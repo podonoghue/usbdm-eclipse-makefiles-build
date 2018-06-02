@@ -5,7 +5,7 @@
  *           Equivalent: 
  *
  * @version  V1.6
- * @date     2018/03
+ * @date     2018/04
  *
  *******************************************************************************************************/
 
@@ -188,16 +188,17 @@ extern void PORTCD_IRQHandler(void);                 /**< General Purpose Input/
 /**
  * @brief Analog-to-Digital Converter
  */
+#define ADC_SC1_COUNT        2          /**< Number of ADC channels                             */
 /**
 * @addtogroup ADC_structs_GROUP ADC struct
 * @brief Struct for ADC
 * @{
 */
 typedef struct ADC_Type {
-   __IO uint32_t  SC1[2];                       /**< 0000: Status and Control Register 1                                */
+   __IO uint32_t  SC1[ADC_SC1_COUNT];           /**< 0000: Status and Control Register 1                                */
    __IO uint32_t  CFG1;                         /**< 0008: Configuration Register 1                                     */
    __IO uint32_t  CFG2;                         /**< 000C: Configuration Register 2                                     */
-   __I  uint32_t  R[2];                         /**< 0010: Data Result Register                                         */
+   __I  uint32_t  R[ADC_SC1_COUNT];             /**< 0010: Data Result Register                                         */
    __IO uint32_t  CV1;                          /**< 0018: Compare Value                                                */
    __IO uint32_t  CV2;                          /**< 001C: Compare Value                                                */
    __IO uint32_t  SC2;                          /**< 0020: Status and Control Register 2                                */
@@ -1954,11 +1955,11 @@ typedef struct LLWU_Type {
       __I  uint8_t   MF;                        /**< 0007: Module Flag Register                                         */
    };
    union {                                      /**< 0000: (size=0002)                                                  */
-      struct {                                  /**< 0000: (size=0002)                                                  */
-      __IO uint8_t   FILT1;                     /**< 0008: Pin Filter 1 register                                        */
-      __IO uint8_t   FILT2;                     /**< 0009: Pin Filter 2 register                                        */
-      };
       __IO uint8_t   FILT[2];                   /**< 0008: Pin Filter  register                                         */
+      struct {                                  /**< 0000: (size=0002)                                                  */
+         __IO uint8_t   FILT1;                  /**< 0008: Pin Filter  register                                         */
+         __IO uint8_t   FILT2;                  /**< 0009: Pin Filter  register                                         */
+      };
    };
 } LLWU_Type;
 
@@ -2200,6 +2201,26 @@ typedef struct LLWU_Type {
 #define LLWU_FILT_FILTF_MASK                     (0x80U)                                             /*!< LLWU_FILT.FILTF Mask                    */
 #define LLWU_FILT_FILTF_SHIFT                    (7U)                                                /*!< LLWU_FILT.FILTF Position                */
 #define LLWU_FILT_FILTF(x)                       (((uint8_t)(((uint8_t)(x))<<7U))&0x80UL)            /*!< LLWU_FILT.FILTF Field                   */
+/* ------- FILT1 Bit Fields                         ------ */
+#define LLWU_FILT1_FILTSEL_MASK                  (0xFU)                                              /*!< LLWU_FILT1.FILTSEL Mask                 */
+#define LLWU_FILT1_FILTSEL_SHIFT                 (0U)                                                /*!< LLWU_FILT1.FILTSEL Position             */
+#define LLWU_FILT1_FILTSEL(x)                    (((uint8_t)(((uint8_t)(x))<<0U))&0xFUL)             /*!< LLWU_FILT1.FILTSEL Field                */
+#define LLWU_FILT1_FILTE_MASK                    (0x60U)                                             /*!< LLWU_FILT1.FILTE Mask                   */
+#define LLWU_FILT1_FILTE_SHIFT                   (5U)                                                /*!< LLWU_FILT1.FILTE Position               */
+#define LLWU_FILT1_FILTE(x)                      (((uint8_t)(((uint8_t)(x))<<5U))&0x60UL)            /*!< LLWU_FILT1.FILTE Field                  */
+#define LLWU_FILT1_FILTF_MASK                    (0x80U)                                             /*!< LLWU_FILT1.FILTF Mask                   */
+#define LLWU_FILT1_FILTF_SHIFT                   (7U)                                                /*!< LLWU_FILT1.FILTF Position               */
+#define LLWU_FILT1_FILTF(x)                      (((uint8_t)(((uint8_t)(x))<<7U))&0x80UL)            /*!< LLWU_FILT1.FILTF Field                  */
+/* ------- FILT2 Bit Fields                         ------ */
+#define LLWU_FILT2_FILTSEL_MASK                  (0xFU)                                              /*!< LLWU_FILT2.FILTSEL Mask                 */
+#define LLWU_FILT2_FILTSEL_SHIFT                 (0U)                                                /*!< LLWU_FILT2.FILTSEL Position             */
+#define LLWU_FILT2_FILTSEL(x)                    (((uint8_t)(((uint8_t)(x))<<0U))&0xFUL)             /*!< LLWU_FILT2.FILTSEL Field                */
+#define LLWU_FILT2_FILTE_MASK                    (0x60U)                                             /*!< LLWU_FILT2.FILTE Mask                   */
+#define LLWU_FILT2_FILTE_SHIFT                   (5U)                                                /*!< LLWU_FILT2.FILTE Position               */
+#define LLWU_FILT2_FILTE(x)                      (((uint8_t)(((uint8_t)(x))<<5U))&0x60UL)            /*!< LLWU_FILT2.FILTE Field                  */
+#define LLWU_FILT2_FILTF_MASK                    (0x80U)                                             /*!< LLWU_FILT2.FILTF Mask                   */
+#define LLWU_FILT2_FILTF_SHIFT                   (7U)                                                /*!< LLWU_FILT2.FILTF Position               */
+#define LLWU_FILT2_FILTF(x)                      (((uint8_t)(((uint8_t)(x))<<7U))&0x80UL)            /*!< LLWU_FILT2.FILTF Field                  */
 /**
  * @} */ /* End group LLWU_Register_Masks_GROUP 
  */
@@ -2602,7 +2623,7 @@ typedef struct MCM_Type {
 */
 
 /* ================================================================================ */
-/* ================           MTB (file:MTB)                       ================ */
+/* ================           MTB (file:MTB_MKE15Z7)               ================ */
 /* ================================================================================ */
 
 /**
@@ -2769,7 +2790,7 @@ typedef struct MTB_Type {
 */
 
 /* ================================================================================ */
-/* ================           MTBDWT (file:MTBDWT_MKL)             ================ */
+/* ================           MTBDWT (file:MTBDWT_MKE15Z7)         ================ */
 /* ================================================================================ */
 
 /**
@@ -3063,6 +3084,7 @@ typedef struct OSC_Type {
 /**
  * @brief Periodic Interrupt Timer (2 channels)
  */
+#define PIT_TMR_COUNT        2          /**< Number of timer channels                           */
 /**
 * @addtogroup PIT_structs_GROUP PIT struct
 * @brief Struct for PIT
@@ -3079,7 +3101,7 @@ typedef struct PIT_Type {
       __I  uint32_t  CVAL;                      /**< 0104: Current Timer Value Register                                 */
       __IO uint32_t  TCTRL;                     /**< 0108: Timer Control Register                                       */
       __IO uint32_t  TFLG;                      /**< 010C: Timer Flag Register                                          */
-   } CHANNEL[2];                                /**< 0100: (cluster: size=0x0020, 32)                                   */
+   } CHANNEL[PIT_TMR_COUNT];                    /**< 0100: (cluster: size=0x0020, 32)                                   */
 } PIT_Type;
 
 /**
@@ -3427,7 +3449,7 @@ typedef struct PORT_Type {
 */
 
 /* ================================================================================ */
-/* ================           RCM (file:RCM_MKL14Z4)               ================ */
+/* ================           RCM (file:RCM_MKL_0x4007F000)        ================ */
 /* ================================================================================ */
 
 /**
@@ -4467,6 +4489,7 @@ typedef struct SYST_Type {
 /**
  * @brief Timer/PWM Module (6 channels)
  */
+#define TPM_CONTROLS_COUNT   6          /**< Number of FTM channels                             */
 /**
 * @addtogroup TPM_structs_GROUP TPM struct
 * @brief Struct for TPM
@@ -4479,7 +4502,7 @@ typedef struct TPM_Type {
    struct {
       __IO uint32_t  CnSC;                      /**< 000C: Channel  Status and Control                                  */
       __IO uint32_t  CnV;                       /**< 0010: Channel  Value                                               */
-   } CONTROLS[6];                               /**< 000C: (cluster: size=0x0030, 48)                                   */
+   } CONTROLS[TPM_CONTROLS_COUNT];              /**< 000C: (cluster: size=0x0030, 48)                                   */
         uint8_t   RESERVED_1[20];              
    __IO uint32_t  STATUS;                       /**< 0050: Capture and Compare Status                                   */
         uint8_t   RESERVED_2[48];              
@@ -4628,6 +4651,7 @@ typedef struct TPM_Type {
 /**
  * @brief Timer/PWM Module (2 channels)
  */
+#define TPM1_CONTROLS_COUNT  2          /**< Number of FTM channels                             */
 /**
 * @addtogroup TPM_structs_GROUP TPM struct
 * @brief Struct for TPM
@@ -4640,7 +4664,7 @@ typedef struct TPM1_Type {
    struct {
       __IO uint32_t  CnSC;                      /**< 000C: Channel  Status and Control                                  */
       __IO uint32_t  CnV;                       /**< 0010: Channel  Value                                               */
-   } CONTROLS[2];                               /**< 000C: (cluster: size=0x0010, 16)                                   */
+   } CONTROLS[TPM1_CONTROLS_COUNT];             /**< 000C: (cluster: size=0x0010, 16)                                   */
         uint8_t   RESERVED_1[52];              
    __IO uint32_t  STATUS;                       /**< 0050: Capture and Compare Status                                   */
         uint8_t   RESERVED_2[48];              

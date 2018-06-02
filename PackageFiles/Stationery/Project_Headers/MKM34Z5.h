@@ -5,7 +5,7 @@
  *           Equivalent: 
  *
  * @version  V1.6
- * @date     2018/03
+ * @date     2018/04
  *
  *******************************************************************************************************/
 
@@ -192,16 +192,17 @@ extern void XBAR_IRQHandler(void);                   /**< Crossbar Switch       
 /**
  * @brief Analog-to-Digital Converter
  */
+#define ADC_SC1_COUNT        4          /**< Number of ADC channels                             */
 /**
 * @addtogroup ADC_structs_GROUP ADC struct
 * @brief Struct for ADC
 * @{
 */
 typedef struct ADC_Type {
-   __IO uint32_t  SC1[4];                       /**< 0000: Status and Control Registers 1                               */
+   __IO uint32_t  SC1[ADC_SC1_COUNT];           /**< 0000: Status and Control Register 1                                */
    __IO uint32_t  CFG1;                         /**< 0010: Configuration Register 1                                     */
    __IO uint32_t  CFG2;                         /**< 0014: Configuration Register 2                                     */
-   __I  uint32_t  R[4];                         /**< 0018: Data Result Register                                         */
+   __I  uint32_t  R[ADC_SC1_COUNT];             /**< 0018: Data Result Register                                         */
    __IO uint32_t  CV1;                          /**< 0028: Compare Value                                                */
    __IO uint32_t  CV2;                          /**< 002C: Compare Value                                                */
    __IO uint32_t  SC2;                          /**< 0030: Status and Control Register 2                                */
@@ -685,6 +686,102 @@ typedef struct AFE_Type {
  * @} */ /* End group AFE_Peripheral_access_layer_GROUP 
  */
 /**
+* @addtogroup AIPS_Peripheral_access_layer_GROUP AIPS Peripheral Access Layer
+* @brief C Struct for AIPS
+* @{
+*/
+
+/* ================================================================================ */
+/* ================           AIPS0 (file:AIPS0_Lite_MKM)          ================ */
+/* ================================================================================ */
+
+/**
+ * @brief AIPS-Lite Bridge
+ */
+/**
+* @addtogroup AIPS_structs_GROUP AIPS struct
+* @brief Struct for AIPS
+* @{
+*/
+typedef struct AIPS_Type {
+        uint8_t   RESERVED_0[32];              
+   __IO uint32_t  PACR[16];                     /**< 0020: Peripheral Access Control Register                           */
+} AIPS_Type;
+
+/**
+ * @} */ /* End group AIPS_structs_GROUP 
+ */
+
+/* -------------------------------------------------------------------------------- */
+/* -----------     'AIPS0' Position & Mask macros                       ----------- */
+/* -------------------------------------------------------------------------------- */
+
+/**
+* @addtogroup AIPS_Register_Masks_GROUP AIPS Register Masks
+* @brief Register Masks for AIPS
+* @{
+*/
+/* ------- PACR Bit Fields                          ------ */
+#define AIPS_PACR_AC7_MASK                       (0x7U)                                              /*!< AIPS0_PACR.AC7 Mask                     */
+#define AIPS_PACR_AC7_SHIFT                      (0U)                                                /*!< AIPS0_PACR.AC7 Position                 */
+#define AIPS_PACR_AC7(x)                         (((uint32_t)(((uint32_t)(x))<<0U))&0x7UL)           /*!< AIPS0_PACR.AC7 Field                    */
+#define AIPS_PACR_RO7_MASK                       (0x8U)                                              /*!< AIPS0_PACR.RO7 Mask                     */
+#define AIPS_PACR_RO7_SHIFT                      (3U)                                                /*!< AIPS0_PACR.RO7 Position                 */
+#define AIPS_PACR_RO7(x)                         (((uint32_t)(((uint32_t)(x))<<3U))&0x8UL)           /*!< AIPS0_PACR.RO7 Field                    */
+#define AIPS_PACR_AC6_MASK                       (0x70U)                                             /*!< AIPS0_PACR.AC6 Mask                     */
+#define AIPS_PACR_AC6_SHIFT                      (4U)                                                /*!< AIPS0_PACR.AC6 Position                 */
+#define AIPS_PACR_AC6(x)                         (((uint32_t)(((uint32_t)(x))<<4U))&0x70UL)          /*!< AIPS0_PACR.AC6 Field                    */
+#define AIPS_PACR_RO6_MASK                       (0x80U)                                             /*!< AIPS0_PACR.RO6 Mask                     */
+#define AIPS_PACR_RO6_SHIFT                      (7U)                                                /*!< AIPS0_PACR.RO6 Position                 */
+#define AIPS_PACR_RO6(x)                         (((uint32_t)(((uint32_t)(x))<<7U))&0x80UL)          /*!< AIPS0_PACR.RO6 Field                    */
+#define AIPS_PACR_AC5_MASK                       (0x700U)                                            /*!< AIPS0_PACR.AC5 Mask                     */
+#define AIPS_PACR_AC5_SHIFT                      (8U)                                                /*!< AIPS0_PACR.AC5 Position                 */
+#define AIPS_PACR_AC5(x)                         (((uint32_t)(((uint32_t)(x))<<8U))&0x700UL)         /*!< AIPS0_PACR.AC5 Field                    */
+#define AIPS_PACR_RO5_MASK                       (0x800U)                                            /*!< AIPS0_PACR.RO5 Mask                     */
+#define AIPS_PACR_RO5_SHIFT                      (11U)                                               /*!< AIPS0_PACR.RO5 Position                 */
+#define AIPS_PACR_RO5(x)                         (((uint32_t)(((uint32_t)(x))<<11U))&0x800UL)        /*!< AIPS0_PACR.RO5 Field                    */
+#define AIPS_PACR_AC4_MASK                       (0x7000U)                                           /*!< AIPS0_PACR.AC4 Mask                     */
+#define AIPS_PACR_AC4_SHIFT                      (12U)                                               /*!< AIPS0_PACR.AC4 Position                 */
+#define AIPS_PACR_AC4(x)                         (((uint32_t)(((uint32_t)(x))<<12U))&0x7000UL)       /*!< AIPS0_PACR.AC4 Field                    */
+#define AIPS_PACR_RO4_MASK                       (0x8000U)                                           /*!< AIPS0_PACR.RO4 Mask                     */
+#define AIPS_PACR_RO4_SHIFT                      (15U)                                               /*!< AIPS0_PACR.RO4 Position                 */
+#define AIPS_PACR_RO4(x)                         (((uint32_t)(((uint32_t)(x))<<15U))&0x8000UL)       /*!< AIPS0_PACR.RO4 Field                    */
+#define AIPS_PACR_AC3_MASK                       (0x70000U)                                          /*!< AIPS0_PACR.AC3 Mask                     */
+#define AIPS_PACR_AC3_SHIFT                      (16U)                                               /*!< AIPS0_PACR.AC3 Position                 */
+#define AIPS_PACR_AC3(x)                         (((uint32_t)(((uint32_t)(x))<<16U))&0x70000UL)      /*!< AIPS0_PACR.AC3 Field                    */
+#define AIPS_PACR_RO3_MASK                       (0x80000U)                                          /*!< AIPS0_PACR.RO3 Mask                     */
+#define AIPS_PACR_RO3_SHIFT                      (19U)                                               /*!< AIPS0_PACR.RO3 Position                 */
+#define AIPS_PACR_RO3(x)                         (((uint32_t)(((uint32_t)(x))<<19U))&0x80000UL)      /*!< AIPS0_PACR.RO3 Field                    */
+#define AIPS_PACR_AC2_MASK                       (0x700000U)                                         /*!< AIPS0_PACR.AC2 Mask                     */
+#define AIPS_PACR_AC2_SHIFT                      (20U)                                               /*!< AIPS0_PACR.AC2 Position                 */
+#define AIPS_PACR_AC2(x)                         (((uint32_t)(((uint32_t)(x))<<20U))&0x700000UL)     /*!< AIPS0_PACR.AC2 Field                    */
+#define AIPS_PACR_RO2_MASK                       (0x800000U)                                         /*!< AIPS0_PACR.RO2 Mask                     */
+#define AIPS_PACR_RO2_SHIFT                      (23U)                                               /*!< AIPS0_PACR.RO2 Position                 */
+#define AIPS_PACR_RO2(x)                         (((uint32_t)(((uint32_t)(x))<<23U))&0x800000UL)     /*!< AIPS0_PACR.RO2 Field                    */
+#define AIPS_PACR_AC1_MASK                       (0x7000000U)                                        /*!< AIPS0_PACR.AC1 Mask                     */
+#define AIPS_PACR_AC1_SHIFT                      (24U)                                               /*!< AIPS0_PACR.AC1 Position                 */
+#define AIPS_PACR_AC1(x)                         (((uint32_t)(((uint32_t)(x))<<24U))&0x7000000UL)    /*!< AIPS0_PACR.AC1 Field                    */
+#define AIPS_PACR_RO1_MASK                       (0x8000000U)                                        /*!< AIPS0_PACR.RO1 Mask                     */
+#define AIPS_PACR_RO1_SHIFT                      (27U)                                               /*!< AIPS0_PACR.RO1 Position                 */
+#define AIPS_PACR_RO1(x)                         (((uint32_t)(((uint32_t)(x))<<27U))&0x8000000UL)    /*!< AIPS0_PACR.RO1 Field                    */
+#define AIPS_PACR_AC0_MASK                       (0x70000000U)                                       /*!< AIPS0_PACR.AC0 Mask                     */
+#define AIPS_PACR_AC0_SHIFT                      (28U)                                               /*!< AIPS0_PACR.AC0 Position                 */
+#define AIPS_PACR_AC0(x)                         (((uint32_t)(((uint32_t)(x))<<28U))&0x70000000UL)   /*!< AIPS0_PACR.AC0 Field                    */
+#define AIPS_PACR_RO0_MASK                       (0x80000000U)                                       /*!< AIPS0_PACR.RO0 Mask                     */
+#define AIPS_PACR_RO0_SHIFT                      (31U)                                               /*!< AIPS0_PACR.RO0 Position                 */
+#define AIPS_PACR_RO0(x)                         (((uint32_t)(((uint32_t)(x))<<31U))&0x80000000UL)   /*!< AIPS0_PACR.RO0 Field                    */
+/**
+ * @} */ /* End group AIPS_Register_Masks_GROUP 
+ */
+
+/* AIPS0 - Peripheral instance base addresses */
+#define AIPS0_BasePtr                  0x40000000UL //!< Peripheral base address
+#define AIPS0                          ((AIPS_Type *) AIPS0_BasePtr) //!< Freescale base pointer
+#define AIPS0_BASE_PTR                 (AIPS0) //!< Freescale style base pointer
+/**
+ * @} */ /* End group AIPS_Peripheral_access_layer_GROUP 
+ */
+/**
 * @addtogroup CMP_Peripheral_access_layer_GROUP CMP Peripheral Access Layer
 * @brief C Struct for CMP
 * @{
@@ -869,26 +966,14 @@ typedef struct CRC_Type {
    union {                                      /**< 0000: (size=0004)                                                  */
       __IO uint32_t  GPOLY;                     /**< 0004: Polynomial register                                          */
       struct {                                  /**< 0000: (size=0004)                                                  */
-         union {                                /**< 0000: (size=0002)                                                  */
-            __IO uint16_t  GPOLYL;              /**< 0004: GPOLYL register                                              */
-            struct {                            /**< 0000: (size=0002)                                                  */
-               __IO uint8_t   GPOLYLL;          /**< 0004: GPOLYLL register                                             */
-               __IO uint8_t   GPOLYLU;          /**< 0005: GPOLYLU register                                             */
-            };
-         };
-         union {                                /**< 0000: (size=0002)                                                  */
-            __IO uint16_t  GPOLYH;              /**< 0006: GPOLYH register                                              */
-            struct {                            /**< 0000: (size=0002)                                                  */
-               __IO uint8_t   GPOLYHL;          /**< 0006: GPOLYHL register                                             */
-               __IO uint8_t   GPOLYHU;          /**< 0007: GPOLYHU register                                             */
-            };
-         };
+         __IO uint16_t  GPOLYL;                 /**< 0004: GPOLYL register                                              */
+         __IO uint16_t  GPOLYH;                 /**< 0006: GPOLYH register                                              */
       };
    };
    union {                                      /**< 0000: (size=0004)                                                  */
       __IO uint32_t  CTRL;                      /**< 0008: Control register                                             */
       struct {                                  /**< 0000: (size=0004)                                                  */
-              uint8_t   RESERVED_6[3];         
+              uint8_t   RESERVED_4[3];         
          __IO uint8_t   CTRLHU;                 /**< 000B: Control register (byte access)                               */
       };
    };
@@ -955,26 +1040,10 @@ typedef struct CRC_Type {
 #define CRC_GPOLYL_GPOLYL_MASK                   (0xFFFFU)                                           /*!< CRC0_GPOLYL.GPOLYL Mask                 */
 #define CRC_GPOLYL_GPOLYL_SHIFT                  (0U)                                                /*!< CRC0_GPOLYL.GPOLYL Position             */
 #define CRC_GPOLYL_GPOLYL(x)                     (((uint16_t)(((uint16_t)(x))<<0U))&0xFFFFUL)        /*!< CRC0_GPOLYL.GPOLYL Field                */
-/* ------- GPOLYLL Bit Fields                       ------ */
-#define CRC_GPOLYLL_GPOLYLL_MASK                 (0xFFU)                                             /*!< CRC0_GPOLYLL.GPOLYLL Mask               */
-#define CRC_GPOLYLL_GPOLYLL_SHIFT                (0U)                                                /*!< CRC0_GPOLYLL.GPOLYLL Position           */
-#define CRC_GPOLYLL_GPOLYLL(x)                   (((uint8_t)(((uint8_t)(x))<<0U))&0xFFUL)            /*!< CRC0_GPOLYLL.GPOLYLL Field              */
-/* ------- GPOLYLU Bit Fields                       ------ */
-#define CRC_GPOLYLU_GPOLYLU_MASK                 (0xFFU)                                             /*!< CRC0_GPOLYLU.GPOLYLU Mask               */
-#define CRC_GPOLYLU_GPOLYLU_SHIFT                (0U)                                                /*!< CRC0_GPOLYLU.GPOLYLU Position           */
-#define CRC_GPOLYLU_GPOLYLU(x)                   (((uint8_t)(((uint8_t)(x))<<0U))&0xFFUL)            /*!< CRC0_GPOLYLU.GPOLYLU Field              */
 /* ------- GPOLYH Bit Fields                        ------ */
 #define CRC_GPOLYH_GPOLYH_MASK                   (0xFFFFU)                                           /*!< CRC0_GPOLYH.GPOLYH Mask                 */
 #define CRC_GPOLYH_GPOLYH_SHIFT                  (0U)                                                /*!< CRC0_GPOLYH.GPOLYH Position             */
 #define CRC_GPOLYH_GPOLYH(x)                     (((uint16_t)(((uint16_t)(x))<<0U))&0xFFFFUL)        /*!< CRC0_GPOLYH.GPOLYH Field                */
-/* ------- GPOLYHL Bit Fields                       ------ */
-#define CRC_GPOLYHL_GPOLYHL_MASK                 (0xFFU)                                             /*!< CRC0_GPOLYHL.GPOLYHL Mask               */
-#define CRC_GPOLYHL_GPOLYHL_SHIFT                (0U)                                                /*!< CRC0_GPOLYHL.GPOLYHL Position           */
-#define CRC_GPOLYHL_GPOLYHL(x)                   (((uint8_t)(((uint8_t)(x))<<0U))&0xFFUL)            /*!< CRC0_GPOLYHL.GPOLYHL Field              */
-/* ------- GPOLYHU Bit Fields                       ------ */
-#define CRC_GPOLYHU_GPOLYHU_MASK                 (0xFFU)                                             /*!< CRC0_GPOLYHU.GPOLYHU Mask               */
-#define CRC_GPOLYHU_GPOLYHU_SHIFT                (0U)                                                /*!< CRC0_GPOLYHU.GPOLYHU Position           */
-#define CRC_GPOLYHU_GPOLYHU(x)                   (((uint8_t)(((uint8_t)(x))<<0U))&0xFFUL)            /*!< CRC0_GPOLYHU.GPOLYHU Field              */
 /* ------- CTRL Bit Fields                          ------ */
 #define CRC_CTRL_TCRC_MASK                       (0x1000000U)                                        /*!< CRC0_CTRL.TCRC Mask                     */
 #define CRC_CTRL_TCRC_SHIFT                      (24U)                                               /*!< CRC0_CTRL.TCRC Position                 */
@@ -2652,11 +2721,11 @@ typedef struct LLWU_Type {
       __I  uint8_t   MF;                        /**< 0007: Module Flag Register                                         */
    };
    union {                                      /**< 0000: (size=0002)                                                  */
-      struct {                                  /**< 0000: (size=0002)                                                  */
-      __IO uint8_t   FILT1;                     /**< 0008: Pin Filter 1 register                                        */
-      __IO uint8_t   FILT2;                     /**< 0009: Pin Filter 2 register                                        */
-      };
       __IO uint8_t   FILT[2];                   /**< 0008: Pin Filter  register                                         */
+      struct {                                  /**< 0000: (size=0002)                                                  */
+         __IO uint8_t   FILT1;                  /**< 0008: Pin Filter  register                                         */
+         __IO uint8_t   FILT2;                  /**< 0009: Pin Filter  register                                         */
+      };
    };
 } LLWU_Type;
 
@@ -2898,6 +2967,26 @@ typedef struct LLWU_Type {
 #define LLWU_FILT_FILTF_MASK                     (0x80U)                                             /*!< LLWU_FILT.FILTF Mask                    */
 #define LLWU_FILT_FILTF_SHIFT                    (7U)                                                /*!< LLWU_FILT.FILTF Position                */
 #define LLWU_FILT_FILTF(x)                       (((uint8_t)(((uint8_t)(x))<<7U))&0x80UL)            /*!< LLWU_FILT.FILTF Field                   */
+/* ------- FILT1 Bit Fields                         ------ */
+#define LLWU_FILT1_FILTSEL_MASK                  (0xFU)                                              /*!< LLWU_FILT1.FILTSEL Mask                 */
+#define LLWU_FILT1_FILTSEL_SHIFT                 (0U)                                                /*!< LLWU_FILT1.FILTSEL Position             */
+#define LLWU_FILT1_FILTSEL(x)                    (((uint8_t)(((uint8_t)(x))<<0U))&0xFUL)             /*!< LLWU_FILT1.FILTSEL Field                */
+#define LLWU_FILT1_FILTE_MASK                    (0x60U)                                             /*!< LLWU_FILT1.FILTE Mask                   */
+#define LLWU_FILT1_FILTE_SHIFT                   (5U)                                                /*!< LLWU_FILT1.FILTE Position               */
+#define LLWU_FILT1_FILTE(x)                      (((uint8_t)(((uint8_t)(x))<<5U))&0x60UL)            /*!< LLWU_FILT1.FILTE Field                  */
+#define LLWU_FILT1_FILTF_MASK                    (0x80U)                                             /*!< LLWU_FILT1.FILTF Mask                   */
+#define LLWU_FILT1_FILTF_SHIFT                   (7U)                                                /*!< LLWU_FILT1.FILTF Position               */
+#define LLWU_FILT1_FILTF(x)                      (((uint8_t)(((uint8_t)(x))<<7U))&0x80UL)            /*!< LLWU_FILT1.FILTF Field                  */
+/* ------- FILT2 Bit Fields                         ------ */
+#define LLWU_FILT2_FILTSEL_MASK                  (0xFU)                                              /*!< LLWU_FILT2.FILTSEL Mask                 */
+#define LLWU_FILT2_FILTSEL_SHIFT                 (0U)                                                /*!< LLWU_FILT2.FILTSEL Position             */
+#define LLWU_FILT2_FILTSEL(x)                    (((uint8_t)(((uint8_t)(x))<<0U))&0xFUL)             /*!< LLWU_FILT2.FILTSEL Field                */
+#define LLWU_FILT2_FILTE_MASK                    (0x60U)                                             /*!< LLWU_FILT2.FILTE Mask                   */
+#define LLWU_FILT2_FILTE_SHIFT                   (5U)                                                /*!< LLWU_FILT2.FILTE Position               */
+#define LLWU_FILT2_FILTE(x)                      (((uint8_t)(((uint8_t)(x))<<5U))&0x60UL)            /*!< LLWU_FILT2.FILTE Field                  */
+#define LLWU_FILT2_FILTF_MASK                    (0x80U)                                             /*!< LLWU_FILT2.FILTF Mask                   */
+#define LLWU_FILT2_FILTF_SHIFT                   (7U)                                                /*!< LLWU_FILT2.FILTF Position               */
+#define LLWU_FILT2_FILTF(x)                      (((uint8_t)(((uint8_t)(x))<<7U))&0x80UL)            /*!< LLWU_FILT2.FILTF Field                  */
 /**
  * @} */ /* End group LLWU_Register_Masks_GROUP 
  */
@@ -3357,7 +3446,7 @@ typedef struct MPU_Type {
       __IO uint32_t  WORD3;                     /**< 040C: Region Descriptor n, Word 3                                  */
    } RGD[8];                                    /**< 0400: (cluster: size=0x0080, 128)                                  */
         uint8_t   RESERVED_4[896];             
-   __IO uint32_t  RGDAAC[8];                    /**< 0800: Region Descriptor Alternate Access Control n                 */
+   __IO uint32_t  RGDAAC[8];                    /**< 0800: Region Descriptor Alternate Access Control                   */
 } MPU_Type;
 
 /**
@@ -3567,7 +3656,7 @@ typedef struct MPU_Type {
 */
 
 /* ================================================================================ */
-/* ================           MTB (file:MTB)                       ================ */
+/* ================           MTB (file:MTB_MKE15Z7)               ================ */
 /* ================================================================================ */
 
 /**
@@ -3734,7 +3823,7 @@ typedef struct MTB_Type {
 */
 
 /* ================================================================================ */
-/* ================           MTBDWT (file:MTBDWT_MKL)             ================ */
+/* ================           MTBDWT (file:MTBDWT_MKE15Z7)         ================ */
 /* ================================================================================ */
 
 /**
@@ -4031,12 +4120,13 @@ typedef struct OSC_Type {
 */
 
 /* ================================================================================ */
-/* ================           PIT0 (file:PIT0_2CH_CHAIN_MKM)       ================ */
+/* ================           PIT0 (file:PIT0_2CH_CHAIN_0x4002D000)       ================ */
 /* ================================================================================ */
 
 /**
  * @brief Periodic Interrupt Timer (2 channels)
  */
+#define PIT_TMR_COUNT        2          /**< Number of timer channels                           */
 /**
 * @addtogroup PIT_structs_GROUP PIT struct
 * @brief Struct for PIT
@@ -4050,7 +4140,7 @@ typedef struct PIT_Type {
       __I  uint32_t  CVAL;                      /**< 0104: Current Timer Value Register                                 */
       __IO uint32_t  TCTRL;                     /**< 0108: Timer Control Register                                       */
       __IO uint32_t  TFLG;                      /**< 010C: Timer Flag Register                                          */
-   } CHANNEL[2];                                /**< 0100: (cluster: size=0x0020, 32)                                   */
+   } CHANNEL[PIT_TMR_COUNT];                    /**< 0100: (cluster: size=0x0020, 32)                                   */
 } PIT_Type;
 
 /**
@@ -4147,8 +4237,8 @@ typedef struct PIT_Type {
 */
 typedef struct PMC_Type {
    __IO uint8_t   LVDSC1;                       /**< 0000: Low Voltage Detect Status and Control 1 Register             */
-   __IO uint8_t   LVDSC2;                       /**< 0001: Low Voltage Detect Status and Control 2 Register             */
-   __IO uint8_t   REGSC;                        /**< 0002: Regulator Status and Control Register                        */
+   __IO uint8_t   LVDSC2;                       /**< 0001: Low Voltage Status and Control 2                             */
+   __IO uint8_t   REGSC;                        /**< 0002: Regulator Status and Control                                 */
 } PMC_Type;
 
 /**
@@ -4533,7 +4623,7 @@ typedef struct PORTE_Type {
 */
 
 /* ================================================================================ */
-/* ================           RCM (file:RCM_MKM14ZA5)              ================ */
+/* ================           RCM (file:RCM_MKM_0x4007B000)        ================ */
 /* ================================================================================ */
 
 /**

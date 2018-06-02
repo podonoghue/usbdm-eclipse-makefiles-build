@@ -5,7 +5,7 @@
  *           Equivalent: 
  *
  * @version  V1.6
- * @date     2018/03
+ * @date     2018/04
  *
  *******************************************************************************************************/
 
@@ -287,17 +287,18 @@ typedef struct ACMP_Type {
 /**
  * @brief Analog-to-Digital Converter
  */
+#define ADC_SC1_COUNT        1          /**< Number of ADC channels                             */
 /**
 * @addtogroup ADC_structs_GROUP ADC struct
 * @brief Struct for ADC
 * @{
 */
 typedef struct ADC_Type {
-   __IO uint32_t  SC1;                          /**< 0000: Status and Control Register 1                                */
+   __IO uint32_t  SC1[ADC_SC1_COUNT];           /**< 0000: Status and Control Register 1                                */
    __IO uint32_t  SC2;                          /**< 0004: Status and Control Register 2                                */
    __IO uint32_t  SC3;                          /**< 0008: Status and Control Register 3                                */
    __IO uint32_t  SC4;                          /**< 000C: Status and Control Register 4                                */
-   __I  uint32_t  R;                            /**< 0010: Conversion Result Register                                   */
+   __I  uint32_t  R[ADC_SC1_COUNT];             /**< 0010: Data Result Register                                         */
    __IO uint32_t  CV;                           /**< 0014: Compare Value Register                                       */
    __IO uint32_t  APCTL1;                       /**< 0018: Pin Control 1 Register                                       */
 } ADC_Type;
@@ -377,9 +378,9 @@ typedef struct ADC_Type {
 #define ADC_SC4_ASCANE_SHIFT                     (6U)                                                /*!< ADC0_SC4.ASCANE Position                */
 #define ADC_SC4_ASCANE(x)                        (((uint32_t)(((uint32_t)(x))<<6U))&0x40UL)          /*!< ADC0_SC4.ASCANE Field                   */
 /* ------- R Bit Fields                             ------ */
-#define ADC_R_ADR_MASK                           (0xFFFU)                                            /*!< ADC0_R.ADR Mask                         */
-#define ADC_R_ADR_SHIFT                          (0U)                                                /*!< ADC0_R.ADR Position                     */
-#define ADC_R_ADR(x)                             (((uint32_t)(((uint32_t)(x))<<0U))&0xFFFUL)         /*!< ADC0_R.ADR Field                        */
+#define ADC_R_D_MASK                             (0xFFFU)                                            /*!< ADC0_R.D Mask                           */
+#define ADC_R_D_SHIFT                            (0U)                                                /*!< ADC0_R.D Position                       */
+#define ADC_R_D(x)                               (((uint32_t)(((uint32_t)(x))<<0U))&0xFFFUL)         /*!< ADC0_R.D Field                          */
 /* ------- CV Bit Fields                            ------ */
 #define ADC_CV_CV_MASK                           (0xFFFU)                                            /*!< ADC0_CV.CV Mask                         */
 #define ADC_CV_CV_SHIFT                          (0U)                                                /*!< ADC0_CV.CV Position                     */
@@ -520,26 +521,14 @@ typedef struct CRC_Type {
    union {                                      /**< 0000: (size=0004)                                                  */
       __IO uint32_t  GPOLY;                     /**< 0004: Polynomial register                                          */
       struct {                                  /**< 0000: (size=0004)                                                  */
-         union {                                /**< 0000: (size=0002)                                                  */
-            __IO uint16_t  GPOLYL;              /**< 0004: GPOLYL register                                              */
-            struct {                            /**< 0000: (size=0002)                                                  */
-               __IO uint8_t   GPOLYLL;          /**< 0004: GPOLYLL register                                             */
-               __IO uint8_t   GPOLYLU;          /**< 0005: GPOLYLU register                                             */
-            };
-         };
-         union {                                /**< 0000: (size=0002)                                                  */
-            __IO uint16_t  GPOLYH;              /**< 0006: GPOLYH register                                              */
-            struct {                            /**< 0000: (size=0002)                                                  */
-               __IO uint8_t   GPOLYHL;          /**< 0006: GPOLYHL register                                             */
-               __IO uint8_t   GPOLYHU;          /**< 0007: GPOLYHU register                                             */
-            };
-         };
+         __IO uint16_t  GPOLYL;                 /**< 0004: GPOLYL register                                              */
+         __IO uint16_t  GPOLYH;                 /**< 0006: GPOLYH register                                              */
       };
    };
    union {                                      /**< 0000: (size=0004)                                                  */
       __IO uint32_t  CTRL;                      /**< 0008: Control register                                             */
       struct {                                  /**< 0000: (size=0004)                                                  */
-              uint8_t   RESERVED_6[3];         
+              uint8_t   RESERVED_4[3];         
          __IO uint8_t   CTRLHU;                 /**< 000B: Control register (byte access)                               */
       };
    };
@@ -606,26 +595,10 @@ typedef struct CRC_Type {
 #define CRC_GPOLYL_GPOLYL_MASK                   (0xFFFFU)                                           /*!< CRC0_GPOLYL.GPOLYL Mask                 */
 #define CRC_GPOLYL_GPOLYL_SHIFT                  (0U)                                                /*!< CRC0_GPOLYL.GPOLYL Position             */
 #define CRC_GPOLYL_GPOLYL(x)                     (((uint16_t)(((uint16_t)(x))<<0U))&0xFFFFUL)        /*!< CRC0_GPOLYL.GPOLYL Field                */
-/* ------- GPOLYLL Bit Fields                       ------ */
-#define CRC_GPOLYLL_GPOLYLL_MASK                 (0xFFU)                                             /*!< CRC0_GPOLYLL.GPOLYLL Mask               */
-#define CRC_GPOLYLL_GPOLYLL_SHIFT                (0U)                                                /*!< CRC0_GPOLYLL.GPOLYLL Position           */
-#define CRC_GPOLYLL_GPOLYLL(x)                   (((uint8_t)(((uint8_t)(x))<<0U))&0xFFUL)            /*!< CRC0_GPOLYLL.GPOLYLL Field              */
-/* ------- GPOLYLU Bit Fields                       ------ */
-#define CRC_GPOLYLU_GPOLYLU_MASK                 (0xFFU)                                             /*!< CRC0_GPOLYLU.GPOLYLU Mask               */
-#define CRC_GPOLYLU_GPOLYLU_SHIFT                (0U)                                                /*!< CRC0_GPOLYLU.GPOLYLU Position           */
-#define CRC_GPOLYLU_GPOLYLU(x)                   (((uint8_t)(((uint8_t)(x))<<0U))&0xFFUL)            /*!< CRC0_GPOLYLU.GPOLYLU Field              */
 /* ------- GPOLYH Bit Fields                        ------ */
 #define CRC_GPOLYH_GPOLYH_MASK                   (0xFFFFU)                                           /*!< CRC0_GPOLYH.GPOLYH Mask                 */
 #define CRC_GPOLYH_GPOLYH_SHIFT                  (0U)                                                /*!< CRC0_GPOLYH.GPOLYH Position             */
 #define CRC_GPOLYH_GPOLYH(x)                     (((uint16_t)(((uint16_t)(x))<<0U))&0xFFFFUL)        /*!< CRC0_GPOLYH.GPOLYH Field                */
-/* ------- GPOLYHL Bit Fields                       ------ */
-#define CRC_GPOLYHL_GPOLYHL_MASK                 (0xFFU)                                             /*!< CRC0_GPOLYHL.GPOLYHL Mask               */
-#define CRC_GPOLYHL_GPOLYHL_SHIFT                (0U)                                                /*!< CRC0_GPOLYHL.GPOLYHL Position           */
-#define CRC_GPOLYHL_GPOLYHL(x)                   (((uint8_t)(((uint8_t)(x))<<0U))&0xFFUL)            /*!< CRC0_GPOLYHL.GPOLYHL Field              */
-/* ------- GPOLYHU Bit Fields                       ------ */
-#define CRC_GPOLYHU_GPOLYHU_MASK                 (0xFFU)                                             /*!< CRC0_GPOLYHU.GPOLYHU Mask               */
-#define CRC_GPOLYHU_GPOLYHU_SHIFT                (0U)                                                /*!< CRC0_GPOLYHU.GPOLYHU Position           */
-#define CRC_GPOLYHU_GPOLYHU(x)                   (((uint8_t)(((uint8_t)(x))<<0U))&0xFFUL)            /*!< CRC0_GPOLYHU.GPOLYHU Field              */
 /* ------- CTRL Bit Fields                          ------ */
 #define CRC_CTRL_TCRC_MASK                       (0x1000000U)                                        /*!< CRC0_CTRL.TCRC Mask                     */
 #define CRC_CTRL_TCRC_SHIFT                      (24U)                                               /*!< CRC0_CTRL.TCRC Position                 */
@@ -768,18 +741,39 @@ typedef struct GPIO_Type {
 */
 /* ------- PDOR Bit Fields                          ------ */
 /* ------- PDORA Bit Fields                         ------ */
+/* ------- PDORB Bit Fields                         ------ */
+/* ------- PDORC Bit Fields                         ------ */
+/* ------- PDORD Bit Fields                         ------ */
 /* ------- PSOR Bit Fields                          ------ */
 /* ------- PSORA Bit Fields                         ------ */
+/* ------- PSORB Bit Fields                         ------ */
+/* ------- PSORC Bit Fields                         ------ */
+/* ------- PSORD Bit Fields                         ------ */
 /* ------- PCOR Bit Fields                          ------ */
 /* ------- PCORA Bit Fields                         ------ */
+/* ------- PCORB Bit Fields                         ------ */
+/* ------- PCORC Bit Fields                         ------ */
+/* ------- PCORD Bit Fields                         ------ */
 /* ------- PTOR Bit Fields                          ------ */
 /* ------- PTORA Bit Fields                         ------ */
+/* ------- PTORB Bit Fields                         ------ */
+/* ------- PTORC Bit Fields                         ------ */
+/* ------- PTORD Bit Fields                         ------ */
 /* ------- PDIR Bit Fields                          ------ */
 /* ------- PDIRA Bit Fields                         ------ */
+/* ------- PDIRB Bit Fields                         ------ */
+/* ------- PDIRC Bit Fields                         ------ */
+/* ------- PDIRD Bit Fields                         ------ */
 /* ------- PDDR Bit Fields                          ------ */
 /* ------- PDDRA Bit Fields                         ------ */
+/* ------- PDDRB Bit Fields                         ------ */
+/* ------- PDDRC Bit Fields                         ------ */
+/* ------- PDDRD Bit Fields                         ------ */
 /* ------- PIDR Bit Fields                          ------ */
 /* ------- PIDRA Bit Fields                         ------ */
+/* ------- PIDRB Bit Fields                         ------ */
+/* ------- PIDRC Bit Fields                         ------ */
+/* ------- PIDRD Bit Fields                         ------ */
 /**
  * @} */ /* End group FGPIOA_Register_Masks_GROUP 
  */
@@ -890,18 +884,39 @@ typedef struct FGPIOB_Type {
 */
 /* ------- PDOR Bit Fields                          ------ */
 /* ------- PDORE Bit Fields                         ------ */
+/* ------- PDORF Bit Fields                         ------ */
+/* ------- PDORG Bit Fields                         ------ */
+/* ------- PDORH Bit Fields                         ------ */
 /* ------- PSOR Bit Fields                          ------ */
 /* ------- PSORE Bit Fields                         ------ */
+/* ------- PSORF Bit Fields                         ------ */
+/* ------- PSORG Bit Fields                         ------ */
+/* ------- PSORH Bit Fields                         ------ */
 /* ------- PCOR Bit Fields                          ------ */
 /* ------- PCORE Bit Fields                         ------ */
+/* ------- PCORF Bit Fields                         ------ */
+/* ------- PCORG Bit Fields                         ------ */
+/* ------- PCORH Bit Fields                         ------ */
 /* ------- PTOR Bit Fields                          ------ */
 /* ------- PTORE Bit Fields                         ------ */
+/* ------- PTORF Bit Fields                         ------ */
+/* ------- PTORG Bit Fields                         ------ */
+/* ------- PTORH Bit Fields                         ------ */
 /* ------- PDIR Bit Fields                          ------ */
 /* ------- PDIRE Bit Fields                         ------ */
+/* ------- PDIRF Bit Fields                         ------ */
+/* ------- PDIRG Bit Fields                         ------ */
+/* ------- PDIRH Bit Fields                         ------ */
 /* ------- PDDR Bit Fields                          ------ */
 /* ------- PDDRE Bit Fields                         ------ */
+/* ------- PDDRF Bit Fields                         ------ */
+/* ------- PDDRG Bit Fields                         ------ */
+/* ------- PDDRH Bit Fields                         ------ */
 /* ------- PIDR Bit Fields                          ------ */
 /* ------- PIDRE Bit Fields                         ------ */
+/* ------- PIDRF Bit Fields                         ------ */
+/* ------- PIDRG Bit Fields                         ------ */
+/* ------- PIDRH Bit Fields                         ------ */
 /**
  * @} */ /* End group FGPIOB_Register_Masks_GROUP 
  */
@@ -1013,19 +1028,20 @@ typedef struct FGPIOC_Type {
 /**
  * @brief FlexTimer Module (2 channels)
  */
+#define FTM_CONTROLS_COUNT   2          /**< Number of FTM channels                             */
 /**
 * @addtogroup FTM_structs_GROUP FTM struct
 * @brief Struct for FTM
 * @{
 */
-typedef struct FTM_2CH_Type {
+typedef struct FTM_Type {
    __IO uint32_t  SC;                           /**< 0000: Status and Control                                           */
    __IO uint32_t  CNT;                          /**< 0004: Counter                                                      */
    __IO uint32_t  MOD;                          /**< 0008: Modulo                                                       */
    struct {
       __IO uint32_t  CnSC;                      /**< 000C: Channel  Status and Control                                  */
       __IO uint32_t  CnV;                       /**< 0010: Channel  Value                                               */
-   } CONTROLS[2];                               /**< 000C: (cluster: size=0x0010, 16)                                   */
+   } CONTROLS[FTM_CONTROLS_COUNT];              /**< 000C: (cluster: size=0x0010, 16)                                   */
         uint8_t   RESERVED_1[48];              
    __IO uint32_t  CNTIN;                        /**< 004C: Counter Initial Value                                        */
    __IO uint32_t  STATUS;                       /**< 0050: Capture and Compare Status                                   */
@@ -1047,7 +1063,7 @@ typedef struct FTM_2CH_Type {
    __IO uint32_t  INVCTRL;                      /**< 0090: FTM Inverting Control                                        */
    __IO uint32_t  SWOCTRL;                      /**< 0094: FTM Software Output Control                                  */
    __IO uint32_t  PWMLOAD;                      /**< 0098: FTM PWM Load                                                 */
-} FTM_2CH_Type;
+} FTM_Type;
 
 /**
  * @} */ /* End group FTM_structs_GROUP 
@@ -1398,7 +1414,7 @@ typedef struct FTM_2CH_Type {
 
 /* FTM0 - Peripheral instance base addresses */
 #define FTM0_BasePtr                   0x40038000UL //!< Peripheral base address
-#define FTM0                           ((FTM_2CH_Type *) FTM0_BasePtr) //!< Freescale base pointer
+#define FTM0                           ((FTM_Type *) FTM0_BasePtr) //!< Freescale base pointer
 #define FTM0_BASE_PTR                  (FTM0) //!< Freescale style base pointer
 /**
  * @} */ /* End group FTM_Peripheral_access_layer_GROUP 
@@ -1419,7 +1435,7 @@ typedef struct FTM_2CH_Type {
 
 /* FTM1 - Peripheral instance base addresses */
 #define FTM1_BasePtr                   0x40039000UL //!< Peripheral base address
-#define FTM1                           ((FTM_2CH_Type *) FTM1_BasePtr) //!< Freescale base pointer
+#define FTM1                           ((FTM_Type *) FTM1_BasePtr) //!< Freescale base pointer
 #define FTM1_BASE_PTR                  (FTM1) //!< Freescale style base pointer
 /**
  * @} */ /* End group FTM_Peripheral_access_layer_GROUP 
@@ -1437,19 +1453,20 @@ typedef struct FTM_2CH_Type {
 /**
  * @brief FlexTimer Module (6 channels)
  */
+#define FTM2_CONTROLS_COUNT  6          /**< Number of FTM channels                             */
 /**
 * @addtogroup FTM_structs_GROUP FTM struct
 * @brief Struct for FTM
 * @{
 */
-typedef struct FTM_Type {
+typedef struct FTM2_Type {
    __IO uint32_t  SC;                           /**< 0000: Status and Control                                           */
    __IO uint32_t  CNT;                          /**< 0004: Counter                                                      */
    __IO uint32_t  MOD;                          /**< 0008: Modulo                                                       */
    struct {
       __IO uint32_t  CnSC;                      /**< 000C: Channel  Status and Control                                  */
       __IO uint32_t  CnV;                       /**< 0010: Channel  Value                                               */
-   } CONTROLS[6];                               /**< 000C: (cluster: size=0x0030, 48)                                   */
+   } CONTROLS[FTM2_CONTROLS_COUNT];             /**< 000C: (cluster: size=0x0030, 48)                                   */
         uint8_t   RESERVED_1[16];              
    __IO uint32_t  CNTIN;                        /**< 004C: Counter Initial Value                                        */
    __IO uint32_t  STATUS;                       /**< 0050: Capture and Compare Status                                   */
@@ -1471,7 +1488,7 @@ typedef struct FTM_Type {
    __IO uint32_t  INVCTRL;                      /**< 0090: FTM Inverting Control                                        */
    __IO uint32_t  SWOCTRL;                      /**< 0094: FTM Software Output Control                                  */
    __IO uint32_t  PWMLOAD;                      /**< 0098: FTM PWM Load                                                 */
-} FTM_Type;
+} FTM2_Type;
 
 /**
  * @} */ /* End group FTM_structs_GROUP 
@@ -1520,12 +1537,6 @@ typedef struct FTM_Type {
 #define FTM_OUTINIT_CH5OI_MASK                   (0x20U)                                             /*!< FTM2_OUTINIT.CH5OI Mask                 */
 #define FTM_OUTINIT_CH5OI_SHIFT                  (5U)                                                /*!< FTM2_OUTINIT.CH5OI Position             */
 #define FTM_OUTINIT_CH5OI(x)                     (((uint32_t)(((uint32_t)(x))<<5U))&0x20UL)          /*!< FTM2_OUTINIT.CH5OI Field                */
-#define FTM_OUTINIT_CH6OI_MASK                   (0x40U)                                             /*!< FTM2_OUTINIT.CH6OI Mask                 */
-#define FTM_OUTINIT_CH6OI_SHIFT                  (6U)                                                /*!< FTM2_OUTINIT.CH6OI Position             */
-#define FTM_OUTINIT_CH6OI(x)                     (((uint32_t)(((uint32_t)(x))<<6U))&0x40UL)          /*!< FTM2_OUTINIT.CH6OI Field                */
-#define FTM_OUTINIT_CH7OI_MASK                   (0x80U)                                             /*!< FTM2_OUTINIT.CH7OI Mask                 */
-#define FTM_OUTINIT_CH7OI_SHIFT                  (7U)                                                /*!< FTM2_OUTINIT.CH7OI Position             */
-#define FTM_OUTINIT_CH7OI(x)                     (((uint32_t)(((uint32_t)(x))<<7U))&0x80UL)          /*!< FTM2_OUTINIT.CH7OI Field                */
 /* ------- OUTMASK Bit Fields                       ------ */
 #define FTM_OUTMASK_CH2OM_MASK                   (0x4U)                                              /*!< FTM2_OUTMASK.CH2OM Mask                 */
 #define FTM_OUTMASK_CH2OM_SHIFT                  (2U)                                                /*!< FTM2_OUTMASK.CH2OM Position             */
@@ -1539,12 +1550,6 @@ typedef struct FTM_Type {
 #define FTM_OUTMASK_CH5OM_MASK                   (0x20U)                                             /*!< FTM2_OUTMASK.CH5OM Mask                 */
 #define FTM_OUTMASK_CH5OM_SHIFT                  (5U)                                                /*!< FTM2_OUTMASK.CH5OM Position             */
 #define FTM_OUTMASK_CH5OM(x)                     (((uint32_t)(((uint32_t)(x))<<5U))&0x20UL)          /*!< FTM2_OUTMASK.CH5OM Field                */
-#define FTM_OUTMASK_CH6OM_MASK                   (0x40U)                                             /*!< FTM2_OUTMASK.CH6OM Mask                 */
-#define FTM_OUTMASK_CH6OM_SHIFT                  (6U)                                                /*!< FTM2_OUTMASK.CH6OM Position             */
-#define FTM_OUTMASK_CH6OM(x)                     (((uint32_t)(((uint32_t)(x))<<6U))&0x40UL)          /*!< FTM2_OUTMASK.CH6OM Field                */
-#define FTM_OUTMASK_CH7OM_MASK                   (0x80U)                                             /*!< FTM2_OUTMASK.CH7OM Mask                 */
-#define FTM_OUTMASK_CH7OM_SHIFT                  (7U)                                                /*!< FTM2_OUTMASK.CH7OM Position             */
-#define FTM_OUTMASK_CH7OM(x)                     (((uint32_t)(((uint32_t)(x))<<7U))&0x80UL)          /*!< FTM2_OUTMASK.CH7OM Field                */
 /* ------- COMBINE Bit Fields                       ------ */
 #define FTM_COMBINE_COMBINE1_MASK                (0x100U)                                            /*!< FTM2_COMBINE.COMBINE1 Mask              */
 #define FTM_COMBINE_COMBINE1_SHIFT               (8U)                                                /*!< FTM2_COMBINE.COMBINE1 Position          */
@@ -1615,12 +1620,6 @@ typedef struct FTM_Type {
 #define FTM_POL_POL5_MASK                        (0x20U)                                             /*!< FTM2_POL.POL5 Mask                      */
 #define FTM_POL_POL5_SHIFT                       (5U)                                                /*!< FTM2_POL.POL5 Position                  */
 #define FTM_POL_POL5(x)                          (((uint32_t)(((uint32_t)(x))<<5U))&0x20UL)          /*!< FTM2_POL.POL5 Field                     */
-#define FTM_POL_POL6_MASK                        (0x40U)                                             /*!< FTM2_POL.POL6 Mask                      */
-#define FTM_POL_POL6_SHIFT                       (6U)                                                /*!< FTM2_POL.POL6 Position                  */
-#define FTM_POL_POL6(x)                          (((uint32_t)(((uint32_t)(x))<<6U))&0x40UL)          /*!< FTM2_POL.POL6 Field                     */
-#define FTM_POL_POL7_MASK                        (0x80U)                                             /*!< FTM2_POL.POL7 Mask                      */
-#define FTM_POL_POL7_SHIFT                       (7U)                                                /*!< FTM2_POL.POL7 Position                  */
-#define FTM_POL_POL7(x)                          (((uint32_t)(((uint32_t)(x))<<7U))&0x80UL)          /*!< FTM2_POL.POL7 Field                     */
 /* ------- FMS Bit Fields                           ------ */
 /* ------- FILTER Bit Fields                        ------ */
 #define FTM_FILTER_CH2FVAL_MASK                  (0xF00U)                                            /*!< FTM2_FILTER.CH2FVAL Mask                */
@@ -1656,12 +1655,6 @@ typedef struct FTM_Type {
 #define FTM_SWOCTRL_CH5OC_MASK                   (0x20U)                                             /*!< FTM2_SWOCTRL.CH5OC Mask                 */
 #define FTM_SWOCTRL_CH5OC_SHIFT                  (5U)                                                /*!< FTM2_SWOCTRL.CH5OC Position             */
 #define FTM_SWOCTRL_CH5OC(x)                     (((uint32_t)(((uint32_t)(x))<<5U))&0x20UL)          /*!< FTM2_SWOCTRL.CH5OC Field                */
-#define FTM_SWOCTRL_CH6OC_MASK                   (0x40U)                                             /*!< FTM2_SWOCTRL.CH6OC Mask                 */
-#define FTM_SWOCTRL_CH6OC_SHIFT                  (6U)                                                /*!< FTM2_SWOCTRL.CH6OC Position             */
-#define FTM_SWOCTRL_CH6OC(x)                     (((uint32_t)(((uint32_t)(x))<<6U))&0x40UL)          /*!< FTM2_SWOCTRL.CH6OC Field                */
-#define FTM_SWOCTRL_CH7OC_MASK                   (0x80U)                                             /*!< FTM2_SWOCTRL.CH7OC Mask                 */
-#define FTM_SWOCTRL_CH7OC_SHIFT                  (7U)                                                /*!< FTM2_SWOCTRL.CH7OC Position             */
-#define FTM_SWOCTRL_CH7OC(x)                     (((uint32_t)(((uint32_t)(x))<<7U))&0x80UL)          /*!< FTM2_SWOCTRL.CH7OC Field                */
 #define FTM_SWOCTRL_CH2OCV_MASK                  (0x400U)                                            /*!< FTM2_SWOCTRL.CH2OCV Mask                */
 #define FTM_SWOCTRL_CH2OCV_SHIFT                 (10U)                                               /*!< FTM2_SWOCTRL.CH2OCV Position            */
 #define FTM_SWOCTRL_CH2OCV(x)                    (((uint32_t)(((uint32_t)(x))<<10U))&0x400UL)        /*!< FTM2_SWOCTRL.CH2OCV Field               */
@@ -1674,12 +1667,6 @@ typedef struct FTM_Type {
 #define FTM_SWOCTRL_CH5OCV_MASK                  (0x2000U)                                           /*!< FTM2_SWOCTRL.CH5OCV Mask                */
 #define FTM_SWOCTRL_CH5OCV_SHIFT                 (13U)                                               /*!< FTM2_SWOCTRL.CH5OCV Position            */
 #define FTM_SWOCTRL_CH5OCV(x)                    (((uint32_t)(((uint32_t)(x))<<13U))&0x2000UL)       /*!< FTM2_SWOCTRL.CH5OCV Field               */
-#define FTM_SWOCTRL_CH6OCV_MASK                  (0x4000U)                                           /*!< FTM2_SWOCTRL.CH6OCV Mask                */
-#define FTM_SWOCTRL_CH6OCV_SHIFT                 (14U)                                               /*!< FTM2_SWOCTRL.CH6OCV Position            */
-#define FTM_SWOCTRL_CH6OCV(x)                    (((uint32_t)(((uint32_t)(x))<<14U))&0x4000UL)       /*!< FTM2_SWOCTRL.CH6OCV Field               */
-#define FTM_SWOCTRL_CH7OCV_MASK                  (0x8000U)                                           /*!< FTM2_SWOCTRL.CH7OCV Mask                */
-#define FTM_SWOCTRL_CH7OCV_SHIFT                 (15U)                                               /*!< FTM2_SWOCTRL.CH7OCV Position            */
-#define FTM_SWOCTRL_CH7OCV(x)                    (((uint32_t)(((uint32_t)(x))<<15U))&0x8000UL)       /*!< FTM2_SWOCTRL.CH7OCV Field               */
 /* ------- PWMLOAD Bit Fields                       ------ */
 #define FTM_PWMLOAD_CH2SEL_MASK                  (0x4U)                                              /*!< FTM2_PWMLOAD.CH2SEL Mask                */
 #define FTM_PWMLOAD_CH2SEL_SHIFT                 (2U)                                                /*!< FTM2_PWMLOAD.CH2SEL Position            */
@@ -1693,19 +1680,13 @@ typedef struct FTM_Type {
 #define FTM_PWMLOAD_CH5SEL_MASK                  (0x20U)                                             /*!< FTM2_PWMLOAD.CH5SEL Mask                */
 #define FTM_PWMLOAD_CH5SEL_SHIFT                 (5U)                                                /*!< FTM2_PWMLOAD.CH5SEL Position            */
 #define FTM_PWMLOAD_CH5SEL(x)                    (((uint32_t)(((uint32_t)(x))<<5U))&0x20UL)          /*!< FTM2_PWMLOAD.CH5SEL Field               */
-#define FTM_PWMLOAD_CH6SEL_MASK                  (0x40U)                                             /*!< FTM2_PWMLOAD.CH6SEL Mask                */
-#define FTM_PWMLOAD_CH6SEL_SHIFT                 (6U)                                                /*!< FTM2_PWMLOAD.CH6SEL Position            */
-#define FTM_PWMLOAD_CH6SEL(x)                    (((uint32_t)(((uint32_t)(x))<<6U))&0x40UL)          /*!< FTM2_PWMLOAD.CH6SEL Field               */
-#define FTM_PWMLOAD_CH7SEL_MASK                  (0x80U)                                             /*!< FTM2_PWMLOAD.CH7SEL Mask                */
-#define FTM_PWMLOAD_CH7SEL_SHIFT                 (7U)                                                /*!< FTM2_PWMLOAD.CH7SEL Position            */
-#define FTM_PWMLOAD_CH7SEL(x)                    (((uint32_t)(((uint32_t)(x))<<7U))&0x80UL)          /*!< FTM2_PWMLOAD.CH7SEL Field               */
 /**
  * @} */ /* End group FTM_Register_Masks_GROUP 
  */
 
 /* FTM2 - Peripheral instance base addresses */
 #define FTM2_BasePtr                   0x4003A000UL //!< Peripheral base address
-#define FTM2                           ((FTM_Type *) FTM2_BasePtr) //!< Freescale base pointer
+#define FTM2                           ((FTM2_Type *) FTM2_BasePtr) //!< Freescale base pointer
 #define FTM2_BASE_PTR                  (FTM2) //!< Freescale style base pointer
 /**
  * @} */ /* End group FTM_Peripheral_access_layer_GROUP 
@@ -2620,12 +2601,13 @@ typedef struct OSC_Type {
 */
 
 /* ================================================================================ */
-/* ================           PIT (file:PIT_2CH_CHAIN)             ================ */
+/* ================           PIT (file:PIT_2CH_CHAIN_0x40037000)       ================ */
 /* ================================================================================ */
 
 /**
  * @brief Periodic Interrupt Timer (2 channels)
  */
+#define PIT_TMR_COUNT        2          /**< Number of timer channels                           */
 /**
 * @addtogroup PIT_structs_GROUP PIT struct
 * @brief Struct for PIT
@@ -2639,7 +2621,7 @@ typedef struct PIT_Type {
       __I  uint32_t  CVAL;                      /**< 0104: Current Timer Value Register                                 */
       __IO uint32_t  TCTRL;                     /**< 0108: Timer Control Register                                       */
       __IO uint32_t  TFLG;                      /**< 010C: Timer Flag Register                                          */
-   } CHANNEL[2];                                /**< 0100: (cluster: size=0x0020, 32)                                   */
+   } CHANNEL[PIT_TMR_COUNT];                    /**< 0100: (cluster: size=0x0020, 32)                                   */
 } PIT_Type;
 
 /**

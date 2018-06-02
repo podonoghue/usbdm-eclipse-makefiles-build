@@ -5,7 +5,7 @@
  *           Equivalent: 
  *
  * @version  V1
- * @date     2018/03
+ * @date     2018/04
  *
  *******************************************************************************************************/
 
@@ -1455,10 +1455,7 @@ typedef struct LPC_I2C_Type {
    __IO uint32_t  ADR2;                         /**< 0024: I2C                                                          */
    __IO uint32_t  ADR3;                         /**< 0028: I2C                                                          */
    __I  uint32_t  DATA_BUFFER;                  /**< 002C: Data buffer register. The contents of the 8 MSBs of the I2DAT shift register will be transferred to the DATA_BUFFER automatically after every nine bits (8 bits of data plus ACK or NACK) has been received on the bus */
-   __IO uint32_t  MASK0;                        /**< 0030: I2C Slave address mask register n. This mask register is associated with I2ADRn to determine an address match. The mask register has no effect when comparing to the General Call address (0000000) */
-   __IO uint32_t  MASK1;                        /**< 0034: I2C Slave address mask register n. This mask register is associated with I2ADRn to determine an address match. The mask register has no effect when comparing to the General Call address (0000000) */
-   __IO uint32_t  MASK2;                        /**< 0038: I2C Slave address mask register n. This mask register is associated with I2ADRn to determine an address match. The mask register has no effect when comparing to the General Call address (0000000) */
-   __IO uint32_t  MASK3;                        /**< 003C: I2C Slave address mask register n. This mask register is associated with I2ADRn to determine an address match. The mask register has no effect when comparing to the General Call address (0000000) */
+   __IO uint32_t  MASK[4];                      /**< 0030: I2C Slave address mask register n. This mask register is associated with I2ADRn to determine an address match. The mask register has no effect when comparing to the General Call address (0000000) */
 } LPC_I2C_Type;
 
 /**
@@ -1536,47 +1533,21 @@ typedef struct LPC_I2C_Type {
 #define LPC_I2C_MMCTRL_MATCH_ALL_MASK            (0x4U)                                              /*!< LPC_I2C_MMCTRL.MATCH_ALL Mask           */
 #define LPC_I2C_MMCTRL_MATCH_ALL_SHIFT           (2U)                                                /*!< LPC_I2C_MMCTRL.MATCH_ALL Position       */
 #define LPC_I2C_MMCTRL_MATCH_ALL(x)              (((uint32_t)(((uint32_t)(x))<<2U))&0x4UL)           /*!< LPC_I2C_MMCTRL.MATCH_ALL Field          */
-/* ------- ADR1 Bit Fields                          ------ */
-#define LPC_I2C_ADR1_GC_MASK                     (0x1U)                                              /*!< LPC_I2C_ADR1.GC Mask                    */
-#define LPC_I2C_ADR1_GC_SHIFT                    (0U)                                                /*!< LPC_I2C_ADR1.GC Position                */
-#define LPC_I2C_ADR1_GC(x)                       (((uint32_t)(((uint32_t)(x))<<0U))&0x1UL)           /*!< LPC_I2C_ADR1.GC Field                   */
-#define LPC_I2C_ADR1_Address_MASK                (0xFEU)                                             /*!< LPC_I2C_ADR1.Address Mask               */
-#define LPC_I2C_ADR1_Address_SHIFT               (1U)                                                /*!< LPC_I2C_ADR1.Address Position           */
-#define LPC_I2C_ADR1_Address(x)                  (((uint32_t)(((uint32_t)(x))<<1U))&0xFEUL)          /*!< LPC_I2C_ADR1.Address Field              */
-/* ------- ADR2 Bit Fields                          ------ */
-#define LPC_I2C_ADR2_GC_MASK                     (0x1U)                                              /*!< LPC_I2C_ADR2.GC Mask                    */
-#define LPC_I2C_ADR2_GC_SHIFT                    (0U)                                                /*!< LPC_I2C_ADR2.GC Position                */
-#define LPC_I2C_ADR2_GC(x)                       (((uint32_t)(((uint32_t)(x))<<0U))&0x1UL)           /*!< LPC_I2C_ADR2.GC Field                   */
-#define LPC_I2C_ADR2_Address_MASK                (0xFEU)                                             /*!< LPC_I2C_ADR2.Address Mask               */
-#define LPC_I2C_ADR2_Address_SHIFT               (1U)                                                /*!< LPC_I2C_ADR2.Address Position           */
-#define LPC_I2C_ADR2_Address(x)                  (((uint32_t)(((uint32_t)(x))<<1U))&0xFEUL)          /*!< LPC_I2C_ADR2.Address Field              */
-/* ------- ADR3 Bit Fields                          ------ */
-#define LPC_I2C_ADR3_GC_MASK                     (0x1U)                                              /*!< LPC_I2C_ADR3.GC Mask                    */
-#define LPC_I2C_ADR3_GC_SHIFT                    (0U)                                                /*!< LPC_I2C_ADR3.GC Position                */
-#define LPC_I2C_ADR3_GC(x)                       (((uint32_t)(((uint32_t)(x))<<0U))&0x1UL)           /*!< LPC_I2C_ADR3.GC Field                   */
-#define LPC_I2C_ADR3_Address_MASK                (0xFEU)                                             /*!< LPC_I2C_ADR3.Address Mask               */
-#define LPC_I2C_ADR3_Address_SHIFT               (1U)                                                /*!< LPC_I2C_ADR3.Address Position           */
-#define LPC_I2C_ADR3_Address(x)                  (((uint32_t)(((uint32_t)(x))<<1U))&0xFEUL)          /*!< LPC_I2C_ADR3.Address Field              */
+/* ------- ADR Bit Fields                           ------ */
+#define LPC_I2C_ADR_GC_MASK                      (0x1U)                                              /*!< LPC_I2C_ADR.GC Mask                     */
+#define LPC_I2C_ADR_GC_SHIFT                     (0U)                                                /*!< LPC_I2C_ADR.GC Position                 */
+#define LPC_I2C_ADR_GC(x)                        (((uint32_t)(((uint32_t)(x))<<0U))&0x1UL)           /*!< LPC_I2C_ADR.GC Field                    */
+#define LPC_I2C_ADR_Address_MASK                 (0xFEU)                                             /*!< LPC_I2C_ADR.Address Mask                */
+#define LPC_I2C_ADR_Address_SHIFT                (1U)                                                /*!< LPC_I2C_ADR.Address Position            */
+#define LPC_I2C_ADR_Address(x)                   (((uint32_t)(((uint32_t)(x))<<1U))&0xFEUL)          /*!< LPC_I2C_ADR.Address Field               */
 /* ------- DATA_BUFFER Bit Fields                   ------ */
 #define LPC_I2C_DATA_BUFFER_Data_MASK            (0xFFU)                                             /*!< LPC_I2C_DATA_BUFFER.Data Mask           */
 #define LPC_I2C_DATA_BUFFER_Data_SHIFT           (0U)                                                /*!< LPC_I2C_DATA_BUFFER.Data Position       */
 #define LPC_I2C_DATA_BUFFER_Data(x)              (((uint32_t)(((uint32_t)(x))<<0U))&0xFFUL)          /*!< LPC_I2C_DATA_BUFFER.Data Field          */
-/* ------- MASK0 Bit Fields                         ------ */
-#define LPC_I2C_MASK0_MASK_MASK                  (0xFEU)                                             /*!< LPC_I2C_MASK0.MASK Mask                 */
-#define LPC_I2C_MASK0_MASK_SHIFT                 (1U)                                                /*!< LPC_I2C_MASK0.MASK Position             */
-#define LPC_I2C_MASK0_MASK(x)                    (((uint32_t)(((uint32_t)(x))<<1U))&0xFEUL)          /*!< LPC_I2C_MASK0.MASK Field                */
-/* ------- MASK1 Bit Fields                         ------ */
-#define LPC_I2C_MASK1_MASK_MASK                  (0xFEU)                                             /*!< LPC_I2C_MASK1.MASK Mask                 */
-#define LPC_I2C_MASK1_MASK_SHIFT                 (1U)                                                /*!< LPC_I2C_MASK1.MASK Position             */
-#define LPC_I2C_MASK1_MASK(x)                    (((uint32_t)(((uint32_t)(x))<<1U))&0xFEUL)          /*!< LPC_I2C_MASK1.MASK Field                */
-/* ------- MASK2 Bit Fields                         ------ */
-#define LPC_I2C_MASK2_MASK_MASK                  (0xFEU)                                             /*!< LPC_I2C_MASK2.MASK Mask                 */
-#define LPC_I2C_MASK2_MASK_SHIFT                 (1U)                                                /*!< LPC_I2C_MASK2.MASK Position             */
-#define LPC_I2C_MASK2_MASK(x)                    (((uint32_t)(((uint32_t)(x))<<1U))&0xFEUL)          /*!< LPC_I2C_MASK2.MASK Field                */
-/* ------- MASK3 Bit Fields                         ------ */
-#define LPC_I2C_MASK3_MASK_MASK                  (0xFEU)                                             /*!< LPC_I2C_MASK3.MASK Mask                 */
-#define LPC_I2C_MASK3_MASK_SHIFT                 (1U)                                                /*!< LPC_I2C_MASK3.MASK Position             */
-#define LPC_I2C_MASK3_MASK(x)                    (((uint32_t)(((uint32_t)(x))<<1U))&0xFEUL)          /*!< LPC_I2C_MASK3.MASK Field                */
+/* ------- MASK Bit Fields                          ------ */
+#define LPC_I2C_MASK_MASK_MASK                   (0xFEU)                                             /*!< LPC_I2C_MASK.MASK Mask                  */
+#define LPC_I2C_MASK_MASK_SHIFT                  (1U)                                                /*!< LPC_I2C_MASK.MASK Position              */
+#define LPC_I2C_MASK_MASK(x)                     (((uint32_t)(((uint32_t)(x))<<1U))&0xFEUL)          /*!< LPC_I2C_MASK.MASK Field                 */
 /**
  * @} */ /* End group I2C_Register_Masks_GROUP 
  */
@@ -1750,32 +1721,19 @@ typedef struct LPC_IOCON_Type {
 #define LPC_IOCON_PIO0_2_OD_MASK                 (0x400U)                                            /*!< LPC_IOCON_PIO0_2.OD Mask                */
 #define LPC_IOCON_PIO0_2_OD_SHIFT                (10U)                                               /*!< LPC_IOCON_PIO0_2.OD Position            */
 #define LPC_IOCON_PIO0_2_OD(x)                   (((uint32_t)(((uint32_t)(x))<<10U))&0x400UL)        /*!< LPC_IOCON_PIO0_2.OD Field               */
-/* ------- PIO2_7 Bit Fields                        ------ */
-#define LPC_IOCON_PIO2_7_FUNC_MASK               (0x7U)                                              /*!< LPC_IOCON_PIO2_7.FUNC Mask              */
-#define LPC_IOCON_PIO2_7_FUNC_SHIFT              (0U)                                                /*!< LPC_IOCON_PIO2_7.FUNC Position          */
-#define LPC_IOCON_PIO2_7_FUNC(x)                 (((uint32_t)(((uint32_t)(x))<<0U))&0x7UL)           /*!< LPC_IOCON_PIO2_7.FUNC Field             */
-#define LPC_IOCON_PIO2_7_MODE_MASK               (0x18U)                                             /*!< LPC_IOCON_PIO2_7.MODE Mask              */
-#define LPC_IOCON_PIO2_7_MODE_SHIFT              (3U)                                                /*!< LPC_IOCON_PIO2_7.MODE Position          */
-#define LPC_IOCON_PIO2_7_MODE(x)                 (((uint32_t)(((uint32_t)(x))<<3U))&0x18UL)          /*!< LPC_IOCON_PIO2_7.MODE Field             */
-#define LPC_IOCON_PIO2_7_HYS_MASK                (0x20U)                                             /*!< LPC_IOCON_PIO2_7.HYS Mask               */
-#define LPC_IOCON_PIO2_7_HYS_SHIFT               (5U)                                                /*!< LPC_IOCON_PIO2_7.HYS Position           */
-#define LPC_IOCON_PIO2_7_HYS(x)                  (((uint32_t)(((uint32_t)(x))<<5U))&0x20UL)          /*!< LPC_IOCON_PIO2_7.HYS Field              */
-#define LPC_IOCON_PIO2_7_OD_MASK                 (0x400U)                                            /*!< LPC_IOCON_PIO2_7.OD Mask                */
-#define LPC_IOCON_PIO2_7_OD_SHIFT                (10U)                                               /*!< LPC_IOCON_PIO2_7.OD Position            */
-#define LPC_IOCON_PIO2_7_OD(x)                   (((uint32_t)(((uint32_t)(x))<<10U))&0x400UL)        /*!< LPC_IOCON_PIO2_7.OD Field               */
-/* ------- PIO2_8 Bit Fields                        ------ */
-#define LPC_IOCON_PIO2_8_FUNC_MASK               (0x7U)                                              /*!< LPC_IOCON_PIO2_8.FUNC Mask              */
-#define LPC_IOCON_PIO2_8_FUNC_SHIFT              (0U)                                                /*!< LPC_IOCON_PIO2_8.FUNC Position          */
-#define LPC_IOCON_PIO2_8_FUNC(x)                 (((uint32_t)(((uint32_t)(x))<<0U))&0x7UL)           /*!< LPC_IOCON_PIO2_8.FUNC Field             */
-#define LPC_IOCON_PIO2_8_MODE_MASK               (0x18U)                                             /*!< LPC_IOCON_PIO2_8.MODE Mask              */
-#define LPC_IOCON_PIO2_8_MODE_SHIFT              (3U)                                                /*!< LPC_IOCON_PIO2_8.MODE Position          */
-#define LPC_IOCON_PIO2_8_MODE(x)                 (((uint32_t)(((uint32_t)(x))<<3U))&0x18UL)          /*!< LPC_IOCON_PIO2_8.MODE Field             */
-#define LPC_IOCON_PIO2_8_HYS_MASK                (0x20U)                                             /*!< LPC_IOCON_PIO2_8.HYS Mask               */
-#define LPC_IOCON_PIO2_8_HYS_SHIFT               (5U)                                                /*!< LPC_IOCON_PIO2_8.HYS Position           */
-#define LPC_IOCON_PIO2_8_HYS(x)                  (((uint32_t)(((uint32_t)(x))<<5U))&0x20UL)          /*!< LPC_IOCON_PIO2_8.HYS Field              */
-#define LPC_IOCON_PIO2_8_OD_MASK                 (0x400U)                                            /*!< LPC_IOCON_PIO2_8.OD Mask                */
-#define LPC_IOCON_PIO2_8_OD_SHIFT                (10U)                                               /*!< LPC_IOCON_PIO2_8.OD Position            */
-#define LPC_IOCON_PIO2_8_OD(x)                   (((uint32_t)(((uint32_t)(x))<<10U))&0x400UL)        /*!< LPC_IOCON_PIO2_8.OD Field               */
+/* ------- PIO2_ Bit Fields                         ------ */
+#define LPC_IOCON_PIO2__FUNC_MASK                (0x7U)                                              /*!< LPC_IOCON_PIO2_.FUNC Mask               */
+#define LPC_IOCON_PIO2__FUNC_SHIFT               (0U)                                                /*!< LPC_IOCON_PIO2_.FUNC Position           */
+#define LPC_IOCON_PIO2__FUNC(x)                  (((uint32_t)(((uint32_t)(x))<<0U))&0x7UL)           /*!< LPC_IOCON_PIO2_.FUNC Field              */
+#define LPC_IOCON_PIO2__MODE_MASK                (0x18U)                                             /*!< LPC_IOCON_PIO2_.MODE Mask               */
+#define LPC_IOCON_PIO2__MODE_SHIFT               (3U)                                                /*!< LPC_IOCON_PIO2_.MODE Position           */
+#define LPC_IOCON_PIO2__MODE(x)                  (((uint32_t)(((uint32_t)(x))<<3U))&0x18UL)          /*!< LPC_IOCON_PIO2_.MODE Field              */
+#define LPC_IOCON_PIO2__HYS_MASK                 (0x20U)                                             /*!< LPC_IOCON_PIO2_.HYS Mask                */
+#define LPC_IOCON_PIO2__HYS_SHIFT                (5U)                                                /*!< LPC_IOCON_PIO2_.HYS Position            */
+#define LPC_IOCON_PIO2__HYS(x)                   (((uint32_t)(((uint32_t)(x))<<5U))&0x20UL)          /*!< LPC_IOCON_PIO2_.HYS Field               */
+#define LPC_IOCON_PIO2__OD_MASK                  (0x400U)                                            /*!< LPC_IOCON_PIO2_.OD Mask                 */
+#define LPC_IOCON_PIO2__OD_SHIFT                 (10U)                                               /*!< LPC_IOCON_PIO2_.OD Position             */
+#define LPC_IOCON_PIO2__OD(x)                    (((uint32_t)(((uint32_t)(x))<<10U))&0x400UL)        /*!< LPC_IOCON_PIO2_.OD Field                */
 /* ------- PIO2_1 Bit Fields                        ------ */
 #define LPC_IOCON_PIO2_1_FUNC_MASK               (0x7U)                                              /*!< LPC_IOCON_PIO2_1.FUNC Mask              */
 #define LPC_IOCON_PIO2_1_FUNC_SHIFT              (0U)                                                /*!< LPC_IOCON_PIO2_1.FUNC Position          */
@@ -1842,32 +1800,7 @@ typedef struct LPC_IOCON_Type {
 #define LPC_IOCON_PIO3_4_OD_MASK                 (0x400U)                                            /*!< LPC_IOCON_PIO3_4.OD Mask                */
 #define LPC_IOCON_PIO3_4_OD_SHIFT                (10U)                                               /*!< LPC_IOCON_PIO3_4.OD Position            */
 #define LPC_IOCON_PIO3_4_OD(x)                   (((uint32_t)(((uint32_t)(x))<<10U))&0x400UL)        /*!< LPC_IOCON_PIO3_4.OD Field               */
-/* ------- PIO2_4 Bit Fields                        ------ */
-#define LPC_IOCON_PIO2_4_FUNC_MASK               (0x7U)                                              /*!< LPC_IOCON_PIO2_4.FUNC Mask              */
-#define LPC_IOCON_PIO2_4_FUNC_SHIFT              (0U)                                                /*!< LPC_IOCON_PIO2_4.FUNC Position          */
-#define LPC_IOCON_PIO2_4_FUNC(x)                 (((uint32_t)(((uint32_t)(x))<<0U))&0x7UL)           /*!< LPC_IOCON_PIO2_4.FUNC Field             */
-#define LPC_IOCON_PIO2_4_MODE_MASK               (0x18U)                                             /*!< LPC_IOCON_PIO2_4.MODE Mask              */
-#define LPC_IOCON_PIO2_4_MODE_SHIFT              (3U)                                                /*!< LPC_IOCON_PIO2_4.MODE Position          */
-#define LPC_IOCON_PIO2_4_MODE(x)                 (((uint32_t)(((uint32_t)(x))<<3U))&0x18UL)          /*!< LPC_IOCON_PIO2_4.MODE Field             */
-#define LPC_IOCON_PIO2_4_HYS_MASK                (0x20U)                                             /*!< LPC_IOCON_PIO2_4.HYS Mask               */
-#define LPC_IOCON_PIO2_4_HYS_SHIFT               (5U)                                                /*!< LPC_IOCON_PIO2_4.HYS Position           */
-#define LPC_IOCON_PIO2_4_HYS(x)                  (((uint32_t)(((uint32_t)(x))<<5U))&0x20UL)          /*!< LPC_IOCON_PIO2_4.HYS Field              */
-#define LPC_IOCON_PIO2_4_OD_MASK                 (0x400U)                                            /*!< LPC_IOCON_PIO2_4.OD Mask                */
-#define LPC_IOCON_PIO2_4_OD_SHIFT                (10U)                                               /*!< LPC_IOCON_PIO2_4.OD Position            */
-#define LPC_IOCON_PIO2_4_OD(x)                   (((uint32_t)(((uint32_t)(x))<<10U))&0x400UL)        /*!< LPC_IOCON_PIO2_4.OD Field               */
-/* ------- PIO2_5 Bit Fields                        ------ */
-#define LPC_IOCON_PIO2_5_FUNC_MASK               (0x7U)                                              /*!< LPC_IOCON_PIO2_5.FUNC Mask              */
-#define LPC_IOCON_PIO2_5_FUNC_SHIFT              (0U)                                                /*!< LPC_IOCON_PIO2_5.FUNC Position          */
-#define LPC_IOCON_PIO2_5_FUNC(x)                 (((uint32_t)(((uint32_t)(x))<<0U))&0x7UL)           /*!< LPC_IOCON_PIO2_5.FUNC Field             */
-#define LPC_IOCON_PIO2_5_MODE_MASK               (0x18U)                                             /*!< LPC_IOCON_PIO2_5.MODE Mask              */
-#define LPC_IOCON_PIO2_5_MODE_SHIFT              (3U)                                                /*!< LPC_IOCON_PIO2_5.MODE Position          */
-#define LPC_IOCON_PIO2_5_MODE(x)                 (((uint32_t)(((uint32_t)(x))<<3U))&0x18UL)          /*!< LPC_IOCON_PIO2_5.MODE Field             */
-#define LPC_IOCON_PIO2_5_HYS_MASK                (0x20U)                                             /*!< LPC_IOCON_PIO2_5.HYS Mask               */
-#define LPC_IOCON_PIO2_5_HYS_SHIFT               (5U)                                                /*!< LPC_IOCON_PIO2_5.HYS Position           */
-#define LPC_IOCON_PIO2_5_HYS(x)                  (((uint32_t)(((uint32_t)(x))<<5U))&0x20UL)          /*!< LPC_IOCON_PIO2_5.HYS Field              */
-#define LPC_IOCON_PIO2_5_OD_MASK                 (0x400U)                                            /*!< LPC_IOCON_PIO2_5.OD Mask                */
-#define LPC_IOCON_PIO2_5_OD_SHIFT                (10U)                                               /*!< LPC_IOCON_PIO2_5.OD Position            */
-#define LPC_IOCON_PIO2_5_OD(x)                   (((uint32_t)(((uint32_t)(x))<<10U))&0x400UL)        /*!< LPC_IOCON_PIO2_5.OD Field               */
+/* ------- PIO2_ Bit Fields                         ------ */
 /* ------- PIO3_5 Bit Fields                        ------ */
 #define LPC_IOCON_PIO3_5_FUNC_MASK               (0x7U)                                              /*!< LPC_IOCON_PIO3_5.FUNC Mask              */
 #define LPC_IOCON_PIO3_5_FUNC_SHIFT              (0U)                                                /*!< LPC_IOCON_PIO3_5.FUNC Position          */
@@ -1907,32 +1840,7 @@ typedef struct LPC_IOCON_Type {
 #define LPC_IOCON_PIO0_7_OD_MASK                 (0x400U)                                            /*!< LPC_IOCON_PIO0_7.OD Mask                */
 #define LPC_IOCON_PIO0_7_OD_SHIFT                (10U)                                               /*!< LPC_IOCON_PIO0_7.OD Position            */
 #define LPC_IOCON_PIO0_7_OD(x)                   (((uint32_t)(((uint32_t)(x))<<10U))&0x400UL)        /*!< LPC_IOCON_PIO0_7.OD Field               */
-/* ------- PIO2_9 Bit Fields                        ------ */
-#define LPC_IOCON_PIO2_9_FUNC_MASK               (0x7U)                                              /*!< LPC_IOCON_PIO2_9.FUNC Mask              */
-#define LPC_IOCON_PIO2_9_FUNC_SHIFT              (0U)                                                /*!< LPC_IOCON_PIO2_9.FUNC Position          */
-#define LPC_IOCON_PIO2_9_FUNC(x)                 (((uint32_t)(((uint32_t)(x))<<0U))&0x7UL)           /*!< LPC_IOCON_PIO2_9.FUNC Field             */
-#define LPC_IOCON_PIO2_9_MODE_MASK               (0x18U)                                             /*!< LPC_IOCON_PIO2_9.MODE Mask              */
-#define LPC_IOCON_PIO2_9_MODE_SHIFT              (3U)                                                /*!< LPC_IOCON_PIO2_9.MODE Position          */
-#define LPC_IOCON_PIO2_9_MODE(x)                 (((uint32_t)(((uint32_t)(x))<<3U))&0x18UL)          /*!< LPC_IOCON_PIO2_9.MODE Field             */
-#define LPC_IOCON_PIO2_9_HYS_MASK                (0x20U)                                             /*!< LPC_IOCON_PIO2_9.HYS Mask               */
-#define LPC_IOCON_PIO2_9_HYS_SHIFT               (5U)                                                /*!< LPC_IOCON_PIO2_9.HYS Position           */
-#define LPC_IOCON_PIO2_9_HYS(x)                  (((uint32_t)(((uint32_t)(x))<<5U))&0x20UL)          /*!< LPC_IOCON_PIO2_9.HYS Field              */
-#define LPC_IOCON_PIO2_9_OD_MASK                 (0x400U)                                            /*!< LPC_IOCON_PIO2_9.OD Mask                */
-#define LPC_IOCON_PIO2_9_OD_SHIFT                (10U)                                               /*!< LPC_IOCON_PIO2_9.OD Position            */
-#define LPC_IOCON_PIO2_9_OD(x)                   (((uint32_t)(((uint32_t)(x))<<10U))&0x400UL)        /*!< LPC_IOCON_PIO2_9.OD Field               */
-/* ------- PIO2_10 Bit Fields                       ------ */
-#define LPC_IOCON_PIO2_10_FUNC_MASK              (0x7U)                                              /*!< LPC_IOCON_PIO2_10.FUNC Mask             */
-#define LPC_IOCON_PIO2_10_FUNC_SHIFT             (0U)                                                /*!< LPC_IOCON_PIO2_10.FUNC Position         */
-#define LPC_IOCON_PIO2_10_FUNC(x)                (((uint32_t)(((uint32_t)(x))<<0U))&0x7UL)           /*!< LPC_IOCON_PIO2_10.FUNC Field            */
-#define LPC_IOCON_PIO2_10_MODE_MASK              (0x18U)                                             /*!< LPC_IOCON_PIO2_10.MODE Mask             */
-#define LPC_IOCON_PIO2_10_MODE_SHIFT             (3U)                                                /*!< LPC_IOCON_PIO2_10.MODE Position         */
-#define LPC_IOCON_PIO2_10_MODE(x)                (((uint32_t)(((uint32_t)(x))<<3U))&0x18UL)          /*!< LPC_IOCON_PIO2_10.MODE Field            */
-#define LPC_IOCON_PIO2_10_HYS_MASK               (0x20U)                                             /*!< LPC_IOCON_PIO2_10.HYS Mask              */
-#define LPC_IOCON_PIO2_10_HYS_SHIFT              (5U)                                                /*!< LPC_IOCON_PIO2_10.HYS Position          */
-#define LPC_IOCON_PIO2_10_HYS(x)                 (((uint32_t)(((uint32_t)(x))<<5U))&0x20UL)          /*!< LPC_IOCON_PIO2_10.HYS Field             */
-#define LPC_IOCON_PIO2_10_OD_MASK                (0x400U)                                            /*!< LPC_IOCON_PIO2_10.OD Mask               */
-#define LPC_IOCON_PIO2_10_OD_SHIFT               (10U)                                               /*!< LPC_IOCON_PIO2_10.OD Position           */
-#define LPC_IOCON_PIO2_10_OD(x)                  (((uint32_t)(((uint32_t)(x))<<10U))&0x400UL)        /*!< LPC_IOCON_PIO2_10.OD Field              */
+/* ------- PIO2_ Bit Fields                         ------ */
 /* ------- PIO2_2 Bit Fields                        ------ */
 #define LPC_IOCON_PIO2_2_FUNC_MASK               (0x7U)                                              /*!< LPC_IOCON_PIO2_2.FUNC Mask              */
 #define LPC_IOCON_PIO2_2_FUNC_SHIFT              (0U)                                                /*!< LPC_IOCON_PIO2_2.FUNC Position          */

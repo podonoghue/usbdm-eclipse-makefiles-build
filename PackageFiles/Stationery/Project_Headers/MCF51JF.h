@@ -5,7 +5,7 @@
  *           Equivalent: 
  *
  * @version  V0.0
- * @date     2018/03
+ * @date     2018/04
  *
  *******************************************************************************************************/
 
@@ -1405,8 +1405,8 @@ typedef struct FTFL_Type {
  * @} */ /* End group FTFL_Peripheral_access_layer_GROUP 
  */
 /**
-* @addtogroup FTM_Peripheral_access_layer_GROUP FTM Peripheral Access Layer
-* @brief C Struct for FTM
+* @addtogroup FTM_2CH_Peripheral_access_layer_GROUP FTM_2CH Peripheral Access Layer
+* @brief C Struct for FTM_2CH
 * @{
 */
 
@@ -1417,12 +1417,13 @@ typedef struct FTFL_Type {
 /**
  * @brief FlexTimer Module (2 channels)
  */
+#define FTM_CONTROLS_COUNT   2          /**< Number of FTM channels                             */
 /**
-* @addtogroup FTM_structs_GROUP FTM struct
-* @brief Struct for FTM
+* @addtogroup FTM_2CH_structs_GROUP FTM_2CH struct
+* @brief Struct for FTM_2CH
 * @{
 */
-typedef struct FTM_2CH_Type {
+typedef struct FTM_Type {
    __IO uint8_t   SC;                           /**< 0000: Status and Control                                           */
    union {                                      /**< 0000: (size=0002)                                                  */
       __IO uint16_t  CNT;                       /**< 0001: Counter                                                      */
@@ -1447,7 +1448,7 @@ typedef struct FTM_2CH_Type {
             __IO uint8_t   CnVL;                /**< 0007: Channel  Value Low                                           */
          };
       };
-   } CONTROLS[2];                               /**< 0005: (cluster: size=0x0006, 6)                                    */
+   } CONTROLS[FTM_CONTROLS_COUNT];              /**< 0005: (cluster: size=0x0006, 6)                                    */
         uint8_t   RESERVED_4[21];              
    union {                                      /**< 0000: (size=0002)                                                  */
       __IO uint16_t  CNTIN;                     /**< 0020: Counter Initial Value                                        */
@@ -1472,10 +1473,10 @@ typedef struct FTM_2CH_Type {
    __IO uint8_t   FLTFILTER;                    /**< 0031: Fault Input Filter Control                                   */
    __IO uint8_t   FLTCTRL;                      /**< 0032: Fault Control                                                */
    __IO uint8_t   QDCTRL;                       /**< 0033: Quadrature Decoder Control and Status                        */
-} FTM_2CH_Type;
+} FTM_Type;
 
 /**
- * @} */ /* End group FTM_structs_GROUP 
+ * @} */ /* End group FTM_2CH_structs_GROUP 
  */
 
 /* -------------------------------------------------------------------------------- */
@@ -1483,8 +1484,8 @@ typedef struct FTM_2CH_Type {
 /* -------------------------------------------------------------------------------- */
 
 /**
-* @addtogroup FTM_Register_Masks_GROUP FTM Register Masks
-* @brief Register Masks for FTM
+* @addtogroup FTM_2CH_Register_Masks_GROUP FTM_2CH Register Masks
+* @brief Register Masks for FTM_2CH
 * @{
 */
 /* ------- SC Bit Fields                            ------ */
@@ -1817,15 +1818,15 @@ typedef struct FTM_2CH_Type {
 #define FTM_QDCTRL_PHAFLTREN_SHIFT               (7U)                                                /*!< FTM0_QDCTRL.PHAFLTREN Position          */
 #define FTM_QDCTRL_PHAFLTREN(x)                  (((uint8_t)(((uint8_t)(x))<<7U))&0x80UL)            /*!< FTM0_QDCTRL.PHAFLTREN Field             */
 /**
- * @} */ /* End group FTM_Register_Masks_GROUP 
+ * @} */ /* End group FTM_2CH_Register_Masks_GROUP 
  */
 
 /* FTM0 - Peripheral instance base addresses */
 #define FTM0_BasePtr                   0xFFFF8440UL //!< Peripheral base address
-#define FTM0                           ((FTM_2CH_Type *) FTM0_BasePtr) //!< Freescale base pointer
+#define FTM0                           ((FTM_Type *) FTM0_BasePtr) //!< Freescale base pointer
 #define FTM0_BASE_PTR                  (FTM0) //!< Freescale style base pointer
 /**
- * @} */ /* End group FTM_Peripheral_access_layer_GROUP 
+ * @} */ /* End group FTM_2CH_Peripheral_access_layer_GROUP 
  */
 /**
 * @addtogroup FTM_Peripheral_access_layer_GROUP FTM Peripheral Access Layer
@@ -1840,12 +1841,13 @@ typedef struct FTM_2CH_Type {
 /**
  * @brief FlexTimer Module (6 channels)
  */
+#define FTM1_CONTROLS_COUNT  6          /**< Number of FTM channels                             */
 /**
 * @addtogroup FTM_structs_GROUP FTM struct
 * @brief Struct for FTM
 * @{
 */
-typedef struct FTM_Type {
+typedef struct FTM1_Type {
    __IO uint8_t   SC;                           /**< 0000: Status and Control                                           */
    union {                                      /**< 0000: (size=0002)                                                  */
       __IO uint16_t  CNT;                       /**< 0001: Counter                                                      */
@@ -1870,7 +1872,7 @@ typedef struct FTM_Type {
             __IO uint8_t   CnVL;                /**< 0007: Channel  Value Low                                           */
          };
       };
-   } CONTROLS[6];                               /**< 0005: (cluster: size=0x0012, 18)                                   */
+   } CONTROLS[FTM1_CONTROLS_COUNT];             /**< 0005: (cluster: size=0x0012, 18)                                   */
         uint8_t   RESERVED_4[9];               
    union {                                      /**< 0000: (size=0002)                                                  */
       __IO uint16_t  CNTIN;                     /**< 0020: Counter Initial Value                                        */
@@ -1895,7 +1897,7 @@ typedef struct FTM_Type {
    __IO uint8_t   FLTFILTER;                    /**< 0031: Fault Input Filter Control                                   */
    __IO uint8_t   FLTCTRL;                      /**< 0032: Fault Control                                                */
    __IO uint8_t   QDCTRL;                       /**< 0033: Quadrature Decoder Control and Status                        */
-} FTM_Type;
+} FTM1_Type;
 
 /**
  * @} */ /* End group FTM_structs_GROUP 
@@ -1937,12 +1939,6 @@ typedef struct FTM_Type {
 #define FTM_STATUS_CH5F_MASK                     (0x20U)                                             /*!< FTM1_STATUS.CH5F Mask                   */
 #define FTM_STATUS_CH5F_SHIFT                    (5U)                                                /*!< FTM1_STATUS.CH5F Position               */
 #define FTM_STATUS_CH5F(x)                       (((uint8_t)(((uint8_t)(x))<<5U))&0x20UL)            /*!< FTM1_STATUS.CH5F Field                  */
-#define FTM_STATUS_CH6F_MASK                     (0x40U)                                             /*!< FTM1_STATUS.CH6F Mask                   */
-#define FTM_STATUS_CH6F_SHIFT                    (6U)                                                /*!< FTM1_STATUS.CH6F Position               */
-#define FTM_STATUS_CH6F(x)                       (((uint8_t)(((uint8_t)(x))<<6U))&0x40UL)            /*!< FTM1_STATUS.CH6F Field                  */
-#define FTM_STATUS_CH7F_MASK                     (0x80U)                                             /*!< FTM1_STATUS.CH7F Mask                   */
-#define FTM_STATUS_CH7F_SHIFT                    (7U)                                                /*!< FTM1_STATUS.CH7F Position               */
-#define FTM_STATUS_CH7F(x)                       (((uint8_t)(((uint8_t)(x))<<7U))&0x80UL)            /*!< FTM1_STATUS.CH7F Field                  */
 /* ------- MODE Bit Fields                          ------ */
 /* ------- SYNC Bit Fields                          ------ */
 /* ------- OUTINIT Bit Fields                       ------ */
@@ -1958,12 +1954,6 @@ typedef struct FTM_Type {
 #define FTM_OUTINIT_CH5OI_MASK                   (0x20U)                                             /*!< FTM1_OUTINIT.CH5OI Mask                 */
 #define FTM_OUTINIT_CH5OI_SHIFT                  (5U)                                                /*!< FTM1_OUTINIT.CH5OI Position             */
 #define FTM_OUTINIT_CH5OI(x)                     (((uint8_t)(((uint8_t)(x))<<5U))&0x20UL)            /*!< FTM1_OUTINIT.CH5OI Field                */
-#define FTM_OUTINIT_CH6OI_MASK                   (0x40U)                                             /*!< FTM1_OUTINIT.CH6OI Mask                 */
-#define FTM_OUTINIT_CH6OI_SHIFT                  (6U)                                                /*!< FTM1_OUTINIT.CH6OI Position             */
-#define FTM_OUTINIT_CH6OI(x)                     (((uint8_t)(((uint8_t)(x))<<6U))&0x40UL)            /*!< FTM1_OUTINIT.CH6OI Field                */
-#define FTM_OUTINIT_CH7OI_MASK                   (0x80U)                                             /*!< FTM1_OUTINIT.CH7OI Mask                 */
-#define FTM_OUTINIT_CH7OI_SHIFT                  (7U)                                                /*!< FTM1_OUTINIT.CH7OI Position             */
-#define FTM_OUTINIT_CH7OI(x)                     (((uint8_t)(((uint8_t)(x))<<7U))&0x80UL)            /*!< FTM1_OUTINIT.CH7OI Field                */
 /* ------- OUTMASK Bit Fields                       ------ */
 #define FTM_OUTMASK_CH2OM_MASK                   (0x4U)                                              /*!< FTM1_OUTMASK.CH2OM Mask                 */
 #define FTM_OUTMASK_CH2OM_SHIFT                  (2U)                                                /*!< FTM1_OUTMASK.CH2OM Position             */
@@ -1977,12 +1967,6 @@ typedef struct FTM_Type {
 #define FTM_OUTMASK_CH5OM_MASK                   (0x20U)                                             /*!< FTM1_OUTMASK.CH5OM Mask                 */
 #define FTM_OUTMASK_CH5OM_SHIFT                  (5U)                                                /*!< FTM1_OUTMASK.CH5OM Position             */
 #define FTM_OUTMASK_CH5OM(x)                     (((uint8_t)(((uint8_t)(x))<<5U))&0x20UL)            /*!< FTM1_OUTMASK.CH5OM Field                */
-#define FTM_OUTMASK_CH6OM_MASK                   (0x40U)                                             /*!< FTM1_OUTMASK.CH6OM Mask                 */
-#define FTM_OUTMASK_CH6OM_SHIFT                  (6U)                                                /*!< FTM1_OUTMASK.CH6OM Position             */
-#define FTM_OUTMASK_CH6OM(x)                     (((uint8_t)(((uint8_t)(x))<<6U))&0x40UL)            /*!< FTM1_OUTMASK.CH6OM Field                */
-#define FTM_OUTMASK_CH7OM_MASK                   (0x80U)                                             /*!< FTM1_OUTMASK.CH7OM Mask                 */
-#define FTM_OUTMASK_CH7OM_SHIFT                  (7U)                                                /*!< FTM1_OUTMASK.CH7OM Position             */
-#define FTM_OUTMASK_CH7OM(x)                     (((uint8_t)(((uint8_t)(x))<<7U))&0x80UL)            /*!< FTM1_OUTMASK.CH7OM Field                */
 /* ------- COMBINE Bit Fields                       ------ */
 /* ------- DEADTIME Bit Fields                      ------ */
 /* ------- EXTTRIG Bit Fields                       ------ */
@@ -1999,7 +1983,7 @@ typedef struct FTM_Type {
 
 /* FTM1 - Peripheral instance base addresses */
 #define FTM1_BasePtr                   0xFFFF8480UL //!< Peripheral base address
-#define FTM1                           ((FTM_Type *) FTM1_BasePtr) //!< Freescale base pointer
+#define FTM1                           ((FTM1_Type *) FTM1_BasePtr) //!< Freescale base pointer
 #define FTM1_BASE_PTR                  (FTM1) //!< Freescale style base pointer
 /**
  * @} */ /* End group FTM_Peripheral_access_layer_GROUP 

@@ -5,7 +5,7 @@
  *           Equivalent: 
  *
  * @version  V0.0
- * @date     2018/03
+ * @date     2018/04
  *
  *******************************************************************************************************/
 
@@ -2387,6 +2387,18 @@ typedef struct GPIO_Type {
 #define GPIO_PORT_PORT7_MASK                     (0x80U)                                             /*!< GPIO_PORTNQ.PORT7 Mask                  */
 #define GPIO_PORT_PORT7_SHIFT                    (7U)                                                /*!< GPIO_PORTNQ.PORT7 Position              */
 #define GPIO_PORT_PORT7(x)                       (((uint8_t)(((uint8_t)(x))<<7U))&0x80UL)            /*!< GPIO_PORTNQ.PORT7 Field                 */
+/* ------- PORTAN Bit Fields                        ------ */
+/* ------- PORTAS Bit Fields                        ------ */
+/* ------- PORTQS Bit Fields                        ------ */
+/* ------- PORTTA Bit Fields                        ------ */
+/* ------- PORTTC Bit Fields                        ------ */
+/* ------- PORTTD Bit Fields                        ------ */
+/* ------- PORTUA Bit Fields                        ------ */
+/* ------- PORTUB Bit Fields                        ------ */
+/* ------- PORTUC Bit Fields                        ------ */
+/* ------- PORTDD Bit Fields                        ------ */
+/* ------- PORTLD Bit Fields                        ------ */
+/* ------- PORTGP Bit Fields                        ------ */
 /* ------- DDRNQ Bit Fields                         ------ */
 #define GPIO_DDR_DDR0_MASK                       (0x1U)                                              /*!< GPIO_DDRNQ.DDR0 Mask                    */
 #define GPIO_DDR_DDR0_SHIFT                      (0U)                                                /*!< GPIO_DDRNQ.DDR0 Position                */
@@ -2412,6 +2424,18 @@ typedef struct GPIO_Type {
 #define GPIO_DDR_DDR7_MASK                       (0x80U)                                             /*!< GPIO_DDRNQ.DDR7 Mask                    */
 #define GPIO_DDR_DDR7_SHIFT                      (7U)                                                /*!< GPIO_DDRNQ.DDR7 Position                */
 #define GPIO_DDR_DDR7(x)                         (((uint8_t)(((uint8_t)(x))<<7U))&0x80UL)            /*!< GPIO_DDRNQ.DDR7 Field                   */
+/* ------- DDRAN Bit Fields                         ------ */
+/* ------- DDRAS Bit Fields                         ------ */
+/* ------- DDRQS Bit Fields                         ------ */
+/* ------- DDRTA Bit Fields                         ------ */
+/* ------- DDRTC Bit Fields                         ------ */
+/* ------- DDRTD Bit Fields                         ------ */
+/* ------- DDRUA Bit Fields                         ------ */
+/* ------- DDRUB Bit Fields                         ------ */
+/* ------- DDRUC Bit Fields                         ------ */
+/* ------- DDRDD Bit Fields                         ------ */
+/* ------- DDRLD Bit Fields                         ------ */
+/* ------- DDRGP Bit Fields                         ------ */
 /* ------- SETNQ Bit Fields                         ------ */
 #define GPIO_SET_SET0_MASK                       (0x1U)                                              /*!< GPIO_SETNQ.SET0 Mask                    */
 #define GPIO_SET_SET0_SHIFT                      (0U)                                                /*!< GPIO_SETNQ.SET0 Position                */
@@ -2437,6 +2461,18 @@ typedef struct GPIO_Type {
 #define GPIO_SET_SET7_MASK                       (0x80U)                                             /*!< GPIO_SETNQ.SET7 Mask                    */
 #define GPIO_SET_SET7_SHIFT                      (7U)                                                /*!< GPIO_SETNQ.SET7 Position                */
 #define GPIO_SET_SET7(x)                         (((uint8_t)(((uint8_t)(x))<<7U))&0x80UL)            /*!< GPIO_SETNQ.SET7 Field                   */
+/* ------- SETAN Bit Fields                         ------ */
+/* ------- SETAS Bit Fields                         ------ */
+/* ------- SETQS Bit Fields                         ------ */
+/* ------- SETTA Bit Fields                         ------ */
+/* ------- SETTC Bit Fields                         ------ */
+/* ------- SETTD Bit Fields                         ------ */
+/* ------- SETUA Bit Fields                         ------ */
+/* ------- SETUB Bit Fields                         ------ */
+/* ------- SETUC Bit Fields                         ------ */
+/* ------- SETDD Bit Fields                         ------ */
+/* ------- SETLD Bit Fields                         ------ */
+/* ------- SETGP Bit Fields                         ------ */
 /* ------- CLRNQ Bit Fields                         ------ */
 #define GPIO_CLR_CLR0_MASK                       (0x1U)                                              /*!< GPIO_CLRNQ.CLR0 Mask                    */
 #define GPIO_CLR_CLR0_SHIFT                      (0U)                                                /*!< GPIO_CLRNQ.CLR0 Position                */
@@ -2462,6 +2498,18 @@ typedef struct GPIO_Type {
 #define GPIO_CLR_CLR7_MASK                       (0x80U)                                             /*!< GPIO_CLRNQ.CLR7 Mask                    */
 #define GPIO_CLR_CLR7_SHIFT                      (7U)                                                /*!< GPIO_CLRNQ.CLR7 Position                */
 #define GPIO_CLR_CLR7(x)                         (((uint8_t)(((uint8_t)(x))<<7U))&0x80UL)            /*!< GPIO_CLRNQ.CLR7 Field                   */
+/* ------- CLRAN Bit Fields                         ------ */
+/* ------- CLRAS Bit Fields                         ------ */
+/* ------- CLRQS Bit Fields                         ------ */
+/* ------- CLRTA Bit Fields                         ------ */
+/* ------- CLRTC Bit Fields                         ------ */
+/* ------- CLRTD Bit Fields                         ------ */
+/* ------- CLRUA Bit Fields                         ------ */
+/* ------- CLRUB Bit Fields                         ------ */
+/* ------- CLRUC Bit Fields                         ------ */
+/* ------- CLRDD Bit Fields                         ------ */
+/* ------- CLRLD Bit Fields                         ------ */
+/* ------- CLRGP Bit Fields                         ------ */
 /* ------- QPARNQ Bit Fields                        ------ */
 #define GPIO_QPAR_QPAR0_MASK                     (0x3U)                                              /*!< GPIO_QPARNQ.QPAR0 Mask                  */
 #define GPIO_QPAR_QPAR0_SHIFT                    (0U)                                                /*!< GPIO_QPARNQ.QPAR0 Position              */
@@ -2513,6 +2561,16 @@ typedef struct GPIO_Type {
 #define GPIO_PAR_PAR7_SHIFT                      (7U)                                                /*!< GPIO_PARAN.PAR7 Position                */
 #define GPIO_PAR_PAR7(x)                         (((uint8_t)(((uint8_t)(x))<<7U))&0x80UL)            /*!< GPIO_PARAN.PAR7 Field                   */
 /* ------- QPARAS Bit Fields                        ------ */
+/* ------- QPARQS Bit Fields                        ------ */
+/* ------- QPARTA Bit Fields                        ------ */
+/* ------- QPARTC Bit Fields                        ------ */
+/* ------- PARTD Bit Fields                         ------ */
+/* ------- QPARUA Bit Fields                        ------ */
+/* ------- QPARUB Bit Fields                        ------ */
+/* ------- PARUC Bit Fields                         ------ */
+/* ------- PARDD Bit Fields                         ------ */
+/* ------- PARLD Bit Fields                         ------ */
+/* ------- PARGP Bit Fields                         ------ */
 /**
  * @} */ /* End group GPIO_Register_Masks_GROUP 
  */

@@ -5,7 +5,7 @@
  *           Equivalent: 
  *
  * @version  V6
- * @date     2018/03
+ * @date     2018/04
  *
  *******************************************************************************************************/
 
@@ -316,8 +316,7 @@ typedef struct CT16B0_Type {
    __IO uint32_t  MCR;                          /**< 0014: Match Control Register (MCR). The MCR is used to control if an interrupt is generated and if the TC is reset when a Match occurs */
    __IO uint32_t  MR[4];                        /**< 0018: Match Register. MR can be enabled through the MCR to reset the TC, stop both the TC and PC, and/or generate an interrupt every time MR matches the TC */
    __IO uint32_t  CCR;                          /**< 0028: Capture Control Register (CCR). The CCR controls which edges of the capture inputs are used to load the Capture Registers and whether or not an interrupt is generated when a capture takes place */
-   __I  uint32_t  CR0;                          /**< 002C: Capture Register (CR). CR is loaded with the value of TC when there is an event on the CT16Bn_CAPm input */
-   __I  uint32_t  CR1;                          /**< 0030: Capture Register (CR). CR is loaded with the value of TC when there is an event on the CT16Bn_CAPm input */
+   __I  uint32_t  CR[2];                        /**< 002C: Capture Register (CR). CR is loaded with the value of TC when there is an event on the CT16Bn_CAPm input */
         uint8_t   RESERVED_0[8];               
    __IO uint32_t  EMR;                          /**< 003C: External Match Register (EMR). The EMR controls the match function and the external match pins CT16B0_MAT[2:0] */
         uint8_t   RESERVED_1[48];              
@@ -436,14 +435,10 @@ typedef struct CT16B0_Type {
 #define CT16B0_CCR_CAP1I_MASK                    (0x20U)                                             /*!< CT16B0_CCR.CAP1I Mask                   */
 #define CT16B0_CCR_CAP1I_SHIFT                   (5U)                                                /*!< CT16B0_CCR.CAP1I Position               */
 #define CT16B0_CCR_CAP1I(x)                      (((uint32_t)(((uint32_t)(x))<<5U))&0x20UL)          /*!< CT16B0_CCR.CAP1I Field                  */
-/* ------- CR0 Bit Fields                           ------ */
-#define CT16B0_CR0_CAP_MASK                      (0xFFFFU)                                           /*!< CT16B0_CR0.CAP Mask                     */
-#define CT16B0_CR0_CAP_SHIFT                     (0U)                                                /*!< CT16B0_CR0.CAP Position                 */
-#define CT16B0_CR0_CAP(x)                        (((uint32_t)(((uint32_t)(x))<<0U))&0xFFFFUL)        /*!< CT16B0_CR0.CAP Field                    */
-/* ------- CR1 Bit Fields                           ------ */
-#define CT16B0_CR1_CAP_MASK                      (0xFFFFU)                                           /*!< CT16B0_CR1.CAP Mask                     */
-#define CT16B0_CR1_CAP_SHIFT                     (0U)                                                /*!< CT16B0_CR1.CAP Position                 */
-#define CT16B0_CR1_CAP(x)                        (((uint32_t)(((uint32_t)(x))<<0U))&0xFFFFUL)        /*!< CT16B0_CR1.CAP Field                    */
+/* ------- CR Bit Fields                            ------ */
+#define CT16B0_CR_CAP_MASK                       (0xFFFFU)                                           /*!< CT16B0_CR.CAP Mask                      */
+#define CT16B0_CR_CAP_SHIFT                      (0U)                                                /*!< CT16B0_CR.CAP Position                  */
+#define CT16B0_CR_CAP(x)                         (((uint32_t)(((uint32_t)(x))<<0U))&0xFFFFUL)        /*!< CT16B0_CR.CAP Field                     */
 /* ------- EMR Bit Fields                           ------ */
 #define CT16B0_EMR_EM0_MASK                      (0x1U)                                              /*!< CT16B0_EMR.EM0 Mask                     */
 #define CT16B0_EMR_EM0_SHIFT                     (0U)                                                /*!< CT16B0_EMR.EM0 Position                 */
@@ -558,8 +553,7 @@ typedef struct CT32B0_Type {
    __IO uint32_t  MCR;                          /**< 0014: Match Control Register (MCR). The MCR is used to control if an interrupt is generated and if the TC is reset when a Match occurs */
    __IO uint32_t  MR[4];                        /**< 0018: Match Register. MR can be enabled through the                */
    __IO uint32_t  CCR;                          /**< 0028: Capture Control Register (CCR). The CCR controls which edges of the capture inputs are used to load the Capture Registers and whether or not an interrupt is generated when a capture takes place */
-   __I  uint32_t  CR0;                          /**< 002C: Capture Register (CR). CR is loaded with the value of TC when there is an event on the CT16Bn_CAPm input */
-   __I  uint32_t  CR1;                          /**< 0030: Capture Register (CR). CR is loaded with the value of TC when there is an event on the CT16Bn_CAPm input */
+   __I  uint32_t  CR[2];                        /**< 002C: Capture Register (CR). CR is loaded with the value of TC when there is an event on the CT16Bn_CAPm input */
         uint8_t   RESERVED_0[8];               
    __IO uint32_t  EMR;                          /**< 003C: External Match Register (EMR). The EMR controls the match function and the external match pins CT32B0_MAT[3:0] */
         uint8_t   RESERVED_1[48];              
@@ -678,14 +672,10 @@ typedef struct CT32B0_Type {
 #define CT32B0_CCR_CAP1I_MASK                    (0x20U)                                             /*!< CT32B0_CCR.CAP1I Mask                   */
 #define CT32B0_CCR_CAP1I_SHIFT                   (5U)                                                /*!< CT32B0_CCR.CAP1I Position               */
 #define CT32B0_CCR_CAP1I(x)                      (((uint32_t)(((uint32_t)(x))<<5U))&0x20UL)          /*!< CT32B0_CCR.CAP1I Field                  */
-/* ------- CR0 Bit Fields                           ------ */
-#define CT32B0_CR0_CAP_MASK                      (0xFFFFFFFFU)                                       /*!< CT32B0_CR0.CAP Mask                     */
-#define CT32B0_CR0_CAP_SHIFT                     (0U)                                                /*!< CT32B0_CR0.CAP Position                 */
-#define CT32B0_CR0_CAP(x)                        (((uint32_t)(((uint32_t)(x))<<0U))&0xFFFFFFFFUL)    /*!< CT32B0_CR0.CAP Field                    */
-/* ------- CR1 Bit Fields                           ------ */
-#define CT32B0_CR1_CAP_MASK                      (0xFFFFFFFFU)                                       /*!< CT32B0_CR1.CAP Mask                     */
-#define CT32B0_CR1_CAP_SHIFT                     (0U)                                                /*!< CT32B0_CR1.CAP Position                 */
-#define CT32B0_CR1_CAP(x)                        (((uint32_t)(((uint32_t)(x))<<0U))&0xFFFFFFFFUL)    /*!< CT32B0_CR1.CAP Field                    */
+/* ------- CR Bit Fields                            ------ */
+#define CT32B0_CR_CAP_MASK                       (0xFFFFFFFFU)                                       /*!< CT32B0_CR.CAP Mask                      */
+#define CT32B0_CR_CAP_SHIFT                      (0U)                                                /*!< CT32B0_CR.CAP Position                  */
+#define CT32B0_CR_CAP(x)                         (((uint32_t)(((uint32_t)(x))<<0U))&0xFFFFFFFFUL)    /*!< CT32B0_CR.CAP Field                     */
 /* ------- EMR Bit Fields                           ------ */
 #define CT32B0_EMR_EM0_MASK                      (0x1U)                                              /*!< CT32B0_EMR.EM0 Mask                     */
 #define CT32B0_EMR_EM0_SHIFT                     (0U)                                                /*!< CT32B0_EMR.EM0 Position                 */
@@ -1877,13 +1867,10 @@ typedef struct I2C_Type {
    __O  uint32_t  CONCLR;                       /**< 0018: I2C Control Clear Register. When a one is written to a bit of this register, the corresponding bit in the I2C control register is cleared. Writing a zero has no effect on the corresponding bit in the I2C control register */
    __IO uint32_t  MMCTRL;                       /**< 001C: Monitor mode control register                                */
    __IO uint32_t  ADR1;                         /**< 0020: I2C Slave Address Register 1. Contains the 7-bit slave address for operation of the I2C interface in slave mode, and is not used in master mode. The least significant bit determines whether a slave responds to the General Call address */
-   __IO uint32_t  ADR2;                         /**< 0024: I2C Slave Address Register 1. Contains the 7-bit slave address for operation of the I2C interface in slave mode, and is not used in master mode. The least significant bit determines whether a slave responds to the General Call address */
-   __IO uint32_t  ADR3;                         /**< 0028: I2C Slave Address Register 1. Contains the 7-bit slave address for operation of the I2C interface in slave mode, and is not used in master mode. The least significant bit determines whether a slave responds to the General Call address */
+   __IO uint32_t  ADR2;                         /**< 0024: I2C Slave Address Register 2. Contains the 7-bit slave address for operation of the I2C interface in slave mode, and is not used in master mode. The least significant bit determines whether a slave responds to the General Call address */
+   __IO uint32_t  ADR3;                         /**< 0028: I2C Slave Address Register 3. Contains the 7-bit slave address for operation of the I2C interface in slave mode, and is not used in master mode. The least significant bit determines whether a slave responds to the General Call address */
    __I  uint32_t  DATA_BUFFER;                  /**< 002C: Data buffer register. The contents of the 8 MSBs of the I2DAT shift register will be transferred to the DATA_BUFFER automatically after every nine bits (8 bits of data plus ACK or NACK) has been received on the bus */
-   __IO uint32_t  MASK0;                        /**< 0030: I2C Slave address mask register 0. This mask register is associated with I2ADR0 to determine an address match. The mask register has no effect when comparing to the General Call address (0000000) */
-   __IO uint32_t  MASK1;                        /**< 0034: I2C Slave address mask register 0. This mask register is associated with I2ADR0 to determine an address match. The mask register has no effect when comparing to the General Call address (0000000) */
-   __IO uint32_t  MASK2;                        /**< 0038: I2C Slave address mask register 0. This mask register is associated with I2ADR0 to determine an address match. The mask register has no effect when comparing to the General Call address (0000000) */
-   __IO uint32_t  MASK3;                        /**< 003C: I2C Slave address mask register 0. This mask register is associated with I2ADR0 to determine an address match. The mask register has no effect when comparing to the General Call address (0000000) */
+   __IO uint32_t  MASK[4];                      /**< 0030: I2C Slave address mask register . This mask register is associated with I2ADR0 to determine an address match. The mask register has no effect when comparing to the General Call address (0000000) */
 } I2C_Type;
 
 /**
@@ -1961,47 +1948,21 @@ typedef struct I2C_Type {
 #define I2C_MMCTRL_MATCH_ALL_MASK                (0x4U)                                              /*!< I2C_MMCTRL.MATCH_ALL Mask               */
 #define I2C_MMCTRL_MATCH_ALL_SHIFT               (2U)                                                /*!< I2C_MMCTRL.MATCH_ALL Position           */
 #define I2C_MMCTRL_MATCH_ALL(x)                  (((uint32_t)(((uint32_t)(x))<<2U))&0x4UL)           /*!< I2C_MMCTRL.MATCH_ALL Field              */
-/* ------- ADR1 Bit Fields                          ------ */
-#define I2C_ADR1_GC_MASK                         (0x1U)                                              /*!< I2C_ADR1.GC Mask                        */
-#define I2C_ADR1_GC_SHIFT                        (0U)                                                /*!< I2C_ADR1.GC Position                    */
-#define I2C_ADR1_GC(x)                           (((uint32_t)(((uint32_t)(x))<<0U))&0x1UL)           /*!< I2C_ADR1.GC Field                       */
-#define I2C_ADR1_Address_MASK                    (0xFEU)                                             /*!< I2C_ADR1.Address Mask                   */
-#define I2C_ADR1_Address_SHIFT                   (1U)                                                /*!< I2C_ADR1.Address Position               */
-#define I2C_ADR1_Address(x)                      (((uint32_t)(((uint32_t)(x))<<1U))&0xFEUL)          /*!< I2C_ADR1.Address Field                  */
-/* ------- ADR2 Bit Fields                          ------ */
-#define I2C_ADR2_GC_MASK                         (0x1U)                                              /*!< I2C_ADR2.GC Mask                        */
-#define I2C_ADR2_GC_SHIFT                        (0U)                                                /*!< I2C_ADR2.GC Position                    */
-#define I2C_ADR2_GC(x)                           (((uint32_t)(((uint32_t)(x))<<0U))&0x1UL)           /*!< I2C_ADR2.GC Field                       */
-#define I2C_ADR2_Address_MASK                    (0xFEU)                                             /*!< I2C_ADR2.Address Mask                   */
-#define I2C_ADR2_Address_SHIFT                   (1U)                                                /*!< I2C_ADR2.Address Position               */
-#define I2C_ADR2_Address(x)                      (((uint32_t)(((uint32_t)(x))<<1U))&0xFEUL)          /*!< I2C_ADR2.Address Field                  */
-/* ------- ADR3 Bit Fields                          ------ */
-#define I2C_ADR3_GC_MASK                         (0x1U)                                              /*!< I2C_ADR3.GC Mask                        */
-#define I2C_ADR3_GC_SHIFT                        (0U)                                                /*!< I2C_ADR3.GC Position                    */
-#define I2C_ADR3_GC(x)                           (((uint32_t)(((uint32_t)(x))<<0U))&0x1UL)           /*!< I2C_ADR3.GC Field                       */
-#define I2C_ADR3_Address_MASK                    (0xFEU)                                             /*!< I2C_ADR3.Address Mask                   */
-#define I2C_ADR3_Address_SHIFT                   (1U)                                                /*!< I2C_ADR3.Address Position               */
-#define I2C_ADR3_Address(x)                      (((uint32_t)(((uint32_t)(x))<<1U))&0xFEUL)          /*!< I2C_ADR3.Address Field                  */
+/* ------- ADR Bit Fields                           ------ */
+#define I2C_ADR_GC_MASK                          (0x1U)                                              /*!< I2C_ADR.GC Mask                         */
+#define I2C_ADR_GC_SHIFT                         (0U)                                                /*!< I2C_ADR.GC Position                     */
+#define I2C_ADR_GC(x)                            (((uint32_t)(((uint32_t)(x))<<0U))&0x1UL)           /*!< I2C_ADR.GC Field                        */
+#define I2C_ADR_Address_MASK                     (0xFEU)                                             /*!< I2C_ADR.Address Mask                    */
+#define I2C_ADR_Address_SHIFT                    (1U)                                                /*!< I2C_ADR.Address Position                */
+#define I2C_ADR_Address(x)                       (((uint32_t)(((uint32_t)(x))<<1U))&0xFEUL)          /*!< I2C_ADR.Address Field                   */
 /* ------- DATA_BUFFER Bit Fields                   ------ */
 #define I2C_DATA_BUFFER_Data_MASK                (0xFFU)                                             /*!< I2C_DATA_BUFFER.Data Mask               */
 #define I2C_DATA_BUFFER_Data_SHIFT               (0U)                                                /*!< I2C_DATA_BUFFER.Data Position           */
 #define I2C_DATA_BUFFER_Data(x)                  (((uint32_t)(((uint32_t)(x))<<0U))&0xFFUL)          /*!< I2C_DATA_BUFFER.Data Field              */
-/* ------- MASK0 Bit Fields                         ------ */
-#define I2C_MASK0_MASK_MASK                      (0xFEU)                                             /*!< I2C_MASK0.MASK Mask                     */
-#define I2C_MASK0_MASK_SHIFT                     (1U)                                                /*!< I2C_MASK0.MASK Position                 */
-#define I2C_MASK0_MASK(x)                        (((uint32_t)(((uint32_t)(x))<<1U))&0xFEUL)          /*!< I2C_MASK0.MASK Field                    */
-/* ------- MASK1 Bit Fields                         ------ */
-#define I2C_MASK1_MASK_MASK                      (0xFEU)                                             /*!< I2C_MASK1.MASK Mask                     */
-#define I2C_MASK1_MASK_SHIFT                     (1U)                                                /*!< I2C_MASK1.MASK Position                 */
-#define I2C_MASK1_MASK(x)                        (((uint32_t)(((uint32_t)(x))<<1U))&0xFEUL)          /*!< I2C_MASK1.MASK Field                    */
-/* ------- MASK2 Bit Fields                         ------ */
-#define I2C_MASK2_MASK_MASK                      (0xFEU)                                             /*!< I2C_MASK2.MASK Mask                     */
-#define I2C_MASK2_MASK_SHIFT                     (1U)                                                /*!< I2C_MASK2.MASK Position                 */
-#define I2C_MASK2_MASK(x)                        (((uint32_t)(((uint32_t)(x))<<1U))&0xFEUL)          /*!< I2C_MASK2.MASK Field                    */
-/* ------- MASK3 Bit Fields                         ------ */
-#define I2C_MASK3_MASK_MASK                      (0xFEU)                                             /*!< I2C_MASK3.MASK Mask                     */
-#define I2C_MASK3_MASK_SHIFT                     (1U)                                                /*!< I2C_MASK3.MASK Position                 */
-#define I2C_MASK3_MASK(x)                        (((uint32_t)(((uint32_t)(x))<<1U))&0xFEUL)          /*!< I2C_MASK3.MASK Field                    */
+/* ------- MASK Bit Fields                          ------ */
+#define I2C_MASK_MASK_MASK                       (0xFEU)                                             /*!< I2C_MASK.MASK Mask                      */
+#define I2C_MASK_MASK_SHIFT                      (1U)                                                /*!< I2C_MASK.MASK Position                  */
+#define I2C_MASK_MASK(x)                         (((uint32_t)(((uint32_t)(x))<<1U))&0xFEUL)          /*!< I2C_MASK.MASK Field                     */
 /**
  * @} */ /* End group I2C_Register_Masks_GROUP 
  */

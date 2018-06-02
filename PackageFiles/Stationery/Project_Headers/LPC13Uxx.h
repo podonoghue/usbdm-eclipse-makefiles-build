@@ -5,7 +5,7 @@
  *           Equivalent: 
  *
  * @version  V1
- * @date     2018/03
+ * @date     2018/04
  *
  *******************************************************************************************************/
 
@@ -1429,11 +1429,9 @@ typedef struct LPC_FLASHCTRL_Type {
 typedef struct LPC_GPIO_GROUP_INT0_Type {
    __IO uint32_t  CTRL;                         /**< 0000: GPIO grouped interrupt control register                      */
         uint8_t   RESERVED_0[28];              
-   __IO uint32_t  PORT_POL0;                    /**< 0020: GPIO grouped interrupt port 0 polarity register              */
-   __IO uint32_t  PORT_POL1;                    /**< 0024: GPIO grouped interrupt port 0 polarity register              */
+   __IO uint32_t  PORT_POL[2];                  /**< 0020: GPIO grouped interrupt port  polarity register               */
         uint8_t   RESERVED_1[24];              
-   __IO uint32_t  PORT_ENA0;                    /**< 0040: GPIO grouped interrupt port 0/1 enable register              */
-   __IO uint32_t  PORT_ENA1;                    /**< 0044: GPIO grouped interrupt port 0/1 enable register              */
+   __IO uint32_t  PORT_ENA[2];                  /**< 0040: GPIO grouped interrupt port /1 enable register               */
 } LPC_GPIO_GROUP_INT0_Type;
 
 /**
@@ -1459,394 +1457,200 @@ typedef struct LPC_GPIO_GROUP_INT0_Type {
 #define LPC_GPIO_GROUP_INT0_CTRL_TRIG_MASK       (0x4U)                                              /*!< LPC_GPIO_GROUP_INT0_CTRL.TRIG Mask      */
 #define LPC_GPIO_GROUP_INT0_CTRL_TRIG_SHIFT      (2U)                                                /*!< LPC_GPIO_GROUP_INT0_CTRL.TRIG Position  */
 #define LPC_GPIO_GROUP_INT0_CTRL_TRIG(x)         (((uint32_t)(((uint32_t)(x))<<2U))&0x4UL)           /*!< LPC_GPIO_GROUP_INT0_CTRL.TRIG Field     */
-/* ------- PORT_POL0 Bit Fields                     ------ */
-#define LPC_GPIO_GROUP_INT0_PORT_POL0_POL_0_MASK (0x1U)                                              /*!< LPC_GPIO_GROUP_INT0_PORT_POL0.POL_0 Mask*/
-#define LPC_GPIO_GROUP_INT0_PORT_POL0_POL_0_SHIFT (0U)                                               /*!< LPC_GPIO_GROUP_INT0_PORT_POL0.POL_0 Position*/
-#define LPC_GPIO_GROUP_INT0_PORT_POL0_POL_0(x)   (((uint32_t)(((uint32_t)(x))<<0U))&0x1UL)           /*!< LPC_GPIO_GROUP_INT0_PORT_POL0.POL_0 Field*/
-#define LPC_GPIO_GROUP_INT0_PORT_POL0_POL_1_MASK (0x2U)                                              /*!< LPC_GPIO_GROUP_INT0_PORT_POL0.POL_1 Mask*/
-#define LPC_GPIO_GROUP_INT0_PORT_POL0_POL_1_SHIFT (1U)                                               /*!< LPC_GPIO_GROUP_INT0_PORT_POL0.POL_1 Position*/
-#define LPC_GPIO_GROUP_INT0_PORT_POL0_POL_1(x)   (((uint32_t)(((uint32_t)(x))<<1U))&0x2UL)           /*!< LPC_GPIO_GROUP_INT0_PORT_POL0.POL_1 Field*/
-#define LPC_GPIO_GROUP_INT0_PORT_POL0_POL_2_MASK (0x4U)                                              /*!< LPC_GPIO_GROUP_INT0_PORT_POL0.POL_2 Mask*/
-#define LPC_GPIO_GROUP_INT0_PORT_POL0_POL_2_SHIFT (2U)                                               /*!< LPC_GPIO_GROUP_INT0_PORT_POL0.POL_2 Position*/
-#define LPC_GPIO_GROUP_INT0_PORT_POL0_POL_2(x)   (((uint32_t)(((uint32_t)(x))<<2U))&0x4UL)           /*!< LPC_GPIO_GROUP_INT0_PORT_POL0.POL_2 Field*/
-#define LPC_GPIO_GROUP_INT0_PORT_POL0_POL_3_MASK (0x8U)                                              /*!< LPC_GPIO_GROUP_INT0_PORT_POL0.POL_3 Mask*/
-#define LPC_GPIO_GROUP_INT0_PORT_POL0_POL_3_SHIFT (3U)                                               /*!< LPC_GPIO_GROUP_INT0_PORT_POL0.POL_3 Position*/
-#define LPC_GPIO_GROUP_INT0_PORT_POL0_POL_3(x)   (((uint32_t)(((uint32_t)(x))<<3U))&0x8UL)           /*!< LPC_GPIO_GROUP_INT0_PORT_POL0.POL_3 Field*/
-#define LPC_GPIO_GROUP_INT0_PORT_POL0_POL_4_MASK (0x10U)                                             /*!< LPC_GPIO_GROUP_INT0_PORT_POL0.POL_4 Mask*/
-#define LPC_GPIO_GROUP_INT0_PORT_POL0_POL_4_SHIFT (4U)                                               /*!< LPC_GPIO_GROUP_INT0_PORT_POL0.POL_4 Position*/
-#define LPC_GPIO_GROUP_INT0_PORT_POL0_POL_4(x)   (((uint32_t)(((uint32_t)(x))<<4U))&0x10UL)          /*!< LPC_GPIO_GROUP_INT0_PORT_POL0.POL_4 Field*/
-#define LPC_GPIO_GROUP_INT0_PORT_POL0_POL_5_MASK (0x20U)                                             /*!< LPC_GPIO_GROUP_INT0_PORT_POL0.POL_5 Mask*/
-#define LPC_GPIO_GROUP_INT0_PORT_POL0_POL_5_SHIFT (5U)                                               /*!< LPC_GPIO_GROUP_INT0_PORT_POL0.POL_5 Position*/
-#define LPC_GPIO_GROUP_INT0_PORT_POL0_POL_5(x)   (((uint32_t)(((uint32_t)(x))<<5U))&0x20UL)          /*!< LPC_GPIO_GROUP_INT0_PORT_POL0.POL_5 Field*/
-#define LPC_GPIO_GROUP_INT0_PORT_POL0_POL_6_MASK (0x40U)                                             /*!< LPC_GPIO_GROUP_INT0_PORT_POL0.POL_6 Mask*/
-#define LPC_GPIO_GROUP_INT0_PORT_POL0_POL_6_SHIFT (6U)                                               /*!< LPC_GPIO_GROUP_INT0_PORT_POL0.POL_6 Position*/
-#define LPC_GPIO_GROUP_INT0_PORT_POL0_POL_6(x)   (((uint32_t)(((uint32_t)(x))<<6U))&0x40UL)          /*!< LPC_GPIO_GROUP_INT0_PORT_POL0.POL_6 Field*/
-#define LPC_GPIO_GROUP_INT0_PORT_POL0_POL_7_MASK (0x80U)                                             /*!< LPC_GPIO_GROUP_INT0_PORT_POL0.POL_7 Mask*/
-#define LPC_GPIO_GROUP_INT0_PORT_POL0_POL_7_SHIFT (7U)                                               /*!< LPC_GPIO_GROUP_INT0_PORT_POL0.POL_7 Position*/
-#define LPC_GPIO_GROUP_INT0_PORT_POL0_POL_7(x)   (((uint32_t)(((uint32_t)(x))<<7U))&0x80UL)          /*!< LPC_GPIO_GROUP_INT0_PORT_POL0.POL_7 Field*/
-#define LPC_GPIO_GROUP_INT0_PORT_POL0_POL_8_MASK (0x100U)                                            /*!< LPC_GPIO_GROUP_INT0_PORT_POL0.POL_8 Mask*/
-#define LPC_GPIO_GROUP_INT0_PORT_POL0_POL_8_SHIFT (8U)                                               /*!< LPC_GPIO_GROUP_INT0_PORT_POL0.POL_8 Position*/
-#define LPC_GPIO_GROUP_INT0_PORT_POL0_POL_8(x)   (((uint32_t)(((uint32_t)(x))<<8U))&0x100UL)         /*!< LPC_GPIO_GROUP_INT0_PORT_POL0.POL_8 Field*/
-#define LPC_GPIO_GROUP_INT0_PORT_POL0_POL_9_MASK (0x200U)                                            /*!< LPC_GPIO_GROUP_INT0_PORT_POL0.POL_9 Mask*/
-#define LPC_GPIO_GROUP_INT0_PORT_POL0_POL_9_SHIFT (9U)                                               /*!< LPC_GPIO_GROUP_INT0_PORT_POL0.POL_9 Position*/
-#define LPC_GPIO_GROUP_INT0_PORT_POL0_POL_9(x)   (((uint32_t)(((uint32_t)(x))<<9U))&0x200UL)         /*!< LPC_GPIO_GROUP_INT0_PORT_POL0.POL_9 Field*/
-#define LPC_GPIO_GROUP_INT0_PORT_POL0_POL_10_MASK (0x400U)                                           /*!< LPC_GPIO_GROUP_INT0_PORT_POL0.POL_10 Mask*/
-#define LPC_GPIO_GROUP_INT0_PORT_POL0_POL_10_SHIFT (10U)                                             /*!< LPC_GPIO_GROUP_INT0_PORT_POL0.POL_10 Position*/
-#define LPC_GPIO_GROUP_INT0_PORT_POL0_POL_10(x)  (((uint32_t)(((uint32_t)(x))<<10U))&0x400UL)        /*!< LPC_GPIO_GROUP_INT0_PORT_POL0.POL_10 Field*/
-#define LPC_GPIO_GROUP_INT0_PORT_POL0_POL_11_MASK (0x800U)                                           /*!< LPC_GPIO_GROUP_INT0_PORT_POL0.POL_11 Mask*/
-#define LPC_GPIO_GROUP_INT0_PORT_POL0_POL_11_SHIFT (11U)                                             /*!< LPC_GPIO_GROUP_INT0_PORT_POL0.POL_11 Position*/
-#define LPC_GPIO_GROUP_INT0_PORT_POL0_POL_11(x)  (((uint32_t)(((uint32_t)(x))<<11U))&0x800UL)        /*!< LPC_GPIO_GROUP_INT0_PORT_POL0.POL_11 Field*/
-#define LPC_GPIO_GROUP_INT0_PORT_POL0_POL_12_MASK (0x1000U)                                          /*!< LPC_GPIO_GROUP_INT0_PORT_POL0.POL_12 Mask*/
-#define LPC_GPIO_GROUP_INT0_PORT_POL0_POL_12_SHIFT (12U)                                             /*!< LPC_GPIO_GROUP_INT0_PORT_POL0.POL_12 Position*/
-#define LPC_GPIO_GROUP_INT0_PORT_POL0_POL_12(x)  (((uint32_t)(((uint32_t)(x))<<12U))&0x1000UL)       /*!< LPC_GPIO_GROUP_INT0_PORT_POL0.POL_12 Field*/
-#define LPC_GPIO_GROUP_INT0_PORT_POL0_POL_13_MASK (0x2000U)                                          /*!< LPC_GPIO_GROUP_INT0_PORT_POL0.POL_13 Mask*/
-#define LPC_GPIO_GROUP_INT0_PORT_POL0_POL_13_SHIFT (13U)                                             /*!< LPC_GPIO_GROUP_INT0_PORT_POL0.POL_13 Position*/
-#define LPC_GPIO_GROUP_INT0_PORT_POL0_POL_13(x)  (((uint32_t)(((uint32_t)(x))<<13U))&0x2000UL)       /*!< LPC_GPIO_GROUP_INT0_PORT_POL0.POL_13 Field*/
-#define LPC_GPIO_GROUP_INT0_PORT_POL0_POL_14_MASK (0x4000U)                                          /*!< LPC_GPIO_GROUP_INT0_PORT_POL0.POL_14 Mask*/
-#define LPC_GPIO_GROUP_INT0_PORT_POL0_POL_14_SHIFT (14U)                                             /*!< LPC_GPIO_GROUP_INT0_PORT_POL0.POL_14 Position*/
-#define LPC_GPIO_GROUP_INT0_PORT_POL0_POL_14(x)  (((uint32_t)(((uint32_t)(x))<<14U))&0x4000UL)       /*!< LPC_GPIO_GROUP_INT0_PORT_POL0.POL_14 Field*/
-#define LPC_GPIO_GROUP_INT0_PORT_POL0_POL_15_MASK (0x8000U)                                          /*!< LPC_GPIO_GROUP_INT0_PORT_POL0.POL_15 Mask*/
-#define LPC_GPIO_GROUP_INT0_PORT_POL0_POL_15_SHIFT (15U)                                             /*!< LPC_GPIO_GROUP_INT0_PORT_POL0.POL_15 Position*/
-#define LPC_GPIO_GROUP_INT0_PORT_POL0_POL_15(x)  (((uint32_t)(((uint32_t)(x))<<15U))&0x8000UL)       /*!< LPC_GPIO_GROUP_INT0_PORT_POL0.POL_15 Field*/
-#define LPC_GPIO_GROUP_INT0_PORT_POL0_POL_16_MASK (0x10000U)                                         /*!< LPC_GPIO_GROUP_INT0_PORT_POL0.POL_16 Mask*/
-#define LPC_GPIO_GROUP_INT0_PORT_POL0_POL_16_SHIFT (16U)                                             /*!< LPC_GPIO_GROUP_INT0_PORT_POL0.POL_16 Position*/
-#define LPC_GPIO_GROUP_INT0_PORT_POL0_POL_16(x)  (((uint32_t)(((uint32_t)(x))<<16U))&0x10000UL)      /*!< LPC_GPIO_GROUP_INT0_PORT_POL0.POL_16 Field*/
-#define LPC_GPIO_GROUP_INT0_PORT_POL0_POL_17_MASK (0x20000U)                                         /*!< LPC_GPIO_GROUP_INT0_PORT_POL0.POL_17 Mask*/
-#define LPC_GPIO_GROUP_INT0_PORT_POL0_POL_17_SHIFT (17U)                                             /*!< LPC_GPIO_GROUP_INT0_PORT_POL0.POL_17 Position*/
-#define LPC_GPIO_GROUP_INT0_PORT_POL0_POL_17(x)  (((uint32_t)(((uint32_t)(x))<<17U))&0x20000UL)      /*!< LPC_GPIO_GROUP_INT0_PORT_POL0.POL_17 Field*/
-#define LPC_GPIO_GROUP_INT0_PORT_POL0_POL_18_MASK (0x40000U)                                         /*!< LPC_GPIO_GROUP_INT0_PORT_POL0.POL_18 Mask*/
-#define LPC_GPIO_GROUP_INT0_PORT_POL0_POL_18_SHIFT (18U)                                             /*!< LPC_GPIO_GROUP_INT0_PORT_POL0.POL_18 Position*/
-#define LPC_GPIO_GROUP_INT0_PORT_POL0_POL_18(x)  (((uint32_t)(((uint32_t)(x))<<18U))&0x40000UL)      /*!< LPC_GPIO_GROUP_INT0_PORT_POL0.POL_18 Field*/
-#define LPC_GPIO_GROUP_INT0_PORT_POL0_POL_19_MASK (0x80000U)                                         /*!< LPC_GPIO_GROUP_INT0_PORT_POL0.POL_19 Mask*/
-#define LPC_GPIO_GROUP_INT0_PORT_POL0_POL_19_SHIFT (19U)                                             /*!< LPC_GPIO_GROUP_INT0_PORT_POL0.POL_19 Position*/
-#define LPC_GPIO_GROUP_INT0_PORT_POL0_POL_19(x)  (((uint32_t)(((uint32_t)(x))<<19U))&0x80000UL)      /*!< LPC_GPIO_GROUP_INT0_PORT_POL0.POL_19 Field*/
-#define LPC_GPIO_GROUP_INT0_PORT_POL0_POL_20_MASK (0x100000U)                                        /*!< LPC_GPIO_GROUP_INT0_PORT_POL0.POL_20 Mask*/
-#define LPC_GPIO_GROUP_INT0_PORT_POL0_POL_20_SHIFT (20U)                                             /*!< LPC_GPIO_GROUP_INT0_PORT_POL0.POL_20 Position*/
-#define LPC_GPIO_GROUP_INT0_PORT_POL0_POL_20(x)  (((uint32_t)(((uint32_t)(x))<<20U))&0x100000UL)     /*!< LPC_GPIO_GROUP_INT0_PORT_POL0.POL_20 Field*/
-#define LPC_GPIO_GROUP_INT0_PORT_POL0_POL_21_MASK (0x200000U)                                        /*!< LPC_GPIO_GROUP_INT0_PORT_POL0.POL_21 Mask*/
-#define LPC_GPIO_GROUP_INT0_PORT_POL0_POL_21_SHIFT (21U)                                             /*!< LPC_GPIO_GROUP_INT0_PORT_POL0.POL_21 Position*/
-#define LPC_GPIO_GROUP_INT0_PORT_POL0_POL_21(x)  (((uint32_t)(((uint32_t)(x))<<21U))&0x200000UL)     /*!< LPC_GPIO_GROUP_INT0_PORT_POL0.POL_21 Field*/
-#define LPC_GPIO_GROUP_INT0_PORT_POL0_POL_22_MASK (0x400000U)                                        /*!< LPC_GPIO_GROUP_INT0_PORT_POL0.POL_22 Mask*/
-#define LPC_GPIO_GROUP_INT0_PORT_POL0_POL_22_SHIFT (22U)                                             /*!< LPC_GPIO_GROUP_INT0_PORT_POL0.POL_22 Position*/
-#define LPC_GPIO_GROUP_INT0_PORT_POL0_POL_22(x)  (((uint32_t)(((uint32_t)(x))<<22U))&0x400000UL)     /*!< LPC_GPIO_GROUP_INT0_PORT_POL0.POL_22 Field*/
-#define LPC_GPIO_GROUP_INT0_PORT_POL0_POL_23_MASK (0x800000U)                                        /*!< LPC_GPIO_GROUP_INT0_PORT_POL0.POL_23 Mask*/
-#define LPC_GPIO_GROUP_INT0_PORT_POL0_POL_23_SHIFT (23U)                                             /*!< LPC_GPIO_GROUP_INT0_PORT_POL0.POL_23 Position*/
-#define LPC_GPIO_GROUP_INT0_PORT_POL0_POL_23(x)  (((uint32_t)(((uint32_t)(x))<<23U))&0x800000UL)     /*!< LPC_GPIO_GROUP_INT0_PORT_POL0.POL_23 Field*/
-#define LPC_GPIO_GROUP_INT0_PORT_POL0_POL_24_MASK (0x1000000U)                                       /*!< LPC_GPIO_GROUP_INT0_PORT_POL0.POL_24 Mask*/
-#define LPC_GPIO_GROUP_INT0_PORT_POL0_POL_24_SHIFT (24U)                                             /*!< LPC_GPIO_GROUP_INT0_PORT_POL0.POL_24 Position*/
-#define LPC_GPIO_GROUP_INT0_PORT_POL0_POL_24(x)  (((uint32_t)(((uint32_t)(x))<<24U))&0x1000000UL)    /*!< LPC_GPIO_GROUP_INT0_PORT_POL0.POL_24 Field*/
-#define LPC_GPIO_GROUP_INT0_PORT_POL0_POL_25_MASK (0x2000000U)                                       /*!< LPC_GPIO_GROUP_INT0_PORT_POL0.POL_25 Mask*/
-#define LPC_GPIO_GROUP_INT0_PORT_POL0_POL_25_SHIFT (25U)                                             /*!< LPC_GPIO_GROUP_INT0_PORT_POL0.POL_25 Position*/
-#define LPC_GPIO_GROUP_INT0_PORT_POL0_POL_25(x)  (((uint32_t)(((uint32_t)(x))<<25U))&0x2000000UL)    /*!< LPC_GPIO_GROUP_INT0_PORT_POL0.POL_25 Field*/
-#define LPC_GPIO_GROUP_INT0_PORT_POL0_POL_26_MASK (0x4000000U)                                       /*!< LPC_GPIO_GROUP_INT0_PORT_POL0.POL_26 Mask*/
-#define LPC_GPIO_GROUP_INT0_PORT_POL0_POL_26_SHIFT (26U)                                             /*!< LPC_GPIO_GROUP_INT0_PORT_POL0.POL_26 Position*/
-#define LPC_GPIO_GROUP_INT0_PORT_POL0_POL_26(x)  (((uint32_t)(((uint32_t)(x))<<26U))&0x4000000UL)    /*!< LPC_GPIO_GROUP_INT0_PORT_POL0.POL_26 Field*/
-#define LPC_GPIO_GROUP_INT0_PORT_POL0_POL_27_MASK (0x8000000U)                                       /*!< LPC_GPIO_GROUP_INT0_PORT_POL0.POL_27 Mask*/
-#define LPC_GPIO_GROUP_INT0_PORT_POL0_POL_27_SHIFT (27U)                                             /*!< LPC_GPIO_GROUP_INT0_PORT_POL0.POL_27 Position*/
-#define LPC_GPIO_GROUP_INT0_PORT_POL0_POL_27(x)  (((uint32_t)(((uint32_t)(x))<<27U))&0x8000000UL)    /*!< LPC_GPIO_GROUP_INT0_PORT_POL0.POL_27 Field*/
-#define LPC_GPIO_GROUP_INT0_PORT_POL0_POL_28_MASK (0x10000000U)                                      /*!< LPC_GPIO_GROUP_INT0_PORT_POL0.POL_28 Mask*/
-#define LPC_GPIO_GROUP_INT0_PORT_POL0_POL_28_SHIFT (28U)                                             /*!< LPC_GPIO_GROUP_INT0_PORT_POL0.POL_28 Position*/
-#define LPC_GPIO_GROUP_INT0_PORT_POL0_POL_28(x)  (((uint32_t)(((uint32_t)(x))<<28U))&0x10000000UL)   /*!< LPC_GPIO_GROUP_INT0_PORT_POL0.POL_28 Field*/
-#define LPC_GPIO_GROUP_INT0_PORT_POL0_POL_29_MASK (0x20000000U)                                      /*!< LPC_GPIO_GROUP_INT0_PORT_POL0.POL_29 Mask*/
-#define LPC_GPIO_GROUP_INT0_PORT_POL0_POL_29_SHIFT (29U)                                             /*!< LPC_GPIO_GROUP_INT0_PORT_POL0.POL_29 Position*/
-#define LPC_GPIO_GROUP_INT0_PORT_POL0_POL_29(x)  (((uint32_t)(((uint32_t)(x))<<29U))&0x20000000UL)   /*!< LPC_GPIO_GROUP_INT0_PORT_POL0.POL_29 Field*/
-#define LPC_GPIO_GROUP_INT0_PORT_POL0_POL_30_MASK (0x40000000U)                                      /*!< LPC_GPIO_GROUP_INT0_PORT_POL0.POL_30 Mask*/
-#define LPC_GPIO_GROUP_INT0_PORT_POL0_POL_30_SHIFT (30U)                                             /*!< LPC_GPIO_GROUP_INT0_PORT_POL0.POL_30 Position*/
-#define LPC_GPIO_GROUP_INT0_PORT_POL0_POL_30(x)  (((uint32_t)(((uint32_t)(x))<<30U))&0x40000000UL)   /*!< LPC_GPIO_GROUP_INT0_PORT_POL0.POL_30 Field*/
-#define LPC_GPIO_GROUP_INT0_PORT_POL0_POL_31_MASK (0x80000000U)                                      /*!< LPC_GPIO_GROUP_INT0_PORT_POL0.POL_31 Mask*/
-#define LPC_GPIO_GROUP_INT0_PORT_POL0_POL_31_SHIFT (31U)                                             /*!< LPC_GPIO_GROUP_INT0_PORT_POL0.POL_31 Position*/
-#define LPC_GPIO_GROUP_INT0_PORT_POL0_POL_31(x)  (((uint32_t)(((uint32_t)(x))<<31U))&0x80000000UL)   /*!< LPC_GPIO_GROUP_INT0_PORT_POL0.POL_31 Field*/
-/* ------- PORT_POL1 Bit Fields                     ------ */
-#define LPC_GPIO_GROUP_INT0_PORT_POL1_POL_0_MASK (0x1U)                                              /*!< LPC_GPIO_GROUP_INT0_PORT_POL1.POL_0 Mask*/
-#define LPC_GPIO_GROUP_INT0_PORT_POL1_POL_0_SHIFT (0U)                                               /*!< LPC_GPIO_GROUP_INT0_PORT_POL1.POL_0 Position*/
-#define LPC_GPIO_GROUP_INT0_PORT_POL1_POL_0(x)   (((uint32_t)(((uint32_t)(x))<<0U))&0x1UL)           /*!< LPC_GPIO_GROUP_INT0_PORT_POL1.POL_0 Field*/
-#define LPC_GPIO_GROUP_INT0_PORT_POL1_POL_1_MASK (0x2U)                                              /*!< LPC_GPIO_GROUP_INT0_PORT_POL1.POL_1 Mask*/
-#define LPC_GPIO_GROUP_INT0_PORT_POL1_POL_1_SHIFT (1U)                                               /*!< LPC_GPIO_GROUP_INT0_PORT_POL1.POL_1 Position*/
-#define LPC_GPIO_GROUP_INT0_PORT_POL1_POL_1(x)   (((uint32_t)(((uint32_t)(x))<<1U))&0x2UL)           /*!< LPC_GPIO_GROUP_INT0_PORT_POL1.POL_1 Field*/
-#define LPC_GPIO_GROUP_INT0_PORT_POL1_POL_2_MASK (0x4U)                                              /*!< LPC_GPIO_GROUP_INT0_PORT_POL1.POL_2 Mask*/
-#define LPC_GPIO_GROUP_INT0_PORT_POL1_POL_2_SHIFT (2U)                                               /*!< LPC_GPIO_GROUP_INT0_PORT_POL1.POL_2 Position*/
-#define LPC_GPIO_GROUP_INT0_PORT_POL1_POL_2(x)   (((uint32_t)(((uint32_t)(x))<<2U))&0x4UL)           /*!< LPC_GPIO_GROUP_INT0_PORT_POL1.POL_2 Field*/
-#define LPC_GPIO_GROUP_INT0_PORT_POL1_POL_3_MASK (0x8U)                                              /*!< LPC_GPIO_GROUP_INT0_PORT_POL1.POL_3 Mask*/
-#define LPC_GPIO_GROUP_INT0_PORT_POL1_POL_3_SHIFT (3U)                                               /*!< LPC_GPIO_GROUP_INT0_PORT_POL1.POL_3 Position*/
-#define LPC_GPIO_GROUP_INT0_PORT_POL1_POL_3(x)   (((uint32_t)(((uint32_t)(x))<<3U))&0x8UL)           /*!< LPC_GPIO_GROUP_INT0_PORT_POL1.POL_3 Field*/
-#define LPC_GPIO_GROUP_INT0_PORT_POL1_POL_4_MASK (0x10U)                                             /*!< LPC_GPIO_GROUP_INT0_PORT_POL1.POL_4 Mask*/
-#define LPC_GPIO_GROUP_INT0_PORT_POL1_POL_4_SHIFT (4U)                                               /*!< LPC_GPIO_GROUP_INT0_PORT_POL1.POL_4 Position*/
-#define LPC_GPIO_GROUP_INT0_PORT_POL1_POL_4(x)   (((uint32_t)(((uint32_t)(x))<<4U))&0x10UL)          /*!< LPC_GPIO_GROUP_INT0_PORT_POL1.POL_4 Field*/
-#define LPC_GPIO_GROUP_INT0_PORT_POL1_POL_5_MASK (0x20U)                                             /*!< LPC_GPIO_GROUP_INT0_PORT_POL1.POL_5 Mask*/
-#define LPC_GPIO_GROUP_INT0_PORT_POL1_POL_5_SHIFT (5U)                                               /*!< LPC_GPIO_GROUP_INT0_PORT_POL1.POL_5 Position*/
-#define LPC_GPIO_GROUP_INT0_PORT_POL1_POL_5(x)   (((uint32_t)(((uint32_t)(x))<<5U))&0x20UL)          /*!< LPC_GPIO_GROUP_INT0_PORT_POL1.POL_5 Field*/
-#define LPC_GPIO_GROUP_INT0_PORT_POL1_POL_6_MASK (0x40U)                                             /*!< LPC_GPIO_GROUP_INT0_PORT_POL1.POL_6 Mask*/
-#define LPC_GPIO_GROUP_INT0_PORT_POL1_POL_6_SHIFT (6U)                                               /*!< LPC_GPIO_GROUP_INT0_PORT_POL1.POL_6 Position*/
-#define LPC_GPIO_GROUP_INT0_PORT_POL1_POL_6(x)   (((uint32_t)(((uint32_t)(x))<<6U))&0x40UL)          /*!< LPC_GPIO_GROUP_INT0_PORT_POL1.POL_6 Field*/
-#define LPC_GPIO_GROUP_INT0_PORT_POL1_POL_7_MASK (0x80U)                                             /*!< LPC_GPIO_GROUP_INT0_PORT_POL1.POL_7 Mask*/
-#define LPC_GPIO_GROUP_INT0_PORT_POL1_POL_7_SHIFT (7U)                                               /*!< LPC_GPIO_GROUP_INT0_PORT_POL1.POL_7 Position*/
-#define LPC_GPIO_GROUP_INT0_PORT_POL1_POL_7(x)   (((uint32_t)(((uint32_t)(x))<<7U))&0x80UL)          /*!< LPC_GPIO_GROUP_INT0_PORT_POL1.POL_7 Field*/
-#define LPC_GPIO_GROUP_INT0_PORT_POL1_POL_8_MASK (0x100U)                                            /*!< LPC_GPIO_GROUP_INT0_PORT_POL1.POL_8 Mask*/
-#define LPC_GPIO_GROUP_INT0_PORT_POL1_POL_8_SHIFT (8U)                                               /*!< LPC_GPIO_GROUP_INT0_PORT_POL1.POL_8 Position*/
-#define LPC_GPIO_GROUP_INT0_PORT_POL1_POL_8(x)   (((uint32_t)(((uint32_t)(x))<<8U))&0x100UL)         /*!< LPC_GPIO_GROUP_INT0_PORT_POL1.POL_8 Field*/
-#define LPC_GPIO_GROUP_INT0_PORT_POL1_POL_9_MASK (0x200U)                                            /*!< LPC_GPIO_GROUP_INT0_PORT_POL1.POL_9 Mask*/
-#define LPC_GPIO_GROUP_INT0_PORT_POL1_POL_9_SHIFT (9U)                                               /*!< LPC_GPIO_GROUP_INT0_PORT_POL1.POL_9 Position*/
-#define LPC_GPIO_GROUP_INT0_PORT_POL1_POL_9(x)   (((uint32_t)(((uint32_t)(x))<<9U))&0x200UL)         /*!< LPC_GPIO_GROUP_INT0_PORT_POL1.POL_9 Field*/
-#define LPC_GPIO_GROUP_INT0_PORT_POL1_POL_10_MASK (0x400U)                                           /*!< LPC_GPIO_GROUP_INT0_PORT_POL1.POL_10 Mask*/
-#define LPC_GPIO_GROUP_INT0_PORT_POL1_POL_10_SHIFT (10U)                                             /*!< LPC_GPIO_GROUP_INT0_PORT_POL1.POL_10 Position*/
-#define LPC_GPIO_GROUP_INT0_PORT_POL1_POL_10(x)  (((uint32_t)(((uint32_t)(x))<<10U))&0x400UL)        /*!< LPC_GPIO_GROUP_INT0_PORT_POL1.POL_10 Field*/
-#define LPC_GPIO_GROUP_INT0_PORT_POL1_POL_11_MASK (0x800U)                                           /*!< LPC_GPIO_GROUP_INT0_PORT_POL1.POL_11 Mask*/
-#define LPC_GPIO_GROUP_INT0_PORT_POL1_POL_11_SHIFT (11U)                                             /*!< LPC_GPIO_GROUP_INT0_PORT_POL1.POL_11 Position*/
-#define LPC_GPIO_GROUP_INT0_PORT_POL1_POL_11(x)  (((uint32_t)(((uint32_t)(x))<<11U))&0x800UL)        /*!< LPC_GPIO_GROUP_INT0_PORT_POL1.POL_11 Field*/
-#define LPC_GPIO_GROUP_INT0_PORT_POL1_POL_12_MASK (0x1000U)                                          /*!< LPC_GPIO_GROUP_INT0_PORT_POL1.POL_12 Mask*/
-#define LPC_GPIO_GROUP_INT0_PORT_POL1_POL_12_SHIFT (12U)                                             /*!< LPC_GPIO_GROUP_INT0_PORT_POL1.POL_12 Position*/
-#define LPC_GPIO_GROUP_INT0_PORT_POL1_POL_12(x)  (((uint32_t)(((uint32_t)(x))<<12U))&0x1000UL)       /*!< LPC_GPIO_GROUP_INT0_PORT_POL1.POL_12 Field*/
-#define LPC_GPIO_GROUP_INT0_PORT_POL1_POL_13_MASK (0x2000U)                                          /*!< LPC_GPIO_GROUP_INT0_PORT_POL1.POL_13 Mask*/
-#define LPC_GPIO_GROUP_INT0_PORT_POL1_POL_13_SHIFT (13U)                                             /*!< LPC_GPIO_GROUP_INT0_PORT_POL1.POL_13 Position*/
-#define LPC_GPIO_GROUP_INT0_PORT_POL1_POL_13(x)  (((uint32_t)(((uint32_t)(x))<<13U))&0x2000UL)       /*!< LPC_GPIO_GROUP_INT0_PORT_POL1.POL_13 Field*/
-#define LPC_GPIO_GROUP_INT0_PORT_POL1_POL_14_MASK (0x4000U)                                          /*!< LPC_GPIO_GROUP_INT0_PORT_POL1.POL_14 Mask*/
-#define LPC_GPIO_GROUP_INT0_PORT_POL1_POL_14_SHIFT (14U)                                             /*!< LPC_GPIO_GROUP_INT0_PORT_POL1.POL_14 Position*/
-#define LPC_GPIO_GROUP_INT0_PORT_POL1_POL_14(x)  (((uint32_t)(((uint32_t)(x))<<14U))&0x4000UL)       /*!< LPC_GPIO_GROUP_INT0_PORT_POL1.POL_14 Field*/
-#define LPC_GPIO_GROUP_INT0_PORT_POL1_POL_15_MASK (0x8000U)                                          /*!< LPC_GPIO_GROUP_INT0_PORT_POL1.POL_15 Mask*/
-#define LPC_GPIO_GROUP_INT0_PORT_POL1_POL_15_SHIFT (15U)                                             /*!< LPC_GPIO_GROUP_INT0_PORT_POL1.POL_15 Position*/
-#define LPC_GPIO_GROUP_INT0_PORT_POL1_POL_15(x)  (((uint32_t)(((uint32_t)(x))<<15U))&0x8000UL)       /*!< LPC_GPIO_GROUP_INT0_PORT_POL1.POL_15 Field*/
-#define LPC_GPIO_GROUP_INT0_PORT_POL1_POL_16_MASK (0x10000U)                                         /*!< LPC_GPIO_GROUP_INT0_PORT_POL1.POL_16 Mask*/
-#define LPC_GPIO_GROUP_INT0_PORT_POL1_POL_16_SHIFT (16U)                                             /*!< LPC_GPIO_GROUP_INT0_PORT_POL1.POL_16 Position*/
-#define LPC_GPIO_GROUP_INT0_PORT_POL1_POL_16(x)  (((uint32_t)(((uint32_t)(x))<<16U))&0x10000UL)      /*!< LPC_GPIO_GROUP_INT0_PORT_POL1.POL_16 Field*/
-#define LPC_GPIO_GROUP_INT0_PORT_POL1_POL_17_MASK (0x20000U)                                         /*!< LPC_GPIO_GROUP_INT0_PORT_POL1.POL_17 Mask*/
-#define LPC_GPIO_GROUP_INT0_PORT_POL1_POL_17_SHIFT (17U)                                             /*!< LPC_GPIO_GROUP_INT0_PORT_POL1.POL_17 Position*/
-#define LPC_GPIO_GROUP_INT0_PORT_POL1_POL_17(x)  (((uint32_t)(((uint32_t)(x))<<17U))&0x20000UL)      /*!< LPC_GPIO_GROUP_INT0_PORT_POL1.POL_17 Field*/
-#define LPC_GPIO_GROUP_INT0_PORT_POL1_POL_18_MASK (0x40000U)                                         /*!< LPC_GPIO_GROUP_INT0_PORT_POL1.POL_18 Mask*/
-#define LPC_GPIO_GROUP_INT0_PORT_POL1_POL_18_SHIFT (18U)                                             /*!< LPC_GPIO_GROUP_INT0_PORT_POL1.POL_18 Position*/
-#define LPC_GPIO_GROUP_INT0_PORT_POL1_POL_18(x)  (((uint32_t)(((uint32_t)(x))<<18U))&0x40000UL)      /*!< LPC_GPIO_GROUP_INT0_PORT_POL1.POL_18 Field*/
-#define LPC_GPIO_GROUP_INT0_PORT_POL1_POL_19_MASK (0x80000U)                                         /*!< LPC_GPIO_GROUP_INT0_PORT_POL1.POL_19 Mask*/
-#define LPC_GPIO_GROUP_INT0_PORT_POL1_POL_19_SHIFT (19U)                                             /*!< LPC_GPIO_GROUP_INT0_PORT_POL1.POL_19 Position*/
-#define LPC_GPIO_GROUP_INT0_PORT_POL1_POL_19(x)  (((uint32_t)(((uint32_t)(x))<<19U))&0x80000UL)      /*!< LPC_GPIO_GROUP_INT0_PORT_POL1.POL_19 Field*/
-#define LPC_GPIO_GROUP_INT0_PORT_POL1_POL_20_MASK (0x100000U)                                        /*!< LPC_GPIO_GROUP_INT0_PORT_POL1.POL_20 Mask*/
-#define LPC_GPIO_GROUP_INT0_PORT_POL1_POL_20_SHIFT (20U)                                             /*!< LPC_GPIO_GROUP_INT0_PORT_POL1.POL_20 Position*/
-#define LPC_GPIO_GROUP_INT0_PORT_POL1_POL_20(x)  (((uint32_t)(((uint32_t)(x))<<20U))&0x100000UL)     /*!< LPC_GPIO_GROUP_INT0_PORT_POL1.POL_20 Field*/
-#define LPC_GPIO_GROUP_INT0_PORT_POL1_POL_21_MASK (0x200000U)                                        /*!< LPC_GPIO_GROUP_INT0_PORT_POL1.POL_21 Mask*/
-#define LPC_GPIO_GROUP_INT0_PORT_POL1_POL_21_SHIFT (21U)                                             /*!< LPC_GPIO_GROUP_INT0_PORT_POL1.POL_21 Position*/
-#define LPC_GPIO_GROUP_INT0_PORT_POL1_POL_21(x)  (((uint32_t)(((uint32_t)(x))<<21U))&0x200000UL)     /*!< LPC_GPIO_GROUP_INT0_PORT_POL1.POL_21 Field*/
-#define LPC_GPIO_GROUP_INT0_PORT_POL1_POL_22_MASK (0x400000U)                                        /*!< LPC_GPIO_GROUP_INT0_PORT_POL1.POL_22 Mask*/
-#define LPC_GPIO_GROUP_INT0_PORT_POL1_POL_22_SHIFT (22U)                                             /*!< LPC_GPIO_GROUP_INT0_PORT_POL1.POL_22 Position*/
-#define LPC_GPIO_GROUP_INT0_PORT_POL1_POL_22(x)  (((uint32_t)(((uint32_t)(x))<<22U))&0x400000UL)     /*!< LPC_GPIO_GROUP_INT0_PORT_POL1.POL_22 Field*/
-#define LPC_GPIO_GROUP_INT0_PORT_POL1_POL_23_MASK (0x800000U)                                        /*!< LPC_GPIO_GROUP_INT0_PORT_POL1.POL_23 Mask*/
-#define LPC_GPIO_GROUP_INT0_PORT_POL1_POL_23_SHIFT (23U)                                             /*!< LPC_GPIO_GROUP_INT0_PORT_POL1.POL_23 Position*/
-#define LPC_GPIO_GROUP_INT0_PORT_POL1_POL_23(x)  (((uint32_t)(((uint32_t)(x))<<23U))&0x800000UL)     /*!< LPC_GPIO_GROUP_INT0_PORT_POL1.POL_23 Field*/
-#define LPC_GPIO_GROUP_INT0_PORT_POL1_POL_24_MASK (0x1000000U)                                       /*!< LPC_GPIO_GROUP_INT0_PORT_POL1.POL_24 Mask*/
-#define LPC_GPIO_GROUP_INT0_PORT_POL1_POL_24_SHIFT (24U)                                             /*!< LPC_GPIO_GROUP_INT0_PORT_POL1.POL_24 Position*/
-#define LPC_GPIO_GROUP_INT0_PORT_POL1_POL_24(x)  (((uint32_t)(((uint32_t)(x))<<24U))&0x1000000UL)    /*!< LPC_GPIO_GROUP_INT0_PORT_POL1.POL_24 Field*/
-#define LPC_GPIO_GROUP_INT0_PORT_POL1_POL_25_MASK (0x2000000U)                                       /*!< LPC_GPIO_GROUP_INT0_PORT_POL1.POL_25 Mask*/
-#define LPC_GPIO_GROUP_INT0_PORT_POL1_POL_25_SHIFT (25U)                                             /*!< LPC_GPIO_GROUP_INT0_PORT_POL1.POL_25 Position*/
-#define LPC_GPIO_GROUP_INT0_PORT_POL1_POL_25(x)  (((uint32_t)(((uint32_t)(x))<<25U))&0x2000000UL)    /*!< LPC_GPIO_GROUP_INT0_PORT_POL1.POL_25 Field*/
-#define LPC_GPIO_GROUP_INT0_PORT_POL1_POL_26_MASK (0x4000000U)                                       /*!< LPC_GPIO_GROUP_INT0_PORT_POL1.POL_26 Mask*/
-#define LPC_GPIO_GROUP_INT0_PORT_POL1_POL_26_SHIFT (26U)                                             /*!< LPC_GPIO_GROUP_INT0_PORT_POL1.POL_26 Position*/
-#define LPC_GPIO_GROUP_INT0_PORT_POL1_POL_26(x)  (((uint32_t)(((uint32_t)(x))<<26U))&0x4000000UL)    /*!< LPC_GPIO_GROUP_INT0_PORT_POL1.POL_26 Field*/
-#define LPC_GPIO_GROUP_INT0_PORT_POL1_POL_27_MASK (0x8000000U)                                       /*!< LPC_GPIO_GROUP_INT0_PORT_POL1.POL_27 Mask*/
-#define LPC_GPIO_GROUP_INT0_PORT_POL1_POL_27_SHIFT (27U)                                             /*!< LPC_GPIO_GROUP_INT0_PORT_POL1.POL_27 Position*/
-#define LPC_GPIO_GROUP_INT0_PORT_POL1_POL_27(x)  (((uint32_t)(((uint32_t)(x))<<27U))&0x8000000UL)    /*!< LPC_GPIO_GROUP_INT0_PORT_POL1.POL_27 Field*/
-#define LPC_GPIO_GROUP_INT0_PORT_POL1_POL_28_MASK (0x10000000U)                                      /*!< LPC_GPIO_GROUP_INT0_PORT_POL1.POL_28 Mask*/
-#define LPC_GPIO_GROUP_INT0_PORT_POL1_POL_28_SHIFT (28U)                                             /*!< LPC_GPIO_GROUP_INT0_PORT_POL1.POL_28 Position*/
-#define LPC_GPIO_GROUP_INT0_PORT_POL1_POL_28(x)  (((uint32_t)(((uint32_t)(x))<<28U))&0x10000000UL)   /*!< LPC_GPIO_GROUP_INT0_PORT_POL1.POL_28 Field*/
-#define LPC_GPIO_GROUP_INT0_PORT_POL1_POL_29_MASK (0x20000000U)                                      /*!< LPC_GPIO_GROUP_INT0_PORT_POL1.POL_29 Mask*/
-#define LPC_GPIO_GROUP_INT0_PORT_POL1_POL_29_SHIFT (29U)                                             /*!< LPC_GPIO_GROUP_INT0_PORT_POL1.POL_29 Position*/
-#define LPC_GPIO_GROUP_INT0_PORT_POL1_POL_29(x)  (((uint32_t)(((uint32_t)(x))<<29U))&0x20000000UL)   /*!< LPC_GPIO_GROUP_INT0_PORT_POL1.POL_29 Field*/
-#define LPC_GPIO_GROUP_INT0_PORT_POL1_POL_30_MASK (0x40000000U)                                      /*!< LPC_GPIO_GROUP_INT0_PORT_POL1.POL_30 Mask*/
-#define LPC_GPIO_GROUP_INT0_PORT_POL1_POL_30_SHIFT (30U)                                             /*!< LPC_GPIO_GROUP_INT0_PORT_POL1.POL_30 Position*/
-#define LPC_GPIO_GROUP_INT0_PORT_POL1_POL_30(x)  (((uint32_t)(((uint32_t)(x))<<30U))&0x40000000UL)   /*!< LPC_GPIO_GROUP_INT0_PORT_POL1.POL_30 Field*/
-#define LPC_GPIO_GROUP_INT0_PORT_POL1_POL_31_MASK (0x80000000U)                                      /*!< LPC_GPIO_GROUP_INT0_PORT_POL1.POL_31 Mask*/
-#define LPC_GPIO_GROUP_INT0_PORT_POL1_POL_31_SHIFT (31U)                                             /*!< LPC_GPIO_GROUP_INT0_PORT_POL1.POL_31 Position*/
-#define LPC_GPIO_GROUP_INT0_PORT_POL1_POL_31(x)  (((uint32_t)(((uint32_t)(x))<<31U))&0x80000000UL)   /*!< LPC_GPIO_GROUP_INT0_PORT_POL1.POL_31 Field*/
-/* ------- PORT_ENA0 Bit Fields                     ------ */
-#define LPC_GPIO_GROUP_INT0_PORT_ENA0_ENA_0_MASK (0x1U)                                              /*!< LPC_GPIO_GROUP_INT0_PORT_ENA0.ENA_0 Mask*/
-#define LPC_GPIO_GROUP_INT0_PORT_ENA0_ENA_0_SHIFT (0U)                                               /*!< LPC_GPIO_GROUP_INT0_PORT_ENA0.ENA_0 Position*/
-#define LPC_GPIO_GROUP_INT0_PORT_ENA0_ENA_0(x)   (((uint32_t)(((uint32_t)(x))<<0U))&0x1UL)           /*!< LPC_GPIO_GROUP_INT0_PORT_ENA0.ENA_0 Field*/
-#define LPC_GPIO_GROUP_INT0_PORT_ENA0_ENA_1_MASK (0x2U)                                              /*!< LPC_GPIO_GROUP_INT0_PORT_ENA0.ENA_1 Mask*/
-#define LPC_GPIO_GROUP_INT0_PORT_ENA0_ENA_1_SHIFT (1U)                                               /*!< LPC_GPIO_GROUP_INT0_PORT_ENA0.ENA_1 Position*/
-#define LPC_GPIO_GROUP_INT0_PORT_ENA0_ENA_1(x)   (((uint32_t)(((uint32_t)(x))<<1U))&0x2UL)           /*!< LPC_GPIO_GROUP_INT0_PORT_ENA0.ENA_1 Field*/
-#define LPC_GPIO_GROUP_INT0_PORT_ENA0_ENA_2_MASK (0x4U)                                              /*!< LPC_GPIO_GROUP_INT0_PORT_ENA0.ENA_2 Mask*/
-#define LPC_GPIO_GROUP_INT0_PORT_ENA0_ENA_2_SHIFT (2U)                                               /*!< LPC_GPIO_GROUP_INT0_PORT_ENA0.ENA_2 Position*/
-#define LPC_GPIO_GROUP_INT0_PORT_ENA0_ENA_2(x)   (((uint32_t)(((uint32_t)(x))<<2U))&0x4UL)           /*!< LPC_GPIO_GROUP_INT0_PORT_ENA0.ENA_2 Field*/
-#define LPC_GPIO_GROUP_INT0_PORT_ENA0_ENA_3_MASK (0x8U)                                              /*!< LPC_GPIO_GROUP_INT0_PORT_ENA0.ENA_3 Mask*/
-#define LPC_GPIO_GROUP_INT0_PORT_ENA0_ENA_3_SHIFT (3U)                                               /*!< LPC_GPIO_GROUP_INT0_PORT_ENA0.ENA_3 Position*/
-#define LPC_GPIO_GROUP_INT0_PORT_ENA0_ENA_3(x)   (((uint32_t)(((uint32_t)(x))<<3U))&0x8UL)           /*!< LPC_GPIO_GROUP_INT0_PORT_ENA0.ENA_3 Field*/
-#define LPC_GPIO_GROUP_INT0_PORT_ENA0_ENA_4_MASK (0x10U)                                             /*!< LPC_GPIO_GROUP_INT0_PORT_ENA0.ENA_4 Mask*/
-#define LPC_GPIO_GROUP_INT0_PORT_ENA0_ENA_4_SHIFT (4U)                                               /*!< LPC_GPIO_GROUP_INT0_PORT_ENA0.ENA_4 Position*/
-#define LPC_GPIO_GROUP_INT0_PORT_ENA0_ENA_4(x)   (((uint32_t)(((uint32_t)(x))<<4U))&0x10UL)          /*!< LPC_GPIO_GROUP_INT0_PORT_ENA0.ENA_4 Field*/
-#define LPC_GPIO_GROUP_INT0_PORT_ENA0_ENA_5_MASK (0x20U)                                             /*!< LPC_GPIO_GROUP_INT0_PORT_ENA0.ENA_5 Mask*/
-#define LPC_GPIO_GROUP_INT0_PORT_ENA0_ENA_5_SHIFT (5U)                                               /*!< LPC_GPIO_GROUP_INT0_PORT_ENA0.ENA_5 Position*/
-#define LPC_GPIO_GROUP_INT0_PORT_ENA0_ENA_5(x)   (((uint32_t)(((uint32_t)(x))<<5U))&0x20UL)          /*!< LPC_GPIO_GROUP_INT0_PORT_ENA0.ENA_5 Field*/
-#define LPC_GPIO_GROUP_INT0_PORT_ENA0_ENA_6_MASK (0x40U)                                             /*!< LPC_GPIO_GROUP_INT0_PORT_ENA0.ENA_6 Mask*/
-#define LPC_GPIO_GROUP_INT0_PORT_ENA0_ENA_6_SHIFT (6U)                                               /*!< LPC_GPIO_GROUP_INT0_PORT_ENA0.ENA_6 Position*/
-#define LPC_GPIO_GROUP_INT0_PORT_ENA0_ENA_6(x)   (((uint32_t)(((uint32_t)(x))<<6U))&0x40UL)          /*!< LPC_GPIO_GROUP_INT0_PORT_ENA0.ENA_6 Field*/
-#define LPC_GPIO_GROUP_INT0_PORT_ENA0_ENA_7_MASK (0x80U)                                             /*!< LPC_GPIO_GROUP_INT0_PORT_ENA0.ENA_7 Mask*/
-#define LPC_GPIO_GROUP_INT0_PORT_ENA0_ENA_7_SHIFT (7U)                                               /*!< LPC_GPIO_GROUP_INT0_PORT_ENA0.ENA_7 Position*/
-#define LPC_GPIO_GROUP_INT0_PORT_ENA0_ENA_7(x)   (((uint32_t)(((uint32_t)(x))<<7U))&0x80UL)          /*!< LPC_GPIO_GROUP_INT0_PORT_ENA0.ENA_7 Field*/
-#define LPC_GPIO_GROUP_INT0_PORT_ENA0_ENA_8_MASK (0x100U)                                            /*!< LPC_GPIO_GROUP_INT0_PORT_ENA0.ENA_8 Mask*/
-#define LPC_GPIO_GROUP_INT0_PORT_ENA0_ENA_8_SHIFT (8U)                                               /*!< LPC_GPIO_GROUP_INT0_PORT_ENA0.ENA_8 Position*/
-#define LPC_GPIO_GROUP_INT0_PORT_ENA0_ENA_8(x)   (((uint32_t)(((uint32_t)(x))<<8U))&0x100UL)         /*!< LPC_GPIO_GROUP_INT0_PORT_ENA0.ENA_8 Field*/
-#define LPC_GPIO_GROUP_INT0_PORT_ENA0_ENA_9_MASK (0x200U)                                            /*!< LPC_GPIO_GROUP_INT0_PORT_ENA0.ENA_9 Mask*/
-#define LPC_GPIO_GROUP_INT0_PORT_ENA0_ENA_9_SHIFT (9U)                                               /*!< LPC_GPIO_GROUP_INT0_PORT_ENA0.ENA_9 Position*/
-#define LPC_GPIO_GROUP_INT0_PORT_ENA0_ENA_9(x)   (((uint32_t)(((uint32_t)(x))<<9U))&0x200UL)         /*!< LPC_GPIO_GROUP_INT0_PORT_ENA0.ENA_9 Field*/
-#define LPC_GPIO_GROUP_INT0_PORT_ENA0_ENA_10_MASK (0x400U)                                           /*!< LPC_GPIO_GROUP_INT0_PORT_ENA0.ENA_10 Mask*/
-#define LPC_GPIO_GROUP_INT0_PORT_ENA0_ENA_10_SHIFT (10U)                                             /*!< LPC_GPIO_GROUP_INT0_PORT_ENA0.ENA_10 Position*/
-#define LPC_GPIO_GROUP_INT0_PORT_ENA0_ENA_10(x)  (((uint32_t)(((uint32_t)(x))<<10U))&0x400UL)        /*!< LPC_GPIO_GROUP_INT0_PORT_ENA0.ENA_10 Field*/
-#define LPC_GPIO_GROUP_INT0_PORT_ENA0_ENA_11_MASK (0x800U)                                           /*!< LPC_GPIO_GROUP_INT0_PORT_ENA0.ENA_11 Mask*/
-#define LPC_GPIO_GROUP_INT0_PORT_ENA0_ENA_11_SHIFT (11U)                                             /*!< LPC_GPIO_GROUP_INT0_PORT_ENA0.ENA_11 Position*/
-#define LPC_GPIO_GROUP_INT0_PORT_ENA0_ENA_11(x)  (((uint32_t)(((uint32_t)(x))<<11U))&0x800UL)        /*!< LPC_GPIO_GROUP_INT0_PORT_ENA0.ENA_11 Field*/
-#define LPC_GPIO_GROUP_INT0_PORT_ENA0_ENA_12_MASK (0x1000U)                                          /*!< LPC_GPIO_GROUP_INT0_PORT_ENA0.ENA_12 Mask*/
-#define LPC_GPIO_GROUP_INT0_PORT_ENA0_ENA_12_SHIFT (12U)                                             /*!< LPC_GPIO_GROUP_INT0_PORT_ENA0.ENA_12 Position*/
-#define LPC_GPIO_GROUP_INT0_PORT_ENA0_ENA_12(x)  (((uint32_t)(((uint32_t)(x))<<12U))&0x1000UL)       /*!< LPC_GPIO_GROUP_INT0_PORT_ENA0.ENA_12 Field*/
-#define LPC_GPIO_GROUP_INT0_PORT_ENA0_ENA_13_MASK (0x2000U)                                          /*!< LPC_GPIO_GROUP_INT0_PORT_ENA0.ENA_13 Mask*/
-#define LPC_GPIO_GROUP_INT0_PORT_ENA0_ENA_13_SHIFT (13U)                                             /*!< LPC_GPIO_GROUP_INT0_PORT_ENA0.ENA_13 Position*/
-#define LPC_GPIO_GROUP_INT0_PORT_ENA0_ENA_13(x)  (((uint32_t)(((uint32_t)(x))<<13U))&0x2000UL)       /*!< LPC_GPIO_GROUP_INT0_PORT_ENA0.ENA_13 Field*/
-#define LPC_GPIO_GROUP_INT0_PORT_ENA0_ENA_14_MASK (0x4000U)                                          /*!< LPC_GPIO_GROUP_INT0_PORT_ENA0.ENA_14 Mask*/
-#define LPC_GPIO_GROUP_INT0_PORT_ENA0_ENA_14_SHIFT (14U)                                             /*!< LPC_GPIO_GROUP_INT0_PORT_ENA0.ENA_14 Position*/
-#define LPC_GPIO_GROUP_INT0_PORT_ENA0_ENA_14(x)  (((uint32_t)(((uint32_t)(x))<<14U))&0x4000UL)       /*!< LPC_GPIO_GROUP_INT0_PORT_ENA0.ENA_14 Field*/
-#define LPC_GPIO_GROUP_INT0_PORT_ENA0_ENA_15_MASK (0x8000U)                                          /*!< LPC_GPIO_GROUP_INT0_PORT_ENA0.ENA_15 Mask*/
-#define LPC_GPIO_GROUP_INT0_PORT_ENA0_ENA_15_SHIFT (15U)                                             /*!< LPC_GPIO_GROUP_INT0_PORT_ENA0.ENA_15 Position*/
-#define LPC_GPIO_GROUP_INT0_PORT_ENA0_ENA_15(x)  (((uint32_t)(((uint32_t)(x))<<15U))&0x8000UL)       /*!< LPC_GPIO_GROUP_INT0_PORT_ENA0.ENA_15 Field*/
-#define LPC_GPIO_GROUP_INT0_PORT_ENA0_ENA_16_MASK (0x10000U)                                         /*!< LPC_GPIO_GROUP_INT0_PORT_ENA0.ENA_16 Mask*/
-#define LPC_GPIO_GROUP_INT0_PORT_ENA0_ENA_16_SHIFT (16U)                                             /*!< LPC_GPIO_GROUP_INT0_PORT_ENA0.ENA_16 Position*/
-#define LPC_GPIO_GROUP_INT0_PORT_ENA0_ENA_16(x)  (((uint32_t)(((uint32_t)(x))<<16U))&0x10000UL)      /*!< LPC_GPIO_GROUP_INT0_PORT_ENA0.ENA_16 Field*/
-#define LPC_GPIO_GROUP_INT0_PORT_ENA0_ENA_17_MASK (0x20000U)                                         /*!< LPC_GPIO_GROUP_INT0_PORT_ENA0.ENA_17 Mask*/
-#define LPC_GPIO_GROUP_INT0_PORT_ENA0_ENA_17_SHIFT (17U)                                             /*!< LPC_GPIO_GROUP_INT0_PORT_ENA0.ENA_17 Position*/
-#define LPC_GPIO_GROUP_INT0_PORT_ENA0_ENA_17(x)  (((uint32_t)(((uint32_t)(x))<<17U))&0x20000UL)      /*!< LPC_GPIO_GROUP_INT0_PORT_ENA0.ENA_17 Field*/
-#define LPC_GPIO_GROUP_INT0_PORT_ENA0_ENA_18_MASK (0x40000U)                                         /*!< LPC_GPIO_GROUP_INT0_PORT_ENA0.ENA_18 Mask*/
-#define LPC_GPIO_GROUP_INT0_PORT_ENA0_ENA_18_SHIFT (18U)                                             /*!< LPC_GPIO_GROUP_INT0_PORT_ENA0.ENA_18 Position*/
-#define LPC_GPIO_GROUP_INT0_PORT_ENA0_ENA_18(x)  (((uint32_t)(((uint32_t)(x))<<18U))&0x40000UL)      /*!< LPC_GPIO_GROUP_INT0_PORT_ENA0.ENA_18 Field*/
-#define LPC_GPIO_GROUP_INT0_PORT_ENA0_ENA_19_MASK (0x80000U)                                         /*!< LPC_GPIO_GROUP_INT0_PORT_ENA0.ENA_19 Mask*/
-#define LPC_GPIO_GROUP_INT0_PORT_ENA0_ENA_19_SHIFT (19U)                                             /*!< LPC_GPIO_GROUP_INT0_PORT_ENA0.ENA_19 Position*/
-#define LPC_GPIO_GROUP_INT0_PORT_ENA0_ENA_19(x)  (((uint32_t)(((uint32_t)(x))<<19U))&0x80000UL)      /*!< LPC_GPIO_GROUP_INT0_PORT_ENA0.ENA_19 Field*/
-#define LPC_GPIO_GROUP_INT0_PORT_ENA0_ENA_20_MASK (0x100000U)                                        /*!< LPC_GPIO_GROUP_INT0_PORT_ENA0.ENA_20 Mask*/
-#define LPC_GPIO_GROUP_INT0_PORT_ENA0_ENA_20_SHIFT (20U)                                             /*!< LPC_GPIO_GROUP_INT0_PORT_ENA0.ENA_20 Position*/
-#define LPC_GPIO_GROUP_INT0_PORT_ENA0_ENA_20(x)  (((uint32_t)(((uint32_t)(x))<<20U))&0x100000UL)     /*!< LPC_GPIO_GROUP_INT0_PORT_ENA0.ENA_20 Field*/
-#define LPC_GPIO_GROUP_INT0_PORT_ENA0_ENA_21_MASK (0x200000U)                                        /*!< LPC_GPIO_GROUP_INT0_PORT_ENA0.ENA_21 Mask*/
-#define LPC_GPIO_GROUP_INT0_PORT_ENA0_ENA_21_SHIFT (21U)                                             /*!< LPC_GPIO_GROUP_INT0_PORT_ENA0.ENA_21 Position*/
-#define LPC_GPIO_GROUP_INT0_PORT_ENA0_ENA_21(x)  (((uint32_t)(((uint32_t)(x))<<21U))&0x200000UL)     /*!< LPC_GPIO_GROUP_INT0_PORT_ENA0.ENA_21 Field*/
-#define LPC_GPIO_GROUP_INT0_PORT_ENA0_ENA_22_MASK (0x400000U)                                        /*!< LPC_GPIO_GROUP_INT0_PORT_ENA0.ENA_22 Mask*/
-#define LPC_GPIO_GROUP_INT0_PORT_ENA0_ENA_22_SHIFT (22U)                                             /*!< LPC_GPIO_GROUP_INT0_PORT_ENA0.ENA_22 Position*/
-#define LPC_GPIO_GROUP_INT0_PORT_ENA0_ENA_22(x)  (((uint32_t)(((uint32_t)(x))<<22U))&0x400000UL)     /*!< LPC_GPIO_GROUP_INT0_PORT_ENA0.ENA_22 Field*/
-#define LPC_GPIO_GROUP_INT0_PORT_ENA0_ENA_23_MASK (0x800000U)                                        /*!< LPC_GPIO_GROUP_INT0_PORT_ENA0.ENA_23 Mask*/
-#define LPC_GPIO_GROUP_INT0_PORT_ENA0_ENA_23_SHIFT (23U)                                             /*!< LPC_GPIO_GROUP_INT0_PORT_ENA0.ENA_23 Position*/
-#define LPC_GPIO_GROUP_INT0_PORT_ENA0_ENA_23(x)  (((uint32_t)(((uint32_t)(x))<<23U))&0x800000UL)     /*!< LPC_GPIO_GROUP_INT0_PORT_ENA0.ENA_23 Field*/
-#define LPC_GPIO_GROUP_INT0_PORT_ENA0_ENA_24_MASK (0x1000000U)                                       /*!< LPC_GPIO_GROUP_INT0_PORT_ENA0.ENA_24 Mask*/
-#define LPC_GPIO_GROUP_INT0_PORT_ENA0_ENA_24_SHIFT (24U)                                             /*!< LPC_GPIO_GROUP_INT0_PORT_ENA0.ENA_24 Position*/
-#define LPC_GPIO_GROUP_INT0_PORT_ENA0_ENA_24(x)  (((uint32_t)(((uint32_t)(x))<<24U))&0x1000000UL)    /*!< LPC_GPIO_GROUP_INT0_PORT_ENA0.ENA_24 Field*/
-#define LPC_GPIO_GROUP_INT0_PORT_ENA0_ENA_25_MASK (0x2000000U)                                       /*!< LPC_GPIO_GROUP_INT0_PORT_ENA0.ENA_25 Mask*/
-#define LPC_GPIO_GROUP_INT0_PORT_ENA0_ENA_25_SHIFT (25U)                                             /*!< LPC_GPIO_GROUP_INT0_PORT_ENA0.ENA_25 Position*/
-#define LPC_GPIO_GROUP_INT0_PORT_ENA0_ENA_25(x)  (((uint32_t)(((uint32_t)(x))<<25U))&0x2000000UL)    /*!< LPC_GPIO_GROUP_INT0_PORT_ENA0.ENA_25 Field*/
-#define LPC_GPIO_GROUP_INT0_PORT_ENA0_ENA_26_MASK (0x4000000U)                                       /*!< LPC_GPIO_GROUP_INT0_PORT_ENA0.ENA_26 Mask*/
-#define LPC_GPIO_GROUP_INT0_PORT_ENA0_ENA_26_SHIFT (26U)                                             /*!< LPC_GPIO_GROUP_INT0_PORT_ENA0.ENA_26 Position*/
-#define LPC_GPIO_GROUP_INT0_PORT_ENA0_ENA_26(x)  (((uint32_t)(((uint32_t)(x))<<26U))&0x4000000UL)    /*!< LPC_GPIO_GROUP_INT0_PORT_ENA0.ENA_26 Field*/
-#define LPC_GPIO_GROUP_INT0_PORT_ENA0_ENA_27_MASK (0x8000000U)                                       /*!< LPC_GPIO_GROUP_INT0_PORT_ENA0.ENA_27 Mask*/
-#define LPC_GPIO_GROUP_INT0_PORT_ENA0_ENA_27_SHIFT (27U)                                             /*!< LPC_GPIO_GROUP_INT0_PORT_ENA0.ENA_27 Position*/
-#define LPC_GPIO_GROUP_INT0_PORT_ENA0_ENA_27(x)  (((uint32_t)(((uint32_t)(x))<<27U))&0x8000000UL)    /*!< LPC_GPIO_GROUP_INT0_PORT_ENA0.ENA_27 Field*/
-#define LPC_GPIO_GROUP_INT0_PORT_ENA0_ENA_28_MASK (0x10000000U)                                      /*!< LPC_GPIO_GROUP_INT0_PORT_ENA0.ENA_28 Mask*/
-#define LPC_GPIO_GROUP_INT0_PORT_ENA0_ENA_28_SHIFT (28U)                                             /*!< LPC_GPIO_GROUP_INT0_PORT_ENA0.ENA_28 Position*/
-#define LPC_GPIO_GROUP_INT0_PORT_ENA0_ENA_28(x)  (((uint32_t)(((uint32_t)(x))<<28U))&0x10000000UL)   /*!< LPC_GPIO_GROUP_INT0_PORT_ENA0.ENA_28 Field*/
-#define LPC_GPIO_GROUP_INT0_PORT_ENA0_ENA_29_MASK (0x20000000U)                                      /*!< LPC_GPIO_GROUP_INT0_PORT_ENA0.ENA_29 Mask*/
-#define LPC_GPIO_GROUP_INT0_PORT_ENA0_ENA_29_SHIFT (29U)                                             /*!< LPC_GPIO_GROUP_INT0_PORT_ENA0.ENA_29 Position*/
-#define LPC_GPIO_GROUP_INT0_PORT_ENA0_ENA_29(x)  (((uint32_t)(((uint32_t)(x))<<29U))&0x20000000UL)   /*!< LPC_GPIO_GROUP_INT0_PORT_ENA0.ENA_29 Field*/
-#define LPC_GPIO_GROUP_INT0_PORT_ENA0_ENA_30_MASK (0x40000000U)                                      /*!< LPC_GPIO_GROUP_INT0_PORT_ENA0.ENA_30 Mask*/
-#define LPC_GPIO_GROUP_INT0_PORT_ENA0_ENA_30_SHIFT (30U)                                             /*!< LPC_GPIO_GROUP_INT0_PORT_ENA0.ENA_30 Position*/
-#define LPC_GPIO_GROUP_INT0_PORT_ENA0_ENA_30(x)  (((uint32_t)(((uint32_t)(x))<<30U))&0x40000000UL)   /*!< LPC_GPIO_GROUP_INT0_PORT_ENA0.ENA_30 Field*/
-#define LPC_GPIO_GROUP_INT0_PORT_ENA0_ENA_31_MASK (0x80000000U)                                      /*!< LPC_GPIO_GROUP_INT0_PORT_ENA0.ENA_31 Mask*/
-#define LPC_GPIO_GROUP_INT0_PORT_ENA0_ENA_31_SHIFT (31U)                                             /*!< LPC_GPIO_GROUP_INT0_PORT_ENA0.ENA_31 Position*/
-#define LPC_GPIO_GROUP_INT0_PORT_ENA0_ENA_31(x)  (((uint32_t)(((uint32_t)(x))<<31U))&0x80000000UL)   /*!< LPC_GPIO_GROUP_INT0_PORT_ENA0.ENA_31 Field*/
-/* ------- PORT_ENA1 Bit Fields                     ------ */
-#define LPC_GPIO_GROUP_INT0_PORT_ENA1_ENA_0_MASK (0x1U)                                              /*!< LPC_GPIO_GROUP_INT0_PORT_ENA1.ENA_0 Mask*/
-#define LPC_GPIO_GROUP_INT0_PORT_ENA1_ENA_0_SHIFT (0U)                                               /*!< LPC_GPIO_GROUP_INT0_PORT_ENA1.ENA_0 Position*/
-#define LPC_GPIO_GROUP_INT0_PORT_ENA1_ENA_0(x)   (((uint32_t)(((uint32_t)(x))<<0U))&0x1UL)           /*!< LPC_GPIO_GROUP_INT0_PORT_ENA1.ENA_0 Field*/
-#define LPC_GPIO_GROUP_INT0_PORT_ENA1_ENA_1_MASK (0x2U)                                              /*!< LPC_GPIO_GROUP_INT0_PORT_ENA1.ENA_1 Mask*/
-#define LPC_GPIO_GROUP_INT0_PORT_ENA1_ENA_1_SHIFT (1U)                                               /*!< LPC_GPIO_GROUP_INT0_PORT_ENA1.ENA_1 Position*/
-#define LPC_GPIO_GROUP_INT0_PORT_ENA1_ENA_1(x)   (((uint32_t)(((uint32_t)(x))<<1U))&0x2UL)           /*!< LPC_GPIO_GROUP_INT0_PORT_ENA1.ENA_1 Field*/
-#define LPC_GPIO_GROUP_INT0_PORT_ENA1_ENA_2_MASK (0x4U)                                              /*!< LPC_GPIO_GROUP_INT0_PORT_ENA1.ENA_2 Mask*/
-#define LPC_GPIO_GROUP_INT0_PORT_ENA1_ENA_2_SHIFT (2U)                                               /*!< LPC_GPIO_GROUP_INT0_PORT_ENA1.ENA_2 Position*/
-#define LPC_GPIO_GROUP_INT0_PORT_ENA1_ENA_2(x)   (((uint32_t)(((uint32_t)(x))<<2U))&0x4UL)           /*!< LPC_GPIO_GROUP_INT0_PORT_ENA1.ENA_2 Field*/
-#define LPC_GPIO_GROUP_INT0_PORT_ENA1_ENA_3_MASK (0x8U)                                              /*!< LPC_GPIO_GROUP_INT0_PORT_ENA1.ENA_3 Mask*/
-#define LPC_GPIO_GROUP_INT0_PORT_ENA1_ENA_3_SHIFT (3U)                                               /*!< LPC_GPIO_GROUP_INT0_PORT_ENA1.ENA_3 Position*/
-#define LPC_GPIO_GROUP_INT0_PORT_ENA1_ENA_3(x)   (((uint32_t)(((uint32_t)(x))<<3U))&0x8UL)           /*!< LPC_GPIO_GROUP_INT0_PORT_ENA1.ENA_3 Field*/
-#define LPC_GPIO_GROUP_INT0_PORT_ENA1_ENA_4_MASK (0x10U)                                             /*!< LPC_GPIO_GROUP_INT0_PORT_ENA1.ENA_4 Mask*/
-#define LPC_GPIO_GROUP_INT0_PORT_ENA1_ENA_4_SHIFT (4U)                                               /*!< LPC_GPIO_GROUP_INT0_PORT_ENA1.ENA_4 Position*/
-#define LPC_GPIO_GROUP_INT0_PORT_ENA1_ENA_4(x)   (((uint32_t)(((uint32_t)(x))<<4U))&0x10UL)          /*!< LPC_GPIO_GROUP_INT0_PORT_ENA1.ENA_4 Field*/
-#define LPC_GPIO_GROUP_INT0_PORT_ENA1_ENA_5_MASK (0x20U)                                             /*!< LPC_GPIO_GROUP_INT0_PORT_ENA1.ENA_5 Mask*/
-#define LPC_GPIO_GROUP_INT0_PORT_ENA1_ENA_5_SHIFT (5U)                                               /*!< LPC_GPIO_GROUP_INT0_PORT_ENA1.ENA_5 Position*/
-#define LPC_GPIO_GROUP_INT0_PORT_ENA1_ENA_5(x)   (((uint32_t)(((uint32_t)(x))<<5U))&0x20UL)          /*!< LPC_GPIO_GROUP_INT0_PORT_ENA1.ENA_5 Field*/
-#define LPC_GPIO_GROUP_INT0_PORT_ENA1_ENA_6_MASK (0x40U)                                             /*!< LPC_GPIO_GROUP_INT0_PORT_ENA1.ENA_6 Mask*/
-#define LPC_GPIO_GROUP_INT0_PORT_ENA1_ENA_6_SHIFT (6U)                                               /*!< LPC_GPIO_GROUP_INT0_PORT_ENA1.ENA_6 Position*/
-#define LPC_GPIO_GROUP_INT0_PORT_ENA1_ENA_6(x)   (((uint32_t)(((uint32_t)(x))<<6U))&0x40UL)          /*!< LPC_GPIO_GROUP_INT0_PORT_ENA1.ENA_6 Field*/
-#define LPC_GPIO_GROUP_INT0_PORT_ENA1_ENA_7_MASK (0x80U)                                             /*!< LPC_GPIO_GROUP_INT0_PORT_ENA1.ENA_7 Mask*/
-#define LPC_GPIO_GROUP_INT0_PORT_ENA1_ENA_7_SHIFT (7U)                                               /*!< LPC_GPIO_GROUP_INT0_PORT_ENA1.ENA_7 Position*/
-#define LPC_GPIO_GROUP_INT0_PORT_ENA1_ENA_7(x)   (((uint32_t)(((uint32_t)(x))<<7U))&0x80UL)          /*!< LPC_GPIO_GROUP_INT0_PORT_ENA1.ENA_7 Field*/
-#define LPC_GPIO_GROUP_INT0_PORT_ENA1_ENA_8_MASK (0x100U)                                            /*!< LPC_GPIO_GROUP_INT0_PORT_ENA1.ENA_8 Mask*/
-#define LPC_GPIO_GROUP_INT0_PORT_ENA1_ENA_8_SHIFT (8U)                                               /*!< LPC_GPIO_GROUP_INT0_PORT_ENA1.ENA_8 Position*/
-#define LPC_GPIO_GROUP_INT0_PORT_ENA1_ENA_8(x)   (((uint32_t)(((uint32_t)(x))<<8U))&0x100UL)         /*!< LPC_GPIO_GROUP_INT0_PORT_ENA1.ENA_8 Field*/
-#define LPC_GPIO_GROUP_INT0_PORT_ENA1_ENA_9_MASK (0x200U)                                            /*!< LPC_GPIO_GROUP_INT0_PORT_ENA1.ENA_9 Mask*/
-#define LPC_GPIO_GROUP_INT0_PORT_ENA1_ENA_9_SHIFT (9U)                                               /*!< LPC_GPIO_GROUP_INT0_PORT_ENA1.ENA_9 Position*/
-#define LPC_GPIO_GROUP_INT0_PORT_ENA1_ENA_9(x)   (((uint32_t)(((uint32_t)(x))<<9U))&0x200UL)         /*!< LPC_GPIO_GROUP_INT0_PORT_ENA1.ENA_9 Field*/
-#define LPC_GPIO_GROUP_INT0_PORT_ENA1_ENA_10_MASK (0x400U)                                           /*!< LPC_GPIO_GROUP_INT0_PORT_ENA1.ENA_10 Mask*/
-#define LPC_GPIO_GROUP_INT0_PORT_ENA1_ENA_10_SHIFT (10U)                                             /*!< LPC_GPIO_GROUP_INT0_PORT_ENA1.ENA_10 Position*/
-#define LPC_GPIO_GROUP_INT0_PORT_ENA1_ENA_10(x)  (((uint32_t)(((uint32_t)(x))<<10U))&0x400UL)        /*!< LPC_GPIO_GROUP_INT0_PORT_ENA1.ENA_10 Field*/
-#define LPC_GPIO_GROUP_INT0_PORT_ENA1_ENA_11_MASK (0x800U)                                           /*!< LPC_GPIO_GROUP_INT0_PORT_ENA1.ENA_11 Mask*/
-#define LPC_GPIO_GROUP_INT0_PORT_ENA1_ENA_11_SHIFT (11U)                                             /*!< LPC_GPIO_GROUP_INT0_PORT_ENA1.ENA_11 Position*/
-#define LPC_GPIO_GROUP_INT0_PORT_ENA1_ENA_11(x)  (((uint32_t)(((uint32_t)(x))<<11U))&0x800UL)        /*!< LPC_GPIO_GROUP_INT0_PORT_ENA1.ENA_11 Field*/
-#define LPC_GPIO_GROUP_INT0_PORT_ENA1_ENA_12_MASK (0x1000U)                                          /*!< LPC_GPIO_GROUP_INT0_PORT_ENA1.ENA_12 Mask*/
-#define LPC_GPIO_GROUP_INT0_PORT_ENA1_ENA_12_SHIFT (12U)                                             /*!< LPC_GPIO_GROUP_INT0_PORT_ENA1.ENA_12 Position*/
-#define LPC_GPIO_GROUP_INT0_PORT_ENA1_ENA_12(x)  (((uint32_t)(((uint32_t)(x))<<12U))&0x1000UL)       /*!< LPC_GPIO_GROUP_INT0_PORT_ENA1.ENA_12 Field*/
-#define LPC_GPIO_GROUP_INT0_PORT_ENA1_ENA_13_MASK (0x2000U)                                          /*!< LPC_GPIO_GROUP_INT0_PORT_ENA1.ENA_13 Mask*/
-#define LPC_GPIO_GROUP_INT0_PORT_ENA1_ENA_13_SHIFT (13U)                                             /*!< LPC_GPIO_GROUP_INT0_PORT_ENA1.ENA_13 Position*/
-#define LPC_GPIO_GROUP_INT0_PORT_ENA1_ENA_13(x)  (((uint32_t)(((uint32_t)(x))<<13U))&0x2000UL)       /*!< LPC_GPIO_GROUP_INT0_PORT_ENA1.ENA_13 Field*/
-#define LPC_GPIO_GROUP_INT0_PORT_ENA1_ENA_14_MASK (0x4000U)                                          /*!< LPC_GPIO_GROUP_INT0_PORT_ENA1.ENA_14 Mask*/
-#define LPC_GPIO_GROUP_INT0_PORT_ENA1_ENA_14_SHIFT (14U)                                             /*!< LPC_GPIO_GROUP_INT0_PORT_ENA1.ENA_14 Position*/
-#define LPC_GPIO_GROUP_INT0_PORT_ENA1_ENA_14(x)  (((uint32_t)(((uint32_t)(x))<<14U))&0x4000UL)       /*!< LPC_GPIO_GROUP_INT0_PORT_ENA1.ENA_14 Field*/
-#define LPC_GPIO_GROUP_INT0_PORT_ENA1_ENA_15_MASK (0x8000U)                                          /*!< LPC_GPIO_GROUP_INT0_PORT_ENA1.ENA_15 Mask*/
-#define LPC_GPIO_GROUP_INT0_PORT_ENA1_ENA_15_SHIFT (15U)                                             /*!< LPC_GPIO_GROUP_INT0_PORT_ENA1.ENA_15 Position*/
-#define LPC_GPIO_GROUP_INT0_PORT_ENA1_ENA_15(x)  (((uint32_t)(((uint32_t)(x))<<15U))&0x8000UL)       /*!< LPC_GPIO_GROUP_INT0_PORT_ENA1.ENA_15 Field*/
-#define LPC_GPIO_GROUP_INT0_PORT_ENA1_ENA_16_MASK (0x10000U)                                         /*!< LPC_GPIO_GROUP_INT0_PORT_ENA1.ENA_16 Mask*/
-#define LPC_GPIO_GROUP_INT0_PORT_ENA1_ENA_16_SHIFT (16U)                                             /*!< LPC_GPIO_GROUP_INT0_PORT_ENA1.ENA_16 Position*/
-#define LPC_GPIO_GROUP_INT0_PORT_ENA1_ENA_16(x)  (((uint32_t)(((uint32_t)(x))<<16U))&0x10000UL)      /*!< LPC_GPIO_GROUP_INT0_PORT_ENA1.ENA_16 Field*/
-#define LPC_GPIO_GROUP_INT0_PORT_ENA1_ENA_17_MASK (0x20000U)                                         /*!< LPC_GPIO_GROUP_INT0_PORT_ENA1.ENA_17 Mask*/
-#define LPC_GPIO_GROUP_INT0_PORT_ENA1_ENA_17_SHIFT (17U)                                             /*!< LPC_GPIO_GROUP_INT0_PORT_ENA1.ENA_17 Position*/
-#define LPC_GPIO_GROUP_INT0_PORT_ENA1_ENA_17(x)  (((uint32_t)(((uint32_t)(x))<<17U))&0x20000UL)      /*!< LPC_GPIO_GROUP_INT0_PORT_ENA1.ENA_17 Field*/
-#define LPC_GPIO_GROUP_INT0_PORT_ENA1_ENA_18_MASK (0x40000U)                                         /*!< LPC_GPIO_GROUP_INT0_PORT_ENA1.ENA_18 Mask*/
-#define LPC_GPIO_GROUP_INT0_PORT_ENA1_ENA_18_SHIFT (18U)                                             /*!< LPC_GPIO_GROUP_INT0_PORT_ENA1.ENA_18 Position*/
-#define LPC_GPIO_GROUP_INT0_PORT_ENA1_ENA_18(x)  (((uint32_t)(((uint32_t)(x))<<18U))&0x40000UL)      /*!< LPC_GPIO_GROUP_INT0_PORT_ENA1.ENA_18 Field*/
-#define LPC_GPIO_GROUP_INT0_PORT_ENA1_ENA_19_MASK (0x80000U)                                         /*!< LPC_GPIO_GROUP_INT0_PORT_ENA1.ENA_19 Mask*/
-#define LPC_GPIO_GROUP_INT0_PORT_ENA1_ENA_19_SHIFT (19U)                                             /*!< LPC_GPIO_GROUP_INT0_PORT_ENA1.ENA_19 Position*/
-#define LPC_GPIO_GROUP_INT0_PORT_ENA1_ENA_19(x)  (((uint32_t)(((uint32_t)(x))<<19U))&0x80000UL)      /*!< LPC_GPIO_GROUP_INT0_PORT_ENA1.ENA_19 Field*/
-#define LPC_GPIO_GROUP_INT0_PORT_ENA1_ENA_20_MASK (0x100000U)                                        /*!< LPC_GPIO_GROUP_INT0_PORT_ENA1.ENA_20 Mask*/
-#define LPC_GPIO_GROUP_INT0_PORT_ENA1_ENA_20_SHIFT (20U)                                             /*!< LPC_GPIO_GROUP_INT0_PORT_ENA1.ENA_20 Position*/
-#define LPC_GPIO_GROUP_INT0_PORT_ENA1_ENA_20(x)  (((uint32_t)(((uint32_t)(x))<<20U))&0x100000UL)     /*!< LPC_GPIO_GROUP_INT0_PORT_ENA1.ENA_20 Field*/
-#define LPC_GPIO_GROUP_INT0_PORT_ENA1_ENA_21_MASK (0x200000U)                                        /*!< LPC_GPIO_GROUP_INT0_PORT_ENA1.ENA_21 Mask*/
-#define LPC_GPIO_GROUP_INT0_PORT_ENA1_ENA_21_SHIFT (21U)                                             /*!< LPC_GPIO_GROUP_INT0_PORT_ENA1.ENA_21 Position*/
-#define LPC_GPIO_GROUP_INT0_PORT_ENA1_ENA_21(x)  (((uint32_t)(((uint32_t)(x))<<21U))&0x200000UL)     /*!< LPC_GPIO_GROUP_INT0_PORT_ENA1.ENA_21 Field*/
-#define LPC_GPIO_GROUP_INT0_PORT_ENA1_ENA_22_MASK (0x400000U)                                        /*!< LPC_GPIO_GROUP_INT0_PORT_ENA1.ENA_22 Mask*/
-#define LPC_GPIO_GROUP_INT0_PORT_ENA1_ENA_22_SHIFT (22U)                                             /*!< LPC_GPIO_GROUP_INT0_PORT_ENA1.ENA_22 Position*/
-#define LPC_GPIO_GROUP_INT0_PORT_ENA1_ENA_22(x)  (((uint32_t)(((uint32_t)(x))<<22U))&0x400000UL)     /*!< LPC_GPIO_GROUP_INT0_PORT_ENA1.ENA_22 Field*/
-#define LPC_GPIO_GROUP_INT0_PORT_ENA1_ENA_23_MASK (0x800000U)                                        /*!< LPC_GPIO_GROUP_INT0_PORT_ENA1.ENA_23 Mask*/
-#define LPC_GPIO_GROUP_INT0_PORT_ENA1_ENA_23_SHIFT (23U)                                             /*!< LPC_GPIO_GROUP_INT0_PORT_ENA1.ENA_23 Position*/
-#define LPC_GPIO_GROUP_INT0_PORT_ENA1_ENA_23(x)  (((uint32_t)(((uint32_t)(x))<<23U))&0x800000UL)     /*!< LPC_GPIO_GROUP_INT0_PORT_ENA1.ENA_23 Field*/
-#define LPC_GPIO_GROUP_INT0_PORT_ENA1_ENA_24_MASK (0x1000000U)                                       /*!< LPC_GPIO_GROUP_INT0_PORT_ENA1.ENA_24 Mask*/
-#define LPC_GPIO_GROUP_INT0_PORT_ENA1_ENA_24_SHIFT (24U)                                             /*!< LPC_GPIO_GROUP_INT0_PORT_ENA1.ENA_24 Position*/
-#define LPC_GPIO_GROUP_INT0_PORT_ENA1_ENA_24(x)  (((uint32_t)(((uint32_t)(x))<<24U))&0x1000000UL)    /*!< LPC_GPIO_GROUP_INT0_PORT_ENA1.ENA_24 Field*/
-#define LPC_GPIO_GROUP_INT0_PORT_ENA1_ENA_25_MASK (0x2000000U)                                       /*!< LPC_GPIO_GROUP_INT0_PORT_ENA1.ENA_25 Mask*/
-#define LPC_GPIO_GROUP_INT0_PORT_ENA1_ENA_25_SHIFT (25U)                                             /*!< LPC_GPIO_GROUP_INT0_PORT_ENA1.ENA_25 Position*/
-#define LPC_GPIO_GROUP_INT0_PORT_ENA1_ENA_25(x)  (((uint32_t)(((uint32_t)(x))<<25U))&0x2000000UL)    /*!< LPC_GPIO_GROUP_INT0_PORT_ENA1.ENA_25 Field*/
-#define LPC_GPIO_GROUP_INT0_PORT_ENA1_ENA_26_MASK (0x4000000U)                                       /*!< LPC_GPIO_GROUP_INT0_PORT_ENA1.ENA_26 Mask*/
-#define LPC_GPIO_GROUP_INT0_PORT_ENA1_ENA_26_SHIFT (26U)                                             /*!< LPC_GPIO_GROUP_INT0_PORT_ENA1.ENA_26 Position*/
-#define LPC_GPIO_GROUP_INT0_PORT_ENA1_ENA_26(x)  (((uint32_t)(((uint32_t)(x))<<26U))&0x4000000UL)    /*!< LPC_GPIO_GROUP_INT0_PORT_ENA1.ENA_26 Field*/
-#define LPC_GPIO_GROUP_INT0_PORT_ENA1_ENA_27_MASK (0x8000000U)                                       /*!< LPC_GPIO_GROUP_INT0_PORT_ENA1.ENA_27 Mask*/
-#define LPC_GPIO_GROUP_INT0_PORT_ENA1_ENA_27_SHIFT (27U)                                             /*!< LPC_GPIO_GROUP_INT0_PORT_ENA1.ENA_27 Position*/
-#define LPC_GPIO_GROUP_INT0_PORT_ENA1_ENA_27(x)  (((uint32_t)(((uint32_t)(x))<<27U))&0x8000000UL)    /*!< LPC_GPIO_GROUP_INT0_PORT_ENA1.ENA_27 Field*/
-#define LPC_GPIO_GROUP_INT0_PORT_ENA1_ENA_28_MASK (0x10000000U)                                      /*!< LPC_GPIO_GROUP_INT0_PORT_ENA1.ENA_28 Mask*/
-#define LPC_GPIO_GROUP_INT0_PORT_ENA1_ENA_28_SHIFT (28U)                                             /*!< LPC_GPIO_GROUP_INT0_PORT_ENA1.ENA_28 Position*/
-#define LPC_GPIO_GROUP_INT0_PORT_ENA1_ENA_28(x)  (((uint32_t)(((uint32_t)(x))<<28U))&0x10000000UL)   /*!< LPC_GPIO_GROUP_INT0_PORT_ENA1.ENA_28 Field*/
-#define LPC_GPIO_GROUP_INT0_PORT_ENA1_ENA_29_MASK (0x20000000U)                                      /*!< LPC_GPIO_GROUP_INT0_PORT_ENA1.ENA_29 Mask*/
-#define LPC_GPIO_GROUP_INT0_PORT_ENA1_ENA_29_SHIFT (29U)                                             /*!< LPC_GPIO_GROUP_INT0_PORT_ENA1.ENA_29 Position*/
-#define LPC_GPIO_GROUP_INT0_PORT_ENA1_ENA_29(x)  (((uint32_t)(((uint32_t)(x))<<29U))&0x20000000UL)   /*!< LPC_GPIO_GROUP_INT0_PORT_ENA1.ENA_29 Field*/
-#define LPC_GPIO_GROUP_INT0_PORT_ENA1_ENA_30_MASK (0x40000000U)                                      /*!< LPC_GPIO_GROUP_INT0_PORT_ENA1.ENA_30 Mask*/
-#define LPC_GPIO_GROUP_INT0_PORT_ENA1_ENA_30_SHIFT (30U)                                             /*!< LPC_GPIO_GROUP_INT0_PORT_ENA1.ENA_30 Position*/
-#define LPC_GPIO_GROUP_INT0_PORT_ENA1_ENA_30(x)  (((uint32_t)(((uint32_t)(x))<<30U))&0x40000000UL)   /*!< LPC_GPIO_GROUP_INT0_PORT_ENA1.ENA_30 Field*/
-#define LPC_GPIO_GROUP_INT0_PORT_ENA1_ENA_31_MASK (0x80000000U)                                      /*!< LPC_GPIO_GROUP_INT0_PORT_ENA1.ENA_31 Mask*/
-#define LPC_GPIO_GROUP_INT0_PORT_ENA1_ENA_31_SHIFT (31U)                                             /*!< LPC_GPIO_GROUP_INT0_PORT_ENA1.ENA_31 Position*/
-#define LPC_GPIO_GROUP_INT0_PORT_ENA1_ENA_31(x)  (((uint32_t)(((uint32_t)(x))<<31U))&0x80000000UL)   /*!< LPC_GPIO_GROUP_INT0_PORT_ENA1.ENA_31 Field*/
+/* ------- PORT_POL Bit Fields                      ------ */
+#define LPC_GPIO_GROUP_INT0_PORT_POL_POL_0_MASK  (0x1U)                                              /*!< LPC_GPIO_GROUP_INT0_PORT_POL.POL_0 Mask */
+#define LPC_GPIO_GROUP_INT0_PORT_POL_POL_0_SHIFT (0U)                                                /*!< LPC_GPIO_GROUP_INT0_PORT_POL.POL_0 Position*/
+#define LPC_GPIO_GROUP_INT0_PORT_POL_POL_0(x)    (((uint32_t)(((uint32_t)(x))<<0U))&0x1UL)           /*!< LPC_GPIO_GROUP_INT0_PORT_POL.POL_0 Field*/
+#define LPC_GPIO_GROUP_INT0_PORT_POL_POL_1_MASK  (0x2U)                                              /*!< LPC_GPIO_GROUP_INT0_PORT_POL.POL_1 Mask */
+#define LPC_GPIO_GROUP_INT0_PORT_POL_POL_1_SHIFT (1U)                                                /*!< LPC_GPIO_GROUP_INT0_PORT_POL.POL_1 Position*/
+#define LPC_GPIO_GROUP_INT0_PORT_POL_POL_1(x)    (((uint32_t)(((uint32_t)(x))<<1U))&0x2UL)           /*!< LPC_GPIO_GROUP_INT0_PORT_POL.POL_1 Field*/
+#define LPC_GPIO_GROUP_INT0_PORT_POL_POL_2_MASK  (0x4U)                                              /*!< LPC_GPIO_GROUP_INT0_PORT_POL.POL_2 Mask */
+#define LPC_GPIO_GROUP_INT0_PORT_POL_POL_2_SHIFT (2U)                                                /*!< LPC_GPIO_GROUP_INT0_PORT_POL.POL_2 Position*/
+#define LPC_GPIO_GROUP_INT0_PORT_POL_POL_2(x)    (((uint32_t)(((uint32_t)(x))<<2U))&0x4UL)           /*!< LPC_GPIO_GROUP_INT0_PORT_POL.POL_2 Field*/
+#define LPC_GPIO_GROUP_INT0_PORT_POL_POL_3_MASK  (0x8U)                                              /*!< LPC_GPIO_GROUP_INT0_PORT_POL.POL_3 Mask */
+#define LPC_GPIO_GROUP_INT0_PORT_POL_POL_3_SHIFT (3U)                                                /*!< LPC_GPIO_GROUP_INT0_PORT_POL.POL_3 Position*/
+#define LPC_GPIO_GROUP_INT0_PORT_POL_POL_3(x)    (((uint32_t)(((uint32_t)(x))<<3U))&0x8UL)           /*!< LPC_GPIO_GROUP_INT0_PORT_POL.POL_3 Field*/
+#define LPC_GPIO_GROUP_INT0_PORT_POL_POL_4_MASK  (0x10U)                                             /*!< LPC_GPIO_GROUP_INT0_PORT_POL.POL_4 Mask */
+#define LPC_GPIO_GROUP_INT0_PORT_POL_POL_4_SHIFT (4U)                                                /*!< LPC_GPIO_GROUP_INT0_PORT_POL.POL_4 Position*/
+#define LPC_GPIO_GROUP_INT0_PORT_POL_POL_4(x)    (((uint32_t)(((uint32_t)(x))<<4U))&0x10UL)          /*!< LPC_GPIO_GROUP_INT0_PORT_POL.POL_4 Field*/
+#define LPC_GPIO_GROUP_INT0_PORT_POL_POL_5_MASK  (0x20U)                                             /*!< LPC_GPIO_GROUP_INT0_PORT_POL.POL_5 Mask */
+#define LPC_GPIO_GROUP_INT0_PORT_POL_POL_5_SHIFT (5U)                                                /*!< LPC_GPIO_GROUP_INT0_PORT_POL.POL_5 Position*/
+#define LPC_GPIO_GROUP_INT0_PORT_POL_POL_5(x)    (((uint32_t)(((uint32_t)(x))<<5U))&0x20UL)          /*!< LPC_GPIO_GROUP_INT0_PORT_POL.POL_5 Field*/
+#define LPC_GPIO_GROUP_INT0_PORT_POL_POL_6_MASK  (0x40U)                                             /*!< LPC_GPIO_GROUP_INT0_PORT_POL.POL_6 Mask */
+#define LPC_GPIO_GROUP_INT0_PORT_POL_POL_6_SHIFT (6U)                                                /*!< LPC_GPIO_GROUP_INT0_PORT_POL.POL_6 Position*/
+#define LPC_GPIO_GROUP_INT0_PORT_POL_POL_6(x)    (((uint32_t)(((uint32_t)(x))<<6U))&0x40UL)          /*!< LPC_GPIO_GROUP_INT0_PORT_POL.POL_6 Field*/
+#define LPC_GPIO_GROUP_INT0_PORT_POL_POL_7_MASK  (0x80U)                                             /*!< LPC_GPIO_GROUP_INT0_PORT_POL.POL_7 Mask */
+#define LPC_GPIO_GROUP_INT0_PORT_POL_POL_7_SHIFT (7U)                                                /*!< LPC_GPIO_GROUP_INT0_PORT_POL.POL_7 Position*/
+#define LPC_GPIO_GROUP_INT0_PORT_POL_POL_7(x)    (((uint32_t)(((uint32_t)(x))<<7U))&0x80UL)          /*!< LPC_GPIO_GROUP_INT0_PORT_POL.POL_7 Field*/
+#define LPC_GPIO_GROUP_INT0_PORT_POL_POL_8_MASK  (0x100U)                                            /*!< LPC_GPIO_GROUP_INT0_PORT_POL.POL_8 Mask */
+#define LPC_GPIO_GROUP_INT0_PORT_POL_POL_8_SHIFT (8U)                                                /*!< LPC_GPIO_GROUP_INT0_PORT_POL.POL_8 Position*/
+#define LPC_GPIO_GROUP_INT0_PORT_POL_POL_8(x)    (((uint32_t)(((uint32_t)(x))<<8U))&0x100UL)         /*!< LPC_GPIO_GROUP_INT0_PORT_POL.POL_8 Field*/
+#define LPC_GPIO_GROUP_INT0_PORT_POL_POL_9_MASK  (0x200U)                                            /*!< LPC_GPIO_GROUP_INT0_PORT_POL.POL_9 Mask */
+#define LPC_GPIO_GROUP_INT0_PORT_POL_POL_9_SHIFT (9U)                                                /*!< LPC_GPIO_GROUP_INT0_PORT_POL.POL_9 Position*/
+#define LPC_GPIO_GROUP_INT0_PORT_POL_POL_9(x)    (((uint32_t)(((uint32_t)(x))<<9U))&0x200UL)         /*!< LPC_GPIO_GROUP_INT0_PORT_POL.POL_9 Field*/
+#define LPC_GPIO_GROUP_INT0_PORT_POL_POL_10_MASK (0x400U)                                            /*!< LPC_GPIO_GROUP_INT0_PORT_POL.POL_10 Mask*/
+#define LPC_GPIO_GROUP_INT0_PORT_POL_POL_10_SHIFT (10U)                                              /*!< LPC_GPIO_GROUP_INT0_PORT_POL.POL_10 Position*/
+#define LPC_GPIO_GROUP_INT0_PORT_POL_POL_10(x)   (((uint32_t)(((uint32_t)(x))<<10U))&0x400UL)        /*!< LPC_GPIO_GROUP_INT0_PORT_POL.POL_10 Field*/
+#define LPC_GPIO_GROUP_INT0_PORT_POL_POL_11_MASK (0x800U)                                            /*!< LPC_GPIO_GROUP_INT0_PORT_POL.POL_11 Mask*/
+#define LPC_GPIO_GROUP_INT0_PORT_POL_POL_11_SHIFT (11U)                                              /*!< LPC_GPIO_GROUP_INT0_PORT_POL.POL_11 Position*/
+#define LPC_GPIO_GROUP_INT0_PORT_POL_POL_11(x)   (((uint32_t)(((uint32_t)(x))<<11U))&0x800UL)        /*!< LPC_GPIO_GROUP_INT0_PORT_POL.POL_11 Field*/
+#define LPC_GPIO_GROUP_INT0_PORT_POL_POL_12_MASK (0x1000U)                                           /*!< LPC_GPIO_GROUP_INT0_PORT_POL.POL_12 Mask*/
+#define LPC_GPIO_GROUP_INT0_PORT_POL_POL_12_SHIFT (12U)                                              /*!< LPC_GPIO_GROUP_INT0_PORT_POL.POL_12 Position*/
+#define LPC_GPIO_GROUP_INT0_PORT_POL_POL_12(x)   (((uint32_t)(((uint32_t)(x))<<12U))&0x1000UL)       /*!< LPC_GPIO_GROUP_INT0_PORT_POL.POL_12 Field*/
+#define LPC_GPIO_GROUP_INT0_PORT_POL_POL_13_MASK (0x2000U)                                           /*!< LPC_GPIO_GROUP_INT0_PORT_POL.POL_13 Mask*/
+#define LPC_GPIO_GROUP_INT0_PORT_POL_POL_13_SHIFT (13U)                                              /*!< LPC_GPIO_GROUP_INT0_PORT_POL.POL_13 Position*/
+#define LPC_GPIO_GROUP_INT0_PORT_POL_POL_13(x)   (((uint32_t)(((uint32_t)(x))<<13U))&0x2000UL)       /*!< LPC_GPIO_GROUP_INT0_PORT_POL.POL_13 Field*/
+#define LPC_GPIO_GROUP_INT0_PORT_POL_POL_14_MASK (0x4000U)                                           /*!< LPC_GPIO_GROUP_INT0_PORT_POL.POL_14 Mask*/
+#define LPC_GPIO_GROUP_INT0_PORT_POL_POL_14_SHIFT (14U)                                              /*!< LPC_GPIO_GROUP_INT0_PORT_POL.POL_14 Position*/
+#define LPC_GPIO_GROUP_INT0_PORT_POL_POL_14(x)   (((uint32_t)(((uint32_t)(x))<<14U))&0x4000UL)       /*!< LPC_GPIO_GROUP_INT0_PORT_POL.POL_14 Field*/
+#define LPC_GPIO_GROUP_INT0_PORT_POL_POL_15_MASK (0x8000U)                                           /*!< LPC_GPIO_GROUP_INT0_PORT_POL.POL_15 Mask*/
+#define LPC_GPIO_GROUP_INT0_PORT_POL_POL_15_SHIFT (15U)                                              /*!< LPC_GPIO_GROUP_INT0_PORT_POL.POL_15 Position*/
+#define LPC_GPIO_GROUP_INT0_PORT_POL_POL_15(x)   (((uint32_t)(((uint32_t)(x))<<15U))&0x8000UL)       /*!< LPC_GPIO_GROUP_INT0_PORT_POL.POL_15 Field*/
+#define LPC_GPIO_GROUP_INT0_PORT_POL_POL_16_MASK (0x10000U)                                          /*!< LPC_GPIO_GROUP_INT0_PORT_POL.POL_16 Mask*/
+#define LPC_GPIO_GROUP_INT0_PORT_POL_POL_16_SHIFT (16U)                                              /*!< LPC_GPIO_GROUP_INT0_PORT_POL.POL_16 Position*/
+#define LPC_GPIO_GROUP_INT0_PORT_POL_POL_16(x)   (((uint32_t)(((uint32_t)(x))<<16U))&0x10000UL)      /*!< LPC_GPIO_GROUP_INT0_PORT_POL.POL_16 Field*/
+#define LPC_GPIO_GROUP_INT0_PORT_POL_POL_17_MASK (0x20000U)                                          /*!< LPC_GPIO_GROUP_INT0_PORT_POL.POL_17 Mask*/
+#define LPC_GPIO_GROUP_INT0_PORT_POL_POL_17_SHIFT (17U)                                              /*!< LPC_GPIO_GROUP_INT0_PORT_POL.POL_17 Position*/
+#define LPC_GPIO_GROUP_INT0_PORT_POL_POL_17(x)   (((uint32_t)(((uint32_t)(x))<<17U))&0x20000UL)      /*!< LPC_GPIO_GROUP_INT0_PORT_POL.POL_17 Field*/
+#define LPC_GPIO_GROUP_INT0_PORT_POL_POL_18_MASK (0x40000U)                                          /*!< LPC_GPIO_GROUP_INT0_PORT_POL.POL_18 Mask*/
+#define LPC_GPIO_GROUP_INT0_PORT_POL_POL_18_SHIFT (18U)                                              /*!< LPC_GPIO_GROUP_INT0_PORT_POL.POL_18 Position*/
+#define LPC_GPIO_GROUP_INT0_PORT_POL_POL_18(x)   (((uint32_t)(((uint32_t)(x))<<18U))&0x40000UL)      /*!< LPC_GPIO_GROUP_INT0_PORT_POL.POL_18 Field*/
+#define LPC_GPIO_GROUP_INT0_PORT_POL_POL_19_MASK (0x80000U)                                          /*!< LPC_GPIO_GROUP_INT0_PORT_POL.POL_19 Mask*/
+#define LPC_GPIO_GROUP_INT0_PORT_POL_POL_19_SHIFT (19U)                                              /*!< LPC_GPIO_GROUP_INT0_PORT_POL.POL_19 Position*/
+#define LPC_GPIO_GROUP_INT0_PORT_POL_POL_19(x)   (((uint32_t)(((uint32_t)(x))<<19U))&0x80000UL)      /*!< LPC_GPIO_GROUP_INT0_PORT_POL.POL_19 Field*/
+#define LPC_GPIO_GROUP_INT0_PORT_POL_POL_20_MASK (0x100000U)                                         /*!< LPC_GPIO_GROUP_INT0_PORT_POL.POL_20 Mask*/
+#define LPC_GPIO_GROUP_INT0_PORT_POL_POL_20_SHIFT (20U)                                              /*!< LPC_GPIO_GROUP_INT0_PORT_POL.POL_20 Position*/
+#define LPC_GPIO_GROUP_INT0_PORT_POL_POL_20(x)   (((uint32_t)(((uint32_t)(x))<<20U))&0x100000UL)     /*!< LPC_GPIO_GROUP_INT0_PORT_POL.POL_20 Field*/
+#define LPC_GPIO_GROUP_INT0_PORT_POL_POL_21_MASK (0x200000U)                                         /*!< LPC_GPIO_GROUP_INT0_PORT_POL.POL_21 Mask*/
+#define LPC_GPIO_GROUP_INT0_PORT_POL_POL_21_SHIFT (21U)                                              /*!< LPC_GPIO_GROUP_INT0_PORT_POL.POL_21 Position*/
+#define LPC_GPIO_GROUP_INT0_PORT_POL_POL_21(x)   (((uint32_t)(((uint32_t)(x))<<21U))&0x200000UL)     /*!< LPC_GPIO_GROUP_INT0_PORT_POL.POL_21 Field*/
+#define LPC_GPIO_GROUP_INT0_PORT_POL_POL_22_MASK (0x400000U)                                         /*!< LPC_GPIO_GROUP_INT0_PORT_POL.POL_22 Mask*/
+#define LPC_GPIO_GROUP_INT0_PORT_POL_POL_22_SHIFT (22U)                                              /*!< LPC_GPIO_GROUP_INT0_PORT_POL.POL_22 Position*/
+#define LPC_GPIO_GROUP_INT0_PORT_POL_POL_22(x)   (((uint32_t)(((uint32_t)(x))<<22U))&0x400000UL)     /*!< LPC_GPIO_GROUP_INT0_PORT_POL.POL_22 Field*/
+#define LPC_GPIO_GROUP_INT0_PORT_POL_POL_23_MASK (0x800000U)                                         /*!< LPC_GPIO_GROUP_INT0_PORT_POL.POL_23 Mask*/
+#define LPC_GPIO_GROUP_INT0_PORT_POL_POL_23_SHIFT (23U)                                              /*!< LPC_GPIO_GROUP_INT0_PORT_POL.POL_23 Position*/
+#define LPC_GPIO_GROUP_INT0_PORT_POL_POL_23(x)   (((uint32_t)(((uint32_t)(x))<<23U))&0x800000UL)     /*!< LPC_GPIO_GROUP_INT0_PORT_POL.POL_23 Field*/
+#define LPC_GPIO_GROUP_INT0_PORT_POL_POL_24_MASK (0x1000000U)                                        /*!< LPC_GPIO_GROUP_INT0_PORT_POL.POL_24 Mask*/
+#define LPC_GPIO_GROUP_INT0_PORT_POL_POL_24_SHIFT (24U)                                              /*!< LPC_GPIO_GROUP_INT0_PORT_POL.POL_24 Position*/
+#define LPC_GPIO_GROUP_INT0_PORT_POL_POL_24(x)   (((uint32_t)(((uint32_t)(x))<<24U))&0x1000000UL)    /*!< LPC_GPIO_GROUP_INT0_PORT_POL.POL_24 Field*/
+#define LPC_GPIO_GROUP_INT0_PORT_POL_POL_25_MASK (0x2000000U)                                        /*!< LPC_GPIO_GROUP_INT0_PORT_POL.POL_25 Mask*/
+#define LPC_GPIO_GROUP_INT0_PORT_POL_POL_25_SHIFT (25U)                                              /*!< LPC_GPIO_GROUP_INT0_PORT_POL.POL_25 Position*/
+#define LPC_GPIO_GROUP_INT0_PORT_POL_POL_25(x)   (((uint32_t)(((uint32_t)(x))<<25U))&0x2000000UL)    /*!< LPC_GPIO_GROUP_INT0_PORT_POL.POL_25 Field*/
+#define LPC_GPIO_GROUP_INT0_PORT_POL_POL_26_MASK (0x4000000U)                                        /*!< LPC_GPIO_GROUP_INT0_PORT_POL.POL_26 Mask*/
+#define LPC_GPIO_GROUP_INT0_PORT_POL_POL_26_SHIFT (26U)                                              /*!< LPC_GPIO_GROUP_INT0_PORT_POL.POL_26 Position*/
+#define LPC_GPIO_GROUP_INT0_PORT_POL_POL_26(x)   (((uint32_t)(((uint32_t)(x))<<26U))&0x4000000UL)    /*!< LPC_GPIO_GROUP_INT0_PORT_POL.POL_26 Field*/
+#define LPC_GPIO_GROUP_INT0_PORT_POL_POL_27_MASK (0x8000000U)                                        /*!< LPC_GPIO_GROUP_INT0_PORT_POL.POL_27 Mask*/
+#define LPC_GPIO_GROUP_INT0_PORT_POL_POL_27_SHIFT (27U)                                              /*!< LPC_GPIO_GROUP_INT0_PORT_POL.POL_27 Position*/
+#define LPC_GPIO_GROUP_INT0_PORT_POL_POL_27(x)   (((uint32_t)(((uint32_t)(x))<<27U))&0x8000000UL)    /*!< LPC_GPIO_GROUP_INT0_PORT_POL.POL_27 Field*/
+#define LPC_GPIO_GROUP_INT0_PORT_POL_POL_28_MASK (0x10000000U)                                       /*!< LPC_GPIO_GROUP_INT0_PORT_POL.POL_28 Mask*/
+#define LPC_GPIO_GROUP_INT0_PORT_POL_POL_28_SHIFT (28U)                                              /*!< LPC_GPIO_GROUP_INT0_PORT_POL.POL_28 Position*/
+#define LPC_GPIO_GROUP_INT0_PORT_POL_POL_28(x)   (((uint32_t)(((uint32_t)(x))<<28U))&0x10000000UL)   /*!< LPC_GPIO_GROUP_INT0_PORT_POL.POL_28 Field*/
+#define LPC_GPIO_GROUP_INT0_PORT_POL_POL_29_MASK (0x20000000U)                                       /*!< LPC_GPIO_GROUP_INT0_PORT_POL.POL_29 Mask*/
+#define LPC_GPIO_GROUP_INT0_PORT_POL_POL_29_SHIFT (29U)                                              /*!< LPC_GPIO_GROUP_INT0_PORT_POL.POL_29 Position*/
+#define LPC_GPIO_GROUP_INT0_PORT_POL_POL_29(x)   (((uint32_t)(((uint32_t)(x))<<29U))&0x20000000UL)   /*!< LPC_GPIO_GROUP_INT0_PORT_POL.POL_29 Field*/
+#define LPC_GPIO_GROUP_INT0_PORT_POL_POL_30_MASK (0x40000000U)                                       /*!< LPC_GPIO_GROUP_INT0_PORT_POL.POL_30 Mask*/
+#define LPC_GPIO_GROUP_INT0_PORT_POL_POL_30_SHIFT (30U)                                              /*!< LPC_GPIO_GROUP_INT0_PORT_POL.POL_30 Position*/
+#define LPC_GPIO_GROUP_INT0_PORT_POL_POL_30(x)   (((uint32_t)(((uint32_t)(x))<<30U))&0x40000000UL)   /*!< LPC_GPIO_GROUP_INT0_PORT_POL.POL_30 Field*/
+#define LPC_GPIO_GROUP_INT0_PORT_POL_POL_31_MASK (0x80000000U)                                       /*!< LPC_GPIO_GROUP_INT0_PORT_POL.POL_31 Mask*/
+#define LPC_GPIO_GROUP_INT0_PORT_POL_POL_31_SHIFT (31U)                                              /*!< LPC_GPIO_GROUP_INT0_PORT_POL.POL_31 Position*/
+#define LPC_GPIO_GROUP_INT0_PORT_POL_POL_31(x)   (((uint32_t)(((uint32_t)(x))<<31U))&0x80000000UL)   /*!< LPC_GPIO_GROUP_INT0_PORT_POL.POL_31 Field*/
+/* ------- PORT_ENA Bit Fields                      ------ */
+#define LPC_GPIO_GROUP_INT0_PORT_ENA_ENA_0_MASK  (0x1U)                                              /*!< LPC_GPIO_GROUP_INT0_PORT_ENA.ENA_0 Mask */
+#define LPC_GPIO_GROUP_INT0_PORT_ENA_ENA_0_SHIFT (0U)                                                /*!< LPC_GPIO_GROUP_INT0_PORT_ENA.ENA_0 Position*/
+#define LPC_GPIO_GROUP_INT0_PORT_ENA_ENA_0(x)    (((uint32_t)(((uint32_t)(x))<<0U))&0x1UL)           /*!< LPC_GPIO_GROUP_INT0_PORT_ENA.ENA_0 Field*/
+#define LPC_GPIO_GROUP_INT0_PORT_ENA_ENA_1_MASK  (0x2U)                                              /*!< LPC_GPIO_GROUP_INT0_PORT_ENA.ENA_1 Mask */
+#define LPC_GPIO_GROUP_INT0_PORT_ENA_ENA_1_SHIFT (1U)                                                /*!< LPC_GPIO_GROUP_INT0_PORT_ENA.ENA_1 Position*/
+#define LPC_GPIO_GROUP_INT0_PORT_ENA_ENA_1(x)    (((uint32_t)(((uint32_t)(x))<<1U))&0x2UL)           /*!< LPC_GPIO_GROUP_INT0_PORT_ENA.ENA_1 Field*/
+#define LPC_GPIO_GROUP_INT0_PORT_ENA_ENA_2_MASK  (0x4U)                                              /*!< LPC_GPIO_GROUP_INT0_PORT_ENA.ENA_2 Mask */
+#define LPC_GPIO_GROUP_INT0_PORT_ENA_ENA_2_SHIFT (2U)                                                /*!< LPC_GPIO_GROUP_INT0_PORT_ENA.ENA_2 Position*/
+#define LPC_GPIO_GROUP_INT0_PORT_ENA_ENA_2(x)    (((uint32_t)(((uint32_t)(x))<<2U))&0x4UL)           /*!< LPC_GPIO_GROUP_INT0_PORT_ENA.ENA_2 Field*/
+#define LPC_GPIO_GROUP_INT0_PORT_ENA_ENA_3_MASK  (0x8U)                                              /*!< LPC_GPIO_GROUP_INT0_PORT_ENA.ENA_3 Mask */
+#define LPC_GPIO_GROUP_INT0_PORT_ENA_ENA_3_SHIFT (3U)                                                /*!< LPC_GPIO_GROUP_INT0_PORT_ENA.ENA_3 Position*/
+#define LPC_GPIO_GROUP_INT0_PORT_ENA_ENA_3(x)    (((uint32_t)(((uint32_t)(x))<<3U))&0x8UL)           /*!< LPC_GPIO_GROUP_INT0_PORT_ENA.ENA_3 Field*/
+#define LPC_GPIO_GROUP_INT0_PORT_ENA_ENA_4_MASK  (0x10U)                                             /*!< LPC_GPIO_GROUP_INT0_PORT_ENA.ENA_4 Mask */
+#define LPC_GPIO_GROUP_INT0_PORT_ENA_ENA_4_SHIFT (4U)                                                /*!< LPC_GPIO_GROUP_INT0_PORT_ENA.ENA_4 Position*/
+#define LPC_GPIO_GROUP_INT0_PORT_ENA_ENA_4(x)    (((uint32_t)(((uint32_t)(x))<<4U))&0x10UL)          /*!< LPC_GPIO_GROUP_INT0_PORT_ENA.ENA_4 Field*/
+#define LPC_GPIO_GROUP_INT0_PORT_ENA_ENA_5_MASK  (0x20U)                                             /*!< LPC_GPIO_GROUP_INT0_PORT_ENA.ENA_5 Mask */
+#define LPC_GPIO_GROUP_INT0_PORT_ENA_ENA_5_SHIFT (5U)                                                /*!< LPC_GPIO_GROUP_INT0_PORT_ENA.ENA_5 Position*/
+#define LPC_GPIO_GROUP_INT0_PORT_ENA_ENA_5(x)    (((uint32_t)(((uint32_t)(x))<<5U))&0x20UL)          /*!< LPC_GPIO_GROUP_INT0_PORT_ENA.ENA_5 Field*/
+#define LPC_GPIO_GROUP_INT0_PORT_ENA_ENA_6_MASK  (0x40U)                                             /*!< LPC_GPIO_GROUP_INT0_PORT_ENA.ENA_6 Mask */
+#define LPC_GPIO_GROUP_INT0_PORT_ENA_ENA_6_SHIFT (6U)                                                /*!< LPC_GPIO_GROUP_INT0_PORT_ENA.ENA_6 Position*/
+#define LPC_GPIO_GROUP_INT0_PORT_ENA_ENA_6(x)    (((uint32_t)(((uint32_t)(x))<<6U))&0x40UL)          /*!< LPC_GPIO_GROUP_INT0_PORT_ENA.ENA_6 Field*/
+#define LPC_GPIO_GROUP_INT0_PORT_ENA_ENA_7_MASK  (0x80U)                                             /*!< LPC_GPIO_GROUP_INT0_PORT_ENA.ENA_7 Mask */
+#define LPC_GPIO_GROUP_INT0_PORT_ENA_ENA_7_SHIFT (7U)                                                /*!< LPC_GPIO_GROUP_INT0_PORT_ENA.ENA_7 Position*/
+#define LPC_GPIO_GROUP_INT0_PORT_ENA_ENA_7(x)    (((uint32_t)(((uint32_t)(x))<<7U))&0x80UL)          /*!< LPC_GPIO_GROUP_INT0_PORT_ENA.ENA_7 Field*/
+#define LPC_GPIO_GROUP_INT0_PORT_ENA_ENA_8_MASK  (0x100U)                                            /*!< LPC_GPIO_GROUP_INT0_PORT_ENA.ENA_8 Mask */
+#define LPC_GPIO_GROUP_INT0_PORT_ENA_ENA_8_SHIFT (8U)                                                /*!< LPC_GPIO_GROUP_INT0_PORT_ENA.ENA_8 Position*/
+#define LPC_GPIO_GROUP_INT0_PORT_ENA_ENA_8(x)    (((uint32_t)(((uint32_t)(x))<<8U))&0x100UL)         /*!< LPC_GPIO_GROUP_INT0_PORT_ENA.ENA_8 Field*/
+#define LPC_GPIO_GROUP_INT0_PORT_ENA_ENA_9_MASK  (0x200U)                                            /*!< LPC_GPIO_GROUP_INT0_PORT_ENA.ENA_9 Mask */
+#define LPC_GPIO_GROUP_INT0_PORT_ENA_ENA_9_SHIFT (9U)                                                /*!< LPC_GPIO_GROUP_INT0_PORT_ENA.ENA_9 Position*/
+#define LPC_GPIO_GROUP_INT0_PORT_ENA_ENA_9(x)    (((uint32_t)(((uint32_t)(x))<<9U))&0x200UL)         /*!< LPC_GPIO_GROUP_INT0_PORT_ENA.ENA_9 Field*/
+#define LPC_GPIO_GROUP_INT0_PORT_ENA_ENA_10_MASK (0x400U)                                            /*!< LPC_GPIO_GROUP_INT0_PORT_ENA.ENA_10 Mask*/
+#define LPC_GPIO_GROUP_INT0_PORT_ENA_ENA_10_SHIFT (10U)                                              /*!< LPC_GPIO_GROUP_INT0_PORT_ENA.ENA_10 Position*/
+#define LPC_GPIO_GROUP_INT0_PORT_ENA_ENA_10(x)   (((uint32_t)(((uint32_t)(x))<<10U))&0x400UL)        /*!< LPC_GPIO_GROUP_INT0_PORT_ENA.ENA_10 Field*/
+#define LPC_GPIO_GROUP_INT0_PORT_ENA_ENA_11_MASK (0x800U)                                            /*!< LPC_GPIO_GROUP_INT0_PORT_ENA.ENA_11 Mask*/
+#define LPC_GPIO_GROUP_INT0_PORT_ENA_ENA_11_SHIFT (11U)                                              /*!< LPC_GPIO_GROUP_INT0_PORT_ENA.ENA_11 Position*/
+#define LPC_GPIO_GROUP_INT0_PORT_ENA_ENA_11(x)   (((uint32_t)(((uint32_t)(x))<<11U))&0x800UL)        /*!< LPC_GPIO_GROUP_INT0_PORT_ENA.ENA_11 Field*/
+#define LPC_GPIO_GROUP_INT0_PORT_ENA_ENA_12_MASK (0x1000U)                                           /*!< LPC_GPIO_GROUP_INT0_PORT_ENA.ENA_12 Mask*/
+#define LPC_GPIO_GROUP_INT0_PORT_ENA_ENA_12_SHIFT (12U)                                              /*!< LPC_GPIO_GROUP_INT0_PORT_ENA.ENA_12 Position*/
+#define LPC_GPIO_GROUP_INT0_PORT_ENA_ENA_12(x)   (((uint32_t)(((uint32_t)(x))<<12U))&0x1000UL)       /*!< LPC_GPIO_GROUP_INT0_PORT_ENA.ENA_12 Field*/
+#define LPC_GPIO_GROUP_INT0_PORT_ENA_ENA_13_MASK (0x2000U)                                           /*!< LPC_GPIO_GROUP_INT0_PORT_ENA.ENA_13 Mask*/
+#define LPC_GPIO_GROUP_INT0_PORT_ENA_ENA_13_SHIFT (13U)                                              /*!< LPC_GPIO_GROUP_INT0_PORT_ENA.ENA_13 Position*/
+#define LPC_GPIO_GROUP_INT0_PORT_ENA_ENA_13(x)   (((uint32_t)(((uint32_t)(x))<<13U))&0x2000UL)       /*!< LPC_GPIO_GROUP_INT0_PORT_ENA.ENA_13 Field*/
+#define LPC_GPIO_GROUP_INT0_PORT_ENA_ENA_14_MASK (0x4000U)                                           /*!< LPC_GPIO_GROUP_INT0_PORT_ENA.ENA_14 Mask*/
+#define LPC_GPIO_GROUP_INT0_PORT_ENA_ENA_14_SHIFT (14U)                                              /*!< LPC_GPIO_GROUP_INT0_PORT_ENA.ENA_14 Position*/
+#define LPC_GPIO_GROUP_INT0_PORT_ENA_ENA_14(x)   (((uint32_t)(((uint32_t)(x))<<14U))&0x4000UL)       /*!< LPC_GPIO_GROUP_INT0_PORT_ENA.ENA_14 Field*/
+#define LPC_GPIO_GROUP_INT0_PORT_ENA_ENA_15_MASK (0x8000U)                                           /*!< LPC_GPIO_GROUP_INT0_PORT_ENA.ENA_15 Mask*/
+#define LPC_GPIO_GROUP_INT0_PORT_ENA_ENA_15_SHIFT (15U)                                              /*!< LPC_GPIO_GROUP_INT0_PORT_ENA.ENA_15 Position*/
+#define LPC_GPIO_GROUP_INT0_PORT_ENA_ENA_15(x)   (((uint32_t)(((uint32_t)(x))<<15U))&0x8000UL)       /*!< LPC_GPIO_GROUP_INT0_PORT_ENA.ENA_15 Field*/
+#define LPC_GPIO_GROUP_INT0_PORT_ENA_ENA_16_MASK (0x10000U)                                          /*!< LPC_GPIO_GROUP_INT0_PORT_ENA.ENA_16 Mask*/
+#define LPC_GPIO_GROUP_INT0_PORT_ENA_ENA_16_SHIFT (16U)                                              /*!< LPC_GPIO_GROUP_INT0_PORT_ENA.ENA_16 Position*/
+#define LPC_GPIO_GROUP_INT0_PORT_ENA_ENA_16(x)   (((uint32_t)(((uint32_t)(x))<<16U))&0x10000UL)      /*!< LPC_GPIO_GROUP_INT0_PORT_ENA.ENA_16 Field*/
+#define LPC_GPIO_GROUP_INT0_PORT_ENA_ENA_17_MASK (0x20000U)                                          /*!< LPC_GPIO_GROUP_INT0_PORT_ENA.ENA_17 Mask*/
+#define LPC_GPIO_GROUP_INT0_PORT_ENA_ENA_17_SHIFT (17U)                                              /*!< LPC_GPIO_GROUP_INT0_PORT_ENA.ENA_17 Position*/
+#define LPC_GPIO_GROUP_INT0_PORT_ENA_ENA_17(x)   (((uint32_t)(((uint32_t)(x))<<17U))&0x20000UL)      /*!< LPC_GPIO_GROUP_INT0_PORT_ENA.ENA_17 Field*/
+#define LPC_GPIO_GROUP_INT0_PORT_ENA_ENA_18_MASK (0x40000U)                                          /*!< LPC_GPIO_GROUP_INT0_PORT_ENA.ENA_18 Mask*/
+#define LPC_GPIO_GROUP_INT0_PORT_ENA_ENA_18_SHIFT (18U)                                              /*!< LPC_GPIO_GROUP_INT0_PORT_ENA.ENA_18 Position*/
+#define LPC_GPIO_GROUP_INT0_PORT_ENA_ENA_18(x)   (((uint32_t)(((uint32_t)(x))<<18U))&0x40000UL)      /*!< LPC_GPIO_GROUP_INT0_PORT_ENA.ENA_18 Field*/
+#define LPC_GPIO_GROUP_INT0_PORT_ENA_ENA_19_MASK (0x80000U)                                          /*!< LPC_GPIO_GROUP_INT0_PORT_ENA.ENA_19 Mask*/
+#define LPC_GPIO_GROUP_INT0_PORT_ENA_ENA_19_SHIFT (19U)                                              /*!< LPC_GPIO_GROUP_INT0_PORT_ENA.ENA_19 Position*/
+#define LPC_GPIO_GROUP_INT0_PORT_ENA_ENA_19(x)   (((uint32_t)(((uint32_t)(x))<<19U))&0x80000UL)      /*!< LPC_GPIO_GROUP_INT0_PORT_ENA.ENA_19 Field*/
+#define LPC_GPIO_GROUP_INT0_PORT_ENA_ENA_20_MASK (0x100000U)                                         /*!< LPC_GPIO_GROUP_INT0_PORT_ENA.ENA_20 Mask*/
+#define LPC_GPIO_GROUP_INT0_PORT_ENA_ENA_20_SHIFT (20U)                                              /*!< LPC_GPIO_GROUP_INT0_PORT_ENA.ENA_20 Position*/
+#define LPC_GPIO_GROUP_INT0_PORT_ENA_ENA_20(x)   (((uint32_t)(((uint32_t)(x))<<20U))&0x100000UL)     /*!< LPC_GPIO_GROUP_INT0_PORT_ENA.ENA_20 Field*/
+#define LPC_GPIO_GROUP_INT0_PORT_ENA_ENA_21_MASK (0x200000U)                                         /*!< LPC_GPIO_GROUP_INT0_PORT_ENA.ENA_21 Mask*/
+#define LPC_GPIO_GROUP_INT0_PORT_ENA_ENA_21_SHIFT (21U)                                              /*!< LPC_GPIO_GROUP_INT0_PORT_ENA.ENA_21 Position*/
+#define LPC_GPIO_GROUP_INT0_PORT_ENA_ENA_21(x)   (((uint32_t)(((uint32_t)(x))<<21U))&0x200000UL)     /*!< LPC_GPIO_GROUP_INT0_PORT_ENA.ENA_21 Field*/
+#define LPC_GPIO_GROUP_INT0_PORT_ENA_ENA_22_MASK (0x400000U)                                         /*!< LPC_GPIO_GROUP_INT0_PORT_ENA.ENA_22 Mask*/
+#define LPC_GPIO_GROUP_INT0_PORT_ENA_ENA_22_SHIFT (22U)                                              /*!< LPC_GPIO_GROUP_INT0_PORT_ENA.ENA_22 Position*/
+#define LPC_GPIO_GROUP_INT0_PORT_ENA_ENA_22(x)   (((uint32_t)(((uint32_t)(x))<<22U))&0x400000UL)     /*!< LPC_GPIO_GROUP_INT0_PORT_ENA.ENA_22 Field*/
+#define LPC_GPIO_GROUP_INT0_PORT_ENA_ENA_23_MASK (0x800000U)                                         /*!< LPC_GPIO_GROUP_INT0_PORT_ENA.ENA_23 Mask*/
+#define LPC_GPIO_GROUP_INT0_PORT_ENA_ENA_23_SHIFT (23U)                                              /*!< LPC_GPIO_GROUP_INT0_PORT_ENA.ENA_23 Position*/
+#define LPC_GPIO_GROUP_INT0_PORT_ENA_ENA_23(x)   (((uint32_t)(((uint32_t)(x))<<23U))&0x800000UL)     /*!< LPC_GPIO_GROUP_INT0_PORT_ENA.ENA_23 Field*/
+#define LPC_GPIO_GROUP_INT0_PORT_ENA_ENA_24_MASK (0x1000000U)                                        /*!< LPC_GPIO_GROUP_INT0_PORT_ENA.ENA_24 Mask*/
+#define LPC_GPIO_GROUP_INT0_PORT_ENA_ENA_24_SHIFT (24U)                                              /*!< LPC_GPIO_GROUP_INT0_PORT_ENA.ENA_24 Position*/
+#define LPC_GPIO_GROUP_INT0_PORT_ENA_ENA_24(x)   (((uint32_t)(((uint32_t)(x))<<24U))&0x1000000UL)    /*!< LPC_GPIO_GROUP_INT0_PORT_ENA.ENA_24 Field*/
+#define LPC_GPIO_GROUP_INT0_PORT_ENA_ENA_25_MASK (0x2000000U)                                        /*!< LPC_GPIO_GROUP_INT0_PORT_ENA.ENA_25 Mask*/
+#define LPC_GPIO_GROUP_INT0_PORT_ENA_ENA_25_SHIFT (25U)                                              /*!< LPC_GPIO_GROUP_INT0_PORT_ENA.ENA_25 Position*/
+#define LPC_GPIO_GROUP_INT0_PORT_ENA_ENA_25(x)   (((uint32_t)(((uint32_t)(x))<<25U))&0x2000000UL)    /*!< LPC_GPIO_GROUP_INT0_PORT_ENA.ENA_25 Field*/
+#define LPC_GPIO_GROUP_INT0_PORT_ENA_ENA_26_MASK (0x4000000U)                                        /*!< LPC_GPIO_GROUP_INT0_PORT_ENA.ENA_26 Mask*/
+#define LPC_GPIO_GROUP_INT0_PORT_ENA_ENA_26_SHIFT (26U)                                              /*!< LPC_GPIO_GROUP_INT0_PORT_ENA.ENA_26 Position*/
+#define LPC_GPIO_GROUP_INT0_PORT_ENA_ENA_26(x)   (((uint32_t)(((uint32_t)(x))<<26U))&0x4000000UL)    /*!< LPC_GPIO_GROUP_INT0_PORT_ENA.ENA_26 Field*/
+#define LPC_GPIO_GROUP_INT0_PORT_ENA_ENA_27_MASK (0x8000000U)                                        /*!< LPC_GPIO_GROUP_INT0_PORT_ENA.ENA_27 Mask*/
+#define LPC_GPIO_GROUP_INT0_PORT_ENA_ENA_27_SHIFT (27U)                                              /*!< LPC_GPIO_GROUP_INT0_PORT_ENA.ENA_27 Position*/
+#define LPC_GPIO_GROUP_INT0_PORT_ENA_ENA_27(x)   (((uint32_t)(((uint32_t)(x))<<27U))&0x8000000UL)    /*!< LPC_GPIO_GROUP_INT0_PORT_ENA.ENA_27 Field*/
+#define LPC_GPIO_GROUP_INT0_PORT_ENA_ENA_28_MASK (0x10000000U)                                       /*!< LPC_GPIO_GROUP_INT0_PORT_ENA.ENA_28 Mask*/
+#define LPC_GPIO_GROUP_INT0_PORT_ENA_ENA_28_SHIFT (28U)                                              /*!< LPC_GPIO_GROUP_INT0_PORT_ENA.ENA_28 Position*/
+#define LPC_GPIO_GROUP_INT0_PORT_ENA_ENA_28(x)   (((uint32_t)(((uint32_t)(x))<<28U))&0x10000000UL)   /*!< LPC_GPIO_GROUP_INT0_PORT_ENA.ENA_28 Field*/
+#define LPC_GPIO_GROUP_INT0_PORT_ENA_ENA_29_MASK (0x20000000U)                                       /*!< LPC_GPIO_GROUP_INT0_PORT_ENA.ENA_29 Mask*/
+#define LPC_GPIO_GROUP_INT0_PORT_ENA_ENA_29_SHIFT (29U)                                              /*!< LPC_GPIO_GROUP_INT0_PORT_ENA.ENA_29 Position*/
+#define LPC_GPIO_GROUP_INT0_PORT_ENA_ENA_29(x)   (((uint32_t)(((uint32_t)(x))<<29U))&0x20000000UL)   /*!< LPC_GPIO_GROUP_INT0_PORT_ENA.ENA_29 Field*/
+#define LPC_GPIO_GROUP_INT0_PORT_ENA_ENA_30_MASK (0x40000000U)                                       /*!< LPC_GPIO_GROUP_INT0_PORT_ENA.ENA_30 Mask*/
+#define LPC_GPIO_GROUP_INT0_PORT_ENA_ENA_30_SHIFT (30U)                                              /*!< LPC_GPIO_GROUP_INT0_PORT_ENA.ENA_30 Position*/
+#define LPC_GPIO_GROUP_INT0_PORT_ENA_ENA_30(x)   (((uint32_t)(((uint32_t)(x))<<30U))&0x40000000UL)   /*!< LPC_GPIO_GROUP_INT0_PORT_ENA.ENA_30 Field*/
+#define LPC_GPIO_GROUP_INT0_PORT_ENA_ENA_31_MASK (0x80000000U)                                       /*!< LPC_GPIO_GROUP_INT0_PORT_ENA.ENA_31 Mask*/
+#define LPC_GPIO_GROUP_INT0_PORT_ENA_ENA_31_SHIFT (31U)                                              /*!< LPC_GPIO_GROUP_INT0_PORT_ENA.ENA_31 Position*/
+#define LPC_GPIO_GROUP_INT0_PORT_ENA_ENA_31(x)   (((uint32_t)(((uint32_t)(x))<<31U))&0x80000000UL)   /*!< LPC_GPIO_GROUP_INT0_PORT_ENA.ENA_31 Field*/
 /**
  * @} */ /* End group GPIO_GROUP_INT0_Register_Masks_GROUP 
  */
@@ -2339,26 +2143,19 @@ typedef struct LPC_GPIO_PORT_Type {
    __IO uint32_t  W[62];                        /**< 10F8: Word pin registers port 0/1                                  */
    __IO uint32_t  W[63];                        /**< 10FC: Word pin registers port 0/1                                  */
         uint8_t   RESERVED_1[3840];            
-   __IO uint32_t  DIR0;                         /**< 2000: Direction registers port 0/1                                 */
-   __IO uint32_t  DIR1;                         /**< 2004: Direction registers port 0/1                                 */
+   __IO uint32_t  DIR[2];                       /**< 2000: Direction registers port /1                                  */
         uint8_t   RESERVED_2[120];             
-   __IO uint32_t  MASK0;                        /**< 2080: Mask register port 0/1                                       */
-   __IO uint32_t  MASK1;                        /**< 2084: Mask register port 0/1                                       */
+   __IO uint32_t  MASK[2];                      /**< 2080: Mask register port /1                                        */
         uint8_t   RESERVED_3[120];             
-   __IO uint32_t  PIN0;                         /**< 2100: Portpin register port 0                                      */
-   __IO uint32_t  PIN1;                         /**< 2104: Portpin register port 0                                      */
+   __IO uint32_t  PIN[2];                       /**< 2100: Portpin register port                                        */
         uint8_t   RESERVED_4[120];             
-   __IO uint32_t  MPIN0;                        /**< 2180: Masked port register port 0/1                                */
-   __IO uint32_t  MPIN1;                        /**< 2184: Masked port register port 0/1                                */
+   __IO uint32_t  MPIN[2];                      /**< 2180: Masked port register port /1                                 */
         uint8_t   RESERVED_5[120];             
-   __IO uint32_t  SET0;                         /**< 2200: Write: Set register for port 0/1  Read: output bits for port 0/1 */
-   __IO uint32_t  SET1;                         /**< 2204: Write: Set register for port 0/1  Read: output bits for port 0/1 */
+   __IO uint32_t  SET[2];                       /**< 2200: Write: Set register for port /1  Read: output bits for port 0/1 */
         uint8_t   RESERVED_6[120];             
-   __O  uint32_t  CLR0;                         /**< 2280: Clear port 0/1                                               */
-   __O  uint32_t  CLR1;                         /**< 2284: Clear port 0/1                                               */
+   __O  uint32_t  CLR[2];                       /**< 2280: Clear port /1                                                */
         uint8_t   RESERVED_7[120];             
-   __O  uint32_t  NOT0;                         /**< 2300: Toggle port 0/1                                              */
-   __O  uint32_t  NOT1;                         /**< 2304: Toggle port 0/1                                              */
+   __O  uint32_t  NOT[2];                       /**< 2300: Toggle port /1                                               */
 } LPC_GPIO_PORT_Type;
 
 /**
@@ -2886,1364 +2683,685 @@ typedef struct LPC_GPIO_PORT_Type {
 #define LPC_GPIO_PORT_W[63]_PWORD_MASK           (0xFFFFFFFFU)                                       /*!< LPC_GPIO_PORT_W[63].PWORD Mask          */
 #define LPC_GPIO_PORT_W[63]_PWORD_SHIFT          (0U)                                                /*!< LPC_GPIO_PORT_W[63].PWORD Position      */
 #define LPC_GPIO_PORT_W[63]_PWORD(x)             (((uint32_t)(((uint32_t)(x))<<0U))&0xFFFFFFFFUL)    /*!< LPC_GPIO_PORT_W[63].PWORD Field         */
-/* ------- DIR0 Bit Fields                          ------ */
-#define LPC_GPIO_PORT_DIR0_DIRP0_MASK            (0x1U)                                              /*!< LPC_GPIO_PORT_DIR0.DIRP0 Mask           */
-#define LPC_GPIO_PORT_DIR0_DIRP0_SHIFT           (0U)                                                /*!< LPC_GPIO_PORT_DIR0.DIRP0 Position       */
-#define LPC_GPIO_PORT_DIR0_DIRP0(x)              (((uint32_t)(((uint32_t)(x))<<0U))&0x1UL)           /*!< LPC_GPIO_PORT_DIR0.DIRP0 Field          */
-#define LPC_GPIO_PORT_DIR0_DIRP1_MASK            (0x2U)                                              /*!< LPC_GPIO_PORT_DIR0.DIRP1 Mask           */
-#define LPC_GPIO_PORT_DIR0_DIRP1_SHIFT           (1U)                                                /*!< LPC_GPIO_PORT_DIR0.DIRP1 Position       */
-#define LPC_GPIO_PORT_DIR0_DIRP1(x)              (((uint32_t)(((uint32_t)(x))<<1U))&0x2UL)           /*!< LPC_GPIO_PORT_DIR0.DIRP1 Field          */
-#define LPC_GPIO_PORT_DIR0_DIRP2_MASK            (0x4U)                                              /*!< LPC_GPIO_PORT_DIR0.DIRP2 Mask           */
-#define LPC_GPIO_PORT_DIR0_DIRP2_SHIFT           (2U)                                                /*!< LPC_GPIO_PORT_DIR0.DIRP2 Position       */
-#define LPC_GPIO_PORT_DIR0_DIRP2(x)              (((uint32_t)(((uint32_t)(x))<<2U))&0x4UL)           /*!< LPC_GPIO_PORT_DIR0.DIRP2 Field          */
-#define LPC_GPIO_PORT_DIR0_DIRP3_MASK            (0x8U)                                              /*!< LPC_GPIO_PORT_DIR0.DIRP3 Mask           */
-#define LPC_GPIO_PORT_DIR0_DIRP3_SHIFT           (3U)                                                /*!< LPC_GPIO_PORT_DIR0.DIRP3 Position       */
-#define LPC_GPIO_PORT_DIR0_DIRP3(x)              (((uint32_t)(((uint32_t)(x))<<3U))&0x8UL)           /*!< LPC_GPIO_PORT_DIR0.DIRP3 Field          */
-#define LPC_GPIO_PORT_DIR0_DIRP4_MASK            (0x10U)                                             /*!< LPC_GPIO_PORT_DIR0.DIRP4 Mask           */
-#define LPC_GPIO_PORT_DIR0_DIRP4_SHIFT           (4U)                                                /*!< LPC_GPIO_PORT_DIR0.DIRP4 Position       */
-#define LPC_GPIO_PORT_DIR0_DIRP4(x)              (((uint32_t)(((uint32_t)(x))<<4U))&0x10UL)          /*!< LPC_GPIO_PORT_DIR0.DIRP4 Field          */
-#define LPC_GPIO_PORT_DIR0_DIRP5_MASK            (0x20U)                                             /*!< LPC_GPIO_PORT_DIR0.DIRP5 Mask           */
-#define LPC_GPIO_PORT_DIR0_DIRP5_SHIFT           (5U)                                                /*!< LPC_GPIO_PORT_DIR0.DIRP5 Position       */
-#define LPC_GPIO_PORT_DIR0_DIRP5(x)              (((uint32_t)(((uint32_t)(x))<<5U))&0x20UL)          /*!< LPC_GPIO_PORT_DIR0.DIRP5 Field          */
-#define LPC_GPIO_PORT_DIR0_DIRP6_MASK            (0x40U)                                             /*!< LPC_GPIO_PORT_DIR0.DIRP6 Mask           */
-#define LPC_GPIO_PORT_DIR0_DIRP6_SHIFT           (6U)                                                /*!< LPC_GPIO_PORT_DIR0.DIRP6 Position       */
-#define LPC_GPIO_PORT_DIR0_DIRP6(x)              (((uint32_t)(((uint32_t)(x))<<6U))&0x40UL)          /*!< LPC_GPIO_PORT_DIR0.DIRP6 Field          */
-#define LPC_GPIO_PORT_DIR0_DIRP7_MASK            (0x80U)                                             /*!< LPC_GPIO_PORT_DIR0.DIRP7 Mask           */
-#define LPC_GPIO_PORT_DIR0_DIRP7_SHIFT           (7U)                                                /*!< LPC_GPIO_PORT_DIR0.DIRP7 Position       */
-#define LPC_GPIO_PORT_DIR0_DIRP7(x)              (((uint32_t)(((uint32_t)(x))<<7U))&0x80UL)          /*!< LPC_GPIO_PORT_DIR0.DIRP7 Field          */
-#define LPC_GPIO_PORT_DIR0_DIRP8_MASK            (0x100U)                                            /*!< LPC_GPIO_PORT_DIR0.DIRP8 Mask           */
-#define LPC_GPIO_PORT_DIR0_DIRP8_SHIFT           (8U)                                                /*!< LPC_GPIO_PORT_DIR0.DIRP8 Position       */
-#define LPC_GPIO_PORT_DIR0_DIRP8(x)              (((uint32_t)(((uint32_t)(x))<<8U))&0x100UL)         /*!< LPC_GPIO_PORT_DIR0.DIRP8 Field          */
-#define LPC_GPIO_PORT_DIR0_DIRP9_MASK            (0x200U)                                            /*!< LPC_GPIO_PORT_DIR0.DIRP9 Mask           */
-#define LPC_GPIO_PORT_DIR0_DIRP9_SHIFT           (9U)                                                /*!< LPC_GPIO_PORT_DIR0.DIRP9 Position       */
-#define LPC_GPIO_PORT_DIR0_DIRP9(x)              (((uint32_t)(((uint32_t)(x))<<9U))&0x200UL)         /*!< LPC_GPIO_PORT_DIR0.DIRP9 Field          */
-#define LPC_GPIO_PORT_DIR0_DIRP10_MASK           (0x400U)                                            /*!< LPC_GPIO_PORT_DIR0.DIRP10 Mask          */
-#define LPC_GPIO_PORT_DIR0_DIRP10_SHIFT          (10U)                                               /*!< LPC_GPIO_PORT_DIR0.DIRP10 Position      */
-#define LPC_GPIO_PORT_DIR0_DIRP10(x)             (((uint32_t)(((uint32_t)(x))<<10U))&0x400UL)        /*!< LPC_GPIO_PORT_DIR0.DIRP10 Field         */
-#define LPC_GPIO_PORT_DIR0_DIRP11_MASK           (0x800U)                                            /*!< LPC_GPIO_PORT_DIR0.DIRP11 Mask          */
-#define LPC_GPIO_PORT_DIR0_DIRP11_SHIFT          (11U)                                               /*!< LPC_GPIO_PORT_DIR0.DIRP11 Position      */
-#define LPC_GPIO_PORT_DIR0_DIRP11(x)             (((uint32_t)(((uint32_t)(x))<<11U))&0x800UL)        /*!< LPC_GPIO_PORT_DIR0.DIRP11 Field         */
-#define LPC_GPIO_PORT_DIR0_DIRP12_MASK           (0x1000U)                                           /*!< LPC_GPIO_PORT_DIR0.DIRP12 Mask          */
-#define LPC_GPIO_PORT_DIR0_DIRP12_SHIFT          (12U)                                               /*!< LPC_GPIO_PORT_DIR0.DIRP12 Position      */
-#define LPC_GPIO_PORT_DIR0_DIRP12(x)             (((uint32_t)(((uint32_t)(x))<<12U))&0x1000UL)       /*!< LPC_GPIO_PORT_DIR0.DIRP12 Field         */
-#define LPC_GPIO_PORT_DIR0_DIRP13_MASK           (0x2000U)                                           /*!< LPC_GPIO_PORT_DIR0.DIRP13 Mask          */
-#define LPC_GPIO_PORT_DIR0_DIRP13_SHIFT          (13U)                                               /*!< LPC_GPIO_PORT_DIR0.DIRP13 Position      */
-#define LPC_GPIO_PORT_DIR0_DIRP13(x)             (((uint32_t)(((uint32_t)(x))<<13U))&0x2000UL)       /*!< LPC_GPIO_PORT_DIR0.DIRP13 Field         */
-#define LPC_GPIO_PORT_DIR0_DIRP14_MASK           (0x4000U)                                           /*!< LPC_GPIO_PORT_DIR0.DIRP14 Mask          */
-#define LPC_GPIO_PORT_DIR0_DIRP14_SHIFT          (14U)                                               /*!< LPC_GPIO_PORT_DIR0.DIRP14 Position      */
-#define LPC_GPIO_PORT_DIR0_DIRP14(x)             (((uint32_t)(((uint32_t)(x))<<14U))&0x4000UL)       /*!< LPC_GPIO_PORT_DIR0.DIRP14 Field         */
-#define LPC_GPIO_PORT_DIR0_DIRP15_MASK           (0x8000U)                                           /*!< LPC_GPIO_PORT_DIR0.DIRP15 Mask          */
-#define LPC_GPIO_PORT_DIR0_DIRP15_SHIFT          (15U)                                               /*!< LPC_GPIO_PORT_DIR0.DIRP15 Position      */
-#define LPC_GPIO_PORT_DIR0_DIRP15(x)             (((uint32_t)(((uint32_t)(x))<<15U))&0x8000UL)       /*!< LPC_GPIO_PORT_DIR0.DIRP15 Field         */
-#define LPC_GPIO_PORT_DIR0_DIRP16_MASK           (0x10000U)                                          /*!< LPC_GPIO_PORT_DIR0.DIRP16 Mask          */
-#define LPC_GPIO_PORT_DIR0_DIRP16_SHIFT          (16U)                                               /*!< LPC_GPIO_PORT_DIR0.DIRP16 Position      */
-#define LPC_GPIO_PORT_DIR0_DIRP16(x)             (((uint32_t)(((uint32_t)(x))<<16U))&0x10000UL)      /*!< LPC_GPIO_PORT_DIR0.DIRP16 Field         */
-#define LPC_GPIO_PORT_DIR0_DIRP17_MASK           (0x20000U)                                          /*!< LPC_GPIO_PORT_DIR0.DIRP17 Mask          */
-#define LPC_GPIO_PORT_DIR0_DIRP17_SHIFT          (17U)                                               /*!< LPC_GPIO_PORT_DIR0.DIRP17 Position      */
-#define LPC_GPIO_PORT_DIR0_DIRP17(x)             (((uint32_t)(((uint32_t)(x))<<17U))&0x20000UL)      /*!< LPC_GPIO_PORT_DIR0.DIRP17 Field         */
-#define LPC_GPIO_PORT_DIR0_DIRP18_MASK           (0x40000U)                                          /*!< LPC_GPIO_PORT_DIR0.DIRP18 Mask          */
-#define LPC_GPIO_PORT_DIR0_DIRP18_SHIFT          (18U)                                               /*!< LPC_GPIO_PORT_DIR0.DIRP18 Position      */
-#define LPC_GPIO_PORT_DIR0_DIRP18(x)             (((uint32_t)(((uint32_t)(x))<<18U))&0x40000UL)      /*!< LPC_GPIO_PORT_DIR0.DIRP18 Field         */
-#define LPC_GPIO_PORT_DIR0_DIRP19_MASK           (0x80000U)                                          /*!< LPC_GPIO_PORT_DIR0.DIRP19 Mask          */
-#define LPC_GPIO_PORT_DIR0_DIRP19_SHIFT          (19U)                                               /*!< LPC_GPIO_PORT_DIR0.DIRP19 Position      */
-#define LPC_GPIO_PORT_DIR0_DIRP19(x)             (((uint32_t)(((uint32_t)(x))<<19U))&0x80000UL)      /*!< LPC_GPIO_PORT_DIR0.DIRP19 Field         */
-#define LPC_GPIO_PORT_DIR0_DIRP20_MASK           (0x100000U)                                         /*!< LPC_GPIO_PORT_DIR0.DIRP20 Mask          */
-#define LPC_GPIO_PORT_DIR0_DIRP20_SHIFT          (20U)                                               /*!< LPC_GPIO_PORT_DIR0.DIRP20 Position      */
-#define LPC_GPIO_PORT_DIR0_DIRP20(x)             (((uint32_t)(((uint32_t)(x))<<20U))&0x100000UL)     /*!< LPC_GPIO_PORT_DIR0.DIRP20 Field         */
-#define LPC_GPIO_PORT_DIR0_DIRP21_MASK           (0x200000U)                                         /*!< LPC_GPIO_PORT_DIR0.DIRP21 Mask          */
-#define LPC_GPIO_PORT_DIR0_DIRP21_SHIFT          (21U)                                               /*!< LPC_GPIO_PORT_DIR0.DIRP21 Position      */
-#define LPC_GPIO_PORT_DIR0_DIRP21(x)             (((uint32_t)(((uint32_t)(x))<<21U))&0x200000UL)     /*!< LPC_GPIO_PORT_DIR0.DIRP21 Field         */
-#define LPC_GPIO_PORT_DIR0_DIRP22_MASK           (0x400000U)                                         /*!< LPC_GPIO_PORT_DIR0.DIRP22 Mask          */
-#define LPC_GPIO_PORT_DIR0_DIRP22_SHIFT          (22U)                                               /*!< LPC_GPIO_PORT_DIR0.DIRP22 Position      */
-#define LPC_GPIO_PORT_DIR0_DIRP22(x)             (((uint32_t)(((uint32_t)(x))<<22U))&0x400000UL)     /*!< LPC_GPIO_PORT_DIR0.DIRP22 Field         */
-#define LPC_GPIO_PORT_DIR0_DIRP23_MASK           (0x800000U)                                         /*!< LPC_GPIO_PORT_DIR0.DIRP23 Mask          */
-#define LPC_GPIO_PORT_DIR0_DIRP23_SHIFT          (23U)                                               /*!< LPC_GPIO_PORT_DIR0.DIRP23 Position      */
-#define LPC_GPIO_PORT_DIR0_DIRP23(x)             (((uint32_t)(((uint32_t)(x))<<23U))&0x800000UL)     /*!< LPC_GPIO_PORT_DIR0.DIRP23 Field         */
-#define LPC_GPIO_PORT_DIR0_DIRP24_MASK           (0x1000000U)                                        /*!< LPC_GPIO_PORT_DIR0.DIRP24 Mask          */
-#define LPC_GPIO_PORT_DIR0_DIRP24_SHIFT          (24U)                                               /*!< LPC_GPIO_PORT_DIR0.DIRP24 Position      */
-#define LPC_GPIO_PORT_DIR0_DIRP24(x)             (((uint32_t)(((uint32_t)(x))<<24U))&0x1000000UL)    /*!< LPC_GPIO_PORT_DIR0.DIRP24 Field         */
-#define LPC_GPIO_PORT_DIR0_DIRP25_MASK           (0x2000000U)                                        /*!< LPC_GPIO_PORT_DIR0.DIRP25 Mask          */
-#define LPC_GPIO_PORT_DIR0_DIRP25_SHIFT          (25U)                                               /*!< LPC_GPIO_PORT_DIR0.DIRP25 Position      */
-#define LPC_GPIO_PORT_DIR0_DIRP25(x)             (((uint32_t)(((uint32_t)(x))<<25U))&0x2000000UL)    /*!< LPC_GPIO_PORT_DIR0.DIRP25 Field         */
-#define LPC_GPIO_PORT_DIR0_DIRP26_MASK           (0x4000000U)                                        /*!< LPC_GPIO_PORT_DIR0.DIRP26 Mask          */
-#define LPC_GPIO_PORT_DIR0_DIRP26_SHIFT          (26U)                                               /*!< LPC_GPIO_PORT_DIR0.DIRP26 Position      */
-#define LPC_GPIO_PORT_DIR0_DIRP26(x)             (((uint32_t)(((uint32_t)(x))<<26U))&0x4000000UL)    /*!< LPC_GPIO_PORT_DIR0.DIRP26 Field         */
-#define LPC_GPIO_PORT_DIR0_DIRP27_MASK           (0x8000000U)                                        /*!< LPC_GPIO_PORT_DIR0.DIRP27 Mask          */
-#define LPC_GPIO_PORT_DIR0_DIRP27_SHIFT          (27U)                                               /*!< LPC_GPIO_PORT_DIR0.DIRP27 Position      */
-#define LPC_GPIO_PORT_DIR0_DIRP27(x)             (((uint32_t)(((uint32_t)(x))<<27U))&0x8000000UL)    /*!< LPC_GPIO_PORT_DIR0.DIRP27 Field         */
-#define LPC_GPIO_PORT_DIR0_DIRP28_MASK           (0x10000000U)                                       /*!< LPC_GPIO_PORT_DIR0.DIRP28 Mask          */
-#define LPC_GPIO_PORT_DIR0_DIRP28_SHIFT          (28U)                                               /*!< LPC_GPIO_PORT_DIR0.DIRP28 Position      */
-#define LPC_GPIO_PORT_DIR0_DIRP28(x)             (((uint32_t)(((uint32_t)(x))<<28U))&0x10000000UL)   /*!< LPC_GPIO_PORT_DIR0.DIRP28 Field         */
-#define LPC_GPIO_PORT_DIR0_DIRP29_MASK           (0x20000000U)                                       /*!< LPC_GPIO_PORT_DIR0.DIRP29 Mask          */
-#define LPC_GPIO_PORT_DIR0_DIRP29_SHIFT          (29U)                                               /*!< LPC_GPIO_PORT_DIR0.DIRP29 Position      */
-#define LPC_GPIO_PORT_DIR0_DIRP29(x)             (((uint32_t)(((uint32_t)(x))<<29U))&0x20000000UL)   /*!< LPC_GPIO_PORT_DIR0.DIRP29 Field         */
-#define LPC_GPIO_PORT_DIR0_DIRP30_MASK           (0x40000000U)                                       /*!< LPC_GPIO_PORT_DIR0.DIRP30 Mask          */
-#define LPC_GPIO_PORT_DIR0_DIRP30_SHIFT          (30U)                                               /*!< LPC_GPIO_PORT_DIR0.DIRP30 Position      */
-#define LPC_GPIO_PORT_DIR0_DIRP30(x)             (((uint32_t)(((uint32_t)(x))<<30U))&0x40000000UL)   /*!< LPC_GPIO_PORT_DIR0.DIRP30 Field         */
-#define LPC_GPIO_PORT_DIR0_DIRP31_MASK           (0x80000000U)                                       /*!< LPC_GPIO_PORT_DIR0.DIRP31 Mask          */
-#define LPC_GPIO_PORT_DIR0_DIRP31_SHIFT          (31U)                                               /*!< LPC_GPIO_PORT_DIR0.DIRP31 Position      */
-#define LPC_GPIO_PORT_DIR0_DIRP31(x)             (((uint32_t)(((uint32_t)(x))<<31U))&0x80000000UL)   /*!< LPC_GPIO_PORT_DIR0.DIRP31 Field         */
-/* ------- DIR1 Bit Fields                          ------ */
-#define LPC_GPIO_PORT_DIR1_DIRP0_MASK            (0x1U)                                              /*!< LPC_GPIO_PORT_DIR1.DIRP0 Mask           */
-#define LPC_GPIO_PORT_DIR1_DIRP0_SHIFT           (0U)                                                /*!< LPC_GPIO_PORT_DIR1.DIRP0 Position       */
-#define LPC_GPIO_PORT_DIR1_DIRP0(x)              (((uint32_t)(((uint32_t)(x))<<0U))&0x1UL)           /*!< LPC_GPIO_PORT_DIR1.DIRP0 Field          */
-#define LPC_GPIO_PORT_DIR1_DIRP1_MASK            (0x2U)                                              /*!< LPC_GPIO_PORT_DIR1.DIRP1 Mask           */
-#define LPC_GPIO_PORT_DIR1_DIRP1_SHIFT           (1U)                                                /*!< LPC_GPIO_PORT_DIR1.DIRP1 Position       */
-#define LPC_GPIO_PORT_DIR1_DIRP1(x)              (((uint32_t)(((uint32_t)(x))<<1U))&0x2UL)           /*!< LPC_GPIO_PORT_DIR1.DIRP1 Field          */
-#define LPC_GPIO_PORT_DIR1_DIRP2_MASK            (0x4U)                                              /*!< LPC_GPIO_PORT_DIR1.DIRP2 Mask           */
-#define LPC_GPIO_PORT_DIR1_DIRP2_SHIFT           (2U)                                                /*!< LPC_GPIO_PORT_DIR1.DIRP2 Position       */
-#define LPC_GPIO_PORT_DIR1_DIRP2(x)              (((uint32_t)(((uint32_t)(x))<<2U))&0x4UL)           /*!< LPC_GPIO_PORT_DIR1.DIRP2 Field          */
-#define LPC_GPIO_PORT_DIR1_DIRP3_MASK            (0x8U)                                              /*!< LPC_GPIO_PORT_DIR1.DIRP3 Mask           */
-#define LPC_GPIO_PORT_DIR1_DIRP3_SHIFT           (3U)                                                /*!< LPC_GPIO_PORT_DIR1.DIRP3 Position       */
-#define LPC_GPIO_PORT_DIR1_DIRP3(x)              (((uint32_t)(((uint32_t)(x))<<3U))&0x8UL)           /*!< LPC_GPIO_PORT_DIR1.DIRP3 Field          */
-#define LPC_GPIO_PORT_DIR1_DIRP4_MASK            (0x10U)                                             /*!< LPC_GPIO_PORT_DIR1.DIRP4 Mask           */
-#define LPC_GPIO_PORT_DIR1_DIRP4_SHIFT           (4U)                                                /*!< LPC_GPIO_PORT_DIR1.DIRP4 Position       */
-#define LPC_GPIO_PORT_DIR1_DIRP4(x)              (((uint32_t)(((uint32_t)(x))<<4U))&0x10UL)          /*!< LPC_GPIO_PORT_DIR1.DIRP4 Field          */
-#define LPC_GPIO_PORT_DIR1_DIRP5_MASK            (0x20U)                                             /*!< LPC_GPIO_PORT_DIR1.DIRP5 Mask           */
-#define LPC_GPIO_PORT_DIR1_DIRP5_SHIFT           (5U)                                                /*!< LPC_GPIO_PORT_DIR1.DIRP5 Position       */
-#define LPC_GPIO_PORT_DIR1_DIRP5(x)              (((uint32_t)(((uint32_t)(x))<<5U))&0x20UL)          /*!< LPC_GPIO_PORT_DIR1.DIRP5 Field          */
-#define LPC_GPIO_PORT_DIR1_DIRP6_MASK            (0x40U)                                             /*!< LPC_GPIO_PORT_DIR1.DIRP6 Mask           */
-#define LPC_GPIO_PORT_DIR1_DIRP6_SHIFT           (6U)                                                /*!< LPC_GPIO_PORT_DIR1.DIRP6 Position       */
-#define LPC_GPIO_PORT_DIR1_DIRP6(x)              (((uint32_t)(((uint32_t)(x))<<6U))&0x40UL)          /*!< LPC_GPIO_PORT_DIR1.DIRP6 Field          */
-#define LPC_GPIO_PORT_DIR1_DIRP7_MASK            (0x80U)                                             /*!< LPC_GPIO_PORT_DIR1.DIRP7 Mask           */
-#define LPC_GPIO_PORT_DIR1_DIRP7_SHIFT           (7U)                                                /*!< LPC_GPIO_PORT_DIR1.DIRP7 Position       */
-#define LPC_GPIO_PORT_DIR1_DIRP7(x)              (((uint32_t)(((uint32_t)(x))<<7U))&0x80UL)          /*!< LPC_GPIO_PORT_DIR1.DIRP7 Field          */
-#define LPC_GPIO_PORT_DIR1_DIRP8_MASK            (0x100U)                                            /*!< LPC_GPIO_PORT_DIR1.DIRP8 Mask           */
-#define LPC_GPIO_PORT_DIR1_DIRP8_SHIFT           (8U)                                                /*!< LPC_GPIO_PORT_DIR1.DIRP8 Position       */
-#define LPC_GPIO_PORT_DIR1_DIRP8(x)              (((uint32_t)(((uint32_t)(x))<<8U))&0x100UL)         /*!< LPC_GPIO_PORT_DIR1.DIRP8 Field          */
-#define LPC_GPIO_PORT_DIR1_DIRP9_MASK            (0x200U)                                            /*!< LPC_GPIO_PORT_DIR1.DIRP9 Mask           */
-#define LPC_GPIO_PORT_DIR1_DIRP9_SHIFT           (9U)                                                /*!< LPC_GPIO_PORT_DIR1.DIRP9 Position       */
-#define LPC_GPIO_PORT_DIR1_DIRP9(x)              (((uint32_t)(((uint32_t)(x))<<9U))&0x200UL)         /*!< LPC_GPIO_PORT_DIR1.DIRP9 Field          */
-#define LPC_GPIO_PORT_DIR1_DIRP10_MASK           (0x400U)                                            /*!< LPC_GPIO_PORT_DIR1.DIRP10 Mask          */
-#define LPC_GPIO_PORT_DIR1_DIRP10_SHIFT          (10U)                                               /*!< LPC_GPIO_PORT_DIR1.DIRP10 Position      */
-#define LPC_GPIO_PORT_DIR1_DIRP10(x)             (((uint32_t)(((uint32_t)(x))<<10U))&0x400UL)        /*!< LPC_GPIO_PORT_DIR1.DIRP10 Field         */
-#define LPC_GPIO_PORT_DIR1_DIRP11_MASK           (0x800U)                                            /*!< LPC_GPIO_PORT_DIR1.DIRP11 Mask          */
-#define LPC_GPIO_PORT_DIR1_DIRP11_SHIFT          (11U)                                               /*!< LPC_GPIO_PORT_DIR1.DIRP11 Position      */
-#define LPC_GPIO_PORT_DIR1_DIRP11(x)             (((uint32_t)(((uint32_t)(x))<<11U))&0x800UL)        /*!< LPC_GPIO_PORT_DIR1.DIRP11 Field         */
-#define LPC_GPIO_PORT_DIR1_DIRP12_MASK           (0x1000U)                                           /*!< LPC_GPIO_PORT_DIR1.DIRP12 Mask          */
-#define LPC_GPIO_PORT_DIR1_DIRP12_SHIFT          (12U)                                               /*!< LPC_GPIO_PORT_DIR1.DIRP12 Position      */
-#define LPC_GPIO_PORT_DIR1_DIRP12(x)             (((uint32_t)(((uint32_t)(x))<<12U))&0x1000UL)       /*!< LPC_GPIO_PORT_DIR1.DIRP12 Field         */
-#define LPC_GPIO_PORT_DIR1_DIRP13_MASK           (0x2000U)                                           /*!< LPC_GPIO_PORT_DIR1.DIRP13 Mask          */
-#define LPC_GPIO_PORT_DIR1_DIRP13_SHIFT          (13U)                                               /*!< LPC_GPIO_PORT_DIR1.DIRP13 Position      */
-#define LPC_GPIO_PORT_DIR1_DIRP13(x)             (((uint32_t)(((uint32_t)(x))<<13U))&0x2000UL)       /*!< LPC_GPIO_PORT_DIR1.DIRP13 Field         */
-#define LPC_GPIO_PORT_DIR1_DIRP14_MASK           (0x4000U)                                           /*!< LPC_GPIO_PORT_DIR1.DIRP14 Mask          */
-#define LPC_GPIO_PORT_DIR1_DIRP14_SHIFT          (14U)                                               /*!< LPC_GPIO_PORT_DIR1.DIRP14 Position      */
-#define LPC_GPIO_PORT_DIR1_DIRP14(x)             (((uint32_t)(((uint32_t)(x))<<14U))&0x4000UL)       /*!< LPC_GPIO_PORT_DIR1.DIRP14 Field         */
-#define LPC_GPIO_PORT_DIR1_DIRP15_MASK           (0x8000U)                                           /*!< LPC_GPIO_PORT_DIR1.DIRP15 Mask          */
-#define LPC_GPIO_PORT_DIR1_DIRP15_SHIFT          (15U)                                               /*!< LPC_GPIO_PORT_DIR1.DIRP15 Position      */
-#define LPC_GPIO_PORT_DIR1_DIRP15(x)             (((uint32_t)(((uint32_t)(x))<<15U))&0x8000UL)       /*!< LPC_GPIO_PORT_DIR1.DIRP15 Field         */
-#define LPC_GPIO_PORT_DIR1_DIRP16_MASK           (0x10000U)                                          /*!< LPC_GPIO_PORT_DIR1.DIRP16 Mask          */
-#define LPC_GPIO_PORT_DIR1_DIRP16_SHIFT          (16U)                                               /*!< LPC_GPIO_PORT_DIR1.DIRP16 Position      */
-#define LPC_GPIO_PORT_DIR1_DIRP16(x)             (((uint32_t)(((uint32_t)(x))<<16U))&0x10000UL)      /*!< LPC_GPIO_PORT_DIR1.DIRP16 Field         */
-#define LPC_GPIO_PORT_DIR1_DIRP17_MASK           (0x20000U)                                          /*!< LPC_GPIO_PORT_DIR1.DIRP17 Mask          */
-#define LPC_GPIO_PORT_DIR1_DIRP17_SHIFT          (17U)                                               /*!< LPC_GPIO_PORT_DIR1.DIRP17 Position      */
-#define LPC_GPIO_PORT_DIR1_DIRP17(x)             (((uint32_t)(((uint32_t)(x))<<17U))&0x20000UL)      /*!< LPC_GPIO_PORT_DIR1.DIRP17 Field         */
-#define LPC_GPIO_PORT_DIR1_DIRP18_MASK           (0x40000U)                                          /*!< LPC_GPIO_PORT_DIR1.DIRP18 Mask          */
-#define LPC_GPIO_PORT_DIR1_DIRP18_SHIFT          (18U)                                               /*!< LPC_GPIO_PORT_DIR1.DIRP18 Position      */
-#define LPC_GPIO_PORT_DIR1_DIRP18(x)             (((uint32_t)(((uint32_t)(x))<<18U))&0x40000UL)      /*!< LPC_GPIO_PORT_DIR1.DIRP18 Field         */
-#define LPC_GPIO_PORT_DIR1_DIRP19_MASK           (0x80000U)                                          /*!< LPC_GPIO_PORT_DIR1.DIRP19 Mask          */
-#define LPC_GPIO_PORT_DIR1_DIRP19_SHIFT          (19U)                                               /*!< LPC_GPIO_PORT_DIR1.DIRP19 Position      */
-#define LPC_GPIO_PORT_DIR1_DIRP19(x)             (((uint32_t)(((uint32_t)(x))<<19U))&0x80000UL)      /*!< LPC_GPIO_PORT_DIR1.DIRP19 Field         */
-#define LPC_GPIO_PORT_DIR1_DIRP20_MASK           (0x100000U)                                         /*!< LPC_GPIO_PORT_DIR1.DIRP20 Mask          */
-#define LPC_GPIO_PORT_DIR1_DIRP20_SHIFT          (20U)                                               /*!< LPC_GPIO_PORT_DIR1.DIRP20 Position      */
-#define LPC_GPIO_PORT_DIR1_DIRP20(x)             (((uint32_t)(((uint32_t)(x))<<20U))&0x100000UL)     /*!< LPC_GPIO_PORT_DIR1.DIRP20 Field         */
-#define LPC_GPIO_PORT_DIR1_DIRP21_MASK           (0x200000U)                                         /*!< LPC_GPIO_PORT_DIR1.DIRP21 Mask          */
-#define LPC_GPIO_PORT_DIR1_DIRP21_SHIFT          (21U)                                               /*!< LPC_GPIO_PORT_DIR1.DIRP21 Position      */
-#define LPC_GPIO_PORT_DIR1_DIRP21(x)             (((uint32_t)(((uint32_t)(x))<<21U))&0x200000UL)     /*!< LPC_GPIO_PORT_DIR1.DIRP21 Field         */
-#define LPC_GPIO_PORT_DIR1_DIRP22_MASK           (0x400000U)                                         /*!< LPC_GPIO_PORT_DIR1.DIRP22 Mask          */
-#define LPC_GPIO_PORT_DIR1_DIRP22_SHIFT          (22U)                                               /*!< LPC_GPIO_PORT_DIR1.DIRP22 Position      */
-#define LPC_GPIO_PORT_DIR1_DIRP22(x)             (((uint32_t)(((uint32_t)(x))<<22U))&0x400000UL)     /*!< LPC_GPIO_PORT_DIR1.DIRP22 Field         */
-#define LPC_GPIO_PORT_DIR1_DIRP23_MASK           (0x800000U)                                         /*!< LPC_GPIO_PORT_DIR1.DIRP23 Mask          */
-#define LPC_GPIO_PORT_DIR1_DIRP23_SHIFT          (23U)                                               /*!< LPC_GPIO_PORT_DIR1.DIRP23 Position      */
-#define LPC_GPIO_PORT_DIR1_DIRP23(x)             (((uint32_t)(((uint32_t)(x))<<23U))&0x800000UL)     /*!< LPC_GPIO_PORT_DIR1.DIRP23 Field         */
-#define LPC_GPIO_PORT_DIR1_DIRP24_MASK           (0x1000000U)                                        /*!< LPC_GPIO_PORT_DIR1.DIRP24 Mask          */
-#define LPC_GPIO_PORT_DIR1_DIRP24_SHIFT          (24U)                                               /*!< LPC_GPIO_PORT_DIR1.DIRP24 Position      */
-#define LPC_GPIO_PORT_DIR1_DIRP24(x)             (((uint32_t)(((uint32_t)(x))<<24U))&0x1000000UL)    /*!< LPC_GPIO_PORT_DIR1.DIRP24 Field         */
-#define LPC_GPIO_PORT_DIR1_DIRP25_MASK           (0x2000000U)                                        /*!< LPC_GPIO_PORT_DIR1.DIRP25 Mask          */
-#define LPC_GPIO_PORT_DIR1_DIRP25_SHIFT          (25U)                                               /*!< LPC_GPIO_PORT_DIR1.DIRP25 Position      */
-#define LPC_GPIO_PORT_DIR1_DIRP25(x)             (((uint32_t)(((uint32_t)(x))<<25U))&0x2000000UL)    /*!< LPC_GPIO_PORT_DIR1.DIRP25 Field         */
-#define LPC_GPIO_PORT_DIR1_DIRP26_MASK           (0x4000000U)                                        /*!< LPC_GPIO_PORT_DIR1.DIRP26 Mask          */
-#define LPC_GPIO_PORT_DIR1_DIRP26_SHIFT          (26U)                                               /*!< LPC_GPIO_PORT_DIR1.DIRP26 Position      */
-#define LPC_GPIO_PORT_DIR1_DIRP26(x)             (((uint32_t)(((uint32_t)(x))<<26U))&0x4000000UL)    /*!< LPC_GPIO_PORT_DIR1.DIRP26 Field         */
-#define LPC_GPIO_PORT_DIR1_DIRP27_MASK           (0x8000000U)                                        /*!< LPC_GPIO_PORT_DIR1.DIRP27 Mask          */
-#define LPC_GPIO_PORT_DIR1_DIRP27_SHIFT          (27U)                                               /*!< LPC_GPIO_PORT_DIR1.DIRP27 Position      */
-#define LPC_GPIO_PORT_DIR1_DIRP27(x)             (((uint32_t)(((uint32_t)(x))<<27U))&0x8000000UL)    /*!< LPC_GPIO_PORT_DIR1.DIRP27 Field         */
-#define LPC_GPIO_PORT_DIR1_DIRP28_MASK           (0x10000000U)                                       /*!< LPC_GPIO_PORT_DIR1.DIRP28 Mask          */
-#define LPC_GPIO_PORT_DIR1_DIRP28_SHIFT          (28U)                                               /*!< LPC_GPIO_PORT_DIR1.DIRP28 Position      */
-#define LPC_GPIO_PORT_DIR1_DIRP28(x)             (((uint32_t)(((uint32_t)(x))<<28U))&0x10000000UL)   /*!< LPC_GPIO_PORT_DIR1.DIRP28 Field         */
-#define LPC_GPIO_PORT_DIR1_DIRP29_MASK           (0x20000000U)                                       /*!< LPC_GPIO_PORT_DIR1.DIRP29 Mask          */
-#define LPC_GPIO_PORT_DIR1_DIRP29_SHIFT          (29U)                                               /*!< LPC_GPIO_PORT_DIR1.DIRP29 Position      */
-#define LPC_GPIO_PORT_DIR1_DIRP29(x)             (((uint32_t)(((uint32_t)(x))<<29U))&0x20000000UL)   /*!< LPC_GPIO_PORT_DIR1.DIRP29 Field         */
-#define LPC_GPIO_PORT_DIR1_DIRP30_MASK           (0x40000000U)                                       /*!< LPC_GPIO_PORT_DIR1.DIRP30 Mask          */
-#define LPC_GPIO_PORT_DIR1_DIRP30_SHIFT          (30U)                                               /*!< LPC_GPIO_PORT_DIR1.DIRP30 Position      */
-#define LPC_GPIO_PORT_DIR1_DIRP30(x)             (((uint32_t)(((uint32_t)(x))<<30U))&0x40000000UL)   /*!< LPC_GPIO_PORT_DIR1.DIRP30 Field         */
-#define LPC_GPIO_PORT_DIR1_DIRP31_MASK           (0x80000000U)                                       /*!< LPC_GPIO_PORT_DIR1.DIRP31 Mask          */
-#define LPC_GPIO_PORT_DIR1_DIRP31_SHIFT          (31U)                                               /*!< LPC_GPIO_PORT_DIR1.DIRP31 Position      */
-#define LPC_GPIO_PORT_DIR1_DIRP31(x)             (((uint32_t)(((uint32_t)(x))<<31U))&0x80000000UL)   /*!< LPC_GPIO_PORT_DIR1.DIRP31 Field         */
-/* ------- MASK0 Bit Fields                         ------ */
-#define LPC_GPIO_PORT_MASK0_MASKP0_MASK          (0x1U)                                              /*!< LPC_GPIO_PORT_MASK0.MASKP0 Mask         */
-#define LPC_GPIO_PORT_MASK0_MASKP0_SHIFT         (0U)                                                /*!< LPC_GPIO_PORT_MASK0.MASKP0 Position     */
-#define LPC_GPIO_PORT_MASK0_MASKP0(x)            (((uint32_t)(((uint32_t)(x))<<0U))&0x1UL)           /*!< LPC_GPIO_PORT_MASK0.MASKP0 Field        */
-#define LPC_GPIO_PORT_MASK0_MASKP1_MASK          (0x2U)                                              /*!< LPC_GPIO_PORT_MASK0.MASKP1 Mask         */
-#define LPC_GPIO_PORT_MASK0_MASKP1_SHIFT         (1U)                                                /*!< LPC_GPIO_PORT_MASK0.MASKP1 Position     */
-#define LPC_GPIO_PORT_MASK0_MASKP1(x)            (((uint32_t)(((uint32_t)(x))<<1U))&0x2UL)           /*!< LPC_GPIO_PORT_MASK0.MASKP1 Field        */
-#define LPC_GPIO_PORT_MASK0_MASKP2_MASK          (0x4U)                                              /*!< LPC_GPIO_PORT_MASK0.MASKP2 Mask         */
-#define LPC_GPIO_PORT_MASK0_MASKP2_SHIFT         (2U)                                                /*!< LPC_GPIO_PORT_MASK0.MASKP2 Position     */
-#define LPC_GPIO_PORT_MASK0_MASKP2(x)            (((uint32_t)(((uint32_t)(x))<<2U))&0x4UL)           /*!< LPC_GPIO_PORT_MASK0.MASKP2 Field        */
-#define LPC_GPIO_PORT_MASK0_MASKP3_MASK          (0x8U)                                              /*!< LPC_GPIO_PORT_MASK0.MASKP3 Mask         */
-#define LPC_GPIO_PORT_MASK0_MASKP3_SHIFT         (3U)                                                /*!< LPC_GPIO_PORT_MASK0.MASKP3 Position     */
-#define LPC_GPIO_PORT_MASK0_MASKP3(x)            (((uint32_t)(((uint32_t)(x))<<3U))&0x8UL)           /*!< LPC_GPIO_PORT_MASK0.MASKP3 Field        */
-#define LPC_GPIO_PORT_MASK0_MASKP4_MASK          (0x10U)                                             /*!< LPC_GPIO_PORT_MASK0.MASKP4 Mask         */
-#define LPC_GPIO_PORT_MASK0_MASKP4_SHIFT         (4U)                                                /*!< LPC_GPIO_PORT_MASK0.MASKP4 Position     */
-#define LPC_GPIO_PORT_MASK0_MASKP4(x)            (((uint32_t)(((uint32_t)(x))<<4U))&0x10UL)          /*!< LPC_GPIO_PORT_MASK0.MASKP4 Field        */
-#define LPC_GPIO_PORT_MASK0_MASKP5_MASK          (0x20U)                                             /*!< LPC_GPIO_PORT_MASK0.MASKP5 Mask         */
-#define LPC_GPIO_PORT_MASK0_MASKP5_SHIFT         (5U)                                                /*!< LPC_GPIO_PORT_MASK0.MASKP5 Position     */
-#define LPC_GPIO_PORT_MASK0_MASKP5(x)            (((uint32_t)(((uint32_t)(x))<<5U))&0x20UL)          /*!< LPC_GPIO_PORT_MASK0.MASKP5 Field        */
-#define LPC_GPIO_PORT_MASK0_MASKP6_MASK          (0x40U)                                             /*!< LPC_GPIO_PORT_MASK0.MASKP6 Mask         */
-#define LPC_GPIO_PORT_MASK0_MASKP6_SHIFT         (6U)                                                /*!< LPC_GPIO_PORT_MASK0.MASKP6 Position     */
-#define LPC_GPIO_PORT_MASK0_MASKP6(x)            (((uint32_t)(((uint32_t)(x))<<6U))&0x40UL)          /*!< LPC_GPIO_PORT_MASK0.MASKP6 Field        */
-#define LPC_GPIO_PORT_MASK0_MASKP7_MASK          (0x80U)                                             /*!< LPC_GPIO_PORT_MASK0.MASKP7 Mask         */
-#define LPC_GPIO_PORT_MASK0_MASKP7_SHIFT         (7U)                                                /*!< LPC_GPIO_PORT_MASK0.MASKP7 Position     */
-#define LPC_GPIO_PORT_MASK0_MASKP7(x)            (((uint32_t)(((uint32_t)(x))<<7U))&0x80UL)          /*!< LPC_GPIO_PORT_MASK0.MASKP7 Field        */
-#define LPC_GPIO_PORT_MASK0_MASKP8_MASK          (0x100U)                                            /*!< LPC_GPIO_PORT_MASK0.MASKP8 Mask         */
-#define LPC_GPIO_PORT_MASK0_MASKP8_SHIFT         (8U)                                                /*!< LPC_GPIO_PORT_MASK0.MASKP8 Position     */
-#define LPC_GPIO_PORT_MASK0_MASKP8(x)            (((uint32_t)(((uint32_t)(x))<<8U))&0x100UL)         /*!< LPC_GPIO_PORT_MASK0.MASKP8 Field        */
-#define LPC_GPIO_PORT_MASK0_MASKP9_MASK          (0x200U)                                            /*!< LPC_GPIO_PORT_MASK0.MASKP9 Mask         */
-#define LPC_GPIO_PORT_MASK0_MASKP9_SHIFT         (9U)                                                /*!< LPC_GPIO_PORT_MASK0.MASKP9 Position     */
-#define LPC_GPIO_PORT_MASK0_MASKP9(x)            (((uint32_t)(((uint32_t)(x))<<9U))&0x200UL)         /*!< LPC_GPIO_PORT_MASK0.MASKP9 Field        */
-#define LPC_GPIO_PORT_MASK0_MASKP10_MASK         (0x400U)                                            /*!< LPC_GPIO_PORT_MASK0.MASKP10 Mask        */
-#define LPC_GPIO_PORT_MASK0_MASKP10_SHIFT        (10U)                                               /*!< LPC_GPIO_PORT_MASK0.MASKP10 Position    */
-#define LPC_GPIO_PORT_MASK0_MASKP10(x)           (((uint32_t)(((uint32_t)(x))<<10U))&0x400UL)        /*!< LPC_GPIO_PORT_MASK0.MASKP10 Field       */
-#define LPC_GPIO_PORT_MASK0_MASKP11_MASK         (0x800U)                                            /*!< LPC_GPIO_PORT_MASK0.MASKP11 Mask        */
-#define LPC_GPIO_PORT_MASK0_MASKP11_SHIFT        (11U)                                               /*!< LPC_GPIO_PORT_MASK0.MASKP11 Position    */
-#define LPC_GPIO_PORT_MASK0_MASKP11(x)           (((uint32_t)(((uint32_t)(x))<<11U))&0x800UL)        /*!< LPC_GPIO_PORT_MASK0.MASKP11 Field       */
-#define LPC_GPIO_PORT_MASK0_MASKP12_MASK         (0x1000U)                                           /*!< LPC_GPIO_PORT_MASK0.MASKP12 Mask        */
-#define LPC_GPIO_PORT_MASK0_MASKP12_SHIFT        (12U)                                               /*!< LPC_GPIO_PORT_MASK0.MASKP12 Position    */
-#define LPC_GPIO_PORT_MASK0_MASKP12(x)           (((uint32_t)(((uint32_t)(x))<<12U))&0x1000UL)       /*!< LPC_GPIO_PORT_MASK0.MASKP12 Field       */
-#define LPC_GPIO_PORT_MASK0_MASKP13_MASK         (0x2000U)                                           /*!< LPC_GPIO_PORT_MASK0.MASKP13 Mask        */
-#define LPC_GPIO_PORT_MASK0_MASKP13_SHIFT        (13U)                                               /*!< LPC_GPIO_PORT_MASK0.MASKP13 Position    */
-#define LPC_GPIO_PORT_MASK0_MASKP13(x)           (((uint32_t)(((uint32_t)(x))<<13U))&0x2000UL)       /*!< LPC_GPIO_PORT_MASK0.MASKP13 Field       */
-#define LPC_GPIO_PORT_MASK0_MASKP14_MASK         (0x4000U)                                           /*!< LPC_GPIO_PORT_MASK0.MASKP14 Mask        */
-#define LPC_GPIO_PORT_MASK0_MASKP14_SHIFT        (14U)                                               /*!< LPC_GPIO_PORT_MASK0.MASKP14 Position    */
-#define LPC_GPIO_PORT_MASK0_MASKP14(x)           (((uint32_t)(((uint32_t)(x))<<14U))&0x4000UL)       /*!< LPC_GPIO_PORT_MASK0.MASKP14 Field       */
-#define LPC_GPIO_PORT_MASK0_MASKP15_MASK         (0x8000U)                                           /*!< LPC_GPIO_PORT_MASK0.MASKP15 Mask        */
-#define LPC_GPIO_PORT_MASK0_MASKP15_SHIFT        (15U)                                               /*!< LPC_GPIO_PORT_MASK0.MASKP15 Position    */
-#define LPC_GPIO_PORT_MASK0_MASKP15(x)           (((uint32_t)(((uint32_t)(x))<<15U))&0x8000UL)       /*!< LPC_GPIO_PORT_MASK0.MASKP15 Field       */
-#define LPC_GPIO_PORT_MASK0_MASKP16_MASK         (0x10000U)                                          /*!< LPC_GPIO_PORT_MASK0.MASKP16 Mask        */
-#define LPC_GPIO_PORT_MASK0_MASKP16_SHIFT        (16U)                                               /*!< LPC_GPIO_PORT_MASK0.MASKP16 Position    */
-#define LPC_GPIO_PORT_MASK0_MASKP16(x)           (((uint32_t)(((uint32_t)(x))<<16U))&0x10000UL)      /*!< LPC_GPIO_PORT_MASK0.MASKP16 Field       */
-#define LPC_GPIO_PORT_MASK0_MASKP17_MASK         (0x20000U)                                          /*!< LPC_GPIO_PORT_MASK0.MASKP17 Mask        */
-#define LPC_GPIO_PORT_MASK0_MASKP17_SHIFT        (17U)                                               /*!< LPC_GPIO_PORT_MASK0.MASKP17 Position    */
-#define LPC_GPIO_PORT_MASK0_MASKP17(x)           (((uint32_t)(((uint32_t)(x))<<17U))&0x20000UL)      /*!< LPC_GPIO_PORT_MASK0.MASKP17 Field       */
-#define LPC_GPIO_PORT_MASK0_MASKP18_MASK         (0x40000U)                                          /*!< LPC_GPIO_PORT_MASK0.MASKP18 Mask        */
-#define LPC_GPIO_PORT_MASK0_MASKP18_SHIFT        (18U)                                               /*!< LPC_GPIO_PORT_MASK0.MASKP18 Position    */
-#define LPC_GPIO_PORT_MASK0_MASKP18(x)           (((uint32_t)(((uint32_t)(x))<<18U))&0x40000UL)      /*!< LPC_GPIO_PORT_MASK0.MASKP18 Field       */
-#define LPC_GPIO_PORT_MASK0_MASKP19_MASK         (0x80000U)                                          /*!< LPC_GPIO_PORT_MASK0.MASKP19 Mask        */
-#define LPC_GPIO_PORT_MASK0_MASKP19_SHIFT        (19U)                                               /*!< LPC_GPIO_PORT_MASK0.MASKP19 Position    */
-#define LPC_GPIO_PORT_MASK0_MASKP19(x)           (((uint32_t)(((uint32_t)(x))<<19U))&0x80000UL)      /*!< LPC_GPIO_PORT_MASK0.MASKP19 Field       */
-#define LPC_GPIO_PORT_MASK0_MASKP20_MASK         (0x100000U)                                         /*!< LPC_GPIO_PORT_MASK0.MASKP20 Mask        */
-#define LPC_GPIO_PORT_MASK0_MASKP20_SHIFT        (20U)                                               /*!< LPC_GPIO_PORT_MASK0.MASKP20 Position    */
-#define LPC_GPIO_PORT_MASK0_MASKP20(x)           (((uint32_t)(((uint32_t)(x))<<20U))&0x100000UL)     /*!< LPC_GPIO_PORT_MASK0.MASKP20 Field       */
-#define LPC_GPIO_PORT_MASK0_MASKP21_MASK         (0x200000U)                                         /*!< LPC_GPIO_PORT_MASK0.MASKP21 Mask        */
-#define LPC_GPIO_PORT_MASK0_MASKP21_SHIFT        (21U)                                               /*!< LPC_GPIO_PORT_MASK0.MASKP21 Position    */
-#define LPC_GPIO_PORT_MASK0_MASKP21(x)           (((uint32_t)(((uint32_t)(x))<<21U))&0x200000UL)     /*!< LPC_GPIO_PORT_MASK0.MASKP21 Field       */
-#define LPC_GPIO_PORT_MASK0_MASKP22_MASK         (0x400000U)                                         /*!< LPC_GPIO_PORT_MASK0.MASKP22 Mask        */
-#define LPC_GPIO_PORT_MASK0_MASKP22_SHIFT        (22U)                                               /*!< LPC_GPIO_PORT_MASK0.MASKP22 Position    */
-#define LPC_GPIO_PORT_MASK0_MASKP22(x)           (((uint32_t)(((uint32_t)(x))<<22U))&0x400000UL)     /*!< LPC_GPIO_PORT_MASK0.MASKP22 Field       */
-#define LPC_GPIO_PORT_MASK0_MASKP23_MASK         (0x800000U)                                         /*!< LPC_GPIO_PORT_MASK0.MASKP23 Mask        */
-#define LPC_GPIO_PORT_MASK0_MASKP23_SHIFT        (23U)                                               /*!< LPC_GPIO_PORT_MASK0.MASKP23 Position    */
-#define LPC_GPIO_PORT_MASK0_MASKP23(x)           (((uint32_t)(((uint32_t)(x))<<23U))&0x800000UL)     /*!< LPC_GPIO_PORT_MASK0.MASKP23 Field       */
-#define LPC_GPIO_PORT_MASK0_MASKP24_MASK         (0x1000000U)                                        /*!< LPC_GPIO_PORT_MASK0.MASKP24 Mask        */
-#define LPC_GPIO_PORT_MASK0_MASKP24_SHIFT        (24U)                                               /*!< LPC_GPIO_PORT_MASK0.MASKP24 Position    */
-#define LPC_GPIO_PORT_MASK0_MASKP24(x)           (((uint32_t)(((uint32_t)(x))<<24U))&0x1000000UL)    /*!< LPC_GPIO_PORT_MASK0.MASKP24 Field       */
-#define LPC_GPIO_PORT_MASK0_MASKP25_MASK         (0x2000000U)                                        /*!< LPC_GPIO_PORT_MASK0.MASKP25 Mask        */
-#define LPC_GPIO_PORT_MASK0_MASKP25_SHIFT        (25U)                                               /*!< LPC_GPIO_PORT_MASK0.MASKP25 Position    */
-#define LPC_GPIO_PORT_MASK0_MASKP25(x)           (((uint32_t)(((uint32_t)(x))<<25U))&0x2000000UL)    /*!< LPC_GPIO_PORT_MASK0.MASKP25 Field       */
-#define LPC_GPIO_PORT_MASK0_MASKP26_MASK         (0x4000000U)                                        /*!< LPC_GPIO_PORT_MASK0.MASKP26 Mask        */
-#define LPC_GPIO_PORT_MASK0_MASKP26_SHIFT        (26U)                                               /*!< LPC_GPIO_PORT_MASK0.MASKP26 Position    */
-#define LPC_GPIO_PORT_MASK0_MASKP26(x)           (((uint32_t)(((uint32_t)(x))<<26U))&0x4000000UL)    /*!< LPC_GPIO_PORT_MASK0.MASKP26 Field       */
-#define LPC_GPIO_PORT_MASK0_MASKP27_MASK         (0x8000000U)                                        /*!< LPC_GPIO_PORT_MASK0.MASKP27 Mask        */
-#define LPC_GPIO_PORT_MASK0_MASKP27_SHIFT        (27U)                                               /*!< LPC_GPIO_PORT_MASK0.MASKP27 Position    */
-#define LPC_GPIO_PORT_MASK0_MASKP27(x)           (((uint32_t)(((uint32_t)(x))<<27U))&0x8000000UL)    /*!< LPC_GPIO_PORT_MASK0.MASKP27 Field       */
-#define LPC_GPIO_PORT_MASK0_MASKP28_MASK         (0x10000000U)                                       /*!< LPC_GPIO_PORT_MASK0.MASKP28 Mask        */
-#define LPC_GPIO_PORT_MASK0_MASKP28_SHIFT        (28U)                                               /*!< LPC_GPIO_PORT_MASK0.MASKP28 Position    */
-#define LPC_GPIO_PORT_MASK0_MASKP28(x)           (((uint32_t)(((uint32_t)(x))<<28U))&0x10000000UL)   /*!< LPC_GPIO_PORT_MASK0.MASKP28 Field       */
-#define LPC_GPIO_PORT_MASK0_MASKP29_MASK         (0x20000000U)                                       /*!< LPC_GPIO_PORT_MASK0.MASKP29 Mask        */
-#define LPC_GPIO_PORT_MASK0_MASKP29_SHIFT        (29U)                                               /*!< LPC_GPIO_PORT_MASK0.MASKP29 Position    */
-#define LPC_GPIO_PORT_MASK0_MASKP29(x)           (((uint32_t)(((uint32_t)(x))<<29U))&0x20000000UL)   /*!< LPC_GPIO_PORT_MASK0.MASKP29 Field       */
-#define LPC_GPIO_PORT_MASK0_MASKP30_MASK         (0x40000000U)                                       /*!< LPC_GPIO_PORT_MASK0.MASKP30 Mask        */
-#define LPC_GPIO_PORT_MASK0_MASKP30_SHIFT        (30U)                                               /*!< LPC_GPIO_PORT_MASK0.MASKP30 Position    */
-#define LPC_GPIO_PORT_MASK0_MASKP30(x)           (((uint32_t)(((uint32_t)(x))<<30U))&0x40000000UL)   /*!< LPC_GPIO_PORT_MASK0.MASKP30 Field       */
-#define LPC_GPIO_PORT_MASK0_MASKP31_MASK         (0x80000000U)                                       /*!< LPC_GPIO_PORT_MASK0.MASKP31 Mask        */
-#define LPC_GPIO_PORT_MASK0_MASKP31_SHIFT        (31U)                                               /*!< LPC_GPIO_PORT_MASK0.MASKP31 Position    */
-#define LPC_GPIO_PORT_MASK0_MASKP31(x)           (((uint32_t)(((uint32_t)(x))<<31U))&0x80000000UL)   /*!< LPC_GPIO_PORT_MASK0.MASKP31 Field       */
-/* ------- MASK1 Bit Fields                         ------ */
-#define LPC_GPIO_PORT_MASK1_MASKP0_MASK          (0x1U)                                              /*!< LPC_GPIO_PORT_MASK1.MASKP0 Mask         */
-#define LPC_GPIO_PORT_MASK1_MASKP0_SHIFT         (0U)                                                /*!< LPC_GPIO_PORT_MASK1.MASKP0 Position     */
-#define LPC_GPIO_PORT_MASK1_MASKP0(x)            (((uint32_t)(((uint32_t)(x))<<0U))&0x1UL)           /*!< LPC_GPIO_PORT_MASK1.MASKP0 Field        */
-#define LPC_GPIO_PORT_MASK1_MASKP1_MASK          (0x2U)                                              /*!< LPC_GPIO_PORT_MASK1.MASKP1 Mask         */
-#define LPC_GPIO_PORT_MASK1_MASKP1_SHIFT         (1U)                                                /*!< LPC_GPIO_PORT_MASK1.MASKP1 Position     */
-#define LPC_GPIO_PORT_MASK1_MASKP1(x)            (((uint32_t)(((uint32_t)(x))<<1U))&0x2UL)           /*!< LPC_GPIO_PORT_MASK1.MASKP1 Field        */
-#define LPC_GPIO_PORT_MASK1_MASKP2_MASK          (0x4U)                                              /*!< LPC_GPIO_PORT_MASK1.MASKP2 Mask         */
-#define LPC_GPIO_PORT_MASK1_MASKP2_SHIFT         (2U)                                                /*!< LPC_GPIO_PORT_MASK1.MASKP2 Position     */
-#define LPC_GPIO_PORT_MASK1_MASKP2(x)            (((uint32_t)(((uint32_t)(x))<<2U))&0x4UL)           /*!< LPC_GPIO_PORT_MASK1.MASKP2 Field        */
-#define LPC_GPIO_PORT_MASK1_MASKP3_MASK          (0x8U)                                              /*!< LPC_GPIO_PORT_MASK1.MASKP3 Mask         */
-#define LPC_GPIO_PORT_MASK1_MASKP3_SHIFT         (3U)                                                /*!< LPC_GPIO_PORT_MASK1.MASKP3 Position     */
-#define LPC_GPIO_PORT_MASK1_MASKP3(x)            (((uint32_t)(((uint32_t)(x))<<3U))&0x8UL)           /*!< LPC_GPIO_PORT_MASK1.MASKP3 Field        */
-#define LPC_GPIO_PORT_MASK1_MASKP4_MASK          (0x10U)                                             /*!< LPC_GPIO_PORT_MASK1.MASKP4 Mask         */
-#define LPC_GPIO_PORT_MASK1_MASKP4_SHIFT         (4U)                                                /*!< LPC_GPIO_PORT_MASK1.MASKP4 Position     */
-#define LPC_GPIO_PORT_MASK1_MASKP4(x)            (((uint32_t)(((uint32_t)(x))<<4U))&0x10UL)          /*!< LPC_GPIO_PORT_MASK1.MASKP4 Field        */
-#define LPC_GPIO_PORT_MASK1_MASKP5_MASK          (0x20U)                                             /*!< LPC_GPIO_PORT_MASK1.MASKP5 Mask         */
-#define LPC_GPIO_PORT_MASK1_MASKP5_SHIFT         (5U)                                                /*!< LPC_GPIO_PORT_MASK1.MASKP5 Position     */
-#define LPC_GPIO_PORT_MASK1_MASKP5(x)            (((uint32_t)(((uint32_t)(x))<<5U))&0x20UL)          /*!< LPC_GPIO_PORT_MASK1.MASKP5 Field        */
-#define LPC_GPIO_PORT_MASK1_MASKP6_MASK          (0x40U)                                             /*!< LPC_GPIO_PORT_MASK1.MASKP6 Mask         */
-#define LPC_GPIO_PORT_MASK1_MASKP6_SHIFT         (6U)                                                /*!< LPC_GPIO_PORT_MASK1.MASKP6 Position     */
-#define LPC_GPIO_PORT_MASK1_MASKP6(x)            (((uint32_t)(((uint32_t)(x))<<6U))&0x40UL)          /*!< LPC_GPIO_PORT_MASK1.MASKP6 Field        */
-#define LPC_GPIO_PORT_MASK1_MASKP7_MASK          (0x80U)                                             /*!< LPC_GPIO_PORT_MASK1.MASKP7 Mask         */
-#define LPC_GPIO_PORT_MASK1_MASKP7_SHIFT         (7U)                                                /*!< LPC_GPIO_PORT_MASK1.MASKP7 Position     */
-#define LPC_GPIO_PORT_MASK1_MASKP7(x)            (((uint32_t)(((uint32_t)(x))<<7U))&0x80UL)          /*!< LPC_GPIO_PORT_MASK1.MASKP7 Field        */
-#define LPC_GPIO_PORT_MASK1_MASKP8_MASK          (0x100U)                                            /*!< LPC_GPIO_PORT_MASK1.MASKP8 Mask         */
-#define LPC_GPIO_PORT_MASK1_MASKP8_SHIFT         (8U)                                                /*!< LPC_GPIO_PORT_MASK1.MASKP8 Position     */
-#define LPC_GPIO_PORT_MASK1_MASKP8(x)            (((uint32_t)(((uint32_t)(x))<<8U))&0x100UL)         /*!< LPC_GPIO_PORT_MASK1.MASKP8 Field        */
-#define LPC_GPIO_PORT_MASK1_MASKP9_MASK          (0x200U)                                            /*!< LPC_GPIO_PORT_MASK1.MASKP9 Mask         */
-#define LPC_GPIO_PORT_MASK1_MASKP9_SHIFT         (9U)                                                /*!< LPC_GPIO_PORT_MASK1.MASKP9 Position     */
-#define LPC_GPIO_PORT_MASK1_MASKP9(x)            (((uint32_t)(((uint32_t)(x))<<9U))&0x200UL)         /*!< LPC_GPIO_PORT_MASK1.MASKP9 Field        */
-#define LPC_GPIO_PORT_MASK1_MASKP10_MASK         (0x400U)                                            /*!< LPC_GPIO_PORT_MASK1.MASKP10 Mask        */
-#define LPC_GPIO_PORT_MASK1_MASKP10_SHIFT        (10U)                                               /*!< LPC_GPIO_PORT_MASK1.MASKP10 Position    */
-#define LPC_GPIO_PORT_MASK1_MASKP10(x)           (((uint32_t)(((uint32_t)(x))<<10U))&0x400UL)        /*!< LPC_GPIO_PORT_MASK1.MASKP10 Field       */
-#define LPC_GPIO_PORT_MASK1_MASKP11_MASK         (0x800U)                                            /*!< LPC_GPIO_PORT_MASK1.MASKP11 Mask        */
-#define LPC_GPIO_PORT_MASK1_MASKP11_SHIFT        (11U)                                               /*!< LPC_GPIO_PORT_MASK1.MASKP11 Position    */
-#define LPC_GPIO_PORT_MASK1_MASKP11(x)           (((uint32_t)(((uint32_t)(x))<<11U))&0x800UL)        /*!< LPC_GPIO_PORT_MASK1.MASKP11 Field       */
-#define LPC_GPIO_PORT_MASK1_MASKP12_MASK         (0x1000U)                                           /*!< LPC_GPIO_PORT_MASK1.MASKP12 Mask        */
-#define LPC_GPIO_PORT_MASK1_MASKP12_SHIFT        (12U)                                               /*!< LPC_GPIO_PORT_MASK1.MASKP12 Position    */
-#define LPC_GPIO_PORT_MASK1_MASKP12(x)           (((uint32_t)(((uint32_t)(x))<<12U))&0x1000UL)       /*!< LPC_GPIO_PORT_MASK1.MASKP12 Field       */
-#define LPC_GPIO_PORT_MASK1_MASKP13_MASK         (0x2000U)                                           /*!< LPC_GPIO_PORT_MASK1.MASKP13 Mask        */
-#define LPC_GPIO_PORT_MASK1_MASKP13_SHIFT        (13U)                                               /*!< LPC_GPIO_PORT_MASK1.MASKP13 Position    */
-#define LPC_GPIO_PORT_MASK1_MASKP13(x)           (((uint32_t)(((uint32_t)(x))<<13U))&0x2000UL)       /*!< LPC_GPIO_PORT_MASK1.MASKP13 Field       */
-#define LPC_GPIO_PORT_MASK1_MASKP14_MASK         (0x4000U)                                           /*!< LPC_GPIO_PORT_MASK1.MASKP14 Mask        */
-#define LPC_GPIO_PORT_MASK1_MASKP14_SHIFT        (14U)                                               /*!< LPC_GPIO_PORT_MASK1.MASKP14 Position    */
-#define LPC_GPIO_PORT_MASK1_MASKP14(x)           (((uint32_t)(((uint32_t)(x))<<14U))&0x4000UL)       /*!< LPC_GPIO_PORT_MASK1.MASKP14 Field       */
-#define LPC_GPIO_PORT_MASK1_MASKP15_MASK         (0x8000U)                                           /*!< LPC_GPIO_PORT_MASK1.MASKP15 Mask        */
-#define LPC_GPIO_PORT_MASK1_MASKP15_SHIFT        (15U)                                               /*!< LPC_GPIO_PORT_MASK1.MASKP15 Position    */
-#define LPC_GPIO_PORT_MASK1_MASKP15(x)           (((uint32_t)(((uint32_t)(x))<<15U))&0x8000UL)       /*!< LPC_GPIO_PORT_MASK1.MASKP15 Field       */
-#define LPC_GPIO_PORT_MASK1_MASKP16_MASK         (0x10000U)                                          /*!< LPC_GPIO_PORT_MASK1.MASKP16 Mask        */
-#define LPC_GPIO_PORT_MASK1_MASKP16_SHIFT        (16U)                                               /*!< LPC_GPIO_PORT_MASK1.MASKP16 Position    */
-#define LPC_GPIO_PORT_MASK1_MASKP16(x)           (((uint32_t)(((uint32_t)(x))<<16U))&0x10000UL)      /*!< LPC_GPIO_PORT_MASK1.MASKP16 Field       */
-#define LPC_GPIO_PORT_MASK1_MASKP17_MASK         (0x20000U)                                          /*!< LPC_GPIO_PORT_MASK1.MASKP17 Mask        */
-#define LPC_GPIO_PORT_MASK1_MASKP17_SHIFT        (17U)                                               /*!< LPC_GPIO_PORT_MASK1.MASKP17 Position    */
-#define LPC_GPIO_PORT_MASK1_MASKP17(x)           (((uint32_t)(((uint32_t)(x))<<17U))&0x20000UL)      /*!< LPC_GPIO_PORT_MASK1.MASKP17 Field       */
-#define LPC_GPIO_PORT_MASK1_MASKP18_MASK         (0x40000U)                                          /*!< LPC_GPIO_PORT_MASK1.MASKP18 Mask        */
-#define LPC_GPIO_PORT_MASK1_MASKP18_SHIFT        (18U)                                               /*!< LPC_GPIO_PORT_MASK1.MASKP18 Position    */
-#define LPC_GPIO_PORT_MASK1_MASKP18(x)           (((uint32_t)(((uint32_t)(x))<<18U))&0x40000UL)      /*!< LPC_GPIO_PORT_MASK1.MASKP18 Field       */
-#define LPC_GPIO_PORT_MASK1_MASKP19_MASK         (0x80000U)                                          /*!< LPC_GPIO_PORT_MASK1.MASKP19 Mask        */
-#define LPC_GPIO_PORT_MASK1_MASKP19_SHIFT        (19U)                                               /*!< LPC_GPIO_PORT_MASK1.MASKP19 Position    */
-#define LPC_GPIO_PORT_MASK1_MASKP19(x)           (((uint32_t)(((uint32_t)(x))<<19U))&0x80000UL)      /*!< LPC_GPIO_PORT_MASK1.MASKP19 Field       */
-#define LPC_GPIO_PORT_MASK1_MASKP20_MASK         (0x100000U)                                         /*!< LPC_GPIO_PORT_MASK1.MASKP20 Mask        */
-#define LPC_GPIO_PORT_MASK1_MASKP20_SHIFT        (20U)                                               /*!< LPC_GPIO_PORT_MASK1.MASKP20 Position    */
-#define LPC_GPIO_PORT_MASK1_MASKP20(x)           (((uint32_t)(((uint32_t)(x))<<20U))&0x100000UL)     /*!< LPC_GPIO_PORT_MASK1.MASKP20 Field       */
-#define LPC_GPIO_PORT_MASK1_MASKP21_MASK         (0x200000U)                                         /*!< LPC_GPIO_PORT_MASK1.MASKP21 Mask        */
-#define LPC_GPIO_PORT_MASK1_MASKP21_SHIFT        (21U)                                               /*!< LPC_GPIO_PORT_MASK1.MASKP21 Position    */
-#define LPC_GPIO_PORT_MASK1_MASKP21(x)           (((uint32_t)(((uint32_t)(x))<<21U))&0x200000UL)     /*!< LPC_GPIO_PORT_MASK1.MASKP21 Field       */
-#define LPC_GPIO_PORT_MASK1_MASKP22_MASK         (0x400000U)                                         /*!< LPC_GPIO_PORT_MASK1.MASKP22 Mask        */
-#define LPC_GPIO_PORT_MASK1_MASKP22_SHIFT        (22U)                                               /*!< LPC_GPIO_PORT_MASK1.MASKP22 Position    */
-#define LPC_GPIO_PORT_MASK1_MASKP22(x)           (((uint32_t)(((uint32_t)(x))<<22U))&0x400000UL)     /*!< LPC_GPIO_PORT_MASK1.MASKP22 Field       */
-#define LPC_GPIO_PORT_MASK1_MASKP23_MASK         (0x800000U)                                         /*!< LPC_GPIO_PORT_MASK1.MASKP23 Mask        */
-#define LPC_GPIO_PORT_MASK1_MASKP23_SHIFT        (23U)                                               /*!< LPC_GPIO_PORT_MASK1.MASKP23 Position    */
-#define LPC_GPIO_PORT_MASK1_MASKP23(x)           (((uint32_t)(((uint32_t)(x))<<23U))&0x800000UL)     /*!< LPC_GPIO_PORT_MASK1.MASKP23 Field       */
-#define LPC_GPIO_PORT_MASK1_MASKP24_MASK         (0x1000000U)                                        /*!< LPC_GPIO_PORT_MASK1.MASKP24 Mask        */
-#define LPC_GPIO_PORT_MASK1_MASKP24_SHIFT        (24U)                                               /*!< LPC_GPIO_PORT_MASK1.MASKP24 Position    */
-#define LPC_GPIO_PORT_MASK1_MASKP24(x)           (((uint32_t)(((uint32_t)(x))<<24U))&0x1000000UL)    /*!< LPC_GPIO_PORT_MASK1.MASKP24 Field       */
-#define LPC_GPIO_PORT_MASK1_MASKP25_MASK         (0x2000000U)                                        /*!< LPC_GPIO_PORT_MASK1.MASKP25 Mask        */
-#define LPC_GPIO_PORT_MASK1_MASKP25_SHIFT        (25U)                                               /*!< LPC_GPIO_PORT_MASK1.MASKP25 Position    */
-#define LPC_GPIO_PORT_MASK1_MASKP25(x)           (((uint32_t)(((uint32_t)(x))<<25U))&0x2000000UL)    /*!< LPC_GPIO_PORT_MASK1.MASKP25 Field       */
-#define LPC_GPIO_PORT_MASK1_MASKP26_MASK         (0x4000000U)                                        /*!< LPC_GPIO_PORT_MASK1.MASKP26 Mask        */
-#define LPC_GPIO_PORT_MASK1_MASKP26_SHIFT        (26U)                                               /*!< LPC_GPIO_PORT_MASK1.MASKP26 Position    */
-#define LPC_GPIO_PORT_MASK1_MASKP26(x)           (((uint32_t)(((uint32_t)(x))<<26U))&0x4000000UL)    /*!< LPC_GPIO_PORT_MASK1.MASKP26 Field       */
-#define LPC_GPIO_PORT_MASK1_MASKP27_MASK         (0x8000000U)                                        /*!< LPC_GPIO_PORT_MASK1.MASKP27 Mask        */
-#define LPC_GPIO_PORT_MASK1_MASKP27_SHIFT        (27U)                                               /*!< LPC_GPIO_PORT_MASK1.MASKP27 Position    */
-#define LPC_GPIO_PORT_MASK1_MASKP27(x)           (((uint32_t)(((uint32_t)(x))<<27U))&0x8000000UL)    /*!< LPC_GPIO_PORT_MASK1.MASKP27 Field       */
-#define LPC_GPIO_PORT_MASK1_MASKP28_MASK         (0x10000000U)                                       /*!< LPC_GPIO_PORT_MASK1.MASKP28 Mask        */
-#define LPC_GPIO_PORT_MASK1_MASKP28_SHIFT        (28U)                                               /*!< LPC_GPIO_PORT_MASK1.MASKP28 Position    */
-#define LPC_GPIO_PORT_MASK1_MASKP28(x)           (((uint32_t)(((uint32_t)(x))<<28U))&0x10000000UL)   /*!< LPC_GPIO_PORT_MASK1.MASKP28 Field       */
-#define LPC_GPIO_PORT_MASK1_MASKP29_MASK         (0x20000000U)                                       /*!< LPC_GPIO_PORT_MASK1.MASKP29 Mask        */
-#define LPC_GPIO_PORT_MASK1_MASKP29_SHIFT        (29U)                                               /*!< LPC_GPIO_PORT_MASK1.MASKP29 Position    */
-#define LPC_GPIO_PORT_MASK1_MASKP29(x)           (((uint32_t)(((uint32_t)(x))<<29U))&0x20000000UL)   /*!< LPC_GPIO_PORT_MASK1.MASKP29 Field       */
-#define LPC_GPIO_PORT_MASK1_MASKP30_MASK         (0x40000000U)                                       /*!< LPC_GPIO_PORT_MASK1.MASKP30 Mask        */
-#define LPC_GPIO_PORT_MASK1_MASKP30_SHIFT        (30U)                                               /*!< LPC_GPIO_PORT_MASK1.MASKP30 Position    */
-#define LPC_GPIO_PORT_MASK1_MASKP30(x)           (((uint32_t)(((uint32_t)(x))<<30U))&0x40000000UL)   /*!< LPC_GPIO_PORT_MASK1.MASKP30 Field       */
-#define LPC_GPIO_PORT_MASK1_MASKP31_MASK         (0x80000000U)                                       /*!< LPC_GPIO_PORT_MASK1.MASKP31 Mask        */
-#define LPC_GPIO_PORT_MASK1_MASKP31_SHIFT        (31U)                                               /*!< LPC_GPIO_PORT_MASK1.MASKP31 Position    */
-#define LPC_GPIO_PORT_MASK1_MASKP31(x)           (((uint32_t)(((uint32_t)(x))<<31U))&0x80000000UL)   /*!< LPC_GPIO_PORT_MASK1.MASKP31 Field       */
-/* ------- PIN0 Bit Fields                          ------ */
-#define LPC_GPIO_PORT_PIN0_PORT0_MASK            (0x1U)                                              /*!< LPC_GPIO_PORT_PIN0.PORT0 Mask           */
-#define LPC_GPIO_PORT_PIN0_PORT0_SHIFT           (0U)                                                /*!< LPC_GPIO_PORT_PIN0.PORT0 Position       */
-#define LPC_GPIO_PORT_PIN0_PORT0(x)              (((uint32_t)(((uint32_t)(x))<<0U))&0x1UL)           /*!< LPC_GPIO_PORT_PIN0.PORT0 Field          */
-#define LPC_GPIO_PORT_PIN0_PORT1_MASK            (0x2U)                                              /*!< LPC_GPIO_PORT_PIN0.PORT1 Mask           */
-#define LPC_GPIO_PORT_PIN0_PORT1_SHIFT           (1U)                                                /*!< LPC_GPIO_PORT_PIN0.PORT1 Position       */
-#define LPC_GPIO_PORT_PIN0_PORT1(x)              (((uint32_t)(((uint32_t)(x))<<1U))&0x2UL)           /*!< LPC_GPIO_PORT_PIN0.PORT1 Field          */
-#define LPC_GPIO_PORT_PIN0_PORT2_MASK            (0x4U)                                              /*!< LPC_GPIO_PORT_PIN0.PORT2 Mask           */
-#define LPC_GPIO_PORT_PIN0_PORT2_SHIFT           (2U)                                                /*!< LPC_GPIO_PORT_PIN0.PORT2 Position       */
-#define LPC_GPIO_PORT_PIN0_PORT2(x)              (((uint32_t)(((uint32_t)(x))<<2U))&0x4UL)           /*!< LPC_GPIO_PORT_PIN0.PORT2 Field          */
-#define LPC_GPIO_PORT_PIN0_PORT3_MASK            (0x8U)                                              /*!< LPC_GPIO_PORT_PIN0.PORT3 Mask           */
-#define LPC_GPIO_PORT_PIN0_PORT3_SHIFT           (3U)                                                /*!< LPC_GPIO_PORT_PIN0.PORT3 Position       */
-#define LPC_GPIO_PORT_PIN0_PORT3(x)              (((uint32_t)(((uint32_t)(x))<<3U))&0x8UL)           /*!< LPC_GPIO_PORT_PIN0.PORT3 Field          */
-#define LPC_GPIO_PORT_PIN0_PORT4_MASK            (0x10U)                                             /*!< LPC_GPIO_PORT_PIN0.PORT4 Mask           */
-#define LPC_GPIO_PORT_PIN0_PORT4_SHIFT           (4U)                                                /*!< LPC_GPIO_PORT_PIN0.PORT4 Position       */
-#define LPC_GPIO_PORT_PIN0_PORT4(x)              (((uint32_t)(((uint32_t)(x))<<4U))&0x10UL)          /*!< LPC_GPIO_PORT_PIN0.PORT4 Field          */
-#define LPC_GPIO_PORT_PIN0_PORT5_MASK            (0x20U)                                             /*!< LPC_GPIO_PORT_PIN0.PORT5 Mask           */
-#define LPC_GPIO_PORT_PIN0_PORT5_SHIFT           (5U)                                                /*!< LPC_GPIO_PORT_PIN0.PORT5 Position       */
-#define LPC_GPIO_PORT_PIN0_PORT5(x)              (((uint32_t)(((uint32_t)(x))<<5U))&0x20UL)          /*!< LPC_GPIO_PORT_PIN0.PORT5 Field          */
-#define LPC_GPIO_PORT_PIN0_PORT6_MASK            (0x40U)                                             /*!< LPC_GPIO_PORT_PIN0.PORT6 Mask           */
-#define LPC_GPIO_PORT_PIN0_PORT6_SHIFT           (6U)                                                /*!< LPC_GPIO_PORT_PIN0.PORT6 Position       */
-#define LPC_GPIO_PORT_PIN0_PORT6(x)              (((uint32_t)(((uint32_t)(x))<<6U))&0x40UL)          /*!< LPC_GPIO_PORT_PIN0.PORT6 Field          */
-#define LPC_GPIO_PORT_PIN0_PORT7_MASK            (0x80U)                                             /*!< LPC_GPIO_PORT_PIN0.PORT7 Mask           */
-#define LPC_GPIO_PORT_PIN0_PORT7_SHIFT           (7U)                                                /*!< LPC_GPIO_PORT_PIN0.PORT7 Position       */
-#define LPC_GPIO_PORT_PIN0_PORT7(x)              (((uint32_t)(((uint32_t)(x))<<7U))&0x80UL)          /*!< LPC_GPIO_PORT_PIN0.PORT7 Field          */
-#define LPC_GPIO_PORT_PIN0_PORT8_MASK            (0x100U)                                            /*!< LPC_GPIO_PORT_PIN0.PORT8 Mask           */
-#define LPC_GPIO_PORT_PIN0_PORT8_SHIFT           (8U)                                                /*!< LPC_GPIO_PORT_PIN0.PORT8 Position       */
-#define LPC_GPIO_PORT_PIN0_PORT8(x)              (((uint32_t)(((uint32_t)(x))<<8U))&0x100UL)         /*!< LPC_GPIO_PORT_PIN0.PORT8 Field          */
-#define LPC_GPIO_PORT_PIN0_PORT9_MASK            (0x200U)                                            /*!< LPC_GPIO_PORT_PIN0.PORT9 Mask           */
-#define LPC_GPIO_PORT_PIN0_PORT9_SHIFT           (9U)                                                /*!< LPC_GPIO_PORT_PIN0.PORT9 Position       */
-#define LPC_GPIO_PORT_PIN0_PORT9(x)              (((uint32_t)(((uint32_t)(x))<<9U))&0x200UL)         /*!< LPC_GPIO_PORT_PIN0.PORT9 Field          */
-#define LPC_GPIO_PORT_PIN0_PORT10_MASK           (0x400U)                                            /*!< LPC_GPIO_PORT_PIN0.PORT10 Mask          */
-#define LPC_GPIO_PORT_PIN0_PORT10_SHIFT          (10U)                                               /*!< LPC_GPIO_PORT_PIN0.PORT10 Position      */
-#define LPC_GPIO_PORT_PIN0_PORT10(x)             (((uint32_t)(((uint32_t)(x))<<10U))&0x400UL)        /*!< LPC_GPIO_PORT_PIN0.PORT10 Field         */
-#define LPC_GPIO_PORT_PIN0_PORT11_MASK           (0x800U)                                            /*!< LPC_GPIO_PORT_PIN0.PORT11 Mask          */
-#define LPC_GPIO_PORT_PIN0_PORT11_SHIFT          (11U)                                               /*!< LPC_GPIO_PORT_PIN0.PORT11 Position      */
-#define LPC_GPIO_PORT_PIN0_PORT11(x)             (((uint32_t)(((uint32_t)(x))<<11U))&0x800UL)        /*!< LPC_GPIO_PORT_PIN0.PORT11 Field         */
-#define LPC_GPIO_PORT_PIN0_PORT12_MASK           (0x1000U)                                           /*!< LPC_GPIO_PORT_PIN0.PORT12 Mask          */
-#define LPC_GPIO_PORT_PIN0_PORT12_SHIFT          (12U)                                               /*!< LPC_GPIO_PORT_PIN0.PORT12 Position      */
-#define LPC_GPIO_PORT_PIN0_PORT12(x)             (((uint32_t)(((uint32_t)(x))<<12U))&0x1000UL)       /*!< LPC_GPIO_PORT_PIN0.PORT12 Field         */
-#define LPC_GPIO_PORT_PIN0_PORT13_MASK           (0x2000U)                                           /*!< LPC_GPIO_PORT_PIN0.PORT13 Mask          */
-#define LPC_GPIO_PORT_PIN0_PORT13_SHIFT          (13U)                                               /*!< LPC_GPIO_PORT_PIN0.PORT13 Position      */
-#define LPC_GPIO_PORT_PIN0_PORT13(x)             (((uint32_t)(((uint32_t)(x))<<13U))&0x2000UL)       /*!< LPC_GPIO_PORT_PIN0.PORT13 Field         */
-#define LPC_GPIO_PORT_PIN0_PORT14_MASK           (0x4000U)                                           /*!< LPC_GPIO_PORT_PIN0.PORT14 Mask          */
-#define LPC_GPIO_PORT_PIN0_PORT14_SHIFT          (14U)                                               /*!< LPC_GPIO_PORT_PIN0.PORT14 Position      */
-#define LPC_GPIO_PORT_PIN0_PORT14(x)             (((uint32_t)(((uint32_t)(x))<<14U))&0x4000UL)       /*!< LPC_GPIO_PORT_PIN0.PORT14 Field         */
-#define LPC_GPIO_PORT_PIN0_PORT15_MASK           (0x8000U)                                           /*!< LPC_GPIO_PORT_PIN0.PORT15 Mask          */
-#define LPC_GPIO_PORT_PIN0_PORT15_SHIFT          (15U)                                               /*!< LPC_GPIO_PORT_PIN0.PORT15 Position      */
-#define LPC_GPIO_PORT_PIN0_PORT15(x)             (((uint32_t)(((uint32_t)(x))<<15U))&0x8000UL)       /*!< LPC_GPIO_PORT_PIN0.PORT15 Field         */
-#define LPC_GPIO_PORT_PIN0_PORT16_MASK           (0x10000U)                                          /*!< LPC_GPIO_PORT_PIN0.PORT16 Mask          */
-#define LPC_GPIO_PORT_PIN0_PORT16_SHIFT          (16U)                                               /*!< LPC_GPIO_PORT_PIN0.PORT16 Position      */
-#define LPC_GPIO_PORT_PIN0_PORT16(x)             (((uint32_t)(((uint32_t)(x))<<16U))&0x10000UL)      /*!< LPC_GPIO_PORT_PIN0.PORT16 Field         */
-#define LPC_GPIO_PORT_PIN0_PORT17_MASK           (0x20000U)                                          /*!< LPC_GPIO_PORT_PIN0.PORT17 Mask          */
-#define LPC_GPIO_PORT_PIN0_PORT17_SHIFT          (17U)                                               /*!< LPC_GPIO_PORT_PIN0.PORT17 Position      */
-#define LPC_GPIO_PORT_PIN0_PORT17(x)             (((uint32_t)(((uint32_t)(x))<<17U))&0x20000UL)      /*!< LPC_GPIO_PORT_PIN0.PORT17 Field         */
-#define LPC_GPIO_PORT_PIN0_PORT18_MASK           (0x40000U)                                          /*!< LPC_GPIO_PORT_PIN0.PORT18 Mask          */
-#define LPC_GPIO_PORT_PIN0_PORT18_SHIFT          (18U)                                               /*!< LPC_GPIO_PORT_PIN0.PORT18 Position      */
-#define LPC_GPIO_PORT_PIN0_PORT18(x)             (((uint32_t)(((uint32_t)(x))<<18U))&0x40000UL)      /*!< LPC_GPIO_PORT_PIN0.PORT18 Field         */
-#define LPC_GPIO_PORT_PIN0_PORT19_MASK           (0x80000U)                                          /*!< LPC_GPIO_PORT_PIN0.PORT19 Mask          */
-#define LPC_GPIO_PORT_PIN0_PORT19_SHIFT          (19U)                                               /*!< LPC_GPIO_PORT_PIN0.PORT19 Position      */
-#define LPC_GPIO_PORT_PIN0_PORT19(x)             (((uint32_t)(((uint32_t)(x))<<19U))&0x80000UL)      /*!< LPC_GPIO_PORT_PIN0.PORT19 Field         */
-#define LPC_GPIO_PORT_PIN0_PORT20_MASK           (0x100000U)                                         /*!< LPC_GPIO_PORT_PIN0.PORT20 Mask          */
-#define LPC_GPIO_PORT_PIN0_PORT20_SHIFT          (20U)                                               /*!< LPC_GPIO_PORT_PIN0.PORT20 Position      */
-#define LPC_GPIO_PORT_PIN0_PORT20(x)             (((uint32_t)(((uint32_t)(x))<<20U))&0x100000UL)     /*!< LPC_GPIO_PORT_PIN0.PORT20 Field         */
-#define LPC_GPIO_PORT_PIN0_PORT21_MASK           (0x200000U)                                         /*!< LPC_GPIO_PORT_PIN0.PORT21 Mask          */
-#define LPC_GPIO_PORT_PIN0_PORT21_SHIFT          (21U)                                               /*!< LPC_GPIO_PORT_PIN0.PORT21 Position      */
-#define LPC_GPIO_PORT_PIN0_PORT21(x)             (((uint32_t)(((uint32_t)(x))<<21U))&0x200000UL)     /*!< LPC_GPIO_PORT_PIN0.PORT21 Field         */
-#define LPC_GPIO_PORT_PIN0_PORT22_MASK           (0x400000U)                                         /*!< LPC_GPIO_PORT_PIN0.PORT22 Mask          */
-#define LPC_GPIO_PORT_PIN0_PORT22_SHIFT          (22U)                                               /*!< LPC_GPIO_PORT_PIN0.PORT22 Position      */
-#define LPC_GPIO_PORT_PIN0_PORT22(x)             (((uint32_t)(((uint32_t)(x))<<22U))&0x400000UL)     /*!< LPC_GPIO_PORT_PIN0.PORT22 Field         */
-#define LPC_GPIO_PORT_PIN0_PORT23_MASK           (0x800000U)                                         /*!< LPC_GPIO_PORT_PIN0.PORT23 Mask          */
-#define LPC_GPIO_PORT_PIN0_PORT23_SHIFT          (23U)                                               /*!< LPC_GPIO_PORT_PIN0.PORT23 Position      */
-#define LPC_GPIO_PORT_PIN0_PORT23(x)             (((uint32_t)(((uint32_t)(x))<<23U))&0x800000UL)     /*!< LPC_GPIO_PORT_PIN0.PORT23 Field         */
-#define LPC_GPIO_PORT_PIN0_PORT24_MASK           (0x1000000U)                                        /*!< LPC_GPIO_PORT_PIN0.PORT24 Mask          */
-#define LPC_GPIO_PORT_PIN0_PORT24_SHIFT          (24U)                                               /*!< LPC_GPIO_PORT_PIN0.PORT24 Position      */
-#define LPC_GPIO_PORT_PIN0_PORT24(x)             (((uint32_t)(((uint32_t)(x))<<24U))&0x1000000UL)    /*!< LPC_GPIO_PORT_PIN0.PORT24 Field         */
-#define LPC_GPIO_PORT_PIN0_PORT25_MASK           (0x2000000U)                                        /*!< LPC_GPIO_PORT_PIN0.PORT25 Mask          */
-#define LPC_GPIO_PORT_PIN0_PORT25_SHIFT          (25U)                                               /*!< LPC_GPIO_PORT_PIN0.PORT25 Position      */
-#define LPC_GPIO_PORT_PIN0_PORT25(x)             (((uint32_t)(((uint32_t)(x))<<25U))&0x2000000UL)    /*!< LPC_GPIO_PORT_PIN0.PORT25 Field         */
-#define LPC_GPIO_PORT_PIN0_PORT26_MASK           (0x4000000U)                                        /*!< LPC_GPIO_PORT_PIN0.PORT26 Mask          */
-#define LPC_GPIO_PORT_PIN0_PORT26_SHIFT          (26U)                                               /*!< LPC_GPIO_PORT_PIN0.PORT26 Position      */
-#define LPC_GPIO_PORT_PIN0_PORT26(x)             (((uint32_t)(((uint32_t)(x))<<26U))&0x4000000UL)    /*!< LPC_GPIO_PORT_PIN0.PORT26 Field         */
-#define LPC_GPIO_PORT_PIN0_PORT27_MASK           (0x8000000U)                                        /*!< LPC_GPIO_PORT_PIN0.PORT27 Mask          */
-#define LPC_GPIO_PORT_PIN0_PORT27_SHIFT          (27U)                                               /*!< LPC_GPIO_PORT_PIN0.PORT27 Position      */
-#define LPC_GPIO_PORT_PIN0_PORT27(x)             (((uint32_t)(((uint32_t)(x))<<27U))&0x8000000UL)    /*!< LPC_GPIO_PORT_PIN0.PORT27 Field         */
-#define LPC_GPIO_PORT_PIN0_PORT28_MASK           (0x10000000U)                                       /*!< LPC_GPIO_PORT_PIN0.PORT28 Mask          */
-#define LPC_GPIO_PORT_PIN0_PORT28_SHIFT          (28U)                                               /*!< LPC_GPIO_PORT_PIN0.PORT28 Position      */
-#define LPC_GPIO_PORT_PIN0_PORT28(x)             (((uint32_t)(((uint32_t)(x))<<28U))&0x10000000UL)   /*!< LPC_GPIO_PORT_PIN0.PORT28 Field         */
-#define LPC_GPIO_PORT_PIN0_PORT29_MASK           (0x20000000U)                                       /*!< LPC_GPIO_PORT_PIN0.PORT29 Mask          */
-#define LPC_GPIO_PORT_PIN0_PORT29_SHIFT          (29U)                                               /*!< LPC_GPIO_PORT_PIN0.PORT29 Position      */
-#define LPC_GPIO_PORT_PIN0_PORT29(x)             (((uint32_t)(((uint32_t)(x))<<29U))&0x20000000UL)   /*!< LPC_GPIO_PORT_PIN0.PORT29 Field         */
-#define LPC_GPIO_PORT_PIN0_PORT30_MASK           (0x40000000U)                                       /*!< LPC_GPIO_PORT_PIN0.PORT30 Mask          */
-#define LPC_GPIO_PORT_PIN0_PORT30_SHIFT          (30U)                                               /*!< LPC_GPIO_PORT_PIN0.PORT30 Position      */
-#define LPC_GPIO_PORT_PIN0_PORT30(x)             (((uint32_t)(((uint32_t)(x))<<30U))&0x40000000UL)   /*!< LPC_GPIO_PORT_PIN0.PORT30 Field         */
-#define LPC_GPIO_PORT_PIN0_PORT31_MASK           (0x80000000U)                                       /*!< LPC_GPIO_PORT_PIN0.PORT31 Mask          */
-#define LPC_GPIO_PORT_PIN0_PORT31_SHIFT          (31U)                                               /*!< LPC_GPIO_PORT_PIN0.PORT31 Position      */
-#define LPC_GPIO_PORT_PIN0_PORT31(x)             (((uint32_t)(((uint32_t)(x))<<31U))&0x80000000UL)   /*!< LPC_GPIO_PORT_PIN0.PORT31 Field         */
-/* ------- PIN1 Bit Fields                          ------ */
-#define LPC_GPIO_PORT_PIN1_PORT0_MASK            (0x1U)                                              /*!< LPC_GPIO_PORT_PIN1.PORT0 Mask           */
-#define LPC_GPIO_PORT_PIN1_PORT0_SHIFT           (0U)                                                /*!< LPC_GPIO_PORT_PIN1.PORT0 Position       */
-#define LPC_GPIO_PORT_PIN1_PORT0(x)              (((uint32_t)(((uint32_t)(x))<<0U))&0x1UL)           /*!< LPC_GPIO_PORT_PIN1.PORT0 Field          */
-#define LPC_GPIO_PORT_PIN1_PORT1_MASK            (0x2U)                                              /*!< LPC_GPIO_PORT_PIN1.PORT1 Mask           */
-#define LPC_GPIO_PORT_PIN1_PORT1_SHIFT           (1U)                                                /*!< LPC_GPIO_PORT_PIN1.PORT1 Position       */
-#define LPC_GPIO_PORT_PIN1_PORT1(x)              (((uint32_t)(((uint32_t)(x))<<1U))&0x2UL)           /*!< LPC_GPIO_PORT_PIN1.PORT1 Field          */
-#define LPC_GPIO_PORT_PIN1_PORT2_MASK            (0x4U)                                              /*!< LPC_GPIO_PORT_PIN1.PORT2 Mask           */
-#define LPC_GPIO_PORT_PIN1_PORT2_SHIFT           (2U)                                                /*!< LPC_GPIO_PORT_PIN1.PORT2 Position       */
-#define LPC_GPIO_PORT_PIN1_PORT2(x)              (((uint32_t)(((uint32_t)(x))<<2U))&0x4UL)           /*!< LPC_GPIO_PORT_PIN1.PORT2 Field          */
-#define LPC_GPIO_PORT_PIN1_PORT3_MASK            (0x8U)                                              /*!< LPC_GPIO_PORT_PIN1.PORT3 Mask           */
-#define LPC_GPIO_PORT_PIN1_PORT3_SHIFT           (3U)                                                /*!< LPC_GPIO_PORT_PIN1.PORT3 Position       */
-#define LPC_GPIO_PORT_PIN1_PORT3(x)              (((uint32_t)(((uint32_t)(x))<<3U))&0x8UL)           /*!< LPC_GPIO_PORT_PIN1.PORT3 Field          */
-#define LPC_GPIO_PORT_PIN1_PORT4_MASK            (0x10U)                                             /*!< LPC_GPIO_PORT_PIN1.PORT4 Mask           */
-#define LPC_GPIO_PORT_PIN1_PORT4_SHIFT           (4U)                                                /*!< LPC_GPIO_PORT_PIN1.PORT4 Position       */
-#define LPC_GPIO_PORT_PIN1_PORT4(x)              (((uint32_t)(((uint32_t)(x))<<4U))&0x10UL)          /*!< LPC_GPIO_PORT_PIN1.PORT4 Field          */
-#define LPC_GPIO_PORT_PIN1_PORT5_MASK            (0x20U)                                             /*!< LPC_GPIO_PORT_PIN1.PORT5 Mask           */
-#define LPC_GPIO_PORT_PIN1_PORT5_SHIFT           (5U)                                                /*!< LPC_GPIO_PORT_PIN1.PORT5 Position       */
-#define LPC_GPIO_PORT_PIN1_PORT5(x)              (((uint32_t)(((uint32_t)(x))<<5U))&0x20UL)          /*!< LPC_GPIO_PORT_PIN1.PORT5 Field          */
-#define LPC_GPIO_PORT_PIN1_PORT6_MASK            (0x40U)                                             /*!< LPC_GPIO_PORT_PIN1.PORT6 Mask           */
-#define LPC_GPIO_PORT_PIN1_PORT6_SHIFT           (6U)                                                /*!< LPC_GPIO_PORT_PIN1.PORT6 Position       */
-#define LPC_GPIO_PORT_PIN1_PORT6(x)              (((uint32_t)(((uint32_t)(x))<<6U))&0x40UL)          /*!< LPC_GPIO_PORT_PIN1.PORT6 Field          */
-#define LPC_GPIO_PORT_PIN1_PORT7_MASK            (0x80U)                                             /*!< LPC_GPIO_PORT_PIN1.PORT7 Mask           */
-#define LPC_GPIO_PORT_PIN1_PORT7_SHIFT           (7U)                                                /*!< LPC_GPIO_PORT_PIN1.PORT7 Position       */
-#define LPC_GPIO_PORT_PIN1_PORT7(x)              (((uint32_t)(((uint32_t)(x))<<7U))&0x80UL)          /*!< LPC_GPIO_PORT_PIN1.PORT7 Field          */
-#define LPC_GPIO_PORT_PIN1_PORT8_MASK            (0x100U)                                            /*!< LPC_GPIO_PORT_PIN1.PORT8 Mask           */
-#define LPC_GPIO_PORT_PIN1_PORT8_SHIFT           (8U)                                                /*!< LPC_GPIO_PORT_PIN1.PORT8 Position       */
-#define LPC_GPIO_PORT_PIN1_PORT8(x)              (((uint32_t)(((uint32_t)(x))<<8U))&0x100UL)         /*!< LPC_GPIO_PORT_PIN1.PORT8 Field          */
-#define LPC_GPIO_PORT_PIN1_PORT9_MASK            (0x200U)                                            /*!< LPC_GPIO_PORT_PIN1.PORT9 Mask           */
-#define LPC_GPIO_PORT_PIN1_PORT9_SHIFT           (9U)                                                /*!< LPC_GPIO_PORT_PIN1.PORT9 Position       */
-#define LPC_GPIO_PORT_PIN1_PORT9(x)              (((uint32_t)(((uint32_t)(x))<<9U))&0x200UL)         /*!< LPC_GPIO_PORT_PIN1.PORT9 Field          */
-#define LPC_GPIO_PORT_PIN1_PORT10_MASK           (0x400U)                                            /*!< LPC_GPIO_PORT_PIN1.PORT10 Mask          */
-#define LPC_GPIO_PORT_PIN1_PORT10_SHIFT          (10U)                                               /*!< LPC_GPIO_PORT_PIN1.PORT10 Position      */
-#define LPC_GPIO_PORT_PIN1_PORT10(x)             (((uint32_t)(((uint32_t)(x))<<10U))&0x400UL)        /*!< LPC_GPIO_PORT_PIN1.PORT10 Field         */
-#define LPC_GPIO_PORT_PIN1_PORT11_MASK           (0x800U)                                            /*!< LPC_GPIO_PORT_PIN1.PORT11 Mask          */
-#define LPC_GPIO_PORT_PIN1_PORT11_SHIFT          (11U)                                               /*!< LPC_GPIO_PORT_PIN1.PORT11 Position      */
-#define LPC_GPIO_PORT_PIN1_PORT11(x)             (((uint32_t)(((uint32_t)(x))<<11U))&0x800UL)        /*!< LPC_GPIO_PORT_PIN1.PORT11 Field         */
-#define LPC_GPIO_PORT_PIN1_PORT12_MASK           (0x1000U)                                           /*!< LPC_GPIO_PORT_PIN1.PORT12 Mask          */
-#define LPC_GPIO_PORT_PIN1_PORT12_SHIFT          (12U)                                               /*!< LPC_GPIO_PORT_PIN1.PORT12 Position      */
-#define LPC_GPIO_PORT_PIN1_PORT12(x)             (((uint32_t)(((uint32_t)(x))<<12U))&0x1000UL)       /*!< LPC_GPIO_PORT_PIN1.PORT12 Field         */
-#define LPC_GPIO_PORT_PIN1_PORT13_MASK           (0x2000U)                                           /*!< LPC_GPIO_PORT_PIN1.PORT13 Mask          */
-#define LPC_GPIO_PORT_PIN1_PORT13_SHIFT          (13U)                                               /*!< LPC_GPIO_PORT_PIN1.PORT13 Position      */
-#define LPC_GPIO_PORT_PIN1_PORT13(x)             (((uint32_t)(((uint32_t)(x))<<13U))&0x2000UL)       /*!< LPC_GPIO_PORT_PIN1.PORT13 Field         */
-#define LPC_GPIO_PORT_PIN1_PORT14_MASK           (0x4000U)                                           /*!< LPC_GPIO_PORT_PIN1.PORT14 Mask          */
-#define LPC_GPIO_PORT_PIN1_PORT14_SHIFT          (14U)                                               /*!< LPC_GPIO_PORT_PIN1.PORT14 Position      */
-#define LPC_GPIO_PORT_PIN1_PORT14(x)             (((uint32_t)(((uint32_t)(x))<<14U))&0x4000UL)       /*!< LPC_GPIO_PORT_PIN1.PORT14 Field         */
-#define LPC_GPIO_PORT_PIN1_PORT15_MASK           (0x8000U)                                           /*!< LPC_GPIO_PORT_PIN1.PORT15 Mask          */
-#define LPC_GPIO_PORT_PIN1_PORT15_SHIFT          (15U)                                               /*!< LPC_GPIO_PORT_PIN1.PORT15 Position      */
-#define LPC_GPIO_PORT_PIN1_PORT15(x)             (((uint32_t)(((uint32_t)(x))<<15U))&0x8000UL)       /*!< LPC_GPIO_PORT_PIN1.PORT15 Field         */
-#define LPC_GPIO_PORT_PIN1_PORT16_MASK           (0x10000U)                                          /*!< LPC_GPIO_PORT_PIN1.PORT16 Mask          */
-#define LPC_GPIO_PORT_PIN1_PORT16_SHIFT          (16U)                                               /*!< LPC_GPIO_PORT_PIN1.PORT16 Position      */
-#define LPC_GPIO_PORT_PIN1_PORT16(x)             (((uint32_t)(((uint32_t)(x))<<16U))&0x10000UL)      /*!< LPC_GPIO_PORT_PIN1.PORT16 Field         */
-#define LPC_GPIO_PORT_PIN1_PORT17_MASK           (0x20000U)                                          /*!< LPC_GPIO_PORT_PIN1.PORT17 Mask          */
-#define LPC_GPIO_PORT_PIN1_PORT17_SHIFT          (17U)                                               /*!< LPC_GPIO_PORT_PIN1.PORT17 Position      */
-#define LPC_GPIO_PORT_PIN1_PORT17(x)             (((uint32_t)(((uint32_t)(x))<<17U))&0x20000UL)      /*!< LPC_GPIO_PORT_PIN1.PORT17 Field         */
-#define LPC_GPIO_PORT_PIN1_PORT18_MASK           (0x40000U)                                          /*!< LPC_GPIO_PORT_PIN1.PORT18 Mask          */
-#define LPC_GPIO_PORT_PIN1_PORT18_SHIFT          (18U)                                               /*!< LPC_GPIO_PORT_PIN1.PORT18 Position      */
-#define LPC_GPIO_PORT_PIN1_PORT18(x)             (((uint32_t)(((uint32_t)(x))<<18U))&0x40000UL)      /*!< LPC_GPIO_PORT_PIN1.PORT18 Field         */
-#define LPC_GPIO_PORT_PIN1_PORT19_MASK           (0x80000U)                                          /*!< LPC_GPIO_PORT_PIN1.PORT19 Mask          */
-#define LPC_GPIO_PORT_PIN1_PORT19_SHIFT          (19U)                                               /*!< LPC_GPIO_PORT_PIN1.PORT19 Position      */
-#define LPC_GPIO_PORT_PIN1_PORT19(x)             (((uint32_t)(((uint32_t)(x))<<19U))&0x80000UL)      /*!< LPC_GPIO_PORT_PIN1.PORT19 Field         */
-#define LPC_GPIO_PORT_PIN1_PORT20_MASK           (0x100000U)                                         /*!< LPC_GPIO_PORT_PIN1.PORT20 Mask          */
-#define LPC_GPIO_PORT_PIN1_PORT20_SHIFT          (20U)                                               /*!< LPC_GPIO_PORT_PIN1.PORT20 Position      */
-#define LPC_GPIO_PORT_PIN1_PORT20(x)             (((uint32_t)(((uint32_t)(x))<<20U))&0x100000UL)     /*!< LPC_GPIO_PORT_PIN1.PORT20 Field         */
-#define LPC_GPIO_PORT_PIN1_PORT21_MASK           (0x200000U)                                         /*!< LPC_GPIO_PORT_PIN1.PORT21 Mask          */
-#define LPC_GPIO_PORT_PIN1_PORT21_SHIFT          (21U)                                               /*!< LPC_GPIO_PORT_PIN1.PORT21 Position      */
-#define LPC_GPIO_PORT_PIN1_PORT21(x)             (((uint32_t)(((uint32_t)(x))<<21U))&0x200000UL)     /*!< LPC_GPIO_PORT_PIN1.PORT21 Field         */
-#define LPC_GPIO_PORT_PIN1_PORT22_MASK           (0x400000U)                                         /*!< LPC_GPIO_PORT_PIN1.PORT22 Mask          */
-#define LPC_GPIO_PORT_PIN1_PORT22_SHIFT          (22U)                                               /*!< LPC_GPIO_PORT_PIN1.PORT22 Position      */
-#define LPC_GPIO_PORT_PIN1_PORT22(x)             (((uint32_t)(((uint32_t)(x))<<22U))&0x400000UL)     /*!< LPC_GPIO_PORT_PIN1.PORT22 Field         */
-#define LPC_GPIO_PORT_PIN1_PORT23_MASK           (0x800000U)                                         /*!< LPC_GPIO_PORT_PIN1.PORT23 Mask          */
-#define LPC_GPIO_PORT_PIN1_PORT23_SHIFT          (23U)                                               /*!< LPC_GPIO_PORT_PIN1.PORT23 Position      */
-#define LPC_GPIO_PORT_PIN1_PORT23(x)             (((uint32_t)(((uint32_t)(x))<<23U))&0x800000UL)     /*!< LPC_GPIO_PORT_PIN1.PORT23 Field         */
-#define LPC_GPIO_PORT_PIN1_PORT24_MASK           (0x1000000U)                                        /*!< LPC_GPIO_PORT_PIN1.PORT24 Mask          */
-#define LPC_GPIO_PORT_PIN1_PORT24_SHIFT          (24U)                                               /*!< LPC_GPIO_PORT_PIN1.PORT24 Position      */
-#define LPC_GPIO_PORT_PIN1_PORT24(x)             (((uint32_t)(((uint32_t)(x))<<24U))&0x1000000UL)    /*!< LPC_GPIO_PORT_PIN1.PORT24 Field         */
-#define LPC_GPIO_PORT_PIN1_PORT25_MASK           (0x2000000U)                                        /*!< LPC_GPIO_PORT_PIN1.PORT25 Mask          */
-#define LPC_GPIO_PORT_PIN1_PORT25_SHIFT          (25U)                                               /*!< LPC_GPIO_PORT_PIN1.PORT25 Position      */
-#define LPC_GPIO_PORT_PIN1_PORT25(x)             (((uint32_t)(((uint32_t)(x))<<25U))&0x2000000UL)    /*!< LPC_GPIO_PORT_PIN1.PORT25 Field         */
-#define LPC_GPIO_PORT_PIN1_PORT26_MASK           (0x4000000U)                                        /*!< LPC_GPIO_PORT_PIN1.PORT26 Mask          */
-#define LPC_GPIO_PORT_PIN1_PORT26_SHIFT          (26U)                                               /*!< LPC_GPIO_PORT_PIN1.PORT26 Position      */
-#define LPC_GPIO_PORT_PIN1_PORT26(x)             (((uint32_t)(((uint32_t)(x))<<26U))&0x4000000UL)    /*!< LPC_GPIO_PORT_PIN1.PORT26 Field         */
-#define LPC_GPIO_PORT_PIN1_PORT27_MASK           (0x8000000U)                                        /*!< LPC_GPIO_PORT_PIN1.PORT27 Mask          */
-#define LPC_GPIO_PORT_PIN1_PORT27_SHIFT          (27U)                                               /*!< LPC_GPIO_PORT_PIN1.PORT27 Position      */
-#define LPC_GPIO_PORT_PIN1_PORT27(x)             (((uint32_t)(((uint32_t)(x))<<27U))&0x8000000UL)    /*!< LPC_GPIO_PORT_PIN1.PORT27 Field         */
-#define LPC_GPIO_PORT_PIN1_PORT28_MASK           (0x10000000U)                                       /*!< LPC_GPIO_PORT_PIN1.PORT28 Mask          */
-#define LPC_GPIO_PORT_PIN1_PORT28_SHIFT          (28U)                                               /*!< LPC_GPIO_PORT_PIN1.PORT28 Position      */
-#define LPC_GPIO_PORT_PIN1_PORT28(x)             (((uint32_t)(((uint32_t)(x))<<28U))&0x10000000UL)   /*!< LPC_GPIO_PORT_PIN1.PORT28 Field         */
-#define LPC_GPIO_PORT_PIN1_PORT29_MASK           (0x20000000U)                                       /*!< LPC_GPIO_PORT_PIN1.PORT29 Mask          */
-#define LPC_GPIO_PORT_PIN1_PORT29_SHIFT          (29U)                                               /*!< LPC_GPIO_PORT_PIN1.PORT29 Position      */
-#define LPC_GPIO_PORT_PIN1_PORT29(x)             (((uint32_t)(((uint32_t)(x))<<29U))&0x20000000UL)   /*!< LPC_GPIO_PORT_PIN1.PORT29 Field         */
-#define LPC_GPIO_PORT_PIN1_PORT30_MASK           (0x40000000U)                                       /*!< LPC_GPIO_PORT_PIN1.PORT30 Mask          */
-#define LPC_GPIO_PORT_PIN1_PORT30_SHIFT          (30U)                                               /*!< LPC_GPIO_PORT_PIN1.PORT30 Position      */
-#define LPC_GPIO_PORT_PIN1_PORT30(x)             (((uint32_t)(((uint32_t)(x))<<30U))&0x40000000UL)   /*!< LPC_GPIO_PORT_PIN1.PORT30 Field         */
-#define LPC_GPIO_PORT_PIN1_PORT31_MASK           (0x80000000U)                                       /*!< LPC_GPIO_PORT_PIN1.PORT31 Mask          */
-#define LPC_GPIO_PORT_PIN1_PORT31_SHIFT          (31U)                                               /*!< LPC_GPIO_PORT_PIN1.PORT31 Position      */
-#define LPC_GPIO_PORT_PIN1_PORT31(x)             (((uint32_t)(((uint32_t)(x))<<31U))&0x80000000UL)   /*!< LPC_GPIO_PORT_PIN1.PORT31 Field         */
-/* ------- MPIN0 Bit Fields                         ------ */
-#define LPC_GPIO_PORT_MPIN0_MPORTP0_MASK         (0x1U)                                              /*!< LPC_GPIO_PORT_MPIN0.MPORTP0 Mask        */
-#define LPC_GPIO_PORT_MPIN0_MPORTP0_SHIFT        (0U)                                                /*!< LPC_GPIO_PORT_MPIN0.MPORTP0 Position    */
-#define LPC_GPIO_PORT_MPIN0_MPORTP0(x)           (((uint32_t)(((uint32_t)(x))<<0U))&0x1UL)           /*!< LPC_GPIO_PORT_MPIN0.MPORTP0 Field       */
-#define LPC_GPIO_PORT_MPIN0_MPORTP1_MASK         (0x2U)                                              /*!< LPC_GPIO_PORT_MPIN0.MPORTP1 Mask        */
-#define LPC_GPIO_PORT_MPIN0_MPORTP1_SHIFT        (1U)                                                /*!< LPC_GPIO_PORT_MPIN0.MPORTP1 Position    */
-#define LPC_GPIO_PORT_MPIN0_MPORTP1(x)           (((uint32_t)(((uint32_t)(x))<<1U))&0x2UL)           /*!< LPC_GPIO_PORT_MPIN0.MPORTP1 Field       */
-#define LPC_GPIO_PORT_MPIN0_MPORTP2_MASK         (0x4U)                                              /*!< LPC_GPIO_PORT_MPIN0.MPORTP2 Mask        */
-#define LPC_GPIO_PORT_MPIN0_MPORTP2_SHIFT        (2U)                                                /*!< LPC_GPIO_PORT_MPIN0.MPORTP2 Position    */
-#define LPC_GPIO_PORT_MPIN0_MPORTP2(x)           (((uint32_t)(((uint32_t)(x))<<2U))&0x4UL)           /*!< LPC_GPIO_PORT_MPIN0.MPORTP2 Field       */
-#define LPC_GPIO_PORT_MPIN0_MPORTP3_MASK         (0x8U)                                              /*!< LPC_GPIO_PORT_MPIN0.MPORTP3 Mask        */
-#define LPC_GPIO_PORT_MPIN0_MPORTP3_SHIFT        (3U)                                                /*!< LPC_GPIO_PORT_MPIN0.MPORTP3 Position    */
-#define LPC_GPIO_PORT_MPIN0_MPORTP3(x)           (((uint32_t)(((uint32_t)(x))<<3U))&0x8UL)           /*!< LPC_GPIO_PORT_MPIN0.MPORTP3 Field       */
-#define LPC_GPIO_PORT_MPIN0_MPORTP4_MASK         (0x10U)                                             /*!< LPC_GPIO_PORT_MPIN0.MPORTP4 Mask        */
-#define LPC_GPIO_PORT_MPIN0_MPORTP4_SHIFT        (4U)                                                /*!< LPC_GPIO_PORT_MPIN0.MPORTP4 Position    */
-#define LPC_GPIO_PORT_MPIN0_MPORTP4(x)           (((uint32_t)(((uint32_t)(x))<<4U))&0x10UL)          /*!< LPC_GPIO_PORT_MPIN0.MPORTP4 Field       */
-#define LPC_GPIO_PORT_MPIN0_MPORTP5_MASK         (0x20U)                                             /*!< LPC_GPIO_PORT_MPIN0.MPORTP5 Mask        */
-#define LPC_GPIO_PORT_MPIN0_MPORTP5_SHIFT        (5U)                                                /*!< LPC_GPIO_PORT_MPIN0.MPORTP5 Position    */
-#define LPC_GPIO_PORT_MPIN0_MPORTP5(x)           (((uint32_t)(((uint32_t)(x))<<5U))&0x20UL)          /*!< LPC_GPIO_PORT_MPIN0.MPORTP5 Field       */
-#define LPC_GPIO_PORT_MPIN0_MPORTP6_MASK         (0x40U)                                             /*!< LPC_GPIO_PORT_MPIN0.MPORTP6 Mask        */
-#define LPC_GPIO_PORT_MPIN0_MPORTP6_SHIFT        (6U)                                                /*!< LPC_GPIO_PORT_MPIN0.MPORTP6 Position    */
-#define LPC_GPIO_PORT_MPIN0_MPORTP6(x)           (((uint32_t)(((uint32_t)(x))<<6U))&0x40UL)          /*!< LPC_GPIO_PORT_MPIN0.MPORTP6 Field       */
-#define LPC_GPIO_PORT_MPIN0_MPORTP7_MASK         (0x80U)                                             /*!< LPC_GPIO_PORT_MPIN0.MPORTP7 Mask        */
-#define LPC_GPIO_PORT_MPIN0_MPORTP7_SHIFT        (7U)                                                /*!< LPC_GPIO_PORT_MPIN0.MPORTP7 Position    */
-#define LPC_GPIO_PORT_MPIN0_MPORTP7(x)           (((uint32_t)(((uint32_t)(x))<<7U))&0x80UL)          /*!< LPC_GPIO_PORT_MPIN0.MPORTP7 Field       */
-#define LPC_GPIO_PORT_MPIN0_MPORTP8_MASK         (0x100U)                                            /*!< LPC_GPIO_PORT_MPIN0.MPORTP8 Mask        */
-#define LPC_GPIO_PORT_MPIN0_MPORTP8_SHIFT        (8U)                                                /*!< LPC_GPIO_PORT_MPIN0.MPORTP8 Position    */
-#define LPC_GPIO_PORT_MPIN0_MPORTP8(x)           (((uint32_t)(((uint32_t)(x))<<8U))&0x100UL)         /*!< LPC_GPIO_PORT_MPIN0.MPORTP8 Field       */
-#define LPC_GPIO_PORT_MPIN0_MPORTP9_MASK         (0x200U)                                            /*!< LPC_GPIO_PORT_MPIN0.MPORTP9 Mask        */
-#define LPC_GPIO_PORT_MPIN0_MPORTP9_SHIFT        (9U)                                                /*!< LPC_GPIO_PORT_MPIN0.MPORTP9 Position    */
-#define LPC_GPIO_PORT_MPIN0_MPORTP9(x)           (((uint32_t)(((uint32_t)(x))<<9U))&0x200UL)         /*!< LPC_GPIO_PORT_MPIN0.MPORTP9 Field       */
-#define LPC_GPIO_PORT_MPIN0_MPORTP10_MASK        (0x400U)                                            /*!< LPC_GPIO_PORT_MPIN0.MPORTP10 Mask       */
-#define LPC_GPIO_PORT_MPIN0_MPORTP10_SHIFT       (10U)                                               /*!< LPC_GPIO_PORT_MPIN0.MPORTP10 Position   */
-#define LPC_GPIO_PORT_MPIN0_MPORTP10(x)          (((uint32_t)(((uint32_t)(x))<<10U))&0x400UL)        /*!< LPC_GPIO_PORT_MPIN0.MPORTP10 Field      */
-#define LPC_GPIO_PORT_MPIN0_MPORTP11_MASK        (0x800U)                                            /*!< LPC_GPIO_PORT_MPIN0.MPORTP11 Mask       */
-#define LPC_GPIO_PORT_MPIN0_MPORTP11_SHIFT       (11U)                                               /*!< LPC_GPIO_PORT_MPIN0.MPORTP11 Position   */
-#define LPC_GPIO_PORT_MPIN0_MPORTP11(x)          (((uint32_t)(((uint32_t)(x))<<11U))&0x800UL)        /*!< LPC_GPIO_PORT_MPIN0.MPORTP11 Field      */
-#define LPC_GPIO_PORT_MPIN0_MPORTP12_MASK        (0x1000U)                                           /*!< LPC_GPIO_PORT_MPIN0.MPORTP12 Mask       */
-#define LPC_GPIO_PORT_MPIN0_MPORTP12_SHIFT       (12U)                                               /*!< LPC_GPIO_PORT_MPIN0.MPORTP12 Position   */
-#define LPC_GPIO_PORT_MPIN0_MPORTP12(x)          (((uint32_t)(((uint32_t)(x))<<12U))&0x1000UL)       /*!< LPC_GPIO_PORT_MPIN0.MPORTP12 Field      */
-#define LPC_GPIO_PORT_MPIN0_MPORTP13_MASK        (0x2000U)                                           /*!< LPC_GPIO_PORT_MPIN0.MPORTP13 Mask       */
-#define LPC_GPIO_PORT_MPIN0_MPORTP13_SHIFT       (13U)                                               /*!< LPC_GPIO_PORT_MPIN0.MPORTP13 Position   */
-#define LPC_GPIO_PORT_MPIN0_MPORTP13(x)          (((uint32_t)(((uint32_t)(x))<<13U))&0x2000UL)       /*!< LPC_GPIO_PORT_MPIN0.MPORTP13 Field      */
-#define LPC_GPIO_PORT_MPIN0_MPORTP14_MASK        (0x4000U)                                           /*!< LPC_GPIO_PORT_MPIN0.MPORTP14 Mask       */
-#define LPC_GPIO_PORT_MPIN0_MPORTP14_SHIFT       (14U)                                               /*!< LPC_GPIO_PORT_MPIN0.MPORTP14 Position   */
-#define LPC_GPIO_PORT_MPIN0_MPORTP14(x)          (((uint32_t)(((uint32_t)(x))<<14U))&0x4000UL)       /*!< LPC_GPIO_PORT_MPIN0.MPORTP14 Field      */
-#define LPC_GPIO_PORT_MPIN0_MPORTP15_MASK        (0x8000U)                                           /*!< LPC_GPIO_PORT_MPIN0.MPORTP15 Mask       */
-#define LPC_GPIO_PORT_MPIN0_MPORTP15_SHIFT       (15U)                                               /*!< LPC_GPIO_PORT_MPIN0.MPORTP15 Position   */
-#define LPC_GPIO_PORT_MPIN0_MPORTP15(x)          (((uint32_t)(((uint32_t)(x))<<15U))&0x8000UL)       /*!< LPC_GPIO_PORT_MPIN0.MPORTP15 Field      */
-#define LPC_GPIO_PORT_MPIN0_MPORTP16_MASK        (0x10000U)                                          /*!< LPC_GPIO_PORT_MPIN0.MPORTP16 Mask       */
-#define LPC_GPIO_PORT_MPIN0_MPORTP16_SHIFT       (16U)                                               /*!< LPC_GPIO_PORT_MPIN0.MPORTP16 Position   */
-#define LPC_GPIO_PORT_MPIN0_MPORTP16(x)          (((uint32_t)(((uint32_t)(x))<<16U))&0x10000UL)      /*!< LPC_GPIO_PORT_MPIN0.MPORTP16 Field      */
-#define LPC_GPIO_PORT_MPIN0_MPORTP17_MASK        (0x20000U)                                          /*!< LPC_GPIO_PORT_MPIN0.MPORTP17 Mask       */
-#define LPC_GPIO_PORT_MPIN0_MPORTP17_SHIFT       (17U)                                               /*!< LPC_GPIO_PORT_MPIN0.MPORTP17 Position   */
-#define LPC_GPIO_PORT_MPIN0_MPORTP17(x)          (((uint32_t)(((uint32_t)(x))<<17U))&0x20000UL)      /*!< LPC_GPIO_PORT_MPIN0.MPORTP17 Field      */
-#define LPC_GPIO_PORT_MPIN0_MPORTP18_MASK        (0x40000U)                                          /*!< LPC_GPIO_PORT_MPIN0.MPORTP18 Mask       */
-#define LPC_GPIO_PORT_MPIN0_MPORTP18_SHIFT       (18U)                                               /*!< LPC_GPIO_PORT_MPIN0.MPORTP18 Position   */
-#define LPC_GPIO_PORT_MPIN0_MPORTP18(x)          (((uint32_t)(((uint32_t)(x))<<18U))&0x40000UL)      /*!< LPC_GPIO_PORT_MPIN0.MPORTP18 Field      */
-#define LPC_GPIO_PORT_MPIN0_MPORTP19_MASK        (0x80000U)                                          /*!< LPC_GPIO_PORT_MPIN0.MPORTP19 Mask       */
-#define LPC_GPIO_PORT_MPIN0_MPORTP19_SHIFT       (19U)                                               /*!< LPC_GPIO_PORT_MPIN0.MPORTP19 Position   */
-#define LPC_GPIO_PORT_MPIN0_MPORTP19(x)          (((uint32_t)(((uint32_t)(x))<<19U))&0x80000UL)      /*!< LPC_GPIO_PORT_MPIN0.MPORTP19 Field      */
-#define LPC_GPIO_PORT_MPIN0_MPORTP20_MASK        (0x100000U)                                         /*!< LPC_GPIO_PORT_MPIN0.MPORTP20 Mask       */
-#define LPC_GPIO_PORT_MPIN0_MPORTP20_SHIFT       (20U)                                               /*!< LPC_GPIO_PORT_MPIN0.MPORTP20 Position   */
-#define LPC_GPIO_PORT_MPIN0_MPORTP20(x)          (((uint32_t)(((uint32_t)(x))<<20U))&0x100000UL)     /*!< LPC_GPIO_PORT_MPIN0.MPORTP20 Field      */
-#define LPC_GPIO_PORT_MPIN0_MPORTP21_MASK        (0x200000U)                                         /*!< LPC_GPIO_PORT_MPIN0.MPORTP21 Mask       */
-#define LPC_GPIO_PORT_MPIN0_MPORTP21_SHIFT       (21U)                                               /*!< LPC_GPIO_PORT_MPIN0.MPORTP21 Position   */
-#define LPC_GPIO_PORT_MPIN0_MPORTP21(x)          (((uint32_t)(((uint32_t)(x))<<21U))&0x200000UL)     /*!< LPC_GPIO_PORT_MPIN0.MPORTP21 Field      */
-#define LPC_GPIO_PORT_MPIN0_MPORTP22_MASK        (0x400000U)                                         /*!< LPC_GPIO_PORT_MPIN0.MPORTP22 Mask       */
-#define LPC_GPIO_PORT_MPIN0_MPORTP22_SHIFT       (22U)                                               /*!< LPC_GPIO_PORT_MPIN0.MPORTP22 Position   */
-#define LPC_GPIO_PORT_MPIN0_MPORTP22(x)          (((uint32_t)(((uint32_t)(x))<<22U))&0x400000UL)     /*!< LPC_GPIO_PORT_MPIN0.MPORTP22 Field      */
-#define LPC_GPIO_PORT_MPIN0_MPORTP23_MASK        (0x800000U)                                         /*!< LPC_GPIO_PORT_MPIN0.MPORTP23 Mask       */
-#define LPC_GPIO_PORT_MPIN0_MPORTP23_SHIFT       (23U)                                               /*!< LPC_GPIO_PORT_MPIN0.MPORTP23 Position   */
-#define LPC_GPIO_PORT_MPIN0_MPORTP23(x)          (((uint32_t)(((uint32_t)(x))<<23U))&0x800000UL)     /*!< LPC_GPIO_PORT_MPIN0.MPORTP23 Field      */
-#define LPC_GPIO_PORT_MPIN0_MPORTP24_MASK        (0x1000000U)                                        /*!< LPC_GPIO_PORT_MPIN0.MPORTP24 Mask       */
-#define LPC_GPIO_PORT_MPIN0_MPORTP24_SHIFT       (24U)                                               /*!< LPC_GPIO_PORT_MPIN0.MPORTP24 Position   */
-#define LPC_GPIO_PORT_MPIN0_MPORTP24(x)          (((uint32_t)(((uint32_t)(x))<<24U))&0x1000000UL)    /*!< LPC_GPIO_PORT_MPIN0.MPORTP24 Field      */
-#define LPC_GPIO_PORT_MPIN0_MPORTP25_MASK        (0x2000000U)                                        /*!< LPC_GPIO_PORT_MPIN0.MPORTP25 Mask       */
-#define LPC_GPIO_PORT_MPIN0_MPORTP25_SHIFT       (25U)                                               /*!< LPC_GPIO_PORT_MPIN0.MPORTP25 Position   */
-#define LPC_GPIO_PORT_MPIN0_MPORTP25(x)          (((uint32_t)(((uint32_t)(x))<<25U))&0x2000000UL)    /*!< LPC_GPIO_PORT_MPIN0.MPORTP25 Field      */
-#define LPC_GPIO_PORT_MPIN0_MPORTP26_MASK        (0x4000000U)                                        /*!< LPC_GPIO_PORT_MPIN0.MPORTP26 Mask       */
-#define LPC_GPIO_PORT_MPIN0_MPORTP26_SHIFT       (26U)                                               /*!< LPC_GPIO_PORT_MPIN0.MPORTP26 Position   */
-#define LPC_GPIO_PORT_MPIN0_MPORTP26(x)          (((uint32_t)(((uint32_t)(x))<<26U))&0x4000000UL)    /*!< LPC_GPIO_PORT_MPIN0.MPORTP26 Field      */
-#define LPC_GPIO_PORT_MPIN0_MPORTP27_MASK        (0x8000000U)                                        /*!< LPC_GPIO_PORT_MPIN0.MPORTP27 Mask       */
-#define LPC_GPIO_PORT_MPIN0_MPORTP27_SHIFT       (27U)                                               /*!< LPC_GPIO_PORT_MPIN0.MPORTP27 Position   */
-#define LPC_GPIO_PORT_MPIN0_MPORTP27(x)          (((uint32_t)(((uint32_t)(x))<<27U))&0x8000000UL)    /*!< LPC_GPIO_PORT_MPIN0.MPORTP27 Field      */
-#define LPC_GPIO_PORT_MPIN0_MPORTP28_MASK        (0x10000000U)                                       /*!< LPC_GPIO_PORT_MPIN0.MPORTP28 Mask       */
-#define LPC_GPIO_PORT_MPIN0_MPORTP28_SHIFT       (28U)                                               /*!< LPC_GPIO_PORT_MPIN0.MPORTP28 Position   */
-#define LPC_GPIO_PORT_MPIN0_MPORTP28(x)          (((uint32_t)(((uint32_t)(x))<<28U))&0x10000000UL)   /*!< LPC_GPIO_PORT_MPIN0.MPORTP28 Field      */
-#define LPC_GPIO_PORT_MPIN0_MPORTP29_MASK        (0x20000000U)                                       /*!< LPC_GPIO_PORT_MPIN0.MPORTP29 Mask       */
-#define LPC_GPIO_PORT_MPIN0_MPORTP29_SHIFT       (29U)                                               /*!< LPC_GPIO_PORT_MPIN0.MPORTP29 Position   */
-#define LPC_GPIO_PORT_MPIN0_MPORTP29(x)          (((uint32_t)(((uint32_t)(x))<<29U))&0x20000000UL)   /*!< LPC_GPIO_PORT_MPIN0.MPORTP29 Field      */
-#define LPC_GPIO_PORT_MPIN0_MPORTP30_MASK        (0x40000000U)                                       /*!< LPC_GPIO_PORT_MPIN0.MPORTP30 Mask       */
-#define LPC_GPIO_PORT_MPIN0_MPORTP30_SHIFT       (30U)                                               /*!< LPC_GPIO_PORT_MPIN0.MPORTP30 Position   */
-#define LPC_GPIO_PORT_MPIN0_MPORTP30(x)          (((uint32_t)(((uint32_t)(x))<<30U))&0x40000000UL)   /*!< LPC_GPIO_PORT_MPIN0.MPORTP30 Field      */
-#define LPC_GPIO_PORT_MPIN0_MPORTP31_MASK        (0x80000000U)                                       /*!< LPC_GPIO_PORT_MPIN0.MPORTP31 Mask       */
-#define LPC_GPIO_PORT_MPIN0_MPORTP31_SHIFT       (31U)                                               /*!< LPC_GPIO_PORT_MPIN0.MPORTP31 Position   */
-#define LPC_GPIO_PORT_MPIN0_MPORTP31(x)          (((uint32_t)(((uint32_t)(x))<<31U))&0x80000000UL)   /*!< LPC_GPIO_PORT_MPIN0.MPORTP31 Field      */
-/* ------- MPIN1 Bit Fields                         ------ */
-#define LPC_GPIO_PORT_MPIN1_MPORTP0_MASK         (0x1U)                                              /*!< LPC_GPIO_PORT_MPIN1.MPORTP0 Mask        */
-#define LPC_GPIO_PORT_MPIN1_MPORTP0_SHIFT        (0U)                                                /*!< LPC_GPIO_PORT_MPIN1.MPORTP0 Position    */
-#define LPC_GPIO_PORT_MPIN1_MPORTP0(x)           (((uint32_t)(((uint32_t)(x))<<0U))&0x1UL)           /*!< LPC_GPIO_PORT_MPIN1.MPORTP0 Field       */
-#define LPC_GPIO_PORT_MPIN1_MPORTP1_MASK         (0x2U)                                              /*!< LPC_GPIO_PORT_MPIN1.MPORTP1 Mask        */
-#define LPC_GPIO_PORT_MPIN1_MPORTP1_SHIFT        (1U)                                                /*!< LPC_GPIO_PORT_MPIN1.MPORTP1 Position    */
-#define LPC_GPIO_PORT_MPIN1_MPORTP1(x)           (((uint32_t)(((uint32_t)(x))<<1U))&0x2UL)           /*!< LPC_GPIO_PORT_MPIN1.MPORTP1 Field       */
-#define LPC_GPIO_PORT_MPIN1_MPORTP2_MASK         (0x4U)                                              /*!< LPC_GPIO_PORT_MPIN1.MPORTP2 Mask        */
-#define LPC_GPIO_PORT_MPIN1_MPORTP2_SHIFT        (2U)                                                /*!< LPC_GPIO_PORT_MPIN1.MPORTP2 Position    */
-#define LPC_GPIO_PORT_MPIN1_MPORTP2(x)           (((uint32_t)(((uint32_t)(x))<<2U))&0x4UL)           /*!< LPC_GPIO_PORT_MPIN1.MPORTP2 Field       */
-#define LPC_GPIO_PORT_MPIN1_MPORTP3_MASK         (0x8U)                                              /*!< LPC_GPIO_PORT_MPIN1.MPORTP3 Mask        */
-#define LPC_GPIO_PORT_MPIN1_MPORTP3_SHIFT        (3U)                                                /*!< LPC_GPIO_PORT_MPIN1.MPORTP3 Position    */
-#define LPC_GPIO_PORT_MPIN1_MPORTP3(x)           (((uint32_t)(((uint32_t)(x))<<3U))&0x8UL)           /*!< LPC_GPIO_PORT_MPIN1.MPORTP3 Field       */
-#define LPC_GPIO_PORT_MPIN1_MPORTP4_MASK         (0x10U)                                             /*!< LPC_GPIO_PORT_MPIN1.MPORTP4 Mask        */
-#define LPC_GPIO_PORT_MPIN1_MPORTP4_SHIFT        (4U)                                                /*!< LPC_GPIO_PORT_MPIN1.MPORTP4 Position    */
-#define LPC_GPIO_PORT_MPIN1_MPORTP4(x)           (((uint32_t)(((uint32_t)(x))<<4U))&0x10UL)          /*!< LPC_GPIO_PORT_MPIN1.MPORTP4 Field       */
-#define LPC_GPIO_PORT_MPIN1_MPORTP5_MASK         (0x20U)                                             /*!< LPC_GPIO_PORT_MPIN1.MPORTP5 Mask        */
-#define LPC_GPIO_PORT_MPIN1_MPORTP5_SHIFT        (5U)                                                /*!< LPC_GPIO_PORT_MPIN1.MPORTP5 Position    */
-#define LPC_GPIO_PORT_MPIN1_MPORTP5(x)           (((uint32_t)(((uint32_t)(x))<<5U))&0x20UL)          /*!< LPC_GPIO_PORT_MPIN1.MPORTP5 Field       */
-#define LPC_GPIO_PORT_MPIN1_MPORTP6_MASK         (0x40U)                                             /*!< LPC_GPIO_PORT_MPIN1.MPORTP6 Mask        */
-#define LPC_GPIO_PORT_MPIN1_MPORTP6_SHIFT        (6U)                                                /*!< LPC_GPIO_PORT_MPIN1.MPORTP6 Position    */
-#define LPC_GPIO_PORT_MPIN1_MPORTP6(x)           (((uint32_t)(((uint32_t)(x))<<6U))&0x40UL)          /*!< LPC_GPIO_PORT_MPIN1.MPORTP6 Field       */
-#define LPC_GPIO_PORT_MPIN1_MPORTP7_MASK         (0x80U)                                             /*!< LPC_GPIO_PORT_MPIN1.MPORTP7 Mask        */
-#define LPC_GPIO_PORT_MPIN1_MPORTP7_SHIFT        (7U)                                                /*!< LPC_GPIO_PORT_MPIN1.MPORTP7 Position    */
-#define LPC_GPIO_PORT_MPIN1_MPORTP7(x)           (((uint32_t)(((uint32_t)(x))<<7U))&0x80UL)          /*!< LPC_GPIO_PORT_MPIN1.MPORTP7 Field       */
-#define LPC_GPIO_PORT_MPIN1_MPORTP8_MASK         (0x100U)                                            /*!< LPC_GPIO_PORT_MPIN1.MPORTP8 Mask        */
-#define LPC_GPIO_PORT_MPIN1_MPORTP8_SHIFT        (8U)                                                /*!< LPC_GPIO_PORT_MPIN1.MPORTP8 Position    */
-#define LPC_GPIO_PORT_MPIN1_MPORTP8(x)           (((uint32_t)(((uint32_t)(x))<<8U))&0x100UL)         /*!< LPC_GPIO_PORT_MPIN1.MPORTP8 Field       */
-#define LPC_GPIO_PORT_MPIN1_MPORTP9_MASK         (0x200U)                                            /*!< LPC_GPIO_PORT_MPIN1.MPORTP9 Mask        */
-#define LPC_GPIO_PORT_MPIN1_MPORTP9_SHIFT        (9U)                                                /*!< LPC_GPIO_PORT_MPIN1.MPORTP9 Position    */
-#define LPC_GPIO_PORT_MPIN1_MPORTP9(x)           (((uint32_t)(((uint32_t)(x))<<9U))&0x200UL)         /*!< LPC_GPIO_PORT_MPIN1.MPORTP9 Field       */
-#define LPC_GPIO_PORT_MPIN1_MPORTP10_MASK        (0x400U)                                            /*!< LPC_GPIO_PORT_MPIN1.MPORTP10 Mask       */
-#define LPC_GPIO_PORT_MPIN1_MPORTP10_SHIFT       (10U)                                               /*!< LPC_GPIO_PORT_MPIN1.MPORTP10 Position   */
-#define LPC_GPIO_PORT_MPIN1_MPORTP10(x)          (((uint32_t)(((uint32_t)(x))<<10U))&0x400UL)        /*!< LPC_GPIO_PORT_MPIN1.MPORTP10 Field      */
-#define LPC_GPIO_PORT_MPIN1_MPORTP11_MASK        (0x800U)                                            /*!< LPC_GPIO_PORT_MPIN1.MPORTP11 Mask       */
-#define LPC_GPIO_PORT_MPIN1_MPORTP11_SHIFT       (11U)                                               /*!< LPC_GPIO_PORT_MPIN1.MPORTP11 Position   */
-#define LPC_GPIO_PORT_MPIN1_MPORTP11(x)          (((uint32_t)(((uint32_t)(x))<<11U))&0x800UL)        /*!< LPC_GPIO_PORT_MPIN1.MPORTP11 Field      */
-#define LPC_GPIO_PORT_MPIN1_MPORTP12_MASK        (0x1000U)                                           /*!< LPC_GPIO_PORT_MPIN1.MPORTP12 Mask       */
-#define LPC_GPIO_PORT_MPIN1_MPORTP12_SHIFT       (12U)                                               /*!< LPC_GPIO_PORT_MPIN1.MPORTP12 Position   */
-#define LPC_GPIO_PORT_MPIN1_MPORTP12(x)          (((uint32_t)(((uint32_t)(x))<<12U))&0x1000UL)       /*!< LPC_GPIO_PORT_MPIN1.MPORTP12 Field      */
-#define LPC_GPIO_PORT_MPIN1_MPORTP13_MASK        (0x2000U)                                           /*!< LPC_GPIO_PORT_MPIN1.MPORTP13 Mask       */
-#define LPC_GPIO_PORT_MPIN1_MPORTP13_SHIFT       (13U)                                               /*!< LPC_GPIO_PORT_MPIN1.MPORTP13 Position   */
-#define LPC_GPIO_PORT_MPIN1_MPORTP13(x)          (((uint32_t)(((uint32_t)(x))<<13U))&0x2000UL)       /*!< LPC_GPIO_PORT_MPIN1.MPORTP13 Field      */
-#define LPC_GPIO_PORT_MPIN1_MPORTP14_MASK        (0x4000U)                                           /*!< LPC_GPIO_PORT_MPIN1.MPORTP14 Mask       */
-#define LPC_GPIO_PORT_MPIN1_MPORTP14_SHIFT       (14U)                                               /*!< LPC_GPIO_PORT_MPIN1.MPORTP14 Position   */
-#define LPC_GPIO_PORT_MPIN1_MPORTP14(x)          (((uint32_t)(((uint32_t)(x))<<14U))&0x4000UL)       /*!< LPC_GPIO_PORT_MPIN1.MPORTP14 Field      */
-#define LPC_GPIO_PORT_MPIN1_MPORTP15_MASK        (0x8000U)                                           /*!< LPC_GPIO_PORT_MPIN1.MPORTP15 Mask       */
-#define LPC_GPIO_PORT_MPIN1_MPORTP15_SHIFT       (15U)                                               /*!< LPC_GPIO_PORT_MPIN1.MPORTP15 Position   */
-#define LPC_GPIO_PORT_MPIN1_MPORTP15(x)          (((uint32_t)(((uint32_t)(x))<<15U))&0x8000UL)       /*!< LPC_GPIO_PORT_MPIN1.MPORTP15 Field      */
-#define LPC_GPIO_PORT_MPIN1_MPORTP16_MASK        (0x10000U)                                          /*!< LPC_GPIO_PORT_MPIN1.MPORTP16 Mask       */
-#define LPC_GPIO_PORT_MPIN1_MPORTP16_SHIFT       (16U)                                               /*!< LPC_GPIO_PORT_MPIN1.MPORTP16 Position   */
-#define LPC_GPIO_PORT_MPIN1_MPORTP16(x)          (((uint32_t)(((uint32_t)(x))<<16U))&0x10000UL)      /*!< LPC_GPIO_PORT_MPIN1.MPORTP16 Field      */
-#define LPC_GPIO_PORT_MPIN1_MPORTP17_MASK        (0x20000U)                                          /*!< LPC_GPIO_PORT_MPIN1.MPORTP17 Mask       */
-#define LPC_GPIO_PORT_MPIN1_MPORTP17_SHIFT       (17U)                                               /*!< LPC_GPIO_PORT_MPIN1.MPORTP17 Position   */
-#define LPC_GPIO_PORT_MPIN1_MPORTP17(x)          (((uint32_t)(((uint32_t)(x))<<17U))&0x20000UL)      /*!< LPC_GPIO_PORT_MPIN1.MPORTP17 Field      */
-#define LPC_GPIO_PORT_MPIN1_MPORTP18_MASK        (0x40000U)                                          /*!< LPC_GPIO_PORT_MPIN1.MPORTP18 Mask       */
-#define LPC_GPIO_PORT_MPIN1_MPORTP18_SHIFT       (18U)                                               /*!< LPC_GPIO_PORT_MPIN1.MPORTP18 Position   */
-#define LPC_GPIO_PORT_MPIN1_MPORTP18(x)          (((uint32_t)(((uint32_t)(x))<<18U))&0x40000UL)      /*!< LPC_GPIO_PORT_MPIN1.MPORTP18 Field      */
-#define LPC_GPIO_PORT_MPIN1_MPORTP19_MASK        (0x80000U)                                          /*!< LPC_GPIO_PORT_MPIN1.MPORTP19 Mask       */
-#define LPC_GPIO_PORT_MPIN1_MPORTP19_SHIFT       (19U)                                               /*!< LPC_GPIO_PORT_MPIN1.MPORTP19 Position   */
-#define LPC_GPIO_PORT_MPIN1_MPORTP19(x)          (((uint32_t)(((uint32_t)(x))<<19U))&0x80000UL)      /*!< LPC_GPIO_PORT_MPIN1.MPORTP19 Field      */
-#define LPC_GPIO_PORT_MPIN1_MPORTP20_MASK        (0x100000U)                                         /*!< LPC_GPIO_PORT_MPIN1.MPORTP20 Mask       */
-#define LPC_GPIO_PORT_MPIN1_MPORTP20_SHIFT       (20U)                                               /*!< LPC_GPIO_PORT_MPIN1.MPORTP20 Position   */
-#define LPC_GPIO_PORT_MPIN1_MPORTP20(x)          (((uint32_t)(((uint32_t)(x))<<20U))&0x100000UL)     /*!< LPC_GPIO_PORT_MPIN1.MPORTP20 Field      */
-#define LPC_GPIO_PORT_MPIN1_MPORTP21_MASK        (0x200000U)                                         /*!< LPC_GPIO_PORT_MPIN1.MPORTP21 Mask       */
-#define LPC_GPIO_PORT_MPIN1_MPORTP21_SHIFT       (21U)                                               /*!< LPC_GPIO_PORT_MPIN1.MPORTP21 Position   */
-#define LPC_GPIO_PORT_MPIN1_MPORTP21(x)          (((uint32_t)(((uint32_t)(x))<<21U))&0x200000UL)     /*!< LPC_GPIO_PORT_MPIN1.MPORTP21 Field      */
-#define LPC_GPIO_PORT_MPIN1_MPORTP22_MASK        (0x400000U)                                         /*!< LPC_GPIO_PORT_MPIN1.MPORTP22 Mask       */
-#define LPC_GPIO_PORT_MPIN1_MPORTP22_SHIFT       (22U)                                               /*!< LPC_GPIO_PORT_MPIN1.MPORTP22 Position   */
-#define LPC_GPIO_PORT_MPIN1_MPORTP22(x)          (((uint32_t)(((uint32_t)(x))<<22U))&0x400000UL)     /*!< LPC_GPIO_PORT_MPIN1.MPORTP22 Field      */
-#define LPC_GPIO_PORT_MPIN1_MPORTP23_MASK        (0x800000U)                                         /*!< LPC_GPIO_PORT_MPIN1.MPORTP23 Mask       */
-#define LPC_GPIO_PORT_MPIN1_MPORTP23_SHIFT       (23U)                                               /*!< LPC_GPIO_PORT_MPIN1.MPORTP23 Position   */
-#define LPC_GPIO_PORT_MPIN1_MPORTP23(x)          (((uint32_t)(((uint32_t)(x))<<23U))&0x800000UL)     /*!< LPC_GPIO_PORT_MPIN1.MPORTP23 Field      */
-#define LPC_GPIO_PORT_MPIN1_MPORTP24_MASK        (0x1000000U)                                        /*!< LPC_GPIO_PORT_MPIN1.MPORTP24 Mask       */
-#define LPC_GPIO_PORT_MPIN1_MPORTP24_SHIFT       (24U)                                               /*!< LPC_GPIO_PORT_MPIN1.MPORTP24 Position   */
-#define LPC_GPIO_PORT_MPIN1_MPORTP24(x)          (((uint32_t)(((uint32_t)(x))<<24U))&0x1000000UL)    /*!< LPC_GPIO_PORT_MPIN1.MPORTP24 Field      */
-#define LPC_GPIO_PORT_MPIN1_MPORTP25_MASK        (0x2000000U)                                        /*!< LPC_GPIO_PORT_MPIN1.MPORTP25 Mask       */
-#define LPC_GPIO_PORT_MPIN1_MPORTP25_SHIFT       (25U)                                               /*!< LPC_GPIO_PORT_MPIN1.MPORTP25 Position   */
-#define LPC_GPIO_PORT_MPIN1_MPORTP25(x)          (((uint32_t)(((uint32_t)(x))<<25U))&0x2000000UL)    /*!< LPC_GPIO_PORT_MPIN1.MPORTP25 Field      */
-#define LPC_GPIO_PORT_MPIN1_MPORTP26_MASK        (0x4000000U)                                        /*!< LPC_GPIO_PORT_MPIN1.MPORTP26 Mask       */
-#define LPC_GPIO_PORT_MPIN1_MPORTP26_SHIFT       (26U)                                               /*!< LPC_GPIO_PORT_MPIN1.MPORTP26 Position   */
-#define LPC_GPIO_PORT_MPIN1_MPORTP26(x)          (((uint32_t)(((uint32_t)(x))<<26U))&0x4000000UL)    /*!< LPC_GPIO_PORT_MPIN1.MPORTP26 Field      */
-#define LPC_GPIO_PORT_MPIN1_MPORTP27_MASK        (0x8000000U)                                        /*!< LPC_GPIO_PORT_MPIN1.MPORTP27 Mask       */
-#define LPC_GPIO_PORT_MPIN1_MPORTP27_SHIFT       (27U)                                               /*!< LPC_GPIO_PORT_MPIN1.MPORTP27 Position   */
-#define LPC_GPIO_PORT_MPIN1_MPORTP27(x)          (((uint32_t)(((uint32_t)(x))<<27U))&0x8000000UL)    /*!< LPC_GPIO_PORT_MPIN1.MPORTP27 Field      */
-#define LPC_GPIO_PORT_MPIN1_MPORTP28_MASK        (0x10000000U)                                       /*!< LPC_GPIO_PORT_MPIN1.MPORTP28 Mask       */
-#define LPC_GPIO_PORT_MPIN1_MPORTP28_SHIFT       (28U)                                               /*!< LPC_GPIO_PORT_MPIN1.MPORTP28 Position   */
-#define LPC_GPIO_PORT_MPIN1_MPORTP28(x)          (((uint32_t)(((uint32_t)(x))<<28U))&0x10000000UL)   /*!< LPC_GPIO_PORT_MPIN1.MPORTP28 Field      */
-#define LPC_GPIO_PORT_MPIN1_MPORTP29_MASK        (0x20000000U)                                       /*!< LPC_GPIO_PORT_MPIN1.MPORTP29 Mask       */
-#define LPC_GPIO_PORT_MPIN1_MPORTP29_SHIFT       (29U)                                               /*!< LPC_GPIO_PORT_MPIN1.MPORTP29 Position   */
-#define LPC_GPIO_PORT_MPIN1_MPORTP29(x)          (((uint32_t)(((uint32_t)(x))<<29U))&0x20000000UL)   /*!< LPC_GPIO_PORT_MPIN1.MPORTP29 Field      */
-#define LPC_GPIO_PORT_MPIN1_MPORTP30_MASK        (0x40000000U)                                       /*!< LPC_GPIO_PORT_MPIN1.MPORTP30 Mask       */
-#define LPC_GPIO_PORT_MPIN1_MPORTP30_SHIFT       (30U)                                               /*!< LPC_GPIO_PORT_MPIN1.MPORTP30 Position   */
-#define LPC_GPIO_PORT_MPIN1_MPORTP30(x)          (((uint32_t)(((uint32_t)(x))<<30U))&0x40000000UL)   /*!< LPC_GPIO_PORT_MPIN1.MPORTP30 Field      */
-#define LPC_GPIO_PORT_MPIN1_MPORTP31_MASK        (0x80000000U)                                       /*!< LPC_GPIO_PORT_MPIN1.MPORTP31 Mask       */
-#define LPC_GPIO_PORT_MPIN1_MPORTP31_SHIFT       (31U)                                               /*!< LPC_GPIO_PORT_MPIN1.MPORTP31 Position   */
-#define LPC_GPIO_PORT_MPIN1_MPORTP31(x)          (((uint32_t)(((uint32_t)(x))<<31U))&0x80000000UL)   /*!< LPC_GPIO_PORT_MPIN1.MPORTP31 Field      */
-/* ------- SET0 Bit Fields                          ------ */
-#define LPC_GPIO_PORT_SET0_SETP0_MASK            (0x1U)                                              /*!< LPC_GPIO_PORT_SET0.SETP0 Mask           */
-#define LPC_GPIO_PORT_SET0_SETP0_SHIFT           (0U)                                                /*!< LPC_GPIO_PORT_SET0.SETP0 Position       */
-#define LPC_GPIO_PORT_SET0_SETP0(x)              (((uint32_t)(((uint32_t)(x))<<0U))&0x1UL)           /*!< LPC_GPIO_PORT_SET0.SETP0 Field          */
-#define LPC_GPIO_PORT_SET0_SETP1_MASK            (0x2U)                                              /*!< LPC_GPIO_PORT_SET0.SETP1 Mask           */
-#define LPC_GPIO_PORT_SET0_SETP1_SHIFT           (1U)                                                /*!< LPC_GPIO_PORT_SET0.SETP1 Position       */
-#define LPC_GPIO_PORT_SET0_SETP1(x)              (((uint32_t)(((uint32_t)(x))<<1U))&0x2UL)           /*!< LPC_GPIO_PORT_SET0.SETP1 Field          */
-#define LPC_GPIO_PORT_SET0_SETP2_MASK            (0x4U)                                              /*!< LPC_GPIO_PORT_SET0.SETP2 Mask           */
-#define LPC_GPIO_PORT_SET0_SETP2_SHIFT           (2U)                                                /*!< LPC_GPIO_PORT_SET0.SETP2 Position       */
-#define LPC_GPIO_PORT_SET0_SETP2(x)              (((uint32_t)(((uint32_t)(x))<<2U))&0x4UL)           /*!< LPC_GPIO_PORT_SET0.SETP2 Field          */
-#define LPC_GPIO_PORT_SET0_SETP3_MASK            (0x8U)                                              /*!< LPC_GPIO_PORT_SET0.SETP3 Mask           */
-#define LPC_GPIO_PORT_SET0_SETP3_SHIFT           (3U)                                                /*!< LPC_GPIO_PORT_SET0.SETP3 Position       */
-#define LPC_GPIO_PORT_SET0_SETP3(x)              (((uint32_t)(((uint32_t)(x))<<3U))&0x8UL)           /*!< LPC_GPIO_PORT_SET0.SETP3 Field          */
-#define LPC_GPIO_PORT_SET0_SETP4_MASK            (0x10U)                                             /*!< LPC_GPIO_PORT_SET0.SETP4 Mask           */
-#define LPC_GPIO_PORT_SET0_SETP4_SHIFT           (4U)                                                /*!< LPC_GPIO_PORT_SET0.SETP4 Position       */
-#define LPC_GPIO_PORT_SET0_SETP4(x)              (((uint32_t)(((uint32_t)(x))<<4U))&0x10UL)          /*!< LPC_GPIO_PORT_SET0.SETP4 Field          */
-#define LPC_GPIO_PORT_SET0_SETP5_MASK            (0x20U)                                             /*!< LPC_GPIO_PORT_SET0.SETP5 Mask           */
-#define LPC_GPIO_PORT_SET0_SETP5_SHIFT           (5U)                                                /*!< LPC_GPIO_PORT_SET0.SETP5 Position       */
-#define LPC_GPIO_PORT_SET0_SETP5(x)              (((uint32_t)(((uint32_t)(x))<<5U))&0x20UL)          /*!< LPC_GPIO_PORT_SET0.SETP5 Field          */
-#define LPC_GPIO_PORT_SET0_SETP6_MASK            (0x40U)                                             /*!< LPC_GPIO_PORT_SET0.SETP6 Mask           */
-#define LPC_GPIO_PORT_SET0_SETP6_SHIFT           (6U)                                                /*!< LPC_GPIO_PORT_SET0.SETP6 Position       */
-#define LPC_GPIO_PORT_SET0_SETP6(x)              (((uint32_t)(((uint32_t)(x))<<6U))&0x40UL)          /*!< LPC_GPIO_PORT_SET0.SETP6 Field          */
-#define LPC_GPIO_PORT_SET0_SETP7_MASK            (0x80U)                                             /*!< LPC_GPIO_PORT_SET0.SETP7 Mask           */
-#define LPC_GPIO_PORT_SET0_SETP7_SHIFT           (7U)                                                /*!< LPC_GPIO_PORT_SET0.SETP7 Position       */
-#define LPC_GPIO_PORT_SET0_SETP7(x)              (((uint32_t)(((uint32_t)(x))<<7U))&0x80UL)          /*!< LPC_GPIO_PORT_SET0.SETP7 Field          */
-#define LPC_GPIO_PORT_SET0_SETP8_MASK            (0x100U)                                            /*!< LPC_GPIO_PORT_SET0.SETP8 Mask           */
-#define LPC_GPIO_PORT_SET0_SETP8_SHIFT           (8U)                                                /*!< LPC_GPIO_PORT_SET0.SETP8 Position       */
-#define LPC_GPIO_PORT_SET0_SETP8(x)              (((uint32_t)(((uint32_t)(x))<<8U))&0x100UL)         /*!< LPC_GPIO_PORT_SET0.SETP8 Field          */
-#define LPC_GPIO_PORT_SET0_SETP9_MASK            (0x200U)                                            /*!< LPC_GPIO_PORT_SET0.SETP9 Mask           */
-#define LPC_GPIO_PORT_SET0_SETP9_SHIFT           (9U)                                                /*!< LPC_GPIO_PORT_SET0.SETP9 Position       */
-#define LPC_GPIO_PORT_SET0_SETP9(x)              (((uint32_t)(((uint32_t)(x))<<9U))&0x200UL)         /*!< LPC_GPIO_PORT_SET0.SETP9 Field          */
-#define LPC_GPIO_PORT_SET0_SETP10_MASK           (0x400U)                                            /*!< LPC_GPIO_PORT_SET0.SETP10 Mask          */
-#define LPC_GPIO_PORT_SET0_SETP10_SHIFT          (10U)                                               /*!< LPC_GPIO_PORT_SET0.SETP10 Position      */
-#define LPC_GPIO_PORT_SET0_SETP10(x)             (((uint32_t)(((uint32_t)(x))<<10U))&0x400UL)        /*!< LPC_GPIO_PORT_SET0.SETP10 Field         */
-#define LPC_GPIO_PORT_SET0_SETP11_MASK           (0x800U)                                            /*!< LPC_GPIO_PORT_SET0.SETP11 Mask          */
-#define LPC_GPIO_PORT_SET0_SETP11_SHIFT          (11U)                                               /*!< LPC_GPIO_PORT_SET0.SETP11 Position      */
-#define LPC_GPIO_PORT_SET0_SETP11(x)             (((uint32_t)(((uint32_t)(x))<<11U))&0x800UL)        /*!< LPC_GPIO_PORT_SET0.SETP11 Field         */
-#define LPC_GPIO_PORT_SET0_SETP12_MASK           (0x1000U)                                           /*!< LPC_GPIO_PORT_SET0.SETP12 Mask          */
-#define LPC_GPIO_PORT_SET0_SETP12_SHIFT          (12U)                                               /*!< LPC_GPIO_PORT_SET0.SETP12 Position      */
-#define LPC_GPIO_PORT_SET0_SETP12(x)             (((uint32_t)(((uint32_t)(x))<<12U))&0x1000UL)       /*!< LPC_GPIO_PORT_SET0.SETP12 Field         */
-#define LPC_GPIO_PORT_SET0_SETP13_MASK           (0x2000U)                                           /*!< LPC_GPIO_PORT_SET0.SETP13 Mask          */
-#define LPC_GPIO_PORT_SET0_SETP13_SHIFT          (13U)                                               /*!< LPC_GPIO_PORT_SET0.SETP13 Position      */
-#define LPC_GPIO_PORT_SET0_SETP13(x)             (((uint32_t)(((uint32_t)(x))<<13U))&0x2000UL)       /*!< LPC_GPIO_PORT_SET0.SETP13 Field         */
-#define LPC_GPIO_PORT_SET0_SETP14_MASK           (0x4000U)                                           /*!< LPC_GPIO_PORT_SET0.SETP14 Mask          */
-#define LPC_GPIO_PORT_SET0_SETP14_SHIFT          (14U)                                               /*!< LPC_GPIO_PORT_SET0.SETP14 Position      */
-#define LPC_GPIO_PORT_SET0_SETP14(x)             (((uint32_t)(((uint32_t)(x))<<14U))&0x4000UL)       /*!< LPC_GPIO_PORT_SET0.SETP14 Field         */
-#define LPC_GPIO_PORT_SET0_SETP15_MASK           (0x8000U)                                           /*!< LPC_GPIO_PORT_SET0.SETP15 Mask          */
-#define LPC_GPIO_PORT_SET0_SETP15_SHIFT          (15U)                                               /*!< LPC_GPIO_PORT_SET0.SETP15 Position      */
-#define LPC_GPIO_PORT_SET0_SETP15(x)             (((uint32_t)(((uint32_t)(x))<<15U))&0x8000UL)       /*!< LPC_GPIO_PORT_SET0.SETP15 Field         */
-#define LPC_GPIO_PORT_SET0_SETP16_MASK           (0x10000U)                                          /*!< LPC_GPIO_PORT_SET0.SETP16 Mask          */
-#define LPC_GPIO_PORT_SET0_SETP16_SHIFT          (16U)                                               /*!< LPC_GPIO_PORT_SET0.SETP16 Position      */
-#define LPC_GPIO_PORT_SET0_SETP16(x)             (((uint32_t)(((uint32_t)(x))<<16U))&0x10000UL)      /*!< LPC_GPIO_PORT_SET0.SETP16 Field         */
-#define LPC_GPIO_PORT_SET0_SETP17_MASK           (0x20000U)                                          /*!< LPC_GPIO_PORT_SET0.SETP17 Mask          */
-#define LPC_GPIO_PORT_SET0_SETP17_SHIFT          (17U)                                               /*!< LPC_GPIO_PORT_SET0.SETP17 Position      */
-#define LPC_GPIO_PORT_SET0_SETP17(x)             (((uint32_t)(((uint32_t)(x))<<17U))&0x20000UL)      /*!< LPC_GPIO_PORT_SET0.SETP17 Field         */
-#define LPC_GPIO_PORT_SET0_SETP18_MASK           (0x40000U)                                          /*!< LPC_GPIO_PORT_SET0.SETP18 Mask          */
-#define LPC_GPIO_PORT_SET0_SETP18_SHIFT          (18U)                                               /*!< LPC_GPIO_PORT_SET0.SETP18 Position      */
-#define LPC_GPIO_PORT_SET0_SETP18(x)             (((uint32_t)(((uint32_t)(x))<<18U))&0x40000UL)      /*!< LPC_GPIO_PORT_SET0.SETP18 Field         */
-#define LPC_GPIO_PORT_SET0_SETP19_MASK           (0x80000U)                                          /*!< LPC_GPIO_PORT_SET0.SETP19 Mask          */
-#define LPC_GPIO_PORT_SET0_SETP19_SHIFT          (19U)                                               /*!< LPC_GPIO_PORT_SET0.SETP19 Position      */
-#define LPC_GPIO_PORT_SET0_SETP19(x)             (((uint32_t)(((uint32_t)(x))<<19U))&0x80000UL)      /*!< LPC_GPIO_PORT_SET0.SETP19 Field         */
-#define LPC_GPIO_PORT_SET0_SETP20_MASK           (0x100000U)                                         /*!< LPC_GPIO_PORT_SET0.SETP20 Mask          */
-#define LPC_GPIO_PORT_SET0_SETP20_SHIFT          (20U)                                               /*!< LPC_GPIO_PORT_SET0.SETP20 Position      */
-#define LPC_GPIO_PORT_SET0_SETP20(x)             (((uint32_t)(((uint32_t)(x))<<20U))&0x100000UL)     /*!< LPC_GPIO_PORT_SET0.SETP20 Field         */
-#define LPC_GPIO_PORT_SET0_SETP21_MASK           (0x200000U)                                         /*!< LPC_GPIO_PORT_SET0.SETP21 Mask          */
-#define LPC_GPIO_PORT_SET0_SETP21_SHIFT          (21U)                                               /*!< LPC_GPIO_PORT_SET0.SETP21 Position      */
-#define LPC_GPIO_PORT_SET0_SETP21(x)             (((uint32_t)(((uint32_t)(x))<<21U))&0x200000UL)     /*!< LPC_GPIO_PORT_SET0.SETP21 Field         */
-#define LPC_GPIO_PORT_SET0_SETP22_MASK           (0x400000U)                                         /*!< LPC_GPIO_PORT_SET0.SETP22 Mask          */
-#define LPC_GPIO_PORT_SET0_SETP22_SHIFT          (22U)                                               /*!< LPC_GPIO_PORT_SET0.SETP22 Position      */
-#define LPC_GPIO_PORT_SET0_SETP22(x)             (((uint32_t)(((uint32_t)(x))<<22U))&0x400000UL)     /*!< LPC_GPIO_PORT_SET0.SETP22 Field         */
-#define LPC_GPIO_PORT_SET0_SETP23_MASK           (0x800000U)                                         /*!< LPC_GPIO_PORT_SET0.SETP23 Mask          */
-#define LPC_GPIO_PORT_SET0_SETP23_SHIFT          (23U)                                               /*!< LPC_GPIO_PORT_SET0.SETP23 Position      */
-#define LPC_GPIO_PORT_SET0_SETP23(x)             (((uint32_t)(((uint32_t)(x))<<23U))&0x800000UL)     /*!< LPC_GPIO_PORT_SET0.SETP23 Field         */
-#define LPC_GPIO_PORT_SET0_SETP24_MASK           (0x1000000U)                                        /*!< LPC_GPIO_PORT_SET0.SETP24 Mask          */
-#define LPC_GPIO_PORT_SET0_SETP24_SHIFT          (24U)                                               /*!< LPC_GPIO_PORT_SET0.SETP24 Position      */
-#define LPC_GPIO_PORT_SET0_SETP24(x)             (((uint32_t)(((uint32_t)(x))<<24U))&0x1000000UL)    /*!< LPC_GPIO_PORT_SET0.SETP24 Field         */
-#define LPC_GPIO_PORT_SET0_SETP25_MASK           (0x2000000U)                                        /*!< LPC_GPIO_PORT_SET0.SETP25 Mask          */
-#define LPC_GPIO_PORT_SET0_SETP25_SHIFT          (25U)                                               /*!< LPC_GPIO_PORT_SET0.SETP25 Position      */
-#define LPC_GPIO_PORT_SET0_SETP25(x)             (((uint32_t)(((uint32_t)(x))<<25U))&0x2000000UL)    /*!< LPC_GPIO_PORT_SET0.SETP25 Field         */
-#define LPC_GPIO_PORT_SET0_SETP26_MASK           (0x4000000U)                                        /*!< LPC_GPIO_PORT_SET0.SETP26 Mask          */
-#define LPC_GPIO_PORT_SET0_SETP26_SHIFT          (26U)                                               /*!< LPC_GPIO_PORT_SET0.SETP26 Position      */
-#define LPC_GPIO_PORT_SET0_SETP26(x)             (((uint32_t)(((uint32_t)(x))<<26U))&0x4000000UL)    /*!< LPC_GPIO_PORT_SET0.SETP26 Field         */
-#define LPC_GPIO_PORT_SET0_SETP27_MASK           (0x8000000U)                                        /*!< LPC_GPIO_PORT_SET0.SETP27 Mask          */
-#define LPC_GPIO_PORT_SET0_SETP27_SHIFT          (27U)                                               /*!< LPC_GPIO_PORT_SET0.SETP27 Position      */
-#define LPC_GPIO_PORT_SET0_SETP27(x)             (((uint32_t)(((uint32_t)(x))<<27U))&0x8000000UL)    /*!< LPC_GPIO_PORT_SET0.SETP27 Field         */
-#define LPC_GPIO_PORT_SET0_SETP28_MASK           (0x10000000U)                                       /*!< LPC_GPIO_PORT_SET0.SETP28 Mask          */
-#define LPC_GPIO_PORT_SET0_SETP28_SHIFT          (28U)                                               /*!< LPC_GPIO_PORT_SET0.SETP28 Position      */
-#define LPC_GPIO_PORT_SET0_SETP28(x)             (((uint32_t)(((uint32_t)(x))<<28U))&0x10000000UL)   /*!< LPC_GPIO_PORT_SET0.SETP28 Field         */
-#define LPC_GPIO_PORT_SET0_SETP29_MASK           (0x20000000U)                                       /*!< LPC_GPIO_PORT_SET0.SETP29 Mask          */
-#define LPC_GPIO_PORT_SET0_SETP29_SHIFT          (29U)                                               /*!< LPC_GPIO_PORT_SET0.SETP29 Position      */
-#define LPC_GPIO_PORT_SET0_SETP29(x)             (((uint32_t)(((uint32_t)(x))<<29U))&0x20000000UL)   /*!< LPC_GPIO_PORT_SET0.SETP29 Field         */
-#define LPC_GPIO_PORT_SET0_SETP30_MASK           (0x40000000U)                                       /*!< LPC_GPIO_PORT_SET0.SETP30 Mask          */
-#define LPC_GPIO_PORT_SET0_SETP30_SHIFT          (30U)                                               /*!< LPC_GPIO_PORT_SET0.SETP30 Position      */
-#define LPC_GPIO_PORT_SET0_SETP30(x)             (((uint32_t)(((uint32_t)(x))<<30U))&0x40000000UL)   /*!< LPC_GPIO_PORT_SET0.SETP30 Field         */
-#define LPC_GPIO_PORT_SET0_SETP31_MASK           (0x80000000U)                                       /*!< LPC_GPIO_PORT_SET0.SETP31 Mask          */
-#define LPC_GPIO_PORT_SET0_SETP31_SHIFT          (31U)                                               /*!< LPC_GPIO_PORT_SET0.SETP31 Position      */
-#define LPC_GPIO_PORT_SET0_SETP31(x)             (((uint32_t)(((uint32_t)(x))<<31U))&0x80000000UL)   /*!< LPC_GPIO_PORT_SET0.SETP31 Field         */
-/* ------- SET1 Bit Fields                          ------ */
-#define LPC_GPIO_PORT_SET1_SETP0_MASK            (0x1U)                                              /*!< LPC_GPIO_PORT_SET1.SETP0 Mask           */
-#define LPC_GPIO_PORT_SET1_SETP0_SHIFT           (0U)                                                /*!< LPC_GPIO_PORT_SET1.SETP0 Position       */
-#define LPC_GPIO_PORT_SET1_SETP0(x)              (((uint32_t)(((uint32_t)(x))<<0U))&0x1UL)           /*!< LPC_GPIO_PORT_SET1.SETP0 Field          */
-#define LPC_GPIO_PORT_SET1_SETP1_MASK            (0x2U)                                              /*!< LPC_GPIO_PORT_SET1.SETP1 Mask           */
-#define LPC_GPIO_PORT_SET1_SETP1_SHIFT           (1U)                                                /*!< LPC_GPIO_PORT_SET1.SETP1 Position       */
-#define LPC_GPIO_PORT_SET1_SETP1(x)              (((uint32_t)(((uint32_t)(x))<<1U))&0x2UL)           /*!< LPC_GPIO_PORT_SET1.SETP1 Field          */
-#define LPC_GPIO_PORT_SET1_SETP2_MASK            (0x4U)                                              /*!< LPC_GPIO_PORT_SET1.SETP2 Mask           */
-#define LPC_GPIO_PORT_SET1_SETP2_SHIFT           (2U)                                                /*!< LPC_GPIO_PORT_SET1.SETP2 Position       */
-#define LPC_GPIO_PORT_SET1_SETP2(x)              (((uint32_t)(((uint32_t)(x))<<2U))&0x4UL)           /*!< LPC_GPIO_PORT_SET1.SETP2 Field          */
-#define LPC_GPIO_PORT_SET1_SETP3_MASK            (0x8U)                                              /*!< LPC_GPIO_PORT_SET1.SETP3 Mask           */
-#define LPC_GPIO_PORT_SET1_SETP3_SHIFT           (3U)                                                /*!< LPC_GPIO_PORT_SET1.SETP3 Position       */
-#define LPC_GPIO_PORT_SET1_SETP3(x)              (((uint32_t)(((uint32_t)(x))<<3U))&0x8UL)           /*!< LPC_GPIO_PORT_SET1.SETP3 Field          */
-#define LPC_GPIO_PORT_SET1_SETP4_MASK            (0x10U)                                             /*!< LPC_GPIO_PORT_SET1.SETP4 Mask           */
-#define LPC_GPIO_PORT_SET1_SETP4_SHIFT           (4U)                                                /*!< LPC_GPIO_PORT_SET1.SETP4 Position       */
-#define LPC_GPIO_PORT_SET1_SETP4(x)              (((uint32_t)(((uint32_t)(x))<<4U))&0x10UL)          /*!< LPC_GPIO_PORT_SET1.SETP4 Field          */
-#define LPC_GPIO_PORT_SET1_SETP5_MASK            (0x20U)                                             /*!< LPC_GPIO_PORT_SET1.SETP5 Mask           */
-#define LPC_GPIO_PORT_SET1_SETP5_SHIFT           (5U)                                                /*!< LPC_GPIO_PORT_SET1.SETP5 Position       */
-#define LPC_GPIO_PORT_SET1_SETP5(x)              (((uint32_t)(((uint32_t)(x))<<5U))&0x20UL)          /*!< LPC_GPIO_PORT_SET1.SETP5 Field          */
-#define LPC_GPIO_PORT_SET1_SETP6_MASK            (0x40U)                                             /*!< LPC_GPIO_PORT_SET1.SETP6 Mask           */
-#define LPC_GPIO_PORT_SET1_SETP6_SHIFT           (6U)                                                /*!< LPC_GPIO_PORT_SET1.SETP6 Position       */
-#define LPC_GPIO_PORT_SET1_SETP6(x)              (((uint32_t)(((uint32_t)(x))<<6U))&0x40UL)          /*!< LPC_GPIO_PORT_SET1.SETP6 Field          */
-#define LPC_GPIO_PORT_SET1_SETP7_MASK            (0x80U)                                             /*!< LPC_GPIO_PORT_SET1.SETP7 Mask           */
-#define LPC_GPIO_PORT_SET1_SETP7_SHIFT           (7U)                                                /*!< LPC_GPIO_PORT_SET1.SETP7 Position       */
-#define LPC_GPIO_PORT_SET1_SETP7(x)              (((uint32_t)(((uint32_t)(x))<<7U))&0x80UL)          /*!< LPC_GPIO_PORT_SET1.SETP7 Field          */
-#define LPC_GPIO_PORT_SET1_SETP8_MASK            (0x100U)                                            /*!< LPC_GPIO_PORT_SET1.SETP8 Mask           */
-#define LPC_GPIO_PORT_SET1_SETP8_SHIFT           (8U)                                                /*!< LPC_GPIO_PORT_SET1.SETP8 Position       */
-#define LPC_GPIO_PORT_SET1_SETP8(x)              (((uint32_t)(((uint32_t)(x))<<8U))&0x100UL)         /*!< LPC_GPIO_PORT_SET1.SETP8 Field          */
-#define LPC_GPIO_PORT_SET1_SETP9_MASK            (0x200U)                                            /*!< LPC_GPIO_PORT_SET1.SETP9 Mask           */
-#define LPC_GPIO_PORT_SET1_SETP9_SHIFT           (9U)                                                /*!< LPC_GPIO_PORT_SET1.SETP9 Position       */
-#define LPC_GPIO_PORT_SET1_SETP9(x)              (((uint32_t)(((uint32_t)(x))<<9U))&0x200UL)         /*!< LPC_GPIO_PORT_SET1.SETP9 Field          */
-#define LPC_GPIO_PORT_SET1_SETP10_MASK           (0x400U)                                            /*!< LPC_GPIO_PORT_SET1.SETP10 Mask          */
-#define LPC_GPIO_PORT_SET1_SETP10_SHIFT          (10U)                                               /*!< LPC_GPIO_PORT_SET1.SETP10 Position      */
-#define LPC_GPIO_PORT_SET1_SETP10(x)             (((uint32_t)(((uint32_t)(x))<<10U))&0x400UL)        /*!< LPC_GPIO_PORT_SET1.SETP10 Field         */
-#define LPC_GPIO_PORT_SET1_SETP11_MASK           (0x800U)                                            /*!< LPC_GPIO_PORT_SET1.SETP11 Mask          */
-#define LPC_GPIO_PORT_SET1_SETP11_SHIFT          (11U)                                               /*!< LPC_GPIO_PORT_SET1.SETP11 Position      */
-#define LPC_GPIO_PORT_SET1_SETP11(x)             (((uint32_t)(((uint32_t)(x))<<11U))&0x800UL)        /*!< LPC_GPIO_PORT_SET1.SETP11 Field         */
-#define LPC_GPIO_PORT_SET1_SETP12_MASK           (0x1000U)                                           /*!< LPC_GPIO_PORT_SET1.SETP12 Mask          */
-#define LPC_GPIO_PORT_SET1_SETP12_SHIFT          (12U)                                               /*!< LPC_GPIO_PORT_SET1.SETP12 Position      */
-#define LPC_GPIO_PORT_SET1_SETP12(x)             (((uint32_t)(((uint32_t)(x))<<12U))&0x1000UL)       /*!< LPC_GPIO_PORT_SET1.SETP12 Field         */
-#define LPC_GPIO_PORT_SET1_SETP13_MASK           (0x2000U)                                           /*!< LPC_GPIO_PORT_SET1.SETP13 Mask          */
-#define LPC_GPIO_PORT_SET1_SETP13_SHIFT          (13U)                                               /*!< LPC_GPIO_PORT_SET1.SETP13 Position      */
-#define LPC_GPIO_PORT_SET1_SETP13(x)             (((uint32_t)(((uint32_t)(x))<<13U))&0x2000UL)       /*!< LPC_GPIO_PORT_SET1.SETP13 Field         */
-#define LPC_GPIO_PORT_SET1_SETP14_MASK           (0x4000U)                                           /*!< LPC_GPIO_PORT_SET1.SETP14 Mask          */
-#define LPC_GPIO_PORT_SET1_SETP14_SHIFT          (14U)                                               /*!< LPC_GPIO_PORT_SET1.SETP14 Position      */
-#define LPC_GPIO_PORT_SET1_SETP14(x)             (((uint32_t)(((uint32_t)(x))<<14U))&0x4000UL)       /*!< LPC_GPIO_PORT_SET1.SETP14 Field         */
-#define LPC_GPIO_PORT_SET1_SETP15_MASK           (0x8000U)                                           /*!< LPC_GPIO_PORT_SET1.SETP15 Mask          */
-#define LPC_GPIO_PORT_SET1_SETP15_SHIFT          (15U)                                               /*!< LPC_GPIO_PORT_SET1.SETP15 Position      */
-#define LPC_GPIO_PORT_SET1_SETP15(x)             (((uint32_t)(((uint32_t)(x))<<15U))&0x8000UL)       /*!< LPC_GPIO_PORT_SET1.SETP15 Field         */
-#define LPC_GPIO_PORT_SET1_SETP16_MASK           (0x10000U)                                          /*!< LPC_GPIO_PORT_SET1.SETP16 Mask          */
-#define LPC_GPIO_PORT_SET1_SETP16_SHIFT          (16U)                                               /*!< LPC_GPIO_PORT_SET1.SETP16 Position      */
-#define LPC_GPIO_PORT_SET1_SETP16(x)             (((uint32_t)(((uint32_t)(x))<<16U))&0x10000UL)      /*!< LPC_GPIO_PORT_SET1.SETP16 Field         */
-#define LPC_GPIO_PORT_SET1_SETP17_MASK           (0x20000U)                                          /*!< LPC_GPIO_PORT_SET1.SETP17 Mask          */
-#define LPC_GPIO_PORT_SET1_SETP17_SHIFT          (17U)                                               /*!< LPC_GPIO_PORT_SET1.SETP17 Position      */
-#define LPC_GPIO_PORT_SET1_SETP17(x)             (((uint32_t)(((uint32_t)(x))<<17U))&0x20000UL)      /*!< LPC_GPIO_PORT_SET1.SETP17 Field         */
-#define LPC_GPIO_PORT_SET1_SETP18_MASK           (0x40000U)                                          /*!< LPC_GPIO_PORT_SET1.SETP18 Mask          */
-#define LPC_GPIO_PORT_SET1_SETP18_SHIFT          (18U)                                               /*!< LPC_GPIO_PORT_SET1.SETP18 Position      */
-#define LPC_GPIO_PORT_SET1_SETP18(x)             (((uint32_t)(((uint32_t)(x))<<18U))&0x40000UL)      /*!< LPC_GPIO_PORT_SET1.SETP18 Field         */
-#define LPC_GPIO_PORT_SET1_SETP19_MASK           (0x80000U)                                          /*!< LPC_GPIO_PORT_SET1.SETP19 Mask          */
-#define LPC_GPIO_PORT_SET1_SETP19_SHIFT          (19U)                                               /*!< LPC_GPIO_PORT_SET1.SETP19 Position      */
-#define LPC_GPIO_PORT_SET1_SETP19(x)             (((uint32_t)(((uint32_t)(x))<<19U))&0x80000UL)      /*!< LPC_GPIO_PORT_SET1.SETP19 Field         */
-#define LPC_GPIO_PORT_SET1_SETP20_MASK           (0x100000U)                                         /*!< LPC_GPIO_PORT_SET1.SETP20 Mask          */
-#define LPC_GPIO_PORT_SET1_SETP20_SHIFT          (20U)                                               /*!< LPC_GPIO_PORT_SET1.SETP20 Position      */
-#define LPC_GPIO_PORT_SET1_SETP20(x)             (((uint32_t)(((uint32_t)(x))<<20U))&0x100000UL)     /*!< LPC_GPIO_PORT_SET1.SETP20 Field         */
-#define LPC_GPIO_PORT_SET1_SETP21_MASK           (0x200000U)                                         /*!< LPC_GPIO_PORT_SET1.SETP21 Mask          */
-#define LPC_GPIO_PORT_SET1_SETP21_SHIFT          (21U)                                               /*!< LPC_GPIO_PORT_SET1.SETP21 Position      */
-#define LPC_GPIO_PORT_SET1_SETP21(x)             (((uint32_t)(((uint32_t)(x))<<21U))&0x200000UL)     /*!< LPC_GPIO_PORT_SET1.SETP21 Field         */
-#define LPC_GPIO_PORT_SET1_SETP22_MASK           (0x400000U)                                         /*!< LPC_GPIO_PORT_SET1.SETP22 Mask          */
-#define LPC_GPIO_PORT_SET1_SETP22_SHIFT          (22U)                                               /*!< LPC_GPIO_PORT_SET1.SETP22 Position      */
-#define LPC_GPIO_PORT_SET1_SETP22(x)             (((uint32_t)(((uint32_t)(x))<<22U))&0x400000UL)     /*!< LPC_GPIO_PORT_SET1.SETP22 Field         */
-#define LPC_GPIO_PORT_SET1_SETP23_MASK           (0x800000U)                                         /*!< LPC_GPIO_PORT_SET1.SETP23 Mask          */
-#define LPC_GPIO_PORT_SET1_SETP23_SHIFT          (23U)                                               /*!< LPC_GPIO_PORT_SET1.SETP23 Position      */
-#define LPC_GPIO_PORT_SET1_SETP23(x)             (((uint32_t)(((uint32_t)(x))<<23U))&0x800000UL)     /*!< LPC_GPIO_PORT_SET1.SETP23 Field         */
-#define LPC_GPIO_PORT_SET1_SETP24_MASK           (0x1000000U)                                        /*!< LPC_GPIO_PORT_SET1.SETP24 Mask          */
-#define LPC_GPIO_PORT_SET1_SETP24_SHIFT          (24U)                                               /*!< LPC_GPIO_PORT_SET1.SETP24 Position      */
-#define LPC_GPIO_PORT_SET1_SETP24(x)             (((uint32_t)(((uint32_t)(x))<<24U))&0x1000000UL)    /*!< LPC_GPIO_PORT_SET1.SETP24 Field         */
-#define LPC_GPIO_PORT_SET1_SETP25_MASK           (0x2000000U)                                        /*!< LPC_GPIO_PORT_SET1.SETP25 Mask          */
-#define LPC_GPIO_PORT_SET1_SETP25_SHIFT          (25U)                                               /*!< LPC_GPIO_PORT_SET1.SETP25 Position      */
-#define LPC_GPIO_PORT_SET1_SETP25(x)             (((uint32_t)(((uint32_t)(x))<<25U))&0x2000000UL)    /*!< LPC_GPIO_PORT_SET1.SETP25 Field         */
-#define LPC_GPIO_PORT_SET1_SETP26_MASK           (0x4000000U)                                        /*!< LPC_GPIO_PORT_SET1.SETP26 Mask          */
-#define LPC_GPIO_PORT_SET1_SETP26_SHIFT          (26U)                                               /*!< LPC_GPIO_PORT_SET1.SETP26 Position      */
-#define LPC_GPIO_PORT_SET1_SETP26(x)             (((uint32_t)(((uint32_t)(x))<<26U))&0x4000000UL)    /*!< LPC_GPIO_PORT_SET1.SETP26 Field         */
-#define LPC_GPIO_PORT_SET1_SETP27_MASK           (0x8000000U)                                        /*!< LPC_GPIO_PORT_SET1.SETP27 Mask          */
-#define LPC_GPIO_PORT_SET1_SETP27_SHIFT          (27U)                                               /*!< LPC_GPIO_PORT_SET1.SETP27 Position      */
-#define LPC_GPIO_PORT_SET1_SETP27(x)             (((uint32_t)(((uint32_t)(x))<<27U))&0x8000000UL)    /*!< LPC_GPIO_PORT_SET1.SETP27 Field         */
-#define LPC_GPIO_PORT_SET1_SETP28_MASK           (0x10000000U)                                       /*!< LPC_GPIO_PORT_SET1.SETP28 Mask          */
-#define LPC_GPIO_PORT_SET1_SETP28_SHIFT          (28U)                                               /*!< LPC_GPIO_PORT_SET1.SETP28 Position      */
-#define LPC_GPIO_PORT_SET1_SETP28(x)             (((uint32_t)(((uint32_t)(x))<<28U))&0x10000000UL)   /*!< LPC_GPIO_PORT_SET1.SETP28 Field         */
-#define LPC_GPIO_PORT_SET1_SETP29_MASK           (0x20000000U)                                       /*!< LPC_GPIO_PORT_SET1.SETP29 Mask          */
-#define LPC_GPIO_PORT_SET1_SETP29_SHIFT          (29U)                                               /*!< LPC_GPIO_PORT_SET1.SETP29 Position      */
-#define LPC_GPIO_PORT_SET1_SETP29(x)             (((uint32_t)(((uint32_t)(x))<<29U))&0x20000000UL)   /*!< LPC_GPIO_PORT_SET1.SETP29 Field         */
-#define LPC_GPIO_PORT_SET1_SETP30_MASK           (0x40000000U)                                       /*!< LPC_GPIO_PORT_SET1.SETP30 Mask          */
-#define LPC_GPIO_PORT_SET1_SETP30_SHIFT          (30U)                                               /*!< LPC_GPIO_PORT_SET1.SETP30 Position      */
-#define LPC_GPIO_PORT_SET1_SETP30(x)             (((uint32_t)(((uint32_t)(x))<<30U))&0x40000000UL)   /*!< LPC_GPIO_PORT_SET1.SETP30 Field         */
-#define LPC_GPIO_PORT_SET1_SETP31_MASK           (0x80000000U)                                       /*!< LPC_GPIO_PORT_SET1.SETP31 Mask          */
-#define LPC_GPIO_PORT_SET1_SETP31_SHIFT          (31U)                                               /*!< LPC_GPIO_PORT_SET1.SETP31 Position      */
-#define LPC_GPIO_PORT_SET1_SETP31(x)             (((uint32_t)(((uint32_t)(x))<<31U))&0x80000000UL)   /*!< LPC_GPIO_PORT_SET1.SETP31 Field         */
-/* ------- CLR0 Bit Fields                          ------ */
-#define LPC_GPIO_PORT_CLR0_CLRP00_MASK           (0x1U)                                              /*!< LPC_GPIO_PORT_CLR0.CLRP00 Mask          */
-#define LPC_GPIO_PORT_CLR0_CLRP00_SHIFT          (0U)                                                /*!< LPC_GPIO_PORT_CLR0.CLRP00 Position      */
-#define LPC_GPIO_PORT_CLR0_CLRP00(x)             (((uint32_t)(((uint32_t)(x))<<0U))&0x1UL)           /*!< LPC_GPIO_PORT_CLR0.CLRP00 Field         */
-#define LPC_GPIO_PORT_CLR0_CLRP01_MASK           (0x2U)                                              /*!< LPC_GPIO_PORT_CLR0.CLRP01 Mask          */
-#define LPC_GPIO_PORT_CLR0_CLRP01_SHIFT          (1U)                                                /*!< LPC_GPIO_PORT_CLR0.CLRP01 Position      */
-#define LPC_GPIO_PORT_CLR0_CLRP01(x)             (((uint32_t)(((uint32_t)(x))<<1U))&0x2UL)           /*!< LPC_GPIO_PORT_CLR0.CLRP01 Field         */
-#define LPC_GPIO_PORT_CLR0_CLRP02_MASK           (0x4U)                                              /*!< LPC_GPIO_PORT_CLR0.CLRP02 Mask          */
-#define LPC_GPIO_PORT_CLR0_CLRP02_SHIFT          (2U)                                                /*!< LPC_GPIO_PORT_CLR0.CLRP02 Position      */
-#define LPC_GPIO_PORT_CLR0_CLRP02(x)             (((uint32_t)(((uint32_t)(x))<<2U))&0x4UL)           /*!< LPC_GPIO_PORT_CLR0.CLRP02 Field         */
-#define LPC_GPIO_PORT_CLR0_CLRP03_MASK           (0x8U)                                              /*!< LPC_GPIO_PORT_CLR0.CLRP03 Mask          */
-#define LPC_GPIO_PORT_CLR0_CLRP03_SHIFT          (3U)                                                /*!< LPC_GPIO_PORT_CLR0.CLRP03 Position      */
-#define LPC_GPIO_PORT_CLR0_CLRP03(x)             (((uint32_t)(((uint32_t)(x))<<3U))&0x8UL)           /*!< LPC_GPIO_PORT_CLR0.CLRP03 Field         */
-#define LPC_GPIO_PORT_CLR0_CLRP04_MASK           (0x10U)                                             /*!< LPC_GPIO_PORT_CLR0.CLRP04 Mask          */
-#define LPC_GPIO_PORT_CLR0_CLRP04_SHIFT          (4U)                                                /*!< LPC_GPIO_PORT_CLR0.CLRP04 Position      */
-#define LPC_GPIO_PORT_CLR0_CLRP04(x)             (((uint32_t)(((uint32_t)(x))<<4U))&0x10UL)          /*!< LPC_GPIO_PORT_CLR0.CLRP04 Field         */
-#define LPC_GPIO_PORT_CLR0_CLRP05_MASK           (0x20U)                                             /*!< LPC_GPIO_PORT_CLR0.CLRP05 Mask          */
-#define LPC_GPIO_PORT_CLR0_CLRP05_SHIFT          (5U)                                                /*!< LPC_GPIO_PORT_CLR0.CLRP05 Position      */
-#define LPC_GPIO_PORT_CLR0_CLRP05(x)             (((uint32_t)(((uint32_t)(x))<<5U))&0x20UL)          /*!< LPC_GPIO_PORT_CLR0.CLRP05 Field         */
-#define LPC_GPIO_PORT_CLR0_CLRP06_MASK           (0x40U)                                             /*!< LPC_GPIO_PORT_CLR0.CLRP06 Mask          */
-#define LPC_GPIO_PORT_CLR0_CLRP06_SHIFT          (6U)                                                /*!< LPC_GPIO_PORT_CLR0.CLRP06 Position      */
-#define LPC_GPIO_PORT_CLR0_CLRP06(x)             (((uint32_t)(((uint32_t)(x))<<6U))&0x40UL)          /*!< LPC_GPIO_PORT_CLR0.CLRP06 Field         */
-#define LPC_GPIO_PORT_CLR0_CLRP07_MASK           (0x80U)                                             /*!< LPC_GPIO_PORT_CLR0.CLRP07 Mask          */
-#define LPC_GPIO_PORT_CLR0_CLRP07_SHIFT          (7U)                                                /*!< LPC_GPIO_PORT_CLR0.CLRP07 Position      */
-#define LPC_GPIO_PORT_CLR0_CLRP07(x)             (((uint32_t)(((uint32_t)(x))<<7U))&0x80UL)          /*!< LPC_GPIO_PORT_CLR0.CLRP07 Field         */
-#define LPC_GPIO_PORT_CLR0_CLRP08_MASK           (0x100U)                                            /*!< LPC_GPIO_PORT_CLR0.CLRP08 Mask          */
-#define LPC_GPIO_PORT_CLR0_CLRP08_SHIFT          (8U)                                                /*!< LPC_GPIO_PORT_CLR0.CLRP08 Position      */
-#define LPC_GPIO_PORT_CLR0_CLRP08(x)             (((uint32_t)(((uint32_t)(x))<<8U))&0x100UL)         /*!< LPC_GPIO_PORT_CLR0.CLRP08 Field         */
-#define LPC_GPIO_PORT_CLR0_CLRP09_MASK           (0x200U)                                            /*!< LPC_GPIO_PORT_CLR0.CLRP09 Mask          */
-#define LPC_GPIO_PORT_CLR0_CLRP09_SHIFT          (9U)                                                /*!< LPC_GPIO_PORT_CLR0.CLRP09 Position      */
-#define LPC_GPIO_PORT_CLR0_CLRP09(x)             (((uint32_t)(((uint32_t)(x))<<9U))&0x200UL)         /*!< LPC_GPIO_PORT_CLR0.CLRP09 Field         */
-#define LPC_GPIO_PORT_CLR0_CLRP010_MASK          (0x400U)                                            /*!< LPC_GPIO_PORT_CLR0.CLRP010 Mask         */
-#define LPC_GPIO_PORT_CLR0_CLRP010_SHIFT         (10U)                                               /*!< LPC_GPIO_PORT_CLR0.CLRP010 Position     */
-#define LPC_GPIO_PORT_CLR0_CLRP010(x)            (((uint32_t)(((uint32_t)(x))<<10U))&0x400UL)        /*!< LPC_GPIO_PORT_CLR0.CLRP010 Field        */
-#define LPC_GPIO_PORT_CLR0_CLRP011_MASK          (0x800U)                                            /*!< LPC_GPIO_PORT_CLR0.CLRP011 Mask         */
-#define LPC_GPIO_PORT_CLR0_CLRP011_SHIFT         (11U)                                               /*!< LPC_GPIO_PORT_CLR0.CLRP011 Position     */
-#define LPC_GPIO_PORT_CLR0_CLRP011(x)            (((uint32_t)(((uint32_t)(x))<<11U))&0x800UL)        /*!< LPC_GPIO_PORT_CLR0.CLRP011 Field        */
-#define LPC_GPIO_PORT_CLR0_CLRP012_MASK          (0x1000U)                                           /*!< LPC_GPIO_PORT_CLR0.CLRP012 Mask         */
-#define LPC_GPIO_PORT_CLR0_CLRP012_SHIFT         (12U)                                               /*!< LPC_GPIO_PORT_CLR0.CLRP012 Position     */
-#define LPC_GPIO_PORT_CLR0_CLRP012(x)            (((uint32_t)(((uint32_t)(x))<<12U))&0x1000UL)       /*!< LPC_GPIO_PORT_CLR0.CLRP012 Field        */
-#define LPC_GPIO_PORT_CLR0_CLRP013_MASK          (0x2000U)                                           /*!< LPC_GPIO_PORT_CLR0.CLRP013 Mask         */
-#define LPC_GPIO_PORT_CLR0_CLRP013_SHIFT         (13U)                                               /*!< LPC_GPIO_PORT_CLR0.CLRP013 Position     */
-#define LPC_GPIO_PORT_CLR0_CLRP013(x)            (((uint32_t)(((uint32_t)(x))<<13U))&0x2000UL)       /*!< LPC_GPIO_PORT_CLR0.CLRP013 Field        */
-#define LPC_GPIO_PORT_CLR0_CLRP014_MASK          (0x4000U)                                           /*!< LPC_GPIO_PORT_CLR0.CLRP014 Mask         */
-#define LPC_GPIO_PORT_CLR0_CLRP014_SHIFT         (14U)                                               /*!< LPC_GPIO_PORT_CLR0.CLRP014 Position     */
-#define LPC_GPIO_PORT_CLR0_CLRP014(x)            (((uint32_t)(((uint32_t)(x))<<14U))&0x4000UL)       /*!< LPC_GPIO_PORT_CLR0.CLRP014 Field        */
-#define LPC_GPIO_PORT_CLR0_CLRP015_MASK          (0x8000U)                                           /*!< LPC_GPIO_PORT_CLR0.CLRP015 Mask         */
-#define LPC_GPIO_PORT_CLR0_CLRP015_SHIFT         (15U)                                               /*!< LPC_GPIO_PORT_CLR0.CLRP015 Position     */
-#define LPC_GPIO_PORT_CLR0_CLRP015(x)            (((uint32_t)(((uint32_t)(x))<<15U))&0x8000UL)       /*!< LPC_GPIO_PORT_CLR0.CLRP015 Field        */
-#define LPC_GPIO_PORT_CLR0_CLRP016_MASK          (0x10000U)                                          /*!< LPC_GPIO_PORT_CLR0.CLRP016 Mask         */
-#define LPC_GPIO_PORT_CLR0_CLRP016_SHIFT         (16U)                                               /*!< LPC_GPIO_PORT_CLR0.CLRP016 Position     */
-#define LPC_GPIO_PORT_CLR0_CLRP016(x)            (((uint32_t)(((uint32_t)(x))<<16U))&0x10000UL)      /*!< LPC_GPIO_PORT_CLR0.CLRP016 Field        */
-#define LPC_GPIO_PORT_CLR0_CLRP017_MASK          (0x20000U)                                          /*!< LPC_GPIO_PORT_CLR0.CLRP017 Mask         */
-#define LPC_GPIO_PORT_CLR0_CLRP017_SHIFT         (17U)                                               /*!< LPC_GPIO_PORT_CLR0.CLRP017 Position     */
-#define LPC_GPIO_PORT_CLR0_CLRP017(x)            (((uint32_t)(((uint32_t)(x))<<17U))&0x20000UL)      /*!< LPC_GPIO_PORT_CLR0.CLRP017 Field        */
-#define LPC_GPIO_PORT_CLR0_CLRP018_MASK          (0x40000U)                                          /*!< LPC_GPIO_PORT_CLR0.CLRP018 Mask         */
-#define LPC_GPIO_PORT_CLR0_CLRP018_SHIFT         (18U)                                               /*!< LPC_GPIO_PORT_CLR0.CLRP018 Position     */
-#define LPC_GPIO_PORT_CLR0_CLRP018(x)            (((uint32_t)(((uint32_t)(x))<<18U))&0x40000UL)      /*!< LPC_GPIO_PORT_CLR0.CLRP018 Field        */
-#define LPC_GPIO_PORT_CLR0_CLRP019_MASK          (0x80000U)                                          /*!< LPC_GPIO_PORT_CLR0.CLRP019 Mask         */
-#define LPC_GPIO_PORT_CLR0_CLRP019_SHIFT         (19U)                                               /*!< LPC_GPIO_PORT_CLR0.CLRP019 Position     */
-#define LPC_GPIO_PORT_CLR0_CLRP019(x)            (((uint32_t)(((uint32_t)(x))<<19U))&0x80000UL)      /*!< LPC_GPIO_PORT_CLR0.CLRP019 Field        */
-#define LPC_GPIO_PORT_CLR0_CLRP020_MASK          (0x100000U)                                         /*!< LPC_GPIO_PORT_CLR0.CLRP020 Mask         */
-#define LPC_GPIO_PORT_CLR0_CLRP020_SHIFT         (20U)                                               /*!< LPC_GPIO_PORT_CLR0.CLRP020 Position     */
-#define LPC_GPIO_PORT_CLR0_CLRP020(x)            (((uint32_t)(((uint32_t)(x))<<20U))&0x100000UL)     /*!< LPC_GPIO_PORT_CLR0.CLRP020 Field        */
-#define LPC_GPIO_PORT_CLR0_CLRP021_MASK          (0x200000U)                                         /*!< LPC_GPIO_PORT_CLR0.CLRP021 Mask         */
-#define LPC_GPIO_PORT_CLR0_CLRP021_SHIFT         (21U)                                               /*!< LPC_GPIO_PORT_CLR0.CLRP021 Position     */
-#define LPC_GPIO_PORT_CLR0_CLRP021(x)            (((uint32_t)(((uint32_t)(x))<<21U))&0x200000UL)     /*!< LPC_GPIO_PORT_CLR0.CLRP021 Field        */
-#define LPC_GPIO_PORT_CLR0_CLRP022_MASK          (0x400000U)                                         /*!< LPC_GPIO_PORT_CLR0.CLRP022 Mask         */
-#define LPC_GPIO_PORT_CLR0_CLRP022_SHIFT         (22U)                                               /*!< LPC_GPIO_PORT_CLR0.CLRP022 Position     */
-#define LPC_GPIO_PORT_CLR0_CLRP022(x)            (((uint32_t)(((uint32_t)(x))<<22U))&0x400000UL)     /*!< LPC_GPIO_PORT_CLR0.CLRP022 Field        */
-#define LPC_GPIO_PORT_CLR0_CLRP023_MASK          (0x800000U)                                         /*!< LPC_GPIO_PORT_CLR0.CLRP023 Mask         */
-#define LPC_GPIO_PORT_CLR0_CLRP023_SHIFT         (23U)                                               /*!< LPC_GPIO_PORT_CLR0.CLRP023 Position     */
-#define LPC_GPIO_PORT_CLR0_CLRP023(x)            (((uint32_t)(((uint32_t)(x))<<23U))&0x800000UL)     /*!< LPC_GPIO_PORT_CLR0.CLRP023 Field        */
-#define LPC_GPIO_PORT_CLR0_CLRP024_MASK          (0x1000000U)                                        /*!< LPC_GPIO_PORT_CLR0.CLRP024 Mask         */
-#define LPC_GPIO_PORT_CLR0_CLRP024_SHIFT         (24U)                                               /*!< LPC_GPIO_PORT_CLR0.CLRP024 Position     */
-#define LPC_GPIO_PORT_CLR0_CLRP024(x)            (((uint32_t)(((uint32_t)(x))<<24U))&0x1000000UL)    /*!< LPC_GPIO_PORT_CLR0.CLRP024 Field        */
-#define LPC_GPIO_PORT_CLR0_CLRP025_MASK          (0x2000000U)                                        /*!< LPC_GPIO_PORT_CLR0.CLRP025 Mask         */
-#define LPC_GPIO_PORT_CLR0_CLRP025_SHIFT         (25U)                                               /*!< LPC_GPIO_PORT_CLR0.CLRP025 Position     */
-#define LPC_GPIO_PORT_CLR0_CLRP025(x)            (((uint32_t)(((uint32_t)(x))<<25U))&0x2000000UL)    /*!< LPC_GPIO_PORT_CLR0.CLRP025 Field        */
-#define LPC_GPIO_PORT_CLR0_CLRP026_MASK          (0x4000000U)                                        /*!< LPC_GPIO_PORT_CLR0.CLRP026 Mask         */
-#define LPC_GPIO_PORT_CLR0_CLRP026_SHIFT         (26U)                                               /*!< LPC_GPIO_PORT_CLR0.CLRP026 Position     */
-#define LPC_GPIO_PORT_CLR0_CLRP026(x)            (((uint32_t)(((uint32_t)(x))<<26U))&0x4000000UL)    /*!< LPC_GPIO_PORT_CLR0.CLRP026 Field        */
-#define LPC_GPIO_PORT_CLR0_CLRP027_MASK          (0x8000000U)                                        /*!< LPC_GPIO_PORT_CLR0.CLRP027 Mask         */
-#define LPC_GPIO_PORT_CLR0_CLRP027_SHIFT         (27U)                                               /*!< LPC_GPIO_PORT_CLR0.CLRP027 Position     */
-#define LPC_GPIO_PORT_CLR0_CLRP027(x)            (((uint32_t)(((uint32_t)(x))<<27U))&0x8000000UL)    /*!< LPC_GPIO_PORT_CLR0.CLRP027 Field        */
-#define LPC_GPIO_PORT_CLR0_CLRP028_MASK          (0x10000000U)                                       /*!< LPC_GPIO_PORT_CLR0.CLRP028 Mask         */
-#define LPC_GPIO_PORT_CLR0_CLRP028_SHIFT         (28U)                                               /*!< LPC_GPIO_PORT_CLR0.CLRP028 Position     */
-#define LPC_GPIO_PORT_CLR0_CLRP028(x)            (((uint32_t)(((uint32_t)(x))<<28U))&0x10000000UL)   /*!< LPC_GPIO_PORT_CLR0.CLRP028 Field        */
-#define LPC_GPIO_PORT_CLR0_CLRP029_MASK          (0x20000000U)                                       /*!< LPC_GPIO_PORT_CLR0.CLRP029 Mask         */
-#define LPC_GPIO_PORT_CLR0_CLRP029_SHIFT         (29U)                                               /*!< LPC_GPIO_PORT_CLR0.CLRP029 Position     */
-#define LPC_GPIO_PORT_CLR0_CLRP029(x)            (((uint32_t)(((uint32_t)(x))<<29U))&0x20000000UL)   /*!< LPC_GPIO_PORT_CLR0.CLRP029 Field        */
-#define LPC_GPIO_PORT_CLR0_CLRP030_MASK          (0x40000000U)                                       /*!< LPC_GPIO_PORT_CLR0.CLRP030 Mask         */
-#define LPC_GPIO_PORT_CLR0_CLRP030_SHIFT         (30U)                                               /*!< LPC_GPIO_PORT_CLR0.CLRP030 Position     */
-#define LPC_GPIO_PORT_CLR0_CLRP030(x)            (((uint32_t)(((uint32_t)(x))<<30U))&0x40000000UL)   /*!< LPC_GPIO_PORT_CLR0.CLRP030 Field        */
-#define LPC_GPIO_PORT_CLR0_CLRP031_MASK          (0x80000000U)                                       /*!< LPC_GPIO_PORT_CLR0.CLRP031 Mask         */
-#define LPC_GPIO_PORT_CLR0_CLRP031_SHIFT         (31U)                                               /*!< LPC_GPIO_PORT_CLR0.CLRP031 Position     */
-#define LPC_GPIO_PORT_CLR0_CLRP031(x)            (((uint32_t)(((uint32_t)(x))<<31U))&0x80000000UL)   /*!< LPC_GPIO_PORT_CLR0.CLRP031 Field        */
-/* ------- CLR1 Bit Fields                          ------ */
-#define LPC_GPIO_PORT_CLR1_CLRP00_MASK           (0x1U)                                              /*!< LPC_GPIO_PORT_CLR1.CLRP00 Mask          */
-#define LPC_GPIO_PORT_CLR1_CLRP00_SHIFT          (0U)                                                /*!< LPC_GPIO_PORT_CLR1.CLRP00 Position      */
-#define LPC_GPIO_PORT_CLR1_CLRP00(x)             (((uint32_t)(((uint32_t)(x))<<0U))&0x1UL)           /*!< LPC_GPIO_PORT_CLR1.CLRP00 Field         */
-#define LPC_GPIO_PORT_CLR1_CLRP01_MASK           (0x2U)                                              /*!< LPC_GPIO_PORT_CLR1.CLRP01 Mask          */
-#define LPC_GPIO_PORT_CLR1_CLRP01_SHIFT          (1U)                                                /*!< LPC_GPIO_PORT_CLR1.CLRP01 Position      */
-#define LPC_GPIO_PORT_CLR1_CLRP01(x)             (((uint32_t)(((uint32_t)(x))<<1U))&0x2UL)           /*!< LPC_GPIO_PORT_CLR1.CLRP01 Field         */
-#define LPC_GPIO_PORT_CLR1_CLRP02_MASK           (0x4U)                                              /*!< LPC_GPIO_PORT_CLR1.CLRP02 Mask          */
-#define LPC_GPIO_PORT_CLR1_CLRP02_SHIFT          (2U)                                                /*!< LPC_GPIO_PORT_CLR1.CLRP02 Position      */
-#define LPC_GPIO_PORT_CLR1_CLRP02(x)             (((uint32_t)(((uint32_t)(x))<<2U))&0x4UL)           /*!< LPC_GPIO_PORT_CLR1.CLRP02 Field         */
-#define LPC_GPIO_PORT_CLR1_CLRP03_MASK           (0x8U)                                              /*!< LPC_GPIO_PORT_CLR1.CLRP03 Mask          */
-#define LPC_GPIO_PORT_CLR1_CLRP03_SHIFT          (3U)                                                /*!< LPC_GPIO_PORT_CLR1.CLRP03 Position      */
-#define LPC_GPIO_PORT_CLR1_CLRP03(x)             (((uint32_t)(((uint32_t)(x))<<3U))&0x8UL)           /*!< LPC_GPIO_PORT_CLR1.CLRP03 Field         */
-#define LPC_GPIO_PORT_CLR1_CLRP04_MASK           (0x10U)                                             /*!< LPC_GPIO_PORT_CLR1.CLRP04 Mask          */
-#define LPC_GPIO_PORT_CLR1_CLRP04_SHIFT          (4U)                                                /*!< LPC_GPIO_PORT_CLR1.CLRP04 Position      */
-#define LPC_GPIO_PORT_CLR1_CLRP04(x)             (((uint32_t)(((uint32_t)(x))<<4U))&0x10UL)          /*!< LPC_GPIO_PORT_CLR1.CLRP04 Field         */
-#define LPC_GPIO_PORT_CLR1_CLRP05_MASK           (0x20U)                                             /*!< LPC_GPIO_PORT_CLR1.CLRP05 Mask          */
-#define LPC_GPIO_PORT_CLR1_CLRP05_SHIFT          (5U)                                                /*!< LPC_GPIO_PORT_CLR1.CLRP05 Position      */
-#define LPC_GPIO_PORT_CLR1_CLRP05(x)             (((uint32_t)(((uint32_t)(x))<<5U))&0x20UL)          /*!< LPC_GPIO_PORT_CLR1.CLRP05 Field         */
-#define LPC_GPIO_PORT_CLR1_CLRP06_MASK           (0x40U)                                             /*!< LPC_GPIO_PORT_CLR1.CLRP06 Mask          */
-#define LPC_GPIO_PORT_CLR1_CLRP06_SHIFT          (6U)                                                /*!< LPC_GPIO_PORT_CLR1.CLRP06 Position      */
-#define LPC_GPIO_PORT_CLR1_CLRP06(x)             (((uint32_t)(((uint32_t)(x))<<6U))&0x40UL)          /*!< LPC_GPIO_PORT_CLR1.CLRP06 Field         */
-#define LPC_GPIO_PORT_CLR1_CLRP07_MASK           (0x80U)                                             /*!< LPC_GPIO_PORT_CLR1.CLRP07 Mask          */
-#define LPC_GPIO_PORT_CLR1_CLRP07_SHIFT          (7U)                                                /*!< LPC_GPIO_PORT_CLR1.CLRP07 Position      */
-#define LPC_GPIO_PORT_CLR1_CLRP07(x)             (((uint32_t)(((uint32_t)(x))<<7U))&0x80UL)          /*!< LPC_GPIO_PORT_CLR1.CLRP07 Field         */
-#define LPC_GPIO_PORT_CLR1_CLRP08_MASK           (0x100U)                                            /*!< LPC_GPIO_PORT_CLR1.CLRP08 Mask          */
-#define LPC_GPIO_PORT_CLR1_CLRP08_SHIFT          (8U)                                                /*!< LPC_GPIO_PORT_CLR1.CLRP08 Position      */
-#define LPC_GPIO_PORT_CLR1_CLRP08(x)             (((uint32_t)(((uint32_t)(x))<<8U))&0x100UL)         /*!< LPC_GPIO_PORT_CLR1.CLRP08 Field         */
-#define LPC_GPIO_PORT_CLR1_CLRP09_MASK           (0x200U)                                            /*!< LPC_GPIO_PORT_CLR1.CLRP09 Mask          */
-#define LPC_GPIO_PORT_CLR1_CLRP09_SHIFT          (9U)                                                /*!< LPC_GPIO_PORT_CLR1.CLRP09 Position      */
-#define LPC_GPIO_PORT_CLR1_CLRP09(x)             (((uint32_t)(((uint32_t)(x))<<9U))&0x200UL)         /*!< LPC_GPIO_PORT_CLR1.CLRP09 Field         */
-#define LPC_GPIO_PORT_CLR1_CLRP010_MASK          (0x400U)                                            /*!< LPC_GPIO_PORT_CLR1.CLRP010 Mask         */
-#define LPC_GPIO_PORT_CLR1_CLRP010_SHIFT         (10U)                                               /*!< LPC_GPIO_PORT_CLR1.CLRP010 Position     */
-#define LPC_GPIO_PORT_CLR1_CLRP010(x)            (((uint32_t)(((uint32_t)(x))<<10U))&0x400UL)        /*!< LPC_GPIO_PORT_CLR1.CLRP010 Field        */
-#define LPC_GPIO_PORT_CLR1_CLRP011_MASK          (0x800U)                                            /*!< LPC_GPIO_PORT_CLR1.CLRP011 Mask         */
-#define LPC_GPIO_PORT_CLR1_CLRP011_SHIFT         (11U)                                               /*!< LPC_GPIO_PORT_CLR1.CLRP011 Position     */
-#define LPC_GPIO_PORT_CLR1_CLRP011(x)            (((uint32_t)(((uint32_t)(x))<<11U))&0x800UL)        /*!< LPC_GPIO_PORT_CLR1.CLRP011 Field        */
-#define LPC_GPIO_PORT_CLR1_CLRP012_MASK          (0x1000U)                                           /*!< LPC_GPIO_PORT_CLR1.CLRP012 Mask         */
-#define LPC_GPIO_PORT_CLR1_CLRP012_SHIFT         (12U)                                               /*!< LPC_GPIO_PORT_CLR1.CLRP012 Position     */
-#define LPC_GPIO_PORT_CLR1_CLRP012(x)            (((uint32_t)(((uint32_t)(x))<<12U))&0x1000UL)       /*!< LPC_GPIO_PORT_CLR1.CLRP012 Field        */
-#define LPC_GPIO_PORT_CLR1_CLRP013_MASK          (0x2000U)                                           /*!< LPC_GPIO_PORT_CLR1.CLRP013 Mask         */
-#define LPC_GPIO_PORT_CLR1_CLRP013_SHIFT         (13U)                                               /*!< LPC_GPIO_PORT_CLR1.CLRP013 Position     */
-#define LPC_GPIO_PORT_CLR1_CLRP013(x)            (((uint32_t)(((uint32_t)(x))<<13U))&0x2000UL)       /*!< LPC_GPIO_PORT_CLR1.CLRP013 Field        */
-#define LPC_GPIO_PORT_CLR1_CLRP014_MASK          (0x4000U)                                           /*!< LPC_GPIO_PORT_CLR1.CLRP014 Mask         */
-#define LPC_GPIO_PORT_CLR1_CLRP014_SHIFT         (14U)                                               /*!< LPC_GPIO_PORT_CLR1.CLRP014 Position     */
-#define LPC_GPIO_PORT_CLR1_CLRP014(x)            (((uint32_t)(((uint32_t)(x))<<14U))&0x4000UL)       /*!< LPC_GPIO_PORT_CLR1.CLRP014 Field        */
-#define LPC_GPIO_PORT_CLR1_CLRP015_MASK          (0x8000U)                                           /*!< LPC_GPIO_PORT_CLR1.CLRP015 Mask         */
-#define LPC_GPIO_PORT_CLR1_CLRP015_SHIFT         (15U)                                               /*!< LPC_GPIO_PORT_CLR1.CLRP015 Position     */
-#define LPC_GPIO_PORT_CLR1_CLRP015(x)            (((uint32_t)(((uint32_t)(x))<<15U))&0x8000UL)       /*!< LPC_GPIO_PORT_CLR1.CLRP015 Field        */
-#define LPC_GPIO_PORT_CLR1_CLRP016_MASK          (0x10000U)                                          /*!< LPC_GPIO_PORT_CLR1.CLRP016 Mask         */
-#define LPC_GPIO_PORT_CLR1_CLRP016_SHIFT         (16U)                                               /*!< LPC_GPIO_PORT_CLR1.CLRP016 Position     */
-#define LPC_GPIO_PORT_CLR1_CLRP016(x)            (((uint32_t)(((uint32_t)(x))<<16U))&0x10000UL)      /*!< LPC_GPIO_PORT_CLR1.CLRP016 Field        */
-#define LPC_GPIO_PORT_CLR1_CLRP017_MASK          (0x20000U)                                          /*!< LPC_GPIO_PORT_CLR1.CLRP017 Mask         */
-#define LPC_GPIO_PORT_CLR1_CLRP017_SHIFT         (17U)                                               /*!< LPC_GPIO_PORT_CLR1.CLRP017 Position     */
-#define LPC_GPIO_PORT_CLR1_CLRP017(x)            (((uint32_t)(((uint32_t)(x))<<17U))&0x20000UL)      /*!< LPC_GPIO_PORT_CLR1.CLRP017 Field        */
-#define LPC_GPIO_PORT_CLR1_CLRP018_MASK          (0x40000U)                                          /*!< LPC_GPIO_PORT_CLR1.CLRP018 Mask         */
-#define LPC_GPIO_PORT_CLR1_CLRP018_SHIFT         (18U)                                               /*!< LPC_GPIO_PORT_CLR1.CLRP018 Position     */
-#define LPC_GPIO_PORT_CLR1_CLRP018(x)            (((uint32_t)(((uint32_t)(x))<<18U))&0x40000UL)      /*!< LPC_GPIO_PORT_CLR1.CLRP018 Field        */
-#define LPC_GPIO_PORT_CLR1_CLRP019_MASK          (0x80000U)                                          /*!< LPC_GPIO_PORT_CLR1.CLRP019 Mask         */
-#define LPC_GPIO_PORT_CLR1_CLRP019_SHIFT         (19U)                                               /*!< LPC_GPIO_PORT_CLR1.CLRP019 Position     */
-#define LPC_GPIO_PORT_CLR1_CLRP019(x)            (((uint32_t)(((uint32_t)(x))<<19U))&0x80000UL)      /*!< LPC_GPIO_PORT_CLR1.CLRP019 Field        */
-#define LPC_GPIO_PORT_CLR1_CLRP020_MASK          (0x100000U)                                         /*!< LPC_GPIO_PORT_CLR1.CLRP020 Mask         */
-#define LPC_GPIO_PORT_CLR1_CLRP020_SHIFT         (20U)                                               /*!< LPC_GPIO_PORT_CLR1.CLRP020 Position     */
-#define LPC_GPIO_PORT_CLR1_CLRP020(x)            (((uint32_t)(((uint32_t)(x))<<20U))&0x100000UL)     /*!< LPC_GPIO_PORT_CLR1.CLRP020 Field        */
-#define LPC_GPIO_PORT_CLR1_CLRP021_MASK          (0x200000U)                                         /*!< LPC_GPIO_PORT_CLR1.CLRP021 Mask         */
-#define LPC_GPIO_PORT_CLR1_CLRP021_SHIFT         (21U)                                               /*!< LPC_GPIO_PORT_CLR1.CLRP021 Position     */
-#define LPC_GPIO_PORT_CLR1_CLRP021(x)            (((uint32_t)(((uint32_t)(x))<<21U))&0x200000UL)     /*!< LPC_GPIO_PORT_CLR1.CLRP021 Field        */
-#define LPC_GPIO_PORT_CLR1_CLRP022_MASK          (0x400000U)                                         /*!< LPC_GPIO_PORT_CLR1.CLRP022 Mask         */
-#define LPC_GPIO_PORT_CLR1_CLRP022_SHIFT         (22U)                                               /*!< LPC_GPIO_PORT_CLR1.CLRP022 Position     */
-#define LPC_GPIO_PORT_CLR1_CLRP022(x)            (((uint32_t)(((uint32_t)(x))<<22U))&0x400000UL)     /*!< LPC_GPIO_PORT_CLR1.CLRP022 Field        */
-#define LPC_GPIO_PORT_CLR1_CLRP023_MASK          (0x800000U)                                         /*!< LPC_GPIO_PORT_CLR1.CLRP023 Mask         */
-#define LPC_GPIO_PORT_CLR1_CLRP023_SHIFT         (23U)                                               /*!< LPC_GPIO_PORT_CLR1.CLRP023 Position     */
-#define LPC_GPIO_PORT_CLR1_CLRP023(x)            (((uint32_t)(((uint32_t)(x))<<23U))&0x800000UL)     /*!< LPC_GPIO_PORT_CLR1.CLRP023 Field        */
-#define LPC_GPIO_PORT_CLR1_CLRP024_MASK          (0x1000000U)                                        /*!< LPC_GPIO_PORT_CLR1.CLRP024 Mask         */
-#define LPC_GPIO_PORT_CLR1_CLRP024_SHIFT         (24U)                                               /*!< LPC_GPIO_PORT_CLR1.CLRP024 Position     */
-#define LPC_GPIO_PORT_CLR1_CLRP024(x)            (((uint32_t)(((uint32_t)(x))<<24U))&0x1000000UL)    /*!< LPC_GPIO_PORT_CLR1.CLRP024 Field        */
-#define LPC_GPIO_PORT_CLR1_CLRP025_MASK          (0x2000000U)                                        /*!< LPC_GPIO_PORT_CLR1.CLRP025 Mask         */
-#define LPC_GPIO_PORT_CLR1_CLRP025_SHIFT         (25U)                                               /*!< LPC_GPIO_PORT_CLR1.CLRP025 Position     */
-#define LPC_GPIO_PORT_CLR1_CLRP025(x)            (((uint32_t)(((uint32_t)(x))<<25U))&0x2000000UL)    /*!< LPC_GPIO_PORT_CLR1.CLRP025 Field        */
-#define LPC_GPIO_PORT_CLR1_CLRP026_MASK          (0x4000000U)                                        /*!< LPC_GPIO_PORT_CLR1.CLRP026 Mask         */
-#define LPC_GPIO_PORT_CLR1_CLRP026_SHIFT         (26U)                                               /*!< LPC_GPIO_PORT_CLR1.CLRP026 Position     */
-#define LPC_GPIO_PORT_CLR1_CLRP026(x)            (((uint32_t)(((uint32_t)(x))<<26U))&0x4000000UL)    /*!< LPC_GPIO_PORT_CLR1.CLRP026 Field        */
-#define LPC_GPIO_PORT_CLR1_CLRP027_MASK          (0x8000000U)                                        /*!< LPC_GPIO_PORT_CLR1.CLRP027 Mask         */
-#define LPC_GPIO_PORT_CLR1_CLRP027_SHIFT         (27U)                                               /*!< LPC_GPIO_PORT_CLR1.CLRP027 Position     */
-#define LPC_GPIO_PORT_CLR1_CLRP027(x)            (((uint32_t)(((uint32_t)(x))<<27U))&0x8000000UL)    /*!< LPC_GPIO_PORT_CLR1.CLRP027 Field        */
-#define LPC_GPIO_PORT_CLR1_CLRP028_MASK          (0x10000000U)                                       /*!< LPC_GPIO_PORT_CLR1.CLRP028 Mask         */
-#define LPC_GPIO_PORT_CLR1_CLRP028_SHIFT         (28U)                                               /*!< LPC_GPIO_PORT_CLR1.CLRP028 Position     */
-#define LPC_GPIO_PORT_CLR1_CLRP028(x)            (((uint32_t)(((uint32_t)(x))<<28U))&0x10000000UL)   /*!< LPC_GPIO_PORT_CLR1.CLRP028 Field        */
-#define LPC_GPIO_PORT_CLR1_CLRP029_MASK          (0x20000000U)                                       /*!< LPC_GPIO_PORT_CLR1.CLRP029 Mask         */
-#define LPC_GPIO_PORT_CLR1_CLRP029_SHIFT         (29U)                                               /*!< LPC_GPIO_PORT_CLR1.CLRP029 Position     */
-#define LPC_GPIO_PORT_CLR1_CLRP029(x)            (((uint32_t)(((uint32_t)(x))<<29U))&0x20000000UL)   /*!< LPC_GPIO_PORT_CLR1.CLRP029 Field        */
-#define LPC_GPIO_PORT_CLR1_CLRP030_MASK          (0x40000000U)                                       /*!< LPC_GPIO_PORT_CLR1.CLRP030 Mask         */
-#define LPC_GPIO_PORT_CLR1_CLRP030_SHIFT         (30U)                                               /*!< LPC_GPIO_PORT_CLR1.CLRP030 Position     */
-#define LPC_GPIO_PORT_CLR1_CLRP030(x)            (((uint32_t)(((uint32_t)(x))<<30U))&0x40000000UL)   /*!< LPC_GPIO_PORT_CLR1.CLRP030 Field        */
-#define LPC_GPIO_PORT_CLR1_CLRP031_MASK          (0x80000000U)                                       /*!< LPC_GPIO_PORT_CLR1.CLRP031 Mask         */
-#define LPC_GPIO_PORT_CLR1_CLRP031_SHIFT         (31U)                                               /*!< LPC_GPIO_PORT_CLR1.CLRP031 Position     */
-#define LPC_GPIO_PORT_CLR1_CLRP031(x)            (((uint32_t)(((uint32_t)(x))<<31U))&0x80000000UL)   /*!< LPC_GPIO_PORT_CLR1.CLRP031 Field        */
-/* ------- NOT0 Bit Fields                          ------ */
-#define LPC_GPIO_PORT_NOT0_NOTP0_MASK            (0x1U)                                              /*!< LPC_GPIO_PORT_NOT0.NOTP0 Mask           */
-#define LPC_GPIO_PORT_NOT0_NOTP0_SHIFT           (0U)                                                /*!< LPC_GPIO_PORT_NOT0.NOTP0 Position       */
-#define LPC_GPIO_PORT_NOT0_NOTP0(x)              (((uint32_t)(((uint32_t)(x))<<0U))&0x1UL)           /*!< LPC_GPIO_PORT_NOT0.NOTP0 Field          */
-#define LPC_GPIO_PORT_NOT0_NOTP1_MASK            (0x2U)                                              /*!< LPC_GPIO_PORT_NOT0.NOTP1 Mask           */
-#define LPC_GPIO_PORT_NOT0_NOTP1_SHIFT           (1U)                                                /*!< LPC_GPIO_PORT_NOT0.NOTP1 Position       */
-#define LPC_GPIO_PORT_NOT0_NOTP1(x)              (((uint32_t)(((uint32_t)(x))<<1U))&0x2UL)           /*!< LPC_GPIO_PORT_NOT0.NOTP1 Field          */
-#define LPC_GPIO_PORT_NOT0_NOTP2_MASK            (0x4U)                                              /*!< LPC_GPIO_PORT_NOT0.NOTP2 Mask           */
-#define LPC_GPIO_PORT_NOT0_NOTP2_SHIFT           (2U)                                                /*!< LPC_GPIO_PORT_NOT0.NOTP2 Position       */
-#define LPC_GPIO_PORT_NOT0_NOTP2(x)              (((uint32_t)(((uint32_t)(x))<<2U))&0x4UL)           /*!< LPC_GPIO_PORT_NOT0.NOTP2 Field          */
-#define LPC_GPIO_PORT_NOT0_NOTP3_MASK            (0x8U)                                              /*!< LPC_GPIO_PORT_NOT0.NOTP3 Mask           */
-#define LPC_GPIO_PORT_NOT0_NOTP3_SHIFT           (3U)                                                /*!< LPC_GPIO_PORT_NOT0.NOTP3 Position       */
-#define LPC_GPIO_PORT_NOT0_NOTP3(x)              (((uint32_t)(((uint32_t)(x))<<3U))&0x8UL)           /*!< LPC_GPIO_PORT_NOT0.NOTP3 Field          */
-#define LPC_GPIO_PORT_NOT0_NOTP4_MASK            (0x10U)                                             /*!< LPC_GPIO_PORT_NOT0.NOTP4 Mask           */
-#define LPC_GPIO_PORT_NOT0_NOTP4_SHIFT           (4U)                                                /*!< LPC_GPIO_PORT_NOT0.NOTP4 Position       */
-#define LPC_GPIO_PORT_NOT0_NOTP4(x)              (((uint32_t)(((uint32_t)(x))<<4U))&0x10UL)          /*!< LPC_GPIO_PORT_NOT0.NOTP4 Field          */
-#define LPC_GPIO_PORT_NOT0_NOTP5_MASK            (0x20U)                                             /*!< LPC_GPIO_PORT_NOT0.NOTP5 Mask           */
-#define LPC_GPIO_PORT_NOT0_NOTP5_SHIFT           (5U)                                                /*!< LPC_GPIO_PORT_NOT0.NOTP5 Position       */
-#define LPC_GPIO_PORT_NOT0_NOTP5(x)              (((uint32_t)(((uint32_t)(x))<<5U))&0x20UL)          /*!< LPC_GPIO_PORT_NOT0.NOTP5 Field          */
-#define LPC_GPIO_PORT_NOT0_NOTP6_MASK            (0x40U)                                             /*!< LPC_GPIO_PORT_NOT0.NOTP6 Mask           */
-#define LPC_GPIO_PORT_NOT0_NOTP6_SHIFT           (6U)                                                /*!< LPC_GPIO_PORT_NOT0.NOTP6 Position       */
-#define LPC_GPIO_PORT_NOT0_NOTP6(x)              (((uint32_t)(((uint32_t)(x))<<6U))&0x40UL)          /*!< LPC_GPIO_PORT_NOT0.NOTP6 Field          */
-#define LPC_GPIO_PORT_NOT0_NOTP7_MASK            (0x80U)                                             /*!< LPC_GPIO_PORT_NOT0.NOTP7 Mask           */
-#define LPC_GPIO_PORT_NOT0_NOTP7_SHIFT           (7U)                                                /*!< LPC_GPIO_PORT_NOT0.NOTP7 Position       */
-#define LPC_GPIO_PORT_NOT0_NOTP7(x)              (((uint32_t)(((uint32_t)(x))<<7U))&0x80UL)          /*!< LPC_GPIO_PORT_NOT0.NOTP7 Field          */
-#define LPC_GPIO_PORT_NOT0_NOTP8_MASK            (0x100U)                                            /*!< LPC_GPIO_PORT_NOT0.NOTP8 Mask           */
-#define LPC_GPIO_PORT_NOT0_NOTP8_SHIFT           (8U)                                                /*!< LPC_GPIO_PORT_NOT0.NOTP8 Position       */
-#define LPC_GPIO_PORT_NOT0_NOTP8(x)              (((uint32_t)(((uint32_t)(x))<<8U))&0x100UL)         /*!< LPC_GPIO_PORT_NOT0.NOTP8 Field          */
-#define LPC_GPIO_PORT_NOT0_NOTP9_MASK            (0x200U)                                            /*!< LPC_GPIO_PORT_NOT0.NOTP9 Mask           */
-#define LPC_GPIO_PORT_NOT0_NOTP9_SHIFT           (9U)                                                /*!< LPC_GPIO_PORT_NOT0.NOTP9 Position       */
-#define LPC_GPIO_PORT_NOT0_NOTP9(x)              (((uint32_t)(((uint32_t)(x))<<9U))&0x200UL)         /*!< LPC_GPIO_PORT_NOT0.NOTP9 Field          */
-#define LPC_GPIO_PORT_NOT0_NOTP10_MASK           (0x400U)                                            /*!< LPC_GPIO_PORT_NOT0.NOTP10 Mask          */
-#define LPC_GPIO_PORT_NOT0_NOTP10_SHIFT          (10U)                                               /*!< LPC_GPIO_PORT_NOT0.NOTP10 Position      */
-#define LPC_GPIO_PORT_NOT0_NOTP10(x)             (((uint32_t)(((uint32_t)(x))<<10U))&0x400UL)        /*!< LPC_GPIO_PORT_NOT0.NOTP10 Field         */
-#define LPC_GPIO_PORT_NOT0_NOTP11_MASK           (0x800U)                                            /*!< LPC_GPIO_PORT_NOT0.NOTP11 Mask          */
-#define LPC_GPIO_PORT_NOT0_NOTP11_SHIFT          (11U)                                               /*!< LPC_GPIO_PORT_NOT0.NOTP11 Position      */
-#define LPC_GPIO_PORT_NOT0_NOTP11(x)             (((uint32_t)(((uint32_t)(x))<<11U))&0x800UL)        /*!< LPC_GPIO_PORT_NOT0.NOTP11 Field         */
-#define LPC_GPIO_PORT_NOT0_NOTP12_MASK           (0x1000U)                                           /*!< LPC_GPIO_PORT_NOT0.NOTP12 Mask          */
-#define LPC_GPIO_PORT_NOT0_NOTP12_SHIFT          (12U)                                               /*!< LPC_GPIO_PORT_NOT0.NOTP12 Position      */
-#define LPC_GPIO_PORT_NOT0_NOTP12(x)             (((uint32_t)(((uint32_t)(x))<<12U))&0x1000UL)       /*!< LPC_GPIO_PORT_NOT0.NOTP12 Field         */
-#define LPC_GPIO_PORT_NOT0_NOTP13_MASK           (0x2000U)                                           /*!< LPC_GPIO_PORT_NOT0.NOTP13 Mask          */
-#define LPC_GPIO_PORT_NOT0_NOTP13_SHIFT          (13U)                                               /*!< LPC_GPIO_PORT_NOT0.NOTP13 Position      */
-#define LPC_GPIO_PORT_NOT0_NOTP13(x)             (((uint32_t)(((uint32_t)(x))<<13U))&0x2000UL)       /*!< LPC_GPIO_PORT_NOT0.NOTP13 Field         */
-#define LPC_GPIO_PORT_NOT0_NOTP14_MASK           (0x4000U)                                           /*!< LPC_GPIO_PORT_NOT0.NOTP14 Mask          */
-#define LPC_GPIO_PORT_NOT0_NOTP14_SHIFT          (14U)                                               /*!< LPC_GPIO_PORT_NOT0.NOTP14 Position      */
-#define LPC_GPIO_PORT_NOT0_NOTP14(x)             (((uint32_t)(((uint32_t)(x))<<14U))&0x4000UL)       /*!< LPC_GPIO_PORT_NOT0.NOTP14 Field         */
-#define LPC_GPIO_PORT_NOT0_NOTP15_MASK           (0x8000U)                                           /*!< LPC_GPIO_PORT_NOT0.NOTP15 Mask          */
-#define LPC_GPIO_PORT_NOT0_NOTP15_SHIFT          (15U)                                               /*!< LPC_GPIO_PORT_NOT0.NOTP15 Position      */
-#define LPC_GPIO_PORT_NOT0_NOTP15(x)             (((uint32_t)(((uint32_t)(x))<<15U))&0x8000UL)       /*!< LPC_GPIO_PORT_NOT0.NOTP15 Field         */
-#define LPC_GPIO_PORT_NOT0_NOTP16_MASK           (0x10000U)                                          /*!< LPC_GPIO_PORT_NOT0.NOTP16 Mask          */
-#define LPC_GPIO_PORT_NOT0_NOTP16_SHIFT          (16U)                                               /*!< LPC_GPIO_PORT_NOT0.NOTP16 Position      */
-#define LPC_GPIO_PORT_NOT0_NOTP16(x)             (((uint32_t)(((uint32_t)(x))<<16U))&0x10000UL)      /*!< LPC_GPIO_PORT_NOT0.NOTP16 Field         */
-#define LPC_GPIO_PORT_NOT0_NOTP17_MASK           (0x20000U)                                          /*!< LPC_GPIO_PORT_NOT0.NOTP17 Mask          */
-#define LPC_GPIO_PORT_NOT0_NOTP17_SHIFT          (17U)                                               /*!< LPC_GPIO_PORT_NOT0.NOTP17 Position      */
-#define LPC_GPIO_PORT_NOT0_NOTP17(x)             (((uint32_t)(((uint32_t)(x))<<17U))&0x20000UL)      /*!< LPC_GPIO_PORT_NOT0.NOTP17 Field         */
-#define LPC_GPIO_PORT_NOT0_NOTP18_MASK           (0x40000U)                                          /*!< LPC_GPIO_PORT_NOT0.NOTP18 Mask          */
-#define LPC_GPIO_PORT_NOT0_NOTP18_SHIFT          (18U)                                               /*!< LPC_GPIO_PORT_NOT0.NOTP18 Position      */
-#define LPC_GPIO_PORT_NOT0_NOTP18(x)             (((uint32_t)(((uint32_t)(x))<<18U))&0x40000UL)      /*!< LPC_GPIO_PORT_NOT0.NOTP18 Field         */
-#define LPC_GPIO_PORT_NOT0_NOTP19_MASK           (0x80000U)                                          /*!< LPC_GPIO_PORT_NOT0.NOTP19 Mask          */
-#define LPC_GPIO_PORT_NOT0_NOTP19_SHIFT          (19U)                                               /*!< LPC_GPIO_PORT_NOT0.NOTP19 Position      */
-#define LPC_GPIO_PORT_NOT0_NOTP19(x)             (((uint32_t)(((uint32_t)(x))<<19U))&0x80000UL)      /*!< LPC_GPIO_PORT_NOT0.NOTP19 Field         */
-#define LPC_GPIO_PORT_NOT0_NOTP20_MASK           (0x100000U)                                         /*!< LPC_GPIO_PORT_NOT0.NOTP20 Mask          */
-#define LPC_GPIO_PORT_NOT0_NOTP20_SHIFT          (20U)                                               /*!< LPC_GPIO_PORT_NOT0.NOTP20 Position      */
-#define LPC_GPIO_PORT_NOT0_NOTP20(x)             (((uint32_t)(((uint32_t)(x))<<20U))&0x100000UL)     /*!< LPC_GPIO_PORT_NOT0.NOTP20 Field         */
-#define LPC_GPIO_PORT_NOT0_NOTP21_MASK           (0x200000U)                                         /*!< LPC_GPIO_PORT_NOT0.NOTP21 Mask          */
-#define LPC_GPIO_PORT_NOT0_NOTP21_SHIFT          (21U)                                               /*!< LPC_GPIO_PORT_NOT0.NOTP21 Position      */
-#define LPC_GPIO_PORT_NOT0_NOTP21(x)             (((uint32_t)(((uint32_t)(x))<<21U))&0x200000UL)     /*!< LPC_GPIO_PORT_NOT0.NOTP21 Field         */
-#define LPC_GPIO_PORT_NOT0_NOTP22_MASK           (0x400000U)                                         /*!< LPC_GPIO_PORT_NOT0.NOTP22 Mask          */
-#define LPC_GPIO_PORT_NOT0_NOTP22_SHIFT          (22U)                                               /*!< LPC_GPIO_PORT_NOT0.NOTP22 Position      */
-#define LPC_GPIO_PORT_NOT0_NOTP22(x)             (((uint32_t)(((uint32_t)(x))<<22U))&0x400000UL)     /*!< LPC_GPIO_PORT_NOT0.NOTP22 Field         */
-#define LPC_GPIO_PORT_NOT0_NOTP23_MASK           (0x800000U)                                         /*!< LPC_GPIO_PORT_NOT0.NOTP23 Mask          */
-#define LPC_GPIO_PORT_NOT0_NOTP23_SHIFT          (23U)                                               /*!< LPC_GPIO_PORT_NOT0.NOTP23 Position      */
-#define LPC_GPIO_PORT_NOT0_NOTP23(x)             (((uint32_t)(((uint32_t)(x))<<23U))&0x800000UL)     /*!< LPC_GPIO_PORT_NOT0.NOTP23 Field         */
-#define LPC_GPIO_PORT_NOT0_NOTP24_MASK           (0x1000000U)                                        /*!< LPC_GPIO_PORT_NOT0.NOTP24 Mask          */
-#define LPC_GPIO_PORT_NOT0_NOTP24_SHIFT          (24U)                                               /*!< LPC_GPIO_PORT_NOT0.NOTP24 Position      */
-#define LPC_GPIO_PORT_NOT0_NOTP24(x)             (((uint32_t)(((uint32_t)(x))<<24U))&0x1000000UL)    /*!< LPC_GPIO_PORT_NOT0.NOTP24 Field         */
-#define LPC_GPIO_PORT_NOT0_NOTP25_MASK           (0x2000000U)                                        /*!< LPC_GPIO_PORT_NOT0.NOTP25 Mask          */
-#define LPC_GPIO_PORT_NOT0_NOTP25_SHIFT          (25U)                                               /*!< LPC_GPIO_PORT_NOT0.NOTP25 Position      */
-#define LPC_GPIO_PORT_NOT0_NOTP25(x)             (((uint32_t)(((uint32_t)(x))<<25U))&0x2000000UL)    /*!< LPC_GPIO_PORT_NOT0.NOTP25 Field         */
-#define LPC_GPIO_PORT_NOT0_NOTP26_MASK           (0x4000000U)                                        /*!< LPC_GPIO_PORT_NOT0.NOTP26 Mask          */
-#define LPC_GPIO_PORT_NOT0_NOTP26_SHIFT          (26U)                                               /*!< LPC_GPIO_PORT_NOT0.NOTP26 Position      */
-#define LPC_GPIO_PORT_NOT0_NOTP26(x)             (((uint32_t)(((uint32_t)(x))<<26U))&0x4000000UL)    /*!< LPC_GPIO_PORT_NOT0.NOTP26 Field         */
-#define LPC_GPIO_PORT_NOT0_NOTP27_MASK           (0x8000000U)                                        /*!< LPC_GPIO_PORT_NOT0.NOTP27 Mask          */
-#define LPC_GPIO_PORT_NOT0_NOTP27_SHIFT          (27U)                                               /*!< LPC_GPIO_PORT_NOT0.NOTP27 Position      */
-#define LPC_GPIO_PORT_NOT0_NOTP27(x)             (((uint32_t)(((uint32_t)(x))<<27U))&0x8000000UL)    /*!< LPC_GPIO_PORT_NOT0.NOTP27 Field         */
-#define LPC_GPIO_PORT_NOT0_NOTP28_MASK           (0x10000000U)                                       /*!< LPC_GPIO_PORT_NOT0.NOTP28 Mask          */
-#define LPC_GPIO_PORT_NOT0_NOTP28_SHIFT          (28U)                                               /*!< LPC_GPIO_PORT_NOT0.NOTP28 Position      */
-#define LPC_GPIO_PORT_NOT0_NOTP28(x)             (((uint32_t)(((uint32_t)(x))<<28U))&0x10000000UL)   /*!< LPC_GPIO_PORT_NOT0.NOTP28 Field         */
-#define LPC_GPIO_PORT_NOT0_NOTP29_MASK           (0x20000000U)                                       /*!< LPC_GPIO_PORT_NOT0.NOTP29 Mask          */
-#define LPC_GPIO_PORT_NOT0_NOTP29_SHIFT          (29U)                                               /*!< LPC_GPIO_PORT_NOT0.NOTP29 Position      */
-#define LPC_GPIO_PORT_NOT0_NOTP29(x)             (((uint32_t)(((uint32_t)(x))<<29U))&0x20000000UL)   /*!< LPC_GPIO_PORT_NOT0.NOTP29 Field         */
-#define LPC_GPIO_PORT_NOT0_NOTP30_MASK           (0x40000000U)                                       /*!< LPC_GPIO_PORT_NOT0.NOTP30 Mask          */
-#define LPC_GPIO_PORT_NOT0_NOTP30_SHIFT          (30U)                                               /*!< LPC_GPIO_PORT_NOT0.NOTP30 Position      */
-#define LPC_GPIO_PORT_NOT0_NOTP30(x)             (((uint32_t)(((uint32_t)(x))<<30U))&0x40000000UL)   /*!< LPC_GPIO_PORT_NOT0.NOTP30 Field         */
-#define LPC_GPIO_PORT_NOT0_NOTP31_MASK           (0x80000000U)                                       /*!< LPC_GPIO_PORT_NOT0.NOTP31 Mask          */
-#define LPC_GPIO_PORT_NOT0_NOTP31_SHIFT          (31U)                                               /*!< LPC_GPIO_PORT_NOT0.NOTP31 Position      */
-#define LPC_GPIO_PORT_NOT0_NOTP31(x)             (((uint32_t)(((uint32_t)(x))<<31U))&0x80000000UL)   /*!< LPC_GPIO_PORT_NOT0.NOTP31 Field         */
-/* ------- NOT1 Bit Fields                          ------ */
-#define LPC_GPIO_PORT_NOT1_NOTP0_MASK            (0x1U)                                              /*!< LPC_GPIO_PORT_NOT1.NOTP0 Mask           */
-#define LPC_GPIO_PORT_NOT1_NOTP0_SHIFT           (0U)                                                /*!< LPC_GPIO_PORT_NOT1.NOTP0 Position       */
-#define LPC_GPIO_PORT_NOT1_NOTP0(x)              (((uint32_t)(((uint32_t)(x))<<0U))&0x1UL)           /*!< LPC_GPIO_PORT_NOT1.NOTP0 Field          */
-#define LPC_GPIO_PORT_NOT1_NOTP1_MASK            (0x2U)                                              /*!< LPC_GPIO_PORT_NOT1.NOTP1 Mask           */
-#define LPC_GPIO_PORT_NOT1_NOTP1_SHIFT           (1U)                                                /*!< LPC_GPIO_PORT_NOT1.NOTP1 Position       */
-#define LPC_GPIO_PORT_NOT1_NOTP1(x)              (((uint32_t)(((uint32_t)(x))<<1U))&0x2UL)           /*!< LPC_GPIO_PORT_NOT1.NOTP1 Field          */
-#define LPC_GPIO_PORT_NOT1_NOTP2_MASK            (0x4U)                                              /*!< LPC_GPIO_PORT_NOT1.NOTP2 Mask           */
-#define LPC_GPIO_PORT_NOT1_NOTP2_SHIFT           (2U)                                                /*!< LPC_GPIO_PORT_NOT1.NOTP2 Position       */
-#define LPC_GPIO_PORT_NOT1_NOTP2(x)              (((uint32_t)(((uint32_t)(x))<<2U))&0x4UL)           /*!< LPC_GPIO_PORT_NOT1.NOTP2 Field          */
-#define LPC_GPIO_PORT_NOT1_NOTP3_MASK            (0x8U)                                              /*!< LPC_GPIO_PORT_NOT1.NOTP3 Mask           */
-#define LPC_GPIO_PORT_NOT1_NOTP3_SHIFT           (3U)                                                /*!< LPC_GPIO_PORT_NOT1.NOTP3 Position       */
-#define LPC_GPIO_PORT_NOT1_NOTP3(x)              (((uint32_t)(((uint32_t)(x))<<3U))&0x8UL)           /*!< LPC_GPIO_PORT_NOT1.NOTP3 Field          */
-#define LPC_GPIO_PORT_NOT1_NOTP4_MASK            (0x10U)                                             /*!< LPC_GPIO_PORT_NOT1.NOTP4 Mask           */
-#define LPC_GPIO_PORT_NOT1_NOTP4_SHIFT           (4U)                                                /*!< LPC_GPIO_PORT_NOT1.NOTP4 Position       */
-#define LPC_GPIO_PORT_NOT1_NOTP4(x)              (((uint32_t)(((uint32_t)(x))<<4U))&0x10UL)          /*!< LPC_GPIO_PORT_NOT1.NOTP4 Field          */
-#define LPC_GPIO_PORT_NOT1_NOTP5_MASK            (0x20U)                                             /*!< LPC_GPIO_PORT_NOT1.NOTP5 Mask           */
-#define LPC_GPIO_PORT_NOT1_NOTP5_SHIFT           (5U)                                                /*!< LPC_GPIO_PORT_NOT1.NOTP5 Position       */
-#define LPC_GPIO_PORT_NOT1_NOTP5(x)              (((uint32_t)(((uint32_t)(x))<<5U))&0x20UL)          /*!< LPC_GPIO_PORT_NOT1.NOTP5 Field          */
-#define LPC_GPIO_PORT_NOT1_NOTP6_MASK            (0x40U)                                             /*!< LPC_GPIO_PORT_NOT1.NOTP6 Mask           */
-#define LPC_GPIO_PORT_NOT1_NOTP6_SHIFT           (6U)                                                /*!< LPC_GPIO_PORT_NOT1.NOTP6 Position       */
-#define LPC_GPIO_PORT_NOT1_NOTP6(x)              (((uint32_t)(((uint32_t)(x))<<6U))&0x40UL)          /*!< LPC_GPIO_PORT_NOT1.NOTP6 Field          */
-#define LPC_GPIO_PORT_NOT1_NOTP7_MASK            (0x80U)                                             /*!< LPC_GPIO_PORT_NOT1.NOTP7 Mask           */
-#define LPC_GPIO_PORT_NOT1_NOTP7_SHIFT           (7U)                                                /*!< LPC_GPIO_PORT_NOT1.NOTP7 Position       */
-#define LPC_GPIO_PORT_NOT1_NOTP7(x)              (((uint32_t)(((uint32_t)(x))<<7U))&0x80UL)          /*!< LPC_GPIO_PORT_NOT1.NOTP7 Field          */
-#define LPC_GPIO_PORT_NOT1_NOTP8_MASK            (0x100U)                                            /*!< LPC_GPIO_PORT_NOT1.NOTP8 Mask           */
-#define LPC_GPIO_PORT_NOT1_NOTP8_SHIFT           (8U)                                                /*!< LPC_GPIO_PORT_NOT1.NOTP8 Position       */
-#define LPC_GPIO_PORT_NOT1_NOTP8(x)              (((uint32_t)(((uint32_t)(x))<<8U))&0x100UL)         /*!< LPC_GPIO_PORT_NOT1.NOTP8 Field          */
-#define LPC_GPIO_PORT_NOT1_NOTP9_MASK            (0x200U)                                            /*!< LPC_GPIO_PORT_NOT1.NOTP9 Mask           */
-#define LPC_GPIO_PORT_NOT1_NOTP9_SHIFT           (9U)                                                /*!< LPC_GPIO_PORT_NOT1.NOTP9 Position       */
-#define LPC_GPIO_PORT_NOT1_NOTP9(x)              (((uint32_t)(((uint32_t)(x))<<9U))&0x200UL)         /*!< LPC_GPIO_PORT_NOT1.NOTP9 Field          */
-#define LPC_GPIO_PORT_NOT1_NOTP10_MASK           (0x400U)                                            /*!< LPC_GPIO_PORT_NOT1.NOTP10 Mask          */
-#define LPC_GPIO_PORT_NOT1_NOTP10_SHIFT          (10U)                                               /*!< LPC_GPIO_PORT_NOT1.NOTP10 Position      */
-#define LPC_GPIO_PORT_NOT1_NOTP10(x)             (((uint32_t)(((uint32_t)(x))<<10U))&0x400UL)        /*!< LPC_GPIO_PORT_NOT1.NOTP10 Field         */
-#define LPC_GPIO_PORT_NOT1_NOTP11_MASK           (0x800U)                                            /*!< LPC_GPIO_PORT_NOT1.NOTP11 Mask          */
-#define LPC_GPIO_PORT_NOT1_NOTP11_SHIFT          (11U)                                               /*!< LPC_GPIO_PORT_NOT1.NOTP11 Position      */
-#define LPC_GPIO_PORT_NOT1_NOTP11(x)             (((uint32_t)(((uint32_t)(x))<<11U))&0x800UL)        /*!< LPC_GPIO_PORT_NOT1.NOTP11 Field         */
-#define LPC_GPIO_PORT_NOT1_NOTP12_MASK           (0x1000U)                                           /*!< LPC_GPIO_PORT_NOT1.NOTP12 Mask          */
-#define LPC_GPIO_PORT_NOT1_NOTP12_SHIFT          (12U)                                               /*!< LPC_GPIO_PORT_NOT1.NOTP12 Position      */
-#define LPC_GPIO_PORT_NOT1_NOTP12(x)             (((uint32_t)(((uint32_t)(x))<<12U))&0x1000UL)       /*!< LPC_GPIO_PORT_NOT1.NOTP12 Field         */
-#define LPC_GPIO_PORT_NOT1_NOTP13_MASK           (0x2000U)                                           /*!< LPC_GPIO_PORT_NOT1.NOTP13 Mask          */
-#define LPC_GPIO_PORT_NOT1_NOTP13_SHIFT          (13U)                                               /*!< LPC_GPIO_PORT_NOT1.NOTP13 Position      */
-#define LPC_GPIO_PORT_NOT1_NOTP13(x)             (((uint32_t)(((uint32_t)(x))<<13U))&0x2000UL)       /*!< LPC_GPIO_PORT_NOT1.NOTP13 Field         */
-#define LPC_GPIO_PORT_NOT1_NOTP14_MASK           (0x4000U)                                           /*!< LPC_GPIO_PORT_NOT1.NOTP14 Mask          */
-#define LPC_GPIO_PORT_NOT1_NOTP14_SHIFT          (14U)                                               /*!< LPC_GPIO_PORT_NOT1.NOTP14 Position      */
-#define LPC_GPIO_PORT_NOT1_NOTP14(x)             (((uint32_t)(((uint32_t)(x))<<14U))&0x4000UL)       /*!< LPC_GPIO_PORT_NOT1.NOTP14 Field         */
-#define LPC_GPIO_PORT_NOT1_NOTP15_MASK           (0x8000U)                                           /*!< LPC_GPIO_PORT_NOT1.NOTP15 Mask          */
-#define LPC_GPIO_PORT_NOT1_NOTP15_SHIFT          (15U)                                               /*!< LPC_GPIO_PORT_NOT1.NOTP15 Position      */
-#define LPC_GPIO_PORT_NOT1_NOTP15(x)             (((uint32_t)(((uint32_t)(x))<<15U))&0x8000UL)       /*!< LPC_GPIO_PORT_NOT1.NOTP15 Field         */
-#define LPC_GPIO_PORT_NOT1_NOTP16_MASK           (0x10000U)                                          /*!< LPC_GPIO_PORT_NOT1.NOTP16 Mask          */
-#define LPC_GPIO_PORT_NOT1_NOTP16_SHIFT          (16U)                                               /*!< LPC_GPIO_PORT_NOT1.NOTP16 Position      */
-#define LPC_GPIO_PORT_NOT1_NOTP16(x)             (((uint32_t)(((uint32_t)(x))<<16U))&0x10000UL)      /*!< LPC_GPIO_PORT_NOT1.NOTP16 Field         */
-#define LPC_GPIO_PORT_NOT1_NOTP17_MASK           (0x20000U)                                          /*!< LPC_GPIO_PORT_NOT1.NOTP17 Mask          */
-#define LPC_GPIO_PORT_NOT1_NOTP17_SHIFT          (17U)                                               /*!< LPC_GPIO_PORT_NOT1.NOTP17 Position      */
-#define LPC_GPIO_PORT_NOT1_NOTP17(x)             (((uint32_t)(((uint32_t)(x))<<17U))&0x20000UL)      /*!< LPC_GPIO_PORT_NOT1.NOTP17 Field         */
-#define LPC_GPIO_PORT_NOT1_NOTP18_MASK           (0x40000U)                                          /*!< LPC_GPIO_PORT_NOT1.NOTP18 Mask          */
-#define LPC_GPIO_PORT_NOT1_NOTP18_SHIFT          (18U)                                               /*!< LPC_GPIO_PORT_NOT1.NOTP18 Position      */
-#define LPC_GPIO_PORT_NOT1_NOTP18(x)             (((uint32_t)(((uint32_t)(x))<<18U))&0x40000UL)      /*!< LPC_GPIO_PORT_NOT1.NOTP18 Field         */
-#define LPC_GPIO_PORT_NOT1_NOTP19_MASK           (0x80000U)                                          /*!< LPC_GPIO_PORT_NOT1.NOTP19 Mask          */
-#define LPC_GPIO_PORT_NOT1_NOTP19_SHIFT          (19U)                                               /*!< LPC_GPIO_PORT_NOT1.NOTP19 Position      */
-#define LPC_GPIO_PORT_NOT1_NOTP19(x)             (((uint32_t)(((uint32_t)(x))<<19U))&0x80000UL)      /*!< LPC_GPIO_PORT_NOT1.NOTP19 Field         */
-#define LPC_GPIO_PORT_NOT1_NOTP20_MASK           (0x100000U)                                         /*!< LPC_GPIO_PORT_NOT1.NOTP20 Mask          */
-#define LPC_GPIO_PORT_NOT1_NOTP20_SHIFT          (20U)                                               /*!< LPC_GPIO_PORT_NOT1.NOTP20 Position      */
-#define LPC_GPIO_PORT_NOT1_NOTP20(x)             (((uint32_t)(((uint32_t)(x))<<20U))&0x100000UL)     /*!< LPC_GPIO_PORT_NOT1.NOTP20 Field         */
-#define LPC_GPIO_PORT_NOT1_NOTP21_MASK           (0x200000U)                                         /*!< LPC_GPIO_PORT_NOT1.NOTP21 Mask          */
-#define LPC_GPIO_PORT_NOT1_NOTP21_SHIFT          (21U)                                               /*!< LPC_GPIO_PORT_NOT1.NOTP21 Position      */
-#define LPC_GPIO_PORT_NOT1_NOTP21(x)             (((uint32_t)(((uint32_t)(x))<<21U))&0x200000UL)     /*!< LPC_GPIO_PORT_NOT1.NOTP21 Field         */
-#define LPC_GPIO_PORT_NOT1_NOTP22_MASK           (0x400000U)                                         /*!< LPC_GPIO_PORT_NOT1.NOTP22 Mask          */
-#define LPC_GPIO_PORT_NOT1_NOTP22_SHIFT          (22U)                                               /*!< LPC_GPIO_PORT_NOT1.NOTP22 Position      */
-#define LPC_GPIO_PORT_NOT1_NOTP22(x)             (((uint32_t)(((uint32_t)(x))<<22U))&0x400000UL)     /*!< LPC_GPIO_PORT_NOT1.NOTP22 Field         */
-#define LPC_GPIO_PORT_NOT1_NOTP23_MASK           (0x800000U)                                         /*!< LPC_GPIO_PORT_NOT1.NOTP23 Mask          */
-#define LPC_GPIO_PORT_NOT1_NOTP23_SHIFT          (23U)                                               /*!< LPC_GPIO_PORT_NOT1.NOTP23 Position      */
-#define LPC_GPIO_PORT_NOT1_NOTP23(x)             (((uint32_t)(((uint32_t)(x))<<23U))&0x800000UL)     /*!< LPC_GPIO_PORT_NOT1.NOTP23 Field         */
-#define LPC_GPIO_PORT_NOT1_NOTP24_MASK           (0x1000000U)                                        /*!< LPC_GPIO_PORT_NOT1.NOTP24 Mask          */
-#define LPC_GPIO_PORT_NOT1_NOTP24_SHIFT          (24U)                                               /*!< LPC_GPIO_PORT_NOT1.NOTP24 Position      */
-#define LPC_GPIO_PORT_NOT1_NOTP24(x)             (((uint32_t)(((uint32_t)(x))<<24U))&0x1000000UL)    /*!< LPC_GPIO_PORT_NOT1.NOTP24 Field         */
-#define LPC_GPIO_PORT_NOT1_NOTP25_MASK           (0x2000000U)                                        /*!< LPC_GPIO_PORT_NOT1.NOTP25 Mask          */
-#define LPC_GPIO_PORT_NOT1_NOTP25_SHIFT          (25U)                                               /*!< LPC_GPIO_PORT_NOT1.NOTP25 Position      */
-#define LPC_GPIO_PORT_NOT1_NOTP25(x)             (((uint32_t)(((uint32_t)(x))<<25U))&0x2000000UL)    /*!< LPC_GPIO_PORT_NOT1.NOTP25 Field         */
-#define LPC_GPIO_PORT_NOT1_NOTP26_MASK           (0x4000000U)                                        /*!< LPC_GPIO_PORT_NOT1.NOTP26 Mask          */
-#define LPC_GPIO_PORT_NOT1_NOTP26_SHIFT          (26U)                                               /*!< LPC_GPIO_PORT_NOT1.NOTP26 Position      */
-#define LPC_GPIO_PORT_NOT1_NOTP26(x)             (((uint32_t)(((uint32_t)(x))<<26U))&0x4000000UL)    /*!< LPC_GPIO_PORT_NOT1.NOTP26 Field         */
-#define LPC_GPIO_PORT_NOT1_NOTP27_MASK           (0x8000000U)                                        /*!< LPC_GPIO_PORT_NOT1.NOTP27 Mask          */
-#define LPC_GPIO_PORT_NOT1_NOTP27_SHIFT          (27U)                                               /*!< LPC_GPIO_PORT_NOT1.NOTP27 Position      */
-#define LPC_GPIO_PORT_NOT1_NOTP27(x)             (((uint32_t)(((uint32_t)(x))<<27U))&0x8000000UL)    /*!< LPC_GPIO_PORT_NOT1.NOTP27 Field         */
-#define LPC_GPIO_PORT_NOT1_NOTP28_MASK           (0x10000000U)                                       /*!< LPC_GPIO_PORT_NOT1.NOTP28 Mask          */
-#define LPC_GPIO_PORT_NOT1_NOTP28_SHIFT          (28U)                                               /*!< LPC_GPIO_PORT_NOT1.NOTP28 Position      */
-#define LPC_GPIO_PORT_NOT1_NOTP28(x)             (((uint32_t)(((uint32_t)(x))<<28U))&0x10000000UL)   /*!< LPC_GPIO_PORT_NOT1.NOTP28 Field         */
-#define LPC_GPIO_PORT_NOT1_NOTP29_MASK           (0x20000000U)                                       /*!< LPC_GPIO_PORT_NOT1.NOTP29 Mask          */
-#define LPC_GPIO_PORT_NOT1_NOTP29_SHIFT          (29U)                                               /*!< LPC_GPIO_PORT_NOT1.NOTP29 Position      */
-#define LPC_GPIO_PORT_NOT1_NOTP29(x)             (((uint32_t)(((uint32_t)(x))<<29U))&0x20000000UL)   /*!< LPC_GPIO_PORT_NOT1.NOTP29 Field         */
-#define LPC_GPIO_PORT_NOT1_NOTP30_MASK           (0x40000000U)                                       /*!< LPC_GPIO_PORT_NOT1.NOTP30 Mask          */
-#define LPC_GPIO_PORT_NOT1_NOTP30_SHIFT          (30U)                                               /*!< LPC_GPIO_PORT_NOT1.NOTP30 Position      */
-#define LPC_GPIO_PORT_NOT1_NOTP30(x)             (((uint32_t)(((uint32_t)(x))<<30U))&0x40000000UL)   /*!< LPC_GPIO_PORT_NOT1.NOTP30 Field         */
-#define LPC_GPIO_PORT_NOT1_NOTP31_MASK           (0x80000000U)                                       /*!< LPC_GPIO_PORT_NOT1.NOTP31 Mask          */
-#define LPC_GPIO_PORT_NOT1_NOTP31_SHIFT          (31U)                                               /*!< LPC_GPIO_PORT_NOT1.NOTP31 Position      */
-#define LPC_GPIO_PORT_NOT1_NOTP31(x)             (((uint32_t)(((uint32_t)(x))<<31U))&0x80000000UL)   /*!< LPC_GPIO_PORT_NOT1.NOTP31 Field         */
+/* ------- DIR Bit Fields                           ------ */
+#define LPC_GPIO_PORT_DIR_DIRP0_MASK             (0x1U)                                              /*!< LPC_GPIO_PORT_DIR.DIRP0 Mask            */
+#define LPC_GPIO_PORT_DIR_DIRP0_SHIFT            (0U)                                                /*!< LPC_GPIO_PORT_DIR.DIRP0 Position        */
+#define LPC_GPIO_PORT_DIR_DIRP0(x)               (((uint32_t)(((uint32_t)(x))<<0U))&0x1UL)           /*!< LPC_GPIO_PORT_DIR.DIRP0 Field           */
+#define LPC_GPIO_PORT_DIR_DIRP1_MASK             (0x2U)                                              /*!< LPC_GPIO_PORT_DIR.DIRP1 Mask            */
+#define LPC_GPIO_PORT_DIR_DIRP1_SHIFT            (1U)                                                /*!< LPC_GPIO_PORT_DIR.DIRP1 Position        */
+#define LPC_GPIO_PORT_DIR_DIRP1(x)               (((uint32_t)(((uint32_t)(x))<<1U))&0x2UL)           /*!< LPC_GPIO_PORT_DIR.DIRP1 Field           */
+#define LPC_GPIO_PORT_DIR_DIRP2_MASK             (0x4U)                                              /*!< LPC_GPIO_PORT_DIR.DIRP2 Mask            */
+#define LPC_GPIO_PORT_DIR_DIRP2_SHIFT            (2U)                                                /*!< LPC_GPIO_PORT_DIR.DIRP2 Position        */
+#define LPC_GPIO_PORT_DIR_DIRP2(x)               (((uint32_t)(((uint32_t)(x))<<2U))&0x4UL)           /*!< LPC_GPIO_PORT_DIR.DIRP2 Field           */
+#define LPC_GPIO_PORT_DIR_DIRP3_MASK             (0x8U)                                              /*!< LPC_GPIO_PORT_DIR.DIRP3 Mask            */
+#define LPC_GPIO_PORT_DIR_DIRP3_SHIFT            (3U)                                                /*!< LPC_GPIO_PORT_DIR.DIRP3 Position        */
+#define LPC_GPIO_PORT_DIR_DIRP3(x)               (((uint32_t)(((uint32_t)(x))<<3U))&0x8UL)           /*!< LPC_GPIO_PORT_DIR.DIRP3 Field           */
+#define LPC_GPIO_PORT_DIR_DIRP4_MASK             (0x10U)                                             /*!< LPC_GPIO_PORT_DIR.DIRP4 Mask            */
+#define LPC_GPIO_PORT_DIR_DIRP4_SHIFT            (4U)                                                /*!< LPC_GPIO_PORT_DIR.DIRP4 Position        */
+#define LPC_GPIO_PORT_DIR_DIRP4(x)               (((uint32_t)(((uint32_t)(x))<<4U))&0x10UL)          /*!< LPC_GPIO_PORT_DIR.DIRP4 Field           */
+#define LPC_GPIO_PORT_DIR_DIRP5_MASK             (0x20U)                                             /*!< LPC_GPIO_PORT_DIR.DIRP5 Mask            */
+#define LPC_GPIO_PORT_DIR_DIRP5_SHIFT            (5U)                                                /*!< LPC_GPIO_PORT_DIR.DIRP5 Position        */
+#define LPC_GPIO_PORT_DIR_DIRP5(x)               (((uint32_t)(((uint32_t)(x))<<5U))&0x20UL)          /*!< LPC_GPIO_PORT_DIR.DIRP5 Field           */
+#define LPC_GPIO_PORT_DIR_DIRP6_MASK             (0x40U)                                             /*!< LPC_GPIO_PORT_DIR.DIRP6 Mask            */
+#define LPC_GPIO_PORT_DIR_DIRP6_SHIFT            (6U)                                                /*!< LPC_GPIO_PORT_DIR.DIRP6 Position        */
+#define LPC_GPIO_PORT_DIR_DIRP6(x)               (((uint32_t)(((uint32_t)(x))<<6U))&0x40UL)          /*!< LPC_GPIO_PORT_DIR.DIRP6 Field           */
+#define LPC_GPIO_PORT_DIR_DIRP7_MASK             (0x80U)                                             /*!< LPC_GPIO_PORT_DIR.DIRP7 Mask            */
+#define LPC_GPIO_PORT_DIR_DIRP7_SHIFT            (7U)                                                /*!< LPC_GPIO_PORT_DIR.DIRP7 Position        */
+#define LPC_GPIO_PORT_DIR_DIRP7(x)               (((uint32_t)(((uint32_t)(x))<<7U))&0x80UL)          /*!< LPC_GPIO_PORT_DIR.DIRP7 Field           */
+#define LPC_GPIO_PORT_DIR_DIRP8_MASK             (0x100U)                                            /*!< LPC_GPIO_PORT_DIR.DIRP8 Mask            */
+#define LPC_GPIO_PORT_DIR_DIRP8_SHIFT            (8U)                                                /*!< LPC_GPIO_PORT_DIR.DIRP8 Position        */
+#define LPC_GPIO_PORT_DIR_DIRP8(x)               (((uint32_t)(((uint32_t)(x))<<8U))&0x100UL)         /*!< LPC_GPIO_PORT_DIR.DIRP8 Field           */
+#define LPC_GPIO_PORT_DIR_DIRP9_MASK             (0x200U)                                            /*!< LPC_GPIO_PORT_DIR.DIRP9 Mask            */
+#define LPC_GPIO_PORT_DIR_DIRP9_SHIFT            (9U)                                                /*!< LPC_GPIO_PORT_DIR.DIRP9 Position        */
+#define LPC_GPIO_PORT_DIR_DIRP9(x)               (((uint32_t)(((uint32_t)(x))<<9U))&0x200UL)         /*!< LPC_GPIO_PORT_DIR.DIRP9 Field           */
+#define LPC_GPIO_PORT_DIR_DIRP10_MASK            (0x400U)                                            /*!< LPC_GPIO_PORT_DIR.DIRP10 Mask           */
+#define LPC_GPIO_PORT_DIR_DIRP10_SHIFT           (10U)                                               /*!< LPC_GPIO_PORT_DIR.DIRP10 Position       */
+#define LPC_GPIO_PORT_DIR_DIRP10(x)              (((uint32_t)(((uint32_t)(x))<<10U))&0x400UL)        /*!< LPC_GPIO_PORT_DIR.DIRP10 Field          */
+#define LPC_GPIO_PORT_DIR_DIRP11_MASK            (0x800U)                                            /*!< LPC_GPIO_PORT_DIR.DIRP11 Mask           */
+#define LPC_GPIO_PORT_DIR_DIRP11_SHIFT           (11U)                                               /*!< LPC_GPIO_PORT_DIR.DIRP11 Position       */
+#define LPC_GPIO_PORT_DIR_DIRP11(x)              (((uint32_t)(((uint32_t)(x))<<11U))&0x800UL)        /*!< LPC_GPIO_PORT_DIR.DIRP11 Field          */
+#define LPC_GPIO_PORT_DIR_DIRP12_MASK            (0x1000U)                                           /*!< LPC_GPIO_PORT_DIR.DIRP12 Mask           */
+#define LPC_GPIO_PORT_DIR_DIRP12_SHIFT           (12U)                                               /*!< LPC_GPIO_PORT_DIR.DIRP12 Position       */
+#define LPC_GPIO_PORT_DIR_DIRP12(x)              (((uint32_t)(((uint32_t)(x))<<12U))&0x1000UL)       /*!< LPC_GPIO_PORT_DIR.DIRP12 Field          */
+#define LPC_GPIO_PORT_DIR_DIRP13_MASK            (0x2000U)                                           /*!< LPC_GPIO_PORT_DIR.DIRP13 Mask           */
+#define LPC_GPIO_PORT_DIR_DIRP13_SHIFT           (13U)                                               /*!< LPC_GPIO_PORT_DIR.DIRP13 Position       */
+#define LPC_GPIO_PORT_DIR_DIRP13(x)              (((uint32_t)(((uint32_t)(x))<<13U))&0x2000UL)       /*!< LPC_GPIO_PORT_DIR.DIRP13 Field          */
+#define LPC_GPIO_PORT_DIR_DIRP14_MASK            (0x4000U)                                           /*!< LPC_GPIO_PORT_DIR.DIRP14 Mask           */
+#define LPC_GPIO_PORT_DIR_DIRP14_SHIFT           (14U)                                               /*!< LPC_GPIO_PORT_DIR.DIRP14 Position       */
+#define LPC_GPIO_PORT_DIR_DIRP14(x)              (((uint32_t)(((uint32_t)(x))<<14U))&0x4000UL)       /*!< LPC_GPIO_PORT_DIR.DIRP14 Field          */
+#define LPC_GPIO_PORT_DIR_DIRP15_MASK            (0x8000U)                                           /*!< LPC_GPIO_PORT_DIR.DIRP15 Mask           */
+#define LPC_GPIO_PORT_DIR_DIRP15_SHIFT           (15U)                                               /*!< LPC_GPIO_PORT_DIR.DIRP15 Position       */
+#define LPC_GPIO_PORT_DIR_DIRP15(x)              (((uint32_t)(((uint32_t)(x))<<15U))&0x8000UL)       /*!< LPC_GPIO_PORT_DIR.DIRP15 Field          */
+#define LPC_GPIO_PORT_DIR_DIRP16_MASK            (0x10000U)                                          /*!< LPC_GPIO_PORT_DIR.DIRP16 Mask           */
+#define LPC_GPIO_PORT_DIR_DIRP16_SHIFT           (16U)                                               /*!< LPC_GPIO_PORT_DIR.DIRP16 Position       */
+#define LPC_GPIO_PORT_DIR_DIRP16(x)              (((uint32_t)(((uint32_t)(x))<<16U))&0x10000UL)      /*!< LPC_GPIO_PORT_DIR.DIRP16 Field          */
+#define LPC_GPIO_PORT_DIR_DIRP17_MASK            (0x20000U)                                          /*!< LPC_GPIO_PORT_DIR.DIRP17 Mask           */
+#define LPC_GPIO_PORT_DIR_DIRP17_SHIFT           (17U)                                               /*!< LPC_GPIO_PORT_DIR.DIRP17 Position       */
+#define LPC_GPIO_PORT_DIR_DIRP17(x)              (((uint32_t)(((uint32_t)(x))<<17U))&0x20000UL)      /*!< LPC_GPIO_PORT_DIR.DIRP17 Field          */
+#define LPC_GPIO_PORT_DIR_DIRP18_MASK            (0x40000U)                                          /*!< LPC_GPIO_PORT_DIR.DIRP18 Mask           */
+#define LPC_GPIO_PORT_DIR_DIRP18_SHIFT           (18U)                                               /*!< LPC_GPIO_PORT_DIR.DIRP18 Position       */
+#define LPC_GPIO_PORT_DIR_DIRP18(x)              (((uint32_t)(((uint32_t)(x))<<18U))&0x40000UL)      /*!< LPC_GPIO_PORT_DIR.DIRP18 Field          */
+#define LPC_GPIO_PORT_DIR_DIRP19_MASK            (0x80000U)                                          /*!< LPC_GPIO_PORT_DIR.DIRP19 Mask           */
+#define LPC_GPIO_PORT_DIR_DIRP19_SHIFT           (19U)                                               /*!< LPC_GPIO_PORT_DIR.DIRP19 Position       */
+#define LPC_GPIO_PORT_DIR_DIRP19(x)              (((uint32_t)(((uint32_t)(x))<<19U))&0x80000UL)      /*!< LPC_GPIO_PORT_DIR.DIRP19 Field          */
+#define LPC_GPIO_PORT_DIR_DIRP20_MASK            (0x100000U)                                         /*!< LPC_GPIO_PORT_DIR.DIRP20 Mask           */
+#define LPC_GPIO_PORT_DIR_DIRP20_SHIFT           (20U)                                               /*!< LPC_GPIO_PORT_DIR.DIRP20 Position       */
+#define LPC_GPIO_PORT_DIR_DIRP20(x)              (((uint32_t)(((uint32_t)(x))<<20U))&0x100000UL)     /*!< LPC_GPIO_PORT_DIR.DIRP20 Field          */
+#define LPC_GPIO_PORT_DIR_DIRP21_MASK            (0x200000U)                                         /*!< LPC_GPIO_PORT_DIR.DIRP21 Mask           */
+#define LPC_GPIO_PORT_DIR_DIRP21_SHIFT           (21U)                                               /*!< LPC_GPIO_PORT_DIR.DIRP21 Position       */
+#define LPC_GPIO_PORT_DIR_DIRP21(x)              (((uint32_t)(((uint32_t)(x))<<21U))&0x200000UL)     /*!< LPC_GPIO_PORT_DIR.DIRP21 Field          */
+#define LPC_GPIO_PORT_DIR_DIRP22_MASK            (0x400000U)                                         /*!< LPC_GPIO_PORT_DIR.DIRP22 Mask           */
+#define LPC_GPIO_PORT_DIR_DIRP22_SHIFT           (22U)                                               /*!< LPC_GPIO_PORT_DIR.DIRP22 Position       */
+#define LPC_GPIO_PORT_DIR_DIRP22(x)              (((uint32_t)(((uint32_t)(x))<<22U))&0x400000UL)     /*!< LPC_GPIO_PORT_DIR.DIRP22 Field          */
+#define LPC_GPIO_PORT_DIR_DIRP23_MASK            (0x800000U)                                         /*!< LPC_GPIO_PORT_DIR.DIRP23 Mask           */
+#define LPC_GPIO_PORT_DIR_DIRP23_SHIFT           (23U)                                               /*!< LPC_GPIO_PORT_DIR.DIRP23 Position       */
+#define LPC_GPIO_PORT_DIR_DIRP23(x)              (((uint32_t)(((uint32_t)(x))<<23U))&0x800000UL)     /*!< LPC_GPIO_PORT_DIR.DIRP23 Field          */
+#define LPC_GPIO_PORT_DIR_DIRP24_MASK            (0x1000000U)                                        /*!< LPC_GPIO_PORT_DIR.DIRP24 Mask           */
+#define LPC_GPIO_PORT_DIR_DIRP24_SHIFT           (24U)                                               /*!< LPC_GPIO_PORT_DIR.DIRP24 Position       */
+#define LPC_GPIO_PORT_DIR_DIRP24(x)              (((uint32_t)(((uint32_t)(x))<<24U))&0x1000000UL)    /*!< LPC_GPIO_PORT_DIR.DIRP24 Field          */
+#define LPC_GPIO_PORT_DIR_DIRP25_MASK            (0x2000000U)                                        /*!< LPC_GPIO_PORT_DIR.DIRP25 Mask           */
+#define LPC_GPIO_PORT_DIR_DIRP25_SHIFT           (25U)                                               /*!< LPC_GPIO_PORT_DIR.DIRP25 Position       */
+#define LPC_GPIO_PORT_DIR_DIRP25(x)              (((uint32_t)(((uint32_t)(x))<<25U))&0x2000000UL)    /*!< LPC_GPIO_PORT_DIR.DIRP25 Field          */
+#define LPC_GPIO_PORT_DIR_DIRP26_MASK            (0x4000000U)                                        /*!< LPC_GPIO_PORT_DIR.DIRP26 Mask           */
+#define LPC_GPIO_PORT_DIR_DIRP26_SHIFT           (26U)                                               /*!< LPC_GPIO_PORT_DIR.DIRP26 Position       */
+#define LPC_GPIO_PORT_DIR_DIRP26(x)              (((uint32_t)(((uint32_t)(x))<<26U))&0x4000000UL)    /*!< LPC_GPIO_PORT_DIR.DIRP26 Field          */
+#define LPC_GPIO_PORT_DIR_DIRP27_MASK            (0x8000000U)                                        /*!< LPC_GPIO_PORT_DIR.DIRP27 Mask           */
+#define LPC_GPIO_PORT_DIR_DIRP27_SHIFT           (27U)                                               /*!< LPC_GPIO_PORT_DIR.DIRP27 Position       */
+#define LPC_GPIO_PORT_DIR_DIRP27(x)              (((uint32_t)(((uint32_t)(x))<<27U))&0x8000000UL)    /*!< LPC_GPIO_PORT_DIR.DIRP27 Field          */
+#define LPC_GPIO_PORT_DIR_DIRP28_MASK            (0x10000000U)                                       /*!< LPC_GPIO_PORT_DIR.DIRP28 Mask           */
+#define LPC_GPIO_PORT_DIR_DIRP28_SHIFT           (28U)                                               /*!< LPC_GPIO_PORT_DIR.DIRP28 Position       */
+#define LPC_GPIO_PORT_DIR_DIRP28(x)              (((uint32_t)(((uint32_t)(x))<<28U))&0x10000000UL)   /*!< LPC_GPIO_PORT_DIR.DIRP28 Field          */
+#define LPC_GPIO_PORT_DIR_DIRP29_MASK            (0x20000000U)                                       /*!< LPC_GPIO_PORT_DIR.DIRP29 Mask           */
+#define LPC_GPIO_PORT_DIR_DIRP29_SHIFT           (29U)                                               /*!< LPC_GPIO_PORT_DIR.DIRP29 Position       */
+#define LPC_GPIO_PORT_DIR_DIRP29(x)              (((uint32_t)(((uint32_t)(x))<<29U))&0x20000000UL)   /*!< LPC_GPIO_PORT_DIR.DIRP29 Field          */
+#define LPC_GPIO_PORT_DIR_DIRP30_MASK            (0x40000000U)                                       /*!< LPC_GPIO_PORT_DIR.DIRP30 Mask           */
+#define LPC_GPIO_PORT_DIR_DIRP30_SHIFT           (30U)                                               /*!< LPC_GPIO_PORT_DIR.DIRP30 Position       */
+#define LPC_GPIO_PORT_DIR_DIRP30(x)              (((uint32_t)(((uint32_t)(x))<<30U))&0x40000000UL)   /*!< LPC_GPIO_PORT_DIR.DIRP30 Field          */
+#define LPC_GPIO_PORT_DIR_DIRP31_MASK            (0x80000000U)                                       /*!< LPC_GPIO_PORT_DIR.DIRP31 Mask           */
+#define LPC_GPIO_PORT_DIR_DIRP31_SHIFT           (31U)                                               /*!< LPC_GPIO_PORT_DIR.DIRP31 Position       */
+#define LPC_GPIO_PORT_DIR_DIRP31(x)              (((uint32_t)(((uint32_t)(x))<<31U))&0x80000000UL)   /*!< LPC_GPIO_PORT_DIR.DIRP31 Field          */
+/* ------- MASK Bit Fields                          ------ */
+#define LPC_GPIO_PORT_MASK_MASKP0_MASK           (0x1U)                                              /*!< LPC_GPIO_PORT_MASK.MASKP0 Mask          */
+#define LPC_GPIO_PORT_MASK_MASKP0_SHIFT          (0U)                                                /*!< LPC_GPIO_PORT_MASK.MASKP0 Position      */
+#define LPC_GPIO_PORT_MASK_MASKP0(x)             (((uint32_t)(((uint32_t)(x))<<0U))&0x1UL)           /*!< LPC_GPIO_PORT_MASK.MASKP0 Field         */
+#define LPC_GPIO_PORT_MASK_MASKP1_MASK           (0x2U)                                              /*!< LPC_GPIO_PORT_MASK.MASKP1 Mask          */
+#define LPC_GPIO_PORT_MASK_MASKP1_SHIFT          (1U)                                                /*!< LPC_GPIO_PORT_MASK.MASKP1 Position      */
+#define LPC_GPIO_PORT_MASK_MASKP1(x)             (((uint32_t)(((uint32_t)(x))<<1U))&0x2UL)           /*!< LPC_GPIO_PORT_MASK.MASKP1 Field         */
+#define LPC_GPIO_PORT_MASK_MASKP2_MASK           (0x4U)                                              /*!< LPC_GPIO_PORT_MASK.MASKP2 Mask          */
+#define LPC_GPIO_PORT_MASK_MASKP2_SHIFT          (2U)                                                /*!< LPC_GPIO_PORT_MASK.MASKP2 Position      */
+#define LPC_GPIO_PORT_MASK_MASKP2(x)             (((uint32_t)(((uint32_t)(x))<<2U))&0x4UL)           /*!< LPC_GPIO_PORT_MASK.MASKP2 Field         */
+#define LPC_GPIO_PORT_MASK_MASKP3_MASK           (0x8U)                                              /*!< LPC_GPIO_PORT_MASK.MASKP3 Mask          */
+#define LPC_GPIO_PORT_MASK_MASKP3_SHIFT          (3U)                                                /*!< LPC_GPIO_PORT_MASK.MASKP3 Position      */
+#define LPC_GPIO_PORT_MASK_MASKP3(x)             (((uint32_t)(((uint32_t)(x))<<3U))&0x8UL)           /*!< LPC_GPIO_PORT_MASK.MASKP3 Field         */
+#define LPC_GPIO_PORT_MASK_MASKP4_MASK           (0x10U)                                             /*!< LPC_GPIO_PORT_MASK.MASKP4 Mask          */
+#define LPC_GPIO_PORT_MASK_MASKP4_SHIFT          (4U)                                                /*!< LPC_GPIO_PORT_MASK.MASKP4 Position      */
+#define LPC_GPIO_PORT_MASK_MASKP4(x)             (((uint32_t)(((uint32_t)(x))<<4U))&0x10UL)          /*!< LPC_GPIO_PORT_MASK.MASKP4 Field         */
+#define LPC_GPIO_PORT_MASK_MASKP5_MASK           (0x20U)                                             /*!< LPC_GPIO_PORT_MASK.MASKP5 Mask          */
+#define LPC_GPIO_PORT_MASK_MASKP5_SHIFT          (5U)                                                /*!< LPC_GPIO_PORT_MASK.MASKP5 Position      */
+#define LPC_GPIO_PORT_MASK_MASKP5(x)             (((uint32_t)(((uint32_t)(x))<<5U))&0x20UL)          /*!< LPC_GPIO_PORT_MASK.MASKP5 Field         */
+#define LPC_GPIO_PORT_MASK_MASKP6_MASK           (0x40U)                                             /*!< LPC_GPIO_PORT_MASK.MASKP6 Mask          */
+#define LPC_GPIO_PORT_MASK_MASKP6_SHIFT          (6U)                                                /*!< LPC_GPIO_PORT_MASK.MASKP6 Position      */
+#define LPC_GPIO_PORT_MASK_MASKP6(x)             (((uint32_t)(((uint32_t)(x))<<6U))&0x40UL)          /*!< LPC_GPIO_PORT_MASK.MASKP6 Field         */
+#define LPC_GPIO_PORT_MASK_MASKP7_MASK           (0x80U)                                             /*!< LPC_GPIO_PORT_MASK.MASKP7 Mask          */
+#define LPC_GPIO_PORT_MASK_MASKP7_SHIFT          (7U)                                                /*!< LPC_GPIO_PORT_MASK.MASKP7 Position      */
+#define LPC_GPIO_PORT_MASK_MASKP7(x)             (((uint32_t)(((uint32_t)(x))<<7U))&0x80UL)          /*!< LPC_GPIO_PORT_MASK.MASKP7 Field         */
+#define LPC_GPIO_PORT_MASK_MASKP8_MASK           (0x100U)                                            /*!< LPC_GPIO_PORT_MASK.MASKP8 Mask          */
+#define LPC_GPIO_PORT_MASK_MASKP8_SHIFT          (8U)                                                /*!< LPC_GPIO_PORT_MASK.MASKP8 Position      */
+#define LPC_GPIO_PORT_MASK_MASKP8(x)             (((uint32_t)(((uint32_t)(x))<<8U))&0x100UL)         /*!< LPC_GPIO_PORT_MASK.MASKP8 Field         */
+#define LPC_GPIO_PORT_MASK_MASKP9_MASK           (0x200U)                                            /*!< LPC_GPIO_PORT_MASK.MASKP9 Mask          */
+#define LPC_GPIO_PORT_MASK_MASKP9_SHIFT          (9U)                                                /*!< LPC_GPIO_PORT_MASK.MASKP9 Position      */
+#define LPC_GPIO_PORT_MASK_MASKP9(x)             (((uint32_t)(((uint32_t)(x))<<9U))&0x200UL)         /*!< LPC_GPIO_PORT_MASK.MASKP9 Field         */
+#define LPC_GPIO_PORT_MASK_MASKP10_MASK          (0x400U)                                            /*!< LPC_GPIO_PORT_MASK.MASKP10 Mask         */
+#define LPC_GPIO_PORT_MASK_MASKP10_SHIFT         (10U)                                               /*!< LPC_GPIO_PORT_MASK.MASKP10 Position     */
+#define LPC_GPIO_PORT_MASK_MASKP10(x)            (((uint32_t)(((uint32_t)(x))<<10U))&0x400UL)        /*!< LPC_GPIO_PORT_MASK.MASKP10 Field        */
+#define LPC_GPIO_PORT_MASK_MASKP11_MASK          (0x800U)                                            /*!< LPC_GPIO_PORT_MASK.MASKP11 Mask         */
+#define LPC_GPIO_PORT_MASK_MASKP11_SHIFT         (11U)                                               /*!< LPC_GPIO_PORT_MASK.MASKP11 Position     */
+#define LPC_GPIO_PORT_MASK_MASKP11(x)            (((uint32_t)(((uint32_t)(x))<<11U))&0x800UL)        /*!< LPC_GPIO_PORT_MASK.MASKP11 Field        */
+#define LPC_GPIO_PORT_MASK_MASKP12_MASK          (0x1000U)                                           /*!< LPC_GPIO_PORT_MASK.MASKP12 Mask         */
+#define LPC_GPIO_PORT_MASK_MASKP12_SHIFT         (12U)                                               /*!< LPC_GPIO_PORT_MASK.MASKP12 Position     */
+#define LPC_GPIO_PORT_MASK_MASKP12(x)            (((uint32_t)(((uint32_t)(x))<<12U))&0x1000UL)       /*!< LPC_GPIO_PORT_MASK.MASKP12 Field        */
+#define LPC_GPIO_PORT_MASK_MASKP13_MASK          (0x2000U)                                           /*!< LPC_GPIO_PORT_MASK.MASKP13 Mask         */
+#define LPC_GPIO_PORT_MASK_MASKP13_SHIFT         (13U)                                               /*!< LPC_GPIO_PORT_MASK.MASKP13 Position     */
+#define LPC_GPIO_PORT_MASK_MASKP13(x)            (((uint32_t)(((uint32_t)(x))<<13U))&0x2000UL)       /*!< LPC_GPIO_PORT_MASK.MASKP13 Field        */
+#define LPC_GPIO_PORT_MASK_MASKP14_MASK          (0x4000U)                                           /*!< LPC_GPIO_PORT_MASK.MASKP14 Mask         */
+#define LPC_GPIO_PORT_MASK_MASKP14_SHIFT         (14U)                                               /*!< LPC_GPIO_PORT_MASK.MASKP14 Position     */
+#define LPC_GPIO_PORT_MASK_MASKP14(x)            (((uint32_t)(((uint32_t)(x))<<14U))&0x4000UL)       /*!< LPC_GPIO_PORT_MASK.MASKP14 Field        */
+#define LPC_GPIO_PORT_MASK_MASKP15_MASK          (0x8000U)                                           /*!< LPC_GPIO_PORT_MASK.MASKP15 Mask         */
+#define LPC_GPIO_PORT_MASK_MASKP15_SHIFT         (15U)                                               /*!< LPC_GPIO_PORT_MASK.MASKP15 Position     */
+#define LPC_GPIO_PORT_MASK_MASKP15(x)            (((uint32_t)(((uint32_t)(x))<<15U))&0x8000UL)       /*!< LPC_GPIO_PORT_MASK.MASKP15 Field        */
+#define LPC_GPIO_PORT_MASK_MASKP16_MASK          (0x10000U)                                          /*!< LPC_GPIO_PORT_MASK.MASKP16 Mask         */
+#define LPC_GPIO_PORT_MASK_MASKP16_SHIFT         (16U)                                               /*!< LPC_GPIO_PORT_MASK.MASKP16 Position     */
+#define LPC_GPIO_PORT_MASK_MASKP16(x)            (((uint32_t)(((uint32_t)(x))<<16U))&0x10000UL)      /*!< LPC_GPIO_PORT_MASK.MASKP16 Field        */
+#define LPC_GPIO_PORT_MASK_MASKP17_MASK          (0x20000U)                                          /*!< LPC_GPIO_PORT_MASK.MASKP17 Mask         */
+#define LPC_GPIO_PORT_MASK_MASKP17_SHIFT         (17U)                                               /*!< LPC_GPIO_PORT_MASK.MASKP17 Position     */
+#define LPC_GPIO_PORT_MASK_MASKP17(x)            (((uint32_t)(((uint32_t)(x))<<17U))&0x20000UL)      /*!< LPC_GPIO_PORT_MASK.MASKP17 Field        */
+#define LPC_GPIO_PORT_MASK_MASKP18_MASK          (0x40000U)                                          /*!< LPC_GPIO_PORT_MASK.MASKP18 Mask         */
+#define LPC_GPIO_PORT_MASK_MASKP18_SHIFT         (18U)                                               /*!< LPC_GPIO_PORT_MASK.MASKP18 Position     */
+#define LPC_GPIO_PORT_MASK_MASKP18(x)            (((uint32_t)(((uint32_t)(x))<<18U))&0x40000UL)      /*!< LPC_GPIO_PORT_MASK.MASKP18 Field        */
+#define LPC_GPIO_PORT_MASK_MASKP19_MASK          (0x80000U)                                          /*!< LPC_GPIO_PORT_MASK.MASKP19 Mask         */
+#define LPC_GPIO_PORT_MASK_MASKP19_SHIFT         (19U)                                               /*!< LPC_GPIO_PORT_MASK.MASKP19 Position     */
+#define LPC_GPIO_PORT_MASK_MASKP19(x)            (((uint32_t)(((uint32_t)(x))<<19U))&0x80000UL)      /*!< LPC_GPIO_PORT_MASK.MASKP19 Field        */
+#define LPC_GPIO_PORT_MASK_MASKP20_MASK          (0x100000U)                                         /*!< LPC_GPIO_PORT_MASK.MASKP20 Mask         */
+#define LPC_GPIO_PORT_MASK_MASKP20_SHIFT         (20U)                                               /*!< LPC_GPIO_PORT_MASK.MASKP20 Position     */
+#define LPC_GPIO_PORT_MASK_MASKP20(x)            (((uint32_t)(((uint32_t)(x))<<20U))&0x100000UL)     /*!< LPC_GPIO_PORT_MASK.MASKP20 Field        */
+#define LPC_GPIO_PORT_MASK_MASKP21_MASK          (0x200000U)                                         /*!< LPC_GPIO_PORT_MASK.MASKP21 Mask         */
+#define LPC_GPIO_PORT_MASK_MASKP21_SHIFT         (21U)                                               /*!< LPC_GPIO_PORT_MASK.MASKP21 Position     */
+#define LPC_GPIO_PORT_MASK_MASKP21(x)            (((uint32_t)(((uint32_t)(x))<<21U))&0x200000UL)     /*!< LPC_GPIO_PORT_MASK.MASKP21 Field        */
+#define LPC_GPIO_PORT_MASK_MASKP22_MASK          (0x400000U)                                         /*!< LPC_GPIO_PORT_MASK.MASKP22 Mask         */
+#define LPC_GPIO_PORT_MASK_MASKP22_SHIFT         (22U)                                               /*!< LPC_GPIO_PORT_MASK.MASKP22 Position     */
+#define LPC_GPIO_PORT_MASK_MASKP22(x)            (((uint32_t)(((uint32_t)(x))<<22U))&0x400000UL)     /*!< LPC_GPIO_PORT_MASK.MASKP22 Field        */
+#define LPC_GPIO_PORT_MASK_MASKP23_MASK          (0x800000U)                                         /*!< LPC_GPIO_PORT_MASK.MASKP23 Mask         */
+#define LPC_GPIO_PORT_MASK_MASKP23_SHIFT         (23U)                                               /*!< LPC_GPIO_PORT_MASK.MASKP23 Position     */
+#define LPC_GPIO_PORT_MASK_MASKP23(x)            (((uint32_t)(((uint32_t)(x))<<23U))&0x800000UL)     /*!< LPC_GPIO_PORT_MASK.MASKP23 Field        */
+#define LPC_GPIO_PORT_MASK_MASKP24_MASK          (0x1000000U)                                        /*!< LPC_GPIO_PORT_MASK.MASKP24 Mask         */
+#define LPC_GPIO_PORT_MASK_MASKP24_SHIFT         (24U)                                               /*!< LPC_GPIO_PORT_MASK.MASKP24 Position     */
+#define LPC_GPIO_PORT_MASK_MASKP24(x)            (((uint32_t)(((uint32_t)(x))<<24U))&0x1000000UL)    /*!< LPC_GPIO_PORT_MASK.MASKP24 Field        */
+#define LPC_GPIO_PORT_MASK_MASKP25_MASK          (0x2000000U)                                        /*!< LPC_GPIO_PORT_MASK.MASKP25 Mask         */
+#define LPC_GPIO_PORT_MASK_MASKP25_SHIFT         (25U)                                               /*!< LPC_GPIO_PORT_MASK.MASKP25 Position     */
+#define LPC_GPIO_PORT_MASK_MASKP25(x)            (((uint32_t)(((uint32_t)(x))<<25U))&0x2000000UL)    /*!< LPC_GPIO_PORT_MASK.MASKP25 Field        */
+#define LPC_GPIO_PORT_MASK_MASKP26_MASK          (0x4000000U)                                        /*!< LPC_GPIO_PORT_MASK.MASKP26 Mask         */
+#define LPC_GPIO_PORT_MASK_MASKP26_SHIFT         (26U)                                               /*!< LPC_GPIO_PORT_MASK.MASKP26 Position     */
+#define LPC_GPIO_PORT_MASK_MASKP26(x)            (((uint32_t)(((uint32_t)(x))<<26U))&0x4000000UL)    /*!< LPC_GPIO_PORT_MASK.MASKP26 Field        */
+#define LPC_GPIO_PORT_MASK_MASKP27_MASK          (0x8000000U)                                        /*!< LPC_GPIO_PORT_MASK.MASKP27 Mask         */
+#define LPC_GPIO_PORT_MASK_MASKP27_SHIFT         (27U)                                               /*!< LPC_GPIO_PORT_MASK.MASKP27 Position     */
+#define LPC_GPIO_PORT_MASK_MASKP27(x)            (((uint32_t)(((uint32_t)(x))<<27U))&0x8000000UL)    /*!< LPC_GPIO_PORT_MASK.MASKP27 Field        */
+#define LPC_GPIO_PORT_MASK_MASKP28_MASK          (0x10000000U)                                       /*!< LPC_GPIO_PORT_MASK.MASKP28 Mask         */
+#define LPC_GPIO_PORT_MASK_MASKP28_SHIFT         (28U)                                               /*!< LPC_GPIO_PORT_MASK.MASKP28 Position     */
+#define LPC_GPIO_PORT_MASK_MASKP28(x)            (((uint32_t)(((uint32_t)(x))<<28U))&0x10000000UL)   /*!< LPC_GPIO_PORT_MASK.MASKP28 Field        */
+#define LPC_GPIO_PORT_MASK_MASKP29_MASK          (0x20000000U)                                       /*!< LPC_GPIO_PORT_MASK.MASKP29 Mask         */
+#define LPC_GPIO_PORT_MASK_MASKP29_SHIFT         (29U)                                               /*!< LPC_GPIO_PORT_MASK.MASKP29 Position     */
+#define LPC_GPIO_PORT_MASK_MASKP29(x)            (((uint32_t)(((uint32_t)(x))<<29U))&0x20000000UL)   /*!< LPC_GPIO_PORT_MASK.MASKP29 Field        */
+#define LPC_GPIO_PORT_MASK_MASKP30_MASK          (0x40000000U)                                       /*!< LPC_GPIO_PORT_MASK.MASKP30 Mask         */
+#define LPC_GPIO_PORT_MASK_MASKP30_SHIFT         (30U)                                               /*!< LPC_GPIO_PORT_MASK.MASKP30 Position     */
+#define LPC_GPIO_PORT_MASK_MASKP30(x)            (((uint32_t)(((uint32_t)(x))<<30U))&0x40000000UL)   /*!< LPC_GPIO_PORT_MASK.MASKP30 Field        */
+#define LPC_GPIO_PORT_MASK_MASKP31_MASK          (0x80000000U)                                       /*!< LPC_GPIO_PORT_MASK.MASKP31 Mask         */
+#define LPC_GPIO_PORT_MASK_MASKP31_SHIFT         (31U)                                               /*!< LPC_GPIO_PORT_MASK.MASKP31 Position     */
+#define LPC_GPIO_PORT_MASK_MASKP31(x)            (((uint32_t)(((uint32_t)(x))<<31U))&0x80000000UL)   /*!< LPC_GPIO_PORT_MASK.MASKP31 Field        */
+/* ------- PIN Bit Fields                           ------ */
+#define LPC_GPIO_PORT_PIN_PORT0_MASK             (0x1U)                                              /*!< LPC_GPIO_PORT_PIN.PORT0 Mask            */
+#define LPC_GPIO_PORT_PIN_PORT0_SHIFT            (0U)                                                /*!< LPC_GPIO_PORT_PIN.PORT0 Position        */
+#define LPC_GPIO_PORT_PIN_PORT0(x)               (((uint32_t)(((uint32_t)(x))<<0U))&0x1UL)           /*!< LPC_GPIO_PORT_PIN.PORT0 Field           */
+#define LPC_GPIO_PORT_PIN_PORT1_MASK             (0x2U)                                              /*!< LPC_GPIO_PORT_PIN.PORT1 Mask            */
+#define LPC_GPIO_PORT_PIN_PORT1_SHIFT            (1U)                                                /*!< LPC_GPIO_PORT_PIN.PORT1 Position        */
+#define LPC_GPIO_PORT_PIN_PORT1(x)               (((uint32_t)(((uint32_t)(x))<<1U))&0x2UL)           /*!< LPC_GPIO_PORT_PIN.PORT1 Field           */
+#define LPC_GPIO_PORT_PIN_PORT2_MASK             (0x4U)                                              /*!< LPC_GPIO_PORT_PIN.PORT2 Mask            */
+#define LPC_GPIO_PORT_PIN_PORT2_SHIFT            (2U)                                                /*!< LPC_GPIO_PORT_PIN.PORT2 Position        */
+#define LPC_GPIO_PORT_PIN_PORT2(x)               (((uint32_t)(((uint32_t)(x))<<2U))&0x4UL)           /*!< LPC_GPIO_PORT_PIN.PORT2 Field           */
+#define LPC_GPIO_PORT_PIN_PORT3_MASK             (0x8U)                                              /*!< LPC_GPIO_PORT_PIN.PORT3 Mask            */
+#define LPC_GPIO_PORT_PIN_PORT3_SHIFT            (3U)                                                /*!< LPC_GPIO_PORT_PIN.PORT3 Position        */
+#define LPC_GPIO_PORT_PIN_PORT3(x)               (((uint32_t)(((uint32_t)(x))<<3U))&0x8UL)           /*!< LPC_GPIO_PORT_PIN.PORT3 Field           */
+#define LPC_GPIO_PORT_PIN_PORT4_MASK             (0x10U)                                             /*!< LPC_GPIO_PORT_PIN.PORT4 Mask            */
+#define LPC_GPIO_PORT_PIN_PORT4_SHIFT            (4U)                                                /*!< LPC_GPIO_PORT_PIN.PORT4 Position        */
+#define LPC_GPIO_PORT_PIN_PORT4(x)               (((uint32_t)(((uint32_t)(x))<<4U))&0x10UL)          /*!< LPC_GPIO_PORT_PIN.PORT4 Field           */
+#define LPC_GPIO_PORT_PIN_PORT5_MASK             (0x20U)                                             /*!< LPC_GPIO_PORT_PIN.PORT5 Mask            */
+#define LPC_GPIO_PORT_PIN_PORT5_SHIFT            (5U)                                                /*!< LPC_GPIO_PORT_PIN.PORT5 Position        */
+#define LPC_GPIO_PORT_PIN_PORT5(x)               (((uint32_t)(((uint32_t)(x))<<5U))&0x20UL)          /*!< LPC_GPIO_PORT_PIN.PORT5 Field           */
+#define LPC_GPIO_PORT_PIN_PORT6_MASK             (0x40U)                                             /*!< LPC_GPIO_PORT_PIN.PORT6 Mask            */
+#define LPC_GPIO_PORT_PIN_PORT6_SHIFT            (6U)                                                /*!< LPC_GPIO_PORT_PIN.PORT6 Position        */
+#define LPC_GPIO_PORT_PIN_PORT6(x)               (((uint32_t)(((uint32_t)(x))<<6U))&0x40UL)          /*!< LPC_GPIO_PORT_PIN.PORT6 Field           */
+#define LPC_GPIO_PORT_PIN_PORT7_MASK             (0x80U)                                             /*!< LPC_GPIO_PORT_PIN.PORT7 Mask            */
+#define LPC_GPIO_PORT_PIN_PORT7_SHIFT            (7U)                                                /*!< LPC_GPIO_PORT_PIN.PORT7 Position        */
+#define LPC_GPIO_PORT_PIN_PORT7(x)               (((uint32_t)(((uint32_t)(x))<<7U))&0x80UL)          /*!< LPC_GPIO_PORT_PIN.PORT7 Field           */
+#define LPC_GPIO_PORT_PIN_PORT8_MASK             (0x100U)                                            /*!< LPC_GPIO_PORT_PIN.PORT8 Mask            */
+#define LPC_GPIO_PORT_PIN_PORT8_SHIFT            (8U)                                                /*!< LPC_GPIO_PORT_PIN.PORT8 Position        */
+#define LPC_GPIO_PORT_PIN_PORT8(x)               (((uint32_t)(((uint32_t)(x))<<8U))&0x100UL)         /*!< LPC_GPIO_PORT_PIN.PORT8 Field           */
+#define LPC_GPIO_PORT_PIN_PORT9_MASK             (0x200U)                                            /*!< LPC_GPIO_PORT_PIN.PORT9 Mask            */
+#define LPC_GPIO_PORT_PIN_PORT9_SHIFT            (9U)                                                /*!< LPC_GPIO_PORT_PIN.PORT9 Position        */
+#define LPC_GPIO_PORT_PIN_PORT9(x)               (((uint32_t)(((uint32_t)(x))<<9U))&0x200UL)         /*!< LPC_GPIO_PORT_PIN.PORT9 Field           */
+#define LPC_GPIO_PORT_PIN_PORT10_MASK            (0x400U)                                            /*!< LPC_GPIO_PORT_PIN.PORT10 Mask           */
+#define LPC_GPIO_PORT_PIN_PORT10_SHIFT           (10U)                                               /*!< LPC_GPIO_PORT_PIN.PORT10 Position       */
+#define LPC_GPIO_PORT_PIN_PORT10(x)              (((uint32_t)(((uint32_t)(x))<<10U))&0x400UL)        /*!< LPC_GPIO_PORT_PIN.PORT10 Field          */
+#define LPC_GPIO_PORT_PIN_PORT11_MASK            (0x800U)                                            /*!< LPC_GPIO_PORT_PIN.PORT11 Mask           */
+#define LPC_GPIO_PORT_PIN_PORT11_SHIFT           (11U)                                               /*!< LPC_GPIO_PORT_PIN.PORT11 Position       */
+#define LPC_GPIO_PORT_PIN_PORT11(x)              (((uint32_t)(((uint32_t)(x))<<11U))&0x800UL)        /*!< LPC_GPIO_PORT_PIN.PORT11 Field          */
+#define LPC_GPIO_PORT_PIN_PORT12_MASK            (0x1000U)                                           /*!< LPC_GPIO_PORT_PIN.PORT12 Mask           */
+#define LPC_GPIO_PORT_PIN_PORT12_SHIFT           (12U)                                               /*!< LPC_GPIO_PORT_PIN.PORT12 Position       */
+#define LPC_GPIO_PORT_PIN_PORT12(x)              (((uint32_t)(((uint32_t)(x))<<12U))&0x1000UL)       /*!< LPC_GPIO_PORT_PIN.PORT12 Field          */
+#define LPC_GPIO_PORT_PIN_PORT13_MASK            (0x2000U)                                           /*!< LPC_GPIO_PORT_PIN.PORT13 Mask           */
+#define LPC_GPIO_PORT_PIN_PORT13_SHIFT           (13U)                                               /*!< LPC_GPIO_PORT_PIN.PORT13 Position       */
+#define LPC_GPIO_PORT_PIN_PORT13(x)              (((uint32_t)(((uint32_t)(x))<<13U))&0x2000UL)       /*!< LPC_GPIO_PORT_PIN.PORT13 Field          */
+#define LPC_GPIO_PORT_PIN_PORT14_MASK            (0x4000U)                                           /*!< LPC_GPIO_PORT_PIN.PORT14 Mask           */
+#define LPC_GPIO_PORT_PIN_PORT14_SHIFT           (14U)                                               /*!< LPC_GPIO_PORT_PIN.PORT14 Position       */
+#define LPC_GPIO_PORT_PIN_PORT14(x)              (((uint32_t)(((uint32_t)(x))<<14U))&0x4000UL)       /*!< LPC_GPIO_PORT_PIN.PORT14 Field          */
+#define LPC_GPIO_PORT_PIN_PORT15_MASK            (0x8000U)                                           /*!< LPC_GPIO_PORT_PIN.PORT15 Mask           */
+#define LPC_GPIO_PORT_PIN_PORT15_SHIFT           (15U)                                               /*!< LPC_GPIO_PORT_PIN.PORT15 Position       */
+#define LPC_GPIO_PORT_PIN_PORT15(x)              (((uint32_t)(((uint32_t)(x))<<15U))&0x8000UL)       /*!< LPC_GPIO_PORT_PIN.PORT15 Field          */
+#define LPC_GPIO_PORT_PIN_PORT16_MASK            (0x10000U)                                          /*!< LPC_GPIO_PORT_PIN.PORT16 Mask           */
+#define LPC_GPIO_PORT_PIN_PORT16_SHIFT           (16U)                                               /*!< LPC_GPIO_PORT_PIN.PORT16 Position       */
+#define LPC_GPIO_PORT_PIN_PORT16(x)              (((uint32_t)(((uint32_t)(x))<<16U))&0x10000UL)      /*!< LPC_GPIO_PORT_PIN.PORT16 Field          */
+#define LPC_GPIO_PORT_PIN_PORT17_MASK            (0x20000U)                                          /*!< LPC_GPIO_PORT_PIN.PORT17 Mask           */
+#define LPC_GPIO_PORT_PIN_PORT17_SHIFT           (17U)                                               /*!< LPC_GPIO_PORT_PIN.PORT17 Position       */
+#define LPC_GPIO_PORT_PIN_PORT17(x)              (((uint32_t)(((uint32_t)(x))<<17U))&0x20000UL)      /*!< LPC_GPIO_PORT_PIN.PORT17 Field          */
+#define LPC_GPIO_PORT_PIN_PORT18_MASK            (0x40000U)                                          /*!< LPC_GPIO_PORT_PIN.PORT18 Mask           */
+#define LPC_GPIO_PORT_PIN_PORT18_SHIFT           (18U)                                               /*!< LPC_GPIO_PORT_PIN.PORT18 Position       */
+#define LPC_GPIO_PORT_PIN_PORT18(x)              (((uint32_t)(((uint32_t)(x))<<18U))&0x40000UL)      /*!< LPC_GPIO_PORT_PIN.PORT18 Field          */
+#define LPC_GPIO_PORT_PIN_PORT19_MASK            (0x80000U)                                          /*!< LPC_GPIO_PORT_PIN.PORT19 Mask           */
+#define LPC_GPIO_PORT_PIN_PORT19_SHIFT           (19U)                                               /*!< LPC_GPIO_PORT_PIN.PORT19 Position       */
+#define LPC_GPIO_PORT_PIN_PORT19(x)              (((uint32_t)(((uint32_t)(x))<<19U))&0x80000UL)      /*!< LPC_GPIO_PORT_PIN.PORT19 Field          */
+#define LPC_GPIO_PORT_PIN_PORT20_MASK            (0x100000U)                                         /*!< LPC_GPIO_PORT_PIN.PORT20 Mask           */
+#define LPC_GPIO_PORT_PIN_PORT20_SHIFT           (20U)                                               /*!< LPC_GPIO_PORT_PIN.PORT20 Position       */
+#define LPC_GPIO_PORT_PIN_PORT20(x)              (((uint32_t)(((uint32_t)(x))<<20U))&0x100000UL)     /*!< LPC_GPIO_PORT_PIN.PORT20 Field          */
+#define LPC_GPIO_PORT_PIN_PORT21_MASK            (0x200000U)                                         /*!< LPC_GPIO_PORT_PIN.PORT21 Mask           */
+#define LPC_GPIO_PORT_PIN_PORT21_SHIFT           (21U)                                               /*!< LPC_GPIO_PORT_PIN.PORT21 Position       */
+#define LPC_GPIO_PORT_PIN_PORT21(x)              (((uint32_t)(((uint32_t)(x))<<21U))&0x200000UL)     /*!< LPC_GPIO_PORT_PIN.PORT21 Field          */
+#define LPC_GPIO_PORT_PIN_PORT22_MASK            (0x400000U)                                         /*!< LPC_GPIO_PORT_PIN.PORT22 Mask           */
+#define LPC_GPIO_PORT_PIN_PORT22_SHIFT           (22U)                                               /*!< LPC_GPIO_PORT_PIN.PORT22 Position       */
+#define LPC_GPIO_PORT_PIN_PORT22(x)              (((uint32_t)(((uint32_t)(x))<<22U))&0x400000UL)     /*!< LPC_GPIO_PORT_PIN.PORT22 Field          */
+#define LPC_GPIO_PORT_PIN_PORT23_MASK            (0x800000U)                                         /*!< LPC_GPIO_PORT_PIN.PORT23 Mask           */
+#define LPC_GPIO_PORT_PIN_PORT23_SHIFT           (23U)                                               /*!< LPC_GPIO_PORT_PIN.PORT23 Position       */
+#define LPC_GPIO_PORT_PIN_PORT23(x)              (((uint32_t)(((uint32_t)(x))<<23U))&0x800000UL)     /*!< LPC_GPIO_PORT_PIN.PORT23 Field          */
+#define LPC_GPIO_PORT_PIN_PORT24_MASK            (0x1000000U)                                        /*!< LPC_GPIO_PORT_PIN.PORT24 Mask           */
+#define LPC_GPIO_PORT_PIN_PORT24_SHIFT           (24U)                                               /*!< LPC_GPIO_PORT_PIN.PORT24 Position       */
+#define LPC_GPIO_PORT_PIN_PORT24(x)              (((uint32_t)(((uint32_t)(x))<<24U))&0x1000000UL)    /*!< LPC_GPIO_PORT_PIN.PORT24 Field          */
+#define LPC_GPIO_PORT_PIN_PORT25_MASK            (0x2000000U)                                        /*!< LPC_GPIO_PORT_PIN.PORT25 Mask           */
+#define LPC_GPIO_PORT_PIN_PORT25_SHIFT           (25U)                                               /*!< LPC_GPIO_PORT_PIN.PORT25 Position       */
+#define LPC_GPIO_PORT_PIN_PORT25(x)              (((uint32_t)(((uint32_t)(x))<<25U))&0x2000000UL)    /*!< LPC_GPIO_PORT_PIN.PORT25 Field          */
+#define LPC_GPIO_PORT_PIN_PORT26_MASK            (0x4000000U)                                        /*!< LPC_GPIO_PORT_PIN.PORT26 Mask           */
+#define LPC_GPIO_PORT_PIN_PORT26_SHIFT           (26U)                                               /*!< LPC_GPIO_PORT_PIN.PORT26 Position       */
+#define LPC_GPIO_PORT_PIN_PORT26(x)              (((uint32_t)(((uint32_t)(x))<<26U))&0x4000000UL)    /*!< LPC_GPIO_PORT_PIN.PORT26 Field          */
+#define LPC_GPIO_PORT_PIN_PORT27_MASK            (0x8000000U)                                        /*!< LPC_GPIO_PORT_PIN.PORT27 Mask           */
+#define LPC_GPIO_PORT_PIN_PORT27_SHIFT           (27U)                                               /*!< LPC_GPIO_PORT_PIN.PORT27 Position       */
+#define LPC_GPIO_PORT_PIN_PORT27(x)              (((uint32_t)(((uint32_t)(x))<<27U))&0x8000000UL)    /*!< LPC_GPIO_PORT_PIN.PORT27 Field          */
+#define LPC_GPIO_PORT_PIN_PORT28_MASK            (0x10000000U)                                       /*!< LPC_GPIO_PORT_PIN.PORT28 Mask           */
+#define LPC_GPIO_PORT_PIN_PORT28_SHIFT           (28U)                                               /*!< LPC_GPIO_PORT_PIN.PORT28 Position       */
+#define LPC_GPIO_PORT_PIN_PORT28(x)              (((uint32_t)(((uint32_t)(x))<<28U))&0x10000000UL)   /*!< LPC_GPIO_PORT_PIN.PORT28 Field          */
+#define LPC_GPIO_PORT_PIN_PORT29_MASK            (0x20000000U)                                       /*!< LPC_GPIO_PORT_PIN.PORT29 Mask           */
+#define LPC_GPIO_PORT_PIN_PORT29_SHIFT           (29U)                                               /*!< LPC_GPIO_PORT_PIN.PORT29 Position       */
+#define LPC_GPIO_PORT_PIN_PORT29(x)              (((uint32_t)(((uint32_t)(x))<<29U))&0x20000000UL)   /*!< LPC_GPIO_PORT_PIN.PORT29 Field          */
+#define LPC_GPIO_PORT_PIN_PORT30_MASK            (0x40000000U)                                       /*!< LPC_GPIO_PORT_PIN.PORT30 Mask           */
+#define LPC_GPIO_PORT_PIN_PORT30_SHIFT           (30U)                                               /*!< LPC_GPIO_PORT_PIN.PORT30 Position       */
+#define LPC_GPIO_PORT_PIN_PORT30(x)              (((uint32_t)(((uint32_t)(x))<<30U))&0x40000000UL)   /*!< LPC_GPIO_PORT_PIN.PORT30 Field          */
+#define LPC_GPIO_PORT_PIN_PORT31_MASK            (0x80000000U)                                       /*!< LPC_GPIO_PORT_PIN.PORT31 Mask           */
+#define LPC_GPIO_PORT_PIN_PORT31_SHIFT           (31U)                                               /*!< LPC_GPIO_PORT_PIN.PORT31 Position       */
+#define LPC_GPIO_PORT_PIN_PORT31(x)              (((uint32_t)(((uint32_t)(x))<<31U))&0x80000000UL)   /*!< LPC_GPIO_PORT_PIN.PORT31 Field          */
+/* ------- MPIN Bit Fields                          ------ */
+#define LPC_GPIO_PORT_MPIN_MPORTP0_MASK          (0x1U)                                              /*!< LPC_GPIO_PORT_MPIN.MPORTP0 Mask         */
+#define LPC_GPIO_PORT_MPIN_MPORTP0_SHIFT         (0U)                                                /*!< LPC_GPIO_PORT_MPIN.MPORTP0 Position     */
+#define LPC_GPIO_PORT_MPIN_MPORTP0(x)            (((uint32_t)(((uint32_t)(x))<<0U))&0x1UL)           /*!< LPC_GPIO_PORT_MPIN.MPORTP0 Field        */
+#define LPC_GPIO_PORT_MPIN_MPORTP1_MASK          (0x2U)                                              /*!< LPC_GPIO_PORT_MPIN.MPORTP1 Mask         */
+#define LPC_GPIO_PORT_MPIN_MPORTP1_SHIFT         (1U)                                                /*!< LPC_GPIO_PORT_MPIN.MPORTP1 Position     */
+#define LPC_GPIO_PORT_MPIN_MPORTP1(x)            (((uint32_t)(((uint32_t)(x))<<1U))&0x2UL)           /*!< LPC_GPIO_PORT_MPIN.MPORTP1 Field        */
+#define LPC_GPIO_PORT_MPIN_MPORTP2_MASK          (0x4U)                                              /*!< LPC_GPIO_PORT_MPIN.MPORTP2 Mask         */
+#define LPC_GPIO_PORT_MPIN_MPORTP2_SHIFT         (2U)                                                /*!< LPC_GPIO_PORT_MPIN.MPORTP2 Position     */
+#define LPC_GPIO_PORT_MPIN_MPORTP2(x)            (((uint32_t)(((uint32_t)(x))<<2U))&0x4UL)           /*!< LPC_GPIO_PORT_MPIN.MPORTP2 Field        */
+#define LPC_GPIO_PORT_MPIN_MPORTP3_MASK          (0x8U)                                              /*!< LPC_GPIO_PORT_MPIN.MPORTP3 Mask         */
+#define LPC_GPIO_PORT_MPIN_MPORTP3_SHIFT         (3U)                                                /*!< LPC_GPIO_PORT_MPIN.MPORTP3 Position     */
+#define LPC_GPIO_PORT_MPIN_MPORTP3(x)            (((uint32_t)(((uint32_t)(x))<<3U))&0x8UL)           /*!< LPC_GPIO_PORT_MPIN.MPORTP3 Field        */
+#define LPC_GPIO_PORT_MPIN_MPORTP4_MASK          (0x10U)                                             /*!< LPC_GPIO_PORT_MPIN.MPORTP4 Mask         */
+#define LPC_GPIO_PORT_MPIN_MPORTP4_SHIFT         (4U)                                                /*!< LPC_GPIO_PORT_MPIN.MPORTP4 Position     */
+#define LPC_GPIO_PORT_MPIN_MPORTP4(x)            (((uint32_t)(((uint32_t)(x))<<4U))&0x10UL)          /*!< LPC_GPIO_PORT_MPIN.MPORTP4 Field        */
+#define LPC_GPIO_PORT_MPIN_MPORTP5_MASK          (0x20U)                                             /*!< LPC_GPIO_PORT_MPIN.MPORTP5 Mask         */
+#define LPC_GPIO_PORT_MPIN_MPORTP5_SHIFT         (5U)                                                /*!< LPC_GPIO_PORT_MPIN.MPORTP5 Position     */
+#define LPC_GPIO_PORT_MPIN_MPORTP5(x)            (((uint32_t)(((uint32_t)(x))<<5U))&0x20UL)          /*!< LPC_GPIO_PORT_MPIN.MPORTP5 Field        */
+#define LPC_GPIO_PORT_MPIN_MPORTP6_MASK          (0x40U)                                             /*!< LPC_GPIO_PORT_MPIN.MPORTP6 Mask         */
+#define LPC_GPIO_PORT_MPIN_MPORTP6_SHIFT         (6U)                                                /*!< LPC_GPIO_PORT_MPIN.MPORTP6 Position     */
+#define LPC_GPIO_PORT_MPIN_MPORTP6(x)            (((uint32_t)(((uint32_t)(x))<<6U))&0x40UL)          /*!< LPC_GPIO_PORT_MPIN.MPORTP6 Field        */
+#define LPC_GPIO_PORT_MPIN_MPORTP7_MASK          (0x80U)                                             /*!< LPC_GPIO_PORT_MPIN.MPORTP7 Mask         */
+#define LPC_GPIO_PORT_MPIN_MPORTP7_SHIFT         (7U)                                                /*!< LPC_GPIO_PORT_MPIN.MPORTP7 Position     */
+#define LPC_GPIO_PORT_MPIN_MPORTP7(x)            (((uint32_t)(((uint32_t)(x))<<7U))&0x80UL)          /*!< LPC_GPIO_PORT_MPIN.MPORTP7 Field        */
+#define LPC_GPIO_PORT_MPIN_MPORTP8_MASK          (0x100U)                                            /*!< LPC_GPIO_PORT_MPIN.MPORTP8 Mask         */
+#define LPC_GPIO_PORT_MPIN_MPORTP8_SHIFT         (8U)                                                /*!< LPC_GPIO_PORT_MPIN.MPORTP8 Position     */
+#define LPC_GPIO_PORT_MPIN_MPORTP8(x)            (((uint32_t)(((uint32_t)(x))<<8U))&0x100UL)         /*!< LPC_GPIO_PORT_MPIN.MPORTP8 Field        */
+#define LPC_GPIO_PORT_MPIN_MPORTP9_MASK          (0x200U)                                            /*!< LPC_GPIO_PORT_MPIN.MPORTP9 Mask         */
+#define LPC_GPIO_PORT_MPIN_MPORTP9_SHIFT         (9U)                                                /*!< LPC_GPIO_PORT_MPIN.MPORTP9 Position     */
+#define LPC_GPIO_PORT_MPIN_MPORTP9(x)            (((uint32_t)(((uint32_t)(x))<<9U))&0x200UL)         /*!< LPC_GPIO_PORT_MPIN.MPORTP9 Field        */
+#define LPC_GPIO_PORT_MPIN_MPORTP10_MASK         (0x400U)                                            /*!< LPC_GPIO_PORT_MPIN.MPORTP10 Mask        */
+#define LPC_GPIO_PORT_MPIN_MPORTP10_SHIFT        (10U)                                               /*!< LPC_GPIO_PORT_MPIN.MPORTP10 Position    */
+#define LPC_GPIO_PORT_MPIN_MPORTP10(x)           (((uint32_t)(((uint32_t)(x))<<10U))&0x400UL)        /*!< LPC_GPIO_PORT_MPIN.MPORTP10 Field       */
+#define LPC_GPIO_PORT_MPIN_MPORTP11_MASK         (0x800U)                                            /*!< LPC_GPIO_PORT_MPIN.MPORTP11 Mask        */
+#define LPC_GPIO_PORT_MPIN_MPORTP11_SHIFT        (11U)                                               /*!< LPC_GPIO_PORT_MPIN.MPORTP11 Position    */
+#define LPC_GPIO_PORT_MPIN_MPORTP11(x)           (((uint32_t)(((uint32_t)(x))<<11U))&0x800UL)        /*!< LPC_GPIO_PORT_MPIN.MPORTP11 Field       */
+#define LPC_GPIO_PORT_MPIN_MPORTP12_MASK         (0x1000U)                                           /*!< LPC_GPIO_PORT_MPIN.MPORTP12 Mask        */
+#define LPC_GPIO_PORT_MPIN_MPORTP12_SHIFT        (12U)                                               /*!< LPC_GPIO_PORT_MPIN.MPORTP12 Position    */
+#define LPC_GPIO_PORT_MPIN_MPORTP12(x)           (((uint32_t)(((uint32_t)(x))<<12U))&0x1000UL)       /*!< LPC_GPIO_PORT_MPIN.MPORTP12 Field       */
+#define LPC_GPIO_PORT_MPIN_MPORTP13_MASK         (0x2000U)                                           /*!< LPC_GPIO_PORT_MPIN.MPORTP13 Mask        */
+#define LPC_GPIO_PORT_MPIN_MPORTP13_SHIFT        (13U)                                               /*!< LPC_GPIO_PORT_MPIN.MPORTP13 Position    */
+#define LPC_GPIO_PORT_MPIN_MPORTP13(x)           (((uint32_t)(((uint32_t)(x))<<13U))&0x2000UL)       /*!< LPC_GPIO_PORT_MPIN.MPORTP13 Field       */
+#define LPC_GPIO_PORT_MPIN_MPORTP14_MASK         (0x4000U)                                           /*!< LPC_GPIO_PORT_MPIN.MPORTP14 Mask        */
+#define LPC_GPIO_PORT_MPIN_MPORTP14_SHIFT        (14U)                                               /*!< LPC_GPIO_PORT_MPIN.MPORTP14 Position    */
+#define LPC_GPIO_PORT_MPIN_MPORTP14(x)           (((uint32_t)(((uint32_t)(x))<<14U))&0x4000UL)       /*!< LPC_GPIO_PORT_MPIN.MPORTP14 Field       */
+#define LPC_GPIO_PORT_MPIN_MPORTP15_MASK         (0x8000U)                                           /*!< LPC_GPIO_PORT_MPIN.MPORTP15 Mask        */
+#define LPC_GPIO_PORT_MPIN_MPORTP15_SHIFT        (15U)                                               /*!< LPC_GPIO_PORT_MPIN.MPORTP15 Position    */
+#define LPC_GPIO_PORT_MPIN_MPORTP15(x)           (((uint32_t)(((uint32_t)(x))<<15U))&0x8000UL)       /*!< LPC_GPIO_PORT_MPIN.MPORTP15 Field       */
+#define LPC_GPIO_PORT_MPIN_MPORTP16_MASK         (0x10000U)                                          /*!< LPC_GPIO_PORT_MPIN.MPORTP16 Mask        */
+#define LPC_GPIO_PORT_MPIN_MPORTP16_SHIFT        (16U)                                               /*!< LPC_GPIO_PORT_MPIN.MPORTP16 Position    */
+#define LPC_GPIO_PORT_MPIN_MPORTP16(x)           (((uint32_t)(((uint32_t)(x))<<16U))&0x10000UL)      /*!< LPC_GPIO_PORT_MPIN.MPORTP16 Field       */
+#define LPC_GPIO_PORT_MPIN_MPORTP17_MASK         (0x20000U)                                          /*!< LPC_GPIO_PORT_MPIN.MPORTP17 Mask        */
+#define LPC_GPIO_PORT_MPIN_MPORTP17_SHIFT        (17U)                                               /*!< LPC_GPIO_PORT_MPIN.MPORTP17 Position    */
+#define LPC_GPIO_PORT_MPIN_MPORTP17(x)           (((uint32_t)(((uint32_t)(x))<<17U))&0x20000UL)      /*!< LPC_GPIO_PORT_MPIN.MPORTP17 Field       */
+#define LPC_GPIO_PORT_MPIN_MPORTP18_MASK         (0x40000U)                                          /*!< LPC_GPIO_PORT_MPIN.MPORTP18 Mask        */
+#define LPC_GPIO_PORT_MPIN_MPORTP18_SHIFT        (18U)                                               /*!< LPC_GPIO_PORT_MPIN.MPORTP18 Position    */
+#define LPC_GPIO_PORT_MPIN_MPORTP18(x)           (((uint32_t)(((uint32_t)(x))<<18U))&0x40000UL)      /*!< LPC_GPIO_PORT_MPIN.MPORTP18 Field       */
+#define LPC_GPIO_PORT_MPIN_MPORTP19_MASK         (0x80000U)                                          /*!< LPC_GPIO_PORT_MPIN.MPORTP19 Mask        */
+#define LPC_GPIO_PORT_MPIN_MPORTP19_SHIFT        (19U)                                               /*!< LPC_GPIO_PORT_MPIN.MPORTP19 Position    */
+#define LPC_GPIO_PORT_MPIN_MPORTP19(x)           (((uint32_t)(((uint32_t)(x))<<19U))&0x80000UL)      /*!< LPC_GPIO_PORT_MPIN.MPORTP19 Field       */
+#define LPC_GPIO_PORT_MPIN_MPORTP20_MASK         (0x100000U)                                         /*!< LPC_GPIO_PORT_MPIN.MPORTP20 Mask        */
+#define LPC_GPIO_PORT_MPIN_MPORTP20_SHIFT        (20U)                                               /*!< LPC_GPIO_PORT_MPIN.MPORTP20 Position    */
+#define LPC_GPIO_PORT_MPIN_MPORTP20(x)           (((uint32_t)(((uint32_t)(x))<<20U))&0x100000UL)     /*!< LPC_GPIO_PORT_MPIN.MPORTP20 Field       */
+#define LPC_GPIO_PORT_MPIN_MPORTP21_MASK         (0x200000U)                                         /*!< LPC_GPIO_PORT_MPIN.MPORTP21 Mask        */
+#define LPC_GPIO_PORT_MPIN_MPORTP21_SHIFT        (21U)                                               /*!< LPC_GPIO_PORT_MPIN.MPORTP21 Position    */
+#define LPC_GPIO_PORT_MPIN_MPORTP21(x)           (((uint32_t)(((uint32_t)(x))<<21U))&0x200000UL)     /*!< LPC_GPIO_PORT_MPIN.MPORTP21 Field       */
+#define LPC_GPIO_PORT_MPIN_MPORTP22_MASK         (0x400000U)                                         /*!< LPC_GPIO_PORT_MPIN.MPORTP22 Mask        */
+#define LPC_GPIO_PORT_MPIN_MPORTP22_SHIFT        (22U)                                               /*!< LPC_GPIO_PORT_MPIN.MPORTP22 Position    */
+#define LPC_GPIO_PORT_MPIN_MPORTP22(x)           (((uint32_t)(((uint32_t)(x))<<22U))&0x400000UL)     /*!< LPC_GPIO_PORT_MPIN.MPORTP22 Field       */
+#define LPC_GPIO_PORT_MPIN_MPORTP23_MASK         (0x800000U)                                         /*!< LPC_GPIO_PORT_MPIN.MPORTP23 Mask        */
+#define LPC_GPIO_PORT_MPIN_MPORTP23_SHIFT        (23U)                                               /*!< LPC_GPIO_PORT_MPIN.MPORTP23 Position    */
+#define LPC_GPIO_PORT_MPIN_MPORTP23(x)           (((uint32_t)(((uint32_t)(x))<<23U))&0x800000UL)     /*!< LPC_GPIO_PORT_MPIN.MPORTP23 Field       */
+#define LPC_GPIO_PORT_MPIN_MPORTP24_MASK         (0x1000000U)                                        /*!< LPC_GPIO_PORT_MPIN.MPORTP24 Mask        */
+#define LPC_GPIO_PORT_MPIN_MPORTP24_SHIFT        (24U)                                               /*!< LPC_GPIO_PORT_MPIN.MPORTP24 Position    */
+#define LPC_GPIO_PORT_MPIN_MPORTP24(x)           (((uint32_t)(((uint32_t)(x))<<24U))&0x1000000UL)    /*!< LPC_GPIO_PORT_MPIN.MPORTP24 Field       */
+#define LPC_GPIO_PORT_MPIN_MPORTP25_MASK         (0x2000000U)                                        /*!< LPC_GPIO_PORT_MPIN.MPORTP25 Mask        */
+#define LPC_GPIO_PORT_MPIN_MPORTP25_SHIFT        (25U)                                               /*!< LPC_GPIO_PORT_MPIN.MPORTP25 Position    */
+#define LPC_GPIO_PORT_MPIN_MPORTP25(x)           (((uint32_t)(((uint32_t)(x))<<25U))&0x2000000UL)    /*!< LPC_GPIO_PORT_MPIN.MPORTP25 Field       */
+#define LPC_GPIO_PORT_MPIN_MPORTP26_MASK         (0x4000000U)                                        /*!< LPC_GPIO_PORT_MPIN.MPORTP26 Mask        */
+#define LPC_GPIO_PORT_MPIN_MPORTP26_SHIFT        (26U)                                               /*!< LPC_GPIO_PORT_MPIN.MPORTP26 Position    */
+#define LPC_GPIO_PORT_MPIN_MPORTP26(x)           (((uint32_t)(((uint32_t)(x))<<26U))&0x4000000UL)    /*!< LPC_GPIO_PORT_MPIN.MPORTP26 Field       */
+#define LPC_GPIO_PORT_MPIN_MPORTP27_MASK         (0x8000000U)                                        /*!< LPC_GPIO_PORT_MPIN.MPORTP27 Mask        */
+#define LPC_GPIO_PORT_MPIN_MPORTP27_SHIFT        (27U)                                               /*!< LPC_GPIO_PORT_MPIN.MPORTP27 Position    */
+#define LPC_GPIO_PORT_MPIN_MPORTP27(x)           (((uint32_t)(((uint32_t)(x))<<27U))&0x8000000UL)    /*!< LPC_GPIO_PORT_MPIN.MPORTP27 Field       */
+#define LPC_GPIO_PORT_MPIN_MPORTP28_MASK         (0x10000000U)                                       /*!< LPC_GPIO_PORT_MPIN.MPORTP28 Mask        */
+#define LPC_GPIO_PORT_MPIN_MPORTP28_SHIFT        (28U)                                               /*!< LPC_GPIO_PORT_MPIN.MPORTP28 Position    */
+#define LPC_GPIO_PORT_MPIN_MPORTP28(x)           (((uint32_t)(((uint32_t)(x))<<28U))&0x10000000UL)   /*!< LPC_GPIO_PORT_MPIN.MPORTP28 Field       */
+#define LPC_GPIO_PORT_MPIN_MPORTP29_MASK         (0x20000000U)                                       /*!< LPC_GPIO_PORT_MPIN.MPORTP29 Mask        */
+#define LPC_GPIO_PORT_MPIN_MPORTP29_SHIFT        (29U)                                               /*!< LPC_GPIO_PORT_MPIN.MPORTP29 Position    */
+#define LPC_GPIO_PORT_MPIN_MPORTP29(x)           (((uint32_t)(((uint32_t)(x))<<29U))&0x20000000UL)   /*!< LPC_GPIO_PORT_MPIN.MPORTP29 Field       */
+#define LPC_GPIO_PORT_MPIN_MPORTP30_MASK         (0x40000000U)                                       /*!< LPC_GPIO_PORT_MPIN.MPORTP30 Mask        */
+#define LPC_GPIO_PORT_MPIN_MPORTP30_SHIFT        (30U)                                               /*!< LPC_GPIO_PORT_MPIN.MPORTP30 Position    */
+#define LPC_GPIO_PORT_MPIN_MPORTP30(x)           (((uint32_t)(((uint32_t)(x))<<30U))&0x40000000UL)   /*!< LPC_GPIO_PORT_MPIN.MPORTP30 Field       */
+#define LPC_GPIO_PORT_MPIN_MPORTP31_MASK         (0x80000000U)                                       /*!< LPC_GPIO_PORT_MPIN.MPORTP31 Mask        */
+#define LPC_GPIO_PORT_MPIN_MPORTP31_SHIFT        (31U)                                               /*!< LPC_GPIO_PORT_MPIN.MPORTP31 Position    */
+#define LPC_GPIO_PORT_MPIN_MPORTP31(x)           (((uint32_t)(((uint32_t)(x))<<31U))&0x80000000UL)   /*!< LPC_GPIO_PORT_MPIN.MPORTP31 Field       */
+/* ------- SET Bit Fields                           ------ */
+#define LPC_GPIO_PORT_SET_SETP0_MASK             (0x1U)                                              /*!< LPC_GPIO_PORT_SET.SETP0 Mask            */
+#define LPC_GPIO_PORT_SET_SETP0_SHIFT            (0U)                                                /*!< LPC_GPIO_PORT_SET.SETP0 Position        */
+#define LPC_GPIO_PORT_SET_SETP0(x)               (((uint32_t)(((uint32_t)(x))<<0U))&0x1UL)           /*!< LPC_GPIO_PORT_SET.SETP0 Field           */
+#define LPC_GPIO_PORT_SET_SETP1_MASK             (0x2U)                                              /*!< LPC_GPIO_PORT_SET.SETP1 Mask            */
+#define LPC_GPIO_PORT_SET_SETP1_SHIFT            (1U)                                                /*!< LPC_GPIO_PORT_SET.SETP1 Position        */
+#define LPC_GPIO_PORT_SET_SETP1(x)               (((uint32_t)(((uint32_t)(x))<<1U))&0x2UL)           /*!< LPC_GPIO_PORT_SET.SETP1 Field           */
+#define LPC_GPIO_PORT_SET_SETP2_MASK             (0x4U)                                              /*!< LPC_GPIO_PORT_SET.SETP2 Mask            */
+#define LPC_GPIO_PORT_SET_SETP2_SHIFT            (2U)                                                /*!< LPC_GPIO_PORT_SET.SETP2 Position        */
+#define LPC_GPIO_PORT_SET_SETP2(x)               (((uint32_t)(((uint32_t)(x))<<2U))&0x4UL)           /*!< LPC_GPIO_PORT_SET.SETP2 Field           */
+#define LPC_GPIO_PORT_SET_SETP3_MASK             (0x8U)                                              /*!< LPC_GPIO_PORT_SET.SETP3 Mask            */
+#define LPC_GPIO_PORT_SET_SETP3_SHIFT            (3U)                                                /*!< LPC_GPIO_PORT_SET.SETP3 Position        */
+#define LPC_GPIO_PORT_SET_SETP3(x)               (((uint32_t)(((uint32_t)(x))<<3U))&0x8UL)           /*!< LPC_GPIO_PORT_SET.SETP3 Field           */
+#define LPC_GPIO_PORT_SET_SETP4_MASK             (0x10U)                                             /*!< LPC_GPIO_PORT_SET.SETP4 Mask            */
+#define LPC_GPIO_PORT_SET_SETP4_SHIFT            (4U)                                                /*!< LPC_GPIO_PORT_SET.SETP4 Position        */
+#define LPC_GPIO_PORT_SET_SETP4(x)               (((uint32_t)(((uint32_t)(x))<<4U))&0x10UL)          /*!< LPC_GPIO_PORT_SET.SETP4 Field           */
+#define LPC_GPIO_PORT_SET_SETP5_MASK             (0x20U)                                             /*!< LPC_GPIO_PORT_SET.SETP5 Mask            */
+#define LPC_GPIO_PORT_SET_SETP5_SHIFT            (5U)                                                /*!< LPC_GPIO_PORT_SET.SETP5 Position        */
+#define LPC_GPIO_PORT_SET_SETP5(x)               (((uint32_t)(((uint32_t)(x))<<5U))&0x20UL)          /*!< LPC_GPIO_PORT_SET.SETP5 Field           */
+#define LPC_GPIO_PORT_SET_SETP6_MASK             (0x40U)                                             /*!< LPC_GPIO_PORT_SET.SETP6 Mask            */
+#define LPC_GPIO_PORT_SET_SETP6_SHIFT            (6U)                                                /*!< LPC_GPIO_PORT_SET.SETP6 Position        */
+#define LPC_GPIO_PORT_SET_SETP6(x)               (((uint32_t)(((uint32_t)(x))<<6U))&0x40UL)          /*!< LPC_GPIO_PORT_SET.SETP6 Field           */
+#define LPC_GPIO_PORT_SET_SETP7_MASK             (0x80U)                                             /*!< LPC_GPIO_PORT_SET.SETP7 Mask            */
+#define LPC_GPIO_PORT_SET_SETP7_SHIFT            (7U)                                                /*!< LPC_GPIO_PORT_SET.SETP7 Position        */
+#define LPC_GPIO_PORT_SET_SETP7(x)               (((uint32_t)(((uint32_t)(x))<<7U))&0x80UL)          /*!< LPC_GPIO_PORT_SET.SETP7 Field           */
+#define LPC_GPIO_PORT_SET_SETP8_MASK             (0x100U)                                            /*!< LPC_GPIO_PORT_SET.SETP8 Mask            */
+#define LPC_GPIO_PORT_SET_SETP8_SHIFT            (8U)                                                /*!< LPC_GPIO_PORT_SET.SETP8 Position        */
+#define LPC_GPIO_PORT_SET_SETP8(x)               (((uint32_t)(((uint32_t)(x))<<8U))&0x100UL)         /*!< LPC_GPIO_PORT_SET.SETP8 Field           */
+#define LPC_GPIO_PORT_SET_SETP9_MASK             (0x200U)                                            /*!< LPC_GPIO_PORT_SET.SETP9 Mask            */
+#define LPC_GPIO_PORT_SET_SETP9_SHIFT            (9U)                                                /*!< LPC_GPIO_PORT_SET.SETP9 Position        */
+#define LPC_GPIO_PORT_SET_SETP9(x)               (((uint32_t)(((uint32_t)(x))<<9U))&0x200UL)         /*!< LPC_GPIO_PORT_SET.SETP9 Field           */
+#define LPC_GPIO_PORT_SET_SETP10_MASK            (0x400U)                                            /*!< LPC_GPIO_PORT_SET.SETP10 Mask           */
+#define LPC_GPIO_PORT_SET_SETP10_SHIFT           (10U)                                               /*!< LPC_GPIO_PORT_SET.SETP10 Position       */
+#define LPC_GPIO_PORT_SET_SETP10(x)              (((uint32_t)(((uint32_t)(x))<<10U))&0x400UL)        /*!< LPC_GPIO_PORT_SET.SETP10 Field          */
+#define LPC_GPIO_PORT_SET_SETP11_MASK            (0x800U)                                            /*!< LPC_GPIO_PORT_SET.SETP11 Mask           */
+#define LPC_GPIO_PORT_SET_SETP11_SHIFT           (11U)                                               /*!< LPC_GPIO_PORT_SET.SETP11 Position       */
+#define LPC_GPIO_PORT_SET_SETP11(x)              (((uint32_t)(((uint32_t)(x))<<11U))&0x800UL)        /*!< LPC_GPIO_PORT_SET.SETP11 Field          */
+#define LPC_GPIO_PORT_SET_SETP12_MASK            (0x1000U)                                           /*!< LPC_GPIO_PORT_SET.SETP12 Mask           */
+#define LPC_GPIO_PORT_SET_SETP12_SHIFT           (12U)                                               /*!< LPC_GPIO_PORT_SET.SETP12 Position       */
+#define LPC_GPIO_PORT_SET_SETP12(x)              (((uint32_t)(((uint32_t)(x))<<12U))&0x1000UL)       /*!< LPC_GPIO_PORT_SET.SETP12 Field          */
+#define LPC_GPIO_PORT_SET_SETP13_MASK            (0x2000U)                                           /*!< LPC_GPIO_PORT_SET.SETP13 Mask           */
+#define LPC_GPIO_PORT_SET_SETP13_SHIFT           (13U)                                               /*!< LPC_GPIO_PORT_SET.SETP13 Position       */
+#define LPC_GPIO_PORT_SET_SETP13(x)              (((uint32_t)(((uint32_t)(x))<<13U))&0x2000UL)       /*!< LPC_GPIO_PORT_SET.SETP13 Field          */
+#define LPC_GPIO_PORT_SET_SETP14_MASK            (0x4000U)                                           /*!< LPC_GPIO_PORT_SET.SETP14 Mask           */
+#define LPC_GPIO_PORT_SET_SETP14_SHIFT           (14U)                                               /*!< LPC_GPIO_PORT_SET.SETP14 Position       */
+#define LPC_GPIO_PORT_SET_SETP14(x)              (((uint32_t)(((uint32_t)(x))<<14U))&0x4000UL)       /*!< LPC_GPIO_PORT_SET.SETP14 Field          */
+#define LPC_GPIO_PORT_SET_SETP15_MASK            (0x8000U)                                           /*!< LPC_GPIO_PORT_SET.SETP15 Mask           */
+#define LPC_GPIO_PORT_SET_SETP15_SHIFT           (15U)                                               /*!< LPC_GPIO_PORT_SET.SETP15 Position       */
+#define LPC_GPIO_PORT_SET_SETP15(x)              (((uint32_t)(((uint32_t)(x))<<15U))&0x8000UL)       /*!< LPC_GPIO_PORT_SET.SETP15 Field          */
+#define LPC_GPIO_PORT_SET_SETP16_MASK            (0x10000U)                                          /*!< LPC_GPIO_PORT_SET.SETP16 Mask           */
+#define LPC_GPIO_PORT_SET_SETP16_SHIFT           (16U)                                               /*!< LPC_GPIO_PORT_SET.SETP16 Position       */
+#define LPC_GPIO_PORT_SET_SETP16(x)              (((uint32_t)(((uint32_t)(x))<<16U))&0x10000UL)      /*!< LPC_GPIO_PORT_SET.SETP16 Field          */
+#define LPC_GPIO_PORT_SET_SETP17_MASK            (0x20000U)                                          /*!< LPC_GPIO_PORT_SET.SETP17 Mask           */
+#define LPC_GPIO_PORT_SET_SETP17_SHIFT           (17U)                                               /*!< LPC_GPIO_PORT_SET.SETP17 Position       */
+#define LPC_GPIO_PORT_SET_SETP17(x)              (((uint32_t)(((uint32_t)(x))<<17U))&0x20000UL)      /*!< LPC_GPIO_PORT_SET.SETP17 Field          */
+#define LPC_GPIO_PORT_SET_SETP18_MASK            (0x40000U)                                          /*!< LPC_GPIO_PORT_SET.SETP18 Mask           */
+#define LPC_GPIO_PORT_SET_SETP18_SHIFT           (18U)                                               /*!< LPC_GPIO_PORT_SET.SETP18 Position       */
+#define LPC_GPIO_PORT_SET_SETP18(x)              (((uint32_t)(((uint32_t)(x))<<18U))&0x40000UL)      /*!< LPC_GPIO_PORT_SET.SETP18 Field          */
+#define LPC_GPIO_PORT_SET_SETP19_MASK            (0x80000U)                                          /*!< LPC_GPIO_PORT_SET.SETP19 Mask           */
+#define LPC_GPIO_PORT_SET_SETP19_SHIFT           (19U)                                               /*!< LPC_GPIO_PORT_SET.SETP19 Position       */
+#define LPC_GPIO_PORT_SET_SETP19(x)              (((uint32_t)(((uint32_t)(x))<<19U))&0x80000UL)      /*!< LPC_GPIO_PORT_SET.SETP19 Field          */
+#define LPC_GPIO_PORT_SET_SETP20_MASK            (0x100000U)                                         /*!< LPC_GPIO_PORT_SET.SETP20 Mask           */
+#define LPC_GPIO_PORT_SET_SETP20_SHIFT           (20U)                                               /*!< LPC_GPIO_PORT_SET.SETP20 Position       */
+#define LPC_GPIO_PORT_SET_SETP20(x)              (((uint32_t)(((uint32_t)(x))<<20U))&0x100000UL)     /*!< LPC_GPIO_PORT_SET.SETP20 Field          */
+#define LPC_GPIO_PORT_SET_SETP21_MASK            (0x200000U)                                         /*!< LPC_GPIO_PORT_SET.SETP21 Mask           */
+#define LPC_GPIO_PORT_SET_SETP21_SHIFT           (21U)                                               /*!< LPC_GPIO_PORT_SET.SETP21 Position       */
+#define LPC_GPIO_PORT_SET_SETP21(x)              (((uint32_t)(((uint32_t)(x))<<21U))&0x200000UL)     /*!< LPC_GPIO_PORT_SET.SETP21 Field          */
+#define LPC_GPIO_PORT_SET_SETP22_MASK            (0x400000U)                                         /*!< LPC_GPIO_PORT_SET.SETP22 Mask           */
+#define LPC_GPIO_PORT_SET_SETP22_SHIFT           (22U)                                               /*!< LPC_GPIO_PORT_SET.SETP22 Position       */
+#define LPC_GPIO_PORT_SET_SETP22(x)              (((uint32_t)(((uint32_t)(x))<<22U))&0x400000UL)     /*!< LPC_GPIO_PORT_SET.SETP22 Field          */
+#define LPC_GPIO_PORT_SET_SETP23_MASK            (0x800000U)                                         /*!< LPC_GPIO_PORT_SET.SETP23 Mask           */
+#define LPC_GPIO_PORT_SET_SETP23_SHIFT           (23U)                                               /*!< LPC_GPIO_PORT_SET.SETP23 Position       */
+#define LPC_GPIO_PORT_SET_SETP23(x)              (((uint32_t)(((uint32_t)(x))<<23U))&0x800000UL)     /*!< LPC_GPIO_PORT_SET.SETP23 Field          */
+#define LPC_GPIO_PORT_SET_SETP24_MASK            (0x1000000U)                                        /*!< LPC_GPIO_PORT_SET.SETP24 Mask           */
+#define LPC_GPIO_PORT_SET_SETP24_SHIFT           (24U)                                               /*!< LPC_GPIO_PORT_SET.SETP24 Position       */
+#define LPC_GPIO_PORT_SET_SETP24(x)              (((uint32_t)(((uint32_t)(x))<<24U))&0x1000000UL)    /*!< LPC_GPIO_PORT_SET.SETP24 Field          */
+#define LPC_GPIO_PORT_SET_SETP25_MASK            (0x2000000U)                                        /*!< LPC_GPIO_PORT_SET.SETP25 Mask           */
+#define LPC_GPIO_PORT_SET_SETP25_SHIFT           (25U)                                               /*!< LPC_GPIO_PORT_SET.SETP25 Position       */
+#define LPC_GPIO_PORT_SET_SETP25(x)              (((uint32_t)(((uint32_t)(x))<<25U))&0x2000000UL)    /*!< LPC_GPIO_PORT_SET.SETP25 Field          */
+#define LPC_GPIO_PORT_SET_SETP26_MASK            (0x4000000U)                                        /*!< LPC_GPIO_PORT_SET.SETP26 Mask           */
+#define LPC_GPIO_PORT_SET_SETP26_SHIFT           (26U)                                               /*!< LPC_GPIO_PORT_SET.SETP26 Position       */
+#define LPC_GPIO_PORT_SET_SETP26(x)              (((uint32_t)(((uint32_t)(x))<<26U))&0x4000000UL)    /*!< LPC_GPIO_PORT_SET.SETP26 Field          */
+#define LPC_GPIO_PORT_SET_SETP27_MASK            (0x8000000U)                                        /*!< LPC_GPIO_PORT_SET.SETP27 Mask           */
+#define LPC_GPIO_PORT_SET_SETP27_SHIFT           (27U)                                               /*!< LPC_GPIO_PORT_SET.SETP27 Position       */
+#define LPC_GPIO_PORT_SET_SETP27(x)              (((uint32_t)(((uint32_t)(x))<<27U))&0x8000000UL)    /*!< LPC_GPIO_PORT_SET.SETP27 Field          */
+#define LPC_GPIO_PORT_SET_SETP28_MASK            (0x10000000U)                                       /*!< LPC_GPIO_PORT_SET.SETP28 Mask           */
+#define LPC_GPIO_PORT_SET_SETP28_SHIFT           (28U)                                               /*!< LPC_GPIO_PORT_SET.SETP28 Position       */
+#define LPC_GPIO_PORT_SET_SETP28(x)              (((uint32_t)(((uint32_t)(x))<<28U))&0x10000000UL)   /*!< LPC_GPIO_PORT_SET.SETP28 Field          */
+#define LPC_GPIO_PORT_SET_SETP29_MASK            (0x20000000U)                                       /*!< LPC_GPIO_PORT_SET.SETP29 Mask           */
+#define LPC_GPIO_PORT_SET_SETP29_SHIFT           (29U)                                               /*!< LPC_GPIO_PORT_SET.SETP29 Position       */
+#define LPC_GPIO_PORT_SET_SETP29(x)              (((uint32_t)(((uint32_t)(x))<<29U))&0x20000000UL)   /*!< LPC_GPIO_PORT_SET.SETP29 Field          */
+#define LPC_GPIO_PORT_SET_SETP30_MASK            (0x40000000U)                                       /*!< LPC_GPIO_PORT_SET.SETP30 Mask           */
+#define LPC_GPIO_PORT_SET_SETP30_SHIFT           (30U)                                               /*!< LPC_GPIO_PORT_SET.SETP30 Position       */
+#define LPC_GPIO_PORT_SET_SETP30(x)              (((uint32_t)(((uint32_t)(x))<<30U))&0x40000000UL)   /*!< LPC_GPIO_PORT_SET.SETP30 Field          */
+#define LPC_GPIO_PORT_SET_SETP31_MASK            (0x80000000U)                                       /*!< LPC_GPIO_PORT_SET.SETP31 Mask           */
+#define LPC_GPIO_PORT_SET_SETP31_SHIFT           (31U)                                               /*!< LPC_GPIO_PORT_SET.SETP31 Position       */
+#define LPC_GPIO_PORT_SET_SETP31(x)              (((uint32_t)(((uint32_t)(x))<<31U))&0x80000000UL)   /*!< LPC_GPIO_PORT_SET.SETP31 Field          */
+/* ------- CLR Bit Fields                           ------ */
+#define LPC_GPIO_PORT_CLR_CLRP00_MASK            (0x1U)                                              /*!< LPC_GPIO_PORT_CLR.CLRP00 Mask           */
+#define LPC_GPIO_PORT_CLR_CLRP00_SHIFT           (0U)                                                /*!< LPC_GPIO_PORT_CLR.CLRP00 Position       */
+#define LPC_GPIO_PORT_CLR_CLRP00(x)              (((uint32_t)(((uint32_t)(x))<<0U))&0x1UL)           /*!< LPC_GPIO_PORT_CLR.CLRP00 Field          */
+#define LPC_GPIO_PORT_CLR_CLRP01_MASK            (0x2U)                                              /*!< LPC_GPIO_PORT_CLR.CLRP01 Mask           */
+#define LPC_GPIO_PORT_CLR_CLRP01_SHIFT           (1U)                                                /*!< LPC_GPIO_PORT_CLR.CLRP01 Position       */
+#define LPC_GPIO_PORT_CLR_CLRP01(x)              (((uint32_t)(((uint32_t)(x))<<1U))&0x2UL)           /*!< LPC_GPIO_PORT_CLR.CLRP01 Field          */
+#define LPC_GPIO_PORT_CLR_CLRP02_MASK            (0x4U)                                              /*!< LPC_GPIO_PORT_CLR.CLRP02 Mask           */
+#define LPC_GPIO_PORT_CLR_CLRP02_SHIFT           (2U)                                                /*!< LPC_GPIO_PORT_CLR.CLRP02 Position       */
+#define LPC_GPIO_PORT_CLR_CLRP02(x)              (((uint32_t)(((uint32_t)(x))<<2U))&0x4UL)           /*!< LPC_GPIO_PORT_CLR.CLRP02 Field          */
+#define LPC_GPIO_PORT_CLR_CLRP03_MASK            (0x8U)                                              /*!< LPC_GPIO_PORT_CLR.CLRP03 Mask           */
+#define LPC_GPIO_PORT_CLR_CLRP03_SHIFT           (3U)                                                /*!< LPC_GPIO_PORT_CLR.CLRP03 Position       */
+#define LPC_GPIO_PORT_CLR_CLRP03(x)              (((uint32_t)(((uint32_t)(x))<<3U))&0x8UL)           /*!< LPC_GPIO_PORT_CLR.CLRP03 Field          */
+#define LPC_GPIO_PORT_CLR_CLRP04_MASK            (0x10U)                                             /*!< LPC_GPIO_PORT_CLR.CLRP04 Mask           */
+#define LPC_GPIO_PORT_CLR_CLRP04_SHIFT           (4U)                                                /*!< LPC_GPIO_PORT_CLR.CLRP04 Position       */
+#define LPC_GPIO_PORT_CLR_CLRP04(x)              (((uint32_t)(((uint32_t)(x))<<4U))&0x10UL)          /*!< LPC_GPIO_PORT_CLR.CLRP04 Field          */
+#define LPC_GPIO_PORT_CLR_CLRP05_MASK            (0x20U)                                             /*!< LPC_GPIO_PORT_CLR.CLRP05 Mask           */
+#define LPC_GPIO_PORT_CLR_CLRP05_SHIFT           (5U)                                                /*!< LPC_GPIO_PORT_CLR.CLRP05 Position       */
+#define LPC_GPIO_PORT_CLR_CLRP05(x)              (((uint32_t)(((uint32_t)(x))<<5U))&0x20UL)          /*!< LPC_GPIO_PORT_CLR.CLRP05 Field          */
+#define LPC_GPIO_PORT_CLR_CLRP06_MASK            (0x40U)                                             /*!< LPC_GPIO_PORT_CLR.CLRP06 Mask           */
+#define LPC_GPIO_PORT_CLR_CLRP06_SHIFT           (6U)                                                /*!< LPC_GPIO_PORT_CLR.CLRP06 Position       */
+#define LPC_GPIO_PORT_CLR_CLRP06(x)              (((uint32_t)(((uint32_t)(x))<<6U))&0x40UL)          /*!< LPC_GPIO_PORT_CLR.CLRP06 Field          */
+#define LPC_GPIO_PORT_CLR_CLRP07_MASK            (0x80U)                                             /*!< LPC_GPIO_PORT_CLR.CLRP07 Mask           */
+#define LPC_GPIO_PORT_CLR_CLRP07_SHIFT           (7U)                                                /*!< LPC_GPIO_PORT_CLR.CLRP07 Position       */
+#define LPC_GPIO_PORT_CLR_CLRP07(x)              (((uint32_t)(((uint32_t)(x))<<7U))&0x80UL)          /*!< LPC_GPIO_PORT_CLR.CLRP07 Field          */
+#define LPC_GPIO_PORT_CLR_CLRP08_MASK            (0x100U)                                            /*!< LPC_GPIO_PORT_CLR.CLRP08 Mask           */
+#define LPC_GPIO_PORT_CLR_CLRP08_SHIFT           (8U)                                                /*!< LPC_GPIO_PORT_CLR.CLRP08 Position       */
+#define LPC_GPIO_PORT_CLR_CLRP08(x)              (((uint32_t)(((uint32_t)(x))<<8U))&0x100UL)         /*!< LPC_GPIO_PORT_CLR.CLRP08 Field          */
+#define LPC_GPIO_PORT_CLR_CLRP09_MASK            (0x200U)                                            /*!< LPC_GPIO_PORT_CLR.CLRP09 Mask           */
+#define LPC_GPIO_PORT_CLR_CLRP09_SHIFT           (9U)                                                /*!< LPC_GPIO_PORT_CLR.CLRP09 Position       */
+#define LPC_GPIO_PORT_CLR_CLRP09(x)              (((uint32_t)(((uint32_t)(x))<<9U))&0x200UL)         /*!< LPC_GPIO_PORT_CLR.CLRP09 Field          */
+#define LPC_GPIO_PORT_CLR_CLRP010_MASK           (0x400U)                                            /*!< LPC_GPIO_PORT_CLR.CLRP010 Mask          */
+#define LPC_GPIO_PORT_CLR_CLRP010_SHIFT          (10U)                                               /*!< LPC_GPIO_PORT_CLR.CLRP010 Position      */
+#define LPC_GPIO_PORT_CLR_CLRP010(x)             (((uint32_t)(((uint32_t)(x))<<10U))&0x400UL)        /*!< LPC_GPIO_PORT_CLR.CLRP010 Field         */
+#define LPC_GPIO_PORT_CLR_CLRP011_MASK           (0x800U)                                            /*!< LPC_GPIO_PORT_CLR.CLRP011 Mask          */
+#define LPC_GPIO_PORT_CLR_CLRP011_SHIFT          (11U)                                               /*!< LPC_GPIO_PORT_CLR.CLRP011 Position      */
+#define LPC_GPIO_PORT_CLR_CLRP011(x)             (((uint32_t)(((uint32_t)(x))<<11U))&0x800UL)        /*!< LPC_GPIO_PORT_CLR.CLRP011 Field         */
+#define LPC_GPIO_PORT_CLR_CLRP012_MASK           (0x1000U)                                           /*!< LPC_GPIO_PORT_CLR.CLRP012 Mask          */
+#define LPC_GPIO_PORT_CLR_CLRP012_SHIFT          (12U)                                               /*!< LPC_GPIO_PORT_CLR.CLRP012 Position      */
+#define LPC_GPIO_PORT_CLR_CLRP012(x)             (((uint32_t)(((uint32_t)(x))<<12U))&0x1000UL)       /*!< LPC_GPIO_PORT_CLR.CLRP012 Field         */
+#define LPC_GPIO_PORT_CLR_CLRP013_MASK           (0x2000U)                                           /*!< LPC_GPIO_PORT_CLR.CLRP013 Mask          */
+#define LPC_GPIO_PORT_CLR_CLRP013_SHIFT          (13U)                                               /*!< LPC_GPIO_PORT_CLR.CLRP013 Position      */
+#define LPC_GPIO_PORT_CLR_CLRP013(x)             (((uint32_t)(((uint32_t)(x))<<13U))&0x2000UL)       /*!< LPC_GPIO_PORT_CLR.CLRP013 Field         */
+#define LPC_GPIO_PORT_CLR_CLRP014_MASK           (0x4000U)                                           /*!< LPC_GPIO_PORT_CLR.CLRP014 Mask          */
+#define LPC_GPIO_PORT_CLR_CLRP014_SHIFT          (14U)                                               /*!< LPC_GPIO_PORT_CLR.CLRP014 Position      */
+#define LPC_GPIO_PORT_CLR_CLRP014(x)             (((uint32_t)(((uint32_t)(x))<<14U))&0x4000UL)       /*!< LPC_GPIO_PORT_CLR.CLRP014 Field         */
+#define LPC_GPIO_PORT_CLR_CLRP015_MASK           (0x8000U)                                           /*!< LPC_GPIO_PORT_CLR.CLRP015 Mask          */
+#define LPC_GPIO_PORT_CLR_CLRP015_SHIFT          (15U)                                               /*!< LPC_GPIO_PORT_CLR.CLRP015 Position      */
+#define LPC_GPIO_PORT_CLR_CLRP015(x)             (((uint32_t)(((uint32_t)(x))<<15U))&0x8000UL)       /*!< LPC_GPIO_PORT_CLR.CLRP015 Field         */
+#define LPC_GPIO_PORT_CLR_CLRP016_MASK           (0x10000U)                                          /*!< LPC_GPIO_PORT_CLR.CLRP016 Mask          */
+#define LPC_GPIO_PORT_CLR_CLRP016_SHIFT          (16U)                                               /*!< LPC_GPIO_PORT_CLR.CLRP016 Position      */
+#define LPC_GPIO_PORT_CLR_CLRP016(x)             (((uint32_t)(((uint32_t)(x))<<16U))&0x10000UL)      /*!< LPC_GPIO_PORT_CLR.CLRP016 Field         */
+#define LPC_GPIO_PORT_CLR_CLRP017_MASK           (0x20000U)                                          /*!< LPC_GPIO_PORT_CLR.CLRP017 Mask          */
+#define LPC_GPIO_PORT_CLR_CLRP017_SHIFT          (17U)                                               /*!< LPC_GPIO_PORT_CLR.CLRP017 Position      */
+#define LPC_GPIO_PORT_CLR_CLRP017(x)             (((uint32_t)(((uint32_t)(x))<<17U))&0x20000UL)      /*!< LPC_GPIO_PORT_CLR.CLRP017 Field         */
+#define LPC_GPIO_PORT_CLR_CLRP018_MASK           (0x40000U)                                          /*!< LPC_GPIO_PORT_CLR.CLRP018 Mask          */
+#define LPC_GPIO_PORT_CLR_CLRP018_SHIFT          (18U)                                               /*!< LPC_GPIO_PORT_CLR.CLRP018 Position      */
+#define LPC_GPIO_PORT_CLR_CLRP018(x)             (((uint32_t)(((uint32_t)(x))<<18U))&0x40000UL)      /*!< LPC_GPIO_PORT_CLR.CLRP018 Field         */
+#define LPC_GPIO_PORT_CLR_CLRP019_MASK           (0x80000U)                                          /*!< LPC_GPIO_PORT_CLR.CLRP019 Mask          */
+#define LPC_GPIO_PORT_CLR_CLRP019_SHIFT          (19U)                                               /*!< LPC_GPIO_PORT_CLR.CLRP019 Position      */
+#define LPC_GPIO_PORT_CLR_CLRP019(x)             (((uint32_t)(((uint32_t)(x))<<19U))&0x80000UL)      /*!< LPC_GPIO_PORT_CLR.CLRP019 Field         */
+#define LPC_GPIO_PORT_CLR_CLRP020_MASK           (0x100000U)                                         /*!< LPC_GPIO_PORT_CLR.CLRP020 Mask          */
+#define LPC_GPIO_PORT_CLR_CLRP020_SHIFT          (20U)                                               /*!< LPC_GPIO_PORT_CLR.CLRP020 Position      */
+#define LPC_GPIO_PORT_CLR_CLRP020(x)             (((uint32_t)(((uint32_t)(x))<<20U))&0x100000UL)     /*!< LPC_GPIO_PORT_CLR.CLRP020 Field         */
+#define LPC_GPIO_PORT_CLR_CLRP021_MASK           (0x200000U)                                         /*!< LPC_GPIO_PORT_CLR.CLRP021 Mask          */
+#define LPC_GPIO_PORT_CLR_CLRP021_SHIFT          (21U)                                               /*!< LPC_GPIO_PORT_CLR.CLRP021 Position      */
+#define LPC_GPIO_PORT_CLR_CLRP021(x)             (((uint32_t)(((uint32_t)(x))<<21U))&0x200000UL)     /*!< LPC_GPIO_PORT_CLR.CLRP021 Field         */
+#define LPC_GPIO_PORT_CLR_CLRP022_MASK           (0x400000U)                                         /*!< LPC_GPIO_PORT_CLR.CLRP022 Mask          */
+#define LPC_GPIO_PORT_CLR_CLRP022_SHIFT          (22U)                                               /*!< LPC_GPIO_PORT_CLR.CLRP022 Position      */
+#define LPC_GPIO_PORT_CLR_CLRP022(x)             (((uint32_t)(((uint32_t)(x))<<22U))&0x400000UL)     /*!< LPC_GPIO_PORT_CLR.CLRP022 Field         */
+#define LPC_GPIO_PORT_CLR_CLRP023_MASK           (0x800000U)                                         /*!< LPC_GPIO_PORT_CLR.CLRP023 Mask          */
+#define LPC_GPIO_PORT_CLR_CLRP023_SHIFT          (23U)                                               /*!< LPC_GPIO_PORT_CLR.CLRP023 Position      */
+#define LPC_GPIO_PORT_CLR_CLRP023(x)             (((uint32_t)(((uint32_t)(x))<<23U))&0x800000UL)     /*!< LPC_GPIO_PORT_CLR.CLRP023 Field         */
+#define LPC_GPIO_PORT_CLR_CLRP024_MASK           (0x1000000U)                                        /*!< LPC_GPIO_PORT_CLR.CLRP024 Mask          */
+#define LPC_GPIO_PORT_CLR_CLRP024_SHIFT          (24U)                                               /*!< LPC_GPIO_PORT_CLR.CLRP024 Position      */
+#define LPC_GPIO_PORT_CLR_CLRP024(x)             (((uint32_t)(((uint32_t)(x))<<24U))&0x1000000UL)    /*!< LPC_GPIO_PORT_CLR.CLRP024 Field         */
+#define LPC_GPIO_PORT_CLR_CLRP025_MASK           (0x2000000U)                                        /*!< LPC_GPIO_PORT_CLR.CLRP025 Mask          */
+#define LPC_GPIO_PORT_CLR_CLRP025_SHIFT          (25U)                                               /*!< LPC_GPIO_PORT_CLR.CLRP025 Position      */
+#define LPC_GPIO_PORT_CLR_CLRP025(x)             (((uint32_t)(((uint32_t)(x))<<25U))&0x2000000UL)    /*!< LPC_GPIO_PORT_CLR.CLRP025 Field         */
+#define LPC_GPIO_PORT_CLR_CLRP026_MASK           (0x4000000U)                                        /*!< LPC_GPIO_PORT_CLR.CLRP026 Mask          */
+#define LPC_GPIO_PORT_CLR_CLRP026_SHIFT          (26U)                                               /*!< LPC_GPIO_PORT_CLR.CLRP026 Position      */
+#define LPC_GPIO_PORT_CLR_CLRP026(x)             (((uint32_t)(((uint32_t)(x))<<26U))&0x4000000UL)    /*!< LPC_GPIO_PORT_CLR.CLRP026 Field         */
+#define LPC_GPIO_PORT_CLR_CLRP027_MASK           (0x8000000U)                                        /*!< LPC_GPIO_PORT_CLR.CLRP027 Mask          */
+#define LPC_GPIO_PORT_CLR_CLRP027_SHIFT          (27U)                                               /*!< LPC_GPIO_PORT_CLR.CLRP027 Position      */
+#define LPC_GPIO_PORT_CLR_CLRP027(x)             (((uint32_t)(((uint32_t)(x))<<27U))&0x8000000UL)    /*!< LPC_GPIO_PORT_CLR.CLRP027 Field         */
+#define LPC_GPIO_PORT_CLR_CLRP028_MASK           (0x10000000U)                                       /*!< LPC_GPIO_PORT_CLR.CLRP028 Mask          */
+#define LPC_GPIO_PORT_CLR_CLRP028_SHIFT          (28U)                                               /*!< LPC_GPIO_PORT_CLR.CLRP028 Position      */
+#define LPC_GPIO_PORT_CLR_CLRP028(x)             (((uint32_t)(((uint32_t)(x))<<28U))&0x10000000UL)   /*!< LPC_GPIO_PORT_CLR.CLRP028 Field         */
+#define LPC_GPIO_PORT_CLR_CLRP029_MASK           (0x20000000U)                                       /*!< LPC_GPIO_PORT_CLR.CLRP029 Mask          */
+#define LPC_GPIO_PORT_CLR_CLRP029_SHIFT          (29U)                                               /*!< LPC_GPIO_PORT_CLR.CLRP029 Position      */
+#define LPC_GPIO_PORT_CLR_CLRP029(x)             (((uint32_t)(((uint32_t)(x))<<29U))&0x20000000UL)   /*!< LPC_GPIO_PORT_CLR.CLRP029 Field         */
+#define LPC_GPIO_PORT_CLR_CLRP030_MASK           (0x40000000U)                                       /*!< LPC_GPIO_PORT_CLR.CLRP030 Mask          */
+#define LPC_GPIO_PORT_CLR_CLRP030_SHIFT          (30U)                                               /*!< LPC_GPIO_PORT_CLR.CLRP030 Position      */
+#define LPC_GPIO_PORT_CLR_CLRP030(x)             (((uint32_t)(((uint32_t)(x))<<30U))&0x40000000UL)   /*!< LPC_GPIO_PORT_CLR.CLRP030 Field         */
+#define LPC_GPIO_PORT_CLR_CLRP031_MASK           (0x80000000U)                                       /*!< LPC_GPIO_PORT_CLR.CLRP031 Mask          */
+#define LPC_GPIO_PORT_CLR_CLRP031_SHIFT          (31U)                                               /*!< LPC_GPIO_PORT_CLR.CLRP031 Position      */
+#define LPC_GPIO_PORT_CLR_CLRP031(x)             (((uint32_t)(((uint32_t)(x))<<31U))&0x80000000UL)   /*!< LPC_GPIO_PORT_CLR.CLRP031 Field         */
+/* ------- NOT Bit Fields                           ------ */
+#define LPC_GPIO_PORT_NOT_NOTP0_MASK             (0x1U)                                              /*!< LPC_GPIO_PORT_NOT.NOTP0 Mask            */
+#define LPC_GPIO_PORT_NOT_NOTP0_SHIFT            (0U)                                                /*!< LPC_GPIO_PORT_NOT.NOTP0 Position        */
+#define LPC_GPIO_PORT_NOT_NOTP0(x)               (((uint32_t)(((uint32_t)(x))<<0U))&0x1UL)           /*!< LPC_GPIO_PORT_NOT.NOTP0 Field           */
+#define LPC_GPIO_PORT_NOT_NOTP1_MASK             (0x2U)                                              /*!< LPC_GPIO_PORT_NOT.NOTP1 Mask            */
+#define LPC_GPIO_PORT_NOT_NOTP1_SHIFT            (1U)                                                /*!< LPC_GPIO_PORT_NOT.NOTP1 Position        */
+#define LPC_GPIO_PORT_NOT_NOTP1(x)               (((uint32_t)(((uint32_t)(x))<<1U))&0x2UL)           /*!< LPC_GPIO_PORT_NOT.NOTP1 Field           */
+#define LPC_GPIO_PORT_NOT_NOTP2_MASK             (0x4U)                                              /*!< LPC_GPIO_PORT_NOT.NOTP2 Mask            */
+#define LPC_GPIO_PORT_NOT_NOTP2_SHIFT            (2U)                                                /*!< LPC_GPIO_PORT_NOT.NOTP2 Position        */
+#define LPC_GPIO_PORT_NOT_NOTP2(x)               (((uint32_t)(((uint32_t)(x))<<2U))&0x4UL)           /*!< LPC_GPIO_PORT_NOT.NOTP2 Field           */
+#define LPC_GPIO_PORT_NOT_NOTP3_MASK             (0x8U)                                              /*!< LPC_GPIO_PORT_NOT.NOTP3 Mask            */
+#define LPC_GPIO_PORT_NOT_NOTP3_SHIFT            (3U)                                                /*!< LPC_GPIO_PORT_NOT.NOTP3 Position        */
+#define LPC_GPIO_PORT_NOT_NOTP3(x)               (((uint32_t)(((uint32_t)(x))<<3U))&0x8UL)           /*!< LPC_GPIO_PORT_NOT.NOTP3 Field           */
+#define LPC_GPIO_PORT_NOT_NOTP4_MASK             (0x10U)                                             /*!< LPC_GPIO_PORT_NOT.NOTP4 Mask            */
+#define LPC_GPIO_PORT_NOT_NOTP4_SHIFT            (4U)                                                /*!< LPC_GPIO_PORT_NOT.NOTP4 Position        */
+#define LPC_GPIO_PORT_NOT_NOTP4(x)               (((uint32_t)(((uint32_t)(x))<<4U))&0x10UL)          /*!< LPC_GPIO_PORT_NOT.NOTP4 Field           */
+#define LPC_GPIO_PORT_NOT_NOTP5_MASK             (0x20U)                                             /*!< LPC_GPIO_PORT_NOT.NOTP5 Mask            */
+#define LPC_GPIO_PORT_NOT_NOTP5_SHIFT            (5U)                                                /*!< LPC_GPIO_PORT_NOT.NOTP5 Position        */
+#define LPC_GPIO_PORT_NOT_NOTP5(x)               (((uint32_t)(((uint32_t)(x))<<5U))&0x20UL)          /*!< LPC_GPIO_PORT_NOT.NOTP5 Field           */
+#define LPC_GPIO_PORT_NOT_NOTP6_MASK             (0x40U)                                             /*!< LPC_GPIO_PORT_NOT.NOTP6 Mask            */
+#define LPC_GPIO_PORT_NOT_NOTP6_SHIFT            (6U)                                                /*!< LPC_GPIO_PORT_NOT.NOTP6 Position        */
+#define LPC_GPIO_PORT_NOT_NOTP6(x)               (((uint32_t)(((uint32_t)(x))<<6U))&0x40UL)          /*!< LPC_GPIO_PORT_NOT.NOTP6 Field           */
+#define LPC_GPIO_PORT_NOT_NOTP7_MASK             (0x80U)                                             /*!< LPC_GPIO_PORT_NOT.NOTP7 Mask            */
+#define LPC_GPIO_PORT_NOT_NOTP7_SHIFT            (7U)                                                /*!< LPC_GPIO_PORT_NOT.NOTP7 Position        */
+#define LPC_GPIO_PORT_NOT_NOTP7(x)               (((uint32_t)(((uint32_t)(x))<<7U))&0x80UL)          /*!< LPC_GPIO_PORT_NOT.NOTP7 Field           */
+#define LPC_GPIO_PORT_NOT_NOTP8_MASK             (0x100U)                                            /*!< LPC_GPIO_PORT_NOT.NOTP8 Mask            */
+#define LPC_GPIO_PORT_NOT_NOTP8_SHIFT            (8U)                                                /*!< LPC_GPIO_PORT_NOT.NOTP8 Position        */
+#define LPC_GPIO_PORT_NOT_NOTP8(x)               (((uint32_t)(((uint32_t)(x))<<8U))&0x100UL)         /*!< LPC_GPIO_PORT_NOT.NOTP8 Field           */
+#define LPC_GPIO_PORT_NOT_NOTP9_MASK             (0x200U)                                            /*!< LPC_GPIO_PORT_NOT.NOTP9 Mask            */
+#define LPC_GPIO_PORT_NOT_NOTP9_SHIFT            (9U)                                                /*!< LPC_GPIO_PORT_NOT.NOTP9 Position        */
+#define LPC_GPIO_PORT_NOT_NOTP9(x)               (((uint32_t)(((uint32_t)(x))<<9U))&0x200UL)         /*!< LPC_GPIO_PORT_NOT.NOTP9 Field           */
+#define LPC_GPIO_PORT_NOT_NOTP10_MASK            (0x400U)                                            /*!< LPC_GPIO_PORT_NOT.NOTP10 Mask           */
+#define LPC_GPIO_PORT_NOT_NOTP10_SHIFT           (10U)                                               /*!< LPC_GPIO_PORT_NOT.NOTP10 Position       */
+#define LPC_GPIO_PORT_NOT_NOTP10(x)              (((uint32_t)(((uint32_t)(x))<<10U))&0x400UL)        /*!< LPC_GPIO_PORT_NOT.NOTP10 Field          */
+#define LPC_GPIO_PORT_NOT_NOTP11_MASK            (0x800U)                                            /*!< LPC_GPIO_PORT_NOT.NOTP11 Mask           */
+#define LPC_GPIO_PORT_NOT_NOTP11_SHIFT           (11U)                                               /*!< LPC_GPIO_PORT_NOT.NOTP11 Position       */
+#define LPC_GPIO_PORT_NOT_NOTP11(x)              (((uint32_t)(((uint32_t)(x))<<11U))&0x800UL)        /*!< LPC_GPIO_PORT_NOT.NOTP11 Field          */
+#define LPC_GPIO_PORT_NOT_NOTP12_MASK            (0x1000U)                                           /*!< LPC_GPIO_PORT_NOT.NOTP12 Mask           */
+#define LPC_GPIO_PORT_NOT_NOTP12_SHIFT           (12U)                                               /*!< LPC_GPIO_PORT_NOT.NOTP12 Position       */
+#define LPC_GPIO_PORT_NOT_NOTP12(x)              (((uint32_t)(((uint32_t)(x))<<12U))&0x1000UL)       /*!< LPC_GPIO_PORT_NOT.NOTP12 Field          */
+#define LPC_GPIO_PORT_NOT_NOTP13_MASK            (0x2000U)                                           /*!< LPC_GPIO_PORT_NOT.NOTP13 Mask           */
+#define LPC_GPIO_PORT_NOT_NOTP13_SHIFT           (13U)                                               /*!< LPC_GPIO_PORT_NOT.NOTP13 Position       */
+#define LPC_GPIO_PORT_NOT_NOTP13(x)              (((uint32_t)(((uint32_t)(x))<<13U))&0x2000UL)       /*!< LPC_GPIO_PORT_NOT.NOTP13 Field          */
+#define LPC_GPIO_PORT_NOT_NOTP14_MASK            (0x4000U)                                           /*!< LPC_GPIO_PORT_NOT.NOTP14 Mask           */
+#define LPC_GPIO_PORT_NOT_NOTP14_SHIFT           (14U)                                               /*!< LPC_GPIO_PORT_NOT.NOTP14 Position       */
+#define LPC_GPIO_PORT_NOT_NOTP14(x)              (((uint32_t)(((uint32_t)(x))<<14U))&0x4000UL)       /*!< LPC_GPIO_PORT_NOT.NOTP14 Field          */
+#define LPC_GPIO_PORT_NOT_NOTP15_MASK            (0x8000U)                                           /*!< LPC_GPIO_PORT_NOT.NOTP15 Mask           */
+#define LPC_GPIO_PORT_NOT_NOTP15_SHIFT           (15U)                                               /*!< LPC_GPIO_PORT_NOT.NOTP15 Position       */
+#define LPC_GPIO_PORT_NOT_NOTP15(x)              (((uint32_t)(((uint32_t)(x))<<15U))&0x8000UL)       /*!< LPC_GPIO_PORT_NOT.NOTP15 Field          */
+#define LPC_GPIO_PORT_NOT_NOTP16_MASK            (0x10000U)                                          /*!< LPC_GPIO_PORT_NOT.NOTP16 Mask           */
+#define LPC_GPIO_PORT_NOT_NOTP16_SHIFT           (16U)                                               /*!< LPC_GPIO_PORT_NOT.NOTP16 Position       */
+#define LPC_GPIO_PORT_NOT_NOTP16(x)              (((uint32_t)(((uint32_t)(x))<<16U))&0x10000UL)      /*!< LPC_GPIO_PORT_NOT.NOTP16 Field          */
+#define LPC_GPIO_PORT_NOT_NOTP17_MASK            (0x20000U)                                          /*!< LPC_GPIO_PORT_NOT.NOTP17 Mask           */
+#define LPC_GPIO_PORT_NOT_NOTP17_SHIFT           (17U)                                               /*!< LPC_GPIO_PORT_NOT.NOTP17 Position       */
+#define LPC_GPIO_PORT_NOT_NOTP17(x)              (((uint32_t)(((uint32_t)(x))<<17U))&0x20000UL)      /*!< LPC_GPIO_PORT_NOT.NOTP17 Field          */
+#define LPC_GPIO_PORT_NOT_NOTP18_MASK            (0x40000U)                                          /*!< LPC_GPIO_PORT_NOT.NOTP18 Mask           */
+#define LPC_GPIO_PORT_NOT_NOTP18_SHIFT           (18U)                                               /*!< LPC_GPIO_PORT_NOT.NOTP18 Position       */
+#define LPC_GPIO_PORT_NOT_NOTP18(x)              (((uint32_t)(((uint32_t)(x))<<18U))&0x40000UL)      /*!< LPC_GPIO_PORT_NOT.NOTP18 Field          */
+#define LPC_GPIO_PORT_NOT_NOTP19_MASK            (0x80000U)                                          /*!< LPC_GPIO_PORT_NOT.NOTP19 Mask           */
+#define LPC_GPIO_PORT_NOT_NOTP19_SHIFT           (19U)                                               /*!< LPC_GPIO_PORT_NOT.NOTP19 Position       */
+#define LPC_GPIO_PORT_NOT_NOTP19(x)              (((uint32_t)(((uint32_t)(x))<<19U))&0x80000UL)      /*!< LPC_GPIO_PORT_NOT.NOTP19 Field          */
+#define LPC_GPIO_PORT_NOT_NOTP20_MASK            (0x100000U)                                         /*!< LPC_GPIO_PORT_NOT.NOTP20 Mask           */
+#define LPC_GPIO_PORT_NOT_NOTP20_SHIFT           (20U)                                               /*!< LPC_GPIO_PORT_NOT.NOTP20 Position       */
+#define LPC_GPIO_PORT_NOT_NOTP20(x)              (((uint32_t)(((uint32_t)(x))<<20U))&0x100000UL)     /*!< LPC_GPIO_PORT_NOT.NOTP20 Field          */
+#define LPC_GPIO_PORT_NOT_NOTP21_MASK            (0x200000U)                                         /*!< LPC_GPIO_PORT_NOT.NOTP21 Mask           */
+#define LPC_GPIO_PORT_NOT_NOTP21_SHIFT           (21U)                                               /*!< LPC_GPIO_PORT_NOT.NOTP21 Position       */
+#define LPC_GPIO_PORT_NOT_NOTP21(x)              (((uint32_t)(((uint32_t)(x))<<21U))&0x200000UL)     /*!< LPC_GPIO_PORT_NOT.NOTP21 Field          */
+#define LPC_GPIO_PORT_NOT_NOTP22_MASK            (0x400000U)                                         /*!< LPC_GPIO_PORT_NOT.NOTP22 Mask           */
+#define LPC_GPIO_PORT_NOT_NOTP22_SHIFT           (22U)                                               /*!< LPC_GPIO_PORT_NOT.NOTP22 Position       */
+#define LPC_GPIO_PORT_NOT_NOTP22(x)              (((uint32_t)(((uint32_t)(x))<<22U))&0x400000UL)     /*!< LPC_GPIO_PORT_NOT.NOTP22 Field          */
+#define LPC_GPIO_PORT_NOT_NOTP23_MASK            (0x800000U)                                         /*!< LPC_GPIO_PORT_NOT.NOTP23 Mask           */
+#define LPC_GPIO_PORT_NOT_NOTP23_SHIFT           (23U)                                               /*!< LPC_GPIO_PORT_NOT.NOTP23 Position       */
+#define LPC_GPIO_PORT_NOT_NOTP23(x)              (((uint32_t)(((uint32_t)(x))<<23U))&0x800000UL)     /*!< LPC_GPIO_PORT_NOT.NOTP23 Field          */
+#define LPC_GPIO_PORT_NOT_NOTP24_MASK            (0x1000000U)                                        /*!< LPC_GPIO_PORT_NOT.NOTP24 Mask           */
+#define LPC_GPIO_PORT_NOT_NOTP24_SHIFT           (24U)                                               /*!< LPC_GPIO_PORT_NOT.NOTP24 Position       */
+#define LPC_GPIO_PORT_NOT_NOTP24(x)              (((uint32_t)(((uint32_t)(x))<<24U))&0x1000000UL)    /*!< LPC_GPIO_PORT_NOT.NOTP24 Field          */
+#define LPC_GPIO_PORT_NOT_NOTP25_MASK            (0x2000000U)                                        /*!< LPC_GPIO_PORT_NOT.NOTP25 Mask           */
+#define LPC_GPIO_PORT_NOT_NOTP25_SHIFT           (25U)                                               /*!< LPC_GPIO_PORT_NOT.NOTP25 Position       */
+#define LPC_GPIO_PORT_NOT_NOTP25(x)              (((uint32_t)(((uint32_t)(x))<<25U))&0x2000000UL)    /*!< LPC_GPIO_PORT_NOT.NOTP25 Field          */
+#define LPC_GPIO_PORT_NOT_NOTP26_MASK            (0x4000000U)                                        /*!< LPC_GPIO_PORT_NOT.NOTP26 Mask           */
+#define LPC_GPIO_PORT_NOT_NOTP26_SHIFT           (26U)                                               /*!< LPC_GPIO_PORT_NOT.NOTP26 Position       */
+#define LPC_GPIO_PORT_NOT_NOTP26(x)              (((uint32_t)(((uint32_t)(x))<<26U))&0x4000000UL)    /*!< LPC_GPIO_PORT_NOT.NOTP26 Field          */
+#define LPC_GPIO_PORT_NOT_NOTP27_MASK            (0x8000000U)                                        /*!< LPC_GPIO_PORT_NOT.NOTP27 Mask           */
+#define LPC_GPIO_PORT_NOT_NOTP27_SHIFT           (27U)                                               /*!< LPC_GPIO_PORT_NOT.NOTP27 Position       */
+#define LPC_GPIO_PORT_NOT_NOTP27(x)              (((uint32_t)(((uint32_t)(x))<<27U))&0x8000000UL)    /*!< LPC_GPIO_PORT_NOT.NOTP27 Field          */
+#define LPC_GPIO_PORT_NOT_NOTP28_MASK            (0x10000000U)                                       /*!< LPC_GPIO_PORT_NOT.NOTP28 Mask           */
+#define LPC_GPIO_PORT_NOT_NOTP28_SHIFT           (28U)                                               /*!< LPC_GPIO_PORT_NOT.NOTP28 Position       */
+#define LPC_GPIO_PORT_NOT_NOTP28(x)              (((uint32_t)(((uint32_t)(x))<<28U))&0x10000000UL)   /*!< LPC_GPIO_PORT_NOT.NOTP28 Field          */
+#define LPC_GPIO_PORT_NOT_NOTP29_MASK            (0x20000000U)                                       /*!< LPC_GPIO_PORT_NOT.NOTP29 Mask           */
+#define LPC_GPIO_PORT_NOT_NOTP29_SHIFT           (29U)                                               /*!< LPC_GPIO_PORT_NOT.NOTP29 Position       */
+#define LPC_GPIO_PORT_NOT_NOTP29(x)              (((uint32_t)(((uint32_t)(x))<<29U))&0x20000000UL)   /*!< LPC_GPIO_PORT_NOT.NOTP29 Field          */
+#define LPC_GPIO_PORT_NOT_NOTP30_MASK            (0x40000000U)                                       /*!< LPC_GPIO_PORT_NOT.NOTP30 Mask           */
+#define LPC_GPIO_PORT_NOT_NOTP30_SHIFT           (30U)                                               /*!< LPC_GPIO_PORT_NOT.NOTP30 Position       */
+#define LPC_GPIO_PORT_NOT_NOTP30(x)              (((uint32_t)(((uint32_t)(x))<<30U))&0x40000000UL)   /*!< LPC_GPIO_PORT_NOT.NOTP30 Field          */
+#define LPC_GPIO_PORT_NOT_NOTP31_MASK            (0x80000000U)                                       /*!< LPC_GPIO_PORT_NOT.NOTP31 Mask           */
+#define LPC_GPIO_PORT_NOT_NOTP31_SHIFT           (31U)                                               /*!< LPC_GPIO_PORT_NOT.NOTP31 Position       */
+#define LPC_GPIO_PORT_NOT_NOTP31(x)              (((uint32_t)(((uint32_t)(x))<<31U))&0x80000000UL)   /*!< LPC_GPIO_PORT_NOT.NOTP31 Field          */
 /**
  * @} */ /* End group GPIO_PORT_Register_Masks_GROUP 
  */
@@ -4286,10 +3404,7 @@ typedef struct LPC_I2C_Type {
    __IO uint32_t  ADR2;                         /**< 0024: I2C Slave Address Register. Contains the 7-bit slave address for operation of the I2C interface in slave mode, and is not used in master mode. The least significant bit determines whether a slave responds to the General Call address */
    __IO uint32_t  ADR3;                         /**< 0028: I2C Slave Address Register. Contains the 7-bit slave address for operation of the I2C interface in slave mode, and is not used in master mode. The least significant bit determines whether a slave responds to the General Call address */
    __I  uint32_t  DATA_BUFFER;                  /**< 002C: Data buffer register. The contents of the 8 MSBs of the I2DAT shift register will be transferred to the DATA_BUFFER automatically after every nine bits (8 bits of data plus ACK or NACK) has been received on the bus */
-   __IO uint32_t  MASK0;                        /**< 0030: I2C Slave address mask register. This mask register is associated with I2ADR0 to determine an address match. The mask register has no effect when comparing to the General Call address (0000000) */
-   __IO uint32_t  MASK1;                        /**< 0034: I2C Slave address mask register. This mask register is associated with I2ADR0 to determine an address match. The mask register has no effect when comparing to the General Call address (0000000) */
-   __IO uint32_t  MASK2;                        /**< 0038: I2C Slave address mask register. This mask register is associated with I2ADR0 to determine an address match. The mask register has no effect when comparing to the General Call address (0000000) */
-   __IO uint32_t  MASK3;                        /**< 003C: I2C Slave address mask register. This mask register is associated with I2ADR0 to determine an address match. The mask register has no effect when comparing to the General Call address (0000000) */
+   __IO uint32_t  MASK[4];                      /**< 0030: I2C Slave address mask register. This mask register is associated with I2ADR to determine an address match. The mask register has no effect when comparing to the General Call address (0000000) */
 } LPC_I2C_Type;
 
 /**
@@ -4367,47 +3482,21 @@ typedef struct LPC_I2C_Type {
 #define LPC_I2C_MMCTRL_MATCH_ALL_MASK            (0x4U)                                              /*!< LPC_I2C_MMCTRL.MATCH_ALL Mask           */
 #define LPC_I2C_MMCTRL_MATCH_ALL_SHIFT           (2U)                                                /*!< LPC_I2C_MMCTRL.MATCH_ALL Position       */
 #define LPC_I2C_MMCTRL_MATCH_ALL(x)              (((uint32_t)(((uint32_t)(x))<<2U))&0x4UL)           /*!< LPC_I2C_MMCTRL.MATCH_ALL Field          */
-/* ------- ADR1 Bit Fields                          ------ */
-#define LPC_I2C_ADR1_GC_MASK                     (0x1U)                                              /*!< LPC_I2C_ADR1.GC Mask                    */
-#define LPC_I2C_ADR1_GC_SHIFT                    (0U)                                                /*!< LPC_I2C_ADR1.GC Position                */
-#define LPC_I2C_ADR1_GC(x)                       (((uint32_t)(((uint32_t)(x))<<0U))&0x1UL)           /*!< LPC_I2C_ADR1.GC Field                   */
-#define LPC_I2C_ADR1_Address_MASK                (0xFEU)                                             /*!< LPC_I2C_ADR1.Address Mask               */
-#define LPC_I2C_ADR1_Address_SHIFT               (1U)                                                /*!< LPC_I2C_ADR1.Address Position           */
-#define LPC_I2C_ADR1_Address(x)                  (((uint32_t)(((uint32_t)(x))<<1U))&0xFEUL)          /*!< LPC_I2C_ADR1.Address Field              */
-/* ------- ADR2 Bit Fields                          ------ */
-#define LPC_I2C_ADR2_GC_MASK                     (0x1U)                                              /*!< LPC_I2C_ADR2.GC Mask                    */
-#define LPC_I2C_ADR2_GC_SHIFT                    (0U)                                                /*!< LPC_I2C_ADR2.GC Position                */
-#define LPC_I2C_ADR2_GC(x)                       (((uint32_t)(((uint32_t)(x))<<0U))&0x1UL)           /*!< LPC_I2C_ADR2.GC Field                   */
-#define LPC_I2C_ADR2_Address_MASK                (0xFEU)                                             /*!< LPC_I2C_ADR2.Address Mask               */
-#define LPC_I2C_ADR2_Address_SHIFT               (1U)                                                /*!< LPC_I2C_ADR2.Address Position           */
-#define LPC_I2C_ADR2_Address(x)                  (((uint32_t)(((uint32_t)(x))<<1U))&0xFEUL)          /*!< LPC_I2C_ADR2.Address Field              */
-/* ------- ADR3 Bit Fields                          ------ */
-#define LPC_I2C_ADR3_GC_MASK                     (0x1U)                                              /*!< LPC_I2C_ADR3.GC Mask                    */
-#define LPC_I2C_ADR3_GC_SHIFT                    (0U)                                                /*!< LPC_I2C_ADR3.GC Position                */
-#define LPC_I2C_ADR3_GC(x)                       (((uint32_t)(((uint32_t)(x))<<0U))&0x1UL)           /*!< LPC_I2C_ADR3.GC Field                   */
-#define LPC_I2C_ADR3_Address_MASK                (0xFEU)                                             /*!< LPC_I2C_ADR3.Address Mask               */
-#define LPC_I2C_ADR3_Address_SHIFT               (1U)                                                /*!< LPC_I2C_ADR3.Address Position           */
-#define LPC_I2C_ADR3_Address(x)                  (((uint32_t)(((uint32_t)(x))<<1U))&0xFEUL)          /*!< LPC_I2C_ADR3.Address Field              */
+/* ------- ADR Bit Fields                           ------ */
+#define LPC_I2C_ADR_GC_MASK                      (0x1U)                                              /*!< LPC_I2C_ADR.GC Mask                     */
+#define LPC_I2C_ADR_GC_SHIFT                     (0U)                                                /*!< LPC_I2C_ADR.GC Position                 */
+#define LPC_I2C_ADR_GC(x)                        (((uint32_t)(((uint32_t)(x))<<0U))&0x1UL)           /*!< LPC_I2C_ADR.GC Field                    */
+#define LPC_I2C_ADR_Address_MASK                 (0xFEU)                                             /*!< LPC_I2C_ADR.Address Mask                */
+#define LPC_I2C_ADR_Address_SHIFT                (1U)                                                /*!< LPC_I2C_ADR.Address Position            */
+#define LPC_I2C_ADR_Address(x)                   (((uint32_t)(((uint32_t)(x))<<1U))&0xFEUL)          /*!< LPC_I2C_ADR.Address Field               */
 /* ------- DATA_BUFFER Bit Fields                   ------ */
 #define LPC_I2C_DATA_BUFFER_Data_MASK            (0xFFU)                                             /*!< LPC_I2C_DATA_BUFFER.Data Mask           */
 #define LPC_I2C_DATA_BUFFER_Data_SHIFT           (0U)                                                /*!< LPC_I2C_DATA_BUFFER.Data Position       */
 #define LPC_I2C_DATA_BUFFER_Data(x)              (((uint32_t)(((uint32_t)(x))<<0U))&0xFFUL)          /*!< LPC_I2C_DATA_BUFFER.Data Field          */
-/* ------- MASK0 Bit Fields                         ------ */
-#define LPC_I2C_MASK0_MASK_MASK                  (0xFEU)                                             /*!< LPC_I2C_MASK0.MASK Mask                 */
-#define LPC_I2C_MASK0_MASK_SHIFT                 (1U)                                                /*!< LPC_I2C_MASK0.MASK Position             */
-#define LPC_I2C_MASK0_MASK(x)                    (((uint32_t)(((uint32_t)(x))<<1U))&0xFEUL)          /*!< LPC_I2C_MASK0.MASK Field                */
-/* ------- MASK1 Bit Fields                         ------ */
-#define LPC_I2C_MASK1_MASK_MASK                  (0xFEU)                                             /*!< LPC_I2C_MASK1.MASK Mask                 */
-#define LPC_I2C_MASK1_MASK_SHIFT                 (1U)                                                /*!< LPC_I2C_MASK1.MASK Position             */
-#define LPC_I2C_MASK1_MASK(x)                    (((uint32_t)(((uint32_t)(x))<<1U))&0xFEUL)          /*!< LPC_I2C_MASK1.MASK Field                */
-/* ------- MASK2 Bit Fields                         ------ */
-#define LPC_I2C_MASK2_MASK_MASK                  (0xFEU)                                             /*!< LPC_I2C_MASK2.MASK Mask                 */
-#define LPC_I2C_MASK2_MASK_SHIFT                 (1U)                                                /*!< LPC_I2C_MASK2.MASK Position             */
-#define LPC_I2C_MASK2_MASK(x)                    (((uint32_t)(((uint32_t)(x))<<1U))&0xFEUL)          /*!< LPC_I2C_MASK2.MASK Field                */
-/* ------- MASK3 Bit Fields                         ------ */
-#define LPC_I2C_MASK3_MASK_MASK                  (0xFEU)                                             /*!< LPC_I2C_MASK3.MASK Mask                 */
-#define LPC_I2C_MASK3_MASK_SHIFT                 (1U)                                                /*!< LPC_I2C_MASK3.MASK Position             */
-#define LPC_I2C_MASK3_MASK(x)                    (((uint32_t)(((uint32_t)(x))<<1U))&0xFEUL)          /*!< LPC_I2C_MASK3.MASK Field                */
+/* ------- MASK Bit Fields                          ------ */
+#define LPC_I2C_MASK_MASK_MASK                   (0xFEU)                                             /*!< LPC_I2C_MASK.MASK Mask                  */
+#define LPC_I2C_MASK_MASK_SHIFT                  (1U)                                                /*!< LPC_I2C_MASK.MASK Position              */
+#define LPC_I2C_MASK_MASK(x)                     (((uint32_t)(((uint32_t)(x))<<1U))&0xFEUL)          /*!< LPC_I2C_MASK.MASK Field                 */
 /**
  * @} */ /* End group I2C_Register_Masks_GROUP 
  */
@@ -5021,70 +4110,23 @@ typedef struct LPC_IOCON_Type {
 #define LPC_IOCON_PIO1_5_OD_MASK                 (0x400U)                                            /*!< LPC_IOCON_PIO1_5.OD Mask                */
 #define LPC_IOCON_PIO1_5_OD_SHIFT                (10U)                                               /*!< LPC_IOCON_PIO1_5.OD Position            */
 #define LPC_IOCON_PIO1_5_OD(x)                   (((uint32_t)(((uint32_t)(x))<<10U))&0x400UL)        /*!< LPC_IOCON_PIO1_5.OD Field               */
-/* ------- PIO1_7 Bit Fields                        ------ */
-#define LPC_IOCON_PIO1_7_FUNC_MASK               (0x7U)                                              /*!< LPC_IOCON_PIO1_7.FUNC Mask              */
-#define LPC_IOCON_PIO1_7_FUNC_SHIFT              (0U)                                                /*!< LPC_IOCON_PIO1_7.FUNC Position          */
-#define LPC_IOCON_PIO1_7_FUNC(x)                 (((uint32_t)(((uint32_t)(x))<<0U))&0x7UL)           /*!< LPC_IOCON_PIO1_7.FUNC Field             */
-#define LPC_IOCON_PIO1_7_MODE_MASK               (0x18U)                                             /*!< LPC_IOCON_PIO1_7.MODE Mask              */
-#define LPC_IOCON_PIO1_7_MODE_SHIFT              (3U)                                                /*!< LPC_IOCON_PIO1_7.MODE Position          */
-#define LPC_IOCON_PIO1_7_MODE(x)                 (((uint32_t)(((uint32_t)(x))<<3U))&0x18UL)          /*!< LPC_IOCON_PIO1_7.MODE Field             */
-#define LPC_IOCON_PIO1_7_HYS_MASK                (0x20U)                                             /*!< LPC_IOCON_PIO1_7.HYS Mask               */
-#define LPC_IOCON_PIO1_7_HYS_SHIFT               (5U)                                                /*!< LPC_IOCON_PIO1_7.HYS Position           */
-#define LPC_IOCON_PIO1_7_HYS(x)                  (((uint32_t)(((uint32_t)(x))<<5U))&0x20UL)          /*!< LPC_IOCON_PIO1_7.HYS Field              */
-#define LPC_IOCON_PIO1_7_INV_MASK                (0x40U)                                             /*!< LPC_IOCON_PIO1_7.INV Mask               */
-#define LPC_IOCON_PIO1_7_INV_SHIFT               (6U)                                                /*!< LPC_IOCON_PIO1_7.INV Position           */
-#define LPC_IOCON_PIO1_7_INV(x)                  (((uint32_t)(((uint32_t)(x))<<6U))&0x40UL)          /*!< LPC_IOCON_PIO1_7.INV Field              */
-#define LPC_IOCON_PIO1_7_OD_MASK                 (0x400U)                                            /*!< LPC_IOCON_PIO1_7.OD Mask                */
-#define LPC_IOCON_PIO1_7_OD_SHIFT                (10U)                                               /*!< LPC_IOCON_PIO1_7.OD Position            */
-#define LPC_IOCON_PIO1_7_OD(x)                   (((uint32_t)(((uint32_t)(x))<<10U))&0x400UL)        /*!< LPC_IOCON_PIO1_7.OD Field               */
-/* ------- PIO1_8 Bit Fields                        ------ */
-#define LPC_IOCON_PIO1_8_FUNC_MASK               (0x7U)                                              /*!< LPC_IOCON_PIO1_8.FUNC Mask              */
-#define LPC_IOCON_PIO1_8_FUNC_SHIFT              (0U)                                                /*!< LPC_IOCON_PIO1_8.FUNC Position          */
-#define LPC_IOCON_PIO1_8_FUNC(x)                 (((uint32_t)(((uint32_t)(x))<<0U))&0x7UL)           /*!< LPC_IOCON_PIO1_8.FUNC Field             */
-#define LPC_IOCON_PIO1_8_MODE_MASK               (0x18U)                                             /*!< LPC_IOCON_PIO1_8.MODE Mask              */
-#define LPC_IOCON_PIO1_8_MODE_SHIFT              (3U)                                                /*!< LPC_IOCON_PIO1_8.MODE Position          */
-#define LPC_IOCON_PIO1_8_MODE(x)                 (((uint32_t)(((uint32_t)(x))<<3U))&0x18UL)          /*!< LPC_IOCON_PIO1_8.MODE Field             */
-#define LPC_IOCON_PIO1_8_HYS_MASK                (0x20U)                                             /*!< LPC_IOCON_PIO1_8.HYS Mask               */
-#define LPC_IOCON_PIO1_8_HYS_SHIFT               (5U)                                                /*!< LPC_IOCON_PIO1_8.HYS Position           */
-#define LPC_IOCON_PIO1_8_HYS(x)                  (((uint32_t)(((uint32_t)(x))<<5U))&0x20UL)          /*!< LPC_IOCON_PIO1_8.HYS Field              */
-#define LPC_IOCON_PIO1_8_INV_MASK                (0x40U)                                             /*!< LPC_IOCON_PIO1_8.INV Mask               */
-#define LPC_IOCON_PIO1_8_INV_SHIFT               (6U)                                                /*!< LPC_IOCON_PIO1_8.INV Position           */
-#define LPC_IOCON_PIO1_8_INV(x)                  (((uint32_t)(((uint32_t)(x))<<6U))&0x40UL)          /*!< LPC_IOCON_PIO1_8.INV Field              */
-#define LPC_IOCON_PIO1_8_OD_MASK                 (0x400U)                                            /*!< LPC_IOCON_PIO1_8.OD Mask                */
-#define LPC_IOCON_PIO1_8_OD_SHIFT                (10U)                                               /*!< LPC_IOCON_PIO1_8.OD Position            */
-#define LPC_IOCON_PIO1_8_OD(x)                   (((uint32_t)(((uint32_t)(x))<<10U))&0x400UL)        /*!< LPC_IOCON_PIO1_8.OD Field               */
-/* ------- PIO1_10 Bit Fields                       ------ */
-#define LPC_IOCON_PIO1_10_FUNC_MASK              (0x7U)                                              /*!< LPC_IOCON_PIO1_10.FUNC Mask             */
-#define LPC_IOCON_PIO1_10_FUNC_SHIFT             (0U)                                                /*!< LPC_IOCON_PIO1_10.FUNC Position         */
-#define LPC_IOCON_PIO1_10_FUNC(x)                (((uint32_t)(((uint32_t)(x))<<0U))&0x7UL)           /*!< LPC_IOCON_PIO1_10.FUNC Field            */
-#define LPC_IOCON_PIO1_10_MODE_MASK              (0x18U)                                             /*!< LPC_IOCON_PIO1_10.MODE Mask             */
-#define LPC_IOCON_PIO1_10_MODE_SHIFT             (3U)                                                /*!< LPC_IOCON_PIO1_10.MODE Position         */
-#define LPC_IOCON_PIO1_10_MODE(x)                (((uint32_t)(((uint32_t)(x))<<3U))&0x18UL)          /*!< LPC_IOCON_PIO1_10.MODE Field            */
-#define LPC_IOCON_PIO1_10_HYS_MASK               (0x20U)                                             /*!< LPC_IOCON_PIO1_10.HYS Mask              */
-#define LPC_IOCON_PIO1_10_HYS_SHIFT              (5U)                                                /*!< LPC_IOCON_PIO1_10.HYS Position          */
-#define LPC_IOCON_PIO1_10_HYS(x)                 (((uint32_t)(((uint32_t)(x))<<5U))&0x20UL)          /*!< LPC_IOCON_PIO1_10.HYS Field             */
-#define LPC_IOCON_PIO1_10_INV_MASK               (0x40U)                                             /*!< LPC_IOCON_PIO1_10.INV Mask              */
-#define LPC_IOCON_PIO1_10_INV_SHIFT              (6U)                                                /*!< LPC_IOCON_PIO1_10.INV Position          */
-#define LPC_IOCON_PIO1_10_INV(x)                 (((uint32_t)(((uint32_t)(x))<<6U))&0x40UL)          /*!< LPC_IOCON_PIO1_10.INV Field             */
-#define LPC_IOCON_PIO1_10_OD_MASK                (0x400U)                                            /*!< LPC_IOCON_PIO1_10.OD Mask               */
-#define LPC_IOCON_PIO1_10_OD_SHIFT               (10U)                                               /*!< LPC_IOCON_PIO1_10.OD Position           */
-#define LPC_IOCON_PIO1_10_OD(x)                  (((uint32_t)(((uint32_t)(x))<<10U))&0x400UL)        /*!< LPC_IOCON_PIO1_10.OD Field              */
-/* ------- PIO1_11 Bit Fields                       ------ */
-#define LPC_IOCON_PIO1_11_FUNC_MASK              (0x7U)                                              /*!< LPC_IOCON_PIO1_11.FUNC Mask             */
-#define LPC_IOCON_PIO1_11_FUNC_SHIFT             (0U)                                                /*!< LPC_IOCON_PIO1_11.FUNC Position         */
-#define LPC_IOCON_PIO1_11_FUNC(x)                (((uint32_t)(((uint32_t)(x))<<0U))&0x7UL)           /*!< LPC_IOCON_PIO1_11.FUNC Field            */
-#define LPC_IOCON_PIO1_11_MODE_MASK              (0x18U)                                             /*!< LPC_IOCON_PIO1_11.MODE Mask             */
-#define LPC_IOCON_PIO1_11_MODE_SHIFT             (3U)                                                /*!< LPC_IOCON_PIO1_11.MODE Position         */
-#define LPC_IOCON_PIO1_11_MODE(x)                (((uint32_t)(((uint32_t)(x))<<3U))&0x18UL)          /*!< LPC_IOCON_PIO1_11.MODE Field            */
-#define LPC_IOCON_PIO1_11_HYS_MASK               (0x20U)                                             /*!< LPC_IOCON_PIO1_11.HYS Mask              */
-#define LPC_IOCON_PIO1_11_HYS_SHIFT              (5U)                                                /*!< LPC_IOCON_PIO1_11.HYS Position          */
-#define LPC_IOCON_PIO1_11_HYS(x)                 (((uint32_t)(((uint32_t)(x))<<5U))&0x20UL)          /*!< LPC_IOCON_PIO1_11.HYS Field             */
-#define LPC_IOCON_PIO1_11_INV_MASK               (0x40U)                                             /*!< LPC_IOCON_PIO1_11.INV Mask              */
-#define LPC_IOCON_PIO1_11_INV_SHIFT              (6U)                                                /*!< LPC_IOCON_PIO1_11.INV Position          */
-#define LPC_IOCON_PIO1_11_INV(x)                 (((uint32_t)(((uint32_t)(x))<<6U))&0x40UL)          /*!< LPC_IOCON_PIO1_11.INV Field             */
-#define LPC_IOCON_PIO1_11_OD_MASK                (0x400U)                                            /*!< LPC_IOCON_PIO1_11.OD Mask               */
-#define LPC_IOCON_PIO1_11_OD_SHIFT               (10U)                                               /*!< LPC_IOCON_PIO1_11.OD Position           */
-#define LPC_IOCON_PIO1_11_OD(x)                  (((uint32_t)(((uint32_t)(x))<<10U))&0x400UL)        /*!< LPC_IOCON_PIO1_11.OD Field              */
+/* ------- PIO1_ Bit Fields                         ------ */
+#define LPC_IOCON_PIO1__FUNC_MASK                (0x7U)                                              /*!< LPC_IOCON_PIO1_.FUNC Mask               */
+#define LPC_IOCON_PIO1__FUNC_SHIFT               (0U)                                                /*!< LPC_IOCON_PIO1_.FUNC Position           */
+#define LPC_IOCON_PIO1__FUNC(x)                  (((uint32_t)(((uint32_t)(x))<<0U))&0x7UL)           /*!< LPC_IOCON_PIO1_.FUNC Field              */
+#define LPC_IOCON_PIO1__MODE_MASK                (0x18U)                                             /*!< LPC_IOCON_PIO1_.MODE Mask               */
+#define LPC_IOCON_PIO1__MODE_SHIFT               (3U)                                                /*!< LPC_IOCON_PIO1_.MODE Position           */
+#define LPC_IOCON_PIO1__MODE(x)                  (((uint32_t)(((uint32_t)(x))<<3U))&0x18UL)          /*!< LPC_IOCON_PIO1_.MODE Field              */
+#define LPC_IOCON_PIO1__HYS_MASK                 (0x20U)                                             /*!< LPC_IOCON_PIO1_.HYS Mask                */
+#define LPC_IOCON_PIO1__HYS_SHIFT                (5U)                                                /*!< LPC_IOCON_PIO1_.HYS Position            */
+#define LPC_IOCON_PIO1__HYS(x)                   (((uint32_t)(((uint32_t)(x))<<5U))&0x20UL)          /*!< LPC_IOCON_PIO1_.HYS Field               */
+#define LPC_IOCON_PIO1__INV_MASK                 (0x40U)                                             /*!< LPC_IOCON_PIO1_.INV Mask                */
+#define LPC_IOCON_PIO1__INV_SHIFT                (6U)                                                /*!< LPC_IOCON_PIO1_.INV Position            */
+#define LPC_IOCON_PIO1__INV(x)                   (((uint32_t)(((uint32_t)(x))<<6U))&0x40UL)          /*!< LPC_IOCON_PIO1_.INV Field               */
+#define LPC_IOCON_PIO1__OD_MASK                  (0x400U)                                            /*!< LPC_IOCON_PIO1_.OD Mask                 */
+#define LPC_IOCON_PIO1__OD_SHIFT                 (10U)                                               /*!< LPC_IOCON_PIO1_.OD Position             */
+#define LPC_IOCON_PIO1__OD(x)                    (((uint32_t)(((uint32_t)(x))<<10U))&0x400UL)        /*!< LPC_IOCON_PIO1_.OD Field                */
+/* ------- PIO1_ Bit Fields                         ------ */
 /* ------- PIO1_13 Bit Fields                       ------ */
 #define LPC_IOCON_PIO1_13_FUNC_MASK              (0x7U)                                              /*!< LPC_IOCON_PIO1_13.FUNC Mask             */
 #define LPC_IOCON_PIO1_13_FUNC_SHIFT             (0U)                                                /*!< LPC_IOCON_PIO1_13.FUNC Position         */

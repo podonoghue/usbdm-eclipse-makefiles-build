@@ -5,7 +5,7 @@
  *           Equivalent: 
  *
  * @version  V0.4
- * @date     2018/03
+ * @date     2018/04
  *
  *******************************************************************************************************/
 
@@ -201,18 +201,7 @@ typedef struct LPC_ADC_Type {
    __IO uint32_t  SEQA_GDAT;                    /**< 0010: A/D Sequence-A Global Data Register. This register contains the result of the most recent A/D conversion performed under sequence-A */
    __IO uint32_t  SEQB_GDAT;                    /**< 0014: A/D Sequence-B Global Data Register. This register contains the result of the most recent A/D conversion performed under sequence-B */
         uint8_t   RESERVED_1[8];               
-   __I  uint32_t  DAT0;                         /**< 0020: A/D Channel 0 Data Register. This register contains the result of the most recent conversion completed on channel 0 */
-   __I  uint32_t  DAT1;                         /**< 0024: A/D Channel 0 Data Register. This register contains the result of the most recent conversion completed on channel 0 */
-   __I  uint32_t  DAT2;                         /**< 0028: A/D Channel 0 Data Register. This register contains the result of the most recent conversion completed on channel 0 */
-   __I  uint32_t  DAT3;                         /**< 002C: A/D Channel 0 Data Register. This register contains the result of the most recent conversion completed on channel 0 */
-   __I  uint32_t  DAT4;                         /**< 0030: A/D Channel 0 Data Register. This register contains the result of the most recent conversion completed on channel 0 */
-   __I  uint32_t  DAT5;                         /**< 0034: A/D Channel 0 Data Register. This register contains the result of the most recent conversion completed on channel 0 */
-   __I  uint32_t  DAT6;                         /**< 0038: A/D Channel 0 Data Register. This register contains the result of the most recent conversion completed on channel 0 */
-   __I  uint32_t  DAT7;                         /**< 003C: A/D Channel 0 Data Register. This register contains the result of the most recent conversion completed on channel 0 */
-   __I  uint32_t  DAT8;                         /**< 0040: A/D Channel 0 Data Register. This register contains the result of the most recent conversion completed on channel 0 */
-   __I  uint32_t  DAT9;                         /**< 0044: A/D Channel 0 Data Register. This register contains the result of the most recent conversion completed on channel 0 */
-   __I  uint32_t  DAT10;                        /**< 0048: A/D Channel 0 Data Register. This register contains the result of the most recent conversion completed on channel 0 */
-   __I  uint32_t  DAT11;                        /**< 004C: A/D Channel 0 Data Register. This register contains the result of the most recent conversion completed on channel 0 */
+   __I  uint32_t  DAT[12];                      /**< 0020: A/D Channel  Data Register. This register contains the result of the most recent conversion completed on channel 0 */
    __IO uint32_t  THR0_LOW;                     /**< 0050: A/D Low Compare Threshold Register 0 : Contains the lower threshold level for automatic threshold comparison for any channels linked to threshold pair 0 */
    __IO uint32_t  THR1_LOW;                     /**< 0054: A/D Low Compare Threshold Register 1: Contains the lower threshold level for automatic threshold comparison for any channels linked to threshold pair 1 */
    __IO uint32_t  THR0_HIGH;                    /**< 0058: A/D High Compare Threshold Register 0: Contains the upper threshold level for automatic threshold comparison for any channels linked to threshold pair 0 */
@@ -343,25 +332,6 @@ typedef struct LPC_ADC_Type {
 #define LPC_ADC_SEQB_GDAT_DATAVALID_MASK         (0x80000000U)                                       /*!< LPC_ADC_SEQB_GDAT.DATAVALID Mask        */
 #define LPC_ADC_SEQB_GDAT_DATAVALID_SHIFT        (31U)                                               /*!< LPC_ADC_SEQB_GDAT.DATAVALID Position    */
 #define LPC_ADC_SEQB_GDAT_DATAVALID(x)           (((uint32_t)(((uint32_t)(x))<<31U))&0x80000000UL)   /*!< LPC_ADC_SEQB_GDAT.DATAVALID Field       */
-/* ------- DAT0 Bit Fields                          ------ */
-#define LPC_ADC_DAT0_RESULT_MASK                 (0xFFF0U)                                           /*!< LPC_ADC_DAT0.RESULT Mask                */
-#define LPC_ADC_DAT0_RESULT_SHIFT                (4U)                                                /*!< LPC_ADC_DAT0.RESULT Position            */
-#define LPC_ADC_DAT0_RESULT(x)                   (((uint32_t)(((uint32_t)(x))<<4U))&0xFFF0UL)        /*!< LPC_ADC_DAT0.RESULT Field               */
-#define LPC_ADC_DAT0_THCMPRANGE_MASK             (0x30000U)                                          /*!< LPC_ADC_DAT0.THCMPRANGE Mask            */
-#define LPC_ADC_DAT0_THCMPRANGE_SHIFT            (16U)                                               /*!< LPC_ADC_DAT0.THCMPRANGE Position        */
-#define LPC_ADC_DAT0_THCMPRANGE(x)               (((uint32_t)(((uint32_t)(x))<<16U))&0x30000UL)      /*!< LPC_ADC_DAT0.THCMPRANGE Field           */
-#define LPC_ADC_DAT0_THCMPCROSS_MASK             (0xC0000U)                                          /*!< LPC_ADC_DAT0.THCMPCROSS Mask            */
-#define LPC_ADC_DAT0_THCMPCROSS_SHIFT            (18U)                                               /*!< LPC_ADC_DAT0.THCMPCROSS Position        */
-#define LPC_ADC_DAT0_THCMPCROSS(x)               (((uint32_t)(((uint32_t)(x))<<18U))&0xC0000UL)      /*!< LPC_ADC_DAT0.THCMPCROSS Field           */
-#define LPC_ADC_DAT0_CHANNEL_MASK                (0x3C000000U)                                       /*!< LPC_ADC_DAT0.CHANNEL Mask               */
-#define LPC_ADC_DAT0_CHANNEL_SHIFT               (26U)                                               /*!< LPC_ADC_DAT0.CHANNEL Position           */
-#define LPC_ADC_DAT0_CHANNEL(x)                  (((uint32_t)(((uint32_t)(x))<<26U))&0x3C000000UL)   /*!< LPC_ADC_DAT0.CHANNEL Field              */
-#define LPC_ADC_DAT0_OVERRUN_MASK                (0x40000000U)                                       /*!< LPC_ADC_DAT0.OVERRUN Mask               */
-#define LPC_ADC_DAT0_OVERRUN_SHIFT               (30U)                                               /*!< LPC_ADC_DAT0.OVERRUN Position           */
-#define LPC_ADC_DAT0_OVERRUN(x)                  (((uint32_t)(((uint32_t)(x))<<30U))&0x40000000UL)   /*!< LPC_ADC_DAT0.OVERRUN Field              */
-#define LPC_ADC_DAT0_DATAVALID_MASK              (0x80000000U)                                       /*!< LPC_ADC_DAT0.DATAVALID Mask             */
-#define LPC_ADC_DAT0_DATAVALID_SHIFT             (31U)                                               /*!< LPC_ADC_DAT0.DATAVALID Position         */
-#define LPC_ADC_DAT0_DATAVALID(x)                (((uint32_t)(((uint32_t)(x))<<31U))&0x80000000UL)   /*!< LPC_ADC_DAT0.DATAVALID Field            */
 /* ------- DAT Bit Fields                           ------ */
 #define LPC_ADC_DAT_RESULT_MASK                  (0xFFF0U)                                           /*!< LPC_ADC_DAT.RESULT Mask                 */
 #define LPC_ADC_DAT_RESULT_SHIFT                 (4U)                                                /*!< LPC_ADC_DAT.RESULT Position             */
@@ -683,7 +653,7 @@ typedef struct LPC_CMP_Type {
 /* ================================================================================ */
 
 /**
- * @brief Cyclic Redundancy Check (CRC) engine
+ * @brief Cyclic Redundancy Check
  */
 /**
 * @addtogroup CRC_structs_GROUP CRC struct
@@ -2170,24 +2140,7 @@ typedef struct LPC_DMA_Type {
 * @{
 */
 typedef struct LPC_DMATRIGMUX_Type {
-   __IO uint32_t  DMA_ITRIG_INMUX0;             /**< 0000: Input mux register for trigger inputs 0 to 23 connected to DMA channel 0. Selects from ADC, SCT, ACMP, pin  interrupts, and DMA requests */
-   __IO uint32_t  DMA_ITRIG_INMUX1;             /**< 0004: Input mux register for trigger inputs 0 to 23 connected to DMA channel 0. Selects from ADC, SCT, ACMP, pin  interrupts, and DMA requests */
-   __IO uint32_t  DMA_ITRIG_INMUX2;             /**< 0008: Input mux register for trigger inputs 0 to 23 connected to DMA channel 0. Selects from ADC, SCT, ACMP, pin  interrupts, and DMA requests */
-   __IO uint32_t  DMA_ITRIG_INMUX3;             /**< 000C: Input mux register for trigger inputs 0 to 23 connected to DMA channel 0. Selects from ADC, SCT, ACMP, pin  interrupts, and DMA requests */
-   __IO uint32_t  DMA_ITRIG_INMUX4;             /**< 0010: Input mux register for trigger inputs 0 to 23 connected to DMA channel 0. Selects from ADC, SCT, ACMP, pin  interrupts, and DMA requests */
-   __IO uint32_t  DMA_ITRIG_INMUX5;             /**< 0014: Input mux register for trigger inputs 0 to 23 connected to DMA channel 0. Selects from ADC, SCT, ACMP, pin  interrupts, and DMA requests */
-   __IO uint32_t  DMA_ITRIG_INMUX6;             /**< 0018: Input mux register for trigger inputs 0 to 23 connected to DMA channel 0. Selects from ADC, SCT, ACMP, pin  interrupts, and DMA requests */
-   __IO uint32_t  DMA_ITRIG_INMUX7;             /**< 001C: Input mux register for trigger inputs 0 to 23 connected to DMA channel 0. Selects from ADC, SCT, ACMP, pin  interrupts, and DMA requests */
-   __IO uint32_t  DMA_ITRIG_INMUX8;             /**< 0020: Input mux register for trigger inputs 0 to 23 connected to DMA channel 0. Selects from ADC, SCT, ACMP, pin  interrupts, and DMA requests */
-   __IO uint32_t  DMA_ITRIG_INMUX9;             /**< 0024: Input mux register for trigger inputs 0 to 23 connected to DMA channel 0. Selects from ADC, SCT, ACMP, pin  interrupts, and DMA requests */
-   __IO uint32_t  DMA_ITRIG_INMUX10;            /**< 0028: Input mux register for trigger inputs 0 to 23 connected to DMA channel 0. Selects from ADC, SCT, ACMP, pin  interrupts, and DMA requests */
-   __IO uint32_t  DMA_ITRIG_INMUX11;            /**< 002C: Input mux register for trigger inputs 0 to 23 connected to DMA channel 0. Selects from ADC, SCT, ACMP, pin  interrupts, and DMA requests */
-   __IO uint32_t  DMA_ITRIG_INMUX12;            /**< 0030: Input mux register for trigger inputs 0 to 23 connected to DMA channel 0. Selects from ADC, SCT, ACMP, pin  interrupts, and DMA requests */
-   __IO uint32_t  DMA_ITRIG_INMUX13;            /**< 0034: Input mux register for trigger inputs 0 to 23 connected to DMA channel 0. Selects from ADC, SCT, ACMP, pin  interrupts, and DMA requests */
-   __IO uint32_t  DMA_ITRIG_INMUX14;            /**< 0038: Input mux register for trigger inputs 0 to 23 connected to DMA channel 0. Selects from ADC, SCT, ACMP, pin  interrupts, and DMA requests */
-   __IO uint32_t  DMA_ITRIG_INMUX15;            /**< 003C: Input mux register for trigger inputs 0 to 23 connected to DMA channel 0. Selects from ADC, SCT, ACMP, pin  interrupts, and DMA requests */
-   __IO uint32_t  DMA_ITRIG_INMUX16;            /**< 0040: Input mux register for trigger inputs 0 to 23 connected to DMA channel 0. Selects from ADC, SCT, ACMP, pin  interrupts, and DMA requests */
-   __IO uint32_t  DMA_ITRIG_INMUX17;            /**< 0044: Input mux register for trigger inputs 0 to 23 connected to DMA channel 0. Selects from ADC, SCT, ACMP, pin  interrupts, and DMA requests */
+   __IO uint32_t  DMA_ITRIG_INMUX[18];          /**< 0000: Input mux for trigger input  for DMA channel 0.              */
 } LPC_DMATRIGMUX_Type;
 
 /**
@@ -2203,22 +2156,6 @@ typedef struct LPC_DMATRIGMUX_Type {
 * @brief Register Masks for DMATRIGMUX
 * @{
 */
-/* ------- DMA_ITRIG_INMUX0 Bit Fields              ------ */
-#define LPC_DMATRIGMUX_DMA_ITRIG_INMUX0_INP_MASK (0xFU)                                              /*!< LPC_DMATRIGMUX_DMA_ITRIG_INMUX0.INP Mask*/
-#define LPC_DMATRIGMUX_DMA_ITRIG_INMUX0_INP_SHIFT (0U)                                               /*!< LPC_DMATRIGMUX_DMA_ITRIG_INMUX0.INP Position*/
-#define LPC_DMATRIGMUX_DMA_ITRIG_INMUX0_INP(x)   (((uint32_t)(((uint32_t)(x))<<0U))&0xFUL)           /*!< LPC_DMATRIGMUX_DMA_ITRIG_INMUX0.INP Field*/
-/* ------- DMA_ITRIG_INMUX1 Bit Fields              ------ */
-#define LPC_DMATRIGMUX_DMA_ITRIG_INMUX1_INP_MASK (0xFU)                                              /*!< LPC_DMATRIGMUX_DMA_ITRIG_INMUX1.INP Mask*/
-#define LPC_DMATRIGMUX_DMA_ITRIG_INMUX1_INP_SHIFT (0U)                                               /*!< LPC_DMATRIGMUX_DMA_ITRIG_INMUX1.INP Position*/
-#define LPC_DMATRIGMUX_DMA_ITRIG_INMUX1_INP(x)   (((uint32_t)(((uint32_t)(x))<<0U))&0xFUL)           /*!< LPC_DMATRIGMUX_DMA_ITRIG_INMUX1.INP Field*/
-/* ------- DMA_ITRIG_INMUX2 Bit Fields              ------ */
-#define LPC_DMATRIGMUX_DMA_ITRIG_INMUX2_INP_MASK (0xFU)                                              /*!< LPC_DMATRIGMUX_DMA_ITRIG_INMUX2.INP Mask*/
-#define LPC_DMATRIGMUX_DMA_ITRIG_INMUX2_INP_SHIFT (0U)                                               /*!< LPC_DMATRIGMUX_DMA_ITRIG_INMUX2.INP Position*/
-#define LPC_DMATRIGMUX_DMA_ITRIG_INMUX2_INP(x)   (((uint32_t)(((uint32_t)(x))<<0U))&0xFUL)           /*!< LPC_DMATRIGMUX_DMA_ITRIG_INMUX2.INP Field*/
-/* ------- DMA_ITRIG_INMUX3 Bit Fields              ------ */
-#define LPC_DMATRIGMUX_DMA_ITRIG_INMUX3_INP_MASK (0xFU)                                              /*!< LPC_DMATRIGMUX_DMA_ITRIG_INMUX3.INP Mask*/
-#define LPC_DMATRIGMUX_DMA_ITRIG_INMUX3_INP_SHIFT (0U)                                               /*!< LPC_DMATRIGMUX_DMA_ITRIG_INMUX3.INP Position*/
-#define LPC_DMATRIGMUX_DMA_ITRIG_INMUX3_INP(x)   (((uint32_t)(((uint32_t)(x))<<0U))&0xFUL)           /*!< LPC_DMATRIGMUX_DMA_ITRIG_INMUX3.INP Field*/
 /* ------- DMA_ITRIG_INMUX Bit Fields               ------ */
 #define LPC_DMATRIGMUX_DMA_ITRIG_INMUX_INP_MASK  (0xFU)                                              /*!< LPC_DMATRIGMUX_DMA_ITRIG_INMUX.INP Mask */
 #define LPC_DMATRIGMUX_DMA_ITRIG_INMUX_INP_SHIFT (0U)                                                /*!< LPC_DMATRIGMUX_DMA_ITRIG_INMUX.INP Position*/
@@ -2326,60 +2263,8 @@ typedef struct LPC_FLASHCTRL_Type {
 * @{
 */
 typedef struct LPC_GPIO_PORT_Type {
-   __IO uint8_t   B0;                           /**< 0000: Byte pin registers port 0; pins PIO0_0 to PIO0_28            */
-   __IO uint8_t   B1;                           /**< 0001: Byte pin registers port 0; pins PIO0_0 to PIO0_28            */
-   __IO uint8_t   B2;                           /**< 0002: Byte pin registers port 0; pins PIO0_0 to PIO0_28            */
-   __IO uint8_t   B3;                           /**< 0003: Byte pin registers port 0; pins PIO0_0 to PIO0_28            */
-        uint8_t   RESERVED_0;                  
-   __IO uint8_t   B4;                           /**< 0004: Byte pin registers port 0; pins PIO0_0 to PIO0_28            */
-        uint8_t   RESERVED_1;                  
-   __IO uint8_t   B5;                           /**< 0005: Byte pin registers port 0; pins PIO0_0 to PIO0_28            */
-        uint8_t   RESERVED_2;                  
-   __IO uint8_t   B6;                           /**< 0006: Byte pin registers port 0; pins PIO0_0 to PIO0_28            */
-        uint8_t   RESERVED_3;                  
-   __IO uint8_t   B7;                           /**< 0007: Byte pin registers port 0; pins PIO0_0 to PIO0_28            */
-        uint8_t   RESERVED_4;                  
-   __IO uint8_t   B8;                           /**< 0008: Byte pin registers port 0; pins PIO0_0 to PIO0_28            */
-   __IO uint8_t   B9;                           /**< 0009: Byte pin registers port 0; pins PIO0_0 to PIO0_28            */
-        uint8_t   RESERVED_5;                  
-   __IO uint8_t   B10;                          /**< 000A: Byte pin registers port 0; pins PIO0_0 to PIO0_28            */
-        uint8_t   RESERVED_6;                  
-   __IO uint8_t   B11;                          /**< 000B: Byte pin registers port 0; pins PIO0_0 to PIO0_28            */
-        uint8_t   RESERVED_7;                  
-   __IO uint8_t   B12;                          /**< 000C: Byte pin registers port 0; pins PIO0_0 to PIO0_28            */
-        uint8_t   RESERVED_8;                  
-   __IO uint8_t   B13;                          /**< 000D: Byte pin registers port 0; pins PIO0_0 to PIO0_28            */
-        uint8_t   RESERVED_9;                  
-   __IO uint8_t   B14;                          /**< 000E: Byte pin registers port 0; pins PIO0_0 to PIO0_28            */
-        uint8_t   RESERVED_10;                 
-   __IO uint8_t   B15;                          /**< 000F: Byte pin registers port 0; pins PIO0_0 to PIO0_28            */
-        uint8_t   RESERVED_11;                 
-   __IO uint8_t   B16;                          /**< 0010: Byte pin registers port 0; pins PIO0_0 to PIO0_28            */
-        uint8_t   RESERVED_12;                 
-   __IO uint8_t   B17;                          /**< 0011: Byte pin registers port 0; pins PIO0_0 to PIO0_28            */
-        uint8_t   RESERVED_13;                 
-   __IO uint8_t   B18;                          /**< 0012: Byte pin registers port 0; pins PIO0_0 to PIO0_28            */
-        uint8_t   RESERVED_14;                 
-   __IO uint8_t   B19;                          /**< 0013: Byte pin registers port 0; pins PIO0_0 to PIO0_28            */
-        uint8_t   RESERVED_15;                 
-   __IO uint8_t   B20;                          /**< 0014: Byte pin registers port 0; pins PIO0_0 to PIO0_28            */
-        uint8_t   RESERVED_16;                 
-   __IO uint8_t   B21;                          /**< 0015: Byte pin registers port 0; pins PIO0_0 to PIO0_28            */
-        uint8_t   RESERVED_17;                 
-   __IO uint8_t   B22;                          /**< 0016: Byte pin registers port 0; pins PIO0_0 to PIO0_28            */
-        uint8_t   RESERVED_18;                 
-   __IO uint8_t   B23;                          /**< 0017: Byte pin registers port 0; pins PIO0_0 to PIO0_28            */
-        uint8_t   RESERVED_19;                 
-   __IO uint8_t   B24;                          /**< 0018: Byte pin registers port 0; pins PIO0_0 to PIO0_28            */
-        uint8_t   RESERVED_20;                 
-   __IO uint8_t   B25;                          /**< 0019: Byte pin registers port 0; pins PIO0_0 to PIO0_28            */
-        uint8_t   RESERVED_21;                 
-   __IO uint8_t   B26;                          /**< 001A: Byte pin registers port 0; pins PIO0_0 to PIO0_28            */
-        uint8_t   RESERVED_22;                 
-   __IO uint8_t   B27;                          /**< 001B: Byte pin registers port 0; pins PIO0_0 to PIO0_28            */
-        uint8_t   RESERVED_23;                 
-   __IO uint8_t   B28;                          /**< 001C: Byte pin registers port 0; pins PIO0_0 to PIO0_28            */
-        uint8_t   RESERVED_24[4067];           
+   __IO uint8_t   B[29];                        /**< 0000: Byte pin registers port ; pins PIO0_0 to PIO0_28             */
+        uint8_t   RESERVED_0[4067];            
    __IO uint32_t  W0;                           /**< 1000: Word pin registers port 0                                    */
    __IO uint32_t  W1;                           /**< 1004: Word pin registers port 0                                    */
    __IO uint32_t  W2;                           /**< 1008: Word pin registers port 0                                    */
@@ -2409,25 +2294,25 @@ typedef struct LPC_GPIO_PORT_Type {
    __IO uint32_t  W26;                          /**< 1068: Word pin registers port 0                                    */
    __IO uint32_t  W27;                          /**< 106C: Word pin registers port 0                                    */
    __IO uint32_t  W28;                          /**< 1070: Word pin registers port 0                                    */
-        uint8_t   RESERVED_25[3980];           
+        uint8_t   RESERVED_1[3980];            
    __IO uint32_t  DIR0;                         /**< 2000: Direction registers port 0                                   */
-        uint8_t   RESERVED_26[124];            
+        uint8_t   RESERVED_2[124];             
    __IO uint32_t  MASK0;                        /**< 2080: Mask register port 0                                         */
-        uint8_t   RESERVED_27[124];            
+        uint8_t   RESERVED_3[124];             
    __IO uint32_t  PIN0;                         /**< 2100: Port pin register port 0                                     */
-        uint8_t   RESERVED_28[124];            
+        uint8_t   RESERVED_4[124];             
    __IO uint32_t  MPIN0;                        /**< 2180: Masked port register port 0                                  */
-        uint8_t   RESERVED_29[124];            
+        uint8_t   RESERVED_5[124];             
    __IO uint32_t  SET0;                         /**< 2200: Write: Set register for port 0 Read: output bits for port 0  */
-        uint8_t   RESERVED_30[124];            
+        uint8_t   RESERVED_6[124];             
    __O  uint32_t  CLR0;                         /**< 2280: Clear port 0                                                 */
-        uint8_t   RESERVED_31[124];            
+        uint8_t   RESERVED_7[124];             
    __O  uint32_t  NOT0;                         /**< 2300: Toggle port 0                                                */
-        uint8_t   RESERVED_32[124];            
+        uint8_t   RESERVED_8[124];             
    __O  uint32_t  DIRSET0;                      /**< 2380: Set pin direction bits for port 0                            */
-        uint8_t   RESERVED_33[124];            
+        uint8_t   RESERVED_9[124];             
    __O  uint32_t  DIRCLR0;                      /**< 2400: Clear pin direction bits for port 0                          */
-        uint8_t   RESERVED_34[124];            
+        uint8_t   RESERVED_10[124];            
    __O  uint32_t  DIRNOT0;                      /**< 2480: Toggle pin direction bits for port 0                         */
 } LPC_GPIO_PORT_Type;
 
@@ -2444,31 +2329,10 @@ typedef struct LPC_GPIO_PORT_Type {
 * @brief Register Masks for GPIO_PORT
 * @{
 */
-/* ------- B0 Bit Fields                            ------ */
-#define LPC_GPIO_PORT_B0_PBYTE_MASK              (0x1U)                                              /*!< LPC_GPIO_PORT_B0.PBYTE Mask             */
-#define LPC_GPIO_PORT_B0_PBYTE_SHIFT             (0U)                                                /*!< LPC_GPIO_PORT_B0.PBYTE Position         */
-#define LPC_GPIO_PORT_B0_PBYTE(x)                (((uint8_t)(((uint8_t)(x))<<0U))&0x1UL)             /*!< LPC_GPIO_PORT_B0.PBYTE Field            */
-/* ------- B1 Bit Fields                            ------ */
-#define LPC_GPIO_PORT_B1_PBYTE_MASK              (0x1U)                                              /*!< LPC_GPIO_PORT_B1.PBYTE Mask             */
-#define LPC_GPIO_PORT_B1_PBYTE_SHIFT             (0U)                                                /*!< LPC_GPIO_PORT_B1.PBYTE Position         */
-#define LPC_GPIO_PORT_B1_PBYTE(x)                (((uint8_t)(((uint8_t)(x))<<0U))&0x1UL)             /*!< LPC_GPIO_PORT_B1.PBYTE Field            */
-/* ------- B2 Bit Fields                            ------ */
-#define LPC_GPIO_PORT_B2_PBYTE_MASK              (0x1U)                                              /*!< LPC_GPIO_PORT_B2.PBYTE Mask             */
-#define LPC_GPIO_PORT_B2_PBYTE_SHIFT             (0U)                                                /*!< LPC_GPIO_PORT_B2.PBYTE Position         */
-#define LPC_GPIO_PORT_B2_PBYTE(x)                (((uint8_t)(((uint8_t)(x))<<0U))&0x1UL)             /*!< LPC_GPIO_PORT_B2.PBYTE Field            */
 /* ------- B Bit Fields                             ------ */
 #define LPC_GPIO_PORT_B_PBYTE_MASK               (0x1U)                                              /*!< LPC_GPIO_PORT_B.PBYTE Mask              */
 #define LPC_GPIO_PORT_B_PBYTE_SHIFT              (0U)                                                /*!< LPC_GPIO_PORT_B.PBYTE Position          */
 #define LPC_GPIO_PORT_B_PBYTE(x)                 (((uint8_t)(((uint8_t)(x))<<0U))&0x1UL)             /*!< LPC_GPIO_PORT_B.PBYTE Field             */
-/* ------- B8 Bit Fields                            ------ */
-#define LPC_GPIO_PORT_B8_PBYTE_MASK              (0x1U)                                              /*!< LPC_GPIO_PORT_B8.PBYTE Mask             */
-#define LPC_GPIO_PORT_B8_PBYTE_SHIFT             (0U)                                                /*!< LPC_GPIO_PORT_B8.PBYTE Position         */
-#define LPC_GPIO_PORT_B8_PBYTE(x)                (((uint8_t)(((uint8_t)(x))<<0U))&0x1UL)             /*!< LPC_GPIO_PORT_B8.PBYTE Field            */
-/* ------- B Bit Fields                             ------ */
-/* ------- B28 Bit Fields                           ------ */
-#define LPC_GPIO_PORT_B28_PBYTE_MASK             (0x1U)                                              /*!< LPC_GPIO_PORT_B28.PBYTE Mask            */
-#define LPC_GPIO_PORT_B28_PBYTE_SHIFT            (0U)                                                /*!< LPC_GPIO_PORT_B28.PBYTE Position        */
-#define LPC_GPIO_PORT_B28_PBYTE(x)               (((uint8_t)(((uint8_t)(x))<<0U))&0x1UL)             /*!< LPC_GPIO_PORT_B28.PBYTE Field           */
 /* ------- W0 Bit Fields                            ------ */
 #define LPC_GPIO_PORT_W0_PWORD_MASK              (0xFFFFFFFFU)                                       /*!< LPC_GPIO_PORT_W0.PWORD Mask             */
 #define LPC_GPIO_PORT_W0_PWORD_SHIFT             (0U)                                                /*!< LPC_GPIO_PORT_W0.PWORD Position         */
@@ -2934,13 +2798,9 @@ typedef struct LPC_I2C0_Type {
 * @{
 */
 typedef struct LPC_INPUTMUX_Type {
-   __IO uint32_t  DMA_INMUX_INMUX0;             /**< 0000: Input mux register for DMA trigger input 20. Selects from 18 DMA trigger outputs */
-   __IO uint32_t  DMA_INMUX_INMUX1;             /**< 0004: Input mux register for DMA trigger input 20. Selects from 18 DMA trigger outputs */
+   __IO uint32_t  DMA_INMUX_INMUX[2];           /**< 0000: Input mux register for DMA trigger input 20. Selects from 18 DMA trigger outputs */
         uint8_t   RESERVED_0[24];              
-   __IO uint32_t  SCT0_INMUX0;                  /**< 0020: Input mux register for SCT input 0                           */
-   __IO uint32_t  SCT0_INMUX1;                  /**< 0024: Input mux register for SCT input 0                           */
-   __IO uint32_t  SCT0_INMUX2;                  /**< 0028: Input mux register for SCT input 0                           */
-   __IO uint32_t  SCT0_INMUX3;                  /**< 002C: Input mux register for SCT input 0                           */
+   __IO uint32_t  SCT0_INMUX0[4];               /**< 0020: Input mux register for SCT input 0                           */
 } LPC_INPUTMUX_Type;
 
 /**
@@ -2956,22 +2816,14 @@ typedef struct LPC_INPUTMUX_Type {
 * @brief Register Masks for INPUTMUX
 * @{
 */
-/* ------- DMA_INMUX_INMUX0 Bit Fields              ------ */
-#define LPC_INPUTMUX_DMA_INMUX_INMUX0_INP_MASK   (0x1FU)                                             /*!< LPC_INPUTMUX_DMA_INMUX_INMUX0.INP Mask  */
-#define LPC_INPUTMUX_DMA_INMUX_INMUX0_INP_SHIFT  (0U)                                                /*!< LPC_INPUTMUX_DMA_INMUX_INMUX0.INP Position*/
-#define LPC_INPUTMUX_DMA_INMUX_INMUX0_INP(x)     (((uint32_t)(((uint32_t)(x))<<0U))&0x1FUL)          /*!< LPC_INPUTMUX_DMA_INMUX_INMUX0.INP Field */
-/* ------- DMA_INMUX_INMUX1 Bit Fields              ------ */
-#define LPC_INPUTMUX_DMA_INMUX_INMUX1_INP_MASK   (0x1FU)                                             /*!< LPC_INPUTMUX_DMA_INMUX_INMUX1.INP Mask  */
-#define LPC_INPUTMUX_DMA_INMUX_INMUX1_INP_SHIFT  (0U)                                                /*!< LPC_INPUTMUX_DMA_INMUX_INMUX1.INP Position*/
-#define LPC_INPUTMUX_DMA_INMUX_INMUX1_INP(x)     (((uint32_t)(((uint32_t)(x))<<0U))&0x1FUL)          /*!< LPC_INPUTMUX_DMA_INMUX_INMUX1.INP Field */
+/* ------- DMA_INMUX_INMUX Bit Fields               ------ */
+#define LPC_INPUTMUX_DMA_INMUX_INMUX_INP_MASK    (0x1FU)                                             /*!< LPC_INPUTMUX_DMA_INMUX_INMUX.INP Mask   */
+#define LPC_INPUTMUX_DMA_INMUX_INMUX_INP_SHIFT   (0U)                                                /*!< LPC_INPUTMUX_DMA_INMUX_INMUX.INP Position*/
+#define LPC_INPUTMUX_DMA_INMUX_INMUX_INP(x)      (((uint32_t)(((uint32_t)(x))<<0U))&0x1FUL)          /*!< LPC_INPUTMUX_DMA_INMUX_INMUX.INP Field  */
 /* ------- SCT0_INMUX0 Bit Fields                   ------ */
 #define LPC_INPUTMUX_SCT0_INMUX0_INP_N_MASK      (0xFU)                                              /*!< LPC_INPUTMUX_SCT0_INMUX0.INP_N Mask     */
 #define LPC_INPUTMUX_SCT0_INMUX0_INP_N_SHIFT     (0U)                                                /*!< LPC_INPUTMUX_SCT0_INMUX0.INP_N Position */
 #define LPC_INPUTMUX_SCT0_INMUX0_INP_N(x)        (((uint32_t)(((uint32_t)(x))<<0U))&0xFUL)           /*!< LPC_INPUTMUX_SCT0_INMUX0.INP_N Field    */
-/* ------- SCT0_INMUX Bit Fields                    ------ */
-#define LPC_INPUTMUX_SCT0_INMUX_INP_N_MASK       (0xFU)                                              /*!< LPC_INPUTMUX_SCT0_INMUX.INP_N Mask      */
-#define LPC_INPUTMUX_SCT0_INMUX_INP_N_SHIFT      (0U)                                                /*!< LPC_INPUTMUX_SCT0_INMUX.INP_N Position  */
-#define LPC_INPUTMUX_SCT0_INMUX_INP_N(x)         (((uint32_t)(((uint32_t)(x))<<0U))&0xFUL)           /*!< LPC_INPUTMUX_SCT0_INMUX.INP_N Field     */
 /**
  * @} */ /* End group INPUTMUX_Register_Masks_GROUP 
  */
@@ -3003,17 +2855,17 @@ typedef struct LPC_INPUTMUX_Type {
 */
 typedef struct LPC_IOCON_Type {
    __IO uint32_t  PIO0_17;                      /**< 0000: I/O configuration for pin PIO0_17                            */
-   __IO uint32_t  PIO0_13;                      /**< 0004: I/O configuration for pin PIO0_17                            */
-   __IO uint32_t  PIO0_12;                      /**< 0008: I/O configuration for pin PIO0_17                            */
+   __IO uint32_t  PIO0_13;                      /**< 0004: I/O configuration for pin PIO0_13                            */
+   __IO uint32_t  PIO0_12;                      /**< 0008: I/O configuration for pin PIO0_12                            */
    __IO uint32_t  PIO0_5;                       /**< 000C: I/O configuration for pin PIO0_5/RESET                       */
    __IO uint32_t  PIO0_4;                       /**< 0010: I/O configuration for pin PIO0_4                             */
    __IO uint32_t  PIO0_3;                       /**< 0014: I/O configuration for pin PIO0_3/SWCLK                       */
    __IO uint32_t  PIO0_2;                       /**< 0018: I/O configuration for pin PIO0_2/SWDIO                       */
-   __IO uint32_t  PIO0_11;                      /**< 001C: I/O configuration for pin PIO0_11. This is the pin configuration for the true open-drain pin */
-   __IO uint32_t  PIO0_10;                      /**< 0020: I/O configuration for pin PIO0_11. This is the pin configuration for the true open-drain pin */
+   __IO uint32_t  PIO0_11;                      /**< 001C: I/O configuration for pin PIO0_11 (true open-drain)          */
+   __IO uint32_t  PIO0_10;                      /**< 0020: I/O configuration for pin PIO0_10 (true open-drain)          */
    __IO uint32_t  PIO0_16;                      /**< 0024: I/O configuration for pin PIO0_16                            */
-   __IO uint32_t  PIO0_15;                      /**< 0028: I/O configuration for pin PIO0_16                            */
-   __IO uint32_t  PIO0_1;                       /**< 002C: I/O configuration for pin PIO0_17                            */
+   __IO uint32_t  PIO0_15;                      /**< 0028: I/O configuration for pin PIO0_15                            */
+   __IO uint32_t  PIO0_1;                       /**< 002C: I/O configuration for pin PIO0_1                             */
         uint8_t   RESERVED_0[4];               
    __IO uint32_t  PIO0_9;                       /**< 0034: I/O configuration for pin PIO0_9/XTALOUT                     */
    __IO uint32_t  PIO0_8;                       /**< 0038: I/O configuration for pin PIO0_8/XTALIN                      */
@@ -3023,10 +2875,10 @@ typedef struct LPC_IOCON_Type {
    __IO uint32_t  PIO0_14;                      /**< 0048: I/O configuration for pin PIO0_14                            */
         uint8_t   RESERVED_1[4];               
    __IO uint32_t  PIO0_28;                      /**< 0050: I/O configuration for pin PIO0_28                            */
-   __IO uint32_t  PIO0_27;                      /**< 0054: I/O configuration for pin PIO0_28                            */
-   __IO uint32_t  PIO0_26;                      /**< 0058: I/O configuration for pin PIO0_28                            */
-   __IO uint32_t  PIO0_25;                      /**< 005C: I/O configuration for pin PIO0_28                            */
-   __IO uint32_t  PIO0_24;                      /**< 0060: I/O configuration for pin PIO0_28                            */
+   __IO uint32_t  PIO0_27;                      /**< 0054: I/O configuration for pin PIO0_27                            */
+   __IO uint32_t  PIO0_26;                      /**< 0058: I/O configuration for pin PIO0_26                            */
+   __IO uint32_t  PIO0_25;                      /**< 005C: I/O configuration for pin PIO0_25                            */
+   __IO uint32_t  PIO0_24;                      /**< 0060: I/O configuration for pin PIO0_24                            */
    __IO uint32_t  PIO0_23;                      /**< 0064: I/O configuration for pin PIO0_23/ADC_3                      */
    __IO uint32_t  PIO0_22;                      /**< 0068: I/O configuration for pin PIO0_22/ADC_4                      */
    __IO uint32_t  PIO0_21;                      /**< 006C: I/O configuration for pin PIO0_21/ACMP_I4/ADC_5              */
@@ -3048,25 +2900,63 @@ typedef struct LPC_IOCON_Type {
 * @brief Register Masks for IOCON
 * @{
 */
-/* ------- PIO0_ Bit Fields                         ------ */
-#define LPC_IOCON_PIO0__MODE_MASK                (0x18U)                                             /*!< LPC_IOCON_PIO0_.MODE Mask               */
-#define LPC_IOCON_PIO0__MODE_SHIFT               (3U)                                                /*!< LPC_IOCON_PIO0_.MODE Position           */
-#define LPC_IOCON_PIO0__MODE(x)                  (((uint32_t)(((uint32_t)(x))<<3U))&0x18UL)          /*!< LPC_IOCON_PIO0_.MODE Field              */
-#define LPC_IOCON_PIO0__HYS_MASK                 (0x20U)                                             /*!< LPC_IOCON_PIO0_.HYS Mask                */
-#define LPC_IOCON_PIO0__HYS_SHIFT                (5U)                                                /*!< LPC_IOCON_PIO0_.HYS Position            */
-#define LPC_IOCON_PIO0__HYS(x)                   (((uint32_t)(((uint32_t)(x))<<5U))&0x20UL)          /*!< LPC_IOCON_PIO0_.HYS Field               */
-#define LPC_IOCON_PIO0__INV_MASK                 (0x40U)                                             /*!< LPC_IOCON_PIO0_.INV Mask                */
-#define LPC_IOCON_PIO0__INV_SHIFT                (6U)                                                /*!< LPC_IOCON_PIO0_.INV Position            */
-#define LPC_IOCON_PIO0__INV(x)                   (((uint32_t)(((uint32_t)(x))<<6U))&0x40UL)          /*!< LPC_IOCON_PIO0_.INV Field               */
-#define LPC_IOCON_PIO0__OD_MASK                  (0x400U)                                            /*!< LPC_IOCON_PIO0_.OD Mask                 */
-#define LPC_IOCON_PIO0__OD_SHIFT                 (10U)                                               /*!< LPC_IOCON_PIO0_.OD Position             */
-#define LPC_IOCON_PIO0__OD(x)                    (((uint32_t)(((uint32_t)(x))<<10U))&0x400UL)        /*!< LPC_IOCON_PIO0_.OD Field                */
-#define LPC_IOCON_PIO0__S_MODE_MASK              (0x1800U)                                           /*!< LPC_IOCON_PIO0_.S_MODE Mask             */
-#define LPC_IOCON_PIO0__S_MODE_SHIFT             (11U)                                               /*!< LPC_IOCON_PIO0_.S_MODE Position         */
-#define LPC_IOCON_PIO0__S_MODE(x)                (((uint32_t)(((uint32_t)(x))<<11U))&0x1800UL)       /*!< LPC_IOCON_PIO0_.S_MODE Field            */
-#define LPC_IOCON_PIO0__CLK_DIV_MASK             (0xE000U)                                           /*!< LPC_IOCON_PIO0_.CLK_DIV Mask            */
-#define LPC_IOCON_PIO0__CLK_DIV_SHIFT            (13U)                                               /*!< LPC_IOCON_PIO0_.CLK_DIV Position        */
-#define LPC_IOCON_PIO0__CLK_DIV(x)               (((uint32_t)(((uint32_t)(x))<<13U))&0xE000UL)       /*!< LPC_IOCON_PIO0_.CLK_DIV Field           */
+/* ------- PIO0_17 Bit Fields                       ------ */
+#define LPC_IOCON_PIO0_17_MODE_MASK              (0x18U)                                             /*!< LPC_IOCON_PIO0_17.MODE Mask             */
+#define LPC_IOCON_PIO0_17_MODE_SHIFT             (3U)                                                /*!< LPC_IOCON_PIO0_17.MODE Position         */
+#define LPC_IOCON_PIO0_17_MODE(x)                (((uint32_t)(((uint32_t)(x))<<3U))&0x18UL)          /*!< LPC_IOCON_PIO0_17.MODE Field            */
+#define LPC_IOCON_PIO0_17_HYS_MASK               (0x20U)                                             /*!< LPC_IOCON_PIO0_17.HYS Mask              */
+#define LPC_IOCON_PIO0_17_HYS_SHIFT              (5U)                                                /*!< LPC_IOCON_PIO0_17.HYS Position          */
+#define LPC_IOCON_PIO0_17_HYS(x)                 (((uint32_t)(((uint32_t)(x))<<5U))&0x20UL)          /*!< LPC_IOCON_PIO0_17.HYS Field             */
+#define LPC_IOCON_PIO0_17_INV_MASK               (0x40U)                                             /*!< LPC_IOCON_PIO0_17.INV Mask              */
+#define LPC_IOCON_PIO0_17_INV_SHIFT              (6U)                                                /*!< LPC_IOCON_PIO0_17.INV Position          */
+#define LPC_IOCON_PIO0_17_INV(x)                 (((uint32_t)(((uint32_t)(x))<<6U))&0x40UL)          /*!< LPC_IOCON_PIO0_17.INV Field             */
+#define LPC_IOCON_PIO0_17_OD_MASK                (0x400U)                                            /*!< LPC_IOCON_PIO0_17.OD Mask               */
+#define LPC_IOCON_PIO0_17_OD_SHIFT               (10U)                                               /*!< LPC_IOCON_PIO0_17.OD Position           */
+#define LPC_IOCON_PIO0_17_OD(x)                  (((uint32_t)(((uint32_t)(x))<<10U))&0x400UL)        /*!< LPC_IOCON_PIO0_17.OD Field              */
+#define LPC_IOCON_PIO0_17_S_MODE_MASK            (0x1800U)                                           /*!< LPC_IOCON_PIO0_17.S_MODE Mask           */
+#define LPC_IOCON_PIO0_17_S_MODE_SHIFT           (11U)                                               /*!< LPC_IOCON_PIO0_17.S_MODE Position       */
+#define LPC_IOCON_PIO0_17_S_MODE(x)              (((uint32_t)(((uint32_t)(x))<<11U))&0x1800UL)       /*!< LPC_IOCON_PIO0_17.S_MODE Field          */
+#define LPC_IOCON_PIO0_17_CLK_DIV_MASK           (0xE000U)                                           /*!< LPC_IOCON_PIO0_17.CLK_DIV Mask          */
+#define LPC_IOCON_PIO0_17_CLK_DIV_SHIFT          (13U)                                               /*!< LPC_IOCON_PIO0_17.CLK_DIV Position      */
+#define LPC_IOCON_PIO0_17_CLK_DIV(x)             (((uint32_t)(((uint32_t)(x))<<13U))&0xE000UL)       /*!< LPC_IOCON_PIO0_17.CLK_DIV Field         */
+/* ------- PIO0_13 Bit Fields                       ------ */
+#define LPC_IOCON_PIO0_13_MODE_MASK              (0x18U)                                             /*!< LPC_IOCON_PIO0_13.MODE Mask             */
+#define LPC_IOCON_PIO0_13_MODE_SHIFT             (3U)                                                /*!< LPC_IOCON_PIO0_13.MODE Position         */
+#define LPC_IOCON_PIO0_13_MODE(x)                (((uint32_t)(((uint32_t)(x))<<3U))&0x18UL)          /*!< LPC_IOCON_PIO0_13.MODE Field            */
+#define LPC_IOCON_PIO0_13_HYS_MASK               (0x20U)                                             /*!< LPC_IOCON_PIO0_13.HYS Mask              */
+#define LPC_IOCON_PIO0_13_HYS_SHIFT              (5U)                                                /*!< LPC_IOCON_PIO0_13.HYS Position          */
+#define LPC_IOCON_PIO0_13_HYS(x)                 (((uint32_t)(((uint32_t)(x))<<5U))&0x20UL)          /*!< LPC_IOCON_PIO0_13.HYS Field             */
+#define LPC_IOCON_PIO0_13_INV_MASK               (0x40U)                                             /*!< LPC_IOCON_PIO0_13.INV Mask              */
+#define LPC_IOCON_PIO0_13_INV_SHIFT              (6U)                                                /*!< LPC_IOCON_PIO0_13.INV Position          */
+#define LPC_IOCON_PIO0_13_INV(x)                 (((uint32_t)(((uint32_t)(x))<<6U))&0x40UL)          /*!< LPC_IOCON_PIO0_13.INV Field             */
+#define LPC_IOCON_PIO0_13_OD_MASK                (0x400U)                                            /*!< LPC_IOCON_PIO0_13.OD Mask               */
+#define LPC_IOCON_PIO0_13_OD_SHIFT               (10U)                                               /*!< LPC_IOCON_PIO0_13.OD Position           */
+#define LPC_IOCON_PIO0_13_OD(x)                  (((uint32_t)(((uint32_t)(x))<<10U))&0x400UL)        /*!< LPC_IOCON_PIO0_13.OD Field              */
+#define LPC_IOCON_PIO0_13_S_MODE_MASK            (0x1800U)                                           /*!< LPC_IOCON_PIO0_13.S_MODE Mask           */
+#define LPC_IOCON_PIO0_13_S_MODE_SHIFT           (11U)                                               /*!< LPC_IOCON_PIO0_13.S_MODE Position       */
+#define LPC_IOCON_PIO0_13_S_MODE(x)              (((uint32_t)(((uint32_t)(x))<<11U))&0x1800UL)       /*!< LPC_IOCON_PIO0_13.S_MODE Field          */
+#define LPC_IOCON_PIO0_13_CLK_DIV_MASK           (0xE000U)                                           /*!< LPC_IOCON_PIO0_13.CLK_DIV Mask          */
+#define LPC_IOCON_PIO0_13_CLK_DIV_SHIFT          (13U)                                               /*!< LPC_IOCON_PIO0_13.CLK_DIV Position      */
+#define LPC_IOCON_PIO0_13_CLK_DIV(x)             (((uint32_t)(((uint32_t)(x))<<13U))&0xE000UL)       /*!< LPC_IOCON_PIO0_13.CLK_DIV Field         */
+/* ------- PIO0_12 Bit Fields                       ------ */
+#define LPC_IOCON_PIO0_12_MODE_MASK              (0x18U)                                             /*!< LPC_IOCON_PIO0_12.MODE Mask             */
+#define LPC_IOCON_PIO0_12_MODE_SHIFT             (3U)                                                /*!< LPC_IOCON_PIO0_12.MODE Position         */
+#define LPC_IOCON_PIO0_12_MODE(x)                (((uint32_t)(((uint32_t)(x))<<3U))&0x18UL)          /*!< LPC_IOCON_PIO0_12.MODE Field            */
+#define LPC_IOCON_PIO0_12_HYS_MASK               (0x20U)                                             /*!< LPC_IOCON_PIO0_12.HYS Mask              */
+#define LPC_IOCON_PIO0_12_HYS_SHIFT              (5U)                                                /*!< LPC_IOCON_PIO0_12.HYS Position          */
+#define LPC_IOCON_PIO0_12_HYS(x)                 (((uint32_t)(((uint32_t)(x))<<5U))&0x20UL)          /*!< LPC_IOCON_PIO0_12.HYS Field             */
+#define LPC_IOCON_PIO0_12_INV_MASK               (0x40U)                                             /*!< LPC_IOCON_PIO0_12.INV Mask              */
+#define LPC_IOCON_PIO0_12_INV_SHIFT              (6U)                                                /*!< LPC_IOCON_PIO0_12.INV Position          */
+#define LPC_IOCON_PIO0_12_INV(x)                 (((uint32_t)(((uint32_t)(x))<<6U))&0x40UL)          /*!< LPC_IOCON_PIO0_12.INV Field             */
+#define LPC_IOCON_PIO0_12_OD_MASK                (0x400U)                                            /*!< LPC_IOCON_PIO0_12.OD Mask               */
+#define LPC_IOCON_PIO0_12_OD_SHIFT               (10U)                                               /*!< LPC_IOCON_PIO0_12.OD Position           */
+#define LPC_IOCON_PIO0_12_OD(x)                  (((uint32_t)(((uint32_t)(x))<<10U))&0x400UL)        /*!< LPC_IOCON_PIO0_12.OD Field              */
+#define LPC_IOCON_PIO0_12_S_MODE_MASK            (0x1800U)                                           /*!< LPC_IOCON_PIO0_12.S_MODE Mask           */
+#define LPC_IOCON_PIO0_12_S_MODE_SHIFT           (11U)                                               /*!< LPC_IOCON_PIO0_12.S_MODE Position       */
+#define LPC_IOCON_PIO0_12_S_MODE(x)              (((uint32_t)(((uint32_t)(x))<<11U))&0x1800UL)       /*!< LPC_IOCON_PIO0_12.S_MODE Field          */
+#define LPC_IOCON_PIO0_12_CLK_DIV_MASK           (0xE000U)                                           /*!< LPC_IOCON_PIO0_12.CLK_DIV Mask          */
+#define LPC_IOCON_PIO0_12_CLK_DIV_SHIFT          (13U)                                               /*!< LPC_IOCON_PIO0_12.CLK_DIV Position      */
+#define LPC_IOCON_PIO0_12_CLK_DIV(x)             (((uint32_t)(((uint32_t)(x))<<13U))&0xE000UL)       /*!< LPC_IOCON_PIO0_12.CLK_DIV Field         */
 /* ------- PIO0_5 Bit Fields                        ------ */
 #define LPC_IOCON_PIO0_5_MODE_MASK               (0x18U)                                             /*!< LPC_IOCON_PIO0_5.MODE Mask              */
 #define LPC_IOCON_PIO0_5_MODE_SHIFT              (3U)                                                /*!< LPC_IOCON_PIO0_5.MODE Position          */
@@ -3143,11 +3033,82 @@ typedef struct LPC_IOCON_Type {
 #define LPC_IOCON_PIO0_2_CLK_DIV_MASK            (0xE000U)                                           /*!< LPC_IOCON_PIO0_2.CLK_DIV Mask           */
 #define LPC_IOCON_PIO0_2_CLK_DIV_SHIFT           (13U)                                               /*!< LPC_IOCON_PIO0_2.CLK_DIV Position       */
 #define LPC_IOCON_PIO0_2_CLK_DIV(x)              (((uint32_t)(((uint32_t)(x))<<13U))&0xE000UL)       /*!< LPC_IOCON_PIO0_2.CLK_DIV Field          */
-/* ------- PIO0_ Bit Fields                         ------ */
-#define LPC_IOCON_PIO0__I2CMODE_MASK             (0x300U)                                            /*!< LPC_IOCON_PIO0_.I2CMODE Mask            */
-#define LPC_IOCON_PIO0__I2CMODE_SHIFT            (8U)                                                /*!< LPC_IOCON_PIO0_.I2CMODE Position        */
-#define LPC_IOCON_PIO0__I2CMODE(x)               (((uint32_t)(((uint32_t)(x))<<8U))&0x300UL)         /*!< LPC_IOCON_PIO0_.I2CMODE Field           */
-/* ------- PIO0_ Bit Fields                         ------ */
+/* ------- PIO0_11 Bit Fields                       ------ */
+#define LPC_IOCON_PIO0_11_MODE_MASK              (0x18U)                                             /*!< LPC_IOCON_PIO0_11.MODE Mask             */
+#define LPC_IOCON_PIO0_11_MODE_SHIFT             (3U)                                                /*!< LPC_IOCON_PIO0_11.MODE Position         */
+#define LPC_IOCON_PIO0_11_MODE(x)                (((uint32_t)(((uint32_t)(x))<<3U))&0x18UL)          /*!< LPC_IOCON_PIO0_11.MODE Field            */
+#define LPC_IOCON_PIO0_11_HYS_MASK               (0x20U)                                             /*!< LPC_IOCON_PIO0_11.HYS Mask              */
+#define LPC_IOCON_PIO0_11_HYS_SHIFT              (5U)                                                /*!< LPC_IOCON_PIO0_11.HYS Position          */
+#define LPC_IOCON_PIO0_11_HYS(x)                 (((uint32_t)(((uint32_t)(x))<<5U))&0x20UL)          /*!< LPC_IOCON_PIO0_11.HYS Field             */
+#define LPC_IOCON_PIO0_11_INV_MASK               (0x40U)                                             /*!< LPC_IOCON_PIO0_11.INV Mask              */
+#define LPC_IOCON_PIO0_11_INV_SHIFT              (6U)                                                /*!< LPC_IOCON_PIO0_11.INV Position          */
+#define LPC_IOCON_PIO0_11_INV(x)                 (((uint32_t)(((uint32_t)(x))<<6U))&0x40UL)          /*!< LPC_IOCON_PIO0_11.INV Field             */
+#define LPC_IOCON_PIO0_11_OD_MASK                (0x400U)                                            /*!< LPC_IOCON_PIO0_11.OD Mask               */
+#define LPC_IOCON_PIO0_11_OD_SHIFT               (10U)                                               /*!< LPC_IOCON_PIO0_11.OD Position           */
+#define LPC_IOCON_PIO0_11_OD(x)                  (((uint32_t)(((uint32_t)(x))<<10U))&0x400UL)        /*!< LPC_IOCON_PIO0_11.OD Field              */
+#define LPC_IOCON_PIO0_11_S_MODE_MASK            (0x1800U)                                           /*!< LPC_IOCON_PIO0_11.S_MODE Mask           */
+#define LPC_IOCON_PIO0_11_S_MODE_SHIFT           (11U)                                               /*!< LPC_IOCON_PIO0_11.S_MODE Position       */
+#define LPC_IOCON_PIO0_11_S_MODE(x)              (((uint32_t)(((uint32_t)(x))<<11U))&0x1800UL)       /*!< LPC_IOCON_PIO0_11.S_MODE Field          */
+#define LPC_IOCON_PIO0_11_CLK_DIV_MASK           (0xE000U)                                           /*!< LPC_IOCON_PIO0_11.CLK_DIV Mask          */
+#define LPC_IOCON_PIO0_11_CLK_DIV_SHIFT          (13U)                                               /*!< LPC_IOCON_PIO0_11.CLK_DIV Position      */
+#define LPC_IOCON_PIO0_11_CLK_DIV(x)             (((uint32_t)(((uint32_t)(x))<<13U))&0xE000UL)       /*!< LPC_IOCON_PIO0_11.CLK_DIV Field         */
+/* ------- PIO0_10 Bit Fields                       ------ */
+#define LPC_IOCON_PIO0_10_MODE_MASK              (0x18U)                                             /*!< LPC_IOCON_PIO0_10.MODE Mask             */
+#define LPC_IOCON_PIO0_10_MODE_SHIFT             (3U)                                                /*!< LPC_IOCON_PIO0_10.MODE Position         */
+#define LPC_IOCON_PIO0_10_MODE(x)                (((uint32_t)(((uint32_t)(x))<<3U))&0x18UL)          /*!< LPC_IOCON_PIO0_10.MODE Field            */
+#define LPC_IOCON_PIO0_10_HYS_MASK               (0x20U)                                             /*!< LPC_IOCON_PIO0_10.HYS Mask              */
+#define LPC_IOCON_PIO0_10_HYS_SHIFT              (5U)                                                /*!< LPC_IOCON_PIO0_10.HYS Position          */
+#define LPC_IOCON_PIO0_10_HYS(x)                 (((uint32_t)(((uint32_t)(x))<<5U))&0x20UL)          /*!< LPC_IOCON_PIO0_10.HYS Field             */
+#define LPC_IOCON_PIO0_10_INV_MASK               (0x40U)                                             /*!< LPC_IOCON_PIO0_10.INV Mask              */
+#define LPC_IOCON_PIO0_10_INV_SHIFT              (6U)                                                /*!< LPC_IOCON_PIO0_10.INV Position          */
+#define LPC_IOCON_PIO0_10_INV(x)                 (((uint32_t)(((uint32_t)(x))<<6U))&0x40UL)          /*!< LPC_IOCON_PIO0_10.INV Field             */
+#define LPC_IOCON_PIO0_10_OD_MASK                (0x400U)                                            /*!< LPC_IOCON_PIO0_10.OD Mask               */
+#define LPC_IOCON_PIO0_10_OD_SHIFT               (10U)                                               /*!< LPC_IOCON_PIO0_10.OD Position           */
+#define LPC_IOCON_PIO0_10_OD(x)                  (((uint32_t)(((uint32_t)(x))<<10U))&0x400UL)        /*!< LPC_IOCON_PIO0_10.OD Field              */
+#define LPC_IOCON_PIO0_10_S_MODE_MASK            (0x1800U)                                           /*!< LPC_IOCON_PIO0_10.S_MODE Mask           */
+#define LPC_IOCON_PIO0_10_S_MODE_SHIFT           (11U)                                               /*!< LPC_IOCON_PIO0_10.S_MODE Position       */
+#define LPC_IOCON_PIO0_10_S_MODE(x)              (((uint32_t)(((uint32_t)(x))<<11U))&0x1800UL)       /*!< LPC_IOCON_PIO0_10.S_MODE Field          */
+#define LPC_IOCON_PIO0_10_CLK_DIV_MASK           (0xE000U)                                           /*!< LPC_IOCON_PIO0_10.CLK_DIV Mask          */
+#define LPC_IOCON_PIO0_10_CLK_DIV_SHIFT          (13U)                                               /*!< LPC_IOCON_PIO0_10.CLK_DIV Position      */
+#define LPC_IOCON_PIO0_10_CLK_DIV(x)             (((uint32_t)(((uint32_t)(x))<<13U))&0xE000UL)       /*!< LPC_IOCON_PIO0_10.CLK_DIV Field         */
+/* ------- PIO0_16 Bit Fields                       ------ */
+#define LPC_IOCON_PIO0_16_MODE_MASK              (0x18U)                                             /*!< LPC_IOCON_PIO0_16.MODE Mask             */
+#define LPC_IOCON_PIO0_16_MODE_SHIFT             (3U)                                                /*!< LPC_IOCON_PIO0_16.MODE Position         */
+#define LPC_IOCON_PIO0_16_MODE(x)                (((uint32_t)(((uint32_t)(x))<<3U))&0x18UL)          /*!< LPC_IOCON_PIO0_16.MODE Field            */
+#define LPC_IOCON_PIO0_16_HYS_MASK               (0x20U)                                             /*!< LPC_IOCON_PIO0_16.HYS Mask              */
+#define LPC_IOCON_PIO0_16_HYS_SHIFT              (5U)                                                /*!< LPC_IOCON_PIO0_16.HYS Position          */
+#define LPC_IOCON_PIO0_16_HYS(x)                 (((uint32_t)(((uint32_t)(x))<<5U))&0x20UL)          /*!< LPC_IOCON_PIO0_16.HYS Field             */
+#define LPC_IOCON_PIO0_16_INV_MASK               (0x40U)                                             /*!< LPC_IOCON_PIO0_16.INV Mask              */
+#define LPC_IOCON_PIO0_16_INV_SHIFT              (6U)                                                /*!< LPC_IOCON_PIO0_16.INV Position          */
+#define LPC_IOCON_PIO0_16_INV(x)                 (((uint32_t)(((uint32_t)(x))<<6U))&0x40UL)          /*!< LPC_IOCON_PIO0_16.INV Field             */
+#define LPC_IOCON_PIO0_16_OD_MASK                (0x400U)                                            /*!< LPC_IOCON_PIO0_16.OD Mask               */
+#define LPC_IOCON_PIO0_16_OD_SHIFT               (10U)                                               /*!< LPC_IOCON_PIO0_16.OD Position           */
+#define LPC_IOCON_PIO0_16_OD(x)                  (((uint32_t)(((uint32_t)(x))<<10U))&0x400UL)        /*!< LPC_IOCON_PIO0_16.OD Field              */
+#define LPC_IOCON_PIO0_16_S_MODE_MASK            (0x1800U)                                           /*!< LPC_IOCON_PIO0_16.S_MODE Mask           */
+#define LPC_IOCON_PIO0_16_S_MODE_SHIFT           (11U)                                               /*!< LPC_IOCON_PIO0_16.S_MODE Position       */
+#define LPC_IOCON_PIO0_16_S_MODE(x)              (((uint32_t)(((uint32_t)(x))<<11U))&0x1800UL)       /*!< LPC_IOCON_PIO0_16.S_MODE Field          */
+#define LPC_IOCON_PIO0_16_CLK_DIV_MASK           (0xE000U)                                           /*!< LPC_IOCON_PIO0_16.CLK_DIV Mask          */
+#define LPC_IOCON_PIO0_16_CLK_DIV_SHIFT          (13U)                                               /*!< LPC_IOCON_PIO0_16.CLK_DIV Position      */
+#define LPC_IOCON_PIO0_16_CLK_DIV(x)             (((uint32_t)(((uint32_t)(x))<<13U))&0xE000UL)       /*!< LPC_IOCON_PIO0_16.CLK_DIV Field         */
+/* ------- PIO0_15 Bit Fields                       ------ */
+#define LPC_IOCON_PIO0_15_MODE_MASK              (0x18U)                                             /*!< LPC_IOCON_PIO0_15.MODE Mask             */
+#define LPC_IOCON_PIO0_15_MODE_SHIFT             (3U)                                                /*!< LPC_IOCON_PIO0_15.MODE Position         */
+#define LPC_IOCON_PIO0_15_MODE(x)                (((uint32_t)(((uint32_t)(x))<<3U))&0x18UL)          /*!< LPC_IOCON_PIO0_15.MODE Field            */
+#define LPC_IOCON_PIO0_15_HYS_MASK               (0x20U)                                             /*!< LPC_IOCON_PIO0_15.HYS Mask              */
+#define LPC_IOCON_PIO0_15_HYS_SHIFT              (5U)                                                /*!< LPC_IOCON_PIO0_15.HYS Position          */
+#define LPC_IOCON_PIO0_15_HYS(x)                 (((uint32_t)(((uint32_t)(x))<<5U))&0x20UL)          /*!< LPC_IOCON_PIO0_15.HYS Field             */
+#define LPC_IOCON_PIO0_15_INV_MASK               (0x40U)                                             /*!< LPC_IOCON_PIO0_15.INV Mask              */
+#define LPC_IOCON_PIO0_15_INV_SHIFT              (6U)                                                /*!< LPC_IOCON_PIO0_15.INV Position          */
+#define LPC_IOCON_PIO0_15_INV(x)                 (((uint32_t)(((uint32_t)(x))<<6U))&0x40UL)          /*!< LPC_IOCON_PIO0_15.INV Field             */
+#define LPC_IOCON_PIO0_15_OD_MASK                (0x400U)                                            /*!< LPC_IOCON_PIO0_15.OD Mask               */
+#define LPC_IOCON_PIO0_15_OD_SHIFT               (10U)                                               /*!< LPC_IOCON_PIO0_15.OD Position           */
+#define LPC_IOCON_PIO0_15_OD(x)                  (((uint32_t)(((uint32_t)(x))<<10U))&0x400UL)        /*!< LPC_IOCON_PIO0_15.OD Field              */
+#define LPC_IOCON_PIO0_15_S_MODE_MASK            (0x1800U)                                           /*!< LPC_IOCON_PIO0_15.S_MODE Mask           */
+#define LPC_IOCON_PIO0_15_S_MODE_SHIFT           (11U)                                               /*!< LPC_IOCON_PIO0_15.S_MODE Position       */
+#define LPC_IOCON_PIO0_15_S_MODE(x)              (((uint32_t)(((uint32_t)(x))<<11U))&0x1800UL)       /*!< LPC_IOCON_PIO0_15.S_MODE Field          */
+#define LPC_IOCON_PIO0_15_CLK_DIV_MASK           (0xE000U)                                           /*!< LPC_IOCON_PIO0_15.CLK_DIV Mask          */
+#define LPC_IOCON_PIO0_15_CLK_DIV_SHIFT          (13U)                                               /*!< LPC_IOCON_PIO0_15.CLK_DIV Position      */
+#define LPC_IOCON_PIO0_15_CLK_DIV(x)             (((uint32_t)(((uint32_t)(x))<<13U))&0xE000UL)       /*!< LPC_IOCON_PIO0_15.CLK_DIV Field         */
 /* ------- PIO0_1 Bit Fields                        ------ */
 #define LPC_IOCON_PIO0_1_MODE_MASK               (0x18U)                                             /*!< LPC_IOCON_PIO0_1.MODE Mask              */
 #define LPC_IOCON_PIO0_1_MODE_SHIFT              (3U)                                                /*!< LPC_IOCON_PIO0_1.MODE Position          */
@@ -3281,7 +3242,101 @@ typedef struct LPC_IOCON_Type {
 #define LPC_IOCON_PIO0_14_CLK_DIV_MASK           (0xE000U)                                           /*!< LPC_IOCON_PIO0_14.CLK_DIV Mask          */
 #define LPC_IOCON_PIO0_14_CLK_DIV_SHIFT          (13U)                                               /*!< LPC_IOCON_PIO0_14.CLK_DIV Position      */
 #define LPC_IOCON_PIO0_14_CLK_DIV(x)             (((uint32_t)(((uint32_t)(x))<<13U))&0xE000UL)       /*!< LPC_IOCON_PIO0_14.CLK_DIV Field         */
-/* ------- PIO0_ Bit Fields                         ------ */
+/* ------- PIO0_28 Bit Fields                       ------ */
+#define LPC_IOCON_PIO0_28_MODE_MASK              (0x18U)                                             /*!< LPC_IOCON_PIO0_28.MODE Mask             */
+#define LPC_IOCON_PIO0_28_MODE_SHIFT             (3U)                                                /*!< LPC_IOCON_PIO0_28.MODE Position         */
+#define LPC_IOCON_PIO0_28_MODE(x)                (((uint32_t)(((uint32_t)(x))<<3U))&0x18UL)          /*!< LPC_IOCON_PIO0_28.MODE Field            */
+#define LPC_IOCON_PIO0_28_HYS_MASK               (0x20U)                                             /*!< LPC_IOCON_PIO0_28.HYS Mask              */
+#define LPC_IOCON_PIO0_28_HYS_SHIFT              (5U)                                                /*!< LPC_IOCON_PIO0_28.HYS Position          */
+#define LPC_IOCON_PIO0_28_HYS(x)                 (((uint32_t)(((uint32_t)(x))<<5U))&0x20UL)          /*!< LPC_IOCON_PIO0_28.HYS Field             */
+#define LPC_IOCON_PIO0_28_INV_MASK               (0x40U)                                             /*!< LPC_IOCON_PIO0_28.INV Mask              */
+#define LPC_IOCON_PIO0_28_INV_SHIFT              (6U)                                                /*!< LPC_IOCON_PIO0_28.INV Position          */
+#define LPC_IOCON_PIO0_28_INV(x)                 (((uint32_t)(((uint32_t)(x))<<6U))&0x40UL)          /*!< LPC_IOCON_PIO0_28.INV Field             */
+#define LPC_IOCON_PIO0_28_OD_MASK                (0x400U)                                            /*!< LPC_IOCON_PIO0_28.OD Mask               */
+#define LPC_IOCON_PIO0_28_OD_SHIFT               (10U)                                               /*!< LPC_IOCON_PIO0_28.OD Position           */
+#define LPC_IOCON_PIO0_28_OD(x)                  (((uint32_t)(((uint32_t)(x))<<10U))&0x400UL)        /*!< LPC_IOCON_PIO0_28.OD Field              */
+#define LPC_IOCON_PIO0_28_S_MODE_MASK            (0x1800U)                                           /*!< LPC_IOCON_PIO0_28.S_MODE Mask           */
+#define LPC_IOCON_PIO0_28_S_MODE_SHIFT           (11U)                                               /*!< LPC_IOCON_PIO0_28.S_MODE Position       */
+#define LPC_IOCON_PIO0_28_S_MODE(x)              (((uint32_t)(((uint32_t)(x))<<11U))&0x1800UL)       /*!< LPC_IOCON_PIO0_28.S_MODE Field          */
+#define LPC_IOCON_PIO0_28_CLK_DIV_MASK           (0xE000U)                                           /*!< LPC_IOCON_PIO0_28.CLK_DIV Mask          */
+#define LPC_IOCON_PIO0_28_CLK_DIV_SHIFT          (13U)                                               /*!< LPC_IOCON_PIO0_28.CLK_DIV Position      */
+#define LPC_IOCON_PIO0_28_CLK_DIV(x)             (((uint32_t)(((uint32_t)(x))<<13U))&0xE000UL)       /*!< LPC_IOCON_PIO0_28.CLK_DIV Field         */
+/* ------- PIO0_27 Bit Fields                       ------ */
+#define LPC_IOCON_PIO0_27_MODE_MASK              (0x18U)                                             /*!< LPC_IOCON_PIO0_27.MODE Mask             */
+#define LPC_IOCON_PIO0_27_MODE_SHIFT             (3U)                                                /*!< LPC_IOCON_PIO0_27.MODE Position         */
+#define LPC_IOCON_PIO0_27_MODE(x)                (((uint32_t)(((uint32_t)(x))<<3U))&0x18UL)          /*!< LPC_IOCON_PIO0_27.MODE Field            */
+#define LPC_IOCON_PIO0_27_HYS_MASK               (0x20U)                                             /*!< LPC_IOCON_PIO0_27.HYS Mask              */
+#define LPC_IOCON_PIO0_27_HYS_SHIFT              (5U)                                                /*!< LPC_IOCON_PIO0_27.HYS Position          */
+#define LPC_IOCON_PIO0_27_HYS(x)                 (((uint32_t)(((uint32_t)(x))<<5U))&0x20UL)          /*!< LPC_IOCON_PIO0_27.HYS Field             */
+#define LPC_IOCON_PIO0_27_INV_MASK               (0x40U)                                             /*!< LPC_IOCON_PIO0_27.INV Mask              */
+#define LPC_IOCON_PIO0_27_INV_SHIFT              (6U)                                                /*!< LPC_IOCON_PIO0_27.INV Position          */
+#define LPC_IOCON_PIO0_27_INV(x)                 (((uint32_t)(((uint32_t)(x))<<6U))&0x40UL)          /*!< LPC_IOCON_PIO0_27.INV Field             */
+#define LPC_IOCON_PIO0_27_OD_MASK                (0x400U)                                            /*!< LPC_IOCON_PIO0_27.OD Mask               */
+#define LPC_IOCON_PIO0_27_OD_SHIFT               (10U)                                               /*!< LPC_IOCON_PIO0_27.OD Position           */
+#define LPC_IOCON_PIO0_27_OD(x)                  (((uint32_t)(((uint32_t)(x))<<10U))&0x400UL)        /*!< LPC_IOCON_PIO0_27.OD Field              */
+#define LPC_IOCON_PIO0_27_S_MODE_MASK            (0x1800U)                                           /*!< LPC_IOCON_PIO0_27.S_MODE Mask           */
+#define LPC_IOCON_PIO0_27_S_MODE_SHIFT           (11U)                                               /*!< LPC_IOCON_PIO0_27.S_MODE Position       */
+#define LPC_IOCON_PIO0_27_S_MODE(x)              (((uint32_t)(((uint32_t)(x))<<11U))&0x1800UL)       /*!< LPC_IOCON_PIO0_27.S_MODE Field          */
+#define LPC_IOCON_PIO0_27_CLK_DIV_MASK           (0xE000U)                                           /*!< LPC_IOCON_PIO0_27.CLK_DIV Mask          */
+#define LPC_IOCON_PIO0_27_CLK_DIV_SHIFT          (13U)                                               /*!< LPC_IOCON_PIO0_27.CLK_DIV Position      */
+#define LPC_IOCON_PIO0_27_CLK_DIV(x)             (((uint32_t)(((uint32_t)(x))<<13U))&0xE000UL)       /*!< LPC_IOCON_PIO0_27.CLK_DIV Field         */
+/* ------- PIO0_26 Bit Fields                       ------ */
+#define LPC_IOCON_PIO0_26_MODE_MASK              (0x18U)                                             /*!< LPC_IOCON_PIO0_26.MODE Mask             */
+#define LPC_IOCON_PIO0_26_MODE_SHIFT             (3U)                                                /*!< LPC_IOCON_PIO0_26.MODE Position         */
+#define LPC_IOCON_PIO0_26_MODE(x)                (((uint32_t)(((uint32_t)(x))<<3U))&0x18UL)          /*!< LPC_IOCON_PIO0_26.MODE Field            */
+#define LPC_IOCON_PIO0_26_HYS_MASK               (0x20U)                                             /*!< LPC_IOCON_PIO0_26.HYS Mask              */
+#define LPC_IOCON_PIO0_26_HYS_SHIFT              (5U)                                                /*!< LPC_IOCON_PIO0_26.HYS Position          */
+#define LPC_IOCON_PIO0_26_HYS(x)                 (((uint32_t)(((uint32_t)(x))<<5U))&0x20UL)          /*!< LPC_IOCON_PIO0_26.HYS Field             */
+#define LPC_IOCON_PIO0_26_INV_MASK               (0x40U)                                             /*!< LPC_IOCON_PIO0_26.INV Mask              */
+#define LPC_IOCON_PIO0_26_INV_SHIFT              (6U)                                                /*!< LPC_IOCON_PIO0_26.INV Position          */
+#define LPC_IOCON_PIO0_26_INV(x)                 (((uint32_t)(((uint32_t)(x))<<6U))&0x40UL)          /*!< LPC_IOCON_PIO0_26.INV Field             */
+#define LPC_IOCON_PIO0_26_OD_MASK                (0x400U)                                            /*!< LPC_IOCON_PIO0_26.OD Mask               */
+#define LPC_IOCON_PIO0_26_OD_SHIFT               (10U)                                               /*!< LPC_IOCON_PIO0_26.OD Position           */
+#define LPC_IOCON_PIO0_26_OD(x)                  (((uint32_t)(((uint32_t)(x))<<10U))&0x400UL)        /*!< LPC_IOCON_PIO0_26.OD Field              */
+#define LPC_IOCON_PIO0_26_S_MODE_MASK            (0x1800U)                                           /*!< LPC_IOCON_PIO0_26.S_MODE Mask           */
+#define LPC_IOCON_PIO0_26_S_MODE_SHIFT           (11U)                                               /*!< LPC_IOCON_PIO0_26.S_MODE Position       */
+#define LPC_IOCON_PIO0_26_S_MODE(x)              (((uint32_t)(((uint32_t)(x))<<11U))&0x1800UL)       /*!< LPC_IOCON_PIO0_26.S_MODE Field          */
+#define LPC_IOCON_PIO0_26_CLK_DIV_MASK           (0xE000U)                                           /*!< LPC_IOCON_PIO0_26.CLK_DIV Mask          */
+#define LPC_IOCON_PIO0_26_CLK_DIV_SHIFT          (13U)                                               /*!< LPC_IOCON_PIO0_26.CLK_DIV Position      */
+#define LPC_IOCON_PIO0_26_CLK_DIV(x)             (((uint32_t)(((uint32_t)(x))<<13U))&0xE000UL)       /*!< LPC_IOCON_PIO0_26.CLK_DIV Field         */
+/* ------- PIO0_25 Bit Fields                       ------ */
+#define LPC_IOCON_PIO0_25_MODE_MASK              (0x18U)                                             /*!< LPC_IOCON_PIO0_25.MODE Mask             */
+#define LPC_IOCON_PIO0_25_MODE_SHIFT             (3U)                                                /*!< LPC_IOCON_PIO0_25.MODE Position         */
+#define LPC_IOCON_PIO0_25_MODE(x)                (((uint32_t)(((uint32_t)(x))<<3U))&0x18UL)          /*!< LPC_IOCON_PIO0_25.MODE Field            */
+#define LPC_IOCON_PIO0_25_HYS_MASK               (0x20U)                                             /*!< LPC_IOCON_PIO0_25.HYS Mask              */
+#define LPC_IOCON_PIO0_25_HYS_SHIFT              (5U)                                                /*!< LPC_IOCON_PIO0_25.HYS Position          */
+#define LPC_IOCON_PIO0_25_HYS(x)                 (((uint32_t)(((uint32_t)(x))<<5U))&0x20UL)          /*!< LPC_IOCON_PIO0_25.HYS Field             */
+#define LPC_IOCON_PIO0_25_INV_MASK               (0x40U)                                             /*!< LPC_IOCON_PIO0_25.INV Mask              */
+#define LPC_IOCON_PIO0_25_INV_SHIFT              (6U)                                                /*!< LPC_IOCON_PIO0_25.INV Position          */
+#define LPC_IOCON_PIO0_25_INV(x)                 (((uint32_t)(((uint32_t)(x))<<6U))&0x40UL)          /*!< LPC_IOCON_PIO0_25.INV Field             */
+#define LPC_IOCON_PIO0_25_OD_MASK                (0x400U)                                            /*!< LPC_IOCON_PIO0_25.OD Mask               */
+#define LPC_IOCON_PIO0_25_OD_SHIFT               (10U)                                               /*!< LPC_IOCON_PIO0_25.OD Position           */
+#define LPC_IOCON_PIO0_25_OD(x)                  (((uint32_t)(((uint32_t)(x))<<10U))&0x400UL)        /*!< LPC_IOCON_PIO0_25.OD Field              */
+#define LPC_IOCON_PIO0_25_S_MODE_MASK            (0x1800U)                                           /*!< LPC_IOCON_PIO0_25.S_MODE Mask           */
+#define LPC_IOCON_PIO0_25_S_MODE_SHIFT           (11U)                                               /*!< LPC_IOCON_PIO0_25.S_MODE Position       */
+#define LPC_IOCON_PIO0_25_S_MODE(x)              (((uint32_t)(((uint32_t)(x))<<11U))&0x1800UL)       /*!< LPC_IOCON_PIO0_25.S_MODE Field          */
+#define LPC_IOCON_PIO0_25_CLK_DIV_MASK           (0xE000U)                                           /*!< LPC_IOCON_PIO0_25.CLK_DIV Mask          */
+#define LPC_IOCON_PIO0_25_CLK_DIV_SHIFT          (13U)                                               /*!< LPC_IOCON_PIO0_25.CLK_DIV Position      */
+#define LPC_IOCON_PIO0_25_CLK_DIV(x)             (((uint32_t)(((uint32_t)(x))<<13U))&0xE000UL)       /*!< LPC_IOCON_PIO0_25.CLK_DIV Field         */
+/* ------- PIO0_24 Bit Fields                       ------ */
+#define LPC_IOCON_PIO0_24_MODE_MASK              (0x18U)                                             /*!< LPC_IOCON_PIO0_24.MODE Mask             */
+#define LPC_IOCON_PIO0_24_MODE_SHIFT             (3U)                                                /*!< LPC_IOCON_PIO0_24.MODE Position         */
+#define LPC_IOCON_PIO0_24_MODE(x)                (((uint32_t)(((uint32_t)(x))<<3U))&0x18UL)          /*!< LPC_IOCON_PIO0_24.MODE Field            */
+#define LPC_IOCON_PIO0_24_HYS_MASK               (0x20U)                                             /*!< LPC_IOCON_PIO0_24.HYS Mask              */
+#define LPC_IOCON_PIO0_24_HYS_SHIFT              (5U)                                                /*!< LPC_IOCON_PIO0_24.HYS Position          */
+#define LPC_IOCON_PIO0_24_HYS(x)                 (((uint32_t)(((uint32_t)(x))<<5U))&0x20UL)          /*!< LPC_IOCON_PIO0_24.HYS Field             */
+#define LPC_IOCON_PIO0_24_INV_MASK               (0x40U)                                             /*!< LPC_IOCON_PIO0_24.INV Mask              */
+#define LPC_IOCON_PIO0_24_INV_SHIFT              (6U)                                                /*!< LPC_IOCON_PIO0_24.INV Position          */
+#define LPC_IOCON_PIO0_24_INV(x)                 (((uint32_t)(((uint32_t)(x))<<6U))&0x40UL)          /*!< LPC_IOCON_PIO0_24.INV Field             */
+#define LPC_IOCON_PIO0_24_OD_MASK                (0x400U)                                            /*!< LPC_IOCON_PIO0_24.OD Mask               */
+#define LPC_IOCON_PIO0_24_OD_SHIFT               (10U)                                               /*!< LPC_IOCON_PIO0_24.OD Position           */
+#define LPC_IOCON_PIO0_24_OD(x)                  (((uint32_t)(((uint32_t)(x))<<10U))&0x400UL)        /*!< LPC_IOCON_PIO0_24.OD Field              */
+#define LPC_IOCON_PIO0_24_S_MODE_MASK            (0x1800U)                                           /*!< LPC_IOCON_PIO0_24.S_MODE Mask           */
+#define LPC_IOCON_PIO0_24_S_MODE_SHIFT           (11U)                                               /*!< LPC_IOCON_PIO0_24.S_MODE Position       */
+#define LPC_IOCON_PIO0_24_S_MODE(x)              (((uint32_t)(((uint32_t)(x))<<11U))&0x1800UL)       /*!< LPC_IOCON_PIO0_24.S_MODE Field          */
+#define LPC_IOCON_PIO0_24_CLK_DIV_MASK           (0xE000U)                                           /*!< LPC_IOCON_PIO0_24.CLK_DIV Mask          */
+#define LPC_IOCON_PIO0_24_CLK_DIV_SHIFT          (13U)                                               /*!< LPC_IOCON_PIO0_24.CLK_DIV Position      */
+#define LPC_IOCON_PIO0_24_CLK_DIV(x)             (((uint32_t)(((uint32_t)(x))<<13U))&0xE000UL)       /*!< LPC_IOCON_PIO0_24.CLK_DIV Field         */
 /* ------- PIO0_23 Bit Fields                       ------ */
 #define LPC_IOCON_PIO0_23_MODE_MASK              (0x18U)                                             /*!< LPC_IOCON_PIO0_23.MODE Mask             */
 #define LPC_IOCON_PIO0_23_MODE_SHIFT             (3U)                                                /*!< LPC_IOCON_PIO0_23.MODE Position         */
@@ -3889,60 +3944,16 @@ typedef struct LPC_SCT_Type {
    __IO uint32_t  EVFLAG;                       /**< 00F4: SCT event flag register                                      */
    __IO uint32_t  CONEN;                        /**< 00F8: SCT conflict enable register                                 */
    __IO uint32_t  CONFLAG;                      /**< 00FC: SCT conflict flag register                                   */
-   union {                                      /**< 0000: (size=0004)                                                  */
-      __IO uint32_t  CAP0;                      /**< 0100: SCT capture register of capture channel 0 to 7; REGMOD0 to REGMODE7 = 1 */
-      __IO uint32_t  MATCH0;                    /**< 0100: SCT match value register of match channels 0 to 7; REGMOD0 to REGMODE7 = 0 */
+   union {                                      /**< 0000: (size=0020)                                                  */
+      __IO uint32_t  CAP[8];                    /**< 0100: SCT capture register of capture channel ; REGMOD0 to REGMODE7 = 1 */
+      __IO uint32_t  MATCH[8];                  /**< 0100: SCT match value register of match channel ; REGMOD0 to REGMODE7 = 0 */
    };
-   union {                                      /**< 0000: (size=0018)                                                  */
-      struct {                                  /**< 0000: (size=0018)                                                  */
-      __IO uint32_t  MATCH1;                    /**< 0104: SCT match value register of match channels 0 to 7; REGMOD0 to REGMODE7 = 0 */
-      __IO uint32_t  MATCH2;                    /**< 0108: SCT match value register of match channels 0 to 7; REGMOD0 to REGMODE7 = 0 */
-      __IO uint32_t  MATCH3;                    /**< 010C: SCT match value register of match channels 0 to 7; REGMOD0 to REGMODE7 = 0 */
-      __IO uint32_t  MATCH4;                    /**< 0110: SCT match value register of match channels 0 to 7; REGMOD0 to REGMODE7 = 0 */
-      __IO uint32_t  MATCH5;                    /**< 0114: SCT match value register of match channels 0 to 7; REGMOD0 to REGMODE7 = 0 */
-      __IO uint32_t  MATCH6;                    /**< 0118: SCT match value register of match channels 0 to 7; REGMOD0 to REGMODE7 = 0 */
-      };
-      struct {                                  /**< 0000: (size=0018)                                                  */
-         __IO uint32_t  CAP1;                   /**< 0104: SCT capture register of capture channel 0 to 7; REGMOD0 to REGMODE7 = 1 */
-         __IO uint32_t  CAP2;                   /**< 0108: SCT capture register of capture channel 0 to 7; REGMOD0 to REGMODE7 = 1 */
-         __IO uint32_t  CAP3;                   /**< 010C: SCT capture register of capture channel 0 to 7; REGMOD0 to REGMODE7 = 1 */
-         __IO uint32_t  CAP4;                   /**< 0110: SCT capture register of capture channel 0 to 7; REGMOD0 to REGMODE7 = 1 */
-         __IO uint32_t  CAP5;                   /**< 0114: SCT capture register of capture channel 0 to 7; REGMOD0 to REGMODE7 = 1 */
-         __IO uint32_t  CAP6;                   /**< 0118: SCT capture register of capture channel 0 to 7; REGMOD0 to REGMODE7 = 1 */
-      };
-   };
-   union {                                      /**< 0000: (size=0004)                                                  */
-      __IO uint32_t  CAP7;                      /**< 011C: SCT capture register of capture channel 0 to 7; REGMOD0 to REGMODE7 = 1 */
-      __IO uint32_t  MATCH7;                    /**< 011C: SCT match value register of match channels 0 to 7; REGMOD0 to REGMODE7 = 0 */
+        uint8_t   RESERVED_2[224];             
+   union {                                      /**< 0000: (size=0020)                                                  */
+      __IO uint32_t  CAPCTRL[8];                /**< 0200: SCT capture control register ; REGMOD0 = 1 to REGMODE7 = 1   */
+      __IO uint32_t  MATCHREL[8];               /**< 0200: SCT match reload value register ; REGMOD0 = 0 to REGMODE7 = 0 */
    };
         uint8_t   RESERVED_3[224];             
-   union {                                      /**< 0000: (size=0004)                                                  */
-      __IO uint32_t  CAPCTRL0;                  /**< 0200: SCT capture control register 0 to 7; REGMOD0 = 1 to REGMODE7 = 1 */
-      __IO uint32_t  MATCHREL0;                 /**< 0200: SCT match reload value register 0 to 7; REGMOD0 = 0 to REGMODE7 = 0 */
-   };
-   union {                                      /**< 0000: (size=0018)                                                  */
-      struct {                                  /**< 0000: (size=0018)                                                  */
-      __IO uint32_t  MATCHREL1;                 /**< 0204: SCT match reload value register 0 to 7; REGMOD0 = 0 to REGMODE7 = 0 */
-      __IO uint32_t  MATCHREL2;                 /**< 0208: SCT match reload value register 0 to 7; REGMOD0 = 0 to REGMODE7 = 0 */
-      __IO uint32_t  MATCHREL3;                 /**< 020C: SCT match reload value register 0 to 7; REGMOD0 = 0 to REGMODE7 = 0 */
-      __IO uint32_t  MATCHREL4;                 /**< 0210: SCT match reload value register 0 to 7; REGMOD0 = 0 to REGMODE7 = 0 */
-      __IO uint32_t  MATCHREL5;                 /**< 0214: SCT match reload value register 0 to 7; REGMOD0 = 0 to REGMODE7 = 0 */
-      __IO uint32_t  MATCHREL6;                 /**< 0218: SCT match reload value register 0 to 7; REGMOD0 = 0 to REGMODE7 = 0 */
-      };
-      struct {                                  /**< 0000: (size=0018)                                                  */
-         __IO uint32_t  CAPCTRL1;               /**< 0204: SCT capture control register 0 to 7; REGMOD0 = 1 to REGMODE7 = 1 */
-         __IO uint32_t  CAPCTRL2;               /**< 0208: SCT capture control register 0 to 7; REGMOD0 = 1 to REGMODE7 = 1 */
-         __IO uint32_t  CAPCTRL3;               /**< 020C: SCT capture control register 0 to 7; REGMOD0 = 1 to REGMODE7 = 1 */
-         __IO uint32_t  CAPCTRL4;               /**< 0210: SCT capture control register 0 to 7; REGMOD0 = 1 to REGMODE7 = 1 */
-         __IO uint32_t  CAPCTRL5;               /**< 0214: SCT capture control register 0 to 7; REGMOD0 = 1 to REGMODE7 = 1 */
-         __IO uint32_t  CAPCTRL6;               /**< 0218: SCT capture control register 0 to 7; REGMOD0 = 1 to REGMODE7 = 1 */
-      };
-   };
-   union {                                      /**< 0000: (size=0004)                                                  */
-      __IO uint32_t  CAPCTRL7;                  /**< 021C: SCT capture control register 0 to 7; REGMOD0 = 1 to REGMODE7 = 1 */
-      __IO uint32_t  MATCHREL7;                 /**< 021C: SCT match reload value register 0 to 7; REGMOD0 = 0 to REGMODE7 = 0 */
-   };
-        uint8_t   RESERVED_5[224];             
    __IO uint32_t  EV0_STATE;                    /**< 0300: SCT event state register 0                                   */
    __IO uint32_t  EV0_CTRL;                     /**< 0304: SCT event control register 0                                 */
    __IO uint32_t  EV1_STATE;                    /**< 0308: SCT event state register 0                                   */
@@ -3959,7 +3970,7 @@ typedef struct LPC_SCT_Type {
    __IO uint32_t  EV6_CTRL;                     /**< 0334: SCT event control register 0                                 */
    __IO uint32_t  EV7_STATE;                    /**< 0338: SCT event state register 0                                   */
    __IO uint32_t  EV7_CTRL;                     /**< 033C: SCT event control register 0                                 */
-        uint8_t   RESERVED_6[448];             
+        uint8_t   RESERVED_4[448];             
    __IO uint32_t  OUT0_SET;                     /**< 0500: SCT output 0 set register                                    */
    __IO uint32_t  OUT0_CLR;                     /**< 0504: SCT output 0 clear register                                  */
    __IO uint32_t  OUT1_SET;                     /**< 0508: SCT output 0 set register                                    */
@@ -4197,34 +4208,6 @@ typedef struct LPC_SCT_Type {
 #define LPC_SCT_CONFLAG_BUSERRH_MASK             (0x80000000U)                                       /*!< LPC_SCT_CONFLAG.BUSERRH Mask            */
 #define LPC_SCT_CONFLAG_BUSERRH_SHIFT            (31U)                                               /*!< LPC_SCT_CONFLAG.BUSERRH Position        */
 #define LPC_SCT_CONFLAG_BUSERRH(x)               (((uint32_t)(((uint32_t)(x))<<31U))&0x80000000UL)   /*!< LPC_SCT_CONFLAG.BUSERRH Field           */
-/* ------- CAP0 Bit Fields                          ------ */
-#define LPC_SCT_CAP0_CAPn_L_MASK                 (0xFFFFU)                                           /*!< LPC_SCT_CAP0.CAPn_L Mask                */
-#define LPC_SCT_CAP0_CAPn_L_SHIFT                (0U)                                                /*!< LPC_SCT_CAP0.CAPn_L Position            */
-#define LPC_SCT_CAP0_CAPn_L(x)                   (((uint32_t)(((uint32_t)(x))<<0U))&0xFFFFUL)        /*!< LPC_SCT_CAP0.CAPn_L Field               */
-#define LPC_SCT_CAP0_CAPn_H_MASK                 (0xFFFF0000U)                                       /*!< LPC_SCT_CAP0.CAPn_H Mask                */
-#define LPC_SCT_CAP0_CAPn_H_SHIFT                (16U)                                               /*!< LPC_SCT_CAP0.CAPn_H Position            */
-#define LPC_SCT_CAP0_CAPn_H(x)                   (((uint32_t)(((uint32_t)(x))<<16U))&0xFFFF0000UL)   /*!< LPC_SCT_CAP0.CAPn_H Field               */
-/* ------- MATCH0 Bit Fields                        ------ */
-#define LPC_SCT_MATCH0_MATCHn_L_MASK             (0xFFFFU)                                           /*!< LPC_SCT_MATCH0.MATCHn_L Mask            */
-#define LPC_SCT_MATCH0_MATCHn_L_SHIFT            (0U)                                                /*!< LPC_SCT_MATCH0.MATCHn_L Position        */
-#define LPC_SCT_MATCH0_MATCHn_L(x)               (((uint32_t)(((uint32_t)(x))<<0U))&0xFFFFUL)        /*!< LPC_SCT_MATCH0.MATCHn_L Field           */
-#define LPC_SCT_MATCH0_MATCHn_H_MASK             (0xFFFF0000U)                                       /*!< LPC_SCT_MATCH0.MATCHn_H Mask            */
-#define LPC_SCT_MATCH0_MATCHn_H_SHIFT            (16U)                                               /*!< LPC_SCT_MATCH0.MATCHn_H Position        */
-#define LPC_SCT_MATCH0_MATCHn_H(x)               (((uint32_t)(((uint32_t)(x))<<16U))&0xFFFF0000UL)   /*!< LPC_SCT_MATCH0.MATCHn_H Field           */
-/* ------- MATCH Bit Fields                         ------ */
-#define LPC_SCT_MATCH_MATCHn_L_MASK              (0xFFFFU)                                           /*!< LPC_SCT_MATCH.MATCHn_L Mask             */
-#define LPC_SCT_MATCH_MATCHn_L_SHIFT             (0U)                                                /*!< LPC_SCT_MATCH.MATCHn_L Position         */
-#define LPC_SCT_MATCH_MATCHn_L(x)                (((uint32_t)(((uint32_t)(x))<<0U))&0xFFFFUL)        /*!< LPC_SCT_MATCH.MATCHn_L Field            */
-#define LPC_SCT_MATCH_MATCHn_H_MASK              (0xFFFF0000U)                                       /*!< LPC_SCT_MATCH.MATCHn_H Mask             */
-#define LPC_SCT_MATCH_MATCHn_H_SHIFT             (16U)                                               /*!< LPC_SCT_MATCH.MATCHn_H Position         */
-#define LPC_SCT_MATCH_MATCHn_H(x)                (((uint32_t)(((uint32_t)(x))<<16U))&0xFFFF0000UL)   /*!< LPC_SCT_MATCH.MATCHn_H Field            */
-/* ------- CAP1 Bit Fields                          ------ */
-#define LPC_SCT_CAP1_CAPn_L_MASK                 (0xFFFFU)                                           /*!< LPC_SCT_CAP1.CAPn_L Mask                */
-#define LPC_SCT_CAP1_CAPn_L_SHIFT                (0U)                                                /*!< LPC_SCT_CAP1.CAPn_L Position            */
-#define LPC_SCT_CAP1_CAPn_L(x)                   (((uint32_t)(((uint32_t)(x))<<0U))&0xFFFFUL)        /*!< LPC_SCT_CAP1.CAPn_L Field               */
-#define LPC_SCT_CAP1_CAPn_H_MASK                 (0xFFFF0000U)                                       /*!< LPC_SCT_CAP1.CAPn_H Mask                */
-#define LPC_SCT_CAP1_CAPn_H_SHIFT                (16U)                                               /*!< LPC_SCT_CAP1.CAPn_H Position            */
-#define LPC_SCT_CAP1_CAPn_H(x)                   (((uint32_t)(((uint32_t)(x))<<16U))&0xFFFF0000UL)   /*!< LPC_SCT_CAP1.CAPn_H Field               */
 /* ------- CAP Bit Fields                           ------ */
 #define LPC_SCT_CAP_CAPn_L_MASK                  (0xFFFFU)                                           /*!< LPC_SCT_CAP.CAPn_L Mask                 */
 #define LPC_SCT_CAP_CAPn_L_SHIFT                 (0U)                                                /*!< LPC_SCT_CAP.CAPn_L Position             */
@@ -4232,48 +4215,13 @@ typedef struct LPC_SCT_Type {
 #define LPC_SCT_CAP_CAPn_H_MASK                  (0xFFFF0000U)                                       /*!< LPC_SCT_CAP.CAPn_H Mask                 */
 #define LPC_SCT_CAP_CAPn_H_SHIFT                 (16U)                                               /*!< LPC_SCT_CAP.CAPn_H Position             */
 #define LPC_SCT_CAP_CAPn_H(x)                    (((uint32_t)(((uint32_t)(x))<<16U))&0xFFFF0000UL)   /*!< LPC_SCT_CAP.CAPn_H Field                */
-/* ------- CAP7 Bit Fields                          ------ */
-#define LPC_SCT_CAP7_CAPn_L_MASK                 (0xFFFFU)                                           /*!< LPC_SCT_CAP7.CAPn_L Mask                */
-#define LPC_SCT_CAP7_CAPn_L_SHIFT                (0U)                                                /*!< LPC_SCT_CAP7.CAPn_L Position            */
-#define LPC_SCT_CAP7_CAPn_L(x)                   (((uint32_t)(((uint32_t)(x))<<0U))&0xFFFFUL)        /*!< LPC_SCT_CAP7.CAPn_L Field               */
-#define LPC_SCT_CAP7_CAPn_H_MASK                 (0xFFFF0000U)                                       /*!< LPC_SCT_CAP7.CAPn_H Mask                */
-#define LPC_SCT_CAP7_CAPn_H_SHIFT                (16U)                                               /*!< LPC_SCT_CAP7.CAPn_H Position            */
-#define LPC_SCT_CAP7_CAPn_H(x)                   (((uint32_t)(((uint32_t)(x))<<16U))&0xFFFF0000UL)   /*!< LPC_SCT_CAP7.CAPn_H Field               */
-/* ------- MATCH7 Bit Fields                        ------ */
-#define LPC_SCT_MATCH7_MATCHn_L_MASK             (0xFFFFU)                                           /*!< LPC_SCT_MATCH7.MATCHn_L Mask            */
-#define LPC_SCT_MATCH7_MATCHn_L_SHIFT            (0U)                                                /*!< LPC_SCT_MATCH7.MATCHn_L Position        */
-#define LPC_SCT_MATCH7_MATCHn_L(x)               (((uint32_t)(((uint32_t)(x))<<0U))&0xFFFFUL)        /*!< LPC_SCT_MATCH7.MATCHn_L Field           */
-#define LPC_SCT_MATCH7_MATCHn_H_MASK             (0xFFFF0000U)                                       /*!< LPC_SCT_MATCH7.MATCHn_H Mask            */
-#define LPC_SCT_MATCH7_MATCHn_H_SHIFT            (16U)                                               /*!< LPC_SCT_MATCH7.MATCHn_H Position        */
-#define LPC_SCT_MATCH7_MATCHn_H(x)               (((uint32_t)(((uint32_t)(x))<<16U))&0xFFFF0000UL)   /*!< LPC_SCT_MATCH7.MATCHn_H Field           */
-/* ------- CAPCTRL0 Bit Fields                      ------ */
-#define LPC_SCT_CAPCTRL0_CAPCONn_L_MASK          (0xFFU)                                             /*!< LPC_SCT_CAPCTRL0.CAPCONn_L Mask         */
-#define LPC_SCT_CAPCTRL0_CAPCONn_L_SHIFT         (0U)                                                /*!< LPC_SCT_CAPCTRL0.CAPCONn_L Position     */
-#define LPC_SCT_CAPCTRL0_CAPCONn_L(x)            (((uint32_t)(((uint32_t)(x))<<0U))&0xFFUL)          /*!< LPC_SCT_CAPCTRL0.CAPCONn_L Field        */
-#define LPC_SCT_CAPCTRL0_CAPCONn_H_MASK          (0xFF0000U)                                         /*!< LPC_SCT_CAPCTRL0.CAPCONn_H Mask         */
-#define LPC_SCT_CAPCTRL0_CAPCONn_H_SHIFT         (16U)                                               /*!< LPC_SCT_CAPCTRL0.CAPCONn_H Position     */
-#define LPC_SCT_CAPCTRL0_CAPCONn_H(x)            (((uint32_t)(((uint32_t)(x))<<16U))&0xFF0000UL)     /*!< LPC_SCT_CAPCTRL0.CAPCONn_H Field        */
-/* ------- MATCHREL0 Bit Fields                     ------ */
-#define LPC_SCT_MATCHREL0_RELOADn_L_MASK         (0xFFFFU)                                           /*!< LPC_SCT_MATCHREL0.RELOADn_L Mask        */
-#define LPC_SCT_MATCHREL0_RELOADn_L_SHIFT        (0U)                                                /*!< LPC_SCT_MATCHREL0.RELOADn_L Position    */
-#define LPC_SCT_MATCHREL0_RELOADn_L(x)           (((uint32_t)(((uint32_t)(x))<<0U))&0xFFFFUL)        /*!< LPC_SCT_MATCHREL0.RELOADn_L Field       */
-#define LPC_SCT_MATCHREL0_RELOADn_H_MASK         (0xFFFF0000U)                                       /*!< LPC_SCT_MATCHREL0.RELOADn_H Mask        */
-#define LPC_SCT_MATCHREL0_RELOADn_H_SHIFT        (16U)                                               /*!< LPC_SCT_MATCHREL0.RELOADn_H Position    */
-#define LPC_SCT_MATCHREL0_RELOADn_H(x)           (((uint32_t)(((uint32_t)(x))<<16U))&0xFFFF0000UL)   /*!< LPC_SCT_MATCHREL0.RELOADn_H Field       */
-/* ------- MATCHREL Bit Fields                      ------ */
-#define LPC_SCT_MATCHREL_RELOADn_L_MASK          (0xFFFFU)                                           /*!< LPC_SCT_MATCHREL.RELOADn_L Mask         */
-#define LPC_SCT_MATCHREL_RELOADn_L_SHIFT         (0U)                                                /*!< LPC_SCT_MATCHREL.RELOADn_L Position     */
-#define LPC_SCT_MATCHREL_RELOADn_L(x)            (((uint32_t)(((uint32_t)(x))<<0U))&0xFFFFUL)        /*!< LPC_SCT_MATCHREL.RELOADn_L Field        */
-#define LPC_SCT_MATCHREL_RELOADn_H_MASK          (0xFFFF0000U)                                       /*!< LPC_SCT_MATCHREL.RELOADn_H Mask         */
-#define LPC_SCT_MATCHREL_RELOADn_H_SHIFT         (16U)                                               /*!< LPC_SCT_MATCHREL.RELOADn_H Position     */
-#define LPC_SCT_MATCHREL_RELOADn_H(x)            (((uint32_t)(((uint32_t)(x))<<16U))&0xFFFF0000UL)   /*!< LPC_SCT_MATCHREL.RELOADn_H Field        */
-/* ------- CAPCTRL1 Bit Fields                      ------ */
-#define LPC_SCT_CAPCTRL1_CAPCONn_L_MASK          (0xFFU)                                             /*!< LPC_SCT_CAPCTRL1.CAPCONn_L Mask         */
-#define LPC_SCT_CAPCTRL1_CAPCONn_L_SHIFT         (0U)                                                /*!< LPC_SCT_CAPCTRL1.CAPCONn_L Position     */
-#define LPC_SCT_CAPCTRL1_CAPCONn_L(x)            (((uint32_t)(((uint32_t)(x))<<0U))&0xFFUL)          /*!< LPC_SCT_CAPCTRL1.CAPCONn_L Field        */
-#define LPC_SCT_CAPCTRL1_CAPCONn_H_MASK          (0xFF0000U)                                         /*!< LPC_SCT_CAPCTRL1.CAPCONn_H Mask         */
-#define LPC_SCT_CAPCTRL1_CAPCONn_H_SHIFT         (16U)                                               /*!< LPC_SCT_CAPCTRL1.CAPCONn_H Position     */
-#define LPC_SCT_CAPCTRL1_CAPCONn_H(x)            (((uint32_t)(((uint32_t)(x))<<16U))&0xFF0000UL)     /*!< LPC_SCT_CAPCTRL1.CAPCONn_H Field        */
+/* ------- MATCH Bit Fields                         ------ */
+#define LPC_SCT_MATCH_MATCHn_L_MASK              (0xFFFFU)                                           /*!< LPC_SCT_MATCH.MATCHn_L Mask             */
+#define LPC_SCT_MATCH_MATCHn_L_SHIFT             (0U)                                                /*!< LPC_SCT_MATCH.MATCHn_L Position         */
+#define LPC_SCT_MATCH_MATCHn_L(x)                (((uint32_t)(((uint32_t)(x))<<0U))&0xFFFFUL)        /*!< LPC_SCT_MATCH.MATCHn_L Field            */
+#define LPC_SCT_MATCH_MATCHn_H_MASK              (0xFFFF0000U)                                       /*!< LPC_SCT_MATCH.MATCHn_H Mask             */
+#define LPC_SCT_MATCH_MATCHn_H_SHIFT             (16U)                                               /*!< LPC_SCT_MATCH.MATCHn_H Position         */
+#define LPC_SCT_MATCH_MATCHn_H(x)                (((uint32_t)(((uint32_t)(x))<<16U))&0xFFFF0000UL)   /*!< LPC_SCT_MATCH.MATCHn_H Field            */
 /* ------- CAPCTRL Bit Fields                       ------ */
 #define LPC_SCT_CAPCTRL_CAPCONn_L_MASK           (0xFFU)                                             /*!< LPC_SCT_CAPCTRL.CAPCONn_L Mask          */
 #define LPC_SCT_CAPCTRL_CAPCONn_L_SHIFT          (0U)                                                /*!< LPC_SCT_CAPCTRL.CAPCONn_L Position      */
@@ -4281,20 +4229,13 @@ typedef struct LPC_SCT_Type {
 #define LPC_SCT_CAPCTRL_CAPCONn_H_MASK           (0xFF0000U)                                         /*!< LPC_SCT_CAPCTRL.CAPCONn_H Mask          */
 #define LPC_SCT_CAPCTRL_CAPCONn_H_SHIFT          (16U)                                               /*!< LPC_SCT_CAPCTRL.CAPCONn_H Position      */
 #define LPC_SCT_CAPCTRL_CAPCONn_H(x)             (((uint32_t)(((uint32_t)(x))<<16U))&0xFF0000UL)     /*!< LPC_SCT_CAPCTRL.CAPCONn_H Field         */
-/* ------- CAPCTRL7 Bit Fields                      ------ */
-#define LPC_SCT_CAPCTRL7_CAPCONn_L_MASK          (0xFFU)                                             /*!< LPC_SCT_CAPCTRL7.CAPCONn_L Mask         */
-#define LPC_SCT_CAPCTRL7_CAPCONn_L_SHIFT         (0U)                                                /*!< LPC_SCT_CAPCTRL7.CAPCONn_L Position     */
-#define LPC_SCT_CAPCTRL7_CAPCONn_L(x)            (((uint32_t)(((uint32_t)(x))<<0U))&0xFFUL)          /*!< LPC_SCT_CAPCTRL7.CAPCONn_L Field        */
-#define LPC_SCT_CAPCTRL7_CAPCONn_H_MASK          (0xFF0000U)                                         /*!< LPC_SCT_CAPCTRL7.CAPCONn_H Mask         */
-#define LPC_SCT_CAPCTRL7_CAPCONn_H_SHIFT         (16U)                                               /*!< LPC_SCT_CAPCTRL7.CAPCONn_H Position     */
-#define LPC_SCT_CAPCTRL7_CAPCONn_H(x)            (((uint32_t)(((uint32_t)(x))<<16U))&0xFF0000UL)     /*!< LPC_SCT_CAPCTRL7.CAPCONn_H Field        */
-/* ------- MATCHREL7 Bit Fields                     ------ */
-#define LPC_SCT_MATCHREL7_RELOADn_L_MASK         (0xFFFFU)                                           /*!< LPC_SCT_MATCHREL7.RELOADn_L Mask        */
-#define LPC_SCT_MATCHREL7_RELOADn_L_SHIFT        (0U)                                                /*!< LPC_SCT_MATCHREL7.RELOADn_L Position    */
-#define LPC_SCT_MATCHREL7_RELOADn_L(x)           (((uint32_t)(((uint32_t)(x))<<0U))&0xFFFFUL)        /*!< LPC_SCT_MATCHREL7.RELOADn_L Field       */
-#define LPC_SCT_MATCHREL7_RELOADn_H_MASK         (0xFFFF0000U)                                       /*!< LPC_SCT_MATCHREL7.RELOADn_H Mask        */
-#define LPC_SCT_MATCHREL7_RELOADn_H_SHIFT        (16U)                                               /*!< LPC_SCT_MATCHREL7.RELOADn_H Position    */
-#define LPC_SCT_MATCHREL7_RELOADn_H(x)           (((uint32_t)(((uint32_t)(x))<<16U))&0xFFFF0000UL)   /*!< LPC_SCT_MATCHREL7.RELOADn_H Field       */
+/* ------- MATCHREL Bit Fields                      ------ */
+#define LPC_SCT_MATCHREL_RELOADn_L_MASK          (0xFFFFU)                                           /*!< LPC_SCT_MATCHREL.RELOADn_L Mask         */
+#define LPC_SCT_MATCHREL_RELOADn_L_SHIFT         (0U)                                                /*!< LPC_SCT_MATCHREL.RELOADn_L Position     */
+#define LPC_SCT_MATCHREL_RELOADn_L(x)            (((uint32_t)(((uint32_t)(x))<<0U))&0xFFFFUL)        /*!< LPC_SCT_MATCHREL.RELOADn_L Field        */
+#define LPC_SCT_MATCHREL_RELOADn_H_MASK          (0xFFFF0000U)                                       /*!< LPC_SCT_MATCHREL.RELOADn_H Mask         */
+#define LPC_SCT_MATCHREL_RELOADn_H_SHIFT         (16U)                                               /*!< LPC_SCT_MATCHREL.RELOADn_H Position     */
+#define LPC_SCT_MATCHREL_RELOADn_H(x)            (((uint32_t)(((uint32_t)(x))<<16U))&0xFFFF0000UL)   /*!< LPC_SCT_MATCHREL.RELOADn_H Field        */
 /* ------- EV0_STATE Bit Fields                     ------ */
 #define LPC_SCT_EV0_STATE_STATEMSKn_MASK         (0xFFU)                                             /*!< LPC_SCT_EV0_STATE.STATEMSKn Mask        */
 #define LPC_SCT_EV0_STATE_STATEMSKn_SHIFT        (0U)                                                /*!< LPC_SCT_EV0_STATE.STATEMSKn Position    */

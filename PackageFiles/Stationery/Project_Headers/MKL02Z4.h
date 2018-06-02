@@ -5,7 +5,7 @@
  *           Equivalent: 
  *
  * @version  V1.6
- * @date     2018/03
+ * @date     2018/04
  *
  *******************************************************************************************************/
 
@@ -158,16 +158,17 @@ extern void PORTB_IRQHandler(void);                  /**< General Purpose Input/
 /**
  * @brief Analog-to-Digital Converter
  */
+#define ADC_SC1_COUNT        2          /**< Number of ADC channels                             */
 /**
 * @addtogroup ADC_structs_GROUP ADC struct
 * @brief Struct for ADC
 * @{
 */
 typedef struct ADC_Type {
-   __IO uint32_t  SC1[2];                       /**< 0000: Status and Control Register 1                                */
+   __IO uint32_t  SC1[ADC_SC1_COUNT];           /**< 0000: Status and Control Register 1                                */
    __IO uint32_t  CFG1;                         /**< 0008: Configuration Register 1                                     */
    __IO uint32_t  CFG2;                         /**< 000C: Configuration Register 2                                     */
-   __I  uint32_t  R[2];                         /**< 0010: Data Result Register                                         */
+   __I  uint32_t  R[ADC_SC1_COUNT];             /**< 0010: Data Result Register                                         */
    __IO uint32_t  CV1;                          /**< 0018: Compare Value                                                */
    __IO uint32_t  CV2;                          /**< 001C: Compare Value                                                */
    __IO uint32_t  SC2;                          /**< 0020: Status and Control Register 2                                */
@@ -1300,7 +1301,7 @@ typedef struct MCM_Type {
 */
 
 /* ================================================================================ */
-/* ================           MTB (file:MTB)                       ================ */
+/* ================           MTB (file:MTB_MKE15Z7)               ================ */
 /* ================================================================================ */
 
 /**
@@ -1467,7 +1468,7 @@ typedef struct MTB_Type {
 */
 
 /* ================================================================================ */
-/* ================           MTBDWT (file:MTBDWT_MKL)             ================ */
+/* ================           MTBDWT (file:MTBDWT_MKE15Z7)         ================ */
 /* ================================================================================ */
 
 /**
@@ -2663,6 +2664,7 @@ typedef struct SYST_Type {
 /**
  * @brief Timer/PWM Module (2 channels)
  */
+#define TPM_CONTROLS_COUNT   2          /**< Number of FTM channels                             */
 /**
 * @addtogroup TPM_structs_GROUP TPM struct
 * @brief Struct for TPM
@@ -2675,7 +2677,7 @@ typedef struct TPM_Type {
    struct {
       __IO uint32_t  CnSC;                      /**< 000C: Channel  Status and Control                                  */
       __IO uint32_t  CnV;                       /**< 0010: Channel  Value                                               */
-   } CONTROLS[2];                               /**< 000C: (cluster: size=0x0010, 16)                                   */
+   } CONTROLS[TPM_CONTROLS_COUNT];              /**< 000C: (cluster: size=0x0010, 16)                                   */
         uint8_t   RESERVED_1[52];              
    __IO uint32_t  STATUS;                       /**< 0050: Capture and Compare Status                                   */
         uint8_t   RESERVED_2[48];              

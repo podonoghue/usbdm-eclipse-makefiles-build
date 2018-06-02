@@ -5,7 +5,7 @@
  *           Equivalent: 
  *
  * @version  V1.6
- * @date     2018/03
+ * @date     2018/04
  *
  *******************************************************************************************************/
 
@@ -336,22 +336,23 @@ extern void FTM5_Ovf_Reload_IRQHandler(void);        /**< FlexTimer Module      
 */
 
 /* ================================================================================ */
-/* ================           ADC0 (file:ADC0_S32K146)             ================ */
+/* ================           ADC0 (file:ADC0_S32K142)             ================ */
 /* ================================================================================ */
 
 /**
  * @brief Analog-to-Digital Converter
  */
+#define ADC_SC1_COUNT        16         /**< Number of ADC channels                             */
 /**
 * @addtogroup ADC_structs_GROUP ADC struct
 * @brief Struct for ADC
 * @{
 */
 typedef struct ADC_Type {
-   __IO uint32_t  SC1[16];                      /**< 0000: Status and Control Register 1                                */
+   __IO uint32_t  SC1[ADC_SC1_COUNT];           /**< 0000: Status and Control Register 1                                */
    __IO uint32_t  CFG1;                         /**< 0040: Configuration Register 1                                     */
    __IO uint32_t  CFG2;                         /**< 0044: Configuration Register 2                                     */
-   __I  uint32_t  R[16];                        /**< 0048: Data Result                                                  */
+   __I  uint32_t  R[ADC_SC1_COUNT];             /**< 0048: Data Result Register                                         */
    __IO uint32_t  CV1;                          /**< 0088: Compare Value                                                */
    __IO uint32_t  CV2;                          /**< 008C: Compare Value                                                */
    __IO uint32_t  SC2;                          /**< 0090: Status and Control Register 2                                */
@@ -592,6 +593,274 @@ typedef struct ADC_Type {
  * @} */ /* End group ADC_Peripheral_access_layer_GROUP 
  */
 /**
+* @addtogroup AIPS_Peripheral_access_layer_GROUP AIPS Peripheral Access Layer
+* @brief C Struct for AIPS
+* @{
+*/
+
+/* ================================================================================ */
+/* ================           AIPS0 (file:AIPS0_Lite_8Mx8Px12OP)       ================ */
+/* ================================================================================ */
+
+/**
+ * @brief AIPS-Lite Bridge
+ */
+/**
+* @addtogroup AIPS_structs_GROUP AIPS struct
+* @brief Struct for AIPS
+* @{
+*/
+typedef struct AIPS_Type {
+   __IO uint32_t  MPRA;                         /**< 0000: Master Privilege Register A                                  */
+        uint8_t   RESERVED_0[28];              
+   __IO uint32_t  PACR[8];                      /**< 0020: Peripheral Access Control Register                           */
+   __IO uint32_t  OPACR[12];                    /**< 0040: Off-Platform Peripheral Access Control Register              */
+} AIPS_Type;
+
+/**
+ * @} */ /* End group AIPS_structs_GROUP 
+ */
+
+/* -------------------------------------------------------------------------------- */
+/* -----------     'AIPS0' Position & Mask macros                       ----------- */
+/* -------------------------------------------------------------------------------- */
+
+/**
+* @addtogroup AIPS_Register_Masks_GROUP AIPS Register Masks
+* @brief Register Masks for AIPS
+* @{
+*/
+/* ------- MPRA Bit Fields                          ------ */
+#define AIPS_MPRA_MPL7_MASK                      (0x1U)                                              /*!< AIPS0_MPRA.MPL7 Mask                    */
+#define AIPS_MPRA_MPL7_SHIFT                     (0U)                                                /*!< AIPS0_MPRA.MPL7 Position                */
+#define AIPS_MPRA_MPL7(x)                        (((uint32_t)(((uint32_t)(x))<<0U))&0x1UL)           /*!< AIPS0_MPRA.MPL7 Field                   */
+#define AIPS_MPRA_MTW7_MASK                      (0x2U)                                              /*!< AIPS0_MPRA.MTW7 Mask                    */
+#define AIPS_MPRA_MTW7_SHIFT                     (1U)                                                /*!< AIPS0_MPRA.MTW7 Position                */
+#define AIPS_MPRA_MTW7(x)                        (((uint32_t)(((uint32_t)(x))<<1U))&0x2UL)           /*!< AIPS0_MPRA.MTW7 Field                   */
+#define AIPS_MPRA_MTR7_MASK                      (0x4U)                                              /*!< AIPS0_MPRA.MTR7 Mask                    */
+#define AIPS_MPRA_MTR7_SHIFT                     (2U)                                                /*!< AIPS0_MPRA.MTR7 Position                */
+#define AIPS_MPRA_MTR7(x)                        (((uint32_t)(((uint32_t)(x))<<2U))&0x4UL)           /*!< AIPS0_MPRA.MTR7 Field                   */
+#define AIPS_MPRA_MPL6_MASK                      (0x10U)                                             /*!< AIPS0_MPRA.MPL6 Mask                    */
+#define AIPS_MPRA_MPL6_SHIFT                     (4U)                                                /*!< AIPS0_MPRA.MPL6 Position                */
+#define AIPS_MPRA_MPL6(x)                        (((uint32_t)(((uint32_t)(x))<<4U))&0x10UL)          /*!< AIPS0_MPRA.MPL6 Field                   */
+#define AIPS_MPRA_MTW6_MASK                      (0x20U)                                             /*!< AIPS0_MPRA.MTW6 Mask                    */
+#define AIPS_MPRA_MTW6_SHIFT                     (5U)                                                /*!< AIPS0_MPRA.MTW6 Position                */
+#define AIPS_MPRA_MTW6(x)                        (((uint32_t)(((uint32_t)(x))<<5U))&0x20UL)          /*!< AIPS0_MPRA.MTW6 Field                   */
+#define AIPS_MPRA_MTR6_MASK                      (0x40U)                                             /*!< AIPS0_MPRA.MTR6 Mask                    */
+#define AIPS_MPRA_MTR6_SHIFT                     (6U)                                                /*!< AIPS0_MPRA.MTR6 Position                */
+#define AIPS_MPRA_MTR6(x)                        (((uint32_t)(((uint32_t)(x))<<6U))&0x40UL)          /*!< AIPS0_MPRA.MTR6 Field                   */
+#define AIPS_MPRA_MPL5_MASK                      (0x100U)                                            /*!< AIPS0_MPRA.MPL5 Mask                    */
+#define AIPS_MPRA_MPL5_SHIFT                     (8U)                                                /*!< AIPS0_MPRA.MPL5 Position                */
+#define AIPS_MPRA_MPL5(x)                        (((uint32_t)(((uint32_t)(x))<<8U))&0x100UL)         /*!< AIPS0_MPRA.MPL5 Field                   */
+#define AIPS_MPRA_MTW5_MASK                      (0x200U)                                            /*!< AIPS0_MPRA.MTW5 Mask                    */
+#define AIPS_MPRA_MTW5_SHIFT                     (9U)                                                /*!< AIPS0_MPRA.MTW5 Position                */
+#define AIPS_MPRA_MTW5(x)                        (((uint32_t)(((uint32_t)(x))<<9U))&0x200UL)         /*!< AIPS0_MPRA.MTW5 Field                   */
+#define AIPS_MPRA_MTR5_MASK                      (0x400U)                                            /*!< AIPS0_MPRA.MTR5 Mask                    */
+#define AIPS_MPRA_MTR5_SHIFT                     (10U)                                               /*!< AIPS0_MPRA.MTR5 Position                */
+#define AIPS_MPRA_MTR5(x)                        (((uint32_t)(((uint32_t)(x))<<10U))&0x400UL)        /*!< AIPS0_MPRA.MTR5 Field                   */
+#define AIPS_MPRA_MPL4_MASK                      (0x1000U)                                           /*!< AIPS0_MPRA.MPL4 Mask                    */
+#define AIPS_MPRA_MPL4_SHIFT                     (12U)                                               /*!< AIPS0_MPRA.MPL4 Position                */
+#define AIPS_MPRA_MPL4(x)                        (((uint32_t)(((uint32_t)(x))<<12U))&0x1000UL)       /*!< AIPS0_MPRA.MPL4 Field                   */
+#define AIPS_MPRA_MTW4_MASK                      (0x2000U)                                           /*!< AIPS0_MPRA.MTW4 Mask                    */
+#define AIPS_MPRA_MTW4_SHIFT                     (13U)                                               /*!< AIPS0_MPRA.MTW4 Position                */
+#define AIPS_MPRA_MTW4(x)                        (((uint32_t)(((uint32_t)(x))<<13U))&0x2000UL)       /*!< AIPS0_MPRA.MTW4 Field                   */
+#define AIPS_MPRA_MTR4_MASK                      (0x4000U)                                           /*!< AIPS0_MPRA.MTR4 Mask                    */
+#define AIPS_MPRA_MTR4_SHIFT                     (14U)                                               /*!< AIPS0_MPRA.MTR4 Position                */
+#define AIPS_MPRA_MTR4(x)                        (((uint32_t)(((uint32_t)(x))<<14U))&0x4000UL)       /*!< AIPS0_MPRA.MTR4 Field                   */
+#define AIPS_MPRA_MPL3_MASK                      (0x10000U)                                          /*!< AIPS0_MPRA.MPL3 Mask                    */
+#define AIPS_MPRA_MPL3_SHIFT                     (16U)                                               /*!< AIPS0_MPRA.MPL3 Position                */
+#define AIPS_MPRA_MPL3(x)                        (((uint32_t)(((uint32_t)(x))<<16U))&0x10000UL)      /*!< AIPS0_MPRA.MPL3 Field                   */
+#define AIPS_MPRA_MTW3_MASK                      (0x20000U)                                          /*!< AIPS0_MPRA.MTW3 Mask                    */
+#define AIPS_MPRA_MTW3_SHIFT                     (17U)                                               /*!< AIPS0_MPRA.MTW3 Position                */
+#define AIPS_MPRA_MTW3(x)                        (((uint32_t)(((uint32_t)(x))<<17U))&0x20000UL)      /*!< AIPS0_MPRA.MTW3 Field                   */
+#define AIPS_MPRA_MTR3_MASK                      (0x40000U)                                          /*!< AIPS0_MPRA.MTR3 Mask                    */
+#define AIPS_MPRA_MTR3_SHIFT                     (18U)                                               /*!< AIPS0_MPRA.MTR3 Position                */
+#define AIPS_MPRA_MTR3(x)                        (((uint32_t)(((uint32_t)(x))<<18U))&0x40000UL)      /*!< AIPS0_MPRA.MTR3 Field                   */
+#define AIPS_MPRA_MPL2_MASK                      (0x100000U)                                         /*!< AIPS0_MPRA.MPL2 Mask                    */
+#define AIPS_MPRA_MPL2_SHIFT                     (20U)                                               /*!< AIPS0_MPRA.MPL2 Position                */
+#define AIPS_MPRA_MPL2(x)                        (((uint32_t)(((uint32_t)(x))<<20U))&0x100000UL)     /*!< AIPS0_MPRA.MPL2 Field                   */
+#define AIPS_MPRA_MTW2_MASK                      (0x200000U)                                         /*!< AIPS0_MPRA.MTW2 Mask                    */
+#define AIPS_MPRA_MTW2_SHIFT                     (21U)                                               /*!< AIPS0_MPRA.MTW2 Position                */
+#define AIPS_MPRA_MTW2(x)                        (((uint32_t)(((uint32_t)(x))<<21U))&0x200000UL)     /*!< AIPS0_MPRA.MTW2 Field                   */
+#define AIPS_MPRA_MTR2_MASK                      (0x400000U)                                         /*!< AIPS0_MPRA.MTR2 Mask                    */
+#define AIPS_MPRA_MTR2_SHIFT                     (22U)                                               /*!< AIPS0_MPRA.MTR2 Position                */
+#define AIPS_MPRA_MTR2(x)                        (((uint32_t)(((uint32_t)(x))<<22U))&0x400000UL)     /*!< AIPS0_MPRA.MTR2 Field                   */
+#define AIPS_MPRA_MPL1_MASK                      (0x1000000U)                                        /*!< AIPS0_MPRA.MPL1 Mask                    */
+#define AIPS_MPRA_MPL1_SHIFT                     (24U)                                               /*!< AIPS0_MPRA.MPL1 Position                */
+#define AIPS_MPRA_MPL1(x)                        (((uint32_t)(((uint32_t)(x))<<24U))&0x1000000UL)    /*!< AIPS0_MPRA.MPL1 Field                   */
+#define AIPS_MPRA_MTW1_MASK                      (0x2000000U)                                        /*!< AIPS0_MPRA.MTW1 Mask                    */
+#define AIPS_MPRA_MTW1_SHIFT                     (25U)                                               /*!< AIPS0_MPRA.MTW1 Position                */
+#define AIPS_MPRA_MTW1(x)                        (((uint32_t)(((uint32_t)(x))<<25U))&0x2000000UL)    /*!< AIPS0_MPRA.MTW1 Field                   */
+#define AIPS_MPRA_MTR1_MASK                      (0x4000000U)                                        /*!< AIPS0_MPRA.MTR1 Mask                    */
+#define AIPS_MPRA_MTR1_SHIFT                     (26U)                                               /*!< AIPS0_MPRA.MTR1 Position                */
+#define AIPS_MPRA_MTR1(x)                        (((uint32_t)(((uint32_t)(x))<<26U))&0x4000000UL)    /*!< AIPS0_MPRA.MTR1 Field                   */
+#define AIPS_MPRA_MPL0_MASK                      (0x10000000U)                                       /*!< AIPS0_MPRA.MPL0 Mask                    */
+#define AIPS_MPRA_MPL0_SHIFT                     (28U)                                               /*!< AIPS0_MPRA.MPL0 Position                */
+#define AIPS_MPRA_MPL0(x)                        (((uint32_t)(((uint32_t)(x))<<28U))&0x10000000UL)   /*!< AIPS0_MPRA.MPL0 Field                   */
+#define AIPS_MPRA_MTW0_MASK                      (0x20000000U)                                       /*!< AIPS0_MPRA.MTW0 Mask                    */
+#define AIPS_MPRA_MTW0_SHIFT                     (29U)                                               /*!< AIPS0_MPRA.MTW0 Position                */
+#define AIPS_MPRA_MTW0(x)                        (((uint32_t)(((uint32_t)(x))<<29U))&0x20000000UL)   /*!< AIPS0_MPRA.MTW0 Field                   */
+#define AIPS_MPRA_MTR0_MASK                      (0x40000000U)                                       /*!< AIPS0_MPRA.MTR0 Mask                    */
+#define AIPS_MPRA_MTR0_SHIFT                     (30U)                                               /*!< AIPS0_MPRA.MTR0 Position                */
+#define AIPS_MPRA_MTR0(x)                        (((uint32_t)(((uint32_t)(x))<<30U))&0x40000000UL)   /*!< AIPS0_MPRA.MTR0 Field                   */
+/* ------- PACR Bit Fields                          ------ */
+#define AIPS_PACR_TP7_MASK                       (0x1U)                                              /*!< AIPS0_PACR.TP7 Mask                     */
+#define AIPS_PACR_TP7_SHIFT                      (0U)                                                /*!< AIPS0_PACR.TP7 Position                 */
+#define AIPS_PACR_TP7(x)                         (((uint32_t)(((uint32_t)(x))<<0U))&0x1UL)           /*!< AIPS0_PACR.TP7 Field                    */
+#define AIPS_PACR_WP7_MASK                       (0x2U)                                              /*!< AIPS0_PACR.WP7 Mask                     */
+#define AIPS_PACR_WP7_SHIFT                      (1U)                                                /*!< AIPS0_PACR.WP7 Position                 */
+#define AIPS_PACR_WP7(x)                         (((uint32_t)(((uint32_t)(x))<<1U))&0x2UL)           /*!< AIPS0_PACR.WP7 Field                    */
+#define AIPS_PACR_SP7_MASK                       (0x4U)                                              /*!< AIPS0_PACR.SP7 Mask                     */
+#define AIPS_PACR_SP7_SHIFT                      (2U)                                                /*!< AIPS0_PACR.SP7 Position                 */
+#define AIPS_PACR_SP7(x)                         (((uint32_t)(((uint32_t)(x))<<2U))&0x4UL)           /*!< AIPS0_PACR.SP7 Field                    */
+#define AIPS_PACR_TP6_MASK                       (0x10U)                                             /*!< AIPS0_PACR.TP6 Mask                     */
+#define AIPS_PACR_TP6_SHIFT                      (4U)                                                /*!< AIPS0_PACR.TP6 Position                 */
+#define AIPS_PACR_TP6(x)                         (((uint32_t)(((uint32_t)(x))<<4U))&0x10UL)          /*!< AIPS0_PACR.TP6 Field                    */
+#define AIPS_PACR_WP6_MASK                       (0x20U)                                             /*!< AIPS0_PACR.WP6 Mask                     */
+#define AIPS_PACR_WP6_SHIFT                      (5U)                                                /*!< AIPS0_PACR.WP6 Position                 */
+#define AIPS_PACR_WP6(x)                         (((uint32_t)(((uint32_t)(x))<<5U))&0x20UL)          /*!< AIPS0_PACR.WP6 Field                    */
+#define AIPS_PACR_SP6_MASK                       (0x40U)                                             /*!< AIPS0_PACR.SP6 Mask                     */
+#define AIPS_PACR_SP6_SHIFT                      (6U)                                                /*!< AIPS0_PACR.SP6 Position                 */
+#define AIPS_PACR_SP6(x)                         (((uint32_t)(((uint32_t)(x))<<6U))&0x40UL)          /*!< AIPS0_PACR.SP6 Field                    */
+#define AIPS_PACR_TP5_MASK                       (0x100U)                                            /*!< AIPS0_PACR.TP5 Mask                     */
+#define AIPS_PACR_TP5_SHIFT                      (8U)                                                /*!< AIPS0_PACR.TP5 Position                 */
+#define AIPS_PACR_TP5(x)                         (((uint32_t)(((uint32_t)(x))<<8U))&0x100UL)         /*!< AIPS0_PACR.TP5 Field                    */
+#define AIPS_PACR_WP5_MASK                       (0x200U)                                            /*!< AIPS0_PACR.WP5 Mask                     */
+#define AIPS_PACR_WP5_SHIFT                      (9U)                                                /*!< AIPS0_PACR.WP5 Position                 */
+#define AIPS_PACR_WP5(x)                         (((uint32_t)(((uint32_t)(x))<<9U))&0x200UL)         /*!< AIPS0_PACR.WP5 Field                    */
+#define AIPS_PACR_SP5_MASK                       (0x400U)                                            /*!< AIPS0_PACR.SP5 Mask                     */
+#define AIPS_PACR_SP5_SHIFT                      (10U)                                               /*!< AIPS0_PACR.SP5 Position                 */
+#define AIPS_PACR_SP5(x)                         (((uint32_t)(((uint32_t)(x))<<10U))&0x400UL)        /*!< AIPS0_PACR.SP5 Field                    */
+#define AIPS_PACR_TP4_MASK                       (0x1000U)                                           /*!< AIPS0_PACR.TP4 Mask                     */
+#define AIPS_PACR_TP4_SHIFT                      (12U)                                               /*!< AIPS0_PACR.TP4 Position                 */
+#define AIPS_PACR_TP4(x)                         (((uint32_t)(((uint32_t)(x))<<12U))&0x1000UL)       /*!< AIPS0_PACR.TP4 Field                    */
+#define AIPS_PACR_WP4_MASK                       (0x2000U)                                           /*!< AIPS0_PACR.WP4 Mask                     */
+#define AIPS_PACR_WP4_SHIFT                      (13U)                                               /*!< AIPS0_PACR.WP4 Position                 */
+#define AIPS_PACR_WP4(x)                         (((uint32_t)(((uint32_t)(x))<<13U))&0x2000UL)       /*!< AIPS0_PACR.WP4 Field                    */
+#define AIPS_PACR_SP4_MASK                       (0x4000U)                                           /*!< AIPS0_PACR.SP4 Mask                     */
+#define AIPS_PACR_SP4_SHIFT                      (14U)                                               /*!< AIPS0_PACR.SP4 Position                 */
+#define AIPS_PACR_SP4(x)                         (((uint32_t)(((uint32_t)(x))<<14U))&0x4000UL)       /*!< AIPS0_PACR.SP4 Field                    */
+#define AIPS_PACR_TP3_MASK                       (0x10000U)                                          /*!< AIPS0_PACR.TP3 Mask                     */
+#define AIPS_PACR_TP3_SHIFT                      (16U)                                               /*!< AIPS0_PACR.TP3 Position                 */
+#define AIPS_PACR_TP3(x)                         (((uint32_t)(((uint32_t)(x))<<16U))&0x10000UL)      /*!< AIPS0_PACR.TP3 Field                    */
+#define AIPS_PACR_WP3_MASK                       (0x20000U)                                          /*!< AIPS0_PACR.WP3 Mask                     */
+#define AIPS_PACR_WP3_SHIFT                      (17U)                                               /*!< AIPS0_PACR.WP3 Position                 */
+#define AIPS_PACR_WP3(x)                         (((uint32_t)(((uint32_t)(x))<<17U))&0x20000UL)      /*!< AIPS0_PACR.WP3 Field                    */
+#define AIPS_PACR_SP3_MASK                       (0x40000U)                                          /*!< AIPS0_PACR.SP3 Mask                     */
+#define AIPS_PACR_SP3_SHIFT                      (18U)                                               /*!< AIPS0_PACR.SP3 Position                 */
+#define AIPS_PACR_SP3(x)                         (((uint32_t)(((uint32_t)(x))<<18U))&0x40000UL)      /*!< AIPS0_PACR.SP3 Field                    */
+#define AIPS_PACR_TP2_MASK                       (0x100000U)                                         /*!< AIPS0_PACR.TP2 Mask                     */
+#define AIPS_PACR_TP2_SHIFT                      (20U)                                               /*!< AIPS0_PACR.TP2 Position                 */
+#define AIPS_PACR_TP2(x)                         (((uint32_t)(((uint32_t)(x))<<20U))&0x100000UL)     /*!< AIPS0_PACR.TP2 Field                    */
+#define AIPS_PACR_WP2_MASK                       (0x200000U)                                         /*!< AIPS0_PACR.WP2 Mask                     */
+#define AIPS_PACR_WP2_SHIFT                      (21U)                                               /*!< AIPS0_PACR.WP2 Position                 */
+#define AIPS_PACR_WP2(x)                         (((uint32_t)(((uint32_t)(x))<<21U))&0x200000UL)     /*!< AIPS0_PACR.WP2 Field                    */
+#define AIPS_PACR_SP2_MASK                       (0x400000U)                                         /*!< AIPS0_PACR.SP2 Mask                     */
+#define AIPS_PACR_SP2_SHIFT                      (22U)                                               /*!< AIPS0_PACR.SP2 Position                 */
+#define AIPS_PACR_SP2(x)                         (((uint32_t)(((uint32_t)(x))<<22U))&0x400000UL)     /*!< AIPS0_PACR.SP2 Field                    */
+#define AIPS_PACR_TP1_MASK                       (0x1000000U)                                        /*!< AIPS0_PACR.TP1 Mask                     */
+#define AIPS_PACR_TP1_SHIFT                      (24U)                                               /*!< AIPS0_PACR.TP1 Position                 */
+#define AIPS_PACR_TP1(x)                         (((uint32_t)(((uint32_t)(x))<<24U))&0x1000000UL)    /*!< AIPS0_PACR.TP1 Field                    */
+#define AIPS_PACR_WP1_MASK                       (0x2000000U)                                        /*!< AIPS0_PACR.WP1 Mask                     */
+#define AIPS_PACR_WP1_SHIFT                      (25U)                                               /*!< AIPS0_PACR.WP1 Position                 */
+#define AIPS_PACR_WP1(x)                         (((uint32_t)(((uint32_t)(x))<<25U))&0x2000000UL)    /*!< AIPS0_PACR.WP1 Field                    */
+#define AIPS_PACR_SP1_MASK                       (0x4000000U)                                        /*!< AIPS0_PACR.SP1 Mask                     */
+#define AIPS_PACR_SP1_SHIFT                      (26U)                                               /*!< AIPS0_PACR.SP1 Position                 */
+#define AIPS_PACR_SP1(x)                         (((uint32_t)(((uint32_t)(x))<<26U))&0x4000000UL)    /*!< AIPS0_PACR.SP1 Field                    */
+#define AIPS_PACR_TP0_MASK                       (0x10000000U)                                       /*!< AIPS0_PACR.TP0 Mask                     */
+#define AIPS_PACR_TP0_SHIFT                      (28U)                                               /*!< AIPS0_PACR.TP0 Position                 */
+#define AIPS_PACR_TP0(x)                         (((uint32_t)(((uint32_t)(x))<<28U))&0x10000000UL)   /*!< AIPS0_PACR.TP0 Field                    */
+#define AIPS_PACR_WP0_MASK                       (0x20000000U)                                       /*!< AIPS0_PACR.WP0 Mask                     */
+#define AIPS_PACR_WP0_SHIFT                      (29U)                                               /*!< AIPS0_PACR.WP0 Position                 */
+#define AIPS_PACR_WP0(x)                         (((uint32_t)(((uint32_t)(x))<<29U))&0x20000000UL)   /*!< AIPS0_PACR.WP0 Field                    */
+#define AIPS_PACR_SP0_MASK                       (0x40000000U)                                       /*!< AIPS0_PACR.SP0 Mask                     */
+#define AIPS_PACR_SP0_SHIFT                      (30U)                                               /*!< AIPS0_PACR.SP0 Position                 */
+#define AIPS_PACR_SP0(x)                         (((uint32_t)(((uint32_t)(x))<<30U))&0x40000000UL)   /*!< AIPS0_PACR.SP0 Field                    */
+/* ------- OPACR Bit Fields                         ------ */
+#define AIPS_OPACR_TP7_MASK                      (0x1U)                                              /*!< AIPS0_OPACR.TP7 Mask                    */
+#define AIPS_OPACR_TP7_SHIFT                     (0U)                                                /*!< AIPS0_OPACR.TP7 Position                */
+#define AIPS_OPACR_TP7(x)                        (((uint32_t)(((uint32_t)(x))<<0U))&0x1UL)           /*!< AIPS0_OPACR.TP7 Field                   */
+#define AIPS_OPACR_WP7_MASK                      (0x2U)                                              /*!< AIPS0_OPACR.WP7 Mask                    */
+#define AIPS_OPACR_WP7_SHIFT                     (1U)                                                /*!< AIPS0_OPACR.WP7 Position                */
+#define AIPS_OPACR_WP7(x)                        (((uint32_t)(((uint32_t)(x))<<1U))&0x2UL)           /*!< AIPS0_OPACR.WP7 Field                   */
+#define AIPS_OPACR_SP7_MASK                      (0x4U)                                              /*!< AIPS0_OPACR.SP7 Mask                    */
+#define AIPS_OPACR_SP7_SHIFT                     (2U)                                                /*!< AIPS0_OPACR.SP7 Position                */
+#define AIPS_OPACR_SP7(x)                        (((uint32_t)(((uint32_t)(x))<<2U))&0x4UL)           /*!< AIPS0_OPACR.SP7 Field                   */
+#define AIPS_OPACR_TP6_MASK                      (0x10U)                                             /*!< AIPS0_OPACR.TP6 Mask                    */
+#define AIPS_OPACR_TP6_SHIFT                     (4U)                                                /*!< AIPS0_OPACR.TP6 Position                */
+#define AIPS_OPACR_TP6(x)                        (((uint32_t)(((uint32_t)(x))<<4U))&0x10UL)          /*!< AIPS0_OPACR.TP6 Field                   */
+#define AIPS_OPACR_WP6_MASK                      (0x20U)                                             /*!< AIPS0_OPACR.WP6 Mask                    */
+#define AIPS_OPACR_WP6_SHIFT                     (5U)                                                /*!< AIPS0_OPACR.WP6 Position                */
+#define AIPS_OPACR_WP6(x)                        (((uint32_t)(((uint32_t)(x))<<5U))&0x20UL)          /*!< AIPS0_OPACR.WP6 Field                   */
+#define AIPS_OPACR_SP6_MASK                      (0x40U)                                             /*!< AIPS0_OPACR.SP6 Mask                    */
+#define AIPS_OPACR_SP6_SHIFT                     (6U)                                                /*!< AIPS0_OPACR.SP6 Position                */
+#define AIPS_OPACR_SP6(x)                        (((uint32_t)(((uint32_t)(x))<<6U))&0x40UL)          /*!< AIPS0_OPACR.SP6 Field                   */
+#define AIPS_OPACR_TP5_MASK                      (0x100U)                                            /*!< AIPS0_OPACR.TP5 Mask                    */
+#define AIPS_OPACR_TP5_SHIFT                     (8U)                                                /*!< AIPS0_OPACR.TP5 Position                */
+#define AIPS_OPACR_TP5(x)                        (((uint32_t)(((uint32_t)(x))<<8U))&0x100UL)         /*!< AIPS0_OPACR.TP5 Field                   */
+#define AIPS_OPACR_WP5_MASK                      (0x200U)                                            /*!< AIPS0_OPACR.WP5 Mask                    */
+#define AIPS_OPACR_WP5_SHIFT                     (9U)                                                /*!< AIPS0_OPACR.WP5 Position                */
+#define AIPS_OPACR_WP5(x)                        (((uint32_t)(((uint32_t)(x))<<9U))&0x200UL)         /*!< AIPS0_OPACR.WP5 Field                   */
+#define AIPS_OPACR_SP5_MASK                      (0x400U)                                            /*!< AIPS0_OPACR.SP5 Mask                    */
+#define AIPS_OPACR_SP5_SHIFT                     (10U)                                               /*!< AIPS0_OPACR.SP5 Position                */
+#define AIPS_OPACR_SP5(x)                        (((uint32_t)(((uint32_t)(x))<<10U))&0x400UL)        /*!< AIPS0_OPACR.SP5 Field                   */
+#define AIPS_OPACR_TP4_MASK                      (0x1000U)                                           /*!< AIPS0_OPACR.TP4 Mask                    */
+#define AIPS_OPACR_TP4_SHIFT                     (12U)                                               /*!< AIPS0_OPACR.TP4 Position                */
+#define AIPS_OPACR_TP4(x)                        (((uint32_t)(((uint32_t)(x))<<12U))&0x1000UL)       /*!< AIPS0_OPACR.TP4 Field                   */
+#define AIPS_OPACR_WP4_MASK                      (0x2000U)                                           /*!< AIPS0_OPACR.WP4 Mask                    */
+#define AIPS_OPACR_WP4_SHIFT                     (13U)                                               /*!< AIPS0_OPACR.WP4 Position                */
+#define AIPS_OPACR_WP4(x)                        (((uint32_t)(((uint32_t)(x))<<13U))&0x2000UL)       /*!< AIPS0_OPACR.WP4 Field                   */
+#define AIPS_OPACR_SP4_MASK                      (0x4000U)                                           /*!< AIPS0_OPACR.SP4 Mask                    */
+#define AIPS_OPACR_SP4_SHIFT                     (14U)                                               /*!< AIPS0_OPACR.SP4 Position                */
+#define AIPS_OPACR_SP4(x)                        (((uint32_t)(((uint32_t)(x))<<14U))&0x4000UL)       /*!< AIPS0_OPACR.SP4 Field                   */
+#define AIPS_OPACR_TP3_MASK                      (0x10000U)                                          /*!< AIPS0_OPACR.TP3 Mask                    */
+#define AIPS_OPACR_TP3_SHIFT                     (16U)                                               /*!< AIPS0_OPACR.TP3 Position                */
+#define AIPS_OPACR_TP3(x)                        (((uint32_t)(((uint32_t)(x))<<16U))&0x10000UL)      /*!< AIPS0_OPACR.TP3 Field                   */
+#define AIPS_OPACR_WP3_MASK                      (0x20000U)                                          /*!< AIPS0_OPACR.WP3 Mask                    */
+#define AIPS_OPACR_WP3_SHIFT                     (17U)                                               /*!< AIPS0_OPACR.WP3 Position                */
+#define AIPS_OPACR_WP3(x)                        (((uint32_t)(((uint32_t)(x))<<17U))&0x20000UL)      /*!< AIPS0_OPACR.WP3 Field                   */
+#define AIPS_OPACR_SP3_MASK                      (0x40000U)                                          /*!< AIPS0_OPACR.SP3 Mask                    */
+#define AIPS_OPACR_SP3_SHIFT                     (18U)                                               /*!< AIPS0_OPACR.SP3 Position                */
+#define AIPS_OPACR_SP3(x)                        (((uint32_t)(((uint32_t)(x))<<18U))&0x40000UL)      /*!< AIPS0_OPACR.SP3 Field                   */
+#define AIPS_OPACR_TP2_MASK                      (0x100000U)                                         /*!< AIPS0_OPACR.TP2 Mask                    */
+#define AIPS_OPACR_TP2_SHIFT                     (20U)                                               /*!< AIPS0_OPACR.TP2 Position                */
+#define AIPS_OPACR_TP2(x)                        (((uint32_t)(((uint32_t)(x))<<20U))&0x100000UL)     /*!< AIPS0_OPACR.TP2 Field                   */
+#define AIPS_OPACR_WP2_MASK                      (0x200000U)                                         /*!< AIPS0_OPACR.WP2 Mask                    */
+#define AIPS_OPACR_WP2_SHIFT                     (21U)                                               /*!< AIPS0_OPACR.WP2 Position                */
+#define AIPS_OPACR_WP2(x)                        (((uint32_t)(((uint32_t)(x))<<21U))&0x200000UL)     /*!< AIPS0_OPACR.WP2 Field                   */
+#define AIPS_OPACR_SP2_MASK                      (0x400000U)                                         /*!< AIPS0_OPACR.SP2 Mask                    */
+#define AIPS_OPACR_SP2_SHIFT                     (22U)                                               /*!< AIPS0_OPACR.SP2 Position                */
+#define AIPS_OPACR_SP2(x)                        (((uint32_t)(((uint32_t)(x))<<22U))&0x400000UL)     /*!< AIPS0_OPACR.SP2 Field                   */
+#define AIPS_OPACR_TP1_MASK                      (0x1000000U)                                        /*!< AIPS0_OPACR.TP1 Mask                    */
+#define AIPS_OPACR_TP1_SHIFT                     (24U)                                               /*!< AIPS0_OPACR.TP1 Position                */
+#define AIPS_OPACR_TP1(x)                        (((uint32_t)(((uint32_t)(x))<<24U))&0x1000000UL)    /*!< AIPS0_OPACR.TP1 Field                   */
+#define AIPS_OPACR_WP1_MASK                      (0x2000000U)                                        /*!< AIPS0_OPACR.WP1 Mask                    */
+#define AIPS_OPACR_WP1_SHIFT                     (25U)                                               /*!< AIPS0_OPACR.WP1 Position                */
+#define AIPS_OPACR_WP1(x)                        (((uint32_t)(((uint32_t)(x))<<25U))&0x2000000UL)    /*!< AIPS0_OPACR.WP1 Field                   */
+#define AIPS_OPACR_SP1_MASK                      (0x4000000U)                                        /*!< AIPS0_OPACR.SP1 Mask                    */
+#define AIPS_OPACR_SP1_SHIFT                     (26U)                                               /*!< AIPS0_OPACR.SP1 Position                */
+#define AIPS_OPACR_SP1(x)                        (((uint32_t)(((uint32_t)(x))<<26U))&0x4000000UL)    /*!< AIPS0_OPACR.SP1 Field                   */
+#define AIPS_OPACR_TP0_MASK                      (0x10000000U)                                       /*!< AIPS0_OPACR.TP0 Mask                    */
+#define AIPS_OPACR_TP0_SHIFT                     (28U)                                               /*!< AIPS0_OPACR.TP0 Position                */
+#define AIPS_OPACR_TP0(x)                        (((uint32_t)(((uint32_t)(x))<<28U))&0x10000000UL)   /*!< AIPS0_OPACR.TP0 Field                   */
+#define AIPS_OPACR_WP0_MASK                      (0x20000000U)                                       /*!< AIPS0_OPACR.WP0 Mask                    */
+#define AIPS_OPACR_WP0_SHIFT                     (29U)                                               /*!< AIPS0_OPACR.WP0 Position                */
+#define AIPS_OPACR_WP0(x)                        (((uint32_t)(((uint32_t)(x))<<29U))&0x20000000UL)   /*!< AIPS0_OPACR.WP0 Field                   */
+#define AIPS_OPACR_SP0_MASK                      (0x40000000U)                                       /*!< AIPS0_OPACR.SP0 Mask                    */
+#define AIPS_OPACR_SP0_SHIFT                     (30U)                                               /*!< AIPS0_OPACR.SP0 Position                */
+#define AIPS_OPACR_SP0(x)                        (((uint32_t)(((uint32_t)(x))<<30U))&0x40000000UL)   /*!< AIPS0_OPACR.SP0 Field                   */
+/**
+ * @} */ /* End group AIPS_Register_Masks_GROUP 
+ */
+
+/* AIPS0 - Peripheral instance base addresses */
+#define AIPS0_BasePtr                  0x40000000UL //!< Peripheral base address
+#define AIPS0                          ((AIPS_Type *) AIPS0_BasePtr) //!< Freescale base pointer
+#define AIPS0_BASE_PTR                 (AIPS0) //!< Freescale style base pointer
+/**
+ * @} */ /* End group AIPS_Peripheral_access_layer_GROUP 
+ */
+/**
 * @addtogroup CAN_Peripheral_access_layer_GROUP CAN Peripheral Access Layer
 * @brief C Struct for CAN
 * @{
@@ -604,14 +873,16 @@ typedef struct ADC_Type {
 /**
  * @brief Flex Controller Area Network module
  */
+#define CAN_MESSAGE_BUFFER_COUNT 32     /**< Number of message buffers                          */
+#define CAN_WAKEUP_BUFFER_COUNT 4       /**< Number of wakeup buffers                           */
 /**
 * @addtogroup CAN_structs_GROUP CAN struct
 * @brief Struct for CAN
 * @{
 */
-typedef struct CAN0_Type {
+typedef struct CAN_Type {
    __IO uint32_t  MCR;                          /**< 0000: Module Configuration Register                                */
-   __IO uint32_t  CTRL1;                        /**< 0004: Control 1 register                                           */
+   __IO uint32_t  CTRL1;                        /**< 0004: Control 1 Register                                           */
    __IO uint32_t  TIMER;                        /**< 0008: Free Running Timer                                           */
         uint8_t   RESERVED_0[4];               
    __IO uint32_t  RXMGMASK;                     /**< 0010: Rx Mailboxes Global Mask Register                            */
@@ -623,7 +894,7 @@ typedef struct CAN0_Type {
    __IO uint32_t  IMASK1;                       /**< 0028: Interrupt Masks 1 register                                   */
         uint8_t   RESERVED_2[4];               
    __IO uint32_t  IFLAG1;                       /**< 0030: Interrupt Flags 1 register                                   */
-   __IO uint32_t  CTRL2;                        /**< 0034: Control 2 register                                           */
+   __IO uint32_t  CTRL2;                        /**< 0034: Control 2 Register                                           */
    __I  uint32_t  ESR2;                         /**< 0038: Error and Status 2 register                                  */
         uint8_t   RESERVED_3[8];               
    __I  uint32_t  CRCR;                         /**< 0044: CRC Register                                                 */
@@ -631,10 +902,15 @@ typedef struct CAN0_Type {
    __I  uint32_t  RXFIR;                        /**< 004C: Rx FIFO Information Register                                 */
    __IO uint32_t  CBT;                          /**< 0050: CAN Bit Timing Register                                      */
         uint8_t   RESERVED_4[44];              
-   __IO uint32_t  EmbeddedRAM[128];             /**< 0080: Embedded RAM                                                 */
-        uint8_t   RESERVED_5[1536];            
-   __IO uint32_t  RXIMR[32];                    /**< 0880: Rx Individual Mask                                           */
-        uint8_t   RESERVED_6[512];             
+   struct {
+      __IO uint32_t  CS;                        /**< 0080: Message Buffer 0 CS Register                                 */
+      __IO uint32_t  ID;                        /**< 0084: Message Buffer 0 ID Register                                 */
+      __IO uint32_t  WORD0;                     /**< 0088: Message Buffer 0 WORD0 Register                              */
+      __IO uint32_t  WORD1;                     /**< 008C: Message Buffer 0 WORD1 Register                              */
+   } MB[CAN_MESSAGE_BUFFER_COUNT];              /**< 0080: (cluster: size=0x0200, 512)                                  */
+        uint8_t   RESERVED_6[1536];            
+   __IO uint32_t  RXIMR[CAN_MESSAGE_BUFFER_COUNT]; /**< 0880: Rx Individual Mask                                           */
+        uint8_t   RESERVED_7[512];             
    __IO uint32_t  CTRL1_PN;                     /**< 0B00: Pretended Networking Control 1 Register                      */
    __IO uint32_t  CTRL2_PN;                     /**< 0B04: Pretended Networking Control 2 Register                      */
    __IO uint32_t  WU_MTC;                       /**< 0B08: Pretended Networking Wake Up Match Register                  */
@@ -645,28 +921,18 @@ typedef struct CAN0_Type {
    __IO uint32_t  FLT_ID2_IDMASK;               /**< 0B1C: Pretended Networking ID Filter 2 Register / ID Mask Register */
    __IO uint32_t  PL2_PLMASK_LO;                /**< 0B20: Pretended Networking Payload Low Filter 2 Register / Payload Low Mask Register */
    __IO uint32_t  PL2_PLMASK_HI;                /**< 0B24: Pretended Networking Payload High Filter 2 low order bits / Payload High Mask Register */
-        uint8_t   RESERVED_7[24];              
-   __I  uint32_t  WMB0_CS;                      /**< 0B40: Wake Up Message Buffer Register for C/S                      */
-   __I  uint32_t  WMB0_ID;                      /**< 0B44: Wake Up Message Buffer Register for ID                       */
-   __I  uint32_t  WMB0_D03;                     /**< 0B48: Wake Up Message Buffer Register for Data 0-3                 */
-   __I  uint32_t  WMB0_D47;                     /**< 0B4C: Wake Up Message Buffer Register Data 4-7                     */
-   __I  uint32_t  WMB1_CS;                      /**< 0B50: Wake Up Message Buffer Register for C/S                      */
-   __I  uint32_t  WMB1_ID;                      /**< 0B54: Wake Up Message Buffer Register for ID                       */
-   __I  uint32_t  WMB1_D03;                     /**< 0B58: Wake Up Message Buffer Register for Data 0-3                 */
-   __I  uint32_t  WMB1_D47;                     /**< 0B5C: Wake Up Message Buffer Register Data 4-7                     */
-   __I  uint32_t  WMB2_CS;                      /**< 0B60: Wake Up Message Buffer Register for C/S                      */
-   __I  uint32_t  WMB2_ID;                      /**< 0B64: Wake Up Message Buffer Register for ID                       */
-   __I  uint32_t  WMB2_D03;                     /**< 0B68: Wake Up Message Buffer Register for Data 0-3                 */
-   __I  uint32_t  WMB2_D47;                     /**< 0B6C: Wake Up Message Buffer Register Data 4-7                     */
-   __I  uint32_t  WMB3_CS;                      /**< 0B70: Wake Up Message Buffer Register for C/S                      */
-   __I  uint32_t  WMB3_ID;                      /**< 0B74: Wake Up Message Buffer Register for ID                       */
-   __I  uint32_t  WMB3_D03;                     /**< 0B78: Wake Up Message Buffer Register for Data 0-3                 */
-   __I  uint32_t  WMB3_D47;                     /**< 0B7C: Wake Up Message Buffer Register Data 4-7                     */
-        uint8_t   RESERVED_8[128];             
+        uint8_t   RESERVED_8[24];              
+   struct {
+      __I  uint32_t  WMBn_CS;                   /**< 0B40: Wake Up Message Buffer Register for C/S                      */
+      __I  uint32_t  WMBn_ID;                   /**< 0B44: Wake Up Message Buffer Register for ID                       */
+      __I  uint32_t  WMBn_D03;                  /**< 0B48: Wake Up Message Buffer Register for Data 0-3                 */
+      __I  uint32_t  WMBn_D47;                  /**< 0B4C: Wake Up Message Buffer Register Data 4-7                     */
+   } WMB[CAN_WAKEUP_BUFFER_COUNT];              /**< 0B40: (cluster: size=0x0040, 64)                                   */
+        uint8_t   RESERVED_10[128];            
    __IO uint32_t  FDCTRL;                       /**< 0C00: CAN FD Control Register                                      */
    __IO uint32_t  FDCBT;                        /**< 0C04: CAN FD Bit Timing Register                                   */
    __I  uint32_t  FDCRC;                        /**< 0C08: CAN FD CRC Register                                          */
-} CAN0_Type;
+} CAN_Type;
 
 /**
  * @} */ /* End group CAN_structs_GROUP 
@@ -994,19 +1260,61 @@ typedef struct CAN0_Type {
 #define CAN_CBT_BTF_MASK                         (0x80000000U)                                       /*!< CAN0_CBT.BTF Mask                       */
 #define CAN_CBT_BTF_SHIFT                        (31U)                                               /*!< CAN0_CBT.BTF Position                   */
 #define CAN_CBT_BTF(x)                           (((uint32_t)(((uint32_t)(x))<<31U))&0x80000000UL)   /*!< CAN0_CBT.BTF Field                      */
-/* ------- EmbeddedRAM Bit Fields                   ------ */
-#define CAN_EmbeddedRAM_DATA_BYTE_3_MASK         (0xFFU)                                             /*!< CAN0_EmbeddedRAM.DATA_BYTE_3 Mask       */
-#define CAN_EmbeddedRAM_DATA_BYTE_3_SHIFT        (0U)                                                /*!< CAN0_EmbeddedRAM.DATA_BYTE_3 Position   */
-#define CAN_EmbeddedRAM_DATA_BYTE_3(x)           (((uint32_t)(((uint32_t)(x))<<0U))&0xFFUL)          /*!< CAN0_EmbeddedRAM.DATA_BYTE_3 Field      */
-#define CAN_EmbeddedRAM_DATA_BYTE_2_MASK         (0xFF00U)                                           /*!< CAN0_EmbeddedRAM.DATA_BYTE_2 Mask       */
-#define CAN_EmbeddedRAM_DATA_BYTE_2_SHIFT        (8U)                                                /*!< CAN0_EmbeddedRAM.DATA_BYTE_2 Position   */
-#define CAN_EmbeddedRAM_DATA_BYTE_2(x)           (((uint32_t)(((uint32_t)(x))<<8U))&0xFF00UL)        /*!< CAN0_EmbeddedRAM.DATA_BYTE_2 Field      */
-#define CAN_EmbeddedRAM_DATA_BYTE_1_MASK         (0xFF0000U)                                         /*!< CAN0_EmbeddedRAM.DATA_BYTE_1 Mask       */
-#define CAN_EmbeddedRAM_DATA_BYTE_1_SHIFT        (16U)                                               /*!< CAN0_EmbeddedRAM.DATA_BYTE_1 Position   */
-#define CAN_EmbeddedRAM_DATA_BYTE_1(x)           (((uint32_t)(((uint32_t)(x))<<16U))&0xFF0000UL)     /*!< CAN0_EmbeddedRAM.DATA_BYTE_1 Field      */
-#define CAN_EmbeddedRAM_DATA_BYTE_0_MASK         (0xFF000000U)                                       /*!< CAN0_EmbeddedRAM.DATA_BYTE_0 Mask       */
-#define CAN_EmbeddedRAM_DATA_BYTE_0_SHIFT        (24U)                                               /*!< CAN0_EmbeddedRAM.DATA_BYTE_0 Position   */
-#define CAN_EmbeddedRAM_DATA_BYTE_0(x)           (((uint32_t)(((uint32_t)(x))<<24U))&0xFF000000UL)   /*!< CAN0_EmbeddedRAM.DATA_BYTE_0 Field      */
+/* ------- CS Bit Fields                            ------ */
+#define CAN_CS_TIME_STAMP_MASK                   (0xFFFFU)                                           /*!< CAN0_CS.TIME_STAMP Mask                 */
+#define CAN_CS_TIME_STAMP_SHIFT                  (0U)                                                /*!< CAN0_CS.TIME_STAMP Position             */
+#define CAN_CS_TIME_STAMP(x)                     (((uint32_t)(((uint32_t)(x))<<0U))&0xFFFFUL)        /*!< CAN0_CS.TIME_STAMP Field                */
+#define CAN_CS_DLC_MASK                          (0xF0000U)                                          /*!< CAN0_CS.DLC Mask                        */
+#define CAN_CS_DLC_SHIFT                         (16U)                                               /*!< CAN0_CS.DLC Position                    */
+#define CAN_CS_DLC(x)                            (((uint32_t)(((uint32_t)(x))<<16U))&0xF0000UL)      /*!< CAN0_CS.DLC Field                       */
+#define CAN_CS_RTR_MASK                          (0x100000U)                                         /*!< CAN0_CS.RTR Mask                        */
+#define CAN_CS_RTR_SHIFT                         (20U)                                               /*!< CAN0_CS.RTR Position                    */
+#define CAN_CS_RTR(x)                            (((uint32_t)(((uint32_t)(x))<<20U))&0x100000UL)     /*!< CAN0_CS.RTR Field                       */
+#define CAN_CS_IDE_MASK                          (0x200000U)                                         /*!< CAN0_CS.IDE Mask                        */
+#define CAN_CS_IDE_SHIFT                         (21U)                                               /*!< CAN0_CS.IDE Position                    */
+#define CAN_CS_IDE(x)                            (((uint32_t)(((uint32_t)(x))<<21U))&0x200000UL)     /*!< CAN0_CS.IDE Field                       */
+#define CAN_CS_SRR_MASK                          (0x400000U)                                         /*!< CAN0_CS.SRR Mask                        */
+#define CAN_CS_SRR_SHIFT                         (22U)                                               /*!< CAN0_CS.SRR Position                    */
+#define CAN_CS_SRR(x)                            (((uint32_t)(((uint32_t)(x))<<22U))&0x400000UL)     /*!< CAN0_CS.SRR Field                       */
+#define CAN_CS_CODE_MASK                         (0xF000000U)                                        /*!< CAN0_CS.CODE Mask                       */
+#define CAN_CS_CODE_SHIFT                        (24U)                                               /*!< CAN0_CS.CODE Position                   */
+#define CAN_CS_CODE(x)                           (((uint32_t)(((uint32_t)(x))<<24U))&0xF000000UL)    /*!< CAN0_CS.CODE Field                      */
+/* ------- ID Bit Fields                            ------ */
+#define CAN_ID_EXT_MASK                          (0x3FFFFU)                                          /*!< CAN0_ID.EXT Mask                        */
+#define CAN_ID_EXT_SHIFT                         (0U)                                                /*!< CAN0_ID.EXT Position                    */
+#define CAN_ID_EXT(x)                            (((uint32_t)(((uint32_t)(x))<<0U))&0x3FFFFUL)       /*!< CAN0_ID.EXT Field                       */
+#define CAN_ID_STD_MASK                          (0x1FFC0000U)                                       /*!< CAN0_ID.STD Mask                        */
+#define CAN_ID_STD_SHIFT                         (18U)                                               /*!< CAN0_ID.STD Position                    */
+#define CAN_ID_STD(x)                            (((uint32_t)(((uint32_t)(x))<<18U))&0x1FFC0000UL)   /*!< CAN0_ID.STD Field                       */
+#define CAN_ID_PRIO_MASK                         (0xE0000000U)                                       /*!< CAN0_ID.PRIO Mask                       */
+#define CAN_ID_PRIO_SHIFT                        (29U)                                               /*!< CAN0_ID.PRIO Position                   */
+#define CAN_ID_PRIO(x)                           (((uint32_t)(((uint32_t)(x))<<29U))&0xE0000000UL)   /*!< CAN0_ID.PRIO Field                      */
+/* ------- WORD0 Bit Fields                         ------ */
+#define CAN_WORD0_DATA_BYTE_3_MASK               (0xFFU)                                             /*!< CAN0_WORD0.DATA_BYTE_3 Mask             */
+#define CAN_WORD0_DATA_BYTE_3_SHIFT              (0U)                                                /*!< CAN0_WORD0.DATA_BYTE_3 Position         */
+#define CAN_WORD0_DATA_BYTE_3(x)                 (((uint32_t)(((uint32_t)(x))<<0U))&0xFFUL)          /*!< CAN0_WORD0.DATA_BYTE_3 Field            */
+#define CAN_WORD0_DATA_BYTE_2_MASK               (0xFF00U)                                           /*!< CAN0_WORD0.DATA_BYTE_2 Mask             */
+#define CAN_WORD0_DATA_BYTE_2_SHIFT              (8U)                                                /*!< CAN0_WORD0.DATA_BYTE_2 Position         */
+#define CAN_WORD0_DATA_BYTE_2(x)                 (((uint32_t)(((uint32_t)(x))<<8U))&0xFF00UL)        /*!< CAN0_WORD0.DATA_BYTE_2 Field            */
+#define CAN_WORD0_DATA_BYTE_1_MASK               (0xFF0000U)                                         /*!< CAN0_WORD0.DATA_BYTE_1 Mask             */
+#define CAN_WORD0_DATA_BYTE_1_SHIFT              (16U)                                               /*!< CAN0_WORD0.DATA_BYTE_1 Position         */
+#define CAN_WORD0_DATA_BYTE_1(x)                 (((uint32_t)(((uint32_t)(x))<<16U))&0xFF0000UL)     /*!< CAN0_WORD0.DATA_BYTE_1 Field            */
+#define CAN_WORD0_DATA_BYTE_0_MASK               (0xFF000000U)                                       /*!< CAN0_WORD0.DATA_BYTE_0 Mask             */
+#define CAN_WORD0_DATA_BYTE_0_SHIFT              (24U)                                               /*!< CAN0_WORD0.DATA_BYTE_0 Position         */
+#define CAN_WORD0_DATA_BYTE_0(x)                 (((uint32_t)(((uint32_t)(x))<<24U))&0xFF000000UL)   /*!< CAN0_WORD0.DATA_BYTE_0 Field            */
+/* ------- WORD1 Bit Fields                         ------ */
+#define CAN_WORD1_DATA_BYTE_7_MASK               (0xFFU)                                             /*!< CAN0_WORD1.DATA_BYTE_7 Mask             */
+#define CAN_WORD1_DATA_BYTE_7_SHIFT              (0U)                                                /*!< CAN0_WORD1.DATA_BYTE_7 Position         */
+#define CAN_WORD1_DATA_BYTE_7(x)                 (((uint32_t)(((uint32_t)(x))<<0U))&0xFFUL)          /*!< CAN0_WORD1.DATA_BYTE_7 Field            */
+#define CAN_WORD1_DATA_BYTE_6_MASK               (0xFF00U)                                           /*!< CAN0_WORD1.DATA_BYTE_6 Mask             */
+#define CAN_WORD1_DATA_BYTE_6_SHIFT              (8U)                                                /*!< CAN0_WORD1.DATA_BYTE_6 Position         */
+#define CAN_WORD1_DATA_BYTE_6(x)                 (((uint32_t)(((uint32_t)(x))<<8U))&0xFF00UL)        /*!< CAN0_WORD1.DATA_BYTE_6 Field            */
+#define CAN_WORD1_DATA_BYTE_5_MASK               (0xFF0000U)                                         /*!< CAN0_WORD1.DATA_BYTE_5 Mask             */
+#define CAN_WORD1_DATA_BYTE_5_SHIFT              (16U)                                               /*!< CAN0_WORD1.DATA_BYTE_5 Position         */
+#define CAN_WORD1_DATA_BYTE_5(x)                 (((uint32_t)(((uint32_t)(x))<<16U))&0xFF0000UL)     /*!< CAN0_WORD1.DATA_BYTE_5 Field            */
+#define CAN_WORD1_DATA_BYTE_4_MASK               (0xFF000000U)                                       /*!< CAN0_WORD1.DATA_BYTE_4 Mask             */
+#define CAN_WORD1_DATA_BYTE_4_SHIFT              (24U)                                               /*!< CAN0_WORD1.DATA_BYTE_4 Position         */
+#define CAN_WORD1_DATA_BYTE_4(x)                 (((uint32_t)(((uint32_t)(x))<<24U))&0xFF000000UL)   /*!< CAN0_WORD1.DATA_BYTE_4 Field            */
 /* ------- RXIMR Bit Fields                         ------ */
 #define CAN_RXIMR_MI_MASK                        (0xFFFFFFFFU)                                       /*!< CAN0_RXIMR.MI Mask                      */
 #define CAN_RXIMR_MI_SHIFT                       (0U)                                                /*!< CAN0_RXIMR.MI Position                  */
@@ -1123,178 +1431,49 @@ typedef struct CAN0_Type {
 #define CAN_PL2_PLMASK_HI_Data_byte_4_MASK       (0xFF000000U)                                       /*!< CAN0_PL2_PLMASK_HI.Data_byte_4 Mask     */
 #define CAN_PL2_PLMASK_HI_Data_byte_4_SHIFT      (24U)                                               /*!< CAN0_PL2_PLMASK_HI.Data_byte_4 Position */
 #define CAN_PL2_PLMASK_HI_Data_byte_4(x)         (((uint32_t)(((uint32_t)(x))<<24U))&0xFF000000UL)   /*!< CAN0_PL2_PLMASK_HI.Data_byte_4 Field    */
-/* ------- WMB0_CS Bit Fields                       ------ */
-#define CAN_WMB0_CS_DLC_MASK                     (0xF0000U)                                          /*!< CAN0_WMB0_CS.DLC Mask                   */
-#define CAN_WMB0_CS_DLC_SHIFT                    (16U)                                               /*!< CAN0_WMB0_CS.DLC Position               */
-#define CAN_WMB0_CS_DLC(x)                       (((uint32_t)(((uint32_t)(x))<<16U))&0xF0000UL)      /*!< CAN0_WMB0_CS.DLC Field                  */
-#define CAN_WMB0_CS_RTR_MASK                     (0x100000U)                                         /*!< CAN0_WMB0_CS.RTR Mask                   */
-#define CAN_WMB0_CS_RTR_SHIFT                    (20U)                                               /*!< CAN0_WMB0_CS.RTR Position               */
-#define CAN_WMB0_CS_RTR(x)                       (((uint32_t)(((uint32_t)(x))<<20U))&0x100000UL)     /*!< CAN0_WMB0_CS.RTR Field                  */
-#define CAN_WMB0_CS_IDE_MASK                     (0x200000U)                                         /*!< CAN0_WMB0_CS.IDE Mask                   */
-#define CAN_WMB0_CS_IDE_SHIFT                    (21U)                                               /*!< CAN0_WMB0_CS.IDE Position               */
-#define CAN_WMB0_CS_IDE(x)                       (((uint32_t)(((uint32_t)(x))<<21U))&0x200000UL)     /*!< CAN0_WMB0_CS.IDE Field                  */
-#define CAN_WMB0_CS_SRR_MASK                     (0x400000U)                                         /*!< CAN0_WMB0_CS.SRR Mask                   */
-#define CAN_WMB0_CS_SRR_SHIFT                    (22U)                                               /*!< CAN0_WMB0_CS.SRR Position               */
-#define CAN_WMB0_CS_SRR(x)                       (((uint32_t)(((uint32_t)(x))<<22U))&0x400000UL)     /*!< CAN0_WMB0_CS.SRR Field                  */
-/* ------- WMB0_ID Bit Fields                       ------ */
-#define CAN_WMB0_ID_ID_MASK                      (0x1FFFFFFFU)                                       /*!< CAN0_WMB0_ID.ID Mask                    */
-#define CAN_WMB0_ID_ID_SHIFT                     (0U)                                                /*!< CAN0_WMB0_ID.ID Position                */
-#define CAN_WMB0_ID_ID(x)                        (((uint32_t)(((uint32_t)(x))<<0U))&0x1FFFFFFFUL)    /*!< CAN0_WMB0_ID.ID Field                   */
-/* ------- WMB0_D03 Bit Fields                      ------ */
-#define CAN_WMB0_D03_Data_byte_3_MASK            (0xFFU)                                             /*!< CAN0_WMB0_D03.Data_byte_3 Mask          */
-#define CAN_WMB0_D03_Data_byte_3_SHIFT           (0U)                                                /*!< CAN0_WMB0_D03.Data_byte_3 Position      */
-#define CAN_WMB0_D03_Data_byte_3(x)              (((uint32_t)(((uint32_t)(x))<<0U))&0xFFUL)          /*!< CAN0_WMB0_D03.Data_byte_3 Field         */
-#define CAN_WMB0_D03_Data_byte_2_MASK            (0xFF00U)                                           /*!< CAN0_WMB0_D03.Data_byte_2 Mask          */
-#define CAN_WMB0_D03_Data_byte_2_SHIFT           (8U)                                                /*!< CAN0_WMB0_D03.Data_byte_2 Position      */
-#define CAN_WMB0_D03_Data_byte_2(x)              (((uint32_t)(((uint32_t)(x))<<8U))&0xFF00UL)        /*!< CAN0_WMB0_D03.Data_byte_2 Field         */
-#define CAN_WMB0_D03_Data_byte_1_MASK            (0xFF0000U)                                         /*!< CAN0_WMB0_D03.Data_byte_1 Mask          */
-#define CAN_WMB0_D03_Data_byte_1_SHIFT           (16U)                                               /*!< CAN0_WMB0_D03.Data_byte_1 Position      */
-#define CAN_WMB0_D03_Data_byte_1(x)              (((uint32_t)(((uint32_t)(x))<<16U))&0xFF0000UL)     /*!< CAN0_WMB0_D03.Data_byte_1 Field         */
-#define CAN_WMB0_D03_Data_byte_0_MASK            (0xFF000000U)                                       /*!< CAN0_WMB0_D03.Data_byte_0 Mask          */
-#define CAN_WMB0_D03_Data_byte_0_SHIFT           (24U)                                               /*!< CAN0_WMB0_D03.Data_byte_0 Position      */
-#define CAN_WMB0_D03_Data_byte_0(x)              (((uint32_t)(((uint32_t)(x))<<24U))&0xFF000000UL)   /*!< CAN0_WMB0_D03.Data_byte_0 Field         */
-/* ------- WMB0_D47 Bit Fields                      ------ */
-#define CAN_WMB0_D47_Data_byte_7_MASK            (0xFFU)                                             /*!< CAN0_WMB0_D47.Data_byte_7 Mask          */
-#define CAN_WMB0_D47_Data_byte_7_SHIFT           (0U)                                                /*!< CAN0_WMB0_D47.Data_byte_7 Position      */
-#define CAN_WMB0_D47_Data_byte_7(x)              (((uint32_t)(((uint32_t)(x))<<0U))&0xFFUL)          /*!< CAN0_WMB0_D47.Data_byte_7 Field         */
-#define CAN_WMB0_D47_Data_byte_6_MASK            (0xFF00U)                                           /*!< CAN0_WMB0_D47.Data_byte_6 Mask          */
-#define CAN_WMB0_D47_Data_byte_6_SHIFT           (8U)                                                /*!< CAN0_WMB0_D47.Data_byte_6 Position      */
-#define CAN_WMB0_D47_Data_byte_6(x)              (((uint32_t)(((uint32_t)(x))<<8U))&0xFF00UL)        /*!< CAN0_WMB0_D47.Data_byte_6 Field         */
-#define CAN_WMB0_D47_Data_byte_5_MASK            (0xFF0000U)                                         /*!< CAN0_WMB0_D47.Data_byte_5 Mask          */
-#define CAN_WMB0_D47_Data_byte_5_SHIFT           (16U)                                               /*!< CAN0_WMB0_D47.Data_byte_5 Position      */
-#define CAN_WMB0_D47_Data_byte_5(x)              (((uint32_t)(((uint32_t)(x))<<16U))&0xFF0000UL)     /*!< CAN0_WMB0_D47.Data_byte_5 Field         */
-#define CAN_WMB0_D47_Data_byte_4_MASK            (0xFF000000U)                                       /*!< CAN0_WMB0_D47.Data_byte_4 Mask          */
-#define CAN_WMB0_D47_Data_byte_4_SHIFT           (24U)                                               /*!< CAN0_WMB0_D47.Data_byte_4 Position      */
-#define CAN_WMB0_D47_Data_byte_4(x)              (((uint32_t)(((uint32_t)(x))<<24U))&0xFF000000UL)   /*!< CAN0_WMB0_D47.Data_byte_4 Field         */
-/* ------- WMB1_CS Bit Fields                       ------ */
-#define CAN_WMB1_CS_DLC_MASK                     (0xF0000U)                                          /*!< CAN0_WMB1_CS.DLC Mask                   */
-#define CAN_WMB1_CS_DLC_SHIFT                    (16U)                                               /*!< CAN0_WMB1_CS.DLC Position               */
-#define CAN_WMB1_CS_DLC(x)                       (((uint32_t)(((uint32_t)(x))<<16U))&0xF0000UL)      /*!< CAN0_WMB1_CS.DLC Field                  */
-#define CAN_WMB1_CS_RTR_MASK                     (0x100000U)                                         /*!< CAN0_WMB1_CS.RTR Mask                   */
-#define CAN_WMB1_CS_RTR_SHIFT                    (20U)                                               /*!< CAN0_WMB1_CS.RTR Position               */
-#define CAN_WMB1_CS_RTR(x)                       (((uint32_t)(((uint32_t)(x))<<20U))&0x100000UL)     /*!< CAN0_WMB1_CS.RTR Field                  */
-#define CAN_WMB1_CS_IDE_MASK                     (0x200000U)                                         /*!< CAN0_WMB1_CS.IDE Mask                   */
-#define CAN_WMB1_CS_IDE_SHIFT                    (21U)                                               /*!< CAN0_WMB1_CS.IDE Position               */
-#define CAN_WMB1_CS_IDE(x)                       (((uint32_t)(((uint32_t)(x))<<21U))&0x200000UL)     /*!< CAN0_WMB1_CS.IDE Field                  */
-#define CAN_WMB1_CS_SRR_MASK                     (0x400000U)                                         /*!< CAN0_WMB1_CS.SRR Mask                   */
-#define CAN_WMB1_CS_SRR_SHIFT                    (22U)                                               /*!< CAN0_WMB1_CS.SRR Position               */
-#define CAN_WMB1_CS_SRR(x)                       (((uint32_t)(((uint32_t)(x))<<22U))&0x400000UL)     /*!< CAN0_WMB1_CS.SRR Field                  */
-/* ------- WMB1_ID Bit Fields                       ------ */
-#define CAN_WMB1_ID_ID_MASK                      (0x1FFFFFFFU)                                       /*!< CAN0_WMB1_ID.ID Mask                    */
-#define CAN_WMB1_ID_ID_SHIFT                     (0U)                                                /*!< CAN0_WMB1_ID.ID Position                */
-#define CAN_WMB1_ID_ID(x)                        (((uint32_t)(((uint32_t)(x))<<0U))&0x1FFFFFFFUL)    /*!< CAN0_WMB1_ID.ID Field                   */
-/* ------- WMB1_D03 Bit Fields                      ------ */
-#define CAN_WMB1_D03_Data_byte_3_MASK            (0xFFU)                                             /*!< CAN0_WMB1_D03.Data_byte_3 Mask          */
-#define CAN_WMB1_D03_Data_byte_3_SHIFT           (0U)                                                /*!< CAN0_WMB1_D03.Data_byte_3 Position      */
-#define CAN_WMB1_D03_Data_byte_3(x)              (((uint32_t)(((uint32_t)(x))<<0U))&0xFFUL)          /*!< CAN0_WMB1_D03.Data_byte_3 Field         */
-#define CAN_WMB1_D03_Data_byte_2_MASK            (0xFF00U)                                           /*!< CAN0_WMB1_D03.Data_byte_2 Mask          */
-#define CAN_WMB1_D03_Data_byte_2_SHIFT           (8U)                                                /*!< CAN0_WMB1_D03.Data_byte_2 Position      */
-#define CAN_WMB1_D03_Data_byte_2(x)              (((uint32_t)(((uint32_t)(x))<<8U))&0xFF00UL)        /*!< CAN0_WMB1_D03.Data_byte_2 Field         */
-#define CAN_WMB1_D03_Data_byte_1_MASK            (0xFF0000U)                                         /*!< CAN0_WMB1_D03.Data_byte_1 Mask          */
-#define CAN_WMB1_D03_Data_byte_1_SHIFT           (16U)                                               /*!< CAN0_WMB1_D03.Data_byte_1 Position      */
-#define CAN_WMB1_D03_Data_byte_1(x)              (((uint32_t)(((uint32_t)(x))<<16U))&0xFF0000UL)     /*!< CAN0_WMB1_D03.Data_byte_1 Field         */
-#define CAN_WMB1_D03_Data_byte_0_MASK            (0xFF000000U)                                       /*!< CAN0_WMB1_D03.Data_byte_0 Mask          */
-#define CAN_WMB1_D03_Data_byte_0_SHIFT           (24U)                                               /*!< CAN0_WMB1_D03.Data_byte_0 Position      */
-#define CAN_WMB1_D03_Data_byte_0(x)              (((uint32_t)(((uint32_t)(x))<<24U))&0xFF000000UL)   /*!< CAN0_WMB1_D03.Data_byte_0 Field         */
-/* ------- WMB1_D47 Bit Fields                      ------ */
-#define CAN_WMB1_D47_Data_byte_7_MASK            (0xFFU)                                             /*!< CAN0_WMB1_D47.Data_byte_7 Mask          */
-#define CAN_WMB1_D47_Data_byte_7_SHIFT           (0U)                                                /*!< CAN0_WMB1_D47.Data_byte_7 Position      */
-#define CAN_WMB1_D47_Data_byte_7(x)              (((uint32_t)(((uint32_t)(x))<<0U))&0xFFUL)          /*!< CAN0_WMB1_D47.Data_byte_7 Field         */
-#define CAN_WMB1_D47_Data_byte_6_MASK            (0xFF00U)                                           /*!< CAN0_WMB1_D47.Data_byte_6 Mask          */
-#define CAN_WMB1_D47_Data_byte_6_SHIFT           (8U)                                                /*!< CAN0_WMB1_D47.Data_byte_6 Position      */
-#define CAN_WMB1_D47_Data_byte_6(x)              (((uint32_t)(((uint32_t)(x))<<8U))&0xFF00UL)        /*!< CAN0_WMB1_D47.Data_byte_6 Field         */
-#define CAN_WMB1_D47_Data_byte_5_MASK            (0xFF0000U)                                         /*!< CAN0_WMB1_D47.Data_byte_5 Mask          */
-#define CAN_WMB1_D47_Data_byte_5_SHIFT           (16U)                                               /*!< CAN0_WMB1_D47.Data_byte_5 Position      */
-#define CAN_WMB1_D47_Data_byte_5(x)              (((uint32_t)(((uint32_t)(x))<<16U))&0xFF0000UL)     /*!< CAN0_WMB1_D47.Data_byte_5 Field         */
-#define CAN_WMB1_D47_Data_byte_4_MASK            (0xFF000000U)                                       /*!< CAN0_WMB1_D47.Data_byte_4 Mask          */
-#define CAN_WMB1_D47_Data_byte_4_SHIFT           (24U)                                               /*!< CAN0_WMB1_D47.Data_byte_4 Position      */
-#define CAN_WMB1_D47_Data_byte_4(x)              (((uint32_t)(((uint32_t)(x))<<24U))&0xFF000000UL)   /*!< CAN0_WMB1_D47.Data_byte_4 Field         */
-/* ------- WMB2_CS Bit Fields                       ------ */
-#define CAN_WMB2_CS_DLC_MASK                     (0xF0000U)                                          /*!< CAN0_WMB2_CS.DLC Mask                   */
-#define CAN_WMB2_CS_DLC_SHIFT                    (16U)                                               /*!< CAN0_WMB2_CS.DLC Position               */
-#define CAN_WMB2_CS_DLC(x)                       (((uint32_t)(((uint32_t)(x))<<16U))&0xF0000UL)      /*!< CAN0_WMB2_CS.DLC Field                  */
-#define CAN_WMB2_CS_RTR_MASK                     (0x100000U)                                         /*!< CAN0_WMB2_CS.RTR Mask                   */
-#define CAN_WMB2_CS_RTR_SHIFT                    (20U)                                               /*!< CAN0_WMB2_CS.RTR Position               */
-#define CAN_WMB2_CS_RTR(x)                       (((uint32_t)(((uint32_t)(x))<<20U))&0x100000UL)     /*!< CAN0_WMB2_CS.RTR Field                  */
-#define CAN_WMB2_CS_IDE_MASK                     (0x200000U)                                         /*!< CAN0_WMB2_CS.IDE Mask                   */
-#define CAN_WMB2_CS_IDE_SHIFT                    (21U)                                               /*!< CAN0_WMB2_CS.IDE Position               */
-#define CAN_WMB2_CS_IDE(x)                       (((uint32_t)(((uint32_t)(x))<<21U))&0x200000UL)     /*!< CAN0_WMB2_CS.IDE Field                  */
-#define CAN_WMB2_CS_SRR_MASK                     (0x400000U)                                         /*!< CAN0_WMB2_CS.SRR Mask                   */
-#define CAN_WMB2_CS_SRR_SHIFT                    (22U)                                               /*!< CAN0_WMB2_CS.SRR Position               */
-#define CAN_WMB2_CS_SRR(x)                       (((uint32_t)(((uint32_t)(x))<<22U))&0x400000UL)     /*!< CAN0_WMB2_CS.SRR Field                  */
-/* ------- WMB2_ID Bit Fields                       ------ */
-#define CAN_WMB2_ID_ID_MASK                      (0x1FFFFFFFU)                                       /*!< CAN0_WMB2_ID.ID Mask                    */
-#define CAN_WMB2_ID_ID_SHIFT                     (0U)                                                /*!< CAN0_WMB2_ID.ID Position                */
-#define CAN_WMB2_ID_ID(x)                        (((uint32_t)(((uint32_t)(x))<<0U))&0x1FFFFFFFUL)    /*!< CAN0_WMB2_ID.ID Field                   */
-/* ------- WMB2_D03 Bit Fields                      ------ */
-#define CAN_WMB2_D03_Data_byte_3_MASK            (0xFFU)                                             /*!< CAN0_WMB2_D03.Data_byte_3 Mask          */
-#define CAN_WMB2_D03_Data_byte_3_SHIFT           (0U)                                                /*!< CAN0_WMB2_D03.Data_byte_3 Position      */
-#define CAN_WMB2_D03_Data_byte_3(x)              (((uint32_t)(((uint32_t)(x))<<0U))&0xFFUL)          /*!< CAN0_WMB2_D03.Data_byte_3 Field         */
-#define CAN_WMB2_D03_Data_byte_2_MASK            (0xFF00U)                                           /*!< CAN0_WMB2_D03.Data_byte_2 Mask          */
-#define CAN_WMB2_D03_Data_byte_2_SHIFT           (8U)                                                /*!< CAN0_WMB2_D03.Data_byte_2 Position      */
-#define CAN_WMB2_D03_Data_byte_2(x)              (((uint32_t)(((uint32_t)(x))<<8U))&0xFF00UL)        /*!< CAN0_WMB2_D03.Data_byte_2 Field         */
-#define CAN_WMB2_D03_Data_byte_1_MASK            (0xFF0000U)                                         /*!< CAN0_WMB2_D03.Data_byte_1 Mask          */
-#define CAN_WMB2_D03_Data_byte_1_SHIFT           (16U)                                               /*!< CAN0_WMB2_D03.Data_byte_1 Position      */
-#define CAN_WMB2_D03_Data_byte_1(x)              (((uint32_t)(((uint32_t)(x))<<16U))&0xFF0000UL)     /*!< CAN0_WMB2_D03.Data_byte_1 Field         */
-#define CAN_WMB2_D03_Data_byte_0_MASK            (0xFF000000U)                                       /*!< CAN0_WMB2_D03.Data_byte_0 Mask          */
-#define CAN_WMB2_D03_Data_byte_0_SHIFT           (24U)                                               /*!< CAN0_WMB2_D03.Data_byte_0 Position      */
-#define CAN_WMB2_D03_Data_byte_0(x)              (((uint32_t)(((uint32_t)(x))<<24U))&0xFF000000UL)   /*!< CAN0_WMB2_D03.Data_byte_0 Field         */
-/* ------- WMB2_D47 Bit Fields                      ------ */
-#define CAN_WMB2_D47_Data_byte_7_MASK            (0xFFU)                                             /*!< CAN0_WMB2_D47.Data_byte_7 Mask          */
-#define CAN_WMB2_D47_Data_byte_7_SHIFT           (0U)                                                /*!< CAN0_WMB2_D47.Data_byte_7 Position      */
-#define CAN_WMB2_D47_Data_byte_7(x)              (((uint32_t)(((uint32_t)(x))<<0U))&0xFFUL)          /*!< CAN0_WMB2_D47.Data_byte_7 Field         */
-#define CAN_WMB2_D47_Data_byte_6_MASK            (0xFF00U)                                           /*!< CAN0_WMB2_D47.Data_byte_6 Mask          */
-#define CAN_WMB2_D47_Data_byte_6_SHIFT           (8U)                                                /*!< CAN0_WMB2_D47.Data_byte_6 Position      */
-#define CAN_WMB2_D47_Data_byte_6(x)              (((uint32_t)(((uint32_t)(x))<<8U))&0xFF00UL)        /*!< CAN0_WMB2_D47.Data_byte_6 Field         */
-#define CAN_WMB2_D47_Data_byte_5_MASK            (0xFF0000U)                                         /*!< CAN0_WMB2_D47.Data_byte_5 Mask          */
-#define CAN_WMB2_D47_Data_byte_5_SHIFT           (16U)                                               /*!< CAN0_WMB2_D47.Data_byte_5 Position      */
-#define CAN_WMB2_D47_Data_byte_5(x)              (((uint32_t)(((uint32_t)(x))<<16U))&0xFF0000UL)     /*!< CAN0_WMB2_D47.Data_byte_5 Field         */
-#define CAN_WMB2_D47_Data_byte_4_MASK            (0xFF000000U)                                       /*!< CAN0_WMB2_D47.Data_byte_4 Mask          */
-#define CAN_WMB2_D47_Data_byte_4_SHIFT           (24U)                                               /*!< CAN0_WMB2_D47.Data_byte_4 Position      */
-#define CAN_WMB2_D47_Data_byte_4(x)              (((uint32_t)(((uint32_t)(x))<<24U))&0xFF000000UL)   /*!< CAN0_WMB2_D47.Data_byte_4 Field         */
-/* ------- WMB3_CS Bit Fields                       ------ */
-#define CAN_WMB3_CS_DLC_MASK                     (0xF0000U)                                          /*!< CAN0_WMB3_CS.DLC Mask                   */
-#define CAN_WMB3_CS_DLC_SHIFT                    (16U)                                               /*!< CAN0_WMB3_CS.DLC Position               */
-#define CAN_WMB3_CS_DLC(x)                       (((uint32_t)(((uint32_t)(x))<<16U))&0xF0000UL)      /*!< CAN0_WMB3_CS.DLC Field                  */
-#define CAN_WMB3_CS_RTR_MASK                     (0x100000U)                                         /*!< CAN0_WMB3_CS.RTR Mask                   */
-#define CAN_WMB3_CS_RTR_SHIFT                    (20U)                                               /*!< CAN0_WMB3_CS.RTR Position               */
-#define CAN_WMB3_CS_RTR(x)                       (((uint32_t)(((uint32_t)(x))<<20U))&0x100000UL)     /*!< CAN0_WMB3_CS.RTR Field                  */
-#define CAN_WMB3_CS_IDE_MASK                     (0x200000U)                                         /*!< CAN0_WMB3_CS.IDE Mask                   */
-#define CAN_WMB3_CS_IDE_SHIFT                    (21U)                                               /*!< CAN0_WMB3_CS.IDE Position               */
-#define CAN_WMB3_CS_IDE(x)                       (((uint32_t)(((uint32_t)(x))<<21U))&0x200000UL)     /*!< CAN0_WMB3_CS.IDE Field                  */
-#define CAN_WMB3_CS_SRR_MASK                     (0x400000U)                                         /*!< CAN0_WMB3_CS.SRR Mask                   */
-#define CAN_WMB3_CS_SRR_SHIFT                    (22U)                                               /*!< CAN0_WMB3_CS.SRR Position               */
-#define CAN_WMB3_CS_SRR(x)                       (((uint32_t)(((uint32_t)(x))<<22U))&0x400000UL)     /*!< CAN0_WMB3_CS.SRR Field                  */
-/* ------- WMB3_ID Bit Fields                       ------ */
-#define CAN_WMB3_ID_ID_MASK                      (0x1FFFFFFFU)                                       /*!< CAN0_WMB3_ID.ID Mask                    */
-#define CAN_WMB3_ID_ID_SHIFT                     (0U)                                                /*!< CAN0_WMB3_ID.ID Position                */
-#define CAN_WMB3_ID_ID(x)                        (((uint32_t)(((uint32_t)(x))<<0U))&0x1FFFFFFFUL)    /*!< CAN0_WMB3_ID.ID Field                   */
-/* ------- WMB3_D03 Bit Fields                      ------ */
-#define CAN_WMB3_D03_Data_byte_3_MASK            (0xFFU)                                             /*!< CAN0_WMB3_D03.Data_byte_3 Mask          */
-#define CAN_WMB3_D03_Data_byte_3_SHIFT           (0U)                                                /*!< CAN0_WMB3_D03.Data_byte_3 Position      */
-#define CAN_WMB3_D03_Data_byte_3(x)              (((uint32_t)(((uint32_t)(x))<<0U))&0xFFUL)          /*!< CAN0_WMB3_D03.Data_byte_3 Field         */
-#define CAN_WMB3_D03_Data_byte_2_MASK            (0xFF00U)                                           /*!< CAN0_WMB3_D03.Data_byte_2 Mask          */
-#define CAN_WMB3_D03_Data_byte_2_SHIFT           (8U)                                                /*!< CAN0_WMB3_D03.Data_byte_2 Position      */
-#define CAN_WMB3_D03_Data_byte_2(x)              (((uint32_t)(((uint32_t)(x))<<8U))&0xFF00UL)        /*!< CAN0_WMB3_D03.Data_byte_2 Field         */
-#define CAN_WMB3_D03_Data_byte_1_MASK            (0xFF0000U)                                         /*!< CAN0_WMB3_D03.Data_byte_1 Mask          */
-#define CAN_WMB3_D03_Data_byte_1_SHIFT           (16U)                                               /*!< CAN0_WMB3_D03.Data_byte_1 Position      */
-#define CAN_WMB3_D03_Data_byte_1(x)              (((uint32_t)(((uint32_t)(x))<<16U))&0xFF0000UL)     /*!< CAN0_WMB3_D03.Data_byte_1 Field         */
-#define CAN_WMB3_D03_Data_byte_0_MASK            (0xFF000000U)                                       /*!< CAN0_WMB3_D03.Data_byte_0 Mask          */
-#define CAN_WMB3_D03_Data_byte_0_SHIFT           (24U)                                               /*!< CAN0_WMB3_D03.Data_byte_0 Position      */
-#define CAN_WMB3_D03_Data_byte_0(x)              (((uint32_t)(((uint32_t)(x))<<24U))&0xFF000000UL)   /*!< CAN0_WMB3_D03.Data_byte_0 Field         */
-/* ------- WMB3_D47 Bit Fields                      ------ */
-#define CAN_WMB3_D47_Data_byte_7_MASK            (0xFFU)                                             /*!< CAN0_WMB3_D47.Data_byte_7 Mask          */
-#define CAN_WMB3_D47_Data_byte_7_SHIFT           (0U)                                                /*!< CAN0_WMB3_D47.Data_byte_7 Position      */
-#define CAN_WMB3_D47_Data_byte_7(x)              (((uint32_t)(((uint32_t)(x))<<0U))&0xFFUL)          /*!< CAN0_WMB3_D47.Data_byte_7 Field         */
-#define CAN_WMB3_D47_Data_byte_6_MASK            (0xFF00U)                                           /*!< CAN0_WMB3_D47.Data_byte_6 Mask          */
-#define CAN_WMB3_D47_Data_byte_6_SHIFT           (8U)                                                /*!< CAN0_WMB3_D47.Data_byte_6 Position      */
-#define CAN_WMB3_D47_Data_byte_6(x)              (((uint32_t)(((uint32_t)(x))<<8U))&0xFF00UL)        /*!< CAN0_WMB3_D47.Data_byte_6 Field         */
-#define CAN_WMB3_D47_Data_byte_5_MASK            (0xFF0000U)                                         /*!< CAN0_WMB3_D47.Data_byte_5 Mask          */
-#define CAN_WMB3_D47_Data_byte_5_SHIFT           (16U)                                               /*!< CAN0_WMB3_D47.Data_byte_5 Position      */
-#define CAN_WMB3_D47_Data_byte_5(x)              (((uint32_t)(((uint32_t)(x))<<16U))&0xFF0000UL)     /*!< CAN0_WMB3_D47.Data_byte_5 Field         */
-#define CAN_WMB3_D47_Data_byte_4_MASK            (0xFF000000U)                                       /*!< CAN0_WMB3_D47.Data_byte_4 Mask          */
-#define CAN_WMB3_D47_Data_byte_4_SHIFT           (24U)                                               /*!< CAN0_WMB3_D47.Data_byte_4 Position      */
-#define CAN_WMB3_D47_Data_byte_4(x)              (((uint32_t)(((uint32_t)(x))<<24U))&0xFF000000UL)   /*!< CAN0_WMB3_D47.Data_byte_4 Field         */
+/* ------- WMBn_CS Bit Fields                       ------ */
+#define CAN_WMBn_CS_DLC_MASK                     (0xF0000U)                                          /*!< CAN0_WMBn_CS.DLC Mask                   */
+#define CAN_WMBn_CS_DLC_SHIFT                    (16U)                                               /*!< CAN0_WMBn_CS.DLC Position               */
+#define CAN_WMBn_CS_DLC(x)                       (((uint32_t)(((uint32_t)(x))<<16U))&0xF0000UL)      /*!< CAN0_WMBn_CS.DLC Field                  */
+#define CAN_WMBn_CS_RTR_MASK                     (0x100000U)                                         /*!< CAN0_WMBn_CS.RTR Mask                   */
+#define CAN_WMBn_CS_RTR_SHIFT                    (20U)                                               /*!< CAN0_WMBn_CS.RTR Position               */
+#define CAN_WMBn_CS_RTR(x)                       (((uint32_t)(((uint32_t)(x))<<20U))&0x100000UL)     /*!< CAN0_WMBn_CS.RTR Field                  */
+#define CAN_WMBn_CS_IDE_MASK                     (0x200000U)                                         /*!< CAN0_WMBn_CS.IDE Mask                   */
+#define CAN_WMBn_CS_IDE_SHIFT                    (21U)                                               /*!< CAN0_WMBn_CS.IDE Position               */
+#define CAN_WMBn_CS_IDE(x)                       (((uint32_t)(((uint32_t)(x))<<21U))&0x200000UL)     /*!< CAN0_WMBn_CS.IDE Field                  */
+#define CAN_WMBn_CS_SRR_MASK                     (0x400000U)                                         /*!< CAN0_WMBn_CS.SRR Mask                   */
+#define CAN_WMBn_CS_SRR_SHIFT                    (22U)                                               /*!< CAN0_WMBn_CS.SRR Position               */
+#define CAN_WMBn_CS_SRR(x)                       (((uint32_t)(((uint32_t)(x))<<22U))&0x400000UL)     /*!< CAN0_WMBn_CS.SRR Field                  */
+/* ------- WMBn_ID Bit Fields                       ------ */
+#define CAN_WMBn_ID_ID_MASK                      (0x1FFFFFFFU)                                       /*!< CAN0_WMBn_ID.ID Mask                    */
+#define CAN_WMBn_ID_ID_SHIFT                     (0U)                                                /*!< CAN0_WMBn_ID.ID Position                */
+#define CAN_WMBn_ID_ID(x)                        (((uint32_t)(((uint32_t)(x))<<0U))&0x1FFFFFFFUL)    /*!< CAN0_WMBn_ID.ID Field                   */
+/* ------- WMBn_D03 Bit Fields                      ------ */
+#define CAN_WMBn_D03_Data_byte_3_MASK            (0xFFU)                                             /*!< CAN0_WMBn_D03.Data_byte_3 Mask          */
+#define CAN_WMBn_D03_Data_byte_3_SHIFT           (0U)                                                /*!< CAN0_WMBn_D03.Data_byte_3 Position      */
+#define CAN_WMBn_D03_Data_byte_3(x)              (((uint32_t)(((uint32_t)(x))<<0U))&0xFFUL)          /*!< CAN0_WMBn_D03.Data_byte_3 Field         */
+#define CAN_WMBn_D03_Data_byte_2_MASK            (0xFF00U)                                           /*!< CAN0_WMBn_D03.Data_byte_2 Mask          */
+#define CAN_WMBn_D03_Data_byte_2_SHIFT           (8U)                                                /*!< CAN0_WMBn_D03.Data_byte_2 Position      */
+#define CAN_WMBn_D03_Data_byte_2(x)              (((uint32_t)(((uint32_t)(x))<<8U))&0xFF00UL)        /*!< CAN0_WMBn_D03.Data_byte_2 Field         */
+#define CAN_WMBn_D03_Data_byte_1_MASK            (0xFF0000U)                                         /*!< CAN0_WMBn_D03.Data_byte_1 Mask          */
+#define CAN_WMBn_D03_Data_byte_1_SHIFT           (16U)                                               /*!< CAN0_WMBn_D03.Data_byte_1 Position      */
+#define CAN_WMBn_D03_Data_byte_1(x)              (((uint32_t)(((uint32_t)(x))<<16U))&0xFF0000UL)     /*!< CAN0_WMBn_D03.Data_byte_1 Field         */
+#define CAN_WMBn_D03_Data_byte_0_MASK            (0xFF000000U)                                       /*!< CAN0_WMBn_D03.Data_byte_0 Mask          */
+#define CAN_WMBn_D03_Data_byte_0_SHIFT           (24U)                                               /*!< CAN0_WMBn_D03.Data_byte_0 Position      */
+#define CAN_WMBn_D03_Data_byte_0(x)              (((uint32_t)(((uint32_t)(x))<<24U))&0xFF000000UL)   /*!< CAN0_WMBn_D03.Data_byte_0 Field         */
+/* ------- WMBn_D47 Bit Fields                      ------ */
+#define CAN_WMBn_D47_Data_byte_7_MASK            (0xFFU)                                             /*!< CAN0_WMBn_D47.Data_byte_7 Mask          */
+#define CAN_WMBn_D47_Data_byte_7_SHIFT           (0U)                                                /*!< CAN0_WMBn_D47.Data_byte_7 Position      */
+#define CAN_WMBn_D47_Data_byte_7(x)              (((uint32_t)(((uint32_t)(x))<<0U))&0xFFUL)          /*!< CAN0_WMBn_D47.Data_byte_7 Field         */
+#define CAN_WMBn_D47_Data_byte_6_MASK            (0xFF00U)                                           /*!< CAN0_WMBn_D47.Data_byte_6 Mask          */
+#define CAN_WMBn_D47_Data_byte_6_SHIFT           (8U)                                                /*!< CAN0_WMBn_D47.Data_byte_6 Position      */
+#define CAN_WMBn_D47_Data_byte_6(x)              (((uint32_t)(((uint32_t)(x))<<8U))&0xFF00UL)        /*!< CAN0_WMBn_D47.Data_byte_6 Field         */
+#define CAN_WMBn_D47_Data_byte_5_MASK            (0xFF0000U)                                         /*!< CAN0_WMBn_D47.Data_byte_5 Mask          */
+#define CAN_WMBn_D47_Data_byte_5_SHIFT           (16U)                                               /*!< CAN0_WMBn_D47.Data_byte_5 Position      */
+#define CAN_WMBn_D47_Data_byte_5(x)              (((uint32_t)(((uint32_t)(x))<<16U))&0xFF0000UL)     /*!< CAN0_WMBn_D47.Data_byte_5 Field         */
+#define CAN_WMBn_D47_Data_byte_4_MASK            (0xFF000000U)                                       /*!< CAN0_WMBn_D47.Data_byte_4 Mask          */
+#define CAN_WMBn_D47_Data_byte_4_SHIFT           (24U)                                               /*!< CAN0_WMBn_D47.Data_byte_4 Position      */
+#define CAN_WMBn_D47_Data_byte_4(x)              (((uint32_t)(((uint32_t)(x))<<24U))&0xFF000000UL)   /*!< CAN0_WMBn_D47.Data_byte_4 Field         */
 /* ------- FDCTRL Bit Fields                        ------ */
 #define CAN_FDCTRL_TDCVAL_MASK                   (0x3FU)                                             /*!< CAN0_FDCTRL.TDCVAL Mask                 */
 #define CAN_FDCTRL_TDCVAL_SHIFT                  (0U)                                                /*!< CAN0_FDCTRL.TDCVAL Position             */
@@ -1343,7 +1522,7 @@ typedef struct CAN0_Type {
 
 /* CAN0 - Peripheral instance base addresses */
 #define CAN0_BasePtr                   0x40024000UL //!< Peripheral base address
-#define CAN0                           ((CAN0_Type *) CAN0_BasePtr) //!< Freescale base pointer
+#define CAN0                           ((CAN_Type *) CAN0_BasePtr) //!< Freescale base pointer
 #define CAN0_BASE_PTR                  (CAN0) //!< Freescale style base pointer
 #define CAN0_IRQS { CAN0_ORed_IRQn, CAN0_Error_IRQn, CAN0_Wake_Up_IRQn, CAN0_ORed_0_15_MB_IRQn, CAN0_ORed_16_31_MB_IRQn,  }
 
@@ -1366,7 +1545,7 @@ typedef struct CAN0_Type {
 
 /* CAN1 - Peripheral instance base addresses */
 #define CAN1_BasePtr                   0x40025000UL //!< Peripheral base address
-#define CAN1                           ((CAN0_Type *) CAN1_BasePtr) //!< Freescale base pointer
+#define CAN1                           ((CAN_Type *) CAN1_BasePtr) //!< Freescale base pointer
 #define CAN1_BASE_PTR                  (CAN1) //!< Freescale style base pointer
 #define CAN1_IRQS { CAN1_ORed_IRQn, CAN1_Error_IRQn, CAN1_ORed_0_15_MB_IRQn, CAN1_ORed_16_31_MB_IRQn,  }
 
@@ -1386,6 +1565,8 @@ typedef struct CAN0_Type {
 /**
  * @brief Flex Controller Area Network module
  */
+#define CAN2_MESSAGE_BUFFER_COUNT 16    /**< Number of message buffers                          */
+#define CAN2_WAKEUP_BUFFER_COUNT 4      /**< Number of wakeup buffers                           */
 /**
 * @addtogroup CAN_structs_GROUP CAN struct
 * @brief Struct for CAN
@@ -1393,7 +1574,7 @@ typedef struct CAN0_Type {
 */
 typedef struct CAN2_Type {
    __IO uint32_t  MCR;                          /**< 0000: Module Configuration Register                                */
-   __IO uint32_t  CTRL1;                        /**< 0004: Control 1 register                                           */
+   __IO uint32_t  CTRL1;                        /**< 0004: Control 1 Register                                           */
    __IO uint32_t  TIMER;                        /**< 0008: Free Running Timer                                           */
         uint8_t   RESERVED_0[4];               
    __IO uint32_t  RXMGMASK;                     /**< 0010: Rx Mailboxes Global Mask Register                            */
@@ -1405,7 +1586,7 @@ typedef struct CAN2_Type {
    __IO uint32_t  IMASK1;                       /**< 0028: Interrupt Masks 1 register                                   */
         uint8_t   RESERVED_2[4];               
    __IO uint32_t  IFLAG1;                       /**< 0030: Interrupt Flags 1 register                                   */
-   __IO uint32_t  CTRL2;                        /**< 0034: Control 2 register                                           */
+   __IO uint32_t  CTRL2;                        /**< 0034: Control 2 Register                                           */
    __I  uint32_t  ESR2;                         /**< 0038: Error and Status 2 register                                  */
         uint8_t   RESERVED_3[8];               
    __I  uint32_t  CRCR;                         /**< 0044: CRC Register                                                 */
@@ -1413,10 +1594,15 @@ typedef struct CAN2_Type {
    __I  uint32_t  RXFIR;                        /**< 004C: Rx FIFO Information Register                                 */
    __IO uint32_t  CBT;                          /**< 0050: CAN Bit Timing Register                                      */
         uint8_t   RESERVED_4[44];              
-   __IO uint32_t  EmbeddedRAM[64];              /**< 0080: Embedded RAM                                                 */
-        uint8_t   RESERVED_5[1792];            
-   __IO uint32_t  RXIMR[16];                    /**< 0880: Rx Individual Mask                                           */
-        uint8_t   RESERVED_6[576];             
+   struct {
+      __IO uint32_t  CS;                        /**< 0080: Message Buffer 0 CS Register                                 */
+      __IO uint32_t  ID;                        /**< 0084: Message Buffer 0 ID Register                                 */
+      __IO uint32_t  WORD0;                     /**< 0088: Message Buffer 0 WORD0 Register                              */
+      __IO uint32_t  WORD1;                     /**< 008C: Message Buffer 0 WORD1 Register                              */
+   } MB[CAN2_MESSAGE_BUFFER_COUNT];             /**< 0080: (cluster: size=0x0100, 256)                                  */
+        uint8_t   RESERVED_6[1792];            
+   __IO uint32_t  RXIMR[CAN2_MESSAGE_BUFFER_COUNT]; /**< 0880: Rx Individual Mask                                           */
+        uint8_t   RESERVED_7[576];             
    __IO uint32_t  CTRL1_PN;                     /**< 0B00: Pretended Networking Control 1 Register                      */
    __IO uint32_t  CTRL2_PN;                     /**< 0B04: Pretended Networking Control 2 Register                      */
    __IO uint32_t  WU_MTC;                       /**< 0B08: Pretended Networking Wake Up Match Register                  */
@@ -1427,24 +1613,14 @@ typedef struct CAN2_Type {
    __IO uint32_t  FLT_ID2_IDMASK;               /**< 0B1C: Pretended Networking ID Filter 2 Register / ID Mask Register */
    __IO uint32_t  PL2_PLMASK_LO;                /**< 0B20: Pretended Networking Payload Low Filter 2 Register / Payload Low Mask Register */
    __IO uint32_t  PL2_PLMASK_HI;                /**< 0B24: Pretended Networking Payload High Filter 2 low order bits / Payload High Mask Register */
-        uint8_t   RESERVED_7[24];              
-   __I  uint32_t  WMB0_CS;                      /**< 0B40: Wake Up Message Buffer Register for C/S                      */
-   __I  uint32_t  WMB0_ID;                      /**< 0B44: Wake Up Message Buffer Register for ID                       */
-   __I  uint32_t  WMB0_D03;                     /**< 0B48: Wake Up Message Buffer Register for Data 0-3                 */
-   __I  uint32_t  WMB0_D47;                     /**< 0B4C: Wake Up Message Buffer Register Data 4-7                     */
-   __I  uint32_t  WMB1_CS;                      /**< 0B50: Wake Up Message Buffer Register for C/S                      */
-   __I  uint32_t  WMB1_ID;                      /**< 0B54: Wake Up Message Buffer Register for ID                       */
-   __I  uint32_t  WMB1_D03;                     /**< 0B58: Wake Up Message Buffer Register for Data 0-3                 */
-   __I  uint32_t  WMB1_D47;                     /**< 0B5C: Wake Up Message Buffer Register Data 4-7                     */
-   __I  uint32_t  WMB2_CS;                      /**< 0B60: Wake Up Message Buffer Register for C/S                      */
-   __I  uint32_t  WMB2_ID;                      /**< 0B64: Wake Up Message Buffer Register for ID                       */
-   __I  uint32_t  WMB2_D03;                     /**< 0B68: Wake Up Message Buffer Register for Data 0-3                 */
-   __I  uint32_t  WMB2_D47;                     /**< 0B6C: Wake Up Message Buffer Register Data 4-7                     */
-   __I  uint32_t  WMB3_CS;                      /**< 0B70: Wake Up Message Buffer Register for C/S                      */
-   __I  uint32_t  WMB3_ID;                      /**< 0B74: Wake Up Message Buffer Register for ID                       */
-   __I  uint32_t  WMB3_D03;                     /**< 0B78: Wake Up Message Buffer Register for Data 0-3                 */
-   __I  uint32_t  WMB3_D47;                     /**< 0B7C: Wake Up Message Buffer Register Data 4-7                     */
-        uint8_t   RESERVED_8[128];             
+        uint8_t   RESERVED_8[24];              
+   struct {
+      __I  uint32_t  WMBn_CS;                   /**< 0B40: Wake Up Message Buffer Register for C/S                      */
+      __I  uint32_t  WMBn_ID;                   /**< 0B44: Wake Up Message Buffer Register for ID                       */
+      __I  uint32_t  WMBn_D03;                  /**< 0B48: Wake Up Message Buffer Register for Data 0-3                 */
+      __I  uint32_t  WMBn_D47;                  /**< 0B4C: Wake Up Message Buffer Register Data 4-7                     */
+   } WMB[CAN2_WAKEUP_BUFFER_COUNT];             /**< 0B40: (cluster: size=0x0040, 64)                                   */
+        uint8_t   RESERVED_10[128];            
    __IO uint32_t  FDCTRL;                       /**< 0C00: CAN FD Control Register                                      */
    __IO uint32_t  FDCBT;                        /**< 0C04: CAN FD Bit Timing Register                                   */
    __I  uint32_t  FDCRC;                        /**< 0C08: CAN FD CRC Register                                          */
@@ -1479,7 +1655,10 @@ typedef struct CAN2_Type {
 /* ------- RXFGMASK Bit Fields                      ------ */
 /* ------- RXFIR Bit Fields                         ------ */
 /* ------- CBT Bit Fields                           ------ */
-/* ------- EmbeddedRAM Bit Fields                   ------ */
+/* ------- CS Bit Fields                            ------ */
+/* ------- ID Bit Fields                            ------ */
+/* ------- WORD0 Bit Fields                         ------ */
+/* ------- WORD1 Bit Fields                         ------ */
 /* ------- RXIMR Bit Fields                         ------ */
 /* ------- CTRL1_PN Bit Fields                      ------ */
 /* ------- CTRL2_PN Bit Fields                      ------ */
@@ -1491,22 +1670,10 @@ typedef struct CAN2_Type {
 /* ------- FLT_ID2_IDMASK Bit Fields                ------ */
 /* ------- PL2_PLMASK_LO Bit Fields                 ------ */
 /* ------- PL2_PLMASK_HI Bit Fields                 ------ */
-/* ------- WMB0_CS Bit Fields                       ------ */
-/* ------- WMB0_ID Bit Fields                       ------ */
-/* ------- WMB0_D03 Bit Fields                      ------ */
-/* ------- WMB0_D47 Bit Fields                      ------ */
-/* ------- WMB1_CS Bit Fields                       ------ */
-/* ------- WMB1_ID Bit Fields                       ------ */
-/* ------- WMB1_D03 Bit Fields                      ------ */
-/* ------- WMB1_D47 Bit Fields                      ------ */
-/* ------- WMB2_CS Bit Fields                       ------ */
-/* ------- WMB2_ID Bit Fields                       ------ */
-/* ------- WMB2_D03 Bit Fields                      ------ */
-/* ------- WMB2_D47 Bit Fields                      ------ */
-/* ------- WMB3_CS Bit Fields                       ------ */
-/* ------- WMB3_ID Bit Fields                       ------ */
-/* ------- WMB3_D03 Bit Fields                      ------ */
-/* ------- WMB3_D47 Bit Fields                      ------ */
+/* ------- WMBn_CS Bit Fields                       ------ */
+/* ------- WMBn_ID Bit Fields                       ------ */
+/* ------- WMBn_D03 Bit Fields                      ------ */
+/* ------- WMBn_D47 Bit Fields                      ------ */
 /* ------- FDCTRL Bit Fields                        ------ */
 /* ------- FDCBT Bit Fields                         ------ */
 /* ------- FDCRC Bit Fields                         ------ */
@@ -1530,22 +1697,22 @@ typedef struct CAN2_Type {
 */
 
 /* ================================================================================ */
-/* ================           CMP0 (file:CMP0_S32K14x)             ================ */
+/* ================           CMP0 (file:CMP0_MKE16F16)            ================ */
 /* ================================================================================ */
 
 /**
- * @brief High-Speed Comparator (CMP), Voltage Reference (VREF) Digital-to-Analog Converter (DAC), and Analog Mux
+ * @brief Comparator, Voltage Ref, D-to-A Converter and Analog Mux
  */
 /**
 * @addtogroup CMP_structs_GROUP CMP struct
 * @brief Struct for CMP
 * @{
 */
-typedef struct CMP0_Type {
+typedef struct CMP_Type {
    __IO uint32_t  C0;                           /**< 0000: CMP Control Register 0                                       */
    __IO uint32_t  C1;                           /**< 0004: CMP Control Register 1                                       */
    __IO uint32_t  C2;                           /**< 0008: CMP Control Register 2                                       */
-} CMP0_Type;
+} CMP_Type;
 
 /**
  * @} */ /* End group CMP_structs_GROUP 
@@ -1710,7 +1877,7 @@ typedef struct CMP0_Type {
 
 /* CMP0 - Peripheral instance base addresses */
 #define CMP0_BasePtr                   0x40073000UL //!< Peripheral base address
-#define CMP0                           ((CMP0_Type *) CMP0_BasePtr) //!< Freescale base pointer
+#define CMP0                           ((CMP_Type *) CMP0_BasePtr) //!< Freescale base pointer
 #define CMP0_BASE_PTR                  (CMP0) //!< Freescale style base pointer
 #define CMP0_IRQS { CMP0_IRQn,  }
 
@@ -1724,7 +1891,7 @@ typedef struct CMP0_Type {
 */
 
 /* ================================================================================ */
-/* ================           CRC (file:CRC_S32K14x)               ================ */
+/* ================           CRC0 (file:CRC0_0x40032000)          ================ */
 /* ================================================================================ */
 
 /**
@@ -1737,26 +1904,38 @@ typedef struct CMP0_Type {
 */
 typedef struct CRC_Type {
    union {                                      /**< 0000: (size=0004)                                                  */
-      __IO uint32_t  DATA;                      /**< 0000: CRC Data register                                            */
+      __IO uint32_t  DATA;                      /**< 0000: Data register                                                */
       struct {                                  /**< 0000: (size=0004)                                                  */
          union {                                /**< 0000: (size=0002)                                                  */
-            __IO uint16_t  DATAL;               /**< 0000: CRC_DATAL register                                           */
+            __IO uint16_t  DATAL;               /**< 0000: DATAL register                                               */
             struct {                            /**< 0000: (size=0002)                                                  */
-               __IO uint8_t   DATALL;           /**< 0000: CRC_DATALL register                                          */
-               __IO uint8_t   DATALU;           /**< 0001: CRC_DATALU register                                          */
+               __IO uint8_t   DATALL;           /**< 0000: DATALL register                                              */
+               __IO uint8_t   DATALU;           /**< 0001: DATALU register                                              */
             };
          };
          union {                                /**< 0000: (size=0002)                                                  */
-            __IO uint16_t  DATAH;               /**< 0002: CRC_DATAH register                                           */
+            __IO uint16_t  DATAH;               /**< 0002: DATAH register                                               */
             struct {                            /**< 0000: (size=0002)                                                  */
-               __IO uint8_t   DATAHL;           /**< 0002: CRC_DATAHL register                                          */
-               __IO uint8_t   DATAHU;           /**< 0003: CRC_DATAHU register                                          */
+               __IO uint8_t   DATAHL;           /**< 0002: DATAHL register                                              */
+               __IO uint8_t   DATAHU;           /**< 0003: DATAHU register                                              */
             };
          };
       };
    };
-   __IO uint32_t  GPOLY;                        /**< 0004: CRC Polynomial register                                      */
-   __IO uint32_t  CTRL;                         /**< 0008: CRC Control register                                         */
+   union {                                      /**< 0000: (size=0004)                                                  */
+      __IO uint32_t  GPOLY;                     /**< 0004: Polynomial register                                          */
+      struct {                                  /**< 0000: (size=0004)                                                  */
+         __IO uint16_t  GPOLYL;                 /**< 0004: GPOLYL register                                              */
+         __IO uint16_t  GPOLYH;                 /**< 0006: GPOLYH register                                              */
+      };
+   };
+   union {                                      /**< 0000: (size=0004)                                                  */
+      __IO uint32_t  CTRL;                      /**< 0008: Control register                                             */
+      struct {                                  /**< 0000: (size=0004)                                                  */
+              uint8_t   RESERVED_4[3];         
+         __IO uint8_t   CTRLHU;                 /**< 000B: Control register (byte access)                               */
+      };
+   };
 } CRC_Type;
 
 /**
@@ -1764,7 +1943,7 @@ typedef struct CRC_Type {
  */
 
 /* -------------------------------------------------------------------------------- */
-/* -----------     'CRC' Position & Mask macros                         ----------- */
+/* -----------     'CRC0' Position & Mask macros                        ----------- */
 /* -------------------------------------------------------------------------------- */
 
 /**
@@ -1773,73 +1952,97 @@ typedef struct CRC_Type {
 * @{
 */
 /* ------- DATA Bit Fields                          ------ */
-#define CRC_DATA_LL_MASK                         (0xFFU)                                             /*!< CRC_DATA.LL Mask                        */
-#define CRC_DATA_LL_SHIFT                        (0U)                                                /*!< CRC_DATA.LL Position                    */
-#define CRC_DATA_LL(x)                           (((uint32_t)(((uint32_t)(x))<<0U))&0xFFUL)          /*!< CRC_DATA.LL Field                       */
-#define CRC_DATA_LU_MASK                         (0xFF00U)                                           /*!< CRC_DATA.LU Mask                        */
-#define CRC_DATA_LU_SHIFT                        (8U)                                                /*!< CRC_DATA.LU Position                    */
-#define CRC_DATA_LU(x)                           (((uint32_t)(((uint32_t)(x))<<8U))&0xFF00UL)        /*!< CRC_DATA.LU Field                       */
-#define CRC_DATA_HL_MASK                         (0xFF0000U)                                         /*!< CRC_DATA.HL Mask                        */
-#define CRC_DATA_HL_SHIFT                        (16U)                                               /*!< CRC_DATA.HL Position                    */
-#define CRC_DATA_HL(x)                           (((uint32_t)(((uint32_t)(x))<<16U))&0xFF0000UL)     /*!< CRC_DATA.HL Field                       */
-#define CRC_DATA_HU_MASK                         (0xFF000000U)                                       /*!< CRC_DATA.HU Mask                        */
-#define CRC_DATA_HU_SHIFT                        (24U)                                               /*!< CRC_DATA.HU Position                    */
-#define CRC_DATA_HU(x)                           (((uint32_t)(((uint32_t)(x))<<24U))&0xFF000000UL)   /*!< CRC_DATA.HU Field                       */
+#define CRC_DATA_LL_MASK                         (0xFFU)                                             /*!< CRC0_DATA.LL Mask                       */
+#define CRC_DATA_LL_SHIFT                        (0U)                                                /*!< CRC0_DATA.LL Position                   */
+#define CRC_DATA_LL(x)                           (((uint32_t)(((uint32_t)(x))<<0U))&0xFFUL)          /*!< CRC0_DATA.LL Field                      */
+#define CRC_DATA_LU_MASK                         (0xFF00U)                                           /*!< CRC0_DATA.LU Mask                       */
+#define CRC_DATA_LU_SHIFT                        (8U)                                                /*!< CRC0_DATA.LU Position                   */
+#define CRC_DATA_LU(x)                           (((uint32_t)(((uint32_t)(x))<<8U))&0xFF00UL)        /*!< CRC0_DATA.LU Field                      */
+#define CRC_DATA_HL_MASK                         (0xFF0000U)                                         /*!< CRC0_DATA.HL Mask                       */
+#define CRC_DATA_HL_SHIFT                        (16U)                                               /*!< CRC0_DATA.HL Position                   */
+#define CRC_DATA_HL(x)                           (((uint32_t)(((uint32_t)(x))<<16U))&0xFF0000UL)     /*!< CRC0_DATA.HL Field                      */
+#define CRC_DATA_HU_MASK                         (0xFF000000U)                                       /*!< CRC0_DATA.HU Mask                       */
+#define CRC_DATA_HU_SHIFT                        (24U)                                               /*!< CRC0_DATA.HU Position                   */
+#define CRC_DATA_HU(x)                           (((uint32_t)(((uint32_t)(x))<<24U))&0xFF000000UL)   /*!< CRC0_DATA.HU Field                      */
 /* ------- DATAL Bit Fields                         ------ */
-#define CRC_DATAL_DATAL_MASK                     (0xFFFFU)                                           /*!< CRC_DATAL.DATAL Mask                    */
-#define CRC_DATAL_DATAL_SHIFT                    (0U)                                                /*!< CRC_DATAL.DATAL Position                */
-#define CRC_DATAL_DATAL(x)                       (((uint16_t)(((uint16_t)(x))<<0U))&0xFFFFUL)        /*!< CRC_DATAL.DATAL Field                   */
+#define CRC_DATAL_DATAL_MASK                     (0xFFFFU)                                           /*!< CRC0_DATAL.DATAL Mask                   */
+#define CRC_DATAL_DATAL_SHIFT                    (0U)                                                /*!< CRC0_DATAL.DATAL Position               */
+#define CRC_DATAL_DATAL(x)                       (((uint16_t)(((uint16_t)(x))<<0U))&0xFFFFUL)        /*!< CRC0_DATAL.DATAL Field                  */
 /* ------- DATALL Bit Fields                        ------ */
-#define CRC_DATALL_DATALL_MASK                   (0xFFU)                                             /*!< CRC_DATALL.DATALL Mask                  */
-#define CRC_DATALL_DATALL_SHIFT                  (0U)                                                /*!< CRC_DATALL.DATALL Position              */
-#define CRC_DATALL_DATALL(x)                     (((uint8_t)(((uint8_t)(x))<<0U))&0xFFUL)            /*!< CRC_DATALL.DATALL Field                 */
+#define CRC_DATALL_DATALL_MASK                   (0xFFU)                                             /*!< CRC0_DATALL.DATALL Mask                 */
+#define CRC_DATALL_DATALL_SHIFT                  (0U)                                                /*!< CRC0_DATALL.DATALL Position             */
+#define CRC_DATALL_DATALL(x)                     (((uint8_t)(((uint8_t)(x))<<0U))&0xFFUL)            /*!< CRC0_DATALL.DATALL Field                */
 /* ------- DATALU Bit Fields                        ------ */
-#define CRC_DATALU_DATALU_MASK                   (0xFFU)                                             /*!< CRC_DATALU.DATALU Mask                  */
-#define CRC_DATALU_DATALU_SHIFT                  (0U)                                                /*!< CRC_DATALU.DATALU Position              */
-#define CRC_DATALU_DATALU(x)                     (((uint8_t)(((uint8_t)(x))<<0U))&0xFFUL)            /*!< CRC_DATALU.DATALU Field                 */
+#define CRC_DATALU_DATALU_MASK                   (0xFFU)                                             /*!< CRC0_DATALU.DATALU Mask                 */
+#define CRC_DATALU_DATALU_SHIFT                  (0U)                                                /*!< CRC0_DATALU.DATALU Position             */
+#define CRC_DATALU_DATALU(x)                     (((uint8_t)(((uint8_t)(x))<<0U))&0xFFUL)            /*!< CRC0_DATALU.DATALU Field                */
 /* ------- DATAH Bit Fields                         ------ */
-#define CRC_DATAH_DATAH_MASK                     (0xFFFFU)                                           /*!< CRC_DATAH.DATAH Mask                    */
-#define CRC_DATAH_DATAH_SHIFT                    (0U)                                                /*!< CRC_DATAH.DATAH Position                */
-#define CRC_DATAH_DATAH(x)                       (((uint16_t)(((uint16_t)(x))<<0U))&0xFFFFUL)        /*!< CRC_DATAH.DATAH Field                   */
+#define CRC_DATAH_DATAH_MASK                     (0xFFFFU)                                           /*!< CRC0_DATAH.DATAH Mask                   */
+#define CRC_DATAH_DATAH_SHIFT                    (0U)                                                /*!< CRC0_DATAH.DATAH Position               */
+#define CRC_DATAH_DATAH(x)                       (((uint16_t)(((uint16_t)(x))<<0U))&0xFFFFUL)        /*!< CRC0_DATAH.DATAH Field                  */
 /* ------- DATAHL Bit Fields                        ------ */
-#define CRC_DATAHL_DATAHL_MASK                   (0xFFU)                                             /*!< CRC_DATAHL.DATAHL Mask                  */
-#define CRC_DATAHL_DATAHL_SHIFT                  (0U)                                                /*!< CRC_DATAHL.DATAHL Position              */
-#define CRC_DATAHL_DATAHL(x)                     (((uint8_t)(((uint8_t)(x))<<0U))&0xFFUL)            /*!< CRC_DATAHL.DATAHL Field                 */
+#define CRC_DATAHL_DATAHL_MASK                   (0xFFU)                                             /*!< CRC0_DATAHL.DATAHL Mask                 */
+#define CRC_DATAHL_DATAHL_SHIFT                  (0U)                                                /*!< CRC0_DATAHL.DATAHL Position             */
+#define CRC_DATAHL_DATAHL(x)                     (((uint8_t)(((uint8_t)(x))<<0U))&0xFFUL)            /*!< CRC0_DATAHL.DATAHL Field                */
 /* ------- DATAHU Bit Fields                        ------ */
-#define CRC_DATAHU_DATAHU_MASK                   (0xFFU)                                             /*!< CRC_DATAHU.DATAHU Mask                  */
-#define CRC_DATAHU_DATAHU_SHIFT                  (0U)                                                /*!< CRC_DATAHU.DATAHU Position              */
-#define CRC_DATAHU_DATAHU(x)                     (((uint8_t)(((uint8_t)(x))<<0U))&0xFFUL)            /*!< CRC_DATAHU.DATAHU Field                 */
+#define CRC_DATAHU_DATAHU_MASK                   (0xFFU)                                             /*!< CRC0_DATAHU.DATAHU Mask                 */
+#define CRC_DATAHU_DATAHU_SHIFT                  (0U)                                                /*!< CRC0_DATAHU.DATAHU Position             */
+#define CRC_DATAHU_DATAHU(x)                     (((uint8_t)(((uint8_t)(x))<<0U))&0xFFUL)            /*!< CRC0_DATAHU.DATAHU Field                */
 /* ------- GPOLY Bit Fields                         ------ */
-#define CRC_GPOLY_LOW_MASK                       (0xFFFFU)                                           /*!< CRC_GPOLY.LOW Mask                      */
-#define CRC_GPOLY_LOW_SHIFT                      (0U)                                                /*!< CRC_GPOLY.LOW Position                  */
-#define CRC_GPOLY_LOW(x)                         (((uint32_t)(((uint32_t)(x))<<0U))&0xFFFFUL)        /*!< CRC_GPOLY.LOW Field                     */
-#define CRC_GPOLY_HIGH_MASK                      (0xFFFF0000U)                                       /*!< CRC_GPOLY.HIGH Mask                     */
-#define CRC_GPOLY_HIGH_SHIFT                     (16U)                                               /*!< CRC_GPOLY.HIGH Position                 */
-#define CRC_GPOLY_HIGH(x)                        (((uint32_t)(((uint32_t)(x))<<16U))&0xFFFF0000UL)   /*!< CRC_GPOLY.HIGH Field                    */
+#define CRC_GPOLY_LOW_MASK                       (0xFFFFU)                                           /*!< CRC0_GPOLY.LOW Mask                     */
+#define CRC_GPOLY_LOW_SHIFT                      (0U)                                                /*!< CRC0_GPOLY.LOW Position                 */
+#define CRC_GPOLY_LOW(x)                         (((uint32_t)(((uint32_t)(x))<<0U))&0xFFFFUL)        /*!< CRC0_GPOLY.LOW Field                    */
+#define CRC_GPOLY_HIGH_MASK                      (0xFFFF0000U)                                       /*!< CRC0_GPOLY.HIGH Mask                    */
+#define CRC_GPOLY_HIGH_SHIFT                     (16U)                                               /*!< CRC0_GPOLY.HIGH Position                */
+#define CRC_GPOLY_HIGH(x)                        (((uint32_t)(((uint32_t)(x))<<16U))&0xFFFF0000UL)   /*!< CRC0_GPOLY.HIGH Field                   */
+/* ------- GPOLYL Bit Fields                        ------ */
+#define CRC_GPOLYL_GPOLYL_MASK                   (0xFFFFU)                                           /*!< CRC0_GPOLYL.GPOLYL Mask                 */
+#define CRC_GPOLYL_GPOLYL_SHIFT                  (0U)                                                /*!< CRC0_GPOLYL.GPOLYL Position             */
+#define CRC_GPOLYL_GPOLYL(x)                     (((uint16_t)(((uint16_t)(x))<<0U))&0xFFFFUL)        /*!< CRC0_GPOLYL.GPOLYL Field                */
+/* ------- GPOLYH Bit Fields                        ------ */
+#define CRC_GPOLYH_GPOLYH_MASK                   (0xFFFFU)                                           /*!< CRC0_GPOLYH.GPOLYH Mask                 */
+#define CRC_GPOLYH_GPOLYH_SHIFT                  (0U)                                                /*!< CRC0_GPOLYH.GPOLYH Position             */
+#define CRC_GPOLYH_GPOLYH(x)                     (((uint16_t)(((uint16_t)(x))<<0U))&0xFFFFUL)        /*!< CRC0_GPOLYH.GPOLYH Field                */
 /* ------- CTRL Bit Fields                          ------ */
-#define CRC_CTRL_TCRC_MASK                       (0x1000000U)                                        /*!< CRC_CTRL.TCRC Mask                      */
-#define CRC_CTRL_TCRC_SHIFT                      (24U)                                               /*!< CRC_CTRL.TCRC Position                  */
-#define CRC_CTRL_TCRC(x)                         (((uint32_t)(((uint32_t)(x))<<24U))&0x1000000UL)    /*!< CRC_CTRL.TCRC Field                     */
-#define CRC_CTRL_WAS_MASK                        (0x2000000U)                                        /*!< CRC_CTRL.WAS Mask                       */
-#define CRC_CTRL_WAS_SHIFT                       (25U)                                               /*!< CRC_CTRL.WAS Position                   */
-#define CRC_CTRL_WAS(x)                          (((uint32_t)(((uint32_t)(x))<<25U))&0x2000000UL)    /*!< CRC_CTRL.WAS Field                      */
-#define CRC_CTRL_FXOR_MASK                       (0x4000000U)                                        /*!< CRC_CTRL.FXOR Mask                      */
-#define CRC_CTRL_FXOR_SHIFT                      (26U)                                               /*!< CRC_CTRL.FXOR Position                  */
-#define CRC_CTRL_FXOR(x)                         (((uint32_t)(((uint32_t)(x))<<26U))&0x4000000UL)    /*!< CRC_CTRL.FXOR Field                     */
-#define CRC_CTRL_TOTR_MASK                       (0x30000000U)                                       /*!< CRC_CTRL.TOTR Mask                      */
-#define CRC_CTRL_TOTR_SHIFT                      (28U)                                               /*!< CRC_CTRL.TOTR Position                  */
-#define CRC_CTRL_TOTR(x)                         (((uint32_t)(((uint32_t)(x))<<28U))&0x30000000UL)   /*!< CRC_CTRL.TOTR Field                     */
-#define CRC_CTRL_TOT_MASK                        (0xC0000000U)                                       /*!< CRC_CTRL.TOT Mask                       */
-#define CRC_CTRL_TOT_SHIFT                       (30U)                                               /*!< CRC_CTRL.TOT Position                   */
-#define CRC_CTRL_TOT(x)                          (((uint32_t)(((uint32_t)(x))<<30U))&0xC0000000UL)   /*!< CRC_CTRL.TOT Field                      */
+#define CRC_CTRL_TCRC_MASK                       (0x1000000U)                                        /*!< CRC0_CTRL.TCRC Mask                     */
+#define CRC_CTRL_TCRC_SHIFT                      (24U)                                               /*!< CRC0_CTRL.TCRC Position                 */
+#define CRC_CTRL_TCRC(x)                         (((uint32_t)(((uint32_t)(x))<<24U))&0x1000000UL)    /*!< CRC0_CTRL.TCRC Field                    */
+#define CRC_CTRL_WAS_MASK                        (0x2000000U)                                        /*!< CRC0_CTRL.WAS Mask                      */
+#define CRC_CTRL_WAS_SHIFT                       (25U)                                               /*!< CRC0_CTRL.WAS Position                  */
+#define CRC_CTRL_WAS(x)                          (((uint32_t)(((uint32_t)(x))<<25U))&0x2000000UL)    /*!< CRC0_CTRL.WAS Field                     */
+#define CRC_CTRL_FXOR_MASK                       (0x4000000U)                                        /*!< CRC0_CTRL.FXOR Mask                     */
+#define CRC_CTRL_FXOR_SHIFT                      (26U)                                               /*!< CRC0_CTRL.FXOR Position                 */
+#define CRC_CTRL_FXOR(x)                         (((uint32_t)(((uint32_t)(x))<<26U))&0x4000000UL)    /*!< CRC0_CTRL.FXOR Field                    */
+#define CRC_CTRL_TOTR_MASK                       (0x30000000U)                                       /*!< CRC0_CTRL.TOTR Mask                     */
+#define CRC_CTRL_TOTR_SHIFT                      (28U)                                               /*!< CRC0_CTRL.TOTR Position                 */
+#define CRC_CTRL_TOTR(x)                         (((uint32_t)(((uint32_t)(x))<<28U))&0x30000000UL)   /*!< CRC0_CTRL.TOTR Field                    */
+#define CRC_CTRL_TOT_MASK                        (0xC0000000U)                                       /*!< CRC0_CTRL.TOT Mask                      */
+#define CRC_CTRL_TOT_SHIFT                       (30U)                                               /*!< CRC0_CTRL.TOT Position                  */
+#define CRC_CTRL_TOT(x)                          (((uint32_t)(((uint32_t)(x))<<30U))&0xC0000000UL)   /*!< CRC0_CTRL.TOT Field                     */
+/* ------- CTRLHU Bit Fields                        ------ */
+#define CRC_CTRLHU_TCRC_MASK                     (0x1U)                                              /*!< CRC0_CTRLHU.TCRC Mask                   */
+#define CRC_CTRLHU_TCRC_SHIFT                    (0U)                                                /*!< CRC0_CTRLHU.TCRC Position               */
+#define CRC_CTRLHU_TCRC(x)                       (((uint8_t)(((uint8_t)(x))<<0U))&0x1UL)             /*!< CRC0_CTRLHU.TCRC Field                  */
+#define CRC_CTRLHU_WAS_MASK                      (0x2U)                                              /*!< CRC0_CTRLHU.WAS Mask                    */
+#define CRC_CTRLHU_WAS_SHIFT                     (1U)                                                /*!< CRC0_CTRLHU.WAS Position                */
+#define CRC_CTRLHU_WAS(x)                        (((uint8_t)(((uint8_t)(x))<<1U))&0x2UL)             /*!< CRC0_CTRLHU.WAS Field                   */
+#define CRC_CTRLHU_FXOR_MASK                     (0x4U)                                              /*!< CRC0_CTRLHU.FXOR Mask                   */
+#define CRC_CTRLHU_FXOR_SHIFT                    (2U)                                                /*!< CRC0_CTRLHU.FXOR Position               */
+#define CRC_CTRLHU_FXOR(x)                       (((uint8_t)(((uint8_t)(x))<<2U))&0x4UL)             /*!< CRC0_CTRLHU.FXOR Field                  */
+#define CRC_CTRLHU_TOTR_MASK                     (0x30U)                                             /*!< CRC0_CTRLHU.TOTR Mask                   */
+#define CRC_CTRLHU_TOTR_SHIFT                    (4U)                                                /*!< CRC0_CTRLHU.TOTR Position               */
+#define CRC_CTRLHU_TOTR(x)                       (((uint8_t)(((uint8_t)(x))<<4U))&0x30UL)            /*!< CRC0_CTRLHU.TOTR Field                  */
+#define CRC_CTRLHU_TOT_MASK                      (0xC0U)                                             /*!< CRC0_CTRLHU.TOT Mask                    */
+#define CRC_CTRLHU_TOT_SHIFT                     (6U)                                                /*!< CRC0_CTRLHU.TOT Position                */
+#define CRC_CTRLHU_TOT(x)                        (((uint8_t)(((uint8_t)(x))<<6U))&0xC0UL)            /*!< CRC0_CTRLHU.TOT Field                   */
 /**
  * @} */ /* End group CRC_Register_Masks_GROUP 
  */
 
-/* CRC - Peripheral instance base addresses */
-#define CRC_BasePtr                    0x40032000UL //!< Peripheral base address
-#define CRC                            ((CRC_Type *) CRC_BasePtr) //!< Freescale base pointer
-#define CRC_BASE_PTR                   (CRC) //!< Freescale style base pointer
+/* CRC0 - Peripheral instance base addresses */
+#define CRC0_BasePtr                   0x40032000UL //!< Peripheral base address
+#define CRC0                           ((CRC_Type *) CRC0_BasePtr) //!< Freescale base pointer
+#define CRC0_BASE_PTR                  (CRC0) //!< Freescale style base pointer
 /**
  * @} */ /* End group CRC_Peripheral_access_layer_GROUP 
  */
@@ -1854,7 +2057,7 @@ typedef struct CRC_Type {
 /* ================================================================================ */
 
 /**
- * @brief CSE_PRAM
+ * @brief CSEc Parameter space RAM
  */
 /**
 * @addtogroup CSE_PRAM_structs_GROUP CSE_PRAM struct
@@ -1862,139 +2065,17 @@ typedef struct CRC_Type {
 * @{
 */
 typedef struct CSE_PRAM_Type {
-   union {                                      /**< 0000: (size=0080)                                                  */
-      __IO uint32_t  _EmbeddedRAM[32];          /**< 0000: CSE PRAM  Register                                           */
-      struct {                                  /**< 0000: (size=0080)                                                  */
-         __IO uint8_t   _EmbeddedRAM0LL;        /**< 0000: CSE PRAM0LL register                                         */
-         __IO uint8_t   _EmbeddedRAM0LU;        /**< 0001: CSE PRAM0LU register                                         */
-         __IO uint8_t   _EmbeddedRAM0HL;        /**< 0002: CSE PRAM0HL register                                         */
-         __IO uint8_t   _EmbeddedRAM0HU;        /**< 0003: CSE PRAM0HU register                                         */
-         __IO uint8_t   _EmbeddedRAM1LL;        /**< 0004: CSE PRAM1LL register                                         */
-         __IO uint8_t   _EmbeddedRAM1LU;        /**< 0005: CSE PRAM1LU register                                         */
-         __IO uint8_t   _EmbeddedRAM1HL;        /**< 0006: CSE PRAM1HL register                                         */
-         __IO uint8_t   _EmbeddedRAM1HU;        /**< 0007: CSE PRAM1HU register                                         */
-         __IO uint8_t   _EmbeddedRAM2LL;        /**< 0008: CSE PRAM2LL register                                         */
-         __IO uint8_t   _EmbeddedRAM2LU;        /**< 0009: CSE PRAM2LU register                                         */
-         __IO uint8_t   _EmbeddedRAM2HL;        /**< 000A: CSE PRAM2HL register                                         */
-         __IO uint8_t   _EmbeddedRAM2HU;        /**< 000B: CSE PRAM2HU register                                         */
-         __IO uint8_t   _EmbeddedRAM3LL;        /**< 000C: CSE PRAM3LL register                                         */
-         __IO uint8_t   _EmbeddedRAM3LU;        /**< 000D: CSE PRAM3LU register                                         */
-         __IO uint8_t   _EmbeddedRAM3HL;        /**< 000E: CSE PRAM3HL register                                         */
-         __IO uint8_t   _EmbeddedRAM3HU;        /**< 000F: CSE PRAM3HU register                                         */
-         __IO uint8_t   _EmbeddedRAM4LL;        /**< 0010: CSE PRAM4LL register                                         */
-         __IO uint8_t   _EmbeddedRAM4LU;        /**< 0011: CSE PRAM4LU register                                         */
-         __IO uint8_t   _EmbeddedRAM4HL;        /**< 0012: CSE PRAM4HL register                                         */
-         __IO uint8_t   _EmbeddedRAM4HU;        /**< 0013: CSE PRAM4HU register                                         */
-         __IO uint8_t   _EmbeddedRAM5LL;        /**< 0014: CSE PRAM5LL register                                         */
-         __IO uint8_t   _EmbeddedRAM5LU;        /**< 0015: CSE PRAM5LU register                                         */
-         __IO uint8_t   _EmbeddedRAM5HL;        /**< 0016: CSE PRAM5HL register                                         */
-         __IO uint8_t   _EmbeddedRAM5HU;        /**< 0017: CSE PRAM5HU register                                         */
-         __IO uint8_t   _EmbeddedRAM6LL;        /**< 0018: CSE PRAM6LL register                                         */
-         __IO uint8_t   _EmbeddedRAM6LU;        /**< 0019: CSE PRAM6LU register                                         */
-         __IO uint8_t   _EmbeddedRAM6HL;        /**< 001A: CSE PRAM6HL register                                         */
-         __IO uint8_t   _EmbeddedRAM6HU;        /**< 001B: CSE PRAM6HU register                                         */
-         __IO uint8_t   _EmbeddedRAM7LL;        /**< 001C: CSE PRAM7LL register                                         */
-         __IO uint8_t   _EmbeddedRAM7LU;        /**< 001D: CSE PRAM7LU register                                         */
-         __IO uint8_t   _EmbeddedRAM7HL;        /**< 001E: CSE PRAM7HL register                                         */
-         __IO uint8_t   _EmbeddedRAM7HU;        /**< 001F: CSE PRAM7HU register                                         */
-         __IO uint8_t   _EmbeddedRAM8LL;        /**< 0020: CSE PRAM8LL register                                         */
-         __IO uint8_t   _EmbeddedRAM8LU;        /**< 0021: CSE PRAM8LU register                                         */
-         __IO uint8_t   _EmbeddedRAM8HL;        /**< 0022: CSE PRAM8HL register                                         */
-         __IO uint8_t   _EmbeddedRAM8HU;        /**< 0023: CSE PRAM8HU register                                         */
-         __IO uint8_t   _EmbeddedRAM9LL;        /**< 0024: CSE PRAM9LL register                                         */
-         __IO uint8_t   _EmbeddedRAM9LU;        /**< 0025: CSE PRAM9LU register                                         */
-         __IO uint8_t   _EmbeddedRAM9HL;        /**< 0026: CSE PRAM9HL register                                         */
-         __IO uint8_t   _EmbeddedRAM9HU;        /**< 0027: CSE PRAM9HU register                                         */
-         __IO uint8_t   _EmbeddedRAM10LL;       /**< 0028: CSE PRAM10LL register                                        */
-         __IO uint8_t   _EmbeddedRAM10LU;       /**< 0029: CSE PRAM10LU register                                        */
-         __IO uint8_t   _EmbeddedRAM10HL;       /**< 002A: CSE PRAM10HL register                                        */
-         __IO uint8_t   _EmbeddedRAM10HU;       /**< 002B: CSE PRAM10HU register                                        */
-         __IO uint8_t   _EmbeddedRAM11LL;       /**< 002C: CSE PRAM11LL register                                        */
-         __IO uint8_t   _EmbeddedRAM11LU;       /**< 002D: CSE PRAM11LU register                                        */
-         __IO uint8_t   _EmbeddedRAM11HL;       /**< 002E: CSE PRAM11HL register                                        */
-         __IO uint8_t   _EmbeddedRAM11HU;       /**< 002F: CSE PRAM11HU register                                        */
-         __IO uint8_t   _EmbeddedRAM12LL;       /**< 0030: CSE PRAM12LL register                                        */
-         __IO uint8_t   _EmbeddedRAM12LU;       /**< 0031: CSE PRAM12LU register                                        */
-         __IO uint8_t   _EmbeddedRAM12HL;       /**< 0032: CSE PRAM12HL register                                        */
-         __IO uint8_t   _EmbeddedRAM12HU;       /**< 0033: CSE PRAM12HU register                                        */
-         __IO uint8_t   _EmbeddedRAM13LL;       /**< 0034: CSE PRAM13LL register                                        */
-         __IO uint8_t   _EmbeddedRAM13LU;       /**< 0035: CSE PRAM13LU register                                        */
-         __IO uint8_t   _EmbeddedRAM13HL;       /**< 0036: CSE PRAM13HL register                                        */
-         __IO uint8_t   _EmbeddedRAM13HU;       /**< 0037: CSE PRAM13HU register                                        */
-         __IO uint8_t   _EmbeddedRAM14LL;       /**< 0038: CSE PRAM14LL register                                        */
-         __IO uint8_t   _EmbeddedRAM14LU;       /**< 0039: CSE PRAM14LU register                                        */
-         __IO uint8_t   _EmbeddedRAM14HL;       /**< 003A: CSE PRAM14HL register                                        */
-         __IO uint8_t   _EmbeddedRAM14HU;       /**< 003B: CSE PRAM14HU register                                        */
-         __IO uint8_t   _EmbeddedRAM15LL;       /**< 003C: CSE PRAM15LL register                                        */
-         __IO uint8_t   _EmbeddedRAM15LU;       /**< 003D: CSE PRAM15LU register                                        */
-         __IO uint8_t   _EmbeddedRAM15HL;       /**< 003E: CSE PRAM15HL register                                        */
-         __IO uint8_t   _EmbeddedRAM15HU;       /**< 003F: CSE PRAM15HU register                                        */
-         __IO uint8_t   _EmbeddedRAM16LL;       /**< 0040: CSE PRAM16LL register                                        */
-         __IO uint8_t   _EmbeddedRAM16LU;       /**< 0041: CSE PRAM16LU register                                        */
-         __IO uint8_t   _EmbeddedRAM16HL;       /**< 0042: CSE PRAM16HL register                                        */
-         __IO uint8_t   _EmbeddedRAM16HU;       /**< 0043: CSE PRAM16HU register                                        */
-         __IO uint8_t   _EmbeddedRAM17LL;       /**< 0044: CSE PRAM17LL register                                        */
-         __IO uint8_t   _EmbeddedRAM17LU;       /**< 0045: CSE PRAM17LU register                                        */
-         __IO uint8_t   _EmbeddedRAM17HL;       /**< 0046: CSE PRAM17HL register                                        */
-         __IO uint8_t   _EmbeddedRAM17HU;       /**< 0047: CSE PRAM17HU register                                        */
-         __IO uint8_t   _EmbeddedRAM18LL;       /**< 0048: CSE PRAM18LL register                                        */
-         __IO uint8_t   _EmbeddedRAM18LU;       /**< 0049: CSE PRAM18LU register                                        */
-         __IO uint8_t   _EmbeddedRAM18HL;       /**< 004A: CSE PRAM18HL register                                        */
-         __IO uint8_t   _EmbeddedRAM18HU;       /**< 004B: CSE PRAM18HU register                                        */
-         __IO uint8_t   _EmbeddedRAM19LL;       /**< 004C: CSE PRAM19LL register                                        */
-         __IO uint8_t   _EmbeddedRAM19LU;       /**< 004D: CSE PRAM19LU register                                        */
-         __IO uint8_t   _EmbeddedRAM19HL;       /**< 004E: CSE PRAM19HL register                                        */
-         __IO uint8_t   _EmbeddedRAM19HU;       /**< 004F: CSE PRAM19HU register                                        */
-         __IO uint8_t   _EmbeddedRAM20LL;       /**< 0050: CSE PRAM20LL register                                        */
-         __IO uint8_t   _EmbeddedRAM20LU;       /**< 0051: CSE PRAM20LU register                                        */
-         __IO uint8_t   _EmbeddedRAM20HL;       /**< 0052: CSE PRAM20HL register                                        */
-         __IO uint8_t   _EmbeddedRAM20HU;       /**< 0053: CSE PRAM20HU register                                        */
-         __IO uint8_t   _EmbeddedRAM21LL;       /**< 0054: CSE PRAM21LL register                                        */
-         __IO uint8_t   _EmbeddedRAM21LU;       /**< 0055: CSE PRAM21LU register                                        */
-         __IO uint8_t   _EmbeddedRAM21HL;       /**< 0056: CSE PRAM21HL register                                        */
-         __IO uint8_t   _EmbeddedRAM21HU;       /**< 0057: CSE PRAM21HU register                                        */
-         __IO uint8_t   _EmbeddedRAM22LL;       /**< 0058: CSE PRAM22LL register                                        */
-         __IO uint8_t   _EmbeddedRAM22LU;       /**< 0059: CSE PRAM22LU register                                        */
-         __IO uint8_t   _EmbeddedRAM22HL;       /**< 005A: CSE PRAM22HL register                                        */
-         __IO uint8_t   _EmbeddedRAM22HU;       /**< 005B: CSE PRAM22HU register                                        */
-         __IO uint8_t   _EmbeddedRAM23LL;       /**< 005C: CSE PRAM23LL register                                        */
-         __IO uint8_t   _EmbeddedRAM23LU;       /**< 005D: CSE PRAM23LU register                                        */
-         __IO uint8_t   _EmbeddedRAM23HL;       /**< 005E: CSE PRAM23HL register                                        */
-         __IO uint8_t   _EmbeddedRAM23HU;       /**< 005F: CSE PRAM23HU register                                        */
-         __IO uint8_t   _EmbeddedRAM24LL;       /**< 0060: CSE PRAM24LL register                                        */
-         __IO uint8_t   _EmbeddedRAM24LU;       /**< 0061: CSE PRAM24LU register                                        */
-         __IO uint8_t   _EmbeddedRAM24HL;       /**< 0062: CSE PRAM24HL register                                        */
-         __IO uint8_t   _EmbeddedRAM24HU;       /**< 0063: CSE PRAM24HU register                                        */
-         __IO uint8_t   _EmbeddedRAM25LL;       /**< 0064: CSE PRAM25LL register                                        */
-         __IO uint8_t   _EmbeddedRAM25LU;       /**< 0065: CSE PRAM25LU register                                        */
-         __IO uint8_t   _EmbeddedRAM25HL;       /**< 0066: CSE PRAM25HL register                                        */
-         __IO uint8_t   _EmbeddedRAM25HU;       /**< 0067: CSE PRAM25HU register                                        */
-         __IO uint8_t   _EmbeddedRAM26LL;       /**< 0068: CSE PRAM26LL register                                        */
-         __IO uint8_t   _EmbeddedRAM26LU;       /**< 0069: CSE PRAM26LU register                                        */
-         __IO uint8_t   _EmbeddedRAM26HL;       /**< 006A: CSE PRAM26HL register                                        */
-         __IO uint8_t   _EmbeddedRAM26HU;       /**< 006B: CSE PRAM26HU register                                        */
-         __IO uint8_t   _EmbeddedRAM27LL;       /**< 006C: CSE PRAM27LL register                                        */
-         __IO uint8_t   _EmbeddedRAM27LU;       /**< 006D: CSE PRAM27LU register                                        */
-         __IO uint8_t   _EmbeddedRAM27HL;       /**< 006E: CSE PRAM27HL register                                        */
-         __IO uint8_t   _EmbeddedRAM27HU;       /**< 006F: CSE PRAM27HU register                                        */
-         __IO uint8_t   _EmbeddedRAM28LL;       /**< 0070: CSE PRAM28LL register                                        */
-         __IO uint8_t   _EmbeddedRAM28LU;       /**< 0071: CSE PRAM28LU register                                        */
-         __IO uint8_t   _EmbeddedRAM28HL;       /**< 0072: CSE PRAM28HL register                                        */
-         __IO uint8_t   _EmbeddedRAM28HU;       /**< 0073: CSE PRAM28HU register                                        */
-         __IO uint8_t   _EmbeddedRAM29LL;       /**< 0074: CSE PRAM29LL register                                        */
-         __IO uint8_t   _EmbeddedRAM29LU;       /**< 0075: CSE PRAM29LU register                                        */
-         __IO uint8_t   _EmbeddedRAM29HL;       /**< 0076: CSE PRAM29HL register                                        */
-         __IO uint8_t   _EmbeddedRAM29HU;       /**< 0077: CSE PRAM29HU register                                        */
-         __IO uint8_t   _EmbeddedRAM30LL;       /**< 0078: CSE PRAM30LL register                                        */
-         __IO uint8_t   _EmbeddedRAM30LU;       /**< 0079: CSE PRAM30LU register                                        */
-         __IO uint8_t   _EmbeddedRAM30HL;       /**< 007A: CSE PRAM30HL register                                        */
-         __IO uint8_t   _EmbeddedRAM30HU;       /**< 007B: CSE PRAM30HU register                                        */
-         __IO uint8_t   _EmbeddedRAM31LL;       /**< 007C: CSE PRAM31LL register                                        */
-         __IO uint8_t   _EmbeddedRAM31LU;       /**< 007D: CSE PRAM31LU register                                        */
-         __IO uint8_t   _EmbeddedRAM31HL;       /**< 007E: CSE PRAM31HL register                                        */
-         __IO uint8_t   _EmbeddedRAM31HU;       /**< 007F: CSE PRAM31HU register                                        */
+   struct {
+      union {                                   /**< 0000: (size=0004)                                                  */
+         __IO uint32_t  DATA_32;                /**< 0000: CSE PRAM Register                                            */
+         struct {                               /**< 0000: (size=0004)                                                  */
+            __IO uint8_t   DATA_8LL;            /**< 0000: CSE PRAM0LL register                                         */
+            __IO uint8_t   DATA_8LU;            /**< 0001: CSE PRAM0LU register                                         */
+            __IO uint8_t   DATA_8HL;            /**< 0002: CSE PRAM0HL register                                         */
+            __IO uint8_t   DATA_8HU;            /**< 0003: CSE PRAM0HU register                                         */
+         };
       };
-   };
+   } RAMn[32];                                  /**< 0000: (cluster: size=0x0080, 128)                                  */
 } CSE_PRAM_Type;
 
 /**
@@ -2010,531 +2091,35 @@ typedef struct CSE_PRAM_Type {
 * @brief Register Masks for CSE_PRAM
 * @{
 */
-/* ------- _EmbeddedRAM Bit Fields                  ------ */
-#define CSE_PRAM__EmbeddedRAM_BYTE_3_MASK        (0xFFU)                                             /*!< CSE_PRAM__EmbeddedRAM.BYTE_3 Mask       */
-#define CSE_PRAM__EmbeddedRAM_BYTE_3_SHIFT       (0U)                                                /*!< CSE_PRAM__EmbeddedRAM.BYTE_3 Position   */
-#define CSE_PRAM__EmbeddedRAM_BYTE_3(x)          (((uint32_t)(((uint32_t)(x))<<0U))&0xFFUL)          /*!< CSE_PRAM__EmbeddedRAM.BYTE_3 Field      */
-#define CSE_PRAM__EmbeddedRAM_BYTE_2_MASK        (0xFF00U)                                           /*!< CSE_PRAM__EmbeddedRAM.BYTE_2 Mask       */
-#define CSE_PRAM__EmbeddedRAM_BYTE_2_SHIFT       (8U)                                                /*!< CSE_PRAM__EmbeddedRAM.BYTE_2 Position   */
-#define CSE_PRAM__EmbeddedRAM_BYTE_2(x)          (((uint32_t)(((uint32_t)(x))<<8U))&0xFF00UL)        /*!< CSE_PRAM__EmbeddedRAM.BYTE_2 Field      */
-#define CSE_PRAM__EmbeddedRAM_BYTE_1_MASK        (0xFF0000U)                                         /*!< CSE_PRAM__EmbeddedRAM.BYTE_1 Mask       */
-#define CSE_PRAM__EmbeddedRAM_BYTE_1_SHIFT       (16U)                                               /*!< CSE_PRAM__EmbeddedRAM.BYTE_1 Position   */
-#define CSE_PRAM__EmbeddedRAM_BYTE_1(x)          (((uint32_t)(((uint32_t)(x))<<16U))&0xFF0000UL)     /*!< CSE_PRAM__EmbeddedRAM.BYTE_1 Field      */
-#define CSE_PRAM__EmbeddedRAM_BYTE_0_MASK        (0xFF000000U)                                       /*!< CSE_PRAM__EmbeddedRAM.BYTE_0 Mask       */
-#define CSE_PRAM__EmbeddedRAM_BYTE_0_SHIFT       (24U)                                               /*!< CSE_PRAM__EmbeddedRAM.BYTE_0 Position   */
-#define CSE_PRAM__EmbeddedRAM_BYTE_0(x)          (((uint32_t)(((uint32_t)(x))<<24U))&0xFF000000UL)   /*!< CSE_PRAM__EmbeddedRAM.BYTE_0 Field      */
-/* ------- _EmbeddedRAM0LL Bit Fields               ------ */
-#define CSE_PRAM__EmbeddedRAM0LL_RAM_LL_MASK     (0xFFU)                                             /*!< CSE_PRAM__EmbeddedRAM0LL.RAM_LL Mask    */
-#define CSE_PRAM__EmbeddedRAM0LL_RAM_LL_SHIFT    (0U)                                                /*!< CSE_PRAM__EmbeddedRAM0LL.RAM_LL Position*/
-#define CSE_PRAM__EmbeddedRAM0LL_RAM_LL(x)       (((uint8_t)(((uint8_t)(x))<<0U))&0xFFUL)            /*!< CSE_PRAM__EmbeddedRAM0LL.RAM_LL Field   */
-/* ------- _EmbeddedRAM0LU Bit Fields               ------ */
-#define CSE_PRAM__EmbeddedRAM0LU_RAM_LU_MASK     (0xFFU)                                             /*!< CSE_PRAM__EmbeddedRAM0LU.RAM_LU Mask    */
-#define CSE_PRAM__EmbeddedRAM0LU_RAM_LU_SHIFT    (0U)                                                /*!< CSE_PRAM__EmbeddedRAM0LU.RAM_LU Position*/
-#define CSE_PRAM__EmbeddedRAM0LU_RAM_LU(x)       (((uint8_t)(((uint8_t)(x))<<0U))&0xFFUL)            /*!< CSE_PRAM__EmbeddedRAM0LU.RAM_LU Field   */
-/* ------- _EmbeddedRAM0HL Bit Fields               ------ */
-#define CSE_PRAM__EmbeddedRAM0HL_RAM_HL_MASK     (0xFFU)                                             /*!< CSE_PRAM__EmbeddedRAM0HL.RAM_HL Mask    */
-#define CSE_PRAM__EmbeddedRAM0HL_RAM_HL_SHIFT    (0U)                                                /*!< CSE_PRAM__EmbeddedRAM0HL.RAM_HL Position*/
-#define CSE_PRAM__EmbeddedRAM0HL_RAM_HL(x)       (((uint8_t)(((uint8_t)(x))<<0U))&0xFFUL)            /*!< CSE_PRAM__EmbeddedRAM0HL.RAM_HL Field   */
-/* ------- _EmbeddedRAM0HU Bit Fields               ------ */
-#define CSE_PRAM__EmbeddedRAM0HU_RAM_HU_MASK     (0xFFU)                                             /*!< CSE_PRAM__EmbeddedRAM0HU.RAM_HU Mask    */
-#define CSE_PRAM__EmbeddedRAM0HU_RAM_HU_SHIFT    (0U)                                                /*!< CSE_PRAM__EmbeddedRAM0HU.RAM_HU Position*/
-#define CSE_PRAM__EmbeddedRAM0HU_RAM_HU(x)       (((uint8_t)(((uint8_t)(x))<<0U))&0xFFUL)            /*!< CSE_PRAM__EmbeddedRAM0HU.RAM_HU Field   */
-/* ------- _EmbeddedRAM1LL Bit Fields               ------ */
-#define CSE_PRAM__EmbeddedRAM1LL_RAM_LL_MASK     (0xFFU)                                             /*!< CSE_PRAM__EmbeddedRAM1LL.RAM_LL Mask    */
-#define CSE_PRAM__EmbeddedRAM1LL_RAM_LL_SHIFT    (0U)                                                /*!< CSE_PRAM__EmbeddedRAM1LL.RAM_LL Position*/
-#define CSE_PRAM__EmbeddedRAM1LL_RAM_LL(x)       (((uint8_t)(((uint8_t)(x))<<0U))&0xFFUL)            /*!< CSE_PRAM__EmbeddedRAM1LL.RAM_LL Field   */
-/* ------- _EmbeddedRAM1LU Bit Fields               ------ */
-#define CSE_PRAM__EmbeddedRAM1LU_RAM_LU_MASK     (0xFFU)                                             /*!< CSE_PRAM__EmbeddedRAM1LU.RAM_LU Mask    */
-#define CSE_PRAM__EmbeddedRAM1LU_RAM_LU_SHIFT    (0U)                                                /*!< CSE_PRAM__EmbeddedRAM1LU.RAM_LU Position*/
-#define CSE_PRAM__EmbeddedRAM1LU_RAM_LU(x)       (((uint8_t)(((uint8_t)(x))<<0U))&0xFFUL)            /*!< CSE_PRAM__EmbeddedRAM1LU.RAM_LU Field   */
-/* ------- _EmbeddedRAM1HL Bit Fields               ------ */
-#define CSE_PRAM__EmbeddedRAM1HL_RAM_HL_MASK     (0xFFU)                                             /*!< CSE_PRAM__EmbeddedRAM1HL.RAM_HL Mask    */
-#define CSE_PRAM__EmbeddedRAM1HL_RAM_HL_SHIFT    (0U)                                                /*!< CSE_PRAM__EmbeddedRAM1HL.RAM_HL Position*/
-#define CSE_PRAM__EmbeddedRAM1HL_RAM_HL(x)       (((uint8_t)(((uint8_t)(x))<<0U))&0xFFUL)            /*!< CSE_PRAM__EmbeddedRAM1HL.RAM_HL Field   */
-/* ------- _EmbeddedRAM1HU Bit Fields               ------ */
-#define CSE_PRAM__EmbeddedRAM1HU_RAM_HU_MASK     (0xFFU)                                             /*!< CSE_PRAM__EmbeddedRAM1HU.RAM_HU Mask    */
-#define CSE_PRAM__EmbeddedRAM1HU_RAM_HU_SHIFT    (0U)                                                /*!< CSE_PRAM__EmbeddedRAM1HU.RAM_HU Position*/
-#define CSE_PRAM__EmbeddedRAM1HU_RAM_HU(x)       (((uint8_t)(((uint8_t)(x))<<0U))&0xFFUL)            /*!< CSE_PRAM__EmbeddedRAM1HU.RAM_HU Field   */
-/* ------- _EmbeddedRAM2LL Bit Fields               ------ */
-#define CSE_PRAM__EmbeddedRAM2LL_RAM_LL_MASK     (0xFFU)                                             /*!< CSE_PRAM__EmbeddedRAM2LL.RAM_LL Mask    */
-#define CSE_PRAM__EmbeddedRAM2LL_RAM_LL_SHIFT    (0U)                                                /*!< CSE_PRAM__EmbeddedRAM2LL.RAM_LL Position*/
-#define CSE_PRAM__EmbeddedRAM2LL_RAM_LL(x)       (((uint8_t)(((uint8_t)(x))<<0U))&0xFFUL)            /*!< CSE_PRAM__EmbeddedRAM2LL.RAM_LL Field   */
-/* ------- _EmbeddedRAM2LU Bit Fields               ------ */
-#define CSE_PRAM__EmbeddedRAM2LU_RAM_LU_MASK     (0xFFU)                                             /*!< CSE_PRAM__EmbeddedRAM2LU.RAM_LU Mask    */
-#define CSE_PRAM__EmbeddedRAM2LU_RAM_LU_SHIFT    (0U)                                                /*!< CSE_PRAM__EmbeddedRAM2LU.RAM_LU Position*/
-#define CSE_PRAM__EmbeddedRAM2LU_RAM_LU(x)       (((uint8_t)(((uint8_t)(x))<<0U))&0xFFUL)            /*!< CSE_PRAM__EmbeddedRAM2LU.RAM_LU Field   */
-/* ------- _EmbeddedRAM2HL Bit Fields               ------ */
-#define CSE_PRAM__EmbeddedRAM2HL_RAM_HL_MASK     (0xFFU)                                             /*!< CSE_PRAM__EmbeddedRAM2HL.RAM_HL Mask    */
-#define CSE_PRAM__EmbeddedRAM2HL_RAM_HL_SHIFT    (0U)                                                /*!< CSE_PRAM__EmbeddedRAM2HL.RAM_HL Position*/
-#define CSE_PRAM__EmbeddedRAM2HL_RAM_HL(x)       (((uint8_t)(((uint8_t)(x))<<0U))&0xFFUL)            /*!< CSE_PRAM__EmbeddedRAM2HL.RAM_HL Field   */
-/* ------- _EmbeddedRAM2HU Bit Fields               ------ */
-#define CSE_PRAM__EmbeddedRAM2HU_RAM_HU_MASK     (0xFFU)                                             /*!< CSE_PRAM__EmbeddedRAM2HU.RAM_HU Mask    */
-#define CSE_PRAM__EmbeddedRAM2HU_RAM_HU_SHIFT    (0U)                                                /*!< CSE_PRAM__EmbeddedRAM2HU.RAM_HU Position*/
-#define CSE_PRAM__EmbeddedRAM2HU_RAM_HU(x)       (((uint8_t)(((uint8_t)(x))<<0U))&0xFFUL)            /*!< CSE_PRAM__EmbeddedRAM2HU.RAM_HU Field   */
-/* ------- _EmbeddedRAM3LL Bit Fields               ------ */
-#define CSE_PRAM__EmbeddedRAM3LL_RAM_LL_MASK     (0xFFU)                                             /*!< CSE_PRAM__EmbeddedRAM3LL.RAM_LL Mask    */
-#define CSE_PRAM__EmbeddedRAM3LL_RAM_LL_SHIFT    (0U)                                                /*!< CSE_PRAM__EmbeddedRAM3LL.RAM_LL Position*/
-#define CSE_PRAM__EmbeddedRAM3LL_RAM_LL(x)       (((uint8_t)(((uint8_t)(x))<<0U))&0xFFUL)            /*!< CSE_PRAM__EmbeddedRAM3LL.RAM_LL Field   */
-/* ------- _EmbeddedRAM3LU Bit Fields               ------ */
-#define CSE_PRAM__EmbeddedRAM3LU_RAM_LU_MASK     (0xFFU)                                             /*!< CSE_PRAM__EmbeddedRAM3LU.RAM_LU Mask    */
-#define CSE_PRAM__EmbeddedRAM3LU_RAM_LU_SHIFT    (0U)                                                /*!< CSE_PRAM__EmbeddedRAM3LU.RAM_LU Position*/
-#define CSE_PRAM__EmbeddedRAM3LU_RAM_LU(x)       (((uint8_t)(((uint8_t)(x))<<0U))&0xFFUL)            /*!< CSE_PRAM__EmbeddedRAM3LU.RAM_LU Field   */
-/* ------- _EmbeddedRAM3HL Bit Fields               ------ */
-#define CSE_PRAM__EmbeddedRAM3HL_RAM_HL_MASK     (0xFFU)                                             /*!< CSE_PRAM__EmbeddedRAM3HL.RAM_HL Mask    */
-#define CSE_PRAM__EmbeddedRAM3HL_RAM_HL_SHIFT    (0U)                                                /*!< CSE_PRAM__EmbeddedRAM3HL.RAM_HL Position*/
-#define CSE_PRAM__EmbeddedRAM3HL_RAM_HL(x)       (((uint8_t)(((uint8_t)(x))<<0U))&0xFFUL)            /*!< CSE_PRAM__EmbeddedRAM3HL.RAM_HL Field   */
-/* ------- _EmbeddedRAM3HU Bit Fields               ------ */
-#define CSE_PRAM__EmbeddedRAM3HU_RAM_HU_MASK     (0xFFU)                                             /*!< CSE_PRAM__EmbeddedRAM3HU.RAM_HU Mask    */
-#define CSE_PRAM__EmbeddedRAM3HU_RAM_HU_SHIFT    (0U)                                                /*!< CSE_PRAM__EmbeddedRAM3HU.RAM_HU Position*/
-#define CSE_PRAM__EmbeddedRAM3HU_RAM_HU(x)       (((uint8_t)(((uint8_t)(x))<<0U))&0xFFUL)            /*!< CSE_PRAM__EmbeddedRAM3HU.RAM_HU Field   */
-/* ------- _EmbeddedRAM4LL Bit Fields               ------ */
-#define CSE_PRAM__EmbeddedRAM4LL_RAM_LL_MASK     (0xFFU)                                             /*!< CSE_PRAM__EmbeddedRAM4LL.RAM_LL Mask    */
-#define CSE_PRAM__EmbeddedRAM4LL_RAM_LL_SHIFT    (0U)                                                /*!< CSE_PRAM__EmbeddedRAM4LL.RAM_LL Position*/
-#define CSE_PRAM__EmbeddedRAM4LL_RAM_LL(x)       (((uint8_t)(((uint8_t)(x))<<0U))&0xFFUL)            /*!< CSE_PRAM__EmbeddedRAM4LL.RAM_LL Field   */
-/* ------- _EmbeddedRAM4LU Bit Fields               ------ */
-#define CSE_PRAM__EmbeddedRAM4LU_RAM_LU_MASK     (0xFFU)                                             /*!< CSE_PRAM__EmbeddedRAM4LU.RAM_LU Mask    */
-#define CSE_PRAM__EmbeddedRAM4LU_RAM_LU_SHIFT    (0U)                                                /*!< CSE_PRAM__EmbeddedRAM4LU.RAM_LU Position*/
-#define CSE_PRAM__EmbeddedRAM4LU_RAM_LU(x)       (((uint8_t)(((uint8_t)(x))<<0U))&0xFFUL)            /*!< CSE_PRAM__EmbeddedRAM4LU.RAM_LU Field   */
-/* ------- _EmbeddedRAM4HL Bit Fields               ------ */
-#define CSE_PRAM__EmbeddedRAM4HL_RAM_HL_MASK     (0xFFU)                                             /*!< CSE_PRAM__EmbeddedRAM4HL.RAM_HL Mask    */
-#define CSE_PRAM__EmbeddedRAM4HL_RAM_HL_SHIFT    (0U)                                                /*!< CSE_PRAM__EmbeddedRAM4HL.RAM_HL Position*/
-#define CSE_PRAM__EmbeddedRAM4HL_RAM_HL(x)       (((uint8_t)(((uint8_t)(x))<<0U))&0xFFUL)            /*!< CSE_PRAM__EmbeddedRAM4HL.RAM_HL Field   */
-/* ------- _EmbeddedRAM4HU Bit Fields               ------ */
-#define CSE_PRAM__EmbeddedRAM4HU_RAM_HU_MASK     (0xFFU)                                             /*!< CSE_PRAM__EmbeddedRAM4HU.RAM_HU Mask    */
-#define CSE_PRAM__EmbeddedRAM4HU_RAM_HU_SHIFT    (0U)                                                /*!< CSE_PRAM__EmbeddedRAM4HU.RAM_HU Position*/
-#define CSE_PRAM__EmbeddedRAM4HU_RAM_HU(x)       (((uint8_t)(((uint8_t)(x))<<0U))&0xFFUL)            /*!< CSE_PRAM__EmbeddedRAM4HU.RAM_HU Field   */
-/* ------- _EmbeddedRAM5LL Bit Fields               ------ */
-#define CSE_PRAM__EmbeddedRAM5LL_RAM_LL_MASK     (0xFFU)                                             /*!< CSE_PRAM__EmbeddedRAM5LL.RAM_LL Mask    */
-#define CSE_PRAM__EmbeddedRAM5LL_RAM_LL_SHIFT    (0U)                                                /*!< CSE_PRAM__EmbeddedRAM5LL.RAM_LL Position*/
-#define CSE_PRAM__EmbeddedRAM5LL_RAM_LL(x)       (((uint8_t)(((uint8_t)(x))<<0U))&0xFFUL)            /*!< CSE_PRAM__EmbeddedRAM5LL.RAM_LL Field   */
-/* ------- _EmbeddedRAM5LU Bit Fields               ------ */
-#define CSE_PRAM__EmbeddedRAM5LU_RAM_LU_MASK     (0xFFU)                                             /*!< CSE_PRAM__EmbeddedRAM5LU.RAM_LU Mask    */
-#define CSE_PRAM__EmbeddedRAM5LU_RAM_LU_SHIFT    (0U)                                                /*!< CSE_PRAM__EmbeddedRAM5LU.RAM_LU Position*/
-#define CSE_PRAM__EmbeddedRAM5LU_RAM_LU(x)       (((uint8_t)(((uint8_t)(x))<<0U))&0xFFUL)            /*!< CSE_PRAM__EmbeddedRAM5LU.RAM_LU Field   */
-/* ------- _EmbeddedRAM5HL Bit Fields               ------ */
-#define CSE_PRAM__EmbeddedRAM5HL_RAM_HL_MASK     (0xFFU)                                             /*!< CSE_PRAM__EmbeddedRAM5HL.RAM_HL Mask    */
-#define CSE_PRAM__EmbeddedRAM5HL_RAM_HL_SHIFT    (0U)                                                /*!< CSE_PRAM__EmbeddedRAM5HL.RAM_HL Position*/
-#define CSE_PRAM__EmbeddedRAM5HL_RAM_HL(x)       (((uint8_t)(((uint8_t)(x))<<0U))&0xFFUL)            /*!< CSE_PRAM__EmbeddedRAM5HL.RAM_HL Field   */
-/* ------- _EmbeddedRAM5HU Bit Fields               ------ */
-#define CSE_PRAM__EmbeddedRAM5HU_RAM_HU_MASK     (0xFFU)                                             /*!< CSE_PRAM__EmbeddedRAM5HU.RAM_HU Mask    */
-#define CSE_PRAM__EmbeddedRAM5HU_RAM_HU_SHIFT    (0U)                                                /*!< CSE_PRAM__EmbeddedRAM5HU.RAM_HU Position*/
-#define CSE_PRAM__EmbeddedRAM5HU_RAM_HU(x)       (((uint8_t)(((uint8_t)(x))<<0U))&0xFFUL)            /*!< CSE_PRAM__EmbeddedRAM5HU.RAM_HU Field   */
-/* ------- _EmbeddedRAM6LL Bit Fields               ------ */
-#define CSE_PRAM__EmbeddedRAM6LL_RAM_LL_MASK     (0xFFU)                                             /*!< CSE_PRAM__EmbeddedRAM6LL.RAM_LL Mask    */
-#define CSE_PRAM__EmbeddedRAM6LL_RAM_LL_SHIFT    (0U)                                                /*!< CSE_PRAM__EmbeddedRAM6LL.RAM_LL Position*/
-#define CSE_PRAM__EmbeddedRAM6LL_RAM_LL(x)       (((uint8_t)(((uint8_t)(x))<<0U))&0xFFUL)            /*!< CSE_PRAM__EmbeddedRAM6LL.RAM_LL Field   */
-/* ------- _EmbeddedRAM6LU Bit Fields               ------ */
-#define CSE_PRAM__EmbeddedRAM6LU_RAM_LU_MASK     (0xFFU)                                             /*!< CSE_PRAM__EmbeddedRAM6LU.RAM_LU Mask    */
-#define CSE_PRAM__EmbeddedRAM6LU_RAM_LU_SHIFT    (0U)                                                /*!< CSE_PRAM__EmbeddedRAM6LU.RAM_LU Position*/
-#define CSE_PRAM__EmbeddedRAM6LU_RAM_LU(x)       (((uint8_t)(((uint8_t)(x))<<0U))&0xFFUL)            /*!< CSE_PRAM__EmbeddedRAM6LU.RAM_LU Field   */
-/* ------- _EmbeddedRAM6HL Bit Fields               ------ */
-#define CSE_PRAM__EmbeddedRAM6HL_RAM_HL_MASK     (0xFFU)                                             /*!< CSE_PRAM__EmbeddedRAM6HL.RAM_HL Mask    */
-#define CSE_PRAM__EmbeddedRAM6HL_RAM_HL_SHIFT    (0U)                                                /*!< CSE_PRAM__EmbeddedRAM6HL.RAM_HL Position*/
-#define CSE_PRAM__EmbeddedRAM6HL_RAM_HL(x)       (((uint8_t)(((uint8_t)(x))<<0U))&0xFFUL)            /*!< CSE_PRAM__EmbeddedRAM6HL.RAM_HL Field   */
-/* ------- _EmbeddedRAM6HU Bit Fields               ------ */
-#define CSE_PRAM__EmbeddedRAM6HU_RAM_HU_MASK     (0xFFU)                                             /*!< CSE_PRAM__EmbeddedRAM6HU.RAM_HU Mask    */
-#define CSE_PRAM__EmbeddedRAM6HU_RAM_HU_SHIFT    (0U)                                                /*!< CSE_PRAM__EmbeddedRAM6HU.RAM_HU Position*/
-#define CSE_PRAM__EmbeddedRAM6HU_RAM_HU(x)       (((uint8_t)(((uint8_t)(x))<<0U))&0xFFUL)            /*!< CSE_PRAM__EmbeddedRAM6HU.RAM_HU Field   */
-/* ------- _EmbeddedRAM7LL Bit Fields               ------ */
-#define CSE_PRAM__EmbeddedRAM7LL_RAM_LL_MASK     (0xFFU)                                             /*!< CSE_PRAM__EmbeddedRAM7LL.RAM_LL Mask    */
-#define CSE_PRAM__EmbeddedRAM7LL_RAM_LL_SHIFT    (0U)                                                /*!< CSE_PRAM__EmbeddedRAM7LL.RAM_LL Position*/
-#define CSE_PRAM__EmbeddedRAM7LL_RAM_LL(x)       (((uint8_t)(((uint8_t)(x))<<0U))&0xFFUL)            /*!< CSE_PRAM__EmbeddedRAM7LL.RAM_LL Field   */
-/* ------- _EmbeddedRAM7LU Bit Fields               ------ */
-#define CSE_PRAM__EmbeddedRAM7LU_RAM_LU_MASK     (0xFFU)                                             /*!< CSE_PRAM__EmbeddedRAM7LU.RAM_LU Mask    */
-#define CSE_PRAM__EmbeddedRAM7LU_RAM_LU_SHIFT    (0U)                                                /*!< CSE_PRAM__EmbeddedRAM7LU.RAM_LU Position*/
-#define CSE_PRAM__EmbeddedRAM7LU_RAM_LU(x)       (((uint8_t)(((uint8_t)(x))<<0U))&0xFFUL)            /*!< CSE_PRAM__EmbeddedRAM7LU.RAM_LU Field   */
-/* ------- _EmbeddedRAM7HL Bit Fields               ------ */
-#define CSE_PRAM__EmbeddedRAM7HL_RAM_HL_MASK     (0xFFU)                                             /*!< CSE_PRAM__EmbeddedRAM7HL.RAM_HL Mask    */
-#define CSE_PRAM__EmbeddedRAM7HL_RAM_HL_SHIFT    (0U)                                                /*!< CSE_PRAM__EmbeddedRAM7HL.RAM_HL Position*/
-#define CSE_PRAM__EmbeddedRAM7HL_RAM_HL(x)       (((uint8_t)(((uint8_t)(x))<<0U))&0xFFUL)            /*!< CSE_PRAM__EmbeddedRAM7HL.RAM_HL Field   */
-/* ------- _EmbeddedRAM7HU Bit Fields               ------ */
-#define CSE_PRAM__EmbeddedRAM7HU_RAM_HU_MASK     (0xFFU)                                             /*!< CSE_PRAM__EmbeddedRAM7HU.RAM_HU Mask    */
-#define CSE_PRAM__EmbeddedRAM7HU_RAM_HU_SHIFT    (0U)                                                /*!< CSE_PRAM__EmbeddedRAM7HU.RAM_HU Position*/
-#define CSE_PRAM__EmbeddedRAM7HU_RAM_HU(x)       (((uint8_t)(((uint8_t)(x))<<0U))&0xFFUL)            /*!< CSE_PRAM__EmbeddedRAM7HU.RAM_HU Field   */
-/* ------- _EmbeddedRAM8LL Bit Fields               ------ */
-#define CSE_PRAM__EmbeddedRAM8LL_RAM_LL_MASK     (0xFFU)                                             /*!< CSE_PRAM__EmbeddedRAM8LL.RAM_LL Mask    */
-#define CSE_PRAM__EmbeddedRAM8LL_RAM_LL_SHIFT    (0U)                                                /*!< CSE_PRAM__EmbeddedRAM8LL.RAM_LL Position*/
-#define CSE_PRAM__EmbeddedRAM8LL_RAM_LL(x)       (((uint8_t)(((uint8_t)(x))<<0U))&0xFFUL)            /*!< CSE_PRAM__EmbeddedRAM8LL.RAM_LL Field   */
-/* ------- _EmbeddedRAM8LU Bit Fields               ------ */
-#define CSE_PRAM__EmbeddedRAM8LU_RAM_LU_MASK     (0xFFU)                                             /*!< CSE_PRAM__EmbeddedRAM8LU.RAM_LU Mask    */
-#define CSE_PRAM__EmbeddedRAM8LU_RAM_LU_SHIFT    (0U)                                                /*!< CSE_PRAM__EmbeddedRAM8LU.RAM_LU Position*/
-#define CSE_PRAM__EmbeddedRAM8LU_RAM_LU(x)       (((uint8_t)(((uint8_t)(x))<<0U))&0xFFUL)            /*!< CSE_PRAM__EmbeddedRAM8LU.RAM_LU Field   */
-/* ------- _EmbeddedRAM8HL Bit Fields               ------ */
-#define CSE_PRAM__EmbeddedRAM8HL_RAM_HL_MASK     (0xFFU)                                             /*!< CSE_PRAM__EmbeddedRAM8HL.RAM_HL Mask    */
-#define CSE_PRAM__EmbeddedRAM8HL_RAM_HL_SHIFT    (0U)                                                /*!< CSE_PRAM__EmbeddedRAM8HL.RAM_HL Position*/
-#define CSE_PRAM__EmbeddedRAM8HL_RAM_HL(x)       (((uint8_t)(((uint8_t)(x))<<0U))&0xFFUL)            /*!< CSE_PRAM__EmbeddedRAM8HL.RAM_HL Field   */
-/* ------- _EmbeddedRAM8HU Bit Fields               ------ */
-#define CSE_PRAM__EmbeddedRAM8HU_RAM_HU_MASK     (0xFFU)                                             /*!< CSE_PRAM__EmbeddedRAM8HU.RAM_HU Mask    */
-#define CSE_PRAM__EmbeddedRAM8HU_RAM_HU_SHIFT    (0U)                                                /*!< CSE_PRAM__EmbeddedRAM8HU.RAM_HU Position*/
-#define CSE_PRAM__EmbeddedRAM8HU_RAM_HU(x)       (((uint8_t)(((uint8_t)(x))<<0U))&0xFFUL)            /*!< CSE_PRAM__EmbeddedRAM8HU.RAM_HU Field   */
-/* ------- _EmbeddedRAM9LL Bit Fields               ------ */
-#define CSE_PRAM__EmbeddedRAM9LL_RAM_LL_MASK     (0xFFU)                                             /*!< CSE_PRAM__EmbeddedRAM9LL.RAM_LL Mask    */
-#define CSE_PRAM__EmbeddedRAM9LL_RAM_LL_SHIFT    (0U)                                                /*!< CSE_PRAM__EmbeddedRAM9LL.RAM_LL Position*/
-#define CSE_PRAM__EmbeddedRAM9LL_RAM_LL(x)       (((uint8_t)(((uint8_t)(x))<<0U))&0xFFUL)            /*!< CSE_PRAM__EmbeddedRAM9LL.RAM_LL Field   */
-/* ------- _EmbeddedRAM9LU Bit Fields               ------ */
-#define CSE_PRAM__EmbeddedRAM9LU_RAM_LU_MASK     (0xFFU)                                             /*!< CSE_PRAM__EmbeddedRAM9LU.RAM_LU Mask    */
-#define CSE_PRAM__EmbeddedRAM9LU_RAM_LU_SHIFT    (0U)                                                /*!< CSE_PRAM__EmbeddedRAM9LU.RAM_LU Position*/
-#define CSE_PRAM__EmbeddedRAM9LU_RAM_LU(x)       (((uint8_t)(((uint8_t)(x))<<0U))&0xFFUL)            /*!< CSE_PRAM__EmbeddedRAM9LU.RAM_LU Field   */
-/* ------- _EmbeddedRAM9HL Bit Fields               ------ */
-#define CSE_PRAM__EmbeddedRAM9HL_RAM_HL_MASK     (0xFFU)                                             /*!< CSE_PRAM__EmbeddedRAM9HL.RAM_HL Mask    */
-#define CSE_PRAM__EmbeddedRAM9HL_RAM_HL_SHIFT    (0U)                                                /*!< CSE_PRAM__EmbeddedRAM9HL.RAM_HL Position*/
-#define CSE_PRAM__EmbeddedRAM9HL_RAM_HL(x)       (((uint8_t)(((uint8_t)(x))<<0U))&0xFFUL)            /*!< CSE_PRAM__EmbeddedRAM9HL.RAM_HL Field   */
-/* ------- _EmbeddedRAM9HU Bit Fields               ------ */
-#define CSE_PRAM__EmbeddedRAM9HU_RAM_HU_MASK     (0xFFU)                                             /*!< CSE_PRAM__EmbeddedRAM9HU.RAM_HU Mask    */
-#define CSE_PRAM__EmbeddedRAM9HU_RAM_HU_SHIFT    (0U)                                                /*!< CSE_PRAM__EmbeddedRAM9HU.RAM_HU Position*/
-#define CSE_PRAM__EmbeddedRAM9HU_RAM_HU(x)       (((uint8_t)(((uint8_t)(x))<<0U))&0xFFUL)            /*!< CSE_PRAM__EmbeddedRAM9HU.RAM_HU Field   */
-/* ------- _EmbeddedRAM10LL Bit Fields              ------ */
-#define CSE_PRAM__EmbeddedRAM10LL_RAM_LL_MASK    (0xFFU)                                             /*!< CSE_PRAM__EmbeddedRAM10LL.RAM_LL Mask   */
-#define CSE_PRAM__EmbeddedRAM10LL_RAM_LL_SHIFT   (0U)                                                /*!< CSE_PRAM__EmbeddedRAM10LL.RAM_LL Position*/
-#define CSE_PRAM__EmbeddedRAM10LL_RAM_LL(x)      (((uint8_t)(((uint8_t)(x))<<0U))&0xFFUL)            /*!< CSE_PRAM__EmbeddedRAM10LL.RAM_LL Field  */
-/* ------- _EmbeddedRAM10LU Bit Fields              ------ */
-#define CSE_PRAM__EmbeddedRAM10LU_RAM_LU_MASK    (0xFFU)                                             /*!< CSE_PRAM__EmbeddedRAM10LU.RAM_LU Mask   */
-#define CSE_PRAM__EmbeddedRAM10LU_RAM_LU_SHIFT   (0U)                                                /*!< CSE_PRAM__EmbeddedRAM10LU.RAM_LU Position*/
-#define CSE_PRAM__EmbeddedRAM10LU_RAM_LU(x)      (((uint8_t)(((uint8_t)(x))<<0U))&0xFFUL)            /*!< CSE_PRAM__EmbeddedRAM10LU.RAM_LU Field  */
-/* ------- _EmbeddedRAM10HL Bit Fields              ------ */
-#define CSE_PRAM__EmbeddedRAM10HL_RAM_HL_MASK    (0xFFU)                                             /*!< CSE_PRAM__EmbeddedRAM10HL.RAM_HL Mask   */
-#define CSE_PRAM__EmbeddedRAM10HL_RAM_HL_SHIFT   (0U)                                                /*!< CSE_PRAM__EmbeddedRAM10HL.RAM_HL Position*/
-#define CSE_PRAM__EmbeddedRAM10HL_RAM_HL(x)      (((uint8_t)(((uint8_t)(x))<<0U))&0xFFUL)            /*!< CSE_PRAM__EmbeddedRAM10HL.RAM_HL Field  */
-/* ------- _EmbeddedRAM10HU Bit Fields              ------ */
-#define CSE_PRAM__EmbeddedRAM10HU_RAM_HU_MASK    (0xFFU)                                             /*!< CSE_PRAM__EmbeddedRAM10HU.RAM_HU Mask   */
-#define CSE_PRAM__EmbeddedRAM10HU_RAM_HU_SHIFT   (0U)                                                /*!< CSE_PRAM__EmbeddedRAM10HU.RAM_HU Position*/
-#define CSE_PRAM__EmbeddedRAM10HU_RAM_HU(x)      (((uint8_t)(((uint8_t)(x))<<0U))&0xFFUL)            /*!< CSE_PRAM__EmbeddedRAM10HU.RAM_HU Field  */
-/* ------- _EmbeddedRAM11LL Bit Fields              ------ */
-#define CSE_PRAM__EmbeddedRAM11LL_RAM_LL_MASK    (0xFFU)                                             /*!< CSE_PRAM__EmbeddedRAM11LL.RAM_LL Mask   */
-#define CSE_PRAM__EmbeddedRAM11LL_RAM_LL_SHIFT   (0U)                                                /*!< CSE_PRAM__EmbeddedRAM11LL.RAM_LL Position*/
-#define CSE_PRAM__EmbeddedRAM11LL_RAM_LL(x)      (((uint8_t)(((uint8_t)(x))<<0U))&0xFFUL)            /*!< CSE_PRAM__EmbeddedRAM11LL.RAM_LL Field  */
-/* ------- _EmbeddedRAM11LU Bit Fields              ------ */
-#define CSE_PRAM__EmbeddedRAM11LU_RAM_LU_MASK    (0xFFU)                                             /*!< CSE_PRAM__EmbeddedRAM11LU.RAM_LU Mask   */
-#define CSE_PRAM__EmbeddedRAM11LU_RAM_LU_SHIFT   (0U)                                                /*!< CSE_PRAM__EmbeddedRAM11LU.RAM_LU Position*/
-#define CSE_PRAM__EmbeddedRAM11LU_RAM_LU(x)      (((uint8_t)(((uint8_t)(x))<<0U))&0xFFUL)            /*!< CSE_PRAM__EmbeddedRAM11LU.RAM_LU Field  */
-/* ------- _EmbeddedRAM11HL Bit Fields              ------ */
-#define CSE_PRAM__EmbeddedRAM11HL_RAM_HL_MASK    (0xFFU)                                             /*!< CSE_PRAM__EmbeddedRAM11HL.RAM_HL Mask   */
-#define CSE_PRAM__EmbeddedRAM11HL_RAM_HL_SHIFT   (0U)                                                /*!< CSE_PRAM__EmbeddedRAM11HL.RAM_HL Position*/
-#define CSE_PRAM__EmbeddedRAM11HL_RAM_HL(x)      (((uint8_t)(((uint8_t)(x))<<0U))&0xFFUL)            /*!< CSE_PRAM__EmbeddedRAM11HL.RAM_HL Field  */
-/* ------- _EmbeddedRAM11HU Bit Fields              ------ */
-#define CSE_PRAM__EmbeddedRAM11HU_RAM_HU_MASK    (0xFFU)                                             /*!< CSE_PRAM__EmbeddedRAM11HU.RAM_HU Mask   */
-#define CSE_PRAM__EmbeddedRAM11HU_RAM_HU_SHIFT   (0U)                                                /*!< CSE_PRAM__EmbeddedRAM11HU.RAM_HU Position*/
-#define CSE_PRAM__EmbeddedRAM11HU_RAM_HU(x)      (((uint8_t)(((uint8_t)(x))<<0U))&0xFFUL)            /*!< CSE_PRAM__EmbeddedRAM11HU.RAM_HU Field  */
-/* ------- _EmbeddedRAM12LL Bit Fields              ------ */
-#define CSE_PRAM__EmbeddedRAM12LL_RAM_LL_MASK    (0xFFU)                                             /*!< CSE_PRAM__EmbeddedRAM12LL.RAM_LL Mask   */
-#define CSE_PRAM__EmbeddedRAM12LL_RAM_LL_SHIFT   (0U)                                                /*!< CSE_PRAM__EmbeddedRAM12LL.RAM_LL Position*/
-#define CSE_PRAM__EmbeddedRAM12LL_RAM_LL(x)      (((uint8_t)(((uint8_t)(x))<<0U))&0xFFUL)            /*!< CSE_PRAM__EmbeddedRAM12LL.RAM_LL Field  */
-/* ------- _EmbeddedRAM12LU Bit Fields              ------ */
-#define CSE_PRAM__EmbeddedRAM12LU_RAM_LU_MASK    (0xFFU)                                             /*!< CSE_PRAM__EmbeddedRAM12LU.RAM_LU Mask   */
-#define CSE_PRAM__EmbeddedRAM12LU_RAM_LU_SHIFT   (0U)                                                /*!< CSE_PRAM__EmbeddedRAM12LU.RAM_LU Position*/
-#define CSE_PRAM__EmbeddedRAM12LU_RAM_LU(x)      (((uint8_t)(((uint8_t)(x))<<0U))&0xFFUL)            /*!< CSE_PRAM__EmbeddedRAM12LU.RAM_LU Field  */
-/* ------- _EmbeddedRAM12HL Bit Fields              ------ */
-#define CSE_PRAM__EmbeddedRAM12HL_RAM_HL_MASK    (0xFFU)                                             /*!< CSE_PRAM__EmbeddedRAM12HL.RAM_HL Mask   */
-#define CSE_PRAM__EmbeddedRAM12HL_RAM_HL_SHIFT   (0U)                                                /*!< CSE_PRAM__EmbeddedRAM12HL.RAM_HL Position*/
-#define CSE_PRAM__EmbeddedRAM12HL_RAM_HL(x)      (((uint8_t)(((uint8_t)(x))<<0U))&0xFFUL)            /*!< CSE_PRAM__EmbeddedRAM12HL.RAM_HL Field  */
-/* ------- _EmbeddedRAM12HU Bit Fields              ------ */
-#define CSE_PRAM__EmbeddedRAM12HU_RAM_HU_MASK    (0xFFU)                                             /*!< CSE_PRAM__EmbeddedRAM12HU.RAM_HU Mask   */
-#define CSE_PRAM__EmbeddedRAM12HU_RAM_HU_SHIFT   (0U)                                                /*!< CSE_PRAM__EmbeddedRAM12HU.RAM_HU Position*/
-#define CSE_PRAM__EmbeddedRAM12HU_RAM_HU(x)      (((uint8_t)(((uint8_t)(x))<<0U))&0xFFUL)            /*!< CSE_PRAM__EmbeddedRAM12HU.RAM_HU Field  */
-/* ------- _EmbeddedRAM13LL Bit Fields              ------ */
-#define CSE_PRAM__EmbeddedRAM13LL_RAM_LL_MASK    (0xFFU)                                             /*!< CSE_PRAM__EmbeddedRAM13LL.RAM_LL Mask   */
-#define CSE_PRAM__EmbeddedRAM13LL_RAM_LL_SHIFT   (0U)                                                /*!< CSE_PRAM__EmbeddedRAM13LL.RAM_LL Position*/
-#define CSE_PRAM__EmbeddedRAM13LL_RAM_LL(x)      (((uint8_t)(((uint8_t)(x))<<0U))&0xFFUL)            /*!< CSE_PRAM__EmbeddedRAM13LL.RAM_LL Field  */
-/* ------- _EmbeddedRAM13LU Bit Fields              ------ */
-#define CSE_PRAM__EmbeddedRAM13LU_RAM_LU_MASK    (0xFFU)                                             /*!< CSE_PRAM__EmbeddedRAM13LU.RAM_LU Mask   */
-#define CSE_PRAM__EmbeddedRAM13LU_RAM_LU_SHIFT   (0U)                                                /*!< CSE_PRAM__EmbeddedRAM13LU.RAM_LU Position*/
-#define CSE_PRAM__EmbeddedRAM13LU_RAM_LU(x)      (((uint8_t)(((uint8_t)(x))<<0U))&0xFFUL)            /*!< CSE_PRAM__EmbeddedRAM13LU.RAM_LU Field  */
-/* ------- _EmbeddedRAM13HL Bit Fields              ------ */
-#define CSE_PRAM__EmbeddedRAM13HL_RAM_HL_MASK    (0xFFU)                                             /*!< CSE_PRAM__EmbeddedRAM13HL.RAM_HL Mask   */
-#define CSE_PRAM__EmbeddedRAM13HL_RAM_HL_SHIFT   (0U)                                                /*!< CSE_PRAM__EmbeddedRAM13HL.RAM_HL Position*/
-#define CSE_PRAM__EmbeddedRAM13HL_RAM_HL(x)      (((uint8_t)(((uint8_t)(x))<<0U))&0xFFUL)            /*!< CSE_PRAM__EmbeddedRAM13HL.RAM_HL Field  */
-/* ------- _EmbeddedRAM13HU Bit Fields              ------ */
-#define CSE_PRAM__EmbeddedRAM13HU_RAM_HU_MASK    (0xFFU)                                             /*!< CSE_PRAM__EmbeddedRAM13HU.RAM_HU Mask   */
-#define CSE_PRAM__EmbeddedRAM13HU_RAM_HU_SHIFT   (0U)                                                /*!< CSE_PRAM__EmbeddedRAM13HU.RAM_HU Position*/
-#define CSE_PRAM__EmbeddedRAM13HU_RAM_HU(x)      (((uint8_t)(((uint8_t)(x))<<0U))&0xFFUL)            /*!< CSE_PRAM__EmbeddedRAM13HU.RAM_HU Field  */
-/* ------- _EmbeddedRAM14LL Bit Fields              ------ */
-#define CSE_PRAM__EmbeddedRAM14LL_RAM_LL_MASK    (0xFFU)                                             /*!< CSE_PRAM__EmbeddedRAM14LL.RAM_LL Mask   */
-#define CSE_PRAM__EmbeddedRAM14LL_RAM_LL_SHIFT   (0U)                                                /*!< CSE_PRAM__EmbeddedRAM14LL.RAM_LL Position*/
-#define CSE_PRAM__EmbeddedRAM14LL_RAM_LL(x)      (((uint8_t)(((uint8_t)(x))<<0U))&0xFFUL)            /*!< CSE_PRAM__EmbeddedRAM14LL.RAM_LL Field  */
-/* ------- _EmbeddedRAM14LU Bit Fields              ------ */
-#define CSE_PRAM__EmbeddedRAM14LU_RAM_LU_MASK    (0xFFU)                                             /*!< CSE_PRAM__EmbeddedRAM14LU.RAM_LU Mask   */
-#define CSE_PRAM__EmbeddedRAM14LU_RAM_LU_SHIFT   (0U)                                                /*!< CSE_PRAM__EmbeddedRAM14LU.RAM_LU Position*/
-#define CSE_PRAM__EmbeddedRAM14LU_RAM_LU(x)      (((uint8_t)(((uint8_t)(x))<<0U))&0xFFUL)            /*!< CSE_PRAM__EmbeddedRAM14LU.RAM_LU Field  */
-/* ------- _EmbeddedRAM14HL Bit Fields              ------ */
-#define CSE_PRAM__EmbeddedRAM14HL_RAM_HL_MASK    (0xFFU)                                             /*!< CSE_PRAM__EmbeddedRAM14HL.RAM_HL Mask   */
-#define CSE_PRAM__EmbeddedRAM14HL_RAM_HL_SHIFT   (0U)                                                /*!< CSE_PRAM__EmbeddedRAM14HL.RAM_HL Position*/
-#define CSE_PRAM__EmbeddedRAM14HL_RAM_HL(x)      (((uint8_t)(((uint8_t)(x))<<0U))&0xFFUL)            /*!< CSE_PRAM__EmbeddedRAM14HL.RAM_HL Field  */
-/* ------- _EmbeddedRAM14HU Bit Fields              ------ */
-#define CSE_PRAM__EmbeddedRAM14HU_RAM_HU_MASK    (0xFFU)                                             /*!< CSE_PRAM__EmbeddedRAM14HU.RAM_HU Mask   */
-#define CSE_PRAM__EmbeddedRAM14HU_RAM_HU_SHIFT   (0U)                                                /*!< CSE_PRAM__EmbeddedRAM14HU.RAM_HU Position*/
-#define CSE_PRAM__EmbeddedRAM14HU_RAM_HU(x)      (((uint8_t)(((uint8_t)(x))<<0U))&0xFFUL)            /*!< CSE_PRAM__EmbeddedRAM14HU.RAM_HU Field  */
-/* ------- _EmbeddedRAM15LL Bit Fields              ------ */
-#define CSE_PRAM__EmbeddedRAM15LL_RAM_LL_MASK    (0xFFU)                                             /*!< CSE_PRAM__EmbeddedRAM15LL.RAM_LL Mask   */
-#define CSE_PRAM__EmbeddedRAM15LL_RAM_LL_SHIFT   (0U)                                                /*!< CSE_PRAM__EmbeddedRAM15LL.RAM_LL Position*/
-#define CSE_PRAM__EmbeddedRAM15LL_RAM_LL(x)      (((uint8_t)(((uint8_t)(x))<<0U))&0xFFUL)            /*!< CSE_PRAM__EmbeddedRAM15LL.RAM_LL Field  */
-/* ------- _EmbeddedRAM15LU Bit Fields              ------ */
-#define CSE_PRAM__EmbeddedRAM15LU_RAM_LU_MASK    (0xFFU)                                             /*!< CSE_PRAM__EmbeddedRAM15LU.RAM_LU Mask   */
-#define CSE_PRAM__EmbeddedRAM15LU_RAM_LU_SHIFT   (0U)                                                /*!< CSE_PRAM__EmbeddedRAM15LU.RAM_LU Position*/
-#define CSE_PRAM__EmbeddedRAM15LU_RAM_LU(x)      (((uint8_t)(((uint8_t)(x))<<0U))&0xFFUL)            /*!< CSE_PRAM__EmbeddedRAM15LU.RAM_LU Field  */
-/* ------- _EmbeddedRAM15HL Bit Fields              ------ */
-#define CSE_PRAM__EmbeddedRAM15HL_RAM_HL_MASK    (0xFFU)                                             /*!< CSE_PRAM__EmbeddedRAM15HL.RAM_HL Mask   */
-#define CSE_PRAM__EmbeddedRAM15HL_RAM_HL_SHIFT   (0U)                                                /*!< CSE_PRAM__EmbeddedRAM15HL.RAM_HL Position*/
-#define CSE_PRAM__EmbeddedRAM15HL_RAM_HL(x)      (((uint8_t)(((uint8_t)(x))<<0U))&0xFFUL)            /*!< CSE_PRAM__EmbeddedRAM15HL.RAM_HL Field  */
-/* ------- _EmbeddedRAM15HU Bit Fields              ------ */
-#define CSE_PRAM__EmbeddedRAM15HU_RAM_HU_MASK    (0xFFU)                                             /*!< CSE_PRAM__EmbeddedRAM15HU.RAM_HU Mask   */
-#define CSE_PRAM__EmbeddedRAM15HU_RAM_HU_SHIFT   (0U)                                                /*!< CSE_PRAM__EmbeddedRAM15HU.RAM_HU Position*/
-#define CSE_PRAM__EmbeddedRAM15HU_RAM_HU(x)      (((uint8_t)(((uint8_t)(x))<<0U))&0xFFUL)            /*!< CSE_PRAM__EmbeddedRAM15HU.RAM_HU Field  */
-/* ------- _EmbeddedRAM16LL Bit Fields              ------ */
-#define CSE_PRAM__EmbeddedRAM16LL_RAM_LL_MASK    (0xFFU)                                             /*!< CSE_PRAM__EmbeddedRAM16LL.RAM_LL Mask   */
-#define CSE_PRAM__EmbeddedRAM16LL_RAM_LL_SHIFT   (0U)                                                /*!< CSE_PRAM__EmbeddedRAM16LL.RAM_LL Position*/
-#define CSE_PRAM__EmbeddedRAM16LL_RAM_LL(x)      (((uint8_t)(((uint8_t)(x))<<0U))&0xFFUL)            /*!< CSE_PRAM__EmbeddedRAM16LL.RAM_LL Field  */
-/* ------- _EmbeddedRAM16LU Bit Fields              ------ */
-#define CSE_PRAM__EmbeddedRAM16LU_RAM_LU_MASK    (0xFFU)                                             /*!< CSE_PRAM__EmbeddedRAM16LU.RAM_LU Mask   */
-#define CSE_PRAM__EmbeddedRAM16LU_RAM_LU_SHIFT   (0U)                                                /*!< CSE_PRAM__EmbeddedRAM16LU.RAM_LU Position*/
-#define CSE_PRAM__EmbeddedRAM16LU_RAM_LU(x)      (((uint8_t)(((uint8_t)(x))<<0U))&0xFFUL)            /*!< CSE_PRAM__EmbeddedRAM16LU.RAM_LU Field  */
-/* ------- _EmbeddedRAM16HL Bit Fields              ------ */
-#define CSE_PRAM__EmbeddedRAM16HL_RAM_HL_MASK    (0xFFU)                                             /*!< CSE_PRAM__EmbeddedRAM16HL.RAM_HL Mask   */
-#define CSE_PRAM__EmbeddedRAM16HL_RAM_HL_SHIFT   (0U)                                                /*!< CSE_PRAM__EmbeddedRAM16HL.RAM_HL Position*/
-#define CSE_PRAM__EmbeddedRAM16HL_RAM_HL(x)      (((uint8_t)(((uint8_t)(x))<<0U))&0xFFUL)            /*!< CSE_PRAM__EmbeddedRAM16HL.RAM_HL Field  */
-/* ------- _EmbeddedRAM16HU Bit Fields              ------ */
-#define CSE_PRAM__EmbeddedRAM16HU_RAM_HU_MASK    (0xFFU)                                             /*!< CSE_PRAM__EmbeddedRAM16HU.RAM_HU Mask   */
-#define CSE_PRAM__EmbeddedRAM16HU_RAM_HU_SHIFT   (0U)                                                /*!< CSE_PRAM__EmbeddedRAM16HU.RAM_HU Position*/
-#define CSE_PRAM__EmbeddedRAM16HU_RAM_HU(x)      (((uint8_t)(((uint8_t)(x))<<0U))&0xFFUL)            /*!< CSE_PRAM__EmbeddedRAM16HU.RAM_HU Field  */
-/* ------- _EmbeddedRAM17LL Bit Fields              ------ */
-#define CSE_PRAM__EmbeddedRAM17LL_RAM_LL_MASK    (0xFFU)                                             /*!< CSE_PRAM__EmbeddedRAM17LL.RAM_LL Mask   */
-#define CSE_PRAM__EmbeddedRAM17LL_RAM_LL_SHIFT   (0U)                                                /*!< CSE_PRAM__EmbeddedRAM17LL.RAM_LL Position*/
-#define CSE_PRAM__EmbeddedRAM17LL_RAM_LL(x)      (((uint8_t)(((uint8_t)(x))<<0U))&0xFFUL)            /*!< CSE_PRAM__EmbeddedRAM17LL.RAM_LL Field  */
-/* ------- _EmbeddedRAM17LU Bit Fields              ------ */
-#define CSE_PRAM__EmbeddedRAM17LU_RAM_LU_MASK    (0xFFU)                                             /*!< CSE_PRAM__EmbeddedRAM17LU.RAM_LU Mask   */
-#define CSE_PRAM__EmbeddedRAM17LU_RAM_LU_SHIFT   (0U)                                                /*!< CSE_PRAM__EmbeddedRAM17LU.RAM_LU Position*/
-#define CSE_PRAM__EmbeddedRAM17LU_RAM_LU(x)      (((uint8_t)(((uint8_t)(x))<<0U))&0xFFUL)            /*!< CSE_PRAM__EmbeddedRAM17LU.RAM_LU Field  */
-/* ------- _EmbeddedRAM17HL Bit Fields              ------ */
-#define CSE_PRAM__EmbeddedRAM17HL_RAM_HL_MASK    (0xFFU)                                             /*!< CSE_PRAM__EmbeddedRAM17HL.RAM_HL Mask   */
-#define CSE_PRAM__EmbeddedRAM17HL_RAM_HL_SHIFT   (0U)                                                /*!< CSE_PRAM__EmbeddedRAM17HL.RAM_HL Position*/
-#define CSE_PRAM__EmbeddedRAM17HL_RAM_HL(x)      (((uint8_t)(((uint8_t)(x))<<0U))&0xFFUL)            /*!< CSE_PRAM__EmbeddedRAM17HL.RAM_HL Field  */
-/* ------- _EmbeddedRAM17HU Bit Fields              ------ */
-#define CSE_PRAM__EmbeddedRAM17HU_RAM_HU_MASK    (0xFFU)                                             /*!< CSE_PRAM__EmbeddedRAM17HU.RAM_HU Mask   */
-#define CSE_PRAM__EmbeddedRAM17HU_RAM_HU_SHIFT   (0U)                                                /*!< CSE_PRAM__EmbeddedRAM17HU.RAM_HU Position*/
-#define CSE_PRAM__EmbeddedRAM17HU_RAM_HU(x)      (((uint8_t)(((uint8_t)(x))<<0U))&0xFFUL)            /*!< CSE_PRAM__EmbeddedRAM17HU.RAM_HU Field  */
-/* ------- _EmbeddedRAM18LL Bit Fields              ------ */
-#define CSE_PRAM__EmbeddedRAM18LL_RAM_LL_MASK    (0xFFU)                                             /*!< CSE_PRAM__EmbeddedRAM18LL.RAM_LL Mask   */
-#define CSE_PRAM__EmbeddedRAM18LL_RAM_LL_SHIFT   (0U)                                                /*!< CSE_PRAM__EmbeddedRAM18LL.RAM_LL Position*/
-#define CSE_PRAM__EmbeddedRAM18LL_RAM_LL(x)      (((uint8_t)(((uint8_t)(x))<<0U))&0xFFUL)            /*!< CSE_PRAM__EmbeddedRAM18LL.RAM_LL Field  */
-/* ------- _EmbeddedRAM18LU Bit Fields              ------ */
-#define CSE_PRAM__EmbeddedRAM18LU_RAM_LU_MASK    (0xFFU)                                             /*!< CSE_PRAM__EmbeddedRAM18LU.RAM_LU Mask   */
-#define CSE_PRAM__EmbeddedRAM18LU_RAM_LU_SHIFT   (0U)                                                /*!< CSE_PRAM__EmbeddedRAM18LU.RAM_LU Position*/
-#define CSE_PRAM__EmbeddedRAM18LU_RAM_LU(x)      (((uint8_t)(((uint8_t)(x))<<0U))&0xFFUL)            /*!< CSE_PRAM__EmbeddedRAM18LU.RAM_LU Field  */
-/* ------- _EmbeddedRAM18HL Bit Fields              ------ */
-#define CSE_PRAM__EmbeddedRAM18HL_RAM_HL_MASK    (0xFFU)                                             /*!< CSE_PRAM__EmbeddedRAM18HL.RAM_HL Mask   */
-#define CSE_PRAM__EmbeddedRAM18HL_RAM_HL_SHIFT   (0U)                                                /*!< CSE_PRAM__EmbeddedRAM18HL.RAM_HL Position*/
-#define CSE_PRAM__EmbeddedRAM18HL_RAM_HL(x)      (((uint8_t)(((uint8_t)(x))<<0U))&0xFFUL)            /*!< CSE_PRAM__EmbeddedRAM18HL.RAM_HL Field  */
-/* ------- _EmbeddedRAM18HU Bit Fields              ------ */
-#define CSE_PRAM__EmbeddedRAM18HU_RAM_HU_MASK    (0xFFU)                                             /*!< CSE_PRAM__EmbeddedRAM18HU.RAM_HU Mask   */
-#define CSE_PRAM__EmbeddedRAM18HU_RAM_HU_SHIFT   (0U)                                                /*!< CSE_PRAM__EmbeddedRAM18HU.RAM_HU Position*/
-#define CSE_PRAM__EmbeddedRAM18HU_RAM_HU(x)      (((uint8_t)(((uint8_t)(x))<<0U))&0xFFUL)            /*!< CSE_PRAM__EmbeddedRAM18HU.RAM_HU Field  */
-/* ------- _EmbeddedRAM19LL Bit Fields              ------ */
-#define CSE_PRAM__EmbeddedRAM19LL_RAM_LL_MASK    (0xFFU)                                             /*!< CSE_PRAM__EmbeddedRAM19LL.RAM_LL Mask   */
-#define CSE_PRAM__EmbeddedRAM19LL_RAM_LL_SHIFT   (0U)                                                /*!< CSE_PRAM__EmbeddedRAM19LL.RAM_LL Position*/
-#define CSE_PRAM__EmbeddedRAM19LL_RAM_LL(x)      (((uint8_t)(((uint8_t)(x))<<0U))&0xFFUL)            /*!< CSE_PRAM__EmbeddedRAM19LL.RAM_LL Field  */
-/* ------- _EmbeddedRAM19LU Bit Fields              ------ */
-#define CSE_PRAM__EmbeddedRAM19LU_RAM_LU_MASK    (0xFFU)                                             /*!< CSE_PRAM__EmbeddedRAM19LU.RAM_LU Mask   */
-#define CSE_PRAM__EmbeddedRAM19LU_RAM_LU_SHIFT   (0U)                                                /*!< CSE_PRAM__EmbeddedRAM19LU.RAM_LU Position*/
-#define CSE_PRAM__EmbeddedRAM19LU_RAM_LU(x)      (((uint8_t)(((uint8_t)(x))<<0U))&0xFFUL)            /*!< CSE_PRAM__EmbeddedRAM19LU.RAM_LU Field  */
-/* ------- _EmbeddedRAM19HL Bit Fields              ------ */
-#define CSE_PRAM__EmbeddedRAM19HL_RAM_HL_MASK    (0xFFU)                                             /*!< CSE_PRAM__EmbeddedRAM19HL.RAM_HL Mask   */
-#define CSE_PRAM__EmbeddedRAM19HL_RAM_HL_SHIFT   (0U)                                                /*!< CSE_PRAM__EmbeddedRAM19HL.RAM_HL Position*/
-#define CSE_PRAM__EmbeddedRAM19HL_RAM_HL(x)      (((uint8_t)(((uint8_t)(x))<<0U))&0xFFUL)            /*!< CSE_PRAM__EmbeddedRAM19HL.RAM_HL Field  */
-/* ------- _EmbeddedRAM19HU Bit Fields              ------ */
-#define CSE_PRAM__EmbeddedRAM19HU_RAM_HU_MASK    (0xFFU)                                             /*!< CSE_PRAM__EmbeddedRAM19HU.RAM_HU Mask   */
-#define CSE_PRAM__EmbeddedRAM19HU_RAM_HU_SHIFT   (0U)                                                /*!< CSE_PRAM__EmbeddedRAM19HU.RAM_HU Position*/
-#define CSE_PRAM__EmbeddedRAM19HU_RAM_HU(x)      (((uint8_t)(((uint8_t)(x))<<0U))&0xFFUL)            /*!< CSE_PRAM__EmbeddedRAM19HU.RAM_HU Field  */
-/* ------- _EmbeddedRAM20LL Bit Fields              ------ */
-#define CSE_PRAM__EmbeddedRAM20LL_RAM_LL_MASK    (0xFFU)                                             /*!< CSE_PRAM__EmbeddedRAM20LL.RAM_LL Mask   */
-#define CSE_PRAM__EmbeddedRAM20LL_RAM_LL_SHIFT   (0U)                                                /*!< CSE_PRAM__EmbeddedRAM20LL.RAM_LL Position*/
-#define CSE_PRAM__EmbeddedRAM20LL_RAM_LL(x)      (((uint8_t)(((uint8_t)(x))<<0U))&0xFFUL)            /*!< CSE_PRAM__EmbeddedRAM20LL.RAM_LL Field  */
-/* ------- _EmbeddedRAM20LU Bit Fields              ------ */
-#define CSE_PRAM__EmbeddedRAM20LU_RAM_LU_MASK    (0xFFU)                                             /*!< CSE_PRAM__EmbeddedRAM20LU.RAM_LU Mask   */
-#define CSE_PRAM__EmbeddedRAM20LU_RAM_LU_SHIFT   (0U)                                                /*!< CSE_PRAM__EmbeddedRAM20LU.RAM_LU Position*/
-#define CSE_PRAM__EmbeddedRAM20LU_RAM_LU(x)      (((uint8_t)(((uint8_t)(x))<<0U))&0xFFUL)            /*!< CSE_PRAM__EmbeddedRAM20LU.RAM_LU Field  */
-/* ------- _EmbeddedRAM20HL Bit Fields              ------ */
-#define CSE_PRAM__EmbeddedRAM20HL_RAM_HL_MASK    (0xFFU)                                             /*!< CSE_PRAM__EmbeddedRAM20HL.RAM_HL Mask   */
-#define CSE_PRAM__EmbeddedRAM20HL_RAM_HL_SHIFT   (0U)                                                /*!< CSE_PRAM__EmbeddedRAM20HL.RAM_HL Position*/
-#define CSE_PRAM__EmbeddedRAM20HL_RAM_HL(x)      (((uint8_t)(((uint8_t)(x))<<0U))&0xFFUL)            /*!< CSE_PRAM__EmbeddedRAM20HL.RAM_HL Field  */
-/* ------- _EmbeddedRAM20HU Bit Fields              ------ */
-#define CSE_PRAM__EmbeddedRAM20HU_RAM_HU_MASK    (0xFFU)                                             /*!< CSE_PRAM__EmbeddedRAM20HU.RAM_HU Mask   */
-#define CSE_PRAM__EmbeddedRAM20HU_RAM_HU_SHIFT   (0U)                                                /*!< CSE_PRAM__EmbeddedRAM20HU.RAM_HU Position*/
-#define CSE_PRAM__EmbeddedRAM20HU_RAM_HU(x)      (((uint8_t)(((uint8_t)(x))<<0U))&0xFFUL)            /*!< CSE_PRAM__EmbeddedRAM20HU.RAM_HU Field  */
-/* ------- _EmbeddedRAM21LL Bit Fields              ------ */
-#define CSE_PRAM__EmbeddedRAM21LL_RAM_LL_MASK    (0xFFU)                                             /*!< CSE_PRAM__EmbeddedRAM21LL.RAM_LL Mask   */
-#define CSE_PRAM__EmbeddedRAM21LL_RAM_LL_SHIFT   (0U)                                                /*!< CSE_PRAM__EmbeddedRAM21LL.RAM_LL Position*/
-#define CSE_PRAM__EmbeddedRAM21LL_RAM_LL(x)      (((uint8_t)(((uint8_t)(x))<<0U))&0xFFUL)            /*!< CSE_PRAM__EmbeddedRAM21LL.RAM_LL Field  */
-/* ------- _EmbeddedRAM21LU Bit Fields              ------ */
-#define CSE_PRAM__EmbeddedRAM21LU_RAM_LU_MASK    (0xFFU)                                             /*!< CSE_PRAM__EmbeddedRAM21LU.RAM_LU Mask   */
-#define CSE_PRAM__EmbeddedRAM21LU_RAM_LU_SHIFT   (0U)                                                /*!< CSE_PRAM__EmbeddedRAM21LU.RAM_LU Position*/
-#define CSE_PRAM__EmbeddedRAM21LU_RAM_LU(x)      (((uint8_t)(((uint8_t)(x))<<0U))&0xFFUL)            /*!< CSE_PRAM__EmbeddedRAM21LU.RAM_LU Field  */
-/* ------- _EmbeddedRAM21HL Bit Fields              ------ */
-#define CSE_PRAM__EmbeddedRAM21HL_RAM_HL_MASK    (0xFFU)                                             /*!< CSE_PRAM__EmbeddedRAM21HL.RAM_HL Mask   */
-#define CSE_PRAM__EmbeddedRAM21HL_RAM_HL_SHIFT   (0U)                                                /*!< CSE_PRAM__EmbeddedRAM21HL.RAM_HL Position*/
-#define CSE_PRAM__EmbeddedRAM21HL_RAM_HL(x)      (((uint8_t)(((uint8_t)(x))<<0U))&0xFFUL)            /*!< CSE_PRAM__EmbeddedRAM21HL.RAM_HL Field  */
-/* ------- _EmbeddedRAM21HU Bit Fields              ------ */
-#define CSE_PRAM__EmbeddedRAM21HU_RAM_HU_MASK    (0xFFU)                                             /*!< CSE_PRAM__EmbeddedRAM21HU.RAM_HU Mask   */
-#define CSE_PRAM__EmbeddedRAM21HU_RAM_HU_SHIFT   (0U)                                                /*!< CSE_PRAM__EmbeddedRAM21HU.RAM_HU Position*/
-#define CSE_PRAM__EmbeddedRAM21HU_RAM_HU(x)      (((uint8_t)(((uint8_t)(x))<<0U))&0xFFUL)            /*!< CSE_PRAM__EmbeddedRAM21HU.RAM_HU Field  */
-/* ------- _EmbeddedRAM22LL Bit Fields              ------ */
-#define CSE_PRAM__EmbeddedRAM22LL_RAM_LL_MASK    (0xFFU)                                             /*!< CSE_PRAM__EmbeddedRAM22LL.RAM_LL Mask   */
-#define CSE_PRAM__EmbeddedRAM22LL_RAM_LL_SHIFT   (0U)                                                /*!< CSE_PRAM__EmbeddedRAM22LL.RAM_LL Position*/
-#define CSE_PRAM__EmbeddedRAM22LL_RAM_LL(x)      (((uint8_t)(((uint8_t)(x))<<0U))&0xFFUL)            /*!< CSE_PRAM__EmbeddedRAM22LL.RAM_LL Field  */
-/* ------- _EmbeddedRAM22LU Bit Fields              ------ */
-#define CSE_PRAM__EmbeddedRAM22LU_RAM_LU_MASK    (0xFFU)                                             /*!< CSE_PRAM__EmbeddedRAM22LU.RAM_LU Mask   */
-#define CSE_PRAM__EmbeddedRAM22LU_RAM_LU_SHIFT   (0U)                                                /*!< CSE_PRAM__EmbeddedRAM22LU.RAM_LU Position*/
-#define CSE_PRAM__EmbeddedRAM22LU_RAM_LU(x)      (((uint8_t)(((uint8_t)(x))<<0U))&0xFFUL)            /*!< CSE_PRAM__EmbeddedRAM22LU.RAM_LU Field  */
-/* ------- _EmbeddedRAM22HL Bit Fields              ------ */
-#define CSE_PRAM__EmbeddedRAM22HL_RAM_HL_MASK    (0xFFU)                                             /*!< CSE_PRAM__EmbeddedRAM22HL.RAM_HL Mask   */
-#define CSE_PRAM__EmbeddedRAM22HL_RAM_HL_SHIFT   (0U)                                                /*!< CSE_PRAM__EmbeddedRAM22HL.RAM_HL Position*/
-#define CSE_PRAM__EmbeddedRAM22HL_RAM_HL(x)      (((uint8_t)(((uint8_t)(x))<<0U))&0xFFUL)            /*!< CSE_PRAM__EmbeddedRAM22HL.RAM_HL Field  */
-/* ------- _EmbeddedRAM22HU Bit Fields              ------ */
-#define CSE_PRAM__EmbeddedRAM22HU_RAM_HU_MASK    (0xFFU)                                             /*!< CSE_PRAM__EmbeddedRAM22HU.RAM_HU Mask   */
-#define CSE_PRAM__EmbeddedRAM22HU_RAM_HU_SHIFT   (0U)                                                /*!< CSE_PRAM__EmbeddedRAM22HU.RAM_HU Position*/
-#define CSE_PRAM__EmbeddedRAM22HU_RAM_HU(x)      (((uint8_t)(((uint8_t)(x))<<0U))&0xFFUL)            /*!< CSE_PRAM__EmbeddedRAM22HU.RAM_HU Field  */
-/* ------- _EmbeddedRAM23LL Bit Fields              ------ */
-#define CSE_PRAM__EmbeddedRAM23LL_RAM_LL_MASK    (0xFFU)                                             /*!< CSE_PRAM__EmbeddedRAM23LL.RAM_LL Mask   */
-#define CSE_PRAM__EmbeddedRAM23LL_RAM_LL_SHIFT   (0U)                                                /*!< CSE_PRAM__EmbeddedRAM23LL.RAM_LL Position*/
-#define CSE_PRAM__EmbeddedRAM23LL_RAM_LL(x)      (((uint8_t)(((uint8_t)(x))<<0U))&0xFFUL)            /*!< CSE_PRAM__EmbeddedRAM23LL.RAM_LL Field  */
-/* ------- _EmbeddedRAM23LU Bit Fields              ------ */
-#define CSE_PRAM__EmbeddedRAM23LU_RAM_LU_MASK    (0xFFU)                                             /*!< CSE_PRAM__EmbeddedRAM23LU.RAM_LU Mask   */
-#define CSE_PRAM__EmbeddedRAM23LU_RAM_LU_SHIFT   (0U)                                                /*!< CSE_PRAM__EmbeddedRAM23LU.RAM_LU Position*/
-#define CSE_PRAM__EmbeddedRAM23LU_RAM_LU(x)      (((uint8_t)(((uint8_t)(x))<<0U))&0xFFUL)            /*!< CSE_PRAM__EmbeddedRAM23LU.RAM_LU Field  */
-/* ------- _EmbeddedRAM23HL Bit Fields              ------ */
-#define CSE_PRAM__EmbeddedRAM23HL_RAM_HL_MASK    (0xFFU)                                             /*!< CSE_PRAM__EmbeddedRAM23HL.RAM_HL Mask   */
-#define CSE_PRAM__EmbeddedRAM23HL_RAM_HL_SHIFT   (0U)                                                /*!< CSE_PRAM__EmbeddedRAM23HL.RAM_HL Position*/
-#define CSE_PRAM__EmbeddedRAM23HL_RAM_HL(x)      (((uint8_t)(((uint8_t)(x))<<0U))&0xFFUL)            /*!< CSE_PRAM__EmbeddedRAM23HL.RAM_HL Field  */
-/* ------- _EmbeddedRAM23HU Bit Fields              ------ */
-#define CSE_PRAM__EmbeddedRAM23HU_RAM_HU_MASK    (0xFFU)                                             /*!< CSE_PRAM__EmbeddedRAM23HU.RAM_HU Mask   */
-#define CSE_PRAM__EmbeddedRAM23HU_RAM_HU_SHIFT   (0U)                                                /*!< CSE_PRAM__EmbeddedRAM23HU.RAM_HU Position*/
-#define CSE_PRAM__EmbeddedRAM23HU_RAM_HU(x)      (((uint8_t)(((uint8_t)(x))<<0U))&0xFFUL)            /*!< CSE_PRAM__EmbeddedRAM23HU.RAM_HU Field  */
-/* ------- _EmbeddedRAM24LL Bit Fields              ------ */
-#define CSE_PRAM__EmbeddedRAM24LL_RAM_LL_MASK    (0xFFU)                                             /*!< CSE_PRAM__EmbeddedRAM24LL.RAM_LL Mask   */
-#define CSE_PRAM__EmbeddedRAM24LL_RAM_LL_SHIFT   (0U)                                                /*!< CSE_PRAM__EmbeddedRAM24LL.RAM_LL Position*/
-#define CSE_PRAM__EmbeddedRAM24LL_RAM_LL(x)      (((uint8_t)(((uint8_t)(x))<<0U))&0xFFUL)            /*!< CSE_PRAM__EmbeddedRAM24LL.RAM_LL Field  */
-/* ------- _EmbeddedRAM24LU Bit Fields              ------ */
-#define CSE_PRAM__EmbeddedRAM24LU_RAM_LU_MASK    (0xFFU)                                             /*!< CSE_PRAM__EmbeddedRAM24LU.RAM_LU Mask   */
-#define CSE_PRAM__EmbeddedRAM24LU_RAM_LU_SHIFT   (0U)                                                /*!< CSE_PRAM__EmbeddedRAM24LU.RAM_LU Position*/
-#define CSE_PRAM__EmbeddedRAM24LU_RAM_LU(x)      (((uint8_t)(((uint8_t)(x))<<0U))&0xFFUL)            /*!< CSE_PRAM__EmbeddedRAM24LU.RAM_LU Field  */
-/* ------- _EmbeddedRAM24HL Bit Fields              ------ */
-#define CSE_PRAM__EmbeddedRAM24HL_RAM_HL_MASK    (0xFFU)                                             /*!< CSE_PRAM__EmbeddedRAM24HL.RAM_HL Mask   */
-#define CSE_PRAM__EmbeddedRAM24HL_RAM_HL_SHIFT   (0U)                                                /*!< CSE_PRAM__EmbeddedRAM24HL.RAM_HL Position*/
-#define CSE_PRAM__EmbeddedRAM24HL_RAM_HL(x)      (((uint8_t)(((uint8_t)(x))<<0U))&0xFFUL)            /*!< CSE_PRAM__EmbeddedRAM24HL.RAM_HL Field  */
-/* ------- _EmbeddedRAM24HU Bit Fields              ------ */
-#define CSE_PRAM__EmbeddedRAM24HU_RAM_HU_MASK    (0xFFU)                                             /*!< CSE_PRAM__EmbeddedRAM24HU.RAM_HU Mask   */
-#define CSE_PRAM__EmbeddedRAM24HU_RAM_HU_SHIFT   (0U)                                                /*!< CSE_PRAM__EmbeddedRAM24HU.RAM_HU Position*/
-#define CSE_PRAM__EmbeddedRAM24HU_RAM_HU(x)      (((uint8_t)(((uint8_t)(x))<<0U))&0xFFUL)            /*!< CSE_PRAM__EmbeddedRAM24HU.RAM_HU Field  */
-/* ------- _EmbeddedRAM25LL Bit Fields              ------ */
-#define CSE_PRAM__EmbeddedRAM25LL_RAM_LL_MASK    (0xFFU)                                             /*!< CSE_PRAM__EmbeddedRAM25LL.RAM_LL Mask   */
-#define CSE_PRAM__EmbeddedRAM25LL_RAM_LL_SHIFT   (0U)                                                /*!< CSE_PRAM__EmbeddedRAM25LL.RAM_LL Position*/
-#define CSE_PRAM__EmbeddedRAM25LL_RAM_LL(x)      (((uint8_t)(((uint8_t)(x))<<0U))&0xFFUL)            /*!< CSE_PRAM__EmbeddedRAM25LL.RAM_LL Field  */
-/* ------- _EmbeddedRAM25LU Bit Fields              ------ */
-#define CSE_PRAM__EmbeddedRAM25LU_RAM_LU_MASK    (0xFFU)                                             /*!< CSE_PRAM__EmbeddedRAM25LU.RAM_LU Mask   */
-#define CSE_PRAM__EmbeddedRAM25LU_RAM_LU_SHIFT   (0U)                                                /*!< CSE_PRAM__EmbeddedRAM25LU.RAM_LU Position*/
-#define CSE_PRAM__EmbeddedRAM25LU_RAM_LU(x)      (((uint8_t)(((uint8_t)(x))<<0U))&0xFFUL)            /*!< CSE_PRAM__EmbeddedRAM25LU.RAM_LU Field  */
-/* ------- _EmbeddedRAM25HL Bit Fields              ------ */
-#define CSE_PRAM__EmbeddedRAM25HL_RAM_HL_MASK    (0xFFU)                                             /*!< CSE_PRAM__EmbeddedRAM25HL.RAM_HL Mask   */
-#define CSE_PRAM__EmbeddedRAM25HL_RAM_HL_SHIFT   (0U)                                                /*!< CSE_PRAM__EmbeddedRAM25HL.RAM_HL Position*/
-#define CSE_PRAM__EmbeddedRAM25HL_RAM_HL(x)      (((uint8_t)(((uint8_t)(x))<<0U))&0xFFUL)            /*!< CSE_PRAM__EmbeddedRAM25HL.RAM_HL Field  */
-/* ------- _EmbeddedRAM25HU Bit Fields              ------ */
-#define CSE_PRAM__EmbeddedRAM25HU_RAM_HU_MASK    (0xFFU)                                             /*!< CSE_PRAM__EmbeddedRAM25HU.RAM_HU Mask   */
-#define CSE_PRAM__EmbeddedRAM25HU_RAM_HU_SHIFT   (0U)                                                /*!< CSE_PRAM__EmbeddedRAM25HU.RAM_HU Position*/
-#define CSE_PRAM__EmbeddedRAM25HU_RAM_HU(x)      (((uint8_t)(((uint8_t)(x))<<0U))&0xFFUL)            /*!< CSE_PRAM__EmbeddedRAM25HU.RAM_HU Field  */
-/* ------- _EmbeddedRAM26LL Bit Fields              ------ */
-#define CSE_PRAM__EmbeddedRAM26LL_RAM_LL_MASK    (0xFFU)                                             /*!< CSE_PRAM__EmbeddedRAM26LL.RAM_LL Mask   */
-#define CSE_PRAM__EmbeddedRAM26LL_RAM_LL_SHIFT   (0U)                                                /*!< CSE_PRAM__EmbeddedRAM26LL.RAM_LL Position*/
-#define CSE_PRAM__EmbeddedRAM26LL_RAM_LL(x)      (((uint8_t)(((uint8_t)(x))<<0U))&0xFFUL)            /*!< CSE_PRAM__EmbeddedRAM26LL.RAM_LL Field  */
-/* ------- _EmbeddedRAM26LU Bit Fields              ------ */
-#define CSE_PRAM__EmbeddedRAM26LU_RAM_LU_MASK    (0xFFU)                                             /*!< CSE_PRAM__EmbeddedRAM26LU.RAM_LU Mask   */
-#define CSE_PRAM__EmbeddedRAM26LU_RAM_LU_SHIFT   (0U)                                                /*!< CSE_PRAM__EmbeddedRAM26LU.RAM_LU Position*/
-#define CSE_PRAM__EmbeddedRAM26LU_RAM_LU(x)      (((uint8_t)(((uint8_t)(x))<<0U))&0xFFUL)            /*!< CSE_PRAM__EmbeddedRAM26LU.RAM_LU Field  */
-/* ------- _EmbeddedRAM26HL Bit Fields              ------ */
-#define CSE_PRAM__EmbeddedRAM26HL_RAM_HL_MASK    (0xFFU)                                             /*!< CSE_PRAM__EmbeddedRAM26HL.RAM_HL Mask   */
-#define CSE_PRAM__EmbeddedRAM26HL_RAM_HL_SHIFT   (0U)                                                /*!< CSE_PRAM__EmbeddedRAM26HL.RAM_HL Position*/
-#define CSE_PRAM__EmbeddedRAM26HL_RAM_HL(x)      (((uint8_t)(((uint8_t)(x))<<0U))&0xFFUL)            /*!< CSE_PRAM__EmbeddedRAM26HL.RAM_HL Field  */
-/* ------- _EmbeddedRAM26HU Bit Fields              ------ */
-#define CSE_PRAM__EmbeddedRAM26HU_RAM_HU_MASK    (0xFFU)                                             /*!< CSE_PRAM__EmbeddedRAM26HU.RAM_HU Mask   */
-#define CSE_PRAM__EmbeddedRAM26HU_RAM_HU_SHIFT   (0U)                                                /*!< CSE_PRAM__EmbeddedRAM26HU.RAM_HU Position*/
-#define CSE_PRAM__EmbeddedRAM26HU_RAM_HU(x)      (((uint8_t)(((uint8_t)(x))<<0U))&0xFFUL)            /*!< CSE_PRAM__EmbeddedRAM26HU.RAM_HU Field  */
-/* ------- _EmbeddedRAM27LL Bit Fields              ------ */
-#define CSE_PRAM__EmbeddedRAM27LL_RAM_LL_MASK    (0xFFU)                                             /*!< CSE_PRAM__EmbeddedRAM27LL.RAM_LL Mask   */
-#define CSE_PRAM__EmbeddedRAM27LL_RAM_LL_SHIFT   (0U)                                                /*!< CSE_PRAM__EmbeddedRAM27LL.RAM_LL Position*/
-#define CSE_PRAM__EmbeddedRAM27LL_RAM_LL(x)      (((uint8_t)(((uint8_t)(x))<<0U))&0xFFUL)            /*!< CSE_PRAM__EmbeddedRAM27LL.RAM_LL Field  */
-/* ------- _EmbeddedRAM27LU Bit Fields              ------ */
-#define CSE_PRAM__EmbeddedRAM27LU_RAM_LU_MASK    (0xFFU)                                             /*!< CSE_PRAM__EmbeddedRAM27LU.RAM_LU Mask   */
-#define CSE_PRAM__EmbeddedRAM27LU_RAM_LU_SHIFT   (0U)                                                /*!< CSE_PRAM__EmbeddedRAM27LU.RAM_LU Position*/
-#define CSE_PRAM__EmbeddedRAM27LU_RAM_LU(x)      (((uint8_t)(((uint8_t)(x))<<0U))&0xFFUL)            /*!< CSE_PRAM__EmbeddedRAM27LU.RAM_LU Field  */
-/* ------- _EmbeddedRAM27HL Bit Fields              ------ */
-#define CSE_PRAM__EmbeddedRAM27HL_RAM_HL_MASK    (0xFFU)                                             /*!< CSE_PRAM__EmbeddedRAM27HL.RAM_HL Mask   */
-#define CSE_PRAM__EmbeddedRAM27HL_RAM_HL_SHIFT   (0U)                                                /*!< CSE_PRAM__EmbeddedRAM27HL.RAM_HL Position*/
-#define CSE_PRAM__EmbeddedRAM27HL_RAM_HL(x)      (((uint8_t)(((uint8_t)(x))<<0U))&0xFFUL)            /*!< CSE_PRAM__EmbeddedRAM27HL.RAM_HL Field  */
-/* ------- _EmbeddedRAM27HU Bit Fields              ------ */
-#define CSE_PRAM__EmbeddedRAM27HU_RAM_HU_MASK    (0xFFU)                                             /*!< CSE_PRAM__EmbeddedRAM27HU.RAM_HU Mask   */
-#define CSE_PRAM__EmbeddedRAM27HU_RAM_HU_SHIFT   (0U)                                                /*!< CSE_PRAM__EmbeddedRAM27HU.RAM_HU Position*/
-#define CSE_PRAM__EmbeddedRAM27HU_RAM_HU(x)      (((uint8_t)(((uint8_t)(x))<<0U))&0xFFUL)            /*!< CSE_PRAM__EmbeddedRAM27HU.RAM_HU Field  */
-/* ------- _EmbeddedRAM28LL Bit Fields              ------ */
-#define CSE_PRAM__EmbeddedRAM28LL_RAM_LL_MASK    (0xFFU)                                             /*!< CSE_PRAM__EmbeddedRAM28LL.RAM_LL Mask   */
-#define CSE_PRAM__EmbeddedRAM28LL_RAM_LL_SHIFT   (0U)                                                /*!< CSE_PRAM__EmbeddedRAM28LL.RAM_LL Position*/
-#define CSE_PRAM__EmbeddedRAM28LL_RAM_LL(x)      (((uint8_t)(((uint8_t)(x))<<0U))&0xFFUL)            /*!< CSE_PRAM__EmbeddedRAM28LL.RAM_LL Field  */
-/* ------- _EmbeddedRAM28LU Bit Fields              ------ */
-#define CSE_PRAM__EmbeddedRAM28LU_RAM_LU_MASK    (0xFFU)                                             /*!< CSE_PRAM__EmbeddedRAM28LU.RAM_LU Mask   */
-#define CSE_PRAM__EmbeddedRAM28LU_RAM_LU_SHIFT   (0U)                                                /*!< CSE_PRAM__EmbeddedRAM28LU.RAM_LU Position*/
-#define CSE_PRAM__EmbeddedRAM28LU_RAM_LU(x)      (((uint8_t)(((uint8_t)(x))<<0U))&0xFFUL)            /*!< CSE_PRAM__EmbeddedRAM28LU.RAM_LU Field  */
-/* ------- _EmbeddedRAM28HL Bit Fields              ------ */
-#define CSE_PRAM__EmbeddedRAM28HL_RAM_HL_MASK    (0xFFU)                                             /*!< CSE_PRAM__EmbeddedRAM28HL.RAM_HL Mask   */
-#define CSE_PRAM__EmbeddedRAM28HL_RAM_HL_SHIFT   (0U)                                                /*!< CSE_PRAM__EmbeddedRAM28HL.RAM_HL Position*/
-#define CSE_PRAM__EmbeddedRAM28HL_RAM_HL(x)      (((uint8_t)(((uint8_t)(x))<<0U))&0xFFUL)            /*!< CSE_PRAM__EmbeddedRAM28HL.RAM_HL Field  */
-/* ------- _EmbeddedRAM28HU Bit Fields              ------ */
-#define CSE_PRAM__EmbeddedRAM28HU_RAM_HU_MASK    (0xFFU)                                             /*!< CSE_PRAM__EmbeddedRAM28HU.RAM_HU Mask   */
-#define CSE_PRAM__EmbeddedRAM28HU_RAM_HU_SHIFT   (0U)                                                /*!< CSE_PRAM__EmbeddedRAM28HU.RAM_HU Position*/
-#define CSE_PRAM__EmbeddedRAM28HU_RAM_HU(x)      (((uint8_t)(((uint8_t)(x))<<0U))&0xFFUL)            /*!< CSE_PRAM__EmbeddedRAM28HU.RAM_HU Field  */
-/* ------- _EmbeddedRAM29LL Bit Fields              ------ */
-#define CSE_PRAM__EmbeddedRAM29LL_RAM_LL_MASK    (0xFFU)                                             /*!< CSE_PRAM__EmbeddedRAM29LL.RAM_LL Mask   */
-#define CSE_PRAM__EmbeddedRAM29LL_RAM_LL_SHIFT   (0U)                                                /*!< CSE_PRAM__EmbeddedRAM29LL.RAM_LL Position*/
-#define CSE_PRAM__EmbeddedRAM29LL_RAM_LL(x)      (((uint8_t)(((uint8_t)(x))<<0U))&0xFFUL)            /*!< CSE_PRAM__EmbeddedRAM29LL.RAM_LL Field  */
-/* ------- _EmbeddedRAM29LU Bit Fields              ------ */
-#define CSE_PRAM__EmbeddedRAM29LU_RAM_LU_MASK    (0xFFU)                                             /*!< CSE_PRAM__EmbeddedRAM29LU.RAM_LU Mask   */
-#define CSE_PRAM__EmbeddedRAM29LU_RAM_LU_SHIFT   (0U)                                                /*!< CSE_PRAM__EmbeddedRAM29LU.RAM_LU Position*/
-#define CSE_PRAM__EmbeddedRAM29LU_RAM_LU(x)      (((uint8_t)(((uint8_t)(x))<<0U))&0xFFUL)            /*!< CSE_PRAM__EmbeddedRAM29LU.RAM_LU Field  */
-/* ------- _EmbeddedRAM29HL Bit Fields              ------ */
-#define CSE_PRAM__EmbeddedRAM29HL_RAM_HL_MASK    (0xFFU)                                             /*!< CSE_PRAM__EmbeddedRAM29HL.RAM_HL Mask   */
-#define CSE_PRAM__EmbeddedRAM29HL_RAM_HL_SHIFT   (0U)                                                /*!< CSE_PRAM__EmbeddedRAM29HL.RAM_HL Position*/
-#define CSE_PRAM__EmbeddedRAM29HL_RAM_HL(x)      (((uint8_t)(((uint8_t)(x))<<0U))&0xFFUL)            /*!< CSE_PRAM__EmbeddedRAM29HL.RAM_HL Field  */
-/* ------- _EmbeddedRAM29HU Bit Fields              ------ */
-#define CSE_PRAM__EmbeddedRAM29HU_RAM_HU_MASK    (0xFFU)                                             /*!< CSE_PRAM__EmbeddedRAM29HU.RAM_HU Mask   */
-#define CSE_PRAM__EmbeddedRAM29HU_RAM_HU_SHIFT   (0U)                                                /*!< CSE_PRAM__EmbeddedRAM29HU.RAM_HU Position*/
-#define CSE_PRAM__EmbeddedRAM29HU_RAM_HU(x)      (((uint8_t)(((uint8_t)(x))<<0U))&0xFFUL)            /*!< CSE_PRAM__EmbeddedRAM29HU.RAM_HU Field  */
-/* ------- _EmbeddedRAM30LL Bit Fields              ------ */
-#define CSE_PRAM__EmbeddedRAM30LL_RAM_LL_MASK    (0xFFU)                                             /*!< CSE_PRAM__EmbeddedRAM30LL.RAM_LL Mask   */
-#define CSE_PRAM__EmbeddedRAM30LL_RAM_LL_SHIFT   (0U)                                                /*!< CSE_PRAM__EmbeddedRAM30LL.RAM_LL Position*/
-#define CSE_PRAM__EmbeddedRAM30LL_RAM_LL(x)      (((uint8_t)(((uint8_t)(x))<<0U))&0xFFUL)            /*!< CSE_PRAM__EmbeddedRAM30LL.RAM_LL Field  */
-/* ------- _EmbeddedRAM30LU Bit Fields              ------ */
-#define CSE_PRAM__EmbeddedRAM30LU_RAM_LU_MASK    (0xFFU)                                             /*!< CSE_PRAM__EmbeddedRAM30LU.RAM_LU Mask   */
-#define CSE_PRAM__EmbeddedRAM30LU_RAM_LU_SHIFT   (0U)                                                /*!< CSE_PRAM__EmbeddedRAM30LU.RAM_LU Position*/
-#define CSE_PRAM__EmbeddedRAM30LU_RAM_LU(x)      (((uint8_t)(((uint8_t)(x))<<0U))&0xFFUL)            /*!< CSE_PRAM__EmbeddedRAM30LU.RAM_LU Field  */
-/* ------- _EmbeddedRAM30HL Bit Fields              ------ */
-#define CSE_PRAM__EmbeddedRAM30HL_RAM_HL_MASK    (0xFFU)                                             /*!< CSE_PRAM__EmbeddedRAM30HL.RAM_HL Mask   */
-#define CSE_PRAM__EmbeddedRAM30HL_RAM_HL_SHIFT   (0U)                                                /*!< CSE_PRAM__EmbeddedRAM30HL.RAM_HL Position*/
-#define CSE_PRAM__EmbeddedRAM30HL_RAM_HL(x)      (((uint8_t)(((uint8_t)(x))<<0U))&0xFFUL)            /*!< CSE_PRAM__EmbeddedRAM30HL.RAM_HL Field  */
-/* ------- _EmbeddedRAM30HU Bit Fields              ------ */
-#define CSE_PRAM__EmbeddedRAM30HU_RAM_HU_MASK    (0xFFU)                                             /*!< CSE_PRAM__EmbeddedRAM30HU.RAM_HU Mask   */
-#define CSE_PRAM__EmbeddedRAM30HU_RAM_HU_SHIFT   (0U)                                                /*!< CSE_PRAM__EmbeddedRAM30HU.RAM_HU Position*/
-#define CSE_PRAM__EmbeddedRAM30HU_RAM_HU(x)      (((uint8_t)(((uint8_t)(x))<<0U))&0xFFUL)            /*!< CSE_PRAM__EmbeddedRAM30HU.RAM_HU Field  */
-/* ------- _EmbeddedRAM31LL Bit Fields              ------ */
-#define CSE_PRAM__EmbeddedRAM31LL_RAM_LL_MASK    (0xFFU)                                             /*!< CSE_PRAM__EmbeddedRAM31LL.RAM_LL Mask   */
-#define CSE_PRAM__EmbeddedRAM31LL_RAM_LL_SHIFT   (0U)                                                /*!< CSE_PRAM__EmbeddedRAM31LL.RAM_LL Position*/
-#define CSE_PRAM__EmbeddedRAM31LL_RAM_LL(x)      (((uint8_t)(((uint8_t)(x))<<0U))&0xFFUL)            /*!< CSE_PRAM__EmbeddedRAM31LL.RAM_LL Field  */
-/* ------- _EmbeddedRAM31LU Bit Fields              ------ */
-#define CSE_PRAM__EmbeddedRAM31LU_RAM_LU_MASK    (0xFFU)                                             /*!< CSE_PRAM__EmbeddedRAM31LU.RAM_LU Mask   */
-#define CSE_PRAM__EmbeddedRAM31LU_RAM_LU_SHIFT   (0U)                                                /*!< CSE_PRAM__EmbeddedRAM31LU.RAM_LU Position*/
-#define CSE_PRAM__EmbeddedRAM31LU_RAM_LU(x)      (((uint8_t)(((uint8_t)(x))<<0U))&0xFFUL)            /*!< CSE_PRAM__EmbeddedRAM31LU.RAM_LU Field  */
-/* ------- _EmbeddedRAM31HL Bit Fields              ------ */
-#define CSE_PRAM__EmbeddedRAM31HL_RAM_HL_MASK    (0xFFU)                                             /*!< CSE_PRAM__EmbeddedRAM31HL.RAM_HL Mask   */
-#define CSE_PRAM__EmbeddedRAM31HL_RAM_HL_SHIFT   (0U)                                                /*!< CSE_PRAM__EmbeddedRAM31HL.RAM_HL Position*/
-#define CSE_PRAM__EmbeddedRAM31HL_RAM_HL(x)      (((uint8_t)(((uint8_t)(x))<<0U))&0xFFUL)            /*!< CSE_PRAM__EmbeddedRAM31HL.RAM_HL Field  */
-/* ------- _EmbeddedRAM31HU Bit Fields              ------ */
-#define CSE_PRAM__EmbeddedRAM31HU_RAM_HU_MASK    (0xFFU)                                             /*!< CSE_PRAM__EmbeddedRAM31HU.RAM_HU Mask   */
-#define CSE_PRAM__EmbeddedRAM31HU_RAM_HU_SHIFT   (0U)                                                /*!< CSE_PRAM__EmbeddedRAM31HU.RAM_HU Position*/
-#define CSE_PRAM__EmbeddedRAM31HU_RAM_HU(x)      (((uint8_t)(((uint8_t)(x))<<0U))&0xFFUL)            /*!< CSE_PRAM__EmbeddedRAM31HU.RAM_HU Field  */
+/* ------- DATA_32 Bit Fields                       ------ */
+#define CSE_PRAM_DATA_32_BYTE_3_MASK             (0xFFU)                                             /*!< CSE_PRAM_DATA_32.BYTE_3 Mask            */
+#define CSE_PRAM_DATA_32_BYTE_3_SHIFT            (0U)                                                /*!< CSE_PRAM_DATA_32.BYTE_3 Position        */
+#define CSE_PRAM_DATA_32_BYTE_3(x)               (((uint32_t)(((uint32_t)(x))<<0U))&0xFFUL)          /*!< CSE_PRAM_DATA_32.BYTE_3 Field           */
+#define CSE_PRAM_DATA_32_BYTE_2_MASK             (0xFF00U)                                           /*!< CSE_PRAM_DATA_32.BYTE_2 Mask            */
+#define CSE_PRAM_DATA_32_BYTE_2_SHIFT            (8U)                                                /*!< CSE_PRAM_DATA_32.BYTE_2 Position        */
+#define CSE_PRAM_DATA_32_BYTE_2(x)               (((uint32_t)(((uint32_t)(x))<<8U))&0xFF00UL)        /*!< CSE_PRAM_DATA_32.BYTE_2 Field           */
+#define CSE_PRAM_DATA_32_BYTE_1_MASK             (0xFF0000U)                                         /*!< CSE_PRAM_DATA_32.BYTE_1 Mask            */
+#define CSE_PRAM_DATA_32_BYTE_1_SHIFT            (16U)                                               /*!< CSE_PRAM_DATA_32.BYTE_1 Position        */
+#define CSE_PRAM_DATA_32_BYTE_1(x)               (((uint32_t)(((uint32_t)(x))<<16U))&0xFF0000UL)     /*!< CSE_PRAM_DATA_32.BYTE_1 Field           */
+#define CSE_PRAM_DATA_32_BYTE_0_MASK             (0xFF000000U)                                       /*!< CSE_PRAM_DATA_32.BYTE_0 Mask            */
+#define CSE_PRAM_DATA_32_BYTE_0_SHIFT            (24U)                                               /*!< CSE_PRAM_DATA_32.BYTE_0 Position        */
+#define CSE_PRAM_DATA_32_BYTE_0(x)               (((uint32_t)(((uint32_t)(x))<<24U))&0xFF000000UL)   /*!< CSE_PRAM_DATA_32.BYTE_0 Field           */
+/* ------- DATA_8LL Bit Fields                      ------ */
+#define CSE_PRAM_DATA_8LL_RAM_LL_MASK            (0xFFU)                                             /*!< CSE_PRAM_DATA_8LL.RAM_LL Mask           */
+#define CSE_PRAM_DATA_8LL_RAM_LL_SHIFT           (0U)                                                /*!< CSE_PRAM_DATA_8LL.RAM_LL Position       */
+#define CSE_PRAM_DATA_8LL_RAM_LL(x)              (((uint8_t)(((uint8_t)(x))<<0U))&0xFFUL)            /*!< CSE_PRAM_DATA_8LL.RAM_LL Field          */
+/* ------- DATA_8LU Bit Fields                      ------ */
+#define CSE_PRAM_DATA_8LU_RAM_LU_MASK            (0xFFU)                                             /*!< CSE_PRAM_DATA_8LU.RAM_LU Mask           */
+#define CSE_PRAM_DATA_8LU_RAM_LU_SHIFT           (0U)                                                /*!< CSE_PRAM_DATA_8LU.RAM_LU Position       */
+#define CSE_PRAM_DATA_8LU_RAM_LU(x)              (((uint8_t)(((uint8_t)(x))<<0U))&0xFFUL)            /*!< CSE_PRAM_DATA_8LU.RAM_LU Field          */
+/* ------- DATA_8HL Bit Fields                      ------ */
+#define CSE_PRAM_DATA_8HL_RAM_HL_MASK            (0xFFU)                                             /*!< CSE_PRAM_DATA_8HL.RAM_HL Mask           */
+#define CSE_PRAM_DATA_8HL_RAM_HL_SHIFT           (0U)                                                /*!< CSE_PRAM_DATA_8HL.RAM_HL Position       */
+#define CSE_PRAM_DATA_8HL_RAM_HL(x)              (((uint8_t)(((uint8_t)(x))<<0U))&0xFFUL)            /*!< CSE_PRAM_DATA_8HL.RAM_HL Field          */
+/* ------- DATA_8HU Bit Fields                      ------ */
+#define CSE_PRAM_DATA_8HU_RAM_HU_MASK            (0xFFU)                                             /*!< CSE_PRAM_DATA_8HU.RAM_HU Mask           */
+#define CSE_PRAM_DATA_8HU_RAM_HU_SHIFT           (0U)                                                /*!< CSE_PRAM_DATA_8HU.RAM_HU Position       */
+#define CSE_PRAM_DATA_8HU_RAM_HU(x)              (((uint8_t)(((uint8_t)(x))<<0U))&0xFFUL)            /*!< CSE_PRAM_DATA_8HU.RAM_HU Field          */
 /**
  * @} */ /* End group CSE_PRAM_Register_Masks_GROUP 
  */
@@ -2547,21 +2132,21 @@ typedef struct CSE_PRAM_Type {
  * @} */ /* End group CSE_PRAM_Peripheral_access_layer_GROUP 
  */
 /**
-* @addtogroup DMA_Peripheral_access_layer_GROUP DMA Peripheral Access Layer
-* @brief C Struct for DMA
+* @addtogroup DMA0_Peripheral_access_layer_GROUP DMA0 Peripheral Access Layer
+* @brief C Struct for DMA0
 * @{
 */
 
 /* ================================================================================ */
-/* ================           DMA (file:DMA_S32K146)               ================ */
+/* ================           DMA0 (file:DMA0_16CH_EARS16)         ================ */
 /* ================================================================================ */
 
 /**
- * @brief Enhanced Direct Memory Access
+ * @brief Enhanced direct memory access controller
  */
 /**
-* @addtogroup DMA_structs_GROUP DMA struct
-* @brief Struct for DMA
+* @addtogroup DMA0_structs_GROUP DMA0 struct
+* @brief Struct for DMA0
 * @{
 */
 typedef struct DMA_Type {
@@ -2588,801 +2173,654 @@ typedef struct DMA_Type {
         uint8_t   RESERVED_5[12];              
    __IO uint32_t  EARS;                         /**< 0044: Enable Asynchronous Request in Stop Register                 */
         uint8_t   RESERVED_6[184];             
-   __IO uint8_t   DCHPRI3;                      /**< 0100: Channel n Priority Register                                  */
-   __IO uint8_t   DCHPRI2;                      /**< 0101: Channel n Priority Register                                  */
-   __IO uint8_t   DCHPRI1;                      /**< 0102: Channel n Priority Register                                  */
-   __IO uint8_t   DCHPRI0;                      /**< 0103: Channel n Priority Register                                  */
-   __IO uint8_t   DCHPRI7;                      /**< 0104: Channel n Priority Register                                  */
-   __IO uint8_t   DCHPRI6;                      /**< 0105: Channel n Priority Register                                  */
-   __IO uint8_t   DCHPRI5;                      /**< 0106: Channel n Priority Register                                  */
-   __IO uint8_t   DCHPRI4;                      /**< 0107: Channel n Priority Register                                  */
-   __IO uint8_t   DCHPRI11;                     /**< 0108: Channel n Priority Register                                  */
-   __IO uint8_t   DCHPRI10;                     /**< 0109: Channel n Priority Register                                  */
-   __IO uint8_t   DCHPRI9;                      /**< 010A: Channel n Priority Register                                  */
-   __IO uint8_t   DCHPRI8;                      /**< 010B: Channel n Priority Register                                  */
-   __IO uint8_t   DCHPRI15;                     /**< 010C: Channel n Priority Register                                  */
-   __IO uint8_t   DCHPRI14;                     /**< 010D: Channel n Priority Register                                  */
-   __IO uint8_t   DCHPRI13;                     /**< 010E: Channel n Priority Register                                  */
-   __IO uint8_t   DCHPRI12;                     /**< 010F: Channel n Priority Register                                  */
+   union {                                      /**< 0000: (size=0010)                                                  */
+      struct {                                  /**< 0000: (size=0010)                                                  */
+      __IO uint8_t   DCHPRI3;                   /**< 0100: Channel 3 Priority Register                                  */
+      __IO uint8_t   DCHPRI2;                   /**< 0101: Channel 2 Priority Register                                  */
+      __IO uint8_t   DCHPRI1;                   /**< 0102: Channel 1 Priority Register                                  */
+      __IO uint8_t   DCHPRI0;                   /**< 0103: Channel 0 Priority Register                                  */
+      __IO uint8_t   DCHPRI7;                   /**< 0104: Channel 7 Priority Register                                  */
+      __IO uint8_t   DCHPRI6;                   /**< 0105: Channel 6 Priority Register                                  */
+      __IO uint8_t   DCHPRI5;                   /**< 0106: Channel 5 Priority Register                                  */
+      __IO uint8_t   DCHPRI4;                   /**< 0107: Channel 4 Priority Register                                  */
+      __IO uint8_t   DCHPRI11;                  /**< 0108: Channel 11 Priority Register                                 */
+      __IO uint8_t   DCHPRI10;                  /**< 0109: Channel 10 Priority Register                                 */
+      __IO uint8_t   DCHPRI9;                   /**< 010A: Channel 9 Priority Register                                  */
+      __IO uint8_t   DCHPRI8;                   /**< 010B: Channel 8 Priority Register                                  */
+      __IO uint8_t   DCHPRI15;                  /**< 010C: Channel 15 Priority Register                                 */
+      __IO uint8_t   DCHPRI14;                  /**< 010D: Channel 14 Priority Register                                 */
+      __IO uint8_t   DCHPRI13;                  /**< 010E: Channel 13 Priority Register                                 */
+      __IO uint8_t   DCHPRI12;                  /**< 010F: Channel 12 Priority Register                                 */
+      };
+      __IO uint8_t   DCHPRI[16];                /**< 0100: Channel  Priority Register                                   */
+   };
         uint8_t   RESERVED_7[3824];            
    struct {
-      __IO uint32_t  SADDR;                     /**< 1000: TCD Source Address                                           */
-      __IO uint16_t  SOFF;                      /**< 1004: TCD Signed Source Address Offset                             */
-      __IO uint16_t  ATTR;                      /**< 1006: TCD Transfer Attributes                                      */
+      __IO uint32_t  SADDR;                     /**< 1000: Source Address                                               */
+      __IO uint16_t  SOFF;                      /**< 1004: Signed Source Address Offset                                 */
+      __IO uint16_t  ATTR;                      /**< 1006: Transfer Attributes                                          */
       union {                                   /**< 1000: (size=0004)                                                  */
-         __IO uint32_t  NBYTES_MLNO;            /**< 1008: TCD Minor Byte Count (Minor Loop Mapping Disabled)           */
-         __IO uint32_t  NBYTES_MLOFFNO;         /**< 1008: TCD Signed Minor Loop Offset (Minor Loop Mapping Enabled and Offset Disabled) */
-         __IO uint32_t  NBYTES_MLOFFYES;        /**< 1008: TCD Signed Minor Loop Offset (Minor Loop Mapping and Offset Enabled) */
+         __IO uint32_t  NBYTES_MLNO;            /**< 1008: Minor Byte Count (Minor Loop Disabled)                       */
+         __IO uint32_t  NBYTES_MLOFFNO;         /**< 1008: Signed Minor Loop Offset (Minor Loop Enabled and Offset Disabled) */
+         __IO uint32_t  NBYTES_MLOFFYES;        /**< 1008: Signed Minor Loop Offset (Minor Loop and Offset Enabled)     */
       };
-      __IO uint32_t  SLAST;                     /**< 100C: TCD Last Source Address Adjustment                           */
-      __IO uint32_t  DADDR;                     /**< 1010: TCD Destination Address                                      */
-      __IO uint16_t  DOFF;                      /**< 1014: TCD Signed Destination Address Offset                        */
+      __IO uint32_t  SLAST;                     /**< 100C: Last Source Address Adjustment                               */
+      __IO uint32_t  DADDR;                     /**< 1010: Destination Address                                          */
+      __IO uint16_t  DOFF;                      /**< 1014: Signed Destination Address Offset                            */
       union {                                   /**< 1000: (size=0002)                                                  */
-         __IO uint16_t  CITER_ELINKNO;          /**< 1016: TCD Current Minor Loop Link, Major Loop Count (Channel Linking Disabled) */
-         __IO uint16_t  CITER_ELINKYES;         /**< 1016: TCD Current Minor Loop Link, Major Loop Count (Channel Linking Enabled) */
+         __IO uint16_t  CITER_ELINKNO;          /**< 1016: Current Minor Loop Link, Major Loop Count (Channel Linking Disabled) */
+         __IO uint16_t  CITER_ELINKYES;         /**< 1016: Current Minor Loop Link, Major Loop Count (Channel Linking Enabled) */
       };
-      __IO uint32_t  DLASTSGA;                  /**< 1018: TCD Last Destination Address Adjustment/Scatter Gather Address */
-      __IO uint16_t  CSR;                       /**< 101C: TCD Control and Status                                       */
+      __IO uint32_t  DLASTSGA;                  /**< 1018: Last Destination Address Adjustment/Scatter Gather Address   */
+      __IO uint16_t  CSR;                       /**< 101C: Control and Status                                           */
       union {                                   /**< 1000: (size=0002)                                                  */
-         __IO uint16_t  BITER_ELINKNO;          /**< 101E: TCD Beginning Minor Loop Link, Major Loop Count (Channel Linking Disabled) */
-         __IO uint16_t  BITER_ELINKYES;         /**< 101E: TCD Beginning Minor Loop Link, Major Loop Count (Channel Linking Enabled) */
+         __IO uint16_t  BITER_ELINKNO;          /**< 101E: Beginning Minor Loop Link, Major Loop Count (Channel Linking Disabled) */
+         __IO uint16_t  BITER_ELINKYES;         /**< 101E: Beginning Minor Loop Link, Major Loop Count (Channel Linking Enabled) */
       };
    } TCD[16];                                   /**< 1000: (cluster: size=0x0200, 512)                                  */
 } DMA_Type;
 
 /**
- * @} */ /* End group DMA_structs_GROUP 
+ * @} */ /* End group DMA0_structs_GROUP 
  */
 
 /* -------------------------------------------------------------------------------- */
-/* -----------     'DMA' Position & Mask macros                         ----------- */
+/* -----------     'DMA0' Position & Mask macros                        ----------- */
 /* -------------------------------------------------------------------------------- */
 
 /**
-* @addtogroup DMA_Register_Masks_GROUP DMA Register Masks
-* @brief Register Masks for DMA
+* @addtogroup DMA0_Register_Masks_GROUP DMA0 Register Masks
+* @brief Register Masks for DMA0
 * @{
 */
 /* ------- CR Bit Fields                            ------ */
-#define DMA_CR_EDBG_MASK                         (0x2U)                                              /*!< DMA_CR.EDBG Mask                        */
-#define DMA_CR_EDBG_SHIFT                        (1U)                                                /*!< DMA_CR.EDBG Position                    */
-#define DMA_CR_EDBG(x)                           (((uint32_t)(((uint32_t)(x))<<1U))&0x2UL)           /*!< DMA_CR.EDBG Field                       */
-#define DMA_CR_ERCA_MASK                         (0x4U)                                              /*!< DMA_CR.ERCA Mask                        */
-#define DMA_CR_ERCA_SHIFT                        (2U)                                                /*!< DMA_CR.ERCA Position                    */
-#define DMA_CR_ERCA(x)                           (((uint32_t)(((uint32_t)(x))<<2U))&0x4UL)           /*!< DMA_CR.ERCA Field                       */
-#define DMA_CR_HOE_MASK                          (0x10U)                                             /*!< DMA_CR.HOE Mask                         */
-#define DMA_CR_HOE_SHIFT                         (4U)                                                /*!< DMA_CR.HOE Position                     */
-#define DMA_CR_HOE(x)                            (((uint32_t)(((uint32_t)(x))<<4U))&0x10UL)          /*!< DMA_CR.HOE Field                        */
-#define DMA_CR_HALT_MASK                         (0x20U)                                             /*!< DMA_CR.HALT Mask                        */
-#define DMA_CR_HALT_SHIFT                        (5U)                                                /*!< DMA_CR.HALT Position                    */
-#define DMA_CR_HALT(x)                           (((uint32_t)(((uint32_t)(x))<<5U))&0x20UL)          /*!< DMA_CR.HALT Field                       */
-#define DMA_CR_CLM_MASK                          (0x40U)                                             /*!< DMA_CR.CLM Mask                         */
-#define DMA_CR_CLM_SHIFT                         (6U)                                                /*!< DMA_CR.CLM Position                     */
-#define DMA_CR_CLM(x)                            (((uint32_t)(((uint32_t)(x))<<6U))&0x40UL)          /*!< DMA_CR.CLM Field                        */
-#define DMA_CR_EMLM_MASK                         (0x80U)                                             /*!< DMA_CR.EMLM Mask                        */
-#define DMA_CR_EMLM_SHIFT                        (7U)                                                /*!< DMA_CR.EMLM Position                    */
-#define DMA_CR_EMLM(x)                           (((uint32_t)(((uint32_t)(x))<<7U))&0x80UL)          /*!< DMA_CR.EMLM Field                       */
-#define DMA_CR_ECX_MASK                          (0x10000U)                                          /*!< DMA_CR.ECX Mask                         */
-#define DMA_CR_ECX_SHIFT                         (16U)                                               /*!< DMA_CR.ECX Position                     */
-#define DMA_CR_ECX(x)                            (((uint32_t)(((uint32_t)(x))<<16U))&0x10000UL)      /*!< DMA_CR.ECX Field                        */
-#define DMA_CR_CX_MASK                           (0x20000U)                                          /*!< DMA_CR.CX Mask                          */
-#define DMA_CR_CX_SHIFT                          (17U)                                               /*!< DMA_CR.CX Position                      */
-#define DMA_CR_CX(x)                             (((uint32_t)(((uint32_t)(x))<<17U))&0x20000UL)      /*!< DMA_CR.CX Field                         */
-#define DMA_CR_ACTIVE_MASK                       (0x80000000U)                                       /*!< DMA_CR.ACTIVE Mask                      */
-#define DMA_CR_ACTIVE_SHIFT                      (31U)                                               /*!< DMA_CR.ACTIVE Position                  */
-#define DMA_CR_ACTIVE(x)                         (((uint32_t)(((uint32_t)(x))<<31U))&0x80000000UL)   /*!< DMA_CR.ACTIVE Field                     */
+#define DMA_CR_EDBG_MASK                         (0x2U)                                              /*!< DMA0_CR.EDBG Mask                       */
+#define DMA_CR_EDBG_SHIFT                        (1U)                                                /*!< DMA0_CR.EDBG Position                   */
+#define DMA_CR_EDBG(x)                           (((uint32_t)(((uint32_t)(x))<<1U))&0x2UL)           /*!< DMA0_CR.EDBG Field                      */
+#define DMA_CR_ERCA_MASK                         (0x4U)                                              /*!< DMA0_CR.ERCA Mask                       */
+#define DMA_CR_ERCA_SHIFT                        (2U)                                                /*!< DMA0_CR.ERCA Position                   */
+#define DMA_CR_ERCA(x)                           (((uint32_t)(((uint32_t)(x))<<2U))&0x4UL)           /*!< DMA0_CR.ERCA Field                      */
+#define DMA_CR_HOE_MASK                          (0x10U)                                             /*!< DMA0_CR.HOE Mask                        */
+#define DMA_CR_HOE_SHIFT                         (4U)                                                /*!< DMA0_CR.HOE Position                    */
+#define DMA_CR_HOE(x)                            (((uint32_t)(((uint32_t)(x))<<4U))&0x10UL)          /*!< DMA0_CR.HOE Field                       */
+#define DMA_CR_HALT_MASK                         (0x20U)                                             /*!< DMA0_CR.HALT Mask                       */
+#define DMA_CR_HALT_SHIFT                        (5U)                                                /*!< DMA0_CR.HALT Position                   */
+#define DMA_CR_HALT(x)                           (((uint32_t)(((uint32_t)(x))<<5U))&0x20UL)          /*!< DMA0_CR.HALT Field                      */
+#define DMA_CR_CLM_MASK                          (0x40U)                                             /*!< DMA0_CR.CLM Mask                        */
+#define DMA_CR_CLM_SHIFT                         (6U)                                                /*!< DMA0_CR.CLM Position                    */
+#define DMA_CR_CLM(x)                            (((uint32_t)(((uint32_t)(x))<<6U))&0x40UL)          /*!< DMA0_CR.CLM Field                       */
+#define DMA_CR_EMLM_MASK                         (0x80U)                                             /*!< DMA0_CR.EMLM Mask                       */
+#define DMA_CR_EMLM_SHIFT                        (7U)                                                /*!< DMA0_CR.EMLM Position                   */
+#define DMA_CR_EMLM(x)                           (((uint32_t)(((uint32_t)(x))<<7U))&0x80UL)          /*!< DMA0_CR.EMLM Field                      */
+#define DMA_CR_ECX_MASK                          (0x10000U)                                          /*!< DMA0_CR.ECX Mask                        */
+#define DMA_CR_ECX_SHIFT                         (16U)                                               /*!< DMA0_CR.ECX Position                    */
+#define DMA_CR_ECX(x)                            (((uint32_t)(((uint32_t)(x))<<16U))&0x10000UL)      /*!< DMA0_CR.ECX Field                       */
+#define DMA_CR_CX_MASK                           (0x20000U)                                          /*!< DMA0_CR.CX Mask                         */
+#define DMA_CR_CX_SHIFT                          (17U)                                               /*!< DMA0_CR.CX Position                     */
+#define DMA_CR_CX(x)                             (((uint32_t)(((uint32_t)(x))<<17U))&0x20000UL)      /*!< DMA0_CR.CX Field                        */
 /* ------- ES Bit Fields                            ------ */
-#define DMA_ES_DBE_MASK                          (0x1U)                                              /*!< DMA_ES.DBE Mask                         */
-#define DMA_ES_DBE_SHIFT                         (0U)                                                /*!< DMA_ES.DBE Position                     */
-#define DMA_ES_DBE(x)                            (((uint32_t)(((uint32_t)(x))<<0U))&0x1UL)           /*!< DMA_ES.DBE Field                        */
-#define DMA_ES_SBE_MASK                          (0x2U)                                              /*!< DMA_ES.SBE Mask                         */
-#define DMA_ES_SBE_SHIFT                         (1U)                                                /*!< DMA_ES.SBE Position                     */
-#define DMA_ES_SBE(x)                            (((uint32_t)(((uint32_t)(x))<<1U))&0x2UL)           /*!< DMA_ES.SBE Field                        */
-#define DMA_ES_SGE_MASK                          (0x4U)                                              /*!< DMA_ES.SGE Mask                         */
-#define DMA_ES_SGE_SHIFT                         (2U)                                                /*!< DMA_ES.SGE Position                     */
-#define DMA_ES_SGE(x)                            (((uint32_t)(((uint32_t)(x))<<2U))&0x4UL)           /*!< DMA_ES.SGE Field                        */
-#define DMA_ES_NCE_MASK                          (0x8U)                                              /*!< DMA_ES.NCE Mask                         */
-#define DMA_ES_NCE_SHIFT                         (3U)                                                /*!< DMA_ES.NCE Position                     */
-#define DMA_ES_NCE(x)                            (((uint32_t)(((uint32_t)(x))<<3U))&0x8UL)           /*!< DMA_ES.NCE Field                        */
-#define DMA_ES_DOE_MASK                          (0x10U)                                             /*!< DMA_ES.DOE Mask                         */
-#define DMA_ES_DOE_SHIFT                         (4U)                                                /*!< DMA_ES.DOE Position                     */
-#define DMA_ES_DOE(x)                            (((uint32_t)(((uint32_t)(x))<<4U))&0x10UL)          /*!< DMA_ES.DOE Field                        */
-#define DMA_ES_DAE_MASK                          (0x20U)                                             /*!< DMA_ES.DAE Mask                         */
-#define DMA_ES_DAE_SHIFT                         (5U)                                                /*!< DMA_ES.DAE Position                     */
-#define DMA_ES_DAE(x)                            (((uint32_t)(((uint32_t)(x))<<5U))&0x20UL)          /*!< DMA_ES.DAE Field                        */
-#define DMA_ES_SOE_MASK                          (0x40U)                                             /*!< DMA_ES.SOE Mask                         */
-#define DMA_ES_SOE_SHIFT                         (6U)                                                /*!< DMA_ES.SOE Position                     */
-#define DMA_ES_SOE(x)                            (((uint32_t)(((uint32_t)(x))<<6U))&0x40UL)          /*!< DMA_ES.SOE Field                        */
-#define DMA_ES_SAE_MASK                          (0x80U)                                             /*!< DMA_ES.SAE Mask                         */
-#define DMA_ES_SAE_SHIFT                         (7U)                                                /*!< DMA_ES.SAE Position                     */
-#define DMA_ES_SAE(x)                            (((uint32_t)(((uint32_t)(x))<<7U))&0x80UL)          /*!< DMA_ES.SAE Field                        */
-#define DMA_ES_ERRCHN_MASK                       (0xF00U)                                            /*!< DMA_ES.ERRCHN Mask                      */
-#define DMA_ES_ERRCHN_SHIFT                      (8U)                                                /*!< DMA_ES.ERRCHN Position                  */
-#define DMA_ES_ERRCHN(x)                         (((uint32_t)(((uint32_t)(x))<<8U))&0xF00UL)         /*!< DMA_ES.ERRCHN Field                     */
-#define DMA_ES_CPE_MASK                          (0x4000U)                                           /*!< DMA_ES.CPE Mask                         */
-#define DMA_ES_CPE_SHIFT                         (14U)                                               /*!< DMA_ES.CPE Position                     */
-#define DMA_ES_CPE(x)                            (((uint32_t)(((uint32_t)(x))<<14U))&0x4000UL)       /*!< DMA_ES.CPE Field                        */
-#define DMA_ES_ECX_MASK                          (0x10000U)                                          /*!< DMA_ES.ECX Mask                         */
-#define DMA_ES_ECX_SHIFT                         (16U)                                               /*!< DMA_ES.ECX Position                     */
-#define DMA_ES_ECX(x)                            (((uint32_t)(((uint32_t)(x))<<16U))&0x10000UL)      /*!< DMA_ES.ECX Field                        */
-#define DMA_ES_VLD_MASK                          (0x80000000U)                                       /*!< DMA_ES.VLD Mask                         */
-#define DMA_ES_VLD_SHIFT                         (31U)                                               /*!< DMA_ES.VLD Position                     */
-#define DMA_ES_VLD(x)                            (((uint32_t)(((uint32_t)(x))<<31U))&0x80000000UL)   /*!< DMA_ES.VLD Field                        */
+#define DMA_ES_DBE_MASK                          (0x1U)                                              /*!< DMA0_ES.DBE Mask                        */
+#define DMA_ES_DBE_SHIFT                         (0U)                                                /*!< DMA0_ES.DBE Position                    */
+#define DMA_ES_DBE(x)                            (((uint32_t)(((uint32_t)(x))<<0U))&0x1UL)           /*!< DMA0_ES.DBE Field                       */
+#define DMA_ES_SBE_MASK                          (0x2U)                                              /*!< DMA0_ES.SBE Mask                        */
+#define DMA_ES_SBE_SHIFT                         (1U)                                                /*!< DMA0_ES.SBE Position                    */
+#define DMA_ES_SBE(x)                            (((uint32_t)(((uint32_t)(x))<<1U))&0x2UL)           /*!< DMA0_ES.SBE Field                       */
+#define DMA_ES_SGE_MASK                          (0x4U)                                              /*!< DMA0_ES.SGE Mask                        */
+#define DMA_ES_SGE_SHIFT                         (2U)                                                /*!< DMA0_ES.SGE Position                    */
+#define DMA_ES_SGE(x)                            (((uint32_t)(((uint32_t)(x))<<2U))&0x4UL)           /*!< DMA0_ES.SGE Field                       */
+#define DMA_ES_NCE_MASK                          (0x8U)                                              /*!< DMA0_ES.NCE Mask                        */
+#define DMA_ES_NCE_SHIFT                         (3U)                                                /*!< DMA0_ES.NCE Position                    */
+#define DMA_ES_NCE(x)                            (((uint32_t)(((uint32_t)(x))<<3U))&0x8UL)           /*!< DMA0_ES.NCE Field                       */
+#define DMA_ES_DOE_MASK                          (0x10U)                                             /*!< DMA0_ES.DOE Mask                        */
+#define DMA_ES_DOE_SHIFT                         (4U)                                                /*!< DMA0_ES.DOE Position                    */
+#define DMA_ES_DOE(x)                            (((uint32_t)(((uint32_t)(x))<<4U))&0x10UL)          /*!< DMA0_ES.DOE Field                       */
+#define DMA_ES_DAE_MASK                          (0x20U)                                             /*!< DMA0_ES.DAE Mask                        */
+#define DMA_ES_DAE_SHIFT                         (5U)                                                /*!< DMA0_ES.DAE Position                    */
+#define DMA_ES_DAE(x)                            (((uint32_t)(((uint32_t)(x))<<5U))&0x20UL)          /*!< DMA0_ES.DAE Field                       */
+#define DMA_ES_SOE_MASK                          (0x40U)                                             /*!< DMA0_ES.SOE Mask                        */
+#define DMA_ES_SOE_SHIFT                         (6U)                                                /*!< DMA0_ES.SOE Position                    */
+#define DMA_ES_SOE(x)                            (((uint32_t)(((uint32_t)(x))<<6U))&0x40UL)          /*!< DMA0_ES.SOE Field                       */
+#define DMA_ES_SAE_MASK                          (0x80U)                                             /*!< DMA0_ES.SAE Mask                        */
+#define DMA_ES_SAE_SHIFT                         (7U)                                                /*!< DMA0_ES.SAE Position                    */
+#define DMA_ES_SAE(x)                            (((uint32_t)(((uint32_t)(x))<<7U))&0x80UL)          /*!< DMA0_ES.SAE Field                       */
+#define DMA_ES_ERRCHN_MASK                       (0xF00U)                                            /*!< DMA0_ES.ERRCHN Mask                     */
+#define DMA_ES_ERRCHN_SHIFT                      (8U)                                                /*!< DMA0_ES.ERRCHN Position                 */
+#define DMA_ES_ERRCHN(x)                         (((uint32_t)(((uint32_t)(x))<<8U))&0xF00UL)         /*!< DMA0_ES.ERRCHN Field                    */
+#define DMA_ES_CPE_MASK                          (0x4000U)                                           /*!< DMA0_ES.CPE Mask                        */
+#define DMA_ES_CPE_SHIFT                         (14U)                                               /*!< DMA0_ES.CPE Position                    */
+#define DMA_ES_CPE(x)                            (((uint32_t)(((uint32_t)(x))<<14U))&0x4000UL)       /*!< DMA0_ES.CPE Field                       */
+#define DMA_ES_ECX_MASK                          (0x10000U)                                          /*!< DMA0_ES.ECX Mask                        */
+#define DMA_ES_ECX_SHIFT                         (16U)                                               /*!< DMA0_ES.ECX Position                    */
+#define DMA_ES_ECX(x)                            (((uint32_t)(((uint32_t)(x))<<16U))&0x10000UL)      /*!< DMA0_ES.ECX Field                       */
+#define DMA_ES_VLD_MASK                          (0x80000000U)                                       /*!< DMA0_ES.VLD Mask                        */
+#define DMA_ES_VLD_SHIFT                         (31U)                                               /*!< DMA0_ES.VLD Position                    */
+#define DMA_ES_VLD(x)                            (((uint32_t)(((uint32_t)(x))<<31U))&0x80000000UL)   /*!< DMA0_ES.VLD Field                       */
 /* ------- ERQ Bit Fields                           ------ */
-#define DMA_ERQ_ERQ0_MASK                        (0x1U)                                              /*!< DMA_ERQ.ERQ0 Mask                       */
-#define DMA_ERQ_ERQ0_SHIFT                       (0U)                                                /*!< DMA_ERQ.ERQ0 Position                   */
-#define DMA_ERQ_ERQ0(x)                          (((uint32_t)(((uint32_t)(x))<<0U))&0x1UL)           /*!< DMA_ERQ.ERQ0 Field                      */
-#define DMA_ERQ_ERQ1_MASK                        (0x2U)                                              /*!< DMA_ERQ.ERQ1 Mask                       */
-#define DMA_ERQ_ERQ1_SHIFT                       (1U)                                                /*!< DMA_ERQ.ERQ1 Position                   */
-#define DMA_ERQ_ERQ1(x)                          (((uint32_t)(((uint32_t)(x))<<1U))&0x2UL)           /*!< DMA_ERQ.ERQ1 Field                      */
-#define DMA_ERQ_ERQ2_MASK                        (0x4U)                                              /*!< DMA_ERQ.ERQ2 Mask                       */
-#define DMA_ERQ_ERQ2_SHIFT                       (2U)                                                /*!< DMA_ERQ.ERQ2 Position                   */
-#define DMA_ERQ_ERQ2(x)                          (((uint32_t)(((uint32_t)(x))<<2U))&0x4UL)           /*!< DMA_ERQ.ERQ2 Field                      */
-#define DMA_ERQ_ERQ3_MASK                        (0x8U)                                              /*!< DMA_ERQ.ERQ3 Mask                       */
-#define DMA_ERQ_ERQ3_SHIFT                       (3U)                                                /*!< DMA_ERQ.ERQ3 Position                   */
-#define DMA_ERQ_ERQ3(x)                          (((uint32_t)(((uint32_t)(x))<<3U))&0x8UL)           /*!< DMA_ERQ.ERQ3 Field                      */
-#define DMA_ERQ_ERQ4_MASK                        (0x10U)                                             /*!< DMA_ERQ.ERQ4 Mask                       */
-#define DMA_ERQ_ERQ4_SHIFT                       (4U)                                                /*!< DMA_ERQ.ERQ4 Position                   */
-#define DMA_ERQ_ERQ4(x)                          (((uint32_t)(((uint32_t)(x))<<4U))&0x10UL)          /*!< DMA_ERQ.ERQ4 Field                      */
-#define DMA_ERQ_ERQ5_MASK                        (0x20U)                                             /*!< DMA_ERQ.ERQ5 Mask                       */
-#define DMA_ERQ_ERQ5_SHIFT                       (5U)                                                /*!< DMA_ERQ.ERQ5 Position                   */
-#define DMA_ERQ_ERQ5(x)                          (((uint32_t)(((uint32_t)(x))<<5U))&0x20UL)          /*!< DMA_ERQ.ERQ5 Field                      */
-#define DMA_ERQ_ERQ6_MASK                        (0x40U)                                             /*!< DMA_ERQ.ERQ6 Mask                       */
-#define DMA_ERQ_ERQ6_SHIFT                       (6U)                                                /*!< DMA_ERQ.ERQ6 Position                   */
-#define DMA_ERQ_ERQ6(x)                          (((uint32_t)(((uint32_t)(x))<<6U))&0x40UL)          /*!< DMA_ERQ.ERQ6 Field                      */
-#define DMA_ERQ_ERQ7_MASK                        (0x80U)                                             /*!< DMA_ERQ.ERQ7 Mask                       */
-#define DMA_ERQ_ERQ7_SHIFT                       (7U)                                                /*!< DMA_ERQ.ERQ7 Position                   */
-#define DMA_ERQ_ERQ7(x)                          (((uint32_t)(((uint32_t)(x))<<7U))&0x80UL)          /*!< DMA_ERQ.ERQ7 Field                      */
-#define DMA_ERQ_ERQ8_MASK                        (0x100U)                                            /*!< DMA_ERQ.ERQ8 Mask                       */
-#define DMA_ERQ_ERQ8_SHIFT                       (8U)                                                /*!< DMA_ERQ.ERQ8 Position                   */
-#define DMA_ERQ_ERQ8(x)                          (((uint32_t)(((uint32_t)(x))<<8U))&0x100UL)         /*!< DMA_ERQ.ERQ8 Field                      */
-#define DMA_ERQ_ERQ9_MASK                        (0x200U)                                            /*!< DMA_ERQ.ERQ9 Mask                       */
-#define DMA_ERQ_ERQ9_SHIFT                       (9U)                                                /*!< DMA_ERQ.ERQ9 Position                   */
-#define DMA_ERQ_ERQ9(x)                          (((uint32_t)(((uint32_t)(x))<<9U))&0x200UL)         /*!< DMA_ERQ.ERQ9 Field                      */
-#define DMA_ERQ_ERQ10_MASK                       (0x400U)                                            /*!< DMA_ERQ.ERQ10 Mask                      */
-#define DMA_ERQ_ERQ10_SHIFT                      (10U)                                               /*!< DMA_ERQ.ERQ10 Position                  */
-#define DMA_ERQ_ERQ10(x)                         (((uint32_t)(((uint32_t)(x))<<10U))&0x400UL)        /*!< DMA_ERQ.ERQ10 Field                     */
-#define DMA_ERQ_ERQ11_MASK                       (0x800U)                                            /*!< DMA_ERQ.ERQ11 Mask                      */
-#define DMA_ERQ_ERQ11_SHIFT                      (11U)                                               /*!< DMA_ERQ.ERQ11 Position                  */
-#define DMA_ERQ_ERQ11(x)                         (((uint32_t)(((uint32_t)(x))<<11U))&0x800UL)        /*!< DMA_ERQ.ERQ11 Field                     */
-#define DMA_ERQ_ERQ12_MASK                       (0x1000U)                                           /*!< DMA_ERQ.ERQ12 Mask                      */
-#define DMA_ERQ_ERQ12_SHIFT                      (12U)                                               /*!< DMA_ERQ.ERQ12 Position                  */
-#define DMA_ERQ_ERQ12(x)                         (((uint32_t)(((uint32_t)(x))<<12U))&0x1000UL)       /*!< DMA_ERQ.ERQ12 Field                     */
-#define DMA_ERQ_ERQ13_MASK                       (0x2000U)                                           /*!< DMA_ERQ.ERQ13 Mask                      */
-#define DMA_ERQ_ERQ13_SHIFT                      (13U)                                               /*!< DMA_ERQ.ERQ13 Position                  */
-#define DMA_ERQ_ERQ13(x)                         (((uint32_t)(((uint32_t)(x))<<13U))&0x2000UL)       /*!< DMA_ERQ.ERQ13 Field                     */
-#define DMA_ERQ_ERQ14_MASK                       (0x4000U)                                           /*!< DMA_ERQ.ERQ14 Mask                      */
-#define DMA_ERQ_ERQ14_SHIFT                      (14U)                                               /*!< DMA_ERQ.ERQ14 Position                  */
-#define DMA_ERQ_ERQ14(x)                         (((uint32_t)(((uint32_t)(x))<<14U))&0x4000UL)       /*!< DMA_ERQ.ERQ14 Field                     */
-#define DMA_ERQ_ERQ15_MASK                       (0x8000U)                                           /*!< DMA_ERQ.ERQ15 Mask                      */
-#define DMA_ERQ_ERQ15_SHIFT                      (15U)                                               /*!< DMA_ERQ.ERQ15 Position                  */
-#define DMA_ERQ_ERQ15(x)                         (((uint32_t)(((uint32_t)(x))<<15U))&0x8000UL)       /*!< DMA_ERQ.ERQ15 Field                     */
+#define DMA_ERQ_ERQ0_MASK                        (0x1U)                                              /*!< DMA0_ERQ.ERQ0 Mask                      */
+#define DMA_ERQ_ERQ0_SHIFT                       (0U)                                                /*!< DMA0_ERQ.ERQ0 Position                  */
+#define DMA_ERQ_ERQ0(x)                          (((uint32_t)(((uint32_t)(x))<<0U))&0x1UL)           /*!< DMA0_ERQ.ERQ0 Field                     */
+#define DMA_ERQ_ERQ1_MASK                        (0x2U)                                              /*!< DMA0_ERQ.ERQ1 Mask                      */
+#define DMA_ERQ_ERQ1_SHIFT                       (1U)                                                /*!< DMA0_ERQ.ERQ1 Position                  */
+#define DMA_ERQ_ERQ1(x)                          (((uint32_t)(((uint32_t)(x))<<1U))&0x2UL)           /*!< DMA0_ERQ.ERQ1 Field                     */
+#define DMA_ERQ_ERQ2_MASK                        (0x4U)                                              /*!< DMA0_ERQ.ERQ2 Mask                      */
+#define DMA_ERQ_ERQ2_SHIFT                       (2U)                                                /*!< DMA0_ERQ.ERQ2 Position                  */
+#define DMA_ERQ_ERQ2(x)                          (((uint32_t)(((uint32_t)(x))<<2U))&0x4UL)           /*!< DMA0_ERQ.ERQ2 Field                     */
+#define DMA_ERQ_ERQ3_MASK                        (0x8U)                                              /*!< DMA0_ERQ.ERQ3 Mask                      */
+#define DMA_ERQ_ERQ3_SHIFT                       (3U)                                                /*!< DMA0_ERQ.ERQ3 Position                  */
+#define DMA_ERQ_ERQ3(x)                          (((uint32_t)(((uint32_t)(x))<<3U))&0x8UL)           /*!< DMA0_ERQ.ERQ3 Field                     */
+#define DMA_ERQ_ERQ4_MASK                        (0x10U)                                             /*!< DMA0_ERQ.ERQ4 Mask                      */
+#define DMA_ERQ_ERQ4_SHIFT                       (4U)                                                /*!< DMA0_ERQ.ERQ4 Position                  */
+#define DMA_ERQ_ERQ4(x)                          (((uint32_t)(((uint32_t)(x))<<4U))&0x10UL)          /*!< DMA0_ERQ.ERQ4 Field                     */
+#define DMA_ERQ_ERQ5_MASK                        (0x20U)                                             /*!< DMA0_ERQ.ERQ5 Mask                      */
+#define DMA_ERQ_ERQ5_SHIFT                       (5U)                                                /*!< DMA0_ERQ.ERQ5 Position                  */
+#define DMA_ERQ_ERQ5(x)                          (((uint32_t)(((uint32_t)(x))<<5U))&0x20UL)          /*!< DMA0_ERQ.ERQ5 Field                     */
+#define DMA_ERQ_ERQ6_MASK                        (0x40U)                                             /*!< DMA0_ERQ.ERQ6 Mask                      */
+#define DMA_ERQ_ERQ6_SHIFT                       (6U)                                                /*!< DMA0_ERQ.ERQ6 Position                  */
+#define DMA_ERQ_ERQ6(x)                          (((uint32_t)(((uint32_t)(x))<<6U))&0x40UL)          /*!< DMA0_ERQ.ERQ6 Field                     */
+#define DMA_ERQ_ERQ7_MASK                        (0x80U)                                             /*!< DMA0_ERQ.ERQ7 Mask                      */
+#define DMA_ERQ_ERQ7_SHIFT                       (7U)                                                /*!< DMA0_ERQ.ERQ7 Position                  */
+#define DMA_ERQ_ERQ7(x)                          (((uint32_t)(((uint32_t)(x))<<7U))&0x80UL)          /*!< DMA0_ERQ.ERQ7 Field                     */
+#define DMA_ERQ_ERQ8_MASK                        (0x100U)                                            /*!< DMA0_ERQ.ERQ8 Mask                      */
+#define DMA_ERQ_ERQ8_SHIFT                       (8U)                                                /*!< DMA0_ERQ.ERQ8 Position                  */
+#define DMA_ERQ_ERQ8(x)                          (((uint32_t)(((uint32_t)(x))<<8U))&0x100UL)         /*!< DMA0_ERQ.ERQ8 Field                     */
+#define DMA_ERQ_ERQ9_MASK                        (0x200U)                                            /*!< DMA0_ERQ.ERQ9 Mask                      */
+#define DMA_ERQ_ERQ9_SHIFT                       (9U)                                                /*!< DMA0_ERQ.ERQ9 Position                  */
+#define DMA_ERQ_ERQ9(x)                          (((uint32_t)(((uint32_t)(x))<<9U))&0x200UL)         /*!< DMA0_ERQ.ERQ9 Field                     */
+#define DMA_ERQ_ERQ10_MASK                       (0x400U)                                            /*!< DMA0_ERQ.ERQ10 Mask                     */
+#define DMA_ERQ_ERQ10_SHIFT                      (10U)                                               /*!< DMA0_ERQ.ERQ10 Position                 */
+#define DMA_ERQ_ERQ10(x)                         (((uint32_t)(((uint32_t)(x))<<10U))&0x400UL)        /*!< DMA0_ERQ.ERQ10 Field                    */
+#define DMA_ERQ_ERQ11_MASK                       (0x800U)                                            /*!< DMA0_ERQ.ERQ11 Mask                     */
+#define DMA_ERQ_ERQ11_SHIFT                      (11U)                                               /*!< DMA0_ERQ.ERQ11 Position                 */
+#define DMA_ERQ_ERQ11(x)                         (((uint32_t)(((uint32_t)(x))<<11U))&0x800UL)        /*!< DMA0_ERQ.ERQ11 Field                    */
+#define DMA_ERQ_ERQ12_MASK                       (0x1000U)                                           /*!< DMA0_ERQ.ERQ12 Mask                     */
+#define DMA_ERQ_ERQ12_SHIFT                      (12U)                                               /*!< DMA0_ERQ.ERQ12 Position                 */
+#define DMA_ERQ_ERQ12(x)                         (((uint32_t)(((uint32_t)(x))<<12U))&0x1000UL)       /*!< DMA0_ERQ.ERQ12 Field                    */
+#define DMA_ERQ_ERQ13_MASK                       (0x2000U)                                           /*!< DMA0_ERQ.ERQ13 Mask                     */
+#define DMA_ERQ_ERQ13_SHIFT                      (13U)                                               /*!< DMA0_ERQ.ERQ13 Position                 */
+#define DMA_ERQ_ERQ13(x)                         (((uint32_t)(((uint32_t)(x))<<13U))&0x2000UL)       /*!< DMA0_ERQ.ERQ13 Field                    */
+#define DMA_ERQ_ERQ14_MASK                       (0x4000U)                                           /*!< DMA0_ERQ.ERQ14 Mask                     */
+#define DMA_ERQ_ERQ14_SHIFT                      (14U)                                               /*!< DMA0_ERQ.ERQ14 Position                 */
+#define DMA_ERQ_ERQ14(x)                         (((uint32_t)(((uint32_t)(x))<<14U))&0x4000UL)       /*!< DMA0_ERQ.ERQ14 Field                    */
+#define DMA_ERQ_ERQ15_MASK                       (0x8000U)                                           /*!< DMA0_ERQ.ERQ15 Mask                     */
+#define DMA_ERQ_ERQ15_SHIFT                      (15U)                                               /*!< DMA0_ERQ.ERQ15 Position                 */
+#define DMA_ERQ_ERQ15(x)                         (((uint32_t)(((uint32_t)(x))<<15U))&0x8000UL)       /*!< DMA0_ERQ.ERQ15 Field                    */
 /* ------- EEI Bit Fields                           ------ */
-#define DMA_EEI_EEI0_MASK                        (0x1U)                                              /*!< DMA_EEI.EEI0 Mask                       */
-#define DMA_EEI_EEI0_SHIFT                       (0U)                                                /*!< DMA_EEI.EEI0 Position                   */
-#define DMA_EEI_EEI0(x)                          (((uint32_t)(((uint32_t)(x))<<0U))&0x1UL)           /*!< DMA_EEI.EEI0 Field                      */
-#define DMA_EEI_EEI1_MASK                        (0x2U)                                              /*!< DMA_EEI.EEI1 Mask                       */
-#define DMA_EEI_EEI1_SHIFT                       (1U)                                                /*!< DMA_EEI.EEI1 Position                   */
-#define DMA_EEI_EEI1(x)                          (((uint32_t)(((uint32_t)(x))<<1U))&0x2UL)           /*!< DMA_EEI.EEI1 Field                      */
-#define DMA_EEI_EEI2_MASK                        (0x4U)                                              /*!< DMA_EEI.EEI2 Mask                       */
-#define DMA_EEI_EEI2_SHIFT                       (2U)                                                /*!< DMA_EEI.EEI2 Position                   */
-#define DMA_EEI_EEI2(x)                          (((uint32_t)(((uint32_t)(x))<<2U))&0x4UL)           /*!< DMA_EEI.EEI2 Field                      */
-#define DMA_EEI_EEI3_MASK                        (0x8U)                                              /*!< DMA_EEI.EEI3 Mask                       */
-#define DMA_EEI_EEI3_SHIFT                       (3U)                                                /*!< DMA_EEI.EEI3 Position                   */
-#define DMA_EEI_EEI3(x)                          (((uint32_t)(((uint32_t)(x))<<3U))&0x8UL)           /*!< DMA_EEI.EEI3 Field                      */
-#define DMA_EEI_EEI4_MASK                        (0x10U)                                             /*!< DMA_EEI.EEI4 Mask                       */
-#define DMA_EEI_EEI4_SHIFT                       (4U)                                                /*!< DMA_EEI.EEI4 Position                   */
-#define DMA_EEI_EEI4(x)                          (((uint32_t)(((uint32_t)(x))<<4U))&0x10UL)          /*!< DMA_EEI.EEI4 Field                      */
-#define DMA_EEI_EEI5_MASK                        (0x20U)                                             /*!< DMA_EEI.EEI5 Mask                       */
-#define DMA_EEI_EEI5_SHIFT                       (5U)                                                /*!< DMA_EEI.EEI5 Position                   */
-#define DMA_EEI_EEI5(x)                          (((uint32_t)(((uint32_t)(x))<<5U))&0x20UL)          /*!< DMA_EEI.EEI5 Field                      */
-#define DMA_EEI_EEI6_MASK                        (0x40U)                                             /*!< DMA_EEI.EEI6 Mask                       */
-#define DMA_EEI_EEI6_SHIFT                       (6U)                                                /*!< DMA_EEI.EEI6 Position                   */
-#define DMA_EEI_EEI6(x)                          (((uint32_t)(((uint32_t)(x))<<6U))&0x40UL)          /*!< DMA_EEI.EEI6 Field                      */
-#define DMA_EEI_EEI7_MASK                        (0x80U)                                             /*!< DMA_EEI.EEI7 Mask                       */
-#define DMA_EEI_EEI7_SHIFT                       (7U)                                                /*!< DMA_EEI.EEI7 Position                   */
-#define DMA_EEI_EEI7(x)                          (((uint32_t)(((uint32_t)(x))<<7U))&0x80UL)          /*!< DMA_EEI.EEI7 Field                      */
-#define DMA_EEI_EEI8_MASK                        (0x100U)                                            /*!< DMA_EEI.EEI8 Mask                       */
-#define DMA_EEI_EEI8_SHIFT                       (8U)                                                /*!< DMA_EEI.EEI8 Position                   */
-#define DMA_EEI_EEI8(x)                          (((uint32_t)(((uint32_t)(x))<<8U))&0x100UL)         /*!< DMA_EEI.EEI8 Field                      */
-#define DMA_EEI_EEI9_MASK                        (0x200U)                                            /*!< DMA_EEI.EEI9 Mask                       */
-#define DMA_EEI_EEI9_SHIFT                       (9U)                                                /*!< DMA_EEI.EEI9 Position                   */
-#define DMA_EEI_EEI9(x)                          (((uint32_t)(((uint32_t)(x))<<9U))&0x200UL)         /*!< DMA_EEI.EEI9 Field                      */
-#define DMA_EEI_EEI10_MASK                       (0x400U)                                            /*!< DMA_EEI.EEI10 Mask                      */
-#define DMA_EEI_EEI10_SHIFT                      (10U)                                               /*!< DMA_EEI.EEI10 Position                  */
-#define DMA_EEI_EEI10(x)                         (((uint32_t)(((uint32_t)(x))<<10U))&0x400UL)        /*!< DMA_EEI.EEI10 Field                     */
-#define DMA_EEI_EEI11_MASK                       (0x800U)                                            /*!< DMA_EEI.EEI11 Mask                      */
-#define DMA_EEI_EEI11_SHIFT                      (11U)                                               /*!< DMA_EEI.EEI11 Position                  */
-#define DMA_EEI_EEI11(x)                         (((uint32_t)(((uint32_t)(x))<<11U))&0x800UL)        /*!< DMA_EEI.EEI11 Field                     */
-#define DMA_EEI_EEI12_MASK                       (0x1000U)                                           /*!< DMA_EEI.EEI12 Mask                      */
-#define DMA_EEI_EEI12_SHIFT                      (12U)                                               /*!< DMA_EEI.EEI12 Position                  */
-#define DMA_EEI_EEI12(x)                         (((uint32_t)(((uint32_t)(x))<<12U))&0x1000UL)       /*!< DMA_EEI.EEI12 Field                     */
-#define DMA_EEI_EEI13_MASK                       (0x2000U)                                           /*!< DMA_EEI.EEI13 Mask                      */
-#define DMA_EEI_EEI13_SHIFT                      (13U)                                               /*!< DMA_EEI.EEI13 Position                  */
-#define DMA_EEI_EEI13(x)                         (((uint32_t)(((uint32_t)(x))<<13U))&0x2000UL)       /*!< DMA_EEI.EEI13 Field                     */
-#define DMA_EEI_EEI14_MASK                       (0x4000U)                                           /*!< DMA_EEI.EEI14 Mask                      */
-#define DMA_EEI_EEI14_SHIFT                      (14U)                                               /*!< DMA_EEI.EEI14 Position                  */
-#define DMA_EEI_EEI14(x)                         (((uint32_t)(((uint32_t)(x))<<14U))&0x4000UL)       /*!< DMA_EEI.EEI14 Field                     */
-#define DMA_EEI_EEI15_MASK                       (0x8000U)                                           /*!< DMA_EEI.EEI15 Mask                      */
-#define DMA_EEI_EEI15_SHIFT                      (15U)                                               /*!< DMA_EEI.EEI15 Position                  */
-#define DMA_EEI_EEI15(x)                         (((uint32_t)(((uint32_t)(x))<<15U))&0x8000UL)       /*!< DMA_EEI.EEI15 Field                     */
+#define DMA_EEI_EEI0_MASK                        (0x1U)                                              /*!< DMA0_EEI.EEI0 Mask                      */
+#define DMA_EEI_EEI0_SHIFT                       (0U)                                                /*!< DMA0_EEI.EEI0 Position                  */
+#define DMA_EEI_EEI0(x)                          (((uint32_t)(((uint32_t)(x))<<0U))&0x1UL)           /*!< DMA0_EEI.EEI0 Field                     */
+#define DMA_EEI_EEI1_MASK                        (0x2U)                                              /*!< DMA0_EEI.EEI1 Mask                      */
+#define DMA_EEI_EEI1_SHIFT                       (1U)                                                /*!< DMA0_EEI.EEI1 Position                  */
+#define DMA_EEI_EEI1(x)                          (((uint32_t)(((uint32_t)(x))<<1U))&0x2UL)           /*!< DMA0_EEI.EEI1 Field                     */
+#define DMA_EEI_EEI2_MASK                        (0x4U)                                              /*!< DMA0_EEI.EEI2 Mask                      */
+#define DMA_EEI_EEI2_SHIFT                       (2U)                                                /*!< DMA0_EEI.EEI2 Position                  */
+#define DMA_EEI_EEI2(x)                          (((uint32_t)(((uint32_t)(x))<<2U))&0x4UL)           /*!< DMA0_EEI.EEI2 Field                     */
+#define DMA_EEI_EEI3_MASK                        (0x8U)                                              /*!< DMA0_EEI.EEI3 Mask                      */
+#define DMA_EEI_EEI3_SHIFT                       (3U)                                                /*!< DMA0_EEI.EEI3 Position                  */
+#define DMA_EEI_EEI3(x)                          (((uint32_t)(((uint32_t)(x))<<3U))&0x8UL)           /*!< DMA0_EEI.EEI3 Field                     */
+#define DMA_EEI_EEI4_MASK                        (0x10U)                                             /*!< DMA0_EEI.EEI4 Mask                      */
+#define DMA_EEI_EEI4_SHIFT                       (4U)                                                /*!< DMA0_EEI.EEI4 Position                  */
+#define DMA_EEI_EEI4(x)                          (((uint32_t)(((uint32_t)(x))<<4U))&0x10UL)          /*!< DMA0_EEI.EEI4 Field                     */
+#define DMA_EEI_EEI5_MASK                        (0x20U)                                             /*!< DMA0_EEI.EEI5 Mask                      */
+#define DMA_EEI_EEI5_SHIFT                       (5U)                                                /*!< DMA0_EEI.EEI5 Position                  */
+#define DMA_EEI_EEI5(x)                          (((uint32_t)(((uint32_t)(x))<<5U))&0x20UL)          /*!< DMA0_EEI.EEI5 Field                     */
+#define DMA_EEI_EEI6_MASK                        (0x40U)                                             /*!< DMA0_EEI.EEI6 Mask                      */
+#define DMA_EEI_EEI6_SHIFT                       (6U)                                                /*!< DMA0_EEI.EEI6 Position                  */
+#define DMA_EEI_EEI6(x)                          (((uint32_t)(((uint32_t)(x))<<6U))&0x40UL)          /*!< DMA0_EEI.EEI6 Field                     */
+#define DMA_EEI_EEI7_MASK                        (0x80U)                                             /*!< DMA0_EEI.EEI7 Mask                      */
+#define DMA_EEI_EEI7_SHIFT                       (7U)                                                /*!< DMA0_EEI.EEI7 Position                  */
+#define DMA_EEI_EEI7(x)                          (((uint32_t)(((uint32_t)(x))<<7U))&0x80UL)          /*!< DMA0_EEI.EEI7 Field                     */
+#define DMA_EEI_EEI8_MASK                        (0x100U)                                            /*!< DMA0_EEI.EEI8 Mask                      */
+#define DMA_EEI_EEI8_SHIFT                       (8U)                                                /*!< DMA0_EEI.EEI8 Position                  */
+#define DMA_EEI_EEI8(x)                          (((uint32_t)(((uint32_t)(x))<<8U))&0x100UL)         /*!< DMA0_EEI.EEI8 Field                     */
+#define DMA_EEI_EEI9_MASK                        (0x200U)                                            /*!< DMA0_EEI.EEI9 Mask                      */
+#define DMA_EEI_EEI9_SHIFT                       (9U)                                                /*!< DMA0_EEI.EEI9 Position                  */
+#define DMA_EEI_EEI9(x)                          (((uint32_t)(((uint32_t)(x))<<9U))&0x200UL)         /*!< DMA0_EEI.EEI9 Field                     */
+#define DMA_EEI_EEI10_MASK                       (0x400U)                                            /*!< DMA0_EEI.EEI10 Mask                     */
+#define DMA_EEI_EEI10_SHIFT                      (10U)                                               /*!< DMA0_EEI.EEI10 Position                 */
+#define DMA_EEI_EEI10(x)                         (((uint32_t)(((uint32_t)(x))<<10U))&0x400UL)        /*!< DMA0_EEI.EEI10 Field                    */
+#define DMA_EEI_EEI11_MASK                       (0x800U)                                            /*!< DMA0_EEI.EEI11 Mask                     */
+#define DMA_EEI_EEI11_SHIFT                      (11U)                                               /*!< DMA0_EEI.EEI11 Position                 */
+#define DMA_EEI_EEI11(x)                         (((uint32_t)(((uint32_t)(x))<<11U))&0x800UL)        /*!< DMA0_EEI.EEI11 Field                    */
+#define DMA_EEI_EEI12_MASK                       (0x1000U)                                           /*!< DMA0_EEI.EEI12 Mask                     */
+#define DMA_EEI_EEI12_SHIFT                      (12U)                                               /*!< DMA0_EEI.EEI12 Position                 */
+#define DMA_EEI_EEI12(x)                         (((uint32_t)(((uint32_t)(x))<<12U))&0x1000UL)       /*!< DMA0_EEI.EEI12 Field                    */
+#define DMA_EEI_EEI13_MASK                       (0x2000U)                                           /*!< DMA0_EEI.EEI13 Mask                     */
+#define DMA_EEI_EEI13_SHIFT                      (13U)                                               /*!< DMA0_EEI.EEI13 Position                 */
+#define DMA_EEI_EEI13(x)                         (((uint32_t)(((uint32_t)(x))<<13U))&0x2000UL)       /*!< DMA0_EEI.EEI13 Field                    */
+#define DMA_EEI_EEI14_MASK                       (0x4000U)                                           /*!< DMA0_EEI.EEI14 Mask                     */
+#define DMA_EEI_EEI14_SHIFT                      (14U)                                               /*!< DMA0_EEI.EEI14 Position                 */
+#define DMA_EEI_EEI14(x)                         (((uint32_t)(((uint32_t)(x))<<14U))&0x4000UL)       /*!< DMA0_EEI.EEI14 Field                    */
+#define DMA_EEI_EEI15_MASK                       (0x8000U)                                           /*!< DMA0_EEI.EEI15 Mask                     */
+#define DMA_EEI_EEI15_SHIFT                      (15U)                                               /*!< DMA0_EEI.EEI15 Position                 */
+#define DMA_EEI_EEI15(x)                         (((uint32_t)(((uint32_t)(x))<<15U))&0x8000UL)       /*!< DMA0_EEI.EEI15 Field                    */
 /* ------- CEEI Bit Fields                          ------ */
-#define DMA_CEEI_CEEI_MASK                       (0xFU)                                              /*!< DMA_CEEI.CEEI Mask                      */
-#define DMA_CEEI_CEEI_SHIFT                      (0U)                                                /*!< DMA_CEEI.CEEI Position                  */
-#define DMA_CEEI_CEEI(x)                         (((uint8_t)(((uint8_t)(x))<<0U))&0xFUL)             /*!< DMA_CEEI.CEEI Field                     */
-#define DMA_CEEI_CAEE_MASK                       (0x40U)                                             /*!< DMA_CEEI.CAEE Mask                      */
-#define DMA_CEEI_CAEE_SHIFT                      (6U)                                                /*!< DMA_CEEI.CAEE Position                  */
-#define DMA_CEEI_CAEE(x)                         (((uint8_t)(((uint8_t)(x))<<6U))&0x40UL)            /*!< DMA_CEEI.CAEE Field                     */
-#define DMA_CEEI_NOP_MASK                        (0x80U)                                             /*!< DMA_CEEI.NOP Mask                       */
-#define DMA_CEEI_NOP_SHIFT                       (7U)                                                /*!< DMA_CEEI.NOP Position                   */
-#define DMA_CEEI_NOP(x)                          (((uint8_t)(((uint8_t)(x))<<7U))&0x80UL)            /*!< DMA_CEEI.NOP Field                      */
+#define DMA_CEEI_CEEI_MASK                       (0xFU)                                              /*!< DMA0_CEEI.CEEI Mask                     */
+#define DMA_CEEI_CEEI_SHIFT                      (0U)                                                /*!< DMA0_CEEI.CEEI Position                 */
+#define DMA_CEEI_CEEI(x)                         (((uint8_t)(((uint8_t)(x))<<0U))&0xFUL)             /*!< DMA0_CEEI.CEEI Field                    */
+#define DMA_CEEI_CAEE_MASK                       (0x40U)                                             /*!< DMA0_CEEI.CAEE Mask                     */
+#define DMA_CEEI_CAEE_SHIFT                      (6U)                                                /*!< DMA0_CEEI.CAEE Position                 */
+#define DMA_CEEI_CAEE(x)                         (((uint8_t)(((uint8_t)(x))<<6U))&0x40UL)            /*!< DMA0_CEEI.CAEE Field                    */
+#define DMA_CEEI_NOP_MASK                        (0x80U)                                             /*!< DMA0_CEEI.NOP Mask                      */
+#define DMA_CEEI_NOP_SHIFT                       (7U)                                                /*!< DMA0_CEEI.NOP Position                  */
+#define DMA_CEEI_NOP(x)                          (((uint8_t)(((uint8_t)(x))<<7U))&0x80UL)            /*!< DMA0_CEEI.NOP Field                     */
 /* ------- SEEI Bit Fields                          ------ */
-#define DMA_SEEI_SEEI_MASK                       (0xFU)                                              /*!< DMA_SEEI.SEEI Mask                      */
-#define DMA_SEEI_SEEI_SHIFT                      (0U)                                                /*!< DMA_SEEI.SEEI Position                  */
-#define DMA_SEEI_SEEI(x)                         (((uint8_t)(((uint8_t)(x))<<0U))&0xFUL)             /*!< DMA_SEEI.SEEI Field                     */
-#define DMA_SEEI_SAEE_MASK                       (0x40U)                                             /*!< DMA_SEEI.SAEE Mask                      */
-#define DMA_SEEI_SAEE_SHIFT                      (6U)                                                /*!< DMA_SEEI.SAEE Position                  */
-#define DMA_SEEI_SAEE(x)                         (((uint8_t)(((uint8_t)(x))<<6U))&0x40UL)            /*!< DMA_SEEI.SAEE Field                     */
-#define DMA_SEEI_NOP_MASK                        (0x80U)                                             /*!< DMA_SEEI.NOP Mask                       */
-#define DMA_SEEI_NOP_SHIFT                       (7U)                                                /*!< DMA_SEEI.NOP Position                   */
-#define DMA_SEEI_NOP(x)                          (((uint8_t)(((uint8_t)(x))<<7U))&0x80UL)            /*!< DMA_SEEI.NOP Field                      */
+#define DMA_SEEI_SEEI_MASK                       (0xFU)                                              /*!< DMA0_SEEI.SEEI Mask                     */
+#define DMA_SEEI_SEEI_SHIFT                      (0U)                                                /*!< DMA0_SEEI.SEEI Position                 */
+#define DMA_SEEI_SEEI(x)                         (((uint8_t)(((uint8_t)(x))<<0U))&0xFUL)             /*!< DMA0_SEEI.SEEI Field                    */
+#define DMA_SEEI_SAEE_MASK                       (0x40U)                                             /*!< DMA0_SEEI.SAEE Mask                     */
+#define DMA_SEEI_SAEE_SHIFT                      (6U)                                                /*!< DMA0_SEEI.SAEE Position                 */
+#define DMA_SEEI_SAEE(x)                         (((uint8_t)(((uint8_t)(x))<<6U))&0x40UL)            /*!< DMA0_SEEI.SAEE Field                    */
+#define DMA_SEEI_NOP_MASK                        (0x80U)                                             /*!< DMA0_SEEI.NOP Mask                      */
+#define DMA_SEEI_NOP_SHIFT                       (7U)                                                /*!< DMA0_SEEI.NOP Position                  */
+#define DMA_SEEI_NOP(x)                          (((uint8_t)(((uint8_t)(x))<<7U))&0x80UL)            /*!< DMA0_SEEI.NOP Field                     */
 /* ------- CERQ Bit Fields                          ------ */
-#define DMA_CERQ_CERQ_MASK                       (0xFU)                                              /*!< DMA_CERQ.CERQ Mask                      */
-#define DMA_CERQ_CERQ_SHIFT                      (0U)                                                /*!< DMA_CERQ.CERQ Position                  */
-#define DMA_CERQ_CERQ(x)                         (((uint8_t)(((uint8_t)(x))<<0U))&0xFUL)             /*!< DMA_CERQ.CERQ Field                     */
-#define DMA_CERQ_CAER_MASK                       (0x40U)                                             /*!< DMA_CERQ.CAER Mask                      */
-#define DMA_CERQ_CAER_SHIFT                      (6U)                                                /*!< DMA_CERQ.CAER Position                  */
-#define DMA_CERQ_CAER(x)                         (((uint8_t)(((uint8_t)(x))<<6U))&0x40UL)            /*!< DMA_CERQ.CAER Field                     */
-#define DMA_CERQ_NOP_MASK                        (0x80U)                                             /*!< DMA_CERQ.NOP Mask                       */
-#define DMA_CERQ_NOP_SHIFT                       (7U)                                                /*!< DMA_CERQ.NOP Position                   */
-#define DMA_CERQ_NOP(x)                          (((uint8_t)(((uint8_t)(x))<<7U))&0x80UL)            /*!< DMA_CERQ.NOP Field                      */
+#define DMA_CERQ_CERQ_MASK                       (0xFU)                                              /*!< DMA0_CERQ.CERQ Mask                     */
+#define DMA_CERQ_CERQ_SHIFT                      (0U)                                                /*!< DMA0_CERQ.CERQ Position                 */
+#define DMA_CERQ_CERQ(x)                         (((uint8_t)(((uint8_t)(x))<<0U))&0xFUL)             /*!< DMA0_CERQ.CERQ Field                    */
+#define DMA_CERQ_CAER_MASK                       (0x40U)                                             /*!< DMA0_CERQ.CAER Mask                     */
+#define DMA_CERQ_CAER_SHIFT                      (6U)                                                /*!< DMA0_CERQ.CAER Position                 */
+#define DMA_CERQ_CAER(x)                         (((uint8_t)(((uint8_t)(x))<<6U))&0x40UL)            /*!< DMA0_CERQ.CAER Field                    */
+#define DMA_CERQ_NOP_MASK                        (0x80U)                                             /*!< DMA0_CERQ.NOP Mask                      */
+#define DMA_CERQ_NOP_SHIFT                       (7U)                                                /*!< DMA0_CERQ.NOP Position                  */
+#define DMA_CERQ_NOP(x)                          (((uint8_t)(((uint8_t)(x))<<7U))&0x80UL)            /*!< DMA0_CERQ.NOP Field                     */
 /* ------- SERQ Bit Fields                          ------ */
-#define DMA_SERQ_SERQ_MASK                       (0xFU)                                              /*!< DMA_SERQ.SERQ Mask                      */
-#define DMA_SERQ_SERQ_SHIFT                      (0U)                                                /*!< DMA_SERQ.SERQ Position                  */
-#define DMA_SERQ_SERQ(x)                         (((uint8_t)(((uint8_t)(x))<<0U))&0xFUL)             /*!< DMA_SERQ.SERQ Field                     */
-#define DMA_SERQ_SAER_MASK                       (0x40U)                                             /*!< DMA_SERQ.SAER Mask                      */
-#define DMA_SERQ_SAER_SHIFT                      (6U)                                                /*!< DMA_SERQ.SAER Position                  */
-#define DMA_SERQ_SAER(x)                         (((uint8_t)(((uint8_t)(x))<<6U))&0x40UL)            /*!< DMA_SERQ.SAER Field                     */
-#define DMA_SERQ_NOP_MASK                        (0x80U)                                             /*!< DMA_SERQ.NOP Mask                       */
-#define DMA_SERQ_NOP_SHIFT                       (7U)                                                /*!< DMA_SERQ.NOP Position                   */
-#define DMA_SERQ_NOP(x)                          (((uint8_t)(((uint8_t)(x))<<7U))&0x80UL)            /*!< DMA_SERQ.NOP Field                      */
+#define DMA_SERQ_SERQ_MASK                       (0xFU)                                              /*!< DMA0_SERQ.SERQ Mask                     */
+#define DMA_SERQ_SERQ_SHIFT                      (0U)                                                /*!< DMA0_SERQ.SERQ Position                 */
+#define DMA_SERQ_SERQ(x)                         (((uint8_t)(((uint8_t)(x))<<0U))&0xFUL)             /*!< DMA0_SERQ.SERQ Field                    */
+#define DMA_SERQ_SAER_MASK                       (0x40U)                                             /*!< DMA0_SERQ.SAER Mask                     */
+#define DMA_SERQ_SAER_SHIFT                      (6U)                                                /*!< DMA0_SERQ.SAER Position                 */
+#define DMA_SERQ_SAER(x)                         (((uint8_t)(((uint8_t)(x))<<6U))&0x40UL)            /*!< DMA0_SERQ.SAER Field                    */
+#define DMA_SERQ_NOP_MASK                        (0x80U)                                             /*!< DMA0_SERQ.NOP Mask                      */
+#define DMA_SERQ_NOP_SHIFT                       (7U)                                                /*!< DMA0_SERQ.NOP Position                  */
+#define DMA_SERQ_NOP(x)                          (((uint8_t)(((uint8_t)(x))<<7U))&0x80UL)            /*!< DMA0_SERQ.NOP Field                     */
 /* ------- CDNE Bit Fields                          ------ */
-#define DMA_CDNE_CDNE_MASK                       (0xFU)                                              /*!< DMA_CDNE.CDNE Mask                      */
-#define DMA_CDNE_CDNE_SHIFT                      (0U)                                                /*!< DMA_CDNE.CDNE Position                  */
-#define DMA_CDNE_CDNE(x)                         (((uint8_t)(((uint8_t)(x))<<0U))&0xFUL)             /*!< DMA_CDNE.CDNE Field                     */
-#define DMA_CDNE_CADN_MASK                       (0x40U)                                             /*!< DMA_CDNE.CADN Mask                      */
-#define DMA_CDNE_CADN_SHIFT                      (6U)                                                /*!< DMA_CDNE.CADN Position                  */
-#define DMA_CDNE_CADN(x)                         (((uint8_t)(((uint8_t)(x))<<6U))&0x40UL)            /*!< DMA_CDNE.CADN Field                     */
-#define DMA_CDNE_NOP_MASK                        (0x80U)                                             /*!< DMA_CDNE.NOP Mask                       */
-#define DMA_CDNE_NOP_SHIFT                       (7U)                                                /*!< DMA_CDNE.NOP Position                   */
-#define DMA_CDNE_NOP(x)                          (((uint8_t)(((uint8_t)(x))<<7U))&0x80UL)            /*!< DMA_CDNE.NOP Field                      */
+#define DMA_CDNE_CDNE_MASK                       (0xFU)                                              /*!< DMA0_CDNE.CDNE Mask                     */
+#define DMA_CDNE_CDNE_SHIFT                      (0U)                                                /*!< DMA0_CDNE.CDNE Position                 */
+#define DMA_CDNE_CDNE(x)                         (((uint8_t)(((uint8_t)(x))<<0U))&0xFUL)             /*!< DMA0_CDNE.CDNE Field                    */
+#define DMA_CDNE_CADN_MASK                       (0x40U)                                             /*!< DMA0_CDNE.CADN Mask                     */
+#define DMA_CDNE_CADN_SHIFT                      (6U)                                                /*!< DMA0_CDNE.CADN Position                 */
+#define DMA_CDNE_CADN(x)                         (((uint8_t)(((uint8_t)(x))<<6U))&0x40UL)            /*!< DMA0_CDNE.CADN Field                    */
+#define DMA_CDNE_NOP_MASK                        (0x80U)                                             /*!< DMA0_CDNE.NOP Mask                      */
+#define DMA_CDNE_NOP_SHIFT                       (7U)                                                /*!< DMA0_CDNE.NOP Position                  */
+#define DMA_CDNE_NOP(x)                          (((uint8_t)(((uint8_t)(x))<<7U))&0x80UL)            /*!< DMA0_CDNE.NOP Field                     */
 /* ------- SSRT Bit Fields                          ------ */
-#define DMA_SSRT_SSRT_MASK                       (0xFU)                                              /*!< DMA_SSRT.SSRT Mask                      */
-#define DMA_SSRT_SSRT_SHIFT                      (0U)                                                /*!< DMA_SSRT.SSRT Position                  */
-#define DMA_SSRT_SSRT(x)                         (((uint8_t)(((uint8_t)(x))<<0U))&0xFUL)             /*!< DMA_SSRT.SSRT Field                     */
-#define DMA_SSRT_SAST_MASK                       (0x40U)                                             /*!< DMA_SSRT.SAST Mask                      */
-#define DMA_SSRT_SAST_SHIFT                      (6U)                                                /*!< DMA_SSRT.SAST Position                  */
-#define DMA_SSRT_SAST(x)                         (((uint8_t)(((uint8_t)(x))<<6U))&0x40UL)            /*!< DMA_SSRT.SAST Field                     */
-#define DMA_SSRT_NOP_MASK                        (0x80U)                                             /*!< DMA_SSRT.NOP Mask                       */
-#define DMA_SSRT_NOP_SHIFT                       (7U)                                                /*!< DMA_SSRT.NOP Position                   */
-#define DMA_SSRT_NOP(x)                          (((uint8_t)(((uint8_t)(x))<<7U))&0x80UL)            /*!< DMA_SSRT.NOP Field                      */
+#define DMA_SSRT_SSRT_MASK                       (0xFU)                                              /*!< DMA0_SSRT.SSRT Mask                     */
+#define DMA_SSRT_SSRT_SHIFT                      (0U)                                                /*!< DMA0_SSRT.SSRT Position                 */
+#define DMA_SSRT_SSRT(x)                         (((uint8_t)(((uint8_t)(x))<<0U))&0xFUL)             /*!< DMA0_SSRT.SSRT Field                    */
+#define DMA_SSRT_SAST_MASK                       (0x40U)                                             /*!< DMA0_SSRT.SAST Mask                     */
+#define DMA_SSRT_SAST_SHIFT                      (6U)                                                /*!< DMA0_SSRT.SAST Position                 */
+#define DMA_SSRT_SAST(x)                         (((uint8_t)(((uint8_t)(x))<<6U))&0x40UL)            /*!< DMA0_SSRT.SAST Field                    */
+#define DMA_SSRT_NOP_MASK                        (0x80U)                                             /*!< DMA0_SSRT.NOP Mask                      */
+#define DMA_SSRT_NOP_SHIFT                       (7U)                                                /*!< DMA0_SSRT.NOP Position                  */
+#define DMA_SSRT_NOP(x)                          (((uint8_t)(((uint8_t)(x))<<7U))&0x80UL)            /*!< DMA0_SSRT.NOP Field                     */
 /* ------- CERR Bit Fields                          ------ */
-#define DMA_CERR_CERR_MASK                       (0xFU)                                              /*!< DMA_CERR.CERR Mask                      */
-#define DMA_CERR_CERR_SHIFT                      (0U)                                                /*!< DMA_CERR.CERR Position                  */
-#define DMA_CERR_CERR(x)                         (((uint8_t)(((uint8_t)(x))<<0U))&0xFUL)             /*!< DMA_CERR.CERR Field                     */
-#define DMA_CERR_CAEI_MASK                       (0x40U)                                             /*!< DMA_CERR.CAEI Mask                      */
-#define DMA_CERR_CAEI_SHIFT                      (6U)                                                /*!< DMA_CERR.CAEI Position                  */
-#define DMA_CERR_CAEI(x)                         (((uint8_t)(((uint8_t)(x))<<6U))&0x40UL)            /*!< DMA_CERR.CAEI Field                     */
-#define DMA_CERR_NOP_MASK                        (0x80U)                                             /*!< DMA_CERR.NOP Mask                       */
-#define DMA_CERR_NOP_SHIFT                       (7U)                                                /*!< DMA_CERR.NOP Position                   */
-#define DMA_CERR_NOP(x)                          (((uint8_t)(((uint8_t)(x))<<7U))&0x80UL)            /*!< DMA_CERR.NOP Field                      */
+#define DMA_CERR_CERR_MASK                       (0xFU)                                              /*!< DMA0_CERR.CERR Mask                     */
+#define DMA_CERR_CERR_SHIFT                      (0U)                                                /*!< DMA0_CERR.CERR Position                 */
+#define DMA_CERR_CERR(x)                         (((uint8_t)(((uint8_t)(x))<<0U))&0xFUL)             /*!< DMA0_CERR.CERR Field                    */
+#define DMA_CERR_CAEI_MASK                       (0x40U)                                             /*!< DMA0_CERR.CAEI Mask                     */
+#define DMA_CERR_CAEI_SHIFT                      (6U)                                                /*!< DMA0_CERR.CAEI Position                 */
+#define DMA_CERR_CAEI(x)                         (((uint8_t)(((uint8_t)(x))<<6U))&0x40UL)            /*!< DMA0_CERR.CAEI Field                    */
+#define DMA_CERR_NOP_MASK                        (0x80U)                                             /*!< DMA0_CERR.NOP Mask                      */
+#define DMA_CERR_NOP_SHIFT                       (7U)                                                /*!< DMA0_CERR.NOP Position                  */
+#define DMA_CERR_NOP(x)                          (((uint8_t)(((uint8_t)(x))<<7U))&0x80UL)            /*!< DMA0_CERR.NOP Field                     */
 /* ------- CINT Bit Fields                          ------ */
-#define DMA_CINT_CINT_MASK                       (0xFU)                                              /*!< DMA_CINT.CINT Mask                      */
-#define DMA_CINT_CINT_SHIFT                      (0U)                                                /*!< DMA_CINT.CINT Position                  */
-#define DMA_CINT_CINT(x)                         (((uint8_t)(((uint8_t)(x))<<0U))&0xFUL)             /*!< DMA_CINT.CINT Field                     */
-#define DMA_CINT_CAIR_MASK                       (0x40U)                                             /*!< DMA_CINT.CAIR Mask                      */
-#define DMA_CINT_CAIR_SHIFT                      (6U)                                                /*!< DMA_CINT.CAIR Position                  */
-#define DMA_CINT_CAIR(x)                         (((uint8_t)(((uint8_t)(x))<<6U))&0x40UL)            /*!< DMA_CINT.CAIR Field                     */
-#define DMA_CINT_NOP_MASK                        (0x80U)                                             /*!< DMA_CINT.NOP Mask                       */
-#define DMA_CINT_NOP_SHIFT                       (7U)                                                /*!< DMA_CINT.NOP Position                   */
-#define DMA_CINT_NOP(x)                          (((uint8_t)(((uint8_t)(x))<<7U))&0x80UL)            /*!< DMA_CINT.NOP Field                      */
+#define DMA_CINT_CINT_MASK                       (0xFU)                                              /*!< DMA0_CINT.CINT Mask                     */
+#define DMA_CINT_CINT_SHIFT                      (0U)                                                /*!< DMA0_CINT.CINT Position                 */
+#define DMA_CINT_CINT(x)                         (((uint8_t)(((uint8_t)(x))<<0U))&0xFUL)             /*!< DMA0_CINT.CINT Field                    */
+#define DMA_CINT_CAIR_MASK                       (0x40U)                                             /*!< DMA0_CINT.CAIR Mask                     */
+#define DMA_CINT_CAIR_SHIFT                      (6U)                                                /*!< DMA0_CINT.CAIR Position                 */
+#define DMA_CINT_CAIR(x)                         (((uint8_t)(((uint8_t)(x))<<6U))&0x40UL)            /*!< DMA0_CINT.CAIR Field                    */
+#define DMA_CINT_NOP_MASK                        (0x80U)                                             /*!< DMA0_CINT.NOP Mask                      */
+#define DMA_CINT_NOP_SHIFT                       (7U)                                                /*!< DMA0_CINT.NOP Position                  */
+#define DMA_CINT_NOP(x)                          (((uint8_t)(((uint8_t)(x))<<7U))&0x80UL)            /*!< DMA0_CINT.NOP Field                     */
 /* ------- INT Bit Fields                           ------ */
-#define DMA_INT_INT0_MASK                        (0x1U)                                              /*!< DMA_INT.INT0 Mask                       */
-#define DMA_INT_INT0_SHIFT                       (0U)                                                /*!< DMA_INT.INT0 Position                   */
-#define DMA_INT_INT0(x)                          (((uint32_t)(((uint32_t)(x))<<0U))&0x1UL)           /*!< DMA_INT.INT0 Field                      */
-#define DMA_INT_INT1_MASK                        (0x2U)                                              /*!< DMA_INT.INT1 Mask                       */
-#define DMA_INT_INT1_SHIFT                       (1U)                                                /*!< DMA_INT.INT1 Position                   */
-#define DMA_INT_INT1(x)                          (((uint32_t)(((uint32_t)(x))<<1U))&0x2UL)           /*!< DMA_INT.INT1 Field                      */
-#define DMA_INT_INT2_MASK                        (0x4U)                                              /*!< DMA_INT.INT2 Mask                       */
-#define DMA_INT_INT2_SHIFT                       (2U)                                                /*!< DMA_INT.INT2 Position                   */
-#define DMA_INT_INT2(x)                          (((uint32_t)(((uint32_t)(x))<<2U))&0x4UL)           /*!< DMA_INT.INT2 Field                      */
-#define DMA_INT_INT3_MASK                        (0x8U)                                              /*!< DMA_INT.INT3 Mask                       */
-#define DMA_INT_INT3_SHIFT                       (3U)                                                /*!< DMA_INT.INT3 Position                   */
-#define DMA_INT_INT3(x)                          (((uint32_t)(((uint32_t)(x))<<3U))&0x8UL)           /*!< DMA_INT.INT3 Field                      */
-#define DMA_INT_INT4_MASK                        (0x10U)                                             /*!< DMA_INT.INT4 Mask                       */
-#define DMA_INT_INT4_SHIFT                       (4U)                                                /*!< DMA_INT.INT4 Position                   */
-#define DMA_INT_INT4(x)                          (((uint32_t)(((uint32_t)(x))<<4U))&0x10UL)          /*!< DMA_INT.INT4 Field                      */
-#define DMA_INT_INT5_MASK                        (0x20U)                                             /*!< DMA_INT.INT5 Mask                       */
-#define DMA_INT_INT5_SHIFT                       (5U)                                                /*!< DMA_INT.INT5 Position                   */
-#define DMA_INT_INT5(x)                          (((uint32_t)(((uint32_t)(x))<<5U))&0x20UL)          /*!< DMA_INT.INT5 Field                      */
-#define DMA_INT_INT6_MASK                        (0x40U)                                             /*!< DMA_INT.INT6 Mask                       */
-#define DMA_INT_INT6_SHIFT                       (6U)                                                /*!< DMA_INT.INT6 Position                   */
-#define DMA_INT_INT6(x)                          (((uint32_t)(((uint32_t)(x))<<6U))&0x40UL)          /*!< DMA_INT.INT6 Field                      */
-#define DMA_INT_INT7_MASK                        (0x80U)                                             /*!< DMA_INT.INT7 Mask                       */
-#define DMA_INT_INT7_SHIFT                       (7U)                                                /*!< DMA_INT.INT7 Position                   */
-#define DMA_INT_INT7(x)                          (((uint32_t)(((uint32_t)(x))<<7U))&0x80UL)          /*!< DMA_INT.INT7 Field                      */
-#define DMA_INT_INT8_MASK                        (0x100U)                                            /*!< DMA_INT.INT8 Mask                       */
-#define DMA_INT_INT8_SHIFT                       (8U)                                                /*!< DMA_INT.INT8 Position                   */
-#define DMA_INT_INT8(x)                          (((uint32_t)(((uint32_t)(x))<<8U))&0x100UL)         /*!< DMA_INT.INT8 Field                      */
-#define DMA_INT_INT9_MASK                        (0x200U)                                            /*!< DMA_INT.INT9 Mask                       */
-#define DMA_INT_INT9_SHIFT                       (9U)                                                /*!< DMA_INT.INT9 Position                   */
-#define DMA_INT_INT9(x)                          (((uint32_t)(((uint32_t)(x))<<9U))&0x200UL)         /*!< DMA_INT.INT9 Field                      */
-#define DMA_INT_INT10_MASK                       (0x400U)                                            /*!< DMA_INT.INT10 Mask                      */
-#define DMA_INT_INT10_SHIFT                      (10U)                                               /*!< DMA_INT.INT10 Position                  */
-#define DMA_INT_INT10(x)                         (((uint32_t)(((uint32_t)(x))<<10U))&0x400UL)        /*!< DMA_INT.INT10 Field                     */
-#define DMA_INT_INT11_MASK                       (0x800U)                                            /*!< DMA_INT.INT11 Mask                      */
-#define DMA_INT_INT11_SHIFT                      (11U)                                               /*!< DMA_INT.INT11 Position                  */
-#define DMA_INT_INT11(x)                         (((uint32_t)(((uint32_t)(x))<<11U))&0x800UL)        /*!< DMA_INT.INT11 Field                     */
-#define DMA_INT_INT12_MASK                       (0x1000U)                                           /*!< DMA_INT.INT12 Mask                      */
-#define DMA_INT_INT12_SHIFT                      (12U)                                               /*!< DMA_INT.INT12 Position                  */
-#define DMA_INT_INT12(x)                         (((uint32_t)(((uint32_t)(x))<<12U))&0x1000UL)       /*!< DMA_INT.INT12 Field                     */
-#define DMA_INT_INT13_MASK                       (0x2000U)                                           /*!< DMA_INT.INT13 Mask                      */
-#define DMA_INT_INT13_SHIFT                      (13U)                                               /*!< DMA_INT.INT13 Position                  */
-#define DMA_INT_INT13(x)                         (((uint32_t)(((uint32_t)(x))<<13U))&0x2000UL)       /*!< DMA_INT.INT13 Field                     */
-#define DMA_INT_INT14_MASK                       (0x4000U)                                           /*!< DMA_INT.INT14 Mask                      */
-#define DMA_INT_INT14_SHIFT                      (14U)                                               /*!< DMA_INT.INT14 Position                  */
-#define DMA_INT_INT14(x)                         (((uint32_t)(((uint32_t)(x))<<14U))&0x4000UL)       /*!< DMA_INT.INT14 Field                     */
-#define DMA_INT_INT15_MASK                       (0x8000U)                                           /*!< DMA_INT.INT15 Mask                      */
-#define DMA_INT_INT15_SHIFT                      (15U)                                               /*!< DMA_INT.INT15 Position                  */
-#define DMA_INT_INT15(x)                         (((uint32_t)(((uint32_t)(x))<<15U))&0x8000UL)       /*!< DMA_INT.INT15 Field                     */
+#define DMA_INT_INT0_MASK                        (0x1U)                                              /*!< DMA0_INT.INT0 Mask                      */
+#define DMA_INT_INT0_SHIFT                       (0U)                                                /*!< DMA0_INT.INT0 Position                  */
+#define DMA_INT_INT0(x)                          (((uint32_t)(((uint32_t)(x))<<0U))&0x1UL)           /*!< DMA0_INT.INT0 Field                     */
+#define DMA_INT_INT1_MASK                        (0x2U)                                              /*!< DMA0_INT.INT1 Mask                      */
+#define DMA_INT_INT1_SHIFT                       (1U)                                                /*!< DMA0_INT.INT1 Position                  */
+#define DMA_INT_INT1(x)                          (((uint32_t)(((uint32_t)(x))<<1U))&0x2UL)           /*!< DMA0_INT.INT1 Field                     */
+#define DMA_INT_INT2_MASK                        (0x4U)                                              /*!< DMA0_INT.INT2 Mask                      */
+#define DMA_INT_INT2_SHIFT                       (2U)                                                /*!< DMA0_INT.INT2 Position                  */
+#define DMA_INT_INT2(x)                          (((uint32_t)(((uint32_t)(x))<<2U))&0x4UL)           /*!< DMA0_INT.INT2 Field                     */
+#define DMA_INT_INT3_MASK                        (0x8U)                                              /*!< DMA0_INT.INT3 Mask                      */
+#define DMA_INT_INT3_SHIFT                       (3U)                                                /*!< DMA0_INT.INT3 Position                  */
+#define DMA_INT_INT3(x)                          (((uint32_t)(((uint32_t)(x))<<3U))&0x8UL)           /*!< DMA0_INT.INT3 Field                     */
+#define DMA_INT_INT4_MASK                        (0x10U)                                             /*!< DMA0_INT.INT4 Mask                      */
+#define DMA_INT_INT4_SHIFT                       (4U)                                                /*!< DMA0_INT.INT4 Position                  */
+#define DMA_INT_INT4(x)                          (((uint32_t)(((uint32_t)(x))<<4U))&0x10UL)          /*!< DMA0_INT.INT4 Field                     */
+#define DMA_INT_INT5_MASK                        (0x20U)                                             /*!< DMA0_INT.INT5 Mask                      */
+#define DMA_INT_INT5_SHIFT                       (5U)                                                /*!< DMA0_INT.INT5 Position                  */
+#define DMA_INT_INT5(x)                          (((uint32_t)(((uint32_t)(x))<<5U))&0x20UL)          /*!< DMA0_INT.INT5 Field                     */
+#define DMA_INT_INT6_MASK                        (0x40U)                                             /*!< DMA0_INT.INT6 Mask                      */
+#define DMA_INT_INT6_SHIFT                       (6U)                                                /*!< DMA0_INT.INT6 Position                  */
+#define DMA_INT_INT6(x)                          (((uint32_t)(((uint32_t)(x))<<6U))&0x40UL)          /*!< DMA0_INT.INT6 Field                     */
+#define DMA_INT_INT7_MASK                        (0x80U)                                             /*!< DMA0_INT.INT7 Mask                      */
+#define DMA_INT_INT7_SHIFT                       (7U)                                                /*!< DMA0_INT.INT7 Position                  */
+#define DMA_INT_INT7(x)                          (((uint32_t)(((uint32_t)(x))<<7U))&0x80UL)          /*!< DMA0_INT.INT7 Field                     */
+#define DMA_INT_INT8_MASK                        (0x100U)                                            /*!< DMA0_INT.INT8 Mask                      */
+#define DMA_INT_INT8_SHIFT                       (8U)                                                /*!< DMA0_INT.INT8 Position                  */
+#define DMA_INT_INT8(x)                          (((uint32_t)(((uint32_t)(x))<<8U))&0x100UL)         /*!< DMA0_INT.INT8 Field                     */
+#define DMA_INT_INT9_MASK                        (0x200U)                                            /*!< DMA0_INT.INT9 Mask                      */
+#define DMA_INT_INT9_SHIFT                       (9U)                                                /*!< DMA0_INT.INT9 Position                  */
+#define DMA_INT_INT9(x)                          (((uint32_t)(((uint32_t)(x))<<9U))&0x200UL)         /*!< DMA0_INT.INT9 Field                     */
+#define DMA_INT_INT10_MASK                       (0x400U)                                            /*!< DMA0_INT.INT10 Mask                     */
+#define DMA_INT_INT10_SHIFT                      (10U)                                               /*!< DMA0_INT.INT10 Position                 */
+#define DMA_INT_INT10(x)                         (((uint32_t)(((uint32_t)(x))<<10U))&0x400UL)        /*!< DMA0_INT.INT10 Field                    */
+#define DMA_INT_INT11_MASK                       (0x800U)                                            /*!< DMA0_INT.INT11 Mask                     */
+#define DMA_INT_INT11_SHIFT                      (11U)                                               /*!< DMA0_INT.INT11 Position                 */
+#define DMA_INT_INT11(x)                         (((uint32_t)(((uint32_t)(x))<<11U))&0x800UL)        /*!< DMA0_INT.INT11 Field                    */
+#define DMA_INT_INT12_MASK                       (0x1000U)                                           /*!< DMA0_INT.INT12 Mask                     */
+#define DMA_INT_INT12_SHIFT                      (12U)                                               /*!< DMA0_INT.INT12 Position                 */
+#define DMA_INT_INT12(x)                         (((uint32_t)(((uint32_t)(x))<<12U))&0x1000UL)       /*!< DMA0_INT.INT12 Field                    */
+#define DMA_INT_INT13_MASK                       (0x2000U)                                           /*!< DMA0_INT.INT13 Mask                     */
+#define DMA_INT_INT13_SHIFT                      (13U)                                               /*!< DMA0_INT.INT13 Position                 */
+#define DMA_INT_INT13(x)                         (((uint32_t)(((uint32_t)(x))<<13U))&0x2000UL)       /*!< DMA0_INT.INT13 Field                    */
+#define DMA_INT_INT14_MASK                       (0x4000U)                                           /*!< DMA0_INT.INT14 Mask                     */
+#define DMA_INT_INT14_SHIFT                      (14U)                                               /*!< DMA0_INT.INT14 Position                 */
+#define DMA_INT_INT14(x)                         (((uint32_t)(((uint32_t)(x))<<14U))&0x4000UL)       /*!< DMA0_INT.INT14 Field                    */
+#define DMA_INT_INT15_MASK                       (0x8000U)                                           /*!< DMA0_INT.INT15 Mask                     */
+#define DMA_INT_INT15_SHIFT                      (15U)                                               /*!< DMA0_INT.INT15 Position                 */
+#define DMA_INT_INT15(x)                         (((uint32_t)(((uint32_t)(x))<<15U))&0x8000UL)       /*!< DMA0_INT.INT15 Field                    */
 /* ------- ERR Bit Fields                           ------ */
-#define DMA_ERR_ERR0_MASK                        (0x1U)                                              /*!< DMA_ERR.ERR0 Mask                       */
-#define DMA_ERR_ERR0_SHIFT                       (0U)                                                /*!< DMA_ERR.ERR0 Position                   */
-#define DMA_ERR_ERR0(x)                          (((uint32_t)(((uint32_t)(x))<<0U))&0x1UL)           /*!< DMA_ERR.ERR0 Field                      */
-#define DMA_ERR_ERR1_MASK                        (0x2U)                                              /*!< DMA_ERR.ERR1 Mask                       */
-#define DMA_ERR_ERR1_SHIFT                       (1U)                                                /*!< DMA_ERR.ERR1 Position                   */
-#define DMA_ERR_ERR1(x)                          (((uint32_t)(((uint32_t)(x))<<1U))&0x2UL)           /*!< DMA_ERR.ERR1 Field                      */
-#define DMA_ERR_ERR2_MASK                        (0x4U)                                              /*!< DMA_ERR.ERR2 Mask                       */
-#define DMA_ERR_ERR2_SHIFT                       (2U)                                                /*!< DMA_ERR.ERR2 Position                   */
-#define DMA_ERR_ERR2(x)                          (((uint32_t)(((uint32_t)(x))<<2U))&0x4UL)           /*!< DMA_ERR.ERR2 Field                      */
-#define DMA_ERR_ERR3_MASK                        (0x8U)                                              /*!< DMA_ERR.ERR3 Mask                       */
-#define DMA_ERR_ERR3_SHIFT                       (3U)                                                /*!< DMA_ERR.ERR3 Position                   */
-#define DMA_ERR_ERR3(x)                          (((uint32_t)(((uint32_t)(x))<<3U))&0x8UL)           /*!< DMA_ERR.ERR3 Field                      */
-#define DMA_ERR_ERR4_MASK                        (0x10U)                                             /*!< DMA_ERR.ERR4 Mask                       */
-#define DMA_ERR_ERR4_SHIFT                       (4U)                                                /*!< DMA_ERR.ERR4 Position                   */
-#define DMA_ERR_ERR4(x)                          (((uint32_t)(((uint32_t)(x))<<4U))&0x10UL)          /*!< DMA_ERR.ERR4 Field                      */
-#define DMA_ERR_ERR5_MASK                        (0x20U)                                             /*!< DMA_ERR.ERR5 Mask                       */
-#define DMA_ERR_ERR5_SHIFT                       (5U)                                                /*!< DMA_ERR.ERR5 Position                   */
-#define DMA_ERR_ERR5(x)                          (((uint32_t)(((uint32_t)(x))<<5U))&0x20UL)          /*!< DMA_ERR.ERR5 Field                      */
-#define DMA_ERR_ERR6_MASK                        (0x40U)                                             /*!< DMA_ERR.ERR6 Mask                       */
-#define DMA_ERR_ERR6_SHIFT                       (6U)                                                /*!< DMA_ERR.ERR6 Position                   */
-#define DMA_ERR_ERR6(x)                          (((uint32_t)(((uint32_t)(x))<<6U))&0x40UL)          /*!< DMA_ERR.ERR6 Field                      */
-#define DMA_ERR_ERR7_MASK                        (0x80U)                                             /*!< DMA_ERR.ERR7 Mask                       */
-#define DMA_ERR_ERR7_SHIFT                       (7U)                                                /*!< DMA_ERR.ERR7 Position                   */
-#define DMA_ERR_ERR7(x)                          (((uint32_t)(((uint32_t)(x))<<7U))&0x80UL)          /*!< DMA_ERR.ERR7 Field                      */
-#define DMA_ERR_ERR8_MASK                        (0x100U)                                            /*!< DMA_ERR.ERR8 Mask                       */
-#define DMA_ERR_ERR8_SHIFT                       (8U)                                                /*!< DMA_ERR.ERR8 Position                   */
-#define DMA_ERR_ERR8(x)                          (((uint32_t)(((uint32_t)(x))<<8U))&0x100UL)         /*!< DMA_ERR.ERR8 Field                      */
-#define DMA_ERR_ERR9_MASK                        (0x200U)                                            /*!< DMA_ERR.ERR9 Mask                       */
-#define DMA_ERR_ERR9_SHIFT                       (9U)                                                /*!< DMA_ERR.ERR9 Position                   */
-#define DMA_ERR_ERR9(x)                          (((uint32_t)(((uint32_t)(x))<<9U))&0x200UL)         /*!< DMA_ERR.ERR9 Field                      */
-#define DMA_ERR_ERR10_MASK                       (0x400U)                                            /*!< DMA_ERR.ERR10 Mask                      */
-#define DMA_ERR_ERR10_SHIFT                      (10U)                                               /*!< DMA_ERR.ERR10 Position                  */
-#define DMA_ERR_ERR10(x)                         (((uint32_t)(((uint32_t)(x))<<10U))&0x400UL)        /*!< DMA_ERR.ERR10 Field                     */
-#define DMA_ERR_ERR11_MASK                       (0x800U)                                            /*!< DMA_ERR.ERR11 Mask                      */
-#define DMA_ERR_ERR11_SHIFT                      (11U)                                               /*!< DMA_ERR.ERR11 Position                  */
-#define DMA_ERR_ERR11(x)                         (((uint32_t)(((uint32_t)(x))<<11U))&0x800UL)        /*!< DMA_ERR.ERR11 Field                     */
-#define DMA_ERR_ERR12_MASK                       (0x1000U)                                           /*!< DMA_ERR.ERR12 Mask                      */
-#define DMA_ERR_ERR12_SHIFT                      (12U)                                               /*!< DMA_ERR.ERR12 Position                  */
-#define DMA_ERR_ERR12(x)                         (((uint32_t)(((uint32_t)(x))<<12U))&0x1000UL)       /*!< DMA_ERR.ERR12 Field                     */
-#define DMA_ERR_ERR13_MASK                       (0x2000U)                                           /*!< DMA_ERR.ERR13 Mask                      */
-#define DMA_ERR_ERR13_SHIFT                      (13U)                                               /*!< DMA_ERR.ERR13 Position                  */
-#define DMA_ERR_ERR13(x)                         (((uint32_t)(((uint32_t)(x))<<13U))&0x2000UL)       /*!< DMA_ERR.ERR13 Field                     */
-#define DMA_ERR_ERR14_MASK                       (0x4000U)                                           /*!< DMA_ERR.ERR14 Mask                      */
-#define DMA_ERR_ERR14_SHIFT                      (14U)                                               /*!< DMA_ERR.ERR14 Position                  */
-#define DMA_ERR_ERR14(x)                         (((uint32_t)(((uint32_t)(x))<<14U))&0x4000UL)       /*!< DMA_ERR.ERR14 Field                     */
-#define DMA_ERR_ERR15_MASK                       (0x8000U)                                           /*!< DMA_ERR.ERR15 Mask                      */
-#define DMA_ERR_ERR15_SHIFT                      (15U)                                               /*!< DMA_ERR.ERR15 Position                  */
-#define DMA_ERR_ERR15(x)                         (((uint32_t)(((uint32_t)(x))<<15U))&0x8000UL)       /*!< DMA_ERR.ERR15 Field                     */
+#define DMA_ERR_ERR0_MASK                        (0x1U)                                              /*!< DMA0_ERR.ERR0 Mask                      */
+#define DMA_ERR_ERR0_SHIFT                       (0U)                                                /*!< DMA0_ERR.ERR0 Position                  */
+#define DMA_ERR_ERR0(x)                          (((uint32_t)(((uint32_t)(x))<<0U))&0x1UL)           /*!< DMA0_ERR.ERR0 Field                     */
+#define DMA_ERR_ERR1_MASK                        (0x2U)                                              /*!< DMA0_ERR.ERR1 Mask                      */
+#define DMA_ERR_ERR1_SHIFT                       (1U)                                                /*!< DMA0_ERR.ERR1 Position                  */
+#define DMA_ERR_ERR1(x)                          (((uint32_t)(((uint32_t)(x))<<1U))&0x2UL)           /*!< DMA0_ERR.ERR1 Field                     */
+#define DMA_ERR_ERR2_MASK                        (0x4U)                                              /*!< DMA0_ERR.ERR2 Mask                      */
+#define DMA_ERR_ERR2_SHIFT                       (2U)                                                /*!< DMA0_ERR.ERR2 Position                  */
+#define DMA_ERR_ERR2(x)                          (((uint32_t)(((uint32_t)(x))<<2U))&0x4UL)           /*!< DMA0_ERR.ERR2 Field                     */
+#define DMA_ERR_ERR3_MASK                        (0x8U)                                              /*!< DMA0_ERR.ERR3 Mask                      */
+#define DMA_ERR_ERR3_SHIFT                       (3U)                                                /*!< DMA0_ERR.ERR3 Position                  */
+#define DMA_ERR_ERR3(x)                          (((uint32_t)(((uint32_t)(x))<<3U))&0x8UL)           /*!< DMA0_ERR.ERR3 Field                     */
+#define DMA_ERR_ERR4_MASK                        (0x10U)                                             /*!< DMA0_ERR.ERR4 Mask                      */
+#define DMA_ERR_ERR4_SHIFT                       (4U)                                                /*!< DMA0_ERR.ERR4 Position                  */
+#define DMA_ERR_ERR4(x)                          (((uint32_t)(((uint32_t)(x))<<4U))&0x10UL)          /*!< DMA0_ERR.ERR4 Field                     */
+#define DMA_ERR_ERR5_MASK                        (0x20U)                                             /*!< DMA0_ERR.ERR5 Mask                      */
+#define DMA_ERR_ERR5_SHIFT                       (5U)                                                /*!< DMA0_ERR.ERR5 Position                  */
+#define DMA_ERR_ERR5(x)                          (((uint32_t)(((uint32_t)(x))<<5U))&0x20UL)          /*!< DMA0_ERR.ERR5 Field                     */
+#define DMA_ERR_ERR6_MASK                        (0x40U)                                             /*!< DMA0_ERR.ERR6 Mask                      */
+#define DMA_ERR_ERR6_SHIFT                       (6U)                                                /*!< DMA0_ERR.ERR6 Position                  */
+#define DMA_ERR_ERR6(x)                          (((uint32_t)(((uint32_t)(x))<<6U))&0x40UL)          /*!< DMA0_ERR.ERR6 Field                     */
+#define DMA_ERR_ERR7_MASK                        (0x80U)                                             /*!< DMA0_ERR.ERR7 Mask                      */
+#define DMA_ERR_ERR7_SHIFT                       (7U)                                                /*!< DMA0_ERR.ERR7 Position                  */
+#define DMA_ERR_ERR7(x)                          (((uint32_t)(((uint32_t)(x))<<7U))&0x80UL)          /*!< DMA0_ERR.ERR7 Field                     */
+#define DMA_ERR_ERR8_MASK                        (0x100U)                                            /*!< DMA0_ERR.ERR8 Mask                      */
+#define DMA_ERR_ERR8_SHIFT                       (8U)                                                /*!< DMA0_ERR.ERR8 Position                  */
+#define DMA_ERR_ERR8(x)                          (((uint32_t)(((uint32_t)(x))<<8U))&0x100UL)         /*!< DMA0_ERR.ERR8 Field                     */
+#define DMA_ERR_ERR9_MASK                        (0x200U)                                            /*!< DMA0_ERR.ERR9 Mask                      */
+#define DMA_ERR_ERR9_SHIFT                       (9U)                                                /*!< DMA0_ERR.ERR9 Position                  */
+#define DMA_ERR_ERR9(x)                          (((uint32_t)(((uint32_t)(x))<<9U))&0x200UL)         /*!< DMA0_ERR.ERR9 Field                     */
+#define DMA_ERR_ERR10_MASK                       (0x400U)                                            /*!< DMA0_ERR.ERR10 Mask                     */
+#define DMA_ERR_ERR10_SHIFT                      (10U)                                               /*!< DMA0_ERR.ERR10 Position                 */
+#define DMA_ERR_ERR10(x)                         (((uint32_t)(((uint32_t)(x))<<10U))&0x400UL)        /*!< DMA0_ERR.ERR10 Field                    */
+#define DMA_ERR_ERR11_MASK                       (0x800U)                                            /*!< DMA0_ERR.ERR11 Mask                     */
+#define DMA_ERR_ERR11_SHIFT                      (11U)                                               /*!< DMA0_ERR.ERR11 Position                 */
+#define DMA_ERR_ERR11(x)                         (((uint32_t)(((uint32_t)(x))<<11U))&0x800UL)        /*!< DMA0_ERR.ERR11 Field                    */
+#define DMA_ERR_ERR12_MASK                       (0x1000U)                                           /*!< DMA0_ERR.ERR12 Mask                     */
+#define DMA_ERR_ERR12_SHIFT                      (12U)                                               /*!< DMA0_ERR.ERR12 Position                 */
+#define DMA_ERR_ERR12(x)                         (((uint32_t)(((uint32_t)(x))<<12U))&0x1000UL)       /*!< DMA0_ERR.ERR12 Field                    */
+#define DMA_ERR_ERR13_MASK                       (0x2000U)                                           /*!< DMA0_ERR.ERR13 Mask                     */
+#define DMA_ERR_ERR13_SHIFT                      (13U)                                               /*!< DMA0_ERR.ERR13 Position                 */
+#define DMA_ERR_ERR13(x)                         (((uint32_t)(((uint32_t)(x))<<13U))&0x2000UL)       /*!< DMA0_ERR.ERR13 Field                    */
+#define DMA_ERR_ERR14_MASK                       (0x4000U)                                           /*!< DMA0_ERR.ERR14 Mask                     */
+#define DMA_ERR_ERR14_SHIFT                      (14U)                                               /*!< DMA0_ERR.ERR14 Position                 */
+#define DMA_ERR_ERR14(x)                         (((uint32_t)(((uint32_t)(x))<<14U))&0x4000UL)       /*!< DMA0_ERR.ERR14 Field                    */
+#define DMA_ERR_ERR15_MASK                       (0x8000U)                                           /*!< DMA0_ERR.ERR15 Mask                     */
+#define DMA_ERR_ERR15_SHIFT                      (15U)                                               /*!< DMA0_ERR.ERR15 Position                 */
+#define DMA_ERR_ERR15(x)                         (((uint32_t)(((uint32_t)(x))<<15U))&0x8000UL)       /*!< DMA0_ERR.ERR15 Field                    */
 /* ------- HRS Bit Fields                           ------ */
-#define DMA_HRS_HRS0_MASK                        (0x1U)                                              /*!< DMA_HRS.HRS0 Mask                       */
-#define DMA_HRS_HRS0_SHIFT                       (0U)                                                /*!< DMA_HRS.HRS0 Position                   */
-#define DMA_HRS_HRS0(x)                          (((uint32_t)(((uint32_t)(x))<<0U))&0x1UL)           /*!< DMA_HRS.HRS0 Field                      */
-#define DMA_HRS_HRS1_MASK                        (0x2U)                                              /*!< DMA_HRS.HRS1 Mask                       */
-#define DMA_HRS_HRS1_SHIFT                       (1U)                                                /*!< DMA_HRS.HRS1 Position                   */
-#define DMA_HRS_HRS1(x)                          (((uint32_t)(((uint32_t)(x))<<1U))&0x2UL)           /*!< DMA_HRS.HRS1 Field                      */
-#define DMA_HRS_HRS2_MASK                        (0x4U)                                              /*!< DMA_HRS.HRS2 Mask                       */
-#define DMA_HRS_HRS2_SHIFT                       (2U)                                                /*!< DMA_HRS.HRS2 Position                   */
-#define DMA_HRS_HRS2(x)                          (((uint32_t)(((uint32_t)(x))<<2U))&0x4UL)           /*!< DMA_HRS.HRS2 Field                      */
-#define DMA_HRS_HRS3_MASK                        (0x8U)                                              /*!< DMA_HRS.HRS3 Mask                       */
-#define DMA_HRS_HRS3_SHIFT                       (3U)                                                /*!< DMA_HRS.HRS3 Position                   */
-#define DMA_HRS_HRS3(x)                          (((uint32_t)(((uint32_t)(x))<<3U))&0x8UL)           /*!< DMA_HRS.HRS3 Field                      */
-#define DMA_HRS_HRS4_MASK                        (0x10U)                                             /*!< DMA_HRS.HRS4 Mask                       */
-#define DMA_HRS_HRS4_SHIFT                       (4U)                                                /*!< DMA_HRS.HRS4 Position                   */
-#define DMA_HRS_HRS4(x)                          (((uint32_t)(((uint32_t)(x))<<4U))&0x10UL)          /*!< DMA_HRS.HRS4 Field                      */
-#define DMA_HRS_HRS5_MASK                        (0x20U)                                             /*!< DMA_HRS.HRS5 Mask                       */
-#define DMA_HRS_HRS5_SHIFT                       (5U)                                                /*!< DMA_HRS.HRS5 Position                   */
-#define DMA_HRS_HRS5(x)                          (((uint32_t)(((uint32_t)(x))<<5U))&0x20UL)          /*!< DMA_HRS.HRS5 Field                      */
-#define DMA_HRS_HRS6_MASK                        (0x40U)                                             /*!< DMA_HRS.HRS6 Mask                       */
-#define DMA_HRS_HRS6_SHIFT                       (6U)                                                /*!< DMA_HRS.HRS6 Position                   */
-#define DMA_HRS_HRS6(x)                          (((uint32_t)(((uint32_t)(x))<<6U))&0x40UL)          /*!< DMA_HRS.HRS6 Field                      */
-#define DMA_HRS_HRS7_MASK                        (0x80U)                                             /*!< DMA_HRS.HRS7 Mask                       */
-#define DMA_HRS_HRS7_SHIFT                       (7U)                                                /*!< DMA_HRS.HRS7 Position                   */
-#define DMA_HRS_HRS7(x)                          (((uint32_t)(((uint32_t)(x))<<7U))&0x80UL)          /*!< DMA_HRS.HRS7 Field                      */
-#define DMA_HRS_HRS8_MASK                        (0x100U)                                            /*!< DMA_HRS.HRS8 Mask                       */
-#define DMA_HRS_HRS8_SHIFT                       (8U)                                                /*!< DMA_HRS.HRS8 Position                   */
-#define DMA_HRS_HRS8(x)                          (((uint32_t)(((uint32_t)(x))<<8U))&0x100UL)         /*!< DMA_HRS.HRS8 Field                      */
-#define DMA_HRS_HRS9_MASK                        (0x200U)                                            /*!< DMA_HRS.HRS9 Mask                       */
-#define DMA_HRS_HRS9_SHIFT                       (9U)                                                /*!< DMA_HRS.HRS9 Position                   */
-#define DMA_HRS_HRS9(x)                          (((uint32_t)(((uint32_t)(x))<<9U))&0x200UL)         /*!< DMA_HRS.HRS9 Field                      */
-#define DMA_HRS_HRS10_MASK                       (0x400U)                                            /*!< DMA_HRS.HRS10 Mask                      */
-#define DMA_HRS_HRS10_SHIFT                      (10U)                                               /*!< DMA_HRS.HRS10 Position                  */
-#define DMA_HRS_HRS10(x)                         (((uint32_t)(((uint32_t)(x))<<10U))&0x400UL)        /*!< DMA_HRS.HRS10 Field                     */
-#define DMA_HRS_HRS11_MASK                       (0x800U)                                            /*!< DMA_HRS.HRS11 Mask                      */
-#define DMA_HRS_HRS11_SHIFT                      (11U)                                               /*!< DMA_HRS.HRS11 Position                  */
-#define DMA_HRS_HRS11(x)                         (((uint32_t)(((uint32_t)(x))<<11U))&0x800UL)        /*!< DMA_HRS.HRS11 Field                     */
-#define DMA_HRS_HRS12_MASK                       (0x1000U)                                           /*!< DMA_HRS.HRS12 Mask                      */
-#define DMA_HRS_HRS12_SHIFT                      (12U)                                               /*!< DMA_HRS.HRS12 Position                  */
-#define DMA_HRS_HRS12(x)                         (((uint32_t)(((uint32_t)(x))<<12U))&0x1000UL)       /*!< DMA_HRS.HRS12 Field                     */
-#define DMA_HRS_HRS13_MASK                       (0x2000U)                                           /*!< DMA_HRS.HRS13 Mask                      */
-#define DMA_HRS_HRS13_SHIFT                      (13U)                                               /*!< DMA_HRS.HRS13 Position                  */
-#define DMA_HRS_HRS13(x)                         (((uint32_t)(((uint32_t)(x))<<13U))&0x2000UL)       /*!< DMA_HRS.HRS13 Field                     */
-#define DMA_HRS_HRS14_MASK                       (0x4000U)                                           /*!< DMA_HRS.HRS14 Mask                      */
-#define DMA_HRS_HRS14_SHIFT                      (14U)                                               /*!< DMA_HRS.HRS14 Position                  */
-#define DMA_HRS_HRS14(x)                         (((uint32_t)(((uint32_t)(x))<<14U))&0x4000UL)       /*!< DMA_HRS.HRS14 Field                     */
-#define DMA_HRS_HRS15_MASK                       (0x8000U)                                           /*!< DMA_HRS.HRS15 Mask                      */
-#define DMA_HRS_HRS15_SHIFT                      (15U)                                               /*!< DMA_HRS.HRS15 Position                  */
-#define DMA_HRS_HRS15(x)                         (((uint32_t)(((uint32_t)(x))<<15U))&0x8000UL)       /*!< DMA_HRS.HRS15 Field                     */
+#define DMA_HRS_HRS0_MASK                        (0x1U)                                              /*!< DMA0_HRS.HRS0 Mask                      */
+#define DMA_HRS_HRS0_SHIFT                       (0U)                                                /*!< DMA0_HRS.HRS0 Position                  */
+#define DMA_HRS_HRS0(x)                          (((uint32_t)(((uint32_t)(x))<<0U))&0x1UL)           /*!< DMA0_HRS.HRS0 Field                     */
+#define DMA_HRS_HRS1_MASK                        (0x2U)                                              /*!< DMA0_HRS.HRS1 Mask                      */
+#define DMA_HRS_HRS1_SHIFT                       (1U)                                                /*!< DMA0_HRS.HRS1 Position                  */
+#define DMA_HRS_HRS1(x)                          (((uint32_t)(((uint32_t)(x))<<1U))&0x2UL)           /*!< DMA0_HRS.HRS1 Field                     */
+#define DMA_HRS_HRS2_MASK                        (0x4U)                                              /*!< DMA0_HRS.HRS2 Mask                      */
+#define DMA_HRS_HRS2_SHIFT                       (2U)                                                /*!< DMA0_HRS.HRS2 Position                  */
+#define DMA_HRS_HRS2(x)                          (((uint32_t)(((uint32_t)(x))<<2U))&0x4UL)           /*!< DMA0_HRS.HRS2 Field                     */
+#define DMA_HRS_HRS3_MASK                        (0x8U)                                              /*!< DMA0_HRS.HRS3 Mask                      */
+#define DMA_HRS_HRS3_SHIFT                       (3U)                                                /*!< DMA0_HRS.HRS3 Position                  */
+#define DMA_HRS_HRS3(x)                          (((uint32_t)(((uint32_t)(x))<<3U))&0x8UL)           /*!< DMA0_HRS.HRS3 Field                     */
+#define DMA_HRS_HRS4_MASK                        (0x10U)                                             /*!< DMA0_HRS.HRS4 Mask                      */
+#define DMA_HRS_HRS4_SHIFT                       (4U)                                                /*!< DMA0_HRS.HRS4 Position                  */
+#define DMA_HRS_HRS4(x)                          (((uint32_t)(((uint32_t)(x))<<4U))&0x10UL)          /*!< DMA0_HRS.HRS4 Field                     */
+#define DMA_HRS_HRS5_MASK                        (0x20U)                                             /*!< DMA0_HRS.HRS5 Mask                      */
+#define DMA_HRS_HRS5_SHIFT                       (5U)                                                /*!< DMA0_HRS.HRS5 Position                  */
+#define DMA_HRS_HRS5(x)                          (((uint32_t)(((uint32_t)(x))<<5U))&0x20UL)          /*!< DMA0_HRS.HRS5 Field                     */
+#define DMA_HRS_HRS6_MASK                        (0x40U)                                             /*!< DMA0_HRS.HRS6 Mask                      */
+#define DMA_HRS_HRS6_SHIFT                       (6U)                                                /*!< DMA0_HRS.HRS6 Position                  */
+#define DMA_HRS_HRS6(x)                          (((uint32_t)(((uint32_t)(x))<<6U))&0x40UL)          /*!< DMA0_HRS.HRS6 Field                     */
+#define DMA_HRS_HRS7_MASK                        (0x80U)                                             /*!< DMA0_HRS.HRS7 Mask                      */
+#define DMA_HRS_HRS7_SHIFT                       (7U)                                                /*!< DMA0_HRS.HRS7 Position                  */
+#define DMA_HRS_HRS7(x)                          (((uint32_t)(((uint32_t)(x))<<7U))&0x80UL)          /*!< DMA0_HRS.HRS7 Field                     */
+#define DMA_HRS_HRS8_MASK                        (0x100U)                                            /*!< DMA0_HRS.HRS8 Mask                      */
+#define DMA_HRS_HRS8_SHIFT                       (8U)                                                /*!< DMA0_HRS.HRS8 Position                  */
+#define DMA_HRS_HRS8(x)                          (((uint32_t)(((uint32_t)(x))<<8U))&0x100UL)         /*!< DMA0_HRS.HRS8 Field                     */
+#define DMA_HRS_HRS9_MASK                        (0x200U)                                            /*!< DMA0_HRS.HRS9 Mask                      */
+#define DMA_HRS_HRS9_SHIFT                       (9U)                                                /*!< DMA0_HRS.HRS9 Position                  */
+#define DMA_HRS_HRS9(x)                          (((uint32_t)(((uint32_t)(x))<<9U))&0x200UL)         /*!< DMA0_HRS.HRS9 Field                     */
+#define DMA_HRS_HRS10_MASK                       (0x400U)                                            /*!< DMA0_HRS.HRS10 Mask                     */
+#define DMA_HRS_HRS10_SHIFT                      (10U)                                               /*!< DMA0_HRS.HRS10 Position                 */
+#define DMA_HRS_HRS10(x)                         (((uint32_t)(((uint32_t)(x))<<10U))&0x400UL)        /*!< DMA0_HRS.HRS10 Field                    */
+#define DMA_HRS_HRS11_MASK                       (0x800U)                                            /*!< DMA0_HRS.HRS11 Mask                     */
+#define DMA_HRS_HRS11_SHIFT                      (11U)                                               /*!< DMA0_HRS.HRS11 Position                 */
+#define DMA_HRS_HRS11(x)                         (((uint32_t)(((uint32_t)(x))<<11U))&0x800UL)        /*!< DMA0_HRS.HRS11 Field                    */
+#define DMA_HRS_HRS12_MASK                       (0x1000U)                                           /*!< DMA0_HRS.HRS12 Mask                     */
+#define DMA_HRS_HRS12_SHIFT                      (12U)                                               /*!< DMA0_HRS.HRS12 Position                 */
+#define DMA_HRS_HRS12(x)                         (((uint32_t)(((uint32_t)(x))<<12U))&0x1000UL)       /*!< DMA0_HRS.HRS12 Field                    */
+#define DMA_HRS_HRS13_MASK                       (0x2000U)                                           /*!< DMA0_HRS.HRS13 Mask                     */
+#define DMA_HRS_HRS13_SHIFT                      (13U)                                               /*!< DMA0_HRS.HRS13 Position                 */
+#define DMA_HRS_HRS13(x)                         (((uint32_t)(((uint32_t)(x))<<13U))&0x2000UL)       /*!< DMA0_HRS.HRS13 Field                    */
+#define DMA_HRS_HRS14_MASK                       (0x4000U)                                           /*!< DMA0_HRS.HRS14 Mask                     */
+#define DMA_HRS_HRS14_SHIFT                      (14U)                                               /*!< DMA0_HRS.HRS14 Position                 */
+#define DMA_HRS_HRS14(x)                         (((uint32_t)(((uint32_t)(x))<<14U))&0x4000UL)       /*!< DMA0_HRS.HRS14 Field                    */
+#define DMA_HRS_HRS15_MASK                       (0x8000U)                                           /*!< DMA0_HRS.HRS15 Mask                     */
+#define DMA_HRS_HRS15_SHIFT                      (15U)                                               /*!< DMA0_HRS.HRS15 Position                 */
+#define DMA_HRS_HRS15(x)                         (((uint32_t)(((uint32_t)(x))<<15U))&0x8000UL)       /*!< DMA0_HRS.HRS15 Field                    */
 /* ------- EARS Bit Fields                          ------ */
-#define DMA_EARS_EDREQ_0_MASK                    (0x1U)                                              /*!< DMA_EARS.EDREQ_0 Mask                   */
-#define DMA_EARS_EDREQ_0_SHIFT                   (0U)                                                /*!< DMA_EARS.EDREQ_0 Position               */
-#define DMA_EARS_EDREQ_0(x)                      (((uint32_t)(((uint32_t)(x))<<0U))&0x1UL)           /*!< DMA_EARS.EDREQ_0 Field                  */
-#define DMA_EARS_EDREQ_1_MASK                    (0x2U)                                              /*!< DMA_EARS.EDREQ_1 Mask                   */
-#define DMA_EARS_EDREQ_1_SHIFT                   (1U)                                                /*!< DMA_EARS.EDREQ_1 Position               */
-#define DMA_EARS_EDREQ_1(x)                      (((uint32_t)(((uint32_t)(x))<<1U))&0x2UL)           /*!< DMA_EARS.EDREQ_1 Field                  */
-#define DMA_EARS_EDREQ_2_MASK                    (0x4U)                                              /*!< DMA_EARS.EDREQ_2 Mask                   */
-#define DMA_EARS_EDREQ_2_SHIFT                   (2U)                                                /*!< DMA_EARS.EDREQ_2 Position               */
-#define DMA_EARS_EDREQ_2(x)                      (((uint32_t)(((uint32_t)(x))<<2U))&0x4UL)           /*!< DMA_EARS.EDREQ_2 Field                  */
-#define DMA_EARS_EDREQ_3_MASK                    (0x8U)                                              /*!< DMA_EARS.EDREQ_3 Mask                   */
-#define DMA_EARS_EDREQ_3_SHIFT                   (3U)                                                /*!< DMA_EARS.EDREQ_3 Position               */
-#define DMA_EARS_EDREQ_3(x)                      (((uint32_t)(((uint32_t)(x))<<3U))&0x8UL)           /*!< DMA_EARS.EDREQ_3 Field                  */
-#define DMA_EARS_EDREQ_4_MASK                    (0x10U)                                             /*!< DMA_EARS.EDREQ_4 Mask                   */
-#define DMA_EARS_EDREQ_4_SHIFT                   (4U)                                                /*!< DMA_EARS.EDREQ_4 Position               */
-#define DMA_EARS_EDREQ_4(x)                      (((uint32_t)(((uint32_t)(x))<<4U))&0x10UL)          /*!< DMA_EARS.EDREQ_4 Field                  */
-#define DMA_EARS_EDREQ_5_MASK                    (0x20U)                                             /*!< DMA_EARS.EDREQ_5 Mask                   */
-#define DMA_EARS_EDREQ_5_SHIFT                   (5U)                                                /*!< DMA_EARS.EDREQ_5 Position               */
-#define DMA_EARS_EDREQ_5(x)                      (((uint32_t)(((uint32_t)(x))<<5U))&0x20UL)          /*!< DMA_EARS.EDREQ_5 Field                  */
-#define DMA_EARS_EDREQ_6_MASK                    (0x40U)                                             /*!< DMA_EARS.EDREQ_6 Mask                   */
-#define DMA_EARS_EDREQ_6_SHIFT                   (6U)                                                /*!< DMA_EARS.EDREQ_6 Position               */
-#define DMA_EARS_EDREQ_6(x)                      (((uint32_t)(((uint32_t)(x))<<6U))&0x40UL)          /*!< DMA_EARS.EDREQ_6 Field                  */
-#define DMA_EARS_EDREQ_7_MASK                    (0x80U)                                             /*!< DMA_EARS.EDREQ_7 Mask                   */
-#define DMA_EARS_EDREQ_7_SHIFT                   (7U)                                                /*!< DMA_EARS.EDREQ_7 Position               */
-#define DMA_EARS_EDREQ_7(x)                      (((uint32_t)(((uint32_t)(x))<<7U))&0x80UL)          /*!< DMA_EARS.EDREQ_7 Field                  */
-#define DMA_EARS_EDREQ_8_MASK                    (0x100U)                                            /*!< DMA_EARS.EDREQ_8 Mask                   */
-#define DMA_EARS_EDREQ_8_SHIFT                   (8U)                                                /*!< DMA_EARS.EDREQ_8 Position               */
-#define DMA_EARS_EDREQ_8(x)                      (((uint32_t)(((uint32_t)(x))<<8U))&0x100UL)         /*!< DMA_EARS.EDREQ_8 Field                  */
-#define DMA_EARS_EDREQ_9_MASK                    (0x200U)                                            /*!< DMA_EARS.EDREQ_9 Mask                   */
-#define DMA_EARS_EDREQ_9_SHIFT                   (9U)                                                /*!< DMA_EARS.EDREQ_9 Position               */
-#define DMA_EARS_EDREQ_9(x)                      (((uint32_t)(((uint32_t)(x))<<9U))&0x200UL)         /*!< DMA_EARS.EDREQ_9 Field                  */
-#define DMA_EARS_EDREQ_10_MASK                   (0x400U)                                            /*!< DMA_EARS.EDREQ_10 Mask                  */
-#define DMA_EARS_EDREQ_10_SHIFT                  (10U)                                               /*!< DMA_EARS.EDREQ_10 Position              */
-#define DMA_EARS_EDREQ_10(x)                     (((uint32_t)(((uint32_t)(x))<<10U))&0x400UL)        /*!< DMA_EARS.EDREQ_10 Field                 */
-#define DMA_EARS_EDREQ_11_MASK                   (0x800U)                                            /*!< DMA_EARS.EDREQ_11 Mask                  */
-#define DMA_EARS_EDREQ_11_SHIFT                  (11U)                                               /*!< DMA_EARS.EDREQ_11 Position              */
-#define DMA_EARS_EDREQ_11(x)                     (((uint32_t)(((uint32_t)(x))<<11U))&0x800UL)        /*!< DMA_EARS.EDREQ_11 Field                 */
-#define DMA_EARS_EDREQ_12_MASK                   (0x1000U)                                           /*!< DMA_EARS.EDREQ_12 Mask                  */
-#define DMA_EARS_EDREQ_12_SHIFT                  (12U)                                               /*!< DMA_EARS.EDREQ_12 Position              */
-#define DMA_EARS_EDREQ_12(x)                     (((uint32_t)(((uint32_t)(x))<<12U))&0x1000UL)       /*!< DMA_EARS.EDREQ_12 Field                 */
-#define DMA_EARS_EDREQ_13_MASK                   (0x2000U)                                           /*!< DMA_EARS.EDREQ_13 Mask                  */
-#define DMA_EARS_EDREQ_13_SHIFT                  (13U)                                               /*!< DMA_EARS.EDREQ_13 Position              */
-#define DMA_EARS_EDREQ_13(x)                     (((uint32_t)(((uint32_t)(x))<<13U))&0x2000UL)       /*!< DMA_EARS.EDREQ_13 Field                 */
-#define DMA_EARS_EDREQ_14_MASK                   (0x4000U)                                           /*!< DMA_EARS.EDREQ_14 Mask                  */
-#define DMA_EARS_EDREQ_14_SHIFT                  (14U)                                               /*!< DMA_EARS.EDREQ_14 Position              */
-#define DMA_EARS_EDREQ_14(x)                     (((uint32_t)(((uint32_t)(x))<<14U))&0x4000UL)       /*!< DMA_EARS.EDREQ_14 Field                 */
-#define DMA_EARS_EDREQ_15_MASK                   (0x8000U)                                           /*!< DMA_EARS.EDREQ_15 Mask                  */
-#define DMA_EARS_EDREQ_15_SHIFT                  (15U)                                               /*!< DMA_EARS.EDREQ_15 Position              */
-#define DMA_EARS_EDREQ_15(x)                     (((uint32_t)(((uint32_t)(x))<<15U))&0x8000UL)       /*!< DMA_EARS.EDREQ_15 Field                 */
-/* ------- DCHPRI3 Bit Fields                       ------ */
-#define DMA_DCHPRI3_CHPRI_MASK                   (0xFU)                                              /*!< DMA_DCHPRI3.CHPRI Mask                  */
-#define DMA_DCHPRI3_CHPRI_SHIFT                  (0U)                                                /*!< DMA_DCHPRI3.CHPRI Position              */
-#define DMA_DCHPRI3_CHPRI(x)                     (((uint8_t)(((uint8_t)(x))<<0U))&0xFUL)             /*!< DMA_DCHPRI3.CHPRI Field                 */
-#define DMA_DCHPRI3_DPA_MASK                     (0x40U)                                             /*!< DMA_DCHPRI3.DPA Mask                    */
-#define DMA_DCHPRI3_DPA_SHIFT                    (6U)                                                /*!< DMA_DCHPRI3.DPA Position                */
-#define DMA_DCHPRI3_DPA(x)                       (((uint8_t)(((uint8_t)(x))<<6U))&0x40UL)            /*!< DMA_DCHPRI3.DPA Field                   */
-#define DMA_DCHPRI3_ECP_MASK                     (0x80U)                                             /*!< DMA_DCHPRI3.ECP Mask                    */
-#define DMA_DCHPRI3_ECP_SHIFT                    (7U)                                                /*!< DMA_DCHPRI3.ECP Position                */
-#define DMA_DCHPRI3_ECP(x)                       (((uint8_t)(((uint8_t)(x))<<7U))&0x80UL)            /*!< DMA_DCHPRI3.ECP Field                   */
-/* ------- DCHPRI2 Bit Fields                       ------ */
-#define DMA_DCHPRI2_CHPRI_MASK                   (0xFU)                                              /*!< DMA_DCHPRI2.CHPRI Mask                  */
-#define DMA_DCHPRI2_CHPRI_SHIFT                  (0U)                                                /*!< DMA_DCHPRI2.CHPRI Position              */
-#define DMA_DCHPRI2_CHPRI(x)                     (((uint8_t)(((uint8_t)(x))<<0U))&0xFUL)             /*!< DMA_DCHPRI2.CHPRI Field                 */
-#define DMA_DCHPRI2_DPA_MASK                     (0x40U)                                             /*!< DMA_DCHPRI2.DPA Mask                    */
-#define DMA_DCHPRI2_DPA_SHIFT                    (6U)                                                /*!< DMA_DCHPRI2.DPA Position                */
-#define DMA_DCHPRI2_DPA(x)                       (((uint8_t)(((uint8_t)(x))<<6U))&0x40UL)            /*!< DMA_DCHPRI2.DPA Field                   */
-#define DMA_DCHPRI2_ECP_MASK                     (0x80U)                                             /*!< DMA_DCHPRI2.ECP Mask                    */
-#define DMA_DCHPRI2_ECP_SHIFT                    (7U)                                                /*!< DMA_DCHPRI2.ECP Position                */
-#define DMA_DCHPRI2_ECP(x)                       (((uint8_t)(((uint8_t)(x))<<7U))&0x80UL)            /*!< DMA_DCHPRI2.ECP Field                   */
-/* ------- DCHPRI1 Bit Fields                       ------ */
-#define DMA_DCHPRI1_CHPRI_MASK                   (0xFU)                                              /*!< DMA_DCHPRI1.CHPRI Mask                  */
-#define DMA_DCHPRI1_CHPRI_SHIFT                  (0U)                                                /*!< DMA_DCHPRI1.CHPRI Position              */
-#define DMA_DCHPRI1_CHPRI(x)                     (((uint8_t)(((uint8_t)(x))<<0U))&0xFUL)             /*!< DMA_DCHPRI1.CHPRI Field                 */
-#define DMA_DCHPRI1_DPA_MASK                     (0x40U)                                             /*!< DMA_DCHPRI1.DPA Mask                    */
-#define DMA_DCHPRI1_DPA_SHIFT                    (6U)                                                /*!< DMA_DCHPRI1.DPA Position                */
-#define DMA_DCHPRI1_DPA(x)                       (((uint8_t)(((uint8_t)(x))<<6U))&0x40UL)            /*!< DMA_DCHPRI1.DPA Field                   */
-#define DMA_DCHPRI1_ECP_MASK                     (0x80U)                                             /*!< DMA_DCHPRI1.ECP Mask                    */
-#define DMA_DCHPRI1_ECP_SHIFT                    (7U)                                                /*!< DMA_DCHPRI1.ECP Position                */
-#define DMA_DCHPRI1_ECP(x)                       (((uint8_t)(((uint8_t)(x))<<7U))&0x80UL)            /*!< DMA_DCHPRI1.ECP Field                   */
-/* ------- DCHPRI0 Bit Fields                       ------ */
-#define DMA_DCHPRI0_CHPRI_MASK                   (0xFU)                                              /*!< DMA_DCHPRI0.CHPRI Mask                  */
-#define DMA_DCHPRI0_CHPRI_SHIFT                  (0U)                                                /*!< DMA_DCHPRI0.CHPRI Position              */
-#define DMA_DCHPRI0_CHPRI(x)                     (((uint8_t)(((uint8_t)(x))<<0U))&0xFUL)             /*!< DMA_DCHPRI0.CHPRI Field                 */
-#define DMA_DCHPRI0_DPA_MASK                     (0x40U)                                             /*!< DMA_DCHPRI0.DPA Mask                    */
-#define DMA_DCHPRI0_DPA_SHIFT                    (6U)                                                /*!< DMA_DCHPRI0.DPA Position                */
-#define DMA_DCHPRI0_DPA(x)                       (((uint8_t)(((uint8_t)(x))<<6U))&0x40UL)            /*!< DMA_DCHPRI0.DPA Field                   */
-#define DMA_DCHPRI0_ECP_MASK                     (0x80U)                                             /*!< DMA_DCHPRI0.ECP Mask                    */
-#define DMA_DCHPRI0_ECP_SHIFT                    (7U)                                                /*!< DMA_DCHPRI0.ECP Position                */
-#define DMA_DCHPRI0_ECP(x)                       (((uint8_t)(((uint8_t)(x))<<7U))&0x80UL)            /*!< DMA_DCHPRI0.ECP Field                   */
-/* ------- DCHPRI7 Bit Fields                       ------ */
-#define DMA_DCHPRI7_CHPRI_MASK                   (0xFU)                                              /*!< DMA_DCHPRI7.CHPRI Mask                  */
-#define DMA_DCHPRI7_CHPRI_SHIFT                  (0U)                                                /*!< DMA_DCHPRI7.CHPRI Position              */
-#define DMA_DCHPRI7_CHPRI(x)                     (((uint8_t)(((uint8_t)(x))<<0U))&0xFUL)             /*!< DMA_DCHPRI7.CHPRI Field                 */
-#define DMA_DCHPRI7_DPA_MASK                     (0x40U)                                             /*!< DMA_DCHPRI7.DPA Mask                    */
-#define DMA_DCHPRI7_DPA_SHIFT                    (6U)                                                /*!< DMA_DCHPRI7.DPA Position                */
-#define DMA_DCHPRI7_DPA(x)                       (((uint8_t)(((uint8_t)(x))<<6U))&0x40UL)            /*!< DMA_DCHPRI7.DPA Field                   */
-#define DMA_DCHPRI7_ECP_MASK                     (0x80U)                                             /*!< DMA_DCHPRI7.ECP Mask                    */
-#define DMA_DCHPRI7_ECP_SHIFT                    (7U)                                                /*!< DMA_DCHPRI7.ECP Position                */
-#define DMA_DCHPRI7_ECP(x)                       (((uint8_t)(((uint8_t)(x))<<7U))&0x80UL)            /*!< DMA_DCHPRI7.ECP Field                   */
-/* ------- DCHPRI6 Bit Fields                       ------ */
-#define DMA_DCHPRI6_CHPRI_MASK                   (0xFU)                                              /*!< DMA_DCHPRI6.CHPRI Mask                  */
-#define DMA_DCHPRI6_CHPRI_SHIFT                  (0U)                                                /*!< DMA_DCHPRI6.CHPRI Position              */
-#define DMA_DCHPRI6_CHPRI(x)                     (((uint8_t)(((uint8_t)(x))<<0U))&0xFUL)             /*!< DMA_DCHPRI6.CHPRI Field                 */
-#define DMA_DCHPRI6_DPA_MASK                     (0x40U)                                             /*!< DMA_DCHPRI6.DPA Mask                    */
-#define DMA_DCHPRI6_DPA_SHIFT                    (6U)                                                /*!< DMA_DCHPRI6.DPA Position                */
-#define DMA_DCHPRI6_DPA(x)                       (((uint8_t)(((uint8_t)(x))<<6U))&0x40UL)            /*!< DMA_DCHPRI6.DPA Field                   */
-#define DMA_DCHPRI6_ECP_MASK                     (0x80U)                                             /*!< DMA_DCHPRI6.ECP Mask                    */
-#define DMA_DCHPRI6_ECP_SHIFT                    (7U)                                                /*!< DMA_DCHPRI6.ECP Position                */
-#define DMA_DCHPRI6_ECP(x)                       (((uint8_t)(((uint8_t)(x))<<7U))&0x80UL)            /*!< DMA_DCHPRI6.ECP Field                   */
-/* ------- DCHPRI5 Bit Fields                       ------ */
-#define DMA_DCHPRI5_CHPRI_MASK                   (0xFU)                                              /*!< DMA_DCHPRI5.CHPRI Mask                  */
-#define DMA_DCHPRI5_CHPRI_SHIFT                  (0U)                                                /*!< DMA_DCHPRI5.CHPRI Position              */
-#define DMA_DCHPRI5_CHPRI(x)                     (((uint8_t)(((uint8_t)(x))<<0U))&0xFUL)             /*!< DMA_DCHPRI5.CHPRI Field                 */
-#define DMA_DCHPRI5_DPA_MASK                     (0x40U)                                             /*!< DMA_DCHPRI5.DPA Mask                    */
-#define DMA_DCHPRI5_DPA_SHIFT                    (6U)                                                /*!< DMA_DCHPRI5.DPA Position                */
-#define DMA_DCHPRI5_DPA(x)                       (((uint8_t)(((uint8_t)(x))<<6U))&0x40UL)            /*!< DMA_DCHPRI5.DPA Field                   */
-#define DMA_DCHPRI5_ECP_MASK                     (0x80U)                                             /*!< DMA_DCHPRI5.ECP Mask                    */
-#define DMA_DCHPRI5_ECP_SHIFT                    (7U)                                                /*!< DMA_DCHPRI5.ECP Position                */
-#define DMA_DCHPRI5_ECP(x)                       (((uint8_t)(((uint8_t)(x))<<7U))&0x80UL)            /*!< DMA_DCHPRI5.ECP Field                   */
-/* ------- DCHPRI4 Bit Fields                       ------ */
-#define DMA_DCHPRI4_CHPRI_MASK                   (0xFU)                                              /*!< DMA_DCHPRI4.CHPRI Mask                  */
-#define DMA_DCHPRI4_CHPRI_SHIFT                  (0U)                                                /*!< DMA_DCHPRI4.CHPRI Position              */
-#define DMA_DCHPRI4_CHPRI(x)                     (((uint8_t)(((uint8_t)(x))<<0U))&0xFUL)             /*!< DMA_DCHPRI4.CHPRI Field                 */
-#define DMA_DCHPRI4_DPA_MASK                     (0x40U)                                             /*!< DMA_DCHPRI4.DPA Mask                    */
-#define DMA_DCHPRI4_DPA_SHIFT                    (6U)                                                /*!< DMA_DCHPRI4.DPA Position                */
-#define DMA_DCHPRI4_DPA(x)                       (((uint8_t)(((uint8_t)(x))<<6U))&0x40UL)            /*!< DMA_DCHPRI4.DPA Field                   */
-#define DMA_DCHPRI4_ECP_MASK                     (0x80U)                                             /*!< DMA_DCHPRI4.ECP Mask                    */
-#define DMA_DCHPRI4_ECP_SHIFT                    (7U)                                                /*!< DMA_DCHPRI4.ECP Position                */
-#define DMA_DCHPRI4_ECP(x)                       (((uint8_t)(((uint8_t)(x))<<7U))&0x80UL)            /*!< DMA_DCHPRI4.ECP Field                   */
-/* ------- DCHPRI11 Bit Fields                      ------ */
-#define DMA_DCHPRI11_CHPRI_MASK                  (0xFU)                                              /*!< DMA_DCHPRI11.CHPRI Mask                 */
-#define DMA_DCHPRI11_CHPRI_SHIFT                 (0U)                                                /*!< DMA_DCHPRI11.CHPRI Position             */
-#define DMA_DCHPRI11_CHPRI(x)                    (((uint8_t)(((uint8_t)(x))<<0U))&0xFUL)             /*!< DMA_DCHPRI11.CHPRI Field                */
-#define DMA_DCHPRI11_DPA_MASK                    (0x40U)                                             /*!< DMA_DCHPRI11.DPA Mask                   */
-#define DMA_DCHPRI11_DPA_SHIFT                   (6U)                                                /*!< DMA_DCHPRI11.DPA Position               */
-#define DMA_DCHPRI11_DPA(x)                      (((uint8_t)(((uint8_t)(x))<<6U))&0x40UL)            /*!< DMA_DCHPRI11.DPA Field                  */
-#define DMA_DCHPRI11_ECP_MASK                    (0x80U)                                             /*!< DMA_DCHPRI11.ECP Mask                   */
-#define DMA_DCHPRI11_ECP_SHIFT                   (7U)                                                /*!< DMA_DCHPRI11.ECP Position               */
-#define DMA_DCHPRI11_ECP(x)                      (((uint8_t)(((uint8_t)(x))<<7U))&0x80UL)            /*!< DMA_DCHPRI11.ECP Field                  */
-/* ------- DCHPRI10 Bit Fields                      ------ */
-#define DMA_DCHPRI10_CHPRI_MASK                  (0xFU)                                              /*!< DMA_DCHPRI10.CHPRI Mask                 */
-#define DMA_DCHPRI10_CHPRI_SHIFT                 (0U)                                                /*!< DMA_DCHPRI10.CHPRI Position             */
-#define DMA_DCHPRI10_CHPRI(x)                    (((uint8_t)(((uint8_t)(x))<<0U))&0xFUL)             /*!< DMA_DCHPRI10.CHPRI Field                */
-#define DMA_DCHPRI10_DPA_MASK                    (0x40U)                                             /*!< DMA_DCHPRI10.DPA Mask                   */
-#define DMA_DCHPRI10_DPA_SHIFT                   (6U)                                                /*!< DMA_DCHPRI10.DPA Position               */
-#define DMA_DCHPRI10_DPA(x)                      (((uint8_t)(((uint8_t)(x))<<6U))&0x40UL)            /*!< DMA_DCHPRI10.DPA Field                  */
-#define DMA_DCHPRI10_ECP_MASK                    (0x80U)                                             /*!< DMA_DCHPRI10.ECP Mask                   */
-#define DMA_DCHPRI10_ECP_SHIFT                   (7U)                                                /*!< DMA_DCHPRI10.ECP Position               */
-#define DMA_DCHPRI10_ECP(x)                      (((uint8_t)(((uint8_t)(x))<<7U))&0x80UL)            /*!< DMA_DCHPRI10.ECP Field                  */
-/* ------- DCHPRI9 Bit Fields                       ------ */
-#define DMA_DCHPRI9_CHPRI_MASK                   (0xFU)                                              /*!< DMA_DCHPRI9.CHPRI Mask                  */
-#define DMA_DCHPRI9_CHPRI_SHIFT                  (0U)                                                /*!< DMA_DCHPRI9.CHPRI Position              */
-#define DMA_DCHPRI9_CHPRI(x)                     (((uint8_t)(((uint8_t)(x))<<0U))&0xFUL)             /*!< DMA_DCHPRI9.CHPRI Field                 */
-#define DMA_DCHPRI9_DPA_MASK                     (0x40U)                                             /*!< DMA_DCHPRI9.DPA Mask                    */
-#define DMA_DCHPRI9_DPA_SHIFT                    (6U)                                                /*!< DMA_DCHPRI9.DPA Position                */
-#define DMA_DCHPRI9_DPA(x)                       (((uint8_t)(((uint8_t)(x))<<6U))&0x40UL)            /*!< DMA_DCHPRI9.DPA Field                   */
-#define DMA_DCHPRI9_ECP_MASK                     (0x80U)                                             /*!< DMA_DCHPRI9.ECP Mask                    */
-#define DMA_DCHPRI9_ECP_SHIFT                    (7U)                                                /*!< DMA_DCHPRI9.ECP Position                */
-#define DMA_DCHPRI9_ECP(x)                       (((uint8_t)(((uint8_t)(x))<<7U))&0x80UL)            /*!< DMA_DCHPRI9.ECP Field                   */
-/* ------- DCHPRI8 Bit Fields                       ------ */
-#define DMA_DCHPRI8_CHPRI_MASK                   (0xFU)                                              /*!< DMA_DCHPRI8.CHPRI Mask                  */
-#define DMA_DCHPRI8_CHPRI_SHIFT                  (0U)                                                /*!< DMA_DCHPRI8.CHPRI Position              */
-#define DMA_DCHPRI8_CHPRI(x)                     (((uint8_t)(((uint8_t)(x))<<0U))&0xFUL)             /*!< DMA_DCHPRI8.CHPRI Field                 */
-#define DMA_DCHPRI8_DPA_MASK                     (0x40U)                                             /*!< DMA_DCHPRI8.DPA Mask                    */
-#define DMA_DCHPRI8_DPA_SHIFT                    (6U)                                                /*!< DMA_DCHPRI8.DPA Position                */
-#define DMA_DCHPRI8_DPA(x)                       (((uint8_t)(((uint8_t)(x))<<6U))&0x40UL)            /*!< DMA_DCHPRI8.DPA Field                   */
-#define DMA_DCHPRI8_ECP_MASK                     (0x80U)                                             /*!< DMA_DCHPRI8.ECP Mask                    */
-#define DMA_DCHPRI8_ECP_SHIFT                    (7U)                                                /*!< DMA_DCHPRI8.ECP Position                */
-#define DMA_DCHPRI8_ECP(x)                       (((uint8_t)(((uint8_t)(x))<<7U))&0x80UL)            /*!< DMA_DCHPRI8.ECP Field                   */
-/* ------- DCHPRI15 Bit Fields                      ------ */
-#define DMA_DCHPRI15_CHPRI_MASK                  (0xFU)                                              /*!< DMA_DCHPRI15.CHPRI Mask                 */
-#define DMA_DCHPRI15_CHPRI_SHIFT                 (0U)                                                /*!< DMA_DCHPRI15.CHPRI Position             */
-#define DMA_DCHPRI15_CHPRI(x)                    (((uint8_t)(((uint8_t)(x))<<0U))&0xFUL)             /*!< DMA_DCHPRI15.CHPRI Field                */
-#define DMA_DCHPRI15_DPA_MASK                    (0x40U)                                             /*!< DMA_DCHPRI15.DPA Mask                   */
-#define DMA_DCHPRI15_DPA_SHIFT                   (6U)                                                /*!< DMA_DCHPRI15.DPA Position               */
-#define DMA_DCHPRI15_DPA(x)                      (((uint8_t)(((uint8_t)(x))<<6U))&0x40UL)            /*!< DMA_DCHPRI15.DPA Field                  */
-#define DMA_DCHPRI15_ECP_MASK                    (0x80U)                                             /*!< DMA_DCHPRI15.ECP Mask                   */
-#define DMA_DCHPRI15_ECP_SHIFT                   (7U)                                                /*!< DMA_DCHPRI15.ECP Position               */
-#define DMA_DCHPRI15_ECP(x)                      (((uint8_t)(((uint8_t)(x))<<7U))&0x80UL)            /*!< DMA_DCHPRI15.ECP Field                  */
-/* ------- DCHPRI14 Bit Fields                      ------ */
-#define DMA_DCHPRI14_CHPRI_MASK                  (0xFU)                                              /*!< DMA_DCHPRI14.CHPRI Mask                 */
-#define DMA_DCHPRI14_CHPRI_SHIFT                 (0U)                                                /*!< DMA_DCHPRI14.CHPRI Position             */
-#define DMA_DCHPRI14_CHPRI(x)                    (((uint8_t)(((uint8_t)(x))<<0U))&0xFUL)             /*!< DMA_DCHPRI14.CHPRI Field                */
-#define DMA_DCHPRI14_DPA_MASK                    (0x40U)                                             /*!< DMA_DCHPRI14.DPA Mask                   */
-#define DMA_DCHPRI14_DPA_SHIFT                   (6U)                                                /*!< DMA_DCHPRI14.DPA Position               */
-#define DMA_DCHPRI14_DPA(x)                      (((uint8_t)(((uint8_t)(x))<<6U))&0x40UL)            /*!< DMA_DCHPRI14.DPA Field                  */
-#define DMA_DCHPRI14_ECP_MASK                    (0x80U)                                             /*!< DMA_DCHPRI14.ECP Mask                   */
-#define DMA_DCHPRI14_ECP_SHIFT                   (7U)                                                /*!< DMA_DCHPRI14.ECP Position               */
-#define DMA_DCHPRI14_ECP(x)                      (((uint8_t)(((uint8_t)(x))<<7U))&0x80UL)            /*!< DMA_DCHPRI14.ECP Field                  */
-/* ------- DCHPRI13 Bit Fields                      ------ */
-#define DMA_DCHPRI13_CHPRI_MASK                  (0xFU)                                              /*!< DMA_DCHPRI13.CHPRI Mask                 */
-#define DMA_DCHPRI13_CHPRI_SHIFT                 (0U)                                                /*!< DMA_DCHPRI13.CHPRI Position             */
-#define DMA_DCHPRI13_CHPRI(x)                    (((uint8_t)(((uint8_t)(x))<<0U))&0xFUL)             /*!< DMA_DCHPRI13.CHPRI Field                */
-#define DMA_DCHPRI13_DPA_MASK                    (0x40U)                                             /*!< DMA_DCHPRI13.DPA Mask                   */
-#define DMA_DCHPRI13_DPA_SHIFT                   (6U)                                                /*!< DMA_DCHPRI13.DPA Position               */
-#define DMA_DCHPRI13_DPA(x)                      (((uint8_t)(((uint8_t)(x))<<6U))&0x40UL)            /*!< DMA_DCHPRI13.DPA Field                  */
-#define DMA_DCHPRI13_ECP_MASK                    (0x80U)                                             /*!< DMA_DCHPRI13.ECP Mask                   */
-#define DMA_DCHPRI13_ECP_SHIFT                   (7U)                                                /*!< DMA_DCHPRI13.ECP Position               */
-#define DMA_DCHPRI13_ECP(x)                      (((uint8_t)(((uint8_t)(x))<<7U))&0x80UL)            /*!< DMA_DCHPRI13.ECP Field                  */
-/* ------- DCHPRI12 Bit Fields                      ------ */
-#define DMA_DCHPRI12_CHPRI_MASK                  (0xFU)                                              /*!< DMA_DCHPRI12.CHPRI Mask                 */
-#define DMA_DCHPRI12_CHPRI_SHIFT                 (0U)                                                /*!< DMA_DCHPRI12.CHPRI Position             */
-#define DMA_DCHPRI12_CHPRI(x)                    (((uint8_t)(((uint8_t)(x))<<0U))&0xFUL)             /*!< DMA_DCHPRI12.CHPRI Field                */
-#define DMA_DCHPRI12_DPA_MASK                    (0x40U)                                             /*!< DMA_DCHPRI12.DPA Mask                   */
-#define DMA_DCHPRI12_DPA_SHIFT                   (6U)                                                /*!< DMA_DCHPRI12.DPA Position               */
-#define DMA_DCHPRI12_DPA(x)                      (((uint8_t)(((uint8_t)(x))<<6U))&0x40UL)            /*!< DMA_DCHPRI12.DPA Field                  */
-#define DMA_DCHPRI12_ECP_MASK                    (0x80U)                                             /*!< DMA_DCHPRI12.ECP Mask                   */
-#define DMA_DCHPRI12_ECP_SHIFT                   (7U)                                                /*!< DMA_DCHPRI12.ECP Position               */
-#define DMA_DCHPRI12_ECP(x)                      (((uint8_t)(((uint8_t)(x))<<7U))&0x80UL)            /*!< DMA_DCHPRI12.ECP Field                  */
+#define DMA_EARS_EDREQ_0_MASK                    (0x1U)                                              /*!< DMA0_EARS.EDREQ_0 Mask                  */
+#define DMA_EARS_EDREQ_0_SHIFT                   (0U)                                                /*!< DMA0_EARS.EDREQ_0 Position              */
+#define DMA_EARS_EDREQ_0(x)                      (((uint32_t)(((uint32_t)(x))<<0U))&0x1UL)           /*!< DMA0_EARS.EDREQ_0 Field                 */
+#define DMA_EARS_EDREQ_1_MASK                    (0x2U)                                              /*!< DMA0_EARS.EDREQ_1 Mask                  */
+#define DMA_EARS_EDREQ_1_SHIFT                   (1U)                                                /*!< DMA0_EARS.EDREQ_1 Position              */
+#define DMA_EARS_EDREQ_1(x)                      (((uint32_t)(((uint32_t)(x))<<1U))&0x2UL)           /*!< DMA0_EARS.EDREQ_1 Field                 */
+#define DMA_EARS_EDREQ_2_MASK                    (0x4U)                                              /*!< DMA0_EARS.EDREQ_2 Mask                  */
+#define DMA_EARS_EDREQ_2_SHIFT                   (2U)                                                /*!< DMA0_EARS.EDREQ_2 Position              */
+#define DMA_EARS_EDREQ_2(x)                      (((uint32_t)(((uint32_t)(x))<<2U))&0x4UL)           /*!< DMA0_EARS.EDREQ_2 Field                 */
+#define DMA_EARS_EDREQ_3_MASK                    (0x8U)                                              /*!< DMA0_EARS.EDREQ_3 Mask                  */
+#define DMA_EARS_EDREQ_3_SHIFT                   (3U)                                                /*!< DMA0_EARS.EDREQ_3 Position              */
+#define DMA_EARS_EDREQ_3(x)                      (((uint32_t)(((uint32_t)(x))<<3U))&0x8UL)           /*!< DMA0_EARS.EDREQ_3 Field                 */
+#define DMA_EARS_EDREQ_4_MASK                    (0x10U)                                             /*!< DMA0_EARS.EDREQ_4 Mask                  */
+#define DMA_EARS_EDREQ_4_SHIFT                   (4U)                                                /*!< DMA0_EARS.EDREQ_4 Position              */
+#define DMA_EARS_EDREQ_4(x)                      (((uint32_t)(((uint32_t)(x))<<4U))&0x10UL)          /*!< DMA0_EARS.EDREQ_4 Field                 */
+#define DMA_EARS_EDREQ_5_MASK                    (0x20U)                                             /*!< DMA0_EARS.EDREQ_5 Mask                  */
+#define DMA_EARS_EDREQ_5_SHIFT                   (5U)                                                /*!< DMA0_EARS.EDREQ_5 Position              */
+#define DMA_EARS_EDREQ_5(x)                      (((uint32_t)(((uint32_t)(x))<<5U))&0x20UL)          /*!< DMA0_EARS.EDREQ_5 Field                 */
+#define DMA_EARS_EDREQ_6_MASK                    (0x40U)                                             /*!< DMA0_EARS.EDREQ_6 Mask                  */
+#define DMA_EARS_EDREQ_6_SHIFT                   (6U)                                                /*!< DMA0_EARS.EDREQ_6 Position              */
+#define DMA_EARS_EDREQ_6(x)                      (((uint32_t)(((uint32_t)(x))<<6U))&0x40UL)          /*!< DMA0_EARS.EDREQ_6 Field                 */
+#define DMA_EARS_EDREQ_7_MASK                    (0x80U)                                             /*!< DMA0_EARS.EDREQ_7 Mask                  */
+#define DMA_EARS_EDREQ_7_SHIFT                   (7U)                                                /*!< DMA0_EARS.EDREQ_7 Position              */
+#define DMA_EARS_EDREQ_7(x)                      (((uint32_t)(((uint32_t)(x))<<7U))&0x80UL)          /*!< DMA0_EARS.EDREQ_7 Field                 */
+#define DMA_EARS_EDREQ_8_MASK                    (0x100U)                                            /*!< DMA0_EARS.EDREQ_8 Mask                  */
+#define DMA_EARS_EDREQ_8_SHIFT                   (8U)                                                /*!< DMA0_EARS.EDREQ_8 Position              */
+#define DMA_EARS_EDREQ_8(x)                      (((uint32_t)(((uint32_t)(x))<<8U))&0x100UL)         /*!< DMA0_EARS.EDREQ_8 Field                 */
+#define DMA_EARS_EDREQ_9_MASK                    (0x200U)                                            /*!< DMA0_EARS.EDREQ_9 Mask                  */
+#define DMA_EARS_EDREQ_9_SHIFT                   (9U)                                                /*!< DMA0_EARS.EDREQ_9 Position              */
+#define DMA_EARS_EDREQ_9(x)                      (((uint32_t)(((uint32_t)(x))<<9U))&0x200UL)         /*!< DMA0_EARS.EDREQ_9 Field                 */
+#define DMA_EARS_EDREQ_10_MASK                   (0x400U)                                            /*!< DMA0_EARS.EDREQ_10 Mask                 */
+#define DMA_EARS_EDREQ_10_SHIFT                  (10U)                                               /*!< DMA0_EARS.EDREQ_10 Position             */
+#define DMA_EARS_EDREQ_10(x)                     (((uint32_t)(((uint32_t)(x))<<10U))&0x400UL)        /*!< DMA0_EARS.EDREQ_10 Field                */
+#define DMA_EARS_EDREQ_11_MASK                   (0x800U)                                            /*!< DMA0_EARS.EDREQ_11 Mask                 */
+#define DMA_EARS_EDREQ_11_SHIFT                  (11U)                                               /*!< DMA0_EARS.EDREQ_11 Position             */
+#define DMA_EARS_EDREQ_11(x)                     (((uint32_t)(((uint32_t)(x))<<11U))&0x800UL)        /*!< DMA0_EARS.EDREQ_11 Field                */
+#define DMA_EARS_EDREQ_12_MASK                   (0x1000U)                                           /*!< DMA0_EARS.EDREQ_12 Mask                 */
+#define DMA_EARS_EDREQ_12_SHIFT                  (12U)                                               /*!< DMA0_EARS.EDREQ_12 Position             */
+#define DMA_EARS_EDREQ_12(x)                     (((uint32_t)(((uint32_t)(x))<<12U))&0x1000UL)       /*!< DMA0_EARS.EDREQ_12 Field                */
+#define DMA_EARS_EDREQ_13_MASK                   (0x2000U)                                           /*!< DMA0_EARS.EDREQ_13 Mask                 */
+#define DMA_EARS_EDREQ_13_SHIFT                  (13U)                                               /*!< DMA0_EARS.EDREQ_13 Position             */
+#define DMA_EARS_EDREQ_13(x)                     (((uint32_t)(((uint32_t)(x))<<13U))&0x2000UL)       /*!< DMA0_EARS.EDREQ_13 Field                */
+#define DMA_EARS_EDREQ_14_MASK                   (0x4000U)                                           /*!< DMA0_EARS.EDREQ_14 Mask                 */
+#define DMA_EARS_EDREQ_14_SHIFT                  (14U)                                               /*!< DMA0_EARS.EDREQ_14 Position             */
+#define DMA_EARS_EDREQ_14(x)                     (((uint32_t)(((uint32_t)(x))<<14U))&0x4000UL)       /*!< DMA0_EARS.EDREQ_14 Field                */
+#define DMA_EARS_EDREQ_15_MASK                   (0x8000U)                                           /*!< DMA0_EARS.EDREQ_15 Mask                 */
+#define DMA_EARS_EDREQ_15_SHIFT                  (15U)                                               /*!< DMA0_EARS.EDREQ_15 Position             */
+#define DMA_EARS_EDREQ_15(x)                     (((uint32_t)(((uint32_t)(x))<<15U))&0x8000UL)       /*!< DMA0_EARS.EDREQ_15 Field                */
+/* ------- DCHPRI Bit Fields                        ------ */
+#define DMA_DCHPRI_CHPRI_MASK                    (0xFU)                                              /*!< DMA0_DCHPRI.CHPRI Mask                  */
+#define DMA_DCHPRI_CHPRI_SHIFT                   (0U)                                                /*!< DMA0_DCHPRI.CHPRI Position              */
+#define DMA_DCHPRI_CHPRI(x)                      (((uint8_t)(((uint8_t)(x))<<0U))&0xFUL)             /*!< DMA0_DCHPRI.CHPRI Field                 */
+#define DMA_DCHPRI_DPA_MASK                      (0x40U)                                             /*!< DMA0_DCHPRI.DPA Mask                    */
+#define DMA_DCHPRI_DPA_SHIFT                     (6U)                                                /*!< DMA0_DCHPRI.DPA Position                */
+#define DMA_DCHPRI_DPA(x)                        (((uint8_t)(((uint8_t)(x))<<6U))&0x40UL)            /*!< DMA0_DCHPRI.DPA Field                   */
+#define DMA_DCHPRI_ECP_MASK                      (0x80U)                                             /*!< DMA0_DCHPRI.ECP Mask                    */
+#define DMA_DCHPRI_ECP_SHIFT                     (7U)                                                /*!< DMA0_DCHPRI.ECP Position                */
+#define DMA_DCHPRI_ECP(x)                        (((uint8_t)(((uint8_t)(x))<<7U))&0x80UL)            /*!< DMA0_DCHPRI.ECP Field                   */
+/* ------- DCHPRI Bit Fields                        ------ */
 /* ------- SADDR Bit Fields                         ------ */
-#define DMA_SADDR_SADDR_MASK                     (0xFFFFFFFFU)                                       /*!< DMA_SADDR.SADDR Mask                    */
-#define DMA_SADDR_SADDR_SHIFT                    (0U)                                                /*!< DMA_SADDR.SADDR Position                */
-#define DMA_SADDR_SADDR(x)                       (((uint32_t)(((uint32_t)(x))<<0U))&0xFFFFFFFFUL)    /*!< DMA_SADDR.SADDR Field                   */
+#define DMA_SADDR_SADDR_MASK                     (0xFFFFFFFFU)                                       /*!< DMA0_SADDR.SADDR Mask                   */
+#define DMA_SADDR_SADDR_SHIFT                    (0U)                                                /*!< DMA0_SADDR.SADDR Position               */
+#define DMA_SADDR_SADDR(x)                       (((uint32_t)(((uint32_t)(x))<<0U))&0xFFFFFFFFUL)    /*!< DMA0_SADDR.SADDR Field                  */
 /* ------- SOFF Bit Fields                          ------ */
-#define DMA_SOFF_SOFF_MASK                       (0xFFFFU)                                           /*!< DMA_SOFF.SOFF Mask                      */
-#define DMA_SOFF_SOFF_SHIFT                      (0U)                                                /*!< DMA_SOFF.SOFF Position                  */
-#define DMA_SOFF_SOFF(x)                         (((uint16_t)(((uint16_t)(x))<<0U))&0xFFFFUL)        /*!< DMA_SOFF.SOFF Field                     */
+#define DMA_SOFF_SOFF_MASK                       (0xFFFFU)                                           /*!< DMA0_SOFF.SOFF Mask                     */
+#define DMA_SOFF_SOFF_SHIFT                      (0U)                                                /*!< DMA0_SOFF.SOFF Position                 */
+#define DMA_SOFF_SOFF(x)                         (((uint16_t)(((uint16_t)(x))<<0U))&0xFFFFUL)        /*!< DMA0_SOFF.SOFF Field                    */
 /* ------- ATTR Bit Fields                          ------ */
-#define DMA_ATTR_DSIZE_MASK                      (0x7U)                                              /*!< DMA_ATTR.DSIZE Mask                     */
-#define DMA_ATTR_DSIZE_SHIFT                     (0U)                                                /*!< DMA_ATTR.DSIZE Position                 */
-#define DMA_ATTR_DSIZE(x)                        (((uint16_t)(((uint16_t)(x))<<0U))&0x7UL)           /*!< DMA_ATTR.DSIZE Field                    */
-#define DMA_ATTR_DMOD_MASK                       (0xF8U)                                             /*!< DMA_ATTR.DMOD Mask                      */
-#define DMA_ATTR_DMOD_SHIFT                      (3U)                                                /*!< DMA_ATTR.DMOD Position                  */
-#define DMA_ATTR_DMOD(x)                         (((uint16_t)(((uint16_t)(x))<<3U))&0xF8UL)          /*!< DMA_ATTR.DMOD Field                     */
-#define DMA_ATTR_SSIZE_MASK                      (0x700U)                                            /*!< DMA_ATTR.SSIZE Mask                     */
-#define DMA_ATTR_SSIZE_SHIFT                     (8U)                                                /*!< DMA_ATTR.SSIZE Position                 */
-#define DMA_ATTR_SSIZE(x)                        (((uint16_t)(((uint16_t)(x))<<8U))&0x700UL)         /*!< DMA_ATTR.SSIZE Field                    */
-#define DMA_ATTR_SMOD_MASK                       (0xF800U)                                           /*!< DMA_ATTR.SMOD Mask                      */
-#define DMA_ATTR_SMOD_SHIFT                      (11U)                                               /*!< DMA_ATTR.SMOD Position                  */
-#define DMA_ATTR_SMOD(x)                         (((uint16_t)(((uint16_t)(x))<<11U))&0xF800UL)       /*!< DMA_ATTR.SMOD Field                     */
+#define DMA_ATTR_DSIZE_MASK                      (0x7U)                                              /*!< DMA0_ATTR.DSIZE Mask                    */
+#define DMA_ATTR_DSIZE_SHIFT                     (0U)                                                /*!< DMA0_ATTR.DSIZE Position                */
+#define DMA_ATTR_DSIZE(x)                        (((uint16_t)(((uint16_t)(x))<<0U))&0x7UL)           /*!< DMA0_ATTR.DSIZE Field                   */
+#define DMA_ATTR_DMOD_MASK                       (0xF8U)                                             /*!< DMA0_ATTR.DMOD Mask                     */
+#define DMA_ATTR_DMOD_SHIFT                      (3U)                                                /*!< DMA0_ATTR.DMOD Position                 */
+#define DMA_ATTR_DMOD(x)                         (((uint16_t)(((uint16_t)(x))<<3U))&0xF8UL)          /*!< DMA0_ATTR.DMOD Field                    */
+#define DMA_ATTR_SSIZE_MASK                      (0x700U)                                            /*!< DMA0_ATTR.SSIZE Mask                    */
+#define DMA_ATTR_SSIZE_SHIFT                     (8U)                                                /*!< DMA0_ATTR.SSIZE Position                */
+#define DMA_ATTR_SSIZE(x)                        (((uint16_t)(((uint16_t)(x))<<8U))&0x700UL)         /*!< DMA0_ATTR.SSIZE Field                   */
+#define DMA_ATTR_SMOD_MASK                       (0xF800U)                                           /*!< DMA0_ATTR.SMOD Mask                     */
+#define DMA_ATTR_SMOD_SHIFT                      (11U)                                               /*!< DMA0_ATTR.SMOD Position                 */
+#define DMA_ATTR_SMOD(x)                         (((uint16_t)(((uint16_t)(x))<<11U))&0xF800UL)       /*!< DMA0_ATTR.SMOD Field                    */
 /* ------- NBYTES_MLNO Bit Fields                   ------ */
-#define DMA_NBYTES_MLNO_NBYTES_MASK              (0xFFFFFFFFU)                                       /*!< DMA_NBYTES_MLNO.NBYTES Mask             */
-#define DMA_NBYTES_MLNO_NBYTES_SHIFT             (0U)                                                /*!< DMA_NBYTES_MLNO.NBYTES Position         */
-#define DMA_NBYTES_MLNO_NBYTES(x)                (((uint32_t)(((uint32_t)(x))<<0U))&0xFFFFFFFFUL)    /*!< DMA_NBYTES_MLNO.NBYTES Field            */
+#define DMA_NBYTES_MLNO_NBYTES_MASK              (0xFFFFFFFFU)                                       /*!< DMA0_NBYTES_MLNO.NBYTES Mask            */
+#define DMA_NBYTES_MLNO_NBYTES_SHIFT             (0U)                                                /*!< DMA0_NBYTES_MLNO.NBYTES Position        */
+#define DMA_NBYTES_MLNO_NBYTES(x)                (((uint32_t)(((uint32_t)(x))<<0U))&0xFFFFFFFFUL)    /*!< DMA0_NBYTES_MLNO.NBYTES Field           */
 /* ------- NBYTES_MLOFFNO Bit Fields                ------ */
-#define DMA_NBYTES_MLOFFNO_NBYTES_MASK           (0x3FFFFFFFU)                                       /*!< DMA_NBYTES_MLOFFNO.NBYTES Mask          */
-#define DMA_NBYTES_MLOFFNO_NBYTES_SHIFT          (0U)                                                /*!< DMA_NBYTES_MLOFFNO.NBYTES Position      */
-#define DMA_NBYTES_MLOFFNO_NBYTES(x)             (((uint32_t)(((uint32_t)(x))<<0U))&0x3FFFFFFFUL)    /*!< DMA_NBYTES_MLOFFNO.NBYTES Field         */
-#define DMA_NBYTES_MLOFFNO_DMLOE_MASK            (0x40000000U)                                       /*!< DMA_NBYTES_MLOFFNO.DMLOE Mask           */
-#define DMA_NBYTES_MLOFFNO_DMLOE_SHIFT           (30U)                                               /*!< DMA_NBYTES_MLOFFNO.DMLOE Position       */
-#define DMA_NBYTES_MLOFFNO_DMLOE(x)              (((uint32_t)(((uint32_t)(x))<<30U))&0x40000000UL)   /*!< DMA_NBYTES_MLOFFNO.DMLOE Field          */
-#define DMA_NBYTES_MLOFFNO_SMLOE_MASK            (0x80000000U)                                       /*!< DMA_NBYTES_MLOFFNO.SMLOE Mask           */
-#define DMA_NBYTES_MLOFFNO_SMLOE_SHIFT           (31U)                                               /*!< DMA_NBYTES_MLOFFNO.SMLOE Position       */
-#define DMA_NBYTES_MLOFFNO_SMLOE(x)              (((uint32_t)(((uint32_t)(x))<<31U))&0x80000000UL)   /*!< DMA_NBYTES_MLOFFNO.SMLOE Field          */
+#define DMA_NBYTES_MLOFFNO_NBYTES_MASK           (0x3FFFFFFFU)                                       /*!< DMA0_NBYTES_MLOFFNO.NBYTES Mask         */
+#define DMA_NBYTES_MLOFFNO_NBYTES_SHIFT          (0U)                                                /*!< DMA0_NBYTES_MLOFFNO.NBYTES Position     */
+#define DMA_NBYTES_MLOFFNO_NBYTES(x)             (((uint32_t)(((uint32_t)(x))<<0U))&0x3FFFFFFFUL)    /*!< DMA0_NBYTES_MLOFFNO.NBYTES Field        */
+#define DMA_NBYTES_MLOFFNO_DMLOE_MASK            (0x40000000U)                                       /*!< DMA0_NBYTES_MLOFFNO.DMLOE Mask          */
+#define DMA_NBYTES_MLOFFNO_DMLOE_SHIFT           (30U)                                               /*!< DMA0_NBYTES_MLOFFNO.DMLOE Position      */
+#define DMA_NBYTES_MLOFFNO_DMLOE(x)              (((uint32_t)(((uint32_t)(x))<<30U))&0x40000000UL)   /*!< DMA0_NBYTES_MLOFFNO.DMLOE Field         */
+#define DMA_NBYTES_MLOFFNO_SMLOE_MASK            (0x80000000U)                                       /*!< DMA0_NBYTES_MLOFFNO.SMLOE Mask          */
+#define DMA_NBYTES_MLOFFNO_SMLOE_SHIFT           (31U)                                               /*!< DMA0_NBYTES_MLOFFNO.SMLOE Position      */
+#define DMA_NBYTES_MLOFFNO_SMLOE(x)              (((uint32_t)(((uint32_t)(x))<<31U))&0x80000000UL)   /*!< DMA0_NBYTES_MLOFFNO.SMLOE Field         */
 /* ------- NBYTES_MLOFFYES Bit Fields               ------ */
-#define DMA_NBYTES_MLOFFYES_NBYTES_MASK          (0x3FFU)                                            /*!< DMA_NBYTES_MLOFFYES.NBYTES Mask         */
-#define DMA_NBYTES_MLOFFYES_NBYTES_SHIFT         (0U)                                                /*!< DMA_NBYTES_MLOFFYES.NBYTES Position     */
-#define DMA_NBYTES_MLOFFYES_NBYTES(x)            (((uint32_t)(((uint32_t)(x))<<0U))&0x3FFUL)         /*!< DMA_NBYTES_MLOFFYES.NBYTES Field        */
-#define DMA_NBYTES_MLOFFYES_MLOFF_MASK           (0x3FFFFC00U)                                       /*!< DMA_NBYTES_MLOFFYES.MLOFF Mask          */
-#define DMA_NBYTES_MLOFFYES_MLOFF_SHIFT          (10U)                                               /*!< DMA_NBYTES_MLOFFYES.MLOFF Position      */
-#define DMA_NBYTES_MLOFFYES_MLOFF(x)             (((uint32_t)(((uint32_t)(x))<<10U))&0x3FFFFC00UL)   /*!< DMA_NBYTES_MLOFFYES.MLOFF Field         */
-#define DMA_NBYTES_MLOFFYES_DMLOE_MASK           (0x40000000U)                                       /*!< DMA_NBYTES_MLOFFYES.DMLOE Mask          */
-#define DMA_NBYTES_MLOFFYES_DMLOE_SHIFT          (30U)                                               /*!< DMA_NBYTES_MLOFFYES.DMLOE Position      */
-#define DMA_NBYTES_MLOFFYES_DMLOE(x)             (((uint32_t)(((uint32_t)(x))<<30U))&0x40000000UL)   /*!< DMA_NBYTES_MLOFFYES.DMLOE Field         */
-#define DMA_NBYTES_MLOFFYES_SMLOE_MASK           (0x80000000U)                                       /*!< DMA_NBYTES_MLOFFYES.SMLOE Mask          */
-#define DMA_NBYTES_MLOFFYES_SMLOE_SHIFT          (31U)                                               /*!< DMA_NBYTES_MLOFFYES.SMLOE Position      */
-#define DMA_NBYTES_MLOFFYES_SMLOE(x)             (((uint32_t)(((uint32_t)(x))<<31U))&0x80000000UL)   /*!< DMA_NBYTES_MLOFFYES.SMLOE Field         */
+#define DMA_NBYTES_MLOFFYES_NBYTES_MASK          (0x3FFU)                                            /*!< DMA0_NBYTES_MLOFFYES.NBYTES Mask        */
+#define DMA_NBYTES_MLOFFYES_NBYTES_SHIFT         (0U)                                                /*!< DMA0_NBYTES_MLOFFYES.NBYTES Position    */
+#define DMA_NBYTES_MLOFFYES_NBYTES(x)            (((uint32_t)(((uint32_t)(x))<<0U))&0x3FFUL)         /*!< DMA0_NBYTES_MLOFFYES.NBYTES Field       */
+#define DMA_NBYTES_MLOFFYES_MLOFF_MASK           (0x3FFFFC00U)                                       /*!< DMA0_NBYTES_MLOFFYES.MLOFF Mask         */
+#define DMA_NBYTES_MLOFFYES_MLOFF_SHIFT          (10U)                                               /*!< DMA0_NBYTES_MLOFFYES.MLOFF Position     */
+#define DMA_NBYTES_MLOFFYES_MLOFF(x)             (((uint32_t)(((uint32_t)(x))<<10U))&0x3FFFFC00UL)   /*!< DMA0_NBYTES_MLOFFYES.MLOFF Field        */
+#define DMA_NBYTES_MLOFFYES_DMLOE_MASK           (0x40000000U)                                       /*!< DMA0_NBYTES_MLOFFYES.DMLOE Mask         */
+#define DMA_NBYTES_MLOFFYES_DMLOE_SHIFT          (30U)                                               /*!< DMA0_NBYTES_MLOFFYES.DMLOE Position     */
+#define DMA_NBYTES_MLOFFYES_DMLOE(x)             (((uint32_t)(((uint32_t)(x))<<30U))&0x40000000UL)   /*!< DMA0_NBYTES_MLOFFYES.DMLOE Field        */
+#define DMA_NBYTES_MLOFFYES_SMLOE_MASK           (0x80000000U)                                       /*!< DMA0_NBYTES_MLOFFYES.SMLOE Mask         */
+#define DMA_NBYTES_MLOFFYES_SMLOE_SHIFT          (31U)                                               /*!< DMA0_NBYTES_MLOFFYES.SMLOE Position     */
+#define DMA_NBYTES_MLOFFYES_SMLOE(x)             (((uint32_t)(((uint32_t)(x))<<31U))&0x80000000UL)   /*!< DMA0_NBYTES_MLOFFYES.SMLOE Field        */
 /* ------- SLAST Bit Fields                         ------ */
-#define DMA_SLAST_SLAST_MASK                     (0xFFFFFFFFU)                                       /*!< DMA_SLAST.SLAST Mask                    */
-#define DMA_SLAST_SLAST_SHIFT                    (0U)                                                /*!< DMA_SLAST.SLAST Position                */
-#define DMA_SLAST_SLAST(x)                       (((uint32_t)(((uint32_t)(x))<<0U))&0xFFFFFFFFUL)    /*!< DMA_SLAST.SLAST Field                   */
+#define DMA_SLAST_SLAST_MASK                     (0xFFFFFFFFU)                                       /*!< DMA0_SLAST.SLAST Mask                   */
+#define DMA_SLAST_SLAST_SHIFT                    (0U)                                                /*!< DMA0_SLAST.SLAST Position               */
+#define DMA_SLAST_SLAST(x)                       (((uint32_t)(((uint32_t)(x))<<0U))&0xFFFFFFFFUL)    /*!< DMA0_SLAST.SLAST Field                  */
 /* ------- DADDR Bit Fields                         ------ */
-#define DMA_DADDR_DADDR_MASK                     (0xFFFFFFFFU)                                       /*!< DMA_DADDR.DADDR Mask                    */
-#define DMA_DADDR_DADDR_SHIFT                    (0U)                                                /*!< DMA_DADDR.DADDR Position                */
-#define DMA_DADDR_DADDR(x)                       (((uint32_t)(((uint32_t)(x))<<0U))&0xFFFFFFFFUL)    /*!< DMA_DADDR.DADDR Field                   */
+#define DMA_DADDR_DADDR_MASK                     (0xFFFFFFFFU)                                       /*!< DMA0_DADDR.DADDR Mask                   */
+#define DMA_DADDR_DADDR_SHIFT                    (0U)                                                /*!< DMA0_DADDR.DADDR Position               */
+#define DMA_DADDR_DADDR(x)                       (((uint32_t)(((uint32_t)(x))<<0U))&0xFFFFFFFFUL)    /*!< DMA0_DADDR.DADDR Field                  */
 /* ------- DOFF Bit Fields                          ------ */
-#define DMA_DOFF_DOFF_MASK                       (0xFFFFU)                                           /*!< DMA_DOFF.DOFF Mask                      */
-#define DMA_DOFF_DOFF_SHIFT                      (0U)                                                /*!< DMA_DOFF.DOFF Position                  */
-#define DMA_DOFF_DOFF(x)                         (((uint16_t)(((uint16_t)(x))<<0U))&0xFFFFUL)        /*!< DMA_DOFF.DOFF Field                     */
+#define DMA_DOFF_DOFF_MASK                       (0xFFFFU)                                           /*!< DMA0_DOFF.DOFF Mask                     */
+#define DMA_DOFF_DOFF_SHIFT                      (0U)                                                /*!< DMA0_DOFF.DOFF Position                 */
+#define DMA_DOFF_DOFF(x)                         (((uint16_t)(((uint16_t)(x))<<0U))&0xFFFFUL)        /*!< DMA0_DOFF.DOFF Field                    */
 /* ------- CITER_ELINKNO Bit Fields                 ------ */
-#define DMA_CITER_ELINKNO_CITER_MASK             (0x7FFFU)                                           /*!< DMA_CITER_ELINKNO.CITER Mask            */
-#define DMA_CITER_ELINKNO_CITER_SHIFT            (0U)                                                /*!< DMA_CITER_ELINKNO.CITER Position        */
-#define DMA_CITER_ELINKNO_CITER(x)               (((uint16_t)(((uint16_t)(x))<<0U))&0x7FFFUL)        /*!< DMA_CITER_ELINKNO.CITER Field           */
-#define DMA_CITER_ELINKNO_ELINK_MASK             (0x8000U)                                           /*!< DMA_CITER_ELINKNO.ELINK Mask            */
-#define DMA_CITER_ELINKNO_ELINK_SHIFT            (15U)                                               /*!< DMA_CITER_ELINKNO.ELINK Position        */
-#define DMA_CITER_ELINKNO_ELINK(x)               (((uint16_t)(((uint16_t)(x))<<15U))&0x8000UL)       /*!< DMA_CITER_ELINKNO.ELINK Field           */
+#define DMA_CITER_ELINKNO_CITER_MASK             (0x7FFFU)                                           /*!< DMA0_CITER_ELINKNO.CITER Mask           */
+#define DMA_CITER_ELINKNO_CITER_SHIFT            (0U)                                                /*!< DMA0_CITER_ELINKNO.CITER Position       */
+#define DMA_CITER_ELINKNO_CITER(x)               (((uint16_t)(((uint16_t)(x))<<0U))&0x7FFFUL)        /*!< DMA0_CITER_ELINKNO.CITER Field          */
+#define DMA_CITER_ELINKNO_ELINK_MASK             (0x8000U)                                           /*!< DMA0_CITER_ELINKNO.ELINK Mask           */
+#define DMA_CITER_ELINKNO_ELINK_SHIFT            (15U)                                               /*!< DMA0_CITER_ELINKNO.ELINK Position       */
+#define DMA_CITER_ELINKNO_ELINK(x)               (((uint16_t)(((uint16_t)(x))<<15U))&0x8000UL)       /*!< DMA0_CITER_ELINKNO.ELINK Field          */
 /* ------- CITER_ELINKYES Bit Fields                ------ */
-#define DMA_CITER_ELINKYES_CITER_LE_MASK         (0x1FFU)                                            /*!< DMA_CITER_ELINKYES.CITER_LE Mask        */
-#define DMA_CITER_ELINKYES_CITER_LE_SHIFT        (0U)                                                /*!< DMA_CITER_ELINKYES.CITER_LE Position    */
-#define DMA_CITER_ELINKYES_CITER_LE(x)           (((uint16_t)(((uint16_t)(x))<<0U))&0x1FFUL)         /*!< DMA_CITER_ELINKYES.CITER_LE Field       */
-#define DMA_CITER_ELINKYES_LINKCH_MASK           (0x1E00U)                                           /*!< DMA_CITER_ELINKYES.LINKCH Mask          */
-#define DMA_CITER_ELINKYES_LINKCH_SHIFT          (9U)                                                /*!< DMA_CITER_ELINKYES.LINKCH Position      */
-#define DMA_CITER_ELINKYES_LINKCH(x)             (((uint16_t)(((uint16_t)(x))<<9U))&0x1E00UL)        /*!< DMA_CITER_ELINKYES.LINKCH Field         */
-#define DMA_CITER_ELINKYES_ELINK_MASK            (0x8000U)                                           /*!< DMA_CITER_ELINKYES.ELINK Mask           */
-#define DMA_CITER_ELINKYES_ELINK_SHIFT           (15U)                                               /*!< DMA_CITER_ELINKYES.ELINK Position       */
-#define DMA_CITER_ELINKYES_ELINK(x)              (((uint16_t)(((uint16_t)(x))<<15U))&0x8000UL)       /*!< DMA_CITER_ELINKYES.ELINK Field          */
+#define DMA_CITER_ELINKYES_CITER_MASK            (0x1FFU)                                            /*!< DMA0_CITER_ELINKYES.CITER Mask          */
+#define DMA_CITER_ELINKYES_CITER_SHIFT           (0U)                                                /*!< DMA0_CITER_ELINKYES.CITER Position      */
+#define DMA_CITER_ELINKYES_CITER(x)              (((uint16_t)(((uint16_t)(x))<<0U))&0x1FFUL)         /*!< DMA0_CITER_ELINKYES.CITER Field         */
+#define DMA_CITER_ELINKYES_LINKCH_MASK           (0x1E00U)                                           /*!< DMA0_CITER_ELINKYES.LINKCH Mask         */
+#define DMA_CITER_ELINKYES_LINKCH_SHIFT          (9U)                                                /*!< DMA0_CITER_ELINKYES.LINKCH Position     */
+#define DMA_CITER_ELINKYES_LINKCH(x)             (((uint16_t)(((uint16_t)(x))<<9U))&0x1E00UL)        /*!< DMA0_CITER_ELINKYES.LINKCH Field        */
+#define DMA_CITER_ELINKYES_ELINK_MASK            (0x8000U)                                           /*!< DMA0_CITER_ELINKYES.ELINK Mask          */
+#define DMA_CITER_ELINKYES_ELINK_SHIFT           (15U)                                               /*!< DMA0_CITER_ELINKYES.ELINK Position      */
+#define DMA_CITER_ELINKYES_ELINK(x)              (((uint16_t)(((uint16_t)(x))<<15U))&0x8000UL)       /*!< DMA0_CITER_ELINKYES.ELINK Field         */
 /* ------- DLASTSGA Bit Fields                      ------ */
-#define DMA_DLASTSGA_DLASTSGA_MASK               (0xFFFFFFFFU)                                       /*!< DMA_DLASTSGA.DLASTSGA Mask              */
-#define DMA_DLASTSGA_DLASTSGA_SHIFT              (0U)                                                /*!< DMA_DLASTSGA.DLASTSGA Position          */
-#define DMA_DLASTSGA_DLASTSGA(x)                 (((uint32_t)(((uint32_t)(x))<<0U))&0xFFFFFFFFUL)    /*!< DMA_DLASTSGA.DLASTSGA Field             */
+#define DMA_DLASTSGA_DLASTSGA_MASK               (0xFFFFFFFFU)                                       /*!< DMA0_DLASTSGA.DLASTSGA Mask             */
+#define DMA_DLASTSGA_DLASTSGA_SHIFT              (0U)                                                /*!< DMA0_DLASTSGA.DLASTSGA Position         */
+#define DMA_DLASTSGA_DLASTSGA(x)                 (((uint32_t)(((uint32_t)(x))<<0U))&0xFFFFFFFFUL)    /*!< DMA0_DLASTSGA.DLASTSGA Field            */
 /* ------- CSR Bit Fields                           ------ */
-#define DMA_CSR_START_MASK                       (0x1U)                                              /*!< DMA_CSR.START Mask                      */
-#define DMA_CSR_START_SHIFT                      (0U)                                                /*!< DMA_CSR.START Position                  */
-#define DMA_CSR_START(x)                         (((uint16_t)(((uint16_t)(x))<<0U))&0x1UL)           /*!< DMA_CSR.START Field                     */
-#define DMA_CSR_INTMAJOR_MASK                    (0x2U)                                              /*!< DMA_CSR.INTMAJOR Mask                   */
-#define DMA_CSR_INTMAJOR_SHIFT                   (1U)                                                /*!< DMA_CSR.INTMAJOR Position               */
-#define DMA_CSR_INTMAJOR(x)                      (((uint16_t)(((uint16_t)(x))<<1U))&0x2UL)           /*!< DMA_CSR.INTMAJOR Field                  */
-#define DMA_CSR_INTHALF_MASK                     (0x4U)                                              /*!< DMA_CSR.INTHALF Mask                    */
-#define DMA_CSR_INTHALF_SHIFT                    (2U)                                                /*!< DMA_CSR.INTHALF Position                */
-#define DMA_CSR_INTHALF(x)                       (((uint16_t)(((uint16_t)(x))<<2U))&0x4UL)           /*!< DMA_CSR.INTHALF Field                   */
-#define DMA_CSR_DREQ_MASK                        (0x8U)                                              /*!< DMA_CSR.DREQ Mask                       */
-#define DMA_CSR_DREQ_SHIFT                       (3U)                                                /*!< DMA_CSR.DREQ Position                   */
-#define DMA_CSR_DREQ(x)                          (((uint16_t)(((uint16_t)(x))<<3U))&0x8UL)           /*!< DMA_CSR.DREQ Field                      */
-#define DMA_CSR_ESG_MASK                         (0x10U)                                             /*!< DMA_CSR.ESG Mask                        */
-#define DMA_CSR_ESG_SHIFT                        (4U)                                                /*!< DMA_CSR.ESG Position                    */
-#define DMA_CSR_ESG(x)                           (((uint16_t)(((uint16_t)(x))<<4U))&0x10UL)          /*!< DMA_CSR.ESG Field                       */
-#define DMA_CSR_MAJORELINK_MASK                  (0x20U)                                             /*!< DMA_CSR.MAJORELINK Mask                 */
-#define DMA_CSR_MAJORELINK_SHIFT                 (5U)                                                /*!< DMA_CSR.MAJORELINK Position             */
-#define DMA_CSR_MAJORELINK(x)                    (((uint16_t)(((uint16_t)(x))<<5U))&0x20UL)          /*!< DMA_CSR.MAJORELINK Field                */
-#define DMA_CSR_ACTIVE_MASK                      (0x40U)                                             /*!< DMA_CSR.ACTIVE Mask                     */
-#define DMA_CSR_ACTIVE_SHIFT                     (6U)                                                /*!< DMA_CSR.ACTIVE Position                 */
-#define DMA_CSR_ACTIVE(x)                        (((uint16_t)(((uint16_t)(x))<<6U))&0x40UL)          /*!< DMA_CSR.ACTIVE Field                    */
-#define DMA_CSR_DONE_MASK                        (0x80U)                                             /*!< DMA_CSR.DONE Mask                       */
-#define DMA_CSR_DONE_SHIFT                       (7U)                                                /*!< DMA_CSR.DONE Position                   */
-#define DMA_CSR_DONE(x)                          (((uint16_t)(((uint16_t)(x))<<7U))&0x80UL)          /*!< DMA_CSR.DONE Field                      */
-#define DMA_CSR_MAJORLINKCH_MASK                 (0xF00U)                                            /*!< DMA_CSR.MAJORLINKCH Mask                */
-#define DMA_CSR_MAJORLINKCH_SHIFT                (8U)                                                /*!< DMA_CSR.MAJORLINKCH Position            */
-#define DMA_CSR_MAJORLINKCH(x)                   (((uint16_t)(((uint16_t)(x))<<8U))&0xF00UL)         /*!< DMA_CSR.MAJORLINKCH Field               */
-#define DMA_CSR_BWC_MASK                         (0xC000U)                                           /*!< DMA_CSR.BWC Mask                        */
-#define DMA_CSR_BWC_SHIFT                        (14U)                                               /*!< DMA_CSR.BWC Position                    */
-#define DMA_CSR_BWC(x)                           (((uint16_t)(((uint16_t)(x))<<14U))&0xC000UL)       /*!< DMA_CSR.BWC Field                       */
+#define DMA_CSR_START_MASK                       (0x1U)                                              /*!< DMA0_CSR.START Mask                     */
+#define DMA_CSR_START_SHIFT                      (0U)                                                /*!< DMA0_CSR.START Position                 */
+#define DMA_CSR_START(x)                         (((uint16_t)(((uint16_t)(x))<<0U))&0x1UL)           /*!< DMA0_CSR.START Field                    */
+#define DMA_CSR_INTMAJOR_MASK                    (0x2U)                                              /*!< DMA0_CSR.INTMAJOR Mask                  */
+#define DMA_CSR_INTMAJOR_SHIFT                   (1U)                                                /*!< DMA0_CSR.INTMAJOR Position              */
+#define DMA_CSR_INTMAJOR(x)                      (((uint16_t)(((uint16_t)(x))<<1U))&0x2UL)           /*!< DMA0_CSR.INTMAJOR Field                 */
+#define DMA_CSR_INTHALF_MASK                     (0x4U)                                              /*!< DMA0_CSR.INTHALF Mask                   */
+#define DMA_CSR_INTHALF_SHIFT                    (2U)                                                /*!< DMA0_CSR.INTHALF Position               */
+#define DMA_CSR_INTHALF(x)                       (((uint16_t)(((uint16_t)(x))<<2U))&0x4UL)           /*!< DMA0_CSR.INTHALF Field                  */
+#define DMA_CSR_DREQ_MASK                        (0x8U)                                              /*!< DMA0_CSR.DREQ Mask                      */
+#define DMA_CSR_DREQ_SHIFT                       (3U)                                                /*!< DMA0_CSR.DREQ Position                  */
+#define DMA_CSR_DREQ(x)                          (((uint16_t)(((uint16_t)(x))<<3U))&0x8UL)           /*!< DMA0_CSR.DREQ Field                     */
+#define DMA_CSR_ESG_MASK                         (0x10U)                                             /*!< DMA0_CSR.ESG Mask                       */
+#define DMA_CSR_ESG_SHIFT                        (4U)                                                /*!< DMA0_CSR.ESG Position                   */
+#define DMA_CSR_ESG(x)                           (((uint16_t)(((uint16_t)(x))<<4U))&0x10UL)          /*!< DMA0_CSR.ESG Field                      */
+#define DMA_CSR_MAJORELINK_MASK                  (0x20U)                                             /*!< DMA0_CSR.MAJORELINK Mask                */
+#define DMA_CSR_MAJORELINK_SHIFT                 (5U)                                                /*!< DMA0_CSR.MAJORELINK Position            */
+#define DMA_CSR_MAJORELINK(x)                    (((uint16_t)(((uint16_t)(x))<<5U))&0x20UL)          /*!< DMA0_CSR.MAJORELINK Field               */
+#define DMA_CSR_ACTIVE_MASK                      (0x40U)                                             /*!< DMA0_CSR.ACTIVE Mask                    */
+#define DMA_CSR_ACTIVE_SHIFT                     (6U)                                                /*!< DMA0_CSR.ACTIVE Position                */
+#define DMA_CSR_ACTIVE(x)                        (((uint16_t)(((uint16_t)(x))<<6U))&0x40UL)          /*!< DMA0_CSR.ACTIVE Field                   */
+#define DMA_CSR_DONE_MASK                        (0x80U)                                             /*!< DMA0_CSR.DONE Mask                      */
+#define DMA_CSR_DONE_SHIFT                       (7U)                                                /*!< DMA0_CSR.DONE Position                  */
+#define DMA_CSR_DONE(x)                          (((uint16_t)(((uint16_t)(x))<<7U))&0x80UL)          /*!< DMA0_CSR.DONE Field                     */
+#define DMA_CSR_MAJORLINKCH_MASK                 (0xF00U)                                            /*!< DMA0_CSR.MAJORLINKCH Mask               */
+#define DMA_CSR_MAJORLINKCH_SHIFT                (8U)                                                /*!< DMA0_CSR.MAJORLINKCH Position           */
+#define DMA_CSR_MAJORLINKCH(x)                   (((uint16_t)(((uint16_t)(x))<<8U))&0xF00UL)         /*!< DMA0_CSR.MAJORLINKCH Field              */
+#define DMA_CSR_BWC_MASK                         (0xC000U)                                           /*!< DMA0_CSR.BWC Mask                       */
+#define DMA_CSR_BWC_SHIFT                        (14U)                                               /*!< DMA0_CSR.BWC Position                   */
+#define DMA_CSR_BWC(x)                           (((uint16_t)(((uint16_t)(x))<<14U))&0xC000UL)       /*!< DMA0_CSR.BWC Field                      */
 /* ------- BITER_ELINKNO Bit Fields                 ------ */
-#define DMA_BITER_ELINKNO_BITER_MASK             (0x7FFFU)                                           /*!< DMA_BITER_ELINKNO.BITER Mask            */
-#define DMA_BITER_ELINKNO_BITER_SHIFT            (0U)                                                /*!< DMA_BITER_ELINKNO.BITER Position        */
-#define DMA_BITER_ELINKNO_BITER(x)               (((uint16_t)(((uint16_t)(x))<<0U))&0x7FFFUL)        /*!< DMA_BITER_ELINKNO.BITER Field           */
-#define DMA_BITER_ELINKNO_ELINK_MASK             (0x8000U)                                           /*!< DMA_BITER_ELINKNO.ELINK Mask            */
-#define DMA_BITER_ELINKNO_ELINK_SHIFT            (15U)                                               /*!< DMA_BITER_ELINKNO.ELINK Position        */
-#define DMA_BITER_ELINKNO_ELINK(x)               (((uint16_t)(((uint16_t)(x))<<15U))&0x8000UL)       /*!< DMA_BITER_ELINKNO.ELINK Field           */
+#define DMA_BITER_ELINKNO_BITER_MASK             (0x7FFFU)                                           /*!< DMA0_BITER_ELINKNO.BITER Mask           */
+#define DMA_BITER_ELINKNO_BITER_SHIFT            (0U)                                                /*!< DMA0_BITER_ELINKNO.BITER Position       */
+#define DMA_BITER_ELINKNO_BITER(x)               (((uint16_t)(((uint16_t)(x))<<0U))&0x7FFFUL)        /*!< DMA0_BITER_ELINKNO.BITER Field          */
+#define DMA_BITER_ELINKNO_ELINK_MASK             (0x8000U)                                           /*!< DMA0_BITER_ELINKNO.ELINK Mask           */
+#define DMA_BITER_ELINKNO_ELINK_SHIFT            (15U)                                               /*!< DMA0_BITER_ELINKNO.ELINK Position       */
+#define DMA_BITER_ELINKNO_ELINK(x)               (((uint16_t)(((uint16_t)(x))<<15U))&0x8000UL)       /*!< DMA0_BITER_ELINKNO.ELINK Field          */
 /* ------- BITER_ELINKYES Bit Fields                ------ */
-#define DMA_BITER_ELINKYES_BITER_MASK            (0x1FFU)                                            /*!< DMA_BITER_ELINKYES.BITER Mask           */
-#define DMA_BITER_ELINKYES_BITER_SHIFT           (0U)                                                /*!< DMA_BITER_ELINKYES.BITER Position       */
-#define DMA_BITER_ELINKYES_BITER(x)              (((uint16_t)(((uint16_t)(x))<<0U))&0x1FFUL)         /*!< DMA_BITER_ELINKYES.BITER Field          */
-#define DMA_BITER_ELINKYES_LINKCH_MASK           (0x1E00U)                                           /*!< DMA_BITER_ELINKYES.LINKCH Mask          */
-#define DMA_BITER_ELINKYES_LINKCH_SHIFT          (9U)                                                /*!< DMA_BITER_ELINKYES.LINKCH Position      */
-#define DMA_BITER_ELINKYES_LINKCH(x)             (((uint16_t)(((uint16_t)(x))<<9U))&0x1E00UL)        /*!< DMA_BITER_ELINKYES.LINKCH Field         */
-#define DMA_BITER_ELINKYES_ELINK_MASK            (0x8000U)                                           /*!< DMA_BITER_ELINKYES.ELINK Mask           */
-#define DMA_BITER_ELINKYES_ELINK_SHIFT           (15U)                                               /*!< DMA_BITER_ELINKYES.ELINK Position       */
-#define DMA_BITER_ELINKYES_ELINK(x)              (((uint16_t)(((uint16_t)(x))<<15U))&0x8000UL)       /*!< DMA_BITER_ELINKYES.ELINK Field          */
+#define DMA_BITER_ELINKYES_BITER_MASK            (0x1FFU)                                            /*!< DMA0_BITER_ELINKYES.BITER Mask          */
+#define DMA_BITER_ELINKYES_BITER_SHIFT           (0U)                                                /*!< DMA0_BITER_ELINKYES.BITER Position      */
+#define DMA_BITER_ELINKYES_BITER(x)              (((uint16_t)(((uint16_t)(x))<<0U))&0x1FFUL)         /*!< DMA0_BITER_ELINKYES.BITER Field         */
+#define DMA_BITER_ELINKYES_LINKCH_MASK           (0x1E00U)                                           /*!< DMA0_BITER_ELINKYES.LINKCH Mask         */
+#define DMA_BITER_ELINKYES_LINKCH_SHIFT          (9U)                                                /*!< DMA0_BITER_ELINKYES.LINKCH Position     */
+#define DMA_BITER_ELINKYES_LINKCH(x)             (((uint16_t)(((uint16_t)(x))<<9U))&0x1E00UL)        /*!< DMA0_BITER_ELINKYES.LINKCH Field        */
+#define DMA_BITER_ELINKYES_ELINK_MASK            (0x8000U)                                           /*!< DMA0_BITER_ELINKYES.ELINK Mask          */
+#define DMA_BITER_ELINKYES_ELINK_SHIFT           (15U)                                               /*!< DMA0_BITER_ELINKYES.ELINK Position      */
+#define DMA_BITER_ELINKYES_ELINK(x)              (((uint16_t)(((uint16_t)(x))<<15U))&0x8000UL)       /*!< DMA0_BITER_ELINKYES.ELINK Field         */
 /**
- * @} */ /* End group DMA_Register_Masks_GROUP 
+ * @} */ /* End group DMA0_Register_Masks_GROUP 
  */
 
-/* DMA - Peripheral instance base addresses */
-#define DMA_BasePtr                    0x40008000UL //!< Peripheral base address
-#define DMA                            ((DMA_Type *) DMA_BasePtr) //!< Freescale base pointer
-#define DMA_BASE_PTR                   (DMA) //!< Freescale style base pointer
-#define DMA_IRQS { DMA0_IRQn, DMA1_IRQn, DMA2_IRQn, DMA3_IRQn, DMA4_IRQn, DMA5_IRQn, DMA6_IRQn, DMA7_IRQn, DMA8_IRQn, DMA9_IRQn, DMA10_IRQn, DMA11_IRQn, DMA12_IRQn, DMA13_IRQn, DMA14_IRQn, DMA15_IRQn, DMA_Error_IRQn,  }
+/* DMA0 - Peripheral instance base addresses */
+#define DMA0_BasePtr                   0x40008000UL //!< Peripheral base address
+#define DMA0                           ((DMA_Type *) DMA0_BasePtr) //!< Freescale base pointer
+#define DMA0_BASE_PTR                  (DMA0) //!< Freescale style base pointer
+#define DMA0_IRQS { DMA0_IRQn, DMA1_IRQn, DMA2_IRQn, DMA3_IRQn, DMA4_IRQn, DMA5_IRQn, DMA6_IRQn, DMA7_IRQn, DMA8_IRQn, DMA9_IRQn, DMA10_IRQn, DMA11_IRQn, DMA12_IRQn, DMA13_IRQn, DMA14_IRQn, DMA15_IRQn, DMA_Error_IRQn,  }
 
 /**
- * @} */ /* End group DMA_Peripheral_access_layer_GROUP 
+ * @} */ /* End group DMA0_Peripheral_access_layer_GROUP 
  */
 /**
 * @addtogroup DMAMUX_Peripheral_access_layer_GROUP DMAMUX Peripheral Access Layer
@@ -3533,11 +2971,11 @@ typedef struct EIM_Type {
    __IO uint32_t  EIMCR;                        /**< 0000: Error Injection Module Configuration Register                */
    __IO uint32_t  EICHEN;                       /**< 0004: Error Injection Channel Enable register                      */
         uint8_t   RESERVED_0[248];             
-   __IO uint32_t  EICHD0_WORD0;                 /**< 0100: Error Injection Channel Descriptor n, Word0                  */
-   __IO uint32_t  EICHD0_WORD1;                 /**< 0104: Error Injection Channel Descriptor n, Word1                  */
-        uint8_t   RESERVED_1[248];             
-   __IO uint32_t  EICHD1_WORD0;                 /**< 0200: Error Injection Channel Descriptor n, Word0                  */
-   __IO uint32_t  EICHD1_WORD1;                 /**< 0204: Error Injection Channel Descriptor n, Word1                  */
+   struct {
+      __IO uint32_t  WORD0;                     /**< 0100: Error Injection Channel Descriptor n, Word0                  */
+      __IO uint32_t  WORD1;                     /**< 0104: Error Injection Channel Descriptor n, Word1                  */
+           uint8_t   RESERVED_1[248];          
+   } EICHDn[2];                                 /**< 0100: (cluster: size=0x0200, 512)                                  */
 } EIM_Type;
 
 /**
@@ -3564,22 +3002,14 @@ typedef struct EIM_Type {
 #define EIM_EICHEN_EICH0EN_MASK                  (0x80000000U)                                       /*!< EIM_EICHEN.EICH0EN Mask                 */
 #define EIM_EICHEN_EICH0EN_SHIFT                 (31U)                                               /*!< EIM_EICHEN.EICH0EN Position             */
 #define EIM_EICHEN_EICH0EN(x)                    (((uint32_t)(((uint32_t)(x))<<31U))&0x80000000UL)   /*!< EIM_EICHEN.EICH0EN Field                */
-/* ------- EICHD0_WORD0 Bit Fields                  ------ */
-#define EIM_EICHD0_WORD0_CHKBIT_MASK_MASK        (0xFE000000U)                                       /*!< EIM_EICHD0_WORD0.CHKBIT_MASK Mask       */
-#define EIM_EICHD0_WORD0_CHKBIT_MASK_SHIFT       (25U)                                               /*!< EIM_EICHD0_WORD0.CHKBIT_MASK Position   */
-#define EIM_EICHD0_WORD0_CHKBIT_MASK(x)          (((uint32_t)(((uint32_t)(x))<<25U))&0xFE000000UL)   /*!< EIM_EICHD0_WORD0.CHKBIT_MASK Field      */
-/* ------- EICHD0_WORD1 Bit Fields                  ------ */
-#define EIM_EICHD0_WORD1_B0_3DATA_MASK_MASK      (0xFFFFFFFFU)                                       /*!< EIM_EICHD0_WORD1.B0_3DATA_MASK Mask     */
-#define EIM_EICHD0_WORD1_B0_3DATA_MASK_SHIFT     (0U)                                                /*!< EIM_EICHD0_WORD1.B0_3DATA_MASK Position */
-#define EIM_EICHD0_WORD1_B0_3DATA_MASK(x)        (((uint32_t)(((uint32_t)(x))<<0U))&0xFFFFFFFFUL)    /*!< EIM_EICHD0_WORD1.B0_3DATA_MASK Field    */
-/* ------- EICHD1_WORD0 Bit Fields                  ------ */
-#define EIM_EICHD1_WORD0_CHKBIT_MASK_MASK        (0xFE000000U)                                       /*!< EIM_EICHD1_WORD0.CHKBIT_MASK Mask       */
-#define EIM_EICHD1_WORD0_CHKBIT_MASK_SHIFT       (25U)                                               /*!< EIM_EICHD1_WORD0.CHKBIT_MASK Position   */
-#define EIM_EICHD1_WORD0_CHKBIT_MASK(x)          (((uint32_t)(((uint32_t)(x))<<25U))&0xFE000000UL)   /*!< EIM_EICHD1_WORD0.CHKBIT_MASK Field      */
-/* ------- EICHD1_WORD1 Bit Fields                  ------ */
-#define EIM_EICHD1_WORD1_B0_3DATA_MASK_MASK      (0xFFFFFFFFU)                                       /*!< EIM_EICHD1_WORD1.B0_3DATA_MASK Mask     */
-#define EIM_EICHD1_WORD1_B0_3DATA_MASK_SHIFT     (0U)                                                /*!< EIM_EICHD1_WORD1.B0_3DATA_MASK Position */
-#define EIM_EICHD1_WORD1_B0_3DATA_MASK(x)        (((uint32_t)(((uint32_t)(x))<<0U))&0xFFFFFFFFUL)    /*!< EIM_EICHD1_WORD1.B0_3DATA_MASK Field    */
+/* ------- WORD0 Bit Fields                         ------ */
+#define EIM_WORD0_CHKBIT_MASK_MASK               (0xFE000000U)                                       /*!< EIM_WORD0.CHKBIT_MASK Mask              */
+#define EIM_WORD0_CHKBIT_MASK_SHIFT              (25U)                                               /*!< EIM_WORD0.CHKBIT_MASK Position          */
+#define EIM_WORD0_CHKBIT_MASK(x)                 (((uint32_t)(((uint32_t)(x))<<25U))&0xFE000000UL)   /*!< EIM_WORD0.CHKBIT_MASK Field             */
+/* ------- WORD1 Bit Fields                         ------ */
+#define EIM_WORD1_B0_3DATA_MASK_MASK             (0xFFFFFFFFU)                                       /*!< EIM_WORD1.B0_3DATA_MASK Mask            */
+#define EIM_WORD1_B0_3DATA_MASK_SHIFT            (0U)                                                /*!< EIM_WORD1.B0_3DATA_MASK Position        */
+#define EIM_WORD1_B0_3DATA_MASK(x)               (((uint32_t)(((uint32_t)(x))<<0U))&0xFFFFFFFFUL)    /*!< EIM_WORD1.B0_3DATA_MASK Field           */
 /**
  * @} */ /* End group EIM_Register_Masks_GROUP 
  */
@@ -3602,7 +3032,7 @@ typedef struct EIM_Type {
 /* ================================================================================ */
 
 /**
- * @brief ERM
+ * @brief Error Reporting Module
  */
 /**
 * @addtogroup ERM_structs_GROUP ERM struct
@@ -3614,9 +3044,10 @@ typedef struct ERM_Type {
         uint8_t   RESERVED_0[12];              
    __IO uint32_t  SR0;                          /**< 0010: ERM Status Register 0                                        */
         uint8_t   RESERVED_1[236];             
-   __I  uint32_t  EAR0;                         /**< 0100: ERM Memory n Error Address Register                          */
-        uint8_t   RESERVED_2[12];              
-   __I  uint32_t  EAR1;                         /**< 0110: ERM Memory n Error Address Register                          */
+   struct {
+      __I  uint32_t  EAR;                       /**< 0100: ERM Memory n Error Address Register                          */
+           uint8_t   RESERVED_2[12];           
+   } EARn[2];                                   /**< 0100: (cluster: size=0x0020, 32)                                   */
 } ERM_Type;
 
 /**
@@ -3658,14 +3089,10 @@ typedef struct ERM_Type {
 #define ERM_SR0_SBC0_MASK                        (0x80000000U)                                       /*!< ERM_SR0.SBC0 Mask                       */
 #define ERM_SR0_SBC0_SHIFT                       (31U)                                               /*!< ERM_SR0.SBC0 Position                   */
 #define ERM_SR0_SBC0(x)                          (((uint32_t)(((uint32_t)(x))<<31U))&0x80000000UL)   /*!< ERM_SR0.SBC0 Field                      */
-/* ------- EAR0 Bit Fields                          ------ */
-#define ERM_EAR0_EAR_MASK                        (0xFFFFFFFFU)                                       /*!< ERM_EAR0.EAR Mask                       */
-#define ERM_EAR0_EAR_SHIFT                       (0U)                                                /*!< ERM_EAR0.EAR Position                   */
-#define ERM_EAR0_EAR(x)                          (((uint32_t)(((uint32_t)(x))<<0U))&0xFFFFFFFFUL)    /*!< ERM_EAR0.EAR Field                      */
-/* ------- EAR1 Bit Fields                          ------ */
-#define ERM_EAR1_EAR_MASK                        (0xFFFFFFFFU)                                       /*!< ERM_EAR1.EAR Mask                       */
-#define ERM_EAR1_EAR_SHIFT                       (0U)                                                /*!< ERM_EAR1.EAR Position                   */
-#define ERM_EAR1_EAR(x)                          (((uint32_t)(((uint32_t)(x))<<0U))&0xFFFFFFFFUL)    /*!< ERM_EAR1.EAR Field                      */
+/* ------- EAR Bit Fields                           ------ */
+#define ERM_EAR_EAR_MASK                         (0xFFFFFFFFU)                                       /*!< ERM_EAR.EAR Mask                        */
+#define ERM_EAR_EAR_SHIFT                        (0U)                                                /*!< ERM_EAR.EAR Position                    */
+#define ERM_EAR_EAR(x)                           (((uint32_t)(((uint32_t)(x))<<0U))&0xFFFFFFFFUL)    /*!< ERM_EAR.EAR Field                       */
 /**
  * @} */ /* End group ERM_Register_Masks_GROUP 
  */
@@ -3686,7 +3113,7 @@ typedef struct ERM_Type {
 */
 
 /* ================================================================================ */
-/* ================           EWM (file:EWM_S32K14x)               ================ */
+/* ================           EWM (file:EWM_INT_PR)                ================ */
 /* ================================================================================ */
 
 /**
@@ -3768,12 +3195,14 @@ typedef struct EWM_Type {
 */
 
 /* ================================================================================ */
-/* ================           FLEXIO (file:FLEXIO_S32K14x)         ================ */
+/* ================           FLEXIO (file:FLEXIO_4SH_4TMR_MKE15Z7)       ================ */
 /* ================================================================================ */
 
 /**
- * @brief The FLEXIO Memory Map/Register Definition can be found here
+ * @brief Flexible I/O
  */
+#define FLEXIO_SHIFT_COUNT   4          /**< Number of shifters                                 */
+#define FLEXIO_TIMER_COUNT   4          /**< Number of shifters                                 */
 /**
 * @addtogroup FLEXIO_structs_GROUP FLEXIO struct
 * @brief Struct for FLEXIO
@@ -3794,23 +3223,23 @@ typedef struct FLEXIO_Type {
         uint8_t   RESERVED_1[4];               
    __IO uint32_t  SHIFTSDEN;                    /**< 0030: Shifter Status DMA Enable                                    */
         uint8_t   RESERVED_2[76];              
-   __IO uint32_t  SHIFTCTL[4];                  /**< 0080: Shifter Control N Register                                   */
+   __IO uint32_t  SHIFTCTL[FLEXIO_SHIFT_COUNT]; /**< 0080: Shifter Control N Register                                   */
         uint8_t   RESERVED_3[112];             
-   __IO uint32_t  SHIFTCFG[4];                  /**< 0100: Shifter Configuration N Register                             */
+   __IO uint32_t  SHIFTCFG[FLEXIO_SHIFT_COUNT]; /**< 0100: Shifter Configuration N Register                             */
         uint8_t   RESERVED_4[240];             
-   __IO uint32_t  SHIFTBUF[4];                  /**< 0200: Shifter Buffer N Register                                    */
+   __IO uint32_t  SHIFTBUF[FLEXIO_SHIFT_COUNT]; /**< 0200: Shifter Buffer N Register                                    */
         uint8_t   RESERVED_5[112];             
-   __IO uint32_t  SHIFTBUFBIS[4];               /**< 0280: Shifter Buffer N Bit Swapped Register                        */
+   __IO uint32_t  SHIFTBUFBIS[FLEXIO_SHIFT_COUNT]; /**< 0280: Shifter Buffer N Bit Swapped Register                        */
         uint8_t   RESERVED_6[112];             
-   __IO uint32_t  SHIFTBUFBYS[4];               /**< 0300: Shifter Buffer N Byte Swapped Register                       */
+   __IO uint32_t  SHIFTBUFBYS[FLEXIO_SHIFT_COUNT]; /**< 0300: Shifter Buffer N Byte Swapped Register                       */
         uint8_t   RESERVED_7[112];             
-   __IO uint32_t  SHIFTBUFBBS[4];               /**< 0380: Shifter Buffer N Bit Byte Swapped Register                   */
+   __IO uint32_t  SHIFTBUFBBS[FLEXIO_SHIFT_COUNT]; /**< 0380: Shifter Buffer N Bit Byte Swapped Register                   */
         uint8_t   RESERVED_8[112];             
-   __IO uint32_t  TIMCTL[4];                    /**< 0400: Timer Control N Register                                     */
+   __IO uint32_t  TIMCTL[FLEXIO_TIMER_COUNT];   /**< 0400: Timer Control N Register                                     */
         uint8_t   RESERVED_9[112];             
-   __IO uint32_t  TIMCFG[4];                    /**< 0480: Timer Configuration N Register                               */
+   __IO uint32_t  TIMCFG[FLEXIO_TIMER_COUNT];   /**< 0480: Timer Configuration N Register                               */
         uint8_t   RESERVED_10[112];            
-   __IO uint32_t  TIMCMP[4];                    /**< 0500: Timer Compare N Register                                     */
+   __IO uint32_t  TIMCMP[FLEXIO_TIMER_COUNT];   /**< 0500: Timer Compare N Register                                     */
 } FLEXIO_Type;
 
 /**
@@ -4014,7 +3443,7 @@ typedef struct FLEXIO_Type {
 /* ================================================================================ */
 
 /**
- * @brief FTFC
+ * @brief Flash Memory Interface
  */
 /**
 * @addtogroup FTFC_structs_GROUP FTFC struct
@@ -4026,18 +3455,18 @@ typedef struct FTFC_Type {
    __IO uint8_t   FCNFG;                        /**< 0001: Flash Configuration Register                                 */
    __I  uint8_t   FSEC;                         /**< 0002: Flash Security Register                                      */
    __I  uint8_t   FOPT;                         /**< 0003: Flash Option Register                                        */
-   __IO uint8_t   FCCOB3;                       /**< 0004: Flash Common Command Object                                  */
-   __IO uint8_t   FCCOB2;                       /**< 0005: Flash Common Command Object                                  */
-   __IO uint8_t   FCCOB1;                       /**< 0006: Flash Common Command Object                                  */
-   __IO uint8_t   FCCOB0;                       /**< 0007: Flash Common Command Object                                  */
-   __IO uint8_t   FCCOB7;                       /**< 0008: Flash Common Command Object                                  */
-   __IO uint8_t   FCCOB6;                       /**< 0009: Flash Common Command Object                                  */
-   __IO uint8_t   FCCOB5;                       /**< 000A: Flash Common Command Object                                  */
-   __IO uint8_t   FCCOB4;                       /**< 000B: Flash Common Command Object                                  */
-   __IO uint8_t   FCCOBB;                       /**< 000C: Flash Common Command Object                                  */
-   __IO uint8_t   FCCOBA;                       /**< 000D: Flash Common Command Object                                  */
-   __IO uint8_t   FCCOB9;                       /**< 000E: Flash Common Command Object                                  */
-   __IO uint8_t   FCCOB8;                       /**< 000F: Flash Common Command Object                                  */
+   __IO uint8_t   FCCOB3;                       /**< 0004: FCCOB 3 - Usually Flash address [7..0]                       */
+   __IO uint8_t   FCCOB2;                       /**< 0005: FCCOB 2 - Usually Flash address [15..8]                      */
+   __IO uint8_t   FCCOB1;                       /**< 0006: FCCOB 1 - Usually Flash address [23..16]                     */
+   __IO uint8_t   FCCOB0;                       /**< 0007: FCCOB 0 - Usually FCMD (Flash command)                       */
+   __IO uint8_t   FCCOB7;                       /**< 0008: FCCOB 7 - Usually Data Byte 3                                */
+   __IO uint8_t   FCCOB6;                       /**< 0009: FCCOB 6 - Usually Data Byte 2                                */
+   __IO uint8_t   FCCOB5;                       /**< 000A: FCCOB 5 - Usually Data Byte 1                                */
+   __IO uint8_t   FCCOB4;                       /**< 000B: FCCOB 4 - Usually Data Byte 0                                */
+   __IO uint8_t   FCCOBB;                       /**< 000C: FCCOB B - Usually Data Byte 7                                */
+   __IO uint8_t   FCCOBA;                       /**< 000D: FCCOB A - Usually Data Byte 6                                */
+   __IO uint8_t   FCCOB9;                       /**< 000E: FCCOB 9 - Usually Data Byte 5                                */
+   __IO uint8_t   FCCOB8;                       /**< 000F: FCCOB 8 - Usually Data Byte 4                                */
    __IO uint8_t   FPROT3;                       /**< 0010: Program Flash Protection                                     */
    __IO uint8_t   FPROT2;                       /**< 0011: Program Flash Protection                                     */
    __IO uint8_t   FPROT1;                       /**< 0012: Program Flash Protection                                     */
@@ -4189,39 +3618,40 @@ typedef struct FTFC_Type {
 */
 
 /* ================================================================================ */
-/* ================           FTM0 (file:FTM0_S32K142)             ================ */
+/* ================           FTM0 (file:FTM0_8CH_S32K142)         ================ */
 /* ================================================================================ */
 
 /**
- * @brief FlexTimer Module
+ * @brief FlexTimer Module (8 channels)
  */
+#define FTM_CONTROLS_COUNT   8          /**< Number of FTM channels                             */
 /**
 * @addtogroup FTM_structs_GROUP FTM struct
 * @brief Struct for FTM
 * @{
 */
-typedef struct FTM0_Type {
-   __IO uint32_t  SC;                           /**< 0000: Status And Control                                           */
+typedef struct FTM_Type {
+   __IO uint32_t  SC;                           /**< 0000: Status and Control                                           */
    __IO uint32_t  CNT;                          /**< 0004: Counter                                                      */
    __IO uint32_t  MOD;                          /**< 0008: Modulo                                                       */
    struct {
-      __IO uint32_t  CnSC;                      /**< 000C: Channel (n) Status And Control                               */
-      __IO uint32_t  CnV;                       /**< 0010: Channel (n) Value                                            */
-   } CONTROLS[8];                               /**< 000C: (cluster: size=0x0040, 64)                                   */
+      __IO uint32_t  CnSC;                      /**< 000C: Channel  Status and Control                                  */
+      __IO uint32_t  CnV;                       /**< 0010: Channel  Value                                               */
+   } CONTROLS[FTM_CONTROLS_COUNT];              /**< 000C: (cluster: size=0x0040, 64)                                   */
    __IO uint32_t  CNTIN;                        /**< 004C: Counter Initial Value                                        */
-   __I  uint32_t  STATUS;                       /**< 0050: Capture And Compare Status                                   */
+   __IO uint32_t  STATUS;                       /**< 0050: Capture and Compare Status                                   */
    __IO uint32_t  MODE;                         /**< 0054: Features Mode Selection                                      */
    __IO uint32_t  SYNC;                         /**< 0058: Synchronization                                              */
-   __IO uint32_t  OUTINIT;                      /**< 005C: Initial State For Channels Output                            */
+   __IO uint32_t  OUTINIT;                      /**< 005C: Initial State for Channels Output                            */
    __IO uint32_t  OUTMASK;                      /**< 0060: Output Mask                                                  */
-   __IO uint32_t  COMBINE;                      /**< 0064: Function For Linked Channels                                 */
-   __IO uint32_t  DEADTIME;                     /**< 0068: Deadtime Configuration                                       */
+   __IO uint32_t  COMBINE;                      /**< 0064: Function for Linked Channels                                 */
+   __IO uint32_t  DEADTIME;                     /**< 0068: Deadtime Insertion Control                                   */
    __IO uint32_t  EXTTRIG;                      /**< 006C: FTM External Trigger                                         */
    __IO uint32_t  POL;                          /**< 0070: Channels Polarity                                            */
    __IO uint32_t  FMS;                          /**< 0074: Fault Mode Status                                            */
    __IO uint32_t  FILTER;                       /**< 0078: Input Capture Filter Control                                 */
    __IO uint32_t  FLTCTRL;                      /**< 007C: Fault Control                                                */
-   __IO uint32_t  QDCTRL;                       /**< 0080: Quadrature Decoder Control And Status                        */
+   __IO uint32_t  QDCTRL;                       /**< 0080: Quadrature Decoder Control and Status                        */
    __IO uint32_t  CONF;                         /**< 0084: Configuration                                                */
    __IO uint32_t  FLTPOL;                       /**< 0088: FTM Fault Input Polarity                                     */
    __IO uint32_t  SYNCONF;                      /**< 008C: Synchronization Configuration                                */
@@ -4238,15 +3668,15 @@ typedef struct FTM0_Type {
    __IO uint32_t  PAIR3DEADTIME;                /**< 00B8: Pair 3 Deadtime Configuration                                */
         uint8_t   RESERVED_4[324];             
    __IO uint32_t  MOD_MIRROR;                   /**< 0200: Mirror of Modulo Value                                       */
-   __IO uint32_t  C0V_MIRROR;                   /**< 0204: Mirror of Channel (n) Match Value                            */
-   __IO uint32_t  C1V_MIRROR;                   /**< 0208: Mirror of Channel (n) Match Value                            */
-   __IO uint32_t  C2V_MIRROR;                   /**< 020C: Mirror of Channel (n) Match Value                            */
-   __IO uint32_t  C3V_MIRROR;                   /**< 0210: Mirror of Channel (n) Match Value                            */
-   __IO uint32_t  C4V_MIRROR;                   /**< 0214: Mirror of Channel (n) Match Value                            */
-   __IO uint32_t  C5V_MIRROR;                   /**< 0218: Mirror of Channel (n) Match Value                            */
-   __IO uint32_t  C6V_MIRROR;                   /**< 021C: Mirror of Channel (n) Match Value                            */
-   __IO uint32_t  C7V_MIRROR;                   /**< 0220: Mirror of Channel (n) Match Value                            */
-} FTM0_Type;
+   __IO uint32_t  C0V_MIRROR;                   /**< 0204: Mirror of Channel Match Value                                */
+   __IO uint32_t  C1V_MIRROR;                   /**< 0208: Mirror of Channel Match Value                                */
+   __IO uint32_t  C2V_MIRROR;                   /**< 020C: Mirror of Channel Match Value                                */
+   __IO uint32_t  C3V_MIRROR;                   /**< 0210: Mirror of Channel Match Value                                */
+   __IO uint32_t  C4V_MIRROR;                   /**< 0214: Mirror of Channel Match Value                                */
+   __IO uint32_t  C5V_MIRROR;                   /**< 0218: Mirror of Channel Match Value                                */
+   __IO uint32_t  C6V_MIRROR;                   /**< 021C: Mirror of Channel Match Value                                */
+   __IO uint32_t  C7V_MIRROR;                   /**< 0220: Mirror of Channel Match Value                                */
+} FTM_Type;
 
 /**
  * @} */ /* End group FTM_structs_GROUP 
@@ -4325,12 +3755,18 @@ typedef struct FTM0_Type {
 #define FTM_CnSC_ICRST_MASK                      (0x2U)                                              /*!< FTM0_CnSC.ICRST Mask                    */
 #define FTM_CnSC_ICRST_SHIFT                     (1U)                                                /*!< FTM0_CnSC.ICRST Position                */
 #define FTM_CnSC_ICRST(x)                        (((uint32_t)(((uint32_t)(x))<<1U))&0x2UL)           /*!< FTM0_CnSC.ICRST Field                   */
+#define FTM_CnSC_ELS_MASK                        (0xCU)                                              /*!< FTM0_CnSC.ELS Mask                      */
+#define FTM_CnSC_ELS_SHIFT                       (2U)                                                /*!< FTM0_CnSC.ELS Position                  */
+#define FTM_CnSC_ELS(x)                          (((uint32_t)(((uint32_t)(x))<<2U))&0xCUL)           /*!< FTM0_CnSC.ELS Field                     */
 #define FTM_CnSC_ELSA_MASK                       (0x4U)                                              /*!< FTM0_CnSC.ELSA Mask                     */
 #define FTM_CnSC_ELSA_SHIFT                      (2U)                                                /*!< FTM0_CnSC.ELSA Position                 */
 #define FTM_CnSC_ELSA(x)                         (((uint32_t)(((uint32_t)(x))<<2U))&0x4UL)           /*!< FTM0_CnSC.ELSA Field                    */
 #define FTM_CnSC_ELSB_MASK                       (0x8U)                                              /*!< FTM0_CnSC.ELSB Mask                     */
 #define FTM_CnSC_ELSB_SHIFT                      (3U)                                                /*!< FTM0_CnSC.ELSB Position                 */
 #define FTM_CnSC_ELSB(x)                         (((uint32_t)(((uint32_t)(x))<<3U))&0x8UL)           /*!< FTM0_CnSC.ELSB Field                    */
+#define FTM_CnSC_MS_MASK                         (0x30U)                                             /*!< FTM0_CnSC.MS Mask                       */
+#define FTM_CnSC_MS_SHIFT                        (4U)                                                /*!< FTM0_CnSC.MS Position                   */
+#define FTM_CnSC_MS(x)                           (((uint32_t)(((uint32_t)(x))<<4U))&0x30UL)          /*!< FTM0_CnSC.MS Field                      */
 #define FTM_CnSC_MSA_MASK                        (0x10U)                                             /*!< FTM0_CnSC.MSA Mask                      */
 #define FTM_CnSC_MSA_SHIFT                       (4U)                                                /*!< FTM0_CnSC.MSA Position                  */
 #define FTM_CnSC_MSA(x)                          (((uint32_t)(((uint32_t)(x))<<4U))&0x10UL)          /*!< FTM0_CnSC.MSA Field                     */
@@ -5023,7 +4459,7 @@ typedef struct FTM0_Type {
 
 /* FTM0 - Peripheral instance base addresses */
 #define FTM0_BasePtr                   0x40038000UL //!< Peripheral base address
-#define FTM0                           ((FTM0_Type *) FTM0_BasePtr) //!< Freescale base pointer
+#define FTM0                           ((FTM_Type *) FTM0_BasePtr) //!< Freescale base pointer
 #define FTM0_BASE_PTR                  (FTM0) //!< Freescale style base pointer
 #define FTM0_IRQS { FTM0_Ch0_Ch1_IRQn, FTM0_Ch2_Ch3_IRQn, FTM0_Ch4_Ch5_IRQn, FTM0_Ch6_Ch7_IRQn, FTM0_Fault_IRQn, FTM0_Ovf_Reload_IRQn,  }
 
@@ -5041,12 +4477,12 @@ typedef struct FTM0_Type {
 /* ================================================================================ */
 
 /**
- * @brief FlexTimer Module
+ * @brief FlexTimer Module (8 channels)
  */
 
 /* FTM1 - Peripheral instance base addresses */
 #define FTM1_BasePtr                   0x40039000UL //!< Peripheral base address
-#define FTM1                           ((FTM0_Type *) FTM1_BasePtr) //!< Freescale base pointer
+#define FTM1                           ((FTM_Type *) FTM1_BasePtr) //!< Freescale base pointer
 #define FTM1_BASE_PTR                  (FTM1) //!< Freescale style base pointer
 #define FTM1_IRQS { FTM1_Ch0_Ch1_IRQn, FTM1_Ch2_Ch3_IRQn, FTM1_Ch4_Ch5_IRQn, FTM1_Ch6_Ch7_IRQn, FTM1_Fault_IRQn, FTM1_Ovf_Reload_IRQn,  }
 
@@ -5064,12 +4500,12 @@ typedef struct FTM0_Type {
 /* ================================================================================ */
 
 /**
- * @brief FlexTimer Module
+ * @brief FlexTimer Module (8 channels)
  */
 
 /* FTM2 - Peripheral instance base addresses */
 #define FTM2_BasePtr                   0x4003A000UL //!< Peripheral base address
-#define FTM2                           ((FTM0_Type *) FTM2_BasePtr) //!< Freescale base pointer
+#define FTM2                           ((FTM_Type *) FTM2_BasePtr) //!< Freescale base pointer
 #define FTM2_BASE_PTR                  (FTM2) //!< Freescale style base pointer
 #define FTM2_IRQS { FTM2_Ch0_Ch1_IRQn, FTM2_Ch2_Ch3_IRQn, FTM2_Ch4_Ch5_IRQn, FTM2_Ch6_Ch7_IRQn, FTM2_Fault_IRQn, FTM2_Ovf_Reload_IRQn,  }
 
@@ -5087,12 +4523,12 @@ typedef struct FTM0_Type {
 /* ================================================================================ */
 
 /**
- * @brief FlexTimer Module
+ * @brief FlexTimer Module (8 channels)
  */
 
 /* FTM3 - Peripheral instance base addresses */
 #define FTM3_BasePtr                   0x40026000UL //!< Peripheral base address
-#define FTM3                           ((FTM0_Type *) FTM3_BasePtr) //!< Freescale base pointer
+#define FTM3                           ((FTM_Type *) FTM3_BasePtr) //!< Freescale base pointer
 #define FTM3_BASE_PTR                  (FTM3) //!< Freescale style base pointer
 #define FTM3_IRQS { FTM3_Ch0_Ch1_IRQn, FTM3_Ch2_Ch3_IRQn, FTM3_Ch4_Ch5_IRQn, FTM3_Ch6_Ch7_IRQn, FTM3_Fault_IRQn, FTM3_Ovf_Reload_IRQn,  }
 
@@ -5110,12 +4546,12 @@ typedef struct FTM0_Type {
 /* ================================================================================ */
 
 /**
- * @brief FlexTimer Module
+ * @brief FlexTimer Module (8 channels)
  */
 
 /* FTM4 - Peripheral instance base addresses */
 #define FTM4_BasePtr                   0x4006E000UL //!< Peripheral base address
-#define FTM4                           ((FTM0_Type *) FTM4_BasePtr) //!< Freescale base pointer
+#define FTM4                           ((FTM_Type *) FTM4_BasePtr) //!< Freescale base pointer
 #define FTM4_BASE_PTR                  (FTM4) //!< Freescale style base pointer
 #define FTM4_IRQS { FTM4_Ch0_Ch1_IRQn, FTM4_Ch2_Ch3_IRQn, FTM4_Ch4_Ch5_IRQn, FTM4_Ch6_Ch7_IRQn, FTM4_Fault_IRQn, FTM4_Ovf_Reload_IRQn,  }
 
@@ -5133,12 +4569,12 @@ typedef struct FTM0_Type {
 /* ================================================================================ */
 
 /**
- * @brief FlexTimer Module
+ * @brief FlexTimer Module (8 channels)
  */
 
 /* FTM5 - Peripheral instance base addresses */
 #define FTM5_BasePtr                   0x4006F000UL //!< Peripheral base address
-#define FTM5                           ((FTM0_Type *) FTM5_BasePtr) //!< Freescale base pointer
+#define FTM5                           ((FTM_Type *) FTM5_BasePtr) //!< Freescale base pointer
 #define FTM5_BASE_PTR                  (FTM5) //!< Freescale style base pointer
 #define FTM5_IRQS { FTM5_Ch0_Ch1_IRQn, FTM5_Ch2_Ch3_IRQn, FTM5_Ch4_Ch5_IRQn, FTM5_Ch6_Ch7_IRQn, FTM5_Fault_IRQn, FTM5_Ovf_Reload_IRQn,  }
 
@@ -5152,7 +4588,7 @@ typedef struct FTM0_Type {
 */
 
 /* ================================================================================ */
-/* ================           GPIOA (file:GPIOA_S32K14x)           ================ */
+/* ================           GPIOA (file:GPIOA_S32K)              ================ */
 /* ================================================================================ */
 
 /**
@@ -5163,7 +4599,7 @@ typedef struct FTM0_Type {
 * @brief Struct for GPIO
 * @{
 */
-typedef struct PT_Type {
+typedef struct GPIO_Type {
    __IO uint32_t  PDOR;                         /**< 0000: Port Data Output Register                                    */
    __O  uint32_t  PSOR;                         /**< 0004: Port Set Output Register                                     */
    __O  uint32_t  PCOR;                         /**< 0008: Port Clear Output Register                                   */
@@ -5171,7 +4607,7 @@ typedef struct PT_Type {
    __I  uint32_t  PDIR;                         /**< 0010: Port Data Input Register                                     */
    __IO uint32_t  PDDR;                         /**< 0014: Port Data Direction Register                                 */
    __IO uint32_t  PIDR;                         /**< 0018: Port Input Disable Register                                  */
-} PT_Type;
+} GPIO_Type;
 
 /**
  * @} */ /* End group GPIO_structs_GROUP 
@@ -5199,7 +4635,7 @@ typedef struct PT_Type {
 
 /* GPIOA - Peripheral instance base addresses */
 #define GPIOA_BasePtr                  0x400FF000UL //!< Peripheral base address
-#define GPIOA                          ((PT_Type *) GPIOA_BasePtr) //!< Freescale base pointer
+#define GPIOA                          ((GPIO_Type *) GPIOA_BasePtr) //!< Freescale base pointer
 #define GPIOA_BASE_PTR                 (GPIOA) //!< Freescale style base pointer
 /**
  * @} */ /* End group GPIO_Peripheral_access_layer_GROUP 
@@ -5220,7 +4656,7 @@ typedef struct PT_Type {
 
 /* GPIOB - Peripheral instance base addresses */
 #define GPIOB_BasePtr                  0x400FF040UL //!< Peripheral base address
-#define GPIOB                          ((PT_Type *) GPIOB_BasePtr) //!< Freescale base pointer
+#define GPIOB                          ((GPIO_Type *) GPIOB_BasePtr) //!< Freescale base pointer
 #define GPIOB_BASE_PTR                 (GPIOB) //!< Freescale style base pointer
 /**
  * @} */ /* End group GPIO_Peripheral_access_layer_GROUP 
@@ -5241,7 +4677,7 @@ typedef struct PT_Type {
 
 /* GPIOC - Peripheral instance base addresses */
 #define GPIOC_BasePtr                  0x400FF080UL //!< Peripheral base address
-#define GPIOC                          ((PT_Type *) GPIOC_BasePtr) //!< Freescale base pointer
+#define GPIOC                          ((GPIO_Type *) GPIOC_BasePtr) //!< Freescale base pointer
 #define GPIOC_BASE_PTR                 (GPIOC) //!< Freescale style base pointer
 /**
  * @} */ /* End group GPIO_Peripheral_access_layer_GROUP 
@@ -5262,7 +4698,7 @@ typedef struct PT_Type {
 
 /* GPIOD - Peripheral instance base addresses */
 #define GPIOD_BasePtr                  0x400FF0C0UL //!< Peripheral base address
-#define GPIOD                          ((PT_Type *) GPIOD_BasePtr) //!< Freescale base pointer
+#define GPIOD                          ((GPIO_Type *) GPIOD_BasePtr) //!< Freescale base pointer
 #define GPIOD_BASE_PTR                 (GPIOD) //!< Freescale style base pointer
 /**
  * @} */ /* End group GPIO_Peripheral_access_layer_GROUP 
@@ -5283,7 +4719,7 @@ typedef struct PT_Type {
 
 /* GPIOE - Peripheral instance base addresses */
 #define GPIOE_BasePtr                  0x400FF100UL //!< Peripheral base address
-#define GPIOE                          ((PT_Type *) GPIOE_BasePtr) //!< Freescale base pointer
+#define GPIOE                          ((GPIO_Type *) GPIOE_BasePtr) //!< Freescale base pointer
 #define GPIOE_BASE_PTR                 (GPIOE) //!< Freescale style base pointer
 /**
  * @} */ /* End group GPIO_Peripheral_access_layer_GROUP 
@@ -5307,10 +4743,10 @@ typedef struct PT_Type {
 * @{
 */
 typedef struct LMEM_Type {
-   __IO uint32_t  LMEM_PCCCR;                   /**< 0000: Cache control register                                       */
-   __IO uint32_t  LMEM_PCCLCR;                  /**< 0004: Cache line control register                                  */
-   __IO uint32_t  LMEM_PCCSAR;                  /**< 0008: Cache search address register                                */
-   __IO uint32_t  LMEM_PCCCVR;                  /**< 000C: Cache read/write value register                              */
+   __IO uint32_t  PCCCR;                        /**< 0000: Cache control register                                       */
+   __IO uint32_t  PCCLCR;                       /**< 0004: Cache line control register                                  */
+   __IO uint32_t  PCCSAR;                       /**< 0008: Cache search address register                                */
+   __IO uint32_t  PCCCVR;                       /**< 000C: Cache read/write value register                              */
         uint8_t   RESERVED_0[16];              
    __IO uint32_t  PCCRMR;                       /**< 0020: Cache regions mode register                                  */
 } LMEM_Type;
@@ -5328,73 +4764,73 @@ typedef struct LMEM_Type {
 * @brief Register Masks for LMEM
 * @{
 */
-/* ------- LMEM_PCCCR Bit Fields                    ------ */
-#define LMEM_LMEM_PCCCR_ENCACHE_MASK             (0x1U)                                              /*!< LMEM_LMEM_PCCCR.ENCACHE Mask            */
-#define LMEM_LMEM_PCCCR_ENCACHE_SHIFT            (0U)                                                /*!< LMEM_LMEM_PCCCR.ENCACHE Position        */
-#define LMEM_LMEM_PCCCR_ENCACHE(x)               (((uint32_t)(((uint32_t)(x))<<0U))&0x1UL)           /*!< LMEM_LMEM_PCCCR.ENCACHE Field           */
-#define LMEM_LMEM_PCCCR_PCCR2_MASK               (0x4U)                                              /*!< LMEM_LMEM_PCCCR.PCCR2 Mask              */
-#define LMEM_LMEM_PCCCR_PCCR2_SHIFT              (2U)                                                /*!< LMEM_LMEM_PCCCR.PCCR2 Position          */
-#define LMEM_LMEM_PCCCR_PCCR2(x)                 (((uint32_t)(((uint32_t)(x))<<2U))&0x4UL)           /*!< LMEM_LMEM_PCCCR.PCCR2 Field             */
-#define LMEM_LMEM_PCCCR_PCCR3_MASK               (0x8U)                                              /*!< LMEM_LMEM_PCCCR.PCCR3 Mask              */
-#define LMEM_LMEM_PCCCR_PCCR3_SHIFT              (3U)                                                /*!< LMEM_LMEM_PCCCR.PCCR3 Position          */
-#define LMEM_LMEM_PCCCR_PCCR3(x)                 (((uint32_t)(((uint32_t)(x))<<3U))&0x8UL)           /*!< LMEM_LMEM_PCCCR.PCCR3 Field             */
-#define LMEM_LMEM_PCCCR_INVW0_MASK               (0x1000000U)                                        /*!< LMEM_LMEM_PCCCR.INVW0 Mask              */
-#define LMEM_LMEM_PCCCR_INVW0_SHIFT              (24U)                                               /*!< LMEM_LMEM_PCCCR.INVW0 Position          */
-#define LMEM_LMEM_PCCCR_INVW0(x)                 (((uint32_t)(((uint32_t)(x))<<24U))&0x1000000UL)    /*!< LMEM_LMEM_PCCCR.INVW0 Field             */
-#define LMEM_LMEM_PCCCR_PUSHW0_MASK              (0x2000000U)                                        /*!< LMEM_LMEM_PCCCR.PUSHW0 Mask             */
-#define LMEM_LMEM_PCCCR_PUSHW0_SHIFT             (25U)                                               /*!< LMEM_LMEM_PCCCR.PUSHW0 Position         */
-#define LMEM_LMEM_PCCCR_PUSHW0(x)                (((uint32_t)(((uint32_t)(x))<<25U))&0x2000000UL)    /*!< LMEM_LMEM_PCCCR.PUSHW0 Field            */
-#define LMEM_LMEM_PCCCR_INVW1_MASK               (0x4000000U)                                        /*!< LMEM_LMEM_PCCCR.INVW1 Mask              */
-#define LMEM_LMEM_PCCCR_INVW1_SHIFT              (26U)                                               /*!< LMEM_LMEM_PCCCR.INVW1 Position          */
-#define LMEM_LMEM_PCCCR_INVW1(x)                 (((uint32_t)(((uint32_t)(x))<<26U))&0x4000000UL)    /*!< LMEM_LMEM_PCCCR.INVW1 Field             */
-#define LMEM_LMEM_PCCCR_PUSHW1_MASK              (0x8000000U)                                        /*!< LMEM_LMEM_PCCCR.PUSHW1 Mask             */
-#define LMEM_LMEM_PCCCR_PUSHW1_SHIFT             (27U)                                               /*!< LMEM_LMEM_PCCCR.PUSHW1 Position         */
-#define LMEM_LMEM_PCCCR_PUSHW1(x)                (((uint32_t)(((uint32_t)(x))<<27U))&0x8000000UL)    /*!< LMEM_LMEM_PCCCR.PUSHW1 Field            */
-#define LMEM_LMEM_PCCCR_GO_MASK                  (0x80000000U)                                       /*!< LMEM_LMEM_PCCCR.GO Mask                 */
-#define LMEM_LMEM_PCCCR_GO_SHIFT                 (31U)                                               /*!< LMEM_LMEM_PCCCR.GO Position             */
-#define LMEM_LMEM_PCCCR_GO(x)                    (((uint32_t)(((uint32_t)(x))<<31U))&0x80000000UL)   /*!< LMEM_LMEM_PCCCR.GO Field                */
-/* ------- LMEM_PCCLCR Bit Fields                   ------ */
-#define LMEM_LMEM_PCCLCR_LGO_MASK                (0x1U)                                              /*!< LMEM_LMEM_PCCLCR.LGO Mask               */
-#define LMEM_LMEM_PCCLCR_LGO_SHIFT               (0U)                                                /*!< LMEM_LMEM_PCCLCR.LGO Position           */
-#define LMEM_LMEM_PCCLCR_LGO(x)                  (((uint32_t)(((uint32_t)(x))<<0U))&0x1UL)           /*!< LMEM_LMEM_PCCLCR.LGO Field              */
-#define LMEM_LMEM_PCCLCR_CACHEADDR_MASK          (0x3FFCU)                                           /*!< LMEM_LMEM_PCCLCR.CACHEADDR Mask         */
-#define LMEM_LMEM_PCCLCR_CACHEADDR_SHIFT         (2U)                                                /*!< LMEM_LMEM_PCCLCR.CACHEADDR Position     */
-#define LMEM_LMEM_PCCLCR_CACHEADDR(x)            (((uint32_t)(((uint32_t)(x))<<2U))&0x3FFCUL)        /*!< LMEM_LMEM_PCCLCR.CACHEADDR Field        */
-#define LMEM_LMEM_PCCLCR_WSEL_MASK               (0x4000U)                                           /*!< LMEM_LMEM_PCCLCR.WSEL Mask              */
-#define LMEM_LMEM_PCCLCR_WSEL_SHIFT              (14U)                                               /*!< LMEM_LMEM_PCCLCR.WSEL Position          */
-#define LMEM_LMEM_PCCLCR_WSEL(x)                 (((uint32_t)(((uint32_t)(x))<<14U))&0x4000UL)       /*!< LMEM_LMEM_PCCLCR.WSEL Field             */
-#define LMEM_LMEM_PCCLCR_TDSEL_MASK              (0x10000U)                                          /*!< LMEM_LMEM_PCCLCR.TDSEL Mask             */
-#define LMEM_LMEM_PCCLCR_TDSEL_SHIFT             (16U)                                               /*!< LMEM_LMEM_PCCLCR.TDSEL Position         */
-#define LMEM_LMEM_PCCLCR_TDSEL(x)                (((uint32_t)(((uint32_t)(x))<<16U))&0x10000UL)      /*!< LMEM_LMEM_PCCLCR.TDSEL Field            */
-#define LMEM_LMEM_PCCLCR_LCIVB_MASK              (0x100000U)                                         /*!< LMEM_LMEM_PCCLCR.LCIVB Mask             */
-#define LMEM_LMEM_PCCLCR_LCIVB_SHIFT             (20U)                                               /*!< LMEM_LMEM_PCCLCR.LCIVB Position         */
-#define LMEM_LMEM_PCCLCR_LCIVB(x)                (((uint32_t)(((uint32_t)(x))<<20U))&0x100000UL)     /*!< LMEM_LMEM_PCCLCR.LCIVB Field            */
-#define LMEM_LMEM_PCCLCR_LCIMB_MASK              (0x200000U)                                         /*!< LMEM_LMEM_PCCLCR.LCIMB Mask             */
-#define LMEM_LMEM_PCCLCR_LCIMB_SHIFT             (21U)                                               /*!< LMEM_LMEM_PCCLCR.LCIMB Position         */
-#define LMEM_LMEM_PCCLCR_LCIMB(x)                (((uint32_t)(((uint32_t)(x))<<21U))&0x200000UL)     /*!< LMEM_LMEM_PCCLCR.LCIMB Field            */
-#define LMEM_LMEM_PCCLCR_LCWAY_MASK              (0x400000U)                                         /*!< LMEM_LMEM_PCCLCR.LCWAY Mask             */
-#define LMEM_LMEM_PCCLCR_LCWAY_SHIFT             (22U)                                               /*!< LMEM_LMEM_PCCLCR.LCWAY Position         */
-#define LMEM_LMEM_PCCLCR_LCWAY(x)                (((uint32_t)(((uint32_t)(x))<<22U))&0x400000UL)     /*!< LMEM_LMEM_PCCLCR.LCWAY Field            */
-#define LMEM_LMEM_PCCLCR_LCMD_MASK               (0x3000000U)                                        /*!< LMEM_LMEM_PCCLCR.LCMD Mask              */
-#define LMEM_LMEM_PCCLCR_LCMD_SHIFT              (24U)                                               /*!< LMEM_LMEM_PCCLCR.LCMD Position          */
-#define LMEM_LMEM_PCCLCR_LCMD(x)                 (((uint32_t)(((uint32_t)(x))<<24U))&0x3000000UL)    /*!< LMEM_LMEM_PCCLCR.LCMD Field             */
-#define LMEM_LMEM_PCCLCR_LADSEL_MASK             (0x4000000U)                                        /*!< LMEM_LMEM_PCCLCR.LADSEL Mask            */
-#define LMEM_LMEM_PCCLCR_LADSEL_SHIFT            (26U)                                               /*!< LMEM_LMEM_PCCLCR.LADSEL Position        */
-#define LMEM_LMEM_PCCLCR_LADSEL(x)               (((uint32_t)(((uint32_t)(x))<<26U))&0x4000000UL)    /*!< LMEM_LMEM_PCCLCR.LADSEL Field           */
-#define LMEM_LMEM_PCCLCR_LACC_MASK               (0x8000000U)                                        /*!< LMEM_LMEM_PCCLCR.LACC Mask              */
-#define LMEM_LMEM_PCCLCR_LACC_SHIFT              (27U)                                               /*!< LMEM_LMEM_PCCLCR.LACC Position          */
-#define LMEM_LMEM_PCCLCR_LACC(x)                 (((uint32_t)(((uint32_t)(x))<<27U))&0x8000000UL)    /*!< LMEM_LMEM_PCCLCR.LACC Field             */
-/* ------- LMEM_PCCSAR Bit Fields                   ------ */
-#define LMEM_LMEM_PCCSAR_LGO_MASK                (0x1U)                                              /*!< LMEM_LMEM_PCCSAR.LGO Mask               */
-#define LMEM_LMEM_PCCSAR_LGO_SHIFT               (0U)                                                /*!< LMEM_LMEM_PCCSAR.LGO Position           */
-#define LMEM_LMEM_PCCSAR_LGO(x)                  (((uint32_t)(((uint32_t)(x))<<0U))&0x1UL)           /*!< LMEM_LMEM_PCCSAR.LGO Field              */
-#define LMEM_LMEM_PCCSAR_PHYADDR_MASK            (0xFFFFFFFCU)                                       /*!< LMEM_LMEM_PCCSAR.PHYADDR Mask           */
-#define LMEM_LMEM_PCCSAR_PHYADDR_SHIFT           (2U)                                                /*!< LMEM_LMEM_PCCSAR.PHYADDR Position       */
-#define LMEM_LMEM_PCCSAR_PHYADDR(x)              (((uint32_t)(((uint32_t)(x))<<2U))&0xFFFFFFFCUL)    /*!< LMEM_LMEM_PCCSAR.PHYADDR Field          */
-/* ------- LMEM_PCCCVR Bit Fields                   ------ */
-#define LMEM_LMEM_PCCCVR_DATA_MASK               (0xFFFFFFFFU)                                       /*!< LMEM_LMEM_PCCCVR.DATA Mask              */
-#define LMEM_LMEM_PCCCVR_DATA_SHIFT              (0U)                                                /*!< LMEM_LMEM_PCCCVR.DATA Position          */
-#define LMEM_LMEM_PCCCVR_DATA(x)                 (((uint32_t)(((uint32_t)(x))<<0U))&0xFFFFFFFFUL)    /*!< LMEM_LMEM_PCCCVR.DATA Field             */
+/* ------- PCCCR Bit Fields                         ------ */
+#define LMEM_PCCCR_ENCACHE_MASK                  (0x1U)                                              /*!< LMEM_PCCCR.ENCACHE Mask                 */
+#define LMEM_PCCCR_ENCACHE_SHIFT                 (0U)                                                /*!< LMEM_PCCCR.ENCACHE Position             */
+#define LMEM_PCCCR_ENCACHE(x)                    (((uint32_t)(((uint32_t)(x))<<0U))&0x1UL)           /*!< LMEM_PCCCR.ENCACHE Field                */
+#define LMEM_PCCCR_PCCR2_MASK                    (0x4U)                                              /*!< LMEM_PCCCR.PCCR2 Mask                   */
+#define LMEM_PCCCR_PCCR2_SHIFT                   (2U)                                                /*!< LMEM_PCCCR.PCCR2 Position               */
+#define LMEM_PCCCR_PCCR2(x)                      (((uint32_t)(((uint32_t)(x))<<2U))&0x4UL)           /*!< LMEM_PCCCR.PCCR2 Field                  */
+#define LMEM_PCCCR_PCCR3_MASK                    (0x8U)                                              /*!< LMEM_PCCCR.PCCR3 Mask                   */
+#define LMEM_PCCCR_PCCR3_SHIFT                   (3U)                                                /*!< LMEM_PCCCR.PCCR3 Position               */
+#define LMEM_PCCCR_PCCR3(x)                      (((uint32_t)(((uint32_t)(x))<<3U))&0x8UL)           /*!< LMEM_PCCCR.PCCR3 Field                  */
+#define LMEM_PCCCR_INVW0_MASK                    (0x1000000U)                                        /*!< LMEM_PCCCR.INVW0 Mask                   */
+#define LMEM_PCCCR_INVW0_SHIFT                   (24U)                                               /*!< LMEM_PCCCR.INVW0 Position               */
+#define LMEM_PCCCR_INVW0(x)                      (((uint32_t)(((uint32_t)(x))<<24U))&0x1000000UL)    /*!< LMEM_PCCCR.INVW0 Field                  */
+#define LMEM_PCCCR_PUSHW0_MASK                   (0x2000000U)                                        /*!< LMEM_PCCCR.PUSHW0 Mask                  */
+#define LMEM_PCCCR_PUSHW0_SHIFT                  (25U)                                               /*!< LMEM_PCCCR.PUSHW0 Position              */
+#define LMEM_PCCCR_PUSHW0(x)                     (((uint32_t)(((uint32_t)(x))<<25U))&0x2000000UL)    /*!< LMEM_PCCCR.PUSHW0 Field                 */
+#define LMEM_PCCCR_INVW1_MASK                    (0x4000000U)                                        /*!< LMEM_PCCCR.INVW1 Mask                   */
+#define LMEM_PCCCR_INVW1_SHIFT                   (26U)                                               /*!< LMEM_PCCCR.INVW1 Position               */
+#define LMEM_PCCCR_INVW1(x)                      (((uint32_t)(((uint32_t)(x))<<26U))&0x4000000UL)    /*!< LMEM_PCCCR.INVW1 Field                  */
+#define LMEM_PCCCR_PUSHW1_MASK                   (0x8000000U)                                        /*!< LMEM_PCCCR.PUSHW1 Mask                  */
+#define LMEM_PCCCR_PUSHW1_SHIFT                  (27U)                                               /*!< LMEM_PCCCR.PUSHW1 Position              */
+#define LMEM_PCCCR_PUSHW1(x)                     (((uint32_t)(((uint32_t)(x))<<27U))&0x8000000UL)    /*!< LMEM_PCCCR.PUSHW1 Field                 */
+#define LMEM_PCCCR_GO_MASK                       (0x80000000U)                                       /*!< LMEM_PCCCR.GO Mask                      */
+#define LMEM_PCCCR_GO_SHIFT                      (31U)                                               /*!< LMEM_PCCCR.GO Position                  */
+#define LMEM_PCCCR_GO(x)                         (((uint32_t)(((uint32_t)(x))<<31U))&0x80000000UL)   /*!< LMEM_PCCCR.GO Field                     */
+/* ------- PCCLCR Bit Fields                        ------ */
+#define LMEM_PCCLCR_LGO_MASK                     (0x1U)                                              /*!< LMEM_PCCLCR.LGO Mask                    */
+#define LMEM_PCCLCR_LGO_SHIFT                    (0U)                                                /*!< LMEM_PCCLCR.LGO Position                */
+#define LMEM_PCCLCR_LGO(x)                       (((uint32_t)(((uint32_t)(x))<<0U))&0x1UL)           /*!< LMEM_PCCLCR.LGO Field                   */
+#define LMEM_PCCLCR_CACHEADDR_MASK               (0x3FFCU)                                           /*!< LMEM_PCCLCR.CACHEADDR Mask              */
+#define LMEM_PCCLCR_CACHEADDR_SHIFT              (2U)                                                /*!< LMEM_PCCLCR.CACHEADDR Position          */
+#define LMEM_PCCLCR_CACHEADDR(x)                 (((uint32_t)(((uint32_t)(x))<<2U))&0x3FFCUL)        /*!< LMEM_PCCLCR.CACHEADDR Field             */
+#define LMEM_PCCLCR_WSEL_MASK                    (0x4000U)                                           /*!< LMEM_PCCLCR.WSEL Mask                   */
+#define LMEM_PCCLCR_WSEL_SHIFT                   (14U)                                               /*!< LMEM_PCCLCR.WSEL Position               */
+#define LMEM_PCCLCR_WSEL(x)                      (((uint32_t)(((uint32_t)(x))<<14U))&0x4000UL)       /*!< LMEM_PCCLCR.WSEL Field                  */
+#define LMEM_PCCLCR_TDSEL_MASK                   (0x10000U)                                          /*!< LMEM_PCCLCR.TDSEL Mask                  */
+#define LMEM_PCCLCR_TDSEL_SHIFT                  (16U)                                               /*!< LMEM_PCCLCR.TDSEL Position              */
+#define LMEM_PCCLCR_TDSEL(x)                     (((uint32_t)(((uint32_t)(x))<<16U))&0x10000UL)      /*!< LMEM_PCCLCR.TDSEL Field                 */
+#define LMEM_PCCLCR_LCIVB_MASK                   (0x100000U)                                         /*!< LMEM_PCCLCR.LCIVB Mask                  */
+#define LMEM_PCCLCR_LCIVB_SHIFT                  (20U)                                               /*!< LMEM_PCCLCR.LCIVB Position              */
+#define LMEM_PCCLCR_LCIVB(x)                     (((uint32_t)(((uint32_t)(x))<<20U))&0x100000UL)     /*!< LMEM_PCCLCR.LCIVB Field                 */
+#define LMEM_PCCLCR_LCIMB_MASK                   (0x200000U)                                         /*!< LMEM_PCCLCR.LCIMB Mask                  */
+#define LMEM_PCCLCR_LCIMB_SHIFT                  (21U)                                               /*!< LMEM_PCCLCR.LCIMB Position              */
+#define LMEM_PCCLCR_LCIMB(x)                     (((uint32_t)(((uint32_t)(x))<<21U))&0x200000UL)     /*!< LMEM_PCCLCR.LCIMB Field                 */
+#define LMEM_PCCLCR_LCWAY_MASK                   (0x400000U)                                         /*!< LMEM_PCCLCR.LCWAY Mask                  */
+#define LMEM_PCCLCR_LCWAY_SHIFT                  (22U)                                               /*!< LMEM_PCCLCR.LCWAY Position              */
+#define LMEM_PCCLCR_LCWAY(x)                     (((uint32_t)(((uint32_t)(x))<<22U))&0x400000UL)     /*!< LMEM_PCCLCR.LCWAY Field                 */
+#define LMEM_PCCLCR_LCMD_MASK                    (0x3000000U)                                        /*!< LMEM_PCCLCR.LCMD Mask                   */
+#define LMEM_PCCLCR_LCMD_SHIFT                   (24U)                                               /*!< LMEM_PCCLCR.LCMD Position               */
+#define LMEM_PCCLCR_LCMD(x)                      (((uint32_t)(((uint32_t)(x))<<24U))&0x3000000UL)    /*!< LMEM_PCCLCR.LCMD Field                  */
+#define LMEM_PCCLCR_LADSEL_MASK                  (0x4000000U)                                        /*!< LMEM_PCCLCR.LADSEL Mask                 */
+#define LMEM_PCCLCR_LADSEL_SHIFT                 (26U)                                               /*!< LMEM_PCCLCR.LADSEL Position             */
+#define LMEM_PCCLCR_LADSEL(x)                    (((uint32_t)(((uint32_t)(x))<<26U))&0x4000000UL)    /*!< LMEM_PCCLCR.LADSEL Field                */
+#define LMEM_PCCLCR_LACC_MASK                    (0x8000000U)                                        /*!< LMEM_PCCLCR.LACC Mask                   */
+#define LMEM_PCCLCR_LACC_SHIFT                   (27U)                                               /*!< LMEM_PCCLCR.LACC Position               */
+#define LMEM_PCCLCR_LACC(x)                      (((uint32_t)(((uint32_t)(x))<<27U))&0x8000000UL)    /*!< LMEM_PCCLCR.LACC Field                  */
+/* ------- PCCSAR Bit Fields                        ------ */
+#define LMEM_PCCSAR_LGO_MASK                     (0x1U)                                              /*!< LMEM_PCCSAR.LGO Mask                    */
+#define LMEM_PCCSAR_LGO_SHIFT                    (0U)                                                /*!< LMEM_PCCSAR.LGO Position                */
+#define LMEM_PCCSAR_LGO(x)                       (((uint32_t)(((uint32_t)(x))<<0U))&0x1UL)           /*!< LMEM_PCCSAR.LGO Field                   */
+#define LMEM_PCCSAR_PHYADDR_MASK                 (0xFFFFFFFCU)                                       /*!< LMEM_PCCSAR.PHYADDR Mask                */
+#define LMEM_PCCSAR_PHYADDR_SHIFT                (2U)                                                /*!< LMEM_PCCSAR.PHYADDR Position            */
+#define LMEM_PCCSAR_PHYADDR(x)                   (((uint32_t)(((uint32_t)(x))<<2U))&0xFFFFFFFCUL)    /*!< LMEM_PCCSAR.PHYADDR Field               */
+/* ------- PCCCVR Bit Fields                        ------ */
+#define LMEM_PCCCVR_DATA_MASK                    (0xFFFFFFFFU)                                       /*!< LMEM_PCCCVR.DATA Mask                   */
+#define LMEM_PCCCVR_DATA_SHIFT                   (0U)                                                /*!< LMEM_PCCCVR.DATA Position               */
+#define LMEM_PCCCVR_DATA(x)                      (((uint32_t)(((uint32_t)(x))<<0U))&0xFFFFFFFFUL)    /*!< LMEM_PCCCVR.DATA Field                  */
 /* ------- PCCRMR Bit Fields                        ------ */
 #define LMEM_PCCRMR_R15_MASK                     (0x3U)                                              /*!< LMEM_PCCRMR.R15 Mask                    */
 #define LMEM_PCCRMR_R15_SHIFT                    (0U)                                                /*!< LMEM_PCCRMR.R15 Position                */
@@ -5466,7 +4902,7 @@ typedef struct LMEM_Type {
 /* ================================================================================ */
 
 /**
- * @brief The LPI2C Memory Map/Register Definition can be found here
+ * @brief Low power I2C
  */
 /**
 * @addtogroup LPI2C_structs_GROUP LPI2C struct
@@ -5946,18 +5382,19 @@ typedef struct LPI2C0_Type {
 */
 
 /* ================================================================================ */
-/* ================           LPIT0 (file:LPIT0_S32K14x)           ================ */
+/* ================           LPIT0 (file:LPIT0)                   ================ */
 /* ================================================================================ */
 
 /**
  * @brief Low Power Periodic Interrupt Timer
  */
+#define LPIT_TMR_COUNT       4          /**< Number of timer channels                           */
 /**
 * @addtogroup LPIT_structs_GROUP LPIT struct
 * @brief Struct for LPIT
 * @{
 */
-typedef struct LPIT0_Type {
+typedef struct LPIT_Type {
    __I  uint32_t  VERID;                        /**< 0000: Version ID Register                                          */
    __I  uint32_t  PARAM;                        /**< 0004: Parameter Register                                           */
    __IO uint32_t  MCR;                          /**< 0008: Module Control Register                                      */
@@ -5966,22 +5403,13 @@ typedef struct LPIT0_Type {
    __IO uint32_t  SETTEN;                       /**< 0014: Set Timer Enable Register                                    */
    __O  uint32_t  CLRTEN;                       /**< 0018: Clear Timer Enable Register                                  */
         uint8_t   RESERVED_0[4];               
-   __IO uint32_t  TVAL0;                        /**< 0020: Timer Value Register                                         */
-   __I  uint32_t  CVAL0;                        /**< 0024: Current Timer Value                                          */
-   __IO uint32_t  TCTRL0;                       /**< 0028: Timer Control Register                                       */
-        uint8_t   RESERVED_1[4];               
-   __IO uint32_t  TVAL1;                        /**< 0030: Timer Value Register                                         */
-   __I  uint32_t  CVAL1;                        /**< 0034: Current Timer Value                                          */
-   __IO uint32_t  TCTRL1;                       /**< 0038: Timer Control Register                                       */
-        uint8_t   RESERVED_2[4];               
-   __IO uint32_t  TVAL2;                        /**< 0040: Timer Value Register                                         */
-   __I  uint32_t  CVAL2;                        /**< 0044: Current Timer Value                                          */
-   __IO uint32_t  TCTRL2;                       /**< 0048: Timer Control Register                                       */
-        uint8_t   RESERVED_3[4];               
-   __IO uint32_t  TVAL3;                        /**< 0050: Timer Value Register                                         */
-   __I  uint32_t  CVAL3;                        /**< 0054: Current Timer Value                                          */
-   __IO uint32_t  TCTRL3;                       /**< 0058: Timer Control Register                                       */
-} LPIT0_Type;
+   struct {
+      __IO uint32_t  TVAL;                      /**< 0020: Timer Value Register                                         */
+      __I  uint32_t  CVAL;                      /**< 0024: Current Timer Value                                          */
+      __IO uint32_t  TCTRL;                     /**< 0028: Timer Control Register                                       */
+           uint8_t   RESERVED_1[4];            
+   } TMR[LPIT_TMR_COUNT];                       /**< 0020: (cluster: size=0x0040, 64)                                   */
+} LPIT_Type;
 
 /**
  * @} */ /* End group LPIT_structs_GROUP 
@@ -6078,145 +5506,46 @@ typedef struct LPIT0_Type {
 #define LPIT0_CLRTEN_CLR_T_EN_3_MASK             (0x8U)                                              /*!< LPIT0_CLRTEN.CLR_T_EN_3 Mask            */
 #define LPIT0_CLRTEN_CLR_T_EN_3_SHIFT            (3U)                                                /*!< LPIT0_CLRTEN.CLR_T_EN_3 Position        */
 #define LPIT0_CLRTEN_CLR_T_EN_3(x)               (((uint32_t)(((uint32_t)(x))<<3U))&0x8UL)           /*!< LPIT0_CLRTEN.CLR_T_EN_3 Field           */
-/* ------- TVAL0 Bit Fields                         ------ */
-#define LPIT0_TVAL0_TMR_VAL_MASK                 (0xFFFFFFFFU)                                       /*!< LPIT0_TVAL0.TMR_VAL Mask                */
-#define LPIT0_TVAL0_TMR_VAL_SHIFT                (0U)                                                /*!< LPIT0_TVAL0.TMR_VAL Position            */
-#define LPIT0_TVAL0_TMR_VAL(x)                   (((uint32_t)(((uint32_t)(x))<<0U))&0xFFFFFFFFUL)    /*!< LPIT0_TVAL0.TMR_VAL Field               */
-/* ------- CVAL0 Bit Fields                         ------ */
-#define LPIT0_CVAL0_TMR_CUR_VAL_MASK             (0xFFFFFFFFU)                                       /*!< LPIT0_CVAL0.TMR_CUR_VAL Mask            */
-#define LPIT0_CVAL0_TMR_CUR_VAL_SHIFT            (0U)                                                /*!< LPIT0_CVAL0.TMR_CUR_VAL Position        */
-#define LPIT0_CVAL0_TMR_CUR_VAL(x)               (((uint32_t)(((uint32_t)(x))<<0U))&0xFFFFFFFFUL)    /*!< LPIT0_CVAL0.TMR_CUR_VAL Field           */
-/* ------- TCTRL0 Bit Fields                        ------ */
-#define LPIT0_TCTRL0_T_EN_MASK                   (0x1U)                                              /*!< LPIT0_TCTRL0.T_EN Mask                  */
-#define LPIT0_TCTRL0_T_EN_SHIFT                  (0U)                                                /*!< LPIT0_TCTRL0.T_EN Position              */
-#define LPIT0_TCTRL0_T_EN(x)                     (((uint32_t)(((uint32_t)(x))<<0U))&0x1UL)           /*!< LPIT0_TCTRL0.T_EN Field                 */
-#define LPIT0_TCTRL0_CHAIN_MASK                  (0x2U)                                              /*!< LPIT0_TCTRL0.CHAIN Mask                 */
-#define LPIT0_TCTRL0_CHAIN_SHIFT                 (1U)                                                /*!< LPIT0_TCTRL0.CHAIN Position             */
-#define LPIT0_TCTRL0_CHAIN(x)                    (((uint32_t)(((uint32_t)(x))<<1U))&0x2UL)           /*!< LPIT0_TCTRL0.CHAIN Field                */
-#define LPIT0_TCTRL0_MODE_MASK                   (0xCU)                                              /*!< LPIT0_TCTRL0.MODE Mask                  */
-#define LPIT0_TCTRL0_MODE_SHIFT                  (2U)                                                /*!< LPIT0_TCTRL0.MODE Position              */
-#define LPIT0_TCTRL0_MODE(x)                     (((uint32_t)(((uint32_t)(x))<<2U))&0xCUL)           /*!< LPIT0_TCTRL0.MODE Field                 */
-#define LPIT0_TCTRL0_TSOT_MASK                   (0x10000U)                                          /*!< LPIT0_TCTRL0.TSOT Mask                  */
-#define LPIT0_TCTRL0_TSOT_SHIFT                  (16U)                                               /*!< LPIT0_TCTRL0.TSOT Position              */
-#define LPIT0_TCTRL0_TSOT(x)                     (((uint32_t)(((uint32_t)(x))<<16U))&0x10000UL)      /*!< LPIT0_TCTRL0.TSOT Field                 */
-#define LPIT0_TCTRL0_TSOI_MASK                   (0x20000U)                                          /*!< LPIT0_TCTRL0.TSOI Mask                  */
-#define LPIT0_TCTRL0_TSOI_SHIFT                  (17U)                                               /*!< LPIT0_TCTRL0.TSOI Position              */
-#define LPIT0_TCTRL0_TSOI(x)                     (((uint32_t)(((uint32_t)(x))<<17U))&0x20000UL)      /*!< LPIT0_TCTRL0.TSOI Field                 */
-#define LPIT0_TCTRL0_TROT_MASK                   (0x40000U)                                          /*!< LPIT0_TCTRL0.TROT Mask                  */
-#define LPIT0_TCTRL0_TROT_SHIFT                  (18U)                                               /*!< LPIT0_TCTRL0.TROT Position              */
-#define LPIT0_TCTRL0_TROT(x)                     (((uint32_t)(((uint32_t)(x))<<18U))&0x40000UL)      /*!< LPIT0_TCTRL0.TROT Field                 */
-#define LPIT0_TCTRL0_TRG_SRC_MASK                (0x800000U)                                         /*!< LPIT0_TCTRL0.TRG_SRC Mask               */
-#define LPIT0_TCTRL0_TRG_SRC_SHIFT               (23U)                                               /*!< LPIT0_TCTRL0.TRG_SRC Position           */
-#define LPIT0_TCTRL0_TRG_SRC(x)                  (((uint32_t)(((uint32_t)(x))<<23U))&0x800000UL)     /*!< LPIT0_TCTRL0.TRG_SRC Field              */
-#define LPIT0_TCTRL0_TRG_SEL_MASK                (0xF000000U)                                        /*!< LPIT0_TCTRL0.TRG_SEL Mask               */
-#define LPIT0_TCTRL0_TRG_SEL_SHIFT               (24U)                                               /*!< LPIT0_TCTRL0.TRG_SEL Position           */
-#define LPIT0_TCTRL0_TRG_SEL(x)                  (((uint32_t)(((uint32_t)(x))<<24U))&0xF000000UL)    /*!< LPIT0_TCTRL0.TRG_SEL Field              */
-/* ------- TVAL1 Bit Fields                         ------ */
-#define LPIT0_TVAL1_TMR_VAL_MASK                 (0xFFFFFFFFU)                                       /*!< LPIT0_TVAL1.TMR_VAL Mask                */
-#define LPIT0_TVAL1_TMR_VAL_SHIFT                (0U)                                                /*!< LPIT0_TVAL1.TMR_VAL Position            */
-#define LPIT0_TVAL1_TMR_VAL(x)                   (((uint32_t)(((uint32_t)(x))<<0U))&0xFFFFFFFFUL)    /*!< LPIT0_TVAL1.TMR_VAL Field               */
-/* ------- CVAL1 Bit Fields                         ------ */
-#define LPIT0_CVAL1_TMR_CUR_VAL_MASK             (0xFFFFFFFFU)                                       /*!< LPIT0_CVAL1.TMR_CUR_VAL Mask            */
-#define LPIT0_CVAL1_TMR_CUR_VAL_SHIFT            (0U)                                                /*!< LPIT0_CVAL1.TMR_CUR_VAL Position        */
-#define LPIT0_CVAL1_TMR_CUR_VAL(x)               (((uint32_t)(((uint32_t)(x))<<0U))&0xFFFFFFFFUL)    /*!< LPIT0_CVAL1.TMR_CUR_VAL Field           */
-/* ------- TCTRL1 Bit Fields                        ------ */
-#define LPIT0_TCTRL1_T_EN_MASK                   (0x1U)                                              /*!< LPIT0_TCTRL1.T_EN Mask                  */
-#define LPIT0_TCTRL1_T_EN_SHIFT                  (0U)                                                /*!< LPIT0_TCTRL1.T_EN Position              */
-#define LPIT0_TCTRL1_T_EN(x)                     (((uint32_t)(((uint32_t)(x))<<0U))&0x1UL)           /*!< LPIT0_TCTRL1.T_EN Field                 */
-#define LPIT0_TCTRL1_CHAIN_MASK                  (0x2U)                                              /*!< LPIT0_TCTRL1.CHAIN Mask                 */
-#define LPIT0_TCTRL1_CHAIN_SHIFT                 (1U)                                                /*!< LPIT0_TCTRL1.CHAIN Position             */
-#define LPIT0_TCTRL1_CHAIN(x)                    (((uint32_t)(((uint32_t)(x))<<1U))&0x2UL)           /*!< LPIT0_TCTRL1.CHAIN Field                */
-#define LPIT0_TCTRL1_MODE_MASK                   (0xCU)                                              /*!< LPIT0_TCTRL1.MODE Mask                  */
-#define LPIT0_TCTRL1_MODE_SHIFT                  (2U)                                                /*!< LPIT0_TCTRL1.MODE Position              */
-#define LPIT0_TCTRL1_MODE(x)                     (((uint32_t)(((uint32_t)(x))<<2U))&0xCUL)           /*!< LPIT0_TCTRL1.MODE Field                 */
-#define LPIT0_TCTRL1_TSOT_MASK                   (0x10000U)                                          /*!< LPIT0_TCTRL1.TSOT Mask                  */
-#define LPIT0_TCTRL1_TSOT_SHIFT                  (16U)                                               /*!< LPIT0_TCTRL1.TSOT Position              */
-#define LPIT0_TCTRL1_TSOT(x)                     (((uint32_t)(((uint32_t)(x))<<16U))&0x10000UL)      /*!< LPIT0_TCTRL1.TSOT Field                 */
-#define LPIT0_TCTRL1_TSOI_MASK                   (0x20000U)                                          /*!< LPIT0_TCTRL1.TSOI Mask                  */
-#define LPIT0_TCTRL1_TSOI_SHIFT                  (17U)                                               /*!< LPIT0_TCTRL1.TSOI Position              */
-#define LPIT0_TCTRL1_TSOI(x)                     (((uint32_t)(((uint32_t)(x))<<17U))&0x20000UL)      /*!< LPIT0_TCTRL1.TSOI Field                 */
-#define LPIT0_TCTRL1_TROT_MASK                   (0x40000U)                                          /*!< LPIT0_TCTRL1.TROT Mask                  */
-#define LPIT0_TCTRL1_TROT_SHIFT                  (18U)                                               /*!< LPIT0_TCTRL1.TROT Position              */
-#define LPIT0_TCTRL1_TROT(x)                     (((uint32_t)(((uint32_t)(x))<<18U))&0x40000UL)      /*!< LPIT0_TCTRL1.TROT Field                 */
-#define LPIT0_TCTRL1_TRG_SRC_MASK                (0x800000U)                                         /*!< LPIT0_TCTRL1.TRG_SRC Mask               */
-#define LPIT0_TCTRL1_TRG_SRC_SHIFT               (23U)                                               /*!< LPIT0_TCTRL1.TRG_SRC Position           */
-#define LPIT0_TCTRL1_TRG_SRC(x)                  (((uint32_t)(((uint32_t)(x))<<23U))&0x800000UL)     /*!< LPIT0_TCTRL1.TRG_SRC Field              */
-#define LPIT0_TCTRL1_TRG_SEL_MASK                (0xF000000U)                                        /*!< LPIT0_TCTRL1.TRG_SEL Mask               */
-#define LPIT0_TCTRL1_TRG_SEL_SHIFT               (24U)                                               /*!< LPIT0_TCTRL1.TRG_SEL Position           */
-#define LPIT0_TCTRL1_TRG_SEL(x)                  (((uint32_t)(((uint32_t)(x))<<24U))&0xF000000UL)    /*!< LPIT0_TCTRL1.TRG_SEL Field              */
-/* ------- TVAL2 Bit Fields                         ------ */
-#define LPIT0_TVAL2_TMR_VAL_MASK                 (0xFFFFFFFFU)                                       /*!< LPIT0_TVAL2.TMR_VAL Mask                */
-#define LPIT0_TVAL2_TMR_VAL_SHIFT                (0U)                                                /*!< LPIT0_TVAL2.TMR_VAL Position            */
-#define LPIT0_TVAL2_TMR_VAL(x)                   (((uint32_t)(((uint32_t)(x))<<0U))&0xFFFFFFFFUL)    /*!< LPIT0_TVAL2.TMR_VAL Field               */
-/* ------- CVAL2 Bit Fields                         ------ */
-#define LPIT0_CVAL2_TMR_CUR_VAL_MASK             (0xFFFFFFFFU)                                       /*!< LPIT0_CVAL2.TMR_CUR_VAL Mask            */
-#define LPIT0_CVAL2_TMR_CUR_VAL_SHIFT            (0U)                                                /*!< LPIT0_CVAL2.TMR_CUR_VAL Position        */
-#define LPIT0_CVAL2_TMR_CUR_VAL(x)               (((uint32_t)(((uint32_t)(x))<<0U))&0xFFFFFFFFUL)    /*!< LPIT0_CVAL2.TMR_CUR_VAL Field           */
-/* ------- TCTRL2 Bit Fields                        ------ */
-#define LPIT0_TCTRL2_T_EN_MASK                   (0x1U)                                              /*!< LPIT0_TCTRL2.T_EN Mask                  */
-#define LPIT0_TCTRL2_T_EN_SHIFT                  (0U)                                                /*!< LPIT0_TCTRL2.T_EN Position              */
-#define LPIT0_TCTRL2_T_EN(x)                     (((uint32_t)(((uint32_t)(x))<<0U))&0x1UL)           /*!< LPIT0_TCTRL2.T_EN Field                 */
-#define LPIT0_TCTRL2_CHAIN_MASK                  (0x2U)                                              /*!< LPIT0_TCTRL2.CHAIN Mask                 */
-#define LPIT0_TCTRL2_CHAIN_SHIFT                 (1U)                                                /*!< LPIT0_TCTRL2.CHAIN Position             */
-#define LPIT0_TCTRL2_CHAIN(x)                    (((uint32_t)(((uint32_t)(x))<<1U))&0x2UL)           /*!< LPIT0_TCTRL2.CHAIN Field                */
-#define LPIT0_TCTRL2_MODE_MASK                   (0xCU)                                              /*!< LPIT0_TCTRL2.MODE Mask                  */
-#define LPIT0_TCTRL2_MODE_SHIFT                  (2U)                                                /*!< LPIT0_TCTRL2.MODE Position              */
-#define LPIT0_TCTRL2_MODE(x)                     (((uint32_t)(((uint32_t)(x))<<2U))&0xCUL)           /*!< LPIT0_TCTRL2.MODE Field                 */
-#define LPIT0_TCTRL2_TSOT_MASK                   (0x10000U)                                          /*!< LPIT0_TCTRL2.TSOT Mask                  */
-#define LPIT0_TCTRL2_TSOT_SHIFT                  (16U)                                               /*!< LPIT0_TCTRL2.TSOT Position              */
-#define LPIT0_TCTRL2_TSOT(x)                     (((uint32_t)(((uint32_t)(x))<<16U))&0x10000UL)      /*!< LPIT0_TCTRL2.TSOT Field                 */
-#define LPIT0_TCTRL2_TSOI_MASK                   (0x20000U)                                          /*!< LPIT0_TCTRL2.TSOI Mask                  */
-#define LPIT0_TCTRL2_TSOI_SHIFT                  (17U)                                               /*!< LPIT0_TCTRL2.TSOI Position              */
-#define LPIT0_TCTRL2_TSOI(x)                     (((uint32_t)(((uint32_t)(x))<<17U))&0x20000UL)      /*!< LPIT0_TCTRL2.TSOI Field                 */
-#define LPIT0_TCTRL2_TROT_MASK                   (0x40000U)                                          /*!< LPIT0_TCTRL2.TROT Mask                  */
-#define LPIT0_TCTRL2_TROT_SHIFT                  (18U)                                               /*!< LPIT0_TCTRL2.TROT Position              */
-#define LPIT0_TCTRL2_TROT(x)                     (((uint32_t)(((uint32_t)(x))<<18U))&0x40000UL)      /*!< LPIT0_TCTRL2.TROT Field                 */
-#define LPIT0_TCTRL2_TRG_SRC_MASK                (0x800000U)                                         /*!< LPIT0_TCTRL2.TRG_SRC Mask               */
-#define LPIT0_TCTRL2_TRG_SRC_SHIFT               (23U)                                               /*!< LPIT0_TCTRL2.TRG_SRC Position           */
-#define LPIT0_TCTRL2_TRG_SRC(x)                  (((uint32_t)(((uint32_t)(x))<<23U))&0x800000UL)     /*!< LPIT0_TCTRL2.TRG_SRC Field              */
-#define LPIT0_TCTRL2_TRG_SEL_MASK                (0xF000000U)                                        /*!< LPIT0_TCTRL2.TRG_SEL Mask               */
-#define LPIT0_TCTRL2_TRG_SEL_SHIFT               (24U)                                               /*!< LPIT0_TCTRL2.TRG_SEL Position           */
-#define LPIT0_TCTRL2_TRG_SEL(x)                  (((uint32_t)(((uint32_t)(x))<<24U))&0xF000000UL)    /*!< LPIT0_TCTRL2.TRG_SEL Field              */
-/* ------- TVAL3 Bit Fields                         ------ */
-#define LPIT0_TVAL3_TMR_VAL_MASK                 (0xFFFFFFFFU)                                       /*!< LPIT0_TVAL3.TMR_VAL Mask                */
-#define LPIT0_TVAL3_TMR_VAL_SHIFT                (0U)                                                /*!< LPIT0_TVAL3.TMR_VAL Position            */
-#define LPIT0_TVAL3_TMR_VAL(x)                   (((uint32_t)(((uint32_t)(x))<<0U))&0xFFFFFFFFUL)    /*!< LPIT0_TVAL3.TMR_VAL Field               */
-/* ------- CVAL3 Bit Fields                         ------ */
-#define LPIT0_CVAL3_TMR_CUR_VAL_MASK             (0xFFFFFFFFU)                                       /*!< LPIT0_CVAL3.TMR_CUR_VAL Mask            */
-#define LPIT0_CVAL3_TMR_CUR_VAL_SHIFT            (0U)                                                /*!< LPIT0_CVAL3.TMR_CUR_VAL Position        */
-#define LPIT0_CVAL3_TMR_CUR_VAL(x)               (((uint32_t)(((uint32_t)(x))<<0U))&0xFFFFFFFFUL)    /*!< LPIT0_CVAL3.TMR_CUR_VAL Field           */
-/* ------- TCTRL3 Bit Fields                        ------ */
-#define LPIT0_TCTRL3_T_EN_MASK                   (0x1U)                                              /*!< LPIT0_TCTRL3.T_EN Mask                  */
-#define LPIT0_TCTRL3_T_EN_SHIFT                  (0U)                                                /*!< LPIT0_TCTRL3.T_EN Position              */
-#define LPIT0_TCTRL3_T_EN(x)                     (((uint32_t)(((uint32_t)(x))<<0U))&0x1UL)           /*!< LPIT0_TCTRL3.T_EN Field                 */
-#define LPIT0_TCTRL3_CHAIN_MASK                  (0x2U)                                              /*!< LPIT0_TCTRL3.CHAIN Mask                 */
-#define LPIT0_TCTRL3_CHAIN_SHIFT                 (1U)                                                /*!< LPIT0_TCTRL3.CHAIN Position             */
-#define LPIT0_TCTRL3_CHAIN(x)                    (((uint32_t)(((uint32_t)(x))<<1U))&0x2UL)           /*!< LPIT0_TCTRL3.CHAIN Field                */
-#define LPIT0_TCTRL3_MODE_MASK                   (0xCU)                                              /*!< LPIT0_TCTRL3.MODE Mask                  */
-#define LPIT0_TCTRL3_MODE_SHIFT                  (2U)                                                /*!< LPIT0_TCTRL3.MODE Position              */
-#define LPIT0_TCTRL3_MODE(x)                     (((uint32_t)(((uint32_t)(x))<<2U))&0xCUL)           /*!< LPIT0_TCTRL3.MODE Field                 */
-#define LPIT0_TCTRL3_TSOT_MASK                   (0x10000U)                                          /*!< LPIT0_TCTRL3.TSOT Mask                  */
-#define LPIT0_TCTRL3_TSOT_SHIFT                  (16U)                                               /*!< LPIT0_TCTRL3.TSOT Position              */
-#define LPIT0_TCTRL3_TSOT(x)                     (((uint32_t)(((uint32_t)(x))<<16U))&0x10000UL)      /*!< LPIT0_TCTRL3.TSOT Field                 */
-#define LPIT0_TCTRL3_TSOI_MASK                   (0x20000U)                                          /*!< LPIT0_TCTRL3.TSOI Mask                  */
-#define LPIT0_TCTRL3_TSOI_SHIFT                  (17U)                                               /*!< LPIT0_TCTRL3.TSOI Position              */
-#define LPIT0_TCTRL3_TSOI(x)                     (((uint32_t)(((uint32_t)(x))<<17U))&0x20000UL)      /*!< LPIT0_TCTRL3.TSOI Field                 */
-#define LPIT0_TCTRL3_TROT_MASK                   (0x40000U)                                          /*!< LPIT0_TCTRL3.TROT Mask                  */
-#define LPIT0_TCTRL3_TROT_SHIFT                  (18U)                                               /*!< LPIT0_TCTRL3.TROT Position              */
-#define LPIT0_TCTRL3_TROT(x)                     (((uint32_t)(((uint32_t)(x))<<18U))&0x40000UL)      /*!< LPIT0_TCTRL3.TROT Field                 */
-#define LPIT0_TCTRL3_TRG_SRC_MASK                (0x800000U)                                         /*!< LPIT0_TCTRL3.TRG_SRC Mask               */
-#define LPIT0_TCTRL3_TRG_SRC_SHIFT               (23U)                                               /*!< LPIT0_TCTRL3.TRG_SRC Position           */
-#define LPIT0_TCTRL3_TRG_SRC(x)                  (((uint32_t)(((uint32_t)(x))<<23U))&0x800000UL)     /*!< LPIT0_TCTRL3.TRG_SRC Field              */
-#define LPIT0_TCTRL3_TRG_SEL_MASK                (0xF000000U)                                        /*!< LPIT0_TCTRL3.TRG_SEL Mask               */
-#define LPIT0_TCTRL3_TRG_SEL_SHIFT               (24U)                                               /*!< LPIT0_TCTRL3.TRG_SEL Position           */
-#define LPIT0_TCTRL3_TRG_SEL(x)                  (((uint32_t)(((uint32_t)(x))<<24U))&0xF000000UL)    /*!< LPIT0_TCTRL3.TRG_SEL Field              */
+/* ------- TVAL Bit Fields                          ------ */
+#define LPIT0_TVAL_TMR_VAL_MASK                  (0xFFFFFFFFU)                                       /*!< LPIT0_TVAL.TMR_VAL Mask                 */
+#define LPIT0_TVAL_TMR_VAL_SHIFT                 (0U)                                                /*!< LPIT0_TVAL.TMR_VAL Position             */
+#define LPIT0_TVAL_TMR_VAL(x)                    (((uint32_t)(((uint32_t)(x))<<0U))&0xFFFFFFFFUL)    /*!< LPIT0_TVAL.TMR_VAL Field                */
+/* ------- CVAL Bit Fields                          ------ */
+#define LPIT0_CVAL_TMR_CUR_VAL_MASK              (0xFFFFFFFFU)                                       /*!< LPIT0_CVAL.TMR_CUR_VAL Mask             */
+#define LPIT0_CVAL_TMR_CUR_VAL_SHIFT             (0U)                                                /*!< LPIT0_CVAL.TMR_CUR_VAL Position         */
+#define LPIT0_CVAL_TMR_CUR_VAL(x)                (((uint32_t)(((uint32_t)(x))<<0U))&0xFFFFFFFFUL)    /*!< LPIT0_CVAL.TMR_CUR_VAL Field            */
+/* ------- TCTRL Bit Fields                         ------ */
+#define LPIT0_TCTRL_T_EN_MASK                    (0x1U)                                              /*!< LPIT0_TCTRL.T_EN Mask                   */
+#define LPIT0_TCTRL_T_EN_SHIFT                   (0U)                                                /*!< LPIT0_TCTRL.T_EN Position               */
+#define LPIT0_TCTRL_T_EN(x)                      (((uint32_t)(((uint32_t)(x))<<0U))&0x1UL)           /*!< LPIT0_TCTRL.T_EN Field                  */
+#define LPIT0_TCTRL_CHAIN_MASK                   (0x2U)                                              /*!< LPIT0_TCTRL.CHAIN Mask                  */
+#define LPIT0_TCTRL_CHAIN_SHIFT                  (1U)                                                /*!< LPIT0_TCTRL.CHAIN Position              */
+#define LPIT0_TCTRL_CHAIN(x)                     (((uint32_t)(((uint32_t)(x))<<1U))&0x2UL)           /*!< LPIT0_TCTRL.CHAIN Field                 */
+#define LPIT0_TCTRL_MODE_MASK                    (0xCU)                                              /*!< LPIT0_TCTRL.MODE Mask                   */
+#define LPIT0_TCTRL_MODE_SHIFT                   (2U)                                                /*!< LPIT0_TCTRL.MODE Position               */
+#define LPIT0_TCTRL_MODE(x)                      (((uint32_t)(((uint32_t)(x))<<2U))&0xCUL)           /*!< LPIT0_TCTRL.MODE Field                  */
+#define LPIT0_TCTRL_TSOT_MASK                    (0x10000U)                                          /*!< LPIT0_TCTRL.TSOT Mask                   */
+#define LPIT0_TCTRL_TSOT_SHIFT                   (16U)                                               /*!< LPIT0_TCTRL.TSOT Position               */
+#define LPIT0_TCTRL_TSOT(x)                      (((uint32_t)(((uint32_t)(x))<<16U))&0x10000UL)      /*!< LPIT0_TCTRL.TSOT Field                  */
+#define LPIT0_TCTRL_TSOI_MASK                    (0x20000U)                                          /*!< LPIT0_TCTRL.TSOI Mask                   */
+#define LPIT0_TCTRL_TSOI_SHIFT                   (17U)                                               /*!< LPIT0_TCTRL.TSOI Position               */
+#define LPIT0_TCTRL_TSOI(x)                      (((uint32_t)(((uint32_t)(x))<<17U))&0x20000UL)      /*!< LPIT0_TCTRL.TSOI Field                  */
+#define LPIT0_TCTRL_TROT_MASK                    (0x40000U)                                          /*!< LPIT0_TCTRL.TROT Mask                   */
+#define LPIT0_TCTRL_TROT_SHIFT                   (18U)                                               /*!< LPIT0_TCTRL.TROT Position               */
+#define LPIT0_TCTRL_TROT(x)                      (((uint32_t)(((uint32_t)(x))<<18U))&0x40000UL)      /*!< LPIT0_TCTRL.TROT Field                  */
+#define LPIT0_TCTRL_TRG_SRC_MASK                 (0x800000U)                                         /*!< LPIT0_TCTRL.TRG_SRC Mask                */
+#define LPIT0_TCTRL_TRG_SRC_SHIFT                (23U)                                               /*!< LPIT0_TCTRL.TRG_SRC Position            */
+#define LPIT0_TCTRL_TRG_SRC(x)                   (((uint32_t)(((uint32_t)(x))<<23U))&0x800000UL)     /*!< LPIT0_TCTRL.TRG_SRC Field               */
+#define LPIT0_TCTRL_TRG_SEL_MASK                 (0xF000000U)                                        /*!< LPIT0_TCTRL.TRG_SEL Mask                */
+#define LPIT0_TCTRL_TRG_SEL_SHIFT                (24U)                                               /*!< LPIT0_TCTRL.TRG_SEL Position            */
+#define LPIT0_TCTRL_TRG_SEL(x)                   (((uint32_t)(((uint32_t)(x))<<24U))&0xF000000UL)    /*!< LPIT0_TCTRL.TRG_SEL Field               */
 /**
  * @} */ /* End group LPIT_Register_Masks_GROUP 
  */
 
 /* LPIT0 - Peripheral instance base addresses */
 #define LPIT0_BasePtr                  0x40037000UL //!< Peripheral base address
-#define LPIT0                          ((LPIT0_Type *) LPIT0_BasePtr) //!< Freescale base pointer
+#define LPIT0                          ((LPIT_Type *) LPIT0_BasePtr) //!< Freescale base pointer
 #define LPIT0_BASE_PTR                 (LPIT0) //!< Freescale style base pointer
 #define LPIT0_IRQS { LPIT0_Ch0_IRQn, LPIT0_Ch1_IRQn, LPIT0_Ch2_IRQn, LPIT0_Ch3_IRQn,  }
 
@@ -6230,18 +5559,18 @@ typedef struct LPIT0_Type {
 */
 
 /* ================================================================================ */
-/* ================           LPSPI0 (file:LPSPI0_S32K14x)         ================ */
+/* ================           LPSPI0 (file:LPSPI0)                 ================ */
 /* ================================================================================ */
 
 /**
- * @brief The LPSPI Memory Map/Register Definition can be found here
+ * @brief Low power SPI
  */
 /**
 * @addtogroup LPSPI_structs_GROUP LPSPI struct
 * @brief Struct for LPSPI
 * @{
 */
-typedef struct LPSPI0_Type {
+typedef struct LPSPI_Type {
    __I  uint32_t  VERID;                        /**< 0000: Version ID Register                                          */
    __I  uint32_t  PARAM;                        /**< 0004: Parameter Register                                           */
         uint8_t   RESERVED_0[8];               
@@ -6263,7 +5592,7 @@ typedef struct LPSPI0_Type {
         uint8_t   RESERVED_4[8];               
    __I  uint32_t  RSR;                          /**< 0070: Receive Status Register                                      */
    __I  uint32_t  RDR;                          /**< 0074: Receive Data Register                                        */
-} LPSPI0_Type;
+} LPSPI_Type;
 
 /**
  * @} */ /* End group LPSPI_structs_GROUP 
@@ -6436,19 +5765,19 @@ typedef struct LPSPI0_Type {
 #define LPSPI0_CCR_SCKPCS_SHIFT                  (24U)                                               /*!< LPSPI0_CCR.SCKPCS Position              */
 #define LPSPI0_CCR_SCKPCS(x)                     (((uint32_t)(((uint32_t)(x))<<24U))&0xFF000000UL)   /*!< LPSPI0_CCR.SCKPCS Field                 */
 /* ------- FCR Bit Fields                           ------ */
-#define LPSPI0_FCR_TXWATER_MASK                  (0x3U)                                              /*!< LPSPI0_FCR.TXWATER Mask                 */
+#define LPSPI0_FCR_TXWATER_MASK                  (0xFFU)                                             /*!< LPSPI0_FCR.TXWATER Mask                 */
 #define LPSPI0_FCR_TXWATER_SHIFT                 (0U)                                                /*!< LPSPI0_FCR.TXWATER Position             */
-#define LPSPI0_FCR_TXWATER(x)                    (((uint32_t)(((uint32_t)(x))<<0U))&0x3UL)           /*!< LPSPI0_FCR.TXWATER Field                */
-#define LPSPI0_FCR_RXWATER_MASK                  (0x30000U)                                          /*!< LPSPI0_FCR.RXWATER Mask                 */
+#define LPSPI0_FCR_TXWATER(x)                    (((uint32_t)(((uint32_t)(x))<<0U))&0xFFUL)          /*!< LPSPI0_FCR.TXWATER Field                */
+#define LPSPI0_FCR_RXWATER_MASK                  (0xFF0000U)                                         /*!< LPSPI0_FCR.RXWATER Mask                 */
 #define LPSPI0_FCR_RXWATER_SHIFT                 (16U)                                               /*!< LPSPI0_FCR.RXWATER Position             */
-#define LPSPI0_FCR_RXWATER(x)                    (((uint32_t)(((uint32_t)(x))<<16U))&0x30000UL)      /*!< LPSPI0_FCR.RXWATER Field                */
+#define LPSPI0_FCR_RXWATER(x)                    (((uint32_t)(((uint32_t)(x))<<16U))&0xFF0000UL)     /*!< LPSPI0_FCR.RXWATER Field                */
 /* ------- FSR Bit Fields                           ------ */
-#define LPSPI0_FSR_TXCOUNT_MASK                  (0x7U)                                              /*!< LPSPI0_FSR.TXCOUNT Mask                 */
+#define LPSPI0_FSR_TXCOUNT_MASK                  (0xFFU)                                             /*!< LPSPI0_FSR.TXCOUNT Mask                 */
 #define LPSPI0_FSR_TXCOUNT_SHIFT                 (0U)                                                /*!< LPSPI0_FSR.TXCOUNT Position             */
-#define LPSPI0_FSR_TXCOUNT(x)                    (((uint32_t)(((uint32_t)(x))<<0U))&0x7UL)           /*!< LPSPI0_FSR.TXCOUNT Field                */
-#define LPSPI0_FSR_RXCOUNT_MASK                  (0x70000U)                                          /*!< LPSPI0_FSR.RXCOUNT Mask                 */
+#define LPSPI0_FSR_TXCOUNT(x)                    (((uint32_t)(((uint32_t)(x))<<0U))&0xFFUL)          /*!< LPSPI0_FSR.TXCOUNT Field                */
+#define LPSPI0_FSR_RXCOUNT_MASK                  (0xFF0000U)                                         /*!< LPSPI0_FSR.RXCOUNT Mask                 */
 #define LPSPI0_FSR_RXCOUNT_SHIFT                 (16U)                                               /*!< LPSPI0_FSR.RXCOUNT Position             */
-#define LPSPI0_FSR_RXCOUNT(x)                    (((uint32_t)(((uint32_t)(x))<<16U))&0x70000UL)      /*!< LPSPI0_FSR.RXCOUNT Field                */
+#define LPSPI0_FSR_RXCOUNT(x)                    (((uint32_t)(((uint32_t)(x))<<16U))&0xFF0000UL)     /*!< LPSPI0_FSR.RXCOUNT Field                */
 /* ------- TCR Bit Fields                           ------ */
 #define LPSPI0_TCR_FRAMESZ_MASK                  (0xFFFU)                                            /*!< LPSPI0_TCR.FRAMESZ Mask                 */
 #define LPSPI0_TCR_FRAMESZ_SHIFT                 (0U)                                                /*!< LPSPI0_TCR.FRAMESZ Position             */
@@ -6507,7 +5836,7 @@ typedef struct LPSPI0_Type {
 
 /* LPSPI0 - Peripheral instance base addresses */
 #define LPSPI0_BasePtr                 0x4002C000UL //!< Peripheral base address
-#define LPSPI0                         ((LPSPI0_Type *) LPSPI0_BasePtr) //!< Freescale base pointer
+#define LPSPI0                         ((LPSPI_Type *) LPSPI0_BasePtr) //!< Freescale base pointer
 #define LPSPI0_BASE_PTR                (LPSPI0) //!< Freescale style base pointer
 #define LPSPI0_IRQS { LPSPI0_IRQn,  }
 
@@ -6525,12 +5854,12 @@ typedef struct LPSPI0_Type {
 /* ================================================================================ */
 
 /**
- * @brief The LPSPI Memory Map/Register Definition can be found here
+ * @brief Low power SPI
  */
 
 /* LPSPI1 - Peripheral instance base addresses */
 #define LPSPI1_BasePtr                 0x4002D000UL //!< Peripheral base address
-#define LPSPI1                         ((LPSPI0_Type *) LPSPI1_BasePtr) //!< Freescale base pointer
+#define LPSPI1                         ((LPSPI_Type *) LPSPI1_BasePtr) //!< Freescale base pointer
 #define LPSPI1_BASE_PTR                (LPSPI1) //!< Freescale style base pointer
 #define LPSPI1_IRQS { LPSPI1_IRQn,  }
 
@@ -6548,12 +5877,12 @@ typedef struct LPSPI0_Type {
 /* ================================================================================ */
 
 /**
- * @brief The LPSPI Memory Map/Register Definition can be found here
+ * @brief Low power SPI
  */
 
 /* LPSPI2 - Peripheral instance base addresses */
 #define LPSPI2_BasePtr                 0x4002E000UL //!< Peripheral base address
-#define LPSPI2                         ((LPSPI0_Type *) LPSPI2_BasePtr) //!< Freescale base pointer
+#define LPSPI2                         ((LPSPI_Type *) LPSPI2_BasePtr) //!< Freescale base pointer
 #define LPSPI2_BASE_PTR                (LPSPI2) //!< Freescale style base pointer
 #define LPSPI2_IRQS { LPSPI2_IRQn,  }
 
@@ -6567,7 +5896,7 @@ typedef struct LPSPI0_Type {
 */
 
 /* ================================================================================ */
-/* ================           LPTMR0 (file:LPTMR0_S32K14x)         ================ */
+/* ================           LPTMR0 (file:LPTMR0_DMA)             ================ */
 /* ================================================================================ */
 
 /**
@@ -6578,12 +5907,12 @@ typedef struct LPSPI0_Type {
 * @brief Struct for LPTMR
 * @{
 */
-typedef struct LPTMR0_Type {
-   __IO uint32_t  CSR;                          /**< 0000: Low Power Timer Control Status Register                      */
-   __IO uint32_t  PSR;                          /**< 0004: Low Power Timer Prescale Register                            */
-   __IO uint32_t  CMR;                          /**< 0008: Low Power Timer Compare Register                             */
-   __IO uint32_t  CNR;                          /**< 000C: Low Power Timer Counter Register                             */
-} LPTMR0_Type;
+typedef struct LPTMR_Type {
+   __IO uint32_t  CSR;                          /**< 0000: Control Status Register                                      */
+   __IO uint32_t  PSR;                          /**< 0004: Prescale Register                                            */
+   __IO uint32_t  CMR;                          /**< 0008: Compare Register                                             */
+   __IO uint32_t  CNR;                          /**< 000C: Counter Register                                             */
+} LPTMR_Type;
 
 /**
  * @} */ /* End group LPTMR_structs_GROUP 
@@ -6647,7 +5976,7 @@ typedef struct LPTMR0_Type {
 
 /* LPTMR0 - Peripheral instance base addresses */
 #define LPTMR0_BasePtr                 0x40040000UL //!< Peripheral base address
-#define LPTMR0                         ((LPTMR0_Type *) LPTMR0_BasePtr) //!< Freescale base pointer
+#define LPTMR0                         ((LPTMR_Type *) LPTMR0_BasePtr) //!< Freescale base pointer
 #define LPTMR0_BASE_PTR                (LPTMR0) //!< Freescale style base pointer
 #define LPTMR0_IRQS { LPTMR0_IRQn,  }
 
@@ -6661,31 +5990,31 @@ typedef struct LPTMR0_Type {
 */
 
 /* ================================================================================ */
-/* ================           LPUART0 (file:LPUART0_S32K14x)       ================ */
+/* ================           LPUART0 (file:LPUART0_MKE_FIFO)       ================ */
 /* ================================================================================ */
 
 /**
- * @brief Universal Asynchronous Receiver/Transmitter
+ * @brief Low Power Universal Asynchronous Receiver/Transmitter
  */
 /**
 * @addtogroup LPUART_structs_GROUP LPUART struct
 * @brief Struct for LPUART
 * @{
 */
-typedef struct LPUART0_Type {
+typedef struct LPUART_Type {
    __I  uint32_t  VERID;                        /**< 0000: Version ID Register                                          */
    __I  uint32_t  PARAM;                        /**< 0004: Parameter Register                                           */
-   __IO uint32_t  GLOBAL;                       /**< 0008: LPUART Global Register                                       */
-   __IO uint32_t  PINCFG;                       /**< 000C: LPUART Pin Configuration Register                            */
-   __IO uint32_t  BAUD;                         /**< 0010: LPUART Baud Rate Register                                    */
-   __IO uint32_t  STAT;                         /**< 0014: LPUART Status Register                                       */
-   __IO uint32_t  CTRL;                         /**< 0018: LPUART Control Register                                      */
-   __IO uint32_t  DATA;                         /**< 001C: LPUART Data Register                                         */
-   __IO uint32_t  MATCH;                        /**< 0020: LPUART Match Address Register                                */
-   __IO uint32_t  MODIR;                        /**< 0024: LPUART Modem IrDA Register                                   */
-   __IO uint32_t  FIFO;                         /**< 0028: LPUART FIFO Register                                         */
-   __IO uint32_t  WATER;                        /**< 002C: LPUART Watermark Register                                    */
-} LPUART0_Type;
+   __IO uint32_t  GLOBAL;                       /**< 0008: Global Register                                              */
+   __IO uint32_t  PINCFG;                       /**< 000C: Pin Configuration Register                                   */
+   __IO uint32_t  BAUD;                         /**< 0010: Baud Rate Register                                           */
+   __IO uint32_t  STAT;                         /**< 0014: Status Register                                              */
+   __IO uint32_t  CTRL;                         /**< 0018: Control Register                                             */
+   __IO uint32_t  DATA;                         /**< 001C: Data Register                                                */
+   __IO uint32_t  MATCH;                        /**< 0020: Match Address Register                                       */
+   __IO uint32_t  MODIR;                        /**< 0024: MODEM IrDA register                                          */
+   __IO uint32_t  FIFO;                         /**< 0028: FIFO Register                                                */
+   __IO uint32_t  WATER;                        /**< 002C: Watermark Register                                           */
+} LPUART_Type;
 
 /**
  * @} */ /* End group LPUART_structs_GROUP 
@@ -6909,36 +6238,9 @@ typedef struct LPUART0_Type {
 #define LPUART_CTRL_R8T9_SHIFT                   (31U)                                               /*!< LPUART0_CTRL.R8T9 Position              */
 #define LPUART_CTRL_R8T9(x)                      (((uint32_t)(((uint32_t)(x))<<31U))&0x80000000UL)   /*!< LPUART0_CTRL.R8T9 Field                 */
 /* ------- DATA Bit Fields                          ------ */
-#define LPUART_DATA_R0T0_MASK                    (0x1U)                                              /*!< LPUART0_DATA.R0T0 Mask                  */
-#define LPUART_DATA_R0T0_SHIFT                   (0U)                                                /*!< LPUART0_DATA.R0T0 Position              */
-#define LPUART_DATA_R0T0(x)                      (((uint32_t)(((uint32_t)(x))<<0U))&0x1UL)           /*!< LPUART0_DATA.R0T0 Field                 */
-#define LPUART_DATA_R1T1_MASK                    (0x2U)                                              /*!< LPUART0_DATA.R1T1 Mask                  */
-#define LPUART_DATA_R1T1_SHIFT                   (1U)                                                /*!< LPUART0_DATA.R1T1 Position              */
-#define LPUART_DATA_R1T1(x)                      (((uint32_t)(((uint32_t)(x))<<1U))&0x2UL)           /*!< LPUART0_DATA.R1T1 Field                 */
-#define LPUART_DATA_R2T2_MASK                    (0x4U)                                              /*!< LPUART0_DATA.R2T2 Mask                  */
-#define LPUART_DATA_R2T2_SHIFT                   (2U)                                                /*!< LPUART0_DATA.R2T2 Position              */
-#define LPUART_DATA_R2T2(x)                      (((uint32_t)(((uint32_t)(x))<<2U))&0x4UL)           /*!< LPUART0_DATA.R2T2 Field                 */
-#define LPUART_DATA_R3T3_MASK                    (0x8U)                                              /*!< LPUART0_DATA.R3T3 Mask                  */
-#define LPUART_DATA_R3T3_SHIFT                   (3U)                                                /*!< LPUART0_DATA.R3T3 Position              */
-#define LPUART_DATA_R3T3(x)                      (((uint32_t)(((uint32_t)(x))<<3U))&0x8UL)           /*!< LPUART0_DATA.R3T3 Field                 */
-#define LPUART_DATA_R4T4_MASK                    (0x10U)                                             /*!< LPUART0_DATA.R4T4 Mask                  */
-#define LPUART_DATA_R4T4_SHIFT                   (4U)                                                /*!< LPUART0_DATA.R4T4 Position              */
-#define LPUART_DATA_R4T4(x)                      (((uint32_t)(((uint32_t)(x))<<4U))&0x10UL)          /*!< LPUART0_DATA.R4T4 Field                 */
-#define LPUART_DATA_R5T5_MASK                    (0x20U)                                             /*!< LPUART0_DATA.R5T5 Mask                  */
-#define LPUART_DATA_R5T5_SHIFT                   (5U)                                                /*!< LPUART0_DATA.R5T5 Position              */
-#define LPUART_DATA_R5T5(x)                      (((uint32_t)(((uint32_t)(x))<<5U))&0x20UL)          /*!< LPUART0_DATA.R5T5 Field                 */
-#define LPUART_DATA_R6T6_MASK                    (0x40U)                                             /*!< LPUART0_DATA.R6T6 Mask                  */
-#define LPUART_DATA_R6T6_SHIFT                   (6U)                                                /*!< LPUART0_DATA.R6T6 Position              */
-#define LPUART_DATA_R6T6(x)                      (((uint32_t)(((uint32_t)(x))<<6U))&0x40UL)          /*!< LPUART0_DATA.R6T6 Field                 */
-#define LPUART_DATA_R7T7_MASK                    (0x80U)                                             /*!< LPUART0_DATA.R7T7 Mask                  */
-#define LPUART_DATA_R7T7_SHIFT                   (7U)                                                /*!< LPUART0_DATA.R7T7 Position              */
-#define LPUART_DATA_R7T7(x)                      (((uint32_t)(((uint32_t)(x))<<7U))&0x80UL)          /*!< LPUART0_DATA.R7T7 Field                 */
-#define LPUART_DATA_R8T8_MASK                    (0x100U)                                            /*!< LPUART0_DATA.R8T8 Mask                  */
-#define LPUART_DATA_R8T8_SHIFT                   (8U)                                                /*!< LPUART0_DATA.R8T8 Position              */
-#define LPUART_DATA_R8T8(x)                      (((uint32_t)(((uint32_t)(x))<<8U))&0x100UL)         /*!< LPUART0_DATA.R8T8 Field                 */
-#define LPUART_DATA_R9T9_MASK                    (0x200U)                                            /*!< LPUART0_DATA.R9T9 Mask                  */
-#define LPUART_DATA_R9T9_SHIFT                   (9U)                                                /*!< LPUART0_DATA.R9T9 Position              */
-#define LPUART_DATA_R9T9(x)                      (((uint32_t)(((uint32_t)(x))<<9U))&0x200UL)         /*!< LPUART0_DATA.R9T9 Field                 */
+#define LPUART_DATA_RT_MASK                      (0x3FFU)                                            /*!< LPUART0_DATA.RT Mask                    */
+#define LPUART_DATA_RT_SHIFT                     (0U)                                                /*!< LPUART0_DATA.RT Position                */
+#define LPUART_DATA_RT(x)                        (((uint32_t)(((uint32_t)(x))<<0U))&0x3FFUL)         /*!< LPUART0_DATA.RT Field                   */
 #define LPUART_DATA_IDLINE_MASK                  (0x800U)                                            /*!< LPUART0_DATA.IDLINE Mask                */
 #define LPUART_DATA_IDLINE_SHIFT                 (11U)                                               /*!< LPUART0_DATA.IDLINE Position            */
 #define LPUART_DATA_IDLINE(x)                    (((uint32_t)(((uint32_t)(x))<<11U))&0x800UL)        /*!< LPUART0_DATA.IDLINE Field               */
@@ -6980,9 +6282,9 @@ typedef struct LPUART0_Type {
 #define LPUART_MODIR_TXCTSSRC_MASK               (0x20U)                                             /*!< LPUART0_MODIR.TXCTSSRC Mask             */
 #define LPUART_MODIR_TXCTSSRC_SHIFT              (5U)                                                /*!< LPUART0_MODIR.TXCTSSRC Position         */
 #define LPUART_MODIR_TXCTSSRC(x)                 (((uint32_t)(((uint32_t)(x))<<5U))&0x20UL)          /*!< LPUART0_MODIR.TXCTSSRC Field            */
-#define LPUART_MODIR_RTSWATER_MASK               (0x300U)                                            /*!< LPUART0_MODIR.RTSWATER Mask             */
+#define LPUART_MODIR_RTSWATER_MASK               (0xFF00U)                                           /*!< LPUART0_MODIR.RTSWATER Mask             */
 #define LPUART_MODIR_RTSWATER_SHIFT              (8U)                                                /*!< LPUART0_MODIR.RTSWATER Position         */
-#define LPUART_MODIR_RTSWATER(x)                 (((uint32_t)(((uint32_t)(x))<<8U))&0x300UL)         /*!< LPUART0_MODIR.RTSWATER Field            */
+#define LPUART_MODIR_RTSWATER(x)                 (((uint32_t)(((uint32_t)(x))<<8U))&0xFF00UL)        /*!< LPUART0_MODIR.RTSWATER Field            */
 #define LPUART_MODIR_TNP_MASK                    (0x30000U)                                          /*!< LPUART0_MODIR.TNP Mask                  */
 #define LPUART_MODIR_TNP_SHIFT                   (16U)                                               /*!< LPUART0_MODIR.TNP Position              */
 #define LPUART_MODIR_TNP(x)                      (((uint32_t)(((uint32_t)(x))<<16U))&0x30000UL)      /*!< LPUART0_MODIR.TNP Field                 */
@@ -7030,25 +6332,25 @@ typedef struct LPUART0_Type {
 #define LPUART_FIFO_TXEMPT_SHIFT                 (23U)                                               /*!< LPUART0_FIFO.TXEMPT Position            */
 #define LPUART_FIFO_TXEMPT(x)                    (((uint32_t)(((uint32_t)(x))<<23U))&0x800000UL)     /*!< LPUART0_FIFO.TXEMPT Field               */
 /* ------- WATER Bit Fields                         ------ */
-#define LPUART_WATER_TXWATER_MASK                (0x3U)                                              /*!< LPUART0_WATER.TXWATER Mask              */
+#define LPUART_WATER_TXWATER_MASK                (0xFFU)                                             /*!< LPUART0_WATER.TXWATER Mask              */
 #define LPUART_WATER_TXWATER_SHIFT               (0U)                                                /*!< LPUART0_WATER.TXWATER Position          */
-#define LPUART_WATER_TXWATER(x)                  (((uint32_t)(((uint32_t)(x))<<0U))&0x3UL)           /*!< LPUART0_WATER.TXWATER Field             */
-#define LPUART_WATER_TXCOUNT_MASK                (0x700U)                                            /*!< LPUART0_WATER.TXCOUNT Mask              */
+#define LPUART_WATER_TXWATER(x)                  (((uint32_t)(((uint32_t)(x))<<0U))&0xFFUL)          /*!< LPUART0_WATER.TXWATER Field             */
+#define LPUART_WATER_TXCOUNT_MASK                (0xFF00U)                                           /*!< LPUART0_WATER.TXCOUNT Mask              */
 #define LPUART_WATER_TXCOUNT_SHIFT               (8U)                                                /*!< LPUART0_WATER.TXCOUNT Position          */
-#define LPUART_WATER_TXCOUNT(x)                  (((uint32_t)(((uint32_t)(x))<<8U))&0x700UL)         /*!< LPUART0_WATER.TXCOUNT Field             */
-#define LPUART_WATER_RXWATER_MASK                (0x30000U)                                          /*!< LPUART0_WATER.RXWATER Mask              */
+#define LPUART_WATER_TXCOUNT(x)                  (((uint32_t)(((uint32_t)(x))<<8U))&0xFF00UL)        /*!< LPUART0_WATER.TXCOUNT Field             */
+#define LPUART_WATER_RXWATER_MASK                (0xFF0000U)                                         /*!< LPUART0_WATER.RXWATER Mask              */
 #define LPUART_WATER_RXWATER_SHIFT               (16U)                                               /*!< LPUART0_WATER.RXWATER Position          */
-#define LPUART_WATER_RXWATER(x)                  (((uint32_t)(((uint32_t)(x))<<16U))&0x30000UL)      /*!< LPUART0_WATER.RXWATER Field             */
-#define LPUART_WATER_RXCOUNT_MASK                (0x7000000U)                                        /*!< LPUART0_WATER.RXCOUNT Mask              */
+#define LPUART_WATER_RXWATER(x)                  (((uint32_t)(((uint32_t)(x))<<16U))&0xFF0000UL)     /*!< LPUART0_WATER.RXWATER Field             */
+#define LPUART_WATER_RXCOUNT_MASK                (0xFF000000U)                                       /*!< LPUART0_WATER.RXCOUNT Mask              */
 #define LPUART_WATER_RXCOUNT_SHIFT               (24U)                                               /*!< LPUART0_WATER.RXCOUNT Position          */
-#define LPUART_WATER_RXCOUNT(x)                  (((uint32_t)(((uint32_t)(x))<<24U))&0x7000000UL)    /*!< LPUART0_WATER.RXCOUNT Field             */
+#define LPUART_WATER_RXCOUNT(x)                  (((uint32_t)(((uint32_t)(x))<<24U))&0xFF000000UL)   /*!< LPUART0_WATER.RXCOUNT Field             */
 /**
  * @} */ /* End group LPUART_Register_Masks_GROUP 
  */
 
 /* LPUART0 - Peripheral instance base addresses */
 #define LPUART0_BasePtr                0x4006A000UL //!< Peripheral base address
-#define LPUART0                        ((LPUART0_Type *) LPUART0_BasePtr) //!< Freescale base pointer
+#define LPUART0                        ((LPUART_Type *) LPUART0_BasePtr) //!< Freescale base pointer
 #define LPUART0_BASE_PTR               (LPUART0) //!< Freescale style base pointer
 #define LPUART0_IRQS { LPUART0_RxTx_IRQn,  }
 
@@ -7066,12 +6368,12 @@ typedef struct LPUART0_Type {
 /* ================================================================================ */
 
 /**
- * @brief Universal Asynchronous Receiver/Transmitter
+ * @brief Low Power Universal Asynchronous Receiver/Transmitter
  */
 
 /* LPUART1 - Peripheral instance base addresses */
 #define LPUART1_BasePtr                0x4006B000UL //!< Peripheral base address
-#define LPUART1                        ((LPUART0_Type *) LPUART1_BasePtr) //!< Freescale base pointer
+#define LPUART1                        ((LPUART_Type *) LPUART1_BasePtr) //!< Freescale base pointer
 #define LPUART1_BASE_PTR               (LPUART1) //!< Freescale style base pointer
 #define LPUART1_IRQS { LPUART1_RxTx_IRQn,  }
 
@@ -7089,12 +6391,12 @@ typedef struct LPUART0_Type {
 /* ================================================================================ */
 
 /**
- * @brief Universal Asynchronous Receiver/Transmitter
+ * @brief Low Power Universal Asynchronous Receiver/Transmitter
  */
 
 /* LPUART2 - Peripheral instance base addresses */
 #define LPUART2_BasePtr                0x4006C000UL //!< Peripheral base address
-#define LPUART2                        ((LPUART0_Type *) LPUART2_BasePtr) //!< Freescale base pointer
+#define LPUART2                        ((LPUART_Type *) LPUART2_BasePtr) //!< Freescale base pointer
 #define LPUART2_BASE_PTR               (LPUART2) //!< Freescale style base pointer
 #define LPUART2_IRQS { LPUART2_RxTx_IRQn,  }
 
@@ -7386,15 +6688,15 @@ typedef struct MPU_Type {
    __IO uint32_t  CESR;                         /**< 0000: Control/Error Status Register                                */
         uint8_t   RESERVED_0[12];              
    struct {
-      __I  uint32_t  EAR;                       /**< 0010: Error Address Register, slave port 0                         */
-      __I  uint32_t  EDR;                       /**< 0014: Error Detail Register, slave port 0                          */
+      __I  uint32_t  EAR;                       /**< 0010: Error Address Register, Slave Port n                         */
+      __I  uint32_t  EDR;                       /**< 0014: Error Detail Register, Slave Port n                          */
    } SP[4];                                     /**< 0010: (cluster: size=0x0020, 32)                                   */
         uint8_t   RESERVED_2[976];             
    struct {
-      __IO uint32_t  WORD0;                     /**< 0400: Region Descriptor 0, Word 0                                  */
-      __IO uint32_t  WORD1;                     /**< 0404: Region Descriptor 0, Word 1                                  */
-      __IO uint32_t  WORD2;                     /**< 0408: Region Descriptor 0, Word 2                                  */
-      __IO uint32_t  WORD3;                     /**< 040C: Region Descriptor 0, Word 3                                  */
+      __IO uint32_t  WORD0;                     /**< 0400: Region Descriptor n, Word 0                                  */
+      __IO uint32_t  WORD1;                     /**< 0404: Region Descriptor n, Word 1                                  */
+      __IO uint32_t  WORD2;                     /**< 0408: Region Descriptor n, Word 2                                  */
+      __IO uint32_t  WORD3;                     /**< 040C: Region Descriptor n, Word 3                                  */
    } RGD[8];                                    /**< 0400: (cluster: size=0x0080, 128)                                  */
         uint8_t   RESERVED_4[896];             
    __IO uint32_t  RGDAAC[8];                    /**< 0800: Region Descriptor Alternate Access Control                   */
@@ -7608,7 +6910,7 @@ typedef struct MPU_Type {
 /* ================================================================================ */
 
 /**
- * @brief MSCM
+ * @brief Miscellaneous System Control Module
  */
 /**
 * @addtogroup MSCM_structs_GROUP MSCM struct
@@ -7840,7 +7142,7 @@ typedef struct MSCM_Type {
 */
 
 /* ================================================================================ */
-/* ================           NV (file:NV_S3214x)                  ================ */
+/* ================           NV (file:NV_MKV40)                   ================ */
 /* ================================================================================ */
 
 /**
@@ -7944,7 +7246,7 @@ typedef struct NV_Type {
 /* ================================================================================ */
 
 /**
- * @brief PCC
+ * @brief Peripheral Clock Controller
  */
 /**
 * @addtogroup PCC_structs_GROUP PCC struct
@@ -7952,47 +7254,60 @@ typedef struct NV_Type {
 * @{
 */
 typedef struct PCC_Type {
-        uint8_t   RESERVED_0[128];             
-   __IO uint32_t  PCC_FTFC;                     /**< 0080: PCC FTFC Register                                            */
-   __IO uint32_t  PCC_DMAMUX;                   /**< 0084: PCC DMAMUX Register                                          */
-        uint8_t   RESERVED_1[8];               
-   __IO uint32_t  PCC_FlexCAN[2];               /**< 0090: PCC FlexCAN Register                                         */
-   __IO uint32_t  PCC_FTM3;                     /**< 0098: PCC FTM3 Register                                            */
-   __IO uint32_t  PCC_ADC1;                     /**< 009C: PCC ADC1 Register                                            */
-        uint8_t   RESERVED_2[12];              
-   __IO uint32_t  PCC_FlexCAN2;                 /**< 00AC: PCC FlexCAN2 Register                                        */
-   __IO uint32_t  PCC_LPSPI[3];                 /**< 00B0: PCC LPSPI Register                                           */
-        uint8_t   RESERVED_3[8];               
-   __IO uint32_t  PCC_PDB1;                     /**< 00C4: PCC PDB1 Register                                            */
-   __IO uint32_t  PCC_CRC;                      /**< 00C8: PCC CRC Register                                             */
-        uint8_t   RESERVED_4[12];              
-   __IO uint32_t  PCC_PDB0;                     /**< 00D8: PCC PDB0 Register                                            */
-   __IO uint32_t  PCC_LPIT;                     /**< 00DC: PCC LPIT Register                                            */
-   __IO uint32_t  PCC_FTM[3];                   /**< 00E0: PCC FTM Register                                             */
-   __IO uint32_t  PCC_ADC0;                     /**< 00EC: PCC ADC0 Register                                            */
-        uint8_t   RESERVED_5[4];               
-   __IO uint32_t  PCC_RTC;                      /**< 00F4: PCC RTC Register                                             */
-        uint8_t   RESERVED_6[8];               
-   __IO uint32_t  PCC_LPTMR0;                   /**< 0100: PCC LPTMR0 Register                                          */
-        uint8_t   RESERVED_7[32];              
-   __IO uint32_t  PCC_PORTA;                    /**< 0124: PCC PORTA Register                                           */
-   __IO uint32_t  PCC_PORTB;                    /**< 0128: PCC PORTB Register                                           */
-   __IO uint32_t  PCC_PORTC;                    /**< 012C: PCC PORTC Register                                           */
-   __IO uint32_t  PCC_PORTD;                    /**< 0130: PCC PORTD Register                                           */
-   __IO uint32_t  PCC_PORTE;                    /**< 0134: PCC PORTE Register                                           */
-        uint8_t   RESERVED_8[48];              
-   __IO uint32_t  PCC_FlexIO;                   /**< 0168: PCC FlexIO Register                                          */
-        uint8_t   RESERVED_9[24];              
-   __IO uint32_t  PCC_EWM;                      /**< 0184: PCC EWM Register                                             */
-        uint8_t   RESERVED_10[16];             
-   __IO uint32_t  PCC_LPI2C0;                   /**< 0198: PCC LPI2C0 Register                                          */
-        uint8_t   RESERVED_11[12];             
-   __IO uint32_t  PCC_LPUART[3];                /**< 01A8: PCC LPUART Register                                          */
-        uint8_t   RESERVED_12[4];              
-   __IO uint32_t  PCC_FTM4;                     /**< 01B8: PCC FTM4 Register                                            */
-   __IO uint32_t  PCC_FTM5;                     /**< 01BC: PCC FTM5 Register                                            */
-        uint8_t   RESERVED_13[12];             
-   __IO uint32_t  PCC_CMP0;                     /**< 01CC: PCC CMP0 Register                                            */
+   union {                                      /**< 0000: (size=0200)                                                  */
+      __IO uint32_t  PCCn[128];                 /**< 0000: PCC Register                                                 */
+      struct {                                  /**< 0000: (size=0200)                                                  */
+              uint8_t   RESERVED_0[128];       
+         __IO uint32_t  PCC_FTFC;               /**< 0080: PCC FTFC Register                                            */
+         __IO uint32_t  PCC_DMAMUX;             /**< 0084: PCC DMAMUX Register                                          */
+              uint8_t   RESERVED_1[8];         
+         __IO uint32_t  PCC_FlexCAN0;           /**< 0090: PCC FlexCAN0 Register                                        */
+         __IO uint32_t  PCC_FlexCAN1;           /**< 0094: PCC FlexCAN1 Register                                        */
+         __IO uint32_t  PCC_FTM3;               /**< 0098: PCC FTM3 Register                                            */
+         __IO uint32_t  PCC_ADC1;               /**< 009C: PCC ADC1 Register                                            */
+              uint8_t   RESERVED_2[12];        
+         __IO uint32_t  PCC_FlexCAN2;           /**< 00AC: PCC FlexCAN2 Register                                        */
+         __IO uint32_t  PCC_LPSPI0;             /**< 00B0: PCC LPSPI0 Register                                          */
+         __IO uint32_t  PCC_LPSPI1;             /**< 00B4: PCC LPSPI1 Register                                          */
+         __IO uint32_t  PCC_LPSPI2;             /**< 00B8: PCC LPSPI2 Register                                          */
+              uint8_t   RESERVED_3[8];         
+         __IO uint32_t  PCC_PDB1;               /**< 00C4: PCC PDB1 Register                                            */
+         __IO uint32_t  PCC_CRC;                /**< 00C8: PCC CRC Register                                             */
+              uint8_t   RESERVED_4[12];        
+         __IO uint32_t  PCC_PDB0;               /**< 00D8: PCC PDB0 Register                                            */
+         __IO uint32_t  PCC_LPIT;               /**< 00DC: PCC LPIT Register                                            */
+         __IO uint32_t  PCC_FTM0;               /**< 00E0: PCC FTM0 Register                                            */
+         __IO uint32_t  PCC_FTM1;               /**< 00E4: PCC FTM1 Register                                            */
+         __IO uint32_t  PCC_FTM2;               /**< 00E8: PCC FTM2 Register                                            */
+         __IO uint32_t  PCC_ADC0;               /**< 00EC: PCC ADC0 Register                                            */
+              uint8_t   RESERVED_5[4];         
+         __IO uint32_t  PCC_RTC;                /**< 00F4: PCC RTC Register                                             */
+              uint8_t   RESERVED_6[8];         
+         __IO uint32_t  PCC_LPTMR0;             /**< 0100: PCC LPTMR0 Register                                          */
+              uint8_t   RESERVED_7[32];        
+         __IO uint32_t  PCC_PORTA;              /**< 0124: PCC PORTA Register                                           */
+         __IO uint32_t  PCC_PORTB;              /**< 0128: PCC PORTB Register                                           */
+         __IO uint32_t  PCC_PORTC;              /**< 012C: PCC PORTC Register                                           */
+         __IO uint32_t  PCC_PORTD;              /**< 0130: PCC PORTD Register                                           */
+         __IO uint32_t  PCC_PORTE;              /**< 0134: PCC PORTE Register                                           */
+              uint8_t   RESERVED_8[48];        
+         __IO uint32_t  PCC_FlexIO;             /**< 0168: PCC FlexIO Register                                          */
+              uint8_t   RESERVED_9[24];        
+         __IO uint32_t  PCC_EWM;                /**< 0184: PCC EWM Register                                             */
+              uint8_t   RESERVED_10[16];       
+         __IO uint32_t  PCC_LPI2C0;             /**< 0198: PCC LPI2C0 Register                                          */
+              uint8_t   RESERVED_11[12];       
+         __IO uint32_t  PCC_LPUART0;            /**< 01A8: PCC LPUART0 Register                                         */
+         __IO uint32_t  PCC_LPUART1;            /**< 01AC: PCC LPUART1 Register                                         */
+         __IO uint32_t  PCC_LPUART2;            /**< 01B0: PCC LPUART2 Register                                         */
+              uint8_t   RESERVED_12[4];        
+         __IO uint32_t  PCC_FTM4;               /**< 01B8: PCC FTM4 Register                                            */
+         __IO uint32_t  PCC_FTM5;               /**< 01BC: PCC FTM5 Register                                            */
+              uint8_t   RESERVED_13[12];       
+         __IO uint32_t  PCC_CMP0;               /**< 01CC: PCC CMP0 Register                                            */
+              uint8_t   RESERVED_14[48];       
+      };
+   };
 } PCC_Type;
 
 /**
@@ -8008,6 +7323,22 @@ typedef struct PCC_Type {
 * @brief Register Masks for PCC
 * @{
 */
+/* ------- PCCn Bit Fields                          ------ */
+#define PCC_PCCn_PCD_MASK                        (0x7U)                                              /*!< PCC_PCCn.PCD Mask                       */
+#define PCC_PCCn_PCD_SHIFT                       (0U)                                                /*!< PCC_PCCn.PCD Position                   */
+#define PCC_PCCn_PCD(x)                          (((uint32_t)(((uint32_t)(x))<<0U))&0x7UL)           /*!< PCC_PCCn.PCD Field                      */
+#define PCC_PCCn_FRAC_MASK                       (0x8U)                                              /*!< PCC_PCCn.FRAC Mask                      */
+#define PCC_PCCn_FRAC_SHIFT                      (3U)                                                /*!< PCC_PCCn.FRAC Position                  */
+#define PCC_PCCn_FRAC(x)                         (((uint32_t)(((uint32_t)(x))<<3U))&0x8UL)           /*!< PCC_PCCn.FRAC Field                     */
+#define PCC_PCCn_PCS_MASK                        (0x1F000000U)                                       /*!< PCC_PCCn.PCS Mask                       */
+#define PCC_PCCn_PCS_SHIFT                       (24U)                                               /*!< PCC_PCCn.PCS Position                   */
+#define PCC_PCCn_PCS(x)                          (((uint32_t)(((uint32_t)(x))<<24U))&0x1F000000UL)   /*!< PCC_PCCn.PCS Field                      */
+#define PCC_PCCn_CGC_MASK                        (0x40000000U)                                       /*!< PCC_PCCn.CGC Mask                       */
+#define PCC_PCCn_CGC_SHIFT                       (30U)                                               /*!< PCC_PCCn.CGC Position                   */
+#define PCC_PCCn_CGC(x)                          (((uint32_t)(((uint32_t)(x))<<30U))&0x40000000UL)   /*!< PCC_PCCn.CGC Field                      */
+#define PCC_PCCn_PR_MASK                         (0x80000000U)                                       /*!< PCC_PCCn.PR Mask                        */
+#define PCC_PCCn_PR_SHIFT                        (31U)                                               /*!< PCC_PCCn.PR Position                    */
+#define PCC_PCCn_PR(x)                           (((uint32_t)(((uint32_t)(x))<<31U))&0x80000000UL)   /*!< PCC_PCCn.PR Field                       */
 /* ------- PCC_FTFC Bit Fields                      ------ */
 #define PCC_PCC_FTFC_CGC_MASK                    (0x40000000U)                                       /*!< PCC_PCC_FTFC.CGC Mask                   */
 #define PCC_PCC_FTFC_CGC_SHIFT                   (30U)                                               /*!< PCC_PCC_FTFC.CGC Position               */
@@ -8022,17 +7353,24 @@ typedef struct PCC_Type {
 #define PCC_PCC_DMAMUX_PR_MASK                   (0x80000000U)                                       /*!< PCC_PCC_DMAMUX.PR Mask                  */
 #define PCC_PCC_DMAMUX_PR_SHIFT                  (31U)                                               /*!< PCC_PCC_DMAMUX.PR Position              */
 #define PCC_PCC_DMAMUX_PR(x)                     (((uint32_t)(((uint32_t)(x))<<31U))&0x80000000UL)   /*!< PCC_PCC_DMAMUX.PR Field                 */
-/* ------- PCC_FlexCAN Bit Fields                   ------ */
-#define PCC_PCC_FlexCAN_CGC_MASK                 (0x40000000U)                                       /*!< PCC_PCC_FlexCAN.CGC Mask                */
-#define PCC_PCC_FlexCAN_CGC_SHIFT                (30U)                                               /*!< PCC_PCC_FlexCAN.CGC Position            */
-#define PCC_PCC_FlexCAN_CGC(x)                   (((uint32_t)(((uint32_t)(x))<<30U))&0x40000000UL)   /*!< PCC_PCC_FlexCAN.CGC Field               */
-#define PCC_PCC_FlexCAN_PR_MASK                  (0x80000000U)                                       /*!< PCC_PCC_FlexCAN.PR Mask                 */
-#define PCC_PCC_FlexCAN_PR_SHIFT                 (31U)                                               /*!< PCC_PCC_FlexCAN.PR Position             */
-#define PCC_PCC_FlexCAN_PR(x)                    (((uint32_t)(((uint32_t)(x))<<31U))&0x80000000UL)   /*!< PCC_PCC_FlexCAN.PR Field                */
+/* ------- PCC_FlexCAN0 Bit Fields                  ------ */
+#define PCC_PCC_FlexCAN0_CGC_MASK                (0x40000000U)                                       /*!< PCC_PCC_FlexCAN0.CGC Mask               */
+#define PCC_PCC_FlexCAN0_CGC_SHIFT               (30U)                                               /*!< PCC_PCC_FlexCAN0.CGC Position           */
+#define PCC_PCC_FlexCAN0_CGC(x)                  (((uint32_t)(((uint32_t)(x))<<30U))&0x40000000UL)   /*!< PCC_PCC_FlexCAN0.CGC Field              */
+#define PCC_PCC_FlexCAN0_PR_MASK                 (0x80000000U)                                       /*!< PCC_PCC_FlexCAN0.PR Mask                */
+#define PCC_PCC_FlexCAN0_PR_SHIFT                (31U)                                               /*!< PCC_PCC_FlexCAN0.PR Position            */
+#define PCC_PCC_FlexCAN0_PR(x)                   (((uint32_t)(((uint32_t)(x))<<31U))&0x80000000UL)   /*!< PCC_PCC_FlexCAN0.PR Field               */
+/* ------- PCC_FlexCAN1 Bit Fields                  ------ */
+#define PCC_PCC_FlexCAN1_CGC_MASK                (0x40000000U)                                       /*!< PCC_PCC_FlexCAN1.CGC Mask               */
+#define PCC_PCC_FlexCAN1_CGC_SHIFT               (30U)                                               /*!< PCC_PCC_FlexCAN1.CGC Position           */
+#define PCC_PCC_FlexCAN1_CGC(x)                  (((uint32_t)(((uint32_t)(x))<<30U))&0x40000000UL)   /*!< PCC_PCC_FlexCAN1.CGC Field              */
+#define PCC_PCC_FlexCAN1_PR_MASK                 (0x80000000U)                                       /*!< PCC_PCC_FlexCAN1.PR Mask                */
+#define PCC_PCC_FlexCAN1_PR_SHIFT                (31U)                                               /*!< PCC_PCC_FlexCAN1.PR Position            */
+#define PCC_PCC_FlexCAN1_PR(x)                   (((uint32_t)(((uint32_t)(x))<<31U))&0x80000000UL)   /*!< PCC_PCC_FlexCAN1.PR Field               */
 /* ------- PCC_FTM3 Bit Fields                      ------ */
-#define PCC_PCC_FTM3_PCS_MASK                    (0x7000000U)                                        /*!< PCC_PCC_FTM3.PCS Mask                   */
+#define PCC_PCC_FTM3_PCS_MASK                    (0x1F000000U)                                       /*!< PCC_PCC_FTM3.PCS Mask                   */
 #define PCC_PCC_FTM3_PCS_SHIFT                   (24U)                                               /*!< PCC_PCC_FTM3.PCS Position               */
-#define PCC_PCC_FTM3_PCS(x)                      (((uint32_t)(((uint32_t)(x))<<24U))&0x7000000UL)    /*!< PCC_PCC_FTM3.PCS Field                  */
+#define PCC_PCC_FTM3_PCS(x)                      (((uint32_t)(((uint32_t)(x))<<24U))&0x1F000000UL)   /*!< PCC_PCC_FTM3.PCS Field                  */
 #define PCC_PCC_FTM3_CGC_MASK                    (0x40000000U)                                       /*!< PCC_PCC_FTM3.CGC Mask                   */
 #define PCC_PCC_FTM3_CGC_SHIFT                   (30U)                                               /*!< PCC_PCC_FTM3.CGC Position               */
 #define PCC_PCC_FTM3_CGC(x)                      (((uint32_t)(((uint32_t)(x))<<30U))&0x40000000UL)   /*!< PCC_PCC_FTM3.CGC Field                  */
@@ -8040,9 +7378,9 @@ typedef struct PCC_Type {
 #define PCC_PCC_FTM3_PR_SHIFT                    (31U)                                               /*!< PCC_PCC_FTM3.PR Position                */
 #define PCC_PCC_FTM3_PR(x)                       (((uint32_t)(((uint32_t)(x))<<31U))&0x80000000UL)   /*!< PCC_PCC_FTM3.PR Field                   */
 /* ------- PCC_ADC1 Bit Fields                      ------ */
-#define PCC_PCC_ADC1_PCS_MASK                    (0x7000000U)                                        /*!< PCC_PCC_ADC1.PCS Mask                   */
+#define PCC_PCC_ADC1_PCS_MASK                    (0x1F000000U)                                       /*!< PCC_PCC_ADC1.PCS Mask                   */
 #define PCC_PCC_ADC1_PCS_SHIFT                   (24U)                                               /*!< PCC_PCC_ADC1.PCS Position               */
-#define PCC_PCC_ADC1_PCS(x)                      (((uint32_t)(((uint32_t)(x))<<24U))&0x7000000UL)    /*!< PCC_PCC_ADC1.PCS Field                  */
+#define PCC_PCC_ADC1_PCS(x)                      (((uint32_t)(((uint32_t)(x))<<24U))&0x1F000000UL)   /*!< PCC_PCC_ADC1.PCS Field                  */
 #define PCC_PCC_ADC1_CGC_MASK                    (0x40000000U)                                       /*!< PCC_PCC_ADC1.CGC Mask                   */
 #define PCC_PCC_ADC1_CGC_SHIFT                   (30U)                                               /*!< PCC_PCC_ADC1.CGC Position               */
 #define PCC_PCC_ADC1_CGC(x)                      (((uint32_t)(((uint32_t)(x))<<30U))&0x40000000UL)   /*!< PCC_PCC_ADC1.CGC Field                  */
@@ -8056,16 +7394,36 @@ typedef struct PCC_Type {
 #define PCC_PCC_FlexCAN2_PR_MASK                 (0x80000000U)                                       /*!< PCC_PCC_FlexCAN2.PR Mask                */
 #define PCC_PCC_FlexCAN2_PR_SHIFT                (31U)                                               /*!< PCC_PCC_FlexCAN2.PR Position            */
 #define PCC_PCC_FlexCAN2_PR(x)                   (((uint32_t)(((uint32_t)(x))<<31U))&0x80000000UL)   /*!< PCC_PCC_FlexCAN2.PR Field               */
-/* ------- PCC_LPSPI Bit Fields                     ------ */
-#define PCC_PCC_LPSPI_PCS_MASK                   (0x7000000U)                                        /*!< PCC_PCC_LPSPI.PCS Mask                  */
-#define PCC_PCC_LPSPI_PCS_SHIFT                  (24U)                                               /*!< PCC_PCC_LPSPI.PCS Position              */
-#define PCC_PCC_LPSPI_PCS(x)                     (((uint32_t)(((uint32_t)(x))<<24U))&0x7000000UL)    /*!< PCC_PCC_LPSPI.PCS Field                 */
-#define PCC_PCC_LPSPI_CGC_MASK                   (0x40000000U)                                       /*!< PCC_PCC_LPSPI.CGC Mask                  */
-#define PCC_PCC_LPSPI_CGC_SHIFT                  (30U)                                               /*!< PCC_PCC_LPSPI.CGC Position              */
-#define PCC_PCC_LPSPI_CGC(x)                     (((uint32_t)(((uint32_t)(x))<<30U))&0x40000000UL)   /*!< PCC_PCC_LPSPI.CGC Field                 */
-#define PCC_PCC_LPSPI_PR_MASK                    (0x80000000U)                                       /*!< PCC_PCC_LPSPI.PR Mask                   */
-#define PCC_PCC_LPSPI_PR_SHIFT                   (31U)                                               /*!< PCC_PCC_LPSPI.PR Position               */
-#define PCC_PCC_LPSPI_PR(x)                      (((uint32_t)(((uint32_t)(x))<<31U))&0x80000000UL)   /*!< PCC_PCC_LPSPI.PR Field                  */
+/* ------- PCC_LPSPI0 Bit Fields                    ------ */
+#define PCC_PCC_LPSPI0_PCS_MASK                  (0x1F000000U)                                       /*!< PCC_PCC_LPSPI0.PCS Mask                 */
+#define PCC_PCC_LPSPI0_PCS_SHIFT                 (24U)                                               /*!< PCC_PCC_LPSPI0.PCS Position             */
+#define PCC_PCC_LPSPI0_PCS(x)                    (((uint32_t)(((uint32_t)(x))<<24U))&0x1F000000UL)   /*!< PCC_PCC_LPSPI0.PCS Field                */
+#define PCC_PCC_LPSPI0_CGC_MASK                  (0x40000000U)                                       /*!< PCC_PCC_LPSPI0.CGC Mask                 */
+#define PCC_PCC_LPSPI0_CGC_SHIFT                 (30U)                                               /*!< PCC_PCC_LPSPI0.CGC Position             */
+#define PCC_PCC_LPSPI0_CGC(x)                    (((uint32_t)(((uint32_t)(x))<<30U))&0x40000000UL)   /*!< PCC_PCC_LPSPI0.CGC Field                */
+#define PCC_PCC_LPSPI0_PR_MASK                   (0x80000000U)                                       /*!< PCC_PCC_LPSPI0.PR Mask                  */
+#define PCC_PCC_LPSPI0_PR_SHIFT                  (31U)                                               /*!< PCC_PCC_LPSPI0.PR Position              */
+#define PCC_PCC_LPSPI0_PR(x)                     (((uint32_t)(((uint32_t)(x))<<31U))&0x80000000UL)   /*!< PCC_PCC_LPSPI0.PR Field                 */
+/* ------- PCC_LPSPI1 Bit Fields                    ------ */
+#define PCC_PCC_LPSPI1_PCS_MASK                  (0x1F000000U)                                       /*!< PCC_PCC_LPSPI1.PCS Mask                 */
+#define PCC_PCC_LPSPI1_PCS_SHIFT                 (24U)                                               /*!< PCC_PCC_LPSPI1.PCS Position             */
+#define PCC_PCC_LPSPI1_PCS(x)                    (((uint32_t)(((uint32_t)(x))<<24U))&0x1F000000UL)   /*!< PCC_PCC_LPSPI1.PCS Field                */
+#define PCC_PCC_LPSPI1_CGC_MASK                  (0x40000000U)                                       /*!< PCC_PCC_LPSPI1.CGC Mask                 */
+#define PCC_PCC_LPSPI1_CGC_SHIFT                 (30U)                                               /*!< PCC_PCC_LPSPI1.CGC Position             */
+#define PCC_PCC_LPSPI1_CGC(x)                    (((uint32_t)(((uint32_t)(x))<<30U))&0x40000000UL)   /*!< PCC_PCC_LPSPI1.CGC Field                */
+#define PCC_PCC_LPSPI1_PR_MASK                   (0x80000000U)                                       /*!< PCC_PCC_LPSPI1.PR Mask                  */
+#define PCC_PCC_LPSPI1_PR_SHIFT                  (31U)                                               /*!< PCC_PCC_LPSPI1.PR Position              */
+#define PCC_PCC_LPSPI1_PR(x)                     (((uint32_t)(((uint32_t)(x))<<31U))&0x80000000UL)   /*!< PCC_PCC_LPSPI1.PR Field                 */
+/* ------- PCC_LPSPI2 Bit Fields                    ------ */
+#define PCC_PCC_LPSPI2_PCS_MASK                  (0x1F000000U)                                       /*!< PCC_PCC_LPSPI2.PCS Mask                 */
+#define PCC_PCC_LPSPI2_PCS_SHIFT                 (24U)                                               /*!< PCC_PCC_LPSPI2.PCS Position             */
+#define PCC_PCC_LPSPI2_PCS(x)                    (((uint32_t)(((uint32_t)(x))<<24U))&0x1F000000UL)   /*!< PCC_PCC_LPSPI2.PCS Field                */
+#define PCC_PCC_LPSPI2_CGC_MASK                  (0x40000000U)                                       /*!< PCC_PCC_LPSPI2.CGC Mask                 */
+#define PCC_PCC_LPSPI2_CGC_SHIFT                 (30U)                                               /*!< PCC_PCC_LPSPI2.CGC Position             */
+#define PCC_PCC_LPSPI2_CGC(x)                    (((uint32_t)(((uint32_t)(x))<<30U))&0x40000000UL)   /*!< PCC_PCC_LPSPI2.CGC Field                */
+#define PCC_PCC_LPSPI2_PR_MASK                   (0x80000000U)                                       /*!< PCC_PCC_LPSPI2.PR Mask                  */
+#define PCC_PCC_LPSPI2_PR_SHIFT                  (31U)                                               /*!< PCC_PCC_LPSPI2.PR Position              */
+#define PCC_PCC_LPSPI2_PR(x)                     (((uint32_t)(((uint32_t)(x))<<31U))&0x80000000UL)   /*!< PCC_PCC_LPSPI2.PR Field                 */
 /* ------- PCC_PDB1 Bit Fields                      ------ */
 #define PCC_PCC_PDB1_CGC_MASK                    (0x40000000U)                                       /*!< PCC_PCC_PDB1.CGC Mask                   */
 #define PCC_PCC_PDB1_CGC_SHIFT                   (30U)                                               /*!< PCC_PCC_PDB1.CGC Position               */
@@ -8088,29 +7446,49 @@ typedef struct PCC_Type {
 #define PCC_PCC_PDB0_PR_SHIFT                    (31U)                                               /*!< PCC_PCC_PDB0.PR Position                */
 #define PCC_PCC_PDB0_PR(x)                       (((uint32_t)(((uint32_t)(x))<<31U))&0x80000000UL)   /*!< PCC_PCC_PDB0.PR Field                   */
 /* ------- PCC_LPIT Bit Fields                      ------ */
-#define PCC_PCC_LPIT_PCS_MASK                    (0x7000000U)                                        /*!< PCC_PCC_LPIT.PCS Mask                   */
+#define PCC_PCC_LPIT_PCS_MASK                    (0x1F000000U)                                       /*!< PCC_PCC_LPIT.PCS Mask                   */
 #define PCC_PCC_LPIT_PCS_SHIFT                   (24U)                                               /*!< PCC_PCC_LPIT.PCS Position               */
-#define PCC_PCC_LPIT_PCS(x)                      (((uint32_t)(((uint32_t)(x))<<24U))&0x7000000UL)    /*!< PCC_PCC_LPIT.PCS Field                  */
+#define PCC_PCC_LPIT_PCS(x)                      (((uint32_t)(((uint32_t)(x))<<24U))&0x1F000000UL)   /*!< PCC_PCC_LPIT.PCS Field                  */
 #define PCC_PCC_LPIT_CGC_MASK                    (0x40000000U)                                       /*!< PCC_PCC_LPIT.CGC Mask                   */
 #define PCC_PCC_LPIT_CGC_SHIFT                   (30U)                                               /*!< PCC_PCC_LPIT.CGC Position               */
 #define PCC_PCC_LPIT_CGC(x)                      (((uint32_t)(((uint32_t)(x))<<30U))&0x40000000UL)   /*!< PCC_PCC_LPIT.CGC Field                  */
 #define PCC_PCC_LPIT_PR_MASK                     (0x80000000U)                                       /*!< PCC_PCC_LPIT.PR Mask                    */
 #define PCC_PCC_LPIT_PR_SHIFT                    (31U)                                               /*!< PCC_PCC_LPIT.PR Position                */
 #define PCC_PCC_LPIT_PR(x)                       (((uint32_t)(((uint32_t)(x))<<31U))&0x80000000UL)   /*!< PCC_PCC_LPIT.PR Field                   */
-/* ------- PCC_FTM Bit Fields                       ------ */
-#define PCC_PCC_FTM_PCS_MASK                     (0x7000000U)                                        /*!< PCC_PCC_FTM.PCS Mask                    */
-#define PCC_PCC_FTM_PCS_SHIFT                    (24U)                                               /*!< PCC_PCC_FTM.PCS Position                */
-#define PCC_PCC_FTM_PCS(x)                       (((uint32_t)(((uint32_t)(x))<<24U))&0x7000000UL)    /*!< PCC_PCC_FTM.PCS Field                   */
-#define PCC_PCC_FTM_CGC_MASK                     (0x40000000U)                                       /*!< PCC_PCC_FTM.CGC Mask                    */
-#define PCC_PCC_FTM_CGC_SHIFT                    (30U)                                               /*!< PCC_PCC_FTM.CGC Position                */
-#define PCC_PCC_FTM_CGC(x)                       (((uint32_t)(((uint32_t)(x))<<30U))&0x40000000UL)   /*!< PCC_PCC_FTM.CGC Field                   */
-#define PCC_PCC_FTM_PR_MASK                      (0x80000000U)                                       /*!< PCC_PCC_FTM.PR Mask                     */
-#define PCC_PCC_FTM_PR_SHIFT                     (31U)                                               /*!< PCC_PCC_FTM.PR Position                 */
-#define PCC_PCC_FTM_PR(x)                        (((uint32_t)(((uint32_t)(x))<<31U))&0x80000000UL)   /*!< PCC_PCC_FTM.PR Field                    */
+/* ------- PCC_FTM0 Bit Fields                      ------ */
+#define PCC_PCC_FTM0_PCS_MASK                    (0x1F000000U)                                       /*!< PCC_PCC_FTM0.PCS Mask                   */
+#define PCC_PCC_FTM0_PCS_SHIFT                   (24U)                                               /*!< PCC_PCC_FTM0.PCS Position               */
+#define PCC_PCC_FTM0_PCS(x)                      (((uint32_t)(((uint32_t)(x))<<24U))&0x1F000000UL)   /*!< PCC_PCC_FTM0.PCS Field                  */
+#define PCC_PCC_FTM0_CGC_MASK                    (0x40000000U)                                       /*!< PCC_PCC_FTM0.CGC Mask                   */
+#define PCC_PCC_FTM0_CGC_SHIFT                   (30U)                                               /*!< PCC_PCC_FTM0.CGC Position               */
+#define PCC_PCC_FTM0_CGC(x)                      (((uint32_t)(((uint32_t)(x))<<30U))&0x40000000UL)   /*!< PCC_PCC_FTM0.CGC Field                  */
+#define PCC_PCC_FTM0_PR_MASK                     (0x80000000U)                                       /*!< PCC_PCC_FTM0.PR Mask                    */
+#define PCC_PCC_FTM0_PR_SHIFT                    (31U)                                               /*!< PCC_PCC_FTM0.PR Position                */
+#define PCC_PCC_FTM0_PR(x)                       (((uint32_t)(((uint32_t)(x))<<31U))&0x80000000UL)   /*!< PCC_PCC_FTM0.PR Field                   */
+/* ------- PCC_FTM1 Bit Fields                      ------ */
+#define PCC_PCC_FTM1_PCS_MASK                    (0x1F000000U)                                       /*!< PCC_PCC_FTM1.PCS Mask                   */
+#define PCC_PCC_FTM1_PCS_SHIFT                   (24U)                                               /*!< PCC_PCC_FTM1.PCS Position               */
+#define PCC_PCC_FTM1_PCS(x)                      (((uint32_t)(((uint32_t)(x))<<24U))&0x1F000000UL)   /*!< PCC_PCC_FTM1.PCS Field                  */
+#define PCC_PCC_FTM1_CGC_MASK                    (0x40000000U)                                       /*!< PCC_PCC_FTM1.CGC Mask                   */
+#define PCC_PCC_FTM1_CGC_SHIFT                   (30U)                                               /*!< PCC_PCC_FTM1.CGC Position               */
+#define PCC_PCC_FTM1_CGC(x)                      (((uint32_t)(((uint32_t)(x))<<30U))&0x40000000UL)   /*!< PCC_PCC_FTM1.CGC Field                  */
+#define PCC_PCC_FTM1_PR_MASK                     (0x80000000U)                                       /*!< PCC_PCC_FTM1.PR Mask                    */
+#define PCC_PCC_FTM1_PR_SHIFT                    (31U)                                               /*!< PCC_PCC_FTM1.PR Position                */
+#define PCC_PCC_FTM1_PR(x)                       (((uint32_t)(((uint32_t)(x))<<31U))&0x80000000UL)   /*!< PCC_PCC_FTM1.PR Field                   */
+/* ------- PCC_FTM2 Bit Fields                      ------ */
+#define PCC_PCC_FTM2_PCS_MASK                    (0x1F000000U)                                       /*!< PCC_PCC_FTM2.PCS Mask                   */
+#define PCC_PCC_FTM2_PCS_SHIFT                   (24U)                                               /*!< PCC_PCC_FTM2.PCS Position               */
+#define PCC_PCC_FTM2_PCS(x)                      (((uint32_t)(((uint32_t)(x))<<24U))&0x1F000000UL)   /*!< PCC_PCC_FTM2.PCS Field                  */
+#define PCC_PCC_FTM2_CGC_MASK                    (0x40000000U)                                       /*!< PCC_PCC_FTM2.CGC Mask                   */
+#define PCC_PCC_FTM2_CGC_SHIFT                   (30U)                                               /*!< PCC_PCC_FTM2.CGC Position               */
+#define PCC_PCC_FTM2_CGC(x)                      (((uint32_t)(((uint32_t)(x))<<30U))&0x40000000UL)   /*!< PCC_PCC_FTM2.CGC Field                  */
+#define PCC_PCC_FTM2_PR_MASK                     (0x80000000U)                                       /*!< PCC_PCC_FTM2.PR Mask                    */
+#define PCC_PCC_FTM2_PR_SHIFT                    (31U)                                               /*!< PCC_PCC_FTM2.PR Position                */
+#define PCC_PCC_FTM2_PR(x)                       (((uint32_t)(((uint32_t)(x))<<31U))&0x80000000UL)   /*!< PCC_PCC_FTM2.PR Field                   */
 /* ------- PCC_ADC0 Bit Fields                      ------ */
-#define PCC_PCC_ADC0_PCS_MASK                    (0x7000000U)                                        /*!< PCC_PCC_ADC0.PCS Mask                   */
+#define PCC_PCC_ADC0_PCS_MASK                    (0x1F000000U)                                       /*!< PCC_PCC_ADC0.PCS Mask                   */
 #define PCC_PCC_ADC0_PCS_SHIFT                   (24U)                                               /*!< PCC_PCC_ADC0.PCS Position               */
-#define PCC_PCC_ADC0_PCS(x)                      (((uint32_t)(((uint32_t)(x))<<24U))&0x7000000UL)    /*!< PCC_PCC_ADC0.PCS Field                  */
+#define PCC_PCC_ADC0_PCS(x)                      (((uint32_t)(((uint32_t)(x))<<24U))&0x1F000000UL)   /*!< PCC_PCC_ADC0.PCS Field                  */
 #define PCC_PCC_ADC0_CGC_MASK                    (0x40000000U)                                       /*!< PCC_PCC_ADC0.CGC Mask                   */
 #define PCC_PCC_ADC0_CGC_SHIFT                   (30U)                                               /*!< PCC_PCC_ADC0.CGC Position               */
 #define PCC_PCC_ADC0_CGC(x)                      (((uint32_t)(((uint32_t)(x))<<30U))&0x40000000UL)   /*!< PCC_PCC_ADC0.CGC Field                  */
@@ -8131,26 +7509,54 @@ typedef struct PCC_Type {
 #define PCC_PCC_LPTMR0_FRAC_MASK                 (0x8U)                                              /*!< PCC_PCC_LPTMR0.FRAC Mask                */
 #define PCC_PCC_LPTMR0_FRAC_SHIFT                (3U)                                                /*!< PCC_PCC_LPTMR0.FRAC Position            */
 #define PCC_PCC_LPTMR0_FRAC(x)                   (((uint32_t)(((uint32_t)(x))<<3U))&0x8UL)           /*!< PCC_PCC_LPTMR0.FRAC Field               */
-#define PCC_PCC_LPTMR0_PCS_MASK                  (0x7000000U)                                        /*!< PCC_PCC_LPTMR0.PCS Mask                 */
+#define PCC_PCC_LPTMR0_PCS_MASK                  (0x1F000000U)                                       /*!< PCC_PCC_LPTMR0.PCS Mask                 */
 #define PCC_PCC_LPTMR0_PCS_SHIFT                 (24U)                                               /*!< PCC_PCC_LPTMR0.PCS Position             */
-#define PCC_PCC_LPTMR0_PCS(x)                    (((uint32_t)(((uint32_t)(x))<<24U))&0x7000000UL)    /*!< PCC_PCC_LPTMR0.PCS Field                */
+#define PCC_PCC_LPTMR0_PCS(x)                    (((uint32_t)(((uint32_t)(x))<<24U))&0x1F000000UL)   /*!< PCC_PCC_LPTMR0.PCS Field                */
 #define PCC_PCC_LPTMR0_CGC_MASK                  (0x40000000U)                                       /*!< PCC_PCC_LPTMR0.CGC Mask                 */
 #define PCC_PCC_LPTMR0_CGC_SHIFT                 (30U)                                               /*!< PCC_PCC_LPTMR0.CGC Position             */
 #define PCC_PCC_LPTMR0_CGC(x)                    (((uint32_t)(((uint32_t)(x))<<30U))&0x40000000UL)   /*!< PCC_PCC_LPTMR0.CGC Field                */
 #define PCC_PCC_LPTMR0_PR_MASK                   (0x80000000U)                                       /*!< PCC_PCC_LPTMR0.PR Mask                  */
 #define PCC_PCC_LPTMR0_PR_SHIFT                  (31U)                                               /*!< PCC_PCC_LPTMR0.PR Position              */
 #define PCC_PCC_LPTMR0_PR(x)                     (((uint32_t)(((uint32_t)(x))<<31U))&0x80000000UL)   /*!< PCC_PCC_LPTMR0.PR Field                 */
-/* ------- PCC_PORT Bit Fields                      ------ */
-#define PCC_PCC_PORT_CGC_MASK                    (0x40000000U)                                       /*!< PCC_PCC_PORT.CGC Mask                   */
-#define PCC_PCC_PORT_CGC_SHIFT                   (30U)                                               /*!< PCC_PCC_PORT.CGC Position               */
-#define PCC_PCC_PORT_CGC(x)                      (((uint32_t)(((uint32_t)(x))<<30U))&0x40000000UL)   /*!< PCC_PCC_PORT.CGC Field                  */
-#define PCC_PCC_PORT_PR_MASK                     (0x80000000U)                                       /*!< PCC_PCC_PORT.PR Mask                    */
-#define PCC_PCC_PORT_PR_SHIFT                    (31U)                                               /*!< PCC_PCC_PORT.PR Position                */
-#define PCC_PCC_PORT_PR(x)                       (((uint32_t)(((uint32_t)(x))<<31U))&0x80000000UL)   /*!< PCC_PCC_PORT.PR Field                   */
+/* ------- PCC_PORTA Bit Fields                     ------ */
+#define PCC_PCC_PORTA_CGC_MASK                   (0x40000000U)                                       /*!< PCC_PCC_PORTA.CGC Mask                  */
+#define PCC_PCC_PORTA_CGC_SHIFT                  (30U)                                               /*!< PCC_PCC_PORTA.CGC Position              */
+#define PCC_PCC_PORTA_CGC(x)                     (((uint32_t)(((uint32_t)(x))<<30U))&0x40000000UL)   /*!< PCC_PCC_PORTA.CGC Field                 */
+#define PCC_PCC_PORTA_PR_MASK                    (0x80000000U)                                       /*!< PCC_PCC_PORTA.PR Mask                   */
+#define PCC_PCC_PORTA_PR_SHIFT                   (31U)                                               /*!< PCC_PCC_PORTA.PR Position               */
+#define PCC_PCC_PORTA_PR(x)                      (((uint32_t)(((uint32_t)(x))<<31U))&0x80000000UL)   /*!< PCC_PCC_PORTA.PR Field                  */
+/* ------- PCC_PORTB Bit Fields                     ------ */
+#define PCC_PCC_PORTB_CGC_MASK                   (0x40000000U)                                       /*!< PCC_PCC_PORTB.CGC Mask                  */
+#define PCC_PCC_PORTB_CGC_SHIFT                  (30U)                                               /*!< PCC_PCC_PORTB.CGC Position              */
+#define PCC_PCC_PORTB_CGC(x)                     (((uint32_t)(((uint32_t)(x))<<30U))&0x40000000UL)   /*!< PCC_PCC_PORTB.CGC Field                 */
+#define PCC_PCC_PORTB_PR_MASK                    (0x80000000U)                                       /*!< PCC_PCC_PORTB.PR Mask                   */
+#define PCC_PCC_PORTB_PR_SHIFT                   (31U)                                               /*!< PCC_PCC_PORTB.PR Position               */
+#define PCC_PCC_PORTB_PR(x)                      (((uint32_t)(((uint32_t)(x))<<31U))&0x80000000UL)   /*!< PCC_PCC_PORTB.PR Field                  */
+/* ------- PCC_PORTC Bit Fields                     ------ */
+#define PCC_PCC_PORTC_CGC_MASK                   (0x40000000U)                                       /*!< PCC_PCC_PORTC.CGC Mask                  */
+#define PCC_PCC_PORTC_CGC_SHIFT                  (30U)                                               /*!< PCC_PCC_PORTC.CGC Position              */
+#define PCC_PCC_PORTC_CGC(x)                     (((uint32_t)(((uint32_t)(x))<<30U))&0x40000000UL)   /*!< PCC_PCC_PORTC.CGC Field                 */
+#define PCC_PCC_PORTC_PR_MASK                    (0x80000000U)                                       /*!< PCC_PCC_PORTC.PR Mask                   */
+#define PCC_PCC_PORTC_PR_SHIFT                   (31U)                                               /*!< PCC_PCC_PORTC.PR Position               */
+#define PCC_PCC_PORTC_PR(x)                      (((uint32_t)(((uint32_t)(x))<<31U))&0x80000000UL)   /*!< PCC_PCC_PORTC.PR Field                  */
+/* ------- PCC_PORTD Bit Fields                     ------ */
+#define PCC_PCC_PORTD_CGC_MASK                   (0x40000000U)                                       /*!< PCC_PCC_PORTD.CGC Mask                  */
+#define PCC_PCC_PORTD_CGC_SHIFT                  (30U)                                               /*!< PCC_PCC_PORTD.CGC Position              */
+#define PCC_PCC_PORTD_CGC(x)                     (((uint32_t)(((uint32_t)(x))<<30U))&0x40000000UL)   /*!< PCC_PCC_PORTD.CGC Field                 */
+#define PCC_PCC_PORTD_PR_MASK                    (0x80000000U)                                       /*!< PCC_PCC_PORTD.PR Mask                   */
+#define PCC_PCC_PORTD_PR_SHIFT                   (31U)                                               /*!< PCC_PCC_PORTD.PR Position               */
+#define PCC_PCC_PORTD_PR(x)                      (((uint32_t)(((uint32_t)(x))<<31U))&0x80000000UL)   /*!< PCC_PCC_PORTD.PR Field                  */
+/* ------- PCC_PORTE Bit Fields                     ------ */
+#define PCC_PCC_PORTE_CGC_MASK                   (0x40000000U)                                       /*!< PCC_PCC_PORTE.CGC Mask                  */
+#define PCC_PCC_PORTE_CGC_SHIFT                  (30U)                                               /*!< PCC_PCC_PORTE.CGC Position              */
+#define PCC_PCC_PORTE_CGC(x)                     (((uint32_t)(((uint32_t)(x))<<30U))&0x40000000UL)   /*!< PCC_PCC_PORTE.CGC Field                 */
+#define PCC_PCC_PORTE_PR_MASK                    (0x80000000U)                                       /*!< PCC_PCC_PORTE.PR Mask                   */
+#define PCC_PCC_PORTE_PR_SHIFT                   (31U)                                               /*!< PCC_PCC_PORTE.PR Position               */
+#define PCC_PCC_PORTE_PR(x)                      (((uint32_t)(((uint32_t)(x))<<31U))&0x80000000UL)   /*!< PCC_PCC_PORTE.PR Field                  */
 /* ------- PCC_FlexIO Bit Fields                    ------ */
-#define PCC_PCC_FlexIO_PCS_MASK                  (0x7000000U)                                        /*!< PCC_PCC_FlexIO.PCS Mask                 */
+#define PCC_PCC_FlexIO_PCS_MASK                  (0x1F000000U)                                       /*!< PCC_PCC_FlexIO.PCS Mask                 */
 #define PCC_PCC_FlexIO_PCS_SHIFT                 (24U)                                               /*!< PCC_PCC_FlexIO.PCS Position             */
-#define PCC_PCC_FlexIO_PCS(x)                    (((uint32_t)(((uint32_t)(x))<<24U))&0x7000000UL)    /*!< PCC_PCC_FlexIO.PCS Field                */
+#define PCC_PCC_FlexIO_PCS(x)                    (((uint32_t)(((uint32_t)(x))<<24U))&0x1F000000UL)   /*!< PCC_PCC_FlexIO.PCS Field                */
 #define PCC_PCC_FlexIO_CGC_MASK                  (0x40000000U)                                       /*!< PCC_PCC_FlexIO.CGC Mask                 */
 #define PCC_PCC_FlexIO_CGC_SHIFT                 (30U)                                               /*!< PCC_PCC_FlexIO.CGC Position             */
 #define PCC_PCC_FlexIO_CGC(x)                    (((uint32_t)(((uint32_t)(x))<<30U))&0x40000000UL)   /*!< PCC_PCC_FlexIO.CGC Field                */
@@ -8165,26 +7571,65 @@ typedef struct PCC_Type {
 #define PCC_PCC_EWM_PR_SHIFT                     (31U)                                               /*!< PCC_PCC_EWM.PR Position                 */
 #define PCC_PCC_EWM_PR(x)                        (((uint32_t)(((uint32_t)(x))<<31U))&0x80000000UL)   /*!< PCC_PCC_EWM.PR Field                    */
 /* ------- PCC_LPI2C0 Bit Fields                    ------ */
-#define PCC_PCC_LPI2C0_PCS_MASK                  (0x7000000U)                                        /*!< PCC_PCC_LPI2C0.PCS Mask                 */
+#define PCC_PCC_LPI2C0_PCS_MASK                  (0x1F000000U)                                       /*!< PCC_PCC_LPI2C0.PCS Mask                 */
 #define PCC_PCC_LPI2C0_PCS_SHIFT                 (24U)                                               /*!< PCC_PCC_LPI2C0.PCS Position             */
-#define PCC_PCC_LPI2C0_PCS(x)                    (((uint32_t)(((uint32_t)(x))<<24U))&0x7000000UL)    /*!< PCC_PCC_LPI2C0.PCS Field                */
+#define PCC_PCC_LPI2C0_PCS(x)                    (((uint32_t)(((uint32_t)(x))<<24U))&0x1F000000UL)   /*!< PCC_PCC_LPI2C0.PCS Field                */
 #define PCC_PCC_LPI2C0_CGC_MASK                  (0x40000000U)                                       /*!< PCC_PCC_LPI2C0.CGC Mask                 */
 #define PCC_PCC_LPI2C0_CGC_SHIFT                 (30U)                                               /*!< PCC_PCC_LPI2C0.CGC Position             */
 #define PCC_PCC_LPI2C0_CGC(x)                    (((uint32_t)(((uint32_t)(x))<<30U))&0x40000000UL)   /*!< PCC_PCC_LPI2C0.CGC Field                */
 #define PCC_PCC_LPI2C0_PR_MASK                   (0x80000000U)                                       /*!< PCC_PCC_LPI2C0.PR Mask                  */
 #define PCC_PCC_LPI2C0_PR_SHIFT                  (31U)                                               /*!< PCC_PCC_LPI2C0.PR Position              */
 #define PCC_PCC_LPI2C0_PR(x)                     (((uint32_t)(((uint32_t)(x))<<31U))&0x80000000UL)   /*!< PCC_PCC_LPI2C0.PR Field                 */
-/* ------- PCC_LPUART Bit Fields                    ------ */
-#define PCC_PCC_LPUART_PCS_MASK                  (0x7000000U)                                        /*!< PCC_PCC_LPUART.PCS Mask                 */
-#define PCC_PCC_LPUART_PCS_SHIFT                 (24U)                                               /*!< PCC_PCC_LPUART.PCS Position             */
-#define PCC_PCC_LPUART_PCS(x)                    (((uint32_t)(((uint32_t)(x))<<24U))&0x7000000UL)    /*!< PCC_PCC_LPUART.PCS Field                */
-#define PCC_PCC_LPUART_CGC_MASK                  (0x40000000U)                                       /*!< PCC_PCC_LPUART.CGC Mask                 */
-#define PCC_PCC_LPUART_CGC_SHIFT                 (30U)                                               /*!< PCC_PCC_LPUART.CGC Position             */
-#define PCC_PCC_LPUART_CGC(x)                    (((uint32_t)(((uint32_t)(x))<<30U))&0x40000000UL)   /*!< PCC_PCC_LPUART.CGC Field                */
-#define PCC_PCC_LPUART_PR_MASK                   (0x80000000U)                                       /*!< PCC_PCC_LPUART.PR Mask                  */
-#define PCC_PCC_LPUART_PR_SHIFT                  (31U)                                               /*!< PCC_PCC_LPUART.PR Position              */
-#define PCC_PCC_LPUART_PR(x)                     (((uint32_t)(((uint32_t)(x))<<31U))&0x80000000UL)   /*!< PCC_PCC_LPUART.PR Field                 */
-/* ------- PCC_FTM Bit Fields                       ------ */
+/* ------- PCC_LPUART0 Bit Fields                   ------ */
+#define PCC_PCC_LPUART0_PCS_MASK                 (0x1F000000U)                                       /*!< PCC_PCC_LPUART0.PCS Mask                */
+#define PCC_PCC_LPUART0_PCS_SHIFT                (24U)                                               /*!< PCC_PCC_LPUART0.PCS Position            */
+#define PCC_PCC_LPUART0_PCS(x)                   (((uint32_t)(((uint32_t)(x))<<24U))&0x1F000000UL)   /*!< PCC_PCC_LPUART0.PCS Field               */
+#define PCC_PCC_LPUART0_CGC_MASK                 (0x40000000U)                                       /*!< PCC_PCC_LPUART0.CGC Mask                */
+#define PCC_PCC_LPUART0_CGC_SHIFT                (30U)                                               /*!< PCC_PCC_LPUART0.CGC Position            */
+#define PCC_PCC_LPUART0_CGC(x)                   (((uint32_t)(((uint32_t)(x))<<30U))&0x40000000UL)   /*!< PCC_PCC_LPUART0.CGC Field               */
+#define PCC_PCC_LPUART0_PR_MASK                  (0x80000000U)                                       /*!< PCC_PCC_LPUART0.PR Mask                 */
+#define PCC_PCC_LPUART0_PR_SHIFT                 (31U)                                               /*!< PCC_PCC_LPUART0.PR Position             */
+#define PCC_PCC_LPUART0_PR(x)                    (((uint32_t)(((uint32_t)(x))<<31U))&0x80000000UL)   /*!< PCC_PCC_LPUART0.PR Field                */
+/* ------- PCC_LPUART1 Bit Fields                   ------ */
+#define PCC_PCC_LPUART1_PCS_MASK                 (0x1F000000U)                                       /*!< PCC_PCC_LPUART1.PCS Mask                */
+#define PCC_PCC_LPUART1_PCS_SHIFT                (24U)                                               /*!< PCC_PCC_LPUART1.PCS Position            */
+#define PCC_PCC_LPUART1_PCS(x)                   (((uint32_t)(((uint32_t)(x))<<24U))&0x1F000000UL)   /*!< PCC_PCC_LPUART1.PCS Field               */
+#define PCC_PCC_LPUART1_CGC_MASK                 (0x40000000U)                                       /*!< PCC_PCC_LPUART1.CGC Mask                */
+#define PCC_PCC_LPUART1_CGC_SHIFT                (30U)                                               /*!< PCC_PCC_LPUART1.CGC Position            */
+#define PCC_PCC_LPUART1_CGC(x)                   (((uint32_t)(((uint32_t)(x))<<30U))&0x40000000UL)   /*!< PCC_PCC_LPUART1.CGC Field               */
+#define PCC_PCC_LPUART1_PR_MASK                  (0x80000000U)                                       /*!< PCC_PCC_LPUART1.PR Mask                 */
+#define PCC_PCC_LPUART1_PR_SHIFT                 (31U)                                               /*!< PCC_PCC_LPUART1.PR Position             */
+#define PCC_PCC_LPUART1_PR(x)                    (((uint32_t)(((uint32_t)(x))<<31U))&0x80000000UL)   /*!< PCC_PCC_LPUART1.PR Field                */
+/* ------- PCC_LPUART2 Bit Fields                   ------ */
+#define PCC_PCC_LPUART2_PCS_MASK                 (0x1F000000U)                                       /*!< PCC_PCC_LPUART2.PCS Mask                */
+#define PCC_PCC_LPUART2_PCS_SHIFT                (24U)                                               /*!< PCC_PCC_LPUART2.PCS Position            */
+#define PCC_PCC_LPUART2_PCS(x)                   (((uint32_t)(((uint32_t)(x))<<24U))&0x1F000000UL)   /*!< PCC_PCC_LPUART2.PCS Field               */
+#define PCC_PCC_LPUART2_CGC_MASK                 (0x40000000U)                                       /*!< PCC_PCC_LPUART2.CGC Mask                */
+#define PCC_PCC_LPUART2_CGC_SHIFT                (30U)                                               /*!< PCC_PCC_LPUART2.CGC Position            */
+#define PCC_PCC_LPUART2_CGC(x)                   (((uint32_t)(((uint32_t)(x))<<30U))&0x40000000UL)   /*!< PCC_PCC_LPUART2.CGC Field               */
+#define PCC_PCC_LPUART2_PR_MASK                  (0x80000000U)                                       /*!< PCC_PCC_LPUART2.PR Mask                 */
+#define PCC_PCC_LPUART2_PR_SHIFT                 (31U)                                               /*!< PCC_PCC_LPUART2.PR Position             */
+#define PCC_PCC_LPUART2_PR(x)                    (((uint32_t)(((uint32_t)(x))<<31U))&0x80000000UL)   /*!< PCC_PCC_LPUART2.PR Field                */
+/* ------- PCC_FTM4 Bit Fields                      ------ */
+#define PCC_PCC_FTM4_PCS_MASK                    (0x1F000000U)                                       /*!< PCC_PCC_FTM4.PCS Mask                   */
+#define PCC_PCC_FTM4_PCS_SHIFT                   (24U)                                               /*!< PCC_PCC_FTM4.PCS Position               */
+#define PCC_PCC_FTM4_PCS(x)                      (((uint32_t)(((uint32_t)(x))<<24U))&0x1F000000UL)   /*!< PCC_PCC_FTM4.PCS Field                  */
+#define PCC_PCC_FTM4_CGC_MASK                    (0x40000000U)                                       /*!< PCC_PCC_FTM4.CGC Mask                   */
+#define PCC_PCC_FTM4_CGC_SHIFT                   (30U)                                               /*!< PCC_PCC_FTM4.CGC Position               */
+#define PCC_PCC_FTM4_CGC(x)                      (((uint32_t)(((uint32_t)(x))<<30U))&0x40000000UL)   /*!< PCC_PCC_FTM4.CGC Field                  */
+#define PCC_PCC_FTM4_PR_MASK                     (0x80000000U)                                       /*!< PCC_PCC_FTM4.PR Mask                    */
+#define PCC_PCC_FTM4_PR_SHIFT                    (31U)                                               /*!< PCC_PCC_FTM4.PR Position                */
+#define PCC_PCC_FTM4_PR(x)                       (((uint32_t)(((uint32_t)(x))<<31U))&0x80000000UL)   /*!< PCC_PCC_FTM4.PR Field                   */
+/* ------- PCC_FTM5 Bit Fields                      ------ */
+#define PCC_PCC_FTM5_PCS_MASK                    (0x1F000000U)                                       /*!< PCC_PCC_FTM5.PCS Mask                   */
+#define PCC_PCC_FTM5_PCS_SHIFT                   (24U)                                               /*!< PCC_PCC_FTM5.PCS Position               */
+#define PCC_PCC_FTM5_PCS(x)                      (((uint32_t)(((uint32_t)(x))<<24U))&0x1F000000UL)   /*!< PCC_PCC_FTM5.PCS Field                  */
+#define PCC_PCC_FTM5_CGC_MASK                    (0x40000000U)                                       /*!< PCC_PCC_FTM5.CGC Mask                   */
+#define PCC_PCC_FTM5_CGC_SHIFT                   (30U)                                               /*!< PCC_PCC_FTM5.CGC Position               */
+#define PCC_PCC_FTM5_CGC(x)                      (((uint32_t)(((uint32_t)(x))<<30U))&0x40000000UL)   /*!< PCC_PCC_FTM5.CGC Field                  */
+#define PCC_PCC_FTM5_PR_MASK                     (0x80000000U)                                       /*!< PCC_PCC_FTM5.PR Mask                    */
+#define PCC_PCC_FTM5_PR_SHIFT                    (31U)                                               /*!< PCC_PCC_FTM5.PR Position                */
+#define PCC_PCC_FTM5_PR(x)                       (((uint32_t)(((uint32_t)(x))<<31U))&0x80000000UL)   /*!< PCC_PCC_FTM5.PR Field                   */
 /* ------- PCC_CMP0 Bit Fields                      ------ */
 #define PCC_PCC_CMP0_CGC_MASK                    (0x40000000U)                                       /*!< PCC_PCC_CMP0.CGC Mask                   */
 #define PCC_PCC_CMP0_CGC_SHIFT                   (30U)                                               /*!< PCC_PCC_CMP0.CGC Position               */
@@ -8210,12 +7655,16 @@ typedef struct PCC_Type {
 */
 
 /* ================================================================================ */
-/* ================           PDB0 (file:PDB0_3CH_1TRIG_0DAC_8PO.svd)       ================ */
+/* ================           PDB0 (file:PDB0_3CH_8PT_0DAC_1PO)       ================ */
 /* ================================================================================ */
 
 /**
- * @brief Programmable Delay Block (3 channels, 1 trigger/slot, 0 DAC, 1 pulse out, 8 pre-triggers)
+ * @brief Programmable Delay Block (3 channels, 8 pre-triggers, 0 DAC, 1 pulse out)
  */
+#define PDB_DLY_COUNT        8          /**< Number of Pre-triggers                             */
+#define PDB_CH_COUNT         3          /**< Number of PDB channels                             */
+#define PDB_POnDLY_COUNT     1          /**< Number of Pulse outputs                            */
+#define PDB_DAC_COUNT        0          /**< Number of DAC outputs                              */
 /**
 * @addtogroup PDB_structs_GROUP PDB struct
 * @brief Struct for PDB
@@ -8229,19 +7678,19 @@ typedef struct PDB_Type {
    struct {
       __IO uint32_t  C1;                        /**< 0010: Channel  Control Register 1                                  */
       __IO uint32_t  S;                         /**< 0014: Channel  Status Register                                     */
-      __IO uint32_t  DLY[8];                    /**< 0018: Channel Delay  Register                                      */
-   } CH[3];                                     /**< 0010: (cluster: size=0x0078, 120)                                  */
+      __IO uint32_t  DLY[PDB_DLY_COUNT];        /**< 0018: Channel Delay  Register                                      */
+   } CH[PDB_CH_COUNT];                          /**< 0010: (cluster: size=0x0078, 120)                                  */
         uint8_t   RESERVED_1[264];             
    __IO uint32_t  POEN;                         /**< 0190: Pulse-Out Enable Register                                    */
    struct {
       union {                                   /**< 0194: (size=0004)                                                  */
-         __IO uint32_t  PODLY;                  /**< 0194: Pulse-Out  Delay Register                                    */
          struct {                               /**< 0194: (size=0004)                                                  */
-            __IO uint16_t  DLY2;                /**< 0194: Pulse-Out  Delay Register                                    */
-            __IO uint16_t  DLY1;                /**< 0196: Pulse-Out  Delay Register                                    */
+         __IO uint16_t  DLY2;                   /**< 0194: Pulse-Out 2 Delay Register                                   */
+         __IO uint16_t  DLY1;                   /**< 0196: Pulse-Out 1 Delay Register                                   */
          };
+         __IO uint32_t  PODLY;                  /**< 0194: Pulse-Out  Delay Register                                    */
       };
-   } POnDLY[1];                                 /**< 0194: (cluster: size=0x0004, 4)                                    */
+   } POnDLY[PDB_POnDLY_COUNT];                  /**< 0194: (cluster: size=0x0004, 4)                                    */
 } PDB_Type;
 
 /**
@@ -8331,6 +7780,7 @@ typedef struct PDB_Type {
 #define PDB_POEN_POEN_MASK                       (0xFFU)                                             /*!< PDB0_POEN.POEN Mask                     */
 #define PDB_POEN_POEN_SHIFT                      (0U)                                                /*!< PDB0_POEN.POEN Position                 */
 #define PDB_POEN_POEN(x)                         (((uint32_t)(((uint32_t)(x))<<0U))&0xFFUL)          /*!< PDB0_POEN.POEN Field                    */
+/* ------- DLY Bit Fields                           ------ */
 /* ------- PODLY Bit Fields                         ------ */
 #define PDB_PODLY_DLY2_MASK                      (0xFFFFU)                                           /*!< PDB0_PODLY.DLY2 Mask                    */
 #define PDB_PODLY_DLY2_SHIFT                     (0U)                                                /*!< PDB0_PODLY.DLY2 Position                */
@@ -8338,14 +7788,6 @@ typedef struct PDB_Type {
 #define PDB_PODLY_DLY1_MASK                      (0xFFFF0000U)                                       /*!< PDB0_PODLY.DLY1 Mask                    */
 #define PDB_PODLY_DLY1_SHIFT                     (16U)                                               /*!< PDB0_PODLY.DLY1 Position                */
 #define PDB_PODLY_DLY1(x)                        (((uint32_t)(((uint32_t)(x))<<16U))&0xFFFF0000UL)   /*!< PDB0_PODLY.DLY1 Field                   */
-/* ------- DLY2 Bit Fields                          ------ */
-#define PDB_DLY2_DLY2_MASK                       (0xFFFFU)                                           /*!< PDB0_DLY2.DLY2 Mask                     */
-#define PDB_DLY2_DLY2_SHIFT                      (0U)                                                /*!< PDB0_DLY2.DLY2 Position                 */
-#define PDB_DLY2_DLY2(x)                         (((uint16_t)(((uint16_t)(x))<<0U))&0xFFFFUL)        /*!< PDB0_DLY2.DLY2 Field                    */
-/* ------- DLY1 Bit Fields                          ------ */
-#define PDB_DLY1_DLY1_MASK                       (0xFFFFU)                                           /*!< PDB0_DLY1.DLY1 Mask                     */
-#define PDB_DLY1_DLY1_SHIFT                      (0U)                                                /*!< PDB0_DLY1.DLY1 Position                 */
-#define PDB_DLY1_DLY1(x)                         (((uint16_t)(((uint16_t)(x))<<0U))&0xFFFFUL)        /*!< PDB0_DLY1.DLY1 Field                    */
 /**
  * @} */ /* End group PDB_Register_Masks_GROUP 
  */
@@ -8370,7 +7812,7 @@ typedef struct PDB_Type {
 /* ================================================================================ */
 
 /**
- * @brief Programmable Delay Block (3 channels, 1 trigger/slot, 0 DAC, 1 pulse out, 8 pre-triggers)
+ * @brief Programmable Delay Block (3 channels, 8 pre-triggers, 0 DAC, 1 pulse out)
  */
 
 /* PDB1 - Peripheral instance base addresses */
@@ -8393,7 +7835,7 @@ typedef struct PDB_Type {
 /* ================================================================================ */
 
 /**
- * @brief PMC
+ * @brief Power Management Controller
  */
 /**
 * @addtogroup PMC_structs_GROUP PMC struct
@@ -8402,8 +7844,8 @@ typedef struct PDB_Type {
 */
 typedef struct PMC_Type {
    __IO uint8_t   LVDSC1;                       /**< 0000: Low Voltage Detect Status and Control 1 Register             */
-   __IO uint8_t   LVDSC2;                       /**< 0001: Low Voltage Detect Status and Control 2 Register             */
-   __IO uint8_t   REGSC;                        /**< 0002: Regulator Status and Control Register                        */
+   __IO uint8_t   LVDSC2;                       /**< 0001: Low Voltage Status and Control 2                             */
+   __IO uint8_t   REGSC;                        /**< 0002: Regulator Status and Control                                 */
         uint8_t   RESERVED_0;                  
    __IO uint8_t   LPOTRIM;                      /**< 0004: Low Power Oscillator Trim Register                           */
 } PMC_Type;
@@ -9817,7 +9259,7 @@ typedef struct SYST_Type {
 /* ================================================================================ */
 
 /**
- * @brief TRGMUX
+ * @brief Trigger MUX Control
  */
 /**
 * @addtogroup TRGMUX_structs_GROUP TRGMUX struct
@@ -9825,33 +9267,38 @@ typedef struct SYST_Type {
 * @{
 */
 typedef struct TRGMUX_Type {
-   __IO uint32_t  TRGMUX_DMAMUX0;               /**< 0000: TRGMUX DMAMUX0 Register                                      */
-   __IO uint32_t  TRGMUX_EXTOUT0;               /**< 0004: TRGMUX EXTOUT0 Register                                      */
-   __IO uint32_t  TRGMUX_EXTOUT1;               /**< 0008: TRGMUX EXTOUT1 Register                                      */
-   __IO uint32_t  TRGMUX_ADC0;                  /**< 000C: TRGMUX ADC0 Register                                         */
-   __IO uint32_t  TRGMUX_ADC1;                  /**< 0010: TRGMUX ADC1 Register                                         */
-        uint8_t   RESERVED_0[8];               
-   __IO uint32_t  TRGMUX_CMP0;                  /**< 001C: TRGMUX CMP0 Register                                         */
-        uint8_t   RESERVED_1[8];               
-   __IO uint32_t  TRGMUX_FTM0;                  /**< 0028: TRGMUX FTM0 Register                                         */
-   __IO uint32_t  TRGMUX_FTM1;                  /**< 002C: TRGMUX FTM1 Register                                         */
-   __IO uint32_t  TRGMUX_FTM2;                  /**< 0030: TRGMUX FTM2 Register                                         */
-   __IO uint32_t  TRGMUX_FTM3;                  /**< 0034: TRGMUX FTM3 Register                                         */
-   __IO uint32_t  TRGMUX_PDB0;                  /**< 0038: TRGMUX PDB0 Register                                         */
-   __IO uint32_t  TRGMUX_PDB1;                  /**< 003C: TRGMUX PDB1 Register                                         */
-        uint8_t   RESERVED_2[4];               
-   __IO uint32_t  TRGMUX_FLEXIO;                /**< 0044: TRGMUX FLEXIO Register                                       */
-   __IO uint32_t  TRGMUX_LPIT0;                 /**< 0048: TRGMUX LPIT0 Register                                        */
-   __IO uint32_t  TRGMUX_LPUART0;               /**< 004C: TRGMUX LPUART0 Register                                      */
-   __IO uint32_t  TRGMUX_LPUART1;               /**< 0050: TRGMUX LPUART1 Register                                      */
-   __IO uint32_t  TRGMUX_LPI2C0;                /**< 0054: TRGMUX LPI2C0 Register                                       */
-        uint8_t   RESERVED_3[4];               
-   __IO uint32_t  TRGMUX_LPSPI0;                /**< 005C: TRGMUX LPSPI0 Register                                       */
-   __IO uint32_t  TRGMUX_LPSPI1;                /**< 0060: TRGMUX LPSPI1 Register                                       */
-   __IO uint32_t  TRGMUX_LPTMR0;                /**< 0064: TRGMUX LPTMR0 Register                                       */
-        uint8_t   RESERVED_4[8];               
-   __IO uint32_t  TRGMUX_FTM4;                  /**< 0070: TRGMUX FTM4 Register                                         */
-   __IO uint32_t  TRGMUX_FTM5;                  /**< 0074: TRGMUX FTM5 Register                                         */
+   union {                                      /**< 0000: (size=0078)                                                  */
+      __IO uint32_t  TRGMUXn[30];               /**< 0000: TRGMUX DMAMUX Register                                       */
+      struct {                                  /**< 0000: (size=0078)                                                  */
+         __IO uint32_t  TRGMUX_DMAMUX0;         /**< 0000: TRGMUX DMAMUX0 Register                                      */
+         __IO uint32_t  TRGMUX_EXTOUT0;         /**< 0004: TRGMUX EXTOUT0 Register                                      */
+         __IO uint32_t  TRGMUX_EXTOUT1;         /**< 0008: TRGMUX EXTOUT1 Register                                      */
+         __IO uint32_t  TRGMUX_ADC0;            /**< 000C: TRGMUX ADC0 Register                                         */
+         __IO uint32_t  TRGMUX_ADC1;            /**< 0010: TRGMUX ADC1 Register                                         */
+              uint8_t   RESERVED_0[8];         
+         __IO uint32_t  TRGMUX_CMP0;            /**< 001C: TRGMUX CMP0 Register                                         */
+              uint8_t   RESERVED_1[8];         
+         __IO uint32_t  TRGMUX_FTM0;            /**< 0028: TRGMUX FTM0 Register                                         */
+         __IO uint32_t  TRGMUX_FTM1;            /**< 002C: TRGMUX FTM1 Register                                         */
+         __IO uint32_t  TRGMUX_FTM2;            /**< 0030: TRGMUX FTM2 Register                                         */
+         __IO uint32_t  TRGMUX_FTM3;            /**< 0034: TRGMUX FTM3 Register                                         */
+         __IO uint32_t  TRGMUX_PDB0;            /**< 0038: TRGMUX PDB0 Register                                         */
+         __IO uint32_t  TRGMUX_PDB1;            /**< 003C: TRGMUX PDB1 Register                                         */
+              uint8_t   RESERVED_2[4];         
+         __IO uint32_t  TRGMUX_FLEXIO;          /**< 0044: TRGMUX FLEXIO Register                                       */
+         __IO uint32_t  TRGMUX_LPIT0;           /**< 0048: TRGMUX LPIT0 Register                                        */
+         __IO uint32_t  TRGMUX_LPUART0;         /**< 004C: TRGMUX LPUART0 Register                                      */
+         __IO uint32_t  TRGMUX_LPUART1;         /**< 0050: TRGMUX LPUART1 Register                                      */
+         __IO uint32_t  TRGMUX_LPI2C0;          /**< 0054: TRGMUX LPI2C0 Register                                       */
+              uint8_t   RESERVED_3[4];         
+         __IO uint32_t  TRGMUX_LPSPI0;          /**< 005C: TRGMUX LPSPI0 Register                                       */
+         __IO uint32_t  TRGMUX_LPSPI1;          /**< 0060: TRGMUX LPSPI1 Register                                       */
+         __IO uint32_t  TRGMUX_LPTMR0;          /**< 0064: TRGMUX LPTMR0 Register                                       */
+              uint8_t   RESERVED_4[8];         
+         __IO uint32_t  TRGMUX_FTM4;            /**< 0070: TRGMUX FTM4 Register                                         */
+         __IO uint32_t  TRGMUX_FTM5;            /**< 0074: TRGMUX FTM5 Register                                         */
+      };
+   };
 } TRGMUX_Type;
 
 /**
@@ -9867,6 +9314,22 @@ typedef struct TRGMUX_Type {
 * @brief Register Masks for TRGMUX
 * @{
 */
+/* ------- TRGMUXn Bit Fields                       ------ */
+#define TRGMUX_TRGMUXn_SEL0_MASK                 (0x7FU)                                             /*!< TRGMUX_TRGMUXn.SEL0 Mask                */
+#define TRGMUX_TRGMUXn_SEL0_SHIFT                (0U)                                                /*!< TRGMUX_TRGMUXn.SEL0 Position            */
+#define TRGMUX_TRGMUXn_SEL0(x)                   (((uint32_t)(((uint32_t)(x))<<0U))&0x7FUL)          /*!< TRGMUX_TRGMUXn.SEL0 Field               */
+#define TRGMUX_TRGMUXn_SEL1_MASK                 (0x7F00U)                                           /*!< TRGMUX_TRGMUXn.SEL1 Mask                */
+#define TRGMUX_TRGMUXn_SEL1_SHIFT                (8U)                                                /*!< TRGMUX_TRGMUXn.SEL1 Position            */
+#define TRGMUX_TRGMUXn_SEL1(x)                   (((uint32_t)(((uint32_t)(x))<<8U))&0x7F00UL)        /*!< TRGMUX_TRGMUXn.SEL1 Field               */
+#define TRGMUX_TRGMUXn_SEL2_MASK                 (0x7F0000U)                                         /*!< TRGMUX_TRGMUXn.SEL2 Mask                */
+#define TRGMUX_TRGMUXn_SEL2_SHIFT                (16U)                                               /*!< TRGMUX_TRGMUXn.SEL2 Position            */
+#define TRGMUX_TRGMUXn_SEL2(x)                   (((uint32_t)(((uint32_t)(x))<<16U))&0x7F0000UL)     /*!< TRGMUX_TRGMUXn.SEL2 Field               */
+#define TRGMUX_TRGMUXn_SEL3_MASK                 (0x7F000000U)                                       /*!< TRGMUX_TRGMUXn.SEL3 Mask                */
+#define TRGMUX_TRGMUXn_SEL3_SHIFT                (24U)                                               /*!< TRGMUX_TRGMUXn.SEL3 Position            */
+#define TRGMUX_TRGMUXn_SEL3(x)                   (((uint32_t)(((uint32_t)(x))<<24U))&0x7F000000UL)   /*!< TRGMUX_TRGMUXn.SEL3 Field               */
+#define TRGMUX_TRGMUXn_LK_MASK                   (0x80000000U)                                       /*!< TRGMUX_TRGMUXn.LK Mask                  */
+#define TRGMUX_TRGMUXn_LK_SHIFT                  (31U)                                               /*!< TRGMUX_TRGMUXn.LK Position              */
+#define TRGMUX_TRGMUXn_LK(x)                     (((uint32_t)(((uint32_t)(x))<<31U))&0x80000000UL)   /*!< TRGMUX_TRGMUXn.LK Field                 */
 /* ------- TRGMUX_DMAMUX0 Bit Fields                ------ */
 #define TRGMUX_TRGMUX_DMAMUX0_SEL0_MASK          (0x7FU)                                             /*!< TRGMUX_TRGMUX_DMAMUX0.SEL0 Mask         */
 #define TRGMUX_TRGMUX_DMAMUX0_SEL0_SHIFT         (0U)                                                /*!< TRGMUX_TRGMUX_DMAMUX0.SEL0 Position     */
@@ -9951,6 +9414,15 @@ typedef struct TRGMUX_Type {
 #define TRGMUX_TRGMUX_CMP0_SEL0_MASK             (0x7FU)                                             /*!< TRGMUX_TRGMUX_CMP0.SEL0 Mask            */
 #define TRGMUX_TRGMUX_CMP0_SEL0_SHIFT            (0U)                                                /*!< TRGMUX_TRGMUX_CMP0.SEL0 Position        */
 #define TRGMUX_TRGMUX_CMP0_SEL0(x)               (((uint32_t)(((uint32_t)(x))<<0U))&0x7FUL)          /*!< TRGMUX_TRGMUX_CMP0.SEL0 Field           */
+#define TRGMUX_TRGMUX_CMP0_SEL1_MASK             (0x7F00U)                                           /*!< TRGMUX_TRGMUX_CMP0.SEL1 Mask            */
+#define TRGMUX_TRGMUX_CMP0_SEL1_SHIFT            (8U)                                                /*!< TRGMUX_TRGMUX_CMP0.SEL1 Position        */
+#define TRGMUX_TRGMUX_CMP0_SEL1(x)               (((uint32_t)(((uint32_t)(x))<<8U))&0x7F00UL)        /*!< TRGMUX_TRGMUX_CMP0.SEL1 Field           */
+#define TRGMUX_TRGMUX_CMP0_SEL2_MASK             (0x7F0000U)                                         /*!< TRGMUX_TRGMUX_CMP0.SEL2 Mask            */
+#define TRGMUX_TRGMUX_CMP0_SEL2_SHIFT            (16U)                                               /*!< TRGMUX_TRGMUX_CMP0.SEL2 Position        */
+#define TRGMUX_TRGMUX_CMP0_SEL2(x)               (((uint32_t)(((uint32_t)(x))<<16U))&0x7F0000UL)     /*!< TRGMUX_TRGMUX_CMP0.SEL2 Field           */
+#define TRGMUX_TRGMUX_CMP0_SEL3_MASK             (0x7F000000U)                                       /*!< TRGMUX_TRGMUX_CMP0.SEL3 Mask            */
+#define TRGMUX_TRGMUX_CMP0_SEL3_SHIFT            (24U)                                               /*!< TRGMUX_TRGMUX_CMP0.SEL3 Position        */
+#define TRGMUX_TRGMUX_CMP0_SEL3(x)               (((uint32_t)(((uint32_t)(x))<<24U))&0x7F000000UL)   /*!< TRGMUX_TRGMUX_CMP0.SEL3 Field           */
 #define TRGMUX_TRGMUX_CMP0_LK_MASK               (0x80000000U)                                       /*!< TRGMUX_TRGMUX_CMP0.LK Mask              */
 #define TRGMUX_TRGMUX_CMP0_LK_SHIFT              (31U)                                               /*!< TRGMUX_TRGMUX_CMP0.LK Position          */
 #define TRGMUX_TRGMUX_CMP0_LK(x)                 (((uint32_t)(((uint32_t)(x))<<31U))&0x80000000UL)   /*!< TRGMUX_TRGMUX_CMP0.LK Field             */
@@ -10022,6 +9494,15 @@ typedef struct TRGMUX_Type {
 #define TRGMUX_TRGMUX_PDB0_SEL0_MASK             (0x7FU)                                             /*!< TRGMUX_TRGMUX_PDB0.SEL0 Mask            */
 #define TRGMUX_TRGMUX_PDB0_SEL0_SHIFT            (0U)                                                /*!< TRGMUX_TRGMUX_PDB0.SEL0 Position        */
 #define TRGMUX_TRGMUX_PDB0_SEL0(x)               (((uint32_t)(((uint32_t)(x))<<0U))&0x7FUL)          /*!< TRGMUX_TRGMUX_PDB0.SEL0 Field           */
+#define TRGMUX_TRGMUX_PDB0_SEL1_MASK             (0x7F00U)                                           /*!< TRGMUX_TRGMUX_PDB0.SEL1 Mask            */
+#define TRGMUX_TRGMUX_PDB0_SEL1_SHIFT            (8U)                                                /*!< TRGMUX_TRGMUX_PDB0.SEL1 Position        */
+#define TRGMUX_TRGMUX_PDB0_SEL1(x)               (((uint32_t)(((uint32_t)(x))<<8U))&0x7F00UL)        /*!< TRGMUX_TRGMUX_PDB0.SEL1 Field           */
+#define TRGMUX_TRGMUX_PDB0_SEL2_MASK             (0x7F0000U)                                         /*!< TRGMUX_TRGMUX_PDB0.SEL2 Mask            */
+#define TRGMUX_TRGMUX_PDB0_SEL2_SHIFT            (16U)                                               /*!< TRGMUX_TRGMUX_PDB0.SEL2 Position        */
+#define TRGMUX_TRGMUX_PDB0_SEL2(x)               (((uint32_t)(((uint32_t)(x))<<16U))&0x7F0000UL)     /*!< TRGMUX_TRGMUX_PDB0.SEL2 Field           */
+#define TRGMUX_TRGMUX_PDB0_SEL3_MASK             (0x7F000000U)                                       /*!< TRGMUX_TRGMUX_PDB0.SEL3 Mask            */
+#define TRGMUX_TRGMUX_PDB0_SEL3_SHIFT            (24U)                                               /*!< TRGMUX_TRGMUX_PDB0.SEL3 Position        */
+#define TRGMUX_TRGMUX_PDB0_SEL3(x)               (((uint32_t)(((uint32_t)(x))<<24U))&0x7F000000UL)   /*!< TRGMUX_TRGMUX_PDB0.SEL3 Field           */
 #define TRGMUX_TRGMUX_PDB0_LK_MASK               (0x80000000U)                                       /*!< TRGMUX_TRGMUX_PDB0.LK Mask              */
 #define TRGMUX_TRGMUX_PDB0_LK_SHIFT              (31U)                                               /*!< TRGMUX_TRGMUX_PDB0.LK Position          */
 #define TRGMUX_TRGMUX_PDB0_LK(x)                 (((uint32_t)(((uint32_t)(x))<<31U))&0x80000000UL)   /*!< TRGMUX_TRGMUX_PDB0.LK Field             */
@@ -10029,6 +9510,15 @@ typedef struct TRGMUX_Type {
 #define TRGMUX_TRGMUX_PDB1_SEL0_MASK             (0x7FU)                                             /*!< TRGMUX_TRGMUX_PDB1.SEL0 Mask            */
 #define TRGMUX_TRGMUX_PDB1_SEL0_SHIFT            (0U)                                                /*!< TRGMUX_TRGMUX_PDB1.SEL0 Position        */
 #define TRGMUX_TRGMUX_PDB1_SEL0(x)               (((uint32_t)(((uint32_t)(x))<<0U))&0x7FUL)          /*!< TRGMUX_TRGMUX_PDB1.SEL0 Field           */
+#define TRGMUX_TRGMUX_PDB1_SEL1_MASK             (0x7F00U)                                           /*!< TRGMUX_TRGMUX_PDB1.SEL1 Mask            */
+#define TRGMUX_TRGMUX_PDB1_SEL1_SHIFT            (8U)                                                /*!< TRGMUX_TRGMUX_PDB1.SEL1 Position        */
+#define TRGMUX_TRGMUX_PDB1_SEL1(x)               (((uint32_t)(((uint32_t)(x))<<8U))&0x7F00UL)        /*!< TRGMUX_TRGMUX_PDB1.SEL1 Field           */
+#define TRGMUX_TRGMUX_PDB1_SEL2_MASK             (0x7F0000U)                                         /*!< TRGMUX_TRGMUX_PDB1.SEL2 Mask            */
+#define TRGMUX_TRGMUX_PDB1_SEL2_SHIFT            (16U)                                               /*!< TRGMUX_TRGMUX_PDB1.SEL2 Position        */
+#define TRGMUX_TRGMUX_PDB1_SEL2(x)               (((uint32_t)(((uint32_t)(x))<<16U))&0x7F0000UL)     /*!< TRGMUX_TRGMUX_PDB1.SEL2 Field           */
+#define TRGMUX_TRGMUX_PDB1_SEL3_MASK             (0x7F000000U)                                       /*!< TRGMUX_TRGMUX_PDB1.SEL3 Mask            */
+#define TRGMUX_TRGMUX_PDB1_SEL3_SHIFT            (24U)                                               /*!< TRGMUX_TRGMUX_PDB1.SEL3 Position        */
+#define TRGMUX_TRGMUX_PDB1_SEL3(x)               (((uint32_t)(((uint32_t)(x))<<24U))&0x7F000000UL)   /*!< TRGMUX_TRGMUX_PDB1.SEL3 Field           */
 #define TRGMUX_TRGMUX_PDB1_LK_MASK               (0x80000000U)                                       /*!< TRGMUX_TRGMUX_PDB1.LK Mask              */
 #define TRGMUX_TRGMUX_PDB1_LK_SHIFT              (31U)                                               /*!< TRGMUX_TRGMUX_PDB1.LK Position          */
 #define TRGMUX_TRGMUX_PDB1_LK(x)                 (((uint32_t)(((uint32_t)(x))<<31U))&0x80000000UL)   /*!< TRGMUX_TRGMUX_PDB1.LK Field             */
@@ -10068,6 +9558,15 @@ typedef struct TRGMUX_Type {
 #define TRGMUX_TRGMUX_LPUART0_SEL0_MASK          (0x7FU)                                             /*!< TRGMUX_TRGMUX_LPUART0.SEL0 Mask         */
 #define TRGMUX_TRGMUX_LPUART0_SEL0_SHIFT         (0U)                                                /*!< TRGMUX_TRGMUX_LPUART0.SEL0 Position     */
 #define TRGMUX_TRGMUX_LPUART0_SEL0(x)            (((uint32_t)(((uint32_t)(x))<<0U))&0x7FUL)          /*!< TRGMUX_TRGMUX_LPUART0.SEL0 Field        */
+#define TRGMUX_TRGMUX_LPUART0_SEL1_MASK          (0x7F00U)                                           /*!< TRGMUX_TRGMUX_LPUART0.SEL1 Mask         */
+#define TRGMUX_TRGMUX_LPUART0_SEL1_SHIFT         (8U)                                                /*!< TRGMUX_TRGMUX_LPUART0.SEL1 Position     */
+#define TRGMUX_TRGMUX_LPUART0_SEL1(x)            (((uint32_t)(((uint32_t)(x))<<8U))&0x7F00UL)        /*!< TRGMUX_TRGMUX_LPUART0.SEL1 Field        */
+#define TRGMUX_TRGMUX_LPUART0_SEL2_MASK          (0x7F0000U)                                         /*!< TRGMUX_TRGMUX_LPUART0.SEL2 Mask         */
+#define TRGMUX_TRGMUX_LPUART0_SEL2_SHIFT         (16U)                                               /*!< TRGMUX_TRGMUX_LPUART0.SEL2 Position     */
+#define TRGMUX_TRGMUX_LPUART0_SEL2(x)            (((uint32_t)(((uint32_t)(x))<<16U))&0x7F0000UL)     /*!< TRGMUX_TRGMUX_LPUART0.SEL2 Field        */
+#define TRGMUX_TRGMUX_LPUART0_SEL3_MASK          (0x7F000000U)                                       /*!< TRGMUX_TRGMUX_LPUART0.SEL3 Mask         */
+#define TRGMUX_TRGMUX_LPUART0_SEL3_SHIFT         (24U)                                               /*!< TRGMUX_TRGMUX_LPUART0.SEL3 Position     */
+#define TRGMUX_TRGMUX_LPUART0_SEL3(x)            (((uint32_t)(((uint32_t)(x))<<24U))&0x7F000000UL)   /*!< TRGMUX_TRGMUX_LPUART0.SEL3 Field        */
 #define TRGMUX_TRGMUX_LPUART0_LK_MASK            (0x80000000U)                                       /*!< TRGMUX_TRGMUX_LPUART0.LK Mask           */
 #define TRGMUX_TRGMUX_LPUART0_LK_SHIFT           (31U)                                               /*!< TRGMUX_TRGMUX_LPUART0.LK Position       */
 #define TRGMUX_TRGMUX_LPUART0_LK(x)              (((uint32_t)(((uint32_t)(x))<<31U))&0x80000000UL)   /*!< TRGMUX_TRGMUX_LPUART0.LK Field          */
@@ -10075,6 +9574,15 @@ typedef struct TRGMUX_Type {
 #define TRGMUX_TRGMUX_LPUART1_SEL0_MASK          (0x7FU)                                             /*!< TRGMUX_TRGMUX_LPUART1.SEL0 Mask         */
 #define TRGMUX_TRGMUX_LPUART1_SEL0_SHIFT         (0U)                                                /*!< TRGMUX_TRGMUX_LPUART1.SEL0 Position     */
 #define TRGMUX_TRGMUX_LPUART1_SEL0(x)            (((uint32_t)(((uint32_t)(x))<<0U))&0x7FUL)          /*!< TRGMUX_TRGMUX_LPUART1.SEL0 Field        */
+#define TRGMUX_TRGMUX_LPUART1_SEL1_MASK          (0x7F00U)                                           /*!< TRGMUX_TRGMUX_LPUART1.SEL1 Mask         */
+#define TRGMUX_TRGMUX_LPUART1_SEL1_SHIFT         (8U)                                                /*!< TRGMUX_TRGMUX_LPUART1.SEL1 Position     */
+#define TRGMUX_TRGMUX_LPUART1_SEL1(x)            (((uint32_t)(((uint32_t)(x))<<8U))&0x7F00UL)        /*!< TRGMUX_TRGMUX_LPUART1.SEL1 Field        */
+#define TRGMUX_TRGMUX_LPUART1_SEL2_MASK          (0x7F0000U)                                         /*!< TRGMUX_TRGMUX_LPUART1.SEL2 Mask         */
+#define TRGMUX_TRGMUX_LPUART1_SEL2_SHIFT         (16U)                                               /*!< TRGMUX_TRGMUX_LPUART1.SEL2 Position     */
+#define TRGMUX_TRGMUX_LPUART1_SEL2(x)            (((uint32_t)(((uint32_t)(x))<<16U))&0x7F0000UL)     /*!< TRGMUX_TRGMUX_LPUART1.SEL2 Field        */
+#define TRGMUX_TRGMUX_LPUART1_SEL3_MASK          (0x7F000000U)                                       /*!< TRGMUX_TRGMUX_LPUART1.SEL3 Mask         */
+#define TRGMUX_TRGMUX_LPUART1_SEL3_SHIFT         (24U)                                               /*!< TRGMUX_TRGMUX_LPUART1.SEL3 Position     */
+#define TRGMUX_TRGMUX_LPUART1_SEL3(x)            (((uint32_t)(((uint32_t)(x))<<24U))&0x7F000000UL)   /*!< TRGMUX_TRGMUX_LPUART1.SEL3 Field        */
 #define TRGMUX_TRGMUX_LPUART1_LK_MASK            (0x80000000U)                                       /*!< TRGMUX_TRGMUX_LPUART1.LK Mask           */
 #define TRGMUX_TRGMUX_LPUART1_LK_SHIFT           (31U)                                               /*!< TRGMUX_TRGMUX_LPUART1.LK Position       */
 #define TRGMUX_TRGMUX_LPUART1_LK(x)              (((uint32_t)(((uint32_t)(x))<<31U))&0x80000000UL)   /*!< TRGMUX_TRGMUX_LPUART1.LK Field          */
@@ -10082,6 +9590,15 @@ typedef struct TRGMUX_Type {
 #define TRGMUX_TRGMUX_LPI2C0_SEL0_MASK           (0x7FU)                                             /*!< TRGMUX_TRGMUX_LPI2C0.SEL0 Mask          */
 #define TRGMUX_TRGMUX_LPI2C0_SEL0_SHIFT          (0U)                                                /*!< TRGMUX_TRGMUX_LPI2C0.SEL0 Position      */
 #define TRGMUX_TRGMUX_LPI2C0_SEL0(x)             (((uint32_t)(((uint32_t)(x))<<0U))&0x7FUL)          /*!< TRGMUX_TRGMUX_LPI2C0.SEL0 Field         */
+#define TRGMUX_TRGMUX_LPI2C0_SEL1_MASK           (0x7F00U)                                           /*!< TRGMUX_TRGMUX_LPI2C0.SEL1 Mask          */
+#define TRGMUX_TRGMUX_LPI2C0_SEL1_SHIFT          (8U)                                                /*!< TRGMUX_TRGMUX_LPI2C0.SEL1 Position      */
+#define TRGMUX_TRGMUX_LPI2C0_SEL1(x)             (((uint32_t)(((uint32_t)(x))<<8U))&0x7F00UL)        /*!< TRGMUX_TRGMUX_LPI2C0.SEL1 Field         */
+#define TRGMUX_TRGMUX_LPI2C0_SEL2_MASK           (0x7F0000U)                                         /*!< TRGMUX_TRGMUX_LPI2C0.SEL2 Mask          */
+#define TRGMUX_TRGMUX_LPI2C0_SEL2_SHIFT          (16U)                                               /*!< TRGMUX_TRGMUX_LPI2C0.SEL2 Position      */
+#define TRGMUX_TRGMUX_LPI2C0_SEL2(x)             (((uint32_t)(((uint32_t)(x))<<16U))&0x7F0000UL)     /*!< TRGMUX_TRGMUX_LPI2C0.SEL2 Field         */
+#define TRGMUX_TRGMUX_LPI2C0_SEL3_MASK           (0x7F000000U)                                       /*!< TRGMUX_TRGMUX_LPI2C0.SEL3 Mask          */
+#define TRGMUX_TRGMUX_LPI2C0_SEL3_SHIFT          (24U)                                               /*!< TRGMUX_TRGMUX_LPI2C0.SEL3 Position      */
+#define TRGMUX_TRGMUX_LPI2C0_SEL3(x)             (((uint32_t)(((uint32_t)(x))<<24U))&0x7F000000UL)   /*!< TRGMUX_TRGMUX_LPI2C0.SEL3 Field         */
 #define TRGMUX_TRGMUX_LPI2C0_LK_MASK             (0x80000000U)                                       /*!< TRGMUX_TRGMUX_LPI2C0.LK Mask            */
 #define TRGMUX_TRGMUX_LPI2C0_LK_SHIFT            (31U)                                               /*!< TRGMUX_TRGMUX_LPI2C0.LK Position        */
 #define TRGMUX_TRGMUX_LPI2C0_LK(x)               (((uint32_t)(((uint32_t)(x))<<31U))&0x80000000UL)   /*!< TRGMUX_TRGMUX_LPI2C0.LK Field           */
@@ -10089,6 +9606,15 @@ typedef struct TRGMUX_Type {
 #define TRGMUX_TRGMUX_LPSPI0_SEL0_MASK           (0x7FU)                                             /*!< TRGMUX_TRGMUX_LPSPI0.SEL0 Mask          */
 #define TRGMUX_TRGMUX_LPSPI0_SEL0_SHIFT          (0U)                                                /*!< TRGMUX_TRGMUX_LPSPI0.SEL0 Position      */
 #define TRGMUX_TRGMUX_LPSPI0_SEL0(x)             (((uint32_t)(((uint32_t)(x))<<0U))&0x7FUL)          /*!< TRGMUX_TRGMUX_LPSPI0.SEL0 Field         */
+#define TRGMUX_TRGMUX_LPSPI0_SEL1_MASK           (0x7F00U)                                           /*!< TRGMUX_TRGMUX_LPSPI0.SEL1 Mask          */
+#define TRGMUX_TRGMUX_LPSPI0_SEL1_SHIFT          (8U)                                                /*!< TRGMUX_TRGMUX_LPSPI0.SEL1 Position      */
+#define TRGMUX_TRGMUX_LPSPI0_SEL1(x)             (((uint32_t)(((uint32_t)(x))<<8U))&0x7F00UL)        /*!< TRGMUX_TRGMUX_LPSPI0.SEL1 Field         */
+#define TRGMUX_TRGMUX_LPSPI0_SEL2_MASK           (0x7F0000U)                                         /*!< TRGMUX_TRGMUX_LPSPI0.SEL2 Mask          */
+#define TRGMUX_TRGMUX_LPSPI0_SEL2_SHIFT          (16U)                                               /*!< TRGMUX_TRGMUX_LPSPI0.SEL2 Position      */
+#define TRGMUX_TRGMUX_LPSPI0_SEL2(x)             (((uint32_t)(((uint32_t)(x))<<16U))&0x7F0000UL)     /*!< TRGMUX_TRGMUX_LPSPI0.SEL2 Field         */
+#define TRGMUX_TRGMUX_LPSPI0_SEL3_MASK           (0x7F000000U)                                       /*!< TRGMUX_TRGMUX_LPSPI0.SEL3 Mask          */
+#define TRGMUX_TRGMUX_LPSPI0_SEL3_SHIFT          (24U)                                               /*!< TRGMUX_TRGMUX_LPSPI0.SEL3 Position      */
+#define TRGMUX_TRGMUX_LPSPI0_SEL3(x)             (((uint32_t)(((uint32_t)(x))<<24U))&0x7F000000UL)   /*!< TRGMUX_TRGMUX_LPSPI0.SEL3 Field         */
 #define TRGMUX_TRGMUX_LPSPI0_LK_MASK             (0x80000000U)                                       /*!< TRGMUX_TRGMUX_LPSPI0.LK Mask            */
 #define TRGMUX_TRGMUX_LPSPI0_LK_SHIFT            (31U)                                               /*!< TRGMUX_TRGMUX_LPSPI0.LK Position        */
 #define TRGMUX_TRGMUX_LPSPI0_LK(x)               (((uint32_t)(((uint32_t)(x))<<31U))&0x80000000UL)   /*!< TRGMUX_TRGMUX_LPSPI0.LK Field           */
@@ -10096,6 +9622,15 @@ typedef struct TRGMUX_Type {
 #define TRGMUX_TRGMUX_LPSPI1_SEL0_MASK           (0x7FU)                                             /*!< TRGMUX_TRGMUX_LPSPI1.SEL0 Mask          */
 #define TRGMUX_TRGMUX_LPSPI1_SEL0_SHIFT          (0U)                                                /*!< TRGMUX_TRGMUX_LPSPI1.SEL0 Position      */
 #define TRGMUX_TRGMUX_LPSPI1_SEL0(x)             (((uint32_t)(((uint32_t)(x))<<0U))&0x7FUL)          /*!< TRGMUX_TRGMUX_LPSPI1.SEL0 Field         */
+#define TRGMUX_TRGMUX_LPSPI1_SEL1_MASK           (0x7F00U)                                           /*!< TRGMUX_TRGMUX_LPSPI1.SEL1 Mask          */
+#define TRGMUX_TRGMUX_LPSPI1_SEL1_SHIFT          (8U)                                                /*!< TRGMUX_TRGMUX_LPSPI1.SEL1 Position      */
+#define TRGMUX_TRGMUX_LPSPI1_SEL1(x)             (((uint32_t)(((uint32_t)(x))<<8U))&0x7F00UL)        /*!< TRGMUX_TRGMUX_LPSPI1.SEL1 Field         */
+#define TRGMUX_TRGMUX_LPSPI1_SEL2_MASK           (0x7F0000U)                                         /*!< TRGMUX_TRGMUX_LPSPI1.SEL2 Mask          */
+#define TRGMUX_TRGMUX_LPSPI1_SEL2_SHIFT          (16U)                                               /*!< TRGMUX_TRGMUX_LPSPI1.SEL2 Position      */
+#define TRGMUX_TRGMUX_LPSPI1_SEL2(x)             (((uint32_t)(((uint32_t)(x))<<16U))&0x7F0000UL)     /*!< TRGMUX_TRGMUX_LPSPI1.SEL2 Field         */
+#define TRGMUX_TRGMUX_LPSPI1_SEL3_MASK           (0x7F000000U)                                       /*!< TRGMUX_TRGMUX_LPSPI1.SEL3 Mask          */
+#define TRGMUX_TRGMUX_LPSPI1_SEL3_SHIFT          (24U)                                               /*!< TRGMUX_TRGMUX_LPSPI1.SEL3 Position      */
+#define TRGMUX_TRGMUX_LPSPI1_SEL3(x)             (((uint32_t)(((uint32_t)(x))<<24U))&0x7F000000UL)   /*!< TRGMUX_TRGMUX_LPSPI1.SEL3 Field         */
 #define TRGMUX_TRGMUX_LPSPI1_LK_MASK             (0x80000000U)                                       /*!< TRGMUX_TRGMUX_LPSPI1.LK Mask            */
 #define TRGMUX_TRGMUX_LPSPI1_LK_SHIFT            (31U)                                               /*!< TRGMUX_TRGMUX_LPSPI1.LK Position        */
 #define TRGMUX_TRGMUX_LPSPI1_LK(x)               (((uint32_t)(((uint32_t)(x))<<31U))&0x80000000UL)   /*!< TRGMUX_TRGMUX_LPSPI1.LK Field           */
@@ -10103,6 +9638,15 @@ typedef struct TRGMUX_Type {
 #define TRGMUX_TRGMUX_LPTMR0_SEL0_MASK           (0x7FU)                                             /*!< TRGMUX_TRGMUX_LPTMR0.SEL0 Mask          */
 #define TRGMUX_TRGMUX_LPTMR0_SEL0_SHIFT          (0U)                                                /*!< TRGMUX_TRGMUX_LPTMR0.SEL0 Position      */
 #define TRGMUX_TRGMUX_LPTMR0_SEL0(x)             (((uint32_t)(((uint32_t)(x))<<0U))&0x7FUL)          /*!< TRGMUX_TRGMUX_LPTMR0.SEL0 Field         */
+#define TRGMUX_TRGMUX_LPTMR0_SEL1_MASK           (0x7F00U)                                           /*!< TRGMUX_TRGMUX_LPTMR0.SEL1 Mask          */
+#define TRGMUX_TRGMUX_LPTMR0_SEL1_SHIFT          (8U)                                                /*!< TRGMUX_TRGMUX_LPTMR0.SEL1 Position      */
+#define TRGMUX_TRGMUX_LPTMR0_SEL1(x)             (((uint32_t)(((uint32_t)(x))<<8U))&0x7F00UL)        /*!< TRGMUX_TRGMUX_LPTMR0.SEL1 Field         */
+#define TRGMUX_TRGMUX_LPTMR0_SEL2_MASK           (0x7F0000U)                                         /*!< TRGMUX_TRGMUX_LPTMR0.SEL2 Mask          */
+#define TRGMUX_TRGMUX_LPTMR0_SEL2_SHIFT          (16U)                                               /*!< TRGMUX_TRGMUX_LPTMR0.SEL2 Position      */
+#define TRGMUX_TRGMUX_LPTMR0_SEL2(x)             (((uint32_t)(((uint32_t)(x))<<16U))&0x7F0000UL)     /*!< TRGMUX_TRGMUX_LPTMR0.SEL2 Field         */
+#define TRGMUX_TRGMUX_LPTMR0_SEL3_MASK           (0x7F000000U)                                       /*!< TRGMUX_TRGMUX_LPTMR0.SEL3 Mask          */
+#define TRGMUX_TRGMUX_LPTMR0_SEL3_SHIFT          (24U)                                               /*!< TRGMUX_TRGMUX_LPTMR0.SEL3 Position      */
+#define TRGMUX_TRGMUX_LPTMR0_SEL3(x)             (((uint32_t)(((uint32_t)(x))<<24U))&0x7F000000UL)   /*!< TRGMUX_TRGMUX_LPTMR0.SEL3 Field         */
 #define TRGMUX_TRGMUX_LPTMR0_LK_MASK             (0x80000000U)                                       /*!< TRGMUX_TRGMUX_LPTMR0.LK Mask            */
 #define TRGMUX_TRGMUX_LPTMR0_LK_SHIFT            (31U)                                               /*!< TRGMUX_TRGMUX_LPTMR0.LK Position        */
 #define TRGMUX_TRGMUX_LPTMR0_LK(x)               (((uint32_t)(((uint32_t)(x))<<31U))&0x80000000UL)   /*!< TRGMUX_TRGMUX_LPTMR0.LK Field           */
@@ -10110,6 +9654,15 @@ typedef struct TRGMUX_Type {
 #define TRGMUX_TRGMUX_FTM4_SEL0_MASK             (0x7FU)                                             /*!< TRGMUX_TRGMUX_FTM4.SEL0 Mask            */
 #define TRGMUX_TRGMUX_FTM4_SEL0_SHIFT            (0U)                                                /*!< TRGMUX_TRGMUX_FTM4.SEL0 Position        */
 #define TRGMUX_TRGMUX_FTM4_SEL0(x)               (((uint32_t)(((uint32_t)(x))<<0U))&0x7FUL)          /*!< TRGMUX_TRGMUX_FTM4.SEL0 Field           */
+#define TRGMUX_TRGMUX_FTM4_SEL1_MASK             (0x7F00U)                                           /*!< TRGMUX_TRGMUX_FTM4.SEL1 Mask            */
+#define TRGMUX_TRGMUX_FTM4_SEL1_SHIFT            (8U)                                                /*!< TRGMUX_TRGMUX_FTM4.SEL1 Position        */
+#define TRGMUX_TRGMUX_FTM4_SEL1(x)               (((uint32_t)(((uint32_t)(x))<<8U))&0x7F00UL)        /*!< TRGMUX_TRGMUX_FTM4.SEL1 Field           */
+#define TRGMUX_TRGMUX_FTM4_SEL2_MASK             (0x7F0000U)                                         /*!< TRGMUX_TRGMUX_FTM4.SEL2 Mask            */
+#define TRGMUX_TRGMUX_FTM4_SEL2_SHIFT            (16U)                                               /*!< TRGMUX_TRGMUX_FTM4.SEL2 Position        */
+#define TRGMUX_TRGMUX_FTM4_SEL2(x)               (((uint32_t)(((uint32_t)(x))<<16U))&0x7F0000UL)     /*!< TRGMUX_TRGMUX_FTM4.SEL2 Field           */
+#define TRGMUX_TRGMUX_FTM4_SEL3_MASK             (0x7F000000U)                                       /*!< TRGMUX_TRGMUX_FTM4.SEL3 Mask            */
+#define TRGMUX_TRGMUX_FTM4_SEL3_SHIFT            (24U)                                               /*!< TRGMUX_TRGMUX_FTM4.SEL3 Position        */
+#define TRGMUX_TRGMUX_FTM4_SEL3(x)               (((uint32_t)(((uint32_t)(x))<<24U))&0x7F000000UL)   /*!< TRGMUX_TRGMUX_FTM4.SEL3 Field           */
 #define TRGMUX_TRGMUX_FTM4_LK_MASK               (0x80000000U)                                       /*!< TRGMUX_TRGMUX_FTM4.LK Mask              */
 #define TRGMUX_TRGMUX_FTM4_LK_SHIFT              (31U)                                               /*!< TRGMUX_TRGMUX_FTM4.LK Position          */
 #define TRGMUX_TRGMUX_FTM4_LK(x)                 (((uint32_t)(((uint32_t)(x))<<31U))&0x80000000UL)   /*!< TRGMUX_TRGMUX_FTM4.LK Field             */
@@ -10117,6 +9670,15 @@ typedef struct TRGMUX_Type {
 #define TRGMUX_TRGMUX_FTM5_SEL0_MASK             (0x7FU)                                             /*!< TRGMUX_TRGMUX_FTM5.SEL0 Mask            */
 #define TRGMUX_TRGMUX_FTM5_SEL0_SHIFT            (0U)                                                /*!< TRGMUX_TRGMUX_FTM5.SEL0 Position        */
 #define TRGMUX_TRGMUX_FTM5_SEL0(x)               (((uint32_t)(((uint32_t)(x))<<0U))&0x7FUL)          /*!< TRGMUX_TRGMUX_FTM5.SEL0 Field           */
+#define TRGMUX_TRGMUX_FTM5_SEL1_MASK             (0x7F00U)                                           /*!< TRGMUX_TRGMUX_FTM5.SEL1 Mask            */
+#define TRGMUX_TRGMUX_FTM5_SEL1_SHIFT            (8U)                                                /*!< TRGMUX_TRGMUX_FTM5.SEL1 Position        */
+#define TRGMUX_TRGMUX_FTM5_SEL1(x)               (((uint32_t)(((uint32_t)(x))<<8U))&0x7F00UL)        /*!< TRGMUX_TRGMUX_FTM5.SEL1 Field           */
+#define TRGMUX_TRGMUX_FTM5_SEL2_MASK             (0x7F0000U)                                         /*!< TRGMUX_TRGMUX_FTM5.SEL2 Mask            */
+#define TRGMUX_TRGMUX_FTM5_SEL2_SHIFT            (16U)                                               /*!< TRGMUX_TRGMUX_FTM5.SEL2 Position        */
+#define TRGMUX_TRGMUX_FTM5_SEL2(x)               (((uint32_t)(((uint32_t)(x))<<16U))&0x7F0000UL)     /*!< TRGMUX_TRGMUX_FTM5.SEL2 Field           */
+#define TRGMUX_TRGMUX_FTM5_SEL3_MASK             (0x7F000000U)                                       /*!< TRGMUX_TRGMUX_FTM5.SEL3 Mask            */
+#define TRGMUX_TRGMUX_FTM5_SEL3_SHIFT            (24U)                                               /*!< TRGMUX_TRGMUX_FTM5.SEL3 Position        */
+#define TRGMUX_TRGMUX_FTM5_SEL3(x)               (((uint32_t)(((uint32_t)(x))<<24U))&0x7F000000UL)   /*!< TRGMUX_TRGMUX_FTM5.SEL3 Field           */
 #define TRGMUX_TRGMUX_FTM5_LK_MASK               (0x80000000U)                                       /*!< TRGMUX_TRGMUX_FTM5.LK Mask              */
 #define TRGMUX_TRGMUX_FTM5_LK_SHIFT              (31U)                                               /*!< TRGMUX_TRGMUX_FTM5.LK Position          */
 #define TRGMUX_TRGMUX_FTM5_LK(x)                 (((uint32_t)(((uint32_t)(x))<<31U))&0x80000000UL)   /*!< TRGMUX_TRGMUX_FTM5.LK Field             */

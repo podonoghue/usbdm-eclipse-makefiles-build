@@ -5,7 +5,7 @@
  *           Equivalent: 
  *
  * @version  V7
- * @date     2018/03
+ * @date     2018/04
  *
  *******************************************************************************************************/
 
@@ -2699,10 +2699,7 @@ typedef struct LPC_I2C_Type {
    __IO uint32_t  ADR2;                         /**< 0024: I2C Slave Address Register. Contains the 7-bit slave address for operation of the I2C interface in slave mode, and is not used in master mode. The least significant bit determines whether a slave responds to the General Call address */
    __IO uint32_t  ADR3;                         /**< 0028: I2C Slave Address Register. Contains the 7-bit slave address for operation of the I2C interface in slave mode, and is not used in master mode. The least significant bit determines whether a slave responds to the General Call address */
    __I  uint32_t  DATA_BUFFER;                  /**< 002C: Data buffer register. The contents of the 8 MSBs of the I2DAT shift register will be transferred to the DATA_BUFFER automatically after every nine bits (8 bits of data plus ACK or NACK) has been received on the bus */
-   __IO uint32_t  MASK0;                        /**< 0030: I2C Slave address mask register. This mask register is associated with I2ADR0 to determine an address match. The mask register has no effect when comparing to the General Call address (zero) */
-   __IO uint32_t  MASK1;                        /**< 0034: I2C Slave address mask register. This mask register is associated with I2ADR0 to determine an address match. The mask register has no effect when comparing to the General Call address (zero) */
-   __IO uint32_t  MASK2;                        /**< 0038: I2C Slave address mask register. This mask register is associated with I2ADR0 to determine an address match. The mask register has no effect when comparing to the General Call address (zero) */
-   __IO uint32_t  MASK3;                        /**< 003C: I2C Slave address mask register. This mask register is associated with I2ADR0 to determine an address match. The mask register has no effect when comparing to the General Call address (zero) */
+   __IO uint32_t  MASK[4];                      /**< 0030: I2C Slave address mask register. This mask register is associated with I2ADR to determine an address match. The mask register has no effect when comparing to the General Call address (zero) */
 } LPC_I2C_Type;
 
 /**
@@ -2780,47 +2777,21 @@ typedef struct LPC_I2C_Type {
 #define LPC_I2C_MMCTRL_MATCH_ALL_MASK            (0x4U)                                              /*!< LPC_I2C_MMCTRL.MATCH_ALL Mask           */
 #define LPC_I2C_MMCTRL_MATCH_ALL_SHIFT           (2U)                                                /*!< LPC_I2C_MMCTRL.MATCH_ALL Position       */
 #define LPC_I2C_MMCTRL_MATCH_ALL(x)              (((uint32_t)(((uint32_t)(x))<<2U))&0x4UL)           /*!< LPC_I2C_MMCTRL.MATCH_ALL Field          */
-/* ------- ADR1 Bit Fields                          ------ */
-#define LPC_I2C_ADR1_GC_MASK                     (0x1U)                                              /*!< LPC_I2C_ADR1.GC Mask                    */
-#define LPC_I2C_ADR1_GC_SHIFT                    (0U)                                                /*!< LPC_I2C_ADR1.GC Position                */
-#define LPC_I2C_ADR1_GC(x)                       (((uint32_t)(((uint32_t)(x))<<0U))&0x1UL)           /*!< LPC_I2C_ADR1.GC Field                   */
-#define LPC_I2C_ADR1_Address_MASK                (0xFEU)                                             /*!< LPC_I2C_ADR1.Address Mask               */
-#define LPC_I2C_ADR1_Address_SHIFT               (1U)                                                /*!< LPC_I2C_ADR1.Address Position           */
-#define LPC_I2C_ADR1_Address(x)                  (((uint32_t)(((uint32_t)(x))<<1U))&0xFEUL)          /*!< LPC_I2C_ADR1.Address Field              */
-/* ------- ADR2 Bit Fields                          ------ */
-#define LPC_I2C_ADR2_GC_MASK                     (0x1U)                                              /*!< LPC_I2C_ADR2.GC Mask                    */
-#define LPC_I2C_ADR2_GC_SHIFT                    (0U)                                                /*!< LPC_I2C_ADR2.GC Position                */
-#define LPC_I2C_ADR2_GC(x)                       (((uint32_t)(((uint32_t)(x))<<0U))&0x1UL)           /*!< LPC_I2C_ADR2.GC Field                   */
-#define LPC_I2C_ADR2_Address_MASK                (0xFEU)                                             /*!< LPC_I2C_ADR2.Address Mask               */
-#define LPC_I2C_ADR2_Address_SHIFT               (1U)                                                /*!< LPC_I2C_ADR2.Address Position           */
-#define LPC_I2C_ADR2_Address(x)                  (((uint32_t)(((uint32_t)(x))<<1U))&0xFEUL)          /*!< LPC_I2C_ADR2.Address Field              */
-/* ------- ADR3 Bit Fields                          ------ */
-#define LPC_I2C_ADR3_GC_MASK                     (0x1U)                                              /*!< LPC_I2C_ADR3.GC Mask                    */
-#define LPC_I2C_ADR3_GC_SHIFT                    (0U)                                                /*!< LPC_I2C_ADR3.GC Position                */
-#define LPC_I2C_ADR3_GC(x)                       (((uint32_t)(((uint32_t)(x))<<0U))&0x1UL)           /*!< LPC_I2C_ADR3.GC Field                   */
-#define LPC_I2C_ADR3_Address_MASK                (0xFEU)                                             /*!< LPC_I2C_ADR3.Address Mask               */
-#define LPC_I2C_ADR3_Address_SHIFT               (1U)                                                /*!< LPC_I2C_ADR3.Address Position           */
-#define LPC_I2C_ADR3_Address(x)                  (((uint32_t)(((uint32_t)(x))<<1U))&0xFEUL)          /*!< LPC_I2C_ADR3.Address Field              */
+/* ------- ADR Bit Fields                           ------ */
+#define LPC_I2C_ADR_GC_MASK                      (0x1U)                                              /*!< LPC_I2C_ADR.GC Mask                     */
+#define LPC_I2C_ADR_GC_SHIFT                     (0U)                                                /*!< LPC_I2C_ADR.GC Position                 */
+#define LPC_I2C_ADR_GC(x)                        (((uint32_t)(((uint32_t)(x))<<0U))&0x1UL)           /*!< LPC_I2C_ADR.GC Field                    */
+#define LPC_I2C_ADR_Address_MASK                 (0xFEU)                                             /*!< LPC_I2C_ADR.Address Mask                */
+#define LPC_I2C_ADR_Address_SHIFT                (1U)                                                /*!< LPC_I2C_ADR.Address Position            */
+#define LPC_I2C_ADR_Address(x)                   (((uint32_t)(((uint32_t)(x))<<1U))&0xFEUL)          /*!< LPC_I2C_ADR.Address Field               */
 /* ------- DATA_BUFFER Bit Fields                   ------ */
 #define LPC_I2C_DATA_BUFFER_Data_MASK            (0xFFU)                                             /*!< LPC_I2C_DATA_BUFFER.Data Mask           */
 #define LPC_I2C_DATA_BUFFER_Data_SHIFT           (0U)                                                /*!< LPC_I2C_DATA_BUFFER.Data Position       */
 #define LPC_I2C_DATA_BUFFER_Data(x)              (((uint32_t)(((uint32_t)(x))<<0U))&0xFFUL)          /*!< LPC_I2C_DATA_BUFFER.Data Field          */
-/* ------- MASK0 Bit Fields                         ------ */
-#define LPC_I2C_MASK0_MASK_MASK                  (0xFEU)                                             /*!< LPC_I2C_MASK0.MASK Mask                 */
-#define LPC_I2C_MASK0_MASK_SHIFT                 (1U)                                                /*!< LPC_I2C_MASK0.MASK Position             */
-#define LPC_I2C_MASK0_MASK(x)                    (((uint32_t)(((uint32_t)(x))<<1U))&0xFEUL)          /*!< LPC_I2C_MASK0.MASK Field                */
-/* ------- MASK1 Bit Fields                         ------ */
-#define LPC_I2C_MASK1_MASK_MASK                  (0xFEU)                                             /*!< LPC_I2C_MASK1.MASK Mask                 */
-#define LPC_I2C_MASK1_MASK_SHIFT                 (1U)                                                /*!< LPC_I2C_MASK1.MASK Position             */
-#define LPC_I2C_MASK1_MASK(x)                    (((uint32_t)(((uint32_t)(x))<<1U))&0xFEUL)          /*!< LPC_I2C_MASK1.MASK Field                */
-/* ------- MASK2 Bit Fields                         ------ */
-#define LPC_I2C_MASK2_MASK_MASK                  (0xFEU)                                             /*!< LPC_I2C_MASK2.MASK Mask                 */
-#define LPC_I2C_MASK2_MASK_SHIFT                 (1U)                                                /*!< LPC_I2C_MASK2.MASK Position             */
-#define LPC_I2C_MASK2_MASK(x)                    (((uint32_t)(((uint32_t)(x))<<1U))&0xFEUL)          /*!< LPC_I2C_MASK2.MASK Field                */
-/* ------- MASK3 Bit Fields                         ------ */
-#define LPC_I2C_MASK3_MASK_MASK                  (0xFEU)                                             /*!< LPC_I2C_MASK3.MASK Mask                 */
-#define LPC_I2C_MASK3_MASK_SHIFT                 (1U)                                                /*!< LPC_I2C_MASK3.MASK Position             */
-#define LPC_I2C_MASK3_MASK(x)                    (((uint32_t)(((uint32_t)(x))<<1U))&0xFEUL)          /*!< LPC_I2C_MASK3.MASK Field                */
+/* ------- MASK Bit Fields                          ------ */
+#define LPC_I2C_MASK_MASK_MASK                   (0xFEU)                                             /*!< LPC_I2C_MASK.MASK Mask                  */
+#define LPC_I2C_MASK_MASK_SHIFT                  (1U)                                                /*!< LPC_I2C_MASK.MASK Position              */
+#define LPC_I2C_MASK_MASK(x)                     (((uint32_t)(((uint32_t)(x))<<1U))&0xFEUL)          /*!< LPC_I2C_MASK.MASK Field                 */
 /**
  * @} */ /* End group I2C_Register_Masks_GROUP 
  */

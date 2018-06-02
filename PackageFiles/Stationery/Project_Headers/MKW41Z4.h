@@ -5,7 +5,7 @@
  *           Equivalent: 
  *
  * @version  V1.6
- * @date     2018/03
+ * @date     2018/04
  *
  *******************************************************************************************************/
 
@@ -192,16 +192,17 @@ extern void PORTB_PORTC_IRQHandler(void);            /**< General Purpose Input/
 /**
  * @brief Analog-to-Digital Converter
  */
+#define ADC_SC1_COUNT        2          /**< Number of ADC channels                             */
 /**
 * @addtogroup ADC_structs_GROUP ADC struct
 * @brief Struct for ADC
 * @{
 */
 typedef struct ADC_Type {
-   __IO uint32_t  SC1[2];                       /**< 0000: Status and Control Register 1                                */
+   __IO uint32_t  SC1[ADC_SC1_COUNT];           /**< 0000: Status and Control Register 1                                */
    __IO uint32_t  CFG1;                         /**< 0008: Configuration Register 1                                     */
    __IO uint32_t  CFG2;                         /**< 000C: Configuration Register 2                                     */
-   __I  uint32_t  R[2];                         /**< 0010: Data Result Register                                         */
+   __I  uint32_t  R[ADC_SC1_COUNT];             /**< 0010: Data Result Register                                         */
    __IO uint32_t  CV1;                          /**< 0018: Compare Value                                                */
    __IO uint32_t  CV2;                          /**< 001C: Compare Value                                                */
    __IO uint32_t  SC2;                          /**< 0020: Status and Control Register 2                                */
@@ -1414,10 +1415,15 @@ typedef struct DMA_Type {
         uint8_t   RESERVED_5[12];              
    __IO uint32_t  EARS;                         /**< 0044: Enable Asynchronous Request in Stop Register                 */
         uint8_t   RESERVED_6[184];             
-   __IO uint8_t   DCHPRI3;                      /**< 0100: Channel 3 Priority Register                                  */
-   __IO uint8_t   DCHPRI2;                      /**< 0101: Channel 2 Priority Register                                  */
-   __IO uint8_t   DCHPRI1;                      /**< 0102: Channel 1 Priority Register                                  */
-   __IO uint8_t   DCHPRI0;                      /**< 0103: Channel 0 Priority Register                                  */
+   union {                                      /**< 0000: (size=0004)                                                  */
+      struct {                                  /**< 0000: (size=0004)                                                  */
+      __IO uint8_t   DCHPRI3;                   /**< 0100: Channel 3 Priority Register                                  */
+      __IO uint8_t   DCHPRI2;                   /**< 0101: Channel 2 Priority Register                                  */
+      __IO uint8_t   DCHPRI1;                   /**< 0102: Channel 1 Priority Register                                  */
+      __IO uint8_t   DCHPRI0;                   /**< 0103: Channel 0 Priority Register                                  */
+      };
+      __IO uint8_t   DCHPRI[4];                 /**< 0100: Channel  Priority Register                                   */
+   };
         uint8_t   RESERVED_7[3836];            
    struct {
       __IO uint32_t  SADDR;                     /**< 1000: Source Address                                               */
@@ -1690,6 +1696,7 @@ typedef struct DMA_Type {
 #define DMA_DCHPRI_ECP_MASK                      (0x80U)                                             /*!< DMA0_DCHPRI.ECP Mask                    */
 #define DMA_DCHPRI_ECP_SHIFT                     (7U)                                                /*!< DMA0_DCHPRI.ECP Position                */
 #define DMA_DCHPRI_ECP(x)                        (((uint8_t)(((uint8_t)(x))<<7U))&0x80UL)            /*!< DMA0_DCHPRI.ECP Field                   */
+/* ------- DCHPRI Bit Fields                        ------ */
 /* ------- SADDR Bit Fields                         ------ */
 #define DMA_SADDR_SADDR_MASK                     (0xFFFFFFFFU)                                       /*!< DMA0_SADDR.SADDR Mask                   */
 #define DMA_SADDR_SADDR_SHIFT                    (0U)                                                /*!< DMA0_SADDR.SADDR Position               */
@@ -2712,19 +2719,19 @@ typedef struct GENFSK_Type {
 * @{
 */
 typedef struct I2C_Type {
-   __IO uint8_t   A1;                           /**< 0000: I2C Address Register 1                                       */
-   __IO uint8_t   F;                            /**< 0001: I2C Frequency Divider register                               */
-   __IO uint8_t   C1;                           /**< 0002: I2C Control Register 1                                       */
-   __IO uint8_t   S;                            /**< 0003: I2C Status register                                          */
-   __IO uint8_t   D;                            /**< 0004: I2C Data I/O register                                        */
-   __IO uint8_t   C2;                           /**< 0005: I2C Control Register 2                                       */
-   __IO uint8_t   FLT;                          /**< 0006: I2C Programmable Input Glitch Filter Register                */
-   __IO uint8_t   RA;                           /**< 0007: I2C Range Address register                                   */
-   __IO uint8_t   SMB;                          /**< 0008: I2C SMBus Control and Status register                        */
-   __IO uint8_t   A2;                           /**< 0009: I2C Address Register 2                                       */
-   __IO uint8_t   SLTH;                         /**< 000A: I2C SCL Low Timeout Register High                            */
-   __IO uint8_t   SLTL;                         /**< 000B: I2C SCL Low Timeout Register Low                             */
-   __IO uint8_t   S2;                           /**< 000C: I2C Status register 2                                        */
+   __IO uint8_t   A1;                           /**< 0000: Address Register 1                                           */
+   __IO uint8_t   F;                            /**< 0001: Frequency Divider register                                   */
+   __IO uint8_t   C1;                           /**< 0002: Control Register 1                                           */
+   __IO uint8_t   S;                            /**< 0003: Status Register                                              */
+   __IO uint8_t   D;                            /**< 0004: Data I/O register                                            */
+   __IO uint8_t   C2;                           /**< 0005: Control Register 2                                           */
+   __IO uint8_t   FLT;                          /**< 0006: Programmable Input Glitch Filter register                    */
+   __IO uint8_t   RA;                           /**< 0007: Range Address register                                       */
+   __IO uint8_t   SMB;                          /**< 0008: SMBus Control and Status register                            */
+   __IO uint8_t   A2;                           /**< 0009: Address Register 2                                           */
+   __IO uint8_t   SLTH;                         /**< 000A: SCL Low Timeout Register High                                */
+   __IO uint8_t   SLTL;                         /**< 000B: SCL Low Timeout Register Low                                 */
+   __IO uint8_t   S2;                           /**< 000C: Status register 2                                            */
 } I2C_Type;
 
 /**
@@ -2968,11 +2975,11 @@ typedef struct LLWU_Type {
       __I  uint8_t   MF;                        /**< 0007: Module Flag Register                                         */
    };
    union {                                      /**< 0000: (size=0002)                                                  */
-      struct {                                  /**< 0000: (size=0002)                                                  */
-      __IO uint8_t   FILT1;                     /**< 0008: Pin Filter 1 register                                        */
-      __IO uint8_t   FILT2;                     /**< 0009: Pin Filter 2 register                                        */
-      };
       __IO uint8_t   FILT[2];                   /**< 0008: Pin Filter  register                                         */
+      struct {                                  /**< 0000: (size=0002)                                                  */
+         __IO uint8_t   FILT1;                  /**< 0008: Pin Filter  register                                         */
+         __IO uint8_t   FILT2;                  /**< 0009: Pin Filter  register                                         */
+      };
    };
 } LLWU_Type;
 
@@ -3214,6 +3221,26 @@ typedef struct LLWU_Type {
 #define LLWU_FILT_FILTF_MASK                     (0x80U)                                             /*!< LLWU_FILT.FILTF Mask                    */
 #define LLWU_FILT_FILTF_SHIFT                    (7U)                                                /*!< LLWU_FILT.FILTF Position                */
 #define LLWU_FILT_FILTF(x)                       (((uint8_t)(((uint8_t)(x))<<7U))&0x80UL)            /*!< LLWU_FILT.FILTF Field                   */
+/* ------- FILT1 Bit Fields                         ------ */
+#define LLWU_FILT1_FILTSEL_MASK                  (0xFU)                                              /*!< LLWU_FILT1.FILTSEL Mask                 */
+#define LLWU_FILT1_FILTSEL_SHIFT                 (0U)                                                /*!< LLWU_FILT1.FILTSEL Position             */
+#define LLWU_FILT1_FILTSEL(x)                    (((uint8_t)(((uint8_t)(x))<<0U))&0xFUL)             /*!< LLWU_FILT1.FILTSEL Field                */
+#define LLWU_FILT1_FILTE_MASK                    (0x60U)                                             /*!< LLWU_FILT1.FILTE Mask                   */
+#define LLWU_FILT1_FILTE_SHIFT                   (5U)                                                /*!< LLWU_FILT1.FILTE Position               */
+#define LLWU_FILT1_FILTE(x)                      (((uint8_t)(((uint8_t)(x))<<5U))&0x60UL)            /*!< LLWU_FILT1.FILTE Field                  */
+#define LLWU_FILT1_FILTF_MASK                    (0x80U)                                             /*!< LLWU_FILT1.FILTF Mask                   */
+#define LLWU_FILT1_FILTF_SHIFT                   (7U)                                                /*!< LLWU_FILT1.FILTF Position               */
+#define LLWU_FILT1_FILTF(x)                      (((uint8_t)(((uint8_t)(x))<<7U))&0x80UL)            /*!< LLWU_FILT1.FILTF Field                  */
+/* ------- FILT2 Bit Fields                         ------ */
+#define LLWU_FILT2_FILTSEL_MASK                  (0xFU)                                              /*!< LLWU_FILT2.FILTSEL Mask                 */
+#define LLWU_FILT2_FILTSEL_SHIFT                 (0U)                                                /*!< LLWU_FILT2.FILTSEL Position             */
+#define LLWU_FILT2_FILTSEL(x)                    (((uint8_t)(((uint8_t)(x))<<0U))&0xFUL)             /*!< LLWU_FILT2.FILTSEL Field                */
+#define LLWU_FILT2_FILTE_MASK                    (0x60U)                                             /*!< LLWU_FILT2.FILTE Mask                   */
+#define LLWU_FILT2_FILTE_SHIFT                   (5U)                                                /*!< LLWU_FILT2.FILTE Position               */
+#define LLWU_FILT2_FILTE(x)                      (((uint8_t)(((uint8_t)(x))<<5U))&0x60UL)            /*!< LLWU_FILT2.FILTE Field                  */
+#define LLWU_FILT2_FILTF_MASK                    (0x80U)                                             /*!< LLWU_FILT2.FILTF Mask                   */
+#define LLWU_FILT2_FILTF_SHIFT                   (7U)                                                /*!< LLWU_FILT2.FILTF Position               */
+#define LLWU_FILT2_FILTF(x)                      (((uint8_t)(((uint8_t)(x))<<7U))&0x80UL)            /*!< LLWU_FILT2.FILTF Field                  */
 /**
  * @} */ /* End group LLWU_Register_Masks_GROUP 
  */
@@ -4575,6 +4602,7 @@ typedef struct OSC_Type {
 /**
  * @brief Periodic Interrupt Timer (2 channels)
  */
+#define PIT_TMR_COUNT        2          /**< Number of timer channels                           */
 /**
 * @addtogroup PIT_structs_GROUP PIT struct
 * @brief Struct for PIT
@@ -4591,7 +4619,7 @@ typedef struct PIT_Type {
       __I  uint32_t  CVAL;                      /**< 0104: Current Timer Value Register                                 */
       __IO uint32_t  TCTRL;                     /**< 0108: Timer Control Register                                       */
       __IO uint32_t  TFLG;                      /**< 010C: Timer Flag Register                                          */
-   } CHANNEL[2];                                /**< 0100: (cluster: size=0x0020, 32)                                   */
+   } CHANNEL[PIT_TMR_COUNT];                    /**< 0100: (cluster: size=0x0020, 32)                                   */
 } PIT_Type;
 
 /**
@@ -4676,7 +4704,7 @@ typedef struct PIT_Type {
 * @{
 */
 typedef struct PMC_Type {
-   __IO uint8_t   LVDSC1;                       /**< 0000: Low Voltage Status and Control 1                             */
+   __IO uint8_t   LVDSC1;                       /**< 0000: Low Voltage Detect Status and Control 1 Register             */
    __IO uint8_t   LVDSC2;                       /**< 0001: Low Voltage Status and Control 2                             */
    __IO uint8_t   REGSC;                        /**< 0002: Regulator Status and Control                                 */
 } PMC_Type;
@@ -6441,6 +6469,7 @@ typedef struct SYST_Type {
 /**
  * @brief Timer/PWM Module (4 channels)
  */
+#define TPM_CONTROLS_COUNT   4          /**< Number of FTM channels                             */
 /**
 * @addtogroup TPM_structs_GROUP TPM struct
 * @brief Struct for TPM
@@ -6453,7 +6482,7 @@ typedef struct TPM_Type {
    struct {
       __IO uint32_t  CnSC;                      /**< 000C: Channel  Status and Control                                  */
       __IO uint32_t  CnV;                       /**< 0010: Channel  Value                                               */
-   } CONTROLS[4];                               /**< 000C: (cluster: size=0x0020, 32)                                   */
+   } CONTROLS[TPM_CONTROLS_COUNT];              /**< 000C: (cluster: size=0x0020, 32)                                   */
         uint8_t   RESERVED_1[36];              
    __IO uint32_t  STATUS;                       /**< 0050: Capture and Compare Status                                   */
         uint8_t   RESERVED_2[16];              
@@ -6667,6 +6696,7 @@ typedef struct TPM_Type {
 /**
  * @brief Timer/PWM Module (2 channels)
  */
+#define TPM1_CONTROLS_COUNT  2          /**< Number of FTM channels                             */
 /**
 * @addtogroup TPM_structs_GROUP TPM struct
 * @brief Struct for TPM
@@ -6679,7 +6709,7 @@ typedef struct TPM1_Type {
    struct {
       __IO uint32_t  CnSC;                      /**< 000C: Channel  Status and Control                                  */
       __IO uint32_t  CnV;                       /**< 0010: Channel  Value                                               */
-   } CONTROLS[2];                               /**< 000C: (cluster: size=0x0010, 16)                                   */
+   } CONTROLS[TPM1_CONTROLS_COUNT];             /**< 000C: (cluster: size=0x0010, 16)                                   */
         uint8_t   RESERVED_1[52];              
    __IO uint32_t  STATUS;                       /**< 0050: Capture and Compare Status                                   */
         uint8_t   RESERVED_2[16];              

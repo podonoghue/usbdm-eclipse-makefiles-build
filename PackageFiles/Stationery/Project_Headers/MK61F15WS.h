@@ -5,7 +5,7 @@
  *           Equivalent: 
  *
  * @version  V1.6
- * @date     2018/03
+ * @date     2018/04
  *
  *******************************************************************************************************/
 
@@ -334,16 +334,17 @@ extern void I2S1_Rx_IRQHandler(void);                /**< Synchronous Serial Int
 /**
  * @brief Analog-to-Digital Converter
  */
+#define ADC_SC1_COUNT        2          /**< Number of ADC channels                             */
 /**
 * @addtogroup ADC_structs_GROUP ADC struct
 * @brief Struct for ADC
 * @{
 */
 typedef struct ADC_Type {
-   __IO uint32_t  SC1[2];                       /**< 0000: Status and Control Register 1                                */
+   __IO uint32_t  SC1[ADC_SC1_COUNT];           /**< 0000: Status and Control Register 1                                */
    __IO uint32_t  CFG1;                         /**< 0008: Configuration Register 1                                     */
    __IO uint32_t  CFG2;                         /**< 000C: Configuration Register 2                                     */
-   __I  uint32_t  R[2];                         /**< 0010: Data Result Register                                         */
+   __I  uint32_t  R[ADC_SC1_COUNT];             /**< 0010: Data Result Register                                         */
    __IO uint32_t  CV1;                          /**< 0018: Compare Value                                                */
    __IO uint32_t  CV2;                          /**< 001C: Compare Value                                                */
    __IO uint32_t  SC2;                          /**< 0020: Status and Control Register 2                                */
@@ -636,6 +637,221 @@ typedef struct ADC_Type {
  * @} */ /* End group ADC_Peripheral_access_layer_GROUP 
  */
 /**
+* @addtogroup AIPS_Peripheral_access_layer_GROUP AIPS Peripheral Access Layer
+* @brief C Struct for AIPS
+* @{
+*/
+
+/* ================================================================================ */
+/* ================           AIPS0 (file:AIPS0_Lite_8Mx16P)       ================ */
+/* ================================================================================ */
+
+/**
+ * @brief AIPS-Lite Bridge
+ */
+/**
+* @addtogroup AIPS_structs_GROUP AIPS struct
+* @brief Struct for AIPS
+* @{
+*/
+typedef struct AIPS_Type {
+   __IO uint32_t  MPRA;                         /**< 0000: Master Privilege Register A                                  */
+        uint8_t   RESERVED_0[28];              
+   __IO uint32_t  PACR[16];                     /**< 0020: Peripheral Access Control Register                           */
+} AIPS_Type;
+
+/**
+ * @} */ /* End group AIPS_structs_GROUP 
+ */
+
+/* -------------------------------------------------------------------------------- */
+/* -----------     'AIPS0' Position & Mask macros                       ----------- */
+/* -------------------------------------------------------------------------------- */
+
+/**
+* @addtogroup AIPS_Register_Masks_GROUP AIPS Register Masks
+* @brief Register Masks for AIPS
+* @{
+*/
+/* ------- MPRA Bit Fields                          ------ */
+#define AIPS_MPRA_MPL7_MASK                      (0x1U)                                              /*!< AIPS0_MPRA.MPL7 Mask                    */
+#define AIPS_MPRA_MPL7_SHIFT                     (0U)                                                /*!< AIPS0_MPRA.MPL7 Position                */
+#define AIPS_MPRA_MPL7(x)                        (((uint32_t)(((uint32_t)(x))<<0U))&0x1UL)           /*!< AIPS0_MPRA.MPL7 Field                   */
+#define AIPS_MPRA_MTW7_MASK                      (0x2U)                                              /*!< AIPS0_MPRA.MTW7 Mask                    */
+#define AIPS_MPRA_MTW7_SHIFT                     (1U)                                                /*!< AIPS0_MPRA.MTW7 Position                */
+#define AIPS_MPRA_MTW7(x)                        (((uint32_t)(((uint32_t)(x))<<1U))&0x2UL)           /*!< AIPS0_MPRA.MTW7 Field                   */
+#define AIPS_MPRA_MTR7_MASK                      (0x4U)                                              /*!< AIPS0_MPRA.MTR7 Mask                    */
+#define AIPS_MPRA_MTR7_SHIFT                     (2U)                                                /*!< AIPS0_MPRA.MTR7 Position                */
+#define AIPS_MPRA_MTR7(x)                        (((uint32_t)(((uint32_t)(x))<<2U))&0x4UL)           /*!< AIPS0_MPRA.MTR7 Field                   */
+#define AIPS_MPRA_MPL6_MASK                      (0x10U)                                             /*!< AIPS0_MPRA.MPL6 Mask                    */
+#define AIPS_MPRA_MPL6_SHIFT                     (4U)                                                /*!< AIPS0_MPRA.MPL6 Position                */
+#define AIPS_MPRA_MPL6(x)                        (((uint32_t)(((uint32_t)(x))<<4U))&0x10UL)          /*!< AIPS0_MPRA.MPL6 Field                   */
+#define AIPS_MPRA_MTW6_MASK                      (0x20U)                                             /*!< AIPS0_MPRA.MTW6 Mask                    */
+#define AIPS_MPRA_MTW6_SHIFT                     (5U)                                                /*!< AIPS0_MPRA.MTW6 Position                */
+#define AIPS_MPRA_MTW6(x)                        (((uint32_t)(((uint32_t)(x))<<5U))&0x20UL)          /*!< AIPS0_MPRA.MTW6 Field                   */
+#define AIPS_MPRA_MTR6_MASK                      (0x40U)                                             /*!< AIPS0_MPRA.MTR6 Mask                    */
+#define AIPS_MPRA_MTR6_SHIFT                     (6U)                                                /*!< AIPS0_MPRA.MTR6 Position                */
+#define AIPS_MPRA_MTR6(x)                        (((uint32_t)(((uint32_t)(x))<<6U))&0x40UL)          /*!< AIPS0_MPRA.MTR6 Field                   */
+#define AIPS_MPRA_MPL5_MASK                      (0x100U)                                            /*!< AIPS0_MPRA.MPL5 Mask                    */
+#define AIPS_MPRA_MPL5_SHIFT                     (8U)                                                /*!< AIPS0_MPRA.MPL5 Position                */
+#define AIPS_MPRA_MPL5(x)                        (((uint32_t)(((uint32_t)(x))<<8U))&0x100UL)         /*!< AIPS0_MPRA.MPL5 Field                   */
+#define AIPS_MPRA_MTW5_MASK                      (0x200U)                                            /*!< AIPS0_MPRA.MTW5 Mask                    */
+#define AIPS_MPRA_MTW5_SHIFT                     (9U)                                                /*!< AIPS0_MPRA.MTW5 Position                */
+#define AIPS_MPRA_MTW5(x)                        (((uint32_t)(((uint32_t)(x))<<9U))&0x200UL)         /*!< AIPS0_MPRA.MTW5 Field                   */
+#define AIPS_MPRA_MTR5_MASK                      (0x400U)                                            /*!< AIPS0_MPRA.MTR5 Mask                    */
+#define AIPS_MPRA_MTR5_SHIFT                     (10U)                                               /*!< AIPS0_MPRA.MTR5 Position                */
+#define AIPS_MPRA_MTR5(x)                        (((uint32_t)(((uint32_t)(x))<<10U))&0x400UL)        /*!< AIPS0_MPRA.MTR5 Field                   */
+#define AIPS_MPRA_MPL4_MASK                      (0x1000U)                                           /*!< AIPS0_MPRA.MPL4 Mask                    */
+#define AIPS_MPRA_MPL4_SHIFT                     (12U)                                               /*!< AIPS0_MPRA.MPL4 Position                */
+#define AIPS_MPRA_MPL4(x)                        (((uint32_t)(((uint32_t)(x))<<12U))&0x1000UL)       /*!< AIPS0_MPRA.MPL4 Field                   */
+#define AIPS_MPRA_MTW4_MASK                      (0x2000U)                                           /*!< AIPS0_MPRA.MTW4 Mask                    */
+#define AIPS_MPRA_MTW4_SHIFT                     (13U)                                               /*!< AIPS0_MPRA.MTW4 Position                */
+#define AIPS_MPRA_MTW4(x)                        (((uint32_t)(((uint32_t)(x))<<13U))&0x2000UL)       /*!< AIPS0_MPRA.MTW4 Field                   */
+#define AIPS_MPRA_MTR4_MASK                      (0x4000U)                                           /*!< AIPS0_MPRA.MTR4 Mask                    */
+#define AIPS_MPRA_MTR4_SHIFT                     (14U)                                               /*!< AIPS0_MPRA.MTR4 Position                */
+#define AIPS_MPRA_MTR4(x)                        (((uint32_t)(((uint32_t)(x))<<14U))&0x4000UL)       /*!< AIPS0_MPRA.MTR4 Field                   */
+#define AIPS_MPRA_MPL3_MASK                      (0x10000U)                                          /*!< AIPS0_MPRA.MPL3 Mask                    */
+#define AIPS_MPRA_MPL3_SHIFT                     (16U)                                               /*!< AIPS0_MPRA.MPL3 Position                */
+#define AIPS_MPRA_MPL3(x)                        (((uint32_t)(((uint32_t)(x))<<16U))&0x10000UL)      /*!< AIPS0_MPRA.MPL3 Field                   */
+#define AIPS_MPRA_MTW3_MASK                      (0x20000U)                                          /*!< AIPS0_MPRA.MTW3 Mask                    */
+#define AIPS_MPRA_MTW3_SHIFT                     (17U)                                               /*!< AIPS0_MPRA.MTW3 Position                */
+#define AIPS_MPRA_MTW3(x)                        (((uint32_t)(((uint32_t)(x))<<17U))&0x20000UL)      /*!< AIPS0_MPRA.MTW3 Field                   */
+#define AIPS_MPRA_MTR3_MASK                      (0x40000U)                                          /*!< AIPS0_MPRA.MTR3 Mask                    */
+#define AIPS_MPRA_MTR3_SHIFT                     (18U)                                               /*!< AIPS0_MPRA.MTR3 Position                */
+#define AIPS_MPRA_MTR3(x)                        (((uint32_t)(((uint32_t)(x))<<18U))&0x40000UL)      /*!< AIPS0_MPRA.MTR3 Field                   */
+#define AIPS_MPRA_MPL2_MASK                      (0x100000U)                                         /*!< AIPS0_MPRA.MPL2 Mask                    */
+#define AIPS_MPRA_MPL2_SHIFT                     (20U)                                               /*!< AIPS0_MPRA.MPL2 Position                */
+#define AIPS_MPRA_MPL2(x)                        (((uint32_t)(((uint32_t)(x))<<20U))&0x100000UL)     /*!< AIPS0_MPRA.MPL2 Field                   */
+#define AIPS_MPRA_MTW2_MASK                      (0x200000U)                                         /*!< AIPS0_MPRA.MTW2 Mask                    */
+#define AIPS_MPRA_MTW2_SHIFT                     (21U)                                               /*!< AIPS0_MPRA.MTW2 Position                */
+#define AIPS_MPRA_MTW2(x)                        (((uint32_t)(((uint32_t)(x))<<21U))&0x200000UL)     /*!< AIPS0_MPRA.MTW2 Field                   */
+#define AIPS_MPRA_MTR2_MASK                      (0x400000U)                                         /*!< AIPS0_MPRA.MTR2 Mask                    */
+#define AIPS_MPRA_MTR2_SHIFT                     (22U)                                               /*!< AIPS0_MPRA.MTR2 Position                */
+#define AIPS_MPRA_MTR2(x)                        (((uint32_t)(((uint32_t)(x))<<22U))&0x400000UL)     /*!< AIPS0_MPRA.MTR2 Field                   */
+#define AIPS_MPRA_MPL1_MASK                      (0x1000000U)                                        /*!< AIPS0_MPRA.MPL1 Mask                    */
+#define AIPS_MPRA_MPL1_SHIFT                     (24U)                                               /*!< AIPS0_MPRA.MPL1 Position                */
+#define AIPS_MPRA_MPL1(x)                        (((uint32_t)(((uint32_t)(x))<<24U))&0x1000000UL)    /*!< AIPS0_MPRA.MPL1 Field                   */
+#define AIPS_MPRA_MTW1_MASK                      (0x2000000U)                                        /*!< AIPS0_MPRA.MTW1 Mask                    */
+#define AIPS_MPRA_MTW1_SHIFT                     (25U)                                               /*!< AIPS0_MPRA.MTW1 Position                */
+#define AIPS_MPRA_MTW1(x)                        (((uint32_t)(((uint32_t)(x))<<25U))&0x2000000UL)    /*!< AIPS0_MPRA.MTW1 Field                   */
+#define AIPS_MPRA_MTR1_MASK                      (0x4000000U)                                        /*!< AIPS0_MPRA.MTR1 Mask                    */
+#define AIPS_MPRA_MTR1_SHIFT                     (26U)                                               /*!< AIPS0_MPRA.MTR1 Position                */
+#define AIPS_MPRA_MTR1(x)                        (((uint32_t)(((uint32_t)(x))<<26U))&0x4000000UL)    /*!< AIPS0_MPRA.MTR1 Field                   */
+#define AIPS_MPRA_MPL0_MASK                      (0x10000000U)                                       /*!< AIPS0_MPRA.MPL0 Mask                    */
+#define AIPS_MPRA_MPL0_SHIFT                     (28U)                                               /*!< AIPS0_MPRA.MPL0 Position                */
+#define AIPS_MPRA_MPL0(x)                        (((uint32_t)(((uint32_t)(x))<<28U))&0x10000000UL)   /*!< AIPS0_MPRA.MPL0 Field                   */
+#define AIPS_MPRA_MTW0_MASK                      (0x20000000U)                                       /*!< AIPS0_MPRA.MTW0 Mask                    */
+#define AIPS_MPRA_MTW0_SHIFT                     (29U)                                               /*!< AIPS0_MPRA.MTW0 Position                */
+#define AIPS_MPRA_MTW0(x)                        (((uint32_t)(((uint32_t)(x))<<29U))&0x20000000UL)   /*!< AIPS0_MPRA.MTW0 Field                   */
+#define AIPS_MPRA_MTR0_MASK                      (0x40000000U)                                       /*!< AIPS0_MPRA.MTR0 Mask                    */
+#define AIPS_MPRA_MTR0_SHIFT                     (30U)                                               /*!< AIPS0_MPRA.MTR0 Position                */
+#define AIPS_MPRA_MTR0(x)                        (((uint32_t)(((uint32_t)(x))<<30U))&0x40000000UL)   /*!< AIPS0_MPRA.MTR0 Field                   */
+/* ------- PACR Bit Fields                          ------ */
+#define AIPS_PACR_TP7_MASK                       (0x1U)                                              /*!< AIPS0_PACR.TP7 Mask                     */
+#define AIPS_PACR_TP7_SHIFT                      (0U)                                                /*!< AIPS0_PACR.TP7 Position                 */
+#define AIPS_PACR_TP7(x)                         (((uint32_t)(((uint32_t)(x))<<0U))&0x1UL)           /*!< AIPS0_PACR.TP7 Field                    */
+#define AIPS_PACR_WP7_MASK                       (0x2U)                                              /*!< AIPS0_PACR.WP7 Mask                     */
+#define AIPS_PACR_WP7_SHIFT                      (1U)                                                /*!< AIPS0_PACR.WP7 Position                 */
+#define AIPS_PACR_WP7(x)                         (((uint32_t)(((uint32_t)(x))<<1U))&0x2UL)           /*!< AIPS0_PACR.WP7 Field                    */
+#define AIPS_PACR_SP7_MASK                       (0x4U)                                              /*!< AIPS0_PACR.SP7 Mask                     */
+#define AIPS_PACR_SP7_SHIFT                      (2U)                                                /*!< AIPS0_PACR.SP7 Position                 */
+#define AIPS_PACR_SP7(x)                         (((uint32_t)(((uint32_t)(x))<<2U))&0x4UL)           /*!< AIPS0_PACR.SP7 Field                    */
+#define AIPS_PACR_TP6_MASK                       (0x10U)                                             /*!< AIPS0_PACR.TP6 Mask                     */
+#define AIPS_PACR_TP6_SHIFT                      (4U)                                                /*!< AIPS0_PACR.TP6 Position                 */
+#define AIPS_PACR_TP6(x)                         (((uint32_t)(((uint32_t)(x))<<4U))&0x10UL)          /*!< AIPS0_PACR.TP6 Field                    */
+#define AIPS_PACR_WP6_MASK                       (0x20U)                                             /*!< AIPS0_PACR.WP6 Mask                     */
+#define AIPS_PACR_WP6_SHIFT                      (5U)                                                /*!< AIPS0_PACR.WP6 Position                 */
+#define AIPS_PACR_WP6(x)                         (((uint32_t)(((uint32_t)(x))<<5U))&0x20UL)          /*!< AIPS0_PACR.WP6 Field                    */
+#define AIPS_PACR_SP6_MASK                       (0x40U)                                             /*!< AIPS0_PACR.SP6 Mask                     */
+#define AIPS_PACR_SP6_SHIFT                      (6U)                                                /*!< AIPS0_PACR.SP6 Position                 */
+#define AIPS_PACR_SP6(x)                         (((uint32_t)(((uint32_t)(x))<<6U))&0x40UL)          /*!< AIPS0_PACR.SP6 Field                    */
+#define AIPS_PACR_TP5_MASK                       (0x100U)                                            /*!< AIPS0_PACR.TP5 Mask                     */
+#define AIPS_PACR_TP5_SHIFT                      (8U)                                                /*!< AIPS0_PACR.TP5 Position                 */
+#define AIPS_PACR_TP5(x)                         (((uint32_t)(((uint32_t)(x))<<8U))&0x100UL)         /*!< AIPS0_PACR.TP5 Field                    */
+#define AIPS_PACR_WP5_MASK                       (0x200U)                                            /*!< AIPS0_PACR.WP5 Mask                     */
+#define AIPS_PACR_WP5_SHIFT                      (9U)                                                /*!< AIPS0_PACR.WP5 Position                 */
+#define AIPS_PACR_WP5(x)                         (((uint32_t)(((uint32_t)(x))<<9U))&0x200UL)         /*!< AIPS0_PACR.WP5 Field                    */
+#define AIPS_PACR_SP5_MASK                       (0x400U)                                            /*!< AIPS0_PACR.SP5 Mask                     */
+#define AIPS_PACR_SP5_SHIFT                      (10U)                                               /*!< AIPS0_PACR.SP5 Position                 */
+#define AIPS_PACR_SP5(x)                         (((uint32_t)(((uint32_t)(x))<<10U))&0x400UL)        /*!< AIPS0_PACR.SP5 Field                    */
+#define AIPS_PACR_TP4_MASK                       (0x1000U)                                           /*!< AIPS0_PACR.TP4 Mask                     */
+#define AIPS_PACR_TP4_SHIFT                      (12U)                                               /*!< AIPS0_PACR.TP4 Position                 */
+#define AIPS_PACR_TP4(x)                         (((uint32_t)(((uint32_t)(x))<<12U))&0x1000UL)       /*!< AIPS0_PACR.TP4 Field                    */
+#define AIPS_PACR_WP4_MASK                       (0x2000U)                                           /*!< AIPS0_PACR.WP4 Mask                     */
+#define AIPS_PACR_WP4_SHIFT                      (13U)                                               /*!< AIPS0_PACR.WP4 Position                 */
+#define AIPS_PACR_WP4(x)                         (((uint32_t)(((uint32_t)(x))<<13U))&0x2000UL)       /*!< AIPS0_PACR.WP4 Field                    */
+#define AIPS_PACR_SP4_MASK                       (0x4000U)                                           /*!< AIPS0_PACR.SP4 Mask                     */
+#define AIPS_PACR_SP4_SHIFT                      (14U)                                               /*!< AIPS0_PACR.SP4 Position                 */
+#define AIPS_PACR_SP4(x)                         (((uint32_t)(((uint32_t)(x))<<14U))&0x4000UL)       /*!< AIPS0_PACR.SP4 Field                    */
+#define AIPS_PACR_TP3_MASK                       (0x10000U)                                          /*!< AIPS0_PACR.TP3 Mask                     */
+#define AIPS_PACR_TP3_SHIFT                      (16U)                                               /*!< AIPS0_PACR.TP3 Position                 */
+#define AIPS_PACR_TP3(x)                         (((uint32_t)(((uint32_t)(x))<<16U))&0x10000UL)      /*!< AIPS0_PACR.TP3 Field                    */
+#define AIPS_PACR_WP3_MASK                       (0x20000U)                                          /*!< AIPS0_PACR.WP3 Mask                     */
+#define AIPS_PACR_WP3_SHIFT                      (17U)                                               /*!< AIPS0_PACR.WP3 Position                 */
+#define AIPS_PACR_WP3(x)                         (((uint32_t)(((uint32_t)(x))<<17U))&0x20000UL)      /*!< AIPS0_PACR.WP3 Field                    */
+#define AIPS_PACR_SP3_MASK                       (0x40000U)                                          /*!< AIPS0_PACR.SP3 Mask                     */
+#define AIPS_PACR_SP3_SHIFT                      (18U)                                               /*!< AIPS0_PACR.SP3 Position                 */
+#define AIPS_PACR_SP3(x)                         (((uint32_t)(((uint32_t)(x))<<18U))&0x40000UL)      /*!< AIPS0_PACR.SP3 Field                    */
+#define AIPS_PACR_TP2_MASK                       (0x100000U)                                         /*!< AIPS0_PACR.TP2 Mask                     */
+#define AIPS_PACR_TP2_SHIFT                      (20U)                                               /*!< AIPS0_PACR.TP2 Position                 */
+#define AIPS_PACR_TP2(x)                         (((uint32_t)(((uint32_t)(x))<<20U))&0x100000UL)     /*!< AIPS0_PACR.TP2 Field                    */
+#define AIPS_PACR_WP2_MASK                       (0x200000U)                                         /*!< AIPS0_PACR.WP2 Mask                     */
+#define AIPS_PACR_WP2_SHIFT                      (21U)                                               /*!< AIPS0_PACR.WP2 Position                 */
+#define AIPS_PACR_WP2(x)                         (((uint32_t)(((uint32_t)(x))<<21U))&0x200000UL)     /*!< AIPS0_PACR.WP2 Field                    */
+#define AIPS_PACR_SP2_MASK                       (0x400000U)                                         /*!< AIPS0_PACR.SP2 Mask                     */
+#define AIPS_PACR_SP2_SHIFT                      (22U)                                               /*!< AIPS0_PACR.SP2 Position                 */
+#define AIPS_PACR_SP2(x)                         (((uint32_t)(((uint32_t)(x))<<22U))&0x400000UL)     /*!< AIPS0_PACR.SP2 Field                    */
+#define AIPS_PACR_TP1_MASK                       (0x1000000U)                                        /*!< AIPS0_PACR.TP1 Mask                     */
+#define AIPS_PACR_TP1_SHIFT                      (24U)                                               /*!< AIPS0_PACR.TP1 Position                 */
+#define AIPS_PACR_TP1(x)                         (((uint32_t)(((uint32_t)(x))<<24U))&0x1000000UL)    /*!< AIPS0_PACR.TP1 Field                    */
+#define AIPS_PACR_WP1_MASK                       (0x2000000U)                                        /*!< AIPS0_PACR.WP1 Mask                     */
+#define AIPS_PACR_WP1_SHIFT                      (25U)                                               /*!< AIPS0_PACR.WP1 Position                 */
+#define AIPS_PACR_WP1(x)                         (((uint32_t)(((uint32_t)(x))<<25U))&0x2000000UL)    /*!< AIPS0_PACR.WP1 Field                    */
+#define AIPS_PACR_SP1_MASK                       (0x4000000U)                                        /*!< AIPS0_PACR.SP1 Mask                     */
+#define AIPS_PACR_SP1_SHIFT                      (26U)                                               /*!< AIPS0_PACR.SP1 Position                 */
+#define AIPS_PACR_SP1(x)                         (((uint32_t)(((uint32_t)(x))<<26U))&0x4000000UL)    /*!< AIPS0_PACR.SP1 Field                    */
+#define AIPS_PACR_TP0_MASK                       (0x10000000U)                                       /*!< AIPS0_PACR.TP0 Mask                     */
+#define AIPS_PACR_TP0_SHIFT                      (28U)                                               /*!< AIPS0_PACR.TP0 Position                 */
+#define AIPS_PACR_TP0(x)                         (((uint32_t)(((uint32_t)(x))<<28U))&0x10000000UL)   /*!< AIPS0_PACR.TP0 Field                    */
+#define AIPS_PACR_WP0_MASK                       (0x20000000U)                                       /*!< AIPS0_PACR.WP0 Mask                     */
+#define AIPS_PACR_WP0_SHIFT                      (29U)                                               /*!< AIPS0_PACR.WP0 Position                 */
+#define AIPS_PACR_WP0(x)                         (((uint32_t)(((uint32_t)(x))<<29U))&0x20000000UL)   /*!< AIPS0_PACR.WP0 Field                    */
+#define AIPS_PACR_SP0_MASK                       (0x40000000U)                                       /*!< AIPS0_PACR.SP0 Mask                     */
+#define AIPS_PACR_SP0_SHIFT                      (30U)                                               /*!< AIPS0_PACR.SP0 Position                 */
+#define AIPS_PACR_SP0(x)                         (((uint32_t)(((uint32_t)(x))<<30U))&0x40000000UL)   /*!< AIPS0_PACR.SP0 Field                    */
+/**
+ * @} */ /* End group AIPS_Register_Masks_GROUP 
+ */
+
+/* AIPS0 - Peripheral instance base addresses */
+#define AIPS0_BasePtr                  0x40000000UL //!< Peripheral base address
+#define AIPS0                          ((AIPS_Type *) AIPS0_BasePtr) //!< Freescale base pointer
+#define AIPS0_BASE_PTR                 (AIPS0) //!< Freescale style base pointer
+/**
+ * @} */ /* End group AIPS_Peripheral_access_layer_GROUP 
+ */
+/**
+* @addtogroup AIPS_Peripheral_access_layer_GROUP AIPS Peripheral Access Layer
+* @brief C Struct for AIPS
+* @{
+*/
+
+/* ================================================================================ */
+/* ================           AIPS1 (derived from AIPS0)           ================ */
+/* ================================================================================ */
+
+/**
+ * @brief AIPS-Lite Bridge
+ */
+
+/* AIPS1 - Peripheral instance base addresses */
+#define AIPS1_BasePtr                  0x40080000UL //!< Peripheral base address
+#define AIPS1                          ((AIPS_Type *) AIPS1_BasePtr) //!< Freescale base pointer
+#define AIPS1_BASE_PTR                 (AIPS1) //!< Freescale style base pointer
+/**
+ * @} */ /* End group AIPS_Peripheral_access_layer_GROUP 
+ */
+/**
 * @addtogroup AXBS_Peripheral_access_layer_GROUP AXBS Peripheral Access Layer
 * @brief C Struct for AXBS
 * @{
@@ -725,6 +941,26 @@ typedef struct AXBS_Type {
 #define AXBS_MGPCR0_AULB_MASK                    (0x7U)                                              /*!< AXBS_MGPCR0.AULB Mask                   */
 #define AXBS_MGPCR0_AULB_SHIFT                   (0U)                                                /*!< AXBS_MGPCR0.AULB Position               */
 #define AXBS_MGPCR0_AULB(x)                      (((uint32_t)(((uint32_t)(x))<<0U))&0x7UL)           /*!< AXBS_MGPCR0.AULB Field                  */
+/* ------- MGPCR1 Bit Fields                        ------ */
+#define AXBS_MGPCR1_AULB_MASK                    (0x7U)                                              /*!< AXBS_MGPCR1.AULB Mask                   */
+#define AXBS_MGPCR1_AULB_SHIFT                   (0U)                                                /*!< AXBS_MGPCR1.AULB Position               */
+#define AXBS_MGPCR1_AULB(x)                      (((uint32_t)(((uint32_t)(x))<<0U))&0x7UL)           /*!< AXBS_MGPCR1.AULB Field                  */
+/* ------- MGPCR2 Bit Fields                        ------ */
+#define AXBS_MGPCR2_AULB_MASK                    (0x7U)                                              /*!< AXBS_MGPCR2.AULB Mask                   */
+#define AXBS_MGPCR2_AULB_SHIFT                   (0U)                                                /*!< AXBS_MGPCR2.AULB Position               */
+#define AXBS_MGPCR2_AULB(x)                      (((uint32_t)(((uint32_t)(x))<<0U))&0x7UL)           /*!< AXBS_MGPCR2.AULB Field                  */
+/* ------- MGPCR3 Bit Fields                        ------ */
+#define AXBS_MGPCR3_AULB_MASK                    (0x7U)                                              /*!< AXBS_MGPCR3.AULB Mask                   */
+#define AXBS_MGPCR3_AULB_SHIFT                   (0U)                                                /*!< AXBS_MGPCR3.AULB Position               */
+#define AXBS_MGPCR3_AULB(x)                      (((uint32_t)(((uint32_t)(x))<<0U))&0x7UL)           /*!< AXBS_MGPCR3.AULB Field                  */
+/* ------- MGPCR6 Bit Fields                        ------ */
+#define AXBS_MGPCR6_AULB_MASK                    (0x7U)                                              /*!< AXBS_MGPCR6.AULB Mask                   */
+#define AXBS_MGPCR6_AULB_SHIFT                   (0U)                                                /*!< AXBS_MGPCR6.AULB Position               */
+#define AXBS_MGPCR6_AULB(x)                      (((uint32_t)(((uint32_t)(x))<<0U))&0x7UL)           /*!< AXBS_MGPCR6.AULB Field                  */
+/* ------- MGPCR7 Bit Fields                        ------ */
+#define AXBS_MGPCR7_AULB_MASK                    (0x7U)                                              /*!< AXBS_MGPCR7.AULB Mask                   */
+#define AXBS_MGPCR7_AULB_SHIFT                   (0U)                                                /*!< AXBS_MGPCR7.AULB Position               */
+#define AXBS_MGPCR7_AULB(x)                      (((uint32_t)(((uint32_t)(x))<<0U))&0x7UL)           /*!< AXBS_MGPCR7.AULB Field                  */
 /**
  * @} */ /* End group AXBS_Register_Masks_GROUP 
  */
@@ -749,6 +985,7 @@ typedef struct AXBS_Type {
 /**
  * @brief Flex Controller Area Network module
  */
+#define CAN_MESSAGE_BUFFER_COUNT 16     /**< Number of message buffers                          */
 /**
 * @addtogroup CAN_structs_GROUP CAN struct
 * @brief Struct for CAN
@@ -780,7 +1017,7 @@ typedef struct CAN_Type {
       __IO uint32_t  ID;                        /**< 0084: Message Buffer 0 ID Register                                 */
       __IO uint32_t  WORD0;                     /**< 0088: Message Buffer 0 WORD0 Register                              */
       __IO uint32_t  WORD1;                     /**< 008C: Message Buffer 0 WORD1 Register                              */
-   } MB[16];                                    /**< 0080: (cluster: size=0x0100, 256)                                  */
+   } MB[CAN_MESSAGE_BUFFER_COUNT];              /**< 0080: (cluster: size=0x0100, 256)                                  */
         uint8_t   RESERVED_4[1792];            
    __IO uint32_t  RXIMR[16];                    /**< 0880: Rx Individual Mask                                           */
 } CAN_Type;
@@ -1688,26 +1925,14 @@ typedef struct CRC_Type {
    union {                                      /**< 0000: (size=0004)                                                  */
       __IO uint32_t  GPOLY;                     /**< 0004: Polynomial register                                          */
       struct {                                  /**< 0000: (size=0004)                                                  */
-         union {                                /**< 0000: (size=0002)                                                  */
-            __IO uint16_t  GPOLYL;              /**< 0004: GPOLYL register                                              */
-            struct {                            /**< 0000: (size=0002)                                                  */
-               __IO uint8_t   GPOLYLL;          /**< 0004: GPOLYLL register                                             */
-               __IO uint8_t   GPOLYLU;          /**< 0005: GPOLYLU register                                             */
-            };
-         };
-         union {                                /**< 0000: (size=0002)                                                  */
-            __IO uint16_t  GPOLYH;              /**< 0006: GPOLYH register                                              */
-            struct {                            /**< 0000: (size=0002)                                                  */
-               __IO uint8_t   GPOLYHL;          /**< 0006: GPOLYHL register                                             */
-               __IO uint8_t   GPOLYHU;          /**< 0007: GPOLYHU register                                             */
-            };
-         };
+         __IO uint16_t  GPOLYL;                 /**< 0004: GPOLYL register                                              */
+         __IO uint16_t  GPOLYH;                 /**< 0006: GPOLYH register                                              */
       };
    };
    union {                                      /**< 0000: (size=0004)                                                  */
       __IO uint32_t  CTRL;                      /**< 0008: Control register                                             */
       struct {                                  /**< 0000: (size=0004)                                                  */
-              uint8_t   RESERVED_6[3];         
+              uint8_t   RESERVED_4[3];         
          __IO uint8_t   CTRLHU;                 /**< 000B: Control register (byte access)                               */
       };
    };
@@ -1774,26 +1999,10 @@ typedef struct CRC_Type {
 #define CRC_GPOLYL_GPOLYL_MASK                   (0xFFFFU)                                           /*!< CRC0_GPOLYL.GPOLYL Mask                 */
 #define CRC_GPOLYL_GPOLYL_SHIFT                  (0U)                                                /*!< CRC0_GPOLYL.GPOLYL Position             */
 #define CRC_GPOLYL_GPOLYL(x)                     (((uint16_t)(((uint16_t)(x))<<0U))&0xFFFFUL)        /*!< CRC0_GPOLYL.GPOLYL Field                */
-/* ------- GPOLYLL Bit Fields                       ------ */
-#define CRC_GPOLYLL_GPOLYLL_MASK                 (0xFFU)                                             /*!< CRC0_GPOLYLL.GPOLYLL Mask               */
-#define CRC_GPOLYLL_GPOLYLL_SHIFT                (0U)                                                /*!< CRC0_GPOLYLL.GPOLYLL Position           */
-#define CRC_GPOLYLL_GPOLYLL(x)                   (((uint8_t)(((uint8_t)(x))<<0U))&0xFFUL)            /*!< CRC0_GPOLYLL.GPOLYLL Field              */
-/* ------- GPOLYLU Bit Fields                       ------ */
-#define CRC_GPOLYLU_GPOLYLU_MASK                 (0xFFU)                                             /*!< CRC0_GPOLYLU.GPOLYLU Mask               */
-#define CRC_GPOLYLU_GPOLYLU_SHIFT                (0U)                                                /*!< CRC0_GPOLYLU.GPOLYLU Position           */
-#define CRC_GPOLYLU_GPOLYLU(x)                   (((uint8_t)(((uint8_t)(x))<<0U))&0xFFUL)            /*!< CRC0_GPOLYLU.GPOLYLU Field              */
 /* ------- GPOLYH Bit Fields                        ------ */
 #define CRC_GPOLYH_GPOLYH_MASK                   (0xFFFFU)                                           /*!< CRC0_GPOLYH.GPOLYH Mask                 */
 #define CRC_GPOLYH_GPOLYH_SHIFT                  (0U)                                                /*!< CRC0_GPOLYH.GPOLYH Position             */
 #define CRC_GPOLYH_GPOLYH(x)                     (((uint16_t)(((uint16_t)(x))<<0U))&0xFFFFUL)        /*!< CRC0_GPOLYH.GPOLYH Field                */
-/* ------- GPOLYHL Bit Fields                       ------ */
-#define CRC_GPOLYHL_GPOLYHL_MASK                 (0xFFU)                                             /*!< CRC0_GPOLYHL.GPOLYHL Mask               */
-#define CRC_GPOLYHL_GPOLYHL_SHIFT                (0U)                                                /*!< CRC0_GPOLYHL.GPOLYHL Position           */
-#define CRC_GPOLYHL_GPOLYHL(x)                   (((uint8_t)(((uint8_t)(x))<<0U))&0xFFUL)            /*!< CRC0_GPOLYHL.GPOLYHL Field              */
-/* ------- GPOLYHU Bit Fields                       ------ */
-#define CRC_GPOLYHU_GPOLYHU_MASK                 (0xFFU)                                             /*!< CRC0_GPOLYHU.GPOLYHU Mask               */
-#define CRC_GPOLYHU_GPOLYHU_SHIFT                (0U)                                                /*!< CRC0_GPOLYHU.GPOLYHU Position           */
-#define CRC_GPOLYHU_GPOLYHU(x)                   (((uint8_t)(((uint8_t)(x))<<0U))&0xFFUL)            /*!< CRC0_GPOLYHU.GPOLYHU Field              */
 /* ------- CTRL Bit Fields                          ------ */
 #define CRC_CTRL_TCRC_MASK                       (0x1000000U)                                        /*!< CRC0_CTRL.TCRC Mask                     */
 #define CRC_CTRL_TCRC_SHIFT                      (24U)                                               /*!< CRC0_CTRL.TCRC Position                 */
@@ -2721,38 +2930,43 @@ typedef struct DMA_Type {
         uint8_t   RESERVED_4[4];               
    __I  uint32_t  HRS;                          /**< 0034: Hardware Request Status Register                             */
         uint8_t   RESERVED_5[200];             
-   __IO uint8_t   DCHPRI3;                      /**< 0100: Channel 3 Priority Register                                  */
-   __IO uint8_t   DCHPRI2;                      /**< 0101: Channel 2 Priority Register                                  */
-   __IO uint8_t   DCHPRI1;                      /**< 0102: Channel 1 Priority Register                                  */
-   __IO uint8_t   DCHPRI0;                      /**< 0103: Channel 0 Priority Register                                  */
-   __IO uint8_t   DCHPRI7;                      /**< 0104: Channel 7 Priority Register                                  */
-   __IO uint8_t   DCHPRI6;                      /**< 0105: Channel 6 Priority Register                                  */
-   __IO uint8_t   DCHPRI5;                      /**< 0106: Channel 5 Priority Register                                  */
-   __IO uint8_t   DCHPRI4;                      /**< 0107: Channel 4 Priority Register                                  */
-   __IO uint8_t   DCHPRI11;                     /**< 0108: Channel 11 Priority Register                                 */
-   __IO uint8_t   DCHPRI10;                     /**< 0109: Channel 10 Priority Register                                 */
-   __IO uint8_t   DCHPRI9;                      /**< 010A: Channel 9 Priority Register                                  */
-   __IO uint8_t   DCHPRI8;                      /**< 010B: Channel 8 Priority Register                                  */
-   __IO uint8_t   DCHPRI15;                     /**< 010C: Channel 15 Priority Register                                 */
-   __IO uint8_t   DCHPRI14;                     /**< 010D: Channel 14 Priority Register                                 */
-   __IO uint8_t   DCHPRI13;                     /**< 010E: Channel 13 Priority Register                                 */
-   __IO uint8_t   DCHPRI12;                     /**< 010F: Channel 12 Priority Register                                 */
-   __IO uint8_t   DCHPRI19;                     /**< 0110: Channel 19 Priority Register                                 */
-   __IO uint8_t   DCHPRI18;                     /**< 0111: Channel 18 Priority Register                                 */
-   __IO uint8_t   DCHPRI17;                     /**< 0112: Channel 17 Priority Register                                 */
-   __IO uint8_t   DCHPRI16;                     /**< 0113: Channel 16 Priority Register                                 */
-   __IO uint8_t   DCHPRI23;                     /**< 0114: Channel 23 Priority Register                                 */
-   __IO uint8_t   DCHPRI22;                     /**< 0115: Channel 22 Priority Register                                 */
-   __IO uint8_t   DCHPRI21;                     /**< 0116: Channel 21 Priority Register                                 */
-   __IO uint8_t   DCHPRI20;                     /**< 0117: Channel 20 Priority Register                                 */
-   __IO uint8_t   DCHPRI27;                     /**< 0118: Channel 27 Priority Register                                 */
-   __IO uint8_t   DCHPRI26;                     /**< 0119: Channel 26 Priority Register                                 */
-   __IO uint8_t   DCHPRI25;                     /**< 011A: Channel 25 Priority Register                                 */
-   __IO uint8_t   DCHPRI24;                     /**< 011B: Channel 24 Priority Register                                 */
-   __IO uint8_t   DCHPRI31;                     /**< 011C: Channel 31 Priority Register                                 */
-   __IO uint8_t   DCHPRI30;                     /**< 011D: Channel 30 Priority Register                                 */
-   __IO uint8_t   DCHPRI29;                     /**< 011E: Channel 29 Priority Register                                 */
-   __IO uint8_t   DCHPRI28;                     /**< 011F: Channel 28 Priority Register                                 */
+   union {                                      /**< 0000: (size=0020)                                                  */
+      struct {                                  /**< 0000: (size=0020)                                                  */
+      __IO uint8_t   DCHPRI3;                   /**< 0100: Channel 3 Priority Register                                  */
+      __IO uint8_t   DCHPRI2;                   /**< 0101: Channel 2 Priority Register                                  */
+      __IO uint8_t   DCHPRI1;                   /**< 0102: Channel 1 Priority Register                                  */
+      __IO uint8_t   DCHPRI0;                   /**< 0103: Channel 0 Priority Register                                  */
+      __IO uint8_t   DCHPRI7;                   /**< 0104: Channel 7 Priority Register                                  */
+      __IO uint8_t   DCHPRI6;                   /**< 0105: Channel 6 Priority Register                                  */
+      __IO uint8_t   DCHPRI5;                   /**< 0106: Channel 5 Priority Register                                  */
+      __IO uint8_t   DCHPRI4;                   /**< 0107: Channel 4 Priority Register                                  */
+      __IO uint8_t   DCHPRI11;                  /**< 0108: Channel 11 Priority Register                                 */
+      __IO uint8_t   DCHPRI10;                  /**< 0109: Channel 10 Priority Register                                 */
+      __IO uint8_t   DCHPRI9;                   /**< 010A: Channel 9 Priority Register                                  */
+      __IO uint8_t   DCHPRI8;                   /**< 010B: Channel 8 Priority Register                                  */
+      __IO uint8_t   DCHPRI15;                  /**< 010C: Channel 15 Priority Register                                 */
+      __IO uint8_t   DCHPRI14;                  /**< 010D: Channel 14 Priority Register                                 */
+      __IO uint8_t   DCHPRI13;                  /**< 010E: Channel 13 Priority Register                                 */
+      __IO uint8_t   DCHPRI12;                  /**< 010F: Channel 12 Priority Register                                 */
+      __IO uint8_t   DCHPRI19;                  /**< 0110: Channel 19 Priority Register                                 */
+      __IO uint8_t   DCHPRI18;                  /**< 0111: Channel 18 Priority Register                                 */
+      __IO uint8_t   DCHPRI17;                  /**< 0112: Channel 17 Priority Register                                 */
+      __IO uint8_t   DCHPRI16;                  /**< 0113: Channel 16 Priority Register                                 */
+      __IO uint8_t   DCHPRI23;                  /**< 0114: Channel 23 Priority Register                                 */
+      __IO uint8_t   DCHPRI22;                  /**< 0115: Channel 22 Priority Register                                 */
+      __IO uint8_t   DCHPRI21;                  /**< 0116: Channel 21 Priority Register                                 */
+      __IO uint8_t   DCHPRI20;                  /**< 0117: Channel 20 Priority Register                                 */
+      __IO uint8_t   DCHPRI27;                  /**< 0118: Channel 27 Priority Register                                 */
+      __IO uint8_t   DCHPRI26;                  /**< 0119: Channel 26 Priority Register                                 */
+      __IO uint8_t   DCHPRI25;                  /**< 011A: Channel 25 Priority Register                                 */
+      __IO uint8_t   DCHPRI24;                  /**< 011B: Channel 24 Priority Register                                 */
+      __IO uint8_t   DCHPRI31;                  /**< 011C: Channel 31 Priority Register                                 */
+      __IO uint8_t   DCHPRI30;                  /**< 011D: Channel 30 Priority Register                                 */
+      __IO uint8_t   DCHPRI29;                  /**< 011E: Channel 29 Priority Register                                 */
+      __IO uint8_t   DCHPRI28;                  /**< 011F: Channel 28 Priority Register                                 */
+      };
+      __IO uint8_t   DCHPRI[32];                /**< 0100: Channel  Priority Register                                   */
+   };
         uint8_t   RESERVED_6[3808];            
    struct {
       __IO uint32_t  SADDR;                     /**< 1000: Source Address                                               */
@@ -3444,6 +3658,7 @@ typedef struct DMA_Type {
 #define DMA_DCHPRI_ECP_MASK                      (0x80U)                                             /*!< DMA0_DCHPRI.ECP Mask                    */
 #define DMA_DCHPRI_ECP_SHIFT                     (7U)                                                /*!< DMA0_DCHPRI.ECP Position                */
 #define DMA_DCHPRI_ECP(x)                        (((uint8_t)(((uint8_t)(x))<<7U))&0x80UL)            /*!< DMA0_DCHPRI.ECP Field                   */
+/* ------- DCHPRI Bit Fields                        ------ */
 /* ------- SADDR Bit Fields                         ------ */
 #define DMA_SADDR_SADDR_MASK                     (0xFFFFFFFFU)                                       /*!< DMA0_SADDR.SADDR Mask                   */
 #define DMA_SADDR_SADDR_SHIFT                    (0U)                                                /*!< DMA0_SADDR.SADDR Position               */
@@ -4244,63 +4459,63 @@ typedef struct ENET_Type {
    __IO uint32_t  TACC;                         /**< 01C0: Transmit Accelerator Function Configuration                  */
    __IO uint32_t  RACC;                         /**< 01C4: Receive Accelerator Function Configuration                   */
         uint8_t   RESERVED_13[56];             
-   __IO uint32_t  RMON_T_DROP;                  /**< 0200: Count of frames not counted correctly (RMON_T_DROP). NOTE: Counter not implemented (read 0 always) as not applicable */
-   __IO uint32_t  RMON_T_PACKETS;               /**< 0204: RMON Tx packet count (RMON_T_PACKETS)                        */
-   __IO uint32_t  RMON_T_BC_PKT;                /**< 0208: RMON Tx Broadcast Packets (RMON_T_BC_PKT)                    */
-   __IO uint32_t  RMON_T_MC_PKT;                /**< 020C: RMON Tx Multicast Packets (RMON_T_MC_PKT)                    */
-   __IO uint32_t  RMON_T_CRC_ALIGN;             /**< 0210: RMON Tx Packets w CRC/Align error (RMON_T_CRC_ALIGN)         */
-   __IO uint32_t  RMON_T_UNDERSIZE;             /**< 0214: RMON Tx Packets < 64 bytes, good CRC (RMON_T_UNDERSIZE)      */
-   __IO uint32_t  RMON_T_OVERSIZE;              /**< 0218: RMON Tx Packets > MAX_FL bytes, good CRC (RMON_T_OVERSIZE)   */
-   __IO uint32_t  RMON_T_FRAG;                  /**< 021C: RMON Tx Packets < 64 bytes, bad CRC (RMON_T_FRAG)            */
-   __IO uint32_t  RMON_T_JAB;                   /**< 0220: RMON Tx Packets > MAX_FL bytes, bad CRC (RMON_T_JAB)         */
-   __IO uint32_t  RMON_T_COL;                   /**< 0224: RMON Tx collision count (RMON_T_COL)                         */
-   __IO uint32_t  RMON_T_P64;                   /**< 0228: RMON Tx 64 byte packets (RMON_T_P64)                         */
-   __IO uint32_t  RMON_T_P65TO127;              /**< 022C: RMON Tx 65 to 127 byte packets (RMON_T_P65TO127)             */
-   __IO uint32_t  RMON_T_P128TO255;             /**< 0230: RMON Tx 128 to 255 byte packets (RMON_T_P128TO255)           */
-   __IO uint32_t  RMON_T_P256TO511;             /**< 0234: RMON Tx 256 to 511 byte packets (RMON_T_P256TO511)           */
-   __IO uint32_t  RMON_T_P512TO1023;            /**< 0238: RMON Tx 512 to 1023 byte packets (RMON_T_P512TO1023)         */
-   __IO uint32_t  RMON_T_P1024TO2047;           /**< 023C: RMON Tx 1024 to 2047 byte packets (RMON_T_P1024TO2047)       */
-   __IO uint32_t  RMON_T_P_GTE2048;             /**< 0240: RMON Tx packets w > 2048 bytes (RMON_T_P_GTE2048)            */
-   __IO uint32_t  RMON_T_OCTETS;                /**< 0244: RMON Tx Octets (RMON_T_OCTETS)                               */
-   __IO uint32_t  IEEE_T_DROP;                  /**< 0248: Count of frames not counted correctly (IEEE_T_DROP). NOTE: Counter not implemented (read 0 always) as not applicable */
-   __IO uint32_t  IEEE_T_FRAME_OK;              /**< 024C: Frames Transmitted OK (IEEE_T_FRAME_OK)                      */
-   __IO uint32_t  IEEE_T_1COL;                  /**< 0250: Frames Transmitted with Single Collision (IEEE_T_1COL)       */
-   __IO uint32_t  IEEE_T_MCOL;                  /**< 0254: Frames Transmitted with Multiple Collisions (IEEE_T_MCOL)    */
-   __IO uint32_t  IEEE_T_DEF;                   /**< 0258: Frames Transmitted after Deferral Delay (IEEE_T_DEF)         */
-   __IO uint32_t  IEEE_T_LCOL;                  /**< 025C: Frames Transmitted with Late Collision (IEEE_T_LCOL)         */
-   __IO uint32_t  IEEE_T_EXCOL;                 /**< 0260: Frames Transmitted with Excessive Collisions (IEEE_T_EXCOL)  */
-   __IO uint32_t  IEEE_T_MACERR;                /**< 0264: Frames Transmitted with Tx FIFO Underrun (IEEE_T_MACERR)     */
-   __IO uint32_t  IEEE_T_CSERR;                 /**< 0268: Frames Transmitted with Carrier Sense Error (IEEE_T_CSERR)   */
-   __IO uint32_t  IEEE_T_SQE;                   /**< 026C: Frames Transmitted with SQE Error (IEEE_T_SQE). NOTE: Counter not implemented (read 0 always) as no SQE information is available */
-   __IO uint32_t  IEEE_T_FDXFC;                 /**< 0270: Flow Control Pause frames transmitted (IEEE_T_FDXFC)         */
-   __IO uint32_t  IEEE_T_OCTETS_OK;             /**< 0274: Octet count for Frames Transmitted w/o Error (IEEE_T_OCTETS_OK). NOTE: Counts total octets (includes header and FCS fields) */
+   __I  uint32_t  RMON_T_DROP;                  /**< 0200: Reserved Statistic Register                                  */
+   __I  uint32_t  RMON_T_PACKETS;               /**< 0204: RMON Tx packet count                                         */
+   __I  uint32_t  RMON_T_BC_PKT;                /**< 0208: Tx Broadcast Packets Statistic Register                      */
+   __I  uint32_t  RMON_T_MC_PKT;                /**< 020C: Tx Multicast Packets Statistic Register                      */
+   __I  uint32_t  RMON_T_CRC_ALIGN;             /**< 0210: Tx Packets with CRC/Align Error Statistic Register           */
+   __I  uint32_t  RMON_T_UNDERSIZE;             /**< 0214: Tx Packets Less Than Bytes and Good CRC Statistic Register   */
+   __I  uint32_t  RMON_T_OVERSIZE;              /**< 0218: Tx Packets GT MAX_FL bytes and Good CRC Statistic Register   */
+   __I  uint32_t  RMON_T_FRAG;                  /**< 021C: Tx Packets Less Than 64 Bytes and Bad CRC Statistic Register */
+   __I  uint32_t  RMON_T_JAB;                   /**< 0220: Tx Packets Greater Than MAX_FL bytes and Bad CRC Statistic Register */
+   __I  uint32_t  RMON_T_COL;                   /**< 0224: Tx Collision Count Statistic Register                        */
+   __I  uint32_t  RMON_T_P64;                   /**< 0228: Tx 64-Byte Packets Statistic Register                        */
+   __I  uint32_t  RMON_T_P65TO127;              /**< 022C: Tx 65- to 127-byte Packets Statistic Register                */
+   __I  uint32_t  RMON_T_P128TO255;             /**< 0230: Tx 128- to 255-byte Packets Statistic Register               */
+   __I  uint32_t  RMON_T_P256TO511;             /**< 0234: Tx 256- to 511-byte Packets Statistic Register               */
+   __I  uint32_t  RMON_T_P512TO1023;            /**< 0238: Tx 512- to 1023-byte Packets Statistic Register              */
+   __I  uint32_t  RMON_T_P1024TO2047;           /**< 023C: Tx 1024- to 2047-byte Packets Statistic Register             */
+   __I  uint32_t  RMON_T_P_GTE2048;             /**< 0240: Tx Packets Greater Than 2048 Bytes Statistic Register        */
+   __I  uint32_t  RMON_T_OCTETS;                /**< 0244: Tx Octets Statistic Register                                 */
+   __I  uint32_t  IEEE_T_DROP;                  /**< 0248: Reserved Statistic Register                                  */
+   __I  uint32_t  IEEE_T_FRAME_OK;              /**< 024C: Frames Transmitted OK Statistic Register                     */
+   __I  uint32_t  IEEE_T_1COL;                  /**< 0250: Frames Transmitted with Single Collision Statistic Register  */
+   __I  uint32_t  IEEE_T_MCOL;                  /**< 0254: Frames Transmitted with Multiple Collisions Statistic Register */
+   __I  uint32_t  IEEE_T_DEF;                   /**< 0258: Frames Transmitted after Deferral Delay Statistic Register   */
+   __I  uint32_t  IEEE_T_LCOL;                  /**< 025C: Frames Transmitted with Late Collision Statistic Register    */
+   __I  uint32_t  IEEE_T_EXCOL;                 /**< 0260: Frames Transmitted with Excessive Collisions Statistic Register */
+   __I  uint32_t  IEEE_T_MACERR;                /**< 0264: Frames Transmitted with Tx FIFO Underrun Statistic Register  */
+   __I  uint32_t  IEEE_T_CSERR;                 /**< 0268: Frames Transmitted with Carrier Sense Error Statistic Register */
+   __I  uint32_t  IEEE_T_SQE;                   /**< 026C: Reserved Statistic Register                                  */
+   __I  uint32_t  IEEE_T_FDXFC;                 /**< 0270: Flow Control Pause Frames Transmitted Statistic Register     */
+   __I  uint32_t  IEEE_T_OCTETS_OK;             /**< 0274: Octet Count for Frames Transmitted w/o Error Statistic Register */
         uint8_t   RESERVED_14[12];             
-   __IO uint32_t  RMON_R_PACKETS;               /**< 0284: RMON Rx packet count (RMON_R_PACKETS)                        */
-   __IO uint32_t  RMON_R_BC_PKT;                /**< 0288: RMON Rx Broadcast Packets (RMON_R_BC_PKT)                    */
-   __IO uint32_t  RMON_R_MC_PKT;                /**< 028C: RMON Rx Multicast Packets (RMON_R_MC_PKT)                    */
-   __IO uint32_t  RMON_R_CRC_ALIGN;             /**< 0290: RMON Rx Packets w CRC/Align error (RMON_R_CRC_ALIGN)         */
-   __IO uint32_t  RMON_R_UNDERSIZE;             /**< 0294: RMON Rx Packets < 64 bytes, good CRC (RMON_R_UNDERSIZE)      */
-   __IO uint32_t  RMON_R_OVERSIZE;              /**< 0298: RMON Rx Packets > MAX_FL bytes, good CRC (RMON_R_OVERSIZE)   */
-   __IO uint32_t  RMON_R_FRAG;                  /**< 029C: RMON Rx Packets < 64 bytes, bad CRC (RMON_R_FRAG)            */
-   __IO uint32_t  RMON_R_JAB;                   /**< 02A0: RMON Rx Packets > MAX_FL bytes, bad CRC (RMON_R_JAB)         */
-   __IO uint32_t  RMON_R_RESVD_0;               /**< 02A4: Reserved (RMON_R_RESVD_0)                                    */
-   __IO uint32_t  RMON_R_P64;                   /**< 02A8: RMON Rx 64 byte packets (RMON_R_P64)                         */
-   __IO uint32_t  RMON_R_P65TO127;              /**< 02AC: RMON Rx 65 to 127 byte packets (RMON_R_P65TO127)             */
-   __IO uint32_t  RMON_R_P128TO255;             /**< 02B0: RMON Rx 128 to 255 byte packets (RMON_R_P128TO255)           */
-   __IO uint32_t  RMON_R_P256TO511;             /**< 02B4: RMON Rx 256 to 511 byte packets (RMON_R_P256TO511)           */
-   __IO uint32_t  RMON_R_P512TO1023;            /**< 02B8: RMON Rx 512 to 1023 byte packets (RMON_R_P512TO1023)         */
-   __IO uint32_t  RMON_R_P1024TO2047;           /**< 02BC: RMON Rx 1024 to 2047 byte packets (RMON_R_P1024TO2047)       */
-   __IO uint32_t  RMON_R_P_GTE2048;             /**< 02C0: RMON Rx packets w > 2048 bytes (RMON_R_P_GTE2048)            */
-   __IO uint32_t  RMON_R_OCTETS;                /**< 02C4: RMON Rx Octets (RMON_R_OCTETS)                               */
-   __IO uint32_t  IEEE_R_DROP;                  /**< 02C8: Count of frames not counted correctly (IEEE_R_DROP). NOTE: Counter increments if a frame with valid/missing SFD character is detected and has been dropped. None of the other counters increments if this counter increments */
-   __IO uint32_t  IEEE_R_FRAME_OK;              /**< 02CC: Frames Received OK (IEEE_R_FRAME_OK)                         */
-   __IO uint32_t  IEEE_R_CRC;                   /**< 02D0: Frames Received with CRC Error (IEEE_R_CRC)                  */
-   __IO uint32_t  IEEE_R_ALIGN;                 /**< 02D4: Frames Received with Alignment Error (IEEE_R_ALIGN)          */
-   __IO uint32_t  IEEE_R_MACERR;                /**< 02D8: Receive Fifo Overflow count (IEEE_R_MACERR)                  */
-   __IO uint32_t  IEEE_R_FDXFC;                 /**< 02DC: Flow Control Pause frames received (IEEE_R_FDXFC)            */
-   __IO uint32_t  IEEE_R_OCTETS_OK;             /**< 02E0: Octet count for Frames Rcvd w/o Error (IEEE_R_OCTETS_OK). Counts total octets (includes header and FCS fields) */
+   __I  uint32_t  RMON_R_PACKETS;               /**< 0284: Rx Packet Count Statistic Register                           */
+   __I  uint32_t  RMON_R_BC_PKT;                /**< 0288: Rx Broadcast Packets Statistic Register                      */
+   __I  uint32_t  RMON_R_MC_PKT;                /**< 028C: Rx Multicast Packets Statistic Register                      */
+   __I  uint32_t  RMON_R_CRC_ALIGN;             /**< 0290: Rx Packets with CRC/Align Error Statistic Register           */
+   __I  uint32_t  RMON_R_UNDERSIZE;             /**< 0294: Rx Packets with Less Than 64 Bytes and Good CRC Statistic Register */
+   __I  uint32_t  RMON_R_OVERSIZE;              /**< 0298: Rx Packets Greater Than MAX_FL and Good CRC Statistic Register */
+   __I  uint32_t  RMON_R_FRAG;                  /**< 029C: Rx Packets Less Than 64 Bytes and Bad CRC Statistic Register */
+   __I  uint32_t  RMON_R_JAB;                   /**< 02A0: Rx Packets Greater Than MAX_FL Bytes and Bad CRC Statistic Register */
+   __I  uint32_t  RMON_R_RESVD_0;               /**< 02A4: Reserved Statistic Register                                  */
+   __I  uint32_t  RMON_R_P64;                   /**< 02A8: Rx 64-Byte Packets Statistic Register                        */
+   __I  uint32_t  RMON_R_P65TO127;              /**< 02AC: Rx 65- to 127-Byte Packets Statistic Register                */
+   __I  uint32_t  RMON_R_P128TO255;             /**< 02B0: Rx 128- to 255-Byte Packets Statistic Register               */
+   __I  uint32_t  RMON_R_P256TO511;             /**< 02B4: Rx 256- to 511-Byte Packets Statistic Register               */
+   __I  uint32_t  RMON_R_P512TO1023;            /**< 02B8: Rx 512- to 1023-Byte Packets Statistic Register              */
+   __I  uint32_t  RMON_R_P1024TO2047;           /**< 02BC: Rx 1024- to 2047-Byte Packets Statistic Register             */
+   __I  uint32_t  RMON_R_P_GTE2048;             /**< 02C0: Rx Packets Greater than 2048 Bytes Statistic Register        */
+   __I  uint32_t  RMON_R_OCTETS;                /**< 02C4: Rx Octets Statistic Register                                 */
+   __I  uint32_t  IEEE_R_DROP;                  /**< 02C8: Frames not Counted Correctly Statistic Register              */
+   __I  uint32_t  IEEE_R_FRAME_OK;              /**< 02CC: Frames Received OK Statistic Register                        */
+   __I  uint32_t  IEEE_R_CRC;                   /**< 02D0: Frames Received with CRC Error Statistic Register            */
+   __I  uint32_t  IEEE_R_ALIGN;                 /**< 02D4: Frames Received with Alignment Error Statistic Register      */
+   __I  uint32_t  IEEE_R_MACERR;                /**< 02D8: Receive FIFO Overflow Count Statistic Register               */
+   __I  uint32_t  IEEE_R_FDXFC;                 /**< 02DC: Flow Control Pause Frames Received Statistic Register        */
+   __I  uint32_t  IEEE_R_OCTETS_OK;             /**< 02E0: Octet Count for Frames Received without Error Statistic Register */
         uint8_t   RESERVED_15[284];            
-   __IO uint32_t  ATCR;                         /**< 0400: Timer Control Register                                       */
+   __IO uint32_t  ATCR;                         /**< 0400: Adjustable Timer Control Register                            */
    __IO uint32_t  ATVR;                         /**< 0404: Timer Value Register                                         */
    __IO uint32_t  ATOFF;                        /**< 0408: Timer Offset Register                                        */
    __IO uint32_t  ATPER;                        /**< 040C: Timer Period Register                                        */
@@ -4687,58 +4902,211 @@ typedef struct ENET_Type {
 #define ENET_RACC_SHIFT16(x)                     (((uint32_t)(((uint32_t)(x))<<7U))&0x80UL)          /*!< ENET_RACC.SHIFT16 Field                 */
 /* ------- RMON_T_DROP Bit Fields                   ------ */
 /* ------- RMON_T_PACKETS Bit Fields                ------ */
+#define ENET_RMON_T_PACKETS_TXPKTS_MASK          (0xFFFFU)                                           /*!< ENET_RMON_T_PACKETS.TXPKTS Mask         */
+#define ENET_RMON_T_PACKETS_TXPKTS_SHIFT         (0U)                                                /*!< ENET_RMON_T_PACKETS.TXPKTS Position     */
+#define ENET_RMON_T_PACKETS_TXPKTS(x)            (((uint32_t)(((uint32_t)(x))<<0U))&0xFFFFUL)        /*!< ENET_RMON_T_PACKETS.TXPKTS Field        */
 /* ------- RMON_T_BC_PKT Bit Fields                 ------ */
+#define ENET_RMON_T_BC_PKT_TXPKTS_MASK           (0xFFFFU)                                           /*!< ENET_RMON_T_BC_PKT.TXPKTS Mask          */
+#define ENET_RMON_T_BC_PKT_TXPKTS_SHIFT          (0U)                                                /*!< ENET_RMON_T_BC_PKT.TXPKTS Position      */
+#define ENET_RMON_T_BC_PKT_TXPKTS(x)             (((uint32_t)(((uint32_t)(x))<<0U))&0xFFFFUL)        /*!< ENET_RMON_T_BC_PKT.TXPKTS Field         */
 /* ------- RMON_T_MC_PKT Bit Fields                 ------ */
+#define ENET_RMON_T_MC_PKT_TXPKTS_MASK           (0xFFFFU)                                           /*!< ENET_RMON_T_MC_PKT.TXPKTS Mask          */
+#define ENET_RMON_T_MC_PKT_TXPKTS_SHIFT          (0U)                                                /*!< ENET_RMON_T_MC_PKT.TXPKTS Position      */
+#define ENET_RMON_T_MC_PKT_TXPKTS(x)             (((uint32_t)(((uint32_t)(x))<<0U))&0xFFFFUL)        /*!< ENET_RMON_T_MC_PKT.TXPKTS Field         */
 /* ------- RMON_T_CRC_ALIGN Bit Fields              ------ */
+#define ENET_RMON_T_CRC_ALIGN_TXPKTS_MASK        (0xFFFFU)                                           /*!< ENET_RMON_T_CRC_ALIGN.TXPKTS Mask       */
+#define ENET_RMON_T_CRC_ALIGN_TXPKTS_SHIFT       (0U)                                                /*!< ENET_RMON_T_CRC_ALIGN.TXPKTS Position   */
+#define ENET_RMON_T_CRC_ALIGN_TXPKTS(x)          (((uint32_t)(((uint32_t)(x))<<0U))&0xFFFFUL)        /*!< ENET_RMON_T_CRC_ALIGN.TXPKTS Field      */
 /* ------- RMON_T_UNDERSIZE Bit Fields              ------ */
+#define ENET_RMON_T_UNDERSIZE_TXPKTS_MASK        (0xFFFFU)                                           /*!< ENET_RMON_T_UNDERSIZE.TXPKTS Mask       */
+#define ENET_RMON_T_UNDERSIZE_TXPKTS_SHIFT       (0U)                                                /*!< ENET_RMON_T_UNDERSIZE.TXPKTS Position   */
+#define ENET_RMON_T_UNDERSIZE_TXPKTS(x)          (((uint32_t)(((uint32_t)(x))<<0U))&0xFFFFUL)        /*!< ENET_RMON_T_UNDERSIZE.TXPKTS Field      */
 /* ------- RMON_T_OVERSIZE Bit Fields               ------ */
+#define ENET_RMON_T_OVERSIZE_TXPKTS_MASK         (0xFFFFU)                                           /*!< ENET_RMON_T_OVERSIZE.TXPKTS Mask        */
+#define ENET_RMON_T_OVERSIZE_TXPKTS_SHIFT        (0U)                                                /*!< ENET_RMON_T_OVERSIZE.TXPKTS Position    */
+#define ENET_RMON_T_OVERSIZE_TXPKTS(x)           (((uint32_t)(((uint32_t)(x))<<0U))&0xFFFFUL)        /*!< ENET_RMON_T_OVERSIZE.TXPKTS Field       */
 /* ------- RMON_T_FRAG Bit Fields                   ------ */
+#define ENET_RMON_T_FRAG_TXPKTS_MASK             (0xFFFFU)                                           /*!< ENET_RMON_T_FRAG.TXPKTS Mask            */
+#define ENET_RMON_T_FRAG_TXPKTS_SHIFT            (0U)                                                /*!< ENET_RMON_T_FRAG.TXPKTS Position        */
+#define ENET_RMON_T_FRAG_TXPKTS(x)               (((uint32_t)(((uint32_t)(x))<<0U))&0xFFFFUL)        /*!< ENET_RMON_T_FRAG.TXPKTS Field           */
 /* ------- RMON_T_JAB Bit Fields                    ------ */
+#define ENET_RMON_T_JAB_TXPKTS_MASK              (0xFFFFU)                                           /*!< ENET_RMON_T_JAB.TXPKTS Mask             */
+#define ENET_RMON_T_JAB_TXPKTS_SHIFT             (0U)                                                /*!< ENET_RMON_T_JAB.TXPKTS Position         */
+#define ENET_RMON_T_JAB_TXPKTS(x)                (((uint32_t)(((uint32_t)(x))<<0U))&0xFFFFUL)        /*!< ENET_RMON_T_JAB.TXPKTS Field            */
 /* ------- RMON_T_COL Bit Fields                    ------ */
+#define ENET_RMON_T_COL_TXPKTS_MASK              (0xFFFFU)                                           /*!< ENET_RMON_T_COL.TXPKTS Mask             */
+#define ENET_RMON_T_COL_TXPKTS_SHIFT             (0U)                                                /*!< ENET_RMON_T_COL.TXPKTS Position         */
+#define ENET_RMON_T_COL_TXPKTS(x)                (((uint32_t)(((uint32_t)(x))<<0U))&0xFFFFUL)        /*!< ENET_RMON_T_COL.TXPKTS Field            */
 /* ------- RMON_T_P64 Bit Fields                    ------ */
+#define ENET_RMON_T_P64_TXPKTS_MASK              (0xFFFFU)                                           /*!< ENET_RMON_T_P64.TXPKTS Mask             */
+#define ENET_RMON_T_P64_TXPKTS_SHIFT             (0U)                                                /*!< ENET_RMON_T_P64.TXPKTS Position         */
+#define ENET_RMON_T_P64_TXPKTS(x)                (((uint32_t)(((uint32_t)(x))<<0U))&0xFFFFUL)        /*!< ENET_RMON_T_P64.TXPKTS Field            */
 /* ------- RMON_T_P65TO127 Bit Fields               ------ */
+#define ENET_RMON_T_P65TO127_TXPKTS_MASK         (0xFFFFU)                                           /*!< ENET_RMON_T_P65TO127.TXPKTS Mask        */
+#define ENET_RMON_T_P65TO127_TXPKTS_SHIFT        (0U)                                                /*!< ENET_RMON_T_P65TO127.TXPKTS Position    */
+#define ENET_RMON_T_P65TO127_TXPKTS(x)           (((uint32_t)(((uint32_t)(x))<<0U))&0xFFFFUL)        /*!< ENET_RMON_T_P65TO127.TXPKTS Field       */
 /* ------- RMON_T_P128TO255 Bit Fields              ------ */
+#define ENET_RMON_T_P128TO255_TXPKTS_MASK        (0xFFFFU)                                           /*!< ENET_RMON_T_P128TO255.TXPKTS Mask       */
+#define ENET_RMON_T_P128TO255_TXPKTS_SHIFT       (0U)                                                /*!< ENET_RMON_T_P128TO255.TXPKTS Position   */
+#define ENET_RMON_T_P128TO255_TXPKTS(x)          (((uint32_t)(((uint32_t)(x))<<0U))&0xFFFFUL)        /*!< ENET_RMON_T_P128TO255.TXPKTS Field      */
 /* ------- RMON_T_P256TO511 Bit Fields              ------ */
+#define ENET_RMON_T_P256TO511_TXPKTS_MASK        (0xFFFFU)                                           /*!< ENET_RMON_T_P256TO511.TXPKTS Mask       */
+#define ENET_RMON_T_P256TO511_TXPKTS_SHIFT       (0U)                                                /*!< ENET_RMON_T_P256TO511.TXPKTS Position   */
+#define ENET_RMON_T_P256TO511_TXPKTS(x)          (((uint32_t)(((uint32_t)(x))<<0U))&0xFFFFUL)        /*!< ENET_RMON_T_P256TO511.TXPKTS Field      */
 /* ------- RMON_T_P512TO1023 Bit Fields             ------ */
+#define ENET_RMON_T_P512TO1023_TXPKTS_MASK       (0xFFFFU)                                           /*!< ENET_RMON_T_P512TO1023.TXPKTS Mask      */
+#define ENET_RMON_T_P512TO1023_TXPKTS_SHIFT      (0U)                                                /*!< ENET_RMON_T_P512TO1023.TXPKTS Position  */
+#define ENET_RMON_T_P512TO1023_TXPKTS(x)         (((uint32_t)(((uint32_t)(x))<<0U))&0xFFFFUL)        /*!< ENET_RMON_T_P512TO1023.TXPKTS Field     */
 /* ------- RMON_T_P1024TO2047 Bit Fields            ------ */
+#define ENET_RMON_T_P1024TO2047_TXPKTS_MASK      (0xFFFFU)                                           /*!< ENET_RMON_T_P1024TO2047.TXPKTS Mask     */
+#define ENET_RMON_T_P1024TO2047_TXPKTS_SHIFT     (0U)                                                /*!< ENET_RMON_T_P1024TO2047.TXPKTS Position */
+#define ENET_RMON_T_P1024TO2047_TXPKTS(x)        (((uint32_t)(((uint32_t)(x))<<0U))&0xFFFFUL)        /*!< ENET_RMON_T_P1024TO2047.TXPKTS Field    */
 /* ------- RMON_T_P_GTE2048 Bit Fields              ------ */
+#define ENET_RMON_T_P_GTE2048_TXPKTS_MASK        (0xFFFFU)                                           /*!< ENET_RMON_T_P_GTE2048.TXPKTS Mask       */
+#define ENET_RMON_T_P_GTE2048_TXPKTS_SHIFT       (0U)                                                /*!< ENET_RMON_T_P_GTE2048.TXPKTS Position   */
+#define ENET_RMON_T_P_GTE2048_TXPKTS(x)          (((uint32_t)(((uint32_t)(x))<<0U))&0xFFFFUL)        /*!< ENET_RMON_T_P_GTE2048.TXPKTS Field      */
 /* ------- RMON_T_OCTETS Bit Fields                 ------ */
+#define ENET_RMON_T_OCTETS_TXOCTS_MASK           (0xFFFFFFFFU)                                       /*!< ENET_RMON_T_OCTETS.TXOCTS Mask          */
+#define ENET_RMON_T_OCTETS_TXOCTS_SHIFT          (0U)                                                /*!< ENET_RMON_T_OCTETS.TXOCTS Position      */
+#define ENET_RMON_T_OCTETS_TXOCTS(x)             (((uint32_t)(((uint32_t)(x))<<0U))&0xFFFFFFFFUL)    /*!< ENET_RMON_T_OCTETS.TXOCTS Field         */
 /* ------- IEEE_T_DROP Bit Fields                   ------ */
 /* ------- IEEE_T_FRAME_OK Bit Fields               ------ */
+#define ENET_IEEE_T_FRAME_OK_COUNT_MASK          (0xFFFFU)                                           /*!< ENET_IEEE_T_FRAME_OK.COUNT Mask         */
+#define ENET_IEEE_T_FRAME_OK_COUNT_SHIFT         (0U)                                                /*!< ENET_IEEE_T_FRAME_OK.COUNT Position     */
+#define ENET_IEEE_T_FRAME_OK_COUNT(x)            (((uint32_t)(((uint32_t)(x))<<0U))&0xFFFFUL)        /*!< ENET_IEEE_T_FRAME_OK.COUNT Field        */
 /* ------- IEEE_T_1COL Bit Fields                   ------ */
+#define ENET_IEEE_T_1COL_COUNT_MASK              (0xFFFFU)                                           /*!< ENET_IEEE_T_1COL.COUNT Mask             */
+#define ENET_IEEE_T_1COL_COUNT_SHIFT             (0U)                                                /*!< ENET_IEEE_T_1COL.COUNT Position         */
+#define ENET_IEEE_T_1COL_COUNT(x)                (((uint32_t)(((uint32_t)(x))<<0U))&0xFFFFUL)        /*!< ENET_IEEE_T_1COL.COUNT Field            */
 /* ------- IEEE_T_MCOL Bit Fields                   ------ */
+#define ENET_IEEE_T_MCOL_COUNT_MASK              (0xFFFFU)                                           /*!< ENET_IEEE_T_MCOL.COUNT Mask             */
+#define ENET_IEEE_T_MCOL_COUNT_SHIFT             (0U)                                                /*!< ENET_IEEE_T_MCOL.COUNT Position         */
+#define ENET_IEEE_T_MCOL_COUNT(x)                (((uint32_t)(((uint32_t)(x))<<0U))&0xFFFFUL)        /*!< ENET_IEEE_T_MCOL.COUNT Field            */
 /* ------- IEEE_T_DEF Bit Fields                    ------ */
+#define ENET_IEEE_T_DEF_COUNT_MASK               (0xFFFFU)                                           /*!< ENET_IEEE_T_DEF.COUNT Mask              */
+#define ENET_IEEE_T_DEF_COUNT_SHIFT              (0U)                                                /*!< ENET_IEEE_T_DEF.COUNT Position          */
+#define ENET_IEEE_T_DEF_COUNT(x)                 (((uint32_t)(((uint32_t)(x))<<0U))&0xFFFFUL)        /*!< ENET_IEEE_T_DEF.COUNT Field             */
 /* ------- IEEE_T_LCOL Bit Fields                   ------ */
+#define ENET_IEEE_T_LCOL_COUNT_MASK              (0xFFFFU)                                           /*!< ENET_IEEE_T_LCOL.COUNT Mask             */
+#define ENET_IEEE_T_LCOL_COUNT_SHIFT             (0U)                                                /*!< ENET_IEEE_T_LCOL.COUNT Position         */
+#define ENET_IEEE_T_LCOL_COUNT(x)                (((uint32_t)(((uint32_t)(x))<<0U))&0xFFFFUL)        /*!< ENET_IEEE_T_LCOL.COUNT Field            */
 /* ------- IEEE_T_EXCOL Bit Fields                  ------ */
+#define ENET_IEEE_T_EXCOL_COUNT_MASK             (0xFFFFU)                                           /*!< ENET_IEEE_T_EXCOL.COUNT Mask            */
+#define ENET_IEEE_T_EXCOL_COUNT_SHIFT            (0U)                                                /*!< ENET_IEEE_T_EXCOL.COUNT Position        */
+#define ENET_IEEE_T_EXCOL_COUNT(x)               (((uint32_t)(((uint32_t)(x))<<0U))&0xFFFFUL)        /*!< ENET_IEEE_T_EXCOL.COUNT Field           */
 /* ------- IEEE_T_MACERR Bit Fields                 ------ */
+#define ENET_IEEE_T_MACERR_COUNT_MASK            (0xFFFFU)                                           /*!< ENET_IEEE_T_MACERR.COUNT Mask           */
+#define ENET_IEEE_T_MACERR_COUNT_SHIFT           (0U)                                                /*!< ENET_IEEE_T_MACERR.COUNT Position       */
+#define ENET_IEEE_T_MACERR_COUNT(x)              (((uint32_t)(((uint32_t)(x))<<0U))&0xFFFFUL)        /*!< ENET_IEEE_T_MACERR.COUNT Field          */
 /* ------- IEEE_T_CSERR Bit Fields                  ------ */
+#define ENET_IEEE_T_CSERR_COUNT_MASK             (0xFFFFU)                                           /*!< ENET_IEEE_T_CSERR.COUNT Mask            */
+#define ENET_IEEE_T_CSERR_COUNT_SHIFT            (0U)                                                /*!< ENET_IEEE_T_CSERR.COUNT Position        */
+#define ENET_IEEE_T_CSERR_COUNT(x)               (((uint32_t)(((uint32_t)(x))<<0U))&0xFFFFUL)        /*!< ENET_IEEE_T_CSERR.COUNT Field           */
 /* ------- IEEE_T_SQE Bit Fields                    ------ */
+#define ENET_IEEE_T_SQE_COUNT_MASK               (0xFFFFU)                                           /*!< ENET_IEEE_T_SQE.COUNT Mask              */
+#define ENET_IEEE_T_SQE_COUNT_SHIFT              (0U)                                                /*!< ENET_IEEE_T_SQE.COUNT Position          */
+#define ENET_IEEE_T_SQE_COUNT(x)                 (((uint32_t)(((uint32_t)(x))<<0U))&0xFFFFUL)        /*!< ENET_IEEE_T_SQE.COUNT Field             */
 /* ------- IEEE_T_FDXFC Bit Fields                  ------ */
+#define ENET_IEEE_T_FDXFC_COUNT_MASK             (0xFFFFU)                                           /*!< ENET_IEEE_T_FDXFC.COUNT Mask            */
+#define ENET_IEEE_T_FDXFC_COUNT_SHIFT            (0U)                                                /*!< ENET_IEEE_T_FDXFC.COUNT Position        */
+#define ENET_IEEE_T_FDXFC_COUNT(x)               (((uint32_t)(((uint32_t)(x))<<0U))&0xFFFFUL)        /*!< ENET_IEEE_T_FDXFC.COUNT Field           */
 /* ------- IEEE_T_OCTETS_OK Bit Fields              ------ */
+#define ENET_IEEE_T_OCTETS_OK_COUNT_MASK         (0xFFFFFFFFU)                                       /*!< ENET_IEEE_T_OCTETS_OK.COUNT Mask        */
+#define ENET_IEEE_T_OCTETS_OK_COUNT_SHIFT        (0U)                                                /*!< ENET_IEEE_T_OCTETS_OK.COUNT Position    */
+#define ENET_IEEE_T_OCTETS_OK_COUNT(x)           (((uint32_t)(((uint32_t)(x))<<0U))&0xFFFFFFFFUL)    /*!< ENET_IEEE_T_OCTETS_OK.COUNT Field       */
 /* ------- RMON_R_PACKETS Bit Fields                ------ */
+#define ENET_RMON_R_PACKETS_COUNT_MASK           (0xFFFFU)                                           /*!< ENET_RMON_R_PACKETS.COUNT Mask          */
+#define ENET_RMON_R_PACKETS_COUNT_SHIFT          (0U)                                                /*!< ENET_RMON_R_PACKETS.COUNT Position      */
+#define ENET_RMON_R_PACKETS_COUNT(x)             (((uint32_t)(((uint32_t)(x))<<0U))&0xFFFFUL)        /*!< ENET_RMON_R_PACKETS.COUNT Field         */
 /* ------- RMON_R_BC_PKT Bit Fields                 ------ */
+#define ENET_RMON_R_BC_PKT_COUNT_MASK            (0xFFFFU)                                           /*!< ENET_RMON_R_BC_PKT.COUNT Mask           */
+#define ENET_RMON_R_BC_PKT_COUNT_SHIFT           (0U)                                                /*!< ENET_RMON_R_BC_PKT.COUNT Position       */
+#define ENET_RMON_R_BC_PKT_COUNT(x)              (((uint32_t)(((uint32_t)(x))<<0U))&0xFFFFUL)        /*!< ENET_RMON_R_BC_PKT.COUNT Field          */
 /* ------- RMON_R_MC_PKT Bit Fields                 ------ */
+#define ENET_RMON_R_MC_PKT_COUNT_MASK            (0xFFFFU)                                           /*!< ENET_RMON_R_MC_PKT.COUNT Mask           */
+#define ENET_RMON_R_MC_PKT_COUNT_SHIFT           (0U)                                                /*!< ENET_RMON_R_MC_PKT.COUNT Position       */
+#define ENET_RMON_R_MC_PKT_COUNT(x)              (((uint32_t)(((uint32_t)(x))<<0U))&0xFFFFUL)        /*!< ENET_RMON_R_MC_PKT.COUNT Field          */
 /* ------- RMON_R_CRC_ALIGN Bit Fields              ------ */
+#define ENET_RMON_R_CRC_ALIGN_COUNT_MASK         (0xFFFFU)                                           /*!< ENET_RMON_R_CRC_ALIGN.COUNT Mask        */
+#define ENET_RMON_R_CRC_ALIGN_COUNT_SHIFT        (0U)                                                /*!< ENET_RMON_R_CRC_ALIGN.COUNT Position    */
+#define ENET_RMON_R_CRC_ALIGN_COUNT(x)           (((uint32_t)(((uint32_t)(x))<<0U))&0xFFFFUL)        /*!< ENET_RMON_R_CRC_ALIGN.COUNT Field       */
 /* ------- RMON_R_UNDERSIZE Bit Fields              ------ */
+#define ENET_RMON_R_UNDERSIZE_COUNT_MASK         (0xFFFFU)                                           /*!< ENET_RMON_R_UNDERSIZE.COUNT Mask        */
+#define ENET_RMON_R_UNDERSIZE_COUNT_SHIFT        (0U)                                                /*!< ENET_RMON_R_UNDERSIZE.COUNT Position    */
+#define ENET_RMON_R_UNDERSIZE_COUNT(x)           (((uint32_t)(((uint32_t)(x))<<0U))&0xFFFFUL)        /*!< ENET_RMON_R_UNDERSIZE.COUNT Field       */
 /* ------- RMON_R_OVERSIZE Bit Fields               ------ */
+#define ENET_RMON_R_OVERSIZE_COUNT_MASK          (0xFFFFU)                                           /*!< ENET_RMON_R_OVERSIZE.COUNT Mask         */
+#define ENET_RMON_R_OVERSIZE_COUNT_SHIFT         (0U)                                                /*!< ENET_RMON_R_OVERSIZE.COUNT Position     */
+#define ENET_RMON_R_OVERSIZE_COUNT(x)            (((uint32_t)(((uint32_t)(x))<<0U))&0xFFFFUL)        /*!< ENET_RMON_R_OVERSIZE.COUNT Field        */
 /* ------- RMON_R_FRAG Bit Fields                   ------ */
+#define ENET_RMON_R_FRAG_COUNT_MASK              (0xFFFFU)                                           /*!< ENET_RMON_R_FRAG.COUNT Mask             */
+#define ENET_RMON_R_FRAG_COUNT_SHIFT             (0U)                                                /*!< ENET_RMON_R_FRAG.COUNT Position         */
+#define ENET_RMON_R_FRAG_COUNT(x)                (((uint32_t)(((uint32_t)(x))<<0U))&0xFFFFUL)        /*!< ENET_RMON_R_FRAG.COUNT Field            */
 /* ------- RMON_R_JAB Bit Fields                    ------ */
+#define ENET_RMON_R_JAB_COUNT_MASK               (0xFFFFU)                                           /*!< ENET_RMON_R_JAB.COUNT Mask              */
+#define ENET_RMON_R_JAB_COUNT_SHIFT              (0U)                                                /*!< ENET_RMON_R_JAB.COUNT Position          */
+#define ENET_RMON_R_JAB_COUNT(x)                 (((uint32_t)(((uint32_t)(x))<<0U))&0xFFFFUL)        /*!< ENET_RMON_R_JAB.COUNT Field             */
 /* ------- RMON_R_RESVD_0 Bit Fields                ------ */
 /* ------- RMON_R_P64 Bit Fields                    ------ */
+#define ENET_RMON_R_P64_COUNT_MASK               (0xFFFFU)                                           /*!< ENET_RMON_R_P64.COUNT Mask              */
+#define ENET_RMON_R_P64_COUNT_SHIFT              (0U)                                                /*!< ENET_RMON_R_P64.COUNT Position          */
+#define ENET_RMON_R_P64_COUNT(x)                 (((uint32_t)(((uint32_t)(x))<<0U))&0xFFFFUL)        /*!< ENET_RMON_R_P64.COUNT Field             */
 /* ------- RMON_R_P65TO127 Bit Fields               ------ */
+#define ENET_RMON_R_P65TO127_COUNT_MASK          (0xFFFFU)                                           /*!< ENET_RMON_R_P65TO127.COUNT Mask         */
+#define ENET_RMON_R_P65TO127_COUNT_SHIFT         (0U)                                                /*!< ENET_RMON_R_P65TO127.COUNT Position     */
+#define ENET_RMON_R_P65TO127_COUNT(x)            (((uint32_t)(((uint32_t)(x))<<0U))&0xFFFFUL)        /*!< ENET_RMON_R_P65TO127.COUNT Field        */
 /* ------- RMON_R_P128TO255 Bit Fields              ------ */
+#define ENET_RMON_R_P128TO255_COUNT_MASK         (0xFFFFU)                                           /*!< ENET_RMON_R_P128TO255.COUNT Mask        */
+#define ENET_RMON_R_P128TO255_COUNT_SHIFT        (0U)                                                /*!< ENET_RMON_R_P128TO255.COUNT Position    */
+#define ENET_RMON_R_P128TO255_COUNT(x)           (((uint32_t)(((uint32_t)(x))<<0U))&0xFFFFUL)        /*!< ENET_RMON_R_P128TO255.COUNT Field       */
 /* ------- RMON_R_P256TO511 Bit Fields              ------ */
+#define ENET_RMON_R_P256TO511_COUNT_MASK         (0xFFFFU)                                           /*!< ENET_RMON_R_P256TO511.COUNT Mask        */
+#define ENET_RMON_R_P256TO511_COUNT_SHIFT        (0U)                                                /*!< ENET_RMON_R_P256TO511.COUNT Position    */
+#define ENET_RMON_R_P256TO511_COUNT(x)           (((uint32_t)(((uint32_t)(x))<<0U))&0xFFFFUL)        /*!< ENET_RMON_R_P256TO511.COUNT Field       */
 /* ------- RMON_R_P512TO1023 Bit Fields             ------ */
+#define ENET_RMON_R_P512TO1023_COUNT_MASK        (0xFFFFU)                                           /*!< ENET_RMON_R_P512TO1023.COUNT Mask       */
+#define ENET_RMON_R_P512TO1023_COUNT_SHIFT       (0U)                                                /*!< ENET_RMON_R_P512TO1023.COUNT Position   */
+#define ENET_RMON_R_P512TO1023_COUNT(x)          (((uint32_t)(((uint32_t)(x))<<0U))&0xFFFFUL)        /*!< ENET_RMON_R_P512TO1023.COUNT Field      */
 /* ------- RMON_R_P1024TO2047 Bit Fields            ------ */
+#define ENET_RMON_R_P1024TO2047_COUNT_MASK       (0xFFFFU)                                           /*!< ENET_RMON_R_P1024TO2047.COUNT Mask      */
+#define ENET_RMON_R_P1024TO2047_COUNT_SHIFT      (0U)                                                /*!< ENET_RMON_R_P1024TO2047.COUNT Position  */
+#define ENET_RMON_R_P1024TO2047_COUNT(x)         (((uint32_t)(((uint32_t)(x))<<0U))&0xFFFFUL)        /*!< ENET_RMON_R_P1024TO2047.COUNT Field     */
 /* ------- RMON_R_P_GTE2048 Bit Fields              ------ */
+#define ENET_RMON_R_P_GTE2048_COUNT_MASK         (0xFFFFU)                                           /*!< ENET_RMON_R_P_GTE2048.COUNT Mask        */
+#define ENET_RMON_R_P_GTE2048_COUNT_SHIFT        (0U)                                                /*!< ENET_RMON_R_P_GTE2048.COUNT Position    */
+#define ENET_RMON_R_P_GTE2048_COUNT(x)           (((uint32_t)(((uint32_t)(x))<<0U))&0xFFFFUL)        /*!< ENET_RMON_R_P_GTE2048.COUNT Field       */
 /* ------- RMON_R_OCTETS Bit Fields                 ------ */
+#define ENET_RMON_R_OCTETS_COUNT_MASK            (0xFFFFFFFFU)                                       /*!< ENET_RMON_R_OCTETS.COUNT Mask           */
+#define ENET_RMON_R_OCTETS_COUNT_SHIFT           (0U)                                                /*!< ENET_RMON_R_OCTETS.COUNT Position       */
+#define ENET_RMON_R_OCTETS_COUNT(x)              (((uint32_t)(((uint32_t)(x))<<0U))&0xFFFFFFFFUL)    /*!< ENET_RMON_R_OCTETS.COUNT Field          */
 /* ------- IEEE_R_DROP Bit Fields                   ------ */
+#define ENET_IEEE_R_DROP_COUNT_MASK              (0xFFFFU)                                           /*!< ENET_IEEE_R_DROP.COUNT Mask             */
+#define ENET_IEEE_R_DROP_COUNT_SHIFT             (0U)                                                /*!< ENET_IEEE_R_DROP.COUNT Position         */
+#define ENET_IEEE_R_DROP_COUNT(x)                (((uint32_t)(((uint32_t)(x))<<0U))&0xFFFFUL)        /*!< ENET_IEEE_R_DROP.COUNT Field            */
 /* ------- IEEE_R_FRAME_OK Bit Fields               ------ */
+#define ENET_IEEE_R_FRAME_OK_COUNT_MASK          (0xFFFFU)                                           /*!< ENET_IEEE_R_FRAME_OK.COUNT Mask         */
+#define ENET_IEEE_R_FRAME_OK_COUNT_SHIFT         (0U)                                                /*!< ENET_IEEE_R_FRAME_OK.COUNT Position     */
+#define ENET_IEEE_R_FRAME_OK_COUNT(x)            (((uint32_t)(((uint32_t)(x))<<0U))&0xFFFFUL)        /*!< ENET_IEEE_R_FRAME_OK.COUNT Field        */
 /* ------- IEEE_R_CRC Bit Fields                    ------ */
+#define ENET_IEEE_R_CRC_COUNT_MASK               (0xFFFFU)                                           /*!< ENET_IEEE_R_CRC.COUNT Mask              */
+#define ENET_IEEE_R_CRC_COUNT_SHIFT              (0U)                                                /*!< ENET_IEEE_R_CRC.COUNT Position          */
+#define ENET_IEEE_R_CRC_COUNT(x)                 (((uint32_t)(((uint32_t)(x))<<0U))&0xFFFFUL)        /*!< ENET_IEEE_R_CRC.COUNT Field             */
 /* ------- IEEE_R_ALIGN Bit Fields                  ------ */
+#define ENET_IEEE_R_ALIGN_COUNT_MASK             (0xFFFFU)                                           /*!< ENET_IEEE_R_ALIGN.COUNT Mask            */
+#define ENET_IEEE_R_ALIGN_COUNT_SHIFT            (0U)                                                /*!< ENET_IEEE_R_ALIGN.COUNT Position        */
+#define ENET_IEEE_R_ALIGN_COUNT(x)               (((uint32_t)(((uint32_t)(x))<<0U))&0xFFFFUL)        /*!< ENET_IEEE_R_ALIGN.COUNT Field           */
 /* ------- IEEE_R_MACERR Bit Fields                 ------ */
+#define ENET_IEEE_R_MACERR_COUNT_MASK            (0xFFFFU)                                           /*!< ENET_IEEE_R_MACERR.COUNT Mask           */
+#define ENET_IEEE_R_MACERR_COUNT_SHIFT           (0U)                                                /*!< ENET_IEEE_R_MACERR.COUNT Position       */
+#define ENET_IEEE_R_MACERR_COUNT(x)              (((uint32_t)(((uint32_t)(x))<<0U))&0xFFFFUL)        /*!< ENET_IEEE_R_MACERR.COUNT Field          */
 /* ------- IEEE_R_FDXFC Bit Fields                  ------ */
+#define ENET_IEEE_R_FDXFC_COUNT_MASK             (0xFFFFU)                                           /*!< ENET_IEEE_R_FDXFC.COUNT Mask            */
+#define ENET_IEEE_R_FDXFC_COUNT_SHIFT            (0U)                                                /*!< ENET_IEEE_R_FDXFC.COUNT Position        */
+#define ENET_IEEE_R_FDXFC_COUNT(x)               (((uint32_t)(((uint32_t)(x))<<0U))&0xFFFFUL)        /*!< ENET_IEEE_R_FDXFC.COUNT Field           */
 /* ------- IEEE_R_OCTETS_OK Bit Fields              ------ */
+#define ENET_IEEE_R_OCTETS_OK_COUNT_MASK         (0xFFFFFFFFU)                                       /*!< ENET_IEEE_R_OCTETS_OK.COUNT Mask        */
+#define ENET_IEEE_R_OCTETS_OK_COUNT_SHIFT        (0U)                                                /*!< ENET_IEEE_R_OCTETS_OK.COUNT Position    */
+#define ENET_IEEE_R_OCTETS_OK_COUNT(x)           (((uint32_t)(((uint32_t)(x))<<0U))&0xFFFFFFFFUL)    /*!< ENET_IEEE_R_OCTETS_OK.COUNT Field       */
 /* ------- ATCR Bit Fields                          ------ */
 #define ENET_ATCR_EN_MASK                        (0x1U)                                              /*!< ENET_ATCR.EN Mask                       */
 #define ENET_ATCR_EN_SHIFT                       (0U)                                                /*!< ENET_ATCR.EN Position                   */
@@ -5256,6 +5624,27 @@ typedef struct FMC_Type {
 #define FMC_TAGVD0_tag_MASK                      (0xFFFC0U)                                          /*!< FMC_TAGVD0.tag Mask                     */
 #define FMC_TAGVD0_tag_SHIFT                     (6U)                                                /*!< FMC_TAGVD0.tag Position                 */
 #define FMC_TAGVD0_tag(x)                        (((uint32_t)(((uint32_t)(x))<<6U))&0xFFFC0UL)       /*!< FMC_TAGVD0.tag Field                    */
+/* ------- S1 Bit Fields                            ------ */
+#define FMC_TAGVD1_valid_MASK                    (0x1U)                                              /*!< FMC_TAGVD1.valid Mask                   */
+#define FMC_TAGVD1_valid_SHIFT                   (0U)                                                /*!< FMC_TAGVD1.valid Position               */
+#define FMC_TAGVD1_valid(x)                      (((uint32_t)(((uint32_t)(x))<<0U))&0x1UL)           /*!< FMC_TAGVD1.valid Field                  */
+#define FMC_TAGVD1_tag_MASK                      (0xFFFC0U)                                          /*!< FMC_TAGVD1.tag Mask                     */
+#define FMC_TAGVD1_tag_SHIFT                     (6U)                                                /*!< FMC_TAGVD1.tag Position                 */
+#define FMC_TAGVD1_tag(x)                        (((uint32_t)(((uint32_t)(x))<<6U))&0xFFFC0UL)       /*!< FMC_TAGVD1.tag Field                    */
+/* ------- S2 Bit Fields                            ------ */
+#define FMC_TAGVD2_valid_MASK                    (0x1U)                                              /*!< FMC_TAGVD2.valid Mask                   */
+#define FMC_TAGVD2_valid_SHIFT                   (0U)                                                /*!< FMC_TAGVD2.valid Position               */
+#define FMC_TAGVD2_valid(x)                      (((uint32_t)(((uint32_t)(x))<<0U))&0x1UL)           /*!< FMC_TAGVD2.valid Field                  */
+#define FMC_TAGVD2_tag_MASK                      (0xFFFC0U)                                          /*!< FMC_TAGVD2.tag Mask                     */
+#define FMC_TAGVD2_tag_SHIFT                     (6U)                                                /*!< FMC_TAGVD2.tag Position                 */
+#define FMC_TAGVD2_tag(x)                        (((uint32_t)(((uint32_t)(x))<<6U))&0xFFFC0UL)       /*!< FMC_TAGVD2.tag Field                    */
+/* ------- S3 Bit Fields                            ------ */
+#define FMC_TAGVD3_valid_MASK                    (0x1U)                                              /*!< FMC_TAGVD3.valid Mask                   */
+#define FMC_TAGVD3_valid_SHIFT                   (0U)                                                /*!< FMC_TAGVD3.valid Position               */
+#define FMC_TAGVD3_valid(x)                      (((uint32_t)(((uint32_t)(x))<<0U))&0x1UL)           /*!< FMC_TAGVD3.valid Field                  */
+#define FMC_TAGVD3_tag_MASK                      (0xFFFC0U)                                          /*!< FMC_TAGVD3.tag Mask                     */
+#define FMC_TAGVD3_tag_SHIFT                     (6U)                                                /*!< FMC_TAGVD3.tag Position                 */
+#define FMC_TAGVD3_tag(x)                        (((uint32_t)(((uint32_t)(x))<<6U))&0xFFFC0UL)       /*!< FMC_TAGVD3.tag Field                    */
 /* ------- S0UM Bit Fields                          ------ */
 #define FMC_DATAW0UM_data_MASK                   (0xFFFFFFFFU)                                       /*!< FMC_DATAW0UM.data Mask                  */
 #define FMC_DATAW0UM_data_SHIFT                  (0U)                                                /*!< FMC_DATAW0UM.data Position              */
@@ -5272,6 +5661,54 @@ typedef struct FMC_Type {
 #define FMC_DATAW0LM_data_MASK                   (0xFFFFFFFFU)                                       /*!< FMC_DATAW0LM.data Mask                  */
 #define FMC_DATAW0LM_data_SHIFT                  (0U)                                                /*!< FMC_DATAW0LM.data Position              */
 #define FMC_DATAW0LM_data(x)                     (((uint32_t)(((uint32_t)(x))<<0U))&0xFFFFFFFFUL)    /*!< FMC_DATAW0LM.data Field                 */
+/* ------- S1UM Bit Fields                          ------ */
+#define FMC_DATAW1UM_data_MASK                   (0xFFFFFFFFU)                                       /*!< FMC_DATAW1UM.data Mask                  */
+#define FMC_DATAW1UM_data_SHIFT                  (0U)                                                /*!< FMC_DATAW1UM.data Position              */
+#define FMC_DATAW1UM_data(x)                     (((uint32_t)(((uint32_t)(x))<<0U))&0xFFFFFFFFUL)    /*!< FMC_DATAW1UM.data Field                 */
+/* ------- S1MU Bit Fields                          ------ */
+#define FMC_DATAW1MU_data_MASK                   (0xFFFFFFFFU)                                       /*!< FMC_DATAW1MU.data Mask                  */
+#define FMC_DATAW1MU_data_SHIFT                  (0U)                                                /*!< FMC_DATAW1MU.data Position              */
+#define FMC_DATAW1MU_data(x)                     (((uint32_t)(((uint32_t)(x))<<0U))&0xFFFFFFFFUL)    /*!< FMC_DATAW1MU.data Field                 */
+/* ------- S1ML Bit Fields                          ------ */
+#define FMC_DATAW1ML_data_MASK                   (0xFFFFFFFFU)                                       /*!< FMC_DATAW1ML.data Mask                  */
+#define FMC_DATAW1ML_data_SHIFT                  (0U)                                                /*!< FMC_DATAW1ML.data Position              */
+#define FMC_DATAW1ML_data(x)                     (((uint32_t)(((uint32_t)(x))<<0U))&0xFFFFFFFFUL)    /*!< FMC_DATAW1ML.data Field                 */
+/* ------- S1LM Bit Fields                          ------ */
+#define FMC_DATAW1LM_data_MASK                   (0xFFFFFFFFU)                                       /*!< FMC_DATAW1LM.data Mask                  */
+#define FMC_DATAW1LM_data_SHIFT                  (0U)                                                /*!< FMC_DATAW1LM.data Position              */
+#define FMC_DATAW1LM_data(x)                     (((uint32_t)(((uint32_t)(x))<<0U))&0xFFFFFFFFUL)    /*!< FMC_DATAW1LM.data Field                 */
+/* ------- S2UM Bit Fields                          ------ */
+#define FMC_DATAW2UM_data_MASK                   (0xFFFFFFFFU)                                       /*!< FMC_DATAW2UM.data Mask                  */
+#define FMC_DATAW2UM_data_SHIFT                  (0U)                                                /*!< FMC_DATAW2UM.data Position              */
+#define FMC_DATAW2UM_data(x)                     (((uint32_t)(((uint32_t)(x))<<0U))&0xFFFFFFFFUL)    /*!< FMC_DATAW2UM.data Field                 */
+/* ------- S2MU Bit Fields                          ------ */
+#define FMC_DATAW2MU_data_MASK                   (0xFFFFFFFFU)                                       /*!< FMC_DATAW2MU.data Mask                  */
+#define FMC_DATAW2MU_data_SHIFT                  (0U)                                                /*!< FMC_DATAW2MU.data Position              */
+#define FMC_DATAW2MU_data(x)                     (((uint32_t)(((uint32_t)(x))<<0U))&0xFFFFFFFFUL)    /*!< FMC_DATAW2MU.data Field                 */
+/* ------- S2ML Bit Fields                          ------ */
+#define FMC_DATAW2ML_data_MASK                   (0xFFFFFFFFU)                                       /*!< FMC_DATAW2ML.data Mask                  */
+#define FMC_DATAW2ML_data_SHIFT                  (0U)                                                /*!< FMC_DATAW2ML.data Position              */
+#define FMC_DATAW2ML_data(x)                     (((uint32_t)(((uint32_t)(x))<<0U))&0xFFFFFFFFUL)    /*!< FMC_DATAW2ML.data Field                 */
+/* ------- S2LM Bit Fields                          ------ */
+#define FMC_DATAW2LM_data_MASK                   (0xFFFFFFFFU)                                       /*!< FMC_DATAW2LM.data Mask                  */
+#define FMC_DATAW2LM_data_SHIFT                  (0U)                                                /*!< FMC_DATAW2LM.data Position              */
+#define FMC_DATAW2LM_data(x)                     (((uint32_t)(((uint32_t)(x))<<0U))&0xFFFFFFFFUL)    /*!< FMC_DATAW2LM.data Field                 */
+/* ------- S3UM Bit Fields                          ------ */
+#define FMC_DATAW3UM_data_MASK                   (0xFFFFFFFFU)                                       /*!< FMC_DATAW3UM.data Mask                  */
+#define FMC_DATAW3UM_data_SHIFT                  (0U)                                                /*!< FMC_DATAW3UM.data Position              */
+#define FMC_DATAW3UM_data(x)                     (((uint32_t)(((uint32_t)(x))<<0U))&0xFFFFFFFFUL)    /*!< FMC_DATAW3UM.data Field                 */
+/* ------- S3MU Bit Fields                          ------ */
+#define FMC_DATAW3MU_data_MASK                   (0xFFFFFFFFU)                                       /*!< FMC_DATAW3MU.data Mask                  */
+#define FMC_DATAW3MU_data_SHIFT                  (0U)                                                /*!< FMC_DATAW3MU.data Position              */
+#define FMC_DATAW3MU_data(x)                     (((uint32_t)(((uint32_t)(x))<<0U))&0xFFFFFFFFUL)    /*!< FMC_DATAW3MU.data Field                 */
+/* ------- S3ML Bit Fields                          ------ */
+#define FMC_DATAW3ML_data_MASK                   (0xFFFFFFFFU)                                       /*!< FMC_DATAW3ML.data Mask                  */
+#define FMC_DATAW3ML_data_SHIFT                  (0U)                                                /*!< FMC_DATAW3ML.data Position              */
+#define FMC_DATAW3ML_data(x)                     (((uint32_t)(((uint32_t)(x))<<0U))&0xFFFFFFFFUL)    /*!< FMC_DATAW3ML.data Field                 */
+/* ------- S3LM Bit Fields                          ------ */
+#define FMC_DATAW3LM_data_MASK                   (0xFFFFFFFFU)                                       /*!< FMC_DATAW3LM.data Mask                  */
+#define FMC_DATAW3LM_data_SHIFT                  (0U)                                                /*!< FMC_DATAW3LM.data Position              */
+#define FMC_DATAW3LM_data(x)                     (((uint32_t)(((uint32_t)(x))<<0U))&0xFFFFFFFFUL)    /*!< FMC_DATAW3LM.data Field                 */
 /**
  * @} */ /* End group FMC_Register_Masks_GROUP 
  */
@@ -5440,6 +5877,7 @@ typedef struct FTFE_Type {
 /**
  * @brief FlexTimer Module (8 channels)
  */
+#define FTM_CONTROLS_COUNT   8          /**< Number of FTM channels                             */
 /**
 * @addtogroup FTM_structs_GROUP FTM struct
 * @brief Struct for FTM
@@ -5452,7 +5890,7 @@ typedef struct FTM_Type {
    struct {
       __IO uint32_t  CnSC;                      /**< 000C: Channel  Status and Control                                  */
       __IO uint32_t  CnV;                       /**< 0010: Channel  Value                                               */
-   } CONTROLS[8];                               /**< 000C: (cluster: size=0x0040, 64)                                   */
+   } CONTROLS[FTM_CONTROLS_COUNT];              /**< 000C: (cluster: size=0x0040, 64)                                   */
    __IO uint32_t  CNTIN;                        /**< 004C: Counter Initial Value                                        */
    __IO uint32_t  STATUS;                       /**< 0050: Capture and Compare Status                                   */
    __IO uint32_t  MODE;                         /**< 0054: Features Mode Selection                                      */
@@ -6088,6 +6526,7 @@ typedef struct FTM_Type {
 /**
  * @brief FlexTimer Module (2 channels)
  */
+#define FTM1_CONTROLS_COUNT  2          /**< Number of FTM channels                             */
 /**
 * @addtogroup FTM_structs_GROUP FTM struct
 * @brief Struct for FTM
@@ -6100,7 +6539,7 @@ typedef struct FTM1_Type {
    struct {
       __IO uint32_t  CnSC;                      /**< 000C: Channel  Status and Control                                  */
       __IO uint32_t  CnV;                       /**< 0010: Channel  Value                                               */
-   } CONTROLS[2];                               /**< 000C: (cluster: size=0x0010, 16)                                   */
+   } CONTROLS[FTM1_CONTROLS_COUNT];             /**< 000C: (cluster: size=0x0010, 16)                                   */
         uint8_t   RESERVED_1[48];              
    __IO uint32_t  CNTIN;                        /**< 004C: Counter Initial Value                                        */
    __IO uint32_t  STATUS;                       /**< 0050: Capture and Compare Status                                   */
@@ -7014,11 +7453,11 @@ typedef struct LLWU_Type {
       __I  uint8_t   MF;                        /**< 0007: Module Flag Register                                         */
    };
    union {                                      /**< 0000: (size=0002)                                                  */
-      struct {                                  /**< 0000: (size=0002)                                                  */
-      __IO uint8_t   FILT1;                     /**< 0008: Pin Filter 1 register                                        */
-      __IO uint8_t   FILT2;                     /**< 0009: Pin Filter 2 register                                        */
-      };
       __IO uint8_t   FILT[2];                   /**< 0008: Pin Filter  register                                         */
+      struct {                                  /**< 0000: (size=0002)                                                  */
+         __IO uint8_t   FILT1;                  /**< 0008: Pin Filter  register                                         */
+         __IO uint8_t   FILT2;                  /**< 0009: Pin Filter  register                                         */
+      };
    };
    __IO uint8_t   RST;                          /**< 000A: Reset Enable Register                                        */
 } LLWU_Type;
@@ -7261,6 +7700,26 @@ typedef struct LLWU_Type {
 #define LLWU_FILT_FILTF_MASK                     (0x80U)                                             /*!< LLWU_FILT.FILTF Mask                    */
 #define LLWU_FILT_FILTF_SHIFT                    (7U)                                                /*!< LLWU_FILT.FILTF Position                */
 #define LLWU_FILT_FILTF(x)                       (((uint8_t)(((uint8_t)(x))<<7U))&0x80UL)            /*!< LLWU_FILT.FILTF Field                   */
+/* ------- FILT1 Bit Fields                         ------ */
+#define LLWU_FILT1_FILTSEL_MASK                  (0xFU)                                              /*!< LLWU_FILT1.FILTSEL Mask                 */
+#define LLWU_FILT1_FILTSEL_SHIFT                 (0U)                                                /*!< LLWU_FILT1.FILTSEL Position             */
+#define LLWU_FILT1_FILTSEL(x)                    (((uint8_t)(((uint8_t)(x))<<0U))&0xFUL)             /*!< LLWU_FILT1.FILTSEL Field                */
+#define LLWU_FILT1_FILTE_MASK                    (0x60U)                                             /*!< LLWU_FILT1.FILTE Mask                   */
+#define LLWU_FILT1_FILTE_SHIFT                   (5U)                                                /*!< LLWU_FILT1.FILTE Position               */
+#define LLWU_FILT1_FILTE(x)                      (((uint8_t)(((uint8_t)(x))<<5U))&0x60UL)            /*!< LLWU_FILT1.FILTE Field                  */
+#define LLWU_FILT1_FILTF_MASK                    (0x80U)                                             /*!< LLWU_FILT1.FILTF Mask                   */
+#define LLWU_FILT1_FILTF_SHIFT                   (7U)                                                /*!< LLWU_FILT1.FILTF Position               */
+#define LLWU_FILT1_FILTF(x)                      (((uint8_t)(((uint8_t)(x))<<7U))&0x80UL)            /*!< LLWU_FILT1.FILTF Field                  */
+/* ------- FILT2 Bit Fields                         ------ */
+#define LLWU_FILT2_FILTSEL_MASK                  (0xFU)                                              /*!< LLWU_FILT2.FILTSEL Mask                 */
+#define LLWU_FILT2_FILTSEL_SHIFT                 (0U)                                                /*!< LLWU_FILT2.FILTSEL Position             */
+#define LLWU_FILT2_FILTSEL(x)                    (((uint8_t)(((uint8_t)(x))<<0U))&0xFUL)             /*!< LLWU_FILT2.FILTSEL Field                */
+#define LLWU_FILT2_FILTE_MASK                    (0x60U)                                             /*!< LLWU_FILT2.FILTE Mask                   */
+#define LLWU_FILT2_FILTE_SHIFT                   (5U)                                                /*!< LLWU_FILT2.FILTE Position               */
+#define LLWU_FILT2_FILTE(x)                      (((uint8_t)(((uint8_t)(x))<<5U))&0x60UL)            /*!< LLWU_FILT2.FILTE Field                  */
+#define LLWU_FILT2_FILTF_MASK                    (0x80U)                                             /*!< LLWU_FILT2.FILTF Mask                   */
+#define LLWU_FILT2_FILTF_SHIFT                   (7U)                                                /*!< LLWU_FILT2.FILTF Position               */
+#define LLWU_FILT2_FILTF(x)                      (((uint8_t)(((uint8_t)(x))<<7U))&0x80UL)            /*!< LLWU_FILT2.FILTF Field                  */
 /* ------- RST Bit Fields                           ------ */
 #define LLWU_RST_RSTFILT_MASK                    (0x1U)                                              /*!< LLWU_RST.RSTFILT Mask                   */
 #define LLWU_RST_RSTFILT_SHIFT                   (0U)                                                /*!< LLWU_RST.RSTFILT Position               */
@@ -8804,12 +9263,16 @@ typedef struct OSC_Type {
 */
 
 /* ================================================================================ */
-/* ================           PDB0 (file:PDB0_4CH_2TRIG_2DAC_4PO)       ================ */
+/* ================           PDB0 (file:PDB0_4CH_2PT_2DAC_4PO)       ================ */
 /* ================================================================================ */
 
 /**
- * @brief Programmable Delay Block (4 channels, 2 triggers, 2 DAC, 4 pulse outputs)
+ * @brief Programmable Delay Block (4 channels, 2 pre-triggers, 2 DAC, 4 pulse out)
  */
+#define PDB_DLY_COUNT        2          /**< Number of Pre-triggers                             */
+#define PDB_CH_COUNT         4          /**< Number of PDB channels                             */
+#define PDB_POnDLY_COUNT     4          /**< Number of Pulse outputs                            */
+#define PDB_DAC_COUNT        2          /**< Number of DAC outputs                              */
 /**
 * @addtogroup PDB_structs_GROUP PDB struct
 * @brief Struct for PDB
@@ -8823,17 +9286,25 @@ typedef struct PDB_Type {
    struct {
       __IO uint32_t  C1;                        /**< 0010: Channel  Control Register 1                                  */
       __IO uint32_t  S;                         /**< 0014: Channel  Status Register                                     */
-      __IO uint32_t  DLY[2];                    /**< 0018: Channel Delay  Register                                      */
+      __IO uint32_t  DLY[PDB_DLY_COUNT];        /**< 0018: Channel Delay  Register                                      */
            uint8_t   RESERVED_0[24];           
-   } CH[4];                                     /**< 0010: (cluster: size=0x00A0, 160)                                  */
+   } CH[PDB_CH_COUNT];                          /**< 0010: (cluster: size=0x00A0, 160)                                  */
         uint8_t   RESERVED_1[160];             
    struct {
       __IO uint32_t  INTC;                      /**< 0150: DAC Interval Trigger n Control Register                      */
       __IO uint32_t  INT;                       /**< 0154: DAC Interval n Register                                      */
-   } DAC[2];                                    /**< 0150: (cluster: size=0x0010, 16)                                   */
+   } DAC[PDB_DAC_COUNT];                        /**< 0150: (cluster: size=0x0010, 16)                                   */
         uint8_t   RESERVED_3[48];              
    __IO uint32_t  POEN;                         /**< 0190: Pulse-Out Enable Register                                    */
-   __IO uint32_t  PODLY[4];                     /**< 0194: Pulse-Out  Delay Register                                    */
+   struct {
+      union {                                   /**< 0194: (size=0004)                                                  */
+         struct {                               /**< 0194: (size=0004)                                                  */
+         __IO uint16_t  DLY2;                   /**< 0194: Pulse-Out 2 Delay Register                                   */
+         __IO uint16_t  DLY1;                   /**< 0196: Pulse-Out 1 Delay Register                                   */
+         };
+         __IO uint32_t  PODLY;                  /**< 0194: Pulse-Out  Delay Register                                    */
+      };
+   } POnDLY[PDB_POnDLY_COUNT];                  /**< 0194: (cluster: size=0x0010, 16)                                   */
 } PDB_Type;
 
 /**
@@ -8934,6 +9405,7 @@ typedef struct PDB_Type {
 #define PDB_POEN_POEN_MASK                       (0xFFU)                                             /*!< PDB0_POEN.POEN Mask                     */
 #define PDB_POEN_POEN_SHIFT                      (0U)                                                /*!< PDB0_POEN.POEN Position                 */
 #define PDB_POEN_POEN(x)                         (((uint32_t)(((uint32_t)(x))<<0U))&0xFFUL)          /*!< PDB0_POEN.POEN Field                    */
+/* ------- DLY Bit Fields                           ------ */
 /* ------- PODLY Bit Fields                         ------ */
 #define PDB_PODLY_DLY2_MASK                      (0xFFFFU)                                           /*!< PDB0_PODLY.DLY2 Mask                    */
 #define PDB_PODLY_DLY2_SHIFT                     (0U)                                                /*!< PDB0_PODLY.DLY2 Position                */
@@ -8967,6 +9439,7 @@ typedef struct PDB_Type {
 /**
  * @brief Periodic Interrupt Timer (4 channels)
  */
+#define PIT_TMR_COUNT        4          /**< Number of timer channels                           */
 /**
 * @addtogroup PIT_structs_GROUP PIT struct
 * @brief Struct for PIT
@@ -8980,7 +9453,7 @@ typedef struct PIT_Type {
       __I  uint32_t  CVAL;                      /**< 0104: Current Timer Value Register                                 */
       __IO uint32_t  TCTRL;                     /**< 0108: Timer Control Register                                       */
       __IO uint32_t  TFLG;                      /**< 010C: Timer Flag Register                                          */
-   } CHANNEL[4];                                /**< 0100: (cluster: size=0x0040, 64)                                   */
+   } CHANNEL[PIT_TMR_COUNT];                    /**< 0100: (cluster: size=0x0040, 64)                                   */
 } PIT_Type;
 
 /**
