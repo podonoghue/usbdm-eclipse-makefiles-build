@@ -111,9 +111,12 @@
          <deleteResource target="Project_Headers" />
          <!-- Remove unused Startup files -->
          <deleteResource target="Startup_Code" />
-         <!-- Remove unused main lines -->
+         <!-- Remove unused main files -->
          <deleteResource target="Sources/main.cpp" />
          <deleteResource target="Sources/main.c" />
+         <!-- Remove unused delay files -->
+         <deleteResource target="Sources/delay.c" />
+         <deleteResource target="Sources/delay.cpp" />
          <!-- Remove unused Linker -->
          <!-- deleteResource target="Project_Settings/Linker_Files" / -->
          <createFolder target="doc" />
