@@ -14,6 +14,10 @@ Devices using this peripheral:
          <access>read-write</access>
          <resetValue>0x0</resetValue>
          <resetMask>0xFFFFFFFF</resetMask>
+         <parameters>
+            <parameter> <value>16</value> <name>MESSAGE_BUFFER_COUNT</name> <description>Number of message buffers</description></parameter>
+            <parameter> <value>4</value> <name>WAKEUP_BUFFER_COUNT</name> <description>Number of wakeup buffers</description></parameter>
+         </parameters>
          <addressBlock>
             <offset>0x0</offset>
             <size>0xC</size>
@@ -1647,9 +1651,8 @@ Devices using this peripheral:
                </fields>
             </register>
             <cluster>
-               <dim>16</dim>
+               <dim>%MESSAGE_BUFFER_COUNT</dim>
                <dimIncrement>16</dimIncrement>
-               <dimIndex>0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15</dimIndex>
                <name>MB,@p@f@i</name>
                <addressOffset>0x80</addressOffset>
                <register>
@@ -1784,9 +1787,8 @@ Devices using this peripheral:
                </register>
             </cluster>
             <register>
-               <dim>16</dim>
+               <dim>%MESSAGE_BUFFER_COUNT</dim>
                <dimIncrement>4</dimIncrement>
-               <dimIndex>0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15</dimIndex>
                <name>RXIMR%s</name>
                <description>Rx Individual Mask</description>
                <addressOffset>0x880</addressOffset>
@@ -2251,9 +2253,8 @@ Devices using this peripheral:
                </fields>
             </register>
             <cluster>
-               <dim>4</dim>
+               <dim>%WAKEUP_BUFFER_COUNT</dim>
                <dimIncrement>16</dimIncrement>
-               <dimIndex>0,1,2,3</dimIndex>
                <name>WMB,@p@f@i</name>
                <addressOffset>0xB40</addressOffset>
                <register>

@@ -17,6 +17,9 @@ Devices using this peripheral:
          <access>read-write</access>
          <resetValue>0x0</resetValue>
          <resetMask>0xFFFFFFFF</resetMask>
+         <parameters>
+            <parameter> <value>16</value> <name>MESSAGE_BUFFER_COUNT</name> <description>Number of message buffers</description></parameter>
+         </parameters>
          <addressBlock>
             <offset>0x0</offset>
             <size>0xC</size>
@@ -1459,9 +1462,8 @@ Not present in all devices</description>
                </fields>
             </register>
             <cluster>
-               <dim>16</dim>
+               <dim>%MESSAGE_BUFFER_COUNT</dim>
                <dimIncrement>16</dimIncrement>
-               <dimIndex>0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15</dimIndex>
                <name>MB,@p@f@i</name>
                <addressOffset>0x80</addressOffset>
                <register>

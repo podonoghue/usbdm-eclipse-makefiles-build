@@ -11,7 +11,7 @@ Devices using this peripheral:
       S32K148
 -->
       <peripheral>
-         <?sourceFile "LPIT0_MKE16F16" ?>
+         <?sourceFile "LPIT0" ?>
          <name>LPIT0</name>
          <description>Low Power Periodic Interrupt Timer</description>
          <groupName>LPIT</groupName>
@@ -21,6 +21,9 @@ Devices using this peripheral:
          <access>read-write</access>
          <resetValue>0x0</resetValue>
          <resetMask>0xFFFFFFFF</resetMask>
+         <parameters>
+            <parameter> <value>4</value> <name>TMR_COUNT</name> <description>Number of timer channels</description></parameter>
+         </parameters>
          <addressBlock>
             <offset>0x0</offset>
             <size>0x18</size>
@@ -395,9 +398,8 @@ Devices using this peripheral:
                </fields>
             </register>
             <cluster>
-               <dim>4</dim>
+               <dim>%TMR_COUNT</dim>
                <dimIncrement>16</dimIncrement>
-               <dimIndex>0,1,2,3</dimIndex>
                <name>TMR,@p@f@i</name>
                <addressOffset>0x20</addressOffset>
                <register>

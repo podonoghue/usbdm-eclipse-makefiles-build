@@ -5,7 +5,7 @@ Devices using this peripheral:
       <peripheral>
          <?sourceFile "CRC_LPC82x" ?>
          <name>CRC</name>
-         <description>Cyclic Redundancy Check (CRC) engine</description>
+         <description>Cyclic Redundancy Check</description>
          <groupName>CRC</groupName>
          <headerStructName>CRC</headerStructName>
          <baseAddress>0x50000000</baseAddress>

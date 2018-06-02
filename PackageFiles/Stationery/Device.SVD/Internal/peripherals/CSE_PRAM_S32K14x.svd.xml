@@ -8,7 +8,7 @@ Devices using this peripheral:
       <peripheral>
          <?sourceFile "CSE_PRAM_S32K14x" ?>
          <name>CSE_PRAM</name>
-         <description>CSE_PRAM</description>
+         <description>CSEc Parameter space RAM</description>
          <groupName>CSE_PRAM</groupName>
          <headerStructName>CSE_PRAM</headerStructName>
          <baseAddress>0x14001000</baseAddress>

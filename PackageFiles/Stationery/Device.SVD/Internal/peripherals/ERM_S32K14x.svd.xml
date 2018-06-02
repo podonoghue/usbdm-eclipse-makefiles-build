@@ -8,7 +8,7 @@ Devices using this peripheral:
       <peripheral>
          <?sourceFile "ERM_S32K14x" ?>
          <name>ERM</name>
-         <description>ERM</description>
+         <description>Error Reporting Module</description>
          <groupName>ERM</groupName>
          <headerStructName>ERM</headerStructName>
          <baseAddress>0x40018000</baseAddress>

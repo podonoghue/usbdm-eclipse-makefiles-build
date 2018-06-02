@@ -30,6 +30,9 @@ Devices using this peripheral:
          <access>read-write</access>
          <resetValue>0x0</resetValue>
          <resetMask>0xFFFFFFFF</resetMask>
+         <parameters>
+            <parameter> <value>2</value> <name>TMR_COUNT</name> <description>Number of timer channels</description></parameter>
+         </parameters>
          <addressBlock>
             <offset>0x0</offset>
             <size>0x4</size>
@@ -51,6 +54,7 @@ Devices using this peripheral:
                <description>Module Control Register</description>
                <addressOffset>0x0</addressOffset>
                <resetValue>0x2</resetValue>
+               <resetMask>0x3</resetMask>
                <fields>
                   <field>
                      <name>FRZ</name>
@@ -119,9 +123,8 @@ Disabled PIT module clock</description>
                </fields>
             </register>
             <cluster>
-               <dim>2</dim>
+               <dim>%TMR_COUNT</dim>
                <dimIncrement>16</dimIncrement>
-               <dimIndex>0,1</dimIndex>
                <name>CHANNEL,@p@f@i</name>
                <addressOffset>0x100</addressOffset>
                <register>

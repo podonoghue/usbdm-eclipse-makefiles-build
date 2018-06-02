@@ -1,30 +1,30 @@
 <!--
 Devices using this peripheral: 
-      MKL17Z4
-      MKL27Z4
-      MKL27Z644
-      MKL33Z4
-      MKL43Z4
+      MKE14Z7
+      MKE15Z7
+      S32K142
+      S32K144
+      S32K146
+      S32K148
 -->
       <peripheral>
-         <?sourceFile "FLEXIO_4SH" ?>
+         <?sourceFile "FLEXIO_4SH_4TMR_MKE15Z7" ?>
          <name>FLEXIO</name>
-         <description>Flexible I/O - universal I/O module for communication (UART, SPI, I2C, I2S) and PWM purposes</description>
+         <description>Flexible I/O</description>
          <groupName>FLEXIO</groupName>
          <headerStructName>FLEXIO</headerStructName>
-         <baseAddress>0x4005F000</baseAddress>
+         <baseAddress>0x4005A000</baseAddress>
          <size>32</size>
          <access>read-write</access>
          <resetValue>0x0</resetValue>
          <resetMask>0xFFFFFFFF</resetMask>
+         <parameters>
+            <parameter> <value>4</value> <name>SHIFT_COUNT</name> <description>Number of shifters</description></parameter>
+            <parameter> <value>4</value> <name>TIMER_COUNT</name> <description>Number of shifters</description></parameter>
+         </parameters>
          <addressBlock>
             <offset>0x0</offset>
-            <size>0xC</size>
-            <usage>registers</usage>
-         </addressBlock>
-         <addressBlock>
-            <offset>0x10</offset>
-            <size>0xC</size>
+            <size>0x1C</size>
             <usage>registers</usage>
          </addressBlock>
          <addressBlock>
@@ -126,7 +126,7 @@ Devices using this peripheral:
                <description>Parameter Register</description>
                <addressOffset>0x4</addressOffset>
                <access>read-only</access>
-               <resetValue>0x10080404</resetValue>
+               <resetValue>0x4080404</resetValue>
                <fields>
                   <field>
                      <name>SHIFTER</name>
@@ -248,6 +248,20 @@ Devices using this peripheral:
                            <value>0b1</value>
                         </enumeratedValue>
                      </enumeratedValues>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>PIN</name>
+               <description>Pin State Register</description>
+               <addressOffset>0xC</addressOffset>
+               <access>read-only</access>
+               <fields>
+                  <field>
+                     <name>PDI</name>
+                     <description>Pin Data Input</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>8</bitWidth>
                   </field>
                </fields>
             </register>
@@ -427,9 +441,8 @@ Devices using this peripheral:
                </fields>
             </register>
             <register>
-               <dim>4</dim>
+               <dim>%SHIFT_COUNT</dim>
                <dimIncrement>4</dimIncrement>
-               <dimIndex>0,1,2,3</dimIndex>
                <name>SHIFTCTL%s</name>
                <description>Shifter Control N Register</description>
                <addressOffset>0x80</addressOffset>
@@ -547,9 +560,8 @@ Devices using this peripheral:
                </fields>
             </register>
             <register>
-               <dim>4</dim>
+               <dim>%SHIFT_COUNT</dim>
                <dimIncrement>4</dimIncrement>
-               <dimIndex>0,1,2,3</dimIndex>
                <name>SHIFTCFG%s</name>
                <description>Shifter Configuration N Register</description>
                <addressOffset>0x100</addressOffset>
@@ -632,9 +644,8 @@ Devices using this peripheral:
                </fields>
             </register>
             <register>
-               <dim>4</dim>
+               <dim>%SHIFT_COUNT</dim>
                <dimIncrement>4</dimIncrement>
-               <dimIndex>0,1,2,3</dimIndex>
                <name>SHIFTBUF%s</name>
                <description>Shifter Buffer N Register</description>
                <addressOffset>0x200</addressOffset>
@@ -648,9 +659,8 @@ Devices using this peripheral:
                </fields>
             </register>
             <register>
-               <dim>4</dim>
+               <dim>%SHIFT_COUNT</dim>
                <dimIncrement>4</dimIncrement>
-               <dimIndex>0,1,2,3</dimIndex>
                <name>SHIFTBUFBIS%s</name>
                <description>Shifter Buffer N Bit Swapped Register</description>
                <addressOffset>0x280</addressOffset>
@@ -664,9 +674,8 @@ Devices using this peripheral:
                </fields>
             </register>
             <register>
-               <dim>4</dim>
+               <dim>%SHIFT_COUNT</dim>
                <dimIncrement>4</dimIncrement>
-               <dimIndex>0,1,2,3</dimIndex>
                <name>SHIFTBUFBYS%s</name>
                <description>Shifter Buffer N Byte Swapped Register</description>
                <addressOffset>0x300</addressOffset>
@@ -680,9 +689,8 @@ Devices using this peripheral:
                </fields>
             </register>
             <register>
-               <dim>4</dim>
+               <dim>%SHIFT_COUNT</dim>
                <dimIncrement>4</dimIncrement>
-               <dimIndex>0,1,2,3</dimIndex>
                <name>SHIFTBUFBBS%s</name>
                <description>Shifter Buffer N Bit Byte Swapped Register</description>
                <addressOffset>0x380</addressOffset>
@@ -696,9 +704,8 @@ Devices using this peripheral:
                </fields>
             </register>
             <register>
-               <dim>4</dim>
+               <dim>%TIMER_COUNT</dim>
                <dimIncrement>4</dimIncrement>
-               <dimIndex>0,1,2,3</dimIndex>
                <name>TIMCTL%s</name>
                <description>Timer Control N Register</description>
                <addressOffset>0x400</addressOffset>
@@ -829,9 +836,8 @@ Devices using this peripheral:
                </fields>
             </register>
             <register>
-               <dim>4</dim>
+               <dim>%TIMER_COUNT</dim>
                <dimIncrement>4</dimIncrement>
-               <dimIndex>0,1,2,3</dimIndex>
                <name>TIMCFG%s</name>
                <description>Timer Configuration N Register</description>
                <addressOffset>0x480</addressOffset>
@@ -1071,9 +1077,8 @@ Devices using this peripheral:
                </fields>
             </register>
             <register>
-               <dim>4</dim>
+               <dim>%TIMER_COUNT</dim>
                <dimIncrement>4</dimIncrement>
-               <dimIndex>0,1,2,3</dimIndex>
                <name>TIMCMP%s</name>
                <description>Timer Compare N Register</description>
                <addressOffset>0x500</addressOffset>

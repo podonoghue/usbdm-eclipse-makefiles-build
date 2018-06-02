@@ -6,7 +6,7 @@ Devices using this peripheral:
       <peripheral>
          <?sourceFile "PCC_MKE15Z7" ?>
          <name>PCC</name>
-         <description>PCC</description>
+         <description>Peripheral Clock Controller</description>
          <groupName>PCC</groupName>
          <headerStructName>PCC</headerStructName>
          <baseAddress>0x40065000</baseAddress>
@@ -28,49 +28,43 @@ Devices using this peripheral:
                <?hide?>
                <description>PCC Register</description>
                <addressOffset>0x0</addressOffset>
-               <resetMask>0x0</resetMask>
+               <resetValue>0x80000000</resetValue>
                <fields>
                   <field>
-                     <name>PCD</name>
-                     <description>Peripheral Clock Divider Select</description>
-                     <bitOffset>0</bitOffset>
-                     <bitWidth>4</bitWidth>
-                     <enumeratedValues>
-                        <enumeratedValue>
-                           <name>XXXX</name>
-                           <description>Divide by N+1</description>
-                           <isDefault>true</isDefault>
-                        </enumeratedValue>
-                     </enumeratedValues>
-                  </field>
-                  <field>
-                     <name>FRAC</name>
-                     <description>Peripheral Clock Divider Fraction</description>
-                     <bitOffset>4</bitOffset>
-                     <bitWidth>1</bitWidth>
-                     <enumeratedValues>
-                        <enumeratedValue>
-                           <name>X</name>
-                           <description>Fractional value N+1</description>
-                           <isDefault>true</isDefault>
-                        </enumeratedValue>
-                     </enumeratedValues>
-                  </field>
-                  <field>
                      <name>PCS</name>
-                     <description>Peripheral Clock Source Select (if implemented for this peripheral)</description>
+                     <description>Peripheral Clock Source Select</description>
                      <bitOffset>24</bitOffset>
-                     <bitWidth>5</bitWidth>
+                     <bitWidth>3</bitWidth>
                      <enumeratedValues>
                         <enumeratedValue>
-                           <name>000</name>
-                           <description>Clock is off. An external clock can be enabled for this peripheral</description>
+                           <name>0</name>
+                           <description>Clock is off.\t An external clock may be enabled for this peripheral</description>
                            <value>0b000</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>XXX</name>
-                           <description>Clock option N</description>
-                           <isDefault>true</isDefault>
+                           <name>1</name>
+                           <description>OSCCLK - System Oscillator Bus Clock(scg_sosc_slow_clk)</description>
+                           <value>0b001</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>2</name>
+                           <description>SCGIRCLK - Slow IRC Clock(scg_sirc_slow_clk), (maximum is 8MHz)</description>
+                           <value>0b010</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>3</name>
+                           <description>SCGFIRCLK - Fast IRC Clock(scg_firc_slow_clk), (maximum is 48MHz)</description>
+                           <value>0b011</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>5</name>
+                           <description>SCGFLLCLK System FLL clock(scg_sfll_slow_clk)</description>
+                           <value>0b101</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>6</name>
+                           <description>SCGPLLCLK System PLL clock(scg_spll_slow_clk)</description>
+                           <value>0b110</value>
                         </enumeratedValue>
                      </enumeratedValues>
                   </field>
@@ -79,15 +73,16 @@ Devices using this peripheral:
                      <description>Indicates peripheral is being used</description>
                      <bitOffset>29</bitOffset>
                      <bitWidth>1</bitWidth>
+                     <access>read-only</access>
                      <enumeratedValues>
                         <enumeratedValue>
                            <name>0</name>
-                           <description>Clock is off. An external clock can be enabled for this peripheral</description>
+                           <description>Peripheral not in use</description>
                            <value>0b0</value>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>1</name>
-                           <description>Clock option N</description>
+                           <description>Peripheral in use.\t Clocking cannot be modified</description>
                            <value>0b1</value>
                         </enumeratedValue>
                      </enumeratedValues>
@@ -105,14 +100,14 @@ Devices using this peripheral:
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>1</name>
-                           <description>Clock enabled. The current clock selection and divider options are locked</description>
+                           <description>Clock enabled.\t The current clock selection and divider options are locked</description>
                            <value>0b1</value>
                         </enumeratedValue>
                      </enumeratedValues>
                   </field>
                   <field>
                      <name>PR</name>
-                     <description>Present</description>
+                     <description>Peripheral Present</description>
                      <bitOffset>31</bitOffset>
                      <bitWidth>1</bitWidth>
                      <access>read-only</access>
@@ -139,26 +134,26 @@ Devices using this peripheral:
                <fields>
                   <field>
                      <name>INUSE</name>
-                     <description>Clock Gate Control</description>
+                     <description>Indicates peripheral is being used</description>
                      <bitOffset>29</bitOffset>
                      <bitWidth>1</bitWidth>
                      <access>read-only</access>
                      <enumeratedValues>
                         <enumeratedValue>
                            <name>0</name>
-                           <description>Peripheral is not being used</description>
+                           <description>Peripheral not in use</description>
                            <value>0b0</value>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>1</name>
-                           <description>Peripheral is being used. Software cannot modify the existing clocking configuration</description>
+                           <description>Peripheral in use.\t Clocking cannot be modified</description>
                            <value>0b1</value>
                         </enumeratedValue>
                      </enumeratedValues>
                   </field>
                   <field>
                      <name>CGC</name>
-                     <description>Clock Control</description>
+                     <description>Clock Gate Control</description>
                      <bitOffset>30</bitOffset>
                      <bitWidth>1</bitWidth>
                      <enumeratedValues>
@@ -169,14 +164,14 @@ Devices using this peripheral:
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>1</name>
-                           <description>Clock enabled</description>
+                           <description>Clock enabled.\t The current clock selection and divider options are locked</description>
                            <value>0b1</value>
                         </enumeratedValue>
                      </enumeratedValues>
                   </field>
                   <field>
                      <name>PR</name>
-                     <description>Enable</description>
+                     <description>Peripheral Present</description>
                      <bitOffset>31</bitOffset>
                      <bitWidth>1</bitWidth>
                      <access>read-only</access>
@@ -210,8 +205,8 @@ Devices using this peripheral:
                      <bitWidth>3</bitWidth>
                      <enumeratedValues>
                         <enumeratedValue>
-                           <name>000</name>
-                           <description>Clock is off (or test clock is enabled)</description>
+                           <name>0</name>
+                           <description>Clock is off.\t An external clock may be enabled for this peripheral</description>
                            <value>0b000</value>
                         </enumeratedValue>
                         <enumeratedValue>
@@ -230,34 +225,39 @@ Devices using this peripheral:
                            <value>0b011</value>
                         </enumeratedValue>
                         <enumeratedValue>
+                           <name>5</name>
+                           <description>SCGFPCLK System FLL clock(scg_sfll_slow_clk)</description>
+                           <value>0b101</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
                            <name>6</name>
-                           <description>SCGPCLK System PLL clock(scg_spll_slow_clk)</description>
+                           <description>SCGPLLCLK System PLL clock(scg_spll_slow_clk)</description>
                            <value>0b110</value>
                         </enumeratedValue>
                      </enumeratedValues>
                   </field>
                   <field>
                      <name>INUSE</name>
-                     <description>Clock Gate Control</description>
+                     <description>Indicates peripheral is being used</description>
                      <bitOffset>29</bitOffset>
                      <bitWidth>1</bitWidth>
                      <access>read-only</access>
                      <enumeratedValues>
                         <enumeratedValue>
                            <name>0</name>
-                           <description>Peripheral is not being used</description>
+                           <description>Peripheral not in use</description>
                            <value>0b0</value>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>1</name>
-                           <description>Peripheral is being used. Software cannot modify the existing clocking configuration</description>
+                           <description>Peripheral in use.\t Clocking cannot be modified</description>
                            <value>0b1</value>
                         </enumeratedValue>
                      </enumeratedValues>
                   </field>
                   <field>
                      <name>CGC</name>
-                     <description>Clock Control</description>
+                     <description>Clock Gate Control</description>
                      <bitOffset>30</bitOffset>
                      <bitWidth>1</bitWidth>
                      <enumeratedValues>
@@ -268,14 +268,14 @@ Devices using this peripheral:
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>1</name>
-                           <description>Clock enabled</description>
+                           <description>Clock enabled.\t The current clock selection and divider options are locked</description>
                            <value>0b1</value>
                         </enumeratedValue>
                      </enumeratedValues>
                   </field>
                   <field>
                      <name>PR</name>
-                     <description>Enable</description>
+                     <description>Peripheral Present</description>
                      <bitOffset>31</bitOffset>
                      <bitWidth>1</bitWidth>
                      <access>read-only</access>
@@ -294,315 +294,33 @@ Devices using this peripheral:
                   </field>
                </fields>
             </register>
-            <register derivedFrom="PCC_ADC1"><dim>2</dim><dimIncrement>4</dimIncrement><dimIndex>0,1</dimIndex> <name>PCC_LPSPI%s</name> <addressOffset>0xB0</addressOffset> <resetValue>0x0</resetValue> <resetMask>0x0</resetMask> </register>
+            <register derivedFrom="PCC_ADC1"> <name>PCC_LPSPI0</name> <addressOffset>0xB0</addressOffset> <resetValue>0x80000000</resetValue> </register>
+            <register derivedFrom="PCC_ADC1"> <name>PCC_LPSPI1</name> <addressOffset>0xB4</addressOffset> <resetValue>0x80000000</resetValue> </register>
             <register derivedFrom="PCC_DMA0"> <name>PCC_CRC</name> <addressOffset>0xC8</addressOffset> <resetValue>0x80000000</resetValue> </register>
             <register derivedFrom="PCC_DMA0"> <name>PCC_PDB0</name> <addressOffset>0xD8</addressOffset> <resetValue>0x80000000</resetValue> </register>
             <register derivedFrom="PCC_ADC1"> <name>PCC_LPIT0</name> <addressOffset>0xDC</addressOffset> <resetValue>0x80000000</resetValue> </register>
-            <register derivedFrom="PCC_DMA0"><dim>3</dim><dimIncrement>4</dimIncrement><dimIndex>0,1,2</dimIndex> <name>PCC_FLEXTMR%s</name> <addressOffset>0xE0</addressOffset> <resetValue>0x0</resetValue> <resetMask>0x0</resetMask> </register>
+            <register derivedFrom="PCC_ADC1"> <name>PCC_FLEXTMR0</name> <addressOffset>0xE0</addressOffset> <resetValue>0x80000000</resetValue> </register>
+            <register derivedFrom="PCC_ADC1"> <name>PCC_FLEXTMR1</name> <addressOffset>0xE4</addressOffset> <resetValue>0x80000000</resetValue> </register>
+            <register derivedFrom="PCC_ADC1"> <name>PCC_FLEXTMR2</name> <addressOffset>0xE8</addressOffset> <resetValue>0x80000000</resetValue> </register>
             <register derivedFrom="PCC_ADC1"> <name>PCC_ADC0</name> <addressOffset>0xEC</addressOffset> </register>
-            <register>
-               <name>PCC_RTC</name>
-               <description>PCC Register</description>
-               <addressOffset>0xF4</addressOffset>
-               <resetValue>0x80000000</resetValue>
-               <fields>
-                  <field>
-                     <name>PCD</name>
-                     <description>Peripheral Clock Divider Select</description>
-                     <bitOffset>0</bitOffset>
-                     <bitWidth>3</bitWidth>
-                     <enumeratedValues>
-                        <enumeratedValue>
-                           <name>0</name>
-                           <description>Divide by 1 (pass-through, no clock divide)</description>
-                           <value>0b000</value>
-                        </enumeratedValue>
-                        <enumeratedValue>
-                           <name>1</name>
-                           <description>Divide by 2</description>
-                           <value>0b001</value>
-                        </enumeratedValue>
-                        <enumeratedValue>
-                           <name>2</name>
-                           <description>Divide by 3</description>
-                           <value>0b010</value>
-                        </enumeratedValue>
-                        <enumeratedValue>
-                           <name>3</name>
-                           <description>Divide by 4</description>
-                           <value>0b011</value>
-                        </enumeratedValue>
-                        <enumeratedValue>
-                           <name>4</name>
-                           <description>Divide by 5</description>
-                           <value>0b100</value>
-                        </enumeratedValue>
-                        <enumeratedValue>
-                           <name>5</name>
-                           <description>Divide by 6</description>
-                           <value>0b101</value>
-                        </enumeratedValue>
-                        <enumeratedValue>
-                           <name>6</name>
-                           <description>Divide by 7</description>
-                           <value>0b110</value>
-                        </enumeratedValue>
-                        <enumeratedValue>
-                           <name>7</name>
-                           <description>Divide by 8</description>
-                           <value>0b111</value>
-                        </enumeratedValue>
-                     </enumeratedValues>
-                  </field>
-                  <field>
-                     <name>FRAC</name>
-                     <description>Peripheral Clock Divider Fraction</description>
-                     <bitOffset>3</bitOffset>
-                     <bitWidth>1</bitWidth>
-                     <enumeratedValues>
-                        <enumeratedValue>
-                           <name>0</name>
-                           <description>Fractional value is 0</description>
-                           <value>0b0</value>
-                        </enumeratedValue>
-                        <enumeratedValue>
-                           <name>1</name>
-                           <description>Fractional value is 1</description>
-                           <value>0b1</value>
-                        </enumeratedValue>
-                     </enumeratedValues>
-                  </field>
-                  <field>
-                     <name>INUSE</name>
-                     <description>Clock Gate Control</description>
-                     <bitOffset>29</bitOffset>
-                     <bitWidth>1</bitWidth>
-                     <access>read-only</access>
-                     <enumeratedValues>
-                        <enumeratedValue>
-                           <name>0</name>
-                           <description>Peripheral is not being used</description>
-                           <value>0b0</value>
-                        </enumeratedValue>
-                        <enumeratedValue>
-                           <name>1</name>
-                           <description>Peripheral is being used. Software cannot modify the existing clocking configuration</description>
-                           <value>0b1</value>
-                        </enumeratedValue>
-                     </enumeratedValues>
-                  </field>
-                  <field>
-                     <name>CGC</name>
-                     <description>Clock Control</description>
-                     <bitOffset>30</bitOffset>
-                     <bitWidth>1</bitWidth>
-                     <enumeratedValues>
-                        <enumeratedValue>
-                           <name>0</name>
-                           <description>Clock disabled</description>
-                           <value>0b0</value>
-                        </enumeratedValue>
-                        <enumeratedValue>
-                           <name>1</name>
-                           <description>Clock enabled</description>
-                           <value>0b1</value>
-                        </enumeratedValue>
-                     </enumeratedValues>
-                  </field>
-                  <field>
-                     <name>PR</name>
-                     <description>Enable</description>
-                     <bitOffset>31</bitOffset>
-                     <bitWidth>1</bitWidth>
-                     <access>read-only</access>
-                     <enumeratedValues>
-                        <enumeratedValue>
-                           <name>0</name>
-                           <description>Peripheral is not present</description>
-                           <value>0b0</value>
-                        </enumeratedValue>
-                        <enumeratedValue>
-                           <name>1</name>
-                           <description>Peripheral is present</description>
-                           <value>0b1</value>
-                        </enumeratedValue>
-                     </enumeratedValues>
-                  </field>
-               </fields>
-            </register>
-            <register>
-               <name>PCC_LPTMR0</name>
-               <description>PCC Register</description>
-               <addressOffset>0x100</addressOffset>
-               <resetValue>0x80000000</resetValue>
-               <fields>
-                  <field>
-                     <name>PCD</name>
-                     <description>Peripheral Clock Divider Select</description>
-                     <bitOffset>0</bitOffset>
-                     <bitWidth>3</bitWidth>
-                     <enumeratedValues>
-                        <enumeratedValue>
-                           <name>0</name>
-                           <description>Divide by 1 (pass-through, no clock divide)</description>
-                           <value>0b000</value>
-                        </enumeratedValue>
-                        <enumeratedValue>
-                           <name>1</name>
-                           <description>Divide by 2</description>
-                           <value>0b001</value>
-                        </enumeratedValue>
-                        <enumeratedValue>
-                           <name>2</name>
-                           <description>Divide by 3</description>
-                           <value>0b010</value>
-                        </enumeratedValue>
-                        <enumeratedValue>
-                           <name>3</name>
-                           <description>Divide by 4</description>
-                           <value>0b011</value>
-                        </enumeratedValue>
-                        <enumeratedValue>
-                           <name>4</name>
-                           <description>Divide by 5</description>
-                           <value>0b100</value>
-                        </enumeratedValue>
-                        <enumeratedValue>
-                           <name>5</name>
-                           <description>Divide by 6</description>
-                           <value>0b101</value>
-                        </enumeratedValue>
-                        <enumeratedValue>
-                           <name>6</name>
-                           <description>Divide by 7</description>
-                           <value>0b110</value>
-                        </enumeratedValue>
-                        <enumeratedValue>
-                           <name>7</name>
-                           <description>Divide by 8</description>
-                           <value>0b111</value>
-                        </enumeratedValue>
-                     </enumeratedValues>
-                  </field>
-                  <field>
-                     <name>FRAC</name>
-                     <description>Peripheral Clock Divider Fraction</description>
-                     <bitOffset>3</bitOffset>
-                     <bitWidth>1</bitWidth>
-                     <enumeratedValues>
-                        <enumeratedValue>
-                           <name>0</name>
-                           <description>Fractional value is 0</description>
-                           <value>0b0</value>
-                        </enumeratedValue>
-                        <enumeratedValue>
-                           <name>1</name>
-                           <description>Fractional value is 1</description>
-                           <value>0b1</value>
-                        </enumeratedValue>
-                     </enumeratedValues>
-                  </field>
-                  <field>
-                     <name>PCS</name>
-                     <description>Peripheral Clock Source Select</description>
-                     <bitOffset>24</bitOffset>
-                     <bitWidth>3</bitWidth>
-                     <enumeratedValues>
-                        <enumeratedValue>
-                           <name>000</name>
-                           <description>Clock is off (or test clock is enabled)</description>
-                           <value>0b000</value>
-                        </enumeratedValue>
-                        <enumeratedValue>
-                           <name>1</name>
-                           <description>OSCCLK - System Oscillator Bus Clock(scg_sosc_slow_clk)</description>
-                           <value>0b001</value>
-                        </enumeratedValue>
-                        <enumeratedValue>
-                           <name>2</name>
-                           <description>SCGIRCLK - Slow IRC Clock(scg_sirc_slow_clk), (maximum is 8MHz)</description>
-                           <value>0b010</value>
-                        </enumeratedValue>
-                        <enumeratedValue>
-                           <name>3</name>
-                           <description>SCGFIRCLK - Fast IRC Clock(scg_firc_slow_clk), (maximum is 48MHz)</description>
-                           <value>0b011</value>
-                        </enumeratedValue>
-                        <enumeratedValue>
-                           <name>6</name>
-                           <description>SCGPCLK System PLL clock(scg_spll_slow_clk)</description>
-                           <value>0b110</value>
-                        </enumeratedValue>
-                     </enumeratedValues>
-                  </field>
-                  <field>
-                     <name>INUSE</name>
-                     <description>Clock Gate Control</description>
-                     <bitOffset>29</bitOffset>
-                     <bitWidth>1</bitWidth>
-                     <access>read-only</access>
-                     <enumeratedValues>
-                        <enumeratedValue>
-                           <name>0</name>
-                           <description>Peripheral is not being used</description>
-                           <value>0b0</value>
-                        </enumeratedValue>
-                        <enumeratedValue>
-                           <name>1</name>
-                           <description>Peripheral is being used. Software cannot modify the existing clocking configuration</description>
-                           <value>0b1</value>
-                        </enumeratedValue>
-                     </enumeratedValues>
-                  </field>
-                  <field>
-                     <name>CGC</name>
-                     <description>Clock Control</description>
-                     <bitOffset>30</bitOffset>
-                     <bitWidth>1</bitWidth>
-                     <enumeratedValues>
-                        <enumeratedValue>
-                           <name>0</name>
-                           <description>Clock disabled</description>
-                           <value>0b0</value>
-                        </enumeratedValue>
-                        <enumeratedValue>
-                           <name>1</name>
-                           <description>Clock enabled</description>
-                           <value>0b1</value>
-                        </enumeratedValue>
-                     </enumeratedValues>
-                  </field>
-                  <field>
-                     <name>PR</name>
-                     <description>Enable</description>
-                     <bitOffset>31</bitOffset>
-                     <bitWidth>1</bitWidth>
-                     <access>read-only</access>
-                     <enumeratedValues>
-                        <enumeratedValue>
-                           <name>0</name>
-                           <description>Peripheral is not present</description>
-                           <value>0b0</value>
-                        </enumeratedValue>
-                        <enumeratedValue>
-                           <name>1</name>
-                           <description>Peripheral is present</description>
-                           <value>0b1</value>
-                        </enumeratedValue>
-                     </enumeratedValues>
-                  </field>
-               </fields>
-            </register>
+            <register derivedFrom="PCC_DMA0"> <name>PCC_RTC</name> <addressOffset>0xF4</addressOffset> <resetValue>0x80000000</resetValue> </register>
+            <register derivedFrom="PCC_ADC1"> <name>PCC_LPTMR0</name> <addressOffset>0x100</addressOffset> <resetValue>0x80000000</resetValue> </register>
             <register derivedFrom="PCC_DMA0"> <name>PCC_TSI</name> <addressOffset>0x114</addressOffset> <resetValue>0x80000000</resetValue> </register>
-            <register derivedFrom="PCC_DMA0"><dim>2</dim><dimIncrement>4</dimIncrement><dimIndex>A,B</dimIndex> <name>PCC_PORT%s</name> <addressOffset>0x124</addressOffset> <resetValue>0x0</resetValue> <resetMask>0x0</resetMask> </register>
+            <register derivedFrom="PCC_DMA0"> <name>PCC_PORTA</name> <addressOffset>0x124</addressOffset> <resetValue>0x80000000</resetValue> </register>
+            <register derivedFrom="PCC_DMA0"> <name>PCC_PORTB</name> <addressOffset>0x128</addressOffset> <resetValue>0x80000000</resetValue> </register>
             <register derivedFrom="PCC_DMA0"> <name>PCC_PORTC</name> <addressOffset>0x12C</addressOffset> <resetValue>0x80000000</resetValue> </register>
-            <register derivedFrom="PCC_DMA0"><dim>2</dim><dimIncrement>4</dimIncrement><dimIndex>D,E</dimIndex> <name>PCC_PORT%s</name> <addressOffset>0x130</addressOffset> <resetValue>0x0</resetValue> <resetMask>0x0</resetMask> </register>
+            <register derivedFrom="PCC_DMA0"> <name>PCC_PORTD</name> <addressOffset>0x130</addressOffset> <resetValue>0x80000000</resetValue> </register>
+            <register derivedFrom="PCC_DMA0"> <name>PCC_PORTE</name> <addressOffset>0x134</addressOffset> <resetValue>0x80000000</resetValue> </register>
             <register derivedFrom="PCC_DMA0"> <name>PCC_PWT</name> <addressOffset>0x158</addressOffset> <resetValue>0x80000000</resetValue> </register>
             <register derivedFrom="PCC_ADC1"> <name>PCC_FLEXIO</name> <addressOffset>0x168</addressOffset> <resetValue>0x80000000</resetValue> </register>
             <register derivedFrom="PCC_DMA0"> <name>PCC_OSC32</name> <addressOffset>0x180</addressOffset> <resetValue>0x80000000</resetValue> </register>
             <register derivedFrom="PCC_DMA0"> <name>PCC_EWM</name> <addressOffset>0x184</addressOffset> <resetValue>0x80000000</resetValue> </register>
-            <register derivedFrom="PCC_ADC1"><dim>2</dim><dimIncrement>4</dimIncrement><dimIndex>0,1</dimIndex> <name>PCC_LPI2C%s</name> <addressOffset>0x198</addressOffset> <resetValue>0x0</resetValue> <resetMask>0x0</resetMask> </register>
-            <register derivedFrom="PCC_ADC1"><dim>3</dim><dimIncrement>4</dimIncrement><dimIndex>0,1,2</dimIndex> <name>PCC_LPUART%s</name> <addressOffset>0x1A8</addressOffset> <resetValue>0x0</resetValue> <resetMask>0x0</resetMask> </register>
-            <register derivedFrom="PCC_DMA0"><dim>2</dim><dimIncrement>4</dimIncrement><dimIndex>0,1</dimIndex> <name>PCC_CMP%s</name> <addressOffset>0x1CC</addressOffset> <resetValue>0x0</resetValue> <resetMask>0x0</resetMask> </register>
+            <register derivedFrom="PCC_ADC1"> <name>PCC_LPI2C0</name> <addressOffset>0x198</addressOffset> <resetValue>0x80000000</resetValue> </register>
+            <register derivedFrom="PCC_ADC1"> <name>PCC_LPI2C1</name> <addressOffset>0x19C</addressOffset> <resetValue>0x80000000</resetValue> </register>
+            <register derivedFrom="PCC_ADC1"> <name>PCC_LPUART0</name> <addressOffset>0x1A8</addressOffset> <resetValue>0x80000000</resetValue> </register>
+            <register derivedFrom="PCC_ADC1"> <name>PCC_LPUART1</name> <addressOffset>0x1AC</addressOffset> <resetValue>0x80000000</resetValue> </register>
+            <register derivedFrom="PCC_ADC1"> <name>PCC_LPUART2</name> <addressOffset>0x1B0</addressOffset> <resetValue>0x80000000</resetValue> </register>
+            <register derivedFrom="PCC_DMA0"> <name>PCC_CMP0</name> <addressOffset>0x1CC</addressOffset> <resetValue>0x80000000</resetValue> </register>
+            <register derivedFrom="PCC_DMA0"> <name>PCC_CMP1</name> <addressOffset>0x1D0</addressOffset> <resetValue>0x80000000</resetValue> </register>
          </registers>
       </peripheral>

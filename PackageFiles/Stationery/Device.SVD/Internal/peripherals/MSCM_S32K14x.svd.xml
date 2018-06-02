@@ -8,7 +8,7 @@ Devices using this peripheral:
       <peripheral>
          <?sourceFile "MSCM_S32K14x" ?>
          <name>MSCM</name>
-         <description>MSCM</description>
+         <description>Miscellaneous System Control Module</description>
          <groupName>MSCM</groupName>
          <headerStructName>MSCM</headerStructName>
          <baseAddress>0x40001000</baseAddress>

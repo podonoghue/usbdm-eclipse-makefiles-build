@@ -29,7 +29,7 @@
       <xi:include href="peripherals/DMA0_8CH_EARS_MKE15Z7.svd.xml"/>
       <xi:include href="peripherals/DMAMUX0_8CH_TRIG_MKE15Z7.svd.xml"/>
       <xi:include href="peripherals/EWM_INT_PR.svd.xml"/>
-      <xi:include href="peripherals/FLEXIO_4SH_MKE15Z7.svd.xml"/>
+      <xi:include href="peripherals/FLEXIO_4SH_4TMR_MKE15Z7.svd.xml"/>
       <xi:include href="peripherals/FTFE_MKE15Z7.svd.xml"/>
       <xi:include href="peripherals/FTM0_8CH_MKE15Z7.svd.xml"/>
       <xi:include href="peripherals/FTM1_4CH_MKE15Z7.svd.xml"/>
@@ -41,8 +41,8 @@
       <peripheral derivedFrom="GPIOA"><name>GPIOE</name><baseAddress>0x400FF100</baseAddress></peripheral>
       <xi:include href="peripherals/LPI2C0_MKE16F16.svd.xml"/>
       <peripheral derivedFrom="LPI2C0"><name>LPI2C1</name><baseAddress>0x40067000</baseAddress></peripheral>
-      <xi:include href="peripherals/LPIT0_MKE16F16.svd.xml"/>
-      <xi:include href="peripherals/LPSPI0_MKE16F16.svd.xml"/>
+      <xi:include href="peripherals/LPIT0.svd.xml"/>
+      <xi:include href="peripherals/LPSPI0.svd.xml"/>
       <peripheral derivedFrom="LPSPI0"><name>LPSPI1</name><baseAddress>0x4002D000</baseAddress></peripheral>
       <xi:include href="peripherals/LPTMR0_DMA.svd.xml"/>
       <xi:include href="peripherals/LPUART0_MKE_FIFO.svd.xml"/>

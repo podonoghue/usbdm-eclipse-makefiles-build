@@ -919,37 +919,7 @@ Devices using this peripheral:
                   </field>
                </fields>
             </register>
-            <register>
-               <name>MCCR1</name>
-               <description>Master Clock Configuration Register 1</description>
-               <addressOffset>0x50</addressOffset>
-               <fields>
-                  <field>
-                     <name>CLKLO</name>
-                     <description>Clock Low Period</description>
-                     <bitOffset>0</bitOffset>
-                     <bitWidth>6</bitWidth>
-                  </field>
-                  <field>
-                     <name>CLKHI</name>
-                     <description>Clock High Period</description>
-                     <bitOffset>8</bitOffset>
-                     <bitWidth>6</bitWidth>
-                  </field>
-                  <field>
-                     <name>SETHOLD</name>
-                     <description>Setup Hold Delay</description>
-                     <bitOffset>16</bitOffset>
-                     <bitWidth>6</bitWidth>
-                  </field>
-                  <field>
-                     <name>DATAVD</name>
-                     <description>Data Valid Delay</description>
-                     <bitOffset>24</bitOffset>
-                     <bitWidth>6</bitWidth>
-                  </field>
-               </fields>
-            </register>
+            <register derivedFrom="MCCR0"> <name>MCCR1</name> <description>Master Clock Configuration Register 1</description> <addressOffset>0x50</addressOffset> </register>
             <register>
                <name>MFCR</name>
                <description>Master FIFO Control Register</description>

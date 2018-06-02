@@ -3,9 +3,9 @@ Devices using this peripheral:
       MKL82Z7
 -->
       <peripheral>
-         <?sourceFile "FLEXIO_8SH_0x4005F000" ?>
+         <?sourceFile "FLEXIO_8SH_8TMR_0x4005F000" ?>
          <name>FLEXIO</name>
-         <description>Flexible I/O - universal I/O module for communication (UART, SPI, I2C, I2S) and PWM purposes</description>
+         <description>Flexible I/O</description>
          <groupName>FLEXIO</groupName>
          <headerStructName>FLEXIO</headerStructName>
          <baseAddress>0x4005F000</baseAddress>
@@ -13,6 +13,10 @@ Devices using this peripheral:
          <access>read-write</access>
          <resetValue>0x0</resetValue>
          <resetMask>0xFFFFFFFF</resetMask>
+         <parameters>
+            <parameter> <value>8</value> <name>SHIFT_COUNT</name> <description>Number of shifters</description></parameter>
+            <parameter> <value>8</value> <name>TIMER_COUNT</name> <description>Number of shifters</description></parameter>
+         </parameters>
          <addressBlock>
             <offset>0x0</offset>
             <size>0x1C</size>
@@ -99,7 +103,6 @@ Devices using this peripheral:
                <description>Version ID Register</description>
                <addressOffset>0x0</addressOffset>
                <access>read-only</access>
-               <resetValue>0x1010001</resetValue>
                <fields>
                   <field>
                      <name>FEATURE</name>
@@ -466,9 +469,8 @@ Devices using this peripheral:
                </fields>
             </register>
             <register>
-               <dim>8</dim>
+               <dim>%SHIFT_COUNT</dim>
                <dimIncrement>4</dimIncrement>
-               <dimIndex>0,1,2,3,4,5,6,7</dimIndex>
                <name>SHIFTCTL%s</name>
                <description>Shifter Control N Register</description>
                <addressOffset>0x80</addressOffset>
@@ -596,9 +598,8 @@ Devices using this peripheral:
                </fields>
             </register>
             <register>
-               <dim>8</dim>
+               <dim>%SHIFT_COUNT</dim>
                <dimIncrement>4</dimIncrement>
-               <dimIndex>0,1,2,3,4,5,6,7</dimIndex>
                <name>SHIFTCFG%s</name>
                <description>Shifter Configuration N Register</description>
                <addressOffset>0x100</addressOffset>
@@ -687,9 +688,8 @@ Devices using this peripheral:
                </fields>
             </register>
             <register>
-               <dim>8</dim>
+               <dim>%SHIFT_COUNT</dim>
                <dimIncrement>4</dimIncrement>
-               <dimIndex>0,1,2,3,4,5,6,7</dimIndex>
                <name>SHIFTBUF%s</name>
                <description>Shifter Buffer N Register</description>
                <addressOffset>0x200</addressOffset>
@@ -703,9 +703,8 @@ Devices using this peripheral:
                </fields>
             </register>
             <register>
-               <dim>8</dim>
+               <dim>%SHIFT_COUNT</dim>
                <dimIncrement>4</dimIncrement>
-               <dimIndex>0,1,2,3,4,5,6,7</dimIndex>
                <name>SHIFTBUFBIS%s</name>
                <description>Shifter Buffer N Bit Swapped Register</description>
                <addressOffset>0x280</addressOffset>
@@ -719,9 +718,8 @@ Devices using this peripheral:
                </fields>
             </register>
             <register>
-               <dim>8</dim>
+               <dim>%SHIFT_COUNT</dim>
                <dimIncrement>4</dimIncrement>
-               <dimIndex>0,1,2,3,4,5,6,7</dimIndex>
                <name>SHIFTBUFBYS%s</name>
                <description>Shifter Buffer N Byte Swapped Register</description>
                <addressOffset>0x300</addressOffset>
@@ -735,9 +733,8 @@ Devices using this peripheral:
                </fields>
             </register>
             <register>
-               <dim>8</dim>
+               <dim>%SHIFT_COUNT</dim>
                <dimIncrement>4</dimIncrement>
-               <dimIndex>0,1,2,3,4,5,6,7</dimIndex>
                <name>SHIFTBUFBBS%s</name>
                <description>Shifter Buffer N Bit Byte Swapped Register</description>
                <addressOffset>0x380</addressOffset>
@@ -751,9 +748,8 @@ Devices using this peripheral:
                </fields>
             </register>
             <register>
-               <dim>8</dim>
+               <dim>%TIMER_COUNT</dim>
                <dimIncrement>4</dimIncrement>
-               <dimIndex>0,1,2,3,4,5,6,7</dimIndex>
                <name>TIMCTL%s</name>
                <description>Timer Control N Register</description>
                <addressOffset>0x400</addressOffset>
@@ -884,9 +880,8 @@ Devices using this peripheral:
                </fields>
             </register>
             <register>
-               <dim>8</dim>
+               <dim>%TIMER_COUNT</dim>
                <dimIncrement>4</dimIncrement>
-               <dimIndex>0,1,2,3,4,5,6,7</dimIndex>
                <name>TIMCFG%s</name>
                <description>Timer Configuration N Register</description>
                <addressOffset>0x480</addressOffset>
@@ -1126,9 +1121,8 @@ Devices using this peripheral:
                </fields>
             </register>
             <register>
-               <dim>8</dim>
+               <dim>%TIMER_COUNT</dim>
                <dimIncrement>4</dimIncrement>
-               <dimIndex>0,1,2,3,4,5,6,7</dimIndex>
                <name>TIMCMP%s</name>
                <description>Timer Compare N Register</description>
                <addressOffset>0x500</addressOffset>
@@ -1143,9 +1137,8 @@ Devices using this peripheral:
                </fields>
             </register>
             <register>
-               <dim>8</dim>
+               <dim>%SHIFT_COUNT</dim>
                <dimIncrement>4</dimIncrement>
-               <dimIndex>0,1,2,3,4,5,6,7</dimIndex>
                <name>SHIFTBUFNBS%s</name>
                <description>Shifter Buffer N Nibble Byte Swapped Register</description>
                <addressOffset>0x680</addressOffset>
@@ -1159,9 +1152,8 @@ Devices using this peripheral:
                </fields>
             </register>
             <register>
-               <dim>8</dim>
+               <dim>%SHIFT_COUNT</dim>
                <dimIncrement>4</dimIncrement>
-               <dimIndex>0,1,2,3,4,5,6,7</dimIndex>
                <name>SHIFTBUFHWS%s</name>
                <description>Shifter Buffer N Half Word Swapped Register</description>
                <addressOffset>0x700</addressOffset>
@@ -1175,9 +1167,8 @@ Devices using this peripheral:
                </fields>
             </register>
             <register>
-               <dim>8</dim>
+               <dim>%SHIFT_COUNT</dim>
                <dimIncrement>4</dimIncrement>
-               <dimIndex>0,1,2,3,4,5,6,7</dimIndex>
                <name>SHIFTBUFNIS%s</name>
                <description>Shifter Buffer N Nibble Swapped Register</description>
                <addressOffset>0x780</addressOffset>

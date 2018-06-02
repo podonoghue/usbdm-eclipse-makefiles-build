@@ -35,7 +35,7 @@
       <xi:include href="peripherals/DMAMUX0_32CH_TRIG_SPLIT_MK28F15.svd.xml"/>
       <xi:include href="peripherals/EWM_INT_PR_CLK.svd.xml"/>
       <xi:include href="peripherals/FB.svd.xml"/>
-      <xi:include href="peripherals/FLEXIO_8SH_0x400DF000.svd.xml"/>
+      <xi:include href="peripherals/FLEXIO_8SH_8TMR_0x400DF000.svd.xml"/>
       <xi:include href="peripherals/FMC_MK28F15.svd.xml"/>
       <xi:include href="peripherals/FTFE_XACCH.svd.xml"/>
       <xi:include href="peripherals/FTM0_8CH_ICRST.svd.xml"/>

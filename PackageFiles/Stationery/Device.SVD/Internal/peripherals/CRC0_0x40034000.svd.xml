@@ -186,38 +186,6 @@ Devices using this peripheral:
                </fields>
             </register>
             <register>
-               <name>GPOLYLL</name>
-               <?hide?>
-               <description>GPOLYLL register</description>
-               <addressOffset>0x4</addressOffset>
-               <size>8</size>
-               <resetValue>0xFF</resetValue>
-               <resetMask>0xFF</resetMask>
-               <fields>
-                  <field>
-                     <name>GPOLYLL</name>
-                     <description>POLYLL stores the first 8 bits of the 32 bit CRC</description>
-                     <bitOffset>0</bitOffset>
-                  </field>
-               </fields>
-            </register>
-            <register>
-               <name>GPOLYLU</name>
-               <?hide?>
-               <description>GPOLYLU register</description>
-               <addressOffset>0x5</addressOffset>
-               <size>8</size>
-               <resetValue>0xFF</resetValue>
-               <resetMask>0xFF</resetMask>
-               <fields>
-                  <field>
-                     <name>GPOLYLU</name>
-                     <description>POLYLL stores the second 8 bits of the 32 bit CRC</description>
-                     <bitOffset>0</bitOffset>
-                  </field>
-               </fields>
-            </register>
-            <register>
                <name>GPOLYH</name>
                <?hide?>
                <description>GPOLYH register</description>
@@ -229,38 +197,6 @@ Devices using this peripheral:
                   <field>
                      <name>GPOLYH</name>
                      <description>POLYH stores the high 16 bits of the 16/32 bit CRC polynomial value</description>
-                     <bitOffset>0</bitOffset>
-                  </field>
-               </fields>
-            </register>
-            <register>
-               <name>GPOLYHL</name>
-               <?hide?>
-               <description>GPOLYHL register</description>
-               <addressOffset>0x6</addressOffset>
-               <size>8</size>
-               <resetValue>0xFF</resetValue>
-               <resetMask>0xFF</resetMask>
-               <fields>
-                  <field>
-                     <name>GPOLYHL</name>
-                     <description>POLYHL stores the third 8 bits of the 32 bit CRC</description>
-                     <bitOffset>0</bitOffset>
-                  </field>
-               </fields>
-            </register>
-            <register>
-               <name>GPOLYHU</name>
-               <?hide?>
-               <description>GPOLYHU register</description>
-               <addressOffset>0x7</addressOffset>
-               <size>8</size>
-               <resetValue>0xFF</resetValue>
-               <resetMask>0xFF</resetMask>
-               <fields>
-                  <field>
-                     <name>GPOLYHU</name>
-                     <description>POLYHU stores the fourth 8 bits of the 32 bit CRC</description>
                      <bitOffset>0</bitOffset>
                   </field>
                </fields>

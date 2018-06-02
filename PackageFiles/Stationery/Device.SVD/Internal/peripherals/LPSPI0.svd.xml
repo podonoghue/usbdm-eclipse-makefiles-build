@@ -11,7 +11,7 @@ Devices using this peripheral:
       S32K148
 -->
       <peripheral>
-         <?sourceFile "LPSPI0_MKE16F16" ?>
+         <?sourceFile "LPSPI0" ?>
          <name>LPSPI0</name>
          <description>Low power SPI</description>
          <groupName>LPSPI</groupName>

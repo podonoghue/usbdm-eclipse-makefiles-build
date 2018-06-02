@@ -36,7 +36,7 @@
       <peripheral derivedFrom="FGPIOA"><name>FGPIOC</name><baseAddress>0xF8000080</baseAddress></peripheral>
       <peripheral derivedFrom="FGPIOA"><name>FGPIOD</name><baseAddress>0xF80000C0</baseAddress></peripheral>
       <peripheral derivedFrom="FGPIOA"><name>FGPIOE</name><baseAddress>0xF8000100</baseAddress></peripheral>
-      <xi:include href="peripherals/FLEXIO_8SH_0x4005F000.svd.xml"/>
+      <xi:include href="peripherals/FLEXIO_8SH_8TMR_0x4005F000.svd.xml"/>
       <xi:include href="peripherals/FTFA_XACCH.svd.xml"/>
       <peripheral derivedFrom="FGPIOA"><name>GPIOA</name>      <groupName>GPIO</groupName><baseAddress>0x400FF000</baseAddress></peripheral>
       <peripheral derivedFrom="FGPIOA"><name>GPIOB</name>      <groupName>GPIO</groupName><baseAddress>0x400FF040</baseAddress></peripheral>
@@ -60,7 +60,7 @@
       <xi:include href="peripherals/MTBDWT_MKE15Z7.svd.xml"/>
       <xi:include href="peripherals/NV_MKL82Z7.svd.xml"/>
       <xi:include href="peripherals/OSC_MKL82Z7.svd.xml"/>
-      <xi:include href="peripherals/PIT0_MKL82Z7.svd.xml"/>
+      <xi:include href="peripherals/PIT_4CH_LTMR64.svd.xml"/>
       <xi:include href="peripherals/PMC_MKL82Z7.svd.xml"/>
       <xi:include href="peripherals/PORTA_MKL82Z7.svd.xml"/>
       <peripheral derivedFrom="PORTA"><name>PORTB</name><baseAddress>0x4004A000</baseAddress></peripheral>
