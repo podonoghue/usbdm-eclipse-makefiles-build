@@ -758,7 +758,7 @@ public:
    /**
     * Constructor
     */
-   SpiBase_T() : Spi(reinterpret_cast<volatile SPI_Type*>(Info::spi)) {
+   SpiBase_T() : Spi(reinterpret_cast<volatile SPI_Type*>(&Info::spi())) {
 
 #ifdef DEBUG_BUILD
       // Check pin assignments
@@ -772,7 +772,7 @@ public:
       }
 
       // Enable SPI module clock
-      *Info::clockReg |= Info::clockMask;
+      Info::clockReg() |= Info::clockMask;
       __DMB();
 
       spi->MCR =

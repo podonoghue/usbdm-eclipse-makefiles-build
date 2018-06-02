@@ -160,9 +160,9 @@ public:
     */
    static void irqHandler(void) {
 
-      if (PdbBase_T<Info>::pdb->SC & PDB_SC_PDBIF_MASK) {
+      if (PdbBase_T<Info>::pdb().SC & PDB_SC_PDBIF_MASK) {
          // Clear interrupt flag
-         PdbBase_T<Info>::pdb->SC  &= ~PDB_SC_PDBIF_MASK;
+         PdbBase_T<Info>::pdb().SC  &= ~PDB_SC_PDBIF_MASK;
          // Handle expected interrupt
          callback();
          return;
@@ -198,8 +198,11 @@ public:
 
 
 protected:
-   static constexpr volatile PDB_Type *pdb      = Info::pdb;
-   static constexpr volatile uint32_t *clockReg = Info::clockReg;
+   /** Hardware instance pointer */
+   static __attribute__((always_inline)) volatile PDB_Type &pdb() { return Info::pdb(); }
+
+   /** Clock register mask for peripheral */
+   static __attribute__((always_inline)) volatile uint32_t &clockReg() { return Info::clockReg(); }
 
 public:
    /**
@@ -216,7 +219,7 @@ public:
    static void  __attribute__((always_inline)) enable() {
       configureAllPins();
 
-      *clockReg |= Info::clockMask;
+      clockReg() |= Info::clockMask;
       __DMB();
    }
 
@@ -229,43 +232,43 @@ public:
    static void defaultConfigure() {
       enable();
 
-      pdb->MOD  = Info::pdb_mod;
-      pdb->IDLY = Info::pdb_idly;
-      pdb->CH[0].C1     = Info::pdb_ch[0].c1;
-      pdb->CH[0].DLY[0] = Info::pdb_ch[0].dly0;
-      pdb->CH[0].DLY[1] = Info::pdb_ch[0].dly1;
+      pdb().MOD  = Info::pdb_mod;
+      pdb().IDLY = Info::pdb_idly;
+      pdb().CH[0].C1     = Info::pdb_ch[0].c1;
+      pdb().CH[0].DLY[0] = Info::pdb_ch[0].dly0;
+      pdb().CH[0].DLY[1] = Info::pdb_ch[0].dly1;
       if (Info::numChannels>1) {
-         pdb->CH[1].C1     = Info::pdb_ch[1].c1;
-         pdb->CH[1].DLY[0] = Info::pdb_ch[1].dly0;
-         pdb->CH[1].DLY[1] = Info::pdb_ch[1].dly1;
+         pdb().CH[1].C1     = Info::pdb_ch[1].c1;
+         pdb().CH[1].DLY[0] = Info::pdb_ch[1].dly0;
+         pdb().CH[1].DLY[1] = Info::pdb_ch[1].dly1;
       }
 #if PDB_DAC_COUNT>0
       if (Info::numDacs>0) {
-         pdb->DAC[0].INTC = Info::pdb_dac[0].dacintc;
-         pdb->DAC[0].INT  = Info::pdb_dac[0].dacint;
+         pdb().DAC[0].INTC = Info::pdb_dac[0].dacintc;
+         pdb().DAC[0].INT  = Info::pdb_dac[0].dacint;
       }
       if (Info::numDacs>1) {
-         pdb->DAC[1].INTC = Info::pdb_dac[1].dacintc;
-         pdb->DAC[1].INT  = Info::pdb_dac[1].dacint;
+         pdb().DAC[1].INTC = Info::pdb_dac[1].dacintc;
+         pdb().DAC[1].INT  = Info::pdb_dac[1].dacint;
       }
 #endif
 #ifdef PDB_POEN_POEN
-      pdb->POEN = Info::pdb_poen;
+      pdb().POEN = Info::pdb_poen;
       if (Info::numPulseOutputs>0) {
-         pdb->POnDLY[0].PODLY     = Info::pdb_podly[0];
+         pdb().POnDLY[0].PODLY     = Info::pdb_podly[0];
       }
       if (Info::numPulseOutputs>1) {
-         pdb->POnDLY[1].PODLY     = Info::pdb_podly[1];
+         pdb().POnDLY[1].PODLY     = Info::pdb_podly[1];
       }
       if (Info::numPulseOutputs>2) {
-         pdb->POnDLY[2].PODLY     = Info::pdb_podly[2];
+         pdb().POnDLY[2].PODLY     = Info::pdb_podly[2];
       }
       if (Info::numPulseOutputs>3) {
-         pdb->POnDLY[3].PODLY     = Info::pdb_podly[3];
+         pdb().POnDLY[3].PODLY     = Info::pdb_podly[3];
       }
 #endif
       // Configure and trigger register load
-      pdb->SC = Info::pdb_sc|PDB_SC_PDBEN_MASK|PDB_SC_LDOK_MASK;
+      pdb().SC = Info::pdb_sc|PDB_SC_PDBEN_MASK|PDB_SC_LDOK_MASK;
       enableNvicInterrupts();
    }
 
@@ -291,8 +294,8 @@ public:
    static uint32_t calcTicksFromTime(float period) {
 
       float clockFrequency = Info::getInputClockFrequency();
-      int multValue        = (pdb->SC&PDB_SC_MULT_MASK)>>PDB_SC_MULT_SHIFT;
-      int prescaleValue    = (pdb->SC&PDB_SC_PRESCALER_MASK)>>PDB_SC_PRESCALER_SHIFT;
+      int multValue        = (pdb().SC&PDB_SC_MULT_MASK)>>PDB_SC_MULT_SHIFT;
+      int prescaleValue    = (pdb().SC&PDB_SC_PRESCALER_MASK)>>PDB_SC_PRESCALER_SHIFT;
 
       // Multiplier factors for prescale divider
       static const int multFactors[] = {1,10,20,40};
@@ -386,9 +389,9 @@ public:
       if (rc != E_NO_ERROR) {
          return rc;
       }
-      pdb->SC  = (pdb->SC&~(PDB_SC_MULT_MASK|PDB_SC_PRESCALER_MASK))|PDB_SC_MULT(mult)|PDB_SC_PRESCALER(prescale)|PDB_SC_PDBIF_MASK;
+      pdb().SC  = (pdb().SC&~(PDB_SC_MULT_MASK|PDB_SC_PRESCALER_MASK))|PDB_SC_MULT(mult)|PDB_SC_PRESCALER(prescale)|PDB_SC_PDBIF_MASK;
 	  // Recalculat MOD using calcTicksFromTime() to ensure consistent results
-      pdb->MOD = calcTicksFromTime(period);
+      pdb().MOD = calcTicksFromTime(period);
 
       return E_NO_ERROR;
    }
@@ -400,7 +403,7 @@ public:
     * @param[in]  pdbMultiplier  Clock pre-scale multiplier (pdb_sc_prescaler)
     */
    static void __attribute__((always_inline)) setClock(PdbPrescale pdbPrescale, PdbMultiplier pdbMultiplier) {
-      pdb->SC  = (pdb->SC&~(PDB_SC_MULT_MASK|PDB_SC_PRESCALER_MASK))|pdbPrescale|pdbMultiplier;
+      pdb().SC  = (pdb().SC&~(PDB_SC_MULT_MASK|PDB_SC_PRESCALER_MASK))|pdbPrescale|pdbMultiplier;
    }
 
    /**
@@ -409,7 +412,7 @@ public:
     * @param[in] modulo Modulo value for the counter (pdb_mod)
     */
    static void __attribute__((always_inline)) setModulo(int modulo) {
-      pdb->MOD = modulo;
+      pdb().MOD = modulo;
    }
 
    /**
@@ -418,7 +421,7 @@ public:
     * @param[in] delay Modulo value for the counter (pdb_mod)
     */
    static void __attribute__((always_inline)) setInterruptDelayInTicks(int delay) {
-      pdb->IDLY = delay;
+      pdb().IDLY = delay;
    }
 
    /**
@@ -427,7 +430,7 @@ public:
     * @param[in] delay Modulo value for the counter (pdb_mod)
     */
    static void __attribute__((always_inline)) setInterruptDelay(float delay) {
-      pdb->IDLY = calcTicksFromTime(delay);
+      pdb().IDLY = calcTicksFromTime(delay);
    }
 
    /**
@@ -437,7 +440,7 @@ public:
     * @param[in] pdbMode         PDB mode. Controls if the PDB does one sequence or repeats (pdb_sc_cont)
     */
    static void __attribute__((always_inline)) setTriggerSource(PdbTrigger pdbTrigger, PdbMode pdbMode=PdbMode_OneShot) {
-      pdb->SC = (pdb->SC&~PDB_SC_TRGSEL_MASK)|pdbTrigger|pdbMode|PDB_SC_PDBIF_MASK;
+      pdb().SC = (pdb().SC&~PDB_SC_TRGSEL_MASK)|pdbTrigger|pdbMode|PDB_SC_PDBIF_MASK;
    }
 
    /**
@@ -447,7 +450,7 @@ public:
 
       // PdbTrigger_Software must be all 1's for this to work
       static_assert(PdbTrigger_Software==PDB_SC_TRGSEL_MASK, "Unexpected value for PdbTrigger_Software");
-      pdb->SC |= PdbTrigger_Software|PDB_SC_SWTRIG_MASK|PDB_SC_PDBIF_MASK;
+      pdb().SC |= PdbTrigger_Software|PDB_SC_SWTRIG_MASK|PDB_SC_PDBIF_MASK;
    }
 
    /**
@@ -459,7 +462,7 @@ public:
     * @note isLoadRegistersComplete() may be used to check if the loading has occurred.
     */
    static void __attribute__((always_inline)) triggerRegisterLoad(PdbLoadMode pdbLoadMode) {
-      pdb->SC = (pdb->SC&~PDB_SC_LDMOD_MASK)|pdbLoadMode|PDB_SC_PDBEN_MASK|PDB_SC_LDOK_MASK|PDB_SC_PDBIF_MASK;
+      pdb().SC = (pdb().SC&~PDB_SC_LDMOD_MASK)|pdbLoadMode|PDB_SC_PDBEN_MASK|PDB_SC_LDOK_MASK|PDB_SC_PDBIF_MASK;
    }
 
    /**
@@ -468,7 +471,7 @@ public:
     * @note The loading is triggered by loadRegisters()
     */
    static bool __attribute__((always_inline)) isRegisterLoadComplete() {
-      return !(pdb->SC & PDB_SC_LDOK_MASK);
+      return !(pdb().SC & PDB_SC_LDOK_MASK);
    }
 
    /**
@@ -495,10 +498,10 @@ public:
     */
    static void enableErrorInterrupts(bool enable=true) {
       if (enable) {
-         pdb->SC |= PDB_SC_PDBEIE_MASK;
+         pdb().SC |= PDB_SC_PDBEIE_MASK;
       }
       else {
-         pdb->SC &= ~PDB_SC_PDBEIE_MASK;
+         pdb().SC &= ~PDB_SC_PDBEIE_MASK;
       }
    }
 
@@ -509,10 +512,10 @@ public:
     */
    static void enableSequenceInterrupts(bool enable=true) {
       if (enable) {
-         pdb->SC |= PDB_SC_PDBIE_MASK;
+         pdb().SC |= PDB_SC_PDBIE_MASK;
       }
       else {
-         pdb->SC &= ~PDB_SC_PDBIE_MASK;
+         pdb().SC &= ~PDB_SC_PDBIE_MASK;
       }
    }
 
@@ -523,10 +526,10 @@ public:
     */
    static void enableDma(bool enable=true) {
       if (enable) {
-         pdb->SC |= PDB_SC_DMAEN_MASK;
+         pdb().SC |= PDB_SC_DMAEN_MASK;
       }
       else {
-         pdb->SC &= ~PDB_SC_DMAEN_MASK;
+         pdb().SC &= ~PDB_SC_DMAEN_MASK;
       }
    }
 
@@ -541,7 +544,7 @@ public:
          PdbInterrupt         pdbInterrupt      = PdbInterrupt_Disable,
          PdbErrorInterrupt    pdbErrorInterrupt = PdbErrorInterrupt_Disable,
          PdbDma               pdbDma            = PdbDma_Disable) {
-      pdb->SC = (pdb->SC&~(PDB_SC_PDBIE_MASK|PDB_SC_PDBEIE_MASK|PDB_SC_DMAEN_MASK))|pdbInterrupt|pdbErrorInterrupt|pdbDma;
+      pdb().SC = (pdb().SC&~(PDB_SC_PDBIE_MASK|PDB_SC_PDBEIE_MASK|PDB_SC_DMAEN_MASK))|pdbInterrupt|pdbErrorInterrupt|pdbDma;
    }
 
    /**
@@ -565,9 +568,9 @@ public:
          PdbPretrigger0 pdbPretrigger0=PdbPretrigger0_Bypass,  uint16_t delay0=0,
          PdbPretrigger1 pdbPretrigger1=PdbPretrigger0_Disable, uint16_t delay1=0) {
 
-      pdb->CH[channel].C1     = pdbPretrigger0|pdbPretrigger1;
-      pdb->CH[channel].DLY[0] = delay0;
-      pdb->CH[channel].DLY[1] = delay1;
+      pdb().CH[channel].C1     = pdbPretrigger0|pdbPretrigger1;
+      pdb().CH[channel].DLY[0] = delay0;
+      pdb().CH[channel].DLY[1] = delay1;
    }
    /**
     * Configures the pretriggers associated with a channel.
@@ -590,9 +593,9 @@ public:
          PdbPretrigger0 pdbPretrigger0,                        float delay0,
          PdbPretrigger1 pdbPretrigger1=PdbPretrigger1_Disable, float delay1=0.0) {
 
-      pdb->CH[channel].C1     = pdbPretrigger0|pdbPretrigger1;
-      pdb->CH[channel].DLY[0] = calcTicksFromTime(delay0);
-      pdb->CH[channel].DLY[1] = calcTicksFromTime(delay1);
+      pdb().CH[channel].C1     = pdbPretrigger0|pdbPretrigger1;
+      pdb().CH[channel].DLY[0] = calcTicksFromTime(delay0);
+      pdb().CH[channel].DLY[1] = calcTicksFromTime(delay1);
    }
 
    /**
@@ -601,7 +604,7 @@ public:
     * @param[in] channel the PDB channel to clear
     */
    static uint32_t getChannelFlags(int channel) {
-      return pdb->CH[channel].S;
+      return pdb().CH[channel].S;
    }
 
    /**
@@ -611,7 +614,7 @@ public:
     */
    static void clearErrorFlags(int channel) {
       // Clear flags
-      pdb->CH[channel].S = PDB_S_ERR_MASK; // w1c bits
+      pdb().CH[channel].S = PDB_S_ERR_MASK; // w1c bits
    }
 };
 

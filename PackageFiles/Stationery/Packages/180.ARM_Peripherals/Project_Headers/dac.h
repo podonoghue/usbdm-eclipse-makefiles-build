@@ -71,11 +71,11 @@ public:
    }
 
 protected:
-   /** Pointer to hardware */
-   static constexpr volatile DAC_Type *dac       = Info::dac;
+   /** Hardware instance pointer */
+   static __attribute__((always_inline)) volatile DAC_Type &dac() { return Info::dac(); }
 
-   /** Pointer to clock register */
-   static constexpr volatile uint32_t *clockReg  = Info::clockReg;
+   /** Clock register for peripheral */
+   static __attribute__((always_inline)) volatile uint32_t &clockReg() { return Info::clockReg(); }
 
 public:
    /**
@@ -87,24 +87,24 @@ public:
     */
    static void enable(uint32_t c0=Info::c0, uint32_t c1=Info::c1, uint32_t c2=Info::c2) {
       // Enable clock
-      *clockReg |= Info::clockMask;
+      clockReg() |= Info::clockMask;
       __DMB();
 
       Info::initPCRs();
 
       // Enable timer
-      dac->C0 = c0|DAC_C0_DACEN_MASK;
-      dac->C1 = c1;
-      dac->C2 = c2;
+      dac().C0 = c0|DAC_C0_DACEN_MASK;
+      dac().C1 = c1;
+      dac().C2 = c2;
    }
    /**
     *   Disable the DAC channel
     */
    static void finalise(uint8_t channel) {
       // Enable timer
-      dac->C0 = 0;
-      dac->C1 = 0;
-      *clockReg &= ~Info::clockMask;
+      dac().C0 = 0;
+      dac().C1 = 0;
+      clockReg() &= ~Info::clockMask;
    }
    /**
     * Set DAC output value
@@ -112,7 +112,7 @@ public:
     * @param value 12-bit value to write to DAC
     */
    static void setValue(uint16_t value) {
-      dac->DATA[0] = DAC_DATA_DATA(value);
+      dac().DATA[0] = DAC_DATA_DATA(value);
    }
 };
 

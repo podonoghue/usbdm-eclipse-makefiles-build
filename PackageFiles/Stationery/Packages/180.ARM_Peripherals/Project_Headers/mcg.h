@@ -73,8 +73,8 @@ private:
    /** Callback function for ISR */
    static MCGCallbackFunction callback;
 
-   /** Pointer to hardware */
-   static constexpr volatile MCG_Type *mcg = McgInfo::mcg;
+   /** Hardware instance */
+   static __attribute__((always_inline)) volatile MCG_Type &mcg() { return McgInfo::mcg(); }
 
    /**
     * Table of clock settings

@@ -223,7 +223,8 @@ template <class Info>
 class SmcBase_T {
 
 protected:
-   static constexpr volatile SMC_Type *smc = Info::smc;
+	   /** Hardware instance pointer */
+	   static __attribute__((always_inline)) volatile SMC_Type &smc() { return Info::smc(); }
 
 public:
 
@@ -268,8 +269,8 @@ public:
     * Configure with settings from <b>Configure.usbdmProject</b>.
     */
    static void defaultConfigure() {
-      smc->PMPROT   = Info::pmprot;
-      smc->STOPCTRL = Info::stopctrl;
+      smc().PMPROT   = Info::pmprot;
+      smc().STOPCTRL = Info::stopctrl;
    }
 
    /**
@@ -290,7 +291,7 @@ public:
          SmcHighSpeedRun         smcHighSpeedRun         = SmcHighSpeedRun_Disable ) {
 
       uint8_t mask = smcVeryLowPower|smcLowLeakageStop|smcVeryLowLeakageStop|smcHighSpeedRun;
-      smc->PMPROT = mask;
+      smc().PMPROT = mask;
       return E_NO_ERROR;
    }
 
@@ -308,7 +309,7 @@ public:
          SmcPartialStopMode      smcPartialStopMode      = SmcPartialStopMode_Normal,
          SmcLpoInLowLeakage      smcLpoInLowLeakage      = SmcLpoInLowLeakage_Disable) {
 
-      smc->STOPCTRL = smcPartialStopMode|smcPowerOnReset|smcLowLeakageStopMode|smcLpoInLowLeakage;
+      smc().STOPCTRL = smcPartialStopMode|smcPowerOnReset|smcLowLeakageStopMode|smcLpoInLowLeakage;
    }
 
    /**
@@ -318,7 +319,7 @@ public:
     */
    static SmcStatus getStatus() {
 
-      return (SmcStatus)(smc->PMSTAT);
+      return (SmcStatus)(smc().PMSTAT);
    }
 
    /**
@@ -338,7 +339,7 @@ public:
 #endif
       switch(smcRunMode) {
          case SmcRunMode_Normal:
-            smc->PMCTRL = (smc->PMCTRL&~SMC_PMCTRL_RUNM_MASK)|smcRunMode;
+            smc().PMCTRL = (smc().PMCTRL&~SMC_PMCTRL_RUNM_MASK)|smcRunMode;
             // Wait for power regulator status to change
             while ((PMC->REGSC & PMC_REGSC_REGONS_MASK) != PMC_REGSC_REGONS(1)) {
                __asm__("nop");
@@ -354,7 +355,7 @@ public:
                // Can only transition from RUN mode
                return setErrorCode(E_ILLEGAL_POWER_TRANSITION);
             }
-            smc->PMCTRL = (smc->PMCTRL&~SMC_PMCTRL_RUNM_MASK)|smcRunMode;
+            smc().PMCTRL = (smc().PMCTRL&~SMC_PMCTRL_RUNM_MASK)|smcRunMode;
             // Wait for power regulator status to change
             while ((PMC->REGSC & PMC_REGSC_REGONS_MASK) != PMC_REGSC_REGONS(1)) {
                __asm__("nop");
@@ -372,7 +373,7 @@ public:
                return setErrorCode(E_ILLEGAL_POWER_TRANSITION);
             }
 #endif
-            smc->PMCTRL = (smc->PMCTRL&~SMC_PMCTRL_RUNM_MASK)|smcRunMode;
+            smc().PMCTRL = (smc().PMCTRL&~SMC_PMCTRL_RUNM_MASK)|smcRunMode;
             // Wait for power regulator status to change
             while ((PMC->REGSC & PMC_REGSC_REGONS_MASK) != PMC_REGSC_REGONS(0)) {
                __asm__("nop");
@@ -394,7 +395,7 @@ public:
     * @param[in]  smcStopMode Stop mode to set
     */
    static void setStopMode(SmcStopMode smcStopMode) {
-      smc->PMCTRL = (smc->PMCTRL&~SMC_PMCTRL_STOPM_MASK)|smcStopMode;
+      smc().PMCTRL = (smc().PMCTRL&~SMC_PMCTRL_STOPM_MASK)|smcStopMode;
       // Make sure write completes
       __DSB();
    }
@@ -499,9 +500,9 @@ public:
          // Can only change in RUN mode
          return setErrorCode(E_ILLEGAL_POWER_TRANSITION);
       }
-      smc->PMCTRL = (smc->PMCTRL&SMC_PMCTRL_STOPM_MASK) | smcExitVeryLowPowerOnInt;
+      smc().PMCTRL = (smc().PMCTRL&SMC_PMCTRL_STOPM_MASK) | smcExitVeryLowPowerOnInt;
       // Make sure write completes
-      (void)smc->PMCTRL;
+      (void)smc().PMCTRL;
       return E_NO_ERROR;
    }
 #else

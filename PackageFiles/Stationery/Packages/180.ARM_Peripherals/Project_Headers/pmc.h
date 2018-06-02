@@ -129,19 +129,19 @@ public:
     */
    static void irqHandler(void) {
 
-      if ((PmcBase_T<Info>::pmc->LVDSC1 & (PMC_LVDSC1_LVDF_MASK|PMC_LVDSC1_LVDIE_MASK)) ==
+      if ((PmcBase_T<Info>::pmc().LVDSC1 & (PMC_LVDSC1_LVDF_MASK|PMC_LVDSC1_LVDIE_MASK)) ==
             (PMC_LVDSC1_LVDF_MASK|PMC_LVDSC1_LVDIE_MASK)) {
 
          // LVDF enabled and detected
-         PmcBase_T<Info>::pmc->LVDSC1 |= PMC_LVDSC1_LVDF_MASK;
+         PmcBase_T<Info>::pmc().LVDSC1 |= PMC_LVDSC1_LVDF_MASK;
          callback(PmcInterruptReason_LowVoltageDetect);
          return;
       }
-      if ((PmcBase_T<Info>::pmc->LVDSC2 & (PMC_LVDSC2_LVWF_MASK|PMC_LVDSC2_LVWIE_MASK)) ==
+      if ((PmcBase_T<Info>::pmc().LVDSC2 & (PMC_LVDSC2_LVWF_MASK|PMC_LVDSC2_LVWIE_MASK)) ==
             (PMC_LVDSC2_LVWF_MASK|PMC_LVDSC2_LVWIE_MASK)) {
 
          // LVWF enabled and detected
-         PmcBase_T<Info>::pmc->LVDSC2 |= PMC_LVDSC2_LVWF_MASK;
+         PmcBase_T<Info>::pmc().LVDSC2 |= PMC_LVDSC2_LVWF_MASK;
          callback(PmcInterruptReason_LowVoltageWarning);
          return;
       }
@@ -166,7 +166,8 @@ public:
 
 
 protected:
-   static constexpr volatile PMC_Type *pmc      = Info::pmc;
+   /** Hardware instance */
+   static __attribute__((always_inline)) volatile PMC_Type &pmc() { return Info::pmc(); }
 
 public:
    /**
@@ -184,9 +185,9 @@ public:
    static void defaultConfigure() {
       enable();
 
-      pmc->LVDSC1 = Info::pmc_lvdsc1;
-      pmc->LVDSC2 = Info::pmc_lvdsc2;
-      pmc->REGSC  = Info::pmc_regsc;
+      pmc().LVDSC1 = Info::pmc_lvdsc1;
+      pmc().LVDSC2 = Info::pmc_lvdsc2;
+      pmc().REGSC  = Info::pmc_regsc;
 
       enableNvicInterrupts();
    }
@@ -201,7 +202,7 @@ public:
          PmcLowVoltageDetectAction pmcLowVoltageDetectAction = PmcLowVoltageDetectAction_None,
          PmcLowVoltageDetectLevel  pmcLowVoltageDetectLevel  = PmcLowVoltageDetectLevel_High
          ) {
-      pmc->LVDSC1 = pmcLowVoltageDetectAction|pmcLowVoltageDetectLevel;
+      pmc().LVDSC1 = pmcLowVoltageDetectAction|pmcLowVoltageDetectLevel;
    }
 
    /**
@@ -214,14 +215,14 @@ public:
          PmcLowVoltageWarningAction pmcLowVoltageWarningAction = PmcLowVoltageWarningAction_None,
          PmcLowVoltageWarningLevel  pmcLowVoltageWarningLevel  = PmcLowVoltageWarningLevel_High
          ) {
-      pmc->LVDSC2 = pmcLowVoltageWarningAction|pmcLowVoltageWarningLevel;
+      pmc().LVDSC2 = pmcLowVoltageWarningAction|pmcLowVoltageWarningLevel;
    }
 
    /**
     * Release pins after VLLSx exit
     */
    static void releasePins () {
-      pmc->REGSC |= PMC_REGSC_ACKISO_MASK;
+      pmc().REGSC |= PMC_REGSC_ACKISO_MASK;
    }
 
    /**
@@ -233,7 +234,7 @@ public:
    static void setBandgapOperation(
          PmcBandgapBuffer           pmcBandgapBuffer,
          PmcBandgapLowPowerEnable   pmcBandgapLowPowerEnable=PmcBandgapLowPowerEnable_Off) {
-      pmc->REGSC = pmcBandgapBuffer|pmcBandgapLowPowerEnable;
+      pmc().REGSC = pmcBandgapBuffer|pmcBandgapLowPowerEnable;
    }
 
    /**
@@ -260,7 +261,7 @@ public:
     * @param blocks Bit mask for the 8 SRAM blocks, 1=> retain, 0=> not powered during LLS2 mode and VLLS2 modes.
     */
    static void setVlpRamRetention(uint8_t blocks) {
-      pmc->SRAMCTL = (uint8_t)~blocks;
+      pmc().SRAMCTL = (uint8_t)~blocks;
    }
 #endif
 };

@@ -63,8 +63,9 @@ enum RcmSource {
 template <class Info>
 class RcmBase_T {
 
-protected:
-   static constexpr volatile RCM_Type *rcm = Info::rcm;
+public:
+   /** Hardware instance pointer */
+   static __attribute__((always_inline)) volatile RCM_Type &rcm() { return Info::rcm(); }
 
 public:
    /**
@@ -72,8 +73,8 @@ public:
     */
    static void defaultConfigure() {
       // Configure Rcm
-      rcm->RPFC  = Info::rcm_rpfc;
-      rcm->RPFW  = Info::rcm_rpfw;
+      rcm().RPFC  = Info::rcm_rpfc;
+      rcm().RPFW  = Info::rcm_rpfw;
    }
 
    /**
@@ -82,7 +83,7 @@ public:
     * @return Bit mask representing sources
     */
    static uint32_t getResetSource() {
-      return (rcm->SRS1<<8)|rcm->SRS0;
+      return (rcm().SRS1<<8)|rcm().SRS0;
    }
 
 #ifdef RCM_SSRS0_SWAKEUP_MASK
@@ -92,7 +93,7 @@ public:
     * @return Bit mask representing sources
     */
    static uint32_t getStickyResetSource() {
-      return (rcm->SSRS1<<8)|rcm->SSRS0;
+      return (rcm().SSRS1<<8)|rcm().SSRS0;
    }
 
    /**
@@ -102,9 +103,9 @@ public:
     * @return Bit mask representing sources
     */
    static uint32_t getAndClearStickyResetSource() {
-      uint32_t snapShot = (rcm->SSRS1<<8)|rcm->SSRS0;
-      rcm->SSRS0 = 0xFF;
-      rcm->SSRS1 = 0xFF;
+      uint32_t snapShot = (rcm().SSRS1<<8)|rcm().SSRS0;
+      rcm().SSRS0 = 0xFF;
+      rcm().SSRS1 = 0xFF;
       return snapShot;
    }
 #endif

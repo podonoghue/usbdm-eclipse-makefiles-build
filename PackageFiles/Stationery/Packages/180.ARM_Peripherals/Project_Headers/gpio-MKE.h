@@ -24,6 +24,7 @@ namespace USBDM {
 
 /**
  * @addtogroup GPIO_Group GPIO, Digital Input/Output
+ * @brief General Purpose Input/Output
  * @{
  */
 
@@ -33,31 +34,31 @@ namespace USBDM {
  * <b>Example</b>
  * @code
  * // Instantiate
- * USBDM::Gpio_T<PORT_BasePtr+offsetof(PORT_Type, PUE0), GPIOA_BasePtr, 3> pta3;
+ * using Pta3 = USBDM::Gpio_T<SIM_SCGC5_PORTA_MASK, PORTA_BasePtr, GPIOA_BasePtr, 3>;
  *
  * // Set as digital output
- * pta3.setOutput();
+ * Pta3::setOutput();
  *
  * // Set pin high
- * pta3.set();
+ * Pta3::set();
  *
  * // Set pin low
- * pta3.clear();
+ * Pta3::clear();
  *
  * // Toggle pin
- * pta3.toggle();
+ * Pta3::toggle();
  *
  * // Set pin to boolean value
- * pta3.write(true);
+ * Pta3::write(true);
  *
  * // Set pin to boolean value
- * pta3.write(false);
+ * Pta3::write(false);
  *
  * // Set as digital input
- * pta3.setInput();
+ * Pta3::setInput();
  *
  * // Read pin as boolean value
- * bool x = pta3.read();
+ * bool x = Pta3::read();
  *
  * @endcode
  *

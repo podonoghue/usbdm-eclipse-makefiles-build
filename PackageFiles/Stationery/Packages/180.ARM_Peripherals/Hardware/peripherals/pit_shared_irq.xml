@@ -52,7 +52,7 @@
          
    <template><![CDATA[
    
-      \t//! Default value for PIT->SC register\n
+      \t//! Default value for PIT load value register\n
       \tstatic constexpr uint32_t pit_ldval  = $(pit_ldval);\n\n
       
       \t//! PIT operation in debug mode\n

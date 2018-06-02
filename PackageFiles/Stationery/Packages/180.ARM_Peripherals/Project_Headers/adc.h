@@ -261,6 +261,14 @@ protected:
    static ADCCallbackFunction fCallback;
 
 public:
+   /** Hardware instance pointer */
+   static __attribute__((always_inline)) volatile ADC_Type &adc() { return Info::adc(); }
+
+protected:
+   /** Clock register for peripheral */
+   static __attribute__((always_inline)) volatile uint32_t &clockReg() { return Info::clockReg(); }
+
+public:
 
    /** Allow convenient access to associate AdcInfo */
    using AdcInfo = Info;
@@ -269,11 +277,11 @@ public:
     * IRQ handler
     */
    static void irqHandler() {
-      if (adc->SC1[0] & ADC_SC1_COCO_MASK) {
-         fCallback(adc->R[0], adc->SC1[0]&ADC_SC1_ADCH_MASK);
+      if (adc().SC1[0] & ADC_SC1_COCO_MASK) {
+         fCallback(adc().R[0], adc().SC1[0]&ADC_SC1_ADCH_MASK);
       }
-      if (adc->SC1[1] & ADC_SC1_COCO_MASK) {
-         fCallback(adc->R[1], adc->SC1[1]&ADC_SC1_ADCH_MASK);
+      if (adc().SC1[1] & ADC_SC1_COCO_MASK) {
+         fCallback(adc().R[1], adc().SC1[1]&ADC_SC1_ADCH_MASK);
       }
    }
 
@@ -304,14 +312,7 @@ public:
       return E_NO_ERROR;
    }
 
-protected:
-   /** Clock register for peripheral */
-   static constexpr volatile uint32_t *clockReg = Info::clockReg;
-
 public:
-   /** Peripheral hardware instance */
-   static constexpr volatile ADC_Type *adc      = Info::adc;
-
    /**
     * Configures all mapped pins associated with this peripheral
     */
@@ -332,7 +333,7 @@ public:
       }
 
       // Enable clock to ADC
-      *clockReg  |= Info::clockMask;
+      clockReg()  |= Info::clockMask;
       __DMB();
    }
 
@@ -341,12 +342,12 @@ public:
     * Does not change ADC pin mapping
     */
    static void disable() {
-      adc->CFG1 = 0;
-      adc->CFG2 = 0;
-      adc->SC2  = 0;
+      adc().CFG1 = 0;
+      adc().CFG2 = 0;
+      adc().SC2  = 0;
 
       // Disable clock to ADC
-      *clockReg  &= ~Info::clockMask;
+      clockReg()  &= ~Info::clockMask;
    }
 
    /**
@@ -357,11 +358,11 @@ public:
       enable();
 
       // Set mode to default
-      adc->CFG1 = Info::cfg1;
-      adc->CFG2 = Info::cfg2;
-      adc->SC2  = Info::sc2;
-      adc->CV1  = Info::cv1;
-      adc->CV1  = Info::cv2;
+      adc().CFG1 = Info::cfg1;
+      adc().CFG2 = Info::cfg2;
+      adc().SC2  = Info::sc2;
+      adc().CV1  = Info::cv1;
+      adc().CV1  = Info::cv2;
       enableNvicInterrupts();
    }
 
@@ -393,8 +394,8 @@ public:
          AdcAsyncClock   adcAsyncClock   = AdcAsyncClock_disabled
          ) {
       enable();
-      adc->CFG1 = adcResolution|adcClockSource|adcClockDivider|adcPower|(adcSample&ADC_CFG1_ADLSMP_MASK);
-      adc->CFG2 = adcMuxsel|adcClockRange|adcAsyncClock|(adcSample&ADC_CFG2_ADLSTS_MASK);
+      adc().CFG1 = adcResolution|adcClockSource|adcClockDivider|adcPower|(adcSample&ADC_CFG1_ADLSMP_MASK);
+      adc().CFG2 = adcMuxsel|adcClockRange|adcAsyncClock|(adcSample&ADC_CFG2_ADLSTS_MASK);
    }
 
    /**
@@ -422,7 +423,7 @@ public:
     * @note This affects all channels on the ADC
     */
    static __attribute__((always_inline)) void setResolution(AdcResolution adcResolution) {
-      adc->CFG1 = (adc->CFG1&~ADC_CFG1_MODE_MASK)|adcResolution;
+      adc().CFG1 = (adc().CFG1&~ADC_CFG1_MODE_MASK)|adcResolution;
    }
 
    /**
@@ -437,7 +438,7 @@ public:
     *  [1..18MHz] for other conversion modes
     */
    static __attribute__((always_inline)) void setClockSource(AdcClockSource adcClockSource, AdcClockDivider adcClockDivider=AdcClockDivider_1) {
-      adc->CFG1 = (adc->CFG1&~(ADC_CFG1_ADIV_MASK|ADC_CFG1_ADICLK_MASK))|adcClockSource|adcClockDivider;
+      adc().CFG1 = (adc().CFG1&~(ADC_CFG1_ADIV_MASK|ADC_CFG1_ADICLK_MASK))|adcClockSource|adcClockDivider;
    }
 
    /**
@@ -451,10 +452,10 @@ public:
     */
    static __attribute__((always_inline)) void enableAsynchronousClock(bool enable=true) {
       if (enable) {
-         adc->CFG1 |= ADC_CFG2_ADACKEN_MASK;
+         adc().CFG1 |= ADC_CFG2_ADACKEN_MASK;
       }
       else {
-         adc->CFG1 &= ~ADC_CFG2_ADACKEN_MASK;
+         adc().CFG1 &= ~ADC_CFG2_ADACKEN_MASK;
       }
    }
 
@@ -466,7 +467,7 @@ public:
     * @note This affects all channels on the ADC
     */
    static __attribute__((always_inline)) void setAveraging(AdcAveraging adcAveraging) {
-      adc->SC3 = (adc->SC3&~(ADC_SC3_AVGE_MASK|ADC_SC3_AVGS_MASK))|adcAveraging;
+      adc().SC3 = (adc().SC3&~(ADC_SC3_AVGE_MASK|ADC_SC3_AVGS_MASK))|adcAveraging;
    }
 
    /**
@@ -481,21 +482,21 @@ public:
    static ErrorCode calibrate() {
 
       // Save current SC3 as modified
-      uint8_t sc3 = adc->SC3;
+      uint8_t sc3 = adc().SC3;
 
       // Start calibration
       setAveraging(AdcAveraging_Cal);
-      (void)adc->SC3;
+      (void)adc().SC3;
 
       // Wait for calibration to complete
-      while (adc->SC3 & ADC_SC3_CAL_MASK) {
+      while (adc().SC3 & ADC_SC3_CAL_MASK) {
          __asm__("nop");
       }
 
-      bool failed = adc->SC3 & ADC_SC3_CALF_MASK;
+      bool failed = adc().SC3 & ADC_SC3_CALF_MASK;
 
       // Restore original SC3 value
-      adc->SC3 = sc3;
+      adc().SC3 = sc3;
 
       // Check calibration outcome
       if(failed) {
@@ -505,16 +506,16 @@ public:
 
       // Calibration factor
       uint16_t calib;
-      calib = adc->CLPS + adc->CLP4 + adc->CLP3 + adc->CLP2 + adc->CLP1 + adc->CLP0;
+      calib = adc().CLPS + adc().CLP4 + adc().CLP3 + adc().CLP2 + adc().CLP1 + adc().CLP0;
       calib /= 2;
       calib |= (1<<15);  // Set MSB
-      adc->PG = calib;
+      adc().PG = calib;
 
 #ifdef ADC_MG_MG_MASK
-      calib = adc->CLMS + adc->CLM4 + adc->CLM3 + adc->CLM2 + adc->CLM1 + adc->CLM0;
+      calib = adc().CLMS + adc().CLM4 + adc().CLM3 + adc().CLM2 + adc().CLM1 + adc().CLM0;
       calib /= 2;
       calib |= (1<<15);  // Set MSB
-      adc->MG = calib;
+      adc().MG = calib;
 #endif
 
       return E_NO_ERROR;
@@ -537,21 +538,21 @@ public:
             break;
          case AdcCompare_LessThan:
          case AdcCompare_GreaterThanOrEqual:
-            adc->CV1 = low;
+            adc().CV1 = low;
             break;
          case AdcCompare_OutsideRangeExclusive:
          case AdcCompare_InsideRangeInclusive:
-            adc->CV1 = low;
-            adc->CV2 = high;
+            adc().CV1 = low;
+            adc().CV2 = high;
             break;
          case AdcCompare_InsideRangeExclusive:
          case AdcCompare_OutsideRangeInclusive:
-            adc->CV1 = high;
-            adc->CV2 = low;
+            adc().CV1 = high;
+            adc().CV2 = low;
             break;
       }
       // Set comparison fields
-      adc->SC2 |= (adc->SC2&~(ADC_SC2_ACFE(1)|ADC_SC2_ACFGT(1)|ADC_SC2_ACREN(1)))|
+      adc().SC2 |= (adc().SC2&~(ADC_SC2_ACFE(1)|ADC_SC2_ACFGT(1)|ADC_SC2_ACREN(1)))|
             (adcCompare&(ADC_SC2_ACFE(1)|ADC_SC2_ACFGT(1)|ADC_SC2_ACREN(1)));
    }
 
@@ -565,9 +566,9 @@ protected:
     */
    static void enableHardwareConversion(int sc1Value, AdcPretrigger adcPretrigger) {
       // Set hardware triggers
-      adc->SC2 = (adc->SC2)|ADC_SC2_ADTRG(1);
+      adc().SC2 = (adc().SC2)|ADC_SC2_ADTRG(1);
       // Configure channel for hardware trigger input
-      adc->SC1[adcPretrigger] = sc1Value;
+      adc().SC1[adcPretrigger] = sc1Value;
    }
 
 #ifdef ADC_SC2_DMAEN
@@ -581,9 +582,9 @@ protected:
     */
    static void enableHardwareConversion(int sc1Value, AdcPretrigger adcPretrigger, AdcDma adcDma) {
       // Set hardware triggers
-      adc->SC2 = (adc->SC2)|ADC_SC2_ADTRG(1)|adcDma;
+      adc().SC2 = (adc().SC2)|ADC_SC2_ADTRG(1)|adcDma;
       // Configure channel for hardware trigger input
-      adc->SC1[adcPretrigger] = sc1Value;
+      adc().SC1[adcPretrigger] = sc1Value;
    }
 #endif
 
@@ -602,13 +603,13 @@ protected:
          return setErrorCode(E_NO_HANDLER);
       }
       if (adcContinuous) {
-         adc->SC3 |= ADC_SC3_ADCO_MASK;
+         adc().SC3 |= ADC_SC3_ADCO_MASK;
       }
       else {
-         adc->SC3 &= ~ADC_SC3_ADCO_MASK;
+         adc().SC3 &= ~ADC_SC3_ADCO_MASK;
       }
       // Trigger conversion
-      adc->SC1[0] = sc1Value;
+      adc().SC1[0] = sc1Value;
 
       return E_NO_ERROR;
    };
@@ -623,13 +624,13 @@ protected:
    static uint16_t readAnalogue(const int sc1Value) {
 
       // Trigger conversion
-      adc->SC1[0] = sc1Value;
-      (void)adc->SC1[0];
+      adc().SC1[0] = sc1Value;
+      (void)adc().SC1[0];
 
-      while ((adc->SC1[0]&ADC_SC1_COCO_MASK) == 0) {
+      while ((adc().SC1[0]&ADC_SC1_COCO_MASK) == 0) {
          __asm__("nop");
       }
-      return (uint16_t)adc->R[0];
+      return (uint16_t)adc().R[0];
    };
 
 };

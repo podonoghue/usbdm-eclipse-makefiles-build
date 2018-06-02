@@ -344,11 +344,11 @@ class DmaBase_T {
    using MuxInfo = Dmamux0Info;
 
 protected:
-   // Pointer to hardware
-   static constexpr volatile DMA_Type    *dmac          = Info::dma;
+   /** Hardware instance pointer */
+   static __attribute__((always_inline)) volatile DMA_Type &dmac() { return Info::dma(); }
 
-   // Pointer to clock register
-   static constexpr volatile uint32_t    *clockReg      = Info::clockReg;
+   /** Clock register mask for peripheral */
+   static __attribute__((always_inline)) volatile uint32_t &clockReg() { return Info::clockReg(); }
 
    /** Callback functions for ISRs */
    static DmaCallbackFunction callbacks[Info::NumVectors];
@@ -371,10 +371,10 @@ public:
    static void irqErrorHandler() {
 
       // Capture error status
-      uint32_t errorFlags = dmac->ES;
+      uint32_t errorFlags = dmac().ES;
 
       // Clear channel error flag
-      dmac->CERR = DMA_CERR_CERR(dmac->ES>>DMA_ES_ERRCHN_SHIFT);
+      dmac().CERR = DMA_CERR_CERR(dmac().ES>>DMA_ES_ERRCHN_SHIFT);
 
       errorCallback(errorFlags);
    }
@@ -382,112 +382,112 @@ public:
    /** DMA interrupt handler -  Calls DMA 0 callback */
    static void irq0Handler() {
       // Clear interrupt flag
-      dmac->CINT = DMA_CINT_CINT(0);
+      dmac().CINT = DMA_CINT_CINT(0);
       callbacks[0]();
    }
 
    /** DMA interrupt handler -  Calls DMA 1 callback */
    static void irq1Handler() {
       // Clear interrupt flag
-      dmac->CINT = DMA_CINT_CINT(1);
+      dmac().CINT = DMA_CINT_CINT(1);
       callbacks[1]();
    }
 
    /** DMA interrupt handler -  Calls DMA 2 callback */
    static void irq2Handler() {
       // Clear interrupt flag
-      dmac->CINT = DMA_CINT_CINT(2);
+      dmac().CINT = DMA_CINT_CINT(2);
       callbacks[2]();
    }
 
    /** DMA interrupt handler -  Calls DMA 3 callback */
    static void irq3Handler() {
       // Clear interrupt flag
-      dmac->CINT = DMA_CINT_CINT(3);
+      dmac().CINT = DMA_CINT_CINT(3);
       callbacks[3]();
    }
 
    /** DMA interrupt handler -  Calls DMA 4 callback */
    static void irq4Handler() {
       // Clear interrupt flag
-      dmac->CINT = DMA_CINT_CINT(4);
+      dmac().CINT = DMA_CINT_CINT(4);
       callbacks[4]();
    }
 
    /** DMA interrupt handler -  Calls DMA 5 callback */
    static void irq5Handler() {
       // Clear interrupt flag
-      dmac->CINT = DMA_CINT_CINT(5);
+      dmac().CINT = DMA_CINT_CINT(5);
       callbacks[5]();
    }
 
    /** DMA interrupt handler -  Calls DMA 6 callback */
    static void irq6Handler() {
       // Clear interrupt flag
-      dmac->CINT = DMA_CINT_CINT(6);
+      dmac().CINT = DMA_CINT_CINT(6);
       callbacks[6]();
    }
 
    /** DMA interrupt handler -  Calls DMA 7 callback */
    static void irq7Handler() {
       // Clear interrupt flag
-      dmac->CINT = DMA_CINT_CINT(7);
+      dmac().CINT = DMA_CINT_CINT(7);
       callbacks[7]();
    }
 
    /** DMA interrupt handler -  Calls DMA 8 callback */
    static void irq8Handler() {
       // Clear interrupt flag
-      dmac->CINT = DMA_CINT_CINT(8);
+      dmac().CINT = DMA_CINT_CINT(8);
       callbacks[8]();
    }
 
    /** DMA interrupt handler -  Calls DMA 9 callback */
    static void irq9Handler() {
       // Clear interrupt flag
-      dmac->CINT = DMA_CINT_CINT(9);
+      dmac().CINT = DMA_CINT_CINT(9);
       callbacks[9]();
    }
 
    /** DMA interrupt handler -  Calls DMA 10 callback */
    static void irq10Handler() {
       // Clear interrupt flag
-      dmac->CINT = DMA_CINT_CINT(10);
+      dmac().CINT = DMA_CINT_CINT(10);
       callbacks[10]();
    }
 
    /** DMA interrupt handler -  Calls DMA 11 callback */
    static void irq11Handler() {
       // Clear interrupt flag
-      dmac->CINT = DMA_CINT_CINT(11);
+      dmac().CINT = DMA_CINT_CINT(11);
       callbacks[11]();
    }
 
    /** DMA interrupt handler -  Calls DMA 12 callback */
    static void irq12Handler() {
       // Clear interrupt flag
-      dmac->CINT = DMA_CINT_CINT(12);
+      dmac().CINT = DMA_CINT_CINT(12);
       callbacks[12]();
    }
 
    /** DMA interrupt handler -  Calls DMA 13 callback */
    static void irq13Handler() {
       // Clear interrupt flag
-      dmac->CINT = DMA_CINT_CINT(13);
+      dmac().CINT = DMA_CINT_CINT(13);
       callbacks[13]();
    }
 
    /** DMA interrupt handler -  Calls DMA 14 callback */
    static void irq14Handler() {
       // Clear interrupt flag
-      dmac->CINT = DMA_CINT_CINT(14);
+      dmac().CINT = DMA_CINT_CINT(14);
       callbacks[14]();
    }
 
    /** DMA interrupt handler -  Calls DMA 15 callback */
    static void irq15Handler() {
       // Clear interrupt flag
-      dmac->CINT = DMA_CINT_CINT(15);
+      dmac().CINT = DMA_CINT_CINT(15);
       callbacks[15]();
    }
 
@@ -508,10 +508,10 @@ public:
          DmaMinorLoopMapping  dmaMinorLoopMapping=DmaMinorLoopMapping_Disabled
          ) {
       // Enable clock to DMAC
-      *clockReg  |= MuxInfo::clockMask;
+      clockReg()  |= MuxInfo::clockMask;
 
       // Set shared control options
-      dmac->CR = dmaArbitration|dmaOnError|dmaLink|dmaMinorLoopMapping|dmaGroupArbitration|DMA_CR_EDBG(1);
+      dmac().CR = dmaArbitration|dmaOnError|dmaLink|dmaMinorLoopMapping|dmaGroupArbitration|DMA_CR_EDBG(1);
 
       // Clear call-backs and TCDs
       for (unsigned channel=0; channel<Info::NumVectors; channel++) {
@@ -539,7 +539,7 @@ public:
          DmaCanPreemptLower dmaCanPreemptLower=DmaCanPreemptLower_Enable) {
 
       int index = (channel&0xFC)|(3-(channel&0x03));
-      constexpr volatile uint8_t *priorities = &dmac->DCHPRI3;
+      constexpr volatile uint8_t *priorities = &dmac().DCHPRI3;
       priorities[index] = dmaCanBePreempted|dmaCanPreemptLower|DMA_DCHPRI_CHPRI(priority);
    }
 
@@ -552,17 +552,17 @@ public:
    static void configureTransfer(DmaChannelNum channel, const DmaTcd &tcd) {
 
       // Copy TCD block to DMAC channel TCD
-      dmac->TCD[channel].SADDR         = tcd.SADDR;
-      dmac->TCD[channel].SOFF          = tcd.SOFF;
-      dmac->TCD[channel].ATTR          = tcd.ATTR;
-      dmac->TCD[channel].NBYTES_MLNO   = tcd.NBYTES;
-      dmac->TCD[channel].SLAST         = tcd.SLAST;
-      dmac->TCD[channel].DADDR         = tcd.DADDR;
-      dmac->TCD[channel].DOFF          = tcd.DOFF;
-      dmac->TCD[channel].CITER_ELINKNO = tcd.CITER;
-      dmac->TCD[channel].DLASTSGA      = tcd.DLAST;
-      dmac->TCD[channel].CSR           = tcd.CSR;
-      dmac->TCD[channel].BITER_ELINKNO = tcd.CITER;
+      dmac().TCD[channel].SADDR         = tcd.SADDR;
+      dmac().TCD[channel].SOFF          = tcd.SOFF;
+      dmac().TCD[channel].ATTR          = tcd.ATTR;
+      dmac().TCD[channel].NBYTES_MLNO   = tcd.NBYTES;
+      dmac().TCD[channel].SLAST         = tcd.SLAST;
+      dmac().TCD[channel].DADDR         = tcd.DADDR;
+      dmac().TCD[channel].DOFF          = tcd.DOFF;
+      dmac().TCD[channel].CITER_ELINKNO = tcd.CITER;
+      dmac().TCD[channel].DLASTSGA      = tcd.DLAST;
+      dmac().TCD[channel].CSR           = tcd.CSR;
+      dmac().TCD[channel].BITER_ELINKNO = tcd.CITER;
    }
 
    /**
@@ -571,7 +571,7 @@ public:
     * @return 32-bit flag register see DMA_ES definitions
     */
    static uint32_t __attribute__((always_inline)) getLastError() {
-      return dmac->ES;
+      return dmac().ES;
    }
 
    /**
@@ -579,9 +579,9 @@ public:
     */
    static void waitUntilComplete(int channel) {
 
-      int lastCiter = dmac->TCD[channel].CITER_ELINKNO;
-      while ((dmac->TCD[channel].CSR & DMA_CSR_DONE_MASK) == 0) {
-         int currentCiter = dmac->TCD[channel].CITER_ELINKNO;
+      int lastCiter = dmac().TCD[channel].CITER_ELINKNO;
+      while ((dmac().TCD[channel].CSR & DMA_CSR_DONE_MASK) == 0) {
+         int currentCiter = dmac().TCD[channel].CITER_ELINKNO;
          if (lastCiter != currentCiter) {
             lastCiter = currentCiter;
             __asm__ volatile("nop");
@@ -604,7 +604,7 @@ public:
     *        the transfer starts.
     */
    static void __attribute__((always_inline)) startSoftwareRequest(DmaChannelNum channel) {
-      dmac->SSRT = channel;
+      dmac().SSRT = channel;
    }
 
    /**
@@ -618,10 +618,10 @@ public:
     */
    static void __attribute__((always_inline)) enableRequests(DmaChannelNum channel, bool enable=true) {
       if (enable) {
-         dmac->SERQ = channel;
+         dmac().SERQ = channel;
       }
       else {
-         dmac->CERQ = channel;
+         dmac().CERQ = channel;
       }
    }
 
@@ -635,10 +635,10 @@ public:
     */
    static void __attribute__((always_inline)) enableAsynchronousRequests(DmaChannelNum channel, bool enable=true) {
       if (enable) {
-         dmac->EARS |= (1<<channel);
+         dmac().EARS |= (1<<channel);
       }
       else {
-         dmac->EARS &= ~(1<<channel);
+         dmac().EARS &= ~(1<<channel);
       }
    }
 #endif
@@ -653,10 +653,10 @@ public:
     */
    static void __attribute__((always_inline)) enableErrorInterrupts(DmaChannelNum channel, bool enable=true) {
       if (enable) {
-         dmac->SEEI = channel;
+         dmac().SEEI = channel;
       }
       else {
-         dmac->CEEI = channel;
+         dmac().CEEI = channel;
       }
    }
 
@@ -668,7 +668,7 @@ public:
     * @note May use DmaChannelNum_All to apply to all channels
     */
    static void __attribute__((always_inline)) clearDoneFlag(DmaChannelNum channel) {
-      dmac->CDNE = channel;
+      dmac().CDNE = channel;
    }
 
    /**
@@ -679,7 +679,7 @@ public:
     * @note May use DmaChannelNum_All to apply to all channels
     */
    static void __attribute__((always_inline)) clearInterruptRequest(DmaChannelNum channel) {
-      dmac->CINT = channel;
+      dmac().CINT = channel;
    }
 
    /**

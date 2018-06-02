@@ -95,7 +95,7 @@ public:
    using Pcr = Pcr_T<clockMask, portAddress, irqNum, bitNum, GPIO_DEFAULT_PCR>;
 
    /** GPIO associated with this pin */
-   static constexpr volatile GPIO_Type *gpio = reinterpret_cast<volatile GPIO_Type *>(gpioAddress);
+   static volatile GPIO_Type &gpio() { return *reinterpret_cast<volatile GPIO_Type *>(gpioAddress); }
 
    /** Bit number of accessed bit in port */
    static constexpr int BITNUM = bitNum;
@@ -154,9 +154,9 @@ public:
    static void setOut() {
       // Make pin an output
 #ifdef RELEASE_BUILD
-      bmeOr(gpio->PDDR, MASK);
+      bmeOr(gpio().PDDR, MASK);
 #else
-      gpio->PDDR |= MASK;
+      gpio().PDDR |= MASK;
 #endif
    }
    /**
@@ -205,9 +205,9 @@ public:
    static void setIn() {
       // Make pin an input
 #ifdef RELEASE_BUILD
-      bmeAnd(gpio->PDDR, ~(MASK));
+      bmeAnd(gpio().PDDR, ~(MASK));
 #else
-      gpio->PDDR &= ~MASK;
+      gpio().PDDR &= ~MASK;
 #endif
    }
    /**
@@ -251,7 +251,7 @@ public:
     * @note Don't use this method unless dealing with very low-level I/O
     */
    static void high() {
-      gpio->PSOR = MASK;
+      gpio().PSOR = MASK;
    }
    /**
     * Clear pin. Pin will be low if configured as an output.
@@ -260,7 +260,7 @@ public:
     * @note Don't use this method unless dealing with very low-level I/O
     */
    static void low() {
-      gpio->PCOR = MASK;
+      gpio().PCOR = MASK;
    }
    /**
     * Set pin. Pin will be high if configured as an output.
@@ -269,7 +269,7 @@ public:
     * @note Don't use this method unless dealing with very low-level I/O
     */
    static void set() {
-	   gpio->PSOR = MASK;
+	   gpio().PSOR = MASK;
    }
    /**
     * Clear pin. Pin will be low if configured as an output.
@@ -278,13 +278,13 @@ public:
     * @note Don't use this method unless dealing with very low-level I/O
     */
    static void clear() {
-	   gpio->PCOR = MASK;
+	   gpio().PCOR = MASK;
    }
    /**
     * Toggle pin (if output)
     */
    static void toggle() {
-      gpio->PTOR = MASK;
+      gpio().PTOR = MASK;
    }
    /**
     * Set pin to active level (if configured as output)
@@ -340,10 +340,10 @@ public:
    static void write(bool value) {
 #ifdef RELEASE_BUILD
       if (polarity) {
-         bmeInsert(gpio->PDOR, bitNum, 1, value);
+         bmeInsert(gpio().PDOR, bitNum, 1, value);
       }
       else {
-         bmeInsert(gpio->PDOR, bitNum, 1, !value);
+         bmeInsert(gpio().PDOR, bitNum, 1, !value);
       }
 #else
       if (value) {
@@ -364,9 +364,9 @@ public:
     */
    static bool isHigh() {
 #ifdef RELEASE_BUILD
-      return bmeExtract(gpio->PDIR, bitNum, 1);
+      return bmeExtract(gpio().PDIR, bitNum, 1);
 #else
-      return (gpio->PDIR & MASK) != 0;
+      return (gpio().PDIR & MASK) != 0;
 #endif
    }
    /**
@@ -379,9 +379,9 @@ public:
     */
    static bool isLow() {
 #ifdef RELEASE_BUILD
-      return !bmeExtract(gpio->PDIR, bitNum, 1);
+      return !bmeExtract(gpio().PDIR, bitNum, 1);
 #else
-      return (gpio->PDIR & MASK) == 0;
+      return (gpio().PDIR & MASK) == 0;
 #endif
    }
    /**
@@ -458,9 +458,9 @@ public:
     */
    static bool readState() {
 #ifdef RELEASE_BUILD
-      uint32_t t = bmeExtract(gpio->PDOR, bitNum, 1);
+      uint32_t t = bmeExtract(gpio().PDOR, bitNum, 1);
 #else
-      uint32_t t = gpio->PDOR & MASK;
+      uint32_t t = gpio().PDOR & MASK;
 #endif
       if (polarity) {
          return t;
@@ -662,12 +662,12 @@ class Field_T {
    static_assert(((left<=31)&&(left>=right)&&(right>=0)), "Illegal bit number for left or right in GpioField");
 
 private:
-   static constexpr volatile GPIO_Type *gpio = reinterpret_cast<volatile GPIO_Type *>(Info::pinInfo.gpioAddress);
+   static volatile GPIO_Type &gpio() { return reinterpret_cast<volatile GPIO_Type *>(Info::pinInfo.gpioAddress); }
 
 #ifdef PORT_DFCR_CS_MASK
-   static constexpr volatile PORT_DFER_Type *port = reinterpret_cast<volatile PORT_DFER_Type *>(Info::pinInfo.portAddress);
+   static volatile PORT_DFER_Type &port() { return reinterpret_cast<volatile PORT_DFER_Type *>(Info::pinInfo.portAddress); }
 #else
-   static constexpr volatile PORT_Type *port = reinterpret_cast<volatile PORT_Type *>(Info::pinInfo.portAddress);
+   static volatile PORT_Type &port() { return reinterpret_cast<volatile PORT_Type *>(Info::pinInfo.portAddress); }
 #endif
    /**
     * Mask for the bits being manipulated
@@ -686,10 +686,10 @@ public:
 
       // Include the if's as I expect one branch to be removed by optimization unless the field spans the boundary
       if ((MASK&0xFFFFUL) != 0) {
-         port->GPCLR = PORT_GPCLR_GPWE(MASK)|(pcrValue&~PORT_PCR_MUX_MASK)|PinMux_Gpio;
+         port().GPCLR = PORT_GPCLR_GPWE(MASK)|(pcrValue&~PORT_PCR_MUX_MASK)|PinMux_Gpio;
       }
       if ((MASK&~0xFFFFUL) != 0) {
-         port->GPCHR = PORT_GPCHR_GPWE(MASK>>16)|(pcrValue&~PORT_PCR_MUX_MASK)|PinMux_Gpio;
+         port().GPCHR = PORT_GPCHR_GPWE(MASK>>16)|(pcrValue&~PORT_PCR_MUX_MASK)|PinMux_Gpio;
       }
    }
    /**
@@ -718,7 +718,7 @@ public:
     * @note Does not affect other pin settings
     */
    static void setOut() {
-      bmeOr(gpio->PDDR, MASK);
+      bmeOr(gpio().PDDR, MASK);
    }
    /**
     * Sets all pin as digital outputs\n
@@ -731,7 +731,7 @@ public:
     */
    static void setOutput(PcrValue pcrValue=GPIO_DEFAULT_PCR) {
       setPCRs(pcrValue);
-      bmeOr(gpio->PDDR, MASK);
+      bmeOr(gpio().PDDR, MASK);
    }
    /**
     * Sets all pin as digital outputs\n
@@ -757,7 +757,7 @@ public:
     * @note Does not affect other pin settings
     */
    static void setIn() {
-      bmeAnd(gpio->PDDR, ~MASK);
+      bmeAnd(gpio().PDDR, ~MASK);
    }
    /**
     * Set all pins as digital inputs\n
@@ -770,7 +770,7 @@ public:
     */
    static void setInput(PcrValue pcrValue=GPIO_DEFAULT_PCR) {
       setPCRs(pcrValue);
-      bmeAnd(gpio->PDDR, ~MASK);
+      bmeAnd(gpio().PDDR, ~MASK);
    }
    /**
     * Set all pins as digital inputs\n
@@ -796,7 +796,7 @@ public:
     * @param[in] mask Mask for pin directions (1=>out, 0=>in)
     */
    static void setDirection(uint32_t mask) {
-      bmeInsert(gpio->PDDR, right, left-right+1, mask);
+      bmeInsert(gpio().PDDR, right, left-right+1, mask);
    }
    /**
     * Set bits in field
@@ -806,7 +806,7 @@ public:
     * @note Polarity _is_ _not_ significant
     */
    static void bitSet(const uint32_t mask) {
-      gpio->PSOR = (mask<<right)&MASK;
+      gpio().PSOR = (mask<<right)&MASK;
    }
    /**
     * Clear bits in field
@@ -816,7 +816,7 @@ public:
     * @note Polarity _is_ _not_ significant
     */
    static void bitClear(const uint32_t mask) {
-      gpio->PCOR = (mask<<right)&MASK;
+      gpio().PCOR = (mask<<right)&MASK;
    }
    /**
     * Toggle bits in field
@@ -824,7 +824,7 @@ public:
     * @param[in] mask Mask to apply to the field (1 => toggle bit, 0 => unchanged)
     */
    static void bitToggle(const uint32_t mask) {
-      gpio->PTOR = (mask<<right)&MASK;
+      gpio().PTOR = (mask<<right)&MASK;
    }
    /**
     * Read field
@@ -835,10 +835,10 @@ public:
     */
    static uint32_t read() {
       if (polarity) {
-         return bmeExtract(gpio->PDIR, right, left-right+1);
+         return bmeExtract(gpio().PDIR, right, left-right+1);
       }
       else {
-         return bmeExtract(gpio->PDIR, right, left-right+1)^MASK;
+         return bmeExtract(gpio().PDIR, right, left-right+1)^MASK;
       }
    }
    /**
@@ -852,7 +852,7 @@ public:
       if (!polarity) {
          value = ~value;
       }
-      bmeInsert(gpio->PDOR, right, left-right+1, value);
+      bmeInsert(gpio().PDOR, right, left-right+1, value);
    }
 };
 

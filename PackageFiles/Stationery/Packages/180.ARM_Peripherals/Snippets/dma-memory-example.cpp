@@ -86,8 +86,8 @@ static void dmaTransfer(uint32_t *source, uint32_t size, uint32_t *destination) 
    static const DmaTcd tcd {
       /* uint32_t  SADDR  Source address        */ (uint32_t)(source),         // Source array
       /* uint16_t  SOFF   SADDR offset          */ sizeof(*source),            // SADDR advances by source data size for each request
-      /* uint16_t  ATTR   Transfer attributes   */ dmaSSize(*source)|          // 32-bit read from SADDR
-      /*                                        */ dmaDSize(*destination),     // 32-bit write to DADDR
+      /* uint16_t  ATTR   Transfer attributes   */ dmaSize(*source,            // 32-bit read from SADDR
+      /*                                        */         *destination),      // 32-bit write to DADDR
       /* uint32_t  NBYTES Minor loop byte count */ size,                       // Total transfer in one minor-loop
       /* uint32_t  SLAST  Last SADDR adjustment */ -size,                      // Reset SADDR to start of array on completion
       /* uint32_t  DADDR  Destination address   */ (uint32_t)(destination),    // Array for result

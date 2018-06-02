@@ -94,19 +94,19 @@ public:
     */
    static void enableInterrupts(unsigned channel, bool enable=true) {
       if (enable) {
-         pit->CHANNEL[channel].TCTRL |= PIT_TCTRL_TIE_MASK;
+         pit().CHANNEL[channel].TCTRL |= PIT_TCTRL_TIE_MASK;
       }
       else {
-         pit->CHANNEL[channel].TCTRL &= ~PIT_TCTRL_TIE_MASK;
+         pit().CHANNEL[channel].TCTRL &= ~PIT_TCTRL_TIE_MASK;
       }
    }
 
 protected:
    /** Pointer to hardware */
-   static constexpr volatile PIT_Type *pit       = Info::pit;
+   static __attribute__((always_inline)) volatile PIT_Type &pit()      { return Info::pit(); }
 
    /** Pointer to clock register */
-   static constexpr volatile uint32_t *clockReg  = Info::clockReg;
+   static __attribute__((always_inline)) volatile uint32_t &clockReg() { return Info::clockReg(); }
 
 public:
    /**
@@ -114,7 +114,7 @@ public:
     */
    static void enable() {
       // Enable clock
-      *clockReg |= Info::clockMask;
+      clockReg() |= Info::clockMask;
       __DMB();
    }
 
@@ -126,7 +126,7 @@ public:
       enable();
 
       // Enable timer
-      pit->MCR = Info::mcr;
+      pit().MCR = Info::mcr;
       for (unsigned i=0; i<Info::irqCount; i++) {
          configureChannelInTicks(i, Info::pit_ldval);
          enableNvicInterrupts(i, false, Info::irqLevel);
@@ -140,14 +140,14 @@ public:
     */
    static void configure(PitDebugMode pitDebugMode=PitDebugMode_Stop) {
       enable();
-      pit->MCR = pitDebugMode|PIT_MCR_MDIS(0); // MDIS cleared => enabled!
+      pit().MCR = pitDebugMode|PIT_MCR_MDIS(0); // MDIS cleared => enabled!
    }
 
    /**
     *   Disable the PIT (all channels)
     */
    static void disable() {
-      pit->MCR = PIT_MCR_MDIS(1);
+      pit().MCR = PIT_MCR_MDIS(1);
       *clockReg &= ~Info::clockMask;
    }
 
@@ -190,10 +190,10 @@ public:
     */
    static void enableChannel(const uint8_t channel, bool enable=true) {
       if (enable) {
-         pit->CHANNEL[channel].TCTRL |= PIT_TCTRL_TEN_MASK;
+         pit().CHANNEL[channel].TCTRL |= PIT_TCTRL_TEN_MASK;
       }
       else {
-         pit->CHANNEL[channel].TCTRL &= ~PIT_TCTRL_TEN_MASK;
+         pit().CHANNEL[channel].TCTRL &= ~PIT_TCTRL_TEN_MASK;
       }
    }
 
@@ -209,9 +209,9 @@ public:
          uint32_t          interval,
          PitChannelIrq     pitChannelIrq=PitChannelIrq_Disable) {
 
-      pit->CHANNEL[channel].LDVAL = interval-1;
-      pit->CHANNEL[channel].TCTRL = pitChannelIrq|PIT_TCTRL_TEN(1);
-      pit->CHANNEL[channel].TFLG  = PIT_TFLG_TIF_MASK;
+      pit().CHANNEL[channel].LDVAL = interval-1;
+      pit().CHANNEL[channel].TCTRL = pitChannelIrq|PIT_TCTRL_TEN(1);
+      pit().CHANNEL[channel].TFLG  = PIT_TFLG_TIF_MASK;
    }
 
    /**
@@ -226,9 +226,9 @@ public:
          float             interval,
          PitChannelIrq     pitChannelIrq=PitChannelIrq_Disable) {
 
-      pit->CHANNEL[channel].LDVAL = round((interval*PitInfo::getClockFrequency())-1);
-      pit->CHANNEL[channel].TCTRL = pitChannelIrq|PIT_TCTRL_TEN(1);
-      pit->CHANNEL[channel].TFLG  = PIT_TFLG_TIF_MASK;
+      pit().CHANNEL[channel].LDVAL = round((interval*PitInfo::getClockFrequency())-1);
+      pit().CHANNEL[channel].TCTRL = pitChannelIrq|PIT_TCTRL_TEN(1);
+      pit().CHANNEL[channel].TFLG  = PIT_TFLG_TIF_MASK;
    }
 
    /**
@@ -238,7 +238,7 @@ public:
     * @param[in]  interval Interval in seconds
     */
    static void setPeriod(unsigned channel, float interval) {
-      pit->CHANNEL[channel].LDVAL = round((interval*PitInfo::getClockFrequency())-1);
+      pit().CHANNEL[channel].LDVAL = round((interval*PitInfo::getClockFrequency())-1);
    }
 
    /**
@@ -248,7 +248,7 @@ public:
     * @param[in]  interval Interval in ticks
     */
    static void setPeriodInTicks(unsigned channel, uint32_t interval) {
-      pit->CHANNEL[channel].LDVAL = interval-1;
+      pit().CHANNEL[channel].LDVAL = interval-1;
    }
 
    /**
@@ -259,7 +259,7 @@ public:
    static void disableChannel(uint8_t channel) {
 
       // Disable timer channel
-      pit->CHANNEL[channel].TCTRL = 0;
+      pit().CHANNEL[channel].TCTRL = 0;
    }
 
    /**
@@ -272,7 +272,7 @@ public:
     */
    static void delayInTicks(uint8_t channel, uint32_t interval) {
       configureChannelInTicks(channel, interval);
-      while (pit->CHANNEL[channel].TFLG == 0) {
+      while (pit().CHANNEL[channel].TFLG == 0) {
          __NOP();
       }
       disableChannel(channel);
@@ -288,7 +288,7 @@ public:
     */
    static void delay(uint8_t channel, float interval) {
       configureChannel(channel, interval);
-      while (pit->CHANNEL[channel].TFLG == 0) {
+      while (pit().CHANNEL[channel].TFLG == 0) {
          __NOP();
       }
       disableChannel(channel);
@@ -327,7 +327,7 @@ public:
    /** PIT interrupt handler -  Calls PIT callback */
    static void irqHandler() {
       // Clear interrupt flag
-      PitBase_T<Info>::pit->CHANNEL[channel].TFLG = PIT_TFLG_TIF_MASK;
+      PitBase_T<Info>::pit().CHANNEL[channel].TFLG = PIT_TFLG_TIF_MASK;
       callback();
    }
 

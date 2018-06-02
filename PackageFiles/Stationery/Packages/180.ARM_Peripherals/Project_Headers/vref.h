@@ -44,8 +44,11 @@ template<class Info>
 class VrefBase_T {
 
 private:
-   static constexpr volatile VREF_Type *vref    = Info::vref;
-   static constexpr volatile uint32_t *clockReg = Info::clockReg;
+   /** Hardware instance pointer */
+   static __attribute__((always_inline)) volatile VREF_Type &vref() { return Info::vref(); }
+
+   /** Clock register mask for peripheral */
+   static __attribute__((always_inline)) volatile uint32_t &clockReg() { return Info::clockReg(); }
 
 #ifdef DEBUG_BUILD
    static_assert((Info::info[0].gpioBit != UNMAPPED_PCR), "VrefBase_T: Vref signal is not mapped to a pin - Modify Configure.usbdm");
@@ -70,7 +73,7 @@ public:
       configureAllPins();
 
       // Enable clock to VREF interface
-      *clockReg |= Info::clockMask;
+      clockReg() |= Info::clockMask;
    }
 
    /**
@@ -80,10 +83,10 @@ public:
       enable();
 
       // Initialise hardware
-      vref->TRM  = Info::vref_trm;
-      vref->SC   = Info::vref_sc|VREF_SC_VREFEN_MASK;
+      vref().TRM  = Info::vref_trm;
+      vref().SC   = Info::vref_sc|VREF_SC_VREFEN_MASK;
 
-      while ((vref->SC & VREF_SC_VREFST_MASK) == 0) {
+      while ((vref().SC & VREF_SC_VREFST_MASK) == 0) {
          // Wait until stable
       }
    }
@@ -101,14 +104,14 @@ public:
     * @param scValue Value for SC register e.g. VREF_SC_VREFEN_MASK|VREF_SC_REGEN_MASK|VREF_SC_ICOMPEN_MASK|VREF_SC_MO`DE_LV(2)
     */
    static void setMode(uint32_t scValue=Info::vref_sc|VREF_SC_VREFEN_MASK) {
-      vref->SC   = scValue;
+      vref().SC   = scValue;
    }
 
    /**
     * Disable Vref
     */
    static void disable() {
-      vref->SC = 0;
+      vref().SC = 0;
       *clockReg &= ~Info::clockMask;
    }
 };

@@ -467,7 +467,7 @@
       \t */
       \tstatic uint32_t getInternalClock() {
       \t   // RTC uses EXTAL32/XTAL32 clock
-      \t   return (rtc->CR&RTC_CR_OSCE_MASK)?osc_input_freq:0;
+      \t   return (rtc().CR&RTC_CR_OSCE_MASK)?osc_input_freq:0;
       \t}\n\n
       
       \t/**
@@ -476,7 +476,7 @@
       \t * @return Clock frequency as uint32_t
       \t */
       \tstatic uint32_t getExternalClock() {
-      \t   return (rtc->CR&RTC_CR_CLKO_MASK)?0:getInternalClock();
+      \t   return (rtc().CR&RTC_CR_CLKO_MASK)?0:getInternalClock();
       \t}\n\n
    ]]></template>
 

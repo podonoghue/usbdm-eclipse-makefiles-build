@@ -145,7 +145,7 @@ public:
    static void irqHandler(void) {
 
       // Capture flags
-      uint32_t status = TsiBase_T<Info>::tsi->GENCS;
+      uint32_t status = TsiBase_T<Info>::tsi().GENCS;
 
       status &= TSI_GENCS_SCNIP_MASK|TSI_GENCS_EOSF_MASK|TSI_GENCS_OUTRGF_MASK|TSI_GENCS_OVRF_MASK|TSI_GENCS_EXTERF_MASK;
 
@@ -154,7 +154,7 @@ public:
          return;
       }
       // Clear flags
-      TsiBase_T<Info>::tsi->GENCS |= status; // w1c found flags
+      TsiBase_T<Info>::tsi().GENCS |= status; // w1c found flags
       if (status == (TSI_GENCS_SCNIP_MASK|TSI_GENCS_EOSF_MASK)) {
          // Ignore EOSF unless SCNIP is clear to avoid multiple events due to errata e3926
          // This assumes that there is at least some idle time between sequences - as there should be
@@ -179,13 +179,20 @@ public:
 
 
 protected:
-   static constexpr volatile TSI_Type *tsi      = Info::tsi;
-   static constexpr volatile uint32_t *clockReg = Info::clockReg;
+   /** Clock register for peripheral */
+   static __attribute__((always_inline)) volatile uint32_t &clockReg() { return Info::clockReg(); }
 
+public:
+   /** Hardware instance pointer */
+   static __attribute__((always_inline)) volatile TSI_Type &tsi() { return Info::tsi(); }
+
+   /**
+    * Handler for unexpected interrupts i.e. hanlder not installed.
+    */
    static void unhandledInterrupt(uint32_t) {
       setAndCheckErrorCode(E_NO_HANDLER);
    }
-public:
+
    /**
     * Configures all mapped pins associated with this peripheral
     */
@@ -203,7 +210,7 @@ public:
          configureAllPins();
       }
 
-      *clockReg |= Info::clockMask;
+      clockReg() |= Info::clockMask;
       __DMB();
    }
 
@@ -214,10 +221,10 @@ public:
    static void defaultConfigure() {
       enable();
 
-      tsi->GENCS     = Info::tsi_gencs|TSI_GENCS_TSIEN_MASK;
-      tsi->SCANC     = Info::tsi_scanc;
-      tsi->THRESHOLD = Info::tsi_threshold;
-      tsi->PEN       = Info::tsi_pen;
+      tsi().GENCS     = Info::tsi_gencs|TSI_GENCS_TSIEN_MASK;
+      tsi().SCANC     = Info::tsi_scanc;
+      tsi().THRESHOLD = Info::tsi_threshold;
+      tsi().PEN       = Info::tsi_pen;
 
       enableNvicInterrupts();
    }
@@ -249,7 +256,7 @@ public:
     */
    static void setScans(TsiElectrodePrescaler tsiElectrodePrescaler, int consecutiveScans) {
 
-      tsi->GENCS = (tsi->GENCS&~(TSI_GENCS_PS_MASK|TSI_GENCS_NSCN_MASK))|tsiElectrodePrescaler|TSI_GENCS_NSCN(consecutiveScans-1);
+      tsi().GENCS = (tsi().GENCS&~(TSI_GENCS_PS_MASK|TSI_GENCS_NSCN_MASK))|tsiElectrodePrescaler|TSI_GENCS_NSCN(consecutiveScans-1);
    }
    /**
     * Set clock source, clock divider and modulus for active mode
@@ -263,7 +270,7 @@ public:
          TsiClockDivider tsiClockDivider  = TsiClockDivider_128,
          uint16_t        scanModulus      = 0 ) {
 
-      tsi->SCANC = (tsi->SCANC&~(TSI_SCANC_AMCLKS_MASK|TSI_SCANC_AMPSC_MASK|TSI_SCANC_SMOD_MASK))|
+      tsi().SCANC = (tsi().SCANC&~(TSI_SCANC_AMCLKS_MASK|TSI_SCANC_AMPSC_MASK|TSI_SCANC_SMOD_MASK))|
             TSI_SCANC_SMOD(scanModulus)|tsiClockSource|tsiClockDivider;
    }
    /**
@@ -288,7 +295,7 @@ public:
          float    clock = inputClock/prescaleFactor;
          uint32_t periodInTicks = round(period*clock);
          if (periodInTicks <= maxPeriodInTicks) {
-            tsi->SCANC = (tsi->SCANC&~(TSI_SCANC_AMPSC_MASK|TSI_SCANC_SMOD_MASK))|
+            tsi().SCANC = (tsi().SCANC&~(TSI_SCANC_AMPSC_MASK|TSI_SCANC_SMOD_MASK))|
                   TSI_SCANC_AMPSC(prescalerValue)|TSI_SCANC_SMOD(periodInTicks);
             return E_NO_ERROR;
          }
@@ -310,7 +317,7 @@ public:
          TsiLowPowerScanInterval tsiLowPowerScanInterval = TsiLowPowerScanInterval_500ms,
          TsiLowPowerClockSource  tsiLowPowerClockSource  = TsiLowPowerClockSource_LpOscClk) {
 
-      tsi->GENCS = (tsi->GENCS&~(TSI_GENCS_STPE_MASK|TSI_GENCS_LPCLKS_MASK|TSI_GENCS_LPSCNITV_MASK))|
+      tsi().GENCS = (tsi().GENCS&~(TSI_GENCS_STPE_MASK|TSI_GENCS_LPCLKS_MASK|TSI_GENCS_LPSCNITV_MASK))|
             tsiStopMode|tsiLowPowerScanInterval|tsiLowPowerClockSource;
    }
    /**
@@ -321,7 +328,7 @@ public:
     */
    static void setCurrents(uint16_t referenceCharge=16, uint16_t externalCharge=16) {
 
-      tsi->SCANC = (tsi->SCANC&~(TSI_SCANC_REFCHRG_MASK|TSI_SCANC_EXTCHRG_MASK))|
+      tsi().SCANC = (tsi().SCANC&~(TSI_SCANC_REFCHRG_MASK|TSI_SCANC_EXTCHRG_MASK))|
             TSI_SCANC_REFCHRG((referenceCharge+1)/2)|TSI_SCANC_EXTCHRG((externalCharge+1)/2);
    }
    /**
@@ -353,7 +360,7 @@ public:
    static void enableTsiInterrupts(
          TsiInterrupt      tsiInterrupt,
          TsiErrorInterrupt tsiErrorInterrupt = TsiErrorInterrupt_Disable) {
-      tsi->GENCS = (tsi->GENCS&~(TSI_GENCS_TSIIE_MASK|TSI_GENCS_ERIE_MASK))|tsiInterrupt|tsiErrorInterrupt;
+      tsi().GENCS = (tsi().GENCS&~(TSI_GENCS_TSIIE_MASK|TSI_GENCS_ERIE_MASK))|tsiInterrupt|tsiErrorInterrupt;
    }
 
    /**
@@ -364,7 +371,7 @@ public:
     * @return 16-bit count value
     */
    static uint16_t getCount(int channel) {
-      return Info::tsi->CNTR[channel];
+      return Info::tsi().CNTR[channel];
    }
 
    /**
@@ -375,16 +382,16 @@ public:
    static void startScan(TsiScanMode tsiScanMode) {
       // Disable module so changes have effect
       // This also helps with errata e4181
-      tsi->GENCS &= ~TSI_GENCS_TSIEN_MASK|TSI_GENCS_SWTS_MASK;
+      tsi().GENCS &= ~TSI_GENCS_TSIEN_MASK|TSI_GENCS_SWTS_MASK;
 
       // Select Hardware/Software mode
-      tsi->GENCS |= (tsiScanMode&TSI_GENCS_STM_MASK);
+      tsi().GENCS |= (tsiScanMode&TSI_GENCS_STM_MASK);
 
       // Enable
-      tsi->GENCS |= TSI_GENCS_TSIEN_MASK;
+      tsi().GENCS |= TSI_GENCS_TSIEN_MASK;
 
       // Clear flags and start scan
-      tsi->GENCS |=
+      tsi().GENCS |=
             tsiScanMode|            // Software/Hardware mode + optional software trigger
             TSI_GENCS_EOSF_MASK|    // Clear flags
             TSI_GENCS_OUTRGF_MASK|
@@ -403,10 +410,10 @@ public:
       startScan(TsiScanMode_Triggered);
 
       // Wait for complete flag or error
-      while ((tsi->GENCS&(TSI_GENCS_EOSF_MASK|TSI_GENCS_OUTRGF_MASK|TSI_GENCS_EXTERF_MASK|TSI_GENCS_OVRF_MASK)) == 0) {
+      while ((tsi().GENCS&(TSI_GENCS_EOSF_MASK|TSI_GENCS_OUTRGF_MASK|TSI_GENCS_EXTERF_MASK|TSI_GENCS_OVRF_MASK)) == 0) {
       }
 
-      return (tsi->GENCS&(TSI_GENCS_OUTRGF_MASK|TSI_GENCS_EXTERF_MASK|TSI_GENCS_OVRF_MASK))?E_ERROR:E_NO_ERROR;
+      return (tsi().GENCS&(TSI_GENCS_OUTRGF_MASK|TSI_GENCS_EXTERF_MASK|TSI_GENCS_OVRF_MASK))?E_ERROR:E_NO_ERROR;
    }
 };
 

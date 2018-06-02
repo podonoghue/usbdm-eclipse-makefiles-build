@@ -219,9 +219,14 @@ class TsiBase_T {
 
 protected:
    static constexpr volatile TSI_Type *tsi      = Info::tsi;
-   static constexpr volatile uint32_t *clockReg = Info::clockReg;
+protected:
+   /** Clock register for peripheral */
+   static __attribute__((always_inline)) volatile uint32_t &clockReg() { return Info::clockReg(); }
 
 public:
+   /** Hardware instance pointer */
+   static __attribute__((always_inline)) volatile TSI_Type &tsi() { return Info::tsi(); }
+
    /**
     * Enable TSI\n
     * Configures all TSI pins
@@ -240,8 +245,8 @@ public:
    static void defaultConfigure() {
       enable();
 
-      tsi->GENCS  = Info::tsi_gencs|TSI_GENCS_TSIEN_MASK;
-      tsi->TSHD   = Info::tsi_tshd;
+      tsi().GENCS  = Info::tsi_gencs|TSI_GENCS_TSIEN_MASK;
+      tsi().TSHD   = Info::tsi_tshd;
 
       enableNvicInterrupts();
    }
@@ -282,7 +287,7 @@ public:
          TsiDeltaVoltage         tsiDeltaVoltage       = TsiDeltaVoltage_High) {
 
       enable();
-      tsi->GENCS =
+      tsi().GENCS =
             TSI_GENCS_TSIEN(1)|TsiMode_Capacitive|
             tsiLowPower|tsiScanNumber|
             tsiReferenceCharge|tsiExternalCharge|
@@ -312,7 +317,7 @@ public:
 
       assert(tsiMode != TsiMode_Capacitive);
       enable();
-      tsi->GENCS =
+      tsi().GENCS =
             TSI_GENCS_TSIEN(1)|
             tsiMode|tsiSeriesResitor|tsiNoiseFilter|
             tsiLowPower|tsiScanNumber|
@@ -327,7 +332,7 @@ public:
     * @param tsiCurrentSource    Determines if sources of electrode and reference oscillators are swapped
     */
    static void setCurentSources(TsiCurrentSource tsiCurrentSource) {
-      tsi->GENCS = (tsi->GENCS&~(TSI_GENCS_CURSW_MASK)) | tsiCurrentSource;
+      tsi().GENCS = (tsi().GENCS&~(TSI_GENCS_CURSW_MASK)) | tsiCurrentSource;
    }
 
    /**
@@ -343,8 +348,8 @@ public:
          TsiExternalCharge       tsiExternalCharge     = TsiExternalCharge_8uA,
          TsiDeltaVoltage         tsiDeltaVoltage       = TsiDeltaVoltage_High) {
 
-      tsi->GENCS =
-            (tsi->GENCS&~(TSI_GENCS_REFCHRG_MASK|TSI_GENCS_EXTCHRG_MASK|TSI_GENCS_DVOLT_MASK|TSI_GENCS_CURSW_MASK)) |
+      tsi().GENCS =
+            (tsi().GENCS&~(TSI_GENCS_REFCHRG_MASK|TSI_GENCS_EXTCHRG_MASK|TSI_GENCS_DVOLT_MASK|TSI_GENCS_CURSW_MASK)) |
             tsiReferenceCharge|tsiExternalCharge|tsiDeltaVoltage;
    }
 
@@ -358,8 +363,8 @@ public:
          TsiScanNumber           tsiScanNumber         = TsiScanNumber_8,
          TsiElectrodePrescaler   tsiElectrodePrescaler = TsiElectrodePrescaler_8) {
       enable();
-      tsi->GENCS =
-            (tsi->GENCS&~(TSI_GENCS_NSCN_MASK|TSI_GENCS_PS_MASK)) |
+      tsi().GENCS =
+            (tsi().GENCS&~(TSI_GENCS_NSCN_MASK|TSI_GENCS_PS_MASK)) |
             tsiScanNumber|tsiElectrodePrescaler;
    }
 
@@ -369,7 +374,7 @@ public:
     * @param tsiInterrupt Interrupt source
     */
    static void selectTsiInterrupt(TsiInterrupt tsiInterrupt) {
-      tsi->GENCS = (tsi->GENCS&~TSI_GENCS_TSIIEN_MASK)|tsiInterrupt;
+      tsi().GENCS = (tsi().GENCS&~TSI_GENCS_TSIIEN_MASK)|tsiInterrupt;
    }
 
    /**
@@ -378,7 +383,7 @@ public:
     * @return 16-bit count value
     */
    static uint16_t getCount() {
-      return Info::tsi->DATA&TSI_DATA_TSICNT_MASK;
+      return Info::tsi().DATA&TSI_DATA_TSICNT_MASK;
    }
 
    /**
@@ -388,9 +393,9 @@ public:
     */
    static void startScan(int channel) {
       // Clear flags
-      Info::tsi->GENCS |= TSI_GENCS_OUTRGF_MASK|TSI_GENCS_EOSF_MASK;
+      Info::tsi().GENCS |= TSI_GENCS_OUTRGF_MASK|TSI_GENCS_EOSF_MASK;
       // Start scan
-      Info::tsi->DATA = TSI_DATA_SWTS_MASK|TSI_DATA_TSICH(channel);
+      Info::tsi().DATA = TSI_DATA_SWTS_MASK|TSI_DATA_TSICH(channel);
    }
 
    /**
@@ -400,11 +405,11 @@ public:
     */
    static void startDmaScan(int channel) {
       // Clear flags
-      Info::tsi->GENCS |= TSI_GENCS_OUTRGF_MASK|TSI_GENCS_EOSF_MASK;
+      Info::tsi().GENCS |= TSI_GENCS_OUTRGF_MASK|TSI_GENCS_EOSF_MASK;
       // Select event of end of scan
-      Info::tsi->GENCS |= TSI_GENCS_ESOR(1)|TSI_GENCS_TSIIEN(1);
+      Info::tsi().GENCS |= TSI_GENCS_ESOR(1)|TSI_GENCS_TSIIEN(1);
       // Start scan
-      Info::tsi->DATA = TSI_DATA_SWTS_MASK|TSI_DATA_DMAEN_MASK|TSI_DATA_TSICH(channel);
+      Info::tsi().DATA = TSI_DATA_SWTS_MASK|TSI_DATA_DMAEN_MASK|TSI_DATA_TSICH(channel);
    }
 
    /**
@@ -416,12 +421,12 @@ public:
     */
    static void startScanAndWait(int channel) {
       // Clear flags
-      Info::tsi->GENCS |= TSI_GENCS_OUTRGF_MASK|TSI_GENCS_EOSF_MASK;
+      Info::tsi().GENCS |= TSI_GENCS_OUTRGF_MASK|TSI_GENCS_EOSF_MASK;
       // Start scan
-      Info::tsi->DATA = TSI_DATA_SWTS_MASK|TSI_DATA_TSICH(channel);
+      Info::tsi().DATA = TSI_DATA_SWTS_MASK|TSI_DATA_TSICH(channel);
 
       // Wait for complete flag or err
-      while ((Info::tsi->GENCS&(TSI_GENCS_EOSF_MASK)) == 0) {
+      while ((Info::tsi().GENCS&(TSI_GENCS_EOSF_MASK)) == 0) {
       }
    }
 
@@ -432,7 +437,7 @@ public:
     * @param low  Low threshold
     */
    static void setThresholds(uint16_t high, uint16_t low) {
-      tsi->TSHD = TSI_TSHD_THRESH(high)|TSI_TSHD_THRESL(low);
+      tsi().TSHD = TSI_TSHD_THRESH(high)|TSI_TSHD_THRESL(low);
    }
 };
 
@@ -453,9 +458,9 @@ public:
     * IRQ handler
     */
    static void irqHandler(void) {
-      uint8_t status = TsiBase_T<Info>::tsi->GENCS&(TSI_GENCS_OUTRGF_MASK|TSI_GENCS_EOSF_MASK);
+      uint8_t status = TsiBase_T<Info>::tsi().GENCS&(TSI_GENCS_OUTRGF_MASK|TSI_GENCS_EOSF_MASK);
       if (callback != 0) {
-         TsiBase_T<Info>::tsi->GENCS |= status;
+         TsiBase_T<Info>::tsi().GENCS |= status;
          callback(status);
       }
    }
@@ -507,7 +512,7 @@ public:
     * @return 16-bit count value
     */
    static uint16_t getCount() {
-      return Info::tsi->DATA&TSI_DATA_TSICNT_MASK;
+      return Info::tsi().DATA&TSI_DATA_TSICNT_MASK;
    }
 };
 

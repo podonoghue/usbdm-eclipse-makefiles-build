@@ -41,7 +41,8 @@ template <class Info>
 class OscBase_T {
 
 protected:
-   static constexpr volatile OSC_Type *osc = Info::osc;
+   /** Hardware instance */
+   static __attribute__((always_inline)) volatile OSC_Type &osc() { return Info::osc(); }
 
 public:
    /**
@@ -61,7 +62,7 @@ public:
          configureAllPins();
       }
       // Configure OSC
-      osc->CR  = Info::cr;
+      Info::osc().CR  = Info::cr;
    }
 
    /**

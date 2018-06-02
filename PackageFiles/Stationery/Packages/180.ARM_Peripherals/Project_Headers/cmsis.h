@@ -190,7 +190,7 @@ public:
  *     //
  *     // Function executed as timer call-back
  *     //
- *     virtual void callback(void *) override {
+ *     virtual void callback() override {
  *        printf(fName);
  *     }
  *
@@ -732,7 +732,7 @@ public:
  *     //
  *     // Function executed as thread
  *     //
- *     virtual void task(void *) override {
+ *     virtual void task() override {
  *        for(;;) {
  *           printf(fName);
  *           CMSIS::Thread::delay(300);

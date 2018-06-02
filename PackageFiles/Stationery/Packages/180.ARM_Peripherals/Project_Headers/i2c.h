@@ -343,7 +343,7 @@ public:
     * @param[in]  i2cMode    Mode of operation
     * @param[in]  myAddress  Address of this device on bus (not currently used)
     */
-   I2cBase_T(unsigned bps=400000, I2cMode i2cMode=I2cMode_Polled, uint8_t myAddress=0) : I2c(Info::i2c, i2cMode) {
+   I2cBase_T(unsigned bps=400000, I2cMode i2cMode=I2cMode_Polled, uint8_t myAddress=0) : I2c(&Info::i2c(), i2cMode) {
 
 #ifdef DEBUG_BUILD
       // Check pin assignments
@@ -401,7 +401,7 @@ public:
    void init(const uint8_t myAddress) {
 
       // Enable clock to I2C interface
-      *Info::clockReg |= Info::clockMask;
+      Info::clockReg() |= Info::clockMask;
 
       thisPtr = this;
 

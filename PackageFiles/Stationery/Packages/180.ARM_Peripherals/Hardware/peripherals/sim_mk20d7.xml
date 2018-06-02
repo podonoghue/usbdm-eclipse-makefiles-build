@@ -31,6 +31,7 @@ Devices using this peripheral:
       
       <intOption name="system_erclk32k_clock" 
          units="Hz"
+	 derived="true"
          description="Frequency of External 32k Reference Clock [ERCLK32K]"
          toolTip="External reference clock available to some peripherals (usually ~32kHz)" 
          origin="Derived from OSC32KCLK, RTCCLK or LPO" 
@@ -52,7 +53,7 @@ Devices using this peripheral:
          \t */
          \tstatic uint32_t getErc32kClock() {
          \t
-         \t   switch(sim->SOPT1&SIM_SOPT1_OSC32KSEL_MASK) {
+         \t   switch(sim().SOPT1&SIM_SOPT1_OSC32KSEL_MASK) {
          \t      default                     : return 0;
          \t      case SIM_SOPT1_OSC32KSEL(0) : return Osc0Info::getOsc32kClock();
          \t      case SIM_SOPT1_OSC32KSEL(2) : return RtcInfo::getExternalClock();
@@ -99,7 +100,7 @@ Devices using this peripheral:
          \t * @param simPeripheralClockSource Clock source for peripheral clock
          \t */
          \tstatic void setPeripheralClock(SimPeripheralClockSource simPeripheralClockSource) {
-         \t   sim->SOPT2 = (sim->SOPT2&~SIM_SOPT2_PLLFLLSEL_MASK) | simPeripheralClockSource;
+         \t   sim().SOPT2 = (sim().SOPT2&~SIM_SOPT2_PLLFLLSEL_MASK) | simPeripheralClockSource;
          \t}\n\n
          
          \t/**
@@ -109,7 +110,7 @@ Devices using this peripheral:
          \t */
          \tstatic uint32_t getPeripheralClock() {
          \t   
-         \t   switch(sim->SOPT2&SIM_SOPT2_PLLFLLSEL_MASK) {
+         \t   switch(sim().SOPT2&SIM_SOPT2_PLLFLLSEL_MASK) {
          \t      default:                     return 0;
          \t      case SIM_SOPT2_PLLFLLSEL(0): return SystemMcgFllClock;
          \t      case SIM_SOPT2_PLLFLLSEL(1): return SystemMcgPllClock;
@@ -183,7 +184,7 @@ Devices using this peripheral:
          \t * @param simUsbFullSpeedClockSource Clock source for peripheral clock
          \t */
          \tstatic void setUsbFullSpeedClock(SimUsbFullSpeedClockSource simUsbFullSpeedClockSource) {
-         \t   sim->SOPT2 = (sim->SOPT2&~SIM_SOPT2_USBSRC_MASK) | simUsbFullSpeedClockSource;
+         \t   sim().SOPT2 = (sim().SOPT2&~SIM_SOPT2_USBSRC_MASK) | simUsbFullSpeedClockSource;
          \t}\n\n
          
          \t/**
@@ -192,12 +193,12 @@ Devices using this peripheral:
          \t * @return Clock frequency as a uint32_t in Hz
          \t */
          \tstatic uint32_t getUsbClock() {
-         \t   switch ((sim->SOPT2&SIM_SOPT2_USBSRC_MASK)) {
+         \t   switch ((sim().SOPT2&SIM_SOPT2_USBSRC_MASK)) {
          \t      default:
          \t      case SIM_SOPT2_USBSRC(0): return $(/MCG/system_usb_clkin_clock);
          \t      case SIM_SOPT2_USBSRC(1): return  (getPeripheralClock()*
-         \t         (((sim->CLKDIV2&SIM_CLKDIV2_USBFRAC_MASK)>>SIM_CLKDIV2_USBFRAC_SHIFT)+1))/
-         \t         (((sim->CLKDIV2&SIM_CLKDIV2_USBDIV_MASK)>>SIM_CLKDIV2_USBDIV_SHIFT)+1);
+         \t         (((sim().CLKDIV2&SIM_CLKDIV2_USBFRAC_MASK)>>SIM_CLKDIV2_USBFRAC_SHIFT)+1))/
+         \t         (((sim().CLKDIV2&SIM_CLKDIV2_USBDIV_MASK)>>SIM_CLKDIV2_USBDIV_SHIFT)+1);
          \t   }
          \t}
          \t#endif\n\n
@@ -572,7 +573,7 @@ Devices using this peripheral:
          \t * @param[in] simAdc0Trigger     Select the ADC0 Trigger source in STOP and VLPS modes, or when ADC0 Alternative Trigger is active.
          \t */
          \tstatic void setAdc0Triggers(SimAdc0AltTrigger simAdc0AltTrigger, SimAdc0Trigger simAdc0Trigger=SimAdc0Trigger_PdbExTrig) {
-         \t   sim->SOPT7 = (sim->SOPT7&~(SIM_SOPT7_ADC0TRGSEL_MASK|SIM_SOPT7_ADC0ALTTRGEN_MASK))|simAdc0Trigger|simAdc0AltTrigger;
+         \t   sim().SOPT7 = (sim().SOPT7&~(SIM_SOPT7_ADC0TRGSEL_MASK|SIM_SOPT7_ADC0ALTTRGEN_MASK))|simAdc0Trigger|simAdc0AltTrigger;
          \t};\n\n
       ]]></template>
       
@@ -659,7 +660,7 @@ Devices using this peripheral:
          \t * @param[in] simAdc1Trigger     Select the ADC1 Trigger source in STOP and VLPS modes, or when ADC0 Alternative Trigger is active.
          \t */
          \tstatic void setAdc1Triggers(SimAdc1AltTrigger simAdc1AltTrigger, SimAdc1Trigger simAdc1Trigger=SimAdc1Trigger_PdbExTrig) {
-         \t   sim->SOPT7 = sim->SOPT7 = (sim->SOPT7&~(SIM_SOPT7_ADC1TRGSEL_MASK|SIM_SOPT7_ADC1ALTTRGEN_MASK))|simAdc1Trigger|simAdc1AltTrigger;
+         \t   sim().SOPT7 = sim().SOPT7 = (sim().SOPT7&~(SIM_SOPT7_ADC1TRGSEL_MASK|SIM_SOPT7_ADC1ALTTRGEN_MASK))|simAdc1Trigger|simAdc1AltTrigger;
          \t};\n\n
       ]]></template>
    
@@ -796,18 +797,18 @@ Devices using this peripheral:
       \tstatic void initRegs() {
       \t#ifdef SIM_SCGC4_USBOTG_MASK
       \t   // The USB interface must be disabled for clock changes to have effect
-      \t   sim->SCGC4 &= ~SIM_SCGC4_USBOTG_MASK;
+      \t   sim().SCGC4 &= ~SIM_SCGC4_USBOTG_MASK;
       \t#endif
       \t
-      \t   sim->SOPT1 = sopt1;
+      \t   sim().SOPT1 = sopt1;
       \t   // sim_sopt2_pllfllsel may also be altered by MCG clock code
-      \t   sim->SOPT2 = sopt2;
-      \t   sim->SOPT4 = sopt4;
-      \t   sim->SOPT5 = sopt5;
-      \t   sim->SOPT7 = sopt7;
+      \t   sim().SOPT2 = sopt2;
+      \t   sim().SOPT4 = sopt4;
+      \t   sim().SOPT5 = sopt5;
+      \t   sim().SOPT7 = sopt7;
       \t
       \t#ifdef SIM_CLKDIV2_USBDIV_MASK
-      \t   sim->CLKDIV2 = clkdiv2;
+      \t   sim().CLKDIV2 = clkdiv2;
       \t#endif
       \t}\n\n
    ]]></template>

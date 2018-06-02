@@ -329,9 +329,9 @@ public:
    /**
     * Construct UART interface
     */
-   Uart_T() : Uart(Info::uart) {
+   Uart_T() : Uart(&Info::uart()) {
       // Enable clock to UART interface
-      *Info::clockReg |= Info::clockMask;
+      Info::clockReg() |= Info::clockMask;
 
       if (Info::mapPinsOnEnable) {
          configureAllPins();
@@ -363,7 +363,7 @@ public:
     * Receive/Transmit IRQ handler (MKL)
     */
    static void irqHandler() {
-      uint8_t status = Info::uart->S1;
+      uint8_t status = Info::uart().S1;
       rxTxCallback(status);
    }
 
@@ -371,7 +371,7 @@ public:
     * Receive/Transmit IRQ handler (MK)
     */
    static void irqRxTxHandler() {
-      uint8_t status = Info::uart->S1;
+      uint8_t status = Info::uart().S1;
       rxTxCallback(status);
    }
 
@@ -379,7 +379,7 @@ public:
     * Error and LON event IRQ handler (MK)
     */
    static void irqErrorHandler() {
-      uint8_t status = Info::uart->S1;
+      uint8_t status = Info::uart().S1;
       errorCallback(status);
    }
 
@@ -387,7 +387,7 @@ public:
     * LON IRQ handler (MK)
     */
    static void irqLonHandler() {
-      uint8_t status = Info::uart->S1;
+      uint8_t status = Info::uart().S1;
       lonCallback(status);
    }
 
@@ -668,20 +668,20 @@ public:
     * Receive/Transmit IRQ handler (MKL)
     */
    static void irqHandler()  {
-      uint8_t status = Info::uart->S1;
+      uint8_t status = Info::uart().S1;
       if (status & UART_S1_RDRF_MASK) {
          // Receive data register full - save data
-         rxQueue.enQueueDiscardOnFull(Info::uart->D);
+         rxQueue.enQueueDiscardOnFull(Info::uart().D);
       }
       if (status & UART_S1_TDRE_MASK) {
          // Transmitter ready
          if (txQueue.isEmpty()) {
             // No data available - disable further transmit interrupts
-            Info::uart->C2 &= ~UART_C2_TIE_MASK;
+            Info::uart().C2 &= ~UART_C2_TIE_MASK;
          }
          else {
             // Transmit next byte
-            Info::uart->D = txQueue.deQueue();
+            Info::uart().D = txQueue.deQueue();
          }
       }
    }
@@ -690,20 +690,20 @@ public:
     * Receive/Transmit IRQ handler (MK)
     */
    static void irqRxTxHandler()  {
-      uint8_t status = Info::uart->S1;
+      uint8_t status = Info::uart().S1;
       if (status & UART_S1_RDRF_MASK) {
          // Receive data register full - save data
-         rxQueue.enQueueDiscardOnFull(Info::uart->D);
+         rxQueue.enQueueDiscardOnFull(Info::uart().D);
       }
       if (status & UART_S1_TDRE_MASK) {
          // Transmitter ready
          if (txQueue.isEmpty()) {
             // No data available - disable further transmit interrupts
-            Info::uart->C2 &= ~UART_C2_TIE_MASK;
+            Info::uart().C2 &= ~UART_C2_TIE_MASK;
          }
          else {
             // Transmit next byte
-            Info::uart->D = txQueue.deQueue();
+            Info::uart().D = txQueue.deQueue();
          }
       }
    }

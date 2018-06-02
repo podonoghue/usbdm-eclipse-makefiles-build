@@ -112,7 +112,7 @@ public:
    /**
     * Flip active odd/even buffer state
     *
-    * @param[in]  usbStat Value from USB->STAT
+    * @param[in]  usbStat Value from USB_STAT
     */
     void flipOddEven(uint8_t usbStat) {
 
@@ -157,9 +157,12 @@ public:
    /** Size of end-point buffer */
    static constexpr int BUFFER_SIZE  = EP_MAXSIZE;
 
+   /** Hardware instance pointer */
+   static __attribute__((always_inline)) volatile USB_Type &usb() { return Info::usb(); }
+
 protected:
-   /** Pointer to hardware */
-   static constexpr USB_Type volatile *usb = Info::usb;
+   /** Clock register for peripheral */
+   static __attribute__((always_inline)) volatile uint32_t &clockReg() { return Info::clockReg(); }
 
    /** Buffer for Transmit & Receive data */
    uint8_t fDataBuffer[EP_MAXSIZE];
@@ -260,14 +263,14 @@ public:
     */
    virtual void stall() override {
       state = EPStall;
-      usb->ENDPOINT[ENDPOINT_NUM].ENDPT |= USB_ENDPT_EPSTALL_MASK;
+      usb().ENDPOINT[ENDPOINT_NUM].ENDPT |= USB_ENDPT_EPSTALL_MASK;
    }
 
    /**
     * Clear Stall on endpoint
     */
    virtual void clearStall() override {
-      usb->ENDPOINT[ENDPOINT_NUM].ENDPT &= ~USB_ENDPT_EPSTALL_MASK;
+      usb().ENDPOINT[ENDPOINT_NUM].ENDPT &= ~USB_ENDPT_EPSTALL_MASK;
       state               = EPIdle;
       txData1             = DATA0;
       rxData1             = DATA0;
@@ -563,12 +566,12 @@ public:
     * Initialise endpoint
     *  - Internal state
     *  - BDTs
-    *  - usb->ENDPOINT[].ENDPT
+    *  - usb().ENDPOINT[].ENDPT
     */
     void initialise() {
       Endpoint_T<Info, 0, EP0_SIZE>::initialise();
       // Receive/Transmit/SETUP
-      usb->ENDPOINT[0].ENDPT = USB_ENDPT_EPRXEN_MASK|USB_ENDPT_EPTXEN_MASK|USB_ENDPT_EPHSHK_MASK;
+      usb().ENDPOINT[0].ENDPT = USB_ENDPT_EPRXEN_MASK|USB_ENDPT_EPTXEN_MASK|USB_ENDPT_EPHSHK_MASK;
    }
 
    /**
@@ -642,12 +645,12 @@ public:
     * Initialise endpoint
     *  - Internal state
     *  - BDTs
-    *  - usb->ENDPOINT[].ENDPT
+    *  - usb().ENDPOINT[].ENDPT
     */
     void initialise() {
       Endpoint_T<Info, ENDPOINT_NUM, EP_MAXSIZE>::initialise();
       // Transmit only
-      usb->ENDPOINT[ENDPOINT_NUM].ENDPT = USB_ENDPT_EPTXEN_MASK|USB_ENDPT_EPHSHK_MASK;
+      usb().ENDPOINT[ENDPOINT_NUM].ENDPT = USB_ENDPT_EPTXEN_MASK|USB_ENDPT_EPHSHK_MASK;
    }
 };
 
@@ -679,12 +682,12 @@ public:
     * Initialise endpoint
     *  - Internal state
     *  - BDTs
-    *  - usb->ENDPOINT[].ENDPT
+    *  - usb().ENDPOINT[].ENDPT
     */
     void initialise() {
       Endpoint_T<Info, ENDPOINT_NUM, EP_MAXSIZE>::initialise();
       // Receive only
-      usb->ENDPOINT[ENDPOINT_NUM].ENDPT = USB_ENDPT_EPRXEN_MASK|USB_ENDPT_EPHSHK_MASK;
+      usb().ENDPOINT[ENDPOINT_NUM].ENDPT = USB_ENDPT_EPRXEN_MASK|USB_ENDPT_EPHSHK_MASK;
    }
 };
 

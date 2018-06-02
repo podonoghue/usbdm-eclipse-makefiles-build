@@ -60,7 +60,7 @@ Devices using this peripheral:
          \t */
          \tstatic uint32_t getErc32kClock() {
          \t
-         \t   switch(sim->SOPT1&SIM_SOPT1_OSC32KSEL_MASK) {
+         \t   switch(sim().SOPT1&SIM_SOPT1_OSC32KSEL_MASK) {
          \t      default                     : return 0;
          \t      case SIM_SOPT1_OSC32KSEL(0) : return Osc0Info::getOsc32kClock();
          \t      case SIM_SOPT1_OSC32KSEL(3) : return 1000;
@@ -93,7 +93,7 @@ Devices using this peripheral:
          \t * @param simPeripheralClockSource Clock source for peripheral clock
          \t */
          \tstatic void setPeripheralClock(SimPeripheralClockSource simPeripheralClockSource) {
-         \t   sim->SOPT2 = (sim->SOPT2&~SIM_SOPT2_PLLFLLSEL_MASK) | simPeripheralClockSource;
+         \t   sim().SOPT2 = (sim().SOPT2&~SIM_SOPT2_PLLFLLSEL_MASK) | simPeripheralClockSource;
          \t}\n\n
          
          \t/**
@@ -103,7 +103,7 @@ Devices using this peripheral:
          \t */
          \tstatic uint32_t getPeripheralClock() {
          \t   
-         \t   switch(sim->SOPT2&SIM_SOPT2_PLLFLLSEL_MASK) {
+         \t   switch(sim().SOPT2&SIM_SOPT2_PLLFLLSEL_MASK) {
          \t      default:                     return 0;
          \t      case SIM_SOPT2_PLLFLLSEL(0): return SystemMcgFllClock;
          \t      case SIM_SOPT2_PLLFLLSEL(1): return SystemMcgPllClock;
@@ -158,7 +158,7 @@ Devices using this peripheral:
          \t * @param simLpuartClockSource Clock source for LPUART
          \t */
          \tstatic void setLpuartClock(SimLpuartClockSource simLpuartClockSource) {
-         \t   sim->SOPT2 = (sim->SOPT2&~SIM_SOPT2_LPUARTSRC_MASK) | simLpuartClockSource;
+         \t   sim().SOPT2 = (sim().SOPT2&~SIM_SOPT2_LPUARTSRC_MASK) | simLpuartClockSource;
          \t}\n\n
    
          \t/**
@@ -168,7 +168,7 @@ Devices using this peripheral:
          \t */
          \tstatic uint32_t getLpuartClock() {
          \t   
-         \t   switch(sim->SOPT2&SIM_SOPT2_LPUARTSRC_MASK) {
+         \t   switch(sim().SOPT2&SIM_SOPT2_LPUARTSRC_MASK) {
          \t   default:
          \t   case SIM_SOPT2_LPUARTSRC(0): return 0;
          \t   case SIM_SOPT2_LPUARTSRC(1): return getPeripheralClock();
@@ -574,7 +574,7 @@ Devices using this peripheral:
          \t * @param[in] simAdc0Trigger     Select the ADC0 Trigger source in STOP and VLPS modes, or when ADC0 Alternative Trigger is active.
          \t */
          \tstatic void setAdc0Triggers(SimAdc0AltTrigger simAdc0AltTrigger, SimAdc0Trigger simAdc0Trigger=SimAdc0Trigger_PdbExTrig) {
-         \t   sim->SOPT7 = (sim->SOPT7&~(SIM_SOPT7_ADC0TRGSEL_MASK|SIM_SOPT7_ADC0ALTTRGEN_MASK))|simAdc0Trigger|simAdc0AltTrigger;
+         \t   sim().SOPT7 = (sim().SOPT7&~(SIM_SOPT7_ADC0TRGSEL_MASK|SIM_SOPT7_ADC0ALTTRGEN_MASK))|simAdc0Trigger|simAdc0AltTrigger;
          \t};\n\n
       ]]></template>
       
@@ -661,7 +661,7 @@ Devices using this peripheral:
          \t * @param[in] simAdc1Trigger     Select the ADC1 Trigger source in STOP and VLPS modes, or when ADC0 Alternative Trigger is active.
          \t */
          \tstatic void setAdc1Triggers(SimAdc1AltTrigger simAdc1AltTrigger, SimAdc1Trigger simAdc1Trigger=SimAdc1Trigger_PdbExTrig) {
-         \t   sim->SOPT7 = sim->SOPT7 = (sim->SOPT7&~(SIM_SOPT7_ADC1TRGSEL_MASK|SIM_SOPT7_ADC1ALTTRGEN_MASK))|simAdc1Trigger|simAdc1AltTrigger;
+         \t   sim().SOPT7 = sim().SOPT7 = (sim().SOPT7&~(SIM_SOPT7_ADC1TRGSEL_MASK|SIM_SOPT7_ADC1ALTTRGEN_MASK))|simAdc1Trigger|simAdc1AltTrigger;
          \t};\n\n
       ]]></template>
    
@@ -905,19 +905,19 @@ Devices using this peripheral:
       \tstatic void initRegs() {
       \t#ifdef SIM_SCGC4_USBOTG_MASK
       \t   // The USB interface must be disabled for clock changes to have effect
-      \t   sim->SCGC4 &= ~SIM_SCGC4_USBOTG_MASK;
+      \t   sim().SCGC4 &= ~SIM_SCGC4_USBOTG_MASK;
       \t#endif
       \t
-      \t   sim->SOPT1 = sopt1;
+      \t   sim().SOPT1 = sopt1;
       \t   // sim_sopt2_pllfllsel may also be altered by MCG clock code
-      \t   sim->SOPT2 = sopt2;
-      \t   sim->SOPT4 = sopt4;
-      \t   sim->SOPT5 = sopt5;
-      \t   sim->SOPT7 = sopt7;
-      \t   sim->SOPT8 = sopt8;
+      \t   sim().SOPT2 = sopt2;
+      \t   sim().SOPT4 = sopt4;
+      \t   sim().SOPT5 = sopt5;
+      \t   sim().SOPT7 = sopt7;
+      \t   sim().SOPT8 = sopt8;
       \t
       \t#ifdef SIM_CLKDIV2_USBDIV_MASK
-      \t   sim->CLKDIV2 = clkdiv2;
+      \t   sim().CLKDIV2 = clkdiv2;
       \t#endif
       \t}\n\n
    ]]></template>
