@@ -37,7 +37,7 @@ namespace USBDM {
  *  // I2C interface
  *  I2c0     i2c0;
  *  // Accelerometer via I2C
- *  MMA845x  accelerometer(i2c0, MMA845x::ACCEL_2Gmode);
+ *  MMA845x  accelerometer(i2c0, MMA845x::AccelerometerMode_2Gmode);
  *
  *  uint8_t id = accelerometer.readID();
  *  printf("Device ID = 0x%02X\n", id);
@@ -96,12 +96,12 @@ public:
    }
 
    enum AccelerometerMode {
-      ACCEL_2Gmode      = (0<<0),        //!< 2g Full-scale, no high-pass filter
-      ACCEL_4Gmode      = (1<<0),        //!< 4g Full-scale, no high-pass filter
-      ACCEL_8Gmode      = (2<<0),        //!< 8g Full-scale, no high-pass filter
-      ACCEL_2G_HPF_mode = (1<<4)|(0<<0), //!< 2g Full-scale, high-pass filter
-      ACCEL_4G_HPF_mode = (1<<4)|(1<<0), //!< 4g Full-scale, high-pass filter
-      ACCEL_8G_HPF_mode = (1<<4)|(2<<0), //!< 8g Full-scale, high-pass filter
+      AccelerometerMode_2Gmode      = (0<<0),        //!< 2g Full-scale, no high-pass filter
+      AccelerometerMode_4Gmode      = (1<<0),        //!< 4g Full-scale, no high-pass filter
+      AccelerometerMode_8Gmode      = (2<<0),        //!< 8g Full-scale, no high-pass filter
+      AccelerometerMode_2G_HPF_mode = (1<<4)|(0<<0), //!< 2g Full-scale, high-pass filter
+      AccelerometerMode_4G_HPF_mode = (1<<4)|(1<<0), //!< 4g Full-scale, high-pass filter
+      AccelerometerMode_8G_HPF_mode = (1<<4)|(2<<0), //!< 8g Full-scale, high-pass filter
    } ;
 
 private:
@@ -136,7 +136,7 @@ public:
     * @param[in] mode  - Mode of operation (gain and filtering)
     * @param[in] cr1   - Data rate etc (see cr1Value())
     */
-   MMA845x(USBDM::I2c &i2c, AccelerometerMode mode, uint8_t cr1=cr1Value());
+   MMA845x(USBDM::I2c &i2c, AccelerometerMode accelerometerMode, uint8_t cr1=cr1Value());
    /**
     * Put accelerometer into Standby mode
     */
@@ -157,10 +157,10 @@ public:
    /**
     * Configure accelerometer
     *
-    * @param[in] mode - One of ACCEL_2Gmode etc.
+    * @param[in] mode - One of AccelerometerMode_2Gmode etc.
     * @param[in] cr1  - Data rate etc (see cr1Value())
     */
-   void configure(AccelerometerMode mode, uint8_t cr1=cr1Value());
+   void configure(AccelerometerMode accelerometerMode, uint8_t cr1=cr1Value());
    /**
     * Read ID from accelerometer
     *

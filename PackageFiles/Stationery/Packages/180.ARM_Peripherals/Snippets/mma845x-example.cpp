@@ -27,7 +27,7 @@ using namespace USBDM;
 I2c0     i2c0;
 
 // Accelerometer via I2C
-MMA845x  accelerometer(i2c0, MMA845x::ACCEL_2Gmode);
+MMA845x  accelerometer(i2c0, MMA845x::AccelerometerMode_2Gmode);
 
 /**************************************************/
 
