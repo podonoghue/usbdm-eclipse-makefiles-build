@@ -11,7 +11,6 @@
 #include <stdint.h>
 #include <string.h>
 #include <stdarg.h>
-#include <stdio.h>
 #include "fonts.h"
 #include "hardware.h"
 #include "spi.h"

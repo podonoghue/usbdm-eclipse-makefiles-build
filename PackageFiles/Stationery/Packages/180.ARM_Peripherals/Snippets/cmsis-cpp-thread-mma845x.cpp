@@ -8,9 +8,8 @@
  */
 /*
  * You may need to change the pin-mapping of the I2C interface
- * You may need to increase the RTOS thread stack size to ~800 bytes for printf()
+ * You may need to increase the RTOS thread stack size to ~800 bytes for console.write()
  */
-#include <stdio.h>
 #include <math.h>
 #include "system.h"
 #include "derivative.h"
@@ -52,9 +51,10 @@ static void report(const char *name, MMA845x &accelerometer) {
    accelerometer.readAccelerometerXYZ(accelStatus, accelX, accelY, accelZ);
 
 #if (OS_STKSIZE<(800/4))
-#error "Requires RTX Default Thread stack size to be increased to about 800 bytes for printf()"
+#error "Requires RTX Default Thread stack size to be increased to about 800 bytes for console.write()"
 #endif
    mutex.lock();
+   
    printf("%s: s=0x%02X, aX=%10d, aY=%10d, aZ=%10d\n", name, accelStatus, accelX, accelY, accelZ);
    mutex.unlock();
 }
@@ -92,15 +92,15 @@ public:
 int main() {
 
 #if (OS_MAINSTKSIZE<(800/4))
-#error "Requires RTX Main Thread stack size to be increased to about 800 bytes for printf()"
+#error "Requires RTX Main Thread stack size to be increased to about 800 bytes for console.write()"
 #endif
 
-   printf("Starting\n");
+   console.writeln("Starting");
 
    uint8_t id = accelerometer.readID();
-   printf("Device ID = 0x%02X (should be 0x1A)\n", id);
+   console.write("Device ID = ").write(id, Radix_16).writeln("(should be 0x1A)");
 
-   printf("Doing simple calibration\n"
+   console.write("Doing simple calibration\n"
           "Make sure the device is level!\n");
    report("Startup", accelerometer);
    waitMS(400);
@@ -114,7 +114,7 @@ int main() {
    // Make sure we have new values
    waitMS(100);
 
-   printf("After calibration\n");
+   console.writeln("After calibration");
 
 #if 0
    /**

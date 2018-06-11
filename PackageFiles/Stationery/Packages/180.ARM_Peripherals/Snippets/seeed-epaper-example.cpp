@@ -23,7 +23,6 @@
  *   - @htmlonly <a href="http://www.seeedstudio.com/wiki/Small_e-Paper_Shield"><b>Seeed Studio e-Paper Wiki</b></a> @endhtmlonly
  *   - @htmlonly <a href="http://www.pervasivedisplays.com"><b>PervasiveDisplays</b></a> @endhtmlonly
  */
-#include <stdio.h>
 #include "system.h"
 #include "derivative.h"
 #include "hardware.h"

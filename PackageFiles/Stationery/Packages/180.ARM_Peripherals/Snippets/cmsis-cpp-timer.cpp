@@ -7,7 +7,6 @@
  *      Author: podonoghue
  ============================================================================
  */
-#include <stdio.h>
 #include "cmsis.h"                      // CMSIS RTX
 #include "hardware.h"                   // Hardware interface
 

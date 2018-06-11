@@ -8,7 +8,6 @@
  * You may need to change the pin-mapping of the I2C interface
 ============================================================================
  */
-#include <stdio.h>
 #include <math.h>
 #include "system.h"
 #include "derivative.h"

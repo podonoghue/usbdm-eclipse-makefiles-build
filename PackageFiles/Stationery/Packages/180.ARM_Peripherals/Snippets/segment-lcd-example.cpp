@@ -1,7 +1,6 @@
 /**
  * @file segment-lcd-example.cpp
  */
-#include <stdio.h>
 #include <stdbool.h>
 #include "system.h"
 #include "derivative.h"

@@ -69,7 +69,7 @@ int main() {
    for(;;) {
 //      Led::toggle();
       USBDM::waitMS(100);
-//      printf("Tick\n");
+//      console.writeln("Tick");
    }
    return 0;
 }

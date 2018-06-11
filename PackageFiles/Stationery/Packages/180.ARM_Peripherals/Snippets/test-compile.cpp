@@ -7,7 +7,6 @@
  *      Author: podonoghue
  ============================================================================
  */
-#include <stdio.h>
 #include "system.h"
 #include "derivative.h"
 #include "hardware.h"
@@ -92,10 +91,10 @@ using Led   = USBDM::GpioC<3>;
 int main() {
    USBDM::mapAllPins();
 
-//   printf("Starting\n");
+//   console.writeln("Starting");
 
-//   printf("SystemBusClock  = %ld\n", SystemBusClock);
-//   printf("SystemCoreClock = %ld\n", SystemCoreClock);
+//   console.write("SystemBusClock  = ").writeln(::SystemBusClock);
+//   console.write("SystemCoreClock = ").writeln(::SystemCoreClock);
 
    USBDM::Adc0::enable();
    USBDM::Adc0::setCallback(adcCallback);
@@ -156,7 +155,7 @@ int main() {
    for(;;) {
       Led::toggle();
       USBDM::waitMS(100);
-//      printf("Tick\n");
+//      console.writeln("Tick");
    }
    return 0;
 }

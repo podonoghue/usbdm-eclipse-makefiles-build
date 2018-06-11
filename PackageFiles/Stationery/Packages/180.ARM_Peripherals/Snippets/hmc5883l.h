@@ -39,7 +39,7 @@ namespace USBDM {
  *      HMC5883L *compass = new HMC5883L(i2c);
  *
  *      uint32_t id = compass->readID();
- *      printf("Compass ID = 0x%6lX (should be 0x483433)\n", id);
+ *      console.write("Compass ID = 0x").write(id, Radix_16).writeln("(should be 0x483433);
  *
  *      compass->setGain(1);
  *

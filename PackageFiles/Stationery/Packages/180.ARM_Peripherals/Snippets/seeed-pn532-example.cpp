@@ -20,7 +20,6 @@
  *
  *   - @htmlonly <a href="http://www.seeedstudio.com/depot/nfc-shield-v20-p-1370.html"><b>Seeed Studio shield</b></a> @endhtmlonly
  */
-#include <stdio.h>
 #include <string.h>
 #include "system.h"
 #include "derivative.h"

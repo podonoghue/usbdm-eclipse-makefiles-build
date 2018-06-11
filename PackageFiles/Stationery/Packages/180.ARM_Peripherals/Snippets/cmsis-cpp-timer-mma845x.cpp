@@ -10,7 +10,6 @@
  * You may need to change the pin-mapping of the I2C interface
  * You may need to increase the RTOS timer stack size to ~800 bytes for printf()
  */
-#include <stdio.h>
 #include <math.h>
 #include "system.h"
 #include "derivative.h"

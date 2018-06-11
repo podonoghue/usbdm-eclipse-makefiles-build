@@ -390,7 +390,7 @@ void Usb0::initialise() {
  * CDC Set line coding handler
  */
 void Usb0::handleSetLineCoding() {
-//   PRINTF("handleSetLineCoding()\n");
+//   console.write("handleSetLineCoding()\n");
    static LineCodingStructure lineCoding;
 
    // Call-back to do after transaction complete
@@ -410,7 +410,7 @@ void Usb0::handleSetLineCoding() {
  * CDC Get line coding handler
  */
 void Usb0::handleGetLineCoding() {
-//   PRINTF("handleGetLineCoding()\n");
+//   console.write("handleGetLineCoding()\n");
    // Send packet
    ep0StartTxTransaction( sizeof(LineCodingStructure), (const uint8_t*)&cdcInterface::getLineCoding());
 }
@@ -419,7 +419,7 @@ void Usb0::handleGetLineCoding() {
  * CDC Set line state handler
  */
 void Usb0::handleSetControlLineState() {
-//   PRINTF("handleSetControlLineState(%X)\n", ep0SetupBuffer.wValue.lo());
+//   console.write("handleSetControlLineState(%X)\n", ep0SetupBuffer.wValue.lo());
    cdcInterface::setControlLineState(ep0SetupBuffer.wValue.lo());
    // Tx empty Status packet
    ep0StartTxTransaction( 0, nullptr );
@@ -429,7 +429,7 @@ void Usb0::handleSetControlLineState() {
  * CDC Send break handler
  */
 void Usb0::handleSendBreak() {
-//   PRINTF("handleSendBreak()\n");
+//   console.write("handleSendBreak()\n");
    cdcInterface::sendBreak(ep0SetupBuffer.wValue);
    // Tx empty Status packet
    ep0StartTxTransaction( 0, nullptr );
@@ -443,7 +443,7 @@ void Usb0::handleSendBreak() {
  * @note Provides CDC extensions
  */
 ErrorCode Usb0::handleUserEp0SetupRequests(const SetupPacket &setup) {
-   //PRINTF("handleUserEp0SetupRequests()\n");
+   //console.write("handleUserEp0SetupRequests()\n");
    switch(REQ_TYPE(setup.bmRequestType)) {
       case REQ_TYPE_CLASS :
          // Class requests

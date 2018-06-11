@@ -72,16 +72,16 @@ namespace USBDM {
 //======================================================================
 // Maximum packet sizes for each endpoint
 //
-static constexpr uint  CONTROL_EP_MAXSIZE           = 64; //!< Control in/out
+static constexpr unsigned  CONTROL_EP_MAXSIZE           = 64; //!< Control in/out
 /*
  *  TODO Define additional end-point sizes
  */
-static constexpr uint  BULK_OUT_EP_MAXSIZE          = 64; //!< Bulk out
-static constexpr uint  BULK_IN_EP_MAXSIZE           = 64; //!< Bulk in
+static constexpr unsigned  BULK_OUT_EP_MAXSIZE          = 64; //!< Bulk out
+static constexpr unsigned  BULK_IN_EP_MAXSIZE           = 64; //!< Bulk in
 
-static constexpr uint  CDC_NOTIFICATION_EP_MAXSIZE  = 16; //!< CDC notification
-static constexpr uint  CDC_DATA_OUT_EP_MAXSIZE      = 16; //!< CDC data out
-static constexpr uint  CDC_DATA_IN_EP_MAXSIZE       = 16; //!< CDC data in
+static constexpr unsigned  CDC_NOTIFICATION_EP_MAXSIZE  = 16; //!< CDC notification
+static constexpr unsigned  CDC_DATA_OUT_EP_MAXSIZE      = 16; //!< CDC data out
+static constexpr unsigned  CDC_DATA_IN_EP_MAXSIZE       = 16; //!< CDC data in
 
 #ifdef USBDM_USB0_IS_DEFINED
 /**
@@ -174,19 +174,19 @@ public:
 
 protected:
    /* end-points */
-   
+
    /** Out end-point for Bulk */
    static OutEndpoint <Usb0Info, Usb0::BULK_OUT_ENDPOINT, BULK_OUT_EP_MAXSIZE> epBulkOut;
-   
+
    /** In end-point for Bulk */
    static InEndpoint  <Usb0Info, Usb0::BULK_IN_ENDPOINT,  BULK_IN_EP_MAXSIZE>  epBulkIn;
-   
+
    /** In end-point for CDC notifications */
    static InEndpoint  <Usb0Info, Usb0::CDC_NOTIFICATION_ENDPOINT, CDC_NOTIFICATION_EP_MAXSIZE>  epCdcNotification;
-   
+
    /** Out end-point for CDC data out */
    static OutEndpoint <Usb0Info, Usb0::CDC_DATA_OUT_ENDPOINT,     CDC_DATA_OUT_EP_MAXSIZE>      epCdcDataOut;
-   
+
    /** In end-point for CDC data in */
    static InEndpoint  <Usb0Info, Usb0::CDC_DATA_IN_ENDPOINT,      CDC_DATA_IN_EP_MAXSIZE>       epCdcDataIn;
    /*
@@ -300,7 +300,7 @@ protected:
       epBulkIn.initialise();
       addEndpoint(&epBulkIn);
       epBulkIn.setCallback(bulkInTransactionCallback);
-	  
+
       epCdcNotification.initialise();
       addEndpoint(&epCdcNotification);
 

@@ -51,7 +51,6 @@
  * \image html MAXREFDES117_firmware_Flowchart.png "MAXREFDES117# Firmware Flowchart"
  *
  */
-#include <stdio.h>
 #include "SpO2algorithm.h"
 #include "MAX30102.h"
 #include "hardware.h"

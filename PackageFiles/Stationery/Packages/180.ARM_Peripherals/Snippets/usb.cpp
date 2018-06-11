@@ -41,7 +41,6 @@ Change History
  * Any manual changes will be lost.
  */
 #include <string.h>
-#include <stdio.h>
 #include "derivative.h"
 #include "usb.h"
 #include "stringFormatter.h"

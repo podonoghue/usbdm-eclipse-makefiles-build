@@ -7,7 +7,6 @@
  * @note You may need to change the pin-mapping of the I2C interface
 ============================================================================
  */
-#include <stdio.h>
 #include <math.h>
 #include "system.h"
 #include "derivative.h"
@@ -45,7 +44,11 @@ void report(MMA8491Q &accelerometer) {
    waitMS(1000);
    accelerometer.readAccelerometerXYZ(accelStatus, accelX, accelY, accelZ);
    accelerometer.standby();
-   printf("s=0x%02X, aX=%10d, aY=%10d, aZ=%10d\n", accelStatus, accelX, accelY, accelZ);
+   console.
+      write("s=").write(accelStatus, Radix_16).
+      write(", aX=").write(accelX).
+      write(", aY=").write(accelY).
+      write(", aZ=").writeln(accelZ);
 }
 
 int main() {

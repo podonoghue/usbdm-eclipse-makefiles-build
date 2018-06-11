@@ -7,7 +7,6 @@
  *      Author: podonoghue
  ============================================================================
  */
-#include <stdio.h>
 #include "system.h"
 #include "derivative.h"
 #include "hardware.h"
@@ -42,7 +41,7 @@ static void dmaCallback() {
 template <typename T1, typename T2>
 static void dmaTransfer(T1 *source, T2 *destination, const uint32_t size) {
 
-   assert((size%sizeof(T1) == 0)&&(size%sizeof(T2) == 0));
+   usbdm_assert((size%sizeof(T1) == 0)&&(size%sizeof(T2) == 0), "Size must be a multiple of transfer sizes");
 
    // DMA channel number to use
    static constexpr DmaChannelNum DMA_CHANNEL = DmaChannelNum_1;

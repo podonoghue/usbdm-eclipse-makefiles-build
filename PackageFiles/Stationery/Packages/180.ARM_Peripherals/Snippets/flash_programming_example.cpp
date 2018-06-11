@@ -15,7 +15,6 @@
  *      Author: podonoghue
  ============================================================================
  */
-#include <stdio.h>
 #include <stdlib.h>
 #include "flash.h"
 
@@ -89,7 +88,7 @@ void printDump(uint8_t *address, uint32_t size) {
 int main(void) {
    printf("Starting\n\r");
    static_assert(((sizeof(copy)&(sectorSize-1)) == 0), "Data must be correct size");
-   assert((((unsigned)copy&(sectorSize-1)) == 0));
+   usbdm_assert((((unsigned)copy&(sectorSize-1)) == 0), "Data must be correct size");
 
    // Report original flash contents
    printf("Flash before programming\n\r");

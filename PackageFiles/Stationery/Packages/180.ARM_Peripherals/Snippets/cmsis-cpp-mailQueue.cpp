@@ -7,7 +7,6 @@
  *      Author: podonoghue
  ============================================================================
  */
-#include <stdio.h>
 #include "cmsis.h"                      // CMSIS RTX
 #include "hardware.h"                   // Hardware interface
 
@@ -36,10 +35,10 @@ static void mailQueueSender(const void *) {
       if (data == nullptr) {
          break;
       }
-      printf("%d: Allocated %p\n\r", i, data);
+      console.write(i).write(": Allocated ").writeln(data);
       data->a = i;
       data->b = i*i;
-      printf("%d: Sending   %p (%d, %d)\n\r", i, &data, data->a, data->b);
+      console.write(i).write(": Sending   ").write(&data).write(", (").write(data->a).write(", ").write(data->a).writeln(")");
       mailQueue.put(data);
       osDelay(100);
    }

@@ -7,7 +7,6 @@
  *      Author: podonoghue
  ============================================================================
  */
-#include <stdio.h>
 #include "cmsis.h"                      // CMSIS RTX
 #include "hardware.h"                   // Hardware interface
 
@@ -35,14 +34,16 @@ static void messageQueueSender(const void *) {
    for (unsigned i=0; i<(sizeof(ar)/sizeof(ar[0])); i++) {
       ar[i].a = i;
       ar[i].b = i*i;
-      printf("%d: Sending %p (%d, %d)\n\r", i, &ar[i], ar[i].a, ar[i].b);
+      console.
+         write(i).write(": Sending ").write(&ar[i]).
+         write(", (").write(ar[i].a).write(",").write(ar[i].b).writeln(")");
       osStatus rc = messageQueue.put(&ar[i], 0);
       osDelay(100);
       if (rc == osErrorResource) {
          break;
       }
    }
-   printf("=== Sender complete ====\n\r");
+   writeln("=== Sender complete ====\n\r");
 }
 
 /**
@@ -55,17 +56,19 @@ static void messageQueueReceiver(const void *) {
          break;
       }
       MessageData *data = (MessageData *)event.value.p;
-      printf("%d: Received %p (%d, %d)\n\r", i, data, data->a, data->b);
+      console.
+         write(i).write(": Received ").write(data).
+         write(", (").write(data->a).write(",").write(data->b).writeln(")");
    }
    messageQueueTestComplete = true;
-   printf("=== Receiver complete ====\n\r");
+   writeln("=== Receiver complete ====");
 }
 
 /*
  * Message Queue example
  */
 static void messageQueueExample() {
-   printf(" message messageQueue.getId() = %p\n\r", messageQueue.getId());
+   console.write(" message messageQueue.getId() = ").writeln(messageQueue.getId());
 
    messageQueue.create();
    CMSIS::Thread sender(messageQueueSender);

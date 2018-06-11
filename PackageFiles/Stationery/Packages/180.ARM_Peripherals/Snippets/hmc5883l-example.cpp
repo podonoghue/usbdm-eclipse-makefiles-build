@@ -7,7 +7,6 @@
  * @note You may need to change the pin-mapping of the I2C interface
 ============================================================================
  */
-#include <stdio.h>
 #include <math.h>
 #include "system.h"
 #include "derivative.h"
@@ -38,7 +37,10 @@ HMC5883L magnetometer(i2c0);
 void report(HMC5883L &magnetometer) {
       int16_t compassX,compassY,compassZ;
       magnetometer.doMeasurement(&compassX, &compassY, &compassZ);
-      printf("X=%10d, Y=%10d, Z=%10d\n", compassX, compassY, compassZ);
+      console
+         .write("X=").write(compassX).
+         .write("Y=").write(compassY).
+         .write("Z=").writeln(compassZ);
 }
 
 int main() {

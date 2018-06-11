@@ -7,7 +7,6 @@
  *      Author: podonoghue
  ============================================================================
  */
-#include <stdio.h>
 #include "system.h"
 #include "derivative.h"
 #include "hardware.h"
@@ -23,20 +22,20 @@ using Led   = $(demo.cpp.led:USBDM::GpioB<3>);
 
 int main() {
 
-   printf(" SystemCoreClock = %ld\n", ::SystemCoreClock);
-   printf(" SystemBusClock  = %ld\n", ::SystemBusClock);
+   console.write(" SystemCoreClock = ".writeln(::SystemCoreClock);
+   console.write(" SystemBusClock  = ".writeln(::SystemBusClock);
 
    // These clocks are updated when the clock configuration changes
-   printf(" USBDM::SystemCoreClock       = %ld\n", USBDM::SystemCoreClock);
-   printf(" USBDM::SystemBusClock        = %ld\n", USBDM::SystemBusClock);
-   printf(" USBDM::SystemLpoClock        = %ld\n", USBDM::SystemLpoClock);
+   console.write(" USBDM::SystemCoreClock       = ".writeln(USBDM::SystemCoreClock);
+   console.write(" USBDM::SystemBusClock        = ".writeln(USBDM::SystemBusClock);
+   console.write(" USBDM::SystemLpoClock        = ".writeln(USBDM::SystemLpoClock);
 
    // These clocks are determined dynamically
-   printf(" USBDM::SystemMcgOutClock     = %ld\n", USBDM::McgInfo::getMcgOutClock());
-   printf(" USBDM::SystemMcgirClock      = %ld\n", USBDM::McgInfo::getMcgIrClock());
-   printf(" USBDM::SystemPeripheralClock = %ld\n", USBDM::SimInfo::getPeripheralClock());
-   printf(" USBDM::SystemOscerClock      = %ld\n", USBDM::Osc0Info::getOscerClock());
-   printf(" USBDM::SystemErclk32kClock   = %ld\n", USBDM::SimInfo::getErc32kClock());
+   console.write(" USBDM::SystemMcgOutClock     = ".writeln(USBDM::McgInfo::getMcgOutClock());
+   console.write(" USBDM::SystemMcgirClock      = ".writeln(USBDM::McgInfo::getMcgIrClock());
+   console.write(" USBDM::SystemPeripheralClock = ".writeln(USBDM::SimInfo::getPeripheralClock());
+   console.write(" USBDM::SystemOscerClock      = ".writeln(USBDM::Osc0Info::getOscerClock());
+   console.write(" USBDM::SystemErclk32kClock   = ".writeln(USBDM::SimInfo::getErc32kClock());
 
    for(;;){
 

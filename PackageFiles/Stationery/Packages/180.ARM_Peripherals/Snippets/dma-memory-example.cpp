@@ -39,7 +39,7 @@ void dmaCallback() {
  */
 static void dmaTransfer(uint32_t *source, uint32_t size, uint32_t *destination) {
 
-   assert(size%sizeof(uint32_t) == 0);
+   usbdm_assert(size%sizeof(uint32_t) == 0, "size must be a multiple of sizeof(uint32_t)");
 
    // DMA channel number to use
    static constexpr DmaChannelNum DMA_CHANNEL = DmaChannelNum_1;

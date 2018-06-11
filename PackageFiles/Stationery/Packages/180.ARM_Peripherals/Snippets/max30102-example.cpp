@@ -7,7 +7,6 @@
  *      Author: podonoghue
  ============================================================================
  */
-#include <stdio.h>
 #include <algorithm>
 #include "cmsis.h"
 #include "system.h"

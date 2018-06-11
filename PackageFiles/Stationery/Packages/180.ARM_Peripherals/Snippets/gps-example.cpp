@@ -32,7 +32,6 @@
  *   - @htmlonly <a href="https://www.itead.cc/itead-gps-shield.html"><b>ITEAD REB-4216 GPS Shield </b></a> @endhtmlonly
  ============================================================================
  */
-#include <stdio.h>
 #include <string.h>
 #include "system.h"
 #include "derivative.h"

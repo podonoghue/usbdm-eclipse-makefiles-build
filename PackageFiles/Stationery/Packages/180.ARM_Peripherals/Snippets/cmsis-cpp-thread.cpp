@@ -7,7 +7,6 @@
  *      Author: podonoghue
  ============================================================================
  */
-#include <stdio.h>
 #include "cmsis.h"                      // CMSIS RTX
 #include "hardware.h"                   // Hardware interface
 
@@ -32,7 +31,7 @@ static void threadExample() {
    /* Start thread */
    thread.run();
 
-   printf(" thread::getId() = %p\n\r", thread.getId());
+   console.write(" thread::getId() = ").write(thread.getId());
 }
 
 int main() {
