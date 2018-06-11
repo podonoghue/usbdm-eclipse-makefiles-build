@@ -1,0 +1,134 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no" ?>
+<!DOCTYPE root SYSTEM "../package.dtd">
+
+<root version="1.0">
+   <!-- Freescale Kinetis SDK OS Choice -->
+
+   <projectActionList id="KSDK-operating-system-freeRTOS" root="" >
+      <applyWhen>
+         <and>
+            <not>
+               <deviceSubfamilyMatches>MKL02Z4</deviceSubfamilyMatches>
+            </not>
+            <not>
+               <deviceSubfamilyMatches>MKL03Z4</deviceSubfamilyMatches>
+            </not>
+            <variableRef idRef="kdsOptionsAvailable" />
+            <variableRef idRef="outputType" condition="matches" value=".*ProjectType\.exe$" />
+         </and>
+      </applyWhen>
+      <variable id="projectOptionValue.Kinetis-SDK-os-free-rtos-823" 
+         name="Free RTOS V8.2.3"
+         description="Free RTOS operating system support" 
+         radioGroup="group-ksdk-operating-system">
+         <enableWhen>
+            <requirement idRef="projectOptionValue.Kinetis-SDK-enable" />
+         </enableWhen>
+      </variable>
+      <projectActionList>
+         <applyWhen>
+            <variableRef idRef="projectOptionValue.Kinetis-SDK-os-free-rtos-823" />
+         </applyWhen>
+         <constant id="kdsOperatingSystem" value="FreeRTOS" />
+         <!-- C Defines -->
+         <projectOption id="net.sourceforge.usbdm.gnu.c.compiler.option.preprocessor.def.symbols">
+            <value>FSL_RTOS_FREE_RTOS</value>
+         </projectOption>
+         <!-- C++ Defines -->
+         <projectOption id="net.sourceforge.usbdm.gnu.cpp.compiler.option.preprocessor.def.symbols">
+            <value>FSL_RTOS_FREE_RTOS</value>
+         </projectOption>
+         <!-- C Include paths -->
+         <projectOption id="net.sourceforge.usbdm.gnu.c.compiler.option.include.paths">
+            <value>&quot;${usbdm_kds_path}/rtos/freertos_8.2.3/Source/include&quot;</value>
+         </projectOption>
+         <!-- C++ Include paths -->
+         <projectOption id="net.sourceforge.usbdm.gnu.cpp.compiler.option.include.paths">
+            <value>&quot;${usbdm_kds_path}/rtos/freertos_8.2.3/Source/include&quot;</value>
+         </projectOption>
+         <projectActionList id="FreeRTOS-Cortex-m0-files" >
+            <applyWhen>
+               <or>
+                  <deviceFamilyMatches>CortexM0</deviceFamilyMatches>
+                  <deviceFamilyMatches>CortexM0plus</deviceFamilyMatches>
+               </or>
+            </applyWhen>
+            <copy source="usbdm_kds_path/rtos/freertos_8.2.3/Source/portable/GCC/ARM_CM0/portmacro.h" target="free-rtos/portmacro.h" type="link" sourcePathType="absolute" />
+            <copy source="usbdm_kds_path/rtos/freertos_8.2.3/Source/portable/GCC/ARM_CM0/port.c"      target="free-rtos/port.c"      type="link" sourcePathType="absolute" />
+            <!-- C Include paths -->
+            <projectOption id="net.sourceforge.usbdm.gnu.c.compiler.option.include.paths">
+               <value>&quot;${usbdm_kds_path}/rtos/freertos_8.2.3/Source/portable/GCC/ARM_CM0&quot;</value>
+            </projectOption>
+            <!-- C++ Include paths -->
+            <projectOption id="net.sourceforge.usbdm.gnu.cpp.compiler.option.include.paths">
+               <value>&quot;${usbdm_kds_path}/rtos/freertos_8.2.3/Source/portable/GCC/ARM_CM0&quot;</value>
+            </projectOption>
+         </projectActionList>
+         <projectActionList id="FreeRTOS-Cortex-m3-files" >
+            <applyWhen>
+               <or>
+                  <deviceFamilyMatches>CortexM3</deviceFamilyMatches>
+                  <deviceFamilyMatches>CortexM3F</deviceFamilyMatches>
+                  <deviceFamilyMatches>CortexM4</deviceFamilyMatches>
+               </or>
+            </applyWhen>
+            <copy source="usbdm_kds_path/rtos/freertos_8.2.3/Source/portable/GCC/ARM_CM3/portmacro.h" target="free-rtos/portmacro.h" type="link" sourcePathType="absolute" />
+            <copy source="usbdm_kds_path/rtos/freertos_8.2.3/Source/portable/GCC/ARM_CM3/port.c"      target="free-rtos/port.c"      type="link" sourcePathType="absolute" />
+            <!-- C Include paths -->
+            <projectOption id="net.sourceforge.usbdm.gnu.c.compiler.option.include.paths">
+               <value>&quot;${usbdm_kds_path}/rtos/freertos_8.2.3/Source/portable/GCC/ARM_CM3&quot;</value>
+            </projectOption>
+            <!-- C++ Include paths -->
+            <projectOption id="net.sourceforge.usbdm.gnu.cpp.compiler.option.include.paths">
+               <value>&quot;${usbdm_kds_path}/rtos/freertos_8.2.3/Source/portable/GCC/ARM_CM3&quot;</value>
+            </projectOption>
+         </projectActionList>
+         <projectActionList id="FreeRTOS-Cortex-m4-files" >
+            <applyWhen>
+               <or>
+                  <deviceFamilyMatches>CortexM4F</deviceFamilyMatches>
+               </or>
+            </applyWhen>
+            <copy source="usbdm_kds_path/rtos/freertos_8.2.3/Source/portable/GCC/ARM_CM4F/portmacro.h" target="free-rtos/portmacro.h" type="link" sourcePathType="absolute" />
+            <copy source="usbdm_kds_path/rtos/freertos_8.2.3/Source/portable/GCC/ARM_CM4F/port.c"      target="free-rtos/port.c"      type="link" sourcePathType="absolute" />
+            <!-- C Include paths -->
+            <projectOption id="net.sourceforge.usbdm.gnu.c.compiler.option.include.paths">
+               <value>&quot;${usbdm_kds_path}/rtos/freertos_8.2.3/Source/portable/GCC/ARM_CM4F&quot;</value>
+            </projectOption>
+            <!-- C++ Include paths -->
+            <projectOption id="net.sourceforge.usbdm.gnu.cpp.compiler.option.include.paths">
+               <value>&quot;${usbdm_kds_path}/rtos/freertos_8.2.3/Source/portable/GCC/ARM_CM4F&quot;</value>
+            </projectOption>
+         </projectActionList>
+
+         <copy source="usbdm_kds_path/rtos/freertos_8.2.3/template_application/FreeRTOSConfig.h"   target="Sources/FreeRTOSConfig.h"            sourcePathType="absolute"  />
+         <copy source="usbdm_kds_path/rtos/freertos_8.2.3/Source/include/croutine.h"               target="free-rtos/croutine.h"                type="link" sourcePathType="absolute" />
+         <copy source="usbdm_kds_path/rtos/freertos_8.2.3/Source/include/deprecated_definitions.h" target="free-rtos/deprecated_definitions.h"  type="link" sourcePathType="absolute" />
+         <copy source="usbdm_kds_path/rtos/freertos_8.2.3/Source/include/event_groups.h"           target="free-rtos/event_groups.h"            type="link" sourcePathType="absolute" />
+         <copy source="usbdm_kds_path/rtos/freertos_8.2.3/Source/include/FreeRTOS.h"               target="free-rtos/FreeRTOS.h"                type="link" sourcePathType="absolute" />
+         <copy source="usbdm_kds_path/rtos/freertos_8.2.3/Source/include/list.h"                   target="free-rtos/list.h"                    type="link" sourcePathType="absolute" />
+         <copy source="usbdm_kds_path/rtos/freertos_8.2.3/Source/include/mpu_wrappers.h"           target="free-rtos/mpu_wrappers.h"            type="link" sourcePathType="absolute" />
+         <copy source="usbdm_kds_path/rtos/freertos_8.2.3/Source/include/portable.h"               target="free-rtos/portable.h"                type="link" sourcePathType="absolute" />
+         <copy source="usbdm_kds_path/rtos/freertos_8.2.3/Source/include/projdefs.h"               target="free-rtos/projdefs.h"                type="link" sourcePathType="absolute" />
+         <copy source="usbdm_kds_path/rtos/freertos_8.2.3/Source/include/queue.h"                  target="free-rtos/queue.h"                   type="link" sourcePathType="absolute" />
+         <copy source="usbdm_kds_path/rtos/freertos_8.2.3/Source/include/semphr.h"                 target="free-rtos/semphr.h"                  type="link" sourcePathType="absolute" />
+         <copy source="usbdm_kds_path/rtos/freertos_8.2.3/Source/include/StackMacros.h"            target="free-rtos/StackMacros.h"             type="link" sourcePathType="absolute" />
+         <copy source="usbdm_kds_path/rtos/freertos_8.2.3/Source/include/task.h"                   target="free-rtos/task.h"                    type="link" sourcePathType="absolute" />
+         <copy source="usbdm_kds_path/rtos/freertos_8.2.3/Source/include/timers.h"                 target="free-rtos/timers.h"                  type="link" sourcePathType="absolute" />
+
+         <copy source="usbdm_kds_path/rtos/freertos_8.2.3/Source/portable/MemMang/heap_1.c"        target="free-rtos/heap_1.c"         type="link" sourcePathType="absolute" />
+         <copy source="usbdm_kds_path/rtos/freertos_8.2.3/Source/portable/MemMang/heap_2.c"        target="free-rtos/heap_2.c"         type="link" sourcePathType="absolute" />
+         <copy source="usbdm_kds_path/rtos/freertos_8.2.3/Source/portable/MemMang/heap_3.c"        target="free-rtos/heap_3.c"         type="link" sourcePathType="absolute" />
+         <copy source="usbdm_kds_path/rtos/freertos_8.2.3/Source/portable/MemMang/heap_4.c"        target="free-rtos/heap_4.c"         type="link" sourcePathType="absolute" />
+         <copy source="usbdm_kds_path/rtos/freertos_8.2.3/Source/portable/MemMang/heap_5.c"        target="free-rtos/heap_5.c"         type="link" sourcePathType="absolute" />
+
+         <copy source="usbdm_kds_path/rtos/freertos_8.2.3/Source/croutine.c"                target="free-rtos/croutine.c"                type="link" sourcePathType="absolute" />
+         <copy source="usbdm_kds_path/rtos/freertos_8.2.3/Source/event_groups.c"            target="free-rtos/event_groups.c"            type="link" sourcePathType="absolute" />
+         <copy source="usbdm_kds_path/rtos/freertos_8.2.3/Source/list.c"                    target="free-rtos/list.c"                    type="link" sourcePathType="absolute" />
+         <copy source="usbdm_kds_path/rtos/freertos_8.2.3/Source/queue.c"                   target="free-rtos/queue.c"                   type="link" sourcePathType="absolute" />
+         <copy source="usbdm_kds_path/rtos/freertos_8.2.3/Source/tasks.c"                   target="free-rtos/tasks.c"                   type="link" sourcePathType="absolute" />
+         <copy source="usbdm_kds_path/rtos/freertos_8.2.3/Source/timers.c"                  target="free-rtos/timers.c"                  type="link" sourcePathType="absolute" />
+      </projectActionList>
+   </projectActionList>
+
+</root>

@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no" ?>
+<!DOCTYPE root SYSTEM "../package.dtd">
+
+<root version="1.0">
+   <!-- Cortex-M0 FreeRTOS RTOS -->
+   <projectActionList id="Cortex-M0-FreeRTOS" >
+      <applyWhen>
+         <and>
+            <deviceFamilyIs>CortexM0</deviceFamilyIs>
+            <variableRef idRef="linkerRamSize"   condition="greaterThan" value="2048" />
+            <variableRef idRef="linkerFlashSize" condition="greaterThan" value="4096" />
+            <variableRef idRef="outputType"      condition="matches"     value=".*ProjectType\.exe$" />
+         </and>
+      </applyWhen>
+      <variable id="projectOptionValue.FreeRTOS" 
+         name="FreeRTOS" 
+         description="Adds FreeRTOS framework for Cortex M0" 
+         checkGroup="group-additional-options" />
+      
+      <projectActionList id="FreeRTOS-noCpp-noBlinky">
+         <applyWhen>
+            <and>
+               <variableRef      idRef="projectOptionValue.FreeRTOS"         defaultValue="false" />
+               <not><variableRef idRef="projectOptionValue.CPP-abstraction"  defaultValue="false" /></not>
+               <not><variableRef idRef="projectOptionValue.FRDM-Blinky"      defaultValue="false" /></not>
+            </and>
+         </applyWhen>
+         <!-- Default RTX C main -->
+         <projectActionList>
+            <applyWhen>
+               <not><variableRef idRef="hasCCNature" condition="isTrue" /></not>
+            </applyWhen>
+            <copy source="Sources/main-RTX.c" target="Sources/main.c" overwrite="true" />
+         </projectActionList>
+         <!-- Default RTX CPP main -->
+         <projectActionList>
+            <applyWhen>
+               <variableRef idRef="hasCCNature" condition="isTrue" />
+            </applyWhen>
+            <copy source="Sources/main-RTX.c" target="Sources/main.cpp" overwrite="true" />
+         </projectActionList>
+      </projectActionList>
+      
+      <projectActionList id="FreeRTOS-noCpp-blinky">
+         <applyWhen>
+            <and>
+               <variableRef      idRef="projectOptionValue.FreeRTOS" />
+               <not><variableRef idRef="projectOptionValue.CPP-abstraction"  defaultValue="false" /></not>
+               <variableRef      idRef="projectOptionValue.FRDM-Blinky"      defaultValue="false" />
+            </and>
+         </applyWhen>
+         <!-- Blinky RTX C main -->
+         <projectActionList>
+            <applyWhen>
+               <not><variableRef idRef="hasCCNature" condition="isTrue" /></not>
+            </applyWhen>
+            <copy source="Sources/main-RTX-Blinky.c" target="Sources/main.c" overwrite="true" />
+         </projectActionList>
+         <!-- Blinky RTX CPP main -->
+         <projectActionList>
+            <applyWhen>
+               <variableRef idRef="hasCCNature" condition="isTrue" />
+            </applyWhen>
+            <copy source="Sources/main-RTX-Blinky.c" target="Sources/main.cpp" overwrite="true" />
+         </projectActionList>
+      </projectActionList>
+
+      <!-- CPP-abstraction RTX files -->
+      <projectActionList id="FreeRTOS-Cpp">
+         <applyWhen>
+            <and>
+               <variableRef idRef="projectOptionValue.FreeRTOS" />
+               <variableRef idRef="projectOptionValue.CPP-abstraction"  defaultValue="false" />
+            </and>
+         </applyWhen>
+      </projectActionList>
+      
+      <projectActionList id="FreeRTOS-base">
+         <applyWhen>
+            <variableRef idRef="projectOptionValue.FreeRTOS" />
+         </applyWhen>
+         <constant id="FreeRTOS.stack.size"   value="100" />
+         <createFolder target="FreeRTOS"            type="include" />
+	 
+         <copy source="../FreeRTOS/Doc/index.html"      target="FreeRTOS.html" type="link" />
+         <copy source="../FreeRTOS/Source"              target="FreeRTOS/Source" />
+         <copy source="../FreeRTOS/License/license.txt" target="FreeRTOS/License.txt" />
+         
+         <copy source="../FreeRTOS/Source/Portable/MemMang/heap_1.c"          target="FreeRTOS/Source/heap_1.c" />
+         <copy source="../FreeRTOS/Source/Portable/GCC/ARM_CM0/port.c"        target="FreeRTOS/Source/port.c" />
+         <copy source="../FreeRTOS/Source/Portable/GCC/ARM_CM0/portmacro.h"   target="FreeRTOS/Source/include/portmacro.h" />
+         
+         <copy source="Sources/FreeRTOSConfig.h"     target="Sources/FreeRTOSConfig.h" />
+         <copy source="Sources/FreeRTOSConfig.cfg"   target="Sources/FreeRTOSConfig.cfg" />
+         
+         <projectOption id="net.sourceforge.usbdm.gnu.c.compiler.option.include.paths">
+            <value>&quot;${ProjDirPath}/FreeRTOS/Source/include&quot;</value>
+            <value>&quot;${ProjDirPath}/FreeRTOS/Source&quot;</value>
+         </projectOption>
+         <projectOption id="net.sourceforge.usbdm.gnu.cpp.compiler.option.include.paths">
+            <value>&quot;${ProjDirPath}/FreeRTOS/Source/include&quot;</value>
+            <value>&quot;${ProjDirPath}/FreeRTOS/Source&quot;</value>
+         </projectOption>
+         <projectOption id="net.sourceforge.usbdm.gnu.c.compiler.option.preprocessor.def.symbols">
+            <value>__CORTEX_M0</value>
+            <value>__FREERTOS</value>
+         </projectOption>
+         <projectOption id="net.sourceforge.usbdm.gnu.cpp.compiler.option.preprocessor.def.symbols">
+            <value>__CORTEX_M0</value>
+            <value>__FREERTOS</value>
+         </projectOption>
+      </projectActionList>
+   </projectActionList>
+
+</root>
