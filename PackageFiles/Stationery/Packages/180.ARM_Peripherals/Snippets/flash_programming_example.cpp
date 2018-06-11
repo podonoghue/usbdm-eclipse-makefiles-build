@@ -1,4 +1,4 @@
- /**
+/**
  ============================================================================
  * @file    flash_programming_example.cpp (180.ARM_Peripherals)
  * @brief   Basic C++ demo of Flash programming interface
@@ -86,31 +86,32 @@ void printDump(uint8_t *address, uint32_t size) {
  * Flash programming example
  */
 int main(void) {
-   printf("Starting\n\r");
+   console.writeln("Starting");
    static_assert(((sizeof(copy)&(sectorSize-1)) == 0), "Data must be correct size");
    usbdm_assert((((unsigned)copy&(sectorSize-1)) == 0), "Data must be correct size");
 
    // Report original flash contents
-   printf("Flash before programming\n\r");
+   console.writeln("Flash before programming");
    printDump(copy, sizeof(copy));
 
    // Erase array located in flash
    FlashDriverError_t rc = Flash::eraseRange(copy, sizeof(copy));
    if (rc != USBDM::FLASH_ERR_OK) {
-      printf("Flash erasing failed\n\r");
+      console.writeln("Flash erasing failed");
       __BKPT();
    }
 
    // Report programmed flash contents
-   printf("Flash after erasing\n\r");
+   console.writeln("Flash after erasing");
    printDump(copy, sizeof(copy));
 
    // Verify programmed data
    for (uint index=0; index<sizeof(copy); index++) {
       if (copy[index] != 0xFF) {
-         printf("Flash failed erase @%p: (data[%3d],0x%02X) != 0xFF\n\r",
-               &copy[index], index, copy[index]);
-         printf("Verify of flash erasing failed\n\r");
+         console.
+         write("Flash failed erase @").write(&copy[index]).
+         write(": (data[").write(index).write("],").write(copy[index]).writeln(") != 0xFF");
+         console.writeln("Verify of flash erasing failed\n\r");
          __BKPT();
       }
    }
@@ -123,25 +124,27 @@ int main(void) {
    // Program data to array located in flash
    rc = Flash::programRange(data, copy, sizeof(data));
    if (rc != USBDM::FLASH_ERR_OK) {
-      printf("Flash programming failed\n\r");
+      console.writeln("Flash programming failed\n\r");
       __BKPT();
    }
 
    // Report programmed flash contents
-   printf("Flash after programming\n\r");
+   console.writeln("Flash after programming\n\r");
    printDump(copy, sizeof(copy));
 
    // Verify programmed data
    for (uint index=0; index<sizeof(data); index++) {
       if (data[index] != copy[index]) {
-         printf("Flash failed verify @%p: (data[%3d],0x%02X) != (copy[%3d],0x%02X)\n\r",
-               &copy[index], index, data[index], index, copy[index]);
-         printf("Verify of flash programming failed\n\r");
+         console.
+         write("Flash failed verify @").write(&copy[index]).
+         write(": (data[").write(index).write("],").write(data[index]).write(") != ").
+         write(": (copy[").write(index).write("],").writeln(copy[index]);
+         console.writeln("Verify of flash programming failed\n\r");
          __BKPT();
       }
    }
 
-   printf("Flash programming sequence completed without error\n\r");
+   console.writeln("Flash programming sequence completed without error\n\r");
 
    for(;;) {
       __asm__("bkpt");

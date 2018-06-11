@@ -30,7 +30,7 @@ using namespace USBDM;
 
 // Define clock modes to use
 static ClockConfig HSRUN_CLOCK_CONFIG  = ClockConfig_PEE_120MHz;
-static ClockConfig RUN_CLOCK_CONFIG    = ClockConfig_PEE_80MHz;
+static ClockConfig RUN_CLOCK_CONFIG    = ClockConfig_PEE_60MHz;
 static ClockConfig VLPR_CLOCK_CONFIG   = ClockConfig_BLPE_4MHz;
 
 // May need reduced baud rate for slow clocks
@@ -47,7 +47,7 @@ using WakeupTimer = Lptmr0;
 static constexpr unsigned FILTER_NUM = 0;
 
 // LLWU Pin to use for wake-up
-static constexpr LlwuPin  WAKEUP_PIN = LlwuPin_ptc1;
+static constexpr LlwuPin  WAKEUP_PIN = LlwuPin_Ptc1;
 
 // LLWU pin configuration
 using WakeupPin = PcrTable_T<LlwuInfo, WAKEUP_PIN>;
@@ -152,7 +152,7 @@ void testStopMode(
     * This assumes run mode is PEE
     */
    if (Smc::getStatus() == SmcStatus_run) {
-      Mcg::clockTransition(McgInfo::clockInfo[RUN_CLOCK_CONFIG]);
+      Mcg::clockTransition(McgInfo::ClockInfo[RUN_CLOCK_CONFIG]);
       console.setBaudRate(BAUD_RATE);
       console.writeln("Awake!").flushOutput();
       console.writeln("Restored clock frequency").flushOutput();
@@ -371,12 +371,12 @@ SmcStatus changeRunMode() {
    SmcStatus smcStatus = Smc::getStatus();
    if (smcStatus == SmcStatus_hsrun) {
       // HSRUN->RUN
-      Mcg::clockTransition(McgInfo::clockInfo[RUN_CLOCK_CONFIG]);
+      Mcg::clockTransition(McgInfo::ClockInfo[RUN_CLOCK_CONFIG]);
       Smc::enterRunMode(SmcRunMode_Normal);
       console.setBaudRate(defaultBaudRate);
       console.writeln("Changed to RUN mode").flushOutput();
       // RUN->VLPR
-      Mcg::clockTransition(McgInfo::clockInfo[VLPR_CLOCK_CONFIG]);
+      Mcg::clockTransition(McgInfo::ClockInfo[VLPR_CLOCK_CONFIG]);
       Smc::enterRunMode(SmcRunMode_VeryLowPower);
       console.setBaudRate(BAUD_RATE);
       console.writeln("Changed to VLPR mode").flushOutput();
@@ -384,14 +384,14 @@ SmcStatus changeRunMode() {
    else if (smcStatus == SmcStatus_vlpr) {
       // VLPR->RUN mode
       Smc::enterRunMode(SmcRunMode_Normal);
-      Mcg::clockTransition(McgInfo::clockInfo[RUN_CLOCK_CONFIG]);
+      Mcg::clockTransition(McgInfo::ClockInfo[RUN_CLOCK_CONFIG]);
       console.setBaudRate(BAUD_RATE);
       console.writeln("Changed to RUN mode").flushOutput();
    }
    else if (smcStatus == SmcStatus_run) {
       // RUN->HSRUN
       Smc::enterRunMode(SmcRunMode_HighSpeed);
-      Mcg::clockTransition(McgInfo::clockInfo[HSRUN_CLOCK_CONFIG]);
+      Mcg::clockTransition(McgInfo::ClockInfo[HSRUN_CLOCK_CONFIG]);
       console.setBaudRate(defaultBaudRate);
       console.writeln("Changed to HSRUN mode").flushOutput();
    }

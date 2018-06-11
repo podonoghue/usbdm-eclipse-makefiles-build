@@ -63,6 +63,7 @@ public:
     */
    void enQueue(T element) {
       bool success = enQueueDiscardOnFull(element);
+      (void)success;
       usbdm_assert(success, "Queue full");
    }
    /*

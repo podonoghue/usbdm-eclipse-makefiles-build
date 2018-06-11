@@ -50,8 +50,7 @@ void report(FXOS8700CQ &accelerometer) {
 int main() {
    printf("Starting\n");
 
-   uint8_t id = accelmag.readID();
-   printf("Device ID = 0x%02X (should be 0xC7)\n", id);
+   console.write("Device ID = 0x").write(accelerometer.readID(), Radix_16).writeln("(should be 0xC7)");
 
    // Enable both Accelerometer and magnetometer
    accelmag.enable(FXOS8700CQ::ACCEL_MAG);
@@ -66,14 +65,14 @@ int main() {
    // Make sure we have new values
    waitMS(100);
 
-   printf("After calibration\n");
+   console.writeln("After calibration\n");
    report(accelmag);
 
-   printf("Calibrating magnetometer\n"
+   console.writeln("Calibrating magnetometer\n"
           "Please rotate the board in all dimensions until complete (~20 s)\n");
 
    for (int time=20; time>0; time--) {
-      printf("Calibrating for %2d seconds\n", time);
+      console.write("Calibrating for ").write(time).writeln(" seconds");
       accelmag.calibrateMagnetometer(1);
    }
 
