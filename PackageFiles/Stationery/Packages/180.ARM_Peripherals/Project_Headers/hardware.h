@@ -185,6 +185,13 @@ inline void clearError() {
    errorCode = E_NO_ERROR;
 }
 
+/**
+ * Print simple log message
+ *
+ * @param  Message to print
+ */
+extern void log_error(const char *);
+
 } // End namespace USBDM
 
 // Use when in-lining makes the release build smaller
@@ -203,13 +210,14 @@ inline void clearError() {
 #if defined (DEBUG_BUILD) && !defined (NDEBUG)
 #define USBDM_STRINGIFY(x)  #x
 #define USBDM_TOSTRING(x)   USBDM_STRINGIFY(x)
+
 /**
  * Macro to do ASSERT operation in debug build
  *
  * @param __e Assert expression to evaluate
  * @param __m Message to print if expression is false
  */
-#define USBDM_ASSERT(__e, __m) ((__e) ? (void)0 : (void)console.writeln("Assertion Failed @" __FILE__ ":" USBDM_TOSTRING(__LINE__) " - " __m))
+#define USBDM_ASSERT(__e, __m) ((__e) ? (void)0 : (void)USBDM::log_error("Assertion Failed @" __FILE__ ":" USBDM_TOSTRING(__LINE__) " - " __m))
 #define usbdm_assert(__e, __m) USBDM_ASSERT(__e, __m)
 #else
 /**

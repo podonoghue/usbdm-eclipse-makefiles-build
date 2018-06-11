@@ -126,7 +126,7 @@ static void configureDma() {
     * Structure to define the DMA transfer
     */
    static const DmaTcd tcd {
-      /* uint32_t  SADDR  Source address        */ (uint32_t)(AdcChannel::adc->R),   // ADC result register
+      /* uint32_t  SADDR  Source address        */ (uint32_t)(AdcChannel::adc().R),  // ADC result register
       /* uint16_t  SOFF   SADDR offset          */ 0,                                // SADDR does not change
       /* uint16_t  ATTR   Transfer attributes   */ DMA_ATTR_SSIZE(DmaSize_16bit)|    // 16-bit read from ADR->R (ignores MSBs)
       /*                                        */ DMA_ATTR_DSIZE(DmaSize_16bit),    // 16-bit write to array

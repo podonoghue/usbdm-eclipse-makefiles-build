@@ -112,7 +112,7 @@ public:
     */
    static void disable() {
       vref().SC = 0;
-      *clockReg &= ~Info::clockMask;
+      clockReg() &= ~Info::clockMask;
    }
 };
 

@@ -18,7 +18,7 @@
  * Any manual changes will be lost.
  */
 #include <stdint.h>
-#include <cstdio>       // snprintf()
+//#include <cstdio>       // snprintf()
 #include <ctype.h>      // isspace() etc
 #include "hardware.h"
 
@@ -495,6 +495,15 @@ public:
       fWidth = 0;
       fPadding = Padding_None;
       fRadix = Radix_10;
+      return *this;
+   }
+
+   /**
+    * Null function (for debug)
+    *
+    * @return Reference to self
+    */
+   FormattedIO NOINLINE_DEBUG &null() {
       return *this;
    }
 

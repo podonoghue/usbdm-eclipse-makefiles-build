@@ -5,7 +5,6 @@
  *  Created on: 10/1/2016
  *      Author: podonoghue
  */
-#include <stdio.h>
 #include <string.h>
 
 #include "system.h"
@@ -84,7 +83,7 @@ FlashDriverError_t Flash::executeFlashCommand() {
    volatile uint32_t source_end = (uint32_t)executeFlashCommand&~1;
    volatile uint32_t size       = source_end-source;
 
-   assert(size<sizeof(space));
+   usbdm_assert(size<sizeof(space), "Flash RAM buffer too small");
 
    // Copy routine to RAM (stack)
    memcpy(space, (uint8_t*)(source), size);
@@ -207,8 +206,8 @@ FlashDriverError_t Flash::programRange(const uint8_t *data, uint8_t *address, ui
       // PFLASH
       phraseSize = programFlashPhraseSize;
    }
-   assert((((uint32_t)address)&(phraseSize-1)) == 0);
-   assert((size&(phraseSize-1)) == 0);
+   usbdm_assert((((uint32_t)address)&(phraseSize-1)) == 0, "Address not on Flash boundary");
+   usbdm_assert((size&(phraseSize-1)) == 0, "Size is not multiple of Flash phrase size");
 
    while (size>0) {
       FlashDriverError_t rc = programPhrase(data, address);
@@ -257,8 +256,8 @@ FlashDriverError_t Flash::eraseRange(uint8_t *address, uint32_t size) {
       // PFLASH
       sectorSize = programFlashSectorSize;
    }
-   assert((((uint32_t)address)&(sectorSize-1)) == 0);
-   assert((size&(sectorSize-1)) == 0);
+   usbdm_assert((((uint32_t)address)&(sectorSize-1)) == 0, "Address not on Flash boundary");
+   usbdm_assert((size&(sectorSize-1)) == 0, "Size is not multiple of Flash phrase size");
 
    while (size>0) {
       FlashDriverError_t rc = eraseSector(address);

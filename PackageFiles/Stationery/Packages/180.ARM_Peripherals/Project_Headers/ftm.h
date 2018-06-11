@@ -17,7 +17,6 @@
  * Any manual changes will be lost.
  */
 #include <stddef.h>
-#include <assert.h>
 #include "derivative.h"
 #include <cmath>
 
@@ -143,22 +142,6 @@ enum FtmChannelAction {
    FtmChannelAction_Irq    = FTM_CnSC_CHIE(1)|FTM_CnSC_DMA(0), //!< Interrupt on event
    FtmChannelAction_Dma    = FTM_CnSC_CHIE(0)|FTM_CnSC_DMA(1), //!< Dma on event
    FtmChannelAction_IrqDma = FTM_CnSC_CHIE(1)|FTM_CnSC_DMA(1), //!< Dma+Interrupt on event
-};
-
-/*
- * Enabled Timer interrupt
- */
-enum FtmChannelIrq {
-   FtmChannelIrq_Disable = FTM_CnSC_CHIE(0), //!< Disable interrupts from this channel
-   FtmChannelIrq_Enable  = FTM_CnSC_CHIE(1), //!< Enable interrupts from this channel
-};
-
-/*
- * Enabled Timer DMA
- */
-enum FtmChannelDma {
-   FtmChannelDma_Disable = FTM_CnSC_DMA(0), //!< Disable DMA requests from this channel
-   FtmChannelDma_Enable  = FTM_CnSC_DMA(1), //!< Enable DMA requests from this channel
 };
 
 /**
@@ -1225,7 +1208,7 @@ public:
 
 #ifdef DEBUG_BUILD
       // Check that owning FTM has been enabled
-      assert(Ftm::isEnabled());
+      usbdm_assert(Ftm::isEnabled(), "FTM not enabled");
 #endif
       tmr().CONTROLS[channel].CnSC = ftmChMode|ftmChannelAction;
 

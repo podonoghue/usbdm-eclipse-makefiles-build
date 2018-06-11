@@ -101,7 +101,6 @@ Devices using this peripheral:
    </validate>
 
    <projectActionList id = "uart_files">
-      <copy source="Project_Headers/formatted_io.h"  target="Project_Headers/formatted_io.h"  overwrite="true"  derived="true" />
       <copy source="Project_Headers/uart.h"          target="Project_Headers/uart.h"          overwrite="true"  derived="true" macroReplace="true" />
    </projectActionList>
          

@@ -315,21 +315,21 @@ public:
       }
 #endif
       // Enable clock to peripheral
-      *DmaMuxInfo::clockReg  |= DmaMuxInfo::clockMask;
+      DmaMuxInfo::clockReg()  |= DmaMuxInfo::clockMask;
 
       // Configure channel - must be disabled to change
-      DmaMuxInfo::dmamux->CHCFG[dmaChannel] = 0;
-      DmaMuxInfo::dmamux->CHCFG[dmaChannel] = dmaMuxEnable|DMAMUX_CHCFG_SOURCE(dmaSlot);
+      DmaMuxInfo::dmamux().CHCFG[dmaChannel] = 0;
+      DmaMuxInfo::dmamux().CHCFG[dmaChannel] = dmaMuxEnable|DMAMUX_CHCFG_SOURCE(dmaSlot);
    }
    /**
     * Disable hardware requests on channel
     */
    static void disable(DmaChannelNum dmaChannel) {
       // Enable clock to peripheral
-      *DmaMuxInfo::clockReg  |= DmaMuxInfo::clockMask;
+      DmaMuxInfo::clockReg()  |= DmaMuxInfo::clockMask;
 
       // Disable channel
-      DmaMuxInfo::dmamux->CHCFG[dmaChannel] = 0;
+      DmaMuxInfo::dmamux().CHCFG[dmaChannel] = 0;
    }
 };
 

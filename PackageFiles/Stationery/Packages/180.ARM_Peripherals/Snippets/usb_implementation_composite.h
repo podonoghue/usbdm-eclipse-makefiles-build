@@ -328,7 +328,7 @@ protected:
    /**
     * Callback for SOF tokens
     */
-   static void sofCallback();
+   static ErrorCode sofCallback();
 
    /**
     * Call-back handling BULK-OUT transaction complete
@@ -381,7 +381,7 @@ protected:
     *
     * @note Provides CDC extensions
     */
-   static void handleUserEp0SetupRequests(const SetupPacket &setup);
+   static ErrorCode handleUserEp0SetupRequests(const SetupPacket &setup);
 
    /**
     * CDC Set line coding handler

@@ -109,7 +109,7 @@ void LcdBase::init() {
    spi.setSpeed(10000000);
 
    // Mode 0, MSB first
-   spi.setMode(spiModeValue(SpiMode_0, SpiOrder_MsbFirst));
+   spi.setMode(SpiMode_0, SpiOrder_MsbFirst);
 
    // Use 9-bit transfers
    spi.setFrameSize(9);
@@ -118,7 +118,7 @@ void LcdBase::init() {
    spi.setPeripheralSelect(SpiPeripheralSelect_None, ActiveLow, SpiSelectMode_Idle);
 
    // Save configuration
-   spiConfig = spi.getConfig();
+   spiConfig = spi.getConfiguration();
 
    // Release SPI
    spi.endTransaction();
@@ -223,7 +223,7 @@ void LcdBase::drawBitmap(uint8_t bmp[131*131]) {
    txData(131);
    // WRITE MEMORY
    txCommand(P_RAMWR);
-   for (j = 0; j < sizeof(bmp); j++) {
+   for (j = 0; j < sizeof(uint8_t[131*131]); j++) {
       txData(bmp[j]);
    }
    // Memory access controller (command 0x36)

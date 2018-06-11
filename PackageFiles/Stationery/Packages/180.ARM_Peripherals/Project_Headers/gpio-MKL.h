@@ -18,7 +18,6 @@
  * Any manual changes will be lost.
  */
 #include <stddef.h>
-#include <assert.h>
 #include "derivative.h"
 #ifdef RELEASE_BUILD
 #include "bme.h"
@@ -662,12 +661,12 @@ class Field_T {
    static_assert(((left<=31)&&(left>=right)&&(right>=0)), "Illegal bit number for left or right in GpioField");
 
 private:
-   static volatile GPIO_Type &gpio() { return reinterpret_cast<volatile GPIO_Type *>(Info::pinInfo.gpioAddress); }
+   static volatile GPIO_Type &gpio() { return *reinterpret_cast<volatile GPIO_Type *>(Info::pinInfo.gpioAddress); }
 
 #ifdef PORT_DFCR_CS_MASK
-   static volatile PORT_DFER_Type &port() { return reinterpret_cast<volatile PORT_DFER_Type *>(Info::pinInfo.portAddress); }
+   static volatile PORT_DFER_Type &port() { return *reinterpret_cast<volatile PORT_DFER_Type *>(Info::pinInfo.portAddress); }
 #else
-   static volatile PORT_Type &port() { return reinterpret_cast<volatile PORT_Type *>(Info::pinInfo.portAddress); }
+   static volatile PORT_Type &port() { return *reinterpret_cast<volatile PORT_Type *>(Info::pinInfo.portAddress); }
 #endif
    /**
     * Mask for the bits being manipulated

@@ -427,7 +427,7 @@ public:
     *  @note: Size of txData and rxData should be appropriate for transmission size.
     */
    void txRx(uint32_t dataSize, const uint8_t *txData, uint8_t *rxData=nullptr) {
-//      assert((txData != nullptr)||(rxData != nullptr));
+//      usbdm_assert((txData != nullptr)||(rxData != nullptr), "Buffer pointers are null");
 
       bytesRemaining = dataSize;
       txDataPtr      = txData;

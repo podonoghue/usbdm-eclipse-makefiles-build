@@ -17,7 +17,6 @@
  */
 #include <climits>
 #include <cstddef>
-#include <cassert>
 #include "derivative.h"
 
 /*
@@ -530,7 +529,7 @@ public:
     */
    static void enableComparison(AdcCompare adcCompare, int low=INT_MIN, int high=INT_MAX) {
 #ifdef DEBUG_BUILD
-      assert (low<=high);
+      usbdm_assert (low<=high, "ADC Low level > high level");
 #endif
       // Juggle CV1, CV2 values to satisfy comparison rules
       switch (adcCompare) {

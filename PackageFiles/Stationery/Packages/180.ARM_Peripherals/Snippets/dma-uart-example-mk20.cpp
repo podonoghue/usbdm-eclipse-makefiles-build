@@ -16,7 +16,6 @@
  *
  * This example requires interrupts to be enabled in the USBDM configuration for the following:
  * - DMA
- * - PIT
  *
  * The LED should be assigned to a suitable GPIO
  *

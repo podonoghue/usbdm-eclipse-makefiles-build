@@ -87,10 +87,10 @@ public:
     */
    static void enableAlarmInterrupts(bool enable=true) {
       if (enable) {
-         RTC->IER   |= RTC_IER_TAIE_MASK;
+         rtc().IER   |= RTC_IER_TAIE_MASK;
       }
       else {
-         RTC->IER   &= ~RTC_IER_TAIE_MASK;
+         rtc().IER   &= ~RTC_IER_TAIE_MASK;
       }
    }
    /**
@@ -100,10 +100,10 @@ public:
     */
    static void enableSecondsInterrupts(bool enable=true) {
       if (enable) {
-         RTC->IER   |= RTC_IER_TSIE_MASK;
+         rtc().IER   |= RTC_IER_TSIE_MASK;
       }
       else {
-         RTC->IER   &= ~RTC_IER_TSIE_MASK;
+         rtc().IER   &= ~RTC_IER_TSIE_MASK;
       }
    }
    /**

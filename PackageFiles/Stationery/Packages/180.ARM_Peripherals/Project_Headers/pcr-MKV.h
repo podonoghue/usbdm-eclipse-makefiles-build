@@ -16,7 +16,6 @@
  * Any manual changes will be lost.
  */
 #include <stddef.h>
-#include <assert.h>
 #include "derivative.h"
 #include "bitband.h"
 

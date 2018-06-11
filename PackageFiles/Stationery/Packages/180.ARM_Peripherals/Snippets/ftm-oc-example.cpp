@@ -61,7 +61,7 @@ int main() {
          FtmClockSource_System,  // Bus clock usually
          FtmPrescale_1);         // The prescaler will be re-calculated later
 
-   // Set IC/OC measurement period to accommodate maximum period + 10%
+   // Set IC/OC measurement period to longest interval + 10%
    // This adjusts the prescaler value but does not change the clock source
    Timer::setMeasurementPeriod(1.1*WAVEFORM_PERIOD/2.0);
 
@@ -90,7 +90,7 @@ int main() {
    // Configure the channel
    TimerChannel::configure(
          FtmChMode_OutputCompareToggle, //  Output Compare with pin toggle
-         FtmChannelIrq_Enable);         //  + interrupts on events
+         FtmChannelAction_Irq);         //  + interrupts on events
 
    // Check if configuration failed
    USBDM::checkError();

@@ -71,6 +71,9 @@ int console_rxChar(void) {
    return console.readChar();
 }
 
+void log_error(const char *msg) {
+   console.writeln(msg);
+}
 /**
  * @}
  */

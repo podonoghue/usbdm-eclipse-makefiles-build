@@ -17,7 +17,11 @@
       <!-- These constant enables external peripheral features -->
       <constant id="cpp.peripheral.external.max30100"          value="true" />
       <constant id="cpp.peripheral.external.elecfreaks-lcd"    value="true" />
-      <constant id="cpp.peripheral.external.gps"    value="true" />
+      <constant id="cpp.peripheral.external.gps"               value="true" />
+      <constant id="demo.lcd.elecfreaks.backlight"             value="GpioC&lt;2&gt;" />
+      <constant id="demo.lcd.elecfreaks.cs"                    value="GpioA&lt;2&gt;" />
+      <constant id="demo.lcd.elecfreaks.reset"                 value="GpioA&lt;12&gt;" />
+      <constant id="demo.lcd.elecfreaks.backlight.ftm"         value="Ftm0&lt;1&gt;" />
 
       <projectActionList>
          <applyWhen >

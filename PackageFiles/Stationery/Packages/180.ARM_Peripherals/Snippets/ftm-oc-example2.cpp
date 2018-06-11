@@ -72,9 +72,6 @@ static bool odd = true;
 
 int main() {
 
-   /**
-    * FTM channel set as Output compare with pin Toggle mode and using a callback function
-    */
    // Configure base FTM (affects all channels)
    Timer::configure(
          FtmMode_LeftAlign,      // Left-aligned is required for OC/IC
@@ -97,16 +94,21 @@ int main() {
    Timer::enableNvicInterrupts();
 
    // Configure pin associated with channel
-   TimerChannel::setDriveStrength(PinDriveStrength_High);
-   TimerChannel::setDriveMode(PinDriveMode_PushPull);
+   TimerChannel::setOutput(
+         PinDriveStrength_High,
+         PinDriveMode_PushPull,
+         PinSlewRate_Slow);
+   // or change individual attributes
+   //  TimerChannel::setDriveStrength(PinDriveStrength_High);
+   //  TimerChannel::setDriveMode(PinDriveMode_PushPull);
 
    // Trigger 1st interrupt at now+100
    TimerChannel::setRelativeEventTime(100);
 
-   // Configure the channel
+   // Configure channel
    TimerChannel::configure(
          FtmChMode_OutputCompareSet, //  Output Compare with pin set
-         FtmChannelIrq_Enable);      //  + interrupts on events
+         FtmChannelAction_Irq);      //  + interrupts on events
 
    // Check if configuration failed
    USBDM::checkError();

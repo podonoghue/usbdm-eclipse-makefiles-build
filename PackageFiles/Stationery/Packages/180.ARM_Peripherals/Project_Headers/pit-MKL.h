@@ -181,7 +181,7 @@ public:
     */
    static void disable() {
       pit().MCR = PIT_MCR_MDIS(1);
-      *clockReg &= ~Info::clockMask;
+      clockReg() &= ~Info::clockMask;
    }
 
    /**

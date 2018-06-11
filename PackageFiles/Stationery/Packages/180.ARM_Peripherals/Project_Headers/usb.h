@@ -17,12 +17,12 @@
  * This file is generated automatically.
  * Any manual changes will be lost.
  */
-#include <stdio.h>
 #include <cstring>
 #include "hardware.h"
 #include "usb_defs.h"
 #include "utilities.h"
 #include "usb_endpoint.h"
+#include "stringFormatter.h"
 
 namespace USBDM {
 
@@ -270,7 +270,7 @@ protected:
 
    /** Used to record Suspend/Resume events */
    static int fSuspendCounter;
-   
+
 public:
    /**
     * Configures all mapped pins associated with this peripheral
@@ -562,7 +562,7 @@ protected:
     */
    static void handleUnexpectedSetup() {
       if (fUnhandledSetupCallback(fEp0SetupBuffer) != E_NO_ERROR) {
-         PRINTF("handleUnexpectedSetup(%s)\n", reportSetupPacket(&fEp0SetupBuffer));
+         console.WRITE("handleUnexpectedSetup(").WRITE(reportSetupPacket(&fEp0SetupBuffer)).WRITELN(")");
          fControlEndpoint.stall();
       }
    }
@@ -615,7 +615,7 @@ protected:
       // Setup callback to update address at end of transaction
       static auto callback = []() {
          setUSBaddressedState(newAddress);
-         //PRINTF("setAddresscb - %d\n", newAddress);
+         //console.WRITE("setAddress-cb - ).WRITELN(newAddress, Radix_16);
       };
       setSetupCompleteCallback(callback);
 
@@ -648,7 +648,7 @@ protected:
    static void handleGetInterface() {
       static const uint8_t interfaceAltSetting = 0;
 
-      //   PUTS("getInterface");
+      //   console.WRITELN("getInterface");
 
       if ((fEp0SetupBuffer.bmRequestType != (EP_IN|RT_INTERFACE)) || // NOT In,Standard,Interface
             (fEp0SetupBuffer.wLength != 1)) {                        // NOT correct length
@@ -794,7 +794,7 @@ void UsbBase_T<Info, EP0_SIZE>::handleSetupToken() {
    // Call-backs only persist during a SETUP transaction
    setSetupCompleteCallback(nullptr);
 
-//   PRINTF("handleSetupToken(%s)\n", reportSetupPacket(&fEp0SetupBuffer));
+//   console.WRITE("handleSetupToken - ").WRITELN(reportSetupPacket(&fEp0SetupBuffer));
 
    switch(REQ_TYPE(fEp0SetupBuffer.bmRequestType)) {
       case REQ_TYPE_STANDARD :
@@ -825,13 +825,13 @@ void UsbBase_T<Info, EP0_SIZE>::handleSetupToken() {
          switch (fEp0SetupBuffer.bRequest) {
 #ifdef MS_COMPATIBLE_ID_FEATURE
             case MS_VENDOR_CODE :
-               //               PUTS("REQ_TYPE_VENDOR - VENDOR_CODE");
+               //               console.WRITELN("REQ_TYPE_VENDOR - VENDOR_CODE");
                if (fEp0SetupBuffer.wIndex == 0x0004) {
-                  //                  PUTS("REQ_TYPE_VENDOR - MS_CompatibleIdFeatureDescriptor");
+                  //                  console.WRITELN("REQ_TYPE_VENDOR - MS_CompatibleIdFeatureDescriptor");
                   ep0StartTxTransaction(sizeof(MS_CompatibleIdFeatureDescriptor), (const uint8_t *)&msCompatibleIdFeatureDescriptor);
                }
                else if (fEp0SetupBuffer.wIndex == 0x0005) {
-                  //                  PUTS("REQ_TYPE_VENDOR - MS_PropertiesFeatureDescriptor");
+                  //                  console.WRITELN("REQ_TYPE_VENDOR - MS_PropertiesFeatureDescriptor");
                   ep0StartTxTransaction(sizeof(MS_PropertiesFeatureDescriptor), (const uint8_t *)&msPropertiesFeatureDescriptor);
                }
                else {
@@ -884,15 +884,15 @@ bool UsbBase_T<Info, EP0_SIZE>::handleTokenComplete() {
    // Control - Accept SETUP, IN or OUT token
 #if 0
    if (bdt->u.result.tok_pid == SETUPToken) {
-      PUTS("\n=====");
+      console.WRITELN("\n=====");
    }
-   PRINTF("\nTOKEN=%s, STATE=%s, size=%d, %s, %s, %s\n",
-         getTokenName(bdt->u.result.tok_pid),
-         getStateName(fControlEndpoint.getHardwareState().state),
-         bdt->bc,
-         (usbStat&USB_STAT_TX_MASK)?"Tx":"Rx",
-               bdt->u.result.data0_1?"DATA1":"DATA0",
-                     (usbStat&USB_STAT_ODD_MASK)?"Odd":"Even");
+   console.
+      WRITE("\nTOKEN=").WRITE(getTokenName(bdt->u.result.tok_pid)).
+      WRITE(", STATE=").WRITE(getStateName(fControlEndpoint.getHardwareState().state)).
+      WRITE(", size=").WRITE(bdt->bc).
+      WRITE((usbStat&USB_STAT_TX_MASK)?", Tx":", Rx").
+      WRITE(bdt->u.result.data0_1?", DATA1":", DATA0").
+      WRITELN((usbStat&USB_STAT_ODD_MASK)?", Odd":", Even");
 #endif
    switch (bdt->u.result.tok_pid) {
       case SETUPToken:
@@ -905,7 +905,7 @@ bool UsbBase_T<Info, EP0_SIZE>::handleTokenComplete() {
          fControlEndpoint.handleOutToken();
          break;
       default:
-         PRINTF("Unexpected token on EP0 = %s\n", getTokenName(bdt->u.result.tok_pid));
+         console.WRITE("Unexpected token on EP0 = ").WRITELN(getTokenName(bdt->u.result.tok_pid));
          break;
    }
    // Indicate processed
@@ -918,7 +918,7 @@ bool UsbBase_T<Info, EP0_SIZE>::handleTokenComplete() {
  */
 template<class Info, int EP0_SIZE>
 void UsbBase_T<Info, EP0_SIZE>::handleUSBReset() {
-//   PUTS("\nReset");
+//   console.WRITELN("\nReset");
 
    // Disable all interrupts
    fUsb().INTEN = 0x00;
@@ -929,7 +929,7 @@ void UsbBase_T<Info, EP0_SIZE>::handleUSBReset() {
 
    // Clear most USB interrupt flags
    fUsb().ISTAT = (uint8_t)~USB_ISTAT_TOKDNE_MASK;
-   
+
    // Set initial USB state
    setUSBdefaultState();
 
@@ -951,7 +951,7 @@ void UsbBase_T<Info, EP0_SIZE>::handleUSBReset() {
  */
 template<class Info, int EP0_SIZE>
 void UsbBase_T<Info, EP0_SIZE>::handleUSBSuspend() {
-//   PUTS("Suspend");
+//   console.WRITELN("Suspend");
    if (fConnectionState != USBconfigured) {
       // Ignore if not configured
       return;
@@ -981,7 +981,7 @@ void UsbBase_T<Info, EP0_SIZE>::handleUSBSuspend() {
  */
 template<class Info, int EP0_SIZE>
 void UsbBase_T<Info, EP0_SIZE>::handleUSBResume() {
-//   PUTS("Resume");
+//   console.WRITELN("Resume");
 
    if (--fSuspendCounter>0) {
       // Ignore as may be noise
@@ -1043,7 +1043,7 @@ void UsbBase_T<Info, EP0_SIZE>::ep0TransactionCallback(EndpointState state) {
          ep0ConfigureSetupTransaction();
          break;
       default:
-         PRINTF("Unhandled %d\n", state);
+         console.WRITE("Unhandled ").WRITELN(getStateName(state));
          break;
    }
 
@@ -1162,7 +1162,7 @@ void UsbBase_T<Info, EP0_SIZE>::addEndpoint(Endpoint *endpoint) {
 template<class Info, int EP0_SIZE>
 void UsbBase_T<Info, EP0_SIZE>::initialiseEndpoints() {
 
-   //   PUTS("initialiseEndpoints()");
+   //   console.WRITELN("initialiseEndpoints()");
 
    // Clear all BDTs
    memset((uint8_t*)(endPointBdts), 0, sizeof(EndpointBdtEntry[UsbImplementation::NUMBER_OF_ENDPOINTS]));
@@ -1185,7 +1185,7 @@ void UsbBase_T<Info, EP0_SIZE>::initialiseEndpoints() {
 template<class Info, int EP0_SIZE>
 void UsbBase_T<Info, EP0_SIZE>::handleGetStatus() {
 
-//   PRINTF("handleGetStatus()\n");
+//   console.WRITELN("handleGetStatus()\n");
 
    static const uint8_t        zeroReturn[]    = {0,0};
    static const EndpointStatus epStatusStalled = {1,0,0};
@@ -1253,7 +1253,7 @@ void UsbBase_T<Info, EP0_SIZE>::handleClearFeature() {
                (epNum >= UsbImplementation::NUMBER_OF_ENDPOINTS))  { // or illegal EP# (ignores direction)
             break;
          }
-         assert(fEndPoints[epNum] != nullptr);
+         usbdm_assert(fEndPoints[epNum] != nullptr, "NULL Endpoint");
          fEndPoints[epNum]->clearStall();
          okResponse = true;
       }
@@ -1297,7 +1297,7 @@ void UsbBase_T<Info, EP0_SIZE>::handleSetFeature() {
                (epNum >= UsbImplementation::NUMBER_OF_ENDPOINTS))  {                   // or illegal EP# (ignores direction)
             break;
          }
-         assert(fEndPoints[epNum] != nullptr);
+         usbdm_assert(fEndPoints[epNum] != nullptr, "NULL Endpoint");
          fEndPoints[epNum]->stall();
          okResponse = true;
       }
@@ -1323,7 +1323,7 @@ void UsbBase_T<Info, EP0_SIZE>::handleGetDescriptor() {
    uint16_t        dataSize = 0;
    const uint8_t  *dataPtr = nullptr;
 
-//   PRINTF("handleGetDescriptor(%d:%d)\n", fEp0SetupBuffer.wValue.hi(), fEp0SetupBuffer.wValue.lo());
+//   console.WRITE("handleGetDescriptor").WRITE(fEp0SetupBuffer.wValue.hi()).WRITE(":").WRITELN(fEp0SetupBuffer.wValue.lo());
 
    if (fEp0SetupBuffer.bmRequestType != (EP_IN|RT_DEVICE)) {
       // Must be In,Standard,Device
@@ -1333,12 +1333,12 @@ void UsbBase_T<Info, EP0_SIZE>::handleGetDescriptor() {
    switch (fEp0SetupBuffer.wValue.hi()) {
 
       case DT_DEVICE: // Get Device Descriptor - 1
-         //      PUTS("getDescriptor-device - ");
+         //      console.WRITELN("getDescriptor-device - ");
          dataPtr  = (uint8_t *) &UsbImplementation::deviceDescriptor;
          dataSize = sizeof(UsbImplementation::deviceDescriptor);
          break;
       case DT_CONFIGURATION: // Get Configuration Descriptor - 2
-         //      PUTS("getDescriptor-config - ");
+         //      console.WRITELN("getDescriptor-config - ");
          if (fEp0SetupBuffer.wValue.lo() != 0) {
             fControlEndpoint.stall();
             return;
@@ -1347,14 +1347,14 @@ void UsbBase_T<Info, EP0_SIZE>::handleGetDescriptor() {
          dataSize = sizeof(UsbImplementation::otherDescriptors);
          break;
       case DT_DEVICEQUALIFIER: // Get Device Qualifier Descriptor
-         //      PUTS("getDescriptor-deviceQ - ");
+         //      console.WRITELN("getDescriptor-deviceQ - ");
          fControlEndpoint.stall();
          return;
       case DT_STRING: // Get String Desc.- 3
-         //      PRINTF("getDescriptor-string - %d\n", descriptorIndex);
+         //      console.WRITE("getDescriptor-string - ).WRITELN(descriptorIndex);
 #ifdef MS_COMPATIBLE_ID_FEATURE
          if (descriptorIndex == 0xEE) {
-            //         PUTS("getDescriptor-string - MS_COMPATIBLE_ID_FEATURE");
+            //         console.WRITELN("getDescriptor-string - MS_COMPATIBLE_ID_FEATURE");
             dataPtr  = fMsOsStringDescriptor;
             dataSize = *dataPtr;
             break;
@@ -1371,16 +1371,16 @@ void UsbBase_T<Info, EP0_SIZE>::handleGetDescriptor() {
          }
 #if defined(UNIQUE_ID)
          else if (descriptorIndex == UsbImplementation::s_serial_index) {
-            uint8_t utf8Buff[sizeof(SERIAL_NO)+10];
+            char utf8Buff[sizeof(SERIAL_NO)+10];
 
             // Generate Semi-unique Serial number
             uint32_t uid = SIM->UIDH^SIM->UIDMH^SIM->UIDML^SIM->UIDL;
-//            FormattedIO::ltoa(uid, utf8Buff, Radix_10);
-            snprintf((char *)utf8Buff, sizeof(utf8Buff), SERIAL_NO, uid);
+            StringFormatter sf(utf8Buff, sizeof(utf8Buff));
+            sf.setPadding(Padding_LeadingZeroes).setWidth(6).write(SERIAL_NO).write(uid, Radix_16);
 
             // Use end-point internal buffer directly - may result in truncation
             dataPtr = fControlEndpoint.getBuffer();
-            utf8ToStringDescriptor(fControlEndpoint.getBuffer(), utf8Buff, fControlEndpoint.BUFFER_SIZE);
+            utf8ToStringDescriptor(fControlEndpoint.getBuffer(), (uint8_t *)utf8Buff, fControlEndpoint.BUFFER_SIZE);
          }
 #endif
          else {
@@ -1427,7 +1427,7 @@ void UsbBase_T<Info, EP0_SIZE>::handleSetConfiguration() {
  */
 template<class Info, int EP0_SIZE>
 void UsbBase_T<Info, EP0_SIZE>::handleSetInterface() {
-   PUTS("setInterface");
+   console.WRITELN("setInterface");
 
    if ((fEp0SetupBuffer.bmRequestType != (EP_OUT|RT_INTERFACE)) || // NOT In,Standard,Interface
          (fEp0SetupBuffer.wLength != 0) ||                         // NOT correct length
@@ -1457,7 +1457,7 @@ template<class Info, int EP0_SIZE>
 void UsbBase_T<Info, EP0_SIZE>::irqHandler() {
 
    //   if (interruptFlags&~USB_ISTAT_SOFTOK_MASK) {
-   //      PRINTF("ISTAT=%2X\n", interruptFlags);
+   //      console.WRITE("ISTAT=").WRITELN(interruptFlags, Radix_16);
    //   }
 
    do {
@@ -1504,14 +1504,14 @@ void UsbBase_T<Info, EP0_SIZE>::irqHandler() {
       }
       if ((pendingInterruptFlags&USB_ISTAT_SLEEP_MASK) != 0) {
          // Bus Idle 3ms => sleep
-         //      PUTS("Suspend");
+         //      console.WRITELN("Suspend");
          handleUSBSuspend();
          // Clear source
          fUsb().ISTAT = USB_ISTAT_SLEEP_MASK;
       }
       if ((pendingInterruptFlags&USB_ISTAT_ERROR_MASK) != 0) {
          // Any Error
-         PRINTF("Error s=0x%02X\n", fUsb().ERRSTAT);
+         console.WRITE("Error s=0x").WRITELN(fUsb().ERRSTAT);
          fUsb().ERRSTAT = 0xFF;
          // Clear source
          fUsb().ISTAT = USB_ISTAT_ERROR_MASK;

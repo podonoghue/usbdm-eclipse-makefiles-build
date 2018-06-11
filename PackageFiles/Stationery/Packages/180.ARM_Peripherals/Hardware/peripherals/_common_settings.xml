@@ -31,7 +31,8 @@
 
 <!-- Convenient location for common files -->
 <projectActionList id = "CommonSettings_files" >
-   <!-- copy source="Sources/xxxx.cpp"                  target="Sources/xxxx.cpp"                overwrite="true"  derived="true" / -->
+   <copy source="Project_Headers/formatted_io.h"    target="Project_Headers/formatted_io.h"    overwrite="true"  derived="true" />
+   <copy source="Project_Headers/stringFormatter.h" target="Project_Headers/stringFormatter.h" overwrite="true"  derived="true" />
 </projectActionList>
 
 </list>

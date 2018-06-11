@@ -232,7 +232,7 @@ public:
     * Configures all TSI pins
     */
    static void enable() {
-      *clockReg |= Info::clockMask;
+      clockReg() |= Info::clockMask;
       __DMB();
 
       Info::initPCRs();
@@ -315,7 +315,7 @@ public:
          TsiReferenceCharge      tsiReferenceCharge    = TsiReferenceCharge_8uA,
          TsiDeltaVoltage         tsiDeltaVoltage       = TsiDeltaVoltage_High) {
 
-      assert(tsiMode != TsiMode_Capacitive);
+      usbdm_assert(tsiMode != TsiMode_Capacitive, "Wrong mode for this configuration ");
       enable();
       tsi().GENCS =
             TSI_GENCS_TSIEN(1)|

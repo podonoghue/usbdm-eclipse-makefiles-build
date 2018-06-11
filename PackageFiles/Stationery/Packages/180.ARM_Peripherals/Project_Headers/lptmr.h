@@ -321,7 +321,7 @@ public:
       // Disable timer
       lptmr().CSR = 0;
       NVIC_DisableIRQ(Info::irqNums[0]);
-      *clockReg &= ~Info::clockMask;
+      clockReg() &= ~Info::clockMask;
    }
 
    /**

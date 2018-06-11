@@ -8,7 +8,6 @@
 #ifndef PROJECT_HEADERS_QUEUE_H_
 #define PROJECT_HEADERS_QUEUE_H_
 
-#include <assert.h>
 #include "system.h"
 
 /**
@@ -64,7 +63,7 @@ public:
     */
    void enQueue(T element) {
       bool success = enQueueDiscardOnFull(element);
-      assert(success);
+      usbdm_assert(success, "Queue full");
    }
    /*
     * Add element to queue. Discards on full.
@@ -94,7 +93,7 @@ public:
     */
    T deQueue() {
 //      lock(&fLock);
-      assert(!isEmpty());
+      usbdm_assert(!isEmpty(), "Queue empty");
       uint8_t t = *fHead++;
       fNumberOfElements--;
       if (fHead>=(fBuff+QUEUE_SIZE)) {

@@ -17,7 +17,6 @@
  * Any manual changes will be lost.
  */
 #include <stddef.h>
-#include <assert.h>
 #include "derivative.h"
 #include <cmath>
 
@@ -1025,10 +1024,9 @@ public:
          TpmChMode         tpmChMode,
          TpmChannelAction  tpmChannelAction = TpmChannelAction_None) {
 
-#ifdef DEBUG_BUILD
       // Check that owning TPM has been enabled
-      assert(Tpm::isEnabled());
-#endif
+      usbdm_assert(Tpm::isEnabled(), "TPM is not enabled");
+      
       tmr().CONTROLS[channel].CnSC = tpmChMode|tpmChannelAction;
 
       if (!Info::mapPinsOnEnable) {

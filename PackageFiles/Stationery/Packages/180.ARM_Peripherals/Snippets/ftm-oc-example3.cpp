@@ -44,17 +44,9 @@ int main() {
          FtmClockSource_System,  // Bus clock usually
          FtmPrescale_1);         // The prescaler will be re-calculated later
 
-   // Set IC/OC measurement period to longest required interval + 10%
+   // Set IC/OC measurement period to longest interval + 10%
    // This adjusts the prescaler value but does not change the clock source
    Timer::setMeasurementPeriod(1.1*WAVEFORM_PERIOD/2);
-
-   // Configure channel
-   TimerChannel::configure(
-         FtmChMode_OutputCompare, // O/C but no pin
-         FtmChannelIrq_Disable);  // No interrupts
-
-   // Check if configuration failed
-   USBDM::checkError();
 
    // Calculate half-period in ticks
    timerHalfPeriod = Timer::convertSecondsToTicks(WAVEFORM_PERIOD/2);
@@ -64,10 +56,22 @@ int main() {
          PinDriveMode_PushPull,
          PinSlewRate_Slow);
 
+   // Configure pin associated with channel
    TimerChannel::setOutput(
          PinDriveStrength_High,
          PinDriveMode_PushPull,
          PinSlewRate_Slow);
+   // or change individual attributes
+   //  TimerChannel::setDriveStrength(PinDriveStrength_High);
+   //  TimerChannel::setDriveMode(PinDriveMode_PushPull);
+
+   // Configure channel
+   TimerChannel::configure(
+         FtmChMode_OutputCompare, // O/C but no pin
+         FtmChannelAction_None);  //  + no action on events
+
+   // Check if configuration failed
+   USBDM::checkError();
 
    for (;;) {
       // Set event

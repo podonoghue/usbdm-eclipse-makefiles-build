@@ -9,7 +9,6 @@
 #ifndef SOURCES_FLASH_H_
 #define SOURCES_FLASH_H_
 
-#include <assert.h>
 #include "derivative.h"
 #include "hardware.h"
 #include "delay.h"

@@ -28,7 +28,8 @@ namespace USBDM {
 class DmaChannel {
 
 protected:
-   static constexpr volatile uint32_t *clockReg = Dmamux0Info::clockReg;
+   /** Clock register mask for peripheral */
+   static __attribute__((always_inline)) volatile uint32_t &clockReg() { return Dmamux0Info::clockReg(); }
 
 private:
    volatile DMA_Type    *dmac;
@@ -51,7 +52,7 @@ public:
    }
 
    void configure(DMAInformation *information) {
-      *clockReg |= Dmamux0Info::clockMask;
+      clockReg() |= Dmamux0Info::clockMask;
       dmaMux->CHCFG[channel]      = 0;
       dmac->DMA[channel].DSR_BCR  = DMA_DSR_BCR_BCR(information->byteCount);
       dmac->DMA[channel].SAR      = information->source;

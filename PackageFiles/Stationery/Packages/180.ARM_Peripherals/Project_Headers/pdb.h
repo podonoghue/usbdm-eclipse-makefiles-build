@@ -224,6 +224,15 @@ public:
    }
 
    /**
+    * Disable PDB
+    */
+   static void  __attribute__((always_inline)) disable() {
+      pdb().SC  = 0;
+      clockReg() &= ~Info::clockMask;
+      __DMB();
+   }
+
+   /**
     * Enables PDB and sets to default configuration.
     *
     * Includes enabling clock and any pins used.\n
@@ -390,7 +399,7 @@ public:
          return rc;
       }
       pdb().SC  = (pdb().SC&~(PDB_SC_MULT_MASK|PDB_SC_PRESCALER_MASK))|PDB_SC_MULT(mult)|PDB_SC_PRESCALER(prescale)|PDB_SC_PDBIF_MASK;
-	  // Recalculat MOD using calcTicksFromTime() to ensure consistent results
+      // Recalculate MOD using calcTicksFromTime() to ensure consistent results
       pdb().MOD = calcTicksFromTime(period);
 
       return E_NO_ERROR;

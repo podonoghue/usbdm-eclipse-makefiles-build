@@ -107,6 +107,7 @@ int main() {
    checkError();
 
    for(;;) {
-      __asm__("nop");
+      // Sleep between interrupts
+      __asm__("wfi");
    }
 }

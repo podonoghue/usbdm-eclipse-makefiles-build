@@ -88,11 +88,10 @@ int main() {
    //  TimerChannel::setPullDevice(PinPull_Up);
    //  TimerChannel::setFilter(PinFilter_Passive);
 
-   // Configure the channel in Input Capture mode
+   // Configure the channel
    TimerChannel::configure(
-         FtmChMode_InputCaptureRisingEdge,
-         FtmChannelIrq_Enable,
-         FtmChannelDma_Disable);
+         FtmChMode_InputCaptureRisingEdge, // Inpout capture rising edge
+         FtmChannelAction_Irq);            //  + interrupts on events
 
    // Enable interrupts from the channel
    TimerChannel::enableInterrupts();

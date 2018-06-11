@@ -5,7 +5,6 @@
  * @version  V4.12.1.80
  * @date     13 April 2016
  */
-#include <stdio.h>
 #include "hardware.h"
 
 namespace USBDM {

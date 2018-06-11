@@ -45,7 +45,8 @@ int main() {
    TimerChannel::setCallback(flash);
 
    // Flash LED @ 1Hz
-   TimerChannel::configureInTicks(::SystemBusClock, PitChannelIrq_Enable);
+//   TimerChannel::configureInTicks(::SystemBusClock/2, PitChannelIrq_Enable);
+   TimerChannel::configure(0.5 * seconds, PitChannelIrq_Enable);
 
    TimerChannel::enableNvicInterrupts(true, NvicPriority_Normal);
 
@@ -53,6 +54,7 @@ int main() {
    checkError();
 
    for(;;) {
-      __asm__("nop");
+      // Sleep between interrupts
+      __asm__("wfi");
    }
 }

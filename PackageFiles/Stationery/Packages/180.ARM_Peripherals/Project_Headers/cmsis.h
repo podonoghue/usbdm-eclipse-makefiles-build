@@ -85,7 +85,7 @@ public:
    Timer(Callback callback, void *argument, os_timer_type timerType) :
      os_timer_def{callback, (void*)&os_timer_cb} {
       osTimerId timer_id __attribute__((unused)) = osTimerCreate(&os_timer_def, timerType, argument);
-      assert((void*)timer_id == (void*)&os_timer_cb);
+      usbdm_assert((void*)timer_id == (void*)&os_timer_cb, "Internal check failed");
    }
    /**
     * Constructor - Create timer of given type
@@ -277,7 +277,7 @@ public:
     */
    Mutex() {
       osMutexId mutex_id __attribute__((unused)) = osMutexCreate(&os_mutex_def);
-      assert((void*)mutex_id == (void*)os_mutex_cb);
+      usbdm_assert((void*)mutex_id == (void*)os_mutex_cb, "Internal check failed");
    }
    /**
     * Delete mutex
@@ -366,7 +366,7 @@ public:
     */
    Semaphore(int32_t count) {
       osSemaphoreId semaphore_id __attribute__((unused)) = osSemaphoreCreate(&os_semaphore_def, count);
-      assert((void*)semaphore_id == (void*)os_semaphore_cb);
+      usbdm_assert((void*)semaphore_id == (void*)os_semaphore_cb, "Internal check failed");
    }
    /**
     * Delete semaphore
@@ -383,7 +383,7 @@ public:
     */
    int32_t wait(uint32_t millisec=osWaitForever) {
       int32_t rc = osSemaphoreWait((osSemaphoreId)os_semaphore_cb, millisec);
-      assert(rc >= 0);
+      usbdm_assert(rc >= 0, "Illegal parameters");
       return rc;
    }
    /**
@@ -391,7 +391,7 @@ public:
     */
    void release() {
       osStatus status __attribute__((unused)) = osSemaphoreRelease((osSemaphoreId)os_semaphore_cb);
-      assert(status == osOK);
+      usbdm_assert(status == osOK, "Failed semaphore");
    }
    /**
     * Get semaphore ID
@@ -467,7 +467,7 @@ public:
     */
    void create() {
       osPoolId pool_id = osPoolCreate(&os_pool_def);
-      assert((void*)pool_id == (void*)pool);
+      usbdm_assert((void*)pool_id == (void*)pool, "Internal check failed");
    }
    /**
     * Allocate a memory block from the memory pool.
@@ -504,7 +504,7 @@ public:
     */
    void free(T *buffer) {
       osStatus status = osPoolFree((osPoolId)pool, buffer);
-      assert(status == osOK);
+      usbdm_assert(status == osOK, "Internal check failed");
    }
    /**
     * Get pool ID
@@ -920,7 +920,7 @@ public:
          threadId = thread->getId();
       }
       osMessageQId message_id = osMessageCreate(&os_pool_def, threadId);
-      assert((void*)message_id == (void*)queue);
+      usbdm_assert((void*)message_id == (void*)queue, "Internal check failed");
       return message_id;
    }
    /**
@@ -981,7 +981,7 @@ public:
     */
    osEvent getISR() {
       osEvent event = osMessageGet((osMessageQId)queue, 0);
-      assert (event.status != osErrorParameter);
+      usbdm_assert (event.status != osErrorParameter, "Internal check failed");
       return event;
    }
    /**
@@ -1094,7 +1094,7 @@ public:
          threadId = thread->getId();
       }
       osMailQId queue_id __attribute__((unused)) = osMailCreate(&os_mail_def, threadId);
-      assert(queue_id == (osMailQId)pool);
+      usbdm_assert(queue_id == (osMailQId)pool, "Internal check failed");
    }
    /**
     * Allocate a memory block from the mail queue memory pool

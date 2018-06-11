@@ -446,7 +446,7 @@ public:
     */
    static void disable() {
       cmp().CR1 = 0;
-      *clockReg &= ~Info::clockMask;
+      clockReg() &= ~Info::clockMask;
    }
 
    /**

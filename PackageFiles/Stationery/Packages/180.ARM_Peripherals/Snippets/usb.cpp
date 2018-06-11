@@ -1,4 +1,4 @@
-/** 
+/**
     @file usb.cpp
     @brief Simple USB Stack for Kinetis
 
@@ -44,6 +44,7 @@ Change History
 #include <stdio.h>
 #include "derivative.h"
 #include "usb.h"
+#include "stringFormatter.h"
 
 namespace USBDM {
 
@@ -52,6 +53,8 @@ EndpointBdtEntry endPointBdts[Usb0::NUMBER_OF_ENDPOINTS] __attribute__ ((aligned
 
 #ifdef MS_COMPATIBLE_ID_FEATURE
 
+// See https://github.com/pbatard/libwdi/wiki/WCID-Devices
+//
 const MS_CompatibleIdFeatureDescriptor msCompatibleIdFeatureDescriptor = {
       /* lLength;             */  nativeToLe32((uint32_t)sizeof(MS_CompatibleIdFeatureDescriptor)),
       /* wVersion;            */  nativeToLe16(0x0100),
@@ -80,11 +83,11 @@ const MS_PropertiesFeatureDescriptor msPropertiesFeatureDescriptor = {
             sizeof(msPropertiesFeatureDescriptor.wPropertyLength0)+
             sizeof(msPropertiesFeatureDescriptor.bData0)
       ),
-      /* uint32_t ldataType0;       */ nativeToLe32(1U), // 1 = Unicode string
+      /* uint32_t ldataType0;       */ nativeToLe32(7UL), // 7 == REG_MULTI_SZ
       /* uint16_t wNameLength0;     */ nativeToLe16(sizeof(msPropertiesFeatureDescriptor.bName0)),
-      /* char16_t bName0[42];       */ MS_DEVICE_INTERFACE_GUIDs,
+      /* char16_t  bName0[42];       */ MS_DEVICE_INTERFACE_GUIDs,
       /* uint32_t wPropertyLength0; */ nativeToLe32(sizeof(msPropertiesFeatureDescriptor.bData0)),
-      /* char16_t bData0[78];       */ MS_DEVICE_GUID,
+      /* char16_t  bData0[78];       */ MS_DEVICE_GUID,
       /*---------------------- Section 2 -----------------------------*/
       /* uint32_t lPropertySize1;   */ nativeToLe32(
             sizeof(msPropertiesFeatureDescriptor.lPropertySize1)+
@@ -94,12 +97,13 @@ const MS_PropertiesFeatureDescriptor msPropertiesFeatureDescriptor = {
             sizeof(msPropertiesFeatureDescriptor.wPropertyLength1)+
             sizeof(msPropertiesFeatureDescriptor.bData1)
       ),
-      /* uint32_t ldataType1;       */ nativeToLe32(2U), // 2 = Unicode string with environment variables
+      /* uint32_t ldataType1;       */ nativeToLe32(7UL), // 7 == REG_MULTI_SZ
       /* uint16_t wNameLength1;     */ nativeToLe16(sizeof(msPropertiesFeatureDescriptor.bName1)),
       /* uint8_t  bName1[];         */ MS_ICONS,
       /* uint32_t wPropertyLength1; */ nativeToLe32(sizeof(msPropertiesFeatureDescriptor.bData1)),
       /* uint8_t  bData1[];         */ MS_ICON_PATH,
 };
+
 #endif
 
 /**
@@ -133,6 +137,27 @@ const char *UsbBase::getTokenName(unsigned token) {
       rc = names[token];
    }
    return rc;
+}
+
+/**
+ * Get name of USB state
+ *
+ * @param  state USB state
+ *
+ * @return Pointer to static string
+ */
+const char *UsbBase::getStateName(EndpointState state){
+   switch (state) {
+      default         : return "Unknown";
+      case EPIdle     : return "EPIdle";
+      case EPDataIn   : return "EPDataIn";
+      case EPDataOut  : return "EPDataOut,";
+      case EPStatusIn : return "EPStatusIn";
+      case EPStatusOut: return "EPStatusOut";
+      case EPThrottle : return "EPThrottle";
+      case EPStall    : return "EPStall";
+      case EPComplete : return "EPComplete";
+   }
 }
 
 /**
@@ -178,35 +203,33 @@ void UsbBase::reportBdt(const char *name, BdtEntry *bdt) {
    (void)name;
    (void)bdt;
    if (bdt->u.setup.own) {
-      PRINTF("%s addr=0x%08lX, bc=%d, %s, %s, %s\n",
-            name,
-            bdt->addr, bdt->bc,
-            bdt->u.setup.data0_1?"DATA1":"DATA0",
-                  bdt->u.setup.bdt_stall?"STALL":"OK",
-                        "USB"
-      );
+      console.write(name).
+            write(" addr=0x").write(bdt->addr,Radix_16).
+            write(", bc=").write(bdt->bc).
+            write(", ").write(bdt->u.setup.data0_1?"DATA1":"DATA0").
+            write(", ").write(bdt->u.setup.bdt_stall?"STALL":"OK").
+            writeln("USB");
    }
    else {
-      PRINTF("%s addr=0x%08lX, bc=%d, %s, %s\n",
-            name,
-            bdt->addr, bdt->bc,
-            getTokenName(bdt->u.result.tok_pid),
-            "PROC"
-      );
+      console.write(name).
+            write(" addr=0x").write(bdt->addr,Radix_16).
+            write(", bc=").write(bdt->bc).
+            write(", ").write(getTokenName(bdt->u.result.tok_pid)).
+            writeln("PROC");
    }
 }
 
 /**
- * Report contents of LineCodingStructure to stdout
+ * Report line code structure values
  *
  * @param lineCodingStructure
  */
-void UsbBase::reportLineCoding(const LineCodingStructure *lineCodingStructure) {
+void reportLineCoding(const LineCodingStructure *lineCodingStructure) {
    (void)lineCodingStructure;
-   PRINTF("rate   = %ld bps\n", lineCodingStructure->dwDTERate);
-   PRINTF("format = %d\n", lineCodingStructure->bCharFormat);
-   PRINTF("parity = %d\n", lineCodingStructure->bParityType);
-   PRINTF("bits   = %d\n", lineCodingStructure->bDataBits);
+   console.write("rate   = ").writeln(lineCodingStructure->dwDTERate);
+   console.write("format = ").writeln(lineCodingStructure->bCharFormat);
+   console.write("parity = ").writeln(lineCodingStructure->bParityType);
+   console.write("bits   = ").writeln(lineCodingStructure->bDataBits);
 }
 
 /**
@@ -217,16 +240,21 @@ void UsbBase::reportLineCoding(const LineCodingStructure *lineCodingStructure) {
  * @return Pointer to static buffer
  */
 const char *UsbBase::reportSetupPacket(SetupPacket *p) {
+#ifdef DEBUG_BUILD
    static char buff[100];
-   snprintf(buff, sizeof(buff), "[0x%02X,%s(0x%02X),%d,%d,%d]",
-         p->bmRequestType,
-         getRequestName(p->bRequest),
-         p->bRequest,
-         (int)(p->wValue),
-         (int)(p->wIndex),
-         (int)(p->wLength)
-   );
+   StringFormatter sf(buff, sizeof(buff));
+   sf.clear().
+         write("[").
+         write(p->bmRequestType).write(",").
+         write(getRequestName(p->bRequest)).write(",").
+         write((int)(p->wValue)).write(",").
+         write((int)(p->wIndex)).write(",").
+         write((int)(p->wLength)).write("]");
    return buff;
+#else
+   (void)p;
+   return "";
+#endif
 }
 
 /**
@@ -234,9 +262,11 @@ const char *UsbBase::reportSetupPacket(SetupPacket *p) {
  *
  * @param value
  */
-void UsbBase::reportLineState(uint8_t value) {
+void reportLineState(uint8_t value) {
    (void)value;
-   PRINTF("Line state: RTS=%d, DTR=%d\n", (value&(1<<1))?1:0, (value&(1<<0))?1:0);
+   console.
+   writeln("Line state: RTS=").write((value&(1<<1))?1:0).
+   write("DTR=").writeln((value&(1<<0))?1:0);
 }
 
 /**

@@ -74,14 +74,22 @@ int main() {
    lcd.drawCircle(CENTRE_X, CENTRE_Y, 20, WHITE);
    lcd.drawCircle(CENTRE_X, CENTRE_Y, 30, WHITE);
    lcd.drawCircle(CENTRE_X, CENTRE_Y, 40, WHITE);
-   lcd.putStr("Some Circles", 30, 10, smallFont, FOREGROUND_COLOUR, BACKGROUND_COLOUR);
+
+   // Set LCD defaults
+   lcd.setFont(smallFont).setForeground(FOREGROUND_COLOUR).setBackground(BACKGROUND_COLOUR);
+
+   // Simple text with position and colours
+   lcd.putStr("Some Circles", 30, 10);
 
    // Cursor position on screen
    int x=0, y=0;
    int xOld=50, yOld=50;
 
-   lcd.setForeground(WHITE).setBackground(BLACK);
-   lcd.moveXY(10, 10).write("Value=").write(123);
+   // Set LCD defaults
+   lcd.setFont(largeFont).setForeground(BLUE).setBackground(WHITE);
+
+   // Formatted write to LCD (using defaults)
+   lcd.moveXY(10, LCD_Y_MAX-largeFont.height-1).write("max-X=").write(LCD_X_MAX).write(" ");
 
    for(;;) {
       x = LCD_X_MIN + CIRCLE_RADIUS + rand() % (LCD_WIDTH-2*CIRCLE_RADIUS);

@@ -335,18 +335,30 @@ public:
     * @note Use Olimex BmpToArray.exe utility to create bitmap
     */
    void drawBitmap(uint8_t bmp[131*131]);
-   /** Draws an ASCII character at the specified (x,y) address and colour
+   /** Draws an ASCII character at the specified (x,y) address, font and colours
     *
-    * @param c         Character to be displayed
-    * @param x         Row address (0 .. 131)
-    * @param y         Column address (0 .. 131)
-    * @param font      Font to use
-    * @param fColour   12-bit foreground colour value
-    * @param bColour   12-bit background colour value
+    * @param c        Character to be displayed
+    * @param x        Row address (0 .. 131)
+    * @param y        Column address (0 .. 131)
+    * @param font     Font pitch (Lcd::FontSmall, Lcd::FontMedium, Lcd::FontLarge)
+    * @param fColour  12-bit foreground colour value rrrrggggbbbb
+    * @param bColour  12-bit background colour value rrrrggggbbbb
     */
-   void putChar(char c, int x, int y, Font &font=smallFont, Colour fColour=DEFAULT_FOREGROUND, Colour bColour=DEFAULT_BACKGROUND);
+   void putChar(char c, int x, int y, Font &font, Colour fColour=DEFAULT_FOREGROUND, Colour bColour=DEFAULT_BACKGROUND);
 
-   /** Draws a null-terminated character string at the specified (x,y) address and colour
+   /** Draws an ASCII character at the specified (x,y) address and colours using the currently set font
+    *
+    * @param c        Character to be displayed
+    * @param x        Row address (0 .. 131)
+    * @param y        Column address (0 .. 131)
+    * @param fColour  12-bit foreground colour value rrrrggggbbbb
+    * @param bColour  12-bit background colour value rrrrggggbbbb
+    */
+   void putChar(char c, int x, int y, Colour fColour=DEFAULT_FOREGROUND, Colour bColour=DEFAULT_BACKGROUND) {
+	   putChar(c, x, y, *fFont, fColour, bColour);
+   }
+
+   /** Draws a null-terminated character string at the specified (x,y) address, font and colours
     *
     * @param str      Pointer to character string to be displayed
     * @param x        Row address (0 .. 131)
@@ -367,7 +379,31 @@ public:
     * @note For more information on how this code does it's thing look at this \n
     *       "http://www.sparkfun.com/tutorial/Nokia%206100%20LCD%20Display%20Driver.pdf"
     */
-   void putStr(const char *str, int x, int y, Font &font=smallFont, Colour fColour=DEFAULT_FOREGROUND, Colour bColour=DEFAULT_BACKGROUND);
+   void putStr(const char *str, int x, int y, Font &font, Colour fColour=DEFAULT_FOREGROUND, Colour bColour=DEFAULT_BACKGROUND);
+
+   /** Draws a null-terminated character string at the specified (x,y) address and colours using the current font
+    *
+    * @param str      Pointer to character string to be displayed
+    * @param x        Row address (0 .. 131)
+    * @param y        Column address (0 .. 131)
+    * @param fColour  12-bit foreground colour value rrrrggggbbbb
+    * @param bColour  12-bit background colour value rrrrggggbbbb
+    *
+    * @code{.c}
+    *       // Here's an example to display "Hello World!" at address (20,20)
+    *
+    *       lcd_putStr("Hello World!", 20, 20, WHITE, BLACK);
+    * @endcode
+    *
+    * @author James P Lynch, August 30, 2007 \n
+    *         Edited by Peter Davenport on August 23, 2010
+    *
+    * @note For more information on how this code does it's thing look at this \n
+    *       "http://www.sparkfun.com/tutorial/Nokia%206100%20LCD%20Display%20Driver.pdf"
+    */
+   void putStr(const char *str, int x, int y, Colour fColour=DEFAULT_FOREGROUND, Colour bColour=DEFAULT_BACKGROUND) {
+	   putStr(str, x, y, *fFont, fColour, bColour);
+   }
 
    int _readChar() override { return -1;}
    bool _isCharAvailable() override { return false; }
@@ -571,7 +607,7 @@ public:
  */
 #if LCD_BACKLIGHT_PWM_FEATURE
 // PWM control for back-light brightness
-using Lcd = Lcd_T<USBDM::gpio_D9, USBDM::gpio_D8, USBDM::ftm_D10>;
+using Lcd = Lcd_T<USBDM::$(demo.lcd.elecfreaks.cs:gpio_D9), USBDM::$(demo.lcd.elecfreaks.reset:gpio_D8), USBDM::$(demo.lcd.elecfreaks.backlight.ftm:ftm_D10)>;
 #else
 // On/Off control of back-light
 using Lcd = Lcd_T<USBDM::$(demo.lcd.elecfreaks.cs:gpio_D9), USBDM::$(demo.lcd.elecfreaks.reset:gpio_D8), USBDM::$(demo.lcd.elecfreaks.backlight:gpio_D10)>;

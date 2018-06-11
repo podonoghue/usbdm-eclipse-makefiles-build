@@ -14,7 +14,6 @@
 #ifndef SOURCES_FLASH_H_
 #define SOURCES_FLASH_H_
 
-#include <assert.h>
 #include "derivative.h"
 #include "hardware.h"
 #include "delay.h"
@@ -71,7 +70,7 @@ protected:
     */
    Flash() {
       static int singletonFlag __attribute__((unused)) = false;
-      assert (!singletonFlag);
+      usbdm_assert (!singletonFlag, "Creating multiple instances of Flash");
       singletonFlag = true;
       waitForFlashReady();
    }

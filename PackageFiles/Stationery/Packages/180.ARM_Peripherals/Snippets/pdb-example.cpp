@@ -5,7 +5,9 @@
  *
  * This example uses PDB software trigger to schedule an ADC conversion
  * Uses an LED for debug timing check.
-*/
+ *
+ * Note - Requires ADC and PDB interrupt handlers to be installed.
+ */
 #include "hardware.h"
 #include "pdb.h"
 
@@ -74,7 +76,7 @@ static void adcCallback(uint32_t value, int) {
 
 static void configureAdc() {
 
-   SimInfo::setAdc0Triggers(SimInfo::SimAdc0AltTrigger_Pdb);
+   SimInfo::setAdc0Triggers(SimAdc0AltTrigger_Pdb);
 
    Adc::enable();
    Adc::setResolution(AdcResolution_8bit_se);
