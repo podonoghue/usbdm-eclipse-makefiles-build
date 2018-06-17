@@ -6,6 +6,11 @@
  *      Author: podonoghue
  */
 
+/* *************************************************************
+ * NOTE - Can't use other objects here as initialisation of
+ *        Flash is done very early (including writeln())
+ ************************************************************* */
+
 #ifndef SOURCES_FLASH_H_
 #define SOURCES_FLASH_H_
 
@@ -19,7 +24,6 @@ namespace USBDM {
  * @brief Abstraction for Flash Memory Module
  * @{
  */
-
 // Error codes
 enum FlashDriverError_t {
    FLASH_ERR_OK                = (0),
@@ -45,6 +49,8 @@ enum FlashDriverError_t {
  */
 class Flash : public FtfaInfo {
 
+public:
+$(/FTFA/FlashConfig:!!!!!!!Not found!!!!!!!)
 protected:
 
    /**

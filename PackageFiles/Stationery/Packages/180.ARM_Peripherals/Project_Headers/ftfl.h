@@ -24,7 +24,6 @@ namespace USBDM {
  * @brief Abstraction for Flash Memory Module
  * @{
  */
-
 // Error codes
 enum FlashDriverError_t {
    FLASH_ERR_OK                = (0),
@@ -51,6 +50,7 @@ enum FlashDriverError_t {
 class Flash : public FtflInfo {
 
 public:
+ $(/FTFL/FlashConfig:!!!!!!!Not found!!!!!!!)
    /** A23 == 0 => indicates PROGRAM flash */
    static constexpr uint32_t PROGRAM_ADDRESS_FLAG = (0<<23);
 

@@ -60,19 +60,21 @@
       <copy source="Snippets/flash_programming_example.cpp"  target="Snippets/flash_programming_example.cpp"  overwrite="true"  derived="true" />
    </projectActionList>
 
-   <template><![CDATA[
+   <template name="FlashConfig" namespace="all"> <![CDATA[
       \t// Sector size for program flash (minimum erase element)
       \tstatic constexpr unsigned programFlashSectorSize = $(pflash_sector_size);\n\n
    
       \t// Phrase size for program flash (minimum programming element)
       \tstatic constexpr unsigned programFlashPhraseSize = $(pflash_phrase_size);\n\n
-   
+      
       \t// Sector size for data flash (minimum erase element)
       \tstatic constexpr unsigned dataFlashSectorSize = $(dflash_sector_size);\n\n
    
       \t// Phrase size for data flash (minimum programming element)
       \tstatic constexpr unsigned dataFlashPhraseSize = $(dflash_phrase_size);\n\n
+   ]]></template>
    
+   <template><![CDATA[
       \tstruct EepromSizes {
       \t   const uint16_t size;    // EEPROM size
       \t   const uint8_t  value;   // Value to select size

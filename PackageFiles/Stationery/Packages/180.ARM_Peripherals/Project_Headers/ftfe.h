@@ -24,7 +24,6 @@ namespace USBDM {
  * @brief Abstraction for Flash Memory Module
  * @{
  */
-
 // Error codes
 enum FlashDriverError_t {
    FLASH_ERR_OK                = (0),
@@ -50,6 +49,8 @@ enum FlashDriverError_t {
  */
 class Flash : public FtfeInfo {
 
+public:
+$(/FTFE/FlashConfig:!!!!!!!Not found!!!!!!!)
 protected:
 
    /** Minimum ratio for EEPROM to Flash backing storage */
