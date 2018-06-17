@@ -137,7 +137,7 @@ public:
       };
       buff[0] = '\0';
       char *ptr = buff;
-      for (int index=0; index<(sizeof(names)/sizeof(names[0])); index++) {
+      for (unsigned index=0; index<(sizeof(names)/sizeof(names[0])); index++) {
          if (source&(1<<index)) {
             ptr = FormattedIO::strcpy(ptr, names[index]);
          }
