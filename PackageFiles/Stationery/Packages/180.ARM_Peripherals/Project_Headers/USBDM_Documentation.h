@@ -89,17 +89,12 @@ Convenience template for UART. Uses the following classes:\n
       console.writeln(integer);
    }
 
-   // Utility functions
-   Console::ultoa(100, buff);
-   console.write("ultoa(100, buff)  = ").writeln(buff);
-   Console::ltoa(-100, buff);
-   console.write("ltoa(-100, buff)  = ").writeln(buff);
-
-   char *ptr = buff;
-   ptr = Console::strcpy(ptr, "Console::ultoa(100, buff) = ");
-   ptr = Console::ultoa(100, ptr);
-   ptr = Console::strcpy(ptr, ", oh well!");
-   console.writeln(buff);
+   // String buffer example
+   // Used to write formatted strings
+   char buff[100];
+   StringFormatter sf(buff, sizeof(buff));
+   sf.write("This is a string and number(").write(3.3).write(") written to a char buffer (string)");
+   console.writeln(sf.toString());
  @endcode
 
 @page DMAExamples  Direct Memory Access Controller

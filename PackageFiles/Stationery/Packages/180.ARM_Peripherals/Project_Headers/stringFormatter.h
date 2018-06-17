@@ -49,8 +49,8 @@ public:
    /**
     * Create String Formatter
     *
-    * @param[in] buffer Buffer for characters
-    * @param[in] size   Size of buffer - Note space will be reserved for a terminator
+    * @param[in] buffer      Buffer for characters
+    * @param[in] bufferSize  Size of buffer - Note space will be reserved for a terminator
     */
    StringFormatter(char buffer[], size_t bufferSize) : buff(buffer), size(bufferSize-1) {
       usbdm_assert(bufferSize>=1, "Buffer size must be > 1");

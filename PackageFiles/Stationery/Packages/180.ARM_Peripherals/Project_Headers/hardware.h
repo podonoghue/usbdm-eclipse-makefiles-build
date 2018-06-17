@@ -186,12 +186,11 @@ inline void clearError() {
 }
 
 /**
- * Print simple log message
+ * Print simple log message to console
  *
- * @param  Message to print
+ * @param msg Message to print
  */
-extern void log_error(const char *);
-
+extern void log_error(const char *msg);
 } // End namespace USBDM
 
 // Use when in-lining makes the release build smaller
