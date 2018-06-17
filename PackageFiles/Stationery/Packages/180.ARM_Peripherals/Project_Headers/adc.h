@@ -663,12 +663,16 @@ public:
    /** Allow convenient access to owning ADC */
    using Adc =  AdcBase_T<Info>;
 
+   /** Information about this ADC */
+   using AdcInfo = Info;
+
    /** Channel number */
    static constexpr int CHANNEL=channel;
 
    /**
     * Configure the pin associated with this ADC channel.
     * The pin is in analogue mode so no PCR settings are active.
+    * This function is of use if mapAllPins and mapAllPinsOnEnable are not selected in USBDM configuration.
     */
    static void setInput() {
       // Map pin to ADC
@@ -754,12 +758,16 @@ public:
    /** Allow convenient access to owning ADC */
    using Adc =  AdcBase_T<Info>;
 
+   /** Information about this ADC */
+   using AdcInfo = Info;
+
    /** Channel number */
    static constexpr int CHANNEL=channel;
 
    /**
     * Configure the pins associated with this ADC channel.
     * The pins are in analogue mode so no PCR settings are active.
+    * This function is of use if mapAllPins and mapAllPinsOnEnable are not selected in USBDM configuration.
     */
    static void setInput() {
       // Map pins to ADC
