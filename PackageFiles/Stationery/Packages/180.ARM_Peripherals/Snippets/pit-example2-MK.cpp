@@ -85,7 +85,7 @@ int main() {
    Timer::configure(PitDebugMode_Stop);
 
 #ifdef SET_HANDLERS_PROGRAMMATICALLY
-   // Set handlers programmatically
+   // Set handler for channel programmatically
    TimerChannelA::setCallback(flashA);
    TimerChannelB::setCallback(flashB);
 #endif

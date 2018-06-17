@@ -1,11 +1,11 @@
-/*
- ============================================================================
+/**
  * @file    pin-interrupt-example.cpp (180.ARM_Peripherals/Sources/pin-interrupt-example.cpp)
- * @brief   Basic C++ demo using GPIO class
  *
- *  Created on: 10/1/2016
- *      Author: podonoghue
- ============================================================================
+ * Pin Interrupt Example
+ *
+ * This example uses GPIO (Port) interrupts
+ *
+ * Note - Requires GPIO interrupt handlers to be installed for the port being used.
  */
 #include "system.h"
 #include "derivative.h"
@@ -19,6 +19,12 @@ using Led      = USBDM::GpioA<2,USBDM::ActiveLow>;
 using Switch   = USBDM::GpioC<0,USBDM::ActiveLow>;
 
 // Call-back function to execute on interrupt
+/**
+ * PORT interrupt call back.
+ * This callback is _shared_ by all port pins
+ *
+ * @param[in] status 32-bit value from ISFR (each bit indicates a possible pin interrupt source)
+ */
 static void callBack(uint32_t status) {
    static int count = 0;
    console.write(count++).write(": Status = 0x").writeln(status, Radix_16);

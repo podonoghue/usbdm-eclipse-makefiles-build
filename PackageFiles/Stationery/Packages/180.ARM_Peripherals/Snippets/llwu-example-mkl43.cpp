@@ -150,15 +150,15 @@ void testStopMode(
     * This assumes run mode is PEE
     */
    if (Smc::getStatus() == SmcStatus_run) {
-      Mcg::configure(RUN_CLOCK_CONFIG);
+      Mcg::clockTransition(Mcg::clockInfo[RUN_CLOCK_CONFIG]);
       console.setBaudRate(BAUD_RATE);
-      console.writeln("Awake!").flushOutput();
+      console.writeln("**** Awake ****").flushOutput();
       console.writeln("Restored clock frequency").flushOutput();
    }
    else
 #endif
    {
-      console.writeln("Awake!").flushOutput();
+      console.writeln("**** Awake ****").flushOutput();
    }
 }
 
@@ -368,7 +368,7 @@ SmcStatus changeRunMode() {
    SmcStatus smcStatus = Smc::getStatus();
    if (smcStatus == SmcStatus_run) {
       // RUN->VLPR
-      Mcg::configure(VLPR_CLOCK_CONFIG);
+      Mcg::clockTransition(Mcg::clockInfo[VLPR_CLOCK_CONFIG]);
       Smc::enterRunMode(SmcRunMode_VeryLowPower);
       console.setBaudRate(BAUD_RATE);
       console.writeln("Changed to VLPR mode").flushOutput();
@@ -376,7 +376,7 @@ SmcStatus changeRunMode() {
    else if (smcStatus == SmcStatus_vlpr) {
       // VLPR->RUN mode
       Smc::enterRunMode(SmcRunMode_Normal);
-      Mcg::configure(RUN_CLOCK_CONFIG);
+      Mcg::clockTransition(Mcg::clockInfo[RUN_CLOCK_CONFIG]);
       console.setBaudRate(BAUD_RATE);
       console.writeln("Changed to RUN mode").flushOutput();
    }

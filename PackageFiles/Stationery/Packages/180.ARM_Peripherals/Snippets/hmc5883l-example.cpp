@@ -37,17 +37,17 @@ HMC5883L magnetometer(i2c0);
 void report(HMC5883L &magnetometer) {
       int16_t compassX,compassY,compassZ;
       magnetometer.doMeasurement(&compassX, &compassY, &compassZ);
-      console
-         .write("X=").write(compassX).
-         .write("Y=").write(compassY).
-         .write("Z=").writeln(compassZ);
+      console.
+         write("X=").write(compassX).
+         write("Y=").write(compassY).
+         write("Z=").writeln(compassZ);
 }
 
 int main() {
-   printf("Starting\n");
+   console.writeln("Starting");
 
    uint32_t id = magnetometer.readID();
-   printf("Device ID = 0x%6lX (should be 0x483433)\n", id);
+   console.write("Device ID = ").write(id).writeln(" (should be 0x483433)\n");
 
 //   magnetometer.setGain(3);
 

@@ -1,7 +1,7 @@
 /**
  ============================================================================
- * @file analogue-diff-example.cpp
- * @brief Example showing use of a differential ADC channel
+ * @file analogue-example.cpp
+ * @brief Example showing use of a single-ended ADC channel
  *
  *  Created on: 10/6/2016
  *      Author: podonoghue
@@ -12,7 +12,7 @@
 using namespace USBDM;
 
 /*
- * Demonstrates differential conversion on a channel
+ * Demonstrates single-ended conversion on a channel
  */
 
 // Connection mapping - change as required
@@ -22,18 +22,18 @@ using namespace USBDM;
 using Adc        = Adc0;
 
 // ADC channel to use
-using AdcChannel = Adc0DiffChannel<0>;
+using AdcChannel = Adc0Channel<0>;
 
 int main(void) {
 
    // Enable and configure ADC
-   Adc::configure(AdcResolution_11bit_diff);
+   Adc::configure(AdcResolution_12bit_se);
 
    // Calibrate before first use
    Adc::calibrate();
 
-   // May change default resolution as needed e.g.
-   Adc::setResolution(USBDM::AdcResolution_9bit_diff);
+   // May change current resolution as needed e.g.
+   Adc::setResolution(USBDM::AdcResolution_10bit_se);
 
 //   // Configure ADC pins (if automatic mapping is not enabled in USBDM configuration)
 //   if (!AdcChannel::AdcInfo::mapPinsOnEnable) {
@@ -42,7 +42,7 @@ int main(void) {
 
    for(;;) {
       // Start next conversion
-      int32_t value = AdcChannel::readAnalogue();
-      console.write("Value = ").write(value*3.3/(1<<8)).writeln(" volts");
+      uint32_t value = AdcChannel::readAnalogue();
+      console.write("Value = ").write(value*3.3/(1<<10)).writeln(" volts");
    }
 }

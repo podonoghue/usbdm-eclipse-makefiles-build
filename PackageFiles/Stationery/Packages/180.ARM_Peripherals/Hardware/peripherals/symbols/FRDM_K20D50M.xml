@@ -11,11 +11,11 @@
    <item key="demo.cpp.ftm"                   value="Ftm0" />                       <!-- FTM/TPM to LED -->
    <item key="demo.cpp.pwm.led1"              value="Ftm0Channel&lt;7&gt;" />       <!-- FTM/TPM to LED -->
    <item key="demo.cpp.pwm.led2"              value="Ftm0Channel&lt;2&gt;" />       <!-- FTM/TPM to LED -->
-   <item key="demo.cpp.joystick.x"            value="Adc0Channel&gt;14&lt;" />      <!-- Analogue I/O (Arduino) -->
-   <item key="demo.cpp.joystick.y"            value="Adc0Channel&gt;15&lt;" />      <!-- Analogue I/O (Arduino) -->
-   <item key="demo.cpp.joystick.k"            value="GpioD&gt;6, ActiveLow&lt;" />  <!-- Digital I/O from switch (Arduino) -->
-   <item key="demo.cpp.external.switch"       value="GpioC&gt;0, ActiveLow&lt;" />  <!-- Digital I/O from switch (Arduino) -->
-   <item key="demo.cpp.external.led"          value="GpioC&gt;1, ActiveLow&lt;" />  <!-- Digital I/O to LED (Arduino) -->
+   <item key="demo.cpp.joystick.x"            value="Adc0Channel&lt;14&gt;" />      <!-- Analogue I/O (Arduino) -->
+   <item key="demo.cpp.joystick.y"            value="Adc0Channel&lt;15&gt;" />      <!-- Analogue I/O (Arduino) -->
+   <item key="demo.cpp.joystick.k"            value="GpioD&lt;6, ActiveLow&gt;" />  <!-- Digital I/O from switch (Arduino) -->
+   <item key="demo.cpp.external.switch"       value="GpioC&lt;0, ActiveLow&gt;" />  <!-- Digital I/O from switch (Arduino) -->
+   <item key="demo.cpp.external.led"          value="GpioC&lt;1, ActiveLow&gt;" />  <!-- Digital I/O to LED (Arduino) -->
    <item key="demo.cpp.external.gps"          value="Gps1" />                       <!-- GPS module connected by serial -->
    <item key="demo.cpp.external.spi"          value="Spi0" />                       <!-- SPI interface to off-board device -->
    <item key="demo.cpp.external.i2c"          value="I2c0" />                       <!-- I2C interface to off-board device -->

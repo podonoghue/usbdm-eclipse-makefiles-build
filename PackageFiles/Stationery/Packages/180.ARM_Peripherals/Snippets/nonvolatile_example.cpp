@@ -5,7 +5,7 @@
  *
  * This example shows how to create a non-volatile variable located in the
  * FlexRAM region of memory and backed by non-volatile storage in the Flash.
- * The variable counts the number of times the chip has been (power-on) reset.
+ * The variable counts the number of times the chip has been power-on-reset.
  *
  * Note:
  * If run from a debug launch then the non-volatile memory will not
@@ -26,30 +26,32 @@
 #include "delay.h"
 #include "flash.h"
 
+using namespace USBDM;
+
 /** Non-volatile variable to count how many times the device has booted */
 __attribute__ ((section(".flexRAM")))
-USBDM::Nonvolatile<int> bootCount_nv;
+Nonvolatile<int> bootCount_nv;
 
 /**
- * A class similar to this should be created to do the following:
+ * A derived class similar to this should be created to do the following:
  * - Configure and partition the flash on the first reset after programming the device.
  * - Do once-only initialisation of non-volatile variables when the above occurs.
  * - Initialise the FlexRAM from the Flash backing store
  */
-class NvInit : public USBDM::Flash {
+class NvInit : public Flash {
 public:
    NvInit() : Flash() {
       // Initialise the non-volatile system and configure if necessary
       volatile int rc = initialiseEeprom();
-      if (rc == USBDM::FLASH_ERR_NEW_EEPROM) {
+      if (rc == FLASH_ERR_NEW_EEPROM) {
          // This is the first reset after programming the device
          // Initialise the non-volatile variables as necessary
          // If not initialised they will have an initial value of 0xFF
          bootCount_nv = 0;
       }
-      else if (rc != USBDM::FLASH_ERR_OK) {
+      else if (rc != FLASH_ERR_OK) {
          // You can trap errors here or check in main
-         printf("FlexNVM initialisation error");
+         console.writeln("FlexNVM initialisation error");
          __BKPT();
       }
    }
@@ -69,7 +71,7 @@ int main() {
    bootCount_nv = bootCount_nv + 1;
 #endif
 
-   printf("Starting, boot count = %d\n", (int)bootCount_nv);
+   console.write("Starting, power on boot count = ").writeln((int)bootCount_nv);
    for(;;) {
    }
    return 0;

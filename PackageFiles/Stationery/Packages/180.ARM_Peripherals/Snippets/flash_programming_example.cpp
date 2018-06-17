@@ -1,5 +1,5 @@
 /**
- ============================================================================
+ ====================================================================================================
  * @file    flash_programming_example.cpp (180.ARM_Peripherals)
  * @brief   Basic C++ demo of Flash programming interface
  *
@@ -11,11 +11,12 @@
  * - The minimum program element size is a phrase (usually 4 or 8 bytes).\n
  *   This requires programming to be done on a phrase boundary and be a multiple of the phrase size.
  *
- *  Created on: 17/4/2017
+ *  Created on: 14/6/2018
  *      Author: podonoghue
- ============================================================================
+ ====================================================================================================
  */
 #include <stdlib.h>
+#include <time.h>       /* time */
 #include "flash.h"
 
 using namespace USBDM;
@@ -23,6 +24,8 @@ using namespace USBDM;
 /*
  * Uncomment to use Data flash rather that Program flash region
  * Not all devices have Data flash e.g. MKxxFX does, MKxxFN doesn't
+ * Note - This is using the data flash as simple flash not EEPROM.
+ *        See nonvolatile_example.cpp for FlexRAM/EEPROM example.
  */
 //#define USE_DATA_FLASH
 
@@ -30,35 +33,30 @@ using namespace USBDM;
 /**
  * Data flash example - the array is located in Data Flash (FlexNVM region used as regular flash)
  */
-/** Size of flash sector being used */
-constexpr int sectorSize = Flash::dataFlashSectorSize;
+/** Size of flash region to program - must be a multiple of flash sector size */
+static constexpr unsigned ArraySize =  2 * Flash::dataFlashSectorSize;
 
 /** Array located in data flash that will be programmed */
-__attribute__ ((section(".flexNVM"), aligned(sectorSize)))
-static uint8_t copy[sectorSize];
+__attribute__ ((section(".flexNVM"), aligned(Flash::dataFlashSectorSize)))
+static uint8_t copy[ArraySize];
 
 #else
 /**
  * Program flash example - the array is located in Program Flash (Regular flash region)
  */
-/** Size of flash sector being used */
-constexpr int sectorSize = Flash::programFlashSectorSize;
+/** Size of flash region to program - must be a multiple of flash sector size */
+static constexpr unsigned ArraySize =  2 * Flash::programFlashSectorSize;
 
 /**
  * Array located in program flash that will be programmed.
  * Must not be in same sector as code or constant data!
  */
-#define FLASH_SECTOR_SIZE 1 // Should be set to value of sectorSize
-#if FLASH_SECTOR_SIZE == 1
-// constexpr not supported in directives!
-#error "Define FLASH_SECTOR_SIZE (above) as a simple integer equal to sectorSize"
-#endif
-__attribute__ ((section(".flash"), aligned(FLASH_SECTOR_SIZE)))
-static uint8_t copy[Flash::programFlashSectorSize];
+__attribute__ ((section(".flash"), aligned(Flash::programFlashSectorSize)))
+static uint8_t copy[ArraySize];
 #endif
 
 /** Data to be programmed to flash */
-static uint8_t data[sectorSize];
+static uint8_t data[ArraySize];
 
 /**
  * Print a range of memory as a hex table
@@ -67,19 +65,26 @@ static uint8_t data[sectorSize];
  * @param size    Number bytes to print
  */
 void printDump(uint8_t *address, uint32_t size) {
-   printf("          0  1  2  3  4  5  6  7  8  9  A  B  C  D  E  F\n\r");
+   constexpr unsigned RowWidth = 32;
+
+   console.setPadding(Padding_LeadingZeroes).setWidth(2);
+   console.write("      ");
+   for (unsigned index=0; index<RowWidth; index++) {
+      console.write(index).write(" ");
+   }
+   console.writeln();
    bool needNewline = true;
-   for (uint index=0; index<size; index++) {
+   for (unsigned index=0; index<size; index++) {
       if (needNewline) {
-         printf("%08X ", (int)address+index);
+         console.write((int)address+index, Radix_16).write(": ");
       }
-      printf("%02X ", address[index]);
-      needNewline = ((index%16)==15);
+      console.write(address[index], Radix_16).write(" ");
+      needNewline = (((index+1)&(RowWidth-1))==0);
       if (needNewline) {
-         printf("\n\r");
+         console.writeln();
       }
    }
-   printf("\n\r");
+   console.writeln().reset();
 }
 
 /**
@@ -87,8 +92,9 @@ void printDump(uint8_t *address, uint32_t size) {
  */
 int main(void) {
    console.writeln("Starting");
-   static_assert(((sizeof(copy)&(sectorSize-1)) == 0), "Data must be correct size");
-   usbdm_assert((((unsigned)copy&(sectorSize-1)) == 0), "Data must be correct size");
+
+   static_assert(((sizeof(copy)&(Flash::programFlashSectorSize-1)) == 0), "Data must be correct size");
+   usbdm_assert((((unsigned)copy&(Flash::programFlashSectorSize-1)) == 0), "Data must be correct size");
 
    // Report original flash contents
    console.writeln("Flash before programming");
@@ -106,7 +112,7 @@ int main(void) {
    printDump(copy, sizeof(copy));
 
    // Verify programmed data
-   for (uint index=0; index<sizeof(copy); index++) {
+   for (unsigned index=0; index<sizeof(copy); index++) {
       if (copy[index] != 0xFF) {
          console.
          write("Flash failed erase @").write(&copy[index]).
@@ -117,7 +123,8 @@ int main(void) {
    }
 
    // Fill source with random data
-   for (uint index=0; index<sizeof(data); index++) {
+   srand (time(NULL));
+   for (unsigned index=0; index<sizeof(data); index++) {
       data[index] = rand()%256;
    }
 
@@ -133,7 +140,7 @@ int main(void) {
    printDump(copy, sizeof(copy));
 
    // Verify programmed data
-   for (uint index=0; index<sizeof(data); index++) {
+   for (unsigned index=0; index<sizeof(data); index++) {
       if (data[index] != copy[index]) {
          console.
          write("Flash failed verify @").write(&copy[index]).

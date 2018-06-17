@@ -12,7 +12,7 @@
  *
  * It is necessary to enable these in Configure.usbdmProject
  * under the "Peripheral Parameters"->DMA tab.
- * Select irqHandlerChannel1 and irqErrorHandler option (Class Method - Software ...)
+ * Select irqHandlers option (Class Method - Software ...)
  */
 #include "hardware.h"
 #include "dma.h"
@@ -26,7 +26,7 @@ static volatile bool complete;
  *
  * Sets flag to indicate sequence complete.
  */
-void dmaCallback() {
+static void dmaCallback() {
    complete = true;
 }
 
@@ -34,10 +34,10 @@ void dmaCallback() {
  * DMA Memory-to-memory transfer
  *
  * @param[in]  source         Source location
- * @param[in]  size           Number of bytes to transfer - must be multiple of uint32_t size
  * @param[out] destination    Destination location
+ * @param[in]  size           Number of bytes to transfer - must be multiple of uint32_t size
  */
-static void dmaTransfer(uint32_t *source, uint32_t size, uint32_t *destination) {
+static void dmaTransfer(uint32_t *source, uint32_t *destination, uint32_t size) {
 
    usbdm_assert(size%sizeof(uint32_t) == 0, "size must be a multiple of sizeof(uint32_t)");
 
@@ -85,13 +85,13 @@ static void dmaTransfer(uint32_t *source, uint32_t size, uint32_t *destination) 
     */
    static const DmaTcd tcd {
       /* uint32_t  SADDR  Source address        */ (uint32_t)(source),         // Source array
-      /* uint16_t  SOFF   SADDR offset          */ sizeof(*source),            // SADDR advances by source data size for each request
+      /* uint16_t  SOFF   SADDR offset          */ sizeof(*source),            // SADDR advances source element size for each transfer
       /* uint16_t  ATTR   Transfer attributes   */ dmaSize(*source,            // 32-bit read from SADDR
       /*                                        */         *destination),      // 32-bit write to DADDR
       /* uint32_t  NBYTES Minor loop byte count */ size,                       // Total transfer in one minor-loop
       /* uint32_t  SLAST  Last SADDR adjustment */ -size,                      // Reset SADDR to start of array on completion
-      /* uint32_t  DADDR  Destination address   */ (uint32_t)(destination),    // Array for result
-      /* uint16_t  DOFF   DADDR offset          */ sizeof(*destination),       // DADDR advances by destination data size for each request
+      /* uint32_t  DADDR  Destination address   */ (uint32_t)(destination),    // Start of array for result
+      /* uint16_t  DOFF   DADDR offset          */ sizeof(*destination),       // DADDR advances destination element size for each transfer
       /* uint16_t  CITER  Major loop count      */ DMA_CITER_ELINKNO_ELINK(0)| // No ELINK
       /*                                        */ DMA_CITER_ELINKNO_CITER(1), // Single (1) software transfer
       /* uint32_t  DLAST  Last DADDR adjustment */ -size,                      // Reset DADDR to start of array on completion
@@ -123,18 +123,20 @@ int main() {
    uint32_t source[20]      = {1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20};
    uint32_t destination[20] = {0};
 
+   console.setPadding(Padding_LeadingSpaces).setWidth(3);
+
    console.writeln("Original buffer contents");
    for (unsigned index=0; index<(sizeof(destination)/sizeof(destination[0])); index++) {
-      console.write(index).write(": , ch2=").writeln(destination[index]);
+      console.write(index).write(": ").writeln(destination[index]);
    }
 
    console.writeln("Starting Transfer");
-   dmaTransfer(source, sizeof(source), destination);
+   dmaTransfer(source, destination, sizeof(source));
    console.writeln("Completed Transfer");
 
    console.writeln("Final buffer contents");
    for (unsigned index=0; index<(sizeof(destination)/sizeof(destination[0])); index++) {
-      console.write(index).write(": , ch2=").writeln(destination[index]);
+      console.write(index).write(": ").writeln(destination[index]);
    }
 
    for(;;) {

@@ -43,14 +43,14 @@ using Debug = GpioA<12>;
  * @param[in] status Flags indicating interrupt source channel(s)
  */
 static void ftmCallback(uint8_t status) {
-   static uint16_t lastEventTime;
+   static uint16_t risingEdgeEventTime;
 
    Debug::set();
    // Check channel
    if (status & TimerChannel::CHANNEL_MASK) {
       uint16_t currentEventTime = TimerChannel::getEventTime();
-      periodInTicks = currentEventTime-lastEventTime;
-      lastEventTime = currentEventTime;
+      periodInTicks = currentEventTime-risingEdgeEventTime;
+      risingEdgeEventTime = currentEventTime;
    }
    Debug::clear();
 }
@@ -90,11 +90,8 @@ int main() {
 
    // Configure the channel
    TimerChannel::configure(
-         FtmChMode_InputCaptureRisingEdge, // Inpout capture rising edge
+         FtmChMode_InputCaptureRisingEdge, // Input capture rising edge
          FtmChannelAction_Irq);            //  + interrupts on events
-
-   // Enable interrupts from the channel
-   TimerChannel::enableInterrupts();
 
    // Check if configuration failed
    USBDM::checkError();

@@ -9,6 +9,7 @@
  */
 #include <limits.h>
 #include "console.h"
+#include "stringFormatter.h"
 
 // Allow access to USBDM methods without USBDM:: prefix
 using namespace USBDM;
@@ -20,6 +21,7 @@ int main() {
    unsigned       unsignedInteger;
    unsigned long  unsignedLong;
 
+   // Writing stuff to console
    console.writeln().writeln("Starting");
 
    console.writeln(123456.4567f);
@@ -44,6 +46,7 @@ int main() {
    console<<3.4567<<EndOfLine;
    console<<3.0067<<EndOfLine;
 
+   // Console read/write
    if (console.write("Number: ").readln(integer).isError()) {
       console.writeln("Opps");
    }
@@ -102,17 +105,11 @@ int main() {
    console<<"UINT_MAX,radix(2)  = "<<Uart::radix(2)<<UINT_MAX<<EndOfLine;
    console<<Radix_10;
 
-   console.setWidth(10);
-   FormattedIO::ultoa(buff, 100);
-   console.write("ultoa(100, buff)  = ").writeln(buff);
-   FormattedIO::ltoa(buff, -100);
-   console.write("ltoa(-100, buff)  = ").writeln(buff);
-
-   char *ptr = buff;
-   ptr = FormattedIO::strcpy(ptr, "Console::ultoa(100, buff) = ");
-   ptr = FormattedIO::ultoa(ptr, 100);
-   ptr = FormattedIO::strcpy(ptr, ", oh well!");
-   console.writeln(buff);
+   //  Basic integer formatting to strings
+   FormattedIO::ultoa(buff, 100, Radix_10, Padding_LeadingZeroes, 12);
+   console.write("ultoa(100, buff, Radix_10, Padding_LeadingZeroes, 12)  = ").writeln(buff);
+   FormattedIO::ltoa(buff, -100, Radix_16, Padding_LeadingSpaces, 12);
+   console.write("ltoa(-100, buff, Radix_16, Padding_LeadingSpaces, 12)  = ").writeln(buff);
 
    // Test input
    console.write("Value (in radix 2): ").readln(integer,Radix_2);
@@ -123,9 +120,11 @@ int main() {
    console<<"Value (in radix 16): ">>Radix_16>>integer>>EndOfLine;
    console<<Radix_10<<integer<<", 0x"<<Radix_16<<(unsigned long)integer<<", 0b"<<Radix_2<<(unsigned long)integer<<EndOfLine;
 
+   // Read and echo an input line
    int length = console.write("text : ").gets(buff, sizeof(buff));
    console.write("[").write(length).write(" chars] = '").write(buff).writeln("'").flushOutput();
 
+   // Read and write numbers
    console<<Radix_10;
    console<<"value :">>integer>>EndOfLine;
    console<<integer<<EndOfLine;
@@ -145,8 +144,14 @@ int main() {
    console.write("An integer   : ").readln(unsignedLong);
    console.writeln(unsignedLong);
 
+   // Writing formatted data to character buffer
+   StringFormatter sf(buff,sizeof(buff));
+   sf.write("This is being written to a string ").write(1).write(",").write(2).write(",").write(3.0).writeln(" - done");
+   console.write(sf.toString());
 
-   console.readChar();
+   console.write("Type any character - ignored").readChar();
+
+   console.writeln("\nFinished");
 
    // If direct interrupt handling is needed.
    //   console.setRxTxCallback(nullptr);

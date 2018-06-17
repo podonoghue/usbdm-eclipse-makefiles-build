@@ -7,8 +7,13 @@
  *      Author: podonoghue
  ============================================================================
  */
-#include "system.h"
-#include "derivative.h"
+/**
+ * This example uses DMA interrupts.
+ *
+ * It is necessary to enable these in Configure.usbdmProject
+ * under the "Peripheral Parameters"->DMA tab.
+ * Select irqHandlers option (Class Method - Software ...)
+ */
 #include "hardware.h"
 #include "pit.h"
 #include "pdb.h"
@@ -35,8 +40,8 @@ static void dmaCallback() {
  * @tparam T2 Type of destination items (this type would usually be inferred)
  *
  * @param[in]  source         Source location
- * @param[in]  size           Number of bytes to transfer - must be multiple of both T1, T2 size
  * @param[out] destination    Destination location
+ * @param[in]  size           Number of bytes to transfer - must be multiple of both T1, T2 size
  */
 template <typename T1, typename T2>
 static void dmaTransfer(T1 *source, T2 *destination, const uint32_t size) {
@@ -88,14 +93,14 @@ static void dmaTransfer(T1 *source, T2 *destination, const uint32_t size) {
    static const DmaTcd tcd {
       /* uint32_t  SADDR  Source address        */ (uint32_t)(source),         // Source array
       /* uint16_t  SOFF   SADDR offset          */ sizeof(*source),            // SADDR advances source element size for each transfer
-      /* uint16_t  ATTR   Transfer attributes   */ dmaSSize(*source)|          // Read size from SADDR
-      /*                                        */ dmaDSize(*destination),     // Write size to DADDR
+      /* uint16_t  ATTR   Transfer attributes   */ dmaSize(*source,            // 32-bit read from SADDR
+      /*                                        */         *destination),      // 32-bit write to DADDR
       /* uint32_t  NBYTES Minor loop byte count */ size,                       // Total transfer in one minor-loop
       /* uint32_t  SLAST  Last SADDR adjustment */ -size,                      // Reset SADDR to start of array on completion
       /* uint32_t  DADDR  Destination address   */ (uint32_t)(destination),    // Start of array for result
       /* uint16_t  DOFF   DADDR offset          */ sizeof(*destination),       // DADDR advances destination element size for each transfer
       /* uint16_t  CITER  Major loop count      */ DMA_CITER_ELINKNO_ELINK(0)| // No ELINK
-      /*                                        */ 1,                          // 1 (software) request
+      /*                                        */ DMA_CITER_ELINKNO_CITER(1), // Single (1) software transfer
       /* uint32_t  DLAST  Last DADDR adjustment */ -size,                      // Reset DADDR to start of array on completion
       /* uint16_t  CSR    Control and Status    */ DMA_CSR_INTMAJOR(1)|        // Generate interrupt on completion of Major-loop
       /*                                        */ DMA_CSR_START(1)
@@ -120,23 +125,25 @@ static void dmaTransfer(T1 *source, T2 *destination, const uint32_t size) {
 }
 
 int main() {
-   printf("Starting\n");
+   console.writeln("Starting");
 
    uint32_t source[20]      = {1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20};
    uint32_t destination[20] = {0};
 
+   console.setPadding(Padding_LeadingSpaces).setWidth(3);
+
    console.writeln("Original buffer contents");
    for (unsigned index=0; index<(sizeof(destination)/sizeof(destination[0])); index++) {
-      console.write(index).write(": , ch2=").writeln(destination[index]);
+      console.write(index).write(": ").writeln(destination[index]);
    }
 
-   console.writeln("Starting Transfer\n");
+   console.writeln("Starting Transfer");
    dmaTransfer(source, destination, sizeof(source));
-   console.writeln("Completed Transfer\n");
+   console.writeln("Completed Transfer");
 
-   console.writeln("Final buffer contents\n");
+   console.writeln("Final buffer contents");
    for (unsigned index=0; index<(sizeof(destination)/sizeof(destination[0])); index++) {
-      console.write(index).write(": , ch2=").writeln(destination[index]);
+      console.write(index).write(": ").writeln(destination[index]);
    }
 
    for(;;) {

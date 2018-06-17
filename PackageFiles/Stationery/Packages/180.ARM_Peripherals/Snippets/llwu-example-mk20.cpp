@@ -53,7 +53,7 @@ using WakeupTimer = Lptmr0;
 static constexpr unsigned FILTER_NUM = 0;
 
 // LLWU Pin to use for wake-up
-static constexpr LlwuPin  WAKEUP_PIN = LlwuPin_ptc1;
+static constexpr LlwuPin  WAKEUP_PIN = LlwuPin_Ptc1;
 
 // LLWU pin configuration
 using WakeupPin = PcrTable_T<LlwuInfo, WAKEUP_PIN>;
@@ -158,15 +158,15 @@ void testStopMode(
     * This assumes run mode is PEE
     */
    if (Smc::getStatus() == SmcStatus_run) {
-      Mcg::clockTransition(McgInfo::clockInfo[RUN_CLOCK_CONFIG]);
+      Mcg::clockTransition(Mcg::clockInfo[RUN_CLOCK_CONFIG]);
       console.setBaudRate(BAUD_RATE);
-      console.writeln("Awake!").flushOutput();
+      console.writeln("**** Awake ****").flushOutput();
       console.writeln("Restored clock frequency").flushOutput();
    }
    else
 #endif
    {
-      console.writeln("Awake!").flushOutput();
+      console.writeln("**** Awake ****").flushOutput();
    }
 }
 
@@ -185,14 +185,14 @@ void testWaitMode(SmcRunMode smcRunMode) {
    console.writeln("Awake!").flushOutput();
 }
 
-/** Names of tests */
-static const char *TestNames[] = {
-   "NONE ", "STOP ", "VLPS ", "WAIT ", "VLPW ", "LLS  ", "VLLS0", "VLLS1", "VLLS2", "VLLS3",
-};
-
 /** Possible tests - must be in this order */
 enum Test {
    NONE, STOP, VLPS, WAIT, VLPW, LLS, VLLS0, VLLS1, VLLS2, VLLS3,
+};
+
+/** Names of tests - must match enum Test{} */
+static const char *TestNames[] = {
+   "NONE ", "STOP ", "VLPS ", "WAIT ", "VLPW ", "LLS  ", "VLLS0", "VLLS1", "VLLS2", "VLLS3",
 };
 
 /**
@@ -376,7 +376,7 @@ SmcStatus changeRunMode() {
    SmcStatus smcStatus = Smc::getStatus();
    if (smcStatus == SmcStatus_run) {
       // RUN->VLPR
-      Mcg::clockTransition(McgInfo::clockInfo[VLPR_CLOCK_CONFIG]);
+      Mcg::clockTransition(Mcg::clockInfo[VLPR_CLOCK_CONFIG]);
       Smc::enterRunMode(SmcRunMode_VeryLowPower);
       console.setBaudRate(BAUD_RATE);
       console.writeln("Changed to VLPR mode").flushOutput();
@@ -384,7 +384,7 @@ SmcStatus changeRunMode() {
    else if (smcStatus == SmcStatus_vlpr) {
       // VLPR->RUN mode
       Smc::enterRunMode(SmcRunMode_Normal);
-      Mcg::clockTransition(McgInfo::clockInfo[RUN_CLOCK_CONFIG]);
+      Mcg::clockTransition(Mcg::clockInfo[RUN_CLOCK_CONFIG]);
       console.setBaudRate(BAUD_RATE);
       console.writeln("Changed to RUN mode").flushOutput();
    }
@@ -456,8 +456,8 @@ int main() {
    for(;;) {
       SmcStatus smcStatus = Smc::getStatus();
       if (refresh) {
-         console.write("SystemCoreClock  = ").writeln(::SystemCoreClock);
-         console.write("SystemBusClock   = ").writeln(::SystemBusClock);
+         console.write("SystemCoreClock  = ").write(::SystemCoreClock/1000000.0).writeln(" MHz");
+         console.write("SystemBusClock   = ").write(::SystemBusClock/1000000.0).writeln(" MHz");
 
          switch(smcStatus) {
             default:

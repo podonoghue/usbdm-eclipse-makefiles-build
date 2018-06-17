@@ -1,11 +1,12 @@
-/*
- ============================================================================
+/**
  * @file    rtc-example.cpp
- * @brief   Basic C++ demo using USBDM::Rtc class
  *
- *  Created on: 10/1/2016
- *      Author: podonoghue
- ============================================================================
+ * Real Time CLock (RTC) Example
+ *
+ * This example uses RTC interrupts.
+ * Uses an LED for debug timing check.
+ *
+ * Note - Requires RTC interrupt handlers to be installed.
  */
 #include <ctime>
 #include "hardware.h"
@@ -24,7 +25,7 @@ using Led = GpioA<2,ActiveLow>;
  */
 void handler(uint32_t timeSinceEpoch) {
    // Set repeat callback for 5 seconds from now
-   Rtc::setAlarm(timeSinceEpoch+4);
+   Rtc::setAlarmTime(timeSinceEpoch+4);
    Led::toggle();
 }
 
@@ -36,7 +37,7 @@ int main() {
 
    // Set initial callback
    Rtc::setAlarmCallback(handler);
-   Rtc::setAlarm(Rtc::getTime()+5);
+   Rtc::setAlarmTime(Rtc::getTime()+5);
    Rtc::enableAlarmInterrupts();
    Rtc::enableNvicInterrupts();
 

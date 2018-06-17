@@ -32,7 +32,7 @@ using TimerChannel = Ftm0Channel<7>;
 static volatile uint16_t timerHalfPeriod;
 
 // Waveform period to generate
-static const float WAVEFORM_PERIOD = 100*ms;
+static constexpr float WAVEFORM_PERIOD = 100*ms;
 
 /**
  * Interrupt handler for Timer interrupts

@@ -1,7 +1,7 @@
 /**
  ============================================================================
  * @file    ftm-quadrature-example.cpp
- * @brief   Demo using Ftm class to implement a Quadrature encoder
+ * @brief   Demo using Ftm class to implement a Quadrature decoder
  *
  *  Created on: 28/5/2017
  *      Author: podonoghue
@@ -10,20 +10,20 @@
 #include "hardware.h"
 
 /*
- * Note - Not all FTMs support quadrature encoder functions
+ * Note - Not all FTMs support quadrature decoder functions
  */
 
 using namespace USBDM;
 
-// Use FTM1 as the quadrature encoder
+// Use FTM1 as the quadrature decoder
 // Not all FTMs support this mode
-using QuadEncoder = QuadEncoder1;
+using QuadDecoder = QuadDecoder1;
 
 /**
  * Callback executed on timer overflow/underflow
  */
 void callBack() {
-   if (QuadEncoder::ftm->QDCTRL & FTM_QDCTRL_QUADIR_MASK) {
+   if (QuadDecoder::ftm().QDCTRL & FTM_QDCTRL_QUADIR_MASK) {
       // Indicates overflow while increasing
    }
    else {
@@ -32,27 +32,27 @@ void callBack() {
 }
 
 int main() {
-   // Enable encoder
-   QuadEncoder::enable();
+   // Configure decoder
+   QuadDecoder::configure(FtmPrescale_1);
 
    // Set pin filters
-   QuadEncoder::enableFilter(15);
+   QuadDecoder::enableFilter(15);
 
    // Reset position to zero
    // Movement will be +/- relative to this initial position
-   QuadEncoder::resetPosition();
+   QuadDecoder::resetPosition();
 
    // Set up callback for quadrature overflow or underflow
-   QuadEncoder::setTimerOverflowCallback(callBack);
-   QuadEncoder::enableTimerOverflowInterrupts();
-   QuadEncoder::enableNvicInterrupts();
+   QuadDecoder::setTimerOverflowCallback(callBack);
+   QuadDecoder::enableTimerOverflowInterrupts();
+   QuadDecoder::enableNvicInterrupts();
 
    // Check if configuration failed
    USBDM::checkError();
 
    for (;;) {
       // Report position
-      console.write("Shaft position = ").writeln(QuadEncoder::getPosition());
+      console.write("Shaft position = ").writeln(QuadDecoder::getPosition());
    }
 
    return 0;

@@ -16,9 +16,6 @@
 
 using namespace USBDM;
 
-// LED connection - change as required
-using Led   = GpioC<3>;
-
 int main() {
 
    console.write(" SystemCoreClock = ").writeln(::SystemCoreClock);

@@ -1,11 +1,11 @@
-/*
- ============================================================================
+/**
  * @file    tsi-mk-example.cpp (180.ARM_Peripherals)
- * @brief   Basic C++ demo using TSI class
  *
- *  Created on: 10/1/2016
- *      Author: podonoghue
- ============================================================================
+ * Touch Sense Input (TSI) Example
+ *
+ * This example uses TSI interrupts, TSI inputs and 2 LEDs
+ *
+ * Note - Requires TSI interrupt handlers to be installed.
  */
 #include <algorithm>
 #include "hardware.h"
@@ -81,7 +81,7 @@ void initTsi(bool periodic) {
    checkError();
 }
 
-/*
+/**
  * The pulse output is intended to be measured on an oscilloscope.
  * The high-time shows the approximate sample time for the active inputs.
  * This will vary with capacitance (finger!)
@@ -171,10 +171,10 @@ void tsiExample() {
 
       // Report values
       console.write("chA=").write(chAOn?"On ":"Off").write("(").write(chA).write("), ");
-      console.write("chB=").write(chBOn?"On ":"Off").write("(").write(chB).write("))");
+      console.write("chB=").write(chBOn?"On ":"Off").write("(").write(chB).writeln("))");
    }
-
 }
+
 int main() {
 
 //   measureScanTime();

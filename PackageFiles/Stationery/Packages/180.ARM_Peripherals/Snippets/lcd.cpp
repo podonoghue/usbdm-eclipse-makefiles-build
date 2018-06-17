@@ -247,7 +247,7 @@ void LcdBase::drawBitmap(uint8_t bmp[131*131]) {
    txData(131);
    // WRITE MEMORY
    txCommand(RAMWR);
-   for (j = 0; j < sizeof(bmp); j++) {
+   for (j = 0; j < sizeof(uint8_t[131*131]); j++) {
       txData(bmp[j]);
    }
    // Memory access controller (command 0x36)
@@ -256,7 +256,6 @@ void LcdBase::drawBitmap(uint8_t bmp[131*131]) {
    // Display On
    txCommand(DISON);
 #endif
-
   unlock();
 }
 

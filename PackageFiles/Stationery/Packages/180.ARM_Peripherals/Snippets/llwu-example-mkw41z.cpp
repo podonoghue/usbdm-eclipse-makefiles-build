@@ -9,8 +9,8 @@
  */
 /*
  * This examples assumes that appropriate clock configurations have been created:
- *  - RUN_CLOCK_CONFIG  = ClockConfig_PEE_48MHz   For RUN mode (Core=80MHz, Bus=40MHz, Flash=27MHz)
- *  - VLPR_CLOCK_CONFIG = ClockConfig_BLPE_4MHz   For VLPR (Core/Bus = 4MHz, Flash = 1MHz)
+ *  - RUN_CLOCK_CONFIG   = ClockConfig_PEE_48MHz   For RUN mode (Core=80MHz, Bus=40MHz, Flash=27MHz)
+ *  - VLPR_CLOCK_CONFIG  = ClockConfig_BLPE_4MHz   For VLPR (Core/Bus = 4MHz, Flash = 1MHz)
  *
  * Interrupts must be configured for GPIO pin used, LLWU, LPTMR
  * It will also be necessary to modify the linker memory map so that only
@@ -151,15 +151,15 @@ void testStopMode(
     * This assumes run mode is PEE
     */
    if (Smc::getStatus() == SmcStatus_run) {
-      Mcg::clockTransition(McgInfo::clockInfo[RUN_CLOCK_CONFIG]);
+      Mcg::clockTransition(Mcg::clockInfo[RUN_CLOCK_CONFIG]);
       console.setBaudRate(BAUD_RATE);
-      console.writeln("Awake!").flushOutput();
+      console.writeln("**** Awake ****").flushOutput();
       console.writeln("Restored clock frequency").flushOutput();
    }
    else
 #endif
    {
-      console.writeln("Awake!").flushOutput();
+      console.writeln("**** Awake ****").flushOutput();
    }
 }
 
@@ -369,7 +369,7 @@ SmcStatus changeRunMode() {
    SmcStatus smcStatus = Smc::getStatus();
    if (smcStatus == SmcStatus_run) {
       // RUN->VLPR
-      Mcg::clockTransition(McgInfo::clockInfo[VLPR_CLOCK_CONFIG]);
+      Mcg::clockTransition(Mcg::clockInfo[VLPR_CLOCK_CONFIG]);
       Smc::enterRunMode(SmcRunMode_VeryLowPower);
       console.setBaudRate(BAUD_RATE);
       console.writeln("Changed to VLPR mode").flushOutput();
@@ -377,7 +377,7 @@ SmcStatus changeRunMode() {
    else if (smcStatus == SmcStatus_vlpr) {
       // VLPR->RUN mode
       Smc::enterRunMode(SmcRunMode_Normal);
-      Mcg::clockTransition(McgInfo::clockInfo[RUN_CLOCK_CONFIG]);
+      Mcg::clockTransition(Mcg::clockInfo[RUN_CLOCK_CONFIG]);
       console.setBaudRate(BAUD_RATE);
       console.writeln("Changed to RUN mode").flushOutput();
    }
