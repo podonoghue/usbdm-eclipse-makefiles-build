@@ -166,7 +166,8 @@ protected:
     *
     * @param mask Mask identifying channel
     */
-   static void unhandledChannelCallback(uint8_t) {
+   static void unhandledChannelCallback(uint8_t mask) {
+      (void)mask;
       setAndCheckErrorCode(E_NO_HANDLER);
    }
    /**
@@ -1447,29 +1448,29 @@ class Tpm3Channel : public TpmBase_T<Tpm3Info>, CheckSignal<Tpm2Info, channel> {
  * @tparam info      Information class for TPM
  *
  * @code
- *  using QuadEncoder = QuadEncoder_T<Ftm0Info>;
+ *  using QuadDecoder = QuadDecoderTpm_T<Tpm0Info>;
  *
- *  // Enable encoder
- *  QuadEncoder::configure();
+ *  // Enable decoder
+ *  QuadDecoder::configure();
  *
  *  // Set pin filters
- *  QuadEncoder::enableFilter(15);
+ *  QuadDecoder::enableFilter(15);
  *
  *  // Reset position to zero
  *  // Movement will be +/- relative to this initial position
- *  QuadEncoder::resetPosition();
+ *  QuadDecoder::resetPosition();
  *
  *  for(;;) {
- *     console.write("Position =").writeln(QuadEncoder.getPosition());
+ *     console.write("Position =").writeln(QuadDecoder.getPosition());
  *  }
  * @endcode
  */
 template <class Info>
-class QuadEncoderTpm_T : public TpmBase_T<Info> {
+class QuadDecoderTpm_T : public TpmBase_T<Info> {
 
 #ifdef DEBUG_BUILD
-   static_assert(Info::InfoQUAD::info[0].gpioBit != UNMAPPED_PCR, "QuadEncoder_T: TPM PHA is not mapped to a pin - Modify Configure.usbdm");
-   static_assert(Info::InfoQUAD::info[1].gpioBit != UNMAPPED_PCR, "QuadEncoder_T: TPM PHB is not mapped to a pin - Modify Configure.usbdm");
+   static_assert(Info::InfoQUAD::info[0].gpioBit != UNMAPPED_PCR, "QuadDecoder_T: TPM PHA is not mapped to a pin - Modify Configure.usbdm");
+   static_assert(Info::InfoQUAD::info[1].gpioBit != UNMAPPED_PCR, "QuadDecoder_T: TPM PHB is not mapped to a pin - Modify Configure.usbdm");
 #endif
 
 public:
@@ -1500,7 +1501,7 @@ public:
       TpmBase_T<Info>::configure(TpmMode_Quadrature, TpmClockSource_Disabled, prescaler);
 
       tpm().QDCTRL =
-            TPM_QDCTRL_QUADEN_MASK|      // Enable Quadrature encoder
+            TPM_QDCTRL_QUADEN_MASK|      // Enable Quadrature decoder
             TPM_QDCTRL_QUADMODE(0);      // Quadrature mode
       tpm().CONF   = TPM_CONF_DBGMODE(3);
    }
@@ -1513,7 +1514,7 @@ public:
       tpm().CNT = 0;
    }
    /**
-    * Get Quadrature encoder position
+    * Get Quadrature decoder position
     *
     * @return Signed number representing position relative to reference location
     */
@@ -1524,18 +1525,18 @@ public:
 
 #ifdef USBDM_TPM1_IS_DEFINED
 /**
- * Class representing TPM1 as Quadrature encoder
+ * Class representing TPM1 as Quadrature decoder
  * Not all TPMs support this mode
  */
-using TpmQuadEncoder1 = QuadEncoderTpm_T<Tpm1Info>;
+using TpmQuadDecoder1 = QuadDecoderTpm_T<Tpm1Info>;
 #endif
 
 #ifdef USBDM_TPM2_IS_DEFINED
 /**
- * Class representing TPM2 as Quadrature encoder
+ * Class representing TPM2 as Quadrature decoder
  * Not all TPMs support this mode
  */
-using TpmQuadEncoder2 = QuadEncoderTpm_T<Tpm2Info>;
+using TpmQuadDecoder2 = QuadDecoderTpm_T<Tpm2Info>;
 #endif
 
 #endif // USBDM_TPM3_IS_DEFINED

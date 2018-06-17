@@ -70,7 +70,7 @@ enum FtmMode {
    FtmMode_LeftAlign   = FTM_SC_CPWMS(0),
    //! Up-down counter: Used for centre-aligned PWM
    FtmMode_CentreAlign = FTM_SC_CPWMS(1),
-   //! Dummy value: Used for quadrature encoder
+   //! Dummy value: Used for quadrature decoder
    FtmMode_Quadrature  = 0,
 };
 
@@ -1628,34 +1628,34 @@ using Ftm3 = FtmBase_T<Ftm3Info>;
 #endif
 
 /**
- * Template class representing a FTM configured as a Quadrature encoder
+ * Template class representing a FTM configured as a Quadrature decoder
  *
  * @tparam info      Information class for FTM
  *
  * @code
- *  using QuadEncoder = QuadEncoder_T<Ftm0Info>;
+ *  using QuadDecoder = QuadDecoder_T<Ftm0Info>;
  *
- *  // Enable encoder
- *  QuadEncoder::configure();
+ *  // Enable decoder
+ *  QuadDecoder::configure();
  *
  *  // Set pin filters
- *  QuadEncoder::enableFilter(15);
+ *  QuadDecoder::enableFilter(15);
  *
  *  // Reset position to zero
  *  // Movement will be +/- relative to this initial position
- *  QuadEncoder::resetPosition();
+ *  QuadDecoder::resetPosition();
  *
  *  for(;;) {
- *     console.write("Position =").writeln(QuadEncoder.getPosition());
+ *     console.write("Position =").writeln(QuadDecoder.getPosition());
  *  }
  * @endcode
  */
 template <class Info>
-class QuadEncoder_T : private FtmBase_T<Info> {
+class QuadDecoder_T : private FtmBase_T<Info> {
 
 #ifdef DEBUG_BUILD
-   static_assert(Info::InfoQUAD::info[0].gpioBit != UNMAPPED_PCR, "QuadEncoder_T: FTM PHA is not mapped to a pin - Modify Configure.usbdm");
-   static_assert(Info::InfoQUAD::info[1].gpioBit != UNMAPPED_PCR, "QuadEncoder_T: FTM PHB is not mapped to a pin - Modify Configure.usbdm");
+   static_assert(Info::InfoQUAD::info[0].gpioBit != UNMAPPED_PCR, "QuadDecoder_T: FTM PHA is not mapped to a pin - Modify Configure.usbdm");
+   static_assert(Info::InfoQUAD::info[1].gpioBit != UNMAPPED_PCR, "QuadDecoder_T: FTM PHB is not mapped to a pin - Modify Configure.usbdm");
 #endif
 
 public:
@@ -1686,7 +1686,7 @@ public:
       FtmBase_T<Info>::configure(FtmMode_Quadrature, FtmClockSource_Disabled, prescaler);
 
       ftm().QDCTRL =
-            FTM_QDCTRL_QUADEN_MASK|      // Enable Quadrature encoder
+            FTM_QDCTRL_QUADEN_MASK|      // Enable Quadrature decoder
             FTM_QDCTRL_QUADMODE(0);      // Quadrature mode
       ftm().CONF   = FTM_CONF_BDMMODE(3);
    }
@@ -1713,7 +1713,7 @@ public:
       ftm().CNT = 0;
    }
    /**
-    * Get Quadrature encoder position
+    * Get Quadrature decoder position
     *
     * @return Signed number representing position relative to reference location
     */
@@ -1725,42 +1725,42 @@ public:
 
 #ifdef USBDM_FTM0_IS_DEFINED
 /**
- * Class representing FTM0 as Quadrature encoder
+ * Class representing FTM0 as Quadrature decoder
  * Not all FTMs support this mode
  */
-using QuadEncoder0 = QuadEncoder_T<Ftm0Info>;
+using QuadDecoder0 = QuadDecoder_T<Ftm0Info>;
 #endif
 
 #ifdef USBDM_FTM1_IS_DEFINED
 /**
- * Class representing FTM1 as Quadrature encoder
+ * Class representing FTM1 as Quadrature decoder
  * Not all FTMs support this mode
  */
-using QuadEncoder1 = QuadEncoder_T<Ftm1Info>;
+using QuadDecoder1 = QuadDecoder_T<Ftm1Info>;
 #endif
 
 #ifdef USBDM_FTM2_IS_DEFINED
 /**
- * Class representing FTM2 as Quadrature encoder
+ * Class representing FTM2 as Quadrature decoder
  * Not all FTMs support this mode
  */
-using QuadEncoder2 = QuadEncoder_T<Ftm2Info>;
+using QuadDecoder2 = QuadDecoder_T<Ftm2Info>;
 #endif
 
 #ifdef USBDM_FTM3_IS_DEFINED
 /**
- * Class representing FTM3 as Quadrature encoder
+ * Class representing FTM3 as Quadrature decoder
  * Not all FTMs support this mode
  */
-using QuadEncoder3 = QuadEncoder_T<Ftm3Info>;
+using QuadDecoder3 = QuadDecoder_T<Ftm3Info>;
 #endif
 
 #ifdef USBDM_FTM4_IS_DEFINED
 /**
- * Class representing FTM4 as Quadrature encoder
+ * Class representing FTM4 as Quadrature decoder
  * Not all FTMs support this mode
  */
-using QuadEncoder4 = QuadEncoder_T<Ftm4Info>;
+using QuadDecoder4 = QuadDecoder_T<Ftm4Info>;
 #endif
 
 /**
