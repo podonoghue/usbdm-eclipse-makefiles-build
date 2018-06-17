@@ -76,12 +76,12 @@ private:
    /** Hardware instance */
    static __attribute__((always_inline)) volatile MCG_Type &mcg() { return McgInfo::mcg(); }
 
+public:
    /**
     * Table of clock settings
     */
    static const McgInfo::ClockInfo clockInfo[];
 
-public:
    /**
     * Transition from current clock mode to mode given
     *
