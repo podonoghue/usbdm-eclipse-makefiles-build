@@ -403,16 +403,16 @@ private:
    PcrBase_T(const PcrBase&) = delete;
    PcrBase_T(PcrBase&&) = delete;
 
+   /** Callback functions for ISRs */
+   static PinCallbackFunction fCallback;
+
+public:
 #ifdef PORT_DFCR_CS_MASK
    static volatile PORT_DFER_Type &port()   { return *reinterpret_cast<volatile PORT_DFER_Type *>(portAddress); }
 #else
    static volatile PORT_Type &port()   { return *reinterpret_cast<volatile PORT_Type *>(portAddress); }
 #endif
 
-   /** Callback functions for ISRs */
-   static PinCallbackFunction fCallback;
-
-public:
    /**
     * Interrupt handler\n
     *  - Clears interrupt flag
