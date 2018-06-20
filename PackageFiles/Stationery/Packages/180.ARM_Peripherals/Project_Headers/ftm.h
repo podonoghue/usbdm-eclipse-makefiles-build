@@ -140,18 +140,26 @@ enum FtmExternalTrigger {
 enum FtmChannelAction {
    FtmChannelAction_None   = FTM_CnSC_CHIE(0)|FTM_CnSC_DMA(0), //!< No action on event
    FtmChannelAction_Irq    = FTM_CnSC_CHIE(1)|FTM_CnSC_DMA(0), //!< Interrupt on event
-   FtmChannelAction_Dma    = FTM_CnSC_CHIE(0)|FTM_CnSC_DMA(1), //!< Dma on event
-   FtmChannelAction_IrqDma = FTM_CnSC_CHIE(1)|FTM_CnSC_DMA(1), //!< Dma+Interrupt on event
+   FtmChannelAction_Dma    = FTM_CnSC_CHIE(1)|FTM_CnSC_DMA(1), //!< DMA on event
 };
 
 /**
  * Selects pairs of channels for some operations
  */
 enum FtmChannelPair {
-   FtmChannelPair_0_1 = (1<<0),//!< Channel Pair select for channels 0 and 1
-   FtmChannelPair_2_3 = (1<<1),//!< Channel Pair select for channels 2 and 3
-   FtmChannelPair_4_5 = (1<<2),//!< Channel Pair select for channels 4 and 5
-   FtmChannelPair_6_7 = (1<<3),//!< Channel Pair select for channels 6 and 6
+   FtmChannelPair_0_1 = (1<<0), //!< Channel Pair select for channels 0 and 1
+   FtmChannelPair_2_3 = (1<<1), //!< Channel Pair select for channels 2 and 3
+   FtmChannelPair_4_5 = (1<<2), //!< Channel Pair select for channels 4 and 5
+   FtmChannelPair_6_7 = (1<<3), //!< Channel Pair select for channels 6 and 6
+};
+
+/**
+ * Controls value forced to pin by forceChannelOutputs()
+ */
+enum FtmChannelForce {    // Enable|Value
+   FtmChannelForce_Release = 0x00|(0x00<<8), //!< Release channel output
+   FtmChannelForce_Low     = 0xFF|(0x00<<8), //!< Force channel output low
+   FtmChannelForce_High    = 0xFF|(0xFF<<8), //!< Force channel output high
 };
 
 /**
@@ -255,7 +263,7 @@ public:
     * @param[in] theCallback Callback function to execute when timer overflows. \n
     *                        nullptr to indicate none
     */
-   static void INLINE_RELEASE setTimerOverflowCallback(FtmCallbackFunction theCallback) {
+   static INLINE_RELEASE void setTimerOverflowCallback(FtmCallbackFunction theCallback) {
       if (theCallback == nullptr) {
          sToiCallback = unhandledCallback;
          return;
@@ -295,7 +303,7 @@ public:
     * @param[in] theCallback Callback function to execute on fault interrupt.\n
     *                        nullptr to indicate none
     */
-   static void INLINE_RELEASE setFaultCallback(FtmCallbackFunction theCallback) {
+   static INLINE_RELEASE void setFaultCallback(FtmCallbackFunction theCallback) {
       if (theCallback == nullptr) {
          sFaultCallback = unhandledCallback;
          return;
@@ -305,16 +313,24 @@ public:
    }
 
 public:
-   /** Hardware instance pointer */
+   /**
+    * Hardware instance pointer
+    *
+    * @return Reference to FTM hardware
+    */
    static __attribute__((always_inline)) volatile FTM_Type &tmr() { return Info::ftm(); }
 
-   /** Clock register for peripheral */
+   /**
+    * Clock register for peripheral
+    *
+    * @return Reference to clock register
+    */
    static __attribute__((always_inline)) volatile uint32_t &clockReg() { return Info::clockReg(); }
 
    /**
     * Configures all mapped pins associated with this peripheral
     */
-   static void INLINE_RELEASE configureAllPins() {
+   static INLINE_RELEASE void configureAllPins() {
       // Configure pins
       Info::initPCRs();
    }
@@ -322,7 +338,7 @@ public:
    /**
     * Enables clock to peripheral and configures all pins
     */
-   static void INLINE_RELEASE enable() {
+   static INLINE_RELEASE void enable() {
       if (Info::mapPinsOnEnable) {
          configureAllPins();
       }
@@ -418,7 +434,7 @@ public:
     * @param[in]  enable        True => enable, False => disable
     * @param[in]  nvicPriority  Interrupt priority
     */
-   static void INLINE_RELEASE enableNvicInterrupts(bool enable=true, uint32_t nvicPriority=NvicPriority_Normal) {
+   static INLINE_RELEASE void enableNvicInterrupts(bool enable=true, uint32_t nvicPriority=NvicPriority_Normal) {
 
       if (enable) {
          enableNvicInterrupt(Info::irqNums[0], nvicPriority);
@@ -434,7 +450,7 @@ public:
     *
     * @param[in] enable true to enable, false to disable
     */
-   static void INLINE_RELEASE enableTimerOverflowInterrupts(bool enable=true) {
+   static INLINE_RELEASE void enableTimerOverflowInterrupts(bool enable=true) {
       if (enable) {
          tmr().SC |= FTM_SC_TOIE_MASK;
       }
@@ -452,7 +468,7 @@ public:
     *
     * @note This function will affect all channels of the timer.
     */
-   static void INLINE_RELEASE setMod(uint16_t modulo) {
+   static INLINE_RELEASE void setMod(uint16_t modulo) {
       tmr().MOD = modulo;
    }
 
@@ -465,7 +481,7 @@ public:
     *
     * @note This function will affect all channels of the timer.
     */
-   static void INLINE_RELEASE setCounterStartValue(uint32_t startValue) {
+   static INLINE_RELEASE void setCounterStartValue(uint32_t startValue) {
          tmr().CNTIN = startValue;
    }
 
@@ -479,6 +495,7 @@ public:
     *
     * @note Assumes prescale has been chosen as a appropriate value. Rudimentary range checking.
     * @note This function will affect all channels of the timer.
+    * @note The counter start load value (CNTIN) to cleared
     */
    static ErrorCode setPeriodInTicks(uint32_t period) {
 
@@ -512,6 +529,9 @@ public:
       uint8_t sc = tmr().SC;
       tmr().SC = FTM_SC_CLKS(0);
 
+      // Start counter from zero
+      tmr().CNTIN = 0;
+
       // Change modulo
       tmr().MOD = period;
 
@@ -533,6 +553,7 @@ public:
     *
     * @note Adjusts Timer pre-scaler to appropriate value.
     * @note This function will affect all channels of the timer.
+    * @note The counter start load value (CNTIN) to cleared
     */
    static ErrorCode setPeriod(float period) {
       float inputClock = Info::getInputClockFrequency();
@@ -757,6 +778,14 @@ public:
    }
 
    /**
+    * Reset counter to initial value
+    */
+   static INLINE_RELEASE void resetTime() {
+      // Note: writing ANY value loads CNT from CNTIN
+      tmr().CNT = 0;
+   }
+
+   /**
     * Get Timer event flags
     *
     * @return Flags indicating if an event has occurred on a channel
@@ -837,7 +866,7 @@ public:
     * @param[in] ftmExternalTrigger Indicates the event to cause the external trigger
     * @param[in] enable             Whether to enable/disable the specified trigger
     */
-   static void INLINE_RELEASE enableExternalTrigger(FtmExternalTrigger ftmExternalTrigger, bool enable=true) {
+   static INLINE_RELEASE void enableExternalTrigger(FtmExternalTrigger ftmExternalTrigger, bool enable=true) {
       if (enable) {
          tmr().EXTTRIG |= ftmExternalTrigger;
       }
@@ -853,7 +882,7 @@ public:
     *                             Construct from ORed FtmExternalTrigger flags e.g. FtmExternalTrigger_ch0|FtmExternalTrigger_ch3
     * @param[in] enable           Whether to enable/disable the specified triggers
     */
-   static void INLINE_RELEASE enableExternalTriggers(int externalTriggers, bool enable=true) {
+   static INLINE_RELEASE void enableExternalTriggers(int externalTriggers, bool enable=true) {
       enableExternalTrigger((FtmExternalTrigger)externalTriggers, enable);
    }
 
@@ -862,7 +891,7 @@ public:
     *
     * @param[in] enable True = >enabled, False => disabled
     */
-   static void INLINE_RELEASE enableFaultInterrupt(bool enable=true) {
+   static INLINE_RELEASE void enableFaultInterrupt(bool enable=true) {
       if (enable) {
          tmr().MODE |= FTM_MODE_FAULTIE_MASK;
       }
@@ -877,7 +906,7 @@ public:
     *  @tparam inputNum        Number of fault input to enable (0..3)
     */
    template<int inputNum>
-   static void INLINE_RELEASE disableFault() {
+   static INLINE_RELEASE void disableFault() {
       static_assert(inputNum<=4, "Illegal fault channel");
 
       // Enable fault on channel
@@ -908,7 +937,7 @@ public:
     * @param[in] eventTime  Absolute event time i.e. value to use as timer comparison value
     * @param[in] channel    Timer channel
     */
-   static void INLINE_RELEASE setEventTime(uint16_t eventTime, int channel) {
+   static INLINE_RELEASE void setEventTime(uint16_t eventTime, int channel) {
       tmr().CONTROLS[channel].CnV = eventTime;
    }
 
@@ -920,7 +949,7 @@ public:
     * @param[in] eventTime  Event time relative to current event time (i.e. Timer channel CnV value)
     * @param[in] channel    Timer channel
     */
-   static void INLINE_RELEASE setDeltaEventTime(uint16_t eventTime, int channel) {
+   static INLINE_RELEASE void setDeltaEventTime(uint16_t eventTime, int channel) {
       tmr().CONTROLS[channel].CnV += eventTime;
    }
 
@@ -932,7 +961,7 @@ public:
     * @param[in] eventTime  Event time relative to current time (i.e. Timer CNT value)
     * @param[in] channel    Timer channel
     */
-   static void INLINE_RELEASE setRelativeEventTime(uint16_t eventTime, int channel) {
+   static INLINE_RELEASE void setRelativeEventTime(uint16_t eventTime, int channel) {
       tmr().CONTROLS[channel].CnV = tmr().CNT + eventTime;
    }
 
@@ -1111,57 +1140,73 @@ template<class Info> FtmCallbackFunction         FtmBase_T<Info>::sFaultCallback
  * @tparam channel FTM timer channel
  */
 template <class Info, int channel>
-class FtmChannel_T : public FtmBase_T<Info>, public PcrTable_T<Info, channel>, CheckSignal<Info, channel> {
+class FtmChannel_T : CheckSignal<Info, channel> {
 
 public:
-   // Allow more convenient access to template super-classes
+   /** Allow access to PCR of associated pin */
    using Pcr = PcrTable_T<Info, channel>;
+
+   /** Allow access owning FTM */
    using Ftm = FtmBase_T<Info>;
 
-   // Allow access to timer hardware instance
-   using FtmBase_T<Info>::tmr;
-
-private:
-   /*
-    * I could use 'using' to hide these functions but the Eclipse
-    * indexer gets confused about visibility
+   /**
+    * Set TOI Callback function.
+    *
+    * @param[in] theCallback Callback function to execute when timer overflows. \n
+    *                        nullptr to indicate none
+    *
+    * @note Note that one callback is shared by all channels of the TPM
     */
-   // Hide these FTM methods as FTM channel methods are preferred
-   static unsigned getAndClearInterruptFlags() {return 0;};
-   static unsigned getInterruptFlags()         {return 0;};
+   static __attribute__((always_inline)) void setTimerOverflowCallback(FtmCallbackFunction theCallback) {
+      Ftm::setTimerOverflowCallback(theCallback);
+   }
 
-   // Hide these PCR methods as they are similar to FTM methods
-   static void setCallback(PinCallbackFunction) {} // Use setPinCallback()
-   static void setIrq(PinIrq) {}                   // Use setPinIrq()
+   /**
+    * Structure for FTM channel.
+    */
+   struct FtmChannel {
+      __IO uint32_t  CnSC; /**< 000C: Channel  Status and Control */
+      __IO uint32_t  CnV;  /**< 0010: Channel  Value              */
+   };
+
+   /**
+    * Allows access to FTM channel registers.
+    *
+    * @return Reference to the FTM channel registers
+    */
+   static __attribute__((always_inline)) volatile FtmChannel &channelRegs() {
+      return *(FtmChannel *)&Ftm::tmr().CONTROLS[CHANNEL];
+   }
 
 public:
    /**
-    * Set callback for Pin IRQ
+    * Set callback for Pin IRQ.
     *
     * @param[in] callback The function to call on Pin interrupt.\n
     *                     nullptr to indicate none
     *
     * @note There is a single callback function for all pins on the related port.
     */
-   static void INLINE_RELEASE setPinCallback(PinCallbackFunction callback) {
+   static __attribute__((always_inline)) void setPinCallback(PinCallbackFunction callback) {
       Pcr::setCallback(callback);
    }
 
    /**
-    * Clear interrupt flag on pin associated with channel
-    * Assumes clock to the port has already been enabled
+    * Clear interrupt flag on pin associated with channel.
+    * Assumes clock to the port has already been enabled.
     */
-   static void INLINE_RELEASE clearPinInterruptFlag() {
+   static __attribute__((always_inline)) void clearPinInterruptFlag() {
       Pcr::clearInterruptFlag();
    }
+   
    /**
-    * Sets interrupt/DMA mode on pin associated with channel
-    * Assumes clock to the port has already been enabled
+    * Sets interrupt/DMA action on pin associated with channel.
+    * Assumes clock to the port has already been enabled.
     *
-    * @param[in] pinIrq Interrupt/DMA mode
+    * @param[in] pinAction Interrupt/DMA mode
     */
-   static void INLINE_RELEASE setPinIrq(PinIrq pinIrq) {
-      Pcr::setIrq(pinIrq);
+   static __attribute__((always_inline)) void setPinAction(PinAction pinAction) {
+      Pcr::setPinAction(pinAction);
    }
 
    /** Timer channel number */
@@ -1171,13 +1216,13 @@ public:
    static constexpr uint32_t CHANNEL_MASK = 1<<channel;
 
    /**
-    * Configure channel and sets mode\n
+    * Configure channel and sets mode.
     * Configures owning FTM with default settings from Configure.usbdmProject if not already enabled.
     *
     * @param[in] ftmChMode         Mode of operation for FTM e.g.FtmChMode_PwmHighTruePulses
     * @param[in] ftmChannelAction  Whether to enable the interrupt or DMA function on this channel
     *
-    * @note Enables FTM as well
+    * @note Enables FTM as well.
     * @note This method has the side-effect of clearing the register update synchronisation i.e.
     *       pending CnV register updates are discarded.
     */
@@ -1189,11 +1234,11 @@ public:
          // Enable parent FTM if needed
          Ftm::defaultConfigure();
       }
-      tmr().CONTROLS[channel].CnSC = ftmChMode|ftmChannelAction;
+      Ftm::tmr().CONTROLS[channel].CnSC = ftmChMode|ftmChannelAction;
    }
 
    /**
-    * Configure channel\n
+    * Configure channel.
     * Doesn't affect shared settings of owning Timer
     *
     * @param[in] ftmChMode         Mode of operation for channel
@@ -1202,7 +1247,7 @@ public:
     * @note This method has the side-effect of clearing the register update synchronisation i.e.
     *       pending CnV register updates are discarded.
     */
-   static void INLINE_RELEASE configure(
+   static INLINE_RELEASE void configure(
          FtmChMode         ftmChMode,
          FtmChannelAction  ftmChannelAction = FtmChannelAction_None) {
 
@@ -1210,7 +1255,7 @@ public:
       // Check that owning FTM has been enabled
       usbdm_assert(Ftm::isEnabled(), "FTM not enabled");
 #endif
-      tmr().CONTROLS[channel].CnSC = ftmChMode|ftmChannelAction;
+      Ftm::tmr().CONTROLS[channel].CnSC = ftmChMode|ftmChannelAction;
 
       if (!Info::mapPinsOnEnable) {
          // Configure pin if used
@@ -1227,12 +1272,12 @@ public:
    }
 
    /**
-    * Get channel mode
+    * Get channel mode.
     *
     * @return Current mode of operation for the channel
     */
    static INLINE_RELEASE FtmChMode getMode() {
-      return (FtmChMode)(tmr().CONTROLS[channel].CnSC &
+      return (FtmChMode)(Ftm::tmr().CONTROLS[channel].CnSC &
             (FTM_CnSC_MS_MASK|FTM_CnSC_ELS_MASK));
    }
 
@@ -1244,39 +1289,39 @@ public:
     * @note This method has the side-effect of clearing the register update synchronisation i.e.
     *       pending CnV register updates are discarded.
     */
-   static void INLINE_RELEASE setMode(FtmChMode ftmChMode) {
-      tmr().CONTROLS[channel].CnSC =
-            (tmr().CONTROLS[channel].CnSC & ~(FTM_CnSC_MS_MASK|FTM_CnSC_ELS_MASK))|ftmChMode;
+   static INLINE_RELEASE void setMode(FtmChMode ftmChMode) {
+      Ftm::tmr().CONTROLS[channel].CnSC =
+            (Ftm::tmr().CONTROLS[channel].CnSC & ~(FTM_CnSC_MS_MASK|FTM_CnSC_ELS_MASK))|ftmChMode;
    }
 
    /**
-    * Set channel action on event
+    * Set channel action on event.
     *
     * @param[in] ftmChannelAction  Whether to enable the interrupt or DMA function on this channel
     *
     * @note This method has the side-effect of clearing the register update synchronisation i.e.
     *       pending CnV register updates are discarded.
     */
-   static void INLINE_RELEASE setAction(FtmChannelAction ftmChannelAction) {
-      tmr().CONTROLS[channel].CnSC =
-            (tmr().CONTROLS[channel].CnSC & ~(FTM_CnSC_CHIE_MASK|FTM_CnSC_DMA_MASK))|ftmChannelAction;
+   static INLINE_RELEASE void setAction(FtmChannelAction ftmChannelAction) {
+      Ftm::tmr().CONTROLS[channel].CnSC =
+            (Ftm::tmr().CONTROLS[channel].CnSC & ~(FTM_CnSC_CHIE_MASK|FTM_CnSC_DMA_MASK))|ftmChannelAction;
    }
 
    /**
-    * Enable or disable interrupt from this channel\n
-    * Note: It is necessary to enableNvicInterrupts() as well
+    * Enable or disable interrupt from this channel.
     *
     * @param[in] enable  True => enable, False => disable
     *
     * @note This method has the side-effect of clearing the register update synchronisation i.e.\n
     *       pending CnV register updates are discarded.
+    * @note It is necessary to enableNvicInterrupts() as well
     */
-   static void INLINE_RELEASE enableInterrupts(bool enable=true) {
+   static INLINE_RELEASE void enableInterrupts(bool enable=true) {
       if (enable) {
-         tmr().CONTROLS[channel].CnSC |= FTM_CnSC_CHIE_MASK;
+         Ftm::tmr().CONTROLS[channel].CnSC |= FTM_CnSC_CHIE_MASK;
       }
       else {
-         tmr().CONTROLS[channel].CnSC &= ~FTM_CnSC_CHIE_MASK;
+         Ftm::tmr().CONTROLS[channel].CnSC &= ~FTM_CnSC_CHIE_MASK;
       }
    }
 
@@ -1289,71 +1334,72 @@ public:
     * @note This method has the side-effect of clearing the register update synchronisation i.e.\n
     *       pending CnV register updates are discarded.
     */
-   static void INLINE_RELEASE enableDma(bool enable=true) {
+   static INLINE_RELEASE void enableDma(bool enable=true) {
       if (enable) {
-         tmr().CONTROLS[channel].CnSC |= FTM_CnSC_DMA_MASK;
+         Ftm::tmr().CONTROLS[channel].CnSC |= FTM_CnSC_DMA_MASK;
       }
       else {
-         tmr().CONTROLS[channel].CnSC &= ~FTM_CnSC_DMA_MASK;
+         Ftm::tmr().CONTROLS[channel].CnSC &= ~FTM_CnSC_DMA_MASK;
       }
    }
 #endif
 
    /**
-    * Enable/disable interrupts in NVIC
+    * Enable/disable interrupts in NVIC.
     *
-    * @param[in] enable true to enable, false to disable
+    * @param[in]  enable        True => enable, False => disable
+    * @param[in]  nvicPriority  Interrupt priority
     */
-   static void INLINE_RELEASE enableNvicInterrupts(bool enable=true) {
-      FtmBase_T<Info>::enableNvicInterrupts(enable);
+   static __attribute__((always_inline)) void enableNvicInterrupts(bool enable=true, uint32_t nvicPriority=NvicPriority_Normal) {
+      Ftm::enableNvicInterrupts(enable, nvicPriority);
    }
 
    /**
-    * Enable/disable Pin interrupts in NVIC
+    * Enable/disable Pin interrupts in NVIC.
     *
     * @param[in] enable true => enable, false => disable
     */
-   static void INLINE_RELEASE enablePinNvicInterrupts(bool enable=true) {
+   static INLINE_RELEASE void enablePinNvicInterrupts(bool enable=true) {
       Pcr::enableNvicInterrupts(enable);
    }
 
    /**
-    * Set Pin Control Register Value. \n
+    * Set Pin Control Register Value.
     * Pin multiplexor value is forced to FTM channel function. \n
     * The clock to the port will be enabled before changing the PCR
     *
     * @param[in] pcrValue PCR value to set
     */
-   static void INLINE_RELEASE setPCR(PcrValue pcrValue=Info::info[channel].pcrValue) {
+   static INLINE_RELEASE void setPCR(PcrValue pcrValue=Info::info[channel].pcrValue) {
       Pcr::setPCR((pcrValue&~PORT_PCR_MUX_MASK)|(Info::info[channel].pcrValue&PORT_PCR_MUX_MASK));
    }
 
    /**
-    * Set Pin Control Register (PCR) value \n
+    * Set Pin Control Register (PCR) value.
     * The clock to the port will be enabled before changing the PCR
     *
     * @param[in] pinPull          One of PinPull_None, PinPull_Up, PinPull_Down
     * @param[in] pinDriveStrength One of PinDriveStrength_Low, PinDriveStrength_High (defaults to PinDriveLow)
     * @param[in] pinDriveMode     One of PinDriveMode_PushPull, PinDriveMode_OpenDrain (defaults to PinPushPull)
-    * @param[in] pinIrq           One of PinIrq_None, etc (defaults to PinIrq_None)
+    * @param[in] pinAction        One of PinAction_None, etc (defaults to PinAction_None)
     * @param[in] pinFilter        One of PinFilter_None, PinFilter_Passive (defaults to PinFilter_None)
     * @param[in] pinSlewRate      One of PinSlewRate_Slow, PinSlewRate_Fast (defaults to PinSlewRate_Fast)
     * @param[in] pinMux           One of PinMux_Analogue, PinMux_Gpio etc (defaults to FTM selection value)
     */
-   static void INLINE_RELEASE setPCR(
+   static INLINE_RELEASE void setPCR(
          PinPull           pinPull,
          PinDriveStrength  pinDriveStrength  = PinDriveStrength_Low,
          PinDriveMode      pinDriveMode      = PinDriveMode_PushPull,
-         PinIrq            pinIrq            = PinIrq_None,
+         PinAction         pinAction         = PinAction_None,
          PinFilter         pinFilter         = PinFilter_None,
          PinSlewRate       pinSlewRate       = PinSlewRate_Fast,
          PinMux            pinMux            = (PinMux)(Info::info[channel].pcrValue&PORT_PCR_MUX_MASK)
          ) {
-      Pcr::setPCR(pinPull,pinDriveStrength,pinDriveMode,pinIrq,pinFilter,pinSlewRate,pinMux);
+      Pcr::setPCR(pinPull,pinDriveStrength,pinDriveMode,pinAction,pinFilter,pinSlewRate,pinMux);
    }
 
    /**
-    * Configures Pin Control Register (PCR) value for a FTM pin to default values\n
+    * Configures Pin Control Register (PCR) value for a FTM pin to default values.
     * This will map the pin to the FTM function (mux value) \n
     * The clock to the port will be enabled before changing the PCR
     *
@@ -1364,7 +1410,7 @@ public:
    }
 
    /**
-    * Set Pin Control Register (PCR) value \n
+    * Set Pin Control Register (PCR) value.
     * This will map the pin to the FTM function (mux value) \n
     * The clock to the port will be enabled before changing the PCR
     *
@@ -1381,7 +1427,7 @@ public:
    }
 
    /**
-    * Configures Pin Control Register (PCR) value for a FTM pin to default values\n
+    * Configures Pin Control Register (PCR) value for a FTM pin to default values.
     * This will map the pin to the FTM function (mux value) \n
     * The clock to the port will be enabled before changing the PCR
     *
@@ -1392,24 +1438,73 @@ public:
    }
 
    /**
-    * Set Pin Control Register (PCR) value \n
+    * Set Pin Control Register (PCR) value.
     * This will map the pin to the FTM function (mux value) \n
     * The clock to the port will be enabled before changing the PCR
     *
     * @param[in] pinPull          One of PinPull_None, PinPull_Up, PinPull_Down
-    * @param[in] pinIrq           One of PinIrq_None, etc (defaults to PinIrq_None)
+    * @param[in] pinAction        One of PinAction_None, etc (defaults to PinAction_None)
     * @param[in] pinFilter        One of PinFilter_None, PinFilter_Passive (defaults to PinFilter_None)
     */
    static void setInput(
          PinPull           pinPull,
-         PinIrq            pinIrq            = PinIrq_None,
+         PinAction         pinAction         = PinAction_None,
          PinFilter         pinFilter         = PinFilter_None
          ) {
-      Pcr::setPCR(pinPull|pinIrq|pinFilter|(Info::info[channel].pcrValue&PORT_PCR_MUX_MASK));
+      Pcr::setPCR(pinPull|pinAction|pinFilter|(Info::info[channel].pcrValue&PORT_PCR_MUX_MASK));
    }
 
    /**
-    * Set PWM high time in ticks\n
+    * Set pull device on associated pin.
+    * Assumes clock to the port has already been enabled
+    *
+    *  @param[in] pinPull Pull selection mode
+    */
+   static INLINE_RELEASE void setPullDevice(PinPull pinPull) {
+      Pcr::setPullDevice(pinPull);
+   }
+
+   /**
+    * Set drive mode on associated pin.
+    * Assumes clock to the port has already been enabled
+    *
+    *  @param[in] pinDriveMode Drive mode
+    */
+   static INLINE_RELEASE void setDriveMode(PinDriveMode pinDriveMode) {
+      Pcr::setDriveMode(pinDriveMode);
+   }
+
+   /**
+    * Set slew rate on associated pin.
+    * Assumes clock to the port has already been enabled
+    *
+    *  @param[in] pinSlewRate Slew rate. Either PinSlewRate_Slow or PinSlewRate_Fast
+    */
+   static INLINE_RELEASE void setSlewRate(PinSlewRate  pinSlewRate) {
+      Pcr::setSlewRate(pinSlewRate);
+   }
+
+   /**
+    * Set filter on associated pin.
+    * Assumes clock to the port has already been enabled
+    *
+    *  @param[in] pinFilter Pin filter option. Either PinFilter_None or PinFilter_Passive
+    */
+   static INLINE_RELEASE void setFilter(PinFilter pinFilter) {
+      Pcr::setFilter(pinFilter);
+   }
+   /**
+    * Set drive strength on associated pin.
+    * Assumes clock to the port has already been enabled
+    *
+    *  @param[in] pinDriveStrength Drive strength to set
+    */
+   static INLINE_RELEASE void setDriveStrength(PinDriveStrength pinDriveStrength) {
+      Pcr::setDriveStrength(pinDriveStrength);
+   }
+
+   /**
+    * Set PWM high time in ticks.
     * Assumes value is less than period
     *
     * @param[in] highTime   PWM high time in ticks
@@ -1423,7 +1518,7 @@ public:
    }
 
    /**
-    * Set PWM high time in seconds\n
+    * Set PWM high time in seconds.
     * Higher precision float version
     *
     * @param[in] highTime   PWM high time in seconds
@@ -1436,62 +1531,51 @@ public:
       return Ftm::setHighTime(highTime, channel);
    }
    /**
-    * Set PWM duty cycle
+    * Set PWM duty cycle.
     *
     * @param[in] dutyCycle  Duty-cycle as percentage
     *
     * @note The actual CnV register update will be delayed by the FTM register synchronisation mechanism
     */
-   static void INLINE_RELEASE setDutyCycle(int dutyCycle) {
+   static INLINE_RELEASE void setDutyCycle(int dutyCycle) {
       Ftm::setDutyCycle(dutyCycle, channel);
    }
 
    /**
-    * Set PWM duty cycle
-    *
-    * @param[in] dutyCycle  Duty-cycle as percentage
-    *
-    * @note The actual CnV register update will be delayed by the FTM register synchronisation mechanism
-    */
-   static void INLINE_RELEASE setDutyCycle(float dutyCycle) {
-      Ftm::setDutyCycle(dutyCycle, channel);
-   }
-
-   /**
-    * Set Timer event time
+    * Set Timer event time.
     *
     * @param[in] offset  Event time relative to current event time (i.e. Timer channel CnV value)
     *
     * @note The actual CnV register update will be delayed by the FTM register synchronisation mechanism
     */
-   static void INLINE_RELEASE setDeltaEventTime(uint16_t offset) {
+   static INLINE_RELEASE void setDeltaEventTime(uint16_t offset) {
       Ftm::setDeltaEventTime(offset, channel);
    }
 
    /**
-    * Set Timer event time relative to current timer count value
+    * Set Timer event time relative to current timer count value.
     *
     * @param[in] offset  Event time relative to current time (i.e. Timer CNT value)
     *
     * @note The actual CnV register update will be delayed by the FTM register synchronisation mechanism
     */
-   static void INLINE_RELEASE setRelativeEventTime(uint16_t offset) {
+   static INLINE_RELEASE void setRelativeEventTime(uint16_t offset) {
       Ftm::setRelativeEventTime(offset, channel);
    }
 
    /**
-    * Set Absolute Timer event time
+    * Set Absolute Timer event time.
     *
     * @param[in] eventTime  Absolute event time i.e. value to use as timer comparison value
     *
     * @note The actual CnV register update will be delayed by the FTM register synchronisation mechanism
     */
-   static void INLINE_RELEASE setEventTime(uint16_t eventTime) {
+   static INLINE_RELEASE void setEventTime(uint16_t eventTime) {
       Ftm::setEventTime(eventTime, channel);
    }
 
    /**
-    * Get Absolute Timer event time
+    * Get Absolute Timer event time.
     *
     * @return Absolute time of last event i.e. value from timer event register
     */
@@ -1500,17 +1584,17 @@ public:
    }
 
    /**
-    * Get Timer interrupt flag
+    * Get Timer interrupt flag.
     *
     * @return true  Indicates an event has occurred on a channel
     * @return false Indicates no event has occurred on a channel since last polled
     */
    static INLINE_RELEASE bool getInterruptFlag() {
-      return (tmr().STATUS&CHANNEL_MASK) != 0;
+      return (Ftm::tmr().STATUS&CHANNEL_MASK) != 0;
    }
 
    /**
-    * Get and Clear Timer interrupt flag
+    * Get and Clear Timer interrupt flag.
     *
     * @return true  Indicates an event has occurred on a channel
     * @return false Indicates no event has occurred on a channel since last polled
@@ -1520,32 +1604,46 @@ public:
    static INLINE_RELEASE bool getAndClearInterruptFlag() {
       // Note - requires read and write zero to clear flags
       // so only flags captured in status are cleared
-      bool status = (tmr().STATUS&CHANNEL_MASK) != 0;
-      tmr().STATUS = ~CHANNEL_MASK;
+      bool status = (Ftm::tmr().STATUS&CHANNEL_MASK) != 0;
+      Ftm::tmr().STATUS = ~CHANNEL_MASK;
       return status;
    }
 
    /**
-    * Clear interrupt flag on channel
+    * Clear interrupt flag on channel.
     */
-   static void INLINE_RELEASE clearInterruptFlag() {
+   static INLINE_RELEASE void clearInterruptFlag() {
       // Note - requires read and write zero to clear flag
-      tmr().CONTROLS[channel].CnSC &= ~FTM_CnSC_CHF_MASK;
+      Ftm::tmr().CONTROLS[channel].CnSC &= ~FTM_CnSC_CHF_MASK;
    }
 
    /**
-    * Set polarity of channels
+    * Set polarity of channels.
     *
     * @param polarity Polarity to set
     */
    static void setPolarity(Polarity polarity) {
       Ftm::setPolarity(polarity, CHANNEL_MASK);
    }
+
+   /**
+    * Force channel output.
+    *
+    * This enables software control of channel output and
+    * defines the value forced to the channel output.
+    * This value is write-buffered and updated by SWOCTRL synchronisation.
+    *
+    * @param ftmChannelForce  Select control of pin. One of FtmChannelForce_Low/High/Release
+    */
+   static void forceChannelOutput(FtmChannelForce ftmChannelForce) {
+      static constexpr uint32_t MASK = ((1<<channel)|(1<<(channel+8)));
+      Ftm::tmr().SWOCTRL = ((Ftm::tmr().SWOCTRL & ~MASK)) | (ftmChannelForce & MASK);
+   }
 };
 
 #ifdef USBDM_FTM0_IS_DEFINED
 /**
- * Template class representing a Timer channel
+ * Template class representing a Timer channel.
  *
  * Example
  * @code
@@ -1571,14 +1669,14 @@ template <int channel>
 class Ftm0Channel : public FtmChannel_T<Ftm0Info, channel> {};
 
 /**
- * Class representing FTM0
+ * Class representing FTM0.
  */
 using Ftm0 = FtmBase_T<Ftm0Info>;
 #endif
 
 #ifdef USBDM_FTM1_IS_DEFINED
 /**
- * Template class representing a FTM1 timer channel
+ * Template class representing a FTM1 timer channel.
  *
  * Refer @ref Ftm0Channel
  *
@@ -1588,7 +1686,7 @@ template <int channel>
 class Ftm1Channel : public FtmChannel_T<Ftm1Info, channel> {};
 
 /**
- * Class representing FTM1
+ * Class representing FTM1.
  */
 using Ftm1 = FtmBase_T<Ftm1Info>;
 #endif
@@ -1651,7 +1749,7 @@ using Ftm3 = FtmBase_T<Ftm3Info>;
  * @endcode
  */
 template <class Info>
-class QuadDecoder_T : private FtmBase_T<Info> {
+class QuadDecoder_T {
 
 #ifdef DEBUG_BUILD
    static_assert(Info::InfoQUAD::info[0].gpioBit != UNMAPPED_PCR, "QuadDecoder_T: FTM PHA is not mapped to a pin - Modify Configure.usbdm");
@@ -1659,10 +1757,62 @@ class QuadDecoder_T : private FtmBase_T<Info> {
 #endif
 
 public:
+   /** Allow more convenient access associated Ftm */
+   using Ftm = FtmBase_T<Info>;
 
-   using FtmBase_T<Info>::setTimerOverflowCallback;
-   using FtmBase_T<Info>::enableTimerOverflowInterrupts;
-   using FtmBase_T<Info>::enableNvicInterrupts;
+   /** Allow access to PCR of associated pin */
+   using Pcr0 = PcrTable_T<typename Info::InfoQUAD, 0>;
+
+   /** Allow access to PCR of associated pin */
+   using Pcr1 = PcrTable_T<typename Info::InfoQUAD, 1>;
+
+   /**
+    * Set Pin Control Register (PCR) values for PHA and PHB inputs.
+    * This will map the pin to the FTM Quadrature function (mux value) \n
+    * The clock to the port will be enabled before changing the PCR
+    *
+    * @param[in] pinPull          One of PinPull_None, PinPull_Up, PinPull_Down
+    * @param[in] pinAction        One of PinAction_None, etc (defaults to PinAction_None)
+    * @param[in] pinFilter        One of PinFilter_None, PinFilter_Passive (defaults to PinFilter_None)
+    */
+   static void setInput(
+         PinPull           pinPull,
+         PinAction         pinAction         = PinAction_None,
+         PinFilter         pinFilter         = PinFilter_None
+         ) {
+      Pcr0::setPCR(pinPull|pinAction|pinFilter|(Info::InfoQUAD::info[0].pcrValue&PORT_PCR_MUX_MASK));
+      Pcr1::setPCR(pinPull|pinAction|pinFilter|(Info::InfoQUAD::info[1].pcrValue&PORT_PCR_MUX_MASK));
+   }
+
+   /**
+    * Set TOI Callback function\n
+    * Note that one callback is shared by all channels of the TPM
+    *
+    * @param[in] theCallback Callback function to execute when timer overflows. \n
+    *                        nullptr to indicate none
+    */
+   static __attribute__((always_inline)) void setTimerOverflowCallback(FtmCallbackFunction theCallback) {
+      Ftm::setTimerOverflowCallback(theCallback);
+   }
+
+   /**
+    * Enable/disable Timer Overflow interrupts
+    *
+    * @param[in] enable true to enable, false to disable
+    */
+   static __attribute__((always_inline)) void enableTimerOverflowInterrupts(bool enable=true) {
+      Ftm::enableTimerOverflowInterrupts(enable);
+   }
+
+   /**
+    * Enable/disable interrupts in NVIC
+    *
+    * @param[in]  enable        True => enable, False => disable
+    * @param[in]  nvicPriority  Interrupt priority
+    */
+   static __attribute__((always_inline)) void enableNvicInterrupts(bool enable=true, uint32_t nvicPriority=NvicPriority_Normal) {
+      Ftm::enableNvicInterrupts(enable, nvicPriority);
+   }
 
    /** Hardware instance pointer */
    static __attribute__((always_inline)) volatile FTM_Type &ftm() { return Info::ftm(); }
@@ -1683,13 +1833,14 @@ public:
       clockReg() |= Info::clockMask;
       __DMB();
 
-      FtmBase_T<Info>::configure(FtmMode_Quadrature, FtmClockSource_Disabled, prescaler);
+     Ftm::configure(FtmMode_Quadrature, FtmClockSource_Disabled, prescaler);
 
       ftm().QDCTRL =
             FTM_QDCTRL_QUADEN_MASK|      // Enable Quadrature decoder
             FTM_QDCTRL_QUADMODE(0);      // Quadrature mode
       ftm().CONF   = FTM_CONF_BDMMODE(3);
    }
+
    /**
     * Enable/disables filtering of quadrature inputs
     *
@@ -1708,7 +1859,7 @@ public:
    /**
     * Reset position to zero
     */
-   static void INLINE_RELEASE resetPosition() {
+   static INLINE_RELEASE void resetPosition() {
       // Note: writing ANY value clears CNT (cannot set value)
       ftm().CNT = 0;
    }

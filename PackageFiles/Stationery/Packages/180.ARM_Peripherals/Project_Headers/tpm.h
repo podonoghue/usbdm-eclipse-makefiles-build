@@ -240,7 +240,7 @@ public:
     * @param[in] theCallback Callback function to execute when timer overflows. \n
     *                        nullptr to indicate none
     */
-   static void INLINE_RELEASE setTimerOverflowCallback(TpmCallbackFunction theCallback) {
+   static INLINE_RELEASE void setTimerOverflowCallback(TpmCallbackFunction theCallback) {
       if (theCallback == nullptr) {
          sToiCallback = unhandledCallback;
          return;
@@ -276,16 +276,24 @@ public:
    }
 
 public:
-   /** Hardware instance pointer */
+   /**
+    * Hardware instance pointer
+    *
+    * @return Reference to TPM hardware
+    */
    static __attribute__((always_inline)) volatile TPM_Type &tmr() { return Info::tpm(); }
 
-   /** Clock register for peripheral */
+   /**
+    * Clock register for peripheral
+    *
+    * @return Reference to clock register
+    */
    static __attribute__((always_inline)) volatile uint32_t &clockReg() { return Info::clockReg(); }
 
    /**
     * Configures all mapped pins associated with this peripheral
     */
-   static void INLINE_RELEASE configureAllPins() {
+   static INLINE_RELEASE void configureAllPins() {
       // Configure pins
       Info::initPCRs();
    }
@@ -293,7 +301,7 @@ public:
    /**
     * Enables clock to peripheral and configures all pins
     */
-   static void INLINE_RELEASE enable() {
+   static INLINE_RELEASE void enable() {
       if (Info::mapPinsOnEnable) {
          configureAllPins();
       }
@@ -412,7 +420,7 @@ public:
     * @param[in]  enable        True => enable, False => disable
     * @param[in]  nvicPriority  Interrupt priority
     */
-   static void INLINE_RELEASE enableNvicInterrupts(bool enable=true, uint32_t nvicPriority=NvicPriority_Normal) {
+   static INLINE_RELEASE void enableNvicInterrupts(bool enable=true, uint32_t nvicPriority=NvicPriority_Normal) {
 
       if (enable) {
          enableNvicInterrupt(Info::irqNums[0], nvicPriority);
@@ -428,7 +436,7 @@ public:
     *
     * @param[in] enable true to enable, false to disable
     */
-   static void INLINE_RELEASE enableTimerOverflowInterrupts(bool enable=true) {
+   static INLINE_RELEASE void enableTimerOverflowInterrupts(bool enable=true) {
       if (enable) {
          tmr().SC |= TPM_SC_TOIE_MASK;
       }
@@ -446,7 +454,7 @@ public:
     *
     * @note This function will affect all channels of the timer.
     */
-   static void INLINE_RELEASE setMod(uint16_t modulo) {
+   static INLINE_RELEASE void setMod(uint16_t modulo) {
       tmr().MOD = modulo;
    }
 
@@ -748,7 +756,15 @@ public:
    static INLINE_RELEASE uint16_t getTime() {
       return tmr().CNT;
    }
-   
+
+   /**
+    * Reset counter to initial value
+    */
+   static INLINE_RELEASE void resetTime() {
+      // Note: writing ANY value loads CNT from CNTIN
+      tmr().CNT = 0;
+   }
+
    /**
     * Get Timer event flags
     *
@@ -800,7 +816,7 @@ public:
     * @param[in] eventTime  Absolute event time i.e. value to use as timer comparison value
     * @param[in] channel    Timer channel
     */
-   static void INLINE_RELEASE setEventTime(uint16_t eventTime, int channel) {
+   static INLINE_RELEASE void setEventTime(uint16_t eventTime, int channel) {
       tmr().CONTROLS[channel].CnV = eventTime;
    }
 
@@ -812,7 +828,7 @@ public:
     * @param[in] eventTime  Event time relative to current event time (i.e. Timer channel CnV value)
     * @param[in] channel    Timer channel
     */
-   static void INLINE_RELEASE setDeltaEventTime(uint16_t eventTime, int channel) {
+   static INLINE_RELEASE void setDeltaEventTime(uint16_t eventTime, int channel) {
       tmr().CONTROLS[channel].CnV += eventTime;
    }
 
@@ -824,7 +840,7 @@ public:
     * @param[in] eventTime  Event time relative to current time (i.e. Timer CNT value)
     * @param[in] channel    Timer channel
     */
-   static void INLINE_RELEASE setRelativeEventTime(uint16_t eventTime, int channel) {
+   static INLINE_RELEASE void setRelativeEventTime(uint16_t eventTime, int channel) {
       tmr().CONTROLS[channel].CnV = tmr().CNT + eventTime;
    }
 
@@ -951,8 +967,7 @@ private:
 
    // Hide these PCR methods as they are similar to TPM methods
    static void setCallback(PinCallbackFunction) {} // Use setPinCallback()
-   static void setIrq(PinIrq) {}                   // Use setPinIrq()
-
+ 
 public:
    /**
     * Set callback for Pin IRQ
@@ -962,7 +977,7 @@ public:
     *
     * @note There is a single callback function for all pins on the related port.
     */
-   static void INLINE_RELEASE setPinCallback(PinCallbackFunction callback) {
+   static INLINE_RELEASE void setPinCallback(PinCallbackFunction callback) {
       Pcr::setCallback(callback);
    }
 
@@ -970,17 +985,17 @@ public:
     * Clear interrupt flag on pin associated with channel
     * Assumes clock to the port has already been enabled
     */
-   static void INLINE_RELEASE clearPinInterruptFlag() {
+   static INLINE_RELEASE void clearPinInterruptFlag() {
       Pcr::clearInterruptFlag();
    }
    /**
     * Sets interrupt/DMA mode on pin associated with channel
     * Assumes clock to the port has already been enabled
     *
-    * @param[in] pinIrq Interrupt/DMA mode
+    * @param[in] pinAction Interrupt/DMA mode
     */
-   static void INLINE_RELEASE setPinIrq(PinIrq pinIrq) {
-      Pcr::setIrq(pinIrq);
+   static INLINE_RELEASE void setPinAction(PinAction pinAction) {
+      Pcr::setPinAction(pinAction);
    }
 
    /** Timer channel number */
@@ -1021,7 +1036,7 @@ public:
     * @note This method has the side-effect of clearing the register update synchronisation i.e.
     *       pending CnV register updates are discarded.
     */
-   static void INLINE_RELEASE configure(
+   static INLINE_RELEASE void configure(
          TpmChMode         tpmChMode,
          TpmChannelAction  tpmChannelAction = TpmChannelAction_None) {
 
@@ -1062,7 +1077,7 @@ public:
     * @note This method has the side-effect of clearing the register update synchronisation i.e.
     *       pending CnV register updates are discarded.
     */
-   static void INLINE_RELEASE setMode(TpmChMode tpmChMode) {
+   static INLINE_RELEASE void setMode(TpmChMode tpmChMode) {
       tmr().CONTROLS[channel].CnSC =
             (tmr().CONTROLS[channel].CnSC & ~(TPM_CnSC_MS_MASK|TPM_CnSC_ELS_MASK))|tpmChMode;
    }
@@ -1075,7 +1090,7 @@ public:
     * @note This method has the side-effect of clearing the register update synchronisation i.e.
     *       pending CnV register updates are discarded.
     */
-   static void INLINE_RELEASE setAction(TpmChannelAction tpmChannelAction) {
+   static INLINE_RELEASE void setAction(TpmChannelAction tpmChannelAction) {
 #ifdef TPM_CnSC_DMA
       tmr().CONTROLS[channel].CnSC =
             (tmr().CONTROLS[channel].CnSC & ~(TPM_CnSC_CHIE_MASK|TPM_CnSC_DMA_MASK))|tpmChannelAction;
@@ -1094,7 +1109,7 @@ public:
     * @note This method has the side-effect of clearing the register update synchronisation i.e.\n
     *       pending CnV register updates are discarded.
     */
-   static void INLINE_RELEASE enableInterrupts(bool enable=true) {
+   static INLINE_RELEASE void enableInterrupts(bool enable=true) {
       if (enable) {
          tmr().CONTROLS[channel].CnSC |= TPM_CnSC_CHIE_MASK;
       }
@@ -1112,7 +1127,7 @@ public:
     * @note This method has the side-effect of clearing the register update synchronisation i.e.\n
     *       pending CnV register updates are discarded.
     */
-   static void INLINE_RELEASE enableDma(bool enable=true) {
+   static INLINE_RELEASE void enableDma(bool enable=true) {
       if (enable) {
          tmr().CONTROLS[channel].CnSC |= TPM_CnSC_DMA_MASK;
       }
@@ -1127,7 +1142,7 @@ public:
     *
     * @param[in] enable true to enable, false to disable
     */
-   static void INLINE_RELEASE enableNvicInterrupts(bool enable=true) {
+   static INLINE_RELEASE void enableNvicInterrupts(bool enable=true) {
       TpmBase_T<Info>::enableNvicInterrupts(enable);
    }
 
@@ -1136,7 +1151,7 @@ public:
     *
     * @param[in] enable true => enable, false => disable
     */
-   static void INLINE_RELEASE enablePinNvicInterrupts(bool enable=true) {
+   static INLINE_RELEASE void enablePinNvicInterrupts(bool enable=true) {
       Pcr::enableNvicInterrupts(enable);
    }
 
@@ -1147,7 +1162,7 @@ public:
     *
     * @param[in] pcrValue PCR value to set
     */
-   static void INLINE_RELEASE setPCR(PcrValue pcrValue=Info::info[channel].pcrValue) {
+   static INLINE_RELEASE void setPCR(PcrValue pcrValue=Info::info[channel].pcrValue) {
       Pcr::setPCR((pcrValue&~PORT_PCR_MUX_MASK)|(Info::info[channel].pcrValue&PORT_PCR_MUX_MASK));
    }
 
@@ -1158,21 +1173,21 @@ public:
     * @param[in] pinPull          One of PinPull_None, PinPull_Up, PinPull_Down
     * @param[in] pinDriveStrength One of PinDriveStrength_Low, PinDriveStrength_High (defaults to PinDriveLow)
     * @param[in] pinDriveMode     One of PinDriveMode_PushPull, PinDriveMode_OpenDrain (defaults to PinPushPull)
-    * @param[in] pinIrq           One of PinIrq_None, etc (defaults to PinIrq_None)
+    * @param[in] pinAction        One of PinAction_None, etc (defaults to PinAction_None)
     * @param[in] pinFilter        One of PinFilter_None, PinFilter_Passive (defaults to PinFilter_None)
     * @param[in] pinSlewRate      One of PinSlewRate_Slow, PinSlewRate_Fast (defaults to PinSlewRate_Fast)
     * @param[in] pinMux           One of PinMux_Analogue, PinMux_Gpio etc (defaults to TPM selection value)
     */
-   static void INLINE_RELEASE setPCR(
+   static INLINE_RELEASE void setPCR(
          PinPull           pinPull,
          PinDriveStrength  pinDriveStrength  = PinDriveStrength_Low,
          PinDriveMode      pinDriveMode      = PinDriveMode_PushPull,
-         PinIrq            pinIrq            = PinIrq_None,
+         PinAction         pinAction         = PinAction_None,
          PinFilter         pinFilter         = PinFilter_None,
          PinSlewRate       pinSlewRate       = PinSlewRate_Fast,
          PinMux            pinMux            = (PinMux)(Info::info[channel].pcrValue&PORT_PCR_MUX_MASK)
          ) {
-      Pcr::setPCR(pinPull,pinDriveStrength,pinDriveMode,pinIrq,pinFilter,pinSlewRate,pinMux);
+      Pcr::setPCR(pinPull,pinDriveStrength,pinDriveMode,pinAction,pinFilter,pinSlewRate,pinMux);
    }
 
    /**
@@ -1220,15 +1235,15 @@ public:
     * The clock to the port will be enabled before changing the PCR
     *
     * @param[in] pinPull          One of PinPull_None, PinPull_Up, PinPull_Down
-    * @param[in] pinIrq           One of PinIrq_None, etc (defaults to PinIrq_None)
+    * @param[in] pinAction        One of PinAction_None, etc (defaults to PinAction_None)
     * @param[in] pinFilter        One of PinFilter_None, PinFilter_Passive (defaults to PinFilter_None)
     */
    static void setInput(
          PinPull           pinPull,
-         PinIrq            pinIrq            = PinIrq_None,
+         PinAction         pinAction         = PinAction_None,
          PinFilter         pinFilter         = PinFilter_None
          ) {
-      Pcr::setPCR(pinPull|pinIrq|pinFilter|(Info::info[channel].pcrValue&PORT_PCR_MUX_MASK));
+      Pcr::setPCR(pinPull|pinAction|pinFilter|(Info::info[channel].pcrValue&PORT_PCR_MUX_MASK));
    }
 
    /**
@@ -1265,7 +1280,7 @@ public:
     *
     * @note The actual CnV register update will be delayed by the TPM register synchronisation mechanism
     */
-   static void INLINE_RELEASE setDutyCycle(int dutyCycle) {
+   static INLINE_RELEASE void setDutyCycle(int dutyCycle) {
       Tpm::setDutyCycle(dutyCycle, channel);
    }
 
@@ -1276,7 +1291,7 @@ public:
     *
     * @note The actual CnV register update will be delayed by the TPM register synchronisation mechanism
     */
-   static void INLINE_RELEASE setDutyCycle(float dutyCycle) {
+   static INLINE_RELEASE void setDutyCycle(float dutyCycle) {
       Tpm::setDutyCycle(dutyCycle, channel);
    }
 
@@ -1287,7 +1302,7 @@ public:
     *
     * @note The actual CnV register update will be delayed by the TPM register synchronisation mechanism
     */
-   static void INLINE_RELEASE setDeltaEventTime(uint16_t offset) {
+   static INLINE_RELEASE void setDeltaEventTime(uint16_t offset) {
       Tpm::setDeltaEventTime(offset, channel);
    }
 
@@ -1298,7 +1313,7 @@ public:
     *
     * @note The actual CnV register update will be delayed by the TPM register synchronisation mechanism
     */
-   static void INLINE_RELEASE setRelativeEventTime(uint16_t offset) {
+   static INLINE_RELEASE void setRelativeEventTime(uint16_t offset) {
       Tpm::setRelativeEventTime(offset, channel);
    }
 
@@ -1309,7 +1324,7 @@ public:
     *
     * @note The actual CnV register update will be delayed by the TPM register synchronisation mechanism
     */
-   static void INLINE_RELEASE setEventTime(uint16_t eventTime) {
+   static INLINE_RELEASE void setEventTime(uint16_t eventTime) {
       Tpm::setEventTime(eventTime, channel);
    }
 
@@ -1351,7 +1366,7 @@ public:
    /**
     * Clear interrupt flag on channel
     */
-   static void INLINE_RELEASE clearInterruptFlag() {
+   static INLINE_RELEASE void clearInterruptFlag() {
       // Note - requires one to clear flag
       tmr().CONTROLS[channel].CnSC = TPM_CnSC_CHF_MASK;
    }
@@ -1509,7 +1524,7 @@ public:
    /**
     * Reset position to zero
     */
-   static void INLINE_RELEASE resetPosition() {
+   static INLINE_RELEASE void resetPosition() {
       // Note: writing ANY value clears CNT (cannot set value)
       tpm().CNT = 0;
    }
