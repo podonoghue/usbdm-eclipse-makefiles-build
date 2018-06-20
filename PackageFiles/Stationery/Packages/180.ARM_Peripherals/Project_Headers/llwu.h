@@ -416,17 +416,17 @@ public:
     * The clock to the port will be enabled before changing the PCR
     *
     * @param[in] pinPull          One of PinPull_None, PinPull_Up, PinPull_Down
-    * @param[in] pinIrq           One of PinIrq_None, etc (defaults to PinIrq_None)
+    * @param[in] pinAction        One of PinAction_None, etc (defaults to PinAction_None)
     * @param[in] pinFilter        One of PinFilter_None, PinFilter_Passive (defaults to PinFilter_None)
     */
    template<LlwuPin llwuPin>
    static void setInput(
          PinPull           pinPull,
-         PinIrq            pinIrq            = PinIrq_None,
+         PinAction         pinAction         = PinAction_None,
          PinFilter         pinFilter         = PinFilter_None
          ) {
       using Pcr = PcrTable_T<Info, llwuPin>;
-      Pcr::setPCR(pinPull|pinIrq|pinFilter|(Info::info[llwuPin].pcrValue&PORT_PCR_MUX_MASK));
+      Pcr::setPCR(pinPull|pinAction|pinFilter|(Info::info[llwuPin].pcrValue&PORT_PCR_MUX_MASK));
    }
 };
 

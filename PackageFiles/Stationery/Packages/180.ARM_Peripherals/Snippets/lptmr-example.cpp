@@ -31,9 +31,10 @@ void flash(void) {
  */
 namespace USBDM {
 
-template<> void Lptmr_T<Lptmr0Info>::irqHandler() {
+template<>
+void LptmrBase_T<Lptmr0Info>::irqHandler() {
    // Clear interrupt flag
-   lptmr->CSR |= LPTMR_CSR_TCF_MASK;
+   lptmr().CSR |= LPTMR_CSR_TCF_MASK;
    RED_LED::toggle();
 }
 

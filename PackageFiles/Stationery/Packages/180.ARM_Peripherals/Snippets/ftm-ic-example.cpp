@@ -82,7 +82,7 @@ int main() {
    // Configure pin associated with channel
    TimerChannel::setInput(
          PinPull_None,
-         PinIrq_None,
+         PinAction_None,
          PinFilter_Passive);
    // or change individual attributes
    //  TimerChannel::setPullDevice(PinPull_Up);

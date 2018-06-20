@@ -200,7 +200,7 @@ public:
    void configureInterrupts(PinCallbackFunction callback) {
       IrqPin::setInput(pcrValue(PinPull_Up));
       IrqPin::setCallback(callback);
-      IrqPin::setIrq(PinIrq_Falling);
+      IrqPin::setPinAction(PinAction_IrqFalling);
       IrqPin::enableNvicInterrupts();
    }
 };

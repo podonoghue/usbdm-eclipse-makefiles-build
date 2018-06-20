@@ -210,7 +210,7 @@ void enablePin(Test test, bool enable) {
    // Disable wake-up pin
    Llwu::setInput<WAKEUP_PIN>(
          PinPull_Up,
-         PinIrq_None,
+         PinAction_None,
          PinFilter_Passive);
 
    if (enable && (test>=LLS)) {
@@ -218,7 +218,7 @@ void enablePin(Test test, bool enable) {
       // Configure wake-up pin as LLWU input
       Llwu::setInput<WAKEUP_PIN>(
             PinPull_Up,
-            PinIrq_None,
+            PinAction_None,
             PinFilter_Passive);
 
       // Use LLWU in most Low-leakage modes
@@ -251,7 +251,7 @@ void enablePin(Test test, bool enable) {
       // Configure wake-up via GPIO interrupt
       WakeupPin::setInput(
             PinPull_Up,
-            PinIrq_Falling,
+            PinAction_IrqFalling,
             PinFilter_Passive);
 
       WakeupPin::clearInterruptFlag();

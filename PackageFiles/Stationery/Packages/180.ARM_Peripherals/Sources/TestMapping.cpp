@@ -45,7 +45,7 @@ using gpioIllegalPin2 = USBDM::GpioB<32>;
 
 int main() {
    printf("Starting\n");
-   pin::setInput(USBDM::PinPull_Up, USBDM::PinIrq_None, USBDM::PinFilter_Passive);
+   pin::setInput(USBDM::PinPull_Up, USBDM::PinAction_None, USBDM::PinFilter_Passive);
    Led::setOutput();
 
    adcFixedPin::enable();

@@ -20,17 +20,16 @@
 // Allow access to USBDM methods without USBDM:: prefix
 using namespace USBDM;
 
-// Clock settings to use
+// Clock configurations to use
 static constexpr ClockConfig VLPR_CLOCK = ClockConfig_BLPE_4MHz;
 static constexpr ClockConfig RUN_CLOCK  = ClockConfig_PEE_48MHz;
 
 // LED connection - change as required
 using Led   = USBDM::GpioA<2>;
 
-using WakeupTimer = Lptmr0;
+using Lptmr = Lptmr0;
 
-void wakeupCallback() {
-   __asm__("nop");
+void toggleLED() {
    Led::toggle();
 }
 
@@ -49,10 +48,14 @@ int main() {
 
    Led::setOutput();
 
-   WakeupTimer::configureTimeCountingMode(LptmrResetOn_Compare, LptmrInterrupt_Enable);
-   WakeupTimer::setPeriod(3*seconds);
-   WakeupTimer::setCallback(wakeupCallback);
-   WakeupTimer::enableNvicInterrupts();
+   /*
+    * The LPTMR is used to toggle the LED as a fixed rate irrespective of clock and run mode.
+    * The LPO clock is used since it is independent of run mode.
+    */
+   Lptmr::configureTimeCountingMode(LptmrResetOn_Compare, LptmrInterrupt_Enable, LptmrClockSel_lpoclk);
+   Lptmr::setPeriod(100*ms);
+   Lptmr::setCallback(toggleLED);
+   Lptmr::enableNvicInterrupts();
 
    for(;;) {
       /*

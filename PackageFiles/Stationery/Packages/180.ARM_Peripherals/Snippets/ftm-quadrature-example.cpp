@@ -35,6 +35,9 @@ int main() {
    // Configure decoder
    QuadDecoder::configure(FtmPrescale_1);
 
+   // Set pin characteristics
+   QuadDecoder::setInput(PinPull_Up);
+
    // Set pin filters
    QuadDecoder::enableFilter(15);
 

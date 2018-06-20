@@ -85,11 +85,11 @@ void CR20ADrv::configureInterface() {
    GreenLed::setOutput(PinDriveStrength_High, PinDriveMode_PushPull, PinSlewRate_Slow);
    BlueLed::setOutput(PinDriveStrength_High, PinDriveMode_PushPull, PinSlewRate_Slow);
 
-   Switch1::setInput(PinPull_Up, PinIrq_None, PinFilter_Passive);
-   Switch2::setInput(PinPull_Up, PinIrq_None, PinFilter_Passive);
+   Switch1::setInput(PinPull_Up, PinAction_None, PinFilter_Passive);
+   Switch2::setInput(PinPull_Up, PinAction_None, PinFilter_Passive);
 
    RstXcvr::setOutput(PinDriveStrength_Low, PinDriveMode_PushPull, PinSlewRate_Slow);
-   Irqb::setInput(PinPull_Up, PinIrq_None, PinFilter_Passive);
+   Irqb::setInput(PinPull_Up, PinAction_None, PinFilter_Passive);
 }
 
 /**

@@ -131,7 +131,7 @@ public:
     * @param[in] pinPull          One of PinPull_None, PinPull_Up, PinPull_Down
     * @param[in] pinDriveStrength One of PinDriveStrength_Low, PinDriveStrength_High (defaults to PinDriveLow)
     * @param[in] pinDriveMode     One of PinDriveMode_PushPull, PinDriveMode_OpenDrain (defaults to PinPushPull)
-    * @param[in] pinIrq           One of PinIrq_None, etc (defaults to PinIrq_None)
+    * @param[in] pinAction        One of PinAction_None, etc (defaults to PinAction_None)
     * @param[in] pinFilter        One of PinFilter_None, PinFilter_Passive (defaults to PinFilter_None)
     * @param[in] pinSlewRate      One of PinSlewRate_Slow, PinSlewRate_Fast (defaults to PinSlewRate_Fast)
     */
@@ -139,11 +139,11 @@ public:
          PinPull           pinPull,
          PinDriveStrength  pinDriveStrength  = PinDriveStrength_Low,
          PinDriveMode      pinDriveMode      = PinDriveMode_PushPull,
-         PinIrq            pinIrq            = PinIrq_None,
+         PinAction         pinAction         = PinAction_None,
          PinFilter         pinFilter         = PinFilter_None,
          PinSlewRate       pinSlewRate       = PinSlewRate_Fast
          ) {
-      setInOut(pinPull|pinDriveStrength|pinDriveMode|pinIrq|pinFilter|pinSlewRate|PinMux_Gpio);
+      setInOut(pinPull|pinDriveStrength|pinDriveMode|pinAction|pinFilter|pinSlewRate|PinMux_Gpio);
    }
    /**
     * Set pin as digital output
@@ -233,15 +233,15 @@ public:
     * @note Use setIn() for a lightweight change of direction without affecting other pin settings.
     *
     * @param[in] pinPull          One of PinPull_None, PinPull_Up, PinPull_Down
-    * @param[in] pinIrq           One of PinIrq_None, etc (defaults to PinIrq_None)
+    * @param[in] pinAction        One of PinAction_None, etc (defaults to PinAction_None)
     * @param[in] pinFilter        One of PinFilter_None, PinFilter_Passive (defaults to PinFilter_None)
     */
    static void setInput(
          PinPull           pinPull,
-         PinIrq            pinIrq            = PinIrq_None,
+         PinAction         pinAction         = PinAction_None,
          PinFilter         pinFilter         = PinFilter_None
          ) {
-      setInput(pinPull|pinIrq|pinFilter|PinMux_Gpio);
+      setInput(pinPull|pinAction|pinFilter|PinMux_Gpio);
    }
    /**
     * Set pin. Pin will be high if configured as an output.
@@ -471,10 +471,10 @@ public:
    /**
     * Sets pin interrupt mode
     *
-    * @param[in] pinIrq Interrupt/DMA mode
+    * @param[in] pinAction Interrupt/DMA mode
     */
-   static void setIrq(PinIrq pinIrq) {
-      Pcr::setIrq(pinIrq);
+   static void setPinAction(PinAction pinAction) {
+      Pcr::setPinAction(pinAction);
    }
 
    /**
@@ -697,7 +697,7 @@ public:
     * @param[in] pinPull          One of PinPull_None, PinPull_Up, PinPull_Down (defaults to PinPull_None)
     * @param[in] pinDriveStrength One of PinDriveStrength_Low, PinDriveStrength_High (defaults to PinDriveLow)
     * @param[in] pinDriveMode     One of PinDriveMode_PushPull, PinDriveMode_OpenDrain (defaults to PinPushPull)
-    * @param[in] pinIrq           One of PinIrq_None, etc (defaults to PinIrq_None)
+    * @param[in] pinAction        One of PinAction_None, etc (defaults to PinAction_None)
     * @param[in] pinFilter        One of PinFilter_None, PinFilter_Passive (defaults to PinFilter_None)
     * @param[in] pinSlewRate      One of PinSlewRate_Slow, PinSlewRate_Fast (defaults to PinSlewRate_Fast)
     */
@@ -705,11 +705,11 @@ public:
          PinPull           pinPull           = PinPull_None,
          PinDriveStrength  pinDriveStrength  = PinDriveStrength_Low,
          PinDriveMode      pinDriveMode      = PinDriveMode_PushPull,
-         PinIrq            pinIrq            = PinIrq_None,
+         PinAction         pinAction         = PinAction_None,
          PinFilter         pinFilter         = PinFilter_None,
          PinSlewRate       pinSlewRate       = PinSlewRate_Fast
          ) {
-      setPCRs(pinPull|pinDriveStrength|pinDriveMode|pinIrq|pinFilter|pinSlewRate);
+      setPCRs(pinPull|pinDriveStrength|pinDriveMode|pinAction|pinFilter|pinSlewRate);
    }
    /**
     * Set all pins as digital outputs.
@@ -779,15 +779,15 @@ public:
     * @note Use setIn() or setDirection() for a lightweight change of direction without affecting other pin settings.
     *
     * @param[in] pinPull          One of PinPull_None, PinPull_Up, PinPull_Down (defaults to PinPull_None)
-    * @param[in] pinIrq           One of PinIrq_None, etc (defaults to PinIrq_None)
+    * @param[in] pinAction        One of PinAction_None, etc (defaults to PinAction_None)
     * @param[in] pinFilter        One of PinFilter_None, PinFilter_Passive (defaults to PinFilter_None)
     */
    static void setInput(
          PinPull           pinPull,
-         PinIrq            pinIrq            = PinIrq_None,
+         PinAction         pinAction         = PinAction_None,
          PinFilter         pinFilter         = PinFilter_None
          ) {
-      setInput(pinPull|pinIrq|pinFilter);
+      setInput(pinPull|pinAction|pinFilter);
    }
    /**
     * Set individual pin directions
@@ -894,7 +894,8 @@ public:
  * @tparam bitNum        Bit number in the port
  * @tparam polarity      Polarity of pin. Either ActiveHigh or ActiveLow
  */
-template<int bitNum, Polarity polarity=ActiveHigh> class GpioA : public Gpio_T<GpioAInfo, bitNum, polarity> {};
+template<int bitNum, Polarity polarity=ActiveHigh> class GpioA :
+      public GpioBase_T<GpioAInfo::pinInfo.clockMask, GpioAInfo::pinInfo.portAddress, GpioAInfo::pinInfo.irqNum, GpioAInfo::pinInfo.gpioAddress, bitNum, polarity> {};
 using PortA = PcrBase_T<GpioAInfo::pinInfo.portAddress>;
 
 /**
@@ -976,7 +977,8 @@ class GpioAField : public Field_T<GpioAInfo, left, right, polarity> {};
  * @tparam bitNum        Bit number in the port
  * @tparam polarity      Polarity of pin. Either ActiveHigh or ActiveLow
  */
-template<int bitNum, Polarity polarity=ActiveHigh> class GpioB : public Gpio_T<GpioBInfo, bitNum, polarity> {};
+template<int bitNum, Polarity polarity=ActiveHigh> class GpioB :
+      public GpioBase_T<GpioBInfo::pinInfo.clockMask, GpioBInfo::pinInfo.portAddress, GpioBInfo::pinInfo.irqNum, GpioBInfo::pinInfo.gpioAddress, bitNum, polarity> {};
 using PortB = PcrBase_T<GpioBInfo::pinInfo.portAddress>;
 
 /**
@@ -1058,7 +1060,8 @@ class GpioBField : public Field_T<GpioBInfo, left, right, polarity> {};
  * @tparam bitNum        Bit number in the port
  * @tparam polarity      Polarity of pin. Either ActiveHigh or ActiveLow
  */
-template<int bitNum, Polarity polarity=ActiveHigh> class GpioC : public Gpio_T<GpioCInfo, bitNum, polarity> {};
+template<int bitNum, Polarity polarity=ActiveHigh> class GpioC :
+      public GpioBase_T<GpioCInfo::pinInfo.clockMask, GpioCInfo::pinInfo.portAddress, GpioCInfo::pinInfo.irqNum, GpioCInfo::pinInfo.gpioAddress, bitNum, polarity> {};
 using PortC = PcrBase_T<GpioCInfo::pinInfo.portAddress>;
 
 /**
@@ -1140,7 +1143,8 @@ class GpioCField : public Field_T<GpioCInfo, left, right, polarity> {};
  * @tparam bitNum        Bit number in the port
  * @tparam polarity      Polarity of pin. Either ActiveHigh or ActiveLow
  */
-template<int bitNum, Polarity polarity=ActiveHigh> class GpioD : public Gpio_T<GpioDInfo, bitNum, polarity> {};
+template<int bitNum, Polarity polarity=ActiveHigh> class GpioD :
+      public GpioBase_T<GpioDInfo::pinInfo.clockMask, GpioDInfo::pinInfo.portAddress, GpioDInfo::pinInfo.irqNum, GpioDInfo::pinInfo.gpioAddress, bitNum, polarity> {};
 using PortD = PcrBase_T<GpioDInfo::pinInfo.portAddress>;
 
 /**
@@ -1222,7 +1226,8 @@ class GpioDField : public Field_T<GpioDInfo, left, right, polarity> {};
  * @tparam bitNum        Bit number in the port
  * @tparam polarity      Polarity of pin. Either ActiveHigh or ActiveLow
  */
-template<int bitNum, Polarity polarity=ActiveHigh> class GpioE : public Gpio_T<GpioEInfo, bitNum, polarity> {};
+template<int bitNum, Polarity polarity=ActiveHigh> class GpioE :
+      public GpioBase_T<GpioEInfo::pinInfo.clockMask, GpioEInfo::pinInfo.portAddress, GpioEInfo::pinInfo.irqNum, GpioEInfo::pinInfo.gpioAddress, bitNum, polarity> {};
 using PortE = PcrBase_T<GpioEInfo::pinInfo.portAddress>;
 
 /**

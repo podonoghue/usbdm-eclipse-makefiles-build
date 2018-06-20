@@ -34,7 +34,7 @@ int main(void) {
          PinSlewRate_Slow);
    Switch::setInput(
          PinPull_Up,
-         PinIrq_None,
+         PinAction_None,
          PinFilter_Passive);
 
    for(;;) {

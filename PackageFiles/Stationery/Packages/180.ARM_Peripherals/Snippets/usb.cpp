@@ -261,7 +261,7 @@ const char *UsbBase::reportSetupPacket(SetupPacket *p) {
  *
  * @param value
  */
-void reportLineState(uint8_t value) {
+void UsbBase::reportLineState(uint8_t value) {
    (void)value;
    console.
    writeln("Line state: RTS=").write((value&(1<<1))?1:0).

@@ -131,7 +131,7 @@ public:
     * @param[in] pinPull          One of PinPull_None, PinPull_Up, PinPull_Down
     * @param[in] pinDriveStrength One of PinDriveStrength_Low, PinDriveStrength_High (defaults to PinDriveLow)
     * @param[in] pinDriveMode     One of PinDriveMode_PushPull, PinDriveMode_OpenDrain (defaults to PinPushPull)
-    * @param[in] pinIrq           One of PinIrq_None, etc (defaults to PinIrq_None)
+    * @param[in] pinAction        One of PinAction_None, etc (defaults to PinAction_None)
     * @param[in] pinFilter        One of PinFilter_None, PinFilter_Passive (defaults to PinFilter_None)
     * @param[in] pinSlewRate      One of PinSlewRate_Slow, PinSlewRate_Fast (defaults to PinSlewRate_Fast)
     */
@@ -139,11 +139,11 @@ public:
          PinPull           pinPull,
          PinDriveStrength  pinDriveStrength  = PinDriveStrength_Low,
          PinDriveMode      pinDriveMode      = PinDriveMode_PushPull,
-         PinIrq            pinIrq            = PinIrq_None,
+         PinAction         pinAction         = PinAction_None,
          PinFilter         pinFilter         = PinFilter_None,
          PinSlewRate       pinSlewRate       = PinSlewRate_Fast
          ) {
-      setInOut(pinPull|pinDriveStrength|pinDriveMode|pinIrq|pinFilter|pinSlewRate|PinMux_Gpio);
+      setInOut(pinPull|pinDriveStrength|pinDriveMode|pinAction|pinFilter|pinSlewRate|PinMux_Gpio);
    }
    /**
     * Set pin as digital output
@@ -233,15 +233,15 @@ public:
     * @note Use setIn() for a lightweight change of direction without affecting other pin settings.
     *
     * @param[in] pinPull          One of PinPull_None, PinPull_Up, PinPull_Down
-    * @param[in] pinIrq           One of PinIrq_None, etc (defaults to PinIrq_None)
+    * @param[in] pinAction        One of PinAction_None, etc (defaults to PinAction_None)
     * @param[in] pinFilter        One of PinFilter_None, PinFilter_Passive (defaults to PinFilter_None)
     */
    static void setInput(
          PinPull           pinPull,
-         PinIrq            pinIrq            = PinIrq_None,
+         PinAction         pinAction         = PinAction_None,
          PinFilter         pinFilter         = PinFilter_None
          ) {
-      setInput(pinPull|pinIrq|pinFilter|PinMux_Gpio);
+      setInput(pinPull|pinAction|pinFilter|PinMux_Gpio);
    }
    /**
     * Set pin. Pin will be high if configured as an output.
@@ -459,10 +459,10 @@ public:
    /**
     * Sets pin interrupt mode
     *
-    * @param[in] pinIrq Interrupt/DMA mode
+    * @param[in] pinAction Interrupt/DMA mode
     */
-   static void setIrq(PinIrq pinIrq) {
-      Pcr::setIrq(pinIrq);
+   static void setPinAction(PinAction pinAction) {
+      Pcr::setPinAction(pinAction);
    }
 
    /**
@@ -685,7 +685,7 @@ public:
     * @param[in] pinPull          One of PinPull_None, PinPull_Up, PinPull_Down (defaults to PinPull_None)
     * @param[in] pinDriveStrength One of PinDriveStrength_Low, PinDriveStrength_High (defaults to PinDriveLow)
     * @param[in] pinDriveMode     One of PinDriveMode_PushPull, PinDriveMode_OpenDrain (defaults to PinPushPull)
-    * @param[in] pinIrq           One of PinIrq_None, etc (defaults to PinIrq_None)
+    * @param[in] pinAction        One of PinAction_None, etc (defaults to PinAction_None)
     * @param[in] pinFilter        One of PinFilter_None, PinFilter_Passive (defaults to PinFilter_None)
     * @param[in] pinSlewRate      One of PinSlewRate_Slow, PinSlewRate_Fast (defaults to PinSlewRate_Fast)
     */
@@ -693,11 +693,11 @@ public:
          PinPull           pinPull           = PinPull_None,
          PinDriveStrength  pinDriveStrength  = PinDriveStrength_Low,
          PinDriveMode      pinDriveMode      = PinDriveMode_PushPull,
-         PinIrq            pinIrq            = PinIrq_None,
+         PinAction         pinAction         = PinAction_None,
          PinFilter         pinFilter         = PinFilter_None,
          PinSlewRate       pinSlewRate       = PinSlewRate_Fast
          ) {
-      setPCRs(pinPull|pinDriveStrength|pinDriveMode|pinIrq|pinFilter|pinSlewRate);
+      setPCRs(pinPull|pinDriveStrength|pinDriveMode|pinAction|pinFilter|pinSlewRate);
    }
    /**
     * Set all pins as digital outputs.
@@ -767,15 +767,15 @@ public:
     * @note Use setIn() or setDirection() for a lightweight change of direction without affecting other pin settings.
     *
     * @param[in] pinPull          One of PinPull_None, PinPull_Up, PinPull_Down (defaults to PinPull_None)
-    * @param[in] pinIrq           One of PinIrq_None, etc (defaults to PinIrq_None)
+    * @param[in] pinAction        One of PinAction_None, etc (defaults to PinAction_None)
     * @param[in] pinFilter        One of PinFilter_None, PinFilter_Passive (defaults to PinFilter_None)
     */
    static void setInput(
          PinPull           pinPull,
-         PinIrq            pinIrq            = PinIrq_None,
+         PinAction         pinAction         = PinAction_None,
          PinFilter         pinFilter         = PinFilter_None
          ) {
-      setInput(pinPull|pinIrq|pinFilter);
+      setInput(pinPull|pinAction|pinFilter);
    }
    /**
     * Set individual pin directions

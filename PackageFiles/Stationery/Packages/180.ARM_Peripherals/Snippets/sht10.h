@@ -113,7 +113,7 @@ public:
     */
    void reset() {
       // Data I/O is Open-drain to avoid conflicts with sensor
-      DataGpio::setInOut(PinPull_Up, PinDriveStrength_High, PinDriveMode_OpenDrain, PinIrq_None, PinFilter_None, PinSlewRate_Fast);
+      DataGpio::setInOut(PinPull_Up, PinDriveStrength_High, PinDriveMode_OpenDrain, PinAction_None, PinFilter_None, PinSlewRate_Fast);
       DataGpio::high();
       DataGpio::setOut();
       ClockGpio::setOutput(PinDriveStrength_High, PinDriveMode_PushPull, PinSlewRate_Fast);
