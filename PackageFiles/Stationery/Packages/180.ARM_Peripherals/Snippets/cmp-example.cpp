@@ -1,6 +1,6 @@
 /**
  ============================================================================
- * @file    cmp.cpp (180.ARM_Peripherals)
+ * @file    cmp-example.cpp (180.ARM_Peripherals)
  * @brief   Basic C++ demo using CMP class
  *
  * It will be necessary to configure the CMP in the configuration
@@ -77,6 +77,7 @@ int main() {
    // Enable interrupts on Rising and Falling edges
    Cmp::enableFallingEdgeInterrupts(true);
    Cmp::enableRisingEdgeInterrupts(true);
+   Cmp::enableNvicInterrupts();
 
    for(;;) {
 //      Led::toggle();
