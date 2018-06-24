@@ -663,13 +663,24 @@ private:
 
 public:
    /**
-    * Utility function to set multiple PCRs using GPCLR & GPCHR
+    * Set field as digital I/O.
+    * Pins are initially set as an input.
+    * Use setIn(), setOut() and setDirection() to change pin directions.
     *
-    * @param[in] pcrValue PCR value to use in configuring port (excluding mux fn)
+    * @note Resets the Pin Control Register values (PCR value).
+    * @note Resets the pin output value to the inactive state
+    *
+    * @param[in] pcrValue PCR value to use in configuring pin (excluding MUX value). See pcrValue()
     */
-   static void setPCRs(PcrValue pcrValue=GPIO_DEFAULT_PCR) {
+   static void setInOut(PcrValue pcrValue=GPIO_DEFAULT_PCR) {
       // Enable clock to GPCLR & GPCHR
       enablePortClocks(Info::pinInfo.clockMask);
+
+      // Default to input
+      gpio().PDDR &= ~MASK;
+
+      // Default to output inactive
+      write(0);
 
       // Include the if's as I expect one branch to be removed by optimization unless the field spans the boundary
       if ((MASK&0xFFFFUL) != 0) {
@@ -679,8 +690,14 @@ public:
          port().GPCHR = PORT_GPCHR_GPWE(MASK>>16)|(pcrValue&~PORT_PCR_MUX_MASK)|PinMux_Gpio;
       }
    }
+
    /**
-    * Utility function to set multiple PCRs using GPCLR & GPCHR
+    * Set field as digital I/O.
+    * Pins are initially set as an input.
+    * Use setIn(), setOut() and setDirection() to change pin directions.
+    *
+    * @note Resets the Pin Control Register values (PCR value).
+    * @note Resets the pin output value to the inactive state
     *
     * @param[in] pinPull          One of PinPull_None, PinPull_Up, PinPull_Down (defaults to PinPull_None)
     * @param[in] pinDriveStrength One of PinDriveStrength_Low, PinDriveStrength_High (defaults to PinDriveLow)
@@ -689,7 +706,7 @@ public:
     * @param[in] pinFilter        One of PinFilter_None, PinFilter_Passive (defaults to PinFilter_None)
     * @param[in] pinSlewRate      One of PinSlewRate_Slow, PinSlewRate_Fast (defaults to PinSlewRate_Fast)
     */
-   static void setPCRs(
+   static void setInOut(
          PinPull           pinPull           = PinPull_None,
          PinDriveStrength  pinDriveStrength  = PinDriveStrength_Low,
          PinDriveMode      pinDriveMode      = PinDriveMode_PushPull,
@@ -697,7 +714,7 @@ public:
          PinFilter         pinFilter         = PinFilter_None,
          PinSlewRate       pinSlewRate       = PinSlewRate_Fast
          ) {
-      setPCRs(pinPull|pinDriveStrength|pinDriveMode|pinAction|pinFilter|pinSlewRate);
+      setInOut(pinPull|pinDriveStrength|pinDriveMode|pinAction|pinFilter|pinSlewRate);
    }
    /**
     * Set all pins as digital outputs.
@@ -708,7 +725,7 @@ public:
       gpio().PDDR |= MASK;
    }
    /**
-    * Sets all pin as digital outputs\n
+    * Sets all pin as digital outputs.
     * Configures all Pin Control Register (PCR) values
     *
     * @note This will also reset the Pin Control Register value (PCR value).
@@ -717,11 +734,11 @@ public:
     * @param[in] pcrValue PCR value to use in configuring port (excluding mux fn)
     */
    static void setOutput(PcrValue pcrValue=GPIO_DEFAULT_PCR) {
-      setPCRs(pcrValue);
+      setInOut(pcrValue);
       gpio().PDDR |= MASK;
    }
    /**
-    * Sets all pin as digital outputs\n
+    * Sets all pin as digital outputs.
     * Configures all Pin Control Register (PCR) values
     *
     * @note This will also reset the Pin Control Register value (PCR value).
@@ -747,7 +764,7 @@ public:
       gpio().PDDR &= ~MASK;
    }
    /**
-    * Set all pins as digital inputs\n
+    * Set all pins as digital inputs.
 	* Configures all Pin Control Register (PCR) values
     *
     * @note This will also reset the Pin Control Register value (PCR value).
@@ -756,12 +773,12 @@ public:
     * @param[in] pcrValue PCR value to use in configuring port (excluding mux fn)
     */
    static void setInput(PcrValue pcrValue=GPIO_DEFAULT_PCR) {
-      setPCRs(pcrValue);
+      setInOut(pcrValue);
       gpio().PDDR &= ~MASK;
    }
    /**
-    * Set all pins as digital inputs\n
-	* Configures all Pin Control Register (PCR) values
+    * Set all pins as digital inputs.
+    * Configures all Pin Control Register (PCR) values
     *
     * @note This will also reset the Pin Control Register value (PCR value).
     * @note Use setIn() or setDirection() for a lightweight change of direction without affecting other pin settings.
@@ -781,6 +798,8 @@ public:
     * Set individual pin directions
     *
     * @param[in] mask Mask for pin directions (1=>out, 0=>in)
+    *
+    * @note Does not affect other pin settings
     */
    static void setDirection(uint32_t mask) {
       gpio().PDDR = (gpio().PDDR&~MASK)|((mask<<right)&MASK);
