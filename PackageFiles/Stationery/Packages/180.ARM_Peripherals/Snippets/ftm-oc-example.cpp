@@ -1,4 +1,4 @@
-/*
+/**
  ============================================================================
  * @file    ftm-oc-example.cpp (180.ARM_Peripherals/Snippets)
  * @brief   Demo using Ftm class to implement a basic Output Compare system
@@ -10,6 +10,7 @@
  ============================================================================
  */
 #include "hardware.h"
+//#include <type_traits>
 
 using namespace USBDM;
 
@@ -26,6 +27,8 @@ using Timer = Ftm0;
 
 // Timer channel for output - change as required
 using TimerChannel = Ftm0Channel<7>;
+
+//static_assert(std::is_same<TimerChannel::Ftm,Timer>::value, "Timer channel must belong to same Timer!");
 
 // Half-period for timer in ticks
 // This variable is shared with the interrupt routine
@@ -51,7 +54,6 @@ static void ftmCallback(uint8_t status) {
 }
 
 int main() {
-
    /**
     * FTM channel set as Output compare with pin Toggle mode and using a callback function
     */

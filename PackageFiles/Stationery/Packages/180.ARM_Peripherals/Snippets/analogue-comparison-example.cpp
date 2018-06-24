@@ -1,4 +1,4 @@
-/*
+/**
  ============================================================================
  * @file    adc-comparison-example.cpp (180.ARM_Peripherals/Snippets)
  * @brief   Basic C++ demo of using ADC comparison hardware with interrupts

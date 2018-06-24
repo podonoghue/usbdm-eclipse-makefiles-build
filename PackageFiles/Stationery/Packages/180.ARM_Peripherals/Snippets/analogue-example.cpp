@@ -8,6 +8,7 @@
  ============================================================================
  */
 #include "hardware.h"
+//#include <type_traits> // std::is_same
 
 using namespace USBDM;
 
@@ -24,8 +25,9 @@ using Adc        = Adc0;
 // ADC channel to use
 using AdcChannel = Adc0Channel<0>;
 
-int main(void) {
+//static_assert(std::is_same<AdcChannel::Adc,Adc>::value, "ADC channel must belong to same ADC!");
 
+int main(void) {
    // Enable and configure ADC
    Adc::configure(AdcResolution_12bit_se);
 

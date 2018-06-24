@@ -24,8 +24,8 @@ using namespace USBDM;
  */
 
 // Connection mapping - change as required
-using Switch =   $(demo.cpp.external.switch:USBDM::GpioB<0,ActiveLow>);
-using Led    =   $(demo.cpp.external.led:USBDM::GpioB<1,ActiveLow>);
+using Switch =   $(demo.cpp.external.switch:GpioB<0,ActiveLow>);
+using Led    =   $(demo.cpp.external.led:GpioB<1,ActiveLow>);
 
 int main(void) {
    Led::setOutput(

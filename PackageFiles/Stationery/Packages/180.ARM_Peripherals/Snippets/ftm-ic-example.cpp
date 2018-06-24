@@ -103,7 +103,7 @@ int main() {
       disableInterrupts();
       tPeriodInTicks = periodInTicks;
       enableInterrupts();
-      int intervalInMilliseconds = (int)(1000*TimerChannel::convertTicksToSeconds(tPeriodInTicks));
+      int intervalInMilliseconds = (int)(1000*Timer::convertTicksToSeconds(tPeriodInTicks));
       console.write("Period = ").write(intervalInMilliseconds).writeln(" ms");
    }
    return 0;
