@@ -324,7 +324,7 @@ public:
 
    /**
     * Basic enable of ADC.
-    * Includes enabling clock and configuring all pins
+    * Includes enabling clock and configuring all pins of mapPinsOnEnable is selected on configuration
     */
    static void enable() {
       if (Info::mapPinsOnEnable) {
@@ -556,6 +556,9 @@ public:
    }
 
 protected:
+   template<class InfoX, int channelX> friend class AdcChannel_T;
+   template<class InfoX, int channelX> friend class AdcDiffChannel_T;
+
    /**
     * Enables hardware trigger mode of operation and configures the channel.
     *
@@ -655,7 +658,7 @@ template<class Info> ADCCallbackFunction AdcBase_T<Info>::fCallback = AdcBase::u
  * @tparam channel ADC channel
  */
 template<class Info, int channel>
-class AdcChannel_T : public AdcBase_T<Info>, CheckSignal<Info, channel> {
+class AdcChannel_T : CheckSignal<Info, channel> {
 
 public:
    using Pcr = PcrTable_T<Info, channel>;
@@ -722,7 +725,7 @@ public:
     */
    static __attribute__((always_inline)) uint32_t readAnalogue() {
       // Zero extended to 32 bits
-      return (uint32_t)(uint16_t)AdcBase_T<Info>::readAnalogue(channel);
+      return (uint32_t)(uint16_t)Adc::readAnalogue(channel);
    };
 };
 
@@ -746,7 +749,7 @@ public:
  * @tparam channel ADC channel
  */
 template<class Info, int channel>
-class AdcDiffChannel_T : public AdcBase_T<Info>, CheckSignal<typename Info::InfoDP, channel>, CheckSignal<typename Info::InfoDM, channel> {
+class AdcDiffChannel_T : private CheckSignal<typename Info::InfoDP, channel>, CheckSignal<typename Info::InfoDM, channel> {
 
 public:
    /** PCR associated with plus channel */
@@ -805,7 +808,7 @@ public:
     */
    static __attribute__((always_inline)) int32_t readAnalogue() {
       // Sign-extended to 32 bits
-      return (int32_t)(int16_t)AdcBase_T<Info>::readAnalogue(channel|ADC_SC1_DIFF_MASK);
+      return (int32_t)(int16_t)Adc::readAnalogue(channel|ADC_SC1_DIFF_MASK);
    };
 };
 #endif
@@ -829,8 +832,7 @@ public:
  * @tparam channel ADC channel
  */
 template<int channel>
-class Adc0Channel : public AdcChannel_T<Adc0Info, channel> {};
-//template<int channel> using Adc0Channel = AdcChannel_T<Adc0Info, channel>;
+using Adc0Channel = AdcChannel_T<Adc0Info, channel>;
 
 #ifdef ADC_SC1_DIFF_MASK
 /**
@@ -851,15 +853,13 @@ class Adc0Channel : public AdcChannel_T<Adc0Info, channel> {};
  * @tparam channel ADC channel
  */
 template<int channel>
-class Adc0DiffChannel : public AdcDiffChannel_T<Adc0Info, channel> {};
-//template<int channel> using Adc0DiffChannel = AdcDiffChannel_T<Adc0Info, channel>;
+using Adc0DiffChannel = AdcDiffChannel_T<Adc0Info, channel>;
 #endif
 
 /**
  * Class representing ADC0
  */
-class Adc0 : public AdcBase_T<Adc0Info>{};
-//using Adc0 = AdcBase_T<Adc0Info>;
+using Adc0 = AdcBase_T<Adc0Info>;
 #endif
 
 #ifdef USBDM_ADC1_IS_DEFINED
@@ -881,8 +881,7 @@ class Adc0 : public AdcBase_T<Adc0Info>{};
  * @tparam channel ADC channel
  */
 template<int channel>
-class Adc1Channel : public AdcChannel_T<Adc1Info, channel> {};
-//template<int channel> using Adc1Channel = AdcChannel_T<Adc1Info, channel>;
+using Adc1Channel = AdcChannel_T<Adc1Info, channel>;
 
 #ifdef ADC_SC1_DIFF_MASK
 /**
@@ -903,15 +902,13 @@ class Adc1Channel : public AdcChannel_T<Adc1Info, channel> {};
  * @tparam channel ADC channel
  */
 template<int channel>
-class Adc1DiffChannel : public AdcDiffChannel_T<Adc1Info, channel> {};
-//template<int channel> using Adc1DiffChannel = AdcDiffChannel_T<Adc01Info, channel>;
+using Adc1DiffChannel = AdcDiffChannel_T<Adc1Info, channel>;
 #endif
 
 /**
  * Class representing ADC1
  */
-class Adc1 : public AdcBase_T<Adc1Info>{};
-//using Adc1 = AdcBase_T<Adc1Info>;
+using Adc1 = AdcBase_T<Adc1Info>;
 #endif
 
 /**
