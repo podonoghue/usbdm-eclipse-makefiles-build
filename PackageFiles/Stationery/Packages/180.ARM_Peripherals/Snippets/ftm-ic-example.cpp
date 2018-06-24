@@ -100,9 +100,10 @@ int main() {
       uint16_t tPeriodInTicks;
       // Access shared data in protected fashion
       // Not necessary on Cortex-M4 as reading a simple variable like this is atomic.
-      disableInterrupts();
-      tPeriodInTicks = periodInTicks;
-      enableInterrupts();
+      {
+         CriticalSection cs;
+         tPeriodInTicks = periodInTicks;
+      }
       int intervalInMilliseconds = (int)(1000*Timer::convertTicksToSeconds(tPeriodInTicks));
       console.write("Period = ").write(intervalInMilliseconds).writeln(" ms");
    }
