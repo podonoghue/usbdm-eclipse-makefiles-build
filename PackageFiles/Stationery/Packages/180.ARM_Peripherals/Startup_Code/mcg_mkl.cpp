@@ -138,14 +138,14 @@ ErrorCode Mcg::clockTransition(const McgInfo::ClockInfo &clockInfo) {
 
 #ifdef MCG_C7_OSCSEL
    // Select OSCCLK Source
-   mcg->C7 = clockInfo.c7; // OSCSEL = 0,1,2 -> XTAL/XTAL32/IRC48M
+   mcg().C7 = clockInfo.c7; // OSCSEL = 0,1,2 -> XTAL/XTAL32/IRC48M
 #endif
 
    // Set Fast Internal Clock divider
-   mcg->SC = clockInfo.sc;
+   mcg().SC = clockInfo.sc;
 
    // Disable clock monitors while clocks change
-   mcg->C8 = 0;
+   mcg().C8 = 0;
 
    McgInfo::ClockMode next;
    if (currentClockMode == McgInfo::ClockMode_None) {
@@ -167,25 +167,25 @@ ErrorCode Mcg::clockTransition(const McgInfo::ClockInfo &clockInfo) {
          case McgInfo::ClockMode_FEI: // From FEE, FBI, FBE or reset(FEI)
 
             // EREFS0 (for exit to FEE,FBE)
-            mcg->C2 = clockInfo.c2|MCG_C2_LP(0);
+            mcg().C2 = clockInfo.c2|MCG_C2_LP(0);
 
-            mcg->C1 =
+            mcg().C1 =
                   MCG_C1_CLKS(0)   | // CLKS     = 0     -> MCGOUTCLK = Output of FLL/PLL (depends on mcg_c6.PLLS)
                   MCG_C1_IREFS(1)  | // IREFS    = 1     -> FLL source = Slow IRC
                   clockInfo.c1;      // FRDIV, IRCLKEN, IREFSTEN
 
             // Set FLL Parameters
-            mcg->C4 = (mcg->C4&(MCG_C4_FCTRIM_MASK|MCG_C4_SCFTRIM_MASK))|clockInfo.c4;
+            mcg().C4 = (mcg().C4&(MCG_C4_FCTRIM_MASK|MCG_C4_SCFTRIM_MASK))|clockInfo.c4;
 
             // Wait for S_IREFST to indicate FLL Reference has switched to IRC
             // Wait for S_CLKST to indicating that OUTCLK has switched to FLL
             do {
                __asm__("nop");
-            } while ((mcg->S & (MCG_S_CLKST_MASK|MCG_S_IREFST_MASK)) != (MCG_S_CLKST(0)|MCG_S_IREFST(1)));
+            } while ((mcg().S & (MCG_S_CLKST_MASK|MCG_S_IREFST_MASK)) != (MCG_S_CLKST(0)|MCG_S_IREFST(1)));
             break;
 
          case McgInfo::ClockMode_FEE: // from FEI, FBI or FBE
-            mcg->C1 =
+            mcg().C1 =
                   MCG_C1_CLKS(0)   | // CLKS     = 0     -> MCGOUTCLK = Output of FLL/PLL (depends on mcg_c6.PLLS)
                   MCG_C1_IREFS(0)  | // IREFS    = 0     -> FLL source = External reference clock
                   clockInfo.c1;      // FRDIV, IRCLKEN, IREFSTEN
@@ -194,7 +194,7 @@ ErrorCode Mcg::clockTransition(const McgInfo::ClockInfo &clockInfo) {
             // Wait for S_IREFST to indicate FLL Reference has switched to ERC
             do {
                __asm__("nop");
-            } while ((mcg->S & (MCG_S_CLKST_MASK|MCG_S_IREFST_MASK)) != (MCG_S_CLKST(0)|MCG_S_IREFST(0)));
+            } while ((mcg().S & (MCG_S_CLKST_MASK|MCG_S_IREFST_MASK)) != (MCG_S_CLKST(0)|MCG_S_IREFST(0)));
 
             externalClockInUse = true;
             break;
@@ -202,64 +202,64 @@ ErrorCode Mcg::clockTransition(const McgInfo::ClockInfo &clockInfo) {
          case McgInfo::ClockMode_FBI: // from BLPI, FEI, FEE, FBE
 
             // Clear LP
-            mcg->C2 = clockInfo.c2|MCG_C2_LP(0);
+            mcg().C2 = clockInfo.c2|MCG_C2_LP(0);
 
-            mcg->C1 =
+            mcg().C1 =
                   MCG_C1_CLKS(1)   | // CLKS     = 1     -> MCGOUTCLK = Internal reference clock is selected
                   MCG_C1_IREFS(1)  | // IREFS    = 1     -> FLL source = Slow IRC
                   clockInfo.c1;      // FRDIV, IRCLKEN, IREFSTEN
 
             // Set FLL Parameters
-            mcg->C4 = (mcg->C4&(MCG_C4_FCTRIM_MASK|MCG_C4_SCFTRIM_MASK))|clockInfo.c4;
+            mcg().C4 = (mcg().C4&(MCG_C4_FCTRIM_MASK|MCG_C4_SCFTRIM_MASK))|clockInfo.c4;
 
             // Wait for S_CLKST to indicating that MCGOUTCLK has switched to IRC
             // Wait for S_IREFST to indicate FLL Reference has switched to IRC
             do {
                __asm__("nop");
-            } while ((mcg->S & (MCG_S_CLKST_MASK|MCG_S_IREFST_MASK)) != (MCG_S_CLKST(1)|MCG_S_IREFST(1)));
+            } while ((mcg().S & (MCG_S_CLKST_MASK|MCG_S_IREFST_MASK)) != (MCG_S_CLKST(1)|MCG_S_IREFST(1)));
             break;
 
          case McgInfo::ClockMode_FBE: // from FEI, FEE, FBI, PBE, BLPE
             // Clear LP
-            mcg->C2 = clockInfo.c2|MCG_C2_LP(0);
+            mcg().C2 = clockInfo.c2|MCG_C2_LP(0);
 
-            mcg->C1 =
+            mcg().C1 =
                   MCG_C1_CLKS(2)   | // CLKS     = 2     -> MCGOUTCLK = External reference clock
                   MCG_C1_IREFS(0)  | // IREFS    = 0     -> FLL source = External reference clock
                   clockInfo.c1;      // FRDIV, IRCLKEN, IREFSTEN
 
             // Select FLL as MCG clock source
-            mcg->C6  = clockInfo.c6;
+            mcg().C6  = clockInfo.c6;
 
             // Wait for S_CLKST to indicating that MCGOUTCLK has switched to ERC
             // Wait for S_IREFST to indicate FLL Reference has switched to ERC
             do {
                __asm__("nop");
-            } while ((mcg->S & (MCG_S_CLKST_MASK|MCG_S_IREFST_MASK)) != (MCG_S_CLKST(2)|MCG_S_IREFST(0)));
+            } while ((mcg().S & (MCG_S_CLKST_MASK|MCG_S_IREFST_MASK)) != (MCG_S_CLKST(2)|MCG_S_IREFST(0)));
 
             externalClockInUse = true;
             break;
 
          case McgInfo::ClockMode_PBE: // from FBE, BLPE, PEE
             // Clear LP
-            mcg->C2 = clockInfo.c2|MCG_C2_LP(0);
-            mcg->C5 = clockInfo.c5;
+            mcg().C2 = clockInfo.c2|MCG_C2_LP(0);
+            mcg().C5 = clockInfo.c5;
             // Select PLL as MCG clock source and set VDIV0
-            mcg->C6 = clockInfo.c6|MCG_C6_PLLS_MASK;
+            mcg().C6 = clockInfo.c6|MCG_C6_PLLS_MASK;
 
-            mcg->C1 =
+            mcg().C1 =
                   MCG_C1_CLKS(2)   | // CLKS     = 2     -> MCGOUTCLK = External reference clock
                   MCG_C1_IREFS(0)  | // IREFS    = 1     -> FLL source = External reference clock
                   clockInfo.c1;      // FRDIV, IRCLKEN, IREFSTEN
 
             externalClockInUse = true;
-            while ((mcg->S&MCG_S_PLLST_MASK) == 0) {
+            while ((mcg().S&MCG_S_PLLST_MASK) == 0) {
                __asm__("nop");
             }
             break;
 
          case McgInfo::ClockMode_PEE: // from PBE
-            mcg->C1 =
+            mcg().C1 =
                   MCG_C1_CLKS(0)   | // CLKS     = 0     -> MCGOUTCLK = Output of FLL/PLL (depends on mcg_c6.PLLS)
                   MCG_C1_IREFS(0)  | // IREFS    = 0     -> FLL source = External reference clock
                   clockInfo.c1;      // FRDIV, IRCLKEN, IREFSTEN
@@ -269,18 +269,18 @@ ErrorCode Mcg::clockTransition(const McgInfo::ClockInfo &clockInfo) {
 
          case McgInfo::ClockMode_BLPE: // from FBE, PBE (registers differ depending on transition)
             externalClockInUse = true;
-            //no break
+            // Fall through
 
          case McgInfo::ClockMode_BLPI: // from FBI
             // Set LP
-            mcg->C2 = clockInfo.c2|MCG_C2_LP(1);
+            mcg().C2 = clockInfo.c2|MCG_C2_LP(1);
             break;
          }
          // Wait for oscillator stable (if used)
          if (externalClockInUse && (clockInfo.c2&MCG_C2_EREFS0_MASK)) {
             do {
                __asm__("nop");
-            } while ((mcg->S & MCG_S_OSCINIT0_MASK) == 0);
+            } while ((mcg().S & MCG_S_OSCINIT0_MASK) == 0);
          }
          currentClockMode = next;
          next = (McgInfo::ClockMode)clockTransitionTable[currentClockMode][to];
@@ -303,7 +303,7 @@ ErrorCode Mcg::clockTransition(const McgInfo::ClockInfo &clockInfo) {
 
    SystemCoreClockUpdate();
 
-   mcg->C8 = clockInfo.c8; // Enable clock monitors
+   mcg().C8 = clockInfo.c8; // Enable clock monitors
 
    return E_NO_ERROR;
 }
@@ -317,17 +317,17 @@ void Mcg::SystemCoreClockUpdate(void) {
 
    uint32_t mcg_erc_clock = McgInfo::getErcClock();
 
-   if ((mcg->C1&MCG_C1_IREFS_MASK) == 0) {
+   if ((mcg().C1&MCG_C1_IREFS_MASK) == 0) {
       // External reference clock is selected
-      SystemMcgffClock = mcg_erc_clock/(1<<((mcg->C1&MCG_C1_FRDIV_MASK)>>MCG_C1_FRDIV_SHIFT));
+      SystemMcgffClock = mcg_erc_clock/(1<<((mcg().C1&MCG_C1_FRDIV_MASK)>>MCG_C1_FRDIV_SHIFT));
 
-      if (((mcg->C2&MCG_C2_RANGE0_MASK) != 0) && 
-	     ((RtcInfo::rtc->CR&RTC_CR_OSCE_MASK) == 0)) {
+      if (((mcg().C2&MCG_C2_RANGE0_MASK) != 0) && 
+	     ((RtcInfo::rtc().CR&RTC_CR_OSCE_MASK) == 0)) {
          // High divisors - extra division
-         if ((mcg->C1&MCG_C1_FRDIV_MASK) == MCG_C1_FRDIV(6)) {
+         if ((mcg().C1&MCG_C1_FRDIV_MASK) == MCG_C1_FRDIV(6)) {
             SystemMcgffClock /= 20;
          }
-         else if ((mcg->C1&MCG_C1_FRDIV_MASK) == MCG_C1_FRDIV(7)) {
+         else if ((mcg().C1&MCG_C1_FRDIV_MASK) == MCG_C1_FRDIV(7)) {
             SystemMcgffClock /= 12;
          }
          else {
@@ -340,16 +340,16 @@ void Mcg::SystemCoreClockUpdate(void) {
       SystemMcgffClock = McgInfo::system_slow_irc_clock;
    }
 
-   uint32_t systemFllClock = SystemMcgffClock * ((mcg->C4&MCG_C4_DMX32_MASK)?732:640) * (((mcg->C4&MCG_C4_DRST_DRS_MASK)>>MCG_C4_DRST_DRS_SHIFT)+1);
+   uint32_t systemFllClock = SystemMcgffClock * ((mcg().C4&MCG_C4_DMX32_MASK)?732:640) * (((mcg().C4&MCG_C4_DRST_DRS_MASK)>>MCG_C4_DRST_DRS_SHIFT)+1);
 
    uint32_t systemPllClock = 0;
-   systemPllClock  = (mcg_erc_clock/10)*(((mcg->C6&MCG_C6_VDIV0_MASK)>>MCG_C6_VDIV0_SHIFT)+McgInfo::pll_vdiv_min);
-   systemPllClock /= ((mcg->C5&MCG_C5_PRDIV0_MASK)>>MCG_C5_PRDIV0_SHIFT)+1;
+   systemPllClock  = (mcg_erc_clock/10)*(((mcg().C6&MCG_C6_VDIV0_MASK)>>MCG_C6_VDIV0_SHIFT)+McgInfo::pll_vdiv_min);
+   systemPllClock /= ((mcg().C5&MCG_C5_PRDIV0_MASK)>>MCG_C5_PRDIV0_SHIFT)+1;
    systemPllClock *= (10/McgInfo::pll_post_divider);
 
    SystemMcgPllClock = 0;
    SystemMcgFllClock = 0;
-   switch (mcg->S&MCG_S_CLKST_MASK) {
+   switch (mcg().S&MCG_S_CLKST_MASK) {
       case MCG_S_CLKST(0) : // FLL
          SystemMcgOutClock = systemFllClock;
          SystemMcgFllClock = systemFllClock;
@@ -365,7 +365,7 @@ void Mcg::SystemCoreClockUpdate(void) {
          SystemMcgPllClock = systemPllClock;
          break;
    }
-   if (mcg->C5&MCG_C5_PLLCLKEN0_MASK) {
+   if (mcg().C5&MCG_C5_PLLCLKEN0_MASK) {
       SystemMcgPllClock = systemPllClock;
    }
    SystemCoreClock   = SystemMcgOutClock/(((SIM->CLKDIV1&SIM_CLKDIV1_OUTDIV1_MASK)>>SIM_CLKDIV1_OUTDIV1_SHIFT)+1);
