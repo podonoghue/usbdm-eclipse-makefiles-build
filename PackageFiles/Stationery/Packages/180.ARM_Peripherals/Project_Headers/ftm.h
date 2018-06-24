@@ -407,6 +407,19 @@ public:
    }
 
    /**
+    * Stop timer counter.
+    * This simply disables the counter clock source. \n
+    * To restart use setClockSource() or configure();
+    *
+    * @note This function will affect all channels of the timer.
+    */
+   static void stopCounter() {
+      if (isEnabled()) {
+         tmr().SC = (tmr().SC&~FTM_SC_CLKS_MASK);
+      }
+   }
+
+   /**
     * Set timer clock source
     *
     * @param[in] ftmClockSource Clock source for timer
@@ -495,7 +508,7 @@ public:
     *
     * @note Assumes prescale has been chosen as a appropriate value. Rudimentary range checking.
     * @note This function will affect all channels of the timer.
-    * @note The counter start load value (CNTIN) to cleared
+    * @note The counter load value (CNTIN) is cleared
     */
    static ErrorCode setPeriodInTicks(uint32_t period) {
 
@@ -525,18 +538,11 @@ public:
          }
 #endif
       }
-      // Disable timer so register changes are immediate
-      uint8_t sc = tmr().SC;
-      tmr().SC = FTM_SC_CLKS(0);
-
       // Start counter from zero
       tmr().CNTIN = 0;
 
       // Change modulo
       tmr().MOD = period;
-
-      // Restart timer
-      tmr().SC  = sc;
 
       // OK period
       return E_NO_ERROR;
@@ -553,7 +559,7 @@ public:
     *
     * @note Adjusts Timer pre-scaler to appropriate value.
     * @note This function will affect all channels of the timer.
-    * @note The counter start load value (CNTIN) to cleared
+    * @note The counter load value (CNTIN) is cleared
     */
    static ErrorCode setPeriod(float period) {
       float inputClock = Info::getInputClockFrequency();
@@ -578,7 +584,8 @@ public:
             return setErrorCode(E_TOO_SMALL);
          }
          if (periodInTicks <= maxPeriodInTicks) {
-            tmr().SC     = (tmr().SC&~FTM_SC_PS_MASK)|FTM_SC_PS(prescalerValue);
+            // Set prescaler & period
+            tmr().SC  = (tmr().SC&~FTM_SC_PS_MASK)|FTM_SC_PS(prescalerValue);
             setPeriodInTicks(periodInTicks);
             return E_NO_ERROR;
          }
@@ -660,11 +667,7 @@ public:
          float tickFrequency = inputClockFrequency/prescaleFactor;
 
          if ((100*std::abs((tickFrequency/frequency)-1)) < tolerance) {
-            // Clear SC so immediate effect on prescale change
-            uint32_t sc = tmr().SC&~FTM_SC_PS_MASK;
-            tmr().SC     = 0;
-            __DSB();
-            tmr().SC     = sc|FTM_SC_PS(prescalerValue);
+            tmr().SC = (tmr().SC & ~FTM_SC_PS_MASK)|FTM_SC_PS(prescalerValue);
             return E_NO_ERROR;
          }
          prescalerValue++;
@@ -1204,6 +1207,8 @@ public:
     * Assumes clock to the port has already been enabled.
     *
     * @param[in] pinAction Interrupt/DMA mode
+    *
+    * @note This is distinct from the timer event action that may be associated with pin changes.
     */
    static __attribute__((always_inline)) void setPinAction(PinAction pinAction) {
       Pcr::setPinAction(pinAction);
@@ -1666,7 +1671,7 @@ public:
  * @tparam channel Timer channel
  */
 template <int channel>
-class Ftm0Channel : public FtmChannel_T<Ftm0Info, channel> {};
+using Ftm0Channel = FtmChannel_T<Ftm0Info, channel>;
 
 /**
  * Class representing FTM0.
@@ -1683,7 +1688,7 @@ using Ftm0 = FtmBase_T<Ftm0Info>;
  * @tparam channel Timer channel
  */
 template <int channel>
-class Ftm1Channel : public FtmChannel_T<Ftm1Info, channel> {};
+using Ftm1Channel = FtmChannel_T<Ftm1Info, channel>;
 
 /**
  * Class representing FTM1.
@@ -1700,7 +1705,7 @@ using Ftm1 = FtmBase_T<Ftm1Info>;
  * @tparam channel Timer channel
  */
 template <int channel>
-class Ftm2Channel : public FtmChannel_T<Ftm2Info, channel> {};
+using Ftm2Channel = FtmChannel_T<Ftm2Info, channel>;
 
 /**
  * Class representing FTM2
@@ -1717,7 +1722,7 @@ using Ftm2 = FtmBase_T<Ftm2Info>;
  * @tparam channel Timer channel
  */
 template <int channel>
-class Ftm3Channel : public FtmChannel_T<Ftm3Info, channel> {};
+using Ftm3Channel = FtmChannel_T<Ftm3Info, channel>;
 
 /**
  * Class representing FTM3
@@ -1826,14 +1831,14 @@ public:
     *
     * @param prescaler Prescale value applied to the output of the quadrature decode before the counter.
     */
-   static void configure(FtmPrescale prescaler = FtmPrescale_1) {
+   static void configure(FtmPrescale ftmPrescale = FtmPrescale_1) {
       Info::InfoQUAD::initPCRs();
 
       // Enable clock to timer
       clockReg() |= Info::clockMask;
       __DMB();
 
-     Ftm::configure(FtmMode_Quadrature, FtmClockSource_Disabled, prescaler);
+     Ftm::configure(FtmMode_Quadrature, FtmClockSource_Disabled, ftmPrescale);
 
       ftm().QDCTRL =
             FTM_QDCTRL_QUADEN_MASK|      // Enable Quadrature decoder

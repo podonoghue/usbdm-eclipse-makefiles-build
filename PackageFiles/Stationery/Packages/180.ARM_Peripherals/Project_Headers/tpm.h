@@ -126,13 +126,6 @@ enum TpmChannelAction {
 #endif
 };
 
-/*
- * Enabled Timer interrupt
- */
-enum TpmChannelIrq {
-   TpmChannelIrq_Disable = TPM_CnSC_CHIE(0), //!< Disable interrupts from this channel
-   TpmChannelIrq_Enable  = TPM_CnSC_CHIE(1), //!< Enable interrupts from this channel
-};
 
 #ifdef TPM_CnSC_DMA
 /*
@@ -378,6 +371,19 @@ public:
          tmr().SC = 0;
       }
       tmr().SC = (sc&~TPM_SC_CPWMS_MASK)|tpmMode;
+   }
+
+   /**
+    * Stop timer counter.
+    * This simply disables the counter clock source. \n
+    * To restart use setClockSource() or configure();
+    *
+    * @note This function will affect all channels of the timer.
+    */
+   static void stopCounter() {
+      if (isEnabled()) {
+         tmr().SC = (tmr().SC&~TPM_SC_CMOD_MASK);
+      }
    }
 
    /**
