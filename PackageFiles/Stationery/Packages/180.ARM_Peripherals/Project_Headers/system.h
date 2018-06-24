@@ -134,18 +134,7 @@ static inline void exitCriticalSection(uint8_t &cpuSR) {
          : :[input] "m" (cpuSR) : "r0");
 }
 
-/**
- * Class used to protect a block of C++ code from interrupts
- */
-class IrqProtect {
-public:
-   inline IrqProtect() {
-      disableInterrupts();
-   }
-   inline ~IrqProtect() {
-      enableInterrupts();
-   }
-};
+namespace USBDM {
 
 /**
  * Class to implement simple critical sections by disabling interrupts.
@@ -165,6 +154,7 @@ public:
  */
 class CriticalSection {
 private:
+   /** Used to record interrupt state on entry */
    volatile uint32_t cpuSR=0;
 
 public:
@@ -197,6 +187,8 @@ public:
             : :[input] "m" (cpuSR) : "r0");
    }
 };
+
+}  // namespace USBDM
 
 #endif // __cplusplus
 
