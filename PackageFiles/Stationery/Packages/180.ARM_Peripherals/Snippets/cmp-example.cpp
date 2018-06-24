@@ -75,8 +75,7 @@ int main() {
    //Cmp::setOutput(PinDriveStrength_High, PinDriveMode_PushPull);
 
    // Enable interrupts on Rising and Falling edges
-   Cmp::enableFallingEdgeInterrupts(true);
-   Cmp::enableRisingEdgeInterrupts(true);
+   Cmp::enableInterrupts(CmpInterrupt_Both);
    Cmp::enableNvicInterrupts();
 
    for(;;) {

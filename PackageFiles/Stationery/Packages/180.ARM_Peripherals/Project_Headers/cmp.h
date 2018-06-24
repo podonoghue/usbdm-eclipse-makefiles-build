@@ -268,10 +268,10 @@ public:
 
    /**
     * Configure pin associated with CMP input.
-    * The pin is set to analogue mode so no PCR settings are active.
+    * The pin is set to analogue mode so no PCR settings are active.\n
     * This function is of use if mapAllPins and mapAllPinsOnEnable are not selected in USBDM configuration.
     *
-    * @param[in] number Number of comparator input for associated pin to map (0-7)
+    * @tparam cmpPin Number of comparator input (0-7) for associated pin being configured.
     */
    template<unsigned cmpPin>
    static void setInput() {
@@ -282,7 +282,7 @@ public:
    }
 
    /**
-    * Enable comparator output pin as output.\n
+    * Enable comparator output pin as output.
     * Configures all Pin Control Register (PCR) values
     *
     * @param[in] pcrValue PCR value to use in configuring port (excluding MUX value). See pcrValue()
@@ -296,7 +296,7 @@ public:
    }
 
    /**
-    * Enable comparator output pin as output.\n
+    * Enable comparator output pin as output.
     * Configures all Pin Control Register (PCR) values
     *
     * @param[in] pinDriveStrength One of PinDriveStrength_Low, PinDriveStrength_High
@@ -325,7 +325,7 @@ public:
     */
 
    /**
-    * Base configuration - Continuous sampling: Mode 2a/b \n
+    * Base configuration - Continuous sampling: Modes 2a/2b.
     * Includes configuring all pins
     *
     *                                        CR1.EN CR1.WE CR1.SE CR0.FILTER_CNT FPR.FILT_PER
@@ -367,7 +367,7 @@ public:
    }
 
    /**
-    * Set Continuous input - Mode 2a/b \n
+    * Set Continuous input - Mode 2a/b.
     * Assumes basic configuration done
     *                                        CR1.EN CR1.WE CR1.SE CR0.FILTER_CNT FPR.FILT_PER
     * 2a/b Continuous                          1      0      0      0              0     COUT == COUTA
@@ -379,7 +379,7 @@ public:
    }
 
    /**
-    * Set Sampled, Non-Filtered input - Modes 3a/3b \n
+    * Set Sampled, Non-Filtered input - Modes 3a/3b.
     * Assumes basic configuration done
     *                                        CR1.EN CR1.WE CR1.SE CR0.FILTER_CNT FPR.FILT_PER
     * 3a   Sampled, Non-Filtered, external     1      0      1      1              X     COUTA combinational, COUT sampled by external clk pin
@@ -399,7 +399,7 @@ public:
    }
 
    /**
-    * Set Sampled, Filtered input - Modes 4a/4b \n
+    * Set Sampled, Filtered input - Modes 4a/4b.
     * Assumes basic configuration done
     *
     *                                        CR1.EN CR1.WE CR1.SE CR0.FILTER_CNT FPR.FILT_PER
@@ -422,7 +422,7 @@ public:
    }
 
    /**
-    * Set Windowed input - Modes 5a/b \n
+    * Set Windowed input - Modes 5a/5b.
     * Assumes basic configuration done
     *
     *                                        CR1.EN CR1.WE CR1.SE CR0.FILTER_CNT FPR.FILT_PER
@@ -435,7 +435,7 @@ public:
    }
 
    /**
-    * Set Windowed, Re-sampled input - Modes 6 \n
+    * Set Windowed, Re-sampled input - mode 6.
     * Assumes basic configuration done
     *
     *                                        CR1.EN CR1.WE CR1.SE CR0.FILTER_CNT FPR.FILT_PER
@@ -452,7 +452,7 @@ public:
    }
 
    /**
-    * Set Windowed, Filtered input - Modes 7 \n
+    * Set Windowed, Filtered input - mode 7.
     * Assumes basic configuration done
     *
     *                                        CR1.EN CR1.WE CR1.SE CR0.FILTER_CNT FPR.FILT_PER
@@ -482,7 +482,7 @@ public:
     * Set input filtering and hysteresis
     *
     * @param[in] cmpFilterSamples Filtering clock pulses
-    * @param[in] cmpHysteresis     Hysteresis level
+    * @param[in] cmpHysteresis    Hysteresis level
     */
    static void setInputConditioning(CmpFilterSamples cmpFilterSamples, CmpHysteresis cmpHysteresis) {
       cmp().CR0 = cmpFilterSamples|cmpHysteresis;
