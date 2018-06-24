@@ -1829,7 +1829,7 @@ public:
     * Enable with default settings\n
     * Includes configuring all pins
     *
-    * @param prescaler Prescale value applied to the output of the quadrature decode before the counter.
+    * @param ftmPrescale Prescale value applied to the output of the quadrature decode before the counter.
     */
    static void configure(FtmPrescale ftmPrescale = FtmPrescale_1) {
       Info::InfoQUAD::initPCRs();
