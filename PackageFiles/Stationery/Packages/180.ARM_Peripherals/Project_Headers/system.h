@@ -94,21 +94,30 @@ static inline void lock(uint32_t * dummy) {(void)dummy;}
 static inline void unlock(uint32_t * dummy) {(void)dummy;}
 #endif
 
+#ifdef __cplusplus
 /**
  * Enter critical section
  *
  * Disables interrupts for a critical section
  *
  * @param cpuSR Variable to hold interrupt state so it can be restored
+ *
+ * @code
+ * uint8_t *cpuSR;
+ * ...
+ * enterCriticalSection(cpuSR);
+ *  // Critical section
+ * exitCriticalSection(cpuSR);
+ * @endcode
  */
-static inline void enterCriticalSection(uint8_t *cpuSR) {
+static inline void enterCriticalSection(uint8_t &cpuSR) {
    __asm__ volatile (
          "  MRS   r0, PRIMASK       \n"   // Copy flags
          // It may be possible for a ISR to run here but it
          // would save/restore PRIMASK so this code is OK
          "  CPSID I                 \n"   // Disable interrupts
          "  STRB  r0, %[output]     \n"   // Save flags
-         : [output] "=m" (*cpuSR) : : "r0");
+         : [output] "=m" (cpuSR) : : "r0");
 }
 
 /**
@@ -118,14 +127,13 @@ static inline void enterCriticalSection(uint8_t *cpuSR) {
  *
  * @param cpuSR Variable to holding interrupt state to be restored
  */
-static inline void exitCriticalSection(uint8_t *cpuSR) {
+static inline void exitCriticalSection(uint8_t &cpuSR) {
    __asm__ volatile (
          "  LDRB r0, %[input]    \n"  // Retrieve original flags
          "  MSR  PRIMASK,r0;     \n"  // Restore
-         : :[input] "m" (*cpuSR) : "r0");
+         : :[input] "m" (cpuSR) : "r0");
 }
 
-#ifdef __cplusplus
 /**
  * Class used to protect a block of C++ code from interrupts
  */
@@ -146,18 +154,18 @@ public:
  * This would be from the declaration of the object until the end of
  * enclosing block. An object of this class should be declared at the
  * start of a block. e.g.
- *
- * {
- *    CriticalSection cs;
- *    ...
- *    Protected code
- *    ...
- * }
- *
+ * @code
+ *    {
+ *       CriticalSection cs;
+ *       ...
+ *       Protected code
+ *       ...
+ *    }
+ * @endcode
  */
 class CriticalSection {
 private:
-   volatile uint8_t cpuSR=0;
+   volatile uint32_t cpuSR=0;
 
 public:
    /**
@@ -172,7 +180,7 @@ public:
             // It may be possible for a ISR to run here but it
             // would save/restore PRIMASK so this code is OK
             "  CPSID I                 \n"   // Disable interrupts
-            "  STRB  r0, %[output]     \n"   // Save flags
+            "  STR  r0, %[output]      \n"   // Save flags
             : [output] "=m" (cpuSR) : : "r0");
    }
 
@@ -184,7 +192,7 @@ public:
     */
    ~CriticalSection() {
       __asm__ volatile (
-            "  LDRB r0, %[input]    \n"  // Retrieve original flags
+            "  LDR r0, %[input]     \n"  // Retrieve original flags
             "  MSR  PRIMASK,r0;     \n"  // Restore
             : :[input] "m" (cpuSR) : "r0");
    }
