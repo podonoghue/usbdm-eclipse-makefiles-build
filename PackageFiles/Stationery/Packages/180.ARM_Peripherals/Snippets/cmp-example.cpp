@@ -17,30 +17,39 @@ using namespace USBDM;
 
 // Connections - change as required
 using Cmp   = Cmp0;
+constexpr Cmp0Input CmpInput = Cmp0Input_CmpIn3;
 
-// Led to control
-using Led   = gpio_LED_RED;
+// Led to control - change as required
+using Led   = GpioA<2, ActiveLow>;
 
 /**
  * Comparator callback
  *
- * @param status Status from cmp.SCR (only CFR, CFF flags)
+ * @param[in]  status Struct indicating interrupt source and state
  */
-void callback(int status) {
-   if (status & CMP_SCR_CFR_MASK) {
-      // Rising edge
-      Led::on();
-   }
-   else if (status & CMP_SCR_CFF_MASK) {
-      // Falling edge
-      Led::off();
-   }
+void callback(CmpStatus status) {
+   switch(status.event) {
+      case CmpEvent_Falling:
+         // Falling edge
+         console.write("Falling, State = ");
+         break;
+      case CmpEvent_Rising:
+         // Rising edge
+         console.write("Rising,  State = ");
+         break;
+      case CmpEvent_Both:
+         // Rising+Falling edges
+         console.write("Both,    State = ");
+         break;
+      default:
+         /* Do nothing */;
 #ifdef DEBUG_BUILD
-   else {
-      // Unexpected
-      __BKPT();
-   }
+         /* Unexpected */
+         __BKPT();
 #endif
+   }
+   Led::write(status.state);
+   console.writeln(status.state);
 }
 
 int main() {
@@ -48,7 +57,7 @@ int main() {
 
    // LED initially off (active low)
    Led::setOutput();
-   Led::high();
+   Led::off();
 
    // Enable comparator before use
    Cmp::configure();
@@ -59,8 +68,11 @@ int main() {
    // Set callback to execute on event
    Cmp::setCallback(callback);
 
-   // Set Comparator inputs (CMP_IN0, DAC)
-   Cmp::selectInputs(0, 7);
+   // Set Comparator inputs
+   Cmp::selectInputs(CmpInput, Cmp0Input_DacRef);
+
+   //Cmp::setInput<CmpInput>();
+   //Cmp::setOutput(PinDriveStrength_High, PinDriveMode_PushPull);
 
    // Enable interrupts on Rising and Falling edges
    Cmp::enableFallingEdgeInterrupts(true);
