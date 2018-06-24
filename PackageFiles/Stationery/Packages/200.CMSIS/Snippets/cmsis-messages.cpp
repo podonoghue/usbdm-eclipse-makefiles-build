@@ -56,9 +56,9 @@ int main (void) {
       osEvent evt = osMessageGet(queue, osWaitForever);
       if (evt.status == osEventMessage) {
          message_t *message = (message_t*)evt.value.p;
-         printf("\nVoltage: %.2f V\n\r"   , message->voltage);
-         printf("Current: %.2f A\n\r"     , message->current);
-         printf("Number of cycles: %lu\n\r", message->counter);
+         console.write("\nVoltage: ").write(message->voltage).writeln(" V");
+         console.write("Current: ").write(message->current).writeln(" A");
+         console.write("Number of cycles: ").writeln(message->counter);
 
          osPoolFree(mpool, message);
       }

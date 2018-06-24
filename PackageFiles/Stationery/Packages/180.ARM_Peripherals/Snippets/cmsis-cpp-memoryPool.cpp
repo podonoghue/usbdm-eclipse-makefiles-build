@@ -8,6 +8,9 @@
  ============================================================================
  */
 #include "hardware.h"                   // Hardware interface
+#include "cmsis.h"
+
+using namespace USBDM;
 
 /*
  * Memory pools example
@@ -22,7 +25,7 @@ static void memoryPoolExample() {
 
    static CMSIS::Pool<Data, 10> pool;
 
-   printf(" memory pool::getId() = %p\n\r", pool.getId());
+   console.write(" memory pool::getId() = ").writeln(pool.getId());
 
    Data *ar[30] = {0};
    for (unsigned i=0; i<(sizeof(ar)/sizeof(ar[0])); i++) {
@@ -31,14 +34,15 @@ static void memoryPoolExample() {
          break;
       }
       else {
-         printf("%d: Allocated %p\n\r", i, ar[i]);
+         console.write(i).write(": Allocated ").write(ar[i]);
       }
       ar[i]->a = i;
       ar[i]->b = i*i;
    }
    for (unsigned i=0; i<(sizeof(ar)/sizeof(ar[0])); i++) {
       if (ar[i] != nullptr) {
-         printf("%d: free %p (%d, %d)\n\r", i, ar[i], ar[i]->a, ar[i]->b);
+         console.write(i).write(": free ").
+               write(ar[i]).write(" (").write(ar[i]->a).write(",").write(ar[i]->b).writeln(")");
          pool.free(ar[i]);
       }
    }

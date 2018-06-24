@@ -18,7 +18,7 @@ osSemaphoreDef(two_slots);
 void test_thread(void const *name) {
     while (true) {
         osSemaphoreWait(two_slots, osWaitForever);
-        printf("%s\n\r", (const char*)name);
+        console.writeln((const char*)name);
         osDelay(1000);
         osSemaphoreRelease(two_slots);
     }

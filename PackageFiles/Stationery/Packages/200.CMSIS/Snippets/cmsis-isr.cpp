@@ -56,9 +56,9 @@ int main (void) {
    while (true) {
       osEvent evt = osMessageGet(queue, osWaitForever);
       if (evt.status != osEventMessage) {
-         printf("queue->get() returned %02x status\n\r", evt.status);
+         console.write("queue->get() returned ").writeln(evt.status, Radix_16);
       } else {
-         printf("queue->get() returned %s\n\r", (const char *)evt.value.v);
+         console.write("queue->get() returned \'").write((const char *)evt.value.v).writeln("\'");
       }
    }
 }

@@ -45,10 +45,10 @@ int main (void) {
         osEvent evt = osMailGet(mail_box, osWaitForever);
         if (evt.status == osEventMail) {
             mail_t *mail = (mail_t*)evt.value.p;
-            printf("\nVoltage: %.2f V\n\r"    , mail->voltage);
-            printf("Current: %.2f A\n\r"      , mail->current);
-            printf("Number of cycles: %lu\n\r", mail->counter);
-
+            console.write("\nVoltage: ").write(mail->voltage).writeln(" V");
+            console.write("Current: ").write(mail->current).writeln(" A");
+            console.write("Number of cycles: ").writeln(mail->counter);
+            
             osMailFree(mail_box, mail);
         }
     }

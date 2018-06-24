@@ -10,6 +10,8 @@
 #include "cmsis.h"                      // CMSIS RTX
 #include "hardware.h"                   // Hardware interface
 
+using namespace USBDM;
+
 /**
  * Message item
  */
@@ -43,7 +45,7 @@ static void messageQueueSender(const void *) {
          break;
       }
    }
-   writeln("=== Sender complete ====\n\r");
+   console.writeln("=== Sender complete ====\n\r");
 }
 
 /**
@@ -61,7 +63,7 @@ static void messageQueueReceiver(const void *) {
          write(", (").write(data->a).write(",").write(data->b).writeln(")");
    }
    messageQueueTestComplete = true;
-   writeln("=== Receiver complete ====");
+   console.writeln("=== Receiver complete ====");
 }
 
 /*

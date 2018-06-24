@@ -17,7 +17,7 @@ osMutexDef(stdio_mutex);
 
 void notify(const char* name, int state) {
    osMutexWait(stdio_mutex, osWaitForever);
-   printf("%s: %d\n\r", name, state);
+   console.write(name).write(": ").writeln(state);
    osMutexRelease(stdio_mutex);
 }
 
@@ -39,7 +39,7 @@ void t3(void const *) {
 osThreadDef(t3, osPriorityNormal, 1, 0);
 
 int main() {
-   printf("Starting\n");
+   console.writeln("Starting\n");
    stdio_mutex = osMutexCreate(osMutex(stdio_mutex));
 
    osThreadCreate(osThread(t2), NULL);

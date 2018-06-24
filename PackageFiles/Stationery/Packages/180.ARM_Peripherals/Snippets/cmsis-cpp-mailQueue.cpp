@@ -9,6 +9,9 @@
  */
 #include "cmsis.h"                      // CMSIS RTX
 #include "hardware.h"                   // Hardware interface
+#include "console.h"
+
+using namespace USBDM;
 
 /**
  * Mail item
@@ -42,7 +45,7 @@ static void mailQueueSender(const void *) {
       mailQueue.put(data);
       osDelay(100);
    }
-   printf("=== Sender complete ====\n\r");
+   console.writeln("=== Sender complete ====");
    while(!mailQueueTestComplete) {
       __asm__("nop");
    }
@@ -58,11 +61,13 @@ static void mailQueueReceiver(const void *) {
          break;
       }
       MailData *data = (MailData *)event.value.p;
-      printf("%d: Received  %p (%d, %d)\n\r", i, data, data->a, data->b);
+      console.
+         write(i).write(": Received  ").write(data).
+         write("(").write(data->a).write(",").write(data->b).writeln(")");
       mailQueue.free(data);
    }
    mailQueueTestComplete = true;
-   printf("=== Receiver complete ====\n\r");
+   console.writeln("=== Receiver complete ====\n\r");
 }
 
 /**
@@ -70,7 +75,7 @@ static void mailQueueReceiver(const void *) {
  */
 void mailQueueExample() {
 
-   printf(" mail mailQueue.getId() = %p\n\r", mailQueue.getId());
+   console.write(" mail mailQueue.getId() = ").writeln(mailQueue.getId());
 
    mailQueue.create();
 

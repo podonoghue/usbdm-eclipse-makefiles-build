@@ -10,6 +10,8 @@
 #include "cmsis.h"                      // CMSIS RTX
 #include "hardware.h"                   // Hardware interface
 
+using namespace USBDM;
+
 using RED_LED   = USBDM::$(demo.cpp.red.led:GpioB<0>);
 using GREEN_LED = USBDM::$(demo.cpp.green.led:GpioB<1>);
 
@@ -40,8 +42,8 @@ void timerExample() {
    myTimer2.start(500);
 
    // Report the timer IDs
-   printf(" myTimer1::getId() = %p\n\r", myTimer1.getId());
-   printf(" myTimer2::getId() = %p\n\r", myTimer2.getId());
+   console.write(" myTimer1::getId() = ").write(myTimer1.getId());
+   console.write(" myTimer2::getId() = ").write(myTimer2.getId());
 }
 
 int main() {

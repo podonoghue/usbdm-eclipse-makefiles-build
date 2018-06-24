@@ -73,13 +73,11 @@ static void timerExample() {
    thread2.run();
 
    // Report the IDs
-   console<<Radix_16;
-   console<<" timer1::getId()   = 0x"<<timer1.getId()<<"\n";
-   console<<" timer2::getId()   = 0x"<<timer2.getId()<<"\n";
+   console.write("timer1::getId()   = 0x").writeln(timer1.getId(), Radix_16);
+   console.write("timer2::getId()   = 0x").writeln(timer2.getId(), Radix_16);
 
-   console<<" thread1::getId()  = 0x"<<thread1.getId()<<"\n";
-   console<<" thread2::getId()  = 0x"<<thread2.getId()<<"\n";
-   console<<Radix_Default;
+   console.write("thread1::getId()  = 0x").writeln(thread1.getId(), Radix_16);
+   console.write("thread2::getId()  = 0x").writeln(thread2.getId(), Radix_16);
 }
 
 int main() {

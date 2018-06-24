@@ -10,6 +10,8 @@
 #include "cmsis.h"                      // CMSIS RTX
 #include "hardware.h"                   // Hardware interface
 
+using namespace USBDM;
+
 using GREEN_LED   = USBDM::$(demo.cpp.green.led:GpioB<0>);
 
 /*
