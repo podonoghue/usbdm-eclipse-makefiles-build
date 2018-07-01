@@ -263,6 +263,7 @@ enum PinMux {
  */
 enum PinAction {
    PinAction_None        = PORT_PCR_IRQC(0),   //!< No interrupt or DMA function
+   PinIrq_None           = PinAction_None,     //!< Deprecated
 
    PinAction_DmaRising   = PORT_PCR_IRQC(1),   //!< Generate DMA request on rising edge
    PinAction_DmaFalling  = PORT_PCR_IRQC(2),   //!< Generate DMA request on falling edge
