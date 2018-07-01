@@ -356,7 +356,7 @@ public:
     *
     * @param[in] ptr      Buffer to write result (at least 32 characters for binary)
     * @param[in] value    Unsigned long to convert
-    * @param[in] radix    Radix for conversion [2..16]
+    * @param[in] radix    Radix for conversion [2..16] (default 10)
     * @param[in] padding  How to pad the number if smaller than field width
     * @param[in] width    Field width of printed number
     *
@@ -378,7 +378,7 @@ public:
     *
     * @param[in] ptr      Buffer to write result (at least 32 characters for binary)
     * @param[in] value    Long to convert
-    * @param[in] radix    Radix for conversion [2..16]
+    * @param[in] radix    Radix for conversion [2..16] (default 10)
     * @param[in] padding  How to pad the number if smaller than field width
     * @param[in] width    Field width of printed number
     *
@@ -581,7 +581,7 @@ public:
     * Write an unsigned long integer
     *
     * @param[in]  value Unsigned long to print
-    * @param[in]  radix Radix for conversion [2..16]
+    * @param[in]  radix Radix for conversion [2..16] (default 10)
     *
     * @return Reference to self
     */
@@ -595,7 +595,7 @@ public:
     * Write a long integer
     *
     * @param[in]  value Long to print
-    * @param[in]  radix Radix for conversion [2..16]
+    * @param[in]  radix Radix for conversion [2..16] (default 10)
     *
     * @return Reference to self
     */
@@ -613,7 +613,7 @@ public:
     * Write an unsigned long integer with newline
     *
     * @param[in]  value Unsigned long to print
-    * @param[in]  radix Radix for conversion [2..16]
+    * @param[in]  radix Radix for conversion [2..16] (default 10)
     *
     * @return Reference to self
     */
@@ -626,11 +626,11 @@ public:
     * Write an pointer value
     *
     * @param[in]  value Pointer value to print
-    * @param[in]  radix Radix for conversion [2..16]
+    * @param[in]  radix Radix for conversion [2..16] (default 16)
     *
     * @return Reference to self
     */
-   FormattedIO NOINLINE_DEBUG &write(const void *value, Radix radix=Radix_10) {
+   FormattedIO NOINLINE_DEBUG &write(const void *value, Radix radix=Radix_16) {
       return write((unsigned long) value, radix);
    }
 
@@ -638,11 +638,11 @@ public:
     * Write an pointer value with newline
     *
     * @param[in]  value Pointer value to print
-    * @param[in]  radix Radix for conversion [2..16]
+    * @param[in]  radix Radix for conversion [2..16] (default 16)
     *
     * @return Reference to self
     */
-   FormattedIO NOINLINE_DEBUG &writeln(const void *value, Radix radix=Radix_10) {
+   FormattedIO NOINLINE_DEBUG &writeln(const void *value, Radix radix=Radix_16) {
       return writeln((unsigned long) value, radix);
    }
 
@@ -650,7 +650,7 @@ public:
     * Write a long integer with newline
     *
     * @param[in]  value Long to print
-    * @param[in]  radix Radix for conversion [2..16]
+    * @param[in]  radix Radix for conversion [2..16] (default 10)
     *
     * @return Reference to self
     */
@@ -663,7 +663,7 @@ public:
     * Write an unsigned integer
     *
     * @param[in]  value Unsigned to print
-    * @param[in]  radix Radix for conversion [2..16]
+    * @param[in]  radix Radix for conversion [2..16] (default 10)
     *
     * @return Reference to self
     */
@@ -675,7 +675,7 @@ public:
     * Write an unsigned integer with newline
     *
     * @param[in]  value Unsigned to print
-    * @param[in]  radix Radix for conversion [2..16]
+    * @param[in]  radix Radix for conversion [2..16] (default 10)
     *
     * @return Reference to self
     */
@@ -687,7 +687,7 @@ public:
     * Write an integer
     *
     * @param[in]  value Integer to print
-    * @param[in]  radix Radix for conversion [2..16]
+    * @param[in]  radix Radix for conversion [2..16] (default 10)
     *
     * @return Reference to self
     */
@@ -699,7 +699,7 @@ public:
     * Write an integer with newline
     *
     * @param[in]  value Integer to print
-    * @param[in]  radix Radix for conversion [2..16]
+    * @param[in]  radix Radix for conversion [2..16] (default 10)
     *
     * @return Reference to self
     */
