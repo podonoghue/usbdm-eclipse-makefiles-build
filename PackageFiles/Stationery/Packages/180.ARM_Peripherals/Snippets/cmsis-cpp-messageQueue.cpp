@@ -57,7 +57,7 @@ static void messageQueueReceiver(const void *) {
       if (event.status != osEventMessage) {
          break;
       }
-      MessageData *data = (MessageData *)event.value.p;
+      MessageData *data = messageQueue.getValueFromEvent(event);
       console.
          write(i).write(": Received ").write(data).
          write(", (").write(data->a).write(",").write(data->b).writeln(")");

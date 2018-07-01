@@ -34,14 +34,15 @@ static CMSIS::MailQueue<MailData, 10> mailQueue;
  */
 static void mailQueueSender(const void *) {
    for (unsigned i=0; i<20; i++) {
-      MailData *data = mailQueue.alloc(0);
+      MailData *data = mailQueue.alloc(2000);
       if (data == nullptr) {
+         console.writeln("Error: Sender failed to allocate mail buffer!");
          break;
       }
       console.write(i).write(": Allocated ").writeln(data);
       data->a = i;
       data->b = i*i;
-      console.write(i).write(": Sending   ").write(&data).write(", (").write(data->a).write(", ").write(data->a).writeln(")");
+      console.write(i).write(": Sending   ").write(data).write(", (").write(data->a).write(", ").write(data->a).writeln(")");
       mailQueue.put(data);
       osDelay(100);
    }
@@ -55,15 +56,19 @@ static void mailQueueSender(const void *) {
  *  Thread for receiving from the mail queue
  */
 static void mailQueueReceiver(const void *) {
+   // Wait a while for sender to produce items (more interesting result)
+   osDelay(1000);
    for(unsigned i=0; ; i++) {
       osEvent event = mailQueue.get(5000);
       if (event.status != osEventMail) {
+         console.writeln("Error: Receiver failed to get mail!");
          break;
       }
-      MailData *data = (MailData *)event.value.p;
+      MailData *data = mailQueue.getValueFromEvent(event);
       console.
          write(i).write(": Received  ").write(data).
          write("(").write(data->a).write(",").write(data->b).writeln(")");
+      console.write(i).write(": Freeing ").writeln(data);
       mailQueue.free(data);
    }
    mailQueueTestComplete = true;

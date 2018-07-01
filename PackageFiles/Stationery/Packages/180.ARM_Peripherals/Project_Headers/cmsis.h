@@ -822,12 +822,14 @@ public:
  * Wrapper for CMSIS Message Queue
  *
  * Basic approach:
- *    - Message queues work in conjunction with a <b>pool</b> of <b>messages</b>.
- *    - Messages are <b>allocated</b> from the pool and added to the queue.
- *    - Messages are then removed from the queue and <b>freed</b> after use.
+ *    - Message queues can buffer a number of items (messages) being transferred.
+ *    - Messages can be added or removed from the queue.
+ *    - Typically the messages will be a small integral item such as an integer.  Alternatively \n
+ *      it could be a pointer to a larger item that is statically or dynamically allocated.
+ *      The allocation and deallocation is not handled by the message queue.
  *
  * @tparam T      Type of items in message queue. Must fit in 32-bits\n
- *                This is typically a simple type like a character or integer or a pointer to
+ *                This is typically a simple type like a character or integer, or a pointer to
  *                a larger type allocated in some independent fashion.
  * @tparam size   Size of message queue in items
  *
@@ -863,7 +865,7 @@ public:
  *       if (event.status != osEventMessage) {
  *          break;
  *       }
- *       MessageData *data = (MessageData *)event.value.p;
+ *       MessageData *data = messageQueue.getValueFromEvent(event);
  *       printf("%d: Received %p (%d, %d)\n\r", i, data, data->a, data->b);
  *    }
  *    messageQueueTestComplete = true;
@@ -971,6 +973,17 @@ public:
       return osMessageGet((osMessageQId)queue, millisec);
    }
    /**
+    * Obtains object contained in event.
+    *
+    * @param event Event to use.  Usually obtained from get().
+    *
+    * @return Object from event
+    */
+   static T getValueFromEvent(osEvent event) {
+      return (T)(event.value.p);
+   }
+
+   /**
     * Get message from queue.
     * Returns immediately (for use in ISRs)
     *
@@ -1041,7 +1054,7 @@ public:
  *       if (event.status != osEventMail) {
  *          break;
  *       }
- *       MailData *data = (MailData *)event.value.p;
+ *       MailData *data = messageQueue.getValueFromEvent(event);
  *       printf("%d: Received  %p (%d, %d)\n\r", i, data, data->a, data->b);
  *       mailQueue.free(data);
  *    }
@@ -1154,9 +1167,9 @@ public:
     *
     * @param[in] mail Mail block to free (previously allocated with alloc or calloc)
     *
-    * @return osOK: the mail block is released.
-    * @return osErrorValue: mail block does not belong to the mail queue pool.
-    * @return osErrorParameter: the value to the parameter queue_id is incorrect.
+    * @return osOK:              The mail block is released.
+    * @return osErrorValue:      Mail block does not belong to the mail queue pool.
+    * @return osErrorParameter:  The value to the parameter queue_id is incorrect.
     */
    osStatus free(T *mail) {
       return osMailFree((osMailQId)&pool, mail);
@@ -1168,22 +1181,33 @@ public:
     * @param[in] millisec How long to wait in milliseconds. Use osWaitForever for indefinite wait.
     *
     * @return Status with:
-    * @return osOK: no mail is available in the queue and no timeout was specified
-    * @return osEventTimeout: no mail has arrived during the given timeout period.
-    * @return osEventMail: mail received, value.p contains the pointer to mail content.
-    * @return osErrorParameter: a parameter is invalid or outside of a permitted range.
+    * @return osOK:              No mail is available in the queue and no timeout was specified
+    * @return osEventTimeout:    No mail has arrived during the given timeout period.
+    * @return osEventMail:       Mail received, value.p contains the pointer to mail content.
+    * @return osErrorParameter:  A parameter is invalid or outside of a permitted range.
     */
    osEvent get(uint32_t millisec=osWaitForever) {
       return osMailGet((os_mailQ_cb *)&pool, millisec);
    }
 
    /**
+    * Obtains pointer to object indicated by event.
+    *
+    * @param event Event to use.  Usually obtained from get().
+    *
+    * @return Object reference
+    */
+   static T *getValueFromEvent(osEvent event) {
+      return (T*)(event.value.p);
+   }
+
+   /**
     * Get a mail item from the mail queue.\n
     * For use in ISRs
     *
-    * @return osOK: no mail is available in the queue
-    * @return osEventMail: mail received, value.p contains the pointer to mail content.
-    * @return osErrorParameter: a parameter is invalid or outside of a permitted range.
+    * @return osOK:              No mail is available in the queue
+    * @return osEventMail:       Mail received, value.p contains the pointer to mail content.
+    * @return osErrorParameter:  A parameter is invalid or outside of a permitted range.
     */
    osEvent getISR() {
       return osMailGet((os_mailQ_cb *)&pool, 0);
@@ -1194,9 +1218,9 @@ public:
     *
     * @param[in] mail A mail block previously allocated by alloc() or calloc().
     *
-    * @return osOK: no mail is available in the queue and no timeout was specified
-    * @return osErrorValue: mail was previously not allocated as memory slot.
-    * @return osErrorParameter: a parameter is invalid or outside of a permitted range.
+    * @return osOK:              The message is put into the queue.
+    * @return osErrorValue:      Mail was previously not allocated as memory slot.
+    * @return osErrorParameter:  A parameter is invalid or outside of a permitted range.
     */
    osStatus put(T *mail) {
       return osMailPut((os_mailQ_cb *)&pool, mail);
