@@ -366,9 +366,9 @@ The interface is divided into a number of templates:
 <li>USBDM::Ftm0
 <li>USBDM::Ftm1
 </ul>
-<li>USBDM::QuadEncoder_T Representing a FTM operating as a quadrature encoder.
+<li>USBDM::QuadDecoder_T Representing a FTM operating as a quadrature encoder.
 <ul>
-<li>USBDM::QuadEncoder1
+<li>USBDM::QuadDecoder1
 </ul>
 <li>USBDM::FtmChannel_T Representing individual channels of a single FTM.
 <ul>
@@ -438,26 +438,26 @@ This is a template class with static methods.\n
 
    // Use FTM1 as the quadrature encoder
    // Not all FTMs support this mode
-   using QuadEncoder = QuadEncoder1;
+   using QuadDecoder = QuadDecoder1;
 
    // Enable encoder
-   QuadEncoder::enable();
+   QuadDecoder::enable();
 
    // Set pin filters
-   QuadEncoder::enableFilter(15);
+   QuadDecoder::enableFilter(15);
 
    // Reset position to zero
    // Movement will be relative to this position
-   QuadEncoder::resetPosition();
+   QuadDecoder::resetPosition();
 
    // Set up callback for quadrature overflow or underflow
-   QuadEncoder::setTimerOverflowCallback(callBack);
-   QuadEncoder::enableTimerOverflowInterrupts();
-   QuadEncoder::enableNvicInterrupts();
+   QuadDecoder::setTimerOverflowCallback(callBack);
+   QuadDecoder::enableTimerOverflowInterrupts();
+   QuadDecoder::enableNvicInterrupts();
 
    for (;;) {
       // Report position
-      console.write("Shaft position = ").writeln(QuadEncoder::getPosition());
+      console.write("Shaft position = ").writeln(QuadDecoder::getPosition());
    }
 @endcode
 
