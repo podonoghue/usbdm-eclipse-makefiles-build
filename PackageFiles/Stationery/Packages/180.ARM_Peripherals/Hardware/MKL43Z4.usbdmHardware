@@ -91,7 +91,7 @@
       <peripheral baseName="ExternalTrigger" instance="">
          <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForShared" />
       </peripheral>
-      <peripheral baseName="FLEXIO"   instance=""         version="flexio_4sh">
+      <peripheral baseName="FLEXIO"   instance=""         version="flexio_4sh_4tmr_0x4005f000">
          <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForFlexio" />
          <clock reg="SCGC5"         mask="SIM_SCGC5_FLEXIO_MASK" />
          <irq num="UART2_FLEXIO_IRQn" />
@@ -127,12 +127,12 @@
          <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForGpio" />
          <clock reg="SCGC5"         mask="SIM_SCGC5_PORTE_MASK" />
       </peripheral>
-      <peripheral baseName="I2C"      instance="0"        version="i2c0_mkl17">
+      <peripheral baseName="I2C"      instance="0"        version="i2c0_mk28f15">
          <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForI2c" />
          <clock reg="SCGC4"         mask="SIM_SCGC4_I2C0_MASK" />
          <irq num="I2C0_IRQn" />
       </peripheral>
-      <peripheral baseName="I2C"      instance="1"        version="i2c0_mkl17">
+      <peripheral baseName="I2C"      instance="1"        version="i2c0_mk28f15">
          <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForI2c" />
          <clock reg="SCGC4"         mask="SIM_SCGC4_I2C1_MASK" />
          <irq num="I2C1_IRQn" />
@@ -213,7 +213,7 @@
          <irq num="SPI1_IRQn" />
       </peripheral>
       <peripheral baseName="TPM"      instance="">
-         <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForShared" />
+         <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForFtmShared" />
       </peripheral>
       <peripheral baseName="TPM"      instance="0"        version="tpm0_6ch_pol">
          <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForFtm" />

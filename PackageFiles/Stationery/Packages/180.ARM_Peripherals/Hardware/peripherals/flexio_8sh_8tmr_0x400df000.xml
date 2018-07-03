@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE peripheralPage SYSTEM "_menu.dtd" >
-<!-- flexio_4sh_mke16f16.xml -->
+<!-- flexio_8sh_8tmr_0x400df000.xml -->
 
 <fragment xmlns:xi="http://www.w3.org/2001/XInclude">
 <xi:include href="flexio_def.xml"/>

@@ -13,8 +13,23 @@
 
 <!-- Template is added to pin_mapping.h -->
 <template namespace="usbdm"><![CDATA[
+   /* Template:_common_settings.xml */\n\n
+   
+   /** Class to static check signal mapping is valid */
+   template<class Info, int signalNum> class CheckSignal {
+   \tstatic_assert((signalNum<Info::numSignals), "Non-existent signal - Modify Configure.usbdm");
+   \tstatic_assert((signalNum>=Info::numSignals)||(Info::info[signalNum].gpioBit != UNMAPPED_PCR), "Signal is not mapped to a pin - Modify Configure.usbdm");
+   \tstatic_assert((signalNum>=Info::numSignals)||(Info::info[signalNum].gpioBit != INVALID_PCR),  "Signal doesn't exist in this device/package");
+   \tstatic_assert((signalNum>=Info::numSignals)||((Info::info[signalNum].gpioBit == UNMAPPED_PCR)||(Info::info[signalNum].gpioBit == INVALID_PCR)||(Info::info[signalNum].gpioBit >= 0)), "Illegal signal");
+   };\n\n
+   
    /** Enables mapping of all allocated pins during startup using mapAllPins() */
    static constexpr bool MAP_ALL_PINS = $(mapAllPins);\n\n
+   
+   /** Used to configure pin-mapping before 1st use of peripherals */
+   extern void mapAllPins();\n\n
+
+   /* END Template:_common_settings.xml */\n\n
    
 ]]></template>
 

@@ -10,7 +10,9 @@
       \t//! Base value for PCR (excluding MUX value)
       \tstatic constexpr uint32_t defaultPcrValue  = 0;\n\n
    ]]></template>
-
+   
+   <xi:include href="_mapPinsOption.xml"/>
+   
    <binaryOption
       name="tsi_gencs_cursw"
       description="Electrode/Reference OSC swap"
@@ -53,6 +55,7 @@
       <choice value="6" name="Divide by 64" />
       <choice value="7" name="Divide by 128" />
    </choiceOption>
+
    <choiceOption name="tsi_gencs_extchrg" 
       description="External Oscillator Charge Current select" 
       toolTip="These bits indicate the electrode oscillator charge and discharge current value" >
@@ -84,6 +87,7 @@
       <choice value="6" name="32 uA" />
       <choice value="7" name="64 uA" />
    </choiceOption>
+
    <choiceOption name="tsi_gencs_mode" 
       description="TSI analog modes setup and status bits"
       toolTip="Set up TSI analog modes\n

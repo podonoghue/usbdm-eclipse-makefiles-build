@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE peripheralPage SYSTEM "_menu.dtd" >
-<!-- pdb_def.xml -->
+<!-- pdb0_2ch_2pt_2dac_2po.xml -->
 <!--
 Devices using this peripheral: 
 -->
@@ -79,13 +79,6 @@ Devices using this peripheral:
       <choice value="1" name="DMA enabled" />
    </binaryOption>
 
-   <binaryOption name="pdb_sc_cont" 
-      description="Continuous Mode Enable"
-      toolTip="This bit enables the PDB operation in continuous mode with the pdb_cnt counter rolling over at the pdb_mod">
-      <choice value="0" name="One-Shot mode" />
-      <choice value="1" name="Continuous mode" />
-   </binaryOption>
-
    <binaryOption name="pdb_sc_pdbie" 
       description="Interrupt Enable"
       toolTip="This bit enables the interrupt.\n
@@ -119,7 +112,6 @@ Devices using this peripheral:
    \t   PDB_SC_TRGSEL($(pdb_sc_trgsel)) |    // Trigger Input Source Select
    \t   PDB_SC_PRESCALER($(pdb_sc_prescaler)) | // Prescaler Divider Select
    \t   PDB_SC_DMAEN($(pdb_sc_dmaen)) |     // DMA Enable
-   \t   PDB_SC_CONT($(pdb_sc_cont)) |     // Continuous Mode Enable
    \t   PDB_SC_PDBEIE($(pdb_sc_pdbeie)) |    // Sequence Error Interrupt Enable
    \t   PDB_SC_LDMOD($(pdb_sc_ldmod));      // Load Mode Select\n\n
    ]]></template>
@@ -314,6 +306,33 @@ Devices using this peripheral:
          min="0" units="s" />
    </category>
    
+   <category name="Dac1 Interval Trigger" description="">
+      <binaryOption name="pdb_int1c_toe" 
+         description="DAC Interval Trigger Enable"
+         toolTip="This bit enables the DAC interval trigger..">
+         <choice value="0" name="Trigger disabled" />
+         <choice value="1" name="Trigger enabled" />
+      </binaryOption>
+
+      <binaryOption name="pdb_int1c_ext" 
+         description="DAC External Trigger Input Enable"
+         toolTip="Enables the external trigger for DAC interval counter.">
+         <choice value="0" name="Input disabled" />
+         <choice value="1" name="Input enabled" />
+      </binaryOption>
+
+      <intOption name="pdb_int1_int" 
+         description="DAC Interval" 
+         toolTip="Specifies the interval value for DAC interval trigger.\n
+                  DAC interval trigger triggers DAC update when the DAC interval counter is equal to the DACINT."
+         value="0" min="0" max="65535" />
+         
+      <floatOption name="pdb_int1_int_delay" 
+         derivedFrom="pdb_int1_int"
+         derived="true"
+         min="0" units="s" />
+   </category>
+   
    <template><![CDATA[
    \tstruct PdbDac {
    \t   uint32_t dacintc;
@@ -321,7 +340,7 @@ Devices using this peripheral:
    \t};\n\n
    
    \t// Number of DACs
-   \tstatic constexpr size_t numDacs = 1;\n\n
+   \tstatic constexpr size_t numDacs = 2;\n\n
    
    \t// Default values for DAC registers
    \tstatic constexpr PdbDac pdb_dac[numDacs] = {
@@ -329,6 +348,11 @@ Devices using this peripheral:
    \t   PDB_INTC_EXT($(pdb_int0c_ext)) | // DAC External Trigger Input Enable\n
    \t   PDB_INTC_TOE($(pdb_int0c_toe)),  // DAC Interval Trigger Enable\n
    \t   PDB_INT_INT($(pdb_int0_int)),   // DAC Interval\n
+   \t},
+   \t{                    // DAC[1] Interval register
+   \t   PDB_INTC_EXT($(pdb_int1c_ext)) | // DAC External Trigger Input Enable\n
+   \t   PDB_INTC_TOE($(pdb_int1c_toe)),  // DAC Interval Trigger Enable\n
+   \t   PDB_INT_INT($(pdb_int1_int)),   // DAC Interval\n
    \t},
    \t};\n\n
    ]]></template>
@@ -392,37 +416,13 @@ Devices using this peripheral:
    	  derivedFrom="pdb_po1_dly_dly2"
       derived="true"
       value="1k" min="0" units="s" />
-   </category>
-   
-   <category name="Pulse Output 2" description="Pulse Output to CMP2" >
-   <intOption name="pdb_po2_dly_dly1" 
-      description="Pulse-Out 1 Delay 1 - rising edge" 
-      toolTip="These bits specify the delay 1 value for the Pulse-Out.\n
-         Pulse-Out goes high when the PDB counter is equal to the DLY1"
-      value="0" min="0" max="65535" />
-
-   <floatOption name="pdb_po2_dly_dly1_delay" 
-   	  derivedFrom="pdb_po2_dly_dly1"
-      derived="true"
-      value="1k" min="0" units="s" />
-
-   <intOption name="pdb_po2_dly_dly2" 
-      description="Pulse-Out 2 Delay 2 - falling edge" 
-      toolTip="These bits specify the delay 2 value for the Pulse-Out.\n
-         Pulse-Out goes low when the PDB counter is equal to the DLY2"
-      value="0" min="0" max="65535" />
-
-   <floatOption name="pdb_po2_dly_dly2_delay" 
-   	  derivedFrom="pdb_po2_dly_dly2"
-      derived="true"
-      value="1k" min="0" units="s" />
 
    </category>
 
    <template><![CDATA[
    
    \t// Number of PDB pulse outputs
-   \tstatic constexpr size_t numPulseOutputs = 3;\n\n
+   \tstatic constexpr size_t numPulseOutputs = 2;\n\n
    
    \tstatic constexpr uint32_t pdb_podly[numPulseOutputs] = {
    
@@ -432,11 +432,7 @@ Devices using this peripheral:
    
    \t   // Pulse Output[1] Delays
    \t   PDB_PODLY_DLY1($(pdb_po1_dly_dly1)) |  // Delay 1
-   \t   PDB_PODLY_DLY2($(pdb_po1_dly_dly2)),   // Delay 2\n\n
-   
-   \t   // PDB Pulse Output[2] Delays
-   \t   PDB_PODLY_DLY1($(pdb_po2_dly_dly1)) |  // Delay 1
-   \t   PDB_PODLY_DLY2($(pdb_po2_dly_dly2)),   // Delay 2
+   \t   PDB_PODLY_DLY2($(pdb_po1_dly_dly2)),   // Delay 2
    \t}; \n\n
    ]]></template>
 

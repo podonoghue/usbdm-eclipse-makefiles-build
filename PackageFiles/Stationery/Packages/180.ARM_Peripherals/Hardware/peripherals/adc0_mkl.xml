@@ -9,20 +9,8 @@
       \tstatic constexpr uint32_t defaultPcrValue  = 0;\n\n
    ]]></template>
    
-   <binaryOption name="mapPinsOnEnable" 
-      description="Map pins when enabled"
-      toolTip="Map all allocated pins on a peripheral when the\n
-               peripheral is enabled by enable() method etc.">
-      <choice value="false" name="Don't map" />
-      <choice value="true"  name="Map when enabled" isDefault="true"/>
-   </binaryOption>
+   <xi:include href="_mapPinsOption.xml"/>
    
-   <!-- Template is added to pin_mapping.h -->
-   <template><![CDATA[
-      \t/** Map all allocated pins on a peripheral when enabled */
-      \tstatic constexpr bool mapPinsOnEnable = $(mapPinsOnEnable);\n\n
-   ]]></template>
-
    <choiceOption name="adc_cfg1_adiclk" description="Clock Source"
       toolTip="Selects the clock source for the module">
       <choice value="0" name="Bus clock" />

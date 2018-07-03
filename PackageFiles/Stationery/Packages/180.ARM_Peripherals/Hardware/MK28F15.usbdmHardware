@@ -166,7 +166,7 @@
          <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForFlexBus" />
          <clock reg="SCGC7"         mask="SIM_SCGC7_FLEXBUS_MASK" />
       </peripheral>
-      <peripheral baseName="FLEXIO"   instance=""         version="flexio_8sh_0x400df000">
+      <peripheral baseName="FLEXIO"   instance=""         version="flexio_8sh_8tmr_0x400df000">
          <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForFlexio" />
          <clock reg="SCGC2"         mask="SIM_SCGC2_FLEXIO_MASK" />
          <irq num="FLEXIO_IRQn" />
@@ -183,19 +183,19 @@
          <param key="peripheral_file" value="ftfe_128k_flexrom" />
       </peripheral>
       <peripheral baseName="FTM"      instance="">
-         <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForShared" />
+         <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForFtmShared" />
       </peripheral>
       <peripheral baseName="FTM"      instance="0"        version="ftm0_8ch_icrst">
          <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForFtm" />
          <clock reg="SCGC6"         mask="SIM_SCGC6_FTM0_MASK" />
          <irq num="FTM0_IRQn" />
       </peripheral>
-      <peripheral baseName="FTM"      instance="1"        version="ftm1_8ch_icrst">
+      <peripheral baseName="FTM"      instance="1"        version="ftm1_2ch_icrst">
          <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForFtm" />
          <clock reg="SCGC6"         mask="SIM_SCGC6_FTM1_MASK" />
          <irq num="FTM1_IRQn" />
       </peripheral>
-      <peripheral baseName="FTM"      instance="2"        version="ftm1_8ch_icrst">
+      <peripheral baseName="FTM"      instance="2"        version="ftm1_2ch_icrst">
          <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForFtm" />
          <clock reg="SCGC6"         mask="SIM_SCGC6_FTM2_MASK" />
          <irq num="FTM2_IRQn" />
@@ -311,7 +311,7 @@
       <peripheral baseName="OSC"      instance="0"        version="osc0_div">
          <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForOsc" />
       </peripheral>
-      <peripheral baseName="PDB"      instance="0"        version="pdb0_1ch_2trig_1dac_2po">
+      <peripheral baseName="PDB"      instance="0"        version="pdb0_1ch_2pt_1dac_2po">
          <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForPdb" />
          <clock reg="SCGC6"         mask="SIM_SCGC6_PDB_MASK" />
          <irq num="PDB0_IRQn" />
@@ -380,7 +380,7 @@
          <irq num="SPI3_IRQn" />
       </peripheral>
       <peripheral baseName="TPM"      instance="">
-         <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForShared" />
+         <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForFtmShared" />
       </peripheral>
       <peripheral baseName="TPM"      instance="1"        version="tpm1_2ch_quad">
          <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForFtm" />

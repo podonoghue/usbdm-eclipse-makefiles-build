@@ -162,7 +162,7 @@
       <peripheral baseName="POWER"    instance="">
          <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForPower" />
       </peripheral>
-      <peripheral baseName="RCM"      instance=""         version="rcm_mkl14z4">
+      <peripheral baseName="RCM"      instance=""         version="rcm_mkl_0x4007f000">
          <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForRcm" />
       </peripheral>
       <peripheral baseName="RTC"      instance=""         version="rtc_mkl04z4">
@@ -188,7 +188,7 @@
          <irq num="SPI1_IRQn" />
       </peripheral>
       <peripheral baseName="TPM"      instance="">
-         <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForShared" />
+         <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForFtmShared" />
       </peripheral>
       <peripheral baseName="TPM"      instance="0"        version="tpm0_6ch">
          <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForFtm" />

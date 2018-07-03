@@ -192,7 +192,7 @@
          <irq num="SPI1_IRQn" />
       </peripheral>
       <peripheral baseName="TPM"      instance="">
-         <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForShared" />
+         <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForFtmShared" />
       </peripheral>
       <peripheral baseName="TPM"      instance="0"        version="tpm0_4ch_mkw41z4">
          <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForFtm" />

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE peripheralPage SYSTEM "_menu.dtd" >
-<!-- pdb_def.xml -->
+<!-- pdb0_2ch_2pt_1dac_2po.xml -->
 <!--
 Devices using this peripheral: 
 -->
@@ -208,7 +208,56 @@ Devices using this peripheral:
       bitList="ADC1SC1B_COCO,ADC0SC1A_COCO" />
 
    </category>
+
+   <category name="Channel 1" description="ADC1 triggers (or FTM1 if not present)" >
+   <bitmaskOption name="pdb_ch1_c1_en" 
+      description="Channel 1 Pre-Trigger Enables" 
+      toolTip="These bits enable the ADC pre-trigger outputs"
+      value="0"
+      bitmask="0x3" 
+      bitList="ADC0.SC1[0],ADC0.SC1[1]" />
+      
+   <bitmaskOption name="pdb_ch1_c1_tos" 
+      description="Channel 1 Pre-Trigger Delay Enables" 
+      toolTip="These bits enable the ADC pre-trigger delay\n
+         If disabled, the pre-trigger asserts 1-clock-cycle after trigger\n
+         If enabled, the pre-trigger is further delayed until the count reaches the channel delay register value"
+      value="0"
+      bitmask="0x3" 
+      bitList="ADC0.SC1[0],ADC0.SC1[1]" />
    
+   <intOption name="pdb_ch1_dly0" 
+      description="Channel 1 Delay 0 - ADC1.SC1[0]" 
+      toolTip="Specifies the delay value for the channel's corresponding pre-trigger."
+      value="0" min="0" max="65535" />
+
+   <floatOption name="pdb_ch1_dly0_delay" 
+      derivedFrom="pdb_ch1_dly0"
+      derived="true"
+      value="1k" min="0" units="s" />
+
+   <intOption name="pdb_ch1_dly1" 
+      description="Channel 1 Delay 1 - ADC1.SC1[1]" 
+      toolTip="Specifies the delay value for the channel's corresponding pre-trigger."
+      value="0" min="0" max="65535" />
+   
+   <floatOption name="pdb_ch1_dly1_delay" 
+      derivedFrom="pdb_ch1_dly1"
+      derived="true"
+      value="1k" min="0" units="s" />
+      
+   <bitmaskOption name="pdb_ch1_c1_bb" 
+      description="Channel 1 Pre-Trigger Back-to-Back Operation Enable" 
+      toolTip="These bits enable the ADC pre-trigger operation as back-to-back mode.\n
+         Back-to-back operation enables the ADC conversions complete to trigger the next PDB channel\n
+         pre-trigger and trigger output, so that the ADC conversions can be triggered on next set\n
+         of configuration and results registers. Application code must only enable the back-to-back\n
+         operation of the pre-triggers at the leading of the back-to-back connection chain."
+      value="0"
+      bitmask="0x3" 
+      bitList="ADC0SC1B_COCO,ADC1SC1A_COCO" />
+   </category>
+
    <template><![CDATA[
    \tstruct PdbChannel {
    \t   uint32_t c1;
@@ -217,7 +266,7 @@ Devices using this peripheral:
    \t};\n\n
    
    \t// Number of PDB channels
-   \tstatic constexpr size_t numChannels = 1;\n\n
+   \tstatic constexpr size_t numChannels = 2;\n\n
    
    \t// Default values for channel registers
    \tstatic constexpr PdbChannel pdb_ch[numChannels] = {
@@ -227,6 +276,13 @@ Devices using this peripheral:
    \t   PDB_C1_EN($(pdb_ch0_c1_en)),    // Pre-Trigger Enable\n
    \t   PDB_DLY_DLY($(pdb_ch0_dly0)),  // Channel[0] pre-trigger delay 0\n
    \t   PDB_DLY_DLY($(pdb_ch0_dly1)),  // Channel[0] pre-trigger delay 1\n
+   \t},
+   \t{                   // Channel[1] Control Register 1
+   \t   PDB_C1_BB($(pdb_ch1_c1_bb)) |   // Channel Pre-Trigger Back-to-Back Operation Enable
+   \t   PDB_C1_TOS($(pdb_ch1_c1_tos)) |  // Channel Pre-Trigger Output Select
+   \t   PDB_C1_EN($(pdb_ch1_c1_en)),    // Channel Pre-Trigger Enable\n
+   \t   PDB_DLY_DLY($(pdb_ch1_dly0)),  // Channel[1] pre-trigger delay 0\n
+   \t   PDB_DLY_DLY($(pdb_ch1_dly1)),  // Channel[1] pre-trigger delay 1\n
    \t},
    \t};\n\n
    ]]></template>
