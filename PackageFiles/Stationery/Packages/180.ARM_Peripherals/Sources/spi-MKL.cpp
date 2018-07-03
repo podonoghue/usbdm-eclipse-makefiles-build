@@ -59,18 +59,16 @@ uint8_t Spi::calculateBr(uint32_t clockFrequency, uint32_t frequency) {
 }
 
 /**
- * Calculate communication BR value for SPI
+ * Calculates speed from SPI clock frequency and SPI clock factors
  *
- * @param[in]  clockFrequency => Clock frequency of SPI in Hz
- * @param[in]  frequency      => Communication frequency in Hz
+ * @param[in] clockFrequency   SPI input clock frequency
+ * @param[in] clockFactors     SPI clock factors
  *
- * @return BR register value
- *
- * Note: Chooses the highest speed that is not greater than frequency.
+ * @return SPI frequency
  */
-uint32_t Spi::calculateSpeed(uint32_t clockFrequency, uint32_t br) {
-   uint32_t sppr = (br&SPI_BR_SPPR_MASK)>>SPI_BR_SPPR_SHIFT;
-   uint32_t spr  = (br&SPI_BR_SPR_MASK)>>SPI_BR_SPR_SHIFT;
+uint32_t Spi::calculateSpeed(uint32_t clockFrequency, uint32_t clockFactors) {
+   uint32_t sppr = (clockFactors&SPI_BR_SPPR_MASK)>>SPI_BR_SPPR_SHIFT;
+   uint32_t spr  = (clockFactors&SPI_BR_SPR_MASK)>>SPI_BR_SPR_SHIFT;
    return clockFrequency/(spprFactors[sppr]*sprFactors[spr]);
 }
 

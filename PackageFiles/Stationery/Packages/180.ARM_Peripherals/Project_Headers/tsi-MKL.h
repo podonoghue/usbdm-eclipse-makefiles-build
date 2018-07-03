@@ -298,11 +298,12 @@ public:
     * Enables and configure the TSI for Noise measurement mode
     *
     * @param tsiMode                Determines the TSI analogue mode (must be one of TsiMode_NoiseDetect_...)
+    * @param tsiSeriesResitor       Determines the series resistor for noise mode (overlaps EXTCHRG[0])
+    * @param tsiNoiseFilter         Determines the noise filter bits (overlaps EXTCHRG[2:1])
     * @param tsiLowPower            Determines operation in low power modes (STOP, VLPS, LLS and VLLS{3,2,1})
     * @param tsiScanNumber          Determines the number of scans when measuring an electrode
     * @param tsiElectrodePrescaler  Determines the prescaler for the output of the electrode oscillator
     * @param tsiReferenceCharge     Determines the reference oscillator charge and discharge current value
-    * @param tsiExternalCharge      Determines the electrode oscillator charge and discharge current value
     * @param tsiDeltaVoltage        Determine the oscillators' voltage limits (not applicable in noise modes)
     */
    static void configure(

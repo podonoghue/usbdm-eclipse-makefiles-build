@@ -197,7 +197,7 @@ protected:
 };
 
 /**
- * Base class representing an FTM
+ * Base class representing a FTM.
  *
  * Example
  * @code
@@ -258,7 +258,7 @@ public:
 
    /**
     * Set TOI Callback function\n
-    * Note that one callback is shared by all channels of the TPM
+    * Note that one callback is shared by all channels of the FTM
     *
     * @param[in] theCallback Callback function to execute when timer overflows. \n
     *                        nullptr to indicate none
@@ -272,7 +272,7 @@ public:
    }
    /**
     * Set channel Callback function\n
-    * Note that one callback is shared by all channels of the TPM
+    * Note that one callback is shared by all channels of the FTM
     *
     * @param[in] theCallback Callback function to execute on channel interrupt.\n
     *                        nullptr to indicate none
@@ -713,7 +713,7 @@ public:
     * @return Time in ticks
     *
     * @note Assumes prescale has been chosen as a appropriate value (see setMeasurementPeriod()). \n
-    * @note Will set error code if calculated value is less the FTM minimum resolution
+    * @note Will set error code if calculated value is less the minimum resolution
     */
    static uint32_t convertSecondsToTicks(float time) {
 
@@ -760,7 +760,7 @@ public:
    }
 
    /**
-    * Convert ticks in ticks to time in seconds
+    * Convert time in ticks to time in seconds
     *
     * @param[in] tickInterval Time in ticks as float
     *
@@ -1158,7 +1158,7 @@ public:
     * @param[in] theCallback Callback function to execute when timer overflows. \n
     *                        nullptr to indicate none
     *
-    * @note Note that one callback is shared by all channels of the TPM
+    * @note Note that one callback is shared by all channels of the FTM
     */
    static __attribute__((always_inline)) void setTimerOverflowCallback(FtmCallbackFunction theCallback) {
       Ftm::setTimerOverflowCallback(theCallback);
@@ -1256,10 +1256,8 @@ public:
          FtmChMode         ftmChMode,
          FtmChannelAction  ftmChannelAction = FtmChannelAction_None) {
 
-#ifdef DEBUG_BUILD
       // Check that owning FTM has been enabled
       usbdm_assert(Ftm::isEnabled(), "FTM not enabled");
-#endif
       Ftm::tmr().CONTROLS[channel].CnSC = ftmChMode|ftmChannelAction;
 
       if (!Info::mapPinsOnEnable) {
@@ -1547,6 +1545,17 @@ public:
    }
 
    /**
+    * Set PWM duty cycle
+    *
+    * @param[in] dutyCycle  Duty-cycle as percentage
+    *
+    * @note The actual CnV register update will be delayed by the FTM register synchronisation mechanism
+    */
+   static INLINE_RELEASE void setDutyCycle(float dutyCycle) {
+      Ftm::setDutyCycle(dutyCycle, channel);
+   }
+
+   /**
     * Set Timer event time.
     *
     * @param[in] offset  Event time relative to current event time (i.e. Timer channel CnV value)
@@ -1756,11 +1765,6 @@ class Ftm3 : public FtmBase_T<Ftm3Info> {};
 template <class Info>
 class QuadDecoder_T {
 
-#ifdef DEBUG_BUILD
-   static_assert(Info::InfoQUAD::info[0].gpioBit != UNMAPPED_PCR, "QuadDecoder_T: FTM PHA is not mapped to a pin - Modify Configure.usbdm");
-   static_assert(Info::InfoQUAD::info[1].gpioBit != UNMAPPED_PCR, "QuadDecoder_T: FTM PHB is not mapped to a pin - Modify Configure.usbdm");
-#endif
-
 public:
    /** Allow more convenient access associated Ftm */
    using Ftm = FtmBase_T<Info>;
@@ -1832,13 +1836,17 @@ public:
     * @param ftmPrescale Prescale value applied to the output of the quadrature decode before the counter.
     */
    static void configure(FtmPrescale ftmPrescale = FtmPrescale_1) {
+      // Assertions placed here so only checked if QuadDecoder actually used
+      static_assert(Info::InfoQUAD::info[0].gpioBit != UNMAPPED_PCR, "QuadDecoder_T: FTM PHA is not mapped to a pin - Modify Configure.usbdm");
+      static_assert(Info::InfoQUAD::info[1].gpioBit != UNMAPPED_PCR, "QuadDecoder_T: FTM PHB is not mapped to a pin - Modify Configure.usbdm");
+
       Info::InfoQUAD::initPCRs();
 
       // Enable clock to timer
       clockReg() |= Info::clockMask;
       __DMB();
 
-     Ftm::configure(FtmMode_Quadrature, FtmClockSource_Disabled, ftmPrescale);
+      Ftm::configure(FtmMode_Quadrature, FtmClockSource_Disabled, ftmPrescale);
 
       ftm().QDCTRL =
             FTM_QDCTRL_QUADEN_MASK|      // Enable Quadrature decoder
@@ -1882,7 +1890,6 @@ public:
 #ifdef USBDM_FTM0_INFOQUAD_IS_DEFINED
 /**
  * Class representing FTM0 as Quadrature decoder
- * Not all FTMs support this mode
  */
 class QuadDecoder0 : public QuadDecoder_T<Ftm0Info> {};
 #endif
@@ -1890,7 +1897,6 @@ class QuadDecoder0 : public QuadDecoder_T<Ftm0Info> {};
 #ifdef USBDM_FTM1_INFOQUAD_IS_DEFINED
 /**
  * Class representing FTM1 as Quadrature decoder
- * Not all FTMs support this mode
  */
 class QuadDecoder1 : public QuadDecoder_T<Ftm1Info> {};
 #endif
@@ -1898,7 +1904,6 @@ class QuadDecoder1 : public QuadDecoder_T<Ftm1Info> {};
 #ifdef USBDM_FTM2_INFOQUAD_IS_DEFINED
 /**
  * Class representing FTM2 as Quadrature decoder
- * Not all FTMs support this mode
  */
 class QuadDecoder2 : public QuadDecoder_T<Ftm2Info> {};
 #endif
@@ -1906,7 +1911,6 @@ class QuadDecoder2 : public QuadDecoder_T<Ftm2Info> {};
 #ifdef USBDM_FTM3_INFOQUAD_IS_DEFINED
 /**
  * Class representing FTM3 as Quadrature decoder
- * Not all FTMs support this mode
  */
 class QuadDecoder3 : public QuadDecoder_T<Ftm3Info> {};
 #endif
@@ -1914,7 +1918,6 @@ class QuadDecoder3 : public QuadDecoder_T<Ftm3Info> {};
 #ifdef USBDM_FTM4_INFOQUAD_IS_DEFINED
 /**
  * Class representing FTM4 as Quadrature decoder
- * Not all FTMs support this mode
  */
 class QuadDecoder4 : public QuadDecoder_T<Ftm4Info> {};
 #endif

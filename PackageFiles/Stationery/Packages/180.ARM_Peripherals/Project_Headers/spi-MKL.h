@@ -147,14 +147,14 @@ protected:
    static uint8_t calculateBr(uint32_t clockFrequency, uint32_t frequency);
 
    /**
-    * Calculate communication speed from SPI clock frequency and BR
+    * Calculates speed from SPI clock frequency and SPI clock factors
     *
-    * @param[in]  clockFrequency => Clock frequency of SPI in Hz
-    * @param[in]  br             => BR register value
+    * @param[in] clockFrequency   SPI input clock frequency
+    * @param[in] clockFactors     SPI clock factors
     *
-    * @return Clock frequency of SPI in Hz for these factors
+    * @return SPI frequency
     */
-   static uint32_t calculateSpeed(uint32_t clockFrequency, uint32_t br);
+   static uint32_t calculateSpeed(uint32_t clockFrequency, uint32_t clockFactors);
 
 #if defined(__CMSIS_RTOS)
    /**

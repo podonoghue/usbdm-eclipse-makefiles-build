@@ -1,5 +1,5 @@
 /**
- * @file pwm-example.cpp
+ * @file tpm-pwm-example.cpp
  */
 #include "hardware.h"
 

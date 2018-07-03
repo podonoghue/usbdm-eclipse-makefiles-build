@@ -154,8 +154,6 @@ public:
    /**
     *  Enable the PIT with default settings.
     *  The channels are enabled with default settings.
-    *
-    *  @param[in]  mcr       Module Control Register
     */
    static void defaultConfigure() {
       enable();
