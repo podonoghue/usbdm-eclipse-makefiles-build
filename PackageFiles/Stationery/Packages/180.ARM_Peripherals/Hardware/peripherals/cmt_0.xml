@@ -11,4 +11,12 @@
    
    <xi:include href="_mapPinsOption.xml"/>
       
+   <xi:include href="_irqOption.xml"/>         
+   
+   <projectActionList id = "dac_files" >
+      <copy source="Project_Headers/cmt.h"     target="Project_Headers/cmt.h"     overwrite="true" derived="true" />
+   </projectActionList>
+   
+   <signals/>
+   
 </peripheralPage>
