@@ -508,7 +508,7 @@ template<class Info> LPTMRCallbackFunction LptmrBase_T<Info>::callback = 0;
  *
  * @endcode
  */
-using Lptmr0 = LptmrBase_T<Lptmr0Info>;
+class Lptmr0 : public LptmrBase_T<Lptmr0Info> {};
 #endif
 
 #ifdef LPTMR1
@@ -533,7 +533,7 @@ using Lptmr0 = LptmrBase_T<Lptmr0Info>;
  *
  * @endcode
  */
-using Lptmr1 = LptmrBase_T<Lptmr1Info>;
+class Lptmr1 : public LptmrBase_T<Lptmr1Info> {};
 #endif
 
 /**

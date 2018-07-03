@@ -1671,12 +1671,12 @@ public:
  * @tparam channel Timer channel
  */
 template <int channel>
-using Ftm0Channel = FtmChannel_T<Ftm0Info, channel>;
+class Ftm0Channel : public FtmChannel_T<Ftm0Info, channel> {};
 
 /**
  * Class representing FTM0.
  */
-using Ftm0 = FtmBase_T<Ftm0Info>;
+class Ftm0 : public FtmBase_T<Ftm0Info> {};
 #endif
 
 #ifdef USBDM_FTM1_IS_DEFINED
@@ -1688,12 +1688,12 @@ using Ftm0 = FtmBase_T<Ftm0Info>;
  * @tparam channel Timer channel
  */
 template <int channel>
-using Ftm1Channel = FtmChannel_T<Ftm1Info, channel>;
+class Ftm1Channel : public FtmChannel_T<Ftm1Info, channel> {};
 
 /**
  * Class representing FTM1.
  */
-using Ftm1 = FtmBase_T<Ftm1Info>;
+class Ftm1 : public FtmBase_T<Ftm1Info> {};
 #endif
 
 #ifdef USBDM_FTM2_IS_DEFINED
@@ -1705,12 +1705,12 @@ using Ftm1 = FtmBase_T<Ftm1Info>;
  * @tparam channel Timer channel
  */
 template <int channel>
-using Ftm2Channel = FtmChannel_T<Ftm2Info, channel>;
+class Ftm2Channel : public FtmChannel_T<Ftm2Info, channel> {};
 
 /**
  * Class representing FTM2
  */
-using Ftm2 = FtmBase_T<Ftm2Info>;
+class Ftm2 : public FtmBase_T<Ftm2Info> {};
 #endif
 
 #ifdef USBDM_FTM3_IS_DEFINED
@@ -1722,12 +1722,12 @@ using Ftm2 = FtmBase_T<Ftm2Info>;
  * @tparam channel Timer channel
  */
 template <int channel>
-using Ftm3Channel = FtmChannel_T<Ftm3Info, channel>;
+class Ftm3Channel : public FtmChannel_T<Ftm3Info, channel> {};
 
 /**
  * Class representing FTM3
  */
-using Ftm3 = FtmBase_T<Ftm3Info>;
+class Ftm3 : public FtmBase_T<Ftm3Info> {};
 #endif
 
 /**
@@ -1879,44 +1879,44 @@ public:
 };
 
 
-#ifdef USBDM_FTM0_IS_DEFINED
+#ifdef USBDM_FTM0_INFOQUAD_IS_DEFINED
 /**
  * Class representing FTM0 as Quadrature decoder
  * Not all FTMs support this mode
  */
-using QuadDecoder0 = QuadDecoder_T<Ftm0Info>;
+class QuadDecoder0 : public QuadDecoder_T<Ftm0Info> {};
 #endif
 
-#ifdef USBDM_FTM1_IS_DEFINED
+#ifdef USBDM_FTM1_INFOQUAD_IS_DEFINED
 /**
  * Class representing FTM1 as Quadrature decoder
  * Not all FTMs support this mode
  */
-using QuadDecoder1 = QuadDecoder_T<Ftm1Info>;
+class QuadDecoder1 : public QuadDecoder_T<Ftm1Info> {};
 #endif
 
-#ifdef USBDM_FTM2_IS_DEFINED
+#ifdef USBDM_FTM2_INFOQUAD_IS_DEFINED
 /**
  * Class representing FTM2 as Quadrature decoder
  * Not all FTMs support this mode
  */
-using QuadDecoder2 = QuadDecoder_T<Ftm2Info>;
+class QuadDecoder2 : public QuadDecoder_T<Ftm2Info> {};
 #endif
 
-#ifdef USBDM_FTM3_IS_DEFINED
+#ifdef USBDM_FTM3_INFOQUAD_IS_DEFINED
 /**
  * Class representing FTM3 as Quadrature decoder
  * Not all FTMs support this mode
  */
-using QuadDecoder3 = QuadDecoder_T<Ftm3Info>;
+class QuadDecoder3 : public QuadDecoder_T<Ftm3Info> {};
 #endif
 
-#ifdef USBDM_FTM4_IS_DEFINED
+#ifdef USBDM_FTM4_INFOQUAD_IS_DEFINED
 /**
  * Class representing FTM4 as Quadrature decoder
  * Not all FTMs support this mode
  */
-using QuadDecoder4 = QuadDecoder_T<Ftm4Info>;
+class QuadDecoder4 : public QuadDecoder_T<Ftm4Info> {};
 #endif
 
 /**

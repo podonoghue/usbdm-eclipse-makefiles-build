@@ -436,7 +436,7 @@ template<class Info> LLWUCallbackFunction LlwuBase_T<Info>::callback = 0;
 /**
  * Class representing LLWU
  */
-using Llwu = LlwuBase_T<LlwuInfo>;
+class Llwu : public LlwuBase_T<LlwuInfo> {};
 
 #endif
 

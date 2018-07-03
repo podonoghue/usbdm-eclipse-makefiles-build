@@ -832,9 +832,9 @@ public:
  * @tparam channel ADC channel
  */
 template<int channel>
-using Adc0Channel = AdcChannel_T<Adc0Info, channel>;
+class Adc0Channel : public AdcChannel_T<Adc0Info, channel> {};
 
-#ifdef ADC_SC1_DIFF_MASK
+#ifdef USBDM_ADC0_INFODM_IS_DEFINED
 /**
  * Template class representing an ADC0 differential channel
  *
@@ -853,13 +853,13 @@ using Adc0Channel = AdcChannel_T<Adc0Info, channel>;
  * @tparam channel ADC channel
  */
 template<int channel>
-using Adc0DiffChannel = AdcDiffChannel_T<Adc0Info, channel>;
+class Adc0DiffChannel : public AdcDiffChannel_T<Adc0Info, channel> {};
 #endif
 
 /**
  * Class representing ADC0
  */
-using Adc0 = AdcBase_T<Adc0Info>;
+class Adc0 : public AdcBase_T<Adc0Info> {};
 #endif
 
 #ifdef USBDM_ADC1_IS_DEFINED
@@ -881,9 +881,9 @@ using Adc0 = AdcBase_T<Adc0Info>;
  * @tparam channel ADC channel
  */
 template<int channel>
-using Adc1Channel = AdcChannel_T<Adc1Info, channel>;
+class Adc1Channel : public AdcChannel_T<Adc1Info, channel> {};
 
-#ifdef ADC_SC1_DIFF_MASK
+#ifdef USBDM_ADC1_INFODM_IS_DEFINED
 /**
  * Template class representing an ADC1 differential channel
  *
@@ -902,13 +902,13 @@ using Adc1Channel = AdcChannel_T<Adc1Info, channel>;
  * @tparam channel ADC channel
  */
 template<int channel>
-using Adc1DiffChannel = AdcDiffChannel_T<Adc1Info, channel>;
+class Adc1DiffChannel : public AdcDiffChannel_T<Adc1Info, channel> {};
 #endif
 
 /**
  * Class representing ADC1
  */
-using Adc1 = AdcBase_T<Adc1Info>;
+class Adc1 : public AdcBase_T<Adc1Info> {};
 #endif
 
 /**

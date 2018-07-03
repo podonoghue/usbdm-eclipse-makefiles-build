@@ -183,11 +183,19 @@ protected:
    /** Callback function for ISR */
    static CMPCallbackFunction callback;
 
-   /** Clock register for peripheral */
+   /**
+    * Clock register for peripheral
+    *
+    * @return Reference to clock register
+    */
    static __attribute__((always_inline)) volatile uint32_t &clockReg() { return Info::clockReg(); }
 
 public:
-   /** Hardware instance pointer */
+   /**
+    * Hardware instance pointer
+    *
+    * @return Reference to CMT hardware
+    */
    static __attribute__((always_inline)) volatile CMP_Type &cmp() { return Info::cmp(); }
 
    /**

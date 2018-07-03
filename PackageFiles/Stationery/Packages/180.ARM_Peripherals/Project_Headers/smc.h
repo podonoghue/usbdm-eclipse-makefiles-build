@@ -542,7 +542,7 @@ public:
 /**
  * Class representing SMC
  */
-using Smc = SmcBase_T<SmcInfo>;
+class Smc : public SmcBase_T<SmcInfo> {};
 
 #endif
 

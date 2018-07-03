@@ -634,7 +634,7 @@ template<class Info> PDBCallbackFunction PdbBase_T<Info>::errorCallback = PdbBas
 /**
  * Class representing PDB
  */
-using Pdb = PdbBase_T<PdbInfo>;
+class Pdb : public PdbBase_T<PdbInfo> {};
 
 #endif
 
@@ -642,7 +642,7 @@ using Pdb = PdbBase_T<PdbInfo>;
 /**
  * Class representing PDB
  */
-using Pdb0 = PdbBase_T<Pdb0Info>;
+class Pdb0 : public PdbBase_T<Pdb0Info> {};
 
 #endif
 

@@ -146,7 +146,7 @@ protected:
     * @return >=0 Digit in range 0 - (radix-1)
     * @return <0  Invalid character for radix
     */
-   static int NOINLINE_DEBUG convertDigit(int ch, Radix radix) {
+   static int convertDigit(int ch, Radix radix) {
       unsigned digit = ch - '0';
       if (digit<10) {
          return (digit<radix)?digit:-1;
@@ -192,7 +192,7 @@ public:
     * @return <0   No character available
     * @return >=0  Character available
     */
-   int NOINLINE_DEBUG peek() {
+   int __attribute__((noinline)) peek() {
       if (lookAhead>0) {
          return lookAhead;
       }
@@ -278,7 +278,7 @@ public:
     * @return Pointer to '\0' null character at end of converted number\n
     *         May be used for incrementally writing to a buffer.
     */
-   static NOINLINE_DEBUG char *ultoa(
+   static __attribute__((noinline)) char *ultoa(
          char          *ptr,
          unsigned long  value,
          Radix          radix,
@@ -460,7 +460,7 @@ public:
     *    int numChars = gets(buff, sizeof(buff));
     * @endcode
     */
-   int NOINLINE_DEBUG gets(char data[], uint16_t size, char terminator='\n') {
+   int __attribute__((noinline)) gets(char data[], uint16_t size, char terminator='\n') {
       char *ptr = data;
       while (size-->1) {
          char ch = readChar();
@@ -492,9 +492,9 @@ public:
     * @return Reference to self
     */
    FormattedIO NOINLINE_DEBUG &reset() {
-      fWidth = 0;
+      fWidth   = 0;
       fPadding = Padding_None;
-      fRadix = Radix_10;
+      fRadix   = Radix_10;
       return *this;
    }
 
@@ -535,7 +535,7 @@ public:
     *
     * @return Reference to self
     */
-   FormattedIO NOINLINE_DEBUG &write(const char *str) {
+   FormattedIO __attribute__((noinline)) &write(const char *str) {
       while (*str != '\0') {
          write(*str++);
       }
@@ -549,7 +549,7 @@ public:
     *
     * @return Reference to self
     */
-   FormattedIO NOINLINE_DEBUG &writeln(const char *str) {
+   FormattedIO __attribute__((noinline)) &writeln(const char *str) {
       write(str);
       return writeln();
    }
@@ -561,7 +561,7 @@ public:
     *
     * @return Reference to self
     */
-   FormattedIO NOINLINE_DEBUG &write(bool b) {
+   FormattedIO __attribute__((noinline)) &write(bool b) {
       return write(b?"true":"false");
    }
 
@@ -572,7 +572,7 @@ public:
     *
     * @return Reference to self
     */
-   FormattedIO NOINLINE_DEBUG &writeln(bool b) {
+   FormattedIO __attribute__((noinline)) &writeln(bool b) {
       write(b);
       return writeln();
    }
@@ -585,7 +585,7 @@ public:
     *
     * @return Reference to self
     */
-   FormattedIO NOINLINE_DEBUG &write(unsigned long value, Radix radix=Radix_10) {
+   FormattedIO __attribute__((noinline)) &write(unsigned long value, Radix radix=Radix_10) {
       char buff[35];
       ultoa(buff, value, radix, fPadding, fWidth, false);
       return write(buff);
@@ -599,7 +599,7 @@ public:
     *
     * @return Reference to self
     */
-   FormattedIO NOINLINE_DEBUG &write(long value, Radix radix=Radix_10) {
+   FormattedIO __attribute__((noinline)) &write(long value, Radix radix=Radix_10) {
       char buff[35];
       bool isNegative = value < 0;
       if (isNegative) {
@@ -617,7 +617,7 @@ public:
     *
     * @return Reference to self
     */
-   FormattedIO NOINLINE_DEBUG &writeln(unsigned long value, Radix radix=Radix_10) {
+   FormattedIO __attribute__((noinline)) &writeln(unsigned long value, Radix radix=Radix_10) {
       write(value, radix);
       return writeln();
    }
@@ -630,7 +630,7 @@ public:
     *
     * @return Reference to self
     */
-   FormattedIO NOINLINE_DEBUG &write(const void *value, Radix radix=Radix_16) {
+   FormattedIO __attribute__((noinline)) &write(const void *value, Radix radix=Radix_16) {
       return write((unsigned long) value, radix);
    }
 
@@ -732,7 +732,7 @@ public:
     *
     * @return Reference to self
     */
-   FormattedIO NOINLINE_DEBUG &write(double value) {
+   FormattedIO __attribute__((noinline)) &write(double value) {
       char buff[20];
       if (value<0) {
          write('-');
@@ -752,7 +752,7 @@ public:
     *
     * @return Reference to self
     */
-   FormattedIO NOINLINE_DEBUG &writeln(double value) {
+   FormattedIO __attribute__((noinline)) &writeln(double value) {
       write(value);
       return writeln();
    }
@@ -945,7 +945,7 @@ public:
     *
     * @return Reference to self
     */
-   FormattedIO NOINLINE_DEBUG &skipWhiteSpace() {
+   FormattedIO __attribute__((noinline)) &skipWhiteSpace() {
       int ch;
       do {
          ch = readChar();
@@ -959,7 +959,7 @@ public:
     *
     * @return Reference to self
     */
-   FormattedIO NOINLINE_DEBUG &readln() {
+   FormattedIO __attribute__((noinline)) &readln() {
       while (readChar() != '\n') {
          __asm__("nop");
       }
@@ -984,7 +984,7 @@ public:
     * @return false No error
     * @return true  Operation failed since last checked e.g. illegal digit at start of number
     */
-   bool NOINLINE_DEBUG isError() {
+   bool __attribute__((noinline)) isError() {
       bool t = inErrorState;
       inErrorState = false;
       return t;
@@ -1000,7 +1000,7 @@ public:
     *
     * @note Skips leading whitespace
     */
-   FormattedIO NOINLINE_DEBUG &read(unsigned long &value, Radix radix=Radix_10) {
+   FormattedIO __attribute__((noinline)) &read(unsigned long &value, Radix radix=Radix_10) {
       // Skip white space
       int ch;
       do {
