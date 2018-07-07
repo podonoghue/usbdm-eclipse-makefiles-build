@@ -5,7 +5,7 @@
  *           Equivalent: 
  *
  * @version  V1.6
- * @date     2018/04
+ * @date     2018/07
  *
  *******************************************************************************************************/
 
@@ -63,7 +63,7 @@ typedef enum {
   PMC_IRQn                      =  20,   /**<  36 Power Management Controller                                                      */
   LLWU_IRQn                     =  21,   /**<  37 Low Leakage Wakeup                                                               */
   WDOG_IRQn                     =  22,   /**<  38 External Watchdog Monitor                                                        */
-  RNG_IRQn                      =  23,   /**<  39 Random Number Generator                                                          */
+  RNGA_IRQn                     =  23,   /**<  39 Random Number Generator Accelerator                                              */
   I2C0_IRQn                     =  24,   /**<  40 Inter-Integrated Circuit                                                         */
   I2C1_IRQn                     =  25,   /**<  41 Inter-Integrated Circuit                                                         */
   SPI0_IRQn                     =  26,   /**<  42 Serial Peripheral Interface                                                      */
@@ -158,7 +158,7 @@ extern void FTF_ReadCollision_IRQHandler(void);      /**< Flash Memory Interface
 extern void PMC_IRQHandler(void);                    /**< Power Management Controller                                                      */
 extern void LLWU_IRQHandler(void);                   /**< Low Leakage Wakeup                                                               */
 extern void WDOG_IRQHandler(void);                   /**< External Watchdog Monitor                                                        */
-extern void RNG_IRQHandler(void);                    /**< Random Number Generator                                                          */
+extern void RNGA_IRQHandler(void);                   /**< Random Number Generator Accelerator                                              */
 extern void I2C0_IRQHandler(void);                   /**< Inter-Integrated Circuit                                                         */
 extern void I2C1_IRQHandler(void);                   /**< Inter-Integrated Circuit                                                         */
 extern void SPI0_IRQHandler(void);                   /**< Serial Peripheral Interface                                                      */
@@ -11472,7 +11472,7 @@ typedef struct TRNG_Type {
 #define TRNG0_BasePtr                  0x400A0000UL //!< Peripheral base address
 #define TRNG0                          ((TRNG_Type *) TRNG0_BasePtr) //!< Freescale base pointer
 #define TRNG0_BASE_PTR                 (TRNG0) //!< Freescale style base pointer
-#define TRNG0_IRQS { RNG_IRQn,  }
+#define TRNG0_IRQS { RNGA_IRQn,  }
 
 /**
  * @} */ /* End group TRNG_Peripheral_access_layer_GROUP 
@@ -14353,29 +14353,14 @@ typedef struct VREF_Type {
 typedef struct WDOG_Type {
    __IO uint16_t  STCTRLH;                      /**< 0000: Status and Control Register High                             */
    __IO uint16_t  STCTRLL;                      /**< 0002: Status and Control Register Low                              */
-   union {                                      /**< 0000: (size=0004)                                                  */
-      __IO uint32_t  TOVAL;                     /**< 0004: Time-out Value Register High TOVALL:TOVALH                   */
-      struct {                                  /**< 0000: (size=0004)                                                  */
-         __IO uint16_t  TOVALH;                 /**< 0004: Time-out Value Register High                                 */
-         __IO uint16_t  TOVALL;                 /**< 0006: Time-out Value Register Low                                  */
-      };
-   };
-   union {                                      /**< 0000: (size=0004)                                                  */
-      __IO uint32_t  WIN;                       /**< 0008: Window Register (WINL:WINH)                                  */
-      struct {                                  /**< 0000: (size=0004)                                                  */
-         __IO uint16_t  WINH;                   /**< 0008: Window Register High                                         */
-         __IO uint16_t  WINL;                   /**< 000A: Window Register Low                                          */
-      };
-   };
+   __IO uint16_t  TOVALH;                       /**< 0004: Time-out Value Register High                                 */
+   __IO uint16_t  TOVALL;                       /**< 0006: Time-out Value Register Low                                  */
+   __IO uint16_t  WINH;                         /**< 0008: Window Register High                                         */
+   __IO uint16_t  WINL;                         /**< 000A: Window Register Low                                          */
    __IO uint16_t  REFRESH;                      /**< 000C: Refresh Register                                             */
    __IO uint16_t  UNLOCK;                       /**< 000E: Unlock Register                                              */
-   union {                                      /**< 0000: (size=0004)                                                  */
-      __IO uint32_t  TMROUT;                    /**< 0010: Timer Output Register (TMROUTL:TMROUTH)                      */
-      struct {                                  /**< 0000: (size=0004)                                                  */
-         __IO uint16_t  TMROUTH;                /**< 0010: Timer Output Register High                                   */
-         __IO uint16_t  TMROUTL;                /**< 0012: Timer Output Register Low                                    */
-      };
-   };
+   __IO uint16_t  TMROUTH;                      /**< 0010: Timer Output Register High                                   */
+   __IO uint16_t  TMROUTL;                      /**< 0012: Timer Output Register Low                                    */
    __IO uint16_t  RSTCNT;                       /**< 0014: Reset Count Register                                         */
    __IO uint16_t  PRESC;                        /**< 0016: Prescaler Register                                           */
 } WDOG_Type;
@@ -14434,10 +14419,6 @@ typedef struct WDOG_Type {
 #define WDOG_STCTRLL_INTFLG_MASK                 (0x8000U)                                           /*!< WDOG_STCTRLL.INTFLG Mask                */
 #define WDOG_STCTRLL_INTFLG_SHIFT                (15U)                                               /*!< WDOG_STCTRLL.INTFLG Position            */
 #define WDOG_STCTRLL_INTFLG(x)                   (((uint16_t)(((uint16_t)(x))<<15U))&0x8000UL)       /*!< WDOG_STCTRLL.INTFLG Field               */
-/* ------- TOVAL Bit Fields                         ------ */
-#define WDOG_TOVAL_TOVAL_MASK                    (0xFFFFFFFFU)                                       /*!< WDOG_TOVAL.TOVAL Mask                   */
-#define WDOG_TOVAL_TOVAL_SHIFT                   (0U)                                                /*!< WDOG_TOVAL.TOVAL Position               */
-#define WDOG_TOVAL_TOVAL(x)                      (((uint32_t)(((uint32_t)(x))<<0U))&0xFFFFFFFFUL)    /*!< WDOG_TOVAL.TOVAL Field                  */
 /* ------- TOVALH Bit Fields                        ------ */
 #define WDOG_TOVALH_TOVALHIGH_MASK               (0xFFFFU)                                           /*!< WDOG_TOVALH.TOVALHIGH Mask              */
 #define WDOG_TOVALH_TOVALHIGH_SHIFT              (0U)                                                /*!< WDOG_TOVALH.TOVALHIGH Position          */
@@ -14446,10 +14427,6 @@ typedef struct WDOG_Type {
 #define WDOG_TOVALL_TOVALLOW_MASK                (0xFFFFU)                                           /*!< WDOG_TOVALL.TOVALLOW Mask               */
 #define WDOG_TOVALL_TOVALLOW_SHIFT               (0U)                                                /*!< WDOG_TOVALL.TOVALLOW Position           */
 #define WDOG_TOVALL_TOVALLOW(x)                  (((uint16_t)(((uint16_t)(x))<<0U))&0xFFFFUL)        /*!< WDOG_TOVALL.TOVALLOW Field              */
-/* ------- WIN Bit Fields                           ------ */
-#define WDOG_WIN_WIN_MASK                        (0xFFFFFFFFU)                                       /*!< WDOG_WIN.WIN Mask                       */
-#define WDOG_WIN_WIN_SHIFT                       (0U)                                                /*!< WDOG_WIN.WIN Position                   */
-#define WDOG_WIN_WIN(x)                          (((uint32_t)(((uint32_t)(x))<<0U))&0xFFFFFFFFUL)    /*!< WDOG_WIN.WIN Field                      */
 /* ------- WINH Bit Fields                          ------ */
 #define WDOG_WINH_WINHIGH_MASK                   (0xFFFFU)                                           /*!< WDOG_WINH.WINHIGH Mask                  */
 #define WDOG_WINH_WINHIGH_SHIFT                  (0U)                                                /*!< WDOG_WINH.WINHIGH Position              */
@@ -14466,10 +14443,6 @@ typedef struct WDOG_Type {
 #define WDOG_UNLOCK_WDOGUNLOCK_MASK              (0xFFFFU)                                           /*!< WDOG_UNLOCK.WDOGUNLOCK Mask             */
 #define WDOG_UNLOCK_WDOGUNLOCK_SHIFT             (0U)                                                /*!< WDOG_UNLOCK.WDOGUNLOCK Position         */
 #define WDOG_UNLOCK_WDOGUNLOCK(x)                (((uint16_t)(((uint16_t)(x))<<0U))&0xFFFFUL)        /*!< WDOG_UNLOCK.WDOGUNLOCK Field            */
-/* ------- TMROUT Bit Fields                        ------ */
-#define WDOG_TMROUT_TIMEROUTHIGH_MASK            (0xFFFFFFFFU)                                       /*!< WDOG_TMROUT.TIMEROUTHIGH Mask           */
-#define WDOG_TMROUT_TIMEROUTHIGH_SHIFT           (0U)                                                /*!< WDOG_TMROUT.TIMEROUTHIGH Position       */
-#define WDOG_TMROUT_TIMEROUTHIGH(x)              (((uint32_t)(((uint32_t)(x))<<0U))&0xFFFFFFFFUL)    /*!< WDOG_TMROUT.TIMEROUTHIGH Field          */
 /* ------- TMROUTH Bit Fields                       ------ */
 #define WDOG_TMROUTH_TIMEROUTHIGH_MASK           (0xFFFFU)                                           /*!< WDOG_TMROUTH.TIMEROUTHIGH Mask          */
 #define WDOG_TMROUTH_TIMEROUTHIGH_SHIFT          (0U)                                                /*!< WDOG_TMROUTH.TIMEROUTHIGH Position      */
@@ -14494,6 +14467,8 @@ typedef struct WDOG_Type {
 #define WDOG_BasePtr                   0x40052000UL //!< Peripheral base address
 #define WDOG                           ((WDOG_Type *) WDOG_BasePtr) //!< Freescale base pointer
 #define WDOG_BASE_PTR                  (WDOG) //!< Freescale style base pointer
+#define WDOG_IRQS { WDOG_IRQn,  }
+
 /**
  * @} */ /* End group WDOG_Peripheral_access_layer_GROUP 
  */

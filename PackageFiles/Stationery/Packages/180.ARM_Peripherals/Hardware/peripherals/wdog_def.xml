@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE peripheralPage SYSTEM "_menu.dtd" >
+<!-- wdog_def.xml -->
+
+<peripheralPage xmlns:xi="http://www.w3.org/2001/XInclude" name="_instance" description="External Watchdog Monitor">
+
+   <xi:include href="_irqOption.xml"/>         
+
+   
+   <projectActionList id = "wdog_files" >
+      <copy source="Project_Headers/wdog.h"         target="Project_Headers/wdog.h"          overwrite="true" derived="true" />
+      <copy source="Snippets/wdog-example.cpp"      target="Snippets/wdog-example.cpp"       overwrite="true" derived="true" />
+   </projectActionList>
+   
+</peripheralPage>

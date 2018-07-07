@@ -11,4 +11,25 @@
    
    <xi:include href="_mapPinsOption.xml"/>  
    
+   <aliasOption key="/SIM/system_bus_clock" />
+   
+   <irqOption name="irqHandlers"  
+      description="I2S Tx/Rx interrupt handler"
+      toolTip="This selection allow the interrupt handlers for this peripheral to be installed using several different methods"
+      pattern="^I2S%i_?(Rx|Tx)?$"
+      classHandler="%c%i::irq$1Handler" />
+        
+   <template><![CDATA[
+       \t//! Class based callback handler has been installed in vector table\n
+       \tstatic constexpr bool irqHandlerInstalled = ($(irqHandlers) == 1);\n\n
+   ]]></template>
+       
+   <intOption name="irqLevel" 
+      description="IRQ Level in NVIC [0-15]"
+      toolTip="Sets the priority level used to configure the NVIC\n
+               Lower numbers represent higher priorities"
+      value="7" min="0" max="15" 
+   />
+
+   
 </peripheralPage>

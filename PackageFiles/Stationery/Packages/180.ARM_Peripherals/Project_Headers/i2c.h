@@ -227,7 +227,7 @@ public:
     * Uses repeated-start.\n
     * Uses shared transmit and receive buffer
     *
-    * @param[in]  address  Address of slave to communicate with (should include LSB = R/W bit = 0)
+    * @param[in]    address  Address of slave to communicate with (should include LSB = R/W bit = 0)
     * @param[in]    txSize   Size of transmission data
     * @param[in]    rxSize   Size of reception data
     * @param[inout] data     Data for transmission and reception

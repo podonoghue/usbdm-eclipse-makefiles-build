@@ -1324,6 +1324,67 @@ public:
     */
    virtual void flushInput() = 0;
 
+   /**
+    * Print an array as a hex table.
+    * The indexes shown are for byte offsets suitable for a memory dump.
+    *
+    * @param data          Array to print
+    * @param size          Size of array in elements
+    * @param visibleIndex The starting index to print for the array. Should be multiple of sizeof(data[]).
+    */
+   template <typename T>
+   void writeArray(T *data, uint32_t size, uint32_t visibleIndex=0) {
+      usbdm_assert((visibleIndex%sizeof(T))==0, "visibleIndex should be multiple of sizeof(data[])");
+      unsigned rowMask;
+      unsigned offset;
+
+      switch(sizeof(T)) {
+         case 1  :
+            offset = (visibleIndex/sizeof(T))&0xF;
+            visibleIndex &= ~0xF;
+            rowMask = 0xF;  break;
+         case 2  :
+            offset = (visibleIndex/sizeof(T))&0x7;
+            visibleIndex &= ~0xF;
+            rowMask = 0x7; break;
+         default :
+            offset = (visibleIndex/sizeof(T))&0x7;
+            visibleIndex &= ~0x1F;
+            rowMask = 0x7; break;
+      }
+      setPadding(Padding_TrailingSpaces).setWidth(2*sizeof(T));
+      write("          ");
+      for (unsigned index=0; index<=(rowMask*sizeof(T)); index+=sizeof(T)) {
+         write(index, Radix_16).write(" ");
+      }
+      writeln();
+      setPadding(Padding_LeadingZeroes);
+      bool needNewline = true;
+      size += offset;
+      for (unsigned index=0; index<size; index++) {
+         if (needNewline) {
+            setWidth(8);
+            write(visibleIndex+index*sizeof(T), Radix_16).write(": ");
+         }
+         if (index<offset) {
+            switch(sizeof(T)) {
+               case 1  : write("   ");       break;
+               case 2  : write("     ");     break;
+               default : write("         "); break;
+            }
+         }
+         else {
+            setWidth(2*sizeof(T));
+            write(data[index-offset], Radix_16).write(" ");
+         }
+         needNewline = (((index+1)&rowMask)==0);
+         if (needNewline) {
+            writeln();
+         }
+      }
+      writeln().reset();
+   }
+
 };
 
 /**

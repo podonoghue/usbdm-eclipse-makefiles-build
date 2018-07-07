@@ -7,8 +7,6 @@
  *      Author: podonoghue
  ============================================================================
  */
-#include "system.h"
-#include "derivative.h"
 #include "hardware.h"
 #include "delay.h"
 #include "dac.h"

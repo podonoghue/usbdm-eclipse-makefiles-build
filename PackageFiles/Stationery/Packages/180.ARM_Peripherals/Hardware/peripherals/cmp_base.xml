@@ -91,13 +91,6 @@
       <choice value="1" name="CMPO is available on CMPO pin" />
    </binaryOption>
 
-   <!-- binaryOption name="cmp_cr1_en" 
-      description="Comparator Module Enable"
-      toolTip="Enables the Analog Comparator module">
-      <choice value="0" name="Analog Comparator is disabled" />
-      <choice value="1" name="Analog Comparator is enabled" />
-   </binaryOption -->
-
    <template><![CDATA[
       \t#ifndef CMP_CR1_TRIGM
       \t#define CMP_CR1_TRIGM(x) 0

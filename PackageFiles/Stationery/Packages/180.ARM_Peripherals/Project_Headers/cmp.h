@@ -1,6 +1,6 @@
 /**
  * @file     cmp.h (180.ARM_Peripherals/Project_Headers/cmp.h)
- * @brief    Voltage Comparator
+ * @brief    Analogue Comparator
  *
  * @version  V4.12.1.80
  * @date     13 April 2016

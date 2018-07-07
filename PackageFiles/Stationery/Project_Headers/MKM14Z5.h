@@ -5,7 +5,7 @@
  *           Equivalent: 
  *
  * @version  V1.6
- * @date     2018/04
+ * @date     2018/07
  *
  *******************************************************************************************************/
 
@@ -4313,99 +4313,99 @@ typedef struct RCM_Type {
  * @} */ /* End group RCM_Peripheral_access_layer_GROUP 
  */
 /**
-* @addtogroup RNG_Peripheral_access_layer_GROUP RNG Peripheral Access Layer
-* @brief C Struct for RNG
+* @addtogroup RNGA_Peripheral_access_layer_GROUP RNGA Peripheral Access Layer
+* @brief C Struct for RNGA
 * @{
 */
 
 /* ================================================================================ */
-/* ================           RNG (file:RNG_1)                     ================ */
+/* ================           RNGA (file:RNGA_0x40029000)          ================ */
 /* ================================================================================ */
 
 /**
  * @brief Random Number Generator Accelerator
  */
 /**
-* @addtogroup RNG_structs_GROUP RNG struct
-* @brief Struct for RNG
+* @addtogroup RNGA_structs_GROUP RNGA struct
+* @brief Struct for RNGA
 * @{
 */
-typedef struct RNG_Type {
+typedef struct RNGA_Type {
    __IO uint32_t  CR;                           /**< 0000: RNGA Control Register                                        */
    __I  uint32_t  SR;                           /**< 0004: RNGA Status Register                                         */
    __O  uint32_t  ER;                           /**< 0008: RNGA Entropy Register                                        */
    __I  uint32_t  OR;                           /**< 000C: RNGA Output Register                                         */
-} RNG_Type;
+} RNGA_Type;
 
 /**
- * @} */ /* End group RNG_structs_GROUP 
+ * @} */ /* End group RNGA_structs_GROUP 
  */
 
 /* -------------------------------------------------------------------------------- */
-/* -----------     'RNG' Position & Mask macros                         ----------- */
+/* -----------     'RNGA' Position & Mask macros                        ----------- */
 /* -------------------------------------------------------------------------------- */
 
 /**
-* @addtogroup RNG_Register_Masks_GROUP RNG Register Masks
-* @brief Register Masks for RNG
+* @addtogroup RNGA_Register_Masks_GROUP RNGA Register Masks
+* @brief Register Masks for RNGA
 * @{
 */
 /* ------- CR Bit Fields                            ------ */
-#define RNG_CR_GO_MASK                           (0x1U)                                              /*!< RNG_CR.GO Mask                          */
-#define RNG_CR_GO_SHIFT                          (0U)                                                /*!< RNG_CR.GO Position                      */
-#define RNG_CR_GO(x)                             (((uint32_t)(((uint32_t)(x))<<0U))&0x1UL)           /*!< RNG_CR.GO Field                         */
-#define RNG_CR_HA_MASK                           (0x2U)                                              /*!< RNG_CR.HA Mask                          */
-#define RNG_CR_HA_SHIFT                          (1U)                                                /*!< RNG_CR.HA Position                      */
-#define RNG_CR_HA(x)                             (((uint32_t)(((uint32_t)(x))<<1U))&0x2UL)           /*!< RNG_CR.HA Field                         */
-#define RNG_CR_INTM_MASK                         (0x4U)                                              /*!< RNG_CR.INTM Mask                        */
-#define RNG_CR_INTM_SHIFT                        (2U)                                                /*!< RNG_CR.INTM Position                    */
-#define RNG_CR_INTM(x)                           (((uint32_t)(((uint32_t)(x))<<2U))&0x4UL)           /*!< RNG_CR.INTM Field                       */
-#define RNG_CR_CLRI_MASK                         (0x8U)                                              /*!< RNG_CR.CLRI Mask                        */
-#define RNG_CR_CLRI_SHIFT                        (3U)                                                /*!< RNG_CR.CLRI Position                    */
-#define RNG_CR_CLRI(x)                           (((uint32_t)(((uint32_t)(x))<<3U))&0x8UL)           /*!< RNG_CR.CLRI Field                       */
-#define RNG_CR_SLP_MASK                          (0x10U)                                             /*!< RNG_CR.SLP Mask                         */
-#define RNG_CR_SLP_SHIFT                         (4U)                                                /*!< RNG_CR.SLP Position                     */
-#define RNG_CR_SLP(x)                            (((uint32_t)(((uint32_t)(x))<<4U))&0x10UL)          /*!< RNG_CR.SLP Field                        */
+#define RNGA_CR_GO_MASK                          (0x1U)                                              /*!< RNGA_CR.GO Mask                         */
+#define RNGA_CR_GO_SHIFT                         (0U)                                                /*!< RNGA_CR.GO Position                     */
+#define RNGA_CR_GO(x)                            (((uint32_t)(((uint32_t)(x))<<0U))&0x1UL)           /*!< RNGA_CR.GO Field                        */
+#define RNGA_CR_HA_MASK                          (0x2U)                                              /*!< RNGA_CR.HA Mask                         */
+#define RNGA_CR_HA_SHIFT                         (1U)                                                /*!< RNGA_CR.HA Position                     */
+#define RNGA_CR_HA(x)                            (((uint32_t)(((uint32_t)(x))<<1U))&0x2UL)           /*!< RNGA_CR.HA Field                        */
+#define RNGA_CR_INTM_MASK                        (0x4U)                                              /*!< RNGA_CR.INTM Mask                       */
+#define RNGA_CR_INTM_SHIFT                       (2U)                                                /*!< RNGA_CR.INTM Position                   */
+#define RNGA_CR_INTM(x)                          (((uint32_t)(((uint32_t)(x))<<2U))&0x4UL)           /*!< RNGA_CR.INTM Field                      */
+#define RNGA_CR_CLRI_MASK                        (0x8U)                                              /*!< RNGA_CR.CLRI Mask                       */
+#define RNGA_CR_CLRI_SHIFT                       (3U)                                                /*!< RNGA_CR.CLRI Position                   */
+#define RNGA_CR_CLRI(x)                          (((uint32_t)(((uint32_t)(x))<<3U))&0x8UL)           /*!< RNGA_CR.CLRI Field                      */
+#define RNGA_CR_SLP_MASK                         (0x10U)                                             /*!< RNGA_CR.SLP Mask                        */
+#define RNGA_CR_SLP_SHIFT                        (4U)                                                /*!< RNGA_CR.SLP Position                    */
+#define RNGA_CR_SLP(x)                           (((uint32_t)(((uint32_t)(x))<<4U))&0x10UL)          /*!< RNGA_CR.SLP Field                       */
 /* ------- SR Bit Fields                            ------ */
-#define RNG_SR_SECV_MASK                         (0x1U)                                              /*!< RNG_SR.SECV Mask                        */
-#define RNG_SR_SECV_SHIFT                        (0U)                                                /*!< RNG_SR.SECV Position                    */
-#define RNG_SR_SECV(x)                           (((uint32_t)(((uint32_t)(x))<<0U))&0x1UL)           /*!< RNG_SR.SECV Field                       */
-#define RNG_SR_LRS_MASK                          (0x2U)                                              /*!< RNG_SR.LRS Mask                         */
-#define RNG_SR_LRS_SHIFT                         (1U)                                                /*!< RNG_SR.LRS Position                     */
-#define RNG_SR_LRS(x)                            (((uint32_t)(((uint32_t)(x))<<1U))&0x2UL)           /*!< RNG_SR.LRS Field                        */
-#define RNG_SR_ORU_MASK                          (0x4U)                                              /*!< RNG_SR.ORU Mask                         */
-#define RNG_SR_ORU_SHIFT                         (2U)                                                /*!< RNG_SR.ORU Position                     */
-#define RNG_SR_ORU(x)                            (((uint32_t)(((uint32_t)(x))<<2U))&0x4UL)           /*!< RNG_SR.ORU Field                        */
-#define RNG_SR_ERRI_MASK                         (0x8U)                                              /*!< RNG_SR.ERRI Mask                        */
-#define RNG_SR_ERRI_SHIFT                        (3U)                                                /*!< RNG_SR.ERRI Position                    */
-#define RNG_SR_ERRI(x)                           (((uint32_t)(((uint32_t)(x))<<3U))&0x8UL)           /*!< RNG_SR.ERRI Field                       */
-#define RNG_SR_SLP_MASK                          (0x10U)                                             /*!< RNG_SR.SLP Mask                         */
-#define RNG_SR_SLP_SHIFT                         (4U)                                                /*!< RNG_SR.SLP Position                     */
-#define RNG_SR_SLP(x)                            (((uint32_t)(((uint32_t)(x))<<4U))&0x10UL)          /*!< RNG_SR.SLP Field                        */
-#define RNG_SR_OREG_LVL_MASK                     (0xFF00U)                                           /*!< RNG_SR.OREG_LVL Mask                    */
-#define RNG_SR_OREG_LVL_SHIFT                    (8U)                                                /*!< RNG_SR.OREG_LVL Position                */
-#define RNG_SR_OREG_LVL(x)                       (((uint32_t)(((uint32_t)(x))<<8U))&0xFF00UL)        /*!< RNG_SR.OREG_LVL Field                   */
-#define RNG_SR_OREG_SIZE_MASK                    (0xFF0000U)                                         /*!< RNG_SR.OREG_SIZE Mask                   */
-#define RNG_SR_OREG_SIZE_SHIFT                   (16U)                                               /*!< RNG_SR.OREG_SIZE Position               */
-#define RNG_SR_OREG_SIZE(x)                      (((uint32_t)(((uint32_t)(x))<<16U))&0xFF0000UL)     /*!< RNG_SR.OREG_SIZE Field                  */
+#define RNGA_SR_SECV_MASK                        (0x1U)                                              /*!< RNGA_SR.SECV Mask                       */
+#define RNGA_SR_SECV_SHIFT                       (0U)                                                /*!< RNGA_SR.SECV Position                   */
+#define RNGA_SR_SECV(x)                          (((uint32_t)(((uint32_t)(x))<<0U))&0x1UL)           /*!< RNGA_SR.SECV Field                      */
+#define RNGA_SR_LRS_MASK                         (0x2U)                                              /*!< RNGA_SR.LRS Mask                        */
+#define RNGA_SR_LRS_SHIFT                        (1U)                                                /*!< RNGA_SR.LRS Position                    */
+#define RNGA_SR_LRS(x)                           (((uint32_t)(((uint32_t)(x))<<1U))&0x2UL)           /*!< RNGA_SR.LRS Field                       */
+#define RNGA_SR_ORU_MASK                         (0x4U)                                              /*!< RNGA_SR.ORU Mask                        */
+#define RNGA_SR_ORU_SHIFT                        (2U)                                                /*!< RNGA_SR.ORU Position                    */
+#define RNGA_SR_ORU(x)                           (((uint32_t)(((uint32_t)(x))<<2U))&0x4UL)           /*!< RNGA_SR.ORU Field                       */
+#define RNGA_SR_ERRI_MASK                        (0x8U)                                              /*!< RNGA_SR.ERRI Mask                       */
+#define RNGA_SR_ERRI_SHIFT                       (3U)                                                /*!< RNGA_SR.ERRI Position                   */
+#define RNGA_SR_ERRI(x)                          (((uint32_t)(((uint32_t)(x))<<3U))&0x8UL)           /*!< RNGA_SR.ERRI Field                      */
+#define RNGA_SR_SLP_MASK                         (0x10U)                                             /*!< RNGA_SR.SLP Mask                        */
+#define RNGA_SR_SLP_SHIFT                        (4U)                                                /*!< RNGA_SR.SLP Position                    */
+#define RNGA_SR_SLP(x)                           (((uint32_t)(((uint32_t)(x))<<4U))&0x10UL)          /*!< RNGA_SR.SLP Field                       */
+#define RNGA_SR_OREG_LVL_MASK                    (0xFF00U)                                           /*!< RNGA_SR.OREG_LVL Mask                   */
+#define RNGA_SR_OREG_LVL_SHIFT                   (8U)                                                /*!< RNGA_SR.OREG_LVL Position               */
+#define RNGA_SR_OREG_LVL(x)                      (((uint32_t)(((uint32_t)(x))<<8U))&0xFF00UL)        /*!< RNGA_SR.OREG_LVL Field                  */
+#define RNGA_SR_OREG_SIZE_MASK                   (0xFF0000U)                                         /*!< RNGA_SR.OREG_SIZE Mask                  */
+#define RNGA_SR_OREG_SIZE_SHIFT                  (16U)                                               /*!< RNGA_SR.OREG_SIZE Position              */
+#define RNGA_SR_OREG_SIZE(x)                     (((uint32_t)(((uint32_t)(x))<<16U))&0xFF0000UL)     /*!< RNGA_SR.OREG_SIZE Field                 */
 /* ------- ER Bit Fields                            ------ */
-#define RNG_ER_EXT_ENT_MASK                      (0xFFFFFFFFU)                                       /*!< RNG_ER.EXT_ENT Mask                     */
-#define RNG_ER_EXT_ENT_SHIFT                     (0U)                                                /*!< RNG_ER.EXT_ENT Position                 */
-#define RNG_ER_EXT_ENT(x)                        (((uint32_t)(((uint32_t)(x))<<0U))&0xFFFFFFFFUL)    /*!< RNG_ER.EXT_ENT Field                    */
+#define RNGA_ER_EXT_ENT_MASK                     (0xFFFFFFFFU)                                       /*!< RNGA_ER.EXT_ENT Mask                    */
+#define RNGA_ER_EXT_ENT_SHIFT                    (0U)                                                /*!< RNGA_ER.EXT_ENT Position                */
+#define RNGA_ER_EXT_ENT(x)                       (((uint32_t)(((uint32_t)(x))<<0U))&0xFFFFFFFFUL)    /*!< RNGA_ER.EXT_ENT Field                   */
 /* ------- OR Bit Fields                            ------ */
-#define RNG_OR_RANDOUT_MASK                      (0xFFFFFFFFU)                                       /*!< RNG_OR.RANDOUT Mask                     */
-#define RNG_OR_RANDOUT_SHIFT                     (0U)                                                /*!< RNG_OR.RANDOUT Position                 */
-#define RNG_OR_RANDOUT(x)                        (((uint32_t)(((uint32_t)(x))<<0U))&0xFFFFFFFFUL)    /*!< RNG_OR.RANDOUT Field                    */
+#define RNGA_OR_RANDOUT_MASK                     (0xFFFFFFFFU)                                       /*!< RNGA_OR.RANDOUT Mask                    */
+#define RNGA_OR_RANDOUT_SHIFT                    (0U)                                                /*!< RNGA_OR.RANDOUT Position                */
+#define RNGA_OR_RANDOUT(x)                       (((uint32_t)(((uint32_t)(x))<<0U))&0xFFFFFFFFUL)    /*!< RNGA_OR.RANDOUT Field                   */
 /**
- * @} */ /* End group RNG_Register_Masks_GROUP 
+ * @} */ /* End group RNGA_Register_Masks_GROUP 
  */
 
-/* RNG - Peripheral instance base addresses */
-#define RNG_BasePtr                    0x40029000UL //!< Peripheral base address
-#define RNG                            ((RNG_Type *) RNG_BasePtr) //!< Freescale base pointer
-#define RNG_BASE_PTR                   (RNG) //!< Freescale style base pointer
+/* RNGA - Peripheral instance base addresses */
+#define RNGA_BasePtr                   0x40029000UL //!< Peripheral base address
+#define RNGA                           ((RNGA_Type *) RNGA_BasePtr) //!< Freescale base pointer
+#define RNGA_BASE_PTR                  (RNGA) //!< Freescale style base pointer
 /**
- * @} */ /* End group RNG_Peripheral_access_layer_GROUP 
+ * @} */ /* End group RNGA_Peripheral_access_layer_GROUP 
  */
 /**
 * @addtogroup ROM_Peripheral_access_layer_GROUP ROM Peripheral Access Layer

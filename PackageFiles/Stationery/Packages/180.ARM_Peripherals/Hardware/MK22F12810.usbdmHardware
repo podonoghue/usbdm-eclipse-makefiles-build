@@ -37,7 +37,7 @@
          <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForControl" />
       </peripheral>
       <peripheral baseName="CRC"      instance="0"        version="crc0_0x40032000">
-         <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForToDo" />
+         <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForCrc" />
          <clock reg="SCGC6"         mask="SIM_SCGC6_CRC_MASK" />
       </peripheral>
       <peripheral baseName="Console"  instance="">
@@ -107,6 +107,7 @@
       <peripheral baseName="EWM"      instance=""         version="ewm_int_pr">
          <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForEwm" />
          <clock reg="SCGC4"         mask="SIM_SCGC4_EWM_MASK" />
+         <irq num="WDOG_IRQn" />
       </peripheral>
       <peripheral baseName="FTFA"     instance=""         version="ftfa_xacch">
          <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForFlash" />

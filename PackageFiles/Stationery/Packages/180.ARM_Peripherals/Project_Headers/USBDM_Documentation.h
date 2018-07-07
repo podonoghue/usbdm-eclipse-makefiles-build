@@ -563,6 +563,7 @@ This is a template class with static methods.\n
 @example analogue-joystick-example.cpp
 @example cmp-example.cpp
 @example console-example.cpp
+@example crc-example.cpp
 @example dac-example.cpp
 @example digital-example1.cpp
 @example digital-example2.cpp
@@ -572,7 +573,8 @@ This is a template class with static methods.\n
 @example dma-uart-example-mk20.cpp
 @example dma-uart-example-mk22f.cpp
 @example dma-uart-example-mk28f.cpp
-@example flash_programming_example.cpp
+@example ewm-example.cpp
+@example flash-programming-example.cpp
 @example ftm-ic-example.cpp
 @example ftm-oc-example.cpp
 @example ftm-pwm-example.cpp
@@ -597,7 +599,8 @@ This is a template class with static methods.\n
 @example mma8491q-example.cpp
 @example mma8491q.cpp
 @example mma8491q.h
-@example nonvolatile_example.cpp
+@example rnga-example.cpp
+@example nonvolatile-example.cpp
 @example pca9685-example.cpp
 @example pca9685.cpp
 @example pca9685.h
@@ -619,5 +622,6 @@ This is a template class with static methods.\n
 @example usb_implementation_cdc.h
 @example usb_implementation_composite.cpp
 @example usb_implementation_composite.h
+@example wdog-example.cpp
 
  */

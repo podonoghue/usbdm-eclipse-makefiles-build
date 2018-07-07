@@ -1,6 +1,6 @@
 /**
  * @file     cmt.h (180.ARM_Peripherals/Project_Headers/cmt.h)
- * @brief    Voltage Comparator
+ * @brief    Carrier Modulator Transmitter
  *
  * @version  V4.12.1.230
  * @date     13 April 2016
@@ -23,55 +23,69 @@ namespace USBDM {
 
 /**
  * @addtogroup CMT_Group CMT, Carrier Modulator Transmitter
- * @brief Pins used for Carrier Modulator Transmitter
+ * @brief  Abstraction for Carrier Modulator Transmitter
  * @{
  */
 
 /**
- *
+ * Clock Divide Prescaler.
+ * Causes the CMT to be clocked at the IF signal frequency, or the IF frequency divided
+ * by 2 ,4, or 8.
  */
 enum CmtClockDivideBy {
-   CmtClockDivideBy_1 = CMT_MSC_CMTDIV(0),//!< CmtClockDivideBy_1
-   CmtClockDivideBy_2 = CMT_MSC_CMTDIV(1),//!< CmtClockDivideBy_2
-   CmtClockDivideBy_4 = CMT_MSC_CMTDIV(2),//!< CmtClockDivideBy_4
-   CmtClockDivideBy_6 = CMT_MSC_CMTDIV(3),//!< CmtClockDivideBy_6
+   //   Assuming 8MHz intermediate frequency                 Carrier    Carrier     Modulator
+   //                                                        resolution min. period min. period
+   CmtClockDivideBy_1 = CMT_MSC_CMTDIV(0),//!< Divide by 1 : 0.125us    0.25us      1.0us
+   CmtClockDivideBy_2 = CMT_MSC_CMTDIV(1),//!< Divide by 2 : 0.25us     0.50us      2.0us
+   CmtClockDivideBy_4 = CMT_MSC_CMTDIV(2),//!< Divide by 4 : 0.50us     1.00us      4.0us
+   CmtClockDivideBy_6 = CMT_MSC_CMTDIV(3),//!< Divide by 6 : 1.00us     2.00us      8.0us
 };
 
 /**
- *
+ *  Primary Prescaler Divider.
+ *  Divides the CMT clock to generate the Intermediate Frequency clock enable to the secondary prescaler.
+ *  This divider would usually be chosen to produce a clock of 8MHz from the input Bus clock
  */
 enum CmtPrescaler {
-   CmtPrescaler_1     = CMT_PPS_PPSDIV(0), //!< CmtPrescaler_1
-   CmtPrescaler_2     = CMT_PPS_PPSDIV(1), //!< CmtPrescaler_2
-   CmtPrescaler_3     = CMT_PPS_PPSDIV(2), //!< CmtPrescaler_3
-   CmtPrescaler_4     = CMT_PPS_PPSDIV(3), //!< CmtPrescaler_4
-   CmtPrescaler_5     = CMT_PPS_PPSDIV(4), //!< CmtPrescaler_5
-   CmtPrescaler_6     = CMT_PPS_PPSDIV(5), //!< CmtPrescaler_6
-   CmtPrescaler_7     = CMT_PPS_PPSDIV(6), //!< CmtPrescaler_7
-   CmtPrescaler_8     = CMT_PPS_PPSDIV(7), //!< CmtPrescaler_8
-   CmtPrescaler_9     = CMT_PPS_PPSDIV(8), //!< CmtPrescaler_9
-   CmtPrescaler_10    = CMT_PPS_PPSDIV(9), //!< CmtPrescaler_10
-   CmtPrescaler_11    = CMT_PPS_PPSDIV(10),//!< CmtPrescaler_11
-   CmtPrescaler_12    = CMT_PPS_PPSDIV(11),//!< CmtPrescaler_12
-   CmtPrescaler_13    = CMT_PPS_PPSDIV(12),//!< CmtPrescaler_13
-   CmtPrescaler_14    = CMT_PPS_PPSDIV(13),//!< CmtPrescaler_14
-   CmtPrescaler_15    = CMT_PPS_PPSDIV(14),//!< CmtPrescaler_15
-   CmtPrescaler_16    = CMT_PPS_PPSDIV(15),//!< CmtPrescaler_16
+   CmtPrescaler_1     = CMT_PPS_PPSDIV(0), //!< Divide by 1
+   CmtPrescaler_2     = CMT_PPS_PPSDIV(1), //!< Divide by 2
+   CmtPrescaler_3     = CMT_PPS_PPSDIV(2), //!< Divide by 3
+   CmtPrescaler_4     = CMT_PPS_PPSDIV(3), //!< Divide by 4
+   CmtPrescaler_5     = CMT_PPS_PPSDIV(4), //!< Divide by 5
+   CmtPrescaler_6     = CMT_PPS_PPSDIV(5), //!< Divide by 6
+   CmtPrescaler_7     = CMT_PPS_PPSDIV(6), //!< Divide by 7
+   CmtPrescaler_8     = CMT_PPS_PPSDIV(7), //!< Divide by 8
+   CmtPrescaler_9     = CMT_PPS_PPSDIV(8), //!< Divide by 9
+   CmtPrescaler_10    = CMT_PPS_PPSDIV(9), //!< Divide by 10
+   CmtPrescaler_11    = CMT_PPS_PPSDIV(10),//!< Divide by 11
+   CmtPrescaler_12    = CMT_PPS_PPSDIV(11),//!< Divide by 12
+   CmtPrescaler_13    = CMT_PPS_PPSDIV(12),//!< Divide by 13
+   CmtPrescaler_14    = CMT_PPS_PPSDIV(13),//!< Divide by 14
+   CmtPrescaler_15    = CMT_PPS_PPSDIV(14),//!< Divide by 15
+   CmtPrescaler_16    = CMT_PPS_PPSDIV(15),//!< Divide by 16
 };
 
 /**
- *
+ *  Controls main mode of CMT
  */
 enum CmtMode {
-   CmtMode_Time            = CMT_MSC_MCGEN(1)|CMT_MSC_BASE(0)|CMT_MSC_FSK(0)|CMT_MSC_EXSPC(0), //!< fcg from primary high & low
-   CmtMode_Baseband        = CMT_MSC_MCGEN(1)|CMT_MSC_BASE(1)|CMT_MSC_FSK(0)|CMT_MSC_EXSPC(0), //!< fcg always high
-   CmtMode_FreqShiftKeying = CMT_MSC_MCGEN(1)|CMT_MSC_BASE(0)|CMT_MSC_FSK(1)|CMT_MSC_EXSPC(0), //!< fcg alternates between primary/secondary high & low
-   CmtMode_ExtendedSpace   = CMT_MSC_MCGEN(1)|CMT_MSC_BASE(0)|CMT_MSC_FSK(0)|CMT_MSC_EXSPC(1), //!< forces subsequent to be spaces
-   CmtMode_Direct          = CMT_MSC_MCGEN(0)|CMT_MSC_BASE(0)|CMT_MSC_FSK(0)|CMT_MSC_EXSPC(0), //!< OC[IROL] controls IRO
+   CmtMode_Time            = CMT_MSC_MCGEN(1)|CMT_MSC_BASE(0)|CMT_MSC_FSK(0)|CMT_MSC_EXSPC(0), //!< IRO = Primary carrier gated by mark/space
+   CmtMode_Baseband        = CMT_MSC_MCGEN(1)|CMT_MSC_BASE(1)|CMT_MSC_FSK(0)|CMT_MSC_EXSPC(0), //!< IRO = Directly controlled by mark/space
+   CmtMode_FreqShiftKeying = CMT_MSC_MCGEN(1)|CMT_MSC_BASE(0)|CMT_MSC_FSK(1)|CMT_MSC_EXSPC(0), //!< IRO = Primary/secondary carriers switched by mark/space
+   CmtMode_Direct          = CMT_MSC_MCGEN(0)|CMT_MSC_BASE(0)|CMT_MSC_FSK(0)|CMT_MSC_EXSPC(0), //!< IRO = OC[IROL] directly
+};
+
+
+/**
+ * Controls Extended space operation
+ */
+enum CmtExtendedSpace {
+   CmtExtendedSpace_Disable  = CMT_MSC_EXSPC(0), //!< Enables to usual operation
+   CmtExtendedSpace_Enable   = CMT_MSC_EXSPC(1), //!< Forces subsequent cycles to be spaces
 };
 
 /**
- *
+ *  Enables/Disabled CMT output
  */
 enum CmtOutput {
    CmtOutput_Disable = CMT_OC_IROPEN(0), //!< IRO Pin disabled
@@ -79,7 +93,7 @@ enum CmtOutput {
 };
 
 /**
- *
+ * Controls polarity of CMT output
  */
 enum CmtPolarity {
    CmtPolarity_ActiveLow  = CMT_OC_CMTPOL(0), //!< Active low
@@ -87,12 +101,12 @@ enum CmtPolarity {
 };
 
 /**
- *
+ * Controls CMT Interrupts and DMA
  */
-enum CmtInterrupt {
-   CmtInterrupt_Disable = CMT_MSC_EOCIE(0),  //!< Interrupts disabled
-   CmtInterrupt_Enable  = CMT_MSC_EOCIE(1),  //!< Interrupts enabled
-
+enum CmtInterruptDma {
+   CmtInterruptDma_None = CMT_DMA_DMA(0)|CMT_MSC_EOCIE(0), //!< Interrupts and DMA disabled
+   CmtInterruptDma_Irq  = CMT_DMA_DMA(0)|CMT_MSC_EOCIE(1), //!< Interrupts enabled
+   CmtInterruptDma_Dma  = CMT_DMA_DMA(1)|CMT_MSC_EOCIE(1), //!< DMA enabled
 };
 
 /**
@@ -103,10 +117,24 @@ enum CmtInterrupt {
 typedef void (*CMTCallbackFunction)();
 
 /**
- * Template class representing a Carrier Modulator Transmitter
+ * Template class representing a Carrier Modulator Transmitter.
+ *
+ * Typical modes of operation:
+ * Time mode
+ *    Waveform alternates between modulation frequency (mark) and idle (space).
+ *    Modulation waveform is controlled by setPrimaryTiming().
+ *    Mark/Space time is controlled by setMarkSpaceTiming().
+ * Baseband mode
+ *    Waveform alternates between high (mark) and idle (space) without use of modulation.
+ *    Mark/Space time is controlled by setMarkSpaceTiming().
+ * FSK mode
+ *    Waveform changes between two modulation frequencies(mark) separated by idle time (space) i.e.
+ *    (Primary modulation - idle - Secondary modulation - idle) repeated.
+ *    Modulation waveforms are controlled by setPrimaryTiming() and setSecondaryTiming().
+ *    Mark/Space time is controlled by setMarkSpaceTiming().
+ *    Space time may be set to zero to obtain simple FSK with no idle time.
  *
  * @tparam info      Information class for CMT
- *
  */
 template<class Info>
 class CmtBase_T {
@@ -138,10 +166,25 @@ public:
    static __attribute__((always_inline)) volatile CMT_Type &cmt() { return Info::cmt(); }
 
    /**
+    * Get CMT status.
+    * The status is set:\n
+    * - When the modulator is not currently active and CMT is enabled to begin the initial CMT transmission.
+    * - At the end of each modulation cycle while CMT is enabled.
+    *
+    * @return Status value
+    *
+    * @note The status is cleared by either:\n
+    * - Calling getStatus() followed by calling getMarkTime(), getSpaceTime() or setMarkSpaceTiming().
+    * - A DMA cycle.
+    */
+   static uint32_t getStatus() {
+      return cmt().MSC & CMT_MSC_EOCF_MASK;
+   }
+
+   /**
     * IRQ handler
     */
    static void irqHandler() {
-
       // Call handler
       callback();
    }
@@ -150,6 +193,8 @@ public:
     * Set callback function
     *
     * @param[in]  theCallback Callback function to execute on interrupt
+    *
+    * @note It is expected that the callback will clear the status flag that triggered the interrupt. See getStatus().
     */
    static void setCallback(CMTCallbackFunction theCallback) {
       if (theCallback == nullptr) {
@@ -181,15 +226,17 @@ public:
    }
 
    /**
+    * Select Primary Prescaler Divider.
+    * This divider would usually be chosen to produce a clock of 8MHz from the input Bus clock
     *
-    * @param cmtPrescaler
+    * @param[in] cmtPrescaler
     */
    static void setPrescaler(CmtPrescaler cmtPrescaler) {
       cmt().PPS = cmtPrescaler;
    }
 
    /**
-    * Enable with default settings\n
+    * Enable with default settings.
     * Includes configuring all pins
     */
    static void defaultConfigure() {
@@ -228,61 +275,151 @@ public:
    }
 
    /**
-    * Base configuration
+    * Base configuration of CMT.
+    * The CMT clock is configured for a nominal 8MHz frequency
     *
-    * @param cmtMode
-    * @param cmtClockDivideBy
-    * @param cmtInterrupt
+    * @param[in] cmtMode             Basic mode
+    * @param[in] cmtClockDivideBy    Divider for carrier (from nominal 8MHz)
     */
-   static void configure(CmtMode cmtMode, CmtClockDivideBy cmtClockDivideBy=CmtClockDivideBy_1, CmtInterrupt cmtInterrupt=CmtInterrupt_Disable) {
+   static void configure(CmtMode cmtMode, CmtClockDivideBy cmtClockDivideBy=CmtClockDivideBy_1) {
       enable();
       setPrescaler((CmtPrescaler)((USBDM::SystemBusClock/8000000)-1));
-      cmt().MSC = cmtMode|cmtClockDivideBy|cmtInterrupt;
+      cmt().MSC = cmtMode|cmtClockDivideBy;
    }
 
    /**
+    * Output control
     *
-    * @param cmtOutput
-    * @param cmtPolarity
+    * @param[in] cmtOutput     Enable/disable output
+    * @param[in] cmtPolarity   Polarity of output
     */
    static void outputControl(CmtOutput cmtOutput, CmtPolarity cmtPolarity=CmtPolarity_ActiveHigh) {
       cmt().OC = cmtOutput|cmtPolarity;
    }
 
    /**
+    * Base mode of CMT
     *
-    * @param cmtMode
+    * @param[in] cmtMode             Basic mode
     */
    static void setMode(CmtMode cmtMode) {
-      cmt().MSC = (cmt().MSC&~(CMT_MSC_MCGEN(1)|CMT_MSC_BASE(1)|CMT_MSC_FSK(1)|CMT_MSC_EXSPC(1)))|cmtMode;
+      cmt().MSC = (cmt().MSC&~(CMT_MSC_MCGEN(1)|CMT_MSC_BASE(1)|CMT_MSC_FSK(1)))|cmtMode;
    }
 
    /**
+    * Controls Extended space operation
     *
-    * @param high
-    * @param low
+    * @param[in] cmtExtendedSpace Allows Forcing of subsequent cycles to be spaces
+    */
+   static void setExtendedSpace(CmtExtendedSpace cmtExtendedSpace=CmtExtendedSpace_Enable) {
+      cmt().MSC = (cmt().MSC&~CMT_MSC_EXSPC(1))|cmtExtendedSpace;
+   }
+
+   /**
+    * Get high time for primary carrier frequency
+    *
+    * @return High time in clock cycles (usually 125ns)
+    */
+   static uint8_t getPrimaryHigh() {
+      return cmt().CGH1;
+   }
+
+   /**
+    * Get low time for primary carrier frequency
+    *
+    * @return Low time in clock cycles (usually 125ns)
+    */
+   static uint8_t getPrimaryLow() {
+      return cmt().CGL1;
+   }
+
+   /**
+    * Set high/low times for primary carrier frequency
+    *
+    * @param[in] high    High time in clock cycles (usually 125ns). Must be >0.
+    * @param[in] low     Low time in clock cycles (usually 125ns). Must be >0.
     */
    static void setPrimaryTiming(uint8_t high, uint8_t low) {
+      usbdm_assert((high>0)&&(low>0), "High/low values must be non-zero");
       cmt().CGH1 = high;
       cmt().CGL1 = low;
    }
 
    /**
+    * Get high time for secondary carrier frequency
     *
-    * @param high
-    * @param low
+    * @return High time in clock cycles (usually 125ns)
+    */
+   static uint8_t getSecondaryHigh() {
+      return cmt().CGH2;
+   }
+
+   /**
+    * Get low time for secondary carrier frequency
+    *
+    * @return Low time in clock cycles (usually 125ns)
+    */
+   static uint8_t getSecondaryLow() {
+      return cmt().CGL2;
+   }
+
+   /**
+    * Set high/low times for secondary carrier frequency (for FSK)
+    *
+    * @param[in] high    High time in carrier cycles (usually 125ns). Must be >0.
+    * @param[in] low     Low time in carrier cycles (usually 125ns). Must be >0.
     */
    static void setSecondaryTiming(uint8_t high, uint8_t low) {
+      usbdm_assert((high>0)&&(low>0), "High/low values must be non-zero");
       cmt().CGH2 = high;
       cmt().CGL2 = low;
    }
 
    /**
+    * Get mark time for modulation
     *
-    * @param mark
-    * @param space
+    * @return Mark time in modulation cycles
     */
-   static void setMarkSpaceTiming(uint32_t mark, uint32_t space) {
+   static uint16_t getMarkTime() {
+      return (cmt().CMD1<<8)|cmt().CMD2;
+   }
+
+   /**
+    * Get space time for modulation
+    *
+    * @return Space time in modulation cycles
+    */
+   static uint16_t getSpaceTime() {
+      return (cmt().CMD3<<8)|cmt().CMD4;
+   }
+
+   /**
+    * Set Mark values for modulation
+    *
+    * @param[in] mark    Mark time in carrier frequency cycles
+    */
+   static void setMarkTiming(uint16_t mark) {
+      cmt().CMD1 = (uint8_t)(mark>>8);
+      cmt().CMD2 = (uint8_t)(mark);
+    }
+
+   /**
+    * Set Space values for modulation
+    *
+    * @param[in] space   Space time in carrier frequency cycles
+    */
+   static void setSpaceTiming(uint16_t space) {
+      cmt().CMD3 = (uint8_t)(space>>8);
+      cmt().CMD4 = (uint8_t)(space);
+    }
+
+   /**
+    * Set Mark/Space values for modulation
+    *
+    * @param[in] mark    Mark time in carrier frequency cycles
+    * @param[in] space   Space time in carrier frequency cycles
+    */
+   static void setMarkSpaceTiming(uint16_t mark, uint16_t space) {
       cmt().CMD1 = (uint8_t)(mark>>8);
       cmt().CMD2 = (uint8_t)(mark);
       cmt().CMD3 = (uint8_t)(space>>8);
@@ -290,15 +427,50 @@ public:
     }
 
    /**
-    *
-    * @param enable
+    * Disable CMT
     */
-   static void enableDma(bool enable) {
+   static void disable() {
+      cmt().MSC = 0;
+      enableNvicInterrupts(false);
+      clockReg() &= ~Info::clockMask;
+   }
+
+   /**
+    * Enable/disable interrupts in NVIC
+    *
+    * @param[in]  enable        True => enable, False => disable
+    * @param[in]  nvicPriority  Interrupt priority
+    */
+   static void enableNvicInterrupts(bool enable=true, uint32_t nvicPriority=NvicPriority_Normal) {
+
       if (enable) {
-         cmt().DMA = CMT_DMA_DMA(1);
+         enableNvicInterrupt(Info::irqNums[0], nvicPriority);
       }
       else {
-         cmt().DMA = CMT_DMA_DMA(0);
+         // Disable interrupts
+         NVIC_DisableIRQ(Info::irqNums[0]);
+      }
+   }
+
+   /**
+    * Enable Interrupt or DMA operation
+    *
+    * @param[in] cmtInterruptDma Selects Interrupts and DMA operation
+    */
+   static void enableInterruptDma(CmtInterruptDma cmtInterruptDma) {
+      switch (cmtInterruptDma) {
+         case CmtInterruptDma_None:
+            cmt().MSC &= ~CMT_MSC_EOCIE_MASK;
+            cmt().DMA &= ~CMT_DMA_DMA_MASK;
+            break;
+         case CmtInterruptDma_Irq:
+            cmt().DMA &= ~CMT_DMA_DMA_MASK;
+            cmt().MSC |= CMT_MSC_EOCIE_MASK;
+            break;
+         case CmtInterruptDma_Dma:
+            cmt().DMA |= CMT_DMA_DMA_MASK;
+            cmt().MSC |= CMT_MSC_EOCIE_MASK;
+            break;
       }
    }
 };

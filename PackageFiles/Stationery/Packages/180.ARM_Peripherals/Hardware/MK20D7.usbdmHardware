@@ -53,7 +53,7 @@
          <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForControl" />
       </peripheral>
       <peripheral baseName="CRC"      instance="0"        version="crc0_0x40032000">
-         <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForToDo" />
+         <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForCrc" />
          <clock reg="SCGC6"         mask="SIM_SCGC6_CRC_MASK" />
       </peripheral>
       <peripheral baseName="Console"  instance="">
@@ -146,6 +146,7 @@
       <peripheral baseName="EWM"      instance=""         version="ewm_int">
          <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForEwm" />
          <clock reg="SCGC4"         mask="SIM_SCGC4_EWM_MASK" />
+         <irq num="WDOG_IRQn" />
       </peripheral>
       <peripheral baseName="FB"       instance=""         version="fb">
          <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForFlexBus" />
@@ -319,6 +320,10 @@
       <peripheral baseName="VREF"     instance=""         version="vref_c">
          <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForVref" />
          <clock reg="SCGC4"         mask="SIM_SCGC4_VREF_MASK" />
+      </peripheral>
+      <peripheral baseName="WDOG"     instance=""         version="wdog_mk">
+         <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForWdog" />
+         <irq num="WDOG_IRQn" />
       </peripheral>
    </peripherals>
    <pins>

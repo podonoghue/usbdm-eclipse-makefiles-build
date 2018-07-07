@@ -61,6 +61,10 @@
       <peripheral baseName="CONTROL"  instance="">
          <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForControl" />
       </peripheral>
+      <peripheral baseName="CRC"      instance="0"        version="crc0_0x40032000">
+         <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForCrc" />
+         <clock reg="SCGC6"         mask="SIM_SCGC6_CRC_MASK" />
+      </peripheral>
       <peripheral baseName="Console"  instance="">
          <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForConsole" />
       </peripheral>
@@ -173,6 +177,7 @@
       <peripheral baseName="EWM"      instance=""         version="ewm_int">
          <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForEwm" />
          <clock reg="SCGC4"         mask="SIM_SCGC4_EWM_MASK" />
+         <irq num="WDOG_IRQn" />
       </peripheral>
       <peripheral baseName="FB"       instance=""         version="fb">
          <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForFlexBus" />
@@ -298,10 +303,10 @@
       <peripheral baseName="POWER"    instance="">
          <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForPower" />
       </peripheral>
-      <peripheral baseName="RNG"      instance=""         version="rng_1">
-         <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForToDo" />
+      <peripheral baseName="RNGA"     instance=""         version="rnga_0x40029000">
+         <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForRnga" />
          <clock reg="SCGC6"         mask="SIM_SCGC6_RNGA_MASK" />
-         <irq num="RNG_IRQn" />
+         <irq num="RNGA_IRQn" />
       </peripheral>
       <peripheral baseName="RTC"      instance=""         version="rtc_mk22f12810">
          <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForRtc" />

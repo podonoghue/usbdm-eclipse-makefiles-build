@@ -1,6 +1,6 @@
 /*
  ============================================================================
- * @file    nonvolatile_example.cpp (180.ARM_Peripherals)
+ * @file    nonvolatile-example.cpp (180.ARM_Peripherals)
  * @brief   Basic C++ demo of non-volatile (flexRAM) template class
  *
  * This example shows how to create a non-volatile variable located in the

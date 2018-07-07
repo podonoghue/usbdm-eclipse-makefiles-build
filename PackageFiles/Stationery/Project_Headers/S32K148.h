@@ -5,7 +5,7 @@
  *           Equivalent: 
  *
  * @version  V1.6
- * @date     2018/04
+ * @date     2018/07
  *
  *******************************************************************************************************/
 
@@ -8208,9 +8208,9 @@ typedef struct PCC_Type {
 #define PCC_PCCn_FRAC_MASK                       (0x8U)                                              /*!< PCC_PCCn.FRAC Mask                      */
 #define PCC_PCCn_FRAC_SHIFT                      (3U)                                                /*!< PCC_PCCn.FRAC Position                  */
 #define PCC_PCCn_FRAC(x)                         (((uint32_t)(((uint32_t)(x))<<3U))&0x8UL)           /*!< PCC_PCCn.FRAC Field                     */
-#define PCC_PCCn_PCS_MASK                        (0x1F000000U)                                       /*!< PCC_PCCn.PCS Mask                       */
+#define PCC_PCCn_PCS_MASK                        (0x7000000U)                                        /*!< PCC_PCCn.PCS Mask                       */
 #define PCC_PCCn_PCS_SHIFT                       (24U)                                               /*!< PCC_PCCn.PCS Position                   */
-#define PCC_PCCn_PCS(x)                          (((uint32_t)(((uint32_t)(x))<<24U))&0x1F000000UL)   /*!< PCC_PCCn.PCS Field                      */
+#define PCC_PCCn_PCS(x)                          (((uint32_t)(((uint32_t)(x))<<24U))&0x7000000UL)    /*!< PCC_PCCn.PCS Field                      */
 #define PCC_PCCn_CGC_MASK                        (0x40000000U)                                       /*!< PCC_PCCn.CGC Mask                       */
 #define PCC_PCCn_CGC_SHIFT                       (30U)                                               /*!< PCC_PCCn.CGC Position                   */
 #define PCC_PCCn_CGC(x)                          (((uint32_t)(((uint32_t)(x))<<30U))&0x40000000UL)   /*!< PCC_PCCn.CGC Field                      */
@@ -8246,9 +8246,9 @@ typedef struct PCC_Type {
 #define PCC_PCC_FlexCAN1_PR_SHIFT                (31U)                                               /*!< PCC_PCC_FlexCAN1.PR Position            */
 #define PCC_PCC_FlexCAN1_PR(x)                   (((uint32_t)(((uint32_t)(x))<<31U))&0x80000000UL)   /*!< PCC_PCC_FlexCAN1.PR Field               */
 /* ------- PCC_FTM3 Bit Fields                      ------ */
-#define PCC_PCC_FTM3_PCS_MASK                    (0x1F000000U)                                       /*!< PCC_PCC_FTM3.PCS Mask                   */
+#define PCC_PCC_FTM3_PCS_MASK                    (0x7000000U)                                        /*!< PCC_PCC_FTM3.PCS Mask                   */
 #define PCC_PCC_FTM3_PCS_SHIFT                   (24U)                                               /*!< PCC_PCC_FTM3.PCS Position               */
-#define PCC_PCC_FTM3_PCS(x)                      (((uint32_t)(((uint32_t)(x))<<24U))&0x1F000000UL)   /*!< PCC_PCC_FTM3.PCS Field                  */
+#define PCC_PCC_FTM3_PCS(x)                      (((uint32_t)(((uint32_t)(x))<<24U))&0x7000000UL)    /*!< PCC_PCC_FTM3.PCS Field                  */
 #define PCC_PCC_FTM3_CGC_MASK                    (0x40000000U)                                       /*!< PCC_PCC_FTM3.CGC Mask                   */
 #define PCC_PCC_FTM3_CGC_SHIFT                   (30U)                                               /*!< PCC_PCC_FTM3.CGC Position               */
 #define PCC_PCC_FTM3_CGC(x)                      (((uint32_t)(((uint32_t)(x))<<30U))&0x40000000UL)   /*!< PCC_PCC_FTM3.CGC Field                  */
@@ -8256,9 +8256,9 @@ typedef struct PCC_Type {
 #define PCC_PCC_FTM3_PR_SHIFT                    (31U)                                               /*!< PCC_PCC_FTM3.PR Position                */
 #define PCC_PCC_FTM3_PR(x)                       (((uint32_t)(((uint32_t)(x))<<31U))&0x80000000UL)   /*!< PCC_PCC_FTM3.PR Field                   */
 /* ------- PCC_ADC1 Bit Fields                      ------ */
-#define PCC_PCC_ADC1_PCS_MASK                    (0x1F000000U)                                       /*!< PCC_PCC_ADC1.PCS Mask                   */
+#define PCC_PCC_ADC1_PCS_MASK                    (0x7000000U)                                        /*!< PCC_PCC_ADC1.PCS Mask                   */
 #define PCC_PCC_ADC1_PCS_SHIFT                   (24U)                                               /*!< PCC_PCC_ADC1.PCS Position               */
-#define PCC_PCC_ADC1_PCS(x)                      (((uint32_t)(((uint32_t)(x))<<24U))&0x1F000000UL)   /*!< PCC_PCC_ADC1.PCS Field                  */
+#define PCC_PCC_ADC1_PCS(x)                      (((uint32_t)(((uint32_t)(x))<<24U))&0x7000000UL)    /*!< PCC_PCC_ADC1.PCS Field                  */
 #define PCC_PCC_ADC1_CGC_MASK                    (0x40000000U)                                       /*!< PCC_PCC_ADC1.CGC Mask                   */
 #define PCC_PCC_ADC1_CGC_SHIFT                   (30U)                                               /*!< PCC_PCC_ADC1.CGC Position               */
 #define PCC_PCC_ADC1_CGC(x)                      (((uint32_t)(((uint32_t)(x))<<30U))&0x40000000UL)   /*!< PCC_PCC_ADC1.CGC Field                  */
@@ -8273,9 +8273,9 @@ typedef struct PCC_Type {
 #define PCC_PCC_FlexCAN2_PR_SHIFT                (31U)                                               /*!< PCC_PCC_FlexCAN2.PR Position            */
 #define PCC_PCC_FlexCAN2_PR(x)                   (((uint32_t)(((uint32_t)(x))<<31U))&0x80000000UL)   /*!< PCC_PCC_FlexCAN2.PR Field               */
 /* ------- PCC_LPSPI0 Bit Fields                    ------ */
-#define PCC_PCC_LPSPI0_PCS_MASK                  (0x1F000000U)                                       /*!< PCC_PCC_LPSPI0.PCS Mask                 */
+#define PCC_PCC_LPSPI0_PCS_MASK                  (0x7000000U)                                        /*!< PCC_PCC_LPSPI0.PCS Mask                 */
 #define PCC_PCC_LPSPI0_PCS_SHIFT                 (24U)                                               /*!< PCC_PCC_LPSPI0.PCS Position             */
-#define PCC_PCC_LPSPI0_PCS(x)                    (((uint32_t)(((uint32_t)(x))<<24U))&0x1F000000UL)   /*!< PCC_PCC_LPSPI0.PCS Field                */
+#define PCC_PCC_LPSPI0_PCS(x)                    (((uint32_t)(((uint32_t)(x))<<24U))&0x7000000UL)    /*!< PCC_PCC_LPSPI0.PCS Field                */
 #define PCC_PCC_LPSPI0_CGC_MASK                  (0x40000000U)                                       /*!< PCC_PCC_LPSPI0.CGC Mask                 */
 #define PCC_PCC_LPSPI0_CGC_SHIFT                 (30U)                                               /*!< PCC_PCC_LPSPI0.CGC Position             */
 #define PCC_PCC_LPSPI0_CGC(x)                    (((uint32_t)(((uint32_t)(x))<<30U))&0x40000000UL)   /*!< PCC_PCC_LPSPI0.CGC Field                */
@@ -8283,9 +8283,9 @@ typedef struct PCC_Type {
 #define PCC_PCC_LPSPI0_PR_SHIFT                  (31U)                                               /*!< PCC_PCC_LPSPI0.PR Position              */
 #define PCC_PCC_LPSPI0_PR(x)                     (((uint32_t)(((uint32_t)(x))<<31U))&0x80000000UL)   /*!< PCC_PCC_LPSPI0.PR Field                 */
 /* ------- PCC_LPSPI1 Bit Fields                    ------ */
-#define PCC_PCC_LPSPI1_PCS_MASK                  (0x1F000000U)                                       /*!< PCC_PCC_LPSPI1.PCS Mask                 */
+#define PCC_PCC_LPSPI1_PCS_MASK                  (0x7000000U)                                        /*!< PCC_PCC_LPSPI1.PCS Mask                 */
 #define PCC_PCC_LPSPI1_PCS_SHIFT                 (24U)                                               /*!< PCC_PCC_LPSPI1.PCS Position             */
-#define PCC_PCC_LPSPI1_PCS(x)                    (((uint32_t)(((uint32_t)(x))<<24U))&0x1F000000UL)   /*!< PCC_PCC_LPSPI1.PCS Field                */
+#define PCC_PCC_LPSPI1_PCS(x)                    (((uint32_t)(((uint32_t)(x))<<24U))&0x7000000UL)    /*!< PCC_PCC_LPSPI1.PCS Field                */
 #define PCC_PCC_LPSPI1_CGC_MASK                  (0x40000000U)                                       /*!< PCC_PCC_LPSPI1.CGC Mask                 */
 #define PCC_PCC_LPSPI1_CGC_SHIFT                 (30U)                                               /*!< PCC_PCC_LPSPI1.CGC Position             */
 #define PCC_PCC_LPSPI1_CGC(x)                    (((uint32_t)(((uint32_t)(x))<<30U))&0x40000000UL)   /*!< PCC_PCC_LPSPI1.CGC Field                */
@@ -8293,9 +8293,9 @@ typedef struct PCC_Type {
 #define PCC_PCC_LPSPI1_PR_SHIFT                  (31U)                                               /*!< PCC_PCC_LPSPI1.PR Position              */
 #define PCC_PCC_LPSPI1_PR(x)                     (((uint32_t)(((uint32_t)(x))<<31U))&0x80000000UL)   /*!< PCC_PCC_LPSPI1.PR Field                 */
 /* ------- PCC_LPSPI2 Bit Fields                    ------ */
-#define PCC_PCC_LPSPI2_PCS_MASK                  (0x1F000000U)                                       /*!< PCC_PCC_LPSPI2.PCS Mask                 */
+#define PCC_PCC_LPSPI2_PCS_MASK                  (0x7000000U)                                        /*!< PCC_PCC_LPSPI2.PCS Mask                 */
 #define PCC_PCC_LPSPI2_PCS_SHIFT                 (24U)                                               /*!< PCC_PCC_LPSPI2.PCS Position             */
-#define PCC_PCC_LPSPI2_PCS(x)                    (((uint32_t)(((uint32_t)(x))<<24U))&0x1F000000UL)   /*!< PCC_PCC_LPSPI2.PCS Field                */
+#define PCC_PCC_LPSPI2_PCS(x)                    (((uint32_t)(((uint32_t)(x))<<24U))&0x7000000UL)    /*!< PCC_PCC_LPSPI2.PCS Field                */
 #define PCC_PCC_LPSPI2_CGC_MASK                  (0x40000000U)                                       /*!< PCC_PCC_LPSPI2.CGC Mask                 */
 #define PCC_PCC_LPSPI2_CGC_SHIFT                 (30U)                                               /*!< PCC_PCC_LPSPI2.CGC Position             */
 #define PCC_PCC_LPSPI2_CGC(x)                    (((uint32_t)(((uint32_t)(x))<<30U))&0x40000000UL)   /*!< PCC_PCC_LPSPI2.CGC Field                */
@@ -8324,9 +8324,9 @@ typedef struct PCC_Type {
 #define PCC_PCC_PDB0_PR_SHIFT                    (31U)                                               /*!< PCC_PCC_PDB0.PR Position                */
 #define PCC_PCC_PDB0_PR(x)                       (((uint32_t)(((uint32_t)(x))<<31U))&0x80000000UL)   /*!< PCC_PCC_PDB0.PR Field                   */
 /* ------- PCC_LPIT Bit Fields                      ------ */
-#define PCC_PCC_LPIT_PCS_MASK                    (0x1F000000U)                                       /*!< PCC_PCC_LPIT.PCS Mask                   */
+#define PCC_PCC_LPIT_PCS_MASK                    (0x7000000U)                                        /*!< PCC_PCC_LPIT.PCS Mask                   */
 #define PCC_PCC_LPIT_PCS_SHIFT                   (24U)                                               /*!< PCC_PCC_LPIT.PCS Position               */
-#define PCC_PCC_LPIT_PCS(x)                      (((uint32_t)(((uint32_t)(x))<<24U))&0x1F000000UL)   /*!< PCC_PCC_LPIT.PCS Field                  */
+#define PCC_PCC_LPIT_PCS(x)                      (((uint32_t)(((uint32_t)(x))<<24U))&0x7000000UL)    /*!< PCC_PCC_LPIT.PCS Field                  */
 #define PCC_PCC_LPIT_CGC_MASK                    (0x40000000U)                                       /*!< PCC_PCC_LPIT.CGC Mask                   */
 #define PCC_PCC_LPIT_CGC_SHIFT                   (30U)                                               /*!< PCC_PCC_LPIT.CGC Position               */
 #define PCC_PCC_LPIT_CGC(x)                      (((uint32_t)(((uint32_t)(x))<<30U))&0x40000000UL)   /*!< PCC_PCC_LPIT.CGC Field                  */
@@ -8334,9 +8334,9 @@ typedef struct PCC_Type {
 #define PCC_PCC_LPIT_PR_SHIFT                    (31U)                                               /*!< PCC_PCC_LPIT.PR Position                */
 #define PCC_PCC_LPIT_PR(x)                       (((uint32_t)(((uint32_t)(x))<<31U))&0x80000000UL)   /*!< PCC_PCC_LPIT.PR Field                   */
 /* ------- PCC_FTM0 Bit Fields                      ------ */
-#define PCC_PCC_FTM0_PCS_MASK                    (0x1F000000U)                                       /*!< PCC_PCC_FTM0.PCS Mask                   */
+#define PCC_PCC_FTM0_PCS_MASK                    (0x7000000U)                                        /*!< PCC_PCC_FTM0.PCS Mask                   */
 #define PCC_PCC_FTM0_PCS_SHIFT                   (24U)                                               /*!< PCC_PCC_FTM0.PCS Position               */
-#define PCC_PCC_FTM0_PCS(x)                      (((uint32_t)(((uint32_t)(x))<<24U))&0x1F000000UL)   /*!< PCC_PCC_FTM0.PCS Field                  */
+#define PCC_PCC_FTM0_PCS(x)                      (((uint32_t)(((uint32_t)(x))<<24U))&0x7000000UL)    /*!< PCC_PCC_FTM0.PCS Field                  */
 #define PCC_PCC_FTM0_CGC_MASK                    (0x40000000U)                                       /*!< PCC_PCC_FTM0.CGC Mask                   */
 #define PCC_PCC_FTM0_CGC_SHIFT                   (30U)                                               /*!< PCC_PCC_FTM0.CGC Position               */
 #define PCC_PCC_FTM0_CGC(x)                      (((uint32_t)(((uint32_t)(x))<<30U))&0x40000000UL)   /*!< PCC_PCC_FTM0.CGC Field                  */
@@ -8344,9 +8344,9 @@ typedef struct PCC_Type {
 #define PCC_PCC_FTM0_PR_SHIFT                    (31U)                                               /*!< PCC_PCC_FTM0.PR Position                */
 #define PCC_PCC_FTM0_PR(x)                       (((uint32_t)(((uint32_t)(x))<<31U))&0x80000000UL)   /*!< PCC_PCC_FTM0.PR Field                   */
 /* ------- PCC_FTM1 Bit Fields                      ------ */
-#define PCC_PCC_FTM1_PCS_MASK                    (0x1F000000U)                                       /*!< PCC_PCC_FTM1.PCS Mask                   */
+#define PCC_PCC_FTM1_PCS_MASK                    (0x7000000U)                                        /*!< PCC_PCC_FTM1.PCS Mask                   */
 #define PCC_PCC_FTM1_PCS_SHIFT                   (24U)                                               /*!< PCC_PCC_FTM1.PCS Position               */
-#define PCC_PCC_FTM1_PCS(x)                      (((uint32_t)(((uint32_t)(x))<<24U))&0x1F000000UL)   /*!< PCC_PCC_FTM1.PCS Field                  */
+#define PCC_PCC_FTM1_PCS(x)                      (((uint32_t)(((uint32_t)(x))<<24U))&0x7000000UL)    /*!< PCC_PCC_FTM1.PCS Field                  */
 #define PCC_PCC_FTM1_CGC_MASK                    (0x40000000U)                                       /*!< PCC_PCC_FTM1.CGC Mask                   */
 #define PCC_PCC_FTM1_CGC_SHIFT                   (30U)                                               /*!< PCC_PCC_FTM1.CGC Position               */
 #define PCC_PCC_FTM1_CGC(x)                      (((uint32_t)(((uint32_t)(x))<<30U))&0x40000000UL)   /*!< PCC_PCC_FTM1.CGC Field                  */
@@ -8354,9 +8354,9 @@ typedef struct PCC_Type {
 #define PCC_PCC_FTM1_PR_SHIFT                    (31U)                                               /*!< PCC_PCC_FTM1.PR Position                */
 #define PCC_PCC_FTM1_PR(x)                       (((uint32_t)(((uint32_t)(x))<<31U))&0x80000000UL)   /*!< PCC_PCC_FTM1.PR Field                   */
 /* ------- PCC_FTM2 Bit Fields                      ------ */
-#define PCC_PCC_FTM2_PCS_MASK                    (0x1F000000U)                                       /*!< PCC_PCC_FTM2.PCS Mask                   */
+#define PCC_PCC_FTM2_PCS_MASK                    (0x7000000U)                                        /*!< PCC_PCC_FTM2.PCS Mask                   */
 #define PCC_PCC_FTM2_PCS_SHIFT                   (24U)                                               /*!< PCC_PCC_FTM2.PCS Position               */
-#define PCC_PCC_FTM2_PCS(x)                      (((uint32_t)(((uint32_t)(x))<<24U))&0x1F000000UL)   /*!< PCC_PCC_FTM2.PCS Field                  */
+#define PCC_PCC_FTM2_PCS(x)                      (((uint32_t)(((uint32_t)(x))<<24U))&0x7000000UL)    /*!< PCC_PCC_FTM2.PCS Field                  */
 #define PCC_PCC_FTM2_CGC_MASK                    (0x40000000U)                                       /*!< PCC_PCC_FTM2.CGC Mask                   */
 #define PCC_PCC_FTM2_CGC_SHIFT                   (30U)                                               /*!< PCC_PCC_FTM2.CGC Position               */
 #define PCC_PCC_FTM2_CGC(x)                      (((uint32_t)(((uint32_t)(x))<<30U))&0x40000000UL)   /*!< PCC_PCC_FTM2.CGC Field                  */
@@ -8364,9 +8364,9 @@ typedef struct PCC_Type {
 #define PCC_PCC_FTM2_PR_SHIFT                    (31U)                                               /*!< PCC_PCC_FTM2.PR Position                */
 #define PCC_PCC_FTM2_PR(x)                       (((uint32_t)(((uint32_t)(x))<<31U))&0x80000000UL)   /*!< PCC_PCC_FTM2.PR Field                   */
 /* ------- PCC_ADC0 Bit Fields                      ------ */
-#define PCC_PCC_ADC0_PCS_MASK                    (0x1F000000U)                                       /*!< PCC_PCC_ADC0.PCS Mask                   */
+#define PCC_PCC_ADC0_PCS_MASK                    (0x7000000U)                                        /*!< PCC_PCC_ADC0.PCS Mask                   */
 #define PCC_PCC_ADC0_PCS_SHIFT                   (24U)                                               /*!< PCC_PCC_ADC0.PCS Position               */
-#define PCC_PCC_ADC0_PCS(x)                      (((uint32_t)(((uint32_t)(x))<<24U))&0x1F000000UL)   /*!< PCC_PCC_ADC0.PCS Field                  */
+#define PCC_PCC_ADC0_PCS(x)                      (((uint32_t)(((uint32_t)(x))<<24U))&0x7000000UL)    /*!< PCC_PCC_ADC0.PCS Field                  */
 #define PCC_PCC_ADC0_CGC_MASK                    (0x40000000U)                                       /*!< PCC_PCC_ADC0.CGC Mask                   */
 #define PCC_PCC_ADC0_CGC_SHIFT                   (30U)                                               /*!< PCC_PCC_ADC0.CGC Position               */
 #define PCC_PCC_ADC0_CGC(x)                      (((uint32_t)(((uint32_t)(x))<<30U))&0x40000000UL)   /*!< PCC_PCC_ADC0.CGC Field                  */
@@ -8387,9 +8387,9 @@ typedef struct PCC_Type {
 #define PCC_PCC_LPTMR0_FRAC_MASK                 (0x8U)                                              /*!< PCC_PCC_LPTMR0.FRAC Mask                */
 #define PCC_PCC_LPTMR0_FRAC_SHIFT                (3U)                                                /*!< PCC_PCC_LPTMR0.FRAC Position            */
 #define PCC_PCC_LPTMR0_FRAC(x)                   (((uint32_t)(((uint32_t)(x))<<3U))&0x8UL)           /*!< PCC_PCC_LPTMR0.FRAC Field               */
-#define PCC_PCC_LPTMR0_PCS_MASK                  (0x1F000000U)                                       /*!< PCC_PCC_LPTMR0.PCS Mask                 */
+#define PCC_PCC_LPTMR0_PCS_MASK                  (0x7000000U)                                        /*!< PCC_PCC_LPTMR0.PCS Mask                 */
 #define PCC_PCC_LPTMR0_PCS_SHIFT                 (24U)                                               /*!< PCC_PCC_LPTMR0.PCS Position             */
-#define PCC_PCC_LPTMR0_PCS(x)                    (((uint32_t)(((uint32_t)(x))<<24U))&0x1F000000UL)   /*!< PCC_PCC_LPTMR0.PCS Field                */
+#define PCC_PCC_LPTMR0_PCS(x)                    (((uint32_t)(((uint32_t)(x))<<24U))&0x7000000UL)    /*!< PCC_PCC_LPTMR0.PCS Field                */
 #define PCC_PCC_LPTMR0_CGC_MASK                  (0x40000000U)                                       /*!< PCC_PCC_LPTMR0.CGC Mask                 */
 #define PCC_PCC_LPTMR0_CGC_SHIFT                 (30U)                                               /*!< PCC_PCC_LPTMR0.CGC Position             */
 #define PCC_PCC_LPTMR0_CGC(x)                    (((uint32_t)(((uint32_t)(x))<<30U))&0x40000000UL)   /*!< PCC_PCC_LPTMR0.CGC Field                */
@@ -8446,9 +8446,9 @@ typedef struct PCC_Type {
 #define PCC_PCC_SAI1_PR_SHIFT                    (31U)                                               /*!< PCC_PCC_SAI1.PR Position                */
 #define PCC_PCC_SAI1_PR(x)                       (((uint32_t)(((uint32_t)(x))<<31U))&0x80000000UL)   /*!< PCC_PCC_SAI1.PR Field                   */
 /* ------- PCC_FlexIO Bit Fields                    ------ */
-#define PCC_PCC_FlexIO_PCS_MASK                  (0x1F000000U)                                       /*!< PCC_PCC_FlexIO.PCS Mask                 */
+#define PCC_PCC_FlexIO_PCS_MASK                  (0x7000000U)                                        /*!< PCC_PCC_FlexIO.PCS Mask                 */
 #define PCC_PCC_FlexIO_PCS_SHIFT                 (24U)                                               /*!< PCC_PCC_FlexIO.PCS Position             */
-#define PCC_PCC_FlexIO_PCS(x)                    (((uint32_t)(((uint32_t)(x))<<24U))&0x1F000000UL)   /*!< PCC_PCC_FlexIO.PCS Field                */
+#define PCC_PCC_FlexIO_PCS(x)                    (((uint32_t)(((uint32_t)(x))<<24U))&0x7000000UL)    /*!< PCC_PCC_FlexIO.PCS Field                */
 #define PCC_PCC_FlexIO_CGC_MASK                  (0x40000000U)                                       /*!< PCC_PCC_FlexIO.CGC Mask                 */
 #define PCC_PCC_FlexIO_CGC_SHIFT                 (30U)                                               /*!< PCC_PCC_FlexIO.CGC Position             */
 #define PCC_PCC_FlexIO_CGC(x)                    (((uint32_t)(((uint32_t)(x))<<30U))&0x40000000UL)   /*!< PCC_PCC_FlexIO.CGC Field                */
@@ -8463,9 +8463,9 @@ typedef struct PCC_Type {
 #define PCC_PCC_EWM_PR_SHIFT                     (31U)                                               /*!< PCC_PCC_EWM.PR Position                 */
 #define PCC_PCC_EWM_PR(x)                        (((uint32_t)(((uint32_t)(x))<<31U))&0x80000000UL)   /*!< PCC_PCC_EWM.PR Field                    */
 /* ------- PCC_LPI2C0 Bit Fields                    ------ */
-#define PCC_PCC_LPI2C0_PCS_MASK                  (0x1F000000U)                                       /*!< PCC_PCC_LPI2C0.PCS Mask                 */
+#define PCC_PCC_LPI2C0_PCS_MASK                  (0x7000000U)                                        /*!< PCC_PCC_LPI2C0.PCS Mask                 */
 #define PCC_PCC_LPI2C0_PCS_SHIFT                 (24U)                                               /*!< PCC_PCC_LPI2C0.PCS Position             */
-#define PCC_PCC_LPI2C0_PCS(x)                    (((uint32_t)(((uint32_t)(x))<<24U))&0x1F000000UL)   /*!< PCC_PCC_LPI2C0.PCS Field                */
+#define PCC_PCC_LPI2C0_PCS(x)                    (((uint32_t)(((uint32_t)(x))<<24U))&0x7000000UL)    /*!< PCC_PCC_LPI2C0.PCS Field                */
 #define PCC_PCC_LPI2C0_CGC_MASK                  (0x40000000U)                                       /*!< PCC_PCC_LPI2C0.CGC Mask                 */
 #define PCC_PCC_LPI2C0_CGC_SHIFT                 (30U)                                               /*!< PCC_PCC_LPI2C0.CGC Position             */
 #define PCC_PCC_LPI2C0_CGC(x)                    (((uint32_t)(((uint32_t)(x))<<30U))&0x40000000UL)   /*!< PCC_PCC_LPI2C0.CGC Field                */
@@ -8473,9 +8473,9 @@ typedef struct PCC_Type {
 #define PCC_PCC_LPI2C0_PR_SHIFT                  (31U)                                               /*!< PCC_PCC_LPI2C0.PR Position              */
 #define PCC_PCC_LPI2C0_PR(x)                     (((uint32_t)(((uint32_t)(x))<<31U))&0x80000000UL)   /*!< PCC_PCC_LPI2C0.PR Field                 */
 /* ------- PCC_LPI2C1 Bit Fields                    ------ */
-#define PCC_PCC_LPI2C1_PCS_MASK                  (0x1F000000U)                                       /*!< PCC_PCC_LPI2C1.PCS Mask                 */
+#define PCC_PCC_LPI2C1_PCS_MASK                  (0x7000000U)                                        /*!< PCC_PCC_LPI2C1.PCS Mask                 */
 #define PCC_PCC_LPI2C1_PCS_SHIFT                 (24U)                                               /*!< PCC_PCC_LPI2C1.PCS Position             */
-#define PCC_PCC_LPI2C1_PCS(x)                    (((uint32_t)(((uint32_t)(x))<<24U))&0x1F000000UL)   /*!< PCC_PCC_LPI2C1.PCS Field                */
+#define PCC_PCC_LPI2C1_PCS(x)                    (((uint32_t)(((uint32_t)(x))<<24U))&0x7000000UL)    /*!< PCC_PCC_LPI2C1.PCS Field                */
 #define PCC_PCC_LPI2C1_CGC_MASK                  (0x40000000U)                                       /*!< PCC_PCC_LPI2C1.CGC Mask                 */
 #define PCC_PCC_LPI2C1_CGC_SHIFT                 (30U)                                               /*!< PCC_PCC_LPI2C1.CGC Position             */
 #define PCC_PCC_LPI2C1_CGC(x)                    (((uint32_t)(((uint32_t)(x))<<30U))&0x40000000UL)   /*!< PCC_PCC_LPI2C1.CGC Field                */
@@ -8483,9 +8483,9 @@ typedef struct PCC_Type {
 #define PCC_PCC_LPI2C1_PR_SHIFT                  (31U)                                               /*!< PCC_PCC_LPI2C1.PR Position              */
 #define PCC_PCC_LPI2C1_PR(x)                     (((uint32_t)(((uint32_t)(x))<<31U))&0x80000000UL)   /*!< PCC_PCC_LPI2C1.PR Field                 */
 /* ------- PCC_LPUART0 Bit Fields                   ------ */
-#define PCC_PCC_LPUART0_PCS_MASK                 (0x1F000000U)                                       /*!< PCC_PCC_LPUART0.PCS Mask                */
+#define PCC_PCC_LPUART0_PCS_MASK                 (0x7000000U)                                        /*!< PCC_PCC_LPUART0.PCS Mask                */
 #define PCC_PCC_LPUART0_PCS_SHIFT                (24U)                                               /*!< PCC_PCC_LPUART0.PCS Position            */
-#define PCC_PCC_LPUART0_PCS(x)                   (((uint32_t)(((uint32_t)(x))<<24U))&0x1F000000UL)   /*!< PCC_PCC_LPUART0.PCS Field               */
+#define PCC_PCC_LPUART0_PCS(x)                   (((uint32_t)(((uint32_t)(x))<<24U))&0x7000000UL)    /*!< PCC_PCC_LPUART0.PCS Field               */
 #define PCC_PCC_LPUART0_CGC_MASK                 (0x40000000U)                                       /*!< PCC_PCC_LPUART0.CGC Mask                */
 #define PCC_PCC_LPUART0_CGC_SHIFT                (30U)                                               /*!< PCC_PCC_LPUART0.CGC Position            */
 #define PCC_PCC_LPUART0_CGC(x)                   (((uint32_t)(((uint32_t)(x))<<30U))&0x40000000UL)   /*!< PCC_PCC_LPUART0.CGC Field               */
@@ -8493,9 +8493,9 @@ typedef struct PCC_Type {
 #define PCC_PCC_LPUART0_PR_SHIFT                 (31U)                                               /*!< PCC_PCC_LPUART0.PR Position             */
 #define PCC_PCC_LPUART0_PR(x)                    (((uint32_t)(((uint32_t)(x))<<31U))&0x80000000UL)   /*!< PCC_PCC_LPUART0.PR Field                */
 /* ------- PCC_LPUART1 Bit Fields                   ------ */
-#define PCC_PCC_LPUART1_PCS_MASK                 (0x1F000000U)                                       /*!< PCC_PCC_LPUART1.PCS Mask                */
+#define PCC_PCC_LPUART1_PCS_MASK                 (0x7000000U)                                        /*!< PCC_PCC_LPUART1.PCS Mask                */
 #define PCC_PCC_LPUART1_PCS_SHIFT                (24U)                                               /*!< PCC_PCC_LPUART1.PCS Position            */
-#define PCC_PCC_LPUART1_PCS(x)                   (((uint32_t)(((uint32_t)(x))<<24U))&0x1F000000UL)   /*!< PCC_PCC_LPUART1.PCS Field               */
+#define PCC_PCC_LPUART1_PCS(x)                   (((uint32_t)(((uint32_t)(x))<<24U))&0x7000000UL)    /*!< PCC_PCC_LPUART1.PCS Field               */
 #define PCC_PCC_LPUART1_CGC_MASK                 (0x40000000U)                                       /*!< PCC_PCC_LPUART1.CGC Mask                */
 #define PCC_PCC_LPUART1_CGC_SHIFT                (30U)                                               /*!< PCC_PCC_LPUART1.CGC Position            */
 #define PCC_PCC_LPUART1_CGC(x)                   (((uint32_t)(((uint32_t)(x))<<30U))&0x40000000UL)   /*!< PCC_PCC_LPUART1.CGC Field               */
@@ -8503,9 +8503,9 @@ typedef struct PCC_Type {
 #define PCC_PCC_LPUART1_PR_SHIFT                 (31U)                                               /*!< PCC_PCC_LPUART1.PR Position             */
 #define PCC_PCC_LPUART1_PR(x)                    (((uint32_t)(((uint32_t)(x))<<31U))&0x80000000UL)   /*!< PCC_PCC_LPUART1.PR Field                */
 /* ------- PCC_LPUART2 Bit Fields                   ------ */
-#define PCC_PCC_LPUART2_PCS_MASK                 (0x1F000000U)                                       /*!< PCC_PCC_LPUART2.PCS Mask                */
+#define PCC_PCC_LPUART2_PCS_MASK                 (0x7000000U)                                        /*!< PCC_PCC_LPUART2.PCS Mask                */
 #define PCC_PCC_LPUART2_PCS_SHIFT                (24U)                                               /*!< PCC_PCC_LPUART2.PCS Position            */
-#define PCC_PCC_LPUART2_PCS(x)                   (((uint32_t)(((uint32_t)(x))<<24U))&0x1F000000UL)   /*!< PCC_PCC_LPUART2.PCS Field               */
+#define PCC_PCC_LPUART2_PCS(x)                   (((uint32_t)(((uint32_t)(x))<<24U))&0x7000000UL)    /*!< PCC_PCC_LPUART2.PCS Field               */
 #define PCC_PCC_LPUART2_CGC_MASK                 (0x40000000U)                                       /*!< PCC_PCC_LPUART2.CGC Mask                */
 #define PCC_PCC_LPUART2_CGC_SHIFT                (30U)                                               /*!< PCC_PCC_LPUART2.CGC Position            */
 #define PCC_PCC_LPUART2_CGC(x)                   (((uint32_t)(((uint32_t)(x))<<30U))&0x40000000UL)   /*!< PCC_PCC_LPUART2.CGC Field               */
@@ -8513,9 +8513,9 @@ typedef struct PCC_Type {
 #define PCC_PCC_LPUART2_PR_SHIFT                 (31U)                                               /*!< PCC_PCC_LPUART2.PR Position             */
 #define PCC_PCC_LPUART2_PR(x)                    (((uint32_t)(((uint32_t)(x))<<31U))&0x80000000UL)   /*!< PCC_PCC_LPUART2.PR Field                */
 /* ------- PCC_FTM4 Bit Fields                      ------ */
-#define PCC_PCC_FTM4_PCS_MASK                    (0x1F000000U)                                       /*!< PCC_PCC_FTM4.PCS Mask                   */
+#define PCC_PCC_FTM4_PCS_MASK                    (0x7000000U)                                        /*!< PCC_PCC_FTM4.PCS Mask                   */
 #define PCC_PCC_FTM4_PCS_SHIFT                   (24U)                                               /*!< PCC_PCC_FTM4.PCS Position               */
-#define PCC_PCC_FTM4_PCS(x)                      (((uint32_t)(((uint32_t)(x))<<24U))&0x1F000000UL)   /*!< PCC_PCC_FTM4.PCS Field                  */
+#define PCC_PCC_FTM4_PCS(x)                      (((uint32_t)(((uint32_t)(x))<<24U))&0x7000000UL)    /*!< PCC_PCC_FTM4.PCS Field                  */
 #define PCC_PCC_FTM4_CGC_MASK                    (0x40000000U)                                       /*!< PCC_PCC_FTM4.CGC Mask                   */
 #define PCC_PCC_FTM4_CGC_SHIFT                   (30U)                                               /*!< PCC_PCC_FTM4.CGC Position               */
 #define PCC_PCC_FTM4_CGC(x)                      (((uint32_t)(((uint32_t)(x))<<30U))&0x40000000UL)   /*!< PCC_PCC_FTM4.CGC Field                  */
@@ -8523,9 +8523,9 @@ typedef struct PCC_Type {
 #define PCC_PCC_FTM4_PR_SHIFT                    (31U)                                               /*!< PCC_PCC_FTM4.PR Position                */
 #define PCC_PCC_FTM4_PR(x)                       (((uint32_t)(((uint32_t)(x))<<31U))&0x80000000UL)   /*!< PCC_PCC_FTM4.PR Field                   */
 /* ------- PCC_FTM5 Bit Fields                      ------ */
-#define PCC_PCC_FTM5_PCS_MASK                    (0x1F000000U)                                       /*!< PCC_PCC_FTM5.PCS Mask                   */
+#define PCC_PCC_FTM5_PCS_MASK                    (0x7000000U)                                        /*!< PCC_PCC_FTM5.PCS Mask                   */
 #define PCC_PCC_FTM5_PCS_SHIFT                   (24U)                                               /*!< PCC_PCC_FTM5.PCS Position               */
-#define PCC_PCC_FTM5_PCS(x)                      (((uint32_t)(((uint32_t)(x))<<24U))&0x1F000000UL)   /*!< PCC_PCC_FTM5.PCS Field                  */
+#define PCC_PCC_FTM5_PCS(x)                      (((uint32_t)(((uint32_t)(x))<<24U))&0x7000000UL)    /*!< PCC_PCC_FTM5.PCS Field                  */
 #define PCC_PCC_FTM5_CGC_MASK                    (0x40000000U)                                       /*!< PCC_PCC_FTM5.CGC Mask                   */
 #define PCC_PCC_FTM5_CGC_SHIFT                   (30U)                                               /*!< PCC_PCC_FTM5.CGC Position               */
 #define PCC_PCC_FTM5_CGC(x)                      (((uint32_t)(((uint32_t)(x))<<30U))&0x40000000UL)   /*!< PCC_PCC_FTM5.CGC Field                  */
@@ -8533,9 +8533,9 @@ typedef struct PCC_Type {
 #define PCC_PCC_FTM5_PR_SHIFT                    (31U)                                               /*!< PCC_PCC_FTM5.PR Position                */
 #define PCC_PCC_FTM5_PR(x)                       (((uint32_t)(((uint32_t)(x))<<31U))&0x80000000UL)   /*!< PCC_PCC_FTM5.PR Field                   */
 /* ------- PCC_FTM6 Bit Fields                      ------ */
-#define PCC_PCC_FTM6_PCS_MASK                    (0x1F000000U)                                       /*!< PCC_PCC_FTM6.PCS Mask                   */
+#define PCC_PCC_FTM6_PCS_MASK                    (0x7000000U)                                        /*!< PCC_PCC_FTM6.PCS Mask                   */
 #define PCC_PCC_FTM6_PCS_SHIFT                   (24U)                                               /*!< PCC_PCC_FTM6.PCS Position               */
-#define PCC_PCC_FTM6_PCS(x)                      (((uint32_t)(((uint32_t)(x))<<24U))&0x1F000000UL)   /*!< PCC_PCC_FTM6.PCS Field                  */
+#define PCC_PCC_FTM6_PCS(x)                      (((uint32_t)(((uint32_t)(x))<<24U))&0x7000000UL)    /*!< PCC_PCC_FTM6.PCS Field                  */
 #define PCC_PCC_FTM6_CGC_MASK                    (0x40000000U)                                       /*!< PCC_PCC_FTM6.CGC Mask                   */
 #define PCC_PCC_FTM6_CGC_SHIFT                   (30U)                                               /*!< PCC_PCC_FTM6.CGC Position               */
 #define PCC_PCC_FTM6_CGC(x)                      (((uint32_t)(((uint32_t)(x))<<30U))&0x40000000UL)   /*!< PCC_PCC_FTM6.CGC Field                  */
@@ -8543,9 +8543,9 @@ typedef struct PCC_Type {
 #define PCC_PCC_FTM6_PR_SHIFT                    (31U)                                               /*!< PCC_PCC_FTM6.PR Position                */
 #define PCC_PCC_FTM6_PR(x)                       (((uint32_t)(((uint32_t)(x))<<31U))&0x80000000UL)   /*!< PCC_PCC_FTM6.PR Field                   */
 /* ------- PCC_FTM7 Bit Fields                      ------ */
-#define PCC_PCC_FTM7_PCS_MASK                    (0x1F000000U)                                       /*!< PCC_PCC_FTM7.PCS Mask                   */
+#define PCC_PCC_FTM7_PCS_MASK                    (0x7000000U)                                        /*!< PCC_PCC_FTM7.PCS Mask                   */
 #define PCC_PCC_FTM7_PCS_SHIFT                   (24U)                                               /*!< PCC_PCC_FTM7.PCS Position               */
-#define PCC_PCC_FTM7_PCS(x)                      (((uint32_t)(((uint32_t)(x))<<24U))&0x1F000000UL)   /*!< PCC_PCC_FTM7.PCS Field                  */
+#define PCC_PCC_FTM7_PCS(x)                      (((uint32_t)(((uint32_t)(x))<<24U))&0x7000000UL)    /*!< PCC_PCC_FTM7.PCS Field                  */
 #define PCC_PCC_FTM7_CGC_MASK                    (0x40000000U)                                       /*!< PCC_PCC_FTM7.CGC Mask                   */
 #define PCC_PCC_FTM7_CGC_SHIFT                   (30U)                                               /*!< PCC_PCC_FTM7.CGC Position               */
 #define PCC_PCC_FTM7_CGC(x)                      (((uint32_t)(((uint32_t)(x))<<30U))&0x40000000UL)   /*!< PCC_PCC_FTM7.CGC Field                  */
@@ -8573,9 +8573,9 @@ typedef struct PCC_Type {
 #define PCC_PCC_ENET_FRAC_MASK                   (0x8U)                                              /*!< PCC_PCC_ENET.FRAC Mask                  */
 #define PCC_PCC_ENET_FRAC_SHIFT                  (3U)                                                /*!< PCC_PCC_ENET.FRAC Position              */
 #define PCC_PCC_ENET_FRAC(x)                     (((uint32_t)(((uint32_t)(x))<<3U))&0x8UL)           /*!< PCC_PCC_ENET.FRAC Field                 */
-#define PCC_PCC_ENET_PCS_MASK                    (0x1F000000U)                                       /*!< PCC_PCC_ENET.PCS Mask                   */
+#define PCC_PCC_ENET_PCS_MASK                    (0x7000000U)                                        /*!< PCC_PCC_ENET.PCS Mask                   */
 #define PCC_PCC_ENET_PCS_SHIFT                   (24U)                                               /*!< PCC_PCC_ENET.PCS Position               */
-#define PCC_PCC_ENET_PCS(x)                      (((uint32_t)(((uint32_t)(x))<<24U))&0x1F000000UL)   /*!< PCC_PCC_ENET.PCS Field                  */
+#define PCC_PCC_ENET_PCS(x)                      (((uint32_t)(((uint32_t)(x))<<24U))&0x7000000UL)    /*!< PCC_PCC_ENET.PCS Field                  */
 #define PCC_PCC_ENET_CGC_MASK                    (0x40000000U)                                       /*!< PCC_PCC_ENET.CGC Mask                   */
 #define PCC_PCC_ENET_CGC_SHIFT                   (30U)                                               /*!< PCC_PCC_ENET.CGC Position               */
 #define PCC_PCC_ENET_CGC(x)                      (((uint32_t)(((uint32_t)(x))<<30U))&0x40000000UL)   /*!< PCC_PCC_ENET.CGC Field                  */
@@ -11605,7 +11605,7 @@ typedef struct TRGMUX_Type {
 /* ================================================================================ */
 
 /**
- * @brief Watchdog timer
+ * @brief Watchdog Timer
  */
 /**
 * @addtogroup WDOG_structs_GROUP WDOG struct

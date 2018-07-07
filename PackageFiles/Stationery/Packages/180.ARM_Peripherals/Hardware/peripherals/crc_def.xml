@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE peripheralPage SYSTEM "_menu.dtd" >
+<!-- crc_def.xml -->
+
+<peripheralPage xmlns:xi="http://www.w3.org/2001/XInclude" name="_instance" description="External Watchdog Monitor">
+
+   <projectActionList id = "crc_files" >
+      <copy source="Project_Headers/crc.h"         target="Project_Headers/crc.h"          overwrite="true" derived="true" />
+      <copy source="Snippets/crc-example.cpp"      target="Snippets/crc-example.cpp"       overwrite="true" derived="true" />
+   </projectActionList>
+   
+</peripheralPage>

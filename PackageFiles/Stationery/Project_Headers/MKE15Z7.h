@@ -5,7 +5,7 @@
  *           Equivalent: 
  *
  * @version  V1.6
- * @date     2018/04
+ * @date     2018/07
  *
  *******************************************************************************************************/
 
@@ -5280,9 +5280,9 @@ typedef struct PCC_Type {
 * @{
 */
 /* ------- PCCn Bit Fields                          ------ */
-#define PCC_PCCn_PCS_MASK                        (0x1F000000U)                                       /*!< PCC_PCCn.PCS Mask                       */
+#define PCC_PCCn_PCS_MASK                        (0x7000000U)                                        /*!< PCC_PCCn.PCS Mask                       */
 #define PCC_PCCn_PCS_SHIFT                       (24U)                                               /*!< PCC_PCCn.PCS Position                   */
-#define PCC_PCCn_PCS(x)                          (((uint32_t)(((uint32_t)(x))<<24U))&0x1F000000UL)   /*!< PCC_PCCn.PCS Field                      */
+#define PCC_PCCn_PCS(x)                          (((uint32_t)(((uint32_t)(x))<<24U))&0x7000000UL)    /*!< PCC_PCCn.PCS Field                      */
 #define PCC_PCCn_INUSE_MASK                      (0x20000000U)                                       /*!< PCC_PCCn.INUSE Mask                     */
 #define PCC_PCCn_INUSE_SHIFT                     (29U)                                               /*!< PCC_PCCn.INUSE Position                 */
 #define PCC_PCCn_INUSE(x)                        (((uint32_t)(((uint32_t)(x))<<29U))&0x20000000UL)   /*!< PCC_PCCn.INUSE Field                    */

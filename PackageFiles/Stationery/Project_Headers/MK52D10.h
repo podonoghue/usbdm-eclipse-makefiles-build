@@ -5,7 +5,7 @@
  *           Equivalent: 
  *
  * @version  V1.6
- * @date     2018/04
+ * @date     2018/07
  *
  *******************************************************************************************************/
 
@@ -63,7 +63,7 @@ typedef enum {
   PMC_IRQn                      =  20,   /**<  36 Power Management Controller                                                      */
   LLWU_IRQn                     =  21,   /**<  37 Low Leakage Wakeup                                                               */
   WDOG_IRQn                     =  22,   /**<  38 External Watchdog Monitor                                                        */
-  RNG_IRQn                      =  23,   /**<  39 Random Number Generator                                                          */
+  RNGA_IRQn                     =  23,   /**<  39 Random Number Generator Accelerator                                              */
   I2C0_IRQn                     =  24,   /**<  40 Inter-Integrated Circuit                                                         */
   I2C1_IRQn                     =  25,   /**<  41 Inter-Integrated Circuit                                                         */
   SPI0_IRQn                     =  26,   /**<  42 Serial Peripheral Interface                                                      */
@@ -161,7 +161,7 @@ extern void FTF_ReadCollision_IRQHandler(void);      /**< Flash Memory Interface
 extern void PMC_IRQHandler(void);                    /**< Power Management Controller                                                      */
 extern void LLWU_IRQHandler(void);                   /**< Low Leakage Wakeup                                                               */
 extern void WDOG_IRQHandler(void);                   /**< External Watchdog Monitor                                                        */
-extern void RNG_IRQHandler(void);                    /**< Random Number Generator                                                          */
+extern void RNGA_IRQHandler(void);                   /**< Random Number Generator Accelerator                                              */
 extern void I2C0_IRQHandler(void);                   /**< Inter-Integrated Circuit                                                         */
 extern void I2C1_IRQHandler(void);                   /**< Inter-Integrated Circuit                                                         */
 extern void SPI0_IRQHandler(void);                   /**< Serial Peripheral Interface                                                      */
@@ -4393,6 +4393,8 @@ typedef struct EWM_Type {
 #define EWM_BasePtr                    0x40061000UL //!< Peripheral base address
 #define EWM                            ((EWM_Type *) EWM_BasePtr) //!< Freescale base pointer
 #define EWM_BASE_PTR                   (EWM) //!< Freescale style base pointer
+#define EWM_IRQS { WDOG_IRQn,  }
+
 /**
  * @} */ /* End group EWM_Peripheral_access_layer_GROUP 
  */
@@ -8564,101 +8566,101 @@ typedef struct RFVBAT_Type {
  * @} */ /* End group RFVBAT_Peripheral_access_layer_GROUP 
  */
 /**
-* @addtogroup RNG_Peripheral_access_layer_GROUP RNG Peripheral Access Layer
-* @brief C Struct for RNG
+* @addtogroup RNGA_Peripheral_access_layer_GROUP RNGA Peripheral Access Layer
+* @brief C Struct for RNGA
 * @{
 */
 
 /* ================================================================================ */
-/* ================           RNG (file:RNG_0)                     ================ */
+/* ================           RNGA (file:RNGA_0x400A0000)          ================ */
 /* ================================================================================ */
 
 /**
  * @brief Random Number Generator Accelerator
  */
 /**
-* @addtogroup RNG_structs_GROUP RNG struct
-* @brief Struct for RNG
+* @addtogroup RNGA_structs_GROUP RNGA struct
+* @brief Struct for RNGA
 * @{
 */
-typedef struct RNG_Type {
+typedef struct RNGA_Type {
    __IO uint32_t  CR;                           /**< 0000: RNGA Control Register                                        */
    __I  uint32_t  SR;                           /**< 0004: RNGA Status Register                                         */
    __O  uint32_t  ER;                           /**< 0008: RNGA Entropy Register                                        */
    __I  uint32_t  OR;                           /**< 000C: RNGA Output Register                                         */
-} RNG_Type;
+} RNGA_Type;
 
 /**
- * @} */ /* End group RNG_structs_GROUP 
+ * @} */ /* End group RNGA_structs_GROUP 
  */
 
 /* -------------------------------------------------------------------------------- */
-/* -----------     'RNG' Position & Mask macros                         ----------- */
+/* -----------     'RNGA' Position & Mask macros                        ----------- */
 /* -------------------------------------------------------------------------------- */
 
 /**
-* @addtogroup RNG_Register_Masks_GROUP RNG Register Masks
-* @brief Register Masks for RNG
+* @addtogroup RNGA_Register_Masks_GROUP RNGA Register Masks
+* @brief Register Masks for RNGA
 * @{
 */
 /* ------- CR Bit Fields                            ------ */
-#define RNG_CR_GO_MASK                           (0x1U)                                              /*!< RNG_CR.GO Mask                          */
-#define RNG_CR_GO_SHIFT                          (0U)                                                /*!< RNG_CR.GO Position                      */
-#define RNG_CR_GO(x)                             (((uint32_t)(((uint32_t)(x))<<0U))&0x1UL)           /*!< RNG_CR.GO Field                         */
-#define RNG_CR_HA_MASK                           (0x2U)                                              /*!< RNG_CR.HA Mask                          */
-#define RNG_CR_HA_SHIFT                          (1U)                                                /*!< RNG_CR.HA Position                      */
-#define RNG_CR_HA(x)                             (((uint32_t)(((uint32_t)(x))<<1U))&0x2UL)           /*!< RNG_CR.HA Field                         */
-#define RNG_CR_INTM_MASK                         (0x4U)                                              /*!< RNG_CR.INTM Mask                        */
-#define RNG_CR_INTM_SHIFT                        (2U)                                                /*!< RNG_CR.INTM Position                    */
-#define RNG_CR_INTM(x)                           (((uint32_t)(((uint32_t)(x))<<2U))&0x4UL)           /*!< RNG_CR.INTM Field                       */
-#define RNG_CR_CLRI_MASK                         (0x8U)                                              /*!< RNG_CR.CLRI Mask                        */
-#define RNG_CR_CLRI_SHIFT                        (3U)                                                /*!< RNG_CR.CLRI Position                    */
-#define RNG_CR_CLRI(x)                           (((uint32_t)(((uint32_t)(x))<<3U))&0x8UL)           /*!< RNG_CR.CLRI Field                       */
-#define RNG_CR_SLP_MASK                          (0x10U)                                             /*!< RNG_CR.SLP Mask                         */
-#define RNG_CR_SLP_SHIFT                         (4U)                                                /*!< RNG_CR.SLP Position                     */
-#define RNG_CR_SLP(x)                            (((uint32_t)(((uint32_t)(x))<<4U))&0x10UL)          /*!< RNG_CR.SLP Field                        */
+#define RNGA_CR_GO_MASK                          (0x1U)                                              /*!< RNGA_CR.GO Mask                         */
+#define RNGA_CR_GO_SHIFT                         (0U)                                                /*!< RNGA_CR.GO Position                     */
+#define RNGA_CR_GO(x)                            (((uint32_t)(((uint32_t)(x))<<0U))&0x1UL)           /*!< RNGA_CR.GO Field                        */
+#define RNGA_CR_HA_MASK                          (0x2U)                                              /*!< RNGA_CR.HA Mask                         */
+#define RNGA_CR_HA_SHIFT                         (1U)                                                /*!< RNGA_CR.HA Position                     */
+#define RNGA_CR_HA(x)                            (((uint32_t)(((uint32_t)(x))<<1U))&0x2UL)           /*!< RNGA_CR.HA Field                        */
+#define RNGA_CR_INTM_MASK                        (0x4U)                                              /*!< RNGA_CR.INTM Mask                       */
+#define RNGA_CR_INTM_SHIFT                       (2U)                                                /*!< RNGA_CR.INTM Position                   */
+#define RNGA_CR_INTM(x)                          (((uint32_t)(((uint32_t)(x))<<2U))&0x4UL)           /*!< RNGA_CR.INTM Field                      */
+#define RNGA_CR_CLRI_MASK                        (0x8U)                                              /*!< RNGA_CR.CLRI Mask                       */
+#define RNGA_CR_CLRI_SHIFT                       (3U)                                                /*!< RNGA_CR.CLRI Position                   */
+#define RNGA_CR_CLRI(x)                          (((uint32_t)(((uint32_t)(x))<<3U))&0x8UL)           /*!< RNGA_CR.CLRI Field                      */
+#define RNGA_CR_SLP_MASK                         (0x10U)                                             /*!< RNGA_CR.SLP Mask                        */
+#define RNGA_CR_SLP_SHIFT                        (4U)                                                /*!< RNGA_CR.SLP Position                    */
+#define RNGA_CR_SLP(x)                           (((uint32_t)(((uint32_t)(x))<<4U))&0x10UL)          /*!< RNGA_CR.SLP Field                       */
 /* ------- SR Bit Fields                            ------ */
-#define RNG_SR_SECV_MASK                         (0x1U)                                              /*!< RNG_SR.SECV Mask                        */
-#define RNG_SR_SECV_SHIFT                        (0U)                                                /*!< RNG_SR.SECV Position                    */
-#define RNG_SR_SECV(x)                           (((uint32_t)(((uint32_t)(x))<<0U))&0x1UL)           /*!< RNG_SR.SECV Field                       */
-#define RNG_SR_LRS_MASK                          (0x2U)                                              /*!< RNG_SR.LRS Mask                         */
-#define RNG_SR_LRS_SHIFT                         (1U)                                                /*!< RNG_SR.LRS Position                     */
-#define RNG_SR_LRS(x)                            (((uint32_t)(((uint32_t)(x))<<1U))&0x2UL)           /*!< RNG_SR.LRS Field                        */
-#define RNG_SR_ORU_MASK                          (0x4U)                                              /*!< RNG_SR.ORU Mask                         */
-#define RNG_SR_ORU_SHIFT                         (2U)                                                /*!< RNG_SR.ORU Position                     */
-#define RNG_SR_ORU(x)                            (((uint32_t)(((uint32_t)(x))<<2U))&0x4UL)           /*!< RNG_SR.ORU Field                        */
-#define RNG_SR_ERRI_MASK                         (0x8U)                                              /*!< RNG_SR.ERRI Mask                        */
-#define RNG_SR_ERRI_SHIFT                        (3U)                                                /*!< RNG_SR.ERRI Position                    */
-#define RNG_SR_ERRI(x)                           (((uint32_t)(((uint32_t)(x))<<3U))&0x8UL)           /*!< RNG_SR.ERRI Field                       */
-#define RNG_SR_SLP_MASK                          (0x10U)                                             /*!< RNG_SR.SLP Mask                         */
-#define RNG_SR_SLP_SHIFT                         (4U)                                                /*!< RNG_SR.SLP Position                     */
-#define RNG_SR_SLP(x)                            (((uint32_t)(((uint32_t)(x))<<4U))&0x10UL)          /*!< RNG_SR.SLP Field                        */
-#define RNG_SR_OREG_LVL_MASK                     (0xFF00U)                                           /*!< RNG_SR.OREG_LVL Mask                    */
-#define RNG_SR_OREG_LVL_SHIFT                    (8U)                                                /*!< RNG_SR.OREG_LVL Position                */
-#define RNG_SR_OREG_LVL(x)                       (((uint32_t)(((uint32_t)(x))<<8U))&0xFF00UL)        /*!< RNG_SR.OREG_LVL Field                   */
-#define RNG_SR_OREG_SIZE_MASK                    (0xFF0000U)                                         /*!< RNG_SR.OREG_SIZE Mask                   */
-#define RNG_SR_OREG_SIZE_SHIFT                   (16U)                                               /*!< RNG_SR.OREG_SIZE Position               */
-#define RNG_SR_OREG_SIZE(x)                      (((uint32_t)(((uint32_t)(x))<<16U))&0xFF0000UL)     /*!< RNG_SR.OREG_SIZE Field                  */
+#define RNGA_SR_SECV_MASK                        (0x1U)                                              /*!< RNGA_SR.SECV Mask                       */
+#define RNGA_SR_SECV_SHIFT                       (0U)                                                /*!< RNGA_SR.SECV Position                   */
+#define RNGA_SR_SECV(x)                          (((uint32_t)(((uint32_t)(x))<<0U))&0x1UL)           /*!< RNGA_SR.SECV Field                      */
+#define RNGA_SR_LRS_MASK                         (0x2U)                                              /*!< RNGA_SR.LRS Mask                        */
+#define RNGA_SR_LRS_SHIFT                        (1U)                                                /*!< RNGA_SR.LRS Position                    */
+#define RNGA_SR_LRS(x)                           (((uint32_t)(((uint32_t)(x))<<1U))&0x2UL)           /*!< RNGA_SR.LRS Field                       */
+#define RNGA_SR_ORU_MASK                         (0x4U)                                              /*!< RNGA_SR.ORU Mask                        */
+#define RNGA_SR_ORU_SHIFT                        (2U)                                                /*!< RNGA_SR.ORU Position                    */
+#define RNGA_SR_ORU(x)                           (((uint32_t)(((uint32_t)(x))<<2U))&0x4UL)           /*!< RNGA_SR.ORU Field                       */
+#define RNGA_SR_ERRI_MASK                        (0x8U)                                              /*!< RNGA_SR.ERRI Mask                       */
+#define RNGA_SR_ERRI_SHIFT                       (3U)                                                /*!< RNGA_SR.ERRI Position                   */
+#define RNGA_SR_ERRI(x)                          (((uint32_t)(((uint32_t)(x))<<3U))&0x8UL)           /*!< RNGA_SR.ERRI Field                      */
+#define RNGA_SR_SLP_MASK                         (0x10U)                                             /*!< RNGA_SR.SLP Mask                        */
+#define RNGA_SR_SLP_SHIFT                        (4U)                                                /*!< RNGA_SR.SLP Position                    */
+#define RNGA_SR_SLP(x)                           (((uint32_t)(((uint32_t)(x))<<4U))&0x10UL)          /*!< RNGA_SR.SLP Field                       */
+#define RNGA_SR_OREG_LVL_MASK                    (0xFF00U)                                           /*!< RNGA_SR.OREG_LVL Mask                   */
+#define RNGA_SR_OREG_LVL_SHIFT                   (8U)                                                /*!< RNGA_SR.OREG_LVL Position               */
+#define RNGA_SR_OREG_LVL(x)                      (((uint32_t)(((uint32_t)(x))<<8U))&0xFF00UL)        /*!< RNGA_SR.OREG_LVL Field                  */
+#define RNGA_SR_OREG_SIZE_MASK                   (0xFF0000U)                                         /*!< RNGA_SR.OREG_SIZE Mask                  */
+#define RNGA_SR_OREG_SIZE_SHIFT                  (16U)                                               /*!< RNGA_SR.OREG_SIZE Position              */
+#define RNGA_SR_OREG_SIZE(x)                     (((uint32_t)(((uint32_t)(x))<<16U))&0xFF0000UL)     /*!< RNGA_SR.OREG_SIZE Field                 */
 /* ------- ER Bit Fields                            ------ */
-#define RNG_ER_EXT_ENT_MASK                      (0xFFFFFFFFU)                                       /*!< RNG_ER.EXT_ENT Mask                     */
-#define RNG_ER_EXT_ENT_SHIFT                     (0U)                                                /*!< RNG_ER.EXT_ENT Position                 */
-#define RNG_ER_EXT_ENT(x)                        (((uint32_t)(((uint32_t)(x))<<0U))&0xFFFFFFFFUL)    /*!< RNG_ER.EXT_ENT Field                    */
+#define RNGA_ER_EXT_ENT_MASK                     (0xFFFFFFFFU)                                       /*!< RNGA_ER.EXT_ENT Mask                    */
+#define RNGA_ER_EXT_ENT_SHIFT                    (0U)                                                /*!< RNGA_ER.EXT_ENT Position                */
+#define RNGA_ER_EXT_ENT(x)                       (((uint32_t)(((uint32_t)(x))<<0U))&0xFFFFFFFFUL)    /*!< RNGA_ER.EXT_ENT Field                   */
 /* ------- OR Bit Fields                            ------ */
-#define RNG_OR_RANDOUT_MASK                      (0xFFFFFFFFU)                                       /*!< RNG_OR.RANDOUT Mask                     */
-#define RNG_OR_RANDOUT_SHIFT                     (0U)                                                /*!< RNG_OR.RANDOUT Position                 */
-#define RNG_OR_RANDOUT(x)                        (((uint32_t)(((uint32_t)(x))<<0U))&0xFFFFFFFFUL)    /*!< RNG_OR.RANDOUT Field                    */
+#define RNGA_OR_RANDOUT_MASK                     (0xFFFFFFFFU)                                       /*!< RNGA_OR.RANDOUT Mask                    */
+#define RNGA_OR_RANDOUT_SHIFT                    (0U)                                                /*!< RNGA_OR.RANDOUT Position                */
+#define RNGA_OR_RANDOUT(x)                       (((uint32_t)(((uint32_t)(x))<<0U))&0xFFFFFFFFUL)    /*!< RNGA_OR.RANDOUT Field                   */
 /**
- * @} */ /* End group RNG_Register_Masks_GROUP 
+ * @} */ /* End group RNGA_Register_Masks_GROUP 
  */
 
-/* RNG - Peripheral instance base addresses */
-#define RNG_BasePtr                    0x400A0000UL //!< Peripheral base address
-#define RNG                            ((RNG_Type *) RNG_BasePtr) //!< Freescale base pointer
-#define RNG_BASE_PTR                   (RNG) //!< Freescale style base pointer
-#define RNG_IRQS { RNG_IRQn,  }
+/* RNGA - Peripheral instance base addresses */
+#define RNGA_BasePtr                   0x400A0000UL //!< Peripheral base address
+#define RNGA                           ((RNGA_Type *) RNGA_BasePtr) //!< Freescale base pointer
+#define RNGA_BASE_PTR                  (RNGA) //!< Freescale style base pointer
+#define RNGA_IRQS { RNGA_IRQn,  }
 
 /**
- * @} */ /* End group RNG_Peripheral_access_layer_GROUP 
+ * @} */ /* End group RNGA_Peripheral_access_layer_GROUP 
  */
 /**
 * @addtogroup RTC_Peripheral_access_layer_GROUP RTC Peripheral Access Layer
@@ -12273,29 +12275,14 @@ typedef struct VREF_Type {
 typedef struct WDOG_Type {
    __IO uint16_t  STCTRLH;                      /**< 0000: Status and Control Register High                             */
    __IO uint16_t  STCTRLL;                      /**< 0002: Status and Control Register Low                              */
-   union {                                      /**< 0000: (size=0004)                                                  */
-      __IO uint32_t  TOVAL;                     /**< 0004: Time-out Value Register High TOVALL:TOVALH                   */
-      struct {                                  /**< 0000: (size=0004)                                                  */
-         __IO uint16_t  TOVALH;                 /**< 0004: Time-out Value Register High                                 */
-         __IO uint16_t  TOVALL;                 /**< 0006: Time-out Value Register Low                                  */
-      };
-   };
-   union {                                      /**< 0000: (size=0004)                                                  */
-      __IO uint32_t  WIN;                       /**< 0008: Window Register (WINL:WINH)                                  */
-      struct {                                  /**< 0000: (size=0004)                                                  */
-         __IO uint16_t  WINH;                   /**< 0008: Window Register High                                         */
-         __IO uint16_t  WINL;                   /**< 000A: Window Register Low                                          */
-      };
-   };
+   __IO uint16_t  TOVALH;                       /**< 0004: Time-out Value Register High                                 */
+   __IO uint16_t  TOVALL;                       /**< 0006: Time-out Value Register Low                                  */
+   __IO uint16_t  WINH;                         /**< 0008: Window Register High                                         */
+   __IO uint16_t  WINL;                         /**< 000A: Window Register Low                                          */
    __IO uint16_t  REFRESH;                      /**< 000C: Refresh Register                                             */
    __IO uint16_t  UNLOCK;                       /**< 000E: Unlock Register                                              */
-   union {                                      /**< 0000: (size=0004)                                                  */
-      __IO uint32_t  TMROUT;                    /**< 0010: Timer Output Register (TMROUTL:TMROUTH)                      */
-      struct {                                  /**< 0000: (size=0004)                                                  */
-         __IO uint16_t  TMROUTH;                /**< 0010: Timer Output Register High                                   */
-         __IO uint16_t  TMROUTL;                /**< 0012: Timer Output Register Low                                    */
-      };
-   };
+   __IO uint16_t  TMROUTH;                      /**< 0010: Timer Output Register High                                   */
+   __IO uint16_t  TMROUTL;                      /**< 0012: Timer Output Register Low                                    */
    __IO uint16_t  RSTCNT;                       /**< 0014: Reset Count Register                                         */
    __IO uint16_t  PRESC;                        /**< 0016: Prescaler Register                                           */
 } WDOG_Type;
@@ -12354,10 +12341,6 @@ typedef struct WDOG_Type {
 #define WDOG_STCTRLL_INTFLG_MASK                 (0x8000U)                                           /*!< WDOG_STCTRLL.INTFLG Mask                */
 #define WDOG_STCTRLL_INTFLG_SHIFT                (15U)                                               /*!< WDOG_STCTRLL.INTFLG Position            */
 #define WDOG_STCTRLL_INTFLG(x)                   (((uint16_t)(((uint16_t)(x))<<15U))&0x8000UL)       /*!< WDOG_STCTRLL.INTFLG Field               */
-/* ------- TOVAL Bit Fields                         ------ */
-#define WDOG_TOVAL_TOVAL_MASK                    (0xFFFFFFFFU)                                       /*!< WDOG_TOVAL.TOVAL Mask                   */
-#define WDOG_TOVAL_TOVAL_SHIFT                   (0U)                                                /*!< WDOG_TOVAL.TOVAL Position               */
-#define WDOG_TOVAL_TOVAL(x)                      (((uint32_t)(((uint32_t)(x))<<0U))&0xFFFFFFFFUL)    /*!< WDOG_TOVAL.TOVAL Field                  */
 /* ------- TOVALH Bit Fields                        ------ */
 #define WDOG_TOVALH_TOVALHIGH_MASK               (0xFFFFU)                                           /*!< WDOG_TOVALH.TOVALHIGH Mask              */
 #define WDOG_TOVALH_TOVALHIGH_SHIFT              (0U)                                                /*!< WDOG_TOVALH.TOVALHIGH Position          */
@@ -12366,10 +12349,6 @@ typedef struct WDOG_Type {
 #define WDOG_TOVALL_TOVALLOW_MASK                (0xFFFFU)                                           /*!< WDOG_TOVALL.TOVALLOW Mask               */
 #define WDOG_TOVALL_TOVALLOW_SHIFT               (0U)                                                /*!< WDOG_TOVALL.TOVALLOW Position           */
 #define WDOG_TOVALL_TOVALLOW(x)                  (((uint16_t)(((uint16_t)(x))<<0U))&0xFFFFUL)        /*!< WDOG_TOVALL.TOVALLOW Field              */
-/* ------- WIN Bit Fields                           ------ */
-#define WDOG_WIN_WIN_MASK                        (0xFFFFFFFFU)                                       /*!< WDOG_WIN.WIN Mask                       */
-#define WDOG_WIN_WIN_SHIFT                       (0U)                                                /*!< WDOG_WIN.WIN Position                   */
-#define WDOG_WIN_WIN(x)                          (((uint32_t)(((uint32_t)(x))<<0U))&0xFFFFFFFFUL)    /*!< WDOG_WIN.WIN Field                      */
 /* ------- WINH Bit Fields                          ------ */
 #define WDOG_WINH_WINHIGH_MASK                   (0xFFFFU)                                           /*!< WDOG_WINH.WINHIGH Mask                  */
 #define WDOG_WINH_WINHIGH_SHIFT                  (0U)                                                /*!< WDOG_WINH.WINHIGH Position              */
@@ -12386,10 +12365,6 @@ typedef struct WDOG_Type {
 #define WDOG_UNLOCK_WDOGUNLOCK_MASK              (0xFFFFU)                                           /*!< WDOG_UNLOCK.WDOGUNLOCK Mask             */
 #define WDOG_UNLOCK_WDOGUNLOCK_SHIFT             (0U)                                                /*!< WDOG_UNLOCK.WDOGUNLOCK Position         */
 #define WDOG_UNLOCK_WDOGUNLOCK(x)                (((uint16_t)(((uint16_t)(x))<<0U))&0xFFFFUL)        /*!< WDOG_UNLOCK.WDOGUNLOCK Field            */
-/* ------- TMROUT Bit Fields                        ------ */
-#define WDOG_TMROUT_TIMEROUTHIGH_MASK            (0xFFFFFFFFU)                                       /*!< WDOG_TMROUT.TIMEROUTHIGH Mask           */
-#define WDOG_TMROUT_TIMEROUTHIGH_SHIFT           (0U)                                                /*!< WDOG_TMROUT.TIMEROUTHIGH Position       */
-#define WDOG_TMROUT_TIMEROUTHIGH(x)              (((uint32_t)(((uint32_t)(x))<<0U))&0xFFFFFFFFUL)    /*!< WDOG_TMROUT.TIMEROUTHIGH Field          */
 /* ------- TMROUTH Bit Fields                       ------ */
 #define WDOG_TMROUTH_TIMEROUTHIGH_MASK           (0xFFFFU)                                           /*!< WDOG_TMROUTH.TIMEROUTHIGH Mask          */
 #define WDOG_TMROUTH_TIMEROUTHIGH_SHIFT          (0U)                                                /*!< WDOG_TMROUTH.TIMEROUTHIGH Position      */

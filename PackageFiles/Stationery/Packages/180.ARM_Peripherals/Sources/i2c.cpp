@@ -327,7 +327,7 @@ ErrorCode I2c::txRx(uint8_t address, uint16_t txSize, const uint8_t txData[], ui
 
 /**
  * Transmit message followed by receive message.
- * Uses repeated-start.
+ * Uses repeated-start.\n
  * Uses shared transmit and receive buffer
  *
  * @param[in]    address  Address of slave to communicate with (should include LSB = R/W bit = 0)
