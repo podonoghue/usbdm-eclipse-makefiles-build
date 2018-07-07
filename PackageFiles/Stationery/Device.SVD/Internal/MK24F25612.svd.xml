@@ -75,7 +75,7 @@
       <xi:include href="peripherals/RCM_MK10D5.svd.xml"/>
       <xi:include href="peripherals/RFSYS_0.svd.xml"/>
       <xi:include href="peripherals/RFVBAT_0.svd.xml"/>
-      <xi:include href="peripherals/RNG_1.svd.xml"/>
+      <xi:include href="peripherals/RNGA_0x40029000.svd.xml"/>
       <xi:include href="peripherals/RTC_MK22F12810.svd.xml"/>
       <xi:include href="peripherals/SCB_CM4_CPACR.svd.xml"/>
       <xi:include href="peripherals/SIM_MK24F25612.svd.xml"/>

@@ -1,35 +1,26 @@
 <!--
 Devices using this peripheral: 
-      MK11D5
-      MK11DA5
-      MK11D5WS
-      MK21D5
-      MK21DA5
-      MK21D5WS
-      MK21F12
-      MK21FA12
-      MK22F25612
-      MK22F51212
-      MK24F12
-      MK24F25612
-      MK63F12
-      MK64F12
-      MKM14Z5
-      MKM33Z5
-      MKM34Z5
-      MKV31F25612
-      MKV31F51212
-      MKW21D5
-      MKW22D5
-      MKW24D5
+      MK10F12
+      MK20F12
+      MK52D10
+      MK53D10
+      MK60D10
+      MK60F12
+      MK60F15
+      MK61F15
+      MK61F15WS
+      MK65F18
+      MK66F18
+      MK70F15
+      MK70F15WS
 -->
       <peripheral>
-         <?sourceFile "RNG_1" ?>
-         <name>RNG</name>
+         <?sourceFile "RNGA_0x400A0000" ?>
+         <name>RNGA</name>
          <description>Random Number Generator Accelerator</description>
-         <groupName>RNG</groupName>
-         <headerStructName>RNG</headerStructName>
-         <baseAddress>0x40029000</baseAddress>
+         <groupName>RNGA</groupName>
+         <headerStructName>RNGA</headerStructName>
+         <baseAddress>0x400A0000</baseAddress>
          <size>32</size>
          <access>read-write</access>
          <resetValue>0x0</resetValue>

@@ -87,7 +87,7 @@
       <xi:include href="peripherals/RCM_MK_SSRS.svd.xml"/>
       <xi:include href="peripherals/RFSYS_0.svd.xml"/>
       <xi:include href="peripherals/RFVBAT_0.svd.xml"/>
-      <xi:include href="peripherals/RNG_0.svd.xml"/>
+      <xi:include href="peripherals/RNGA_0x400A0000.svd.xml"/>
       <xi:include href="peripherals/RTC_TAMPER_WPS.svd.xml"/>
       <xi:include href="peripherals/SDHC0_MK28F15.svd.xml"/>
       <xi:include href="peripherals/SDRAMC.svd.xml"/>

@@ -80,7 +80,7 @@
       <xi:include href="peripherals/RCM_MK10D5.svd.xml"/>
       <xi:include href="peripherals/RFSYS_0.svd.xml"/>
       <xi:include href="peripherals/RFVBAT_0.svd.xml"/>
-      <xi:include href="peripherals/RNG_0.svd.xml"/>
+      <xi:include href="peripherals/RNGA_0x400A0000.svd.xml"/>
       <xi:include href="peripherals/RTC_WAR_RAR_TSIE_WPON.svd.xml"/>
       <xi:include href="peripherals/SCB_CM4.svd.xml"/>
       <xi:include href="peripherals/SDHC0_MK10D10.svd.xml"/>

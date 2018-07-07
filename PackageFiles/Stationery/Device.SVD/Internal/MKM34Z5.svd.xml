@@ -70,7 +70,7 @@
       <peripheral derivedFrom="PORTA"><name>PORTH</name><baseAddress>0x4004D000</baseAddress></peripheral>
       <peripheral derivedFrom="PORTA"><name>PORTI</name><baseAddress>0x4004E000</baseAddress></peripheral>
       <xi:include href="peripherals/RCM_MKM_0x4007B000.svd.xml"/>
-      <xi:include href="peripherals/RNG_1.svd.xml"/>
+      <xi:include href="peripherals/RNGA_0x40029000.svd.xml"/>
       <xi:include href="peripherals/ROM_MKL.svd.xml"/>
       <xi:include href="peripherals/RTC_MKM14ZA5.svd.xml"/>
       <xi:include href="peripherals/RTCRAM_MKM.svd.xml"/>

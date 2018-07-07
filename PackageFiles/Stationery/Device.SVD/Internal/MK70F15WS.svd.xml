@@ -86,7 +86,7 @@
       <xi:include href="peripherals/RCM_MK61F15WS.svd.xml"/>
       <xi:include href="peripherals/RFSYS_0.svd.xml"/>
       <xi:include href="peripherals/RFVBAT_0.svd.xml"/>
-      <xi:include href="peripherals/RNG_0.svd.xml"/>
+      <xi:include href="peripherals/RNGA_0x400A0000.svd.xml"/>
       <xi:include href="peripherals/RTC_MK61F15WS.svd.xml"/>
       <xi:include href="peripherals/SDHC0_MK10DZ10.svd.xml"/>
       <xi:include href="peripherals/SIM_MK70F15.svd.xml"/>
