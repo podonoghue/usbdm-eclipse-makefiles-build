@@ -110,12 +110,12 @@ To clear the interrupt request, user should clear this bit by writing 0</descrip
                      <enumeratedValues>
                         <enumeratedValue>
                            <name>0b0</name>
-                           <description>Interrupt enabled</description>
+                           <description>Interrupt disabled</description>
                            <value>0b0</value>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>0b1</name>
-                           <description>Interrupt disabled</description>
+                           <description>Interrupt enabled</description>
                            <value>0b1</value>
                         </enumeratedValue>
                      </enumeratedValues>

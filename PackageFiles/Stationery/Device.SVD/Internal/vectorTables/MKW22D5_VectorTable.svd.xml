@@ -122,9 +122,10 @@ Devices using this vector table:
       <value>22</value>
    </interrupt>
    <interrupt>
-      <name>RNG</name>
-      <description>Random Number Generator</description>
+      <name>RNGA</name>
+      <description>Random Number Generator Accelerator</description>
       <value>23</value>
+      <peripheral>RNGA</peripheral>
    </interrupt>
    <interrupt>
       <name>I2C0</name>

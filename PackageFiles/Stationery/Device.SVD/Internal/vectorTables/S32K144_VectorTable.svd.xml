@@ -141,8 +141,8 @@ Devices using this vector table:
       <name>WDOG_EWM</name>
       <description>Watchdog timer</description>
       <value>22</value>
-      <peripheral>WDOG</peripheral>
       <peripheral>EWM</peripheral>
+      <peripheral>WDOG</peripheral>
    </interrupt>
    <interrupt>
       <name>RCM</name>

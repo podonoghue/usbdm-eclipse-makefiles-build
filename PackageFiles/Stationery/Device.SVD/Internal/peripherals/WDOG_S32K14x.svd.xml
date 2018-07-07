@@ -8,7 +8,7 @@ Devices using this peripheral:
       <peripheral>
          <?sourceFile "WDOG_S32K14x" ?>
          <name>WDOG</name>
-         <description>Watchdog timer</description>
+         <description>Watchdog Timer</description>
          <groupName>WDOG</groupName>
          <headerStructName>WDOG</headerStructName>
          <baseAddress>0x40052000</baseAddress>

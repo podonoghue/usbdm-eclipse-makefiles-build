@@ -142,10 +142,11 @@ Devices using this vector table:
       <description>External Watchdog Monitor</description>
       <value>22</value>
       <peripheral>EWM</peripheral>
+      <peripheral>WDOG</peripheral>
    </interrupt>
    <interrupt>
-      <name>RNG</name>
-      <description>Random Number Generator</description>
+      <name>RNGA</name>
+      <description>Random Number Generator Accelerator</description>
       <value>23</value>
       <peripheral>TRNG0</peripheral>
    </interrupt>

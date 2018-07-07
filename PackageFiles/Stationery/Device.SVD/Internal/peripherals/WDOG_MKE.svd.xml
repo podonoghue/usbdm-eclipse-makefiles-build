@@ -183,7 +183,8 @@ Devices using this peripheral:
                <fields>
                   <field>
                      <name>CLK</name>
-                     <description>Clock: This write-once field indicates the clock source that feeds the watchdog counter</description>
+                     <description>Clock: \n
+This write-once field indicates the clock source that feeds the watchdog counter</description>
                      <bitOffset>0</bitOffset>
                      <bitWidth>2</bitWidth>
                      <enumeratedValues>

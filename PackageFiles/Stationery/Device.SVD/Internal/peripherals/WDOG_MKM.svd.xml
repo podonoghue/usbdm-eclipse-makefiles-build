@@ -39,12 +39,12 @@ In the disabled state, the watchdog timer is kept in the reset state, but the ot
                      <enumeratedValues>
                         <enumeratedValue>
                            <name>0b0</name>
-                           <description>WDOG disabled</description>
+                           <description>Watchdog disabled</description>
                            <value>0b0</value>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>0b1</name>
-                           <description>WDOG enabled</description>
+                           <description>Watchdog enabled</description>
                            <value>0b1</value>
                         </enumeratedValue>
                      </enumeratedValues>
@@ -57,7 +57,7 @@ In the disabled state, the watchdog timer is kept in the reset state, but the ot
                      <enumeratedValues>
                         <enumeratedValue>
                            <name>0b0</name>
-                           <description>Low Power OScillator</description>
+                           <description>Low Power Oscillator</description>
                            <value>0b0</value>
                         </enumeratedValue>
                         <enumeratedValue>
@@ -167,6 +167,18 @@ The clock for the timer is switched from the main watchdog clock to the fast clo
 The TESTSEL bit selects the test to be run</description>
                      <bitOffset>10</bitOffset>
                      <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>Not testing</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>Testing</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
                   </field>
                   <field>
                      <name>TESTSEL</name>

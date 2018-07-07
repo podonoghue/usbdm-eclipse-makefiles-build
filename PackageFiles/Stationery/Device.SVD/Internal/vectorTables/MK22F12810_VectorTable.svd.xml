@@ -69,6 +69,7 @@ Devices using this vector table:
       <name>WDOG</name>
       <description>External Watchdog Monitor</description>
       <value>22</value>
+      <peripheral>EWM</peripheral>
       <peripheral>WDOG</peripheral>
    </interrupt>
    <interrupt>

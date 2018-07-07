@@ -46,12 +46,12 @@ In the disabled state, the watchdog timer is kept in the reset state, but the ot
                      <enumeratedValues>
                         <enumeratedValue>
                            <name>0b0</name>
-                           <description>WDOG disabled</description>
+                           <description>Watchdog disabled</description>
                            <value>0b0</value>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>0b1</name>
-                           <description>WDOG enabled</description>
+                           <description>Watchdog enabled</description>
                            <value>0b1</value>
                         </enumeratedValue>
                      </enumeratedValues>
@@ -64,7 +64,7 @@ In the disabled state, the watchdog timer is kept in the reset state, but the ot
                      <enumeratedValues>
                         <enumeratedValue>
                            <name>0b0</name>
-                           <description>Low Power OScillator</description>
+                           <description>Low Power Oscillator</description>
                            <value>0b0</value>
                         </enumeratedValue>
                         <enumeratedValue>
@@ -210,6 +210,18 @@ The clock for the timer is switched from the main watchdog clock to the fast clo
 The TESTSEL bit selects the test to be run</description>
                      <bitOffset>10</bitOffset>
                      <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>Not testing</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>Testing</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
                   </field>
                   <field>
                      <name>TESTSEL</name>
@@ -311,19 +323,6 @@ The interrupt can be cleared by writing 1 to this bit. It also gets cleared on a
                </fields>
             </register>
             <register>
-               <name>TOVAL</name>
-               <description>Time-out Value Register High TOVALL:TOVALH</description>
-               <addressOffset>0x4</addressOffset>
-               <fields>
-                  <field>
-                     <name>TOVAL</name>
-                     <description>Defines the 32-bit time-out value for the watchdog timer.\n
-It is defined in terms of cycles of the watchdog clock</description>
-                     <bitOffset>0</bitOffset>
-                  </field>
-               </fields>
-            </register>
-            <register>
                <name>TOVALH</name>
                <description>Time-out Value Register High</description>
                <addressOffset>0x4</addressOffset>
@@ -333,7 +332,8 @@ It is defined in terms of cycles of the watchdog clock</description>
                <fields>
                   <field>
                      <name>TOVALHIGH</name>
-                     <description>Bits[31..16]</description>
+                     <description>Bits[31..16] of the 32-bit time-out value for the watchdog timer.\n
+It is defined in terms of cycles of the watchdog clock</description>
                      <bitOffset>0</bitOffset>
                   </field>
                </fields>
@@ -348,22 +348,8 @@ It is defined in terms of cycles of the watchdog clock</description>
                <fields>
                   <field>
                      <name>TOVALLOW</name>
-                     <description>Bits[16..0]</description>
-                     <bitOffset>0</bitOffset>
-                  </field>
-               </fields>
-            </register>
-            <register>
-               <name>WIN</name>
-               <description>Window Register (WINL:WINH)</description>
-               <addressOffset>0x8</addressOffset>
-               <fields>
-                  <field>
-                     <name>WIN</name>
-                     <description>Defines the 32-bit window for the windowed mode of operation of the watchdog.\n
-It is defined in terms of cycles of the watchdog clock. \n
-In this mode the watchdog can be refreshed only when the timer has reached a value greater than or equal to this window length.\n
- A refresh outside this window resets the system or if IRQRSTEN is set, it interrupts and then resets the system</description>
+                     <description>Bits[16..0] of the 32-bit time-out value for the watchdog timer.\n
+It is defined in terms of cycles of the watchdog clock</description>
                      <bitOffset>0</bitOffset>
                   </field>
                </fields>
@@ -377,7 +363,10 @@ In this mode the watchdog can be refreshed only when the timer has reached a val
                <fields>
                   <field>
                      <name>WINHIGH</name>
-                     <description>Bits[31..16]</description>
+                     <description>Bits[31..16] of the 32-bit window for the windowed mode of operation of the watchdog.\n
+It is defined in terms of cycles of the watchdog clock. \n
+In this mode the watchdog can be refreshed only when the timer has reached a value greater than or equal to this window length.\n
+ A refresh outside this window resets the system or if IRQRSTEN is set, it interrupts and then resets the system</description>
                      <bitOffset>0</bitOffset>
                   </field>
                </fields>
@@ -392,7 +381,10 @@ In this mode the watchdog can be refreshed only when the timer has reached a val
                <fields>
                   <field>
                      <name>WINLOW</name>
-                     <description>Bits[16..0]</description>
+                     <description>Bits[16..0] of the 32-bit window for the windowed mode of operation of the watchdog.\n
+It is defined in terms of cycles of the watchdog clock. \n
+In this mode the watchdog can be refreshed only when the timer has reached a value greater than or equal to this window length.\n
+ A refresh outside this window resets the system or if IRQRSTEN is set, it interrupts and then resets the system</description>
                      <bitOffset>0</bitOffset>
                   </field>
                </fields>
@@ -434,18 +426,6 @@ it interrupts and then resets the system). The unlock sequence is effective only
                </fields>
             </register>
             <register>
-               <name>TMROUT</name>
-               <description>Timer Output Register (TMROUTL:TMROUTH)</description>
-               <addressOffset>0x10</addressOffset>
-               <fields>
-                  <field>
-                     <name>TIMEROUTHIGH</name>
-                     <description>Shows the value of the upper 16 bits of the watchdog timer</description>
-                     <bitOffset>0</bitOffset>
-                  </field>
-               </fields>
-            </register>
-            <register>
                <name>TMROUTH</name>
                <description>Timer Output Register High</description>
                <addressOffset>0x10</addressOffset>
@@ -454,7 +434,7 @@ it interrupts and then resets the system). The unlock sequence is effective only
                <fields>
                   <field>
                      <name>TIMEROUTHIGH</name>
-                     <description>Shows the value of the upper 16 bits of the watchdog timer</description>
+                     <description>Bits[32:16] the watchdog timer</description>
                      <bitOffset>0</bitOffset>
                   </field>
                </fields>
@@ -468,7 +448,7 @@ it interrupts and then resets the system). The unlock sequence is effective only
                <fields>
                   <field>
                      <name>TIMEROUTLOW</name>
-                     <description>Shows the value of the lower 16 bits of the watchdog timer</description>
+                     <description>Bits[15:0] the watchdog timer</description>
                      <bitOffset>0</bitOffset>
                   </field>
                </fields>
