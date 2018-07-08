@@ -1,6 +1,6 @@
-/*
+/**
  ============================================================================
- * @file    pit-adc-dma-example.cpp (180.ARM_Peripherals/Snippets)
+ * @file    dma-pit-adc-example.cpp (180.ARM_Peripherals/Snippets)
  * @brief   PIT trigger ADC triggers DMA
  *
  *  Created on: 10/7/2017
@@ -21,7 +21,7 @@ using namespace USBDM;
 using Led         = GpioA<2, ActiveLow>;  // = PTA2 = D9 = Blue LED
 using Adc         = Adc0;
 using AdcChannel  = Adc0Channel<0>;
-using PitChannel  = PitChannel0;
+using PITChannel  = PitChannel<0>;
 
 /**
  * This example used the PIT to trigger 100 ADC conversions @1ms interval.
@@ -49,10 +49,10 @@ static void configureAdc() {
    Adc::calibrate();
 
    // Configure the ADC to use hardware with trigger A + interrupts + DMA
-   AdcChannel::enableHardwareConversion(AdcPretrigger_A, AdcInterrupt_disable, AdcDma_Enable);
+   AdcChannel::enableHardwareConversion(AdcPretrigger_0, AdcInterrupt_disable, AdcDma_Enable);
 
    // Connect ADC trigger A to PIT
-   SimInfo::setAdc0Triggers(SimInfo::SimAdc0AltTrigger_PreTrigger_A, SimInfo::SimAdc0Trigger_PitCh0);
+   SimInfo::setAdc0Triggers(SimAdc0AltTrigger_PreTrigger_0, SimAdc0Trigger_PitCh0);
 
    // Check for errors so far
    checkError();
@@ -66,10 +66,10 @@ bool complete;
  *
  * Sets flag to indicate sequence complete.
  */
-void dmaCallback() {
+static void dmaCallback() {
    // Clear LED for debug
    Led::off();
-   PitChannel::disable();
+   PITChannel::disable();
    complete = true;
 }
 
@@ -80,11 +80,14 @@ uint16_t buffer[100] = {1,2,3,4,5,6,7,8,9};
  * - Triggered by the ADC
  * - Transfers results from the ADC to memory buffer
  */
-static void configureDma() {
+static ErrorCode configureDma() {
 
    // DMA channel number to use
-   static constexpr DmaChannelNum DMA_CHANNEL = DmaChannelNum_1;
+   const DmaChannelNum dmaChannelNum = Dma0::allocateChannel();
 
+   if (dmaChannelNum == DmaChannelNum_None) {
+      return E_NO_RESOURCE;
+   }
    /**
     * @verbatim
     * +------------------------------+            Simple DMA mode (MLNO = Minor Loop Mapping Disabled)
@@ -125,7 +128,7 @@ static void configureDma() {
     * Structure to define the DMA transfer
     */
    static const DmaTcd tcd {
-      /* uint32_t  SADDR  Source address        */ (uint32_t)(AdcChannel::adc().R),  // ADC result register
+      /* uint32_t  SADDR  Source address        */ (uint32_t)(ADC0->R),              // ADC result register
       /* uint16_t  SOFF   SADDR offset          */ 0,                                // SADDR does not change
       /* uint16_t  ATTR   Transfer attributes   */ DMA_ATTR_SSIZE(DmaSize_16bit)|    // 16-bit read from ADR->R (ignores MSBs)
       /*                                        */ DMA_ATTR_DSIZE(DmaSize_16bit),    // 16-bit write to array
@@ -145,21 +148,22 @@ static void configureDma() {
    complete = false;
 
    // Enable DMAC with default settings
-   Dma0::enable();
+   Dma0::configure();
 
    // Set callback (Interrupts are enabled in TCD)
-   Dma0::setCallback(DMA_CHANNEL, dmaCallback);
-   Dma0::enableNvicInterrupts(DMA_CHANNEL);
+   Dma0::setCallback(dmaChannelNum, dmaCallback);
+   Dma0::enableNvicInterrupts(dmaChannelNum);
 
    // DMA triggered by ADC requests
-   DmaMux0::configure(DMA_CHANNEL, DmaSlot_ADC0, DmaMuxEnable_Continuous);
+   DmaMux0::configure(dmaChannelNum, Dma0Slot_ADC0, DmaMuxEnable_Continuous);
 
    // Configure the transfer
-   Dma0::configureTransfer(DMA_CHANNEL, tcd);
+   Dma0::configureTransfer(dmaChannelNum, tcd);
 
    // Enable requests from the channel
-   Dma0::enableRequests(DMA_CHANNEL);
+   Dma0::enableRequests(dmaChannelNum);
 
+   return E_NO_ERROR;
 }
 
 /**
@@ -180,9 +184,9 @@ void configurePit() {
    // Configure base PIT
    Pit::configure(PitDebugMode_Stop);
 
-   PitChannel::setCallback(pitCallback);
+   PITChannel::setCallback(pitCallback);
    // Configure channel
-   PitChannel::configure(1*ms, PitChannelIrq_Enable);
+   PITChannel::configure(1*ms, PitChannelIrq_Enable);
 }
 
 void testHardwareConversions() {
@@ -194,14 +198,12 @@ void testHardwareConversions() {
       __asm__("nop");
    }
 
-   printf("Completed Transfer\n");
-   for (unsigned index=0; index<(sizeof(buffer)/sizeof(buffer[0])); index++) {
-      printf("%4d: , ch2=%6u\n", index, buffer[index]);
-   }
+   console.writeln("Completed Transfer");
+   console.writeArray(buffer, sizeof(buffer)/sizeof(buffer[0]));
 }
 
 int main() {
-   printf("Starting\n");
+   console.writeln("Starting");
 
    Led::setOutput();
 

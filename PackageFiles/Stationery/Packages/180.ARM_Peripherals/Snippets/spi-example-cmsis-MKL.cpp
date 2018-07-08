@@ -1,6 +1,6 @@
 /*
  ============================================================================
- * @file    spi-example.cpp (180.ARM_Peripherals/Snippets)
+ * @file    spi-example-cmsis-MKL.cpp (180.ARM_Peripherals/Snippets)
  * @brief   Basic C++ demo of using SPI interface
  *
  *  Created on: 10/6/2017

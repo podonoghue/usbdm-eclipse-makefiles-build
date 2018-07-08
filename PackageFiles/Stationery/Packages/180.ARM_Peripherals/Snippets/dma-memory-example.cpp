@@ -1,6 +1,6 @@
 /*
  ============================================================================
- * @file    main.cpp (180.ARM_Peripherals/Sources/main.cpp)
+ * @file    dma-memory-example..cpp (180.ARM_Peripherals/Sources/main.cpp)
  * @brief   Basic C++ demo using GPIO class
  *
  *  Created on: 10/1/2016
@@ -37,13 +37,16 @@ static void dmaCallback() {
  * @param[out] destination    Destination location
  * @param[in]  size           Number of bytes to transfer - must be multiple of uint32_t size
  */
-static void dmaTransfer(uint32_t *source, uint32_t *destination, uint32_t size) {
+static ErrorCode dmaTransfer(uint32_t *source, uint32_t *destination, uint32_t size) {
 
    usbdm_assert(size%sizeof(uint32_t) == 0, "size must be a multiple of sizeof(uint32_t)");
 
    // DMA channel number to use
-   static constexpr DmaChannelNum DMA_CHANNEL = DmaChannelNum_1;
+   const DmaChannelNum dmaChannelNum = Dma0::allocateChannel();
 
+   if (dmaChannelNum == DmaChannelNum_None) {
+      return E_NO_RESOURCE;
+   }
    /**
     * @verbatim
     * +------------------------------+            Simple DMA mode (MLNO = Minor Loop Mapping Disabled)
@@ -106,19 +109,31 @@ static void dmaTransfer(uint32_t *source, uint32_t *destination, uint32_t size) 
    Dma0::configure();
 
    // Set callback (Interrupts are enabled in TCD)
-   Dma0::setCallback(DMA_CHANNEL, dmaCallback);
-   Dma0::enableNvicInterrupts(DMA_CHANNEL);
+   Dma0::setCallback(dmaChannelNum, dmaCallback);
+   Dma0::enableNvicInterrupts(dmaChannelNum);
 
    // Configure the transfer
-   Dma0::configureTransfer(DMA_CHANNEL, tcd);
+   Dma0::configureTransfer(dmaChannelNum, tcd);
 
    while (!complete) {
       __asm__("nop");
    }
+   return E_NO_ERROR;
 }
 
 int main() {
    console.writeln("Starting");
+
+#if 0
+   // For testing channel allocation
+   for(;;) {
+      DmaChannelNum ch = Dma0::allocateChannel();
+      if (ch == DmaChannelNum_None) {
+         break;
+      }
+      console.write("Channel allocated = ").writeln(ch);
+   }
+#endif
 
    uint32_t source[20]      = {1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20};
    uint32_t destination[20] = {0};
@@ -126,17 +141,15 @@ int main() {
    console.setPadding(Padding_LeadingSpaces).setWidth(3);
 
    console.writeln("Original buffer contents");
-   for (unsigned index=0; index<(sizeof(destination)/sizeof(destination[0])); index++) {
-      console.write(index).write(": ").writeln(destination[index]);
-   }
+   console.writeArray(source, sizeof(source)/sizeof(source[0]));
 
    console.writeln("Starting Transfer");
-   dmaTransfer(source, destination, sizeof(source));
-   console.writeln("Completed Transfer");
+   ErrorCode rc = dmaTransfer(source, destination, sizeof(source));
+   console.write("Completed Transfer rc = ").writeln(getErrorMessage(rc));
 
-   console.writeln("Final buffer contents");
-   for (unsigned index=0; index<(sizeof(destination)/sizeof(destination[0])); index++) {
-      console.write(index).write(": ").writeln(destination[index]);
+   if (rc == E_NO_ERROR) {
+      console.writeln("Final buffer contents");
+      console.writeArray(destination, sizeof(destination)/sizeof(destination[0]));
    }
 
    for(;;) {

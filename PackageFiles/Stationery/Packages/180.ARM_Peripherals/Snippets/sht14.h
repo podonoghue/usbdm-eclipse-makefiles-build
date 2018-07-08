@@ -1,5 +1,5 @@
 /*
- * sht14.h
+ * @file sht14.h
  *
  *  Created on: 29Sep.,2017
  *      Author: podonoghue

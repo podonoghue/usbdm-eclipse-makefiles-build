@@ -1,6 +1,6 @@
 /**
  ============================================================================
- * @file digital-example1.cpp
+ * @file digital-example2.cpp
  * @brief Basic digital input/output example
  *
  *  Created on: 10/1/2016

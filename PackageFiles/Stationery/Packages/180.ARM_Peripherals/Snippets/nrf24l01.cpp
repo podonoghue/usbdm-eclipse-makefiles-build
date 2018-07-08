@@ -1,5 +1,5 @@
 /*
- * NRF24L01.cpp
+ * nrf24l01.cpp
  *
  *  Created on: 30/06/2014
  *      Author: podonoghue

@@ -1,6 +1,6 @@
 /*
  ============================================================================
- * @file    test-mcg.c
+ * @file    mcg-test.c
  * @brief   Test Mcg configuration
  *
  *  Created on: 10/1/2016

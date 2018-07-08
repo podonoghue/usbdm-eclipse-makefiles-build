@@ -30,10 +30,6 @@ Spi0 spi;
 // Which SPI PCS signal to assert
 static constexpr SpiPeripheralSelect spiSelect = SpiPeripheralSelect_2;
 
-// DMA channel numbers
-static constexpr DmaChannelNum DMA_TX_CHANNEL = DmaChannelNum_0;
-static constexpr DmaChannelNum DMA_RX_CHANNEL = DmaChannelNum_1;
-
 // Used to indicate complete transfer
 static volatile bool complete;
 
@@ -76,7 +72,7 @@ static const uint8_t rxTestBuffer[sizeof(txBuffer)/sizeof(txBuffer[0])] = {1,2,3
 /**
  * Configure DMA from Memory-to-UART
  */
-static void initDma() {
+static void initDma(DmaChannelNum dmaTransmitChannel, DmaChannelNum dmaReceiveChannel) {
 
    /**
     * @verbatim
@@ -121,10 +117,10 @@ static void initDma() {
       /* uint32_t  SADDR  Source address        */ (uint32_t)(txBuffer),                     // Source array
       /* uint16_t  SOFF   SADDR offset          */ sizeof(txBuffer[0]),                      // SADDR advances 1 element for each request
       /* uint16_t  ATTR   Transfer attributes   */ dmaSSize(txBuffer[0])|                    // Read size for SADDR
-      /*                                        */ dmaDSize(spi.SPI->PUSHR),                 // Write size for DADDR
+      /*                                        */ dmaDSize(SPI0->PUSHR),                 // Write size for DADDR
       /* uint32_t  NBYTES Minor loop byte count */ sizeof(txBuffer[0]),                      // Total transfer in one minor-loop
       /* uint32_t  SLAST  Last SADDR adjustment */ -sizeof(txBuffer),                        // Reset SADDR to start of array on completion
-      /* uint32_t  DADDR  Destination address   */ (uint32_t)(&spi.SPI->PUSHR),              // Destination is SPI PUSH data register
+      /* uint32_t  DADDR  Destination address   */ (uint32_t)(&SPI0->PUSHR),              // Destination is SPI PUSH data register
       /* uint16_t  DOFF   DADDR offset          */ 0,                                        // DADDR doesn't change
       /* uint16_t  CITER  Major loop count      */ DMA_CITER_ELINKNO_ELINK(0)|               // No ELINK
       /*                                        */ ((sizeof(txBuffer))/sizeof(txBuffer[0])), // Transfer entire txBuffer
@@ -135,7 +131,7 @@ static void initDma() {
    };
 
    static const DmaTcd rxTcd {
-      /* uint32_t  SADDR  Source address        */ (uint32_t)(&spi.SPI->POPR),               // Source is SPI POPR data register
+      /* uint32_t  SADDR  Source address        */ (uint32_t)(&SPI0->POPR),               // Source is SPI POPR data register
       /* uint16_t  SOFF   SADDR offset          */ 0,                                        // SADDR adoesn't change
       /* uint16_t  ATTR   Transfer attributes   */ dmaSSize(rxBuffer[0])|                    // Read size for SADDR (read 1 byte, discards 3)
       /*                                        */ dmaDSize(rxBuffer[0]),                    // Write size to DADDR
@@ -158,24 +154,24 @@ static void initDma() {
    Dma0::configure();
 
    // Set callback (Interrupts are enabled in TCD)
-   Dma0::setCallback(DMA_TX_CHANNEL, dmaCallback);
-   Dma0::enableNvicInterrupts(DMA_TX_CHANNEL);
+   Dma0::setCallback(dmaTransmitChannel, dmaCallback);
+   Dma0::enableNvicInterrupts(dmaTransmitChannel);
 
    // Set callback (Interrupts are enabled in TCD)
-   Dma0::setCallback(DMA_RX_CHANNEL, dmaCallback);
-   Dma0::enableNvicInterrupts(DMA_RX_CHANNEL);
+   Dma0::setCallback(dmaReceiveChannel, dmaCallback);
+   Dma0::enableNvicInterrupts(dmaReceiveChannel);
 
    // Connect DMA channel to SPI Tx
-   DmaMux0::configure(DMA_TX_CHANNEL, DmaSlot_SPI0_Transmit, DmaMuxEnable_Continuous);
+   DmaMux0::configure(dmaTransmitChannel, Dma0Slot_SPI0_Tx, DmaMuxEnable_Continuous);
 
    // Connect DMA channel to SPI Rx
-   DmaMux0::configure(DMA_RX_CHANNEL, DmaSlot_SPI0_Receive, DmaMuxEnable_Continuous);
+   DmaMux0::configure(dmaReceiveChannel, Dma0Slot_SPI0_Rx, DmaMuxEnable_Continuous);
 
    // Configure the Tx transfer
-   Dma0::configureTransfer(DMA_TX_CHANNEL, txTcd);
+   Dma0::configureTransfer(dmaTransmitChannel, txTcd);
 
    // Configure the Rx transfer
-   Dma0::configureTransfer(DMA_RX_CHANNEL, rxTcd);
+   Dma0::configureTransfer(dmaReceiveChannel, rxTcd);
 }
 
 /**
@@ -186,7 +182,8 @@ static void initDma() {
  *
  * @param status Interrupt status value from SPI->SR
  */
-static void spiCallback(uint32_t) {
+static void spiCallback(uint32_t status) {
+   (void)status;
    Led::toggle();
 }
 
@@ -208,17 +205,17 @@ static void configureSpi() {
 /**
  * Start transfer
  */
-static void startTransfer() {
+static void startTransfer(DmaChannelNum dmaTransmitChannel, DmaChannelNum dmaReceiveChannel) {
    complete = false;
 
    spi.getStatus();
    spi.enableTransfer();
 
    // Enable Rx hardware requests
-   Dma0::enableRequests(DMA_RX_CHANNEL);
+   Dma0::enableRequests(dmaReceiveChannel);
 
    // Enable Tx hardware requests
-   Dma0::enableRequests(DMA_TX_CHANNEL);
+   Dma0::enableRequests(dmaTransmitChannel);
 }
 
 int main() {
@@ -226,13 +223,29 @@ int main() {
 
    Led::setOutput();
 
+   // DMA channel number to use (determines which PIT channel used)
+   static const DmaChannelNum dmaTransmitChannel = Dma0::allocatePeriodicChannel();
+   if (dmaTransmitChannel == DmaChannelNum_None) {
+      console.writeln("Failed to allocate Transmit DMA channel, rc= ").writeln(E_NO_RESOURCE);
+      __asm__("bkpt");
+   }
+   console.write("Allocated Transmit DMA channel  #").writeln(dmaTransmitChannel);
+
+   // DMA channel number to use (determines which PIT channel used)
+   static const DmaChannelNum dmaReceiveChannel = Dma0::allocatePeriodicChannel();
+   if (dmaReceiveChannel == DmaChannelNum_None) {
+      console.writeln("Failed to allocate Receive DMA channel, rc= ").writeln(E_NO_RESOURCE);
+      __asm__("bkpt");
+   }
+   console.write("Allocated Receive DMA channel  #").writeln(dmaReceiveChannel);
+
    // Set up DMA transfer from memory -> SPI
-   initDma();
+   initDma(dmaTransmitChannel, dmaReceiveChannel);
    configureSpi();
 
    for(;;) {
       // Start transfer
-      startTransfer();
+      startTransfer(dmaTransmitChannel, dmaReceiveChannel);
 
       // Wait for completion of 1 Major-loop = 1 txBuffer
       while (!complete) {

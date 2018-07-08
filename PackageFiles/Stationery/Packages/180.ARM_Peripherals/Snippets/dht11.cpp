@@ -1,5 +1,5 @@
 /*
- * dht11.cpp
+ * @file dht11.cpp
  *
  *  Created on: 19Nov.,2017
  *      Author: podonoghue

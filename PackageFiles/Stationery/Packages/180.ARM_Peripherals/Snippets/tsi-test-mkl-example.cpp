@@ -1,6 +1,6 @@
 /*
  ============================================================================
- * @file    tsi-mkl-example.cpp (180.ARM_Peripherals)
+ * @file    tsi-test-mkl-example.cpp (180.ARM_Peripherals\Snippets)
  * @brief   Basic C++ demo using TSI class
  *
  *  Created on: 10/1/2016

@@ -1,5 +1,5 @@
 /**
- * @file    pid.h
+ * @file    pit-pid-example.h
  * @brief   PID Controller
  *
  *  Created on: 10 Jul 2016

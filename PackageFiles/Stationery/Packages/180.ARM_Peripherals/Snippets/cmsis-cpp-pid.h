@@ -1,5 +1,5 @@
 /**
- * @file    pid.h
+ * @file    cmsis-cpp-pid.h
  * @brief   PID Controller using CMSIS TimerClass
  *
  *  Created on: 10 Jul 2016

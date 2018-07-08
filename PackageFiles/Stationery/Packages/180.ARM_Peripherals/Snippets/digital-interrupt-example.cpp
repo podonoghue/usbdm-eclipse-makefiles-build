@@ -1,5 +1,5 @@
 /**
- * @file    pin-interrupt-example.cpp (180.ARM_Peripherals/Sources/pin-interrupt-example.cpp)
+ * @file    digital-interrupt-example.cpp (180.ARM_Peripherals/Sources/pin-interrupt-example.cpp)
  *
  * Pin Interrupt Example
  *

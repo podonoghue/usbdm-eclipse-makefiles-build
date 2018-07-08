@@ -16,6 +16,7 @@
  *
  * This example requires interrupts to be enabled in the USBDM configuration for the following:
  * - DMA
+ * - PIT
  *
  * The LED should be assigned to a suitable GPIO
  *
@@ -37,12 +38,6 @@ using namespace USBDM;
 
 // Connection - change as required
 using Led         = GpioA<2, ActiveLow>;  // = Blue LED
-
-// PIT channel used for throttling
-using TimerChannel = PitChannel<1>;
-
-// DMA channel number to use (must agree with PIT channel used)
-static constexpr DmaChannelNum DMA_CHANNEL = DmaChannelNum_1;
 
 // Slot number to use (must agree with console UART)
 static constexpr DmaSlot DMA_SLOT = Dma0Slot_UART0_Tx;
@@ -136,8 +131,10 @@ static const DmaTcd tcd {
 
 /**
  * Configure DMA from Memory-to-UART
+ *
+ * @param dmaChannel  Pre-allocated DMA channel to use.
  */
-static void configureDma() {
+static void configureDma(DmaChannelNum dmaChannel) {
 
    // Sequence not complete yet
    complete = false;
@@ -146,39 +143,41 @@ static void configureDma() {
    Dma0::configure();
 
    // Set callback (Interrupts are enabled in TCD)
-   Dma0::setCallback(DMA_CHANNEL, dmaCallback);
+   Dma0::setCallback(dmaChannel, dmaCallback);
    Dma0::setErrorCallback(dmaErrorCallbackFunction);
-   Dma0::enableNvicInterrupts(DMA_CHANNEL);
+   Dma0::enableNvicInterrupts(dmaChannel);
    Dma0::enableNvicErrorInterrupt();
 
    // Connect DMA channel to UART but throttle by PIT Channel 1 (matches DMA channel 1)
-   DmaMux0::configure(DMA_CHANNEL, DMA_SLOT, DmaMuxEnable_Triggered);
+   DmaMux0::configure(dmaChannel, DMA_SLOT, DmaMuxEnable_Triggered);
 
    // Configure the transfer
-   Dma0::configureTransfer(DMA_CHANNEL, tcd);
+   Dma0::configureTransfer(dmaChannel, tcd);
 
    // Enable hardware requests
-   Dma0::enableRequests(DMA_CHANNEL);
+   Dma0::enableRequests(dmaChannel);
 
 #ifdef DMA_EARS_EDREQ_0_MASK
    // Enable asynchronous requests (if available)
-   Dma0::enableAsynchronousRequests(DMA_CHANNEL);
+   Dma0::enableAsynchronousRequests(dmaChannel);
 #endif
 
    // Enable channel interrupt requests
-   Dma0::enableErrorInterrupts(DMA_CHANNEL);
+   Dma0::enableErrorInterrupts(dmaChannel);
 }
 
-/*
+/**
  * Configure the PIT
- * - Generates regular events. Each event is used to throttle the UART Tx.
+ * - Generates regular events which throttles the DMA -> UART Tx.
+ *
+ * @param dmaChannel  DMA channel being used, determines PIT
  */
-static void configurePit() {
+static void configurePit(DmaChannelNum dmaChannel) {
    // Configure base PIT
    Pit::configure(PitDebugMode_Stop);
 
    // Configure channel for 100ms + interrupts
-   TimerChannel::configure(100*ms, PitChannelIrq_Enable);
+   Pit::configureChannel(dmaChannel, 100*ms, PitChannelIrq_Enable);
 }
 
 /**
@@ -237,9 +236,17 @@ int main() {
          SmcLowLeakageStop_Enable,
          SmcVeryLowLeakageStop_Enable);
 
+   // DMA channel number to use (determines which PIT channel used)
+   static const DmaChannelNum dmaChannel = Dma0::allocatePeriodicChannel();
+   if (dmaChannel == DmaChannelNum_None) {
+      console.writeln("Failed to allocate DMA channel, rc= ").writeln(E_NO_RESOURCE);
+      __asm__("bkpt");
+   }
+   console.write("Allocate DMA channel  #").writeln(dmaChannel);
+
    // Set up DMA transfer from memory -> UART
-   configureDma();
-   configurePit();
+   configureDma(dmaChannel);
+   configurePit(dmaChannel);
 
    // Start the UART DMA requests
    console.writeln("Doing 1 DMA transfer while in RUN").flushOutput();
@@ -258,7 +265,7 @@ int main() {
    changeRunMode(SmcRunMode_VeryLowPower);
 
    // Re-configure PIT as bus clock may have changed
-   configurePit();
+   configurePit(dmaChannel);
 
    // Start the UART DMA requests again
    complete = false;

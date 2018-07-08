@@ -1,5 +1,5 @@
 /*
- * ftm-dma-example.cpp
+ * @file ftm-dma-example.cpp
  *
  *  Created on: 19 Jun 2018
  *      Author: podonoghue

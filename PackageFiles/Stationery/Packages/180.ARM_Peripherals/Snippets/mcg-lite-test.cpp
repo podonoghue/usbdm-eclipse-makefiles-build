@@ -1,6 +1,6 @@
 /*
  ============================================================================
- * @file    test-mcglite.c
+ * @file    mcg-lite-test.cpp
  * @brief   Test Mcg Lite configuration
  *
  *  Created on: 10/1/2016

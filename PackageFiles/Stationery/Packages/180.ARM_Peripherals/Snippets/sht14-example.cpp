@@ -1,6 +1,6 @@
 /*
  ============================================================================
- * @file    main.cpp (180.ARM_Peripherals/Sources/main.cpp)
+ * @file    sht14-example.cpp (180.ARM_Peripherals/Snippets)
  * @brief   Basic C++ demo
  *
  *  Created on: 10/1/2016

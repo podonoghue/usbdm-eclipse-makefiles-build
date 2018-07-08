@@ -1,6 +1,6 @@
 /*
  ============================================================================
- * @file    main.cpp (180.ARM_Peripherals/Sources/main.cpp)
+ * @file    mcg-run-mode-test-mk22f.cpp (180.ARM_Peripherals/Sources/)
  * @brief   Basic C++ demo
  *
  *  Created on: 10/1/2016
