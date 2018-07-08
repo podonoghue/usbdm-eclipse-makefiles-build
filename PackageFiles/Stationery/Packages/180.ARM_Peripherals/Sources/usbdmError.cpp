@@ -29,6 +29,7 @@ static const char *messages[] {
       "Program has terminated",
       "Clock initialisation failed",
       "Callback already installed",
+      "Failed resource allocation",
 };
 
 /**

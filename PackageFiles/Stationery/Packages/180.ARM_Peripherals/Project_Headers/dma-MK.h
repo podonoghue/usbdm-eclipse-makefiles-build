@@ -131,7 +131,8 @@ enum DmaChannelNum {
    DmaChannelNum_30,     //!< Channel 30
    DmaChannelNum_31,     //!< Channel 31
 
-   DmaChannelNum_All = (1<<6),  //!< All channels, some operations may be applied to all channels
+   DmaChannelNum_All  = (1<<6),  //!< All channels, some operations may be applied to all channels
+   DmaChannelNum_None = (1<<7),  //!< Used to indicate failed channel allocation 
 };
 
 /**
@@ -353,6 +354,9 @@ protected:
    /** Callback functions for ISRs */
    static DmaCallbackFunction callbacks[Info::NumVectors];
 
+   /** Bit-mask of free channels */
+   static uint32_t allocatedChannels;
+
    /** Callback functions for errors */
    static DmaErrorCallbackFunction errorCallback;
 
@@ -519,6 +523,28 @@ public:
          callbacks[channel] = noHandlerCallback;
          configureTransfer((DmaChannelNum)channel, emptyTcd);
       }
+   }
+
+   /**
+    * Allocate DMA channel
+    *
+    * @return Error DmaChannelNum_None - No channel available
+    * @return Channel number
+    */
+   static DmaChannelNum allocateChannel() {
+      unsigned channelNum = __builtin_ffs(allocatedChannels);
+      if ((channelNum == 0)||(--channelNum>=Info::NumChannels)) {
+         return DmaChannelNum_None;
+      }
+      allocatedChannels &= ~(1<<channelNum);
+      return (DmaChannelNum) channelNum;
+   }
+
+   /**
+    * Free DMA channel
+    */
+   static void freeChannel(DmaChannelNum channelNum) {
+      allocatedChannels |= (1<<channelNum);
    }
 
    /**
@@ -763,12 +789,15 @@ template<class Info> DmaCallbackFunction DmaBase_T<Info>::callbacks[];
  */
 template<class Info> DmaErrorCallbackFunction DmaBase_T<Info>::errorCallback = noHandlerErrorCallback;
 
+
+template<class Info> uint32_t DmaBase_T<Info>::allocatedChannels = -1;
+
 #ifdef USBDM_DMAMUX0_IS_DEFINED
 using DmaMux0 = DmaMux_T<Dmamux0Info, Dma0Info::NumChannels>;
 #endif
 
 #ifdef USBDM_DMAMUX1_IS_DEFINED
-using DmaMux1 = DmaMux_T<Dmamux1Info>;
+using DmaMux1 = DmaMux_T<Dmamux1Info, Dma0Info::NumChannels>;
 #endif
 
 #ifdef USBDM_DMA0_IS_DEFINED
