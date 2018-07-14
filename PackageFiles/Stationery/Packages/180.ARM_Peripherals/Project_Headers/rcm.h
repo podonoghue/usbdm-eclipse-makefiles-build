@@ -17,6 +17,7 @@
  * Any manual changes will be lost.
  */
 #include "hardware.h"
+#include "stringFormatter.h"
 
 namespace USBDM {
 
@@ -111,12 +112,11 @@ public:
 #endif
 
    /**
-    * Returns a bit mask indicating the source of the last reset
+    * Returns a string indicating the source of the reset indicated by source
     *
-    * @return Bit mask representing sources
+    * @param source Pointer to string in static buffer representing reset sources
     */
    static const char *getResetSourceDescription(uint32_t source) {
-      static char buff[20];
       static const char *names[] = {
             "Wakeup,",
             "Lvd,",
@@ -135,19 +135,19 @@ public:
             "14,",
             "15,",
       };
-      buff[0] = '\0';
-      char *ptr = buff;
+      static char buff[20];
+      USBDM::StringFormatter stringFormatter(buff, sizeof(buff));
       for (unsigned index=0; index<(sizeof(names)/sizeof(names[0])); index++) {
          if (source&(1<<index)) {
-            ptr = FormattedIO::strcpy(ptr, names[index]);
+            stringFormatter.write(names[index]);
          }
       }
       return buff;
    }
    /**
-    * Returns a bit mask indicating the source of the last reset
+    * Returns a string indicating the source of the last reset
     *
-    * @return Bit mask representing sources
+    * @param source Pointer to string in static buffer representing reset sources
     */
    static const char *getResetSourceDescription() {
       return getResetSourceDescription(getResetSource());
