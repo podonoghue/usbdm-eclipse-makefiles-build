@@ -1,6 +1,6 @@
-/*
+/**
  ============================================================================
- * @file    dma-memory-template-example..cpp (180.ARM_Peripherals/Sources/main.cpp)
+ * @file    dma-memory-template-example.cpp (180.ARM_Peripherals/Sources/)
  * @brief   Basic C++ demo using GPIO class
  *
  *  Created on: 10/1/2016
@@ -17,8 +17,12 @@
 #include "hardware.h"
 #include "dma.h"
 
+#include "stdlib.h"
+#include "string.h"
+
 using namespace USBDM;
 
+// Used to indicate complete transfer
 static volatile bool complete;
 
 /**
@@ -26,7 +30,8 @@ static volatile bool complete;
  *
  * Sets flag to indicate sequence complete.
  */
-static void dmaCallback() {
+static void dmaCallback(DmaChannelNum channel) {
+   Dma0::clearInterruptRequest(channel);
    complete = true;
 }
 
@@ -91,19 +96,29 @@ static ErrorCode dmaTransfer(T1 *source, T2 *destination, const uint32_t size) {
     * Structure to define the DMA transfer
     */
    static const DmaTcd tcd {
-      /* uint32_t  SADDR  Source address        */ (uint32_t)(source),         // Source array
-      /* uint16_t  SOFF   SADDR offset          */ sizeof(*source),            // SADDR advances source element size for each transfer
-      /* uint16_t  ATTR   Transfer attributes   */ dmaSize(*source,            // 32-bit read from SADDR
-      /*                                        */         *destination),      // 32-bit write to DADDR
-      /* uint32_t  NBYTES Minor loop byte count */ size,                       // Total transfer in one minor-loop
-      /* uint32_t  SLAST  Last SADDR adjustment */ -size,                      // Reset SADDR to start of array on completion
-      /* uint32_t  DADDR  Destination address   */ (uint32_t)(destination),    // Start of array for result
-      /* uint16_t  DOFF   DADDR offset          */ sizeof(*destination),       // DADDR advances destination element size for each transfer
-      /* uint16_t  CITER  Major loop count      */ DMA_CITER_ELINKNO_ELINK(0)| // No ELINK
-      /*                                        */ DMA_CITER_ELINKNO_CITER(1), // Single (1) software transfer
-      /* uint32_t  DLAST  Last DADDR adjustment */ -size,                      // Reset DADDR to start of array on completion
-      /* uint16_t  CSR    Control and Status    */ DMA_CSR_INTMAJOR(1)|        // Generate interrupt on completion of Major-loop
-      /*                                        */ DMA_CSR_START(1)
+      /* uint32_t  SADDR        Source address              */ (uint32_t)(source),         // Source array
+      /* uint16_t  SOFF         Source offset               */ sizeof(*source),            // SADDR advances source element size for each transfer
+      /* DmaSize   DSIZE        Destination size            */ dmaSize(*destination),      // X-bit write to DADDR
+      /* DmaModulo DMOD         Destination modulo          */ DmaModulo_Disabled,
+      /* DmaSize   SSIZE        Source size                 */ dmaSize(*source),           // X-bit read from SADDR
+      /* DmaModulo SMOD         Source modulo               */ DmaModulo_Disabled,
+      /* uint32_t  NBYTES       Minor loop byte count       */ size,                       // Total transfer in one minor-loop
+      /* uint32_t  SLAST        Last SADDR adjustment       */ -size,                      // Reset SADDR to start of array on completion
+      /* uint32_t  DADDR        Destination address         */ (uint32_t)(destination),    // Start of array for result
+      /* uint16_t  DOFF         DADDR offset                */ sizeof(*destination),       // DADDR advances destination element size for each transfer
+      /* uint16_t  CITER        Major loop count            */ DMA_CITER_ELINKNO_ELINK(0)| // No ELINK
+      /*                                                    */ DMA_CITER_ELINKNO_CITER(1), // Single (1) software transfer
+      /* uint32_t  DLAST        Last DADDR adjustment       */ -size,                      // Reset DADDR to start of array on completion
+      /* bool      START;       Channel Start               */ true,                       // Software start
+      /* bool      INTMAJOR;    Interrupt on major complete */ true,                       // Generate interrupt on completion of Major-loop
+      /* bool      INTHALF;     Interrupt on half complete  */ false,
+      /* bool      DREQ;        Disable Request             */ false,                      // Don't clear hardware request when complete major loop
+      /* bool      ESG;         Enable Scatter/Gather       */ false,
+      /* bool      MAJORELINK;  Enable channel linking      */ false,
+      /* bool      ACTIVE;      Channel Active              */ false,
+      /* bool      DONE;        Channel Done                */ false,
+      /* unsigned  MAJORLINKCH; Link Channel Number         */ 0,
+      /* DmaSpeed  BWC;         Bandwidth (speed) Control   */ DmaSpeed_NoStalls,
    };
 
    // Sequence not complete yet
@@ -125,6 +140,13 @@ static ErrorCode dmaTransfer(T1 *source, T2 *destination, const uint32_t size) {
    return E_NO_ERROR;
 }
 
+// Data element size for array - uint8_t/uint16_t/uint32_t
+using ArrayElement = uint16_t;
+
+constexpr int DataSize = 4*((1<<10)/sizeof(ArrayElement));  // 4KiB
+ArrayElement source[DataSize];
+ArrayElement destination[DataSize];
+
 int main() {
    console.writeln("Starting");
 
@@ -139,12 +161,10 @@ int main() {
    }
 #endif
 
-   uint32_t source[20]      = {1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20};
-   uint32_t destination[20] = {0};
-
-   console.setPadding(Padding_LeadingSpaces).setWidth(3);
-
-   console.writeln("Original buffer contents");
+   for(ArrayElement *p=source; p<(source+DataSize); p++) {
+      *p = (ArrayElement)rand();
+   }
+   console.writeln("Source buffer contents");
    console.writeArray(source, sizeof(source)/sizeof(source[0]));
 
    console.writeln("Starting Transfer");
@@ -152,8 +172,15 @@ int main() {
    console.write("Completed Transfer rc = ").writeln(getErrorMessage(rc));
 
    if (rc == E_NO_ERROR) {
-      console.writeln("Final buffer contents");
+      console.writeln("Destination buffer contents");
       console.writeArray(destination, sizeof(destination)/sizeof(destination[0]));
+
+      if (memcmp(source,destination,sizeof(source)) == 0) {
+         console.writeln("Contents verify passed");
+      }
+      else {
+         console.writeln("Contents verify failed");
+      }
    }
 
    for(;;) {

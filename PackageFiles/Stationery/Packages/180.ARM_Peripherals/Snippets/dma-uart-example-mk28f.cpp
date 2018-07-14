@@ -48,26 +48,7 @@ static constexpr ClockConfig RUN_MODE   = ClockConfig_PEE_120MHz;
 static constexpr ClockConfig HSRUN_MODE = ClockConfig_PEE_150MHz;
 
 // Used to indicate complete transfer
-volatile bool complete;
-
-/**
- * DMA complete callback
- *
- * Sets flag to indicate sequence complete.
- */
-static void dmaCallback() {
-   complete = true;
-}
-
-/**
- * DMA error call back
- *
- * @param errorFlags Channel error information (DMA_ES)
- */
-void dmaErrorCallbackFunction(uint32_t errorFlags) {
-   console.write("DMA error DMA_ES = 0x").writeln(errorFlags, Radix_16);
-   __BKPT();
-}
+static volatile bool complete;
 
 static const char message[]=
       "=================================\n\r"
@@ -111,24 +92,57 @@ static const char message[]=
  * +------------------------------+              - DMA_CSR_START    = Start transfer. Used for software transfers. Automatically cleared.
  * @endverbatim
  *
- * Structure to define a DMA transfer
+ * Structure to define the DMA transfer
  */
 static const DmaTcd tcd {
-   /* uint32_t  SADDR  Source address        */ (uint32_t)(message),                    // Source array
-   /* uint16_t  SOFF   SADDR offset          */ sizeof(message[0]),                     // SADDR advances 1 byte for each request
-   /* uint16_t  ATTR   Transfer attributes   */ dmaSSize(message[0])|                   // 8-bit read from SADDR
-   /*                                        */ dmaDSize(message[0]),                   // 8-bit write to DADDR
-   /* uint32_t  NBYTES Minor loop byte count */ 1*sizeof(message[0]),                   // Total transfer in one minor-loop
-   /* uint32_t  SLAST  Last SADDR adjustment */ -sizeof(message),                       // Reset SADDR to start of array on completion
-   /* uint32_t  DADDR  Destination address   */ (uint32_t)(&console.lpuart->DATA),      // Destination is UART data register
-   /* uint16_t  DOFF   DADDR offset          */ 0,                                      // DADDR doesn't change
-   /* uint16_t  CITER  Major loop count      */ DMA_CITER_ELINKNO_ELINK(0)|             // No ELINK
-   /*                                        */ ((sizeof(message))/sizeof(message[0])), // Transfer entire buffer
-   /* uint32_t  DLAST  Last DADDR adjustment */ 0,                                      // DADDR doesn't change
-   /* uint16_t  CSR    Control and Status    */ DMA_CSR_INTMAJOR(1)|                    // Generate interrupt on completion of Major-loop
-   /*                                        */ DMA_CSR_DREQ(0)|                        // Don't clear hardware request when complete major loop (non-stop)
-   /*                                        */ DMA_CSR_START(0),                       // Don't start (triggered by hardware)
+   /* uint32_t  SADDR        Source address              */ (uint32_t)(message),                    // Source array
+   /* uint16_t  SOFF         Source offset               */ sizeof(message[0]),                     // SADDR advances 1 byte for each request
+   /* DmaSize   DSIZE        Destination size            */ dmaSize(message[0]),                    // 8-bit read from DADDR
+   /* DmaModulo DMOD         Destination modulo          */ DmaModulo_Disabled,
+   /* DmaSize   SSIZE        Source size                 */ dmaSize(message[0]),                    // 8-bit write to SADDR
+   /* DmaModulo SMOD         Source modulo               */ DmaModulo_Disabled,
+   /* uint32_t  NBYTES       Minor loop byte count       */ 1*sizeof(message[0]),                   // Total transfer in one minor-loop
+   /* uint32_t  SLAST        Last SADDR adjustment       */ -sizeof(message),                       // Reset SADDR to start of array on completion
+   /* uint32_t  DADDR        Destination address         */ (uint32_t)(&console.uart->D),           // Destination is UART data register
+   /* uint16_t  DOFF         DADDR offset                */ 0,                                      // DADDR doesn't change
+   /* uint16_t  CITER        Major loop count            */ DMA_CITER_ELINKNO_ELINK(0)|             // No ELINK
+   /*                                                    */ ((sizeof(message))/sizeof(message[0])), // Transfer entire buffer
+   /* uint32_t  DLAST        Last DADDR adjustment       */ 0,                                      // DADDR doesn't change
+   /* bool      START;       Channel Start               */ false,                                  // Don't start (triggered by hardware)
+   /* bool      INTMAJOR;    Interrupt on major complete */ true,                                   // Generate interrupt on completion of Major-loop
+   /* bool      INTHALF;     Interrupt on half complete  */ false,
+   /* bool      DREQ;        Disable Request             */ false,                                  // Don't clear hardware request when complete major loop
+   /* bool      ESG;         Enable Scatter/Gather       */ false,
+   /* bool      MAJORELINK;  Enable channel linking      */ false,
+   /* bool      ACTIVE;      Channel Active              */ false,
+   /* bool      DONE;        Channel Done                */ false,
+   /* unsigned  MAJORLINKCH; Link Channel Number         */ 0,
+   /* DmaSpeed  BWC;         Bandwidth (speed) Control   */ DmaSpeed_NoStalls,
 };
+
+/**
+ * DMA error call back
+ *
+ * @param errorFlags Channel error information (DMA_ES)
+ */
+void dmaErrorCallbackFunction(uint32_t errorFlags) {
+   console.write("DMA error DMA_ES = 0x").writeln(errorFlags, Radix_16);
+   __BKPT();
+}
+
+/**
+ * DMA complete callback
+ *
+ * Sets flag to indicate sequence complete.
+ */
+static void dmaCallback(DmaChannelNum channel) {
+   // Clear status
+   Dma0::clearInterruptRequest(channel);
+   // Stop UART requests
+   console.enableDma(LpuartDma_TxHoldingEmpty, false);
+   // Flag complete to main-line
+   complete = true;
+}
 
 /**
  * Configure DMA from Memory-to-UART
@@ -268,7 +282,7 @@ int main() {
    }
    console.write("Allocate DMA channel  #").writeln(dmaChannel);
 
-   // Set up DMA transfer from memory -> UART
+   // Set up throttled DMA transfer from memory -> UART
    configureDma(dmaChannel);
    configurePit(dmaChannel);
 
@@ -280,8 +294,6 @@ int main() {
    while (!complete) {
       __asm__("nop");
    }
-   // Stop the UART DMA requests
-   console.enableDma(LpuartDma_TxHoldingEmpty, false);
    console.writeln("Done 1st transfer");
    waitMS(500);
 
@@ -300,8 +312,6 @@ int main() {
    while (!complete) {
       __asm__("nop");
    }
-   // Stop the UART DMA requests
-   console.enableDma(LpuartDma_TxHoldingEmpty, false);
    console.writeln("Done another transfer");
    waitMS(500);
 
@@ -312,16 +322,18 @@ int main() {
          SmcLpoInLowLeakage_Disable);  // LPO stops in LLS/VLLS
 
    console.writeln("\nDoing DMA while deep-sleeping....").flushOutput();
-   console.enableDma(LpuartDma_TxHoldingEmpty);
 
    for(;;) {
       Led::toggle();
-      Smc::enterStopMode(SmcStopMode_NormalStop);
-      // Will wake up after each transfer due to DMA complete interrupt
-
-      console.enableDma(LpuartDma_TxHoldingEmpty, false);
-      console.writeln("Woke up!");
+      // Enable UART Tx DMA requests
       console.enableDma(LpuartDma_TxHoldingEmpty);
+
+      //Smc::enterWaitMode();
+	  Smc::enterStopMode(SmcStopMode_NormalStop);
+
+      // Will wake up after each complete transfer due to DMA complete interrupt
+
+      console.writeln("Woke up!");
    }
    return 0;
 }

@@ -1,6 +1,6 @@
 /**
  ============================================================================
- * @file    dma-uart-example-mk20.cpp (180.ARM_Peripherals/Snippets)
+ * @file    dma-uart-example-mkl25.cpp (180.ARM_Peripherals/Snippets)
  * @brief   DMA example using UART and PIT throttling
  *
  *  Created on: 10/1/2016
@@ -37,7 +37,7 @@
 using namespace USBDM;
 
 // Connection - change as required
-using Led         = GpioA<2, ActiveLow>;  // = Blue LED
+using Led         = GpioD<1, ActiveLow>;  // = Blue LED
 
 // Slot number to use (must agree with console UART)
 static constexpr DmaSlot DMA_SLOT = Dma0Slot_UART0_Tx;
@@ -56,78 +56,41 @@ static const char message[]=
 
 /**
  * @verbatim
- * +------------------------------+            Simple DMA mode (MLNO = Minor Loop Mapping Disabled)
- * | Major Loop =                 |            ==================================================
- * |    CITER x Minor Loop        |
- * |                              |            Each DMA request triggers a minor-loop transfer sequence.
- * | +--------------------------+ |<-DMA Req.  The minor loops are counted in the major-loop.
- * | | Minor Loop               | |
- * | | Each transfer            | |            The following are used during a minor loop:
- * | |   SADDR->DADDR           | |             - SADDR Source address
- * | |   SADDR += SOFF          | |             - SOFF  Adjustment applied to SADDR after each transfer
- * | |   DADDR += DOFF          | |             - DADDR Destination address
- * | | Total transfer is NBYTES | |             - DOFF  Adjustment applied to DADDR after each transfer
- * | +--------------------------+ |             - NBYTES Number of bytes to transfer
- * | +--------------------------+ |<-DMA Req.   - Attributes
- * | | Minor Loop               | |               - ATTR_SSIZE, ATTR_DSIZE Source and destination transfer sizes
- * |..............................|               - ATTR_SMOD, ATTR_DMOD Modulo --TODO
- * | |                          | |
- * | +--------------------------+ |             The number of reads and writes done will depend on NBYTES, SSIZE and DSIZE
- * | +--------------------------+ |<-DMA Req.   For example: NBYTES=12, SSIZE=16-bits, DSIZE=32-bits => 6 reads, 3 writes
- * | | Minor Loop               | |             NBYTES must be an even multiple of SSIZE and DSIZE in bytes.
- * | | Each transfer            | |
- * | |   SADDR->DADDR           | |            The following are used by the major loop
- * | |   SADDR += SOFF          | |             - SLAST Adjustment applied to SADDR at the end of each major loop
- * | |   DADDR += DOFF          | |             - DLAST Adjustment applied to DADDR at the end of each major loop
- * | | Total transfer is NBYTES | |             - CITER Major loop counter - counts how many completed major loops
+ * +------------------------------+  DMA mode
+ * | Loop =                       |  ==================================================
  * | +--------------------------+ |
- * |                              |            SLAST and DLAST may be used to reset the addresses to the initial value or
- * | At end of Major Loop         |            link to the next transfer.
- * |    SADDR += SLAST            |            The total transferred for the entire sequence is CITER x NBYTES.
- * |    DADDR += DLAST            |
- * |                              |            Important options in the CSR:
- * | Total transfer =             |              - DMA_CSR_INTMAJOR = Generate interrupt at end of Major-loop
- * |    CITER*NBYTES              |              - DMA_CSR_DREQ     = Clear hardware request at end of Major-loop
- * +------------------------------+              - DMA_CSR_START    = Start transfer. Used for software transfers. Automatically cleared.
+ * | | Each transfer            | |  The following are used during a loop:
+ * | |   SADDR->DADDR           | |   - SADDR      Source address
+ * | |   SADDR += DCR.SSIZE     | |   - DCR.SSIZE  Adjustment applied to SADDR after each transfer
+ * | |   DADDR += DCR.DSIZE     | |   - DADDR      Destination address
+ * | +--------------------------+ |   - DCR.DSIZE  Adjustment applied to DADDR after each transfer
+ * |   Total transfer is BCR      |   - BCR        Number of bytes to transfer
+ * +------------------------------+
  * @endverbatim
  *
  * Structure to define the DMA transfer
  */
 static const DmaTcd tcd {
-   /* uint32_t  SADDR        Source address              */ (uint32_t)(message),                    // Source array
-   /* uint16_t  SOFF         Source offset               */ sizeof(message[0]),                     // SADDR advances 1 byte for each request
-   /* DmaSize   DSIZE        Destination size            */ dmaSize(message[0]),                    // 8-bit read from DADDR
-   /* DmaModulo DMOD         Destination modulo          */ DmaModulo_Disabled,
-   /* DmaSize   SSIZE        Source size                 */ dmaSize(message[0]),                    // 8-bit write to SADDR
-   /* DmaModulo SMOD         Source modulo               */ DmaModulo_Disabled,
-   /* uint32_t  NBYTES       Minor loop byte count       */ 1*sizeof(message[0]),                   // Total transfer in one minor-loop
-   /* uint32_t  SLAST        Last SADDR adjustment       */ -sizeof(message),                       // Reset SADDR to start of array on completion
-   /* uint32_t  DADDR        Destination address         */ (uint32_t)(&console.uart->D),           // Destination is UART data register
-   /* uint16_t  DOFF         DADDR offset                */ 0,                                      // DADDR doesn't change
-   /* uint16_t  CITER        Major loop count            */ DMA_CITER_ELINKNO_ELINK(0)|             // No ELINK
-   /*                                                    */ ((sizeof(message))/sizeof(message[0])), // Transfer entire buffer
-   /* uint32_t  DLAST        Last DADDR adjustment       */ 0,                                      // DADDR doesn't change
-   /* bool      START;       Channel Start               */ false,                                  // Don't start (triggered by hardware)
-   /* bool      INTMAJOR;    Interrupt on major complete */ true,                                   // Generate interrupt on completion of Major-loop
-   /* bool      INTHALF;     Interrupt on half complete  */ false,
-   /* bool      DREQ;        Disable Request             */ false,                                  // Don't clear hardware request when complete major loop
-   /* bool      ESG;         Enable Scatter/Gather       */ false,
-   /* bool      MAJORELINK;  Enable channel linking      */ false,
-   /* bool      ACTIVE;      Channel Active              */ false,
-   /* bool      DONE;        Channel Done                */ false,
-   /* unsigned  MAJORLINKCH; Link Channel Number         */ 0,
-   /* DmaSpeed  BWC;         Bandwidth (speed) Control   */ DmaSpeed_NoStalls,
+   /* uint32_t   SADDR     Source address                */ (uint32_t)(message),          // Source array
+   /* uint32_t   DADDR     Destination address           */ (uint32_t)(&console.uart->D), // UART Data register
+   /* uint32_t   BCR       Byte count                    */ sizeof(message),              // Total transfer in bytes
+   /* unsigned   LCH2:2;   Complete (BCR=0) link channel */ 0,
+   /* unsigned   LCH1:2;   Cycle-steal link channel      */ 0,
+   /* DmaLink    LINKCC:2; Link channel control          */ DmaLink_None,
+   /* bool       D_REQ:1;  Clear ERQ when complete       */ true,                         // Disable peripheral requests (ERQ) at end
+   /* DmaModulo  DMOD:4;   Destination address modulo    */ DmaModulo_Disabled,
+   /* DmaModulo  SMOD:4;   Source address modulo         */ DmaModulo_Disabled,
+   /* bool       START:1;  Start transfer                */ false,
+   /* DmaSize    DSIZE:2;  Destination size              */ dmaSize(message[0]),          // 8-bit source
+   /* bool       DINC:1;   Destination increment         */ false,
+   /* DmaSize    SSIZE:2;  Source size                   */ dmaSize(console.uart->D),     // 8-bit destination
+   /* bool       SINC:1;   Source increment              */ true,                         // Increment source address
+   /* bool       EADREQ:1; Enable asynchronous DMA       */ true,                         // Asynchronous DMA
+   /* bool       AA:1;     Auto-align                    */ false,
+   /* DmaMode    CS:1;     Cycle steal/Continuous        */ DmaMode_CycleSteal,           // Single transfer for each request
+   /* bool       ERQ:1;    Enable peripheral request     */ true,                         // Requests from UART
+   /* bool       EINT:1;   Interrupt enable              */ true,                         // Interrupt when complete
 };
-
-/**
- * DMA error call back
- *
- * @param errorFlags Channel error information (DMA_ES)
- */
-void dmaErrorCallbackFunction(uint32_t errorFlags) {
-   console.write("DMA error DMA_ES = 0x").writeln(errorFlags, Radix_16);
-   __BKPT();
-}
 
 /**
  * DMA complete callback
@@ -139,6 +102,8 @@ static void dmaCallback(DmaChannelNum channel) {
    Dma0::clearInterruptRequest(channel);
    // Stop UART requests
    console.enableDma(UartDma_TxHoldingEmpty, false);
+   // Reconfigure for next transfer
+   Dma0::configureTransfer(channel, tcd);
    // Flag complete to main-line
    complete = true;
 }
@@ -158,26 +123,13 @@ static void configureDma(DmaChannelNum dmaChannel) {
 
    // Set callback (Interrupts are enabled in TCD)
    Dma0::setCallback(dmaChannel, dmaCallback);
-   Dma0::setErrorCallback(dmaErrorCallbackFunction);
    Dma0::enableNvicInterrupts(dmaChannel);
-   Dma0::enableNvicErrorInterrupt();
 
    // Connect DMA channel to UART but throttle by PIT Channel 1 (matches DMA channel 1)
    DmaMux0::configure(dmaChannel, DMA_SLOT, DmaMuxEnable_Triggered);
 
    // Configure the transfer
    Dma0::configureTransfer(dmaChannel, tcd);
-
-   // Enable hardware requests
-   Dma0::enableRequests(dmaChannel);
-
-#ifdef DMA_EARS_EDREQ_0_MASK
-   // Enable asynchronous requests (if available)
-   Dma0::enableAsynchronousRequests(dmaChannel);
-#endif
-
-   // Enable channel interrupt requests
-   Dma0::enableErrorInterrupts(dmaChannel);
 }
 
 /**
@@ -239,6 +191,9 @@ void changeRunMode(SmcRunMode smcRunMode) {
 
 int main() {
 
+   SimInfo::setUart0Clock(SimUart0ClockSource_OscerClk);
+   console.setBaudRate(defaultBaudRate);
+
    console.writeln("\nStarting\n").flushOutput();
 
    // LED used for debug from DMA loop
@@ -266,7 +221,7 @@ int main() {
    console.writeln("Doing 1 DMA transfer while in RUN").flushOutput();
    console.enableDma(UartDma_TxHoldingEmpty);
 
-   // Wait for completion of 1 Major-loop = 1 message
+   // Wait for completion of 1 message
    while (!complete) {
       __asm__("nop");
    }
@@ -284,12 +239,12 @@ int main() {
    console.writeln("\nDoing DMA while in VLPR....").flushOutput();
    console.enableDma(UartDma_TxHoldingEmpty);
 
-   // Wait for completion of 1 Major-loop = 1 message
+   // Wait for completion of 1 message
    while (!complete) {
       __asm__("nop");
    }
    console.writeln("Done 2nd transfer");
-   waitMS(500);
+   waitMS(100);
 
    Smc::setStopOptions(
          SmcLowLeakageStopMode_VLLS3,   // Retains RAM

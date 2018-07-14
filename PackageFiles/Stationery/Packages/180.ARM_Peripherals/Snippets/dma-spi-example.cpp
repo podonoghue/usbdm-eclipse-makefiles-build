@@ -38,7 +38,8 @@ static volatile bool complete;
  *
  * Sets flag to indicate sequence complete.
  */
-static void dmaCallback() {
+static void dmaCallback(DmaChannelNum channel) {
+   Dma0::clearInterruptRequest(channel);
    complete = true;
 }
 
