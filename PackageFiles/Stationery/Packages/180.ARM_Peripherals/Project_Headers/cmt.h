@@ -111,8 +111,6 @@ enum CmtInterruptDma {
 
 /**
  * Type definition for CMT interrupt call back
- *
- * @param[in]  status Struct indicating interrupt source and state
  */
 typedef void (*CMTCallbackFunction)();
 
@@ -143,7 +141,7 @@ protected:
    /**
     * Callback to catch unhandled interrupt
     */
-   static void unhandledChannelCallback() {
+   static void unhandledCallback() {
       setAndCheckErrorCode(E_NO_HANDLER);
    }
 
@@ -159,7 +157,7 @@ protected:
 
 public:
    /**
-    * Hardware instance pointer
+    * Hardware instance pointer.
     *
     * @return Reference to CMT hardware
     */
@@ -190,7 +188,7 @@ public:
    }
 
    /**
-    * Set callback function
+    * Set callback function.
     *
     * @param[in]  theCallback Callback function to execute on interrupt
     *
@@ -198,7 +196,7 @@ public:
     */
    static void setCallback(CMTCallbackFunction theCallback) {
       if (theCallback == nullptr) {
-         theCallback = unhandledChannelCallback;
+         theCallback = unhandledCallback;
       }
       callback = theCallback;
    }
@@ -223,16 +221,6 @@ public:
 
       // Enable clock to CMP interface
       clockReg() |= Info::clockMask;
-   }
-
-   /**
-    * Select Primary Prescaler Divider.
-    * This divider would usually be chosen to produce a clock of 8MHz from the input Bus clock
-    *
-    * @param[in] cmtPrescaler
-    */
-   static void setPrescaler(CmtPrescaler cmtPrescaler) {
-      cmt().PPS = cmtPrescaler;
    }
 
    /**
@@ -272,6 +260,16 @@ public:
          PinSlewRate       pinSlewRate       = PinSlewRate_Fast
          ) {
       setOutput(pinDriveStrength|pinDriveMode|pinSlewRate);
+   }
+
+   /**
+    * Select Primary Prescaler Divider.
+    * This divider would usually be chosen to produce a clock of 8MHz from the input Bus clock
+    *
+    * @param[in] cmtPrescaler
+    */
+   static void setPrescaler(CmtPrescaler cmtPrescaler) {
+      cmt().PPS = cmtPrescaler;
    }
 
    /**
@@ -475,7 +473,7 @@ public:
    }
 };
 
-template<class Info> CMTCallbackFunction CmtBase_T<Info>::callback = CmtBase_T<Info>::unhandledChannelCallback;
+template<class Info> CMTCallbackFunction CmtBase_T<Info>::callback = CmtBase_T<Info>::unhandledCallback;
 
 #if defined(USBDM_CMT_IS_DEFINED)
 class Cmt : public CmtBase_T<CmtInfo> {};
