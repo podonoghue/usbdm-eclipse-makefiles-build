@@ -50,7 +50,26 @@ enum RcmSource {
 };
 
 /**
- * Template class providing interface to Reset Control Module
+ * Reset pin filter select in run and wait modes.
+ * Selects how the reset pin filter is enabled in run and wait modes.
+ */
+enum RcmResetPinRunWaitFilter {
+   RcmResetPinRunWaitFilter_Disabled           = RCM_RPFC_RSTFLTSRW(0b00), //!< All Filtering disabled
+   RcmResetPinRunWaitFilter_BusCLock           = RCM_RPFC_RSTFLTSRW(0b01), //!< Bus clock filter enabled for normal operation
+   RcmResetPinRunWaitFilter_LowPowerOscillator = RCM_RPFC_RSTFLTSRW(0b10), //!< LPO clock filter enabled for normal operation
+};
+
+/**
+ * Reset pin filter select in stop mode.
+ * Selects how the reset pin filter is enabled in STOP and VLPS modes
+ */
+enum RcmResetPinStopFilter {
+   RcmResetPinStopFilter_Disabled           = RCM_RPFC_RSTFLTSS(0), //!< All Filtering disabled
+   RcmResetPinStopFilter_LowPowerOscillator = RCM_RPFC_RSTFLTSS(1), //!< LPO clock filter enabled
+};
+
+/**
+ * Template class providing interface to Reset Control Module.
  *
  * @tparam info      Information class for RCM
  *
@@ -79,7 +98,26 @@ public:
    }
 
    /**
-    * Returns a bit mask indicating the source of the last reset
+    * Set Reset filtering.
+    *
+    * @param rcmResetPinRunWaitFilter  Reset pin filter select in run and wait modes.
+    * @param rcmResetPinStopFilter     Reset pin filter select in stop mode.
+    * @param resetWidth                Reset pin filter bus clock filter width [1..32]
+    */
+   static void configure(
+         RcmResetPinRunWaitFilter rcmResetPinRunWaitFilter,
+         RcmResetPinStopFilter    rcmResetPinStopFilter,
+         unsigned                 resetwidth) {
+
+      resetwidth--;
+      usbdm_assert(resetwidth<=RCM_RPFW_RSTFLTSEL_MASK, "Reset width out of range");
+
+      rcm().RPFC = rcmResetPinRunWaitFilter|rcmResetPinStopFilter;
+      rcm().RPFW = RCM_RPFW_RSTFLTSEL(resetwidth-1);
+   }
+
+   /**
+    * Returns a bit mask indicating the source of the last reset.
     *
     * @return Bit mask representing sources
     */
@@ -89,7 +127,7 @@ public:
 
 #ifdef RCM_SSRS0_SWAKEUP_MASK
    /**
-    * Returns a bit mask indicating the cumulative reset sources since last cleared
+    * Returns a bit mask indicating the cumulative reset sources since last cleared.
     *
     * @return Bit mask representing sources
     */
@@ -98,7 +136,7 @@ public:
    }
 
    /**
-    * Returns a bit mask indicating the cumulative reset sources since last cleared\n
+    * Returns a bit mask indicating the cumulative reset sources since last cleared.
     * The cumulative value is cleared.
     *
     * @return Bit mask representing sources
@@ -112,7 +150,7 @@ public:
 #endif
 
    /**
-    * Returns a string indicating the source of the reset indicated by source
+    * Returns a string indicating the source of the reset indicated by source.
     *
     * @param source Pointer to string in static buffer representing reset sources
     */
@@ -145,7 +183,7 @@ public:
       return buff;
    }
    /**
-    * Returns a string indicating the source of the last reset
+    * Returns a string indicating the source of the last reset.
     *
     * @param source Pointer to string in static buffer representing reset sources
     */
