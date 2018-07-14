@@ -494,9 +494,9 @@ public:
 #ifdef UART_C4_OSR_MASK
 template<class Info> class Uart_osr_T : public Uart_T<Info> {
 
+public:
    using Uart_T<Info>::uart;
 
-public:
    /**
     * Construct UART interface
     *
