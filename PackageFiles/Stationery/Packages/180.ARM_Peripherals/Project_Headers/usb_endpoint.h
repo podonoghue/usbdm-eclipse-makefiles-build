@@ -192,11 +192,12 @@ protected:
    void (*fCallback)(EndpointState endpointState);
 
    /**
-    *  Dummy callback used catch used of unset callback
+    *  Dummy callback used to catch use of unset callback
     *
     * @param[in]  endpointState State of endpoint before completion
     */
-   static void unsetHandlerCallback(EndpointState) {
+   static void unsetHandlerCallback(EndpointState endpointState) {
+      (void)endpointState;
       setAndCheckErrorCode(E_NO_HANDLER);
    }
 
