@@ -2,11 +2,18 @@
 <!DOCTYPE peripheralPage SYSTEM "_menu.dtd" >
 <!-- usbdcd_def.xml -->
 
-<peripheralPage xmlns:xi="http://www.w3.org/2001/XInclude" name="_instance" description="Inter-Integrated-Circuit">
+<peripheralPage xmlns:xi="http://www.w3.org/2001/XInclude" name="_instance" description="USB Device Charger Detection">
+
+   <xi:include href="_irqOption.xml"/>         
 
    <template><![CDATA[
       \t//! Base value for PCR (excluding MUX value)
       \tstatic constexpr uint32_t defaultPcrValue  = 0;\n\n
    ]]></template>
+
+   <projectActionList id = "wdog_files" >
+      <copy source="Project_Headers/usbdcd.h"       target="Project_Headers/usbdcd.h"          overwrite="true" derived="true" />
+      <copy source="Snippets/usbdcd-example.cpp"    target="Snippets/usbdcd-example.cpp"       overwrite="true" derived="true" />
+   </projectActionList>
    
 </peripheralPage>
