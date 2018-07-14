@@ -2,6 +2,14 @@
 <!DOCTYPE peripheralPage SYSTEM "_menu.dtd" >
 <!-- pit_4ch_ltmr64.xml -->
 
-<fragment xmlns:xi="http://www.w3.org/2001/XInclude">
-<xi:include href="pit_shared_irq.xml"/>
-</fragment>
+<peripheralPage xmlns:xi="http://www.w3.org/2001/XInclude" name="_instance" description="Programmable Interrupt Timer">
+
+   <template><![CDATA[
+   
+      \t//! Number of PIT channels\n
+      \tstatic constexpr uint32_t numChannels  = 2;\n\n
+      
+   ]]></template>
+
+   <xi:include href="pit_shared_irq.xml"/>
+</peripheralPage>

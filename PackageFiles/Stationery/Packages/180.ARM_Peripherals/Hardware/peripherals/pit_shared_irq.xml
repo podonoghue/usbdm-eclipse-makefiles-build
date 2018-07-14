@@ -2,7 +2,7 @@
 <!DOCTYPE peripheralPage SYSTEM "_menu.dtd" >
 <!-- pit_shared_irq.xml -->
 
-<peripheralPage xmlns:xi="http://www.w3.org/2001/XInclude" name="_instance" description="Programmable Interrupt Timer">
+<fragment xmlns:xi="http://www.w3.org/2001/XInclude">
 
    <aliasOption key="/SIM/system_bus_clock" displayName="PIT input clock" constant="true"/>
 
@@ -69,4 +69,4 @@
       \t   return SystemBusClock;
       \t}\n\n
    ]]></template>
-</peripheralPage>
+</fragment>

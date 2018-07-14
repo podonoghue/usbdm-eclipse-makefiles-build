@@ -2,7 +2,7 @@
 <!DOCTYPE peripheralPage SYSTEM "_menu.dtd" >
 <!-- pit.xml -->
 
-<peripheralPage xmlns:xi="http://www.w3.org/2001/XInclude" name="_instance" description="Programmable Interrupt Timer">
+<fragment xmlns:xi="http://www.w3.org/2001/XInclude">
 
    <aliasOption key="/SIM/system_bus_clock" displayName="PIT input clock" constant="true"/>
 
@@ -73,9 +73,9 @@
    </validate>
 
    <projectActionList id = "pit_files" >
-      <copy source="Snippets/pit-example1.cpp"       target="Snippets/pit-example1.cpp" overwrite="true" derived="true"/>
-      <copy source="Snippets/pit-example2-MK.cpp"    target="Snippets/pit-example2.cpp" overwrite="true" derived="true"/>
-      <copy source="Snippets/pit-example3-MK.cpp"    target="Snippets/pit-example3.cpp" overwrite="true" derived="true"/>
+      <copy source="Snippets/pit-example1.cpp"       target="Snippets/pit-example1.cpp" overwrite="true" derived="true" />
+      <copy source="Snippets/pit-example2-MK.cpp"    target="Snippets/pit-example2.cpp" overwrite="true" derived="true" />
+      <copy source="Snippets/pit-example3-MK.cpp"    target="Snippets/pit-example3.cpp" overwrite="true" derived="true" />
       <copy source="Project_Headers/pit-MK.h"        target="Project_Headers/pit.h"     overwrite="true" derived="true" />
    </projectActionList>
          
@@ -98,4 +98,4 @@
       \t   return SystemBusClock;
       \t}\n\n
    ]]></template>
-</peripheralPage>
+</fragment>
