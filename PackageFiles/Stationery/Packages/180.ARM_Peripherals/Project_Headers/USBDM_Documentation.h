@@ -559,14 +559,17 @@ This is a template class with static methods.\n
 
 @example analogue-comparison-example.cpp
 @example analogue-diff-example.cpp
+@example analogue-example.cpp
 @example analogue-interrupt-example.cpp
 @example analogue-joystick-example.cpp
 @example cmp-example.cpp
+@example cmt-example.cpp
 @example console-example.cpp
 @example crc-example.cpp
 @example dac-example.cpp
 @example digital-example1.cpp
 @example digital-example2.cpp
+@example digital-interrupt-example.cpp
 @example dma-memory-example.cpp
 @example dma-memory-template-example.cpp
 @example dma-spi-example.cpp
@@ -591,8 +594,10 @@ This is a template class with static methods.\n
 @example llwu-example-mk22f.cpp
 @example lptmr-example.cpp
 @example mag3310-example.cpp
-@example mag3310.cpp
 @example mag3310.h
+@example mcg-run-mode-test-mk20.cpp
+@example mcg-run-mode-test-mk22f.cpp
+@example mcg-test.cpp
 @example mma845x-example.cpp
 @example mma845x.cpp
 @example mma845x.h
@@ -604,15 +609,15 @@ This is a template class with static methods.\n
 @example pca9685-example.cpp
 @example pca9685.cpp
 @example pca9685.h
+@example pdb-example.cpp
 @example pit-example1.cpp
 @example pit-example2.cpp
 @example pit-example3.cpp
-@example pdb-example.cpp
+@example rcm-example.cpp
 @example rtc-example.cpp
 @example spi-example.cpp
-@example mcg-test.cpp
 @example tsi-mk-example.cpp
-@example usb.cpp
+@example uart-example.cpp
 @example usb_cdc_interface.cpp
 @example usb_cdc_interface.h
 @example usb_implementation.h
@@ -622,6 +627,9 @@ This is a template class with static methods.\n
 @example usb_implementation_cdc.h
 @example usb_implementation_composite.cpp
 @example usb_implementation_composite.h
+@example usb.cpp
+@example usbdcd-example.cpp
+@example vlpr-run-hsrun-example.cpp
 @example wdog-example.cpp
 
  */

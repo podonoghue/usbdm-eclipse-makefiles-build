@@ -89,35 +89,38 @@ public:
 
 public:
    /**
-    * Initialise RCM to default settings
+    * Initialise RCM to default settings as determined by Configure.usbdmProject
     */
    static void defaultConfigure() {
-      // Configure Rcm
+      // Configure RCM
       rcm().RPFC  = Info::rcm_rpfc;
       rcm().RPFW  = Info::rcm_rpfw;
    }
 
    /**
-    * Set Reset filtering.
+    * Configure filtering.
     *
     * @param rcmResetPinRunWaitFilter  Reset pin filter select in run and wait modes.
     * @param rcmResetPinStopFilter     Reset pin filter select in stop mode.
     * @param resetWidth                Reset pin filter bus clock filter width [1..32]
+    *
+    * @note These settings persist through resets other than POR
     */
    static void configure(
          RcmResetPinRunWaitFilter rcmResetPinRunWaitFilter,
          RcmResetPinStopFilter    rcmResetPinStopFilter,
-         unsigned                 resetwidth) {
+         unsigned                 resetWidth) {
 
-      resetwidth--;
-      usbdm_assert(resetwidth<=RCM_RPFW_RSTFLTSEL_MASK, "Reset width out of range");
+      resetWidth--;
+      usbdm_assert(resetWidth<=RCM_RPFW_RSTFLTSEL_MASK, "Reset width out of range");
 
       rcm().RPFC = rcmResetPinRunWaitFilter|rcmResetPinStopFilter;
-      rcm().RPFW = RCM_RPFW_RSTFLTSEL(resetwidth-1);
+      rcm().RPFW = RCM_RPFW_RSTFLTSEL(resetWidth);
    }
 
    /**
     * Returns a bit mask indicating the source of the last reset.
+    * See RcmSource for bit masks to use.
     *
     * @return Bit mask representing sources
     */
@@ -184,8 +187,6 @@ public:
    }
    /**
     * Returns a string indicating the source of the last reset.
-    *
-    * @param source Pointer to string in static buffer representing reset sources
     */
    static const char *getResetSourceDescription() {
       return getResetSourceDescription(getResetSource());
