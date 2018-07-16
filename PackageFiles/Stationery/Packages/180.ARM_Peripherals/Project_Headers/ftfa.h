@@ -61,17 +61,17 @@ protected:
    }
 
    /**
-    * Launch & wait for Flash command to complete
+    * Launch & wait for Flash command to complete.
     */
    static void executeFlashCommand_asm();
 
    /**
-    * Launch & wait for Flash command to complete
+    * Launch & wait for Flash command to complete.
     */
    static FlashDriverError_t executeFlashCommand();
 
    /**
-    * Read Flash Resource (IFR etc)
+    * Read Flash Resource (IFR etc).
     * This command reads 4 bytes from the selected flash resource
     *
     * @param[in]  resourceSelectCode 00 => IFR, 01 => Version ID
@@ -85,7 +85,7 @@ protected:
 public:
 
    /**
-    * Wait until flash is ready.\n
+    * Wait until flash is ready.
     * Any flash operations will have completed.
     *
     * @return true => OK, false => timeout
@@ -101,7 +101,7 @@ public:
 
 private:
    /**
-    * Program a phrase to Flash memory
+    * Program a phrase to Flash memory.
     *
     * @param[in]  data       Location of data to program
     * @param[out] address    Memory address to program - must be phrase boundary
@@ -111,7 +111,7 @@ private:
    static FlashDriverError_t programPhrase(const uint8_t *data, uint8_t *address);
 
    /**
-    * Erase sector of Flash memory
+    * Erase sector of Flash memory.
     *
     * @param[in]  address    Memory address to erase - must be sector boundary
     *
@@ -121,7 +121,7 @@ private:
 
 public:
    /**
-    * Program a range of bytes to Flash memory
+    * Program a range of bytes to Flash memory.
     *
     * @param[in]  data       Location of data to program
     * @param[out] address    Memory address to program - must be phrase boundary
@@ -132,16 +132,16 @@ public:
    static FlashDriverError_t programRange(const uint8_t *data, uint8_t *address, uint32_t size);
 
    /**
-    * Erase a range of Flash memory
+    * Erase a range of Flash memory.
     *
-    * @param[out] address    Memory address to start erasing - must be sector boundary
+    * @param[in]  address    Memory address to start erasing - must be sector boundary
     * @param[in]  size       Size of range (in bytes) to erase - must be multiple of sector size
     *
     * @return Error code
     */
    static FlashDriverError_t eraseRange(uint8_t *address, uint32_t size);
    /**
-    * Mass erase entire Flash memory
+    * Mass erase entire Flash memory.
     */
    static void eraseAll();
 };

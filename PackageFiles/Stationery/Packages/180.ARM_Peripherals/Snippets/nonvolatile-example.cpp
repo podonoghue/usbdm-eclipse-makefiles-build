@@ -42,17 +42,16 @@ class NvInit : public Flash {
 public:
    NvInit() : Flash() {
       // Initialise the non-volatile system and configure if necessary
-      volatile int rc = initialiseEeprom();
+      volatile int rc = initialiseEeprom<EepromSel_2KBytes, PartitionSel_flash0K_eeprom32K, SplitSel_disabled>();
+
       if (rc == FLASH_ERR_NEW_EEPROM) {
          // This is the first reset after programming the device
          // Initialise the non-volatile variables as necessary
          // If not initialised they will have an initial value of 0xFF
          bootCount_nv = 0;
       }
-      else if (rc != FLASH_ERR_OK) {
-         // You can trap errors here or check in main
-         console.writeln("FlexNVM initialisation error");
-         __BKPT();
+      else {
+         usbdm_assert(rc != FLASH_ERR_OK, "FlexNVM initialisation error");
       }
    }
 };

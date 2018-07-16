@@ -184,9 +184,9 @@ FlashDriverError_t Flash::programRange(const uint8_t *data, uint8_t *address, ui
 }
 
 /**
- * Erase sector in Flash memory
+ * Erase sector of Flash memory.
  *
- * @param[in]  address    Memory address to erase - must be phrase boundary
+ * @param[in]  address    Memory address to erase - must be sector boundary
  *
  * @return Error code
  */
@@ -200,7 +200,7 @@ FlashDriverError_t Flash::eraseSector(uint8_t *address) {
 }
 
 /**
- * Program a range of bytes to Flash memory
+ * Erase a range of Flash memory.
  *
  * @param[in]  address    Memory address to start erasing - must be sector boundary
  * @param[in]  size       Size of range (in bytes) to erase - must be multiple of sector size

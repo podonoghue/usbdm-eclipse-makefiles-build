@@ -24,24 +24,24 @@
    <choiceOption name="EepromSize" 
       description="FlexNVM - EEPROM size"
       toolTip="Selects emulated EEPROM size">
-      <choice value="eeprom32Bytes"  name="32 bytes" />
-      <choice value="eeprom64Bytes"  name="64 bytes" />
-      <choice value="eeprom128Bytes" name="128 bytes" />
-      <choice value="eeprom256Bytes" name="256 bytes" />
-      <choice value="eeprom512Bytes" name="512 bytes" />
-      <choice value="eeprom1KBytes"  name="1 KiB" />
-      <choice value="eeprom2KBytes"  name="2 KiB" isDefault="true"/>
+      <choice value="EepromSel_32Bytes"  name="32 bytes" />
+      <choice value="EepromSel_64Bytes"  name="64 bytes" />
+      <choice value="EepromSel_128Bytes" name="128 bytes" />
+      <choice value="EepromSel_256Bytes" name="256 bytes" />
+      <choice value="EepromSel_512Bytes" name="512 bytes" />
+      <choice value="EepromSel_1KBytes"  name="1 KiB" />
+      <choice value="EepromSel_2KBytes"  name="2 KiB" isDefault="true"/>
    </choiceOption>
    
    <choiceOption name="FlashPartition" 
       description="FlexNVM - Flash EEPROM partition"
       toolTip="Selects division of FlexNVM between flash and EEPROM backing storage\n
                The larger the EEPROM backing the better the wear characteristic">
-      <choice value="partition_flash32K_eeprom0K"  name="flash=32KiB eeprom backing=0B" />
-      <choice value="partition_flash24K_eeprom8K"  name="flash=24KiB eeprom backing=8KiB" />
-      <choice value="partition_flash16K_eeprom16K" name="flash=16KiB eeprom backing=16KiB" />
-      <choice value="partition_flash8K_eeprom24K"  name="flash=8KiB eeprom backing=24KiB" />
-      <choice value="partition_flash0K_eeprom32K"  name="flash=0B eeprom backing=32KiB" isDefault="true"/>
+      <choice value="PartitionSel_flash32K_eeprom0K"  name="flash=32KiB eeprom backing=0B" />
+      <choice value="PartitionSel_flash24K_eeprom8K"  name="flash=24KiB eeprom backing=8KiB" />
+      <choice value="PartitionSel_flash16K_eeprom16K" name="flash=16KiB eeprom backing=16KiB" />
+      <choice value="PartitionSel_flash8K_eeprom24K"  name="flash=8KiB eeprom backing=24KiB" />
+      <choice value="PartitionSel_flash0K_eeprom32K"  name="flash=0B eeprom backing=32KiB" isDefault="true"/>
    </choiceOption>
    
    <projectActionList id = "flash_files" >
@@ -102,34 +102,34 @@
 
       \t/** Selects EEPROM size */
       \tenum EepromSel {
-      \t   eeprom32Bytes,
-      \t   eeprom64Bytes,
-      \t   eeprom128Bytes,
-      \t   eeprom256Bytes,
-      \t   eeprom512Bytes,
-      \t   eeprom1KBytes,
-      \t   eeprom2KBytes,
+      \t   EepromSel_32Bytes,
+      \t   EepromSel_64Bytes,
+      \t   EepromSel_128Bytes,
+      \t   EepromSel_256Bytes,
+      \t   EepromSel_512Bytes,
+      \t   EepromSel_1KBytes,
+      \t   EepromSel_2KBytes,
       \t};\n\n
       
       \t/** Selects division of FlexNVM between flash and EEPROM backing storage */
       \tenum PartitionSel {
-      \t   partition_flash32K_eeprom0K,
-      \t   partition_flash24K_eeprom8K,
-      \t   partition_flash16K_eeprom16K,
-      \t   partition_flash8K_eeprom24K,
-      \t   partition_flash0K_eeprom32K,
+      \t   PartitionSel_flash32K_eeprom0K,
+      \t   PartitionSel_flash24K_eeprom8K,
+      \t   PartitionSel_flash16K_eeprom16K,
+      \t   PartitionSel_flash8K_eeprom24K,
+      \t   PartitionSel_flash0K_eeprom32K,
       \t
       \t   // All EEPROM
-      \t   partition_flash0K_eeprom_all = partition_flash0K_eeprom32K,
+      \t   PartitionSel_flash0K_eeprom_all = PartitionSel_flash0K_eeprom32K,
       \t};\n\n
       
       \t/**
       \t * Selects division of the EEPROM
       \t * Not supported on this device
       \t */
-      \tenum PartitionSplit {
+      \tenum SplitSel {
       \t   // Not supported
-      \t   partition_disabled=0x30,
+      \t   SplitSel_disabled=0x30,
       \t};\n\n
    
       \t//! FlexNVM - EEPROM size
@@ -139,7 +139,7 @@
       \tstatic constexpr PartitionSel partitionSel = $(FlashPartition);\n\n
 
       \t//! FlexNVM - EEPROM partition - not available
-      \tstatic constexpr PartitionSplit partitionSplit = partition_disabled;\n\n
+      \tstatic constexpr SplitSel partitionSplit = SplitSel_disabled;\n\n
       
    ]]></template>
 

@@ -45,7 +45,7 @@ enum FlashDriverError_t {
 };
 
 /**
- * Class representing Flash interface
+ * Class representing Flash interface.
  */
 class Flash : public FtflInfo {
 
@@ -63,7 +63,7 @@ protected:
    static constexpr unsigned MINIMUM_BACKING_RATIO = 16;
 
    /**
-    * Constructor\n
+    * Constructor.
     * Typically this method would be overridden in a derived class
     * to do the initialisation of the flash and non-volatile variables.
     * Alternatively, the startup code may call the static methods directly.
@@ -76,17 +76,17 @@ protected:
    }
 
    /**
-    * Launch & wait for Flash command to complete
+    * Launch & wait for Flash command to complete.
     */
    static void executeFlashCommand_asm();
 
    /**
-    * Launch & wait for Flash command to complete
+    * Launch & wait for Flash command to complete.
     */
    static FlashDriverError_t executeFlashCommand();
 
    /**
-    * Read Flash Resource (IFR etc)
+    * Read Flash Resource (IFR etc).
     * This command reads 4 bytes from the selected flash resource
     *
     * @param[in]  resourceSelectCode 00 => IFR, 01 => Version ID
@@ -98,7 +98,7 @@ protected:
    static FlashDriverError_t readFlashResource(uint8_t resourceSelectCode, uint32_t address, uint8_t *data);
 
    /**
-    * Program EEPROM Data Size Code and FlexNVM Partition Code
+    * Program EEPROM Data Size Code and FlexNVM Partition Code.
     *
     * See device reference manual for the meaning of the following parameters
     *
@@ -110,7 +110,7 @@ protected:
    static FlashDriverError_t partitionFlash(uint8_t eeprom, uint8_t partition);
 
    /**
-    * Initialise the EEPROM
+    * Initialise the EEPROM.
     *
     * This function should be called before the first access to variables located in the eeprom.
     *
@@ -123,7 +123,7 @@ protected:
     *
     * @note This routine will only partition EEPROM when first executed after the device has been programmed.
     */
-   template<EepromSel eeprom=eepromSel, PartitionSel partition=partitionSel, PartitionSplit split=partitionSplit>
+   template<EepromSel eeprom=eepromSel, PartitionSel partition=partitionSel, SplitSel split=partitionSplit>
    static FlashDriverError_t initialiseEeprom () {
 
 //      console.
@@ -165,36 +165,37 @@ protected:
 public:
 
    /**
-    * Checks if the flexRAM has been configured\n
+    * Checks if the flexRAM has been configured.
     * Will wait for flash ready as necessary
     *
     * @return true if configured
     */
    static bool isFlexRamConfigured() {
-
+#if 1
       return waitForFlashReady() && (FTFL->FCNFG&FTFL_FCNFG_EEERDY_MASK);
+#else
+      console.write("FTFL->FCNFG = ").writeln(FTFL->FCNFG, Radix_16);
+      console.write("FTFL->FCNFG.FTFL_FCNFG_RAMRDY = ").writeln((bool)(FTFL->FCNFG&FTFL_FCNFG_RAMRDY_MASK));
+      console.write("FTFL->FCNFG.FTFL_FCNFG_EEERDY = ").writeln((bool)(FTFL->FCNFG&FTFL_FCNFG_EEERDY_MASK));
 
-      //      console.write("FTFL->FCNFG = ").writeln(FTFL->FCNFG, Radix_16);
-      //      console.write("FTFL->FCNFG.FTFL_FCNFG_RAMRDY = ").writeln((bool)(FTFL->FCNFG&FTFL_FCNFG_RAMRDY_MASK));
-      //      console.write("FTFL->FCNFG.FTFL_FCNFG_EEERDY = ").writeln((bool)(FTFL->FCNFG&FTFL_FCNFG_EEERDY_MASK));
-      //
-      //      uint8_t result[4];
-      //      FlashDriverError_t rc = readFlashResource(0, DATA_ADDRESS_FLAG|0xFC, result);
-      //      if (rc != 0) {
-      //         console.write("IFR read failed, rc=").writeln(rc);
-      //         return false;
-      //      }
-      //      uint8_t flexNvmPartitionSize = result[0];
-      //      uint8_t eepromDatSetSize     = result[1];
-      //
-      //      console.write("FlexNVM partition code = ").writeln(flexNvmPartitionSize, Radix_16);
-      //      console.write("EEPROM data set size   = ").writeln(eepromDatSetSize, Radix_16);
-      //
-      //      return (FTFL->FCNFG&FTFL_FCNFG_EEERDY_MASK);
+      uint8_t result[4];
+      FlashDriverError_t rc = readFlashResource(0, DATA_ADDRESS_FLAG|0xFC, result);
+      if (rc != 0) {
+         console.write("IFR read failed, rc=").writeln(rc);
+         return false;
+      }
+      uint8_t flexNvmPartitionSize = result[0];
+      uint8_t eepromDatSetSize     = result[1];
+
+      console.write("FlexNVM partition code = ").writeln(flexNvmPartitionSize, Radix_16);
+      console.write("EEPROM data set size   = ").writeln(eepromDatSetSize, Radix_16);
+
+      return (FTFL->FCNFG&FTFL_FCNFG_EEERDY_MASK);
+#endif
    }
 
    /**
-    * Wait until flash is ready.\n
+    * Wait until flash is ready.
     * Any flash operations will have completed.
     *
     * @return true => OK, false => timeout
@@ -210,7 +211,7 @@ public:
 
 private:
    /**
-    * Program a phrase to Flash memory
+    * Program a phrase to Flash memory.
     *
     * @param[in]  data       Location of data to program
     * @param[out] address    Memory address to program - must be phrase boundary
@@ -220,7 +221,7 @@ private:
    static FlashDriverError_t programPhrase(const uint8_t *data, uint8_t *address);
 
    /**
-    * Erase sector of Flash memory
+    * Erase sector of Flash memory.
     *
     * @param[in]  address    Memory address to erase - must be sector boundary
     *
@@ -230,7 +231,7 @@ private:
 
 public:
    /**
-    * Program a range of bytes to Flash memory
+    * Program a range of bytes to Flash memory.
     *
     * @param[in]  data       Location of data to program
     * @param[out] address    Memory address to program - must be phrase boundary
@@ -241,22 +242,22 @@ public:
    static FlashDriverError_t programRange(const uint8_t *data, uint8_t *address, uint32_t size);
 
    /**
-    * Erase a range of Flash memory
+    * Erase a range of Flash memory.
     *
-    * @param[out] address    Memory address to start erasing - must be sector boundary
+    * @param[in]  address    Memory address to start erasing - must be sector boundary
     * @param[in]  size       Size of range (in bytes) to erase - must be multiple of sector size
     *
     * @return Error code
     */
    static FlashDriverError_t eraseRange(uint8_t *address, uint32_t size);
    /**
-    * Mass erase entire Flash memory
+    * Mass erase entire Flash memory.
     */
    static void eraseAll();
 };
 
 /**
- * Class to wrap a scalar variable allocated within the FlexRam area\n
+ * Class to wrap a scalar variable allocated within the FlexRam area.
  * Size is limited to 1, 2 or 4 bytes.
  *
  * Writing to the variable triggers an EEPROM update.\n
@@ -273,11 +274,11 @@ public:
 template <typename T>
 class Nonvolatile {
 
-   static_assert((sizeof(T) == 1)||(sizeof(T) == 2)||(sizeof(T) == 4), "T must be 1,2 or 4 bytes in size");
+   static_assert((sizeof(T) == 1)||(sizeof(T) == 2)||(sizeof(T) == 4), "Size of non-volatile object must be 1, 2 or 4 bytes in size");
 
 private:
    /**
-    * Data value in FlexRAM
+    * Data value in FlexRAM.
     *
     * FlexRAM required data to be aligned according to its size.\n
     * Be careful how you order variables otherwise space will be wasted
@@ -287,7 +288,7 @@ private:
 
 public:
    /**
-    * Assign to underlying type\n
+    * Assign to underlying type.
     * This adds a wait for the Flash to be updated
     *
     * @param[in]  data The data to assign
@@ -297,7 +298,7 @@ public:
       Flash::waitForFlashReady();
    }
    /**
-    * Assign to underlying type\n
+    * Assign to underlying type.
     * This adds a wait for the Flash to be updated
     *
     * @param[in]  data The data to assign
@@ -307,7 +308,7 @@ public:
       Flash::waitForFlashReady();
    }
    /**
-    * Increment underlying type\n
+    * Increment underlying type.
     * This adds a wait for the Flash to be updated
     *
     * @param[in]  change The amount to increment
@@ -317,7 +318,7 @@ public:
       Flash::waitForFlashReady();
    }
    /**
-    * Increment underlying type\n
+    * Increment underlying type.
     * This adds a wait for the Flash to be updated
     *
     * @param[in]  change The amount to increment
@@ -327,7 +328,7 @@ public:
       Flash::waitForFlashReady();
    }
    /**
-    * Decrement underlying type\n
+    * Decrement underlying type.
     * This adds a wait for the Flash to be updated
     *
     * @param[in]  change The amount to increment
@@ -337,7 +338,7 @@ public:
       Flash::waitForFlashReady();
    }
    /**
-    * Decrement underlying type\n
+    * Decrement underlying type.
     * This adds a wait for the Flash to be updated
     *
     * @param[in]  change The amount to increment
@@ -347,7 +348,7 @@ public:
       Flash::waitForFlashReady();
    }
    /**
-    * Return the underlying object - read-only!
+    * Return the underlying object - <b>read-only</b>.
     */
    operator T() const {
       Flash::waitForFlashReady();
@@ -356,7 +357,7 @@ public:
 };
 
 /**
- * Class to wrap an array of scalar variables allocated to the FlexRam area
+ * Class to wrap an array of scalar variables allocated to the FlexRam area.
  *
  * Element size is limited to 1, 2 or 4 bytes.
  *
@@ -381,7 +382,7 @@ private:
    using TArray = T[dimension];
    using TPtr   = const T(*);
 
-   /** Array of elements in FlexRAM
+   /** Array of elements in FlexRAM.
     *
     *  FlexRAM required data to be aligned according to its size.\n
     *  Be careful how you order variables otherwise space will be wasted
@@ -391,7 +392,7 @@ private:
 
 public:
    /**
-    * Assign to underlying array
+    * Assign to underlying array.
     *
     * @param[in]  other TArray to assign from
     *
@@ -405,7 +406,7 @@ public:
    }
 
    /**
-    * Assign to underlying array
+    * Assign to underlying array.
     *
     * @param[in]  other NonvolatileArray to assign from
     *
@@ -419,7 +420,7 @@ public:
    }
 
    /**
-    * Assign to underlying array
+    * Assign to underlying array.
     *
     * @param[in]  other NonvolatileArray to assign to
     *
@@ -432,7 +433,7 @@ public:
    }
 
    /**
-    * Return a reference to the underlying array element - read-only!
+    * Return a reference to the underlying array element - read-only.
     *
     * @param[in]  index Index of element to return
     *
@@ -443,14 +444,14 @@ public:
    }
 
    /**
-    * Return a pointer to the underlying array - read-only!
+    * Return a pointer to the underlying array - read-only.
     */
    operator TPtr() const {
       return data;
    }
 
    /**
-    * Set an element of the array to the value provided
+    * Set an element of the array to the value provided.
     *
     * @param[in]  index Array index of element to change
     * @param[in]  value Value to initialise array elements to
@@ -460,7 +461,7 @@ public:
       Flash::waitForFlashReady();
    }
    /**
-    * Set all elements of the array to the value provided
+    * Set all elements of the array to the value provided.
     *
     * @param[in]  value Value to initialise array elements to
     */

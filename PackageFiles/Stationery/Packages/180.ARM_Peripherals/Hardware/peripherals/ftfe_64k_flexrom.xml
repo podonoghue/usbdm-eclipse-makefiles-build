@@ -24,32 +24,32 @@
    <choiceOption name="EepromSize" 
       description="FlexNVM - EEPROM size"
       toolTip="Selects emulated EEPROM size">
-      <choice value="eeprom32Bytes"  name="32 bytes" />
-      <choice value="eeprom64Bytes"  name="64 bytes" />
-      <choice value="eeprom128Bytes" name="128 bytes" />
-      <choice value="eeprom256Bytes" name="256 bytes" />
-      <choice value="eeprom512Bytes" name="512 bytes" />
-      <choice value="eeprom1KBytes"  name="1 KiB" />
-      <choice value="eeprom2KBytes"  name="2 KiB" />
-      <choice value="eeprom4KBytes"  name="4 KiB" isDefault="true"/>
+      <choice value="EepromSel_32Bytes"  name="32 bytes" />
+      <choice value="EepromSel_64Bytes"  name="64 bytes" />
+      <choice value="EepromSel_128Bytes" name="128 bytes" />
+      <choice value="EepromSel_256Bytes" name="256 bytes" />
+      <choice value="EepromSel_512Bytes" name="512 bytes" />
+      <choice value="EepromSel_1KBytes"  name="1 KiB" />
+      <choice value="EepromSel_2KBytes"  name="2 KiB" />
+      <choice value="EepromSel_4KBytes"  name="4 KiB" isDefault="true"/>
    </choiceOption>
    
    <choiceOption name="FlashPartition" 
       description="FlexNVM - Flash EEPROM partition"
       toolTip="Selects division of FlexNVM between flash and EEPROM backing storage\n
                The larger the EEPROM backing the better the wear characteristic">
-      <choice value="partition_flash64K_eeprom0K" name="flash=64KiB eeprom backing=0B" />
-      <choice value="partition_flash32K_eeprom32K" name="flash=32KiB eeprom backing=32KiB" />
-      <choice value="partition_flash0K_eeprom64K" name="flash=0B eeprom backing=64KiB" isDefault="true"/>
+      <choice value="PartitionSel_flash64K_eeprom0K" name="flash=64KiB eeprom backing=0B" />
+      <choice value="PartitionSel_flash32K_eeprom32K" name="flash=32KiB eeprom backing=32KiB" />
+      <choice value="PartitionSel_flash0K_eeprom64K" name="flash=0B eeprom backing=64KiB" isDefault="true"/>
    </choiceOption>
    
    <choiceOption name="FlexNVM_Partition" 
       description="FlexNVM - EEPROM partition"
       toolTip="Selects division of the two regions of EEPROM (if supported on device)\n
                This allows A/B regions to have different wear characteristics">
-      <choice value="partition_A1_B7_8ths" name="A=1/8, B=7/8" />
-      <choice value="partition_A2_B6_8ths" name="A=1/4, B=3/4" />
-      <choice value="partition_A4_B4_8ths" name="A=1/2, B=1/2" isDefault="true"/>
+      <choice value="SplitSel_A1_B7_8ths" name="A=1/8, B=7/8" />
+      <choice value="SplitSel_A2_B6_8ths" name="A=1/4, B=3/4" />
+      <choice value="SplitSel_A4_B4_8ths" name="A=1/2, B=1/2" isDefault="true"/>
    </choiceOption>
 
    <projectActionList id = "flash_files" >
@@ -109,39 +109,39 @@
 
       \t/** Selects EEPROM size */
       \tenum EepromSel {
-      \t   eeprom32Bytes,
-      \t   eeprom64Bytes,
-      \t   eeprom128Bytes,
-      \t   eeprom256Bytes,
-      \t   eeprom512Bytes,
-      \t   eeprom1KBytes,
-      \t   eeprom2KBytes,
-      \t   eeprom4KBytes,
+      \t   EepromSel_32Bytes,
+      \t   EepromSel_64Bytes,
+      \t   EepromSel_128Bytes,
+      \t   EepromSel_256Bytes,
+      \t   EepromSel_512Bytes,
+      \t   EepromSel_1KBytes,
+      \t   EepromSel_2KBytes,
+      \t   EepromSel_4KBytes,
       \t};\n\n
       
       \t/** Selects division of FlexNVM between flash and EEPROM backing storage */
       \tenum PartitionSel {
-      \t   partition_flash64K_eeprom0K,
-      \t   partition_flash32K_eeprom32K,
-      \t   partition_flash0K_eeprom64K,
+      \t   PartitionSel_flash64K_eeprom0K,
+      \t   PartitionSel_flash32K_eeprom32K,
+      \t   PartitionSel_flash0K_eeprom64K,
       \t
       \t   // All EEPROM
-      \t   partition_flash0K_eeprom_all = partition_flash0K_eeprom64K,
+      \t   PartitionSel_flash0K_eeprom_all = PartitionSel_flash0K_eeprom64K,
       \t};\n\n
       
       \t/**
       \t * Selects division of the EEPROM into two regions 
       \t * This allows A/B regions to have different wear characteristics
       \t */
-      \tenum PartitionSplit {
-      \t   partition_A1_B7_8ths = 0x00,                 //! A=1/8, B=7/8
-      \t   partition_A2_B6_8ths = 0x10,                 //! A=2/8=1/4, B=6/8=3/4
-      \t   partition_A4_B4_8ths = 0x30,                 //! A=4/8=1/2, B=4/8=1/2
-      \t   partition_A1_B3_4ths = partition_A2_B6_8ths, //! A=2/8=1/4, B=6/8=3/4
-      \t   partition_A1_B1_2ths = partition_A4_B4_8ths, //! A=4/8=1/2, B=4/8=1/2
+      \tenum SplitSel {
+      \t   SplitSel_A1_B7_8ths = 0x00,                 //! A=1/8, B=7/8
+      \t   SplitSel_A2_B6_8ths = 0x10,                 //! A=2/8=1/4, B=6/8=3/4
+      \t   SplitSel_A4_B4_8ths = 0x30,                 //! A=4/8=1/2, B=4/8=1/2
+      \t   SplitSel_A1_B3_4ths = SplitSel_A2_B6_8ths, //! A=2/8=1/4, B=6/8=3/4
+      \t   SplitSel_A1_B1_2ths = SplitSel_A4_B4_8ths, //! A=4/8=1/2, B=4/8=1/2
       \t
       \t   // Default - A = B = 1/2
-      \t   partition_default=partition_A4_B4_8ths,      //! Equal partitions
+      \t   SplitSel_default=SplitSel_A4_B4_8ths,      //! Equal partitions
       \t};\n\n
    
       \t//! FlexNVM - EEPROM size
@@ -151,7 +151,7 @@
       \tstatic constexpr PartitionSel partitionSel = $(FlashPartition);\n\n
 
       \t//! FlexNVM - EEPROM partition
-      \tstatic constexpr PartitionSplit partitionSplit = $(FlexNVM_Partition);\n\n
+      \tstatic constexpr SplitSel partitionSplit = $(FlexNVM_Partition);\n\n
       
    ]]></template>
 
