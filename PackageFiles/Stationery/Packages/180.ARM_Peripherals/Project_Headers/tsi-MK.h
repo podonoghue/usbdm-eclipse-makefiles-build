@@ -187,7 +187,7 @@ public:
    static __attribute__((always_inline)) volatile TSI_Type &tsi() { return Info::tsi(); }
 
    /**
-    * Handler for unexpected interrupts i.e. hanlder not installed.
+    * Handler for unexpected interrupts i.e. handler not installed.
     */
    static void unhandledInterrupt(uint32_t) {
       setAndCheckErrorCode(E_NO_HANDLER);
@@ -199,6 +199,17 @@ public:
    static void __attribute__((always_inline)) configureAllPins() {
       // Configure pins
       Info::initPCRs();
+   }
+
+   /**
+    * Configure the pin associated with a TSI input electrode.
+    *
+    * @tparam electrodeNum Number of electrode to configure
+    */
+   template<int electrodeNum>
+   static void setInput() {
+      // Configure associated pin as analogue input
+      PcrTable_T<Info, electrodeNum>::setPCR(PinMux_Analog);
    }
 
    /**

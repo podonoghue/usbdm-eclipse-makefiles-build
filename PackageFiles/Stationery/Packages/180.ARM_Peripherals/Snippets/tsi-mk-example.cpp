@@ -50,6 +50,11 @@ void initTsi(bool periodic) {
 
    // Enable TSI
    Tsi0::enable();
+
+   // Set electrodes as inputs
+   Tsi0::setInput<electrodeA>();
+   Tsi0::setInput<electrodeB>();
+
    // Set clock source (and divider and modulus)
    Tsi0::setClock(TsiClockSource_LpOscClk);
    // Set Low power clock - off
@@ -104,7 +109,7 @@ void measureScanTime() {
  * An example that scans two electrodes using hardware scan mode.
  * A simple calibration is done initially and then the two electrodes
  * are used to control two LEDs in a simple on-off fashion.
- * The electrode measurements are printed to stdout.
+ * The electrode measurements are written to the console.
  *
  * The measurement output toggle on each sample sequence.
  */
@@ -176,6 +181,8 @@ void tsiExample() {
 }
 
 int main() {
+
+   console.writeln("Starting");
 
 //   measureScanTime();
    tsiExample();
