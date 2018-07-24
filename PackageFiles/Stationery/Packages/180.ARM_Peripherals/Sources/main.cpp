@@ -28,7 +28,7 @@ int main() {
 
    for(int count = 0;;count++) {
       Led::toggle();
-      USBDM::waitMS(100);
+      waitMS(100);
       console.write(count).writeln(": Tick...");
    }
    return 0;
