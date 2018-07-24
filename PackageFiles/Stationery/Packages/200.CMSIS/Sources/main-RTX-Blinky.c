@@ -8,7 +8,6 @@
  */
 #include "cmsis_os.h"                   // CMSIS RTX
 #include "derivative.h"                 // Device header
-#include "RTX_Conf_CM.cfg"
 #include "leds.h"
 
 osThreadId tid_redThread;               // Thread id of redThread

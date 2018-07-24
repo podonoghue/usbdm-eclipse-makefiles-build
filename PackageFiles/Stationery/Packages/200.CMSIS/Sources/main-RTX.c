@@ -11,7 +11,6 @@
 #include "cmsis_os.h"                   // CMSIS RTX
 #include "derivative.h"                 // Device header
 #include "utilities.h"
-#include "RTX_Conf_CM.cfg"
 //#include "leds.h"
 
 // Forward references

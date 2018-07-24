@@ -6,10 +6,9 @@
  * RTX example program
  *----------------------------------------------------------------------------
  */
-#include "cmsis.h"                      // CMSIS RTX
 #include "hardware.h"                   // Hardware interface
-#include "RTX_Conf_CM.cfg"
 #include "console.h"
+#include "cmsis.h"                      // CMSIS RTX
 
 using namespace USBDM;
 
@@ -41,9 +40,8 @@ static void callbackLed3Toggle(const void *) {
 // Callback to print "Tick"
 static void callbackTick(const void *) {
    static int i = 0;
-   (void)i;
    // Report the callback
-   console<<"Callback - "<<i++<<"\n";
+   console.write("Callback - ").writeln(i++);
 };
 
 /**
