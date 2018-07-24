@@ -3,6 +3,9 @@
  * @brief   Basic UART routines for console
  * @date    13 June 2015
  */
+#ifndef CONSOLE_H_
+#define CONSOLE_H_
+
 #include <derivative.h>
 #include "hardware.h"
 #if defined(USBDM_UART0_IS_DEFINED) || defined(USBDM_UART1_IS_DEFINED) || defined(USBDM_UART2_IS_DEFINED) || defined(USBDM_UART3_IS_DEFINED) || defined(USBDM_UART4_IS_DEFINED)
@@ -21,8 +24,6 @@
  * Any manual changes will be lost.
  */
 
-#ifndef CONSOLE_H_
-#define CONSOLE_H_
 
 #define USE_CONSOLE $(/Console/consoleEnable:0)
 
