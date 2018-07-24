@@ -22,6 +22,9 @@
 #include "hardware.h"
 #include "formatted_io.h"
 #include "queue.h"
+#ifdef __CMSIS_RTOS
+#include "cmsis.h"
+#endif
 
 namespace USBDM {
 
@@ -61,6 +64,71 @@ enum UartDma {
 class Uart : public FormattedIO {
 
 protected:
+#ifdef __CMSIS_RTOS
+   /**
+    * Obtain UART mutex.
+    *
+    * @param[in]  milliseconds How long to wait in milliseconds. Use osWaitForever for indefinite wait
+    *
+    * @return osOK:                    The mutex has been obtain.
+    * @return osErrorTimeoutResource:  The mutex could not be obtained in the given time.
+    * @return osErrorResource:         The mutex could not be obtained when no timeout was specified.
+    * @return osErrorParameter:        The parameter mutex_id is incorrect.
+    * @return osErrorISR:              Cannot be called from interrupt service routines.
+    *
+    * @note The USBDM error code will also be set on error
+    */
+   virtual osStatus startTransaction(int milliseconds=osWaitForever) = 0;
+
+   /**
+    * Release UART mutex.
+    *
+    * @return osOK:              The mutex has been correctly released.
+    * @return osErrorResource:   The mutex was not obtained before.
+    * @return osErrorISR:        Cannot be called from interrupt service routines.
+    *
+    * @note The USBDM error code will also be set on error
+    */
+   virtual osStatus endTransaction() = 0;
+#else
+   /**
+    * Obtain UART - dummy routine (non RTOS)
+    */
+   int startTransaction(int =0) {
+      return 0;
+   }
+   /**
+    * Release UART - dummy routine (non RTOS)
+    */
+   int endTransaction() {
+      return 0;
+   }
+#endif
+
+//   /**
+//    * Obtain UART mutex.
+//    *
+//    * @return Reference to self
+//    *
+//    * @note Failure result is an assertion failure
+//    */
+//   FormattedIO &lock() {
+//      usbdm_assert(startTransaction() == 0, "Failed to obtain UART lock");
+//      return *this;
+//   }
+//
+//   /**
+//    * Release UART mutex.
+//    *
+//    * @return Reference to self
+//    *
+//    * @note Failure result is an assertion failure
+//    */
+//   FormattedIO &unlock() {
+//      usbdm_assert(endTransaction() == 0, "Failed to release UART lock");
+//      return *this;
+//   }
+//
    /**
     * Check if character is available
     *
@@ -308,6 +376,62 @@ typedef void (*UARTCallbackFunction)(uint8_t status);
  * @tparam Info   Class describing UART hardware
  */
 template<class Info> class Uart_T : public Uart {
+
+#ifdef __CMSIS_RTOS
+protected:
+   /**
+    * Mutex to protect access\n
+    * Using a static accessor function avoids issues with static object initialisation order
+    *
+    * @return mutex
+    */
+   static CMSIS::Mutex &mutex(int =0) {
+      /** Mutex to protect access - static so per UART */
+      static CMSIS::Mutex mutex;
+      return mutex;
+   }
+
+public:
+   /**
+    * Obtain UART mutex.
+    *
+    * @param[in]  milliseconds How long to wait in milliseconds. Use osWaitForever for indefinite wait
+    *
+    * @return osOK:                    The mutex has been obtain.
+    * @return osErrorTimeoutResource:  The mutex could not be obtained in the given time.
+    * @return osErrorResource:         The mutex could not be obtained when no timeout was specified.
+    * @return osErrorParameter:        The parameter mutex_id is incorrect.
+    * @return osErrorISR:              Cannot be called from interrupt service routines.
+    *
+    * @note The USBDM error code will also be set on error
+    */
+   virtual osStatus startTransaction(int milliseconds=osWaitForever) override {
+      // Obtain mutex
+      osStatus status = mutex().wait(milliseconds);
+      if (status != osOK) {
+         setCmsisErrorCode(status);
+      }
+      return status;
+   }
+
+   /**
+    * Release UART mutex
+    *
+    * @return osOK:              The mutex has been correctly released.
+    * @return osErrorResource:   The mutex was not obtained before.
+    * @return osErrorISR:        Cannot be called from interrupt service routines.
+    *
+    * @note The USBDM error code will also be set on error
+    */
+   virtual osStatus endTransaction() override {
+      // Release mutex
+      osStatus status = mutex().release();
+      if (status != osOK) {
+         setCmsisErrorCode(status);
+      }
+      return status;
+   }
+#endif
 
 protected:
    /** Callback function for RxTx ISR */
