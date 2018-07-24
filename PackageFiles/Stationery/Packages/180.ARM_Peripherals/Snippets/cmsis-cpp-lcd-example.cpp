@@ -20,8 +20,8 @@
  =====================================================================================================
  */
 #include <stdlib.h>
-#include "cmsis.h"
 #include "lcd.h"
+#include "cmsis.h"
 #include "spi.h"
 #include "delay.h"
 

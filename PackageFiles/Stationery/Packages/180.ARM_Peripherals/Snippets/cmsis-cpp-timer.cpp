@@ -7,8 +7,8 @@
  *      Author: podonoghue
  ============================================================================
  */
-#include "cmsis.h"                      // CMSIS RTX
 #include "hardware.h"                   // Hardware interface
+#include "cmsis.h"                      // CMSIS RTX
 
 using namespace USBDM;
 
@@ -50,6 +50,7 @@ int main() {
    timerExample();
 
    for(;;) {
+      console.writeln("This is the main thread running in a loop");
    }
    return 0;
 }

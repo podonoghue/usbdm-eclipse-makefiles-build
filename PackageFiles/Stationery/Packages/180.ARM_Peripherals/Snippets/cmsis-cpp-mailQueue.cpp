@@ -7,9 +7,8 @@
  *      Author: podonoghue
  ============================================================================
  */
-#include "cmsis.h"                      // CMSIS RTX
 #include "hardware.h"                   // Hardware interface
-#include "console.h"
+#include "cmsis.h"                      // CMSIS RTX
 
 using namespace USBDM;
 

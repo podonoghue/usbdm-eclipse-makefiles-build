@@ -8,7 +8,7 @@
  ============================================================================
  */
 #include "hardware.h"                   // Hardware interface
-#include "cmsis.h"
+#include "cmsis.h"                      // CMSIS RTX
 
 using namespace USBDM;
 

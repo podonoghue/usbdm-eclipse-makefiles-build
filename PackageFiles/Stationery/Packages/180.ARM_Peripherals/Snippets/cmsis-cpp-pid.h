@@ -1,16 +1,19 @@
 /**
+ ============================================================================
  * @file    cmsis-cpp-pid.h
  * @brief   PID Controller using CMSIS TimerClass
  *
  *  Created on: 10 Jul 2016
  *      Author: podonoghue
+ ============================================================================
  */
 
 #ifndef PROJECT_HEADERS_PID_H_
 #define PROJECT_HEADERS_PID_H_
 
 #include <time.h>
-#include "cmsis.h"
+#include "hardware.h"                   // Hardware interface
+#include "cmsis.h"                      // CMSIS RTX
 #include "pid.h"
 
 class Pid {
