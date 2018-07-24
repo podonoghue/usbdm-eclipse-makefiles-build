@@ -605,9 +605,6 @@ template<class Info, const int bitNum, Polarity polarity>
 class  Gpio_T : public GpioBase_T<Info::pinInfo.clockMask, Info::pinInfo.portAddress, Info::pinInfo.irqNum, Info::pinInfo.gpioAddress, bitNum, polarity> {
 
    static_assert(((bitNum>=0)&&(bitNum<=31)), "Illegal bit number in Gpio");
-
-public:
-   static constexpr bool irqHandlerInstalled = Info::irqHandlerInstalled;
 };
 
 /**
@@ -668,12 +665,15 @@ private:
 #else
    static volatile PORT_Type &port() { return *reinterpret_cast<volatile PORT_Type *>(Info::pinInfo.portAddress); }
 #endif
+   // PCR associated with port
+   using Pcr = PcrBase_T<Info::pinInfo.portAddress, Info::pinInfo.irqNum>;
+
+public:
    /**
     * Mask for the bits being manipulated
     */
    static constexpr uint32_t MASK = ((1<<(left-right+1))-1)<<right;
 
-public:
    /**
     * Set field as digital I/O.
     * Pins are initially set as an input.
@@ -782,11 +782,26 @@ public:
     * @note This will also reset the Pin Control Register value (PCR value).
     * @note Use setIn() or setDirection() for a lightweight change of direction without affecting other pin settings.
     *
-    * @param[in] pcrValue PCR value to use in configuring port (excluding mux fn)
+    * @param[in] pcrValue PCR value to use in configuring port (excluding mux and irq functions)
     */
    static void setInput(PcrValue pcrValue=GPIO_DEFAULT_PCR) {
       setInOut(pcrValue);
-      bmeAnd(gpio().PDDR, ~MASK);
+   }
+   /**
+    * Set all pins as digital inputs.
+    * Configures all Pin Control Register (PCR) values
+    *
+    * @note This will also reset the Pin Control Register value (PCR value).
+    * @note Use setIn() or setDirection() for a lightweight change of direction without affecting other pin settings.
+    *
+    * @param[in] pinPull          One of PinPull_None, PinPull_Up, PinPull_Down (defaults to PinPull_None)
+    * @param[in] pinFilter        One of PinFilter_None, PinFilter_Passive (defaults to PinFilter_None)
+    */
+   static void setInput(
+         PinPull           pinPull,
+         PinFilter         pinFilter         = PinFilter_None
+         ) {
+      setInput(pinPull|pinFilter);
    }
    /**
     * Set all pins as digital inputs.
@@ -801,10 +816,22 @@ public:
     */
    static void setInput(
          PinPull           pinPull,
-         PinAction         pinAction         = PinAction_None,
+         PinAction         pinAction,
          PinFilter         pinFilter         = PinFilter_None
          ) {
-      setInput(pinPull|pinAction|pinFilter);
+      // Enable clock to GPCLR & GPCHR
+      enablePortClocks(Info::pinInfo.clockMask);
+
+      // Set to input
+      gpio().PDDR &= ~MASK;
+
+      // Default to output inactive
+      write(0);
+
+      // Set individual PCRs (required for IRQ function)
+      for (int bit=right; bit<=left; bit++) {
+         port().PCR[bit] = pinPull|pinAction|pinFilter|PinMux_Gpio;
+      }
    }
    /**
     * Set individual pin directions
@@ -872,6 +899,35 @@ public:
       }
       bmeInsert(gpio().PDOR, right, left-right+1, value);
    }
+
+   /**
+    * Enable/disable pin interrupts.\n
+    * Any pending NVIC interrupts are first cleared.
+    * Convenience wrapper for PCR function
+    *
+    * @param[in] enable        True => enable, False => disable
+    * @param[in] nvicPriority  Interrupt priority
+    */
+   static void enableNvicInterrupts(bool enable=true, uint32_t nvicPriority=NvicPriority_Normal) {
+      Pcr::enableNvicInterrupts(enable, nvicPriority);
+   }
+
+   /**
+    * Set callback for Pin interrupts
+    *
+    * @param[in] callback The function to call on Pin interrupt. \n
+    *                     nullptr to indicate none
+    *
+    * @return E_NO_ERROR            No error
+    * @return E_HANDLER_ALREADY_SET Handler already set
+    *
+    * @note There is a single callback function for all pins on the related port.
+    *       It is necessary to identify the originating pin in the callback
+    */
+   static ErrorCode setCallback(PinCallbackFunction callback) {
+      return Pcr::setCallback(callback);
+   }
+
 };
 
 #ifdef USBDM_GPIOA_IS_DEFINED
@@ -915,7 +971,7 @@ public:
  */
 template<int bitNum, Polarity polarity=ActiveHigh> class GpioA :
       public GpioBase_T<GpioAInfo::pinInfo.clockMask, GpioAInfo::pinInfo.portAddress, GpioAInfo::pinInfo.irqNum, GpioAInfo::pinInfo.gpioAddress, bitNum, polarity> {};
-using PortA = PcrBase_T<GpioAInfo::pinInfo.portAddress>;
+using PortA = PcrBase_T<GpioAInfo::pinInfo.portAddress, GpioAInfo::pinInfo.irqNum>;
 
 /**
  * @brief Convenience template for GpioA fields. See @ref Field_T
@@ -998,7 +1054,7 @@ class GpioAField : public Field_T<GpioAInfo, left, right, polarity> {};
  */
 template<int bitNum, Polarity polarity=ActiveHigh> class GpioB :
       public GpioBase_T<GpioBInfo::pinInfo.clockMask, GpioBInfo::pinInfo.portAddress, GpioBInfo::pinInfo.irqNum, GpioBInfo::pinInfo.gpioAddress, bitNum, polarity> {};
-using PortB = PcrBase_T<GpioBInfo::pinInfo.portAddress>;
+using PortB = PcrBase_T<GpioBInfo::pinInfo.portAddress, GpioBInfo::pinInfo.irqNum>;
 
 /**
  * @brief Convenience template for GpioB fields. See @ref Field_T
@@ -1081,7 +1137,7 @@ class GpioBField : public Field_T<GpioBInfo, left, right, polarity> {};
  */
 template<int bitNum, Polarity polarity=ActiveHigh> class GpioC :
       public GpioBase_T<GpioCInfo::pinInfo.clockMask, GpioCInfo::pinInfo.portAddress, GpioCInfo::pinInfo.irqNum, GpioCInfo::pinInfo.gpioAddress, bitNum, polarity> {};
-using PortC = PcrBase_T<GpioCInfo::pinInfo.portAddress>;
+using PortC = PcrBase_T<GpioCInfo::pinInfo.portAddress, GpioCInfo::pinInfo.irqNum>;
 
 /**
  * @brief Convenience template for GpioC fields. See @ref Field_T
@@ -1164,7 +1220,7 @@ class GpioCField : public Field_T<GpioCInfo, left, right, polarity> {};
  */
 template<int bitNum, Polarity polarity=ActiveHigh> class GpioD :
       public GpioBase_T<GpioDInfo::pinInfo.clockMask, GpioDInfo::pinInfo.portAddress, GpioDInfo::pinInfo.irqNum, GpioDInfo::pinInfo.gpioAddress, bitNum, polarity> {};
-using PortD = PcrBase_T<GpioDInfo::pinInfo.portAddress>;
+using PortD = PcrBase_T<GpioDInfo::pinInfo.portAddress, GpioDInfo::pinInfo.irqNum>;
 
 /**
  * @brief Convenience template for GpioD fields. See @ref Field_T
@@ -1247,7 +1303,7 @@ class GpioDField : public Field_T<GpioDInfo, left, right, polarity> {};
  */
 template<int bitNum, Polarity polarity=ActiveHigh> class GpioE :
       public GpioBase_T<GpioEInfo::pinInfo.clockMask, GpioEInfo::pinInfo.portAddress, GpioEInfo::pinInfo.irqNum, GpioEInfo::pinInfo.gpioAddress, bitNum, polarity> {};
-using PortE = PcrBase_T<GpioEInfo::pinInfo.portAddress>;
+using PortE = PcrBase_T<GpioEInfo::pinInfo.portAddress, GpioEInfo::pinInfo.irqNum>;
 
 /**
  * @brief Convenience template for GpioE fields. See @ref Field_T
