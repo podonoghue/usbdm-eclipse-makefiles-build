@@ -1,5 +1,9 @@
 /**
- * @file pit-example3.cpp (derived from pit-example3-MK.cpp)
+ ============================================================================
+ * @file  pit-example2.cpp (180.ARM_Peripherals/Snippets/pit-example3-MK.cpp)
+ * @brief Programmable Interrupt Timer (PIT) Example
+ * @author   podonoghue
+============================================================================
  */
 #include "hardware.h"
 #include "pit.h"

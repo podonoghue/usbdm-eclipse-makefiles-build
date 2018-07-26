@@ -1,6 +1,6 @@
 /**
  ================================================================================
- * @file   fxos8700cq-example.cpp
+ * @file   fxos8700cq-example.cpp (180.ARM_Peripherals/Snippets)
  * @brief  Demonstrates use of FXOS8700CQ Accelerometer and Magnetometer over I2C
  * @version  V4.11.1.90
  * @author   podonoghue

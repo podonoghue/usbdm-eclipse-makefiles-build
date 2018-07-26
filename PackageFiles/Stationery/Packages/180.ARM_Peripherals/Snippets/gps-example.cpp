@@ -1,6 +1,6 @@
 /**
  ============================================================================
- * @file   gps-example.cpp
+ * @file   gps-example.cpp (180.ARM_Peripherals/Snippets)
  * @brief  GPS shield demonstration
  *
  *  Created on: 29/11/2015

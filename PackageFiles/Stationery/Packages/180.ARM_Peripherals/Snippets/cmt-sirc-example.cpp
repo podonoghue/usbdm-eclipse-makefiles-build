@@ -1,6 +1,6 @@
 /**
  ============================================================================
- * @file    cmt-sirc-example.cpp (180.ARM_Peripherals)
+ * @file    cmt-sirc-example.cpp  (180.ARM_Peripherals/Snippets)
  * @brief   Basic C++ demo using Cmt class to send Sony SIRC protocol
  *
  * It will be necessary to configure the CMT interrupt handling in

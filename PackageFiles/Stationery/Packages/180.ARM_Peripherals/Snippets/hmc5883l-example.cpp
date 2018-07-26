@@ -1,6 +1,6 @@
 /**
  ============================================================================
- * @file     hmc5883l-example.cpp
+ * @file     hmc5883l-example.cpp (180.ARM_Peripherals/Snippets)
  * @brief    Demonstrates use of HMC5883L Magnetometer over I2C
  * @version  V4.11.1.90
  * @author   podonoghue

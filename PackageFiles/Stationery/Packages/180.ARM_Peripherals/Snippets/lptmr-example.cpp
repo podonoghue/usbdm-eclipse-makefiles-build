@@ -1,5 +1,11 @@
-/**
- * @file lptmr-example.cpp
+/*
+ ============================================================================
+ * @file lptmr-example.cpp (180.ARM_Peripherals/Snippets/)
+ * @brief   Basic C++ LPTMR demo
+ *
+ *  Created on: 25/09/2017
+ *      Author: podonoghue
+ ============================================================================
  */
 #include "hardware.h"
 #include "lptmr.h"

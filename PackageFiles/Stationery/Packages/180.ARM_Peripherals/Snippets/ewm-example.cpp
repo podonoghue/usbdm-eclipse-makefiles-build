@@ -1,6 +1,6 @@
 /**
  ============================================================================
- * @file    ewm-example.cpp
+ * @file    ewm-example.cpp (180.ARM_Peripherals/Snippets)
  * @brief   Basic C++ demo using EWM class
  *
  *  Created on: 5 Jul 2018

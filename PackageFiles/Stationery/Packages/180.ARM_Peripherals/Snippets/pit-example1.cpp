@@ -1,10 +1,11 @@
 /**
- * @file pit-example1.cpp
- *
- * Programmable Interrupt Timer (PIT) Example
- *
+ ============================================================================
+ * @file  pit-example1.cpp (180.ARM_Peripherals/Snippets/)
+ * @brief Programmable Interrupt Timer (PIT) Example
+ * @author   podonoghue
  * Toggles LED use PIT for delay.
  * This example uses busy-waiting so it not a practical solution
+============================================================================
  */
 #include "hardware.h"
 #include "pit.h"

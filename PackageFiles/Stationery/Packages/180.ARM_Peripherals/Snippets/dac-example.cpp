@@ -1,6 +1,6 @@
 /**
  ============================================================================
- * @file    dac-example.cpp
+ * @file    dac-example.cpp (180.ARM_Peripherals/Snippets)
  * @brief   Basic C++ demo using DAC class
  *
  *  Created on: 10/6/2016

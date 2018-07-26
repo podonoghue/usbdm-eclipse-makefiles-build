@@ -1,6 +1,6 @@
 /**
  ============================================================================
- * @file cmsis-cpp-memoryPool.cpp
+ * @file cmsis-cpp-memoryPool.cpp (180.ARM_Peripherals/Snippets)
  * @brief RTX Memory Pool example program
  *
  *  Created on: 10/6/2016

@@ -1,6 +1,6 @@
 /**
  ============================================================================
- * @file    ftm-servo-example.cpp (180.ARM_Peripherals)
+ * @file    ftm-servo-example.cpp (180.ARM_Peripherals/Snippets)
  * @brief   Demo using Ftm class to implement a servo-motor controller
  *
  *  Created on: 10/6/2016

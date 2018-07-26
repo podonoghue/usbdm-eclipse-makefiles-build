@@ -1,6 +1,6 @@
 /**
  ============================================================================
- * @file analogue-joystick-example.cpp
+ * @file analogue-joystick-example.cpp (180.ARM_Peripherals/Snippets)
  * @brief Example showing use of a use of 2 ADC channels with a 2-pot joystick
  *
  *  Created on: 10/6/2016

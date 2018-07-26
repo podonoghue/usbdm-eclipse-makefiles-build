@@ -1,6 +1,6 @@
 /**
  ============================================================================
- * @file cmsis-cpp-thread.cpp
+ * @file cmsis-cpp-thread.cpp (180.ARM_Peripherals/Snippets)
  * @brief RTX Thread example program
  *
  *  Created on: 10/6/2016

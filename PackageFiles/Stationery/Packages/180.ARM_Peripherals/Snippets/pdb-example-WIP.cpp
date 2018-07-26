@@ -1,14 +1,18 @@
-/*
+/**
  ============================================================================
- * @file    pdb-example.cpp (180.ARM_Peripherals/Snippets)
- * @brief   PIT trigger ADC triggers DMA
+ * @file   pdb-example-WIP.cpp (180.ARM_Peripherals/Snippets/)
+ * @brief  Basic C++ Programmable Delay Block (PDB) Example
  *
  *  Created on: 10/7/2017
  *      Author: podonoghue
  ============================================================================
  */
-#include "system.h"
-#include "derivative.h"
+/*
+ * This example uses PDB software trigger to schedule an ADC conversion
+ * Uses an LED for debug timing check.
+ *
+ * Note - Requires ADC and PDB interrupt handlers to be installed.
+ */
 #include "hardware.h"
 #include "pit.h"
 #include "pdb.h"

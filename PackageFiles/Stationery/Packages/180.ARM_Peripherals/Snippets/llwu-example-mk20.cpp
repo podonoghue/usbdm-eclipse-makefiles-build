@@ -1,7 +1,7 @@
 /*
  ============================================================================
  * @file    llwu-example-mk20.cpp (180.ARM_Peripherals/Snippets/)
- * @brief   Basic C++ demo
+ * @brief   Basic C++ LLWU demo
  *
  *  Created on: 25/09/2017
  *      Author: podonoghue

@@ -1,6 +1,6 @@
 /**
  ============================================================================
- * @file    ftm-quadrature-example.cpp
+ * @file    ftm-quadrature-example.cpp (180.ARM_Peripherals/Snippets)
  * @brief   Demo using Ftm class to implement a Quadrature decoder
  *
  *  Created on: 28/5/2017

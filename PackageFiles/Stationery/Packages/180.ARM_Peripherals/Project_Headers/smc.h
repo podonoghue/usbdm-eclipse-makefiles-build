@@ -404,7 +404,7 @@ public:
     * Enter Stop Mode (STOP, VLPS, LLSx, VLLSx)
     * (ARM core DEEPSLEEP mode)
     *
-    * The processor will stop execution and enter the current STOP mode.\n
+    * The processor will stop execution and enter the currently configured STOP mode.\n
     * Peripherals affected will depend on the stop mode selected.\n
     * The stop mode to enter may be set by setStopMode().
     * Other options that affect stop mode may be set by setStopOptions().
@@ -423,7 +423,7 @@ public:
     * The processor will stop execution and enter the given STOP mode.\n
     * Peripherals affected will depend on the stop mode selected.
     *
-    * @param[in] smcStopMode Stop mode to set
+    * @param[in] smcStopMode Stop mode to set.  This will become the default STOP mode.
     */
    static void enterStopMode(SmcStopMode smcStopMode) {
       setStopMode(smcStopMode);
@@ -443,14 +443,13 @@ public:
     * Enter Wait Mode (WAIT, VLPW)\n
     * (ARM core SLEEP mode)
     *
-    * The processor will stop execution and enter SLEEP mode.\n
-    * In this mode the core clock is disabled (no code executing),
+    * The processor will stop execution and enter WAIT/VLPW mode.\n
+    * This function can be used to enter normal WAIT mode or VLPW mode
+    * depending upon current run mode.\n
+    * In wait mode the core clock is disabled (no code executing),
     * but bus clocks are enabled (peripheral modules are operational).
     *
-    * This function can be used to enter normal WAIT mode or VLPW mode
-    * depending upon current run mode.
-    *
-    * Mode transitions:
+    * Possible power mode transitions:
     * - RUN  -> WAIT
     * - VLPR -> VLPW
     *

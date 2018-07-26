@@ -1,6 +1,6 @@
 /**
  ============================================================================
- * @file    rnga-example.cpp
+ * @file    rnga-example.cpp (180.ARM_Peripherals/Snippets)
  * @brief   Basic C++ demo using rnga class
  *
  *  Created on: 5 Jul 2018

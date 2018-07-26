@@ -1,12 +1,17 @@
 /**
- * @file    rtc-example.cpp
- *
- * Real Time CLock (RTC) Example
- *
+ ============================================================================
+ * @file   rtc-example.cpp (180.ARM_Peripherals/Snippets)
+ * @brief  Real Time CLock (RTC) Example
+ * @date   12 Jul 2018
+ * @author podonoghue
+ ============================================================================
+ */
+ /*
  * This example uses RTC interrupts.
  * Uses an LED for debug timing check.
  *
  * Note - Requires RTC interrupt handlers to be installed.
+ ============================================================================
  */
 #include <ctime>
 #include "hardware.h"

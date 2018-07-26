@@ -1,6 +1,6 @@
 /**
  ====================================================================================================
- * @file    flash-programming-example.cpp (180.ARM_Peripherals)
+ * @file    flash-programming-example.cpp (180.ARM_Peripherals/Snippets)
  * @brief   Basic C++ demo of Flash programming interface
  *
  * This example erases and then programs a range of flash memory.

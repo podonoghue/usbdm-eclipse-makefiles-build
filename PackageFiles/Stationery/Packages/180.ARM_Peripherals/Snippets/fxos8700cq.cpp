@@ -1,6 +1,6 @@
 /**
  ============================================================================
- * @file   fxos8700cq.cpp
+ * @file   fxos8700cq.cpp (180.ARM_Peripherals/Snippets)
  * @brief  FXOS8700 Accelerometer/Magnetometer interface
  *
  *  Created on: 10/6/2016

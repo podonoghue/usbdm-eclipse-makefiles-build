@@ -1,7 +1,7 @@
 /**
  ============================================================================
- * @file digital-example1.cpp
- * @brief Basic digital output example
+ * @file digital-example1.cpp (180.ARM_Peripherals/Snippets/)
+ * @brief Basic C++ GPIO output example
  *
  *  Created on: 10/1/2016
  *      Author: podonoghue

@@ -1,8 +1,13 @@
 /**
- * @file pdb-example1.cpp
+ ============================================================================
+ * @file   pdb-example.cpp (180.ARM_Peripherals/Snippets/)
+ * @brief  Basic C++ Programmable Delay Block (PDB) Example
  *
- * Programmable Delay Block (PDB) Example
- *
+ *  Created on: 10/7/2017
+ *      Author: podonoghue
+ ============================================================================
+ */
+/*
  * This example uses PDB software trigger to schedule an ADC conversion
  * Uses an LED for debug timing check.
  *

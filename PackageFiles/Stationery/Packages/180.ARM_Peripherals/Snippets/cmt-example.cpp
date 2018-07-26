@@ -1,6 +1,6 @@
 /**
  ============================================================================
- * @file    cmt-example.cpp (180.ARM_Peripherals)
+ * @file    cmt-example.cpp (180.ARM_Peripherals/Snippets)
  * @brief   Basic C++ demo using Cmt class
  *
  * It will be necessary to configure the CMT in the USBDM configuration

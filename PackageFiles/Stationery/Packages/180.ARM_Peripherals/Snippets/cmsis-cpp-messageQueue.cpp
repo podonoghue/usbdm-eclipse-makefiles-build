@@ -1,6 +1,6 @@
 /**
  ============================================================================
- * @file cmsis-cpp-messageQueue.cpp
+ * @file cmsis-cpp-messageQueue.cpp (180.ARM_Peripherals/Snippets)
  * @brief RTX Message Queue example program
  *
  *  Created on: 10/6/2016

@@ -1,6 +1,6 @@
 /**
  ==================================================================================
- * @file  cmsis-cpp-timer-mma845x.cpp
+ * @file  cmsis-cpp-timer-mma845x.cpp (180.ARM_Peripherals/Snippets)
  * @brief Demonstrates use of CMSIS with MMA845x Accelerometer over I2C
  * @version  V4.11.1.90
  * @author   podonoghue

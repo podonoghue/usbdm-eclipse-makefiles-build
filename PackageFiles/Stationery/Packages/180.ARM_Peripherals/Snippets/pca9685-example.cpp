@@ -1,6 +1,6 @@
 /**
  ============================================================================
- * @file pca9685-example.cpp
+ * @file pca9685-example.cpp (180.ARM_Peripherals/Snippets/)
  * @brief Demonstrates use of PCA9685 over I2C
  * @version  V4.11.1.90
  * @author   podonoghue

@@ -1,6 +1,6 @@
 /*
  ========================================================================================
- * @file    llwu-example.cpp (180.ARM_Peripherals)
+ * @file    llwu-example.cpp  (180.ARM_Peripherals/Snippets)
  * @brief   Basic C++ demo using LLWU class - very incomplete
  *
  * @note To use this demonstration the Console baud rate needs to be reduced to 9600 baud

@@ -1,6 +1,6 @@
 /**
  ============================================================================
- * @file analogue-interrupt-example.cpp
+ * @file analogue-interrupt-example.cpp (180.ARM_Peripherals/Snippets)
  * @brief Example showing use of a interrupts with an ADC channel
  *
  *  Created on: 10/6/2016

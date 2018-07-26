@@ -1,6 +1,6 @@
 /**
  ============================================================================
- * @file     hmc5883l.h
+ * @file     hmc5883l.h (180.ARM_Peripherals/Snippets)
  * @brief    Interface for HMC5883L 3-axis magnetometer
  * @version  V4.11.1.70
  * @date     18 June 2015

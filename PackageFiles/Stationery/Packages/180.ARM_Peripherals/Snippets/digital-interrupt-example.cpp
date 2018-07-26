@@ -1,14 +1,19 @@
 /**
- * @file    digital-interrupt-example.cpp (180.ARM_Peripherals/Sources/pin-interrupt-example.cpp)
+ ============================================================================
+ * @file    digital-interrupt-example.cpp (180.ARM_Peripherals/Snippets/)
+ * @brief   Basic C++ demo of GPIO interrupts.
  *
- * Pin Interrupt Example
- *
- * This example uses GPIO (Port) interrupts
- *
- * Note - Requires GPIO interrupt handlers to be installed for the port being used.
+ *  Created on: 26/7/2017
+ *      Author: podonoghue
+ ============================================================================
  */
-#include "system.h"
-#include "derivative.h"
+/**
+ * This example uses GPIO interrupts.
+ *
+ * It is necessary to enable these in Configure.usbdmProject
+ * under the "Peripheral Parameters"->GPIOx tab.
+ * Select irqHandlers option (Class Method - Software ...)
+ */
 #include "hardware.h"
 
 // Allow access to USBDM methods without USBDM:: prefix

@@ -1,6 +1,6 @@
 /**
  ============================================================================
- * @file cmsis-cpp-mailQueue.cpp
+ * @file cmsis-cpp-mailQueue.cpp (180.ARM_Peripherals/Snippets)
  * @brief RTX Mail Queue example program
  *
  *  Created on: 10/6/2016

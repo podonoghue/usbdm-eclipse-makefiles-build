@@ -1,6 +1,6 @@
 /**
  ============================================================================
- * @file analogue-example.cpp
+ * @file analogue-example.cpp (180.ARM_Peripherals/Snippets)
  * @brief Example showing use of a single-ended ADC channel
  *
  *  Created on: 10/6/2016

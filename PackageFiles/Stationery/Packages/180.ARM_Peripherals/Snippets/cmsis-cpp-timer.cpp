@@ -1,6 +1,6 @@
 /**
  ============================================================================
- * @file cmsis-cpp-timer.cpp
+ * @file cmsis-cpp-timer.cpp (180.ARM_Peripherals/Snippets)
  * @brief RTX Timer example program
  *
  *  Created on: 10/6/2016

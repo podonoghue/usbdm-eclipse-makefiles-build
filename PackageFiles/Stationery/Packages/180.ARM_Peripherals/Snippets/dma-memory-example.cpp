@@ -1,6 +1,6 @@
 /**
  ============================================================================
- * @file    dma-memory-example.cpp (180.ARM_Peripherals/Sources/)
+ * @file    dma-memory-example.cpp (180.ARM_Peripherals/Snippets/)
  * @brief   Basic C++ demo using GPIO class
  *
  *  Created on: 10/1/2016

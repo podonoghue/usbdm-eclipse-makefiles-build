@@ -1,6 +1,6 @@
 /*
  ============================================================================
- * @file    pit-adc-dma-example.cpp (180.ARM_Peripherals/Snippets)
+ * @file    pit-adc-dma-example.cpp (180.ARM_Peripherals/Snippets/)
  * @brief   PIT trigger ADC triggers DMA
  *
  *  Created on: 10/7/2017

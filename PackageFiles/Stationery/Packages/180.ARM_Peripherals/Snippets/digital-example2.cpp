@@ -1,7 +1,7 @@
 /**
  ============================================================================
- * @file digital-example2.cpp
- * @brief Basic digital input/output example
+ * @file digital-example2.cpp (180.ARM_Peripherals/Snippets/)
+ * @brief Basic C++ GPIO input/output example
  *
  *  Created on: 10/1/2016
  *      Author: podonoghue
@@ -15,7 +15,6 @@ using namespace USBDM;
  * Simple Digital I/O example
  *
  * Echoes an external switch to an external LED
- * Uses arduino aliases if available
  *
  *  Switch + LED
  *  1 x Digital input

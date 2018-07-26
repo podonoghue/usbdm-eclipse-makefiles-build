@@ -1,6 +1,6 @@
 /**
  ============================================================================
- * @file cmsis-cpp-spi-mutex.cpp
+ * @file cmsis-cpp-spi-mutex.cpp (180.ARM_Peripherals/Snippets)
  * @brief RTX Thread/SPI/MUTEX example program
  *
  *  Created on: 23/7/2018

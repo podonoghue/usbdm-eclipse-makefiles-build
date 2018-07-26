@@ -1,8 +1,11 @@
-/*
- * @file ftm-dma-example.cpp
+/**
+ ============================================================================
+ * @file ftm-dma-example.cpp (180.ARM_Peripherals/Snippets)
+ * @brief   FTM example using DMA
  *
  *  Created on: 19 Jun 2018
  *      Author: podonoghue
+ ============================================================================
  */
 #include <algorithm>    // std::max
 #include "hardware.h"

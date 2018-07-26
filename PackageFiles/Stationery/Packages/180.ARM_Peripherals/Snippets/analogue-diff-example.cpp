@@ -1,6 +1,6 @@
 /**
  ============================================================================
- * @file analogue-diff-example.cpp
+ * @file analogue-diff-example.cpp (180.ARM_Peripherals/Snippets)
  * @brief Example showing use of a differential ADC channel
  *
  *  Created on: 10/6/2016

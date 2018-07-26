@@ -1,6 +1,6 @@
 /**
  ============================================================================
- * @file    cmp-example.cpp (180.ARM_Peripherals)
+ * @file    cmp-example.cpp (180.ARM_Peripherals/Snippets)
  * @brief   Basic C++ demo using Cmp class
  *
  * It will be necessary to configure the CMP in the USBDM configuration
