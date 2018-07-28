@@ -171,7 +171,7 @@ void LcdBase::init() {
 
    txCommand(DISON);         // Turn on the display
 
-   //   int i;
+   //   unsigned i;
    //   for (i=0; i<64; i++) {
    //      txCommand(VOLCTR);        // Voltage control (contrast setting)
    //      txData(i);                // P1: 32 volume value (adjust this setting for your display 0 .. 63)
@@ -314,7 +314,7 @@ void LcdBase::clear(Colour colour) {
  *
  * @author James P Lynch July 7, 2007
  */
-void LcdBase::setXY(int x, int y) {
+void LcdBase::setXY(unsigned x, unsigned y) {
    lock();
 
    // Row address set (command 0x2B)
@@ -351,7 +351,16 @@ void LcdBase::setXY(int x, int y) {
  *
  * @author James P Lynch July 7, 2007
  */
-void LcdBase::drawPixel(int x, int y, Colour colour) {
+void LcdBase::drawPixel(unsigned x, unsigned y, Colour colour) {
+
+#ifdef DEBUG_BUILD
+   usbdm_assert((x<=LCD_X_MAX) && (y<=LCD_Y_MAX), "Pixel off screen");
+#endif
+
+   // Clip to screen
+   if ((x>LCD_X_MAX) || (y>LCD_Y_MAX)) {
+      return;
+   }
 
    lock();
 
@@ -395,7 +404,7 @@ void LcdBase::drawPixel(int x, int y, Colour colour) {
  * @note Taken verbatim from Professor McMillan's presentation: \n
  *       http://www.cs.unc.edu/~mcmillan/comp136/Lecture6/Lines.html
  */
-void LcdBase::drawLine(int x0, int y0, int x1, int y1, Colour colour) {
+void LcdBase::drawLine(unsigned x0, unsigned y0, unsigned x1, unsigned y1, Colour colour) {
 
    lock();
 
@@ -505,11 +514,11 @@ void LcdBase::drawLine(int x0, int y0, int x1, int y1, Colour colour) {
  *       In the case of an unfilled rectangle, drawing four lines with the Bresenham line
  *       drawing algorithm is reasonably efficient.
  */
-void LcdBase::drawRect(int x0, int y0, int x1, int y1, int fill, Colour colour) {
+void LcdBase::drawRect(unsigned x0, unsigned y0, unsigned x1, unsigned y1, unsigned fill, Colour colour) {
 
    lock();
 
-   int xmin, xmax, ymin, ymax;
+   unsigned xmin, xmax, ymin, ymax;
    // Check if the rectangle is to be filled
    if (fill) {
       // best way to create a filled rectangle is to define a drawing box
@@ -630,17 +639,17 @@ void LcdBase::drawRect(int x0, int y0, int x1, int y1, int fill, Colour colour) 
  *
  *  @author James P Lynch July 7, 2007
  */
-void LcdBase::putChar(char c, int x, int y, Font &font, Colour fColour, Colour bColour) {
+void LcdBase::putChar(char c, unsigned x, unsigned y, Font &font, Colour fColour, Colour bColour) {
 
    lock();
 
-   unsigned int nCols;
-   unsigned int nRows;
-   unsigned int nBytes;
+   unsigned nCols;
+   unsigned nRows;
+   unsigned nBytes;
    unsigned char pixelRow;
    unsigned char mask;
-   unsigned int word0;
-   unsigned int word1;
+   unsigned word0;
+   unsigned word1;
    const uint8_t *pChar;
 
    // Get the nColumns, nRows and nBytes
@@ -680,8 +689,7 @@ void LcdBase::putChar(char c, int x, int y, Font &font, Colour fColour, Colour b
 #endif
 
    // Loop on each row, working backwards from the bottom to the top
-   int i;
-   for (i = nRows - 1; i >= 0; i--) {
+   for (int i = nRows - 1; i >= 0; i--) {
       unsigned j;
       // Copy pixel row from font table and then decrement row
       pixelRow = *pChar--;
@@ -741,7 +749,7 @@ void LcdBase::putChar(char c, int x, int y, Font &font, Colour fColour, Colour b
  * @note For more information on how this code does it's thing look at this \n
  *       "http://www.sparkfun.com/tutorial/Nokia%206100%20LCD%20Display%20Driver.pdf"
  */
-void LcdBase::putStr(const char *str, int x, int y, Font &font, Colour fColour, Colour bColour) {
+void LcdBase::putStr(const char *str, unsigned x, unsigned y, Font &font, Colour fColour, Colour bColour) {
 
    while (*str != '\0') {
       // Draw the character
@@ -791,15 +799,15 @@ void LcdBase::setContrast(uint8_t setting) {
  * @note Taken verbatim Wikipedia article on Bresenham's line algorithm \n
  *        http://www.wikipedia.org
  */
-void LcdBase::drawCircle(int centreX, int centreY, int radius, Colour colour, int circleType) {
+void LcdBase::drawCircle(unsigned centreX, unsigned centreY, unsigned radius, Colour colour, unsigned circleType) {
 
    lock();
 
    int f = 1 - radius;
-   int ddF_x = 0;
-   int ddF_y = -2 * radius;
-   int x = 0;
-   int y = radius;
+   unsigned ddF_x = 0;
+   unsigned ddF_y = -2 * radius;
+   unsigned x = 0;
+   unsigned y = radius;
 
    if (circleType&(SECTOR_315_360|SECTOR_0_45)) {
       drawPixel(centreX + radius, centreY, colour);  // 0,360

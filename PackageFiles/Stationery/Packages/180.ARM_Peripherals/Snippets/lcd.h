@@ -63,16 +63,16 @@ namespace USBDM {
 //   Lcd Dimension Definitions
 //
 //********************************************************************
-constexpr int ROW_LENGTH       = 132;
-constexpr int COL_HEIGHT       = 132;
-constexpr int ENDPAGE          = 132;
-constexpr int ENDCOL           = 130;
+constexpr unsigned ROW_LENGTH       = 132;
+constexpr unsigned COL_HEIGHT       = 132;
+constexpr unsigned ENDPAGE          = 132;
+constexpr unsigned ENDCOL           = 130;
 
 // Usable area
-constexpr int LCD_X_MIN        = 1;
-constexpr int LCD_X_MAX        = 130;
-constexpr int LCD_Y_MIN        = 1;
-constexpr int LCD_Y_MAX        = 130;
+constexpr unsigned LCD_X_MIN        = 1;
+constexpr unsigned LCD_X_MAX        = 130;
+constexpr unsigned LCD_Y_MIN        = 1;
+constexpr unsigned LCD_Y_MAX        = 130;
 
 /**
  * Calculates colour as 16-bit value in 4:4:4 format
@@ -121,34 +121,34 @@ constexpr Colour WHITE            = 0xFFF;
 //*******************************************************
 //       Circle Definitions
 //*******************************************************
-constexpr int SECTOR_0_45      = 0x01;
-constexpr int SECTOR_45_90     = 0x02;
-constexpr int SECTOR_90_135    = 0x04;
-constexpr int SECTOR_135_180   = 0x08;
-constexpr int SECTOR_180_225   = 0x10;
-constexpr int SECTOR_225_270   = 0x20;
-constexpr int SECTOR_270_315   = 0x40;
-constexpr int SECTOR_315_360   = 0x80;
+constexpr unsigned SECTOR_0_45      = 0x01;
+constexpr unsigned SECTOR_45_90     = 0x02;
+constexpr unsigned SECTOR_90_135    = 0x04;
+constexpr unsigned SECTOR_135_180   = 0x08;
+constexpr unsigned SECTOR_180_225   = 0x10;
+constexpr unsigned SECTOR_225_270   = 0x20;
+constexpr unsigned SECTOR_270_315   = 0x40;
+constexpr unsigned SECTOR_315_360   = 0x80;
 
-constexpr int QUAD_NORTH_EAST  = (SECTOR_0_45|SECTOR_45_90);
-constexpr int QUAD_NORTH_WEST  = (SECTOR_90_135|SECTOR_135_180);
-constexpr int QUAD_SOUTH_WEST  = (SECTOR_180_225|SECTOR_225_270);
-constexpr int QUAD_SOUTH_EAST  = (SECTOR_270_315|SECTOR_315_360);
+constexpr unsigned QUAD_NORTH_EAST  = (SECTOR_0_45|SECTOR_45_90);
+constexpr unsigned QUAD_NORTH_WEST  = (SECTOR_90_135|SECTOR_135_180);
+constexpr unsigned QUAD_SOUTH_WEST  = (SECTOR_180_225|SECTOR_225_270);
+constexpr unsigned QUAD_SOUTH_EAST  = (SECTOR_270_315|SECTOR_315_360);
 
-constexpr int FULLCIRCLE       = (QUAD_NORTH_EAST|QUAD_NORTH_WEST|QUAD_SOUTH_EAST|QUAD_SOUTH_WEST);
-constexpr int OPENSOUTH        = (QUAD_NORTH_EAST|QUAD_NORTH_WEST);
-constexpr int OPENNORTH        = (QUAD_SOUTH_EAST|QUAD_SOUTH_WEST);
-constexpr int OPENEAST         = (QUAD_NORTH_WEST|QUAD_SOUTH_WEST);
-constexpr int OPENWEST         = (QUAD_NORTH_EAST|QUAD_SOUTH_EAST);
-constexpr int OPENNORTHEAST    = (QUAD_NORTH_WEST|QUAD_SOUTH_EAST|QUAD_SOUTH_WEST);
-constexpr int OPENNORTHWEST    = (QUAD_NORTH_EAST|QUAD_SOUTH_EAST|QUAD_SOUTH_WEST);
-constexpr int OPENSOUTHEAST    = (QUAD_NORTH_EAST|QUAD_NORTH_WEST|QUAD_SOUTH_WEST);
-constexpr int OPENSOUTHWEST    = (QUAD_NORTH_EAST|QUAD_NORTH_WEST|QUAD_SOUTH_EAST);
+constexpr unsigned FULLCIRCLE       = (QUAD_NORTH_EAST|QUAD_NORTH_WEST|QUAD_SOUTH_EAST|QUAD_SOUTH_WEST);
+constexpr unsigned OPENSOUTH        = (QUAD_NORTH_EAST|QUAD_NORTH_WEST);
+constexpr unsigned OPENNORTH        = (QUAD_SOUTH_EAST|QUAD_SOUTH_WEST);
+constexpr unsigned OPENEAST         = (QUAD_NORTH_WEST|QUAD_SOUTH_WEST);
+constexpr unsigned OPENWEST         = (QUAD_NORTH_EAST|QUAD_SOUTH_EAST);
+constexpr unsigned OPENNORTHEAST    = (QUAD_NORTH_WEST|QUAD_SOUTH_EAST|QUAD_SOUTH_WEST);
+constexpr unsigned OPENNORTHWEST    = (QUAD_NORTH_EAST|QUAD_SOUTH_EAST|QUAD_SOUTH_WEST);
+constexpr unsigned OPENSOUTHEAST    = (QUAD_NORTH_EAST|QUAD_NORTH_WEST|QUAD_SOUTH_WEST);
+constexpr unsigned OPENSOUTHWEST    = (QUAD_NORTH_EAST|QUAD_NORTH_WEST|QUAD_SOUTH_EAST);
 
-constexpr int DEFAULT_BACKGROUND = BLACK;
-constexpr int DEFAULT_FOREGROUND = WHITE;
+constexpr unsigned DEFAULT_BACKGROUND = BLACK;
+constexpr unsigned DEFAULT_FOREGROUND = WHITE;
 
-constexpr int DEFAULT_LCD_CONTRAST = 65;
+constexpr unsigned DEFAULT_LCD_CONTRAST = 65;
 
 /**
  * @brief Class representing an LCD
@@ -226,14 +226,14 @@ protected:
     * @param colour Colour to send
     * @param size   Size of colour block
     */
-   virtual void txColourBlock(Colour colour, int size) = 0;
+   virtual void txColourBlock(Colour colour, unsigned size) = 0;
 
    /** Sets the Row and Column addresses
     *
     * @param x Row address (0 .. 131)
     * @param y Column address (0 .. 131)
     */
-   void setXY(int x, int y);
+   void setXY(unsigned x, unsigned y);
 
    /**
     *  Initialises the LCD
@@ -262,7 +262,7 @@ public:
     *
     * Note : Only of elecfreaks version of shield
     */
-   virtual void backlightSetLevel(int level) = 0;
+   virtual void backlightSetLevel(unsigned level) = 0;
    /**
     * Turn LCD back-light on
     */
@@ -293,7 +293,7 @@ public:
     *
     * @note See lcd.h for some sample colour settings
     */
-   void drawPixel(int x, int y, Colour colour=DEFAULT_FOREGROUND);
+   void drawPixel(unsigned x, unsigned y, Colour colour=DEFAULT_FOREGROUND);
 
    /** Draws a line in the specified colour from (x0,y0) to (x1,y1)
     *
@@ -303,7 +303,7 @@ public:
     * @param  y1      Column address (0 .. 131)
     * @param  colour  12-bit colour value rrrrggggbbbb
     */
-   void drawLine(int x0, int y0, int x1, int y1, Colour colour=DEFAULT_FOREGROUND);
+   void drawLine(unsigned x0, unsigned y0, unsigned x1, unsigned y1, Colour colour=DEFAULT_FOREGROUND);
 
    /** Draws a rectangle in the specified colour from (x1,y1) to (x2,y2)\n
     *  Rectangle can be filled with a colour if desired
@@ -315,7 +315,7 @@ public:
     * @param  fill    Indicates if the rectangle will be filled
     * @param  colour  12-bit colour value rrrrggggbbbb
     */
-   void drawRect(int x0, int y0, int x1, int y1, int fill, Colour colour=DEFAULT_FOREGROUND);
+   void drawRect(unsigned x0, unsigned y0, unsigned x1, unsigned y1, unsigned fill, Colour colour=DEFAULT_FOREGROUND);
 
    /** Draws a line circle in the specified colour at center (x0,y0) with radius
     *
@@ -325,7 +325,7 @@ public:
     * @param colour     12-bit colour value rrrrggggbbbb
     * @param circleType Controls which segments of the circle are drawn
     */
-   void drawCircle(int centreX, int centreY, int radius, Colour colour, int circleType=FULLCIRCLE);
+   void drawCircle(unsigned centreX, unsigned centreY, unsigned radius, Colour colour, unsigned circleType=FULLCIRCLE);
    /** Writes the entire LCD screen from a bmp file
     *
     * @param bmp - bitmap to display
@@ -344,7 +344,7 @@ public:
     * @param fColour  12-bit foreground colour value rrrrggggbbbb
     * @param bColour  12-bit background colour value rrrrggggbbbb
     */
-   void putChar(char c, int x, int y, Font &font, Colour fColour=DEFAULT_FOREGROUND, Colour bColour=DEFAULT_BACKGROUND);
+   void putChar(char c, unsigned x, unsigned y, Font &font, Colour fColour=DEFAULT_FOREGROUND, Colour bColour=DEFAULT_BACKGROUND);
 
    /** Draws an ASCII character at the specified (x,y) address and colours using the currently set font
     *
@@ -354,7 +354,7 @@ public:
     * @param fColour  12-bit foreground colour value rrrrggggbbbb
     * @param bColour  12-bit background colour value rrrrggggbbbb
     */
-   void putChar(char c, int x, int y, Colour fColour=DEFAULT_FOREGROUND, Colour bColour=DEFAULT_BACKGROUND) {
+   void putChar(char c, unsigned x, unsigned y, Colour fColour=DEFAULT_FOREGROUND, Colour bColour=DEFAULT_BACKGROUND) {
 	   putChar(c, x, y, *fFont, fColour, bColour);
    }
 
@@ -379,7 +379,7 @@ public:
     * @note For more information on how this code does it's thing look at this \n
     *       "http://www.sparkfun.com/tutorial/Nokia%206100%20LCD%20Display%20Driver.pdf"
     */
-   void putStr(const char *str, int x, int y, Font &font, Colour fColour=DEFAULT_FOREGROUND, Colour bColour=DEFAULT_BACKGROUND);
+   void putStr(const char *str, unsigned x, unsigned y, Font &font, Colour fColour=DEFAULT_FOREGROUND, Colour bColour=DEFAULT_BACKGROUND);
 
    /** Draws a null-terminated character string at the specified (x,y) address and colours using the current font
     *
@@ -401,17 +401,17 @@ public:
     * @note For more information on how this code does it's thing look at this \n
     *       "http://www.sparkfun.com/tutorial/Nokia%206100%20LCD%20Display%20Driver.pdf"
     */
-   void putStr(const char *str, int x, int y, Colour fColour=DEFAULT_FOREGROUND, Colour bColour=DEFAULT_BACKGROUND) {
+   void putStr(const char *str, unsigned x, unsigned y, Colour fColour=DEFAULT_FOREGROUND, Colour bColour=DEFAULT_BACKGROUND) {
 	   putStr(str, x, y, *fFont, fColour, bColour);
    }
 
-   int _readChar() override { return -1;}
+   int  _readChar() override { return -1;}
    bool _isCharAvailable() override { return false; }
    void flushInput() override {}
    void flushOutput() override {}
 
 private:
-   int fX,fY;
+   unsigned fX,fY;
    Font *fFont;
    Colour fForeground;
    Colour fBackground;
@@ -427,7 +427,7 @@ public:
       return *this;
    }
 
-   LcdBase &moveXY(int x, int y) {
+   LcdBase &moveXY(unsigned x, unsigned y) {
       fX = x;
       fY = y;
       return *this;
@@ -438,15 +438,36 @@ public:
       return *this;
    }
 
-   void _writeChar(char ch) override {
-      putChar(ch, fX, fY, *fFont, fForeground, fBackground);
-      fX += fFont->width;
-      if (fX >= LCD_X_MAX) {
+   /**
+    * Does newline - move to start of next line
+    */
+   void _newline() {
+      if (fY > (LCD_Y_MIN+fFont->height)) {
+         fY -= fFont->height;
          fX = LCD_X_MIN;
-         fY += fFont->height;
-         if (fY >= LCD_Y_MAX) {
-            fY = LCD_Y_MIN;
+      }
+   }
+
+   /**
+    * Writes a character (blocking)
+    *
+    * @param[in]  ch - character to send
+    */
+   void _writeChar(char ch) override {
+      // Keep on screen
+      if (ch == '\n') {
+         // Convert to => \n\r
+         _newline();
+      }
+      else if (ch == '\r') {
+         fX = LCD_X_MIN;
+      }
+      else {
+         if (fX >= LCD_X_MAX) {
+            _newline();
          }
+         putChar(ch, fX, fY, *fFont, fForeground, fBackground);
+         fX += fFont->width;
       }
    }
 };
@@ -484,7 +505,7 @@ public:
    /**
     * Reset LCD
     */
-   virtual void reset()override  {
+   virtual void reset() override  {
       // Reset display
 //      SpiCS_n::low();
       Reset_n::low();
@@ -493,6 +514,7 @@ public:
       SpiCS_n::high();
       waitMS(20);
    }
+
    /**
     * Send a single command byte to the display
     *
@@ -545,7 +567,7 @@ public:
     * @param colour Colour to send
     * @param size   Size of colour block (even)
     */
-   virtual void txColourBlock(Colour colour, int size) override {
+   virtual void txColourBlock(Colour colour, unsigned size) override {
       // Construct RRRRGGGG|BBBBRRRR|GGGGBBBB in 3 bytes = 2 pixels
       uint16_t data1 = DATA_FLAG|(colour >> 4);
       uint16_t data2 = DATA_FLAG|(((colour & 0xF) << 4) | ((colour >> 8) & 0xF));
@@ -569,7 +591,7 @@ public:
     *
     * @param level 0-100 back-light level as percentage
     */
-   virtual void backlightSetLevel(int level) {
+   virtual void backlightSetLevel(unsigned level) {
 #if LCD_BACKLIGHT_PWM_FEATURE
       BackLight::setMode(1000, tmr_leftAlign);
       if (level>100) {

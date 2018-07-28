@@ -37,20 +37,20 @@ Lcd lcd(spi);
 
 /* ************************************************** */
 
-/// LCD derived dimensions
-static constexpr int LCD_WIDTH  = (LCD_X_MAX-LCD_X_MIN);
-static constexpr int LCD_HEIGHT = (LCD_Y_MAX-LCD_Y_MIN);
-static constexpr int CENTRE_X   = ((LCD_X_MAX-LCD_X_MIN)/2);
-static constexpr int CENTRE_Y   = ((LCD_Y_MAX-LCD_Y_MIN)/2);
+// LCD derived dimensions
+static constexpr unsigned LCD_WIDTH  = (LCD_X_MAX-LCD_X_MIN);
+static constexpr unsigned LCD_HEIGHT = (LCD_Y_MAX-LCD_Y_MIN);
+static constexpr unsigned CENTRE_X   = ((LCD_X_MAX-LCD_X_MIN)/2);
+static constexpr unsigned CENTRE_Y   = ((LCD_Y_MAX-LCD_Y_MIN)/2);
 
 // Colour for LCD background
-static constexpr int BACKGROUND_COLOUR = (RED);
+static constexpr Colour BACKGROUND_COLOUR = (RED);
 
 // Colour for LCD foreground
-static constexpr int FOREGROUND_COLOUR = (WHITE);
+static constexpr Colour FOREGROUND_COLOUR = (WHITE);
 
 // Radius used for the moving circle
-static constexpr int CIRCLE_RADIUS = (20);
+static constexpr unsigned CIRCLE_RADIUS = (20);
 
 /*
  * Draws a cursor on the lcd screen
@@ -61,7 +61,7 @@ static constexpr int CIRCLE_RADIUS = (20);
  *
  * @note Done this way so a more sophisticated cursor can be added
  */
-void drawCursor(int x, int y, int colour) {
+void drawCursor(unsigned x, unsigned y, Colour colour) {
    lcd.drawCircle(x, y, CIRCLE_RADIUS, colour);
 //   lcd.drawRect(x-CIRCLE_RADIUS/2, y-1, x+CIRCLE_RADIUS/2, y+1, false, colour);
 //   lcd.drawRect(x-1, y-CIRCLE_RADIUS/2, x+1, y+CIRCLE_RADIUS/2, false, colour);
@@ -82,8 +82,8 @@ int main() {
    lcd.putStr("Some Circles", 30, 10);
 
    // Cursor position on screen
-   int x=0, y=0;
-   int xOld=50, yOld=50;
+   unsigned x=0, y=0;
+   unsigned xOld=50, yOld=50;
 
    // Set LCD defaults
    lcd.setFont(largeFont).setForeground(BLUE).setBackground(WHITE);
