@@ -1,11 +1,12 @@
 /**
- ============================================================================
+ ==============================================================================
  * @file    digital-rotary-encoder-example.cpp (180.ARM_Peripherals/Snippets/)
- * @brief   Basic C++ demo of GPIOs with interrupts to implement a .
+ * @brief   Basic C++ demo of GPIOs with interrupts to implement an interface
+ *          for a 2-phase rotary encoder.
  *
  *  Created on: 26/7/2018
  *      Author: podonoghue
- ============================================================================
+ ==============================================================================
  */
 /**
  * This example uses GPIO interrupts.
@@ -19,10 +20,10 @@
 // Allow access to USBDM methods without USBDM:: prefix
 using namespace USBDM;
 
-// GPIOs as a field - this assumes consecutive pins on same port
-using PhotoDetector = GpioCField<1, 0, ActiveLow>;
+/** Encoder pins as a GPIO field - this assumes consecutive pins on same port */
+using Encoder = GpioCField<1, 0, ActiveLow>;
 
-// Variable used by callback to track shaft position
+/** Variable used by callback to track encoder position */
 static volatile int position;
 
 #if 1
@@ -73,9 +74,9 @@ void pinIrqCallback(uint32_t eventMask) {
    static State currentState = State_Idle;
 
    // Check channel
-   if (eventMask && PhotoDetector::MASK) {
+   if (eventMask && Encoder::MASK) {
       // Use state of GPIOs to determine next state
-      uint8_t value = PhotoDetector::read();
+      uint8_t value = Encoder::read();
       State nextState = nextStateTable[currentState][value];
       if (nextState&Inc) {
          position++;
@@ -112,9 +113,9 @@ void pinIrqCallback(uint32_t eventMask) {
    static uint32_t lastState = 0;
 
    // Check channel
-   if (eventMask && PhotoDetector::MASK) {
+   if (eventMask && Encoder::MASK) {
       // Use change of state of GPIOs to determine rotation (if any)
-      uint32_t currentState = PhotoDetector::read();
+      uint32_t currentState = Encoder::read();
       position += motion[lastState][currentState];
       lastState = currentState;
    }
@@ -122,7 +123,7 @@ void pinIrqCallback(uint32_t eventMask) {
 #endif
 
 /**
- * Enable shaft encoder.
+ * Enable shaft encoder interface.
  *
  * Enables encoder interrupts and does any other initialisation required.
  */
@@ -131,24 +132,24 @@ void startEncoder() {
    // Start position at zero
    position = 0;
 
-   // Configure Photo-detectors as inputs with dual-edge interrupts
-   PhotoDetector::setCallback(pinIrqCallback);
-   PhotoDetector::setInput(PinPull_Up, PinAction_IrqEither, PinFilter_Passive);
-   PhotoDetector::enableNvicInterrupts();
+   // Configure encoder pins as inputs with dual-edge interrupts
+   Encoder::setCallback(pinIrqCallback);
+   Encoder::setInput(PinPull_Up, PinAction_IrqEither, PinFilter_Passive);
+   Encoder::enableNvicInterrupts();
 }
 
 /**
  *  Disables shaft encoder.
  */
 void stopEncoder() {
-   PhotoDetector::setInput(PinPull_None, PinAction_None);
-   PhotoDetector::enableNvicInterrupts(false);
+   Encoder::setInput(PinPull_None, PinAction_None);
+   Encoder::enableNvicInterrupts(false);
 }
 
 /**
- * Returns the shaft position.
+ * Returns the encoder position.
  */
-int shaftPosition() {
+int getPosition() {
    return position;
 }
 
@@ -161,7 +162,7 @@ int main() {
    for(;;) {
       // Only print when changing
       lastMeasurement    = currentMeasurement;
-      currentMeasurement = shaftPosition();
+      currentMeasurement = getPosition();
       if (currentMeasurement != lastMeasurement) {
          console.write("Position = ").writeln(currentMeasurement);
       }

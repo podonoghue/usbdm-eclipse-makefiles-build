@@ -570,6 +570,7 @@ This is a template class with static methods.\n
 @example digital-example1.cpp
 @example digital-example2.cpp
 @example digital-interrupt-example.cpp
+@example digital-rotary-encoder-example.cpp
 @example dma-memory-example.cpp
 @example dma-memory-template-example.cpp
 @example dma-spi-example.cpp
