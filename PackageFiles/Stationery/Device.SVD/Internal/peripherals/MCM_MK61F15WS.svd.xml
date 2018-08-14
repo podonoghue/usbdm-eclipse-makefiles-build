@@ -33,7 +33,8 @@ Devices using this peripheral:
          <registers>
             <register>
                <name>PLASC</name>
-               <description>Crossbar Switch (AXBS) Slave Configuration</description>
+               <description>Crossbar Switch (AXBS) Slave Configuration\n
+PLASC is a 16-bit read-only register identifying the presence/absence of bus slave connections to the device&apos;s crossbar switch</description>
                <addressOffset>0x8</addressOffset>
                <size>16</size>
                <access>read-only</access>
@@ -62,7 +63,8 @@ Devices using this peripheral:
             </register>
             <register>
                <name>PLAMC</name>
-               <description>Crossbar Switch (AXBS) Master Configuration</description>
+               <description>Crossbar Switch (AXBS) Master Configuration\n
+PLAMC is a 16-bit read-only register identifying the presence/absence of bus master connections to the device&apos;s crossbar switch</description>
                <addressOffset>0xA</addressOffset>
                <size>16</size>
                <access>read-only</access>
@@ -167,7 +169,11 @@ Devices using this peripheral:
             </register>
             <register>
                <name>ISCR</name>
-               <description>Interrupt Status Register</description>
+               <description>Interrupt Status and Control Register\n
+The MCM_ISCR register includes the enable and status bits associated with the core&apos;s
+floating-point exceptions. The individual event indicators are first qualified with their
+exception enables and then logically summed to form an interrupt request sent to the
+core&apos;s NVIC</description>
                <addressOffset>0x10</addressOffset>
                <fields>
                   <field>
@@ -190,7 +196,7 @@ Devices using this peripheral:
                   </field>
                   <field>
                      <name>NMI</name>
-                     <description>Non-maskable Interrupt Pending</description>
+                     <description>Nonmaskable Interrupt Pending</description>
                      <bitOffset>2</bitOffset>
                      <bitWidth>1</bitWidth>
                      <enumeratedValues>
@@ -245,7 +251,9 @@ Devices using this peripheral:
                   </field>
                   <field>
                      <name>FIOC</name>
-                     <description>FPU invalid operation interrupt status</description>
+                     <description>FPU invalid operation interrupt status\n
+This read-only bit is a copy of the core&apos;s FPSCR[IOC] bit and signals an illegal operation has been
+detected in the processor&apos;s FPU. Once set, this bit remains set until software clears the FPSCR[IOC] bit</description>
                      <bitOffset>8</bitOffset>
                      <bitWidth>1</bitWidth>
                      <access>read-only</access>
@@ -262,33 +270,25 @@ Devices using this peripheral:
                         </enumeratedValue>
                      </enumeratedValues>
                   </field>
-                  <field derivedFrom="FIOC" > <name>FDZC</name> <description>FPU divide-by-zero interrupt status</description> <bitOffset>9</bitOffset> </field>
-                  <field derivedFrom="FIOC" > <name>FOFC</name> <description>FPU overflow interrupt status</description> <bitOffset>10</bitOffset> </field>
-                  <field derivedFrom="FIOC" > <name>FUFC</name> <description>FPU underflow interrupt status</description> <bitOffset>11</bitOffset> </field>
-                  <field derivedFrom="FIOC" > <name>FIXC</name> <description>FPU inexact interrupt status</description> <bitOffset>12</bitOffset> </field>
-                  <field derivedFrom="FIOC" > <name>FIDC</name> <description>FPU input denormal interrupt status</description> <bitOffset>15</bitOffset> </field>
+                  <field derivedFrom="FIOC" > <name>FDZC</name> <description>FPU divide-by-zero interrupt status\n
+This read-only bit is a copy of the core&apos;s FPSCR[DZC] bit and signals a divide by zero has been detected
+in the processor&apos;s FPU. Once set, this bit remains set until software clears the FPSCR[DZC] bit</description> <bitOffset>9</bitOffset> </field>
+                  <field derivedFrom="FIOC" > <name>FOFC</name> <description>FPU overflow interrupt status\n
+This read-only bit is a copy of the core&apos;s FPSCR[OFC] bit and signals an overflow has been detected in
+the processor&apos;s FPU. Once set, this bit remains set until software clears the FPSCR[OFC] bit</description> <bitOffset>10</bitOffset> </field>
+                  <field derivedFrom="FIOC" > <name>FUFC</name> <description>FPU underflow interrupt status\n
+This read-only bit is a copy of the core&apos;s FPSCR[UFC] bit and signals an underflow has been detected in
+the processor&apos;s FPU. Once set, this bit remains set until software clears the FPSCR[UFC] bit</description> <bitOffset>11</bitOffset> </field>
+                  <field derivedFrom="FIOC" > <name>FIXC</name> <description>FPU inexact interrupt status\n
+This read-only bit is a copy of the core&apos;s FPSCR[IXC] bit and signals an inexact number has been
+detected in the processor&apos;s FPU. Once set, this bit remains set until software clears the FPSCR[IXC] bit</description> <bitOffset>12</bitOffset> </field>
+                  <field derivedFrom="FIOC" > <name>FIDC</name> <description>FPU input denormal interrupt status\n
+This read-only bit is a copy of the core&apos;s FPSCR[IDC] bit and signals input denormalized number has been
+detected in the processor&apos;s FPU. Once set, this bit remains set until software clears the FPSCR[IDC] bit</description> <bitOffset>15</bitOffset> </field>
                   <field>
                      <name>CWBEE</name>
                      <description>Cache write buffer error enable</description>
                      <bitOffset>20</bitOffset>
-                     <bitWidth>1</bitWidth>
-                     <enumeratedValues>
-                        <enumeratedValue>
-                           <name>0b0</name>
-                           <description>Disable error interrupt</description>
-                           <value>0b0</value>
-                        </enumeratedValue>
-                        <enumeratedValue>
-                           <name>0b1</name>
-                           <description>Enable error interrupt</description>
-                           <value>0b1</value>
-                        </enumeratedValue>
-                     </enumeratedValues>
-                  </field>
-                  <field>
-                     <name>FIOCE</name>
-                     <description>FPU invalid operation interrupt enable</description>
-                     <bitOffset>24</bitOffset>
                      <bitWidth>1</bitWidth>
                      <enumeratedValues>
                         <enumeratedValue>
@@ -303,6 +303,7 @@ Devices using this peripheral:
                         </enumeratedValue>
                      </enumeratedValues>
                   </field>
+                  <field derivedFrom="CWBEE" > <name>FIOCE</name> <description>FPU invalid operation interrupt enable</description> <bitOffset>24</bitOffset> </field>
                   <field derivedFrom="FIOCE" > <name>FDZCE</name> <description>FPU divide-by-zero interrupt enable</description> <bitOffset>25</bitOffset> </field>
                   <field derivedFrom="FIOCE" > <name>FOFCE</name> <description>FPU overflow interrupt enable</description> <bitOffset>26</bitOffset> </field>
                   <field derivedFrom="FIOCE" > <name>FUFCE</name> <description>FPU underflow interrupt enable</description> <bitOffset>27</bitOffset> </field>

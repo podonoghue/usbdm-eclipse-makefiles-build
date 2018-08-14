@@ -40,7 +40,8 @@ Devices using this peripheral:
          <registers>
             <register>
                <name>PLASC</name>
-               <description>Crossbar Switch (AXBS) Slave Configuration</description>
+               <description>Crossbar Switch (AXBS) Slave Configuration\n
+PLASC is a 16-bit read-only register identifying the presence/absence of bus slave connections to the device&apos;s crossbar switch</description>
                <addressOffset>0x8</addressOffset>
                <size>16</size>
                <access>read-only</access>
@@ -69,7 +70,8 @@ Devices using this peripheral:
             </register>
             <register>
                <name>PLAMC</name>
-               <description>Crossbar Switch (AXBS) Master Configuration</description>
+               <description>Crossbar Switch (AXBS) Master Configuration\n
+PLAMC is a 16-bit read-only register identifying the presence/absence of bus master connections to the device&apos;s crossbar switch</description>
                <addressOffset>0xA</addressOffset>
                <size>16</size>
                <access>read-only</access>

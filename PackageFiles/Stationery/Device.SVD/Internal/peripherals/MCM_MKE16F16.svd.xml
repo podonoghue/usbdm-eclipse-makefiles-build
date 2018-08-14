@@ -69,7 +69,8 @@ Devices using this peripheral:
          <registers>
             <register>
                <name>PLASC</name>
-               <description>Crossbar Switch (AXBS) Slave Configuration</description>
+               <description>Crossbar Switch (AXBS) Slave Configuration\n
+PLASC is a 16-bit read-only register identifying the presence/absence of bus slave connections to the device&apos;s crossbar switch</description>
                <addressOffset>0x8</addressOffset>
                <size>16</size>
                <access>read-only</access>
@@ -83,12 +84,12 @@ Devices using this peripheral:
                      <bitWidth>8</bitWidth>
                      <enumeratedValues>
                         <enumeratedValue>
-                           <name>0</name>
+                           <name>0b0</name>
                            <description>A bus slave connection to AXBS input port n is absent</description>
                            <value>0b0</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>1</name>
+                           <name>0b1</name>
                            <description>A bus slave connection to AXBS input port n is present</description>
                            <value>0b1</value>
                         </enumeratedValue>
@@ -98,7 +99,8 @@ Devices using this peripheral:
             </register>
             <register>
                <name>PLAMC</name>
-               <description>Crossbar Switch (AXBS) Master Configuration</description>
+               <description>Crossbar Switch (AXBS) Master Configuration\n
+PLAMC is a 16-bit read-only register identifying the presence/absence of bus master connections to the device&apos;s crossbar switch</description>
                <addressOffset>0xA</addressOffset>
                <size>16</size>
                <access>read-only</access>
@@ -112,12 +114,12 @@ Devices using this peripheral:
                      <bitWidth>8</bitWidth>
                      <enumeratedValues>
                         <enumeratedValue>
-                           <name>0</name>
+                           <name>0b0</name>
                            <description>A bus master connection to AXBS input port n is absent</description>
                            <value>0b0</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>1</name>
+                           <name>0b1</name>
                            <description>A bus master connection to AXBS input port n is present</description>
                            <value>0b1</value>
                         </enumeratedValue>
@@ -137,12 +139,12 @@ Devices using this peripheral:
                      <bitWidth>1</bitWidth>
                      <enumeratedValues>
                         <enumeratedValue>
-                           <name>0</name>
+                           <name>0b0</name>
                            <description>Fixed-priority arbitration</description>
                            <value>0b0</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>1</name>
+                           <name>0b1</name>
                            <description>Round-robin arbitration</description>
                            <value>0b1</value>
                         </enumeratedValue>
@@ -155,22 +157,22 @@ Devices using this peripheral:
                      <bitWidth>2</bitWidth>
                      <enumeratedValues>
                         <enumeratedValue>
-                           <name>00</name>
+                           <name>0b00</name>
                            <description>Round robin</description>
                            <value>0b00</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>01</name>
+                           <name>0b01</name>
                            <description>Special round robin (favors SRAM backdoor accesses over the processor)</description>
                            <value>0b01</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>10</name>
+                           <name>0b10</name>
                            <description>Fixed priority. Processor has highest, backdoor has lowest</description>
                            <value>0b10</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>11</name>
+                           <name>0b11</name>
                            <description>Fixed priority. Backdoor has highest, processor has lowest</description>
                            <value>0b11</value>
                         </enumeratedValue>
@@ -193,7 +195,11 @@ Devices using this peripheral:
             </register>
             <register>
                <name>ISCR</name>
-               <description>Interrupt Status and Control Register</description>
+               <description>Interrupt Status and Control Register\n
+The MCM_ISCR register includes the enable and status bits associated with the core&apos;s
+floating-point exceptions. The individual event indicators are first qualified with their
+exception enables and then logically summed to form an interrupt request sent to the
+core&apos;s NVIC</description>
                <addressOffset>0x10</addressOffset>
                <fields>
                   <field>
@@ -203,12 +209,12 @@ Devices using this peripheral:
                      <bitWidth>1</bitWidth>
                      <enumeratedValues>
                         <enumeratedValue>
-                           <name>0</name>
+                           <name>0b0</name>
                            <description>No error</description>
                            <value>0b0</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>1</name>
+                           <name>0b1</name>
                            <description>Error occurred</description>
                            <value>0b1</value>
                         </enumeratedValue>
@@ -222,12 +228,12 @@ Devices using this peripheral:
                      <access>read-only</access>
                      <enumeratedValues>
                         <enumeratedValue>
-                           <name>0</name>
+                           <name>0b0</name>
                            <description>No interrupt</description>
                            <value>0b0</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>1</name>
+                           <name>0b1</name>
                            <description>Interrupt occurred</description>
                            <value>0b1</value>
                         </enumeratedValue>
@@ -245,12 +251,12 @@ Devices using this peripheral:
                      <bitWidth>1</bitWidth>
                      <enumeratedValues>
                         <enumeratedValue>
-                           <name>0</name>
+                           <name>0b0</name>
                            <description>Disable error interrupt</description>
                            <value>0b0</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>1</name>
+                           <name>0b1</name>
                            <description>Enable error interrupt</description>
                            <value>0b1</value>
                         </enumeratedValue>
@@ -263,12 +269,12 @@ Devices using this peripheral:
                      <bitWidth>1</bitWidth>
                      <enumeratedValues>
                         <enumeratedValue>
-                           <name>0</name>
+                           <name>0b0</name>
                            <description>Disable interrupt</description>
                            <value>0b0</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>1</name>
+                           <name>0b1</name>
                            <description>Enable interrupt</description>
                            <value>0b1</value>
                         </enumeratedValue>
@@ -297,24 +303,24 @@ Devices using this peripheral:
             </register>
             <register>
                <name>FATR</name>
-               <description>Store Buffer Fault Attributes register</description>
+               <description>Fault attributes register</description>
                <addressOffset>0x24</addressOffset>
                <access>read-only</access>
                <resetMask>0x0</resetMask>
                <fields>
                   <field>
                      <name>BEDA</name>
-                     <description>Bus Error Data Access type</description>
+                     <description>Bus error access type</description>
                      <bitOffset>0</bitOffset>
                      <bitWidth>1</bitWidth>
                      <enumeratedValues>
                         <enumeratedValue>
-                           <name>0</name>
+                           <name>0b0</name>
                            <description>Instruction</description>
                            <value>0b0</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>1</name>
+                           <name>0b1</name>
                            <description>Data</description>
                            <value>0b1</value>
                         </enumeratedValue>
@@ -327,12 +333,12 @@ Devices using this peripheral:
                      <bitWidth>1</bitWidth>
                      <enumeratedValues>
                         <enumeratedValue>
-                           <name>0</name>
+                           <name>0b0</name>
                            <description>User mode</description>
                            <value>0b0</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>1</name>
+                           <name>0b1</name>
                            <description>Supervisor/privileged mode</description>
                            <value>0b1</value>
                         </enumeratedValue>
@@ -345,17 +351,17 @@ Devices using this peripheral:
                      <bitWidth>2</bitWidth>
                      <enumeratedValues>
                         <enumeratedValue>
-                           <name>00</name>
+                           <name>0b00</name>
                            <description>8-bit access</description>
                            <value>0b00</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>01</name>
+                           <name>0b01</name>
                            <description>16-bit access</description>
                            <value>0b01</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>10</name>
+                           <name>0b10</name>
                            <description>32-bit access</description>
                            <value>0b10</value>
                         </enumeratedValue>
@@ -368,12 +374,12 @@ Devices using this peripheral:
                      <bitWidth>1</bitWidth>
                      <enumeratedValues>
                         <enumeratedValue>
-                           <name>0</name>
+                           <name>0b0</name>
                            <description>Read access</description>
                            <value>0b0</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>1</name>
+                           <name>0b1</name>
                            <description>Write access</description>
                            <value>0b1</value>
                         </enumeratedValue>
@@ -392,12 +398,12 @@ Devices using this peripheral:
                      <bitWidth>1</bitWidth>
                      <enumeratedValues>
                         <enumeratedValue>
-                           <name>0</name>
+                           <name>0b0</name>
                            <description>No bus error overrun</description>
                            <value>0b0</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>1</name>
+                           <name>0b1</name>
                            <description>Bus error overrun occurred. The FADR and FDR registers and the other FATR bits are not updated to reflect this new bus error</description>
                            <value>0b1</value>
                         </enumeratedValue>
@@ -407,7 +413,7 @@ Devices using this peripheral:
             </register>
             <register>
                <name>FDR</name>
-               <description>Store Buffer Fault Data Register</description>
+               <description>Fault data register</description>
                <addressOffset>0x28</addressOffset>
                <access>read-only</access>
                <resetMask>0x0</resetMask>
@@ -421,7 +427,7 @@ Devices using this peripheral:
             </register>
             <register>
                <name>PID</name>
-               <description>Process ID Register</description>
+               <description>Process ID register</description>
                <addressOffset>0x30</addressOffset>
                <fields>
                   <field>
@@ -439,17 +445,17 @@ Devices using this peripheral:
                <fields>
                   <field>
                      <name>CPOREQ</name>
-                     <description>Compute Operation Request</description>
+                     <description>Compute Operation request</description>
                      <bitOffset>0</bitOffset>
                      <bitWidth>1</bitWidth>
                      <enumeratedValues>
                         <enumeratedValue>
-                           <name>0</name>
+                           <name>0b0</name>
                            <description>Request is cleared</description>
                            <value>0b0</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>1</name>
+                           <name>0b1</name>
                            <description>Request Compute Operation</description>
                            <value>0b1</value>
                         </enumeratedValue>
@@ -457,18 +463,18 @@ Devices using this peripheral:
                   </field>
                   <field>
                      <name>CPOACK</name>
-                     <description>Compute Operation Acknowledge</description>
+                     <description>Compute Operation acknowledge</description>
                      <bitOffset>1</bitOffset>
                      <bitWidth>1</bitWidth>
                      <access>read-only</access>
                      <enumeratedValues>
                         <enumeratedValue>
-                           <name>0</name>
+                           <name>0b0</name>
                            <description>Compute operation entry has not completed or compute operation exit has completed</description>
                            <value>0b0</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>1</name>
+                           <name>0b1</name>
                            <description>Compute operation entry has completed or compute operation exit has not completed</description>
                            <value>0b1</value>
                         </enumeratedValue>
@@ -476,17 +482,17 @@ Devices using this peripheral:
                   </field>
                   <field>
                      <name>CPOWOI</name>
-                     <description>Compute Operation Wakeup On Interrupt</description>
+                     <description>Compute Operation wakeup on interrupt</description>
                      <bitOffset>2</bitOffset>
                      <bitWidth>1</bitWidth>
                      <enumeratedValues>
                         <enumeratedValue>
-                           <name>0</name>
+                           <name>0b0</name>
                            <description>No effect</description>
                            <value>0b0</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>1</name>
+                           <name>0b1</name>
                            <description>When set, the CPOREQ is cleared on any interrupt or exception vector fetch</description>
                            <value>0b1</value>
                         </enumeratedValue>
@@ -523,22 +529,22 @@ Devices using this peripheral:
                      <access>read-only</access>
                      <enumeratedValues>
                         <enumeratedValue>
-                           <name>000</name>
+                           <name>0b000</name>
                            <description>SRAM_L</description>
                            <value>0b000</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>001</name>
+                           <name>0b001</name>
                            <description>SRAM_U</description>
                            <value>0b001</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>010</name>
+                           <name>0b010</name>
                            <description>PC Cache</description>
                            <value>0b010</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>011</name>
+                           <name>0b011</name>
                            <description>PS Cache</description>
                            <value>0b011</value>
                         </enumeratedValue>
@@ -552,12 +558,12 @@ Devices using this peripheral:
                      <access>read-only</access>
                      <enumeratedValues>
                         <enumeratedValue>
-                           <name>0</name>
+                           <name>0b0</name>
                            <description>(??TBD?? current content from &quot;MSCM OCMEM Configuration Register Descriptions&quot;). Writes to the LMDRn[7:0] are allowed</description>
                            <value>0b0</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>1</name>
+                           <name>0b1</name>
                            <description>(??TBD?? current content from &quot;MSCM OCMEM Configuration Register Descriptions&quot;). Writes to the LMDRn[7:0] are ignored</description>
                            <value>0b1</value>
                         </enumeratedValue>
@@ -571,12 +577,12 @@ Devices using this peripheral:
                      <access>read-only</access>
                      <enumeratedValues>
                         <enumeratedValue>
-                           <name>010</name>
+                           <name>0b010</name>
                            <description>LMEMn 32-bits wide</description>
                            <value>0b010</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>011</name>
+                           <name>0b011</name>
                            <description>LMEMn 64-bits wide</description>
                            <value>0b011</value>
                         </enumeratedValue>
@@ -590,17 +596,17 @@ Devices using this peripheral:
                      <access>read-only</access>
                      <enumeratedValues>
                         <enumeratedValue>
-                           <name>0000</name>
+                           <name>0b0000</name>
                            <description>No Cache</description>
                            <value>0b0000</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>0010</name>
+                           <name>0b0010</name>
                            <description>2-Way Set Associative</description>
                            <value>0b0010</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>0100</name>
+                           <name>0b0100</name>
                            <description>4-Way Set Associative</description>
                            <value>0b0100</value>
                         </enumeratedValue>
@@ -614,82 +620,82 @@ Devices using this peripheral:
                      <access>read-only</access>
                      <enumeratedValues>
                         <enumeratedValue>
-                           <name>0000</name>
+                           <name>0b0000</name>
                            <description>no LMEMn (0 KB)</description>
                            <value>0b0000</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>0001</name>
+                           <name>0b0001</name>
                            <description>1 KB LMEMn</description>
                            <value>0b0001</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>0010</name>
+                           <name>0b0010</name>
                            <description>2 KB LMEMn</description>
                            <value>0b0010</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>0011</name>
+                           <name>0b0011</name>
                            <description>4 KB LMEMn</description>
                            <value>0b0011</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>0100</name>
+                           <name>0b0100</name>
                            <description>8 KB LMEMn</description>
                            <value>0b0100</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>0101</name>
+                           <name>0b0101</name>
                            <description>16 KB LMEMn</description>
                            <value>0b0101</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>0110</name>
+                           <name>0b0110</name>
                            <description>32 KB LMEMn</description>
                            <value>0b0110</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>0111</name>
+                           <name>0b0111</name>
                            <description>64 KB LMEMn</description>
                            <value>0b0111</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>1000</name>
+                           <name>0b1000</name>
                            <description>128 KB LMEMn</description>
                            <value>0b1000</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>1001</name>
+                           <name>0b1001</name>
                            <description>256 KB LMEMn</description>
                            <value>0b1001</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>1010</name>
+                           <name>0b1010</name>
                            <description>512 KB LMEMn</description>
                            <value>0b1010</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>1011</name>
+                           <name>0b1011</name>
                            <description>1024 KB LMEMn</description>
                            <value>0b1011</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>1100</name>
+                           <name>0b1100</name>
                            <description>2048 KB LMEMn</description>
                            <value>0b1100</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>1101</name>
+                           <name>0b1101</name>
                            <description>4096 KB LMEMn</description>
                            <value>0b1101</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>1110</name>
+                           <name>0b1110</name>
                            <description>8192 KB LMEMn</description>
                            <value>0b1110</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>1111</name>
+                           <name>0b1111</name>
                            <description>16384 KB LMEMn</description>
                            <value>0b1111</value>
                         </enumeratedValue>
@@ -703,12 +709,12 @@ Devices using this peripheral:
                      <access>read-only</access>
                      <enumeratedValues>
                         <enumeratedValue>
-                           <name>0</name>
+                           <name>0b0</name>
                            <description>LMEMn is a power-of-2 capacity</description>
                            <value>0b0</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>1</name>
+                           <name>0b1</name>
                            <description>LMEMn is not a power-of-2, with a capacity is 0.75 * LMSZ</description>
                            <value>0b1</value>
                         </enumeratedValue>
@@ -722,12 +728,12 @@ Devices using this peripheral:
                      <access>read-only</access>
                      <enumeratedValues>
                         <enumeratedValue>
-                           <name>0</name>
+                           <name>0b0</name>
                            <description>(??TBD?? current content from &quot;MSCM OCMEM Configuration Register Descriptions&quot;). LMEMn is not present</description>
                            <value>0b0</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>1</name>
+                           <name>0b1</name>
                            <description>(??TBD?? current content from &quot;MSCM OCMEM Configuration Register Descriptions&quot;). LMEMn is present</description>
                            <value>0b1</value>
                         </enumeratedValue>
@@ -747,12 +753,12 @@ Devices using this peripheral:
                      <bitWidth>1</bitWidth>
                      <enumeratedValues>
                         <enumeratedValue>
-                           <name>0</name>
+                           <name>0b0</name>
                            <description>reporting enabled</description>
                            <value>0b0</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>1</name>
+                           <name>0b1</name>
                            <description>reporting disabled</description>
                            <value>0b1</value>
                         </enumeratedValue>
