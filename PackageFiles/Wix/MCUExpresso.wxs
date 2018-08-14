@@ -45,6 +45,8 @@
          <DirectorySearch Id='Ds.$(var.ECLIPSE_VER)_DirectorySearch4' Path='Apps\nxp\MCUXpressoIDE_10.0.2_411' AssignToProperty="yes" />
          <DirectorySearch Id='Ds.$(var.ECLIPSE_VER)_DirectorySearch5' Path='nxp\MCUXpressoIDE_10.2.0_759' AssignToProperty="yes" />
          <DirectorySearch Id='Ds.$(var.ECLIPSE_VER)_DirectorySearch6' Path='Apps\nxp\MCUXpressoIDE_10.2.0_759' AssignToProperty="yes" />
+         <DirectorySearch Id='Ds.$(var.ECLIPSE_VER)_DirectorySearch5' Path='nxp\MCUXpressoIDE_10.2.1_795' AssignToProperty="yes" />
+         <DirectorySearch Id='Ds.$(var.ECLIPSE_VER)_DirectorySearch6' Path='Apps\nxp\MCUXpressoIDE_10.2.1_795' AssignToProperty="yes" />
       </Property>
       
       <!--=================================================================================
