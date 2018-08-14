@@ -17,6 +17,7 @@
 #include "derivative.h"
 #include "hardware.h"
 #include "delay.h"
+#include "smc.h"
 
 namespace USBDM {
 /**
@@ -42,6 +43,7 @@ enum FlashDriverError_t {
    FLASH_ERR_UNKNOWN           = (13), // Unspecified error
    FLASH_ERR_PROG_RDCOLERR     = (14), // Read Collision
    FLASH_ERR_NEW_EEPROM        = (15), // Indicates EEPROM has just bee partitioned and need initialisation
+   FLASH_ERR_NOT_AVAILABLE     = (16), // Attempt to do flash operation when not available (e.g. while in VLPR mode)
 };
 
 /**
@@ -165,6 +167,13 @@ protected:
 public:
 
    /**
+    * Hardware instance pointer
+    *
+    * @return Reference to Flash hardware
+    */
+   __attribute__((always_inline)) static volatile FTFL_Type &flashController() { return ftfl(); }
+
+   /**
     * Checks if the flexRAM has been configured.
     * Will wait for flash ready as necessary
     *
@@ -172,11 +181,11 @@ public:
     */
    static bool isFlexRamConfigured() {
 #if 1
-      return waitForFlashReady() && (FTFL->FCNFG&FTFL_FCNFG_EEERDY_MASK);
+      return waitForFlashReady() && (flashController().FCNFG&FTFL_FCNFG_EEERDY_MASK);
 #else
-      console.write("FTFL->FCNFG = ").writeln(FTFL->FCNFG, Radix_16);
-      console.write("FTFL->FCNFG.FTFL_FCNFG_RAMRDY = ").writeln((bool)(FTFL->FCNFG&FTFL_FCNFG_RAMRDY_MASK));
-      console.write("FTFL->FCNFG.FTFL_FCNFG_EEERDY = ").writeln((bool)(FTFL->FCNFG&FTFL_FCNFG_EEERDY_MASK));
+      console.write("flashController().FCNFG = ").writeln(flashController().FCNFG, Radix_16);
+      console.write("flashController().FCNFG.FTFL_FCNFG_RAMRDY = ").writeln((bool)(flashController().FCNFG&FTFL_FCNFG_RAMRDY_MASK));
+      console.write("flashController().FCNFG.FTFL_FCNFG_EEERDY = ").writeln((bool)(flashController().FCNFG&FTFL_FCNFG_EEERDY_MASK));
 
       uint8_t result[4];
       FlashDriverError_t rc = readFlashResource(0, DATA_ADDRESS_FLAG|0xFC, result);
@@ -190,7 +199,7 @@ public:
       console.write("FlexNVM partition code = ").writeln(flexNvmPartitionSize, Radix_16);
       console.write("EEPROM data set size   = ").writeln(eepromDatSetSize, Radix_16);
 
-      return (FTFL->FCNFG&FTFL_FCNFG_EEERDY_MASK);
+      return (flashController().FCNFG&FTFL_FCNFG_EEERDY_MASK);
 #endif
    }
 
@@ -202,11 +211,36 @@ public:
     */
    static bool waitForFlashReady() {
       for(int timeout=0; timeout<100000; timeout++) {
-         if ((FTFL->FSTAT&FTFL_FSTAT_CCIF_MASK) != 0) {
+         if ((flashController().FSTAT&FTFL_FSTAT_CCIF_MASK) != 0) {
             return true;
          }
       }
       return false;
+   }
+
+   /**
+    * Check if flash operations are available.
+    * This will check if the processor is in the correct mode for flash operations.
+    *
+    * @return true  => OK
+    * @return false => Processor not in correct mode
+    */
+   static bool isFlashAvailable() {
+      return (Smc::getStatus() == SmcStatus_run);
+   }
+
+   /**
+    * Waits until the current flash operation is complete with run mode check.
+    * This is used to wait until a FlaxRAM write has completed.
+    *
+    * @return true  => Operation complete and FlexRAM idle
+    * @return false => timeout or flash not available
+    */
+   static bool waitUntilFlexIdle() {
+      usbdm_assert(isFlashAvailable(), "Flash use in unsuitable run mode");
+      return
+            isFlashAvailable() &&
+            waitForFlashReady();
    }
 
 private:
@@ -293,9 +327,9 @@ public:
     *
     * @param[in]  data The data to assign
     */
-   void operator=(const Nonvolatile &data ) {
-      this->data = data;
-      Flash::waitForFlashReady();
+   void operator=(const Nonvolatile<T> &data ) {
+      this->data = (T)data;
+      Flash::waitUntilFlexIdle();
    }
    /**
     * Assign to underlying type.
@@ -305,7 +339,7 @@ public:
     */
    void operator=(const T &data ) {
       this->data = data;
-      Flash::waitForFlashReady();
+      Flash::waitUntilFlexIdle();
    }
    /**
     * Increment underlying type.
@@ -313,9 +347,9 @@ public:
     *
     * @param[in]  change The amount to increment
     */
-   void operator+=(const Nonvolatile &change ) {
-      this->data += change;
-      Flash::waitForFlashReady();
+   void operator+=(const Nonvolatile<T> &change ) {
+      this->data += (T)change;
+      Flash::waitUntilFlexIdle();
    }
    /**
     * Increment underlying type.
@@ -325,7 +359,7 @@ public:
     */
    void operator+=(const T &change ) {
       this->data += change;
-      Flash::waitForFlashReady();
+      Flash::waitUntilFlexIdle();
    }
    /**
     * Decrement underlying type.
@@ -333,9 +367,9 @@ public:
     *
     * @param[in]  change The amount to increment
     */
-   void operator-=(const Nonvolatile &change ) {
-      this->data -= change;
-      Flash::waitForFlashReady();
+   void operator-=(const Nonvolatile<T> &change ) {
+      this->data -= (T)change;
+      Flash::waitUntilFlexIdle();
    }
    /**
     * Decrement underlying type.
@@ -345,13 +379,15 @@ public:
     */
    void operator-=(const T &change ) {
       this->data -= change;
-      Flash::waitForFlashReady();
+      Flash::waitUntilFlexIdle();
    }
    /**
     * Return the underlying object - <b>read-only</b>.
+    *
+    * @return underlying object
     */
    operator T() const {
-      Flash::waitForFlashReady();
+      Flash::waitUntilFlexIdle();
       return data;
    }
 };
@@ -401,7 +437,7 @@ public:
    void operator=(const TArray &other ) {
       for (int index=0; index<dimension; index++) {
          data[index] = other[index];
-         Flash::waitForFlashReady();
+         Flash::waitUntilFlexIdle();
       }
    }
 
@@ -413,18 +449,20 @@ public:
     * This adds a wait for the Flash to be updated after each element is assigned
     */
    void operator=(const NonvolatileArray &other ) {
+      if (this = &other) {
+         // Identity check
+         return;
+      }
       for (int index=0; index<dimension; index++) {
          data[index] = other[index];
-         Flash::waitForFlashReady();
+         Flash::waitUntilFlexIdle();
       }
    }
 
    /**
-    * Assign to underlying array.
+    * Copy to array of underlying type.
     *
-    * @param[in]  other NonvolatileArray to assign to
-    *
-    * This adds a wait for the Flash to be updated after each element is assigned
+    * @param[in]  other Array to copy to
     */
    void copyTo(T *other) const {
       for (int index=0; index<dimension; index++) {
@@ -458,7 +496,7 @@ public:
     */
    void set(int index, T value) {
       data[index] = value;
-      Flash::waitForFlashReady();
+      Flash::waitUntilFlexIdle();
    }
    /**
     * Set all elements of the array to the value provided.
@@ -468,7 +506,7 @@ public:
    void set(T value) {
       for (int index=0; index<dimension; index++) {
          data[index] = value;
-         Flash::waitForFlashReady();
+         Flash::waitUntilFlexIdle();
       }
    }
 };

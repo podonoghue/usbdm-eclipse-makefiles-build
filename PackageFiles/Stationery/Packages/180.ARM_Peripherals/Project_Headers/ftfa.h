@@ -42,10 +42,11 @@ enum FlashDriverError_t {
    FLASH_ERR_UNKNOWN           = (13), // Unspecified error
    FLASH_ERR_PROG_RDCOLERR     = (14), // Read Collision
    FLASH_ERR_NEW_EEPROM        = (15), // Indicates EEPROM has just bee partitioned and need initialisation
+   FLASH_ERR_NOT_AVAILABLE     = (16), // Attempt to do flash operation when not available (e.g. while in VLPR mode)
 };
 
 /**
- * Class representing Flash interface
+ * Class representing Flash interface.
  */
 class Flash : public FtfaInfo {
 
@@ -85,6 +86,12 @@ protected:
 public:
 
    /**
+    * Hardware instance pointer
+    *
+    * @return Reference to Flash hardware
+    */
+   __attribute__((always_inline)) static volatile FTFA_Type &flashController() { return ftfa(); }
+   /**
     * Wait until flash is ready.
     * Any flash operations will have completed.
     *
@@ -92,7 +99,7 @@ public:
     */
    static bool waitForFlashReady() {
       for(int timeout=0; timeout<100000; timeout++) {
-         if ((FTFA->FSTAT&FTFA_FSTAT_CCIF_MASK) != 0) {
+         if ((flashController().FSTAT&FTFA_FSTAT_CCIF_MASK) != 0) {
             return true;
          }
       }
