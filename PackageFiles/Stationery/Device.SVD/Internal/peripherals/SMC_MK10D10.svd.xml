@@ -290,7 +290,7 @@ This field controls which LLS or VLLS sub-mode to enter if STOPM = LLSx or VLLSx
                   <field derivedFrom="LLSM" > <name>VLLSM</name> <bitOffset>0</bitOffset> <?ignoreOverlap?> <?hide?> </field>
                   <field>
                      <name>RAM2PO</name>
-                     <description>RAM2 Power Option
+                     <description>RAM2 Power Option\n
 Controls powering of RAM partition 2 in VLLS2 mode</description>
                      <bitOffset>4</bitOffset>
                      <bitWidth>1</bitWidth>

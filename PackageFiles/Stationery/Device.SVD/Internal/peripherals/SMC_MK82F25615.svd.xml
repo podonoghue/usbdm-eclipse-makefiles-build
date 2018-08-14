@@ -281,7 +281,9 @@ This field controls which LLS or VLLS sub-mode to enter if STOPM = LLSx or VLLSx
                   </field>
                   <field>
                      <name>LPOPO</name>
-                     <description>LPO Power Option</description>
+                     <description>LPO Power Option\n
+Controls whether the 1kHZ LPO clock is enabled in LLS/VLLSx modes.\n
+NOTE: During VLLS0 mode, the LPO clock is disabled by hardware and this bit has no effect</description>
                      <bitOffset>3</bitOffset>
                      <bitWidth>1</bitWidth>
                      <enumeratedValues>
