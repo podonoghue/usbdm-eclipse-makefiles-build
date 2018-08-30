@@ -344,7 +344,7 @@ public:
     * @param fColour  12-bit foreground colour value rrrrggggbbbb
     * @param bColour  12-bit background colour value rrrrggggbbbb
     */
-   void putChar(char c, unsigned x, unsigned y, Font &font, Colour fColour=DEFAULT_FOREGROUND, Colour bColour=DEFAULT_BACKGROUND);
+   void putChar(char c, unsigned x, unsigned y, const Font &font, Colour fColour=DEFAULT_FOREGROUND, Colour bColour=DEFAULT_BACKGROUND);
 
    /** Draws an ASCII character at the specified (x,y) address and colours using the currently set font
     *
@@ -379,7 +379,7 @@ public:
     * @note For more information on how this code does it's thing look at this \n
     *       "http://www.sparkfun.com/tutorial/Nokia%206100%20LCD%20Display%20Driver.pdf"
     */
-   void putStr(const char *str, unsigned x, unsigned y, Font &font, Colour fColour=DEFAULT_FOREGROUND, Colour bColour=DEFAULT_BACKGROUND);
+   void putStr(const char *str, unsigned x, unsigned y, const Font &font, Colour fColour=DEFAULT_FOREGROUND, Colour bColour=DEFAULT_BACKGROUND);
 
    /** Draws a null-terminated character string at the specified (x,y) address and colours using the current font
     *
@@ -412,7 +412,7 @@ public:
 
 private:
    unsigned fX,fY;
-   Font *fFont;
+   const Font *fFont;
    Colour fForeground;
    Colour fBackground;
 
@@ -433,7 +433,7 @@ public:
       return *this;
    }
 
-   LcdBase &setFont(Font &font) {
+   LcdBase &setFont(const Font &font) {
       fFont = &font;
       return *this;
    }

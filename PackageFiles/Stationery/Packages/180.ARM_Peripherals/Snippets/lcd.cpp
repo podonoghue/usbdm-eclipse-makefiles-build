@@ -639,7 +639,7 @@ void LcdBase::drawRect(unsigned x0, unsigned y0, unsigned x1, unsigned y1, unsig
  *
  *  @author James P Lynch July 7, 2007
  */
-void LcdBase::putChar(char c, unsigned x, unsigned y, Font &font, Colour fColour, Colour bColour) {
+void LcdBase::putChar(char c, unsigned x, unsigned y, const Font &font, Colour fColour, Colour bColour) {
 
    lock();
 
@@ -749,7 +749,7 @@ void LcdBase::putChar(char c, unsigned x, unsigned y, Font &font, Colour fColour
  * @note For more information on how this code does it's thing look at this \n
  *       "http://www.sparkfun.com/tutorial/Nokia%206100%20LCD%20Display%20Driver.pdf"
  */
-void LcdBase::putStr(const char *str, unsigned x, unsigned y, Font &font, Colour fColour, Colour bColour) {
+void LcdBase::putStr(const char *str, unsigned x, unsigned y, const Font &font, Colour fColour, Colour bColour) {
 
    while (*str != '\0') {
       // Draw the character
