@@ -23,7 +23,7 @@ using adc = USBDM::Adc0;
 
 using JOYSTICK_X = $(demo.cpp.joystick.x:Adc0Channel<0>);
 using JOYSTICK_Y = $(demo.cpp.joystick.y:Adc0Channel<3>);
-using JOYSTICK_K = $(demo.cpp.joystick.k:GpioC<3>);
+using JOYSTICK_K = $(demo.cpp.joystick.k:GpioC<3,ActiveLow>);
 
 int main(void) {
 
@@ -38,7 +38,7 @@ int main(void) {
    for(;;) {
       int  x = JOYSTICK_X::readAnalogue();
       int  y = JOYSTICK_Y::readAnalogue();
-      bool k = JOYSTICK_K::read();
-      console.write("Joystick (X,Y,K) = ").write(x).write(", ").write(y).write(", ").writeln(k?"HIGH":"LOW");
+      bool k = JOYSTICK_K::isPressed();
+      console.write("Joystick (X,Y,K) = ").write(x).write(", ").write(y).write(", ").writeln(k?"Pressed":"Released");
    }
 }

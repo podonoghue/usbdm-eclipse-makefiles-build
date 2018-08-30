@@ -43,6 +43,6 @@ int main(void) {
    for(;;) {
       // Start next conversion
       int32_t value = AdcChannel::readAnalogue();
-      console.write("Value = ").write(value*3.3/(1<<8)).writeln(" volts");
+      console.write("Difference  = ").write(value*3.3/(1<<8)-1).writeln(" volts");
    }
 }
