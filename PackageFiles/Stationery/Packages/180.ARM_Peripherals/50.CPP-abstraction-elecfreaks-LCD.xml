@@ -31,17 +31,18 @@
                <applyWhen >
                   <variableRef idRef="projectOptionValue.CPP-abstraction-LCD" />
                </applyWhen>
-               <copy source="Snippets/lcd.h"                       target="Sources/lcd.h"                        overwrite="true"/>
-               <copy source="Snippets/lcd_private.h"               target="Sources/lcd_private.h"                overwrite="true"/>
-               <copy source="Snippets/fonts.h"                     target="Sources/fonts.h"                      overwrite="true"/>
-               <copy source="Snippets/lcd.cpp"                     target="Sources/lcd.cpp"                      overwrite="true"/>
-               <copy source="Snippets/fonts.cpp"                   target="Sources/fonts.cpp"                    overwrite="true"/>
-               <copy source="Snippets/elecfreaks-lcd-example.cpp"  target="Snippets/elecfreaks-lcd-example.cpp"  overwrite="true" />
-               <copy source="Snippets/lcd.h"                       target="Snippets/lcd.h"                       overwrite="true"/>
-               <copy source="Snippets/lcd_private.h"               target="Snippets/lcd_private.h"               overwrite="true"/>
-               <copy source="Snippets/fonts.h"                     target="Snippets/fonts.h"                     overwrite="true"/>
-               <copy source="Snippets/lcd.cpp"                     target="Snippets/lcd.cpp"                     overwrite="true"/>
-               <copy source="Snippets/fonts.cpp"                   target="Snippets/fonts.cpp"                   overwrite="true"/>
+               <copy source="Snippets/lcd.h"                            target="Sources/lcd.h"                        overwrite="true"/>
+               <copy source="Snippets/lcd_private.h"                    target="Sources/lcd_private.h"                overwrite="true"/>
+               <copy source="Snippets/fonts.h"                          target="Sources/fonts.h"                      overwrite="true"/>
+               <copy source="Snippets/lcd.cpp"                          target="Sources/lcd.cpp"                      overwrite="true"/>
+               <copy source="Snippets/fonts.cpp"                        target="Sources/fonts.cpp"                    overwrite="true"/>
+               <copy source="Snippets/elecfreaks-lcd-example.cpp"       target="Snippets/elecfreaks-lcd-example.cpp"  overwrite="true" />
+               <copy source="Snippets/elecfreaks-lcd-text-example.cpp"  target="Snippets/elecfreaks-lcd-text-example.cpp"  overwrite="true" />
+               <copy source="Snippets/lcd.h"                            target="Snippets/lcd.h"                       overwrite="true"/>
+               <copy source="Snippets/lcd_private.h"                    target="Snippets/lcd_private.h"               overwrite="true"/>
+               <copy source="Snippets/fonts.h"                          target="Snippets/fonts.h"                     overwrite="true"/>
+               <copy source="Snippets/lcd.cpp"                          target="Snippets/lcd.cpp"                     overwrite="true"/>
+               <copy source="Snippets/fonts.cpp"                        target="Snippets/fonts.cpp"                   overwrite="true"/>
                <projectOption id="net.sourceforge.usbdm.gnu.c.compiler.option.preprocessor.def.symbols">
                   <value>LCD_AVAILABLE</value>
                </projectOption>

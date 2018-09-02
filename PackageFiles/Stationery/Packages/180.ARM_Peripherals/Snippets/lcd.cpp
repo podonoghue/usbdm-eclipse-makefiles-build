@@ -455,12 +455,12 @@ void LcdBase::drawLine(unsigned x0, unsigned y0, unsigned x1, unsigned y1, Colou
 /** Draws a rectangle in the specified colour from (x1,y1) to (x2,y2)\n
  *  Rectangle can be filled with a colour if desired
  *
- * @param  x0     row address (0 .. 131)
- * @param  y0     column address (0 .. 131)
- * @param  x1     row address (0 .. 131)
- * @param  y1     column address (0 .. 131)
- * @param  fill   indicates if the
- * @param  colour  12-bit colour value rrrrggggbbbb
+ * @param  x0     Row address (0 .. 131)
+ * @param  y0     Column address (0 .. 131)
+ * @param  x1     Row address (0 .. 131)
+ * @param  y1     Column address (0 .. 131)
+ * @param  fill   Indicates if the
+ * @param  colour 12-bit colour value rrrrggggbbbb
  *
  * note See lcd.h for some sample colour settings
  *
@@ -514,7 +514,7 @@ void LcdBase::drawLine(unsigned x0, unsigned y0, unsigned x1, unsigned y1, Colou
  *       In the case of an unfilled rectangle, drawing four lines with the Bresenham line
  *       drawing algorithm is reasonably efficient.
  */
-void LcdBase::drawRect(unsigned x0, unsigned y0, unsigned x1, unsigned y1, unsigned fill, Colour colour) {
+void LcdBase::drawRect(unsigned x0, unsigned y0, unsigned x1, unsigned y1, bool fill, Colour colour) {
 
    lock();
 
@@ -568,12 +568,12 @@ void LcdBase::drawRect(unsigned x0, unsigned y0, unsigned x1, unsigned y1, unsig
 
 /** Draws an ASCII character at the specified (x,y) address and colour
  *
- * @param c           Character to be displayed
- * @param x           Row address (0 .. 131)
- * @param y           Column address (0 .. 131)
- * @param font        Font to use
- * @param fColour     12-bit foreground colour value
- * @param bColour     12-bit background colour value
+ * @param c                    Character to be displayed
+ * @param x                    Row address (0 .. 131)
+ * @param y                    Column address (0 .. 131)
+ * @param font                 Font to use
+ * @param foregroundColour     12-bit foreground colour value
+ * @param backgroundColour     12-bit background colour value
  *
  * @verbatim
  * Notes: Here's an example to display "E" at address (20,20)
@@ -639,7 +639,7 @@ void LcdBase::drawRect(unsigned x0, unsigned y0, unsigned x1, unsigned y1, unsig
  *
  *  @author James P Lynch July 7, 2007
  */
-void LcdBase::putChar(char c, unsigned x, unsigned y, const Font &font, Colour fColour, Colour bColour) {
+void LcdBase::putChar(char c, unsigned x, unsigned y, const Font &font, Colour foregroundColour, Colour backgroundColour) {
 
    lock();
 
@@ -700,17 +700,17 @@ void LcdBase::putChar(char c, unsigned x, unsigned y, const Font &font, Colour f
          // If pixel bit set, use foreground colour; else use the background colour
          // Now get the pixel colour for two successive pixels
          if ((pixelRow & mask) == 0) {
-            word0 = bColour;
+            word0 = backgroundColour;
          }
          else {
-            word0 = fColour;
+            word0 = foregroundColour;
          }
          mask = mask >> 1;
          if ((pixelRow & mask) == 0) {
-            word1 = bColour;
+            word1 = backgroundColour;
          }
          else {
-            word1 = fColour;
+            word1 = foregroundColour;
          }
          mask = mask >> 1;
 
@@ -733,12 +733,12 @@ void LcdBase::putChar(char c, unsigned x, unsigned y, const Font &font, Colour f
 
 /** Draws a nul-terminated character string at the specified (x,y) address and colour
  *
- * @param str       Character string to be displayed
- * @param x         Row address (0 .. 131)
- * @param y         Column address (0 .. 131)
- * @param font      Font to use
- * @param fColour   12-bit foreground colour value rrrrggggbbbb
- * @param bColour   12-bit background colour value rrrrggggbbbb
+ * @param str                Character string to be displayed
+ * @param x                  Row address (0 .. 131)
+ * @param y                  Column address (0 .. 131)
+ * @param font               Font to use
+ * @param foregroundColour   12-bit foreground colour value rrrrggggbbbb
+ * @param backgroundColour   12-bit background colour value rrrrggggbbbb
  *
  * @note Here's an example to display "Hello World!" at address (20,20) \n
  *       lcd_putStr("Hello World!", 20, 20, WHITE, BLACK);
@@ -749,11 +749,11 @@ void LcdBase::putChar(char c, unsigned x, unsigned y, const Font &font, Colour f
  * @note For more information on how this code does it's thing look at this \n
  *       "http://www.sparkfun.com/tutorial/Nokia%206100%20LCD%20Display%20Driver.pdf"
  */
-void LcdBase::putStr(const char *str, unsigned x, unsigned y, const Font &font, Colour fColour, Colour bColour) {
+void LcdBase::putStr(const char *str, unsigned x, unsigned y, const Font &font, Colour foregroundColour, Colour backgroundColour) {
 
    while (*str != '\0') {
       // Draw the character
-      putChar(*str++, x, y, font, fColour, bColour);
+      putChar(*str++, x, y, font, foregroundColour, backgroundColour);
 
       // Advance the x position
       x += font.width;
@@ -788,11 +788,11 @@ void LcdBase::setContrast(uint8_t setting) {
 
 /** Draws a line circle in the specified colour at center (x0,y0) with radius
  *
- * @param centreX = row address (0 .. 131)
- * @param centreY = column address (0 .. 131)
- * @param radius = radius in pixels
- * @param colour = 12-bit colour value rrrrggggbbbb
- * @param circleType = controls which segments of the circle are drawn
+ * @param centreX      Row address (0 .. 131)
+ * @param centreY      Column address (0 .. 131)
+ * @param radius       Radius in pixels
+ * @param colour       12-bit colour value rrrrggggbbbb
+ * @param circleType   Controls which segments of the circle are drawn
  *
  * @author Jack Bresenham IBM, Winthrop University (Father of this algorithm, 1962)
  *

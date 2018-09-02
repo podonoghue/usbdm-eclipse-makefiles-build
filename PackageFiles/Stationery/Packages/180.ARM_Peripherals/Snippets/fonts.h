@@ -32,11 +32,11 @@ public:
 };
 
 /** Small 6x8 font */
-extern Font smallFont;
+extern Font fontSmall;
 /** Medium 8x8 font */
-extern Font mediumFont;
+extern Font fontMedium;
 /** Large 8x16 font */
-extern Font largeFont;
+extern Font fontLarge;
 
 }; // end namespace USBDM
 

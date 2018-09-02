@@ -118,6 +118,70 @@ constexpr Colour GOLD             = 0xFD0;
 constexpr Colour YELLOW           = 0xFF0;
 constexpr Colour WHITE            = 0xFFF;
 
+/**
+ * Font settings object.
+ *
+ * Encapsulates the font and colours for text
+ */
+class FontSettings {
+
+public:
+   /// Font to use
+   const Font   *font;
+   /// Foreground colour
+   Colour foregroundColour;
+   /// Background colour
+   Colour backgroundColour;
+
+   /**
+    * Constructor
+    *
+    * @param font             Font to use
+    * @param foregroundColour Foreground colour
+    * @param backgroundColour Background colour
+    */
+   constexpr FontSettings(
+         const Font &font,
+         Colour foregroundColour,
+         Colour backgroundColour) : font(&font), foregroundColour(foregroundColour), backgroundColour(backgroundColour) {}
+
+   /**
+    * Set font
+    *
+    * @param font Font to use
+    *
+    * @return Reference to self
+    */
+   FontSettings &setFont(const Font &font) {
+      this->font = &font;
+      return *this;
+   }
+
+   /**
+    * Set foreground colour
+    *
+    * @param colour Colour to use
+    *
+    * @return Reference to self
+    */
+   FontSettings &setForegroundColour(Colour colour) {
+      this->foregroundColour = colour;
+      return *this;
+   }
+
+   /**
+    * Set background colour
+    *
+    * @param colour Colour to use
+    *
+    * @return Reference to self
+    */
+   FontSettings &setBackgroundColour(Colour colour) {
+      this->backgroundColour = colour;
+      return *this;
+   }
+};
+
 //*******************************************************
 //       Circle Definitions
 //*******************************************************
@@ -145,9 +209,6 @@ constexpr unsigned OPENNORTHWEST    = (QUAD_NORTH_EAST|QUAD_SOUTH_EAST|QUAD_SOUT
 constexpr unsigned OPENSOUTHEAST    = (QUAD_NORTH_EAST|QUAD_NORTH_WEST|QUAD_SOUTH_WEST);
 constexpr unsigned OPENSOUTHWEST    = (QUAD_NORTH_EAST|QUAD_NORTH_WEST|QUAD_SOUTH_EAST);
 
-constexpr unsigned DEFAULT_BACKGROUND = BLACK;
-constexpr unsigned DEFAULT_FOREGROUND = WHITE;
-
 constexpr unsigned DEFAULT_LCD_CONTRAST = 65;
 
 /**
@@ -162,7 +223,7 @@ constexpr unsigned DEFAULT_LCD_CONTRAST = 65;
  * lcd.drawCircle(65, 65, 20, WHITE);
  * lcd.drawCircle(65, 65, 30, WHITE);
  * lcd.drawCircle(65, 65, 40, WHITE);
- * lcd.putStr("Some Circles", 30, 10, Fonts::FontSmall, WHITE, RED);
+ * lcd.putStr("Some Circles", 30, 10, Fonts::fontSmall, WHITE, RED);
  *
  *  @endcode
  */
@@ -246,7 +307,7 @@ public:
     *
     *  @param spi   SPI interface to use to communicate with LCD
     */
-   LcdBase(Spi &spi) : spi(spi) {
+   LcdBase(Spi &spi) : spi(spi), fX(0), fY(0), fSettings(fontSmall, WHITE, BLACK) {
    }
 
    virtual ~LcdBase() {
@@ -258,9 +319,9 @@ public:
     * @param  level  Level back-light level as percentage
     *
     * @note     Requires @ref LCD_BACKLIGHT_PWM_FEATURE to be fully implemented.\n
-    * Otherwise it falls back to basic on/off
+    *           Otherwise it falls back to basic on/off
     *
-    * Note : Only of elecfreaks version of shield
+    * Note : Only available for elecfreaks version of shield
     */
    virtual void backlightSetLevel(unsigned level) = 0;
    /**
@@ -283,9 +344,13 @@ public:
     *
     * @param colour   12-bit colour value rrrrggggbbbb
     */
-   void clear(Colour colour=DEFAULT_BACKGROUND);
+   void clear(Colour colour);
 
-   /** Lights a single pixel in the specified colour at the specified x and y addresses
+   /** This function will clear the screen to the default background colour.
+    */
+   void clear() { clear(fSettings.backgroundColour); }
+
+   /** Draws a single pixel in the specified colour
     *
     * @param  x      Row address (0 .. 131)
     * @param  y      Column address (0 .. 131)
@@ -293,7 +358,18 @@ public:
     *
     * @note See lcd.h for some sample colour settings
     */
-   void drawPixel(unsigned x, unsigned y, Colour colour=DEFAULT_FOREGROUND);
+   void drawPixel(unsigned x, unsigned y, Colour colour);
+
+   /** Draws a single pixel in the current foreground colour.
+    *
+    * @param  x      Row address (0 .. 131)
+    * @param  y      Column address (0 .. 131)
+    *
+    * @note See lcd.h for some sample colour settings
+    */
+   void drawPixel(unsigned x, unsigned y) {
+      drawPixel(x, y, fSettings.foregroundColour);
+   }
 
    /** Draws a line in the specified colour from (x0,y0) to (x1,y1)
     *
@@ -303,7 +379,18 @@ public:
     * @param  y1      Column address (0 .. 131)
     * @param  colour  12-bit colour value rrrrggggbbbb
     */
-   void drawLine(unsigned x0, unsigned y0, unsigned x1, unsigned y1, Colour colour=DEFAULT_FOREGROUND);
+   void drawLine(unsigned x0, unsigned y0, unsigned x1, unsigned y1, Colour colour);
+
+   /** Draws a line in the foreground colour from (x0,y0) to (x1,y1)
+    *
+    * @param  x0      Row address (0 .. 131)
+    * @param  y0      Column address (0 .. 131)
+    * @param  x1      Row address (0 .. 131)
+    * @param  y1      Column address (0 .. 131)
+    */
+   void drawLine(unsigned x0, unsigned y0, unsigned x1, unsigned y1) {
+      drawLine(x0, y0, x1, y1, fSettings.foregroundColour);
+   }
 
    /** Draws a rectangle in the specified colour from (x1,y1) to (x2,y2)\n
     *  Rectangle can be filled with a colour if desired
@@ -315,16 +402,35 @@ public:
     * @param  fill    Indicates if the rectangle will be filled
     * @param  colour  12-bit colour value rrrrggggbbbb
     */
-   void drawRect(unsigned x0, unsigned y0, unsigned x1, unsigned y1, unsigned fill, Colour colour=DEFAULT_FOREGROUND);
+   void drawRect(unsigned x0, unsigned y0, unsigned x1, unsigned y1, bool fill, Colour colour);
+
+   /** Draws a rectangle in the foreground colour from (x1,y1) to (x2,y2)\n
+    *  Rectangle can be filled with a colour if desired
+    *
+    * @param  x0      Row address (0 .. 131)
+    * @param  y0      Column address (0 .. 131)
+    * @param  x1      Row address (0 .. 131)
+    * @param  y1      Column address (0 .. 131)
+    * @param  fill    Indicates if the rectangle will be filled
+    */
+   void drawRect(unsigned x0, unsigned y0, unsigned x1, unsigned y1, unsigned fill) {
+      drawRect(x0, y0, x1, y1, fill, fSettings.foregroundColour);
+   }
 
    /** Draws a line circle in the specified colour at center (x0,y0) with radius
     *
-    * @param centreX    Row address (0 .. 131)
-    * @param centreY    Column address (0 .. 131)
-    * @param radius     Radius in pixels
-    * @param colour     12-bit colour value rrrrggggbbbb
-    * @param circleType Controls which segments of the circle are drawn
+    * @param centreX      Row address (0 .. 131)
+    * @param centreY      Column address (0 .. 131)
+    * @param radius       Radius in pixels
+    * @param colour       12-bit colour value rrrrggggbbbb
+    * @param circleType   Controls which segments of the circle are drawn
+    *
+    * @author Jack Bresenham IBM, Winthrop University (Father of this algorithm, 1962)
+    *
+    * @note Taken verbatim Wikipedia article on Bresenham's line algorithm \n
+    *        http://www.wikipedia.org
     */
+
    void drawCircle(unsigned centreX, unsigned centreY, unsigned radius, Colour colour, unsigned circleType=FULLCIRCLE);
    /** Writes the entire LCD screen from a bmp file
     *
@@ -335,37 +441,59 @@ public:
     * @note Use Olimex BmpToArray.exe utility to create bitmap
     */
    void drawBitmap(uint8_t bmp[131*131]);
+
    /** Draws an ASCII character at the specified (x,y) address, font and colours
     *
-    * @param c        Character to be displayed
-    * @param x        Row address (0 .. 131)
-    * @param y        Column address (0 .. 131)
-    * @param font     Font pitch (Lcd::FontSmall, Lcd::FontMedium, Lcd::FontLarge)
-    * @param fColour  12-bit foreground colour value rrrrggggbbbb
-    * @param bColour  12-bit background colour value rrrrggggbbbb
+    * @param c                 Character to be displayed
+    * @param x                 Row address (0 .. 131)
+    * @param y                 Column address (0 .. 131)
+    * @param font              Font pitch (Lcd::fontSmall, Lcd::fontMedium, Lcd::fontLarge)
+    * @param foregroundColour  12-bit foreground colour value rrrrggggbbbb
+    * @param backgroundColour  12-bit background colour value rrrrggggbbbb
     */
-   void putChar(char c, unsigned x, unsigned y, const Font &font, Colour fColour=DEFAULT_FOREGROUND, Colour bColour=DEFAULT_BACKGROUND);
+   void putChar(char c, unsigned x, unsigned y, const Font &font, Colour foregroundColour, Colour backgroundColour);
 
-   /** Draws an ASCII character at the specified (x,y) address and colours using the currently set font
+   /** Draws an ASCII character at the specified (x,y) address, font and foreground colour and current background
+    *
+    * @param c                 Character to be displayed
+    * @param x                 Row address (0 .. 131)
+    * @param y                 Column address (0 .. 131)
+    * @param font              Font pitch (Lcd::fontSmall, Lcd::fontMedium, Lcd::fontLarge)
+    * @param foregroundColour  12-bit foreground colour value rrrrggggbbbb
+    */
+   void putChar(char c, unsigned x, unsigned y, const Font &font, Colour foregroundColour) {
+      putChar(c, x, y, font, foregroundColour, fSettings.backgroundColour);
+   }
+
+   /** Draws an ASCII character at the specified (x,y) address, font and current colours
     *
     * @param c        Character to be displayed
     * @param x        Row address (0 .. 131)
     * @param y        Column address (0 .. 131)
-    * @param fColour  12-bit foreground colour value rrrrggggbbbb
-    * @param bColour  12-bit background colour value rrrrggggbbbb
+    * @param font     Font pitch (Lcd::fontSmall, Lcd::fontMedium, Lcd::fontLarge)
     */
-   void putChar(char c, unsigned x, unsigned y, Colour fColour=DEFAULT_FOREGROUND, Colour bColour=DEFAULT_BACKGROUND) {
-	   putChar(c, x, y, *fFont, fColour, bColour);
+   void putChar(char c, unsigned x, unsigned y, const Font &font) {
+      putChar(c, x, y, font, fSettings.foregroundColour, fSettings.backgroundColour);
+   }
+
+   /** Draws an ASCII character at the specified (x,y) address and colours using the currently set font and colours
+    *
+    * @param c        Character to be displayed
+    * @param x        Row address (0 .. 131)
+    * @param y        Column address (0 .. 131)
+    */
+   void putChar(char c, unsigned x, unsigned y) {
+	   putChar(c, x, y, *fSettings.font, fSettings.foregroundColour, fSettings.backgroundColour);
    }
 
    /** Draws a null-terminated character string at the specified (x,y) address, font and colours
     *
-    * @param str      Pointer to character string to be displayed
-    * @param x        Row address (0 .. 131)
-    * @param y        Column address (0 .. 131)
-    * @param font     Font pitch (Lcd::FontSmall, Lcd::FontMedium, Lcd::FontLarge)
-    * @param fColour  12-bit foreground colour value rrrrggggbbbb
-    * @param bColour  12-bit background colour value rrrrggggbbbb
+    * @param str               Pointer to character string to be displayed
+    * @param x                 Row address (0 .. 131)
+    * @param y                 Column address (0 .. 131)
+    * @param font              Font pitch (Lcd::fontSmall, Lcd::fontMedium, Lcd::fontLarge)
+    * @param foregroundColour  12-bit foreground colour value rrrrggggbbbb
+    * @param backgroundColour  12-bit background colour value rrrrggggbbbb
     *
     * @code{.c}
     *       // Here's an example to display "Hello World!" at address (20,20)
@@ -379,30 +507,39 @@ public:
     * @note For more information on how this code does it's thing look at this \n
     *       "http://www.sparkfun.com/tutorial/Nokia%206100%20LCD%20Display%20Driver.pdf"
     */
-   void putStr(const char *str, unsigned x, unsigned y, const Font &font, Colour fColour=DEFAULT_FOREGROUND, Colour bColour=DEFAULT_BACKGROUND);
+   void putStr(const char *str, unsigned x, unsigned y, const Font &font, Colour foregroundColour, Colour backgroundColour);
 
    /** Draws a null-terminated character string at the specified (x,y) address and colours using the current font
     *
-    * @param str      Pointer to character string to be displayed
-    * @param x        Row address (0 .. 131)
-    * @param y        Column address (0 .. 131)
-    * @param fColour  12-bit foreground colour value rrrrggggbbbb
-    * @param bColour  12-bit background colour value rrrrggggbbbb
-    *
-    * @code{.c}
-    *       // Here's an example to display "Hello World!" at address (20,20)
-    *
-    *       lcd_putStr("Hello World!", 20, 20, WHITE, BLACK);
-    * @endcode
-    *
-    * @author James P Lynch, August 30, 2007 \n
-    *         Edited by Peter Davenport on August 23, 2010
-    *
-    * @note For more information on how this code does it's thing look at this \n
-    *       "http://www.sparkfun.com/tutorial/Nokia%206100%20LCD%20Display%20Driver.pdf"
+    * @param str               Pointer to character string to be displayed
+    * @param x                 Row address (0 .. 131)
+    * @param y                 Column address (0 .. 131)
+    * @param foregroundColour  12-bit foreground colour value rrrrggggbbbb
+    * @param backgroundColour  12-bit background colour value rrrrggggbbbb
     */
-   void putStr(const char *str, unsigned x, unsigned y, Colour fColour=DEFAULT_FOREGROUND, Colour bColour=DEFAULT_BACKGROUND) {
-	   putStr(str, x, y, *fFont, fColour, bColour);
+   void putStr(const char *str, unsigned x, unsigned y, Colour foregroundColour, Colour backgroundColour) {
+      putStr(str, x, y, *fSettings.font, foregroundColour, backgroundColour);
+   }
+
+   /** Draws a null-terminated character string at the specified (x,y) address and colours using the current font
+    *
+    * @param str               Pointer to character string to be displayed
+    * @param x                 Row address (0 .. 131)
+    * @param y                 Column address (0 .. 131)
+    * @param foregroundColour  12-bit foreground colour value rrrrggggbbbb
+    */
+   void putStr(const char *str, unsigned x, unsigned y, Colour foregroundColour) {
+      putStr(str, x, y, *fSettings.font, foregroundColour, fSettings.backgroundColour);
+   }
+
+   /** Draws a null-terminated character string at the specified (x,y) address and colours using the current font
+    *
+    * @param str               Pointer to character string to be displayed
+    * @param x                 Row address (0 .. 131)
+    * @param y                 Column address (0 .. 131)
+    */
+   void putStr(const char *str, unsigned x, unsigned y) {
+      putStr(str, x, y, *fSettings.font, fSettings.foregroundColour, fSettings.backgroundColour);
    }
 
    int  _readChar() override { return -1;}
@@ -411,39 +548,85 @@ public:
    void flushOutput() override {}
 
 private:
-   unsigned fX,fY;
-   const Font *fFont;
-   Colour fForeground;
-   Colour fBackground;
+   unsigned     fX;
+   unsigned     fY;
+   FontSettings fSettings;
 
 public:
-   LcdBase &setForeground(Colour foreground) {
-      fForeground = foreground;
+   /**
+    * Set text font
+    *
+    * @param font Font to use
+    *
+    * @return reference to self
+    */
+   LcdBase &setFont(const Font &font) {
+      fSettings.font = &font;
       return *this;
    }
 
-   LcdBase &setBackground(Colour background) {
-      fBackground = background;
+   /**
+    * Set text foreground colour
+    *
+    * @param colour  Colour to use
+    *
+    * @return reference to self
+    */
+   LcdBase &setForeground(Colour colour) {
+      fSettings.foregroundColour = colour;
       return *this;
    }
 
+   /**
+    * Set text background colour
+    *
+    * @param colour  Colour to use
+    *
+    * @return reference to self
+    */
+   LcdBase &setBackground(Colour colour) {
+      fSettings.backgroundColour = colour;
+      return *this;
+   }
+
+   /**
+    * Move text cursor
+    *
+    * @param x X position of lower left
+    * @param y Y position of lower left
+    *
+    * @return reference to self
+    */
    LcdBase &moveXY(unsigned x, unsigned y) {
       fX = x;
       fY = y;
       return *this;
    }
 
-   LcdBase &setFont(const Font &font) {
-      fFont = &font;
-      return *this;
+   /**
+    * Get current text settings
+    *
+    * @return Text settings
+    */
+   FontSettings getTextSettings() {
+      return fSettings;
+   }
+
+   /**
+    * Set current text settings
+    *
+    * @param settings Settings to use
+    */
+   void setTextSettings(FontSettings settings) {
+      fSettings = settings;
    }
 
    /**
     * Does newline - move to start of next line
     */
    void _newline() {
-      if (fY > (LCD_Y_MIN+fFont->height)) {
-         fY -= fFont->height;
+      if (fY > (LCD_Y_MIN+fSettings.font->height)) {
+         fY -= fSettings.font->height;
          fX = LCD_X_MIN;
       }
    }
@@ -466,8 +649,8 @@ public:
          if (fX >= LCD_X_MAX) {
             _newline();
          }
-         putChar(ch, fX, fY, *fFont, fForeground, fBackground);
-         fX += fFont->width;
+         putChar(ch, fX, fY, *fSettings.font, fSettings.foregroundColour, fSettings.backgroundColour);
+         fX += fSettings.font->width;
       }
    }
 };
@@ -623,7 +806,7 @@ public:
  * lcd.drawCircle(65, 65, 20, WHITE);
  * lcd.drawCircle(65, 65, 30, WHITE);
  * lcd.drawCircle(65, 65, 40, WHITE);
- * lcd.putStr("Some Circles", 30, 10, Fonts::FontSmall, WHITE, RED);
+ * lcd.putStr("Some Circles", 30, 10, Fonts::fontSmall, WHITE, RED);
  *
  *  @endcode
  */
