@@ -22,7 +22,7 @@ using namespace USBDM;
  *
  * It is necessary to enable these in Configure.usbdmProject
  * under the "Peripheral Parameters"->PIT tab.
- * Select irqHandlerChannelX option (Class Method - Software ...)
+ * Select irqHandlers option (Class Method - Software ...)
  */
 
 // Connection mapping - change as required
