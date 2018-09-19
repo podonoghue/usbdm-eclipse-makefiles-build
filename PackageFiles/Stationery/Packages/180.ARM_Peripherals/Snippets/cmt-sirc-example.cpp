@@ -40,26 +40,30 @@
  */
 using namespace USBDM;
 
-// LED connection - change as required
+// Debug LED connection - change as required
 using Led   = GpioA<2,ActiveLow>;
 
-constexpr unsigned SonyCarrier    = 40000;  //!< Sony SIRC carrier frequency (Hz)
-constexpr unsigned SonyOneTime    =  1200;  //!< Sony SIRC on time (us) for '1'
-constexpr unsigned SonyZeroTime   =   600;  //!< Sony SIRC on time (us) for '0'
-constexpr unsigned SonyStartTime  =  2400;  //!< Sony SIRC on time (us) for start
-constexpr unsigned SonyOffTime    =   600;  //!< Sony SIRC off time (us)
-constexpr unsigned SonyRepeatTime = 45000;  //!< Sony SIRC repeat packet time (us)
-constexpr unsigned SonyRepeats    =     3;  //!< How many times to repeat packet in transmission
+// Constant describing transmission
+constexpr unsigned SONY_CARRIER     = 40000;  //!< Sony SIRC carrier frequency (Hz)
+constexpr unsigned SONY_ONE_TIME    =  1200;  //!< Sony SIRC on time (us) for '1'
+constexpr unsigned SONY_ZERO_TIME   =   600;  //!< Sony SIRC on time (us) for '0'
+constexpr unsigned SONY_START_TIME  =  2400;  //!< Sony SIRC on time (us) for start
+constexpr unsigned SONY_OFF_TIME    =   600;  //!< Sony SIRC off time (us)
+constexpr unsigned SONY_REPEAT_TIME = 45000;  //!< Sony SIRC repeat packet time (us)
+constexpr unsigned SONY_REPEATS     =     4;  //!< How many times to repeat packet in transmission
 
 /** Carrier half period in CMT clock cycles (Based on 8MHz CMT clock) */
-constexpr uint8_t  PrimaryCarrierHalfTime = ((8000000UL/SonyCarrier)/2);
+constexpr uint8_t  PrimaryCarrierHalfTime = ((8000000UL/SONY_CARRIER)/2);
 
-/** command/address/extended value to transmit */
+/** Command/address/extended value to transmit */
 static volatile uint32_t data;
+
 /** Length of command/address/extended packet */
 static volatile unsigned packetLength;
+
 /** Count of bits transmitted in packet */
 static volatile unsigned bitNum;
+
 /** Count of packet repeats */
 static volatile unsigned repeatCount;
 
@@ -69,7 +73,7 @@ static volatile unsigned repeatCount;
  * This processes each bit for transmission.
  */
 static void cmtCallback() {
-   /** command/address/extended value as being transmitted */
+   /** Command/address/extended value being transmitted */
    static uint32_t shiftReg;
 
    /** Time since start of current packet */
@@ -78,7 +82,7 @@ static void cmtCallback() {
 //   Led::toggle();
    if (Cmt::getStatus()) {
       if(bitNum==0) {
-         if (repeatCount++ >= SonyRepeats) {
+         if (repeatCount++ >= SONY_REPEATS) {
             // Completed entire sequence of repeats
 
             // Clear Interrupt flag
@@ -96,19 +100,19 @@ static void cmtCallback() {
       if (bitNum<packetLength) {
          // LSB first
          if (shiftReg&0b1) {
-            Cmt::setMarkTiming(SonyOneTime);
-            repeatTime += SonyOneTime+SonyOffTime;
+            Cmt::setMarkTiming(SONY_ONE_TIME);
+            repeatTime += SONY_ONE_TIME+SONY_OFF_TIME;
          }
          else {
-            Cmt::setMarkTiming(SonyZeroTime);
-            repeatTime += SonyZeroTime+SonyOffTime;
+            Cmt::setMarkTiming(SONY_ZERO_TIME);
+            repeatTime += SONY_ZERO_TIME+SONY_OFF_TIME;
          }
          bitNum++;
          shiftReg >>= 1;
       }
       else {
          Cmt::setExtendedSpace(CmtExtendedSpace_Enable);
-         Cmt::setMarkTiming(SonyRepeatTime-SonyOffTime-repeatTime);
+         Cmt::setMarkTiming(SONY_REPEAT_TIME-SONY_OFF_TIME-repeatTime);
          bitNum = 0;
       }
    }
@@ -118,6 +122,7 @@ static void cmtCallback() {
  * Does basic setup of CMT for SIRC protocol
  */
 static void configureCmtTime() {
+   // Restart counters for ISR callback processing
    repeatCount  = 0;
    bitNum       = 0;
 
@@ -133,7 +138,7 @@ static void configureCmtTime() {
    Cmt::setPrimaryTiming(PrimaryCarrierHalfTime,PrimaryCarrierHalfTime);
 
    // Set up for START bit
-   Cmt::setMarkSpaceTiming(SonyStartTime, SonyOffTime);
+   Cmt::setMarkSpaceTiming(SONY_START_TIME, SONY_OFF_TIME);
 
    Cmt::setMode(CmtMode_Time);
 }
@@ -143,27 +148,68 @@ static void configureCmtTime() {
  *
  * @return True if busy
  */
-bool inline isBusy() {
-   return (repeatCount <= SonyRepeats);
+bool isBusy() {
+   return (repeatCount <= SONY_REPEATS);
 }
 
 /**
  * Wait for CMT to complete transmitting sequence
  */
-void inline waitUntilComplete() {
+void waitUntilComplete() {
    while (isBusy()) {
    }
 }
+
+enum CmtAddress {
+   CmtAddress_tv             =1,
+   CmtAddress_vcr1           =2,
+   CmtAddress_vcr2           =3,
+   CmtAddress_laserDisk      =6,
+   CmtAddress_surroundSound  =12,
+   CmtAddress_cassette       =16,
+   CmtAddress_cdPlayer       =17,
+   CmtAddress_equalizer      =18,
+};
+
+enum CmtCommand {
+   CmtCommand_digit0         =  0,
+   CmtCommand_digit1         =  1,
+   CmtCommand_digit2         =  2,
+   CmtCommand_digit3         =  3,
+   CmtCommand_digit4         =  4,
+   CmtCommand_digit5         =  5,
+   CmtCommand_digit6         =  6,
+   CmtCommand_digit7         =  7,
+   CmtCommand_digit8         =  8,
+   CmtCommand_digit9         =  9,
+   CmtCommand_channelUp      = 16,
+   CmtCommand_channelDown    = 17,
+   CmtCommand_volumeUp       = 18,
+   CmtCommand_volumeDown     = 19,
+   CmtCommand_mute           = 20,
+   CmtCommand_power          = 21,
+   CmtCommand_reset          = 22,
+   CmtCommand_audioMode      = 23,
+   CmtCommand_contrastUp     = 24,
+   CmtCommand_contrastDown   = 25,
+   CmtCommand_colourUp       = 26,
+   CmtCommand_colourDown     = 27,
+   CmtCommand_brightnessUp   = 30,
+   CmtCommand_brightnessDown = 31,
+   CmtCommand_balanceLeft    = 38,
+   CmtCommand_balanceRight   = 39,
+   CmtCommand_standby        = 47,
+};
 
 /**
  * Start transmission of 12-bit sequence.
  * START + N*(7-bit COMMAND, 5-bit ADDRESS)
  *
- * @param command 7-bit command
  * @param address 5-bit address
+ * @param command 7-bit command
  */
-void send12(uint8_t command7, uint8_t address5) {
-   data         = (address5<<7)|command7;
+void send12(CmtAddress cmtAddress, CmtCommand cmtCommand) {
+   data         = (cmtAddress<<7)|cmtCommand;
    packetLength = 12;
    configureCmtTime();
 }
@@ -172,11 +218,11 @@ void send12(uint8_t command7, uint8_t address5) {
  * Start transmission of 15-bit sequence.
  * START + N*(7-bit COMMAND, 8-bit ADDRESS)
  *
- * @param command 7-bit command
  * @param address 8-bit address
+ * @param command 7-bit command
  */
-void send15(uint8_t command7, uint8_t address8) {
-   data         = (address8<<7)|command7;
+void send15(CmtAddress cmtAddress, CmtCommand cmtCommand) {
+   data         = (cmtAddress<<7)|cmtCommand;
    packetLength = 15;
    configureCmtTime();
 }
@@ -185,12 +231,12 @@ void send15(uint8_t command7, uint8_t address8) {
  * Start transmission of 20-bit sequence.
  * START + N*(7-bit COMMAND, 5-bit ADDRESS, 8-bit EXTENDED)
  *
- * @param command  7-bit command
  * @param address  5-bit address
+ * @param command  7-bit command
  * @param extended 8-bit extended value
  */
-void send20(uint8_t command7, uint8_t address5, uint8_t extended8) {
-   data         = (extended8<<12)|(address5<<7)|command7;
+void send20(CmtAddress cmtAddress, CmtCommand cmtCommand, uint8_t extended8) {
+   data         = (extended8<<12)|(cmtAddress<<7)|cmtCommand;
    packetLength = 20;
    configureCmtTime();
 }
@@ -203,11 +249,34 @@ int main() {
    Led::setOutput();
 
    for(int count = 0;;count++) {
-      Led::on();
-      // Send test pattern
-      send20(0x03, 0x01, 0x80);
+      int ch = console.readChar();
+      Led::toggle();
+      // Send pattern
+      switch(ch) {
+         case '0': send12(CmtAddress_tv, CmtCommand_digit0      );      break;
+         case '1': send12(CmtAddress_tv, CmtCommand_digit1      );      break;
+         case '2': send12(CmtAddress_tv, CmtCommand_digit2      );      break;
+         case '3': send12(CmtAddress_tv, CmtCommand_digit3      );      break;
+         case '4': send12(CmtAddress_tv, CmtCommand_digit4      );      break;
+         case '5': send12(CmtAddress_tv, CmtCommand_digit5      );      break;
+         case '6': send12(CmtAddress_tv, CmtCommand_digit6      );      break;
+         case '7': send12(CmtAddress_tv, CmtCommand_digit7      );      break;
+         case '8': send12(CmtAddress_tv, CmtCommand_digit8      );      break;
+         case '9': send12(CmtAddress_tv, CmtCommand_digit9      );      break;
+         case 'V': send12(CmtAddress_tv, CmtCommand_volumeUp    );      break;
+         case 'v': send12(CmtAddress_tv, CmtCommand_volumeDown  );      break;
+         case 'C': send12(CmtAddress_tv, CmtCommand_channelUp   );      break;
+         case 'c': send12(CmtAddress_tv, CmtCommand_channelDown );      break;
+         case 'M':
+         case 'm': send12(CmtAddress_tv, CmtCommand_mute        );      break;
+         case 'S':
+         case 's': send12(CmtAddress_tv, CmtCommand_standby     );      break;
+         default:
+            // 'untoggle' LED
+            Led::toggle();
+            break;
+      }
       waitUntilComplete();
-      Led::off();
       waitMS(100);
    }
    return 0;
