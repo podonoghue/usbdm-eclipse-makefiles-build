@@ -485,13 +485,16 @@ public:
 
       // Start calibration
       setAveraging(AdcAveraging_Cal);
-      (void)adc().SC3;
 
       // Wait for calibration to complete
-      while (adc().SC3 & ADC_SC3_CAL_MASK) {
+      while ((adc().SC1[0] & ADC_SC1_COCO_MASK) == 0) {
          __asm__("nop");
       }
 
+      // Clear COCO
+      (void)adc().R[0];
+
+      // Check if calibration failed
       bool failed = adc().SC3 & ADC_SC3_CALF_MASK;
 
       // Restore original SC3 value
@@ -685,12 +688,12 @@ public:
    /**
     * Enables hardware trigger mode of operation and configures a channel.
     *
-    * @param[in] adcPretrigger   Hardware pre-trigger to use for this channel\n
+    * @param[in] adcPretrigger   Hardware pre-trigger to use for this channel.\n
     *                            This corresponds to pre-triggers in the PDB channels and SC1[n]/R[n] register selection
-    * @param[in] enableInterrupt Whether to generate an interrupt when each conversion completes
+    * @param[in] adcInterrupt    Whether to generate an interrupt when each conversion completes
     */
-   static void enableHardwareConversion(AdcPretrigger adcPretrigger, AdcInterrupt enableInterrupt=AdcInterrupt_disable) {
-      AdcBase_T<Info>::enableHardwareConversion(channel|enableInterrupt, adcPretrigger);
+   static void enableHardwareConversion(AdcPretrigger adcPretrigger, AdcInterrupt adcInterrupt=AdcInterrupt_disable) {
+      AdcBase_T<Info>::enableHardwareConversion(channel|adcInterrupt, adcPretrigger);
    }
 
 #ifdef ADC_SC2_DMAEN
@@ -699,11 +702,11 @@ public:
     *
     * @param[in] adcPretrigger   Hardware pre-trigger to use for this channel\n
     *                            This corresponds to pre-triggers in the PDB channels and SC1[n]/R[n] register selection
-    * @param[in] enableInterrupt Whether to generate an interrupt when each conversion completes
+    * @param[in] adcInterrupt    Whether to generate an interrupt when each conversion completes
     * @param[in] adcDma          Whether to generate a DMA request when each conversion completes
     */
-   static void enableHardwareConversion(AdcPretrigger adcPretrigger, AdcInterrupt enableInterrupt, AdcDma adcDma) {
-      AdcBase_T<Info>::enableHardwareConversion(channel|enableInterrupt, adcPretrigger, adcDma);
+   static void enableHardwareConversion(AdcPretrigger adcPretrigger, AdcInterrupt adcInterrupt, AdcDma adcDma) {
+      AdcBase_T<Info>::enableHardwareConversion(channel|adcInterrupt, adcPretrigger, adcDma);
    }
 #endif
 
