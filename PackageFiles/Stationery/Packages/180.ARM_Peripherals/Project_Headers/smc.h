@@ -146,17 +146,18 @@ enum SmcPowerOnReset {
 };
 
 /**
- *  POR Power Option\n
- *  This bit controls whether the POR detect circuit is enabled in VLLS0 mode.
+ *  Sleep on exit from Interrupt Service Routine (ISR)\n
+ *  This option controls whether the processor re-enters sleep mode when exiting the\n
+ *  handler for the interrupt that awakened it.
  */
 enum SmcSleepOnExit {
-   SmcSleepOnExit_Disable = false,  //!< Processor does not enter SLEEP/DEEPSLEEP mode
-   SmcSleepOnExit_Enable  = true,   //!< Processor enters SLEEP/DEEPSLEEP mode on completion of interrupts
+   SmcSleepOnExit_Disable = 0,                       //!< Processor does not re-enter SLEEP/DEEPSLEEP mode on completion of interrupt.
+   SmcSleepOnExit_Enable  = SCB_SCR_SLEEPONEXIT_Msk, //!< Processor re-enters SLEEP/DEEPSLEEP mode on completion of interrupt.
 };
 
 /**
  *  VLS or VLLS Mode Control\n
- *  This field controls which LLS/VLLS sub-mode to enter if STOPM=LLS/VLLS\n
+ *  This field controls which LLS/VLLS sub-mode to enter if STOPM=LLS/VLLS
  *
  * @note Not all modes are supported on all processors
  */
