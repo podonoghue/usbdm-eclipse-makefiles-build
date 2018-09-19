@@ -10,7 +10,7 @@
  ============================================================================
  */
 #include "hardware.h"
-//#include <type_traits>
+#include "smc.h"
 
 using namespace USBDM;
 
@@ -32,7 +32,7 @@ using TimerChannel = Ftm0Channel<7>;
 
 // Half-period for timer in ticks
 // This variable is shared with the interrupt routine
-static volatile uint16_t timerHalfPeriod;
+static volatile uint16_t timerHalfPeriodInTicks;
 
 // Waveform period to generate
 static constexpr float WAVEFORM_PERIOD = 100*ms;
@@ -48,8 +48,8 @@ static void ftmCallback(uint8_t status) {
    // Check channel
    if (status & TimerChannel::CHANNEL_MASK) {
       // Note: The pin is toggled directly by hardware
-      // Re-trigger at last interrupt time + timerHalfPeriod
-      TimerChannel::setDeltaEventTime(timerHalfPeriod);
+      // Re-trigger at last interrupt time + timerHalfPeriodInTicks
+      TimerChannel::setDeltaEventTime(timerHalfPeriodInTicks);
    }
 }
 
@@ -69,7 +69,7 @@ int main() {
 
    // Calculate half-period in timer ticks
    // Must be done after timer clock configuration (above)
-   timerHalfPeriod = Timer::convertSecondsToTicks(WAVEFORM_PERIOD/2.0);
+   timerHalfPeriodInTicks = Timer::convertSecondsToTicks(WAVEFORM_PERIOD/2.0);
 
    // Set callback function
    Timer::setChannelCallback(ftmCallback);
@@ -97,8 +97,9 @@ int main() {
    // Check if configuration failed
    USBDM::checkError();
 
+   // Wait here forever (sleeping between interrupts)
    for(;;) {
-      __asm__("wfi");
+      Smc::enterWaitMode();
    }
    return 0;
 }
