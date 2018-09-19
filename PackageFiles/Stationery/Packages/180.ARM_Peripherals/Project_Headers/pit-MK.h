@@ -403,6 +403,28 @@ public:
       return PitBase_T<Info>::enableNvicInterrupts(channel, enable, nvicPriority);
    }
 
+   /**
+    *  Use a PIT channel to implement a busy-wait delay
+    *
+    *  @param[in]  channel   Channel to use
+    *  @param[in]  interval  Interval to wait in timer ticks (usually bus clock period)
+    *
+    *  @note Function doesn't return until interval has expired
+    */
+   static void __attribute__((always_inline)) delayInTicks(uint32_t interval) {
+      PitBase_T<Info>::delayInTicks(channel, interval);
+   }
+
+   /**
+    *  Use a PIT channel to implement a busy-wait delay
+    *
+    *  @param[in]  interval  Interval to wait as a float
+    *
+    *  @note Function doesn't return until interval has expired
+    */
+   static void __attribute__((always_inline)) delay(float interval) {
+      PitBase_T<Info>::delay(channel, interval);
+   }
 };
 
 /**
