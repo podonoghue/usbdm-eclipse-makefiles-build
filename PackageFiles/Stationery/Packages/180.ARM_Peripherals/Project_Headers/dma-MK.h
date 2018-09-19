@@ -192,9 +192,9 @@ enum DmaCanPreemptLower {
 /**
  * Type definition for DMA interrupt call back.
  *
- * channel[in] Channel
+ * @param[in] dmaChannelNum
  */
-typedef void (*DmaCallbackFunction)(DmaChannelNum channel);
+typedef void (*DmaCallbackFunction)(DmaChannelNum dmaChannelNum);
 
 /**
  * Type definition for DMA error interrupt call back.
@@ -202,32 +202,6 @@ typedef void (*DmaCallbackFunction)(DmaChannelNum channel);
  * @param errorFlags          Channel error information (DMA_ES)
  */
 typedef void (*DmaErrorCallbackFunction)(uint32_t errorFlags);
-
-/**
- * Get DMA source size of object.
- * For use in TCD ATTR value
- *
- * @param[in] obj Object to get size of
- *
- * @return mask suitable for use as part of TCD.ATTR value
- */
-template <class T>
-static constexpr uint32_t dmaSSize(const T &obj) {
-   return DMA_ATTR_SSIZE(getDmaSize(obj));
-}
-
-/**
- * Get DMA destination size of object.
- * For use in TCD ATTR value
- *
- * @param[in] obj Object to get size of
- *
- * @return mask suitable for use as part of TCD.ATTR value
- */
-template <class T>
-static constexpr uint32_t dmaDSize(const T &obj) {
-   return DMA_ATTR_DSIZE(getDmaSize(obj));
-}
 
 /**
  * Get DMA size of object.
@@ -246,6 +220,32 @@ static constexpr DmaSize dmaSize(const Td &obj) {
       (sizeof(obj)==4) ?DmaSize_32bit:
       (sizeof(obj)==16)?DmaSize_16byte:
       /*          ==32*/DmaSize_32byte;
+}
+
+/**
+ * Get DMA source size of object.
+ * For use in TCD ATTR value
+ *
+ * @param[in] obj Object to get size of
+ *
+ * @return mask suitable for use as part of TCD.ATTR value
+ */
+template <class T>
+static constexpr uint32_t dmaSSize(const T &obj) {
+   return DMA_ATTR_SSIZE(dmaSize(obj));
+}
+
+/**
+ * Get DMA destination size of object.
+ * For use in TCD ATTR value
+ *
+ * @param[in] obj Object to get size of
+ *
+ * @return mask suitable for use as part of TCD.ATTR value
+ */
+template <class T>
+static constexpr uint32_t dmaDSize(const T &obj) {
+   return DMA_ATTR_DSIZE(dmaSize(obj));
 }
 
 /**
@@ -361,21 +361,21 @@ public:
    /**
     * Configures and enable hardware requests on a channel.
     *
-    * @param[in] dmaChannel   The DMA channel being enabled
-    * @param[in] dmaSlot      The DMA slot (source) to connect to this channel
-    * @param[in] dmaMuxEnable The mode for the channel
+    * @param[in] dmaChannelNum   The DMA channel being enabled
+    * @param[in] dmaSlot         The DMA slot (source) to connect to this channel
+    * @param[in] dmaMuxEnable    The mode for the channel
     */
-   static void configure(DmaChannelNum dmaChannel, DmaSlot dmaSlot, DmaMuxEnable dmaMuxEnable=DmaMuxEnable_Continuous) {
+   static void configure(DmaChannelNum dmaChannelNum, DmaSlot dmaSlot, DmaMuxEnable dmaMuxEnable=DmaMuxEnable_Continuous) {
 #ifdef DEBUG_BUILD
-      if (dmaChannel >= NumChannels) {
+      if (dmaChannelNum >= NumChannels) {
          // Channel doesn't exists
          setAndCheckErrorCode(E_ILLEGAL_PARAM);
       }
-      if ((dmaMuxEnable == DmaMuxEnable_Triggered) && (dmaChannel>USBDM::PitInfo::numChannels)) {
+      if ((dmaMuxEnable == DmaMuxEnable_Triggered) && (dmaChannelNum>USBDM::PitInfo::numChannels)) {
          // PIT triggering only available on channels corresponding to PIT channels
          setAndCheckErrorCode(E_ILLEGAL_PARAM);
       }
-      if (((dmaChannel>=16)&&(dmaSlot<64))||((dmaChannel<16)&&(dmaSlot>=64))) {
+      if (((dmaChannelNum>=16)&&(dmaSlot<64))||((dmaChannelNum<16)&&(dmaSlot>=64))) {
          // DmaSlots 0-63 must associate with DMA channels 0-15
          // DmaSlots 64-128 must associate with DMA channels 15-31
          setAndCheckErrorCode(E_ILLEGAL_PARAM);
@@ -385,19 +385,26 @@ public:
       DmaMuxInfo::clockReg()  |= DmaMuxInfo::clockMask;
 
       // Configure channel - must be disabled to change
-      DmaMuxInfo::dmamux().CHCFG[dmaChannel] = 0;
-      DmaMuxInfo::dmamux().CHCFG[dmaChannel] = dmaMuxEnable|DMAMUX_CHCFG_SOURCE(dmaSlot);
+      DmaMuxInfo::dmamux().CHCFG[dmaChannelNum] = 0;
+      DmaMuxInfo::dmamux().CHCFG[dmaChannelNum] = dmaMuxEnable|DMAMUX_CHCFG_SOURCE(dmaSlot);
    }
 
    /**
     * Disable hardware requests on channel
+    *
+    * @param dmaChannelNum Channel to modify
     */
-   static void disable(DmaChannelNum dmaChannel) {
+   static void disable(DmaChannelNum dmaChannelNum) {
+#ifdef DEBUG_BUILD
+      if (dmaChannelNum>=NumChannels) {
+         setAndCheckErrorCode(E_ILLEGAL_PARAM);
+      }
+#endif
       // Enable clock to peripheral
       DmaMuxInfo::clockReg()  |= DmaMuxInfo::clockMask;
 
       // Disable channel
-      DmaMuxInfo::dmamux().CHCFG[dmaChannel] = 0;
+      DmaMuxInfo::dmamux().CHCFG[dmaChannelNum] = 0;
    }
 };
 
@@ -589,8 +596,8 @@ public:
    /**
     * Allocate DMA channel.
     *
-    * @return Error DmaChannelNum_None - No channel available
-    * @return Channel number
+    * @return DmaChannelNum_None - No suitable channel available.  Error code set.
+    * @return Channel number     - Number of allocated channel
     */
    static DmaChannelNum allocateChannel() {
       unsigned channelNum = __builtin_ffs(allocatedChannels);
@@ -607,7 +614,7 @@ public:
     * This is a channel that may be throttled by an associated PIT channel.
     *
     * @return Error DmaChannelNum_None - No suitable channel available.  Error code set.
-    * @return Channel number
+    * @return Channel number           - Number of allocated channel
     */
    static DmaChannelNum allocatePeriodicChannel() {
       unsigned channelNum = __builtin_ffs(allocatedChannels);
@@ -621,16 +628,23 @@ public:
 
    /**
     * Free DMA channel.
+    *
+    * @param dmaChannelNum Channel to release
     */
-   static void freeChannel(DmaChannelNum channelNum) {
-      allocatedChannels |= (1<<channelNum);
+   static void freeChannel(DmaChannelNum dmaChannelNum) {
+#ifdef DEBUG_BUILD
+      if (dmaChannelNum>=Info::NumChannels) {
+         setAndCheckErrorCode(E_ILLEGAL_PARAM);
+      }
+#endif
+      allocatedChannels |= (1<<dmaChannelNum);
    }
 
    /**
     * Set priority for a DMA channel.
     * This is only used if DmaArbitration_Fixed is used.
     *
-    * @param[in] channel            DMA channel number
+    * @param[in] dmaChannelNum      Channel to modify
     * @param[in] priority           Priority for the channel
     * @param[in] dmaCanBePreempted  Controls whether the channel can be suspended by a higher priority channel
     * @param[in] dmaCanPreemptLower Controls whether the channel can suspend a lower priority channel
@@ -638,12 +652,16 @@ public:
     * @note The priority of each channel must be a unique number from [0..NumChannel-1]
     */
    static void setChannelPriority(
-         DmaChannelNum      channel,
+         DmaChannelNum      dmaChannelNum,
          int                priority,
          DmaCanBePreempted  dmaCanBePreempted=DmaCanBePreempted_Enable,
          DmaCanPreemptLower dmaCanPreemptLower=DmaCanPreemptLower_Enable) {
-
-      int index = (channel&0xFC)|(3-(channel&0x03));
+#ifdef DEBUG_BUILD
+      if (dmaChannelNum>=Info::NumChannels) {
+         setAndCheckErrorCode(E_ILLEGAL_PARAM);
+      }
+#endif
+      int index = (dmaChannelNum&0xFC)|(3-(dmaChannelNum&0x03));
       constexpr volatile uint8_t *priorities = &dmac().DCHPRI3;
       priorities[index] = dmaCanBePreempted|dmaCanPreemptLower|DMA_DCHPRI_CHPRI(priority);
    }
@@ -651,12 +669,17 @@ public:
    /**
     * Configure channel for arbitrary transfer defined by DmaTcd.
     *
-    * @param[in] channel DMA channel number
-    * @param[in] tcd     DMA TCD block describing the transfer
+    * @param[in] dmaChannelNum DMA channel number
+    * @param[in] tcd           DMA TCD block describing the transfer
     */
-   static void configureTransfer(DmaChannelNum channel, const DmaTcd &tcd) {
-      (*(DmaTcd* const)&dmac().TCD[channel]) = tcd;
-      dmac().TCD[channel].BITER_ELINKNO      = tcd.CITER;
+   static void configureTransfer(DmaChannelNum dmaChannelNum, const DmaTcd &tcd) {
+#ifdef DEBUG_BUILD
+      if (dmaChannelNum>=Info::NumChannels) {
+         setAndCheckErrorCode(E_ILLEGAL_PARAM);
+      }
+#endif
+      (*(DmaTcd* const)&dmac().TCD[dmaChannelNum]) = tcd;
+      dmac().TCD[dmaChannelNum].BITER_ELINKNO      = tcd.CITER;
    }
 
    /**
@@ -671,13 +694,17 @@ public:
    /**
     * Waits until the channel indicates the transaction has completed.
     *	
-    * @param[in] channel DMA channel number
+    * @param[in] dmaChannelNum DMA channel number
     */
-   static void waitUntilComplete(DmaChannelNum channel) {
-
-      int lastCiter = dmac().TCD[channel].CITER_ELINKNO;
-      while ((dmac().TCD[channel].CSR & DMA_CSR_DONE_MASK) == 0) {
-         int currentCiter = dmac().TCD[channel].CITER_ELINKNO;
+   static void waitUntilComplete(DmaChannelNum dmaChannelNum) {
+#ifdef DEBUG_BUILD
+      if (dmaChannelNum>=Info::NumChannels) {
+         setAndCheckErrorCode(E_ILLEGAL_PARAM);
+      }
+#endif
+      int lastCiter = dmac().TCD[dmaChannelNum].CITER_ELINKNO;
+      while ((dmac().TCD[dmaChannelNum].CSR & DMA_CSR_DONE_MASK) == 0) {
+         int currentCiter = dmac().TCD[dmaChannelNum].CITER_ELINKNO;
          if (lastCiter != currentCiter) {
             lastCiter = currentCiter;
             __asm__ volatile("nop");
@@ -694,30 +721,40 @@ public:
     * There is no need to use this function for a single request as the START bit may be set\n
     * in the original TCD used with configureTransfer().
     *
-    * @param[in]  channel Channel being modified
+    * @param[in] dmaChannelNum Channel being modified
     *
     * @note There is no clear option as the flag is automatically cleared by the DMA controller when
     *        the transfer starts.
     */
-   static void __attribute__((always_inline)) startSoftwareRequest(DmaChannelNum channel) {
-      dmac().SSRT = channel;
+   static void __attribute__((always_inline)) startSoftwareRequest(DmaChannelNum dmaChannelNum) {
+#ifdef DEBUG_BUILD
+      if (dmaChannelNum>=Info::NumChannels) {
+         setAndCheckErrorCode(E_ILLEGAL_PARAM);
+      }
+#endif
+      dmac().SSRT = dmaChannelNum;
    }
 
    /**
     * Enable/disable DMA hardware requests on a channel.
     * The channel should be configured beforehand using configureTransfer().
     *
-    * @param[in]  channel Channel being modified
-    * @param[in]  enable  True => enable, False => disable
+    * @param[in]  dmaChannelNum  Channel being modified
+    * @param[in]  enable         True => enable, False => disable
     *
     * @note May use DmaChannelNum_All to apply to all channels
     */
-   static void __attribute__((always_inline)) enableRequests(DmaChannelNum channel, bool enable=true) {
+   static void __attribute__((always_inline)) enableRequests(DmaChannelNum dmaChannelNum, bool enable=true) {
+#ifdef DEBUG_BUILD
+      if (dmaChannelNum>=Info::NumChannels) {
+         setAndCheckErrorCode(E_ILLEGAL_PARAM);
+      }
+#endif
       if (enable) {
-         dmac().SERQ = channel;
+         dmac().SERQ = dmaChannelNum;
       }
       else {
-         dmac().CERQ = channel;
+         dmac().CERQ = dmaChannelNum;
       }
    }
 
@@ -726,15 +763,20 @@ public:
     * Enable/disable DMA asynchronous requests on a channel\n
     * The channel should be configured beforehand using configureTransfer()
     *
-    * @param[in]  channel Channel being modified
-    * @param[in]  enable  True => enable, False => disable
+    * @param[in]  dmaChannelNum Channel being modified
+    * @param[in]  enable        True => enable, False => disable
     */
-   static void __attribute__((always_inline)) enableAsynchronousRequests(DmaChannelNum channel, bool enable=true) {
+   static void __attribute__((always_inline)) enableAsynchronousRequests(DmaChannelNum dmaChannelNum, bool enable=true) {
+#ifdef DEBUG_BUILD
+      if (dmaChannelNum>=Info::NumChannels) {
+         setAndCheckErrorCode(E_ILLEGAL_PARAM);
+      }
+#endif
       if (enable) {
-         dmac().EARS |= (1<<channel);
+         dmac().EARS |= (1<<dmaChannelNum);
       }
       else {
-         dmac().EARS &= ~(1<<channel);
+         dmac().EARS &= ~(1<<dmaChannelNum);
       }
    }
 #endif
@@ -742,58 +784,73 @@ public:
    /**
     * Enable/disable error interrupts for a channel.
     *
-    * @param[in]  channel Channel being modified
-    * @param[in]  enable  True => enable, False => disable
+    * @param[in]  dmaChannelNum Channel being modified
+    * @param[in]  enable        True => enable, False => disable
     *
     * @note May use DmaChannelNum_All to apply to all channels
     */
-   static void __attribute__((always_inline)) enableErrorInterrupts(DmaChannelNum channel, bool enable=true) {
+   static void __attribute__((always_inline)) enableErrorInterrupts(DmaChannelNum dmaChannelNum, bool enable=true) {
+#ifdef DEBUG_BUILD
+      if (dmaChannelNum>=Info::NumChannels) {
+         setAndCheckErrorCode(E_ILLEGAL_PARAM);
+      }
+#endif
       if (enable) {
-         dmac().SEEI = channel;
+         dmac().SEEI = dmaChannelNum;
       }
       else {
-         dmac().CEEI = channel;
+         dmac().CEEI = dmaChannelNum;
       }
    }
 
    /**
     * Clear done flag for a channel.
     *
-    * @param[in]  channel Channel being modified
+    * @param[in]  dmaChannelNum  Channel being modified
     *
     * @note May use DmaChannelNum_All to apply to all channels
     */
-   static void __attribute__((always_inline)) clearDoneFlag(DmaChannelNum channel) {
-      dmac().CDNE = channel;
+   static void __attribute__((always_inline)) clearDoneFlag(DmaChannelNum dmaChannelNum) {
+#ifdef DEBUG_BUILD
+      if (dmaChannelNum>=Info::NumChannels) {
+         setAndCheckErrorCode(E_ILLEGAL_PARAM);
+      }
+#endif
+      dmac().CDNE = dmaChannelNum;
    }
 
    /**
     * Clear interrupt request flag for a channel.
     *
-    * @param[in]  channel Channel being modified
+    * @param[in]  dmaChannelNum  Channel being modified
     *
     * @note May use DmaChannelNum_All to apply to all channels
     */
-   static void __attribute__((always_inline)) clearInterruptRequest(DmaChannelNum channel) {
-      dmac().CINT = channel;
+   static void __attribute__((always_inline)) clearInterruptRequest(DmaChannelNum dmaChannelNum) {
+#ifdef DEBUG_BUILD
+      if (dmaChannelNum>=Info::NumChannels) {
+         setAndCheckErrorCode(E_ILLEGAL_PARAM);
+      }
+#endif
+      dmac().CINT = dmaChannelNum;
    }
 
    /**
     * Enable/disable interrupts in NVIC.
     *
-    * @param[in]  channel       Channel being modified
-    * @param[in]  enable        True => enable, False => disable
-    * @param[in]  nvicPriority  Interrupt priority
+    * @param[in]  dmaChannelNum  Channel being modified
+    * @param[in]  enable         True => enable, False => disable
+    * @param[in]  nvicPriority   Interrupt priority
 	
     * @return E_NO_ERROR on success
     */
-   static ErrorCode enableNvicInterrupts(DmaChannelNum channel, bool enable=true, uint32_t nvicPriority=NvicPriority_Normal) {
+   static ErrorCode enableNvicInterrupts(DmaChannelNum dmaChannelNum, bool enable=true, uint32_t nvicPriority=NvicPriority_Normal) {
 #ifdef DEBUG_BUILD
-      if (channel>=Info::NumChannels) {
+      if (dmaChannelNum>=Info::NumChannels) {
          setAndCheckErrorCode(E_ILLEGAL_PARAM);
       }
 #endif
-      IRQn_Type irqNum = static_cast<IRQn_Type>(Info::irqNums[0] + (channel&(Info::NumChannels-1)));
+      IRQn_Type irqNum = static_cast<IRQn_Type>(Info::irqNums[0] + (dmaChannelNum&(Info::NumChannels-1)));
       if (enable) {
          enableNvicInterrupt(irqNum, nvicPriority);
       }
@@ -826,20 +883,25 @@ public:
    /**
     * Set callback for ISR.
     *
-    * @param[in]  channel  The DMA channel to set callback for
-    * @param[in]  callback The function to call from stub ISR
+    * @param[in]  dmaChannelNum  The DMA channel to set callback for
+    * @param[in]  callback       The function to call from stub ISR
     */
-   static void __attribute__((always_inline)) setCallback(DmaChannelNum channel, DmaCallbackFunction callback) {
+   static void __attribute__((always_inline)) setCallback(DmaChannelNum dmaChannelNum, DmaCallbackFunction callback) {
+#ifdef DEBUG_BUILD
+      if (dmaChannelNum>=Info::NumChannels) {
+         setAndCheckErrorCode(E_ILLEGAL_PARAM);
+      }
+#endif
       if (callback == nullptr) {
          callback = noHandlerCallback;
       }
-      callbacks[channel] = callback;
+      callbacks[dmaChannelNum] = callback;
    }
 
    /**
     * Set error callback for ISR.
     *
-    * @param[in]  callback The function to call from stub ISR
+    * @param[in] callback The function to call from stub ISR
     */
    static void __attribute__((always_inline)) setErrorCallback(DmaErrorCallbackFunction callback) {
       if (callback == nullptr) {

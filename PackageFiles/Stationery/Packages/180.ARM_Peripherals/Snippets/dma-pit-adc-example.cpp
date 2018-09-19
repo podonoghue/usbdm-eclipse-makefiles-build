@@ -18,9 +18,9 @@
 using namespace USBDM;
 
 // Connection - change as required
-using Led         = GpioA<2, ActiveLow>;  // = PTA2 = D9 = Blue LED
+using Led         = GpioA<2, ActiveLow>;  // = PTA2 = Arduino D9 = Blue LED
 using Adc         = Adc0;
-using AdcChannel  = Adc0Channel<0>;
+using AdcChannel  = Adc0Channel<14>; // = PTC0 = Arduino A0
 using PITChannel  = PitChannel<0>;
 
 /**
@@ -33,6 +33,7 @@ using PITChannel  = PitChannel<0>;
  * |            |     |           |     |           |     |          |
  * +------------+     +-----------+     +-----------+     +----------+
  *
+ * Requires use of interrupts for PIT (for debug) and DMA.
  */
 
 /**
@@ -48,7 +49,7 @@ static void configureAdc() {
    // Calibrate before use
    Adc::calibrate();
 
-   // Configure the ADC to use hardware with trigger A + interrupts + DMA
+   // Configure the ADC hardware trigger 0 for no interrupts + DMA
    AdcChannel::enableHardwareConversion(AdcPretrigger_0, AdcInterrupt_disable, AdcDma_Enable);
 
    // Connect ADC trigger A to PIT
@@ -71,7 +72,6 @@ static void dmaCallback(DmaChannelNum channel) {
 
    // Clear LED for debug
    Led::off();
-   PITChannel::disable();
    complete = true;
 }
 
@@ -81,11 +81,11 @@ uint16_t buffer[100] = {1,2,3,4,5,6,7,8,9};
  * Configure the DMA
  * - Triggered by the ADC
  * - Transfers results from the ADC to memory buffer
+ *
+ * @return E_NO_ERROR    Success
+ * @return E_NO_RESOURCE Unable to allocate DMA channel
  */
-static ErrorCode configureDma() {
-
-   // DMA channel number to use
-   const DmaChannelNum dmaChannelNum = Dma0::allocateChannel();
+static ErrorCode configureDma(DmaChannelNum dmaChannelNum) {
 
    if (dmaChannelNum == DmaChannelNum_None) {
       return E_NO_RESOURCE;
@@ -130,20 +130,29 @@ static ErrorCode configureDma() {
     * Structure to define the DMA transfer
     */
    static const DmaTcd tcd {
-      /* uint32_t  SADDR  Source address        */ (uint32_t)(ADC0->R),              // ADC result register
-      /* uint16_t  SOFF   SADDR offset          */ 0,                                // SADDR does not change
-      /* uint16_t  ATTR   Transfer attributes   */ DMA_ATTR_SSIZE(DmaSize_16bit)|    // 16-bit read from ADR->R (ignores MSBs)
-      /*                                        */ DMA_ATTR_DSIZE(DmaSize_16bit),    // 16-bit write to array
-      /* uint32_t  NBYTES Minor loop byte count */ 2,                                // 2-bytes for each ADC DMA request
-      /* uint32_t  SLAST  Last SADDR adjustment */ 0,                                // No adjustment as SADDR was unchanged
-      /* uint32_t  DADDR  Destination address   */ (uint32_t)(&buffer),              // Start of array for result
-      /* uint16_t  DOFF   DADDR offset          */ sizeof(buffer[0]),                // DADDR advances 2 bytes for each request
-      /* uint16_t  CITER  Major loop count      */ DMA_CITER_ELINKNO_ELINK(0)|       // No ELINK
-      /*                                        */ sizeof(buffer)/sizeof(buffer[0]), // Number of requests to do
-      /* uint32_t  DLAST  Last DADDR adjustment */ -sizeof(buffer),                  // Reset DADDR to start of array on completion
-      /* uint16_t  CSR    Control and Status    */ DMA_CSR_INTMAJOR(1)|              // Generate interrupt on completion of Major-loop
-      /*                                        */ DMA_CSR_DREQ(1)|                  // Clear hardware request when complete major loop (non-stop)
-      /*                                        */ DMA_CSR_START(0),                 // Don't start
+      /* uint32_t  SADDR        Source address              */ (uint32_t)(&Adc::adc().R[0]),     // ADC result register
+      /* uint16_t  SOFF         SADDR offset                */ 0,                                // SADDR does not change
+      /* DmaSize   DSIZE        Destination size            */ dmaSize(buffer[0]),               // 16-bit read from DADDR
+      /* DmaModulo DMOD         Destination modulo          */ DmaModulo_Disabled,               // No modulo
+      /* DmaSize   SSIZE        Source size                 */ dmaSize(buffer[0]),               // 16-bit write to SADDR
+      /* DmaModulo SMOD         Source modulo               */ DmaModulo_Disabled,               // No modulo
+      /* uint32_t  NBYTES       Minor loop byte count       */ 2,                                // 2-bytes for each ADC DMA request
+      /* uint32_t  SLAST        Last SADDR adjustment       */ 0,                                // No adjustment as SADDR was unchanged
+      /* uint32_t  DADDR        Destination address         */ (uint32_t)(&buffer),              // Start of array for result
+      /* uint16_t  DOFF         DADDR offset                */ sizeof(buffer[0]),                // DADDR advances 2 bytes for each request
+      /* uint16_t  CITER        Major loop count            */ DMA_CITER_ELINKNO_ELINK(0)|       // No ELINK
+      /*                                                    */ sizeof(buffer)/sizeof(buffer[0]), // Number of requests to do
+      /* uint32_t  DLAST        Last DADDR adjustment       */ -sizeof(buffer),                  // Reset DADDR to start of array on completion
+      /* bool      START;       Channel Start               */ false,                            // Don't start (triggered by hardware)
+      /* bool      INTMAJOR;    Interrupt on major complete */ true,                             // Generate interrupt on completion of Major-loop
+      /* bool      INTHALF;     Interrupt on half complete  */ false,                            // No interrupt when half complete
+      /* bool      DREQ;        Disable Request             */ true,                             // Clear hardware request when complete major loop
+      /* bool      ESG;         Enable Scatter/Gather       */ false,                            // Disabled
+      /* bool      MAJORELINK;  Enable channel linking      */ false,                            // Disabled
+      /* bool      ACTIVE;      Channel Active              */ false,
+      /* bool      DONE;        Channel Done                */ false,
+      /* unsigned  MAJORLINKCH; Link Channel Number         */ 0,                                // N/A
+      /* DmaSpeed  BWC;         Bandwidth (speed) Control   */ DmaSpeed_NoStalls,                // Full speed
    };
 
    // Sequence not complete yet
@@ -154,6 +163,7 @@ static ErrorCode configureDma() {
 
    // Set callback (Interrupts are enabled in TCD)
    Dma0::setCallback(dmaChannelNum, dmaCallback);
+
    Dma0::enableNvicInterrupts(dmaChannelNum);
 
    // DMA triggered by ADC requests
@@ -168,14 +178,24 @@ static ErrorCode configureDma() {
    return E_NO_ERROR;
 }
 
+void startDma(DmaChannelNum dmaChannelNum) {
+   // Sequence not complete yet
+   complete = false;
+
+   // Enable requests from the channel
+   Dma0::enableRequests(dmaChannelNum);
+}
+
 /**
  * PIT callback
  *
  * Used for debug timing checks.
- * LED toggles on each PIT event
+ * LED toggles on each PIT event while DMA underway
  */
 void pitCallback() {
-   Led::toggle();
+   if (!complete) {
+      Led::toggle();
+   }
 }
 
 /*
@@ -187,21 +207,35 @@ void configurePit() {
    Pit::configure(PitDebugMode_Stop);
 
    PITChannel::setCallback(pitCallback);
+
    // Configure channel
    PITChannel::configure(1*ms, PitChannelIrq_Enable);
+   PITChannel::enableNvicInterrupts();
 }
 
 void testHardwareConversions() {
    configureAdc();
-   configureDma();
-   configurePit();
 
-   while (!complete) {
-      __asm__("nop");
+   // Allocate DMA channel to use
+   const DmaChannelNum dmaChannelNum = Dma0::allocateChannel();
+   if (dmaChannelNum == DmaChannelNum_None) {
+      console.writeln("Failed to allocate DMA channel");
+	  checkError();
    }
 
-   console.writeln("Completed Transfer");
-   console.writeArray(buffer, sizeof(buffer)/sizeof(buffer[0]));
+   configureDma(dmaChannelNum);
+   configurePit();
+
+   for(;;) {
+      console.writeln("Starting Transfer");
+      startDma(dmaChannelNum);
+      while (!complete) {
+         __asm__("nop");
+      }
+      console.writeln("Completed Transfer");
+      console.writeArray(buffer, sizeof(buffer)/sizeof(buffer[0]));
+      waitMS(1000);
+   }
 }
 
 int main() {

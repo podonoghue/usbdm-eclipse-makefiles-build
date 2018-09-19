@@ -43,35 +43,41 @@ static void dmaCallback(DmaChannelNum channel) {
    complete = true;
 }
 
+/**
+ * Base value for transmit data
+ */
 static constexpr uint32_t PUSH_BASE =
-      SPI_PUSHR_CONT(1)|
-      SPI_PUSHR_CTAS(0)|
-      SPI_PUSHR_EOQ(0)|
-      SPI_PUSHR_CTCNT(0)|
-      spiSelect;
+      SPI_PUSHR_CTAS(0)|   // CTAR 0
+      SPI_PUSHR_EOQ(0)|    // Not end of Queue
+      SPI_PUSHR_CTCNT(0)|  // Don't clear transfer counter
+      spiSelect;           // Peripheral to select
 
+/**
+ * Transmit Data + Control information.
+ * Continuously asserts peripheral select during transfer
+ */
 const uint32_t txBuffer[]= {
-      PUSH_BASE|SPI_PUSHR_TXDATA(1)|SPI_PUSHR_CTCNT(0),
-      PUSH_BASE|SPI_PUSHR_TXDATA(2),
-      PUSH_BASE|SPI_PUSHR_TXDATA(3),
-      PUSH_BASE|SPI_PUSHR_TXDATA(4),
-      PUSH_BASE|SPI_PUSHR_TXDATA(5),
-      PUSH_BASE|SPI_PUSHR_TXDATA(6),
-      PUSH_BASE|SPI_PUSHR_TXDATA(7),
-      PUSH_BASE|SPI_PUSHR_TXDATA(8),
-      PUSH_BASE|SPI_PUSHR_TXDATA(9),
-      PUSH_BASE|SPI_PUSHR_TXDATA(10),
-      PUSH_BASE|SPI_PUSHR_TXDATA(11),
-      PUSH_BASE|SPI_PUSHR_TXDATA(12),
-      PUSH_BASE|SPI_PUSHR_TXDATA(13),
-      (PUSH_BASE|SPI_PUSHR_TXDATA(14))&~SPI_PUSHR_CONT(1),
+      PUSH_BASE|SPI_PUSHR_CONT(1)|SPI_PUSHR_TXDATA(1),
+      PUSH_BASE|SPI_PUSHR_CONT(1)|SPI_PUSHR_TXDATA(2),
+      PUSH_BASE|SPI_PUSHR_CONT(1)|SPI_PUSHR_TXDATA(3),
+      PUSH_BASE|SPI_PUSHR_CONT(1)|SPI_PUSHR_TXDATA(4),
+      PUSH_BASE|SPI_PUSHR_CONT(1)|SPI_PUSHR_TXDATA(5),
+      PUSH_BASE|SPI_PUSHR_CONT(1)|SPI_PUSHR_TXDATA(6),
+      PUSH_BASE|SPI_PUSHR_CONT(1)|SPI_PUSHR_TXDATA(7),
+      PUSH_BASE|SPI_PUSHR_CONT(1)|SPI_PUSHR_TXDATA(8),
+      PUSH_BASE|SPI_PUSHR_CONT(1)|SPI_PUSHR_TXDATA(9),
+      PUSH_BASE|SPI_PUSHR_CONT(1)|SPI_PUSHR_TXDATA(10),
+      PUSH_BASE|SPI_PUSHR_CONT(1)|SPI_PUSHR_TXDATA(11),
+      PUSH_BASE|SPI_PUSHR_CONT(1)|SPI_PUSHR_TXDATA(12),
+      PUSH_BASE|SPI_PUSHR_CONT(1)|SPI_PUSHR_TXDATA(13),
+      PUSH_BASE|SPI_PUSHR_CONT(0)|SPI_PUSHR_TXDATA(14)|SPI_PUSHR_EOQ(1),
 };
 
 static uint8_t rxBuffer[sizeof(txBuffer)/sizeof(txBuffer[0])];
 static const uint8_t rxTestBuffer[sizeof(txBuffer)/sizeof(txBuffer[0])] = {1,2,3,4,5,6,7,8,9,10,11,12,13,14};
 
 /**
- * Configure DMA from Memory-to-UART
+ * Configure DMA from Memory-to-SPI-to-Memory
  */
 static void initDma(DmaChannelNum dmaTransmitChannel, DmaChannelNum dmaReceiveChannel) {
 
@@ -111,41 +117,67 @@ static void initDma(DmaChannelNum dmaTransmitChannel, DmaChannelNum dmaReceiveCh
     * |    CITER*NBYTES              |              - DMA_CSR_DREQ     = Clear hardware request at end of Major-loop
     * +------------------------------+              - DMA_CSR_START    = Start transfer. Used for software transfers. Automatically cleared.
     * @endverbatim
+    */
+   /**
+    * Structure to define the Transmit DMA transfer
     *
-    * Structure to define the DMA transfer
+    * Note: This uses a 32-bit transfer even though the transmit data is only 8-bit
     */
    static const DmaTcd txTcd {
-      /* uint32_t  SADDR  Source address        */ (uint32_t)(txBuffer),                     // Source array
-      /* uint16_t  SOFF   SADDR offset          */ sizeof(txBuffer[0]),                      // SADDR advances 1 element for each request
-      /* uint16_t  ATTR   Transfer attributes   */ dmaSSize(txBuffer[0])|                    // Read size for SADDR
-      /*                                        */ dmaDSize(SPI0->PUSHR),                 // Write size for DADDR
-      /* uint32_t  NBYTES Minor loop byte count */ sizeof(txBuffer[0]),                      // Total transfer in one minor-loop
-      /* uint32_t  SLAST  Last SADDR adjustment */ -sizeof(txBuffer),                        // Reset SADDR to start of array on completion
-      /* uint32_t  DADDR  Destination address   */ (uint32_t)(&SPI0->PUSHR),              // Destination is SPI PUSH data register
-      /* uint16_t  DOFF   DADDR offset          */ 0,                                        // DADDR doesn't change
-      /* uint16_t  CITER  Major loop count      */ DMA_CITER_ELINKNO_ELINK(0)|               // No ELINK
-      /*                                        */ ((sizeof(txBuffer))/sizeof(txBuffer[0])), // Transfer entire txBuffer
-      /* uint32_t  DLAST  Last DADDR adjustment */ 0,                                        // DADDR doesn't change
-      /* uint16_t  CSR    Control and Status    */ DMA_CSR_INTMAJOR(0)|                      // Generate interrupt on completion of Major-loop
-      /*                                        */ DMA_CSR_DREQ(1)|                          // Clear hardware request when complete major loop (non-stop)
-      /*                                        */ DMA_CSR_START(0),                         // Don't start (triggered by hardware)
+      /* uint32_t  SADDR        Source address              */ (uint32_t)(txBuffer),                     // Source array
+      /* uint16_t  SOFF         SADDR offset                */ sizeof(txBuffer[0]),                      // SADDR advances 1 element for each request
+      /* DmaSize   DSIZE        Destination size            */ dmaSize(SPI0->PUSHR),                     // 32-bit write to DADDR (PUSHR)
+      /* DmaModulo DMOD         Destination modulo          */ DmaModulo_Disabled,                       // No modulo
+      /* DmaSize   SSIZE        Source size                 */ dmaSize(txBuffer[0]),                     // 32-bit read from SADDR (buffer)
+      /* DmaModulo SMOD         Source modulo               */ DmaModulo_Disabled,                       // No modulo
+      /* uint32_t  NBYTES       Minor loop byte count       */ sizeof(txBuffer[0]),                      // Total transfer in one minor-loop
+      /* uint32_t  SLAST        Last SADDR adjustment       */ -sizeof(txBuffer),                        // Reset SADDR to start of array on completion
+      /* uint32_t  DADDR        Destination address         */ (uint32_t)(&SPI0->PUSHR),                 // Destination is SPI PUSH data register
+      /* uint16_t  DOFF         DADDR offset                */ 0,                                        // DADDR doesn't change
+      /* uint16_t  CITER        Major loop count            */ DMA_CITER_ELINKNO_ELINK(0)|               // No ELINK
+      /*                                                    */ ((sizeof(txBuffer))/sizeof(txBuffer[0])), // Transfer entire txBuffer
+      /* uint32_t  DLAST        Last DADDR adjustment       */ 0,                                        // DADDR doesn't change
+      /* bool      START;       Channel Start               */ false,                                    // Don't start (triggered by hardware)
+      /* bool      INTMAJOR;    Interrupt on major complete */ false,                                    // No interrupt
+      /* bool      INTHALF;     Interrupt on half complete  */ false,                                    // No interrupt
+      /* bool      DREQ;        Disable Request             */ true,                                     // Clear hardware request when complete major loop
+      /* bool      ESG;         Enable Scatter/Gather       */ false,                                    // Disabled
+      /* bool      MAJORELINK;  Enable channel linking      */ false,                                    // Disabled
+      /* bool      ACTIVE;      Channel Active              */ false,
+      /* bool      DONE;        Channel Done                */ false,
+      /* unsigned  MAJORLINKCH; Link Channel Number         */ 0,                                        // N/A
+      /* DmaSpeed  BWC;         Bandwidth (speed) Control   */ DmaSpeed_NoStalls,                        // Full speed
    };
 
+   /**
+    * Structure to define the Receive DMA transfer
+    *
+    * Note: The transfer size used here is 8-bits only
+    */
    static const DmaTcd rxTcd {
-      /* uint32_t  SADDR  Source address        */ (uint32_t)(&SPI0->POPR),               // Source is SPI POPR data register
-      /* uint16_t  SOFF   SADDR offset          */ 0,                                        // SADDR adoesn't change
-      /* uint16_t  ATTR   Transfer attributes   */ dmaSSize(rxBuffer[0])|                    // Read size for SADDR (read 1 byte, discards 3)
-      /*                                        */ dmaDSize(rxBuffer[0]),                    // Write size to DADDR
-      /* uint32_t  NBYTES Minor loop byte count */ sizeof(rxBuffer[0]),                      // Total transfer in one minor-loop
-      /* uint32_t  SLAST  Last SADDR adjustment */ 0,                                        // SADDR doesn't change
-      /* uint32_t  DADDR  Destination address   */ (uint32_t)(rxBuffer),                     // Destination array
-      /* uint16_t  DOFF   DADDR offset          */ sizeof(rxBuffer[0]),                      // DADDR advances 1 element for each request
-      /* uint16_t  CITER  Major loop count      */ DMA_CITER_ELINKNO_ELINK(0)|               // No ELINK
-      /*                                        */ ((sizeof(rxBuffer))/sizeof(rxBuffer[0])), // Transfer entire txBuffer
-      /* uint32_t  DLAST  Last DADDR adjustment */ -sizeof(rxBuffer),                        // Reset DADDR to start of array on completion
-      /* uint16_t  CSR    Control and Status    */ DMA_CSR_INTMAJOR(1)|                      // Generate interrupt on completion of Major-loop
-      /*                                        */ DMA_CSR_DREQ(1)|                          // Clear hardware request when complete major loop (non-stop)
-      /*                                        */ DMA_CSR_START(0),                         // Don't start (triggered by hardware)
+      /* uint32_t  SADDR        Source address              */ (uint32_t)(&SPI0->POPR),                  // Source is SPI POPR data register
+      /* uint16_t  SOFF         SADDR offset                */ 0,                                        // SADDR adoesn't change
+      /* DmaSize   DSIZE        Destination size            */ dmaSize(rxBuffer[0]),                     // 8-bit write to DADDR (buffer)
+      /* DmaModulo DMOD         Destination modulo          */ DmaModulo_Disabled,                       // No modulo
+      /* DmaSize   SSIZE        Source size                 */ DmaSize_8bit,                             // 8-bit read from SADDR (=POPR)
+      /* DmaModulo SMOD         Source modulo               */ DmaModulo_Disabled,                       // No modulo
+      /* uint32_t  NBYTES       Minor loop byte count       */ sizeof(rxBuffer[0]),                      // Total transfer in one minor-loop
+      /* uint32_t  SLAST        Last SADDR adjustment       */ 0,                                        // SADDR doesn't change
+      /* uint32_t  DADDR        Destination address         */ (uint32_t)(rxBuffer),                     // Destination array
+      /* uint16_t  DOFF         DADDR offset                */ sizeof(rxBuffer[0]),                      // DADDR advances 1 element for each request
+      /* uint16_t  CITER        Major loop count            */ DMA_CITER_ELINKNO_ELINK(0)|               // No ELINK
+      /*                                                    */ ((sizeof(rxBuffer))/sizeof(rxBuffer[0])), // Transfer entire txBuffer
+      /* uint32_t  DLAST        Last DADDR adjustment       */ -sizeof(rxBuffer),                        // Reset DADDR to start of array on completion
+      /* bool      START;       Channel Start               */ false,                                    // Don't start (triggered by hardware)
+      /* bool      INTMAJOR;    Interrupt on major complete */ true,                                     // Generate interrupt on completion of Major-loop
+      /* bool      INTHALF;     Interrupt on half complete  */ false,                                    // No interrupt
+      /* bool      DREQ;        Disable Request             */ true,                                     // Clear hardware request when complete major loop
+      /* bool      ESG;         Enable Scatter/Gather       */ false,                                    // Disabled
+      /* bool      MAJORELINK;  Enable channel linking      */ false,                                    // Disabled
+      /* bool      ACTIVE;      Channel Active              */ false,
+      /* bool      DONE;        Channel Done                */ false,
+      /* unsigned  MAJORLINKCH; Link Channel Number         */ 0,                                        // N/A
+      /* DmaSpeed  BWC;         Bandwidth (speed) Control   */ DmaSpeed_NoStalls,                        // Full speed
    };
 
    // Sequence not complete yet
@@ -224,27 +256,32 @@ int main() {
 
    Led::setOutput();
 
-   // DMA channel number to use (determines which PIT channel used)
+   // DMA channel number to use for transmission
    static const DmaChannelNum dmaTransmitChannel = Dma0::allocatePeriodicChannel();
    if (dmaTransmitChannel == DmaChannelNum_None) {
-      console.writeln("Failed to allocate Transmit DMA channel, rc= ").writeln(E_NO_RESOURCE);
-      __asm__("bkpt");
+      console.writeln("Failed to allocate Transmit DMA channel");
+      checkError();
    }
    console.write("Allocated Transmit DMA channel  #").writeln(dmaTransmitChannel);
 
-   // DMA channel number to use (determines which PIT channel used)
+   // DMA channel number to use for reception
    static const DmaChannelNum dmaReceiveChannel = Dma0::allocatePeriodicChannel();
    if (dmaReceiveChannel == DmaChannelNum_None) {
-      console.writeln("Failed to allocate Receive DMA channel, rc= ").writeln(E_NO_RESOURCE);
-      __asm__("bkpt");
+      console.writeln("Failed to allocate Receive DMA channel");
+      checkError();
    }
    console.write("Allocated Receive DMA channel  #").writeln(dmaReceiveChannel);
 
-   // Set up DMA transfer from memory -> SPI
+   // Set up DMA transfer from memory -> SPI -> memory
    initDma(dmaTransmitChannel, dmaReceiveChannel);
    configureSpi();
 
    for(;;) {
+      // Clear Rx buffer
+      memset(rxBuffer, 0, sizeof(rxBuffer));
+
+      console.writeln("Starting Transfer");
+
       // Start transfer
       startTransfer(dmaTransmitChannel, dmaReceiveChannel);
 
@@ -257,6 +294,7 @@ int main() {
          console.writeln("Failed Verify\n");
          __BKPT();
       }
+      console.writeln("Starting complete & verified");
    }
    return 0;
 }
