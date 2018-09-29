@@ -61,10 +61,10 @@ static volatile uint32_t data;
 /** Length of command/address/extended packet */
 static volatile unsigned packetLength;
 
-/** Count of bits transmitted in packet */
+/** Count of bits in packet transmitted so far */
 static volatile unsigned bitNum;
 
-/** Count of packet repeats */
+/** Count of packet repeats so far */
 static volatile unsigned repeatCount;
 
 /**
@@ -79,7 +79,7 @@ static void cmtCallback() {
    /** Time since start of current packet */
    static unsigned repeatTime;
 
-//   Led::toggle();
+   //   Led::toggle();
    if (Cmt::getStatus()) {
       if(bitNum==0) {
          if (repeatCount++ >= SONY_REPEATS) {
@@ -161,44 +161,90 @@ void waitUntilComplete() {
 }
 
 enum CmtAddress {
-   CmtAddress_tv             =1,
-   CmtAddress_vcr1           =2,
-   CmtAddress_vcr2           =3,
-   CmtAddress_laserDisk      =6,
-   CmtAddress_surroundSound  =12,
-   CmtAddress_cassette       =16,
-   CmtAddress_cdPlayer       =17,
-   CmtAddress_equalizer      =18,
+   CmtAddress_tv             = 1,
+   CmtAddress_vcr1           = 2,
+   CmtAddress_teletext       = 3,
+   CmtAddress_Widescreen     = 4,
+   CmtAddress_laserDisk      = 6,
+   CmtAddress_vcr2           = 7,
+   CmtAddress_vcr3           = 11,
+   CmtAddress_surroundSound  = 12,
+   CmtAddress_cassette       = 16,
+   CmtAddress_cdPlayer       = 17,
+   CmtAddress_equalizer      = 18,
+   CmtAddress_dvd            = 26,
+   //   CmtAddress_TV_Digital_Effects_15_bit            = 0xA4   ,
+   //   CmtAddress_PlayStation_2_DVD_20_bit             = 0x093A ,
+   //   CmtAddress_PlayStation_2_PS2_20_bit             = 0x1B5A ,
 };
 
 enum CmtCommand {
-   CmtCommand_digit0         =  0,
-   CmtCommand_digit1         =  1,
-   CmtCommand_digit2         =  2,
-   CmtCommand_digit3         =  3,
-   CmtCommand_digit4         =  4,
-   CmtCommand_digit5         =  5,
-   CmtCommand_digit6         =  6,
-   CmtCommand_digit7         =  7,
-   CmtCommand_digit8         =  8,
-   CmtCommand_digit9         =  9,
-   CmtCommand_channelUp      = 16,
-   CmtCommand_channelDown    = 17,
-   CmtCommand_volumeUp       = 18,
-   CmtCommand_volumeDown     = 19,
-   CmtCommand_mute           = 20,
-   CmtCommand_power          = 21,
-   CmtCommand_reset          = 22,
-   CmtCommand_audioMode      = 23,
-   CmtCommand_contrastUp     = 24,
-   CmtCommand_contrastDown   = 25,
-   CmtCommand_colourUp       = 26,
-   CmtCommand_colourDown     = 27,
-   CmtCommand_brightnessUp   = 30,
-   CmtCommand_brightnessDown = 31,
-   CmtCommand_balanceLeft    = 38,
-   CmtCommand_balanceRight   = 39,
-   CmtCommand_standby        = 47,
+   CmtCommand_digit1                       =  0,
+   CmtCommand_digit2                       =  1,
+   CmtCommand_digit3                       =  2,
+   CmtCommand_digit4                       =  3,
+   CmtCommand_digit5                       =  4,
+   CmtCommand_digit6                       =  5,
+   CmtCommand_digit7                       =  6,
+   CmtCommand_digit8                       =  7,
+   CmtCommand_digit9                       =  8,
+   CmtCommand_digit0                       =  9,
+   CmtCommand_enter                        = 11,
+   CmtCommand_channelUp                    = 16,
+   CmtCommand_channelDown                  = 17,
+   CmtCommand_volumeUp                     = 18,
+   CmtCommand_volumeDown                   = 19,
+   CmtCommand_mute                         = 20,
+   CmtCommand_power                        = 21,
+   CmtCommand_resetTv                      = 22,
+   CmtCommand_audioMode                    = 23,
+   CmtCommand_contrastUp                   = 24,
+   CmtCommand_contrastDown                 = 25,
+   CmtCommand_colourUp                     = 26,
+   CmtCommand_colourDown                   = 27,
+   CmtCommand_brightnessUp                 = 30,
+   CmtCommand_brightnessDown               = 31,
+   CmtCommand_sharpUp                      = 32,
+   CmtCommand_sharpDown                    = 33,
+   CmtCommand_selectTvTuner                = 36,
+   CmtCommand_cycleAuxillaryExternalModes  = 37,
+   CmtCommand_balanceLeft                  = 38,
+   CmtCommand_balanceRight                 = 39,
+   CmtCommand_surroundOnOff                = 41,
+   CmtCommand_auxAnt                       = 42,
+   CmtCommand_standby                      = 47,
+
+   CmtCommand_timeDisplay                  = 48,
+   CmtCommand_sleepTimer                   = 54,
+   CmtCommand_channelDisplay               = 58,
+   CmtCommand_channelJump                  = 59,
+   CmtCommand_teletextMode                 = 63,
+   CmtCommand_selectInputVideo_1           = 64,
+   CmtCommand_selectInputVideo_2           = 65,
+   CmtCommand_selectInputVideo_3           = 66,
+   CmtCommand_noiseReductionOnOff          = 74,
+   CmtCommand_cableBroadcast               = 78,
+   CmtCommand_notchFilterOnOff             = 79,
+   CmtCommand_pipChannelUp                 = 88,
+   CmtCommand_pipChannelDown               = 89,
+   CmtCommand_pipOn                        = 91,
+   CmtCommand_FreezeScreen                 = 92,
+   CmtCommand_pipPosition                  = 94,
+   CmtCommand_pipSwap                      = 95,
+   CmtCommand_guide                        = 96,
+   CmtCommand_videoSetup                   = 97,
+   CmtCommand_AudioSetup                   = 98,
+   CmtCommand_ExitSetup                    = 99,
+   CmtCommand_AutoProgram                  = 107,
+   CmtCommand_TrebleUp                     = 112,
+   CmtCommand_TrebleDown                   = 113,
+   CmtCommand_BassUp                       = 114,
+   CmtCommand_BassDown                     = 115,
+   CmtCommand_PlusKey                      = 116,
+   CmtCommand_MinusKey                     = 117,
+   CmtCommand_AddChannel                   = 120,
+   CmtCommand_DeleteChannel                = 121,
+   CmtCommand_TrinitoneOnOff               = 125,
 };
 
 /**
