@@ -21,7 +21,7 @@ using namespace USBDM;
 // Connection - change as required
 using Led         = GpioA<2, ActiveLow>;  // = PTA2 = D9 = Blue LED
 using Adc         = Adc0;
-using AdcChannel  = Adc0Channel<0>;
+using AdcChannel  = Adc::Channel<0>;
 
 /**
  * ADC callback

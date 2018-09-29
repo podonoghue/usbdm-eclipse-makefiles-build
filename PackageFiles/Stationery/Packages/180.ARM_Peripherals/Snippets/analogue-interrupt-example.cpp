@@ -16,9 +16,9 @@ using namespace USBDM;
  */
 
 // Connection mapping - change as required
-// (ch(19) = light sensor on FRDM-K20
-using adc        = Adc0;
-using adcChannel = Adc0Channel<19>;
+// (ADC Ch(19) = light sensor on FRDM-K20
+using Adc        = Adc0;
+using AdcChannel = Adc::Channel<19>;
 
 /**
  * NOTE:  This is not a sensible approach
@@ -26,7 +26,7 @@ using adcChannel = Adc0Channel<19>;
  */
 void handler(uint32_t value, int) {
    // Start next conversion
-   adcChannel::startConversion();
+   AdcChannel::startConversion();
    value = value/10;
    for (uint i=0; i<75; i++) {
       if (i<value) {
@@ -40,19 +40,19 @@ int main(void) {
    console.writeln("Starting");
 
    // Enable and configure ADC
-   adc::configure(AdcResolution_8bit_se);
+   Adc::configure(AdcResolution_8bit_se);
 
    // Calibrate before use
-   adc::calibrate();
+   Adc::calibrate();
 
    // Note: Setting callback affects all channels on that ADC
-   adc::setCallback(handler);
+   Adc::setCallback(handler);
 
    // Check for error so far
    checkError();
 
    // Start a conversion
-   adcChannel::startConversion();
+   AdcChannel::startConversion();
 
    for(;;) {
    }

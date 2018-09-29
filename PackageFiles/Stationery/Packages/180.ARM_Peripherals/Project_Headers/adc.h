@@ -226,6 +226,22 @@ private:
    AdcBase(PcrBase&&) = delete;
 
 public:
+   /** Class to static check channel pin mapping is valid */
+   template<class Info, int channel> class CheckSignal {
+      static_assert((channel<Info::numSignals),
+            "Non-existent ADC channel - Check Configure.usbdm for available channels");
+      static_assert((channel>=Info::numSignals)||(Info::info[channel].gpioBit != UNMAPPED_PCR),
+            "ADC channel is not mapped to a pin - Modify Configure.usbdm");
+      static_assert((channel>=Info::numSignals)||(Info::info[channel].gpioBit != INVALID_PCR),
+            "ADC channel doesn't exist in this device/package - Check Configure.usbdm for available channels");
+      static_assert((channel>=Info::numSignals)||((Info::info[channel].gpioBit == UNMAPPED_PCR)||(Info::info[channel].gpioBit == INVALID_PCR)||(Info::info[channel].gpioBit >= 0)),
+            "Illegal ADC Channel - Check Configure.usbdm for available channels");
+   public:
+      /** Dummy function to allow convenient in-line checking */
+      static constexpr void check() {}
+   };
+
+public:
    /** Callback to catch unhandled interrupt */
    static void unhandledCallback(uint32_t, int) {
       setAndCheckErrorCode(E_NO_HANDLER);
@@ -638,99 +654,98 @@ protected:
       return (uint16_t)adc().R[0];
    };
 
-};
-
-template<class Info> ADCCallbackFunction AdcBase_T<Info>::fCallback = AdcBase::unhandledCallback;
-
-/**
- * Template class representing an ADC channel.
- *
- * Example
- * @code
- * // Instantiate the ADC channel (for ADC0 channel 6)
- * using Adc0_ch6 = USBDM::AdcChannel_T<Adc0Info, 6>;
- *
- * // Set ADC resolution
- * Adc0_ch6::setMode(AdcResolution_16bit_se);
- *
- * // Read ADC value
- * uint32_t value = Adc0_ch6::readAnalogue();
- * @endcode
- *
- * @tparam info    Table of information describing ADC
- * @tparam channel ADC channel
- */
-template<class Info, int channel>
-class AdcChannel_T : CheckSignal<Info, channel> {
-
 public:
-   using Pcr = PcrTable_T<Info, channel>;
-
-   /** Allow convenient access to owning ADC */
-   using Adc =  AdcBase_T<Info>;
-
-   /** Information about this ADC */
-   using AdcInfo = Info;
-
-   /** Channel number */
-   static constexpr int CHANNEL=channel;
-
    /**
-    * Configure the pin associated with this ADC channel.
-    * The pin is in analogue mode so no PCR settings are active.
-    * This function is of use if mapAllPins and mapAllPinsOnEnable are not selected in USBDM configuration.
-    */
-   static void setInput() {
-      // Map pin to ADC
-      Pcr::setPCR(Info::info[channel].pcrValue);
-   }
-
-   /**
-    * Enables hardware trigger mode of operation and configures a channel.
+    * Template class representing an ADC channel.
     *
-    * @param[in] adcPretrigger   Hardware pre-trigger to use for this channel.\n
-    *                            This corresponds to pre-triggers in the PDB channels and SC1[n]/R[n] register selection
-    * @param[in] adcInterrupt    Whether to generate an interrupt when each conversion completes
-    */
-   static void enableHardwareConversion(AdcPretrigger adcPretrigger, AdcInterrupt adcInterrupt=AdcInterrupt_disable) {
-      AdcBase_T<Info>::enableHardwareConversion(channel|adcInterrupt, adcPretrigger);
-   }
-
-#ifdef ADC_SC2_DMAEN
-   /**
-    * Enables hardware trigger mode of operation and configures a channel.
+    * Example
+    * @code
+    * // Instantiate the ADC channel (for ADC0 channel 6)
+    * using Adc0_ch6 = USBDM::AdcChannel_T<Adc0Info, 6>;
     *
-    * @param[in] adcPretrigger   Hardware pre-trigger to use for this channel\n
-    *                            This corresponds to pre-triggers in the PDB channels and SC1[n]/R[n] register selection
-    * @param[in] adcInterrupt    Whether to generate an interrupt when each conversion completes
-    * @param[in] adcDma          Whether to generate a DMA request when each conversion completes
-    */
-   static void enableHardwareConversion(AdcPretrigger adcPretrigger, AdcInterrupt adcInterrupt, AdcDma adcDma) {
-      AdcBase_T<Info>::enableHardwareConversion(channel|adcInterrupt, adcPretrigger, adcDma);
-   }
-#endif
-
-   /**
-    * Initiates a conversion but does not wait for it to complete.
-    * Intended for use with interrupts so ADC interrupts are enabled
+    * // Set ADC resolution
+    * Adc0_ch6::setMode(AdcResolution_16bit_se);
     *
-    * @param[in] adcInterrupt   Determines if an interrupt is generated when conversions are complete
-    * @param[in] adcContinuous  Select continuous conversion mode
+    * // Read ADC value
+    * uint32_t value = Adc0_ch6::readAnalogue();
+    * @endcode
+    *
+    * @tparam info    Table of information describing ADC
+    * @tparam channel ADC channel
     */
-   static __attribute__((always_inline)) void startConversion(AdcInterrupt adcInterrupt=AdcInterrupt_disable, AdcContinuous adcContinuous=AdcContinuous_Disabled) {
-      AdcBase_T<Info>::startConversion(channel|adcInterrupt, adcContinuous);
+   template<int channel>
+   class Channel {
+
+      AdcBase::CheckSignal<Info, channel> check;
+
+   public:
+      using Pcr = PcrTable_T<Info, channel>;
+
+      /** Allow convenient access to owning ADC */
+      using Adc =  AdcBase_T<Info>;
+
+      /** Information about this ADC */
+      using AdcInfo = Info;
+
+      /** Channel number */
+      static constexpr int CHANNEL=channel;
+
+      /**
+       * Configure the pin associated with this ADC channel.
+       * The pin is in analogue mode so no PCR settings are active.
+       * This function is of use if mapAllPins and mapAllPinsOnEnable are not selected in USBDM configuration.
+       */
+      static void setInput() {
+         // Map pin to ADC
+         Pcr::setPCR(Info::info[channel].pcrValue);
+      }
+
+      /**
+       * Enables hardware trigger mode of operation and configures a channel.
+       *
+       * @param[in] adcPretrigger   Hardware pre-trigger to use for this channel.\n
+       *                            This corresponds to pre-triggers in the PDB channels and SC1[n]/R[n] register selection
+       * @param[in] adcInterrupt    Whether to generate an interrupt when each conversion completes
+       */
+      static void enableHardwareConversion(AdcPretrigger adcPretrigger, AdcInterrupt adcInterrupt=AdcInterrupt_disable) {
+         AdcBase_T<Info>::enableHardwareConversion(channel|adcInterrupt, adcPretrigger);
+      }
+
+   #ifdef ADC_SC2_DMAEN
+      /**
+       * Enables hardware trigger mode of operation and configures a channel.
+       *
+       * @param[in] adcPretrigger   Hardware pre-trigger to use for this channel\n
+       *                            This corresponds to pre-triggers in the PDB channels and SC1[n]/R[n] register selection
+       * @param[in] adcInterrupt    Whether to generate an interrupt when each conversion completes
+       * @param[in] adcDma          Whether to generate a DMA request when each conversion completes
+       */
+      static void enableHardwareConversion(AdcPretrigger adcPretrigger, AdcInterrupt adcInterrupt, AdcDma adcDma) {
+         AdcBase_T<Info>::enableHardwareConversion(channel|adcInterrupt, adcPretrigger, adcDma);
+      }
+   #endif
+
+      /**
+       * Initiates a conversion but does not wait for it to complete.
+       * Intended for use with interrupts so ADC interrupts are enabled
+       *
+       * @param[in] adcInterrupt   Determines if an interrupt is generated when conversions are complete
+       * @param[in] adcContinuous  Select continuous conversion mode
+       */
+      static __attribute__((always_inline)) void startConversion(AdcInterrupt adcInterrupt=AdcInterrupt_disable, AdcContinuous adcContinuous=AdcContinuous_Disabled) {
+         AdcBase_T<Info>::startConversion(channel|adcInterrupt, adcContinuous);
+      };
+
+      /**
+       * Initiates a conversion and waits for it to complete.
+       *
+       * @return - the result of the conversion
+       */
+      static __attribute__((always_inline)) uint32_t readAnalogue() {
+         // Zero extended to 32 bits
+         return (uint32_t)(uint16_t)Adc::readAnalogue(channel);
+      };
    };
-
-   /**
-    * Initiates a conversion and waits for it to complete.
-    *
-    * @return - the result of the conversion
-    */
-   static __attribute__((always_inline)) uint32_t readAnalogue() {
-      // Zero extended to 32 bits
-      return (uint32_t)(uint16_t)Adc::readAnalogue(channel);
-   };
-};
 
 #ifdef ADC_SC1_DIFF_MASK
 /**
@@ -751,8 +766,12 @@ public:
  * @tparam info    Table of information describing ADC
  * @tparam channel ADC channel
  */
-template<class Info, int channel>
-class AdcDiffChannel_T : private CheckSignal<typename Info::InfoDP, channel>, CheckSignal<typename Info::InfoDM, channel> {
+template<int channel>
+class DiffChannel {
+
+private:
+   AdcBase::CheckSignal<typename Info::InfoDP, channel> checkPos;
+   AdcBase::CheckSignal<typename Info::InfoDM, channel> checkNeg;
 
 public:
    /** PCR associated with plus channel */
@@ -816,7 +835,16 @@ public:
 };
 #endif
 
+};
+
+template<class Info> ADCCallbackFunction AdcBase_T<Info>::fCallback = AdcBase::unhandledCallback;
+
 #ifdef USBDM_ADC0_IS_DEFINED
+/**
+ * Class representing ADC0
+ */
+class Adc0 : public AdcBase_T<Adc0Info> {};
+
 /**
  * Template class representing an ADC0 channel
  *
@@ -833,9 +861,11 @@ public:
  * @endcode
  *
  * @tparam channel ADC channel
+ *
+ * @deprecated
  */
 template<int channel>
-class Adc0Channel : public AdcChannel_T<Adc0Info, channel> {};
+class Adc0Channel : public Adc0::Channel<channel> {};
 
 #ifdef USBDM_ADC0_INFODM_IS_DEFINED
 /**
@@ -854,18 +884,21 @@ class Adc0Channel : public AdcChannel_T<Adc0Info, channel> {};
  * @endcode
  *
  * @tparam channel ADC channel
+ *
+ * @deprecated
  */
 template<int channel>
-class Adc0DiffChannel : public AdcDiffChannel_T<Adc0Info, channel> {};
+class Adc0DiffChannel : public Adc0::DiffChannel<channel> {};
 #endif
 
-/**
- * Class representing ADC0
- */
-class Adc0 : public AdcBase_T<Adc0Info> {};
 #endif
 
 #ifdef USBDM_ADC1_IS_DEFINED
+/**
+ * Class representing ADC1
+ */
+class Adc1 : public AdcBase_T<Adc1Info> {};
+
 /**
  * Template class representing an ADC1 channel
  *
@@ -882,9 +915,11 @@ class Adc0 : public AdcBase_T<Adc0Info> {};
  * @endcode
  *
  * @tparam channel ADC channel
+ *
+ * @deprecated
  */
 template<int channel>
-class Adc1Channel : public AdcChannel_T<Adc1Info, channel> {};
+class Adc1Channel : public Adc1::Channel<channel> {};
 
 #ifdef USBDM_ADC1_INFODM_IS_DEFINED
 /**
@@ -903,15 +938,12 @@ class Adc1Channel : public AdcChannel_T<Adc1Info, channel> {};
  * @endcode
  *
  * @tparam channel ADC channel
+ *
+ * @deprecated
  */
 template<int channel>
-class Adc1DiffChannel : public AdcDiffChannel_T<Adc1Info, channel> {};
+class Adc1DiffChannel : public Adc1::DiffChannel_T<channel> {};
 #endif
-
-/**
- * Class representing ADC1
- */
-class Adc1 : public AdcBase_T<Adc1Info> {};
 #endif
 
 /**

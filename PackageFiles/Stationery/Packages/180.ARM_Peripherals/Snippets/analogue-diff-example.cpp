@@ -22,7 +22,7 @@ using namespace USBDM;
 using Adc        = Adc0;
 
 // ADC channel to use
-using AdcChannel = Adc0DiffChannel<0>;
+using AdcChannel = Adc::DiffChannel<0>;
 
 int main(void) {
 
