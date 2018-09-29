@@ -406,7 +406,6 @@ public:
    /**
     *  Use a PIT channel to implement a busy-wait delay
     *
-    *  @param[in]  channel   Channel to use
     *  @param[in]  interval  Interval to wait in timer ticks (usually bus clock period)
     *
     *  @note Function doesn't return until interval has expired
