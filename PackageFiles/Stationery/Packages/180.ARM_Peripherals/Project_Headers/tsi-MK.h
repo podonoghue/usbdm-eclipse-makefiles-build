@@ -135,6 +135,27 @@ template <class Info>
 class TsiBase_T {
 
 protected:
+   /**
+    * Used to suppress error messages that are already checked
+    * by static assertions in a more meaningful manner.
+    *
+    * @return Unchanged validate channel number or 0
+    */
+   static constexpr int limitElectrode(int electrode) {
+      return (electrode>=Info::numSignals)?0:electrode;
+   }
+
+   /** Class to static check channel pin mapping is valid */
+   template<int electrodeNum> class CheckSignal {
+      static_assert((electrodeNum<Info::numSignals), "Non-existent TSI Input - Modify Configure.usbdm");
+      static_assert((electrodeNum>=Info::numSignals)||(Info::info[electrodeNum].gpioBit != UNMAPPED_PCR), "TSI Input is not mapped to a pin - Modify Configure.usbdm");
+      static_assert((electrodeNum>=Info::numSignals)||(Info::info[electrodeNum].gpioBit != INVALID_PCR),  "TSI Input doesn't exist in this device/package - Modify Configure.usbdm");
+      static_assert((electrodeNum>=Info::numSignals)||((Info::info[electrodeNum].gpioBit == UNMAPPED_PCR)||(Info::info[electrodeNum].gpioBit == INVALID_PCR)||(Info::info[electrodeNum].gpioBit >= 0)), "Illegal TSI Input - Modify Configure.usbdm");
+   public:
+      /** Dummy function to allow convenient in-line checking */
+      static constexpr void check() {}
+   };
+
    /** Callback function for ISR */
    static TSICallbackFunction callback;
 
@@ -208,8 +229,11 @@ public:
     */
    template<int electrodeNum>
    static void setInput() {
+      // Check if electrode mapped to pin
+      CheckSignal<electrodeNum>::check();
+
       // Configure associated pin as analogue input
-      PcrTable_T<Info, electrodeNum>::setPCR(PinMux_Analog);
+      PcrTable_T<Info, limitElectrode(electrodeNum)>::setPCR(PinMux_Analog);
    }
 
    /**

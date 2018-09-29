@@ -96,6 +96,17 @@ template <class Info>
 class LlwuBase_T {
 
 protected:
+   /** Class to static check channel pin mapping is valid */
+   template<class Info, LlwuPin llwuPin> class CheckSignal {
+      static_assert((llwuPin<Info::numSignals), "Non-existent LLWU Input - Modify Configure.usbdm");
+      static_assert((llwuPin>=Info::numSignals)||(Info::info[llwuPin].gpioBit != UNMAPPED_PCR), "LLWU Input is not mapped to a pin - Modify Configure.usbdm");
+      static_assert((llwuPin>=Info::numSignals)||(Info::info[llwuPin].gpioBit != INVALID_PCR),  "LLWU Input doesn't exist in this device/package - Modify Configure.usbdm");
+      static_assert((llwuPin>=Info::numSignals)||((Info::info[llwuPin].gpioBit == UNMAPPED_PCR)||(Info::info[llwuPin].gpioBit == INVALID_PCR)||(Info::info[llwuPin].gpioBit >= 0)), "Illegal LLWU Input - Modify Configure.usbdm");
+   public:
+      /** Dummy function to allow convenient in-line checking */
+      static constexpr void check() {}
+   };
+
    /** Callback function for ISR */
    static LLWUCallbackFunction callback;
 
@@ -415,9 +426,11 @@ public:
     * This will map the pin to the LLWU function (mux value) \n
     * The clock to the port will be enabled before changing the PCR
     *
-    * @param[in] pinPull          One of PinPull_None, PinPull_Up, PinPull_Down
-    * @param[in] pinAction        One of PinAction_None, etc (defaults to PinAction_None)
-    * @param[in] pinFilter        One of PinFilter_None, PinFilter_Passive (defaults to PinFilter_None)
+    * @tparam llwuPin          LLWU pin to configure e.g. LlwuPin_Pte1
+    *
+    * @param[in]  pinPull          One of PinPull_None, PinPull_Up, PinPull_Down
+    * @param[in]  pinAction        One of PinAction_None, etc (defaults to PinAction_None)
+    * @param[in]  pinFilter        One of PinFilter_None, PinFilter_Passive (defaults to PinFilter_None)
     */
    template<LlwuPin llwuPin>
    static void setInput(
@@ -425,6 +438,7 @@ public:
          PinAction         pinAction         = PinAction_None,
          PinFilter         pinFilter         = PinFilter_None
          ) {
+      LlwuBase_T::CheckSignal<Info, llwuPin>::check();
       using Pcr = PcrTable_T<Info, llwuPin>;
       Pcr::setPCR(pinPull|pinAction|pinFilter|(Info::info[llwuPin].pcrValue&PORT_PCR_MUX_MASK));
    }
