@@ -17,25 +17,31 @@ using namespace USBDM;
 /**
  * This example uses FTM interrupts.
  *
- * It is necessary enable these in Configure.usbdmProject under the "Peripheral Parameters"->FTM tab
+ * It is necessary to enable these in Configure.usbdmProject
+ * under the "Peripheral Parameters"->FTM tab.
  * Select irqHandlingMethod option (Class Method - Software ...)
  */
 
-// Timer being used - change as required
-// Could also access as TimerChannel::Ftm
+/**
+ * Timer being used - change as required
+ * Could also access as TimerChannel::Ftm
+ */
 using Timer = Ftm0;
 
-// Timer channel for output - change as required
-using TimerChannel = Ftm0Channel<7>;
+/// Timer channel for output - change as required
+using TimerChannel = Timer::Channel<7>;
 
-//static_assert(std::is_same<TimerChannel::Ftm,Timer>::value, "Timer channel must belong to same Timer!");
-
-// Half-period for timer in ticks
-// This variable is shared with the interrupt routine
+/**
+ * Half-period for timer in ticks.
+ * This variable is shared with the interrupt routine
+ */
 static volatile uint16_t timerHalfPeriodInTicks;
 
-// Waveform period to generate
+/// Waveform period to generate
 static constexpr float WAVEFORM_PERIOD = 100*ms;
+
+/// Maximum OC interval - the OC interval should not exceed this value.
+static constexpr float MAX_OC_INTERVAL = (1.1 * WAVEFORM_PERIOD)/2;
 
 /**
  * Interrupt handler for Timer interrupts
@@ -53,6 +59,11 @@ static void ftmCallback(uint8_t status) {
    }
 }
 
+/**
+ * Demonstration main-line
+ *
+ * @return Not used.
+ */
 int main() {
    /**
     * FTM channel set as Output compare with pin Toggle mode and using a callback function
@@ -63,9 +74,9 @@ int main() {
          FtmClockSource_System,  // Bus clock usually
          FtmPrescale_1);         // The prescaler will be re-calculated later
 
-   // Set IC/OC measurement period to longest interval + 10%
+   // Set IC/OC measurement period to longest interval
    // This adjusts the prescaler value but does not change the clock source
-   Timer::setMeasurementPeriod(1.1*WAVEFORM_PERIOD/2.0);
+   Timer::setMeasurementPeriod(MAX_OC_INTERVAL);
 
    // Calculate half-period in timer ticks
    // Must be done after timer clock configuration (above)

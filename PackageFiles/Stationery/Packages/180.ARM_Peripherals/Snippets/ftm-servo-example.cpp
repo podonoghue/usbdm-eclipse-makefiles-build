@@ -21,6 +21,8 @@ template <class FtmChannel>
 class Servo {
 
 private:
+   using Timer = typename FtmChannel::Ftm;
+
    // Assumes servo is controlled by a [1,2] millisecond pulse repeated every 20 millisecond
    static constexpr float SERVO_PERIOD = 20.0 * ms;
    static constexpr float SERVO_MIN    =  1.0 * ms;
@@ -32,9 +34,10 @@ public:
     * Position is centred
     */
    static void enable() {
-      FtmChannel::enable();
-      FtmChannel::setDriveStrength(PinDriveStrength_High);
-      FtmChannel::setPeriod(SERVO_PERIOD);
+      Timer::configure(FtmMode_LeftAlign, FtmClockSource_System);
+      Timer::setPeriod(SERVO_PERIOD, true);
+      FtmChannel::configure(FtmChMode_PwmHighTruePulses);
+      FtmChannel::setOutput(PinDriveStrength_High);
       FtmChannel::setHighTime((SERVO_MIN+SERVO_MAX)/2);
    }
 

@@ -19,7 +19,7 @@ using namespace USBDM;
 
 // Connection mapping - change as required
 using Timer = $(demo.cpp.ftm:Ftm0);
-using Led   = $(demo.cpp.pwm.led1:Ftm0Channel<7>);
+using Led   = $(demo.cpp.pwm.led1:Timer::Channel<7>);
 
 int main() {
 

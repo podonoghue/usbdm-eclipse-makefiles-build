@@ -13,6 +13,7 @@
 #include "hardware.h"
 
 using namespace USBDM;
+
 /**
  * This example uses FTM interrupts.
  *
@@ -20,19 +21,27 @@ using namespace USBDM;
  * under the "Peripheral Parameters"->FTM tab.
  * Select irqHandlingMethod option (Class Method - Software ...)
  */
-// Timer being used - change as required
-// Could also access as TimerChannel::Ftm
+
+/**
+ * Timer being used - change as required
+ * Could also access as TimerChannel::Ftm
+ */
 using Timer = Ftm0;
 
-// Timer channel for measurement - change as required
-using TimerChannel = Ftm0Channel<7>;
+/// Timer channel for measurement - change as required
+using TimerChannel = Timer::Channel<7>;
 
-// Period between input edges in ticks
-// This variable is shared with the interrupt routine
+/**
+ * Period between input edges in ticks.
+ * This variable is shared with the interrupt routine
+ */
 static volatile uint16_t periodInTicks = 0;
 
 // Maximum measurement time
-static const float MEASUREMENT_TIME = 100*ms;
+static constexpr float MEASUREMENT_TIME = 100*ms;
+
+/// Maximum IC interval - the IC interval betweem measurement events should not exceed this value.
+static constexpr float MAX_IC_INTERVAL = (1.1 * MEASUREMENT_TIME);
 
 using Debug = GpioA<12>;
 
@@ -55,6 +64,11 @@ static void ftmCallback(uint8_t status) {
    Debug::clear();
 }
 
+/**
+ * Demonstration main-line
+ *
+ * @return Not used.
+ */
 int main() {
    console.writeln("Starting");
 
@@ -69,9 +83,9 @@ int main() {
          FtmClockSource_System,  // Bus clock usually
          FtmPrescale_1);         // The prescaler will be re-calculated later
 
-   // Set IC/OC measurement period to accommodate maximum measurement + 10%
+   // Set IC/OC measurement period to accommodate maximum measurement
    // This adjusts the prescaler value but does not change the clock source
-   Timer::setMeasurementPeriod(1.1*MEASUREMENT_TIME);
+   Timer::setMeasurementPeriod(MAX_IC_INTERVAL);
 
    // Set callback function
    Timer::setChannelCallback(ftmCallback);
@@ -96,6 +110,7 @@ int main() {
    // Check if configuration failed
    USBDM::checkError();
 
+   // Loop here forever reporting values from ISR (call-back)
    for(;;) {
       uint16_t tPeriodInTicks;
       // Access shared data in protected fashion
