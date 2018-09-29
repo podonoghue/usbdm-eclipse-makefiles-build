@@ -601,6 +601,25 @@ public:
 template<class Info>
 class SpiBase_T : public Spi {
 
+public:
+   /** Get reference to GPIO hardware as struct */
+   static volatile SPI_Type &spiPtr() { return Info::spi(); }
+
+   /** Get base address of SPI hardware as uint32_t */
+   static constexpr uint32_t spiBase() { return Info::baseAddress(); }
+   /** Get base address of SPI.MCR register as uint32_t */
+   static constexpr uint32_t spiMCR() { return spiBase() + offsetof(SPI_Type, MCR); }
+   /** Get base address of SPI.CR register as uint32_t */
+   static constexpr uint32_t spiCR() { return spiBase() + offsetof(SPI_Type, TCR); }
+   /** Get base address of SPI.CTAR[n] register as uint32_t */
+   static constexpr uint32_t spiCTAR(unsigned index) { return spiBase() + offsetof(SPI_Type, CTAR[index]); }
+   /** Get base address of SPI.SR register as uint32_t */
+   static constexpr uint32_t spiSR() { return spiBase() + offsetof(SPI_Type, SR); }
+   /** Get base address of SPI.PUSHR register as uint32_t */
+   static constexpr uint32_t spiPUSHR() { return spiBase() + offsetof(SPI_Type, PUSHR); }
+   /** Get base address of SPI.POPR register as uint32_t */
+   static constexpr uint32_t spiPOPR() { return spiBase() + offsetof(SPI_Type, POPR); }
+
 protected:
    /** Callback function for ISR */
    static SpiCallbackFunction callback;
@@ -779,9 +798,9 @@ public:
 
 #ifdef DEBUG_BUILD
       // Check pin assignments
-      static_assert(Info::info[0].gpioBit != UNMAPPED_PCR, "SPIx_SCK has not been assigned to a pin");
-      static_assert(Info::info[1].gpioBit != UNMAPPED_PCR, "SPIx_SIN has not been assigned to a pin");
-      static_assert(Info::info[2].gpioBit != UNMAPPED_PCR, "SPIx_SOUT has not been assigned to a pin");
+      static_assert(Info::info[0].gpioBit != UNMAPPED_PCR, "SPIx_SCK has not been assigned to a pin - Modify Configure.usbdm");
+      static_assert(Info::info[1].gpioBit != UNMAPPED_PCR, "SPIx_SIN has not been assigned to a pin - Modify Configure.usbdm");
+      static_assert(Info::info[2].gpioBit != UNMAPPED_PCR, "SPIx_SOUT has not been assigned to a pin - Modify Configure.usbdm");
 #endif
 
       if (Info::mapPinsOnEnable) {

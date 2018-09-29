@@ -377,6 +377,15 @@ typedef void (*UARTCallbackFunction)(uint8_t status);
  */
 template<class Info> class Uart_T : public Uart {
 
+public:
+   /** Get reference to GPIO hardware as struct */
+   static volatile UART_Type &uartPtr() { return Info::uart(); }
+
+   /** Get base address of SPI hardware as uint32_t */
+   static constexpr uint32_t uartBase() { return Info::baseAddress(); }
+   /** Get base address of UART.D register as uint32_t */
+   static constexpr uint32_t uartD() { return uartBase() + offsetof(UART_Type, D); }
+
 #ifdef __CMSIS_RTOS
 protected:
    /**
