@@ -254,6 +254,32 @@ enum NvicPriority {
 #include "delay.h"
 #include "console.h"
 
+/**
+ * Calculate a Vector number using an offset from an existing number.
+ * This is only useful if related vectors are consecutive e.g. DMA0_IRQn, DMA1_IRQn ...
+ *
+ * @param vector  Base vector to use
+ * @param offset  Offset from base vector
+ *
+ * @return  Vector number calculated from vector+offset
+ */
+constexpr IRQn_Type inline operator+(IRQn_Type vector, unsigned offset) {
+   return (IRQn_Type)((unsigned)vector + offset);
+}
+
+/**
+ * Calculate a Vector number using an offset from an existing number.
+ * This is only useful if related vectors are consecutive e.g. DMA0_IRQn, DMA1_IRQn ...
+ *
+ * @param vector  Base vector to use
+ * @param offset  Offset from base vector
+ *
+ * @return  Vector number calculated from vector+offset
+ */
+constexpr IRQn_Type inline operator+(IRQn_Type vector, int offset) {
+   return vector + (unsigned)offset;
+}
+
 namespace USBDM {
 
 } // End namespace USBDM

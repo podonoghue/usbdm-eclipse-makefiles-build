@@ -13,6 +13,12 @@
  * The transmission is not continuous but may be restarted without setting up the TCD again:
  * - Clears the DREQ on transfer complete
  * - Arranging SLAST/DLAST to return the transfer addresses to starting value after each major-loop.
+ *
+ * This example requires DMA and SPI interrupts.
+ *
+ * It is necessary to enable these in Configure.usbdmProject
+ * under the "Peripheral Parameters"->DMA0 and "Peripheral Parameters"->SPI tabs
+ * Select irqHandlingMethod option (Class Method - Software ...)
  */
 #include <string.h>
 #include "hardware.h"
@@ -97,7 +103,7 @@ static void initDma(DmaChannelNum dmaTransmitChannel, DmaChannelNum dmaReceiveCh
     * | +--------------------------+ |             - NBYTES Number of bytes to transfer
     * | +--------------------------+ |<-DMA Req.   - Attributes
     * | | Minor Loop               | |               - ATTR_SSIZE, ATTR_DSIZE Source and destination transfer sizes
-    * |..............................|               - ATTR_SMOD, ATTR_DMOD Modulo --TODO
+    * |..............................|               - ATTR_SMOD, ATTR_DMOD Modulo
     * | |                          | |
     * | +--------------------------+ |             The number of reads and writes done will depend on NBYTES, SSIZE and DSIZE
     * | +--------------------------+ |<-DMA Req.   For example: NBYTES=12, SSIZE=16-bits, DSIZE=32-bits => 6 reads, 3 writes
@@ -123,16 +129,16 @@ static void initDma(DmaChannelNum dmaTransmitChannel, DmaChannelNum dmaReceiveCh
     *
     * Note: This uses a 32-bit transfer even though the transmit data is only 8-bit
     */
-   static const DmaTcd txTcd {
+   static constexpr DmaTcd txTcd {
       /* uint32_t  SADDR        Source address              */ (uint32_t)(txBuffer),                     // Source array
       /* uint16_t  SOFF         SADDR offset                */ sizeof(txBuffer[0]),                      // SADDR advances 1 element for each request
-      /* DmaSize   DSIZE        Destination size            */ dmaSize(SPI0->PUSHR),                     // 32-bit write to DADDR (PUSHR)
+      /* DmaSize   DSIZE        Destination size            */ DmaSize_32bit,                            // 32-bit write to DADDR (PUSHR)
       /* DmaModulo DMOD         Destination modulo          */ DmaModulo_Disabled,                       // No modulo
       /* DmaSize   SSIZE        Source size                 */ dmaSize(txBuffer[0]),                     // 32-bit read from SADDR (buffer)
       /* DmaModulo SMOD         Source modulo               */ DmaModulo_Disabled,                       // No modulo
       /* uint32_t  NBYTES       Minor loop byte count       */ sizeof(txBuffer[0]),                      // Total transfer in one minor-loop
       /* uint32_t  SLAST        Last SADDR adjustment       */ -sizeof(txBuffer),                        // Reset SADDR to start of array on completion
-      /* uint32_t  DADDR        Destination address         */ (uint32_t)(&SPI0->PUSHR),                 // Destination is SPI PUSH data register
+      /* uint32_t  DADDR        Destination address         */ spi.spiPUSHR(),                           // Destination is SPI PUSH data register
       /* uint16_t  DOFF         DADDR offset                */ 0,                                        // DADDR doesn't change
       /* uint16_t  CITER        Major loop count            */ DMA_CITER_ELINKNO_ELINK(0)|               // No ELINK
       /*                                                    */ ((sizeof(txBuffer))/sizeof(txBuffer[0])), // Transfer entire txBuffer
@@ -154,8 +160,8 @@ static void initDma(DmaChannelNum dmaTransmitChannel, DmaChannelNum dmaReceiveCh
     *
     * Note: The transfer size used here is 8-bits only
     */
-   static const DmaTcd rxTcd {
-      /* uint32_t  SADDR        Source address              */ (uint32_t)(&SPI0->POPR),                  // Source is SPI POPR data register
+   static constexpr DmaTcd rxTcd {
+      /* uint32_t  SADDR        Source address              */ spi.spiPOPR(),                            // Source is SPI POPR data register
       /* uint16_t  SOFF         SADDR offset                */ 0,                                        // SADDR adoesn't change
       /* DmaSize   DSIZE        Destination size            */ dmaSize(rxBuffer[0]),                     // 8-bit write to DADDR (buffer)
       /* DmaModulo DMOD         Destination modulo          */ DmaModulo_Disabled,                       // No modulo
@@ -253,6 +259,14 @@ static void startTransfer(DmaChannelNum dmaTransmitChannel, DmaChannelNum dmaRec
 
 int main() {
    console.writeln("Starting");
+   console.write("spiPtr      = ").writeln((unsigned)&spi.spiPtr(), Radix_16);
+   console.write("spiBase     = ").writeln(spi.spiBase(), Radix_16);
+   console.write("spiCR       = ").writeln(spi.spiCR(), Radix_16);
+   console.write("spiCTAR[1]  = ").writeln(spi.spiCTAR(1), Radix_16);
+   console.write("spiMCR      = ").writeln(spi.spiMCR(), Radix_16);
+   console.write("spiPOPR     = ").writeln(spi.spiPOPR(), Radix_16);
+   console.write("spiPUSHR    = ").writeln(spi.spiPUSHR(), Radix_16);
+   console.write("spiSR       = ").writeln(spi.spiSR(), Radix_16);
 
    Led::setOutput();
 
@@ -276,6 +290,7 @@ int main() {
    initDma(dmaTransmitChannel, dmaReceiveChannel);
    configureSpi();
 
+   unsigned failureCount = 0;
    for(;;) {
       // Clear Rx buffer
       memset(rxBuffer, 0, sizeof(rxBuffer));
@@ -291,10 +306,12 @@ int main() {
       }
       // Check expected Rx data
       if (memcmp(rxBuffer, rxTestBuffer, sizeof(rxBuffer)) != 0) {
-         console.writeln("Failed Verify\n");
-         __BKPT();
+         failureCount++;
+         console.write("Failed   - fail count = ").writeln(failureCount);
       }
-      console.writeln("Starting complete & verified");
+      else {
+         console.write("Verified - fail count =").writeln(failureCount);
+      }
    }
    return 0;
 }

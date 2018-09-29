@@ -72,7 +72,7 @@ static const char message[]=
  */
 static const DmaTcd tcd {
    /* uint32_t   SADDR     Source address                */ (uint32_t)(message),          // Source array
-   /* uint32_t   DADDR     Destination address           */ (uint32_t)(&console.uart->D), // UART Data register
+   /* uint32_t   DADDR     Destination address           */ console.uartD(),              // UART Data register
    /* uint32_t   BCR       Byte count                    */ sizeof(message),              // Total transfer in bytes
    /* unsigned   LCH2:2;   Complete (BCR=0) link channel */ 0,
    /* unsigned   LCH1:2;   Cycle-steal link channel      */ 0,
@@ -83,7 +83,7 @@ static const DmaTcd tcd {
    /* bool       START:1;  Start transfer                */ false,
    /* DmaSize    DSIZE:2;  Destination size              */ dmaSize(message[0]),          // 8-bit source
    /* bool       DINC:1;   Destination increment         */ false,
-   /* DmaSize    SSIZE:2;  Source size                   */ dmaSize(console.uart->D),     // 8-bit destination
+   /* DmaSize    SSIZE:2;  Source size                   */ dmaSize(message[0]),          // 8-bit destination
    /* bool       SINC:1;   Source increment              */ true,                         // Increment source address
    /* bool       EADREQ:1; Enable asynchronous DMA       */ true,                         // Asynchronous DMA
    /* bool       AA:1;     Auto-align                    */ false,

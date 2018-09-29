@@ -94,7 +94,7 @@ static const char message[]=
  *
  * Structure to define the DMA transfer
  */
-static const DmaTcd tcd {
+static constexpr DmaTcd tcd {
    /* uint32_t  SADDR        Source address              */ (uint32_t)(message),                    // Source array
    /* uint16_t  SOFF         Source offset               */ sizeof(message[0]),                     // SADDR advances 1 byte for each request
    /* DmaSize   DSIZE        Destination size            */ dmaSize(message[0]),                    // 8-bit read from DADDR
@@ -103,7 +103,7 @@ static const DmaTcd tcd {
    /* DmaModulo SMOD         Source modulo               */ DmaModulo_Disabled,
    /* uint32_t  NBYTES       Minor loop byte count       */ 1*sizeof(message[0]),                   // Total transfer in one minor-loop
    /* uint32_t  SLAST        Last SADDR adjustment       */ -sizeof(message),                       // Reset SADDR to start of array on completion
-   /* uint32_t  DADDR        Destination address         */ (uint32_t)(&console.uart->D),           // Destination is UART data register
+   /* uint32_t  DADDR        Destination address         */ console.uartD(),                        // Destination is UART data register
    /* uint16_t  DOFF         DADDR offset                */ 0,                                      // DADDR doesn't change
    /* uint16_t  CITER        Major loop count            */ DMA_CITER_ELINKNO_ELINK(0)|             // No ELINK
    /*                                                    */ ((sizeof(message))/sizeof(message[0])), // Transfer entire buffer

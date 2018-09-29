@@ -33,7 +33,7 @@ namespace USBDM {
  */
 enum DmaMuxEnable {
    DmaMuxEnable_Disable    = DMAMUX_CHCFG_ENBL(0),                      //!< DMA channel is disabled
-   DmaMuxEnable_Continuous = DMAMUX_CHCFG_ENBL(1)|DMAMUX_CHCFG_TRIG(0), //!< DMA channel is enabled
+   DmaMuxEnable_Continuous = DMAMUX_CHCFG_ENBL(1)|DMAMUX_CHCFG_TRIG(0), //!< DMA channel is enabled continuously
    DmaMuxEnable_Triggered  = DMAMUX_CHCFG_ENBL(1)|DMAMUX_CHCFG_TRIG(1), //!< DMA channel is enabled and triggered by PIT channel
 };
 
@@ -190,6 +190,30 @@ enum DmaCanPreemptLower {
 };
 
 /**
+ * Calculate a DMA slot number using an offset from an existing number
+ *
+ * @param slot    Base slot to use
+ * @param offset  Offset from base slot
+ *
+ * @return  DMA slot number calculated from slot+offset
+ */
+constexpr DmaSlot inline operator+(DmaSlot slot, unsigned offset) {
+   return (DmaSlot)((unsigned)slot + offset);
+}
+
+/**
+ * Calculate a DMA slot number using an offset from an existing number
+ *
+ * @param slot    Base slot to use
+ * @param offset  Offset from base slot
+ *
+ * @return  DMA slot number calculated from slot+offset
+ */
+constexpr DmaSlot inline operator+(DmaSlot slot, int offset) {
+   return slot + (unsigned)offset;
+}
+
+/**
  * Type definition for DMA interrupt call back.
  *
  * @param[in] dmaChannelNum
@@ -199,7 +223,7 @@ typedef void (*DmaCallbackFunction)(DmaChannelNum dmaChannelNum);
 /**
  * Type definition for DMA error interrupt call back.
  *
- * @param errorFlags          Channel error information (DMA_ES)
+ * @param errorFlags Channel error information (DMA_ES)
  */
 typedef void (*DmaErrorCallbackFunction)(uint32_t errorFlags);
 
@@ -268,25 +292,35 @@ enum DmaSpeed {
    DmaSpeed_8_Stalls = 0b11, //!< DMA engine stalls for 8 cycles after each R/W.
 };
 
-struct DmaTcdAttr {
-   DmaSize       DSIZE:3;       //!< Destination size
-   DmaModulo     DMOD:5;        //!< Destination modulo
-   DmaSize       SSIZE:3;       //!< Source size
-   DmaModulo     SMOD:5;        //!< Source modulo
+struct __attribute__((__packed__)) DmaTcdAttr {
+   union {
+      struct {
+         DmaSize       DSIZE:3;       //!< Destination size
+         DmaModulo     DMOD:5;        //!< Destination modulo
+         DmaSize       SSIZE:3;       //!< Source size
+         DmaModulo     SMOD:5;        //!< Source modulo
+      };
+      uint16_t data;
+   };
 };
 
-struct DmaTcdCsr {
-   bool          START:1;       //!< Channel Start
-   bool          INTMAJOR:1;    //!< Interrupt on major complete
-   bool          INTHALF:1;     //!< Interrupt on major half complete
-   bool          DREQ:1;        //!< Disable Request
-   bool          ESG:1;         //!< Enable Scatter/Gather
-   bool          MAJORELINK:1;  //!< Enable channel linking
-   bool          ACTIVE:1;      //!< Channel Active
-   bool          DONE:1;        //!< Channel Done
-   unsigned      MAJORLINKCH:4; //!< Link Channel Number
-   unsigned      :2;
-   DmaSpeed      BWC:2;         //!< Bandwidth Control
+struct __attribute__((__packed__)) DmaTcdCsr {
+   union {
+      struct {
+         bool          START:1;       //!< Channel Start
+         bool          INTMAJOR:1;    //!< Interrupt on major complete
+         bool          INTHALF:1;     //!< Interrupt on major half complete
+         bool          DREQ:1;        //!< Disable Request
+         bool          ESG:1;         //!< Enable Scatter/Gather
+         bool          MAJORELINK:1;  //!< Enable channel linking
+         bool          ACTIVE:1;      //!< Channel Active
+         bool          DONE:1;        //!< Channel Done
+         unsigned      MAJORLINKCH:4; //!< Link Channel Number
+         unsigned      :2;
+         DmaSpeed      BWC:2;         //!< Bandwidth Control
+      };
+      uint16_t data;
+   };
 };
 /**
  * Transfer Control Descriptor
@@ -305,7 +339,7 @@ struct DmaTcdCsr {
  * | +--------------------------+ |             - NBYTES Number of bytes to transfer
  * | +--------------------------+ |<-DMA Req.   - Attributes
  * | | Minor Loop               | |               - ATTR_SSIZE, ATTR_DSIZE Source and destination transfer sizes
- * |..............................|               - ATTR_SMOD, ATTR_DMOD Modulo --TODO
+ * |..............................|               - ATTR_SMOD, ATTR_DMOD Modulo
  * | |                          | |
  * | +--------------------------+ |             The number of reads and writes done will depend on NBYTES, SSIZE and DSIZE
  * | +--------------------------+ |<-DMA Req.   For example: NBYTES=12, SSIZE=16-bits, DSIZE=32-bits => 6 reads, 3 writes
@@ -328,17 +362,18 @@ struct DmaTcdCsr {
  *
  * Structure to define a DMA transfer
  */
-struct DmaTcd {
-   uint32_t      SADDR;         //!< Source address
-   uint16_t      SOFF;          //!< Source offset
-   DmaTcdAttr    ATTR;          //!< Transfer attributes
-   uint32_t      NBYTES;        //!< Minor loop byte count
-   uint32_t      SLAST;         //!< Last source adjustment
-   uint32_t      DADDR;         //!< Destination address
-   uint16_t      DOFF;          //!< Destination offset
-   uint16_t      CITER;         //!< Major loop count
-   uint32_t      DLAST;         //!< Last destination adjustment
-   DmaTcdCsr     CSR;           //!< Control and Status
+struct __attribute__((__packed__)) DmaTcd {
+   uint32_t      SADDR;         //!< :00 Source address
+   uint16_t      SOFF;          //!< :04 Source offset
+   DmaTcdAttr    ATTR;          //!< :06 Transfer attributes
+   uint32_t      NBYTES;        //!< :08 Minor loop byte count
+   uint32_t      SLAST;         //!< :0C Last source adjustment
+   uint32_t      DADDR;         //!< :10 Destination address
+   uint16_t      DOFF;          //!< :14 Destination offset
+   uint16_t      CITER;         //!< :16 Major loop count
+   uint32_t      DLAST;         //!< :18 Last destination adjustment
+   DmaTcdCsr     CSR;           //!< :1C Control and Status
+//   uint16_t      BITER;         //!< :1E Byte iterator.  Must always equal initial CITER
 };
 
 /**
@@ -584,7 +619,7 @@ public:
             /* bool      ACTIVE:1      Channel Active              */ false,
             /* bool      DONE:1        Channel Done                */ false,
             /* unsigned  MAJORLINKCH:4 Link Channel Number         */ 0,
-            /* DmaSpeed  BWC:2         Bandwidth (speed) Control   */ DmaSpeed_NoStalls,
+            /* DmaSpeed  BWC:2         Bandwidth (speed) Control   */ DmaSpeed_NoStalls
          };
          callbacks[channel] = noHandlerCallback;
          configureTransfer((DmaChannelNum)channel, emptyTcd);
@@ -678,8 +713,17 @@ public:
          setAndCheckErrorCode(E_ILLEGAL_PARAM);
       }
 #endif
-      (*(DmaTcd* const)&dmac().TCD[dmaChannelNum]) = tcd;
-      dmac().TCD[dmaChannelNum].BITER_ELINKNO      = tcd.CITER;
+      dmac().TCD[dmaChannelNum].SADDR           = tcd.SADDR;
+      dmac().TCD[dmaChannelNum].SOFF            = tcd.SOFF;
+      dmac().TCD[dmaChannelNum].ATTR            = tcd.ATTR.data;
+      dmac().TCD[dmaChannelNum].NBYTES_MLNO     = tcd.NBYTES;
+      dmac().TCD[dmaChannelNum].SLAST           = tcd.SLAST;
+      dmac().TCD[dmaChannelNum].DADDR           = tcd.DADDR;
+      dmac().TCD[dmaChannelNum].DOFF            = tcd.DOFF;
+      dmac().TCD[dmaChannelNum].CITER_ELINKNO   = tcd.CITER;
+      dmac().TCD[dmaChannelNum].DLASTSGA        = tcd.DLAST;
+      dmac().TCD[dmaChannelNum].CSR             = tcd.CSR.data;
+      dmac().TCD[dmaChannelNum].BITER_ELINKNO   = tcd.CITER;
    }
 
    /**
@@ -736,6 +780,29 @@ public:
    }
 
    /**
+    * Enable/disable DMA hardware requests on multiple channels.
+    * The channel should be configured beforehand using configureTransfer().
+    *
+    * @param[in]  dmaChannelMask Mask for channels being modified
+    * @param[in]  enable         True => enable, False => disable
+    *
+    * @note May use DmaChannelNum_All to apply to all channels
+    */
+   static void __attribute__((always_inline)) enableMultipleRequests(uint32_t dmaChannelMask, bool enable=true) {
+#ifdef DEBUG_BUILD
+      if (dmaChannelMask&~((1<<Info::NumChannels)-1)) {
+         setAndCheckErrorCode(E_ILLEGAL_PARAM);
+      }
+#endif
+      if (enable) {
+         dmac().ERQ |= dmaChannelMask;
+      }
+      else {
+         dmac().ERQ &= ~dmaChannelMask;
+      }
+   }
+
+   /**
     * Enable/disable DMA hardware requests on a channel.
     * The channel should be configured beforehand using configureTransfer().
     *
@@ -782,6 +849,26 @@ public:
 #endif
 
    /**
+    * Enable/disable error interrupts on multiple channels.
+    *
+    * @param[in]  dmaChannelMask Mask for channels being modified
+    * @param[in]  enable         True => enable, False => disable
+    */
+   static void __attribute__((always_inline)) enableMultipleErrorInterrupts(uint32_t dmaChannelMask, bool enable=true) {
+#ifdef DEBUG_BUILD
+      if (dmaChannelMask&~((1<<Info::NumChannels)-1)) {
+         setAndCheckErrorCode(E_ILLEGAL_PARAM);
+      }
+#endif
+      if (enable) {
+         dmac().EEI |= dmaChannelMask;
+      }
+      else {
+         dmac().EEI &= ~dmaChannelMask;
+      }
+   }
+
+   /**
     * Enable/disable error interrupts for a channel.
     *
     * @param[in]  dmaChannelNum Channel being modified
@@ -820,6 +907,26 @@ public:
    }
 
    /**
+    * Clear interrupt request flags on multiple channels.
+    *
+    * @param[in]  dmaChannelMask Mask for channels being modified
+    * @param[in]  enable         True => enable, False => disable
+    */
+   static void __attribute__((always_inline)) clearMultipleInterruptRequests(uint32_t dmaChannelMask, bool enable=true) {
+#ifdef DEBUG_BUILD
+      if (dmaChannelMask&~((1<<Info::NumChannels)-1)) {
+         setAndCheckErrorCode(E_ILLEGAL_PARAM);
+      }
+#endif
+      if (enable) {
+         dmac().INT |= dmaChannelMask;
+      }
+      else {
+         dmac().INT &= ~dmaChannelMask;
+      }
+   }
+
+   /**
     * Clear interrupt request flag for a channel.
     *
     * @param[in]  dmaChannelNum  Channel being modified
@@ -850,7 +957,7 @@ public:
          setAndCheckErrorCode(E_ILLEGAL_PARAM);
       }
 #endif
-      IRQn_Type irqNum = static_cast<IRQn_Type>(Info::irqNums[0] + (dmaChannelNum&(Info::NumChannels-1)));
+      IRQn_Type irqNum = Dma0Info::irqNums[0] + (dmaChannelNum&(Dma0Info::NumChannels-1));
       if (enable) {
          enableNvicInterrupt(irqNum, nvicPriority);
       }
@@ -929,7 +1036,7 @@ using DmaMux0 = DmaMux_T<Dmamux0Info, Dma0Info::NumChannels>;
 #endif
 
 #ifdef USBDM_DMAMUX1_IS_DEFINED
-using DmaMux1 = DmaMux_T<Dmamux1Info, Dma0Info::NumChannels>;
+using DmaMux1 = DmaMux_T<Dmamux1Info, Dma1Info::NumChannels>;
 #endif
 
 #ifdef USBDM_DMA0_IS_DEFINED
