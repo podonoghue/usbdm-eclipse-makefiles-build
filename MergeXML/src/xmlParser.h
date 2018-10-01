@@ -24,13 +24,13 @@ class XmlParser {
 private:
    DualString attr_merge_actions;
 
-   xercesc_3_1::ErrorHandler*    errHandler;
+   xercesc::ErrorHandler*    errHandler;
 
-   xercesc_3_1::XercesDOMParser* mergeParser;
-   xercesc_3_1::DOMDocument*     mergeDocument;
+   xercesc::XercesDOMParser* mergeParser;
+   xercesc::DOMDocument*     mergeDocument;
 
-   xercesc_3_1::XercesDOMParser* patchParser;
-   xercesc_3_1::DOMDocument*     patchDocument;
+   xercesc::XercesDOMParser* patchParser;
+   xercesc::DOMDocument*     patchDocument;
    static bool      verbose;
    bool  mergeDone;
 
@@ -59,32 +59,32 @@ private:
 private:
    typedef enum {scan, insert, replace, mergeAttrs} Actions;
 
-   int modifyNewProjectWizardXML(xercesc_3_1::DOMElement *el);
-   int modifyWizardUIXML(xercesc_3_1::DOMElement *el);
-   int modifyWizardUIXMLPage(xercesc_3_1::DOMElement *el);
-   int modifyWizardUIXMLCondition(xercesc_3_1::DOMNode *el);
-   int addLaunchSetting( xercesc_3_1::DOMElement *el,
+   int modifyNewProjectWizardXML(xercesc::DOMElement *el);
+   int modifyWizardUIXML(xercesc::DOMElement *el);
+   int modifyWizardUIXMLPage(xercesc::DOMElement *el);
+   int modifyWizardUIXMLCondition(xercesc::DOMNode *el);
+   int addLaunchSetting( xercesc::DOMElement *el,
                          const char *conditionId,
                          const char *configurationId,
                          const char *name,
                          const char *projectType);
-   int addLaunchSettings(xercesc_3_1::DOMElement *el);
-   int addLaunchSettingsRefs(xercesc_3_1::DOMElement *el);
-   int addLaunchSettingsRef( xercesc_3_1::DOMElement *configuration,
+   int addLaunchSettings(xercesc::DOMElement *el);
+   int addLaunchSettingsRefs(xercesc::DOMElement *el);
+   int addLaunchSettingsRef( xercesc::DOMElement *configuration,
                              const char *id);
-   int addcheckBoxItem(xercesc_3_1::DOMElement *uiElement, const char *id );
+   int addcheckBoxItem(xercesc::DOMElement *uiElement, const char *id );
 
-   void  load(xercesc_3_1::XercesDOMParser* &parser, xercesc_3_1::DOMDocument* &document, const char* xmlFile);
+   void  load(xercesc::XercesDOMParser* &parser, xercesc::DOMDocument* &document, const char* xmlFile);
    int   mergePatchfile();
    int   loadSourcefile(const char *sourcePath);
    int   loadPatchfile(const char *patchPath);
    int   commit(const char* xmlFile);
-   bool  mergeNodes(xercesc_3_1::DOMElement *mergeEl, xercesc_3_1::DOMElement *patchEl);
-   bool  nodesMatch(xercesc_3_1::DOMElement *mergeEl, xercesc_3_1::DOMElement *patchEl);
-   void  processAttributes(xercesc_3_1::DOMElement *mergeEl, xercesc_3_1::DOMElement *patchEl);
-   Actions getAction(xercesc_3_1::DOMElement *mergeEl);
-   xercesc_3_1::DOMElement *removeActionAttributes(xercesc_3_1::DOMElement *patchEl);
-   xercesc_3_1::DOMComment *getCommentNode(xercesc_3_1::DOMElement *element);
+   bool  mergeNodes(xercesc::DOMElement *mergeEl, xercesc::DOMElement *patchEl);
+   bool  nodesMatch(xercesc::DOMElement *mergeEl, xercesc::DOMElement *patchEl);
+   void  processAttributes(xercesc::DOMElement *mergeEl, xercesc::DOMElement *patchEl);
+   Actions getAction(xercesc::DOMElement *mergeEl);
+   xercesc::DOMElement *removeActionAttributes(xercesc::DOMElement *patchEl);
+   xercesc::DOMComment *getCommentNode(xercesc::DOMElement *element);
 
 public:
    static int addUsbdmWizard(const wxString& sourcePath, const wxString& patchPath);
