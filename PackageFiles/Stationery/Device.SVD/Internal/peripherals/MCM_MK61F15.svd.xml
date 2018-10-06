@@ -1,7 +1,9 @@
 <!--
 Devices using this peripheral: 
       MK61F15
+      MK61F15WS
       MK70F15
+      MK70F15WS
 -->
       <peripheral>
          <?sourceFile "MCM_MK61F15" ?>
