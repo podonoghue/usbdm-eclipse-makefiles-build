@@ -203,7 +203,7 @@ Specifies which DMA source, if any, is routed to a particular DMA channel</descr
                            <value>32</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>FTM1_Ch2</name>
+                           <name>FTM1_Ch1</name>
                            <description>FTM1 Channel 1</description>
                            <value>33</value>
                         </enumeratedValue>
