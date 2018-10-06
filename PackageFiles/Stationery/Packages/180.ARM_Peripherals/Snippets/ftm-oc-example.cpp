@@ -70,13 +70,12 @@ int main() {
     */
    // Configure base FTM (affects all channels)
    Timer::configure(
-         FtmMode_LeftAlign,      // Left-aligned is required for OC/IC
-         FtmClockSource_System,  // Bus clock usually
-         FtmPrescale_1);         // The prescaler will be re-calculated later
+         FtmMode_LeftAlign,       // Left-aligned is required for OC/IC
+         FtmClockSource_System);  // Bus clock usually
 
-   // Set IC/OC measurement period to longest interval
+   // Set IC/OC measurement interval to longest interval needed.
    // This adjusts the prescaler value but does not change the clock source
-   Timer::setMeasurementPeriod(MAX_OC_INTERVAL);
+   Timer::setMaximumInterval(MAX_OC_INTERVAL);
 
    // Calculate half-period in timer ticks
    // Must be done after timer clock configuration (above)

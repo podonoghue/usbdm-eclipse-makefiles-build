@@ -40,7 +40,7 @@ static volatile uint16_t periodInTicks = 0;
 // Maximum measurement time
 static constexpr float MEASUREMENT_TIME = 100*ms;
 
-/// Maximum IC interval - the IC interval betweem measurement events should not exceed this value.
+// Maximum IC interval - the IC interval between measurement events should not exceed this value.
 static constexpr float MAX_IC_INTERVAL = (1.1 * MEASUREMENT_TIME);
 
 using Debug = GpioA<12>;
@@ -83,11 +83,11 @@ int main() {
          FtmClockSource_System,  // Bus clock usually
          FtmPrescale_1);         // The prescaler will be re-calculated later
 
-   // Set IC/OC measurement period to accommodate maximum measurement
-   // This adjusts the prescaler value but does not change the clock source
-   Timer::setMeasurementPeriod(MAX_IC_INTERVAL);
+   // Set IC/OC measurement interval to accommodate maximum measurement needed.
+   // This adjusts the prescaler value but does not change the clock source.
+   Timer::setMaximumInterval(MAX_IC_INTERVAL);
 
-   // Set callback function
+   // Set callback function shared by all channels
    Timer::setChannelCallback(ftmCallback);
 
    // Enable interrupts for entire timer

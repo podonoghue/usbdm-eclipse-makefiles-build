@@ -240,6 +240,25 @@ protected:
 template<class Info>
 class FtmBase_T : public FtmBase {
 
+public:
+   /** Get reference to FTM hardware as struct */
+   static volatile SPI_Type &ftmPtr() { return Info::ftm(); }
+
+   /** @return Base address of SPI hardware as uint32_t */
+   static constexpr uint32_t ftmBase() { return Info::baseAddress; }
+   /** @return Base address of FTM.SC register as uint32_t */
+   static constexpr uint32_t ftmSC() { return ftmBase() + offsetof(FTM_Type, SC); }
+   /** @return Base address of FTM.CNT register as uint32_t */
+   static constexpr uint32_t ftmCNT() { return ftmBase() + offsetof(FTM_Type, CNT); }
+   /** @return Base address of FTM.MOD register as uint32_t */
+   static constexpr uint32_t ftmMOD() { return ftmBase() + offsetof(FTM_Type, MOD); }
+   /** @return Base address of FTM.CONTROL[n] struct as uint32_t */
+   static constexpr uint32_t ftmCONTROL(int index) { return ftmBase() + offsetof(FTM_Type, CONTROLS[index]); }
+   /** @return Base address of FTM.CONTROL[n].CnSC struct as uint32_t */
+   static constexpr uint32_t ftmCnSC(int index) { return ftmBase() + offsetof(FTM_Type, CONTROLS[index])+0; }
+   /** @return Base address of FTM.CONTROL[n].CnV struct as uint32_t */
+   static constexpr uint32_t ftmCnV(int index) { return ftmBase() + offsetof(FTM_Type, CONTROLS[index])+sizeof(uint32_t); }
+
 private:
    /**
     * This class is not intended to be instantiated
@@ -649,12 +668,11 @@ public:
    }
 
    /**
-    * Set measurement period.
-    * Input Capture and Output Compare will be able to operate over
-    *  at least this period without overflow.\n
+    * Set maximum interval for input-capture or output compare.
+    * Input Capture and Output Compare will be able to operate over at least this period without overflow.\n
     * This value is write-buffered and updated by MOD/CNTIN synchronisation unless suspend is true.
     *
-    * @param[in] period   Period in seconds as a float
+    * @param[in] interval Interval in seconds as a float
     * @param[in] suspend  Whether to suspend FTM during change.
     *
     * @return E_NO_ERROR  => success
@@ -662,16 +680,28 @@ public:
     * @return E_TOO_LARGE => failed to find suitable values
     *
     * @note Adjusts Timer pre-scaler to appropriate value.
-    * @note Timer period is set to maximum.
+    * @note Timer period in ticks is set to maximum.
     * @note This function will affect all channels of the timer.
     */
-   static INLINE_RELEASE ErrorCode setMeasurementPeriod(float period, bool suspend=false) {
+   static INLINE_RELEASE ErrorCode setMaximumInterval(float interval, bool suspend=false) {
       // Try to set capture period
-      ErrorCode rc = setPeriod(period, suspend);
+      ErrorCode rc = setPeriod(interval, suspend);
       // Set actual period to maximum ticks in any case
       // This is the usual value for IC or OC set-up
       setPeriodInTicks(0x10000, suspend);
       return rc;
+   }
+
+   /**
+    * Set measurement period.
+    *
+    * @param[in] period   Period in seconds as a float
+    * @param[in] suspend  Whether to suspend FTM during change.
+    *
+    * @deprecated Use setMaximumInterval()
+    */
+   static INLINE_RELEASE ErrorCode setMeasurementPeriod(float period, bool suspend=false) {
+      return setMaximumInterval(period, suspend);
    }
 
    /**
