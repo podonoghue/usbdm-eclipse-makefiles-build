@@ -69,9 +69,9 @@ enum DmaOnError {
 /**
  * Whether to enable continuous link mode.
  */
-enum DmaLink {
-   DmaLink_Disabled  = DMA_CR_CLM(0), //!< Link mode disabled
-   DmaLink_Enabled   = DMA_CR_CLM(1), //!< Link mode enabled
+enum DmaContinuousLink {
+   DmaContinuousLink_Disabled  = DMA_CR_CLM(0), //!< Link mode disabled
+   DmaContinuousLink_Enabled   = DMA_CR_CLM(1), //!< Link mode enabled
 };
 
 /**
@@ -170,7 +170,6 @@ enum DmaModulo {
    DmaModulo_512MiByte  = 0b11101, //!< 512-Mebibyte modulo
    DmaModulo_1GiByte    = 0b11110, //!< 1-Gibibyte modulo
    DmaModulo_2GiByte    = 0b11111, //!< 2-Gibibyte modulo
-
 };
 
 /**
@@ -292,6 +291,37 @@ enum DmaSpeed {
    DmaSpeed_8_Stalls = 0b11, //!< DMA engine stalls for 8 cycles after each R/W.
 };
 
+/**
+ * Determines if the offset is applied to source and/or destination
+ */
+enum DmaMinorLoopOffsetSelect {
+   DmaMinorLoopOffsetSelect_Source        = DMA_NBYTES_MLOFFYES_SMLOE(1)|DMA_NBYTES_MLOFFYES_DMLOE(0),//!< Source only
+   DmaMinorLoopOffsetSelect_Destination   = DMA_NBYTES_MLOFFYES_SMLOE(0)|DMA_NBYTES_MLOFFYES_DMLOE(1),//!< Destination only
+   DmaMinorLoopOffsetSelect_Both          = DMA_NBYTES_MLOFFYES_SMLOE(1)|DMA_NBYTES_MLOFFYES_DMLOE(1),//!< Both Source and Destination
+};
+
+/**
+ * Creates DMA NBYTES entry for:
+ * - Minor loop enabled CR[EMLN] = 1 (DmaMinorLoopMapping_Enabled)
+ * - Source/Destination offset enabled
+ *
+ * In this mode address adjustments are made at the end of a minor loop
+ *
+ * @param offset                    20-bit signed value for offset to apply after minor loop completion
+ * @param dmaMinorLoopOffsetSelect  Determines if the offset is applied to source and/or destination address
+ * @param nBytes                    10-bit value for byte count
+ *
+ * @return TCD.NBYTES entry
+ */
+constexpr uint32_t dmaNBytes(uint16_t nBytes, DmaMinorLoopOffsetSelect dmaMinorLoopOffsetSelect,  int32_t offset) {
+   return
+#ifdef DEBUG_BUILD
+   usbdm_assert((nBytes<(1<<10)), "nBytes is too large"),
+   usbdm_assert(((offset>=-(1<<19))&&(offset<(1<<19))),"Offset is too large"),
+#endif
+   dmaMinorLoopOffsetSelect|DMA_NBYTES_MLOFFYES_MLOFF(offset)|DMA_NBYTES_MLOFFYES_NBYTES(nBytes);
+}
+
 struct __attribute__((__packed__)) DmaTcdAttr {
    union {
       struct {
@@ -302,6 +332,34 @@ struct __attribute__((__packed__)) DmaTcdAttr {
       };
       uint16_t data;
    };
+   /**
+    * Default constructor
+    */
+   constexpr DmaTcdAttr() :
+      DSIZE(DmaSize_8bit),
+      DMOD(DmaModulo_Disabled),
+      SSIZE(DmaSize_8bit),
+      SMOD(DmaModulo_Disabled) {
+   }
+   /**
+    * Constructor
+	*
+    * @param dmaSizeSource          Size for source transfers
+    * @param dmaModuloSource        Modulo for source transfers
+    * @param dmaSizeDestination     Size for destination transfers
+    * @param dmaModuloDestination   Modulo for destination transfers
+    */
+   constexpr DmaTcdAttr(
+         DmaSize     dmaSizeSource,
+         DmaModulo   dmaModuloSource,
+         DmaSize     dmaSizeDestination,
+         DmaModulo   dmaModuloDestination
+   ) :
+      DSIZE(dmaSizeDestination),
+      DMOD(dmaModuloDestination),
+      SSIZE(dmaSizeSource),
+      SMOD(dmaModuloSource) {
+   }
 };
 
 struct __attribute__((__packed__)) DmaTcdCsr {
@@ -321,6 +379,56 @@ struct __attribute__((__packed__)) DmaTcdCsr {
       };
       uint16_t data;
    };
+   /**
+    * Default constructor
+    */
+   constexpr DmaTcdCsr() :
+      START(false),
+      INTMAJOR(false),
+      INTHALF(false),
+      DREQ(false),
+      ESG(false),
+      MAJORELINK(false),
+      ACTIVE(false),
+      DONE(false),
+      MAJORLINKCH(DmaChannelNum_0),
+      BWC(DmaSpeed_NoStalls)
+   {
+   }
+   /**
+    * Constructor
+	*
+    * @param startChannel                 Software start of channel
+    * @param disableRequestOnCompletion   Disable hardware request on major loop completion
+    * @param interruptOnMajorComplete     Interrupt request on on major loop completion
+    * @param interruptOnMajorHalfComplete Interrupt request on on major loop half completion
+    * @param bandwidthControl             Control how channel monopolises the bus
+    * @param enableScatterGather          Enable Scatter/Gather operations
+    * @param enableMajorChannelLinking    Enable linking to another channel at the completion of the major loop
+    * @param majorLinkChannelNumber       Channel to link to if enableMajorChannelLinking is enabled
+    */
+   constexpr DmaTcdCsr(
+         bool          startChannel,
+         bool          disableRequestOnCompletion,
+         bool          interruptOnMajorComplete,
+         bool          interruptOnMajorHalfComplete = false,
+         DmaSpeed      bandwidthControl             = DmaSpeed_NoStalls,
+         bool          enableScatterGather          = false,
+         bool          enableMajorChannelLinking    = false,
+         DmaChannelNum majorLinkChannelNumber       = DmaChannelNum_0
+   ) :
+      START(startChannel),
+      INTMAJOR(interruptOnMajorComplete),
+      INTHALF(interruptOnMajorHalfComplete),
+      DREQ(disableRequestOnCompletion),
+      ESG(enableScatterGather),
+      MAJORELINK(enableMajorChannelLinking),
+      ACTIVE(false),
+      DONE(false),
+      MAJORLINKCH(majorLinkChannelNumber),
+      BWC(bandwidthControl)
+   {
+   }
 };
 /**
  * Transfer Control Descriptor
@@ -364,17 +472,230 @@ struct __attribute__((__packed__)) DmaTcdCsr {
  */
 struct __attribute__((__packed__)) DmaTcd {
    uint32_t      SADDR;         //!< :00 Source address
-   uint16_t      SOFF;          //!< :04 Source offset
+   int16_t       SOFF;          //!< :04 Source offset
    DmaTcdAttr    ATTR;          //!< :06 Transfer attributes
    uint32_t      NBYTES;        //!< :08 Minor loop byte count
-   uint32_t      SLAST;         //!< :0C Last source adjustment
+   int32_t       SLAST;         //!< :0C Last source adjustment
    uint32_t      DADDR;         //!< :10 Destination address
-   uint16_t      DOFF;          //!< :14 Destination offset
+   int16_t       DOFF;          //!< :14 Destination offset
    uint16_t      CITER;         //!< :16 Major loop count
-   uint32_t      DLAST;         //!< :18 Last destination adjustment
+   int32_t       DLAST;         //!< :18 Last destination adjustment
    DmaTcdCsr     CSR;           //!< :1C Control and Status
-//   uint16_t      BITER;         //!< :1E Byte iterator.  Must always equal initial CITER
+
+   /**
+    * Default constructor
+    */
+   constexpr DmaTcd() :
+            SADDR(0),
+            SOFF(0),
+            ATTR(),
+            NBYTES(0),
+            SLAST(0),
+            DADDR(0),
+            DOFF(0),
+            CITER(0),
+            DLAST(0),
+            CSR() {
+         }
+
+   /**
+    * Constructor.
+    * This constructor should be used if minor loops are disabled (DmaMinorLoopMapping_Disabled).
+    *
+    * @param sourceAddress                Starting source address
+    * @param sourceOffset                 Offset to apply to source address after each read
+    * @param sourceSize                   Source size
+    * @param sourceModulo                 Source modulo
+    * @param lastSourceAdjustment         Source adjustment to apply after completion of the major iteration count
+    *
+    * @param destinationAddress           Starting destination address
+    * @param destinationOffset            Offset to apply to destination address after each read
+    * @param destinationSize              Destination size
+    * @param destinationModulo            Destination modulo
+    * @param lastDestinationAdjustment    Destination adjustment to apply after completion of the major iteration count
+    *
+    * @param minorLoopByteCount           Number of bytes to be transferred in each minor loop (per service request)
+    * @param majorLoopCount               Number of major iterations
+    *
+    * @param startChannel                 Software start of channel
+    * @param disableRequestOnCompletion   Disable hardware request on major loop completion
+    * @param interruptOnMajorComplete     Interrupt request on on major loop completion
+    * @param interruptOnMajorHalfComplete Interrupt request on on major loop half completion
+    * @param bandwidthControl             Control how channel monopolises the bus
+    * @param enableScatterGather          Enable Scatter/Gather operations
+    * @param enableChannelLinking         Enable linking to another channel
+    * @param linkChannelNumber            Channel to link to if linking is enabled
+    */
+   constexpr DmaTcd(
+         uint32_t      sourceAddress,
+         int16_t       sourceOffset,
+         DmaSize       sourceSize,
+         DmaModulo     sourceModulo,
+         int32_t       lastSourceAdjustment,
+
+         uint32_t      destinationAddress,
+         int16_t       destinationOffset,
+         DmaSize       destinationSize,
+         DmaModulo     destinationModulo,
+         int32_t       lastDestinationAdjustment,
+
+         uint32_t      minorLoopByteCount,
+         uint16_t      majorLoopCount,
+
+         bool          startChannel,
+         bool          disableRequestOnCompletion,
+         bool          interruptOnMajorComplete,
+         bool          interruptOnMajorHalfComplete = false,
+         DmaSpeed      bandwidthControl             = DmaSpeed_NoStalls,
+         bool          enableScatterGather          = false,
+         bool          enableMajorChannelLinking    = false,
+         DmaChannelNum majorLinkChannelNumber       = DmaChannelNum_0
+   ) :
+      SADDR(sourceAddress),
+      SOFF(sourceOffset),
+      ATTR(sourceSize, sourceModulo, destinationSize, destinationModulo),
+      NBYTES(minorLoopByteCount),
+      SLAST(lastSourceAdjustment),
+      DADDR(destinationAddress),
+      DOFF(destinationOffset),
+      CITER(majorLoopCount),
+      DLAST(lastDestinationAdjustment),
+      CSR(
+            startChannel, disableRequestOnCompletion,
+            interruptOnMajorComplete, interruptOnMajorHalfComplete,
+            bandwidthControl,
+            enableScatterGather,
+            enableMajorChannelLinking, majorLinkChannelNumber) {
+   }
+
+   /**
+    * Constructor.
+    * This constructor should be used if minor loops are enabled (DmaMinorLoopMapping_enabled).
+    *
+    * @param sourceAddress                Starting source address
+    * @param sourceOffset                 Source address offset applied after each read
+    * @param sourceSize                   Source transfer size
+    * @param sourceModulo                 Source modulo
+    * @param lastSourceAdjustment         Source adjustment to apply after completion of the major iteration count
+    *
+    * @param destinationAddress           Starting destination address
+    * @param destinationOffset            Destination address offset applied after each write
+    * @param destinationSize              Destination transfer size
+    * @param destinationModulo            Destination modulo
+    * @param lastDestinationAdjustment    Destination adjustment to apply after completion of the major iteration count
+    *
+    * @param dmaMinorLoopOffsetSelect     Selects if the minor loop offset is applied to source and/or destination
+    * @param minorLoopOffset              Offset applied to source and/or destination after minor loop
+    * @param minorLoopByteCount           Number of bytes to be transferred in each minor loop (per service request)
+
+    * @param majorLoopCount               Number of major iterations (may include link channel)
+    *
+    * @param startChannel                 Software start of channel
+    * @param disableRequestOnCompletion   Disable hardware request on major loop completion
+    * @param interruptOnMajorComplete     Interrupt request on on major loop completion
+    * @param interruptOnMajorHalfComplete Interrupt request on on major loop half completion
+    * @param bandwidthControl             Control how channel monopolises the bus
+    * @param enableScatterGather          Enable Scatter/Gather operations
+    * @param enableChannelLinking         Enable linking to another channel
+    * @param linkChannelNumber            Channel to link to if linking is enabled
+    */
+   constexpr DmaTcd(
+         uint32_t                  sourceAddress,
+         int16_t                   sourceOffset,
+         DmaSize                   sourceSize,
+         DmaModulo                 sourceModulo,
+         int32_t                   lastSourceAdjustment,
+
+         uint32_t                  destinationAddress,
+         int16_t                   destinationOffset,
+         DmaSize                   destinationSize,
+         DmaModulo                 destinationModulo,
+         int32_t                   lastDestinationAdjustment,
+
+         uint16_t                  minorLoopByteCount,
+         DmaMinorLoopOffsetSelect  dmaMinorLoopOffsetSelect,
+         int16_t                   minorLoopOffset,
+
+         uint16_t                  majorLoopCount,
+
+         bool                      startChannel,
+         bool                      disableRequestOnCompletion,
+         bool                      interruptOnMajorComplete,
+         bool                      interruptOnMajorHalfComplete = false,
+         DmaSpeed                  bandwidthControl             = DmaSpeed_NoStalls,
+         bool                      enableScatterGather          = false,
+         bool                      enableMajorChannelLinking    = false,
+         DmaChannelNum             majorLinkChannelNumber       = DmaChannelNum_0
+   ) :
+      SADDR(sourceAddress),
+      SOFF(sourceOffset),
+      ATTR(sourceSize, sourceModulo, destinationSize, destinationModulo),
+      NBYTES(dmaNBytes(minorLoopByteCount, dmaMinorLoopOffsetSelect, minorLoopOffset)),
+      SLAST(lastSourceAdjustment),
+      DADDR(destinationAddress),
+      DOFF(destinationOffset),
+      CITER(majorLoopCount),
+      DLAST(lastDestinationAdjustment),
+      CSR(
+            startChannel, disableRequestOnCompletion,
+            interruptOnMajorComplete, interruptOnMajorHalfComplete,
+            bandwidthControl,
+            enableScatterGather,
+            enableMajorChannelLinking, majorLinkChannelNumber) {
+   }
 };
+
+/**
+ * Creates DMA NBYTES entry for:
+ * - Minor loop enabled CR[EMLN] = 1 (DmaMinorLoopMapping_Enabled)
+ * - Source/Destination offset disabled TCD.SMLOE=TCD.DMLOE=0
+ *
+ * In this mode no address adjustments are made at the end of a minor loop
+ *
+ * @param nBytes 30-bit value for byte count
+ *
+ * @return TCD.NBYTES entry
+ */
+constexpr uint32_t dmaNBytes(uint32_t nBytes) {
+   return
+#ifdef DEBUG_BUILD
+         usbdm_assert((nBytes<(1<<30)), "nBytes is too large"),
+#endif
+         DMA_NBYTES_MLOFFNO_NBYTES(nBytes);
+}
+
+/**
+ * Creates DMA CITER entry for:
+ * - Channel-to-channel linking disabled TCD.ELINK=0
+ *
+ * @param citer 15-bit value for major iteration count
+ *
+ * @return TCD.CITER entry
+ */
+constexpr uint16_t dmaCiter(uint16_t citer) {
+   return
+#ifdef DEBUG_BUILD
+         usbdm_assert((citer<(1<<15)), "CITER is too large"),
+#endif
+         DMA_CITER_ELINKNO_CITER(citer);
+}
+
+/**
+ * Creates DMA CITER entry for:
+ * - Channel-to-channel linking enabled TCD.ELINK=1
+ *
+ * @param dmaChannelNum Channel to link to
+ * @param citer         9-bit value for major iteration count
+ *
+ * @return TCD.CITER entry
+ */
+constexpr uint16_t dmaCiter(DmaChannelNum dmaChannelNum, uint16_t citer) {
+   return
+#ifdef DEBUG_BUILD
+         usbdm_assert((citer<(1<<9)), "citer is too large"),
+#endif
+         DMA_CITER_ELINKNO_ELINK(1)|DMA_CITER_ELINKYES_LINKCH(dmaChannelNum)|DMA_CITER_ELINKYES_CITER(citer);
+}
 
 /**
  * Template class providing interface to DMA Multiplexor.
@@ -576,18 +897,18 @@ public:
     * Enable and configure shared DMA settings.
     * This also clears all DMA channels.
     *
+    * @param[in] dmaOnError            Whether to halt when a DMA error occurs
+    * @param[in] dmaMinorLoopMapping   Whether to enable minor loop mapping
+    * @param[in] dmaContinuousLink     Whether to enable continuous link mode
     * @param[in] dmaArbitration        How to arbitrate between requests from different DMA channels
     * @param[in] dmaGroupArbitration   How to arbitrate between requests from different DMA groups
-    * @param[in] dmaOnError            Whether to halt when a DMA error occurs
-    * @param[in] dmaLink               Whether to enable continuous link mode
-    * @param[in] dmaMinorLoopMapping   Whether to enable minor loop mapping
     */
    static void configure(
-         DmaArbitration       dmaArbitration=DmaArbitration_RoundRobin,
-         DmaGroupArbitration  dmaGroupArbitration=DmaGroupArbitration_RoundRobin,
          DmaOnError           dmaOnError=DmaOnError_Halt,
-         DmaLink              dmaLink=DmaLink_Disabled,
-         DmaMinorLoopMapping  dmaMinorLoopMapping=DmaMinorLoopMapping_Disabled
+         DmaMinorLoopMapping  dmaMinorLoopMapping=DmaMinorLoopMapping_Disabled,
+         DmaContinuousLink    dmaLink=DmaContinuousLink_Disabled,
+         DmaArbitration       dmaArbitration=DmaArbitration_RoundRobin,
+         DmaGroupArbitration  dmaGroupArbitration=DmaGroupArbitration_RoundRobin
          ) {
       // Enable clock to DMAC
       clockReg()  |= MuxInfo::clockMask;
@@ -597,35 +918,56 @@ public:
 
       // Clear call-backs and TCDs
       for (unsigned channel=0; channel<Info::NumVectors; channel++) {
-         static const DmaTcd emptyTcd {
-            /* uint32_t  SADDR         Source address              */ 0,
-            /* uint16_t  SOFF          Source offset               */ 0,
-            /* DmaSize   DSIZE:3       Destination size            */ DmaSize_8bit,
-            /* DmaModulo DMOD:5        Destination modulo          */ DmaModulo_Disabled,
-            /* DmaSize   SSIZE:3       Source size                 */ DmaSize_8bit,
-            /* DmaModulo SMOD:5        Source modulo               */ DmaModulo_Disabled,
-            /* uint32_t  NBYTES        Minor loop byte count       */ 0,
-            /* uint32_t  SLAST         Last source adjustment      */ 0,
-            /* uint32_t  DADDR         Destination address         */ 0,
-            /* uint16_t  DOFF          Destination offset          */ 0,
-            /* uint16_t  CITER         Major loop count            */ 0,
-            /* uint32_t  DLAST         Last destination adjustment */ 0,
-            /* bool      START:1       Channel Start               */ false,
-            /* bool      INTMAJOR:1    Interrupt on major complete */ false,
-            /* bool      INTHALF:1     Interrupt on half complete  */ false,
-            /* bool      DREQ:1        Disable Request             */ false,
-            /* bool      ESG:1         Enable Scatter/Gather       */ false,
-            /* bool      MAJORELINK:1  Enable channel linking      */ false,
-            /* bool      ACTIVE:1      Channel Active              */ false,
-            /* bool      DONE:1        Channel Done                */ false,
-            /* unsigned  MAJORLINKCH:4 Link Channel Number         */ 0,
-            /* DmaSpeed  BWC:2         Bandwidth (speed) Control   */ DmaSpeed_NoStalls
-         };
+         static const DmaTcd emptyTcd;
          callbacks[channel] = noHandlerCallback;
          configureTransfer((DmaChannelNum)channel, emptyTcd);
       }
       // Reset record of allocated channels
       allocatedChannels = 0;
+   }
+
+   /**
+    * Set channel arbitration settings.
+    *
+    * @param[in] dmaArbitration        How to arbitrate between requests from different DMA channels
+    * @param[in] dmaGroupArbitration   How to arbitrate between requests from different DMA groups
+    */
+   void setArbitration(
+         DmaArbitration       dmaArbitration,
+         DmaGroupArbitration  dmaGroupArbitration=DmaGroupArbitration_RoundRobin ) {
+#if defined DMA_CR_ERGA
+      dmac().CR = (dmac().CR&~(DMA_CR_ERCA(1)|DMA_CR_GRP1PRI(1)|DMA_CR_GRP0PRI(1)))|dmaArbitration|dmaGroupArbitration;
+#else
+      dmac().CR = (dmac().CR&~(DMA_CR_ERCA(1)))|dmaArbitration|dmaGroupArbitration;
+#endif
+   }
+
+   /**
+    * Set minor loop mapping modes.
+    *
+    * @param[in] dmaMinorLoopMapping Whether to enable minor loop mapping
+    */
+   void setMinorLoopMapping(DmaMinorLoopMapping  dmaMinorLoopMapping) {
+      dmac().CR = (dmac().CR&~(DMA_CR_EMLM(1)))|dmaMinorLoopMapping;
+   }
+
+   /**
+    * Set error handling
+    *
+    * @param[in] dmaOnError Whether to halt when a DMA error occurs
+    */
+   void setErrorHandling(DmaOnError dmaOnError) {
+      dmac().CR = (dmac().CR&~(DMA_CR_HOE(1)))|dmaOnError;
+   }
+
+   /**
+    * Enable and configure shared DMA settings.
+    * This also clears all DMA channels.
+    *
+    * @param[in] dmaContinuousLink       Whether to enable continuous link mode
+    */
+   void setLinking(DmaContinuousLink dmaContinuousLink) {
+      dmac().CR = (dmac().CR&~(DMA_CR_CLM(1)))|dmaContinuousLink;
    }
 
    /**

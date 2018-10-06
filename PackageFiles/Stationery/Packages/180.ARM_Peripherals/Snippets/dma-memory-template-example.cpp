@@ -1,6 +1,6 @@
 /**
  ============================================================================
- * @file    dma-memory-template-example.cpp (180.ARM_Peripherals/Sources/)
+ * @file    dma-memory-template-example.cpp (180.ARM_Peripherals/Snippets/)
  * @brief   Basic C++ demo using GPIO class
  *
  *  Created on: 10/1/2016
@@ -72,7 +72,7 @@ static ErrorCode dmaTransfer(T1 *source, T2 *destination, const uint32_t size) {
     * | +--------------------------+ |             - NBYTES Number of bytes to transfer
     * | +--------------------------+ |<-DMA Req.   - Attributes
     * | | Minor Loop               | |               - ATTR_SSIZE, ATTR_DSIZE Source and destination transfer sizes
-    * |..............................|               - ATTR_SMOD, ATTR_DMOD Modulo --TODO
+    * |..............................|               - ATTR_SMOD, ATTR_DMOD Modulo
     * | |                          | |
     * | +--------------------------+ |             The number of reads and writes done will depend on NBYTES, SSIZE and DSIZE
     * | +--------------------------+ |<-DMA Req.   For example: NBYTES=12, SSIZE=16-bits, DSIZE=32-bits => 6 reads, 3 writes
@@ -95,31 +95,28 @@ static ErrorCode dmaTransfer(T1 *source, T2 *destination, const uint32_t size) {
     *
     * Structure to define the DMA transfer
     */
-   static const DmaTcd tcd {
-      /* uint32_t  SADDR        Source address              */ (uint32_t)(source),         // Source array
-      /* uint16_t  SOFF         Source offset               */ sizeof(*source),            // SADDR advances source element size for each transfer
-      /* DmaSize   DSIZE        Destination size            */ dmaSize(*destination),      // X-bit write to DADDR
-      /* DmaModulo DMOD         Destination modulo          */ DmaModulo_Disabled,
-      /* DmaSize   SSIZE        Source size                 */ dmaSize(*source),           // X-bit read from SADDR
-      /* DmaModulo SMOD         Source modulo               */ DmaModulo_Disabled,
-      /* uint32_t  NBYTES       Minor loop byte count       */ size,                       // Total transfer in one minor-loop
-      /* uint32_t  SLAST        Last SADDR adjustment       */ -size,                      // Reset SADDR to start of array on completion
-      /* uint32_t  DADDR        Destination address         */ (uint32_t)(destination),    // Start of array for result
-      /* uint16_t  DOFF         DADDR offset                */ sizeof(*destination),       // DADDR advances destination element size for each transfer
-      /* uint16_t  CITER        Major loop count            */ DMA_CITER_ELINKNO_ELINK(0)| // No ELINK
-      /*                                                    */ DMA_CITER_ELINKNO_CITER(1), // Single (1) software transfer
-      /* uint32_t  DLAST        Last DADDR adjustment       */ -size,                      // Reset DADDR to start of array on completion
-      /* bool      START;       Channel Start               */ true,                       // Software start
-      /* bool      INTMAJOR;    Interrupt on major complete */ true,                       // Generate interrupt on completion of Major-loop
-      /* bool      INTHALF;     Interrupt on half complete  */ false,
-      /* bool      DREQ;        Disable Request             */ false,                      // Don't clear hardware request when complete major loop
-      /* bool      ESG;         Enable Scatter/Gather       */ false,
-      /* bool      MAJORELINK;  Enable channel linking      */ false,
-      /* bool      ACTIVE;      Channel Active              */ false,
-      /* bool      DONE;        Channel Done                */ false,
-      /* unsigned  MAJORLINKCH; Link Channel Number         */ 0,
-      /* DmaSpeed  BWC;         Bandwidth (speed) Control   */ DmaSpeed_NoStalls,
-   };
+   static const DmaTcd tcd (
+      /* Source address                 */ (uint32_t)(source),      // Source array
+      /* Source offset                  */ sizeof(*source),         // Source address advances source element size for each transfer
+      /* Source size                    */ dmaSize(*source),        // X-bit read from source address
+      /* Source modulo                  */ DmaModulo_Disabled,      // Disabled
+      /* Last source adjustment         */ -(int)size,              // Reset Source address to start of array on completion
+
+      /* Destination address            */ (uint32_t)(destination), // Start of array for result
+      /* Destination offset             */ sizeof(*destination),    // Destination address advances destination element size for each transfer
+      /* Destination size               */ dmaSize(*destination),   // X-bit write to destination address
+      /* Destination modulo             */ DmaModulo_Disabled,
+      /* Last destination adjustment    */ -(int)size,              // Reset destination address to start of array on completion
+
+      /* Minor loop byte count          */ dmaNBytes(size),         // Total transfer in one minor-loop
+      /* Major loop count               */ dmaCiter(1),             // Single (1) software transfer
+
+      /* Start channel                  */ true,                    // Software start
+      /* Disable Req. on major complete */ false,                   // Don't clear hardware request when major loop completed
+      /* Interrupt on major complete    */ true,                    // Generate interrupt on completion of major-loop
+      /* Interrupt on half complete     */ false,                   // No interrupt
+      /* Bandwidth (speed) Control      */ DmaSpeed_NoStalls        // Full speed
+   );
 
    // Sequence not complete yet
    complete = false;
@@ -143,7 +140,7 @@ static ErrorCode dmaTransfer(T1 *source, T2 *destination, const uint32_t size) {
 // Data element size for array - uint8_t/uint16_t/uint32_t
 using ArrayElement = uint16_t;
 
-constexpr int DataSize = 4*((1<<10)/sizeof(ArrayElement));  // 4KiB
+constexpr int DataSize = 3*((1<<10)/sizeof(ArrayElement));  // 3KiB
 ArrayElement source[DataSize];
 ArrayElement destination[DataSize];
 
@@ -182,7 +179,6 @@ int main() {
          console.writeln("Contents verify failed");
       }
    }
-
    for(;;) {
       __asm__("nop");
    }

@@ -70,7 +70,7 @@ static const char message[]=
  * | +--------------------------+ |             - NBYTES Number of bytes to transfer
  * | +--------------------------+ |<-DMA Req.   - Attributes
  * | | Minor Loop               | |               - ATTR_SSIZE, ATTR_DSIZE Source and destination transfer sizes
- * |..............................|               - ATTR_SMOD, ATTR_DMOD Modulo --TODO
+ * |..............................|               - ATTR_SMOD, ATTR_DMOD Modulo
  * | |                          | |
  * | +--------------------------+ |             The number of reads and writes done will depend on NBYTES, SSIZE and DSIZE
  * | +--------------------------+ |<-DMA Req.   For example: NBYTES=12, SSIZE=16-bits, DSIZE=32-bits => 6 reads, 3 writes
@@ -93,32 +93,29 @@ static const char message[]=
  *
  * Structure to define the DMA transfer
  */
-static constexpr DmaTcd tcd {
-   /* uint32_t  SADDR        Source address              */ (uint32_t)(message),        // Source array
-   /* uint16_t  SOFF         Source offset               */ sizeof(message[0]),         // SADDR advances 1 byte for each request
-   /* DmaSize   DSIZE        Destination size            */ dmaSize(message[0]),        // 8-bit read from DADDR
-   /* DmaModulo DMOD         Destination modulo          */ DmaModulo_Disabled,
-   /* DmaSize   SSIZE        Source size                 */ dmaSize(message[0]),        // 8-bit write to SADDR
-   /* DmaModulo SMOD         Source modulo               */ DmaModulo_Disabled,
-   /* uint32_t  NBYTES       Minor loop byte count       */ 1*sizeof(message[0]),       // Total transfer in one minor-loop
-   /* uint32_t  SLAST        Last SADDR adjustment       */ -sizeof(message),           // Reset SADDR to start of array on completion
-   /* uint32_t  DADDR        Destination address         */ console.uartD(),            // Destination is UART data register
-   /* uint16_t  DOFF         DADDR offset                */ 0,                          // DADDR doesn't change
-   /* uint16_t  CITER        Major loop count            */ DMA_CITER_ELINKNO_ELINK(0)| // No ELINK
-   /*                                                    */ ((sizeof(message))/         // Transfer entire buffer
-   /*                                                    */  sizeof(message[0])),
-   /* uint32_t  DLAST        Last DADDR adjustment       */ 0,                          // DADDR doesn't change
-   /* bool      START;       Channel Start               */ false,                      // Don't start (triggered by hardware)
-   /* bool      INTMAJOR;    Interrupt on major complete */ true,                       // Generate interrupt on completion of Major-loop
-   /* bool      INTHALF;     Interrupt on half complete  */ false,
-   /* bool      DREQ;        Disable Request             */ false,                      // Don't clear hardware request when complete major loop
-   /* bool      ESG;         Enable Scatter/Gather       */ false,
-   /* bool      MAJORELINK;  Enable channel linking      */ false,
-   /* bool      ACTIVE;      Channel Active              */ false,
-   /* bool      DONE;        Channel Done                */ false,
-   /* unsigned  MAJORLINKCH; Link Channel Number         */ 0,
-   /* DmaSpeed  BWC;         Bandwidth (speed) Control   */ DmaSpeed_NoStalls,
-};
+static constexpr DmaTcd tcd = DmaTcd (
+   /* Source address                 */ (uint32_t)(message),           // Source array
+   /* Source offset                  */ sizeof(message[0]),            // Source address advances 1 element for each request
+   /* Source size                    */ dmaSize(message[0]),           // 8-bit read from source address
+   /* Source modulo                  */ DmaModulo_Disabled,            // Disabled
+   /* Last source adjustment         */ -(int)sizeof(message),         // Reset source address to start of array on completion
+
+   /* Destination address            */ console.uartD(),               // Destination is UART data register
+   /* Destination offset             */ 0,                             // Destination address doesn't change
+   /* Destination size               */ dmaSize(message[0]),           // 8-bit write to destination address
+   /* Destination modulo             */ DmaModulo_Disabled,            // Disabled
+   /* Last destination adjustment    */ 0,                             // Destination address doesn't change
+
+   /* Minor loop byte count          */ dmaNBytes(sizeof(message[0])), // Total transfer in one minor-loop
+   /* Major loop count               */ dmaCiter((sizeof(message))/    // Transfer entire buffer
+   /*                                */           sizeof(message[0])),
+
+   /* Start channel                  */ false,                         // Don't start (triggered by hardware)
+   /* Disable Req. on major complete */ false,                         // Don't clear hardware request when major loop completed
+   /* Interrupt on major complete    */ true,                          // Generate interrupt on completion of Major-loop
+   /* Interrupt on half complete     */ false,                         // No interrupt
+   /* Bandwidth (speed) Control      */ DmaSpeed_NoStalls              // Full speed
+);
 
 /**
  * DMA error call back
@@ -154,8 +151,13 @@ static void configureDma(DmaChannelNum dmaChannel) {
    // Sequence not complete yet
    complete = false;
 
-   // Enable DMAC with default settings
-   Dma0::configure();
+   // Enable DMAC
+   // Note: These settings affect all DMA channels
+   Dma0::configure(
+         DmaOnError_Halt,
+         DmaMinorLoopMapping_Disabled,
+         DmaLink_Disabled,
+         DmaArbitration_Fixed);
 
    // Set callback (Interrupts are enabled in TCD)
    Dma0::setCallback(dmaChannel, dmaCallback);
@@ -163,7 +165,7 @@ static void configureDma(DmaChannelNum dmaChannel) {
    Dma0::enableNvicInterrupts(dmaChannel);
    Dma0::enableNvicErrorInterrupt();
 
-   // Connect DMA channel to UART but throttle by PIT Channel 1 (matches DMA channel 1)
+   // Connect DMA channel to UART but throttle by PIT Channel N (matches DMA channel N)
    DmaMux0::configure(dmaChannel, DMA_SLOT, DmaMuxEnable_Triggered);
 
    // Configure the transfer
