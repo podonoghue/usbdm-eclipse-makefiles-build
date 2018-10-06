@@ -153,7 +153,7 @@ public:
 
    /**
     *  Enable the PIT with default settings.
-    *  The channels are enabled with default settings.
+    *  All channels are enabled with default settings.
     */
    static void defaultConfigure() {
       enable();
@@ -229,7 +229,7 @@ public:
          PitChannelIrq     pitChannelIrq=PitChannelIrq_Disable,
          PitChannelEnable  pitChannelEnable=PitChannelEnable_Enable) {
 
-      pit().CHANNEL[channel].LDVAL = interval;
+      pit().CHANNEL[channel].LDVAL = interval-1;
       pit().CHANNEL[channel].TCTRL = pitChannelIrq|pitChannelEnable;
       pit().CHANNEL[channel].TFLG  = PIT_TFLG_TIF_MASK;
 
