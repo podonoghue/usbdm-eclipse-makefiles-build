@@ -14,14 +14,18 @@
 using namespace USBDM;
 
 // LED connections - change as required
-using LedA = USBDM::GpioA<2,ActiveLow>;
-using LedB = USBDM::GpioC<3,ActiveLow>;
+using LedA = GpioA<2,ActiveLow>;
+using LedB = GpioC<3,ActiveLow>;
 
+/*
+ * Debug Pin.
+ * The high-time shows the approximate sample time for the active inputs.
+ */
 using MeasurementPin = USBDM::GpioE<1>;
 
 // TSI electrodes to use
-constexpr uint32_t electrodeA = 11;
-constexpr uint32_t electrodeB = 12;
+using ElectrodeA = Tsi0::Pin<11>;
+using ElectrodeB = Tsi0::Pin<12>;
 
 /*
  * Flag used to communicate between ISR and foreground task.
@@ -52,15 +56,17 @@ void initTsi(bool periodic) {
    Tsi0::enable();
 
    // Set electrodes as inputs
-   Tsi0::setInput<electrodeA>();
-   Tsi0::setInput<electrodeB>();
+   ElectrodeA::setInput();
+   ElectrodeB::setInput();
 
    // Set clock source (and divider and modulus)
    Tsi0::setClock(TsiClockSource_LpOscClk);
    // Set Low power clock - off
    Tsi0::setLowPowerClock(TsiStopMode_Disabled);
    // Enable these two inputs
-   Tsi0::selectInputs((1<<electrodeA)|(1<<electrodeB), electrodeA);
+   Tsi0::selectInputs(
+         (1<<ElectrodeA::electrodeNum)|(1<<ElectrodeB::electrodeNum),
+         ElectrodeA::electrodeNum);
    // Set charge currents
    Tsi0::setCurrents(16,16);
    // This affects the electrode sample interval and needs to be a compromise
@@ -128,10 +134,10 @@ void tsiExample() {
    }
    // Start min/max at first measurement +/- delta
    static constexpr int delta = 0;
-   chAMin = std::max(0,     Tsi0::getCount(electrodeA)-delta);
-   chAMax = std::min(65535, Tsi0::getCount(electrodeA)+delta);
-   chBMin = std::max(0,     Tsi0::getCount(electrodeB)-delta);
-   chBMax = std::min(65535, Tsi0::getCount(electrodeB)+delta);
+   chAMin = std::max(0,     ElectrodeA::getCount()-delta);
+   chAMax = std::min(65535, ElectrodeA::getCount()+delta);
+   chBMin = std::max(0,     ElectrodeB::getCount()-delta);
+   chBMax = std::min(65535, ElectrodeB::getCount()+delta);
 
    // Reconfigure as Hardware-triggered (periodic)
    // with interrupts
@@ -153,8 +159,8 @@ void tsiExample() {
       waitUS(250);
 
       // Read two active electrodes
-      uint16_t chA = Tsi0::getCount(electrodeA);
-      uint16_t chB = Tsi0::getCount(electrodeB);
+      uint16_t chA = ElectrodeA::getCount();
+      uint16_t chB = ElectrodeB::getCount();
 
       // Adjust min/max
       chAMin = std::min(chA, chAMin);
