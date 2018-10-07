@@ -203,7 +203,7 @@ public:
          PinAction         pinAction         = PinAction_None,
          PinFilter         pinFilter         = PinFilter_None
          ) {
-      setInput(pinPull|pinAction|pinFilter|(Info::info[channel].pcrValue&PORT_PCR_MUX_MASK));
+      setInput(pinPull|pinAction|pinFilter);
    }
 
    /**
