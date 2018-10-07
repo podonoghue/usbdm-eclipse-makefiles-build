@@ -5,7 +5,7 @@
  *           Equivalent: 
  *
  * @version  V1.6
- * @date     2018/07
+ * @date     2018/10
  *
  *******************************************************************************************************/
 
@@ -1714,7 +1714,7 @@ typedef enum DmaSlot {
    Dma0Slot_FTM0_Ch6                   =       30, //!<  FTM0 Channel 6
    Dma0Slot_FTM0_Ch7                   =       31, //!<  FTM0 Channel 7
    Dma0Slot_FTM1_Ch0                   =       32, //!<  FTM1 Channel 0
-   Dma0Slot_FTM1_Ch2                   =       33, //!<  FTM1 Channel 1
+   Dma0Slot_FTM1_Ch1                   =       33, //!<  FTM1 Channel 1
    Dma0Slot_ADC0                       =       40, //!<  ADC0
    Dma0Slot_CMP0                       =       42, //!<  CMP0
    Dma0Slot_CMP1                       =       43, //!<  CMP1
