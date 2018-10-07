@@ -62,7 +62,7 @@ int main() {
        * RUN -> VLPR
        * Change clock down then run mode
        */
-      Mcg::clockTransition(McgInfo::clockInfo[ClockConfig_VLPR]);
+      Mcg::clockTransition(Mcg::clockInfo[ClockConfig_VLPR]);
       console_setBaudRate(defaultBaudRate);
       Smc::enterRunMode(SmcRunMode_VeryLowPower);
       report();
@@ -73,7 +73,7 @@ int main() {
        * Change mode then clock up
        */
       Smc::enterRunMode(SmcRunMode_Normal);
-      Mcg::clockTransition(McgInfo::clockInfo[ClockConfig_RUN]);
+      Mcg::clockTransition(Mcg::clockInfo[ClockConfig_RUN]);
       console_setBaudRate(defaultBaudRate);
       report();
       waitMS(1000);
@@ -84,7 +84,7 @@ int main() {
        * Change mode then clock up
        */
       Smc::enterRunMode(SmcRunMode_HighSpeed);
-      Mcg::clockTransition(McgInfo::clockInfo[ClockConfig_HSRUN]);
+      Mcg::clockTransition(Mcg::clockInfo[ClockConfig_HSRUN]);
       console_setBaudRate(defaultBaudRate);
       report();
       waitMS(1000);
@@ -93,7 +93,7 @@ int main() {
        * HSRUN -> RUN
        * Change clock down then run mode
        */
-      Mcg::clockTransition(McgInfo::clockInfo[ClockConfig_RUN]);
+      Mcg::clockTransition(Mcg::clockInfo[ClockConfig_RUN]);
       Smc::enterRunMode(SmcRunMode_Normal);
       console_setBaudRate(defaultBaudRate);
       report();
