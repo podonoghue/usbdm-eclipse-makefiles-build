@@ -3,10 +3,19 @@
  * @file    neopixel-example.cpp (180.ARM_Peripherals/Snippets)
  * @brief   Demo using Ftm class to implement a basic driver for a neopixel
  *
- *  Created on: 3/7/2017
+ * The number of lines of neopixels that can be driven is limited by the
+ * number of port pins available on a single port.
+ * The code assumes consecutive pins within a byte as it uses a GpioXField
+ * and byte size data but this limitation can be removed.
+ *
+ * This code is loosely based on the the technique described here:
+ * https://mcuoneclipse.com/2015/08/01/tutorial-adafruit-ws2812b-neopixels-with-the-freescale-frdm-k64f-board-part-1-hardware/
+ *
+ *  Created on: 3/10/2018
  *      Author: podonoghue
  ============================================================================
  */
+#include <string.h>
 #include "hardware.h"
 #include "dma.h"
 
@@ -21,15 +30,15 @@ using namespace USBDM;
  */
 
 /** GPIO driving pixel data */
-using Pixel = GpioDField<1,0>;
+using Pixel = GpioDField<3,2>;
 
 /**
  * FTM Timer being used - change as required
  */
 using Timer = Ftm0;
 
-// Timer channels
-// These are used to trigger DMA transfers to the PORT registers
+// Fixed Timer channels.
+// These are used to trigger DMA transfers to the PORT registers.
 using HighChannel = Timer::Channel<1>; //!< PSOR - Sets pin high
 using DataChannel = Timer::Channel<2>; //!< PCOR - Set pin low/unchanged according to data
 using LowChannel  = Timer::Channel<3>; //!< PCOR - Sets pin low
@@ -51,27 +60,28 @@ static void dmaCallback(DmaChannelNum channel) {
    complete = true;
 }
 
-/** Number of strings of pixels. */
-//static constexpr unsigned PIXEL_WIDTH  = 1;
-
 /** Number of pixels in a string. */
-static constexpr unsigned PIXEL_LENGTH = 2;
+static constexpr unsigned PIXEL_LENGTH = 12;
 
-/** Number of bits required per pixel. */
+/** Number of RGB bits required per pixel. */
 static constexpr unsigned PIXEL_BIT_LENGTH = 24;
 
 /**
- * Transmit Data
+ * Transmit Data.
+ * This holds the unpacked pixel RGB information.\n
+ * Each bit represents a different pixel string.
  */
 static uint8_t pixelBuffer[PIXEL_LENGTH*PIXEL_BIT_LENGTH] = {0};
 
 /**
- * Unpack RGB pixel data into format for transmission
+ * Unpack RGB pixel data into format for transmission.
+ * This routine would be called once for each pixel string being driven by
+ * the GPIO pins.
  *
- * @param pixelMask  Bit mask for the GPIO driving the pixel string.
- * @param pixelData  Array of RGB data for pixels in string.
+ * @param[in] pixelMask  Bit mask for the GPIO pin driving the pixel string.
+ * @param[in] pixelData  Array of RGB data for pixels in string.
  */
-void unpackPixels(uint8_t pixelMask, uint32_t pixelData[PIXEL_LENGTH]) {
+void unpackPixels(uint8_t pixelMask, const uint32_t pixelData[PIXEL_LENGTH]) {
    uint8_t *pixelBufferPtr = pixelBuffer;
    for (unsigned pixel=0; pixel<PIXEL_LENGTH; pixel++) {
       uint32_t data = pixelData[pixel];
@@ -79,26 +89,31 @@ void unpackPixels(uint8_t pixelMask, uint32_t pixelData[PIXEL_LENGTH]) {
       // Shuffle data RGB => GRB
       data = ((data<<8)&0xFF0000)|((data>>8)&0x00FF00)|(data&0xFF);
 
-      // Unpack into transmission format
-      // GGGGGGGGRRRRRRRRBBBBBBBB => bit position in byte
+      // Merge into transmission format - 1 bit per byte
+      // GGGGGGGGRRRRRRRRBBBBBBBB => bit order in bytes
       for (unsigned bitMask=(1<<(PIXEL_BIT_LENGTH-1)); bitMask != 0; bitMask>>=1) {
          if (data & bitMask) {
-            *pixelBufferPtr++ |= pixelMask;
+            *pixelBufferPtr++ &= ~pixelMask;
          }
          else {
-            *pixelBufferPtr++ &= ~pixelMask;
+            *pixelBufferPtr++ |= pixelMask;
          }
       }
    }
 }
 
 /**
- * Configure DMA from Memory-to-GPIO
+ * Configure DMA from pixelBuffer-->GPIO.
+ *
+ * This sets up three DMA channels:
+ *  - Fixed Bit-mask -> GPIO.PSOR Set all used bits
+ *  - pixelBuffer    -> GPIO.PCOR Selectively clear bits
+ *  - Fixed Bit-mask -> GPIO.PCOR Clear all used bits
  */
 static void initialiseDma(DmaChannelNum dmaSetChannel, DmaChannelNum dmaDataChannel, DmaChannelNum dmaClearChannel) {
 
-/** Mask corresponding to above GPIO */
-static const uint32_t bitmask = Pixel::MASK;
+   /** Mask corresponding to above GPIO */
+   static const uint8_t bitmask = Pixel::MASK;
 
    /**
     * @verbatim
@@ -139,103 +154,107 @@ static const uint32_t bitmask = Pixel::MASK;
     */
 
    /**
-    * Structure to define the Pin setting DMA transfer
+    * Structure to define the Pin setting DMA transfer.
+    * Fixed bit-mask => PSOR.
+    * Sets all pins driving strings of pixels.
     */
-   static constexpr DmaTcd setTCD {
-      /* uint32_t  SADDR       Source address              */ (uint32_t)(&bitmask),            // Source = Fixed bit-mask
-      /* uint16_t  SOFF        SADDR offset                */ 0,                               // SADDR doesn't advance
-      /* DmaSize   DSIZE       Destination size            */ dmaSize(bitmask),                // 32-bit write to SADDR
-      /* DmaModulo DMOD        Destination modulo          */ DmaModulo_Disabled,              // No modulo
-      /* DmaSize   SSIZE       Source size                 */ dmaSize(bitmask),                // 32-bit read from DADDR
-      /* DmaModulo SMOD        Source modulo               */ DmaModulo_Disabled,              // No modulo
-      /* uint32_t  NBYTES      Minor loop byte count       */ sizeof(bitmask),                 // Total transfer in one minor-loop
-      /* uint32_t  SLAST       Last SADDR adjustment       */ 0,                               // SADDR doesn't change
-      /* uint32_t  DADDR       Destination address         */ Pixel::gpioPSOR(),               // Destination is GPIO.PSOR register
-      /* uint16_t  DOFF        DADDR offset                */ 0,                               // DADDR doesn't change
-      /* uint16_t  CITER       Major loop count            */ DMA_CITER_ELINKNO_ELINK(0)|      // No ELINK
-      /*                                                   */ ((sizeof(pixelBuffer))/
-                                                                sizeof(pixelBuffer[0])),       // Transfer count matches entire pixelBuffer
-      /* uint32_t  DLAST       Last DADDR adjustment       */ 0,                               // DADDR doesn't change
-      /* bool      START       Channel Start               */ false,                           // Don't start (triggered by hardware)
-      /* bool      INTMAJOR    Interrupt on major complete */ false,                           // Disabled
-      /* bool      INTHALF     Interrupt on half complete  */ false,                           // Disabled
-      /* bool      DREQ        Disable Request             */ true,                            // Clear hardware request when complete major loop
-      /* bool      ESG         Enable Scatter/Gather       */ false,                           // Disabled
-      /* bool      MAJORELINK  Enable channel linking      */ false,                           // Disabled
-      /* bool      ACTIVE      Channel Active              */ false,
-      /* bool      DONE        Channel Done                */ false,
-      /* unsigned  MAJORLINKCH Link Channel Number         */ 0,                               // N/A
-      /* DmaSpeed  BWC         Bandwidth (speed) Control   */ DmaSpeed_NoStalls,               // Full speed
-   };
+   static constexpr DmaTcd setTCD (
+      /* Source address              */ (uint32_t)(&bitmask),              // Source = Fixed bit-mask
+      /* Source address offset       */ 0,                                 // Source address doesn't advance
+      /* Source size                 */ dmaSize(bitmask),                  // 8-bit read from Destination address
+      /* Source address modulo       */ DmaModulo_Disabled,                // No modulo
+      /* Source last adjustment      */ 0,                                 // Source address doesn't change
+
+      /* Destination address         */ Pixel::gpioPSOR(),                 // Destination is GPIO.PSOR register
+      /* Destination address offset  */ 0,                                 // Destination address doesn't change
+      /* Destination size            */ dmaSize(bitmask),                  // 8-bit write to Source address
+      /* Destination address modulo  */ DmaModulo_Disabled,                // No modulo
+      /* Destination last adjustment */ 0,                                 // Destination address doesn't change
+
+      /* Minor loop byte count       */ sizeof(bitmask),                   // Total transfer in one minor-loop
+
+      /* Major loop count            */ dmaCiter(sizeof(pixelBuffer))/
+      /*                             */          sizeof(pixelBuffer[0]),   // Transfer count matches entire pixelBuffer
+
+      /* Channel Start               */ false,                             // Don't start (triggered by hardware)
+      /* Disable Request             */ true,                              // Clear hardware request when complete major loop
+      /* Interrupt on major complete */ false,                             // Disabled
+      /* Interrupt on half complete  */ false,                             // Disabled
+      /* Bandwidth (speed) Control   */ DmaSpeed_NoStalls                  // Full speed
+   );
 
    /**
     * Structure to define the Pin data DMA transfer
+    * pixelBuffer[n] => PCOR
+    * This selectively clears pins driving strings of pixels.
     */
-   static constexpr DmaTcd dataTCD {
-      /* uint32_t  SADDR       Source address              */ (uint32_t)(pixelBuffer),         // Source = Fixed bit-mask
-      /* uint16_t  SOFF        SADDR offset                */ sizeof(pixelBuffer[0]),          // SADDR advances
-      /* DmaSize   DSIZE       Destination size            */ dmaSize(pixelBuffer[0]),         // 32-bit write to SADDR
-      /* DmaModulo DMOD        Destination modulo          */ DmaModulo_Disabled,              // No modulo
-      /* DmaSize   SSIZE       Source size                 */ dmaSize(pixelBuffer[0]),         // 32-bit read from DADDR
-      /* DmaModulo SMOD        Source modulo               */ DmaModulo_Disabled,              // No modulo
-      /* uint32_t  NBYTES      Minor loop byte count       */ sizeof(pixelBuffer[0]),          // Total transfer in one minor-loop
-      /* uint32_t  SLAST       Last SADDR adjustment       */ -sizeof(pixelBuffer),            // Reset SADDR back to start of buffer
-      /* uint32_t  DADDR       Destination address         */ Pixel::gpioPCOR(),               // Destination is GPIO.PCOR register
-      /* uint16_t  DOFF        DADDR offset                */ 0,                               // DADDR doesn't change
-      /* uint16_t  CITER       Major loop count            */ DMA_CITER_ELINKNO_ELINK(0)|      // No ELINK
-      /*                                                   */ ((sizeof(pixelBuffer))/
-                                                                sizeof(pixelBuffer[0])),       // Transfer count matches entire pixelBuffer
-      /* uint32_t  DLAST       Last DADDR adjustment       */ 0,                               // DADDR doesn't change
-      /* bool      START       Channel Start               */ false,                           // Don't start (triggered by hardware)
-      /* bool      INTMAJOR    Interrupt on major complete */ false,                           // Disabled
-      /* bool      INTHALF     Interrupt on half complete  */ false,                           // Disabled
-      /* bool      DREQ        Disable Request             */ true,                            // Clear hardware request when complete major loop
-      /* bool      ESG         Enable Scatter/Gather       */ false,                           // Disabled
-      /* bool      MAJORELINK  Enable channel linking      */ false,                           // Disabled
-      /* bool      ACTIVE      Channel Active              */ false,
-      /* bool      DONE        Channel Done                */ false,
-      /* unsigned  MAJORLINKCH Link Channel Number         */ 0,                               // N/A
-      /* DmaSpeed  BWC         Bandwidth (speed) Control   */ DmaSpeed_NoStalls,               // Full speed
-   };
+   static constexpr DmaTcd dataTCD (
+      /* Source address              */ (uint32_t)(pixelBuffer),           // Source = Fixed bit-mask
+      /* Source address offset       */ sizeof(pixelBuffer[0]),            // Source address advances
+      /* Source size                 */ dmaSize(pixelBuffer[0]),           // 8-bit read from Destination address
+      /* Source address modulo       */ DmaModulo_Disabled,                // No modulo
+      /* Source last adjustment      */ -(int)sizeof(pixelBuffer),         // Reset Source address back to start of buffer
+
+      /* Destination address         */ Pixel::gpioPCOR(),                 // Destination is GPIO.PCOR register
+      /* Destination address offset  */ 0,                                 // Destination address doesn't change
+      /* Destination size            */ dmaSize(pixelBuffer[0]),           // 8-bit write to Source address
+      /* Destination address modulo  */ DmaModulo_Disabled,                // No modulo
+      /* Destination last adjustment */ 0,                                 // Destination address doesn't change
+
+      /* Minor loop byte count       */ sizeof(pixelBuffer[0]),            // Total transfer in one minor-loop
+
+      /* Major loop count            */ dmaCiter(sizeof(pixelBuffer))/
+      /*                             */          sizeof(pixelBuffer[0]),   // Transfer count matches entire pixelBuffer
+
+      /* Channel Start               */ false,                             // Don't start (triggered by hardware)
+      /* Disable Request             */ true,                              // Clear hardware request when complete major loop
+      /* Interrupt on major complete */ false,                             // Disabled
+      /* Interrupt on half complete  */ false,                             // Disabled
+      /* Bandwidth (speed) Control   */ DmaSpeed_NoStalls                  // Full speed
+   );
 
    /**
     * Structure to define the Pin clearing DMA transfer
+    * Fixed bit-mask => PCOR.
+    * Clears all pins driving strings of pixels.
     */
-   static constexpr DmaTcd clearTCD {
-      /* uint32_t  SADDR       Source address              */ (uint32_t)(&bitmask),            // Source = Fixed bit-mask
-      /* uint16_t  SOFF        SADDR offset                */ 0,                               // SADDR doesn't advance
-      /* DmaSize   DSIZE       Destination size            */ dmaSize(bitmask),                // 32-bit write to SADDR
-      /* DmaModulo DMOD        Destination modulo          */ DmaModulo_Disabled,              // No modulo
-      /* DmaSize   SSIZE       Source size                 */ dmaSize(bitmask),                // 32-bit read from DADDR
-      /* DmaModulo SMOD        Source modulo               */ DmaModulo_Disabled,              // No modulo
-      /* uint32_t  NBYTES      Minor loop byte count       */ sizeof(bitmask),                 // Total transfer in one minor-loop
-      /* uint32_t  SLAST       Last SADDR adjustment       */ 0,                               // SADDR doesn't change
-      /* uint32_t  DADDR       Destination address         */ Pixel::gpioPCOR(),               // Destination is GPIO.PCOR register
-      /* uint16_t  DOFF        DADDR offset                */ 0,                               // DADDR doesn't change
-      /* uint16_t  CITER       Major loop count            */ DMA_CITER_ELINKNO_ELINK(0)|      // No ELINK
-      /*                                                   */ ((sizeof(pixelBuffer))/
-                                                                sizeof(pixelBuffer[0])),       // Transfer count matches entire pixelBuffer
-      /* uint32_t  DLAST       Last DADDR adjustment       */ 0,                               // DADDR doesn't change
-      /* bool      START       Channel Start               */ false,                           // Don't start (triggered by hardware)
-      /* bool      INTMAJOR    Interrupt on major complete */ true,                            // Generate interrupt on completion of Major-loop
-      /* bool      INTHALF     Interrupt on half complete  */ false,                           // Disabled
-      /* bool      DREQ        Disable Request             */ true,                            // Clear hardware request when complete major loop
-      /* bool      ESG         Enable Scatter/Gather       */ false,                           // Disabled
-      /* bool      MAJORELINK  Enable channel linking      */ false,                           // Disabled
-      /* bool      ACTIVE      Channel Active              */ false,
-      /* bool      DONE        Channel Done                */ false,
-      /* unsigned  MAJORLINKCH Link Channel Number         */ 0,                               // N/A
-      /* DmaSpeed  BWC         Bandwidth (speed) Control   */ DmaSpeed_NoStalls,               // Full speed
-   };
+   static constexpr DmaTcd clearTCD (
+      /* Source address              */ (uint32_t)(&bitmask),               // Source = Fixed bit-mask
+      /* Source address offset       */ 0,                                  // Source address doesn't advance
+      /* Source size                 */ dmaSize(bitmask),                   // 8-bit read from Destination address
+      /* Source address modulo       */ DmaModulo_Disabled,                 // No modulo
+      /* Source last adjustment      */ 0,                                  // Source address doesn't change
+
+      /* Destination address         */ Pixel::gpioPCOR(),                  // Destination is GPIO.PCOR register
+      /* Destination address offset  */ 0,                                  // Destination address doesn't change
+      /* Destination size            */ dmaSize(bitmask),                   // 8-bit write to Source address
+      /* Destination address modulo  */ DmaModulo_Disabled,                 // No modulo
+      /* Destination last adjustment */ 0,                                  // Destination address doesn't change
+
+      /* Minor loop byte count       */ sizeof(bitmask),                    // Total transfer in one minor-loop
+
+      /* Major loop count            */ dmaCiter(sizeof(pixelBuffer))/
+      /*                             */          sizeof(pixelBuffer[0]),    // Transfer count matches entire pixelBuffer
+
+      /* Channel Start               */ false,                              // Don't start (triggered by hardware)
+      /* Disable Request             */ true,                               // Clear hardware request when complete major loop
+      /* Interrupt on major complete */ true,                               // Generate interrupt on completion of Major-loop
+      /* Interrupt on half complete  */ false,                              // Disabled
+      /* Bandwidth (speed) Control   */ DmaSpeed_NoStalls                   // Full speed
+   );
 
    // Enable DMAC with default settings
-   Dma0::configure();
+   Dma0::configure(
+         DmaOnError_Halt,
+         DmaMinorLoopMapping_Disabled,
+         DmaContinuousLink_Disabled,
+         DmaArbitration_RoundRobin);
 
-   // Set callback (Interrupts are enabled in TCD)
+   // Set callback (Interrupts are enabled in one TCD above)
    Dma0::setCallback(dmaClearChannel, dmaCallback);
    Dma0::enableNvicInterrupts(dmaClearChannel);
 
-   // Connect DMA channels FTM
+   // Connect DMA channels to FTM for triggering
    DmaMux0::configure(dmaSetChannel,   Dma0Slot_FTM0_Ch1, DmaMuxEnable_Continuous);
    DmaMux0::configure(dmaDataChannel,  Dma0Slot_FTM0_Ch2, DmaMuxEnable_Continuous);
    DmaMux0::configure(dmaClearChannel, Dma0Slot_FTM0_Ch3, DmaMuxEnable_Continuous);
@@ -262,9 +281,28 @@ static const uint32_t bitmask = Pixel::MASK;
  *          --+                         +------------+
  *            |<-------------- Period -------------->|
  */
-static constexpr float T0_HIGH = 500*us;
-static constexpr float T1_HIGH = 700*us;
-static constexpr float PERIOD  = 1200*us;
+//#define WS2812
+//#define WS2812B
+#define SK6812
+#if defined WS2812
+static constexpr float T0_HIGH = 400*ns;   // 350 +/- 150 us
+static constexpr float T1_HIGH = 600*ns;   // 700 +/- 150 us
+static constexpr float PERIOD  = 1200*ns;
+//static constexpr float T0_LOW  = 800*ns; // 800 +/- 150 us
+//static constexpr float T1_LOW  = 600*ns; // 600 +/- 150 us
+#elif defined WS2812B
+static constexpr float T0_HIGH = 500*ns;   // 400 +/- 150 us
+static constexpr float T1_HIGH = 800*ns;   // 800 +/- 150 us
+static constexpr float PERIOD  = 1350*ns;
+//static constexpr float T0_LOW  = 850*ns; // 850 +/- 150 us
+//static constexpr float T1_LOW  = 550*ns; // 450 +/- 150 us
+#elif defined SK6812
+static constexpr float T0_HIGH = 300*ns;     // 300 +/- 150 us
+static constexpr float T1_HIGH = 600*ns;     // 600 +/- 150 us
+static constexpr float PERIOD  = 1200*ns;
+//static constexpr float T0_LOW  = 900*ns;   // 900 +/- 150 us
+//static constexpr float T1_LOW  = 600*ns;   // 600 +/- 150 us
+#endif
 
 /**
  * Start transfer
@@ -273,39 +311,43 @@ static void startTransfer(DmaChannelNum dmaSetChannel, DmaChannelNum dmaDataChan
    // Sequence not complete yet
    complete = false;
 
-   uint32_t dmaChannelMask = (1<<dmaSetChannel)|(1<<dmaDataChannel)|(1<<dmaClearChannel);
-   uint32_t ftmChannelMask = HighChannel::CHANNEL_MASK|DataChannel::CHANNEL_MASK|LowChannel::CHANNEL_MASK;
+   const uint32_t dmaChannelMask = (1<<dmaSetChannel)|(1<<dmaDataChannel)|(1<<dmaClearChannel);
+   const uint32_t ftmChannelMask = HighChannel::CHANNEL_MASK|DataChannel::CHANNEL_MASK|LowChannel::CHANNEL_MASK;
 
-   // Clear FTM timer count and channel flags
-   Ftm0::resetTime();
-   Ftm0::clearSelectedInterruptFlags(ftmChannelMask);
+   // Reset timer count, start counting to a moderate value and clear channel flags.
+   // This allows time for setup before the FTM counter roll-over and new values are synchronously loaded.
+   Timer::setPeriodInTicks(Timer::convertMicrosecondsToTicks(100), true);
+   Timer::resetTime();
+   Timer::clearSelectedInterruptFlags(ftmChannelMask);
 
-   // Configure the channels
+   // Configure the period and channel event times.
+   // These will take effect at the next counter roll-over.
+   Timer::setPeriod(PERIOD, false);
    HighChannel::configure(FtmChMode_OutputCompareToggle, FtmChannelAction_Dma);
    DataChannel::configure(FtmChMode_OutputCompare, FtmChannelAction_Dma);
    LowChannel::configure(FtmChMode_OutputCompare, FtmChannelAction_Dma);
 
    // Enable timer hardware requests
    Dma0::enableMultipleRequests(dmaChannelMask);
+
+   // Check if configuration failed
+   checkError();
 }
 
+/**
+ * Base initialisation of FTM
+ */
 static void initialiseFtm() {
    /**
-    * FTM set up for as required for Output Compare
+    * FTM set up as required for Output Compare
     */
    // Configure base FTM (affects all channels)
    Timer::configure(
          FtmMode_LeftAlign,      // Left-aligned is required for OC/IC
-         FtmClockSource_System); // Disabled clock initially during setup
+         FtmClockSource_System); // System clock
 
-   // Set period
-   // This adjusts the prescaler and modulo values but does not change the clock source
+   // Set required period
    Timer::setPeriod(PERIOD, true);
-
-//   // Configure pins associated with channels
-   HighChannel::setOutput();
-//   DataChannel::setOutput();
-//   LowChannel::setOutput();
 
    // Configure the channels - no DMA
    HighChannel::configure(FtmChMode_OutputCompare, FtmChannelAction_None);
@@ -313,10 +355,9 @@ static void initialiseFtm() {
    LowChannel::configure(FtmChMode_OutputCompare, FtmChannelAction_None);
 
    // Set channel event times
-   uint32_t offset = Timer::convertSecondsToTicks(100*us);
-   HighChannel::setEventTime(offset);
-   DataChannel::setEventTime(offset+Timer::convertSecondsToTicks(T0_HIGH));
-   LowChannel::setEventTime(offset+Timer::convertSecondsToTicks(T1_HIGH));
+   HighChannel::setEventTime(0);
+   DataChannel::setEventTime(Timer::convertSecondsToTicks(T0_HIGH));
+   LowChannel::setEventTime(Timer::convertSecondsToTicks(T1_HIGH));
 
    // Check if configuration failed
    checkError();
@@ -330,17 +371,205 @@ void initialisePins() {
 }
 
 /**
+ * Write pixel buffer to LEDs
+ *
+ * @param pixel0Data
+ * @param pixel1Data
+ */
+void writeLEDs(const uint32_t *pixel0Data, const uint32_t *pixel1Data) {
+   //   console.writeln("Starting Transfer");
+
+   unpackPixels(Pixel::mask(0), pixel0Data);
+   unpackPixels(Pixel::mask(1), pixel1Data);
+
+   // Start transfer
+   startTransfer(DmaChannelNum_0, DmaChannelNum_1, DmaChannelNum_2);
+
+   // Wait for completion of 1 Major-loop = 1 pixelBuffer
+   while (!complete) {
+      __asm__("nop");
+   }
+   //   console.writeln("Transfer complete");
+}
+
+/**
+ * Construct RGB value from individual RGB bytes
+ *
+ * @param[in] red
+ * @param[in] green
+ * @param[in] blue
+ *
+ * @return 24-bit RG value
+ */
+constexpr uint32_t rgb(uint8_t red, uint8_t green, uint8_t blue) {
+   return (red<<16)|(green<<8)|blue;
+}
+
+/**
+ * Extract red component from RGB colour
+ *
+ * @param[in] rgb
+ *
+ * @return Extracted component
+ */
+constexpr uint8_t red(uint32_t rgb) {
+   return (rgb>>16)&0xFF;
+}
+
+/**
+ * Extract green component from RGB colour
+ *
+ * @param[in] rgb
+ *
+ * @return Extracted component
+ */
+constexpr uint8_t green(uint32_t rgb) {
+   return (rgb>>8)&0xFF;
+}
+
+/**
+ * Extract blue component from RGB colour
+ *
+ * @param[in] rgb
+ *
+ * @return Extracted component
+ */
+constexpr uint8_t blue(uint32_t rgb) {
+   return rgb&0xFF;
+}
+
+/**
+ * Calculate an intermediate colour
+ *
+ * @param[in] from          1st colour
+ * @param[in] to            2nd colour
+ * @param[in] percentage    Controls the percentage of each colour included in the result
+ *
+ * @return  Intermediate colour = (((100-percentage)*from) + (percentage*to))/100;
+ */
+uint32_t mix(uint32_t from, uint32_t to, int percentage) {
+
+   uint8_t r = (((100-percentage)*red(from))   + (percentage*red(to)))/100;
+   uint8_t g = (((100-percentage)*green(from)) + (percentage*green(to)))/100;
+   uint8_t b = (((100-percentage)*blue(from))  + (percentage*blue(to)))/100;
+
+   return rgb(r,g,b);
+}
+
+/**
+ *  Pan LEDs between colours
+ *
+ * @param[in]    from       Colour to pan from (current colour)
+ * @param[in]    to         Colour to pan to
+ * @param[inout] pixelData  Buffer for persistent pixel data
+ */
+void panLeds(uint32_t from, uint32_t to, int delay, uint32_t pixelData[PIXEL_LENGTH]) {
+   for(unsigned percentage=0; percentage<=100; percentage+=10) {
+      memcpy(pixelData, pixelData+1, (PIXEL_LENGTH-1)*sizeof(*pixelData));
+      pixelData[PIXEL_LENGTH-1] = mix(from, to, percentage);
+      writeLEDs(pixelData, pixelData);
+      waitMS(delay);
+   }
+}
+
+void animate1() {
+   uint32_t colours[] = {
+         rgb(  0,   0, 255),
+         rgb(  0, 255,   0),
+         rgb(255,   0,   0),
+         rgb(  0, 255, 255),
+         rgb(255, 255,   0),
+         rgb(255,   0, 255),
+         rgb(255, 255, 255),
+   };
+
+   // Delay between changes
+   constexpr int DELAY_VALUE = 20;
+
+   // Buffer for pixel data
+   uint32_t pixelData[PIXEL_LENGTH];
+
+   // Pan from off to initial colour
+   memset(pixelData, 0, sizeof(pixelData));
+   panLeds(rgb(0,0,0), colours[0], DELAY_VALUE, pixelData);
+   writeLEDs(pixelData, pixelData);
+
+   // Pan between colours
+   unsigned phase=0;
+   for(;;) {
+      uint32_t from = colours[phase];
+      phase = (phase+1)%(sizeof(colours)/sizeof(colours[0]));
+      uint32_t to = colours[phase];
+      panLeds(from, to, DELAY_VALUE, pixelData);
+   }
+}
+
+void animate2() {
+
+   // Delay between changes
+   constexpr int DELAY_VALUE = 100;
+
+#if 0
+   uint32_t pixels[PIXEL_LENGTH];
+   for (unsigned i=0;;i+=100) {
+      for (unsigned j=0; j<(PIXEL_LENGTH);j++) {
+         pixels[j] = i;
+         i += 0x010101;
+      }
+      writeLEDs(pixels, pixels);
+      waitMS(100);
+   }
+#else
+   //                                       RRGGBB    RRGGBB    RRGGBB    RRGGBB    RRGGBB    RRGGBB    RRGGBB    RRGGBB    RRGGBB    RRGGBB    RRGGBB    RRGGBB
+   //   uint32_t pixel0Data[PIXEL_LENGTH]  = { 0x341256, 0x221133, 0x221133, 0x221133, 0x221133, 0x221133, 0x221133, 0x221133, 0x221133, 0x221133, 0x221133, 0x221133, };
+   static const uint32_t pixel1DataA[PIXEL_LENGTH] = { 0x0000FF, 0x00FF00, 0xFF0000, 0xFFFF00, 0xFF00FF, 0x00FFFF, 0x0000FF, 0x00FF00, 0xFF0000, 0xFFFF00, 0xFF00FF, 0x00FFFF, };
+   static const uint32_t pixel1DataB[PIXEL_LENGTH] = { 0x0000FF, 0x00FF00, 0xFF0000, 0xFFFF00, 0xFF00FF, 0x00FFFF, 0x0000FF, 0x00FF00, 0xFF0000, 0xFFFF00, 0xFF00FF, 0x00FFFF, };
+   static const uint32_t pixel1DataC[PIXEL_LENGTH] = { 0x00FF00, 0xFF0000, 0xFFFF00, 0xFF00FF, 0x00FFFF, 0x0000FF, 0x00FF00, 0xFF0000, 0xFFFF00, 0xFF00FF, 0x00FFFF, 0x0000FF, };
+   static const uint32_t pixel1DataD[PIXEL_LENGTH] = { 0x00FF00, 0xFF0000, 0xFFFF00, 0xFF00FF, 0x00FFFF, 0x0000FF, 0x00FF00, 0xFF0000, 0xFFFF00, 0xFF00FF, 0x00FFFF, 0x0000FF, };
+   static const uint32_t pixel1DataE[PIXEL_LENGTH] = { 0xFF0000, 0xFFFF00, 0xFF00FF, 0x00FFFF, 0x0000FF, 0x00FF00, 0xFF0000, 0xFFFF00, 0xFF00FF, 0x00FFFF, 0x0000FF, 0x00FF00, };
+   static const uint32_t pixel1DataF[PIXEL_LENGTH] = { 0xFF0000, 0xFFFF00, 0xFF00FF, 0x00FFFF, 0x0000FF, 0x00FF00, 0xFF0000, 0xFFFF00, 0xFF00FF, 0x00FFFF, 0x0000FF, 0x00FF00, };
+   static const uint32_t pixel1DataG[PIXEL_LENGTH] = { 0xFFFF00, 0xFF00FF, 0x00FFFF, 0x0000FF, 0x00FF00, 0xFF0000, 0xFFFF00, 0xFF00FF, 0x00FFFF, 0x0000FF, 0x00FF00, 0xFF0000, };
+   static const uint32_t pixel1DataH[PIXEL_LENGTH] = { 0xFFFF00, 0xFF00FF, 0x00FFFF, 0x0000FF, 0x00FF00, 0xFF0000, 0xFFFF00, 0xFF00FF, 0x00FFFF, 0x0000FF, 0x00FF00, 0xFF0000, };
+   static const uint32_t pixel1DataI[PIXEL_LENGTH] = { 0xFF00FF, 0x00FFFF, 0x0000FF, 0x00FF00, 0xFF0000, 0xFFFF00, 0xFF00FF, 0x00FFFF, 0x0000FF, 0x00FF00, 0xFF0000, 0xFFFF00, };
+   static const uint32_t pixel1DataJ[PIXEL_LENGTH] = { 0xFF00FF, 0x00FFFF, 0x0000FF, 0x00FF00, 0xFF0000, 0xFFFF00, 0xFF00FF, 0x00FFFF, 0x0000FF, 0x00FF00, 0xFF0000, 0xFFFF00, };
+   static const uint32_t pixel1DataK[PIXEL_LENGTH] = { 0x00FFFF, 0x0000FF, 0x00FF00, 0xFF0000, 0xFFFF00, 0xFF00FF, 0x00FFFF, 0x0000FF, 0x00FF00, 0xFF0000, 0xFFFF00, 0xFF00FF, };
+   static const uint32_t pixel1DataL[PIXEL_LENGTH] = { 0x00FFFF, 0x0000FF, 0x00FF00, 0xFF0000, 0xFFFF00, 0xFF00FF, 0x00FFFF, 0x0000FF, 0x00FF00, 0xFF0000, 0xFFFF00, 0xFF00FF, };
+
+   for(;;) {
+      writeLEDs(pixel1DataB, pixel1DataL);
+      waitMS(DELAY_VALUE);
+      writeLEDs(pixel1DataA, pixel1DataK);
+      waitMS(DELAY_VALUE);
+      writeLEDs(pixel1DataC, pixel1DataJ);
+      waitMS(DELAY_VALUE);
+      writeLEDs(pixel1DataD, pixel1DataI);
+      waitMS(DELAY_VALUE);
+      writeLEDs(pixel1DataE, pixel1DataH);
+      waitMS(DELAY_VALUE);
+      writeLEDs(pixel1DataF, pixel1DataG);
+      waitMS(DELAY_VALUE);
+      writeLEDs(pixel1DataG, pixel1DataF);
+      waitMS(DELAY_VALUE);
+      writeLEDs(pixel1DataH, pixel1DataE);
+      waitMS(DELAY_VALUE);
+      writeLEDs(pixel1DataI, pixel1DataD);
+      waitMS(DELAY_VALUE);
+      writeLEDs(pixel1DataJ, pixel1DataC);
+      waitMS(DELAY_VALUE);
+      writeLEDs(pixel1DataK, pixel1DataB);
+      waitMS(DELAY_VALUE);
+      writeLEDs(pixel1DataL, pixel1DataA);
+      waitMS(DELAY_VALUE);
+   }
+#endif
+}
+
+/**
  * Demonstration main-line
  *
  * @return Not used.
  */
 int main() {
-
-   console.write("gpioBase    = ").writeln(Pixel::gpioBase(), Radix_16);
-   console.write("gpioPSOR    = ").writeln(Pixel::gpioPSOR(), Radix_16);
-   console.write("portBase    = ").writeln(Pixel::portBase(), Radix_16);
-   console.write("portPCRs(3) = ").writeln(Pixel::portPCR(3), Radix_16);
-   console.write("portGPCHR   = ").writeln(Pixel::portGPCHR(), Radix_16);
 
    initialisePins();
 
@@ -348,26 +577,7 @@ int main() {
 
    initialiseDma(DmaChannelNum_0, DmaChannelNum_1, DmaChannelNum_2);
 
-   uint32_t pixel0Data[PIXEL_LENGTH] = { 0x341256, 0x221133, };
-   unpackPixels(Pixel::mask(0), pixel0Data);
+   animate1();
 
-   uint32_t pixel1Data[PIXEL_LENGTH] = { 0xFF00FF, 0x00FF00, };
-   unpackPixels(Pixel::mask(1), pixel1Data);
-
-   // Wait here forever
-   for(;;) {
-      console.writeln("Starting Transfer");
-
-      // Start transfer
-      startTransfer(DmaChannelNum_0, DmaChannelNum_1, DmaChannelNum_2);
-
-      // Wait for completion of 1 Major-loop = 1 pixelBuffer
-      while (!complete) {
-         __asm__("nop");
-      }
-      console.writeln("Transfer complete");
-
-      waitMS(100);
-   }
    return 0;
 }
