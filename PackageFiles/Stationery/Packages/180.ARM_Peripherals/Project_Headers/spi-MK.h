@@ -602,11 +602,11 @@ template<class Info>
 class SpiBase_T : public Spi {
 
 public:
-   /** Get reference to GPIO hardware as struct */
+   /** Get reference to SPI hardware as struct */
    static volatile SPI_Type &spiPtr() { return Info::spi(); }
 
    /** Get base address of SPI hardware as uint32_t */
-   static constexpr uint32_t spiBase() { return Info::baseAddress(); }
+   static constexpr uint32_t spiBase() { return Info::baseAddress; }
    /** Get base address of SPI.MCR register as uint32_t */
    static constexpr uint32_t spiMCR() { return spiBase() + offsetof(SPI_Type, MCR); }
    /** Get base address of SPI.CR register as uint32_t */
