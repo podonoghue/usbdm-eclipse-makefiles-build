@@ -294,6 +294,9 @@ public:
       disableChannel(channel);
    }
 
+protected:
+   static PitCallbackFunction callbacks[PitInfo::numChannels];
+
    /**
     * Class representing a PIT channel
     *
@@ -302,11 +305,7 @@ public:
    template <int channel>
    class Channel {
 
-   protected:
-      static PitCallbackFunction callback;
-
    public:
-
       /** Timer channel number */
       static constexpr int CHANNEL = channel;
 
@@ -320,14 +319,14 @@ public:
             callbackFunction = PitBase_T<Info>::unhandledCallback;
             enableInterrupts(false);
          }
-         callback = callbackFunction;
+         callbacks[channel] = callbackFunction;
       }
 
       /** PIT interrupt handler -  Calls PIT callback */
       static void irqHandler() {
          // Clear interrupt flag
          PitBase_T<Info>::pit().CHANNEL[channel].TFLG = PIT_TFLG_TIF_MASK;
-         callback();
+         callbacks[channel]();
       }
 
       /**
@@ -426,6 +425,17 @@ public:
    };
 };
 
+/**
+ * Callback for programmatically set handlers
+ */
+template<class Info>
+PitCallbackFunction PitBase_T<Info>::callbacks[] = {
+      PitBase_T<Info>::unhandledCallback,
+      PitBase_T<Info>::unhandledCallback,
+      PitBase_T<Info>::unhandledCallback,
+      PitBase_T<Info>::unhandledCallback,
+};
+
 #ifdef PIT
 /**
  * @brief class representing the PIT
@@ -439,14 +449,6 @@ class Pit : public PitBase_T<PitInfo> {};
  */
 template <int channel>
 using PitChannel = Pit::Channel<channel>;
-
-/**
- * Callback for programmatically set handlers
- */
-template<> template<> PitCallbackFunction Pit::Channel<0>::callback = PitBase_T::unhandledCallback;
-template<> template<> PitCallbackFunction Pit::Channel<1>::callback = PitBase_T::unhandledCallback;
-template<> template<> PitCallbackFunction Pit::Channel<2>::callback = PitBase_T::unhandledCallback;
-template<> template<> PitCallbackFunction Pit::Channel<3>::callback = PitBase_T::unhandledCallback;
 
 #endif
 

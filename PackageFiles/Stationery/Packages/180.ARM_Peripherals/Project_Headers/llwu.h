@@ -438,7 +438,7 @@ public:
        * This will map the pin to the LLWU function (mux value) \n
        * The clock to the port will be enabled before changing the PCR
        *
-       * @tparam llwuPin          LLWU pin to configure e.g. LlwuPin_Pte1
+       * @tparam llwuPin LLWU pin to configure e.g. LlwuPin_Pte1
        *
        * @param[in]  pinPull          One of PinPull_None, PinPull_Up, PinPull_Down
        * @param[in]  pinAction        One of PinAction_None, etc (defaults to PinAction_None)
