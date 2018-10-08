@@ -1377,7 +1377,7 @@ public:
          //               break;
          //            default:
          //               // Map pin to FTM
-         //               CheckSignal<Info, channel>::check();
+         //               CheckChannel<Info, channel>::check();
          //               Pcr::setPCR(Info::info[channel].pcrValue);
          //         }
          //      }
@@ -1487,7 +1487,7 @@ public:
        * @param[in] pcrValue PCR value to set
        */
       static INLINE_RELEASE void setPCR(PcrValue pcrValue=Info::info[channel].pcrValue) {
-         CheckSignal<Info, channel>::check();
+         CheckChannel<Info, channel>::check();
          Pcr::setPCR((pcrValue&~PORT_PCR_MUX_MASK)|(Info::info[channel].pcrValue&PORT_PCR_MUX_MASK));
       }
 
@@ -1512,7 +1512,7 @@ public:
             PinSlewRate       pinSlewRate       = PinSlewRate_Fast,
             PinMux            pinMux            = (PinMux)(Info::info[channel].pcrValue&PORT_PCR_MUX_MASK)
       ) {
-         CheckSignal<Info, channel>::check();
+         CheckChannel<Info, channel>::check();
          Pcr::setPCR(pinPull,pinDriveStrength,pinDriveMode,pinAction,pinFilter,pinSlewRate,pinMux);
       }
 
