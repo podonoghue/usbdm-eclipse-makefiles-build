@@ -942,7 +942,7 @@ class Adc1Channel : public Adc1::Channel<channel> {};
  * @deprecated
  */
 template<int channel>
-class Adc1DiffChannel : public Adc1::DiffChannel_T<channel> {};
+class Adc1DiffChannel : public Adc1::DiffChannel<channel> {};
 #endif
 #endif
 
