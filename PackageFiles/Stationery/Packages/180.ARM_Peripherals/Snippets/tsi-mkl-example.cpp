@@ -94,9 +94,6 @@ void pollButtons() {
          TsiExternalCharge_8uA,
          TsiDeltaVoltage_High);
 
-   Button1::setInput();
-   Button2::setInput();
-
    console.setPadding(Padding_LeadingSpaces).setWidth(8);
    for(;;) {
       console.write("Button1(").write(Button1::poll()).write(", ").write(Button1::getCount()).write(") ");
