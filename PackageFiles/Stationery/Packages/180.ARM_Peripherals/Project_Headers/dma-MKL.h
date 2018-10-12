@@ -124,7 +124,7 @@ struct DmaTcdDcr {
    unsigned   LCH2:2;       // Link channel 2 see DmaLink
    unsigned   LCH1:2;       // Link channel 1 see DmaLink
    DmaLink    LINKCC:2;     // Link channel control
-   unsigned   :1;
+   unsigned   FILL1:1;
    bool       D_REQ:1;      // Disable peripheral requests (clear ERQ) when complete
    DmaModulo  DMOD:4;       // Destination address modulo
    DmaModulo  SMOD:4;       // Source address modulo
@@ -134,11 +134,93 @@ struct DmaTcdDcr {
    DmaSize    SSIZE:2;      // Source size
    bool       SINC:1;       // Source increment
    bool       EADREQ:1;     // Enable asynchronous DMA
-   unsigned   :4;
+   unsigned   FILL2:4;
    bool       AA:1;         // Auto-align
    DmaMode    CS:1;         // Cycle steal or continuous mode
    bool       ERQ:1;        // Enable peripheral request
    bool       EINT:1;       // Enable interrupt request on completion of transfer
+
+   /**
+    * Empty constructor
+    */
+   constexpr DmaTcdDcr() :
+         LCH2(0),
+         LCH1(0),
+         LINKCC(DmaLink_None),
+         FILL1(0),
+         D_REQ(0),
+         DMOD(DmaModulo_Disabled),
+         SMOD(DmaModulo_Disabled),
+         START(false),
+         DSIZE(DmaSize_32bit),
+         DINC(0),
+         SSIZE(DmaSize_32bit),
+         SINC(0),
+         EADREQ(0),
+         FILL2(0),
+         AA(0),
+         CS(DmaMode_Continuous),
+         ERQ(0),
+         EINT(0)
+   {}
+
+   /**
+    * Constructor
+    *
+    * @param sourceSize                             Source size
+    * @param sourceModulo                           Source address modulo
+    * @param sourceIncrement                        Source increment
+    * @param destinationSize                        Destination size
+    * @param destinationModulo                      Destination address modulo
+    * @param destinationIncrement                   Destination increment
+    * @param dmaMode                                Cycle steal or continuous mode
+    * @param autoAlign                              Auto-align
+    * @param startTransfer                          Start transfer (software triggered)
+    * @param enableAsynchronousRequests             Enable asynchronous DMA
+    * @param enablePeripheralRequests               Enable peripheral request
+    * @param disablePeripheralRequestOnComplete     Disable peripheral requests (clear ERQ) when complete
+    * @param enableInterrupts                       Enable interrupt request on completion of transfer
+    * @param linkControl                            Link channel control
+    * @param linkChannel1                           Link channel 1
+    * @param linkChannel2                           Link channel 2
+    */
+   constexpr DmaTcdDcr(
+         DmaSize   sourceSize,
+         DmaModulo sourceModulo,
+         bool      sourceIncrement,
+         DmaSize   destinationSize,
+         DmaModulo destinationModulo,
+         bool      destinationIncrement,
+         DmaMode   dmaMode,
+         bool      autoAlign,
+         bool      startTransfer,
+         bool      enableAsynchronousRequests,
+         bool      enablePeripheralRequests,
+         bool      disablePeripheralRequestOnComplete,
+         bool      enableInterrupts,
+         DmaLink   linkControl    = DmaLink_None,
+         unsigned  linkChannel1   = 0,
+         unsigned  linkChannel2   = 0
+   ) :
+      LCH2(linkChannel2),
+      LCH1(linkChannel1),
+      LINKCC(linkControl),
+      FILL1(0),
+      D_REQ(disablePeripheralRequestOnComplete),
+      DMOD(destinationModulo),
+      SMOD(sourceModulo),
+      START(startTransfer),
+      DSIZE(destinationSize),
+      DINC(destinationIncrement),
+      SSIZE(sourceSize),
+      SINC(sourceIncrement),
+      EADREQ(enableAsynchronousRequests),
+      FILL2(0),
+      AA(autoAlign),
+      CS(dmaMode),
+      ERQ(enablePeripheralRequests),
+      EINT(enableInterrupts)
+   {}
 };
 
 /**
@@ -159,11 +241,109 @@ struct DmaTcdDcr {
  * Structure to define a DMA transfer
  */
 struct DmaTcd {
-      uint32_t  SAR;        //!< Source address
-      uint32_t  DAR;        //!< Destination address
-      uint32_t  BCR;        //!< Number of bytes to transfer [23:0] only
-      DmaTcdDcr DCR;        //!< Control register
-} ;
+   uint32_t  SAR;        //!< Source address
+   uint32_t  DAR;        //!< Destination address
+   uint32_t  BCR;        //!< Number of bytes to transfer [23:0] only
+   DmaTcdDcr DCR;        //!< Control register
+
+   /**
+    * Empty constructor
+    */
+   constexpr DmaTcd():
+      SAR(0),
+      DAR(0),
+      BCR(0),
+      DCR(DmaTcdDcr()) {
+   }
+
+   /**
+    *  Compound constructor
+    *
+    * @param transferSize         Transfer size
+    * @param sourceSize           Source size
+    * @param destinationAddress   Destination address
+    * @param configuration        Transfer configuration
+    */
+   constexpr DmaTcd(
+         uint32_t  transferSize,
+         uint32_t  sourceAddress,
+         uint32_t  destinationAddress,
+         DmaTcdDcr configuration
+         ) :
+            SAR(sourceAddress),
+            DAR(destinationAddress),
+            BCR(transferSize),
+            DCR(configuration)
+   {
+   }
+
+   /**
+    * Constructor
+    *
+    * @param transferSize                           Transfer size
+    * @param sourceAddress                          Source address
+    * @param sourceSize                             Source size
+    * @param sourceModulo                           Source address modulo
+    * @param sourceIncrement                        Source increment
+    * @param destinationAddress                     Destination address
+    * @param destinationSize                        Destination size
+    * @param destinationModulo                      Destination address modulo
+    * @param destinationIncrement                   Destination increment
+    * @param dmaMode                                Cycle steal or continuous mode
+    * @param autoAlign                              Auto-align
+    * @param startTransfer                          Start transfer (software triggered)
+    * @param enableAsynchronousRequests             Enable asynchronous DMA
+    * @param enablePeripheralRequests               Enable peripheral request
+    * @param disablePeripheralRequestOnComplete   Disable peripheral requests (clear ERQ) when complete
+    * @param enableInterrupts                       Enable interrupt request on completion of transfer
+    * @param linkControl                            Link channel control
+    * @param linkChannel1                           Link channel 1
+    * @param linkChannel2                           Link channel 2
+    */
+   constexpr DmaTcd(
+         uint32_t  transferSize,
+         uint32_t  sourceAddress,
+         DmaSize   sourceSize,
+         DmaModulo sourceModulo,
+         bool      sourceIncrement,
+         uint32_t  destinationAddress,
+         DmaSize   destinationSize,
+         DmaModulo destinationModulo,
+         bool      destinationIncrement,
+         DmaMode   dmaMode,
+         bool      autoAlign,
+         bool      startTransfer,
+         bool      enableAsynchronousRequests,
+         bool      enablePeripheralRequests,
+         bool      disablePeripheralRequestOnComplete,
+         bool      enableInterrupts,
+         DmaLink   linkControl   = DmaLink_None,
+         unsigned  linkChannel1  = 0,
+         unsigned  linkChannel2  = 0
+         ) :
+      SAR(sourceAddress),
+      DAR(destinationAddress),
+      BCR(transferSize),
+      DCR(DmaTcdDcr(
+            sourceSize,
+            sourceModulo,
+            sourceIncrement,
+            destinationSize,
+            destinationModulo,
+            destinationIncrement,
+            dmaMode,
+            autoAlign,
+            startTransfer,
+            enableAsynchronousRequests,
+            enablePeripheralRequests,
+            disablePeripheralRequestOnComplete,
+            enableInterrupts,
+            linkControl,
+            linkChannel1,
+            linkChannel2
+      )) {
+   }
+};
 
 /**
  * Get DMA size of object.
@@ -173,12 +353,46 @@ struct DmaTcd {
  *
  * @return one of the DmaSize_xxxx values
  */
-template <class Td>
-static constexpr DmaSize dmaSize(const Td &obj) {
+template <class T>
+static constexpr DmaSize dmaSize(const T &obj) {
    static_assert(((sizeof(obj)==1)||(sizeof(obj)==2)||(sizeof(obj)==4)), "Illegal DMA transfer size");
    return
       (sizeof(obj)==1) ?DmaSize_8bit:
       (sizeof(obj)==2) ?DmaSize_16bit:
+      /*          ==4 */DmaSize_32bit;
+}
+
+/**
+ * Get DMA size of object.
+ * For use in TCD.DSIZE, TCD.SSIZE value
+ *
+ * @param[in] obj Object to obtain DMA size value for
+ *
+ * @return one of the DmaSize_xxxx values
+ */
+template <class T>
+static constexpr DmaSize dmaSize(const T *obj) {
+   static_assert(((sizeof(*obj)==1)||(sizeof(*obj)==2)||(sizeof(*obj)==4)), "Illegal DMA transfer size");
+   return
+      (sizeof(*obj)==1) ?DmaSize_8bit:
+      (sizeof(*obj)==2) ?DmaSize_16bit:
+      /*          ==4 */DmaSize_32bit;
+}
+
+/**
+ * Get DMA size of object.
+ * For use in TCD.DSIZE, TCD.SSIZE value
+ *
+ * @tparam T Type to get DMA size of
+ *
+ * @return one of the DmaSize_xxxx values
+ */
+template <class T>
+static constexpr DmaSize dmaSize() {
+   static_assert(((sizeof(T)==1)||(sizeof(T)==2)||(sizeof(T)==4)), "Illegal DMA transfer size");
+   return
+      (sizeof(T)==1) ?DmaSize_8bit:
+      (sizeof(T)==2) ?DmaSize_16bit:
       /*          ==4 */DmaSize_32bit;
 }
 
@@ -303,27 +517,7 @@ public:
 
       // Clear call-backs and TCDs
       for (unsigned channel=0; channel<Info::NumVectors; channel++) {
-         static const DmaTcd emptyTcd = {
-            /* uint32_t   SADR      Source address                */ 0,
-            /* uint32_t   DADR      Destination address           */ 0,
-            /* uint32_t   BCR       Byte count                    */ 0,
-            /* unsigned   LCH2:2;   Complete (BCR=0) link channel */ 0,
-            /* unsigned   LCH1:2;   Cycle-steal link channel      */ 0,
-            /* DmaLink    LINKCC:2; Link channel control          */ DmaLink_None,
-            /* bool       D_REQ:1;  Clear ERQ when complete       */ false,
-            /* DmaModulo  DMOD:4;   Destination address modulo    */ DmaModulo_Disabled,
-            /* DmaModulo  SMOD:4;   Source address modulo         */ DmaModulo_Disabled,
-            /* bool       START:1;  Start transfer (software)     */ false,
-            /* DmaSize    DSIZE:2;  Destination size              */ DmaSize_32bit,
-            /* bool       DINC:1;   Destination increment         */ false,
-            /* DmaSize    SSIZE:2;  Source size                   */ DmaSize_32bit,
-            /* bool       SINC:1;   Source increment              */ false,
-            /* bool       EADREQ:1; Enable asynchronous DMA       */ false,
-            /* bool       AA:1;     Auto-align                    */ false,
-            /* DmaMode    CS:1;     Cycle steal/Continuous        */ DmaMode_Continuous,
-            /* bool       ERQ:1;    Enable peripheral request     */ false,
-            /* bool       EINT:1;   Interrupt enable              */ false,
-         };
+         static const DmaTcd emptyTcd;
          callbacks[channel] = noHandlerCallback;
          configureTransfer((DmaChannelNum)channel, emptyTcd);
       }

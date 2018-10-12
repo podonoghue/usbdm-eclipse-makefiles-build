@@ -305,8 +305,7 @@ static constexpr float PERIOD  = 1200*ns;
 #endif
 
 /**
- * Start DMA transfer of pixel data to LEDs.
- * Assumes initialiseFtm() and initialiseDma() have been called previously.
+ * Start transfer
  */
 static void startTransfer(DmaChannelNum dmaSetChannel, DmaChannelNum dmaDataChannel, DmaChannelNum dmaClearChannel) {
    // Sequence not complete yet
@@ -315,30 +314,21 @@ static void startTransfer(DmaChannelNum dmaSetChannel, DmaChannelNum dmaDataChan
    const uint32_t dmaChannelMask = (1<<dmaSetChannel)|(1<<dmaDataChannel)|(1<<dmaClearChannel);
    const uint32_t ftmChannelMask = HighChannel::CHANNEL_MASK|DataChannel::CHANNEL_MASK|LowChannel::CHANNEL_MASK;
 
-   /**
-    * It is important that the FTM and DMA start in the correct sequence.
-    * Due to the short timing involved it is easier to disable the timer
-    * counter clock before making changes to FTM or DMA
-    */
-   Timer::setClockSource(FtmClockSource_Disabled);
-
-   // Clear any old interrupts (DMA requests)
-   // This only works because the FTM channels have DMA disabled at the moment!
+   // Reset timer count, start counting to a moderate value and clear channel flags.
+   // This allows time for setup before the FTM counter roll-over and new values are synchronously loaded.
+   Timer::setPeriodInTicks(Timer::convertMicrosecondsToTicks(100), true);
+   Timer::resetTime();
    Timer::clearSelectedInterruptFlags(ftmChannelMask);
 
-   // Configure the three channels for DMA (timing is already set)
-   HighChannel::configure(FtmChMode_OutputCompare, FtmChannelAction_Dma);
+   // Configure the period and channel event times.
+   // These will take effect at the next counter roll-over.
+   Timer::setPeriod(PERIOD, false);
+   HighChannel::configure(FtmChMode_OutputCompareToggle, FtmChannelAction_Dma);
    DataChannel::configure(FtmChMode_OutputCompare, FtmChannelAction_Dma);
    LowChannel::configure(FtmChMode_OutputCompare, FtmChannelAction_Dma);
 
-   // Enable timer->DMA hardware requests
+   // Enable timer hardware requests
    Dma0::enableMultipleRequests(dmaChannelMask);
-
-   // Restart the counter from zero so sequence starts in correct order
-   Timer::resetTime();
-
-   // Restore clock
-   Timer::setClockSource(FtmClockSource_System);
 
    // Check if configuration failed
    checkError();
@@ -356,11 +346,10 @@ static void initialiseFtm() {
          FtmMode_LeftAlign,      // Left-aligned is required for OC/IC
          FtmClockSource_System); // System clock
 
-   // Set required Timer period.
-   // Note that this requires the counter clock to have been already set
-   Timer::setPeriod(PERIOD);
+   // Set required period
+   Timer::setPeriod(PERIOD, true);
 
-   // Configure the channels for O.C so event times can be set - no DMA initially
+   // Configure the channels - no DMA
    HighChannel::configure(FtmChMode_OutputCompare, FtmChannelAction_None);
    DataChannel::configure(FtmChMode_OutputCompare, FtmChannelAction_None);
    LowChannel::configure(FtmChMode_OutputCompare, FtmChannelAction_None);
@@ -396,7 +385,7 @@ void writeLEDs(const uint32_t *pixel0Data, const uint32_t *pixel1Data) {
    // Start transfer
    startTransfer(DmaChannelNum_0, DmaChannelNum_1, DmaChannelNum_2);
 
-   // Wait for completion of 1 Major-loop = 1 pixelBuffer transfer
+   // Wait for completion of 1 Major-loop = 1 pixelBuffer
    while (!complete) {
       __asm__("nop");
    }
@@ -455,15 +444,14 @@ constexpr uint8_t blue(uint32_t rgb) {
  * @param[in] from          1st colour
  * @param[in] to            2nd colour
  * @param[in] percentage    Controls the percentage of each colour included in the result
- * @param[in] brightness    Weighting for overall brightness (percent)
  *
  * @return  Intermediate colour = (((100-percentage)*from) + (percentage*to))/100;
  */
-uint32_t mix(uint32_t from, uint32_t to, int percentage, int brightness=100) {
+uint32_t mix(uint32_t from, uint32_t to, int percentage) {
 
-   uint8_t r = brightness*(((100-percentage)*red(from))   + (percentage*red(to)))/10000;
-   uint8_t g = brightness*(((100-percentage)*green(from)) + (percentage*green(to)))/10000;
-   uint8_t b = brightness*(((100-percentage)*blue(from))  + (percentage*blue(to)))/10000;
+   uint8_t r = (((100-percentage)*red(from))   + (percentage*red(to)))/100;
+   uint8_t g = (((100-percentage)*green(from)) + (percentage*green(to)))/100;
+   uint8_t b = (((100-percentage)*blue(from))  + (percentage*blue(to)))/100;
 
    return rgb(r,g,b);
 }
@@ -473,47 +461,19 @@ uint32_t mix(uint32_t from, uint32_t to, int percentage, int brightness=100) {
  *
  * @param[in]    from       Colour to pan from (current colour)
  * @param[in]    to         Colour to pan to
- * @param[in]    delay      Delay between changes (milliseconds)
  * @param[inout] pixelData  Buffer for persistent pixel data
  */
 void panLeds(uint32_t from, uint32_t to, int delay, uint32_t pixelData[PIXEL_LENGTH]) {
    for(unsigned percentage=0; percentage<=100; percentage+=10) {
       memcpy(pixelData, pixelData+1, (PIXEL_LENGTH-1)*sizeof(*pixelData));
-      pixelData[PIXEL_LENGTH-1] = mix(from, to, percentage, 100);
+      pixelData[PIXEL_LENGTH-1] = mix(from, to, percentage);
       writeLEDs(pixelData, pixelData);
       waitMS(delay);
    }
 }
 
-/**
- * Pan between random colours
- */
 void animate1() {
-   // Delay between changes
-   constexpr int DELAY_VALUE = 100;
-
-   // Buffer for pixel data
-   uint32_t pixelData[PIXEL_LENGTH];
-
-   // Clear buffer initially
-   memset(pixelData, 0, sizeof(pixelData));
-
-   // Pan from off
-   uint32_t to, from = rgb(0,0,0);
-
-   // Pan between random colours
-   for(;;) {
-      to = rgb(rand()%256,rand()%256,rand()%256);
-      panLeds(from, to, DELAY_VALUE, pixelData);
-      from = to;
-   }
-}
-
-/**
- * Pan between random colours from a table
- */
-void animate2() {
-   static const uint32_t colours[] = {
+   uint32_t colours[] = {
          rgb(  0,   0, 255),
          rgb(  0, 255,   0),
          rgb(255,   0,   0),
@@ -524,27 +484,27 @@ void animate2() {
    };
 
    // Delay between changes
-   constexpr int DELAY_VALUE = 100;
+   constexpr int DELAY_VALUE = 20;
 
    // Buffer for pixel data
    uint32_t pixelData[PIXEL_LENGTH];
 
-   // Clear buffer initially
+   // Pan from off to initial colour
    memset(pixelData, 0, sizeof(pixelData));
+   panLeds(rgb(0,0,0), colours[0], DELAY_VALUE, pixelData);
+   writeLEDs(pixelData, pixelData);
 
-   // Pan between random colours from array
-   uint32_t to, from = rgb(0,0,0);
+   // Pan between colours
+   unsigned phase=0;
    for(;;) {
-      to   = colours[rand()%(sizeof(colours)/sizeof(colours[0]))];
+      uint32_t from = colours[phase];
+      phase = (phase+1)%(sizeof(colours)/sizeof(colours[0]));
+      uint32_t to = colours[phase];
       panLeds(from, to, DELAY_VALUE, pixelData);
-      from = to;
    }
 }
 
-/**
- * Change to colours from a table
- */
-void animate3() {
+void animate2() {
 
    // Delay between changes
    constexpr int DELAY_VALUE = 100;
@@ -605,23 +565,6 @@ void animate3() {
 }
 
 /**
- * Sends fixed pattern for testing timing
- */
-void test() {
-
-   // Delay between changes
-   constexpr int DELAY_VALUE = 100;
-
-   //                                                    RRGGBB    RRGGBB    RRGGBB    RRGGBB    RRGGBB    RRGGBB    RRGGBB    RRGGBB    RRGGBB    RRGGBB    RRGGBB    RRGGBB
-   static const uint32_t pixel1DataA[PIXEL_LENGTH] = { 0x0000FF, 0x00FF00, 0xFF0000, 0xFFFF00, 0xFF00FF, 0x00FFFF, 0x0000FF, 0x00FF00, 0xFF0000, 0xFFFF00, 0xFF00FF, 0x00FFFF, };
-   for(;;) {
-      writeLEDs(pixel1DataA, pixel1DataA);
-      waitMS(DELAY_VALUE);
-   }
-
-}
-
-/**
  * Demonstration main-line
  *
  * @return Not used.
@@ -634,7 +577,7 @@ int main() {
 
    initialiseDma(DmaChannelNum_0, DmaChannelNum_1, DmaChannelNum_2);
 
-   animate2();
+   animate1();
 
    return 0;
 }

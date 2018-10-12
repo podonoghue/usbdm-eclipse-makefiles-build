@@ -234,14 +234,52 @@ typedef void (*DmaErrorCallbackFunction)(uint32_t errorFlags);
  *
  * @return one of the DmaSize_xxxx values
  */
-template <class Td>
-static constexpr DmaSize dmaSize(const Td &obj) {
+template <class T>
+static constexpr DmaSize dmaSize(const T &obj) {
    static_assert(((sizeof(obj)==1)||(sizeof(obj)==2)||(sizeof(obj)==4)||(sizeof(obj)==16)||(sizeof(obj)==32)), "Illegal DMA transfer size");
    return
       (sizeof(obj)==1) ?DmaSize_8bit:
       (sizeof(obj)==2) ?DmaSize_16bit:
       (sizeof(obj)==4) ?DmaSize_32bit:
       (sizeof(obj)==16)?DmaSize_16byte:
+      /*          ==32*/DmaSize_32byte;
+}
+
+/**
+ * Get DMA size of object.
+ * For use in TCD.SMOD, TCD.DMOD value
+ *
+ * @param[in] obj Object to obtain DMA size value for
+ *
+ * @return one of the DmaSize_xxxx values
+ */
+template <class T>
+static constexpr DmaSize dmaSize(const T *obj) {
+   static_assert(((sizeof(*obj)==1)||(sizeof(*obj)==2)||(sizeof(*obj)==4)||(sizeof(*obj)==16)||(sizeof(*obj)==32)), "Illegal DMA transfer size");
+   return
+      (sizeof(*obj)==1) ?DmaSize_8bit:
+      (sizeof(*obj)==2) ?DmaSize_16bit:
+      (sizeof(*obj)==4) ?DmaSize_32bit:
+      (sizeof(*obj)==16)?DmaSize_16byte:
+      /*          ==32*/DmaSize_32byte;
+}
+
+/**
+ * Get DMA size of object.
+ * For use in TCD.SMOD, TCD.DMOD value
+ *
+ * @tparam T Type to get DMA size of
+ *
+ * @return one of the DmaSize_xxxx values
+ */
+template <class T>
+static constexpr DmaSize dmaSize() {
+   static_assert(((sizeof(T)==1)||(sizeof(T)==2)||(sizeof(T)==4)||(sizeof(T)==16)||(sizeof(T)==32)), "Illegal DMA transfer size");
+   return
+      (sizeof(T)==1) ?DmaSize_8bit:
+      (sizeof(T)==2) ?DmaSize_16bit:
+      (sizeof(T)==4) ?DmaSize_32bit:
+      (sizeof(T)==16)?DmaSize_16byte:
       /*          ==32*/DmaSize_32byte;
 }
 
