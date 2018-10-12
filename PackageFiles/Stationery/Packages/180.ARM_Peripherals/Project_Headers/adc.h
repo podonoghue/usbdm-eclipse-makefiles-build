@@ -60,7 +60,7 @@ static constexpr PcrValue ADC_DEFAULT_PCR = pcrValue(
       PinPull_None, PinDriveStrength_Low, PinDriveMode_PushPull, PinAction_None, PinFilter_None, PinSlewRate_Fast, PinMux_Analogue);
 
 /**
- * ADC Resolutions\n
+ * ADC Resolutions.
  * The resolutions available vary with single-ended/differential modes\n
  * Note the equivalence between modes e.g. 8-bit-se = 9-bit-diff
  */
@@ -116,7 +116,7 @@ enum AdcClockDivider {
  */
 enum AdcInterrupt {
    AdcInterrupt_disable = ADC_SC1_AIEN(0), //!< No interrupt on conversion complete
-   AdcInterrupt_enable  = ADC_SC1_AIEN(1), //!< No interrupt on conversion complete
+   AdcInterrupt_enable  = ADC_SC1_AIEN(1), //!< Interrupt on conversion complete
 };
 
 /**
@@ -129,7 +129,7 @@ enum AdcPretrigger {
 
 #ifdef ADC_SC2_DMAEN
 /**
- * Select the pretrigger
+ * Selects DMA operation
  */
 enum AdcDma {
    AdcDma_Disable = ADC_SC2_DMAEN(0), //!< DMA disabled
@@ -138,7 +138,8 @@ enum AdcDma {
 #endif
 
 /**
- *  Input sample interval. Long sample times allow the use of higher input impedance sources
+ *  Input sample interval.
+ *  Long sample times allow the use of higher input impedance sources
  */
 enum AdcSample {
    AdcSample_Normal  = ADC_CFG1_ADLSMP(0),                    //!< Normal sample interval
@@ -165,7 +166,7 @@ enum AdcPower {
 };
 
 /**
- * Allows higher input clock speed operation.\n
+ * Allows higher input clock speed operation.
  * This actually extends the number of conversion clock cycles but is offset by allowing a faster input clock.
  */
 enum AdcClockRange {
@@ -174,7 +175,7 @@ enum AdcClockRange {
 };
 
 /**
- * Controls whether the internal ADC clock is always enabled.\n
+ * Controls whether the internal ADC clock is always enabled.
  * In any case, if internal clock is selected for use by the converter (AdcClockSource_Asynch) then\n
  * it will be enabled when needed for a conversion but with an extended conversion time.\n
  * If always enable this startup delay is avoided and the clock may be use by other peripherals.
@@ -206,13 +207,12 @@ enum AdcCompare {
 };
 
 /**
- * Type definition for ADC interrupt call back
+ * Type definition for ADC interrupt call back.
  *
- * @param[in] value   Conversion value from channel
- * @param[in] channel Channel number for the conversion
+ * @param[in] value   Conversion result from channel
+ * @param[in] channel Channel providing the result
  */
-typedef void (*ADCCallbackFunction)(uint32_t value, int channel);
-
+typedef void (*ADCCallbackFunction)(uint32_t result, int channel);
 
 /**
  * Provides common unhandledCallback for all ADCs.
@@ -575,9 +575,6 @@ public:
    }
 
 protected:
-   template<class InfoX, int channelX> friend class AdcChannel_T;
-   template<class InfoX, int channelX> friend class AdcDiffChannel_T;
-
    /**
     * Enables hardware trigger mode of operation and configures the channel.
     *
@@ -660,17 +657,17 @@ public:
     *
     * Example
     * @code
-    * // Instantiate the ADC channel (for ADC0 channel 6)
-    * using Adc0_ch6 = USBDM::AdcChannel_T<Adc0Info, 6>;
+    * // Instantiate the ADC and the channel (for ADC0 channel 6)
+    * using Adc0    = AdcBase_T<Adc0Info>;
+    * using Adc0Ch6 = Adc0::Channel<6>;
     *
     * // Set ADC resolution
-    * Adc0_ch6::setMode(AdcResolution_16bit_se);
+    * Adc0::setMode(AdcResolution_16bit_se);
     *
     * // Read ADC value
-    * uint32_t value = Adc0_ch6::readAnalogue();
+    * uint32_t value = Adc0Ch6::readAnalogue();
     * @endcode
     *
-    * @tparam info    Table of information describing ADC
     * @tparam channel ADC channel
     */
    template<int channel>
@@ -753,17 +750,17 @@ public:
  *
  * Example
  * @code
- * // Instantiate the differential ADC channels (for ADC_DM0, ADC_DP0)
- * using Adc0 = USBDM::Adc0DiffChannel<Adc0Info,0>;
+ * // Instantiate the ADC and the differential channel (for ADC_DM0, ADC_DP0)
+ * using Adc0 = AdcBase_T<Adc0Info>;
+ * using Adc0Ch6 = Adc0::DiffChannel<0>;
  *
  * // Set ADC resolution
  * Adc0.setMode(AdcResolution_11bit_diff );
  *
  * // Read ADC value
- * uint32_t value = Adc0.readAnalogue();
+ * uint32_t value = Adc0Ch0.readAnalogue();
  * @endcode
  *
- * @tparam info    Table of information describing ADC
  * @tparam channel ADC channel
  */
 template<int channel>
