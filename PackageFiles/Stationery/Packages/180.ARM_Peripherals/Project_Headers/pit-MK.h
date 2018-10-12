@@ -167,7 +167,7 @@ public:
       if (channel>=Info::irqCount) {
          setAndCheckErrorCode(E_ILLEGAL_PARAM);
       }
-      IRQn_Type irqNum = irqNums[channel];
+      const IRQn_Type irqNum = irqNums[channel];
       if (enable) {
          // Enable interrupts
          NVIC_EnableIRQ(irqNum);
@@ -295,7 +295,8 @@ public:
    }
 
 protected:
-   static PitCallbackFunction callbacks[PitInfo::numChannels];
+   /** Callback functions for ISRs */
+   static PitCallbackFunction callbacks[Info::numChannels];
 
    /**
     * Class representing a PIT channel
@@ -426,7 +427,7 @@ protected:
 };
 
 /**
- * Callback for programmatically set handlers
+ * Callback table for programmatically set handlers
  */
 template<class Info>
 PitCallbackFunction PitBase_T<Info>::callbacks[] = {
@@ -440,7 +441,7 @@ PitCallbackFunction PitBase_T<Info>::callbacks[] = {
 /**
  * @brief class representing the PIT
  */
-class Pit : public PitBase_T<PitInfo> {};
+using Pit = PitBase_T<PitInfo>;
 
 /**
  * @brief Class representing a PIT channel

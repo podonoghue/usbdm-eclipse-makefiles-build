@@ -33,8 +33,8 @@ using Led1 = $(demo.cpp.blue.led:GpioA<2, ActiveLow>);
 using Led2 = $(demo.cpp.red.led:GpioC<3, ActiveLow>);
 
 using Timer         = Pit;
-using TimerChannelA = Timer::Channel<0>;
-using TimerChannelB = Timer::Channel<1>;
+using TimerChannelA = Pit::Channel<0>;
+using TimerChannelB = Pit::Channel<1>;
 
 #ifndef SET_HANDLERS_PROGRAMMATICALLY
 /**
@@ -49,13 +49,13 @@ namespace USBDM {
  *
  * This method avoids the overhead of the indirection through a call-back
  */
-template<> template<> void TimerChannelA::irqHandler() {
+template<> template<> void PitChannel<0>::irqHandler() {
    // Clear interrupt flag
    pit().CHANNEL[0].TFLG = PIT_TFLG_TIF_MASK;
    Led1::toggle();
 }
 
-template<> template<> void TimerChannelB::irqHandler() {
+template<> template<> void PitChannel<1>::irqHandler() {
    // Clear interrupt flag
    pit().CHANNEL[1].TFLG = PIT_TFLG_TIF_MASK;
    Led2::toggle();
