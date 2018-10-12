@@ -43,7 +43,7 @@ static void dmaCallback(DmaChannelNum channel) {
  *
  * @param[in]  source         Source location
  * @param[out] destination    Destination location
- * @param[in]  size           Number of bytes to transfer - must be multiple of both T1, T2 size
+ * @param[in]  size           Number of bytes to transfer - must be multiple of both sizeof(T1) and sizeof(T2) size
  */
 template <typename T1, typename T2>
 static ErrorCode dmaTransfer(T1 *source, T2 *destination, const uint32_t size) {

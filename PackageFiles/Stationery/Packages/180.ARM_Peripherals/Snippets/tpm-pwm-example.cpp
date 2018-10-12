@@ -1,5 +1,11 @@
 /**
- * @file tpm-pwm-example.cpp
+ ============================================================================
+ * @file    tpm-pwm-example.cpp
+ * @brief   Demo using Ftm class to implement a basic PWM output
+ *
+ *  Created on: 10/6/2016
+ *      Author: podonoghue
+ ============================================================================
  */
 #include "hardware.h"
 
@@ -11,14 +17,6 @@ using namespace USBDM;
  * Uses PWM to change the brightness of an LED
  */
 
-/*
- * This example is not supported on all targets as PWM feature may not be available
- * on the pins connected to the LEDs (e.g. K64F).
- *
- * The mapping of pins in may need to be changed to map PWM to LEDs as
- * preference was given to mapping to external pins on board (e.g. KL25Z).
- *
- */
 // Connection mapping - change as required
 using Timer = $(demo.cpp.tpm:Tpm2);
 using Led   = $(demo.cpp.pwm.led1:Tpm2Channel<0>);

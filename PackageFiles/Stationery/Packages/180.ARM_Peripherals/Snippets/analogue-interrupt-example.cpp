@@ -24,12 +24,12 @@ using AdcChannel = Adc::Channel<19>;
  * NOTE:  This is not a sensible approach
  *        Using serial I/O in a ISR is very silly!!!!
  */
-void handler(uint32_t value, int) {
+void handler(uint32_t result, int) {
    // Start next conversion
-   AdcChannel::startConversion();
-   value = value/10;
-   for (uint i=0; i<75; i++) {
-      if (i<value) {
+   AdcChannel::startConversion(AdcInterrupt_enable);
+   result = result/10;
+   for (unsigned i=0; i<75; i++) {
+      if (i<result) {
          console.write('X');
       }
    }
@@ -47,12 +47,13 @@ int main(void) {
 
    // Note: Setting callback affects all channels on that ADC
    Adc::setCallback(handler);
+   Adc::enableNvicInterrupts(true, NvicPriority_Normal);
 
    // Check for error so far
    checkError();
 
-   // Start a conversion
-   AdcChannel::startConversion();
+   // Start a conversion with interrupt on completion
+   AdcChannel::startConversion(AdcInterrupt_enable);
 
    for(;;) {
    }
