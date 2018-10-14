@@ -843,8 +843,8 @@ public:
    /**
     * Clear selected timer event flags
     *
-    * @param mask Mask indicating which channel flags to clear
-    *             There is one bit for each channel
+    * @param channelMask Mask indicating which channel flags to clear.
+    *                    There is one bit for each channel
 	*/
    static INLINE_RELEASE void clearSelectedInterruptFlags(uint32_t channelMask) {
       (void)tmr().STATUS;

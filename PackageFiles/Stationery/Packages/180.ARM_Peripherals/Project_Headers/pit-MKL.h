@@ -86,19 +86,6 @@ protected:
    }
    
 public:
-   /** PIT interrupt handler -  Calls PIT callback */
-   static void irqHandler() {
-      for (unsigned channel=0; channel<Info::numChannels; channel++) {
-         if (pit().CHANNEL[channel].TFLG & PIT_TFLG_TIF_MASK) {
-            // Clear interrupt flag
-            pit().CHANNEL[channel].TFLG = PIT_TFLG_TIF_MASK;
-            // Do call-back
-            callbacks[channel]();
-         }
-      }
-   }
-
-public:
    /**
     * Enable/disable channel interrupts
     *
@@ -111,6 +98,18 @@ public:
       }
       else {
          pit().CHANNEL[channel].TCTRL &= ~PIT_TCTRL_TIE_MASK;
+      }
+   }
+
+   /** PIT interrupt handler -  Calls PIT callback */
+   static void irqHandler() {
+      for (unsigned channel=0; channel<Info::numChannels; channel++) {
+         if (pit().CHANNEL[channel].TFLG & PIT_TFLG_TIF_MASK) {
+            // Clear interrupt flag
+            pit().CHANNEL[channel].TFLG = PIT_TFLG_TIF_MASK;
+            // Do call-back
+            callbacks[channel]();
+         }
       }
    }
 

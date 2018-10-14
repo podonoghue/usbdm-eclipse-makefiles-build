@@ -463,8 +463,8 @@ public:
       /**
        * Set callback for Pin interrupts
        *
-       * @param[in] callback The function to call on Pin interrupt. \n
-       *                     nullptr to indicate none
+       * @param[in] pinCallback The function to call on Pin interrupt. \n
+       *                        nullptr to indicate none
        *
        * @return E_NO_ERROR            No error
        * @return E_HANDLER_ALREADY_SET Handler already set
