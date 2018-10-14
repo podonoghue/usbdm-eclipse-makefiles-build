@@ -44,7 +44,7 @@ static void dmaCallback(DmaChannelNum channel) {
  */
 static ErrorCode dmaTransfer(uint32_t *source, uint32_t *destination, uint32_t size) {
 
-   usbdm_assert(size%sizeof(uint32_t) == 0, "size must be a multiple of sizeof(uint32_t)");
+   usbdm_assert(size%sizeof(uint32_t) == 0, "Size must be a multiple of sizeof(uint32_t)");
 
    // DMA channel number to use
    const DmaChannelNum dmaChannelNum = Dma0::allocateChannel();
@@ -68,7 +68,7 @@ static ErrorCode dmaTransfer(uint32_t *source, uint32_t *destination, uint32_t s
     * | +--------------------------+ |             - NBYTES Number of bytes to transfer
     * | +--------------------------+ |<-DMA Req.   - Attributes
     * | | Minor Loop               | |               - ATTR_SSIZE, ATTR_DSIZE Source and destination transfer sizes
-    * |..............................|               - ATTR_SMOD, ATTR_DMOD Modulo --TODO
+    * |..............................|               - ATTR_SMOD, ATTR_DMOD Modulo
     * | |                          | |
     * | +--------------------------+ |             The number of reads and writes done will depend on NBYTES, SSIZE and DSIZE
     * | +--------------------------+ |<-DMA Req.   For example: NBYTES=12, SSIZE=16-bits, DSIZE=32-bits => 6 reads, 3 writes
@@ -91,31 +91,28 @@ static ErrorCode dmaTransfer(uint32_t *source, uint32_t *destination, uint32_t s
     *
     * Structure to define the DMA transfer
     */
-   static const DmaTcd tcd {
-      /* uint32_t  SADDR         Source address              */ (uint32_t)(source),         // Source array
-      /* uint16_t  SOFF          Source offset               */ sizeof(*source),            // SADDR advances source element size for each transfer
-      /* DmaSize   DSIZE:3       Destination size            */ dmaSize(*destination),      // 32-bit write to DADDR
-      /* DmaModulo DMOD:5        Destination modulo          */ DmaModulo_Disabled,
-      /* DmaSize   SSIZE:3       Source size                 */ dmaSize(*source),           // 32-bit read from SADDR
-      /* DmaModulo SMOD:5        Source modulo               */ DmaModulo_Disabled,
-      /* uint32_t  NBYTES        Minor loop byte count       */ size,                       // Total transfer in one minor-loop
-      /* uint32_t  SLAST         Last source adjustment      */ -size,                      // Reset SADDR to start of array on completion
-      /* uint32_t  DADDR         Destination address         */ (uint32_t)(destination),    // Start of array for result
-      /* uint16_t  DOFF          Destination offset          */ sizeof(*destination),       // DADDR advances destination element size for each transfer
-      /* uint16_t  CITER         Major loop count            */ DMA_CITER_ELINKNO_ELINK(0)| // No ELINK
-      /*                                                     */ DMA_CITER_ELINKNO_CITER(1), // Single (1) software transfer
-      /* uint32_t  DLAST:1        Last DADDR adjustment      */ -size,                      // Reset DADDR to start of array on completion
-      /* bool      START:1       Channel Start               */ true,                       // Software start
-      /* bool      INTMAJOR:1    Interrupt on major complete */ true,                       // Generate interrupt on completion of Major-loop
-      /* bool      INTHALF:1     Interrupt on half complete  */ false,
-      /* bool      DREQ:1        Disable Request             */ false,                      // Don't clear hardware request when complete major loop
-      /* bool      ESG:1         Enable Scatter/Gather       */ false,
-      /* bool      MAJORELINK:1  Enable channel linking      */ false,
-      /* bool      ACTIVE:1      Channel Active              */ false,
-      /* bool      DONE:1        Channel Done                */ false,
-      /* unsigned  MAJORLINKCH:4 Link Channel Number         */ 0,
-      /* DmaSpeed  BWC:2         Bandwidth (speed) Control   */ DmaSpeed_NoStalls,
-   };
+   static const DmaTcd tcd (
+      /* Source address                 */ (uint32_t)(source),      // Source array
+      /* Source offset                  */ sizeof(*source),         // Source address advances source element size for each transfer
+      /* Source size                    */ dmaSize(*source),        // 32-bit read from source address
+      /* Source modulo                  */ DmaModulo_Disabled,      // Disabled
+      /* Last source adjustment         */ -(int)size,              // Reset Source address to start of array on completion
+
+      /* Destination address            */ (uint32_t)(destination), // Start of array for result
+      /* Destination offset             */ sizeof(*destination),    // Destination address advances destination element size for each transfer
+      /* Destination size               */ dmaSize(*destination),   // 32-bit write to destination address
+      /* Destination modulo             */ DmaModulo_Disabled,
+      /* Last destination adjustment    */ -(int)size,              // Reset destination address to start of array on completion
+
+      /* Minor loop byte count          */ dmaNBytes(size),         // Total transfer in one minor-loop
+      /* Major loop count               */ dmaCiter(1),             // Single (1) software transfer
+
+      /* Start channel                  */ true,                    // Software start
+      /* Disable Req. on major complete */ false,                   // Don't clear hardware request when major loop completed
+      /* Interrupt on major complete    */ true,                    // Generate interrupt on completion of major-loop
+      /* Interrupt on half complete     */ false,                   // No interrupt
+      /* Bandwidth (speed) Control      */ DmaSpeed_NoStalls        // Full speed
+   );
 
    // Sequence not complete yet
    complete = false;
@@ -136,7 +133,7 @@ static ErrorCode dmaTransfer(uint32_t *source, uint32_t *destination, uint32_t s
    return E_NO_ERROR;
 }
 
-constexpr int DataSize = 4*((1<<10)/sizeof(uint32_t));  // 4KiB
+constexpr int DataSize = 3*((1<<10)/sizeof(uint32_t));  // 3KiB
 uint32_t source[DataSize];
 uint32_t destination[DataSize];
 
@@ -175,7 +172,6 @@ int main() {
          console.writeln("Contents verify failed");
       }
    }
-
    for(;;) {
       __asm__("nop");
    }

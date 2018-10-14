@@ -209,6 +209,24 @@ enum TsiNoiseFilter {
  */
 typedef void (*TSICallbackFunction)(uint8_t status);
 
+class TsiBase {
+public:
+   /** Class to static check channel pin mapping is valid */
+   template<class Info, int channel> class CheckSignal {
+      static_assert((channel<Info::numSignals),
+            "Non-existent TSI channel - Check Configure.usbdm for available channels");
+      static_assert((channel>=Info::numSignals)||(Info::info[channel].gpioBit != UNMAPPED_PCR),
+            "TSI channel is not mapped to a pin - Modify Configure.usbdm");
+      static_assert((channel>=Info::numSignals)||(Info::info[channel].gpioBit != INVALID_PCR),
+            "TSI channel doesn't exist in this device/package - Check Configure.usbdm for available channels");
+      static_assert((channel>=Info::numSignals)||((Info::info[channel].gpioBit == UNMAPPED_PCR)||(Info::info[channel].gpioBit == INVALID_PCR)||(Info::info[channel].gpioBit >= 0)),
+            "Illegal TSI Channel - Check Configure.usbdm for available channels");
+   public:
+      /** Dummy function to allow convenient in-line checking */
+      static constexpr void check() {}
+   };
+};
+
 /**
  * Template class representing a TSI interface
  *
@@ -217,8 +235,6 @@ typedef void (*TSICallbackFunction)(uint8_t status);
 template <class Info>
 class TsiBase_T {
 
-protected:
-   static constexpr volatile TSI_Type *tsi      = Info::tsi;
 protected:
    /** Clock register for peripheral */
    static __attribute__((always_inline)) volatile uint32_t &clockReg() { return Info::clockReg(); }
@@ -484,9 +500,22 @@ public:
  * @tparam threshold Threshold for the button to be considered pressed
  */
 template<class Info, int channel, int threshold>
-class TsiButton_T : public USBDM::TsiIrq_T<Info>, CheckSignal<Info, channel> {
+class TsiButton_T : public USBDM::TsiIrq_T<Info> {
+
+   TsiBase::CheckSignal<Info, channel> check;
 
 public:
+   using Pcr = PcrTable_T<Info, channel>;
+
+   /**
+    * Configure the pin associated with this TSI channel.
+    * The pin is in analogue mode so no PCR settings are active.
+    * This function is of use if mapAllPins and mapAllPinsOnEnable are not selected in USBDM configuration.
+    */
+   static void setInput() {
+      // Map pin to ADC
+      Pcr::setPCR(Info::info[channel].pcrValue);
+   }
 
    /**
     * Poll button \n

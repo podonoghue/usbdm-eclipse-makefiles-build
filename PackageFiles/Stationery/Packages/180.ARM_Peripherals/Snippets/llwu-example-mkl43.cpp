@@ -45,18 +45,15 @@ using WakeupTimer = Lptmr0;
 static constexpr unsigned FILTER_NUM = 0;
 
 // LLWU Pin to use for wake-up
-static constexpr LlwuPin  WAKEUP_PIN = LlwuPin_Ptc1;
+using WakeupPin = Llwu::Pin<LlwuPin_Ptc1>;
 
-// LLWU pin configuration
-using WakeupPin = PcrTable_T<LlwuInfo, WAKEUP_PIN>;
-
-//! Flag to indicate Pin handler ran
+// Flag to indicate Pin handler ran
 bool pinHandlerRan;
 
-//! Flag to indicate Timer handler ran
+// Flag to indicate Timer handler ran
 bool timerHandlerRan;
 
-//! Flag to indicate LLWU handler ran
+// Flag to indicate LLWU handler ran
 bool llwuHandlerRan;
 
 /**
@@ -92,17 +89,16 @@ void llwuCallback() {
       WakeupTimer::clearInterruptFlag();
       WakeupTimer::enableInterrupts(false);
    }
-   if (Llwu::isPinWakeupSource(WAKEUP_PIN)) {
+   if (Llwu::isPinWakeupSource(WakeupPin::pin)) {
       // Wake-up from pin
       RedLed::toggle();
-      Llwu::clearPinWakeupFlag(WAKEUP_PIN);
+      Llwu::clearPinWakeupFlag(WakeupPin::pin);
    }
    if (Llwu::isFilteredPinWakeupSource(FILTER_NUM)) {
       // Wake-up from filtered pin
       RedLed::toggle();
       Llwu::clearFilteredPinWakeupFlag(FILTER_NUM);
    }
-   __asm__("nop");
 }
 
 /**
@@ -177,14 +173,14 @@ void testWaitMode(SmcRunMode smcRunMode) {
    console.writeln("Awake!").flushOutput();
 }
 
-/** Names of tests */
-static const char *TestNames[] = {
-   "NONE ", "STOP ", "VLPS ", "WAIT ", "VLPW ", "LLS  ", "VLLS0", "VLLS1", "VLLS2", "VLLS3",
-};
-
 /** Possible tests - must be in this order */
 enum Test {
    NONE, STOP, VLPS, WAIT, VLPW, LLS, VLLS0, VLLS1, VLLS2, VLLS3,
+};
+
+/** Names of tests - must match enum Test{} */
+static const char *TestNames[] = {
+   "NONE ", "STOP ", "VLPS ", "WAIT ", "VLPW ", "LLS  ", "VLLS0", "VLLS1", "VLLS2", "VLLS3",
 };
 
 /**
@@ -198,27 +194,21 @@ void enablePin(Test test, bool enable) {
    // Disable filtered pin
    Llwu::configureFilteredPinSource(
          FILTER_NUM,
-         WAKEUP_PIN,
+         WakeupPin::pin,
          LlwuFilterPinMode_Disabled);
 
    // Disable direct pin
    Llwu::configurePinSource(
-         WAKEUP_PIN,
+         WakeupPin::pin,
          LlwuPinMode_Disabled);
 
    // Disable wake-up pin
-   Llwu::setInput<WAKEUP_PIN>(
+   WakeupPin::setInput(
          PinPull_Up,
          PinAction_None,
          PinFilter_Passive);
 
    if (enable && (test>=LLS)) {
-
-      // Configure wake-up pin as LLWU input
-      Llwu::setInput<WAKEUP_PIN>(
-            PinPull_Up,
-            PinAction_None,
-            PinFilter_Passive);
 
       // Use LLWU in most Low-leakage modes
       Llwu::clearAllFlags();
@@ -229,14 +219,14 @@ void enablePin(Test test, bool enable) {
          console.writeln("Configuring filtered LLWU pin wake-up").flushOutput();
          Llwu::configureFilteredPinSource(
                FILTER_NUM,
-               WAKEUP_PIN,
+               WakeupPin::pin,
                LlwuFilterPinMode_FallingEdge);
       }
       else {
          // LLWU direct from pin
          console.writeln("Configuring direct LLWU pin wake-up").flushOutput();
          Llwu::configurePinSource(
-               WAKEUP_PIN,
+               WakeupPin::pin,
                LlwuPinMode_FallingEdge);
       }
       Llwu::setCallback(llwuCallback);
@@ -407,7 +397,7 @@ void help() {
 }
 
 int main() {
-   // Change UART clock source (assumes console = UART0)
+   // Set UART (console) clock to clock source available in VLPR mode
    SimInfo::setUart0Clock(SimUart0ClockSource_OscerClk);
    console.setBaudRate(BAUD_RATE);
 
@@ -448,8 +438,8 @@ int main() {
    for(;;) {
       SmcStatus smcStatus = Smc::getStatus();
       if (refresh) {
-         console.write("SystemCoreClock  = ").writeln(::SystemCoreClock);
-         console.write("SystemBusClock   = ").writeln(::SystemBusClock);
+         console.write("SystemCoreClock  = ").write(::SystemCoreClock/1000000.0).writeln(" MHz");
+         console.write("SystemBusClock   = ").write(::SystemBusClock/1000000.0).writeln(" MHz");
 
          switch(smcStatus) {
             default:

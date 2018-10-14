@@ -56,6 +56,7 @@ static ErrorCode dmaTransfer(T1 *source, T2 *destination, const uint32_t size) {
    if (dmaChannelNum == DmaChannelNum_None) {
       return E_NO_RESOURCE;
    }
+
    /**
     * @verbatim
     * +------------------------------+  DMA mode
@@ -72,27 +73,24 @@ static ErrorCode dmaTransfer(T1 *source, T2 *destination, const uint32_t size) {
     *
     * Structure to define the DMA transfer
     */
-   static const DmaTcd tcd {
-      /* uint32_t  SADDR     Source address                */ (uint32_t)(source),      // Source array
-      /* uint32_t  DADDR     Destination address           */ (uint32_t)(destination), // Start of array for result
-      /* uint32_t  BCR       Byte count                    */ size,                    // Total transfer size in bytes
-      /* unsigned  LCH2:2;   Complete (BCR=0) link channel */ 0,
-      /* unsigned  LCH1:2;   Cycle-steal link channel      */ 0,
-      /* DmaLink   LINKCC:2; Link channel control          */ DmaLink_None,
-      /* bool      D_REQ:1;  Clear ERQ when complete       */ true,                    // Disable peripheral requests (ERQ) at end
-      /* DmaModulo DMOD:4;   Destination address modulo    */ DmaModulo_Disabled,
-      /* DmaModulo SMOD:4;   Source address modulo         */ DmaModulo_Disabled,
-      /* bool      START:1;  Start transfer                */ true,                    // Start transfer immediately
-      /* DmaSize   DSIZE:2;  Destination size              */ dmaSize(*destination),   // 32-bit source
-      /* bool      DINC:1;   Destination increment         */ true,                    // Increment destination address
-      /* DmaSize   SSIZE:2;  Source size                   */ dmaSize(*source),        // 32-bit destination
-      /* bool      SINC:1;   Source increment              */ true,                    // Increment source address
-      /* bool      EADREQ:1; Enable asynchronous DMA       */ true,                    // Asynchronous DMA
-      /* bool      AA:1;     Auto-align                    */ false,
-      /* DmaMode   CS:1;     Cycle steal/Continuous        */ DmaMode_Continuous,      // All data for each request
-      /* bool      ERQ:1;    Enable peripheral request     */ false,
-      /* bool      EINT:1;   Interrupt enable              */ true,                    // Interrupt when complete
-   };
+   static const DmaTcd tcd (
+      /* Transfer size                          */ size,                    // Total transfer size in bytes
+      /* Source address                         */ (uint32_t)(source),      // Source array
+      /* Source size                            */ dmaSize(*source),        // 32-bit source
+      /* Source modulo                          */ DmaModulo_Disabled,
+      /* Source increment                       */ true,                    // Increment source address
+      /* Destination address                    */ (uint32_t)(destination), // Start of array for result
+      /* Destination size                       */ dmaSize(*destination),   // 32-bit destination
+      /* Destination modulo                     */ DmaModulo_Disabled,
+      /* Destination increment                  */ true,                    // Increment destination address
+      /* DMA mode                               */ DmaMode_Continuous,      // All data for each request
+      /* Auto align                             */ false,
+      /* Start transfer                         */ true,                    // Start transfer immediately
+      /* Enable asynchronous requests           */ true,                    // Asynchronous DMA
+      /* Enable peripheral requests             */ false,
+      /* Disable peripheral request on complete */ false,
+      /* Enable interrupts                      */ true                     // Interrupt when complete
+   );
 
    // Sequence not complete yet
    complete = false;
@@ -155,7 +153,6 @@ int main() {
          console.writeln("Contents verify failed");
       }
    }
-
    for(;;) {
       __asm__("nop");
    }

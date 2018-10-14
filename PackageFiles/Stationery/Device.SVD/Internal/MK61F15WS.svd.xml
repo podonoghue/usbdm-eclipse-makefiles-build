@@ -67,7 +67,7 @@
       <xi:include href="peripherals/LMEM_0.svd.xml"/>
       <xi:include href="peripherals/LPTMR0.svd.xml"/>
       <xi:include href="peripherals/MCG_MK_DUALPLL.svd.xml"/>
-      <xi:include href="peripherals/MCM_MK61F15WS.svd.xml"/>
+      <xi:include href="peripherals/MCM_MK61F15.svd.xml"/>
       <xi:include href="peripherals/MPU_MK10F12_16R.svd.xml"/>
       <xi:include href="peripherals/NFC_0.svd.xml"/>
       <xi:include href="peripherals/NV_MK2.svd.xml"/>

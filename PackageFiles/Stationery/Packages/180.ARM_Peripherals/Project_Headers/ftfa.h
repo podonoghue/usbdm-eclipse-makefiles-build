@@ -17,6 +17,7 @@
 #include "derivative.h"
 #include "hardware.h"
 #include "delay.h"
+#include "smc.h"
 
 namespace USBDM {
 /**
@@ -104,6 +105,31 @@ public:
          }
       }
       return false;
+   }
+
+   /**
+    * Check if flash operations are available.
+    * This will check if the processor is in the correct mode for flash operations.
+    *
+    * @return true  => OK
+    * @return false => Processor not in correct mode
+    */
+   static bool isFlashAvailable() {
+      return (Smc::getStatus() == SmcStatus_run);
+   }
+
+   /**
+    * Waits until the current flash operation is complete with run mode check.
+    * This is used to wait until a FlexRAM write has completed.
+    *
+    * @return true  => Operation complete and FlexRAM idle
+    * @return false => timeout or flash not available
+    */
+   static bool waitUntilFlexIdle() {
+      usbdm_assert(isFlashAvailable(), "Flash use in unsuitable run mode");
+      return
+            isFlashAvailable() &&
+            waitForFlashReady();
    }
 
 private:

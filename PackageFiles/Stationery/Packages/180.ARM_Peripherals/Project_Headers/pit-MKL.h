@@ -66,44 +66,25 @@ enum PitChannelEnable {
  * @endcode
  */
 template<class Info>
-class Pit_T {
+class PitBase_T {
 
 private:
    /**
     * This class is not intended to be instantiated
     */
-   Pit_T() = delete;
-   Pit_T(const Pit_T&) = delete;
-   Pit_T(Pit_T&&) = delete;
+   PitBase_T() = delete;
+   PitBase_T(const PitBase_T&) = delete;
+   PitBase_T(PitBase_T&&) = delete;
 
 protected:
    /** Default TCTRL value for timer channel */
    static constexpr uint32_t PIT_TCTRL_DEFAULT_VALUE = (PIT_TCTRL_TEN_MASK);
-
-   /** Number of timer channels */
-   static constexpr uint32_t PIT_NUMBER_OF_CHANNELS  = 2;
-
-   /** Callback functions for ISRs */
-   static PitCallbackFunction callbacks[PIT_NUMBER_OF_CHANNELS];
 
    /** Callback to catch unhandled interrupt */
    static void unhandledCallback() {
       setAndCheckErrorCode(E_NO_HANDLER);
    }
    
-public:
-   /** PIT interrupt handler -  Calls PIT callback */
-   static void irqHandler() {
-      for (unsigned channel=0; channel<PIT_NUMBER_OF_CHANNELS; channel++) {
-         if (pit().CHANNEL[channel].TFLG & PIT_TFLG_TIF_MASK) {
-            // Clear interrupt flag
-            pit().CHANNEL[channel].TFLG = PIT_TFLG_TIF_MASK;
-            // Do call-back
-            callbacks[channel]();
-         }
-      }
-   }
-
 public:
    /**
     * Enable/disable channel interrupts
@@ -117,6 +98,18 @@ public:
       }
       else {
          pit().CHANNEL[channel].TCTRL &= ~PIT_TCTRL_TIE_MASK;
+      }
+   }
+
+   /** PIT interrupt handler -  Calls PIT callback */
+   static void irqHandler() {
+      for (unsigned channel=0; channel<Info::numChannels; channel++) {
+         if (pit().CHANNEL[channel].TFLG & PIT_TFLG_TIF_MASK) {
+            // Clear interrupt flag
+            pit().CHANNEL[channel].TFLG = PIT_TFLG_TIF_MASK;
+            // Do call-back
+            callbacks[channel]();
+         }
       }
    }
 
@@ -153,7 +146,7 @@ public:
 
    /**
     *  Enable the PIT with default settings.
-    *  The channels are enabled with default settings.
+    *  All channels are enabled with default settings.
     */
    static void defaultConfigure() {
       enable();
@@ -187,16 +180,24 @@ public:
     *
     * @param[in]  enable        True => enable, False => disable
     * @param[in]  nvicPriority  Interrupt priority
+    *
+    * @return E_NO_ERROR on success
     */
-   static void enableNvicInterrupts(bool enable=true, uint32_t nvicPriority=NvicPriority_Normal) {
+   static ErrorCode enableNvicInterrupts(bool enable=true, uint32_t nvicPriority=NvicPriority_Normal) {
 
+      constexpr IRQn_Type irqNum = Info::irqNums[0];
       if (enable) {
-         enableNvicInterrupt(Info::irqNums[0], nvicPriority);
+         // Enable interrupts
+         NVIC_EnableIRQ(irqNum);
+
+         // Set priority level
+         NVIC_SetPriority(irqNum, nvicPriority);
       }
       else {
          // Disable interrupts
-         NVIC_DisableIRQ(Info::irqNums[0]);
+         NVIC_DisableIRQ(irqNum);
       }
+      return E_NO_ERROR;
    }
    
    /**
@@ -212,7 +213,6 @@ public:
       else {
          pit().CHANNEL[channel].TCTRL &= ~PIT_TCTRL_TEN_MASK;
       }
-      enableNvicInterrupts(enable);
    }
 
    /**
@@ -221,19 +221,15 @@ public:
     *  @param[in]  channel           Channel to configure
     *  @param[in]  interval          Interval in timer ticks (usually bus clock period)
     *  @param[in]  pitChannelIrq     Whether to enable interrupts
-    *  @param[in]  pitChannelEnable  Whether to enable channel initially
     */
    static void configureChannelInTicks(
          uint8_t           channel,
          uint32_t          interval,
-         PitChannelIrq     pitChannelIrq=PitChannelIrq_Disable,
-         PitChannelEnable  pitChannelEnable=PitChannelEnable_Enable) {
+         PitChannelIrq     pitChannelIrq=PitChannelIrq_Disable) {
 
-      pit().CHANNEL[channel].LDVAL = interval;
-      pit().CHANNEL[channel].TCTRL = pitChannelIrq|pitChannelEnable;
+      pit().CHANNEL[channel].LDVAL = interval-1;
+      pit().CHANNEL[channel].TCTRL = pitChannelIrq|PIT_TCTRL_TEN(1);
       pit().CHANNEL[channel].TFLG  = PIT_TFLG_TIF_MASK;
-
-      enableNvicInterrupts();
    }
 
    /**
@@ -242,16 +238,14 @@ public:
     *  @param[in]  channel           Channel to configure
     *  @param[in]  interval          Interval in seconds
     *  @param[in]  pitChannelIrq     Whether to enable interrupts
-    *  @param[in]  pitChannelEnable  Whether to enable channel initially
     */
    static void configureChannel(
          uint8_t           channel,
          float             interval,
-         PitChannelIrq     pitChannelIrq=PitChannelIrq_Disable,
-         PitChannelEnable  pitChannelEnable=PitChannelEnable_Enable) {
+         PitChannelIrq     pitChannelIrq=PitChannelIrq_Disable) {
 
       pit().CHANNEL[channel].LDVAL = round((interval*PitInfo::getClockFrequency())-1);
-      pit().CHANNEL[channel].TCTRL = pitChannelIrq|pitChannelEnable;
+      pit().CHANNEL[channel].TCTRL = pitChannelIrq|PIT_TCTRL_TEN(1);
       pit().CHANNEL[channel].TFLG  = PIT_TFLG_TIF_MASK;
    }
 
@@ -317,21 +311,150 @@ public:
       }
       disableChannel(channel);
    }
+
+protected:
+   /** Callback functions for ISRs */
+   static PitCallbackFunction callbacks[Info::numChannels];
+
+   /**
+    * Class representing a PIT channel
+    *
+    * @tparam channel Timer channel number
+    */
+   template <int channel>
+   class Channel {
+
+   public:
+      /** Timer channel number */
+      static constexpr int CHANNEL = channel;
+
+      /**
+       * Set interrupt callback
+       *
+       * @param[in]  callbackFunction  Function to call from stub ISR
+       */
+      static void setCallback(PitCallbackFunction callbackFunction) {
+         if (callbackFunction == nullptr) {
+            callbackFunction = PitBase_T<Info>::unhandledCallback;
+            enableInterrupts(false);
+         }
+         callbacks[channel] = callbackFunction;
+      }
+
+      /** PIT interrupt handler -  Calls PIT callback */
+      static void irqHandler() {
+         // Clear interrupt flag
+         PitBase_T<Info>::pit().CHANNEL[channel].TFLG = PIT_TFLG_TIF_MASK;
+         callbacks[channel]();
+      }
+
+      /**
+       *  Configure the PIT channel
+       *
+       *  @param[in]  interval          Interval in timer ticks (usually bus clock)
+       *  @param[in]  pitChannelIrq     Whether to enable interrupts
+       */
+      static void __attribute__((always_inline)) configureInTicks(
+            uint32_t          interval,
+            PitChannelIrq     pitChannelIrq=PitChannelIrq_Disable) {
+
+         PitBase_T<Info>::configureChannelInTicks(channel, interval, pitChannelIrq);
+      }
+
+      /**
+       *  Configure the PIT channel
+       *
+       *  @param[in]  interval          Interval in seconds
+       *  @param[in]  pitChannelIrq     Whether to enable interrupts
+       */
+      static void __attribute__((always_inline)) configure(
+            float             interval,
+            PitChannelIrq     pitChannelIrq=PitChannelIrq_Disable) {
+
+         PitBase_T<Info>::configureChannel(channel, interval, pitChannelIrq);
+      }
+
+      /**
+       * Set period in seconds
+       *
+       * @param[in]  interval Interval in seconds
+       */
+      static void __attribute__((always_inline)) setPeriod(float interval) {
+         PitBase_T<Info>::setPeriod(channel, interval);
+      }
+
+      /**
+       * Set period in seconds
+       *
+       * @param[in]  interval Interval in ticks
+       */
+      static void __attribute__((always_inline)) setPeriodInTicks(uint32_t interval) {
+         PitBase_T<Info>::setPeriodInTicks(channel, interval);
+      }
+
+      /**
+       *   Enable/Disable the PIT channel
+       */
+      static void __attribute__((always_inline)) enable(bool enable=true) {
+         PitBase_T<Info>::enableChannel(channel, enable);
+      }
+
+      /**
+       * Enable/disable channel interrupts
+       *
+       * @param[in]  enable  True => enable, False => disable
+       */
+      static void __attribute__((always_inline)) enableInterrupts(bool enable=true) {
+         PitBase_T<Info>::enableInterrupts(channel, enable);
+      }
+
+      /**
+       *  Use a PIT channel to implement a busy-wait delay
+       *
+       *  @param[in]  interval  Interval to wait in timer ticks (usually bus clock period)
+       *
+       *  @note Function doesn't return until interval has expired
+       */
+      static void __attribute__((always_inline)) delayInTicks(uint32_t interval) {
+         PitBase_T<Info>::delayInTicks(channel, interval);
+      }
+
+      /**
+       *  Use a PIT channel to implement a busy-wait delay
+       *
+       *  @param[in]  interval  Interval to wait as a float
+       *
+       *  @note Function doesn't return until interval has expired
+       */
+      static void __attribute__((always_inline)) delay(float interval) {
+         PitBase_T<Info>::delay(channel, interval);
+      }
+   };
 };
 
 /**
  * Callback table for programmatically set handlers
  */
-template<class Info> PitCallbackFunction Pit_T<Info>::callbacks[] = {
-   unhandledCallback,
-   unhandledCallback,
-   };
+template<class Info>
+PitCallbackFunction PitBase_T<Info>::callbacks[] = {
+      PitBase_T<Info>::unhandledCallback,
+      PitBase_T<Info>::unhandledCallback,
+};
 
 #ifdef PIT
 /**
  * @brief class representing the PIT
  */
-using Pit = Pit_T<PitInfo>;
+using Pit = PitBase_T<PitInfo>;
+
+/**
+ * @brief Class representing a PIT channel
+ *
+ * @tparam channel Channel number
+ */
+template <int channel>
+using PitChannel = Pit::Channel<channel>;
+
 #endif
 
 /**

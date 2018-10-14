@@ -333,7 +333,7 @@ ErrorCode Mcg::clockTransition(const McgInfo::ClockInfo &clockInfo) {
 
          case McgInfo::ClockMode_BLPE: // from FBE, PBE (registers differ depending on transition)
             externalClockInUse = true;
-            // Fall through
+            // Fall through - no break
 
          case McgInfo::ClockMode_BLPI: // from FBI
             // Set LP

@@ -97,7 +97,7 @@ class LlwuBase_T {
 
 protected:
    /** Class to static check channel pin mapping is valid */
-   template<class Info, LlwuPin llwuPin> class CheckSignal {
+   template<LlwuPin llwuPin> class CheckSignal {
       static_assert((llwuPin<Info::numSignals), "Non-existent LLWU Input - Modify Configure.usbdm");
       static_assert((llwuPin>=Info::numSignals)||(Info::info[llwuPin].gpioBit != UNMAPPED_PCR), "LLWU Input is not mapped to a pin - Modify Configure.usbdm");
       static_assert((llwuPin>=Info::numSignals)||(Info::info[llwuPin].gpioBit != INVALID_PCR),  "LLWU Input doesn't exist in this device/package - Modify Configure.usbdm");
@@ -421,27 +421,73 @@ public:
       }
    }
 
-   /**
-    * Set Pin Control Register (PCR) value \n
-    * This will map the pin to the LLWU function (mux value) \n
-    * The clock to the port will be enabled before changing the PCR
-    *
-    * @tparam llwuPin          LLWU pin to configure e.g. LlwuPin_Pte1
-    *
-    * @param[in]  pinPull          One of PinPull_None, PinPull_Up, PinPull_Down
-    * @param[in]  pinAction        One of PinAction_None, etc (defaults to PinAction_None)
-    * @param[in]  pinFilter        One of PinFilter_None, PinFilter_Passive (defaults to PinFilter_None)
-    */
    template<LlwuPin llwuPin>
-   static void setInput(
-         PinPull           pinPull,
-         PinAction         pinAction         = PinAction_None,
-         PinFilter         pinFilter         = PinFilter_None
-         ) {
-      LlwuBase_T::CheckSignal<Info, llwuPin>::check();
+   class Pin {
+
+   private:
+      // Checks pin mapping is valid
+      LlwuBase_T::CheckSignal<llwuPin> check;
+
       using Pcr = PcrTable_T<Info, llwuPin>;
-      Pcr::setPCR(pinPull|pinAction|pinFilter|(Info::info[llwuPin].pcrValue&PORT_PCR_MUX_MASK));
-   }
+
+   public:
+      static constexpr LlwuPin pin = llwuPin;
+
+      /**
+       * Set Pin Control Register (PCR) value \n
+       * This will map the pin to the LLWU function (mux value) \n
+       * The clock to the port will be enabled before changing the PCR
+       *
+       * @tparam llwuPin LLWU pin to configure e.g. LlwuPin_Pte1
+       *
+       * @param[in]  pinPull          One of PinPull_None, PinPull_Up, PinPull_Down
+       * @param[in]  pinAction        One of PinAction_None, etc (defaults to PinAction_None)
+       * @param[in]  pinFilter        One of PinFilter_None, PinFilter_Passive (defaults to PinFilter_None)
+       */
+      static void setInput(
+            PinPull           pinPull           = PinPull_None,
+            PinAction         pinAction         = PinAction_None,
+            PinFilter         pinFilter         = PinFilter_None
+            ) {
+         Pcr::setPCR(pinPull|pinAction|pinFilter|(Info::info[llwuPin].pcrValue&PORT_PCR_MUX_MASK));
+      }
+
+      /**
+       * Clear pin interrupt flag.
+       * Assumes clock to the port has already been enabled.
+       */
+      static void clearInterruptFlag() {
+         Pcr::clearInterruptFlag();
+      }
+
+      /**
+       * Set callback for Pin interrupts
+       *
+       * @param[in] pinCallback The function to call on Pin interrupt. \n
+       *                        nullptr to indicate none
+       *
+       * @return E_NO_ERROR            No error
+       * @return E_HANDLER_ALREADY_SET Handler already set
+       *
+       * @note There is a single callback function for all pins on the related port.
+       *       It is necessary to identify the originating pin in the callback
+       */
+      static void setCallback(PinCallbackFunction pinCallback) {
+         Pcr::setCallback(pinCallback);
+      }
+
+      /**
+       * Enable/disable Pin interrupts in NVIC.
+       * Any pending NVIC interrupts are first cleared.
+       *
+       * @param[in]  enable        True => enable, False => disable
+       * @param[in]  nvicPriority  Interrupt priority
+       */
+      static void enableNvicInterrupts(bool enable=true, uint32_t nvicPriority=NvicPriority_Normal) {
+         Pcr::enableNvicInterrupts(enable, nvicPriority);
+      }
+
+   };
 };
 
 template<class Info> LLWUCallbackFunction LlwuBase_T<Info>::callback = 0;

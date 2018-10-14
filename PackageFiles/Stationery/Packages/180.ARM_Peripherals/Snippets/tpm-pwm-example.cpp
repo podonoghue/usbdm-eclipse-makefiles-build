@@ -1,5 +1,11 @@
 /**
- * @file tpm-pwm-example.cpp
+ ============================================================================
+ * @file    tpm-pwm-example.cpp
+ * @brief   Demo using Ftm class to implement a basic PWM output
+ *
+ *  Created on: 10/6/2016
+ *      Author: podonoghue
+ ============================================================================
  */
 #include "hardware.h"
 

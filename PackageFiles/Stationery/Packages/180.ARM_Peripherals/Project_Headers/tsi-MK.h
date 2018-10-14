@@ -223,20 +223,6 @@ public:
    }
 
    /**
-    * Configure the pin associated with a TSI input electrode.
-    *
-    * @tparam electrodeNum Number of electrode to configure
-    */
-   template<int electrodeNum>
-   static void setInput() {
-      // Check if electrode mapped to pin
-      CheckSignal<electrodeNum>::check();
-
-      // Configure associated pin as analogue input
-      PcrTable_T<Info, limitElectrode(electrodeNum)>::setPCR(PinMux_Analog);
-   }
-
-   /**
     * Enables TSI bus interface clock and configures all pins
     */
    static void enable() {
@@ -450,6 +436,45 @@ public:
 
       return (tsi().GENCS&(TSI_GENCS_OUTRGF_MASK|TSI_GENCS_EXTERF_MASK|TSI_GENCS_OVRF_MASK))?E_ERROR:E_NO_ERROR;
    }
+
+   /**
+    * Class representing a TSI input pin
+    *
+    * @tparam electrodeNum Number of TSI electrode (input) to configure
+    */
+   template<int tsiElectrodeNum>
+   class Pin {
+
+   private:
+      // Check if electrode mapped to pin
+      static CheckSignal<tsiElectrodeNum> check;
+
+      // PCR for pin associated with electrode
+      using Pcr = PcrTable_T<Info, limitElectrode(tsiElectrodeNum)>;
+
+   public:
+      static constexpr int electrodeNum = tsiElectrodeNum;
+
+      /**
+       * Configure the pin associated with a TSI input electrode.
+       */
+      static void setInput() {
+         // Configure associated pin as analogue input
+         Pcr::setPCR(PinMux_Analog);
+      }
+
+      /**
+       * Get channel count value
+       *
+       * @param[in]  channel Channel number
+       *
+       * @return 16-bit count value
+       */
+      static uint16_t getCount() {
+         return Info::tsi().CNTR[tsiElectrodeNum];
+      }
+   };
+
 };
 
 template<class Info> TSICallbackFunction TsiBase_T<Info>::callback = TsiBase_T<Info>::unhandledInterrupt;

@@ -231,7 +231,7 @@ public:
 
    /**
     * Waits until the current flash operation is complete with run mode check.
-    * This is used to wait until a FlaxRAM write has completed.
+    * This is used to wait until a FlexRAM write has completed.
     *
     * @return true  => Operation complete and FlexRAM idle
     * @return false => timeout or flash not available
@@ -449,7 +449,7 @@ public:
     * This adds a wait for the Flash to be updated after each element is assigned
     */
    void operator=(const NonvolatileArray &other ) {
-      if (this = &other) {
+      if (this == &other) {
          // Identity check
          return;
       }
@@ -460,9 +460,11 @@ public:
    }
 
    /**
-    * Copy to array of underlying type.
+    * Assign to underlying array.
     *
-    * @param[in]  other Array to copy to
+    * @param[in]  other NonvolatileArray to assign to
+    *
+    * This adds a wait for the Flash to be updated after each element is assigned
     */
    void copyTo(T *other) const {
       for (int index=0; index<dimension; index++) {

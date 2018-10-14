@@ -29,7 +29,7 @@ using namespace USBDM;
 using Led = $(demo.cpp.blue.led:GpioA<2, USBDM::ActiveLow>);
 
 using Timer        = Pit;
-using TimerChannel = PitChannel<0>;
+using TimerChannel = Timer::Channel<0>;
 /*
  * This callback is set programmatically
  */

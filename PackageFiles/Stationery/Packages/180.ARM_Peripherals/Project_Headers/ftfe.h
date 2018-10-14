@@ -216,19 +216,22 @@ public:
     * Check if flash operations are available.
     * This will check if the processor is in the correct mode for flash operations.
     *
-    * @return true => OK, false => timeout
+    * @return true  => OK
+    * @return false => Processor not in correct mode
     */
    static bool isFlashAvailable() {
       return (Smc::getStatus() == SmcStatus_run);
    }
 
    /**
-    * Waits until the current flash operation is complete with run mode check
+    * Waits until the current flash operation is complete with run mode check.
+    * This is used to wait until a FlexRAM write has completed.
     *
-    * @return true  => Operation complete
+    * @return true  => Operation complete and FlexRAM idle
     * @return false => timeout or flash not available
     */
    static bool waitUntilFlexIdle() {
+      usbdm_assert(isFlashAvailable(), "Flash use in unsuitable run mode");
       return
             isFlashAvailable() &&
             waitForFlashReady();
@@ -318,8 +321,8 @@ public:
     *
     * @param[in]  data The data to assign
     */
-   void operator=(const Nonvolatile &data ) {
-      this->data = data;
+   void operator=(const Nonvolatile<T> &data ) {
+      this->data = (T)data;
       Flash::waitUntilFlexIdle();
    }
    /**
@@ -338,8 +341,8 @@ public:
     *
     * @param[in]  change The amount to increment
     */
-   void operator+=(const Nonvolatile &change ) {
-      this->data += change;
+   void operator+=(const Nonvolatile<T> &change ) {
+      this->data += (T)change;
       Flash::waitUntilFlexIdle();
    }
    /**
@@ -358,8 +361,8 @@ public:
     *
     * @param[in]  change The amount to increment
     */
-   void operator-=(const Nonvolatile &change ) {
-      this->data -= change;
+   void operator-=(const Nonvolatile<T> &change ) {
+      this->data -= (T)change;
       Flash::waitUntilFlexIdle();
    }
    /**
@@ -374,6 +377,8 @@ public:
    }
    /**
     * Return the underlying object - <b>read-only</b>.
+    *
+    * @return underlying object
     */
    operator T() const {
       Flash::waitUntilFlexIdle();
@@ -438,6 +443,10 @@ public:
     * This adds a wait for the Flash to be updated after each element is assigned
     */
    void operator=(const NonvolatileArray &other ) {
+      if (this == &other) {
+         // Identity check
+         return;
+      }
       for (int index=0; index<dimension; index++) {
          data[index] = other[index];
          Flash::waitUntilFlexIdle();

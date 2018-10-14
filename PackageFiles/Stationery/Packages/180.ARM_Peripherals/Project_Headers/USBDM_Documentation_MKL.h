@@ -1,5 +1,5 @@
 /**
- * @file     USBDM_Documentation.h (180.ARM_Peripherals/Project_Headers/USBDM_Documentation.h)
+ * @file     USBDM_Documentation_MKL.h (180.ARM_Peripherals/Project_Headers/USBDM_Documentation_MKL.h)
  * @brief    USBDM Documentation
  */
  
@@ -13,7 +13,7 @@ Table of Contents
  - \ref ADCExamples \n
  - \ref Console \n
  - \ref DMAExamples \n
- - \ref FTMExamples \n
+ - \ref TPMExamples \n
  - \ref GPIOExamples \n
  - \ref I2CExamples \n
  - \ref LPTMRExamples \n
@@ -116,12 +116,10 @@ This is a template class with static methods.\n
 <em>It cannot be instantiated.</em>
 
 <b>Examples</b>\n
- - @ref dma-memory-example.cpp
- - @ref dma-memory-template-example.cpp
+ - @ref dma-memory-example-mkl.cpp
+ - @ref dma-memory-template-example-mkl.cpp
  - @ref dma-spi-example.cpp
- - @ref dma-uart-example-mk20.cpp
- - @ref dma-uart-example-mk22f.cpp
- - @ref dma-uart-example-mk28f.cpp
+ - @ref dma-uart-example-mkl25.cpp
 
  @page GPIOExamples  General Purpose Input Output
 
@@ -356,30 +354,30 @@ This is a template class with static methods.\n
    console.write("ADC measurement = ").writeln(value);
  @endcode
 
-@page FTMExamples Flexible Timer Module
+@page TPMExamples Flexible Timer Module
 
-Convenience template for FTM hardware.
+Convenience template for TPM hardware.
 The interface is divided into a number of templates:
 <ul>
-<li>USBDM::FtmBase_T Representing the shared FTM functionality.
+<li>USBDM::TpmBase_T Representing the shared TPM functionality.
 <ul>
-<li>USBDM::Ftm0
-<li>USBDM::Ftm1
+<li>USBDM::Tpm0
+<li>USBDM::Tpm1
 </ul>
-<li>USBDM::QuadDecoder_T Representing a FTM operating as a quadrature encoder.
+<li>USBDM::TpmQuadDecoder_T Representing a TPM operating as a quadrature encoder.
 <ul>
-<li>USBDM::QuadDecoder1
+<li>USBDM::TpmQuadDecoder1
 </ul>
-<li>USBDM::FtmChannel_T Representing individual channels of a single FTM.
+<li>USBDM::TpmChannel_T Representing individual channels of a single TPM.
 <ul>
-<li>USBDM::Ftm0Channel
-<li>USBDM::Ftm1Channel
+<li>USBDM::Tpm0Channel
+<li>USBDM::Tpm1Channel
 </ul>
 </ul>
 It provides:\n
 <ul>
 <li>Static pin mapping in conjunction with the configuration settings.
-<li>Setting the FTM period in ticks or seconds
+<li>Setting the TPM period in ticks or seconds
 <li>Setting the channel duty cycle in percentage
 <li>Interrupt driven operation is also supported through a callback if <b>enabled in the configuration</b>.
 </ul>
@@ -388,11 +386,9 @@ This is a template class with static methods.\n
 <em>It cannot be instantiated.</em>
 
 <b>Examples</b>\n
- - @ref ftm-ic-example.cpp
- - @ref ftm-oc-example.cpp
- - @ref ftm-pwm-example.cpp
- - @ref ftm-quadrature-example.cpp
- - @ref ftm-servo-example.cpp
+ - @ref tpm-ic-example.cpp
+ - @ref tpm-oc-example.cpp
+ - @ref tpm-pwm-example.cpp
 
  <b>Usage - PWM</b>
 @code
@@ -401,24 +397,24 @@ This is a template class with static methods.\n
    using namespace USBDM;
 
    // Initialise the timer with initial alignment
-   // This affects all channels of the FTM
-   Ftm0::configure(FtmMode_LeftAlign);
+   // This affects all channels of the TPM
+   Tpm0::configure(TpmMode_LeftAlign);
 
    // Set timer period in ticks
-   // This affects all channels of the FTM
+   // This affects all channels of the TPM
    // Timer pre-scaler is not changed
-   Ftm0::setPeriodInTicks(500);
+   Tpm0::setPeriodInTicks(500);
 
    // Set timer period in microseconds
-   // This affects all channels of the FTM
+   // This affects all channels of the TPM
    // Timer pre-scaler (tick rate) will be adjusted to accommodate the required period
-   Ftm0::setPeriod(125*us);
+   Tpm0::setPeriod(125*us);
 
-   // Use FTM0 channel 3
-   using PwmOutput = Ftm0Channel<3> ;
+   // Use TPM0 channel 3
+   using PwmOutput = Tpm0Channel<3> ;
 
    // Set channel to generate PWM with active-high pulses
-   PwmOutput::enable(ftm_pwmHighTruePulses);
+   PwmOutput::enable(tpm_pwmHighTruePulses);
 
    // Set duty cycle as percentage
    PwmOutput::setDutyCycle(34);
@@ -436,28 +432,28 @@ This is a template class with static methods.\n
    // This allows access to USBDM classes and methods without the USBDM:: prefix.
    using namespace USBDM;
 
-   // Use FTM1 as the quadrature encoder
-   // Not all FTMs support this mode
-   using QuadDecoder = QuadDecoder1;
+   // Use TPM1 as the quadrature encoder
+   // Not all TPMs support this mode
+   using TpmQuadDecoder = TpmQuadDecoder1;
 
    // Enable encoder
-   QuadDecoder::enable();
+   TpmQuadDecoder::enable();
 
    // Set pin filters
-   QuadDecoder::enableFilter(15);
+   TpmQuadDecoder::enableFilter(15);
 
    // Reset position to zero
    // Movement will be relative to this position
-   QuadDecoder::resetPosition();
+   TpmQuadDecoder::resetPosition();
 
    // Set up callback for quadrature overflow or underflow
-   QuadDecoder::setTimerOverflowCallback(callBack);
-   QuadDecoder::enableTimerOverflowInterrupts();
-   QuadDecoder::enableNvicInterrupts();
+   TpmQuadDecoder::setTimerOverflowCallback(callBack);
+   TpmQuadDecoder::enableTimerOverflowInterrupts();
+   TpmQuadDecoder::enableNvicInterrupts();
 
    for (;;) {
       // Report position
-      console.write("Shaft position = ").writeln(QuadDecoder::getPosition());
+      console.write("Shaft position = ").writeln(TpmQuadDecoder::getPosition());
    }
 @endcode
 
@@ -530,13 +526,13 @@ This is a template class with static methods.\n
    using namespace USBDM;
 
    Pdb::enable();
-   // Trigger from FTM
+   // Trigger from TPM
    Pdb::setTriggerSource(PdbTrigger_Software);
    // Set callback
    Pdb::setCallback(pdbCallback);
    // Interrupt during sequence
    Pdb::enableSequenceInterrupts();
-   // Set period a bit longer than FTM period
+   // Set period a bit longer than TPM period
    Pdb::setPeriod(PERIOD);
    // Generate interrupt near end of sequence
    Pdb::setInterruptDelay(PERIOD-5*ms);
@@ -571,19 +567,15 @@ This is a template class with static methods.\n
 @example digital-example2.cpp
 @example digital-interrupt-example.cpp
 @example digital-rotary-encoder-example.cpp
-@example dma-memory-example.cpp
-@example dma-memory-template-example.cpp
+@example dma-memory-example-mkl.cpp
+@example dma-memory-template-example-mkl.cpp
 @example dma-spi-example.cpp
-@example dma-uart-example-mk20.cpp
-@example dma-uart-example-mk22f.cpp
-@example dma-uart-example-mk28f.cpp
+@example dma-uart-example-mkl25.cpp
 @example ewm-example.cpp
 @example flash-programming-example.cpp
-@example ftm-ic-example.cpp
-@example ftm-oc-example.cpp
-@example ftm-pwm-example.cpp
-@example ftm-quadrature-example.cpp
-@example ftm-servo-example.cpp
+@example tpm-ic-example.cpp
+@example tpm-oc-example.cpp
+@example tpm-pwm-example.cpp
 @example fxos8700cq-example.cpp
 @example fxos8700cq.cpp
 @example fxos8700cq.h
@@ -591,8 +583,7 @@ This is a template class with static methods.\n
 @example hmc5883l.cpp
 @example hmc5883l.h
 @example i2c-example.cpp
-@example llwu-example-mk20.cpp
-@example llwu-example-mk22f.cpp
+@example llwu-example-mkl25z.cpp
 @example lptmr-example.cpp
 @example mag3310-example.cpp
 @example mag3310.h
@@ -617,7 +608,7 @@ This is a template class with static methods.\n
 @example rcm-example.cpp
 @example rtc-example.cpp
 @example spi-example.cpp
-@example tsi-mk-example.cpp
+@example tsi-mkl-example.cpp
 @example uart-example.cpp
 @example usb_cdc_interface.cpp
 @example usb_cdc_interface.h
@@ -631,6 +622,5 @@ This is a template class with static methods.\n
 @example usb.cpp
 @example usbdcd-example.cpp
 @example vlpr-run-hsrun-example.cpp
-@example wdog-example.cpp
 
  */

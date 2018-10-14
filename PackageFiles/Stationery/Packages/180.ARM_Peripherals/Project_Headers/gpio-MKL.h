@@ -93,8 +93,51 @@ public:
    /** PCR associated with this GPIO pin */
    using Pcr = Pcr_T<clockMask, portAddress, irqNum, bitNum, GPIO_DEFAULT_PCR>;
 
-   /** GPIO associated with this pin */
+   /** Get base address of GPIO hardware as pointer to struct */
    static volatile GPIO_Type &gpio() { return *reinterpret_cast<volatile GPIO_Type *>(gpioAddress); }
+
+   /** Get base address of GPIO hardware as uint32_t */
+   static constexpr uint32_t gpioBase() { return gpioAddress; }
+   /** Get base address of GPIO.PDOR register as uint32_t */
+   static constexpr uint32_t gpioPDOR() { return gpioBase() + offsetof(GPIO_Type, PDOR); }
+   /** Get base address of GPIO.PSOR register as uint32_t */
+   static constexpr uint32_t gpioPSOR() { return gpioBase() + offsetof(GPIO_Type, PSOR); }
+   /** Get base address of GPIO.PCOR register as uint32_t */
+   static constexpr uint32_t gpioPCOR() { return gpioBase() + offsetof(GPIO_Type, PCOR); }
+   /** Get base address of GPIO.PTOR register as uint32_t */
+   static constexpr uint32_t gpioPTOR() { return gpioBase() + offsetof(GPIO_Type, PTOR); }
+   /** Get base address of GPIO.PDIR register as uint32_t */
+   static constexpr uint32_t gpioPDIR() { return gpioBase() + offsetof(GPIO_Type, PDIR); }
+   /** Get base address of GPIO.PDDR register as uint32_t */
+   static constexpr uint32_t gpioPDDR() { return gpioBase() + offsetof(GPIO_Type, PDDR); }
+
+#ifdef PORT_DFCR_CS_MASK
+   /** Get base address of PORT hardware as pointer to struct */
+   static volatile PORT_DFER_Type &port() { return *reinterpret_cast<volatile PORT_DFER_Type *>(gpioAddress); }
+   /** Get base address of PORT register as uint32_t */
+   static constexpr uint32_t portBase() { return gpioAddress; }
+   /** Get base address of PORT.PCR register as uint32_t */
+   static constexpr uint32_t portPCR(int index) { return portBase() + offsetof(PORT_DFER_Type, PCR[index]); }
+   /** Get base address of PORT.GPCLR registers as uint32_t */
+   static constexpr uint32_t portGPCLR() { return portBase() + offsetof(PORT_DFER_Type, GPCLR); }
+   /** Get base address of PORT.GPCHR registers as uint32_t */
+   static constexpr uint32_t portGPCHR() { return portBase() + offsetof(PORT_DFER_Type, GPCHR); }
+   /** Get base address of PORT.ISFR registers as uint32_t */
+   static constexpr uint32_t portISFR() { return portBase() + offsetof(PORT_DFER_Type, ISFR); }
+#else
+   /** Get base address of PORT hardware as pointer to struct */
+   static volatile PORT_Type &port() { return *reinterpret_cast<volatile PORT_Type *>(gpioAddress); }
+   /** Get base address of PORT register as uint32_t */
+   static constexpr uint32_t portBase() { return gpioAddress; }
+   /** Get base address of PORT.PCR register as uint32_t */
+   static constexpr uint32_t portPCR(int index) { return portBase() + offsetof(PORT_Type, PCR[index]); }
+   /** Get base address of PORT.GPCLR registers as uint32_t */
+   static constexpr uint32_t portGPCLR() { return portBase() + offsetof(PORT_Type, GPCLR); }
+   /** Get base address of PORT.GPCHR registers as uint32_t */
+   static constexpr uint32_t portGPCHR() { return portBase() + offsetof(PORT_Type, GPCHR); }
+   /** Get base address of PORT.ISFR registers as uint32_t */
+   static constexpr uint32_t portISFR() { return portBase() + offsetof(PORT_Type, ISFR); }
+#endif
 
    /** Bit number of accessed bit in port */
    static constexpr int BITNUM = bitNum;
@@ -657,23 +700,73 @@ class Field_T {
 
    static_assert(((left<=31)&&(left>=right)&&(right>=0)), "Illegal bit number for left or right in GpioField");
 
-private:
+public:
+   /** Get base address of GPIO hardware as pointer to struct */
    static volatile GPIO_Type &gpio() { return *reinterpret_cast<volatile GPIO_Type *>(Info::pinInfo.gpioAddress); }
 
+   /** Get base address of GPIO hardware as uint32_t */
+   static constexpr uint32_t gpioBase() { return Info::pinInfo.gpioAddress; }
+   /** Get base address of GPIO.PDOR register as uint32_t */
+   static constexpr uint32_t gpioPDOR() { return gpioBase() + offsetof(GPIO_Type, PDOR); }
+   /** Get base address of GPIO.PSOR register as uint32_t */
+   static constexpr uint32_t gpioPSOR() { return gpioBase() + offsetof(GPIO_Type, PSOR); }
+   /** Get base address of GPIO.PCOR register as uint32_t */
+   static constexpr uint32_t gpioPCOR() { return gpioBase() + offsetof(GPIO_Type, PCOR); }
+   /** Get base address of GPIO.PTOR register as uint32_t */
+   static constexpr uint32_t gpioPTOR() { return gpioBase() + offsetof(GPIO_Type, PTOR); }
+   /** Get base address of GPIO.PDIR register as uint32_t */
+   static constexpr uint32_t gpioPDIR() { return gpioBase() + offsetof(GPIO_Type, PDIR); }
+   /** Get base address of GPIO.PDDR register as uint32_t */
+   static constexpr uint32_t gpioPDDR() { return gpioBase() + offsetof(GPIO_Type, PDDR); }
+
 #ifdef PORT_DFCR_CS_MASK
+   /** Get base address of PORT hardware as pointer to struct */
    static volatile PORT_DFER_Type &port() { return *reinterpret_cast<volatile PORT_DFER_Type *>(Info::pinInfo.portAddress); }
+   /** Get base address of PORT register as uint32_t */
+   static constexpr uint32_t portBase() { return Info::pinInfo.portAddress; }
+   /** Get base address of PORT.PCR register as uint32_t */
+   static constexpr uint32_t portPCR(int index) { return portBase() + offsetof(PORT_DFER_Type, PCR[index]); }
+   /** Get base address of PORT.GPCLR registers as uint32_t */
+   static constexpr uint32_t portGPCLR() { return portBase() + offsetof(PORT_DFER_Type, GPCLR); }
+   /** Get base address of PORT.GPCHR registers as uint32_t */
+   static constexpr uint32_t portGPCHR() { return portBase() + offsetof(PORT_DFER_Type, GPCHR); }
+   /** Get base address of PORT.ISFR registers as uint32_t */
+   static constexpr uint32_t portISFR() { return portBase() + offsetof(PORT_DFER_Type, ISFR); }
 #else
+   /** Get base address of PORT hardware as pointer to struct */
    static volatile PORT_Type &port() { return *reinterpret_cast<volatile PORT_Type *>(Info::pinInfo.portAddress); }
+   /** Get base address of PORT register as uint32_t */
+   static constexpr uint32_t portBase() { return Info::pinInfo.portAddress; }
+   /** Get base address of PORT.PCR register as uint32_t */
+   static constexpr uint32_t portPCR(int index) { return portBase() + offsetof(PORT_Type, PCR[index]); }
+   /** Get base address of PORT.GPCLR registers as uint32_t */
+   static constexpr uint32_t portGPCLR() { return portBase() + offsetof(PORT_Type, GPCLR); }
+   /** Get base address of PORT.GPCHR registers as uint32_t */
+   static constexpr uint32_t portGPCHR() { return portBase() + offsetof(PORT_Type, GPCHR); }
+   /** Get base address of PORT.ISFR registers as uint32_t */
+   static constexpr uint32_t portISFR() { return portBase() + offsetof(PORT_Type, ISFR); }
 #endif
+
    // PCR associated with port
    using Pcr = PcrBase_T<Info::pinInfo.portAddress, Info::pinInfo.irqNum>;
 
 public:
    /**
-    * Mask for the bits being manipulated
+    * Mask for the bits being manipulated within underlying port hardware
     */
    static constexpr uint32_t MASK = ((1<<(left-right+1))-1)<<right;
 
+   /**
+    * Calculate Port bit-mask from field bit number
+    *
+    * @param bitNum  Bit number within field (left-right,0]
+    *
+    * @return Mask for given bit within underlying port hardware
+    */
+   static constexpr uint32_t mask(uint32_t bitNum) {
+      return 1<<(bitNum+right);
+   }
+   
    /**
     * Set field as digital I/O.
     * Pins are initially set as an input.
@@ -719,7 +812,7 @@ public:
     * @param[in] pinSlewRate      One of PinSlewRate_Slow, PinSlewRate_Fast (defaults to PinSlewRate_Fast)
     */
    static void setInOut(
-         PinPull           pinPull           = PinPull_None,
+         PinPull           pinPull,
          PinDriveStrength  pinDriveStrength  = PinDriveStrength_Low,
          PinDriveMode      pinDriveMode      = PinDriveMode_PushPull,
          PinAction         pinAction         = PinAction_None,

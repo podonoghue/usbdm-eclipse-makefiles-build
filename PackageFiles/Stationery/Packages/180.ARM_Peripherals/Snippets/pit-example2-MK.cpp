@@ -7,6 +7,7 @@
  */
 #include "hardware.h"
 #include "pit.h"
+#include "smc.h"
 
 using namespace USBDM;
 
@@ -29,12 +30,12 @@ using namespace USBDM;
 #define SET_HANDLERS_PROGRAMMATICALLY
 
 // Connection mapping - change as required
-using Led1 = $(demo.cpp.blue.led:GpioA<2, USBDM::ActiveLow>);
-using Led2 = $(demo.cpp.red.led:GpioC<3, USBDM::ActiveLow>);
+using Led1 = $(demo.cpp.blue.led:GpioA<2, ActiveLow>);
+using Led2 = $(demo.cpp.red.led:GpioC<3, ActiveLow>);
 
 using Timer         = Pit;
-using TimerChannelA = PitChannel<0>;
-using TimerChannelB = PitChannel<1>;
+using TimerChannelA = Timer::Channel<0>;
+using TimerChannelB = Timer::Channel<1>;
 
 #ifndef SET_HANDLERS_PROGRAMMATICALLY
 /**
@@ -49,15 +50,15 @@ namespace USBDM {
  *
  * This method avoids the overhead of the indirection through a call-back
  */
-template<> void PitBase_T<PitInfo>::irq0Handler() {
+template<> template<> void TimerChannelA::irqHandler() {
    // Clear interrupt flag
-   pit->CHANNEL[0].TFLG = PIT_TFLG_TIF_MASK;
+   pit().CHANNEL[0].TFLG = PIT_TFLG_TIF_MASK;
    Led1::toggle();
 }
 
-template<> void PitBase_T<PitInfo>::irq1Handler() {
+template<> template<> void TimerChannelB::irqHandler() {
    // Clear interrupt flag
-   pit->CHANNEL[1].TFLG = PIT_TFLG_TIF_MASK;
+   pit().CHANNEL[1].TFLG = PIT_TFLG_TIF_MASK;
    Led2::toggle();
 }
 
@@ -112,6 +113,6 @@ int main() {
 
    for(;;) {
       // Sleep between interrupts
-      __asm__("wfi");
+      Smc::enterWaitMode();
    }
 }

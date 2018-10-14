@@ -1,9 +1,9 @@
 /**
  ============================================================================
- * @file    ftm-oc-example.cpp (180.ARM_Peripherals/Snippets)
- * @brief   Demo using Ftm class to implement a basic Output Compare system
+ * @file    tpm-oc-example.cpp (180.ARM_Peripherals/Snippets)
+ * @brief   Demo using Tpm class to implement a basic Output Compare system
  *
- *  An FTM output generates a square wave with 100ms period
+ *  An TPM output generates a square wave with 100ms period
  *
  *  Created on: 3/7/2017
  *      Author: podonoghue
@@ -15,21 +15,21 @@
 using namespace USBDM;
 
 /**
- * This example uses FTM interrupts.
+ * This example uses TPM interrupts.
  *
  * It is necessary to enable these in Configure.usbdmProject
- * under the "Peripheral Parameters"->FTM tab.
+ * under the "Peripheral Parameters"->TPM tab.
  * Select irqHandlingMethod option (Class Method - Software ...)
  */
 
 /**
  * Timer being used - change as required
- * Could also access as TimerChannel::Ftm
+ * Could also access as TimerChannel::Tpm
  */
-using Timer = Ftm0;
+using Timer = Tpm0;
 
 /// Timer channel for output - change as required
-using TimerChannel = Timer::Channel<7>;
+using TimerChannel = Timer::Channel<1>;
 
 /**
  * Half-period for timer in ticks.
@@ -49,7 +49,7 @@ static constexpr float MAX_OC_INTERVAL = (1.1 * WAVEFORM_PERIOD)/2;
  *
  * @param[in] status Flags indicating interrupt source channel(s)
  */
-static void ftmCallback(uint8_t status) {
+static void tpmCallback(uint8_t status) {
 
    // Check channel
    if (status & TimerChannel::CHANNEL_MASK) {
@@ -66,23 +66,51 @@ static void ftmCallback(uint8_t status) {
  */
 int main() {
    /**
-    * FTM channel set as Output compare with pin Toggle mode and using a callback function
+    * TPM channel set as Output compare with pin Toggle mode and using a callback function
     */
-   // Configure base FTM (affects all channels)
+   // Configure base TPM (affects all channels)
+   SimInfo::setTpmClock(SimTpmClockSource_Peripheral);
    Timer::configure(
-         FtmMode_LeftAlign,       // Left-aligned is required for OC/IC
-         FtmClockSource_System);  // Bus clock usually
+         TpmMode_LeftAlign,        // Left-aligned is required for OC/IC
+         TpmClockSource_Internal); // Bus clock usually
 
    // Set IC/OC measurement interval to longest interval needed.
    // This adjusts the prescaler value but does not change the clock source
-   Timer::setMaximumInterval(MAX_OC_INTERVAL);
+   Timer::setMaximumInterval(MAX_OC_INTERVAL, true);
+
+#if 1
+   uint16_t modulo = Timer::getCounterMaximumValue();
+   Timer::setPeriodInTicks(1000, false);
+   Timer::setPeriodInTicks(2000, false);
+   Timer::setPeriodInTicks(3000, false);
+   Timer::setPeriodInTicks(1000, true);
+   Timer::setPeriodInTicks(2000, true);
+   Timer::setPeriodInTicks(3000, true);
+   Timer::setCounterMaximumValue(modulo, true);
+   Timer::setClockSource(TpmClockSource_External);
+   Timer::setClockSource(TpmClockSource_Internal);
+   Timer::setClockSource(TpmClockSource_External);
+   Timer::setClockSource(TpmClockSource_Internal);
+   Timer::enableTimerOverflowInterrupts(true);
+   Timer::enableTimerOverflowInterrupts(false);
+   Timer::enableTimerOverflowInterrupts(true);
+   Timer::enableTimerOverflowInterrupts(false);
+   Timer::enableTimerOverflowDma(true);
+   Timer::enableTimerOverflowDma(false);
+   Timer::enableTimerOverflowDma(true);
+   Timer::enableTimerOverflowDma(false);
+   Timer::setMode(TpmMode_CentreAlign);
+   Timer::setMode(TpmMode_LeftAlign);
+   Timer::setMode(TpmMode_CentreAlign);
+   Timer::setMode(TpmMode_LeftAlign);
+#endif
 
    // Calculate half-period in timer ticks
    // Must be done after timer clock configuration (above)
    timerHalfPeriodInTicks = Timer::convertSecondsToTicks(WAVEFORM_PERIOD/2.0);
 
    // Set callback function
-   Timer::setChannelCallback(ftmCallback);
+   Timer::setChannelCallback(tpmCallback);
 
    // Enable interrupts for entire timer
    Timer::enableNvicInterrupts();
@@ -101,8 +129,8 @@ int main() {
 
    // Configure the channel
    TimerChannel::configure(
-         FtmChMode_OutputCompareToggle, //  Output Compare with pin toggle
-         FtmChannelAction_Irq);         //  + interrupts on events
+         TpmChMode_OutputCompareToggle, //  Output Compare with pin toggle
+         TpmChannelAction_Irq);         //  + interrupts on events
 
    // Check if configuration failed
    USBDM::checkError();

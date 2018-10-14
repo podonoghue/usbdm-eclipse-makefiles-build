@@ -111,6 +111,8 @@
    <projectActionList id = "tpm_files" >
       <copy source="Project_Headers/tpm.h"         target="Project_Headers/tpm.h"          overwrite="true" derived="true" />
       <copy source="Snippets/tpm-pwm-example.cpp"  target="Snippets/tpm-pwm-example.cpp"   overwrite="true" derived="true"/>
+      <copy source="Snippets/tpm-ic-example.cpp"   target="Snippets/tpm-ic-example.cpp"    overwrite="true" derived="true"/>
+      <copy source="Snippets/tpm-oc-example.cpp"   target="Snippets/tpm-oc-example.cpp"    overwrite="true" derived="true"/>
    </projectActionList>
          
    <template><![CDATA[

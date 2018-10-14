@@ -1,9 +1,9 @@
 /*
  ================================================================================
- * @file    ftm-ic-example.cpp
- * @brief   Demo using Ftm class to implement a basic Input Capture system
+ * @file    tpm-ic-example.cpp
+ * @brief   Demo using Tpm class to implement a basic Input Capture system
  *
- * An FTM input channel is used to measure the period of a waveform.
+ * An TPM input channel is used to measure the period of a waveform.
  * This example uses floating point calculations.
  *
  *  Created on: 3/7/2017
@@ -15,21 +15,21 @@
 using namespace USBDM;
 
 /**
- * This example uses FTM interrupts.
+ * This example uses TPM interrupts.
  *
  * It is necessary to enable these in Configure.usbdmProject
- * under the "Peripheral Parameters"->FTM tab.
+ * under the "Peripheral Parameters"->TPM tab.
  * Select irqHandlingMethod option (Class Method - Software ...)
  */
 
 /**
  * Timer being used - change as required
- * Could also access as TimerChannel::Ftm
+ * Could also access as TimerChannel::Tpm
  */
-using Timer = Ftm0;
+using Timer = Tpm0;
 
 /// Timer channel for measurement - change as required
-using TimerChannel = Timer::Channel<7>;
+using TimerChannel = Timer::Channel<1>;
 
 /**
  * Period between input edges in ticks.
@@ -75,13 +75,13 @@ int main() {
    Debug::setOutput(PinDriveStrength_High);
 
    /**
-    * FTM channel set as Input Capture using a callback function
+    * TPM channel set as Input Capture using a callback function
     */
-   // Configure base FTM (affects all channels)
+   // Configure base TPM (affects all channels)
    Timer::configure(
-         FtmMode_LeftAlign,      // Left-aligned is required for OC/IC
-         FtmClockSource_System,  // Bus clock usually
-         FtmPrescale_1);         // The prescaler will be re-calculated later
+         TpmMode_LeftAlign,       // Left-aligned is required for OC/IC
+         TpmClockSource_Internal, // Bus clock usually
+         TpmPrescale_1);          // The prescaler will be re-calculated later
 
    // Set IC/OC measurement interval to accommodate maximum measurement needed.
    // This adjusts the prescaler value but does not change the clock source.
@@ -104,8 +104,8 @@ int main() {
 
    // Configure the channel
    TimerChannel::configure(
-         FtmChMode_InputCaptureRisingEdge, // Input capture rising edge
-         FtmChannelAction_Irq);            //  + interrupts on events
+         TpmChMode_InputCaptureRisingEdge, // Input capture rising edge
+         TpmChannelAction_Irq);            //  + interrupts on events
 
    // Check if configuration failed
    USBDM::checkError();
@@ -114,7 +114,7 @@ int main() {
    for(;;) {
       uint16_t tPeriodInTicks;
       // Access shared data in protected fashion
-      // Not necessary on Cortex-M4 as reading a simple variable like this is atomic.
+      // Not necessary on Cortex-M as reading a simple variable like this is atomic.
       {
          CriticalSection cs;
          tPeriodInTicks = periodInTicks;

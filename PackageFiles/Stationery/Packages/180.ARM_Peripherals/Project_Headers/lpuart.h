@@ -248,7 +248,7 @@ public:
    static volatile LPUART_Type &uartPtr() { return Info::uart(); }
 
    /** Get base address of SPI hardware as uint32_t */
-   static constexpr uint32_t uartBase() { return Info::baseAddress(); }
+   static constexpr uint32_t uartBase() { return Info::baseAddress; }
    /** Get base address of UART.D register as uint32_t */
    static constexpr uint32_t uartD() { return uartBase() + offsetof(LPUART_Type, D); }
 

@@ -23,14 +23,10 @@ using Led   = $(demo.cpp.pwm.led1:Timer::Channel<7>);
 
 int main() {
 
-   //Timer::stopCounter();
-
    // Configure base FTM for left-aligned PWM
    Timer::configure(
          FtmMode_LeftAlign,
-         FtmClockSource_System,
-         FtmPrescale_1
-   );
+         FtmClockSource_System);
 
    /*
     * Change PWM period
@@ -48,13 +44,6 @@ int main() {
    // Check if configuration failed
    checkError();
 
-//   for(;;) {
-//      for (int i=1; i<=99; i++) {
-//         Timer::setPeriod(i*us);
-//         Led::setDutyCycle(50);
-//         waitMS(100);
-//      }
-//   }
    for(;;) {
       // Using percentage duty-cycle
       for (int i=1; i<=99; i++) {
