@@ -71,7 +71,7 @@ static const char message[]=
  * | +--------------------------+ |             - NBYTES Number of bytes to transfer
  * | +--------------------------+ |<-DMA Req.   - Attributes
  * | | Minor Loop               | |               - ATTR_SSIZE, ATTR_DSIZE Source and destination transfer sizes
- * |..............................|               - ATTR_SMOD, ATTR_DMOD Modulo --TODO
+ * |..............................|               - ATTR_SMOD, ATTR_DMOD Modulo
  * | |                          | |
  * | +--------------------------+ |             The number of reads and writes done will depend on NBYTES, SSIZE and DSIZE
  * | +--------------------------+ |<-DMA Req.   For example: NBYTES=12, SSIZE=16-bits, DSIZE=32-bits => 6 reads, 3 writes
@@ -96,23 +96,23 @@ static const char message[]=
  */
 static constexpr DmaTcd tcd = DmaTcd (
    /* Source address                 */ (uint32_t)(message),           // Source array
-   /* Source offset                  */ sizeof(message[0]),            // SADDR advances 1 byte for each request
-   /* Source size                    */ dmaSize(message[0]),           // 8-bit write to SADDR
+   /* Source offset                  */ sizeof(message[0]),            // Source address advances 1 element for each request
+   /* Source size                    */ dmaSize(message[0]),           // 8-bit read from source address
    /* Source modulo                  */ DmaModulo_Disabled,            // Disabled
-   /* Last source adjustment         */ -(int)sizeof(message),         // Reset SADDR to start of array on completion
+   /* Last source adjustment         */ -(int)sizeof(message),         // Reset source address to start of array on completion
 
    /* Destination address            */ console.uartD(),               // Destination is UART data register
-   /* Destination offset             */ 0,                             // DADDR doesn't change
-   /* Destination size               */ dmaSize(message[0]),           // 8-bit read from DADDR
+   /* Destination offset             */ 0,                             // Destination address doesn't change
+   /* Destination size               */ dmaSize(message[0]),           // 8-bit write to destination address
    /* Destination modulo             */ DmaModulo_Disabled,            // Disabled
-   /* Last destination adjustment    */ 0,                             // DADDR doesn't change
+   /* Last destination adjustment    */ 0,                             // Destination address doesn't change
 
    /* Minor loop byte count          */ dmaNBytes(sizeof(message[0])), // Total transfer in one minor-loop
    /* Major loop count               */ dmaCiter((sizeof(message))/    // Transfer entire buffer
    /*                                */           sizeof(message[0])),
 
    /* Start channel                  */ false,                         // Don't start (triggered by hardware)
-   /* Disable Req. on major complete */ false,                         // Don't clear hardware request when complete major loop
+   /* Disable Req. on major complete */ false,                         // Don't clear hardware request when major loop completed
    /* Interrupt on major complete    */ true,                          // Generate interrupt on completion of Major-loop
    /* Interrupt on half complete     */ false,                         // No interrupt
    /* Bandwidth (speed) Control      */ DmaSpeed_NoStalls              // Full speed

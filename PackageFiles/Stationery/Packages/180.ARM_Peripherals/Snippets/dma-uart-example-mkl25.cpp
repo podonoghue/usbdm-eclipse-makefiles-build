@@ -70,27 +70,25 @@ static const char message[]=
  *
  * Structure to define the DMA transfer
  */
-static const DmaTcd tcd {
-   /* uint32_t   SADDR     Source address                */ (uint32_t)(message),          // Source array
-   /* uint32_t   DADDR     Destination address           */ console.uartD(),              // UART Data register
-   /* uint32_t   BCR       Byte count                    */ sizeof(message),              // Total transfer in bytes
-   /* unsigned   LCH2:2;   Complete (BCR=0) link channel */ 0,
-   /* unsigned   LCH1:2;   Cycle-steal link channel      */ 0,
-   /* DmaLink    LINKCC:2; Link channel control          */ DmaLink_None,
-   /* bool       D_REQ:1;  Clear ERQ when complete       */ true,                         // Disable peripheral requests (ERQ) at end
-   /* DmaModulo  DMOD:4;   Destination address modulo    */ DmaModulo_Disabled,
-   /* DmaModulo  SMOD:4;   Source address modulo         */ DmaModulo_Disabled,
-   /* bool       START:1;  Start transfer                */ false,
-   /* DmaSize    DSIZE:2;  Destination size              */ dmaSize(message[0]),          // 8-bit source
-   /* bool       DINC:1;   Destination increment         */ false,
-   /* DmaSize    SSIZE:2;  Source size                   */ dmaSize(message[0]),          // 8-bit destination
-   /* bool       SINC:1;   Source increment              */ true,                         // Increment source address
-   /* bool       EADREQ:1; Enable asynchronous DMA       */ true,                         // Asynchronous DMA
-   /* bool       AA:1;     Auto-align                    */ false,
-   /* DmaMode    CS:1;     Cycle steal/Continuous        */ DmaMode_CycleSteal,           // Single transfer for each request
-   /* bool       ERQ:1;    Enable peripheral request     */ true,                         // Requests from UART
-   /* bool       EINT:1;   Interrupt enable              */ true,                         // Interrupt when complete
-};
+    static const DmaTcd tcd (
+      /* Transfer size                          */ sizeof(message),         // Total transfer in bytes
+      /* Source address                         */ (uint32_t)(message),     // Source array
+      /* Source size                            */ dmaSize(message[0]),     // 8-bit destination
+      /* Source modulo                          */ DmaModulo_Disabled,
+      /* Source increment                       */ true,                    // Increment source address
+      /* Destination address                    */ console.uartD(),         // UART Data register
+      /* Destination size                       */ dmaSize(message[0]),     // 8-bit source
+      /* Destination modulo                     */ DmaModulo_Disabled,
+      /* Destination increment                  */ false,
+      /* DMA mode                               */ DmaMode_CycleSteal,      // Single transfer for each request
+      /* Auto align                             */ false,
+      /* Start transfer                         */ false,
+      /* Enable asynchronous requests           */ true,                    // Asynchronous DMA
+      /* Enable peripheral requests             */ true,                    // Requests from UART
+      /* Disable peripheral request on complete */ true,                    // Disable peripheral requests (ERQ) at end
+      /* Enable interrupts                      */ true                     // Interrupt when complete
+   );
+
 
 /**
  * DMA complete callback

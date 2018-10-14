@@ -7,6 +7,7 @@
  */
 #include "hardware.h"
 #include "pit.h"
+#include "smc.h"
 
 using namespace USBDM;
 
@@ -33,8 +34,8 @@ using Led1 = $(demo.cpp.blue.led:GpioA<2, ActiveLow>);
 using Led2 = $(demo.cpp.red.led:GpioC<3, ActiveLow>);
 
 using Timer         = Pit;
-using TimerChannelA = Pit::Channel<0>;
-using TimerChannelB = Pit::Channel<1>;
+using TimerChannelA = Timer::Channel<0>;
+using TimerChannelB = Timer::Channel<1>;
 
 #ifndef SET_HANDLERS_PROGRAMMATICALLY
 /**
@@ -49,13 +50,13 @@ namespace USBDM {
  *
  * This method avoids the overhead of the indirection through a call-back
  */
-template<> template<> void PitChannel<0>::irqHandler() {
+template<> template<> void TimerChannelA::irqHandler() {
    // Clear interrupt flag
    pit().CHANNEL[0].TFLG = PIT_TFLG_TIF_MASK;
    Led1::toggle();
 }
 
-template<> template<> void PitChannel<1>::irqHandler() {
+template<> template<> void TimerChannelB::irqHandler() {
    // Clear interrupt flag
    pit().CHANNEL[1].TFLG = PIT_TFLG_TIF_MASK;
    Led2::toggle();
@@ -112,6 +113,6 @@ int main() {
 
    for(;;) {
       // Sleep between interrupts
-      __asm__("wfi");
+      Smc::enterWaitMode();
    }
 }
