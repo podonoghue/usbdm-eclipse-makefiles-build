@@ -30,24 +30,24 @@ namespace USBDM {
  * Determines if VLPR, VLPW, and VLPS modes are enabled
  */
 enum SmcVeryLowPower {
-   SmcVeryLowPower_Disable  = SMC_PMPROT_AVLP(0),   //!< Disallow VLPR, VLPW, and VLPS modes
-   SmcVeryLowPower_Enable   = SMC_PMPROT_AVLP(1),   //!< Allow VLPR, VLPW, and VLPS modes
+   SmcVeryLowPower_Disabled  = SMC_PMPROT_AVLP(0),   //!< Disallow VLPR, VLPW, and VLPS modes
+   SmcVeryLowPower_Enabled   = SMC_PMPROT_AVLP(1),   //!< Allow VLPR, VLPW, and VLPS modes
 };
 
 /**
  * Determines if any LLSx modes are enabled
  */
 enum SmcLowLeakageStop {
-   SmcLowLeakageStop_Disable  = SMC_PMPROT_ALLS(0),   //!< Disallow Any LLSx mode
-   SmcLowLeakageStop_Enable   = SMC_PMPROT_ALLS(1),   //!< Allow Any LLSx mode
+   SmcLowLeakageStop_Disabled  = SMC_PMPROT_ALLS(0),   //!< Disallow Any LLSx mode
+   SmcLowLeakageStop_Enabled   = SMC_PMPROT_ALLS(1),   //!< Allow Any LLSx mode
 };
 
 /**
  * Determines if any VLLSx modes are enabled
  */
 enum SmcVeryLowLeakageStop {
-   SmcVeryLowLeakageStop_Disable  = SMC_PMPROT_AVLLS(0),   //!< Disallow Any VLLSx mode
-   SmcVeryLowLeakageStop_Enable   = SMC_PMPROT_AVLLS(1),   //!< Allow Any VLLSx mode
+   SmcVeryLowLeakageStop_Disabled  = SMC_PMPROT_AVLLS(0),   //!< Disallow Any VLLSx mode
+   SmcVeryLowLeakageStop_Enabled   = SMC_PMPROT_AVLLS(1),   //!< Allow Any VLLSx mode
 };
 
 /**
@@ -57,10 +57,10 @@ enum SmcVeryLowLeakageStop {
  */
 enum SmcHighSpeedRun {
 #ifdef SMC_PMPROT_AHSRUN
-   SmcHighSpeedRun_Disable  = SMC_PMPROT_AHSRUN(0),   //!< Disallow HSRUN mode
-   SmcHighSpeedRun_Enable   = SMC_PMPROT_AHSRUN(1),   //!< Allow HSRUN mode
+   SmcHighSpeedRun_Disabled  = SMC_PMPROT_AHSRUN(0),   //!< Disallow HSRUN mode
+   SmcHighSpeedRun_Enabled   = SMC_PMPROT_AHSRUN(1),   //!< Allow HSRUN mode
 #else
-   SmcHighSpeedRun_Disable  = 0, //!< HSRUN Not supported
+   SmcHighSpeedRun_Disabled  = 0, //!< HSRUN Not supported
 #endif
 };
 
@@ -71,10 +71,10 @@ enum SmcHighSpeedRun {
  */
 enum SmcExitVeryLowPowerOnInt {
 #ifdef SMC_PMCTRL_LPWUI
-   SmcExitVeryLowPowerOnInt_Disable = SMC_PMCTRL_LPWUI(0),  //!< Remain in VLP mode on interrupt
-   SmcExitVeryLowPowerOnInt_Enable  = SMC_PMCTRL_LPWUI(1),  //!< Exit to RUN mode on interrupt
+   SmcExitVeryLowPowerOnInt_Disabled = SMC_PMCTRL_LPWUI(0),  //!< Remain in VLP mode on interrupt
+   SmcExitVeryLowPowerOnInt_Enabled  = SMC_PMCTRL_LPWUI(1),  //!< Exit to RUN mode on interrupt
 #else
-   SmcExitVeryLowPowerOnInt_Disable = 0, //!< LPWUI not supported
+   SmcExitVeryLowPowerOnInt_Disabled = 0, //!< LPWUI not supported
 #endif
 };
 
@@ -125,10 +125,10 @@ enum SmcPartialStopMode {
  */
 enum SmcLpoInLowLeakage {
 #ifdef SMC_STOPCTRL_LPOPO
-   SmcLpoInLowLeakage_Enable  = SMC_STOPCTRL_LPOPO(0), //!< LPO clock is enabled in LLS/VLLSx
-   SmcLpoInLowLeakage_Disable = SMC_STOPCTRL_LPOPO(1), //!< LPO clock is disabled in LLS/VLLSx
+   SmcLpoInLowLeakage_Enabled  = SMC_STOPCTRL_LPOPO(0), //!< LPO clock is enabled in LLS/VLLSx
+   SmcLpoInLowLeakage_Disabled = SMC_STOPCTRL_LPOPO(1), //!< LPO clock is disabled in LLS/VLLSx
 #else
-   SmcLpoInLowLeakage_Disable  = 0, //!< LPO clock in STOP option not supported
+   SmcLpoInLowLeakage_Disabled  = 0, //!< LPO clock in STOP option not supported
 #endif
 };
 
@@ -138,10 +138,10 @@ enum SmcLpoInLowLeakage {
  */
 enum SmcPowerOnReset {
 #ifdef SMC_STOPCTRL_PORPO
-   SmcPowerOnReset_Enable  = SMC_STOPCTRL_PORPO(0),   //!< Power on reset (brown-out detection) in STOP enabled
-   SmcPowerOnReset_Disable = SMC_STOPCTRL_PORPO(1),   //!< Power on reset (brown-out detection) in STOP disabled
+   SmcPowerOnReset_Enabled  = SMC_STOPCTRL_PORPO(0),   //!< Power on reset (brown-out detection) in STOP enabled
+   SmcPowerOnReset_Disabled = SMC_STOPCTRL_PORPO(1),   //!< Power on reset (brown-out detection) in STOP disabled
 #else
-   SmcPowerOnReset_Disable = 0,   //!< Power on reset (brown-out detection) in STOP not supported
+   SmcPowerOnReset_Disabled = 0,   //!< Power on reset (brown-out detection) in STOP not supported
 #endif
 };
 
@@ -151,8 +151,8 @@ enum SmcPowerOnReset {
  *  handler for the interrupt that awakened it.
  */
 enum SmcSleepOnExit {
-   SmcSleepOnExit_Disable = 0,                       //!< Processor does not re-enter SLEEP/DEEPSLEEP mode on completion of interrupt.
-   SmcSleepOnExit_Enable  = SCB_SCR_SLEEPONEXIT_Msk, //!< Processor re-enters SLEEP/DEEPSLEEP mode on completion of interrupt.
+   SmcSleepOnExit_Disabled = 0,                       //!< Processor does not re-enter SLEEP/DEEPSLEEP mode on completion of interrupt.
+   SmcSleepOnExit_Enabled  = SCB_SCR_SLEEPONEXIT_Msk, //!< Processor re-enters SLEEP/DEEPSLEEP mode on completion of interrupt.
 };
 
 /**
@@ -204,11 +204,11 @@ enum SmcStatus {
  */
 enum SmcPowerOption {
 #ifdef SMC_VLLSCTRL_PORPO
-   SmcPowerOption_Disable = SMC_VLLSCTRL_PORPO(0),   //!< Disable POR detect in VLLS0
-   SmcPowerOption_Enable  = SMC_VLLSCTRL_PORPO(1),   //!< Enable POR detect in VLLS0
+   SmcPowerOption_Disabled = SMC_VLLSCTRL_PORPO(0),   //!< Disable POR detect in VLLS0
+   SmcPowerOption_Enabled  = SMC_VLLSCTRL_PORPO(1),   //!< Enable POR detect in VLLS0
 #else
-   SmcPowerOption_Disable = (0),   //!< Not supported
-   SmcPowerOption_Enable  = (0),   //!< Not supported
+   SmcPowerOption_Disabled = (0),   //!< Not supported
+   SmcPowerOption_Enabled  = (0),   //!< Not supported
 #endif
 };
 
@@ -287,9 +287,9 @@ public:
     */
    static ErrorCode enablePowerModes(
          SmcVeryLowPower         smcVeryLowPower,
-         SmcLowLeakageStop       smcLowLeakageStop       = SmcLowLeakageStop_Disable,
-         SmcVeryLowLeakageStop   smcVeryLowLeakageStop   = SmcVeryLowLeakageStop_Disable,
-         SmcHighSpeedRun         smcHighSpeedRun         = SmcHighSpeedRun_Disable ) {
+         SmcLowLeakageStop       smcLowLeakageStop       = SmcLowLeakageStop_Disabled,
+         SmcVeryLowLeakageStop   smcVeryLowLeakageStop   = SmcVeryLowLeakageStop_Disabled,
+         SmcHighSpeedRun         smcHighSpeedRun         = SmcHighSpeedRun_Disabled ) {
 
       uint8_t mask = smcVeryLowPower|smcLowLeakageStop|smcVeryLowLeakageStop|smcHighSpeedRun;
       smc().PMPROT = mask;
@@ -306,9 +306,9 @@ public:
     */
    static void setStopOptions(
          SmcLowLeakageStopMode   smcLowLeakageStopMode,
-         SmcPowerOnReset         smcPowerOnReset         = SmcPowerOnReset_Disable,
+         SmcPowerOnReset         smcPowerOnReset         = SmcPowerOnReset_Disabled,
          SmcPartialStopMode      smcPartialStopMode      = SmcPartialStopMode_Normal,
-         SmcLpoInLowLeakage      smcLpoInLowLeakage      = SmcLpoInLowLeakage_Disable) {
+         SmcLpoInLowLeakage      smcLpoInLowLeakage      = SmcLpoInLowLeakage_Disabled) {
 
       smc().STOPCTRL = smcPartialStopMode|smcPowerOnReset|smcLowLeakageStopMode|smcLpoInLowLeakage;
    }
@@ -526,7 +526,7 @@ public:
     *
     * @param[in] smcSleepOnExit Determines action on completion of all exception handlers
     */
-   static void setSleepOnExit(SmcSleepOnExit smcSleepOnExit=SmcSleepOnExit_Enable) {
+   static void setSleepOnExit(SmcSleepOnExit smcSleepOnExit=SmcSleepOnExit_Enabled) {
       if (smcSleepOnExit) {
          SCB->SCR |= SCB_SCR_SLEEPONEXIT_Msk;
       }

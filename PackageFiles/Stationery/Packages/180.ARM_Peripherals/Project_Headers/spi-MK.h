@@ -101,8 +101,8 @@ enum SpiTxCompleteInterrupt {
  * Controls DSPI Finished interrupts (EOQF flag)
  */
 enum SpiEndOfQueueInterrupt {
-   SpiEndOfQueueInterrupt_Disable   = SPI_RSER_EOQF_RE(0),   // DSPI Finished Request Disabled
-   SpiEndOfQueueInterrupt_Enable    = SPI_RSER_EOQF_RE(1),   // DSPI Finished Request Enable (EOQF flag)
+   SpiEndOfQueueInterrupt_Disabled   = SPI_RSER_EOQF_RE(0),   // DSPI Finished Request Disabled
+   SpiEndOfQueueInterrupt_Enabled    = SPI_RSER_EOQF_RE(1),   // DSPI Finished Request Enable (EOQF flag)
 };
 /**
  * Select which Peripheral Select Line to assert during transaction
@@ -583,7 +583,7 @@ public:
     */
    void configureInterrupts(
          SpiTxCompleteInterrupt     spiTxCompleteInterrupt     = SpiTxCompleteInterrupt_Disabled,
-         SpiEndOfQueueInterrupt     spiEndOfQueueInterrupt     = SpiEndOfQueueInterrupt_Disable,
+         SpiEndOfQueueInterrupt     spiEndOfQueueInterrupt     = SpiEndOfQueueInterrupt_Disabled,
          SpiFifoUnderflowInterrupt  spiFifoUnderflowInterrupt  = SpiFifoUnderflowInterrupt_Disabled,
          SpiFifoOverflowInterrupt   spiFifoOverflowInterrupt   = SpiFifoOverflowInterrupt_Disabled
          ) {

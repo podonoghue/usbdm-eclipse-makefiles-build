@@ -41,9 +41,9 @@ int main() {
 
    // Enable all power modes
    Smc::enablePowerModes(
-         SmcVeryLowPower_Enable,
-         SmcLowLeakageStop_Enable,
-         SmcVeryLowLeakageStop_Enable
+         SmcVeryLowPower_Enabled,
+         SmcLowLeakageStop_Enabled,
+         SmcVeryLowLeakageStop_Enabled
          );
 
    Led::setOutput();
@@ -52,7 +52,7 @@ int main() {
     * The LPTMR is used to toggle the LED as a fixed rate irrespective of clock and run mode.
     * The LPO clock is used since it is independent of run mode.
     */
-   Lptmr::configureTimeCountingMode(LptmrResetOn_Compare, LptmrInterrupt_Enable, LptmrClockSel_lpoclk);
+   Lptmr::configureTimeCountingMode(LptmrResetOn_Compare, LptmrInterrupt_Enabled, LptmrClockSel_lpoclk);
    Lptmr::setPeriod(100*ms);
    Lptmr::setCallback(toggleLED);
    Lptmr::enableNvicInterrupts();

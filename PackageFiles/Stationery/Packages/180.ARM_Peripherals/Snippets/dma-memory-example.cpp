@@ -101,7 +101,7 @@ static ErrorCode dmaTransfer(uint32_t *source, uint32_t *destination, uint32_t s
       /* Destination address            */ (uint32_t)(destination), // Start of array for result
       /* Destination offset             */ sizeof(*destination),    // Destination address advances destination element size for each transfer
       /* Destination size               */ dmaSize(*destination),   // 32-bit write to destination address
-      /* Destination modulo             */ DmaModulo_Disabled,
+      /* Destination modulo             */ DmaModulo_Disabled,      // Disabled
       /* Last destination adjustment    */ -(int)size,              // Reset destination address to start of array on completion
 
       /* Minor loop byte count          */ dmaNBytes(size),         // Total transfer in one minor-loop

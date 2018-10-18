@@ -58,7 +58,7 @@ static void configureAdc() {
    Adc::calibrate();
 
    // Configure the ADC to use hardware with trigger 0 + interrupts + DMA
-   AdcChannel::enableHardwareConversion(AdcPretrigger_0, AdcInterrupt_disable, AdcDma_Enable);
+   AdcChannel::enableHardwareConversion(AdcPretrigger_0, AdcInterrupt_Disabled, AdcDma_Enabled);
 
    // Connect ADC trigger 0 to PIT
    SimInfo::setAdc0Triggers(SimAdc0AltTrigger_PreTrigger_0, SimAdc0Trigger_PitCh0);
@@ -178,7 +178,7 @@ void configurePit() {
    Tmr_Channel::setCallback(pitCallback);
 
    // Configure channel
-   Tmr_Channel::configure(1*ms, PitChannelIrq_Enable);
+   Tmr_Channel::configure(1*ms, PitChannelIrq_Enabled);
    Tmr_Channel::enableNvicInterrupts();
 
    // Check for errors so far

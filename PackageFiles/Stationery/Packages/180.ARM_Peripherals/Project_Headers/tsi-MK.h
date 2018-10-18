@@ -108,13 +108,13 @@ enum TsiStopMode {
 };
 
 enum TsiInterrupt {
-   TsiInterrupt_Disable    = TSI_GENCS_TSIIE(0)|TSI_GENCS_ESOR(0),   //!< Interrupts disabled
+   TsiInterrupt_Disabled   = TSI_GENCS_TSIIE(0)|TSI_GENCS_ESOR(0),   //!< Interrupts disabled
    TsiInterrupt_OutOfRange = TSI_GENCS_TSIIE(1)|TSI_GENCS_ESOR(0),   //!< Interrupt generated on Out-of-Range condition (OUTRGF flag)
    TsiInterrupt_EndOfScan  = TSI_GENCS_TSIIE(1)|TSI_GENCS_ESOR(1),   //!< Interrupt generated on End-of-Scan condition (EOSF flag)
 };
 enum TsiErrorInterrupt {
-   TsiErrorInterrupt_Disable  = TSI_GENCS_ERIE(0),   //!< Error interrupts disabled
-   TsiErrorInterrupt_Enable   = TSI_GENCS_ERIE(1),   //!< Error interrupts enabled (overrun or illegal measurement result)
+   TsiErrorInterrupt_Disabled  = TSI_GENCS_ERIE(0),   //!< Error interrupts disabled
+   TsiErrorInterrupt_Enabled   = TSI_GENCS_ERIE(1),   //!< Error interrupts enabled (overrun or illegal measurement result)
 };
 /**
  * Type definition for TSI interrupt call back
@@ -380,7 +380,7 @@ public:
     */
    static void enableTsiInterrupts(
          TsiInterrupt      tsiInterrupt,
-         TsiErrorInterrupt tsiErrorInterrupt = TsiErrorInterrupt_Disable) {
+         TsiErrorInterrupt tsiErrorInterrupt = TsiErrorInterrupt_Disabled) {
       tsi().GENCS = (tsi().GENCS&~(TSI_GENCS_TSIIE_MASK|TSI_GENCS_ERIE_MASK))|tsiInterrupt|tsiErrorInterrupt;
    }
 

@@ -84,7 +84,7 @@ void initTsi(bool periodic) {
       Tsi0::startScan(TsiScanMode_Periodic);
 
       // Enable interrupts
-      Tsi0::enableTsiInterrupts(TsiInterrupt_EndOfScan, TsiErrorInterrupt_Enable);
+      Tsi0::enableTsiInterrupts(TsiInterrupt_EndOfScan, TsiErrorInterrupt_Enabled);
       Tsi0::enableNvicInterrupts();
    }
 

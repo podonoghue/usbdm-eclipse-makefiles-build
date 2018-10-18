@@ -99,14 +99,14 @@ int main() {
 #endif
 
    // Flash 1st LED @ 2Hz
-   TimerChannelA::configureInTicks(::SystemBusClock/2, PitChannelIrq_Enable);
+   TimerChannelA::configureInTicks(::SystemBusClock/2, PitChannelIrq_Enabled);
    // or
-//   TimerChannelA::configure(500*ms, PitChannelIrq_Enable);
+//   TimerChannelA::configure(500*ms, PitChannelIrq_Enabled);
 
    // Flash 2nd LED @ 1Hz
-   TimerChannelB::configureInTicks(::SystemBusClock, PitChannelIrq_Enable);
+   TimerChannelB::configureInTicks(::SystemBusClock, PitChannelIrq_Enabled);
    // or
-//   TimerChannelB::configure(1*seconds, PitChannelIrq_Enable);
+//   TimerChannelB::configure(1*seconds, PitChannelIrq_Enabled);
 
    // Check for errors so far
    checkError();

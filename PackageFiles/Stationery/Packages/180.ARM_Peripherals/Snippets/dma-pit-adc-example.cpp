@@ -11,20 +11,21 @@
 #include "derivative.h"
 #include "hardware.h"
 #include "pit.h"
-#include "pdb.h"
-#include "lptmr.h"
 #include "dma.h"
 
 using namespace USBDM;
 
-// Connection - change as required
+// Hardware connections - change as required
 using Led         = GpioA<2, ActiveLow>;  // = PTA2 = Arduino D9 = Blue LED
 using Adc         = Adc0;
 using AdcChannel  = Adc0Channel<14>; // = PTC0 = Arduino A0
 using PITChannel  = PitChannel<0>;
 
+// Sample rate for ADC
+constexpr float SAMPLE_RATE = 1*ms;
+
 /**
- * This example used the PIT to trigger 100 ADC conversions @1ms interval.
+ * This example uses the PIT to trigger 100 ADC conversions @1ms interval.
  * Each conversion result is captured by the DMAC and transferred to memory.
  *
  * +------------+     +-----------+     +-----------+     +----------+
@@ -38,7 +39,7 @@ using PITChannel  = PitChannel<0>;
 
 /**
  * Configure the ADC
- * - Triggered by the PIT
+ * - Triggered directly by the PIT
  * - Results retrieved by the DMAC
  */
 static void configureAdc() {
@@ -49,8 +50,14 @@ static void configureAdc() {
    // Calibrate before use
    Adc::calibrate();
 
+   // Average across 4 samples
+   Adc::setAveraging(AdcAveraging_4);
+
+   // Map pin to ADC
+   AdcChannel::setInput();
+
    // Configure the ADC hardware trigger 0 for no interrupts + DMA
-   AdcChannel::enableHardwareConversion(AdcPretrigger_0, AdcInterrupt_disable, AdcDma_Enable);
+   AdcChannel::enableHardwareConversion(AdcPretrigger_0, AdcInterrupt_Disabled, AdcDma_Enabled);
 
    // Connect ADC trigger A to PIT
    SimInfo::setAdc0Triggers(SimAdc0AltTrigger_PreTrigger_0, SimAdc0Trigger_PitCh0);
@@ -60,7 +67,7 @@ static void configureAdc() {
 }
 
 // Flag to indicate transfer complete
-bool complete;
+volatile bool complete;
 
 /**
  * DMA complete callback
@@ -75,6 +82,7 @@ static void dmaCallback(DmaChannelNum channel) {
    complete = true;
 }
 
+// Buffer for data
 uint16_t buffer[100] = {1,2,3,4,5,6,7,8,9};
 
 /**
@@ -85,11 +93,10 @@ uint16_t buffer[100] = {1,2,3,4,5,6,7,8,9};
  * @return E_NO_ERROR    Success
  * @return E_NO_RESOURCE Unable to allocate DMA channel
  */
-static ErrorCode configureDma(DmaChannelNum dmaChannelNum) {
+static void configureDma(DmaChannelNum dmaChannelNum) {
 
-   if (dmaChannelNum == DmaChannelNum_None) {
-      return E_NO_RESOURCE;
-   }
+   usbdm_assert(dmaChannelNum != DmaChannelNum_None, "Illegal DMA channel");
+
    /**
     * @verbatim
     * +------------------------------+            Simple DMA mode (MLNO = Minor Loop Mapping Disabled)
@@ -106,11 +113,11 @@ static ErrorCode configureDma(DmaChannelNum dmaChannelNum) {
     * | +--------------------------+ |             - NBYTES Number of bytes to transfer
     * | +--------------------------+ |<-DMA Req.   - Attributes
     * | | Minor Loop               | |               - ATTR_SSIZE, ATTR_DSIZE Source and destination transfer sizes
-    * |..............................|               - ATTR_SMOD, ATTR_DMOD Modulo --TODO
+    * |..............................|               - ATTR_SMOD, ATTR_DMOD Modulo
     * | |                          | |
-    * | +--------------------------+ |             The number of reads and writes done will depend on NBYTES, SSIZE and DSIZE
-    * | +--------------------------+ |<-DMA Req.   For example: NBYTES=12, SSIZE=16-bits, DSIZE=32-bits => 6 reads, 3 writes
-    * | | Minor Loop               | |             NBYTES must be an even multiple of SSIZE and DSIZE in bytes.
+    * | +--------------------------+ |            The number of reads and writes done will depend on NBYTES, SSIZE and DSIZE
+    * | +--------------------------+ |<-DMA Req.  For example: NBYTES=12, SSIZE=16-bits, DSIZE=32-bits => 6 reads, 3 writes
+    * | | Minor Loop               | |            NBYTES must be an even multiple of SSIZE and DSIZE in bytes.
     * | | Each transfer            | |
     * | |   SADDR->DADDR           | |            The following are used by the major loop
     * | |   SADDR += SOFF          | |             - SLAST Adjustment applied to SADDR after major loop
@@ -129,31 +136,28 @@ static ErrorCode configureDma(DmaChannelNum dmaChannelNum) {
     *
     * Structure to define the DMA transfer
     */
-   static const DmaTcd tcd {
-      /* uint32_t  SADDR        Source address              */ (uint32_t)(&Adc::adc().R[0]),     // ADC result register
-      /* uint16_t  SOFF         SADDR offset                */ 0,                                // SADDR does not change
-      /* DmaSize   DSIZE        Destination size            */ dmaSize(buffer[0]),               // 16-bit read from DADDR
-      /* DmaModulo DMOD         Destination modulo          */ DmaModulo_Disabled,               // No modulo
-      /* DmaSize   SSIZE        Source size                 */ dmaSize(buffer[0]),               // 16-bit write to SADDR
-      /* DmaModulo SMOD         Source modulo               */ DmaModulo_Disabled,               // No modulo
-      /* uint32_t  NBYTES       Minor loop byte count       */ 2,                                // 2-bytes for each ADC DMA request
-      /* uint32_t  SLAST        Last SADDR adjustment       */ 0,                                // No adjustment as SADDR was unchanged
-      /* uint32_t  DADDR        Destination address         */ (uint32_t)(&buffer),              // Start of array for result
-      /* uint16_t  DOFF         DADDR offset                */ sizeof(buffer[0]),                // DADDR advances 2 bytes for each request
-      /* uint16_t  CITER        Major loop count            */ DMA_CITER_ELINKNO_ELINK(0)|       // No ELINK
-      /*                                                    */ sizeof(buffer)/sizeof(buffer[0]), // Number of requests to do
-      /* uint32_t  DLAST        Last DADDR adjustment       */ -sizeof(buffer),                  // Reset DADDR to start of array on completion
-      /* bool      START;       Channel Start               */ false,                            // Don't start (triggered by hardware)
-      /* bool      INTMAJOR;    Interrupt on major complete */ true,                             // Generate interrupt on completion of Major-loop
-      /* bool      INTHALF;     Interrupt on half complete  */ false,                            // No interrupt when half complete
-      /* bool      DREQ;        Disable Request             */ true,                             // Clear hardware request when complete major loop
-      /* bool      ESG;         Enable Scatter/Gather       */ false,                            // Disabled
-      /* bool      MAJORELINK;  Enable channel linking      */ false,                            // Disabled
-      /* bool      ACTIVE;      Channel Active              */ false,
-      /* bool      DONE;        Channel Done                */ false,
-      /* unsigned  MAJORLINKCH; Link Channel Number         */ 0,                                // N/A
-      /* DmaSpeed  BWC;         Bandwidth (speed) Control   */ DmaSpeed_NoStalls,                // Full speed
-   };
+   static const DmaTcd tcd (
+      /* Source address                 */ (uint32_t)(Adc::adcR(0)),      // Read from ADC result register
+      /* Source offset                  */ 0,                             // Source address does not change
+      /* Source size                    */ dmaSize(buffer[0]),            // Size of read from ADC matches buffer element size
+      /* Source modulo                  */ DmaModulo_Disabled,            // Disabled
+      /* Last source adjustment         */ 0,                             // No adjustment as SADDR was unchanged
+
+      /* Destination address            */ (uint32_t)(buffer),            // Write results to buffer
+      /* Destination offset             */ sizeof(buffer[0]),             // Destination address advances 2 bytes for each request
+      /* Destination size               */ dmaSize(buffer[0]),            // 16-bit write to buffer
+      /* Destination modulo             */ DmaModulo_Disabled,            // Disabled
+      /* Last destination adjustment    */ -sizeof(buffer),               // Reset destination to start of buffer on completion
+
+      /* Minor loop byte count          */ dmaNBytes(sizeof(buffer[0])),  // 2-bytes for each ADC DMA request
+      /* Major loop count               */ dmaCiter(sizeof(buffer)/       // Total Number of requests to do
+	   /*                                */          sizeof(buffer[0])),
+      /* Channel Start                  */ false,                         // Don't start (triggered by hardware = ADC)
+      /* Disable Req. on major complete */ true,                          // Clear hardware request when complete major loop
+      /* Interrupt on major complete    */ true,                          // Generate interrupt on completion of major-loop
+      /* Interrupt on half complete     */ false,                         // No interrupt
+      /* Bandwidth (speed) Control      */ DmaSpeed_NoStalls              // Full speed
+   );
 
    // Sequence not complete yet
    complete = false;
@@ -163,7 +167,6 @@ static ErrorCode configureDma(DmaChannelNum dmaChannelNum) {
 
    // Set callback (Interrupts are enabled in TCD)
    Dma0::setCallback(dmaChannelNum, dmaCallback);
-
    Dma0::enableNvicInterrupts(dmaChannelNum);
 
    // DMA triggered by ADC requests
@@ -174,10 +177,13 @@ static ErrorCode configureDma(DmaChannelNum dmaChannelNum) {
 
    // Enable requests from the channel
    Dma0::enableRequests(dmaChannelNum);
-
-   return E_NO_ERROR;
 }
 
+/**
+ * Start DMA transaction
+ *
+ * @param dmaChannelNum Channel to start
+ */
 void startDma(DmaChannelNum dmaChannelNum) {
    // Sequence not complete yet
    complete = false;
@@ -198,8 +204,9 @@ void pitCallback() {
    }
 }
 
-/*
+/**
  * Configure the PIT
+ *
  * - Generates regular events. Each event is used to initiate an ADC conversions.
  */
 void configurePit() {
@@ -209,10 +216,13 @@ void configurePit() {
    PITChannel::setCallback(pitCallback);
 
    // Configure channel
-   PITChannel::configure(1*ms, PitChannelIrq_Enable);
+   PITChannel::configure(SAMPLE_RATE, PitChannelIrq_Enabled);
    PITChannel::enableNvicInterrupts();
 }
 
+/**
+ * Test hardware conversions
+ */
 void testHardwareConversions() {
    configureAdc();
 

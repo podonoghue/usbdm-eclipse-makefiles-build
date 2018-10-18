@@ -103,8 +103,8 @@ enum LptmrMode {
  * Enable/Disable LPTMR interrupts
  */
 enum LptmrInterrupt {
-   LptmrInterrupt_Disable = LPTMR_CSR_TIE(0), //!< Disable LPTMR interrupts
-   LptmrInterrupt_Enable  = LPTMR_CSR_TIE(1), //!< Enable LPTMR interrupts
+   LptmrInterrupt_Disabled = LPTMR_CSR_TIE(0), //!< Disable LPTMR interrupts
+   LptmrInterrupt_Enabled  = LPTMR_CSR_TIE(1), //!< Enable LPTMR interrupts
 };
 
 /**
@@ -159,7 +159,7 @@ public:
          LptmrPinSel       lptmrPinSel,
          LptmrPulseEdge    lptmrPulseEdge = LptmrPulse_RisingEdge,
          LptmrResetOn      lptmrResetOn   = LptmrResetOn_Overflow,
-         LptmrInterrupt    lptmrInterrupt = LptmrInterrupt_Disable) {
+         LptmrInterrupt    lptmrInterrupt = LptmrInterrupt_Disabled) {
 
       enable();
       // Change settings with timer disabled
@@ -179,7 +179,7 @@ public:
     */
    static void configureTimeCountingMode(
          LptmrResetOn      lptmrResetOn   = LptmrResetOn_Compare,
-         LptmrInterrupt    lptmrInterrupt = LptmrInterrupt_Disable,
+         LptmrInterrupt    lptmrInterrupt = LptmrInterrupt_Disabled,
          LptmrClockSel     lptmrClockSel  = LptmrClockSel_mcgirclk,
          LptmrPrescale     lptmrPrescale  = LptmrPrescale_Bypass) {
       enable();

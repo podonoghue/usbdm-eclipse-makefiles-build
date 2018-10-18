@@ -121,7 +121,7 @@ static void configurePdb() {
    Pdb::setErrorCallback(pdbErrorCallback);
    Pdb::setCallback(pdbCallback);
    // Interrupts during sequence or error
-   Pdb::setInterrupts(PdbInterrupt_Enable, PdbErrorInterrupt_Enable);
+   Pdb::setInterrupts(PdbInterrupt_Enabled, PdbErrorInterrupt_Enabled);
 
    // Set period a bit longer than FTM period
    Pdb::setPeriod(PERIOD+1*ms);
@@ -175,8 +175,8 @@ static void configureAdc() {
    Adc::enableNvicInterrupts();
 
    // Configure the ADC to use hardware with trigger 0 & 1 + interrupts
-   AdcChannelA::enableHardwareConversion(AdcPretrigger_0, AdcInterrupt_enable);
-   AdcChannelB::enableHardwareConversion(AdcPretrigger_1, AdcInterrupt_enable);
+   AdcChannelA::enableHardwareConversion(AdcPretrigger_0, AdcInterrupt_Enabled);
+   AdcChannelB::enableHardwareConversion(AdcPretrigger_1, AdcInterrupt_Enabled);
 
    // Connect ADC trigger A to usual PDB
    SimInfo::setAdc0Triggers(SimAdc0AltTrigger_Pdb);
@@ -262,7 +262,7 @@ static void configureDma() {
 
 
 //   DmaMux0::configure(DMA_CHANNEL, DmaMux0::DmaSlot_AlwaysEnabled0, DmaMuxEnable_continuous);
-//   DmaMux0::configure(DMA_CHANNEL, DmaMux0::DmaSlot_AlwaysEnabled0, DmaMuxEnable_disable);
+//   DmaMux0::configure(DMA_CHANNEL, DmaMux0::DmaSlot_AlwaysEnabled0, DmaMuxEnable_Disabled);
 //   DmaMux0::configure(DMA_CHANNEL, DmaMux0::DmaSlot_AlwaysEnabled0, DmaMuxEnable_triggered);
 //   DmaMux0::disable(DMA_CHANNEL);
 //   DmaMux0::configure(15, DmaMux0::DmaSlot_AlwaysEnabled0, DmaMuxEnable_continuous);

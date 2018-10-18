@@ -45,16 +45,16 @@ enum PitDebugMode {
  * Enable the PIT interrupts
  */
 enum PitChannelIrq {
-   PitChannelIrq_Disable  = PIT_TCTRL_TIE(0),  //!< PIT channel interrupt disabled
-   PitChannelIrq_Enable   = PIT_TCTRL_TIE(1),  //!< PIT channel interrupt disabled
+   PitChannelIrq_Disabled  = PIT_TCTRL_TIE(0),  //!< PIT channel interrupt disabled
+   PitChannelIrq_Enabled   = PIT_TCTRL_TIE(1),  //!< PIT channel interrupt disabled
 };
 
 /**
  * Enable the PIT channel
  */
 enum PitChannelEnable {
-   PitChannelEnable_Disable  = PIT_TCTRL_TEN(0),  //!< PIT channel disabled
-   PitChannelEnable_Enable   = PIT_TCTRL_TEN(1),  //!< PIT channel enabled
+   PitChannelEnable_Disabled  = PIT_TCTRL_TEN(0),  //!< PIT channel disabled
+   PitChannelEnable_Enabled   = PIT_TCTRL_TEN(1),  //!< PIT channel enabled
 };
 
 /**
@@ -225,7 +225,7 @@ public:
    static void configureChannelInTicks(
          uint8_t           channel,
          uint32_t          interval,
-         PitChannelIrq     pitChannelIrq=PitChannelIrq_Disable) {
+         PitChannelIrq     pitChannelIrq=PitChannelIrq_Disabled) {
 
       pit().CHANNEL[channel].LDVAL = interval-1;
       pit().CHANNEL[channel].TCTRL = pitChannelIrq|PIT_TCTRL_TEN(1);
@@ -242,7 +242,7 @@ public:
    static void configureChannel(
          uint8_t           channel,
          float             interval,
-         PitChannelIrq     pitChannelIrq=PitChannelIrq_Disable) {
+         PitChannelIrq     pitChannelIrq=PitChannelIrq_Disabled) {
 
       pit().CHANNEL[channel].LDVAL = round((interval*PitInfo::getClockFrequency())-1);
       pit().CHANNEL[channel].TCTRL = pitChannelIrq|PIT_TCTRL_TEN(1);
@@ -356,7 +356,7 @@ protected:
        */
       static void __attribute__((always_inline)) configureInTicks(
             uint32_t          interval,
-            PitChannelIrq     pitChannelIrq=PitChannelIrq_Disable) {
+            PitChannelIrq     pitChannelIrq=PitChannelIrq_Disabled) {
 
          PitBase_T<Info>::configureChannelInTicks(channel, interval, pitChannelIrq);
       }
@@ -369,7 +369,7 @@ protected:
        */
       static void __attribute__((always_inline)) configure(
             float             interval,
-            PitChannelIrq     pitChannelIrq=PitChannelIrq_Disable) {
+            PitChannelIrq     pitChannelIrq=PitChannelIrq_Disabled) {
 
          PitBase_T<Info>::configureChannel(channel, interval, pitChannelIrq);
       }

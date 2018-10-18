@@ -32,7 +32,7 @@ namespace USBDM {
  * Controls operation of DMA-MUX channel.
  */
 enum DmaMuxEnable {
-   DmaMuxEnable_Disable    = DMAMUX_CHCFG_ENBL(0),                      //!< DMA channel is disabled
+   DmaMuxEnable_Disabled    = DMAMUX_CHCFG_ENBL(0),                      //!< DMA channel is disabled
    DmaMuxEnable_Continuous = DMAMUX_CHCFG_ENBL(1)|DMAMUX_CHCFG_TRIG(0), //!< DMA channel is enabled continuously
    DmaMuxEnable_Triggered  = DMAMUX_CHCFG_ENBL(1)|DMAMUX_CHCFG_TRIG(1), //!< DMA channel is enabled and triggered by PIT channel
 };

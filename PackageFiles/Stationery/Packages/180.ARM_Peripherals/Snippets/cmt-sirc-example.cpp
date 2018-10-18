@@ -95,7 +95,7 @@ static void cmtCallback() {
          // Start of new packet transmission
          shiftReg   = data;
          repeatTime = 0;
-         Cmt::setExtendedSpace(CmtExtendedSpace_Disable);
+         Cmt::setExtendedSpace(CmtExtendedSpace_Disabled);
       }
       if (bitNum<packetLength) {
          // LSB first
@@ -111,7 +111,7 @@ static void cmtCallback() {
          shiftReg >>= 1;
       }
       else {
-         Cmt::setExtendedSpace(CmtExtendedSpace_Enable);
+         Cmt::setExtendedSpace(CmtExtendedSpace_Enabled);
          Cmt::setMarkTiming(SONY_REPEAT_TIME-SONY_OFF_TIME-repeatTime);
          bitNum = 0;
       }
@@ -127,7 +127,7 @@ static void configureCmtTime() {
    bitNum       = 0;
 
    Cmt::configure(CmtMode_Direct);
-   Cmt::outputControl(CmtOutput_Enable);
+   Cmt::outputControl(CmtOutput_Enabled);
    Cmt::setOutput(PinDriveMode_PushPull);
 
    Cmt::setCallback(cmtCallback);

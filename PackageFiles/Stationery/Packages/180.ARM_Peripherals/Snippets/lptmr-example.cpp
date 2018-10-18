@@ -53,7 +53,7 @@ int main() {
    // Enable LPTMR in time counting mode
    Lptmr0::configureTimeCountingMode(
          LptmrResetOn_Compare,
-         LptmrInterrupt_Enable,
+         LptmrInterrupt_Enabled,
          LptmrClockSel_mcgirclk);
 
    // Set clock source

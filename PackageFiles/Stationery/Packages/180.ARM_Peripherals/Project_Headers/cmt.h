@@ -80,16 +80,16 @@ enum CmtMode {
  * Controls Extended space operation
  */
 enum CmtExtendedSpace {
-   CmtExtendedSpace_Disable  = CMT_MSC_EXSPC(0), //!< Enables to usual operation
-   CmtExtendedSpace_Enable   = CMT_MSC_EXSPC(1), //!< Forces subsequent cycles to be spaces
+   CmtExtendedSpace_Disabled  = CMT_MSC_EXSPC(0), //!< Enables to usual operation
+   CmtExtendedSpace_Enabled   = CMT_MSC_EXSPC(1), //!< Forces subsequent cycles to be spaces
 };
 
 /**
  *  Enables/Disabled CMT output
  */
 enum CmtOutput {
-   CmtOutput_Disable = CMT_OC_IROPEN(0), //!< IRO Pin disabled
-   CmtOutput_Enable  = CMT_OC_IROPEN(1), //!< IRO Pin enabled
+   CmtOutput_Disabled = CMT_OC_IROPEN(0), //!< IRO Pin disabled
+   CmtOutput_Enabled  = CMT_OC_IROPEN(1), //!< IRO Pin enabled
 };
 
 /**
@@ -309,7 +309,7 @@ public:
     *
     * @param[in] cmtExtendedSpace Allows Forcing of subsequent cycles to be spaces
     */
-   static void setExtendedSpace(CmtExtendedSpace cmtExtendedSpace=CmtExtendedSpace_Enable) {
+   static void setExtendedSpace(CmtExtendedSpace cmtExtendedSpace=CmtExtendedSpace_Enabled) {
       cmt().MSC = (cmt().MSC&~CMT_MSC_EXSPC(1))|cmtExtendedSpace;
    }
 

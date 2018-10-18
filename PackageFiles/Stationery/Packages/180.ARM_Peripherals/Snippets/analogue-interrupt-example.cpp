@@ -26,7 +26,7 @@ using AdcChannel = Adc::Channel<19>;
  */
 void handler(uint32_t result, int) {
    // Start next conversion
-   AdcChannel::startConversion(AdcInterrupt_enable);
+   AdcChannel::startConversion(AdcInterrupt_Enabled);
    result = result/10;
    for (unsigned i=0; i<75; i++) {
       if (i<result) {
@@ -53,7 +53,7 @@ int main(void) {
    checkError();
 
    // Start a conversion with interrupt on completion
-   AdcChannel::startConversion(AdcInterrupt_enable);
+   AdcChannel::startConversion(AdcInterrupt_Enabled);
 
    for(;;) {
    }

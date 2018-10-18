@@ -270,7 +270,7 @@ void enableTimer(Test test, bool enable) {
 
       WakeupTimer::configureTimeCountingMode(
             LptmrResetOn_Compare,
-            LptmrInterrupt_Enable,
+            LptmrInterrupt_Enabled,
             LptmrClockSel_lpoclk);
       WakeupTimer::setPeriod(5*seconds);
       WakeupTimer::setCallback(wakeupTimerCallback);
@@ -430,10 +430,10 @@ int main() {
 
    // Enable all power modes
    Smc::enablePowerModes(
-         SmcVeryLowPower_Enable,
-         SmcLowLeakageStop_Enable,
-         SmcVeryLowLeakageStop_Enable,
-         SmcHighSpeedRun_Enable
+         SmcVeryLowPower_Enabled,
+         SmcLowLeakageStop_Enabled,
+         SmcVeryLowLeakageStop_Enabled,
+         SmcHighSpeedRun_Enabled
    );
 
    //Errata e4481 STOP mode recovery unstable
@@ -583,7 +583,7 @@ int main() {
          case 'I':
             if (smcStatus==SmcStatus_run) {
                lpwui = !lpwui;
-               Smc::setExitVeryLowPowerOnInterrupt(lpwui?SmcExitVeryLowPowerOnInt_Enable:SmcExitVeryLowPowerOnInt_Disable);
+               Smc::setExitVeryLowPowerOnInterrupt(lpwui?SmcExitVeryLowPowerOnInt_Enabled:SmcExitVeryLowPowerOnInt_Disabled);
             }
             break;
 #endif

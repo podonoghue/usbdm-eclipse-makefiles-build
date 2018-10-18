@@ -115,8 +115,8 @@ enum AdcClockDivider {
  * Controls whether an interrupt is triggered at the end of a conversion
  */
 enum AdcInterrupt {
-   AdcInterrupt_disable = ADC_SC1_AIEN(0), //!< No interrupt on conversion complete
-   AdcInterrupt_enable  = ADC_SC1_AIEN(1), //!< Interrupt on conversion complete
+   AdcInterrupt_Disabled = ADC_SC1_AIEN(0), //!< No interrupt on conversion complete
+   AdcInterrupt_Enabled  = ADC_SC1_AIEN(1), //!< Interrupt on conversion complete
 };
 
 /**
@@ -132,8 +132,8 @@ enum AdcPretrigger {
  * Selects DMA operation
  */
 enum AdcDma {
-   AdcDma_Disable = ADC_SC2_DMAEN(0), //!< DMA disabled
-   AdcDma_Enable  = ADC_SC2_DMAEN(1), //!< DMA enabled
+   AdcDma_Disabled = ADC_SC2_DMAEN(0), //!< DMA disabled
+   AdcDma_Enabled  = ADC_SC2_DMAEN(1), //!< DMA enabled
 };
 #endif
 
@@ -181,8 +181,8 @@ enum AdcClockRange {
  * If always enable this startup delay is avoided and the clock may be use by other peripherals.
  */
 enum AdcAsyncClock {
-   AdcAsyncClock_disabled = ADC_CFG2_ADACKEN(0), //!< ADC Asynchronous clock enable on demand.
-   AdcAsyncClock_enabled  = ADC_CFG2_ADACKEN(0), //!< ADC Asynchronous clock always enabled
+   AdcAsyncClock_Disabled = ADC_CFG2_ADACKEN(0), //!< ADC Asynchronous clock enable on demand.
+   AdcAsyncClock_Enabled  = ADC_CFG2_ADACKEN(0), //!< ADC Asynchronous clock always enabled
 };
 
 /**
@@ -278,6 +278,17 @@ protected:
 public:
    /** Hardware instance pointer */
    static __attribute__((always_inline)) volatile ADC_Type &adc() { return Info::adc(); }
+
+public:
+   /** Get reference to ADC hardware as struct */
+   static volatile ADC_Type &adcPtr() { return Info::adc(); }
+
+   /** @return Base address of SPI hardware as uint32_t */
+   static constexpr uint32_t adcBase() { return Info::baseAddress; }
+   /** @return Base address of ADC.SC1[index] registers as uint32_t */
+   static constexpr uint32_t adcSC(unsigned index) { return adcBase() + offsetof(ADC_Type, SC1[index]); }
+   /** @return Base address of ADC.R[index] registers as uint32_t */
+   static constexpr uint32_t adcR(unsigned index) { return adcBase() + offsetof(ADC_Type, R[index]); }
 
 protected:
    /** Clock register for peripheral */
@@ -406,7 +417,7 @@ public:
          AdcPower        adcPower        = AdcPower_Normal,
          AdcMuxsel       adcMuxsel       = AdcMuxsel_B,
          AdcClockRange   adcClockRange   = AdcClockRange_high,
-         AdcAsyncClock   adcAsyncClock   = AdcAsyncClock_disabled
+         AdcAsyncClock   adcAsyncClock   = AdcAsyncClock_Disabled
          ) {
       enable();
       adc().CFG1 = adcResolution|adcClockSource|adcClockDivider|adcPower|(adcSample&ADC_CFG1_ADLSMP_MASK);
@@ -704,7 +715,7 @@ public:
        *                            This corresponds to pre-triggers in the PDB channels and SC1[n]/R[n] register selection
        * @param[in] adcInterrupt    Whether to generate an interrupt when each conversion completes
        */
-      static void enableHardwareConversion(AdcPretrigger adcPretrigger, AdcInterrupt adcInterrupt=AdcInterrupt_disable) {
+      static void enableHardwareConversion(AdcPretrigger adcPretrigger, AdcInterrupt adcInterrupt=AdcInterrupt_Disabled) {
          AdcBase_T<Info>::enableHardwareConversion(channel|adcInterrupt, adcPretrigger);
       }
 
@@ -729,7 +740,7 @@ public:
        * @param[in] adcInterrupt   Determines if an interrupt is generated when conversions are complete
        * @param[in] adcContinuous  Select continuous conversion mode
        */
-      static __attribute__((always_inline)) void startConversion(AdcInterrupt adcInterrupt=AdcInterrupt_disable, AdcContinuous adcContinuous=AdcContinuous_Disabled) {
+      static __attribute__((always_inline)) void startConversion(AdcInterrupt adcInterrupt=AdcInterrupt_Disabled, AdcContinuous adcContinuous=AdcContinuous_Disabled) {
          AdcBase_T<Info>::startConversion(channel|adcInterrupt, adcContinuous);
       };
 
@@ -805,7 +816,7 @@ public:
     * @param[in] adcInterrupt    Whether to generate interrupt when complete
     * @param[in] adcDma          Whether to generate a DMA request when each conversion completes
     */
-   static void enableHardwareConversion(AdcPretrigger adcPretrigger, AdcInterrupt adcInterrupt=AdcInterrupt_disable, AdcDma adcDma=AdcDma_Disable) {
+   static void enableHardwareConversion(AdcPretrigger adcPretrigger, AdcInterrupt adcInterrupt=AdcInterrupt_Disabled, AdcDma adcDma=AdcDma_Disabled) {
       AdcBase_T<Info>::enableHardwareConversion(channel|ADC_SC1_DIFF_MASK|adcInterrupt, adcPretrigger, adcDma);
    }
 
@@ -816,7 +827,7 @@ public:
     * @param[in] adcInterrupt   Determines if an interrupt is generated when conversions are complete
     * @param[in] adcContinuous  Select continuous conversion mode
     */
-   static __attribute__((always_inline)) void startConversion(AdcInterrupt adcInterrupt=AdcInterrupt_disable, AdcContinuous adcContinuous=AdcContinuous_Disabled) {
+   static __attribute__((always_inline)) void startConversion(AdcInterrupt adcInterrupt=AdcInterrupt_Disabled, AdcContinuous adcContinuous=AdcContinuous_Disabled) {
       AdcBase_T<Info>::startConversion(channel|ADC_SC1_DIFF_MASK|adcInterrupt, adcContinuous);
    };
 

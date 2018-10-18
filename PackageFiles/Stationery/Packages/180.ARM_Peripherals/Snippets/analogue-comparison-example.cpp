@@ -57,7 +57,7 @@ int main() {
     * Start continuous conversions with interrupts on comparison true.
     * A bit wasteful of power - should throttle.
     */
-   AdcChannel::startConversion(AdcInterrupt_enable, AdcContinuous_Enabled);
+   AdcChannel::startConversion(AdcInterrupt_Enabled, AdcContinuous_Enabled);
 
    for(;;) {
       __asm__("nop");

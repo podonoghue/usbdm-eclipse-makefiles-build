@@ -41,10 +41,10 @@ void cmtCallback() {
          Cmt::setMarkSpaceTiming(ZeroMarkTime, ZeroSpaceTime);
       }
       if (bitNum == 15) {
-         Cmt::setExtendedSpace(CmtExtendedSpace_Enable);
+         Cmt::setExtendedSpace(CmtExtendedSpace_Enabled);
       }
       if (bitNum--==0) {
-         Cmt::setExtendedSpace(CmtExtendedSpace_Disable);
+         Cmt::setExtendedSpace(CmtExtendedSpace_Disabled);
       }
    }
 }
@@ -54,7 +54,7 @@ void configureCmtFrequencyShiftKeying() {
    Cmt::setPrimaryTiming(PrimaryCarrierHalfTime,PrimaryCarrierHalfTime);
    Cmt::setSecondaryTiming(SecondaryCarrierHalfTime,SecondaryCarrierHalfTime);
    Cmt::setMarkSpaceTiming(ZeroMarkTime, ZeroSpaceTime);
-   Cmt::outputControl(CmtOutput_Enable);
+   Cmt::outputControl(CmtOutput_Enabled);
    Cmt::setOutput(PinDriveMode_PushPull);
 
    Cmt::setCallback(cmtCallback);
@@ -67,7 +67,7 @@ void configureCmtTime() {
    Cmt::configure(CmtMode_Direct);
    Cmt::setPrimaryTiming(PrimaryCarrierHalfTime,PrimaryCarrierHalfTime);
    Cmt::setMarkSpaceTiming(ZeroMarkTime, ZeroSpaceTime);
-   Cmt::outputControl(CmtOutput_Enable);
+   Cmt::outputControl(CmtOutput_Enabled);
    Cmt::setOutput(PinDriveMode_PushPull);
 
    Cmt::setCallback(cmtCallback);

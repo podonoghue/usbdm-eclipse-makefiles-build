@@ -70,17 +70,17 @@ enum SpiOrder {
  * Slave Select pin function in master mode
  */
 enum SpiPinSelect {
-   SpiPinSelect_Disable = SPI_C1_SSOE(0)|SPI_C2_MODFEN(0),  //!< SS pin acts as GPIO when Master
-   SpiPinSelect_FaultIn = SPI_C1_SSOE(0)|SPI_C2_MODFEN(1),  //!< SS pin acts as FAULT in when Master
-   SpiPinSelect_Enable  = SPI_C1_SSOE(1)|SPI_C2_MODFEN(1),  //!< SS pin acts as SlaveSelect when Master
+   SpiPinSelect_Disabled    = SPI_C1_SSOE(0)|SPI_C2_MODFEN(0),  //!< SS pin acts as GPIO when Master
+   SpiPinSelect_FaultIn     = SPI_C1_SSOE(0)|SPI_C2_MODFEN(1),  //!< SS pin acts as FAULT in when Master
+   SpiPinSelect_SlaveSelect = SPI_C1_SSOE(1)|SPI_C2_MODFEN(1),  //!< SS pin acts as SlaveSelect when Master
 };
 
 /**
  * Controls operation in Low Power mode
  */
 enum SpiLowPower {
-   SpiLowPower_Disable = SPI_C2_SPISWAI(0), //!< SPI disabled in Low Power mode
-   SpiLowPower_Enable  = SPI_C2_SPISWAI(1), //!< SPI enabled in Low Power mode
+   SpiLowPower_Disabled = SPI_C2_SPISWAI(0), //!< SPI disabled in Low Power mode
+   SpiLowPower_Enabled  = SPI_C2_SPISWAI(1), //!< SPI enabled in Low Power mode
 };
 
 /**

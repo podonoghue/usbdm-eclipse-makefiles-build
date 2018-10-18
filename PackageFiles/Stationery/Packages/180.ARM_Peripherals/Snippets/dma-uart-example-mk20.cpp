@@ -194,7 +194,7 @@ static void configurePit(DmaChannelNum dmaChannel) {
    Pit::configure(PitDebugMode_Stop);
 
    // Configure channel for 100ms + interrupts
-   Pit::configureChannel(dmaChannel, 100*ms, PitChannelIrq_Enable);
+   Pit::configureChannel(dmaChannel, 100*ms, PitChannelIrq_Enabled);
 }
 
 /**
@@ -249,9 +249,9 @@ int main() {
 
    // Allow entry to other RUN modes
    Smc::enablePowerModes(
-         SmcVeryLowPower_Enable,
-         SmcLowLeakageStop_Enable,
-         SmcVeryLowLeakageStop_Enable);
+         SmcVeryLowPower_Enabled,
+         SmcLowLeakageStop_Enabled,
+         SmcVeryLowLeakageStop_Enabled);
 
    // DMA channel number to use (determines which PIT channel used)
    static const DmaChannelNum dmaChannel = Dma0::allocatePeriodicChannel();
@@ -296,10 +296,10 @@ int main() {
 
    Smc::setStopOptions(
          SmcLowLeakageStopMode_VLLS3,   // Retains RAM
-         SmcPowerOnReset_Enable,        // Brown-out detection
+         SmcPowerOnReset_Enabled,        // Brown-out detection
          SmcPartialStopMode_Normal,     // No bus clock in stop!
          // SmcPartialStopMode_Partial1 - Bus clock active (for DMAC)
-         SmcLpoInLowLeakage_Disable);   // LPO stops in LLS/VLLS
+         SmcLpoInLowLeakage_Disabled);   // LPO stops in LLS/VLLS
 
    console.writeln("\nDoing DMA while sleeping....").flushOutput();
 

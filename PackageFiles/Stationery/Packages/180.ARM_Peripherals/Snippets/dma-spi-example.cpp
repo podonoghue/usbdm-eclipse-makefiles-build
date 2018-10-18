@@ -232,7 +232,7 @@ static void configureSpi() {
    spi.setCallback(spiCallback);
    spi.configureInterrupts(
          SpiTxCompleteInterrupt_Enabled,
-         SpiEndOfQueueInterrupt_Enable,
+         SpiEndOfQueueInterrupt_Enabled,
          SpiFifoUnderflowInterrupt_Enabled,
          SpiFifoOverflowInterrupt_Enabled);
    spi.configureFifoRequests(SpiFifoTxRequest_Dma, SpiFifoRxRequest_Dma);

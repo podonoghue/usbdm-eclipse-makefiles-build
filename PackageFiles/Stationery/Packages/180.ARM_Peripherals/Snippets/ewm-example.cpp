@@ -34,7 +34,7 @@ int main(){
    Led::setOutput(PinDriveStrength_High);
 
    // Configure EWM for no external input
-   Ewm::configure(EwmInput_Disable);
+   Ewm::configure(EwmInput_Disabled);
 
    // Expire if not serviced for ~254ms (LPO ~1kHz)
    Ewm::setWindow(0,254);

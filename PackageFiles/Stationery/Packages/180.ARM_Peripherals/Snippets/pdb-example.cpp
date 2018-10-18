@@ -58,7 +58,7 @@ static void configurePdb() {
    Pdb::setErrorCallback(pdbErrorCallback);
    Pdb::setCallback(pdbCallback);
    // Interrupts during sequence or error
-   Pdb::setInterrupts(PdbInterrupt_Enable, PdbErrorInterrupt_Enable);
+   Pdb::setInterrupts(PdbInterrupt_Enabled, PdbErrorInterrupt_Enabled);
 
    // Set period of sequence
    Pdb::setPeriod(SEQ_LENGTH);
@@ -89,7 +89,7 @@ static void configureAdc() {
    Adc::setCallback(adcCallback);
    Adc::enableNvicInterrupts();
 
-   AdcChannel::enableHardwareConversion(AdcPretrigger_0, AdcInterrupt_enable);
+   AdcChannel::enableHardwareConversion(AdcPretrigger_0, AdcInterrupt_Enabled);
 }
 
 int main() {

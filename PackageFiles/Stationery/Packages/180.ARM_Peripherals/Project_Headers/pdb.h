@@ -90,8 +90,8 @@ enum PdbLoadMode {
  * Controls whether the PDB interrupt is enabled
  */
 enum PdbInterrupt {
-   PdbInterrupt_Disable = PDB_SC_PDBIE(0),  //!< Sequence interrupt disabled
-   PdbInterrupt_Enable  = PDB_SC_PDBIE(1),  //!< Sequence interrupt enabled
+   PdbInterrupt_Disabled = PDB_SC_PDBIE(0),  //!< Sequence interrupt disabled
+   PdbInterrupt_Enabled  = PDB_SC_PDBIE(1),  //!< Sequence interrupt enabled
 };
 
 /**
@@ -106,28 +106,28 @@ enum PdbMode {
  * Controls whether the PDB generates DMA requests
  */
 enum PdbDma {
-   PdbDma_Disable  = PDB_SC_CONT(0),  //!< DMA is disabled
-   PdbDma_Enable   = PDB_SC_CONT(1),  //!< DMA enabled
+   PdbDma_Disabled  = PDB_SC_CONT(0),  //!< DMA is disabled
+   PdbDma_Enabled   = PDB_SC_CONT(1),  //!< DMA enabled
 };
 
 /**
  * Controls whether the PDB error interrupt is enabled
  */
 enum PdbErrorInterrupt {
-   PdbErrorInterrupt_Disable = PDB_SC_PDBEIE(0),   //!< Sequence error disabled
-   PdbErrorInterrupt_Enable  = PDB_SC_PDBEIE(1),   //!< Sequence error enabled
+   PdbErrorInterrupt_Disabled = PDB_SC_PDBEIE(0),   //!< Sequence error disabled
+   PdbErrorInterrupt_Enabled  = PDB_SC_PDBEIE(1),   //!< Sequence error enabled
 };
 
 enum PdbPretrigger0 {
-   PdbPretrigger0_Disable = PDB_C1_EN(0<<0),                   //!< Pretrigger 0 disabled
-   PdbPretrigger0_Bypass  = PDB_C1_EN(1<<0)|PDB_C1_TOS(0<<0),  //!< Pretrigger 0 asserts 1 clock after trigger
-   PdbPretrigger0_Delay   = PDB_C1_EN(1<<0)|PDB_C1_TOS(1<<0),  //!< Pretrigger 0 asserts 1 clock + delay after trigger
+   PdbPretrigger0_Disabled = PDB_C1_EN(0<<0),                   //!< Pretrigger 0 disabled
+   PdbPretrigger0_Bypass   = PDB_C1_EN(1<<0)|PDB_C1_TOS(0<<0),  //!< Pretrigger 0 asserts 1 clock after trigger
+   PdbPretrigger0_Delay    = PDB_C1_EN(1<<0)|PDB_C1_TOS(1<<0),  //!< Pretrigger 0 asserts 1 clock + delay after trigger
 };
 
 enum PdbPretrigger1 {
-   PdbPretrigger1_Disable = PDB_C1_EN(0<<1),                   //!< Pretrigger 1 disabled
-   PdbPretrigger1_Bypass  = PDB_C1_EN(1<<1)|PDB_C1_TOS(0<<1),  //!< Pretrigger 1 asserts 1 clock after trigger
-   PdbPretrigger1_Delay   = PDB_C1_EN(1<<1)|PDB_C1_TOS(1<<1),  //!< Pretrigger 1 asserts 1 clock + delay after trigger
+   PdbPretrigger1_Disabled = PDB_C1_EN(0<<1),                   //!< Pretrigger 1 disabled
+   PdbPretrigger1_Bypass   = PDB_C1_EN(1<<1)|PDB_C1_TOS(0<<1),  //!< Pretrigger 1 asserts 1 clock after trigger
+   PdbPretrigger1_Delay    = PDB_C1_EN(1<<1)|PDB_C1_TOS(1<<1),  //!< Pretrigger 1 asserts 1 clock + delay after trigger
 };
 
 /**
@@ -550,9 +550,9 @@ public:
     * @param[in] pdbDma             Whether DMA requests are generated
     */
    static void setInterrupts(
-         PdbInterrupt         pdbInterrupt      = PdbInterrupt_Disable,
-         PdbErrorInterrupt    pdbErrorInterrupt = PdbErrorInterrupt_Disable,
-         PdbDma               pdbDma            = PdbDma_Disable) {
+         PdbInterrupt         pdbInterrupt      = PdbInterrupt_Disabled,
+         PdbErrorInterrupt    pdbErrorInterrupt = PdbErrorInterrupt_Disabled,
+         PdbDma               pdbDma            = PdbDma_Disabled) {
       pdb().SC = (pdb().SC&~(PDB_SC_PDBIE_MASK|PDB_SC_PDBEIE_MASK|PDB_SC_DMAEN_MASK))|pdbInterrupt|pdbErrorInterrupt|pdbDma;
    }
 
@@ -575,7 +575,7 @@ public:
     */
    static void setPretriggersInTicks(int channel,
          PdbPretrigger0 pdbPretrigger0=PdbPretrigger0_Bypass,  uint16_t delay0=0,
-         PdbPretrigger1 pdbPretrigger1=PdbPretrigger0_Disable, uint16_t delay1=0) {
+         PdbPretrigger1 pdbPretrigger1=PdbPretrigger0_Disabled, uint16_t delay1=0) {
 
       pdb().CH[channel].C1     = pdbPretrigger0|pdbPretrigger1;
       pdb().CH[channel].DLY[0] = delay0;
@@ -600,7 +600,7 @@ public:
     */
    static void setPretriggers(int channel,
          PdbPretrigger0 pdbPretrigger0,                        float delay0,
-         PdbPretrigger1 pdbPretrigger1=PdbPretrigger1_Disable, float delay1=0.0) {
+         PdbPretrigger1 pdbPretrigger1=PdbPretrigger1_Disabled, float delay1=0.0) {
 
       pdb().CH[channel].C1     = pdbPretrigger0|pdbPretrigger1;
       pdb().CH[channel].DLY[0] = calcTicksFromTime(delay0);

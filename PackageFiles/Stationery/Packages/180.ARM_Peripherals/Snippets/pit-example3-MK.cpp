@@ -49,8 +49,8 @@ int main() {
    TimerChannel::setCallback(flash);
 
    // Flash LED @ 1Hz
-//   TimerChannel::configureInTicks(::SystemBusClock/2, PitChannelIrq_Enable);
-   TimerChannel::configure(0.5 * seconds, PitChannelIrq_Enable);
+//   TimerChannel::configureInTicks(::SystemBusClock/2, PitChannelIrq_Enabled);
+   TimerChannel::configure(0.5 * seconds, PitChannelIrq_Enabled);
 
    TimerChannel::enableNvicInterrupts(true, NvicPriority_Normal);
 

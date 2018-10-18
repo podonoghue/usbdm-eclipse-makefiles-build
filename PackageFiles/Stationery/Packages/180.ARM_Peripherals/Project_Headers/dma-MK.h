@@ -32,7 +32,7 @@ namespace USBDM {
  * Controls operation of DMA-MUX channel.
  */
 enum DmaMuxEnable {
-   DmaMuxEnable_Disable    = DMAMUX_CHCFG_ENBL(0),                      //!< DMA channel is disabled
+   DmaMuxEnable_Disabled   = DMAMUX_CHCFG_ENBL(0),                      //!< DMA channel is disabled
    DmaMuxEnable_Continuous = DMAMUX_CHCFG_ENBL(1)|DMAMUX_CHCFG_TRIG(0), //!< DMA channel is enabled continuously
    DmaMuxEnable_Triggered  = DMAMUX_CHCFG_ENBL(1)|DMAMUX_CHCFG_TRIG(1), //!< DMA channel is enabled and triggered by PIT channel
 };
@@ -176,16 +176,16 @@ enum DmaModulo {
  * Controls whether a channel can be suspended by a higher priority channel.
  */
 enum DmaCanBePreempted {
-   DmaCanBePreempted_Disable = DMA_DCHPRI_ECP(0), //!< Channel N cannot be suspended by a higher priority channel's service request
-   DmaCanBePreempted_Enable  = DMA_DCHPRI_ECP(1), //!< Channel N can be temporarily suspended by the service request of a higher priority channel
+   DmaCanBePreempted_Disabled = DMA_DCHPRI_ECP(0), //!< Channel N cannot be suspended by a higher priority channel's service request
+   DmaCanBePreempted_Enabled  = DMA_DCHPRI_ECP(1), //!< Channel N can be temporarily suspended by the service request of a higher priority channel
 };
 
 /**
  * Controls whether a channel can suspend a lower priority channel.
  */
 enum DmaCanPreemptLower {
-   DmaCanPreemptLower_Enable  = DMA_DCHPRI_DPA(0), //!< Channel N can suspend a lower priority channel
-   DmaCanPreemptLower_Disable = DMA_DCHPRI_DPA(1), //!< Channel N cannot suspend a lower priority channel
+   DmaCanPreemptLower_Enabled  = DMA_DCHPRI_DPA(0), //!< Channel N can suspend a lower priority channel
+   DmaCanPreemptLower_Disabled = DMA_DCHPRI_DPA(1), //!< Channel N cannot suspend a lower priority channel
 };
 
 /**
@@ -608,7 +608,7 @@ struct __attribute__((__packed__)) DmaTcd {
 
    /**
     * Constructor.
-    * This constructor should be used if minor loops are enabled (DmaMinorLoopMapping_enabled).
+    * This constructor should be used if minor loops are enabled (DmaMinorLoopMapping_Enabled).
     *
     * @param sourceAddress                Starting source address
     * @param sourceOffset                 Source address offset applied after each read
@@ -1069,8 +1069,8 @@ public:
    static void setChannelPriority(
          DmaChannelNum      dmaChannelNum,
          int                priority,
-         DmaCanBePreempted  dmaCanBePreempted=DmaCanBePreempted_Enable,
-         DmaCanPreemptLower dmaCanPreemptLower=DmaCanPreemptLower_Enable) {
+         DmaCanBePreempted  dmaCanBePreempted=DmaCanBePreempted_Enabled,
+         DmaCanPreemptLower dmaCanPreemptLower=DmaCanPreemptLower_Enabled) {
 #ifdef DEBUG_BUILD
       if (dmaChannelNum>=Info::NumChannels) {
          setAndCheckErrorCode(E_ILLEGAL_PARAM);

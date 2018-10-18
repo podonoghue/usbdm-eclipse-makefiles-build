@@ -49,10 +49,10 @@ int main() {
    report();
 
    Smc::enablePowerModes(
-         SmcVeryLowPower_Enable,
-         SmcLowLeakageStop_Enable,
-         SmcVeryLowLeakageStop_Enable,
-         SmcHighSpeedRun_Enable);
+         SmcVeryLowPower_Enabled,
+         SmcLowLeakageStop_Enabled,
+         SmcVeryLowLeakageStop_Enabled,
+         SmcHighSpeedRun_Enabled);
 
    Led::setOutput();
 
