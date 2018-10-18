@@ -1315,6 +1315,13 @@ public:
       /** Allow access owning FTM */
       using Ftm = FtmBase_T<Info>;
 
+      /** @return Base address of FTM.CONTROL struct as uint32_t */
+      static constexpr uint32_t ftmCONTROL() { return ftmBase() + offsetof(FTM_Type, CONTROLS[channel]); }
+      /** @return Base address of FTM.CONTROL.CnSC struct as uint32_t */
+      static constexpr uint32_t ftmCnSC() { return ftmBase() + offsetof(FTM_Type, CONTROLS[channel])+0; }
+      /** @return Base address of FTM.CONTROL.CnV struct as uint32_t */
+      static constexpr uint32_t ftmCnV() { return ftmBase() + offsetof(FTM_Type, CONTROLS[channel])+sizeof(uint32_t); }
+
       /**
        * Set TOI Callback function.
        *
@@ -1886,6 +1893,15 @@ class Ftm3Channel : public Ftm3::Channel<channel> {};
 #endif
 
 /**
+ *  Quadrature Decoder Mode\n
+ *  Selects the encoding mode used in the Quadrature Decoder mode.
+ */
+enum QuadratureMode {
+   QuadratureMode_Phase_AB_Mode        = FTM_QDCTRL_QUADMODE(0),   //!< Phase A and phase B encoding mode.
+   QuadratureMode_Count_Direction_Mode = FTM_QDCTRL_QUADMODE(1),   //!< Count and direction encoding mode.
+};
+
+/**
  * Template class representing a FTM configured as a Quadrature decoder
  *
  * @tparam info      Information class for FTM
@@ -1912,17 +1928,23 @@ template <class Info>
 class QuadDecoder_T {
 
 private:
-   FtmBase::CheckChannel<Info, 0> checkQ0;
-   FtmBase::CheckChannel<Info, 1> checkQ1;
+   FtmBase::CheckChannel<typename Info::InfoQUAD, 0> checkQ0;
+   FtmBase::CheckChannel<typename Info::InfoQUAD, 1> checkQ1;
 
 public:
+   /** Hardware instance pointer */
+   static __attribute__((always_inline)) volatile FTM_Type &ftm() { return Info::ftm(); }
+
+   /** Clock register for peripheral */
+   static __attribute__((always_inline)) volatile uint32_t &clockReg() { return Info::clockReg(); }
+
    /** Allow more convenient access associated Ftm */
    using Ftm = FtmBase_T<Info>;
 
-   /** Allow access to PCR of associated pin */
+   /** Allow access to PCR of associated phase-A pin */
    using Pcr0 = PcrTable_T<typename Info::InfoQUAD, 0>;
 
-   /** Allow access to PCR of associated pin */
+   /** Allow access to PCR of associated phase-B pin */
    using Pcr1 = PcrTable_T<typename Info::InfoQUAD, 1>;
 
    /**
@@ -1939,10 +1961,38 @@ public:
          PinAction         pinAction         = PinAction_None,
          PinFilter         pinFilter         = PinFilter_None
    ) {
-      FtmBase::CheckPinMapping<Info, 0>::check();
-      FtmBase::CheckPinMapping<Info, 1>::check();
+      FtmBase::CheckPinMapping<typename Info::InfoQUAD, 0>::check();
+      FtmBase::CheckPinMapping<typename Info::InfoQUAD, 1>::check();
       Pcr0::setPCR(pinPull|pinAction|pinFilter|(Info::InfoQUAD::info[0].pcrValue&PORT_PCR_MUX_MASK));
       Pcr1::setPCR(pinPull|pinAction|pinFilter|(Info::InfoQUAD::info[1].pcrValue&PORT_PCR_MUX_MASK));
+   }
+
+   /**
+    * Set polarity of Quadrature inputs.
+    *
+    * @param polarity Polarity of the two inputs
+    */
+   static void setPolarity(Polarity polarity) {
+      if (polarity == ActiveHigh) {
+         ftm().QDCTRL &= ~(FTM_QDCTRL_PHAPOL_MASK|FTM_QDCTRL_PHBPOL_MASK);
+      }
+      else {
+         ftm().QDCTRL |= FTM_QDCTRL_PHAPOL_MASK|FTM_QDCTRL_PHBPOL_MASK;
+      }
+   }
+
+   /**
+    * Set Quadrature mode
+    *
+    * @param quadratureMode   Mode of operation for the decoder
+    */
+   static void setMode(QuadratureMode quadratureMode = QuadratureMode_Phase_AB_Mode) {
+      if (quadratureMode) {
+         ftm().QDCTRL |= FTM_QDCTRL_QUADMODE_MASK;
+      }
+      else {
+         ftm().QDCTRL &= ~FTM_QDCTRL_QUADMODE_MASK;
+      }
    }
 
    /**
@@ -1975,19 +2025,16 @@ public:
       Ftm::enableNvicInterrupts(enable, nvicPriority);
    }
 
-   /** Hardware instance pointer */
-   static __attribute__((always_inline)) volatile FTM_Type &ftm() { return Info::ftm(); }
-
-   /** Clock register for peripheral */
-   static __attribute__((always_inline)) volatile uint32_t &clockReg() { return Info::clockReg(); }
-
    /**
     * Enable with default settings\n
     * Includes configuring all pins
     *
     * @param ftmPrescale Prescale value applied to the output of the quadrature decode before the counter.
     */
-   static void configure(FtmPrescale ftmPrescale = FtmPrescale_1) {
+   static void configure(
+         FtmPrescale    ftmPrescale    = FtmPrescale_1,
+         QuadratureMode quadratureMode = QuadratureMode_Phase_AB_Mode
+         ) {
       // Assertions placed here so only checked if QuadDecoder actually used
       static_assert(Info::InfoQUAD::info[0].gpioBit != UNMAPPED_PCR, "QuadDecoder_T: FTM PHA is not mapped to a pin - Modify Configure.usbdm");
       static_assert(Info::InfoQUAD::info[1].gpioBit != UNMAPPED_PCR, "QuadDecoder_T: FTM PHB is not mapped to a pin - Modify Configure.usbdm");
@@ -2002,7 +2049,7 @@ public:
 
       ftm().QDCTRL =
             FTM_QDCTRL_QUADEN_MASK|      // Enable Quadrature decoder
-            FTM_QDCTRL_QUADMODE(0);      // Quadrature mode
+            quadratureMode;              // Quadrature mode
       ftm().CONF   = FTM_CONF_BDMMODE(3);
    }
 

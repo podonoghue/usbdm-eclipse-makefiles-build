@@ -33,10 +33,15 @@ void callBack() {
 
 int main() {
    // Configure decoder
-   QuadDecoder::configure(FtmPrescale_1);
+   QuadDecoder::configure(
+         FtmPrescale_1,
+         QuadratureMode_Phase_AB_Mode);
 
-   // Set pin characteristics
+   // Set input characteristics
    QuadDecoder::setInput(PinPull_Up);
+
+   // Change polarity if needed
+//   QuadDecoder::setPolarity(ActiveLow);
 
    // Set pin filters
    QuadDecoder::enableFilter(15);
@@ -53,9 +58,14 @@ int main() {
    // Check if configuration failed
    USBDM::checkError();
 
+   int16_t lastPosition = 0;
    for (;;) {
-      // Report position
-      console.write("Shaft position = ").writeln(QuadDecoder::getPosition());
+      int16_t position = QuadDecoder::getPosition();
+      if (position != lastPosition) {
+         // Report position
+         console.write("Shaft position = ").writeln(position);
+         lastPosition = position;
+      }
    }
 
    return 0;
