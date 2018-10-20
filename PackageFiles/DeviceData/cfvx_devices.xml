@@ -128,6 +128,27 @@
          <registerDescriptionRef ref="Coldfire-register-description" />
          <note>Default CFV1 Device</note>
       </device>
+     <!--
+         =======================================================================
+      -->
+     <device family="CFVx" name="MCF5211" subfamily="MCF521x">
+         <clock type="External" registerAddress="0" />
+         <memoryRef ref="coldfire16K_Ram" />
+         <memoryRef ref="coldfire128K_Flash" />
+         <sdid value="0x0F40" />
+      </device>      
+      <device family="CFVx" name="MCF5212" subfamily="MCF521x">
+         <clock type="External" registerAddress="0" />
+         <memoryRef ref="coldfire32K_Ram" />
+         <memoryRef ref="coldfire256K_Flash" />
+         <sdid value="0x1080" />
+      </device>
+      <device family="CFVx" name="MCF5213" subfamily="MCF521x">
+         <clock type="External" registerAddress="0" />
+         <memoryRef ref="coldfire32K_Ram" />
+         <memoryRef ref="coldfire256K_Flash" />
+         <sdid value="0x10C0" />
+      </device>
       <!--
          =======================================================================
       -->
