@@ -246,7 +246,10 @@ __attribute__((__weak__))
 void _exit(int rc __attribute__((unused))) {
    for(;;) {
       /*
-       * If you end up here it probably means you fell of the end of main()!
+       * If you end up here it probably means you fell of the end of main() or
+       * failed an assertion!
+       *
+       * Check the stack trace in the Debug window to find source of problem.
        */
       __asm__("bkpt");
    }
