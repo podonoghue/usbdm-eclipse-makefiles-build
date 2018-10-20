@@ -141,6 +141,70 @@ enum CmpDacSource {
    CmpDacSource_Vdd  = CmpDacSource_Vin2,  //!< Select Vrin2 = Vdd
 };
 
+#if defined(USBDM_CMP0_IS_DEFINED)
+/**
+ * Select CMP0 inputs
+ */
+enum Cmp0Input {
+   Cmp0Input_CmpIn0  = 0, //!< Cmp external pin 0
+   Cmp0Input_CmpIn1  = 1, //!< Cmp external pin 1
+   Cmp0Input_CmpIn2  = 2, //!< Cmp external pin 2
+   Cmp0Input_CmpIn3  = 3, //!< Cmp external pin 3
+   Cmp0Input_CmpIn4  = 4, //!< Cmp external pin 4
+   Cmp0Input_VRefOut = 5, //!< Vref Output
+   Cmp0Input_Bandgap = 6, //!< Internal Band-gap
+   Cmp0Input_DacRef  = 7, //!< 6-bit dac0 reference
+};
+#endif
+
+#if defined(USBDM_CMP1_IS_DEFINED)
+/**
+ * Select CMP1 inputs
+ */
+enum Cmp1Input {
+   Cmp1Input_CmpIn0  = 0, //!< Cmp external pin 0
+   Cmp1Input_CmpIn1  = 1, //!< Cmp external pin 1
+   Cmp1Input_CmpIn2  = 2, //!< Cmp external pin 2
+   Cmp1Input_CmpIn3  = 3, //!< Cmp external pin 3
+   Cmp1Input_CmpIn4  = 4, //!< Cmp external pin 4
+   Cmp1Input_VRefOut = 5, //!< Vref Output
+   Cmp1Input_Bandgap = 6, //!< Internal Band-gap
+   Cmp1Input_DacRef  = 7, //!< 6-bit dac1 reference
+};
+#endif
+
+#if defined(USBDM_CMP2_IS_DEFINED)
+/**
+ * Select CMP2 inputs
+ */
+enum Cmp2Input {
+   Cmp2Input_CmpIn0  = 0, //!< Cmp external pin 0
+   Cmp2Input_CmpIn1  = 1, //!< Cmp external pin 1
+   Cmp2Input_CmpIn2  = 2, //!< Cmp external pin 2
+   Cmp2Input_CmpIn3  = 3, //!< Cmp external pin 3
+   Cmp2Input_CmpIn4  = 4, //!< Cmp external pin 4
+   Cmp2Input_VRefOut = 5, //!< Vref Output
+   Cmp2Input_Bandgap = 6, //!< Internal Band-gap
+   Cmp2Input_DacRef  = 7, //!< 6-bit dac1 reference
+};
+#endif
+
+#if defined(USBDM_CMP3_IS_DEFINED)
+/**
+ * Select CMP3 inputs
+ */
+enum Cmp3Input {
+   Cmp3Input_CmpIn0  = 0, //!< Cmp external pin 0
+   Cmp3Input_CmpIn1  = 1, //!< Cmp external pin 1
+   Cmp3Input_CmpIn2  = 2, //!< Cmp external pin 2
+   Cmp3Input_CmpIn3  = 3, //!< Cmp external pin 3
+   Cmp3Input_CmpIn4  = 4, //!< Cmp external pin 4
+   Cmp3Input_VRefOut = 5, //!< Vref Output
+   Cmp3Input_Bandgap = 6, //!< Internal Band-gap
+   Cmp3Input_DacRef  = 7, //!< 6-bit dac1 reference
+};
+#endif
+
 /**
  * Type definition for CMP interrupt call back
  *
@@ -170,18 +234,40 @@ template<class Info>
 class CmpBase_T {
 
 protected:
+   /** Class to static check inputNum is mapped to a pin */
+   template<int inputNum> class CheckPinMapping {
+      static_assert((inputNum>=Info::numSignals)||(Info::info[inputNum].gpioBit != UNMAPPED_PCR),
+            "CMP input is not mapped to a pin - Modify Configure.usbdm");
+   public:
+      /** Dummy function to allow convenient in-line checking */
+      static constexpr void check() {}
+   };
+
+   /** Class to static check valid inputNum - it does not check that it is mapped to a pin */
+   template<int inputNum> class CheckChannel {
+      static_assert((inputNum<Info::numSignals),
+            "Non-existent CMP input  - Check Configure.usbdm for available inputs");
+      static_assert((inputNum>=Info::numSignals)||(Info::info[inputNum].gpioBit != INVALID_PCR),
+            "CMP input  doesn't exist in this device/package - Check Configure.usbdm for available inputs");
+      static_assert((inputNum>=Info::numSignals)||((Info::info[inputNum].gpioBit == UNMAPPED_PCR)||(Info::info[inputNum].gpioBit == INVALID_PCR)||(Info::info[inputNum].gpioBit >= 0)),
+            "Illegal CMP input - Check Configure.usbdm for available inputs");
+   public:
+      /** Dummy function to allow convenient in-line checking */
+      static constexpr void check() {}
+   };
+
    /**
     * Callback to catch unhandled interrupt
     *
     * @param[in] status Struct indicating interrupt source and state
     */
-   static void unhandledChannelCallback(CmpStatus status) {
+   static void unhandledCallback(CmpStatus status) {
       (void)status;
       setAndCheckErrorCode(E_NO_HANDLER);
    }
 
    /** Callback function for ISR */
-   static CMPCallbackFunction callback;
+   static CMPCallbackFunction sCallback;
 
    /**
     * Clock register for peripheral
@@ -211,19 +297,21 @@ public:
       CmpStatus cmpStatus{(CmpEvent)(status&(CMP_SCR_CFR_MASK|CMP_SCR_CFF_MASK)),(bool)(status&CMP_SCR_COUT_MASK)};
 
       // Call handler
-      callback(cmpStatus);
+      sCallback(cmpStatus);
    }
 
    /**
     * Set callback function
     *
-    * @param[in]  theCallback Callback function to execute on interrupt
+    * @param[in] callback Callback function to execute on interrupt.\n
+    *                     Use nullptr to remove callback.
     */
-   static void setCallback(CMPCallbackFunction theCallback) {
-      if (theCallback == nullptr) {
-         theCallback = unhandledChannelCallback;
+   static void setCallback(CMPCallbackFunction callback) {
+      usbdm_assert(Info::irqHandlerInstalled, "CMP not configured for interrupts");
+      if (callback == nullptr) {
+         callback = unhandledCallback;
       }
-      callback = theCallback;
+      sCallback = callback;
    }
 public:
    /**
@@ -272,21 +360,6 @@ public:
     */
    static void setInputs() {
       configureAllPins();
-   }
-
-   /**
-    * Configure pin associated with CMP input.
-    * The pin is set to analogue mode so no PCR settings are active.\n
-    * This function is of use if mapAllPins and mapAllPinsOnEnable are not selected in USBDM configuration.
-    *
-    * @tparam cmpPin Number of comparator input (0-7) for associated pin being configured.
-    */
-   template<unsigned cmpPin>
-   static void setInput() {
-      using Pcr = PcrTable_T<Info, cmpPin>;
-
-      // Map pin to CMP_OUT
-      Pcr::setPCR(Info::info[cmpPin].pcrValue);
    }
 
    /**
@@ -615,29 +688,40 @@ public:
       cmp().DACCR = (cmp().DACCR&~CMP_DACCR_VOSEL_MASK) | CMP_DACCR_VOSEL(level);
    }
 
+   /**
+    * Class representing a Comparator 0 pin
+    *
+    * @tparam cmpInput Number of comparator input (0-7) for associated pin.
+    */
+   template<int cmpInput>
+   class Pin {
+   public:
+      static constexpr Cmp0Input pinNum = (Cmp0Input)cmpInput;
+
+      /**
+       * Configure pin associated with CMP input.
+       * This will map the pin to the CMP function (analogue MUX value) \n
+       * The clock to the port will be enabled before changing the PCR.
+       *
+       * @note Resets the entire Pin Control Register value (PCR value).
+       */
+      static void setInput() {
+         using Pcr = PcrTable_T<Info, cmpInput>;
+         CmpBase_T::CheckPinMapping<cmpInput>::check();
+
+         // Map pin
+         Pcr::setPCR(Info::info[cmpInput].pcrValue);
+      }
+   };
 };
 
-template<class Info> CMPCallbackFunction CmpBase_T<Info>::callback = CmpBase_T<Info>::unhandledChannelCallback;
+template<class Info> CMPCallbackFunction CmpBase_T<Info>::sCallback = CmpBase_T<Info>::unhandledCallback;
 
 #if defined(USBDM_CMP_IS_DEFINED)
 using Cmp = CmpBase_T<CmpInfo>;
 #endif
 
 #if defined(USBDM_CMP0_IS_DEFINED)
-/**
- * Select CMP0 inputs
- */
-enum Cmp0Input {
-   Cmp0Input_CmpIn0  = 0, //!< Cmp external pin 0
-   Cmp0Input_CmpIn1  = 1, //!< Cmp external pin 1
-   Cmp0Input_CmpIn2  = 2, //!< Cmp external pin 2
-   Cmp0Input_CmpIn3  = 3, //!< Cmp external pin 3
-   Cmp0Input_CmpIn4  = 4, //!< Cmp external pin 4
-   Cmp0Input_VRefOut = 5, //!< Vref Output
-   Cmp0Input_Bandgap = 6, //!< Internal Band-gap
-   Cmp0Input_DacRef  = 7, //!< 6-bit dac0 reference
-};
-
 class Cmp0 : public CmpBase_T<Cmp0Info> {
 public:
    /**
@@ -653,20 +737,6 @@ public:
 #endif
 
 #if defined(USBDM_CMP1_IS_DEFINED)
-/**
- * Select CMP1 inputs
- */
-enum Cmp1Input {
-   Cmp1Input_CmpIn0  = 0, //!< Cmp external pin 0
-   Cmp1Input_CmpIn1  = 1, //!< Cmp external pin 1
-   Cmp1Input_CmpIn2  = 2, //!< Cmp external pin 2
-   Cmp1Input_CmpIn3  = 3, //!< Cmp external pin 3
-   Cmp1Input_CmpIn4  = 4, //!< Cmp external pin 4
-   Cmp1Input_VRefOut = 5, //!< Vref Output
-   Cmp1Input_Bandgap = 6, //!< Internal Band-gap
-   Cmp1Input_DacRef  = 7, //!< 6-bit dac1 reference
-};
-
 class Cmp1 : public CmpBase_T<Cmp1Info> {
 public:
    /**
@@ -682,20 +752,6 @@ public:
 #endif
 
 #if defined(USBDM_CMP2_IS_DEFINED)
-/**
- * Select CMP2 inputs
- */
-enum Cmp2Input {
-   Cmp2Input_CmpIn0  = 0, //!< Cmp external pin 0
-   Cmp2Input_CmpIn1  = 1, //!< Cmp external pin 1
-   Cmp2Input_CmpIn2  = 2, //!< Cmp external pin 2
-   Cmp2Input_CmpIn3  = 3, //!< Cmp external pin 3
-   Cmp2Input_CmpIn4  = 4, //!< Cmp external pin 4
-   Cmp2Input_VRefOut = 5, //!< Vref Output
-   Cmp2Input_Bandgap = 6, //!< Internal Band-gap
-   Cmp2Input_DacRef  = 7, //!< 6-bit dac1 reference
-};
-
 class Cmp2 : public CmpBase_T<Cmp2Info> {
 public:
    /**
@@ -711,20 +767,6 @@ public:
 #endif
 
 #if defined(USBDM_CMP3_IS_DEFINED)
-/**
- * Select CMP3 inputs
- */
-enum Cmp3Input {
-   Cmp3Input_CmpIn0  = 0, //!< Cmp external pin 0
-   Cmp3Input_CmpIn1  = 1, //!< Cmp external pin 1
-   Cmp3Input_CmpIn2  = 2, //!< Cmp external pin 2
-   Cmp3Input_CmpIn3  = 3, //!< Cmp external pin 3
-   Cmp3Input_CmpIn4  = 4, //!< Cmp external pin 4
-   Cmp3Input_VRefOut = 5, //!< Vref Output
-   Cmp3Input_Bandgap = 6, //!< Internal Band-gap
-   Cmp3Input_DacRef  = 7, //!< 6-bit dac1 reference
-};
-
 class Cmp2 : public CmpBase_T<Cmp3Info> {
 public:
    /**
