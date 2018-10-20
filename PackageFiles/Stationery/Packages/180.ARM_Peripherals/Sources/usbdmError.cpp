@@ -92,10 +92,12 @@ extern "C" void __attribute__((constructor)) cpp_initialise() {
 }
 
 /**
- * Enable interrupts in NVIC
+ * Enable and set priority of interrupts in NVIC.
  *
  * @param[in]  irqNum        Interrupt number
  * @param[in]  nvicPriority  Interrupt priority
+ *
+ * @note Any pending interrupts are cleared before enabling.
  */
 void enableNvicInterrupt(IRQn_Type irqNum, uint32_t nvicPriority) {
 
