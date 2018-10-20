@@ -50,16 +50,17 @@ template <class Info>
 class RtcBase_T {
 
 public:
-   static void unhandledInterrupt(uint32_t) {
+   /** Handler for unexpected interrupts */
+   static void unhandledCallback(uint32_t) {
       setAndCheckErrorCode(E_NO_HANDLER);
    }
 
 protected:
    /** Callback function for alarm ISR */
-   static RTCCallbackFunction alarmCallback;
+   static RTCCallbackFunction sAlarmCallback;
 
    /** Callback function for seconds ISR */
-   static RTCCallbackFunction secondsCallback;
+   static RTCCallbackFunction sSecondsCallback;
 
 public:
    /**
@@ -69,7 +70,7 @@ public:
       // Clear alarm
       RtcBase_T<Info>::rtc().TAR   = 0;
       // Call handler
-      alarmCallback(RtcBase_T<Info>::rtc().TSR);
+      sAlarmCallback(RtcBase_T<Info>::rtc().TSR);
    }
 
    /**
@@ -77,7 +78,7 @@ public:
     */
    static void irqSecondsHandler(void) {
       // Call handler
-      secondsCallback(RtcBase_T<Info>::rtc().TSR);
+      sSecondsCallback(RtcBase_T<Info>::rtc().TSR);
    }
 
    /**
@@ -109,26 +110,29 @@ public:
    /**
     * Set Alarm callback function
     *
-    *   @param[in]  callback - Callback function to be executed on RTC alarm interrupt
+    *  @param[in]  callback  Callback function to be executed on alarm interrupt.\n
+    *                        Use nullptr to remove callback.
     */
    static void setAlarmCallback(RTCCallbackFunction callback) {
+      usbdm_assert(Info::irqHandlerInstalled, "RTC not configure for interrupts");
       if (callback == nullptr) {
-         alarmCallback = unhandledInterrupt;
-         return;
+         callback = unhandledCallback;
       }
-      alarmCallback = callback;
+      sAlarmCallback = callback;
    }
+
    /**
     * Set Seconds callback function
     *
-    *   @param[in]  callback - Callback function to be executed on RTC alarm interrupt
+    *  @param[in]  callback  Callback function to be executed on seconds interrupt.\n
+    *                        Use nullptr to remove callback.
     */
    static void setSecondsCallback(RTCCallbackFunction callback) {
+      usbdm_assert(Info::irqHandlerInstalled, "RTC not configure for interrupts");
       if (callback == nullptr) {
-         secondsCallback = unhandledInterrupt;
-         return;
+         callback = unhandledCallback;
       }
-      secondsCallback = callback;
+      sSecondsCallback = callback;
    }
 
 
@@ -288,8 +292,8 @@ public:
 
 };
 
-template<class Info> RTCCallbackFunction RtcBase_T<Info>::alarmCallback   = unhandledInterrupt;
-template<class Info> RTCCallbackFunction RtcBase_T<Info>::secondsCallback = unhandledInterrupt;
+template<class Info> RTCCallbackFunction RtcBase_T<Info>::sAlarmCallback   = unhandledCallback;
+template<class Info> RTCCallbackFunction RtcBase_T<Info>::sSecondsCallback = unhandledCallback;
 
 #ifdef USBDM_RTC_IS_DEFINED
 /**

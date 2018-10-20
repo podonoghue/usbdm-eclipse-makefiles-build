@@ -185,17 +185,17 @@ enum SmcStatus {
 #ifdef SMC_PMPROT_AHSRUN
    SmcStatus_hsrun  = SMC_PMSTAT_PMSTAT(1<<7),    //!< Processor is in High Speed Run mode
 #endif
-   SmcStatus_run    = SMC_PMSTAT_PMSTAT(1<<0),    //!< Processor is in Normal Run mode
-   SmcStatus_vlpr   = SMC_PMSTAT_PMSTAT(1<<2),    //!< Processor is in Very Low Power Run mode
+   SmcStatus_RUN    = SMC_PMSTAT_PMSTAT(1<<0),    //!< Processor is in Normal Run mode
+   SmcStatus_VLPR   = SMC_PMSTAT_PMSTAT(1<<2),    //!< Processor is in Very Low Power Run mode
 
    // Sleep = Wait modes
-   SmcStatus_vlpw   = SMC_PMSTAT_PMSTAT(1<<3),    //!< Processor is in Very Low Power Wait mode
+   SmcStatus_VLPW   = SMC_PMSTAT_PMSTAT(1<<3),    //!< Processor is in Very Low Power Wait mode
 
    // Stop = DeepSleep modes
-   SmcStatus_stop   = SMC_PMSTAT_PMSTAT(1<<1),    //!< Processor is in Stop mode
-   SmcStatus_vlps   = SMC_PMSTAT_PMSTAT(1<<4),    //!< Processor is in Very Low Power Stop mode
-   SmcStatus_lls    = SMC_PMSTAT_PMSTAT(1<<5),    //!< Processor is in Low Leakage Stop mode
-   SmcStatus_vlls   = SMC_PMSTAT_PMSTAT(1<<6),    //!< Processor is in Very Low Leakage Stop mode
+   SmcStatus_STOP   = SMC_PMSTAT_PMSTAT(1<<1),    //!< Processor is in Stop mode
+   SmcStatus_VLPS   = SMC_PMSTAT_PMSTAT(1<<4),    //!< Processor is in Very Low Power Stop mode
+   SmcStatus_LLS    = SMC_PMSTAT_PMSTAT(1<<5),    //!< Processor is in Low Leakage Stop mode
+   SmcStatus_VLLS   = SMC_PMSTAT_PMSTAT(1<<6),    //!< Processor is in Very Low Leakage Stop mode
 };
 
 /**
@@ -242,10 +242,10 @@ public:
          return "HSRUN";
       }
 #endif
-      if (status == SmcStatus_run) {
+      if (status == SmcStatus_RUN) {
          return "RUN";
       }
-      if (status == SmcStatus_vlpr) {
+      if (status == SmcStatus_VLPR) {
          return "VLPR";
       }
       return "Impossible while running!";
@@ -346,13 +346,13 @@ public:
                __asm__("nop");
             }
             // Wait for power status to change
-            while (getStatus() != SmcStatus_run) {
+            while (getStatus() != SmcStatus_RUN) {
                __asm__("nop");
             }
             break;
 #ifdef SMC_PMPROT_AHSRUN
          case SmcRunMode_HighSpeed:
-            if (smcStatus != SmcStatus_run) {
+            if (smcStatus != SmcStatus_RUN) {
                // Can only transition from RUN mode
                return setErrorCode(E_ILLEGAL_POWER_TRANSITION);
             }
@@ -369,7 +369,7 @@ public:
 #endif
          case SmcRunMode_VeryLowPower:
 #ifdef SMC_PMPROT_AHSRUN
-            if (smcStatus != SmcStatus_run) {
+            if (smcStatus != SmcStatus_RUN) {
                // Can only transition from RUN mode
                return setErrorCode(E_ILLEGAL_POWER_TRANSITION);
             }
@@ -380,7 +380,7 @@ public:
                __asm__("nop");
             }
             // Wait for power status to change
-            while (getStatus() != SmcStatus_vlpr) {
+            while (getStatus() != SmcStatus_VLPR) {
                __asm__("nop");
             }
             break;
@@ -496,7 +496,7 @@ public:
     * @return E_ILLEGAL_POWER_TRANSITION If not in RUN mode
     */
    static ErrorCode setExitVeryLowPowerOnInterrupt(SmcExitVeryLowPowerOnInt smcExitVeryLowPowerOnInt) {
-      if (getStatus() != SmcStatus_run) {
+      if (getStatus() != SmcStatus_RUN) {
          // Can only change in RUN mode
          return setErrorCode(E_ILLEGAL_POWER_TRANSITION);
       }

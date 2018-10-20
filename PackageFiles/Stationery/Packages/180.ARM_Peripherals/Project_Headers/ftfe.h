@@ -220,7 +220,7 @@ public:
     * @return false => Processor not in correct mode
     */
    static bool isFlashAvailable() {
-      return (Smc::getStatus() == SmcStatus_run);
+      return (Smc::getStatus() == SmcStatus_RUN);
    }
 
    /**

@@ -820,7 +820,7 @@ protected:
    static __attribute__((always_inline)) volatile uint32_t &clockReg() { return Info::clockReg(); }
 
    /** Callback functions for ISRs */
-   static DmaCallbackFunction callbacks[Info::NumVectors];
+   static DmaCallbackFunction sCallbacks[Info::NumVectors];
 
    /** Bit-mask of allocated channels */
    static uint32_t allocatedChannels;
@@ -853,82 +853,82 @@ public:
 
    /** DMA interrupt handler -  Calls DMA 0 callback */
    static void irq0Handler() {
-      callbacks[0](DmaChannelNum_0);
+      sCallbacks[0](DmaChannelNum_0);
    }
 
    /** DMA interrupt handler -  Calls DMA 1 callback */
    static void irq1Handler() {
-      callbacks[1](DmaChannelNum_1);
+      sCallbacks[1](DmaChannelNum_1);
    }
 
    /** DMA interrupt handler -  Calls DMA 2 callback */
    static void irq2Handler() {
-      callbacks[2](DmaChannelNum_2);
+      sCallbacks[2](DmaChannelNum_2);
    }
 
    /** DMA interrupt handler -  Calls DMA 3 callback */
    static void irq3Handler() {
-      callbacks[3](DmaChannelNum_3);
+      sCallbacks[3](DmaChannelNum_3);
    }
 
    /** DMA interrupt handler -  Calls DMA 4 callback */
    static void irq4Handler() {
-      callbacks[4](DmaChannelNum_4);
+      sCallbacks[4](DmaChannelNum_4);
    }
 
    /** DMA interrupt handler -  Calls DMA 5 callback */
    static void irq5Handler() {
-      callbacks[5](DmaChannelNum_5);
+      sCallbacks[5](DmaChannelNum_5);
    }
 
    /** DMA interrupt handler -  Calls DMA 6 callback */
    static void irq6Handler() {
-      callbacks[6](DmaChannelNum_6);
+      sCallbacks[6](DmaChannelNum_6);
    }
 
    /** DMA interrupt handler -  Calls DMA 7 callback */
    static void irq7Handler() {
-      callbacks[7](DmaChannelNum_7);
+      sCallbacks[7](DmaChannelNum_7);
    }
 
    /** DMA interrupt handler -  Calls DMA 8 callback */
    static void irq8Handler() {
-      callbacks[8](DmaChannelNum_8);
+      sCallbacks[8](DmaChannelNum_8);
    }
 
    /** DMA interrupt handler -  Calls DMA 9 callback */
    static void irq9Handler() {
-      callbacks[9](DmaChannelNum_9);
+      sCallbacks[9](DmaChannelNum_9);
    }
 
    /** DMA interrupt handler -  Calls DMA 10 callback */
    static void irq10Handler() {
-      callbacks[10](DmaChannelNum_10);
+      sCallbacks[10](DmaChannelNum_10);
    }
 
    /** DMA interrupt handler -  Calls DMA 11 callback */
    static void irq11Handler() {
-      callbacks[11](DmaChannelNum_11);
+      sCallbacks[11](DmaChannelNum_11);
    }
 
    /** DMA interrupt handler -  Calls DMA 12 callback */
    static void irq12Handler() {
-      callbacks[12](DmaChannelNum_12);
+      sCallbacks[12](DmaChannelNum_12);
    }
 
    /** DMA interrupt handler -  Calls DMA 13 callback */
    static void irq13Handler() {
-      callbacks[13](DmaChannelNum_13);
+      sCallbacks[13](DmaChannelNum_13);
    }
 
    /** DMA interrupt handler -  Calls DMA 14 callback */
    static void irq14Handler() {
-      callbacks[14](DmaChannelNum_14);
+      sCallbacks[14](DmaChannelNum_14);
    }
 
    /** DMA interrupt handler -  Calls DMA 15 callback */
    static void irq15Handler() {
-      callbacks[15](DmaChannelNum_15);
+      sCallbacks[15](DmaChannelNum_15);
    }
 
    /**
@@ -957,7 +957,7 @@ public:
       // Clear call-backs and TCDs
       for (unsigned channel=0; channel<Info::NumVectors; channel++) {
          static const DmaTcd emptyTcd;
-         callbacks[channel] = noHandlerCallback;
+         sCallbacks[channel] = noHandlerCallback;
          configureTransfer((DmaChannelNum)channel, emptyTcd);
       }
       // Reset record of allocated channels
@@ -1370,19 +1370,17 @@ public:
    /**
     * Set callback for ISR.
     *
-    * @param[in]  dmaChannelNum  The DMA channel to set callback for
-    * @param[in]  callback       The function to call from stub ISR
+    * @param[in] dmaChannelNum  The DMA channel to set callback for
+    * @param[in] callback       Callback function to execute on interrupt.\n
+    *                           Use nullptr to remove callback.
     */
    static void __attribute__((always_inline)) setCallback(DmaChannelNum dmaChannelNum, DmaCallbackFunction callback) {
-#ifdef DEBUG_BUILD
-      if (dmaChannelNum>=Info::NumChannels) {
-         setAndCheckErrorCode(E_ILLEGAL_PARAM);
-      }
-#endif
+      usbdm_assert(Info::irqHandlerInstalled, "DMA not configured for interrupts");
+      usbdm_assert(dmaChannelNum<Info::NumChannels, "Illegal DMA channel");
       if (callback == nullptr) {
          callback = noHandlerCallback;
       }
-      callbacks[dmaChannelNum] = callback;
+      sCallbacks[dmaChannelNum] = callback;
    }
 
    /**
@@ -1401,7 +1399,7 @@ public:
 /**
  * Callback table for programmatically set handlers.
  */
-template<class Info> DmaCallbackFunction DmaBase_T<Info>::callbacks[];
+template<class Info> DmaCallbackFunction DmaBase_T<Info>::sCallbacks[];
 
 /**
  * Callback for programmatically set error handler.

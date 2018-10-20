@@ -273,7 +273,7 @@ private:
 
 protected:
    /** Callback function for ISR */
-   static ADCCallbackFunction fCallback;
+   static ADCCallbackFunction sCallback;
 
 public:
    /** Hardware instance pointer */
@@ -304,38 +304,36 @@ public:
     */
    static void irqHandler() {
       if (adc().SC1[0] & ADC_SC1_COCO_MASK) {
-         fCallback(adc().R[0], adc().SC1[0]&ADC_SC1_ADCH_MASK);
+         sCallback(adc().R[0], adc().SC1[0]&ADC_SC1_ADCH_MASK);
       }
       if (adc().SC1[1] & ADC_SC1_COCO_MASK) {
-         fCallback(adc().R[1], adc().SC1[1]&ADC_SC1_ADCH_MASK);
+         sCallback(adc().R[1], adc().SC1[1]&ADC_SC1_ADCH_MASK);
       }
    }
 
    /**
     * Set callback for conversion complete interrupts
     *
-    * @param[in] callback The function to call on conversion interrupt. \n
-    *                     nullptr to indicate none
+    * @param[in] callback Callback function to execute on interrupt.\n
+    *                     Use nullptr to remove callback.
     *
     * @return E_NO_ERROR            No error
     * @return E_HANDLER_ALREADY_SET Handler already set
     *
     * @note There is a single callback function for all channels of the ADC.\n
-    *       It is necessary to identify the originating channel in the callback
+    *       It is necessary to identify the originating channel in the callback.
+    * @note To change between handlers first use setCallback(nullptr).
     */
-   static ErrorCode setCallback(ADCCallbackFunction callback) {
+   static void setCallback(ADCCallbackFunction callback) {
+      usbdm_assert(Info::irqHandlerInstalled, "ADC not configured for interrupts");
       if (callback == nullptr) {
-         fCallback = AdcBase::unhandledCallback;
-         return E_NO_ERROR;
+         sCallback = AdcBase::unhandledCallback;
+         return;
       }
-#ifdef DEBUG_BUILD
-      // Callback is shared across all port pins. Check if callback already assigned
-      if ((fCallback != AdcBase::unhandledCallback) && (fCallback != callback)) {
-         return setErrorCode(ErrorCode::E_HANDLER_ALREADY_SET);
-      }
-#endif
-      fCallback = callback;
-      return E_NO_ERROR;
+      usbdm_assert(
+            (sCallback == AdcBase::unhandledCallback) || (sCallback == callback),
+            "Handler already set");
+      sCallback = callback;
    }
 
 public:
@@ -845,7 +843,7 @@ public:
 
 };
 
-template<class Info> ADCCallbackFunction AdcBase_T<Info>::fCallback = AdcBase::unhandledCallback;
+template<class Info> ADCCallbackFunction AdcBase_T<Info>::sCallback = AdcBase::unhandledCallback;
 
 #ifdef USBDM_ADC0_IS_DEFINED
 /**

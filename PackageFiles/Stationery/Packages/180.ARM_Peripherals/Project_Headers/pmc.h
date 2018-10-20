@@ -118,9 +118,10 @@ class PmcBase_T {
 
 protected:
    /** Callback function for ISR */
-   static PMCCallbackFunction callback;
+   static PMCCallbackFunction sCallback;
+
    /** Handler for unexpected interrupts */
-   static void illegalInterruptHandler(PmcInterruptReason) {
+   static void unhandledCallback(PmcInterruptReason) {
       setAndCheckErrorCode(E_NO_HANDLER);
    }
 public:
@@ -134,7 +135,7 @@ public:
 
          // LVDF enabled and detected
          PmcBase_T<Info>::pmc().LVDSC1 |= PMC_LVDSC1_LVDF_MASK;
-         callback(PmcInterruptReason_LowVoltageDetect);
+         sCallback(PmcInterruptReason_LowVoltageDetect);
          return;
       }
       if ((PmcBase_T<Info>::pmc().LVDSC2 & (PMC_LVDSC2_LVWF_MASK|PMC_LVDSC2_LVWIE_MASK)) ==
@@ -142,7 +143,7 @@ public:
 
          // LVWF enabled and detected
          PmcBase_T<Info>::pmc().LVDSC2 |= PMC_LVDSC2_LVWF_MASK;
-         callback(PmcInterruptReason_LowVoltageWarning);
+         sCallback(PmcInterruptReason_LowVoltageWarning);
          return;
       }
 #ifdef DEBUG_BUILD
@@ -154,14 +155,15 @@ public:
    /**
     * Set Callback function
     *
-    *   @param[in]  theCallback - Callback function to be executed on PMC interrupt
+    *  @param[in]  callback  Callback function to be executed on interrupt.\n
+    *                        Use nullptr to remove callback.
     */
-   static void setCallback(PMCCallbackFunction theCallback) {
-      if (theCallback == nullptr) {
-         callback = illegalInterruptHandler;
-         return;
+   static void setCallback(PMCCallbackFunction callback) {
+      usbdm_assert(Info::irqHandlerInstalled, "PMC not configure for interrupts");
+      if (callback == nullptr) {
+         callback = unhandledCallback;
       }
-      callback = theCallback;
+      sCallback = callback;
    }
 
 
@@ -266,7 +268,7 @@ public:
 #endif
 };
 
-template<class Info> PMCCallbackFunction PmcBase_T<Info>::callback = PmcBase_T<Info>::illegalInterruptHandler;
+template<class Info> PMCCallbackFunction PmcBase_T<Info>::sCallback = PmcBase_T<Info>::unhandledCallback;
 
 #ifdef USBDM_PMC_IS_DEFINED
 /**

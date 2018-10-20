@@ -108,28 +108,33 @@ protected:
    };
 
    /** Callback function for ISR */
-   static LLWUCallbackFunction callback;
+   static LLWUCallbackFunction sCallback;
+
+   /** Callback to catch unhandled interrupt */
+   static void unhandledCallback() {
+      setAndCheckErrorCode(E_NO_HANDLER);
+   }
 
 public:
    /**
     * IRQ handler
     */
    static void irqHandler(void) {
-      if (callback != 0) {
-         callback();
-      }
-      else {
-         setAndCheckErrorCode(E_NO_HANDLER);
-      }
+      sCallback();
    }
 
    /**
     * Set Callback function
     *
-    *   @param[in]  theCallback - Callback function to be executed on LLWU interrupt
+    *   @param[in]  callback Callback function to be executed on interrupt\n
+    *                        Use nullptr to remove callback.
     */
-   static void setCallback(LLWUCallbackFunction theCallback) {
-      callback = theCallback;
+   static void setCallback(LLWUCallbackFunction callback) {
+      usbdm_assert(Info::irqHandlerInstalled, "LLWU not configured for interrupts");
+      if (callback == nullptr) {
+         callback = unhandledCallback;
+      }
+      sCallback = callback;
    }
 
 protected:
@@ -490,7 +495,7 @@ public:
    };
 };
 
-template<class Info> LLWUCallbackFunction LlwuBase_T<Info>::callback = 0;
+template<class Info> LLWUCallbackFunction LlwuBase_T<Info>::sCallback = LlwuBase_T<Info>::unhandledCallback;
 
 #ifdef USBDM_LLWU_IS_DEFINED
 /**

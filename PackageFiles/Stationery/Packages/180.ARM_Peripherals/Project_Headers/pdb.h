@@ -147,11 +147,13 @@ class PdbBase_T {
 
 protected:
    /** Callback function for ISR */
-   static PDBCallbackFunction callback;
+   static PDBCallbackFunction sCallback;
+
    /** Callback function for error ISR */
-   static PDBCallbackFunction errorCallback;
+   static PDBCallbackFunction sErrorCallback;
+
    /** Handler for unexpected interrupts */
-   static void illegalInterruptHandler() {
+   static void unhandledCallback() {
       setAndCheckErrorCode(E_NO_HANDLER);
    }
 public:
@@ -164,36 +166,39 @@ public:
          // Clear interrupt flag
          PdbBase_T<Info>::pdb().SC  &= ~PDB_SC_PDBIF_MASK;
          // Handle expected interrupt
-         callback();
+         sCallback();
          return;
       }
       // Assume sequence error
-      errorCallback();
+      sErrorCallback();
    }
 
    /**
     * Set Callback function
     *
-    *   @param[in]  theCallback - Callback function to be executed on PDB interrupt
+    *   @param[in]  callback Callback function to be executed on interrupt\n
+    *                        Use nullptr to remove callback.
     */
-   static void setCallback(PDBCallbackFunction theCallback) {
-      if (theCallback == nullptr) {
-         callback = illegalInterruptHandler;
-         return;
+   static void setCallback(PDBCallbackFunction callback) {
+      usbdm_assert(Info::irqHandlerInstalled, "PDB not configure for interrupts");
+      if (callback == nullptr) {
+         callback = unhandledCallback;
       }
-      callback = theCallback;
+      sCallback = callback;
    }
+
    /**
     * Set Callback function
     *
-    *   @param[in]  theCallback - Callback function to be executed on PDB interrupt
+    *   @param[in]  callback Callback function to be executed on error interrupt\n
+    *                        Use nullptr to remove callback.
     */
-   static void setErrorCallback(PDBCallbackFunction theCallback) {
-      if (theCallback == nullptr) {
-         errorCallback = illegalInterruptHandler;
-         return;
+   static void setErrorCallback(PDBCallbackFunction callback) {
+      usbdm_assert(Info::irqHandlerInstalled, "PDB not configure for interrupts");
+      if (callback == nullptr) {
+         callback = unhandledCallback;
       }
-      errorCallback = theCallback;
+      sErrorCallback = callback;
    }
 
 
@@ -627,8 +632,8 @@ public:
    }
 };
 
-template<class Info> PDBCallbackFunction PdbBase_T<Info>::callback = PdbBase_T<Info>::illegalInterruptHandler;
-template<class Info> PDBCallbackFunction PdbBase_T<Info>::errorCallback = PdbBase_T<Info>::illegalInterruptHandler;
+template<class Info> PDBCallbackFunction PdbBase_T<Info>::sCallback      = PdbBase_T<Info>::unhandledCallback;
+template<class Info> PDBCallbackFunction PdbBase_T<Info>::sErrorCallback = PdbBase_T<Info>::unhandledCallback;
 
 #ifdef USBDM_PDB_IS_DEFINED
 /**

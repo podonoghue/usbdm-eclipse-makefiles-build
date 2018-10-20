@@ -77,7 +77,7 @@ protected:
    }
 
    /** Callback function for ISR */
-   static EWMCallbackFunction callback;
+   static EWMCallbackFunction sCallback;
 
    /**
     * Clock register for peripheral
@@ -99,19 +99,21 @@ public:
     */
    static void irqHandler() {
       // Call handler
-      callback();
+      sCallback();
    }
 
    /**
     * Set callback function
     *
-    * @param[in]  theCallback Callback function to execute on interrupt
+    * @param[in] callback Callback function to execute on interrupt.\n
+    *                     Use nullptr to remove callback.
     */
-   static void setCallback(EWMCallbackFunction theCallback) {
-      if (theCallback == nullptr) {
-         theCallback = unhandledCallback;
+   static void setCallback(EWMCallbackFunction callback) {
+      usbdm_assert(Info::irqHandlerInstalled, "EWM not configured for interrupts");
+      if (callback == nullptr) {
+         callback = unhandledCallback;
       }
-      callback = theCallback;
+      sCallback = callback;
    }
 
 public:
@@ -287,7 +289,7 @@ public:
    }
 };
 
-template<class Info> EWMCallbackFunction EwmBase_T<Info>::callback = EwmBase_T<Info>::unhandledCallback;
+template<class Info> EWMCallbackFunction EwmBase_T<Info>::sCallback = EwmBase_T<Info>::unhandledCallback;
 
 #if defined(USBDM_EWM_IS_DEFINED)
 class Ewm : public EwmBase_T<EwmInfo> {};

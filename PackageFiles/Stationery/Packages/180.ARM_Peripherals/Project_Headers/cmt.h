@@ -146,7 +146,7 @@ protected:
    }
 
    /** Callback function for ISR */
-   static CMTCallbackFunction callback;
+   static CMTCallbackFunction sCallback;
 
    /**
     * Clock register for peripheral
@@ -184,21 +184,23 @@ public:
     */
    static void irqHandler() {
       // Call handler
-      callback();
+      sCallback();
    }
 
    /**
     * Set callback function.
     *
-    * @param[in]  theCallback Callback function to execute on interrupt
+    * @param[in] callback Callback function to execute on interrupt.\n
+    *                     Use nullptr to remove callback.
     *
     * @note It is expected that the callback will clear the status flag that triggered the interrupt. See getStatus().
     */
-   static void setCallback(CMTCallbackFunction theCallback) {
-      if (theCallback == nullptr) {
-         theCallback = unhandledCallback;
+   static void setCallback(CMTCallbackFunction callback) {
+      usbdm_assert(Info::irqHandlerInstalled, "CMT not configured for interrupts");
+      if (callback == nullptr) {
+         callback = unhandledCallback;
       }
-      callback = theCallback;
+      sCallback = callback;
    }
 
 public:
@@ -473,7 +475,7 @@ public:
    }
 };
 
-template<class Info> CMTCallbackFunction CmtBase_T<Info>::callback = CmtBase_T<Info>::unhandledCallback;
+template<class Info> CMTCallbackFunction CmtBase_T<Info>::sCallback = CmtBase_T<Info>::unhandledCallback;
 
 #if defined(USBDM_CMT_IS_DEFINED)
 class Cmt : public CmtBase_T<CmtInfo> {};

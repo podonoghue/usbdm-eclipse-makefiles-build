@@ -622,30 +622,29 @@ public:
 
 protected:
    /** Callback function for ISR */
-   static SpiCallbackFunction callback;
+   static SpiCallbackFunction sCallback;
 
 public:
    /**
     * IRQ handler
     */
    static void irqHandler() {
-      callback(SpiBase_T<Info>::getStatus());
+      sCallback(SpiBase_T<Info>::getStatus());
    }
 
    /**
     * Set Callback function\n
     *
-    * @param[in] theCallback Callback function to execute on interrupt.\n
-    *                        nullptr to indicate none
+    *  @param[in]  callback  Callback function to be executed on interrupt.\n
+    *                        Use nullptr to remove callback.
     */
-   static __attribute__((always_inline)) void setCallback(SpiCallbackFunction theCallback) {
-      if (theCallback == nullptr) {
+   static __attribute__((always_inline)) void setCallback(SpiCallbackFunction callback) {
+      usbdm_assert(Info::irqHandlerInstalled, "SPI not configure for interrupts");
+      if (callback == nullptr) {
          callback = Spi::unhandledCallback;
-         return;
       }
-      callback = theCallback;
+      sCallback = callback;
    }
-
 
 #ifdef __CMSIS_RTOS
 protected:
@@ -895,7 +894,7 @@ void __attribute__((noinline)) Spi::txRx(uint32_t dataSize, const T *txData, T *
    }
 }
 
-template<class Info> SpiCallbackFunction SpiBase_T<Info>::callback = Spi::unhandledCallback;
+template<class Info> SpiCallbackFunction SpiBase_T<Info>::sCallback = Spi::unhandledCallback;
 
 #if defined(USBDM_SPI0_IS_DEFINED)
 /**

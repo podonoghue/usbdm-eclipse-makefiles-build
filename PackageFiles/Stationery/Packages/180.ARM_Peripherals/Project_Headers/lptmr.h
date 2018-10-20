@@ -34,13 +34,13 @@ namespace USBDM {
 typedef void (*LPTMRCallbackFunction)(void);
 
 /**
- * Select the LPTMR clock clock source which determines count speed or glitch filtering
+ * Select the LPTMR clock source which determines count speed or glitch filtering
  */
 enum LptmrClockSel {
-   LptmrClockSel_mcgirclk = LPTMR_PSR_PCS(0), //!< MCG Internal Reference Clock (MCGIRCLK)
-   LptmrClockSel_lpoclk   = LPTMR_PSR_PCS(1), //!< Low power oscillator (LPO - 1kHz)
-   LptmrClockSel_erclk32  = LPTMR_PSR_PCS(2), //!< 32kHz Clock Source (ERCLK32)
-   LptmrClockSel_oscerclk = LPTMR_PSR_PCS(3), //!< Oscillator External Reference Clock (OSCERCLK)
+   LptmrClockSel_Mcgirclk = LPTMR_PSR_PCS(0), //!< MCG Internal Reference Clock (MCGIRCLK)
+   LptmrClockSel_Lpoclk   = LPTMR_PSR_PCS(1), //!< Low power oscillator (LPO - 1kHz)
+   LptmrClockSel_Erclk32  = LPTMR_PSR_PCS(2), //!< 32kHz Clock Source (ERCLK32)
+   LptmrClockSel_Oscerclk = LPTMR_PSR_PCS(3), //!< Oscillator External Reference Clock (OSCERCLK)
 };
 
 /**
@@ -70,9 +70,9 @@ enum LptmrPrescale {
  * Select the LPTMR clock input pin
  */
 enum LptmrPinSel {
-   LptmrPinSel_cmp0 = LPTMR_CSR_TPS(0), //!< CMP pin
-   LptmrPinSel_alt1 = LPTMR_CSR_TPS(1), //!< LPTMR_ALT1 pin
-   LptmrPinSel_alt2 = LPTMR_CSR_TPS(2), //!< LPTMR_ALT1 pin
+   LptmrPinSel_Cmp0 = LPTMR_CSR_TPS(0), //!< CMP pin
+   LptmrPinSel_Alt1 = LPTMR_CSR_TPS(1), //!< LPTMR_ALT1 pin
+   LptmrPinSel_Alt2 = LPTMR_CSR_TPS(2), //!< LPTMR_ALT2 pin
 };
 
 /**
@@ -118,13 +118,19 @@ protected:
    static constexpr int MINIMUM_RESOLUTION = 100;
 
    /** Callback function for ISR */
-   static LPTMRCallbackFunction callback;
+   static LPTMRCallbackFunction sCallback;
 
    /** Hardware instance */
    static __attribute__((always_inline)) volatile LPTMR_Type &lptmr()     { return Info::lptmr(); }
 
-   /* Pointer to clock register */
+   /** Pointer to clock register */
    static __attribute__((always_inline)) volatile uint32_t   &clockReg()  { return Info::clockReg(); }
+
+
+   /** Callback to catch unhandled interrupt */
+   static void unhandledCallback() {
+      setAndCheckErrorCode(E_NO_HANDLER);
+   }
 
 public:
    /**
@@ -147,7 +153,8 @@ public:
    }
    
    /**
-    * Set LPTMR to pulse counting mode with selection of input pin, edge selection and reset mode.\n
+    * Set LPTMR to pulse counting mode.
+    * Provides selection of input pin, edge selection and reset mode.\n
     * The timer is enabled and pins configured.
     *
     * @param[in] lptmrPinSel     Input pin for Pulse Counting mode
@@ -169,7 +176,7 @@ public:
    }
 
    /**
-    * Set LPTMR to time counting mode.\n
+    * Set LPTMR to time counting mode.
     * The timer is enabled and pins configured.
     *
     * @param[in] lptmrResetOn    Selects when the LPTMR counter resets to zero
@@ -180,7 +187,7 @@ public:
    static void configureTimeCountingMode(
          LptmrResetOn      lptmrResetOn   = LptmrResetOn_Compare,
          LptmrInterrupt    lptmrInterrupt = LptmrInterrupt_Disabled,
-         LptmrClockSel     lptmrClockSel  = LptmrClockSel_mcgirclk,
+         LptmrClockSel     lptmrClockSel  = LptmrClockSel_Mcgirclk,
          LptmrPrescale     lptmrPrescale  = LptmrPrescale_Bypass) {
       enable();
       // Change settings with timer disabled
@@ -205,7 +212,7 @@ public:
    }
 
    /**
-    * Set LPTMR clock source and prescaler\n
+    * Set LPTMR clock source and prescaler.
     * These settings are used for the clock prescaler in timer mode and glitch filter in pulse-counting mode.
     *
     * @param[in] lptmrClockSel   Clock source selection
@@ -260,21 +267,17 @@ public:
    }
 
    /**
-    * Set callback for ISR and enable NVIC interrupts
+    * Set callback for ISR and enable NVIC interrupts.
     *
-    * @param[in]  theCallback The function to call from stub ISR
-    *
-    * @return E_NO_ERROR on success
+    *   @param[in]  callback Callback function to be executed on interrupt\n
+    *                        Use nullptr to remove callback.
     */
-   static ErrorCode setCallback(LPTMRCallbackFunction theCallback) {
-      if (!Info::irqHandlerInstalled) {
-         return setErrorCode(E_NO_HANDLER);
+   static void setCallback(LPTMRCallbackFunction callback) {
+      usbdm_assert(Info::irqHandlerInstalled, "LPTMR not configure for interrupts");
+      if (callback == nullptr) {
+         callback = unhandledCallback;
       }
-      callback = theCallback;
-
-      enableNvicInterrupts();
-
-      return E_NO_ERROR;
+      sCallback = callback;
    }
 
    /**
@@ -285,13 +288,12 @@ public:
       // Clear interrupt flag
       lptmr().CSR |= LPTMR_CSR_TCF_MASK;
 
-      if (callback != 0) {
-         callback();
-      }
+      sCallback();
    }
 
    /**
-    * Enable LPTMR with default configuration\n
+    * Enable LPTMR with default configuration.
+    *
     * Includes enabling clock and any pins used.\n
     * Sets LPTMR to default configuration
     */
@@ -317,7 +319,7 @@ public:
    /**
     *   Disable the LPTMR
     */
-   static void finalise(void) {
+   static void disable(void) {
       // Disable timer
       lptmr().CSR = 0;
       NVIC_DisableIRQ(Info::irqNums[0]);
@@ -325,7 +327,7 @@ public:
    }
 
    /**
-    * Converts a time in microseconds to number of ticks
+    * Converts a time in microseconds to number of ticks.
     *
     * @param[in]  time Time in microseconds
     *
@@ -353,7 +355,7 @@ public:
       return rv;
    }
    /**
-    * Converts a time in milliseconds to number of ticks
+    * Converts a time in milliseconds to number of ticks.
     *
     * @param[in]  time Time in milliseconds
     *
@@ -411,7 +413,7 @@ public:
    }
 
    /**
-    * Set period of timer
+    * Set period of timer.
     *
     * @param[in]  period Period in seconds as a float
     *
@@ -430,10 +432,10 @@ public:
       int      prescaleFactor=1;
       uint32_t prescalerValue=0;
       while (prescalerValue<=16) {
-         float    clock = inputClock/prescaleFactor;
-         uint32_t mod   = round(period*clock);
+         float    clockFrequency = inputClock/prescaleFactor;
+         uint32_t mod   = rintf(period*clockFrequency);
          if (mod < MINIMUM_RESOLUTION) {
-            // Too short a period for 1% resolution
+            // Too short a period for reasonable resolution
             return setErrorCode(E_TOO_SMALL);
          }
          if (mod <= 65535) {
@@ -451,7 +453,7 @@ public:
    }
 
    /**
-    * Set glitch filter interval.\n
+    * Set glitch filter interval.
     * This adjusts the clock prescaler so that the filter interval is at least the given value.
     *
     * @param[in]  interval Interval in seconds as a float
@@ -482,9 +484,18 @@ public:
       // Too long a period
       return setErrorCode(E_ILLEGAL_PARAM);
    }
+
+   /**
+    * Get timer counter value
+    *
+    * @return Timer value in ticks.
+    */
+   static uint32_t getCounterValue() {
+      return lptmr().CNR;
+   }
 };
 
-template<class Info> LPTMRCallbackFunction LptmrBase_T<Info>::callback = 0;
+template<class Info> LPTMRCallbackFunction LptmrBase_T<Info>::sCallback = LptmrBase_T<Info>::unhandledCallback;
 
 #ifdef LPTMR0
 /**
@@ -499,16 +510,20 @@ template<class Info> LPTMRCallbackFunction LptmrBase_T<Info>::callback = 0;
  * }
  *
  * ...
+ * // Configure LPTMR in time counting mode
+ * Lptmr0::configureTimeCountingMode(
+ *      LptmrResetOn_Compare,
+ *      LptmrInterrupt_Enabled,
+ *      LptmrClockSel_Lpoclk);
  *
- * // Configure LPTMR
- * Lptmr0::configure(1000);
+ * // Set period of timer event
+ * Lptmr0::setPeriod(5*seconds);
  *
- * // This handler is set programmatically
+ * // Set call-back
  * Lptmr0::setCallback(flash);
- *
  * @endcode
  */
-class Lptmr0 : public LptmrBase_T<Lptmr0Info> {};
+using Lptmr0 = LptmrBase_T<Lptmr0Info>;
 #endif
 
 #ifdef LPTMR1
@@ -525,15 +540,20 @@ class Lptmr0 : public LptmrBase_T<Lptmr0Info> {};
  *
  * ...
  *
- * // Configure LPTMR
- * Lptmr1::configure(1000);
+ * // Configure LPTMR in time counting mode
+ * Lptmr1::configureTimeCountingMode(
+ *      LptmrResetOn_Compare,
+ *      LptmrInterrupt_Enabled,
+ *      LptmrClockSel_Lpoclk);
  *
- * // This handler is set programmatically
+ * // Set period of timer event
+ * Lptmr1::setPeriod(5*seconds);
+ *
+ * // Set call-back
  * Lptmr1::setCallback(flash);
- *
  * @endcode
  */
-class Lptmr1 : public LptmrBase_T<Lptmr1Info> {};
+using Lptmr1 = LptmrBase_T<Lptmr1Info>;
 #endif
 
 /**

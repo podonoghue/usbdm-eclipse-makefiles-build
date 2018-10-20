@@ -157,7 +157,7 @@ protected:
    };
 
    /** Callback function for ISR */
-   static TSICallbackFunction callback;
+   static TSICallbackFunction sCallback;
 
 public:
    /**
@@ -182,20 +182,21 @@ public:
          return;
       }
       // Execute call-back
-      callback(status);
+      sCallback(status);
    }
 
    /**
     * Set Callback function
     *
-    *   @param[in]  theCallback - Callback function to be executed on TSI alarm interrupt
+    *  @param[in]  callback  Callback function to be executed on interrupt.\n
+    *                        Use nullptr to remove callback.
     */
-   static void setCallback(TSICallbackFunction theCallback) {
-      if (theCallback == nullptr) {
-         callback = TsiBase_T<Info>::unhandledInterrupt;
-         return;
+   static void setCallback(TSICallbackFunction callback) {
+      usbdm_assert(Info::irqHandlerInstalled, "TSI not configure for interrupts");
+      if (callback == nullptr) {
+         callback = TsiBase_T<Info>::unhandledCallback;
       }
-      callback = theCallback;
+      sCallback = callback;
    }
 
 
@@ -210,7 +211,7 @@ public:
    /**
     * Handler for unexpected interrupts i.e. handler not installed.
     */
-   static void unhandledInterrupt(uint32_t) {
+   static void unhandledCallback(uint32_t) {
       setAndCheckErrorCode(E_NO_HANDLER);
    }
 
@@ -477,7 +478,7 @@ public:
 
 };
 
-template<class Info> TSICallbackFunction TsiBase_T<Info>::callback = TsiBase_T<Info>::unhandledInterrupt;
+template<class Info> TSICallbackFunction TsiBase_T<Info>::sCallback = TsiBase_T<Info>::unhandledCallback;
 
 #ifdef USBDM_TSI_IS_DEFINED
 /**

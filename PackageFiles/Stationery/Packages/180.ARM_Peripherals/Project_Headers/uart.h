@@ -179,7 +179,7 @@ protected:
    /**
     * Handler for interrupts when no handler set
     */
-   static void unexpectedInterrupt(uint8_t) {
+   static void unhandledCallback(uint8_t) {
       setAndCheckErrorCode(E_NO_HANDLER);
    }
 
@@ -527,11 +527,13 @@ public:
    /**
     * Set Receive/Transmit Callback function
     *
-    *   @param[in]  callback Callback function to be executed on UART receive or transmit
+    *  @param[in]  callback  Callback function to be executed on Rx or Tx interrupt.\n
+    *                        Use nullptr to remove callback.
     */
    static void setRxTxCallback(UARTCallbackFunction callback) {
+      usbdm_assert(Info::irqHandlerInstalled, "UART not configure for interrupts");
       if (callback == nullptr) {
-         rxTxCallback = unexpectedInterrupt;
+         callback = unhandledCallback;
       }
       rxTxCallback = callback;
    }
@@ -539,11 +541,13 @@ public:
    /**
     * Set Error Callback function
     *
-    *   @param[in]  callback Callback function to be executed on UART receive or transmit
+    *  @param[in]  callback  Callback function to be executed on error interrupt.\n
+    *                        Use nullptr to remove callback.
     */
    static void setErrorCallback(UARTCallbackFunction callback) {
+      usbdm_assert(Info::irqHandlerInstalled, "UART not configure for interrupts");
       if (callback == nullptr) {
-         errorCallback = unexpectedInterrupt;
+         callback = unhandledCallback;
       }
       errorCallback = callback;
    }
@@ -551,11 +555,13 @@ public:
    /**
     * Set LON Callback function
     *
-    *   @param[in]  callback Callback function to be executed on UART LON interrupt
+    *  @param[in]  callback  Callback function to be executed on LON interrupt.\n
+    *                        Use nullptr to remove callback.
     */
    static void setLonCallback(UARTCallbackFunction callback) {
+      usbdm_assert(Info::irqHandlerInstalled, "UART not configure for interrupts");
       if (callback == nullptr) {
-         errorCallback = unexpectedInterrupt;
+         callback = unhandledCallback;
       }
       lonCallback = callback;
    }
@@ -591,9 +597,9 @@ public:
 
 };
 
-template<class Info> UARTCallbackFunction Uart_T<Info>::rxTxCallback  = unexpectedInterrupt;
-template<class Info> UARTCallbackFunction Uart_T<Info>::errorCallback = unexpectedInterrupt;
-template<class Info> UARTCallbackFunction Uart_T<Info>::lonCallback   = unexpectedInterrupt;
+template<class Info> UARTCallbackFunction Uart_T<Info>::rxTxCallback  = unhandledCallback;
+template<class Info> UARTCallbackFunction Uart_T<Info>::errorCallback = unhandledCallback;
+template<class Info> UARTCallbackFunction Uart_T<Info>::lonCallback   = unhandledCallback;
 
 #ifdef UART_C4_BRFA_MASK
 template<class Info> class Uart_brfa_T : public Uart_T<Info> {

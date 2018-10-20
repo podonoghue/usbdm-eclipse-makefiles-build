@@ -284,7 +284,7 @@ public:
    static I2c *thisPtr;
 
    /** Callback function for ISR */
-   static I2cCallbackFunction callback;
+   static I2cCallbackFunction sCallback;
 
 #ifdef __CMSIS_RTOS
 protected:
@@ -371,15 +371,15 @@ public:
     * This callback is executed when the I2C state machine returns to the IDLE state
     * at the end of a transaction.
     *
-    * @param[in] theCallback Callback function to execute on interrupt.\n
-    *                        nullptr to indicate none
+    * @param[in] callback Callback function to execute on interrupt.\n
+    *                     Use nullptr to remove callback.
     */
-   static __attribute__((always_inline)) void setCallback(I2cCallbackFunction theCallback) {
-      if (theCallback == nullptr) {
+   static __attribute__((always_inline)) void setCallback(I2cCallbackFunction callback) {
+      usbdm_assert(Info::irqHandlerInstalled, "I2C not configured for interrupts");
+      if (callback == nullptr) {
          callback = I2c::unhandledCallback;
-         return;
       }
-      callback = theCallback;
+      sCallback = callback;
    }
 
    /**
@@ -451,12 +451,12 @@ public:
    static void irqHandler() {
       thisPtr->poll();
       if (thisPtr->state == I2C_State::i2c_idle) {
-         callback();
+         sCallback();
       }
    }
 };
 
-template<class Info> I2cCallbackFunction I2cBase_T<Info>::callback = I2c::unhandledCallback;
+template<class Info> I2cCallbackFunction I2cBase_T<Info>::sCallback = I2c::unhandledCallback;
 
 /** Used by ISR to obtain handle of object */
 template<class Info> I2c *I2cBase_T<Info>::thisPtr = 0;
