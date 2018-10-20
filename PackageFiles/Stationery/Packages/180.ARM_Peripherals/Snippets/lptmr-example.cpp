@@ -9,6 +9,7 @@
  */
 #include "hardware.h"
 #include "lptmr.h"
+#include "smc.h"
 
 using namespace USBDM;
 
@@ -24,6 +25,8 @@ using namespace USBDM;
 // Connection mapping - change as required
 using RED_LED   = USBDM::GpioC<3>;
 
+using Lptmr = Lptmr0;
+
 /*
  * This handler is set programmatically
  */
@@ -33,12 +36,13 @@ void flash(void) {
 
 #ifndef SET_HANDLERS_PROGRAMMATICALLY
 /**
- * Example showing how to install a custom IRQ handler for a LPTMR
+ * Example showing how to install a custom IRQ handler for the Lptmr.
+ * This will avoid the overhead of the USBDM call-back mechanism.
  */
 namespace USBDM {
 
 template<>
-void LptmrBase_T<Lptmr0Info>::irqHandler() {
+void Lptmr::irqHandler() {
    // Clear interrupt flag
    lptmr().CSR |= LPTMR_CSR_TCF_MASK;
    RED_LED::toggle();
@@ -51,29 +55,27 @@ int main() {
    RED_LED::setOutput();
 
    // Enable LPTMR in time counting mode
-   Lptmr0::configureTimeCountingMode(
+   Lptmr::configureTimeCountingMode(
          LptmrResetOn_Compare,
          LptmrInterrupt_Enabled,
-         LptmrClockSel_mcgirclk);
+         LptmrClockSel_Lpoclk);
 
-   // Set clock source
-   Lptmr0::setClock(LptmrClockSel_erclk32);
    // Set period of timer event
-   Lptmr0::setPeriod(200*ms);
+   Lptmr::setPeriod(5*seconds);
 
 #ifdef SET_HANDLERS_PROGRAMMATICALLY
    // This handler is set programmatically
-   Lptmr0::setCallback(flash);
+   Lptmr::setCallback(flash);
 #endif
 
-   Lptmr0::enableNvicInterrupts();
+   Lptmr::enableNvicInterrupts();
 
    // Check for errors so far
    checkError();
 
    for(;;) {
-      // This is required so that the CNR visibly updates in debugger
-      LPTMR0->CNR = 0;
-      __asm__("nop");
+      // Sleep between interrupts
+      Smc::enterWaitMode();
+      console.writeln("Awake!");
    }
 }

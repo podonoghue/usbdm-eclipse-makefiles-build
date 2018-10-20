@@ -12,7 +12,6 @@
 /*
  * Note - Not all FTMs support quadrature decoder functions
  */
-
 using namespace USBDM;
 
 // Use FTM1 as the quadrature decoder
@@ -23,11 +22,13 @@ using QuadDecoder = QuadDecoder1;
  * Callback executed on timer overflow/underflow
  */
 void callBack() {
-   if (QuadDecoder::ftm().QDCTRL & FTM_QDCTRL_QUADIR_MASK) {
+   if (QuadDecoder::getOverflowDirection()) {
       // Indicates overflow while increasing
+      console.writeln("Increasing");
    }
    else {
       // Indicates overflow while decreasing
+      console.writeln("Decreasing");
    }
 }
 

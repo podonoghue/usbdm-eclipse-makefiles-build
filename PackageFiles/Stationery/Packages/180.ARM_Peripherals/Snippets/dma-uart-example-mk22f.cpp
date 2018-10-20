@@ -209,8 +209,8 @@ void changeRunMode(SmcRunMode smcRunMode) {
 
    // Check if transition needed
    if (((smcStatus == SmcStatus_hsrun) && (smcRunMode == SmcRunMode_HighSpeed)) ||
-       ((smcStatus == SmcStatus_run) && (smcRunMode == SmcRunMode_Normal)) ||
-       ((smcStatus == SmcStatus_vlpr) && (smcRunMode == SmcRunMode_VeryLowPower))) {
+       ((smcStatus == SmcStatus_RUN) && (smcRunMode == SmcRunMode_Normal)) ||
+       ((smcStatus == SmcStatus_VLPR) && (smcRunMode == SmcRunMode_VeryLowPower))) {
       return;
    }
    // If changing go via RUN
@@ -221,7 +221,7 @@ void changeRunMode(SmcRunMode smcRunMode) {
       console.setBaudRate(defaultBaudRate);
       console.write("Changed to RUN mode, ").flushOutput();
    }
-   else if (smcStatus == SmcStatus_vlpr) {
+   else if (smcStatus == SmcStatus_VLPR) {
       // Do VLPR->RUN mode
       Smc::enterRunMode(SmcRunMode_Normal);
       Mcg::configure(RUN_MODE);

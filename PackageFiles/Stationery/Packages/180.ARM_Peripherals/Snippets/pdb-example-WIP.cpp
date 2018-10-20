@@ -44,7 +44,7 @@ void configureLptmr() {
    // Enable LPTMR in time counting mode
    Lptmr::setTimeCountingMode(LptmrResetOn_Compare);
    // Set clock source
-   Lptmr::setClock(LptmrClockSel_erclk32, LptmrPrescale_1024);
+   Lptmr::setClock(LptmrClockSel_Erclk32, LptmrPrescale_1024);
    // Set period of timer event
    Lptmr::setPeriod(PERIOD);
 

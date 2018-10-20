@@ -25,8 +25,6 @@ using AdcChannel = Adc::Channel<19>;
  *        Using serial I/O in a ISR is very silly!!!!
  */
 void handler(uint32_t result, int) {
-   // Start next conversion
-   AdcChannel::startConversion(AdcInterrupt_Enabled);
    result = result/10;
    for (unsigned i=0; i<75; i++) {
       if (i<result) {
@@ -45,16 +43,19 @@ int main(void) {
    // Calibrate before use
    Adc::calibrate();
 
-   // Note: Setting callback affects all channels on that ADC
+   // Note: Setting callback affects all channels on the ADC
    Adc::setCallback(handler);
    Adc::enableNvicInterrupts(true, NvicPriority_Normal);
+
+   // Configure ADC pin
+   AdcChannel::setInput();
 
    // Check for error so far
    checkError();
 
-   // Start a conversion with interrupt on completion
-   AdcChannel::startConversion(AdcInterrupt_Enabled);
-
    for(;;) {
+      // Start a conversion with interrupt on completion
+      AdcChannel::startConversion(AdcInterrupt_Enabled);
+      waitMS(100);
    }
 }

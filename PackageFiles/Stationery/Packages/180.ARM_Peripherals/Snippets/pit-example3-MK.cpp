@@ -1,12 +1,13 @@
 /**
  ============================================================================
- * @file  pit-example2.cpp (180.ARM_Peripherals/Snippets/pit-example3-MK.cpp)
+ * @file  pit-example3.cpp (180.ARM_Peripherals/Snippets/pit-example3-MK.cpp)
  * @brief Programmable Interrupt Timer (PIT) Example
  * @author   podonoghue
 ============================================================================
  */
 #include "hardware.h"
 #include "pit.h"
+#include "smc.h"
 
 using namespace USBDM;
 
@@ -26,7 +27,7 @@ using namespace USBDM;
  */
 
 // Connection mapping - change as required
-using Led = $(demo.cpp.blue.led:GpioA<2, USBDM::ActiveLow>);
+using Led = $(demo.cpp.blue.led:GpioA<2, ActiveLow>);
 
 using Timer        = Pit;
 using TimerChannel = Timer::Channel<0>;
@@ -59,6 +60,6 @@ int main() {
 
    for(;;) {
       // Sleep between interrupts
-      __asm__("wfi");
+      Smc::enterWaitMode();
    }
 }

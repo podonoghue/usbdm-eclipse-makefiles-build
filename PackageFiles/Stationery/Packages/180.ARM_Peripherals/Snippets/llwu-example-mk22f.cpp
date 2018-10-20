@@ -147,7 +147,7 @@ void testStopMode(
     * MCG transitions PEE->PBE when in STOP modes.
     * This assumes run mode is PEE
     */
-   if (Smc::getStatus() == SmcStatus_run) {
+   if (Smc::getStatus() == SmcStatus_RUN) {
       Mcg::clockTransition(Mcg::clockInfo[RUN_CLOCK_CONFIG]);
       console.setBaudRate(BAUD_RATE);
       console.writeln("**** Awake ****").flushOutput();
@@ -271,7 +271,7 @@ void enableTimer(Test test, bool enable) {
       WakeupTimer::configureTimeCountingMode(
             LptmrResetOn_Compare,
             LptmrInterrupt_Enabled,
-            LptmrClockSel_lpoclk);
+            LptmrClockSel_Lpoclk);
       WakeupTimer::setPeriod(5*seconds);
       WakeupTimer::setCallback(wakeupTimerCallback);
       WakeupTimer::enableNvicInterrupts();
@@ -371,14 +371,14 @@ SmcStatus changeRunMode() {
       console.setBaudRate(BAUD_RATE);
       console.writeln("Changed to VLPR mode").flushOutput();
    }
-   else if (smcStatus == SmcStatus_vlpr) {
+   else if (smcStatus == SmcStatus_VLPR) {
       // VLPR->RUN mode
       Smc::enterRunMode(SmcRunMode_Normal);
       Mcg::clockTransition(Mcg::clockInfo[RUN_CLOCK_CONFIG]);
       console.setBaudRate(BAUD_RATE);
       console.writeln("Changed to RUN mode").flushOutput();
    }
-   else if (smcStatus == SmcStatus_run) {
+   else if (smcStatus == SmcStatus_RUN) {
       // RUN->HSRUN
       Smc::enterRunMode(SmcRunMode_HighSpeed);
       Mcg::clockTransition(Mcg::clockInfo[HSRUN_CLOCK_CONFIG]);
@@ -474,7 +474,7 @@ int main() {
                );
                break;
             default:
-            case SmcStatus_run:
+            case SmcStatus_RUN:
                console.write(
                      "\n\nTests\n"
                      "====================================\n"
@@ -491,7 +491,7 @@ int main() {
                      "H - Help\n"
                );
                break;
-            case SmcStatus_vlpr:
+            case SmcStatus_VLPR:
                console.write(
                      "\n\nTests\n"
                      "====================================\n"
@@ -526,18 +526,18 @@ int main() {
       int command = toupper(console.readChar());
       switch(command) {
          case 'S':
-            if (smcStatus==SmcStatus_run) {
+            if (smcStatus==SmcStatus_RUN) {
                test = (test==VLPS)?STOP:VLPS;
             }
-            else if (smcStatus==SmcStatus_vlpr) {
+            else if (smcStatus==SmcStatus_VLPR) {
                test = VLPS;
             }
             break;
          case 'W':
-            if (smcStatus==SmcStatus_run) {
+            if (smcStatus==SmcStatus_RUN) {
                test = WAIT;
             }
-            else if (smcStatus==SmcStatus_vlpr) {
+            else if (smcStatus==SmcStatus_VLPR) {
                test = VLPW;
             }
             break;
@@ -559,7 +559,7 @@ int main() {
                   test=NONE;
                   break;
                default:
-               case SmcStatus_run:
+               case SmcStatus_RUN:
                   if (test==VLPW) {
                      test=WAIT;
                   }
@@ -567,7 +567,7 @@ int main() {
                      test=STOP;
                   }
                   break;
-               case SmcStatus_vlpr:
+               case SmcStatus_VLPR:
                   test = oldTest;
                   if (test==WAIT) {
                      test=VLPW;
@@ -581,7 +581,7 @@ int main() {
             break;
 #ifdef SMC_PMCTRL_LPWUI_MASK
          case 'I':
-            if (smcStatus==SmcStatus_run) {
+            if (smcStatus==SmcStatus_RUN) {
                lpwui = !lpwui;
                Smc::setExitVeryLowPowerOnInterrupt(lpwui?SmcExitVeryLowPowerOnInt_Enabled:SmcExitVeryLowPowerOnInt_Disabled);
             }

@@ -16,8 +16,8 @@
 using namespace USBDM;
 
 // Connections - change as required
-using Cmp   = Cmp0;
-constexpr Cmp0Input CmpInput = Cmp0Input_CmpIn3;
+using Cmp    = Cmp0;
+using CmpPin = Cmp::Pin<Cmp0Input_CmpIn2>;
 
 // Led to control - change as required
 using Led   = GpioA<2, ActiveLow>;
@@ -68,20 +68,23 @@ int main() {
    // Set callback to execute on event
    Cmp::setCallback(callback);
 
-   // Set Comparator inputs
-   Cmp::selectInputs(CmpInput, Cmp0Input_DacRef);
+   // Configure input pin
+   CmpPin::setInput();
 
-   //Cmp::setInput<CmpInput>();
-   //Cmp::setOutput(PinDriveStrength_High, PinDriveMode_PushPull);
+   // Set Comparator inputs
+   Cmp::selectInputs(CmpPin::pinNum, Cmp0Input_DacRef);
+
+   // Configure output pin
+   Cmp::setOutput(PinDriveStrength_High, PinDriveMode_PushPull);
 
    // Enable interrupts on Rising and Falling edges
    Cmp::enableInterrupts(CmpInterrupt_Both);
    Cmp::enableNvicInterrupts();
 
    for(;;) {
-//      Led::toggle();
+      //      Led::toggle();
       USBDM::waitMS(100);
-//      console.writeln("Tick");
+      //      console.writeln("Tick");
    }
    return 0;
 }

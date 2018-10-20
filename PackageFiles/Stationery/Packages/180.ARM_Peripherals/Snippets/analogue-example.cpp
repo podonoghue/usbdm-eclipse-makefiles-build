@@ -34,10 +34,8 @@ int main(void) {
    // May change current resolution as needed e.g.
    Adc::setResolution(USBDM::AdcResolution_10bit_se);
 
-//   // Configure ADC pins (if automatic mapping is not enabled in USBDM configuration)
-//   if (!AdcChannel::AdcInfo::mapPinsOnEnable) {
-//      AdcChannel::setInput();
-//   }
+   // Configure ADC pin
+   AdcChannel::setInput();
 
    for(;;) {
       // Start next conversion
