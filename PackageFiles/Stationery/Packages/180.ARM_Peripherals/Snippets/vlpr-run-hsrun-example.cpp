@@ -20,11 +20,9 @@
 using namespace USBDM;
 
 // Map clock settings for each mode to available settings
-static constexpr unsigned ClockConfig_HSRUN = ClockConfig_PEE_120MHz;
-static constexpr unsigned ClockConfig_RUN   = ClockConfig_PEE_80MHz;
-static constexpr unsigned ClockConfig_VLPR  = ClockConfig_BLPE_4MHz;
-
-//static constexpr unsigned ClockConfig_RUN   = ClockConfig_PEE_48MHz;
+static constexpr ClockConfig ClockConfig_HSRUN = ClockConfig_PEE_120MHz;
+static constexpr ClockConfig ClockConfig_RUN   = ClockConfig_PEE_80MHz;
+static constexpr ClockConfig ClockConfig_VLPR  = ClockConfig_BLPE_4MHz;
 
 // LED connection - change as required
 using Led   = GpioC<3>;
@@ -32,13 +30,9 @@ using Led   = GpioC<3>;
 using namespace USBDM;
 
 void report() {
-   console.write("Run mode=");
-   console.write(Smc::getSmcStatusName());
-   console.write(", Clock =");
-   console.write(Mcg::getClockModeName());
-   console.write("@");
-   console.write(::SystemCoreClock);
-   console.writeln(" Hz").flushOutput();
+   console.write("Run mode = ").write(Smc::getSmcStatusName());
+   console.write(", Clock = ").write(Mcg::getClockModeName());
+   console.write("@").write(::SystemCoreClock).writeln(" Hz").flushOutput();
 }
 
 int main() {
@@ -63,8 +57,8 @@ int main() {
        * Change clock down then run mode
        */
       Mcg::clockTransition(Mcg::clockInfo[ClockConfig_VLPR]);
-      console_setBaudRate(defaultBaudRate);
       Smc::enterRunMode(SmcRunMode_VeryLowPower);
+      console_setBaudRate(defaultBaudRate);
       report();
       waitMS(1000);
 

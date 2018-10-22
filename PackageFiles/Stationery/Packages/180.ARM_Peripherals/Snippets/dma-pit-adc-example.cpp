@@ -60,7 +60,7 @@ static void configureAdc() {
    AdcChannel::enableHardwareConversion(AdcPretrigger_0, AdcInterrupt_Disabled, AdcDma_Enabled);
 
    // Connect ADC trigger A to PIT
-   SimInfo::setAdc0Triggers(SimAdc0AltTrigger_PreTrigger_0, SimAdc0Trigger_PitCh0);
+   SimInfo::setAdc0Triggers(SimAdc0TriggerMode_Alt_PreTrigger_0, SimAdc0Trigger_PitCh0);
 
    // Check for errors so far
    checkError();
@@ -137,7 +137,7 @@ static void configureDma(DmaChannelNum dmaChannelNum) {
     * Structure to define the DMA transfer
     */
    static const DmaTcd tcd (
-      /* Source address                 */ (uint32_t)(Adc::adcR(0)),      // Read from ADC result register
+      /* Source address                 */ Adc::adcR(0),                  // Read from ADC result register
       /* Source offset                  */ 0,                             // Source address does not change
       /* Source size                    */ dmaSize(buffer[0]),            // Size of read from ADC matches buffer element size
       /* Source modulo                  */ DmaModulo_Disabled,            // Disabled
@@ -230,7 +230,7 @@ void testHardwareConversions() {
    const DmaChannelNum dmaChannelNum = Dma0::allocateChannel();
    if (dmaChannelNum == DmaChannelNum_None) {
       console.writeln("Failed to allocate DMA channel");
-	  checkError();
+      checkError();
    }
 
    configureDma(dmaChannelNum);

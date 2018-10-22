@@ -18,8 +18,6 @@
  * - DMA
  * - PIT
  *
- * The LED should be assigned to a suitable GPIO
- *
  * It may also be necessary to adjust DMA_SLOT for the console UART.
  *    DmaSlot_UART0_Transmit => DmaSlot_UART?_Transmit
  * 
@@ -35,9 +33,6 @@
 #include "mcg.h"
 
 using namespace USBDM;
-
-// Connection - change as required
-using Led         = GpioA<2, ActiveLow>;  // = Blue LED
 
 // Slot number to use (must agree with console UART)
 static constexpr DmaSlot DMA_SLOT = Dma0Slot_UART0_Tx;
@@ -156,7 +151,7 @@ static void configureDma(DmaChannelNum dmaChannel) {
    Dma0::configure(
          DmaOnError_Halt,
          DmaMinorLoopMapping_Disabled,
-         DmaLink_Disabled,
+         DmaContinuousLink_Disabled,
          DmaArbitration_Fixed);
 
    // Set callback (Interrupts are enabled in TCD)
@@ -187,14 +182,14 @@ static void configureDma(DmaChannelNum dmaChannel) {
  * Configure the PIT
  * - Generates regular events which throttles the DMA -> UART Tx.
  *
- * @param dmaChannel  DMA channel being used, determines PIT
+ * @param dmaChannel  PIT channel being used.  Must be associated with DMA channel.
  */
-static void configurePit(DmaChannelNum dmaChannel) {
+static void configurePit(PitChannelNum pitChannel) {
    // Configure base PIT
    Pit::configure(PitDebugMode_Stop);
 
    // Configure channel for 100ms + interrupts
-   Pit::configureChannel(dmaChannel, 100*ms, PitChannelIrq_Enabled);
+   Pit::configureChannel(pitChannel, 100*ms, PitChannelIrq_Enabled);
 }
 
 /**
@@ -244,9 +239,6 @@ int main() {
 
    console.writeln("\nStarting\n").flushOutput();
 
-   // LED used for debug from DMA loop
-   Led::setOutput();
-
    // Allow entry to other RUN modes
    Smc::enablePowerModes(
          SmcVeryLowPower_Enabled,
@@ -259,11 +251,19 @@ int main() {
       console.write("Failed to allocate DMA channel, rc= ").writeln(E_NO_RESOURCE);
       __asm__("bkpt");
    }
-   console.write("Allocate DMA channel  #").writeln(dmaChannel);
+   console.write("Allocated DMA channel  #").writeln(dmaChannel);
 
    // Set up throttled DMA transfer from memory -> UART
    configureDma(dmaChannel);
-   configurePit(dmaChannel);
+
+   // Get Pit channel associated with DMA channel
+   PitChannelNum pitChannel = Pit::allocateDmaAssociatedChannel(dmaChannel);
+   if (pitChannel == PitChannelNum_None) {
+      console.write("Failed to allocate PIT channel, rc= ").writeln(E_NO_RESOURCE);
+      __asm__("bkpt");
+   }
+   console.write("Allocated PIT channel  #").writeln(pitChannel);
+   configurePit(pitChannel);
 
    // Start the UART DMA requests
    console.writeln("Doing 1 DMA transfer while in RUN").flushOutput();
@@ -280,7 +280,7 @@ int main() {
    changeRunMode(SmcRunMode_VeryLowPower);
 
    // Re-configure PIT as bus clock may have changed
-   configurePit(dmaChannel);
+   configurePit(pitChannel);
 
    // Start the UART DMA requests again
    complete = false;
@@ -295,16 +295,15 @@ int main() {
    waitMS(500);
 
    Smc::setStopOptions(
-         SmcLowLeakageStopMode_VLLS3,   // Retains RAM
+         SmcLowLeakageStopMode_VLLS3,    // Retains RAM
          SmcPowerOnReset_Enabled,        // Brown-out detection
-         SmcPartialStopMode_Normal,     // No bus clock in stop!
+         SmcPartialStopMode_Normal,      // No bus clock in stop!
          // SmcPartialStopMode_Partial1 - Bus clock active (for DMAC)
          SmcLpoInLowLeakage_Disabled);   // LPO stops in LLS/VLLS
 
    console.writeln("\nDoing DMA while sleeping....").flushOutput();
 
    for(;;) {
-      Led::toggle();
       // Enable UART Tx DMA requests
       console.enableDma(UartDma_TxHoldingEmpty);
 

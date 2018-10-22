@@ -140,17 +140,6 @@ uint32_t destination[DataSize];
 int main() {
    console.writeln("Starting");
 
-#if 0
-   // For testing channel allocation
-   for(;;) {
-      DmaChannelNum ch = Dma0::allocateChannel();
-      if (ch == DmaChannelNum_None) {
-         break;
-      }
-      console.write("Channel allocated = ").writeln(ch);
-   }
-#endif
-
    for(uint32_t *p=source; p<(source+DataSize); p++) {
       *p = (uint32_t)rand();
    }

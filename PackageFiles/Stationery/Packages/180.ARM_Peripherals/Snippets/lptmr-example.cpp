@@ -23,36 +23,36 @@ using namespace USBDM;
 #define SET_HANDLERS_PROGRAMMATICALLY
 
 // Connection mapping - change as required
-using RED_LED   = USBDM::GpioC<3>;
+using RedLed   = USBDM::GpioC<3>;
 
+// Timer to use
 using Lptmr = Lptmr0;
 
-/*
+/**
  * This handler is set programmatically
  */
 void flash(void) {
-   RED_LED::toggle();
+   RedLed::toggle();
 }
 
 #ifndef SET_HANDLERS_PROGRAMMATICALLY
 /**
  * Example showing how to install a custom IRQ handler for the Lptmr.
- * This will avoid the overhead of the USBDM call-back mechanism.
+ * This will avoid the time and space overhead of the USBDM call-back mechanism.
  */
 namespace USBDM {
 
 template<>
 void Lptmr::irqHandler() {
-   // Clear interrupt flag
-   lptmr().CSR |= LPTMR_CSR_TCF_MASK;
-   RED_LED::toggle();
+   clearInterruptFlag();
+   RedLed::toggle();
 }
 
 }
 #endif
 
 int main() {
-   RED_LED::setOutput();
+   RedLed::setOutput();
 
    // Enable LPTMR in time counting mode
    Lptmr::configureTimeCountingMode(
