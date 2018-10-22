@@ -476,7 +476,7 @@ Devices using this peripheral:
       
       <template namespace="usbdm"><![CDATA[
          \t/**
-         \t * Select the ADC0 Trigger source in STOP and VLPS modes, or when ADC0 Alternative Trigger is active.
+         \t * Selects the ADC0 Trigger source in STOP and VLPS modes, or when ADC0 Alternative Trigger is active.
          \t */
          \tenum SimAdc0Trigger {
          \t   SimAdc0Trigger_PdbExTrig    = SIM_SOPT7_ADC0TRGSEL(0),   //!< External Trigger Source PDBx_EXTRG
@@ -498,14 +498,16 @@ Devices using this peripheral:
          \t};\n\n
          
          \t/**
-         \t * Select the ADC0 Alternative Trigger sources.
-         \t * If PDB is selected then Pre-trigger 0/1 is determined by the PDB setup
-         \t * otherwise Pre-trigger 0/1 is determined by this selection.
+         \t * Selects the ADC0 trigger mode.\n
+         \t * 
+         \t *    _Pdb              - ADC is triggered by PDB which selects the pretrigger (SC1[0..n]/R[0..n]
+         \t *    _Alt_PreTrigger_0 - ADC is triggered by SimAdc0Trigger selection and uses pretrigger 0 = A (SC1[0]/R[0])
+         \t *    _Alt_PreTrigger_1 - ADC is triggered by SimAdc0Trigger selection and uses pretrigger 1 = B (SC1[1]/R[1])
          \t */
-         \tenum SimAdc0AltTrigger {
-         \t   SimAdc0AltTrigger_Pdb           = SIM_SOPT7_ADC0ALTTRGEN(0),                              //!< PDB trigger
-         \t   SimAdc0AltTrigger_PreTrigger_0  = SIM_SOPT7_ADC0ALTTRGEN(1)|SIM_SOPT7_ADC0PRETRGSEL(0),   //!< Pre-trigger 0 = A (SC1[0])
-         \t   SimAdc0AltTrigger_PreTrigger_1  = SIM_SOPT7_ADC0ALTTRGEN(1)|SIM_SOPT7_ADC0PRETRGSEL(1),   //!< Pre-trigger 1 = B (SC1[1])
+         \tenum SimAdc0TriggerMode {
+         \t   SimAdc0TriggerMode_Pdb               = SIM_SOPT7_ADC0ALTTRGEN(0),                              //!< PDB trigger
+         \t   SimAdc0TriggerMode_Alt_PreTrigger_0  = SIM_SOPT7_ADC0ALTTRGEN(1)|SIM_SOPT7_ADC0PRETRGSEL(0),   //!< Pre-trigger 0 = A (SC1[0])
+         \t   SimAdc0TriggerMode_Alt_PreTrigger_1  = SIM_SOPT7_ADC0ALTTRGEN(1)|SIM_SOPT7_ADC0PRETRGSEL(1),   //!< Pre-trigger 1 = B (SC1[1])
          \t};\n\n
       ]]></template>
       
@@ -515,14 +517,14 @@ Devices using this peripheral:
          \t * 
          \t * If PDB is selected by SimAdc0Trigger then Pre-trigger 0/1 is determined by the PDB setup,
          \t * otherwise Pre-trigger 0/1 is determined by this parameter.\n
-         \t * For example, setAdc0Triggers(SimAdc0AltTrigger_PreTrigger_1, SimAdc0Trigger_PitCh0) will set the trigger source\n
+         \t * For example, setAdc0Triggers(SimAdc0TriggerMode_Alt_PreTrigger_1, SimAdc0Trigger_PitCh0) will set the trigger source\n
          \t * to PIT channel 0 and conversion will use SC1[1]/R[1]. 
          \t *
-         \t * @param[in] simAdc0AltTrigger  Select the ADC0 Alternative Trigger sources 
+         \t * @param[in] simAdc0TriggerMode Select ADC0 Trigger mode 
          \t * @param[in] simAdc0Trigger     Select the ADC0 Trigger source in STOP and VLPS modes, or when ADC0 Alternative Trigger is active.
          \t */
-         \tstatic void setAdc0Triggers(SimAdc0AltTrigger simAdc0AltTrigger, SimAdc0Trigger simAdc0Trigger=SimAdc0Trigger_PdbExTrig) {
-         \t   sim().SOPT7 = (sim().SOPT7&~(SIM_SOPT7_ADC0TRGSEL_MASK|SIM_SOPT7_ADC0ALTTRGEN_MASK))|simAdc0Trigger|simAdc0AltTrigger;
+         \tstatic void setAdc0Triggers(SimAdc0TriggerMode simAdc0TriggerMode, SimAdc0Trigger simAdc0Trigger=SimAdc0Trigger_PdbExTrig) {
+         \t   sim().SOPT7 = (sim().SOPT7&~(SIM_SOPT7_ADC0TRGSEL_MASK|SIM_SOPT7_ADC0ALTTRGEN_MASK))|simAdc0Trigger|simAdc0TriggerMode;
          \t};\n\n
       ]]></template>
       

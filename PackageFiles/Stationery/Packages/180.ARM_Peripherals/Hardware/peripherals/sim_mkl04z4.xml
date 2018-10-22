@@ -360,8 +360,8 @@ Devices using this peripheral:
          \t   SimAdc0Trigger_Cmp2         = SIM_SOPT7_ADC0TRGSEL(3),   //!< Comparator 2 (if present)
          \t   SimAdc0Trigger_PitCh0       = SIM_SOPT7_ADC0TRGSEL(4),   //!< PIT Channel 0
          \t   SimAdc0Trigger_PitCh1       = SIM_SOPT7_ADC0TRGSEL(5),   //!< PIT Channel 1
-         \t   SimAdc0Trigger_PitCh2       = SIM_SOPT7_ADC0TRGSEL(6),   //!< PIT Channel 2
-         \t   SimAdc0Trigger_PitCh3       = SIM_SOPT7_ADC0TRGSEL(7),   //!< PIT Channel 3
+         \t   SimAdc0Trigger_6            = SIM_SOPT7_ADC0TRGSEL(6),   //!< Reserved
+         \t   SimAdc0Trigger_7            = SIM_SOPT7_ADC0TRGSEL(7),   //!< Reserved
          \t   SimAdc0Trigger_Tpm0         = SIM_SOPT7_ADC0TRGSEL(8),   //!< TPM0 Init and Ext Trigger Outputs
          \t   SimAdc0Trigger_Tpm1         = SIM_SOPT7_ADC0TRGSEL(9),   //!< TPM1 Init and Ext Trigger Outputs
          \t   SimAdc0Trigger_Tpm2         = SIM_SOPT7_ADC0TRGSEL(10),  //!< TPM2 Init and Ext Trigger Outputs (if present)
@@ -373,14 +373,16 @@ Devices using this peripheral:
          \t};\n\n
          
          \t/**
-         \t * Select the ADC0 Alternative Trigger sources.
-         \t * If TPM is selected then Pre-triggers are TPM channel 0 (A) and channel 1 (B)
-         \t * otherwise Pre-trigger 0/1 is determined by this selection.
+         \t * Selects the ADC0 trigger mode.\n
+         \t * 
+         \t *    _Tpm              - ADC is triggered by TPM. Pre-triggers are TPM channel 0 (A) and channel 1 (B)
+         \t *    _Alt_PreTrigger_0 - ADC is triggered by SimAdc0Trigger selection and uses pretrigger 0 = A (SC1[0]/R[0])
+         \t *    _Alt_PreTrigger_1 - ADC is triggered by SimAdc0Trigger selection and uses pretrigger 1 = B (SC1[1]/R[1])
          \t */
-         \tenum SimAdc0AltTrigger {
-         \t   SimAdc0AltTrigger_Tpm           = SIM_SOPT7_ADC0ALTTRGEN(0),                              //!< TPM trigger
-         \t   SimAdc0AltTrigger_PreTrigger_0  = SIM_SOPT7_ADC0ALTTRGEN(1)|SIM_SOPT7_ADC0PRETRGSEL(0),   //!< Pre-trigger 0 = A (SC1[0])
-         \t   SimAdc0AltTrigger_PreTrigger_1  = SIM_SOPT7_ADC0ALTTRGEN(1)|SIM_SOPT7_ADC0PRETRGSEL(1),   //!< Pre-trigger 1 = B (SC1[1])
+         \tenum SimAdc0TriggerMode {
+         \t   SimAdc0TriggerMode_Tpm               = SIM_SOPT7_ADC0ALTTRGEN(0),                              //!< TPM trigger
+         \t   SimAdc0TriggerMode_Alt_PreTrigger_0  = SIM_SOPT7_ADC0ALTTRGEN(1)|SIM_SOPT7_ADC0PRETRGSEL(0),   //!< Pre-trigger 0 = A (SC1[0])
+         \t   SimAdc0TriggerMode_Alt_PreTrigger_1  = SIM_SOPT7_ADC0ALTTRGEN(1)|SIM_SOPT7_ADC0PRETRGSEL(1),   //!< Pre-trigger 1 = B (SC1[1])
          \t};\n\n
       ]]></template>
       
@@ -390,14 +392,14 @@ Devices using this peripheral:
          \t * 
          \t * If TPM is selected by SimAdc0Trigger then Pre-triggers are TPM channel 0 (A) and channel 1 (B),
          \t * otherwise Pre-trigger 0/1 is determined by this parameter.\n
-         \t * For example, setAdc0Triggers(SimAdc0AltTrigger_PreTrigger_1, SimAdc0Trigger_PitCh0) will set the trigger source\n
+         \t * For example, setAdc0Triggers(SimAdc0TriggerMode_Alt_PreTrigger_1, SimAdc0Trigger_PitCh0) will set the trigger source\n
          \t * to PIT channel 0 and conversion will use SC1[1]/R[1]. 
          \t *
-         \t * @param[in] simAdc0AltTrigger  Select the ADC0 Alternative Trigger sources 
+         \t * @param[in] simAdc0TriggerMode Select ADC0 Trigger mode 
          \t * @param[in] simAdc0Trigger     Select the ADC0 Trigger source in STOP and VLPS modes, or when ADC0 Alternative Trigger is active.
          \t */
-         \tstatic void setAdc0Triggers(SimAdc0AltTrigger simAdc0AltTrigger, SimAdc0Trigger simAdc0Trigger=SimAdc0Trigger_External) {
-         \t   sim().SOPT7 = (sim().SOPT7&~(SIM_SOPT7_ADC0TRGSEL_MASK|SIM_SOPT7_ADC0ALTTRGEN_MASK))|simAdc0Trigger|simAdc0AltTrigger;
+         \tstatic void setAdc0Triggers(SimAdc0TriggerMode simAdc0TriggerMode, SimAdc0Trigger simAdc0Trigger=SimAdc0Trigger_External) {
+         \t   sim().SOPT7 = (sim().SOPT7&~(SIM_SOPT7_ADC0TRGSEL_MASK|SIM_SOPT7_ADC0ALTTRGEN_MASK))|simAdc0Trigger|simAdc0TriggerMode;
          \t};\n\n
       ]]></template>
       
