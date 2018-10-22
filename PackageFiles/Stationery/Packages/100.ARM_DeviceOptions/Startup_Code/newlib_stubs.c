@@ -249,7 +249,8 @@ void _exit(int rc __attribute__((unused))) {
        * If you end up here it probably means you fell of the end of main() or
        * failed an assertion!
        *
-       * Check the stack trace in the Debug window to find source of problem.
+       * Check console output to see description of failed assertions and
+       * check the stack trace in the Debug window to find source of problem.
        */
       __asm__("bkpt");
    }
