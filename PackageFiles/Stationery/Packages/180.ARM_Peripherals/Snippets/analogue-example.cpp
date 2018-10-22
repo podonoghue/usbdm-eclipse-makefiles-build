@@ -38,7 +38,7 @@ int main(void) {
    AdcChannel::setInput();
 
    for(;;) {
-      // Start next conversion
+      // Do next conversion
       uint32_t value = AdcChannel::readAnalogue();
       console.write("Value = ").write(value*3.3/(1<<10)-1).writeln(" volts");
    }
