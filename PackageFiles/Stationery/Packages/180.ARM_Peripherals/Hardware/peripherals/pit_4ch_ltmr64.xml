@@ -7,7 +7,7 @@
    <template><![CDATA[
    
       \t//! Number of PIT channels\n
-      \tstatic constexpr uint32_t numChannels  = 4;\n\n
+      \tstatic constexpr uint32_t NumChannels  = 4;\n\n
       
    ]]></template>
 

@@ -22,6 +22,8 @@
  */
 namespace USBDM {
 
+enum PitChannelNum : unsigned;
+
 /**
  * @addtogroup DMA_Group DMA, Direct Memory Access (DMA)
  * @brief Support for DMA operations
@@ -85,7 +87,7 @@ enum DmaMinorLoopMapping {
 /**
  * Channel numbers.
  */
-enum DmaChannelNum {
+enum DmaChannelNum : unsigned {
    DmaChannelNum_0,      //!< Channel  0
    DmaChannelNum_1,      //!< Channel  1
    DmaChannelNum_2,      //!< Channel  2
@@ -765,7 +767,7 @@ public:
          // Channel doesn't exists
          setAndCheckErrorCode(E_ILLEGAL_PARAM);
       }
-      if ((dmaMuxEnable == DmaMuxEnable_Triggered) && (dmaChannelNum>USBDM::PitInfo::numChannels)) {
+      if ((dmaMuxEnable == DmaMuxEnable_Triggered) && (dmaChannelNum>USBDM::PitInfo::NumChannels)) {
          // PIT triggering only available on channels corresponding to PIT channels
          setAndCheckErrorCode(E_ILLEGAL_PARAM);
       }
@@ -1025,6 +1027,26 @@ public:
    }
 
    /**
+    * Allocate Periodic DMA channel associated with given PIT channel.
+    * This is a channel that may be throttled by the associated PIT channel.
+    *
+    * @param pitChannelNum PIT channel being used.
+    * @return DmaChannelNum_None - No suitable channel available.  Error code set.
+    * @return Channel number     - Number of allocated channel
+    */
+   static DmaChannelNum allocatePitAssociatedChannel(PitChannelNum pitChannelNum) {
+      const uint32_t channelMask = (1<<pitChannelNum);
+      usbdm_assert(pitChannelNum<Info::NumChannels, "No DMA channel associated with PIT channel");
+      usbdm_assert((allocatedChannels & channelMask) != 0, "DMA channel already allocated");
+      if ((allocatedChannels & channelMask) == 0) {
+         setErrorCode(E_NO_RESOURCE);
+         return DmaChannelNum_None;
+      }
+      allocatedChannels &= ~channelMask;
+      return (DmaChannelNum) pitChannelNum;
+   }
+
+   /**
     * Allocate Periodic DMA channel.
     * This is a channel that may be throttled by an associated PIT channel.
     *
@@ -1033,7 +1055,7 @@ public:
     */
    static DmaChannelNum allocatePeriodicChannel() {
       unsigned channelNum = __builtin_ffs(allocatedChannels);
-      if ((channelNum == 0)||(--channelNum>=Info::NumChannels)||(channelNum>=USBDM::PitInfo::numChannels)) {
+      if ((channelNum == 0)||(--channelNum>=Info::NumChannels)||(channelNum>=USBDM::PitInfo::NumChannels)) {
          setErrorCode(E_NO_RESOURCE);
          return DmaChannelNum_None;
       }

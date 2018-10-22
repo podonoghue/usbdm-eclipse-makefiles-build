@@ -426,7 +426,7 @@ public:
          // Channel doesn't exists
          setAndCheckErrorCode(E_ILLEGAL_PARAM);
       }
-      if ((dmaMuxEnable == DmaMuxEnable_Triggered) && (dmaChannel>USBDM::PitInfo::numChannels)) {
+      if ((dmaMuxEnable == DmaMuxEnable_Triggered) && (dmaChannel>USBDM::PitInfo::NumChannels)) {
          // PIT triggering only available on channels corresponding to PIT channels
          setAndCheckErrorCode(E_ILLEGAL_PARAM);
       }
@@ -550,7 +550,7 @@ public:
     */
    static DmaChannelNum allocatePeriodicChannel() {
       unsigned channelNum = __builtin_ffs(allocatedChannels);
-      if ((channelNum == 0)||(--channelNum>=Info::NumChannels)||(channelNum>=USBDM::PitInfo::numChannels)) {
+      if ((channelNum == 0)||(--channelNum>=Info::NumChannels)||(channelNum>=USBDM::PitInfo::NumChannels)) {
          setErrorCode(E_NO_RESOURCE);
          return DmaChannelNum_None;
       }
