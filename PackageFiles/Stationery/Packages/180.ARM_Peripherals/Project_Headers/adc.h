@@ -277,7 +277,7 @@ protected:
 
 public:
    /** Hardware instance pointer */
-   static __attribute__((always_inline)) volatile ADC_Type &adc() { return Info::adc(); }
+   static volatile ADC_Type &adc() { return Info::adc(); }
 
 public:
    /** Get reference to ADC hardware as struct */
@@ -292,7 +292,7 @@ public:
 
 protected:
    /** Clock register for peripheral */
-   static __attribute__((always_inline)) volatile uint32_t &clockReg() { return Info::clockReg(); }
+   static volatile uint32_t &clockReg() { return Info::clockReg(); }
 
 public:
 
@@ -336,11 +336,10 @@ public:
       sCallback = callback;
    }
 
-public:
    /**
     * Configures all mapped pins associated with this peripheral
     */
-   static void __attribute__((always_inline)) configureAllPins() {
+   static void configureAllPins() {
       // Configure pins
       Info::initPCRs();
       Info::InfoDP::initPCRs();
@@ -407,7 +406,7 @@ public:
     *  [2..12MHz] for 16-bit conversion modes  \n
     *  [1..18MHz] for other conversion modes
     */
-   static void __attribute__((always_inline)) configure(
+   static void configure(
          AdcResolution   adcResolution,
          AdcClockSource  adcClockSource  = AdcClockSource_Asynch,
          AdcClockDivider adcClockDivider = AdcClockDivider_1,
@@ -446,7 +445,7 @@ public:
     *
     * @note This affects all channels on the ADC
     */
-   static __attribute__((always_inline)) void setResolution(AdcResolution adcResolution) {
+   static void setResolution(AdcResolution adcResolution) {
       adc().CFG1 = (adc().CFG1&~ADC_CFG1_MODE_MASK)|adcResolution;
    }
 
@@ -461,7 +460,7 @@ public:
     *  [2..12MHz] for 16-bit conversion modes  \n
     *  [1..18MHz] for other conversion modes
     */
-   static __attribute__((always_inline)) void setClockSource(AdcClockSource adcClockSource, AdcClockDivider adcClockDivider=AdcClockDivider_1) {
+   static void setClockSource(AdcClockSource adcClockSource, AdcClockDivider adcClockDivider=AdcClockDivider_1) {
       adc().CFG1 = (adc().CFG1&~(ADC_CFG1_ADIV_MASK|ADC_CFG1_ADICLK_MASK))|adcClockSource|adcClockDivider;
    }
 
@@ -474,7 +473,7 @@ public:
     *       If the internal clock is selected, it will be automatically enabled when an ADC conversion is initiated.\n
     *       However, enabling it beforehand will reduce the latency of the 1st conversion in a sequence.
     */
-   static __attribute__((always_inline)) void enableAsynchronousClock(bool enable=true) {
+   static void enableAsynchronousClock(bool enable=true) {
       if (enable) {
          adc().CFG1 |= ADC_CFG2_ADACKEN_MASK;
       }
@@ -490,7 +489,7 @@ public:
     *
     * @note This affects all channels on the ADC
     */
-   static __attribute__((always_inline)) void setAveraging(AdcAveraging adcAveraging) {
+   static void setAveraging(AdcAveraging adcAveraging) {
       adc().SC3 = (adc().SC3&~(ADC_SC3_AVGE_MASK|ADC_SC3_AVGS_MASK))|adcAveraging;
    }
 
@@ -583,6 +582,35 @@ public:
             (adcCompare&(ADC_SC2_ACFE(1)|ADC_SC2_ACFGT(1)|ADC_SC2_ACREN(1)));
    }
 
+   /**
+    * Enable/disable continuous conversion mode.
+    *
+    * @param[in] adcContinuous  Controls continuous conversion mode.
+    */
+   static void enableContinuousConversions(AdcContinuous adcContinuous) {
+      if (adcContinuous) {
+         adc().SC3 |= ADC_SC3_ADCO_MASK;
+      }
+      else {
+         adc().SC3 &= ~ADC_SC3_ADCO_MASK;
+      }
+   }
+
+   /**
+    * Enable/disable DMA.
+    *
+    * @param[in] adcDma  Controls DMA operation.
+    */
+   static void enableDma(AdcDma adcDma = AdcDma_Enabled) {
+      // Set up DMA
+      if (adcDma) {
+         adc().SC2 |= ADC_SC2_DMAEN_MASK;
+      }
+      else {
+         adc().SC2 &= ~ADC_SC2_DMAEN_MASK;
+      }
+   }
+
 protected:
    /**
     * Enables hardware trigger mode of operation and configures the channel.
@@ -603,7 +631,7 @@ protected:
     * Enables hardware trigger mode of operation and configures the channel.
     *
     * @param[in] sc1Value        SC1 register value including the ADC channel, Differential mode and interrupt enable
-    * @param[in] adcPretrigger   Hardware pre-trigger to use for this channel\n
+    * @param[in] adcPretrigger   Hardware pre-trigger to use for this channel.\n
     *                            This corresponds to pre-triggers in the PDB channels and SC1[n] register setups
     * @param[in] adcDma          Whether to generate a DMA request when each conversion completes
     */
@@ -617,28 +645,13 @@ protected:
 
    /**
     * Initiates a conversion but does not wait for it to complete.
+    * Intended for use with interrupts or DMA.
     *
     * @param[in] sc1Value       SC1 register value. This includes channel, differential mode and interrupts enable.
-    * @param[in] adcContinuous  Select continuous conversion mode
-    *
-    * @return E_NO_ERROR on success
     */
-   static __attribute__((always_inline)) ErrorCode startConversion(const int sc1Value, AdcContinuous adcContinuous) {
-
-      if ((sc1Value&&ADC_SC1_AIEN_MASK) && !Info::irqHandlerInstalled) {
-         // Enabling interrupts without a handler installed in vector table
-         return setErrorCode(E_NO_HANDLER);
-      }
-      if (adcContinuous) {
-         adc().SC3 |= ADC_SC3_ADCO_MASK;
-      }
-      else {
-         adc().SC3 &= ~ADC_SC3_ADCO_MASK;
-      }
+   static void startConversion(const int sc1Value) {
       // Trigger conversion
       adc().SC1[0] = sc1Value;
-
-      return E_NO_ERROR;
    };
 
    /**
@@ -717,7 +730,7 @@ public:
          AdcBase_T<Info>::enableHardwareConversion(channel|adcInterrupt, adcPretrigger);
       }
 
-   #ifdef ADC_SC2_DMAEN
+#ifdef ADC_SC2_DMAEN
       /**
        * Enables hardware trigger mode of operation and configures a channel.
        *
@@ -729,17 +742,18 @@ public:
       static void enableHardwareConversion(AdcPretrigger adcPretrigger, AdcInterrupt adcInterrupt, AdcDma adcDma) {
          AdcBase_T<Info>::enableHardwareConversion(channel|adcInterrupt, adcPretrigger, adcDma);
       }
-   #endif
+#endif
 
       /**
        * Initiates a conversion but does not wait for it to complete.
-       * Intended for use with interrupts so ADC interrupts are enabled
+       * Intended for use with interrupts or DMA.
        *
        * @param[in] adcInterrupt   Determines if an interrupt is generated when conversions are complete
-       * @param[in] adcContinuous  Select continuous conversion mode
        */
-      static __attribute__((always_inline)) void startConversion(AdcInterrupt adcInterrupt=AdcInterrupt_Disabled, AdcContinuous adcContinuous=AdcContinuous_Disabled) {
-         AdcBase_T<Info>::startConversion(channel|adcInterrupt, adcContinuous);
+      static void startConversion(AdcInterrupt adcInterrupt=AdcInterrupt_Disabled) {
+         usbdm_assert(Info::irqHandlerInstalled || (adcInterrupt == AdcInterrupt_Disabled),
+               "Enabling interrupts without a handler installed in vector table");
+         AdcBase_T<Info>::startConversion(channel|adcInterrupt);
       };
 
       /**
@@ -747,98 +761,99 @@ public:
        *
        * @return - the result of the conversion
        */
-      static __attribute__((always_inline)) uint32_t readAnalogue() {
+      static uint32_t readAnalogue() {
          // Zero extended to 32 bits
          return (uint32_t)(uint16_t)Adc::readAnalogue(channel);
       };
    };
 
 #ifdef ADC_SC1_DIFF_MASK
-/**
- * Template class representing an ADC differential channel
- *
- * Example
- * @code
- * // Instantiate the ADC and the differential channel (for ADC_DM0, ADC_DP0)
- * using Adc0 = AdcBase_T<Adc0Info>;
- * using Adc0Ch6 = Adc0::DiffChannel<0>;
- *
- * // Set ADC resolution
- * Adc0.setMode(AdcResolution_11bit_diff );
- *
- * // Read ADC value
- * uint32_t value = Adc0Ch0.readAnalogue();
- * @endcode
- *
- * @tparam channel ADC channel
- */
-template<int channel>
-class DiffChannel {
-
-private:
-   AdcBase::CheckSignal<typename Info::InfoDP, channel> checkPos;
-   AdcBase::CheckSignal<typename Info::InfoDM, channel> checkNeg;
-
-public:
-   /** PCR associated with plus channel */
-   using PcrP = PcrTable_T<typename Info::InfoDP, channel>;
-
-   /** PCR associated with minus channel */
-   using PcrM = PcrTable_T<typename Info::InfoDM, channel>;
-
-   /** Allow convenient access to owning ADC */
-   using Adc =  AdcBase_T<Info>;
-
-   /** Information about this ADC */
-   using AdcInfo = Info;
-
-   /** Channel number */
-   static constexpr int CHANNEL=channel;
-
    /**
-    * Configure the pins associated with this ADC channel.
-    * The pins are in analogue mode so no PCR settings are active.
-    * This function is of use if mapAllPins and mapAllPinsOnEnable are not selected in USBDM configuration.
-    */
-   static void setInput() {
-      // Map pins to ADC
-      PcrP::setPCR(Info::InfoDP::info[channel].pcrValue);
-      PcrM::setPCR(Info::InfoDM::info[channel].pcrValue);
-   }
-
-   /**
-    * Enables hardware trigger mode of operation and configures a channel.
+    * Template class representing an ADC differential channel
     *
-    * @param[in] adcPretrigger   Hardware pre-trigger to use for this channel\n
-    *                            This corresponds to pre-triggers in the PDB channels and SC1[n] register setups
-    * @param[in] adcInterrupt    Whether to generate interrupt when complete
-    * @param[in] adcDma          Whether to generate a DMA request when each conversion completes
-    */
-   static void enableHardwareConversion(AdcPretrigger adcPretrigger, AdcInterrupt adcInterrupt=AdcInterrupt_Disabled, AdcDma adcDma=AdcDma_Disabled) {
-      AdcBase_T<Info>::enableHardwareConversion(channel|ADC_SC1_DIFF_MASK|adcInterrupt, adcPretrigger, adcDma);
-   }
-
-   /**
-    * Initiates a conversion but does not wait for it to complete.
-    * Intended for use with interrupts so ADC interrupts are enabled
+    * Example
+    * @code
+    * // Instantiate the ADC and the differential channel (for ADC_DM0, ADC_DP0)
+    * using Adc0 = AdcBase_T<Adc0Info>;
+    * using Adc0Ch6 = Adc0::DiffChannel<0>;
     *
-    * @param[in] adcInterrupt   Determines if an interrupt is generated when conversions are complete
-    * @param[in] adcContinuous  Select continuous conversion mode
+    * // Set ADC resolution
+    * Adc0.setMode(AdcResolution_11bit_diff );
+    *
+    * // Read ADC value
+    * uint32_t value = Adc0Ch0.readAnalogue();
+    * @endcode
+    *
+    * @tparam channel ADC channel
     */
-   static __attribute__((always_inline)) void startConversion(AdcInterrupt adcInterrupt=AdcInterrupt_Disabled, AdcContinuous adcContinuous=AdcContinuous_Disabled) {
-      AdcBase_T<Info>::startConversion(channel|ADC_SC1_DIFF_MASK|adcInterrupt, adcContinuous);
+   template<int channel>
+   class DiffChannel {
+
+   private:
+      AdcBase::CheckSignal<typename Info::InfoDP, channel> checkPos;
+      AdcBase::CheckSignal<typename Info::InfoDM, channel> checkNeg;
+
+   public:
+      /** PCR associated with plus channel */
+      using PcrP = PcrTable_T<typename Info::InfoDP, channel>;
+
+      /** PCR associated with minus channel */
+      using PcrM = PcrTable_T<typename Info::InfoDM, channel>;
+
+      /** Allow convenient access to owning ADC */
+      using Adc =  AdcBase_T<Info>;
+
+      /** Information about this ADC */
+      using AdcInfo = Info;
+
+      /** Channel number */
+      static constexpr int CHANNEL=channel;
+
+      /**
+       * Configure the pins associated with this ADC channel.
+       * The pins are in analogue mode so no PCR settings are active.
+       * This function is of use if mapAllPins and mapAllPinsOnEnable are not selected in USBDM configuration.
+       */
+      static void setInput() {
+         // Map pins to ADC
+         PcrP::setPCR(Info::InfoDP::info[channel].pcrValue);
+         PcrM::setPCR(Info::InfoDM::info[channel].pcrValue);
+      }
+
+      /**
+       * Enables hardware trigger mode of operation and configures a channel.
+       *
+       * @param[in] adcPretrigger   Hardware pre-trigger to use for this channel\n
+       *                            This corresponds to pre-triggers in the PDB channels and SC1[n] register setups
+       * @param[in] adcInterrupt    Whether to generate interrupt when complete
+       * @param[in] adcDma          Whether to generate a DMA request when each conversion completes
+       */
+      static void enableHardwareConversion(AdcPretrigger adcPretrigger, AdcInterrupt adcInterrupt=AdcInterrupt_Disabled, AdcDma adcDma=AdcDma_Disabled) {
+         AdcBase_T<Info>::enableHardwareConversion(channel|ADC_SC1_DIFF_MASK|adcInterrupt, adcPretrigger, adcDma);
+      }
+
+      /**
+       * Initiates a conversion but does not wait for it to complete.
+       * Intended for use with interrupts or DMA.
+       *
+       * @param[in] adcInterrupt   Determines if an interrupt is generated when conversions are complete
+       */
+      static void startConversion(AdcInterrupt adcInterrupt=AdcInterrupt_Disabled) {
+         usbdm_assert(Info::irqHandlerInstalled || (adcInterrupt == AdcInterrupt_Disabled),
+               "Enabling interrupts without a handler installed in vector table");
+         AdcBase_T<Info>::startConversion(channel|ADC_SC1_DIFF_MASK|adcInterrupt);
+      };
+
+      /**
+       * Initiates a conversion and waits for it to complete.
+       *
+       * @return - the result of the conversion
+       */
+      static int32_t readAnalogue() {
+         // Sign-extended to 32 bits
+         return (int32_t)(int16_t)Adc::readAnalogue(channel|ADC_SC1_DIFF_MASK);
+      };
    };
-
-   /**
-    * Initiates a conversion and waits for it to complete.
-    *
-    * @return - the result of the conversion
-    */
-   static __attribute__((always_inline)) int32_t readAnalogue() {
-      // Sign-extended to 32 bits
-      return (int32_t)(int16_t)Adc::readAnalogue(channel|ADC_SC1_DIFF_MASK);
-   };
-};
 #endif
 
 };
