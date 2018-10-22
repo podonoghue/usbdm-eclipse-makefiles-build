@@ -23,6 +23,8 @@
 
 namespace USBDM {
 
+enum DmaChannelNum : unsigned;
+
 /**
  * @addtogroup PIT_Group PIT, Programmable Interrupt Timer
  * @brief Abstraction for Programmable Interrupt Timer
@@ -58,6 +60,18 @@ enum PitChannelEnable {
 };
 
 /**
+ * Channel numbers.
+ */
+enum PitChannelNum : unsigned {
+   PitChannelNum_0,      //!< Channel  0
+   PitChannelNum_1,      //!< Channel  1
+   PitChannelNum_2,      //!< Channel  2
+   PitChannelNum_3,      //!< Channel  3
+
+   PitChannelNum_None = (1<<7),  //!< Used to indicate failed channel allocation
+};
+
+/**
  * @brief Class representing a Programmable Interrupt  Timer
  *
  * <b>Example</b>
@@ -76,6 +90,9 @@ private:
    PitBase_T(const PitBase_T&) = delete;
    PitBase_T(PitBase_T&&) = delete;
 
+   /** Bit-mask of allocated channels */
+   static uint32_t allocatedChannels;
+
 protected:
    /** Default TCTRL value for timer channel */
    static constexpr uint32_t PIT_TCTRL_DEFAULT_VALUE = (PIT_TCTRL_TEN_MASK);
@@ -84,15 +101,64 @@ protected:
    static void unhandledCallback() {
       setAndCheckErrorCode(E_NO_HANDLER);
    }
-   
+
 public:
+   /**
+    * Allocate PIT channel.
+    *
+    * @return PitChannelNum_None - No suitable channel available.  Error code set.
+    * @return Channel number     - Number of allocated channel
+    */
+   static PitChannelNum allocateChannel() {
+      unsigned channelNum = __builtin_ffs(allocatedChannels);
+      if ((channelNum == 0)||(--channelNum>=Info::NumChannels)) {
+         setErrorCode(E_NO_RESOURCE);
+         return PitChannelNum_None;
+      }
+      allocatedChannels &= ~(1<<channelNum);
+      return (PitChannelNum) channelNum;
+   }
+
+   /**
+    * Allocate PIT channel associated with DMA channel.
+    * This is a channel that may be used to throttle the associated DMA channel.
+    *
+    * @param dmaChannelNum DMA channel being used.
+    *
+    * @return PitChannelNum_None - No suitable channel available.  Error code set.
+    * @return Channel number     - Number of allocated channel
+    */
+   static PitChannelNum allocateDmaAssociatedChannel(DmaChannelNum dmaChannelNum) {
+      const uint32_t channelMask = (1<<dmaChannelNum);
+      usbdm_assert(dmaChannelNum<Info::NumChannels, "No PIT channel associated with DMA channel");
+      usbdm_assert((allocatedChannels & channelMask) != 0, "PIT channel already allocated");
+      if ((allocatedChannels & channelMask) == 0) {
+         setErrorCode(E_NO_RESOURCE);
+         return PitChannelNum_None;
+      }
+      allocatedChannels &= ~channelMask;
+      return (PitChannelNum) dmaChannelNum;
+   }
+
+   /**
+    * Free PIT channel.
+    *
+    * @param pitChannelNum Channel to release
+    */
+   static void freeChannel(PitChannelNum pitChannelNum) {
+      const uint32_t channelMask = (1<<pitChannelNum);
+      usbdm_assert(pitChannelNum<Info::NumChannels, "Illegal PIT channel");
+      usbdm_assert((allocatedChannels & channelMask) == 0, "Freeing unallocated PIT channel");
+      allocatedChannels |= channelMask;
+   }
+
    /**
     * Enable/disable channel interrupts
     *
     * @param[in]  channel Channel being modified
     * @param[in]  enable  True => enable, False => disable
     */
-   static void enableInterrupts(unsigned channel, bool enable=true) {
+   static void enableInterrupts(PitChannelNum channel, bool enable=true) {
       if (enable) {
          pit().CHANNEL[channel].TCTRL |= PIT_TCTRL_TIE_MASK;
       }
@@ -109,7 +175,7 @@ public:
     *  @param[in]  callback  Callback function to be executed on interrupt.\n
     *                        Use nullptr to remove callback.
     */
-   static void setCallback(uint8_t channel, PitCallbackFunction callback) {
+   static void setCallback(PitChannelNum channel, PitCallbackFunction callback) {
       usbdm_assert(Info::irqHandlerInstalled, "PIT not configure for interrupts");
       if (callback == nullptr) {
          callback = unhandledCallback;
@@ -176,7 +242,7 @@ public:
     *
     * @return E_NO_ERROR on success
     */
-   static ErrorCode enableNvicInterrupts(unsigned channel, bool enable=true, uint32_t nvicPriority=NvicPriority_Normal) {
+   static ErrorCode enableNvicInterrupts(PitChannelNum channel, bool enable=true, uint32_t nvicPriority=NvicPriority_Normal) {
       static const IRQn_Type irqNums[] = {
             Info::irqNums[0], Info::irqNums[1], Info::irqNums[2], Info::irqNums[3],
       };
@@ -198,7 +264,7 @@ public:
     *
     *  @param[in]  channel   Channel to enable
     */
-   static void enableChannel(const uint8_t channel) {
+   static void enableChannel(const PitChannelNum channel) {
       pit().CHANNEL[channel].TCTRL |= PIT_TCTRL_TEN_MASK;
    }
 
@@ -207,7 +273,7 @@ public:
     *
     *   @param[in]  channel Channel to disable
     */
-   static void disableChannel(uint8_t channel) {
+   static void disableChannel(PitChannelNum channel) {
 
       // Disable timer channel
       pit().CHANNEL[channel].TCTRL &= ~PIT_TCTRL_TEN_MASK;
@@ -224,7 +290,7 @@ public:
     *        immediate effect.
     */
    static void configureChannelInTicks(
-         uint8_t           channel,
+         PitChannelNum     channel,
          uint32_t          tickInterval,
          PitChannelIrq     pitChannelIrq=PitChannelIrq_Disabled) {
 
@@ -247,7 +313,7 @@ public:
     *        immediate effect.
     */
    static void configureChannel(
-         uint8_t           channel,
+         PitChannelNum     channel,
          float             intervalInSeconds,
          PitChannelIrq     pitChannelIrq=PitChannelIrq_Disabled) {
 
@@ -296,7 +362,7 @@ public:
     * @note If the timer is currently enabled this value will be loaded on the next expiration.
     *       To have immediate effect it is necessary to use configureChannel().
     */
-   static void setPeriodInTicks(unsigned channel, uint32_t interval) {
+   static void setPeriodInTicks(PitChannelNum channel, uint32_t interval) {
       pit().CHANNEL[channel].LDVAL = interval-1;
    }
 
@@ -309,7 +375,7 @@ public:
     * @note If the timer is currently enabled this value will be loaded on the next expiration.
     *       To have immediate effect it is necessary to use configureChannel().
     */
-   static void setPeriod(unsigned channel, float interval) {
+   static void setPeriod(PitChannelNum channel, float interval) {
       setPeriodInTicks(channel, rintf(interval*Info::getClockFrequency()));
    }
 
@@ -321,7 +387,7 @@ public:
     *
     *  @note Function doesn't return until interval has expired
     */
-   static void delayInTicks(uint8_t channel, uint32_t interval) {
+   static void delayInTicks(PitChannelNum channel, uint32_t interval) {
       configureChannelInTicks(channel, interval);
       while (pit().CHANNEL[channel].TFLG == 0) {
          __NOP();
@@ -337,7 +403,7 @@ public:
     *
     *  @note Function doesn't return until interval has expired
     */
-   static void delay(uint8_t channel, float interval) {
+   static void delay(PitChannelNum channel, float interval) {
       configureChannel(channel, interval);
       while (pit().CHANNEL[channel].TFLG == 0) {
          __NOP();
@@ -347,7 +413,7 @@ public:
 
 protected:
    /** Callback functions for ISRs */
-   static PitCallbackFunction sCallbacks[Info::numChannels];
+   static PitCallbackFunction sCallbacks[Info::NumChannels];
 
    /**
     * Class representing a PIT channel
@@ -359,7 +425,7 @@ protected:
 
    public:
       /** Timer channel number */
-      static constexpr int CHANNEL = channel;
+      static constexpr PitChannelNum CHANNEL = (PitChannelNum)channel;
 
       /**
        * Set interrupt callback
@@ -367,7 +433,7 @@ protected:
        * @param[in]  callbackFunction  Function to call from stub ISR
        */
       static void setCallback(PitCallbackFunction callbackFunction) {
-         PitBase_T<Info>::setCallback(channel, callbackFunction);
+         PitBase_T<Info>::setCallback(CHANNEL, callbackFunction);
       }
 
       /** PIT interrupt handler - Calls PIT callback */
@@ -390,7 +456,7 @@ protected:
             uint32_t          interval,
             PitChannelIrq     pitChannelIrq=PitChannelIrq_Disabled) {
 
-         PitBase_T<Info>::configureChannelInTicks(channel, interval, pitChannelIrq);
+         PitBase_T<Info>::configureChannelInTicks(CHANNEL, interval, pitChannelIrq);
       }
 
       /**
@@ -406,7 +472,7 @@ protected:
             float             interval,
             PitChannelIrq     pitChannelIrq=PitChannelIrq_Disabled) {
 
-         PitBase_T<Info>::configureChannel(channel, interval, pitChannelIrq);
+         PitBase_T<Info>::configureChannel(CHANNEL, interval, pitChannelIrq);
       }
 
       /**
@@ -418,7 +484,7 @@ protected:
        *       To have immediate effect it is necessary to use configure().
        */
       static void __attribute__((always_inline)) setPeriod(float interval) {
-         PitBase_T<Info>::setPeriod(channel, interval);
+         PitBase_T<Info>::setPeriod(CHANNEL, interval);
       }
 
       /**
@@ -430,21 +496,21 @@ protected:
        *       To have immediate effect it is necessary to use configure().
        */
       static void __attribute__((always_inline)) setPeriodInTicks(uint32_t interval) {
-         PitBase_T<Info>::setPeriodInTicks(channel, interval);
+         PitBase_T<Info>::setPeriodInTicks(CHANNEL, interval);
       }
 
       /**
        *   Enable the PIT channel
        */
       static void __attribute__((always_inline)) enable() {
-         PitBase_T<Info>::enableChannel(channel);
+         PitBase_T<Info>::enableChannel(CHANNEL);
       }
 
       /**
        *   Disable the PIT channel
        */
       static void __attribute__((always_inline)) disable() {
-         PitBase_T<Info>::disableChannel(channel);
+         PitBase_T<Info>::disableChannel(CHANNEL);
       }
 
       /**
@@ -455,7 +521,7 @@ protected:
        * @note It is also necessary to modify NVIC using enableNvicInterrupts().
        */
       static void __attribute__((always_inline)) enableInterrupts(bool enable=true) {
-         PitBase_T<Info>::enableInterrupts(channel, enable);
+         PitBase_T<Info>::enableInterrupts(CHANNEL, enable);
       }
 
       /**
@@ -467,7 +533,7 @@ protected:
        * @return E_NO_ERROR on success
        */
       static ErrorCode __attribute__((always_inline)) enableNvicInterrupts(bool enable=true, uint32_t nvicPriority=NvicPriority_Normal) {
-         return PitBase_T<Info>::enableNvicInterrupts(channel, enable, nvicPriority);
+         return PitBase_T<Info>::enableNvicInterrupts(CHANNEL, enable, nvicPriority);
       }
 
       /**
@@ -478,7 +544,7 @@ protected:
        *  @note Function doesn't return until interval has expired
        */
       static void __attribute__((always_inline)) delayInTicks(uint32_t interval) {
-         PitBase_T<Info>::delayInTicks(channel, interval);
+         PitBase_T<Info>::delayInTicks(CHANNEL, interval);
       }
 
       /**
@@ -489,10 +555,13 @@ protected:
        *  @note Function doesn't return until interval has expired
        */
       static void __attribute__((always_inline)) delay(float interval) {
-         PitBase_T<Info>::delay(channel, interval);
+         PitBase_T<Info>::delay(CHANNEL, interval);
       }
    };
 };
+
+/** Bit-mask of allocated channels */
+template<class Info> uint32_t PitBase_T<Info>::allocatedChannels = -1;
 
 /**
  * Callback table for programmatically set handlers
