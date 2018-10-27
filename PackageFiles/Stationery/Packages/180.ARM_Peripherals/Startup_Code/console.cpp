@@ -39,6 +39,7 @@ extern "C"
 void console_initialise() {
    console.setBaudRate(defaultBaudRate);
    console.setEcho();
+   console.configureAllPins();
 }
 
 /*
