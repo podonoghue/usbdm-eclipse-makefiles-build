@@ -563,8 +563,8 @@ struct __attribute__((__packed__)) DmaTcd {
     * @param interruptOnMajorHalfComplete Interrupt request on on major loop half completion
     * @param bandwidthControl             Control how channel monopolises the bus
     * @param enableScatterGather          Enable Scatter/Gather operations
-    * @param enableChannelLinking         Enable linking to another channel
-    * @param linkChannelNumber            Channel to link to if linking is enabled
+    * @param enableMajorChannelLinking    Enable linking to another channel
+    * @param majorLinkChannelNumber       Channel to link to if linking is enabled
     */
    constexpr DmaTcd(
          uint32_t      sourceAddress,
@@ -636,8 +636,8 @@ struct __attribute__((__packed__)) DmaTcd {
     * @param interruptOnMajorHalfComplete Interrupt request on on major loop half completion
     * @param bandwidthControl             Control how channel monopolises the bus
     * @param enableScatterGather          Enable Scatter/Gather operations
-    * @param enableChannelLinking         Enable linking to another channel
-    * @param linkChannelNumber            Channel to link to if linking is enabled
+    * @param enableMajorChannelLinking    Enable linking to another channel
+    * @param majorLinkChannelNumber       Channel to link to if linking is enabled
     */
    constexpr DmaTcd(
          uint32_t                  sourceAddress,
@@ -698,9 +698,7 @@ struct __attribute__((__packed__)) DmaTcd {
  */
 constexpr uint32_t dmaNBytes(uint32_t nBytes) {
    return
-#ifdef DEBUG_BUILD
          usbdm_assert((nBytes<(1<<30)), "nBytes is too large"),
-#endif
          DMA_NBYTES_MLOFFNO_NBYTES(nBytes);
 }
 
@@ -714,9 +712,7 @@ constexpr uint32_t dmaNBytes(uint32_t nBytes) {
  */
 constexpr uint16_t dmaCiter(uint16_t citer) {
    return
-#ifdef DEBUG_BUILD
          usbdm_assert((citer<(1<<15)), "CITER is too large"),
-#endif
          DMA_CITER_ELINKNO_CITER(citer);
 }
 
@@ -731,9 +727,7 @@ constexpr uint16_t dmaCiter(uint16_t citer) {
  */
 constexpr uint16_t dmaCiter(DmaChannelNum dmaChannelNum, uint16_t citer) {
    return
-#ifdef DEBUG_BUILD
          usbdm_assert((citer<(1<<9)), "citer is too large"),
-#endif
          DMA_CITER_ELINKNO_ELINK(1)|DMA_CITER_ELINKYES_LINKCH(dmaChannelNum)|DMA_CITER_ELINKYES_CITER(citer);
 }
 
@@ -762,21 +756,18 @@ public:
     * @param[in] dmaMuxEnable    The mode for the channel
     */
    static void configure(DmaChannelNum dmaChannelNum, DmaSlot dmaSlot, DmaMuxEnable dmaMuxEnable=DmaMuxEnable_Continuous) {
-#ifdef DEBUG_BUILD
-      if (dmaChannelNum >= NumChannels) {
-         // Channel doesn't exists
-         setAndCheckErrorCode(E_ILLEGAL_PARAM);
-      }
-      if ((dmaMuxEnable == DmaMuxEnable_Triggered) && (dmaChannelNum>USBDM::PitInfo::NumChannels)) {
-         // PIT triggering only available on channels corresponding to PIT channels
-         setAndCheckErrorCode(E_ILLEGAL_PARAM);
-      }
-      if (((dmaChannelNum>=16)&&(dmaSlot<64))||((dmaChannelNum<16)&&(dmaSlot>=64))) {
-         // DmaSlots 0-63 must associate with DMA channels 0-15
-         // DmaSlots 64-128 must associate with DMA channels 15-31
-         setAndCheckErrorCode(E_ILLEGAL_PARAM);
-      }
-#endif
+
+      usbdm_assert(dmaChannelNum<NumChannels, "Illegal DMA channel");
+
+      // Throttled DMA channels limited by PIT channels available
+      usbdm_assert((dmaMuxEnable != DmaMuxEnable_Triggered) || (dmaChannelNum<=USBDM::PitInfo::NumChannels),
+            "Illegal PIT throttled channel");
+
+      // DmaSlots 0-63 must associate with DMA channels 0-15
+      // DmaSlots 64-128 must associate with DMA channels 15-31
+      usbdm_assert(((dmaChannelNum<16)||(dmaSlot>=64))&&((dmaChannelNum>=16)||(dmaSlot<64)),
+            "Illegal PIT channel");
+
       // Enable clock to peripheral
       DmaMuxInfo::clockReg()  |= DmaMuxInfo::clockMask;
 
@@ -791,11 +782,9 @@ public:
     * @param dmaChannelNum Channel to modify
     */
    static void disable(DmaChannelNum dmaChannelNum) {
-#ifdef DEBUG_BUILD
-      if (dmaChannelNum>=NumChannels) {
-         setAndCheckErrorCode(E_ILLEGAL_PARAM);
-      }
-#endif
+
+      usbdm_assert(dmaChannelNum<NumChannels, "Illegal DMA channel");
+
       // Enable clock to peripheral
       DmaMuxInfo::clockReg()  |= DmaMuxInfo::clockMask;
 
@@ -946,15 +935,16 @@ public:
    static void configure(
          DmaOnError           dmaOnError=DmaOnError_Halt,
          DmaMinorLoopMapping  dmaMinorLoopMapping=DmaMinorLoopMapping_Disabled,
-         DmaContinuousLink    dmaLink=DmaContinuousLink_Disabled,
+         DmaContinuousLink    dmaContinuousLink=DmaContinuousLink_Disabled,
          DmaArbitration       dmaArbitration=DmaArbitration_RoundRobin,
          DmaGroupArbitration  dmaGroupArbitration=DmaGroupArbitration_RoundRobin
          ) {
+
       // Enable clock to DMAC
       clockReg()  |= MuxInfo::clockMask;
 
       // Set shared control options
-      dmac().CR = dmaArbitration|dmaOnError|dmaLink|dmaMinorLoopMapping|dmaGroupArbitration|DMA_CR_EDBG(1);
+      dmac().CR = dmaArbitration|dmaOnError|dmaContinuousLink|dmaMinorLoopMapping|dmaGroupArbitration|DMA_CR_EDBG(1);
 
       // Clear call-backs and TCDs
       for (unsigned channel=0; channel<Info::NumVectors; channel++) {
@@ -963,7 +953,7 @@ public:
          configureTransfer((DmaChannelNum)channel, emptyTcd);
       }
       // Reset record of allocated channels
-      allocatedChannels = 0;
+      allocatedChannels = -1;
    }
 
    /**
@@ -1093,11 +1083,9 @@ public:
          int                priority,
          DmaCanBePreempted  dmaCanBePreempted=DmaCanBePreempted_Enabled,
          DmaCanPreemptLower dmaCanPreemptLower=DmaCanPreemptLower_Enabled) {
-#ifdef DEBUG_BUILD
-      if (dmaChannelNum>=Info::NumChannels) {
-         setAndCheckErrorCode(E_ILLEGAL_PARAM);
-      }
-#endif
+
+      usbdm_assert(dmaChannelNum<Info::NumChannels, "Illegal DMA channel");
+
       int index = (dmaChannelNum&0xFC)|(3-(dmaChannelNum&0x03));
       constexpr volatile uint8_t *priorities = &dmac().DCHPRI3;
       priorities[index] = dmaCanBePreempted|dmaCanPreemptLower|DMA_DCHPRI_CHPRI(priority);
@@ -1110,11 +1098,9 @@ public:
     * @param[in] tcd           DMA TCD block describing the transfer
     */
    static void configureTransfer(DmaChannelNum dmaChannelNum, const DmaTcd &tcd) {
-#ifdef DEBUG_BUILD
-      if (dmaChannelNum>=Info::NumChannels) {
-         setAndCheckErrorCode(E_ILLEGAL_PARAM);
-      }
-#endif
+
+      usbdm_assert(dmaChannelNum<Info::NumChannels, "Illegal DMA channel");
+
       dmac().TCD[dmaChannelNum].SADDR           = tcd.SADDR;
       dmac().TCD[dmaChannelNum].SOFF            = tcd.SOFF;
       dmac().TCD[dmaChannelNum].ATTR            = tcd.ATTR.data;
@@ -1143,11 +1129,9 @@ public:
     * @param[in] dmaChannelNum DMA channel number
     */
    static void waitUntilComplete(DmaChannelNum dmaChannelNum) {
-#ifdef DEBUG_BUILD
-      if (dmaChannelNum>=Info::NumChannels) {
-         setAndCheckErrorCode(E_ILLEGAL_PARAM);
-      }
-#endif
+
+      usbdm_assert(dmaChannelNum<Info::NumChannels, "Illegal DMA channel");
+
       int lastCiter = dmac().TCD[dmaChannelNum].CITER_ELINKNO;
       while ((dmac().TCD[dmaChannelNum].CSR & DMA_CSR_DONE_MASK) == 0) {
          int currentCiter = dmac().TCD[dmaChannelNum].CITER_ELINKNO;
@@ -1173,11 +1157,9 @@ public:
     *        the transfer starts.
     */
    static void __attribute__((always_inline)) startSoftwareRequest(DmaChannelNum dmaChannelNum) {
-#ifdef DEBUG_BUILD
-      if (dmaChannelNum>=Info::NumChannels) {
-         setAndCheckErrorCode(E_ILLEGAL_PARAM);
-      }
-#endif
+
+      usbdm_assert(dmaChannelNum<Info::NumChannels, "Illegal DMA channel");
+
       dmac().SSRT = dmaChannelNum;
    }
 
@@ -1191,11 +1173,9 @@ public:
     * @note May use DmaChannelNum_All to apply to all channels
     */
    static void __attribute__((always_inline)) enableMultipleRequests(uint32_t dmaChannelMask, bool enable=true) {
-#ifdef DEBUG_BUILD
-      if (dmaChannelMask&~((1<<Info::NumChannels)-1)) {
-         setAndCheckErrorCode(E_ILLEGAL_PARAM);
-      }
-#endif
+
+      usbdm_assert((dmaChannelMask&~((1<<Info::NumChannels))-1) != 0, "Illegal DMA channel");
+
       if (enable) {
          dmac().ERQ |= dmaChannelMask;
       }
@@ -1214,11 +1194,9 @@ public:
     * @note May use DmaChannelNum_All to apply to all channels
     */
    static void __attribute__((always_inline)) enableRequests(DmaChannelNum dmaChannelNum, bool enable=true) {
-#ifdef DEBUG_BUILD
-      if (dmaChannelNum>=Info::NumChannels) {
-         setAndCheckErrorCode(E_ILLEGAL_PARAM);
-      }
-#endif
+
+      usbdm_assert(dmaChannelNum<Info::NumChannels, "Illegal DMA channel");
+
       if (enable) {
          dmac().SERQ = dmaChannelNum;
       }
@@ -1236,11 +1214,9 @@ public:
     * @param[in]  enable        True => enable, False => disable
     */
    static void __attribute__((always_inline)) enableAsynchronousRequests(DmaChannelNum dmaChannelNum, bool enable=true) {
-#ifdef DEBUG_BUILD
-      if (dmaChannelNum>=Info::NumChannels) {
-         setAndCheckErrorCode(E_ILLEGAL_PARAM);
-      }
-#endif
+
+      usbdm_assert(dmaChannelNum<Info::NumChannels, "Illegal DMA channel");
+
       if (enable) {
          dmac().EARS |= (1<<dmaChannelNum);
       }
@@ -1257,11 +1233,9 @@ public:
     * @param[in]  enable         True => enable, False => disable
     */
    static void __attribute__((always_inline)) enableMultipleErrorInterrupts(uint32_t dmaChannelMask, bool enable=true) {
-#ifdef DEBUG_BUILD
-      if (dmaChannelMask&~((1<<Info::NumChannels)-1)) {
-         setAndCheckErrorCode(E_ILLEGAL_PARAM);
-      }
-#endif
+
+      usbdm_assert((dmaChannelMask&~((1<<Info::NumChannels))-1) != 0, "Illegal DMA channel");
+
       if (enable) {
          dmac().EEI |= dmaChannelMask;
       }
@@ -1279,11 +1253,9 @@ public:
     * @note May use DmaChannelNum_All to apply to all channels
     */
    static void __attribute__((always_inline)) enableErrorInterrupts(DmaChannelNum dmaChannelNum, bool enable=true) {
-#ifdef DEBUG_BUILD
-      if (dmaChannelNum>=Info::NumChannels) {
-         setAndCheckErrorCode(E_ILLEGAL_PARAM);
-      }
-#endif
+
+      usbdm_assert(dmaChannelNum<Info::NumChannels, "Illegal DMA channel");
+
       if (enable) {
          dmac().SEEI = dmaChannelNum;
       }
@@ -1300,11 +1272,9 @@ public:
     * @note May use DmaChannelNum_All to apply to all channels
     */
    static void __attribute__((always_inline)) clearDoneFlag(DmaChannelNum dmaChannelNum) {
-#ifdef DEBUG_BUILD
-      if (dmaChannelNum>=Info::NumChannels) {
-         setAndCheckErrorCode(E_ILLEGAL_PARAM);
-      }
-#endif
+
+      usbdm_assert(dmaChannelNum<Info::NumChannels, "Illegal DMA channel");
+
       dmac().CDNE = dmaChannelNum;
    }
 
@@ -1315,11 +1285,9 @@ public:
     * @param[in]  enable         True => enable, False => disable
     */
    static void __attribute__((always_inline)) clearMultipleInterruptRequests(uint32_t dmaChannelMask, bool enable=true) {
-#ifdef DEBUG_BUILD
-      if (dmaChannelMask&~((1<<Info::NumChannels)-1)) {
-         setAndCheckErrorCode(E_ILLEGAL_PARAM);
-      }
-#endif
+
+      usbdm_assert((dmaChannelMask&~((1<<Info::NumChannels))-1) != 0, "Illegal DMA channel");
+
       if (enable) {
          dmac().INT |= dmaChannelMask;
       }
@@ -1336,11 +1304,9 @@ public:
     * @note May use DmaChannelNum_All to apply to all channels
     */
    static void __attribute__((always_inline)) clearInterruptRequest(DmaChannelNum dmaChannelNum) {
-#ifdef DEBUG_BUILD
-      if (dmaChannelNum>=Info::NumChannels) {
-         setAndCheckErrorCode(E_ILLEGAL_PARAM);
-      }
-#endif
+
+      usbdm_assert(dmaChannelNum<Info::NumChannels, "Illegal DMA channel");
+
       dmac().CINT = dmaChannelNum;
    }
 
@@ -1354,11 +1320,9 @@ public:
     * @return E_NO_ERROR on success
     */
    static ErrorCode enableNvicInterrupts(DmaChannelNum dmaChannelNum, bool enable=true, uint32_t nvicPriority=NvicPriority_Normal) {
-#ifdef DEBUG_BUILD
-      if (dmaChannelNum>=Info::NumChannels) {
-         setAndCheckErrorCode(E_ILLEGAL_PARAM);
-      }
-#endif
+
+      usbdm_assert(dmaChannelNum<Info::NumChannels, "Illegal DMA channel");
+
       IRQn_Type irqNum = Dma0Info::irqNums[0] + (dmaChannelNum&(Dma0Info::NumChannels-1));
       if (enable) {
          enableNvicInterrupt(irqNum, nvicPriority);
@@ -1397,8 +1361,10 @@ public:
     *                           Use nullptr to remove callback.
     */
    static void __attribute__((always_inline)) setCallback(DmaChannelNum dmaChannelNum, DmaCallbackFunction callback) {
+
       usbdm_assert(Info::irqHandlerInstalled, "DMA not configured for interrupts");
       usbdm_assert(dmaChannelNum<Info::NumChannels, "Illegal DMA channel");
+
       if (callback == nullptr) {
          callback = noHandlerCallback;
       }
