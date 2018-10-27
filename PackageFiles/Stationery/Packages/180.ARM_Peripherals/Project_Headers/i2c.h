@@ -468,7 +468,7 @@ template<class Info> I2c *I2cBase_T<Info>::thisPtr = 0;
  * <b>Example</b>\n
  * Refer @ref I2cBase_T
  */
-class I2c0 : public I2cBase_T<I2c0Info> {};
+using I2c0 = I2cBase_T<I2c0Info>;
 #endif
 
 #if defined(USBDM_I2C1_IS_DEFINED)
@@ -478,7 +478,7 @@ class I2c0 : public I2cBase_T<I2c0Info> {};
  * <b>Example</b>
  * Refer @ref I2cBase_T
  */
-class I2c1 : public I2cBase_T<I2c1Info> {};
+using I2c1 = I2cBase_T<I2c1Info>;
 #endif
 
 #if defined(USBDM_I2C2_IS_DEFINED)
@@ -488,7 +488,7 @@ class I2c1 : public I2cBase_T<I2c1Info> {};
  * <b>Example</b>
  * Refer @ref I2cBase_T
  */
-class I2c2 : public I2cBase_T<I2c2Info> {};
+using I2c2 = I2cBase_T<I2c2Info>;
 #endif
 
 /**
