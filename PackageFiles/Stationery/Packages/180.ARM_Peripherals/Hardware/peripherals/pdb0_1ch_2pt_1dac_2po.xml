@@ -10,7 +10,9 @@ Devices using this peripheral:
       \t//! Base value for PCR (excluding MUX value)
       \tstatic constexpr uint32_t defaultPcrValue  = DEFAULT_PCR;\n\n
    ]]></template>
-  
+   
+   <xi:include href="_mapPinsOption.xml"/>  
+
    <aliasOption key="/SIM/system_bus_clock" displayName="PDB input clock" constant="true"/>
 
    <choiceOption name="pdb_sc_prescaler" 

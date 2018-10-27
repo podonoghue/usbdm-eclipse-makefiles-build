@@ -9,7 +9,7 @@
       \tstatic constexpr uint32_t defaultPcrValue  = I2C_DEFAULT_PCR;\n\n
    ]]></template>
    
-   <xi:include href="_mapPinsOption.xml"/>  
+   <xi:include href="_mapPinsOption_on.xml"/>
    
    <aliasOption key="/SIM/system_bus_clock" />
    

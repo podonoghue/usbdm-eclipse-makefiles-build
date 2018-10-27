@@ -8,7 +8,7 @@
       \tstatic constexpr uint32_t defaultPcrValue  = 0;\n\n
    ]]></template>
   
-   <xi:include href="_mapPinsOption.xml"/>   
+   <xi:include href="_mapPinsOption_on.xml"/>
 
    <intOption name="osc_input_freq"
       units="Hz"
