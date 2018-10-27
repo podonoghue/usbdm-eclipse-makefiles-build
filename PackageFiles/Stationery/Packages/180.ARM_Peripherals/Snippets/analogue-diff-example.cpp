@@ -35,10 +35,8 @@ int main(void) {
    // May change default resolution as needed e.g.
    Adc::setResolution(USBDM::AdcResolution_9bit_diff);
 
-//   // Configure ADC pins (if automatic mapping is not enabled in USBDM configuration)
-//   if (!AdcChannel::AdcInfo::mapPinsOnEnable) {
-//      AdcChannel::setInput();
-//   }
+   // Connect ADC channel to pin
+   AdcChannel::setInput();
 
    for(;;) {
       // Do next conversion

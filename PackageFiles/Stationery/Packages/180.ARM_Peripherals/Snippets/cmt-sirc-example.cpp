@@ -292,6 +292,12 @@ int main() {
    console.write("SystemCoreClock = ").writeln(::SystemCoreClock);
    console.write("SystemBusClock  = ").writeln(::SystemBusClock);
 
+   // Configure CMT output and connect to pin
+   Cmt::setOutput(
+         PinDriveStrength_High,
+         PinDriveMode_PushPull,
+         PinSlewRate_Slow);
+
    Led::setOutput();
 
    for(int count = 0;;count++) {

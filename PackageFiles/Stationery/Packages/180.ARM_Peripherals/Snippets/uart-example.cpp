@@ -21,6 +21,8 @@ int main() {
 
    Uart0 uart;
 
+   uart.configureAllPins();
+
    uart.setBaudRate(115200);
 
    char aSingleCharacter;

@@ -68,13 +68,13 @@ int main() {
    // Set callback to execute on event
    Cmp::setCallback(callback);
 
-   // Configure input pin
+   // Connect CMP input to pin
    CmpPin::setInput();
 
    // Set Comparator inputs
    Cmp::selectInputs(CmpPin::pinNum, Cmp0Input_DacRef);
 
-   // Configure output pin
+   // Connect CMP output to pin
    Cmp::setOutput(PinDriveStrength_High, PinDriveMode_PushPull);
 
    // Enable interrupts on Rising and Falling edges

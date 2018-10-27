@@ -9,10 +9,11 @@
  ==============================================================================
  */
 /**
- * This example uses GPIO interrupts.
+ * This example uses GPIO interrupts.\n
+ * It would be more efficient to use the FTM Quadrature decoder if available.
  *
- * It is necessary to enable these in Configure.usbdmProject
- * under the "Peripheral Parameters"->GPIOx tab.
+ * It is necessary to enable these in Configure.usbdmProject\n
+ * under the "Peripheral Parameters"->GPIOx tab.\n
  * Select irqHandlers option (Class Method - Software ...)
  */
 #include "hardware.h"

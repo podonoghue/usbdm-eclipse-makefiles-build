@@ -16,7 +16,6 @@
  *
  * This example requires interrupts to be enabled in the USBDM configuration for the following:
  * - DMA
- * - PIT
  *
  * The LED should be assigned to a suitable GPIO
  *
@@ -35,9 +34,6 @@
 #include "mcg.h"
 
 using namespace USBDM;
-
-// Connection - change as required
-using Led         = GpioE<8, ActiveLow>;  // = Blue LED
 
 // Slot number to use (must agree with console UART)
 static constexpr DmaSlot DMA_SLOT = Dma0SlotLow_LPUART0_Tx;
@@ -124,7 +120,7 @@ static constexpr DmaTcd tcd = DmaTcd (
  * @param errorFlags Channel error information (DMA_ES)
  */
 void dmaErrorCallbackFunction(uint32_t errorFlags) {
-   console.write("DMA error DMA_ES = 0x").writeln(errorFlags, Radix_16);
+   console.write("DMA error DMA_ES = 0x").writeln(errorFlags, Radix_2);
    __BKPT();
 }
 
@@ -157,7 +153,7 @@ static void configureDma(DmaChannelNum dmaChannel) {
    Dma0::configure(
          DmaOnError_Halt,
          DmaMinorLoopMapping_Disabled,
-         DmaLink_Disabled,
+         DmaContinuousLink_Disabled,
          DmaArbitration_Fixed);
 
    // Set callback (Interrupts are enabled in TCD)
@@ -188,14 +184,14 @@ static void configureDma(DmaChannelNum dmaChannel) {
  * Configure the PIT
  * - Generates regular events which throttles the DMA -> UART Tx.
  *
- * @param dmaChannel  DMA channel being used, determines PIT
+ * @param dmaChannel  PIT channel being used.  Must be associated with DMA channel.
  */
-static void configurePit(DmaChannelNum dmaChannel) {
+static void configurePit(PitChannelNum pitChannel) {
    // Configure base PIT
    Pit::configure(PitDebugMode_Stop);
 
    // Configure channel for 100ms + interrupts
-   Pit::configureChannel(dmaChannel, 100*ms, PitChannelIrq_Enabled);
+   Pit::configureChannel(pitChannel, 100*ms, PitChannelIrq_Enabled);
 }
 
 /**
@@ -262,9 +258,6 @@ int main() {
 
    console.writeln("\nStarting\n").flushOutput();
 
-   // LED used for debug from DMA loop
-   Led::setOutput();
-
    // Re-configure LPUART as clocks change during example
    SimInfo::setLpuartClock(SimLpuartClockSource_McgIrClk);
    console.setBaudRate(defaultBaudRate, 4);
@@ -280,14 +273,22 @@ int main() {
    // DMA channel number to use (determines which PIT channel used)
    static const DmaChannelNum dmaChannel = Dma0::allocatePeriodicChannel();
    if (dmaChannel == DmaChannelNum_None) {
-      console.writeln("Failed to allocate DMA channel, rc= ").writeln(E_NO_RESOURCE);
+      console.write("Failed to allocate DMA channel, rc= ").writeln(E_NO_RESOURCE);
       __asm__("bkpt");
    }
-   console.write("Allocate DMA channel  #").writeln(dmaChannel);
+   console.write("Allocated DMA channel  #").writeln(dmaChannel);
 
    // Set up throttled DMA transfer from memory -> UART
    configureDma(dmaChannel);
-   configurePit(dmaChannel);
+
+   // Get Pit channel associated with DMA channel
+   PitChannelNum pitChannel = Pit::allocateDmaAssociatedChannel(dmaChannel);
+   if (pitChannel == PitChannelNum_None) {
+      console.write("Failed to allocate PIT channel, rc= ").writeln(E_NO_RESOURCE);
+      __asm__("bkpt");
+   }
+   console.write("Allocated PIT channel  #").writeln(pitChannel);
+   configurePit(pitChannel);
 
    // Start the UART DMA requests
    console.writeln("Doing 1 DMA transfer while in RUN").flushOutput();
@@ -304,7 +305,7 @@ int main() {
    changeRunMode(SmcRunMode_VeryLowPower);
 
    // Re-configure PIT as bus clock may have changed
-   configurePit(dmaChannel);
+   configurePit(pitChannel);
 
    // Start the UART DMA requests again
    complete = false;
@@ -315,7 +316,7 @@ int main() {
    while (!complete) {
       __asm__("nop");
    }
-   console.writeln("Done another transfer");
+   console.writeln("Done 2nd transfer");
    waitMS(500);
 
    Smc::setStopOptions(
@@ -327,7 +328,6 @@ int main() {
    console.writeln("\nDoing DMA while deep-sleeping....").flushOutput();
 
    for(;;) {
-      Led::toggle();
       // Enable UART Tx DMA requests
       console.enableDma(LpuartDma_TxHoldingEmpty);
 
@@ -335,8 +335,7 @@ int main() {
 	  Smc::enterStopMode(SmcStopMode_NormalStop);
 
       // Will wake up after each complete transfer due to DMA complete interrupt
-
-      console.writeln("Woke up!");
+      console.writeln("Woke up!").flushOutput();
    }
    return 0;
 }

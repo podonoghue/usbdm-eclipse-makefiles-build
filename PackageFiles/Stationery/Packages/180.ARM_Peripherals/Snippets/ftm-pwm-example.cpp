@@ -19,7 +19,7 @@ using namespace USBDM;
 
 // Connection mapping - change as required
 using Timer = $(demo.cpp.ftm:Ftm0);
-using Led   = $(demo.cpp.pwm.led1:Timer::Channel<7>);
+using PwmLed   = $(demo.cpp.pwm.led1:Timer::Channel<7>);
 
 int main() {
 
@@ -35,11 +35,10 @@ int main() {
    Timer::setPeriod(5*us);
 
    // Configure channel as PWM high-pulses
-   Led::configure(FtmChMode_PwmHighTruePulses);
+   PwmLed::configure(FtmChMode_PwmHighTruePulses);
 
    // Configure pin associated with channel
-   Led::setDriveStrength(PinDriveStrength_High);
-   Led::setDriveMode(PinDriveMode_PushPull);
+   PwmLed::setOutput(PinDriveStrength_High, PinDriveMode_PushPull);
 
    // Check if configuration failed
    checkError();
@@ -47,13 +46,15 @@ int main() {
    for(;;) {
       // Using percentage duty-cycle
       for (int i=1; i<=99; i++) {
-         Led::setDutyCycle(i);
+         PwmLed::setDutyCycle(i);
          waitMS(10);
+         console.write("Duty = ").write(i).writeln(" %");
       }
       // Using high-time
       for (int i=99; i>0; i--) {
-         Led::setHighTime((i*5*us)/100.0);
+         PwmLed::setHighTime((i*5*us)/100.0);
          waitMS(10);
+         console.write("High time = ").write(5*i).writeln(" us");
       }
    }
 }

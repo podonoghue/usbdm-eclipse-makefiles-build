@@ -38,7 +38,7 @@ int main() {
          FtmPrescale_1,
          QuadratureMode_Phase_AB_Mode);
 
-   // Set input characteristics
+   // Connect QuadDecoder to pins and configure input characteristics
    QuadDecoder::setInput(PinPull_Up);
 
    // Change polarity if needed

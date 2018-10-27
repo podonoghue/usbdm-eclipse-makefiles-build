@@ -16,26 +16,26 @@ using namespace USBDM;
  */
 
 // Connection mapping - change as required
-using RED_LED   = $(demo.cpp.red.led:GpioB<0,ActiveLow>);
-using GREEN_LED = $(demo.cpp.green.led:GpioB<1,ActiveLow>);
+using RedLed   = $(demo.cpp.red.led:GpioB<0,ActiveLow>);
+using GreenLed = $(demo.cpp.green.led:GpioB<1,ActiveLow>);
 
 int main() {
-   RED_LED::setOutput(
+   RedLed::setOutput(
          PinDriveStrength_High,
          PinDriveMode_PushPull,
          PinSlewRate_Slow);
-   GREEN_LED::setOutput(
+   GreenLed::setOutput(
          PinDriveStrength_High,
          PinDriveMode_PushPull,
          PinSlewRate_Slow);
    for(;;) {
-      RED_LED::toggle();
+      RedLed::toggle();
       USBDM::waitMS(100);
-      RED_LED::toggle();
+      RedLed::toggle();
       USBDM::waitMS(100);
-      GREEN_LED::toggle();
+      GreenLed::toggle();
       USBDM::waitMS(100);
-      GREEN_LED::toggle();
+      GreenLed::toggle();
       USBDM::waitMS(100);
    }
 }

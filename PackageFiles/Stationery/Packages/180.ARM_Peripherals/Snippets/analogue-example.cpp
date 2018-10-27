@@ -34,7 +34,7 @@ int main(void) {
    // May change current resolution as needed e.g.
    Adc::setResolution(USBDM::AdcResolution_10bit_se);
 
-   // Configure ADC pin
+   // Connect ADC channel to pin
    AdcChannel::setInput();
 
    for(;;) {

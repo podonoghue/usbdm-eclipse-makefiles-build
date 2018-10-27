@@ -3,32 +3,66 @@
  * @file    dac-example.cpp (180.ARM_Peripherals/Snippets)
  * @brief   Basic C++ demo using DAC class
  *
- *  Created on: 10/6/2016
+ *  Created on: 30/10/2018
  *      Author: podonoghue
  ============================================================================
  */
 #include "hardware.h"
-#include "delay.h"
 #include "dac.h"
 
-static const int values[] = {
-      2048,2403,2748,3072,3364,3616,3821,3972,
-      4064,4095,4064,3972,3821,3616,3364,3072,
-      2748,2403,2048,1693,1348,1024,732,480,
-      275,124,32,1,32,124,275,480,
-      732,1024,1348,1693,
-};
+using namespace USBDM;
 
-using dac = USBDM::Dac0;
+// 100 samples
+static constexpr unsigned NUM_SAMPLES = 100;
 
-int main() {
-   dac::configure();
-   for(;;) {
-      for (uint i=0; i<(sizeof(values)/sizeof(values[0])); i++) {
-         dac::setValue(values[i]);
-      }
+// Table of values for a sine wave
+static uint16_t sineTable[NUM_SAMPLES];
+
+using Dac = Dac0;
+
+constexpr float PI = 3.14159265358979323846;
+
+/**
+ * Fill sineTable with scaled sine waveform
+ */
+void initSineTable() {
+
+   for (unsigned index = 0; index<(sizeof(sineTable)/sizeof(sineTable[0])); index++) {
+      sineTable[index] = roundf(Dac::getRange() * (1 + sin(index*2*PI/NUM_SAMPLES))/2);
    }
-   for(;;) {}
-   return 0;
 }
 
+/**
+ * Configure DAC for simple software use
+ */
+static void configureDac() {
+
+   // Basic configuration
+   Dac::configure(
+         DacReferenceSelect_Vdda,
+         DacPower_High,
+         DacTriggerSelect_Software);
+
+   // No buffer
+   Dac::configureBuffer(
+         DacBufferMode_Disabled);
+
+   // Connect output to pin (if necessary)
+   Dac::setOutput();
+}
+
+int main() {
+   console.writeln("Starting");
+
+   initSineTable();
+   configureDac();
+
+   // Loop through DAC values
+   for(;;) {
+      for (unsigned i=0; i<(sizeof(sineTable)/sizeof(sineTable[0])); i++) {
+         Dac::writeValue(sineTable[i]);
+         waitUS(10);
+      }
+   }
+   return 0;
+}

@@ -53,6 +53,9 @@ int main() {
    Adc::setCallback(adcComparisonCallback);
    Adc::enableNvicInterrupts();
 
+   // Connect ADC channel to pin
+   AdcChannel::setInput();
+
    /**
     * Start continuous conversions with interrupts on comparison true.
     * A bit wasteful of power - should throttle.

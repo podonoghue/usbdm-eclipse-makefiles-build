@@ -40,9 +40,9 @@ static void dmaCallback(DmaChannelNum channel) {
  *
  * @param[in]  source         Source location
  * @param[out] destination    Destination location
- * @param[in]  size           Number of bytes to transfer - must be multiple of uint32_t size
+ * @param[in]  size           Number of bytes to transfer - must be multiple of sizeof(uint32_t)
  */
-static ErrorCode dmaTransfer(uint32_t *source, uint32_t *destination, uint32_t size) {
+static ErrorCode dmaTransfer(uint32_t *source, uint32_t *destination, int size) {
 
    usbdm_assert(size%sizeof(uint32_t) == 0, "Size must be a multiple of sizeof(uint32_t)");
 
@@ -96,13 +96,13 @@ static ErrorCode dmaTransfer(uint32_t *source, uint32_t *destination, uint32_t s
       /* Source offset                  */ sizeof(*source),         // Source address advances source element size for each transfer
       /* Source size                    */ dmaSize(*source),        // 32-bit read from source address
       /* Source modulo                  */ DmaModulo_Disabled,      // Disabled
-      /* Last source adjustment         */ -(int)size,              // Reset Source address to start of array on completion
+      /* Last source adjustment         */ -size,                   // Reset Source address to start of array on completion
 
       /* Destination address            */ (uint32_t)(destination), // Start of array for result
       /* Destination offset             */ sizeof(*destination),    // Destination address advances destination element size for each transfer
       /* Destination size               */ dmaSize(*destination),   // 32-bit write to destination address
       /* Destination modulo             */ DmaModulo_Disabled,      // Disabled
-      /* Last destination adjustment    */ -(int)size,              // Reset destination address to start of array on completion
+      /* Last destination adjustment    */ -size,                   // Reset destination address to start of array on completion
 
       /* Minor loop byte count          */ dmaNBytes(size),         // Total transfer in one minor-loop
       /* Major loop count               */ dmaCiter(1),             // Single (1) software transfer

@@ -16,7 +16,8 @@
  *
  * This example requires interrupts to be enabled in the USBDM configuration for the following:
  * - DMA
- * - PIT
+ *
+ * The LED should be assigned to a suitable GPIO
  *
  * It may also be necessary to adjust DMA_SLOT for the console UART.
  *    DmaSlot_UART0_Transmit => DmaSlot_UART?_Transmit
@@ -118,7 +119,7 @@ static constexpr DmaTcd tcd = DmaTcd (
  * @param errorFlags Channel error information (DMA_ES)
  */
 void dmaErrorCallbackFunction(uint32_t errorFlags) {
-   console.write("DMA error DMA_ES = 0x").writeln(errorFlags, Radix_16);
+   console.write("DMA error DMA_ES = 0x").writeln(errorFlags, Radix_2);
    __BKPT();
 }
 

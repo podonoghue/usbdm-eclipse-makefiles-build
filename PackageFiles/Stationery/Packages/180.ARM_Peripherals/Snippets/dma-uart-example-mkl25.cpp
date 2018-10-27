@@ -36,9 +36,6 @@
 
 using namespace USBDM;
 
-// Connection - change as required
-using Led         = GpioD<1, ActiveLow>;  // = Blue LED
-
 // Slot number to use (must agree with console UART)
 static constexpr DmaSlot DMA_SLOT = Dma0Slot_UART0_Tx;
 
@@ -194,9 +191,6 @@ int main() {
 
    console.writeln("\nStarting\n").flushOutput();
 
-   // LED used for debug from DMA loop
-   Led::setOutput();
-
    // Allow entry to other RUN modes
    Smc::enablePowerModes(
          SmcVeryLowPower_Enabled,
@@ -209,11 +203,19 @@ int main() {
       console.write("Failed to allocate DMA channel, rc= ").writeln(E_NO_RESOURCE);
       __asm__("bkpt");
    }
-   console.write("Allocate DMA channel  #").writeln(dmaChannel);
+   console.write("Allocated DMA channel  #").writeln(dmaChannel);
 
    // Set up throttled DMA transfer from memory -> UART
    configureDma(dmaChannel);
-   configurePit(dmaChannel);
+
+   // Get Pit channel associated with DMA channel
+   PitChannelNum pitChannel = Pit::allocateDmaAssociatedChannel(dmaChannel);
+   if (pitChannel == PitChannelNum_None) {
+      console.write("Failed to allocate PIT channel, rc= ").writeln(E_NO_RESOURCE);
+      __asm__("bkpt");
+   }
+   console.write("Allocated PIT channel  #").writeln(pitChannel);
+   configurePit(pitChannel);
 
    // Start the UART DMA requests
    console.writeln("Doing 1 DMA transfer while in RUN").flushOutput();
@@ -230,7 +232,7 @@ int main() {
    changeRunMode(SmcRunMode_VeryLowPower);
 
    // Re-configure PIT as bus clock may have changed
-   configurePit(dmaChannel);
+   configurePit(pitChannel);
 
    // Start the UART DMA requests again
    complete = false;
@@ -242,7 +244,7 @@ int main() {
       __asm__("nop");
    }
    console.writeln("Done 2nd transfer");
-   waitMS(100);
+   waitMS(500);
 
    Smc::setStopOptions(
          SmcLowLeakageStopMode_VLLS3,   // Retains RAM
@@ -254,7 +256,6 @@ int main() {
    console.writeln("\nDoing DMA while sleeping....").flushOutput();
 
    for(;;) {
-      Led::toggle();
       // Enable UART Tx DMA requests
       console.enableDma(UartDma_TxHoldingEmpty);
 

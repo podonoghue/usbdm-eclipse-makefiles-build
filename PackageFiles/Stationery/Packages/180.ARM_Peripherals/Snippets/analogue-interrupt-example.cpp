@@ -47,7 +47,7 @@ int main(void) {
    Adc::setCallback(handler);
    Adc::enableNvicInterrupts(true, NvicPriority_Normal);
 
-   // Configure ADC pin
+   // Connect ADC channel to pin
    AdcChannel::setInput();
 
    // Check for error so far

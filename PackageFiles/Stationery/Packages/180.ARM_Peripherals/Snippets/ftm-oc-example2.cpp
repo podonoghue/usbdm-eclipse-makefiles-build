@@ -10,22 +10,26 @@
  ============================================================================
  */
 #include "hardware.h"
+#include "smc.h"
 
 using namespace USBDM;
 
 /**
  * This example uses FTM interrupts.
  *
- * It is necessary enable these in Configure.usbdmProject under the "Peripheral Parameters"->FTM tab
+ * It is necessary to enable these in Configure.usbdmProject
+ * under the "Peripheral Parameters"->FTM tab.
  * Select irqHandlingMethod option (Class Method - Software ...)
  */
 
-// Timer being used - change as required
-// Could also access as TimerChannel::Ftm
+/**
+ * Timer being used - change as required
+ * Could also access as TimerChannel::Ftm
+ */
 using Timer = Ftm0;
 
-// Timer channel being used - change as required
-using TimerChannel = Ftm0Channel<7>;
+/// Timer channel for output - change as required
+using TimerChannel = Timer::Channel<7>;
 
 // Waveform for timer (in ticks)
 static volatile uint16_t waveformHighTime;
@@ -36,6 +40,9 @@ static const float WAVEFORM_HIGH_TIME = 100*ms;
 static const float WAVEFORM_LOW_TIME  = 50*ms;
 
 #define max(a,b) ((a>b)?a:b)
+
+/// Maximum OC interval - the OC interval should not exceed this value.
+static constexpr float MAX_OC_INTERVAL = 1.1*max(WAVEFORM_HIGH_TIME, WAVEFORM_LOW_TIME)
 
 /**
  * Interrupt handler for Timer interrupts
@@ -71,16 +78,17 @@ static bool odd = true;
 }
 
 int main() {
-
+   /**
+    * FTM channel set as Output compare with pin Toggle mode and using a callback function
+    */
    // Configure base FTM (affects all channels)
    Timer::configure(
-         FtmMode_LeftAlign,      // Left-aligned is required for OC/IC
-         FtmClockSource_System,  // Bus clock usually
-         FtmPrescale_1);         // The prescaler will be re-calculated later
+         FtmMode_LeftAlign,       // Left-aligned is required for OC/IC
+         FtmClockSource_System);  // Bus clock usually
 
-   // Set IC/OC measurement period to longest interval + 10%
+   // Set IC/OC measurement interval to longest interval needed.
    // This adjusts the prescaler value but does not change the clock source
-   Timer::setMeasurementPeriod(1.1*max(WAVEFORM_HIGH_TIME, WAVEFORM_LOW_TIME));
+   Timer::setMaximumInterval(MAX_OC_INTERVAL);
 
    // Calculate waveform times in timer ticks
    // Must be done after timer clock configuration (above)
@@ -98,14 +106,11 @@ int main() {
          PinDriveStrength_High,
          PinDriveMode_PushPull,
          PinSlewRate_Slow);
-   // or change individual attributes
-   //  TimerChannel::setDriveStrength(PinDriveStrength_High);
-   //  TimerChannel::setDriveMode(PinDriveMode_PushPull);
 
    // Trigger 1st interrupt at now+100
    TimerChannel::setRelativeEventTime(100);
 
-   // Configure channel
+   // Configure the channel
    TimerChannel::configure(
          FtmChMode_OutputCompareSet, //  Output Compare with pin set
          FtmChannelAction_Irq);      //  + interrupts on events
@@ -113,8 +118,9 @@ int main() {
    // Check if configuration failed
    USBDM::checkError();
 
+   // Wait here forever (sleeping between interrupts)
    for(;;) {
-      __asm__("wfi");
+      Smc::enterWaitMode();
    }
    return 0;
 }

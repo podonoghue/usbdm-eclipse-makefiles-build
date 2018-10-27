@@ -46,9 +46,9 @@ static void dmaCallback(DmaChannelNum channel) {
  * @param[in]  size           Number of bytes to transfer - must be multiple of both sizeof(T1) and sizeof(T2) size
  */
 template <typename T1, typename T2>
-static ErrorCode dmaTransfer(T1 *source, T2 *destination, const uint32_t size) {
+static ErrorCode dmaTransfer(T1 *source, T2 *destination, int size) {
 
-   usbdm_assert((size%sizeof(T1) == 0)&&(size%sizeof(T2) == 0), "Size must be a multiple of transfer sizes");
+   usbdm_assert((size%sizeof(T1) == 0)&&(size%sizeof(T2) == 0), "Size must be a multiple of the size of source and destination elements");
 
    // DMA channel number to use
    const DmaChannelNum dmaChannelNum = Dma0::allocateChannel();
@@ -100,13 +100,13 @@ static ErrorCode dmaTransfer(T1 *source, T2 *destination, const uint32_t size) {
       /* Source offset                  */ sizeof(*source),         // Source address advances source element size for each transfer
       /* Source size                    */ dmaSize(*source),        // X-bit read from source address
       /* Source modulo                  */ DmaModulo_Disabled,      // Disabled
-      /* Last source adjustment         */ -(int)size,              // Reset Source address to start of array on completion
+      /* Last source adjustment         */ -size,                   // Reset Source address to start of array on completion
 
       /* Destination address            */ (uint32_t)(destination), // Start of array for result
       /* Destination offset             */ sizeof(*destination),    // Destination address advances destination element size for each transfer
       /* Destination size               */ dmaSize(*destination),   // X-bit write to destination address
-      /* Destination modulo             */ DmaModulo_Disabled,
-      /* Last destination adjustment    */ -(int)size,              // Reset destination address to start of array on completion
+      /* Destination modulo             */ DmaModulo_Disabled,      // Disabled
+      /* Last destination adjustment    */ -size,                   // Reset destination address to start of array on completion
 
       /* Minor loop byte count          */ dmaNBytes(size),         // Total transfer in one minor-loop
       /* Major loop count               */ dmaCiter(1),             // Single (1) software transfer

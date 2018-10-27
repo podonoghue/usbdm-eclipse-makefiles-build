@@ -21,7 +21,7 @@ using namespace USBDM;
  *  1 x Digital output
  *
  */
-
+ 
 // Connection mapping - change as required
 using Switch =   $(demo.cpp.external.switch:GpioB<0,ActiveLow>);
 using Led    =   $(demo.cpp.external.led:GpioB<1,ActiveLow>);

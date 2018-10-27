@@ -40,7 +40,10 @@ int main() {
 
    // Install interrupt call-back
    Switch::setCallback(callBack);
-   Switch::setInput(PinPull_Up, PinAction_IrqFalling, PinFilter_Passive);
+   Switch::setInput(
+         PinPull_Up,
+         PinAction_IrqFalling,
+         PinFilter_Passive);
    Switch::enableNvicInterrupts();
 
    for(;;) {

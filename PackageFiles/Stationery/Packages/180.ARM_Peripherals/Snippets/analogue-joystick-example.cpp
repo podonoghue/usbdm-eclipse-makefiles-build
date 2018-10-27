@@ -33,7 +33,12 @@ int main(void) {
    // Calibrate before use
    Adc::calibrate();
 
-   JOYSTICK_K::setInput();
+   // Connect ADC channels to pins
+   JOYSTICK_X::setInput();
+   JOYSTICK_Y::setInput();
+
+   // Connect and configure digital input pin
+   JOYSTICK_K::setInput(PinPull_Up);
 
    for(;;) {
       int  x = JOYSTICK_X::readAnalogue();

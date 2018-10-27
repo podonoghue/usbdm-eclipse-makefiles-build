@@ -86,6 +86,12 @@ int main() {
 
    Led::setOutput();
 
+   // Configure CMT output and connect to pin
+   Cmt::setOutput(
+         PinDriveStrength_High,
+         PinDriveMode_PushPull,
+         PinSlewRate_Slow);
+
    for(int count = 0;;count++) {
       waitMS(500);
       bitNum = 15;
