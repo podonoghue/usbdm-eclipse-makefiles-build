@@ -948,8 +948,8 @@ public:
    /**
     * Clear selected timer event flags
     *
-    * @param mask Mask indicating which channel flags to clear
-    *             There is one bit for each channel
+    * @param channelMask Mask indicating which channel flags to clear
+    *                    There is one bit for each channel
 	*
 	* @note Flags will not be cleared if the channel is configured for DMA
     */
@@ -2080,7 +2080,8 @@ public:
     * Basic configuration of Quadrature decoder.
     * Includes configuring all pins if
     *
-    * @param ftmPrescale Prescale value applied to the output of the quadrature decode before the counter.
+    * @param ftmPrescale    Prescale value applied to the output of the quadrature decode before the counter.
+    * @param quadratureMode Selects the encoding mode used to decode the input changes.
     */
    static void configure(
          FtmPrescale    ftmPrescale    = FtmPrescale_1,

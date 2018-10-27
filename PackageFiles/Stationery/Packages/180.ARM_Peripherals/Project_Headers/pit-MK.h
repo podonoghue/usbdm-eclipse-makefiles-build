@@ -334,7 +334,7 @@ public:
    /**
     * Converts time in seconds to time in ticks
     *
-    * @param[in] time Time interval in seconds
+    * @param[in] seconds Time interval in seconds
     *
     * @return Time interval in ticks
     *

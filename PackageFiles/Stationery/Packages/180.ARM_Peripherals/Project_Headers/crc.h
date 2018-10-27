@@ -128,6 +128,7 @@ public:
    static void defaultConfigure() {
       enable();
       // Initialise hardware
+//      crc().GPOLY = Info::gpoly;
    }
 
    /**

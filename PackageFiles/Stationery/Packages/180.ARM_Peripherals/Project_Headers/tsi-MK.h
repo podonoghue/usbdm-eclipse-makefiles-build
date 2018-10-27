@@ -467,8 +467,6 @@ public:
       /**
        * Get channel count value
        *
-       * @param[in]  channel Channel number
-       *
        * @return 16-bit count value
        */
       static uint16_t getCount() {

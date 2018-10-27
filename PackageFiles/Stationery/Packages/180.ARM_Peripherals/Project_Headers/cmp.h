@@ -313,6 +313,7 @@ public:
       }
       sCallback = callback;
    }
+
 public:
    /**
     * Configures all mapped pins associated with this peripheral
