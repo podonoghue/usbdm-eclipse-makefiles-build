@@ -144,7 +144,7 @@ void startEncoder() {
  */
 void stopEncoder() {
    Encoder::setInput(PinPull_None, PinAction_None);
-   Encoder::enableNvicInterrupts(false);
+   Encoder::disableNvicInterrupts();
 }
 
 /**

@@ -951,7 +951,7 @@ bool VL53L0X::getSpadInfo(uint8_t *count, bool *type_is_aperture) {
  * Get sequence step enables
  * based on VL53L0X_GetSequenceStepEnables()
  *
- * @param enables
+ * @return Bit mask for enables
  */
 VL53L0X::SequenceStepEnables VL53L0X::getSequenceStepEnables() {
    return (SequenceStepEnables) readReg(SYSTEM_SEQUENCE_CONFIG);

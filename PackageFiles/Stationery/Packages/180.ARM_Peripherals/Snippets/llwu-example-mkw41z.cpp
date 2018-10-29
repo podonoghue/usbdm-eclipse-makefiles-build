@@ -249,7 +249,7 @@ void enablePin(Test test, bool enable) {
       WakeupPin::enableNvicInterrupts();
    }
    else {
-      WakeupPin::enableNvicInterrupts(false);
+      WakeupPin::disableNvicInterrupts();
    }
 }
 
@@ -285,7 +285,7 @@ void enableTimer(Test test, bool enable) {
       }
    }
    else {
-      WakeupTimer::enableNvicInterrupts(false);
+      WakeupTimer::disableNvicInterrupts();
    }
 }
 
@@ -339,9 +339,9 @@ void runTest(
       case VLLS3: testStopMode(SmcStopMode_VeryLowLeakageStop, SmcLowLeakageStopMode_VLLS3); break;
       case NONE: break;
    }
-   Llwu::enableNvicInterrupts(false);
-   WakeupTimer::enableNvicInterrupts(false);
-   WakeupPin::enableNvicInterrupts(false);
+   Llwu::disableNvicInterrupts();
+   WakeupTimer::disableNvicInterrupts();
+   WakeupPin::disableNvicInterrupts();
 
    console.write("Timer callback() ").writeln(timerHandlerRan?"Ran":"Didn't run");
    console.write("Pin callback()   ").writeln(pinHandlerRan?"Ran":"Didn't run");

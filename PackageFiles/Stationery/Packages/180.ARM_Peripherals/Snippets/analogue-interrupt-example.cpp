@@ -45,7 +45,7 @@ int main(void) {
 
    // Note: Setting callback affects all channels on the ADC
    Adc::setCallback(handler);
-   Adc::enableNvicInterrupts(true, NvicPriority_Normal);
+   Adc::enableNvicInterrupts(NvicPriority_Normal);
 
    // Connect ADC channel to pin
    AdcChannel::setInput();

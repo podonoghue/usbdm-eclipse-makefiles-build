@@ -90,7 +90,7 @@ int main() {
 
    Timer::configure(PitDebugMode_Stop);
 
-   Timer::enableNvicInterrupts(true, NvicPriority_Normal);
+   Timer::enableNvicInterrupts(NvicPriority_Normal);
 
 #ifdef SET_HANDLERS_PROGRAMMATICALLY
    // Set handler for channel programmatically

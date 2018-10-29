@@ -53,7 +53,7 @@ int main() {
 //   TimerChannel::configureInTicks(::SystemBusClock/2, PitChannelIrq_Enabled);
    TimerChannel::configure(0.5 * seconds, PitChannelIrq_Enabled);
 
-   TimerChannel::enableNvicInterrupts(true, NvicPriority_Normal);
+   TimerChannel::enableNvicInterrupts(NvicPriority_Normal);
 
    // Check for errors so far
    checkError();

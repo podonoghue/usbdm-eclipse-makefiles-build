@@ -28,14 +28,15 @@ int main() {
          PinDriveStrength_High,
          PinDriveMode_PushPull,
          PinSlewRate_Slow);
+
+   console.setEcho(EchoMode_Off);
+
    for(;;) {
-      RedLed::toggle();
-      USBDM::waitMS(100);
-      RedLed::toggle();
-      USBDM::waitMS(100);
-      GreenLed::toggle();
-      USBDM::waitMS(100);
-      GreenLed::toggle();
-      USBDM::waitMS(100);
+      console.write("\rPress (R)ed or (G)reen :");
+      switch(console.readChar()) {
+         case 'r': case 'R' : RedLed::toggle();   break;
+         case 'g': case 'G' : GreenLed::toggle(); break;
+         default: break;
+      }
    }
 }
