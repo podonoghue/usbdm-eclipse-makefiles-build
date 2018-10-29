@@ -20,16 +20,13 @@ using Led = GpioC<3,ActiveLow>;
 using Timer = Ftm0;
 
 // Timer channel being used - change as required
-using TimerChannel = Ftm0Channel<7>;
-
-// DMA channel number to use (must agree with PIT channel used)
-static constexpr DmaChannelNum DMA_CHANNEL = DmaChannelNum_1;
+using TimerChannel = Timer::Channel<7>;
 
 // Slot number to use (must agree with FTM channel used)
-static constexpr DmaSlot DMA_SLOT = static_cast<DmaSlot>(Dma0Slot_FTM0_Ch0+TimerChannel::CHANNEL);
+static constexpr DmaSlot DMA_SLOT = Dma0Slot_FTM0_Ch0+TimerChannel::CHANNEL;
 
 // Waveform to generate
-static uint16_t data[4]= {};
+static uint32_t data[4]= {};
 
 /**
  * @verbatim
@@ -47,16 +44,16 @@ static uint16_t data[4]= {};
  * | +--------------------------+ |             - NBYTES Number of bytes to transfer
  * | +--------------------------+ |<-DMA Req.   - Attributes
  * | | Minor Loop               | |               - ATTR_SSIZE, ATTR_DSIZE Source and destination transfer sizes
- * |..............................|               - ATTR_SMOD, ATTR_DMOD Modulo --TODO
+ * |..............................|               - ATTR_SMOD, ATTR_DMOD Modulo
  * | |                          | |
  * | +--------------------------+ |             The number of reads and writes done will depend on NBYTES, SSIZE and DSIZE
  * | +--------------------------+ |<-DMA Req.   For example: NBYTES=12, SSIZE=16-bits, DSIZE=32-bits => 6 reads, 3 writes
  * | | Minor Loop               | |             NBYTES must be an even multiple of SSIZE and DSIZE in bytes.
  * | | Each transfer            | |
  * | |   SADDR->DADDR           | |            The following are used by the major loop
- * | |   SADDR += SOFF          | |             - SLAST Adjustment applied to SADDR at the end of each major loop
- * | |   DADDR += DOFF          | |             - DLAST Adjustment applied to DADDR at the end of each major loop
- * | | Total transfer is NBYTES | |             - CITER Major loop counter - counts how many completed major loops
+ * | |   SADDR += SOFF          | |             - SLAST Adjustment applied to SADDR after major loop
+ * | |   DADDR += DOFF          | |             - DLAST Adjustment applied to DADDR after major loop
+ * | | Total transfer is NBYTES | |             - CITER Major loop counter - counts how many minor loops
  * | +--------------------------+ |
  * |                              |            SLAST and DLAST may be used to reset the addresses to the initial value or
  * | At end of Major Loop         |            link to the next transfer.
@@ -68,34 +65,38 @@ static uint16_t data[4]= {};
  * +------------------------------+              - DMA_CSR_START    = Start transfer. Used for software transfers. Automatically cleared.
  * @endverbatim
  *
- * Structure to define a DMA transfer
+ * Structure to define the DMA transfer
  */
-static const DmaTcd tcd {
-   /* uint32_t  SADDR  Source address        */ (uint32_t)(data),                         // Source array
-   /* uint16_t  SOFF   SADDR offset          */ sizeof(data[0]),                          // SADDR advances 1 byte for each request
-   /* uint16_t  ATTR   Transfer attributes   */ dmaSSize(data[0])|                        // 16-bit read from SADDR
-   /*                                        */ dmaDSize(data[0]),                        // 16-bit write to DADDR
-   /* uint32_t  NBYTES Minor loop byte count */ 1*sizeof(data[0]),                        // Total transfer in one minor-loop
-   /* uint32_t  SLAST  Last SADDR adjustment */ -sizeof(data),                            // Reset SADDR to start of array on completion
-   /* uint32_t  DADDR  Destination address   */ (uint32_t)(&TimerChannel::channelRegs().CnV), // Destination is FTM channel CnV register
-   /* uint16_t  DOFF   DADDR offset          */ 0,                                        // DADDR doesn't change
-   /* uint16_t  CITER  Major loop count      */ DMA_CITER_ELINKNO_ELINK(0)|               // No ELINK
-   /*                                        */ ((sizeof(data))/sizeof(data[0])),         // Transfer entire buffer
-   /* uint32_t  DLAST  Last DADDR adjustment */ 0,                                        // DADDR doesn't change
-   /* uint16_t  CSR    Control and Status    */ DMA_CSR_INTMAJOR(1)|                      // Generate interrupt on completion of Major-loop
-   /*                                        */ DMA_CSR_DREQ(0)|                          // Don't clear hardware request when complete major loop (non-stop)
-   /*                                        */ DMA_CSR_START(0),                         // Don't start (triggered by hardware)
-};
+static constexpr DmaTcd tcd (
+   /* Source address                 */ (uint32_t)(data),         // Source array
+   /* Source offset                  */ sizeof(data[0]),          // Source advances element size for each transfer
+   /* Source size                    */ dmaSize(data[0]),         // Match source element size
+   /* Source modulo                  */ DmaModulo_Disabled,       // No modulo
+   /* Last source adjustment         */ -(int)sizeof(data),       // Reset Source address to start of array on completion
 
-bool complete = false;
+   /* Destination address            */ TimerChannel::ftmCnV(),   // Write to FTM count register
+   /* Destination offset             */ 0,                        // Fixed destination
+   /* Destination size               */ DmaSize_32bit,            // 32-bit write to destination address
+   /* Destination modulo             */ DmaModulo_Disabled,       // Disabled
+   /* Last destination adjustment    */ 0,                        // No adjustment as address unchanged
+
+   /* Minor loop byte count          */ dmaNBytes(sizeof(data[0])),               // Transfer one entry in minor-loop
+   /* Major loop count               */ dmaCiter((sizeof(data))/sizeof(data[0])), // Transfer entire table in major loop
+
+   /* Start channel                  */ false,                   // Don't start (triggered by hardware)
+   /* Disable Req. on major complete */ false,                   // Don't clear hardware request when major loop completed
+   /* Interrupt on major complete    */ true,                    // Generate interrupt on completion of major-loop
+   /* Interrupt on half complete     */ false,                   // No interrupt
+   /* Bandwidth (speed) Control      */ DmaSpeed_NoStalls        // Full speed
+);
 
 /**
  * DMA complete callback
  *
  * Sets flag to indicate sequence complete.
  */
-static void dmaCallback() {
-   complete = true;
+static void dmaCallback(DmaChannelNum dmaChannelNum) {
+   Dma0::clearInterruptRequest(dmaChannelNum);
    Led::toggle();
 }
 
@@ -105,51 +106,67 @@ static void dmaCallback() {
  * @param errorFlags Channel error information (DMA_ES)
  */
 void dmaErrorCallbackFunction(uint32_t errorFlags) {
-   console.write("DMA error DMA_ES = 0x").writeln(errorFlags, Radix_16);
+   console.write("DMA error DMA_ES = 0b").writeln(errorFlags, Radix_2);
    __BKPT();
 }
 
 /**
  * Configure DMA from Memory-to-UART
+ *
+ * @param dmaChannel
  */
-static void configureDma() {
+static void configureDmaChannel() {
 
-   // Sequence not complete yet
-   complete = false;
-
-   // Enable DMAC with default settings
-   Dma0::configure();
+   // Allocate DMA channel
+   DmaChannelNum dmaChannel = Dma0::allocateChannel();
 
    // Set callback (Interrupts are enabled in TCD)
-   Dma0::setCallback(DMA_CHANNEL, dmaCallback);
-   Dma0::setErrorCallback(dmaErrorCallbackFunction);
-   Dma0::enableNvicInterrupts(DMA_CHANNEL);
-   Dma0::enableNvicErrorInterrupt();
+   Dma0::setCallback(dmaChannel, dmaCallback);
+   Dma0::enableNvicInterrupts(dmaChannel);
 
    // Connect DMA channel to UART but throttle by PIT Channel 1 (matches DMA channel 1)
-   DmaMux0::configure(DMA_CHANNEL, DMA_SLOT, DmaMuxEnable_Continuous);
+   DmaMux0::configure(dmaChannel, DMA_SLOT, DmaMuxEnable_Continuous);
 
    // Configure the transfer
-   Dma0::configureTransfer(DMA_CHANNEL, tcd);
+   Dma0::configureTransfer(dmaChannel, tcd);
 
    // Enable hardware requests
-   Dma0::enableRequests(DMA_CHANNEL);
+   Dma0::enableRequests(dmaChannel);
 
 #ifdef DMA_EARS_EDREQ_0_MASK
    // Enable asynchronous requests (if available)
-   Dma0::enableAsynchronousRequests(DMA_CHANNEL);
+   Dma0::enableAsynchronousRequests(dmaChannel);
 #endif
 
    // Enable channel interrupt requests
-   Dma0::enableErrorInterrupts(DMA_CHANNEL);
+   Dma0::enableErrorInterrupts(dmaChannel);
 }
 
-int main() {
+/**
+ * Enable DMAC and install error handler
+ */
+void configureDma() {
+   Dma0::configure(
+         DmaOnError_Halt,
+         DmaMinorLoopMapping_Disabled,
+         DmaContinuousLink_Disabled);
 
-   configureDma();
+   Dma0::setErrorCallback(dmaErrorCallbackFunction);
+   Dma0::enableNvicErrorInterrupt();
+}
 
+/**
+ * 500 ms period
+ * Toggle events at 100, 101, 250 and 300 us using DMA
+ *
+ *                100  101              250       300            500 us
+ *  ----------------+  +-----------------+         +-----------------
+ *                  |  |                 |         |
+ *                  +--+                 +---------+
+ *                  1 us      149 us         50 us       200 + 100 us
+ */
+void configureTimer() {
    // Configure base FTM (affects all channels)
-   // The prescaler will be recalculated later
    Timer::configure(
          FtmMode_LeftAlign,      // Left-aligned is required for OC/IC
          FtmClockSource_System); // Bus clock usually
@@ -171,8 +188,6 @@ int main() {
    // Restart counter
    Timer::resetTime();
 
-   Led::setOutput(PinDriveStrength_High);
-
    // Trigger 1st DMA at last event in table
    TimerChannel::setEventTime(data[3]);
 
@@ -180,6 +195,17 @@ int main() {
    TimerChannel::configure(
          FtmChMode_OutputCompareToggle, //  Output Compare with pin toggle
          FtmChannelAction_Dma);         //  + DMA on events
+}
+
+int main() {
+
+   configureDma();
+
+   configureDmaChannel();
+
+   configureTimer();
+
+   Led::setOutput(PinDriveStrength_High);
 
    Led::on();
 

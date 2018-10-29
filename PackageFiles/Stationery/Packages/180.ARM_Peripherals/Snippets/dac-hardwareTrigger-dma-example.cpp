@@ -1,15 +1,14 @@
 /**
- ============================================================================
- * @file    dac-pdb-dma-example.cpp (180.ARM_Peripherals/Snippets)
+ * @file    dac-hardwareTrigger-dma-example.cpp (180.ARM_Peripherals/Snippets)
  * @brief   DMA example using DAC and PIT
  *
- *  Created on: 20/10/2018
- *      Author: podonoghue
- ============================================================================
+ * @version  V4.12.1.240
+ * @date     28/10/2018
  */
 /**
  * This example uses DMA to transfer values from an array to the DAC for conversion.
- * The PDB DMA requests are used to control the rate of the DMA transfers to the DAC.
+ * The DAC DMA requests are used to initiate DMA transfers to the DAC.
+ * The DAC is triggered by the PDB using hardware-trigger.
  */
 /**
  * This example uses DMA interrupts.
@@ -85,14 +84,14 @@ static constexpr DmaTcd tcd (
    /* Last source adjustment         */ -(int)sizeof(sineTable),          // Reset Source address to start of array on completion
 
    /* Destination address            */ Dac::dacData(),                   // Destination
-   /* Destination offset             */ 0,                                // No adjustment
+   /* Destination offset             */ 2,                                // Advance by 2 bytes (1 entry) each write
    /* Destination size               */ DmaSize_16bit,                    // 16-bit write to destination address
-   /* Destination modulo             */ DmaModulo_Disabled,               // Disabled
-   /* Last destination adjustment    */ 0,                                // No adjustment
+   /* Destination modulo             */ DmaModulo_4byte,                  // Wrap around after 4 bytes (2 entries)
+   /* Last destination adjustment    */ 0,                                // No adjustment as using modulo
 
    /* Minor loop byte count          */ dmaNBytes(sizeof(sineTable[0])),  // 1 value transfered each minor-loop (triggered request)
    /* Major loop count               */ dmaCiter(sizeof(sineTable)/       // Transfer entire buffer in major loop
-   /*                                */           sizeof(sineTable[0])),
+   /*                                */          sizeof(sineTable[0])),
 
    /* Start channel                  */ false,                            // Don't start (triggered by hardware)
    /* Disable Req. on major complete */ false,                            // Don't clear hardware request when major loop completed
@@ -132,8 +131,8 @@ static void configureDma(DmaChannelNum dmaChannel) {
    Dma0::enableErrorInterrupts(dmaChannel);
    Dma0::enableNvicErrorInterrupt();
 
-   // Connect DMA channel to PDB
-   DmaMux0::configure(dmaChannel, Dma0Slot_PDB, DmaMuxEnable_Continuous);
+   // Connect DMA channel to DAC0
+   DmaMux0::configure(dmaChannel, Dma0Slot_DAC0, DmaMuxEnable_Continuous);
 
    // Configure the transfer
    Dma0::configureTransfer(dmaChannel, tcd);
@@ -145,26 +144,25 @@ static void configureDma(DmaChannelNum dmaChannel) {
    // Enable asynchronous requests (if available)
    Dma0::enableAsynchronousRequests(dmaChannel);
 #endif
-
 }
 
 /**
  * Configure PDB to trigger DMA at regular interval.
- * The trigger phase is controlled by the interrupt time (IDLY).
- * The trigger period is the PDB period.
+ * The trigger period is controlled by DAC trigger.
  */
 static void configurePdb() {
+
     // Configure PDB.
    Pdb0::configure(
          PdbMode_Continuous,  // Run continuously from when triggered.
          PdbTrigger_Software, // Start when triggered by software
-         PdbAction_Dma);      // Generate DMA requests instead of interrupts
+         PdbAction_None);     // No DMA or interrupts
 
-   // Period of timer (interrupts)
-   Pdb0::setPeriod(PDB_PERIOD);
+   // Period of main timer - irrelevant
+   Pdb0::setModuloInTicks(0);
 
-   // Any phase will do (<PDB_PERIOD)
-   Pdb0::setInterruptDelay(0);
+   // In free-running mode this is actually the period of the DACINT
+   Pdb0::configureDacTrigger(0, PdbDacTriggerMode_Delayed, PDB_PERIOD);
 
    // Registers load on next event
    Pdb0::confirmRegisterLoad(PdbLoadMode_Event);
@@ -186,10 +184,17 @@ static void configureDac() {
 
    // No buffer
    Dac::configureBuffer(
-         DacBufferMode_Disabled);
+         DacBufferMode_Normal,
+         DacWaterMark_Normal1);
+
+   Dac::setBufferWritePointer(0);
+   Dac::setBufferLimit(1);
 
    // Connect output to pin (if necessary)
    Dac::setOutput();
+
+   Dac::enableDma();
+   Dac::enableInterrupts(DacTopFlagIrq_Enabled, DacBottomFlagIrq_Enabled, DacWatermarkIrq_Disabled);
 }
 
 int main() {
@@ -201,7 +206,7 @@ int main() {
    // This also clears the channel reservations
    Dma0::configure();
 
-   // DMA channel number to use (determines which PIT channel used)
+   // DMA channel number to use
    static const DmaChannelNum dmaChannel = Dma0::allocatePeriodicChannel();
    if (dmaChannel == DmaChannelNum_None) {
       console.write("Failed to allocate DMA channel, rc= ").writeln(E_NO_RESOURCE);
