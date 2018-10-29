@@ -72,6 +72,31 @@ enum PitChannelNum : unsigned {
 };
 
 /**
+ * Calculate a PIT channel number using an offset from an existing number
+ *
+ * @param channel Base slot to use
+ * @param offset  Offset from base channel
+ *
+ * @return  PIT channel number calculated from slot+offset
+ */
+constexpr PitChannelNum inline operator+(PitChannelNum channel, unsigned offset) {
+   return (PitChannelNum)((unsigned)channel + offset);
+}
+
+/**
+ * Calculate a PIT channel number using an offset from an existing number
+ *
+ * @param channel Base slot to use
+ * @param offset  Offset from base channel
+ *
+ * @return  PIT channel number calculated from slot+offset
+ */
+constexpr PitChannelNum inline operator+(PitChannelNum channel, int offset) {
+   return channel + (unsigned)offset;
+}
+
+
+/**
  * @brief Class representing a Programmable Interrupt  Timer
  *
  * <b>Example</b>
@@ -226,7 +251,9 @@ public:
     */
    static void configure(PitDebugMode pitDebugMode=PitDebugMode_Stop) {
       enable();
-      for (PitChannelNum channel = PitChannelNum_0; channel < PitInfo::NumChannels; channel = channel+1) {
+      for (PitChannelNum channel = PitChannelNum_0;
+           channel < PitInfo::NumChannels;
+           channel = channel+1) {
          disableChannel(channel);
       }
       pit().MCR = pitDebugMode|PIT_MCR_MDIS(0); // MDIS cleared => enabled!
