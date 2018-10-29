@@ -230,10 +230,24 @@ template<class Info>
 class FtmBase_T : public FtmBase {
 
 public:
-   /** Get reference to FTM hardware as struct */
-   static volatile SPI_Type &ftmPtr() { return Info::ftm(); }
+   /**
+    * Hardware instance pointer
+    *
+    * @return Reference to FTM hardware
+    */
+   static __attribute__((always_inline)) volatile FTM_Type &tmr() { return Info::ftm(); }
 
-   /** @return Base address of SPI hardware as uint32_t */
+   /**
+    * Clock register for peripheral
+    *
+    * @return Reference to clock register
+    */
+   static __attribute__((always_inline)) volatile uint32_t &clockReg() { return Info::clockReg(); }
+
+   /** Get reference to FTM hardware as struct */
+   static volatile FTM_Type &ftm() { return Info::ftm(); }
+
+   /** @return Base address of FTM hardware as uint32_t */
    static constexpr uint32_t ftmBase() { return Info::baseAddress; }
    /** @return Base address of FTM.SC register as uint32_t */
    static constexpr uint32_t ftmSC() { return ftmBase() + offsetof(FTM_Type, SC); }
@@ -346,20 +360,6 @@ public:
 
 public:
    /**
-    * Hardware instance pointer
-    *
-    * @return Reference to FTM hardware
-    */
-   static __attribute__((always_inline)) volatile FTM_Type &tmr() { return Info::ftm(); }
-
-   /**
-    * Clock register for peripheral
-    *
-    * @return Reference to clock register
-    */
-   static __attribute__((always_inline)) volatile uint32_t &clockReg() { return Info::clockReg(); }
-
-   /**
     * Configures all mapped pins associated with this peripheral
     */
    static INLINE_RELEASE void configureAllPins() {
@@ -457,7 +457,7 @@ public:
     * @note This function will affect all channels of the timer.
     * @note The timer will be disabled while making changes.
     */
-   static void setMode(FtmMode ftmMode=FtmMode_LeftAlign) {
+   static void setMode(FtmMode ftmMode) {
       // Disable timer to allow change
       uint32_t sc = tmr().SC;
       tmr().SC = 0;
@@ -1328,9 +1328,9 @@ public:
 
       /** @return Base address of FTM.CONTROL struct as uint32_t */
       static constexpr uint32_t ftmCONTROL() { return ftmBase() + offsetof(FTM_Type, CONTROLS[channel]); }
-      /** @return Base address of FTM.CONTROL.CnSC struct as uint32_t */
+      /** @return Address of FTM.CONTROL.CnSC as uint32_t */
       static constexpr uint32_t ftmCnSC() { return ftmBase() + offsetof(FTM_Type, CONTROLS[channel])+0; }
-      /** @return Base address of FTM.CONTROL.CnV struct as uint32_t */
+      /** @return Address of FTM.CONTROL.CnV as uint32_t */
       static constexpr uint32_t ftmCnV() { return ftmBase() + offsetof(FTM_Type, CONTROLS[channel])+sizeof(uint32_t); }
 
       /**
@@ -1396,7 +1396,7 @@ public:
       }
 
       /** Timer channel number */
-      static constexpr uint32_t CHANNEL      = channel;
+      static constexpr unsigned CHANNEL      = channel;
 
       /** Mask for Timer channel */
       static constexpr uint32_t CHANNEL_MASK = 1<<channel;
@@ -1914,9 +1914,9 @@ class Ftm3Channel : public Ftm3::Channel<channel> {};
  *  Quadrature Decoder Mode\n
  *  Selects the encoding mode used in the Quadrature Decoder mode.
  */
-enum QuadratureMode {
-   QuadratureMode_Phase_AB_Mode        = FTM_QDCTRL_QUADMODE(0),   //!< Phase A and phase B encoding mode.
-   QuadratureMode_Count_Direction_Mode = FTM_QDCTRL_QUADMODE(1),   //!< Count and direction encoding mode.
+enum FtmQuadratureMode {
+   FtmQuadratureMode_Phase_AB_Mode        = FTM_QDCTRL_QUADMODE(0),   //!< Phase A and phase B encoding mode.
+   FtmQuadratureMode_Count_Direction_Mode = FTM_QDCTRL_QUADMODE(1),   //!< Count and direction encoding mode.
 };
 
 /**
@@ -1925,17 +1925,17 @@ enum QuadratureMode {
  * @tparam info      Information class for FTM
  *
  * @code
- *  using QuadDecoder = QuadDecoder_T<Ftm0Info>;
+ *  using FtmQuadDecoder = FtmQuadDecoder_T<Ftm0Info>;
  *
  *  // Enable decoder
- *  QuadDecoder::configure();
+ *  FtmQuadDecoder::configure();
  *
  *  // Set pin filters
- *  QuadDecoder::enableFilter(15);
+ *  FtmQuadDecoder::enableFilter(15);
  *
  *  // Reset position to zero
  *  // Movement will be +/- relative to this initial position
- *  QuadDecoder::resetPosition();
+ *  FtmQuadDecoder::resetPosition();
  *
  *  for(;;) {
  *     console.write("Position =").writeln(QuadDecoder.getPosition());
@@ -1943,7 +1943,7 @@ enum QuadratureMode {
  * @endcode
  */
 template <class Info>
-class QuadDecoder_T {
+class FtmQuadDecoder_T {
 
 private:
    FtmBase::CheckChannel<typename Info::InfoQUAD, 0> checkQ0;
@@ -2004,7 +2004,7 @@ public:
     *
     * @param quadratureMode   Mode of operation for the decoder
     */
-   static void setMode(QuadratureMode quadratureMode = QuadratureMode_Phase_AB_Mode) {
+   static void setMode(FtmQuadratureMode quadratureMode = FtmQuadratureMode_Phase_AB_Mode) {
       if (quadratureMode) {
          tmr().QDCTRL |= FTM_QDCTRL_QUADMODE_MASK;
       }
@@ -2079,15 +2079,16 @@ public:
    /**
     * Basic configuration of Quadrature decoder.
     * Includes configuring all pins if
+    * mapPinsOnEnable setting is true
     *
     * @param ftmPrescale    Prescale value applied to the output of the quadrature decode before the counter.
     * @param quadratureMode Selects the encoding mode used to decode the input changes.
     */
    static void configure(
-         FtmPrescale    ftmPrescale    = FtmPrescale_1,
-         QuadratureMode quadratureMode = QuadratureMode_Phase_AB_Mode
+         FtmPrescale       ftmPrescale       = FtmPrescale_1,
+         FtmQuadratureMode ftmQuadratureMode = FtmQuadratureMode_Phase_AB_Mode
          ) {
-      // Assertions placed here so only checked if QuadDecoder actually used
+      // Assertions placed here so only checked if FtmQuadDecoder actually used
       static_assert(Info::InfoQUAD::info[0].gpioBit != UNMAPPED_PCR, "QuadDecoder_T: FTM PHA is not mapped to a pin - Modify Configure.usbdm");
       static_assert(Info::InfoQUAD::info[1].gpioBit != UNMAPPED_PCR, "QuadDecoder_T: FTM PHB is not mapped to a pin - Modify Configure.usbdm");
 
@@ -2100,7 +2101,7 @@ public:
 
       tmr().QDCTRL =
             FTM_QDCTRL_QUADEN_MASK|      // Enable Quadrature decoder
-            quadratureMode;              // Quadrature mode
+            ftmQuadratureMode;           // Quadrature mode
       tmr().CONF   = FTM_CONF_BDMMODE(3);
    }
 
@@ -2159,35 +2160,35 @@ public:
  * Class representing FTM0 as Quadrature decoder
  * Not all FTMs support this mode
  */
-class QuadDecoder0 : public QuadDecoder_T<Ftm0Info> {};
+class FtmQuadDecoder0 : public FtmQuadDecoder_T<Ftm0Info> {};
 #endif
 
 #ifdef USBDM_FTM1_INFOQUAD_IS_DEFINED
 /**
  * Class representing FTM1 as Quadrature decoder
  */
-class QuadDecoder1 : public QuadDecoder_T<Ftm1Info> {};
+class FtmQuadDecoder1 : public FtmQuadDecoder_T<Ftm1Info> {};
 #endif
 
 #ifdef USBDM_FTM2_INFOQUAD_IS_DEFINED
 /**
  * Class representing FTM2 as Quadrature decoder
  */
-class QuadDecoder2 : public QuadDecoder_T<Ftm2Info> {};
+class FtmQuadDecoder2 : public FtmQuadDecoder_T<Ftm2Info> {};
 #endif
 
 #ifdef USBDM_FTM3_INFOQUAD_IS_DEFINED
 /**
  * Class representing FTM3 as Quadrature decoder
  */
-class QuadDecoder3 : public QuadDecoder_T<Ftm3Info> {};
+class FtmQuadDecoder3 : public FtmQuadDecoder_T<Ftm3Info> {};
 #endif
 
 #ifdef USBDM_FTM4_INFOQUAD_IS_DEFINED
 /**
  * Class representing FTM4 as Quadrature decoder
  */
-class QuadDecoder4 : public QuadDecoder_T<Ftm4Info> {};
+class FtmQuadDecoder4 : public FtmQuadDecoder_T<Ftm4Info> {};
 #endif
 
 /**

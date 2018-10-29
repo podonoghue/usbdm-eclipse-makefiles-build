@@ -194,8 +194,22 @@ template<class Info>
 class TpmBase_T : public TpmBase {
 
 public:
+   /**
+    * Hardware instance pointer
+    *
+    * @return Reference to TPM hardware
+    */
+   static __attribute__((always_inline)) volatile TPM_Type &tmr() { return Info::tpm(); }
+
+   /**
+    * Clock register for peripheral
+    *
+    * @return Reference to clock register
+    */
+   static __attribute__((always_inline)) volatile uint32_t &clockReg() { return Info::clockReg(); }
+
    /** Get reference to TPM hardware as struct */
-   static volatile SPI_Type &tpmPtr() { return Info::tpm(); }
+   static volatile TPM_Type &tpm() { return Info::tpm(); }
 
    /** @return Base address of SPI hardware as uint32_t */
    static constexpr uint32_t tpmBase() { return Info::baseAddress; }
@@ -265,8 +279,8 @@ public:
     * Set channel Callback function\n
     * Note that one callback is shared by all channels of the timer
     *
-    * @param[in] theCallback Callback function to execute on channel interrupt.\n
-    *                        nullptr to indicate none
+    * @param[in] callback Callback function to execute on channel interrupt.\n
+    *                     Use nullptr to remove callback.
     *
     * @return E_NO_ERROR            No error
     * @return E_HANDLER_ALREADY_SET Handler already set
@@ -274,36 +288,21 @@ public:
     * @note One channel event callback is shared by all channels of the timer.
     *       It is necessary to identify the originating channel in the callback
     */
-   static ErrorCode INLINE_RELEASE setChannelCallback(TpmChannelCallbackFunction theCallback) {
-      if (theCallback == nullptr) {
+   static ErrorCode INLINE_RELEASE setChannelCallback(TpmChannelCallbackFunction callback) {
+      usbdm_assert(Info::irqHandlerInstalled, "TPM not configure for interrupts");
+      if (callback == nullptr) {
          sChannelCallback = unhandledChannelCallback;
          return E_NO_ERROR;
       }
 #ifdef DEBUG_BUILD
       // Callback is shared across all channels. Check if callback already assigned
-      if ((sChannelCallback != unhandledChannelCallback) && (sChannelCallback != theCallback)) {
+      if ((sChannelCallback != unhandledChannelCallback) && (sChannelCallback != callback)) {
          return setErrorCode(ErrorCode::E_HANDLER_ALREADY_SET);
       }
 #endif
-      sChannelCallback = theCallback;
+      sChannelCallback = callback;
       return E_NO_ERROR;
    }
-
-public:
-   /**
-    * Hardware instance pointer
-    *
-    * @return Reference to TPM hardware
-    */
-   static __attribute__((always_inline)) volatile TPM_Type &tmr() { return Info::tpm(); }
-
-   /**
-    * Clock register for peripheral
-    *
-    * @return Reference to clock register
-    */
-   static __attribute__((always_inline)) volatile uint32_t &clockReg() { return Info::clockReg(); }
-
    /**
     * Configures all mapped pins associated with this peripheral
     */
@@ -313,20 +312,33 @@ public:
    }
 
    /**
-    * Enables clock to peripheral and configures all pins
+    * Enables clock to peripheral and configures all pins if
+    * mapPinsOnEnable setting is true
     */
    static INLINE_RELEASE void enable() {
       if (Info::mapPinsOnEnable) {
          configureAllPins();
       }
 
-      // Enable clock to peripheral
+      // Enable clock to peripheral interface
       clockReg() |= Info::clockMask;
       __DMB();
    }
 
    /**
-    * Configure with settings from Configure.usbdmProject.\n
+    * Disables peripheral including clocks
+    */
+   static INLINE_RELEASE void disable() {
+      // Disable FTM (clock source disabled)
+      tmr().SC = 0;
+
+      // Disable clock to peripheral interface
+      clockReg() &= ~Info::clockMask;
+      __DMB();
+   }
+
+   /**
+    * Configure with settings from Configure.usbdmProject.
     * Includes configuring all pins
     */
    static void defaultConfigure() {
@@ -389,7 +401,7 @@ public:
       tmr().SC = 0;
       (void)tmr().SC;
 
-     // Set new mode
+      // Set new mode
       tmr().SC = (sc&~TPM_SC_CPWMS_MASK)|tpmMode;
    }
 
@@ -548,22 +560,20 @@ public:
 
          // Halve with rounding
          period = (period+1)/2;
-#ifdef DEBUG_BUILD
          if (period > 0x7FFFUL) {
             // Attempt to set too long a period
+            usbdm_assert(false, "Interval is too long");
             return setErrorCode(E_TOO_LARGE);
          }
-#endif
       }
       else {
          // Left-aligned period is MOD+1 value
          period = period-1;
-#ifdef DEBUG_BUILD
          if (period > 0xFFFF) {
             // Attempt to set too long a period
+            usbdm_assert(false, "Interval is too long");
             return setErrorCode(E_TOO_LARGE);
          }
-#endif
       }
       setCounterMaximumValue(period, suspend);
       return E_NO_ERROR;
@@ -601,6 +611,7 @@ public:
          float    clock = inputClock/prescaleFactor;
          uint32_t periodInTicks   = round(period*clock);
          if (periodInTicks < Info::minimumResolution) {
+            usbdm_assert(false, "Interval is too short");
             // Too short a period for minimum resolution
             return setErrorCode(E_TOO_SMALL);
          }
@@ -617,6 +628,7 @@ public:
          prescaleFactor <<= 1;
       }
       // Too long a period
+      usbdm_assert(false, "Interval is too long");
       return setErrorCode(E_TOO_LARGE);
    }
 
@@ -734,7 +746,7 @@ public:
       // Calculate period
       uint32_t tickRate = getTickFrequencyAsInt();
       uint64_t rv       = ((uint64_t)time*tickRate)/1000000;
-#ifdef DEBUG_BUILD
+      usbdm_assert(rv <= 0xFFFFUL, "Interval is too long");
       if (rv > 0xFFFFUL) {
          // Attempt to set too long a period
          setErrorCode(E_TOO_LARGE);
@@ -743,26 +755,25 @@ public:
          // Attempt to set too short a period
          setErrorCode(E_TOO_SMALL);
       }
-#endif
       return rv;
    }
 
    /**
     * Converts time in seconds to time in ticks
     *
-    * @param[in] time Time in seconds
+    * @param[in] seconds Time interval in seconds
     *
     * @return Time in ticks
     *
     * @note Assumes prescale has been chosen as a appropriate value (see setMaximumInterval()). \n
     * @note Will set error code if calculated value is less the minimum resolution
     */
-   static uint32_t convertSecondsToTicks(float time) {
+   static uint32_t convertSecondsToTicks(float seconds) {
 
       // Calculate period
       float    tickRate = getTickFrequencyAsFloat();
-      uint64_t rv       = time*tickRate;
-#ifdef DEBUG_BUILD
+      uint64_t rv       = rintf(seconds*tickRate);
+      usbdm_assert(rv <= 0xFFFFUL, "Interval is too long");
       if (rv > 0xFFFFUL) {
          // Attempt to set too long a period
          setErrorCode(E_TOO_LARGE);
@@ -771,23 +782,22 @@ public:
          // Attempt to set too short a period
          setErrorCode(E_TOO_SMALL);
       }
-#endif
       return rv;
    }
 
    /**
     * Convert time in ticks to time in microseconds
     *
-    * @param[in] tickInterval Time in ticks
+    * @param[in] timeInTicks Time in ticks
     *
     * @return Time in microseconds
     *
     * @note Assumes prescale has been chosen as a appropriate value. Rudimentary range checking.
     */
-   static uint32_t convertTicksToMicroseconds(int tickInterval) {
+   static uint32_t convertTicksToMicroseconds(int timeInTicks) {
 
       // Calculate period
-      uint64_t rv = ((uint64_t)tickInterval*1000000)/getTickFrequencyAsInt();
+      uint64_t rv = ((uint64_t)timeInTicks*1000000)/getTickFrequencyAsInt();
 #ifdef DEBUG_BUILD
       if (rv > 0xFFFFUL) {
          // Attempt to set too long a period
@@ -804,13 +814,12 @@ public:
    /**
     * Convert time in ticks to time in seconds
     *
-    * @param[in] tickInterval Time in ticks as float
+    * @param[in] timeInTicks Time in ticks
     *
     * @return Time in seconds
     */
-   static float INLINE_RELEASE convertTicksToSeconds(int tickInterval) {
-      // Calculate period
-      return tickInterval/getTickFrequencyAsFloat();
+   static float INLINE_RELEASE convertTicksToSeconds(int timeInTicks) {
+      return ((float)timeInTicks)/getTickFrequencyAsFloat();
    }
 
    /**
@@ -843,7 +852,7 @@ public:
    /**
     * Clear selected timer event flags
     *
-    * @param channelMask Mask indicating which channel flags to clear.
+    * @param channelMask Mask indicating which channel flags to clear
     *                    There is one bit for each channel
 	*/
    static INLINE_RELEASE void clearSelectedInterruptFlags(uint32_t channelMask) {
@@ -1044,6 +1053,13 @@ public:
       /** Allow access owning TPM */
       using Tpm = TpmBase_T<Info>;
 
+      /** @return Base address of FTM.CONTROL struct as uint32_t */
+      static constexpr uint32_t tpmCONTROL() { return tpmBase() + offsetof(FTM_Type, CONTROLS[channel]); }
+      /** @return Address of FTM.CONTROL.CnSC as uint32_t */
+      static constexpr uint32_t tpmCnSC() { return tpmBase() + offsetof(FTM_Type, CONTROLS[channel])+0; }
+      /** @return Address of FTM.CONTROL.CnV as uint32_t */
+      static constexpr uint32_t tpmCnV() { return tpmBase() + offsetof(FTM_Type, CONTROLS[channel])+sizeof(uint32_t); }
+
       /**
        * Set TOI Callback function.
        *
@@ -1107,7 +1123,7 @@ public:
       }
 
       /** Timer channel number */
-      static constexpr uint32_t CHANNEL      = channel;
+      static constexpr unsigned CHANNEL      = channel;
 
       /** Mask for Timer channel */
       static constexpr uint32_t CHANNEL_MASK = 1<<channel;
@@ -1147,6 +1163,13 @@ public:
          usbdm_assert(Tpm::isEnabled(), "TPM not enabled");
 		 
          Tpm::tmr().CONTROLS[channel].CnSC = tpmChMode|tpmChannelAction;
+      }
+
+      /**
+       * Disables timer channel (sets mode to FtmChMode_Disabled)
+       */
+      void disable() {
+         setMode(TpmChMode_Disabled);
       }
 
       /**
@@ -1320,7 +1343,7 @@ public:
       /**
        * Configures Pin Control Register (PCR) value for a Timer pin to default values.
        * This will map the pin to the Timer function (mux value) \n
-       * The clock to the port will be enabled before changing the PCR
+       * The clock to the port will be enabled before changing the PCR.
        *
        * @note Resets the Pin Control Register value (PCR value).
        */
@@ -1332,7 +1355,7 @@ public:
       /**
        * Set Pin Control Register (PCR) value.
        * This will map the pin to the Timer function (mux value) \n
-       * The clock to the port will be enabled before changing the PCR
+       * The clock to the port will be enabled before changing the PCR.
        *
        * @param[in] pinPull          One of PinPull_None, PinPull_Up, PinPull_Down
        * @param[in] pinAction        One of PinAction_None, etc (defaults to PinAction_None)
@@ -1595,24 +1618,32 @@ template <int channel>
 class Tpm3Channel : public Tpm3::Channel<channel> {};
 #endif
 
-#if defined(TPM_QDCTRL_QUADEN_MASK)
+/**
+ *  Quadrature Decoder Mode\n
+ *  Selects the encoding mode used in the Quadrature Decoder mode.
+ */
+enum TpmQuadratureMode {
+   TpmQuadratureMode_Phase_AB_Mode        = FTM_QDCTRL_QUADMODE(0),   //!< Phase A and phase B encoding mode.
+   TpmQuadratureMode_Count_Direction_Mode = FTM_QDCTRL_QUADMODE(1),   //!< Count and direction encoding mode.
+};
+
 /**
  * Template class representing a TPM configured as a Quadrature decoder
  *
  * @tparam info      Information class for TPM
  *
  * @code
- *  using QuadDecoder = QuadDecoder_T<Tpm0Info>;
+ *  using TpmQuadDecoder = TpmQuadDecoder_T<Tpm0Info>;
  *
  *  // Enable decoder
- *  QuadDecoder::configure();
+ *  TpmQuadDecoder::configure();
  *
  *  // Set pin filters
- *  QuadDecoder::enableFilter(15);
+ *  TpmQuadDecoder::enableFilter(15);
  *
  *  // Reset position to zero
  *  // Movement will be +/- relative to this initial position
- *  QuadDecoder::resetPosition();
+ *  TpmQuadDecoder::resetPosition();
  *
  *  for(;;) {
  *     console.write("Position =").writeln(QuadDecoder.getPosition());
@@ -1620,20 +1651,26 @@ class Tpm3Channel : public Tpm3::Channel<channel> {};
  * @endcode
  */
 template <class Info>
-class QuadDecoder_T {
+class TpmQuadDecoder_T {
 
 private:
-   TpmBase::CheckChannel<Info, 0> checkQ0;
-   TpmBase::CheckChannel<Info, 1> checkQ1;
+   TpmBase::CheckChannel<typename Info::InfoQUAD, 0> checkQ0;
+   TpmBase::CheckChannel<typename Info::InfoQUAD, 1> checkQ1;
 
 public:
+   /** Hardware instance pointer */
+   static __attribute__((always_inline)) volatile TPM_Type &tpm() { return Info::tpm(); }
+
+   /** Clock register for peripheral */
+   static __attribute__((always_inline)) volatile uint32_t &clockReg() { return Info::clockReg(); }
+
    /** Allow more convenient access associated Tpm */
    using Tpm = TpmBase_T<Info>;
 
-   /** Allow access to PCR of associated pin */
+   /** Allow access to PCR of associated phase-A pin */
    using Pcr0 = PcrTable_T<typename Info::InfoQUAD, 0>;
 
-   /** Allow access to PCR of associated pin */
+   /** Allow access to PCR of associated phase-B pin */
    using Pcr1 = PcrTable_T<typename Info::InfoQUAD, 1>;
 
    /**
@@ -1650,8 +1687,8 @@ public:
          PinAction         pinAction         = PinAction_None,
          PinFilter         pinFilter         = PinFilter_None
    ) {
-      TpmBase::CheckPinMapping<Info, 0>::check();
-      TpmBase::CheckPinMapping<Info, 1>::check();
+      TpmBase::CheckPinMapping<typename Info::InfoQUAD, 0>::check();
+      TpmBase::CheckPinMapping<typename Info::InfoQUAD, 1>::check();
       Pcr0::setPCR(pinPull|pinAction|pinFilter|(Info::InfoQUAD::info[0].pcrValue&PORT_PCR_MUX_MASK));
       Pcr1::setPCR(pinPull|pinAction|pinFilter|(Info::InfoQUAD::info[1].pcrValue&PORT_PCR_MUX_MASK));
    }
@@ -1686,34 +1723,65 @@ public:
       Tpm::enableNvicInterrupts(enable, nvicPriority);
    }
 
-   /** Hardware instance pointer */
-   static __attribute__((always_inline)) volatile TPM_Type &tpm() { return Info::tpm(); }
-
-   /** Clock register for peripheral */
-   static __attribute__((always_inline)) volatile uint32_t &clockReg() { return Info::clockReg(); }
+   /**
+    * Configures all mapped pins associated with this peripheral
+    */
+   static INLINE_RELEASE void configureAllPins() {
+      // Configure pins
+      Info::InfoQUAD::initPCRs();
+   }
 
    /**
-    * Enable with default settings\n
-    * Includes configuring all pins
+    * Enables clock to peripheral and configures all pins if
+    * mapPinsOnEnable setting is true
+    */
+   static INLINE_RELEASE void enable() {
+      if (Info::mapPinsOnEnable) {
+         configureAllPins();
+      }
+      // Enable clock to peripheral interface
+      clockReg() |= Info::clockMask;
+      __DMB();
+   }
+
+   /**
+    * Disables peripheral including clocks
+    */
+   static INLINE_RELEASE void disable() {
+      // Disable FTM (clock source disabled)
+      tmr().QDCTRL = 0;
+
+      // Disable clock to peripheral interface
+      clockReg() &= ~Info::clockMask;
+      __DMB();
+   }
+
+   /**
+    * Basic configuration of Quadrature decoder.
+    * Includes configuring all pins if
+    * mapPinsOnEnable setting is true
     *
     * @param tpmPrescale Prescale value applied to the output of the quadrature decode before the counter.
+    * @param quadratureMode Selects the encoding mode used to decode the input changes.
     */
-   static void configure(TpmPrescale tpmPrescale = TpmPrescale_1) {
-      // Assertions placed here so only checked if QuadDecoder actually used
+   static void configure(
+         TpmPrescale       tpmPrescale       = TpmPrescale_1,
+         TpmQuadratureMode tpmQuadratureMode = TpmQuadratureMode_Phase_AB_Mode
+         ) {
+      // Assertions placed here so only checked if TpmQuadDecoder actually used
       static_assert(Info::InfoQUAD::info[0].gpioBit != UNMAPPED_PCR, "QuadDecoder_T: TPM PHA is not mapped to a pin - Modify Configure.usbdm");
       static_assert(Info::InfoQUAD::info[1].gpioBit != UNMAPPED_PCR, "QuadDecoder_T: TPM PHB is not mapped to a pin - Modify Configure.usbdm");
 
-      Info::InfoQUAD::initPCRs();
+      enable();
 
-      // Enable clock to timer
-      clockReg() |= Info::clockMask;
-      __DMB();
-
-      Tpm::configure(TpmMode_Quadrature, TpmClockSource_Disabled, tpmPrescale);
+      // Disable so immediate effect
+      tmr().SC = 0;
+      (void)tmr().SC;
+      tmr().SC = TpmMode_Quadrature|TpmClockSource_Disabled|tpmPrescale;
 
       tpm().QDCTRL =
             TPM_QDCTRL_QUADEN_MASK|      // Enable Quadrature decoder
-            TPM_QDCTRL_QUADMODE(0);      // Quadrature mode
+            tpmQuadratureMode;           // Quadrature mode
       tpm().CONF   = TPM_CONF_DBGMODE(3);
    }
 
@@ -1728,6 +1796,10 @@ public:
     * Get Quadrature decoder position
     *
     * @return Signed number representing position relative to reference location
+    *
+    * @note This can be viewed as a signed number +/- relative to the initial position.
+    * @note This can be viewed as an unsigned number counting up from 0
+    *       with overflow at 0xFFFF and underflow at 0.
     */
    static INLINE_RELEASE int16_t getPosition() {
       return (int16_t)(tpm().CNT);
@@ -1741,35 +1813,35 @@ public:
  * Class representing TPM0 as Quadrature decoder
  * Not all TPMs support this mode
  */
-class TpmQuadDecoder0 : public QuadDecoder_T<Tpm0Info> {};
+class TpmQuadDecoder0 : public TpmQuadDecoder_T<Tpm0Info> {};
 #endif
 
 #ifdef USBDM_TPM1_INFOQUAD_IS_DEFINED
 /**
  * Class representing TPM1 as Quadrature decoder
  */
-class TpmQuadDecoder1 : public QuadDecoder_T<Tpm1Info> {};
+class TpmQuadDecoder1 : public TpmQuadDecoder_T<Tpm1Info> {};
 #endif
 
 #ifdef USBDM_TPM2_INFOQUAD_IS_DEFINED
 /**
  * Class representing TPM2 as Quadrature decoder
  */
-class TpmQuadDecoder2 : public QuadDecoder_T<Tpm2Info> {};
+class TpmQuadDecoder2 : public TpmQuadDecoder_T<Tpm2Info> {};
 #endif
 
 #ifdef USBDM_TPM3_INFOQUAD_IS_DEFINED
 /**
  * Class representing TPM3 as Quadrature decoder
  */
-class TpmQuadDecoder3 : public QuadDecoder_T<Tpm3Info> {};
+class TpmQuadDecoder3 : public TpmQuadDecoder_T<Tpm3Info> {};
 #endif
 
 #ifdef USBDM_TPM4_INFOQUAD_IS_DEFINED
 /**
  * Class representing TPM4 as Quadrature decoder
  */
-class TpmQuadDecoder4 : public QuadDecoder_T<Tpm4Info> {};
+class TpmQuadDecoder4 : public TpmQuadDecoder_T<Tpm4Info> {};
 #endif
 
 /**
