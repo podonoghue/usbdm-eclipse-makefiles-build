@@ -1169,12 +1169,10 @@ public:
     *
     * @param[in]  dmaChannelMask Mask for channels being modified
     * @param[in]  enable         True => enable, False => disable
-    *
-    * @note May use DmaChannelNum_All to apply to all channels
     */
    static void __attribute__((always_inline)) enableMultipleRequests(uint32_t dmaChannelMask, bool enable=true) {
 
-      usbdm_assert((dmaChannelMask&~((1<<Info::NumChannels))-1) != 0, "Illegal DMA channel");
+      usbdm_assert((dmaChannelMask&~((1<<Info::NumChannels)-1)) != 0, "Illegal DMA channel");
 
       if (enable) {
          dmac().ERQ |= dmaChannelMask;
@@ -1234,7 +1232,7 @@ public:
     */
    static void __attribute__((always_inline)) enableMultipleErrorInterrupts(uint32_t dmaChannelMask, bool enable=true) {
 
-      usbdm_assert((dmaChannelMask&~((1<<Info::NumChannels))-1) != 0, "Illegal DMA channel");
+      usbdm_assert((dmaChannelMask&~((1<<Info::NumChannels)-1)) != 0, "Illegal DMA channel");
 
       if (enable) {
          dmac().EEI |= dmaChannelMask;
@@ -1286,7 +1284,7 @@ public:
     */
    static void __attribute__((always_inline)) clearMultipleInterruptRequests(uint32_t dmaChannelMask, bool enable=true) {
 
-      usbdm_assert((dmaChannelMask&~((1<<Info::NumChannels))-1) != 0, "Illegal DMA channel");
+      usbdm_assert((dmaChannelMask&~((1<<Info::NumChannels)-1)) != 0, "Illegal DMA channel");
 
       if (enable) {
          dmac().INT |= dmaChannelMask;
