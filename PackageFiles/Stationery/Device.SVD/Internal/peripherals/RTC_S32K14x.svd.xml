@@ -24,7 +24,7 @@ Devices using this peripheral:
          <registers>
             <register>
                <name>TSR</name>
-               <description>RTC Time Seconds Register</description>
+               <description>Time Seconds Register</description>
                <addressOffset>0x0</addressOffset>
                <fields>
                   <field>
@@ -36,7 +36,7 @@ Devices using this peripheral:
             </register>
             <register>
                <name>TPR</name>
-               <description>RTC Time Prescaler Register</description>
+               <description>Time Prescaler Register</description>
                <addressOffset>0x4</addressOffset>
                <fields>
                   <field>
@@ -49,7 +49,7 @@ Devices using this peripheral:
             </register>
             <register>
                <name>TAR</name>
-               <description>RTC Time Alarm Register</description>
+               <description>Time Alarm Register</description>
                <addressOffset>0x8</addressOffset>
                <fields>
                   <field>
@@ -61,68 +61,44 @@ Devices using this peripheral:
             </register>
             <register>
                <name>TCR</name>
-               <description>RTC Time Compensation Register</description>
+               <description>Time Compensation Register</description>
                <addressOffset>0xC</addressOffset>
                <fields>
                   <field>
                      <name>TCR</name>
-                     <description>Time Compensation Register</description>
+                     <description>Time Compensation Register\n
+This number is subtracted from the nominal 32768 counts per second</description>
                      <bitOffset>0</bitOffset>
                      <bitWidth>8</bitWidth>
                      <enumeratedValues>
                         <enumeratedValue>
-                           <name>10000000</name>
-                           <description>Time Prescaler Register overflows every 32896 clock cycles</description>
-                           <value>0b10000000</value>
-                        </enumeratedValue>
-                        <enumeratedValue>
-                           <name>10000001</name>
-                           <description>Time Prescaler Register overflows every 32895 clock cycles</description>
-                           <value>0b10000001</value>
-                        </enumeratedValue>
-                        <enumeratedValue>
-                           <name>11111111</name>
-                           <description>Time Prescaler Register overflows every 32769 clock cycles</description>
-                           <value>0b11111111</value>
-                        </enumeratedValue>
-                        <enumeratedValue>
-                           <name>00000000</name>
-                           <description>Time Prescaler Register overflows every 32768 clock cycles</description>
-                           <value>0b0</value>
-                        </enumeratedValue>
-                        <enumeratedValue>
-                           <name>00000001</name>
-                           <description>Time Prescaler Register overflows every 32767 clock cycles</description>
-                           <value>0b1</value>
-                        </enumeratedValue>
-                        <enumeratedValue>
-                           <name>01111110</name>
-                           <description>Time Prescaler Register overflows every 32642 clock cycles</description>
-                           <value>0b1111110</value>
-                        </enumeratedValue>
-                        <enumeratedValue>
-                           <name>01111111</name>
-                           <description>Time Prescaler Register overflows every 32641 clock cycles</description>
-                           <value>0b1111111</value>
+                           <name>0bXXXXXXXX</name>
+                           <description>(32768-N) counts</description>
+                           <isDefault>true</isDefault>
                         </enumeratedValue>
                      </enumeratedValues>
                   </field>
                   <field>
                      <name>CIR</name>
-                     <description>Compensation Interval Register</description>
+                     <description>Compensation Interval Register\n
+Configures the compensation interval in seconds from 1 to 256 to control how frequently the TCR should
+adjust the number of 32.768 kHz cycles in each second</description>
                      <bitOffset>8</bitOffset>
                      <bitWidth>8</bitWidth>
                   </field>
                   <field>
                      <name>TCV</name>
-                     <description>Time Compensation Value</description>
+                     <description>Time Compensation Value\n
+Current value used by the compensation logic for the present second interval. Updated once a second if
+the CIC equals 0 with the contents of the TCR field</description>
                      <bitOffset>16</bitOffset>
                      <bitWidth>8</bitWidth>
                      <access>read-only</access>
                   </field>
                   <field>
                      <name>CIC</name>
-                     <description>Compensation Interval Counter</description>
+                     <description>Compensation Interval Counter\n
+Current value of the compensation interval counter</description>
                      <bitOffset>24</bitOffset>
                      <bitWidth>8</bitWidth>
                      <access>read-only</access>
@@ -131,54 +107,64 @@ Devices using this peripheral:
             </register>
             <register>
                <name>CR</name>
-               <description>RTC Control Register</description>
+               <description>Control Register</description>
                <addressOffset>0x10</addressOffset>
                <fields>
                   <field>
                      <name>SWR</name>
-                     <description>Software Reset</description>
+                     <description>Software Reset\n
+Resets all RTC registers except for the SWR bit and the RTC_WAR and RTC_RAR registers.\n
+The SWR bit is cleared by VBAT POR and by software explicitly clearing it</description>
                      <bitOffset>0</bitOffset>
                      <bitWidth>1</bitWidth>
                      <enumeratedValues>
                         <enumeratedValue>
-                           <name>0</name>
+                           <name>0b0</name>
                            <description>No effect</description>
                            <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>Reset RTC apart from (SWR, WAR, RAR)</description>
+                           <value>0b1</value>
                         </enumeratedValue>
                      </enumeratedValues>
                   </field>
                   <field>
                      <name>SUP</name>
-                     <description>Supervisor Access</description>
+                     <description>Supervisor Access\n
+Protects the RTC from non-supervisor access.\n
+When protected, non-supervisor accesses generate a bus error</description>
                      <bitOffset>2</bitOffset>
                      <bitWidth>1</bitWidth>
                      <enumeratedValues>
                         <enumeratedValue>
-                           <name>0</name>
-                           <description>Non-supervisor mode write accesses are not supported and generate a bus error</description>
+                           <name>0b0</name>
+                           <description>Protected</description>
                            <value>0b0</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>1</name>
-                           <description>Non-supervisor mode write accesses are supported</description>
+                           <name>0b1</name>
+                           <description>Unprotected</description>
                            <value>0b1</value>
                         </enumeratedValue>
                      </enumeratedValues>
                   </field>
                   <field>
                      <name>UM</name>
-                     <description>Update Mode</description>
+                     <description>Update Mode\n
+Protects the registers when locked</description>
                      <bitOffset>3</bitOffset>
                      <bitWidth>1</bitWidth>
                      <enumeratedValues>
                         <enumeratedValue>
-                           <name>0</name>
-                           <description>Registers cannot be written when locked</description>
+                           <name>0b0</name>
+                           <description>Protected when locked</description>
                            <value>0b0</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>1</name>
-                           <description>Registers can be written when locked under limited conditions</description>
+                           <name>0b1</name>
+                           <description>Unprotected when locked</description>
                            <value>0b1</value>
                         </enumeratedValue>
                      </enumeratedValues>
@@ -190,13 +176,13 @@ Devices using this peripheral:
                      <bitWidth>1</bitWidth>
                      <enumeratedValues>
                         <enumeratedValue>
-                           <name>0</name>
+                           <name>0b0</name>
                            <description>The prescaler output clock (as configured by TSIC) is output on RTC_CLKOUT</description>
                            <value>0b0</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>1</name>
-                           <description>The RTC 32kHz crystal clock is output on RTC_CLKOUT, provided it is output to other peripherals</description>
+                           <name>0b1</name>
+                           <description>The RTC 32kHz crystal clock is output on RTC_CLKOUT</description>
                            <value>0b1</value>
                         </enumeratedValue>
                      </enumeratedValues>
@@ -208,13 +194,13 @@ Devices using this peripheral:
                      <bitWidth>1</bitWidth>
                      <enumeratedValues>
                         <enumeratedValue>
-                           <name>0</name>
-                           <description>RTC prescaler increments using 32kHz crystal</description>
+                           <name>0b0</name>
+                           <description>prescaler increments using 32 kHz crystal</description>
                            <value>0b0</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>1</name>
-                           <description>RTC prescaler increments using 1kHz LPO, bits [4:0] of the prescaler are ignored</description>
+                           <name>0b1</name>
+                           <description>prescaler increments using 128 kHz LPO, bits [4:0] of the prescaler are bypassed</description>
                            <value>0b1</value>
                         </enumeratedValue>
                      </enumeratedValues>
@@ -227,12 +213,12 @@ Devices using this peripheral:
                      <enumeratedValues>
                         <enumeratedValue>
                            <name>0</name>
-                           <description>Disable RTC_CLKOUT pin</description>
+                           <description>RTC_CLKOUT is disabled</description>
                            <value>0b0</value>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>1</name>
-                           <description>Enable RTC_CLKOUT pin</description>
+                           <description>RTC_CLKOUT is enabled</description>
                            <value>0b1</value>
                         </enumeratedValue>
                      </enumeratedValues>
@@ -241,63 +227,66 @@ Devices using this peripheral:
             </register>
             <register>
                <name>SR</name>
-               <description>RTC Status Register</description>
+               <description>Status Register</description>
                <addressOffset>0x14</addressOffset>
                <resetValue>0x1</resetValue>
                <fields>
                   <field>
                      <name>TIF</name>
-                     <description>Time Invalid Flag</description>
+                     <description>Time Invalid Flag\n
+Indicates if the time is valid</description>
                      <bitOffset>0</bitOffset>
                      <bitWidth>1</bitWidth>
                      <access>read-only</access>
                      <enumeratedValues>
                         <enumeratedValue>
-                           <name>0</name>
-                           <description>Time is valid</description>
+                           <name>0b0</name>
+                           <description>Valid</description>
                            <value>0b0</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>1</name>
-                           <description>Time is invalid and time counter is read as zero</description>
+                           <name>0b1</name>
+                           <description>Invalid</description>
                            <value>0b1</value>
                         </enumeratedValue>
                      </enumeratedValues>
                   </field>
                   <field>
                      <name>TOF</name>
-                     <description>Time Overflow Flag</description>
+                     <description>Time Overflow Flag\n
+Indicates time overflow has occurred</description>
                      <bitOffset>1</bitOffset>
                      <bitWidth>1</bitWidth>
                      <access>read-only</access>
                      <enumeratedValues>
                         <enumeratedValue>
-                           <name>0</name>
-                           <description>Time overflow has not occurred</description>
+                           <name>0b0</name>
+                           <description>No overflow</description>
                            <value>0b0</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>1</name>
-                           <description>Time overflow has occurred and time counter is read as zero</description>
+                           <name>0b1</name>
+                           <description>Overflow</description>
                            <value>0b1</value>
                         </enumeratedValue>
                      </enumeratedValues>
                   </field>
                   <field>
                      <name>TAF</name>
-                     <description>Time Alarm Flag</description>
+                     <description>Time Alarm Flag\n
+Set when alarm time reached</description>
                      <bitOffset>2</bitOffset>
                      <bitWidth>1</bitWidth>
                      <access>read-only</access>
                      <enumeratedValues>
                         <enumeratedValue>
-                           <name>0</name>
-                           <description>Time alarm has not occurred</description>
+                           <name>0b0</name>
+                           <description>No alarm</description>
                            <value>0b0</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>1</name>
-                           <description>Time alarm has occurred</description>
+                           <name>0b1</name>
+                           <description>Alarm occurred</description>
                            <value>0b1</value>
                         </enumeratedValue>
                      </enumeratedValues>
@@ -309,13 +298,13 @@ Devices using this peripheral:
                      <bitWidth>1</bitWidth>
                      <enumeratedValues>
                         <enumeratedValue>
-                           <name>0</name>
-                           <description>Time counter is disabled</description>
+                           <name>0b0</name>
+                           <description>Disabled</description>
                            <value>0b0</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>1</name>
-                           <description>Time counter is enabled</description>
+                           <name>0b1</name>
+                           <description>Enabled</description>
                            <value>0b1</value>
                         </enumeratedValue>
                      </enumeratedValues>
@@ -324,87 +313,40 @@ Devices using this peripheral:
             </register>
             <register>
                <name>LR</name>
-               <description>RTC Lock Register</description>
+               <description>Lock Register</description>
                <addressOffset>0x18</addressOffset>
                <resetValue>0xFF</resetValue>
                <fields>
                   <field>
                      <name>TCL</name>
-                     <description>Time Compensation Lock</description>
+                     <description>Time Compensation Lock\n
+Write protects the Time Compensation Register</description>
                      <bitOffset>3</bitOffset>
                      <bitWidth>1</bitWidth>
                      <enumeratedValues>
                         <enumeratedValue>
-                           <name>0</name>
-                           <description>Time Compensation Register is locked and writes are ignored</description>
+                           <name>0b0</name>
+                           <description>Protected</description>
                            <value>0b0</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>1</name>
-                           <description>Time Compensation Register is not locked and writes complete as normal</description>
+                           <name>0b1</name>
+                           <description>Unprotected</description>
                            <value>0b1</value>
                         </enumeratedValue>
                      </enumeratedValues>
                   </field>
-                  <field>
-                     <name>CRL</name>
-                     <description>Control Register Lock</description>
-                     <bitOffset>4</bitOffset>
-                     <bitWidth>1</bitWidth>
-                     <enumeratedValues>
-                        <enumeratedValue>
-                           <name>0</name>
-                           <description>Control Register is locked and writes are ignored</description>
-                           <value>0b0</value>
-                        </enumeratedValue>
-                        <enumeratedValue>
-                           <name>1</name>
-                           <description>Control Register is not locked and writes complete as normal</description>
-                           <value>0b1</value>
-                        </enumeratedValue>
-                     </enumeratedValues>
-                  </field>
-                  <field>
-                     <name>SRL</name>
-                     <description>Status Register Lock</description>
-                     <bitOffset>5</bitOffset>
-                     <bitWidth>1</bitWidth>
-                     <enumeratedValues>
-                        <enumeratedValue>
-                           <name>0</name>
-                           <description>Status Register is locked and writes are ignored</description>
-                           <value>0b0</value>
-                        </enumeratedValue>
-                        <enumeratedValue>
-                           <name>1</name>
-                           <description>Status Register is not locked and writes complete as normal</description>
-                           <value>0b1</value>
-                        </enumeratedValue>
-                     </enumeratedValues>
-                  </field>
-                  <field>
-                     <name>LRL</name>
-                     <description>Lock Register Lock</description>
-                     <bitOffset>6</bitOffset>
-                     <bitWidth>1</bitWidth>
-                     <enumeratedValues>
-                        <enumeratedValue>
-                           <name>0</name>
-                           <description>Lock Register is locked and writes are ignored</description>
-                           <value>0b0</value>
-                        </enumeratedValue>
-                        <enumeratedValue>
-                           <name>1</name>
-                           <description>Lock Register is not locked and writes complete as normal</description>
-                           <value>0b1</value>
-                        </enumeratedValue>
-                     </enumeratedValues>
-                  </field>
+                  <field derivedFrom="TCL" > <name>CRL</name> <description>Control Register Lock\n
+Write protects the Control Register</description> <bitOffset>4</bitOffset> </field>
+                  <field derivedFrom="TCL" > <name>SRL</name> <description>Status Register Lock\n
+Write protects the Status Register</description> <bitOffset>5</bitOffset> </field>
+                  <field derivedFrom="TCL" > <name>LRL</name> <description>Lock Register Lock\n
+Write protects the Lock Register</description> <bitOffset>6</bitOffset> </field>
                </fields>
             </register>
             <register>
                <name>IER</name>
-               <description>RTC Interrupt Enable Register</description>
+               <description>Interrupt Enable Register</description>
                <addressOffset>0x1C</addressOffset>
                <resetValue>0x7</resetValue>
                <fields>
@@ -415,71 +357,20 @@ Devices using this peripheral:
                      <bitWidth>1</bitWidth>
                      <enumeratedValues>
                         <enumeratedValue>
-                           <name>0</name>
-                           <description>Time invalid flag does not generate an interrupt</description>
+                           <name>0b0</name>
+                           <description>Masked</description>
                            <value>0b0</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>1</name>
-                           <description>Time invalid flag does generate an interrupt</description>
+                           <name>0b1</name>
+                           <description>Enabled</description>
                            <value>0b1</value>
                         </enumeratedValue>
                      </enumeratedValues>
                   </field>
-                  <field>
-                     <name>TOIE</name>
-                     <description>Time Overflow Interrupt Enable</description>
-                     <bitOffset>1</bitOffset>
-                     <bitWidth>1</bitWidth>
-                     <enumeratedValues>
-                        <enumeratedValue>
-                           <name>0</name>
-                           <description>Time overflow flag does not generate an interrupt</description>
-                           <value>0b0</value>
-                        </enumeratedValue>
-                        <enumeratedValue>
-                           <name>1</name>
-                           <description>Time overflow flag does generate an interrupt</description>
-                           <value>0b1</value>
-                        </enumeratedValue>
-                     </enumeratedValues>
-                  </field>
-                  <field>
-                     <name>TAIE</name>
-                     <description>Time Alarm Interrupt Enable</description>
-                     <bitOffset>2</bitOffset>
-                     <bitWidth>1</bitWidth>
-                     <enumeratedValues>
-                        <enumeratedValue>
-                           <name>0</name>
-                           <description>Time alarm flag does not generate an interrupt</description>
-                           <value>0b0</value>
-                        </enumeratedValue>
-                        <enumeratedValue>
-                           <name>1</name>
-                           <description>Time alarm flag does generate an interrupt</description>
-                           <value>0b1</value>
-                        </enumeratedValue>
-                     </enumeratedValues>
-                  </field>
-                  <field>
-                     <name>TSIE</name>
-                     <description>Time Seconds Interrupt Enable</description>
-                     <bitOffset>4</bitOffset>
-                     <bitWidth>1</bitWidth>
-                     <enumeratedValues>
-                        <enumeratedValue>
-                           <name>0</name>
-                           <description>Seconds interrupt is disabled</description>
-                           <value>0b0</value>
-                        </enumeratedValue>
-                        <enumeratedValue>
-                           <name>1</name>
-                           <description>Seconds interrupt is enabled</description>
-                           <value>0b1</value>
-                        </enumeratedValue>
-                     </enumeratedValues>
-                  </field>
+                  <field derivedFrom="TIIE" > <name>TOIE</name> <description>Time Overflow Interrupt Enable</description> <bitOffset>1</bitOffset> </field>
+                  <field derivedFrom="TIIE" > <name>TAIE</name> <description>Time Alarm Interrupt Enable</description> <bitOffset>2</bitOffset> </field>
+                  <field derivedFrom="TIIE" > <name>TSIE</name> <description>Time Seconds Interrupt Enable</description> <bitOffset>4</bitOffset> </field>
                   <field>
                      <name>TSIC</name>
                      <description>Timer Seconds Interrupt Configuration</description>
@@ -487,42 +378,42 @@ Devices using this peripheral:
                      <bitWidth>3</bitWidth>
                      <enumeratedValues>
                         <enumeratedValue>
-                           <name>000</name>
+                           <name>0b000</name>
                            <description>1 Hz</description>
                            <value>0b000</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>001</name>
+                           <name>0b001</name>
                            <description>2 Hz</description>
                            <value>0b001</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>010</name>
+                           <name>0b010</name>
                            <description>4 Hz</description>
                            <value>0b010</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>011</name>
+                           <name>0b011</name>
                            <description>8 Hz</description>
                            <value>0b011</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>100</name>
+                           <name>0b100</name>
                            <description>16 Hz</description>
                            <value>0b100</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>101</name>
+                           <name>0b101</name>
                            <description>32 Hz</description>
                            <value>0b101</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>110</name>
+                           <name>0b110</name>
                            <description>64 Hz</description>
                            <value>0b110</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>111</name>
+                           <name>0b111</name>
                            <description>128 Hz</description>
                            <value>0b111</value>
                         </enumeratedValue>

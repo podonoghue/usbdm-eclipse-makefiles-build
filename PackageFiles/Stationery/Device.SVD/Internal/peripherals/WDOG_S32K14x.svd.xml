@@ -24,170 +24,171 @@ Devices using this peripheral:
          <registers>
             <register>
                <name>CS</name>
-               <description>Watchdog Control and Status Register</description>
+               <description>Control and Status Register</description>
                <addressOffset>0x0</addressOffset>
                <resetValue>0x2980</resetValue>
                <fields>
                   <field>
                      <name>STOP</name>
-                     <description>Stop Enable</description>
+                     <description>Stop Enable: This write-once bit enables the watchdog to operate when the chip is in stop mode</description>
                      <bitOffset>0</bitOffset>
                      <bitWidth>1</bitWidth>
                      <enumeratedValues>
                         <enumeratedValue>
-                           <name>0</name>
-                           <description>Watchdog disabled in chip stop mode</description>
+                           <name>0b0</name>
+                           <description>Disabled in chip stop mode</description>
                            <value>0b0</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>1</name>
-                           <description>Watchdog enabled in chip stop mode</description>
+                           <name>0b1</name>
+                           <description>Enabled in chip stop mode</description>
                            <value>0b1</value>
                         </enumeratedValue>
                      </enumeratedValues>
                   </field>
                   <field>
                      <name>WAIT</name>
-                     <description>Wait Enable</description>
+                     <description>Wait Enable: This write-once bit enables the watchdog to operate when the chip is in wait mode</description>
                      <bitOffset>1</bitOffset>
                      <bitWidth>1</bitWidth>
                      <enumeratedValues>
                         <enumeratedValue>
-                           <name>0</name>
-                           <description>Watchdog disabled in chip wait mode</description>
+                           <name>0b0</name>
+                           <description>Disabled in chip wait mode</description>
                            <value>0b0</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>1</name>
-                           <description>Watchdog enabled in chip wait mode</description>
+                           <name>0b1</name>
+                           <description>Enabled in chip wait mode</description>
                            <value>0b1</value>
                         </enumeratedValue>
                      </enumeratedValues>
                   </field>
                   <field>
                      <name>DBG</name>
-                     <description>Debug Enable</description>
+                     <description>Debug Enable: This write-once bit enables the watchdog to operate when the chip is in debug mode</description>
                      <bitOffset>2</bitOffset>
                      <bitWidth>1</bitWidth>
                      <enumeratedValues>
                         <enumeratedValue>
-                           <name>0</name>
-                           <description>Watchdog disabled in chip debug mode</description>
+                           <name>0b0</name>
+                           <description>Disabled in chip debug mode</description>
                            <value>0b0</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>1</name>
-                           <description>Watchdog enabled in chip debug mode</description>
+                           <name>0b1</name>
+                           <description>Enabled in chip debug mode</description>
                            <value>0b1</value>
                         </enumeratedValue>
                      </enumeratedValues>
                   </field>
                   <field>
                      <name>TST</name>
-                     <description>Watchdog Test</description>
+                     <description>Test: Enables the fast test mode. The test mode allows software to exercise all bits of the counter to demonstrate that the watchdog is functioning properly. This write-once field is cleared (0:0) on POR only. Any other reset does not affect the value of this field</description>
                      <bitOffset>3</bitOffset>
                      <bitWidth>2</bitWidth>
                      <enumeratedValues>
                         <enumeratedValue>
-                           <name>00</name>
-                           <description>Watchdog test mode disabled</description>
+                           <name>0b00</name>
+                           <description>Test mode disabled</description>
                            <value>0b00</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>01</name>
-                           <description>Watchdog user mode enabled. (Watchdog test mode disabled.) After testing the watchdog, software should use this setting to indicate that the watchdog is functioning normally in user mode</description>
+                           <name>0b01</name>
+                           <description>User mode enabled. (Watchdog test mode disabled.) After testing the watchdog, software should use this setting to indicate that the watchdog is functioning normally in user mode</description>
                            <value>0b01</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>10</name>
-                           <description>Watchdog test mode enabled, only the low byte is used. CNT[CNTLOW] is compared with TOVAL[TOVALLOW]</description>
+                           <name>0b10</name>
+                           <description>Test mode enabled, only the low byte is used. CNTL is compared with TOVALL</description>
                            <value>0b10</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>11</name>
-                           <description>Watchdog test mode enabled, only the high byte is used. CNT[CNTHIGH] is compared with TOVAL[TOVALHIGH]</description>
+                           <name>0b11</name>
+                           <description>Test mode enabled, only the high byte is used. CNTH is compared with TOVALH</description>
                            <value>0b11</value>
                         </enumeratedValue>
                      </enumeratedValues>
                   </field>
                   <field>
                      <name>UPDATE</name>
-                     <description>Allow updates</description>
+                     <description>Allow updates: This write-once bit allows software to reconfigure the watchdog without a reset</description>
                      <bitOffset>5</bitOffset>
                      <bitWidth>1</bitWidth>
                      <enumeratedValues>
                         <enumeratedValue>
-                           <name>0</name>
+                           <name>0b0</name>
                            <description>Updates not allowed. After the initial configuration, the watchdog cannot be later modified without forcing a reset</description>
                            <value>0b0</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>1</name>
-                           <description>Updates allowed. Software can modify the watchdog configuration registers within 8&apos;d128 bus clocks after performing the unlock write sequence</description>
+                           <name>0b1</name>
+                           <description>Updates allowed. Software can modify the watchdog configuration registers within 128 bus clocks after performing the unlock write sequence</description>
                            <value>0b1</value>
                         </enumeratedValue>
                      </enumeratedValues>
                   </field>
                   <field>
                      <name>INT</name>
-                     <description>Watchdog Interrupt</description>
+                     <description>Interrupt: This write-once bit configures the watchdog to generate an interrupt request upon a reset-triggering event (timeout or illegal write to the watchdog), prior to forcing a reset. After the interrupt vector fetch, the reset occurs after a delay of 128 bus clocks</description>
                      <bitOffset>6</bitOffset>
                      <bitWidth>1</bitWidth>
                      <enumeratedValues>
                         <enumeratedValue>
-                           <name>0</name>
-                           <description>Watchdog interrupts are disabled. Watchdog resets are not delayed</description>
+                           <name>0b0</name>
+                           <description>Interrupts are disabled. Watchdog resets are not delayed</description>
                            <value>0b0</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>1</name>
-                           <description>Watchdog interrupts are enabled. Watchdog resets are delayed by 8&apos;d128 bus clocks from the interrupt vector fetch</description>
+                           <name>0b1</name>
+                           <description>Interrupts are enabled. Watchdog resets are delayed by 128 bus clocks</description>
                            <value>0b1</value>
                         </enumeratedValue>
                      </enumeratedValues>
                   </field>
                   <field>
                      <name>EN</name>
-                     <description>Watchdog Enable</description>
+                     <description>Enable: This write-once bit enables the watchdog counter to start counting</description>
                      <bitOffset>7</bitOffset>
                      <bitWidth>1</bitWidth>
                      <enumeratedValues>
                         <enumeratedValue>
-                           <name>0</name>
-                           <description>Watchdog disabled</description>
+                           <name>0b0</name>
+                           <description>Disabled</description>
                            <value>0b0</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>1</name>
-                           <description>Watchdog enabled</description>
+                           <name>0b1</name>
+                           <description>Enabled</description>
                            <value>0b1</value>
                         </enumeratedValue>
                      </enumeratedValues>
                   </field>
                   <field>
                      <name>CLK</name>
-                     <description>Watchdog Clock</description>
+                     <description>Clock: \n
+This write-once field indicates the clock source that feeds the watchdog counter</description>
                      <bitOffset>8</bitOffset>
                      <bitWidth>2</bitWidth>
                      <enumeratedValues>
                         <enumeratedValue>
-                           <name>00</name>
+                           <name>0b00</name>
                            <description>Bus clock</description>
                            <value>0b00</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>01</name>
-                           <description>LPO clock</description>
+                           <name>0b01</name>
+                           <description>1 kHz internal low-power oscillator (LPOCLK)</description>
                            <value>0b01</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>10</name>
-                           <description>INTCLK (internal clock)</description>
+                           <name>0b10</name>
+                           <description>32 kHz internal oscillator (ICSIRCLK)</description>
                            <value>0b10</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>11</name>
-                           <description>ERCLK (external reference clock)</description>
+                           <name>0b11</name>
+                           <description>External clock source</description>
                            <value>0b11</value>
                         </enumeratedValue>
                      </enumeratedValues>
@@ -200,12 +201,12 @@ Devices using this peripheral:
                      <access>read-only</access>
                      <enumeratedValues>
                         <enumeratedValue>
-                           <name>0</name>
+                           <name>0b0</name>
                            <description>Reconfiguring WDOG</description>
                            <value>0b0</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>1</name>
+                           <name>0b1</name>
                            <description>Reconfiguration is successful</description>
                            <value>0b1</value>
                         </enumeratedValue>
@@ -219,12 +220,12 @@ Devices using this peripheral:
                      <access>read-only</access>
                      <enumeratedValues>
                         <enumeratedValue>
-                           <name>0</name>
+                           <name>0b0</name>
                            <description>WDOG is locked</description>
                            <value>0b0</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>1</name>
+                           <name>0b1</name>
                            <description>WDOG is unlocked</description>
                            <value>0b1</value>
                         </enumeratedValue>
@@ -232,53 +233,36 @@ Devices using this peripheral:
                   </field>
                   <field>
                      <name>PRES</name>
-                     <description>Watchdog prescaler</description>
+                     <description>Prescalar: This write-once bit enables a fixed 256 pre-scaling of watchdog counter reference clock. (The block diagram shows this clock divider option.)</description>
                      <bitOffset>12</bitOffset>
                      <bitWidth>1</bitWidth>
                      <enumeratedValues>
                         <enumeratedValue>
-                           <name>0</name>
+                           <name>0b0</name>
                            <description>256 prescaler disabled</description>
                            <value>0b0</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>1</name>
+                           <name>0b1</name>
                            <description>256 prescaler enabled</description>
                            <value>0b1</value>
                         </enumeratedValue>
                      </enumeratedValues>
                   </field>
-                  <field>
-                     <name>CMD32EN</name>
-                     <description>Enables or disables WDOG support for 32-bit (otherwise 16-bit or 8-bit) refresh/unlock command write words</description>
-                     <bitOffset>13</bitOffset>
-                     <bitWidth>1</bitWidth>
-                     <enumeratedValues>
-                        <enumeratedValue>
-                           <name>0</name>
-                           <description>Disables support for 32-bit refresh/unlock command write words. Only 16-bit or 8-bit is supported</description>
-                           <value>0b0</value>
-                        </enumeratedValue>
-                        <enumeratedValue>
-                           <name>1</name>
-                           <description>Enables support for 32-bit refresh/unlock command write words. 16-bit or 8-bit is NOT supported</description>
-                           <value>0b1</value>
-                        </enumeratedValue>
-                     </enumeratedValues>
-                  </field>
+                  <field derivedFrom="EN" > <name>CMD32EN</name> <description>Enables or disables WDOG support for 32-bit (otherwise 16-bit or 8-bit) refresh/unlock command write words</description> <bitOffset>13</bitOffset> </field>
                   <field>
                      <name>FLG</name>
-                     <description>Watchdog Interrupt Flag</description>
+                     <description>Interrupt Flag: This bit is an interrupt indicator when INT is set in control and status register 1. Write 1 to clear it</description>
                      <bitOffset>14</bitOffset>
                      <bitWidth>1</bitWidth>
                      <enumeratedValues>
                         <enumeratedValue>
-                           <name>0</name>
+                           <name>0b0</name>
                            <description>No interrupt occurred</description>
                            <value>0b0</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>1</name>
+                           <name>0b1</name>
                            <description>An interrupt occurred</description>
                            <value>0b1</value>
                         </enumeratedValue>
@@ -286,17 +270,17 @@ Devices using this peripheral:
                   </field>
                   <field>
                      <name>WIN</name>
-                     <description>Watchdog Window</description>
+                     <description>Window: This write-once bit enables window mode</description>
                      <bitOffset>15</bitOffset>
                      <bitWidth>1</bitWidth>
                      <enumeratedValues>
                         <enumeratedValue>
-                           <name>0</name>
+                           <name>0b0</name>
                            <description>Window mode disabled</description>
                            <value>0b0</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>1</name>
+                           <name>0b1</name>
                            <description>Window mode enabled</description>
                            <value>0b1</value>
                         </enumeratedValue>
@@ -306,7 +290,12 @@ Devices using this peripheral:
             </register>
             <register>
                <name>CNT</name>
-               <description>Watchdog Counter Register</description>
+               <description>Counter Register: \n
+The watchdog counter registers CNT provide access to the value of the free-running watchdog counter. Software can read the counter registers at any time.\n
+Software cannot write directly to the watchdog counter; however, two write sequences to these registers have special functions:\n
+1. The refresh sequence resets the watchdog counter to 0x0000.\n
+2. The unlock sequence allows the watchdog to be reconfigured without forcing a reset (when CS1[UPDATE] = 1).\n
+NOTE: All other writes to these registers are illegal and force a reset</description>
                <addressOffset>0x4</addressOffset>
                <fields>
                   <field>
@@ -324,8 +313,27 @@ Devices using this peripheral:
                </fields>
             </register>
             <register>
+               <name>CNTLOW</name>
+               <description>Counter Register: Low (see CNT for description)</description>
+               <addressOffset>0x4</addressOffset>
+               <size>8</size>
+               <access>read-only</access>
+               <resetMask>0xFF</resetMask>
+            </register>
+            <register>
+               <name>CNTHIGH</name>
+               <description>Counter Register: High (see CNT for description)</description>
+               <addressOffset>0x5</addressOffset>
+               <size>8</size>
+               <access>read-only</access>
+               <resetMask>0xFF</resetMask>
+            </register>
+            <register>
                <name>TOVAL</name>
-               <description>Watchdog Timeout Value Register</description>
+               <description>Timeout Value Register: \n
+The watchdog timeout value registers TOVAL contains the 16-bit value used to set the timeout period of the watchdog. \n
+The watchdog counter CNT is continuously compared with the timeout value TOVAL. If the counter reaches the timeout value, the watchdog forces a reset.\n
+NOTE: Writing 0 to the Watchdog Timeout Value Register generates an immediate reset</description>
                <addressOffset>0x8</addressOffset>
                <resetValue>0x400</resetValue>
                <fields>
@@ -344,8 +352,26 @@ Devices using this peripheral:
                </fields>
             </register>
             <register>
+               <name>TOVALLOW</name>
+               <description>Timeout Value Register: Low (see TOVAL for description)</description>
+               <addressOffset>0x8</addressOffset>
+               <size>8</size>
+               <access>read-write</access>
+               <resetMask>0xFF</resetMask>
+            </register>
+            <register>
+               <name>TOVALHIGH</name>
+               <description>Timeout Value Register: High (see TOVAL for description)</description>
+               <addressOffset>0x9</addressOffset>
+               <size>8</size>
+               <access>read-write</access>
+               <resetMask>0xFF</resetMask>
+            </register>
+            <register>
                <name>WIN</name>
-               <description>Watchdog Window Register</description>
+               <description>Window Register:\n
+When window mode is enabled WIN determine the earliest time that a refresh sequence is considered valid.\n
+WIN must be less than TOVAL</description>
                <addressOffset>0xC</addressOffset>
                <fields>
                   <field>
@@ -361,6 +387,22 @@ Devices using this peripheral:
                      <bitWidth>8</bitWidth>
                   </field>
                </fields>
+            </register>
+            <register>
+               <name>WINLOW</name>
+               <description>Window Register: Low (see WIN for description)</description>
+               <addressOffset>0xC</addressOffset>
+               <size>8</size>
+               <access>read-write</access>
+               <resetMask>0xFF</resetMask>
+            </register>
+            <register>
+               <name>WINHIGH</name>
+               <description>Window Register: High (see WIN for description)</description>
+               <addressOffset>0xD</addressOffset>
+               <size>8</size>
+               <access>read-write</access>
+               <resetMask>0xFF</resetMask>
             </register>
          </registers>
       </peripheral>

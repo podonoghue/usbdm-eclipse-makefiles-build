@@ -310,7 +310,7 @@ Indicates if the DAC buffer read pointer has reached the watermark level</descri
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>0b11</name>
-                           <description>FIFO mode</description>
+                           <description>FIFO mode (if supported)</description>
                            <value>0b11</value>
                         </enumeratedValue>
                      </enumeratedValues>
@@ -323,22 +323,22 @@ Indicates if the DAC buffer read pointer has reached the watermark level</descri
                      <enumeratedValues>
                         <enumeratedValue>
                            <name>0b00</name>
-                           <description>In normal mode, 1 word . In FIFO mode, 2 or less than 2 data remaining in FIFO will set watermark status bit</description>
+                           <description>1 word/(FIFO&lt;=2)</description>
                            <value>0b00</value>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>0b01</name>
-                           <description>In normal mode, 2 words . In FIFO mode, Max/4 or less than Max/4 data remaining in FIFO will set watermark status bit</description>
+                           <description>2 words/(FIFO&lt;=MAX/4)</description>
                            <value>0b01</value>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>0b10</name>
-                           <description>In normal mode, 3 words . In FIFO mode, Max/2 or less than Max/2 data remaining in FIFO will set watermark status bit</description>
+                           <description>3 words/(FIFO&lt;=MAX/2)</description>
                            <value>0b10</value>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>0b11</name>
-                           <description>In normal mode, 4 words . In FIFO mode, Max-2 or less than Max-2 data remaining in FIFO will set watermark status bit</description>
+                           <description>4 words/(FIFO&lt;=MAX-2)</description>
                            <value>0b11</value>
                         </enumeratedValue>
                      </enumeratedValues>

@@ -218,12 +218,12 @@ This write-once field indicates the clock source that feeds the watchdog counter
                      <enumeratedValues>
                         <enumeratedValue>
                            <name>0b0</name>
-                           <description>256 prescalar disabled</description>
+                           <description>256 prescaler disabled</description>
                            <value>0b0</value>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>0b1</name>
-                           <description>256 prescalar enabled</description>
+                           <description>256 prescaler enabled</description>
                            <value>0b1</value>
                         </enumeratedValue>
                      </enumeratedValues>

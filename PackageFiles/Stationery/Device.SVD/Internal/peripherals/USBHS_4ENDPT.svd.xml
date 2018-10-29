@@ -283,6 +283,7 @@ Devices using this peripheral:
                <fields>
                   <field>
                      <name>GPTLD</name>
+                     <description>Specifies the value to be loaded into the countdown timer on a reset</description>
                      <bitOffset>0</bitOffset>
                      <bitWidth>24</bitWidth>
                   </field>
@@ -1083,7 +1084,7 @@ Devices using this peripheral:
                      <bitWidth>14</bitWidth>
                   </field>
                   <field>
-                     <name>Reerved</name>
+                     <name>Reserved</name>
                      <description>Reserved</description>
                      <bitOffset>14</bitOffset>
                      <bitWidth>18</bitWidth>
@@ -1174,7 +1175,7 @@ Devices using this peripheral:
                      <bitWidth>7</bitWidth>
                   </field>
                   <field>
-                     <name>Reerved</name>
+                     <name>Reserved</name>
                      <description>Reserved</description>
                      <bitOffset>31</bitOffset>
                      <bitWidth>1</bitWidth>
@@ -1598,7 +1599,7 @@ Devices using this peripheral:
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>0b0011</name>
-                           <description>SEQ_NAK</description>
+                           <description>SE0_NAK</description>
                            <value>0b0011</value>
                         </enumeratedValue>
                         <enumeratedValue>
@@ -1702,9 +1703,9 @@ Devices using this peripheral:
                      <access>read-only</access>
                      <enumeratedValues>
                         <enumeratedValue>
-                           <name>0b000</name>
+                           <name>0b00</name>
                            <description>Use UTMI transceiver interface</description>
-                           <value>0b000</value>
+                           <value>0b00</value>
                         </enumeratedValue>
                      </enumeratedValues>
                   </field>

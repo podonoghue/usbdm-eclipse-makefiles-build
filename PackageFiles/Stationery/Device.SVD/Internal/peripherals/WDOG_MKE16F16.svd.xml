@@ -9,7 +9,7 @@ Devices using this peripheral:
       <peripheral>
          <?sourceFile "WDOG_MKE16F16" ?>
          <name>WDOG</name>
-         <description>Watchdog timer</description>
+         <description>Watchdog Timer</description>
          <groupName>WDOG</groupName>
          <headerStructName>WDOG</headerStructName>
          <baseAddress>0x40052000</baseAddress>
@@ -25,7 +25,7 @@ Devices using this peripheral:
          <registers>
             <register>
                <name>CS</name>
-               <description>Watchdog Control and Status Register</description>
+               <description>Control and Status Register</description>
                <addressOffset>0x0</addressOffset>
                <resetValue>0x2980</resetValue>
                <fields>
@@ -240,12 +240,12 @@ This write-once field indicates the clock source that feeds the watchdog counter
                      <enumeratedValues>
                         <enumeratedValue>
                            <name>0b0</name>
-                           <description>256 prescalar disabled</description>
+                           <description>256 prescaler disabled</description>
                            <value>0b0</value>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>0b1</name>
-                           <description>256 prescalar enabled</description>
+                           <description>256 prescaler enabled</description>
                            <value>0b1</value>
                         </enumeratedValue>
                      </enumeratedValues>

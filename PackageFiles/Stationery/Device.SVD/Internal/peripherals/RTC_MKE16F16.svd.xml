@@ -268,14 +268,14 @@ Enables the 32kHz clock to be output to other peripherals</description>
                      <bitWidth>2</bitWidth>
                      <enumeratedValues>
                         <enumeratedValue>
-                           <name>0b0</name>
+                           <name>0b00</name>
                            <description>RTC_CLKOUT is disabled</description>
-                           <value>0b0</value>
+                           <value>0b00</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>0b1</name>
+                           <name>0b01</name>
                            <description>RTC_CLKOUT is enabled</description>
-                           <value>0b1</value>
+                           <value>0b01</value>
                         </enumeratedValue>
                      </enumeratedValues>
                   </field>
