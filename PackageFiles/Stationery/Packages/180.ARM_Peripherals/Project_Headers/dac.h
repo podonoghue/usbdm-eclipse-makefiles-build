@@ -1,10 +1,9 @@
 /**
  * @file     dac.h (180.ARM_Peripherals/Project_Headers/dac.h)
- *
  * @brief    Abstraction layer for DAC interface
  *
- * @version  V4.12.1.80
- * @date     13 April 2016
+ * @version  V4.12.1.240
+ * @date     28/10/2018
  */
 
 #ifndef HEADERS_DAC_H_
@@ -51,7 +50,9 @@ enum DacPower {
 
 #ifdef DAC_C0_DACBWIEN
 /**
- * DAC Buffer Watermark Interrupt Enable
+ * DAC Buffer Watermark Interrupt Enable.
+ * Control whether an interrupt is generated when SR.DACBFWMF is set i.e.
+ * when the DAC buffer read pointer has reached the watermark level.
  */
 enum DacWatermarkIrq {
    DacWatermarkIrq_Disabled = DAC_C0_DACBWIEN(0), //!< The DAC buffer watermark interrupt is disabled.
@@ -60,7 +61,9 @@ enum DacWatermarkIrq {
 #endif
 
 /**
- * DAC Buffer Read Pointer Top Flag Interrupt Enable
+ * DAC Buffer Read Pointer Top Flag Interrupt Enable.
+ * Control whether an interrupt is generated when SR.DACBFRPTF is set i.e.
+ * when the DAC buffer read pointer is zero.
  */
 enum DacTopFlagIrq {
    DacTopFlagIrq_Disabled = DAC_C0_DACBTIEN(0), //!< The DAC buffer read pointer top flag interrupt is disabled.
@@ -68,7 +71,9 @@ enum DacTopFlagIrq {
 };
 
 /**
- * DAC Buffer Read Pointer Bottom Flag Interrupt Enable
+ * DAC Buffer Read Pointer Bottom Flag Interrupt Enable.
+ * Control whether an interrupt is generated when SR.DACBFRPBF is set.
+ * when the DAC buffer read pointer is equal to buffer upper limit (C2.DACBFUP).
  */
 enum DacBottomFlagIrq {
    DacBottomFlagIrq_Disabled = DAC_C0_DACBBIEN(0), //!< The DAC buffer read pointer bottom flag interrupt is disabled.
@@ -111,6 +116,28 @@ enum DacBufferMode {
    DacBufferMode_Scan      = DAC_C1_DACBFEN(1)|DAC_C1_DACBFMD(1), //!< Read pointer enabled. Read pointer points advances once only.
 };
 #endif
+
+/**
+ * DAC Buffer Watermark Select.
+ * Controls when SR[DACBFWMF] is set.
+ *
+ * Normal Mode:
+ *   SR[DACBFWMF] will be set when the DAC buffer read pointer reaches this many words away
+ *   from the upper limit (DACBUP). This allows user configuration of the watermark interrupt.
+ *
+ * FIFO mode:
+ *   SR[DACBFWMF] will be set when there is a threshold number of entries left in the FIFO.
+ */
+enum DacWaterMark {
+   DacWaterMark_Normal1       = DAC_C1_DACBFWM(0),  //!< Normal mode: Read pointer 1 entry away from upper limit
+   DacWaterMark_Normal2       = DAC_C1_DACBFWM(0),  //!< Normal mode: Read pointer 2 entries away from upper limit
+   DacWaterMark_Normal3       = DAC_C1_DACBFWM(0),  //!< Normal mode: Read pointer 3 entries away from upper limit
+   DacWaterMark_Normal4       = DAC_C1_DACBFWM(0),  //!< Normal mode: Read pointer 4 entries away from upper limit
+   DacWaterMark_Fifo2         = DAC_C1_DACBFWM(0),  //!< FIFO mode: Threshold <= 2 remaining FIFO entries
+   DacWaterMark_FifoMaxDiv4   = DAC_C1_DACBFWM(0),  //!< FIFO mode: Threshold <= Max/4 remaining FIFO entries
+   DacWaterMark_FifoMaxDiv2   = DAC_C1_DACBFWM(0),  //!< FIFO mode: Threshold <= Max/2 remaining FIFO entries
+   DacWaterMark_FifoMaxMinus2 = DAC_C1_DACBFWM(0),  //!< FIFO mode: Threshold <= Max-2 remaining FIFO entries
+};
 
 /**
  * DAC status value as individual flags
@@ -180,8 +207,6 @@ protected:
 
    /**
     * Callback to catch unhandled interrupt
-    *
-    * @param[in] status Struct indicating interrupt source and state
     */
    static void unhandledCallback(DacStatusValue) {
       setAndCheckErrorCode(E_NO_HANDLER);
@@ -292,15 +317,15 @@ public:
     *  Configure DAC buffer operation
     *
     * @param dacBufferMode  Select if buffer is used and how the buffer pointer changes.
-    * @param waterMarkLevel Selects water mark level for buffer.
+    * @param dacWaterMark   Selects water mark level for buffer.
     */
    static void configureBuffer(
          DacBufferMode dacBufferMode  = DacBufferMode_Disabled,
-         uint8_t       waterMarkLevel = (DAC_C1_DACBFWM_MASK>>DAC_C1_DACBFWM_SHIFT)
+         DacWaterMark  dacWaterMark   = DacWaterMark_Normal1
           ) {
       dac().C1 =
             (dac().C1&~(DAC_C1_DACBFEN_MASK|DAC_C1_DACBFMD_MASK|DAC_C1_DACBFWM_MASK))|
-            dacBufferMode|DAC_C1_DACBFWM(waterMarkLevel);
+            dacBufferMode|dacWaterMark;
    }
 #else
    /**
@@ -403,9 +428,9 @@ public:
     * Enable or disable interrupts.
     * The flags are cleared first.
     *
-    * @param dacTopFlagIrq       Buffer Read Pointer Top Flag Interrupt Enable
-    * @param dacBottomFlagIrq    Buffer Read Pointer Bottom Flag Interrupt Enable
-    * @param dacWatermarkIrq     Buffer Watermark Interrupt Enable
+    * @param dacTopFlagIrq       Interrupt Enable for buffer read pointer is zero.
+    * @param dacBottomFlagIrq    Interrupt Enable for buffer read pointer is equal to buffer limit C2.DACBFUP.
+    * @param dacWatermarkIrq     Interrupt Enable for buffer read pointer has reached the watermark level.
     */
    static void enableInterrupts(
          DacTopFlagIrq      dacTopFlagIrq,
@@ -460,8 +485,6 @@ public:
    /**
     * Enable DAC output pin as output.
     * Configures all Pin Control Register (PCR) values
-    *
-    * @param[in] pcrValue PCR value to use in configuring port (excluding MUX value). See pcrValue()
     */
    static void setOutput() {
       CheckOutput<0>::check();
