@@ -97,6 +97,9 @@ protected:
    /** Default TCTRL value for timer channel */
    static constexpr uint32_t PIT_TCTRL_DEFAULT_VALUE = (PIT_TCTRL_TEN_MASK);
 
+   /** Callback functions for ISRs */
+   static PitCallbackFunction sCallbacks[Info::NumChannels];
+
    /** Callback to catch unhandled interrupt */
    static void unhandledCallback() {
       setAndCheckErrorCode(E_NO_HANDLER);
@@ -410,10 +413,6 @@ public:
       }
       disableChannel(channel);
    }
-
-protected:
-   /** Callback functions for ISRs */
-   static PitCallbackFunction sCallbacks[Info::NumChannels];
 
    /**
     * Class representing a PIT channel
