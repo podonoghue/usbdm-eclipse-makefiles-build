@@ -25,10 +25,12 @@
 namespace USBDM {
 
 /**
- * Enable interrupts in NVIC
+ * Enable and set priority of interrupts in NVIC.
  *
  * @param[in]  irqNum        Interrupt number
  * @param[in]  nvicPriority  Interrupt priority
+ *
+ * @note Any pending interrupts are cleared before enabling.
  */
 void enableNvicInterrupt(IRQn_Type irqNum, uint32_t nvicPriority=NvicPriority_Normal);
 
@@ -392,7 +394,7 @@ public:
  *
  * tparam portAddress Address of port to be used
  */
-template<uint32_t portAddress>
+template<uint32_t portAddress, IRQn_Type irqNum>
 class PcrBase_T {
 
 private:
@@ -454,6 +456,35 @@ public:
       fCallback = callback;
       return E_NO_ERROR;
    }
+
+   /**
+    * Enable Pin interrupts in NVIC.
+    * Any pending NVIC interrupts are first cleared.
+    */
+   static void enableNvicInterrupts() {
+      static_assert(irqNum>=0, "Pin does not support interrupts");
+      enableNvicInterrupt(irqNum);
+   }
+
+   /**
+    * Enable and set priority of Pin interrupts in NVIC.
+    * Any pending NVIC interrupts are first cleared.
+    *
+    * @param[in]  nvicPriority  Interrupt priority
+    */
+   static void enableNvicInterrupts(uint32_t nvicPriority=NvicPriority_Normal) {
+      static_assert(irqNum>=0, "Pin does not support interrupts");
+      enableNvicInterrupt(irqNum, nvicPriority);
+   }
+
+   /**
+    * Disable Pin interrupts in NVIC.
+    */
+   static void disableNvicInterrupts() {
+      static_assert(irqNum>=0, "Pin does not support interrupts");
+      // Disable interrupts
+      NVIC_DisableIRQ(irqNum);
+   }
 };
 
 /**
@@ -477,7 +508,7 @@ public:
  * @tparam defPcrValue     Default value for PCR (including MUX value)
  */
 template<uint32_t clockMask, uint32_t portAddress, IRQn_Type irqNum, int bitNum, PcrValue defPcrValue>
-class Pcr_T : public PcrBase_T<portAddress> {
+class Pcr_T : public PcrBase_T<portAddress, irqNum> {
 
 #ifdef DEBUG_BUILD
    static_assert((bitNum != UNMAPPED_PCR), "Pcr_T: Signal is not mapped to a pin - Modify Configure.usbdm");
@@ -763,21 +794,32 @@ public:
 #endif
 
    /**
-    * Enable/disable Pin interrupts in NVIC.
+    * Enable Pin interrupts in NVIC.
+    * Any pending NVIC interrupts are first cleared.
+    */
+   static void enableNvicInterrupts() {
+      static_assert(irqNum>=0, "Pin does not support interrupts");
+      enableNvicInterrupt(irqNum);
+   }
+
+   /**
+    * Enable and set priority of Pin interrupts in NVIC.
     * Any pending NVIC interrupts are first cleared.
     *
-    * @param[in]  enable        True => enable, False => disable
     * @param[in]  nvicPriority  Interrupt priority
     */
-   static void enableNvicInterrupts(bool enable=true, uint32_t nvicPriority=NvicPriority_Normal) {
+   static void enableNvicInterrupts(uint32_t nvicPriority=NvicPriority_Normal) {
       static_assert(irqNum>=0, "Pin does not support interrupts");
-      if (enable) {
-         enableNvicInterrupt(irqNum, nvicPriority);
-      }
-      else {
-         // Disable interrupts
-         NVIC_DisableIRQ(irqNum);
-      }
+      enableNvicInterrupt(irqNum, nvicPriority);
+   }
+
+   /**
+    * Disable Pin interrupts in NVIC.
+    */
+   static void disableNvicInterrupts() {
+      static_assert(irqNum>=0, "Pin does not support interrupts");
+      // Disable interrupts
+      NVIC_DisableIRQ(irqNum);
    }
 
 #ifdef PORT_DFCR_CS_MASK
@@ -821,8 +863,8 @@ public:
 
 };
 
-template<uint32_t portAddress>
-PinCallbackFunction USBDM::PcrBase_T<portAddress>::fCallback = PcrBase::unhandledCallback;
+template<uint32_t portAddress, IRQn_Type irqNum>
+PinCallbackFunction USBDM::PcrBase_T<portAddress, irqNum>::fCallback = PcrBase::unhandledCallback;
 
 /**
  * @brief Template function to set a PCR to the default value

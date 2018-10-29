@@ -338,22 +338,47 @@ public:
    }
 
    /**
-    * Enable/disable interrupts in NVIC
-    *
-    * @param[in]  enable    True => enable, False => disable
-    * @param[in]  nvicPriority  Interrupt priority
+    * Enable interrupts in NVIC
+    * Any pending NVIC interrupts are first cleared.
     */
-   static void enableNvicInterrupts(bool enable=true, uint32_t nvicPriority=NvicPriority_Normal) {
-
-      if (enable) {
-         enableNvicInterrupt(Info::irqNums[0], nvicPriority);
+   static void enableNvicInterrupts() {
+      enableNvicInterrupt(Info::irqNums[0]);
+      if (Info::irqCount>1) {
+          enableNvicInterrupt(Info::irqNums[1]);
       }
-      else {
-         // Disable interrupts
-         NVIC_DisableIRQ(Info::irqNums[0]);
+      if (Info::irqCount>2) {
+          enableNvicInterrupt(Info::irqNums[2]);
       }
    }
 
+   /**
+    * Enable and set priority of interrupts in NVIC
+    * Any pending NVIC interrupts are first cleared.
+    *
+    * @param[in]  nvicPriority  Interrupt priority
+    */
+   static void enableNvicInterrupts(uint32_t nvicPriority) {
+      enableNvicInterrupt(Info::irqNums[0], nvicPriority);
+      if (Info::irqCount>1) {
+          enableNvicInterrupt(Info::irqNums[1], nvicPriority);
+      }
+      if (Info::irqCount>2) {
+          enableNvicInterrupt(Info::irqNums[2], nvicPriority);
+      }
+   }
+
+   /**
+    * Disable interrupts in NVIC
+    */
+   static void disableNvicInterrupts() {
+      NVIC_DisableIRQ(Info::irqNums[0]);
+      if (Info::irqCount>1) {
+         NVIC_DisableIRQ(Info::irqNums[1]);
+      }
+      if (Info::irqCount>2) {
+         NVIC_DisableIRQ(Info::irqNums[2]);
+      }
+   }
 };
 
 template<class Info> LPUARTCallbackFunction Lpuart_T<Info>::rxTxCallback  = unexpectedInterrupt;

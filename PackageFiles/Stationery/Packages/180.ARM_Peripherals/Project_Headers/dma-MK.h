@@ -1026,7 +1026,7 @@ public:
     */
    static DmaChannelNum allocatePitAssociatedChannel(PitChannelNum pitChannelNum) {
       const uint32_t channelMask = (1<<pitChannelNum);
-      usbdm_assert(pitChannelNum<Info::NumChannels, "No DMA channel associated with PIT channel");
+      usbdm_assert(pitChannelNum<Info::NumChannels,        "No DMA channel associated with PIT channel");
       usbdm_assert((allocatedChannels & channelMask) != 0, "DMA channel already allocated");
       if ((allocatedChannels & channelMask) == 0) {
          setErrorCode(E_NO_RESOURCE);
@@ -1059,11 +1059,8 @@ public:
     * @param dmaChannelNum Channel to release
     */
    static void freeChannel(DmaChannelNum dmaChannelNum) {
-#ifdef DEBUG_BUILD
-      if (dmaChannelNum>=Info::NumChannels) {
-         setAndCheckErrorCode(E_ILLEGAL_PARAM);
-      }
-#endif
+      usbdm_assert(dmaChannelNum<Info::NumChannels,        "Illegal DMA channel");
+      usbdm_assert((allocatedChannels & channelMask) == 0, "Freeing unallocated DMA channel");
       allocatedChannels |= (1<<dmaChannelNum);
    }
 
@@ -1309,46 +1306,67 @@ public:
    }
 
    /**
-    * Enable/disable interrupts in NVIC.
+    * Enable channel interrupts in NVIC.
+    * Any pending NVIC interrupts are first cleared.
     *
     * @param[in]  dmaChannelNum  Channel being modified
-    * @param[in]  enable         True => enable, False => disable
-    * @param[in]  nvicPriority   Interrupt priority
-	
-    * @return E_NO_ERROR on success
     */
-   static ErrorCode enableNvicInterrupts(DmaChannelNum dmaChannelNum, bool enable=true, uint32_t nvicPriority=NvicPriority_Normal) {
-
+   static void enableNvicInterrupts(DmaChannelNum dmaChannelNum) {
       usbdm_assert(dmaChannelNum<Info::NumChannels, "Illegal DMA channel");
 
-      IRQn_Type irqNum = Dma0Info::irqNums[0] + (dmaChannelNum&(Dma0Info::NumChannels-1));
-      if (enable) {
-         enableNvicInterrupt(irqNum, nvicPriority);
-      }
-      else {
-         // Disable interrupts
-         NVIC_DisableIRQ(irqNum);
-      }
-      return E_NO_ERROR;
+      const IRQn_Type irqNum = Dma0Info::irqNums[0] + (dmaChannelNum&(Dma0Info::NumChannels-1));
+      enableNvicInterrupt(irqNum);
    }
 
    /**
-    * Enable/disable error interrupts in NVIC.
+    * Enable and set priority of channel interrupts in NVIC.
+    * Any pending NVIC interrupts are first cleared.
     *
-    * @param[in]  enable        True => enable, False => disable
-    * @param[in]  nvicPriority  Interrupt priority
-
-    * @return E_NO_ERROR on success
+    * @param[in]  dmaChannelNum  Channel being modified
+    * @param[in]  nvicPriority   Interrupt priority
     */
-   static ErrorCode enableNvicErrorInterrupt(bool enable=true, uint32_t nvicPriority=NvicPriority_Normal) {
-      if (enable) {
-         enableNvicInterrupt(Info::irqNums[Info::irqCount-1], nvicPriority);
-      }
-      else {
-         // Disable interrupts
-         NVIC_DisableIRQ(Info::irqNums[Info::irqCount-1]);
-      }
-      return E_NO_ERROR;
+   static void enableNvicInterrupts(DmaChannelNum dmaChannelNum, uint32_t nvicPriority) {
+      usbdm_assert(dmaChannelNum<Info::NumChannels, "Illegal DMA channel");
+
+      const IRQn_Type irqNum = Dma0Info::irqNums[0] + (dmaChannelNum&(Dma0Info::NumChannels-1));
+      enableNvicInterrupt(irqNum, nvicPriority);
+   }
+
+   /**
+    * Disable channel interrupts in NVIC.
+    *
+    * @param[in]  dmaChannelNum  Channel being modified
+    */
+   static void disableNvicInterrupts(DmaChannelNum dmaChannelNum) {
+      usbdm_assert(dmaChannelNum<Info::NumChannels, "Illegal DMA channel");
+
+      const IRQn_Type irqNum = Dma0Info::irqNums[0] + (dmaChannelNum&(Dma0Info::NumChannels-1));
+      NVIC_DisableIRQ(irqNum);
+   }
+
+   /**
+    * Enable error interrupts in NVIC.
+    * Any pending NVIC interrupts are first cleared.
+    */
+   static void enableNvicErrorInterrupt() {
+      enableNvicInterrupt(Info::irqNums[Info::irqCount-1]);
+   }
+
+   /**
+    * Enable and set priority of error interrupts in NVIC.
+    * Any pending NVIC interrupts are first cleared.
+    *
+    * @param[in]  nvicPriority  Interrupt priority
+    */
+   static void enableNvicErrorInterrupt(uint32_t nvicPriority) {
+      enableNvicInterrupt(Info::irqNums[Info::irqCount-1], nvicPriority);
+   }
+
+   /**
+    * Disable error interrupts in NVIC.
+    */
+   static void disableNvicErrorInterrupt() {
+      NVIC_DisableIRQ(Info::irqNums[Info::irqCount-1]);
    }
 
    /**

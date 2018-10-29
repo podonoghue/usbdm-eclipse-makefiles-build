@@ -214,18 +214,23 @@ public:
       pit().MCR = Info::mcr;
       for (unsigned i=0; i<Info::irqCount; i++) {
          configureChannelInTicks(i, Info::pit_ldval);
-         enableNvicInterrupts(i, false, Info::irqLevel);
+         disableNvicInterrupts(Info::irqLevel);
       }
    }
 
    /**
-    *  Enables and configures the PIT
+    *  Enables and configures the PIT.
+    *  This also clears all channels and channel reservations.
     *
     *  @param[in]  pitDebugMode  Determined whether the PIT halts when suspended during debug
     */
    static void configure(PitDebugMode pitDebugMode=PitDebugMode_Stop) {
       enable();
+      for (PitChannelNum channel = PitChannelNum_0; channel < PitInfo::NumChannels; channel = channel+1) {
+         disableChannel(channel);
+      }
       pit().MCR = pitDebugMode|PIT_MCR_MDIS(0); // MDIS cleared => enabled!
+      allocatedChannels = -1;
    }
 
    /**
@@ -237,29 +242,45 @@ public:
    }
 
    /**
-    * Enable/disable interrupts in NVIC
+    * Enable interrupts in NVIC
+    * Any pending NVIC interrupts are first cleared.
     *
     * @param[in]  channel       Channel being modified
-    * @param[in]  enable        True => enable, False => disable
-    * @param[in]  nvicPriority  Interrupt priority
-    *
-    * @return E_NO_ERROR on success
     */
-   static ErrorCode enableNvicInterrupts(PitChannelNum channel, bool enable=true, uint32_t nvicPriority=NvicPriority_Normal) {
+   static void enableNvicInterrupts(PitChannelNum channel) {
       static const IRQn_Type irqNums[] = {
             Info::irqNums[0], Info::irqNums[1], Info::irqNums[2], Info::irqNums[3],
       };
-      if (channel>=Info::irqCount) {
-         setAndCheckErrorCode(E_ILLEGAL_PARAM);
-      }
-      const IRQn_Type irqNum = irqNums[channel];
-      if (enable) {
-         enableNvicInterrupt(irqNum, nvicPriority);
-      }
-      else {
-         NVIC_DisableIRQ(irqNum);
-      }
-      return E_NO_ERROR;
+      usbdm_assert(channel<Info::irqCount,"Illegal PIT channel");
+      enableNvicInterrupt(irqNums[channel]);
+   }
+
+   /**
+    * Enable and set priority of interrupts in NVIC
+    * Any pending NVIC interrupts are first cleared.
+    *
+    * @param[in]  channel       Channel being modified
+    * @param[in]  nvicPriority  Interrupt priority
+    */
+   static void enableNvicInterrupts(PitChannelNum channel, uint32_t nvicPriority) {
+      static const IRQn_Type irqNums[] = {
+            Info::irqNums[0], Info::irqNums[1], Info::irqNums[2], Info::irqNums[3],
+      };
+      usbdm_assert(channel<Info::irqCount,"Illegal PIT channel");
+      enableNvicInterrupt(irqNums[channel], nvicPriority);
+   }
+
+   /**
+    * Disable interrupts in NVIC
+    *
+    * @param[in]  channel       Channel being modified
+    */
+   static void disableNvicInterrupts(PitChannelNum channel) {
+      static const IRQn_Type irqNums[] = {
+            Info::irqNums[0], Info::irqNums[1], Info::irqNums[2], Info::irqNums[3],
+      };
+      usbdm_assert(channel<Info::irqCount,"Illegal PIT channel");
+      NVIC_DisableIRQ(irqNums[channel]);
    }
    
    /**
@@ -524,15 +545,28 @@ public:
       }
 
       /**
-       * Enable/disable interrupts in NVIC
-       *
-       * @param[in]  enable        True => enable, False => disable
-       * @param[in]  nvicPriority  Interrupt priority
-       *
-       * @return E_NO_ERROR on success
+       * Enable interrupts in NVIC
+       * Any pending NVIC interrupts are first cleared.
        */
-      static ErrorCode __attribute__((always_inline)) enableNvicInterrupts(bool enable=true, uint32_t nvicPriority=NvicPriority_Normal) {
-         return PitBase_T<Info>::enableNvicInterrupts(CHANNEL, enable, nvicPriority);
+      static void enableNvicInterrupts() {
+         return PitBase_T<Info>::enableNvicInterrupts(CHANNEL);
+      }
+
+      /**
+       * Enable and set priority of interrupts in NVIC
+       * Any pending NVIC interrupts are first cleared.
+       *
+       * @param[in]  nvicPriority  Interrupt priority
+       */
+      static void enableNvicInterrupts(uint32_t nvicPriority) {
+         return PitBase_T<Info>::enableNvicInterrupts(CHANNEL, nvicPriority);
+      }
+
+      /**
+       * Disable interrupts in NVIC
+       */
+      static void disableNvicInterrupts() {
+         return PitBase_T<Info>::disableNvicInterrupts(CHANNEL);
       }
 
       /**

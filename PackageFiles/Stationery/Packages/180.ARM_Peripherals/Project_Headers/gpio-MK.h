@@ -596,15 +596,31 @@ public:
 #endif
 
    /**
-    * Enable/disable pin interrupts.\n
+    * Enable pin interrupt in NVIC.
+    * Any pending NVIC interrupts are first cleared.
+    * Convenience wrapper for PCR function
+    */
+   static void enableNvicInterrupts() {
+      Pcr::enableNvicInterrupts();
+   }
+
+   /**
+    * Enable and set priority of pin interrupt in NVIC.
     * Any pending NVIC interrupts are first cleared.
     * Convenience wrapper for PCR function
     *
-    * @param[in] enable        True => enable, False => disable
     * @param[in] nvicPriority  Interrupt priority
     */
-   static void enableNvicInterrupts(bool enable=true, uint32_t nvicPriority=NvicPriority_Normal) {
-      Pcr::enableNvicInterrupts(enable, nvicPriority);
+   static void enableNvicInterrupts(uint32_t nvicPriority) {
+      Pcr::enableNvicInterrupts(nvicPriority);
+   }
+
+   /**
+    * Disable pin interrupt in NVIC.
+    * Convenience wrapper for PCR function
+    */
+   static void disableNvicInterrupts() {
+      Pcr::disableNvicInterrupts();
    }
 
    /**
@@ -984,15 +1000,31 @@ public:
    }
 
    /**
-    * Enable/disable pin interrupts.\n
+    * Enable pin interrupt in NVIC.
+    * Any pending NVIC interrupts are first cleared.
+    * Convenience wrapper for PCR function
+    */
+   static void enableNvicInterrupts() {
+      Pcr::enableNvicInterrupts();
+   }
+
+   /**
+    * Enable and set priority of pin interrupt in NVIC.
     * Any pending NVIC interrupts are first cleared.
     * Convenience wrapper for PCR function
     *
-    * @param[in] enable        True => enable, False => disable
     * @param[in] nvicPriority  Interrupt priority
     */
-   static void enableNvicInterrupts(bool enable=true, uint32_t nvicPriority=NvicPriority_Normal) {
-      Pcr::enableNvicInterrupts(enable, nvicPriority);
+   static void enableNvicInterrupts(uint32_t nvicPriority) {
+      Pcr::enableNvicInterrupts(nvicPriority);
+   }
+
+   /**
+    * Disable pin interrupt in NVIC.
+    * Convenience wrapper for PCR function
+    */
+   static void disableNvicInterrupts() {
+      Pcr::disableNvicInterrupts();
    }
 
    /**

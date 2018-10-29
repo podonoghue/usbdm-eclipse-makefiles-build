@@ -476,7 +476,7 @@ protected:
    static __attribute__((always_inline)) volatile uint32_t &clockReg() { return Info::clockReg(); }
 
    /** Callback functions for ISRs */
-   static DmaCallbackFunction callbacks[Info::NumVectors];
+   static DmaCallbackFunction sCallbacks[Info::NumVectors];
 
    /** Bit-mask of allocated channels */
    static uint32_t allocatedChannels;
@@ -489,22 +489,22 @@ protected:
 public:
    /** DMA interrupt handler -  Calls DMA 0 callback */
    static void irq0Handler() {
-      callbacks[0](DmaChannelNum_0);
+      sCallbacks[0](DmaChannelNum_0);
    }
 
    /** DMA interrupt handler -  Calls DMA 1 callback */
    static void irq1Handler() {
-      callbacks[1](DmaChannelNum_1);
+      sCallbacks[1](DmaChannelNum_1);
    }
 
    /** DMA interrupt handler -  Calls DMA 2 callback */
    static void irq2Handler() {
-      callbacks[2](DmaChannelNum_2);
+      sCallbacks[2](DmaChannelNum_2);
    }
 
    /** DMA interrupt handler -  Calls DMA 3 callback */
    static void irq3Handler() {
-      callbacks[3](DmaChannelNum_3);
+      sCallbacks[3](DmaChannelNum_3);
    }
 
    /**
@@ -518,18 +518,18 @@ public:
       // Clear call-backs and TCDs
       for (unsigned channel=0; channel<Info::NumVectors; channel++) {
          static const DmaTcd emptyTcd;
-         callbacks[channel] = noHandlerCallback;
+         sCallbacks[channel] = noHandlerCallback;
          configureTransfer((DmaChannelNum)channel, emptyTcd);
       }
       // Reset record of allocated channels
-      allocatedChannels = 0;
+      allocatedChannels = -1;
    }
 
    /**
     * Allocate DMA channel.
     *
-    * @return Error DmaChannelNum_None - No channel available
-    * @return Channel number
+    * @return DmaChannelNum_None - No suitable channel available.  Error code set.
+    * @return Channel number     - Number of allocated channel
     */
    static DmaChannelNum allocateChannel() {
       unsigned channelNum = __builtin_ffs(allocatedChannels);
@@ -546,7 +546,7 @@ public:
     * This is a channel that may be throttled by an associated PIT channel.
     *
     * @return Error DmaChannelNum_None - No suitable channel available.  Error code set.
-    * @return Channel number
+    * @return Channel number           - Number of allocated channel
     */
    static DmaChannelNum allocatePeriodicChannel() {
       unsigned channelNum = __builtin_ffs(allocatedChannels);
@@ -560,9 +560,13 @@ public:
 
    /**
     * Free DMA channel.
+    *
+    * @param dmaChannelNum Channel to release
     */
-   static void freeChannel(DmaChannelNum channelNum) {
-      allocatedChannels |= (1<<channelNum);
+   static void freeChannel(DmaChannelNum dmaChannelNum) {
+      usbdm_assert(dmaChannelNum<Info::NumChannels,        "Illegal DMA channel");
+      usbdm_assert((allocatedChannels & channelMask) == 0, "Freeing unallocated DMA channel");
+      allocatedChannels |= (1<<dmaChannelNum);
    }
 
    /**
@@ -605,29 +609,42 @@ public:
    }
 
    /**
-    * Enable/disable interrupts in NVIC.
+    * Enable channel interrupts in NVIC.
+    * Any pending NVIC interrupts are first cleared.
     *
-    * @param[in]  channel       Channel being modified
-    * @param[in]  enable        True => enable, False => disable
-    * @param[in]  nvicPriority  Interrupt priority
-	
-    * @return E_NO_ERROR on success
+    * @param[in]  dmaChannelNum  Channel being modified
     */
-   static ErrorCode enableNvicInterrupts(DmaChannelNum channel, bool enable=true, uint32_t nvicPriority=NvicPriority_Normal) {
-#ifdef DEBUG_BUILD
-      if (channel>=Info::NumChannels) {
-         setAndCheckErrorCode(E_ILLEGAL_PARAM);
-      }
-#endif
-      IRQn_Type irqNum = static_cast<IRQn_Type>(Info::irqNums[0] + (channel&(Info::NumChannels-1)));
-      if (enable) {
-         enableNvicInterrupt(irqNum, nvicPriority);
-      }
-      else {
-         // Disable interrupts
-         NVIC_DisableIRQ(irqNum);
-      }
-      return E_NO_ERROR;
+   static void enableNvicInterrupts(DmaChannelNum dmaChannelNum) {
+      usbdm_assert(dmaChannelNum<Info::NumChannels, "Illegal DMA channel");
+
+      const IRQn_Type irqNum = Dma0Info::irqNums[0] + (dmaChannelNum&(Dma0Info::NumChannels-1));
+      enableNvicInterrupt(irqNum);
+   }
+
+   /**
+    * Enable and set priority of channel interrupts in NVIC.
+    * Any pending NVIC interrupts are first cleared.
+    *
+    * @param[in]  dmaChannelNum  Channel being modified
+    * @param[in]  nvicPriority   Interrupt priority
+    */
+   static void enableNvicInterrupts(DmaChannelNum dmaChannelNum, uint32_t nvicPriority) {
+      usbdm_assert(dmaChannelNum<Info::NumChannels, "Illegal DMA channel");
+
+      const IRQn_Type irqNum = Dma0Info::irqNums[0] + (dmaChannelNum&(Dma0Info::NumChannels-1));
+      enableNvicInterrupt(irqNum, nvicPriority);
+   }
+
+   /**
+    * Disable channel interrupts in NVIC.
+    *
+    * @param[in]  dmaChannelNum  Channel being modified
+    */
+   static void disableNvicInterrupts(DmaChannelNum dmaChannelNum) {
+      usbdm_assert(dmaChannelNum<Info::NumChannels, "Illegal DMA channel");
+
+      const IRQn_Type irqNum = Dma0Info::irqNums[0] + (dmaChannelNum&(Dma0Info::NumChannels-1));
+      NVIC_DisableIRQ(irqNum);
    }
 
 
@@ -637,11 +654,11 @@ public:
     * @param[in]  channel  The DMA channel to set callback for
     * @param[in]  callback The function to call from stub ISR
     */
-   static void __attribute__((always_inline)) setCallback(DmaChannelNum channel, DmaCallbackFunction callback) {
+   static void __attribute__((always_inline)) setCallback(DmaChannelNum dmaChannelNum, DmaCallbackFunction callback) {
       if (callback == nullptr) {
          callback = noHandlerCallback;
       }
-      callbacks[channel] = callback;
+      sCallbacks[dmaChannelNum] = callback;
    }
 
 };
@@ -649,7 +666,7 @@ public:
 /**
  * Callback table for programmatically set handlers.
  */
-template<class Info> DmaCallbackFunction DmaBase_T<Info>::callbacks[];
+template<class Info> DmaCallbackFunction DmaBase_T<Info>::sCallbacks[];
 
 /** Bit-mask of allocated channels */
 template<class Info> uint32_t DmaBase_T<Info>::allocatedChannels = -1;

@@ -467,23 +467,33 @@ public:
    }
 
    /**
-    * Enable/disable Pin interrupts in NVIC.
+    * Enable Pin interrupts in NVIC.
     * Any pending NVIC interrupts are first cleared.
-    *
-    * @param[in]  enable        True => enable, False => disable
-    * @param[in]  nvicPriority  Interrupt priority
     */
-   static void enableNvicInterrupts(bool enable=true, uint32_t nvicPriority=NvicPriority_Normal) {
+   static void enableNvicInterrupts() {
       static_assert(irqNum>=0, "Pin does not support interrupts");
-      if (enable) {
-         enableNvicInterrupt(irqNum, nvicPriority);
-      }
-      else {
-         // Disable interrupts
-         NVIC_DisableIRQ(irqNum);
-      }
+      enableNvicInterrupt(irqNum);
    }
 
+   /**
+    * Enable and set priority of Pin interrupts in NVIC.
+    * Any pending NVIC interrupts are first cleared.
+    *
+    * @param[in]  nvicPriority  Interrupt priority
+    */
+   static void enableNvicInterrupts(uint32_t nvicPriority=NvicPriority_Normal) {
+      static_assert(irqNum>=0, "Pin does not support interrupts");
+      enableNvicInterrupt(irqNum, nvicPriority);
+   }
+
+   /**
+    * Disable Pin interrupts in NVIC.
+    */
+   static void disableNvicInterrupts() {
+      static_assert(irqNum>=0, "Pin does not support interrupts");
+      // Disable interrupts
+      NVIC_DisableIRQ(irqNum);
+   }
 };
 
 /**
@@ -821,21 +831,32 @@ public:
 #endif
 
    /**
-    * Enable/disable Pin interrupts in NVIC.
+    * Enable Pin interrupts in NVIC.
+    * Any pending NVIC interrupts are first cleared.
+    */
+   static void enableNvicInterrupts() {
+      static_assert(irqNum>=0, "Pin does not support interrupts");
+      enableNvicInterrupt(irqNum);
+   }
+
+   /**
+    * Enable and set priority of Pin interrupts in NVIC.
     * Any pending NVIC interrupts are first cleared.
     *
-    * @param[in]  enable        True => enable, False => disable
     * @param[in]  nvicPriority  Interrupt priority
     */
-   static void enableNvicInterrupts(bool enable=true, uint32_t nvicPriority=NvicPriority_Normal) {
+   static void enableNvicInterrupts(uint32_t nvicPriority=NvicPriority_Normal) {
       static_assert(irqNum>=0, "Pin does not support interrupts");
-      if (enable) {
-         enableNvicInterrupt(irqNum, nvicPriority);
-      }
-      else {
-         // Disable interrupts
-         NVIC_DisableIRQ(irqNum);
-      }
+      enableNvicInterrupt(irqNum, nvicPriority);
+   }
+
+   /**
+    * Disable Pin interrupts in NVIC.
+    */
+   static void disableNvicInterrupts() {
+      static_assert(irqNum>=0, "Pin does not support interrupts");
+      // Disable interrupts
+      NVIC_DisableIRQ(irqNum);
    }
 
 #ifdef PORT_DFCR_CS_MASK

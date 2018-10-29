@@ -228,27 +228,36 @@ public:
    }
 
    /**
-    * Enable/disable interrupts in NVIC
+    * Enable interrupts in NVIC
+    * Any pending NVIC interrupts are first cleared.
+    */
+   static void enableNvicInterrupts() {
+      enableNvicInterrupt(Info::irqNums[0]);
+      if (Info::irqCount>1) {
+         enableNvicInterrupt(Info::irqNums[1]);
+      }
+   }
+
+   /**
+    * Enable and set priority of interrupts in NVIC
+    * Any pending NVIC interrupts are first cleared.
     *
-    * @param[in]  enable        True => enable, False => disable
     * @param[in]  nvicPriority  Interrupt priority
     */
-   static void enableNvicInterrupts(bool enable=true, uint32_t nvicPriority=NvicPriority_Normal) {
-      // Clear pending to avoid POR interrupt
-      NVIC_ClearPendingIRQ(Info::irqNums[0]);
-      if (enable) {
-         enableNvicInterrupt(Info::irqNums[0], nvicPriority);
-         if (Info::irqCount>1) {
-            enableNvicInterrupt(Info::irqNums[1], nvicPriority);
-         }
+   static void enableNvicInterrupts(uint32_t nvicPriority) {
+      enableNvicInterrupt(Info::irqNums[0], nvicPriority);
+      if (Info::irqCount>1) {
+         enableNvicInterrupt(Info::irqNums[1], nvicPriority);
       }
-      else {
-         // Disable interrupts
-         NVIC_DisableIRQ(Info::irqNums[0]);
-         if (Info::irqCount>1) {
-            // Disable interrupts
-            NVIC_DisableIRQ(Info::irqNums[1]);
-         }
+   }
+
+   /**
+    * Disable interrupts in NVIC
+    */
+   static void disableNvicInterrupts() {
+      NVIC_DisableIRQ(Info::irqNums[0]);
+      if (Info::irqCount>1) {
+         NVIC_DisableIRQ(Info::irqNums[1]);
       }
    }
 

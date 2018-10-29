@@ -240,22 +240,31 @@ public:
    static void clearInterruptFlag() {
       rnga().CR |= RNGA_CR_CLRI_MASK;
    }
+   
    /**
-    * Enable/disable interrupts in NVIC
-    *
-    * @param[in]  enable        True => enable, False => disable
-    * @param[in]  nvicPriority  Interrupt priority
+    * Enable interrupts in NVIC
+    * Any pending NVIC interrupts are first cleared.
     */
-   static void enableNvicInterrupts(bool enable=true, uint32_t nvicPriority=NvicPriority_Normal) {
-
-      if (enable) {
-         enableNvicInterrupt(Info::irqNums[0], nvicPriority);
-      }
-      else {
-         NVIC_DisableIRQ(Info::irqNums[0]);
-      }
+   static void enableNvicInterrupts() {
+      enableNvicInterrupt(Info::irqNums[0]);
    }
 
+   /**
+    * Enable and set priority of interrupts in NVIC
+    * Any pending NVIC interrupts are first cleared.
+    *
+    * @param[in]  nvicPriority  Interrupt priority
+    */
+   static void enableNvicInterrupts(uint32_t nvicPriority) {
+      enableNvicInterrupt(Info::irqNums[0], nvicPriority);
+   }
+
+   /**
+    * Disable interrupts in NVIC
+    */
+   static void disableNvicInterrupts() {
+      NVIC_DisableIRQ(Info::irqNums[0]);
+   }
    /**
     * Enable/disable interrupts.
     *

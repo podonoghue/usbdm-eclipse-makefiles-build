@@ -518,20 +518,28 @@ public:
    }
 
    /**
-    * Enable/disable interrupts in NVIC
+    * Enable interrupts in NVIC
+    * Any pending NVIC interrupts are first cleared.
+    */
+   static void enableNvicInterrupts() {
+      enableNvicInterrupt(Info::irqNums[0]);
+   }
+
+   /**
+    * Enable and set priority of interrupts in NVIC
+    * Any pending NVIC interrupts are first cleared.
     *
-    * @param[in]  enable        True => enable, False => disable
     * @param[in]  nvicPriority  Interrupt priority
     */
-   static INLINE_RELEASE void enableNvicInterrupts(bool enable=true, uint32_t nvicPriority=NvicPriority_Normal) {
+   static void enableNvicInterrupts(uint32_t nvicPriority) {
+      enableNvicInterrupt(Info::irqNums[0], nvicPriority);
+   }
 
-      if (enable) {
-         enableNvicInterrupt(Info::irqNums[0], nvicPriority);
-      }
-      else {
-         // Disable interrupts
-         NVIC_DisableIRQ(Info::irqNums[0]);
-      }
+   /**
+    * Disable interrupts in NVIC
+    */
+   static void disableNvicInterrupts() {
+      NVIC_DisableIRQ(Info::irqNums[0]);
    }
 
    /**
@@ -1523,22 +1531,28 @@ public:
 #endif
 
       /**
-       * Enable/disable interrupts in NVIC.
-       *
-       * @param[in]  enable        True => enable, False => disable
-       * @param[in]  nvicPriority  Interrupt priority
+       * Enable Pin interrupts in NVIC
+       * Any pending NVIC interrupts are first cleared.
        */
-      static __attribute__((always_inline)) void enableNvicInterrupts(bool enable=true, uint32_t nvicPriority=NvicPriority_Normal) {
-         Ftm::enableNvicInterrupts(enable, nvicPriority);
+      static void enablePinNvicInterrupts() {
+         Pcr::enableNvicInterrupt();
       }
 
       /**
-       * Enable/disable Pin interrupts in NVIC.
+       * Enable and set priority of Pin interrupts in NVIC
+       * Any pending NVIC interrupts are first cleared.
        *
-       * @param[in] enable true => enable, false => disable
+       * @param[in]  nvicPriority  Interrupt priority
        */
-      static INLINE_RELEASE void enablePinNvicInterrupts(bool enable=true) {
-         Pcr::enableNvicInterrupts(enable);
+      static void enablePinNvicInterrupts(uint32_t nvicPriority) {
+         Pcr::enableNvicInterrupt(nvicPriority);
+      }
+
+      /**
+       * Disable Pin interrupts in NVIC
+       */
+      static void disablePinNvicInterrupts() {
+         Pcr::disableNvicInterrupts();
       }
 
       /**
@@ -2034,13 +2048,28 @@ public:
    }
 
    /**
-    * Enable/disable interrupts in NVIC
+    * Enable interrupts in NVIC
+    * Any pending NVIC interrupts are first cleared.
+    */
+   static void enableNvicInterrupts() {
+      enableNvicInterrupt(Info::irqNums[0]);
+   }
+
+   /**
+    * Enable and set priority of interrupts in NVIC
+    * Any pending NVIC interrupts are first cleared.
     *
-    * @param[in]  enable        True => enable, False => disable
     * @param[in]  nvicPriority  Interrupt priority
     */
-   static __attribute__((always_inline)) void enableNvicInterrupts(bool enable=true, uint32_t nvicPriority=NvicPriority_Normal) {
-      Ftm::enableNvicInterrupts(enable, nvicPriority);
+   static void enableNvicInterrupts(uint32_t nvicPriority) {
+      enableNvicInterrupt(Info::irqNums[0], nvicPriority);
+   }
+
+   /**
+    * Disable interrupts in NVIC
+    */
+   static void disableNvicInterrupts() {
+      NVIC_DisableIRQ(Info::irqNums[0]);
    }
 
    /**

@@ -410,20 +410,28 @@ public:
    }
 
    /**
-    * Enable/disable interrupts in NVIC
+    * Enable interrupts in NVIC
+    * Any pending NVIC interrupts are first cleared.
+    */
+   static void enableNvicInterrupts() {
+      enableNvicInterrupt(Info::irqNums[0]);
+   }
+
+   /**
+    * Enable and set priority of interrupts in NVIC
+    * Any pending NVIC interrupts are first cleared.
     *
-    * @param[in]  enable        True => enable, False => disable
     * @param[in]  nvicPriority  Interrupt priority
     */
-   static void enableNvicInterrupts(bool enable=true, uint32_t nvicPriority=NvicPriority_Normal) {
+   static void enableNvicInterrupts(uint32_t nvicPriority) {
+      enableNvicInterrupt(Info::irqNums[0], nvicPriority);
+   }
 
-      if (enable) {
-         enableNvicInterrupt(Info::irqNums[0], nvicPriority);
-      }
-      else {
-         // Disable interrupts
-         NVIC_DisableIRQ(Info::irqNums[0]);
-      }
+   /**
+    * Disable interrupts in NVIC
+    */
+   static void disableNvicInterrupts() {
+      NVIC_DisableIRQ(Info::irqNums[0]);
    }
 
    template<LlwuPin llwuPin>
@@ -482,16 +490,29 @@ public:
       }
 
       /**
-       * Enable/disable Pin interrupts in NVIC.
+       * Enable Pin interrupts in NVIC
        * Any pending NVIC interrupts are first cleared.
-       *
-       * @param[in]  enable        True => enable, False => disable
-       * @param[in]  nvicPriority  Interrupt priority
        */
-      static void enableNvicInterrupts(bool enable=true, uint32_t nvicPriority=NvicPriority_Normal) {
-         Pcr::enableNvicInterrupts(enable, nvicPriority);
+      static void enablePinNvicInterrupts() {
+         Pcr::enableNvicInterrupt();
       }
 
+      /**
+       * Enable and set priority of Pin interrupts in NVIC
+       * Any pending NVIC interrupts are first cleared.
+       *
+       * @param[in]  nvicPriority  Interrupt priority
+       */
+      static void enablePinNvicInterrupts(uint32_t nvicPriority) {
+         Pcr::enableNvicInterrupt(nvicPriority);
+      }
+
+      /**
+       * Disable Pin interrupts in NVIC
+       */
+      static void disablePinNvicInterrupts() {
+         Pcr::disableNvicInterrupts();
+      }
    };
 };
 

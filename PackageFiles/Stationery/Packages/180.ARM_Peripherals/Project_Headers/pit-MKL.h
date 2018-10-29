@@ -244,8 +244,10 @@ public:
 
       // Enable timer
       pit().MCR = Info::mcr;
-
-      enableNvicInterrupts();
+      for (unsigned i=0; i<Info::irqCount; i++) {
+         configureChannelInTicks(i, Info::pit_ldval);
+      }
+      enableNvicInterrupts(Info::irqLevel);
    }
 
    /**
@@ -272,23 +274,28 @@ public:
    }
 
    /**
-    * Enable/disable interrupts in NVIC
-    *
-    * @param[in]  enable        True => enable, False => disable
-    * @param[in]  nvicPriority  Interrupt priority
-    *
-    * @return E_NO_ERROR on success
+    * Enable interrupts in NVIC
+    * Any pending NVIC interrupts are first cleared.
     */
-   static ErrorCode enableNvicInterrupts(bool enable=true, uint32_t nvicPriority=NvicPriority_Normal) {
+   static void enableNvicInterrupts() {
+      enableNvicInterrupt(irqNums[0]);
+   }
 
-      constexpr IRQn_Type irqNum = Info::irqNums[0];
-      if (enable) {
-         enableNvicInterrupt(irqNum, nvicPriority);
-      }
-      else {
-         NVIC_DisableIRQ(irqNum);
-      }
-      return E_NO_ERROR;
+   /**
+    * Enable and set priority of interrupts in NVIC
+    * Any pending NVIC interrupts are first cleared.
+    *
+    * @param[in]  nvicPriority  Interrupt priority
+    */
+   static void enableNvicInterrupts(uint32_t nvicPriority) {
+      enableNvicInterrupt(irqNums[0], nvicPriority);
+   }
+
+   /**
+    * Disable interrupts in NVIC
+    */
+   static void disableNvicInterrupts() {
+      NVIC_DisableIRQ(irqNums[0]);
    }
    
    /**
