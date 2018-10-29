@@ -1059,9 +1059,10 @@ public:
     * @param dmaChannelNum Channel to release
     */
    static void freeChannel(DmaChannelNum dmaChannelNum) {
+      const uint32_t channelMask = (1<<dmaChannelNum);
       usbdm_assert(dmaChannelNum<Info::NumChannels,        "Illegal DMA channel");
       usbdm_assert((allocatedChannels & channelMask) == 0, "Freeing unallocated DMA channel");
-      allocatedChannels |= (1<<dmaChannelNum);
+      allocatedChannels |= channelMask;
    }
 
    /**
