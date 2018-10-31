@@ -1563,7 +1563,7 @@ public:
        * @param[in] pcrValue PCR value to set
        */
       static INLINE_RELEASE void setPCR(PcrValue pcrValue=Info::info[channel].pcrValue) {
-         CheckSignal<Info, channel>::check();
+         CheckPinMapping<Info, channel>::check();
          Pcr::setPCR((pcrValue&~PORT_PCR_MUX_MASK)|(Info::info[channel].pcrValue&PORT_PCR_MUX_MASK));
       }
 
@@ -1588,7 +1588,7 @@ public:
             PinSlewRate       pinSlewRate       = PinSlewRate_Fast,
             PinMux            pinMux            = (PinMux)(Info::info[channel].pcrValue&PORT_PCR_MUX_MASK)
       ) {
-         CheckSignal<Info, channel>::check();
+         CheckPinMapping<Info, channel>::check();
          Pcr::setPCR(pinPull,pinDriveStrength,pinDriveMode,pinAction,pinFilter,pinSlewRate,pinMux);
       }
 
@@ -2110,8 +2110,8 @@ public:
     * Includes configuring all pins if
     * mapPinsOnEnable setting is true
     *
-    * @param ftmPrescale    Prescale value applied to the output of the quadrature decode before the counter.
-    * @param quadratureMode Selects the encoding mode used to decode the input changes.
+    * @param ftmPrescale       Prescale value applied to the output of the quadrature decode before the counter.
+    * @param ftmQuadratureMode Selects the encoding mode used to decode the input changes.
     */
    static void configure(
          FtmPrescale       ftmPrescale       = FtmPrescale_1,
