@@ -1619,9 +1619,8 @@ Not present in all devices</description>
                </register>
             </cluster>
             <register>
-               <dim>16</dim>
+               <dim>%MESSAGE_BUFFER_COUNT</dim>
                <dimIncrement>4</dimIncrement>
-               <dimIndex>0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15</dimIndex>
                <name>RXIMR%s</name>
                <description>Rx Individual Mask</description>
                <addressOffset>0x880</addressOffset>
