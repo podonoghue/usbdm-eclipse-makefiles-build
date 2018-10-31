@@ -80,10 +80,10 @@ enum PdbTrigger {
  * Controls the loading of MOD, IDLY, CHnDLYm, DACINTx,and POyDLY register from holding registers
  */
 enum PdbLoadMode {
-   PdbLoadMode_Immediate = PDB_SC_LDMOD(0), //!< The register are loaded immediately after LD_OK is set
-   PdbLoadMode_Modulo    = PDB_SC_LDMOD(1), //!< The register are loaded when the counter reaches the modulo value
-   PdbLoadMode_Event     = PDB_SC_LDMOD(2), //!< The register are loaded when a trigger event occurs
-   PdbLoadMode_Both      = PDB_SC_LDMOD(3), //!< The register are loaded when either counter reaches the modulo value or trigger event occurs
+   PdbLoadMode_Immediate = PDB_SC_LDMOD(0), //!< Loaded immediately after LD_OK is set
+   PdbLoadMode_Modulo    = PDB_SC_LDMOD(1), //!< Loaded on counter roll-over after LD_OK is set
+   PdbLoadMode_Event     = PDB_SC_LDMOD(2), //!< Loaded on trigger event after LD_OK is set
+   PdbLoadMode_Both      = PDB_SC_LDMOD(3), //!< Loaded on counter roll-over or trigger event after LD_OK is set
 };
 
 /**
@@ -158,15 +158,18 @@ enum PdbDacTriggerMode {
  *    - The DAC delay counters count [0..DACINTx]. Set with configureDacTrigger().
  *      The counters may be bypassed for external triggers.
  * - The PDB may operate in one-shot or continuous mode.
- *    - One shot mode   - The PDB and delay counters are reset on trigger. The PDB counter counts one sequence.
+ *    - One shot mode   - The PDB and DAC delay counters are reset on trigger. The PDB counter counts one sequence only.
+ *      The DAC counter only operates while the main counter is counting but it may produce multiple triggers in the sequence.
  *    - Continuous mode - As above but the counter resets when it reaches the counter period and restarts.\n
- *      The DAC delay counters are also reset on PDB counter restart.
- * - I would expect the DAC Delay counter period to be less than or equal to the PDB counter period.
+ *      The DAC delay counters are NOT reset on PDB counter roll-over so operate independently after initial trigger.
+ * - I would expect the DAC Delay counter period to be less than or equal to the PDB counter period in one-shot mode.
  * - The DAC Delay period may be set smaller than (PDB counter period/2) to trigger multiple DAC output
- *   changes within a PDB period but more often there would be only a single DAC event e.g.
- *   <b>(PDB counter period/2) < (DAC Delay period) <= (PDB counter period)</b>
- * - The pre-triggers within a channel are associated with different ADC pre-triggers e.g. SC1[n]/R[n]. \n
+ *   triggers within a PDB period but more often there would be only a single DAC event e.g.
+ *   <b>(PDB counter period/2) < (DAC Delay period) <= (PDB counter period)</b>. Again this is in one-shot mode.
+ * - The pre-triggers within a channel are associated with different ADC pre-triggers e.g. SC1[n]/R[n]. The pre-triggers
+ *   are referenced to the main PDB counter.\n
  *   This allows multiple ADC channels (inputs) to be used with a PDB period - usually only 2 are available per ADC.
+ *   Set with configureAdcPretrigger().
  * - The pulse outputs may be configured as high for a pulse from [start...end] times based on the PDB counter.
  *   Set with configurePulseOutput().
  */
@@ -337,8 +340,9 @@ public:
    /**
     * Configures the PDB
     *
-    * Includes enabling clock and any pins used.\n
-    * Most settings are disabled.
+    * Includes enabling clock and configuring all pins if mapPinsOnEnable is
+    * selected in configuration.\n
+    * ADC triggers, CMP pulse outputs and ADC triggers are disabled.
     *
     * @param pdbMode       PDB operates in one-shot or continuous mode
     * @param pdbTrigger    PDB Trigger source
@@ -443,7 +447,7 @@ public:
       // Multiplier factors for prescale divider
       static const int multFactors[] = {1,10,20,40};
       float clock = clockFrequency/(multFactors[multValue]*(1<<prescaleValue));
-      return round(seconds*clock)-1;
+      return round(seconds*clock);
    }
 
    /**
@@ -536,8 +540,8 @@ public:
       pdb().SC  = (pdb().SC&~(PDB_SC_MULT_MASK|PDB_SC_PRESCALER_MASK))|
             PDB_SC_MULT(mult)|PDB_SC_PRESCALER(prescale)|PDB_SC_PDBIF_MASK;
 
-      // Recalculate MOD using convertSecondsToTicks() to ensure consistent results
-      pdb().MOD = convertSecondsToTicks(period);
+      // Calculate MOD using new MULT and PRESCALER convertSecondsToTicks()
+      pdb().MOD = convertSecondsToTicks(period) - 1;
 
       return E_NO_ERROR;
    }
@@ -580,7 +584,7 @@ public:
     */
    static void setInterruptDelay(float delay) {
 
-      pdb().IDLY = convertSecondsToTicks(delay);
+      pdb().IDLY = convertSecondsToTicks(delay) - 1;
    }
 
    /**
@@ -628,7 +632,7 @@ public:
    /**
     * Indicates if loading of MOD, IDLY, CHnDLYm, DACINTx,and POyDLY registers is complete
     *
-    * @note The loading is triggered by loadRegisters()
+    * @note The loading is triggered by confirmRegisterLoad()
     */
    static bool isRegisterLoadComplete() {
 
@@ -650,7 +654,7 @@ public:
     * @param adcNum           ADC associated with the pre-trigger (channel)
     * @param pretriggerNum    Pretrigger being modified
     * @param pdbPretrigger    Pretrigger settings
-    * @param delay            Delay
+    * @param delay            Delay in ticks - only needed for PdbPretrigger_Delayed
     */
    static void configureAdcPretriggerInTicks (
          unsigned       adcNum,
@@ -663,7 +667,7 @@ public:
 
       uint32_t mask      = (PDB_C1_EN(1)|PDB_C1_BB(1)|PDB_C1_TOS(1))<<pretriggerNum;
       pdb().CH[adcNum].C1                 = (pdb().CH[adcNum].C1&~mask)|(pdbPretrigger<<pretriggerNum);
-      pdb().CH[adcNum].DLY[pretriggerNum] = delay;
+      pdb().CH[adcNum].DLY[pretriggerNum] = delay - 1;
    }
 
    /**
@@ -680,7 +684,7 @@ public:
     * @param adcNum           ADC associated with the pre-trigger (channel)
     * @param pretriggerNum    Pretrigger being modified
     * @param pdbPretrigger    Pretrigger settings
-    * @param delay            Delay
+    * @param delay            Delay - only needed for PdbPretrigger_Delayed
     */
    static void configureAdcPretrigger (
          unsigned       adcNum,
@@ -764,7 +768,7 @@ public:
        *
        * @param pretriggerNum    Pretrigger being modified
        * @param pdbPretrigger    Pretrigger settings
-       * @param delay            Delay
+       * @param delay            Delay in ticks - only needed for PdbPretrigger_Delayed
        */
       static void configureInTicks (
             unsigned       pretriggerNum,
@@ -787,7 +791,7 @@ public:
        *
        * @param pretriggerNum    Pretrigger being modified
        * @param pdbPretrigger    Pretrigger settings
-       * @param delay            Delay
+       * @param delay            Delay - only needed for PdbPretrigger_Delayed
        */
       static void configure (
             unsigned       pretriggerNum,
@@ -828,9 +832,12 @@ public:
    /**
     * DAC Trigger Control
     *
+    * There may be multiple DAC triggers generated if the period is smaller that the main counter period.\n
+    * The trigger may be bypassed when using an external trigger.
+    *
     * @param dacNum            DAC number
     * @param pdbDacTriggerMode Control how the DAC trigger is generated
-    * @param period            Reload value for DAC interval counter
+    * @param period            DAC period in ticks
     */
    static void configureDacTriggerInTicks (
          unsigned          dacNum,
@@ -844,11 +851,12 @@ public:
             "DAC period may not be used with external trigger");
 
       pdb().DAC[dacNum].INTC = pdbDacTriggerMode;
-      pdb().DAC[dacNum].INT  = period;
+      pdb().DAC[dacNum].INT  = period - 1;
    }
 
    /**
-    * DAC Trigger Control.\n
+    * DAC Trigger Control.
+    *
     * There may be multiple DAC triggers generated if the period is smaller that the main counter period.\n
     * The trigger may be bypassed when using an external trigger.
     *
@@ -890,6 +898,9 @@ public:
       /**
        * DAC Trigger Control
        *
+       * There may be multiple DAC triggers generated if the period is smaller that the main counter period.\n
+       * The trigger may be bypassed when using an external trigger.
+       *
        * @param pdbDacTriggerMode Control how the DAC trigger is generated
        * @param period            Reload value for DAC interval counter
        */
@@ -902,6 +913,9 @@ public:
 
       /**
        * DAC Trigger Control
+       *
+       * There may be multiple DAC triggers generated if the period is smaller that the main counter period.\n
+       * The trigger may be bypassed when using an external trigger.
        *
        * @param pdbDacTriggerMode Control how the DAC trigger is generated
        * @param period           Interval used to calculate the reload value for DAC interval counter
