@@ -158,8 +158,13 @@ static void configurePdb() {
          PdbTrigger_Software, // Start when triggered by software
          PdbAction_None);     // No DMA or interrupts
 
-   // Period of main timer - irrelevant
-   Pdb0::setModuloInTicks(0);
+   /*
+    * Period of main timer
+    * The main PDB timer is not actually used in this example so the modulo value is irrelevant.
+    * However, this method has the side-effect of setting the prescaler and multiplier which are also
+    * used for the DAC counters.
+    */
+   Pdb0::setPeriod(PDB_PERIOD);
 
    // In free-running mode this is actually the period of the DACINT
    Pdb0::configureDacTrigger(0, PdbDacTriggerMode_Delayed, PDB_PERIOD);
