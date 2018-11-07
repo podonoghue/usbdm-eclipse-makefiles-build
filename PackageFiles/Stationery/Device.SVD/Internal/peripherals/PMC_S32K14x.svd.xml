@@ -187,25 +187,29 @@ LVWF is set when VSupply transitions below the trip point</description>
                <fields>
                   <field>
                      <name>BIASEN</name>
-                     <description>Bias Enable Bit</description>
+                     <description>Bias Enable Bit -
+This bit enables source and well biasing for the core logic in low power mode. 
+This bit must be set to 1 when using VLP* modes</description>
                      <bitOffset>0</bitOffset>
                      <bitWidth>1</bitWidth>
                      <enumeratedValues>
                         <enumeratedValue>
                            <name>0b0</name>
-                           <description>Biasing disabled, core logic can run in full performance</description>
+                           <description>Disabled, full performance</description>
                            <value>0b0</value>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>0b1</name>
-                           <description>Biasing enabled, core logic is slower and there are restrictions in allowed system clock speed (see Data Sheet for details)</description>
+                           <description>Enabled, system clock speed is restricted</description>
                            <value>0b1</value>
                         </enumeratedValue>
                      </enumeratedValues>
                   </field>
                   <field>
                      <name>CLKBIASDIS</name>
-                     <description>Clock Bias Disable Bit</description>
+                     <description>Clock Bias Disable Bit
+Allows the bias currents and reference voltages to be disabled in VLPS mode for the
+following clock modules: SIRC, FIRC, PLL</description>
                      <bitOffset>1</bitOffset>
                      <bitWidth>1</bitWidth>
                      <enumeratedValues>
@@ -216,63 +220,66 @@ LVWF is set when VSupply transitions below the trip point</description>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>0b1</name>
-                           <description>In STOP/VLPS mode the bias currents and reference voltages for the following clock modules are disabled: SIRC, FIRC, PLL. (if available on device)</description>
+                           <description>Biases are disabled</description>
                            <value>0b1</value>
                         </enumeratedValue>
                      </enumeratedValues>
                   </field>
                   <field>
                      <name>REGFPM</name>
-                     <description>Regulator in Full Performance Mode Status Bit</description>
+                     <description>Indicates if the regulator in Full Performance Mode</description>
                      <bitOffset>2</bitOffset>
                      <bitWidth>1</bitWidth>
                      <access>read-only</access>
                      <enumeratedValues>
                         <enumeratedValue>
                            <name>0b0</name>
-                           <description>Regulator is in low power mode or transition to/from</description>
+                           <description>Low power mode or in transition</description>
                            <value>0b0</value>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>0b1</name>
-                           <description>Regulator is in full performance mode</description>
+                           <description>Full performance mode</description>
                            <value>0b1</value>
                         </enumeratedValue>
                      </enumeratedValues>
                   </field>
                   <field>
                      <name>LPOSTAT</name>
-                     <description>LPO Status Bit</description>
+                     <description>LPO Status Bit
+Indicates the state of the LPO output (High/Low).  
+May be used to detrmine LPO period and hence allow frequency trimming</description>
                      <bitOffset>6</bitOffset>
                      <bitWidth>1</bitWidth>
                      <access>read-only</access>
                      <enumeratedValues>
                         <enumeratedValue>
                            <name>0b0</name>
-                           <description>Low power oscillator in low phase</description>
+                           <description>In low phase</description>
                            <value>0b0</value>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>0b1</name>
-                           <description>Low power oscillator in high phase</description>
+                           <description>In high phase</description>
                            <value>0b1</value>
                         </enumeratedValue>
                      </enumeratedValues>
                   </field>
                   <field>
                      <name>LPODIS</name>
-                     <description>LPO Disable Bit</description>
+                     <description>LPO Disable Bit
+Allows the ow power oscillator to be disabled</description>
                      <bitOffset>7</bitOffset>
                      <bitWidth>1</bitWidth>
                      <enumeratedValues>
                         <enumeratedValue>
                            <name>0b0</name>
-                           <description>Low power oscillator enabled</description>
+                           <description>LPO enabled</description>
                            <value>0b0</value>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>0b1</name>
-                           <description>Low power oscillator disabled</description>
+                           <description>LPO disabled</description>
                            <value>0b1</value>
                         </enumeratedValue>
                      </enumeratedValues>
@@ -288,7 +295,8 @@ LVWF is set when VSupply transitions below the trip point</description>
                <fields>
                   <field>
                      <name>LPOTRIM</name>
-                     <description>LPO trimming bits</description>
+                     <description>LPO trimming bits.
+This is a signed value adjusting the LPO frequency</description>
                      <bitOffset>0</bitOffset>
                      <bitWidth>5</bitWidth>
                   </field>

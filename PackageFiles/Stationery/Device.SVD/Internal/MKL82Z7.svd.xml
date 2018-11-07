@@ -25,7 +25,7 @@
       <xi:include href="peripherals/AIPS0_Lite_8Mx16P.svd.xml"/>
       <xi:include href="peripherals/CMP0_MKV.svd.xml"/>
       <xi:include href="peripherals/CRC0_0x40032000.svd.xml"/>
-      <xi:include href="peripherals/DAC0_16CH_MKL82Z7.svd.xml"/>
+      <xi:include href="peripherals/DAC0_16CH_FIFO16.svd.xml"/>
       <xi:include href="peripherals/DMA0_8CH_EARS_MKE15Z7.svd.xml"/>
       <xi:include href="peripherals/DMAMUX0_8CH_MKL82Z7.svd.xml"/>
       <xi:include href="peripherals/EMVSIM0_0x4004E000.svd.xml"/>

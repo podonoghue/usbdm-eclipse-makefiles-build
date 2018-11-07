@@ -10,7 +10,7 @@ Devices using this peripheral:
          <name>LPI2C0</name>
          <description>Low power I2C</description>
          <groupName>LPI2C</groupName>
-         <headerStructName>LPI2C0</headerStructName>
+         <headerStructName>LPI2C</headerStructName>
          <baseAddress>0x40066000</baseAddress>
          <size>32</size>
          <access>read-write</access>

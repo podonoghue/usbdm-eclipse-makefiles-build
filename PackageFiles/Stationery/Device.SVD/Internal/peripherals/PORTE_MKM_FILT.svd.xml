@@ -211,42 +211,42 @@ Configures Interrupt and DMA functions</description>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>0b0001</name>
-                           <description>DMA Request on rising edge</description>
+                           <description>ISF flag and DMA request on rising edge</description>
                            <value>0b0001</value>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>0b0010</name>
-                           <description>DMA Request on falling edge</description>
+                           <description>ISF flag and DMA request on falling edge</description>
                            <value>0b0010</value>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>0b0011</name>
-                           <description>DMA Request on either edge</description>
+                           <description>ISF flag and DMA request on either edge</description>
                            <value>0b0011</value>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>0b1000</name>
-                           <description>Interrupt when logic 0</description>
+                           <description>ISF flag and Interrupt when logic 0</description>
                            <value>0b1000</value>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>0b1001</name>
-                           <description>Interrupt on rising edge</description>
+                           <description>ISF flag and Interrupt on rising edge</description>
                            <value>0b1001</value>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>0b1010</name>
-                           <description>Interrupt on falling edge</description>
+                           <description>ISF flag and Interrupt on falling edge</description>
                            <value>0b1010</value>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>0b1011</name>
-                           <description>Interrupt on either edge</description>
+                           <description>ISF flag and Interrupt on either edge</description>
                            <value>0b1011</value>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>0b1100</name>
-                           <description>Interrupt when logic 1</description>
+                           <description>ISF flag and Interrupt when logic 1</description>
                            <value>0b1100</value>
                         </enumeratedValue>
                         <enumeratedValue>
@@ -410,31 +410,66 @@ Reflects the interrupt status of each pin</description>
             </register>
             <register>
                <name>DFER</name>
-               <description>Digital Filter Enable Register</description>
+               <description>Digital Filter Enable Register\n
+Controls Digital Filtering on inputs</description>
                <addressOffset>0xC0</addressOffset>
                <fields>
                   <field>
-                     <name>DFE</name>
-                     <description>Digital Filter Enable</description>
+                     <name>DFE0</name>
+                     <description>Digital Filter Enable 0\n
+Enabled Digital Filtering if configured as a digital input</description>
                      <bitOffset>0</bitOffset>
+                     <bitWidth>1</bitWidth>
                      <enumeratedValues>
                         <enumeratedValue>
                            <name>0b0</name>
-                           <description>Digital filter is disabled on the corresponding pin and output of the digital filter is reset to zero</description>
+                           <description>Filtering disabled</description>
                            <value>0b0</value>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>0b1</name>
-                           <description>Digital filter is enabled on the corresponding pin, if the pin is configured as a digital input</description>
+                           <description>Filtering enabled</description>
                            <value>0b1</value>
                         </enumeratedValue>
                      </enumeratedValues>
                   </field>
+                  <field derivedFrom="DFE0" > <name>DFE1</name> <description>Digital Filter Enable 1</description> <bitOffset>1</bitOffset> </field>
+                  <field derivedFrom="DFE0" > <name>DFE2</name> <description>Digital Filter Enable 2</description> <bitOffset>2</bitOffset> </field>
+                  <field derivedFrom="DFE0" > <name>DFE3</name> <description>Digital Filter Enable 3</description> <bitOffset>3</bitOffset> </field>
+                  <field derivedFrom="DFE0" > <name>DFE4</name> <description>Digital Filter Enable 4</description> <bitOffset>4</bitOffset> </field>
+                  <field derivedFrom="DFE0" > <name>DFE5</name> <description>Digital Filter Enable 5</description> <bitOffset>5</bitOffset> </field>
+                  <field derivedFrom="DFE0" > <name>DFE6</name> <description>Digital Filter Enable 6</description> <bitOffset>6</bitOffset> </field>
+                  <field derivedFrom="DFE0" > <name>DFE7</name> <description>Digital Filter Enable 7</description> <bitOffset>7</bitOffset> </field>
+                  <field derivedFrom="DFE0" > <name>DFE8</name> <description>Digital Filter Enable 8</description> <bitOffset>8</bitOffset> </field>
+                  <field derivedFrom="DFE0" > <name>DFE9</name> <description>Digital Filter Enable 9</description> <bitOffset>9</bitOffset> </field>
+                  <field derivedFrom="DFE0" > <name>DFE10</name> <description>Digital Filter Enable 10</description> <bitOffset>10</bitOffset> </field>
+                  <field derivedFrom="DFE0" > <name>DFE11</name> <description>Digital Filter Enable 11</description> <bitOffset>11</bitOffset> </field>
+                  <field derivedFrom="DFE0" > <name>DFE12</name> <description>Digital Filter Enable 12</description> <bitOffset>12</bitOffset> </field>
+                  <field derivedFrom="DFE0" > <name>DFE13</name> <description>Digital Filter Enable 13</description> <bitOffset>13</bitOffset> </field>
+                  <field derivedFrom="DFE0" > <name>DFE14</name> <description>Digital Filter Enable 14</description> <bitOffset>14</bitOffset> </field>
+                  <field derivedFrom="DFE0" > <name>DFE15</name> <description>Digital Filter Enable 15</description> <bitOffset>15</bitOffset> </field>
+                  <field derivedFrom="DFE0" > <name>DFE16</name> <description>Digital Filter Enable 16</description> <bitOffset>16</bitOffset> </field>
+                  <field derivedFrom="DFE0" > <name>DFE17</name> <description>Digital Filter Enable 17</description> <bitOffset>17</bitOffset> </field>
+                  <field derivedFrom="DFE0" > <name>DFE18</name> <description>Digital Filter Enable 18</description> <bitOffset>18</bitOffset> </field>
+                  <field derivedFrom="DFE0" > <name>DFE19</name> <description>Digital Filter Enable 19</description> <bitOffset>19</bitOffset> </field>
+                  <field derivedFrom="DFE0" > <name>DFE20</name> <description>Digital Filter Enable 20</description> <bitOffset>20</bitOffset> </field>
+                  <field derivedFrom="DFE0" > <name>DFE21</name> <description>Digital Filter Enable 21</description> <bitOffset>21</bitOffset> </field>
+                  <field derivedFrom="DFE0" > <name>DFE22</name> <description>Digital Filter Enable 22</description> <bitOffset>22</bitOffset> </field>
+                  <field derivedFrom="DFE0" > <name>DFE23</name> <description>Digital Filter Enable 23</description> <bitOffset>23</bitOffset> </field>
+                  <field derivedFrom="DFE0" > <name>DFE24</name> <description>Digital Filter Enable 24</description> <bitOffset>24</bitOffset> </field>
+                  <field derivedFrom="DFE0" > <name>DFE25</name> <description>Digital Filter Enable 25</description> <bitOffset>25</bitOffset> </field>
+                  <field derivedFrom="DFE0" > <name>DFE26</name> <description>Digital Filter Enable 26</description> <bitOffset>26</bitOffset> </field>
+                  <field derivedFrom="DFE0" > <name>DFE27</name> <description>Digital Filter Enable 27</description> <bitOffset>27</bitOffset> </field>
+                  <field derivedFrom="DFE0" > <name>DFE28</name> <description>Digital Filter Enable 28</description> <bitOffset>28</bitOffset> </field>
+                  <field derivedFrom="DFE0" > <name>DFE29</name> <description>Digital Filter Enable 29</description> <bitOffset>29</bitOffset> </field>
+                  <field derivedFrom="DFE0" > <name>DFE30</name> <description>Digital Filter Enable 30</description> <bitOffset>30</bitOffset> </field>
+                  <field derivedFrom="DFE0" > <name>DFE31</name> <description>Digital Filter Enable 31</description> <bitOffset>31</bitOffset> </field>
                </fields>
             </register>
             <register>
                <name>DFCR</name>
-               <description>Digital Filter Clock Register</description>
+               <description>Digital Filter Clock Register\n
+Select the clock source for the digital filter</description>
                <addressOffset>0xC4</addressOffset>
                <fields>
                   <field>
@@ -445,12 +480,12 @@ Reflects the interrupt status of each pin</description>
                      <enumeratedValues>
                         <enumeratedValue>
                            <name>0b0</name>
-                           <description>Digital Filters are clocked by the bus clock</description>
+                           <description>Bus clock</description>
                            <value>0b0</value>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>0b1</name>
-                           <description>Digital Filters are clocked by the 1 kHz LPO clock</description>
+                           <description>1 kHz LPO clock</description>
                            <value>0b1</value>
                         </enumeratedValue>
                      </enumeratedValues>
@@ -464,9 +499,17 @@ Reflects the interrupt status of each pin</description>
                <fields>
                   <field>
                      <name>FILT</name>
-                     <description>Filter Length</description>
+                     <description>Filter Length\n
+Configures the maximum size of the glitches, in clock cycles, that the digital filter absorbs for the enabled digital filters</description>
                      <bitOffset>0</bitOffset>
                      <bitWidth>5</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0bX</name>
+                           <description>Length in clocks</description>
+                           <isDefault>true</isDefault>
+                        </enumeratedValue>
+                     </enumeratedValues>
                   </field>
                </fields>
             </register>

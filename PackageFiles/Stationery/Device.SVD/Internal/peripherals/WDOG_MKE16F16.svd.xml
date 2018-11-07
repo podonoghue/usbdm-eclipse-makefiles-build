@@ -5,6 +5,10 @@ Devices using this peripheral:
       MKE15Z7
       MKE16F16
       MKE18F16
+      S32K142
+      S32K144
+      S32K146
+      S32K148
 -->
       <peripheral>
          <?sourceFile "WDOG_MKE16F16" ?>

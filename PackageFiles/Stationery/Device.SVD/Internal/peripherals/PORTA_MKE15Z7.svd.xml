@@ -8,7 +8,7 @@ Devices using this peripheral:
          <name>PORTA</name>
          <description>Pin Control and Interrupts</description>
          <groupName>PORT</groupName>
-         <headerStructName>PORT</headerStructName>
+         <headerStructName>PORT_DFER</headerStructName>
          <baseAddress>0x40049000</baseAddress>
          <size>32</size>
          <access>read-write</access>

@@ -62,7 +62,7 @@
       <xi:include href="peripherals/PDB0_2CH_8PT_0DAC_1PO.svd.xml"/>
       <peripheral derivedFrom="PDB0"><name>PDB1</name><baseAddress>0x40031000</baseAddress></peripheral>
       <xi:include href="peripherals/PMC_S32K14x.svd.xml"/>
-      <xi:include href="peripherals/PORTA_S32K14x.svd.xml"/>
+      <xi:include href="peripherals/PORTA_DFER_GICLR.svd.xml"/>
       <peripheral derivedFrom="PORTA"><name>PORTB</name><baseAddress>0x4004A000</baseAddress></peripheral>
       <peripheral derivedFrom="PORTA"><name>PORTC</name><baseAddress>0x4004B000</baseAddress></peripheral>
       <peripheral derivedFrom="PORTA"><name>PORTD</name><baseAddress>0x4004C000</baseAddress></peripheral>
@@ -75,7 +75,7 @@
       <xi:include href="peripherals/SMC_S32K14x.svd.xml"/>
       <xi:include href="peripherals/SYST.svd.xml"/>
       <xi:include href="peripherals/TRGMUX_S32K142.svd.xml"/>
-      <xi:include href="peripherals/WDOG_S32K14x.svd.xml"/>
+      <xi:include href="peripherals/WDOG_MKE16F16.svd.xml"/>
    </peripherals>
    <vendorExtensions>
    <xi:include href="vectorTables/S32K142_VectorTable.svd.xml"/>
