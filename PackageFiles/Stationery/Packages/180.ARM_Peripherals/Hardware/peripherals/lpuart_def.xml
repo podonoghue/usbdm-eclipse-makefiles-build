@@ -119,7 +119,7 @@ Devices using this peripheral:
    \t */
    \tstatic uint32_t getClockFrequency() {
    \t#if defined(PCC_PCC_LPUART$(_instance)_CGC_MASK)
-   \t   return PccInfo::getLpuart0Clock();
+   \t   return PccInfo::getLpuart0Frequency();
    \t#elif defined(SIM_SOPT2_LPUART$(_instance)SRC_MASK)
    \t   return SimInfo::getLpuart$(_instance)Clock();
    \t#else

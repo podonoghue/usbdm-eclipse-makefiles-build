@@ -169,16 +169,16 @@ void Scg::SystemCoreClockUpdate() {
 
    switch (scg().CSR & SCG_CSR_SCS_MASK) {
       case SCG_RCCR_SCS(0b0001) : // SOSC
-         clockFrequency = ScgInfo::getSoscClock();
+         clockFrequency = ScgInfo::getSoscFrequency();
          break;
       case SCG_RCCR_SCS(0b0010) : // SIRC
-         clockFrequency = ScgInfo::getSircClock();
+         clockFrequency = ScgInfo::getSircFrequency();
          break;
       case SCG_RCCR_SCS(0b0011) : // FIRC
-         clockFrequency = ScgInfo::getFircClock();
+         clockFrequency = ScgInfo::getFircFrequency();
          break;
       case SCG_RCCR_SCS(0b0110) : // SPLL
-         clockFrequency = ScgInfo::getSpllClock();
+         clockFrequency = ScgInfo::getSpllFrequency();
          break;
    }
    ::SystemCoreClock = ScgInfo::getSystemDividedClock(clockFrequency,    (scg().RCCR&SCG_RCCR_DIVCORE_MASK)>>SCG_RCCR_DIVCORE_SHIFT);

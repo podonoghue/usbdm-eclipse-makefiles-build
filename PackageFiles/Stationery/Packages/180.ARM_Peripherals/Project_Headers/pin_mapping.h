@@ -189,6 +189,514 @@ public:
  * @}
  */
 /**
+ * @addtogroup SCG_Group SCG, System Clock Generator
+ * @brief Abstraction for System Clock Generator
+ * @{
+ */
+#define USBDM_SCG_IS_DEFINED
+/**
+ * Peripheral information for SCG, System Clock Generator.
+ * 
+ * This may include pin information, constants, register addresses, and default register values,
+ * along with simple accessor functions.
+ */
+   /**
+    * FIRC Regulator enable
+    */
+   enum ScgFircRegulator {
+      ScgFircRegulator_Enabled  = SCG_FIRCCSR_FIRCREGOFF(0), //!< Fast IRC Regulator is enabled.
+      ScgFircRegulator_Disabled = SCG_FIRCCSR_FIRCREGOFF(1), //!< Fast IRC Regulator is disabled.
+   };
+
+   /**
+    * FIRC enable
+    */
+   enum ScgFircControl {
+      ScgFircControl_Disabled = SCG_FIRCCSR_FIRCEN(0), //!< FIRC Disabled
+      ScgFircControl_Enabled  = SCG_FIRCCSR_FIRCEN(1), //!< FIRC Enabled
+   };
+
+   /**
+    * SIRC Enable in Low Power modes
+    */
+   enum ScgSircLowPower {
+      ScgSircLowPower_Disabled = SCG_SIRCCSR_SIRCLPEN(0), //!< SIRC Disabled in low power
+      ScgSircLowPower_Enabled  = SCG_SIRCCSR_SIRCLPEN(1), //!< SIRC Ensabled in low power
+   };
+
+   /**
+    * SIRC Enable in Stop modes
+    */
+   enum ScgSircStop {
+      ScgSircStop_Disabled = SCG_SIRCCSR_SIRCSTEN(0), //!< SIRC Disabled in STOP
+      ScgSircStop_Enabled  = SCG_SIRCCSR_SIRCSTEN(1), //!< SIRC Enabled in STOP
+   };
+
+   /**
+    * SIRC enable
+    */
+   enum ScgSircControl {
+      ScgSircControl_Disabled = SCG_SIRCCSR_SIRCEN(0), //!< SIRC Disabled
+      ScgSircControl_Enabled  = SCG_SIRCCSR_SIRCEN(1), //!< SIRC Enabled
+   };
+
+   /**
+    * SOSC clock monitor
+    */
+   enum ScgSoscMonitor {
+      ScgSoscMonitor_Disabled   = SCG_SOSCCSR_SOSCCM(0)|SCG_SOSCCSR_SOSCCMRE(0), //!< Monitor Disabled
+      ScgSoscMonitor_Interrrupt = SCG_SOSCCSR_SOSCCM(1)|SCG_SOSCCSR_SOSCCMRE(0), //!< Monitor Enabled, generates interrupt
+      ScgSoscMonitor_Reset      = SCG_SOSCCSR_SOSCCM(1)|SCG_SOSCCSR_SOSCCMRE(1), //!< Monitor Enabled, generates reset 
+   };
+
+   /**
+    * SOSC enable
+    */
+   enum ScgSoscControl {
+      ScgSoscControl_Disabled = SCG_SOSCCSR_SOSCEN(0), //!< SOSC Disabled
+      ScgSoscControl_Enabled  = SCG_SOSCCSR_SOSCEN(1), //!< SOSC Enabled
+   };
+
+   /**
+    *  Divisors for FIRC/SIRC/SOSC/SPLLDIV1_CLK clocks
+    */
+   enum ScgDivisor1 {
+      ScgDivisor1_Disabled = SCG_SOSCDIV_SOSCDIV1(0),
+      ScgDivisor1_Div1     = SCG_SOSCDIV_SOSCDIV1(1),
+      ScgDivisor1_Div2     = SCG_SOSCDIV_SOSCDIV1(2),
+      ScgDivisor1_Div4     = SCG_SOSCDIV_SOSCDIV1(3),
+      ScgDivisor1_Div8     = SCG_SOSCDIV_SOSCDIV1(4),
+      ScgDivisor1_Div16    = SCG_SOSCDIV_SOSCDIV1(5),
+      ScgDivisor1_Div32    = SCG_SOSCDIV_SOSCDIV1(6),
+      ScgDivisor1_Div64    = SCG_SOSCDIV_SOSCDIV1(7),
+   };
+
+   /**
+    *  Divisors for FIRC/SIRC/SOSC/SPLLDIV2_CLK clocks
+    */
+   enum ScgDivisor2 {
+      ScgDivisor2_Disabled = SCG_SOSCDIV_SOSCDIV2(0),
+      ScgDivisor2_Div1     = SCG_SOSCDIV_SOSCDIV2(1),
+      ScgDivisor2_Div2     = SCG_SOSCDIV_SOSCDIV2(2),
+      ScgDivisor2_Div4     = SCG_SOSCDIV_SOSCDIV2(3),
+      ScgDivisor2_Div8     = SCG_SOSCDIV_SOSCDIV2(4),
+      ScgDivisor2_Div16    = SCG_SOSCDIV_SOSCDIV2(5),
+      ScgDivisor2_Div32    = SCG_SOSCDIV_SOSCDIV2(6),
+      ScgDivisor2_Div64    = SCG_SOSCDIV_SOSCDIV2(7),
+   };
+
+   enum ScgClkOut {
+      ScgClkOut_ScgSlowClock  = SCG_CLKOUTCNFG_CLKOUTSEL(0),
+      ScgClkOut_SoscClock     = SCG_CLKOUTCNFG_CLKOUTSEL(1),
+      ScgClkOut_SircClock     = SCG_CLKOUTCNFG_CLKOUTSEL(2),
+      ScgClkOut_FircClock     = SCG_CLKOUTCNFG_CLKOUTSEL(3),
+      ScgClkOut_SpllClock     = SCG_CLKOUTCNFG_CLKOUTSEL(6)
+   };
+
+class ScgInfo {
+public:
+   //! Hardware base address as uint32_t 
+   static constexpr uint32_t baseAddress = SCG_BasePtr;
+
+   //! Hardware base pointer
+   __attribute__((always_inline)) static volatile SCG_Type &scg() {
+      return *(SCG_Type *)baseAddress;
+   }
+
+   //! Number of IRQs for hardware
+   static constexpr uint32_t irqCount  = 1;
+
+   //! IRQ numbers for hardware
+   static constexpr IRQn_Type irqNums[]  = {
+      SCG_IRQn, };
+
+   // Template:scg_s32k14x
+
+   //! Class based callback handler has been installed in vector table
+   static constexpr bool irqHandlerInstalled = (1 == 1);
+
+   //! Default IRQ level
+   static constexpr uint32_t irqLevel =  7;
+
+   //! Base value for PCR (excluding MUX value)
+   static constexpr uint32_t defaultPcrValue  = 0;
+
+   //! Map all allocated pins on a peripheral when enabled
+   static constexpr bool mapPinsOnEnable = true;
+
+   enum ClockMode {
+      ClockMode_None     = -1,
+      ClockMode_FIRC     = 0, // Reset state
+      ClockMode_SOSC,
+      ClockMode_SIRC,
+      ClockMode_SPLL,
+   };
+
+   //! Frequency of Crystal or External Clock (XTAL/EXTAL)
+   static constexpr uint32_t system_sosc_frequency = 8000000UL;
+
+   //! Frequency of Slow Internal Reference Clock [~32kHz]
+   static constexpr uint32_t system_sirc_frequency = 8000000UL;
+
+   //! Frequency of Fast Internal Reference Clock [~4MHz]
+   static constexpr uint32_t system_firc_frequency = 48000000UL;
+
+   //! PLL Multiply factor starts at this value
+   static constexpr uint32_t pll_mult_offset= 16;
+
+   //! PLL post divider
+   static constexpr uint32_t pll_post_divider = 2;
+
+   //! SCG_CLKOUT source
+   static constexpr uint32_t scg_clkoutcnfg = SCG_CLKOUTCNFG_CLKOUTSEL(6);
+
+   //! Structure for a clock configuration
+   struct ClockSetting {
+      //! Control Status Register
+      uint32_t csr;
+      //! Divide Register
+      uint32_t div;
+      //! Configuration Register
+      uint32_t cfg;
+   };
+
+   //! Structure for clock configuration for all clocks
+   struct ClockInfo {
+      //! Clock Mode
+      ClockMode clockMode;
+   
+      //! RUN Clock Control Register (SCS, DIVCORE, DIVBUS, DIVSLOW)
+      uint32_t rccr; 
+      //! VLPR Clock Control Register (SCS, DIVCORE, DIVBUS, DIVSLOW)
+      uint32_t vccr; 
+      //! HSRUN Clock Control Register (SCS, DIVCORE, DIVBUS, DIVSLOW)
+      uint32_t hccr; 
+   
+      //! Fast IRC Control Status Register (LK, FIRCREGOFF, FIRCEN)
+      uint32_t firccsr;
+      //! Fast IRC Divide Register (FIRCDIV2, FIRCDIV1)
+      uint32_t fircdiv;
+      //! Fast IRC Configuration Register (RANGE)
+      uint32_t firccfg;
+   
+      //! Slow IRC Control Status Register (LK, SIRCLPEN, SIRCSTEN, SIRCEN)
+      uint32_t sirccsr;
+      //! Slow IRC Divide Register (SIRCDIV2, SIRCDIV1)
+      uint32_t sircdiv;
+      //! Slow IRC Configuration Register (RANGE)
+      uint32_t sirccfg;
+   
+      //! System OSC Control Status Register (LK, SOSCCMRE, SOSCCM, SOSCEN, )
+      uint32_t sosccsr;
+      //! System OSC Divide Register (SOSCDIV2, SOSCDIV1)
+      uint32_t soscdiv;
+      //! System OSC Configuration Register (RANGE, HGO, EREFS)
+      uint32_t sosccfg;
+   
+      //! System PLL Control Status Register (LK, SPLLCMRE, SPLLCM, SPLLEN)
+      uint32_t spllcsr;
+      //! System PLL Divide Register (SPLLDIV2, SPLLDIV1)
+      uint32_t splldiv;
+      //! System PLL Configuration Register (MULT, PREDIV)
+      uint32_t spllcfg;
+   };
+
+   /**
+    * Get divided clock frequency as calculated by SCG_xCCR[DIVCORE, DIVBUS, DIVSLOW] dividers
+    *
+    * @param frequency Frequency of input clock
+    * @param divider   Divider value [0..15]
+    *
+    * @return Frequency of divided clock
+    */
+   static constexpr uint32_t getSystemDividedClock(uint32_t frequency, uint32_t divider) {
+      return (frequency/(divider + 1));
+   }
+
+   /**
+    * Get divided clock frequency as calculated by SCG_xDIV[xDIV2, xDIV2] dividers
+    *
+    * @param frequency Frequency of input clock
+    * @param divider   Divider value [0..7]
+    *
+    * @return Frequency of divided clock
+    */
+   static constexpr uint32_t getPeripheralDividedClock(uint32_t frequency, uint32_t divider) {
+      return (divider == 0)?0:(frequency/(1<<(divider - 1)));
+   }
+
+   /**
+    * Set SCG Clock out
+    *
+    * @param scgClkOut
+    */
+   static void setScgClkOut(ScgClkOut scgClkOut) {
+      scg().CLKOUTCNFG = scgClkOut;
+   }
+
+   /**
+    * Configure FIRC_CLK
+    *
+    * @param scgFircControl
+    * @param scgFircRegulator
+    */
+   static void configureFircClock(
+         ScgFircControl   scgFircControl,
+         ScgFircRegulator scgFircRegulator) {
+      scg().FIRCCSR = SCG_FIRCCSR_FIRCERR_MASK|scgFircRegulator|scgFircControl;
+   }
+
+   /**
+    * Configure SIRC_CLK
+    *
+    * @param ScgSircControl
+    * @param ScgSircLowPower
+    * @param ScgSircStop
+    */
+   static void configureSircClock(
+         ScgSircControl  scgSircControl,
+         ScgSircLowPower scgSircLowPower,
+         ScgSircStop     scgSircStop) {
+      scg().SIRCCSR = scgSircControl|scgSircLowPower|scgSircStop;
+   }
+
+   /**
+    * Configure SOSC_CLK
+    *
+    * @param ScgSoscMonitor 
+    * @param ScgSosControl
+    */
+   static void configureSoscClock(
+         ScgSoscControl  scgSoscControl,
+         ScgSoscMonitor  scgSoscMonitor) {
+      scg().SOSCCSR = scgSoscMonitor|scgSoscControl;
+   }
+
+   /**
+    * Set SPLLDIVx_CLK Clock dividers
+    *
+    * @param scgDivisor1 Divisor for DIV1_CLK
+    * @param scgDivisor2 Divisor for DIV2_CLK
+    */
+   static void setSpllDivisors(ScgDivisor1 scgDivisor1, ScgDivisor2 scgDivisor2) {
+      scg().SPLLDIV = scgDivisor2|scgDivisor1;
+   }
+
+   /**
+    * Set FircDIVx_CLK Clock dividers
+    *
+    * @param scgDivisor1 Divisor for FIRCDIV1_CLK
+    * @param scgDivisor2 Divisor for FIRCDIV2_CLK
+    */
+   static void setFircDivisors(ScgDivisor1 scgDivisor1, ScgDivisor2 scgDivisor2) {
+      scg().FIRCDIV = scgDivisor2|scgDivisor1;
+   }
+
+   /**
+    * Get FIRC_CLK Clock
+    *
+    * @return Clock as uint32_t
+    */
+   static uint32_t getFircClock() {
+      return (scg().FIRCCFG&SCG_FIRCCSR_FIRCVLD_MASK)?(system_sirc_frequency):0;
+   }
+
+   /**
+    * Get FIRCDIV1_CLK Clock FIRC_CLK/DIV1
+    *
+    * @return Clock as uint32_t
+    */
+   static uint32_t getFircDiv1Clock() {
+      return getPeripheralDividedClock(getFircClock(), (scg().FIRCDIV&SCG_FIRCDIV_FIRCDIV1_MASK)>>SCG_FIRCDIV_FIRCDIV1_SHIFT);
+   }
+
+   /**
+    * Get FIRCDIV2_CLK Clock FIRC_CLK/DIV2
+    *
+    * @return Clock as uint32_t
+    */
+   static uint32_t getFircDiv2Clock() {
+      return getPeripheralDividedClock(getFircClock(), (scg().FIRCDIV&SCG_FIRCDIV_FIRCDIV2_MASK)>>SCG_FIRCDIV_FIRCDIV2_SHIFT);
+   }
+
+   /**
+    * Set SircDIVx_CLK Clock dividers
+    *
+    * @param scgDivisor1 Divisor for SIRCDIV1_CLK
+    * @param scgDivisor2 Divisor for SIRCDIV2_CLK
+    */
+   static void setSircDivisors(ScgDivisor1 scgDivisor1, ScgDivisor2 scgDivisor2) {
+      scg().SIRCDIV = scgDivisor2|scgDivisor1;
+   }
+
+   /**
+    * Get SIRC_CLK Clock
+    *
+    * @return Clock as uint32_t
+    */
+   static uint32_t getSircClock() {
+      return (scg().SIRCCFG&SCG_SIRCCSR_SIRCVLD_MASK)?(system_sirc_frequency):0;
+   }
+
+   /**
+    * Get SIRCDIV1_CLK Clock SIRC_CLK/DIV1
+    *
+    * @return Clock as uint32_t
+    */
+   static uint32_t getSircDiv1Clock() {
+      return getPeripheralDividedClock(getSircClock(), (scg().SIRCDIV&SCG_SIRCDIV_SIRCDIV1_MASK)>>SCG_SIRCDIV_SIRCDIV1_SHIFT);
+   }
+
+   /**
+    * Get SIRCDIV2_CLK Clock SIRC_CLK/DIV2
+    *
+    * @return Clock as uint32_t
+    */
+   static uint32_t getSircDiv2Clock() {
+      return getPeripheralDividedClock(getSircClock(), (scg().SIRCDIV&SCG_SIRCDIV_SIRCDIV2_MASK)>>SCG_SIRCDIV_SIRCDIV2_SHIFT);
+   }
+
+   /**
+    * Set SoscDIVx_CLK Clock dividers
+    *
+    * @param scgDivisor1 Divisor for SOSCDIV1_CLK
+    * @param scgDivisor2 Divisor for SOSCDIV2_CLK
+    */
+   static void setSoscDivisors(ScgDivisor1 scgDivisor1, ScgDivisor2 scgDivisor2) {
+      scg().SOSCDIV = scgDivisor2|scgDivisor1;
+   }
+
+   /**
+    * Get SOSC_CLK Clock
+    *
+    * @return Clock as uint32_t
+    */
+   static uint32_t getSoscClock() {
+      return (scg().SOSCCFG&SCG_SOSCCSR_SOSCVLD_MASK)?(system_sirc_frequency):0;
+   }
+
+   /**
+    * Get SOSCDIV1_CLK Clock SOSC_CLK/DIV1
+    *
+    * @return Clock as uint32_t
+    */
+   static uint32_t getSoscDiv1Clock() {
+      return getPeripheralDividedClock(getSoscClock(), (scg().SOSCDIV&SCG_SOSCDIV_SOSCDIV1_MASK)>>SCG_SOSCDIV_SOSCDIV1_SHIFT);
+   }
+
+   /**
+    * Get SOSCDIV2_CLK Clock SOSC_CLK/DIV2
+    *
+    * @return Clock as uint32_t
+    */
+   static uint32_t getSoscDiv2Clock() {
+      return getPeripheralDividedClock(getSoscClock(), (scg().SOSCDIV&SCG_SOSCDIV_SOSCDIV2_MASK)>>SCG_SOSCDIV_SOSCDIV2_SHIFT);
+   }
+
+   /**
+    * Get SPLL_CLK Clock
+    *
+    * @return Clock as uint32_t
+    */
+   static uint32_t getSpllClock() {
+      if ((scg().SPLLCSR&SCG_SPLLCSR_SPLLVLD_MASK) == 0) {
+         return 0;
+      }
+      uint32_t clockFrequency = system_sosc_frequency;
+      clockFrequency *= (((scg().SPLLCFG & SCG_SPLLCFG_MULT_MASK)>>SCG_SPLLCFG_MULT_SHIFT)+pll_mult_offset);
+      clockFrequency /= (((scg().SPLLCFG & SCG_SPLLCFG_PREDIV_MASK)>>SCG_SPLLCFG_PREDIV_SHIFT)+1);
+      return clockFrequency / pll_post_divider;
+   }
+
+   /**
+    * Get SPLLDIV1_CLK Clock SPLL_CLK/DIV1
+    *
+    * @return Clock as uint32_t
+    */
+   static uint32_t getSpllDiv1Clock() {
+      return getPeripheralDividedClock(getSpllClock(), (scg().SPLLDIV&SCG_SPLLDIV_SPLLDIV1_MASK)>>SCG_SPLLDIV_SPLLDIV1_SHIFT);
+   }
+
+   /**
+    * Get SPLLDIV2_CLK Clock SPLL_CLK/DIV2
+    *
+    * @return Clock as uint32_t
+    */
+   static uint32_t getSpllDiv2Clock() {
+      return getPeripheralDividedClock(getSpllClock(), (scg().SPLLDIV&SCG_SPLLDIV_SPLLDIV2_MASK)>>SCG_SPLLDIV_SPLLDIV2_SHIFT);
+   }
+
+   /**
+    * Get System/Core Clock SYS_CLK/CORE_CLK
+    *
+    * @return Clock as uint32_t
+    */
+   static uint32_t getSysClock() {
+      return getPeripheralDividedClock(getSpllClock(), (scg().SPLLDIV&SCG_SPLLDIV_SPLLDIV2_MASK)>>SCG_SPLLDIV_SPLLDIV2_SHIFT);
+   }
+
+   /**
+    * Get Internal LPO clock LPO128K_CLK
+    *
+    * @return Clock as uint32_t
+    */
+   static constexpr uint32_t getLpo128Clock() {
+      return 128000;
+   }
+
+   /**
+    * Get External RTC input clock RTC_CLKIN
+    *
+    * @return Clock as uint32_t
+    */
+   static constexpr uint32_t getRtcClkinClock() {
+      return 32000;
+   }
+
+   //! Number of signals available in info table
+   static constexpr int numSignals  = 2;
+
+   //! Information for each signal of peripheral
+   static constexpr PinInfo  info[] = {
+
+         //      Signal                 Pin                                  portInfo    gpioAddress     gpioBit  PCR value
+         /*   0: SCG_XTAL             = PTB6 (12)                      */  { PortBInfo,  GPIOB_BasePtr,  6,       PORT_PCR_MUX(0)|defaultPcrValue  },
+         /*   1: SCG_EXTAL            = PTB7 (11)                      */  { PortBInfo,  GPIOB_BasePtr,  7,       PORT_PCR_MUX(0)|defaultPcrValue  },
+   };
+
+   /**
+    * Initialise pins used by peripheral
+    * 
+    * @param pcrValue PCR value controlling pin options
+    */
+   static void initPCRs(uint32_t pcrValue=defaultPcrValue) {
+#ifdef PCC_PCCn_CGC_MASK
+      PCC->PCC_PORTB = PCC_PCCn_CGC_MASK;
+#else
+      enablePortClocks(PORTB_CLOCK_MASK);
+#endif
+      PORTB->GPCLR = pcrValue|PORT_PCR_MUX(0)|PORT_GPCLR_GPWE(0x00C0UL);
+   }
+
+   /**
+    * Resets pins used by peripheral
+    */
+   static void clearPCRs() {
+#ifdef PCC_PCCn_CGC_MASK
+      PCC->PCC_PORTB = PCC_PCCn_CGC_MASK;
+#else
+      enablePortClocks(PORTB_CLOCK_MASK);
+#endif
+      PORTB->GPCLR = PORT_PCR_MUX(0)|PORT_GPCLR_GPWE(0xC0U);
+   }
+
+};
+
+/** 
+ * End group SCG_Group
+ * @}
+ */
+/**
  * @addtogroup SIM_Group SIM, System Integration Module
  * @brief Abstraction for System Integration Module
  * @{
@@ -200,6 +708,16 @@ public:
  * This may include pin information, constants, register addresses, and default register values,
  * along with simple accessor functions.
  */
+   /**
+    * RTC Clock sources
+    */
+   enum SimRtcClockSource {
+      SimRtcClockSource_SoscDiv1 = SIM_LPOCLKS_RTCCLKSEL(0),//!< SoscDiv1
+      SimRtcClockSource_Lpo128   = SIM_LPOCLKS_RTCCLKSEL(1),//!< Lpo128
+      SimRtcClockSource_RtcClkin = SIM_LPOCLKS_RTCCLKSEL(2),//!< RtcClkin
+      SimRtcClockSource_FircDiv1 = SIM_LPOCLKS_RTCCLKSEL(3),//!< FircDiv1
+   };
+
 class SimInfo {
 public:
    //! Hardware base address as uint32_t 
@@ -215,6 +733,37 @@ public:
 
    // Template:sim_s32k142
 
+   /**
+    * Set Source for RTC clock
+    *
+    * @param rtcClockSource
+    */
+   static void setRtcClockSource(SimRtcClockSource simRtcClockSource) {
+      sim().LPOCLKS = (sim().LPOCLKS&~SIM_LPOCLKS_RTCCLKSEL_MASK)|simRtcClockSource;
+   }
+
+   /**
+    * Get RTC_CLK Clock
+    *
+    * @return Clock as uint32_t
+    */
+   static uint32_t getRtcClock() {
+      switch(sim().LPOCLKS&SIM_LPOCLKS_RTCCLKSEL_MASK) {
+         default:
+         case SimRtcClockSource_SoscDiv1:
+            return ScgInfo::getSoscDiv1Clock();
+            break;
+         case SimRtcClockSource_Lpo128:
+            return ScgInfo::getLpo128Clock();
+            break;
+         case SimRtcClockSource_RtcClkin:
+            return ScgInfo::getRtcClkinClock();
+            break;
+         case SimRtcClockSource_FircDiv1:
+            return ScgInfo::getFircDiv1Clock();
+            break;
+      }
+   }
 };
 
 /** 
@@ -299,10 +848,10 @@ public:
       switch(div1ClockSource&(PCC_PCCn_CGC_MASK|PCC_PCCn_PCD_MASK)) {
          default:
          case Div1ClockSource_Disabled: return 0; // Disabled
-         case Div1ClockSource_Spll:     return 0; // SPLLDIV1
-         case Div1ClockSource_Firc:     return 0; // FIRCDIV1
-         case Div1ClockSource_Sirc:     return 0; // SIRCDIV1
-         case Div1ClockSource_Sosc:     return 0; // SOSCDIV1
+         case Div1ClockSource_Spll:     return ScgInfo::getSoscDiv1Clock(); // SPLLDIV1
+         case Div1ClockSource_Firc:     return ScgInfo::getFircDiv1Clock(); // FIRCDIV1
+         case Div1ClockSource_Sirc:     return ScgInfo::getSircDiv1Clock(); // SIRCDIV1
+         case Div2ClockSource_Sosc:     return ScgInfo::getSoscDiv1Clock(); // SOSCDIV2
       }
    }
 
@@ -317,10 +866,10 @@ public:
       switch(div2ClockSource&(PCC_PCCn_CGC_MASK|PCC_PCCn_PCD_MASK)) {
          default:
          case Div2ClockSource_Disabled: return 0; // Disabled
-         case Div2ClockSource_Spll:     return 0; // SPLLDIV2
-         case Div2ClockSource_Firc:     return 0; // FIRCDIV2
-         case Div2ClockSource_Sirc:     return 0; // SIRCDIV2
-         case Div2ClockSource_Sosc:     return 0; // SOSCDIV2
+         case Div2ClockSource_Spll:     return ScgInfo::getSoscDiv2Clock(); // SPLLDIV2
+         case Div2ClockSource_Firc:     return ScgInfo::getFircDiv2Clock(); // FIRCDIV2
+         case Div2ClockSource_Sirc:     return ScgInfo::getSircDiv2Clock(); // SIRCDIV2
+         case Div2ClockSource_Sosc:     return ScgInfo::getSoscDiv2Clock(); // SOSCDIV2
       }
    }
 
@@ -819,7 +1368,7 @@ public:
 
          //      Signal                 Pin                                  portInfo    gpioAddress     gpioBit  PCR value
          /*   0: ADC0_SE0             = PTA0 (50)                      */  { PortAInfo,  GPIOA_BasePtr,  0,       PORT_PCR_MUX(0)|defaultPcrValue  },
-         /*   1: ADC0_SE1             = --                             */  { NoPortInfo, 0,         UNMAPPED_PCR, 0 },
+         /*   1: ADC0_SE1             = PTA1 (49)                      */  { PortAInfo,  GPIOA_BasePtr,  1,       PORT_PCR_MUX(0)|defaultPcrValue  },
          /*   2: ADC0_SE2             = --                             */  { NoPortInfo, 0,         UNMAPPED_PCR, 0 },
          /*   3: ADC0_SE3             = --                             */  { NoPortInfo, 0,         UNMAPPED_PCR, 0 },
          /*   4: ADC0_SE4             = --                             */  { NoPortInfo, 0,         UNMAPPED_PCR, 0 },
@@ -846,9 +1395,8 @@ public:
       PCC->PCC_PORTA = PCC_PCCn_CGC_MASK;
 #else
       enablePortClocks(PORTA_CLOCK_MASK);
-
 #endif
-      PORTA->GPCLR = pcrValue|PORT_PCR_MUX(0)|PORT_GPCLR_GPWE(0x0001UL);
+      PORTA->GPCLR = pcrValue|PORT_PCR_MUX(0)|PORT_GPCLR_GPWE(0x0003UL);
    }
 
    /**
@@ -859,9 +1407,8 @@ public:
       PCC->PCC_PORTA = PCC_PCCn_CGC_MASK;
 #else
       enablePortClocks(PORTA_CLOCK_MASK);
-
 #endif
-      PORTA->GPCLR = PORT_PCR_MUX(0)|PORT_GPCLR_GPWE(0x1U);
+      PORTA->GPCLR = PORT_PCR_MUX(0)|PORT_GPCLR_GPWE(0x3U);
    }
 
 };
@@ -950,8 +1497,8 @@ public:
    static constexpr PinInfo  info[] = {
 
          //      Signal                 Pin                                  portInfo    gpioAddress     gpioBit  PCR value
-         /*   0: ADC1_SE0             = --                             */  { NoPortInfo, 0,         UNMAPPED_PCR, 0 },
-         /*   1: ADC1_SE1             = --                             */  { NoPortInfo, 0,         UNMAPPED_PCR, 0 },
+         /*   0: ADC1_SE0             = PTA2 (48)                      */  { PortAInfo,  GPIOA_BasePtr,  2,       PORT_PCR_MUX(0)|defaultPcrValue  },
+         /*   1: ADC1_SE1             = PTA3 (47)                      */  { PortAInfo,  GPIOA_BasePtr,  3,       PORT_PCR_MUX(0)|defaultPcrValue  },
          /*   2: ADC1_SE2             = --                             */  { NoPortInfo, 0,         UNMAPPED_PCR, 0 },
          /*   3: ADC1_SE3             = --                             */  { NoPortInfo, 0,         UNMAPPED_PCR, 0 },
          /*   4: ADC1_SE4             = --                             */  { NoPortInfo, 0,         UNMAPPED_PCR, 0 },
@@ -974,13 +1521,24 @@ public:
     * @param pcrValue PCR value controlling pin options
     */
    static void initPCRs(uint32_t pcrValue=defaultPcrValue) {
-      (void)pcrValue;
+#ifdef PCC_PCCn_CGC_MASK
+      PCC->PCC_PORTA = PCC_PCCn_CGC_MASK;
+#else
+      enablePortClocks(PORTA_CLOCK_MASK);
+#endif
+      PORTA->GPCLR = pcrValue|PORT_PCR_MUX(0)|PORT_GPCLR_GPWE(0x000CUL);
    }
 
    /**
     * Resets pins used by peripheral
     */
    static void clearPCRs() {
+#ifdef PCC_PCCn_CGC_MASK
+      PCC->PCC_PORTA = PCC_PCCn_CGC_MASK;
+#else
+      enablePortClocks(PORTA_CLOCK_MASK);
+#endif
+      PORTA->GPCLR = PORT_PCR_MUX(0)|PORT_GPCLR_GPWE(0xCU);
    }
 
 };
@@ -1280,7 +1838,7 @@ public:
 
          //      Signal                 Pin                                  portInfo    gpioAddress     gpioBit  PCR value
          /*   0: CMP0_IN0             = PTA0 (50)                      */  { PortAInfo,  GPIOA_BasePtr,  0,       PORT_PCR_MUX(0)|defaultPcrValue  },
-         /*   1: CMP0_IN1             = --                             */  { NoPortInfo, 0,         UNMAPPED_PCR, 0 },
+         /*   1: CMP0_IN1             = PTA1 (49)                      */  { PortAInfo,  GPIOA_BasePtr,  1,       PORT_PCR_MUX(0)|defaultPcrValue  },
          /*   2: CMP0_IN2             = --                             */  { NoPortInfo, 0,         UNMAPPED_PCR, 0 },
          /*   3: CMP0_IN3             = --                             */  { NoPortInfo, 0,         UNMAPPED_PCR, 0 },
          /*   4: CMP0_IN4             = --                             */  { NoPortInfo, 0,         UNMAPPED_PCR, 0 },
@@ -1301,9 +1859,8 @@ public:
       PCC->PCC_PORTA = PCC_PCCn_CGC_MASK;
 #else
       enablePortClocks(PORTA_CLOCK_MASK);
-
 #endif
-      PORTA->GPCLR = pcrValue|PORT_PCR_MUX(0)|PORT_GPCLR_GPWE(0x0001UL);
+      PORTA->GPCLR = pcrValue|PORT_PCR_MUX(0)|PORT_GPCLR_GPWE(0x0003UL);
    }
 
    /**
@@ -1314,9 +1871,8 @@ public:
       PCC->PCC_PORTA = PCC_PCCn_CGC_MASK;
 #else
       enablePortClocks(PORTA_CLOCK_MASK);
-
 #endif
-      PORTA->GPCLR = PORT_PCR_MUX(0)|PORT_GPCLR_GPWE(0x1U);
+      PORTA->GPCLR = PORT_PCR_MUX(0)|PORT_GPCLR_GPWE(0x3U);
    }
 
 };
@@ -3846,176 +4402,6 @@ public:
  * @}
  */
 /**
- * @addtogroup SCG_Group SCG, System Clock Generator
- * @brief Abstraction for System Clock Generator
- * @{
- */
-#define USBDM_SCG_IS_DEFINED
-/**
- * Peripheral information for SCG, System Clock Generator.
- * 
- * This may include pin information, constants, register addresses, and default register values,
- * along with simple accessor functions.
- */
-class ScgInfo {
-public:
-   //! Hardware base address as uint32_t 
-   static constexpr uint32_t baseAddress = SCG_BasePtr;
-
-   //! Hardware base pointer
-   __attribute__((always_inline)) static volatile SCG_Type &scg() {
-      return *(SCG_Type *)baseAddress;
-   }
-
-   //! Number of IRQs for hardware
-   static constexpr uint32_t irqCount  = 1;
-
-   //! IRQ numbers for hardware
-   static constexpr IRQn_Type irqNums[]  = {
-      SCG_IRQn, };
-
-   // Template:scg_s32k14x
-
-   //! Class based callback handler has been installed in vector table
-   static constexpr bool irqHandlerInstalled = (1 == 1);
-
-   //! Default IRQ level
-   static constexpr uint32_t irqLevel =  7;
-
-   //! Base value for PCR (excluding MUX value)
-   static constexpr uint32_t defaultPcrValue  = 0;
-
-   //! Map all allocated pins on a peripheral when enabled
-   static constexpr bool mapPinsOnEnable = false;
-
-   enum ClockMode {
-      ClockMode_None     = -1,
-      ClockMode_FIRC     = 0, // Reset state
-      ClockMode_SOSC,
-      ClockMode_SIRC,
-      ClockMode_SYSPLL,
-   };
-
-   //! Frequency of Slow Internal Reference Clock [~32kHz]
-   static constexpr uint32_t system_slow_irc_clock = 8000000UL;
-
-   //! Frequency of Fast Internal Reference Clock [~4MHz]
-   static constexpr uint32_t system_fast_irc_clock = 48000000UL;
-
-   //! PLL VDIV min value
-   static constexpr uint32_t pll_vdiv_min = 24;
-
-   //! PLL post divider
-   static constexpr uint32_t pll_post_divider = 1;
-
-   //! Structure for clock configurations
-   struct ClockInfo {
-      //! Clock Mode
-      const ClockMode clockMode;
-
-      //! System OSC Control Status Register (LK, SOSCCMRE, SOSCCM, SOSCEN, )
-      const uint32_t sosccsr;
-      //! System OSC Divide Register (SOSCDIV2, SOSCDIV1)
-      const uint32_t soscdiv;
-      //! System OSC Configuration Register (RANGE, HGO, EREFS)
-      const uint32_t sosccfg;
-
-      //! Slow IRC Control Status Register (LK, SIRCLPEN, SIRCSTEN, SIRCEN)
-      const uint32_t sirccsr;
-      //! Slow IRC Divide Register (SIRCDIV2, SIRCDIV1)
-      const uint32_t sircdiv;
-      //! Slow IRC Configuration Register (RANGE)
-      const uint32_t sirccfg;
-
-      //! Fast IRC Control Status Register (LK, FIRCREGOFF, FIRCEN)
-      const uint32_t firccsr;
-      //! Fast IRC Divide Register (FIRCDIV2, FIRCDIV1)
-      const uint32_t fircdiv;
-      //! Fast IRC Configuration Register (RANGE)
-      const uint32_t firccfg;
-
-      //! System PLL Control Status Register (LK, SPLLCMRE, SPLLCM, SPLLEN)
-      const uint32_t spllcsr;
-      //! System PLL Divide Register (SPLLDIV2, SPLLDIV1)
-      const uint32_t splldiv;
-      //! System PLL Configuration Register (MULT, PREDIV)
-      const uint32_t spllcfg;
-   };
-
-   /**
-    * Get Fast Internal Reference Clock FIRC/DIV1
-    *
-    * @return Clock as uint32_t
-    */
-   static uint32_t getFastIrcClockDiv1() {
-      return system_fast_irc_clock/(1<<((scg().FIRCDIV&SCG_FIRCDIV_FIRCDIV1_MASK)>>SCG_FIRCDIV_FIRCDIV1_SHIFT));
-   }
-
-   /**
-    * Get Fast Internal Reference Clock FIRC/DIV2
-    *
-    * @return Clock as uint32_t
-    */
-   static uint32_t getFastIrcClockDiv2() {
-      return system_fast_irc_clock/(1<<((scg().FIRCDIV&SCG_FIRCDIV_FIRCDIV2_MASK)>>SCG_FIRCDIV_FIRCDIV2_SHIFT));
-   }
-
-   /**
-    * Get Slow Internal Reference Clock SIRC/DIV1
-    *
-    * @return Clock as uint32_t
-    */
-   static uint32_t getSlowIrcClockDiv1() {
-      return system_slow_irc_clock/(1<<((scg().SIRCDIV&SCG_SIRCDIV_SIRCDIV1_MASK)>>SCG_SIRCDIV_SIRCDIV1_SHIFT));
-   }
-
-   /**
-    * Get Slow Internal Reference Clock SIRC/DIV2
-    *
-    * @return Clock as uint32_t
-    */
-   static uint32_t getSlowIrcClockDiv2() {
-      return system_slow_irc_clock/(1<<((scg().SIRCDIV&SCG_SIRCDIV_SIRCDIV2_MASK)>>SCG_SIRCDIV_SIRCDIV2_SHIFT));
-   }
-
-   //! Number of signals available in info table
-   static constexpr int numSignals  = 2;
-
-   //! Information for each signal of peripheral
-   static constexpr PinInfo  info[] = {
-
-         //      Signal                 Pin                                  portInfo    gpioAddress     gpioBit  PCR value
-         /*   0: SCG_XTAL             = PTB6 (12)                      */  { PortBInfo,  GPIOB_BasePtr,  6,       PORT_PCR_MUX(0)|defaultPcrValue  },
-         /*   1: SCG_EXTAL            = PTB7 (11)                      */  { PortBInfo,  GPIOB_BasePtr,  7,       PORT_PCR_MUX(0)|defaultPcrValue  },
-   };
-
-   /**
-    * Initialise pins used by peripheral
-    * 
-    * @param pcrValue PCR value controlling pin options
-    */
-   static void initPCRs(uint32_t pcrValue=defaultPcrValue) {
-      enablePortClock(PORTB_CLOCK_MASK);
-
-      PORTB->GPCLR = pcrValue|PORT_PCR_MUX(0)|PORT_GPCLR_GPWE(0x00C0UL);
-   }
-
-   /**
-    * Resets pins used by peripheral
-    */
-   static void clearPCRs() {
-      enablePortClock(PORTB_CLOCK_MASK);
-
-      PORTB->GPCLR = PORT_PCR_MUX(0)|PORT_GPCLR_GPWE(0xC0U);
-   }
-
-};
-
-/** 
- * End group SCG_Group
- * @}
- */
-/**
  * @addtogroup SMC_Group SMC, System Mode Controller
  * @brief Abstraction for System Mode Controller
  * @{
@@ -4163,6 +4549,9 @@ namespace USBDM {
  * @{
  */
 using Adc_50               = const USBDM::Adc0Channel<0>;
+using Adc_49               = const USBDM::Adc0Channel<1>;
+using Adc_48               = const USBDM::Adc1Channel<0>;
+using Adc_47               = const USBDM::Adc1Channel<1>;
 /** 
  * End group ADC_Group
  * @}
@@ -4183,9 +4572,9 @@ using Adc_50               = const USBDM::Adc0Channel<0>;
  *    Pin Name               |   Functions                                 |  Location                 |  Description  
  *  ------------------------ | --------------------------------------------|---------------------------| ------------- 
  *  PTA0                     | ADC0_SE0/CMP0_IN0                           | 50                        | -       
- *  PTA1                     | -                                           | 49                        | -       
- *  PTA2                     | -                                           | 48                        | -       
- *  PTA3                     | -                                           | 47                        | -       
+ *  PTA1                     | ADC0_SE1/CMP0_IN1                           | 49                        | -       
+ *  PTA2                     | ADC1_SE0                                    | 48                        | -       
+ *  PTA3                     | ADC1_SE1                                    | 47                        | -       
  *  PTA4                     | -                                           | 64                        | -       
  *  PTA5                     | -                                           | 63                        | -       
  *  PTA6                     | -                                           | 38                        | -       
@@ -4298,9 +4687,9 @@ using Adc_50               = const USBDM::Adc0Channel<0>;
  *  PTD4                     | -                                           | 44                        | -       
  *  PTD3                     | -                                           | 45                        | -       
  *  PTD2                     | -                                           | 46                        | -       
- *  PTA3                     | -                                           | 47                        | -       
- *  PTA2                     | -                                           | 48                        | -       
- *  PTA1                     | -                                           | 49                        | -       
+ *  PTA3                     | ADC1_SE1                                    | 47                        | -       
+ *  PTA2                     | ADC1_SE0                                    | 48                        | -       
+ *  PTA1                     | ADC0_SE1/CMP0_IN1                           | 49                        | -       
  *  PTA0                     | ADC0_SE0/CMP0_IN0                           | 50                        | -       
  *  PTC7                     | -                                           | 51                        | -       
  *  PTC6                     | -                                           | 52                        | -       
@@ -4324,6 +4713,9 @@ using Adc_50               = const USBDM::Adc0Channel<0>;
  *  ------------------------ | --------------------------------------------|---------------------------| ------------- 
  *  VSS1                     | -                                           | 40                        | -       
  *  PTA0                     | ADC0_SE0/CMP0_IN0                           | 50                        | -       
+ *  PTA1                     | ADC0_SE1/CMP0_IN1                           | 49                        | -       
+ *  PTA2                     | ADC1_SE0                                    | 48                        | -       
+ *  PTA3                     | ADC1_SE1                                    | 47                        | -       
  *  PTB7                     | SCG_EXTAL                                   | 11                        | -       
  *  PTB6                     | SCG_XTAL                                    | 12                        | -       
  *

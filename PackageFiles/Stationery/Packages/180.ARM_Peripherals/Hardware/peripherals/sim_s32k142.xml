@@ -43,8 +43,8 @@
    \t *
    \t * @param rtcClockSource
    \t */
-   \tstatic void setSimRtcClockSource(SimRtcClockSource rtcClockSource) {
-   \t   sim().LPOCLKS = (sim().LPOCLKS&~SIM_LPOCLKS_RTCCLKSEL_MASK)|rtcClockSource;
+   \tstatic void setRtcClockSource(SimRtcClockSource simRtcClockSource) {
+   \t   sim().LPOCLKS = (sim().LPOCLKS&~SIM_LPOCLKS_RTCCLKSEL_MASK)|simRtcClockSource;
    \t}\n\n
 
    \t/**
@@ -52,23 +52,69 @@
    \t *
    \t * @return Clock as uint32_t
    \t */
-   \tstatic uint32_t getRtcClock() {
+   \tstatic uint32_t getRtcFrequency() {
    \t   switch(sim().LPOCLKS&SIM_LPOCLKS_RTCCLKSEL_MASK) {
    \t      default:
    \t      case SimRtcClockSource_SoscDiv1:
-   \t         return ScgInfo::getSoscDiv1Clock();
+   \t         return ScgInfo::getSoscDiv1Frequency();
    \t         break;
    \t      case SimRtcClockSource_Lpo128:
-   \t         return ScgInfo::getLpo128Clock();
+   \t         return ScgInfo::getLpo128Frequency();
    \t         break;
    \t      case SimRtcClockSource_RtcClkin:
-   \t         return ScgInfo::getRtcClkinClock();
+   \t         return ScgInfo::getRtcClkinFrequency();
    \t         break;
    \t      case SimRtcClockSource_FircDiv1:
-   \t         return ScgInfo::getFircDiv1Clock();
+   \t         return ScgInfo::getFircDiv1Frequency();
    \t         break;
    \t   }
    \t}
    ]]></template>
 
+   <template namespace="usbdm"><![CDATA[
+   \t/**
+   \t * LPO Clock sources
+   \t */
+   \tenum SimLpoClockSource {
+   \t   SimLpoClockSource_Lpo128kHz = SIM_LPOCLKS_LPOCLKSEL(0),//!< Lpo128 ~ 128 kHz
+   \t   SimLpoClockSource_Reserved1 = SIM_LPOCLKS_LPOCLKSEL(1),//!< Reserved
+   \t   SimLpoClockSource_Lpo32kHz  = SIM_LPOCLKS_LPOCLKSEL(2),//!< Lpo32 ~ 32 kHz
+   \t   SimLpoClockSource_Lpo1kHz   = SIM_LPOCLKS_LPOCLKSEL(3),//!< Lpo1 ~ 1 kHz
+   \t};\n\n
+
+   ]]></template>
+
+   <template><![CDATA[
+   \t/**
+   \t * Set Source for LPO clock
+   \t *
+   \t * @param rtcClockSource
+   \t */
+   \tstatic void setLpoClockSource(SimLpoClockSource simLpoClockSource) {
+   \t   sim().LPOCLKS = (sim().LPOCLKS&~SIM_LPOCLKS_LPOCLKSEL_MASK)|simLpoClockSource;
+   \t}\n\n
+
+   \t/**
+   \t * Get LPO_CLK Clock
+   \t *
+   \t * @return Clock as uint32_t
+   \t */
+   \tstatic uint32_t getLpoFrequency() {
+   \t   switch(sim().LPOCLKS&SIM_LPOCLKS_LPOCLKSEL_MASK) {
+   \t      default:
+   \t      case SimLpoClockSource_Lpo128kHz:
+   \t         return ScgInfo::getLpo128Frequency();
+   \t         break;
+   \t      case SimLpoClockSource_Reserved1:
+   \t         return 0;
+   \t         break;
+   \t      case SimLpoClockSource_Lpo32kHz:
+   \t         return ScgInfo::getLpo128Frequency()/4;
+   \t         break;
+   \t      case SimLpoClockSource_Lpo1kHz:
+   \t         return ScgInfo::getLpo128Frequency()/128;
+   \t         break;
+   \t   }
+   \t}\n\n
+   ]]></template>
 </peripheralPage>

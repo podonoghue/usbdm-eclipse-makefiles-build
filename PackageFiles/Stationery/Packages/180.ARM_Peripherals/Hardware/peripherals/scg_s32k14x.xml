@@ -529,10 +529,10 @@
       \tstatic constexpr uint32_t system_firc_frequency = $(system_firc_frequency)UL;\n\n
 
       \t//! PLL Multiply factor starts at this value
-      \tstatic constexpr uint32_t pll_mult_offset= 16;\n\n
+      \tstatic constexpr uint32_t pll_mult_offset = $(pll_mult_min);\n\n
 
       \t//! PLL post divider
-      \tstatic constexpr uint32_t pll_post_divider = 2;\n\n
+      \tstatic constexpr uint32_t pll_post_divider = $(pll_post_divider);\n\n
 
       \t//! SCG_CLKOUT source
       \tstatic constexpr uint32_t scg_clkoutcnfg = SCG_CLKOUTCNFG_CLKOUTSEL($(scg_clkoutcnfg_clkoutsel));\n\n
@@ -672,6 +672,23 @@
       \t};\n\n
       
       \t/**
+      \t * SPLL clock monitor
+      \t */
+      \tenum ScgSpllMonitor {
+      \t   ScgSpllMonitor_Disabled   = SCG_SPLLCSR_SPLLCM(0)|SCG_SPLLCSR_SPLLCMRE(0), //!< Monitor Disabled
+      \t   ScgSpllMonitor_Interrrupt = SCG_SPLLCSR_SPLLCM(1)|SCG_SPLLCSR_SPLLCMRE(0), //!< Monitor Enabled, generates interrupt
+      \t   ScgSpllMonitor_Reset      = SCG_SPLLCSR_SPLLCM(1)|SCG_SPLLCSR_SPLLCMRE(1), //!< Monitor Enabled, generates reset 
+      \t};\n\n
+      
+      \t/**
+      \t * SPLL enable
+      \t */
+      \tenum ScgSpllControl {
+      \t   ScgSpllControl_Disabled = SCG_SPLLCSR_SPLLEN(0), //!< SPLL Disabled
+      \t   ScgSpllControl_Enabled  = SCG_SPLLCSR_SPLLEN(1), //!< SPLL Enabled
+      \t};\n\n
+      
+      \t/**
       \t *  Divisors for FIRC/SIRC/SOSC/SPLLDIV1_CLK clocks
       \t */
       \tenum ScgDivisor1 {
@@ -699,6 +716,9 @@
       \t   ScgDivisor2_Div64    = SCG_SOSCDIV_SOSCDIV2(7),
       \t};\n\n
       
+      \t/**
+      \t *  Selections for output clock CLKOUT
+      \t */
       \tenum ScgClkOut {
       \t   ScgClkOut_ScgSlowClock  = SCG_CLKOUTCNFG_CLKOUTSEL(0),
       \t   ScgClkOut_SoscClock     = SCG_CLKOUTCNFG_CLKOUTSEL(1),
@@ -729,7 +749,7 @@
       \t * @param scgFircControl
       \t * @param scgFircRegulator
       \t */
-      \tstatic void configureFircClock(
+      \tstatic void configureFirc(
       \t      ScgFircControl   scgFircControl,
       \t      ScgFircRegulator scgFircRegulator) {
       \t   scg().FIRCCSR = SCG_FIRCCSR_FIRCERR_MASK|scgFircRegulator|scgFircControl;
@@ -742,7 +762,7 @@
       \t * @param ScgSircLowPower
       \t * @param ScgSircStop
       \t */
-      \tstatic void configureSircClock(
+      \tstatic void configureSirc(
       \t      ScgSircControl  scgSircControl,
       \t      ScgSircLowPower scgSircLowPower,
       \t      ScgSircStop     scgSircStop) {
@@ -752,31 +772,34 @@
       \t/**
       \t * Configure SOSC_CLK
       \t *
+      \t * @param ScgSoscControl
       \t * @param ScgSoscMonitor 
-      \t * @param ScgSosControl
       \t */
-      \tstatic void configureSoscClock(
+      \tstatic void configureSosc(
       \t      ScgSoscControl  scgSoscControl,
       \t      ScgSoscMonitor  scgSoscMonitor) {
       \t   scg().SOSCCSR = scgSoscMonitor|scgSoscControl;
       \t}\n\n
       
       \t/**
-      \t * Set SPLLDIVx_CLK Clock dividers
+      \t * Configure SPLL_CLK
       \t *
-      \t * @param scgDivisor1 Divisor for $(instance::toupper)DIV1_CLK
-      \t * @param scgDivisor2 Divisor for $(instance::toupper)DIV2_CLK
+      \t * @param scgSpllControl 
+      \t * @param scgSpllMonitor 
       \t */
-      \tstatic void setSpllDivisors(ScgDivisor1 scgDivisor1, ScgDivisor2 scgDivisor2) {
-      \t   scg().SPLLDIV = scgDivisor2|scgDivisor1;
+      \tstatic void configureSpllc(
+      \t      ScgSpllControl  scgSpllControl,
+      \t      ScgSpllMonitor  scgSpllMonitor) {
+      \t   scg().SPLLCSR = scgSpllMonitor|scgSpllControl;
       \t}\n\n
+      
       ]]>
    </template>
-   
+
    <template>
       <for 
        var="instance" 
-       enumeration="Firc, Sirc, Sosc"
+       enumeration="Firc, Sirc, Sosc, Spll"
       />
       <![CDATA[
       \t/**
@@ -789,42 +812,34 @@
       \t   scg().$(instance::toupper)DIV = scgDivisor2|scgDivisor1;
       \t}\n\n
    
-      \t/**
-      \t * Get $(instance::toupper)_CLK Clock
-      \t *
-      \t * @return Clock as uint32_t
-      \t */
-      \tstatic uint32_t get$(instance)Clock() {
-      \t   return (scg().$(instance::toupper)CFG&SCG_$(instance::toupper)CSR_$(instance::toupper)VLD_MASK)?(system_sirc_frequency):0;
-      \t}\n\n
+      ]]>
+   </template>
 
+   <template>
+      <for 
+       var="instance" 
+       enumeration="Firc, Sirc, Sosc"
+      />
+      <![CDATA[
       \t/**
-      \t * Get $(instance::toupper)DIV1_CLK Clock $(instance::toupper)_CLK/DIV1
+      \t * Get $(instance::toupper)_CLK Frequency
       \t *
       \t * @return Clock as uint32_t
       \t */
-      \tstatic uint32_t get$(instance)Div1Clock() {
-      \t   return getPeripheralDividedClock(get$(instance)Clock(), (scg().$(instance::toupper)DIV&SCG_$(instance::toupper)DIV_$(instance::toupper)DIV1_MASK)>>SCG_$(instance::toupper)DIV_$(instance::toupper)DIV1_SHIFT);
-      \t}\n\n
-
-      \t/**
-      \t * Get $(instance::toupper)DIV2_CLK Clock $(instance::toupper)_CLK/DIV2
-      \t *
-      \t * @return Clock as uint32_t
-      \t */
-      \tstatic uint32_t get$(instance)Div2Clock() {
-      \t   return getPeripheralDividedClock(get$(instance)Clock(), (scg().$(instance::toupper)DIV&SCG_$(instance::toupper)DIV_$(instance::toupper)DIV2_MASK)>>SCG_$(instance::toupper)DIV_$(instance::toupper)DIV2_SHIFT);
+      \tstatic uint32_t get$(instance)Frequency() {
+      \t   return (scg().$(instance::toupper)CFG&SCG_$(instance::toupper)CSR_$(instance::toupper)VLD_MASK)?(system_$(instance::tolower)_frequency):0;
       \t}\n\n
       ]]>
    </template>
-      
-   <template><![CDATA[
+
+   <template>
+      <![CDATA[
       \t/**
-      \t * Get SPLL_CLK Clock
+      \t * Get SPLL_CLK Frequency
       \t *
       \t * @return Clock as uint32_t
       \t */
-      \tstatic uint32_t getSpllClock() {
+      \tstatic uint32_t getSpllFrequency() {
       \t   if ((scg().SPLLCSR&SCG_SPLLCSR_SPLLVLD_MASK) == 0) {
       \t      return 0;
       \t   }
@@ -833,57 +848,61 @@
       \t   clockFrequency /= (((scg().SPLLCFG & SCG_SPLLCFG_PREDIV_MASK)>>SCG_SPLLCFG_PREDIV_SHIFT)+1);
       \t   return clockFrequency / pll_post_divider;
       \t}\n\n
+      ]]>
+   </template>
 
+   <template>
+      <for 
+       var="instance" 
+       enumeration="Firc, Sirc, Sosc, Spll"
+      />
+      <![CDATA[
       \t/**
-      \t * Get SPLLDIV1_CLK Clock SPLL_CLK/DIV1
+      \t * Get $(instance::toupper)DIV1_CLK Frequency $(instance::toupper)_CLK/DIV1
       \t *
       \t * @return Clock as uint32_t
       \t */
-      \tstatic uint32_t getSpllDiv1Clock() {
-      \t   return getPeripheralDividedClock(getSpllClock(), (scg().SPLLDIV&SCG_SPLLDIV_SPLLDIV1_MASK)>>SCG_SPLLDIV_SPLLDIV1_SHIFT);
+      \tstatic uint32_t get$(instance)Div1Frequency() {
+      \t   return getPeripheralDividedClock(get$(instance)Frequency(), (scg().$(instance::toupper)DIV&SCG_$(instance::toupper)DIV_$(instance::toupper)DIV1_MASK)>>SCG_$(instance::toupper)DIV_$(instance::toupper)DIV1_SHIFT);
       \t}\n\n
+      ]]>
+   </template>
 
+   <template>
+      <for 
+       var="instance" 
+       enumeration="Firc, Sirc, Sosc, Spll"
+      />
+      <![CDATA[
       \t/**
-      \t * Get SPLLDIV2_CLK Clock SPLL_CLK/DIV2
+      \t * Get $(instance::toupper)DIV2_CLK Frequency $(instance::toupper)_CLK/DIV2
       \t *
       \t * @return Clock as uint32_t
       \t */
-      \tstatic uint32_t getSpllDiv2Clock() {
-      \t   return getPeripheralDividedClock(getSpllClock(), (scg().SPLLDIV&SCG_SPLLDIV_SPLLDIV2_MASK)>>SCG_SPLLDIV_SPLLDIV2_SHIFT);
+      \tstatic uint32_t get$(instance)Div2Frequency() {
+      \t   return getPeripheralDividedClock(get$(instance)Frequency(), (scg().$(instance::toupper)DIV&SCG_$(instance::toupper)DIV_$(instance::toupper)DIV2_MASK)>>SCG_$(instance::toupper)DIV_$(instance::toupper)DIV2_SHIFT);
       \t}\n\n
-   ]]></template>
-   
+      ]]>
+   </template>
+      
    <template><![CDATA[
       \t/**
-      \t * Get System/Core Clock SYS_CLK/CORE_CLK
+      \t * Get Internal LPO Frequency LPO128K_CLK
       \t *
       \t * @return Clock as uint32_t
       \t */
-      \tstatic uint32_t getSysClock() {
-      \t   return getPeripheralDividedClock(getSpllClock(), (scg().SPLLDIV&SCG_SPLLDIV_SPLLDIV2_MASK)>>SCG_SPLLDIV_SPLLDIV2_SHIFT);
-      \t}\n\n
-   ]]></template>
-
-   <template><![CDATA[
-      \t/**
-      \t * Get Internal LPO clock LPO128K_CLK
-      \t *
-      \t * @return Clock as uint32_t
-      \t */
-      \tstatic constexpr uint32_t getLpo128Clock() {
+      \tstatic constexpr uint32_t getLpo128Frequency() {
       \t   return $(system_lpo_frequency);
       \t}\n\n
       
       \t/**
-      \t * Get External RTC input clock RTC_CLKIN
+      \t * Get External RTC clock input Frequency RTC_CLKIN
       \t *
       \t * @return Clock as uint32_t
       \t */
-      \tstatic constexpr uint32_t getRtcClkinClock() {
+      \tstatic constexpr uint32_t getRtcClkinFrequency() {
       \t   return $(system_rtcclkin_frequency);
       \t}\n\n
-      
-      
    ]]></template>
    
    <template name="ClockConfig" dim="3" namespace="all" ><![CDATA[
