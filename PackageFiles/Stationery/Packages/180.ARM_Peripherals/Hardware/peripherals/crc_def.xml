@@ -16,6 +16,8 @@
       \n
    ]]></template>
    
+   <xi:include href="_clockOption.xml"/>
+      
    <projectActionList id = "crc_files" >
       <copy source="Project_Headers/crc.h"         target="Project_Headers/crc.h"          overwrite="true" derived="true" />
       <copy source="Snippets/crc-example.cpp"      target="Snippets/crc-example.cpp"       overwrite="true" derived="true" />

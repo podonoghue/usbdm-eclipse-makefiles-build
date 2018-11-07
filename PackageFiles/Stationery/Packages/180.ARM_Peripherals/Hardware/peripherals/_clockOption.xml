@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE fragment SYSTEM "_menu.dtd" >
+<!-- _clockOption.xml -->
+
+<fragment xmlns:xi="http://www.w3.org/2001/XInclude">
+         
+   <template><![CDATA[
+     \t/** 
+     \t *  Enable clock to peripheral
+     \t */
+     \t__attribute__((always_inline)) static void enableClock() {
+     \t   $(clockEnable);
+     \t}\n\n
+
+     \t/** 
+     \t *  Disable clock to peripheral
+     \t */
+     \t__attribute__((always_inline)) static void disableClock() {
+     \t   $(clockDisable);
+     \t}\n\n
+   ]]></template>
+      
+</fragment>

@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE peripheralPage SYSTEM "_menu.dtd" >
+<!-- ftfc_s32k14x.xml -->
+
+<peripheralPage xmlns:xi="http://www.w3.org/2001/XInclude" name="_instance" description="FTFC">
+   
+   <signals/>
+   
+   <xi:include href="_clockOption.xml"/>
+   
+</peripheralPage>

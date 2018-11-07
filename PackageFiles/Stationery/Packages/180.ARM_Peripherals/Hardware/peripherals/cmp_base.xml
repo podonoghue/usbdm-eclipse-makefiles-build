@@ -111,7 +111,7 @@
       description="Filter Sample Period"
       toolTip="Specifies the sampling period, in bus clock cycles, of the comparator output filter"
       value="0" min="0" max="255" />
-      
+           
    <template><![CDATA[
       \t//! CMP Filter Period Register
       \tstatic constexpr uint32_t fpr =

@@ -171,21 +171,21 @@
   
 <!ELEMENT choice EMPTY >
    <!ATTLIST choice value         CDATA        #REQUIRED>
-   <!ATTLIST choice disabledValue CDATA        #IMPLIED>
    <!ATTLIST choice name          CDATA        #REQUIRED>
    <!ATTLIST choice isDefault     (false|true) "false">
 
 <!ELEMENT binaryOption (choice, choice)? >
-   <!ATTLIST binaryOption constant     (false|true) "false">
-   <!ATTLIST binaryOption hidden       (false|true) "false">
-   <!ATTLIST binaryOption name         ID           #REQUIRED>
-   <!ATTLIST binaryOption key          CDATA        #IMPLIED>
-   <!ATTLIST binaryOption origin       CDATA        #IMPLIED>
-   <!ATTLIST binaryOption description  CDATA        #IMPLIED>
-   <!ATTLIST binaryOption toolTip      CDATA        #IMPLIED>
-   <!ATTLIST binaryOption indexedBy    CDATA        #IMPLIED>
-   <!ATTLIST binaryOption derived      (false|true) "false">
-   <!ATTLIST binaryOption derivedFrom  IDREF        #IMPLIED>
+   <!ATTLIST binaryOption constant      (false|true) "false">
+   <!ATTLIST binaryOption hidden        (false|true) "false">
+   <!ATTLIST binaryOption disabledValue CDATA        #IMPLIED>
+   <!ATTLIST binaryOption name          ID           #REQUIRED>
+   <!ATTLIST binaryOption key           CDATA        #IMPLIED>
+   <!ATTLIST binaryOption origin        CDATA        #IMPLIED>
+   <!ATTLIST binaryOption description   CDATA        #IMPLIED>
+   <!ATTLIST binaryOption toolTip       CDATA        #IMPLIED>
+   <!ATTLIST binaryOption indexedBy     CDATA        #IMPLIED>
+   <!ATTLIST binaryOption derived       (false|true) "false">
+   <!ATTLIST binaryOption derivedFrom   IDREF        #IMPLIED>
 
 <!ELEMENT irqOption EMPTY >
    <!ATTLIST irqOption constant      (false|true) "false">
@@ -202,10 +202,14 @@
    <!ATTLIST irqOption derived       (false|true) "false">
    <!ATTLIST irqOption derivedFrom   IDREF        #IMPLIED>
 
-<!ELEMENT template (#PCDATA)>
+<!ELEMENT template (#PCDATA|for)* >
    <!ATTLIST template namespace (info|usbdm|class|all)  "info" >
    <!ATTLIST template name 		CDATA  					"" >
    <!ATTLIST template dim  		CDATA  					"0" >
+
+<!ELEMENT for EMPTY >
+   <!ATTLIST for var         CDATA #REQUIRED >
+   <!ATTLIST for enumeration CDATA #REQUIRED >
 
 <!ELEMENT validate (param*) >
    <!ATTLIST validate class CDATA #REQUIRED>

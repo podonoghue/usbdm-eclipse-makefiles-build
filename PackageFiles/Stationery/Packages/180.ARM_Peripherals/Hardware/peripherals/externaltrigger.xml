@@ -2,7 +2,7 @@
 <!DOCTYPE peripheralPage SYSTEM "_menu.dtd" >
 <!-- externaltrigger.xml -->
 
-<peripheralPage xmlns:xi="http://www.w3.org/2001/XInclude" name="_instance" description="Inter-Integrated-Circuit">
+<peripheralPage xmlns:xi="http://www.w3.org/2001/XInclude" name="_instance" description="External Triggers">
 
    <template><![CDATA[
       \t//! Base value for PCR (excluding MUX value)

@@ -3,7 +3,6 @@
 <!-- _common_settings.xml -->
 
 <list name="CommonSettings" >
-
 <binaryOption name="mapAllPins" 
    description="Map all allocated pins"
    toolTip="Map all allocated pins during startup using mapAllPins()">
@@ -15,6 +14,77 @@
 <template namespace="usbdm"><![CDATA[
    /* Template:_common_settings.xml */\n\n
    
+   #if defined(PCC)\n\n
+   
+   /** Dummy port information for pins without an associated PCR */
+   constexpr PortInfo  __attribute__((unused)) NoPortInfo {0, 0, (IRQn_Type)-1};\n\n
+   
+   #if defined(PCC_PCC_PORTA_CGC_MASK)
+   /** Port information for PORTA*/
+   constexpr PortInfo  __attribute__((unused)) PortAInfo {PORTA_BasePtr, (uint32_t)&PCC->PCC_PORTA, PORTA_IRQn};
+   #endif\n\n
+   
+   #if defined(PCC_PCC_PORTB_CGC_MASK)
+   /** Port information for PORTB*/
+   constexpr PortInfo  __attribute__((unused)) PortBInfo {PORTB_BasePtr, (uint32_t)&PCC->PCC_PORTB, PORTB_IRQn};
+   #endif\n\n
+   
+   #if defined(PCC_PCC_PORTC_CGC_MASK)
+   /** Port information for PORTC*/
+   constexpr PortInfo  __attribute__((unused)) PortCInfo {PORTC_BasePtr, (uint32_t)&PCC->PCC_PORTC, PORTC_IRQn};
+   #endif\n\n
+   
+   #if defined(PCC_PCC_PORTD_CGC_MASK)
+   /** Port information for PORTD*/
+   constexpr PortInfo  __attribute__((unused)) PortDInfo {PORTD_BasePtr, (uint32_t)&PCC->PCC_PORTD, PORTD_IRQn};
+   #endif\n\n
+   
+   #if defined(PCC_PCC_PORTE_CGC_MASK)
+   /** Port information for PORTE*/
+   constexpr PortInfo  __attribute__((unused)) PortEInfo {PORTE_BasePtr, (uint32_t)&PCC->PCC_PORTE, PORTE_IRQn};
+   #endif\n\n
+   
+   #if defined(PCC_PCC_PORTF_CGC_MASK)
+   /** Port information for PORTF*/
+   constexpr PortInfo  __attribute__((unused)) PortFInfo {PORTF_BasePtr, (uint32_t)&PCC->PCC_PORTF, PORTF_IRQn};
+   #endif\n\n
+   
+   #if defined(PCC_PCC_PORTG_CGC_MASK)
+   /** Port information for PORTG*/
+   constexpr PortInfo  __attribute__((unused)) PortGInfo {PORTG_BasePtr, (uint32_t)&PCC->PCC_PORTG, PORTG_IRQn};
+   #endif\n\n
+   
+   #else // defined(PCC)
+   /** Dummy port information for pins without an associated PCR */
+   constexpr PortInfo  __attribute__((unused)) NoPortInfo {0, 0, (IRQn_Type)-1};\n\n
+   
+   #ifdef SIM_SCGC5_PORTA_MASK
+   /** Port information for PORTA */
+   constexpr PortInfo  __attribute__((unused)) PortAInfo {PORTA_BasePtr, SIM_SCGC5_PORTA_MASK, PORTA_IRQn};
+   #endif\n\n
+   
+   #ifdef SIM_SCGC5_PORTB_MASK
+   /** Port information for PORTB */
+   constexpr PortInfo  __attribute__((unused)) PortBInfo {PORTB_BasePtr, SIM_SCGC5_PORTB_MASK, PORTB_IRQn};
+   #endif\n\n
+   
+   #ifdef SIM_SCGC5_PORTC_MASK
+   /** Port information for PORTC */
+   constexpr PortInfo  __attribute__((unused)) PortCInfo {PORTC_BasePtr, SIM_SCGC5_PORTC_MASK, PORTC_IRQn};
+   #endif\n\n
+   
+   #ifdef SIM_SCGC5_PORTD_MASK
+   /** Port information for PORTD */
+   constexpr PortInfo  __attribute__((unused)) PortDInfo {PORTD_BasePtr, SIM_SCGC5_PORTD_MASK, PORTD_IRQn};
+   #endif\n\n
+   
+   #ifdef SIM_SCGC5_PORTE_MASK
+   /** Port information for PORTE */
+   constexpr PortInfo  __attribute__((unused)) PortEInfo {PORTE_BasePtr, SIM_SCGC5_PORTE_MASK, PORTE_IRQn};
+   #endif\n\n
+   
+   #endif // defined(PCC)\n\n
+
    /** Class to static check signal mapping is valid */
    template<class Info, int signalNum> class CheckSignal {
    \tstatic_assert((signalNum<Info::numSignals), "Non-existent signal - Modify Configure.usbdm");

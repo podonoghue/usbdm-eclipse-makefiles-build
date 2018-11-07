@@ -29,7 +29,7 @@
       <choice value="0" name="Disabled" />
       <choice value="1" name="System bus clock" isDefault="true" />
       <choice value="2" name="Fixed frequency clock" />
-      <choice value="3" name="External clock (synchonized to System Clock)" />
+      <choice value="3" name="External clock (PCC clock selection)" />
    </choiceOption>
    <choiceOption name="ftm_sc_ps" description="Clock prescaler"
       toolTip="Selects the prescaler for the module">
@@ -173,7 +173,10 @@
       \t   }
       \t}\n\n
    ]]></template>
+   
+   <xi:include href="_clockOption.xml"/>
 
    <signals/>
    <signals name="FTM" />
+
 </peripheralPage>

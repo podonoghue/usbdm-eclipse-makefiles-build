@@ -32,9 +32,11 @@
    <template><![CDATA[
       \t//! Default value for Low Voltage Detect Status And Control 1 register\n
       \tstatic constexpr uint32_t pmc_lvdsc1  = 
+      \t#ifdef PMC_LVDSC1_LVDV
+      \t   PMC_LVDSC1_LVDV($(pmc_lvdsc1_lvdv))   | // Low-Voltage Detect Voltage Select
+      \t#endif
       \t   PMC_LVDSC1_LVDIE($(pmc_lvdsc1_lvdie)) | // Low-Voltage Detect Interrupt Enable
-      \t   PMC_LVDSC1_LVDRE($(pmc_lvdsc1_lvdre)) | // Low-Voltage Detect Reset Enable
-      \t   PMC_LVDSC1_LVDV($(pmc_lvdsc1_lvdv));   // Low-Voltage Detect Voltage Select   \n\n
+      \t   PMC_LVDSC1_LVDRE($(pmc_lvdsc1_lvdre));  // Low-Voltage Detect Reset Enable\n\n
    ]]></template>
 
    <binaryOption name="pmc_lvdsc2_lvwie" 
@@ -57,8 +59,10 @@
    <template><![CDATA[
       \t//! Default value for Low Voltage Detect Status And Control 2 register\n
       \tstatic constexpr uint32_t pmc_lvdsc2  = 
-      \t   PMC_LVDSC2_LVWIE($(pmc_lvdsc2_lvwie)) | // Low-Voltage Warning Interrupt Enable
-      \t   PMC_LVDSC2_LVWV($(pmc_lvdsc2_lvwv));   // Low-Voltage Warning Voltage Select   \n\n
+      \t#ifdef PMC_LVDSC2_LVWV
+      \t   PMC_LVDSC2_LVWV($(pmc_lvdsc2_lvwv))   | // Low-Voltage Warning Voltage Select
+      \t#endif
+      \t   PMC_LVDSC2_LVWIE($(pmc_lvdsc2_lvwie));  // Low-Voltage Warning Interrupt Enable\n\n
    ]]></template>
 
    <binaryOption name="pmc_regsc_bgen" 
@@ -77,16 +81,16 @@
    </binaryOption>
 
    <template><![CDATA[
+      \t#ifdef PMC_REGSC_BGEN
       \t//! Default value for Regulator Status And Control register\n
       \tstatic constexpr uint32_t pmc_regsc  = 
-      \t#ifdef PMC_REGSC_BGEN
       \t   PMC_REGSC_BGEN($(pmc_regsc_bgen)) | // Bandgap Enable In VLPx Operation
-      \t#endif
       \t   PMC_REGSC_BGBE($(pmc_regsc_bgbe));  // Bandgap Buffer Enable   \n\n
+      \t#endif
    ]]></template>
 
    <xi:include href="_irqOption.xml"/>
-
+   
    <validate
       class="net.sourceforge.usbdm.deviceEditor.validators.PeripheralValidator">
    </validate>

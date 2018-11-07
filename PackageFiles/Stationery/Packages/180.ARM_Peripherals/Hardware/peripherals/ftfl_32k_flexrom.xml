@@ -140,7 +140,8 @@
 
       \t//! FlexNVM - EEPROM partition - not available
       \tstatic constexpr SplitSel partitionSplit = SplitSel_disabled;\n\n
-      
    ]]></template>
+   
+   <xi:include href="_clockOption.xml"/>
 
 </peripheralPage>

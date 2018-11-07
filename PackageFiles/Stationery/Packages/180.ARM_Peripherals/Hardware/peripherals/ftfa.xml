@@ -28,5 +28,7 @@
       \tstatic constexpr unsigned programFlashPhraseSize = $(pflash_phrase_size);\n\n
          
    ]]></template>
+   
+   <xi:include href="_clockOption.xml"/>
 
 </peripheralPage>

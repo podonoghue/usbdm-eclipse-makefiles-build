@@ -30,6 +30,7 @@
                Lower numbers represent higher priorities"
       value="7" min="0" max="15" 
    />
-
    
+   <xi:include href="_clockOption.xml"/>
+
 </peripheralPage>

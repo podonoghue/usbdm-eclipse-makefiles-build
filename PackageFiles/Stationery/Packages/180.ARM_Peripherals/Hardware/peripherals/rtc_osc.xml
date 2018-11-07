@@ -446,6 +446,8 @@
          <aliasOption name="rtc_rar_tsrr" />
       </category>   
    </category>
+   
+   <xi:include href="_clockOption.xml"/>
 
    <signals/>
 

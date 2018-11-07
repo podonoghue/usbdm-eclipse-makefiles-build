@@ -140,6 +140,8 @@
    </projectActionList>
 
    <xi:include href="_irqOption.xml"/>
+   
+   <xi:include href="_clockOption.xml"/>
 
    <validate
       class="net.sourceforge.usbdm.deviceEditor.validators.PeripheralValidator">

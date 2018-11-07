@@ -16,6 +16,7 @@
       <choice value="3" name="Reserved" />
    </choiceOption>
 
+   <!-- Note: second entry gets the tick irrespective of true/false value -->
    <binaryOption name="XXXXX" 
       description="YYYYY"
       toolTip="TTTTTTTTTTTT">

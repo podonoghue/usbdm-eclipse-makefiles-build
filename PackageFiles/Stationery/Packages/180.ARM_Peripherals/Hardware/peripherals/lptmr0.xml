@@ -219,6 +219,8 @@
       \t   return freq/(1<<(((lptmr().PSR&LPTMR_PSR_PRESCALE_MASK)>>LPTMR_PSR_PRESCALE_SHIFT)+1));
       \t}\n\n
    ]]></template>
+   
+   <xi:include href="_clockOption.xml"/>
 
    <signals/>
 

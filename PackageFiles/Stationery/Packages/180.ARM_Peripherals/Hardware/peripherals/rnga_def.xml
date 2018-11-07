@@ -11,4 +11,6 @@
       <copy source="Snippets/rnga-example.cpp"      target="Snippets/rnga-example.cpp"       overwrite="true" derived="true" />
    </projectActionList>
    
+   <xi:include href="_clockOption.xml"/>
+   
 </peripheralPage>

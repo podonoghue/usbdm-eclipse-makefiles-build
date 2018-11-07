@@ -9,4 +9,6 @@
       \tstatic constexpr uint32_t defaultPcrValue  = I2C_DEFAULT_PCR;\n\n
    ]]></template>
    
+   <xi:include href="_clockOption.xml"/>
+   
 </peripheralPage>

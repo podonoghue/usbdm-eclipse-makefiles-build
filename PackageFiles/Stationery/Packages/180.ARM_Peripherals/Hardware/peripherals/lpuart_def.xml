@@ -6,13 +6,6 @@ Devices using this peripheral:
 -->
 <peripheralPage xmlns:xi="http://www.w3.org/2001/XInclude" name="_instance" description="UART">
 
-   <template><![CDATA[
-      \t//! Base value for PCR (excluding MUX value)
-      \tstatic constexpr uint32_t defaultPcrValue  = DEFAULT_PCR;\n\n
-   ]]></template>
-   
-   <xi:include href="_mapPinsOption.xml"/>  
-
    <aliasOption key="/MCG/system_mcgfllclk_clock"          optional="true" /> 
    <aliasOption key="/OSC0/oscer_clock"                    optional="true" /> 
    <aliasOption key="/MCG/system_mcgirclk_clock"           optional="true" /> 
@@ -125,13 +118,25 @@ Devices using this peripheral:
    \t * @return Input clock frequency as a uint32_t in Hz
    \t */
    \tstatic uint32_t getClockFrequency() {
-   \t#ifdef SIM_SOPT2_LPUART$(_instance)SRC_MASK
+   \t#if defined(PCC_PCC_LPUART$(_instance)_CGC_MASK)
+   \t   return PccInfo::getLpuart0Clock();
+   \t#elif defined(SIM_SOPT2_LPUART$(_instance)SRC_MASK)
    \t   return SimInfo::getLpuart$(_instance)Clock();
    \t#else
    \t   return SimInfo::getLpuartClock();
    \t#endif
    \t}\n\n
    ]]></template>
+   
+   <template><![CDATA[
+      \t//! Base value for PCR (excluding MUX value)
+      \tstatic constexpr uint32_t defaultPcrValue  = 0;\n\n
+   ]]></template>
+   
+   <xi:include href="_mapPinsOption.xml"/>
+   
+   <xi:include href="_clockOption.xml"/>
 
    <signals/>
+   
 </peripheralPage>

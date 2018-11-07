@@ -51,6 +51,8 @@
    <choiceOption name="dma_chcfg2"  derivedFrom="dma_chcfg0"/>
    <choiceOption name="dma_chcfg3"  derivedFrom="dma_chcfg0"/>
    
+   <xi:include href="_clockOption.xml"/>
+   
    <template><![CDATA[
       \t// Number of DMA channels implemented
       \tstatic constexpr unsigned NumChannels = $(/DMA0/NumChannels);\n\n

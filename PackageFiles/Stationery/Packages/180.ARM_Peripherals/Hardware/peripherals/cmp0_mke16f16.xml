@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE peripheralPage SYSTEM "_menu.dtd" >
+<!-- cmp0_mke16f16.xml -->
+
+<peripheralPage xmlns:xi="http://www.w3.org/2001/XInclude" name="_instance" description="Comparitor">
+   
+   <template><![CDATA[
+      \t//! Base value for PCR (excluding MUX value)
+      \tstatic constexpr uint32_t defaultPcrValue  = 0;\n\n
+   ]]></template>
+   
+   <xi:include href="_mapPinsOption.xml"/>
+   
+   <xi:include href="_clockOption.xml"/>
+
+   <signals/>
+   
+</peripheralPage>

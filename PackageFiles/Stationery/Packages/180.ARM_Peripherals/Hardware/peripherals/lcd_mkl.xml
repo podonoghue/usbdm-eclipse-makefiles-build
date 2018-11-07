@@ -175,5 +175,7 @@
    \t   $(lcd_gcr_clock); // Clock source\n\n
    ]]></template>
    
+   <xi:include href="_clockOption.xml"/>
+   
 </peripheralPage>
 

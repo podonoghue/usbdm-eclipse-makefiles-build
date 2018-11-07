@@ -154,5 +154,7 @@
       \tstatic constexpr SplitSel partitionSplit = $(FlexNVM_Partition);\n\n
       
    ]]></template>
+   
+   <xi:include href="_clockOption.xml"/>
 
 </peripheralPage>

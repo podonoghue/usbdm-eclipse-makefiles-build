@@ -38,6 +38,8 @@
       \t   CMP_MUXCR_PSEL($(cmp_muxcr_psel))| // Plus Input Mux Control
       \t   CMP_MUXCR_MSEL($(cmp_muxcr_msel)); // Minus Input Mux Control\n\n
    ]]></template>
+   
+   <xi:include href="_clockOption.xml"/>
 
    <xi:include href="_irqOption.xml"/>         
 

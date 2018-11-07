@@ -1,9 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE peripheralPage SYSTEM "_menu.dtd" >
 <!-- sim_mk20d5.xml -->
-<!--
-Devices using this peripheral: 
--->
+
 <peripheralPage xmlns:xi="http://www.w3.org/2001/XInclude" name="_instance" description="SIM">
    
    <!-- Indicates RTC/OSC0 don't share XTAL/EXTAL pins -->

@@ -3,7 +3,7 @@
 <!DOCTYPE peripheralPage SYSTEM "_menu.dtd" >
 <!-- smc_ram2po_mkw41z4.xml -->
 
-<peripheralPage xmlns:xi="http://www.w3.org/2001/XInclude" name="_instance" description="Low Leakage Wakeup Unit">
+<peripheralPage xmlns:xi="http://www.w3.org/2001/XInclude" name="_instance" description="System Mode Controller">
 
    <binaryOption name="smc_pmprot_ahsrun" 
       description="Allow High Speed Run mode" 

@@ -155,18 +155,6 @@
 
    <xi:include href="_irqOption.xml"/>
       
-   <validate
-      class="net.sourceforge.usbdm.deviceEditor.validators.AdcValidate">
-   </validate>
-
-   <projectActionList id = "adc_files" >
-      <copy source="Project_Headers/adc.h"                    target="Project_Headers/adc.h"                    overwrite="true"  derived="true" />
-      <copy source="Snippets/analogue-comparison-example.cpp" target="Snippets/analogue-comparison-example.cpp" overwrite="true"  derived="true" />
-      <copy source="Snippets/analogue-example.cpp"            target="Snippets/analogue-example.cpp"            overwrite="true"  derived="true" />
-      <copy source="Snippets/analogue-interrupt-example.cpp"  target="Snippets/analogue-interrupt-example.cpp"  overwrite="true"  derived="true" />
-      <copy source="Snippets/analogue-joystick-example.cpp"   target="Snippets/analogue-joystick-example.cpp"   overwrite="true"  derived="true" />
-   </projectActionList>
-   
    <template><![CDATA[
      \t//! Default value for ADCx_CFG1 register
      \tstatic constexpr uint32_t cfg1  = 
@@ -200,5 +188,19 @@
    ]]></template>
    
    <signals/>
+   
+   <xi:include href="_clockOption.xml"/>
+
+   <validate
+      class="net.sourceforge.usbdm.deviceEditor.validators.AdcValidate">
+   </validate>
+
+   <projectActionList id = "adc_files" >
+      <copy source="Project_Headers/adc.h"                    target="Project_Headers/adc.h"                    overwrite="true"  derived="true" />
+      <copy source="Snippets/analogue-comparison-example.cpp" target="Snippets/analogue-comparison-example.cpp" overwrite="true"  derived="true" />
+      <copy source="Snippets/analogue-example.cpp"            target="Snippets/analogue-example.cpp"            overwrite="true"  derived="true" />
+      <copy source="Snippets/analogue-interrupt-example.cpp"  target="Snippets/analogue-interrupt-example.cpp"  overwrite="true"  derived="true" />
+      <copy source="Snippets/analogue-joystick-example.cpp"   target="Snippets/analogue-joystick-example.cpp"   overwrite="true"  derived="true" />
+   </projectActionList>
    
 </peripheralPage>

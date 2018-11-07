@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE peripheralPage SYSTEM "_menu.dtd" >
+<!-- sim_s32k142.xml -->
+
+<peripheralPage xmlns:xi="http://www.w3.org/2001/XInclude" name="_instance" description="SIM">
+   
+   <!-- Indicates RTC/OSC0 don't share XTAL/EXTAL pins -->
+   <constant name="rtcSharesPins" value="false"   derived="true" />
+   
+   <!-- Oscillator used for OSC0 -->
+   <constant name="osc0_peripheral"   value="/OSC0"    derived="true"/>
+   
+   <!-- Oscillator used for OSC1 = RTC -->
+   <constant name="osc32k_peripheral" value="/RTC"     derived="true"/>
+   
+   <!-- RTC clock in (EXTAL32K) -->
+   <constant name="rtc_clkin"         value="/RTC/osc_input_freq" derived="true"/>
+   
+         <intOption name="system_bus_clock." 
+         units="Hz"
+         description="System Bus Clock"
+         toolTip="Clocks the bus slaves and peripherals\n
+                  Must be &lt;= Core Clock frequency and an integer divisor"
+         value="36000000" />
+      
+   <xi:include href="_simFiles-MK.xml"/>
+   
+   <template namespace="usbdm"><![CDATA[
+   \t/**
+   \t * RTC Clock sources
+   \t */
+   \tenum SimRtcClockSource {
+   \t   SimRtcClockSource_SoscDiv1 = SIM_LPOCLKS_RTCCLKSEL(0),//!< SoscDiv1
+   \t   SimRtcClockSource_Lpo128   = SIM_LPOCLKS_RTCCLKSEL(1),//!< Lpo128
+   \t   SimRtcClockSource_RtcClkin = SIM_LPOCLKS_RTCCLKSEL(2),//!< RtcClkin
+   \t   SimRtcClockSource_FircDiv1 = SIM_LPOCLKS_RTCCLKSEL(3),//!< FircDiv1
+   \t};\n\n
+   ]]></template>
+
+   <template><![CDATA[
+   \t/**
+   \t * Set Source for RTC clock
+   \t *
+   \t * @param rtcClockSource
+   \t */
+   \tstatic void setSimRtcClockSource(SimRtcClockSource rtcClockSource) {
+   \t   sim().LPOCLKS = (sim().LPOCLKS&~SIM_LPOCLKS_RTCCLKSEL_MASK)|rtcClockSource;
+   \t}\n\n
+
+   \t/**
+   \t * Get RTC_CLK Clock
+   \t *
+   \t * @return Clock as uint32_t
+   \t */
+   \tstatic uint32_t getRtcClock() {
+   \t   switch(sim().LPOCLKS&SIM_LPOCLKS_RTCCLKSEL_MASK) {
+   \t      default:
+   \t      case SimRtcClockSource_SoscDiv1:
+   \t         return ScgInfo::getSoscDiv1Clock();
+   \t         break;
+   \t      case SimRtcClockSource_Lpo128:
+   \t         return ScgInfo::getLpo128Clock();
+   \t         break;
+   \t      case SimRtcClockSource_RtcClkin:
+   \t         return ScgInfo::getRtcClkinClock();
+   \t         break;
+   \t      case SimRtcClockSource_FircDiv1:
+   \t         return ScgInfo::getFircDiv1Clock();
+   \t         break;
+   \t   }
+   \t}
+   ]]></template>
+
+</peripheralPage>

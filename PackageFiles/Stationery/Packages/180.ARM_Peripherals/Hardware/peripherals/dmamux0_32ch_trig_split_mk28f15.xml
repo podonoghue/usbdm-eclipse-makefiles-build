@@ -131,5 +131,8 @@
    <choiceOption name="dma_chcfg29" derivedFrom="dma_chcfg16"/>
    <choiceOption name="dma_chcfg30" derivedFrom="dma_chcfg16"/>
    <choiceOption name="dma_chcfg31" derivedFrom="dma_chcfg16"/>
+   
+   <xi:include href="_clockOption.xml"/>
+   
 
 </peripheralPage>

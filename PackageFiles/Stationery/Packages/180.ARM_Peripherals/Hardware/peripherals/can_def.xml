@@ -8,14 +8,16 @@
       \t//! Base value for PCR (excluding MUX value)
       \tstatic constexpr uint32_t defaultPcrValue  = 0;\n\n
    ]]></template>
-
-   <xi:include href="_mapPinsOption.xml"/>
-
    
+   <xi:include href="_mapPinsOption.xml"/>
+   
+   
+   <signals/>
+   
+   <xi:include href="_clockOption.xml"/>
+      
    <projectActionList id = "can_files" >
       <copy source="Project_Headers/can.h"                    target="Project_Headers/can.h"                    overwrite="true"  derived="true" />
    </projectActionList>
-      
-   <signals/>
    
 </peripheralPage>

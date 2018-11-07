@@ -69,4 +69,7 @@
       \t   return SystemBusClock;
       \t}\n\n
    ]]></template>
+   
+   <xi:include href="_clockOption.xml"/>
+
 </fragment>

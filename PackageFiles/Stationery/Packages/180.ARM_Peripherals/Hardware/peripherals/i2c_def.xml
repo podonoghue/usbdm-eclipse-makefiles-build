@@ -71,5 +71,9 @@
       \t   return $(clockSource:SystemBusClock);
       \t}\n\n
    ]]></template>
+   
+   <xi:include href="_clockOption.xml"/>
+   
    <signals/>
+
 </peripheralPage>

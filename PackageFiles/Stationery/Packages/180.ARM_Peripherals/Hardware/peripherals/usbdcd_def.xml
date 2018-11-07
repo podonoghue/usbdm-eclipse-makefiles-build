@@ -10,6 +10,8 @@
       \t//! Base value for PCR (excluding MUX value)
       \tstatic constexpr uint32_t defaultPcrValue  = 0;\n\n
    ]]></template>
+   
+   <xi:include href="_clockOption.xml"/>
 
    <projectActionList id = "wdog_files" >
       <copy source="Project_Headers/usbdcd.h"       target="Project_Headers/usbdcd.h"          overwrite="true" derived="true" />

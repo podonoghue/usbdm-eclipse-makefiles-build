@@ -275,6 +275,8 @@
          <aliasOption name="rtc_tcr_tcr" />
       </category>   
    </category>
+   
+   <xi:include href="_clockOption.xml"/>
 
    <signals/>
    <signals name="OSC0"/>

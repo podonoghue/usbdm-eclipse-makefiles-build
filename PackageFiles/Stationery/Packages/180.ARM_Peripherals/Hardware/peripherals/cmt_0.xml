@@ -13,6 +13,8 @@
       
    <xi:include href="_irqOption.xml"/>         
    
+   <xi:include href="_clockOption.xml"/>
+      
    <projectActionList id = "cmt_files" >
       <copy source="Project_Headers/cmt.h"          target="Project_Headers/cmt.h"          overwrite="true" derived="true" />
       <copy source="Snippets/cmt-example.cpp"       target="Snippets/cmt-example.cpp"       overwrite="true" derived="true" />

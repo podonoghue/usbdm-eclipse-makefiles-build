@@ -31,6 +31,8 @@
       <choice value="6" name="Bandgap" />
       <choice value="7" name="6-bit DAC0" />
    </choiceOption>
+   
+   <xi:include href="_clockOption.xml"/>
 
    <template><![CDATA[
       \t//! MUX Control Register

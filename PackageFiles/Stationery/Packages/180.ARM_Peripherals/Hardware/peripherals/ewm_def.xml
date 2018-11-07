@@ -34,7 +34,9 @@
        \t//! Default IRQ level\n
        \tstatic constexpr uint32_t irqLevel =  $(irqLevel);\n\n
    ]]></template>
-      
+   
+   <xi:include href="_clockOption.xml"/>
+
    <projectActionList id = "ewm_files" >
       <copy source="Project_Headers/ewm.h"          target="Project_Headers/ewm.h"          overwrite="true" derived="true" />
       <copy source="Snippets/ewm-example.cpp"       target="Snippets/ewm-example.cpp"       overwrite="true" derived="true" />

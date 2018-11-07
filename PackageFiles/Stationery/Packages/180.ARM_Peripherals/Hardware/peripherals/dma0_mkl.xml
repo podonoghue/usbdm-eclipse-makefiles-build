@@ -50,7 +50,7 @@
       \t//! Number of DMA vectors implemented
       \tstatic constexpr unsigned NumVectors = $(NumVectors);\n\n
    ]]></template>
-
+   
    <projectActionList id = "dma_files" >
       <copy source="Project_Headers/dma-MKL.h"                    target="Project_Headers/dma.h"                        overwrite="true"  derived="true" />
       <copy source="Snippets/dma-memory-example-mkl.cpp"          target="Snippets/dma-memory-example-mkl.cpp"          overwrite="true"  derived="true" />

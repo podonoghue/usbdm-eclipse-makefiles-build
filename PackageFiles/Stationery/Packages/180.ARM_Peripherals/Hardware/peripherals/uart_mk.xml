@@ -83,6 +83,8 @@ Devices using this peripheral:
        \t//! Default IRQ level\n
        \tstatic constexpr uint32_t irqLevel =  $(irqLevel);\n\n
    ]]></template>
+   
+   <xi:include href="_clockOption.xml"/>
       
    <validate
       class="net.sourceforge.usbdm.deviceEditor.validators.UartValidate">

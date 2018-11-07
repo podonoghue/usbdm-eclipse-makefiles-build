@@ -74,6 +74,8 @@ Devices using this peripheral:
    \t    VREF_SC_MODE_LV($(vref_sc_mode_lv));   // Buffer Mode selection \n\n
    ]]></template>
 
+   
+   <xi:include href="_clockOption.xml"/>
 
    <signals/>
 </peripheralPage>

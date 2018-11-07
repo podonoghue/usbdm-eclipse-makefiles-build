@@ -20,6 +20,8 @@ Devices using this peripheral:
 
    <xi:include href="_irqOption.xml"/>
    
+   <xi:include href="_clockOption.xml"/>
+   
    <xi:include href="usb_files.xml"/>
 
    <signals/>

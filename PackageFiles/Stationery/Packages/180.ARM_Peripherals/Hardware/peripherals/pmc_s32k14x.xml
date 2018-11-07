@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE peripheralPage SYSTEM "_menu.dtd" >
+<!-- pmc_s32k14x.xml -->
+
+<fragment xmlns:xi="http://www.w3.org/2001/XInclude">
+<xi:include href="pmc_def.xml"/>
+</fragment>
