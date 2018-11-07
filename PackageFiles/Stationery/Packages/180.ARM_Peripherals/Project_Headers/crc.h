@@ -93,14 +93,6 @@ enum CrcWidth {
 template<class Info>
 class CrcBase_T {
 
-protected:
-   /**
-    * Clock register for peripheral.
-    *
-    * @return Reference to clock register
-    */
-   static __attribute__((always_inline)) volatile uint32_t &clockReg() { return Info::clockReg(); }
-
 public:
    /**
     * Hardware instance pointer.
@@ -119,7 +111,7 @@ public:
    static void enable() {
 
       // Enable clock to CRC interface
-      clockReg() |= Info::clockMask;
+      Info::enableClock();
    }
 
    /**
@@ -226,7 +218,7 @@ public:
     * Disable interface to CRC.
     */
    static void disable() {
-      clockReg() &= ~Info::clockMask;
+      Info::disableClock();
    }
 
    /**

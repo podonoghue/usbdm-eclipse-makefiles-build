@@ -769,7 +769,7 @@ public:
             "Illegal PIT channel");
 
       // Enable clock to peripheral
-      DmaMuxInfo::clockReg()  |= DmaMuxInfo::clockMask;
+      DmaMuxInfo::enableClock();
 
       // Configure channel - must be disabled to change
       DmaMuxInfo::dmamux().CHCFG[dmaChannelNum] = 0;
@@ -786,7 +786,7 @@ public:
       usbdm_assert(dmaChannelNum<NumChannels, "Illegal DMA channel");
 
       // Enable clock to peripheral
-      DmaMuxInfo::clockReg()  |= DmaMuxInfo::clockMask;
+      DmaMuxInfo::enableClock();
 
       // Disable channel
       DmaMuxInfo::dmamux().CHCFG[dmaChannelNum] = 0;
@@ -806,9 +806,6 @@ class DmaBase_T {
 protected:
    /** Hardware instance pointer */
    static __attribute__((always_inline)) volatile DMA_Type &dmac() { return Info::dma(); }
-
-   /** Clock register mask for peripheral */
-   static __attribute__((always_inline)) volatile uint32_t &clockReg() { return Info::clockReg(); }
 
    /** Callback functions for ISRs */
    static DmaCallbackFunction sCallbacks[Info::NumVectors];
@@ -941,7 +938,7 @@ public:
          ) {
 
       // Enable clock to DMAC
-      clockReg()  |= MuxInfo::clockMask;
+      Info::enableClock();
 
       // Set shared control options
       dmac().CR = dmaArbitration|dmaOnError|dmaContinuousLink|dmaMinorLoopMapping|dmaGroupArbitration|DMA_CR_EDBG(1);

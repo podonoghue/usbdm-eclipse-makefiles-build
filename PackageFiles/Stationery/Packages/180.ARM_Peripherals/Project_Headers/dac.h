@@ -215,13 +215,6 @@ protected:
    /** Callback function for ISR */
    static DACCallbackFunction sCallback;
 
-   /**
-    * Clock register for peripheral
-    *
-    * @return Reference to clock register
-    */
-   static __attribute__((always_inline)) volatile uint32_t &clockReg() { return Info::clockReg(); }
-
 public:
    /**
     * Hardware instance pointer
@@ -279,7 +272,7 @@ public:
       }
 
       // Enable clock to DAC interface
-      clockReg() |= Info::clockMask;
+      Info::enableClock();
    }
 
    /**
@@ -531,7 +524,7 @@ public:
       // Enable timer
       dac().C0 = 0;
       dac().C1 = 0;
-      clockReg() &= ~Info::clockMask;
+      Info::disableClock();
    }
    /**
     * Write output value for non-buffered mode or write value to FIFO for FIFO mode.

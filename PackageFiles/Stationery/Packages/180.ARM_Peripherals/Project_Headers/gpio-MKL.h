@@ -938,7 +938,7 @@ public:
       write(0);
 
       // Set individual PCRs (required for IRQ function)
-      for (int bit=right; bit<=left; bit++) {
+      for (unsigned bit=right; bit<=left; bit++) {
          port().PCR[bit] = pinPull|pinAction|pinFilter|PinMux_Gpio;
       }
    }

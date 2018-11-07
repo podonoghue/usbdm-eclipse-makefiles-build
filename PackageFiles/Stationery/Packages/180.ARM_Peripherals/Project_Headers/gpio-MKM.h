@@ -652,10 +652,6 @@ public:
    /** Hardware instance pointer */
    static __attribute__((always_inline)) volatile ADC_Type &adc() { return Info::adc(); }
 
-protected:
-   /** Clock register for peripheral */
-   static __attribute__((always_inline)) volatile uint32_t &clockReg() { return Info::clockReg(); }
-
 public:
    using Pcr = PcrTable_T<info, adcChannel, info::pcrValue>;
 
@@ -668,7 +664,7 @@ public:
     */
    static void setMode(uint32_t mode = AdcResolution_16bit_se) {
       // Enable clock to ADC
-      clockReg()  |= info::clockMask;
+      Info::enableClock();
 
       // Set up ADC pin
       Pcr::setPCR(ADC_PORT_FN);

@@ -201,13 +201,6 @@ public:
     */
    static __attribute__((always_inline)) volatile TPM_Type &tmr() { return Info::tpm(); }
 
-   /**
-    * Clock register for peripheral
-    *
-    * @return Reference to clock register
-    */
-   static __attribute__((always_inline)) volatile uint32_t &clockReg() { return Info::clockReg(); }
-
    /** Get reference to TPM hardware as struct */
    static volatile TPM_Type &tpm() { return Info::tpm(); }
 
@@ -321,7 +314,7 @@ public:
       }
 
       // Enable clock to peripheral interface
-      clockReg() |= Info::clockMask;
+      Info::enableClock();
       __DMB();
    }
 
@@ -333,7 +326,7 @@ public:
       tmr().SC = 0;
 
       // Disable clock to peripheral interface
-      clockReg() &= ~Info::clockMask;
+      Info::disableClock();
       __DMB();
    }
 
@@ -383,9 +376,9 @@ public:
     * @return True  enabled
     * @return False disabled
     */
-   static INLINE_RELEASE bool isEnabled() {
-      return ((clockReg() & Info::clockMask) != 0);
-   }
+   //static INLINE_RELEASE bool isEnabled() {
+   //   return ((clockReg() & Info::clockMask) != 0);
+   //}
 
    /**
     * Set timer mode
@@ -413,9 +406,9 @@ public:
     * @note This function will affect all channels of the timer.
     */
    static void stopCounter() {
-      if (isEnabled()) {
+      //if (isEnabled()) {
          tmr().SC = (tmr().SC&~TPM_SC_CMOD_MASK);
-      }
+      //}
    }
 
    /**
@@ -1149,7 +1142,7 @@ public:
             TpmChMode         tpmChMode        = TpmChMode_PwmHighTruePulses,
             TpmChannelAction  tpmChannelAction = TpmChannelAction_None) {
 
-         usbdm_assert(Tpm::isEnabled(), "TPM must be enable first");
+         //usbdm_assert(Tpm::isEnabled(), "TPM must be enable first");
          Tpm::tmr().CONTROLS[channel].CnSC = tpmChMode|tpmChannelAction;
       }
 
@@ -1168,7 +1161,7 @@ public:
             TpmChannelAction  tpmChannelAction = TpmChannelAction_None) {
 
          // Check that owning Timer has been enabled
-         usbdm_assert(Tpm::isEnabled(), "TPM not enabled");
+         //usbdm_assert(Tpm::isEnabled(), "TPM not enabled");
 		 
          Tpm::tmr().CONTROLS[channel].CnSC = tpmChMode|tpmChannelAction;
       }
@@ -1675,9 +1668,6 @@ public:
    /** Hardware instance pointer */
    static __attribute__((always_inline)) volatile TPM_Type &tpm() { return Info::tpm(); }
 
-   /** Clock register for peripheral */
-   static __attribute__((always_inline)) volatile uint32_t &clockReg() { return Info::clockReg(); }
-
    /** Allow more convenient access associated Tpm */
    using Tpm = TpmBase_T<Info>;
 
@@ -1769,7 +1759,7 @@ public:
          configureAllPins();
       }
       // Enable clock to peripheral interface
-      clockReg() |= Info::clockMask;
+      Info::enableClock();
       __DMB();
    }
 
@@ -1781,7 +1771,7 @@ public:
       tmr().QDCTRL = 0;
 
       // Disable clock to peripheral interface
-      clockReg() &= ~Info::clockMask;
+      Info::disableClock();
       __DMB();
    }
 

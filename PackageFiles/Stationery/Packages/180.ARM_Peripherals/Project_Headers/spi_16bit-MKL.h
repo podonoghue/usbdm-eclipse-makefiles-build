@@ -591,7 +591,7 @@ public:
       }
 
       // Enable SPI module clock
-      *Info::clockReg |= Info::clockMask;
+      Info::enableClock();
       __DMB();
 
       spi->C1 =

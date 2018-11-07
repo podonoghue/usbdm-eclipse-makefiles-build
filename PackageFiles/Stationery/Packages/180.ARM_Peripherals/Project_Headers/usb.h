@@ -285,7 +285,7 @@ public:
     * Configures all USB pins
     */
    static void enable() {
-      fClockReg() |= Info::clockMask;
+      fInfo::enableClock();
       __DMB();
 
       configureAllPins();

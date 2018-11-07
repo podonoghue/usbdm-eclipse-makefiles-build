@@ -269,13 +269,6 @@ protected:
    /** Callback function for ISR */
    static CMPCallbackFunction sCallback;
 
-   /**
-    * Clock register for peripheral
-    *
-    * @return Reference to clock register
-    */
-   static __attribute__((always_inline)) volatile uint32_t &clockReg() { return Info::clockReg(); }
-
 public:
    /**
     * Hardware instance pointer
@@ -333,7 +326,7 @@ public:
       }
 
       // Enable clock to CMP interface
-      clockReg() |= Info::clockMask;
+      Info::enableClock();
    }
 
    /**
@@ -575,7 +568,7 @@ public:
     */
    static void disable() {
       cmp().CR1 = 0;
-      clockReg() &= ~Info::clockMask;
+      Info::disableClock();
    }
 
    /**

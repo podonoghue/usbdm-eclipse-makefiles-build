@@ -437,7 +437,7 @@ public:
       }
 #endif
       // Enable clock to peripheral
-      DmaMuxInfo::clockReg()  |= DmaMuxInfo::clockMask;
+      DmaMuxInfo::enableClock();
 
       // Configure channel - must be disabled to change
       DmaMuxInfo::dmamux().CHCFG[dmaChannel] = 0;
@@ -451,7 +451,7 @@ public:
     */
    static void disable(DmaChannelNum dmaChannel) {
       // Enable clock to peripheral
-      DmaMuxInfo::clockReg()  |= DmaMuxInfo::clockMask;
+      DmaMuxInfo::enableClock();
 
       // Disable channel
       DmaMuxInfo::dmamux().CHCFG[dmaChannel] = 0;
@@ -471,9 +471,6 @@ class DmaBase_T {
 protected:
    /** Hardware instance pointer */
    static __attribute__((always_inline)) volatile DMA_Type &dmac() { return Info::dma(); }
-
-   /** Clock register mask for peripheral */
-   static __attribute__((always_inline)) volatile uint32_t &clockReg() { return Info::clockReg(); }
 
    /** Callback functions for ISRs */
    static DmaCallbackFunction sCallbacks[Info::NumVectors];
@@ -513,7 +510,7 @@ public:
     */
    static void configure() {
       // Enable clock to DMAC
-      clockReg()  |= MuxInfo::clockMask;
+      Info::enableClock();
 
       // Clear call-backs and TCDs
       for (unsigned channel=0; channel<Info::NumVectors; channel++) {

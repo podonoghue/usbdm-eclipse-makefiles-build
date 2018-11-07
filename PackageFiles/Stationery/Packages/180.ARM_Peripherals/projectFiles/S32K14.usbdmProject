@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- S32K14.usbdmProject -->
+<!-- 
+   Settings
+-->
+
+<section name="USBDM">
+   <item key="$$DeviceInfo_Device_Variant"                 value="FS32K144HAT0MLHT" />
+   <item key="$$DeviceInfo_SubFamily"                      value="S32K144" />
+   <item key="$$Hardware_Source_Filename"                  value="S32K144.usbdmHardware" />
+</section>

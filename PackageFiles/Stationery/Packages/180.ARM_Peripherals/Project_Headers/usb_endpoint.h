@@ -161,9 +161,6 @@ public:
    static __attribute__((always_inline)) volatile USB_Type &usb() { return Info::usb(); }
 
 protected:
-   /** Clock register for peripheral */
-   static __attribute__((always_inline)) volatile uint32_t &clockReg() { return Info::clockReg(); }
-
    /** Buffer for Transmit & Receive data */
    uint8_t fDataBuffer[EP_MAXSIZE];
 

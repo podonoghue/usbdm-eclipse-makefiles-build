@@ -649,7 +649,7 @@ public:
  * @tparam polarity      Polarity of pin. Either ActiveHigh or ActiveLow
  */
 template<class Info, const int bitNum, Polarity polarity>
-class  Gpio_T : public GpioBase_T<Info::pinInfo.clockMask, Info::pinInfo.portAddress, Info::pinInfo.irqNum, Info::pinInfo.gpioAddress, bitNum, polarity> {
+class  Gpio_T : public GpioBase_T<Info::pinInfo.clockInfo, Info::pinInfo.portAddress, Info::pinInfo.irqNum, Info::pinInfo.gpioAddress, bitNum, polarity> {
 
    static_assert(((bitNum>=0)&&(bitNum<=31)), "Illegal bit number in Gpio");
 };
@@ -662,7 +662,7 @@ class  Gpio_T : public GpioBase_T<Info::pinInfo.clockMask, Info::pinInfo.portAdd
  * @tparam polarity      Polarity of pin. Either ActiveHigh or ActiveLow
  */
 template<class Info, const uint32_t index, Polarity polarity>
-using  GpioTable_T = GpioBase_T<Info::info[index].clockMask, Info::info[index].portAddress, Info::info[index].irqNum, Info::info[index].gpioAddress, Info::info[index].gpioBit, polarity>;
+using  GpioTable_T = GpioBase_T<Info::info[index].clockInfo, Info::info[index].portAddress, Info::info[index].irqNum, Info::info[index].gpioAddress, Info::info[index].gpioBit, polarity>;
 
 /**
  * @brief Template representing a field within a port
@@ -783,7 +783,7 @@ public:
     */
    static void setInOut(PcrValue pcrValue=GPIO_DEFAULT_PCR) {
       // Enable clock to GPCLR & GPCHR
-      enablePortClocks(Info::pinInfo.clockMask);
+      enablePortClocks(Info::pinInfo.clockInfo);
 
       // Default to input
       gpio().PDDR &= ~MASK;
@@ -917,7 +917,7 @@ public:
          PinFilter         pinFilter         = PinFilter_None
          ) {
       // Enable clock to GPCLR & GPCHR
-      enablePortClocks(Info::pinInfo.clockMask);
+      enablePortClocks(Info::pinInfo.clockInfo);
 
       // Set to input
       gpio().PDDR &= ~MASK;
@@ -926,7 +926,7 @@ public:
       write(0);
 
       // Set individual PCRs (required for IRQ function)
-      for (int bit=right; bit<=left; bit++) {
+      for (unsigned bit=right; bit<=left; bit++) {
          port().PCR[bit] = pinPull|pinAction|pinFilter|PinMux_Gpio;
       }
    }
@@ -1085,7 +1085,7 @@ public:
  * @tparam polarity      Polarity of pin. Either ActiveHigh or ActiveLow
  */
 template<int bitNum, Polarity polarity=ActiveHigh> class GpioA :
-      public GpioBase_T<GpioAInfo::pinInfo.clockMask, GpioAInfo::pinInfo.portAddress, GpioAInfo::pinInfo.irqNum, GpioAInfo::pinInfo.gpioAddress, bitNum, polarity> {};
+      public GpioBase_T<GpioAInfo::pinInfo.clockInfo, GpioAInfo::pinInfo.portAddress, GpioAInfo::pinInfo.irqNum, GpioAInfo::pinInfo.gpioAddress, bitNum, polarity> {};
 using PortA = PcrBase_T<GpioAInfo::pinInfo.portAddress, GpioAInfo::pinInfo.irqNum>;
 
 /**
@@ -1168,7 +1168,7 @@ class GpioAField : public Field_T<GpioAInfo, left, right, polarity> {};
  * @tparam polarity      Polarity of pin. Either ActiveHigh or ActiveLow
  */
 template<int bitNum, Polarity polarity=ActiveHigh> class GpioB :
-      public GpioBase_T<GpioBInfo::pinInfo.clockMask, GpioBInfo::pinInfo.portAddress, GpioBInfo::pinInfo.irqNum, GpioBInfo::pinInfo.gpioAddress, bitNum, polarity> {};
+      public GpioBase_T<GpioBInfo::pinInfo.clockInfo, GpioBInfo::pinInfo.portAddress, GpioBInfo::pinInfo.irqNum, GpioBInfo::pinInfo.gpioAddress, bitNum, polarity> {};
 using PortB = PcrBase_T<GpioBInfo::pinInfo.portAddress, GpioBInfo::pinInfo.irqNum>;
 
 /**
@@ -1251,7 +1251,7 @@ class GpioBField : public Field_T<GpioBInfo, left, right, polarity> {};
  * @tparam polarity      Polarity of pin. Either ActiveHigh or ActiveLow
  */
 template<int bitNum, Polarity polarity=ActiveHigh> class GpioC :
-      public GpioBase_T<GpioCInfo::pinInfo.clockMask, GpioCInfo::pinInfo.portAddress, GpioCInfo::pinInfo.irqNum, GpioCInfo::pinInfo.gpioAddress, bitNum, polarity> {};
+      public GpioBase_T<GpioCInfo::pinInfo.clockInfo, GpioCInfo::pinInfo.portAddress, GpioCInfo::pinInfo.irqNum, GpioCInfo::pinInfo.gpioAddress, bitNum, polarity> {};
 using PortC = PcrBase_T<GpioCInfo::pinInfo.portAddress, GpioCInfo::pinInfo.irqNum>;
 
 /**
@@ -1334,7 +1334,7 @@ class GpioCField : public Field_T<GpioCInfo, left, right, polarity> {};
  * @tparam polarity      Polarity of pin. Either ActiveHigh or ActiveLow
  */
 template<int bitNum, Polarity polarity=ActiveHigh> class GpioD :
-      public GpioBase_T<GpioDInfo::pinInfo.clockMask, GpioDInfo::pinInfo.portAddress, GpioDInfo::pinInfo.irqNum, GpioDInfo::pinInfo.gpioAddress, bitNum, polarity> {};
+      public GpioBase_T<GpioDInfo::pinInfo.clockInfo, GpioDInfo::pinInfo.portAddress, GpioDInfo::pinInfo.irqNum, GpioDInfo::pinInfo.gpioAddress, bitNum, polarity> {};
 using PortD = PcrBase_T<GpioDInfo::pinInfo.portAddress, GpioDInfo::pinInfo.irqNum>;
 
 /**
@@ -1417,7 +1417,7 @@ class GpioDField : public Field_T<GpioDInfo, left, right, polarity> {};
  * @tparam polarity      Polarity of pin. Either ActiveHigh or ActiveLow
  */
 template<int bitNum, Polarity polarity=ActiveHigh> class GpioE :
-      public GpioBase_T<GpioEInfo::pinInfo.clockMask, GpioEInfo::pinInfo.portAddress, GpioEInfo::pinInfo.irqNum, GpioEInfo::pinInfo.gpioAddress, bitNum, polarity> {};
+      public GpioBase_T<GpioEInfo::pinInfo.clockInfo, GpioEInfo::pinInfo.portAddress, GpioEInfo::pinInfo.irqNum, GpioEInfo::pinInfo.gpioAddress, bitNum, polarity> {};
 using PortE = PcrBase_T<GpioEInfo::pinInfo.portAddress, GpioEInfo::pinInfo.irqNum>;
 
 /**

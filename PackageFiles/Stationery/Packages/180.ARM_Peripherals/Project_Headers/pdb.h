@@ -251,9 +251,6 @@ protected:
    /** Hardware instance pointer */
    static volatile PDB_Type &pdb() { return Info::pdb(); }
 
-   /** Clock register mask for peripheral */
-   static volatile uint32_t &clockReg() { return Info::clockReg(); }
-
 public:
    /**
     * Configures all mapped pins associated with this peripheral
@@ -272,7 +269,7 @@ public:
       if (Info::mapPinsOnEnable) {
          configureAllPins();
       }
-      clockReg() |= Info::clockMask;
+      Info::enableClock();
       __DMB();
    }
 
@@ -282,7 +279,7 @@ public:
    static void  disable() {
 
       pdb().SC  = 0;
-      clockReg() &= ~Info::clockMask;
+      Info::disableClock();
       __DMB();
    }
 

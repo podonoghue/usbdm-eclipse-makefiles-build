@@ -50,7 +50,7 @@
 #define FTM3_CLOCK_REG  SCGC3
 #endif
 #ifdef SIM_SCGC3_FTM3_MASKC
-#define FTM3_CLOCK_MASK SIM_SCGC3_FTM3_MASKC
+#define FTM3_CLOCK_MASK SIM_SCGC3_FTM3_MASK
 #define FTM3_CLOCK_REG  SCGC3
 #endif
 #endif
@@ -104,7 +104,11 @@ enum FtmClockSource {
    FtmClockSource_Disabled    = FTM_SC_CLKS(0),  //!< Timer is disabled
    FtmClockSource_System      = FTM_SC_CLKS(1),  //!< System clock (usually the bus clock)
    FtmClockSource_FixedFreq   = FTM_SC_CLKS(2),  //!< Fixed frequency clock (various sources such as FLL,PLL)
+#if defined(USBDM_PCC_IS_DEFINED)
+   FtmClockSource_PccClockMux = FTM_SC_CLKS(3),  //!< External clock via PCC multiplexor
+#else
    FtmClockSource_External    = FTM_SC_CLKS(3),  //!< External clock provided to FTM_CLKINx pin
+#endif
 };
 
 /**
@@ -236,13 +240,6 @@ public:
     * @return Reference to FTM hardware
     */
    static __attribute__((always_inline)) volatile FTM_Type &tmr() { return Info::ftm(); }
-
-   /**
-    * Clock register for peripheral
-    *
-    * @return Reference to clock register
-    */
-   static __attribute__((always_inline)) volatile uint32_t &clockReg() { return Info::clockReg(); }
 
    /** Get reference to FTM hardware as struct */
    static volatile FTM_Type &ftm() { return Info::ftm(); }
@@ -377,7 +374,7 @@ public:
       }
 
       // Enable clock to peripheral interface
-      clockReg() |= Info::clockMask;
+      Info::enableClock();
       __DMB();
    }
 
@@ -389,7 +386,7 @@ public:
       tmr().SC = 0;
 
       // Disable clock to peripheral interface
-      clockReg() &= ~Info::clockMask;
+      Info::disableClock();
       __DMB();
    }
 
@@ -445,9 +442,9 @@ public:
     * @return True  enabled
     * @return False disabled
     */
-   static INLINE_RELEASE bool isEnabled() {
-      return ((clockReg() & Info::clockMask) != 0);
-   }
+   //static INLINE_RELEASE bool isEnabled() {
+   //   return ((clockReg() & Info::clockMask) != 0);
+   //}
 
    /**
     * Set timer mode
@@ -475,9 +472,9 @@ public:
     * @note This function will affect all channels of the timer.
     */
    static void stopCounter() {
-      if (isEnabled()) {
+      //if (isEnabled()) {
          tmr().SC = (tmr().SC&~FTM_SC_CLKS_MASK);
-      }
+      //}
    }
 
    /**
@@ -1422,7 +1419,7 @@ public:
             FtmChMode         ftmChMode        = FtmChMode_PwmHighTruePulses,
             FtmChannelAction  ftmChannelAction = FtmChannelAction_None) {
 
-         usbdm_assert(Ftm::isEnabled(), "TPM must be enable first");
+         //usbdm_assert(Ftm::isEnabled(), "TPM must be enable first");
          Ftm::tmr().CONTROLS[channel].CnSC = ftmChMode|ftmChannelAction;
       }
 
@@ -1441,7 +1438,7 @@ public:
             FtmChannelAction  ftmChannelAction = FtmChannelAction_None) {
 
          // Check that owning Timer has been enabled
-         usbdm_assert(Ftm::isEnabled(), "FTM not enabled");
+         //usbdm_assert(Ftm::isEnabled(), "FTM not enabled");
 		 
          Ftm::tmr().CONTROLS[channel].CnSC = ftmChMode|ftmChannelAction;
       }
@@ -1967,9 +1964,6 @@ public:
    /** Hardware instance pointer */
    static __attribute__((always_inline)) volatile FTM_Type &tmr() { return Info::ftm(); }
 
-   /** Clock register for peripheral */
-   static __attribute__((always_inline)) volatile uint32_t &clockReg() { return Info::clockReg(); }
-
    /** Allow more convenient access associated Ftm */
    using Ftm = FtmBase_T<Info>;
 
@@ -2089,7 +2083,7 @@ public:
          configureAllPins();
       }
       // Enable clock to peripheral interface
-      clockReg() |= Info::clockMask;
+      Info::enableClock();
       __DMB();
    }
 
@@ -2101,7 +2095,7 @@ public:
       tmr().QDCTRL = 0;
 
       // Disable clock to peripheral interface
-      clockReg() &= ~Info::clockMask;
+      Info::disableClock();
       __DMB();
    }
 

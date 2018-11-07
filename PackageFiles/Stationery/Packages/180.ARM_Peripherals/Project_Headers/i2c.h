@@ -426,7 +426,7 @@ public:
    void init(const uint8_t myAddress) {
 
       // Enable clock to I2C interface
-      Info::clockReg() |= Info::clockMask;
+      Info::enableClock();
 
       thisPtr = this;
 

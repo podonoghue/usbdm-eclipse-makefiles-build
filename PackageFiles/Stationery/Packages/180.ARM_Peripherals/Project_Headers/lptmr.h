@@ -123,10 +123,6 @@ protected:
    /** Hardware instance */
    static __attribute__((always_inline)) volatile LPTMR_Type &lptmr()     { return Info::lptmr(); }
 
-   /** Pointer to clock register */
-   static __attribute__((always_inline)) volatile uint32_t   &clockReg()  { return Info::clockReg(); }
-
-
    /** Callback to catch unhandled interrupt */
    static void unhandledCallback() {
       setAndCheckErrorCode(E_NO_HANDLER);
@@ -148,7 +144,7 @@ public:
       configureAllPins();
 
       // Enable clock
-      clockReg() |= Info::clockMask;
+      Info::enableClock();
       __DMB();
    }
    
@@ -331,7 +327,7 @@ public:
       // Disable timer
       lptmr().CSR = 0;
       NVIC_DisableIRQ(Info::irqNums[0]);
-      clockReg() &= ~Info::clockMask;
+      Info::disableClock();
    }
 
    /**

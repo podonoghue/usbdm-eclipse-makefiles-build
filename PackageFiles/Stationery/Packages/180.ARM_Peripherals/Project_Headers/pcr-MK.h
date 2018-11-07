@@ -48,33 +48,37 @@ enum Polarity {
    ActiveHigh=true   //!< Signal is active high i.e. Active => High level, Inactive => Low level
 };
 
-/*
- * PORT clock masks
+/** Pin number indicating the function has a fixed mapping to a pin */
+constexpr   int8_t FIXED_NO_PCR         = 0x00;
+
+/** Pin number indicating the function doesn't exist. Note: -ve value*/
+constexpr   int8_t INVALID_PCR          = 0xA5;
+
+/** Pin number indicating the function is not currently mapped to a pin. Note: -ve value */
+constexpr   int8_t UNMAPPED_PCR         = 0xA4;
+
+#ifdef PCC
+/**
+ * Enable clock to selected ports
+ *
+ * @param[in] pccAddress Address of PCC register for port to enable
  */
-#ifdef SIM_SCGC5_PORTA_MASK
-constexpr   uint32_t PORTA_CLOCK_MASK         = SIM_SCGC5_PORTA_MASK;
-#endif
+static inline void enablePortClocks(uint32_t pccAddress) {
+   *(uint32_t *)pccAddress |= PCC_PCCn_CGC_MASK;
+   __DMB();
+};
 
-#ifdef SIM_SCGC5_PORTB_MASK
-constexpr   uint32_t PORTB_CLOCK_MASK         = SIM_SCGC5_PORTB_MASK;
-#endif
+/**
+ * Disable clock to selected ports
+ *
+ * @param[in] pccAddress Address of PCC register for port to disable
+ */
+static inline void disablePortClocks(uint32_t pccAddress) {
+   *(uint32_t *)pccAddress &= ~PCC_PCCn_CGC_MASK;
+   __DMB();
+};
 
-#ifdef SIM_SCGC5_PORTC_MASK
-constexpr   uint32_t PORTC_CLOCK_MASK         = SIM_SCGC5_PORTC_MASK;
-#endif
-
-#ifdef SIM_SCGC5_PORTD_MASK
-constexpr   uint32_t PORTD_CLOCK_MASK         = SIM_SCGC5_PORTD_MASK;
-#endif
-
-#ifdef SIM_SCGC5_PORTE_MASK
-constexpr   uint32_t PORTE_CLOCK_MASK         = SIM_SCGC5_PORTE_MASK;
-#endif
-
-#ifdef SIM_SCGC5_PORTF_MASK
-constexpr   uint32_t PORTF_CLOCK_MASK         = SIM_SCGC5_PORTF_MASK;
-#endif
-
+#else
 /**
  * Enable clock to selected ports
  *
@@ -95,14 +99,28 @@ static inline void disablePortClocks(uint32_t clockMask) {
    __DMB();
 };
 
-/** Pin number indicating the function has a fixed mapping to a pin */
-constexpr   int8_t FIXED_NO_PCR         = 0x00;
-
-/** Pin number indicating the function doesn't exist. Note: -ve value*/
-constexpr   int8_t INVALID_PCR          = 0xA5;
-
-/** Pin number indicating the function is not currently mapped to a pin. Note: -ve value */
-constexpr   int8_t UNMAPPED_PCR         = 0xA4;
+#if defined(SIM_SCGC5_PORTA_MASK)
+static constexpr uint32_t PORTA_CLOCK_MASK = SIM_SCGC5_PORTA_MASK;
+#endif
+#if defined(SIM_SCGC5_PORTB_MASK)
+static constexpr uint32_t PORTB_CLOCK_MASK = SIM_SCGC5_PORTB_MASK;
+#endif
+#if defined(SIM_SCGC5_PORTC_MASK)
+static constexpr uint32_t PORTC_CLOCK_MASK = SIM_SCGC5_PORTC_MASK;
+#endif
+#if defined(SIM_SCGC5_PORTD_MASK)
+static constexpr uint32_t PORTD_CLOCK_MASK = SIM_SCGC5_PORTD_MASK;
+#endif
+#if defined(SIM_SCGC5_PORTE_MASK)
+static constexpr uint32_t PORTE_CLOCK_MASK = SIM_SCGC5_PORTE_MASK;
+#endif
+#if defined(SIM_SCGC5_PORTF_MASK)
+static constexpr uint32_t PORTF_CLOCK_MASK = SIM_SCGC5_PORTF_MASK;
+#endif
+#if defined(SIM_SCGC5_PORTG_MASK)
+static constexpr uint32_t PORTG_CLOCK_MASK = SIM_SCGC5_PORTG_MASK;
+#endif
+#endif
 
 /**
  * Port information
@@ -111,7 +129,7 @@ constexpr   int8_t UNMAPPED_PCR         = 0xA4;
 class PortInfo {
 public:
    const uint32_t  portAddress;   //!< Port hardware base pointer
-   const uint32_t  clockMask;     //!< Port clock mask
+   const uint32_t  clockInfo;     //!< Either clock mask or port clock control register address
    const IRQn_Type irqNum;        //!< Port interrupt number
 };
 
@@ -121,7 +139,7 @@ public:
 class PinInfo {
 public:
    const uint32_t   portAddress;  //!< Port hardware base pointer
-   const uint32_t   clockMask;    //!< Port clock mask
+   const uint32_t   clockInfo;    //!< Either clock mask or port clock control register address
    const IRQn_Type  irqNum;       //!< Port interrupt number
    const uint32_t   gpioAddress;  //!< GPIO Hardware base pointer
    const uint32_t   gpioBit;      //!< Bit number for pin
@@ -139,7 +157,7 @@ public:
          uint32_t        gpioAddress,
          int             gpioBit,
          uint32_t        pcrValue) :
-                     portAddress(portInfo.portAddress), clockMask(portInfo.clockMask), irqNum(portInfo.irqNum),
+                     portAddress(portInfo.portAddress), clockInfo(portInfo.clockInfo), irqNum(portInfo.irqNum),
                      gpioAddress(gpioAddress), gpioBit(gpioBit), pcrValue(pcrValue) {}
 };
 
@@ -502,12 +520,12 @@ public:
  * PortC_3::disableClock();
  * @endcode
  *
- * @tparam clockMask       Mask for SIM clock register associated with this PCR
+ * @tparam clockInfo       PCC register address or mask for SIM clock register associated with this PCR
  * @tparam portAddress     PORT to be manipulated e.g. PORTA (PCR array)
  * @tparam bitNum          Bit number e.g. 3
  * @tparam defPcrValue     Default value for PCR (including MUX value)
  */
-template<uint32_t clockMask, uint32_t portAddress, IRQn_Type irqNum, int bitNum, PcrValue defPcrValue>
+template<uint32_t clockInfo, uint32_t portAddress, IRQn_Type irqNum, int bitNum, PcrValue defPcrValue>
 class Pcr_T : public PcrBase_T<portAddress, irqNum> {
 
 #ifdef DEBUG_BUILD
@@ -537,17 +555,17 @@ private:
 
 public:
    /**
-    * Enable/disable clock associated with PORT
-    *
-    * @param[in] enable true => enable, false => disable
+    * Enable clock associated with PORT
     */
-   static void enableClock(bool enable=true) {
-      if (enable) {
-         enablePortClocks(clockMask);
-      }
-      else {
-         disablePortClocks(clockMask);
-      }
+   static void enableClock() {
+      enablePortClocks(clockInfo);
+   }
+
+   /**
+    * Disable clock associated with PORT
+    */
+   static void disableClock() {
+      disablePortClocks(clockInfo);
    }
 
    /**
@@ -559,7 +577,7 @@ public:
     */
    static void setPCR(PcrValue pcrValue=defPcrValue) {
       if (portAddress != 0) {
-         enablePortClocks(clockMask);
+         enablePortClocks(clockInfo);
 
 #ifdef PORT_DFCR_CS_MASK
          enableDigitalFilter(pcrValue&PinFilter_Digital);
@@ -578,7 +596,7 @@ public:
       if (portAddress == 0) {
          return (PcrValue) 0;
       }
-      enablePortClocks(clockMask);
+      enablePortClocks(clockInfo);
       return pcrReg();
    }
    /**
@@ -603,7 +621,7 @@ public:
          PinMux            pinMux            = (PinMux)(defPcrValue&PORT_PCR_MUX_MASK)
          ) {
       if (portAddress != 0) {
-         enablePortClocks(clockMask);
+         enablePortClocks(clockInfo);
 
 #ifdef PORT_DFCR_CS_MASK
          enableDigitalFilter(pinFilter == PinFilter_Digital);
@@ -612,6 +630,8 @@ public:
          pcrReg() = pinPull|pinDriveStrength|pinDriveMode|pinAction|pinFilter|pinSlewRate|pinMux;
       }
    }
+
+#if defined(PORT_PCR_ODE_ASK) and defined (PORT_PCR_SRE_MASK)
    /**
     * @brief
     * Set subset of Pin Control Register Attributes associated with output direction \n
@@ -628,9 +648,62 @@ public:
          PinSlewRate       pinSlewRate       = PinSlewRate_Fast) {
 
       pcrReg() =
-            (pcrReg()&~(PORT_PCR_DSE_MASK|PORT_PCR_ODE(1)|PORT_PCR_SRE_MASK)) |
+            (pcrReg()&~(PORT_PCR_DSE_MASK|PORT_PCR_ODE_ASK|PORT_PCR_SRE_MASK)) |
             (pinDriveStrength|pinDriveMode|pinSlewRate);
    }
+#elif defined(PORT_PCR_ODE_ASK)
+   /**
+    * @brief
+    * Set subset of Pin Control Register Attributes associated with output direction \n
+    * Only specified attributes are changed.\n
+    * Assumes clock to the port has already been enabled
+    *
+    * @param[in] pinDriveStrength One of PinDriveStrength_Low, PinDriveStrength_High
+    * @param[in] pinDriveMode     One of PinDriveMode_PushPull, PinDriveMode_OpenDrain (defaults to PinPushPull)
+    */
+   static void setOutput(
+         PinDriveStrength  pinDriveStrength,
+         PinDriveMode      pinDriveMode      = PinDriveMode_PushPull) {
+
+      pcrReg() =
+            (pcrReg()&~(PORT_PCR_DSE_MASK|PORT_PCR_ODE_ASK)) |
+            (pinDriveStrength|pinDriveMode);
+   }
+#elif defined(PORT_PCR_SRE_MASK)
+   /**
+    * @brief
+    * Set subset of Pin Control Register Attributes associated with output direction \n
+    * Only specified attributes are changed.\n
+    * Assumes clock to the port has already been enabled
+    *
+    * @param[in] pinDriveStrength One of PinDriveStrength_Low, PinDriveStrength_High
+    * @param[in] pinSlewRate      One of PinSlewRate_Slow, PinSlewRate_Fast (defaults to PinSlewRate_Fast)
+    */
+   static void setOutput(
+         PinDriveStrength  pinDriveStrength,
+         PinSlewRate       pinSlewRate       = PinSlewRate_Fast) {
+
+      pcrReg() =
+            (pcrReg()&~(PORT_PCR_DSE_MASK|PORT_PCR_SRE_MASK)) |
+            (pinDriveStrength|pinSlewRate);
+   }
+#else
+   /**
+    * @brief
+    * Set subset of Pin Control Register Attributes associated with output direction \n
+    * Only specified attributes are changed.\n
+    * Assumes clock to the port has already been enabled
+    *
+    * @param[in] pinDriveStrength One of PinDriveStrength_Low, PinDriveStrength_High
+    */
+   static void setOutput(
+         PinDriveStrength  pinDriveStrength) {
+
+      pcrReg() =
+            (pcrReg()&~(PORT_PCR_DSE_MASK)) | (pinDriveStrength);
+   }
+
+#endif
 
    /**
     * @brief
@@ -937,7 +1010,7 @@ void processPcrs(uint32_t pcrValue) {
  * @tparam index         Index of pin in configuration table
  */
 template<class Info, uint8_t index> using PcrTable_T =
-      Pcr_T<Info::info[index].clockMask, Info::info[index].portAddress, Info::info[index].irqNum, Info::info[index].gpioBit, Info::info[index].pcrValue>;
+      Pcr_T<Info::info[index].clockInfo, Info::info[index].portAddress, Info::info[index].irqNum, Info::info[index].gpioBit, Info::info[index].pcrValue>;
 
 /**
  * @}

@@ -199,11 +199,6 @@ public:
       sCallback = callback;
    }
 
-
-protected:
-   /** Clock register for peripheral */
-   static __attribute__((always_inline)) volatile uint32_t &clockReg() { return Info::clockReg(); }
-
 public:
    /** Hardware instance pointer */
    static __attribute__((always_inline)) volatile TSI_Type &tsi() { return Info::tsi(); }
@@ -232,7 +227,7 @@ public:
          configureAllPins();
       }
 
-      clockReg() |= Info::clockMask;
+      Info::enableClock();
       __DMB();
    }
 

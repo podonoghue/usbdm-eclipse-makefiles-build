@@ -464,7 +464,7 @@ public:
     */
    Uart_T() : Uart(&Info::uart()) {
       // Enable clock to UART interface
-      Info::clockReg() |= Info::clockMask;
+      Info::enableClock();
 
       if (Info::mapPinsOnEnable) {
          configureAllPins();

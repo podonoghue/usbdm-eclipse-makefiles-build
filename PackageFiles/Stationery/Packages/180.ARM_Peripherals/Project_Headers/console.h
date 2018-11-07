@@ -33,8 +33,8 @@
 namespace USBDM {
 
 /**
- * @addtogroup CONSOLE_Group Console, Console
- * @brief Console serial interface
+ * @addtogroup CONSOLE_Group Console, Console Interface
+ * @brief Abstraction for Console Interface
  * @{
  */
 

@@ -22,6 +22,9 @@
 #include "hardware.h"
 #include "formatted_io.h"
 #include "queue.h"
+#ifdef __CMSIS_RTOS
+#include "cmsis.h"
+#endif
 
 namespace USBDM {
 
@@ -55,6 +58,47 @@ enum LpuartDma {
 class Lpuart : public FormattedIO {
 
 protected:
+#ifdef __CMSIS_RTOS
+   /**
+    * Obtain UART mutex.
+    *
+    * @param[in]  milliseconds How long to wait in milliseconds. Use osWaitForever for indefinite wait
+    *
+    * @return osOK:                    The mutex has been obtain.
+    * @return osErrorTimeoutResource:  The mutex could not be obtained in the given time.
+    * @return osErrorResource:         The mutex could not be obtained when no timeout was specified.
+    * @return osErrorParameter:        The parameter mutex_id is incorrect.
+    * @return osErrorISR:              Cannot be called from interrupt service routines.
+    *
+    * @note The USBDM error code will also be set on error
+    */
+   virtual osStatus startTransaction(int milliseconds=osWaitForever) = 0;
+
+   /**
+    * Release UART mutex.
+    *
+    * @return osOK:              The mutex has been correctly released.
+    * @return osErrorResource:   The mutex was not obtained before.
+    * @return osErrorISR:        Cannot be called from interrupt service routines.
+    *
+    * @note The USBDM error code will also be set on error
+    */
+   virtual osStatus endTransaction() = 0;
+#else
+   /**
+    * Obtain UART - dummy routine (non RTOS)
+    */
+   int startTransaction(int =0) {
+      return 0;
+   }
+   /**
+    * Release UART - dummy routine (non RTOS)
+    */
+   int endTransaction() {
+      return 0;
+   }
+#endif
+
    /**
     * Check if character is available
     *
@@ -105,7 +149,7 @@ protected:
    /**
     * Handler for interrupts when no handler set
     */
-   static void unexpectedInterrupt(uint8_t) {
+   static void unhandledCallback(uint8_t) {
       setAndCheckErrorCode(E_NO_HANDLER);
    }
 
@@ -131,7 +175,7 @@ public:
    }
 
    /**
-    * Set baud factor value for interface
+    * Set baud factor value for interface.
     *
     * This is calculated from baud rate and UART clock frequency
     *
@@ -145,7 +189,7 @@ public:
       uint32_t ctrl = lpuart->CTRL;
       lpuart->CTRL = 0;
 
-      // Calculate UART clock setting with rounding
+      // Calculate UART divider with rounding
       uint32_t divider = (clockFrequency<<1)/(oversample * baudrate);
       divider = (divider>>1)|(divider&0b1);
 
@@ -153,7 +197,7 @@ public:
       lpuart->BAUD = (lpuart->BAUD&~(LPUART_BAUD_SBR_MASK|LPUART_BAUD_OSR_MASK))|
             LPUART_BAUD_SBR(divider)|LPUART_BAUD_OSR(oversample-1);
 
-      // Restore configuration
+      // Restore UART settings
       lpuart->CTRL = ctrl;
    }
 
@@ -252,6 +296,62 @@ public:
    /** Get base address of UART.D register as uint32_t */
    static constexpr uint32_t uartDATA() { return uartBase() + offsetof(LPUART_Type, DATA); }
 
+#ifdef __CMSIS_RTOS
+protected:
+   /**
+    * Mutex to protect access\n
+    * Using a static accessor function avoids issues with static object initialisation order
+    *
+    * @return mutex
+    */
+   static CMSIS::Mutex &mutex(int =0) {
+      /** Mutex to protect access - static so per UART */
+      static CMSIS::Mutex mutex;
+      return mutex;
+   }
+
+public:
+   /**
+    * Obtain UART mutex.
+    *
+    * @param[in]  milliseconds How long to wait in milliseconds. Use osWaitForever for indefinite wait
+    *
+    * @return osOK:                    The mutex has been obtain.
+    * @return osErrorTimeoutResource:  The mutex could not be obtained in the given time.
+    * @return osErrorResource:         The mutex could not be obtained when no timeout was specified.
+    * @return osErrorParameter:        The parameter mutex_id is incorrect.
+    * @return osErrorISR:              Cannot be called from interrupt service routines.
+    *
+    * @note The USBDM error code will also be set on error
+    */
+   virtual osStatus startTransaction(int milliseconds=osWaitForever) override {
+      // Obtain mutex
+      osStatus status = mutex().wait(milliseconds);
+      if (status != osOK) {
+         setCmsisErrorCode(status);
+      }
+      return status;
+   }
+
+   /**
+    * Release UART mutex
+    *
+    * @return osOK:              The mutex has been correctly released.
+    * @return osErrorResource:   The mutex was not obtained before.
+    * @return osErrorISR:        Cannot be called from interrupt service routines.
+    *
+    * @note The USBDM error code will also be set on error
+    */
+   virtual osStatus endTransaction() override {
+      // Release mutex
+      osStatus status = mutex().release();
+      if (status != osOK) {
+         setCmsisErrorCode(status);
+      }
+      return status;
+   }
+#endif
+
 protected:
    /** Callback function for RxTx ISR */
    static LPUARTCallbackFunction rxTxCallback;
@@ -270,9 +370,9 @@ public:
     *
     * @param[in]  baudrate         Interface speed in bits-per-second
     */
-   Lpuart_T(unsigned baudrate=Info::defaultBaudRate) : Lpuart(Info::lpuart) {
+   Lpuart_T(unsigned baudrate=Info::defaultBaudRate) : Lpuart(&Info::lpuart()) {
       // Enable clock to UART interface
-      *Info::clockReg |= Info::clockMask;
+      Info::enableClock();
 
       if (Info::mapPinsOnEnable) {
          configureAllPins();
@@ -332,7 +432,7 @@ public:
     */
    static void setRxTxCallback(LPUARTCallbackFunction callback) {
       if (callback == nullptr) {
-         rxTxCallback = unexpectedInterrupt;
+         rxTxCallback = unhandledCallback;
       }
       rxTxCallback = callback;
    }
@@ -381,7 +481,7 @@ public:
    }
 };
 
-template<class Info> LPUARTCallbackFunction Lpuart_T<Info>::rxTxCallback  = unexpectedInterrupt;
+template<class Info> LPUARTCallbackFunction Lpuart_T<Info>::rxTxCallback  = unhandledCallback;
 
 /**
  * @brief Template class representing an UART interface with buffered reception
@@ -415,6 +515,13 @@ public:
    }
 
 protected:
+
+   /** Lock variable for writes */
+   static volatile uint32_t fWriteLock;
+
+   /** Lock variable for reads */
+   static volatile uint32_t fReadLock;
+
    /**
     * Queue for Buffered reception (if used)
     */
@@ -430,27 +537,30 @@ protected:
     * @param[in]  ch - character to send
     */
    virtual void _writeChar(char ch) override {
-      // Wait for space in buffer
-      while (txQueue.isFull()) {
-         __asm__("nop");
+      lock(&fWriteLock);
+      // Add character to buffer
+      while (!txQueue.enQueueDiscardOnFull(ch)) {
       }
-      txQueue.enQueue(ch);
       lpuart->CTRL |= LPUART_CTRL_TIE_MASK;
+      unlock(&fWriteLock);
       if (ch=='\n') {
         _writeChar('\r');
       }
    }
 
    /**
-    * Receives a single character (blocking)
+    * Receives a single character (blocking on queue empty)
     *
     * @return Character received
     */
    virtual int _readChar() override {
+      lock(&fReadLock);
       while (rxQueue.isEmpty()) {
          __asm__("nop");
       }
-      return rxQueue.deQueue();
+      char t = rxQueue.deQueue();
+      unlock(&fReadLock);
+      return t;
    }
 
    /**

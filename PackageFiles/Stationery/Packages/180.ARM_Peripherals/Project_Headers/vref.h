@@ -47,9 +47,6 @@ private:
    /** Hardware instance pointer */
    static __attribute__((always_inline)) volatile VREF_Type &vref() { return Info::vref(); }
 
-   /** Clock register mask for peripheral */
-   static __attribute__((always_inline)) volatile uint32_t &clockReg() { return Info::clockReg(); }
-
 #ifdef DEBUG_BUILD
    static_assert((Info::info[0].gpioBit != UNMAPPED_PCR), "VrefBase_T: Vref signal is not mapped to a pin - Modify Configure.usbdm");
    static_assert((Info::info[0].gpioBit != INVALID_PCR),  "VrefBase_T: Non-existent signal used for Vref input");
@@ -73,7 +70,7 @@ public:
       configureAllPins();
 
       // Enable clock to VREF interface
-      clockReg() |= Info::clockMask;
+      Info::enableClock();
    }
 
    /**
@@ -112,7 +109,7 @@ public:
     */
    static void disable() {
       vref().SC = 0;
-      clockReg() &= ~Info::clockMask;
+      Info::disableClock();
    }
 };
 

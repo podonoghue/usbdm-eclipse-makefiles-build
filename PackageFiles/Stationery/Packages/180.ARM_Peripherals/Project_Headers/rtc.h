@@ -140,9 +140,6 @@ protected:
    /** Hardware instance */
    static volatile RTC_Type &rtc()      { return Info::rtc(); }
    
-   /** Clock register */
-   static volatile uint32_t &clockReg() { return Info::clockReg(); }
-
 public:
    /**
     * Configures all mapped pins associated with this peripheral
@@ -160,8 +157,7 @@ public:
 
       // Enable clock to RTC interface
       // (RTC used its own clock internally)
-      clockReg()  |= Info::clockMask;
-      __DMB();
+      Info::enableClock();
 
       if ((Info::cr&RTC_CR_OSCE_MASK) == 0) {
          // RTC disabled

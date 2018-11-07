@@ -215,16 +215,13 @@ protected:
    /** Pointer to hardware */
    static __attribute__((always_inline)) volatile PIT_Type &pit()      { return Info::pit(); }
 
-   /** Pointer to clock register */
-   static __attribute__((always_inline)) volatile uint32_t &clockReg() { return Info::clockReg(); }
-
 public:
    /**
     * Basic enable of PIT
     */
    static void enable() {
       // Enable clock
-      clockReg() |= Info::clockMask;
+      Info::enableClock();
       __DMB();
    }
 
@@ -265,7 +262,7 @@ public:
     */
    static void disable() {
       pit().MCR = PIT_MCR_MDIS(1);
-      clockReg() &= ~Info::clockMask;
+      Info::disableClock();
    }
 
    /**

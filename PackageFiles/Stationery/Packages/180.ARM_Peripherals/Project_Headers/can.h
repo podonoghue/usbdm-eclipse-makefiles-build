@@ -23,8 +23,8 @@
 namespace USBDM {
 
 /**
- * @addtogroup CAN_Group CAN, Digital-to-Analogue Converter
- * @brief Pins used for Digital-to-Analogue Converter
+ * @addtogroup CAN_Group CAN, Controller Area Network
+ * @brief Abstraction for Controller Area Network
  * @{
  */
 /**
@@ -74,9 +74,6 @@ protected:
    /** Hardware instance pointer */
    static __attribute__((always_inline)) volatile CAN_Type &can() { return Info::can(); }
 
-   /** Clock register for peripheral */
-   static __attribute__((always_inline)) volatile uint32_t &clockReg() { return Info::clockReg(); }
-
 public:
    /**
     *  Configure the CAN with default settings
@@ -87,25 +84,19 @@ public:
     */
    static void enable(uint32_t c0=Info::c0, uint32_t c1=Info::c1, uint32_t c2=Info::c2) {
       // Enable clock
-      clockReg() |= Info::clockMask;
+      Info::enableClock();
       __DMB();
 
       Info::initPCRs();
 
       // Enable timer
-      can().C0 = c0|CAN_C0_CANEN_MASK;
-      can().C1 = c1;
-      can().C2 = c2;
    }
    
    /**
     *   Disable the CAN channel
     */
    static void finalise(uint8_t channel) {
-      // Enable timer
-      can().C0 = 0;
-      can().C1 = 0;
-      clockReg() &= ~Info::clockMask;
+      Info::disableClock();
    }
    
    /**

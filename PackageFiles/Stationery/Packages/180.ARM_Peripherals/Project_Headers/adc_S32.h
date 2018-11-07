@@ -138,54 +138,6 @@ enum AdcDma {
 #endif
 
 /**
- *  Input sample interval.
- *  Long sample times allow the use of higher input impedance sources
- */
-enum AdcSample {
-   AdcSample_Normal  = ADC_CFG1_ADLSMP(0),                    //!< Normal sample interval
-   AdcSample_2       = ADC_CFG1_ADLSMP(1)|ADC_CFG2_ADLSTS(3), //!< Extra 2 sample clocks (6 clocks total)
-   AdcSample_6       = ADC_CFG1_ADLSMP(1)|ADC_CFG2_ADLSTS(2), //!< Extra 6 sample clocks (10 clocks total)
-   AdcSample_12      = ADC_CFG1_ADLSMP(1)|ADC_CFG2_ADLSTS(1), //!< Extra 12 sample clocks (16 clocks total)
-   AdcSample_20      = ADC_CFG1_ADLSMP(1)|ADC_CFG2_ADLSTS(0), //!< Extra 20 sample clocks (24 clocks total)
-};
-
-/**
- * Selects between A/B multiplexor inputs on some ADC channels
- */
-enum AdcMuxsel {
-   AdcMuxsel_A  = ADC_CFG2_MUXSEL(0), //!< The multiplexor selects A channels
-   AdcMuxsel_B  = ADC_CFG2_MUXSEL(1), //!< The multiplexor selects B channels
-};
-
-/**
- * Allows reduced power consumption but with restricted input clock speed
- */
-enum AdcPower {
-   AdcPower_Normal  = ADC_CFG1_ADLPC(0), //!< Normal power operation
-   AdcPower_Lowl    = ADC_CFG1_ADLPC(1), //!< Low power operation
-};
-
-/**
- * Allows higher input clock speed operation.
- * This actually extends the number of conversion clock cycles but is offset by allowing a faster input clock.
- */
-enum AdcClockRange {
-   AdcClockRange_normal = ADC_CFG2_ADHSC(0), //!< Normal input clock range
-   AdcClockRange_high   = ADC_CFG2_ADHSC(1), //!< Higher speed input clock range selected
-};
-
-/**
- * Controls whether the internal ADC clock is always enabled.
- * In any case, if internal clock is selected for use by the converter (AdcClockSource_Asynch) then\n
- * it will be enabled when needed for a conversion but with an extended conversion time.\n
- * If always enable this startup delay is avoided and the clock may be use by other peripherals.
- */
-enum AdcAsyncClock {
-   AdcAsyncClock_Disabled = ADC_CFG2_ADACKEN(0), //!< ADC Asynchronous clock enable on demand.
-   AdcAsyncClock_Enabled  = ADC_CFG2_ADACKEN(0), //!< ADC Asynchronous clock always enabled
-};
-
-/**
  * Selects between single and continuous conversions
  */
 enum AdcContinuous {
@@ -407,15 +359,11 @@ public:
          AdcResolution   adcResolution,
          AdcClockSource  adcClockSource  = AdcClockSource_Asynch,
          AdcClockDivider adcClockDivider = AdcClockDivider_1,
-         AdcSample       adcSample       = AdcSample_Normal,
-         AdcPower        adcPower        = AdcPower_Normal,
-         AdcMuxsel       adcMuxsel       = AdcMuxsel_B,
-         AdcClockRange   adcClockRange   = AdcClockRange_high,
-         AdcAsyncClock   adcAsyncClock   = AdcAsyncClock_Disabled
+         unsigned        adcSample       = 10
          ) {
       enable();
-      adc().CFG1 = adcResolution|adcClockSource|adcClockDivider|adcPower|(adcSample&ADC_CFG1_ADLSMP_MASK);
-      adc().CFG2 = adcMuxsel|adcClockRange|adcAsyncClock|(adcSample&ADC_CFG2_ADLSTS_MASK);
+      adc().CFG1 = adcResolution|adcClockSource|adcClockDivider;
+      adc().CFG2 = ADC_CFG2_SMPLTS(adcSample);
    }
 
    /**
@@ -470,24 +418,6 @@ public:
    }
 
    /**
-    * Enable ADC internal asynchronous clock source
-    *
-    * @param[in] enable true to enable clock, false to disable
-    *
-    * @note It is not necessary to enable the internal clock to use it as an ADC clock source.\n
-    *       If the internal clock is selected, it will be automatically enabled when an ADC conversion is initiated.\n
-    *       However, enabling it beforehand will reduce the latency of the 1st conversion in a sequence.
-    */
-   static void enableAsynchronousClock(bool enable=true) {
-      if (enable) {
-         adc().CFG1 |= ADC_CFG2_ADACKEN_MASK;
-      }
-      else {
-         adc().CFG1 &= ~ADC_CFG2_ADACKEN_MASK;
-      }
-   }
-
-   /**
     * Set averaging mode
     *
     * @param[in] adcAveraging Mode for averaging e.g. AdcAveraging_4 etc
@@ -523,31 +453,8 @@ public:
       // Clear COCO
       (void)adc().R[0];
 
-      // Check if calibration failed
-      bool failed = adc().SC3 & ADC_SC3_CALF_MASK;
-
       // Restore original SC3 value
       adc().SC3 = sc3;
-
-      // Check calibration outcome
-      if(failed) {
-         // Failed calibration
-         return setErrorCode(E_CALIBRATE_FAIL);
-      }
-
-      // Calibration factor
-      uint16_t calib;
-      calib = adc().CLPS + adc().CLP4 + adc().CLP3 + adc().CLP2 + adc().CLP1 + adc().CLP0;
-      calib /= 2;
-      calib |= (1<<15);  // Set MSB
-      adc().PG = calib;
-
-#ifdef ADC_MG_MG_MASK
-      calib = adc().CLMS + adc().CLM4 + adc().CLM3 + adc().CLM2 + adc().CLM1 + adc().CLM0;
-      calib /= 2;
-      calib |= (1<<15);  // Set MSB
-      adc().MG = calib;
-#endif
 
       return E_NO_ERROR;
    }

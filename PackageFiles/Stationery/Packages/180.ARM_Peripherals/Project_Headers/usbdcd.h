@@ -99,13 +99,6 @@ protected:
    /** Callback function for ISR */
    static USBDCDCallbackFunction callback;
 
-   /**
-    * Clock register for peripheral
-    *
-    * @return Reference to clock register
-    */
-   static __attribute__((always_inline)) volatile uint32_t &clockReg() { return Info::clockReg(); }
-
 public:
    /**
     * Hardware instance pointer.
@@ -158,7 +151,7 @@ public:
    static void enable() {
 
       // Enable clock to CMP interface
-      clockReg() |= Info::clockMask;
+      Info::enableClock();
    }
 
    /**
@@ -192,7 +185,7 @@ public:
     * Disable interface to USBDCD
     */
    static void disable() {
-      clockReg() &= ~Info::clockMask;
+      Info::disableClock();
    }
 
    /**
