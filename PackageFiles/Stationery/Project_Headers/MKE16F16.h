@@ -5,7 +5,7 @@
  *           Equivalent: 
  *
  * @version  V1.6
- * @date     2018/07
+ * @date     2018/11
  *
  *******************************************************************************************************/
 
@@ -5856,10 +5856,10 @@ typedef struct MCM_Type {
    __IO uint32_t  ISCR;                         /**< 0010: Interrupt Status and Control Register                        */
         uint8_t   RESERVED_1[12];              
    __I  uint32_t  FADR;                         /**< 0020: Store Buffer Fault address register                          */
-   __I  uint32_t  FATR;                         /**< 0024: Store Buffer Fault Attributes register                       */
-   __I  uint32_t  FDR;                          /**< 0028: Store Buffer Fault Data Register                             */
+   __I  uint32_t  FATR;                         /**< 0024: Fault attributes register                                    */
+   __I  uint32_t  FDR;                          /**< 0028: Fault data register                                          */
         uint8_t   RESERVED_2[4];               
-   __IO uint32_t  PID;                          /**< 0030: Process ID Register                                          */
+   __IO uint32_t  PID;                          /**< 0030: Process ID register                                          */
         uint8_t   RESERVED_3[12];              
    __IO uint32_t  CPO;                          /**< 0040: Compute Operation Control Register                           */
         uint8_t   RESERVED_4[956];             
@@ -7527,7 +7527,7 @@ typedef struct PMC_Type {
 * @brief Struct for PORT
 * @{
 */
-typedef struct PORTA_Type {
+typedef struct PORT_DFER_Type {
    __IO uint32_t  PCR[32];                      /**< 0000: Pin Control Register                                         */
    __O  uint32_t  GPCLR;                        /**< 0080: Global Pin Control Low Register                              */
    __O  uint32_t  GPCHR;                        /**< 0084: Global Pin Control High Register                             */
@@ -7537,7 +7537,7 @@ typedef struct PORTA_Type {
    __IO uint32_t  DFER;                         /**< 00C0: Digital Filter Enable Register                               */
    __IO uint32_t  DFCR;                         /**< 00C4: Digital Filter Clock Register                                */
    __IO uint32_t  DFWR;                         /**< 00C8: Digital Filter Width Register                                */
-} PORTA_Type;
+} PORT_DFER_Type;
 
 /**
  * @} */ /* End group PORT_structs_GROUP 
@@ -7613,7 +7613,7 @@ typedef struct PORTA_Type {
 
 /* PORTA - Peripheral instance base addresses */
 #define PORTA_BasePtr                  0x40049000UL //!< Peripheral base address
-#define PORTA                          ((PORTA_Type *) PORTA_BasePtr) //!< Freescale base pointer
+#define PORTA                          ((PORT_DFER_Type *) PORTA_BasePtr) //!< Freescale base pointer
 #define PORTA_BASE_PTR                 (PORTA) //!< Freescale style base pointer
 /**
  * @} */ /* End group PORT_Peripheral_access_layer_GROUP 
@@ -7634,7 +7634,7 @@ typedef struct PORTA_Type {
 
 /* PORTB - Peripheral instance base addresses */
 #define PORTB_BasePtr                  0x4004A000UL //!< Peripheral base address
-#define PORTB                          ((PORTA_Type *) PORTB_BasePtr) //!< Freescale base pointer
+#define PORTB                          ((PORT_DFER_Type *) PORTB_BasePtr) //!< Freescale base pointer
 #define PORTB_BASE_PTR                 (PORTB) //!< Freescale style base pointer
 /**
  * @} */ /* End group PORT_Peripheral_access_layer_GROUP 
@@ -7655,7 +7655,7 @@ typedef struct PORTA_Type {
 
 /* PORTC - Peripheral instance base addresses */
 #define PORTC_BasePtr                  0x4004B000UL //!< Peripheral base address
-#define PORTC                          ((PORTA_Type *) PORTC_BasePtr) //!< Freescale base pointer
+#define PORTC                          ((PORT_DFER_Type *) PORTC_BasePtr) //!< Freescale base pointer
 #define PORTC_BASE_PTR                 (PORTC) //!< Freescale style base pointer
 /**
  * @} */ /* End group PORT_Peripheral_access_layer_GROUP 
@@ -7676,7 +7676,7 @@ typedef struct PORTA_Type {
 
 /* PORTD - Peripheral instance base addresses */
 #define PORTD_BasePtr                  0x4004C000UL //!< Peripheral base address
-#define PORTD                          ((PORTA_Type *) PORTD_BasePtr) //!< Freescale base pointer
+#define PORTD                          ((PORT_DFER_Type *) PORTD_BasePtr) //!< Freescale base pointer
 #define PORTD_BASE_PTR                 (PORTD) //!< Freescale style base pointer
 /**
  * @} */ /* End group PORT_Peripheral_access_layer_GROUP 
@@ -7697,7 +7697,7 @@ typedef struct PORTA_Type {
 
 /* PORTE - Peripheral instance base addresses */
 #define PORTE_BasePtr                  0x4004D000UL //!< Peripheral base address
-#define PORTE                          ((PORTA_Type *) PORTE_BasePtr) //!< Freescale base pointer
+#define PORTE                          ((PORT_DFER_Type *) PORTE_BasePtr) //!< Freescale base pointer
 #define PORTE_BASE_PTR                 (PORTE) //!< Freescale style base pointer
 /**
  * @} */ /* End group PORT_Peripheral_access_layer_GROUP 
@@ -9452,7 +9452,7 @@ typedef struct TRGMUX1_Type {
 /* ================================================================================ */
 
 /**
- * @brief Watchdog timer
+ * @brief Watchdog Timer
  */
 /**
 * @addtogroup WDOG_structs_GROUP WDOG struct
@@ -9460,7 +9460,7 @@ typedef struct TRGMUX1_Type {
 * @{
 */
 typedef struct WDOG_Type {
-   __IO uint32_t  CS;                           /**< 0000: Watchdog Control and Status Register                         */
+   __IO uint32_t  CS;                           /**< 0000: Control and Status Register                                  */
    union {                                      /**< 0000: (size=0004)                                                  */
       __IO uint32_t  CNT;                       /**< 0004: Counter Register:                                            */
       struct {                                  /**< 0000: (size=0004)                                                  */

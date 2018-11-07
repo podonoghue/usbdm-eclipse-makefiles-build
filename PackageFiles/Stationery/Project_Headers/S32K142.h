@@ -5,7 +5,7 @@
  *           Equivalent: 
  *
  * @version  V1.6
- * @date     2018/07
+ * @date     2018/11
  *
  *******************************************************************************************************/
 
@@ -4804,7 +4804,7 @@ typedef struct LMEM_Type {
 * @brief Struct for LPI2C
 * @{
 */
-typedef struct LPI2C0_Type {
+typedef struct LPI2C_Type {
    __I  uint32_t  VERID;                        /**< 0000: Version ID Register                                          */
    __I  uint32_t  PARAM;                        /**< 0004: Parameter Register                                           */
         uint8_t   RESERVED_0[8];               
@@ -4845,7 +4845,7 @@ typedef struct LPI2C0_Type {
    __O  uint32_t  STDR;                         /**< 0160: Slave Transmit Data Register                                 */
         uint8_t   RESERVED_11[12];             
    __I  uint32_t  SRDR;                         /**< 0170: Slave Receive Data Register                                  */
-} LPI2C0_Type;
+} LPI2C_Type;
 
 /**
  * @} */ /* End group LPI2C_structs_GROUP 
@@ -5263,7 +5263,7 @@ typedef struct LPI2C0_Type {
 
 /* LPI2C0 - Peripheral instance base addresses */
 #define LPI2C0_BasePtr                 0x40066000UL //!< Peripheral base address
-#define LPI2C0                         ((LPI2C0_Type *) LPI2C0_BasePtr) //!< Freescale base pointer
+#define LPI2C0                         ((LPI2C_Type *) LPI2C0_BasePtr) //!< Freescale base pointer
 #define LPI2C0_BASE_PTR                (LPI2C0) //!< Freescale style base pointer
 #define LPI2C0_IRQS { LPI2C0_Master_IRQn, LPI2C0_Slave_IRQn,  }
 
@@ -7722,7 +7722,7 @@ typedef struct PMC_Type {
 */
 
 /* ================================================================================ */
-/* ================           PORTA (file:PORTA_S32K14x)           ================ */
+/* ================           PORTA (file:PORTA_DFER_GICLR)        ================ */
 /* ================================================================================ */
 
 /**
@@ -7733,7 +7733,7 @@ typedef struct PMC_Type {
 * @brief Struct for PORT
 * @{
 */
-typedef struct PORT_Type {
+typedef struct PORT_DFER_Type {
    __IO uint32_t  PCR[32];                      /**< 0000: Pin Control Register                                         */
    __O  uint32_t  GPCLR;                        /**< 0080: Global Pin Control Low Register                              */
    __O  uint32_t  GPCHR;                        /**< 0084: Global Pin Control High Register                             */
@@ -7745,7 +7745,7 @@ typedef struct PORT_Type {
    __IO uint32_t  DFER;                         /**< 00C0: Digital Filter Enable Register                               */
    __IO uint32_t  DFCR;                         /**< 00C4: Digital Filter Clock Register                                */
    __IO uint32_t  DFWR;                         /**< 00C8: Digital Filter Width Register                                */
-} PORT_Type;
+} PORT_DFER_Type;
 
 /**
  * @} */ /* End group PORT_structs_GROUP 
@@ -7832,7 +7832,7 @@ typedef struct PORT_Type {
 
 /* PORTA - Peripheral instance base addresses */
 #define PORTA_BasePtr                  0x40049000UL //!< Peripheral base address
-#define PORTA                          ((PORT_Type *) PORTA_BasePtr) //!< Freescale base pointer
+#define PORTA                          ((PORT_DFER_Type *) PORTA_BasePtr) //!< Freescale base pointer
 #define PORTA_BASE_PTR                 (PORTA) //!< Freescale style base pointer
 #define PORTA_IRQS { PORTA_IRQn,  }
 
@@ -7855,7 +7855,7 @@ typedef struct PORT_Type {
 
 /* PORTB - Peripheral instance base addresses */
 #define PORTB_BasePtr                  0x4004A000UL //!< Peripheral base address
-#define PORTB                          ((PORT_Type *) PORTB_BasePtr) //!< Freescale base pointer
+#define PORTB                          ((PORT_DFER_Type *) PORTB_BasePtr) //!< Freescale base pointer
 #define PORTB_BASE_PTR                 (PORTB) //!< Freescale style base pointer
 #define PORTB_IRQS { PORTB_IRQn,  }
 
@@ -7878,7 +7878,7 @@ typedef struct PORT_Type {
 
 /* PORTC - Peripheral instance base addresses */
 #define PORTC_BasePtr                  0x4004B000UL //!< Peripheral base address
-#define PORTC                          ((PORT_Type *) PORTC_BasePtr) //!< Freescale base pointer
+#define PORTC                          ((PORT_DFER_Type *) PORTC_BasePtr) //!< Freescale base pointer
 #define PORTC_BASE_PTR                 (PORTC) //!< Freescale style base pointer
 #define PORTC_IRQS { PORTC_IRQn,  }
 
@@ -7901,7 +7901,7 @@ typedef struct PORT_Type {
 
 /* PORTD - Peripheral instance base addresses */
 #define PORTD_BasePtr                  0x4004C000UL //!< Peripheral base address
-#define PORTD                          ((PORT_Type *) PORTD_BasePtr) //!< Freescale base pointer
+#define PORTD                          ((PORT_DFER_Type *) PORTD_BasePtr) //!< Freescale base pointer
 #define PORTD_BASE_PTR                 (PORTD) //!< Freescale style base pointer
 #define PORTD_IRQS { PORTD_IRQn,  }
 
@@ -7924,7 +7924,7 @@ typedef struct PORT_Type {
 
 /* PORTE - Peripheral instance base addresses */
 #define PORTE_BasePtr                  0x4004D000UL //!< Peripheral base address
-#define PORTE                          ((PORT_Type *) PORTE_BasePtr) //!< Freescale base pointer
+#define PORTE                          ((PORT_DFER_Type *) PORTE_BasePtr) //!< Freescale base pointer
 #define PORTE_BASE_PTR                 (PORTE) //!< Freescale style base pointer
 #define PORTE_IRQS { PORTE_IRQn,  }
 
@@ -8169,14 +8169,14 @@ typedef struct RCM_Type {
 * @{
 */
 typedef struct RTC_Type {
-   __IO uint32_t  TSR;                          /**< 0000: RTC Time Seconds Register                                    */
-   __IO uint32_t  TPR;                          /**< 0004: RTC Time Prescaler Register                                  */
-   __IO uint32_t  TAR;                          /**< 0008: RTC Time Alarm Register                                      */
-   __IO uint32_t  TCR;                          /**< 000C: RTC Time Compensation Register                               */
-   __IO uint32_t  CR;                           /**< 0010: RTC Control Register                                         */
-   __IO uint32_t  SR;                           /**< 0014: RTC Status Register                                          */
-   __IO uint32_t  LR;                           /**< 0018: RTC Lock Register                                            */
-   __IO uint32_t  IER;                          /**< 001C: RTC Interrupt Enable Register                                */
+   __IO uint32_t  TSR;                          /**< 0000: Time Seconds Register                                        */
+   __IO uint32_t  TPR;                          /**< 0004: Time Prescaler Register                                      */
+   __IO uint32_t  TAR;                          /**< 0008: Time Alarm Register                                          */
+   __IO uint32_t  TCR;                          /**< 000C: Time Compensation Register                                   */
+   __IO uint32_t  CR;                           /**< 0010: Control Register                                             */
+   __IO uint32_t  SR;                           /**< 0014: Status Register                                              */
+   __IO uint32_t  LR;                           /**< 0018: Lock Register                                                */
+   __IO uint32_t  IER;                          /**< 001C: Interrupt Enable Register                                    */
 } RTC_Type;
 
 /**
@@ -9434,7 +9434,7 @@ typedef struct TRGMUX_Type {
 */
 
 /* ================================================================================ */
-/* ================           WDOG (file:WDOG_S32K14x)             ================ */
+/* ================           WDOG (file:WDOG_MKE16F16)            ================ */
 /* ================================================================================ */
 
 /**
@@ -9446,10 +9446,31 @@ typedef struct TRGMUX_Type {
 * @{
 */
 typedef struct WDOG_Type {
-   __IO uint32_t  CS;                           /**< 0000: Watchdog Control and Status Register                         */
-   __IO uint32_t  CNT;                          /**< 0004: Watchdog Counter Register                                    */
-   __IO uint32_t  TOVAL;                        /**< 0008: Watchdog Timeout Value Register                              */
-   __IO uint32_t  WIN;                          /**< 000C: Watchdog Window Register                                     */
+   __IO uint32_t  CS;                           /**< 0000: Control and Status Register                                  */
+   union {                                      /**< 0000: (size=0004)                                                  */
+      __IO uint32_t  CNT;                       /**< 0004: Counter Register:                                            */
+      struct {                                  /**< 0000: (size=0004)                                                  */
+         __I  uint8_t   CNTLOW;                 /**< 0004: Counter Register: Low (see CNT for description)              */
+         __I  uint8_t   CNTHIGH;                /**< 0005: Counter Register: High (see CNT for description)             */
+              uint8_t   RESERVED_0[2];         
+      };
+   };
+   union {                                      /**< 0000: (size=0004)                                                  */
+      __IO uint32_t  TOVAL;                     /**< 0008: Timeout Value Register:                                      */
+      struct {                                  /**< 0000: (size=0004)                                                  */
+         __IO uint8_t   TOVALLOW;               /**< 0008: Timeout Value Register: Low (see TOVAL for description)      */
+         __IO uint8_t   TOVALHIGH;              /**< 0009: Timeout Value Register: High (see TOVAL for description)     */
+              uint8_t   RESERVED_1[2];         
+      };
+   };
+   union {                                      /**< 0000: (size=0004)                                                  */
+      __IO uint32_t  WIN;                       /**< 000C: Window Register:                                             */
+      struct {                                  /**< 0000: (size=0004)                                                  */
+         __IO uint8_t   WINLOW;                 /**< 000C: Window Register: Low (see WIN for description)               */
+         __IO uint8_t   WINHIGH;                /**< 000D: Window Register: High (see WIN for description)              */
+              uint8_t   RESERVED_2[2];         
+      };
+   };
 } WDOG_Type;
 
 /**
@@ -9515,6 +9536,8 @@ typedef struct WDOG_Type {
 #define WDOG_CNT_CNTHIGH_MASK                    (0xFF00U)                                           /*!< WDOG_CNT.CNTHIGH Mask                   */
 #define WDOG_CNT_CNTHIGH_SHIFT                   (8U)                                                /*!< WDOG_CNT.CNTHIGH Position               */
 #define WDOG_CNT_CNTHIGH(x)                      (((uint32_t)(((uint32_t)(x))<<8U))&0xFF00UL)        /*!< WDOG_CNT.CNTHIGH Field                  */
+/* ------- CNTLOW Bit Fields                        ------ */
+/* ------- CNTHIGH Bit Fields                       ------ */
 /* ------- TOVAL Bit Fields                         ------ */
 #define WDOG_TOVAL_TOVALLOW_MASK                 (0xFFU)                                             /*!< WDOG_TOVAL.TOVALLOW Mask                */
 #define WDOG_TOVAL_TOVALLOW_SHIFT                (0U)                                                /*!< WDOG_TOVAL.TOVALLOW Position            */
@@ -9522,6 +9545,8 @@ typedef struct WDOG_Type {
 #define WDOG_TOVAL_TOVALHIGH_MASK                (0xFF00U)                                           /*!< WDOG_TOVAL.TOVALHIGH Mask               */
 #define WDOG_TOVAL_TOVALHIGH_SHIFT               (8U)                                                /*!< WDOG_TOVAL.TOVALHIGH Position           */
 #define WDOG_TOVAL_TOVALHIGH(x)                  (((uint32_t)(((uint32_t)(x))<<8U))&0xFF00UL)        /*!< WDOG_TOVAL.TOVALHIGH Field              */
+/* ------- TOVALLOW Bit Fields                      ------ */
+/* ------- TOVALHIGH Bit Fields                     ------ */
 /* ------- WIN Bit Fields                           ------ */
 #define WDOG_WIN_WINLOW_MASK                     (0xFFU)                                             /*!< WDOG_WIN.WINLOW Mask                    */
 #define WDOG_WIN_WINLOW_SHIFT                    (0U)                                                /*!< WDOG_WIN.WINLOW Position                */
@@ -9529,6 +9554,8 @@ typedef struct WDOG_Type {
 #define WDOG_WIN_WINHIGH_MASK                    (0xFF00U)                                           /*!< WDOG_WIN.WINHIGH Mask                   */
 #define WDOG_WIN_WINHIGH_SHIFT                   (8U)                                                /*!< WDOG_WIN.WINHIGH Position               */
 #define WDOG_WIN_WINHIGH(x)                      (((uint32_t)(((uint32_t)(x))<<8U))&0xFF00UL)        /*!< WDOG_WIN.WINHIGH Field                  */
+/* ------- WINLOW Bit Fields                        ------ */
+/* ------- WINHIGH Bit Fields                       ------ */
 /**
  * @} */ /* End group WDOG_Register_Masks_GROUP 
  */

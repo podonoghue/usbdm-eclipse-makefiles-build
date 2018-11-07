@@ -5,7 +5,7 @@
  *           Equivalent: 
  *
  * @version  V1.6
- * @date     2018/07
+ * @date     2018/11
  *
  *******************************************************************************************************/
 
@@ -961,7 +961,7 @@ typedef struct CAN_Type {
       __IO uint32_t  WORD1;                     /**< 008C: Message Buffer 0 WORD1 Register                              */
    } MB[CAN_MESSAGE_BUFFER_COUNT];              /**< 0080: (cluster: size=0x0100, 256)                                  */
         uint8_t   RESERVED_4[1792];            
-   __IO uint32_t  RXIMR[16];                    /**< 0880: Rx Individual Mask                                           */
+   __IO uint32_t  RXIMR[CAN_MESSAGE_BUFFER_COUNT]; /**< 0880: Rx Individual Mask                                           */
 } CAN_Type;
 
 /**
@@ -8750,7 +8750,7 @@ typedef struct MCM_Type {
    __I  uint16_t  PLASC;                        /**< 0008: Crossbar Switch (AXBS) Slave Configuration                   */
    __I  uint16_t  PLAMC;                        /**< 000A: Crossbar Switch (AXBS) Master Configuration                  */
    __IO uint32_t  CR;                           /**< 000C: Control Register                                             */
-   __IO uint32_t  ISCR;                         /**< 0010: Interrupt Status Register                                    */
+   __IO uint32_t  ISCR;                         /**< 0010: Interrupt Status and Control Register                        */
    __IO uint32_t  ETBCC;                        /**< 0014: ETB Counter Control register                                 */
    __IO uint32_t  ETBRL;                        /**< 0018: ETB Reload register                                          */
    __I  uint32_t  ETBCNT;                       /**< 001C: ETB Counter Value register                                   */

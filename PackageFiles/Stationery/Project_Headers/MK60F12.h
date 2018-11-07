@@ -5,7 +5,7 @@
  *           Equivalent: 
  *
  * @version  V1.6
- * @date     2018/07
+ * @date     2018/11
  *
  *******************************************************************************************************/
 
@@ -1022,7 +1022,7 @@ typedef struct CAN_Type {
       __IO uint32_t  WORD1;                     /**< 008C: Message Buffer 0 WORD1 Register                              */
    } MB[CAN_MESSAGE_BUFFER_COUNT];              /**< 0080: (cluster: size=0x0100, 256)                                  */
         uint8_t   RESERVED_4[1792];            
-   __IO uint32_t  RXIMR[16];                    /**< 0880: Rx Individual Mask                                           */
+   __IO uint32_t  RXIMR[CAN_MESSAGE_BUFFER_COUNT]; /**< 0880: Rx Individual Mask                                           */
 } CAN_Type;
 
 /**
@@ -14352,9 +14352,9 @@ typedef struct USBHS_Type {
 #define USBHS_FRINDEX_FRINDEX_MASK               (0x3FFFU)                                           /*!< USBHS_FRINDEX.FRINDEX Mask              */
 #define USBHS_FRINDEX_FRINDEX_SHIFT              (0U)                                                /*!< USBHS_FRINDEX.FRINDEX Position          */
 #define USBHS_FRINDEX_FRINDEX(x)                 (((uint32_t)(((uint32_t)(x))<<0U))&0x3FFFUL)        /*!< USBHS_FRINDEX.FRINDEX Field             */
-#define USBHS_FRINDEX_Reerved_MASK               (0xFFFFC000U)                                       /*!< USBHS_FRINDEX.Reerved Mask              */
-#define USBHS_FRINDEX_Reerved_SHIFT              (14U)                                               /*!< USBHS_FRINDEX.Reerved Position          */
-#define USBHS_FRINDEX_Reerved(x)                 (((uint32_t)(((uint32_t)(x))<<14U))&0xFFFFC000UL)   /*!< USBHS_FRINDEX.Reerved Field             */
+#define USBHS_FRINDEX_Reserved_MASK              (0xFFFFC000U)                                       /*!< USBHS_FRINDEX.Reserved Mask             */
+#define USBHS_FRINDEX_Reserved_SHIFT             (14U)                                               /*!< USBHS_FRINDEX.Reserved Position         */
+#define USBHS_FRINDEX_Reserved(x)                (((uint32_t)(((uint32_t)(x))<<14U))&0xFFFFC000UL)   /*!< USBHS_FRINDEX.Reserved Field            */
 /* ------- DEVICEADDR Bit Fields                    ------ */
 #define USBHS_DEVICEADDR_USBADRA_MASK            (0x1000000U)                                        /*!< USBHS_DEVICEADDR.USBADRA Mask           */
 #define USBHS_DEVICEADDR_USBADRA_SHIFT           (24U)                                               /*!< USBHS_DEVICEADDR.USBADRA Position       */
@@ -14378,9 +14378,9 @@ typedef struct USBHS_Type {
 #define USBHS_TTCTRL_TTHA_MASK                   (0x7F000000U)                                       /*!< USBHS_TTCTRL.TTHA Mask                  */
 #define USBHS_TTCTRL_TTHA_SHIFT                  (24U)                                               /*!< USBHS_TTCTRL.TTHA Position              */
 #define USBHS_TTCTRL_TTHA(x)                     (((uint32_t)(((uint32_t)(x))<<24U))&0x7F000000UL)   /*!< USBHS_TTCTRL.TTHA Field                 */
-#define USBHS_TTCTRL_Reerved_MASK                (0x80000000U)                                       /*!< USBHS_TTCTRL.Reerved Mask               */
-#define USBHS_TTCTRL_Reerved_SHIFT               (31U)                                               /*!< USBHS_TTCTRL.Reerved Position           */
-#define USBHS_TTCTRL_Reerved(x)                  (((uint32_t)(((uint32_t)(x))<<31U))&0x80000000UL)   /*!< USBHS_TTCTRL.Reerved Field              */
+#define USBHS_TTCTRL_Reserved_MASK               (0x80000000U)                                       /*!< USBHS_TTCTRL.Reserved Mask              */
+#define USBHS_TTCTRL_Reserved_SHIFT              (31U)                                               /*!< USBHS_TTCTRL.Reserved Position          */
+#define USBHS_TTCTRL_Reserved(x)                 (((uint32_t)(((uint32_t)(x))<<31U))&0x80000000UL)   /*!< USBHS_TTCTRL.Reserved Field             */
 /* ------- BURSTSIZE Bit Fields                     ------ */
 #define USBHS_BURSTSIZE_RXPBURST_MASK            (0xFFU)                                             /*!< USBHS_BURSTSIZE.RXPBURST Mask           */
 #define USBHS_BURSTSIZE_RXPBURST_SHIFT           (0U)                                                /*!< USBHS_BURSTSIZE.RXPBURST Position       */
