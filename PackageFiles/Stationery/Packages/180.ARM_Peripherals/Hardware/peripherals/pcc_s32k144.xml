@@ -1,152 +1,289 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE peripheralPage SYSTEM "_menu.dtd" >
-<!-- pdb0_1ch_2pt_0dac_2po.xml -->
+<!-- pcc_s32k144.xml -->
 
 <peripheralPage xmlns:xi="http://www.w3.org/2001/XInclude" name="_instance" description="Port Clock Control" >
 
-      <template namespace="usbdm"><![CDATA[
-         \t/**
-         \t * Clock sources using first dividers\n\n
-         \t * - SOSC_CLK = System oscillator clock. Either EXTAL or oscillator. See SCG_SOSCCFG[EREFS].
-         \t * - SIRC_CLK = Output clock of Slow IRC.
-         \t * - FIRC_CLK = Output clock of Fast IRC.
-         \t * - SPLL_CLK = Output of PLL (VCO_CLK / 2)
-         \t */
-         \tenum PccDiv1Clock {
-         \t   PccDiv1Clock_Disabled   = PCC_PCCn_CGC(0)|PCC_PCCn_PCD(0), //!< Disabled
-         \t   PccDiv1Clock_Reserved0  = PCC_PCCn_CGC(1)|PCC_PCCn_PCD(0), //!< Disabled
-         \t   PccDiv1Clock_Sosc       = PCC_PCCn_CGC(1)|PCC_PCCn_PCD(1), //!< SOSC_CLK divided by SCG_SOSCDIV[SOSCDIV1]
-         \t   PccDiv1Clock_Sirc       = PCC_PCCn_CGC(1)|PCC_PCCn_PCD(2), //!< SIRC_CLK divided by SCG_SIRCDIV[SIRCDIV1]
-         \t   PccDiv1Clock_Firc       = PCC_PCCn_CGC(1)|PCC_PCCn_PCD(3), //!< FIRC_CLK divided by SCG_FIRCDIV[FIRCDIV1]
-         \t   PccDiv1Clock_Reserved4  = PCC_PCCn_CGC(1)|PCC_PCCn_PCD(4), //!< Disabled
-         \t   PccDiv1Clock_Reserved5  = PCC_PCCn_CGC(1)|PCC_PCCn_PCD(5), //!< Disabled
-         \t   PccDiv1Clock_Spll       = PCC_PCCn_CGC(1)|PCC_PCCn_PCD(6), //!< SPLL_CLK divided by SCG_SPLLDIV[SPLLDIV1]
-         \t   PccDiv1Clock_Reserved7  = PCC_PCCn_CGC(1)|PCC_PCCn_PCD(7), //!< Disabled
-         \t};\n\n
-      
-         \t/**
-         \t * Clock sources using second dividers\n\n
-         \t * - SOSC_CLK = System oscillator clock. Either EXTAL or oscillator. See SCG_SOSCCFG[EREFS].
-         \t * - SIRC_CLK = Output clock of Slow IRC.
-         \t * - FIRC_CLK = Output clock of Fast IRC (Nominally 48MHz).
-         \t * - SPLL_CLK = Output of PLL (VCO_CLK / 2)
-         \t */
-         \tenum PccDiv2Clock {
-         \t   PccDiv2Clock_Disabled   = PCC_PCCn_CGC(0)|PCC_PCCn_PCD(0), //!< Disabled
-         \t   PccDiv2Clock_Reserved0  = PCC_PCCn_CGC(1)|PCC_PCCn_PCD(0), //!< Disabled
-         \t   PccDiv2Clock_Sosc       = PCC_PCCn_CGC(1)|PCC_PCCn_PCD(1), //!< SOSC_CLK divided by SCG_SOSCDIV[SOSCDIV2]
-         \t   PccDiv2Clock_Sirc       = PCC_PCCn_CGC(1)|PCC_PCCn_PCD(2), //!< SIRC_CLK divided by SCG_SIRCDIV[SIRCDIV2]
-         \t   PccDiv2Clock_Firc       = PCC_PCCn_CGC(1)|PCC_PCCn_PCD(3), //!< FIRC_CLK divided by SCG_FIRCDIV[FIRCDIV2]
-         \t   PccDiv2Clock_Reserved4  = PCC_PCCn_CGC(1)|PCC_PCCn_PCD(4), //!< Disabled
-         \t   PccDiv2Clock_Reserved5  = PCC_PCCn_CGC(1)|PCC_PCCn_PCD(5), //!< Disabled
-         \t   PccDiv2Clock_Spll       = PCC_PCCn_CGC(1)|PCC_PCCn_PCD(6), //!< SPLL_CLK divided by SCG_SPLLDIV[SPLLDIV2]
-         \t   PccDiv2Clock_Reserved7  = PCC_PCCn_CGC(1)|PCC_PCCn_PCD(7), //!< Disabled
-         \t};\n\n
-      ]]></template>
-      
-      <template><![CDATA[
-         \t/**
-         \t * Get clock frequency for peripheral using the Divide-by-1 clock sources
-         \t *
-         \t * @param pccDiv1Clock Clock source selector as used by PCC->PCCn
-         \t *
-         \t * @return Frequency as a uint32_t in Hz
-         \t */
-         \tstatic uint32_t getDivideBy1Frequency(PccDiv1Clock pccDiv1Clock) {
-         \t   switch(pccDiv1Clock&(PCC_PCCn_CGC_MASK|PCC_PCCn_PCD_MASK)) {
-         \t      default:
-         \t      case PccDiv1Clock_Disabled: return 0; // Disabled
-         \t      case PccDiv1Clock_Spll:     return ScgInfo::getSoscDiv1Frequency(); // SPLLDIV1
-         \t      case PccDiv1Clock_Firc:     return ScgInfo::getFircDiv1Frequency(); // FIRCDIV1
-         \t      case PccDiv1Clock_Sirc:     return ScgInfo::getSircDiv1Frequency(); // SIRCDIV1
-         \t      case PccDiv2Clock_Sosc:     return ScgInfo::getSoscDiv1Frequency(); // SOSCDIV2
-         \t   }
-         \t}\n\n
+<choiceOption key="pcc_$(instance::tolower)" 
+   description="Clock to $(instance::toUpper)"
+   toolTip="Default clock for $(instance::toUpper)">
+   <for 
+      var="instance" 
+      enumeration="
+     Adc0, Adc1, 
+     Flexio, 
+     Lpuart0, Lpuart1, Lpuart2, 
+     Lpspi0, Lpspi1, Lpspi2, 
+     Lpi2c0, Lpi2c1, Lpi2c2, 
+     Lpit,
+     Lptmr0"
+   />
+   <choice value="0" name="Disabled" />
+   <choice value="1" name="SOSCDIV1_CLK" />
+   <choice value="2" name="SIRCDIV1_CLK" />
+   <choice value="3" name="FIRCDIV1_CLK" />
+   <choice value="6" name="SPLLDIV1_CLK" />
+</choiceOption>
 
-         \t/**
-         \t * Get clock frequency for peripheral using the Divide-by-2 clock sources
-         \t *
-         \t * @param pccDiv2Clock Clock source selector as used by PCC->PCCn
-         \t *
-         \t * @return Frequency as a uint32_t in Hz
-         \t */
-         \tstatic uint32_t getDivideBy2Frequency(PccDiv2Clock pccDiv2Clock) {
-         \t   switch(pccDiv2Clock&(PCC_PCCn_CGC_MASK|PCC_PCCn_PCD_MASK)) {
-         \t      default:
-         \t      case PccDiv2Clock_Disabled: return 0; // Disabled
-         \t      case PccDiv2Clock_Spll:     return ScgInfo::getSoscDiv2Frequency(); // SPLLDIV2
-         \t      case PccDiv2Clock_Firc:     return ScgInfo::getFircDiv2Frequency(); // FIRCDIV2
-         \t      case PccDiv2Clock_Sirc:     return ScgInfo::getSircDiv2Frequency(); // SIRCDIV2
-         \t      case PccDiv2Clock_Sosc:     return ScgInfo::getSoscDiv2Frequency(); // SOSCDIV2
-         \t   }
-         \t}\n\n
-      ]]></template>
-      
-      <template>
-         <for 
-	    var="instance" 
-	    enumeration="
-           Adc0, Adc1, 
-           Flexio, 
-           Lpuart0, Lpuart1, Lpuart2, 
-           Lpspi0, Lpspi1, Lpspi2, 
-           Lpi2c0, Lpi2c1, Lpi2c2, 
-           Lpit,
-           Lptmr0"
-         />
-         <![CDATA[
-         #ifdef PCC_PCC_$(instance::toupper)_CGC_MASK
-         \t/**
-         \t * Set $(instance::toupper) input clock source
-         \t *
-         \t * @param pccDiv2Clock Clock source selection
-         \t */
-         \tstatic void set$(instance)Source(PccDiv2Clock pccDiv2Clock) {
-         \t   pcc().PCC_$(instance::toupper) = 0;
-         \t   pcc().PCC_$(instance::toupper) = pccDiv2Clock;
-         \t}\n\n
-         
-         \t/**
-         \t * Get $(instance::toupper) input clock frequency
-         \t *
-         \t * @return Frequency as a uint32_t in Hz
-         \t */
-         \tstatic uint32_t get$(instance)Frequency() {
-         \t   return getDivideBy2Frequency((PccDiv2Clock)pcc().PCC_$(instance::toupper));
-         \t}\n
-         #endif\n\n
-         ]]>
-      </template>
-      
-      <template>
-         <for 
-	    var="instance" 
-	    enumeration="
-           Ftm0, Ftm1, Ftm2, Ftm3, 
-           Enet"
-         />
-         <![CDATA[
-         #ifdef PCC_PCC_$(instance::toupper)_CGC_MASK
-         \t/**
-         \t * Set $(instance::toupper) input clock source
-         \t *
-         \t * @param pccDiv2Clock Clock source selection
-         \t */
-         \tstatic void set$(instance)Source(PccDiv1Clock pccDiv1Clock) {
-         \t   pcc().PCC_$(instance::toupper) = 0;
-         \t   pcc().PCC_$(instance::toupper) = pccDiv1Clock;
-         \t}\n\n
-         
-         \t/**
-         \t * Get $(instance::toupper) input clock frequency
-         \t *
-         \t * @return Frequency as a uint32_t in Hz
-         \t */
-         \tstatic uint32_t get$(instance)Frequency() {
-         \t   return getDivideBy1Frequency((PccDiv1Clock)pcc().PCC_$(instance::toupper));
-         \t}\n
-         #endif\n\n
-         ]]>
-      </template>
+<choiceOption key="pcc_$(instance::tolower)" 
+   description="Clock to $(instance::toUpper)"
+   toolTip="Default clock for $(instance::toUpper)">
+   <for 
+      var="instance" 
+      enumeration="
+     Ftm0, Ftm1, Ftm2, Ftm3, 
+     Enet"
+   />
+   <choice value="0" name="Disabled" />
+   <choice value="1" name="SOSCDIV2_CLK" />
+   <choice value="2" name="SIRCDIV2_CLK" />
+   <choice value="3" name="FIRCDIV2_CLK" />
+   <choice value="6" name="SPLLDIV2_CLK" />
+</choiceOption>
+
+<template>
+   <for 
+ var="instance" 
+ enumeration="
+  Adc0, Adc1, 
+     Flexio, 
+     Lpuart0, Lpuart1, Lpuart2, 
+     Lpspi0, Lpspi1, Lpspi2, 
+     Lpi2c0, Lpi2c1, Lpi2c2, 
+     Lpit,
+     Lptmr0,
+     Ftm0, Ftm1, Ftm2, Ftm3, 
+     Enet"
+   />
+   <![CDATA[
+   \t#ifdef PCC_PCC_$(instance::toupper)_CGC_MASK
+   \t// Default clock selection for $(instance)
+   \tconst uint32_t pcc_$(instance::tolower) = $(pcc_$(instance::tolower)::defer);
+   \t#endif
+   ]]>
+</template>
+
+<template>
+   <![CDATA[
+   \t/**
+   \t *  Initialise default peripheral clocks
+   \t */
+   \tvoid initClocks() {
+   ]]>
+</template>
+
+<template>
+   <for 
+ var="instance" 
+ enumeration="
+     Adc0, Adc1, 
+     Flexio, 
+     Lpuart0, Lpuart1, Lpuart2, 
+     Lpspi0, Lpspi1, Lpspi2, 
+     Lpi2c0, Lpi2c1, Lpi2c2, 
+     Lpit,
+     Lptmr0,
+     Ftm0, Ftm1, Ftm2, Ftm3, 
+     Enet"
+   />
+   <![CDATA[
+   \t#ifdef PCC_PCC_$(instance::toupper)_CGC_MASK
+   \t   pcc().PCC_$(instance::toupper) = 0;
+   \t   pcc().PCC_$(instance::toupper) = PCC_PCCn_CGC_MASK|PCC_PCCn_PCS(pcc_$(instance::tolower));
+   \t#endif
+   ]]>
+</template>
+
+<template>
+   <![CDATA[
+   \t}\n\n
+   ]]>
+</template>
+
+<template>
+   <for 
+ var="instance" 
+ enumeration="
+     Adc0, Adc1, 
+     Flexio, 
+     Lpuart0, Lpuart1, Lpuart2, 
+     Lpspi0, Lpspi1, Lpspi2, 
+     Lpi2c0, Lpi2c1, Lpi2c2, 
+     Lpit,
+     Lptmr0,
+     Ftm0, Ftm1, Ftm2, Ftm3, 
+     Enet"
+   />
+   <![CDATA[
+   \t#ifdef PCC_PCC_$(instance::toupper)_CGC_MASK
+   \t/**
+   \t *  Initialise $(instance::toupper) default clock
+   \t */
+   \tvoid init$(instance)Clock() {
+   \t   pcc().PCC_$(instance::toupper) = 0;
+   \t   pcc().PCC_$(instance::toupper) = PCC_PCCn_CGC_MASK|PCC_PCCn_PCS(pcc_$(instance::tolower));
+   \t}
+   \t#endif\n\n
+   ]]>
+</template>
+
+
+<template namespace="usbdm"><![CDATA[
+   \t/**
+   \t * Clock sources using first dividers\n\n
+   \t * - SOSCDIV1_CLK = System oscillator clock divided by SCG_SOSCDIV.SOSCDIV1
+   \t * - SIRCDIV1_CLK = Output clock of Slow IRC divided by SCG_SIRCDIV.SIRCDIV1
+   \t * - FIRCDIV1_CLK = Output clock of Fast IRC divided by SCG_FIRCDIV.FIRCDIV1
+   \t * - SPLLDIV1_CLK = Output of PLL (VCO_CLK / 2) divided by SCG_SPLLDIV.SPLLDIV1
+   \t */
+   \tenum PccDiv1Clock {
+   \t   PccDiv1Clock_Disabled    = PCC_PCCn_PCS(0), //!< Disabled
+   \t   PccDiv1Clock_FtmExternal = PCC_PCCn_PCS(0), //!< FTM external clock (FTM only)
+   \t   PccDiv1Clock_Sosc        = PCC_PCCn_PCS(1), //!< SOSCDIV1_CLK
+   \t   PccDiv1Clock_Sirc        = PCC_PCCn_PCS(2), //!< SIRCDIV1_CLK
+   \t   PccDiv1Clock_Firc        = PCC_PCCn_PCS(3), //!< FIRCDIV1_CLK
+   \t   PccDiv1Clock_Reserved4   = PCC_PCCn_PCS(4), //!< Disabled
+   \t   PccDiv1Clock_Reserved5   = PCC_PCCn_PCS(5), //!< Disabled
+   \t   PccDiv1Clock_Spll        = PCC_PCCn_PCS(6), //!< SPLLDIV1_CLK
+   \t   PccDiv1Clock_Reserved7   = PCC_PCCn_PCS(7), //!< Disabled
+   \t};\n\n
+
+   \t/**
+   \t * Clock sources using second dividers\n\n
+   \t * - SOSCDIV2_CLK = System oscillator clock divided by SCG_SOSCDIV.SOSCDIV2
+   \t * - SIRCDIV2_CLK = Output clock of Slow IRC divided by SCG_SIRCDIV.SIRCDIV2
+   \t * - FIRCDIV2_CLK = Output clock of Fast IRC divided by SCG_FIRCDIV.FIRCDIV2
+   \t * - SPLLDIV2_CLK = Output of PLL (VCO_CLK / 2) divided by SCG_SPLLDIV.SPLLDIV2
+   \t */
+   \tenum PccDiv2Clock {
+   \t   PccDiv2Clock_Disabled   = PCC_PCCn_PCS(0), //!< Disabled
+   \t   PccDiv2Clock_Sosc       = PCC_PCCn_PCS(1), //!< SOSCDIV2_CLK
+   \t   PccDiv2Clock_Sirc       = PCC_PCCn_PCS(2), //!< SIRCDIV2_CLK
+   \t   PccDiv2Clock_Firc       = PCC_PCCn_PCS(3), //!< FIRCDIV2_CLK
+   \t   PccDiv2Clock_Reserved4  = PCC_PCCn_PCS(4), //!< Disabled
+   \t   PccDiv2Clock_Reserved5  = PCC_PCCn_PCS(5), //!< Disabled
+   \t   PccDiv2Clock_Spll       = PCC_PCCn_PCS(6), //!< SPLLDIV2_CLK
+   \t   PccDiv2Clock_Reserved7  = PCC_PCCn_PCS(7), //!< Disabled
+   \t};\n\n
+]]></template>
+
+<template><![CDATA[
+   \t/**
+   \t * Get clock frequency for peripheral using the Divide-by-1 clock sources
+   \t *
+   \t * @param pccDiv1Clock Clock source selector as used by PCC->PCCn
+   \t *
+   \t * @return Frequency as a uint32_t in Hz
+   \t */
+   \tstatic uint32_t getDivideBy1Frequency(PccDiv1Clock pccDiv1Clock) {
+   \t   switch(pccDiv1Clock&PCC_PCCn_PCS_MASK) {
+   \t      default:
+   \t      case PccDiv1Clock_Disabled: return 0; // Disabled
+   \t      case PccDiv1Clock_Spll:     return ScgInfo::getSpllDiv1Frequency(); // SPLLDIV1_CLK
+   \t      case PccDiv1Clock_Firc:     return ScgInfo::getFircDiv1Frequency(); // FIRCDIV1_CLK
+   \t      case PccDiv1Clock_Sirc:     return ScgInfo::getSircDiv1Frequency(); // SIRCDIV1_CLK
+   \t      case PccDiv2Clock_Sosc:     return ScgInfo::getSoscDiv1Frequency(); // SOSCDIV2_CLK
+   \t   }
+   \t}\n\n
+
+   \t/**
+   \t * Get clock frequency for peripheral using the Divide-by-2 clock sources
+   \t *
+   \t * @param pccDiv2Clock Clock source selector as used by PCC->PCCn
+   \t *
+   \t * @return Frequency as a uint32_t in Hz
+   \t */
+   \tstatic uint32_t getDivideBy2Frequency(PccDiv2Clock pccDiv2Clock) {
+   \t   switch(pccDiv2Clock&PCC_PCCn_PCS_MASK) {
+   \t      default:
+   \t      case PccDiv2Clock_Disabled: return 0; // Disabled
+   \t      case PccDiv2Clock_Spll:     return ScgInfo::getSpllDiv2Frequency(); // SPLLDIV2_CLK
+   \t      case PccDiv2Clock_Firc:     return ScgInfo::getFircDiv2Frequency(); // FIRCDIV2_CLK
+   \t      case PccDiv2Clock_Sirc:     return ScgInfo::getSircDiv2Frequency(); // SIRCDIV2_CLK
+   \t      case PccDiv2Clock_Sosc:     return ScgInfo::getSoscDiv2Frequency(); // SOSCDIV2_CLK
+   \t   }
+   \t}\n\n
+]]></template>
+
+<template>
+   <for 
+ var="instance" 
+ enumeration="
+     Adc0, Adc1, 
+     Flexio, 
+     Lpuart0, Lpuart1, Lpuart2, 
+     Lpspi0, Lpspi1, Lpspi2, 
+     Lpi2c0, Lpi2c1, Lpi2c2, 
+     Lpit,
+     Lptmr0"
+   />
+   <![CDATA[
+   #ifdef PCC_PCC_$(instance::toupper)_CGC_MASK
+   \t/**
+   \t * Set $(instance::toupper) input clock source.
+   \t * This also enables the clock.
+   \t *
+   \t * @param pccDiv2Clock Clock source selection
+   \t *
+   \t * @note This peripheral uses the DIV2 peripheral clocks e.g. SOSCDIV2_CLK 
+   \t * @note The peripheral bus clock will be disabled before changing the clock 
+   \t */
+   \tstatic void set$(instance)ClockSource(PccDiv2Clock pccDiv2Clock) {
+   \t   // Disable bus clock 
+   \t   pcc().PCC_$(instance::toupper) = 0;
+   \t   pcc().PCC_$(instance::toupper) = PCC_PCCn_CGC_MASK|pccDiv2Clock;
+   \t}\n\n
+   
+   \t/**
+   \t * Get $(instance::toupper) input clock frequency
+   \t *
+   \t * @note These peripherals use the DIV2 peripheral clocks e.g. SOSCDIV2_CLK 
+   \t *
+   \t * @return Frequency as a uint32_t in Hz
+   \t */
+   \tstatic uint32_t get$(instance)Frequency() {
+   \t   return getDivideBy2Frequency((PccDiv2Clock)pcc().PCC_$(instance::toupper));
+   \t}
+   #endif\n\n
+   ]]>
+</template>
+
+<template>
+   <for 
+ var="instance" 
+ enumeration="
+     Ftm0, Ftm1, Ftm2, Ftm3, 
+     Enet"
+   />
+   <![CDATA[
+   #ifdef PCC_PCC_$(instance::toupper)_CGC_MASK
+   \t/**
+   \t * Set $(instance::toupper) input clock source.
+   \t * This also enables the clock.
+   \t *
+   \t * @param pccDiv2Clock Clock source selection
+   \t *
+   \t * @note This peripheral uses the DIV1 peripheral clocks e.g. SOSCDIV1_CLK 
+   \t * @note The peripheral bus clock will be disabled before changing the clock 
+   \t */
+   \tstatic void set$(instance)ClockSource(PccDiv1Clock pccDiv1Clock) {
+   \t   // Disable bus clock 
+   \t   pcc().PCC_$(instance::toupper) = 0;
+   \t   pcc().PCC_$(instance::toupper) = PCC_PCCn_CGC_MASK|pccDiv1Clock;
+   \t}\n\n
+   
+   \t/**
+   \t * Get $(instance::toupper) input clock frequency
+   \t *
+   \t * @note These peripherals use the DIV1 peripheral clocks e.g. SOSCDIV1_CLK 
+   \t *
+   \t * @return Frequency as a uint32_t in Hz
+   \t */
+   \tstatic uint32_t get$(instance)Frequency() {
+   \t   return getDivideBy1Frequency((PccDiv1Clock)pcc().PCC_$(instance::toupper));
+   \t}
+   #endif\n\n
+   ]]>
+</template>
       
 </peripheralPage>

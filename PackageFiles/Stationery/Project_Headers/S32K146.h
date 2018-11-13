@@ -2829,7 +2829,7 @@ typedef struct DMA_Type {
 */
 
 /* ================================================================================ */
-/* ================           DMAMUX0 (file:DMAMUX0_16CH_TRIG)       ================ */
+/* ================           DMAMUX0 (file:DMAMUX0_16CH_TRIG_S32K14x)       ================ */
 /* ================================================================================ */
 
 /**
@@ -2881,67 +2881,67 @@ typedef struct DMAMUX_Type {
  */
 typedef enum DmaSlot {
    Dma0Slot_Disabled                   =        0, //!<  Disabled
-   Dma0Slot_Slot1                      =        1, //!<  Slot1
-   Dma0Slot_Slot2                      =        2, //!<  Slot2
-   Dma0Slot_Slot3                      =        3, //!<  Slot3
-   Dma0Slot_Slot4                      =        4, //!<  Slot4
-   Dma0Slot_Slot5                      =        5, //!<  Slot5
-   Dma0Slot_Slot6                      =        6, //!<  Slot6
-   Dma0Slot_Slot7                      =        7, //!<  Slot7
-   Dma0Slot_Slot8                      =        8, //!<  Slot8
-   Dma0Slot_Slot9                      =        9, //!<  Slot9
-   Dma0Slot_Slot10                     =       10, //!<  Slot10
-   Dma0Slot_Slot11                     =       11, //!<  Slot11
-   Dma0Slot_Slot12                     =       12, //!<  Slot12
-   Dma0Slot_Slot13                     =       13, //!<  Slot13
-   Dma0Slot_Slot14                     =       14, //!<  Slot14
-   Dma0Slot_Slot15                     =       15, //!<  Slot15
-   Dma0Slot_Slot16                     =       16, //!<  Slot16
-   Dma0Slot_Slot17                     =       17, //!<  Slot17
-   Dma0Slot_Slot18                     =       18, //!<  Slot18
-   Dma0Slot_Slot19                     =       19, //!<  Slot19
-   Dma0Slot_Slot20                     =       20, //!<  Slot20
-   Dma0Slot_Slot21                     =       21, //!<  Slot21
-   Dma0Slot_Slot22                     =       22, //!<  Slot22
-   Dma0Slot_Slot23                     =       23, //!<  Slot23
-   Dma0Slot_Slot24                     =       24, //!<  Slot24
-   Dma0Slot_Slot25                     =       25, //!<  Slot25
-   Dma0Slot_Slot26                     =       26, //!<  Slot26
-   Dma0Slot_Slot27                     =       27, //!<  Slot27
-   Dma0Slot_Slot28                     =       28, //!<  Slot28
-   Dma0Slot_Slot29                     =       29, //!<  Slot29
-   Dma0Slot_Slot30                     =       30, //!<  Slot30
-   Dma0Slot_Slot31                     =       31, //!<  Slot31
-   Dma0Slot_Slot32                     =       32, //!<  Slot32
-   Dma0Slot_Slot33                     =       33, //!<  Slot33
-   Dma0Slot_Slot34                     =       34, //!<  Slot34
-   Dma0Slot_Slot35                     =       35, //!<  Slot35
-   Dma0Slot_Slot36                     =       36, //!<  Slot36
-   Dma0Slot_Slot37                     =       37, //!<  Slot37
-   Dma0Slot_Slot38                     =       38, //!<  Slot38
-   Dma0Slot_Slot39                     =       39, //!<  Slot39
-   Dma0Slot_Slot40                     =       40, //!<  Slot40
-   Dma0Slot_Slot41                     =       41, //!<  Slot41
-   Dma0Slot_Slot42                     =       42, //!<  Slot42
-   Dma0Slot_Slot43                     =       43, //!<  Slot43
-   Dma0Slot_Slot44                     =       44, //!<  Slot44
-   Dma0Slot_Slot45                     =       45, //!<  Slot45
-   Dma0Slot_Slot46                     =       46, //!<  Slot46
-   Dma0Slot_Slot47                     =       47, //!<  Slot47
-   Dma0Slot_Slot48                     =       48, //!<  Slot48
-   Dma0Slot_Slot49                     =       49, //!<  Slot49
-   Dma0Slot_Slot50                     =       50, //!<  Slot50
-   Dma0Slot_Slot51                     =       51, //!<  Slot51
-   Dma0Slot_Slot52                     =       52, //!<  Slot52
-   Dma0Slot_Slot53                     =       53, //!<  Slot53
-   Dma0Slot_Slot54                     =       54, //!<  Slot54
-   Dma0Slot_Slot55                     =       55, //!<  Slot55
-   Dma0Slot_Slot56                     =       56, //!<  Slot56
-   Dma0Slot_Slot57                     =       57, //!<  Slot57
-   Dma0Slot_Slot58                     =       58, //!<  Slot58
-   Dma0Slot_Slot59                     =       59, //!<  Slot59
-   Dma0Slot_AlwaysEnabled60            =       60, //!<  AlwaysEnabled60
-   Dma0Slot_AlwaysEnabled61            =       61, //!<  AlwaysEnabled61
+   Dma0Slot_ENET                       =        1, //!<  ENET
+   Dma0Slot_LPUART0_Rx                 =        2, //!<  LPUART0_Rx
+   Dma0Slot_LPUART0_Tx                 =        3, //!<  LPUART0_Tx
+   Dma0Slot_LPUART1_Rx                 =        4, //!<  LPUART1_Rx
+   Dma0Slot_LPUART1_Tx                 =        5, //!<  LPUART1_Tx
+   Dma0Slot_LPUART2_Rx                 =        6, //!<  LPUART2_Rx
+   Dma0Slot_LPUART2_Tx                 =        7, //!<  LPUART2_Tx
+   Dma0Slot_LPI2C1_Rx                  =        8, //!<  LPI2C1_Rx
+   Dma0Slot_LPI2C1_Tx                  =        9, //!<  LPI2C1_Tx
+   Dma0Slot_FLEXIO_Sh0                 =       10, //!<  FLEXIO_Sh0
+   Dma0Slot_FLEXIO_Sh1                 =       11, //!<  FLEXIO_Sh1
+   Dma0Slot_FLEXIO_Sh2                 =       12, //!<  FLEXIO_Sh2
+   Dma0Slot_FLEXIO_Sh3                 =       13, //!<  FLEXIO_Sh3
+   Dma0Slot_LPSPI0_Rx                  =       14, //!<  LPSPI0_Rx
+   Dma0Slot_LPSPI0_Tx                  =       15, //!<  LPSPI0_Tx
+   Dma0Slot_LPSPI1_Rx                  =       16, //!<  LPSPI1_Rx
+   Dma0Slot_LPSPI1_Tx                  =       17, //!<  LPSPI1_Tx
+   Dma0Slot_LPSPI2_Rx                  =       18, //!<  LPSPI2_Rx
+   Dma0Slot_LPSPI2_Tx                  =       19, //!<  LPSPI2_Tx
+   Dma0Slot_FTM1_Ch0                   =       20, //!<  FTM1_Ch0
+   Dma0Slot_FTM1_Ch1                   =       21, //!<  FTM1_Ch1
+   Dma0Slot_FTM1_Ch2                   =       22, //!<  FTM1_Ch2
+   Dma0Slot_FTM1_Ch3                   =       23, //!<  FTM1_Ch3
+   Dma0Slot_FTM1_Ch4                   =       24, //!<  FTM1_Ch4
+   Dma0Slot_FTM1_Ch5                   =       25, //!<  FTM1_Ch5
+   Dma0Slot_FTM1_Ch6                   =       26, //!<  FTM1_Ch6
+   Dma0Slot_FTM1_Ch7                   =       27, //!<  FTM1_Ch7
+   Dma0Slot_FTM2_Ch0                   =       28, //!<  FTM2_Ch0
+   Dma0Slot_FTM2_Ch1                   =       29, //!<  FTM2_Ch1
+   Dma0Slot_FTM2_Ch2                   =       30, //!<  FTM2_Ch2
+   Dma0Slot_FTM2_Ch3                   =       31, //!<  FTM2_Ch3
+   Dma0Slot_FTM2_Ch4                   =       32, //!<  FTM2_Ch4
+   Dma0Slot_FTM2_Ch5                   =       33, //!<  FTM2_Ch5
+   Dma0Slot_FTM2_Ch6                   =       34, //!<  FTM2_Ch6
+   Dma0Slot_FTM2_Ch7                   =       35, //!<  FTM2_Ch7
+   Dma0Slot_FTM0_Or                    =       36, //!<  FTM0_Or
+   Dma0Slot_FTM3_Or                    =       37, //!<  FTM3_Or
+   Dma0Slot_FTM4_Or                    =       38, //!<  FTM4_Or
+   Dma0Slot_FTM5_Or                    =       39, //!<  FTM5_Or
+   Dma0Slot_FTM6_Or                    =       40, //!<  FTM6_Or
+   Dma0Slot_FTM7_Or                    =       41, //!<  FTM7_Or
+   Dma0Slot_ADC0                       =       42, //!<  ADC0
+   Dma0Slot_ADC1                       =       43, //!<  ADC1
+   Dma0Slot_LPI2C0_Rx                  =       44, //!<  LPI2C0_Rx
+   Dma0Slot_LPI2C0_Tx                  =       45, //!<  LPI2C0_Tx
+   Dma0Slot_PDB0                       =       46, //!<  PDB0
+   Dma0Slot_PDB1                       =       47, //!<  PDB1
+   Dma0Slot_CMP0                       =       48, //!<  CMP0
+   Dma0Slot_PORTA                      =       49, //!<  PORTA
+   Dma0Slot_POSRTB                     =       50, //!<  POSRTB
+   Dma0Slot_PORTC                      =       51, //!<  PORTC
+   Dma0Slot_PORTD                      =       52, //!<  PORTD
+   Dma0Slot_PORTE                      =       53, //!<  PORTE
+   Dma0Slot_CAN0                       =       54, //!<  CAN0
+   Dma0Slot_CAN1                       =       55, //!<  CAN1
+   Dma0Slot_CAN2                       =       56, //!<  CAN2
+   Dma0Slot_SAI0_Rx                    =       57, //!<  SAI0_Rx
+   Dma0Slot_SAI0_tx                    =       58, //!<  SAI0_tx
+   Dma0Slot_LPTMR0                     =       59, //!<  LPTMR0
+   Dma0Slot_QUADSPI_Rx                 =       60, //!<  QUADSPI_Rx
+   Dma0Slot_QUADSPI_Tx                 =       61, //!<  QUADSPI_Tx
    Dma0Slot_AlwaysEnabled62            =       62, //!<  AlwaysEnabled62
    Dma0Slot_AlwaysEnabled63            =       63, //!<  AlwaysEnabled63
 } DmaSlot;

@@ -8,10 +8,13 @@
       description="Clock Sources"
       toolTip="FIRC_CLK, SIRC_CLK, LPO_CLK, USB_CLKIN frequencies" >
 
+      <aliasOption key="/SIM/system_lpo_frequency" />   
+      <aliasOption key="/SIM/system_rtcclkin_frequency" />   
+
       <intOption name="system_firc_frequency"
          description="Frequency of Fast Internal Reference [FIRC] Clock"
          toolTip="Dependent on device and clock Trim. [Typically ~48MHz]"
-         origin="FIRC_CLK"
+         origin="FIRC frequency"
          constant="true"
          units="Hz"
          value="48000000" />
@@ -19,34 +22,10 @@
       <intOption name="system_sirc_frequency"
          description="Frequency of Slow Internal Reference [SIRC] Clock"
          toolTip="Dependent on device and clock Trim. [Typically ~8MHz]"
-         origin="SIRC_CLK"
+         origin="SIRC frequency"
          constant="true"
          units="Hz"
          value="8000000" />
-
-      <intOption name="system_lpo_frequency"
-         description="Frequency of Internal Low Power Oscillator [LPO] Clock"
-         toolTip="Dependent on device. [Typically ~128kHz]" 
-         constant="true" 
-         origin="LPO_CLK"
-         units="Hz"
-         value="128000"/>
-
-      <intOption name="system_rtcclkin_frequency"
-         description="Frequency of External RTC_CLKIN Clock"
-         toolTip="Dependent on device. [Typically ~32kHz]" 
-         constant="true" 
-         origin="LPO_CLK"
-         units="Hz"
-         value="32000"/>
-
-      <intOption name="system_usb_clkin_frequency"  
-         description="Frequency of External USB Clock"
-         toolTip="Externally provided clock for USB on USB_CLKIN" 
-         constant="true" 
-         origin="USB Clock In pin"
-         units="Hz"
-         value="48000000" />
    </category>
 
    <category name="External Clocks" 
@@ -56,15 +35,15 @@
       <intOption name="system_sosc_frequency"  
          description="Frequency of External crystal or clock (EXTAL/XTAL pins)"
          toolTip="Crystal connected to EXTAL/XTAL pins or clock provided to EXTAL pin" 
-         origin="System Oscillator/External Clock In pin"
+         origin="SOSC frequency"
          units="Hz"
-         value="8000000" min="4000000" max="40000000"/>
+         value="8000000" />
       
       <binaryOption name="scg_sosccfg_erefs"
          description="System Oscillator External Reference Select" 
          toolTip="Determines whether a clock or crystal is used for the external reference clock" >
          <choice value="0" name="External clock" />
-         <choice value="1" name="Oscillator" isDefault="true" />
+         <choice value="1" name="Oscillator" />
       </binaryOption>
 
       <binaryOption name="scg_sosccfg_hgo"
@@ -77,12 +56,12 @@
       <choiceOption name="scg_sosccfg_range"
          description="System Oscillator Frequency Range Select"
          toolTip="Selects the frequency range for the crystal oscillator"
+         origin="Determined from crystal oscillator frequency"
          derived="true"
          constant="true">
          <choice value="0" name="Reserved" />
-         <choice value="1" name="Reserved" />
-         <choice value="1" name="Medium range (4MHz - 8MHz)" />
-         <choice value="2" name="High range (8MHz - 40MHz)" isDefault="true" />
+         <choice value="1" name="Medium range" />
+         <choice value="2" name="High range" isDefault="true" />
       </choiceOption>
       
       <choiceOption name="scg_clkoutcnfg_clkoutsel"
@@ -101,19 +80,22 @@
          toolTip="Clock configurations for different run modes"
          value="ClockConfig_." >
          
-      <choiceOption name="clock_mode." 
-         description="Default Clock Mode"
-         toolTip="System Oscillator Clock(SOSC)\n
-            In SOSC mode, SCGCLKOUT and system clocks are derived from the external System Oscillator Clock (SOSC).\n
+      <choiceOption name="clock_transition_mode." 
+         description="Clock mode used for run mode transitions"
+         toolTip="System Oscillator Clock (SOSC)\n
+            SCGCLKOUT and system clocks are derived from the external System Oscillator Clock (SOSC).\n
+            This mode is only available for use in RUN mode.\n
             \n
             Slow Internal Reference Clock (SIRC)\n
             In SIRC mode, SCGCLKOUT and system clocks are derived from the slow internal reference clock.\n
             Two frequency ranges are available for SIRC clock as described in the SIRCCFG[RANGE] register definition.\n 
+            This mode is only available for use in RUN and VLPR modes.\n
             \n
             Fast Internal Reference Clock (FIRC)\n
             In FIRC mode, SCGCLKOUT and system clocks are derived from the fast internal reference clock.\n
             Four frequency range settings are available for FIRC clock as described in the FIRC[RANGE]\n
             register definition. \n
+            This mode is only available for use in RUN and HSRUN modes.\n
             \n
             System PLL (SPLL)\n
             In SPLL mode, the SCGCLKOUT and system clocks are derived from the output of PLL which is controlled\n
@@ -121,6 +103,7 @@
             as specified by its corresponding SCG_SPLLCFG[MULT], times the selected PLL reference frequency. \n
             The PLL's programmable reference divider must be configured to produce a valid PLL reference clock. \n
             This divide value is defined by the SCG_SPLLCFG[PREDIV] bits.\n
+            This mode is only available for use in RUN and HSRUN modes.
          ">
          <choice name="No setup (Reset default)"              value="ClockMode_None" />
          <choice name="System Oscillator Clock (SOSC)"        value="ClockMode_SOSC" />
@@ -129,12 +112,18 @@
          <choice name="System PLL (SPLL)"                     value="ClockMode_SPLL" />
       </choiceOption>
       
-      <category name="RUN Mode System Clocks" 
-         description="CORE_CLK/SYS_CLK, BUS_CLK, FLASH_CLK">
+      <category name="runModeSystemClocks."
+         description="RUN mode clock settings"
+         toolTip="Determines CORE_CLK/SYS_CLK, BUS_CLK, FLASH_CLK clock frequencies for RUN mode\n
+                  Clock transitions to VLPR/HSRUN use this RUN state as an intermediate state"
+         derived="true"
+         constant="true"
+         >
 
-         <choiceOption name="scg_rccr_scs." 
+         <choiceOption name="scg_runccr_scs." 
             description="System Clock Source"
             toolTip="Clock used to generate core/system, bus and flash clocks"
+            constant="true"
             >
             <choice name="System Oscillator Clock (SOSC)"        value="0001" />
             <choice name="Slow Internal Reference Clock (SIRC)"  value="0010" />
@@ -142,17 +131,17 @@
             <choice name="System PLL (SPLL)"                     value="0110" />
          </choiceOption>
 
-         <intOption name="scg_rccr_divcore."  
+         <intOption name="scg_runccr_divcore."  
             description="Core Clock Divide Ratio (for CORE_CLK, SYS_CLOCK)"
             toolTip="Divider for core clock" 
             value="1" min="1" max="16" offset="-1" />
          
-         <intOption name="scg_rccr_divbus."  
+         <intOption name="scg_runccr_divbus."  
             description="Bus Clock Divide Ratio (for BUS_CLK)"
             toolTip="Divider for bus clock" 
             value="1" min="1" max="16" offset="-1" />
          
-         <intOption name="scg_rccr_divslow."  
+         <intOption name="scg_runccr_divslow."  
             description="Flash Clock Divide Ratio (for FLASH_CLK)"
             toolTip="Divider for Flash clock" 
             value="1" min="1" max="8" offset="-1" />
@@ -161,6 +150,7 @@
             description="Core and System clock [CORE_CLK, SYS_CLK]" 
             units="Hz" 
             disabledValue="0.0"
+            min="0" max="80MHz" 
             derived="true"
             constant="true" />
             
@@ -168,6 +158,7 @@
             description="Bus clock [BUS_CLK]" 
             units="Hz" 
             disabledValue="0.0"
+            min="0" max="48MHz" 
             derived="true"
             constant="true" />
             
@@ -175,32 +166,24 @@
             description="Flash clock [FLASH_CLK]" 
             units="Hz" 
             disabledValue="0.0"
+            min="0" max="26.67MHz" 
             derived="true"
             constant="true" />
       </category>        
        
-      <category name="VLPR Mode System Clocks" 
-         description="CORE_CLK/SYS_CLK, BUS_CLK, FLASH_CLK">
-
-         <choiceOption name="scg_vccr_scs."           derivedFrom="scg_rccr_scs." />
-         <intOption    name="scg_vccr_divcore."       derivedFrom="scg_rccr_divcore." />         
-         <intOption    name="scg_vccr_divbus."        derivedFrom="scg_rccr_divbus." />
-         <intOption    name="scg_vccr_divslow."       derivedFrom="scg_rccr_divslow." />
-         <floatOption  name="vlpr_mode_core_clock."   derivedFrom="run_mode_core_clock."  />
-         <floatOption  name="vlpr_mode_bus_clock."    derivedFrom="run_mode_bus_clock." />
-         <floatOption  name="vlpr_mode_flash_clock."  derivedFrom="run_mode_flash_clock." />
-      </category>
-      
-      <category name="HSRUN Mode System Clocks" 
-         description="CORE_CLK/SYS_CLK, BUS_CLK, FLASH_CLK">
-
-         <choiceOption name="scg_hccr_scs."            derivedFrom="scg_rccr_scs." />
-         <intOption    name="scg_hccr_divcore."        derivedFrom="scg_rccr_divcore." />         
-         <intOption    name="scg_hccr_divbus."         derivedFrom="scg_rccr_divbus." />
-         <intOption    name="scg_hccr_divslow."        derivedFrom="scg_rccr_divslow." />
-         <floatOption  name="hsrun_mode_core_clock."   derivedFrom="run_mode_core_clock."  />
-         <floatOption  name="hsrun_mode_bus_clock."    derivedFrom="run_mode_bus_clock." />
-         <floatOption  name="hsrun_mode_flash_clock."  derivedFrom="run_mode_flash_clock." />
+      <category name="alternativeModeSystemClocks." 
+         description="Alternative VLPR/HSRUN mode clock settings"
+         toolTip="Determines CORE_CLK/SYS_CLK, BUS_CLK, FLASH_CLK clock frequencies for alternative run mode"
+         derived="true"
+         constant="true"
+         >
+         <choiceOption name="scg_altccr_scs."        constant="true" derivedFrom="scg_runccr_scs."/>
+         <intOption    name="scg_altccr_divcore."                    derivedFrom="scg_runccr_divcore." />
+         <intOption    name="scg_altccr_divbus."                     derivedFrom="scg_runccr_divbus." />
+         <intOption    name="scg_altccr_divslow."                    derivedFrom="scg_runccr_divslow." />
+         <floatOption  name="alt_mode_core_clock."   constant="true" derivedFrom="run_mode_core_clock."  max="4MHz" />
+         <floatOption  name="alt_mode_bus_clock."    constant="true" derivedFrom="run_mode_bus_clock."   max="4MHz" />
+         <floatOption  name="alt_mode_flash_clock."  constant="true" derivedFrom="run_mode_flash_clock." max="1MHz" />
       </category>
       
       <category name="FIRC" 
@@ -234,7 +217,7 @@
             description="Fast IRC Clock Divide 1 (for FIRCDIV1_CLK)"
             toolTip="Clock divider 1 for the Fast IRC. Used by modules that need an asynchronous clock source." >
             <choice value="0" name="Disabled" />
-            <choice value="1" name="Divide by 1" />
+            <choice value="1" name="Divide by 1" isDefault="true" />
             <choice value="2" name="Divide by 2" />
             <choice value="3" name="Divide by 4" />
             <choice value="4" name="Divide by 8" />
@@ -260,15 +243,15 @@
 
          <floatOption name="firc_div1_frequency." 
             description="Fast IRC via divider 1 [FIRCDIV1_CLK]" 
-            origin="Fast IRC after divider 1"
+            origin="FIRC_CLK/FIRCDIV1"
             units="Hz" 
             disabledValue="0.0"
             derived="true"
             constant="true" />
          
          <floatOption name="firc_div2_frequency." 
-            description="Fast IRC via divider 2 [FIRCDIV2_CLK" 
-            origin="Fast IRC after divider 2"
+            description="Fast IRC via divider 2 [FIRCDIV2_CLK]" 
+            origin="FIRC_CLK/FIRCDIV2"
             units="Hz" 
             disabledValue="0.0"
             derived="true"
@@ -328,7 +311,7 @@
 
          <floatOption name="sirc_div1_frequency." 
             description="Slow IRC via divider 1 [SIRCDIV1_CLK]" 
-            origin="Slow IRC after divider 1"
+            origin="SIRC_CLK/SIRCDIV1"
             units="Hz" 
             disabledValue="0"
             derived="true"
@@ -336,7 +319,7 @@
          
          <floatOption  name="sirc_div2_frequency." 
             description="Slow IRC via divider 2 [SIRCDIV2_CLK]" 
-            origin="Slow IRC after divider 2"
+            origin="SIRC_CLK/SIRCDIV2"
             units="Hz" 
             disabledValue="0"
             derived="true"
@@ -386,7 +369,7 @@
          <intOption name="sosc_frequency."  
             description="Frequency of System Oscillator clock [SOSC_CLK]"
             toolTip="Crystal connected to EXTAL/XTAL pins or clock provided to EXTAL pin" 
-            origin="System Oscillator/External Clock In pin"
+            origin="SOSC_CLK"
             disabledValue="0"
             units="Hz"
             derived="true"
@@ -395,7 +378,7 @@
          <floatOption 
             name="sosc_div1_frequency." 
             description="System Oscillator via divider 1 [SOSCDIV1_CLK]" 
-            origin="System Oscillator after divider 1"
+            origin="SOSC_CLK/SIRCDIV1"
             disabledValue="0"
             units="Hz" 
             derived="true"
@@ -404,7 +387,7 @@
          <floatOption 
             name="sosc_div2_frequency." 
             description="System Oscillator via divider 2 [SOSCDIV2_CLK]" 
-            origin="System Oscillator after divider 2"
+            origin="SOSC_CLK/SIRCDIV2"
             disabledValue="0"
             units="Hz" 
             derived="true"
@@ -422,7 +405,7 @@
          <intOption name="scg_spllcfg_mult."  
             description="System PLL Multiplier"
             toolTip="Selects the multiplication factor applied to the PLL reference clock frequency."
-            value="32" />
+            value="28" />
    
          <intOption name="scg_spllcfg_prediv."  
             description="System PLL Reference Clock Divider"
@@ -459,7 +442,7 @@
             name="system_spll_clock." 
             description="Frequency of System PLL clock [SPLL_CLK]"
             toolTip="Derived from External Clock or Crystal" 
-            origin="System Oscillator via PLL"
+            origin="SPLL_CLK"
             units="Hz" 
             disabledValue="0"
             derived="true"
@@ -468,7 +451,7 @@
          <floatOption 
             name="spll_div1_frequency." 
             description="System PLL via divider 1 (SPLLDIV1_CLK)" 
-            origin="System Oscillator via PLL and after divider 1"
+            origin="SPLL_CLK/SIRCDIV1"
             units="Hz" 
             disabledValue="0"
             derived="true"
@@ -477,7 +460,7 @@
          <floatOption 
             name="spll_div2_frequency." 
             description="System PLL via divider 2 (SPLLDIV2_CLK)" 
-            origin="System Oscillator via PLL and after divider 2"
+            origin="SPLL_CLK/SIRCDIV2"
             units="Hz" 
             disabledValue="0"
             derived="true"
@@ -485,19 +468,23 @@
       </category>
    </indexedCategory>
    
-      <category name="SCG Parameters" description="" toolTip="Parameters limiting SCG operation">
-         <intOption name="pll_mult_min"         constant="true" value="16" />
-         <intOption name="pll_mult_max"         constant="true" value="47" />
-         <intOption name="pll_prediv_min"       constant="true" value="1" />
-         <intOption name="pll_prediv_max"       constant="true" value="8" />
-         <intOption name="pll_post_divider"     constant="true" value="2" />
-         <intOption name="pll_in_min"           constant="true" units="Hz" value="8000000" />
-         <intOption name="pll_in_max"           constant="true" units="Hz" value="40000000" />
-         <intOption name="pll_after_prediv_min" constant="true" units="Hz" value="8000000" />
-         <intOption name="pll_after_prediv_max" constant="true" units="Hz" value="16000000" />
-         <intOption name="pll_output_min"       constant="true" units="Hz" value="90000000" />
-         <intOption name="pll_output_max"       constant="true" units="Hz" value="160000000" />
-      </category>
+   <category name="SCG Parameters" description="" toolTip="Parameters limiting SCG operation">
+      <intOption name="pll_mult_min"              constant="true" value="16" />
+      <intOption name="pll_mult_max"              constant="true" value="47" />
+      <intOption name="pll_prediv_min"            constant="true" value="1" />
+      <intOption name="pll_prediv_max"            constant="true" value="8" />
+      <intOption name="pll_post_divider"          constant="true" value="2" />
+      <intOption name="pll_in_min"                constant="true" units="Hz" value="8MHz" />
+      <intOption name="pll_in_max"                constant="true" units="Hz" value="40MHz" />
+      <intOption name="pll_after_prediv_min"      constant="true" units="Hz" value="8MHz" />
+      <intOption name="pll_after_prediv_max"      constant="true" units="Hz" value="16MHz" />
+      <intOption name="pll_output_min"            constant="true" units="Hz" value="90MHz" />
+      <intOption name="pll_output_max"            constant="true" units="Hz" value="160MHz" />
+      <intOption name="osc_Low_min_frequency"     constant="true" units="Hz" value="4MHz" />
+      <intOption name="osc_medium_min_frequency"  constant="true" units="Hz" value="4MHz" />
+      <intOption name="osc_high_min_frequency"    constant="true" units="Hz" value="8MHz" />
+      <intOption name="osc_high_max_frequency"    constant="true" units="Hz" value="40MHz" />
+   </category>
 
    <xi:include href="_irqOption.xml"/>
       
@@ -553,11 +540,9 @@
       \t   ClockMode clockMode;
       \t
       \t   //! RUN Clock Control Register (SCS, DIVCORE, DIVBUS, DIVSLOW)
-      \t   uint32_t rccr; 
-      \t   //! VLPR Clock Control Register (SCS, DIVCORE, DIVBUS, DIVSLOW)
-      \t   uint32_t vccr; 
-      \t   //! HSRUN Clock Control Register (SCS, DIVCORE, DIVBUS, DIVSLOW)
-      \t   uint32_t hccr; 
+      \t   uint32_t runccr; 
+      \t   //! VLPR?HSRUN Clock Control Register (SCS, DIVCORE, DIVBUS, DIVSLOW)
+      \t   uint32_t altccr; 
       \t
       \t   //! Fast IRC Control Status Register (LK, FIRCREGOFF, FIRCEN)
       \t   uint32_t firccsr;
@@ -635,7 +620,7 @@
       \t */
       \tenum ScgSircLowPower {
       \t   ScgSircLowPower_Disabled = SCG_SIRCCSR_SIRCLPEN(0), //!< SIRC Disabled in low power
-      \t   ScgSircLowPower_Enabled  = SCG_SIRCCSR_SIRCLPEN(1), //!< SIRC Ensabled in low power
+      \t   ScgSircLowPower_Enabled  = SCG_SIRCCSR_SIRCLPEN(1), //!< SIRC Enabled in low power
       \t};\n\n
       
       \t/**
@@ -741,7 +726,6 @@
       ]]>
    </template>
 
-
    <template><![CDATA[
       \t/**
       \t * Configure FIRC_CLK
@@ -792,7 +776,6 @@
       \t      ScgSpllMonitor  scgSpllMonitor) {
       \t   scg().SPLLCSR = scgSpllMonitor|scgSpllControl;
       \t}\n\n
-      
       ]]>
    </template>
 
@@ -811,7 +794,6 @@
       \tstatic void set$(instance)Divisors(ScgDivisor1 scgDivisor1, ScgDivisor2 scgDivisor2) {
       \t   scg().$(instance::toupper)DIV = scgDivisor2|scgDivisor1;
       \t}\n\n
-   
       ]]>
    </template>
 
@@ -827,7 +809,7 @@
       \t * @return Clock as uint32_t
       \t */
       \tstatic uint32_t get$(instance)Frequency() {
-      \t   return (scg().$(instance::toupper)CFG&SCG_$(instance::toupper)CSR_$(instance::toupper)VLD_MASK)?(system_$(instance::tolower)_frequency):0;
+      \t   return (scg().$(instance::toupper)CSR&SCG_$(instance::toupper)CSR_$(instance::toupper)VLD_MASK)?(system_$(instance::tolower)_frequency):0;
       \t}\n\n
       ]]>
    </template>
@@ -885,37 +867,16 @@
       ]]>
    </template>
       
-   <template><![CDATA[
-      \t/**
-      \t * Get Internal LPO Frequency LPO128K_CLK
-      \t *
-      \t * @return Clock as uint32_t
-      \t */
-      \tstatic constexpr uint32_t getLpo128Frequency() {
-      \t   return $(system_lpo_frequency);
-      \t}\n\n
-      
-      \t/**
-      \t * Get External RTC clock input Frequency RTC_CLKIN
-      \t *
-      \t * @return Clock as uint32_t
-      \t */
-      \tstatic constexpr uint32_t getRtcClkinFrequency() {
-      \t   return $(system_rtcclkin_frequency);
-      \t}\n\n
-   ]]></template>
-   
    <template name="ClockConfig" dim="3" namespace="all" ><![CDATA[
       \t$(ClockConfig.:/* -- missing name for configuration -- */),
    ]]></template>
    
    <template name="ScgClockInfoEntries" dim="3" namespace="all" ><![CDATA[
       \t{
-      \t   /* clockMode - Clock Mode                          */  ScgInfo::$(clock_mode.),\n\n                                            
+      \t   /* clockMode - Clock Mode                          */  ScgInfo::$(clock_transition_mode.),\n\n                                            
          
-      \t   /* rccr      - Run Clock Control Register          */  SCG_RCCR_SCS(0b$(scg_rccr_scs.))|SCG_RCCR_DIVCORE($(scg_rccr_divcore.))|SCG_RCCR_DIVBUS($(scg_rccr_divbus.))|SCG_RCCR_DIVSLOW($(scg_rccr_divslow.)),             
-      \t   /* vccr      - VLPR Clock Control Register         */  SCG_VCCR_SCS(0b$(scg_vccr_scs.))|SCG_VCCR_DIVCORE($(scg_vccr_divcore.))|SCG_VCCR_DIVBUS($(scg_vccr_divbus.))|SCG_VCCR_DIVSLOW($(scg_vccr_divslow.)),             
-      \t   /* hccr      - HSRUN Clock Control Register        */  SCG_HCCR_SCS(0b$(scg_hccr_scs.))|SCG_HCCR_DIVCORE($(scg_hccr_divcore.))|SCG_HCCR_DIVBUS($(scg_hccr_divbus.))|SCG_HCCR_DIVSLOW($(scg_hccr_divslow.)), \n\n        
+      \t   /* runccr    - RUN Clock Control Register          */  SCG_RCCR_SCS(0b$(scg_runccr_scs.))|SCG_RCCR_DIVCORE($(scg_runccr_divcore.))|SCG_RCCR_DIVBUS($(scg_runccr_divbus.))|SCG_RCCR_DIVSLOW($(scg_runccr_divslow.)),             
+      \t   /* altccr    - VLPR/HSRUN Clock Control Register   */  SCG_RCCR_SCS(0b$(scg_altccr_scs.))|SCG_RCCR_DIVCORE($(scg_altccr_divcore.))|SCG_RCCR_DIVBUS($(scg_altccr_divbus.))|SCG_RCCR_DIVSLOW($(scg_altccr_divslow.)),             
                                     
       \t   /* firccsr   - Fast IRC Control Status Register    */  SCG_FIRCCSR_FIRCREGOFF($(scg_firccsr_fircregoff.))|SCG_FIRCCSR_FIRCEN($(scg_firccsr_fircen.)),                        
       \t   /* fircdiv   - Fast IRC Divide Register            */  SCG_FIRCDIV_FIRCDIV2($(scg_fircdiv_fircdiv2.))|SCG_FIRCDIV_FIRCDIV1($(scg_fircdiv_fircdiv1.)),                        
@@ -932,7 +893,7 @@
       \t   /* spllcsr   - System PLL Control Status Register  */  SCG_SPLLCSR_SPLLCMRE($(scg_spllcsr_spllcmre.))|SCG_SPLLCSR_SPLLCM($(scg_spllcsr_spllcm.))|SCG_SPLLCSR_SPLLEN($(scg_spllcsr_spllen.)),    
       \t   /* splldiv   - System PLL Divide Register          */  SCG_SPLLDIV_SPLLDIV2($(scg_splldiv_splldiv2.))|SCG_SPLLDIV_SPLLDIV1($(scg_splldiv_splldiv1.)),                        
       \t   /* spllcfg   - System PLL Configuration Register   */  SCG_SPLLCFG_MULT($(scg_spllcfg_mult.))|SCG_SPLLCFG_PREDIV($(scg_spllcfg_prediv.)),  \n\n                             
-      \t},
+      \t},\n\n
    ]]></template>
    
    <validate

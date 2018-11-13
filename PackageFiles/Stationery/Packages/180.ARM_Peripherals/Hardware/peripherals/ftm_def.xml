@@ -27,9 +27,9 @@
    <choiceOption name="ftm_sc_clks" description="Clock Mode Selection"
       toolTip="Selects the clock source for the module">
       <choice value="0" name="Disabled" />
-      <choice value="1" name="System bus clock" isDefault="true" />
+      <choice value="1" name="System clock" isDefault="true" />
       <choice value="2" name="Fixed frequency clock" />
-      <choice value="3" name="External clock (PCC clock selection)" />
+      <choice value="3" name="External clock" />
    </choiceOption>
    <choiceOption name="ftm_sc_ps" description="Clock prescaler"
       toolTip="Selects the prescaler for the module">
@@ -121,8 +121,8 @@
       <aliasOption key="/SIM/sim_sopt4_ftm$(_instance)flt3"    optional="true" constant="false" />
       <aliasOption key="/SIM/sim_sopt4_ftm$(_instance)trg0src" optional="true" constant="false" />
       <aliasOption key="/SIM/sim_sopt4_ftm$(_instance)trg1src" optional="true" constant="false" />
-      <aliasOption key="/SIM/sim_sopt4_ftm$(_instance)ch0src" optional="true" constant="false" />
-      <aliasOption key="/SIM/sim_sopt4_ftm$(_instance)ch1src" optional="true" constant="false" />
+      <aliasOption key="/SIM/sim_sopt4_ftm$(_instance)ch0src"  optional="true" constant="false" />
+      <aliasOption key="/SIM/sim_sopt4_ftm$(_instance)ch1src"  optional="true" constant="false" />
    
       <aliasOption key="/SIM/sim_sopt8_ftm$(_instance)och7src" optional="true" constant="false"/>
       <aliasOption key="/SIM/sim_sopt8_ftm$(_instance)och6src" optional="true" constant="false"/>
@@ -147,7 +147,7 @@
       <copy source="Snippets/ftm-oc-example.cpp"          target="Snippets/ftm-oc-example.cpp"          overwrite="true" derived="true" />
       <copy source="Snippets/ftm-servo-example.cpp"       target="Snippets/ftm-servo-example.cpp"       overwrite="true" derived="true" />
       <copy source="Snippets/ftm-quadrature-example.cpp"  target="Snippets/ftm-quadrature-example.cpp"  overwrite="true" derived="true" />
-      <copy source="Snippets/neopixel-example.cpp"        target="Snippets/neopixel-example.cpp"  overwrite="true" derived="true" />
+      <copy source="Snippets/neopixel-example.cpp"        target="Snippets/neopixel-example.cpp"        overwrite="true" derived="true" />
    </projectActionList>
          
    <template><![CDATA[
@@ -157,6 +157,23 @@
       \t/** Minimum usable interval in ticks */      
       \tstatic constexpr uint32_t minimumInterval=$(minimumInterval);\n\n
       
+      #if defined(USBDM_PCC_IS_DEFINED)
+      \t/**
+      \t * Get input clock frequency
+      \t *
+      \t * @return Input clock frequency as a uint32_t in Hz
+      \t */
+      \tstatic uint32_t getInputClockFrequency() {
+      \t
+      \t   switch(ftm().SC&FTM_SC_CLKS_MASK) {
+      \t   default:
+      \t   case FTM_SC_CLKS(0): return 0;
+      \t   case FTM_SC_CLKS(1): return SystemBusClock;
+      \t   case FTM_SC_CLKS(2): return SimInfo::getRtcFrequency();
+      \t   case FTM_SC_CLKS(3): return PccInfo::getFtm$(_instance)Frequency();
+      \t   }
+      \t}\n\n
+      #else
       \t/**
       \t * Get input clock frequency
       \t *
@@ -172,6 +189,7 @@
       \t   case FTM_SC_CLKS(3): return ftmExternalClock;
       \t   }
       \t}\n\n
+      #endif
    ]]></template>
    
    <xi:include href="_clockOption.xml"/>

@@ -4,117 +4,286 @@
 
 <peripheralPage xmlns:xi="http://www.w3.org/2001/XInclude" name="_instance" description="SIM">
    
-   <!-- Indicates RTC/OSC0 don't share XTAL/EXTAL pins -->
-   <constant name="rtcSharesPins" value="false"   derived="true" />
-   
-   <!-- Oscillator used for OSC0 -->
-   <constant name="osc0_peripheral"   value="/OSC0"    derived="true"/>
-   
-   <!-- Oscillator used for OSC1 = RTC -->
-   <constant name="osc32k_peripheral" value="/RTC"     derived="true"/>
-   
-   <!-- RTC clock in (EXTAL32K) -->
-   <constant name="rtc_clkin"         value="/RTC/osc_input_freq" derived="true"/>
-   
-         <intOption name="system_bus_clock." 
-         units="Hz"
-         description="System Bus Clock"
-         toolTip="Clocks the bus slaves and peripherals\n
-                  Must be &lt;= Core Clock frequency and an integer divisor"
-         value="36000000" />
-      
    <xi:include href="_simFiles-MK.xml"/>
+
+   <template><![CDATA[
+      \t/**
+      \t * Get Internal LPO Frequency LPO128K_CLK
+      \t *
+      \t * @return Clock as uint32_t
+      \t */
+      \tstatic constexpr uint32_t getLpo128Frequency() {
+      \t   return $(system_lpo_frequency);
+      \t}\n\n
+      
+      \t/**
+      \t * Get External RTC clock input Frequency RTC_CLKIN
+      \t *
+      \t * @return Clock as uint32_t
+      \t */
+      \tstatic constexpr uint32_t getRtcClkinFrequency() {
+      \t   return $(system_rtcclkin_frequency);
+      \t}\n\n
+   ]]></template>
    
    <template namespace="usbdm"><![CDATA[
-   \t/**
-   \t * RTC Clock sources
-   \t */
-   \tenum SimRtcClockSource {
-   \t   SimRtcClockSource_SoscDiv1 = SIM_LPOCLKS_RTCCLKSEL(0),//!< SoscDiv1
-   \t   SimRtcClockSource_Lpo128   = SIM_LPOCLKS_RTCCLKSEL(1),//!< Lpo128
-   \t   SimRtcClockSource_RtcClkin = SIM_LPOCLKS_RTCCLKSEL(2),//!< RtcClkin
-   \t   SimRtcClockSource_FircDiv1 = SIM_LPOCLKS_RTCCLKSEL(3),//!< FircDiv1
-   \t};\n\n
+      \t/**
+      \t * RTC Clock sources
+      \t */
+      \tenum SimRtcClockSource {
+      \t   SimRtcClockSource_SoscDiv1 = SIM_LPOCLKS_RTCCLKSEL(0),//!< SoscDiv1
+      \t   SimRtcClockSource_Lpo128   = SIM_LPOCLKS_RTCCLKSEL(1),//!< Lpo128
+      \t   SimRtcClockSource_RtcClkin = SIM_LPOCLKS_RTCCLKSEL(2),//!< RtcClkin
+      \t   SimRtcClockSource_FircDiv1 = SIM_LPOCLKS_RTCCLKSEL(3),//!< FircDiv1
+      \t};\n\n
    ]]></template>
 
    <template><![CDATA[
-   \t/**
-   \t * Set Source for RTC clock
-   \t *
-   \t * @param rtcClockSource
-   \t */
-   \tstatic void setRtcClockSource(SimRtcClockSource simRtcClockSource) {
-   \t   sim().LPOCLKS = (sim().LPOCLKS&~SIM_LPOCLKS_RTCCLKSEL_MASK)|simRtcClockSource;
-   \t}\n\n
-
-   \t/**
-   \t * Get RTC_CLK Clock
-   \t *
-   \t * @return Clock as uint32_t
-   \t */
-   \tstatic uint32_t getRtcFrequency() {
-   \t   switch(sim().LPOCLKS&SIM_LPOCLKS_RTCCLKSEL_MASK) {
-   \t      default:
-   \t      case SimRtcClockSource_SoscDiv1:
-   \t         return ScgInfo::getSoscDiv1Frequency();
-   \t         break;
-   \t      case SimRtcClockSource_Lpo128:
-   \t         return ScgInfo::getLpo128Frequency();
-   \t         break;
-   \t      case SimRtcClockSource_RtcClkin:
-   \t         return ScgInfo::getRtcClkinFrequency();
-   \t         break;
-   \t      case SimRtcClockSource_FircDiv1:
-   \t         return ScgInfo::getFircDiv1Frequency();
-   \t         break;
-   \t   }
-   \t}
+      \t/**
+      \t * Set Source for RTC clock
+      \t *
+      \t * @param rtcClockSource
+      \t */
+      \tstatic void setRtcClockSource(SimRtcClockSource simRtcClockSource) {
+      \t   sim().LPOCLKS = (sim().LPOCLKS&~SIM_LPOCLKS_RTCCLKSEL_MASK)|simRtcClockSource;
+      \t}\n\n
+   
+      \t/**
+      \t * Get RTC_CLK Clock
+      \t *
+      \t * @return Clock as uint32_t
+      \t */
+      \tstatic uint32_t getRtcFrequency() {
+      \t   switch(sim().LPOCLKS&SIM_LPOCLKS_RTCCLKSEL_MASK) {
+      \t      default:
+      \t      case SimRtcClockSource_SoscDiv1:
+      \t         return ScgInfo::getSoscDiv1Frequency();
+      \t      case SimRtcClockSource_Lpo128:
+      \t         return SimInfo::getLpo128Frequency();
+      \t      case SimRtcClockSource_RtcClkin:
+      \t         return SimInfo::getRtcClkinFrequency();
+      \t      case SimRtcClockSource_FircDiv1:
+      \t         return ScgInfo::getFircDiv1Frequency();
+      \t   }
+      \t}\n\n
    ]]></template>
 
+   <template>
+      <for 
+       var="instance" 
+       enumeration="Lpo32k, Lpo1k"
+      /><![CDATA[
+      \t/**
+      \t * Enable $(instance::toupper)_CLK clock
+      \t */
+      \tstatic void enable$(instance)Clock() {
+      \t   sim().LPOCLKS |= SIM_LPOCLKS_$(instance::toupper)CLKEN_MASK;
+      \t}\n\n
+   
+      \t/**
+      \t * Disable $(instance::toupper)_CLK clock
+      \t */
+      \tstatic void disable$(instance)Clock() {
+      \t   sim().LPOCLKS &= SIM_LPOCLKS_$(instance::toupper)CLKEN_MASK;
+      \t}\n\n
+   ]]></template>
+   
    <template namespace="usbdm"><![CDATA[
-   \t/**
-   \t * LPO Clock sources
-   \t */
-   \tenum SimLpoClockSource {
-   \t   SimLpoClockSource_Lpo128kHz = SIM_LPOCLKS_LPOCLKSEL(0),//!< Lpo128 ~ 128 kHz
-   \t   SimLpoClockSource_Reserved1 = SIM_LPOCLKS_LPOCLKSEL(1),//!< Reserved
-   \t   SimLpoClockSource_Lpo32kHz  = SIM_LPOCLKS_LPOCLKSEL(2),//!< Lpo32 ~ 32 kHz
-   \t   SimLpoClockSource_Lpo1kHz   = SIM_LPOCLKS_LPOCLKSEL(3),//!< Lpo1 ~ 1 kHz
-   \t};\n\n
-
+      \t/**
+      \t * LPO Clock sources
+      \t */
+      \tenum SimLpoClockSource {
+      \t   SimLpoClockSource_Lpo128kHz = SIM_LPOCLKS_LPOCLKSEL(0), //!< Lpo128 ~ 128 kHz
+      \t   SimLpoClockSource_Reserved1 = SIM_LPOCLKS_LPOCLKSEL(1), //!< Reserved
+      \t   SimLpoClockSource_Lpo32kHz  = SIM_LPOCLKS_LPOCLKSEL(2), //!< Lpo32 ~ 32 kHz
+      \t   SimLpoClockSource_Lpo1kHz   = SIM_LPOCLKS_LPOCLKSEL(3), //!< Lpo1 ~ 1 kHz
+      \t};\n\n
    ]]></template>
 
    <template><![CDATA[
-   \t/**
-   \t * Set Source for LPO clock
-   \t *
-   \t * @param rtcClockSource
-   \t */
-   \tstatic void setLpoClockSource(SimLpoClockSource simLpoClockSource) {
-   \t   sim().LPOCLKS = (sim().LPOCLKS&~SIM_LPOCLKS_LPOCLKSEL_MASK)|simLpoClockSource;
-   \t}\n\n
-
-   \t/**
-   \t * Get LPO_CLK Clock
-   \t *
-   \t * @return Clock as uint32_t
-   \t */
-   \tstatic uint32_t getLpoFrequency() {
-   \t   switch(sim().LPOCLKS&SIM_LPOCLKS_LPOCLKSEL_MASK) {
-   \t      default:
-   \t      case SimLpoClockSource_Lpo128kHz:
-   \t         return ScgInfo::getLpo128Frequency();
-   \t         break;
-   \t      case SimLpoClockSource_Reserved1:
-   \t         return 0;
-   \t         break;
-   \t      case SimLpoClockSource_Lpo32kHz:
-   \t         return ScgInfo::getLpo128Frequency()/4;
-   \t         break;
-   \t      case SimLpoClockSource_Lpo1kHz:
-   \t         return ScgInfo::getLpo128Frequency()/128;
-   \t         break;
-   \t   }
-   \t}\n\n
+      \t/**
+      \t * Get LPO32K_CLK Clock
+      \t *
+      \t * @return Clock as uint32_t
+      \t */
+      \tstatic uint32_t getLpo32kFrequency() {
+      \t   return (sim().LPOCLKS && SIM_LPOCLKS_LPO32KCLKEN_MASK)?(getLpo128Frequency()/4):0;
+      \t}\n\n
+      
+      \t/**
+      \t * Get LPO1K_CLK Clock
+      \t *
+      \t * @return Clock as uint32_t
+      \t */
+      \tstatic uint32_t getLpo1kFrequency() {
+      \t   return (sim().LPOCLKS && SIM_LPOCLKS_LPO1KCLKEN_MASK)?(getLpo32kFrequency()/32):0;
+      \t}\n\n
+   
+      \t/**
+      \t * Set Source for LPO clock
+      \t *
+      \t * @param simLpoClockSource
+      \t */
+      \tstatic void setLpoClockSource(SimLpoClockSource simLpoClockSource) {
+      \t   sim().LPOCLKS = (sim().LPOCLKS&~SIM_LPOCLKS_LPOCLKSEL_MASK)|simLpoClockSource;
+      \t}\n\n
+   
+      \t/**
+      \t * Get LPO_CLK Clock
+      \t *
+      \t * @return Clock as uint32_t
+      \t */
+      \tstatic uint32_t getLpoFrequency() {
+      \t   switch(sim().LPOCLKS&SIM_LPOCLKS_LPOCLKSEL_MASK) {
+      \t      case SimLpoClockSource_Lpo128kHz:
+      \t         return getLpo128Frequency();
+      \t      default:
+      \t      case SimLpoClockSource_Reserved1:
+      \t         return 0;
+      \t      case SimLpoClockSource_Lpo32kHz:
+      \t         return getLpo32kFrequency();
+      \t      case SimLpoClockSource_Lpo1kHz:
+      \t         return getLpo1kFrequency();
+      \t   }
+      \t}\n\n
    ]]></template>
+   
+   <template namespace="usbdm">
+      <for 
+       var="instance" 
+       enumeration="0, 1, 2, 3"
+      />
+      <![CDATA[
+      \t/**
+      \t * FTM external clock pin selection
+      \t */
+      \tenum SimFtm$(instance)ExternalClockSource {
+      \t   SimFtm$(instance)ExternalClockSource_Tclk0 = SIM_FTMOPT0_FTM$(instance)CLKSEL(0), //!< TCLK0 pin
+      \t   SimFtm$(instance)ExternalClockSource_Tclk1 = SIM_FTMOPT0_FTM$(instance)CLKSEL(1), //!< TCLK1 pin
+      \t   SimFtm$(instance)ExternalClockSource_Tclk2 = SIM_FTMOPT0_FTM$(instance)CLKSEL(2), //!< TCLK2 pin
+      \t};\n\n
+   ]]></template>
+     
+   <template>
+      <for 
+       var="instance" 
+       enumeration="0, 1, 2, 3"
+      />
+      <![CDATA[
+      \t/**
+      \t * Select FTM$(instance) external clock pin
+      \t *
+      \t * @param simFtm$(instance)ExternalClockSource Selects the external clock source for PccInfo::setFtm$(instance)Source(PccDiv1Clock_FtmExternal)
+      \t */
+      \tstatic void setFtm$(instance)ExternalClockSource(SimFtm$(instance)ExternalClockSource simFtm$(instance)ExternalClockSource) {
+      \t   sim().FTMOPT0 = (sim().FTMOPT0&~SIM_FTMOPT0_FTM$(instance)CLKSEL_MASK)|simFtm$(instance)ExternalClockSource;
+      \t}\n\n
+   ]]></template>
+   
+   <template namespace="usbdm">
+      <for 
+       var="instance" 
+       enumeration="0, 1, 2, 3"
+      />
+      <![CDATA[
+      \t/**
+      \t * FTM$(instance) Fault 0 input selection
+      \t *
+      \t * This selects between a Fault pin or the output of the trigger multiplexor
+      \t */
+      \tenum SimFtm$(instance)Fault0Select {
+      \t   SimFtm$(instance)Fault0Select_Flt0   = SIM_FTMOPT0_FTM$(instance)FLTxSEL(0b000), //!< FTM$(instance)_FLT0 pin
+      \t   SimFtm$(instance)Fault0Select_TrgMux = SIM_FTMOPT0_FTM$(instance)FLTxSEL(0b001), //!< FTM$(instance) Trigger Multiplexor
+      \t};\n\n
+      
+      \t/**
+      \t * FTM$(instance) Fault 1 input selection
+      \t *
+      \t * This selects between a Fault pin or the output of the trigger multiplexor
+      \t */
+      \tenum SimFtm$(instance)Fault1Select {
+      \t   SimFtm$(instance)Fault1Select_Flt1   = SIM_FTMOPT0_FTM$(instance)FLTxSEL(0b000), //!< FTM$(instance)_FLT1 pin
+      \t   SimFtm$(instance)Fault1Select_TrgMux = SIM_FTMOPT0_FTM$(instance)FLTxSEL(0b010), //!< FTM$(instance) Trigger Multiplexor
+      \t};\n\n
+      
+      \t/**
+      \t * FTM$(instance) Fault 2 input selection
+      \t *
+      \t * This selects between a Fault pin or the output of the trigger multiplexor
+      \t */
+      \tenum SimFtm$(instance)Fault2Select {
+      \t   SimFtm$(instance)Fault2Select_Flt2   = SIM_FTMOPT0_FTM$(instance)FLTxSEL(0b000), //!< FTM$(instance)_FLT2 pin
+      \t   SimFtm$(instance)Fault2Select_TrgMux = SIM_FTMOPT0_FTM$(instance)FLTxSEL(0b100), //!< FTM$(instance) Trigger Multiplexor
+      \t};\n\n
+      ]]>
+   </template>
+     
+   <template>
+      <for 
+       var="instance" 
+       enumeration="0, 1, 2, 3"
+      />
+      <![CDATA[
+      \t/**
+      \t * Select FTM$(instance) fault source
+      \t *
+      \t * This selects between a FTM$(instance) Fault pin or the output of the FTM$(instance) trigger multiplexor
+      \t * for each fault input. 
+      \t *
+      \t * @param simFtm$(instance)Fault0Select Fault input 0 select
+      \t * @param simFtm$(instance)Fault1Select Fault input 1 select
+      \t * @param simFtm$(instance)Fault2Select Fault input 2 select
+      \t */
+      \tstatic void setFtm$(instance)FaultSource(
+      \t      SimFtm$(instance)Fault0Select simFtm$(instance)Fault0Select,
+      \t      SimFtm$(instance)Fault1Select simFtm$(instance)Fault1Select,
+      \t      SimFtm$(instance)Fault2Select simFtm$(instance)Fault2Select) {
+      \t   sim().FTMOPT0 = (sim().FTMOPT0&~SIM_FTMOPT0_FTM$(instance)FLTxSEL_MASK)|
+      \t         (simFtm$(instance)Fault0Select|simFtm$(instance)Fault1Select|simFtm$(instance)Fault2Select);
+      \t}\n\n
+      ]]>
+   </template>
+   
+   <category name="Device Parameters" description="" toolTip="Parameters controlling device">
+   
+      <intOption name="system_lpo_frequency"
+         description="Frequency of Internal Low Power Oscillator [LPO] Clock"
+         toolTip="Dependent on device. [Typically ~128kHz]" 
+         constant="true" 
+         origin="LPO_CLK frequency"
+         units="Hz"
+         value="128000"/>
+   
+      <intOption name="system_rtcclkin_frequency"
+         description="Frequency of External RTC_CLKIN Clock"
+         toolTip="Dependent on device. [Typically ~32kHz]" 
+         constant="true" 
+         origin="RTC_CLKIN frequency"
+         units="Hz"
+         value="32000"/>
+            
+      <stringOption name="pdb_input_clock"   constant="true" value="/SCG/run_mode_core_clock" />
+      <stringOption name="ftm0_input1_clock" constant="true" value="/SCG/run_mode_core_clock" />
+      <stringOption name="ftm0_input2_clock" constant="true" value="/SCG/run_mode_core_clock" />
+      <stringOption name="ftm0_input3_clock" constant="true" value="/SCG/run_mode_core_clock" />
+      <stringOption name="ftm1_input1_clock" constant="true" value="/SCG/run_mode_core_clock" />
+      <stringOption name="ftm1_input2_clock" constant="true" value="/SCG/run_mode_core_clock" />
+      <stringOption name="ftm1_input3_clock" constant="true" value="/SCG/run_mode_core_clock" />
+      <stringOption name="ftm2_input1_clock" constant="true" value="/SCG/run_mode_core_clock" />
+      <stringOption name="ftm2_input2_clock" constant="true" value="/SCG/run_mode_core_clock" />
+      <stringOption name="ftm2_input3_clock" constant="true" value="/SCG/run_mode_core_clock" />
+      <stringOption name="ftm3_input1_clock" constant="true" value="/SCG/run_mode_core_clock" />
+      <stringOption name="ftm3_input2_clock" constant="true" value="/SCG/run_mode_core_clock" />
+      <stringOption name="ftm3_input3_clock" constant="true" value="/SCG/run_mode_core_clock" />
+      <floatOption  name="vlpr_mode_max_core_frequency"   constant="true" value="4MHz"    units="Hz" />
+      <floatOption  name="vlpr_mode_max_bus_frequency"    constant="true" value="4MHz"    units="Hz" />
+      <floatOption  name="vlpr_mode_max_flash_frequency"  constant="true" value="1MHz"    units="Hz" />
+      <floatOption  name="run_mode_max_core_frequency"    constant="true" value="80MHz"   units="Hz" />
+      <floatOption  name="run_mode_max_bus_frequency"     constant="true" value="48MHz"   units="Hz" />
+      <floatOption  name="run_mode_max_flash_frequency"   constant="true" value="18.7MHz" units="Hz" />
+      <floatOption  name="hsrun_mode_max_core_frequency"  constant="true" value="112MHz"  units="Hz" />
+      <floatOption  name="hsrun_mode_max_bus_frequency"   constant="true" value="56MHz"   units="Hz" />
+      <floatOption  name="hsrun_mode_max_flash_frequency" constant="true" value="28MHz"   units="Hz" />
+   </category>
+
 </peripheralPage>

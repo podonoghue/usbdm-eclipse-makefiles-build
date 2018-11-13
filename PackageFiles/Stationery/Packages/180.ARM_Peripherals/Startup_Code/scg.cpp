@@ -105,8 +105,8 @@ ErrorCode Scg::clockTransition(const ScgInfo::ClockInfo &clockInfo) {
          while ((scg().FIRCCSR&SCG_FIRCCSR_FIRCVLD_MASK) == 0) {
             __asm__("nop");
          }
-         scg().RCCR    = SCG_RCCR_SCS(0b0011)|clockInfo.rccr;
-         scg().HCCR    = SCG_HCCR_SCS(0b0011)|clockInfo.hccr;
+         scg().RCCR    = SCG_RCCR_SCS(0b0011)|clockInfo.runccr;
+         scg().HCCR    = SCG_HCCR_SCS(0b0011)|clockInfo.altccr;
          // Wait until FIRC is system clock
          while ((scg().FIRCCSR&SCG_FIRCCSR_FIRCSEL_MASK) == 0) {
             __asm__("nop");
@@ -118,8 +118,8 @@ ErrorCode Scg::clockTransition(const ScgInfo::ClockInfo &clockInfo) {
          while ((scg().SIRCCSR&SCG_SIRCCSR_SIRCVLD_MASK) == 0) {
             __asm__("nop");
          }
-         scg().RCCR    = SCG_RCCR_SCS(0b0010)|clockInfo.rccr;
-         scg().VCCR    = SCG_VCCR_SCS(0b0010)|clockInfo.vccr;
+         scg().RCCR    = SCG_RCCR_SCS(0b0010)|clockInfo.runccr;
+         scg().VCCR    = SCG_VCCR_SCS(0b0010)|clockInfo.altccr;
          // Wait until SIRC is system clock
          while ((scg().SIRCCSR&SCG_SIRCCSR_SIRCSEL_MASK) == 0) {
             __asm__("nop");
@@ -131,7 +131,7 @@ ErrorCode Scg::clockTransition(const ScgInfo::ClockInfo &clockInfo) {
          while ((scg().SOSCCSR&SCG_SOSCCSR_SOSCVLD_MASK) == 0) {
             __asm__("nop");
          }
-         scg().RCCR    = SCG_RCCR_SCS(0b0001)|clockInfo.rccr;
+         scg().RCCR    = SCG_RCCR_SCS(0b0001)|clockInfo.runccr;
          // Wait until SOSC is system clock
          while ((scg().SOSCCSR&SCG_SOSCCSR_SOSCSEL_MASK) == 0) {
             __asm__("nop");
@@ -143,8 +143,8 @@ ErrorCode Scg::clockTransition(const ScgInfo::ClockInfo &clockInfo) {
          while ((scg().SPLLCSR&SCG_SPLLCSR_SPLLVLD_MASK) == 0) {
             __asm__("nop");
          }
-         scg().RCCR    = SCG_RCCR_SCS(0b0110)|clockInfo.rccr;
-         scg().HCCR    = SCG_HCCR_SCS(0b0110)|clockInfo.hccr;
+         scg().RCCR    = SCG_RCCR_SCS(0b0110)|clockInfo.runccr;
+         scg().HCCR    = SCG_HCCR_SCS(0b0110)|clockInfo.altccr;
          // Wait until SPLL is system clock
          while ((scg().SPLLCSR&SCG_SPLLCSR_SPLLSEL_MASK) == 0) {
             __asm__("nop");

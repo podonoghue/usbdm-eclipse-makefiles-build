@@ -30,7 +30,7 @@
       <xi:include href="peripherals/CRC0_0x40032000.svd.xml"/>
       <xi:include href="peripherals/CSE_PRAM_S32K14x.svd.xml"/>
       <xi:include href="peripherals/DMA0_16CH_EARS16.svd.xml"/>
-      <xi:include href="peripherals/DMAMUX0_16CH_TRIG.svd.xml"/>
+      <xi:include href="peripherals/DMAMUX0_16CH_TRIG_S32K14x.svd.xml"/>
       <xi:include href="peripherals/EIM_S32K14x.svd.xml"/>
       <xi:include href="peripherals/ERM_S32K14x.svd.xml"/>
       <xi:include href="peripherals/EWM_INT_PR.svd.xml"/>

@@ -8,4 +8,32 @@
    <item key="$$DeviceInfo_Device_Variant"                 value="FS32K144HAT0MLHT" />
    <item key="$$DeviceInfo_SubFamily"                      value="S32K144" />
    <item key="$$Hardware_Source_Filename"                  value="S32K144.usbdmHardware" />
+   <item key="$signal$PTB6_muxSetting"                     value="mux0" />
+   <item key="$signal$PTB7_muxSetting"                     value="mux0" />
+   <item key="/SCG/ClockConfig[0]"                         value="RUN" />
+   <item key="/SCG/ClockConfig[1]"                         value="VLPR" />
+   <item key="/SCG/ClockConfig[2]"                         value="HSRUN" />
+   <item key="/SCG/clock_transition_mode[0]"               value="ClockMode_FIRC" />
+   <item key="/SCG/clock_transition_mode[1]"               value="ClockMode_SIRC" />
+   <item key="/SCG/clock_transition_mode[2]"               value="ClockMode_SPLL" />
+   <item key="/SCG/scg_altccr_divbus[2]"                   value="2" />
+   <item key="/SCG/scg_altccr_divcore[1]"                  value="2" />
+   <item key="/SCG/scg_altccr_divslow[0]"                  value="3" />
+   <item key="/SCG/scg_altccr_divslow[1]"                  value="4" />
+   <item key="/SCG/scg_altccr_divslow[2]"                  value="4" />
+   <item key="/SCG/scg_altccr_scs[0]"                      value="0011" />
+   <item key="/SCG/scg_altccr_scs[1]"                      value="0010" />
+   <item key="/SCG/scg_altccr_scs[2]"                      value="0110" />
+   <item key="/SCG/scg_firccsr_fircen[1]"                  value="false" />
+   <item key="/SCG/scg_runccr_divbus[2]"                   value="2" />
+   <item key="/SCG/scg_runccr_divcore[2]"                  value="2" />
+   <item key="/SCG/scg_runccr_divslow[0]"                  value="3" />
+   <item key="/SCG/scg_runccr_divslow[2]"                  value="3" />
+   <item key="/SCG/scg_runccr_scs[0]"                      value="0011" />
+   <item key="/SCG/scg_runccr_scs[1]"                      value="0010" />
+   <item key="/SCG/scg_runccr_scs[2]"                      value="0110" />
+   <item key="/SCG/scg_sosccsr_soscen[1]"                  value="false" />
+   <item key="/SCG/scg_spllcfg_mult[0]"                    value="28" />
+   <item key="/SCG/scg_spllcfg_mult[2]"                    value="28" />
+   <item key="/SCG/scg_spllcsr_spllen[1]"                  value="false" />
 </section>
