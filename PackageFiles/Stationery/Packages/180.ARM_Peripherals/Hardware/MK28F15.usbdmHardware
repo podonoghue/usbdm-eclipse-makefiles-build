@@ -14,22 +14,22 @@
    <peripherals>
       <peripheral baseName="ADC"      instance="0"        version="adc0_diff_a">
          <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForAdc" />
-         <clock clockEnable="SIM->SCGC6 |= SIM_SCGC6_ADC0_MASK" clockDisable="SIM->SCGC6 &amp;= ~SIM_SCGC6_ADC0_MASK" />
+         <clock clockEnable="SIM->SCGC6 |= SIM_SCGC6_ADC0_MASK;" clockDisable="SIM->SCGC6 &amp;= ~SIM_SCGC6_ADC0_MASK;" />
          <irq num="ADC0_IRQn" />
       </peripheral>
       <peripheral baseName="CMP"      instance="0"        version="cmp0_mk22f">
          <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForCmp" />
-         <clock clockEnable="SIM->SCGC4 |= SIM_SCGC4_CMP_MASK" clockDisable="SIM->SCGC4 &amp;= ~SIM_SCGC4_CMP_MASK" />
+         <clock clockEnable="SIM->SCGC4 |= SIM_SCGC4_CMP_MASK;" clockDisable="SIM->SCGC4 &amp;= ~SIM_SCGC4_CMP_MASK;" />
          <irq num="CMP0_IRQn" />
       </peripheral>
       <peripheral baseName="CMP"      instance="1"        version="cmp0_mk22f">
          <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForCmp" />
-         <clock clockEnable="SIM->SCGC4 |= SIM_SCGC4_CMP_MASK" clockDisable="SIM->SCGC4 &amp;= ~SIM_SCGC4_CMP_MASK" />
+         <clock clockEnable="SIM->SCGC4 |= SIM_SCGC4_CMP_MASK;" clockDisable="SIM->SCGC4 &amp;= ~SIM_SCGC4_CMP_MASK;" />
          <irq num="CMP1_IRQn" />
       </peripheral>
       <peripheral baseName="CMT"      instance=""         version="cmt_0">
          <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForCmt" />
-         <clock clockEnable="SIM->SCGC4 |= SIM_SCGC4_CMT_MASK" clockDisable="SIM->SCGC4 &amp;= ~SIM_SCGC4_CMT_MASK" />
+         <clock clockEnable="SIM->SCGC4 |= SIM_SCGC4_CMT_MASK;" clockDisable="SIM->SCGC4 &amp;= ~SIM_SCGC4_CMT_MASK;" />
          <irq num="CMT_IRQn" />
       </peripheral>
       <peripheral baseName="CONTROL"  instance="">
@@ -37,19 +37,19 @@
       </peripheral>
       <peripheral baseName="CRC"      instance="0"        version="crc0_0x40032000">
          <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForCrc" />
-         <clock clockEnable="SIM->SCGC6 |= SIM_SCGC6_CRC_MASK" clockDisable="SIM->SCGC6 &amp;= ~SIM_SCGC6_CRC_MASK" />
+         <clock clockEnable="SIM->SCGC6 |= SIM_SCGC6_CRC_MASK;" clockDisable="SIM->SCGC6 &amp;= ~SIM_SCGC6_CRC_MASK;" />
       </peripheral>
       <peripheral baseName="Console"  instance="">
          <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForConsole" />
       </peripheral>
       <peripheral baseName="DAC"      instance="0"        version="dac0_16ch_fifo16_0x400cc000">
          <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForDac" />
-         <clock clockEnable="SIM->SCGC6 |= SIM_SCGC6_DAC0_MASK" clockDisable="SIM->SCGC6 &amp;= ~SIM_SCGC6_DAC0_MASK" />
+         <clock clockEnable="SIM->SCGC2 |= SIM_SCGC2_DAC0_MASK;\nSIM->SCGC6 |= SIM_SCGC6_DAC0_MASK;" clockDisable="SIM->SCGC2 &amp;= ~SIM_SCGC2_DAC0_MASK;\nSIM->SCGC2 &amp;= ~SIM_SCGC2_DAC0_MASK;" />
          <irq num="DAC0_IRQn" />
       </peripheral>
       <peripheral baseName="DMA"      instance="0"        version="dma0_32ch_ears">
          <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForDma" />
-         <clock clockEnable="SIM->SCGC7 |= SIM_SCGC7_DMA_MASK" clockDisable="SIM->SCGC7 &amp;= ~SIM_SCGC7_DMA_MASK" />
+         <clock clockEnable="SIM->SCGC7 |= SIM_SCGC7_DMA_MASK;" clockDisable="SIM->SCGC7 &amp;= ~SIM_SCGC7_DMA_MASK;" />
          <irq num="DMA0_DMA16_IRQn" />
          <irq num="DMA1_DMA17_IRQn" />
          <irq num="DMA2_DMA18_IRQn" />
@@ -70,7 +70,7 @@
       </peripheral>
       <peripheral baseName="DMAMUX"   instance="0"        version="dmamux0_32ch_trig_split_mk28f15">
          <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForDmaMux" />
-         <clock clockEnable="SIM->SCGC6 |= SIM_SCGC6_DMAMUX0_MASK" clockDisable="SIM->SCGC6 &amp;= ~SIM_SCGC6_DMAMUX0_MASK" />
+         <clock clockEnable="SIM->SCGC6 |= SIM_SCGC6_DMAMUX0_MASK;" clockDisable="SIM->SCGC6 &amp;= ~SIM_SCGC6_DMAMUX0_MASK;" />
          <dma source="Disabled (Low channels 0-15)" num="0" />
          <dma source="LPUART0 Receive (Low channels 0-15)" num="2" />
          <dma source="LPUART0 Transmit (Low channels 0-15)" num="3" />
@@ -159,21 +159,21 @@
       </peripheral>
       <peripheral baseName="EWM"      instance=""         version="ewm_int_pr_clk">
          <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForEwm" />
-         <clock clockEnable="SIM->SCGC4 |= SIM_SCGC4_EWM_MASK" clockDisable="SIM->SCGC4 &amp;= ~SIM_SCGC4_EWM_MASK" />
+         <clock clockEnable="SIM->SCGC4 |= SIM_SCGC4_EWM_MASK;" clockDisable="SIM->SCGC4 &amp;= ~SIM_SCGC4_EWM_MASK;" />
          <irq num="WDOG_IRQn" />
       </peripheral>
       <peripheral baseName="FB"       instance=""         version="fb">
          <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForFlexBus" />
-         <clock clockEnable="SIM->SCGC7 |= SIM_SCGC7_FLEXBUS_MASK" clockDisable="SIM->SCGC7 &amp;= ~SIM_SCGC7_FLEXBUS_MASK" />
+         <clock clockEnable="SIM->SCGC7 |= SIM_SCGC7_FLEXBUS_MASK;" clockDisable="SIM->SCGC7 &amp;= ~SIM_SCGC7_FLEXBUS_MASK;" />
       </peripheral>
       <peripheral baseName="FLEXIO"   instance=""         version="flexio_8sh_8tmr_0x400df000">
          <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForFlexio" />
-         <clock clockEnable="SIM->SCGC2 |= SIM_SCGC2_FLEXIO_MASK" clockDisable="SIM->SCGC2 &amp;= ~SIM_SCGC2_FLEXIO_MASK" />
+         <clock clockEnable="SIM->SCGC2 |= SIM_SCGC2_FLEXIO_MASK;" clockDisable="SIM->SCGC2 &amp;= ~SIM_SCGC2_FLEXIO_MASK;" />
          <irq num="FLEXIO_IRQn" />
       </peripheral>
       <peripheral baseName="FTFE"     instance=""         version="ftfe_xacch">
          <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForFlash" />
-         <clock clockEnable="SIM->SCGC6 |= SIM_SCGC6_FTF_MASK" clockDisable="SIM->SCGC6 &amp;= ~SIM_SCGC6_FTF_MASK" />
+         <clock clockEnable="SIM->SCGC6 |= SIM_SCGC6_FTF_MASK;" clockDisable="SIM->SCGC6 &amp;= ~SIM_SCGC6_FTF_MASK;" />
          <irq num="FTF_Command_IRQn" />
          <irq num="FTF_ReadCollision_IRQn" />
          <param key="dflash_phrase_size" value="8" />
@@ -187,57 +187,57 @@
       </peripheral>
       <peripheral baseName="FTM"      instance="0"        version="ftm0_8ch_icrst">
          <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForFtm" />
-         <clock clockEnable="SIM->SCGC6 |= SIM_SCGC6_FTM0_MASK" clockDisable="SIM->SCGC6 &amp;= ~SIM_SCGC6_FTM0_MASK" />
+         <clock clockEnable="SIM->SCGC6 |= SIM_SCGC6_FTM0_MASK;" clockDisable="SIM->SCGC6 &amp;= ~SIM_SCGC6_FTM0_MASK;" />
          <irq num="FTM0_IRQn" />
       </peripheral>
       <peripheral baseName="FTM"      instance="1"        version="ftm1_2ch_icrst">
          <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForFtm" />
-         <clock clockEnable="SIM->SCGC6 |= SIM_SCGC6_FTM1_MASK" clockDisable="SIM->SCGC6 &amp;= ~SIM_SCGC6_FTM1_MASK" />
+         <clock clockEnable="SIM->SCGC6 |= SIM_SCGC6_FTM1_MASK;" clockDisable="SIM->SCGC6 &amp;= ~SIM_SCGC6_FTM1_MASK;" />
          <irq num="FTM1_IRQn" />
       </peripheral>
       <peripheral baseName="FTM"      instance="2"        version="ftm1_2ch_icrst">
          <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForFtm" />
-         <clock clockEnable="SIM->SCGC6 |= SIM_SCGC6_FTM2_MASK" clockDisable="SIM->SCGC6 &amp;= ~SIM_SCGC6_FTM2_MASK" />
+         <clock clockEnable="SIM->SCGC3 |= SIM_SCGC3_FTM2_MASK;\nSIM->SCGC6 |= SIM_SCGC6_FTM2_MASK;" clockDisable="SIM->SCGC3 &amp;= ~SIM_SCGC3_FTM2_MASK;\nSIM->SCGC3 &amp;= ~SIM_SCGC3_FTM2_MASK;" />
          <irq num="FTM2_IRQn" />
       </peripheral>
       <peripheral baseName="FTM"      instance="3"        version="ftm0_8ch_icrst">
          <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForFtm" />
-         <clock clockEnable="SIM->SCGC3 |= SIM_SCGC3_FTM3_MASK" clockDisable="SIM->SCGC3 &amp;= ~SIM_SCGC3_FTM3_MASK" />
+         <clock clockEnable="SIM->SCGC3 |= SIM_SCGC3_FTM3_MASK;" clockDisable="SIM->SCGC3 &amp;= ~SIM_SCGC3_FTM3_MASK;" />
          <irq num="FTM3_IRQn" />
       </peripheral>
       <peripheral baseName="GPIO"     instance="A"        version="gpioa_0x400ff000">
          <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForGpio" />
-         <clock clockEnable="SIM->SCGC5 |= SIM_SCGC5_PORTA_MASK" clockDisable="SIM->SCGC5 &amp;= ~SIM_SCGC5_PORTA_MASK" />
+         <clock clockEnable="SIM->SCGC5 |= SIM_SCGC5_PORTA_MASK;" clockDisable="SIM->SCGC5 &amp;= ~SIM_SCGC5_PORTA_MASK;" />
          <irq num="PORTA_IRQn" />
       </peripheral>
       <peripheral baseName="GPIO"     instance="B"        version="gpioa_0x400ff000">
          <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForGpio" />
-         <clock clockEnable="SIM->SCGC5 |= SIM_SCGC5_PORTB_MASK" clockDisable="SIM->SCGC5 &amp;= ~SIM_SCGC5_PORTB_MASK" />
+         <clock clockEnable="SIM->SCGC5 |= SIM_SCGC5_PORTB_MASK;" clockDisable="SIM->SCGC5 &amp;= ~SIM_SCGC5_PORTB_MASK;" />
          <irq num="PORTB_IRQn" />
       </peripheral>
       <peripheral baseName="GPIO"     instance="C"        version="gpioa_0x400ff000">
          <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForGpio" />
-         <clock clockEnable="SIM->SCGC5 |= SIM_SCGC5_PORTC_MASK" clockDisable="SIM->SCGC5 &amp;= ~SIM_SCGC5_PORTC_MASK" />
+         <clock clockEnable="SIM->SCGC5 |= SIM_SCGC5_PORTC_MASK;" clockDisable="SIM->SCGC5 &amp;= ~SIM_SCGC5_PORTC_MASK;" />
          <irq num="PORTC_IRQn" />
       </peripheral>
       <peripheral baseName="GPIO"     instance="D"        version="gpioa_0x400ff000">
          <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForGpio" />
-         <clock clockEnable="SIM->SCGC5 |= SIM_SCGC5_PORTD_MASK" clockDisable="SIM->SCGC5 &amp;= ~SIM_SCGC5_PORTD_MASK" />
+         <clock clockEnable="SIM->SCGC5 |= SIM_SCGC5_PORTD_MASK;" clockDisable="SIM->SCGC5 &amp;= ~SIM_SCGC5_PORTD_MASK;" />
          <irq num="PORTD_IRQn" />
       </peripheral>
       <peripheral baseName="GPIO"     instance="E"        version="gpioa_0x400ff000">
          <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForGpio" />
-         <clock clockEnable="SIM->SCGC5 |= SIM_SCGC5_PORTE_MASK" clockDisable="SIM->SCGC5 &amp;= ~SIM_SCGC5_PORTE_MASK" />
+         <clock clockEnable="SIM->SCGC5 |= SIM_SCGC5_PORTE_MASK;" clockDisable="SIM->SCGC5 &amp;= ~SIM_SCGC5_PORTE_MASK;" />
          <irq num="PORTE_IRQn" />
       </peripheral>
       <peripheral baseName="I2C"      instance="0"        version="i2c0_mk28f15">
          <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForI2c" />
-         <clock clockEnable="SIM->SCGC4 |= SIM_SCGC4_I2C0_MASK" clockDisable="SIM->SCGC4 &amp;= ~SIM_SCGC4_I2C0_MASK" />
+         <clock clockEnable="SIM->SCGC4 |= SIM_SCGC4_I2C0_MASK;" clockDisable="SIM->SCGC4 &amp;= ~SIM_SCGC4_I2C0_MASK;" />
          <irq num="I2C0_IRQn" />
       </peripheral>
       <peripheral baseName="I2C"      instance="1"        version="i2c0_mk28f15">
          <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForI2c" />
-         <clock clockEnable="SIM->SCGC4 |= SIM_SCGC4_I2C1_MASK" clockDisable="SIM->SCGC4 &amp;= ~SIM_SCGC4_I2C1_MASK" />
+         <clock clockEnable="SIM->SCGC4 |= SIM_SCGC4_I2C1_MASK;" clockDisable="SIM->SCGC4 &amp;= ~SIM_SCGC4_I2C1_MASK;" />
          <irq num="I2C1_IRQn" />
       </peripheral>
       <peripheral baseName="I2C"      instance="2"        version="i2c0_mk28f15">
@@ -246,18 +246,18 @@
       </peripheral>
       <peripheral baseName="I2C"      instance="3"        version="i2c0_mk28f15">
          <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForI2c" />
-         <clock clockEnable="SIM->SCGC1 |= SIM_SCGC1_I2C3_MASK" clockDisable="SIM->SCGC1 &amp;= ~SIM_SCGC1_I2C3_MASK" />
+         <clock clockEnable="SIM->SCGC1 |= SIM_SCGC1_I2C3_MASK;" clockDisable="SIM->SCGC1 &amp;= ~SIM_SCGC1_I2C3_MASK;" />
          <irq num="I2C3_IRQn" />
       </peripheral>
       <peripheral baseName="I2S"      instance="0"        version="i2s0_2ch_mk28f15">
          <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForI2s" />
-         <clock clockEnable="SIM->SCGC6 |= SIM_SCGC6_I2S0_MASK" clockDisable="SIM->SCGC6 &amp;= ~SIM_SCGC6_I2S0_MASK" />
+         <clock clockEnable="SIM->SCGC6 |= SIM_SCGC6_I2S0_MASK;" clockDisable="SIM->SCGC6 &amp;= ~SIM_SCGC6_I2S0_MASK;" />
          <irq num="I2S0_Tx_IRQn" />
          <irq num="I2S0_Rx_IRQn" />
       </peripheral>
       <peripheral baseName="I2S"      instance="1"        version="i2s0_2ch_mk28f15">
          <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForI2s" />
-         <clock clockEnable="SIM->SCGC3 |= SIM_SCGC3_I2S1_MASK" clockDisable="SIM->SCGC3 &amp;= ~SIM_SCGC3_I2S1_MASK" />
+         <clock clockEnable="SIM->SCGC3 |= SIM_SCGC3_I2S1_MASK;" clockDisable="SIM->SCGC3 &amp;= ~SIM_SCGC3_I2S1_MASK;" />
          <irq num="I2S1_Tx_IRQn" />
          <irq num="I2S1_Rx_IRQn" />
       </peripheral>
@@ -267,37 +267,37 @@
       </peripheral>
       <peripheral baseName="LPTMR"    instance="0"        version="lptmr0">
          <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForLptmr" />
-         <clock clockEnable="SIM->SCGC5 |= SIM_SCGC5_LPTMR0_MASK" clockDisable="SIM->SCGC5 &amp;= ~SIM_SCGC5_LPTMR0_MASK" />
+         <clock clockEnable="SIM->SCGC5 |= SIM_SCGC5_LPTMR0_MASK;" clockDisable="SIM->SCGC5 &amp;= ~SIM_SCGC5_LPTMR0_MASK;" />
          <irq num="LPTMR0_LPTMR1_IRQn" />
       </peripheral>
       <peripheral baseName="LPTMR"    instance="1"        version="lptmr0">
          <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForLptmr" />
-         <clock clockEnable="SIM->SCGC5 |= SIM_SCGC5_LPTMR1_MASK" clockDisable="SIM->SCGC5 &amp;= ~SIM_SCGC5_LPTMR1_MASK" />
+         <clock clockEnable="SIM->SCGC5 |= SIM_SCGC5_LPTMR1_MASK;" clockDisable="SIM->SCGC5 &amp;= ~SIM_SCGC5_LPTMR1_MASK;" />
          <irq num="LPTMR0_LPTMR1_IRQn" />
       </peripheral>
       <peripheral baseName="LPUART"   instance="0"        version="lpuart0_fifo_0x400c4000">
          <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForLpuart" />
-         <clock clockEnable="SIM->SCGC2 |= SIM_SCGC2_LPUART0_MASK" clockDisable="SIM->SCGC2 &amp;= ~SIM_SCGC2_LPUART0_MASK" />
+         <clock clockEnable="SIM->SCGC2 |= SIM_SCGC2_LPUART0_MASK;" clockDisable="SIM->SCGC2 &amp;= ~SIM_SCGC2_LPUART0_MASK;" />
          <irq num="LPUART0_IRQn" />
       </peripheral>
       <peripheral baseName="LPUART"   instance="1"        version="lpuart0_fifo_0x400c4000">
          <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForLpuart" />
-         <clock clockEnable="SIM->SCGC2 |= SIM_SCGC2_LPUART1_MASK" clockDisable="SIM->SCGC2 &amp;= ~SIM_SCGC2_LPUART1_MASK" />
+         <clock clockEnable="SIM->SCGC2 |= SIM_SCGC2_LPUART1_MASK;" clockDisable="SIM->SCGC2 &amp;= ~SIM_SCGC2_LPUART1_MASK;" />
          <irq num="LPUART1_IRQn" />
       </peripheral>
       <peripheral baseName="LPUART"   instance="2"        version="lpuart0_fifo_0x400c4000">
          <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForLpuart" />
-         <clock clockEnable="SIM->SCGC2 |= SIM_SCGC2_LPUART2_MASK" clockDisable="SIM->SCGC2 &amp;= ~SIM_SCGC2_LPUART2_MASK" />
+         <clock clockEnable="SIM->SCGC2 |= SIM_SCGC2_LPUART2_MASK;" clockDisable="SIM->SCGC2 &amp;= ~SIM_SCGC2_LPUART2_MASK;" />
          <irq num="LPUART2_IRQn" />
       </peripheral>
       <peripheral baseName="LPUART"   instance="3"        version="lpuart0_fifo_0x400c4000">
          <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForLpuart" />
-         <clock clockEnable="SIM->SCGC2 |= SIM_SCGC2_LPUART3_MASK" clockDisable="SIM->SCGC2 &amp;= ~SIM_SCGC2_LPUART3_MASK" />
+         <clock clockEnable="SIM->SCGC2 |= SIM_SCGC2_LPUART3_MASK;" clockDisable="SIM->SCGC2 &amp;= ~SIM_SCGC2_LPUART3_MASK;" />
          <irq num="LPUART3_IRQn" />
       </peripheral>
       <peripheral baseName="LPUART"   instance="4"        version="lpuart0_fifo_0x400c4000">
          <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForLpuart" />
-         <clock clockEnable="SIM->SCGC2 |= SIM_SCGC2_LPUART4_MASK" clockDisable="SIM->SCGC2 &amp;= ~SIM_SCGC2_LPUART4_MASK" />
+         <clock clockEnable="SIM->SCGC2 |= SIM_SCGC2_LPUART4_MASK;" clockDisable="SIM->SCGC2 &amp;= ~SIM_SCGC2_LPUART4_MASK;" />
          <irq num="LPUART4_IRQn" />
       </peripheral>
       <peripheral baseName="MCG"      instance=""         version="mcg_mk28f15">
@@ -306,19 +306,19 @@
       </peripheral>
       <peripheral baseName="MPU"      instance=""         version="mpu_mk28f15">
          <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForToDo" />
-         <clock clockEnable="SIM->SCGC7 |= SIM_SCGC7_MPU_MASK" clockDisable="SIM->SCGC7 &amp;= ~SIM_SCGC7_MPU_MASK" />
+         <clock clockEnable="SIM->SCGC7 |= SIM_SCGC7_MPU_MASK;" clockDisable="SIM->SCGC7 &amp;= ~SIM_SCGC7_MPU_MASK;" />
       </peripheral>
       <peripheral baseName="OSC"      instance="0"        version="osc0_div">
          <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForOsc" />
       </peripheral>
       <peripheral baseName="PDB"      instance="0"        version="pdb0_1ch_2pt_1dac_2po">
          <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForPdb" />
-         <clock clockEnable="SIM->SCGC6 |= SIM_SCGC6_PDB_MASK" clockDisable="SIM->SCGC6 &amp;= ~SIM_SCGC6_PDB_MASK" />
+         <clock clockEnable="SIM->SCGC6 |= SIM_SCGC6_PDB_MASK;" clockDisable="SIM->SCGC6 &amp;= ~SIM_SCGC6_PDB_MASK;" />
          <irq num="PDB0_IRQn" />
       </peripheral>
       <peripheral baseName="PIT"      instance=""         version="pit_4ch_ltmr64">
          <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForPit" />
-         <clock clockEnable="SIM->SCGC6 |= SIM_SCGC6_PIT_MASK" clockDisable="SIM->SCGC6 &amp;= ~SIM_SCGC6_PIT_MASK" />
+         <clock clockEnable="SIM->SCGC6 |= SIM_SCGC6_PIT_MASK;" clockDisable="SIM->SCGC6 &amp;= ~SIM_SCGC6_PIT_MASK;" />
          <irq num="PIT0_IRQn" />
          <irq num="PIT1_IRQn" />
          <irq num="PIT2_IRQn" />
@@ -333,7 +333,7 @@
       </peripheral>
       <peripheral baseName="QSPI"     instance="0"        version="qspi0_0x400da000">
          <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForQspi" />
-         <clock clockEnable="SIM->SCGC2 |= SIM_SCGC2_QSPI_MASK" clockDisable="SIM->SCGC2 &amp;= ~SIM_SCGC2_QSPI_MASK" />
+         <clock clockEnable="SIM->SCGC2 |= SIM_SCGC2_QSPI_MASK;" clockDisable="SIM->SCGC2 &amp;= ~SIM_SCGC2_QSPI_MASK;" />
          <irq num="QSPI0_IRQn" />
       </peripheral>
       <peripheral baseName="RCM"      instance=""         version="rcm_mk28f15">
@@ -341,18 +341,18 @@
       </peripheral>
       <peripheral baseName="RTC"      instance=""         version="rtc_mk22f12810">
          <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForRtc" />
-         <clock clockEnable="SIM->SCGC6 |= SIM_SCGC6_RTC_MASK" clockDisable="SIM->SCGC6 &amp;= ~SIM_SCGC6_RTC_MASK" />
+         <clock clockEnable="SIM->SCGC6 |= SIM_SCGC6_RTC_MASK;" clockDisable="SIM->SCGC6 &amp;= ~SIM_SCGC6_RTC_MASK;" />
          <irq num="RTC_Alarm_IRQn" />
          <irq num="RTC_Seconds_IRQn" />
       </peripheral>
       <peripheral baseName="SDHC"     instance="0"        version="sdhc0_mk28f15">
          <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForSdhc" />
-         <clock clockEnable="SIM->SCGC3 |= SIM_SCGC3_SDHC_MASK" clockDisable="SIM->SCGC3 &amp;= ~SIM_SCGC3_SDHC_MASK" />
+         <clock clockEnable="SIM->SCGC3 |= SIM_SCGC3_SDHC_MASK;" clockDisable="SIM->SCGC3 &amp;= ~SIM_SCGC3_SDHC_MASK;" />
          <irq num="SDHC_IRQn" />
       </peripheral>
       <peripheral baseName="SDRAMC"   instance=""         version="sdramc">
          <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForSdramc" />
-         <clock clockEnable="SIM->SCGC7 |= SIM_SCGC7_SDRAMC_MASK" clockDisable="SIM->SCGC7 &amp;= ~SIM_SCGC7_SDRAMC_MASK" />
+         <clock clockEnable="SIM->SCGC7 |= SIM_SCGC7_SDRAMC_MASK;" clockDisable="SIM->SCGC7 &amp;= ~SIM_SCGC7_SDRAMC_MASK;" />
       </peripheral>
       <peripheral baseName="SIM"      instance=""         version="sim_mk28f15">
          <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForSim" />
@@ -362,12 +362,12 @@
       </peripheral>
       <peripheral baseName="SPI"      instance="0"        version="spi0_mk_pcsis6_pcsse">
          <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForSpi" />
-         <clock clockEnable="SIM->SCGC6 |= SIM_SCGC6_SPI0_MASK" clockDisable="SIM->SCGC6 &amp;= ~SIM_SCGC6_SPI0_MASK" />
+         <clock clockEnable="SIM->SCGC6 |= SIM_SCGC6_SPI0_MASK;" clockDisable="SIM->SCGC6 &amp;= ~SIM_SCGC6_SPI0_MASK;" />
          <irq num="SPI0_IRQn" />
       </peripheral>
       <peripheral baseName="SPI"      instance="1"        version="spi0_mk_pcsis6_pcsse">
          <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForSpi" />
-         <clock clockEnable="SIM->SCGC6 |= SIM_SCGC6_SPI1_MASK" clockDisable="SIM->SCGC6 &amp;= ~SIM_SCGC6_SPI1_MASK" />
+         <clock clockEnable="SIM->SCGC3 |= SIM_SCGC3_SPI1_MASK;\nSIM->SCGC6 |= SIM_SCGC6_SPI1_MASK;" clockDisable="SIM->SCGC3 &amp;= ~SIM_SCGC3_SPI1_MASK;\nSIM->SCGC3 &amp;= ~SIM_SCGC3_SPI1_MASK;" />
          <irq num="SPI1_IRQn" />
       </peripheral>
       <peripheral baseName="SPI"      instance="2"        version="spi0_mk_pcsis6_pcsse">
@@ -376,7 +376,7 @@
       </peripheral>
       <peripheral baseName="SPI"      instance="3"        version="spi0_mk_pcsis6_pcsse">
          <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForSpi" />
-         <clock clockEnable="SIM->SCGC3 |= SIM_SCGC3_SPI3_MASK" clockDisable="SIM->SCGC3 &amp;= ~SIM_SCGC3_SPI3_MASK" />
+         <clock clockEnable="SIM->SCGC3 |= SIM_SCGC3_SPI3_MASK;" clockDisable="SIM->SCGC3 &amp;= ~SIM_SCGC3_SPI3_MASK;" />
          <irq num="SPI3_IRQn" />
       </peripheral>
       <peripheral baseName="TPM"      instance="">
@@ -384,46 +384,46 @@
       </peripheral>
       <peripheral baseName="TPM"      instance="1"        version="tpm1_2ch_quad">
          <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForFtm" />
-         <clock clockEnable="SIM->SCGC2 |= SIM_SCGC2_TPM1_MASK" clockDisable="SIM->SCGC2 &amp;= ~SIM_SCGC2_TPM1_MASK" />
+         <clock clockEnable="SIM->SCGC2 |= SIM_SCGC2_TPM1_MASK;" clockDisable="SIM->SCGC2 &amp;= ~SIM_SCGC2_TPM1_MASK;" />
          <irq num="TPM1_IRQn" />
       </peripheral>
       <peripheral baseName="TPM"      instance="2"        version="tpm1_2ch_quad">
          <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForFtm" />
-         <clock clockEnable="SIM->SCGC2 |= SIM_SCGC2_TPM2_MASK" clockDisable="SIM->SCGC2 &amp;= ~SIM_SCGC2_TPM2_MASK" />
+         <clock clockEnable="SIM->SCGC2 |= SIM_SCGC2_TPM2_MASK;" clockDisable="SIM->SCGC2 &amp;= ~SIM_SCGC2_TPM2_MASK;" />
          <irq num="TPM2_IRQn" />
       </peripheral>
       <peripheral baseName="TRNG"     instance="0"        version="trng0_0x400a0000_mk28f15">
          <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForRnga" />
-         <clock clockEnable="SIM->SCGC3 |= SIM_SCGC3_TRNG0_MASK" clockDisable="SIM->SCGC3 &amp;= ~SIM_SCGC3_TRNG0_MASK" />
+         <clock clockEnable="SIM->SCGC3 |= SIM_SCGC3_TRNG0_MASK;" clockDisable="SIM->SCGC3 &amp;= ~SIM_SCGC3_TRNG0_MASK;" />
          <irq num="RNGA_IRQn" />
       </peripheral>
       <peripheral baseName="USB"      instance="0"        version="usb0_mk28f15">
          <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForUsb" />
-         <clock clockEnable="SIM->SCGC4 |= SIM_SCGC4_USBOTG_MASK" clockDisable="SIM->SCGC4 &amp;= ~SIM_SCGC4_USBOTG_MASK" />
+         <clock clockEnable="SIM->SCGC4 |= SIM_SCGC4_USBOTG_MASK;" clockDisable="SIM->SCGC4 &amp;= ~SIM_SCGC4_USBOTG_MASK;" />
          <irq num="USB0_IRQn" />
       </peripheral>
       <peripheral baseName="USBDCD"   instance=""         version="usbdcd_v1_2_mk28f15">
          <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForUsbdcd" />
-         <clock clockEnable="SIM->SCGC6 |= SIM_SCGC6_USBDCD_MASK" clockDisable="SIM->SCGC6 &amp;= ~SIM_SCGC6_USBDCD_MASK" />
+         <clock clockEnable="SIM->SCGC6 |= SIM_SCGC6_USBDCD_MASK;" clockDisable="SIM->SCGC6 &amp;= ~SIM_SCGC6_USBDCD_MASK;" />
          <irq num="USBDCD_IRQn" />
       </peripheral>
       <peripheral baseName="USBHS"    instance=""         version="usbhs_8endpt">
          <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForUsbhs" />
-         <clock clockEnable="SIM->SCGC3 |= SIM_SCGC3_USBHS_MASK" clockDisable="SIM->SCGC3 &amp;= ~SIM_SCGC3_USBHS_MASK" />
+         <clock clockEnable="SIM->SCGC3 |= SIM_SCGC3_USBHS_MASK;" clockDisable="SIM->SCGC3 &amp;= ~SIM_SCGC3_USBHS_MASK;" />
          <irq num="USBHS_IRQn" />
       </peripheral>
       <peripheral baseName="USBHSDCD" instance=""         version="usbdcd_v1_2_mk28f15">
          <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForToDo" />
-         <clock clockEnable="SIM->SCGC3 |= SIM_SCGC3_USBHSDCD_MASK" clockDisable="SIM->SCGC3 &amp;= ~SIM_SCGC3_USBHSDCD_MASK" />
+         <clock clockEnable="SIM->SCGC3 |= SIM_SCGC3_USBHSDCD_MASK;" clockDisable="SIM->SCGC3 &amp;= ~SIM_SCGC3_USBHSDCD_MASK;" />
          <irq num="USBHSDCD_IRQn" />
       </peripheral>
       <peripheral baseName="USBHSPHY" instance="">
          <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForToDo" />
-         <clock clockEnable="SIM->SCGC3 |= SIM_SCGC3_USBHSPHY_MASK" clockDisable="SIM->SCGC3 &amp;= ~SIM_SCGC3_USBHSPHY_MASK" />
+         <clock clockEnable="SIM->SCGC3 |= SIM_SCGC3_USBHSPHY_MASK;" clockDisable="SIM->SCGC3 &amp;= ~SIM_SCGC3_USBHSPHY_MASK;" />
       </peripheral>
       <peripheral baseName="VREF"     instance=""         version="vref_c">
          <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForVref" />
-         <clock clockEnable="SIM->SCGC4 |= SIM_SCGC4_VREF_MASK" clockDisable="SIM->SCGC4 &amp;= ~SIM_SCGC4_VREF_MASK" />
+         <clock clockEnable="SIM->SCGC4 |= SIM_SCGC4_VREF_MASK;" clockDisable="SIM->SCGC4 &amp;= ~SIM_SCGC4_VREF_MASK;" />
       </peripheral>
    </peripherals>
    <pins>

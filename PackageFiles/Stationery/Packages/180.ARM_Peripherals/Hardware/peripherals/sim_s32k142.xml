@@ -6,6 +6,228 @@
    
    <xi:include href="_simFiles-MK.xml"/>
 
+   <binaryOption name="chipctl_sraml_reten"
+      description="SRAML retention enable"
+      toolTip="Enables SRAML contents retention across resets">
+      <choice name="Disabled"  value="1"/>   
+      <choice name="Enabled"   value="0" isDefault="true"/>   
+   </binaryOption>
+   
+   <binaryOption name="chipctl_sramu_reten"
+      description="SRAMU retention enable"
+      toolTip="Enables SRAMU contents retention across resets">
+      <choice name="Disabled"  value="1"/>   
+      <choice name="Enabled"   value="0" isDefault="true"/>   
+   </binaryOption>
+   
+   <binaryOption name="chipctl_adc_supplyen"
+      description="ADC supply monitoring enable"
+      toolTip="Enable for internal supply monitored on ADC0 internal channel 0 (ADC0_SC1n[ADCH] = 010101b)">
+      <choice name="Disabled" value="0"/>   
+      <choice name="Enabled"  value="1"/>   
+   </binaryOption>
+   
+   <choiceOption name="chipctl_adc_supply"
+      description="ADC supply monitoring selection"
+      toolTip="Selects the internal supply monitored on ADC0 internal channel 0 (ADC0_SC1n[ADCH] = 010101b)">
+      <choice value="0" name="5 V input VDD supply (VDD)"/>
+      <choice value="1" name="5 V input analog supply (VDDA)"/>
+      <choice value="2" name="ADC Reference Supply (VREFH)"/>
+      <choice value="3" name="3.3 V Oscillator Regulator Output (VDD_3V)"/>
+      <choice value="4" name="3.3 V flash regulator output (VDD_flash_3V)"/>
+      <choice value="5" name="1.2 V core regulator output (VDD_LV)"/>
+      <choice value="6" name="Reserved"/>
+      <choice value="7" name="Reserved"/>
+   </choiceOption>
+   
+   <binaryOption name="chipctl_pdb_bb_sel"
+      description="PDB back-to-back select"
+      toolTip="Determines whether PDB0, PDB1 in conjunction with ADC0.COCO[7..0] and ADC1.COCO[7..0]\n
+               operate as independent back-to-back rings or as a single larger ring ">
+      <choice name="Independent rings" value="0"/>
+      <choice name="Single ring" value="1"/>
+   </binaryOption>
+   
+   <binaryOption name="chipctl_traceclk_sel" 
+      description="Debug trace clock select"
+      toolTip="Selects the the trace clock source" 
+      constant="true">
+      <choice value="0"  name="Core clock" isDefault="true" />
+      <choice value="1"  name="Reserved" />
+   </binaryOption>   
+   
+   <binaryOption name="chipctl_clkouten"
+      description="CLKOUT enable"
+      toolTip="Used to enable the clock on the clockout pin">
+      <choice name="Disabled" value="0"/>   
+      <choice name="Enabled"  value="1"/>   
+   </binaryOption>
+   
+   <intOption name="chipctl_clkoutdiv"
+      description="CLKOUT Divide Ratio"
+      toolTip="Used to select the divisor for the clock on the clockout pin"
+      min="1" max="8" offset="-1" value="1" >
+   
+   </intOption>
+   <choiceOption name="chipctl_clkoutsel" 
+      description="CLKOUT select"
+      toolTip="Selects the clock to output on the CLKOUT pin." >
+      <choice value="0"   name="SCG CLKOUT" />
+      <choice value="1"   name="Reserved" />
+      <choice value="2"   name="SOSC DIV2 CLK" />
+      <choice value="3"   name="Reserved" />
+      <choice value="4"   name="SIRC DIV2 CLK" />
+      <choice value="5"   name="QSPI_SFIF_CLK_HYP_PREMUX (if present)" />
+      <choice value="6"   name="FIRC DIV2 CLK" />
+      <choice value="7"   name="HCLK" />
+      <choice value="8"   name="SPLL DIV2 CLK" />
+      <choice value="9"   name="BUS_CLK" />
+      <choice value="10"  name="LPO128K_CLK" />
+      <choice value="11"  name="QSPI_Module clock (if present)" />
+      <choice value="12"  name="LPO_CLK from SIM_LPOCLKS[LPOCLKSEL]" />
+      <choice value="13"  name="QSPI_SFIF_CLK (if present)" />
+      <choice value="14"  name="RTC_CLK from SIM_LPOCLKS[RTCCLKSEL]" />
+      <choice value="15"  name="QSPI_2xSFIF_CLK (if present)" />
+   </choiceOption>
+   
+   <binaryOption name="chipctl_adc_interleave_en_0"
+      description="ADC interleave channel enable">
+      <choice name="PTB15&lt;-ADC1_SE14, PTB0&lt;-ADC0_SE4"  value="0b0000"/>
+      <choice name="PTB0&lt;-(ADC0_SE4/ADC1_SE14)"           value="0b0001"/>
+   </binaryOption>
+
+   <binaryOption name="chipctl_adc_interleave_en_1"
+      description="ADC interleave channel enable">
+      <choice name="PTB1&lt;-ADC0_SE5, PTB16&lt;-ADC1_SE15" value="0b0000"/>
+      <choice name="PTB1&lt;-(ADC0_SE5/ADC1_SE15)"          value="0b0010"/>
+   </binaryOption>
+
+   <binaryOption name="chipctl_adc_interleave_en_2"
+      description="ADC interleave channel enable">
+      <choice name="PTC0&lt;-ADC0_SE8, PTB13&lt;-ADC1_SE8" value="0b0000"/>
+      <choice name="PTB13&lt;-(ADC0_SE8/ADC1_SE8)"         value="0b0100"/>
+   </binaryOption>
+
+   <binaryOption name="chipctl_adc_interleave_en_3"
+      description="ADC interleave channel enable">
+      <choice name="PTC1&lt;-ADC0_SE9, PTB14&lt;-ADC1_SE9" value="0b0000"/>
+      <choice name="PTB14&lt;-(ADC0_SE9/ADC1_SE9)"         value="0b1000"/>
+   </binaryOption>
+
+   <template namespace="usbdm"><![CDATA[
+      \tenum SimAdcChannelInterleave {
+      \t   SimAdcChannelInterleave_ADC0_SE4_ADC1_SE14 = SIM_CHIPCTL_ADC_INTERLEAVE_EN(0b0001),
+      \t   SimAdcChannelInterleave_ADC0_SE5_ADC1_SE15 = SIM_CHIPCTL_ADC_INTERLEAVE_EN(0b0010),
+      \t   SimAdcChannelInterleave_ADC0_SE8_ADC1_SE8  = SIM_CHIPCTL_ADC_INTERLEAVE_EN(0b0100),
+      \t   SimAdcChannelInterleave_ADC0_SE9_ADC1_SE9  = SIM_CHIPCTL_ADC_INTERLEAVE_EN(0b1000),
+      \t};\n\n
+      
+      \tenum SimAdcSupplyMonitor {
+      \t   SimAdcSupplyMonitor_Disabled     = SIM_CHIPCTL_ADC_SUPPLYEN(0)|SIM_CHIPCTL_ADC_SUPPLY(0),
+      \t   SimAdcSupplyMonitor_Vdd          = SIM_CHIPCTL_ADC_SUPPLYEN(1)|SIM_CHIPCTL_ADC_SUPPLY(0),
+      \t   SimAdcSupplyMonitor_Vdda         = SIM_CHIPCTL_ADC_SUPPLYEN(1)|SIM_CHIPCTL_ADC_SUPPLY(1),
+      \t   SimAdcSupplyMonitor_Vrefh        = SIM_CHIPCTL_ADC_SUPPLYEN(1)|SIM_CHIPCTL_ADC_SUPPLY(2),
+      \t   SimAdcSupplyMonitor_Vdd_3V       = SIM_CHIPCTL_ADC_SUPPLYEN(1)|SIM_CHIPCTL_ADC_SUPPLY(3),
+      \t   SimAdcSupplyMonitor_Vdd_flash_3V = SIM_CHIPCTL_ADC_SUPPLYEN(1)|SIM_CHIPCTL_ADC_SUPPLY(4),
+      \t   SimAdcSupplyMonitor_Vdd_lv       = SIM_CHIPCTL_ADC_SUPPLYEN(1)|SIM_CHIPCTL_ADC_SUPPLY(5),
+      \t   SimAdcSupplyMonitor_Reserved6    = SIM_CHIPCTL_ADC_SUPPLYEN(1)|SIM_CHIPCTL_ADC_SUPPLY(6),
+      \t   SimAdcSupplyMonitor_Reserved7    = SIM_CHIPCTL_ADC_SUPPLYEN(1)|SIM_CHIPCTL_ADC_SUPPLY(7),
+      \t};\n\n
+      
+      \tenum SimClkOutSelect {
+      \t   SimClkOutSelect_Disabled          = SIM_CHIPCTL_CLKOUTEN(0)|SIM_CHIPCTL_CLKOUTSEL(0),  //!< Disabled
+      \t   SimClkOutSelect_SCG_CLKOUT        = SIM_CHIPCTL_CLKOUTEN(1)|SIM_CHIPCTL_CLKOUTSEL(0),  //!< SCG Clock output 
+      \t   SimClkOutSelect_Reserved1         = SIM_CHIPCTL_CLKOUTEN(1)|SIM_CHIPCTL_CLKOUTSEL(1),  //!< Reserved
+      \t   SimClkOutSelect_SOSCDIV2_CLK      = SIM_CHIPCTL_CLKOUTEN(1)|SIM_CHIPCTL_CLKOUTSEL(2),  //!< SOSCDIV2 clock 
+      \t   SimClkOutSelect_Reserved3         = SIM_CHIPCTL_CLKOUTEN(1)|SIM_CHIPCTL_CLKOUTSEL(3),  //!< Reserved
+      \t   SimClkOutSelect_SIRCDIV2_CLK      = SIM_CHIPCTL_CLKOUTEN(1)|SIM_CHIPCTL_CLKOUTSEL(4),  //!< SIRCDIV2 clock 
+      \t   SimClkOutSelect_Reserved5         = SIM_CHIPCTL_CLKOUTEN(1)|SIM_CHIPCTL_CLKOUTSEL(5),  //!< Reserved  
+      \t   SimClkOutSelect_FIRCDIV2_CLK      = SIM_CHIPCTL_CLKOUTEN(1)|SIM_CHIPCTL_CLKOUTSEL(6),  //!< FIRCDIV2 clock 
+      \t   SimClkOutSelect_CORE_CLK          = SIM_CHIPCTL_CLKOUTEN(1)|SIM_CHIPCTL_CLKOUTSEL(7),  //!< CORE_CLK 
+      \t   SimClkOutSelect_SPLLDIV2_CLK      = SIM_CHIPCTL_CLKOUTEN(1)|SIM_CHIPCTL_CLKOUTSEL(8),  //!< SPLLDIV2 clock 
+      \t   SimClkOutSelect_BUS_CLK           = SIM_CHIPCTL_CLKOUTEN(1)|SIM_CHIPCTL_CLKOUTSEL(9),  //!< BUS_CLK
+      \t   SimClkOutSelect_LPO12K_CLK        = SIM_CHIPCTL_CLKOUTEN(1)|SIM_CHIPCTL_CLKOUTSEL(10), //!< LPO12K_CLK 
+      \t   SimClkOutSelect_QSPI_Module_CLK   = SIM_CHIPCTL_CLKOUTEN(1)|SIM_CHIPCTL_CLKOUTSEL(11), //!< QSPI Module clock
+      \t   SimClkOutSelect_LPO_CLK           = SIM_CHIPCTL_CLKOUTEN(1)|SIM_CHIPCTL_CLKOUTSEL(12), //!< LPOCLK 
+      \t   SimClkOutSelect_QSPI_SFIF_CLK     = SIM_CHIPCTL_CLKOUTEN(1)|SIM_CHIPCTL_CLKOUTSEL(13), //!< QSPI
+      \t   SimClkOutSelect_RTC_CLK           = SIM_CHIPCTL_CLKOUTEN(1)|SIM_CHIPCTL_CLKOUTSEL(14), //!< RTC_CLK 
+      \t   SimClkOutSelect_QSPI_2xSFIF_CLK   = SIM_CHIPCTL_CLKOUTEN(1)|SIM_CHIPCTL_CLKOUTSEL(15), //!< QSPI
+      \t};\n\n
+      
+      \tenum SimClkOutDiv {
+      \t   SimClkOutDiv_Div1     = SIM_CHIPCTL_CLKOUTDIV(0), //!< Divide by 1
+      \t   SimClkOutDiv_Div2     = SIM_CHIPCTL_CLKOUTDIV(1), //!< Divide by 2
+      \t   SimClkOutDiv_Div3     = SIM_CHIPCTL_CLKOUTDIV(2), //!< Divide by 3
+      \t   SimClkOutDiv_Div4     = SIM_CHIPCTL_CLKOUTDIV(3), //!< Divide by 4
+      \t   SimClkOutDiv_Div5     = SIM_CHIPCTL_CLKOUTDIV(4), //!< Divide by 5
+      \t   SimClkOutDiv_Div6     = SIM_CHIPCTL_CLKOUTDIV(5), //!< Divide by 6
+      \t   SimClkOutDiv_Div7     = SIM_CHIPCTL_CLKOUTDIV(6), //!< Divide by 7
+      \t   SimClkOutDiv_Div8     = SIM_CHIPCTL_CLKOUTDIV(7), //!< Divide by 8
+      \t};\n\n
+   ]]></template>
+   
+   <template><![CDATA[
+      \t// Chip Control register (CHIPCTL)
+      \tstatic constexpr uint32_t chipctl = 
+      \t   SIM_CHIPCTL_SRAML_RETEN($(chipctl_sraml_reten))|     // SRAML retention enable
+      \t   SIM_CHIPCTL_SRAMU_RETEN($(chipctl_sramu_reten))|     // SRAMU retention enable
+      \t   SIM_CHIPCTL_ADC_SUPPLYEN($(chipctl_adc_supplyen))|    // ADC Internal supply monitoring enable
+      \t   SIM_CHIPCTL_ADC_SUPPLY($(chipctl_adc_supply))|      // ADC Internal supply monitoring selection
+      \t   SIM_CHIPCTL_PDB_BB_SEL($(chipctl_pdb_bb_sel))|      // PDB back-to-back select
+      \t   SIM_CHIPCTL_TRACECLK_SEL($(chipctl_traceclk_sel))|    // Debug trace clock select
+      \t   SIM_CHIPCTL_CLKOUTEN($(chipctl_clkouten))|        // CLKOUT pin enable
+      \t   SIM_CHIPCTL_CLKOUTDIV($(chipctl_clkoutdiv))|       // CLKOUT pin divider
+      \t   SIM_CHIPCTL_CLKOUTSEL($(chipctl_clkoutsel))|       // CLKOUT pin clock source select
+      \t   SIM_CHIPCTL_ADC_INTERLEAVE_EN($(chipctl_adc_interleave_en_3)|$(chipctl_adc_interleave_en_2)|$(chipctl_adc_interleave_en_1)|$(chipctl_adc_interleave_en_0)); // ADC interleave channel enable\n\n
+      
+      \t/**
+      \t * Selects the clock and divider for output on the CLKOUT pin
+      \t * 
+      \t * @param simClkOut      Clock to output
+      \t * @param simClkOutDiv   Divider for clock output
+      \t */
+      \tstatic void setClkout(SimClkOutSelect simClkOutSelect, SimClkOutDiv simClkOutDiv=SimClkOutDiv_Div1) {
+      \t   sim().CHIPCTL = (sim().CHIPCTL&~(SIM_CHIPCTL_CLKOUTEN_MASK|SIM_CHIPCTL_CLKOUTDIV_MASK|SIM_CHIPCTL_CLKOUTSEL_MASK)) |
+      \t         simClkOutSelect|simClkOutDiv;
+      \t}\n\n
+
+      \t/**
+      \t * Selects the internal supply monitored on ADC0 internal channel 0.
+      \t * (ADC0_SC1n[ADCH] = 010101b)
+      \t * 
+      \t * @param simAdcSupplyMonitor
+      \t */
+      \tstatic void setAdcSupplyMonitoring(SimAdcSupplyMonitor simAdcSupplyMonitor) {
+      \t   sim().CHIPCTL = (sim().CHIPCTL&~(SIM_CHIPCTL_ADC_SUPPLYEN_MASK|SIM_CHIPCTL_ADC_SUPPLY_MASK)) |
+      \t                    simAdcSupplyMonitor;
+      \t}\n\n
+      
+      \t/**
+      \t * Clear all ADC channel interleaving
+      \t */
+      \tstatic void clearAdcChannelInterleave() {
+      \t   sim().CHIPCTL &= ~SIM_CHIPCTL_ADC_INTERLEAVE_EN_MASK;
+      \t}\n\n
+         
+      \t/**
+      \t * Enable ADC channel interleave
+      \t *
+      \t * @param simAdcChannelInterleave Channel pair to interleave
+      \t */
+      \tstatic void enableAdcChannelInterleave(SimAdcChannelInterleave simAdcChannelInterleave) {
+      \t   sim().CHIPCTL |= simAdcChannelInterleave;
+      \t}\n\n
+         
+      \t/**
+      \t * Disable ADC channel interleave
+      \t *
+      \t * @param simAdcChannelInterleave Channel pair to not interleave
+      \t */
+      \tstatic void disableAdcChannelInterleave(SimAdcChannelInterleave simAdcChannelInterleave) {
+      \t   sim().CHIPCTL &= ~simAdcChannelInterleave;
+      \t}\n\n   
+   ]]></template>
+   
    <template><![CDATA[
       \t/**
       \t * Get Internal LPO Frequency LPO128K_CLK

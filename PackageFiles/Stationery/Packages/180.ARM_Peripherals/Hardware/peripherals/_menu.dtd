@@ -43,7 +43,7 @@
    <!ATTLIST category  toolTip      CDATA        #IMPLIED>
    <!ATTLIST category  derived      (false|true) #IMPLIED>
 
-<!ELEMENT intOption (for*) >
+<!ELEMENT intOption (for?) >
    <!ATTLIST intOption constant     (false|true)  #IMPLIED>
    <!ATTLIST intOption hidden       (false|true)  #IMPLIED>
    <!ATTLIST intOption name          ID           #REQUIRED>
@@ -81,7 +81,7 @@
    <!ATTLIST bitmaskOption derived        (false|true) #IMPLIED>
    <!ATTLIST bitmaskOption derivedFrom    IDREF        #IMPLIED>
   
-<!ELEMENT floatOption (for*) >
+<!ELEMENT floatOption (for?) >
    <!ATTLIST floatOption constant      (false|true) #IMPLIED>
    <!ATTLIST floatOption hidden        (false|true) #IMPLIED>
    <!ATTLIST floatOption name          ID           #REQUIRED>
@@ -113,7 +113,7 @@
    <!ATTLIST aliasOption constant    (false|true) "true">
    <!ATTLIST aliasOption optional    (false|true) #IMPLIED>
 
-<!ELEMENT stringOption (for*) >
+<!ELEMENT stringOption (for?) >
    <!ATTLIST stringOption constant      (false|true) #IMPLIED>
    <!ATTLIST binaryOption hidden        (false|true) #IMPLIED>
    <!ATTLIST stringOption name          ID           #REQUIRED>
@@ -127,7 +127,7 @@
    <!ATTLIST stringOption derived       (false|true) #IMPLIED>
    <!ATTLIST stringOption derivedFrom   IDREF        #IMPLIED>
   
-<!ELEMENT numericListOption (for*) >
+<!ELEMENT numericListOption (for?) >
    <!ATTLIST numericListOption constant      (false|true) #IMPLIED>
    <!ATTLIST numericListOption hidden        (false|true) #IMPLIED>
    <!ATTLIST numericListOption name          ID           #REQUIRED>
@@ -144,7 +144,7 @@
    <!ATTLIST numericListOption derived       (false|true) #IMPLIED>
    <!ATTLIST numericListOption derivedFrom   IDREF        #IMPLIED>
   
-<!ELEMENT pinListOption (for*) >
+<!ELEMENT pinListOption (for?) >
    <!ATTLIST pinListOption constant      (false|true) #IMPLIED>
    <!ATTLIST pinListOption hidden        (false|true) #IMPLIED>
    <!ATTLIST pinListOption name          ID           #REQUIRED>
@@ -159,7 +159,7 @@
    <!ATTLIST pinListOption derived       (false|true) #IMPLIED>
    <!ATTLIST pinListOption derivedFrom   IDREF        #IMPLIED>
    
-<!ELEMENT choiceOption (for*, (choice)*) >
+<!ELEMENT choiceOption (for?, (choice)*) >
    <!ATTLIST choiceOption constant     (false|true) #IMPLIED>
    <!ATTLIST choiceOption hidden       (false|true) #IMPLIED>
    <!ATTLIST choiceOption name         ID           #IMPLIED>
@@ -177,11 +177,11 @@
    <!ATTLIST choice name          CDATA        #REQUIRED>
    <!ATTLIST choice isDefault     (false|true) #IMPLIED>
 
-<!ELEMENT binaryOption (choice, choice)? >
+<!ELEMENT binaryOption (for?, choice, choice)? >
    <!ATTLIST binaryOption constant      (false|true) #IMPLIED>
    <!ATTLIST binaryOption hidden        (false|true) #IMPLIED>
    <!ATTLIST binaryOption disabledValue CDATA        #IMPLIED>
-   <!ATTLIST binaryOption name          ID           #REQUIRED>
+   <!ATTLIST binaryOption name          ID           #IMPLIED>
    <!ATTLIST binaryOption key           CDATA        #IMPLIED>
    <!ATTLIST binaryOption origin        CDATA        #IMPLIED>
    <!ATTLIST binaryOption description   CDATA        #IMPLIED>

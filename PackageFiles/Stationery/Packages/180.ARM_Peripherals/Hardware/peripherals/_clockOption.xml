@@ -4,20 +4,36 @@
 
 <fragment xmlns:xi="http://www.w3.org/2001/XInclude">
          
-   <template><![CDATA[
-     \t/** 
-     \t *  Enable clock to peripheral
-     \t */
-     \t__attribute__((always_inline)) static void enableClock() {
-     \t   $(clockEnable);
-     \t}\n\n
+<!-- 
+      Predefined symbols generated for current peripheral
+      _base_class FTM0 => Ftm
+      _instance   FTM0 => 0
+      _class      FTM0 => Ftm0
+      _name       FTM0 => FTM0
+ -->
+ 
+<template><![CDATA[
+   \t/** 
+   \t *  Enable clock to $(_class)
+   \t */
+   \tstatic void enableClock() {
+   #ifdef PCC
+   \t   PccInfo::enable$(_class)Clock();
+   #else
+   \t   SimInfo::enable$(_class)Clock();
+   #endif
+   \t}\n\n
 
-     \t/** 
-     \t *  Disable clock to peripheral
-     \t */
-     \t__attribute__((always_inline)) static void disableClock() {
-     \t   $(clockDisable);
-     \t}\n\n
-   ]]></template>
+   \t/** 
+   \t *  Disable clock to $(_class)
+   \t */
+   \tstatic void disableClock() {
+   #ifdef PCC
+   \t   PccInfo::disable$(_class)Clock();
+   #else
+   \t   SimInfo::disable$(_class)Clock();
+   #endif
+   \t}\n\n
+]]></template>
       
 </fragment>

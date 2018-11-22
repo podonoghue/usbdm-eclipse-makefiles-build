@@ -60,8 +60,9 @@
          derived="true"
          constant="true">
          <choice value="0" name="Reserved" />
-         <choice value="1" name="Medium range" />
-         <choice value="2" name="High range" isDefault="true" />
+         <choice value="1" name="Low range" />
+         <choice value="2" name="Medium range" />
+         <choice value="3" name="High range" isDefault="true" />
       </choiceOption>
       
       <choiceOption name="scg_clkoutcnfg_clkoutsel"

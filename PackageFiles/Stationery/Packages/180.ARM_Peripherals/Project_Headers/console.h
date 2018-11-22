@@ -42,7 +42,7 @@ namespace USBDM {
 constexpr int defaultBaudRate = $(/Console/defaultBaudRate:115200);
 
 //! Maps console to UART used
-using  Console = $(/Console/consoleDevice:USBDM::Uart0);
+using  Console = $(/Console/consoleDevice:USBDM\:\:Uart0);
 
 //! Console instance
 extern Console console;

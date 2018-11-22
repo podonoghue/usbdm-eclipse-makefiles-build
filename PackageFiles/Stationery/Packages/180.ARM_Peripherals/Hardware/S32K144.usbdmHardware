@@ -25,7 +25,7 @@
       </peripheral>
       <peripheral baseName="CAN"      instance="0"        version="can0_s32k14x">
          <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForFlexCan" />
-         <clock clockEnable="PCC->PCC_FlexCAN0 |= PCC_PCCn_CGC_MASK" clockDisable="PCC->PCC_FlexCAN0 &amp;= ~PCC_PCCn_CGC_MASK" />
+         <clock clockEnable="PCC->PCC_FLEXCAN0 |= PCC_PCCn_CGC_MASK" clockDisable="PCC->PCC_FLEXCAN0 &amp;= ~PCC_PCCn_CGC_MASK" />
          <irq num="CAN0_ORed_IRQn" />
          <irq num="CAN0_Error_IRQn" />
          <irq num="CAN0_Wake_Up_IRQn" />
@@ -34,14 +34,14 @@
       </peripheral>
       <peripheral baseName="CAN"      instance="1"        version="can1_s32k14x">
          <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForFlexCan" />
-         <clock clockEnable="PCC->PCC_FlexCAN1 |= PCC_PCCn_CGC_MASK" clockDisable="PCC->PCC_FlexCAN1 &amp;= ~PCC_PCCn_CGC_MASK" />
+         <clock clockEnable="PCC->PCC_FLEXCAN1 |= PCC_PCCn_CGC_MASK" clockDisable="PCC->PCC_FLEXCAN1 &amp;= ~PCC_PCCn_CGC_MASK" />
          <irq num="CAN1_ORed_IRQn" />
          <irq num="CAN1_Error_IRQn" />
          <irq num="CAN1_ORed_0_15_MB_IRQn" />
       </peripheral>
       <peripheral baseName="CAN"      instance="2"        version="can1_s32k14x">
          <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForFlexCan" />
-         <clock clockEnable="PCC->PCC_FlexCAN2 |= PCC_PCCn_CGC_MASK" clockDisable="PCC->PCC_FlexCAN2 &amp;= ~PCC_PCCn_CGC_MASK" />
+         <clock clockEnable="PCC->PCC_FLEXCAN2 |= PCC_PCCn_CGC_MASK" clockDisable="PCC->PCC_FLEXCAN2 &amp;= ~PCC_PCCn_CGC_MASK" />
          <irq num="CAN2_ORed_IRQn" />
          <irq num="CAN2_Error_IRQn" />
          <irq num="CAN2_ORed_0_15_MB_IRQn" />
@@ -81,71 +81,71 @@
          <irq num="DMA15_IRQn" />
          <irq num="DMA_Error_IRQn" />
       </peripheral>
-      <peripheral baseName="DMAMUX"   instance="0"        version="dmamux0_16ch_trig">
+      <peripheral baseName="DMAMUX"   instance="0"        version="dmamux0_16ch_trig_s32k14x">
          <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForDmaMux" />
          <clock clockEnable="PCC->PCC_DMAMUX |= PCC_PCCn_CGC_MASK" clockDisable="PCC->PCC_DMAMUX &amp;= ~PCC_PCCn_CGC_MASK" />
          <dma source="Disabled"             num="0" />
-         <dma source="Slot1"                num="1" />
-         <dma source="Slot2"                num="2" />
-         <dma source="Slot3"                num="3" />
-         <dma source="Slot4"                num="4" />
-         <dma source="Slot5"                num="5" />
-         <dma source="Slot6"                num="6" />
-         <dma source="Slot7"                num="7" />
-         <dma source="Slot8"                num="8" />
-         <dma source="Slot9"                num="9" />
-         <dma source="Slot10"               num="10" />
-         <dma source="Slot11"               num="11" />
-         <dma source="Slot12"               num="12" />
-         <dma source="Slot13"               num="13" />
-         <dma source="Slot14"               num="14" />
-         <dma source="Slot15"               num="15" />
-         <dma source="Slot16"               num="16" />
-         <dma source="Slot17"               num="17" />
-         <dma source="Slot18"               num="18" />
-         <dma source="Slot19"               num="19" />
-         <dma source="Slot20"               num="20" />
-         <dma source="Slot21"               num="21" />
-         <dma source="Slot22"               num="22" />
-         <dma source="Slot23"               num="23" />
-         <dma source="Slot24"               num="24" />
-         <dma source="Slot25"               num="25" />
-         <dma source="Slot26"               num="26" />
-         <dma source="Slot27"               num="27" />
-         <dma source="Slot28"               num="28" />
-         <dma source="Slot29"               num="29" />
-         <dma source="Slot30"               num="30" />
-         <dma source="Slot31"               num="31" />
-         <dma source="Slot32"               num="32" />
-         <dma source="Slot33"               num="33" />
-         <dma source="Slot34"               num="34" />
-         <dma source="Slot35"               num="35" />
-         <dma source="Slot36"               num="36" />
-         <dma source="Slot37"               num="37" />
-         <dma source="Slot38"               num="38" />
-         <dma source="Slot39"               num="39" />
-         <dma source="Slot40"               num="40" />
-         <dma source="Slot41"               num="41" />
-         <dma source="Slot42"               num="42" />
-         <dma source="Slot43"               num="43" />
-         <dma source="Slot44"               num="44" />
-         <dma source="Slot45"               num="45" />
-         <dma source="Slot46"               num="46" />
-         <dma source="Slot47"               num="47" />
-         <dma source="Slot48"               num="48" />
-         <dma source="Slot49"               num="49" />
-         <dma source="Slot50"               num="50" />
-         <dma source="Slot51"               num="51" />
-         <dma source="Slot52"               num="52" />
-         <dma source="Slot53"               num="53" />
-         <dma source="Slot54"               num="54" />
-         <dma source="Slot55"               num="55" />
-         <dma source="Slot56"               num="56" />
-         <dma source="Slot57"               num="57" />
-         <dma source="Slot58"               num="58" />
-         <dma source="Slot59"               num="59" />
-         <dma source="AlwaysEnabled60"      num="60" />
-         <dma source="AlwaysEnabled61"      num="61" />
+         <dma source="ENET"                 num="1" />
+         <dma source="LPUART0_Rx"           num="2" />
+         <dma source="LPUART0_Tx"           num="3" />
+         <dma source="LPUART1_Rx"           num="4" />
+         <dma source="LPUART1_Tx"           num="5" />
+         <dma source="LPUART2_Rx"           num="6" />
+         <dma source="LPUART2_Tx"           num="7" />
+         <dma source="LPI2C1_Rx"            num="8" />
+         <dma source="LPI2C1_Tx"            num="9" />
+         <dma source="FLEXIO_Sh0"           num="10" />
+         <dma source="FLEXIO_Sh1"           num="11" />
+         <dma source="FLEXIO_Sh2"           num="12" />
+         <dma source="FLEXIO_Sh3"           num="13" />
+         <dma source="LPSPI0_Rx"            num="14" />
+         <dma source="LPSPI0_Tx"            num="15" />
+         <dma source="LPSPI1_Rx"            num="16" />
+         <dma source="LPSPI1_Tx"            num="17" />
+         <dma source="LPSPI2_Rx"            num="18" />
+         <dma source="LPSPI2_Tx"            num="19" />
+         <dma source="FTM1_Ch0"             num="20" />
+         <dma source="FTM1_Ch1"             num="21" />
+         <dma source="FTM1_Ch2"             num="22" />
+         <dma source="FTM1_Ch3"             num="23" />
+         <dma source="FTM1_Ch4"             num="24" />
+         <dma source="FTM1_Ch5"             num="25" />
+         <dma source="FTM1_Ch6"             num="26" />
+         <dma source="FTM1_Ch7"             num="27" />
+         <dma source="FTM2_Ch0"             num="28" />
+         <dma source="FTM2_Ch1"             num="29" />
+         <dma source="FTM2_Ch2"             num="30" />
+         <dma source="FTM2_Ch3"             num="31" />
+         <dma source="FTM2_Ch4"             num="32" />
+         <dma source="FTM2_Ch5"             num="33" />
+         <dma source="FTM2_Ch6"             num="34" />
+         <dma source="FTM2_Ch7"             num="35" />
+         <dma source="FTM0_Or"              num="36" />
+         <dma source="FTM3_Or"              num="37" />
+         <dma source="FTM4_Or"              num="38" />
+         <dma source="FTM5_Or"              num="39" />
+         <dma source="FTM6_Or"              num="40" />
+         <dma source="FTM7_Or"              num="41" />
+         <dma source="ADC0"                 num="42" />
+         <dma source="ADC1"                 num="43" />
+         <dma source="LPI2C0_Rx"            num="44" />
+         <dma source="LPI2C0_Tx"            num="45" />
+         <dma source="PDB0"                 num="46" />
+         <dma source="PDB1"                 num="47" />
+         <dma source="CMP0"                 num="48" />
+         <dma source="PORTA"                num="49" />
+         <dma source="POSRTB"               num="50" />
+         <dma source="PORTC"                num="51" />
+         <dma source="PORTD"                num="52" />
+         <dma source="PORTE"                num="53" />
+         <dma source="CAN0"                 num="54" />
+         <dma source="CAN1"                 num="55" />
+         <dma source="CAN2"                 num="56" />
+         <dma source="SAI0_Rx"              num="57" />
+         <dma source="SAI0_tx"              num="58" />
+         <dma source="LPTMR0"               num="59" />
+         <dma source="QUADSPI_Rx"           num="60" />
+         <dma source="QUADSPI_Tx"           num="61" />
          <dma source="AlwaysEnabled62"      num="62" />
          <dma source="AlwaysEnabled63"      num="63" />
       </peripheral>

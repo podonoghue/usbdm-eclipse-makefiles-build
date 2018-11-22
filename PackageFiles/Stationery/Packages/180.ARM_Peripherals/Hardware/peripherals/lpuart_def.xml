@@ -6,6 +6,8 @@ Devices using this peripheral:
 -->
 <peripheralPage xmlns:xi="http://www.w3.org/2001/XInclude" name="_instance" description="UART">
 
+   <aliasOption key="/PCC/pcc_lpuart$(_instance)"          optional="true" constant="false"/> 
+
    <aliasOption key="/MCG/system_mcgfllclk_clock"          optional="true" /> 
    <aliasOption key="/OSC0/oscer_clock"                    optional="true" /> 
    <aliasOption key="/MCG/system_mcgirclk_clock"           optional="true" /> 
@@ -112,7 +114,7 @@ Devices using this peripheral:
    \t//! Default buffer size for transmit queue when interrupt driven
    \tstatic constexpr unsigned transmitBufferSize = $(transmitBufferSize);\n\n
 
-   \t#if defined(PCC_PCC_LPUART$(_instance)_CGC_MASK)
+   #if defined(PCC_PCC_LPUART$(_instance)_CGC_MASK)
    \t/**
    \t * Set LPUART$(_instance) input clock source.
    \t * This also enables the clock.
@@ -125,7 +127,7 @@ Devices using this peripheral:
    \tstatic void setClockSource(PccDiv2Clock pccDiv2Clock) {
    \t   PccInfo::setLpuart$(_instance)ClockSource(pccDiv2Clock);
    \t}
-   \t#endif\n\n
+   #endif\n\n
    
    \t/**
    \t * Get input clock frequency
@@ -133,14 +135,15 @@ Devices using this peripheral:
    \t * @return Input clock frequency as a uint32_t in Hz
    \t */
    \tstatic uint32_t getClockFrequency() {
-   \t#if defined(PCC_PCC_LPUART$(_instance)_CGC_MASK)
+   #if defined(PCC_PCC_LPUART$(_instance)_CGC_MASK)
    \t   return PccInfo::getLpuart$(_instance)Frequency();
    \t#elif defined(SIM_SOPT2_LPUART$(_instance)SRC_MASK)
    \t   return SimInfo::getLpuart$(_instance)Clock();
    \t#else
    \t   return SimInfo::getLpuartClock();
-   \t#endif
+   #endif
    \t}\n\n
+
    ]]></template>
    
    <template><![CDATA[

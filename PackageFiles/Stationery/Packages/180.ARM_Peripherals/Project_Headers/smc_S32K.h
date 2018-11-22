@@ -34,49 +34,53 @@ enum SmcVeryLowPower {
    SmcVeryLowPower_Enabled   = SMC_PMPROT_AVLP(1),   //!< Allow VLPR, VLPW, and VLPS modes
 };
 
+#ifdef SMC_PMPROT_ALLS
 /**
  * Determines if any LLSx modes are enabled
+ *
+ * @note Not supported on all processors
  */
 enum SmcLowLeakageStop {
    SmcLowLeakageStop_Disabled  = SMC_PMPROT_ALLS(0),   //!< Disallow Any LLSx mode
    SmcLowLeakageStop_Enabled   = SMC_PMPROT_ALLS(1),   //!< Allow Any LLSx mode
 };
+#endif
 
+#ifdef SMC_PMPROT_AVLLS
 /**
  * Determines if any VLLSx modes are enabled
+ *
+ * @note Not supported on all processors
  */
 enum SmcVeryLowLeakageStop {
    SmcVeryLowLeakageStop_Disabled  = SMC_PMPROT_AVLLS(0),   //!< Disallow Any VLLSx mode
    SmcVeryLowLeakageStop_Enabled   = SMC_PMPROT_AVLLS(1),   //!< Allow Any VLLSx mode
 };
+#endif
 
+#ifdef SMC_PMPROT_AHSRUN
 /**
  * Determines if HSRUN mode is enabled
  *
  * @note Not supported on all processors
  */
 enum SmcHighSpeedRun {
-#ifdef SMC_PMPROT_AHSRUN
    SmcHighSpeedRun_Disabled  = SMC_PMPROT_AHSRUN(0),   //!< Disallow HSRUN mode
    SmcHighSpeedRun_Enabled   = SMC_PMPROT_AHSRUN(1),   //!< Allow HSRUN mode
-#else
-   SmcHighSpeedRun_Disabled  = 0, //!< HSRUN Not supported
-#endif
 };
+#endif
 
+#ifdef SMC_PMCTRL_LPWUI
 /**
  * Whether to exit VLP to Run mode on interrupt
  *
  * @note Not supported on all processors
  */
 enum SmcExitVeryLowPowerOnInt {
-#ifdef SMC_PMCTRL_LPWUI
    SmcExitVeryLowPowerOnInt_Disabled = SMC_PMCTRL_LPWUI(0),  //!< Remain in VLP mode on interrupt
    SmcExitVeryLowPowerOnInt_Enabled  = SMC_PMCTRL_LPWUI(1),  //!< Exit to RUN mode on interrupt
-#else
-   SmcExitVeryLowPowerOnInt_Disabled = 0, //!< LPWUI not supported
-#endif
 };
+#endif
 
 /**
  * Sets Run mode
@@ -97,8 +101,12 @@ enum SmcRunMode {
 enum SmcStopMode {
    SmcStopMode_NormalStop         = SMC_PMCTRL_STOPM(0), //!< Normal Stop (STOP)
    SmcStopMode_VeryLowPowerStop   = SMC_PMCTRL_STOPM(2), //!< Very-Low-Power Stop (VLPS)
+#ifdef SMC_PMPROT_ALLS_MASK
    SmcStopMode_LowLeakageStop     = SMC_PMCTRL_STOPM(3), //!< Low-Leakage Stop (LLSx)
+#endif
+#ifdef SMC_PMPROT_AVLLS_MASK
    SmcStopMode_VeryLowLeakageStop = SMC_PMCTRL_STOPM(4), //!< Very-Low-Leakage Stop (VLLSx)
+#endif
 };
 
 /**
@@ -155,6 +163,7 @@ enum SmcSleepOnExit {
    SmcSleepOnExit_Enabled  = SCB_SCR_SLEEPONEXIT_Msk, //!< Processor re-enters SLEEP/DEEPSLEEP mode on completion of interrupt.
 };
 
+#if defined(SMC_STOPCTRL_LLSM) || defined(SMC_STOPCTRL_VLLSM)
 /**
  *  VLS or VLLS Mode Control\n
  *  This field controls which LLS/VLLS sub-mode to enter if STOPM=LLS/VLLS
@@ -176,6 +185,7 @@ enum SmcLowLeakageStopMode {
    SmcLowLeakageStopMode_VLLS3 = SMC_STOPCTRL_VLLSM(3),  //!< Enter VLLS3 in VLLSx mode, LLS3 in LLSx mode
 #endif
 };
+#endif
 
 /**
  *  Indicates the current stop mode
@@ -273,27 +283,26 @@ public:
       smc().PMPROT   = Info::pmprot;
       smc().STOPCTRL = Info::stopctrl;
    }
-
+   
+$(/SMC/EnablePowerModes:
    /**
     * Enable the given power modes.
     * A mode must be enabled before it can be entered.
     *
     * @param[in] smcVeryLowPower        Allows VLPR, VLPW, and VLPS modes
-    * @param[in] smcLowLeakageStop      Allows LLSx modes
-    * @param[in] smcVeryLowLeakageStop  Allows VLLSx modes
     * @param[in] smcHighSpeedRun        Allows HSRUN mode (if supported)
     *
     * @note This is a write-once-after-reset operation
+    * @note Default implementation
     */
    static ErrorCode enablePowerModes(
          SmcVeryLowPower         smcVeryLowPower,
-         SmcLowLeakageStop       smcLowLeakageStop       = SmcLowLeakageStop_Disabled,
-         SmcVeryLowLeakageStop   smcVeryLowLeakageStop   = SmcVeryLowLeakageStop_Disabled,
-         SmcHighSpeedRun         smcHighSpeedRun         = SmcHighSpeedRun_Disabled ) {
+         SmcHighSpeedRun         smcHighSpeedRun) {
 
-      smc().PMPROT = smcVeryLowPower|smcLowLeakageStop|smcVeryLowLeakageStop|smcHighSpeedRun;
+      smc().PMPROT = smcVeryLowPower|smcHighSpeedRun;
       return E_NO_ERROR;
    }
+)
 
    /**
     * Allows the detailed operation in STOP mode to be controlled.
@@ -304,12 +313,11 @@ public:
     * @param[in] smcLpoInLowLeakage     Controls whether the 1 kHz LPO clock is enabled in LLS/VLLSx modes (if supported).
     */
    static void setStopOptions(
-         SmcLowLeakageStopMode   smcLowLeakageStopMode,
          SmcPowerOnReset         smcPowerOnReset         = SmcPowerOnReset_Disabled,
          SmcPartialStopMode      smcPartialStopMode      = SmcPartialStopMode_Normal,
          SmcLpoInLowLeakage      smcLpoInLowLeakage      = SmcLpoInLowLeakage_Disabled) {
 
-      smc().STOPCTRL = smcPartialStopMode|smcPowerOnReset|smcLowLeakageStopMode|smcLpoInLowLeakage;
+      smc().STOPCTRL = smcPartialStopMode|smcPowerOnReset|smcLpoInLowLeakage;
    }
 
    /**
@@ -321,6 +329,11 @@ public:
 
       return (SmcStatus)(smc().PMSTAT);
    }
+
+#ifndef PMC_REGSC_REGONS_MASK
+#define PMC_REGSC_REGONS_MASK PMC_REGSC_REGFPM_MASK
+#define PMC_REGSC_REGONS      PMC_REGSC_REGFPM
+#endif
 
    /**
     * Enter Run Mode.
@@ -386,6 +399,8 @@ public:
          default:
             return setErrorCode(E_ILLEGAL_PARAM);
       }
+      // Update clocks as clock change is automatic
+      Scg::SystemCoreClockUpdate();
       return E_NO_ERROR;
    }
 
@@ -502,15 +517,6 @@ public:
       smc().PMCTRL = (smc().PMCTRL&SMC_PMCTRL_STOPM_MASK) | smcExitVeryLowPowerOnInt;
       // Make sure write completes
       (void)smc().PMCTRL;
-      return E_NO_ERROR;
-   }
-#else
-   /**
-    * Set action on interrupt when in VLP modes (VLPR, VLPW or VLPS).
-    *
-    * @note Not supported on this target
-    */
-   static ErrorCode setExitVeryLowPowerOnInterrupt(SmcExitVeryLowPowerOnInt) {
       return E_NO_ERROR;
    }
 #endif
