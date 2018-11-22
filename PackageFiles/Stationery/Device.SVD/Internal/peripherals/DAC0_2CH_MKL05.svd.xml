@@ -162,6 +162,7 @@ Indicates that the DAC buffer read pointer not zero</description>
                      </enumeratedValues>
                   </field>
                   <field derivedFrom="DACBBIEN" > <name>DACBTIEN</name> <description>Buffer Read Pointer Top Flag Interrupt Enable</description> <bitOffset>1</bitOffset> </field>
+                  <field derivedFrom="DACBBIEN" > <name>DACBWIEN</name> <description>Buffer Watermark Interrupt Enable</description> <bitOffset>2</bitOffset> </field>
                   <field>
                      <name>LPEN</name>
                      <description>Low Power Control</description>

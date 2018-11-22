@@ -194,7 +194,7 @@ This field is cleared by hardware on any exit to normal RUN mode</description>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>0b11</name>
-                           <description>High Speed Run mode (HSRUN)(if available)</description>
+                           <description>High Speed Run mode (HSRUN)</description>
                            <value>0b11</value>
                         </enumeratedValue>
                      </enumeratedValues>
@@ -302,7 +302,7 @@ Controls whether the POR detect circuit (for brown-out detection) is enabled in 
                   <field>
                      <name>PSTOPO</name>
                      <description>Partial Stop Option\n
-These bits control whether a Partial Stop mode is entered when STOPM=STOP</description>
+These bits control which Stop mode is entered when STOPM=STOP</description>
                      <bitOffset>6</bitOffset>
                      <bitWidth>2</bitWidth>
                      <enumeratedValues>

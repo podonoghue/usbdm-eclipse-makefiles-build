@@ -57,10 +57,6 @@ Devices using this peripheral:
       MKW21D5
       MKW22D5
       MKW24D5
-      S32K142
-      S32K144
-      S32K146
-      S32K148
 -->
       <peripheral>
          <?sourceFile "DMAMUX0_16CH_TRIG" ?>

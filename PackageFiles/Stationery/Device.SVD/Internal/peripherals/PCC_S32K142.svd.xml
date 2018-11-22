@@ -178,8 +178,10 @@ Devices using this peripheral:
                </fields>
             </register>
             <register derivedFrom="PCC_FTFC"> <name>PCC_DMAMUX</name> <description>PCC DMAMUX Register</description> <addressOffset>0x84</addressOffset> <resetValue>0x80000000</resetValue> </register>
-            <register derivedFrom="PCC_FTFC"> <name>PCC_FlexCAN0</name> <description>PCC FlexCAN0 Register</description> <addressOffset>0x90</addressOffset> <resetValue>0x80000000</resetValue> </register>
-            <register derivedFrom="PCC_FTFC"> <name>PCC_FlexCAN1</name> <description>PCC FlexCAN1 Register</description> <addressOffset>0x94</addressOffset> <resetValue>0x80000000</resetValue> </register>
+            <register derivedFrom="PCC_FTFC"> <name>PCC_CAN0</name> <description>PCC FLEXCAN0 Register</description> <addressOffset>0x90</addressOffset> <resetValue>0x80000000</resetValue> </register>
+            <register derivedFrom="PCC_FTFC"> <name>PCC_FLEXCAN0</name> <description>PCC FLEXCAN0 Register</description> <addressOffset>0x90</addressOffset> <resetValue>0x80000000</resetValue> </register>
+            <register derivedFrom="PCC_FTFC"> <name>PCC_CAN1</name> <description>PCC FLEXCAN1 Register</description> <addressOffset>0x94</addressOffset> <resetValue>0x80000000</resetValue> </register>
+            <register derivedFrom="PCC_FTFC"> <name>PCC_FLEXCAN1</name> <description>PCC FLEXCAN1 Register</description> <addressOffset>0x94</addressOffset> <resetValue>0x80000000</resetValue> </register>
             <register>
                <name>PCC_FTM3</name>
                <description>PCC FTM3 Register</description>
@@ -268,8 +270,10 @@ Devices using this peripheral:
             <register derivedFrom="PCC_FTM3"> <name>PCC_LPSPI1</name> <description>PCC LPSPI1 Register</description> <addressOffset>0xB4</addressOffset> </register>
             <register derivedFrom="PCC_FTFC"> <name>PCC_PDB1</name> <description>PCC PDB1 Register</description> <addressOffset>0xC4</addressOffset> <resetValue>0x80000000</resetValue> </register>
             <register derivedFrom="PCC_FTFC"> <name>PCC_CRC</name> <description>PCC CRC Register</description> <addressOffset>0xC8</addressOffset> <resetValue>0x80000000</resetValue> </register>
+            <register derivedFrom="PCC_FTFC"> <name>PCC_CRC0</name> <description>PCC CRC Register</description> <addressOffset>0xC8</addressOffset> <resetValue>0x80000000</resetValue> </register>
             <register derivedFrom="PCC_FTFC"> <name>PCC_PDB0</name> <description>PCC PDB0 Register</description> <addressOffset>0xD8</addressOffset> <resetValue>0x80000000</resetValue> </register>
             <register derivedFrom="PCC_FTM3"> <name>PCC_LPIT</name> <description>PCC LPIT Register</description> <addressOffset>0xDC</addressOffset> </register>
+            <register derivedFrom="PCC_FTM3"> <name>PCC_LPIT0</name> <description>PCC LPIT Register</description> <addressOffset>0xDC</addressOffset> </register>
             <register derivedFrom="PCC_FTM3"> <name>PCC_FTM0</name> <description>PCC FTM0 Register</description> <addressOffset>0xE0</addressOffset> </register>
             <register derivedFrom="PCC_FTM3"> <name>PCC_FTM1</name> <description>PCC FTM1 Register</description> <addressOffset>0xE4</addressOffset> </register>
             <register derivedFrom="PCC_FTM3"> <name>PCC_FTM2</name> <description>PCC FTM2 Register</description> <addressOffset>0xE8</addressOffset> </register>
@@ -281,7 +285,7 @@ Devices using this peripheral:
             <register derivedFrom="PCC_FTFC"> <name>PCC_PORTC</name> <description>PCC PORTC Register</description> <addressOffset>0x12C</addressOffset> <resetValue>0x80000000</resetValue> </register>
             <register derivedFrom="PCC_FTFC"> <name>PCC_PORTD</name> <description>PCC PORTD Register</description> <addressOffset>0x130</addressOffset> <resetValue>0x80000000</resetValue> </register>
             <register derivedFrom="PCC_FTFC"> <name>PCC_PORTE</name> <description>PCC PORTE Register</description> <addressOffset>0x134</addressOffset> <resetValue>0x80000000</resetValue> </register>
-            <register derivedFrom="PCC_FTM3"> <name>PCC_FlexIO</name> <description>PCC FlexIO Register</description> <addressOffset>0x168</addressOffset> </register>
+            <register derivedFrom="PCC_FTM3"> <name>PCC_FLEXIO</name> <description>PCC FLEXIO Register</description> <addressOffset>0x168</addressOffset> </register>
             <register derivedFrom="PCC_FTFC"> <name>PCC_EWM</name> <description>PCC EWM Register</description> <addressOffset>0x184</addressOffset> <resetValue>0x80000000</resetValue> </register>
             <register derivedFrom="PCC_FTM3"> <name>PCC_LPI2C0</name> <description>PCC LPI2C0 Register</description> <addressOffset>0x198</addressOffset> </register>
             <register derivedFrom="PCC_FTM3"> <name>PCC_LPUART0</name> <description>PCC LPUART0 Register</description> <addressOffset>0x1A8</addressOffset> </register>
