@@ -1,9 +1,9 @@
 /**
- * @file     adc.h (180.ARM_Peripherals/Project_Headers/adc.h)
+ * @file     adc.h (180.ARM_Peripherals/Project_Headers/adc_S32.h)
  * @brief    ADC routines
  *
  * @version  V4.12.1.80
- * @date     13 April 2016
+ * @date     26 December 2018
  */
 #ifndef HEADER_ADC_H
 #define HEADER_ADC_H
@@ -95,10 +95,11 @@ enum AdcAveraging {
  * ADC input clock source.
  */
 enum AdcClockSource {
-   AdcClockSource_Bus      = ADC_CFG1_ADICLK(0), //!< Bus Clock
-   AdcClockSource_Busdiv2  = ADC_CFG1_ADICLK(1), //!< Bus Clock / 2
-   AdcClockSource_Alt      = ADC_CFG1_ADICLK(2), //!< Alternate clock (ALTCLK)
-   AdcClockSource_Asynch   = ADC_CFG1_ADICLK(3), //!< Asynchronous clock (ADACK Internal ADC clock source)
+   AdcClockSource_PccAdcClk  = ADC_CFG1_ADICLK(0), //!< Clock from PCC_ADCn multiplexor
+   AdcClockSource_Reserved1  = ADC_CFG1_ADICLK(1), //!< Reserved
+   AdcClockSource_Reserved2  = ADC_CFG1_ADICLK(2), //!< Reserved
+   AdcClockSource_Reserved3  = ADC_CFG1_ADICLK(3), //!< Reserved
+   AdcClockSource_Default    = AdcClockSource_PccAdcClk
 };
 
 /**
@@ -273,7 +274,7 @@ public:
     * @note To change between handlers first use setCallback(nullptr).
     */
    static void setCallback(ADCCallbackFunction callback) {
-      usbdm_assert(Info::irqHandlerInstalled, "ADC not configured for interrupts");
+      static_assert(Info::irqHandlerInstalled, "ADC not configured for interrupts. Modify Configure.usbdmProject");
       if (callback == nullptr) {
          sCallback = AdcBase::unhandledCallback;
          return;
@@ -290,8 +291,6 @@ public:
    static void configureAllPins() {
       // Configure pins
       Info::initPCRs();
-      Info::InfoDP::initPCRs();
-      Info::InfoDM::initPCRs();
    }
 
    /**
@@ -345,19 +344,13 @@ public:
     * @param[in] adcClockSource  Clock source e.g. AdcClockSource_Asynch
     * @param[in] adcClockDivider Clock divider e.g. AdcClockDivider_4
     * @param[in] adcSample       Input sample interval. Allows use of higher input impedance sources
-    * @param[in] adcPower        Allows reduced power consumption but with restricted input clock speed
-    * @param[in] adcMuxsel       Selects between A/B multiplexor inputs on channels 4-8
-    * @param[in] adcClockRange   Allows higher input clock speed operation
-    * @param[in] adcAsyncClock   Controls whether the internal ADC clock is always enabled or only when needed for a conversion
     *
-    * @note These settings apply to all channels on the ADC.\n
-    * The resulting ADC clock rate should be restricted to the following ranges (assumes AdcPower_Normal, AdcClockRange_high):\n
-    *  [2..12MHz] for 16-bit conversion modes  \n
-    *  [1..18MHz] for other conversion modes
+    * @note These settings apply to all channels on the ADC.
+    * @note The resulting ADC clock rate should be restricted to [2..40MHz]
     */
    static void configure(
          AdcResolution   adcResolution,
-         AdcClockSource  adcClockSource  = AdcClockSource_Asynch,
+         AdcClockSource  adcClockSource  = AdcClockSource_Default,
          AdcClockDivider adcClockDivider = AdcClockDivider_1,
          unsigned        adcSample       = 10
          ) {

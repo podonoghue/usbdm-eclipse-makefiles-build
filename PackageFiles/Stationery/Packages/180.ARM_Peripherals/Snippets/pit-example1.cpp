@@ -16,24 +16,24 @@ using namespace USBDM;
 // Led is assumed active-low
 using LED   = $(demo.cpp.red.led:GpioA<2, ActiveLow>);
 
-using TimerChannel = Pit::Channel<0>;
+using Timer        = Pit;
+using TimerChannel = Timer::Channel<0>;
 
 int main() {
 
    LED::setOutput(PinDriveStrength_High);
 
    // Enable PIT
-   Pit::configure();
+   Timer::configure();
 
    // Check for errors so far
    checkError();
 
    for(;;) {
-      LED::toggle();
-
       // Delay in ticks using channel 0
       // This is a busy-waiting loop!
-//      TimerChannel::delayInTicks(::SystemBusClock/10);
       TimerChannel::delay(100*ms);
+      //console.writeln("Tick");
+      LED::toggle();
    }
 }

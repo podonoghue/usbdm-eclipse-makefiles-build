@@ -115,14 +115,16 @@ Devices using this peripheral:
    \tstatic constexpr unsigned transmitBufferSize = $(transmitBufferSize);\n\n
 
    #if defined(PCC_PCC_LPUART$(_instance)_CGC_MASK)
+   \t//! Default clock source
+   \tstatic constexpr PccDiv2Clock defaultClockSource = PccDiv2Clock_Firc;\n\n
    \t/**
    \t * Set LPUART$(_instance) input clock source.
-   \t * This also enables the clock.
    \t *
    \t * @param pccDiv2Clock Clock source selection
    \t *
-   \t * @note This peripheral uses the DIV1 peripheral clocks e.g. SOSCDIV1_CLK 
-   \t * @note The peripheral bus clock will be disabled before changing the clock 
+   \t * @note This peripheral uses the DIV2 peripheral clocks e.g. SOSCDIV2_CLK 
+   \t * @note The peripheral bus clock will be disabled before changing the 
+   \t         clock and is left disabled.
    \t */
    \tstatic void setClockSource(PccDiv2Clock pccDiv2Clock) {
    \t   PccInfo::setLpuart$(_instance)ClockSource(pccDiv2Clock);

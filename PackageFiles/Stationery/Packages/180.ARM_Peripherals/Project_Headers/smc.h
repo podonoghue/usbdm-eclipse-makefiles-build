@@ -34,49 +34,53 @@ enum SmcVeryLowPower {
    SmcVeryLowPower_Enabled   = SMC_PMPROT_AVLP(1),   //!< Allow VLPR, VLPW, and VLPS modes
 };
 
+#ifdef SMC_PMPROT_ALLS
 /**
  * Determines if any LLSx modes are enabled
+ *
+ * @note Not supported on all processors
  */
 enum SmcLowLeakageStop {
    SmcLowLeakageStop_Disabled  = SMC_PMPROT_ALLS(0),   //!< Disallow Any LLSx mode
    SmcLowLeakageStop_Enabled   = SMC_PMPROT_ALLS(1),   //!< Allow Any LLSx mode
 };
+#endif
 
+#ifdef SMC_PMPROT_AVLLS
 /**
  * Determines if any VLLSx modes are enabled
+ *
+ * @note Not supported on all processors
  */
 enum SmcVeryLowLeakageStop {
    SmcVeryLowLeakageStop_Disabled  = SMC_PMPROT_AVLLS(0),   //!< Disallow Any VLLSx mode
    SmcVeryLowLeakageStop_Enabled   = SMC_PMPROT_AVLLS(1),   //!< Allow Any VLLSx mode
 };
+#endif
 
+#ifdef SMC_PMPROT_AHSRUN
 /**
  * Determines if HSRUN mode is enabled
  *
  * @note Not supported on all processors
  */
 enum SmcHighSpeedRun {
-#ifdef SMC_PMPROT_AHSRUN
    SmcHighSpeedRun_Disabled  = SMC_PMPROT_AHSRUN(0),   //!< Disallow HSRUN mode
    SmcHighSpeedRun_Enabled   = SMC_PMPROT_AHSRUN(1),   //!< Allow HSRUN mode
-#else
-   SmcHighSpeedRun_Disabled  = 0, //!< HSRUN Not supported
-#endif
 };
+#endif
 
+#ifdef SMC_PMCTRL_LPWUI
 /**
  * Whether to exit VLP to Run mode on interrupt
  *
  * @note Not supported on all processors
  */
 enum SmcExitVeryLowPowerOnInt {
-#ifdef SMC_PMCTRL_LPWUI
    SmcExitVeryLowPowerOnInt_Disabled = SMC_PMCTRL_LPWUI(0),  //!< Remain in VLP mode on interrupt
    SmcExitVeryLowPowerOnInt_Enabled  = SMC_PMCTRL_LPWUI(1),  //!< Exit to RUN mode on interrupt
-#else
-   SmcExitVeryLowPowerOnInt_Disabled = 0, //!< LPWUI not supported
-#endif
 };
+#endif
 
 /**
  * Sets Run mode
@@ -97,10 +101,15 @@ enum SmcRunMode {
 enum SmcStopMode {
    SmcStopMode_NormalStop         = SMC_PMCTRL_STOPM(0), //!< Normal Stop (STOP)
    SmcStopMode_VeryLowPowerStop   = SMC_PMCTRL_STOPM(2), //!< Very-Low-Power Stop (VLPS)
+#ifdef SMC_PMPROT_ALLS_MASK
    SmcStopMode_LowLeakageStop     = SMC_PMCTRL_STOPM(3), //!< Low-Leakage Stop (LLSx)
+#endif
+#ifdef SMC_PMPROT_AVLLS_MASK
    SmcStopMode_VeryLowLeakageStop = SMC_PMCTRL_STOPM(4), //!< Very-Low-Leakage Stop (VLLSx)
+#endif
 };
 
+#ifdef SMC_STOPCTRL_PSTOPO
 /**
  *  Partial Stop Option\n
  *  Controls whether a Partial Stop mode is entered when STOPM=STOP\n
@@ -108,15 +117,18 @@ enum SmcStopMode {
  * @note Not supported on all processors
  */
 enum SmcPartialStopMode {
-#ifdef SMC_STOPCTRL_PSTOPO
    SmcPartialStopMode_Normal   = SMC_STOPCTRL_PSTOPO(0), //!< Normal stop mode
    SmcPartialStopMode_Partial1 = SMC_STOPCTRL_PSTOPO(1), //!< Partial Stop with both system and bus clocks disabled
    SmcPartialStopMode_Partial2 = SMC_STOPCTRL_PSTOPO(2), //!< Partial Stop with system clock disabled and bus clock enabled
-#else
-   SmcPartialStopMode_Normal   = 0, //!< Partial STOP options not supported
-#endif
-};
 
+   SmcPartialStopMode_Stop = SmcPartialStopMode_Normal,    //!< Normal stop mode
+   SmcPartialStopMode_Stop1 = SmcPartialStopMode_Partial1, //!< Stop with both system and bus clocks disabled
+   SmcPartialStopMode_Stop2 = SmcPartialStopMode_Partial2, //!< Stop with system clock disabled and bus clock enabled
+
+};
+#endif
+
+#ifdef SMC_STOPCTRL_LPOPO
 /**
  *  Stop mode LPO Option\n
  *  Controls whether the 1 kHz LPO clock is enabled in LLS/VLLSx modes.
@@ -124,26 +136,21 @@ enum SmcPartialStopMode {
  * @note Not supported on all processors
  */
 enum SmcLpoInLowLeakage {
-#ifdef SMC_STOPCTRL_LPOPO
    SmcLpoInLowLeakage_Enabled  = SMC_STOPCTRL_LPOPO(0), //!< LPO clock is enabled in LLS/VLLSx
    SmcLpoInLowLeakage_Disabled = SMC_STOPCTRL_LPOPO(1), //!< LPO clock is disabled in LLS/VLLSx
-#else
-   SmcLpoInLowLeakage_Disabled  = 0, //!< LPO clock in STOP option not supported
-#endif
 };
+#endif
 
+#ifdef SMC_STOPCTRL_PORPO
 /**
  *  POR Power Option\n
  *  This bit controls whether the POR detect circuit is enabled in VLLS0 mode.
  */
 enum SmcPowerOnReset {
-#ifdef SMC_STOPCTRL_PORPO
-   SmcPowerOnReset_Enabled  = SMC_STOPCTRL_PORPO(0),   //!< Power on reset (brown-out detection) in STOP enabled
-   SmcPowerOnReset_Disabled = SMC_STOPCTRL_PORPO(1),   //!< Power on reset (brown-out detection) in STOP disabled
-#else
-   SmcPowerOnReset_Disabled = 0,   //!< Power on reset (brown-out detection) in STOP not supported
-#endif
+   SmcPowerOnReset_Enabled  = SMC_STOPCTRL_PORPO(0),   //!< Power on reset (brown-out detection) in VLLS0 enabled
+   SmcPowerOnReset_Disabled = SMC_STOPCTRL_PORPO(1),   //!< Power on reset (brown-out detection) in VLLS0 disabled
 };
+#endif
 
 /**
  *  Sleep on exit from Interrupt Service Routine (ISR)\n
@@ -155,6 +162,7 @@ enum SmcSleepOnExit {
    SmcSleepOnExit_Enabled  = SCB_SCR_SLEEPONEXIT_Msk, //!< Processor re-enters SLEEP/DEEPSLEEP mode on completion of interrupt.
 };
 
+#if defined(SMC_STOPCTRL_LLSM) || defined(SMC_STOPCTRL_VLLSM)
 /**
  *  VLS or VLLS Mode Control\n
  *  This field controls which LLS/VLLS sub-mode to enter if STOPM=LLS/VLLS
@@ -176,6 +184,7 @@ enum SmcLowLeakageStopMode {
    SmcLowLeakageStopMode_VLLS3 = SMC_STOPCTRL_VLLSM(3),  //!< Enter VLLS3 in VLLSx mode, LLS3 in LLSx mode
 #endif
 };
+#endif
 
 /**
  *  Indicates the current stop mode
@@ -199,20 +208,6 @@ enum SmcStatus {
 };
 
 /**
- *  POR Power Option\n
- *  This bit controls whether the POR detect circuit is enabled in VLLS0 mode.
- */
-enum SmcPowerOption {
-#ifdef SMC_VLLSCTRL_PORPO
-   SmcPowerOption_Disabled = SMC_VLLSCTRL_PORPO(0),   //!< Disable POR detect in VLLS0
-   SmcPowerOption_Enabled  = SMC_VLLSCTRL_PORPO(1),   //!< Enable POR detect in VLLS0
-#else
-   SmcPowerOption_Disabled = (0),   //!< Not supported
-   SmcPowerOption_Enabled  = (0),   //!< Not supported
-#endif
-};
-
-/**
  * @brief Template class representing the System Mode Controller (SMC)
  *
  * Partially based on Freescale Application note AN4503\n
@@ -230,7 +225,7 @@ protected:
 public:
 
    /**
-    * Get name from SMC status
+    * Get name from SMC status e.g. RUN, VLPR, HSRUN
     *
     * @param status
     *
@@ -250,8 +245,9 @@ public:
       }
       return "Impossible while running!";
    }
+   
    /**
-    * Get name for current SMC status
+    * Get name for current SMC status  e.g. RUN, VLPR, HSRUN
     *
     * @return Pointer to static string
     */
@@ -273,7 +269,7 @@ public:
       smc().PMPROT   = Info::pmprot;
       smc().STOPCTRL = Info::stopctrl;
    }
-
+   
    /**
     * Enable the given power modes.
     * A mode must be enabled before it can be entered.
@@ -300,7 +296,7 @@ public:
     *
     * @param[in] smcLowLeakageStopMode  Controls which LLS/VLLS sub-mode to enter if STOPM=LLS/VLLS
     * @param[in] smcPowerOnReset        Controls whether the POR detect circuit is enabled in VLLS0 mode
-    * @param[in] smcPartialStopMode     Controls whether a Partial Stop mode is entered when STOPM=STOP (if supported)
+    * @param[in] smcPartialStopMode     Controls whether a Partial Stop mode is entered when STOPM=STOP
     * @param[in] smcLpoInLowLeakage     Controls whether the 1 kHz LPO clock is enabled in LLS/VLLSx modes (if supported).
     */
    static void setStopOptions(
@@ -340,10 +336,6 @@ public:
       switch(smcRunMode) {
          case SmcRunMode_Normal:
             smc().PMCTRL = (smc().PMCTRL&~SMC_PMCTRL_RUNM_MASK)|smcRunMode;
-            // Wait for power regulator status to change
-            while ((PMC->REGSC & PMC_REGSC_REGONS_MASK) != PMC_REGSC_REGONS(1)) {
-               __asm__("nop");
-            }
             // Wait for power status to change
             while (getStatus() != SmcStatus_RUN) {
                __asm__("nop");
@@ -356,10 +348,6 @@ public:
                return setErrorCode(E_ILLEGAL_POWER_TRANSITION);
             }
             smc().PMCTRL = (smc().PMCTRL&~SMC_PMCTRL_RUNM_MASK)|smcRunMode;
-            // Wait for power regulator status to change
-            while ((PMC->REGSC & PMC_REGSC_REGONS_MASK) != PMC_REGSC_REGONS(1)) {
-               __asm__("nop");
-            }
             // Wait for power status to change
             while (getStatus() != SmcStatus_hsrun) {
                __asm__("nop");
@@ -374,10 +362,6 @@ public:
             }
 #endif
             smc().PMCTRL = (smc().PMCTRL&~SMC_PMCTRL_RUNM_MASK)|smcRunMode;
-            // Wait for power regulator status to change
-            while ((PMC->REGSC & PMC_REGSC_REGONS_MASK) != PMC_REGSC_REGONS(0)) {
-               __asm__("nop");
-            }
             // Wait for power status to change
             while (getStatus() != SmcStatus_VLPR) {
                __asm__("nop");
@@ -386,6 +370,11 @@ public:
          default:
             return setErrorCode(E_ILLEGAL_PARAM);
       }
+#ifdef USBDM_SCG_IS_DEFINED
+      // Update clocks as clock change is automatic with run mode change
+      // Update clocks as clock change is automatic
+      Scg::SystemCoreClockUpdate();
+#endif
       return E_NO_ERROR;
    }
 
@@ -502,15 +491,6 @@ public:
       smc().PMCTRL = (smc().PMCTRL&SMC_PMCTRL_STOPM_MASK) | smcExitVeryLowPowerOnInt;
       // Make sure write completes
       (void)smc().PMCTRL;
-      return E_NO_ERROR;
-   }
-#else
-   /**
-    * Set action on interrupt when in VLP modes (VLPR, VLPW or VLPS).
-    *
-    * @note Not supported on this target
-    */
-   static ErrorCode setExitVeryLowPowerOnInterrupt(SmcExitVeryLowPowerOnInt) {
       return E_NO_ERROR;
    }
 #endif

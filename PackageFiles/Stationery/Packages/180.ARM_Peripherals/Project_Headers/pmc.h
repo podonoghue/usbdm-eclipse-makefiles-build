@@ -49,6 +49,7 @@ enum PmcLowVoltageDetectAction {
    PmcLowVoltageDetectAction_Interrupt = PMC_LVDSC1_LVDRE(1)|PMC_LVDSC1_LVDIE(1),//!< Interrupt on Low Voltage Detect
    PmcLowVoltageDetectAction_Reset     = PMC_LVDSC1_LVDRE(0)|PMC_LVDSC1_LVDIE(0),//!< Reset on Low Voltage Detect
 };
+
 #ifdef PMC_LVDSC1_LVDV
 /**
  * Level at which Low Voltage Detect operates
@@ -251,14 +252,14 @@ public:
 
 #endif
 
+#ifdef PMC_REGSC_ACKISO_MASK
    /**
     * Release pins after VLLSx exit
     */
    static void releasePins () {
-#ifdef PMC_REGSC_ACKISO_MASK
       pmc().REGSC |= PMC_REGSC_ACKISO_MASK;
-#endif
    }
+#endif
 
 #ifdef PMC_REGSC_BGEN
    /**
@@ -271,6 +272,111 @@ public:
          PmcBandgapBuffer           pmcBandgapBuffer,
          PmcBandgapLowPowerEnable   pmcBandgapLowPowerEnable=PmcBandgapLowPowerEnable_Off) {
       pmc().REGSC = pmcBandgapBuffer|pmcBandgapLowPowerEnable;
+   }
+#endif
+
+#ifdef PMC_REGSC_BIASEN
+   /**
+    * Enables source and well biasing for the core logic in low power mode.
+    *
+    * In full performance mode this option has no effect.
+    * This is useful to further reduce MCU power consumption in low power mode.
+    * This bit must be enabled when using VLP* modes.
+    *
+    * Biasing enabled => Core logic is slower and there are restrictions in allowed system clock speed
+    */
+   static void enableCoreBias() {
+      pmc().REGSC |= PMC_REGSC_BIASEN_MASK;
+   }
+
+   /**
+    * Disables source and well biasing for the core logic in low power mode.
+    *
+    * Biasing disabled => Core logic can run in full performance
+    */
+   static void disableCoreBias() {
+      pmc().REGSC &= ~PMC_REGSC_BIASEN_MASK;
+   }
+#endif
+
+#ifdef PMC_REGSC_CLKBIASDIS
+   /**
+    * Enables the bias currents and reference voltages for some clock modules.
+    *
+    * Disabling clock bias reduces power consumption in VLPS mode.
+    *
+    * Enabled  - No effect
+    */
+   static void enableClockBias() {
+      pmc().REGSC &= ~PMC_REGSC_CLKBIASDIS_MASK;
+   }
+
+   /**
+    * Disables the bias currents and reference voltages for some clock modules.
+    *
+    * Disabling clock bias further reduce power consumption in VLPS mode.
+    * While using this option, it must be ensured that respective clock modules are
+    * disabled in VLPS mode otherwise severe malfunction of clock modules will occur.
+    *
+    * Disabled - In VLPS mode, the bias currents and reference voltages for the 
+    *            following clock modules are disabled: SIRC, FIRC, PLL.
+    */
+   static void disableClockBias() {
+      pmc().REGSC |= PMC_REGSC_CLKBIASDIS_MASK;
+   }
+#endif
+
+#ifdef PMC_REGSC_LPODIS
+   /**
+    * Enable low power oscillator (LPO)
+    *
+    * Controls operation of the low power oscillator.
+    *
+    * @note After disabling the LPO a time of 2 LPO clock cycles is required before 
+    *       it is allowed to enable it again. Violating this waiting time of 2 cycles
+    *       can result in malfunction of the LPO.
+    */
+   static void enableLowPowerOscillator() {
+      pmc().REGSC &= ~PMC_REGSC_LPODIS_MASK;
+   }
+
+   /**
+    * Disable low power oscillator (LPO)
+    *
+    * Controls operation of the low power oscillator.
+    *
+    * @note After disabling the LPO a time of 2 LPO clock cycles is required before
+    *       it is allowed to enable it again. Violating this waiting time of 2 cycles
+    *       can result in malfunction of the LPO.
+    */
+   static void disableLowPowerOscillator() {
+      pmc().REGSC |= PMC_REGSC_LPODIS_MASK;
+   }
+#endif
+
+#ifdef PMC_REGSC_LPOSTAT
+   /**
+    * Get Low Power Oscillator (LPO) state
+    *
+    * @return true  => LPO is currently in high state
+    * @return false => LPO is currently in low state
+    */
+   static bool getLowpowerOscillatorStatus() {
+      return (pmc().REGSC & PMC_REGSC_LPOSTAT_MASK)?true:false;
+   }
+#endif
+
+#ifdef PMC_LPOTRIM_LPOTRIM
+   static void setLowpowerOscillatorTrim(int trimValue) {
+      pmc().LPOTRIM = PMC_LPOTRIM_LPOTRIM(trimValue);
+   }
+   static int getLowpowerOscillatorTrim() {
+      int trim = pmc().LPOTRIM&PMC_LPOTRIM_LPOTRIM_MASK;
+      if (((unsigned)trim)>(PMC_LPOTRIM_LPOTRIM_MASK>>1)) {
+         // Sign extend -ve values
+         trim -= PMC_LPOTRIM_LPOTRIM_MASK+1;
+      }
+      return trim;
    }
 #endif
 

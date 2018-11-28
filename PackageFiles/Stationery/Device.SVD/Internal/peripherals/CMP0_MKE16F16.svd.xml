@@ -420,6 +420,13 @@ Controls availability of the comparator output on the associated CMPO output pin
                      </enumeratedValues>
                   </field>
                   <field>
+                     <name>CHN</name>
+                     <?ignoreOverlap?>
+                     <description>Channel input enable mask</description>
+                     <bitOffset>16</bitOffset>
+                     <bitWidth>8</bitWidth>
+                  </field>
+                  <field>
                      <name>CHN0</name>
                      <description>Channel 0 input enable</description>
                      <bitOffset>16</bitOffset>
@@ -506,9 +513,9 @@ Controls availability of the comparator output on the associated CMPO output pin
                      <bitWidth>6</bitWidth>
                      <enumeratedValues>
                         <enumeratedValue>
-                           <name>0b000000</name>
-                           <description>The modulus is set to 64(same with 111111)</description>
-                           <value>0b0</value>
+                           <name>0bXXXXXX</name>
+                           <description>The modulus is set to N (0=>64)</description>
+                           <isDefault>true</isDefault>
                         </enumeratedValue>
                      </enumeratedValues>
                   </field>
@@ -539,6 +546,13 @@ Controls availability of the comparator output on the associated CMPO output pin
                            <value>0b11</value>
                         </enumeratedValue>
                      </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>CHF</name>
+                     <?ignoreOverlap?>
+                     <description>Channel input changed flags</description>
+                     <bitOffset>16</bitOffset>
+                     <bitWidth>8</bitWidth>
                   </field>
                   <field>
                      <name>CH0F</name>

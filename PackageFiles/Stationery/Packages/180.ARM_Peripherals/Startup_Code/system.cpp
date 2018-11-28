@@ -142,7 +142,9 @@ void SystemInit(void) {
     * It may not be correct for a specific target
     */
 
+#ifdef PMC_REGSC_ACKISO
    USBDM::Pmc::releasePins();
+#endif
 
    /* Use Clock initialisation - if present */
    clock_initialise();

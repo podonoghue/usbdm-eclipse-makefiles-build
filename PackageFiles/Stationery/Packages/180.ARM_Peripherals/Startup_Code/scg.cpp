@@ -47,8 +47,25 @@ volatile uint32_t SystemLpoClock;
 /** Callback for programmatically set handler */
 SCGCallbackFunction Scg::callback = {0};
 
-/** Current clock mode (FEI out of reset) */
-ScgInfo::ClockMode Scg::currentClockMode = ScgInfo::ClockMode::ClockMode_FIRC;
+/**
+ * Get current clock mode
+ *
+ * @return clock mode
+ */
+ScgInfo::ClockMode Scg::getClockMode() {
+   switch (scg().CSR & SCG_CSR_SCS_MASK) {
+      case SCG_CSR_SCS(1): // SOSC_CLK
+         return ScgInfo::ClockMode_SOSC;
+      case SCG_CSR_SCS(2): // SIRC_CLK
+         return ScgInfo::ClockMode_SIRC;
+      case SCG_CSR_SCS(3): // FIRC_CLK
+         return ScgInfo::ClockMode_FIRC;
+      case SCG_CSR_SCS(6): // SPLL_CLK
+         return ScgInfo::ClockMode_SPLL;
+      default:
+         return ScgInfo::ClockMode_None;
+   }
+}
 
 /**
  * Get name for clock mode
@@ -168,16 +185,16 @@ void Scg::SystemCoreClockUpdate() {
    uint32_t clockFrequency = 0;
 
    switch (scg().CSR & SCG_CSR_SCS_MASK) {
-      case SCG_RCCR_SCS(0b0001) : // SOSC
+      case SCG_CSR_SCS(0b0001) : // SOSC
          clockFrequency = ScgInfo::getSoscFrequency();
          break;
-      case SCG_RCCR_SCS(0b0010) : // SIRC
+      case SCG_CSR_SCS(0b0010) : // SIRC
          clockFrequency = ScgInfo::getSircFrequency();
          break;
-      case SCG_RCCR_SCS(0b0011) : // FIRC
+      case SCG_CSR_SCS(0b0011) : // FIRC
          clockFrequency = ScgInfo::getFircFrequency();
          break;
-      case SCG_RCCR_SCS(0b0110) : // SPLL
+      case SCG_CSR_SCS(0b0110) : // SPLL
          clockFrequency = ScgInfo::getSpllFrequency();
          break;
    }
@@ -190,8 +207,8 @@ void Scg::SystemCoreClockUpdate() {
  */
 void Scg::defaultConfigure() {
 
-   currentClockMode = ScgInfo::ClockMode::ClockMode_None;
-
+   ScgInfo::initPCRs();
+   
    // Transition to desired clock mode
    clockTransition(clockInfo[ClockConfig_default]);
 

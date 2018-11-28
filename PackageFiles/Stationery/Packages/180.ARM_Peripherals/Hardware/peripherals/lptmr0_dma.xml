@@ -5,10 +5,237 @@
 <peripheralPage xmlns:xi="http://www.w3.org/2001/XInclude" name="_instance" description="Low Power Timer">
    <template><![CDATA[
       \t//! Base value for PCR (excluding MUX value)
-      \tstatic constexpr uint32_t defaultPcrValue  = 0;\n\n
+      \tstatic constexpr uint32_t defaultPcrValue  = DEFAULT_PCR;\n\n
    ]]></template>
    
+   <aliasOption key="/PCC/pcc_lptmr$(_instance)" constant="false" optional="false" />
+
    <xi:include href="_mapPinsOption.xml"/>
+
+   <intOption name="minimumResolution" 
+      description="Minimum resolution for time interval setting"
+      toolTip="This value is used as a minimum value check when setting the time interval.\n
+               This is to prevent setting intervals with low resolution"
+      value="100" min="1" 
+   />
+
+   <template><![CDATA[
+      \t//! Minimum resolution for time interval setting
+      \tstatic constexpr uint32_t minimumResolution = $(minimumResolution);\n\n
+      
+   ]]></template>
+   
+   <choiceOption name="lptmr_psr_pcs" description="Clock Source"
+      toolTip="Low Power Timer clock source">
+      <choice value="0" name="SIRC Div 2 Internal Reference Clock (SIRCDIV2_CLK)" />
+      <choice value="1" name="Low power oscillator 1kHz (LPO1K_CLK)" />
+      <choice value="2" name="32kHz Clock Source (RTC_CLK)" />
+      <choice value="3" name="Clock from PCC_LPTMR0 mux (PCC)" />
+   </choiceOption>
+
+   <binaryOption name="lptmr_psr_pbyp" description="Prescaler Bypass"
+      toolTip="When PBYP is set:\n
+      - The selected prescaler clock in Time Counter mode or\n
+        the selected input source in Pulse Counter mode, directly clocks the lptmr_cnr.\n
+        When PBYP is clear:\n
+      - The lptmr_cnr is clocked by the output of the prescaler/glitch filter">
+      <choice value="0" name="Prescaler/glitch filter is enabled" />
+      <choice value="1" name="Prescaler/glitch filter is bypassed" />
+   </binaryOption>
+   
+   <choiceOption name="lptmr_psr_prescaler" description="Prescaler Value"
+      toolTip="Configures the size of the Prescaler in Time Counter mode or\n
+         width of the glitch filter in Pulse Counter mode">
+      <choice value="0"  name="Prescaler = 2, no glitch filter" />
+      <choice value="1"  name="Prescaler = 4, 2 clock glitch filter" />
+      <choice value="2"  name="Prescaler = 8, 4 clock glitch filter" />
+      <choice value="3"  name="Prescaler = 16, 8 clock glitch filter" />
+      <choice value="4"  name="Prescaler = 32, 16 clock glitch filter" />
+      <choice value="5"  name="Prescaler = 64, 32 clock glitch filter" />
+      <choice value="6"  name="Prescaler = 128, 64 clock glitch filter" />
+      <choice value="7"  name="Prescaler = 256, 128 clock glitch filter" />
+      <choice value="8"  name="Prescaler = 512, 256 clock glitch filter" />
+      <choice value="9"  name="Prescaler = 1024, 512 clock glitch filter" />
+      <choice value="10" name="Prescaler = 2048, 1024 clock glitch filter" />
+      <choice value="11" name="Prescaler = 4096, 2048 clock glitch filter" />
+      <choice value="12" name="Prescaler = 8192, 4096 clock glitch filter" />
+      <choice value="13" name="Prescaler = 16384, 8192 clock glitch filter" />
+      <choice value="14" name="Prescaler = 32768, 16384 clock glitch filter" />
+      <choice value="15" name="Prescaler = 65536, 32768 clock glitch filter" />
+   </choiceOption>
+   
+   <floatOption name="clockFrequency" 
+      constant="true"
+      description="Frequency of timer clock"
+      toolTip="Determined from timer clock source and prescaler"
+      derived="true"
+      units="Hz"/>
+      
+   <floatOption name="clockPeriod" 
+      constant="true"
+      description="Period of timer clock"
+      toolTip="Determined from timer clock source and prescaler"
+      derived="true"
+      units="s"/>
+      
+   <floatOption name="maximumPeriod" 
+      constant="true"
+      description="Maximum period of timer"
+      toolTip="Determined from timer clock source and prescaler"
+      derived="true"
+      units="s"/>
+    
+   <template><![CDATA[
+      \t//! Default Timer Compare value\n
+      \tstatic constexpr uint32_t cmr = $(lptmr_cmr);\n\n
+      
+      \t//! Default PSR value\n
+      \tstatic constexpr uint32_t psr = 
+      \t   LPTMR_PSR_PRESCALE($(lptmr_psr_prescaler))|
+      \t   LPTMR_PSR_PBYP($(lptmr_psr_pbyp))|
+      \t   LPTMR_PSR_PCS($(lptmr_psr_pcs));\n\n
+   ]]></template>
+   
+   <binaryOption name="lptmr_csr_tms" description="Timer Mode Select"
+      toolTip="Configures the mode of the LPTMR">
+      <choice value="0" name="Time Counter mode" />
+      <choice value="1" name="Pulse Counter mode" />
+   </binaryOption>
+   
+   <binaryOption name="lptmr_csr_tie" description="Timer interrupt enable"
+      toolTip="Enables interrupts">
+      <choice value="0" name="Interrupt disabled" />
+      <choice value="1" name="Interrupt enabled" />
+   </binaryOption>
+   
+   <choiceOption name="lptmr_csr_tps" description="Timer Pin Select for Pulse Counter mode"
+      toolTip="Configures the input source to be used in Pulse Counter mode.\n
+      The input connections vary by device">
+      <choice value="0" name="Trgmux output" />
+      <choice value="1" name="LPTMR_ALT1 pin" />
+      <choice value="2" name="LPTMR_ALT2 pin" />
+      <choice value="2" name="LPTMR_ALT3 pin" />
+   </choiceOption>
+   
+   <binaryOption name="lptmr_csr_tpp" description="Timer Pin Polarity for Pulse Counter mode"
+      toolTip="Configures the polarity of the input source in Pulse Counter mode">
+      <choice value="0" name="Active-high source, rising-edge increments lptmr_cnr" />
+      <choice value="1" name="Active-low source,  falling-edge increments lptmr_cnr" />
+   </binaryOption>
+
+   <binaryOption name="lptmr_csr_tfc" description="Timer Free-Running Counter enable"
+      toolTip="When clear, lptmr_csr_tfc configures the lptmr_cnr to reset whenever lptmr_csr_tcf is set.\n
+      When set, lptmr_csr_tfc configures the lptmr_cnr to reset on overflow">
+      <choice value="0" name="lptmr_cnr is reset whenever lptmr_csr_tcf is set" />
+      <choice value="1" name="lptmr_cnr is reset on overflow" />
+   </binaryOption>
+   
+   <template><![CDATA[
+      \t//! Default CSR value\n
+      \tstatic constexpr uint32_t csr = 
+      \t   LPTMR_CSR_TIE($(lptmr_csr_tie))|
+      \t   LPTMR_CSR_TMS($(lptmr_csr_tms))|
+      \t   LPTMR_CSR_TFC($(lptmr_csr_tfc))|
+      \t   LPTMR_CSR_TPP($(lptmr_csr_tpp))|
+      \t   LPTMR_CSR_TPS($(lptmr_csr_tps));\n\n
+   ]]></template>
+   
+   <intOption name="lptmr_cmr" description="Timer Compare Register"
+      toolTip="Default value for comparison\n
+      lptmr_csr_tcf flag is set when lptmr_cnr equals the value in the lptmr_cmr and lptmr_cnr increments. \n
+      The hardware trigger will assert until the next time the lptmr_cnr increments. \n
+      If lptmr_csr_tfc=0 the lptmr_cnr will roll-over to zero" 
+      value="65535" min="0" max="65535" />
+      
+   <floatOption name="lptmr_cmrPeriod"     description="Timer Compare Interval"
+      toolTip="This is determined from lptmr_cmr register and clock frequency.\n
+      When lptmr_csr_tfc=0 this is the lptmr_cnr roll-over period"
+      derived="true"
+      min="0" units="s"/>
+    
+   <floatOption name="lptmr_cmrFrequency"  description="Timer Compare Frequency"
+      toolTip="This is determined from lptmr_cmr register and clock frequency.\n
+      When lptmr_csr_tfc=0 this is the lptmr_cnr roll-over frequency"
+      derived="true"
+      min="0" units="Hz"/>
+    
+   <irqOption name="irqHandlingMethod"  
+      description="Peripheral interrupt handler"
+      toolTip="This selection allow the interrupt handler for this peripheral to be installed using several different methods"
+      pattern="^.*%b%i.*$" 
+      classHandler="%c%i::irqHandler" />
+      
+   <template><![CDATA[
+       \t//! Class based callback handler has been installed in vector table\n
+       \tstatic constexpr bool irqHandlerInstalled = ($(irqHandlingMethod) == 1);\n\n
+   ]]></template>
+       
+   <intOption name="irqLevel" 
+      description="IRQ Level in NVIC [0-15]"
+      toolTip="Sets the priority level used to configure the NVIC\n
+               Lower numbers represent higher priorities"
+      value="7" min="0" max="15" 
+   />
+
+   <template><![CDATA[
+       \t//! Default IRQ level\n
+       \tstatic constexpr uint32_t irqLevel =  $(irqLevel);\n\n
+   ]]></template>
+      
+   <!-- validate
+      class="net.sourceforge.usbdm.deviceEditor.validators.LptmrValidate">
+   </validate -->
+
+   <projectActionList id = "lptmr_files" >
+      <copy source="Project_Headers/lptmr.h"     target="Project_Headers/lptmr.h"      overwrite="true" derived="true" />
+      <copy source="Snippets/lptmr-example.cpp"  target="Snippets/lptmr-example.cpp"   overwrite="true" derived="true"/>
+   </projectActionList>
+      
+   <template><![CDATA[
+      \t/**
+      \t * Get input clock frequency
+      \t *
+      \t * @return Input clock frequency as an uint32_t in Hz
+      \t */
+      \tstatic uint32_t getInputClockFrequency() {
+      \t
+      \t   switch(lptmr().PSR&LPTMR_PSR_PCS_MASK) {
+      \t   default:
+      \t   case LPTMR_PSR_PCS(0): return ScgInfo::getSircDiv2Frequency();
+      \t   case LPTMR_PSR_PCS(1): return SimInfo::getLpo1kFrequency();
+      \t   case LPTMR_PSR_PCS(2): return SimInfo::getRtcFrequency();
+      \t   case LPTMR_PSR_PCS(3): return PccInfo::getLptmr0Frequency();
+      \t   }
+      \t}\n\n
+      
+      \t/**
+      \t * Get clock frequency
+      \t *
+      \t * @return Frequency as a float in Hz
+      \t */
+      \tstatic float getClockFrequencyF() {
+      \t
+      \t   float freq = getInputClockFrequency();
+      \t   if (lptmr().PSR&LPTMR_PSR_PBYP_MASK) {
+      \t      return freq;
+      \t   }
+      \t   return freq/(1<<(((lptmr().PSR&LPTMR_PSR_PRESCALE_MASK)>>LPTMR_PSR_PRESCALE_SHIFT)+1));
+      \t}\n\n
+      
+      \t/**
+      \t * Get clock frequency
+      \t *
+      \t * @return Frequency as a uint32_t in Hz (may underflow)
+      \t */
+      \tstatic uint32_t getClockFrequency() {
+      \t
+      \t   uint32_t freq = getInputClockFrequency();
+      \t   if (lptmr().PSR&LPTMR_PSR_PBYP_MASK) {
+      \t      return freq;
+      \t   }
+      \t   return freq/(1<<(((lptmr().PSR&LPTMR_PSR_PRESCALE_MASK)>>LPTMR_PSR_PRESCALE_SHIFT)+1));
+      \t}\n\n
+   ]]></template>
    
    <xi:include href="_clockOption.xml"/>
 

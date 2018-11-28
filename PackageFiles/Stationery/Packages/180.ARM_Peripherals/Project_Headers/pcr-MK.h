@@ -528,11 +528,11 @@ public:
 template<uint32_t clockInfo, uint32_t portAddress, IRQn_Type irqNum, int bitNum, PcrValue defPcrValue>
 class Pcr_T : public PcrBase_T<portAddress, irqNum> {
 
-#ifdef DEBUG_BUILD
-   static_assert((bitNum != UNMAPPED_PCR), "Pcr_T: Signal is not mapped to a pin - Modify Configure.usbdm");
-   static_assert((bitNum != INVALID_PCR),  "Pcr_T: Non-existent signal");
-   static_assert((bitNum == UNMAPPED_PCR)||(bitNum == INVALID_PCR)||((bitNum >= 0)&&(bitNum <= 31)), "Pcr_T: Illegal bit number");
-#endif
+//#ifdef DEBUG_BUILD
+//   static_assert((bitNum != UNMAPPED_PCR), "Pcr_T: Signal is not mapped to a pin - Modify Configure.usbdm");
+//   static_assert((bitNum != INVALID_PCR),  "Pcr_T: Non-existent signal");
+//   static_assert((bitNum == UNMAPPED_PCR)||(bitNum == INVALID_PCR)||((bitNum >= 0)&&(bitNum <= 31)), "Pcr_T: Illegal bit number");
+//#endif
 
 public:
    static constexpr int      BITNUM  = bitNum;
@@ -579,9 +579,6 @@ public:
       if (portAddress != 0) {
          enablePortClocks(clockInfo);
 
-#ifdef PORT_DFCR_CS_MASK
-         enableDigitalFilter(pcrValue&PinFilter_Digital);
-#endif
          // Pointer to PCR register for pin
          pcrReg() = pcrValue;
       }
@@ -623,9 +620,6 @@ public:
       if (portAddress != 0) {
          enablePortClocks(clockInfo);
 
-#ifdef PORT_DFCR_CS_MASK
-         enableDigitalFilter(pinFilter == PinFilter_Digital);
-#endif
          // Set PCR register for pin
          pcrReg() = pinPull|pinDriveStrength|pinDriveMode|pinAction|pinFilter|pinSlewRate|pinMux;
       }
@@ -720,9 +714,6 @@ public:
          PinAction         pinAction         = PinAction_None,
          PinFilter         pinFilter         = PinFilter_None) {
 
-#ifdef PORT_DFCR_CS_MASK
-         enableDigitalFilter(pinFilter == PinFilter_Digital);
-#endif
       pcrReg() =
             (pcrReg()&~(PORT_PCR_PD_MASK|PORT_PCR_IRQC_MASK|PORT_PCR_PFE_MASK)) |
             (pinPull|pinAction|pinFilter);
@@ -809,24 +800,17 @@ public:
    }
 #endif
 
-#if defined PORT_PCR_PFE_MASK || defined PORT_DFCR_CS_MASK
+#if defined PORT_PCR_PFE_MASK
    /**
-    * Set filter on pin.
+    * Set passive filter on pin.
     * Assumes clock to the port has already been enabled.
     *
     *  @param[in] pinFilter Pin filter option. Either PinFilter_None or PinFilter_Passive
+    *
+    *  @note see also enableDigitalFilter(), disableDigitalFilter()
     */
    static void setFilter(PinFilter pinFilter) {
-#ifdef PORT_DFCR_CS_MASK
-         enableDigitalFilter(pinFilter == PinFilter_Digital);
-#endif
          pcrReg() = (pcrReg()&~PORT_PCR_PFE_MASK) | pinFilter;
-   }
-#else
-   /**
-    * Not supported
-    */
-   static void setFilter(PinFilter) {
    }
 #endif
 
@@ -918,19 +902,21 @@ public:
    }
 
    /**
-    * Enable/disable digital filter on the pin
-    *
-    * @param enable  True => enable, False => disable
+    * Enable digital filter on the pin
     *
     * @note Not all ports support this feature
     */
-   static void enableDigitalFilter(bool enable) {
-      if (enable) {
+   static void enableDigitalFilter() {
          port().DFER |= BITMASK;
-      }
-      else {
-         port().DFER &= ~BITMASK;
-      }
+   }
+
+   /**
+    * Disable digital filter on the pin
+    *
+    * @note Not all ports support this feature
+    */
+   static void disableDigitalFilter() {
+      port().DFER &= ~BITMASK;
    }
 #endif
 

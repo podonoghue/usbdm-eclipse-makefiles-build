@@ -1,13 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE peripheralPage SYSTEM "_menu.dtd" >
-<!-- lptmr0_0.xml -->
+<!-- lptmr0.xml -->
 
-<peripheralPage xmlns:xi="http://www.w3.org/2001/XInclude" name="_instance" description="Low power timer">
-
+<peripheralPage xmlns:xi="http://www.w3.org/2001/XInclude" name="_instance" description="Low Power Timer">
    <template><![CDATA[
       \t//! Base value for PCR (excluding MUX value)
       \tstatic constexpr uint32_t defaultPcrValue  = DEFAULT_PCR;\n\n
    ]]></template>
+   
+   <xi:include href="_mapPinsOption.xml"/>
 
    <choiceOption name="lptmr_psr_pcs" description="Clock Source"
       toolTip="Low Power Timer clock source">
@@ -223,5 +224,5 @@
    <xi:include href="_clockOption.xml"/>
 
    <signals/>
-
+   
 </peripheralPage>

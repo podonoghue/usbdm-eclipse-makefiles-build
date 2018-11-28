@@ -373,10 +373,9 @@ public:
    Lpuart_T(unsigned baudrate=Info::defaultBaudRate) : Lpuart(&Info::lpuart()) {
       // Enable clock to UART interface
 #ifdef PCC_BASE_PTR
-      Info::setClockSource(PccDiv2Clock_Firc);
-#else
-      Info::enableClock();
+      Info::setClockSource(Info::defaultClockSource);
 #endif
+      Info::enableClock();
 
       if (Info::mapPinsOnEnable) {
          configureAllPins();

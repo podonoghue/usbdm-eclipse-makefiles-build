@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE section>
+<!-- FRDM_K20D50M.xml -->
+
+<section name="DeviceSettings" >
+   <!-- Definitions used by example programs -->
+   <item key="demo.cpp.led"                   value="GpioD&lt;15,ActiveLow&gt;" />   <!-- Digital I/O generic LED -->
+   <item key="demo.cpp.red.led"               value="GpioD&lt;15,ActiveLow&gt;" />   <!-- Digital I/O to LED -->
+   <item key="demo.cpp.green.led"             value="GpioD&lt;16,ActiveLow&gt;" />   <!-- Digital I/O to LED -->
+   <item key="demo.cpp.blue.led"              value="GpioD&lt;0,ActiveLow&gt;" />   <!-- Digital I/O to LED -->
+   <item key="demo.cpp.ftm"                   value="Ftm0" />                       <!-- FTM/TPM to LED -->
+   <item key="demo.cpp.pwm.led1"              value="Ftm0Channel&lt;0&gt;" />       <!-- FTM/TPM to LED -->
+   <item key="demo.cpp.pwm.led2"              value="Ftm0Channel&lt;1&gt;" />       <!-- FTM/TPM to LED -->
+   <item key="demo.cpp.joystick.x"            value="Adc0Channel&lt;0&gt;" />      <!-- Analogue I/O (Arduino) -->
+   <item key="demo.cpp.joystick.y"            value="Adc0Channel&lt;1&gt;" />      <!-- Analogue I/O (Arduino) -->
+   <item key="demo.cpp.joystick.k"            value="GpioB&lt;0, ActiveLow&gt;" />  <!-- Digital I/O from switch (Arduino) -->
+   <item key="demo.cpp.external.switch"       value="GpioD&lt;4, ActiveLow&gt;" />  <!-- Digital I/O from switch (Arduino) -->
+   <item key="demo.cpp.external.led"          value="GpioB&lt;12, ActiveLow&gt;" />  <!-- Digital I/O to LED (Arduino) -->
+   <item key="demo.cpp.external.spi"          value="Spi0" />                       <!-- SPI interface to off-board device -->
+   <item key="demo.cpp.external.i2c"          value="I2c0" />                       <!-- I2C interface to off-board device -->
+</section>

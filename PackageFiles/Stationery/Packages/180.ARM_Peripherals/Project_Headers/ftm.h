@@ -1377,6 +1377,7 @@ public:
        * @note There is a single callback function for all pins on the related port.
        */
       static __attribute__((always_inline)) void setPinCallback(PinCallbackFunction callback) {
+         FtmBase::CheckPinMapping<Info, channel>::check();
          Pcr::setCallback(callback);
       }
 
@@ -1385,6 +1386,7 @@ public:
        * Assumes clock to the port has already been enabled.
        */
       static __attribute__((always_inline)) void clearPinInterruptFlag() {
+         FtmBase::CheckPinMapping<Info, channel>::check();
          Pcr::clearInterruptFlag();
       }
 
@@ -1397,6 +1399,7 @@ public:
        * @note This is distinct from the timer event action that may be associated with pin changes.
        */
       static __attribute__((always_inline)) void setPinAction(PinAction pinAction) {
+         FtmBase::CheckPinMapping<Info, channel>::check();
          Pcr::setPinAction(pinAction);
       }
 
@@ -1532,6 +1535,7 @@ public:
        * Any pending NVIC interrupts are first cleared.
        */
       static void enablePinNvicInterrupts() {
+         FtmBase::CheckPinMapping<Info, channel>::check();
          Pcr::enableNvicInterrupt();
       }
 
@@ -1542,6 +1546,7 @@ public:
        * @param[in]  nvicPriority  Interrupt priority
        */
       static void enablePinNvicInterrupts(uint32_t nvicPriority) {
+         FtmBase::CheckPinMapping<Info, channel>::check();
          Pcr::enableNvicInterrupt(nvicPriority);
       }
 
@@ -1549,6 +1554,7 @@ public:
        * Disable Pin interrupts in NVIC
        */
       static void disablePinNvicInterrupts() {
+         FtmBase::CheckPinMapping<Info, channel>::check();
          Pcr::disableNvicInterrupts();
       }
 
@@ -1656,6 +1662,7 @@ public:
        *  @param[in] pinPull Pull selection mode
        */
       static INLINE_RELEASE void setPullDevice(PinPull pinPull) {
+         FtmBase::CheckPinMapping<Info, channel>::check();
          Pcr::setPullDevice(pinPull);
       }
 
@@ -1666,6 +1673,7 @@ public:
        *  @param[in] pinDriveMode Drive mode
        */
       static INLINE_RELEASE void setDriveMode(PinDriveMode pinDriveMode) {
+         FtmBase::CheckPinMapping<Info, channel>::check();
          Pcr::setDriveMode(pinDriveMode);
       }
 
@@ -1676,6 +1684,7 @@ public:
        *  @param[in] pinSlewRate Slew rate. Either PinSlewRate_Slow or PinSlewRate_Fast
        */
       static INLINE_RELEASE void setSlewRate(PinSlewRate  pinSlewRate) {
+         FtmBase::CheckPinMapping<Info, channel>::check();
          Pcr::setSlewRate(pinSlewRate);
       }
 
@@ -1686,8 +1695,10 @@ public:
        *  @param[in] pinFilter Pin filter option. Either PinFilter_None or PinFilter_Passive
        */
       static INLINE_RELEASE void setFilter(PinFilter pinFilter) {
+         FtmBase::CheckPinMapping<Info, channel>::check();
          Pcr::setFilter(pinFilter);
       }
+
       /**
        * Set drive strength on associated pin.
        * Assumes clock to the port has already been enabled
@@ -1695,8 +1706,45 @@ public:
        *  @param[in] pinDriveStrength Drive strength to set
        */
       static INLINE_RELEASE void setDriveStrength(PinDriveStrength pinDriveStrength) {
+         FtmBase::CheckPinMapping<Info, channel>::check();
          Pcr::setDriveStrength(pinDriveStrength);
       }
+
+#ifdef PORT_DFCR_CS_MASK
+   /**
+    * Configures Digital Pin Filter for entire PORT associated with FTM channel pin
+    *
+    * @param pinDigitalFilterClock  Clock source
+    * @param filterLength           Filter length in clock ticks
+    *
+    * @note Not all ports support this feature
+    * @note This affects the digital filter for all pins of the port containing the FTM channel pin
+    */
+   static INLINE_RELEASE void configureDigitalFilter(PinDigitalFilterClock pinDigitalFilterClock, int filterLength) {
+      FtmBase::CheckPinMapping<Info, channel>::check();
+      Pcr::configureDigitalFilter(pinDigitalFilterClock, filterLength);
+   }
+
+   /**
+    * Enable digital filter on the input pin associated with FTM channel
+    *
+    * @note Not all ports support this feature
+    */
+   static INLINE_RELEASE void enableDigitalFilter() {
+      FtmBase::CheckPinMapping<Info, channel>::check();
+      Pcr::enableDigitalFilter();
+   }
+
+   /**
+    * Disable digital filter on the input pin associated with FTM channel
+    *
+    * @note Not all ports support this feature
+    */
+   static INLINE_RELEASE void disableDigitalFilter() {
+      FtmBase::CheckPinMapping<Info, channel>::check();
+      Pcr::disableDigitalFilter();
+   }
+#endif // PORT_DFCR_CS_MASK
 
       /**
        * Set PWM high time in ticks.

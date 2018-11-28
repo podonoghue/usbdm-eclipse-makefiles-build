@@ -82,6 +82,15 @@ public:
    static ErrorCode clockTransition(const ScgInfo::ClockInfo &to);
 
    /**
+    * Transition from current clock mode to mode given
+    *
+    * @param clockConfig Clock configuration index
+    */
+   static void clockTransition(ClockConfig clockConfig) {
+      Scg::clockTransition(Scg::clockInfo[clockConfig]);
+   }
+   
+   /**
     * Update SystemCoreClock variable
     *
     * Updates the SystemCoreClock variable with current core Clock retrieved from CPU registers.
@@ -130,17 +139,12 @@ public:
       Scg::callback = callback;
    }
 
-   /** Current clock mode (FEI out of reset) */
-   static ScgInfo::ClockMode currentClockMode;
-
    /**
     * Get current clock mode
     *
-    * @return
+    * @return clock mode
     */
-   static ScgInfo::ClockMode getClockMode() {
-      return currentClockMode;
-   }
+   static ScgInfo::ClockMode getClockMode();
 
    /**
     * Get name for clock mode

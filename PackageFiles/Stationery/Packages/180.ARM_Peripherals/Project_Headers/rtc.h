@@ -159,10 +159,12 @@ public:
       // (RTC used its own clock internally)
       Info::enableClock();
 
+#ifdef RTC_CR_OSCE_MASK
       if ((Info::cr&RTC_CR_OSCE_MASK) == 0) {
          // RTC disabled
          return;
       }
+#endif
 
       configureAllPins();
 

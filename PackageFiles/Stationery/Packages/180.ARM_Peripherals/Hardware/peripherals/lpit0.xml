@@ -2,17 +2,92 @@
 <!DOCTYPE peripheralPage SYSTEM "_menu.dtd" >
 <!-- lpit0.xml -->
 
-<peripheralPage xmlns:xi="http://www.w3.org/2001/XInclude" name="_instance" description="LP PIT">
-   
+<peripheralPage xmlns:xi="http://www.w3.org/2001/XInclude" name="_instance" description="LP LPIT">
+
+   <aliasOption key="/PCC/pcc_lpit$(_instance)" constant="false" optional="true" />
+
+   <intOption name="lpit_ldval" description="Reload value"
+      toolTip="Value loaded in timer register on roll-over"
+      value="4799" min="0" max="0xFFFFFFFF" />
+
+   <floatOption name="lpit_period" description="Default period of timer"
+      toolTip="Used to calculate the timer load value"
+      derived="true"
+      value="1m" min="0" units="s" />
+
+   <floatOption name="lpit_frequency" description="Default frequency of timer"
+      toolTip="Used to calculate the timer load value"
+      derived="true"
+      value="1k" min="0" units="Hz" />
+
+   <binaryOption name="lpit_mcr_dbg_en" description="Debug Enable Bit"
+      toolTip="Stops the timer channels when the device enters Debug mode">
+      <choice value="0" name="Stop timer channels in Debug mode" />
+      <choice value="1" name="Allow timer channels to continue to run in Debug mode" isDefault="true" />
+   </binaryOption>
+
+    <!--
+     Patterns for pattern and classHandler 
+     -  %i replaced with peripheral instance e.g. FTM1 => 1, PTA => A
+     -  %b replaced with peripheral base name e.g. FTM1 => = FTM
+     -  %c replaced with peripheral C++ base class name e.g. FTM1 => = Ftm
+     -  _IRQHandler is appended to the pattern (only)
+     -->
+   <irqOption name="irqHandlers"  
+      description="Channel interrupt handlers"
+      toolTip="This selection allow the interrupt handler for this peripheral to be installed using several different methods"
+      pattern="^%b_Ch(\d+)$" 
+      classHandler="%c%iChannel&lt;$1&gt;::irqHandler" />
+      
    <template><![CDATA[
-      \t//! Base value for PCR (excluding MUX value)
-      \tstatic constexpr uint32_t defaultPcrValue  = 0;\n\n
+       \t//! Class based callback handler has been installed in vector table\n
+       \tstatic constexpr bool irqHandlerInstalled = ($(irqHandlers) == 1);\n\n
+   ]]></template>
+       
+   <intOption name="irqLevel" 
+      description="IRQ Level in NVIC [0-15]"
+      toolTip="Sets the priority level used to configure the NVIC\n
+               Lower numbers represent higher priorities"
+      value="7" min="0" max="15" 
+   />
+
+   <template><![CDATA[
+       \t//! Number of LPIT channels\n
+       \tstatic constexpr uint32_t NumChannels = 4;\n\n
+       \t//! Default IRQ level\n
+       \tstatic constexpr uint32_t irqLevel =  $(irqLevel);\n\n
+   ]]></template>
+ 
+   <!-- validate
+      class="net.sourceforge.usbdm.deviceEditor.validators.LpitValidate">
+   </validate -->
+
+   <projectActionList id = "lpit_files" >
+      <copy source="Snippets/lpit-example1.cpp"    target="Snippets/lpit-example1.cpp" overwrite="true" derived="true" />
+      <copy source="Snippets/lpit-example2.cpp"    target="Snippets/lpit-example2.cpp" overwrite="true" derived="true" />
+      <copy source="Snippets/lpit-example3.cpp"    target="Snippets/lpit-example3.cpp" overwrite="true" derived="true" />
+      <copy source="Project_Headers/lpit.h"        target="Project_Headers/lpit.h"     overwrite="true" derived="true" />
+   </projectActionList>
+         
+   <template><![CDATA[
+   
+      \t//! Default value for LPIT load value register\n
+      \tstatic constexpr uint32_t lpit_ldval  = $(lpit_ldval);\n\n
+      
+      \t//! LPIT operation in debug mode\n
+      \tstatic constexpr uint32_t mcr = 
+      \t   LPIT_MCR_DBG_EN($(lpit_mcr_dbg_en));  // Debug Enable Bit\n\n
+      
+      \t/**
+      \t * Get clock frequency
+      \t *
+      \t * @return Input clock frequency as a uint32_t in Hz
+      \t */
+      \tstatic __attribute__((always_inline)) uint32_t getClockFrequency() {
+      \t   return PccInfo::getLpit$(_instance)Frequency();
+      \t}\n\n
    ]]></template>
    
-   <xi:include href="_mapPinsOption.xml"/>
-   
    <xi:include href="_clockOption.xml"/>
-
-   <signals/>
    
 </peripheralPage>

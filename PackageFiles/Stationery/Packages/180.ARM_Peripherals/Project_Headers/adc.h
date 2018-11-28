@@ -99,6 +99,7 @@ enum AdcClockSource {
    AdcClockSource_Busdiv2  = ADC_CFG1_ADICLK(1), //!< Bus Clock / 2
    AdcClockSource_Alt      = ADC_CFG1_ADICLK(2), //!< Alternate clock (ALTCLK)
    AdcClockSource_Asynch   = ADC_CFG1_ADICLK(3), //!< Asynchronous clock (ADACK Internal ADC clock source)
+   AdcClockSource_Default  = AdcClockSource_Bus
 };
 
 /**
@@ -321,7 +322,7 @@ public:
     * @note To change between handlers first use setCallback(nullptr).
     */
    static void setCallback(ADCCallbackFunction callback) {
-      usbdm_assert(Info::irqHandlerInstalled, "ADC not configured for interrupts");
+      static_assert(Info::irqHandlerInstalled, "ADC not configured for interrupts. Modify Configure.usbdmProject");
       if (callback == nullptr) {
          sCallback = AdcBase::unhandledCallback;
          return;
@@ -405,7 +406,7 @@ public:
     */
    static void configure(
          AdcResolution   adcResolution,
-         AdcClockSource  adcClockSource  = AdcClockSource_Asynch,
+         AdcClockSource  adcClockSource  = AdcClockSource_Default,
          AdcClockDivider adcClockDivider = AdcClockDivider_1,
          AdcSample       adcSample       = AdcSample_Normal,
          AdcPower        adcPower        = AdcPower_Normal,
@@ -472,19 +473,19 @@ public:
    /**
     * Enable ADC internal asynchronous clock source
     *
-    * @param[in] enable true to enable clock, false to disable
-    *
     * @note It is not necessary to enable the internal clock to use it as an ADC clock source.\n
     *       If the internal clock is selected, it will be automatically enabled when an ADC conversion is initiated.\n
     *       However, enabling it beforehand will reduce the latency of the 1st conversion in a sequence.
     */
    static void enableAsynchronousClock(bool enable=true) {
-      if (enable) {
-         adc().CFG1 |= ADC_CFG2_ADACKEN_MASK;
-      }
-      else {
-         adc().CFG1 &= ~ADC_CFG2_ADACKEN_MASK;
-      }
+      adc().CFG2 |= ADC_CFG2_ADACKEN_MASK;
+   }
+
+   /**
+    * Disable ADC internal asynchronous clock source
+    */
+   static void enableAsynchronousClock(bool enable=true) {
+      adc().CFG2 &= ~ADC_CFG2_ADACKEN_MASK;
    }
 
    /**

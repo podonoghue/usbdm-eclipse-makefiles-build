@@ -68,27 +68,22 @@ Devices using this peripheral:
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>1</name>
-                           <description>OSCCLK - System Oscillator Bus Clock(scg_sosc_slow_clk)</description>
+                           <description>SOSC_CLK - System Oscillator Clock</description>
                            <value>0b001</value>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>2</name>
-                           <description>SCGIRCLK - Slow IRC Clock(scg_sirc_slow_clk), (maximum is 8MHz)</description>
+                           <description>SIRC_CLK - Slow IRC Clock, (maximum is 8MHz)</description>
                            <value>0b010</value>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>3</name>
-                           <description>SCGFIRCLK - Fast IRC Clock(scg_firc_slow_clk), (maximum is 48MHz)</description>
+                           <description>FIRC_CLK - Fast IRC Clock, (maximum is 48MHz)</description>
                            <value>0b011</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>5</name>
-                           <description>SCGFLLCLK System FLL clock(scg_sfll_slow_clk)</description>
-                           <value>0b101</value>
-                        </enumeratedValue>
-                        <enumeratedValue>
                            <name>6</name>
-                           <description>SCGPLLCLK System PLL clock(scg_spll_slow_clk)</description>
+                           <description>SPLL_CLK System PLL clock</description>
                            <value>0b110</value>
                         </enumeratedValue>
                      </enumeratedValues>
@@ -201,27 +196,22 @@ Devices using this peripheral:
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>1</name>
-                           <description>OSCCLK - System Oscillator Bus Clock(scg_sosc_slow_clk)</description>
+                           <description>SOSC_CLK - System Oscillator Clock</description>
                            <value>0b001</value>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>2</name>
-                           <description>SCGIRCLK - Slow IRC Clock(scg_sirc_slow_clk), (maximum is 8MHz)</description>
+                           <description>SIRC_CLK - Slow IRC Clock, (maximum is 8MHz)</description>
                            <value>0b010</value>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>3</name>
-                           <description>SCGFIRCLK - Fast IRC Clock(scg_firc_slow_clk), (maximum is 48MHz)</description>
+                           <description>FIRC_CLK - Fast IRC Clock, (maximum is 48MHz)</description>
                            <value>0b011</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>5</name>
-                           <description>SCGFPCLK System FLL clock(scg_sfll_slow_clk)</description>
-                           <value>0b101</value>
-                        </enumeratedValue>
-                        <enumeratedValue>
                            <name>6</name>
-                           <description>SCGPLLCLK System PLL clock(scg_spll_slow_clk)</description>
+                           <description>SPLL_CLK System PLL clock</description>
                            <value>0b110</value>
                         </enumeratedValue>
                      </enumeratedValues>

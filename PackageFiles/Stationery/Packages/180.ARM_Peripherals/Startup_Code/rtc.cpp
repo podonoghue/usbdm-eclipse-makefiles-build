@@ -26,8 +26,9 @@
  * @param tzp
  */
 extern "C" __attribute__ ((__weak__))
-int _gettimeofday(struct timeval *tp, void *tzp) {
-   (void)tzp;
+int _gettimeofday(struct timeval *tp, void *) {
+   // Start RTC if not already running
+   USBDM::Rtc::initialise();
    tp->tv_sec  = USBDM::Rtc::getTime();
    tp->tv_usec = 0;
    return 0;
@@ -40,9 +41,8 @@ int _gettimeofday(struct timeval *tp, void *tzp) {
  * @param tzp
  */
 extern "C"
-int settimeofday(const struct timeval *tp, const struct timezone *tzp) {
-   (void)tzp;
-   // Start RTC
+int settimeofday(const struct timeval *tp, const struct timezone *) {
+   // Start RTC if not already running
    USBDM::Rtc::initialise();
    USBDM::Rtc::setTime(tp->tv_sec);
    return 0;

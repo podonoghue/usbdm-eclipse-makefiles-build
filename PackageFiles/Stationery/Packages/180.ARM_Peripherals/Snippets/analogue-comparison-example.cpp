@@ -19,7 +19,7 @@ using namespace USBDM;
  */
 
 // Connection - change as required
-using Led         = GpioA<2, ActiveLow>;  // = PTA2 = D9 = Blue LED
+using Led         = $(demo.cpp.red.led:GpioB<0,ActiveLow>);
 using Adc         = Adc0;
 using AdcChannel  = Adc::Channel<0>;
 
@@ -36,8 +36,12 @@ int main() {
    // Enable LED
    Led::setOutput();
 
+#ifdef USBDM_PCC_IS_DEFINED
    // Enable and configure ADC
-   Adc::configure(AdcResolution_16bit_se);
+   PccInfo::setAdc0ClockSource(PccDiv2Clock_Sirc);
+#endif
+
+   Adc::configure(AdcResolution_10bit_se, AdcClockSource_PccAdcClk, AdcClockDivider_1, 256);
 
    // Calibrate before use
    Adc::calibrate();

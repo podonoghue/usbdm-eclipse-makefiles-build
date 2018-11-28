@@ -7,6 +7,7 @@
 
 <root version="1.2.0">
    <family name="S32K144">
+      <device name="EVB_S32K144"  manual="S32K1XXRM"  package="EVB_S32K144" />
       <device name="FS32K144HAT0MLHT" manual="S32K1XXRM"  package="LQFP_64" />
       <device name="FS32K144HAT0MLLT" manual="S32K1XXRM"  package="LQFP_100" />
       <device name="FS32K144UAT0VLHT" manual="S32K1XXRM"  package="LQFP_64" />
@@ -1071,6 +1072,102 @@
       </pin>
    </pins>
    <packages>
+      <package name="EVB_S32K144">
+         <placement pin="PTA0"          location="J5_07" />
+         <placement pin="PTA1"          location="J5_05" />
+         <placement pin="PTA10"         location="J3_14" />
+         <placement pin="PTA11"         location="J1_02" />
+         <placement pin="PTA12"         location="J6_16" />
+         <placement pin="PTA13"         location="J6_14" />
+         <placement pin="PTA14"         location="J2_16" />
+         <placement pin="PTA15"         location="J5_01" />
+         <placement pin="PTA16"         location="J5_03" />
+         <placement pin="PTA17"         location="J1_04" />
+         <placement pin="PTA2"          location="J1_01" />
+         <placement pin="PTA3"          location="J1_03" />
+         <placement pin="PTA4"          location="J3_16" />
+         <placement pin="PTA5"          location="J3_05" />
+         <placement pin="PTA6"          location="J4_09" />
+         <placement pin="PTA7"          location="J5_09" />
+         <placement pin="PTA8"          location="J6_17" />
+         <placement pin="PTA9"          location="J6_19" />
+         <placement pin="PTB0"          location="J4_05" />
+         <placement pin="PTB1"          location="J4_07" />
+         <placement pin="PTB10"         location="J1_09" />
+         <placement pin="PTB11"         location="J1_11" />
+         <placement pin="PTB12"         location="J4_03" />
+         <placement pin="PTB13"         location="J5_11" />
+         <placement pin="PTB14"         location="J4_08" />
+         <placement pin="PTB15"         location="J4_10" />
+         <placement pin="PTB16"         location="J4_12" />
+         <placement pin="PTB17"         location="J4_06" />
+         <placement pin="PTB2"          location="J2_11" />
+         <placement pin="PTB3"          location="J2_09" />
+         <placement pin="PTB4"          location="J2_07" />
+         <placement pin="PTB5"          location="J2_05" />
+         <placement pin="PTB6"          location="XTAL" />
+         <placement pin="PTB7"          location="XTAL" />
+         <placement pin="PTB8"          location="J1_05" />
+         <placement pin="PTB9"          location="J1_07" />
+         <placement pin="PTC0"          location="J4_11" />
+         <placement pin="PTC1"          location="J5_13" />
+         <placement pin="PTC10"         location="J1_13" />
+         <placement pin="PTC11"         location="J1_15" />
+         <placement pin="PTC12"         location="J2_10" />
+         <placement pin="PTC13"         location="J2_12" />
+         <placement pin="PTC14"         location="J4_14" />
+         <placement pin="PTC15"         location="J5_20" />
+         <placement pin="PTC16"         location="J6_08" />
+         <placement pin="PTC17"         location="J6_06" />
+         <placement pin="PTC2"          location="J5_15" />
+         <placement pin="PTC3"          location="J4_16" />
+         <placement pin="PTC4"          location="J3_12" />
+         <placement pin="PTC5"          location="J3_10" />
+         <placement pin="PTC6"          location="J4_04" />
+         <placement pin="PTC7"          location="J4_02" />
+         <placement pin="PTC8"          location="J6_09" />
+         <placement pin="PTC9"          location="J6_11" />
+         <placement pin="PTD0"          location="J2_06_J6_01" />
+         <placement pin="PTD1"          location="J6_02" />
+         <placement pin="PTD10"         location="J1_06" />
+         <placement pin="PTD11"         location="J1_08" />
+         <placement pin="PTD12"         location="J1_10" />
+         <placement pin="PTD13"         location="J2_01" />
+         <placement pin="PTD14"         location="J2_03" />
+         <placement pin="PTD15"         location="J2_02" />
+         <placement pin="PTD16"         location="J2_04" />
+         <placement pin="PTD17"         location="J6_13" />
+         <placement pin="PTD2"          location="J6_03" />
+         <placement pin="PTD3"          location="J1_14_J6_04" />
+         <placement pin="PTD4"          location="J4_01" />
+         <placement pin="PTD5"          location="J1_12" />
+         <placement pin="PTD6"          location="J5_18" />
+         <placement pin="PTD7"          location="J5_16" />
+         <placement pin="PTD8"          location="J6_07" />
+         <placement pin="PTD9"          location="J6_05" />
+         <placement pin="PTE0"          location="J3_06" />
+         <placement pin="PTE1"          location="J5_14" />
+         <placement pin="PTE10"         location="J2_19" />
+         <placement pin="PTE11"         location="J2_17" />
+         <placement pin="PTE12"         location="J6_15" />
+         <placement pin="PTE13"         location="J5_08" />
+         <placement pin="PTE14"         location="J5_06" />
+         <placement pin="PTE15"         location="J5_04" />
+         <placement pin="PTE16"         location="J5_02" />
+         <placement pin="PTE2"          location="J4_13" />
+         <placement pin="PTE3"          location="J1_16" />
+         <placement pin="PTE4"          location="J6_20" />
+         <placement pin="PTE5"          location="J6_18" />
+         <placement pin="PTE6"          location="J4_15" />
+         <placement pin="PTE7"          location="J2_14" />
+         <placement pin="PTE8"          location="J2_08" />
+         <placement pin="PTE9"          location="J3_08" />
+         <placement pin="VDD"           location="J3_07" />
+         <placement pin="VREFH"         location="J2_15" />
+         <placement pin="VSS"           location="J3_11" />
+         <placement pin="VSS1"          location="J3_13" />
+         <placement pin="VSS2"          location="J2_13" />
+      </package>
       <package name="LQFP_100">
          <placement pin="PTA0"          location="79" />
          <placement pin="PTA1"          location="78" />

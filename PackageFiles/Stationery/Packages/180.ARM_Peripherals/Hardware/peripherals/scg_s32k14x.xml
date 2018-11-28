@@ -12,7 +12,7 @@
       <aliasOption key="/SIM/system_rtcclkin_frequency" />   
 
       <intOption name="system_firc_frequency"
-         description="Frequency of Fast Internal Reference [FIRC] Clock"
+         description="Frequency of Fast Internal Reference Clock [FIRC_CLK]"
          toolTip="Dependent on device and clock Trim. [Typically ~48MHz]"
          origin="FIRC frequency"
          constant="true"
@@ -20,7 +20,7 @@
          value="48000000" />
 
       <intOption name="system_sirc_frequency"
-         description="Frequency of Slow Internal Reference [SIRC] Clock"
+         description="Frequency of Slow Internal Reference Clock [SIRC_CLK]"
          toolTip="Dependent on device and clock Trim. [Typically ~8MHz]"
          origin="SIRC frequency"
          constant="true"
@@ -43,7 +43,7 @@
          description="System Oscillator External Reference Select" 
          toolTip="Determines whether a clock or crystal is used for the external reference clock" >
          <choice value="0" name="External clock" />
-         <choice value="1" name="Oscillator" />
+         <choice value="1" name="Oscillator" isDefault="true" />
       </binaryOption>
 
       <binaryOption name="scg_sosccfg_hgo"
@@ -784,35 +784,37 @@
       <for 
        var="instance" 
        enumeration="Firc, Sirc, Sosc, Spll"
-      />
-      <![CDATA[
-      \t/**
-      \t * Set $(instance)DIVx_CLK Clock dividers
-      \t *
-      \t * @param scgDivisor1 Divisor for $(instance::toupper)DIV1_CLK
-      \t * @param scgDivisor2 Divisor for $(instance::toupper)DIV2_CLK
-      \t */
-      \tstatic void set$(instance)Divisors(ScgDivisor1 scgDivisor1, ScgDivisor2 scgDivisor2) {
-      \t   scg().$(instance::toupper)DIV = scgDivisor2|scgDivisor1;
-      \t}\n\n
-      ]]>
+      >
+         <![CDATA[
+         \t/**
+         \t * Set $(instance)DIVx_CLK Clock dividers
+         \t *
+         \t * @param scgDivisor1 Divisor for $(instance::toupper)DIV1_CLK
+         \t * @param scgDivisor2 Divisor for $(instance::toupper)DIV2_CLK
+         \t */
+         \tstatic void set$(instance)Divisors(ScgDivisor1 scgDivisor1, ScgDivisor2 scgDivisor2) {
+         \t   scg().$(instance::toupper)DIV = scgDivisor2|scgDivisor1;
+         \t}\n\n
+         ]]>
+      </for>
    </template>
 
    <template>
       <for 
        var="instance" 
        enumeration="Firc, Sirc, Sosc"
-      />
-      <![CDATA[
-      \t/**
-      \t * Get $(instance::toupper)_CLK Frequency
-      \t *
-      \t * @return Clock as uint32_t
-      \t */
-      \tstatic uint32_t get$(instance)Frequency() {
-      \t   return (scg().$(instance::toupper)CSR&SCG_$(instance::toupper)CSR_$(instance::toupper)VLD_MASK)?(system_$(instance::tolower)_frequency):0;
-      \t}\n\n
-      ]]>
+      >
+         <![CDATA[
+         \t/**
+         \t * Get $(instance::toupper)_CLK Frequency
+         \t *
+         \t * @return Clock as uint32_t
+         \t */
+         \tstatic uint32_t get$(instance)Frequency() {
+         \t   return (scg().$(instance::toupper)CSR&SCG_$(instance::toupper)CSR_$(instance::toupper)VLD_MASK)?(system_$(instance::tolower)_frequency):0;
+         \t}\n\n
+         ]]>
+      </for>
    </template>
 
    <template>
@@ -838,34 +840,36 @@
       <for 
        var="instance" 
        enumeration="Firc, Sirc, Sosc, Spll"
-      />
-      <![CDATA[
-      \t/**
-      \t * Get $(instance::toupper)DIV1_CLK Frequency $(instance::toupper)_CLK/DIV1
-      \t *
-      \t * @return Clock as uint32_t
-      \t */
-      \tstatic uint32_t get$(instance)Div1Frequency() {
-      \t   return getPeripheralDividedClock(get$(instance)Frequency(), (scg().$(instance::toupper)DIV&SCG_$(instance::toupper)DIV_$(instance::toupper)DIV1_MASK)>>SCG_$(instance::toupper)DIV_$(instance::toupper)DIV1_SHIFT);
-      \t}\n\n
-      ]]>
+      >
+         <![CDATA[
+         \t/**
+         \t * Get $(instance::toupper)DIV1_CLK Frequency $(instance::toupper)_CLK/DIV1
+         \t *
+         \t * @return Clock as uint32_t
+         \t */
+         \tstatic uint32_t get$(instance)Div1Frequency() {
+         \t   return getPeripheralDividedClock(get$(instance)Frequency(), (scg().$(instance::toupper)DIV&SCG_$(instance::toupper)DIV_$(instance::toupper)DIV1_MASK)>>SCG_$(instance::toupper)DIV_$(instance::toupper)DIV1_SHIFT);
+         \t}\n\n
+         ]]>
+      </for>
    </template>
 
    <template>
       <for 
        var="instance" 
        enumeration="Firc, Sirc, Sosc, Spll"
-      />
-      <![CDATA[
-      \t/**
-      \t * Get $(instance::toupper)DIV2_CLK Frequency $(instance::toupper)_CLK/DIV2
-      \t *
-      \t * @return Clock as uint32_t
-      \t */
-      \tstatic uint32_t get$(instance)Div2Frequency() {
-      \t   return getPeripheralDividedClock(get$(instance)Frequency(), (scg().$(instance::toupper)DIV&SCG_$(instance::toupper)DIV_$(instance::toupper)DIV2_MASK)>>SCG_$(instance::toupper)DIV_$(instance::toupper)DIV2_SHIFT);
-      \t}\n\n
-      ]]>
+      >
+         <![CDATA[
+         \t/**
+         \t * Get $(instance::toupper)DIV2_CLK Frequency $(instance::toupper)_CLK/DIV2
+         \t *
+         \t * @return Clock as uint32_t
+         \t */
+         \tstatic uint32_t get$(instance)Div2Frequency() {
+         \t   return getPeripheralDividedClock(get$(instance)Frequency(), (scg().$(instance::toupper)DIV&SCG_$(instance::toupper)DIV_$(instance::toupper)DIV2_MASK)>>SCG_$(instance::toupper)DIV_$(instance::toupper)DIV2_SHIFT);
+         \t}\n\n
+         ]]>
+      </for>
    </template>
       
    <template name="ClockConfig" dim="3" namespace="all" ><![CDATA[

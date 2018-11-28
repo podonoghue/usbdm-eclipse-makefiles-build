@@ -3,15 +3,40 @@
 <!-- cmp0_mke16f16.xml -->
 
 <peripheralPage xmlns:xi="http://www.w3.org/2001/XInclude" name="_instance" description="Comparitor">
-   
-   <template><![CDATA[
-      \t//! Base value for PCR (excluding MUX value)
-      \tstatic constexpr uint32_t defaultPcrValue  = 0;\n\n
-   ]]></template>
-   
-   <xi:include href="_mapPinsOption.xml"/>
-   
+ 
+   <xi:include href="cmp32_base.xml"/>
+ 
+   <choiceOption name="cmp_c1_psel" 
+      description="Plus Input Mux Control"
+      toolTip="Determines which input is selected for the plus input of the comparator" >
+      <choice value="CMP_C1_PSEL(0)|CMP_C1_INPSEL(1)" name="CMP_IN0" />
+      <choice value="CMP_C1_PSEL(1)|CMP_C1_INPSEL(1)" name="CMP_IN1" />
+      <choice value="CMP_C1_PSEL(2)|CMP_C1_INPSEL(1)" name="CMP_IN2" />
+      <choice value="CMP_C1_PSEL(3)|CMP_C1_INPSEL(1)" name="CMP_IN3" />
+      <choice value="CMP_C1_PSEL(4)|CMP_C1_INPSEL(1)" name="CMP_IN4" />
+      <choice value="CMP_C1_PSEL(5)|CMP_C1_INPSEL(1)" name="CMP_IN5" />
+      <choice value="CMP_C1_PSEL(6)|CMP_C1_INPSEL(1)" name="CMP_IN6" />
+      <choice value="CMP_C1_PSEL(7)|CMP_C1_INPSEL(1)" name="CMP_IN7" />
+      <choice value="CMP_C1_PSEL(0)|CMP_C1_INPSEL(1)" name="DAC" />
+   </choiceOption>
+
+   <choiceOption name="cmp_c1_msel" 
+      description="Minus Input Mux Control"
+      toolTip="Determines which input is selected for the minus input of the comparator" >
+      <choice value="CMP_C1_MSEL(0)|CMP_C1_INNSEL(1)" name="CMP_IN0" />
+      <choice value="CMP_C1_MSEL(1)|CMP_C1_INNSEL(1)" name="CMP_IN1" />
+      <choice value="CMP_C1_MSEL(2)|CMP_C1_INNSEL(1)" name="CMP_IN2" />
+      <choice value="CMP_C1_MSEL(3)|CMP_C1_INNSEL(1)" name="CMP_IN3" />
+      <choice value="CMP_C1_MSEL(4)|CMP_C1_INNSEL(1)" name="CMP_IN4" />
+      <choice value="CMP_C1_MSEL(5)|CMP_C1_INNSEL(1)" name="CMP_IN5" />
+      <choice value="CMP_C1_MSEL(6)|CMP_C1_INNSEL(1)" name="CMP_IN6" />
+      <choice value="CMP_C1_MSEL(7)|CMP_C1_INNSEL(1)" name="CMP_IN7" />
+      <choice value="CMP_C1_MSEL(0)|CMP_C1_INNSEL(1)" name="DAC" />
+   </choiceOption>
+
    <xi:include href="_clockOption.xml"/>
+
+   <xi:include href="_irqOption.xml"/>         
 
    <signals/>
    

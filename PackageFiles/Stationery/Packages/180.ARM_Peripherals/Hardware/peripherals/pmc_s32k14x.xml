@@ -2,6 +2,86 @@
 <!DOCTYPE peripheralPage SYSTEM "_menu.dtd" >
 <!-- pmc_s32k14x.xml -->
 
-<fragment xmlns:xi="http://www.w3.org/2001/XInclude">
-<xi:include href="pmc_def.xml"/>
-</fragment>
+<peripheralPage xmlns:xi="http://www.w3.org/2001/XInclude" name="_instance" description="Power Management Controller">
+
+   <binaryOption name="pmc_lvdsc1_lvdie" 
+      description="Low-Voltage Detect Interrupt Enable"
+      toolTip="Enables hardware interrupt requests for LVDF">
+      <choice value="0" name="Disabled" isDefault="true" />
+      <choice value="1" name="Enabled" />
+   </binaryOption>
+
+   <binaryOption name="pmc_lvdsc1_lvdre" 
+      description="Low-Voltage Detect Reset Enable"
+      toolTip="This write-once bit enables LVDF events to generate a hardware reset.\n 
+               Additional writes are ignored.">
+      <choice value="0" name="Disabled" isDefault="true" />
+      <choice value="1" name="Enabled" />
+   </binaryOption>
+
+   <template><![CDATA[
+      \t//! Default value for Low Voltage Detect Status And Control 1 register\n
+      \tstatic constexpr uint32_t pmc_lvdsc1  = 
+      \t   PMC_LVDSC1_LVDIE($(pmc_lvdsc1_lvdie)) | // Low-Voltage Detect Interrupt Enable
+      \t   PMC_LVDSC1_LVDRE($(pmc_lvdsc1_lvdre));  // Low-Voltage Detect Reset Enable\n\n
+   ]]></template>
+
+   <binaryOption name="pmc_lvdsc2_lvwie" 
+      description="Low-Voltage Warning Interrupt Enable"
+      toolTip="Enables hardware interrupt requests for LVWF">
+      <choice value="0" name="Disabled" isDefault="true" />
+      <choice value="1" name="Enabled" />
+   </binaryOption>
+
+   <template><![CDATA[
+      \t//! Default value for Low Voltage Detect Status And Control 2 register\n
+      \tstatic constexpr uint32_t pmc_lvdsc2  = 
+      \t   PMC_LVDSC2_LVWIE($(pmc_lvdsc2_lvwie));  // Low-Voltage Warning Interrupt Enable\n\n
+   ]]></template>
+
+   <binaryOption name="pmc_regsc_lpodis" 
+      description="Low Power Oscillator control"
+      toolTip="May be used to disable the LPO.">
+      <choice value="1" name="Disabled" />
+      <choice value="0" name="Enabled" isDefault="true" />
+   </binaryOption>
+
+   <binaryOption name="pmc_regsc_clkbiasdis" 
+      description="Clock Bias control"
+      toolTip="May be used to disable the bias currents and reference voltages for some \n
+               clock modules to further reduce power consumption in VLPS mode. \n
+               Note: It must be ensured that respective clock modules are disabled in VLPS\n
+               otherwise severe malfunction of clock modules will happen.">
+      <choice value="1" name="Disabled - SIRC/FIRC/PLL clocks unavailable in VLPS " />
+      <choice value="0" name="Enabled" isDefault="true" />
+   </binaryOption>
+
+   <binaryOption name="pmc_regsc_biasen" 
+      description="Core Bias control"
+      toolTip="Controls source and well biasing for the core logic in low power mode. \n
+               In full performance mode this option has no effect. \n
+	       This is useful to further reduce MCU power consumption in low power mode. \n
+	       This bit must be set to 1 when using VLP* modes.">
+      <choice value="0" name="Disabled" isDefault="true" />
+      <choice value="1" name="Enabled - Core has reduced performance" />
+   </binaryOption>
+
+   <template><![CDATA[
+      \t//! Default value for Regulator Status And Control register\n
+      \tstatic constexpr uint32_t pmc_regsc  = 
+      \t   PMC_REGSC_LPODIS($(pmc_regsc_lpodis)) |     // Low power oscillator disable
+      \t   PMC_REGSC_CLKBIASDIS($(pmc_regsc_clkbiasdis)) | // Clock bias disable
+      \t   PMC_REGSC_BIASEN($(pmc_regsc_biasen));      // Core bias enable   \n\n
+   ]]></template>
+
+   <xi:include href="_irqOption.xml"/>
+   
+   <validate
+      class="net.sourceforge.usbdm.deviceEditor.validators.PeripheralValidator">
+   </validate>
+
+   <projectActionList id = "pmc_files" >
+      <copy source="Project_Headers/pmc.h"       target="Project_Headers/pmc.h"     overwrite="true" derived="true" />
+   </projectActionList>
+         
+</peripheralPage>

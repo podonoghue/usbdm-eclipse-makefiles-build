@@ -210,7 +210,7 @@
    <!ATTLIST template name 		CDATA  					"" >
    <!ATTLIST template dim  		CDATA  					"0" >
 
-<!ELEMENT for EMPTY >
+<!ELEMENT for (#PCDATA|for)* >
    <!ATTLIST for var         CDATA #REQUIRED >
    <!ATTLIST for enumeration CDATA #REQUIRED >
 

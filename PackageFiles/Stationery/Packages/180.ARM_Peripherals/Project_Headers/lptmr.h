@@ -33,6 +33,18 @@ namespace USBDM {
  */
 typedef void (*LPTMRCallbackFunction)(void);
 
+#ifdef PCC_PCC_LPTMR0_CGC_MASK
+/**
+ * Select the LPTMR clock source which determines count speed or glitch filtering
+ */
+enum LptmrClockSel {
+   LptmrClockSel_SircDiv2Clk  = LPTMR_PSR_PCS(0), //!< Slow Internal Reference Div 2 Clock (SIRCDIV2_CLK)
+   LptmrClockSel_Lpo1Kclk     = LPTMR_PSR_PCS(1), //!< Low power oscillator 1kHz (LPO1K_CLK)
+   LptmrClockSel_Rtcclk       = LPTMR_PSR_PCS(2), //!< 32kHz Clock Source (RTC_CLK)
+   LptmrClockSel_PccLptmrClk  = LPTMR_PSR_PCS(3), //!< Clock from PCC_LPTMRx multiplexor (PCC)
+   LptmrClockSel_Default      = LptmrClockSel_Lpo1Kclk,
+};
+#else
 /**
  * Select the LPTMR clock source which determines count speed or glitch filtering
  */
@@ -41,7 +53,9 @@ enum LptmrClockSel {
    LptmrClockSel_Lpoclk   = LPTMR_PSR_PCS(1), //!< Low power oscillator (LPO - 1kHz)
    LptmrClockSel_Erclk32  = LPTMR_PSR_PCS(2), //!< 32kHz Clock Source (ERCLK32)
    LptmrClockSel_Oscerclk = LPTMR_PSR_PCS(3), //!< Oscillator External Reference Clock (OSCERCLK)
+   LptmrClockSel_Default  = LptmrClockSel_Lpoclk,
 };
+#endif
 
 /**
  * Select the LPTMR clock pre-scale which affect counter speed/glitch filtering
@@ -183,7 +197,7 @@ public:
    static void configureTimeCountingMode(
          LptmrResetOn      lptmrResetOn   = LptmrResetOn_Compare,
          LptmrInterrupt    lptmrInterrupt = LptmrInterrupt_Disabled,
-         LptmrClockSel     lptmrClockSel  = LptmrClockSel_Mcgirclk,
+         LptmrClockSel     lptmrClockSel  = LptmrClockSel_Default,
          LptmrPrescale     lptmrPrescale  = LptmrPrescale_Bypass) {
       enable();
       // Change settings with timer disabled
@@ -440,7 +454,7 @@ public:
          uint32_t mod   = rintf(period*clockFrequency);
          if (mod < MINIMUM_RESOLUTION) {
             // Too short a period for reasonable resolution
-            return setErrorCode(E_TOO_SMALL);
+            return setAndCheckErrorCode(E_TOO_SMALL);
          }
          if (mod <= 65535) {
             __DSB();
@@ -453,7 +467,7 @@ public:
          prescaleFactor <<= 1;
       }
       // Too long a period
-      return setErrorCode(E_ILLEGAL_PARAM);
+      return setAndCheckErrorCode(E_TOO_LARGE);
    }
 
    /**
@@ -486,7 +500,7 @@ public:
          prescaleFactor <<= 1;
       }
       // Too long a period
-      return setErrorCode(E_ILLEGAL_PARAM);
+      return setAndCheckErrorCode(E_TOO_LARGE);
    }
 
    /**

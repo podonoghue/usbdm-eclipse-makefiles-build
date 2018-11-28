@@ -5,20 +5,71 @@
 -->
 
 <section name="USBDM">
-   <item key="$$DeviceInfo_Device_Variant"                 value="FS32K144HAT0MLHT" />
+   <item key="$$DeviceInfo_Device_Variant"                 value="EVB_S32K144" />
    <item key="$$DeviceInfo_SubFamily"                      value="S32K144" />
    <item key="$$Hardware_Source_Filename"                  value="S32K144.usbdmHardware" />
+   <item key="$signal$PTA11_muxSetting"                    value="mux5" />
+   <item key="$signal$PTA4_descriptionSetting"             value="SWD_DIO" />
+   <item key="$signal$PTB14_descriptionSetting"            value="SBC_SCK" />
+   <item key="$signal$PTB14_muxSetting"                    value="mux3" />
+   <item key="$signal$PTB15_descriptionSetting"            value="SBC_MISO" />
+   <item key="$signal$PTB15_muxSetting"                    value="mux3" />
+   <item key="$signal$PTB16_descriptionSetting"            value="SBC_MOSI" />
+   <item key="$signal$PTB16_muxSetting"                    value="mux3" />
+   <item key="$signal$PTB17_descriptionSetting"            value="SBC_CS" />
+   <item key="$signal$PTB17_muxSetting"                    value="mux3" />
+   <item key="$signal$PTB4_muxSetting"                     value="mux2" />
+   <item key="$signal$PTB5_muxSetting"                     value="mux5" />
+   <item key="$signal$PTB6_descriptionSetting"             value="8MHz Crystal" />
    <item key="$signal$PTB6_muxSetting"                     value="mux0" />
+   <item key="$signal$PTB7_descriptionSetting"             value="8MHz Crystal" />
    <item key="$signal$PTB7_muxSetting"                     value="mux0" />
+   <item key="$signal$PTC12_descriptionSetting"            value="Switch 2" />
+   <item key="$signal$PTC12_muxSetting"                    value="mux1" />
+   <item key="$signal$PTC13_descriptionSetting"            value="Switch 3" />
+   <item key="$signal$PTC13_muxSetting"                    value="mux1" />
+   <item key="$signal$PTC14_descriptionSetting"            value="Potentiometer" />
+   <item key="$signal$PTC14_muxSetting"                    value="mux0" />
+   <item key="$signal$PTC3_muxSetting"                     value="mux0" />
+   <item key="$signal$PTC4_descriptionSetting"             value="SWD_CLK" />
+   <item key="$signal$PTC4_muxSetting"                     value="mux7" />
+   <item key="$signal$PTC6_descriptionSetting"             value="Console Rx" />
+   <item key="$signal$PTC6_muxSetting"                     value="mux2" />
+   <item key="$signal$PTC7_descriptionSetting"             value="Console Tx" />
+   <item key="$signal$PTC7_muxSetting"                     value="mux2" />
+   <item key="$signal$PTD0_descriptionSetting"             value="RGB_Blue" />
+   <item key="$signal$PTD0_muxSetting"                     value="mux2" />
+   <item key="$signal$PTD15_descriptionSetting"            value="RGB_Red" />
+   <item key="$signal$PTD15_muxSetting"                    value="mux2" />
+   <item key="$signal$PTD16_descriptionSetting"            value="RGB_Green" />
+   <item key="$signal$PTD16_muxSetting"                    value="mux2" />
+   <item key="$signal$PTD6_descriptionSetting"             value="LIN Rx" />
+   <item key="$signal$PTD6_muxSetting"                     value="mux2" />
+   <item key="$signal$PTD7_descriptionSetting"             value="LIN Tx" />
+   <item key="$signal$PTD7_muxSetting"                     value="mux2" />
+   <item key="$signal$PTE2_muxSetting"                     value="mux0" />
+   <item key="$signal$PTE3_muxSetting"                     value="mux7" />
+   <item key="$signal$PTE4_descriptionSetting"             value="CAN Rx" />
+   <item key="$signal$PTE4_muxSetting"                     value="mux5" />
+   <item key="$signal$PTE5_descriptionSetting"             value="CAN Tx" />
+   <item key="$signal$PTE5_muxSetting"                     value="mux5" />
+   <item key="$signal$PTE6_muxSetting"                     value="mux0" />
+   <item key="/Console/consoleDevice"                      value="USBDM::Lpuart1" />
+   <item key="/LPUART1/mapPinsOnEnable"                    value="true" />
+   <item key="/PCC/pcc_lpuart0"                            value="PccDiv2Clock_Sirc" />
+   <item key="/PCC/pcc_lpuart1"                            value="PccDiv2Clock_Sirc" />
+   <item key="/PCC/pcc_lpuart2"                            value="PccDiv2Clock_Sirc" />
    <item key="/SCG/ClockConfig[0]"                         value="RUN" />
    <item key="/SCG/ClockConfig[1]"                         value="VLPR" />
    <item key="/SCG/ClockConfig[2]"                         value="HSRUN" />
    <item key="/SCG/clock_transition_mode[0]"               value="ClockMode_FIRC" />
    <item key="/SCG/clock_transition_mode[1]"               value="ClockMode_SIRC" />
    <item key="/SCG/clock_transition_mode[2]"               value="ClockMode_SPLL" />
+   <item key="/SCG/mapPinsOnEnable"                        value="true" />
+   <item key="/SCG/scg_altccr_divbus[0]"                   value="2" />
    <item key="/SCG/scg_altccr_divbus[2]"                   value="2" />
    <item key="/SCG/scg_altccr_divcore[1]"                  value="2" />
-   <item key="/SCG/scg_altccr_divslow[0]"                  value="3" />
+   <item key="/SCG/scg_altccr_divslow[0]"                  value="4" />
    <item key="/SCG/scg_altccr_divslow[1]"                  value="4" />
    <item key="/SCG/scg_altccr_divslow[2]"                  value="4" />
    <item key="/SCG/scg_altccr_scs[0]"                      value="0011" />
@@ -33,7 +84,5 @@
    <item key="/SCG/scg_runccr_scs[1]"                      value="0010" />
    <item key="/SCG/scg_runccr_scs[2]"                      value="0110" />
    <item key="/SCG/scg_sosccsr_soscen[1]"                  value="false" />
-   <item key="/SCG/scg_spllcfg_mult[0]"                    value="28" />
-   <item key="/SCG/scg_spllcfg_mult[2]"                    value="28" />
    <item key="/SCG/scg_spllcsr_spllen[1]"                  value="false" />
 </section>
