@@ -5,7 +5,7 @@
  *           Equivalent: 
  *
  * @version  V0.4
- * @date     2018/11
+ * @date     2018/12
  *
  *******************************************************************************************************/
 
@@ -195,12 +195,12 @@ extern void PIN_INT7_IRQHandler(void);               /**< Pin interrupt and  pat
 */
 typedef struct LPC_ADC_Type {
    __IO uint32_t  CTRL;                         /**< 0000: A/D Control Register. Contains the clock divide value, enable bits for each sequence and the A/D power-down bit */
-        uint8_t   RESERVED_0[4];               
+        uint8_t   RESERVED_0[4];                /**< 0004: 0x4 bytes                                                    */
    __IO uint32_t  SEQA_CTRL;                    /**< 0008: A/D Conversion Sequence-A control Register: Controls triggering and channel selection for conversion sequence-A. Also specifies interrupt mode for sequence-A */
    __IO uint32_t  SEQB_CTRL;                    /**< 000C: A/D Conversion Sequence-B Control Register: Controls triggering and channel selection for conversion sequence-B. Also specifies interrupt mode for sequence-B */
    __IO uint32_t  SEQA_GDAT;                    /**< 0010: A/D Sequence-A Global Data Register. This register contains the result of the most recent A/D conversion performed under sequence-A */
    __IO uint32_t  SEQB_GDAT;                    /**< 0014: A/D Sequence-B Global Data Register. This register contains the result of the most recent A/D conversion performed under sequence-B */
-        uint8_t   RESERVED_1[8];               
+        uint8_t   RESERVED_1[8];                /**< 0018: 0x8 bytes                                                    */
    __I  uint32_t  DAT[12];                      /**< 0020: A/D Channel  Data Register. This register contains the result of the most recent conversion completed on channel 0 */
    __IO uint32_t  THR0_LOW;                     /**< 0050: A/D Low Compare Threshold Register 0 : Contains the lower threshold level for automatic threshold comparison for any channels linked to threshold pair 0 */
    __IO uint32_t  THR1_LOW;                     /**< 0054: A/D Low Compare Threshold Register 1: Contains the lower threshold level for automatic threshold comparison for any channels linked to threshold pair 1 */
@@ -663,7 +663,7 @@ typedef struct LPC_CMP_Type {
 typedef struct LPC_CRC_Type {
    __IO uint32_t  MODE;                         /**< 0000: CRC mode register                                            */
    __IO uint32_t  SEED;                         /**< 0004: CRC seed register                                            */
-   union {                                      /**< 0000: (size=0004)                                                  */
+   union {                                      /**< 0008: (size=0004)                                                  */
       __I  uint32_t  SUM;                       /**< 0008: CRC checksum register                                        */
       __O  uint32_t  WR_DATA;                   /**< 0008: CRC data register                                            */
    };
@@ -746,99 +746,99 @@ typedef struct LPC_DMA_Type {
    __IO uint32_t  CTRL;                         /**< 0000: DMA control                                                  */
    __I  uint32_t  INTSTAT;                      /**< 0004: Interrupt status                                             */
    __IO uint32_t  SRAMBASE;                     /**< 0008: SRAM address of the channel configuration table              */
-        uint8_t   RESERVED_0[20];              
+        uint8_t   RESERVED_0[20];               /**< 000C: 0x14 bytes                                                   */
    __IO uint32_t  ENABLESET0;                   /**< 0020: Channel Enable read and Set for all DMA channels             */
-        uint8_t   RESERVED_1[4];               
+        uint8_t   RESERVED_1[4];                /**< 0024: 0x4 bytes                                                    */
    __O  uint32_t  ENABLECLR0;                   /**< 0028: Channel Enable Clear for all DMA channels                    */
-        uint8_t   RESERVED_2[4];               
+        uint8_t   RESERVED_2[4];                /**< 002C: 0x4 bytes                                                    */
    __I  uint32_t  ACTIVE0;                      /**< 0030: Channel Active status for all DMA channels                   */
-        uint8_t   RESERVED_3[4];               
+        uint8_t   RESERVED_3[4];                /**< 0034: 0x4 bytes                                                    */
    __I  uint32_t  BUSY0;                        /**< 0038: Channel Busy status for all DMA channels                     */
-        uint8_t   RESERVED_4[4];               
+        uint8_t   RESERVED_4[4];                /**< 003C: 0x4 bytes                                                    */
    __IO uint32_t  ERRINT0;                      /**< 0040: Error Interrupt status for all DMA channels                  */
-        uint8_t   RESERVED_5[4];               
+        uint8_t   RESERVED_5[4];                /**< 0044: 0x4 bytes                                                    */
    __IO uint32_t  INTENSET0;                    /**< 0048: Interrupt Enable read and Set for all DMA channels           */
-        uint8_t   RESERVED_6[4];               
+        uint8_t   RESERVED_6[4];                /**< 004C: 0x4 bytes                                                    */
    __O  uint32_t  INTENCLR0;                    /**< 0050: Interrupt Enable Clear for all DMA channels                  */
-        uint8_t   RESERVED_7[4];               
+        uint8_t   RESERVED_7[4];                /**< 0054: 0x4 bytes                                                    */
    __IO uint32_t  INTA0;                        /**< 0058: Interrupt A status for all DMA channels                      */
-        uint8_t   RESERVED_8[4];               
+        uint8_t   RESERVED_8[4];                /**< 005C: 0x4 bytes                                                    */
    __IO uint32_t  INTB0;                        /**< 0060: Interrupt B status for all DMA channels                      */
-        uint8_t   RESERVED_9[4];               
+        uint8_t   RESERVED_9[4];                /**< 0064: 0x4 bytes                                                    */
    __O  uint32_t  SETVALID0;                    /**< 0068: Set ValidPending control bits for all DMA channels           */
-        uint8_t   RESERVED_10[4];              
+        uint8_t   RESERVED_10[4];               /**< 006C: 0x4 bytes                                                    */
    __O  uint32_t  SETTRIG0;                     /**< 0070: Set Trigger control bits for all DMA channels                */
-        uint8_t   RESERVED_11[4];              
+        uint8_t   RESERVED_11[4];               /**< 0074: 0x4 bytes                                                    */
    __O  uint32_t  ABORT0;                       /**< 0078: Channel Abort control for all DMA channels                   */
-        uint8_t   RESERVED_12[900];            
+        uint8_t   RESERVED_12[900];             /**< 007C: 0x384 bytes                                                  */
    __IO uint32_t  CFG0;                         /**< 0400: Configuration register for DMA channel 0                     */
    __I  uint32_t  CTLSTAT0;                     /**< 0404: Control and status register for DMA channel 0                */
    __IO uint32_t  XFERCFG0;                     /**< 0408: Transfer configuration register for DMA channel 0            */
-        uint8_t   RESERVED_13[4];              
+        uint8_t   RESERVED_13[4];               /**< 040C: 0x4 bytes                                                    */
    __IO uint32_t  CFG1;                         /**< 0410: Configuration register for DMA channel 0                     */
    __I  uint32_t  CTLSTAT1;                     /**< 0414: Control and status register for DMA channel 0                */
    __IO uint32_t  XFERCFG1;                     /**< 0418: Transfer configuration register for DMA channel 0            */
-        uint8_t   RESERVED_14[4];              
+        uint8_t   RESERVED_14[4];               /**< 041C: 0x4 bytes                                                    */
    __IO uint32_t  CFG2;                         /**< 0420: Configuration register for DMA channel 0                     */
    __I  uint32_t  CTLSTAT2;                     /**< 0424: Control and status register for DMA channel 0                */
    __IO uint32_t  XFERCFG2;                     /**< 0428: Transfer configuration register for DMA channel 0            */
-        uint8_t   RESERVED_15[4];              
+        uint8_t   RESERVED_15[4];               /**< 042C: 0x4 bytes                                                    */
    __IO uint32_t  CFG3;                         /**< 0430: Configuration register for DMA channel 0                     */
    __I  uint32_t  CTLSTAT3;                     /**< 0434: Control and status register for DMA channel 0                */
    __IO uint32_t  XFERCFG3;                     /**< 0438: Transfer configuration register for DMA channel 0            */
-        uint8_t   RESERVED_16[4];              
+        uint8_t   RESERVED_16[4];               /**< 043C: 0x4 bytes                                                    */
    __IO uint32_t  CFG4;                         /**< 0440: Configuration register for DMA channel 0                     */
    __I  uint32_t  CTLSTAT4;                     /**< 0444: Control and status register for DMA channel 0                */
    __IO uint32_t  XFERCFG4;                     /**< 0448: Transfer configuration register for DMA channel 0            */
-        uint8_t   RESERVED_17[4];              
+        uint8_t   RESERVED_17[4];               /**< 044C: 0x4 bytes                                                    */
    __IO uint32_t  CFG5;                         /**< 0450: Configuration register for DMA channel 0                     */
    __I  uint32_t  CTLSTAT5;                     /**< 0454: Control and status register for DMA channel 0                */
    __IO uint32_t  XFERCFG5;                     /**< 0458: Transfer configuration register for DMA channel 0            */
-        uint8_t   RESERVED_18[4];              
+        uint8_t   RESERVED_18[4];               /**< 045C: 0x4 bytes                                                    */
    __IO uint32_t  CFG6;                         /**< 0460: Configuration register for DMA channel 0                     */
    __I  uint32_t  CTLSTAT6;                     /**< 0464: Control and status register for DMA channel 0                */
    __IO uint32_t  XFERCFG6;                     /**< 0468: Transfer configuration register for DMA channel 0            */
-        uint8_t   RESERVED_19[4];              
+        uint8_t   RESERVED_19[4];               /**< 046C: 0x4 bytes                                                    */
    __IO uint32_t  CFG7;                         /**< 0470: Configuration register for DMA channel 0                     */
    __I  uint32_t  CTLSTAT7;                     /**< 0474: Control and status register for DMA channel 0                */
    __IO uint32_t  XFERCFG7;                     /**< 0478: Transfer configuration register for DMA channel 0            */
-        uint8_t   RESERVED_20[4];              
+        uint8_t   RESERVED_20[4];               /**< 047C: 0x4 bytes                                                    */
    __IO uint32_t  CFG8;                         /**< 0480: Configuration register for DMA channel 0                     */
    __I  uint32_t  CTLSTAT8;                     /**< 0484: Control and status register for DMA channel 0                */
    __IO uint32_t  XFERCFG8;                     /**< 0488: Transfer configuration register for DMA channel 0            */
-        uint8_t   RESERVED_21[4];              
+        uint8_t   RESERVED_21[4];               /**< 048C: 0x4 bytes                                                    */
    __IO uint32_t  CFG9;                         /**< 0490: Configuration register for DMA channel 0                     */
    __I  uint32_t  CTLSTAT9;                     /**< 0494: Control and status register for DMA channel 0                */
    __IO uint32_t  XFERCFG9;                     /**< 0498: Transfer configuration register for DMA channel 0            */
-        uint8_t   RESERVED_22[4];              
+        uint8_t   RESERVED_22[4];               /**< 049C: 0x4 bytes                                                    */
    __IO uint32_t  CFG10;                        /**< 04A0: Configuration register for DMA channel 0                     */
    __I  uint32_t  CTLSTAT10;                    /**< 04A4: Control and status register for DMA channel 0                */
    __IO uint32_t  XFERCFG10;                    /**< 04A8: Transfer configuration register for DMA channel 0            */
-        uint8_t   RESERVED_23[4];              
+        uint8_t   RESERVED_23[4];               /**< 04AC: 0x4 bytes                                                    */
    __IO uint32_t  CFG11;                        /**< 04B0: Configuration register for DMA channel 0                     */
    __I  uint32_t  CTLSTAT11;                    /**< 04B4: Control and status register for DMA channel 0                */
    __IO uint32_t  XFERCFG11;                    /**< 04B8: Transfer configuration register for DMA channel 0            */
-        uint8_t   RESERVED_24[4];              
+        uint8_t   RESERVED_24[4];               /**< 04BC: 0x4 bytes                                                    */
    __IO uint32_t  CFG12;                        /**< 04C0: Configuration register for DMA channel 0                     */
    __I  uint32_t  CTLSTAT12;                    /**< 04C4: Control and status register for DMA channel 0                */
    __IO uint32_t  XFERCFG12;                    /**< 04C8: Transfer configuration register for DMA channel 0            */
-        uint8_t   RESERVED_25[4];              
+        uint8_t   RESERVED_25[4];               /**< 04CC: 0x4 bytes                                                    */
    __IO uint32_t  CFG13;                        /**< 04D0: Configuration register for DMA channel 0                     */
    __I  uint32_t  CTLSTAT13;                    /**< 04D4: Control and status register for DMA channel 0                */
    __IO uint32_t  XFERCFG13;                    /**< 04D8: Transfer configuration register for DMA channel 0            */
-        uint8_t   RESERVED_26[4];              
+        uint8_t   RESERVED_26[4];               /**< 04DC: 0x4 bytes                                                    */
    __IO uint32_t  CFG14;                        /**< 04E0: Configuration register for DMA channel 0                     */
    __I  uint32_t  CTLSTAT14;                    /**< 04E4: Control and status register for DMA channel 0                */
    __IO uint32_t  XFERCFG14;                    /**< 04E8: Transfer configuration register for DMA channel 0            */
-        uint8_t   RESERVED_27[4];              
+        uint8_t   RESERVED_27[4];               /**< 04EC: 0x4 bytes                                                    */
    __IO uint32_t  CFG15;                        /**< 04F0: Configuration register for DMA channel 0                     */
    __I  uint32_t  CTLSTAT15;                    /**< 04F4: Control and status register for DMA channel 0                */
    __IO uint32_t  XFERCFG15;                    /**< 04F8: Transfer configuration register for DMA channel 0            */
-        uint8_t   RESERVED_28[4];              
+        uint8_t   RESERVED_28[4];               /**< 04FC: 0x4 bytes                                                    */
    __IO uint32_t  CFG16;                        /**< 0500: Configuration register for DMA channel 0                     */
    __I  uint32_t  CTLSTAT16;                    /**< 0504: Control and status register for DMA channel 0                */
    __IO uint32_t  XFERCFG16;                    /**< 0508: Transfer configuration register for DMA channel 0            */
-        uint8_t   RESERVED_29[4];              
+        uint8_t   RESERVED_29[4];               /**< 050C: 0x4 bytes                                                    */
    __IO uint32_t  CFG17;                        /**< 0510: Configuration register for DMA channel 0                     */
    __I  uint32_t  CTLSTAT17;                    /**< 0514: Control and status register for DMA channel 0                */
    __IO uint32_t  XFERCFG17;                    /**< 0518: Transfer configuration register for DMA channel 0            */
@@ -2190,12 +2190,12 @@ typedef struct LPC_DMATRIGMUX_Type {
 * @{
 */
 typedef struct LPC_FLASHCTRL_Type {
-        uint8_t   RESERVED_0[16];              
+        uint8_t   RESERVED_0[16];               /**< 0000: 0x10 bytes                                                   */
    __IO uint32_t  FLASHCFG;                     /**< 0010: Flash configuration register                                 */
-        uint8_t   RESERVED_1[12];              
+        uint8_t   RESERVED_1[12];               /**< 0014: 0xC bytes                                                    */
    __IO uint32_t  FMSSTART;                     /**< 0020: Signature start address register                             */
    __IO uint32_t  FMSSTOP;                      /**< 0024: Signature stop-address register                              */
-        uint8_t   RESERVED_2[4];               
+        uint8_t   RESERVED_2[4];                /**< 0028: 0x4 bytes                                                    */
    __I  uint32_t  FMSW0;                        /**< 002C: Signature Word                                               */
 } LPC_FLASHCTRL_Type;
 
@@ -2264,7 +2264,7 @@ typedef struct LPC_FLASHCTRL_Type {
 */
 typedef struct LPC_GPIO_PORT_Type {
    __IO uint8_t   B[29];                        /**< 0000: Byte pin registers port ; pins PIO0_0 to PIO0_28             */
-        uint8_t   RESERVED_0[4067];            
+        uint8_t   RESERVED_0[4067];             /**< 001D: 0xFE3 bytes                                                  */
    __IO uint32_t  W0;                           /**< 1000: Word pin registers port 0                                    */
    __IO uint32_t  W1;                           /**< 1004: Word pin registers port 0                                    */
    __IO uint32_t  W2;                           /**< 1008: Word pin registers port 0                                    */
@@ -2294,25 +2294,25 @@ typedef struct LPC_GPIO_PORT_Type {
    __IO uint32_t  W26;                          /**< 1068: Word pin registers port 0                                    */
    __IO uint32_t  W27;                          /**< 106C: Word pin registers port 0                                    */
    __IO uint32_t  W28;                          /**< 1070: Word pin registers port 0                                    */
-        uint8_t   RESERVED_1[3980];            
+        uint8_t   RESERVED_1[3980];             /**< 1074: 0xF8C bytes                                                  */
    __IO uint32_t  DIR0;                         /**< 2000: Direction registers port 0                                   */
-        uint8_t   RESERVED_2[124];             
+        uint8_t   RESERVED_2[124];              /**< 2004: 0x7C bytes                                                   */
    __IO uint32_t  MASK0;                        /**< 2080: Mask register port 0                                         */
-        uint8_t   RESERVED_3[124];             
+        uint8_t   RESERVED_3[124];              /**< 2084: 0x7C bytes                                                   */
    __IO uint32_t  PIN0;                         /**< 2100: Port pin register port 0                                     */
-        uint8_t   RESERVED_4[124];             
+        uint8_t   RESERVED_4[124];              /**< 2104: 0x7C bytes                                                   */
    __IO uint32_t  MPIN0;                        /**< 2180: Masked port register port 0                                  */
-        uint8_t   RESERVED_5[124];             
+        uint8_t   RESERVED_5[124];              /**< 2184: 0x7C bytes                                                   */
    __IO uint32_t  SET0;                         /**< 2200: Write: Set register for port 0 Read: output bits for port 0  */
-        uint8_t   RESERVED_6[124];             
+        uint8_t   RESERVED_6[124];              /**< 2204: 0x7C bytes                                                   */
    __O  uint32_t  CLR0;                         /**< 2280: Clear port 0                                                 */
-        uint8_t   RESERVED_7[124];             
+        uint8_t   RESERVED_7[124];              /**< 2284: 0x7C bytes                                                   */
    __O  uint32_t  NOT0;                         /**< 2300: Toggle port 0                                                */
-        uint8_t   RESERVED_8[124];             
+        uint8_t   RESERVED_8[124];              /**< 2304: 0x7C bytes                                                   */
    __O  uint32_t  DIRSET0;                      /**< 2380: Set pin direction bits for port 0                            */
-        uint8_t   RESERVED_9[124];             
+        uint8_t   RESERVED_9[124];              /**< 2384: 0x7C bytes                                                   */
    __O  uint32_t  DIRCLR0;                      /**< 2400: Clear pin direction bits for port 0                          */
-        uint8_t   RESERVED_10[124];            
+        uint8_t   RESERVED_10[124];             /**< 2404: 0x7C bytes                                                   */
    __O  uint32_t  DIRNOT0;                      /**< 2480: Toggle pin direction bits for port 0                         */
 } LPC_GPIO_PORT_Type;
 
@@ -2418,11 +2418,11 @@ typedef struct LPC_I2C0_Type {
    __IO uint32_t  TIMEOUT;                      /**< 0010: Time-out value register                                      */
    __IO uint32_t  CLKDIV;                       /**< 0014: Clock pre-divider for the entire I2C block. This determines what time increments are used for the MSTTIME and SLVTIME */
    __I  uint32_t  INTSTAT;                      /**< 0018: Interrupt Status register for Master, Slave, and Monitor functions */
-        uint8_t   RESERVED_0[4];               
+        uint8_t   RESERVED_0[4];                /**< 001C: 0x4 bytes                                                    */
    __IO uint32_t  MSTCTL;                       /**< 0020: Master control register                                      */
    __IO uint32_t  MSTTIME;                      /**< 0024: Master timing configuration                                  */
    __IO uint32_t  MSTDAT;                       /**< 0028: Combined Master receiver and transmitter data register       */
-        uint8_t   RESERVED_1[20];              
+        uint8_t   RESERVED_1[20];               /**< 002C: 0x14 bytes                                                   */
    __IO uint32_t  SLVCTL;                       /**< 0040: Slave control register                                       */
    __IO uint32_t  SLVDAT;                       /**< 0044: Combined Slave receiver and transmitter data register        */
    __IO uint32_t  SLVADR0;                      /**< 0048: Slave address 0                                              */
@@ -2430,7 +2430,7 @@ typedef struct LPC_I2C0_Type {
    __IO uint32_t  SLVADR2;                      /**< 0050: Slave address 0                                              */
    __IO uint32_t  SLVADR3;                      /**< 0054: Slave address 0                                              */
    __IO uint32_t  SLVQUAL0;                     /**< 0058: Slave Qualification for address 0                            */
-        uint8_t   RESERVED_2[36];              
+        uint8_t   RESERVED_2[36];               /**< 005C: 0x24 bytes                                                   */
    __I  uint32_t  MONRXDAT;                     /**< 0080: Monitor receiver data register                               */
 } LPC_I2C0_Type;
 
@@ -2799,7 +2799,7 @@ typedef struct LPC_I2C0_Type {
 */
 typedef struct LPC_INPUTMUX_Type {
    __IO uint32_t  DMA_INMUX_INMUX[2];           /**< 0000: Input mux register for DMA trigger input 20. Selects from 18 DMA trigger outputs */
-        uint8_t   RESERVED_0[24];              
+        uint8_t   RESERVED_0[24];               /**< 0008: 0x18 bytes                                                   */
    __IO uint32_t  SCT0_INMUX0[4];               /**< 0020: Input mux register for SCT input 0                           */
 } LPC_INPUTMUX_Type;
 
@@ -2866,14 +2866,14 @@ typedef struct LPC_IOCON_Type {
    __IO uint32_t  PIO0_16;                      /**< 0024: I/O configuration for pin PIO0_16                            */
    __IO uint32_t  PIO0_15;                      /**< 0028: I/O configuration for pin PIO0_15                            */
    __IO uint32_t  PIO0_1;                       /**< 002C: I/O configuration for pin PIO0_1                             */
-        uint8_t   RESERVED_0[4];               
+        uint8_t   RESERVED_0[4];                /**< 0030: 0x4 bytes                                                    */
    __IO uint32_t  PIO0_9;                       /**< 0034: I/O configuration for pin PIO0_9/XTALOUT                     */
    __IO uint32_t  PIO0_8;                       /**< 0038: I/O configuration for pin PIO0_8/XTALIN                      */
    __IO uint32_t  PIO0_7;                       /**< 003C: I/O configuration for pin PIO0_7                             */
    __IO uint32_t  PIO0_6;                       /**< 0040: I/O configuration for pin PIO0_6/VDDCMP                      */
    __IO uint32_t  PIO0_0;                       /**< 0044: I/O configuration for pin PIO0_0/ACMP_I0                     */
    __IO uint32_t  PIO0_14;                      /**< 0048: I/O configuration for pin PIO0_14                            */
-        uint8_t   RESERVED_1[4];               
+        uint8_t   RESERVED_1[4];                /**< 004C: 0x4 bytes                                                    */
    __IO uint32_t  PIO0_28;                      /**< 0050: I/O configuration for pin PIO0_28                            */
    __IO uint32_t  PIO0_27;                      /**< 0054: I/O configuration for pin PIO0_27                            */
    __IO uint32_t  PIO0_26;                      /**< 0058: I/O configuration for pin PIO0_26                            */
@@ -3497,7 +3497,7 @@ typedef struct LPC_MRT_Type {
    __I  uint32_t  TIMER3;                       /**< 0034: MRT0 Timer register. This register reads the value of the down-counter */
    __IO uint32_t  CTRL3;                        /**< 0038: MRT0 Control register. This register controls the MRT0 modes */
    __IO uint32_t  STAT3;                        /**< 003C: MRT0 Status register                                         */
-        uint8_t   RESERVED_0[180];             
+        uint8_t   RESERVED_0[180];              /**< 0040: 0xB4 bytes                                                   */
    __I  uint32_t  IDLE_CH;                      /**< 00F4: Idle channel register. This register returns the number of the first idle channel */
    __IO uint32_t  IRQ_FLAG;                     /**< 00F8: Global interrupt flag register                               */
 } LPC_MRT_Type;
@@ -3930,7 +3930,7 @@ typedef struct LPC_SCT_Type {
    __IO uint32_t  HALT;                         /**< 000C: SCT halt condition register                                  */
    __IO uint32_t  STOP;                         /**< 0010: SCT stop condition register                                  */
    __IO uint32_t  START;                        /**< 0014: SCT start condition register                                 */
-        uint8_t   RESERVED_0[40];              
+        uint8_t   RESERVED_0[40];               /**< 0018: 0x28 bytes                                                   */
    __IO uint32_t  COUNT;                        /**< 0040: SCT counter register                                         */
    __IO uint32_t  STATE;                        /**< 0044: SCT state register                                           */
    __I  uint32_t  INPUT;                        /**< 0048: SCT input register                                           */
@@ -3939,21 +3939,21 @@ typedef struct LPC_SCT_Type {
    __IO uint32_t  OUTPUTDIRCTRL;                /**< 0054: SCT output counter direction control register                */
    __IO uint32_t  RES;                          /**< 0058: SCT conflict resolution register                             */
    __IO uint32_t  DMAREQ[2];                    /**< 005C: SCT DMA request  register                                    */
-        uint8_t   RESERVED_1[140];             
+        uint8_t   RESERVED_1[140];              /**< 0064: 0x8C bytes                                                   */
    __IO uint32_t  EVEN;                         /**< 00F0: SCT event enable register                                    */
    __IO uint32_t  EVFLAG;                       /**< 00F4: SCT event flag register                                      */
    __IO uint32_t  CONEN;                        /**< 00F8: SCT conflict enable register                                 */
    __IO uint32_t  CONFLAG;                      /**< 00FC: SCT conflict flag register                                   */
-   union {                                      /**< 0000: (size=0020)                                                  */
+   union {                                      /**< 0100: (size=0020)                                                  */
       __IO uint32_t  CAP[8];                    /**< 0100: SCT capture register of capture channel ; REGMOD0 to REGMODE7 = 1 */
       __IO uint32_t  MATCH[8];                  /**< 0100: SCT match value register of match channel ; REGMOD0 to REGMODE7 = 0 */
    };
-        uint8_t   RESERVED_2[224];             
-   union {                                      /**< 0000: (size=0020)                                                  */
+        uint8_t   RESERVED_2[224];              /**< 0120: 0xE0 bytes                                                   */
+   union {                                      /**< 0200: (size=0020)                                                  */
       __IO uint32_t  CAPCTRL[8];                /**< 0200: SCT capture control register ; REGMOD0 = 1 to REGMODE7 = 1   */
       __IO uint32_t  MATCHREL[8];               /**< 0200: SCT match reload value register ; REGMOD0 = 0 to REGMODE7 = 0 */
    };
-        uint8_t   RESERVED_3[224];             
+        uint8_t   RESERVED_3[224];              /**< 0220: 0xE0 bytes                                                   */
    __IO uint32_t  EV0_STATE;                    /**< 0300: SCT event state register 0                                   */
    __IO uint32_t  EV0_CTRL;                     /**< 0304: SCT event control register 0                                 */
    __IO uint32_t  EV1_STATE;                    /**< 0308: SCT event state register 0                                   */
@@ -3970,7 +3970,7 @@ typedef struct LPC_SCT_Type {
    __IO uint32_t  EV6_CTRL;                     /**< 0334: SCT event control register 0                                 */
    __IO uint32_t  EV7_STATE;                    /**< 0338: SCT event state register 0                                   */
    __IO uint32_t  EV7_CTRL;                     /**< 033C: SCT event control register 0                                 */
-        uint8_t   RESERVED_4[448];             
+        uint8_t   RESERVED_4[448];              /**< 0340: 0x1C0 bytes                                                  */
    __IO uint32_t  OUT0_SET;                     /**< 0500: SCT output 0 set register                                    */
    __IO uint32_t  OUT0_CLR;                     /**< 0504: SCT output 0 clear register                                  */
    __IO uint32_t  OUT1_SET;                     /**< 0508: SCT output 0 set register                                    */
@@ -4898,7 +4898,7 @@ typedef struct LPC_SWM_Type {
    __IO uint32_t  PINASSIGN9;                   /**< 0024: Pin assign register 9. Assign movable functions SCT_OUT5, I2C1_SDA, I2C1_SCL, I2C2_SDA */
    __IO uint32_t  PINASSIGN10;                  /**< 0028: Pin assign register 10. Assign movable functions I2C2_SCL, I2C3_SDA, I2C3_SCL, ADC_PINTRIG0 */
    __IO uint32_t  PINASSIGN11;                  /**< 002C: Pin assign register 11. Assign movable functions ADC_PINTRIG1, ACMP_O, CLKOUT, GPIO_INT_BMAT */
-        uint8_t   RESERVED_0[400];             
+        uint8_t   RESERVED_0[400];              /**< 0030: 0x190 bytes                                                  */
    __IO uint32_t  PINENABLE0;                   /**< 01C0: Pin enable register 0. Enables fixed-pin functions ACMP_I0, ACMP_I1, SWCLK, SWDIO, XTALIN, XTALOUT, RESET, CLKIN, VDDCMP */
 } LPC_SWM_Type;
 
@@ -5181,39 +5181,39 @@ typedef struct LPC_SYSCON_Type {
    __IO uint32_t  PRESETCTRL;                   /**< 0004: Peripheral reset control                                     */
    __IO uint32_t  SYSPLLCTRL;                   /**< 0008: System PLL control                                           */
    __I  uint32_t  SYSPLLSTAT;                   /**< 000C: System PLL status                                            */
-        uint8_t   RESERVED_0[16];              
+        uint8_t   RESERVED_0[16];               /**< 0010: 0x10 bytes                                                   */
    __IO uint32_t  SYSOSCCTRL;                   /**< 0020: System oscillator control                                    */
    __IO uint32_t  WDTOSCCTRL;                   /**< 0024: Watchdog oscillator control                                  */
    __IO uint32_t  IRCCTRL;                      /**< 0028: IRC control                                                  */
-        uint8_t   RESERVED_1[4];               
+        uint8_t   RESERVED_1[4];                /**< 002C: 0x4 bytes                                                    */
    __IO uint32_t  SYSRSTSTAT;                   /**< 0030: System reset status register                                 */
-        uint8_t   RESERVED_2[12];              
+        uint8_t   RESERVED_2[12];               /**< 0034: 0xC bytes                                                    */
    __IO uint32_t  SYSPLLCLKSEL;                 /**< 0040: System PLL clock source select                               */
    __IO uint32_t  SYSPLLCLKUEN;                 /**< 0044: System PLL clock source update enable                        */
-        uint8_t   RESERVED_3[40];              
+        uint8_t   RESERVED_3[40];               /**< 0048: 0x28 bytes                                                   */
    __IO uint32_t  MAINCLKSEL;                   /**< 0070: Main clock source select                                     */
    __IO uint32_t  MAINCLKUEN;                   /**< 0074: Main clock source update enable                              */
    __IO uint32_t  SYSAHBCLKDIV;                 /**< 0078: System clock divider                                         */
-        uint8_t   RESERVED_4[4];               
+        uint8_t   RESERVED_4[4];                /**< 007C: 0x4 bytes                                                    */
    __IO uint32_t  SYSAHBCLKCTRL;                /**< 0080: System clock control                                         */
-        uint8_t   RESERVED_5[16];              
+        uint8_t   RESERVED_5[16];               /**< 0084: 0x10 bytes                                                   */
    __IO uint32_t  UARTCLKDIV;                   /**< 0094: USART clock divider                                          */
-        uint8_t   RESERVED_6[72];              
+        uint8_t   RESERVED_6[72];               /**< 0098: 0x48 bytes                                                   */
    __IO uint32_t  CLKOUTSEL;                    /**< 00E0: CLKOUT clock source select                                   */
    __IO uint32_t  CLKOUTUEN;                    /**< 00E4: CLKOUT clock source update enable                            */
    __IO uint32_t  CLKOUTDIV;                    /**< 00E8: CLKOUT clock divider                                         */
-        uint8_t   RESERVED_7[4];               
+        uint8_t   RESERVED_7[4];                /**< 00EC: 0x4 bytes                                                    */
    __IO uint32_t  UARTFRGDIV;                   /**< 00F0: USART1 to USART4 common fractional generator divider value   */
    __IO uint32_t  UARTFRGMULT;                  /**< 00F4: USART1 to USART4 common fractional generator multiplier value */
-        uint8_t   RESERVED_8[4];               
+        uint8_t   RESERVED_8[4];                /**< 00F8: 0x4 bytes                                                    */
    __IO uint32_t  EXTTRACECMD;                  /**< 00FC: External trace buffer command register                       */
    __I  uint32_t  PIOPORCAP0;                   /**< 0100: POR captured PIO status 0                                    */
-        uint8_t   RESERVED_9[48];              
+        uint8_t   RESERVED_9[48];               /**< 0104: 0x30 bytes                                                   */
    __IO uint32_t  IOCONCLKDIV6;                 /**< 0134: Peripheral clock 6 to the IOCON block for programmable glitch filter */
-        uint8_t   RESERVED_10[24];             
+        uint8_t   RESERVED_10[24];              /**< 0138: 0x18 bytes                                                   */
    __IO uint32_t  BODCTRL;                      /**< 0150: Brown-Out Detect                                             */
    __IO uint32_t  SYSTCKCAL;                    /**< 0154: System tick counter calibration                              */
-        uint8_t   RESERVED_11[24];             
+        uint8_t   RESERVED_11[24];              /**< 0158: 0x18 bytes                                                   */
    __IO uint32_t  IRQLATENCY;                   /**< 0170: IQR delay. Allows trade-off between interrupt latency and determinism */
    __IO uint32_t  NMISRC;                       /**< 0174: NMI Source Control                                           */
    __IO uint32_t  PINTSEL0;                     /**< 0178: GPIO Pin Interrupt Select register 0                         */
@@ -5224,15 +5224,15 @@ typedef struct LPC_SYSCON_Type {
    __IO uint32_t  PINTSEL5;                     /**< 018C: GPIO Pin Interrupt Select register 0                         */
    __IO uint32_t  PINTSEL6;                     /**< 0190: GPIO Pin Interrupt Select register 0                         */
    __IO uint32_t  PINTSEL7;                     /**< 0194: GPIO Pin Interrupt Select register 0                         */
-        uint8_t   RESERVED_12[108];            
+        uint8_t   RESERVED_12[108];             /**< 0198: 0x6C bytes                                                   */
    __IO uint32_t  STARTERP0;                    /**< 0204: Start logic 0 pin wake-up enable register                    */
-        uint8_t   RESERVED_13[12];             
+        uint8_t   RESERVED_13[12];              /**< 0208: 0xC bytes                                                    */
    __IO uint32_t  STARTERP1;                    /**< 0214: Start logic 1 interrupt wake-up enable register              */
-        uint8_t   RESERVED_14[24];             
+        uint8_t   RESERVED_14[24];              /**< 0218: 0x18 bytes                                                   */
    __IO uint32_t  PDSLEEPCFG;                   /**< 0230: Power-down states in deep-sleep mode                         */
    __IO uint32_t  PDAWAKECFG;                   /**< 0234: Power-down states for wake-up from deep-sleep                */
    __IO uint32_t  PDRUNCFG;                     /**< 0238: Power configuration register                                 */
-        uint8_t   RESERVED_15[444];            
+        uint8_t   RESERVED_15[444];             /**< 023C: 0x1BC bytes                                                  */
    __I  uint32_t  DEVICE_ID;                    /**< 03F8: Device ID                                                    */
 } LPC_SYSCON_Type;
 
@@ -6040,7 +6040,7 @@ typedef struct LPC_USART0_Type {
 */
 typedef struct LPC_WKT_Type {
    __IO uint32_t  CTRL;                         /**< 0000: Self wake-up timer control register                          */
-        uint8_t   RESERVED_0[8];               
+        uint8_t   RESERVED_0[8];                /**< 0004: 0x8 bytes                                                    */
    __IO uint32_t  COUNT;                        /**< 000C: Counter register                                             */
 } LPC_WKT_Type;
 
@@ -6107,7 +6107,7 @@ typedef struct LPC_WWDT_Type {
    __IO uint32_t  TC;                           /**< 0004: Watchdog timer constant register. This 24-bit register determines the time-out value */
    __O  uint32_t  FEED;                         /**< 0008: Watchdog feed sequence register. Writing 0xAA followed by 0x55 to this register reloads the Watchdog timer with the value contained in WDTC */
    __I  uint32_t  TV;                           /**< 000C: Watchdog timer value register. This 24-bit register reads out the current value of the Watchdog timer */
-        uint8_t   RESERVED_0[4];               
+        uint8_t   RESERVED_0[4];                /**< 0010: 0x4 bytes                                                    */
    __IO uint32_t  WARNINT;                      /**< 0014: Watchdog Warning Interrupt compare value                     */
    __IO uint32_t  WINDOW;                       /**< 0018: Watchdog Window compare value                                */
 } LPC_WWDT_Type;

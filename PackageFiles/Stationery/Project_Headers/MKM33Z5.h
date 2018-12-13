@@ -5,7 +5,7 @@
  *           Equivalent: 
  *
  * @version  V1.6
- * @date     2018/11
+ * @date     2018/12
  *
  *******************************************************************************************************/
 
@@ -209,7 +209,7 @@ typedef struct ADC_Type {
    __IO uint32_t  SC3;                          /**< 0034: Status and Control Register 3                                */
    __IO uint32_t  OFS;                          /**< 0038: Offset Correction Register                                   */
    __IO uint32_t  PG;                           /**< 003C: Plus-Side Gain Register                                      */
-        uint8_t   RESERVED_0[4];               
+        uint8_t   RESERVED_0[4];                /**< 0040: 0x4 bytes                                                    */
    __IO uint32_t  CLPD;                         /**< 0044: Plus-Side General Calibration Value                          */
    __IO uint32_t  CLPS;                         /**< 0048: Plus-Side General Calibration Value                          */
    __IO uint32_t  CLP4;                         /**< 004C: Plus-Side General Calibration Value                          */
@@ -387,21 +387,21 @@ typedef struct AFE_Type {
    __IO uint32_t  CH1_CFR;                      /**< 0004: Channel1 Configuration Register                              */
    __IO uint32_t  CH2_CFR;                      /**< 0008: Channel2 Configuration Register                              */
    __IO uint32_t  CH3_CFR;                      /**< 000C: Channel3 Configuration Register                              */
-        uint8_t   RESERVED_0[8];               
+        uint8_t   RESERVED_0[8];                /**< 0010: 0x8 bytes                                                    */
    __IO uint32_t  CR;                           /**< 0018: Control Register                                             */
    __IO uint32_t  CKR;                          /**< 001C: Clock Configuration Register                                 */
    __IO uint32_t  DI;                           /**< 0020: DMA and Interrupt Register                                   */
-        uint8_t   RESERVED_1[8];               
+        uint8_t   RESERVED_1[8];                /**< 0024: 0x8 bytes                                                    */
    __IO uint32_t  CH0_DR;                       /**< 002C: Channel0 Delay Register                                      */
    __IO uint32_t  CH1_DR;                       /**< 0030: Channel1 Delay Register                                      */
    __IO uint32_t  CH2_DR;                       /**< 0034: Channel2 Delay Register                                      */
    __IO uint32_t  CH3_DR;                       /**< 0038: Channel3 Delay Register                                      */
-        uint8_t   RESERVED_2[8];               
+        uint8_t   RESERVED_2[8];                /**< 003C: 0x8 bytes                                                    */
    __I  uint32_t  CH0_RR;                       /**< 0044: Channel0 Result Register                                     */
    __I  uint32_t  CH1_RR;                       /**< 0048: Channel1 Result Register                                     */
    __I  uint32_t  CH2_RR;                       /**< 004C: Channel2 Result Register                                     */
    __I  uint32_t  CH3_RR;                       /**< 0050: Channel3 Result Register                                     */
-        uint8_t   RESERVED_3[8];               
+        uint8_t   RESERVED_3[8];                /**< 0054: 0x8 bytes                                                    */
    __I  uint32_t  SR;                           /**< 005C: Status Register                                              */
 } AFE_Type;
 
@@ -704,7 +704,7 @@ typedef struct AFE_Type {
 * @{
 */
 typedef struct AIPS_Type {
-        uint8_t   RESERVED_0[32];              
+        uint8_t   RESERVED_0[32];               /**< 0000: 0x20 bytes                                                   */
    __IO uint32_t  PACR[16];                     /**< 0020: Peripheral Access Control Register                           */
 } AIPS_Type;
 
@@ -954,26 +954,26 @@ typedef struct CRC_Type {
                __IO uint8_t   DATALU;           /**< 0001: DATALU register                                              */
             };
          };
-         union {                                /**< 0000: (size=0002)                                                  */
+         union {                                /**< 0002: (size=0002)                                                  */
             __IO uint16_t  DATAH;               /**< 0002: DATAH register                                               */
-            struct {                            /**< 0000: (size=0002)                                                  */
+            struct {                            /**< 0002: (size=0002)                                                  */
                __IO uint8_t   DATAHL;           /**< 0002: DATAHL register                                              */
                __IO uint8_t   DATAHU;           /**< 0003: DATAHU register                                              */
             };
          };
       };
    };
-   union {                                      /**< 0000: (size=0004)                                                  */
+   union {                                      /**< 0004: (size=0004)                                                  */
       __IO uint32_t  GPOLY;                     /**< 0004: Polynomial register                                          */
-      struct {                                  /**< 0000: (size=0004)                                                  */
+      struct {                                  /**< 0004: (size=0004)                                                  */
          __IO uint16_t  GPOLYL;                 /**< 0004: GPOLYL register                                              */
          __IO uint16_t  GPOLYH;                 /**< 0006: GPOLYH register                                              */
       };
    };
-   union {                                      /**< 0000: (size=0004)                                                  */
+   union {                                      /**< 0008: (size=0004)                                                  */
       __IO uint32_t  CTRL;                      /**< 0008: Control register                                             */
-      struct {                                  /**< 0000: (size=0004)                                                  */
-              uint8_t   RESERVED_4[3];         
+      struct {                                  /**< 0008: (size=0004)                                                  */
+              uint8_t   RESERVED_4[3];          /**< 0008: 0x3 bytes                                                    */
          __IO uint8_t   CTRLHU;                 /**< 000B: Control register (byte access)                               */
       };
    };
@@ -1106,14 +1106,14 @@ typedef struct CRC_Type {
 * @{
 */
 typedef struct DMA_Type {
-        uint8_t   RESERVED_0[256];             
+        uint8_t   RESERVED_0[256];              /**< 0000: 0x100 bytes                                                  */
    struct {
       __IO uint32_t  SAR;                       /**< 0100: Source Address Register                                      */
       __IO uint32_t  DAR;                       /**< 0104: Destination Address Register                                 */
-      union {                                   /**< 0100: (size=0004)                                                  */
+      union {                                   /**< 0108: (size=0004)                                                  */
          __IO uint32_t  DSR_BCR;                /**< 0108: DMA Status / Byte Count Register                             */
-         struct {                               /**< 0100: (size=0004)                                                  */
-                 uint8_t   RESERVED_1[3];      
+         struct {                               /**< 0108: (size=0004)                                                  */
+                 uint8_t   RESERVED_1[3];       /**< 0108: 0x3 bytes                                                    */
             __IO uint8_t   DSR;                 /**< 010B: DMA Status Register                                          */
          };
       };
@@ -1859,11 +1859,11 @@ typedef struct FTFA_Type {
 */
 typedef struct GPIO_Type {
    __IO uint8_t   PDOR;                         /**< 0000: Port Data Output Register                                    */
-        uint8_t   RESERVED_0[15];              
+        uint8_t   RESERVED_0[15];               /**< 0001: 0xF bytes                                                    */
    __I  uint8_t   PDIR;                         /**< 0010: Port Data Input Register                                     */
-        uint8_t   RESERVED_1[3];               
+        uint8_t   RESERVED_1[3];                /**< 0011: 0x3 bytes                                                    */
    __IO uint8_t   PDDR;                         /**< 0014: Port Data Direction Register                                 */
-        uint8_t   RESERVED_2[7];               
+        uint8_t   RESERVED_2[7];                /**< 0015: 0x7 bytes                                                    */
    __IO uint8_t   GACR;                         /**< 001C: GPIO Attribute Checker Register                              */
 } GPIO_Type;
 
@@ -2307,9 +2307,9 @@ typedef struct LCD_Type {
    __IO uint32_t  FDSR;                         /**< 000C: LCD Fault Detect Status Register                             */
    __IO uint32_t  PEN[2];                       /**< 0010: LCD Pin Enable                                               */
    __IO uint32_t  BPEN[2];                      /**< 0018: LCD Back Plane Enable register                               */
-   union {                                      /**< 0000: (size=0040)                                                  */
+   union {                                      /**< 0020: (size=0040)                                                  */
       __IO uint8_t   WF[64];                    /**< 0020: LCD Waveform Register                                        */
-      struct {                                  /**< 0000: (size=0040)                                                  */
+      struct {                                  /**< 0020: (size=0040)                                                  */
          __IO uint32_t  WF3TO0;                 /**< 0020: LCD Waveform register                                        */
          __IO uint32_t  WF7TO4;                 /**< 0024: LCD Waveform register                                        */
          __IO uint32_t  WF11TO8;                /**< 0028: LCD Waveform register                                        */
@@ -2709,20 +2709,20 @@ typedef struct LLWU_Type {
       };
    };
    __IO uint8_t   ME;                           /**< 0004: Module Enable Register                                       */
-   union {                                      /**< 0000: (size=0002)                                                  */
+   union {                                      /**< 0005: (size=0002)                                                  */
       __IO uint8_t   PF[2];                     /**< 0005: Pin Flag  Register                                           */
-      struct {                                  /**< 0000: (size=0002)                                                  */
+      struct {                                  /**< 0005: (size=0002)                                                  */
          __IO uint8_t   F1;                     /**< 0005: Pin Flag 1 Register                                          */
          __IO uint8_t   F2;                     /**< 0006: Pin Flag 2 Register                                          */
       };
    };
-   union {                                      /**< 0000: (size=0001)                                                  */
+   union {                                      /**< 0007: (size=0001)                                                  */
       __I  uint8_t   F3;                        /**< 0007: Module Flag 3 Register                                       */
       __I  uint8_t   MF;                        /**< 0007: Module Flag Register                                         */
    };
-   union {                                      /**< 0000: (size=0002)                                                  */
+   union {                                      /**< 0008: (size=0002)                                                  */
       __IO uint8_t   FILT[2];                   /**< 0008: Pin Filter  register                                         */
-      struct {                                  /**< 0000: (size=0002)                                                  */
+      struct {                                  /**< 0008: (size=0002)                                                  */
          __IO uint8_t   FILT1;                  /**< 0008: Pin Filter  register                                         */
          __IO uint8_t   FILT2;                  /**< 0009: Pin Filter  register                                         */
       };
@@ -3113,9 +3113,9 @@ typedef struct MCG_Type {
    __IO uint8_t   C5;                           /**< 0004: Control 5 Register                                           */
    __IO uint8_t   C6;                           /**< 0005: Control 6 Register                                           */
    __IO uint8_t   S;                            /**< 0006: Status Register                                              */
-        uint8_t   RESERVED_0;                  
+        uint8_t   RESERVED_0;                   /**< 0007: 0x1 bytes                                                    */
    __IO uint8_t   SC;                           /**< 0008: Status and Control Register                                  */
-        uint8_t   RESERVED_1;                  
+        uint8_t   RESERVED_1;                   /**< 0009: 0x1 bytes                                                    */
    __IO uint8_t   ATCVH;                        /**< 000A: ATM Compare Value High                                       */
    __IO uint8_t   ATCVL;                        /**< 000B: ATM Compare Value Low                                        */
    __IO uint8_t   C7;                           /**< 000C: Control 7 Register                                           */
@@ -3317,15 +3317,15 @@ typedef struct MCG_Type {
 * @{
 */
 typedef struct MCM_Type {
-        uint8_t   RESERVED_0[8];               
+        uint8_t   RESERVED_0[8];                /**< 0000: 0x8 bytes                                                    */
    __I  uint16_t  PLASC;                        /**< 0008: Crossbar Switch (AXBS) Slave Configuration                   */
    __I  uint16_t  PLAMC;                        /**< 000A: Crossbar Switch (AXBS) Master Configuration                  */
    __IO uint32_t  PLACR;                        /**< 000C: Platform Control Register                                    */
-        uint8_t   RESERVED_1[32];              
+        uint8_t   RESERVED_1[32];               /**< 0010: 0x20 bytes                                                   */
    __IO uint32_t  PID;                          /**< 0030: Process ID register                                          */
-        uint8_t   RESERVED_2[12];              
+        uint8_t   RESERVED_2[12];               /**< 0034: 0xC bytes                                                    */
    __IO uint32_t  CPO;                          /**< 0040: Compute Operation Control Register                           */
-        uint8_t   RESERVED_3[60];              
+        uint8_t   RESERVED_3[60];               /**< 0044: 0x3C bytes                                                   */
    __IO uint32_t  MATCR;                        /**< 0080: Master Attribute Configuration Register                      */
 } MCM_Type;
 
@@ -3433,19 +3433,19 @@ typedef struct MCM_Type {
 */
 typedef struct MPU_Type {
    __IO uint32_t  CESR;                         /**< 0000: Control/Error Status Register                                */
-        uint8_t   RESERVED_0[12];              
+        uint8_t   RESERVED_0[12];               /**< 0004: 0xC bytes                                                    */
    struct {
       __I  uint32_t  EAR;                       /**< 0010: Error Address Register, Slave Port n                         */
       __I  uint32_t  EDR;                       /**< 0014: Error Detail Register, Slave Port n                          */
    } SP[2];                                     /**< 0010: (cluster: size=0x0010, 16)                                   */
-        uint8_t   RESERVED_2[992];             
+        uint8_t   RESERVED_2[992];              /**< 0020: 0x3E0 bytes                                                  */
    struct {
       __IO uint32_t  WORD0;                     /**< 0400: Region Descriptor n, Word 0                                  */
       __IO uint32_t  WORD1;                     /**< 0404: Region Descriptor n, Word 1                                  */
       __IO uint32_t  WORD2;                     /**< 0408: Region Descriptor n, Word 2                                  */
       __IO uint32_t  WORD3;                     /**< 040C: Region Descriptor n, Word 3                                  */
    } RGD[8];                                    /**< 0400: (cluster: size=0x0080, 128)                                  */
-        uint8_t   RESERVED_4[896];             
+        uint8_t   RESERVED_4[896];              /**< 0480: 0x380 bytes                                                  */
    __IO uint32_t  RGDAAC[8];                    /**< 0800: Region Descriptor Alternate Access Control                   */
 } MPU_Type;
 
@@ -3672,17 +3672,17 @@ typedef struct MTB_Type {
    __IO uint32_t  MASTER;                       /**< 0004: MTB Master Register                                          */
    __IO uint32_t  FLOW;                         /**< 0008: MTB Flow Register                                            */
    __I  uint32_t  BASE;                         /**< 000C: MTB Base Register                                            */
-        uint8_t   RESERVED_0[3824];            
+        uint8_t   RESERVED_0[3824];             /**< 0010: 0xEF0 bytes                                                  */
    __I  uint32_t  MODECTRL;                     /**< 0F00: Integration Mode Control Register                            */
-        uint8_t   RESERVED_1[156];             
+        uint8_t   RESERVED_1[156];              /**< 0F04: 0x9C bytes                                                   */
    __I  uint32_t  TAGSET;                       /**< 0FA0: Claim TAG Set Register                                       */
    __I  uint32_t  TAGCLEAR;                     /**< 0FA4: Claim TAG Clear Register                                     */
-        uint8_t   RESERVED_2[8];               
+        uint8_t   RESERVED_2[8];                /**< 0FA8: 0x8 bytes                                                    */
    __I  uint32_t  LOCKACCESS;                   /**< 0FB0: Lock Access Register                                         */
    __I  uint32_t  LOCKSTAT;                     /**< 0FB4: Lock Status Register                                         */
    __I  uint32_t  AUTHSTAT;                     /**< 0FB8: Authentication Status Register                               */
    __I  uint32_t  DEVICEARCH;                   /**< 0FBC: Device Architecture Register                                 */
-        uint8_t   RESERVED_3[8];               
+        uint8_t   RESERVED_3[8];                /**< 0FC0: 0x8 bytes                                                    */
    __I  uint32_t  DEVICECFG;                    /**< 0FC8: Device Configuration Register                                */
    __I  uint32_t  DEVICETYPID;                  /**< 0FCC: Device Type Identifier Register                              */
    __I  uint32_t  PERIPHID4;                    /**< 0FD0: Peripheral ID Register                                       */
@@ -3836,16 +3836,16 @@ typedef struct MTB_Type {
 */
 typedef struct MTBDWT_Type {
    __I  uint32_t  CTRL;                         /**< 0000: MTB DWT Control Register                                     */
-        uint8_t   RESERVED_0[28];              
+        uint8_t   RESERVED_0[28];               /**< 0004: 0x1C bytes                                                   */
    struct {
       __IO uint32_t  COMP;                      /**< 0020: MTB_DWT Comparator Register                                  */
       __IO uint32_t  MASK;                      /**< 0024: MTB_DWT Comparator Mask Register                             */
       __IO uint32_t  FCT;                       /**< 0028: MTB_DWT Comparator Function Register 0                       */
-           uint8_t   RESERVED_1[4];            
+           uint8_t   RESERVED_1[4];             /**< 002C: 0x4 bytes                                                    */
    } COMPARATOR[2];                             /**< 0020: (cluster: size=0x0020, 32)                                   */
-        uint8_t   RESERVED_2[448];             
+        uint8_t   RESERVED_2[448];              /**< 0040: 0x1C0 bytes                                                  */
    __IO uint32_t  TBCTRL;                       /**< 0200: MTB_DWT Trace Buffer Control Register                        */
-        uint8_t   RESERVED_3[3524];            
+        uint8_t   RESERVED_3[3524];             /**< 0204: 0xDC4 bytes                                                  */
    __I  uint32_t  DEVICECFG;                    /**< 0FC8: Device Configuration Register                                */
    __I  uint32_t  DEVICETYPID;                  /**< 0FCC: Device Type Identifier Register                              */
    __I  uint32_t  PERIPHID4;                    /**< 0FD0: Peripheral ID Register                                       */
@@ -4134,7 +4134,7 @@ typedef struct OSC_Type {
 */
 typedef struct PIT_Type {
    __IO uint32_t  MCR;                          /**< 0000: Module Control Register                                      */
-        uint8_t   RESERVED_0[252];             
+        uint8_t   RESERVED_0[252];              /**< 0004: 0xFC bytes                                                   */
    struct {
       __IO uint32_t  LDVAL;                     /**< 0100: Timer Load Value Register                                    */
       __I  uint32_t  CVAL;                      /**< 0104: Current Timer Value Register                                 */
@@ -4330,10 +4330,10 @@ typedef struct PMC_Type {
 */
 typedef struct PORT_Type {
    __IO uint32_t  PCR[8];                       /**< 0000: Pin Control Register                                         */
-        uint8_t   RESERVED_0[96];              
+        uint8_t   RESERVED_0[96];               /**< 0020: 0x60 bytes                                                   */
    __O  uint32_t  GPCLR;                        /**< 0080: Global Pin Control Low Register                              */
    __O  uint32_t  GPCHR;                        /**< 0084: Global Pin Control High Register                             */
-        uint8_t   RESERVED_1[24];              
+        uint8_t   RESERVED_1[24];               /**< 0088: 0x18 bytes                                                   */
    __IO uint32_t  ISFR;                         /**< 00A0: Interrupt Status Flag Register                               */
 } PORT_Type;
 
@@ -4484,12 +4484,12 @@ typedef struct PORT_Type {
 */
 typedef struct PORTE_Type {
    __IO uint32_t  PCR[8];                       /**< 0000: Pin Control Register                                         */
-        uint8_t   RESERVED_0[96];              
+        uint8_t   RESERVED_0[96];               /**< 0020: 0x60 bytes                                                   */
    __O  uint32_t  GPCLR;                        /**< 0080: Global Pin Control Low Register                              */
    __O  uint32_t  GPCHR;                        /**< 0084: Global Pin Control High Register                             */
-        uint8_t   RESERVED_1[24];              
+        uint8_t   RESERVED_1[24];               /**< 0088: 0x18 bytes                                                   */
    __IO uint32_t  ISFR;                         /**< 00A0: Interrupt Status Flag Register                               */
-        uint8_t   RESERVED_2[28];              
+        uint8_t   RESERVED_2[28];               /**< 00A4: 0x1C bytes                                                   */
    __IO uint32_t  DFER;                         /**< 00C0: Digital Filter Enable Register                               */
    __IO uint32_t  DFCR;                         /**< 00C4: Digital Filter Clock Register                                */
    __IO uint32_t  DFWR;                         /**< 00C8: Digital Filter Width Register                                */
@@ -4637,7 +4637,7 @@ typedef struct PORTE_Type {
 typedef struct RCM_Type {
    __I  uint8_t   SRS0;                         /**< 0000: System Reset Status Register 0                               */
    __I  uint8_t   SRS1;                         /**< 0001: System Reset Status Register 1                               */
-        uint8_t   RESERVED_0[2];               
+        uint8_t   RESERVED_0[2];                /**< 0002: 0x2 bytes                                                    */
    __IO uint8_t   RPFC;                         /**< 0004: Reset Pin Filter Control Register                            */
    __IO uint8_t   RPFW;                         /**< 0005: Reset Pin Filter Width Register                              */
 } RCM_Type;
@@ -4828,7 +4828,7 @@ typedef struct RNGA_Type {
 typedef struct ROM_Type {
    __I  uint32_t  ENTRY[3];                     /**< 0000: Entry                                                        */
    __I  uint32_t  TABLEMARK;                    /**< 000C: End of Table Marker Register                                 */
-        uint8_t   RESERVED_0[4028];            
+        uint8_t   RESERVED_0[4028];             /**< 0010: 0xFBC bytes                                                  */
    __I  uint32_t  SYSACCESS;                    /**< 0FCC: System Access Register                                       */
    __I  uint32_t  PERIPHID4;                    /**< 0FD0: Peripheral ID Register                                       */
    __I  uint32_t  PERIPHID5;                    /**< 0FD4: Peripheral ID Register                                       */
@@ -4913,14 +4913,14 @@ typedef struct RTC_Type {
    __IO uint16_t  ALM_HOURMIN;                  /**< 000C: Hours and Minutes Alarm Register                             */
    __IO uint16_t  ALM_SECONDS;                  /**< 000E: Seconds Alarm Register                                       */
    __IO uint16_t  CTRL;                         /**< 0010: Control Register                                             */
-   union {                                      /**< 0000: (size=0002)                                                  */
+   union {                                      /**< 0012: (size=0002)                                                  */
       __IO uint16_t  STATUS;                    /**< 0012: Status Register                                              */
       __IO uint8_t   STATUS_B;                  /**< 0012: Status Register LSB                                          */
    };
    __I  uint16_t  ISR;                          /**< 0014: Interrupt Status Register                                    */
    __IO uint16_t  IER;                          /**< 0016: Interrupt Enable Register                                    */
-        uint8_t   RESERVED_0[8];               
-   union {                                      /**< 0000: (size=0002)                                                  */
+        uint8_t   RESERVED_0[8];                /**< 0018: 0x8 bytes                                                    */
+   union {                                      /**< 0020: (size=0002)                                                  */
       __IO uint16_t  GP_DATA_REG;               /**< 0020: General Purpose Data Register                                */
       __IO uint16_t  OSC;                       /**< 0020: RTC Control Register                                         */
    };
@@ -4928,14 +4928,14 @@ typedef struct RTC_Type {
    __IO uint16_t  DST_MONTH;                    /**< 0024: Daylight Saving Month Register                               */
    __IO uint16_t  DST_DAY;                      /**< 0026: Daylight Saving Day Register                                 */
    __IO uint16_t  COMPEN;                       /**< 0028: Compensation Register                                        */
-        uint8_t   RESERVED_1[2];               
+        uint8_t   RESERVED_1[2];                /**< 002A: 0x2 bytes                                                    */
    __IO uint16_t  TAMPER_DIRECTION;             /**< 002C: Tamper Direction Register                                    */
    __IO uint16_t  TAMPER_QSCR;                  /**< 002E: Tamper Queue Status and Control Register                     */
-        uint8_t   RESERVED_2[2];               
+        uint8_t   RESERVED_2[2];                /**< 0030: 0x2 bytes                                                    */
    __IO uint16_t  TAMPER_SCR;                   /**< 0032: Tamper Status and Control Register                           */
    __IO uint16_t  FILTER01_CFG;                 /**< 0034: Tamper 01 Filter Configuration Register                      */
    __IO uint16_t  FILTER2_CFG;                  /**< 0036: Tamper 2 Filter Configuration Register                       */
-        uint8_t   RESERVED_3[8];               
+        uint8_t   RESERVED_3[8];                /**< 0038: 0x8 bytes                                                    */
    __I  uint16_t  TAMPER_QUEUE;                 /**< 0040: Tamper Queue Register                                        */
    __IO uint16_t  CTRL2;                        /**< 0042: Control 2 Register                                           */
 } RTC_Type;
@@ -5334,21 +5334,21 @@ typedef struct RTC_RAM_Type {
 typedef struct SIM_Type {
    __IO uint32_t  SOPT1;                        /**< 0000: System Options Register 1                                    */
    __IO uint32_t  SOPT1_CFG;                    /**< 0004: SOPT1 Configuration Register                                 */
-        uint8_t   RESERVED_0[4092];            
+        uint8_t   RESERVED_0[4092];             /**< 0008: 0xFFC bytes                                                  */
    __IO uint32_t  CTRL_REG;                     /**< 1004: System Control Register                                      */
-        uint8_t   RESERVED_1[28];              
+        uint8_t   RESERVED_1[28];               /**< 1008: 0x1C bytes                                                   */
    __I  uint32_t  SDID;                         /**< 1024: System Device Identification Register                        */
-        uint8_t   RESERVED_2[12];              
+        uint8_t   RESERVED_2[12];               /**< 1028: 0xC bytes                                                    */
    __IO uint32_t  SCGC4;                        /**< 1034: System Clock Gating Control Register 4                       */
    __IO uint32_t  SCGC5;                        /**< 1038: System Clock Gating Control Register 5                       */
    __IO uint32_t  SCGC6;                        /**< 103C: System Clock Gating Control Register 6                       */
    __IO uint32_t  SCGC7;                        /**< 1040: System Clock Gating Control Register 7                       */
    __IO uint32_t  CLKDIV1;                      /**< 1044: System Clock Divider Register 1                              */
-        uint8_t   RESERVED_3[4];               
+        uint8_t   RESERVED_3[4];                /**< 1048: 0x4 bytes                                                    */
    __IO uint32_t  FCFG1;                        /**< 104C: Flash Configuration Register 1                               */
    __I  uint32_t  FCFG2;                        /**< 1050: Flash Configuration Register 2                               */
    __I  uint32_t  UID[4];                       /**< 1054: Unique Identification Register                               */
-        uint8_t   RESERVED_4[8];               
+        uint8_t   RESERVED_4[8];                /**< 1064: 0x8 bytes                                                    */
    __IO uint32_t  MISC_CTL;                     /**< 106C: Miscellaneous Control Register                               */
 } SIM_Type;
 
@@ -5710,7 +5710,7 @@ typedef struct SIM_Type {
 typedef struct SMC_Type {
    __IO uint8_t   PMPROT;                       /**< 0000: Power Mode Protection Register                               */
    __IO uint8_t   PMCTRL;                       /**< 0001: Power Mode Control Register                                  */
-   union {                                      /**< 0000: (size=0001)                                                  */
+   union {                                      /**< 0002: (size=0001)                                                  */
       __IO uint8_t   STOPCTRL;                  /**< 0002: Stop Control Register                                        */
       __IO uint8_t   VLLSCTRL;                  /**< 0002: VLLS Control Register (old name)                             */
    };
@@ -5809,7 +5809,7 @@ typedef struct SPI_Type {
    __IO uint8_t   MH;                           /**< 0005: Match register high                                          */
    __IO uint8_t   DL;                           /**< 0006: Data register low                                            */
    __IO uint8_t   DH;                           /**< 0007: Data register high                                           */
-        uint8_t   RESERVED_0[2];               
+        uint8_t   RESERVED_0[2];                /**< 0008: 0x2 bytes                                                    */
    __IO uint8_t   CI;                           /**< 000A: Clear interrupt register                                     */
    __IO uint8_t   C3;                           /**< 000B: Control register 3                                           */
 } SPI_Type;
@@ -6115,7 +6115,7 @@ typedef struct TMR_Type {
    __IO uint16_t  CMPLD2;                       /**< 0012: Timer Channel Comparator Load Register 2                     */
    __IO uint16_t  CSCTRL;                       /**< 0014: Timer Channel Comparator Status and Control Register         */
    __IO uint16_t  FILT;                         /**< 0016: Timer Channel Input Filter Register                          */
-        uint8_t   RESERVED_0[6];               
+        uint8_t   RESERVED_0[6];                /**< 0018: 0x6 bytes                                                    */
    __IO uint16_t  ENBL;                         /**< 001E: Timer Channel Enable Register                                */
 } TMR_Type;
 
@@ -6563,7 +6563,7 @@ typedef struct UART1_Type {
    __IO uint8_t   C5;                           /**< 000B: Control Register 5                                           */
    __I  uint8_t   ED;                           /**< 000C: Extended Data Register                                       */
    __IO uint8_t   MODEM;                        /**< 000D: Modem Register                                               */
-        uint8_t   RESERVED_0[2];               
+        uint8_t   RESERVED_0[2];                /**< 000E: 0x2 bytes                                                    */
    __IO uint8_t   PFIFO;                        /**< 0010: FIFO Parameters                                              */
    __IO uint8_t   CFIFO;                        /**< 0011: FIFO Control Register                                        */
    __IO uint8_t   SFIFO;                        /**< 0012: FIFO Status Register                                         */
@@ -6866,7 +6866,7 @@ typedef struct UART_Type {
    __IO uint8_t   C5;                           /**< 000B: Control Register 5                                           */
    __I  uint8_t   ED;                           /**< 000C: Extended Data Register                                       */
    __IO uint8_t   MODEM;                        /**< 000D: Modem Register                                               */
-        uint8_t   RESERVED_0[2];               
+        uint8_t   RESERVED_0[2];                /**< 000E: 0x2 bytes                                                    */
    __IO uint8_t   PFIFO;                        /**< 0010: FIFO Parameters                                              */
    __IO uint8_t   CFIFO;                        /**< 0011: FIFO Control Register                                        */
    __IO uint8_t   SFIFO;                        /**< 0012: FIFO Status Register                                         */
@@ -6874,11 +6874,11 @@ typedef struct UART_Type {
    __I  uint8_t   TCFIFO;                       /**< 0014: FIFO Transmit Count                                          */
    __IO uint8_t   RWFIFO;                       /**< 0015: FIFO Receive Watermark                                       */
    __I  uint8_t   RCFIFO;                       /**< 0016: FIFO Receive Count                                           */
-        uint8_t   RESERVED_1;                  
+        uint8_t   RESERVED_1;                   /**< 0017: 0x1 bytes                                                    */
    __IO uint8_t   C7816;                        /**< 0018: 7816 Control Register                                        */
    __IO uint8_t   IE7816;                       /**< 0019: 7816 Interrupt Enable Register                               */
    __IO uint8_t   IS7816;                       /**< 001A: 7816 Interrupt Status Register                               */
-   union {                                      /**< 0000: (size=0001)                                                  */
+   union {                                      /**< 001B: (size=0001)                                                  */
       __IO uint8_t   WP7816T0;                  /**< 001B: 7816 Wait Parameter Register                                 */
       __IO uint8_t   WP7816T1;                  /**< 001B: 7816 Wait Parameter Register                                 */
    };
@@ -7085,7 +7085,7 @@ typedef struct UART_Type {
 typedef struct VREF_Type {
    __IO uint8_t   TRM;                          /**< 0000: VREFH Trim Register                                          */
    __IO uint8_t   SC;                           /**< 0001: Status and Control Register                                  */
-        uint8_t   RESERVED_0[3];               
+        uint8_t   RESERVED_0[3];                /**< 0002: 0x3 bytes                                                    */
    __IO uint8_t   TRML;                         /**< 0005: VREFL TRIM Register                                          */
 } VREF_Type;
 
@@ -7164,25 +7164,25 @@ typedef struct VREF_Type {
 typedef struct WDOG_Type {
    __IO uint16_t  STCTRLH;                      /**< 0000: Status and Control Register High                             */
    __IO uint16_t  STCTRLL;                      /**< 0002: Status and Control Register Low                              */
-   union {                                      /**< 0000: (size=0004)                                                  */
+   union {                                      /**< 0004: (size=0004)                                                  */
       __IO uint32_t  TOVAL;                     /**< 0004: Time-out Value Register High TOVALL:TOVALH                   */
-      struct {                                  /**< 0000: (size=0004)                                                  */
+      struct {                                  /**< 0004: (size=0004)                                                  */
          __IO uint16_t  TOVALH;                 /**< 0004: Time-out Value Register High                                 */
          __IO uint16_t  TOVALL;                 /**< 0006: Time-out Value Register Low                                  */
       };
    };
-   union {                                      /**< 0000: (size=0004)                                                  */
+   union {                                      /**< 0008: (size=0004)                                                  */
       __IO uint32_t  WIN;                       /**< 0008: Window Register (WINL:WINH)                                  */
-      struct {                                  /**< 0000: (size=0004)                                                  */
+      struct {                                  /**< 0008: (size=0004)                                                  */
          __IO uint16_t  WINH;                   /**< 0008: Window Register High                                         */
          __IO uint16_t  WINL;                   /**< 000A: Window Register Low                                          */
       };
    };
    __IO uint16_t  REFRESH;                      /**< 000C: Refresh Register                                             */
    __IO uint16_t  UNLOCK;                       /**< 000E: Unlock Register                                              */
-   union {                                      /**< 0000: (size=0004)                                                  */
+   union {                                      /**< 0010: (size=0004)                                                  */
       __IO uint32_t  TMROUT;                    /**< 0010: Timer Output Register (TMROUTL:TMROUTH)                      */
-      struct {                                  /**< 0000: (size=0004)                                                  */
+      struct {                                  /**< 0010: (size=0004)                                                  */
          __IO uint16_t  TMROUTH;                /**< 0010: Timer Output Register High                                   */
          __IO uint16_t  TMROUTL;                /**< 0012: Timer Output Register Low                                    */
       };

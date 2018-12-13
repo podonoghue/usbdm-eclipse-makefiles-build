@@ -5,7 +5,7 @@
  *           Equivalent: 
  *
  * @version  V1
- * @date     2018/11
+ * @date     2018/12
  *
  *******************************************************************************************************/
 
@@ -198,7 +198,7 @@ extern void USBWAKEUP_IRQHandler(void);              /**< USB2.0 device controll
 typedef struct LPC_ADC_Type {
    __IO uint32_t  CR;                           /**< 0000: A/D Control Register. The CR register must be written to select the operating mode before A/D conversion can occur */
    __IO uint32_t  GDR;                          /**< 0004: A/D Global Data Register. Contains the result of the most recent A/D conversion */
-        uint8_t   RESERVED_0[4];               
+        uint8_t   RESERVED_0[4];                /**< 0008: 0x4 bytes                                                    */
    __IO uint32_t  INTEN;                        /**< 000C: A/D Interrupt Enable Register. This register contains enable bits that allow the DONE flag of each A/D channel to be included or excluded from contributing to the generation of an A/D interrupt */
    __IO uint32_t  DR[0];                        /**< 0010: A/D Channel N Data                                           */
    __IO uint32_t  DR[1];                        /**< 0014: A/D Channel N Data                                           */
@@ -408,11 +408,11 @@ typedef struct LPC_CT16B0_Type {
    __IO uint32_t  MR3;                          /**< 0024: Match Register 0. MR0 can be enabled through the MCR to reset the TC, stop both the TC and PC, and/or generate an interrupt every time MR0 matches the TC */
    __IO uint32_t  CCR;                          /**< 0028: Capture Control Register. The CCR controls which edges of the capture inputs are used to load the Capture Registers and whether or not an interrupt is generated when a capture takes place */
    __I  uint32_t  CR0;                          /**< 002C: Capture Register 0. CR0 is loaded with the value of TC when there is an event on the CT16B0_CAP0 input */
-        uint8_t   RESERVED_0[4];               
+        uint8_t   RESERVED_0[4];                /**< 0030: 0x4 bytes                                                    */
    __I  uint32_t  CR1;                          /**< 0034: Capture Register 1. CR1 is loaded with the value of TC when there is an event on the CT16B0_CAP1 input */
-        uint8_t   RESERVED_1[4];               
+        uint8_t   RESERVED_1[4];                /**< 0038: 0x4 bytes                                                    */
    __IO uint32_t  EMR;                          /**< 003C: External Match Register. The EMR controls the match function and the external match pins CT16B0_MAT[1:0] and CT16B1_MAT[1:0] */
-        uint8_t   RESERVED_2[48];              
+        uint8_t   RESERVED_2[48];               /**< 0040: 0x30 bytes                                                   */
    __IO uint32_t  CTCR;                         /**< 0070: Count Control Register. The CTCR selects between Timer and Counter mode, and in Counter mode selects the signal and edge(s) for counting */
    __IO uint32_t  PWMC;                         /**< 0074: PWM Control Register. The PWMCON enables PWM mode for the external match pins CT16B0_MAT[1:0] and CT16B1_MAT[1:0] */
 } LPC_CT16B0_Type;
@@ -636,9 +636,9 @@ typedef struct LPC_CT16B1_Type {
    __IO uint32_t  CCR;                          /**< 0028: Capture Control Register. The CCR controls which edges of the capture inputs are used to load the Capture Registers and whether or not an interrupt is generated when a capture takes place */
    __I  uint32_t  CR0;                          /**< 002C: Capture Register 0. CR0 is loaded with the value of TC when there is an event on the CT16B0_CAP0 input */
    __I  uint32_t  CR1;                          /**< 0030: Capture Register 1. CR1 is loaded with the value of TC when there is an event on the CT16B1_CAP1 input */
-        uint8_t   RESERVED_0[8];               
+        uint8_t   RESERVED_0[8];                /**< 0034: 0x8 bytes                                                    */
    __IO uint32_t  EMR;                          /**< 003C: External Match Register. The EMR controls the match function and the external match pins CT16B0_MAT[1:0] and CT16B1_MAT[1:0] */
-        uint8_t   RESERVED_1[48];              
+        uint8_t   RESERVED_1[48];               /**< 0040: 0x30 bytes                                                   */
    __IO uint32_t  CTCR;                         /**< 0070: Count Control Register. The CTCR selects between Timer and Counter mode, and in Counter mode selects the signal and edge(s) for counting */
    __IO uint32_t  PWMC;                         /**< 0074: PWM Control Register. The PWMCON enables PWM mode for the external match pins CT16B0_MAT[1:0] and CT16B1_MAT[1:0] */
 } LPC_CT16B1_Type;
@@ -861,11 +861,11 @@ typedef struct LPC_CT32B0_Type {
    __IO uint32_t  MR3;                          /**< 0024: Match Register 0. MR0 can be enabled through the MCR to reset the TC, stop both the TC and PC, and/or generate an interrupt every time MR0 matches the TC */
    __IO uint32_t  CCR;                          /**< 0028: Capture Control Register. The CCR controls which edges of the capture inputs are used to load the Capture Registers and whether or not an interrupt is generated when a capture takes place */
    __I  uint32_t  CR0;                          /**< 002C: Capture Register 0. CR0 is loaded with the value of TC when there is an event on the CT32B0_CAP0 input */
-        uint8_t   RESERVED_0[4];               
+        uint8_t   RESERVED_0[4];                /**< 0030: 0x4 bytes                                                    */
    __IO uint32_t  CR1;                          /**< 0034: Capture Register 1. CR1 is loaded with the value of TC when there is an event on the CT32B0_CAP1 input */
-        uint8_t   RESERVED_1[4];               
+        uint8_t   RESERVED_1[4];                /**< 0038: 0x4 bytes                                                    */
    __IO uint32_t  EMR;                          /**< 003C: External Match Register. The EMR controls the match function and the external match pins CT32Bn_MAT[3:0] */
-        uint8_t   RESERVED_2[48];              
+        uint8_t   RESERVED_2[48];               /**< 0040: 0x30 bytes                                                   */
    __IO uint32_t  CTCR;                         /**< 0070: Count Control Register. The CTCR selects between Timer and Counter mode, and in Counter mode selects the signal and edge(s) for counting */
    __IO uint32_t  PWMC;                         /**< 0074: PWM Control Register. The PWMCON enables PWM mode for the external match pins CT32Bn_MAT[3:0] */
 } LPC_CT32B0_Type;
@@ -1089,9 +1089,9 @@ typedef struct LPC_CT32B1_Type {
    __IO uint32_t  CCR;                          /**< 0028: Capture Control Register. The CCR controls which edges of the capture inputs are used to load the Capture Registers and whether or not an interrupt is generated when a capture takes place */
    __I  uint32_t  CR0;                          /**< 002C: Capture Register 0. CR0 is loaded with the value of TC when there is an event on the CT32B0_CAP0 input */
    __IO uint32_t  CR1;                          /**< 0030: Capture Register 1. CR1 is loaded with the value of TC when there is an event on the CT32B1_CAP1 input */
-        uint8_t   RESERVED_0[8];               
+        uint8_t   RESERVED_0[8];                /**< 0034: 0x8 bytes                                                    */
    __IO uint32_t  EMR;                          /**< 003C: External Match Register. The EMR controls the match function and the external match pins CT32Bn_MAT[3:0] */
-        uint8_t   RESERVED_1[48];              
+        uint8_t   RESERVED_1[48];               /**< 0040: 0x30 bytes                                                   */
    __IO uint32_t  CTCR;                         /**< 0070: Count Control Register. The CTCR selects between Timer and Counter mode, and in Counter mode selects the signal and edge(s) for counting */
    __IO uint32_t  PWMC;                         /**< 0074: PWM Control Register. The PWMCON enables PWM mode for the external match pins CT32Bn_MAT[3:0] */
 } LPC_CT32B1_Type;
@@ -1302,23 +1302,23 @@ typedef struct LPC_CT32B1_Type {
 * @{
 */
 typedef struct LPC_FLASHCTRL_Type {
-        uint8_t   RESERVED_0[16];              
+        uint8_t   RESERVED_0[16];               /**< 0000: 0x10 bytes                                                   */
    __IO uint32_t  FLASHCFG;                     /**< 0010: Flash memory access time configuration register              */
-        uint8_t   RESERVED_1[12];              
+        uint8_t   RESERVED_1[12];               /**< 0014: 0xC bytes                                                    */
    __IO uint32_t  FMSSTART;                     /**< 0020: Signature start address register                             */
    __IO uint32_t  FMSSTOP;                      /**< 0024: Signature stop-address register                              */
-        uint8_t   RESERVED_2[4];               
+        uint8_t   RESERVED_2[4];                /**< 0028: 0x4 bytes                                                    */
    __I  uint32_t  FMSW0;                        /**< 002C: Word 0 [31:0]                                                */
    __I  uint32_t  FMSW1;                        /**< 0030: Word 1 [63:32]                                               */
    __I  uint32_t  FMSW2;                        /**< 0034: Word 2 [95:64]                                               */
    __I  uint32_t  FMSW3;                        /**< 0038: Word 3 [127:96]                                              */
-        uint8_t   RESERVED_3[96];              
+        uint8_t   RESERVED_3[96];               /**< 003C: 0x60 bytes                                                   */
    __IO uint32_t  EEMSSTART;                    /**< 009C: EEPROM BIST start address register                           */
    __IO uint32_t  EEMSSTOP;                     /**< 00A0: EEPROM BIST stop address register                            */
    __I  uint32_t  EEMSSIG;                      /**< 00A4: EEPROM 24-bit BIST signature register                        */
-        uint8_t   RESERVED_4[3896];            
+        uint8_t   RESERVED_4[3896];             /**< 00A8: 0xF38 bytes                                                  */
    __I  uint32_t  FMSTAT;                       /**< 0FE0: Signature generation status register                         */
-        uint8_t   RESERVED_5[4];               
+        uint8_t   RESERVED_5[4];                /**< 0FE4: 0x4 bytes                                                    */
    __O  uint32_t  FMSTATCLR;                    /**< 0FE8: Signature generation status clear register                   */
 } LPC_FLASHCTRL_Type;
 
@@ -1428,9 +1428,9 @@ typedef struct LPC_FLASHCTRL_Type {
 */
 typedef struct LPC_GPIO_GROUP_INT0_Type {
    __IO uint32_t  CTRL;                         /**< 0000: GPIO grouped interrupt control register                      */
-        uint8_t   RESERVED_0[28];              
+        uint8_t   RESERVED_0[28];               /**< 0004: 0x1C bytes                                                   */
    __IO uint32_t  PORT_POL[2];                  /**< 0020: GPIO grouped interrupt port  polarity register               */
-        uint8_t   RESERVED_1[24];              
+        uint8_t   RESERVED_1[24];               /**< 0028: 0x18 bytes                                                   */
    __IO uint32_t  PORT_ENA[2];                  /**< 0040: GPIO grouped interrupt port /1 enable register               */
 } LPC_GPIO_GROUP_INT0_Type;
 
@@ -2077,7 +2077,7 @@ typedef struct LPC_GPIO_PORT_Type {
    __IO uint8_t   B[61];                        /**< 003D: Byte pin registers port 0/1; pins PIO0/1_0 to PIO0/1_31      */
    __IO uint8_t   B[62];                        /**< 003E: Byte pin registers port 0/1; pins PIO0/1_0 to PIO0/1_31      */
    __IO uint8_t   B[63];                        /**< 003F: Byte pin registers port 0/1; pins PIO0/1_0 to PIO0/1_31      */
-        uint8_t   RESERVED_0[4032];            
+        uint8_t   RESERVED_0[4032];             /**< 0040: 0xFC0 bytes                                                  */
    __IO uint32_t  W[0];                         /**< 1000: Word pin registers port 0/1                                  */
    __IO uint32_t  W[1];                         /**< 1004: Word pin registers port 0/1                                  */
    __IO uint32_t  W[2];                         /**< 1008: Word pin registers port 0/1                                  */
@@ -2142,19 +2142,19 @@ typedef struct LPC_GPIO_PORT_Type {
    __IO uint32_t  W[61];                        /**< 10F4: Word pin registers port 0/1                                  */
    __IO uint32_t  W[62];                        /**< 10F8: Word pin registers port 0/1                                  */
    __IO uint32_t  W[63];                        /**< 10FC: Word pin registers port 0/1                                  */
-        uint8_t   RESERVED_1[3840];            
+        uint8_t   RESERVED_1[3840];             /**< 1100: 0xF00 bytes                                                  */
    __IO uint32_t  DIR[2];                       /**< 2000: Direction registers port /1                                  */
-        uint8_t   RESERVED_2[120];             
+        uint8_t   RESERVED_2[120];              /**< 2008: 0x78 bytes                                                   */
    __IO uint32_t  MASK[2];                      /**< 2080: Mask register port /1                                        */
-        uint8_t   RESERVED_3[120];             
+        uint8_t   RESERVED_3[120];              /**< 2088: 0x78 bytes                                                   */
    __IO uint32_t  PIN[2];                       /**< 2100: Portpin register port                                        */
-        uint8_t   RESERVED_4[120];             
+        uint8_t   RESERVED_4[120];              /**< 2108: 0x78 bytes                                                   */
    __IO uint32_t  MPIN[2];                      /**< 2180: Masked port register port /1                                 */
-        uint8_t   RESERVED_5[120];             
+        uint8_t   RESERVED_5[120];              /**< 2188: 0x78 bytes                                                   */
    __IO uint32_t  SET[2];                       /**< 2200: Write: Set register for port /1  Read: output bits for port 0/1 */
-        uint8_t   RESERVED_6[120];             
+        uint8_t   RESERVED_6[120];              /**< 2208: 0x78 bytes                                                   */
    __O  uint32_t  CLR[2];                       /**< 2280: Clear port /1                                                */
-        uint8_t   RESERVED_7[120];             
+        uint8_t   RESERVED_7[120];              /**< 2288: 0x78 bytes                                                   */
    __O  uint32_t  NOT[2];                       /**< 2300: Toggle port /1                                               */
 } LPC_GPIO_PORT_Type;
 
@@ -3559,13 +3559,13 @@ typedef struct LPC_IOCON_Type {
    __IO uint32_t  PIO1_3;                       /**< 006C: I/O configuration for pin PIO1_3/CT32B1_MAT3                 */
    __IO uint32_t  PIO1_4;                       /**< 0070: I/O configuration for pin PIO1_4/CT32B1_CAP0                 */
    __IO uint32_t  PIO1_5;                       /**< 0074: I/O configuration for pin PIO1_5/CT32B1_CAP1                 */
-        uint8_t   RESERVED_0[4];               
+        uint8_t   RESERVED_0[4];                /**< 0078: 0x4 bytes                                                    */
    __IO uint32_t  PIO1_7;                       /**< 007C: I/O configuration for pin PIO1_7                             */
    __IO uint32_t  PIO1_8;                       /**< 0080: I/O configuration for pin PIO1_7                             */
-        uint8_t   RESERVED_1[4];               
+        uint8_t   RESERVED_1[4];                /**< 0084: 0x4 bytes                                                    */
    __IO uint32_t  PIO1_10;                      /**< 0088: I/O configuration for pin PIO1_10                            */
    __IO uint32_t  PIO1_11;                      /**< 008C: I/O configuration for pin PIO1_10                            */
-        uint8_t   RESERVED_2[4];               
+        uint8_t   RESERVED_2[4];                /**< 0090: 0x4 bytes                                                    */
    __IO uint32_t  PIO1_13;                      /**< 0094: I/O configuration for PIO1_13/DTR/CT16B0_MAT0/TXD            */
    __IO uint32_t  PIO1_14;                      /**< 0098: I/O configuration for PIO1_14/DSR/CT16B0_MAT1/RXD            */
    __IO uint32_t  PIO1_15;                      /**< 009C: I/O configuration for pin PIO1_15/DCD/ CT16B0_MAT2/SCK1      */
@@ -3583,7 +3583,7 @@ typedef struct LPC_IOCON_Type {
    __IO uint32_t  PIO1_27;                      /**< 00CC: I/O configuration for pin PIO1_27/CT32B0_MAT3/ TXD           */
    __IO uint32_t  PIO1_28;                      /**< 00D0: I/O configuration for pin PIO1_28/CT32B0_CAP0/ SCLK          */
    __IO uint32_t  PIO1_29;                      /**< 00D4: I/O configuration for pin PIO1_29/SCK0/ CT32B0_CAP1          */
-        uint8_t   RESERVED_3[4];               
+        uint8_t   RESERVED_3[4];                /**< 00D8: 0x4 bytes                                                    */
    __IO uint32_t  PIO1_31;                      /**< 00DC: I/O configuration for pin PIO1_31                            */
 } LPC_IOCON_Type;
 
@@ -4799,57 +4799,57 @@ typedef struct LPC_SYSCON_Type {
    __I  uint32_t  SYSPLLSTAT;                   /**< 000C: System PLL status                                            */
    __IO uint32_t  USBPLLCTRL;                   /**< 0010: USB PLL control                                              */
    __I  uint32_t  USBPLLSTAT;                   /**< 0014: USB PLL status                                               */
-        uint8_t   RESERVED_0[8];               
+        uint8_t   RESERVED_0[8];                /**< 0018: 0x8 bytes                                                    */
    __IO uint32_t  SYSOSCCTRL;                   /**< 0020: System oscillator control                                    */
    __IO uint32_t  WDTOSCCTRL;                   /**< 0024: Watchdog oscillator control                                  */
-        uint8_t   RESERVED_1[8];               
+        uint8_t   RESERVED_1[8];                /**< 0028: 0x8 bytes                                                    */
    __IO uint32_t  SYSRSTSTAT;                   /**< 0030: System reset status register                                 */
-        uint8_t   RESERVED_2[12];              
+        uint8_t   RESERVED_2[12];               /**< 0034: 0xC bytes                                                    */
    __IO uint32_t  SYSPLLCLKSEL;                 /**< 0040: System PLL clock source select                               */
-        uint8_t   RESERVED_3[4];               
+        uint8_t   RESERVED_3[4];                /**< 0044: 0x4 bytes                                                    */
    __IO uint32_t  USBPLLCLKSEL;                 /**< 0048: USB PLL clock source select                                  */
-        uint8_t   RESERVED_4[36];              
+        uint8_t   RESERVED_4[36];               /**< 004C: 0x24 bytes                                                   */
    __IO uint32_t  MAINCLKSEL;                   /**< 0070: Main clock source select                                     */
-        uint8_t   RESERVED_5[4];               
+        uint8_t   RESERVED_5[4];                /**< 0074: 0x4 bytes                                                    */
    __IO uint32_t  SYSAHBCLKDIV;                 /**< 0078: System clock divider                                         */
-        uint8_t   RESERVED_6[4];               
+        uint8_t   RESERVED_6[4];                /**< 007C: 0x4 bytes                                                    */
    __IO uint32_t  SYSAHBCLKCTRL;                /**< 0080: System clock control                                         */
-        uint8_t   RESERVED_7[16];              
+        uint8_t   RESERVED_7[16];               /**< 0084: 0x10 bytes                                                   */
    __IO uint32_t  SSP0CLKDIV;                   /**< 0094: SSP0 clock divider                                           */
    __IO uint32_t  UARTCLKDIV;                   /**< 0098: UART clock divider                                           */
    __IO uint32_t  SSP1CLKDIV;                   /**< 009C: SSP1 clock divider                                           */
-        uint8_t   RESERVED_8[12];              
+        uint8_t   RESERVED_8[12];               /**< 00A0: 0xC bytes                                                    */
    __IO uint32_t  TRACECLKDIV;                  /**< 00AC: ARM trace clock divider                                      */
    __IO uint32_t  SYSTICKCLKDIV;                /**< 00B0: SYSTICK clock divider                                        */
-        uint8_t   RESERVED_9[12];              
+        uint8_t   RESERVED_9[12];               /**< 00B4: 0xC bytes                                                    */
    __IO uint32_t  USBCLKSEL;                    /**< 00C0: USB clock source select                                      */
-        uint8_t   RESERVED_10[4];              
+        uint8_t   RESERVED_10[4];               /**< 00C4: 0x4 bytes                                                    */
    __IO uint32_t  USBCLKDIV;                    /**< 00C8: USB clock source divider                                     */
-        uint8_t   RESERVED_11[20];             
+        uint8_t   RESERVED_11[20];              /**< 00CC: 0x14 bytes                                                   */
    __IO uint32_t  CLKOUTSEL;                    /**< 00E0: CLKOUT clock source select                                   */
-        uint8_t   RESERVED_12[4];              
+        uint8_t   RESERVED_12[4];               /**< 00E4: 0x4 bytes                                                    */
    __IO uint32_t  CLKOUTDIV;                    /**< 00E8: CLKOUT clock divider                                         */
-        uint8_t   RESERVED_13[20];             
+        uint8_t   RESERVED_13[20];              /**< 00EC: 0x14 bytes                                                   */
    __I  uint32_t  PIOPORCAP0;                   /**< 0100: POR captured PIO status 0                                    */
    __I  uint32_t  PIOPORCAP1;                   /**< 0104: POR captured PIO status 1                                    */
-        uint8_t   RESERVED_14[72];             
+        uint8_t   RESERVED_14[72];              /**< 0108: 0x48 bytes                                                   */
    __IO uint32_t  BODCTRL;                      /**< 0150: Brown-Out Detect                                             */
    __IO uint32_t  SYSTCKCAL;                    /**< 0154: System tick counter calibration                              */
-        uint8_t   RESERVED_15[24];             
+        uint8_t   RESERVED_15[24];              /**< 0158: 0x18 bytes                                                   */
    __IO uint32_t  IRQLATENCY;                   /**< 0170: IQR delay. Allows trade-off between interrupt latency and determinism */
    __IO uint32_t  NMISRC;                       /**< 0174: NMI Source Control                                           */
    __IO uint32_t  PINTSEL[8];                   /**< 0178: GPIO Pin Interrupt Select register                           */
    __IO uint32_t  USBCLKCTRL;                   /**< 0198: USB clock control                                            */
    __I  uint32_t  USBCLKST;                     /**< 019C: USB clock status                                             */
-        uint8_t   RESERVED_16[100];            
+        uint8_t   RESERVED_16[100];             /**< 01A0: 0x64 bytes                                                   */
    __IO uint32_t  STARTERP0;                    /**< 0204: Start logic 0 interrupt wake-up enable register 0            */
-        uint8_t   RESERVED_17[12];             
+        uint8_t   RESERVED_17[12];              /**< 0208: 0xC bytes                                                    */
    __IO uint32_t  STARTERP1;                    /**< 0214: Start logic 1 interrupt wake-up enable register 1            */
-        uint8_t   RESERVED_18[24];             
+        uint8_t   RESERVED_18[24];              /**< 0218: 0x18 bytes                                                   */
    __IO uint32_t  PDSLEEPCFG;                   /**< 0230: Power-down states in deep-sleep mode                         */
    __IO uint32_t  PDAWAKECFG;                   /**< 0234: Power-down states for wake-up from deep-sleep                */
    __IO uint32_t  PDRUNCFG;                     /**< 0238: Power configuration register                                 */
-        uint8_t   RESERVED_19[444];            
+        uint8_t   RESERVED_19[444];             /**< 023C: 0x1BC bytes                                                  */
    __I  uint32_t  DEVICE_ID;                    /**< 03F8: Device ID                                                    */
 } LPC_SYSCON_Type;
 
@@ -5256,11 +5256,11 @@ typedef struct LPC_USART_Type {
       __I  uint32_t  RBR;                       /**< 0000: Receiver Buffer Register. Contains the next received character to be read. (DLAB=0) */
       __O  uint32_t  THR;                       /**< 0000: Transmit Holding Register. The next character to be transmitted is written here. (DLAB=0) */
    };
-   union {                                      /**< 0000: (size=0004)                                                  */
+   union {                                      /**< 0004: (size=0004)                                                  */
       __IO uint32_t  DLM;                       /**< 0004: Divisor Latch MSB. Most significant byte of the baud rate divisor value. The full divisor is used to generate a baud rate from the fractional rate divider. (DLAB=1) */
       __IO uint32_t  IER;                       /**< 0004: Interrupt Enable Register. Contains individual interrupt enable bits for the 7 potential USART interrupts. (DLAB=0) */
    };
-   union {                                      /**< 0000: (size=0004)                                                  */
+   union {                                      /**< 0008: (size=0004)                                                  */
       __O  uint32_t  FCR;                       /**< 0008: FIFO Control Register. Controls USART FIFO usage and modes   */
       __I  uint32_t  IIR;                       /**< 0008: Interrupt ID Register. Identifies which interrupt(s) are pending */
    };
@@ -5274,9 +5274,9 @@ typedef struct LPC_USART_Type {
    __IO uint32_t  FDR;                          /**< 0028: Fractional Divider Register. Generates a clock input for the baud rate divider */
    __IO uint32_t  OSR;                          /**< 002C: Oversampling Register. Controls the degree of oversampling during each bit time */
    __IO uint32_t  TER;                          /**< 0030: Transmit Enable Register. Turns off USART transmitter for use with software flow control */
-        uint8_t   RESERVED_0[12];              
+        uint8_t   RESERVED_0[12];               /**< 0034: 0xC bytes                                                    */
    __IO uint32_t  HDEN;                         /**< 0040: Half duplex enable register                                  */
-        uint8_t   RESERVED_1[4];               
+        uint8_t   RESERVED_1[4];                /**< 0044: 0x4 bytes                                                    */
    __IO uint32_t  SCICTRL;                      /**< 0048: Smart Card Interface Control register. Enables and configures the Smart Card Interface feature */
    __IO uint32_t  RS485CTRL;                    /**< 004C: RS-485/EIA-485 Control. Contains controls to configure various aspects of RS-485/EIA-485 modes */
    __IO uint32_t  RS485ADRMATCH;                /**< 0050: RS-485/EIA-485 address match. Contains the address match value for RS-485/EIA-485 mode */
@@ -5616,7 +5616,7 @@ typedef struct LPC_USB_Type {
    __IO uint32_t  INTEN;                        /**< 0024: USB interrupt enable register                                */
    __IO uint32_t  INTSETSTAT;                   /**< 0028: USB set interrupt status register                            */
    __IO uint32_t  INTROUTING;                   /**< 002C: USB interrupt routing register                               */
-        uint8_t   RESERVED_0[4];               
+        uint8_t   RESERVED_0[4];                /**< 0030: 0x4 bytes                                                    */
    __I  uint32_t  EPTOGGLE;                     /**< 0034: USB Endpoint toggle register                                 */
 } LPC_USB_Type;
 
