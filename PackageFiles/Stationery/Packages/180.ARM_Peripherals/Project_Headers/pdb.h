@@ -387,18 +387,18 @@ public:
    }
 
    /**
-    * Enable/disable sequence error interrupts (pdb_sc_pdbeie)
-    *
-    * @param[in]  enable True => enable, False => disable
+    * Enable sequence error interrupts (pdb_sc_pdbeie)
     */
-   static void enableErrorInterrupts(bool enable=true) {
+   static void enableErrorInterrupts() {
+      pdb().SC |= PDB_SC_PDBEIE_MASK;
+   }
 
-      if (enable) {
-         pdb().SC |= PDB_SC_PDBEIE_MASK;
-      }
-      else {
-         pdb().SC &= ~PDB_SC_PDBEIE_MASK;
-      }
+   /**
+    * Disable sequence error interrupts (pdb_sc_pdbeie)
+    */
+   static void disableErrorInterrupts() {
+
+      pdb().SC &= ~PDB_SC_PDBEIE_MASK;
    }
 
    /**
@@ -614,14 +614,14 @@ public:
    }
 
    /**
-    * Enable PDB and confirms loading of MOD, IDLY, CHnDLYm, DACINTx,and POyDLY from holding registers
+    * Enable PDB and configures loading of MOD, IDLY, CHnDLYm, DACINTx,and POyDLY from holding registers
     *
     * @param[in]  pdbLoadMode Controls when the registers are loaded. (pdb_sc_ldmod)
     *
     * @note The actual loading time is governed by pdbLoadMode
     * @note isLoadRegistersComplete() may be used to check if the loading has occurred.
     */
-   static void confirmRegisterLoad(PdbLoadMode pdbLoadMode) {
+   static void configureRegisterLoad(PdbLoadMode pdbLoadMode) {
 
       pdb().SC = (pdb().SC&~PDB_SC_LDMOD_MASK)|pdbLoadMode|PDB_SC_PDBEN_MASK|PDB_SC_LDOK_MASK|PDB_SC_PDBIF_MASK;
    }
@@ -1050,6 +1050,14 @@ class Pdb : public PdbBase_T<PdbInfo> {};
  * Class representing PDB
  */
 class Pdb0 : public PdbBase_T<Pdb0Info> {};
+
+#endif
+
+#ifdef USBDM_PDB1_IS_DEFINED
+/**
+ * Class representing PDB
+ */
+class Pdb1 : public PdbBase_T<Pdb1Info> {};
 
 #endif
 

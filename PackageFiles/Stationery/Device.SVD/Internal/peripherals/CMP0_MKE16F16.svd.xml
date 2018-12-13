@@ -514,7 +514,7 @@ Controls availability of the comparator output on the associated CMPO output pin
                      <enumeratedValues>
                         <enumeratedValue>
                            <name>0bXXXXXX</name>
-                           <description>The modulus is set to N (0=>64)</description>
+                           <description>The modulus is set to N (0=&gt;64)</description>
                            <isDefault>true</isDefault>
                         </enumeratedValue>
                      </enumeratedValues>

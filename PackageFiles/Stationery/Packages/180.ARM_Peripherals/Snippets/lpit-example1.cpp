@@ -25,7 +25,7 @@ int main() {
 
    // Enable PIT
    PccInfo::setLpit0ClockSource(PccDiv2Clock_Firc);
-   Timer::configure();
+   Timer::configure(LpitDozeMode_Run, LpitDebugMode_Stop);
 
    // Check for errors so far
    checkError();

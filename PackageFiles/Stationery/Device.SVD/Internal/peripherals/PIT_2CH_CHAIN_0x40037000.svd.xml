@@ -82,7 +82,7 @@ Disabled PIT module clock</description>
                </fields>
             </register>
             <cluster>
-               <dim>%TMR_COUNT</dim>
+               <dim>$(TMR_COUNT)</dim>
                <dimIncrement>16</dimIncrement>
                <name>CHANNEL,@p@f@i</name>
                <addressOffset>0x100</addressOffset>

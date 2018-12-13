@@ -112,7 +112,7 @@ public:
     * Any pending NVIC interrupts are first cleared.
     */
    static void enableNvicInterrupts() {
-      enableNvicInterrupt(McgInfo::irqNums[0]);
+      NVIC_EnableIRQ(McgInfo::irqNums[0]);
    }
 
    /**

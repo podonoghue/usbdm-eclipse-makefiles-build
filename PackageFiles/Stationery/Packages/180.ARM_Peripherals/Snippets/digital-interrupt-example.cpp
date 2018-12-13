@@ -23,7 +23,6 @@ using namespace USBDM;
 using Led      = USBDM::GpioA<2,USBDM::ActiveLow>;
 using Switch   = USBDM::GpioC<0,USBDM::ActiveLow>;
 
-// Call-back function to execute on interrupt
 /**
  * PORT interrupt call back.
  * This callback is _shared_ by all port pins

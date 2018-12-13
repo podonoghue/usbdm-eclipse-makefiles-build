@@ -12,17 +12,17 @@
 using namespace USBDM;
 
 /**
- * Programmable Interrupt Timer (PIT) Example
+ * Programmable Interrupt Timer (LPIT) Example
  *
- * Demonstrates PIT call-back or static handler
+ * Demonstrates LPIT call-back or static handler
  *
  * Toggles LEDs
  */
 /**
- * This example uses PIT interrupts.
+ * This example uses LPIT interrupts.
  *
  * It is necessary to enable these in Configure.usbdmProject
- * under the "Peripheral Parameters"->PIT tab.
+ * under the "Peripheral Parameters"->LPIT tab.
  * Select irqHandlerChannelX option (Class Method - Software ...)
  */
 
@@ -39,42 +39,43 @@ using TimerChannelB = Timer::Channel<1>;
 
 #ifndef SET_HANDLERS_PROGRAMMATICALLY
 /**
- * Example showing how to create custom IRQ handlers for PIT channels by
- * providing an explicit instantiation of the PIT template function for ISR
+ * Example showing how to create custom IRQ handlers for LPIT channels by
+ * providing an explicit instantiation of the LPIT template function for ISR
  */
 namespace USBDM {
 
 /*
  * If using a naked handler it must be named exactly as shown
- * MK version - individual handler for each PIT channel
+ * S32 version - individual handler for each LPIT channel
  *
  * This method avoids the overhead of the indirection through a call-back
  */
 template<> template<> void TimerChannelA::irqHandler() {
    // Clear interrupt flag
-   lpit().CHANNEL[0].TFLG = PIT_TFLG_TIF_MASK;
+   lpit().MSR = CHANNEL_MASK;
    Led1::toggle();
 }
 
 template<> template<> void TimerChannelB::irqHandler() {
    // Clear interrupt flag
-   lpit().CHANNEL[1].TFLG = PIT_TFLG_TIF_MASK;
+   lpit().MSR = CHANNEL_MASK;
    Led2::toggle();
 }
 
 } // end namespace USBDM
-#endif
 
+#else
 /*
  * These callbacks are set programmatically
  */
-void flashA(void) {
+static void flashA(void) {
    Led1::toggle();
 }
 
-void flashB(void) {
+static void flashB(void) {
    Led2::toggle();
 }
+#endif
 
 int main() {
    Led1::setOutput(
@@ -87,8 +88,8 @@ int main() {
          PinDriveMode_PushPull,
          PinSlewRate_Slow);
 
-   PccInfo::setLpit0ClockSource(PccDiv2Clock_Firc);
-   Timer::configure(LpitDebugMode_Stop);
+   PccInfo::setLpit0ClockSource(PccDiv2Clock_Sirc);
+   Timer::configure(LpitDozeMode_Run, LpitDebugMode_Stop);
 
 #ifdef SET_HANDLERS_PROGRAMMATICALLY
    // Set handler for channel programmatically
@@ -108,8 +109,9 @@ int main() {
    // Check for errors so far
    checkError();
 
+   Smc::enablePowerModes(SmcVeryLowPower_Enabled, SmcHighSpeedRun_Enabled);
    for(;;) {
       // Sleep between interrupts
-      Smc::enterWaitMode();
+      Smc::enterStopMode(SmcStopMode_VeryLowPowerStop);
    }
 }

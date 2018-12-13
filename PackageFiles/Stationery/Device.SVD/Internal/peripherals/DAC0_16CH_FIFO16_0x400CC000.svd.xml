@@ -57,7 +57,7 @@ Devices using this peripheral:
          <resetValue>0x0</resetValue>
          <resetMask>0xFFFFFFFF</resetMask>
          <addressBlock>
-            <?width "8" ?>
+            <?width "16" ?>
             <offset>0x0</offset>
             <size>0x24</size>
             <usage>registers</usage>

@@ -4,6 +4,13 @@
 
 <fragment xmlns:xi="http://www.w3.org/2001/XInclude">
 
+   <!--
+   Patterns for pattern and classHandler 
+     -  %i replaced with peripheral instance e.g. FTM1 => 1, PTA => A
+     -  %b replaced with peripheral base name e.g. FTM1 => = FTM
+     -  %c replaced with peripheral C++ base class name e.g. FTM1 => = Ftm
+     -  _IRQHandler is appended to the pattern (only)
+   -->
    <irqOption name="irqHandlingMethod"  
       description="Peripheral interrupt handler"
       toolTip="This selection allow the interrupt handler for this peripheral to be installed using several different methods"

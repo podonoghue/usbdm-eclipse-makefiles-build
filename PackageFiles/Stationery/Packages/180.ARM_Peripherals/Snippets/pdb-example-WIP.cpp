@@ -76,7 +76,7 @@ static void configureFtm() {
    FtmChannel::setDriveStrength(PinDriveStrength_High);
    FtmChannel::configure(FtmChMode_PwmHighTruePulses, FtmChannelAction_Irq);
    FtmChannel::setHighTime(HIGH_TIME);
-   FtmChannel::enableNvicInterrupts();
+   Ftm::enableNvicInterrupts();
    //   FtmChannel::enableInterrupts();
 
    // Check if configuration failed
@@ -121,18 +121,17 @@ static void configurePdb() {
    Pdb::setErrorCallback(pdbErrorCallback);
    Pdb::setCallback(pdbCallback);
    // Interrupts during sequence or error
-   Pdb::setInterrupts(PdbInterrupt_Enabled, PdbErrorInterrupt_Enabled);
+   Pdb::setActions(PdbAction_Interrupt, PdbErrorInterrupt_Enabled);
 
    // Set period a bit longer than FTM period
    Pdb::setPeriod(PERIOD+1*ms);
    // Generate interrupt at end of sequence
    Pdb::setInterruptDelay(PERIOD);
    // Take ADC samples before and after FTM edge
-   Pdb::setPretriggers(0,
-         PdbPretrigger0_Delay, HIGH_TIME-SAMPLE_DELAY,  // Sample before falling edge
-         PdbPretrigger1_Delay, HIGH_TIME+SAMPLE_DELAY); // Sample after falling edge
+   Pdb::configureAdcPretrigger(0, 0, PdbPretrigger_Delayed, HIGH_TIME-SAMPLE_DELAY);
+   Pdb::configureAdcPretrigger(0, 1, PdbPretrigger_Delayed, HIGH_TIME+SAMPLE_DELAY);
    // Update registers
-   Pdb::triggerRegisterLoad(PdbLoadMode_Immediate);
+   Pdb::configureRegisterLoad(PdbLoadMode_Immediate);
 
    Pdb::enableNvicInterrupts();
 
@@ -179,9 +178,8 @@ static void configureAdc() {
    AdcChannelB::enableHardwareConversion(AdcPretrigger_1, AdcInterrupt_Enabled);
 
    // Connect ADC trigger A to usual PDB
-   SimInfo::setAdc0Triggers(SimAdc0AltTrigger_Pdb);
+   SimInfo::setAdc0Triggers(SimAdc0TriggerMode_Pdb);
 
-   
    // Check for errors so far
    checkError();
 }
@@ -194,7 +192,7 @@ bool complete;
  *
  * Sets flag to indicate sequence complete.
  */
-void dmaCallback() {
+void dmaCallback(DmaChannelNum) {
    // Clear LED for debug
    Led::off();
    Pdb::disable();
@@ -235,21 +233,26 @@ static void configureDma() {
     *  - DLAST Adjustment applied to DADDR after each major loop - can be used to reset the DADDR for next major loop
     *  - CITER Major loop counter - counts major loops
     */
-   static const DmaTcd tcd {
-      /* uint32_t  SADDR  Source address        */ (uint32_t)(AdcChannelA::adc().R),   // ADC result register
-      /* uint16_t  SOFF   SADDR offset          */ 0,                                  // SADDR does not change
-      /* uint16_t  ATTR   Transfer attributes   */ DMA_ATTR_SSIZE(DmaSize_16bit)|      // 16-bit read from ADR->R (ignores MSBs)
-      /*                                        */ DMA_ATTR_DSIZE(DmaSize_16bit),      // 16-bit write to array
-      /* uint32_t  NBYTES Minor loop byte count */ 2,                                  // 2-bytes for each ADC DMA request
-      /* uint32_t  SLAST  Last SADDR adjustment */ 0,                                  // No adjustment as SADDR was unchanged
-      /* uint32_t  DADDR  Destination address   */ (uint32_t)(&results),               // Start of array for result
-      /* uint16_t  DOFF   DADDR offset          */ sizeof(results[0]),                 // DADDR advances 2 bytes for each request
-      /* uint16_t  CITER  Major loop count      */ DMA_CITER_ELINKNO_ELINK(0)|         // No ELINK
-      /*                                        */ sizeof(results)/sizeof(results[0]), // Number of requests to do
-      /* uint32_t  DLAST  Last DADDR adjustment */ -sizeof(results),                   // Reset DADDR to start of array on completion
-      /* uint16_t  CSR    Control and Status    */ DMA_CSR_INTMAJOR(1)|                // Generate interrupt on completion of Major-loop
-      /*                                        */ DMA_CSR_DREQ(1),                    // Stop transfer on completion of Major-loop
-   };
+   static const DmaTcd tcd (
+      /* Source address              */ Adc::adcR(0),                       // ADC result register
+      /* Source offset               */ 0,                                  // SADDR does not change
+	  /* Source size                 */ DmaSize_16bit,                      // 16-bit read from ADR->R (ignores MSBs)
+	  /* Source modulo               */ DmaModulo_Disabled,
+      /* Source last adjustment      */ 0,                                  // No adjustment as SADDR was unchanged
+
+      /* Destination address         */ (uint32_t)(&results),               // Start of array for result
+      /* Destination offset          */ sizeof(results[0]),                 // DADDR advances 2 bytes for each request
+	  /* Destination size            */ DmaSize_16bit,                      // 16-bit read from ADR->R (ignores MSBs)
+      /* Destination modulo          */ DmaModulo_Disabled,                      // 16-bit write to array
+      /* Destination last adjustment */ -(int)sizeof(results),                   // Reset DADDR to start of array on completion
+
+      /* Minor loop byte count       */ 2,                                  // 2-bytes for each ADC DMA request
+      /* Major loop count            */ sizeof(results)/sizeof(results[0]), // Number of requests to do
+
+	  /* Start Channel               */ false,
+	  /* Disable req. on complete    */ true,                               // Stop transfer on completion of Major-loop
+	  /* Interrupt On Complete 	     */ true                                // Generate interrupt on completion of Major-loop
+   );
 
    // Configure the transfer
    DmaMux0::disable(DMA_CHANNEL);
@@ -261,7 +264,7 @@ static void configureDma() {
    Dma0::setCallback(DMA_CHANNEL, dmaCallback);
 
 
-//   DmaMux0::configure(DMA_CHANNEL, DmaMux0::DmaSlot_AlwaysEnabled0, DmaMuxEnable_continuous);
+//   DmaMux0::configure(DMA_CHANNEL, DmaMux0::DmaSlot_AlwaysEnabled0, DmaMuxEnable_Continuous);
 //   DmaMux0::configure(DMA_CHANNEL, DmaMux0::DmaSlot_AlwaysEnabled0, DmaMuxEnable_Disabled);
 //   DmaMux0::configure(DMA_CHANNEL, DmaMux0::DmaSlot_AlwaysEnabled0, DmaMuxEnable_triggered);
 //   DmaMux0::disable(DMA_CHANNEL);

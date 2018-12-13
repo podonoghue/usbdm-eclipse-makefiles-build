@@ -60,10 +60,10 @@ volatile uint32_t SystemMcgFllClock;
 volatile uint32_t SystemMcgPllClock;
 
 /** Core/System clock (from MCGOUTCLK/CLKDIV) */
-volatile uint32_t SystemCoreClock;
+//volatile uint32_t SystemCoreClock;
 
 /** Bus clock (from MCGOUTCLK/CLKDIV) */
-volatile uint32_t SystemBusClock;
+//volatile uint32_t SystemBusClock;
 
 /** LPO - Low power oscillator 1kHz clock available in LP modes */
 volatile uint32_t SystemLpoClock;
@@ -432,13 +432,10 @@ void Mcg::SystemCoreClockUpdate(void) {
    if (mcg().C5&MCG_C5_PLLCLKEN0_MASK) {
       SystemMcgPllClock = systemPllClock;
    }
-   SystemCoreClock   = SystemMcgOutClock/(((SIM->CLKDIV1&SIM_CLKDIV1_OUTDIV1_MASK)>>SIM_CLKDIV1_OUTDIV1_SHIFT)+1);
-   SystemBusClock    = SystemMcgOutClock/(((SIM->CLKDIV1&SIM_CLKDIV1_OUTDIV2_MASK)>>SIM_CLKDIV1_OUTDIV2_SHIFT)+1);
+   ::SystemCoreClock   = SystemMcgOutClock/(((SIM->CLKDIV1&SIM_CLKDIV1_OUTDIV1_MASK)>>SIM_CLKDIV1_OUTDIV1_SHIFT)+1);
+   ::SystemBusClock    = SystemMcgOutClock/(((SIM->CLKDIV1&SIM_CLKDIV1_OUTDIV2_MASK)>>SIM_CLKDIV1_OUTDIV2_SHIFT)+1);
 
    SystemLpoClock    = 1000;
-
-   ::SystemBusClock  = SystemBusClock;
-   ::SystemCoreClock = SystemCoreClock;
 }
 
 /**

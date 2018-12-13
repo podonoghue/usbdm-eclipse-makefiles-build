@@ -39,16 +39,24 @@ typedef void (*LpitCallbackFunction)(void);
  * Control LPIT operation in debug mode (suspended for debugging)
  */
 enum LpitDebugMode {
-   LpitDebugMode_Run  = LPIT_MCR_DBG_EN(0),  //!< LPIT continues to run in debug mode
-   LpitDebugMode_Stop = LPIT_MCR_DBG_EN(1),  //!< LPIT stops in debug mode
+   LpitDebugMode_Run  = LPIT_MCR_DBG_EN(1),  //!< LPIT continues to run in debug mode
+   LpitDebugMode_Stop = LPIT_MCR_DBG_EN(0),  //!< LPIT stops in debug mode
+};
+
+/**
+ * Control LPIT operation in WAIT and SLEEP modes
+ */
+enum LpitDozeMode {
+   LpitDozeMode_Run  = LPIT_MCR_DOZE_EN(1),  //!< LPIT operates in WAIT and SLEEP modes
+   LpitDozeMode_Stop = LPIT_MCR_DOZE_EN(0),  //!< LPIT stops in WAIT and SLEEP modes
 };
 
 /**
  * Enable the LPIT interrupts
  */
 enum LpitChannelIrq {
-   LpitChannelIrq_Disabled  = LPIT_TCTRL_T_EN(0),  //!< LPIT channel interrupt disabled
-   LpitChannelIrq_Enabled   = LPIT_TCTRL_T_EN(1),  //!< LPIT channel interrupt disabled
+   LpitChannelIrq_Disabled  = false,  //!< LPIT channel interrupt disabled
+   LpitChannelIrq_Enabled   = true,   //!< LPIT channel interrupt disabled
 };
 
 /**
@@ -238,11 +246,12 @@ public:
     *  Enables and configures the LPIT.
     *  This also clears all channels and channel reservations.
     *
-    *  @param[in]  lpitDebugMode  Determined whether the LPIT halts when suspended during debug
+    *  @param[in]  lpitDebugMode  Determines whether the LPIT halts when suspended during debug
+    *  @param[in]  lpitDozeMode   Determines whether the LPIT halts when processor is in wait or sleep modes
     */
-   static void configure(LpitDebugMode lpitDebugMode=LpitDebugMode_Stop) {
+   static void configure(LpitDozeMode lpitDozeMode, LpitDebugMode lpitDebugMode=LpitDebugMode_Stop) {
       enable();
-      lpit().MCR = lpitDebugMode|LPIT_MCR_M_CEN_MASK;
+      lpit().MCR = lpitDebugMode|lpitDozeMode|LPIT_MCR_M_CEN_MASK;
       for (LpitChannelNum channel = LpitChannelNum_0;
            channel < Lpit0Info::NumChannels;
            channel = channel+1) {
@@ -261,7 +270,6 @@ public:
 
    /**
     * Enable interrupts in NVIC
-    * Any pending NVIC interrupts are first cleared.
     *
     * @param[in]  channel       Channel being modified
     */
@@ -270,7 +278,7 @@ public:
             Info::irqNums[0], Info::irqNums[1], Info::irqNums[2], Info::irqNums[3],
       };
       usbdm_assert(channel<Info::irqCount,"Illegal LPIT channel");
-      enableNvicInterrupt(irqNums[channel]);
+      NVIC_EnableIRQ(irqNums[channel]);
    }
 
    /**
@@ -357,7 +365,8 @@ public:
       lpit().TMR[channel].TCTRL = 0;
       lpit().TMR[channel].TVAL  = tickInterval-1;
       lpit().MSR                = (1<<channel);
-      lpit().TMR[channel].TCTRL = lpitChannelIrq|LPIT_TCTRL_T_EN_MASK;
+      lpit().MIER              |= (lpitChannelIrq<<channel);
+      lpit().TMR[channel].TCTRL = LPIT_TCTRL_T_EN_MASK;
    }
 
    /**
@@ -398,7 +407,7 @@ public:
     *
     * @note Will set error code if calculated value is unsuitable
     */
-   static int convertSecondsToTicks(float seconds) {
+   static uint32_t convertSecondsToTicks(float seconds) {
       float intervalInTicks = rintf(seconds*Info::getClockFrequency());
       usbdm_assert(intervalInTicks <= 0xFFFFFFFFUL, "Interval is too long");
       usbdm_assert(intervalInTicks > 0, "Interval is too short");
@@ -408,7 +417,7 @@ public:
       if (intervalInTicks <= 0) {
          setErrorCode(E_TOO_SMALL);
       }
-      return rintf((uint32_t)intervalInTicks);
+      return (uint32_t)intervalInTicks;
    }
 
    /**
@@ -480,7 +489,7 @@ public:
    public:
       /** Timer channel number */
       static constexpr LpitChannelNum CHANNEL      = (LpitChannelNum)channel;
-      static constexpr LpitChannelNum CHANNEL_MASK = 1<<CHANNEL;
+      static constexpr uint32_t       CHANNEL_MASK = 1<<CHANNEL;
 
       /**
        * Set interrupt callback
@@ -494,7 +503,7 @@ public:
       /** LPIT interrupt handler - Calls LPIT callback */
       static void irqHandler() {
          // Clear interrupt flag
-         LpitBase_T<Info>::lpit().MSR = (1<<CHANNEL);
+         lpit().MSR = CHANNEL_MASK;
          sCallbacks[channel]();
       }
 
@@ -580,14 +589,6 @@ public:
       }
 
       /**
-       * Enable interrupts in NVIC
-       * Any pending NVIC interrupts are first cleared.
-       */
-      static void enableNvicInterrupts() {
-         return LpitBase_T<Info>::enableNvicInterrupts(CHANNEL);
-      }
-
-      /**
        * Enable and set priority of interrupts in NVIC
        * Any pending NVIC interrupts are first cleared.
        *
@@ -595,6 +596,13 @@ public:
        */
       static void enableNvicInterrupts(uint32_t nvicPriority) {
          return LpitBase_T<Info>::enableNvicInterrupts(CHANNEL, nvicPriority);
+      }
+
+      /**
+       * Enable interrupts in NVIC
+       */
+      static void enableNvicInterrupts() {
+         return LpitBase_T<Info>::enableNvicInterrupts(CHANNEL);
       }
 
       /**

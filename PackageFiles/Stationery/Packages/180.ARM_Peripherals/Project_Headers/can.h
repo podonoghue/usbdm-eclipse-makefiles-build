@@ -19,6 +19,7 @@
  */
 #include "derivative.h"
 #include "hardware.h"
+#include "string.h"
 
 namespace USBDM {
 
@@ -30,7 +31,136 @@ namespace USBDM {
 /**
  * Type definition for CAN interrupt call back
  */
-typedef void (*CANCallbackFunction)(void);
+typedef void (*CanCallbackFunction)(void);
+
+/**
+ * Represents a CAN Message in RAM
+ */
+struct CanMessageBuffer {
+   __IO uint32_t  CS;     //!< CS Register
+   __IO uint32_t  ID;     //!< ID Register
+   __IO uint8_t   DATA[]; //!< DATA portion of buffer - variable size
+};
+
+/**
+ * Filter table entry - Format A
+ */
+union CanFilterIdFormatA {
+   struct {
+      unsigned  fill1 : 1;
+      unsigned  rxid  : 29;
+      unsigned  ide   : 1;
+      unsigned  rtr   : 1;
+   };
+   uint32_t raw;
+
+   /**
+    * Filter table entry - Format A
+    *
+    * @param rxid
+    * @param ide
+    * @param rtr
+    */
+   constexpr CanFilterIdFormatA(
+                  unsigned  rxid,
+                  bool      ide,
+                  bool      rtr) : fill1(0), rxid(rxid), ide(ide), rtr(rtr) {}
+
+   /**
+    * Filter table entry - Format A
+    *
+    * @param raw
+    */
+   constexpr CanFilterIdFormatA(
+                  uint32_t  raw) : raw(raw) {}
+};
+
+/**
+ * Filter table entry - Format B
+ */
+union CanFilterIdFormatB {
+   struct {
+      unsigned  rxid    : 14;
+      unsigned  ide     : 1;
+      unsigned  rtr     : 1;
+   };
+   uint16_t raw;
+
+   /**
+    * Filter table entry - Format A
+    *
+    * @param rxid
+    * @param ide
+    * @param rtr
+    */
+   constexpr CanFilterIdFormatB(
+                  unsigned  rxid,
+                  unsigned  ide,
+                  unsigned  rtr) : rxid(rxid), ide(ide), rtr(rtr) {}
+
+   /**
+    * Filter table entry - Format A
+    *
+    * @param raw
+    */
+   constexpr CanFilterIdFormatB(
+                  uint16_t  raw) : raw(raw) {}
+};
+
+/**
+ * Filter table entry - Format C
+ */
+struct CanFilterIdFormatC {
+   unsigned  rxid    : 8;
+
+   /**
+    * Filter table entry - Format A
+    *
+    * @param rxid
+    */
+   constexpr CanFilterIdFormatC(
+                  unsigned  rxid) : rxid(rxid) {}
+};
+
+/**
+ * Size of data in message
+ */
+enum CanDataSize {
+   CanDataSize_0  = 0,   // No Data bytes in message
+   CanDataSize_1  = 1,   // 1 bytes in message
+   CanDataSize_2  = 2,   // 2 bytes in message
+   CanDataSize_3  = 3,   // 3 bytes in message
+   CanDataSize_4  = 4,   // 4 bytes in message
+   CanDataSize_5  = 5,   // 5 bytes in message
+   CanDataSize_6  = 6,   // 6 bytes in message
+   CanDataSize_7  = 7,   // 7 bytes in message
+   CanDataSize_8  = 8,   // 8 bytes in message
+   CanDataSize_12 = 9,   // 12 bytes in message
+   CanDataSize_16 = 10,  // 16 bytes in message
+   CanDataSize_20 = 11,  // 20 bytes in message
+   CanDataSize_24 = 12,  // 24 bytes in message
+   CanDataSize_32 = 13,  // 32 bytes in message
+   CanDataSize_48 = 14,  // 48 bytes in message
+   CanDataSize_64 = 15,  // 64 bytes in message
+};
+
+/**
+ * Indicates size of message buffer in terms of data size.
+ * A single buffer size is used for a range of data sizes.
+ */
+enum CanMessageSize {
+   CanMessageSize_8  = 8,   // <= 8  data bytes in message, buffer is 16 bytes
+   CanMessageSize_16 = 16,  // <= 16 data bytes in message, buffer is 24 bytes
+   CanMessageSize_32 = 32,  // <= 32 data bytes in message, buffer is 40 bytes
+   CanMessageSize_64 = 64,  // <= 64 data bytes in message, buffer is 72 bytes
+};
+
+enum CanAcceptanceMode {
+   CanAcceptanceMode_FormatA   = CAN_MCR_IDAM(0),
+   CanAcceptanceMode_FormatB   = CAN_MCR_IDAM(1),
+   CanAcceptanceMode_FormatC   = CAN_MCR_IDAM(2),
+   CanAcceptanceMode_RejectALl = CAN_MCR_IDAM(3),
+};
 
 /**
  * @brief Class representing a Digital to Analogue Converter
@@ -47,55 +177,254 @@ template<class Info>
 class Can_T {
 protected:
 
-   /** Callback functions for ISRs */
-   static CANCallbackFunction callback[Info::irqCount];
+   /** Hardware instance pointer */
+   static __attribute__((always_inline)) volatile CAN_Type &can() { return Info::can(); }
+
+   /** sCallbacks functions for ISRs */
+   static CanCallbackFunction sCallbacks[Info::irqCount];
+
+   /** sCallbacks to catch unhandled interrupt */
+   static void noHandlerCallback() {
+      setAndCheckErrorCode(E_NO_HANDLER);
+   }
 
 public:
-   /** CAN interrupt handler -  Calls CAN0 callback */
+   /** CAN interrupt handler */
    static void irqHandler() {
-      // Clear interrupt flag
-      if (Can_T::callback[0] != 0) {
-         Can_T::callback[0]();
+      Can_T::sCallbacks[0]();
+   }
+
+   /** CAN interrupt handler */
+   static void errorIrqHandler() {
+      Can_T::sCallbacks[1]();
+   }
+
+   /** CAN interrupt handler */
+   static void wakeupIrqHandler() {
+      Can_T::sCallbacks[2]();
+   }
+
+   /** CAN message buffer interrupt handler */
+   static void mb0_15_IrqHandler() {
+      Can_T::sCallbacks[3]();
+   }
+
+   /** CAN message buffer interrupt handler */
+   static void mb16_31_IrqHandler() {
+      Can_T::sCallbacks[4]();
+   }
+
+protected:
+   /**
+    * Set sCallbacks for ISR
+    *
+    * @param sCallbacks The function to call from stub ISR
+    */
+   static void setCallback(CanCallbackFunction callback, int index) {
+      usbdm_assert(Info::irqHandlerInstalled, "DMA not configured for interrupts");
+
+      if (sCallbacks == nullptr) {
+         sCallbacks[index] = noHandlerCallback;
       }
+      sCallbacks[index] = callback;
    }
 
 public:
    /**
-    * Set callback for ISR
+    * Set sCallbacks for ISR
     *
-    * @param channel  The CAN channel to modify
-    * @param callback The function to call from stub ISR
+    * @param sCallbacks The function to call from stub ISR
     */
-   static void setCallback(int channel, CANCallbackFunction callback) {
-      Can_T::callback[channel] = callback;
+   static void setOredCallback(CanCallbackFunction callback) {
+      setCallback(callback, Info::OredIrqNumIndex);
    }
 
-protected:
-   /** Hardware instance pointer */
-   static __attribute__((always_inline)) volatile CAN_Type &can() { return Info::can(); }
+   /**
+    * Set sCallbacks for ISR
+    *
+    * @param sCallbacks The function to call from stub ISR
+    */
+   static void setErrorCallback(CanCallbackFunction callback) {
+      setCallback(callback, Info::ErrorIrqNumIndex);
+   }
+
+   /**
+    * Set sCallbacks for ISR
+    *
+    * @param sCallbacks The function to call from stub ISR
+    */
+   static void setWakeupCallback(CanCallbackFunction callback) {
+      setCallback(callback, Info::WakeupIrqNumIndex);
+   }
+
+   /**
+    * Set sCallbacks for ISR
+    *
+    * @param sCallbacks The function to call from stub ISR
+    */
+   static void setOred0_15_Callback(CanCallbackFunction callback) {
+      setCallback(callback, Info::Ored_0_15_IrqNumIndex);
+   }
+
+   /**
+    * Set sCallbacks for ISR
+    *
+    * @param sCallbacks The function to call from stub ISR
+    */
+   static void setOred16_31_Callback(CanCallbackFunction callback) {
+      setCallback(callback, Info::Ored_16_32_IrqNumIndex);
+   }
+
+   /**
+    * Get pointer to CAN Message Buffer
+    *
+    * @param size    Size of message buffers being used.
+    * @param index   Index of message buffer
+    *
+    * @return Pointer to message buffer.
+    */
+   static CanMessageBuffer *getMessageBuffer(CanMessageSize canMessageSize, unsigned index) {
+      return (CanMessageBuffer *) (Info::baseAddress + offsetof(struct CAN_Type, MB) + index*(canMessageSize+8));
+   };
+
+   /**
+    * Get pointer to CAN Top of FIFO Message Buffer.
+    *
+    * @return Pointer to message buffer.
+    *
+    * @note This is only applicable when FIFO is enabled.
+    */
+   static CanMessageBuffer *getFifoMessageBuffer() {
+      return (CanMessageBuffer *) (can().MB);
+   };
+
+   /**
+    * Get Filter Table array.
+    * The result is formatted as an array of format A filters
+    *
+    * @return Pointer to start of filter table array
+    *
+    * @note This is only applicable when FIFO is enabled.
+    */
+   static CanFilterIdFormatA *getFormatAFilterTable() {
+      return (CanFilterIdFormatA *) (can().FIFO.FILTER_ID_A);
+   }
+
+   /**
+    * Get Filter Table array.
+    * The result is formatted as an array of format B filters
+    *
+    * @return Pointer to start of filter table array
+    *
+    * @note This is only applicable when FIFO is enabled.
+    */
+   static CanFilterIdFormatB *getFormatBFilterTable() {
+      return (CanFilterIdFormatB *) (can().FIFO.FILTER_ID_B);
+   }
+
+   /**
+    * Get Filter Table array.
+    * The result is formatted as an array of format C filters
+    *
+    * @return Pointer to start of filter table array
+    *
+    * @note This is only applicable when FIFO is enabled.
+    */
+   static CanFilterIdFormatC *getFormatCFilterTable() {
+      return (CanFilterIdFormatC *) (can().FIFO.FILTER_ID_C);
+   }
+
+   /**
+    * Get Filter Table array.
+    * The result is formatted as an array of format C filters
+    *
+    * @return Pointer to start of filter table array
+    *
+    * @note This is only applicable when FIFO is enabled.
+    */
+   static void clearFilterTable() {
+      memset(
+         (void*)(can().FIFO.FILTER_ID_A),
+         0,
+         Info::NumberOfMessageFilters*sizeof(can().FIFO.FILTER_ID_A[0]));
+   }
 
 public:
    /**
     *  Configure the CAN with default settings
     *
-    *  @param c0       Module Control Register 0
-    *  @param c1       Module Control Register 1
-    *  @param c2       Module Control Register 2
     */
-   static void enable(uint32_t c0=Info::c0, uint32_t c1=Info::c1, uint32_t c2=Info::c2) {
+   static void enable() {
       // Enable clock
       Info::enableClock();
       __DMB();
 
       Info::initPCRs();
+   }
 
-      // Enable timer
+   static void configure(unsigned baud) {
+      enable();
+
+      // Apply software reset and wait until complete
+      can().MCR = CAN_MCR_SOFTRST(1);
+      while (can().MCR & CAN_MCR_SOFTRST_MASK) {
+         __asm__("nop");
+      }
+      can().MCR =
+            CAN_MCR_MDIS(0)|     // Enable CAN
+            CAN_MCR_FRZ(1)|      // Allow Freeze (on debug or Halt)
+            CAN_MCR_RFEN(0)|     // No RxFIFO
+            CAN_MCR_HALT(1)|     // Start in Freeze
+            CAN_MCR_SOFTRST(0)|  //
+            CAN_MCR_SUPV(1)|     // Only allow supervisor access
+            CAN_MCR_WRNEN(0)|    //
+            CAN_MCR_SRXDIS(1)|   // Allow self-reception
+            CAN_MCR_IRMQ(0)|     //
+            CAN_MCR_DMA(0)|      // No DMA
+            CAN_MCR_PNET_EN(0)|  // No Pretend Networking
+            CAN_MCR_LPRIOEN(1)|  // No local priority
+            CAN_MCR_AEN(1)|      // Allow Tx abort
+            CAN_MCR_FDEN(0)|     // No flexible data rate
+            CAN_MCR_IDAM(0)|     //
+            CAN_MCR_MAXMB(-1);
+
+
+      static const uint32_t params[] = {
+            /* ~ 125000 */ CAN_CTRL1_PROPSEG(2)|CAN_CTRL1_RJW(1)|CAN_CTRL1_PSEG1(7)|CAN_CTRL1_PSEG2(3)|CAN_CTRL1_PRESDIV(7),
+            /* ~ 250000 */ CAN_CTRL1_PROPSEG(2)|CAN_CTRL1_RJW(1)|CAN_CTRL1_PSEG1(7)|CAN_CTRL1_PSEG2(3)|CAN_CTRL1_PRESDIV(3),
+            /* ~ 500000 */ CAN_CTRL1_PROPSEG(2)|CAN_CTRL1_RJW(1)|CAN_CTRL1_PSEG1(7)|CAN_CTRL1_PSEG2(3)|CAN_CTRL1_PRESDIV(1),
+            /* ~1000000 */ CAN_CTRL1_PROPSEG(2)|CAN_CTRL1_RJW(0)|CAN_CTRL1_PSEG1(1)|CAN_CTRL1_PSEG2(1)|CAN_CTRL1_PRESDIV(1),
+      };
+      uint32_t baudIndex = 0;
+      if (baud >=  250000) baudIndex++;
+      if (baud >=  500000) baudIndex++;
+      if (baud >= 1000000) baudIndex++;
+      can().CTRL1 =
+            CAN_CTRL1_CLKSRC(0)| //
+            params[baudIndex];
+
+      can().MB[3].CS =
+            CAN_CS_TIME_STAMP(0)|
+            CAN_CS_DLC(0)|
+            CAN_CS_RTR(0)|
+            CAN_CS_IDE(0)|
+            CAN_CS_SRR(0)|
+            CAN_CS_CODE(0);
+
+      memset((void*)(can().MB), 0, Info::NumberOfMessageBuffers*sizeof(can().MB[0]));
    }
    
    /**
-    *   Disable the CAN channel
+    *   Disable the CAN
     */
    static void finalise(uint8_t channel) {
+      // Halt CAN
+      can().MCR |= CAN_MCR_HALT_MASK;
+
+      // Wait until ack'ed
+      while (can().MCR & CAN_MCR_FRZACK_MASK) {
+         __asm__("nop");
+      }
       Info::disableClock();
    }
    
@@ -103,8 +432,8 @@ public:
     * Enable interrupts in NVIC
     * Any pending NVIC interrupts are first cleared.
     */
-   static void enableNvicInterrupts() {
-      enableNvicInterrupt(Info::irqNums[0]);
+   static void enableOredNvicInterrupts() {
+      enableNvicInterrupt(Info::irqNums[Info::OredIrqNumIndex]);
    }
 
    /**
@@ -113,15 +442,115 @@ public:
     *
     * @param[in]  nvicPriority  Interrupt priority
     */
-   static void enableNvicInterrupts(uint32_t nvicPriority) {
-      enableNvicInterrupt(Info::irqNums[0], nvicPriority);
+   static void enableOredNvicInterrupts(uint32_t nvicPriority) {
+      enableNvicInterrupt(Info::irqNums[Info::OredIrqNumIndex], nvicPriority);
    }
 
    /**
     * Disable interrupts in NVIC
     */
-   static void disableNvicInterrupts() {
-      NVIC_DisableIRQ(Info::irqNums[0]);
+   static void disableOredNvicInterrupts() {
+      NVIC_DisableIRQ(Info::irqNums[Info::OredIrqNumIndex]);
+   }
+
+   /**
+    * Enable interrupts in NVIC
+    * Any pending NVIC interrupts are first cleared.
+    */
+   static void enableWakeupNvicInterrupts() {
+      enableNvicInterrupt(Info::irqNums[Info::WakeupIrqNumIndex]);
+   }
+
+   /**
+    * Enable and set priority of interrupts in NVIC
+    * Any pending NVIC interrupts are first cleared.
+    *
+    * @param[in]  nvicPriority  Interrupt priority
+    */
+   static void enableWakeupNvicInterrupts(uint32_t nvicPriority) {
+      enableNvicInterrupt(Info::irqNums[Info::WakeupIrqNumIndex], nvicPriority);
+   }
+
+   /**
+    * Disable interrupts in NVIC
+    */
+   static void disableWakeupNvicInterrupts() {
+      NVIC_DisableIRQ(Info::irqNums[Info::WakeupIrqNumIndex]);
+   }
+
+   /**
+    * Enable interrupts in NVIC
+    * Any pending NVIC interrupts are first cleared.
+    */
+   static void enableErrorNvicInterrupts() {
+      enableNvicInterrupt(Info::irqNums[Info::ErrorIrqNumIndex]);
+   }
+
+   /**
+    * Enable and set priority of interrupts in NVIC
+    * Any pending NVIC interrupts are first cleared.
+    *
+    * @param[in]  nvicPriority  Interrupt priority
+    */
+   static void enableErrorNvicInterrupts(uint32_t nvicPriority) {
+      enableNvicInterrupt(Info::irqNums[Info::ErrorIrqNumIndex], nvicPriority);
+   }
+
+   /**
+    * Disable interrupts in NVIC
+    */
+   static void disableErrorNvicInterrupts() {
+      NVIC_DisableIRQ(Info::irqNums[Info::ErrorIrqNumIndex]);
+   }
+
+   /**
+    * Enable interrupts in NVIC
+    * Any pending NVIC interrupts are first cleared.
+    */
+   static void enableOred_0_15_NvicInterrupts() {
+      enableNvicInterrupt(Info::irqNums[Info::Ored_0_15_IrqNumIndex]);
+   }
+
+   /**
+    * Enable and set priority of interrupts in NVIC
+    * Any pending NVIC interrupts are first cleared.
+    *
+    * @param[in]  nvicPriority  Interrupt priority
+    */
+   static void enableOred_0_15_NvicInterrupts(uint32_t nvicPriority) {
+      enableNvicInterrupt(Info::irqNums[Info::Ored_0_15_IrqNumIndex], nvicPriority);
+   }
+
+   /**
+    * Disable interrupts in NVIC
+    */
+   static void disableOred_0_15_NvicInterrupts() {
+      NVIC_DisableIRQ(Info::irqNums[Info::Ored_0_15_IrqNumIndex]);
+   }
+
+   /**
+    * Enable interrupts in NVIC
+    * Any pending NVIC interrupts are first cleared.
+    */
+   static void enableOred_16_32_NvicInterrupts() {
+      enableNvicInterrupt(Info::irqNums[Info::Ored_16_32_IrqNumIndex]);
+   }
+
+   /**
+    * Enable and set priority of interrupts in NVIC
+    * Any pending NVIC interrupts are first cleared.
+    *
+    * @param[in]  nvicPriority  Interrupt priority
+    */
+   static void enableOred_16_32_NvicInterrupts(uint32_t nvicPriority) {
+      enableNvicInterrupt(Info::irqNums[Info::Ored_16_32_IrqNumIndex], nvicPriority);
+   }
+
+   /**
+    * Disable interrupts in NVIC
+    */
+   static void disableOred_16_32_NvicInterrupts() {
+      NVIC_DisableIRQ(Info::irqNums[Info::Ored_16_32_IrqNumIndex]);
    }
 
 };
@@ -129,7 +558,7 @@ public:
 /**
  * Callback table for programmatically set handlers
  */
-template<class Info> CANCallbackFunction Can_T<Info>::callback[] = {0};
+template<class Info> CanCallbackFunction Can_T<Info>::sCallbacks[] = {0};
 
 #if defined(USBDM_CAN0_IS_DEFINED)
 using Can0 = Can_T<Can0Info>;
@@ -137,6 +566,10 @@ using Can0 = Can_T<Can0Info>;
 
 #if defined(USBDM_CAN1_IS_DEFINED)
 using Can1 = Can_T<Can1Info>;
+#endif
+
+#if defined(USBDM_CAN2_IS_DEFINED)
+using Can2 = Can_T<Can2Info>;
 #endif
 /**
  * @}

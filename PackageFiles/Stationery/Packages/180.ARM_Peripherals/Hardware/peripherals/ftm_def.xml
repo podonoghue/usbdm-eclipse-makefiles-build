@@ -2,15 +2,13 @@
 <!DOCTYPE peripheralPage SYSTEM "_menu.dtd" >
 <!-- ftm_def.xml -->
 
-<peripheralPage xmlns:xi="http://www.w3.org/2001/XInclude" name="_instance" description="Flex timer">
+<fragment xmlns:xi="http://www.w3.org/2001/XInclude">
 
    <template><![CDATA[
       \t//! Base value for PCR (excluding MUX value)
       \tstatic constexpr uint32_t defaultPcrValue  = DEFAULT_PCR;\n\n
    ]]></template>
    
-   <xi:include href="_mapPinsOption.xml"/>   
-
    <intOption name="minimumInterval" description="Minimum usable interval in ticks"
       toolTip="This value is used as a minimum acceptable value for the timer interval in ticks\n
                when using convertMicrosecondsToTicks() or convertSecondsToTicks()"
@@ -157,23 +155,6 @@
       \t/** Minimum usable interval in ticks */      
       \tstatic constexpr uint32_t minimumInterval=$(minimumInterval);\n\n
       
-      #if defined(USBDM_PCC_IS_DEFINED)
-      \t/**
-      \t * Get input clock frequency
-      \t *
-      \t * @return Input clock frequency as a uint32_t in Hz
-      \t */
-      \tstatic uint32_t getInputClockFrequency() {
-      \t
-      \t   switch(ftm().SC&FTM_SC_CLKS_MASK) {
-      \t   default:
-      \t   case FTM_SC_CLKS(0): return 0;
-      \t   case FTM_SC_CLKS(1): return SystemBusClock;
-      \t   case FTM_SC_CLKS(2): return SimInfo::getRtcFrequency();
-      \t   case FTM_SC_CLKS(3): return PccInfo::getFtm$(_instance)Frequency();
-      \t   }
-      \t}\n\n
-      #else
       \t/**
       \t * Get input clock frequency
       \t *
@@ -189,7 +170,6 @@
       \t   case FTM_SC_CLKS(3): return ftmExternalClock;
       \t   }
       \t}\n\n
-      #endif
    ]]></template>
    
    <xi:include href="_clockOption.xml"/>
@@ -197,4 +177,4 @@
    <signals/>
    <signals name="FTM" />
 
-</peripheralPage>
+</fragment>

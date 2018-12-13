@@ -1462,7 +1462,7 @@ Not present in all devices</description>
                </fields>
             </register>
             <cluster>
-               <dim>%MESSAGE_BUFFER_COUNT</dim>
+               <dim>$(MESSAGE_BUFFER_COUNT)</dim>
                <dimIncrement>16</dimIncrement>
                <name>MB,@p@f@i</name>
                <addressOffset>0x80</addressOffset>

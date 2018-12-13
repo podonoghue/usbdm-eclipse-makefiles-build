@@ -26,7 +26,7 @@ Devices using this peripheral:
          </addressBlock>
          <registers>
             <register>
-               <dim>%SC1_COUNT</dim>
+               <dim>$(SC1_COUNT)</dim>
                <dimIncrement>4</dimIncrement>
                <name>SC1%s</name>
                <description>Status and Control Register 1</description>
@@ -398,7 +398,7 @@ Single-ended/Differential(if available)</description>
                </fields>
             </register>
             <register>
-               <dim>%SC1_COUNT</dim>
+               <dim>$(SC1_COUNT)</dim>
                <dimIncrement>4</dimIncrement>
                <name>R%s</name>
                <description>Data Result Register</description>

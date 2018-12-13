@@ -441,7 +441,7 @@ Devices using this peripheral:
                </fields>
             </register>
             <register>
-               <dim>%SHIFT_COUNT</dim>
+               <dim>$(SHIFT_COUNT)</dim>
                <dimIncrement>4</dimIncrement>
                <name>SHIFTCTL%s</name>
                <description>Shifter Control N Register</description>
@@ -560,7 +560,7 @@ Devices using this peripheral:
                </fields>
             </register>
             <register>
-               <dim>%SHIFT_COUNT</dim>
+               <dim>$(SHIFT_COUNT)</dim>
                <dimIncrement>4</dimIncrement>
                <name>SHIFTCFG%s</name>
                <description>Shifter Configuration N Register</description>
@@ -644,7 +644,7 @@ Devices using this peripheral:
                </fields>
             </register>
             <register>
-               <dim>%SHIFT_COUNT</dim>
+               <dim>$(SHIFT_COUNT)</dim>
                <dimIncrement>4</dimIncrement>
                <name>SHIFTBUF%s</name>
                <description>Shifter Buffer N Register</description>
@@ -659,7 +659,7 @@ Devices using this peripheral:
                </fields>
             </register>
             <register>
-               <dim>%SHIFT_COUNT</dim>
+               <dim>$(SHIFT_COUNT)</dim>
                <dimIncrement>4</dimIncrement>
                <name>SHIFTBUFBIS%s</name>
                <description>Shifter Buffer N Bit Swapped Register</description>
@@ -674,7 +674,7 @@ Devices using this peripheral:
                </fields>
             </register>
             <register>
-               <dim>%SHIFT_COUNT</dim>
+               <dim>$(SHIFT_COUNT)</dim>
                <dimIncrement>4</dimIncrement>
                <name>SHIFTBUFBYS%s</name>
                <description>Shifter Buffer N Byte Swapped Register</description>
@@ -689,7 +689,7 @@ Devices using this peripheral:
                </fields>
             </register>
             <register>
-               <dim>%SHIFT_COUNT</dim>
+               <dim>$(SHIFT_COUNT)</dim>
                <dimIncrement>4</dimIncrement>
                <name>SHIFTBUFBBS%s</name>
                <description>Shifter Buffer N Bit Byte Swapped Register</description>
@@ -704,7 +704,7 @@ Devices using this peripheral:
                </fields>
             </register>
             <register>
-               <dim>%TIMER_COUNT</dim>
+               <dim>$(TIMER_COUNT)</dim>
                <dimIncrement>4</dimIncrement>
                <name>TIMCTL%s</name>
                <description>Timer Control N Register</description>
@@ -836,7 +836,7 @@ Devices using this peripheral:
                </fields>
             </register>
             <register>
-               <dim>%TIMER_COUNT</dim>
+               <dim>$(TIMER_COUNT)</dim>
                <dimIncrement>4</dimIncrement>
                <name>TIMCFG%s</name>
                <description>Timer Configuration N Register</description>
@@ -1077,7 +1077,7 @@ Devices using this peripheral:
                </fields>
             </register>
             <register>
-               <dim>%TIMER_COUNT</dim>
+               <dim>$(TIMER_COUNT)</dim>
                <dimIncrement>4</dimIncrement>
                <name>TIMCMP%s</name>
                <description>Timer Compare N Register</description>

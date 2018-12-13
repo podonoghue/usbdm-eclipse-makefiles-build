@@ -76,7 +76,7 @@ Devices using this peripheral:
       description="LPUART Tx/Rx interrupt handler"
       toolTip="This selection allow the interrupt handlers for this peripheral to be installed using several different methods"
       pattern="^LPUART%i_?(RxTx)?$"
-      classHandler="%c%i::irq$1Handler" />
+      classHandler="%c%i::irqHandler" />
         
    <template><![CDATA[
        \t//! Class based callback handler has been installed in vector table\n

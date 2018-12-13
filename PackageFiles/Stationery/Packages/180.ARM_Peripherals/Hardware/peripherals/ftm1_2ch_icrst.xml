@@ -2,6 +2,27 @@
 <!DOCTYPE peripheralPage SYSTEM "_menu.dtd" >
 <!-- ftm1_2ch_icrst.xml -->
 
-<fragment xmlns:xi="http://www.w3.org/2001/XInclude">
-<xi:include href="ftm_def.xml"/>
-</fragment>
+<peripheralPage xmlns:xi="http://www.w3.org/2001/XInclude" name="_instance" description="Flex timer">
+   <xi:include href="_mapPinsOption.xml"/>   
+
+   <intOption name="NumChannels" constant="true" derived="true"
+      description="Number of Channels" 
+      toolTip="The number of timer channels available" 
+      value="2" />
+
+   <intOption name="NumChannelVectors" constant="true" derived="true"
+      description="Number of Channel interrupt vectors" 
+      toolTip="Number of channel event interrupt vectors - \n
+               Multiple Channels may be mapped to the same vector" 
+      value="1" />
+
+   <template><![CDATA[
+      \t//! Number of channels implemented
+      \tstatic constexpr unsigned NumChannels = $(NumChannels);\n\n
+
+      \t//! Number of channel event vectors implemented
+      \tstatic constexpr unsigned NumChannelVectors = $(NumChannelVectors);\n\n
+   ]]></template>
+   
+   <xi:include href="ftm_def.xml"/>
+</peripheralPage>

@@ -147,7 +147,7 @@
    <irqOption name="irqAlarmHandler"  
       description="RTC Alarm interrupt handler"
       toolTip="This selection allow the interrupt handler for this peripheral to be installed using several different methods"
-      pattern="^RTC_Alarm$" 
+      pattern="^RTC(_Alarm)?$" 
       classHandler="%c%i::irqAlarmHandler" />
       
    <irqOption name="irqSecondsHandler"  

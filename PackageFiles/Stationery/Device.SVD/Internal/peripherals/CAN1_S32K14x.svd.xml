@@ -16,6 +16,7 @@ Devices using this peripheral:
          <resetMask>0xFFFFFFFF</resetMask>
          <parameters>
             <parameter> <value>16</value> <name>MESSAGE_BUFFER_COUNT</name> <description>Number of message buffers</description></parameter>
+            <parameter> <value>40</value> <name>FILTER_COUNT</name> <description>Number of Filter IDs</description></parameter>
             <parameter> <value>4</value> <name>WAKEUP_BUFFER_COUNT</name> <description>Number of wakeup buffers</description></parameter>
          </parameters>
          <addressBlock>
@@ -1651,7 +1652,212 @@ Devices using this peripheral:
                </fields>
             </register>
             <cluster>
-               <dim>%MESSAGE_BUFFER_COUNT</dim>
+               <name>FIFO</name>
+               <addressOffset>0x80</addressOffset>
+               <register>
+                  <name>CS</name>
+                  <description>FIFO Message Buffer CS Register</description>
+                  <addressOffset>0x0</addressOffset>
+                  <fields>
+                     <field>
+                        <name>TIME_STAMP</name>
+                        <description>Free-Running Counter Time stamp. This 16-bit field is a copy of the Free-Running Timer, captured for Tx and Rx frames at the time when the beginning of the Identifier field appears on the CAN bus</description>
+                        <bitOffset>0</bitOffset>
+                        <bitWidth>16</bitWidth>
+                     </field>
+                     <field>
+                        <name>DLC</name>
+                        <description>Length of the data to be stored/transmitted</description>
+                        <bitOffset>16</bitOffset>
+                        <bitWidth>4</bitWidth>
+                     </field>
+                     <field>
+                        <name>RTR</name>
+                        <description>Remote Transmission Request. One/zero for remote/data frame</description>
+                        <bitOffset>20</bitOffset>
+                        <bitWidth>1</bitWidth>
+                     </field>
+                     <field>
+                        <name>IDE</name>
+                        <description>ID Extended. One/zero for extended/standard format frame</description>
+                        <bitOffset>21</bitOffset>
+                        <bitWidth>1</bitWidth>
+                     </field>
+                     <field>
+                        <name>SRR</name>
+                        <description>Substitute Remote Request. Contains a fixed recessive bit</description>
+                        <bitOffset>22</bitOffset>
+                        <bitWidth>1</bitWidth>
+                     </field>
+                     <field>
+                        <name>IDHIT</name>
+                        <description>Identifier Acceptance Filter Hit Indicator</description>
+                        <bitOffset>24</bitOffset>
+                        <bitWidth>8</bitWidth>
+                     </field>
+                  </fields>
+               </register>
+               <register>
+                  <name>ID</name>
+                  <description>FIFO Message Buffer ID Register</description>
+                  <addressOffset>0x4</addressOffset>
+                  <fields>
+                     <field>
+                        <name>EXT</name>
+                        <description>Contains extended (LOW word) identifier of message buffer</description>
+                        <bitOffset>0</bitOffset>
+                        <bitWidth>18</bitWidth>
+                     </field>
+                     <field>
+                        <name>STD</name>
+                        <description>Contains standard/extended (HIGH word) identifier of message buffer</description>
+                        <bitOffset>18</bitOffset>
+                        <bitWidth>11</bitWidth>
+                     </field>
+                     <field>
+                        <name>PRIO</name>
+                        <description>Local priority. This 3-bit field is only used when LPRIO_EN bit is set in MCR and it only makes sense for Tx buffers. These bits are not transmitted. They are appended to the regular ID to define the transmission priority</description>
+                        <bitOffset>29</bitOffset>
+                        <bitWidth>3</bitWidth>
+                     </field>
+                  </fields>
+               </register>
+               <register>
+                  <name>WORD0</name>
+                  <description>FIFO Message Buffer WORD0 Register</description>
+                  <addressOffset>0x8</addressOffset>
+                  <fields>
+                     <field>
+                        <name>DATA_BYTE_3</name>
+                        <description>Data byte 3 of Rx/Tx frame</description>
+                        <bitOffset>0</bitOffset>
+                        <bitWidth>8</bitWidth>
+                     </field>
+                     <field>
+                        <name>DATA_BYTE_2</name>
+                        <description>Data byte 2 of Rx/Tx frame</description>
+                        <bitOffset>8</bitOffset>
+                        <bitWidth>8</bitWidth>
+                     </field>
+                     <field>
+                        <name>DATA_BYTE_1</name>
+                        <description>Data byte 1 of Rx/Tx frame</description>
+                        <bitOffset>16</bitOffset>
+                        <bitWidth>8</bitWidth>
+                     </field>
+                     <field>
+                        <name>DATA_BYTE_0</name>
+                        <description>Data byte 0 of Rx/Tx frame</description>
+                        <bitOffset>24</bitOffset>
+                        <bitWidth>8</bitWidth>
+                     </field>
+                  </fields>
+               </register>
+               <register>
+                  <name>WORD1</name>
+                  <description>FIFO Message Buffer WORD1 Register</description>
+                  <addressOffset>0xC</addressOffset>
+                  <fields>
+                     <field>
+                        <name>DATA_BYTE_7</name>
+                        <description>Data byte 7 of Rx/Tx frame</description>
+                        <bitOffset>0</bitOffset>
+                        <bitWidth>8</bitWidth>
+                     </field>
+                     <field>
+                        <name>DATA_BYTE_6</name>
+                        <description>Data byte 6 of Rx/Tx frame</description>
+                        <bitOffset>8</bitOffset>
+                        <bitWidth>8</bitWidth>
+                     </field>
+                     <field>
+                        <name>DATA_BYTE_5</name>
+                        <description>Data byte 5 of Rx/Tx frame</description>
+                        <bitOffset>16</bitOffset>
+                        <bitWidth>8</bitWidth>
+                     </field>
+                     <field>
+                        <name>DATA_BYTE_4</name>
+                        <description>Data byte 4 of Rx/Tx frame</description>
+                        <bitOffset>24</bitOffset>
+                        <bitWidth>8</bitWidth>
+                     </field>
+                  </fields>
+               </register>
+               <register>
+                  <dim>$(FILTER_COUNT)</dim>
+                  <dimIncrement>4</dimIncrement>
+                  <name>FILTER_ID_A</name>
+                  <description>FIFO Message Filter ID</description>
+                  <addressOffset>0x60</addressOffset>
+                  <fields>
+                     <field>
+                        <name>RXID</name>
+                        <description>Rx Frame Identifier</description>
+                        <bitOffset>1</bitOffset>
+                        <bitWidth>29</bitWidth>
+                     </field>
+                     <field>
+                        <name>IDE</name>
+                        <description>Extended Frame</description>
+                        <bitOffset>30</bitOffset>
+                        <bitWidth>1</bitWidth>
+                     </field>
+                     <field>
+                        <name>RTR</name>
+                        <description>Remote Frame</description>
+                        <bitOffset>31</bitOffset>
+                        <bitWidth>1</bitWidth>
+                     </field>
+                  </fields>
+               </register>
+               <register>
+                  <dim>$(FILTER_COUNT)*2</dim>
+                  <dimIncrement>2</dimIncrement>
+                  <name>FILTER_ID_B</name>
+                  <description>FIFO Message Filter ID</description>
+                  <addressOffset>0x60</addressOffset>
+                  <size>16</size>
+                  <fields>
+                     <field>
+                        <name>RXID</name>
+                        <description>Rx Frame Identifier</description>
+                        <bitOffset>0</bitOffset>
+                        <bitWidth>14</bitWidth>
+                     </field>
+                     <field>
+                        <name>IDE</name>
+                        <description>Extended Frame</description>
+                        <bitOffset>14</bitOffset>
+                        <bitWidth>1</bitWidth>
+                     </field>
+                     <field>
+                        <name>RTR</name>
+                        <description>Remote Frame</description>
+                        <bitOffset>15</bitOffset>
+                        <bitWidth>1</bitWidth>
+                     </field>
+                  </fields>
+               </register>
+               <register>
+                  <dim>$(FILTER_COUNT)*4</dim>
+                  <dimIncrement>1</dimIncrement>
+                  <name>FILTER_ID_C</name>
+                  <description>FIFO Message Filter ID</description>
+                  <addressOffset>0x60</addressOffset>
+                  <size>8</size>
+                  <fields>
+                     <field>
+                        <name>RTR_B</name>
+                        <description>Remote Frame</description>
+                        <bitOffset>0</bitOffset>
+                        <bitWidth>8</bitWidth>
+                     </field>
+                  </fields>
+               </register>
+            </cluster>
+            <cluster>
+               <dim>$(MESSAGE_BUFFER_COUNT)</dim>
                <dimIncrement>16</dimIncrement>
                <name>MB,@p@f@i</name>
                <addressOffset>0x80</addressOffset>
@@ -1695,6 +1901,24 @@ Devices using this peripheral:
                         <description>Reserved</description>
                         <bitOffset>24</bitOffset>
                         <bitWidth>4</bitWidth>
+                     </field>
+                     <field>
+                        <name>ESI</name>
+                        <description>Substitute Remote Request. Contains a fixed recessive bit</description>
+                        <bitOffset>29</bitOffset>
+                        <bitWidth>1</bitWidth>
+                     </field>
+                     <field>
+                        <name>BRS</name>
+                        <description>Substitute Remote Request. Contains a fixed recessive bit</description>
+                        <bitOffset>30</bitOffset>
+                        <bitWidth>1</bitWidth>
+                     </field>
+                     <field>
+                        <name>EDL</name>
+                        <description>Substitute Remote Request. Contains a fixed recessive bit</description>
+                        <bitOffset>31</bitOffset>
+                        <bitWidth>1</bitWidth>
                      </field>
                   </fields>
                </register>
@@ -1787,7 +2011,7 @@ Devices using this peripheral:
                </register>
             </cluster>
             <register>
-               <dim>%MESSAGE_BUFFER_COUNT</dim>
+               <dim>$(MESSAGE_BUFFER_COUNT)</dim>
                <dimIncrement>4</dimIncrement>
                <name>RXIMR%s</name>
                <description>Rx Individual Mask</description>
@@ -2098,7 +2322,7 @@ Devices using this peripheral:
             </register>
             <register>
                <name>PL1_LO</name>
-               <description>Pretended Networking Payload Low Filter 1 Register</description>
+               <description>Pretended Networking payload Low Filter 1 Register</description>
                <addressOffset>0xB14</addressOffset>
                <fields>
                   <field>
@@ -2129,7 +2353,7 @@ Devices using this peripheral:
             </register>
             <register>
                <name>PL1_HI</name>
-               <description>Pretended Networking Payload High Filter 1 Register</description>
+               <description>Pretended Networking payload High Filter 1 Register</description>
                <addressOffset>0xB18</addressOffset>
                <fields>
                   <field>
@@ -2192,7 +2416,7 @@ Devices using this peripheral:
             </register>
             <register>
                <name>PL2_PLMASK_LO</name>
-               <description>Pretended Networking Payload Low Filter 2 Register / Payload Low Mask Register</description>
+               <description>Pretended Networking payload Low Filter 2 Register / payload Low Mask Register</description>
                <addressOffset>0xB20</addressOffset>
                <fields>
                   <field>
@@ -2223,7 +2447,7 @@ Devices using this peripheral:
             </register>
             <register>
                <name>PL2_PLMASK_HI</name>
-               <description>Pretended Networking Payload High Filter 2 low order bits / Payload High Mask Register</description>
+               <description>Pretended Networking payload High Filter 2 low order bits / payload High Mask Register</description>
                <addressOffset>0xB24</addressOffset>
                <fields>
                   <field>
@@ -2253,7 +2477,7 @@ Devices using this peripheral:
                </fields>
             </register>
             <cluster>
-               <dim>%WAKEUP_BUFFER_COUNT</dim>
+               <dim>$(WAKEUP_BUFFER_COUNT)</dim>
                <dimIncrement>16</dimIncrement>
                <name>WMB,@p@f@i</name>
                <addressOffset>0xB40</addressOffset>

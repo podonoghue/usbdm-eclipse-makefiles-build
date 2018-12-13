@@ -30,7 +30,7 @@ Devices using this peripheral:
          </addressBlock>
          <registers>
             <register>
-               <dim>%SC1_COUNT</dim>
+               <dim>$(SC1_COUNT)</dim>
                <dimIncrement>4</dimIncrement>
                <name>SC1%s</name>
                <description>Status and Control Register 1</description>
@@ -464,7 +464,7 @@ Controls whether the Asynchronous clock output is always enabled or only as requ
                </fields>
             </register>
             <register>
-               <dim>%SC1_COUNT</dim>
+               <dim>$(SC1_COUNT)</dim>
                <dimIncrement>4</dimIncrement>
                <name>R%s</name>
                <description>Data Result Register</description>

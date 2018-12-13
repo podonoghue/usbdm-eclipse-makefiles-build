@@ -20,7 +20,7 @@
    #ifdef PCC
    \t   PccInfo::enable$(_class)Clock();
    #else
-   \t   SimInfo::enable$(_class)Clock();
+   \t   $(clockEnable)
    #endif
    \t}\n\n
 
@@ -31,7 +31,7 @@
    #ifdef PCC
    \t   PccInfo::disable$(_class)Clock();
    #else
-   \t   SimInfo::disable$(_class)Clock();
+   \t   $(clockDisable)
    #endif
    \t}\n\n
 ]]></template>

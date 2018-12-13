@@ -433,7 +433,7 @@ Reading this field returns the value that is effective for the current cycle of 
                </fields>
             </register>
             <cluster>
-               <dim>%CH_COUNT</dim>
+               <dim>$(CH_COUNT)</dim>
                <dimIncrement>40</dimIncrement>
                <name>CH,@pCH@i@f</name>
                <addressOffset>0x10</addressOffset>
@@ -547,7 +547,7 @@ The CF[m] bit is set when the PDB counter matches the CHnDLYm. Write 0 to clear 
                   </fields>
                </register>
                <register>
-                  <dim>%DLY_COUNT</dim>
+                  <dim>$(DLY_COUNT)</dim>
                   <dimIncrement>4</dimIncrement>
                   <name>DLY%s</name>
                   <description>Channel Delay %s Register\n
@@ -566,7 +566,7 @@ Reading this field returns the value that is effective for the current cycle</de
                </register>
             </cluster>
             <cluster>
-               <dim>%DAC_COUNT</dim>
+               <dim>$(DAC_COUNT)</dim>
                <dimIncrement>8</dimIncrement>
                <name>DAC,@pDAC@f@i</name>
                <addressOffset>0x150</addressOffset>
@@ -656,7 +656,7 @@ Enables the pulse output. Only lower Y bits are implemented in this MCU</descrip
                </fields>
             </register>
             <cluster>
-               <dim>%POnDLY_COUNT</dim>
+               <dim>$(POnDLY_COUNT)</dim>
                <dimIncrement>4</dimIncrement>
                <name>POnDLY,@pPOnDLY@i@f</name>
                <addressOffset>0x194</addressOffset>

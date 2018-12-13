@@ -105,30 +105,6 @@ protected:
    }
 #endif
 
-//   /**
-//    * Obtain UART mutex.
-//    *
-//    * @return Reference to self
-//    *
-//    * @note Failure result is an assertion failure
-//    */
-//   FormattedIO &lock() {
-//      usbdm_assert(startTransaction() == 0, "Failed to obtain UART lock");
-//      return *this;
-//   }
-//
-//   /**
-//    * Release UART mutex.
-//    *
-//    * @return Reference to self
-//    *
-//    * @note Failure result is an assertion failure
-//    */
-//   FormattedIO &unlock() {
-//      usbdm_assert(endTransaction() == 0, "Failed to release UART lock");
-//      return *this;
-//   }
-//
    /**
     * Check if character is available
     *
@@ -136,7 +112,7 @@ protected:
     * @return false No character available
     */
    virtual bool _isCharAvailable() override {
-      return (uart->S1 & UART_S1_RDRF_MASK);
+      return (uart.S1 & UART_S1_RDRF_MASK);
    }
 
    /**
@@ -150,14 +126,14 @@ protected:
       uint8_t status;
       do {
          // Get status from UART
-         status = uart->S1;
+         status = uart.S1;
          // Clear & ignore pending errors
          if ((status & (UART_S1_FE_MASK|UART_S1_OR_MASK|UART_S1_PF_MASK|UART_S1_NF_MASK)) != 0) {
             clearError();
          }
          // Check for Rx buffer full
       } while ((status & UART_S1_RDRF_MASK) == 0);
-      return (uint8_t)(uart->D);
+      return (uint8_t)(uart.D);
    }
 
    /**
@@ -166,11 +142,11 @@ protected:
     * @param[in]  ch - character to send
     */
    virtual void _writeChar(char ch) override {
-      while ((uart->S1 & UART_S1_TDRE_MASK) == 0) {
+      while ((uart.S1 & UART_S1_TDRE_MASK) == 0) {
          // Wait for Tx buffer empty
          __asm__("nop");
       }
-      uart->D = ch;
+      uart.D = ch;
       if (ch=='\n') {
          write('\r');
       }
@@ -188,14 +164,14 @@ public:
    /**
     * UART hardware instance
     */
-   volatile UART_Type * const uart;
+   volatile UART_Type &uart;
 
    /**
     * Construct UART interface
     *
     * @param[in]  uart Base address of UART hardware
     */
-   Uart(volatile UART_Type *uart) : uart(uart) {
+   Uart(volatile UART_Type &uart) : uart(uart) {
    }
 
    /**
@@ -227,20 +203,20 @@ public:
        * BRFD = (2*clockFrequency/Baudrate)&0x1F
        */
       // Disable UART before changing registers
-      uint8_t c2Value = uart->C2;
-      uart->C2 = 0;
+      uint8_t c2Value = uart.C2;
+      uart.C2 = 0;
 
       // Calculate UART clock setting (5-bit fraction at right)
       int divider = (2*clockFrequency)/baudrate;
 
       // Set Baud rate register
-      uart->BDH = (uart->BDH&~UART_BDH_SBR_MASK) | UART_BDH_SBR((divider>>(8+5)));
-      uart->BDL = UART_BDL_SBR(divider>>5);
+      uart.BDH = (uart.BDH&~UART_BDH_SBR_MASK) | UART_BDH_SBR((divider>>(8+5)));
+      uart.BDL = UART_BDL_SBR(divider>>5);
       // Fractional divider to get closer to the baud rate
-      uart->C4 = (uart->C4&~UART_C4_BRFA_MASK) | UART_C4_BRFA(divider);
+      uart.C4 = (uart.C4&~UART_C4_BRFA_MASK) | UART_C4_BRFA(divider);
 
       // Restore UART settings
-      uart->C2 = c2Value;
+      uart.C2 = c2Value;
    }
 #endif
 
@@ -262,19 +238,19 @@ public:
        */
 
       // Disable UART before changing registers
-      uint8_t c2Value = uart->C2;
-      uart->C2 = 0;
+      uint8_t c2Value = uart.C2;
+      uart.C2 = 0;
 
       // Calculate UART divider with rounding
       uint32_t divider = (clockFrequency<<1)/(oversample * baudrate);
       divider = (divider>>1)|(divider&0b1);
 
       // Set Baud rate register
-      uart->BDH = (uart->BDH&~UART_BDH_SBR_MASK) | UART_BDH_SBR((divider>>8));
-      uart->BDL = UART_BDL_SBR(divider);
+      uart.BDH = (uart.BDH&~UART_BDH_SBR_MASK) | UART_BDH_SBR((divider>>8));
+      uart.BDL = UART_BDL_SBR(divider);
 
       // Restore UART settings
-      uart->C2 = c2Value;
+      uart.C2 = c2Value;
    }
 
    /**
@@ -302,12 +278,12 @@ public:
    void enableInterrupt(UartInterrupt uartInterrupt, bool enable=true) {
       if (enable) {
 #ifdef UART_C5_TDMAS
-         uart->C5 &= ~uartInterrupt; // DMA must be off to enable interrupts
+         uart.C5 &= ~uartInterrupt; // DMA must be off to enable interrupts
 #endif
-         uart->C2 |= uartInterrupt;
+         uart.C2 |= uartInterrupt;
       }
       else {
-         uart->C2 &= ~uartInterrupt; // May also disable DMA
+         uart.C2 &= ~uartInterrupt; // May also disable DMA
       }
    }
 
@@ -322,16 +298,16 @@ public:
    void enableDma(UartDma uartDma, bool enable=true) {
       // Flags are in same positions in the C2 and C5
       if (enable) {
-         uart->C5 |= uartDma;
+         uart.C5 |= uartDma;
 #ifdef UART_C5_TDMAS
-         uart->C2 |= uartDma; // Interrupts must be enable for DMA
+         uart.C2 |= uartDma; // Interrupts must be enable for DMA
 #endif
       }
       else {
 #ifdef UART_C5_TDMAS
-         uart->C2 &= ~uartDma; // Switching DMA off shouldn't enable interrupts!
+         uart.C2 &= ~uartDma; // Switching DMA off shouldn't enable interrupts!
 #endif
-         uart->C5 &= ~uartDma;
+         uart.C5 &= ~uartDma;
       }
    }
 
@@ -339,7 +315,7 @@ public:
     *  Flush output data
     */
    virtual void flushOutput() override {
-      while ((uart->S1 & UART_S1_TC_MASK) == 0) {
+      while ((uart.S1 & UART_S1_TC_MASK) == 0) {
       // Wait until transmission of last character is complete
       }
    };
@@ -348,7 +324,7 @@ public:
     *  Flush input data
     */
    virtual void flushInput() override {
-      (void)uart->D;
+      (void)uart.D;
       lookAhead = -1;
    };
 };
@@ -462,7 +438,7 @@ public:
    /**
     * Construct UART interface
     */
-   Uart_T() : Uart(&Info::uart()) {
+   Uart_T() : Uart(Info::uart()) {
       // Enable clock to UART interface
       Info::enableClock();
 
@@ -470,7 +446,7 @@ public:
          configureAllPins();
       }
 
-      uart->C2 = UART_C2_TE(1)|UART_C2_RE(1);
+      uart.C2 = UART_C2_TE(1)|UART_C2_RE(1);
    }
 
    /**
@@ -484,10 +460,10 @@ protected:
     */
    virtual void clearError() override {
       if (Info::statusNeedsWrite) {
-         uart->S1 = 0xFF;
+         uart.S1 = 0xFF;
       }
       else {
-         (void)uart->D;
+         (void)uart.D;
       }
    }
 
@@ -571,12 +547,12 @@ public:
     * Any pending NVIC interrupts are first cleared.
     */
    static void enableNvicInterrupts() {
-      enableNvicInterrupt(Info::irqNums[0]);
+      NVIC_EnableIRQ(Info::irqNums[0]);
       if (Info::irqCount>1) {
-          enableNvicInterrupt(Info::irqNums[1]);
+         NVIC_EnableIRQ(Info::irqNums[1]);
       }
       if (Info::irqCount>2) {
-          enableNvicInterrupt(Info::irqNums[2]);
+         NVIC_EnableIRQ(Info::irqNums[2]);
       }
    }
 
@@ -673,7 +649,7 @@ public:
       static constexpr int OVER_SAMPLE = Info::oversampleRatio;
 
       // Set oversample ratio and baud rate
-      uart->C4 = (uart->C4&~UART_C4_OSR_MASK)|(OVER_SAMPLE-1);
+      uart.C4 = (uart.C4&~UART_C4_OSR_MASK)|(OVER_SAMPLE-1);
       Uart::setBaudRate_basic(baudrate, Info::getInputClockFrequency(), OVER_SAMPLE);
    }
 
@@ -688,7 +664,7 @@ public:
    void setBaudRate(unsigned baudrate, unsigned oversample) {
 
       // Set oversample ratio and baud rate
-      uart->C4 = (uart->C4&~UART_C4_OSR_MASK)|UART_C4_OSR(oversample-1);
+      uart.C4 = (uart.C4&~UART_C4_OSR_MASK)|UART_C4_OSR(oversample-1);
       Uart::setBaudRate_basic(baudrate, Info::getInputClockFrequency(), oversample);
    }
 
@@ -783,7 +759,7 @@ protected:
       // Add character to buffer
       while (!txQueue.enQueueDiscardOnFull(ch)) {
       }
-      uart->C2 |= UART_C2_TIE_MASK;
+      uart.C2 |= UART_C2_TIE_MASK;
       unlock(&fWriteLock);
       if (ch=='\n') {
         _writeChar('\r');
@@ -876,7 +852,7 @@ public:
       while (!txQueue.isEmpty()) {
          // Wait until queue empty
       }
-      while ((uart->S1 & UART_S1_TC_MASK) == 0) {
+      while ((uart.S1 & UART_S1_TC_MASK) == 0) {
          // Wait until transmission of last character is complete
       }
    }
@@ -952,7 +928,7 @@ public:
       static constexpr int OVER_SAMPLE = Info::oversampleRatio;
 
       // Set oversample ratio
-      uart->C4 = (uart->C4&~UART_C4_OSR_MASK)|(OVER_SAMPLE-1);
+      uart.C4 = (uart.C4&~UART_C4_OSR_MASK)|(OVER_SAMPLE-1);
 
       Uart::setBaudRate_basic(baudrate, Info::getInputClockFrequency(), OVER_SAMPLE);
    }
@@ -992,8 +968,8 @@ public:
 
 template<class Info, int rxSize, int txSize> Queue<char, rxSize> UartBuffered_T<Info, rxSize, txSize>::rxQueue;
 template<class Info, int rxSize, int txSize> Queue<char, txSize> UartBuffered_T<Info, rxSize, txSize>::txQueue;
-template<class Info, int rxSize, int txSize> volatile uint32_t UartBuffered_T<Info, rxSize, txSize>::fReadLock = 0;
-template<class Info, int rxSize, int txSize> volatile uint32_t UartBuffered_T<Info, rxSize, txSize>::fWriteLock = 0;
+template<class Info, int rxSize, int txSize> volatile uint32_t   UartBuffered_T<Info, rxSize, txSize>::fReadLock  = 0;
+template<class Info, int rxSize, int txSize> volatile uint32_t   UartBuffered_T<Info, rxSize, txSize>::fWriteLock = 0;
 
 #ifdef USBDM_UART0_IS_DEFINED
 /**

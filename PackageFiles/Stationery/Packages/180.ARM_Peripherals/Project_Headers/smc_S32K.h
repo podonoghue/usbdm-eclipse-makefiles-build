@@ -1,5 +1,5 @@
 /**
- * @file     smc.h (180.ARM_Peripherals/Project_Headers/smc.h)
+ * @file     smc.h (180.ARM_Peripherals/Project_Headers/smc_S32K.h)
  * @brief    System Management Controller
  *
  * @version  V4.12.1.210
@@ -392,7 +392,7 @@ public:
    static void enterStopMode() {
       SCB->SCR |= SCB_SCR_SLEEPDEEP_Msk;
       // Make sure write completes
-      __DSB();
+      (void)(SCB->SCR);
       __WFI();
    }
 
@@ -419,52 +419,10 @@ public:
       enterStopMode();
    }
 
-   /**
-    * Enter Wait Mode (WAIT, VLPW)\n
-    * (ARM core SLEEP mode)
-    *
-    * The processor will stop execution and enter WAIT/VLPW mode.\n
-    * This function can be used to enter normal WAIT mode or VLPW mode
-    * depending upon current run mode.\n
-    * In wait mode the core clock is disabled (no code executing),
-    * but bus clocks are enabled (peripheral modules are operational).
-    *
-    * Possible power mode transitions:
-    * - RUN  -> WAIT
-    * - VLPR -> VLPW
-    *
-    * WAIT mode is exited using any enabled interrupt or RESET.
-    *
-    * For Kinetis K:
-    * If in VLPW mode, the statue of the SMC_PMCTRL[LPWUI] bit
-    * determines if the processor exits to VLPR or RUN mode.\n
-    * Use setExitVeryLowPowerOnInterrupt() to modify this action.
-    *
-    * For Kinetis L:
-    * LPWUI does not exist.\n
-    * Exits with an interrupt from VLPW will always be back to VLPR.\n
-    * Exits from an interrupt from WAIT will always be back to RUN.
-    *
-    * @note Some modules include a programmable option to disable them in wait mode.\n
-    * If those modules are programmed to disable in wait mode, they will not be able to
-    * generate interrupts to wake the core.
+   /*
+    * WAIT mode is not supported
     */
-   static void enterWaitMode() {
-      SCB->SCR &= ~SCB_SCR_SLEEPDEEP_Msk;
-      // Make sure write completes
-      __DSB();
-      __WFI();
-   }
-
-   /**
-    * Enter SLEEP mode
-    *
-    * See enterWaitMode();
-    */
-   static void sleep() {
-      enterWaitMode();
-   }
-
+	
 #ifdef SMC_PMCTRL_LPWUI_MASK
    /**
     * Select VLP action on interrupt when in VLP modes (VLPR, VLPW or VLPS).
@@ -504,7 +462,7 @@ public:
          SCB->SCR &= ~SCB_SCR_SLEEPONEXIT_Msk;
       }
       // Make sure write completes
-      __DSB();
+      (void)(SCB->SCR);
    }
 };
 

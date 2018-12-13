@@ -6,15 +6,15 @@
 ============================================================================
  */
 #include "hardware.h"
-#include "pit.h"
+#include "lpit.h"
 #include "smc.h"
 
 using namespace USBDM;
 
 /**
- * Programmable Interrupt Timer (PIT) Example
+ * Programmable Interrupt Timer (LPIT) Example
  *
- * Demonstrates PIT call-back
+ * Demonstrates LPIT call-back
  *
  * Toggles LED
  */
@@ -22,14 +22,14 @@ using namespace USBDM;
  * This example uses PIT interrupts.
  *
  * It is necessary to enable these in Configure.usbdmProject
- * under the "Peripheral Parameters"->PIT tab.
- * Select irqHandlers option (Class Method - Software ...)
+ * under the "Peripheral Parameters"->LPIT tab.
+ * Select irqHandlerChannelX option (Class Method - Software ...)
  */
 
 // Connection mapping - change as required
 using Led = $(demo.cpp.blue.led:GpioA<2, ActiveLow>);
 
-using Timer        = Pit;
+using Timer        = Lpit0;
 using TimerChannel = Timer::Channel<0>;
 /*
  * This callback is set programmatically
@@ -44,14 +44,14 @@ int main() {
          PinDriveMode_PushPull,
          PinSlewRate_Slow);
 
-   Timer::configure(PitDebugMode_Stop);
+   PccInfo::setLpit0ClockSource(PccDiv2Clock_Sirc);
+   Timer::configure(LpitDozeMode_Run, LpitDebugMode_Stop);
 
    // Set handler programmatically
    TimerChannel::setCallback(flash);
 
    // Flash LED @ 1Hz
-//   TimerChannel::configureInTicks(::SystemBusClock/2, PitChannelIrq_Enabled);
-   TimerChannel::configure(0.5 * seconds, PitChannelIrq_Enabled);
+   TimerChannel::configure(0.5 * seconds, LpitChannelIrq_Enabled);
 
    TimerChannel::enableNvicInterrupts(NvicPriority_Normal);
 

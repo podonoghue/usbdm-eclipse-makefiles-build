@@ -106,7 +106,7 @@ protected:
     * @return false No character available
     */
    virtual bool _isCharAvailable() override {
-      return (lpuart->STAT & LPUART_STAT_RDRF_MASK);
+      return (lpuart.STAT & LPUART_STAT_RDRF_MASK);
    }
 
    /**
@@ -120,14 +120,14 @@ protected:
       uint32_t status;
       do {
          // Get status from UART
-         status = lpuart->STAT;
+         status = lpuart.STAT;
          // Clear & ignore pending errors
          if ((status & (LPUART_STAT_FE_MASK|LPUART_STAT_OR_MASK|LPUART_STAT_PF_MASK|LPUART_STAT_NF_MASK)) != 0) {
-            lpuart->STAT = LPUART_STAT_FE_MASK|LPUART_STAT_OR_MASK|LPUART_STAT_PF_MASK|LPUART_STAT_NF_MASK;
+            lpuart.STAT = LPUART_STAT_FE_MASK|LPUART_STAT_OR_MASK|LPUART_STAT_PF_MASK|LPUART_STAT_NF_MASK;
          }
          // Check for Rx buffer full
       } while ((status & LPUART_STAT_RDRF_MASK) == 0);
-      return (uint8_t)(lpuart->DATA);
+      return (uint8_t)(lpuart.DATA);
    }
 
    /**
@@ -136,11 +136,11 @@ protected:
     * @param[in]  ch - character to send
     */
    virtual void _writeChar(char ch) override {
-      while ((lpuart->STAT & LPUART_STAT_TDRE_MASK) == 0) {
+      while ((lpuart.STAT & LPUART_STAT_TDRE_MASK) == 0) {
          // Wait for Tx buffer empty
          __asm__("nop");
       }
-      lpuart->DATA = ch;
+      lpuart.DATA = ch;
       if (ch=='\n') {
          write('\r');
       }
@@ -158,14 +158,14 @@ public:
    /**
     * LPUART hardware instance
     */
-   volatile LPUART_Type * const lpuart;
+   volatile LPUART_Type &lpuart;
 
    /**
     * Construct UART interface
     *
     * @param[in]  lpuart Base address of UART hardware
     */
-   Lpuart(volatile LPUART_Type *lpuart) : lpuart(lpuart) {
+   Lpuart(volatile LPUART_Type &lpuart) : lpuart(lpuart) {
    }
 
    /**
@@ -186,19 +186,19 @@ public:
    void __attribute__((noinline)) setBaudRate(uint32_t baudrate, uint32_t clockFrequency, uint32_t oversample) {
 
       // Disable UART before changing registers
-      uint32_t ctrl = lpuart->CTRL;
-      lpuart->CTRL = 0;
+      uint32_t ctrl = lpuart.CTRL;
+      lpuart.CTRL = 0;
 
       // Calculate UART divider with rounding
       uint32_t divider = (clockFrequency<<1)/(oversample * baudrate);
       divider = (divider>>1)|(divider&0b1);
 
       // Set Baud rate register
-      lpuart->BAUD = (lpuart->BAUD&~(LPUART_BAUD_SBR_MASK|LPUART_BAUD_OSR_MASK))|
+      lpuart.BAUD = (lpuart.BAUD&~(LPUART_BAUD_SBR_MASK|LPUART_BAUD_OSR_MASK))|
             LPUART_BAUD_SBR(divider)|LPUART_BAUD_OSR(oversample-1);
 
       // Restore UART settings
-      lpuart->CTRL = ctrl;
+      lpuart.CTRL = ctrl;
    }
 
    /**
@@ -220,10 +220,10 @@ public:
     */
    void enableInterrupt(LpuartInterrupt lpuartInterrupt, bool enable=true) {
       if (enable) {
-         lpuart->CTRL |= lpuartInterrupt;
+         lpuart.CTRL |= lpuartInterrupt;
       }
       else {
-         lpuart->CTRL &= ~lpuartInterrupt;
+         lpuart.CTRL &= ~lpuartInterrupt;
       }
    }
 
@@ -238,10 +238,10 @@ public:
    void enableDma(LpuartDma lpuartDma, bool enable=true) {
       // Flags are in same positions in the C2 and C5
       if (enable) {
-         lpuart->BAUD |= lpuartDma;
+         lpuart.BAUD |= lpuartDma;
       }
       else {
-         lpuart->BAUD &= ~lpuartDma;
+         lpuart.BAUD &= ~lpuartDma;
       }
    }
 
@@ -249,7 +249,7 @@ public:
     *  Flush output data
     */
    virtual void flushOutput() override {
-      while ((lpuart->STAT & LPUART_STAT_TC_MASK) == 0) {
+      while ((lpuart.STAT & LPUART_STAT_TC_MASK) == 0) {
       // Wait until transmission of last character is complete
       }
    };
@@ -258,7 +258,7 @@ public:
     *  Flush input data
     */
    virtual void flushInput() override {
-      (void)lpuart->DATA;
+      (void)lpuart.DATA;
       lookAhead = -1;
    };
 };
@@ -288,12 +288,13 @@ typedef void (*LPUARTCallbackFunction)(uint8_t status);
 template<class Info> class Lpuart_T : public Lpuart {
 
 public:
-   /** Get reference to GPIO hardware as struct */
+   /** Get reference to UART hardware as struct */
    static volatile LPUART_Type &uartPtr() { return Info::uart(); }
 
-   /** Get base address of SPI hardware as uint32_t */
+   /** Get base address of UART hardware as uint32_t */
    static constexpr uint32_t uartBase() { return Info::baseAddress; }
-   /** Get base address of UART.D register as uint32_t */
+
+   /** Get base address of UART.DATA register as uint32_t */
    static constexpr uint32_t uartDATA() { return uartBase() + offsetof(LPUART_Type, DATA); }
 
 #ifdef __CMSIS_RTOS
@@ -370,7 +371,7 @@ public:
     *
     * @param[in]  baudrate         Interface speed in bits-per-second
     */
-   Lpuart_T(unsigned baudrate=Info::defaultBaudRate) : Lpuart(&Info::lpuart()) {
+   Lpuart_T(unsigned baudrate=Info::defaultBaudRate) : Lpuart(Info::lpuart()) {
       // Enable clock to UART interface
 #ifdef PCC_BASE_PTR
       Info::setClockSource(Info::defaultClockSource);
@@ -383,7 +384,7 @@ public:
 
       setBaudRate(baudrate);
 
-      lpuart->CTRL = LPUART_CTRL_TE(1)|LPUART_CTRL_RE(1);
+      lpuart.CTRL = LPUART_CTRL_TE(1)|LPUART_CTRL_RE(1);
    }
 
    /**
@@ -424,7 +425,7 @@ public:
     * Receive/Transmit/Error IRQ handler
     */
    static void irqHandler() {
-      uint8_t status = Info::lpuart->STAT;
+      uint8_t status = Info::lpuart().STAT;
       rxTxCallback(status);
    }
 
@@ -445,12 +446,12 @@ public:
     * Any pending NVIC interrupts are first cleared.
     */
    static void enableNvicInterrupts() {
-      enableNvicInterrupt(Info::irqNums[0]);
+      NVIC_EnableIRQ(Info::irqNums[0]);
       if (Info::irqCount>1) {
-          enableNvicInterrupt(Info::irqNums[1]);
+         NVIC_EnableIRQ(Info::irqNums[1]);
       }
       if (Info::irqCount>2) {
-          enableNvicInterrupt(Info::irqNums[2]);
+         NVIC_EnableIRQ(Info::irqNums[2]);
       }
    }
 
@@ -544,7 +545,7 @@ protected:
       // Add character to buffer
       while (!txQueue.enQueueDiscardOnFull(ch)) {
       }
-      lpuart->CTRL |= LPUART_CTRL_TIE_MASK;
+      lpuart.CTRL |= LPUART_CTRL_TIE_MASK;
       unlock(&fWriteLock);
       if (ch=='\n') {
         _writeChar('\r');
@@ -581,20 +582,20 @@ public:
     * Receive/Transmit/Error IRQ handler
     */
    static void irqHandler()  {
-      uint8_t status = Info::lpuart->STAT;
+      uint8_t status = Info::lpuart().STAT;
       if (status & LPUART_STAT_RDRF_MASK) {
          // Receive data register full - save data
-         rxQueue.enQueueDiscardOnFull(Info::lpuart->DATA);
+         rxQueue.enQueueDiscardOnFull(Info::lpuart().DATA);
       }
       if (status & LPUART_STAT_TDRE_MASK) {
          // Transmitter ready
          if (txQueue.isEmpty()) {
             // No data available - disable further transmit interrupts
-            Info::lpuart->CTRL &= ~LPUART_CTRL_TIE_MASK;
+            Info::lpuart().CTRL &= ~LPUART_CTRL_TIE_MASK;
          }
          else {
             // Transmit next byte
-            Info::lpuart->DATA = txQueue.deQueue();
+            Info::lpuart().DATA = txQueue.deQueue();
          }
       }
    }
@@ -607,7 +608,7 @@ public:
       while (!txQueue.isEmpty()) {
          // Wait until queue empty
       }
-      while ((lpuart->STAT & LPUART_STAT_TC_MASK) == 0) {
+      while ((lpuart.STAT & LPUART_STAT_TC_MASK) == 0) {
          // Wait until transmission of last character is complete
       }
    }
@@ -624,6 +625,8 @@ public:
 
 template<class Info, int rxSize, int txSize> Queue<char, rxSize> LpuartBuffered_T<Info, rxSize, txSize>::rxQueue;
 template<class Info, int rxSize, int txSize> Queue<char, txSize> LpuartBuffered_T<Info, rxSize, txSize>::txQueue;
+template<class Info, int rxSize, int txSize> volatile uint32_t   LpuartBuffered_T<Info, rxSize, txSize>::fWriteLock = 0;
+template<class Info, int rxSize, int txSize> volatile uint32_t   LpuartBuffered_T<Info, rxSize, txSize>::fReadLock  = 0;
 
 #ifdef USBDM_LPUART0_IS_DEFINED
 /**

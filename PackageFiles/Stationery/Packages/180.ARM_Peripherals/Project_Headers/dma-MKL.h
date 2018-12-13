@@ -40,7 +40,7 @@ enum DmaMuxEnable {
 /**
  * DMA Channel numbers.
  */
-enum DmaChannelNum {
+enum DmaChannelNum : unsigned {
    DmaChannelNum_0,      //!< Channel  0
    DmaChannelNum_1,      //!< Channel  1
    DmaChannelNum_2,      //!< Channel  2
@@ -484,24 +484,13 @@ protected:
    }
 
 public:
-   /** DMA interrupt handler -  Calls DMA 0 callback */
-   static void irq0Handler() {
-      sCallbacks[0](DmaChannelNum_0);
-   }
-
-   /** DMA interrupt handler -  Calls DMA 1 callback */
-   static void irq1Handler() {
-      sCallbacks[1](DmaChannelNum_1);
-   }
-
-   /** DMA interrupt handler -  Calls DMA 2 callback */
-   static void irq2Handler() {
-      sCallbacks[2](DmaChannelNum_2);
-   }
-
-   /** DMA interrupt handler -  Calls DMA 3 callback */
-   static void irq3Handler() {
-      sCallbacks[3](DmaChannelNum_3);
+   /** DMA interrupt handler - Calls DMA callback
+    *
+    * @tparam channel Channel number
+    */
+   template<unsigned channel>
+   static void irqHandler() {
+      sCallbacks[channel]((DmaChannelNum)channel);
    }
 
    /**

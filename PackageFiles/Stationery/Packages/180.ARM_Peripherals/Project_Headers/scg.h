@@ -102,7 +102,7 @@ public:
     * Any pending NVIC interrupts are first cleared.
     */
    static void enableNvicInterrupts() {
-      enableNvicInterrupt(ScgInfo::irqNums[0]);
+      NVIC_EnableIRQ(ScgInfo::irqNums[0]);
    }
 
    /**

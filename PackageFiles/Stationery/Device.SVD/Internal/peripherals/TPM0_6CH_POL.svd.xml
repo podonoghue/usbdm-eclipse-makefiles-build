@@ -226,7 +226,7 @@ An interrupt is generated when TOF equals one</description>
                </fields>
             </register>
             <cluster>
-               <dim>%CONTROLS_COUNT</dim>
+               <dim>$(CONTROLS_COUNT)</dim>
                <dimIncrement>8</dimIncrement>
                <name>CONTROLS,@pC@i@f</name>
                <addressOffset>0xC</addressOffset>

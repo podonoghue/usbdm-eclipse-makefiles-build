@@ -115,25 +115,25 @@ Devices using this vector table:
    </interrupt>
    <interrupt>
       <name>FTFC</name>
-      <description>FTFC</description>
+      <description>Flash Memory Module</description>
       <value>18</value>
       <peripheral>FTFC</peripheral>
    </interrupt>
    <interrupt>
-      <name>Read_Collision</name>
-      <description>FTFC</description>
+      <name>FTFC_Read_Collision</name>
+      <description>Flash Memory Module</description>
       <value>19</value>
       <peripheral>FTFC</peripheral>
    </interrupt>
    <interrupt>
       <name>LVD_LVW</name>
-      <description>PMC</description>
+      <description>Power Management Controller</description>
       <value>20</value>
       <peripheral>PMC</peripheral>
    </interrupt>
    <interrupt>
       <name>FTFC_Fault</name>
-      <description>FTFC</description>
+      <description>Flash Memory Module</description>
       <value>21</value>
       <peripheral>FTFC</peripheral>
    </interrupt>
@@ -152,25 +152,25 @@ Devices using this vector table:
    </interrupt>
    <interrupt>
       <name>LPI2C0_Master</name>
-      <description>The LPI2C Memory Map/Register Definition can be found here</description>
+      <description>Low Power I2C</description>
       <value>24</value>
       <peripheral>LPI2C0</peripheral>
    </interrupt>
    <interrupt>
       <name>LPI2C0_Slave</name>
-      <description>The LPI2C Memory Map/Register Definition can be found here</description>
+      <description>Low Power I2C</description>
       <value>25</value>
       <peripheral>LPI2C0</peripheral>
    </interrupt>
    <interrupt>
       <name>LPSPI0</name>
-      <description>The LPSPI Memory Map/Register Definition can be found here</description>
+      <description>Low Power SPI</description>
       <value>26</value>
       <peripheral>LPSPI0</peripheral>
    </interrupt>
    <interrupt>
       <name>LPSPI1</name>
-      <description>The LPSPI Memory Map/Register Definition can be found here</description>
+      <description>Low Power SPI</description>
       <value>27</value>
       <peripheral>LPSPI1</peripheral>
    </interrupt>
@@ -218,13 +218,13 @@ Devices using this vector table:
    </interrupt>
    <interrupt>
       <name>ERM_single_fault</name>
-      <description>ERM</description>
+      <description>Error Reporting Module</description>
       <value>44</value>
       <peripheral>ERM</peripheral>
    </interrupt>
    <interrupt>
       <name>ERM_double_fault</name>
-      <description>ERM</description>
+      <description>Error Reporting Module</description>
       <value>45</value>
       <peripheral>ERM</peripheral>
    </interrupt>
@@ -325,7 +325,7 @@ Devices using this vector table:
    </interrupt>
    <interrupt>
       <name>FLEXIO</name>
-      <description>The FLEXIO Memory Map/Register Definition can be found here</description>
+      <description>FLEXIO module</description>
       <value>69</value>
       <peripheral>FLEXIO</peripheral>
    </interrupt>

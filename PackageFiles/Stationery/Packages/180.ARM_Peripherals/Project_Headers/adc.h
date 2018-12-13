@@ -477,14 +477,14 @@ public:
     *       If the internal clock is selected, it will be automatically enabled when an ADC conversion is initiated.\n
     *       However, enabling it beforehand will reduce the latency of the 1st conversion in a sequence.
     */
-   static void enableAsynchronousClock(bool enable=true) {
+   static void enableAsynchronousClock() {
       adc().CFG2 |= ADC_CFG2_ADACKEN_MASK;
    }
 
    /**
     * Disable ADC internal asynchronous clock source
     */
-   static void enableAsynchronousClock(bool enable=true) {
+   static void disableAsynchronousClock() {
       adc().CFG2 &= ~ADC_CFG2_ADACKEN_MASK;
    }
 

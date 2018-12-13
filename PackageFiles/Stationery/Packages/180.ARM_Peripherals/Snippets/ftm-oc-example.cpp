@@ -81,9 +81,6 @@ int main() {
    // Must be done after timer clock configuration (above)
    timerHalfPeriodInTicks = Timer::convertSecondsToTicks(WAVEFORM_PERIOD/2.0);
 
-   // Set callback function
-   Timer::setChannelCallback(ftmCallback);
-
    // Enable interrupts for entire timer
    Timer::enableNvicInterrupts();
 
@@ -95,6 +92,9 @@ int main() {
 
    // Trigger 1st interrupt at now+100
    TimerChannel::setRelativeEventTime(100);
+
+   // Set callback function (may be shared by multiple channels)
+   TimerChannel::setChannelCallback(ftmCallback);
 
    // Configure the channel
    TimerChannel::configure(

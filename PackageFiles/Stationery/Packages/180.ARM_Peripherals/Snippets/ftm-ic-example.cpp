@@ -87,9 +87,6 @@ int main() {
    // This adjusts the prescaler value but does not change the clock source.
    Timer::setMaximumInterval(MAX_IC_INTERVAL);
 
-   // Set callback function shared by all channels
-   Timer::setChannelCallback(ftmCallback);
-
    // Enable interrupts for entire timer
    Timer::enableNvicInterrupts();
 
@@ -101,6 +98,9 @@ int main() {
    // or change individual attributes
    //  TimerChannel::setPullDevice(PinPull_Up);
    //  TimerChannel::setFilter(PinFilter_Passive);
+
+   // Set callback function (may be shared by multiple channels)
+   TimerChannel::setChannelCallback(ftmCallback);
 
    // Configure the channel
    TimerChannel::configure(

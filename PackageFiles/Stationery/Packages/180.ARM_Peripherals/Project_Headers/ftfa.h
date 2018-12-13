@@ -137,7 +137,7 @@ public:
     * Any pending NVIC interrupts are first cleared.
     */
    static void enableNvicInterrupts() {
-      enableNvicInterrupt(irqNums[0]);
+      NVIC_EnableIRQ(irqNums[0]);
    }
 
    /**
@@ -162,7 +162,7 @@ public:
     * Any pending NVIC interrupts are first cleared.
     */
    static void enableNvicCollisionInterrupts() {
-      enableNvicInterrupt(irqNums[1]);
+      NVIC_EnableIRQ(irqNums[1]);
    }
 
    /**

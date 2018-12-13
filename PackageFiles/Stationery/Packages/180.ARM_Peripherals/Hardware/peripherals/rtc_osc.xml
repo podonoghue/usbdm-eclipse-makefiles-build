@@ -403,7 +403,7 @@
       \t            ($(rtc_month)) +
       \t            ($(rtc_day)+12-1))*24 +
       \t           ($(rtc_hour)))*60 +
-      \t          ($(rtc_minute)))*60;
+      \t          ($(rtc_minute)))*60;\n\n
     ]]></template>     
 
    <category name="Device Registers (view only)" description="RTC Register values">

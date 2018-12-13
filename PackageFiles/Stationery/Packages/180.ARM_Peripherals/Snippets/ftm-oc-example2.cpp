@@ -95,9 +95,6 @@ int main() {
    waveformHighTime = Timer::convertSecondsToTicks(WAVEFORM_HIGH_TIME);
    waveformLowTime  = Timer::convertSecondsToTicks(WAVEFORM_LOW_TIME);
 
-   // Set callback function
-   Timer::setChannelCallback(ftmCallback);
-
    // Enable interrupts for entire timer
    Timer::enableNvicInterrupts();
 
@@ -109,6 +106,9 @@ int main() {
 
    // Trigger 1st interrupt at now+100
    TimerChannel::setRelativeEventTime(100);
+
+   // Set callback function (may be shared by multiple channels)
+   TimerChannel::setChannelCallback(ftmCallback);
 
    // Configure the channel
    TimerChannel::configure(

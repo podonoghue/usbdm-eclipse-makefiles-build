@@ -53,21 +53,21 @@ static void configurePdb() {
 
    Pdb::enable();
    // Software Trigger
-   Pdb::setTriggerSource(PdbTrigger_Software, PdbMode_OneShot);
+   Pdb::setTriggerSource(PdbTrigger_Software);
    // Set call-backs
    Pdb::setErrorCallback(pdbErrorCallback);
    Pdb::setCallback(pdbCallback);
    // Interrupts during sequence or error
-   Pdb::setInterrupts(PdbInterrupt_Enabled, PdbErrorInterrupt_Enabled);
+   Pdb::setActions(PdbAction_Interrupt, PdbErrorInterrupt_Enabled);
 
    // Set period of sequence
    Pdb::setPeriod(SEQ_LENGTH);
    // Generate interrupt at end of sequence
    Pdb::setInterruptDelay(SEQ_LENGTH);
    // Take single ADC sample at TRIGGER_TIME
-   Pdb::setPretriggers(0, PdbPretrigger0_Delay, TRIGGER_TIME);
+   Pdb::configureAdcPretrigger(0, 0, PdbPretrigger_Delayed, TRIGGER_TIME);
    // Update registers
-   Pdb::triggerRegisterLoad(PdbLoadMode_Immediate);
+   Pdb::configureRegisterLoad(PdbLoadMode_Immediate);
    while (!Pdb::isRegisterLoadComplete()) {
       __asm__("nop");
    }
@@ -81,7 +81,7 @@ static void adcCallback(uint32_t value, int) {
 
 static void configureAdc() {
 
-   SimInfo::setAdc0Triggers(SimAdc0AltTrigger_Pdb);
+   SimInfo::setAdc0Triggers(SimAdc0TriggerMode_Pdb);
 
    Adc::enable();
    Adc::setResolution(AdcResolution_8bit_se);

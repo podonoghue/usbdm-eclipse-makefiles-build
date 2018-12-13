@@ -398,7 +398,7 @@ Devices using this peripheral:
                </fields>
             </register>
             <cluster>
-               <dim>%TMR_COUNT</dim>
+               <dim>$(TMR_COUNT)</dim>
                <dimIncrement>16</dimIncrement>
                <name>TMR,@p@f@i</name>
                <addressOffset>0x20</addressOffset>

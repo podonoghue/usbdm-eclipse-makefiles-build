@@ -168,7 +168,7 @@
          <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForFlash" />
          <clock clockEnable="PCC->PCC_FTFC |= PCC_PCCn_CGC_MASK" clockDisable="PCC->PCC_FTFC &amp;= ~PCC_PCCn_CGC_MASK" />
          <irq num="FTFC_IRQn" />
-         <irq num="Read_Collision_IRQn" />
+         <irq num="FTFC_Read_Collision_IRQn" />
          <irq num="FTFC_Fault_IRQn" />
       </peripheral>
       <peripheral baseName="FTM"      instance="">

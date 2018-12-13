@@ -25,7 +25,7 @@ Devices using this peripheral:
          </addressBlock>
          <registers>
             <register>
-               <dim>%SC1_COUNT</dim>
+               <dim>$(SC1_COUNT)</dim>
                <dimIncrement>4</dimIncrement>
                <name>SC1%s</name>
                <description>Status and Control Register 1</description>
@@ -571,7 +571,7 @@ When this field is set, ADC will AND all of compare triggers and set COCO after 
                </fields>
             </register>
             <register>
-               <dim>%SC1_COUNT</dim>
+               <dim>$(SC1_COUNT)</dim>
                <dimIncrement>4</dimIncrement>
                <name>R%s</name>
                <description>Data Result Register</description>

@@ -29,7 +29,7 @@
       
       <intOption name="system_erclk32k_clock" 
          units="Hz"
-	 derived="true"
+         derived="true"
          description="Frequency of External 32k Reference Clock [ERCLK32K]"
          toolTip="External reference clock available to some peripherals (usually ~32kHz)" 
          origin="Derived from OSC32KCLK, RTCCLK or LPO" 

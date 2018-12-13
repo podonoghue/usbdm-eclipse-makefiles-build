@@ -401,7 +401,7 @@ public:
    static void enterStopMode() {
       SCB->SCR |= SCB_SCR_SLEEPDEEP_Msk;
       // Make sure write completes
-      __DSB();
+      (void)(SCB->SCR);
       __WFI();
    }
 
@@ -461,7 +461,7 @@ public:
    static void enterWaitMode() {
       SCB->SCR &= ~SCB_SCR_SLEEPDEEP_Msk;
       // Make sure write completes
-      __DSB();
+      (void)(SCB->SCR);
       __WFI();
    }
 
@@ -513,7 +513,7 @@ public:
          SCB->SCR &= ~SCB_SCR_SLEEPONEXIT_Msk;
       }
       // Make sure write completes
-      __DSB();
+      (void)(SCB->SCR);
    }
 };
 

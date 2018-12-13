@@ -2,6 +2,94 @@
 <!DOCTYPE peripheralPage SYSTEM "_menu.dtd" >
 <!-- can1_s32k14x.xml -->
 
-<fragment xmlns:xi="http://www.w3.org/2001/XInclude">
-<xi:include href="can_def.xml"/>
-</fragment>
+<peripheralPage xmlns:xi="http://www.w3.org/2001/XInclude" name="_instance" description="FlexCAN">
+
+   <template><![CDATA[
+      \t//! Base value for PCR (excluding MUX value)
+      \tstatic constexpr uint32_t defaultPcrValue  = 0;\n\n
+   ]]></template>
+   
+   <xi:include href="_mapPinsOption.xml"/>
+   
+   <intOption name="NumberOfMessageBuffers" 
+      description="Number of message buffers available"
+      toolTip="This value is determined by the hardware"
+      constant="true" 
+      value="16" />
+
+   <intOption name="NumberOfMessageFilters" 
+      description="Number of message buffers available"
+      toolTip="This value is determined by the hardware"
+      constant="true" 
+      value="40" />
+
+   <template><![CDATA[
+       \t//! Number of Message Buffers\n
+       \tstatic constexpr unsigned NumberOfMessageBuffers =  $(NumberOfMessageBuffers);\n\n
+       \t//! Number of Message Filters\n
+       \tstatic constexpr unsigned NumberOfMessageFilters =  $(NumberOfMessageFilters);\n\n
+   ]]></template>
+
+   <!--
+   Patterns for pattern and classHandler 
+     -  %i replaced with peripheral instance e.g. FTM1 => 1, PTA => A
+     -  %b replaced with peripheral base name e.g. FTM1 => = FTM
+     -  %c replaced with peripheral C++ base class name e.g. FTM1 => = Ftm
+     -  _IRQHandler is appended to the pattern (only)
+   -->
+   <irqOption name="irqHandlingMethod"  
+      description="Interrupt handlers"
+      toolTip="This selection allow the interrupt handler for this peripheral to be installed using several different methods"
+      pattern="^%b%i_ORed$" 
+      classHandler="%c%i::irqHandler" />
+
+   <irqOption name="errorIrqHandlingMethod"  
+      description="Interrupt handlers"
+      toolTip="This selection allow the interrupt handler for this peripheral to be installed using several different methods"
+      pattern="^%b%i_Error$" 
+      classHandler="%c%i::errorIrqHandler" />
+
+   <irqOption name="wakeupIrqHandlingMethod"  
+      description="Interrupt handlers"
+      toolTip="This selection allow the interrupt handler for this peripheral to be installed using several different methods"
+      pattern="^%b%i_Wake_Up$" 
+      classHandler="%c%i::wakeupIrqHandler" />
+
+   <irqOption name="mbIrqHandlingMethod"  
+      description="Interrupt handlers"
+      toolTip="This selection allow the interrupt handler for this peripheral to be installed using several different methods"
+      pattern="^%b%i_ORed_(\d+_\d+)_MB$" 
+      classHandler="%c%i::mb$1_IrqHandler" />
+
+   <signals/>
+   
+   
+   <!-- Template is added to class within pin_mapping.h -->
+   <template><![CDATA[
+       \t//! Class based callback handler has been installed in vector table\n
+       \tstatic constexpr bool irqHandlerInstalled = ($(irqHandlingMethod) == 1);\n\n
+       
+       \tstatic constexpr unsigned OredIrqNumIndex        = 0;
+       \tstatic constexpr unsigned ErrorIrqNumIndex       = 1;
+       \tstatic constexpr unsigned Ored_0_15_IrqNumIndex  = 2;
+   ]]></template>
+       
+   <intOption name="irqLevel" 
+      description="IRQ Level in NVIC [0-15]"
+      toolTip="Sets the priority level used to configure the NVIC\n
+               Lower numbers represent higher priorities"
+      value="7" min="0" max="15" 
+   />
+
+   <template><![CDATA[
+       \t//! Default IRQ level\n
+       \tstatic constexpr uint32_t irqLevel =  $(irqLevel);\n\n
+   ]]></template>
+
+   <xi:include href="_clockOption.xml"/>
+      
+   <projectActionList id = "can_files" >
+      <copy source="Project_Headers/can.h"                    target="Project_Headers/can.h"                    overwrite="true"  derived="true" />
+   </projectActionList>
+   
+</peripheralPage>

@@ -759,9 +759,16 @@ public:
 
       usbdm_assert(dmaChannelNum<NumChannels, "Illegal DMA channel");
 
+#ifdef USBDM_PIT_IS_DEFINED
       // Throttled DMA channels limited by PIT channels available
       usbdm_assert((dmaMuxEnable != DmaMuxEnable_Triggered) || (dmaChannelNum<=USBDM::PitInfo::NumChannels),
             "Illegal PIT throttled channel");
+#endif
+
+#ifdef USBDM_LPIT0_IS_DEFINED
+      usbdm_assert((dmaMuxEnable != DmaMuxEnable_Triggered) || (dmaChannelNum<=USBDM::Lpit0Info::NumChannels),
+            "Illegal PIT throttled channel");
+#endif
 
       // DmaSlots 0-63 must associate with DMA channels 0-15
       // DmaSlots 64-128 must associate with DMA channels 15-31
@@ -828,7 +835,7 @@ protected:
 
 public:
    /** DMA interrupt handler -  Error callback */
-   static void irqErrorHandler() {
+   static void errorIrqHandler() {
 
       // Capture error status
       uint32_t errorFlags = dmac().ES;
@@ -839,84 +846,13 @@ public:
       errorCallback(errorFlags);
    }
 
-   /** DMA interrupt handler -  Calls DMA 0 callback */
-   static void irq0Handler() {
-      sCallbacks[0](DmaChannelNum_0);
-   }
-
-   /** DMA interrupt handler -  Calls DMA 1 callback */
-   static void irq1Handler() {
-      sCallbacks[1](DmaChannelNum_1);
-   }
-
-   /** DMA interrupt handler -  Calls DMA 2 callback */
-   static void irq2Handler() {
-      sCallbacks[2](DmaChannelNum_2);
-   }
-
-   /** DMA interrupt handler -  Calls DMA 3 callback */
-   static void irq3Handler() {
-      sCallbacks[3](DmaChannelNum_3);
-   }
-
-   /** DMA interrupt handler -  Calls DMA 4 callback */
-   static void irq4Handler() {
-      sCallbacks[4](DmaChannelNum_4);
-   }
-
-   /** DMA interrupt handler -  Calls DMA 5 callback */
-   static void irq5Handler() {
-      sCallbacks[5](DmaChannelNum_5);
-   }
-
-   /** DMA interrupt handler -  Calls DMA 6 callback */
-   static void irq6Handler() {
-      sCallbacks[6](DmaChannelNum_6);
-   }
-
-   /** DMA interrupt handler -  Calls DMA 7 callback */
-   static void irq7Handler() {
-      sCallbacks[7](DmaChannelNum_7);
-   }
-
-   /** DMA interrupt handler -  Calls DMA 8 callback */
-   static void irq8Handler() {
-      sCallbacks[8](DmaChannelNum_8);
-   }
-
-   /** DMA interrupt handler -  Calls DMA 9 callback */
-   static void irq9Handler() {
-      sCallbacks[9](DmaChannelNum_9);
-   }
-
-   /** DMA interrupt handler -  Calls DMA 10 callback */
-   static void irq10Handler() {
-      sCallbacks[10](DmaChannelNum_10);
-   }
-
-   /** DMA interrupt handler -  Calls DMA 11 callback */
-   static void irq11Handler() {
-      sCallbacks[11](DmaChannelNum_11);
-   }
-
-   /** DMA interrupt handler -  Calls DMA 12 callback */
-   static void irq12Handler() {
-      sCallbacks[12](DmaChannelNum_12);
-   }
-
-   /** DMA interrupt handler -  Calls DMA 13 callback */
-   static void irq13Handler() {
-      sCallbacks[13](DmaChannelNum_13);
-   }
-
-   /** DMA interrupt handler -  Calls DMA 14 callback */
-   static void irq14Handler() {
-      sCallbacks[14](DmaChannelNum_14);
-   }
-
-   /** DMA interrupt handler -  Calls DMA 15 callback */
-   static void irq15Handler() {
-      sCallbacks[15](DmaChannelNum_15);
+   /** DMA interrupt handler - Calls DMA callback
+    *
+    * @tparam channel Channel number
+    */
+   template<unsigned channel>
+   static void irqHandler() {
+      sCallbacks[channel]((DmaChannelNum)channel);
    }
 
    /**
@@ -1033,6 +969,26 @@ public:
       return (DmaChannelNum) pitChannelNum;
    }
 
+#ifdef USBDM_LPIT0_IS_DEFINED
+   /**
+    * Allocate Periodic DMA channel.
+    * This is a channel that may be throttled by an associated PIT channel.
+    *
+    * @return Error DmaChannelNum_None - No suitable channel available.  Error code set.
+    * @return Channel number           - Number of allocated channel
+    */
+   static DmaChannelNum allocatePeriodicChannel() {
+      unsigned channelNum = __builtin_ffs(allocatedChannels);
+      if ((channelNum == 0)||(--channelNum>=Info::NumChannels)||(channelNum>=USBDM::Lpit0Info::NumChannels)) {
+         setErrorCode(E_NO_RESOURCE);
+         return DmaChannelNum_None;
+      }
+      allocatedChannels &= ~(1<<channelNum);
+      return (DmaChannelNum) channelNum;
+   }
+#endif
+
+#ifdef USBDM_PIT_IS_DEFINED
    /**
     * Allocate Periodic DMA channel.
     * This is a channel that may be throttled by an associated PIT channel.
@@ -1049,6 +1005,7 @@ public:
       allocatedChannels &= ~(1<<channelNum);
       return (DmaChannelNum) channelNum;
    }
+#endif
 
    /**
     * Free DMA channel.
@@ -1313,7 +1270,7 @@ public:
       usbdm_assert(dmaChannelNum<Info::NumChannels, "Illegal DMA channel");
 
       const IRQn_Type irqNum = Dma0Info::irqNums[0] + (dmaChannelNum&(Dma0Info::NumChannels-1));
-      enableNvicInterrupt(irqNum);
+      NVIC_EnableIRQ(irqNum);
    }
 
    /**

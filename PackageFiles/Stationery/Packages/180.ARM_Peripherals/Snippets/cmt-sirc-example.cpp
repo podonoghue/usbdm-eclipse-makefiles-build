@@ -16,7 +16,7 @@
 /*
  * Sony SIRC
  *
- * 40kHz carrier, 600us basic unit, bits transmitter LSB first
+ * 40kHz carrier, 600us basic unit, bits transmitted LSB first
  *
  * Pulse width encoding of bits:
  *

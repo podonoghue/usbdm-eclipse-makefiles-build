@@ -9,10 +9,11 @@
    <item key="demo.cpp.green.led"             value="GpioD&lt;4,ActiveLow&gt;" />   <!-- Digital I/O to LED -->
    <item key="demo.cpp.blue.led"              value="GpioA&lt;2,ActiveLow&gt;" />   <!-- Digital I/O to LED -->
    <item key="demo.cpp.ftm"                   value="Ftm0" />                       <!-- FTM/TPM to LED -->
-   <item key="demo.cpp.pwm.led1"              value="Ftm0Channel&lt;7&gt;" />       <!-- FTM/TPM to LED -->
-   <item key="demo.cpp.pwm.led2"              value="Ftm0Channel&lt;2&gt;" />       <!-- FTM/TPM to LED -->
-   <item key="demo.cpp.joystick.x"            value="Adc0Channel&lt;14&gt;" />      <!-- Analogue I/O (Arduino) -->
-   <item key="demo.cpp.joystick.y"            value="Adc0Channel&lt;15&gt;" />      <!-- Analogue I/O (Arduino) -->
+   <item key="demo.cpp.pwm.led1"              value="Channel&lt;7&gt;" />           <!-- FTM/TPM to LED -->
+   <item key="demo.cpp.pwm.led2"              value="Channel&lt;2&gt;" />           <!-- FTM/TPM to LED -->
+   <item key="demo.cpp.adc"                   value="Adc0" />                       <!-- ADC -->
+   <item key="demo.cpp.joystick.x"            value="Channel&lt;14&gt;" />          <!-- Analogue I/O (Arduino) -->
+   <item key="demo.cpp.joystick.y"            value="Channel&lt;15&gt;" />          <!-- Analogue I/O (Arduino) -->
    <item key="demo.cpp.joystick.k"            value="GpioD&lt;6, ActiveLow&gt;" />  <!-- Digital I/O from switch (Arduino) -->
    <item key="demo.cpp.external.switch"       value="GpioC&lt;0, ActiveLow&gt;" />  <!-- Digital I/O from switch (Arduino) -->
    <item key="demo.cpp.external.led"          value="GpioC&lt;1, ActiveLow&gt;" />  <!-- Digital I/O to LED (Arduino) -->

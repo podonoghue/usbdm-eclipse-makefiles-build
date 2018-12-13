@@ -32,7 +32,7 @@ namespace USBDM {
  *
  * @note Any pending interrupts are cleared before enabling.
  */
-void enableNvicInterrupt(IRQn_Type irqNum, uint32_t nvicPriority=NvicPriority_Normal);
+void enableNvicInterrupt(IRQn_Type irqNum, uint32_t nvicPriority);
 
 /**
  * @addtogroup PeripheralPinTables Peripheral Information Classes
@@ -481,7 +481,7 @@ public:
     */
    static void enableNvicInterrupts() {
       static_assert(irqNum>=0, "Pin does not support interrupts");
-      enableNvicInterrupt(irqNum);
+      NVIC_EnableIRQ(irqNum);
    }
 
    /**
@@ -500,7 +500,6 @@ public:
     */
    static void disableNvicInterrupts() {
       static_assert(irqNum>=0, "Pin does not support interrupts");
-      // Disable interrupts
       NVIC_DisableIRQ(irqNum);
    }
 };
@@ -856,7 +855,7 @@ public:
     */
    static void enableNvicInterrupts() {
       static_assert(irqNum>=0, "Pin does not support interrupts");
-      enableNvicInterrupt(irqNum);
+      NVIC_EnableIRQ(irqNum);
    }
 
    /**
@@ -865,7 +864,7 @@ public:
     *
     * @param[in]  nvicPriority  Interrupt priority
     */
-   static void enableNvicInterrupts(uint32_t nvicPriority=NvicPriority_Normal) {
+   static void enableNvicInterrupts(uint32_t nvicPriority) {
       static_assert(irqNum>=0, "Pin does not support interrupts");
       enableNvicInterrupt(irqNum, nvicPriority);
    }

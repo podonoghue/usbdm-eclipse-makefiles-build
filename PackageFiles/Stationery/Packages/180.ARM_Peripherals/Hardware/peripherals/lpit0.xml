@@ -36,8 +36,8 @@
    <irqOption name="irqHandlers"  
       description="Channel interrupt handlers"
       toolTip="This selection allow the interrupt handler for this peripheral to be installed using several different methods"
-      pattern="^%b_Ch(\d+)$" 
-      classHandler="%c%iChannel&lt;$1&gt;::irqHandler" />
+      pattern="^%b%i_Ch(\d+)$" 
+      classHandler="%c%i::Channel&lt;$1&gt;::irqHandler" />
       
    <template><![CDATA[
        \t//! Class based callback handler has been installed in vector table\n
