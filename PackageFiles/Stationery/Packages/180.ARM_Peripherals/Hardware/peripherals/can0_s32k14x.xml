@@ -82,6 +82,33 @@
                Lower numbers represent higher priorities"
       value="7" min="0" max="15" 
    />
+   
+   <template><![CDATA[
+      \t/**
+      \t * Get Controller Host Interface input clock frequency
+      \t *
+      \t * @return Input clock frequency as a uint32_t in Hz
+      \t */
+      \tstatic uint32_t getChiClockFrequency() {
+      \t   return SystemCoreClock;
+      \t}\n\n
+   ]]></template>
+
+   <template><![CDATA[
+      \t/**
+      \t * Get Protocol Engine input clock frequency
+      \t *
+      \t * @return Input clock frequency as a uint32_t in Hz
+      \t */
+      \tstatic uint32_t getPeClockFrequency() {
+      \t   if (can().CTRL1 & CAN_CTRL1_CLKSRC_MASK) {
+      \t      return ScgInfo::getSoscDiv2Frequency();
+      \t   }
+      \t   else {
+      \t      return SystemCoreClock;
+      \t   }
+      \t}\n\n
+   ]]></template>
 
    <template><![CDATA[
        \t//! Default IRQ level\n

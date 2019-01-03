@@ -124,6 +124,7 @@
          <choiceOption name="scg_runccr_scs." 
             description="System Clock Source"
             toolTip="Clock used to generate core/system, bus and flash clocks"
+	    origin="Determined by clock_transition_mode"
             constant="true"
             >
             <choice name="System Oscillator Clock (SOSC)"        value="0001" />

@@ -71,7 +71,7 @@
        
        \tstatic constexpr unsigned OredIrqNumIndex        = 0;
        \tstatic constexpr unsigned ErrorIrqNumIndex       = 1;
-       \tstatic constexpr unsigned Ored_0_15_IrqNumIndex  = 2;
+       \tstatic constexpr unsigned Ored_0_15_IrqNumIndex  = 2;\n\n
    ]]></template>
        
    <intOption name="irqLevel" 
