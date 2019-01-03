@@ -1818,6 +1818,7 @@ Devices using this peripheral:
                   <description>FIFO Message Filter ID</description>
                   <addressOffset>0x60</addressOffset>
                   <size>16</size>
+                  <resetMask>0xFFFF</resetMask>
                   <fields>
                      <field>
                         <name>RXID</name>
@@ -1846,12 +1847,12 @@ Devices using this peripheral:
                   <description>FIFO Message Filter ID</description>
                   <addressOffset>0x60</addressOffset>
                   <size>8</size>
+                  <resetMask>0xFF</resetMask>
                   <fields>
                      <field>
                         <name>RTR_B</name>
                         <description>Remote Frame</description>
                         <bitOffset>0</bitOffset>
-                        <bitWidth>8</bitWidth>
                      </field>
                   </fields>
                </register>
