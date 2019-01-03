@@ -230,12 +230,12 @@ public:
     *
     * @param[in] pinDriveStrength One of PinDriveStrength_Low, PinDriveStrength_High
     * @param[in] pinDriveMode     One of PinDriveMode_PushPull, PinDriveMode_OpenDrain (defaults to PinPushPull)
-    * @param[in] pinSlewRate      One of PinSlewRate_Slow, PinSlewRate_Fast (defaults to PinSlewRate_Fast)
+    * @param[in] pinSlewRate      One of PinSlewRate_Slow, PinSlewRate_Fast (defaults to PinSlewRate_Slow)
     */
    static void setOutput(
          PinDriveStrength  pinDriveStrength,
          PinDriveMode      pinDriveMode      = PinDriveMode_PushPull,
-         PinSlewRate       pinSlewRate       = PinSlewRate_Fast
+         PinSlewRate       pinSlewRate       = PinSlewRate_Slow
          ) {
       setOutput(pinDriveStrength|pinDriveMode|pinSlewRate);
    }

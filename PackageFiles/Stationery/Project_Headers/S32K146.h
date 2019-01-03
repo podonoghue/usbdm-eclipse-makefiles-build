@@ -58,10 +58,10 @@ typedef enum {
   DMA15_IRQn                    =  15,   /**<  31 Enhanced Direct Memory Access                                                    */
   DMA_Error_IRQn                =  16,   /**<  32 Enhanced Direct Memory Access                                                    */
   MCM_IRQn                      =  17,   /**<  33 Core Platform Miscellaneous Control Module                                       */
-  FTFC_IRQn                     =  18,   /**<  34 FTFC                                                                             */
-  Read_Collision_IRQn           =  19,   /**<  35 FTFC                                                                             */
-  LVD_LVW_IRQn                  =  20,   /**<  36 PMC                                                                              */
-  FTFC_Fault_IRQn               =  21,   /**<  37 FTFC                                                                             */
+  FTFC_IRQn                     =  18,   /**<  34 Flash Memory Module                                                              */
+  FTFC_Read_Collision_IRQn      =  19,   /**<  35 Flash Memory Module                                                              */
+  LVD_LVW_IRQn                  =  20,   /**<  36 Power Management Controller                                                      */
+  FTFC_Fault_IRQn               =  21,   /**<  37 Flash Memory Module                                                              */
   WDOG_EWM_IRQn                 =  22,   /**<  38 Watchdog timer                                                                   */
   RCM_IRQn                      =  23,   /**<  39 Reset Control Module                                                             */
   LPI2C0_Master_IRQn            =  24,   /**<  40 Low Power I2C                                                                    */
@@ -75,8 +75,8 @@ typedef enum {
   ADC0_IRQn                     =  39,   /**<  55 Analog-to-Digital Converter                                                      */
   ADC1_IRQn                     =  40,   /**<  56 Analog-to-Digital Converter                                                      */
   CMP0_IRQn                     =  41,   /**<  57 High-Speed Comparator (CMP), Voltage Reference (VREF) Digital-to-Analog Converter (DAC), and Analog Mux */
-  ERM_single_fault_IRQn         =  44,   /**<  60 ERM                                                                              */
-  ERM_double_fault_IRQn         =  45,   /**<  61 ERM                                                                              */
+  ERM_single_fault_IRQn         =  44,   /**<  60 Error Reporting Module                                                           */
+  ERM_double_fault_IRQn         =  45,   /**<  61 Error Reporting Module                                                           */
   RTC_IRQn                      =  46,   /**<  62 Secure Real Time Clock                                                           */
   RTC_Seconds_IRQn              =  47,   /**<  63 Secure Real Time Clock                                                           */
   LPIT0_Ch0_IRQn                =  48,   /**<  64 Low Power Periodic Interrupt Timer                                               */
@@ -180,10 +180,10 @@ extern void DMA14_IRQHandler(void);                  /**< Enhanced Direct Memory
 extern void DMA15_IRQHandler(void);                  /**< Enhanced Direct Memory Access                                                    */
 extern void DMA_Error_IRQHandler(void);              /**< Enhanced Direct Memory Access                                                    */
 extern void MCM_IRQHandler(void);                    /**< Core Platform Miscellaneous Control Module                                       */
-extern void FTFC_IRQHandler(void);                   /**< FTFC                                                                             */
-extern void Read_Collision_IRQHandler(void);         /**< FTFC                                                                             */
-extern void LVD_LVW_IRQHandler(void);                /**< PMC                                                                              */
-extern void FTFC_Fault_IRQHandler(void);             /**< FTFC                                                                             */
+extern void FTFC_IRQHandler(void);                   /**< Flash Memory Module                                                              */
+extern void FTFC_Read_Collision_IRQHandler(void);    /**< Flash Memory Module                                                              */
+extern void LVD_LVW_IRQHandler(void);                /**< Power Management Controller                                                      */
+extern void FTFC_Fault_IRQHandler(void);             /**< Flash Memory Module                                                              */
 extern void WDOG_EWM_IRQHandler(void);               /**< Watchdog timer                                                                   */
 extern void RCM_IRQHandler(void);                    /**< Reset Control Module                                                             */
 extern void LPI2C0_Master_IRQHandler(void);          /**< Low Power I2C                                                                    */
@@ -197,8 +197,8 @@ extern void LPUART2_RxTx_IRQHandler(void);           /**< Universal Asynchronous
 extern void ADC0_IRQHandler(void);                   /**< Analog-to-Digital Converter                                                      */
 extern void ADC1_IRQHandler(void);                   /**< Analog-to-Digital Converter                                                      */
 extern void CMP0_IRQHandler(void);                   /**< High-Speed Comparator (CMP), Voltage Reference (VREF) Digital-to-Analog Converter (DAC), and Analog Mux */
-extern void ERM_single_fault_IRQHandler(void);       /**< ERM                                                                              */
-extern void ERM_double_fault_IRQHandler(void);       /**< ERM                                                                              */
+extern void ERM_single_fault_IRQHandler(void);       /**< Error Reporting Module                                                           */
+extern void ERM_double_fault_IRQHandler(void);       /**< Error Reporting Module                                                           */
 extern void RTC_IRQHandler(void);                    /**< Secure Real Time Clock                                                           */
 extern void RTC_Seconds_IRQHandler(void);            /**< Secure Real Time Clock                                                           */
 extern void LPIT0_Ch0_IRQHandler(void);              /**< Low Power Periodic Interrupt Timer                                               */
@@ -3689,7 +3689,7 @@ typedef struct FTFC_Type {
 #define FTFC_BasePtr                   0x40020000UL //!< Peripheral base address
 #define FTFC                           ((FTFC_Type *) FTFC_BasePtr) //!< Freescale base pointer
 #define FTFC_BASE_PTR                  (FTFC) //!< Freescale style base pointer
-#define FTFC_IRQS { FTFC_IRQn, Read_Collision_IRQn, FTFC_Fault_IRQn,  }
+#define FTFC_IRQS { FTFC_IRQn, FTFC_Read_Collision_IRQn, FTFC_Fault_IRQn,  }
 
 /**
  * @} */ /* End group FTFC_Peripheral_access_layer_GROUP 

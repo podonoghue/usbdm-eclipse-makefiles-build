@@ -366,7 +366,7 @@ static constexpr PcrValue DEFAULT_PCR = pcrValue(PinPull_Up, PinDriveStrength_Hi
  * Default PCR value for pins used as GPIO (including multiplexor value)
  * High drive strength + Pull-up + GPIO_MUX value
  */
-static constexpr PcrValue GPIO_DEFAULT_PCR = pcrValue(PinPull_Up, PinDriveStrength_High, PinDriveMode_PushPull, PinAction_None, PinFilter_None, PinSlewRate_Fast, PinMux_Gpio);
+static constexpr PcrValue GPIO_DEFAULT_PCR = pcrValue(PinPull_None, PinDriveStrength_Low, PinDriveMode_PushPull, PinAction_None, PinFilter_None, PinSlewRate_Fast, PinMux_Gpio);
 
 /**
  * Default PCR setting for I2C pins (excluding multiplexor value)
@@ -477,7 +477,6 @@ public:
 
    /**
     * Enable Pin interrupts in NVIC.
-    * Any pending NVIC interrupts are first cleared.
     */
    static void enableNvicInterrupts() {
       static_assert(irqNum>=0, "Pin does not support interrupts");
@@ -624,7 +623,7 @@ public:
       }
    }
 
-#if defined(PORT_PCR_ODE_ASK) and defined (PORT_PCR_SRE_MASK)
+#if defined(PORT_PCR_ODE_MASK) and defined (PORT_PCR_SRE_MASK)
    /**
     * @brief
     * Set subset of Pin Control Register Attributes associated with output direction \n
@@ -641,7 +640,7 @@ public:
          PinSlewRate       pinSlewRate       = PinSlewRate_Fast) {
 
       pcrReg() =
-            (pcrReg()&~(PORT_PCR_DSE_MASK|PORT_PCR_ODE_ASK|PORT_PCR_SRE_MASK)) |
+            (pcrReg()&~(PORT_PCR_DSE_MASK|PORT_PCR_ODE_MASK|PORT_PCR_SRE_MASK)) |
             (pinDriveStrength|pinDriveMode|pinSlewRate);
    }
 #elif defined(PORT_PCR_ODE_ASK)
@@ -851,7 +850,6 @@ public:
 
    /**
     * Enable Pin interrupts in NVIC.
-    * Any pending NVIC interrupts are first cleared.
     */
    static void enableNvicInterrupts() {
       static_assert(irqNum>=0, "Pin does not support interrupts");

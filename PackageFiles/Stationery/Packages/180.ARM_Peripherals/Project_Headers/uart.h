@@ -169,7 +169,7 @@ public:
    /**
     * Construct UART interface
     *
-    * @param[in]  uart Base address of UART hardware
+    * @param[in]  lpuart Reference to UART hardware
     */
    Uart(volatile UART_Type &uart) : uart(uart) {
    }
@@ -354,11 +354,12 @@ typedef void (*UARTCallbackFunction)(uint8_t status);
 template<class Info> class Uart_T : public Uart {
 
 public:
-   /** Get reference to GPIO hardware as struct */
+   /** Get reference to UART hardware as struct */
    static volatile UART_Type &uartPtr() { return Info::uart(); }
 
-   /** Get base address of SPI hardware as uint32_t */
+   /** Get base address of LPUART hardware as uint32_t */
    static constexpr uint32_t uartBase() { return Info::baseAddress; }
+
    /** Get base address of UART.D register as uint32_t */
    static constexpr uint32_t uartD() { return uartBase() + offsetof(UART_Type, D); }
 

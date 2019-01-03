@@ -107,8 +107,6 @@ void _HardFault_Handler(
       volatile ExceptionFrame *exceptionFrame __attribute__((__unused__)),
       uint32_t execReturn                     __attribute__((__unused__)) ) {
 
-   __asm__("bkpt");
-
 #ifdef DEBUG_BUILD
    using namespace USBDM;
 

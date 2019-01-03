@@ -863,11 +863,11 @@ typedef struct CAN_Type {
    __IO uint32_t  WU_MTC;                       /**< 0B08: Pretended Networking Wake Up Match Register                  */
    __IO uint32_t  FLT_ID1;                      /**< 0B0C: Pretended Networking ID Filter 1 Register                    */
    __IO uint32_t  FLT_DLC;                      /**< 0B10: Pretended Networking DLC Filter Register                     */
-   __IO uint32_t  PL1_LO;                       /**< 0B14: Pretended Networking Payload Low Filter 1 Register           */
-   __IO uint32_t  PL1_HI;                       /**< 0B18: Pretended Networking Payload High Filter 1 Register          */
+   __IO uint32_t  PL1_LO;                       /**< 0B14: Pretended Networking payload Low Filter 1 Register           */
+   __IO uint32_t  PL1_HI;                       /**< 0B18: Pretended Networking payload High Filter 1 Register          */
    __IO uint32_t  FLT_ID2_IDMASK;               /**< 0B1C: Pretended Networking ID Filter 2 Register / ID Mask Register */
-   __IO uint32_t  PL2_PLMASK_LO;                /**< 0B20: Pretended Networking Payload Low Filter 2 Register / Payload Low Mask Register */
-   __IO uint32_t  PL2_PLMASK_HI;                /**< 0B24: Pretended Networking Payload High Filter 2 low order bits / Payload High Mask Register */
+   __IO uint32_t  PL2_PLMASK_LO;                /**< 0B20: Pretended Networking payload Low Filter 2 Register / payload Low Mask Register */
+   __IO uint32_t  PL2_PLMASK_HI;                /**< 0B24: Pretended Networking payload High Filter 2 low order bits / payload High Mask Register */
         uint8_t   RESERVED_8[24];               /**< 0B28: 0x18 bytes                                                   */
    struct {
       __I  uint32_t  WMBn_CS;                   /**< 0B40: Wake Up Message Buffer Register for C/S                      */

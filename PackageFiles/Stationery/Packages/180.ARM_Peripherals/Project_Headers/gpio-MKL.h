@@ -235,7 +235,7 @@ public:
    static void setOutput(
          PinDriveStrength  pinDriveStrength,
          PinDriveMode      pinDriveMode      = PinDriveMode_PushPull,
-         PinSlewRate       pinSlewRate       = PinSlewRate_Fast
+         PinSlewRate       pinSlewRate       = PinSlewRate_Slow
          ) {
       setOutput(pinDriveStrength|pinDriveMode|pinSlewRate);
    }

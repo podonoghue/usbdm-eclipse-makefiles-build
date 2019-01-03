@@ -433,17 +433,17 @@ public:
       setOutput(pinDriveStrength|pinDriveMode|pinSlewRate);
    }
 
-   /*                                                          CmpFilterSamples cmpFilterSamplePeriod
-    *                                        C0.EN C0.WE C0.SE C0.FILTER_CNT    C0.FPR
-    * 1  Disabled                              0      X      X      X              X
-    * 2a/b Continuous                          1      0      0     (0     or       0)    COUT == COUTA
-    * 3a   Sampled, Non-Filtered, external     1      0      1      1              X     COUTA combinational, COUT sampled by external clk pin
-    * 3b   Sampled, Non-Filtered, internal     1      0      0      1             >=1    COUTA combinational, COUT sampled by busclk/PFR
-    * 4a   Sampled, Filtered, external         1      0      1     >=2             X     COUTA combinational, COUT filtered by external clk pin
-    * 4b   Sampled, Filtered, internal         1      0      0     >=2            >=1    COUTA combinational, COUT filtered by busclk/PFR
-    * 5a/b Windowed                            1      1      0      0              0     COUT == COUTA clocked by bus clock when Window=1
-    * 6    Windowed, Re-sampled                1      1      0      1             >=1    COUTA clocked by bus clock when Window=1, COUT re-sampled
-    * 7    Windowed, Filtered                  1      1      0     >=2            >=1    COUTA clocked by bus clock when Window=1, COUT filtered by bus clock/PFR
+   /*                                                          CmpFilterSamples    cmpFilterSamplePeriod
+    *                                        C0.EN C0.WE C0.SE C0.FILTER_CNT       C0.FPR
+    * 1  Disabled                              0      X      X      X                X
+    * 2a/b Continuous                          1      0      0     (0     or         0)    COUT == COUTA
+    * 3a   Sampled, Non-Filtered, external     1      0      1      1                X     COUTA combinational, COUT sampled by external clk pin
+    * 3b   Sampled, Non-Filtered, internal     1      0      0      1               >=1    COUTA combinational, COUT sampled by busclk/PFR
+    * 4a   Sampled, Filtered, external         1      0      1     >=2               X     COUTA combinational, COUT filtered by external clk pin
+    * 4b   Sampled, Filtered, internal         1      0      0     >=2              >=1    COUTA combinational, COUT filtered by busclk/PFR
+    * 5a/b Windowed                            1      1      0      0                0     COUT == COUTA clocked by bus clock when Window=1
+    * 6    Windowed, Re-sampled                1      1      0      1               >=1    COUTA clocked by bus clock when Window=1, COUT re-sampled
+    * 7    Windowed, Filtered                  1      1      0     >=2              >=1    COUTA clocked by bus clock when Window=1, COUT filtered by bus clock/PFR
     */
 
    /**
@@ -632,7 +632,7 @@ public:
    }
 
    /**
-    * Enables Filter mode
+    * Disables Filter mode
     */
    static void disableFilterMode() {
       cmp().C0 &= ~CMP_C0_WE_MASK;

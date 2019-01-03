@@ -163,7 +163,7 @@ public:
    /**
     * Construct UART interface
     *
-    * @param[in]  lpuart Base address of UART hardware
+    * @param[in]  lpuart Reference to LPUART hardware
     */
    Lpuart(volatile LPUART_Type &lpuart) : lpuart(lpuart) {
    }
@@ -288,10 +288,10 @@ typedef void (*LPUARTCallbackFunction)(uint8_t status);
 template<class Info> class Lpuart_T : public Lpuart {
 
 public:
-   /** Get reference to UART hardware as struct */
+   /** Get reference to LPUART hardware as struct */
    static volatile LPUART_Type &uartPtr() { return Info::uart(); }
 
-   /** Get base address of UART hardware as uint32_t */
+   /** Get base address of LPUART hardware as uint32_t */
    static constexpr uint32_t uartBase() { return Info::baseAddress; }
 
    /** Get base address of UART.DATA register as uint32_t */
@@ -582,7 +582,7 @@ public:
     * Receive/Transmit/Error IRQ handler
     */
    static void irqHandler()  {
-      uint8_t status = Info::lpuart().STAT;
+      auto status = Info::lpuart().STAT;
       if (status & LPUART_STAT_RDRF_MASK) {
          // Receive data register full - save data
          rxQueue.enQueueDiscardOnFull(Info::lpuart().DATA);
@@ -625,8 +625,8 @@ public:
 
 template<class Info, int rxSize, int txSize> Queue<char, rxSize> LpuartBuffered_T<Info, rxSize, txSize>::rxQueue;
 template<class Info, int rxSize, int txSize> Queue<char, txSize> LpuartBuffered_T<Info, rxSize, txSize>::txQueue;
-template<class Info, int rxSize, int txSize> volatile uint32_t   LpuartBuffered_T<Info, rxSize, txSize>::fWriteLock = 0;
 template<class Info, int rxSize, int txSize> volatile uint32_t   LpuartBuffered_T<Info, rxSize, txSize>::fReadLock  = 0;
+template<class Info, int rxSize, int txSize> volatile uint32_t   LpuartBuffered_T<Info, rxSize, txSize>::fWriteLock = 0;
 
 #ifdef USBDM_LPUART0_IS_DEFINED
 /**
@@ -711,6 +711,23 @@ typedef  $(/LPUART3/lpuartClass:Lpuart_T)<Lpuart3Info> Lpuart3;
  *  @endcode
  */
 typedef  $(/LPUART4/lpuartClass:Lpuart_T)<Lpuart4Info> Lpuart4;
+#endif
+
+#ifdef USBDM_LPUART5_IS_DEFINED
+/**
+ * @brief Class representing LPUART5 interface
+ *
+ * <b>Example</b>
+ * @code
+ *  // Instantiate interface
+ *  USBDM::Lpuart5 lpuart;
+ *
+ *  for(int i=0; i++;) {
+ *     lpuart<<"Hello world, i="<<i<<"\n";
+ *  }
+ *  @endcode
+ */
+typedef  $(/LPUART5/lpuartClass:Lpuart_T)<Lpuart5Info> Lpuart5;
 #endif
 
 /**

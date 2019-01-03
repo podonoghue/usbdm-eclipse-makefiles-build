@@ -20,9 +20,244 @@
 #include "derivative.h"
 #include "hardware.h"
 #include "string.h"
+#include <limits.h>
 
 namespace USBDM {
 
+/**
+ * Select Standard or extended CAN mode
+ * Standard - 11-bit ID field
+ * Extended - 29-bit ID field
+ */
+enum CanMode {
+   CanMode_Standard = false,  //!< CanMode_Standard
+   CanMode_Extended = true,   //!< CanMode_Extended
+};
+
+/**
+ * Class holding CAN communication parameters
+ */
+union CanParameters {
+public:
+   struct {
+      uint32_t    ctrl1;      //!< Control register 1
+      uint32_t    ctrl2;      //!< Control register 2
+      uint32_t    mcr;        //!< Mode control register
+      union {
+         struct { // Non-FIFO mode
+            uint32_t    rxmgmask; //!< Receive Mailboxes Global Mask Register (Non FIFO). applies to MBs apart from 14 & 15
+            uint32_t    rx14mask; //!< Receive Mailbox 14 Mask Register (Non FIFO)
+            uint32_t    rx15mask; //!< Receive Mailbox 14 Mask Register (Non FIFO)
+         };
+         struct { // FIFO mode
+            uint32_t    rxfgmask;   //!< Mask for Receive FIFO ID Filter Table elements not covered by an individual mask
+            uint32_t    fill[2];
+         };
+      };
+   };
+   struct {
+      //--- CTRL1 --------------------------
+      unsigned propSeg:3;    //!< Propagation Segment
+      bool     lom:1;        //!< Listen-Only Mode
+      bool     lbuf:1;       //!< Lowest Buffer Transmitted First
+      bool     tsyn:1;       //!< Timer Sync
+      bool     boffrec:1;    //!< Bus Off Recovery
+      bool     smp:1;        //!< CAN Bit Sampling
+      unsigned :2;
+      bool     rwrnmsk:1;    //!< Receive Warning Interrupt Mask
+      bool     twrnmsk:1;    //!< Transmit Warning Interrupt Mask
+      bool     lpb:1;        //!< Loop Back Mode
+      bool     clksrc:1;     //!< CAN Engine Clock Source
+      bool     errmsk:1;     //!< Error Mask
+      bool     boffmsk:1;    //!< Bus Off Mask
+      unsigned pSeg2:3;      //!< Phase Segment 2
+      unsigned pSeg1:3;      //!< Phase Segment 1
+      unsigned rjw:2;        //!< Resynchronisation Jump Width
+      unsigned presdiv:8;    //!< Prescaler Division Factor
+      //--- CTRL2 --------------------------
+      unsigned :16;
+      bool     eacen:1;      //!< Entire Frame Arbitration Field Comparison Enable For Receive Mailboxes
+      bool     rrs:1;        //!< Remote Request Stored (Automatic Remote Response Frame is not generated)
+      bool     mrp:1;        //!< Mailboxes Reception Priority
+      unsigned tasd:5;       //!< Transmit Arbitration Start Delay
+      unsigned rffn:4;       //!< Number Of Receive FIFO Filters
+#ifdef CAN_CTRL2_WRMFRZ
+      bool     wrmfrz:1;     //!< Write-Access To Memory In Freeze Mode
+#else
+      unsigned :1;     //!< WRMFRZ not available
+#endif // CAN_CTRL2_WRMFRZ
+#ifdef CAN_CTRL2_BOFFDONEMSK_MASK
+      bool     boffdonemsk:1;     //!< Mask for the Bus Off Done Interrupt in CAN_ESR1 register.
+#else
+      unsigned :1;     //!< BOFFDONEMSK not available
+#endif
+#ifdef CAN_CTRL2_ERRMSK_FAST_MASK
+      bool     errmsk_fast:1;     //!< Error Interrupt Mask for errors detected in the Data Phase of fast CAN FD frames
+#else
+      unsigned :1;     //!< ERRMSK_FAST not available
+#endif
+      unsigned :1;
+      //--- MCR --------------------------
+      unsigned maxmb:7;     //!< Number of the last message buffer
+      unsigned :1;
+      unsigned idam:2;      //!< ID Acceptance Mode
+      unsigned :1;
+      bool     fden:1;      //!< Flexible Data rate enable
+      bool     aen:1;       //!< Abort Enable
+      bool     lprioen:1;   //!< Local Priority Enable
+      unsigned :2;
+      bool     irmq:1;      //!< Individual Receive Masking And Queue Enable
+      bool     srxdis:1;    //!< Self Reception Disable
+      unsigned :1;
+      bool     waxsrc:1;    //!< Wake Up Source
+      unsigned :1;          //!< LPMACK - Low-Power Mode Acknowledge
+      bool     wrnen:1;     //!< Warning Interrupt Enable
+      bool     slfwak:1;    //!< Self Wake Up
+      bool     supv:1;      //!< Supervisor Mode
+      unsigned :1;          //!< FRZACK - Freeze Mode Acknowledge
+      unsigned :1;          //!< SOFTRST - Soft Reset
+      bool     waxmsk:1;    //!< Wake Up Interrupt Mask
+      unsigned :1;          //!< NOTRDY - FlexCAN Not Ready
+      bool     :1;          //!< HALT - Halt FlexCAN
+      bool     rfen:1;      //!< Receive FIFO Enable
+      bool     :1;          //!< FRZ - Freeze Enable
+      bool     :1;          //!< MDIS - Module Disable
+   };
+
+private:
+   /**
+    * Constructor
+    * Most parameters will be set to a default disabled value apart from:\n
+    * Communication parameters calculated from bitRate and clockFreq:\n
+    *   - presdiv Prescaler Division Factor
+    *   - propSeg Propagation Segment
+    *   - pSeg1   Phase Segment 1
+    *   - pSeg2   Phase Segment 2
+    *   - rjw     Resynchronisation Jump Width
+    *   - tasd    Transmit Arbitration Start Delay (=22, reset default)
+    *   - maxmb   Number Of The Last Message Buffer (=15, reset default)
+    *
+    * @param bitRate    Desired bit rate
+    * @param clockFreq  Protocol Engine input clock frequency
+    *
+    * @note Use isValid to check for success or check USBDM error code
+    */
+   CanParameters(unsigned bitRate, unsigned clockFreq) {
+
+      unsigned bestError        = INT_MAX;
+      unsigned bestPrescaler    = 1;  // 1..256
+      unsigned bestTq           = 0;  // 8..25 = 1 + timeSegment1 + timeSegment2
+
+      // Try each tq value checking for the best outcome
+      // Prefer higher tq if multiple equal best
+      for (uint8_t tq = 25; tq>=8; tq--) {
+         unsigned prescaler = clockFreq/tq/bitRate;  // 1..256
+
+         auto checkParams = [&] {
+            // Check settings
+            int error = clockFreq/tq/prescaler - bitRate;
+            if (error<0) {
+               error = -error;
+            }
+//            console.
+//               write("TQ =").write(tq).
+//               write(", PS = ").write(prescaler).
+//               write(", F =").write(clockFreq/tq/prescaler/1000.0).write(" kHz").
+//               write(", E =").write(error).write(" Hz");
+            if ((unsigned)error < bestError) {
+//               console.write(" *");
+               bestError     = (unsigned)error;
+               bestTq        = tq;
+               bestPrescaler = prescaler;
+            }
+//            console.writeln();
+         };
+         if (prescaler>=1) {
+            checkParams();
+         }
+         prescaler++;
+         if (prescaler<=256) {
+            checkParams();
+         }
+      }
+      if (bestTq == 0) {
+         // Indicates failure
+         propSeg = 0;
+         setErrorCode(E_ILLEGAL_PARAM);
+         return;
+      }
+      /*
+       * tq has to be allocated between
+       *   Sync segment   = fixed @ 1
+       *   Time segment 1 = 4..16
+       *   Time segment 2 = 2..8
+       * Time segment 1 gets subdivided into propSegment and pseg1
+       * Time segment 2 become pseg2
+       *
+       * Resync is equal to Time segment 2 up to a maximum of 4
+       */
+      unsigned timeSegment2 = (bestTq-1)/3;
+      unsigned timeSegment1 = (bestTq-1) - timeSegment2;
+      unsigned resyncJumpWidth = timeSegment2;
+      if (resyncJumpWidth>4) {
+         resyncJumpWidth = 4;
+      }
+      ctrl1   = 0; // Reset value
+      presdiv = bestPrescaler - 1;
+      propSeg = ((timeSegment1+1)/2) - 1;
+      pSeg1   = (timeSegment1 - propSeg) - 2;
+      pSeg2   = timeSegment2 - 1;
+      rjw     = resyncJumpWidth - 1;
+
+      ctrl2   = 0;
+      tasd    = 22; // Reset value
+
+      mcr     = 0;
+      maxmb   = 16-1;
+      aen     = true;
+      irmq    = true;
+
+      rxmgmask = ~0;
+      rx14mask = ~0;
+      rx15mask = ~0;
+   }
+
+public:
+   /**
+    * Constructor
+    * Most parameters will be set to a default disabled value apart from:\n
+    * Communication parameters calculated from bitRate and SystemCoreClock:\n
+    *   - presdiv Prescaler Division Factor
+    *   - propSeg Propagation Segment
+    *   - pSeg1   Phase Segment 1
+    *   - pSeg2   Phase Segment 2
+    *   - rjw     Resynchronisation Jump Width
+    *   - tasd    Transmit Arbitration Start Delay (=22, reset default)
+    *   - maxmb   Number Of The Last Message Buffer (=15, reset default)
+    *
+    *   - clksrc = 1 : System clock source
+    *
+    * @param bitRate    Desired bit rate
+    * @param clockFreq  Protocol Engine input clock frequency
+    *
+    * @note Use isValid to check for success or check USBDM error code
+    */
+   CanParameters(unsigned bitRate) : CanParameters(bitRate, SystemCoreClock) {
+      clksrc  = true;  // SYS_CLK
+   }
+
+   /**
+    * Check if value was constructed correctly
+    *
+    * @return true  Values appear valid
+    * @return false Values appear invalid
+    */
+   bool isValid() const {
+      //TODO - Check values properly
+      return (propSeg != 0);
+   }
+
+};
 /**
  * @addtogroup CAN_Group CAN, Controller Area Network
  * @brief Abstraction for Controller Area Network
@@ -33,93 +268,20 @@ namespace USBDM {
  */
 typedef void (*CanCallbackFunction)(void);
 
-/**
- * Represents a CAN Message in RAM
- */
-struct CanMessageBuffer {
-   __IO uint32_t  CS;     //!< CS Register
-   __IO uint32_t  ID;     //!< ID Register
-   __IO uint8_t   DATA[]; //!< DATA portion of buffer - variable size
-};
+enum CanMessageCode {
+   CanMessageCode_RxInactive = 0b0000, //!< MB does not participate
+   CanMessageCode_RxEmpty    = 0b0100, //!< May be filled on reception
+   CanMessageCode_RxFull     = 0b0010, //!< Buffer holds received data
+   CanMessageCode_RxOverrun  = 0b0110, //!< Reception Overrun, Buffer holds received data
+   CanMessageCode_RxAnswer   = 0b1010, //!< Buffer used for remote answer reception
 
-/**
- * Filter table entry - Format A
- */
-union CanFilterIdFormatA {
-   struct {
-      unsigned  fill1 : 1;
-      unsigned  rxid  : 29;
-      unsigned  ide   : 1;
-      unsigned  rtr   : 1;
-   };
-   uint32_t raw;
+   CanMessageCode_RxBusy     = 0b0001, //!< This bit indicate the buffer is busy (changing)
 
-   /**
-    * Filter table entry - Format A
-    *
-    * @param rxid
-    * @param ide
-    * @param rtr
-    */
-   constexpr CanFilterIdFormatA(
-                  unsigned  rxid,
-                  bool      ide,
-                  bool      rtr) : fill1(0), rxid(rxid), ide(ide), rtr(rtr) {}
-
-   /**
-    * Filter table entry - Format A
-    *
-    * @param raw
-    */
-   constexpr CanFilterIdFormatA(
-                  uint32_t  raw) : raw(raw) {}
-};
-
-/**
- * Filter table entry - Format B
- */
-union CanFilterIdFormatB {
-   struct {
-      unsigned  rxid    : 14;
-      unsigned  ide     : 1;
-      unsigned  rtr     : 1;
-   };
-   uint16_t raw;
-
-   /**
-    * Filter table entry - Format A
-    *
-    * @param rxid
-    * @param ide
-    * @param rtr
-    */
-   constexpr CanFilterIdFormatB(
-                  unsigned  rxid,
-                  unsigned  ide,
-                  unsigned  rtr) : rxid(rxid), ide(ide), rtr(rtr) {}
-
-   /**
-    * Filter table entry - Format A
-    *
-    * @param raw
-    */
-   constexpr CanFilterIdFormatB(
-                  uint16_t  raw) : raw(raw) {}
-};
-
-/**
- * Filter table entry - Format C
- */
-struct CanFilterIdFormatC {
-   unsigned  rxid    : 8;
-
-   /**
-    * Filter table entry - Format A
-    *
-    * @param rxid
-    */
-   constexpr CanFilterIdFormatC(
-                  unsigned  rxid) : rxid(rxid) {}
+   CanMessageCode_TxInactive = 0b1000, //!< MB does not participate
+   CanMessageCode_TxAbort    = 0b1001, //!< Aborted, MB does not participate
+   CanMessageCode_TxData     = 0b1100, //!< (RTR=0) Transmit Data
+   CanMessageCode_TxRemote   = 0b1100, //!< (RTR=1) Transmit Remote request
+   CanMessageCode_TxAnswer   = 0b1110, //!< Buffer automatically used for remote answer response
 };
 
 /**
@@ -145,6 +307,563 @@ enum CanDataSize {
 };
 
 /**
+ * Can CS value in message
+ */
+union CanControlStatus {
+   uint32_t  raw;
+   struct {
+      unsigned       timeStamp : 16;    //!< Time stamp
+      CanDataSize    dlc       :  4;    //!< Length of Data
+      unsigned       rtr       :  1;    //!< Remote Transmission Request
+      unsigned       ide       :  1;    //!< ID Extended Bit
+      unsigned       srr       :  1;    //!< Substitute Remote Request
+      unsigned                 :  1;
+      CanMessageCode code      :  4;    //!< Message Buffer Code
+      unsigned                 :  1;
+      unsigned       esi       :  1;    //!< Error State Indicator
+      unsigned       brs       :  1;    //!< Bit Rate Switch
+      unsigned       edl       :  1;    //!< Extended Data Length
+   };
+   struct {
+      unsigned       : 23;
+      unsigned idhit :  9; //!< Identifier Acceptance Filter Hit Indicator
+   };
+   void operator=(uint32_t value) volatile { raw = value; }
+   void operator=(uint32_t value) { raw = value; }
+   void operator=(volatile CanControlStatus &other) { raw = other.raw; }
+   void operator=(CanControlStatus &other) volatile { raw = other.raw; }
+   void operator=(CanControlStatus &other) { raw = other.raw; }
+   constexpr CanControlStatus(uint32_t value) : raw(value) {}
+   constexpr CanControlStatus(CanControlStatus &other) : raw(other.raw) {}
+   constexpr CanControlStatus(const CanControlStatus &other) : raw(other.raw) {}
+   constexpr CanControlStatus(volatile CanControlStatus &other) : raw(((CanControlStatus &)other).raw) {}
+   constexpr CanControlStatus() : raw(0) {}
+} __attribute__((__packed__)) ;
+
+/**
+ * Can CS value in message
+ */
+union CanId {
+   uint32_t  raw;
+   struct {
+      unsigned idExt : 29;  //!< Extended Frame Identifier
+      unsigned prio  :  3;  //!< Local priority
+   };
+   struct {
+      unsigned       : 18;
+      unsigned idStd : 11;  //!< Standard Frame Identifier
+      unsigned       :  3;
+   };
+   void operator=(uint32_t value) volatile { raw = value; }
+   void operator=(volatile CanId &other) { raw = other.raw; }
+   void operator=(CanId &other) volatile { raw = other.raw; }
+   constexpr CanId(uint32_t value) : raw(value) {}
+   constexpr CanId(const CanId &other) : raw(other.raw) {}
+   constexpr CanId() : raw(0) {}
+}  __attribute__((__packed__));
+
+/**
+ * Represents a CAN Message in CAN RAM area.
+ * This is never constructed.
+ */
+struct CanMessageBuffer {
+   CanControlStatus CS;        //!< CS Register
+   CanId            ID;        //!< ID Register
+   uint32_t         DATA32[];  //!< DATA portion of buffer - variable size
+
+   /**
+    * Map index from uint8_t to little-endian uint_32_t
+    *
+    * @param index Index to map
+    *
+    * @return Mapped index
+    */
+   static constexpr unsigned mapIndex8(const unsigned index) {
+      return (index^0x3U);
+   }
+
+   /**
+    * Index data array as uint8_t
+    *
+    * @param index
+    *
+    * @return Reference to indexed byte
+    */
+   volatile uint8_t &data8(const unsigned index) volatile {
+      return *(((uint8_t *)DATA32) + mapIndex8(index));
+   }
+
+   /**
+    * Index data array as uint8_t
+    *
+    * @param index
+    *
+    * @return Reference to indexed byte
+    */
+   const uint8_t &data8(const int index) const {
+      return *(((uint8_t *)DATA32) + mapIndex8(index));
+   }
+
+   /**
+    * Index data array as uint8_t
+    *
+    * @param index
+    *
+    * @return Reference to indexed byte
+    */
+   uint8_t &data8(const int index) {
+      return *(((uint8_t *)DATA32) + mapIndex8(index));
+    }
+
+   /**
+    * Map index from uint8_t to little-endian uint_32_t
+    *
+    * @param index Index to map
+    *
+    * @return Mapped index
+    */
+   static constexpr unsigned mapIndex16(const unsigned index) {
+      return (index&~0x1U) + (1-(index&0x1U));
+   }
+
+   /**
+    * Index data array as uint16_t
+    *
+    * @param index
+    *
+    * @return Reference to indexed byte
+    */
+   volatile uint16_t &data16(const unsigned index) volatile {
+      return *(((uint16_t *)DATA32) + mapIndex16(index));
+   }
+
+   /**
+    * Index data array as uint16_t
+    *
+    * @param index
+    *
+    * @return Reference to indexed byte
+    */
+   const uint16_t &data16(const int index) const {
+      return *(((uint16_t *)DATA32) + mapIndex16(index));
+   }
+
+   /**
+    * Index data array as uint16_t
+    *
+    * @param index
+    *
+    * @return Reference to indexed byte
+    */
+   uint16_t &data16(const int index) {
+      return *(((uint16_t *)DATA32) + mapIndex16(index));
+    }
+} __attribute__((__packed__));
+
+/**
+ * Represents a standard 8-byte CAN Message in RAM
+ */
+struct CanMessageBuffer8 {
+   CanControlStatus CS;         //!< CS Register
+   CanId            ID;         //!< ID Register
+   uint32_t         DATA32[2];  //!< DATA portion of buffer - standard size
+
+   /**
+    * Map index from uint8_t to little-endian uint_32_t
+    *
+    * @param index Index to map
+    *
+    * @return Mapped index
+    */
+   static constexpr unsigned mapIndex8(const unsigned index) {
+      return (index^0x3U);
+   }
+
+   /**
+    * Index data array as uint8_t
+    *
+    * @param index
+    *
+    * @return Reference to indexed byte
+    */
+   volatile uint8_t &data8(const unsigned index) volatile {
+      return *(((uint8_t *)DATA32) + mapIndex8(index));
+   }
+
+   /**
+    * Index data array as uint8_t
+    *
+    * @param index
+    *
+    * @return Reference to indexed byte
+    */
+   const uint8_t &data8(const int index) const {
+      return *(((uint8_t *)DATA32) + mapIndex8(index));
+   }
+
+   /**
+    * Index data array as uint8_t
+    *
+    * @param index
+    *
+    * @return Reference to indexed byte
+    */
+   uint8_t &data8(const int index) {
+      return *(((uint8_t *)DATA32) + mapIndex8(index));
+    }
+
+   /**
+    * Map index from uint8_t to little-endian uint_32_t
+    *
+    * @param index Index to map
+    *
+    * @return Mapped index
+    */
+   static constexpr unsigned mapIndex16(const unsigned index) {
+      return (index&~0x1U) + (1-(index&0x1U));
+   }
+
+   /**
+    * Index data array as uint16_t
+    *
+    * @param index
+    *
+    * @return Reference to indexed byte
+    */
+   volatile uint16_t &data16(const unsigned index) volatile {
+      return *(((uint16_t *)DATA32) + mapIndex16(index));
+   }
+
+   /**
+    * Index data array as uint16_t
+    *
+    * @param index
+    *
+    * @return Reference to indexed byte
+    */
+   const uint16_t &data16(const int index) const {
+      return *(((uint16_t *)DATA32) + mapIndex16(index));
+   }
+
+   /**
+    * Index data array as uint16_t
+    *
+    * @param index
+    *
+    * @return Reference to indexed byte
+    */
+   uint16_t &data16(const int index) {
+      return *(((uint16_t *)DATA32) + mapIndex16(index));
+    }
+} __attribute__((__packed__));
+
+/**
+ * Filter mask for CAN Mailboxes
+ * The mask is applied to the comparison to the MB[ID], MB[RTR] and MB[ID]
+ */
+union CanMailboxFilterMask {
+   uint32_t     raw;             //!< RAW 32-bit value
+   struct {
+      unsigned  idMask     : 29; //!< Mask for MB[ID] field
+      unsigned  fill       :  1;
+      unsigned  ideMask    :  1; //!< Mask for MB[IDE] field
+      unsigned  rtrMask    :  1; //!< Mask for MB[RTR] field
+   };
+
+   /**
+    * Constructor for Mail box filter
+    *
+    * @param canModeMask Mask for Select Standard or Extended mode
+    * @param idMask      Mask for MB[ID] (standard 11-bit, or extended 29-bit)
+    * @param ideMask     Mask for MB[IDE] field
+    * @param rtrMask     Mask for MB[RTR] field
+    */
+   constexpr CanMailboxFilterMask(
+         CanMode  canMode,
+         unsigned idMask,
+         bool     ideMask=true,
+         bool     rtrMask=true) :
+         idMask(canMode?idMask:(idMask<<18)), fill(0), ideMask(ideMask), rtrMask(rtrMask) {}
+
+   constexpr CanMailboxFilterMask(uint32_t value) : raw(value) {}
+   constexpr CanMailboxFilterMask(const CanId &other) : raw(other.raw) {}
+   constexpr CanMailboxFilterMask() : raw(~0U) {}
+
+   void operator=(uint32_t value) volatile { raw = value; }
+   };
+
+
+/**
+ * Filter mask for CAN receive FIFO filters
+ * The mask is applied to comparisons using the FIFO ID table.
+ * This select entry to the FIFO.
+ */
+union CanFifoFilterMask {
+   uint32_t     raw;             //!< RAW 32-bit value
+   struct {
+      unsigned  fill       :  1;
+      unsigned  rxidaMask  : 29; //!< Mask for Receive Frame Identifier (standard 11-bit, or extended 29-bit)
+      unsigned  ideaMask   :  1; //!< Mask for Extended Frame
+      unsigned  rtraMask   :  1; //!< Mask for Remote Frame
+   };
+   struct {
+      unsigned  rxidb0Mask : 14; //!< Mask for Receive Frame Identifier (standard 11-bit, or extended only 14 MSB bits)
+      unsigned  ideb0Mask  :  1; //!< Mask for Extended Frame
+      unsigned  rtrb0Mask  :  1; //!< Mask for Remote Frame
+
+      unsigned  rxidb1Mask : 14; //!< Mask for Receive Frame Identifier (standard 11-bit, or extended only 14 MSB bits)
+      unsigned  ideb1Mask  :  1; //!< Mask for Extended Frame
+      unsigned  rtrb1Mask  :  1; //!< Mask for Remote Frame
+   };
+   struct {
+      unsigned  rxidc0Mask :  8; //!< Mask for Receive Frame Identifier (standard or extended only 8 MSB bits)
+      unsigned  rxidc1Mask :  8; //!< Mask for Receive Frame Identifier (standard or extended only 8 MSB bits)
+      unsigned  rxidc2Mask :  8; //!< Mask for Receive Frame Identifier (standard or extended only 8 MSB bits)
+      unsigned  rxidc3Mask :  8; //!< Mask for Receive Frame Identifier (standard or extended only 8 MSB bits)
+   };
+
+   /**
+    * Constructor for filter table entry mask - Format A
+    *
+    * @param canModeMask Mask for Select Standard or Extended mode
+    * @param rxidMask    Mask for Receive Frame Identifier (standard 11-bit, or extended 29-bit)
+    * @param ideMask     Mask for Extended Frame
+    * @param rtrMask     Mask for Remote Frame
+    */
+   constexpr CanFifoFilterMask(
+         CanMode   canMode,
+         unsigned  rxidMask,
+         bool      ideMask,
+         bool      rtrMask) : fill(0), rxidaMask(canMode?rxidMask:(rxidMask<<18)), ideaMask(ideMask), rtraMask(rtrMask) {}
+
+   /**
+    * Constructor for filter table entry mask - Format B
+    *
+    * @param canMode      Mask for Select Standard or Extended mode
+    * @param rxid0Mask    Mask for Receive Frame Identifier (standard 11-bit, or extended only 14 MSB bits)
+    * @param ide0Mask     Mask for Extended Frame
+    * @param rtr0Mask     Mask for Remote Frame
+    * @param rxid1Mask    Mask for Receive Frame Identifier (standard 11-bit, or extended only 14 MSB bits)
+    * @param ide1Mask     Mask for Extended Frame
+    * @param rtr1Mask     Mask for Remote Frame
+    */
+   constexpr CanFifoFilterMask(
+         CanMode   canMode,
+         unsigned  rxid0Mask,
+         unsigned  ide0Mask,
+         unsigned  rtr0Mask,
+         unsigned  rxid1Mask,
+         unsigned  ide1Mask,
+         unsigned  rtr1Mask
+         ) :
+         rxidb0Mask(canMode?rxidb0Mask:(rxid0Mask<<3)), ideb0Mask(ide0Mask), rtrb0Mask(rtr0Mask),
+         rxidb1Mask(canMode?rxid1Mask:(rxid1Mask<<3)), ideb1Mask(ide1Mask), rtrb1Mask(rtr1Mask) {}
+
+   /**
+    * Constructor for filter table entry mask - Format C
+    *
+    * @param rxid0Mask    Mask for Receive Frame Identifier (standard or extended, only 8 MSB bits)
+    * @param rxid1Mask    Mask for Receive Frame Identifier (standard or extended, only 8 MSB bits)
+    * @param rxid2Mask    Mask for Receive Frame Identifier (standard or extended, only 8 MSB bits)
+    * @param rxid3Mask    Mask for Receive Frame Identifier (standard or extended, only 8 MSB bits)
+    */
+   constexpr CanFifoFilterMask(unsigned  rxid0Mask, unsigned  rxid1Mask, unsigned  rxid2Mask, unsigned  rxid3Mask) :
+      rxidc0Mask(rxid0Mask), rxidc1Mask(rxid1Mask), rxidc2Mask(rxid2Mask), rxidc3Mask(rxid3Mask) {}
+
+   constexpr CanFifoFilterMask(uint32_t value) : raw(value) {}
+   constexpr CanFifoFilterMask(const CanId &other) : raw(other.raw) {}
+   constexpr CanFifoFilterMask() : raw(~0U) {}
+
+   void operator=(uint32_t value) volatile { raw = value; }
+   };
+
+/**
+ * FIFO Filter table entry - Formats A, B and C
+ * These entries are used to filter received messages for acceptance into the Receive FIFO.
+ */
+union CanFifoFilter {
+   uint32_t raw;             //!< RAW 32-bit value
+   struct {
+      unsigned  fill1  :  1;
+      unsigned  rxida  : 29; //!< Receive Frame Identifier (standard 11-bit, or extended 29-bit)
+      unsigned  idea   :  1; //!< Extended Frame
+      unsigned  rtra   :  1; //!< Remote Frame
+   };
+   struct {
+      unsigned  rxidb0 : 14; //!< Receive Frame Identifier (standard 11-bit, or extended only 14 MSB bits)
+      unsigned  ideb0  :  1; //!< Extended Frame
+      unsigned  rtrb0  :  1; //!< Remote Frame
+      unsigned  rxidb1 : 14; //!< Receive Frame Identifier (standard 11-bit, or extended only 14 MSB bits)
+      unsigned  ideb1  :  1; //!< Extended Frame
+      unsigned  rtrb1  :  1; //!< Remote Frame
+   };
+   struct {
+      unsigned  rxidc0 :  8; //!< Receive Frame Identifier (standard or extended only 8 MSB bits)
+      unsigned  rxidc1 :  8; //!< Receive Frame Identifier (standard or extended only 8 MSB bits)
+      unsigned  rxidc2 :  8; //!< Receive Frame Identifier (standard or extended only 8 MSB bits)
+      unsigned  rxidc3 :  8; //!< Receive Frame Identifier (standard or extended only 8 MSB bits)
+   };
+
+   /**
+    * Constructor filter table entry - Format A
+    *
+    * @param canMode Select Standard or Extended mode
+    * @param rxid    Receive Frame Identifier (standard 11-bit, or extended 29-bit)
+    * @param ide     Extended Frame
+    * @param rtr     Remote Frame
+    */
+   constexpr CanFifoFilter(
+         CanMode   canMode,
+         unsigned  rxid,
+         bool      ide,
+         bool      rtr) : fill1(0), rxida(canMode?rxid:(rxid<<18)), idea(ide), rtra(rtr) {}
+
+   /**
+    * Constructor filter table entry - Format A
+    *
+    * @param canMode  Select Standard or Extended mode
+    * @param rxid0    Receive Frame Identifier (standard 11-bit, or extended only 14 MSB bits)
+    * @param ide0     Extended Frame
+    * @param rtr0     Remote Frame
+    * @param rxid1    Receive Frame Identifier (standard 11-bit, or extended only 14 MSB bits)
+    * @param ide1     Extended Frame
+    * @param rtr1     Remote Frame
+    */
+   constexpr CanFifoFilter(
+         CanMode   canMode,
+         unsigned  rxid0,
+         unsigned  ide0,
+         unsigned  rtr0,
+         unsigned  rxid1,
+         unsigned  ide1,
+         unsigned  rtr1
+         ) : rxidb0(canMode?rxidb0:(rxid0<<3)), ideb0(ide0), rtrb0(rtr0), rxidb1(canMode?rxid1:(rxid1<<3)), ideb1(ide1), rtrb1(rtr1) {}
+
+   /**
+    * Filter table entry - Format C
+    *
+    * @param rxid0    Receive Frame Identifier (standard or extended, only 8 MSB bits)
+    * @param rxid1    Receive Frame Identifier (standard or extended, only 8 MSB bits)
+    * @param rxid2    Receive Frame Identifier (standard or extended, only 8 MSB bits)
+    * @param rxid3    Receive Frame Identifier (standard or extended, only 8 MSB bits)
+    */
+   constexpr CanFifoFilter(unsigned  rxid0, unsigned  rxid1, unsigned  rxid2, unsigned  rxid3) :
+      rxidc0(rxid0), rxidc1(rxid1), rxidc2(rxid2), rxidc3(rxid3) {}
+
+   // Don't allow implicit declaration
+   constexpr CanFifoFilter() = delete;
+
+   /**
+    * Constructor filter table entry - Format A
+    *
+    * @param raw
+    */
+   constexpr CanFifoFilter(uint32_t  raw) : raw(raw) {}
+
+   /**
+    * Copy constructor
+    *
+    * @param other
+    */
+   constexpr CanFifoFilter(const CanFifoFilter &other) : raw(other.raw) {}
+
+   /**
+    * Assignment operator from uint32_t
+    *
+    * @param raw
+    */
+   void operator=(uint32_t value) volatile { raw = value; }
+
+   /**
+    * Assignment operator
+    *
+    * @param other
+    */
+   void operator=(const CanFifoFilter &other) volatile { raw = other.raw; }
+};
+
+/**
+ * Represents the error counts
+ */
+union CanErrorCounts {
+   uint32_t raw;  //!< Raw value as 32-bit integer
+   struct {
+      uint8_t transmitErrorCount;      //!< Transmit Error Counter
+      uint8_t receiveErrorCount;       //!< Receive Error Counter
+      uint8_t transmitFastErrorCount;  //!< Transmit Error Counter for fast bits
+      uint8_t receiveFastErrorCount;   //!< Receive Error Counter for fast bits
+   };
+
+   /**
+    * Constructor from uint32_t
+    *
+    * @param value
+    */
+   constexpr CanErrorCounts(uint32_t value) : raw(value) {}
+
+   /**
+    * Copy constructor
+    *
+    * @param other
+    */
+   constexpr CanErrorCounts(const CanErrorCounts &other) : raw(other.raw) {}
+
+   /**
+    * Assignment operator from uint32_t
+    *
+    * @param raw
+    */
+   void operator=(uint32_t value) volatile { raw = value; }
+
+   /**
+    * Assignment operator
+    *
+    * @param raw
+    */
+   void operator=(CanErrorCounts &other) volatile { raw = other.raw; }
+};
+
+/**
+ * Represents CRC value for last transmitted buffer
+ */
+union CanCrc15 {
+   uint32_t raw;  //!< Raw value as 32-bit integer
+   struct {
+      unsigned txcrc : 15; //!< 15-bit CRC value
+      unsigned pad1  : 1;
+      unsigned mbcrc : 7;  //!< Number of message buffer
+   };
+
+   /**
+    * Constructor from uint32_t
+    *
+    * @param value
+    */
+   constexpr CanCrc15(uint32_t value) : raw(value) {}
+
+   /**
+    * Copy constructor
+    *
+    * @param other
+    */
+   constexpr CanCrc15(const CanCrc15 &other) : raw(other.raw) {}
+
+   /**
+    * Assignment operator from uint32_t
+    *
+    * @param raw
+    */
+   void operator=(uint32_t value) volatile { this->raw = value; }
+
+   /**
+    * Assignment operator
+    *
+    * @param other
+    */
+   void operator=(CanCrc15 &other) volatile { this->raw = other.raw; }
+};
+
+/**
  * Indicates size of message buffer in terms of data size.
  * A single buffer size is used for a range of data sizes.
  */
@@ -155,21 +874,47 @@ enum CanMessageSize {
    CanMessageSize_64 = 64,  // <= 64 data bytes in message, buffer is 72 bytes
 };
 
+/**
+ * CAN Acceptance mode (CAN_MCR_IDAM)
+ */
 enum CanAcceptanceMode {
-   CanAcceptanceMode_FormatA   = CAN_MCR_IDAM(0),
-   CanAcceptanceMode_FormatB   = CAN_MCR_IDAM(1),
-   CanAcceptanceMode_FormatC   = CAN_MCR_IDAM(2),
-   CanAcceptanceMode_RejectALl = CAN_MCR_IDAM(3),
+   CanAcceptanceMode_FormatA   = (0),//!< CanAcceptanceMode_FormatA
+   CanAcceptanceMode_FormatB   = (1),//!< CanAcceptanceMode_FormatB
+   CanAcceptanceMode_FormatC   = (2),//!< CanAcceptanceMode_FormatC
+   CanAcceptanceMode_RejectALl = (3),//!< CanAcceptanceMode_RejectAll
 };
 
 /**
- * @brief Class representing a Digital to Analogue Converter
+ * CAN FIFO filter table size (CAN_CTRL2_RFFN)
+ * The remaining MBs are available for non-FIFO use.
+ */
+enum CanFifoFilterSize {
+   CanFifoFilterSize_8   = (0x0), // 8   entry Filter table
+   CanFifoFilterSize_16  = (0x1), // 16  entry Filter table
+   CanFifoFilterSize_24  = (0x2), // 24  entry Filter table
+   CanFifoFilterSize_32  = (0x3), // 32  entry Filter table
+   CanFifoFilterSize_40  = (0x4), // 40  entry Filter table
+   CanFifoFilterSize_48  = (0x5), // 48  entry Filter table
+   CanFifoFilterSize_56  = (0x6), // 56  entry Filter table
+   CanFifoFilterSize_64  = (0x7), // 64  entry Filter table
+   CanFifoFilterSize_72  = (0x8), // 72  entry Filter table
+   CanFifoFilterSize_80  = (0x9), // 80  entry Filter table
+   CanFifoFilterSize_88  = (0xA), // 88  entry Filter table
+   CanFifoFilterSize_96  = (0xB), // 96  entry Filter table
+   CanFifoFilterSize_104 = (0xC), // 104 entry Filter table
+   CanFifoFilterSize_112 = (0xD), // 112 entry Filter table
+   CanFifoFilterSize_120 = (0xE), // 120 entry Filter table
+   CanFifoFilterSize_128 = (0xF), // 128 entry Filter table
+};
+
+/**
+ * @brief Class representing a Controller Area Network (CAN() interface.
  *
  * <b>Example</b>
  * @code
  * using can = Can_T<Can0Info>;
  *
- *  vref::configure();
+ *  can::configure(12500);
  *
  * @endcode
  */
@@ -188,30 +933,33 @@ protected:
       setAndCheckErrorCode(E_NO_HANDLER);
    }
 
+   /** Number of Message Buffers used by FIFO (including filters) */
+   static unsigned reservedMessageBuffers;
+
 public:
    /** CAN interrupt handler */
    static void irqHandler() {
-      Can_T::sCallbacks[0]();
+      Can_T::sCallbacks[Info::OredIrqNumIndex]();
    }
 
    /** CAN interrupt handler */
    static void errorIrqHandler() {
-      Can_T::sCallbacks[1]();
+      Can_T::sCallbacks[Info::ErrorIrqNumIndex]();
    }
 
    /** CAN interrupt handler */
    static void wakeupIrqHandler() {
-      Can_T::sCallbacks[2]();
+      Can_T::sCallbacks[Info::WakeupIrqNumIndex]();
    }
 
    /** CAN message buffer interrupt handler */
    static void mb0_15_IrqHandler() {
-      Can_T::sCallbacks[3]();
+      Can_T::sCallbacks[Info::Ored_0_15_IrqNumIndex]();
    }
 
    /** CAN message buffer interrupt handler */
    static void mb16_31_IrqHandler() {
-      Can_T::sCallbacks[4]();
+      Can_T::sCallbacks[Info::Ored_16_32_IrqNumIndex]();
    }
 
 protected:
@@ -276,15 +1024,30 @@ public:
    }
 
    /**
-    * Get pointer to CAN Message Buffer
+    * Get pointer to CAN Message Buffer.
+    * Allowances are made for mailboxes lost to the Receive FIFO so the
+    * index is relative to the first usable mailbox
     *
     * @param size    Size of message buffers being used.
     * @param index   Index of message buffer
     *
     * @return Pointer to message buffer.
     */
-   static CanMessageBuffer *getMessageBuffer(CanMessageSize canMessageSize, unsigned index) {
-      return (CanMessageBuffer *) (Info::baseAddress + offsetof(struct CAN_Type, MB) + index*(canMessageSize+8));
+   static volatile CanMessageBuffer *getMessageBuffer(CanMessageSize canMessageSize, unsigned index) {
+      return (CanMessageBuffer *) (Info::baseAddress + offsetof(struct CAN_Type, MB) + reservedMessageBuffers*sizeof(CanMessageBuffer8) + index*(canMessageSize+8));
+   };
+
+   /**
+    * Get pointer to CAN Message Buffer assuming default size (8 data bytes)
+    * Allowances are made for mailboxes lost to the Receive FIFO so the
+    * index is relative to the first usable mailbox
+    *
+    * @param index   Index of message buffer
+    *
+    * @return Pointer to message buffer.
+    */
+   static inline volatile CanMessageBuffer *getMessageBuffer(unsigned index) {
+      return getMessageBuffer(CanMessageSize_8, index);
    };
 
    /**
@@ -294,124 +1057,208 @@ public:
     *
     * @note This is only applicable when FIFO is enabled.
     */
-   static CanMessageBuffer *getFifoMessageBuffer() {
-      return (CanMessageBuffer *) (can().MB);
+   static CanMessageBuffer8 *getFifoMessageBuffer() {
+      return (CanMessageBuffer8 *) (can().MB);
    };
 
    /**
     * Get Filter Table array.
-    * The result is formatted as an array of format A filters
+    * The result is formatted as an array of CanFifoFilters.
+    * These filters are applied to the entry of Received messages into the FIFO.
+    * The filter is modified by the FIFO filter masks see getFifoFilterMaskTable()
     *
     * @return Pointer to start of filter table array
     *
     * @note This is only applicable when FIFO is enabled.
     */
-   static CanFilterIdFormatA *getFormatAFilterTable() {
-      return (CanFilterIdFormatA *) (can().FIFO.FILTER_ID_A);
+   static CanFifoFilter *getFifoFilterTable() {
+      return (CanFifoFilter *) (can().FIFO.FILTER_ID_A);
    }
 
    /**
-    * Get Filter Table array.
-    * The result is formatted as an array of format B filters
+    * Get FIFO Mask Table array.
+    * The result is formatted as an array of CanFilterMasks.
+    * These masks are applied to filtering of Received messages into the FIFO.
     *
-    * @return Pointer to start of filter table array
-    *
-    * @note This is only applicable when FIFO is enabled.
+    * @return Pointer to start of filter mask table array
     */
-   static CanFilterIdFormatB *getFormatBFilterTable() {
-      return (CanFilterIdFormatB *) (can().FIFO.FILTER_ID_B);
+   static CanFifoFilterMask *getFifoFilterMaskTable() {
+      return (CanFifoFilterMask *) (can().RXIMR);
    }
 
    /**
-    * Get Filter Table array.
-    * The result is formatted as an array of format C filters
+    * Get Mailbox Mask Table array.
+    * The result is formatted as an array of CanFilterMasks.
+    * These masks are applied to filtering of Received messages into the FIFO.
     *
-    * @return Pointer to start of filter table array
-    *
-    * @note This is only applicable when FIFO is enabled.
+    * @return Pointer to start of filter mask table array
     */
-   static CanFilterIdFormatC *getFormatCFilterTable() {
-      return (CanFilterIdFormatC *) (can().FIFO.FILTER_ID_C);
+   static CanMailboxFilterMask *getMailboxFilterMaskTable() {
+      return (CanMailboxFilterMask *) (can().RXIMR + reservedMessageBuffers);
    }
 
+private:
    /**
-    * Get Filter Table array.
-    * The result is formatted as an array of format C filters
+    * Utility function to select the smaller of two unsigned values
     *
-    * @return Pointer to start of filter table array
+    * @param a
+    * @param b
     *
-    * @note This is only applicable when FIFO is enabled.
+    * @return smaller of a and b
     */
-   static void clearFilterTable() {
-      memset(
-         (void*)(can().FIFO.FILTER_ID_A),
-         0,
-         Info::NumberOfMessageFilters*sizeof(can().FIFO.FILTER_ID_A[0]));
+   static constexpr unsigned min(unsigned a, unsigned b) {
+      return (a<b)?a:b;
    }
 
 public:
    /**
-    *  Configure the CAN with default settings
-    *
+    * Configures all mapped pins associated with this peripheral
     */
-   static void enable() {
-      // Enable clock
-      Info::enableClock();
-      __DMB();
-
+   static void configureAllPins() {
+      // Configure pins
       Info::initPCRs();
    }
 
-   static void configure(unsigned baud) {
+   /**
+    *  Configure the CAN with default settings
+    */
+   static void enable() {
+      if (Info::mapPinsOnEnable) {
+         configureAllPins();
+      }
+
+      // Enable clock to peripheral
+      Info::enableClock();
+      __DMB();
+   }
+
+   /*
+    * FIFO is 6 entries deep (re-uses MBs[0..5])
+    * TOP is MB[0]
+    * ID Filter table (re-uses MBs[6..])
+    * RFFN determines size of Filter table
+    *
+    * FIFO mode options
+    * MCR.RFEN    Enable FIFO
+    * MCR.IDAM    ID Acceptance mode Format of Receive FIFO ID Filter Table elements
+    * CTRL2.RFFN  Number Of Receive FIFO Filters
+    * MCR.DMA     Enable DMA
+    *
+    * MCR.FDN  Flexible Data rate - excluded
+    */
+   /**
+    * Configure for Receive FIFO use
+    *
+    * In this mode received packets are stored in a receive FIFO.
+    * The packets are accepted/rejected using an acceptance filter table.
+    * The acceptance filters are masked by a filter mask table and/or a default mask
+    * @param[in] canParameters         CAN communication parameters
+    * @param[in] canAcceptanceMode     Format for acceptance filters
+    * @param[in] fifoFilterCount       Number of FIFO acceptance filters
+    * @param[in] fifoFilters           Acceptance filters applied to received messages to determine FIFO entry - [0..fifoFilterMasks-1]
+    * @param[in] fifoFilterMasks       Masks applied to FIFO acceptance filters [0..min(8 + 2*((fifoFilterCount/8)-1),31)]
+    * @param[in] fifoDefaultFilterMask Mask applied to FIFO acceptance filters not covered by fifoFilterMasks
+    * @param[in] mailBoxfilterMasks    Acceptance filters applied to received messages for mailboxes
+    */
+   static void configureWithReceiveFifo(
+         const CanParameters        &canParameters,
+         const CanAcceptanceMode    canAcceptanceMode,
+         const unsigned             fifoFilterCount,
+         const CanFifoFilter        fifoFilters[/*fifoFilterMasks*/],
+         const CanFifoFilterMask    fifoFilterMasks[/*min(8 + 2*((fifoFilterCount/8)-1),31)*/],
+         const CanFifoFilterMask    fifoDefaultFilterMask,
+         const CanMailboxFilterMask mailboxFilterMask[]
+         ) {
+      CanParameters      modifiedCanParameters(canParameters);
+
+      usbdm_assert(!canParameters.fden,"FIFO cannot be used with Flexible Data Rate");
+      modifiedCanParameters.rfen = true;
+      modifiedCanParameters.idam = canAcceptanceMode;
+
+      unsigned rffn = (fifoFilterCount/8) - 1;
+      modifiedCanParameters.rffn = rffn;
+      configure(modifiedCanParameters);
+
+      reservedMessageBuffers = 2*rffn + 8; // Lost to FIFO + Filters
+
+      // Mask for Receive FIFO ID Filter Table elements not covered by an individual masks
+      can().RXFGMASK = fifoDefaultFilterMask.raw;
+
+      // Individual FIFO ID filters
+      auto filters = Can_T::getFifoFilterTable();
+      for (unsigned index=0; index<fifoFilterCount; index++) {
+         filters[index] = fifoFilters[index];
+      }
+
+      // Individual FIFO ID filter masks
+      auto fifoMasks = Can_T::getFifoFilterMaskTable();
+      for (unsigned index=0; index<min(8 + 2*((fifoFilterCount/8)-1),32); index++) {
+         fifoMasks[index] = fifoFilterMasks[index];
+      }
+
+      // Individual Mailbox filter masks
+      auto mbMasks = Can_T::getMailboxFilterMaskTable();
+      for (unsigned index=0; index<(32-min(8 + 2*((fifoFilterCount/8)-1),32)); index++) {
+         mbMasks[index] = mailboxFilterMask[index];
+      }
+      can().MCR &= ~CAN_MCR_HALT_MASK;
+   }
+
+   /**
+    * Configure CAN with given settings
+    *
+    * @param[in] canParameters
+    */
+   static void configure(const CanParameters &canParameters) {
       enable();
 
+      // Assume no FIFO
+      reservedMessageBuffers = 0;
+
+      // Make sure disabled so CLKSRC can be set
+      can().MCR = CAN_MCR_MDIS(1);
+
+      // Wait until in LP mode
+      while (!(can().MCR & CAN_MCR_LPMACK_MASK)) {
+         __asm__("nop");
+      }
+
+      can().CTRL1 = canParameters.ctrl1 & CAN_CTRL1_CLKSRC_MASK;
+
+      // Enable
+      can().MCR = CAN_MCR_MDIS(0)|CAN_MCR_FRZ(1);
+
+      // Wait until not in LP mode
+      while (can().MCR & CAN_MCR_LPMACK_MASK) {
+         __asm__("nop");
+      }
+
       // Apply software reset and wait until complete
-      can().MCR = CAN_MCR_SOFTRST(1);
+      can().MCR |= CAN_MCR_SOFTRST(1);
       while (can().MCR & CAN_MCR_SOFTRST_MASK) {
          __asm__("nop");
       }
-      can().MCR =
-            CAN_MCR_MDIS(0)|     // Enable CAN
-            CAN_MCR_FRZ(1)|      // Allow Freeze (on debug or Halt)
-            CAN_MCR_RFEN(0)|     // No RxFIFO
-            CAN_MCR_HALT(1)|     // Start in Freeze
-            CAN_MCR_SOFTRST(0)|  //
-            CAN_MCR_SUPV(1)|     // Only allow supervisor access
-            CAN_MCR_WRNEN(0)|    //
-            CAN_MCR_SRXDIS(1)|   // Allow self-reception
-            CAN_MCR_IRMQ(0)|     //
-            CAN_MCR_DMA(0)|      // No DMA
-            CAN_MCR_PNET_EN(0)|  // No Pretend Networking
-            CAN_MCR_LPRIOEN(1)|  // No local priority
-            CAN_MCR_AEN(1)|      // Allow Tx abort
-            CAN_MCR_FDEN(0)|     // No flexible data rate
-            CAN_MCR_IDAM(0)|     //
-            CAN_MCR_MAXMB(-1);
+      // Wait until in Freeze mode
+      while ((can().MCR & CAN_MCR_FRZACK_MASK)==0) {
+         __asm__("nop");
+      }
 
+      // Clear message buffers
+      memset((void*)(can().MB),    0, Info::NumberOfMessageBuffers*sizeof(can().MB[0]));
+      memset((void*)(can().RXIMR), 0, 32*sizeof(can().RXIMR[0]));
 
-      static const uint32_t params[] = {
-            /* ~ 125000 */ CAN_CTRL1_PROPSEG(2)|CAN_CTRL1_RJW(1)|CAN_CTRL1_PSEG1(7)|CAN_CTRL1_PSEG2(3)|CAN_CTRL1_PRESDIV(7),
-            /* ~ 250000 */ CAN_CTRL1_PROPSEG(2)|CAN_CTRL1_RJW(1)|CAN_CTRL1_PSEG1(7)|CAN_CTRL1_PSEG2(3)|CAN_CTRL1_PRESDIV(3),
-            /* ~ 500000 */ CAN_CTRL1_PROPSEG(2)|CAN_CTRL1_RJW(1)|CAN_CTRL1_PSEG1(7)|CAN_CTRL1_PSEG2(3)|CAN_CTRL1_PRESDIV(1),
-            /* ~1000000 */ CAN_CTRL1_PROPSEG(2)|CAN_CTRL1_RJW(0)|CAN_CTRL1_PSEG1(1)|CAN_CTRL1_PSEG2(1)|CAN_CTRL1_PRESDIV(1),
-      };
-      uint32_t baudIndex = 0;
-      if (baud >=  250000) baudIndex++;
-      if (baud >=  500000) baudIndex++;
-      if (baud >= 1000000) baudIndex++;
-      can().CTRL1 =
-            CAN_CTRL1_CLKSRC(0)| //
-            params[baudIndex];
+      // Clear any pending flags
+      can().IFLAG1 = ~0;
 
-      can().MB[3].CS =
-            CAN_CS_TIME_STAMP(0)|
-            CAN_CS_DLC(0)|
-            CAN_CS_RTR(0)|
-            CAN_CS_IDE(0)|
-            CAN_CS_SRR(0)|
-            CAN_CS_CODE(0);
+      can().CTRL1 = canParameters.ctrl1;
 
-      memset((void*)(can().MB), 0, Info::NumberOfMessageBuffers*sizeof(can().MB[0]));
+      can().CTRL2 = canParameters.ctrl2;
+
+      // Configure CAN
+      can().MCR = canParameters.mcr|
+            CAN_MCR_HALT(1) |            // Stay in Freeze
+            CAN_MCR_FRZ(1);
+
    }
    
    /**
@@ -429,11 +1276,197 @@ public:
    }
    
    /**
+    * Write value to 16-bit free running counter
+    * The timer is clocked by CAN bit clock or an external clock and does not count
+    * in Disable, Stop, Pretended Networking and Freeze modes.
+    *
+    * The timer starts from 0x0 after Reset, counts linearly to 0xFFFF, and wraps around.
+    * The timer value is captured when the second bit of the identifier field of any frame is on
+    * the CAN bus. This captured value is written into the Time Stamp entry in a message
+    * buffer after a successful reception or transmission of a message.
+    * If CTRL1[TSYN] is asserted, the Timer is reset whenever a message is received in the
+    * first available Mailbox, according to CAN_CTRL2[RFFN] setting.
+    * The CPU can write to this register any time. However, if the write occurs at the same time
+    * that the Timer is being reset by a reception in the first Mailbox, then the write value is
+    * discarded.
+    *
+    * @param value
+    */
+   static void writeTimer(uint16_t value) {
+      can().TIMER = value;
+   }
+
+   /**
+    * Write value to 16-bit free running counter
+    *
+    * @return Timer value
+    */
+   static uint16_t readTimer() {
+      return can().TIMER;
+   }
+
+   /**
+    * Set Global Message Buffer Mask\n
+    * Used to mask the filter fields of all Receive MBs, excluding MBs 14-15, which
+    * have individual mask registers
+    *
+    * @param mask
+    */
+   static void setGlobalMessageBufferMask(uint16_t mask) {
+      can().RXMGMASK = mask;
+   }
+
+   /**
+    * Set FIFO Message Buffer Mask\n
+    * Used to mask the Receive FIFO ID Filter Table elements that do
+    * not have a corresponding RXIMR according to CAN_CTRL2[RFFN]
+    * field setting.
+    *
+    * @param mask
+    */
+   static void setFifoMessageBufferMask(uint16_t mask) {
+      can().RXFGMASK = mask;
+   }
+
+   /**
+    * Set Message Buffer 14 Message Buffer Mask
+    *
+    * @param mask
+    */
+   static void setMessageBuffer14Mask(uint16_t mask) {
+      can().RX14MASK = mask;
+   }
+
+   /**
+    * Set Message Buffer 15 Message Buffer Mask
+    *
+    * @param mask
+    */
+   static void setMessageBuffer15Mask(uint16_t mask) {
+      can().RX15MASK = mask;
+   }
+
+   /**
+    * Get error counts
+    *
+    * @return Error counts
+    */
+   static CanErrorCounts getErrorCounters() {
+      return (CanErrorCounts)can().ECR;
+   }
+
+   /**
     * Enable interrupts in NVIC
     * Any pending NVIC interrupts are first cleared.
     */
    static void enableOredNvicInterrupts() {
       enableNvicInterrupt(Info::irqNums[Info::OredIrqNumIndex]);
+   }
+
+   /**
+    * Get Error Status
+    *
+    * @return Mask representing various errors.
+    */
+   static uint32_t getErrorStatus() {
+      return can().ESR1;
+   }
+
+   /**
+    * Enable interrupts from selected message buffers
+    *
+    * @param[in] mask 1's in the mask enable interrupts from the corresponding message buffer.
+    */
+   static void enableMessageBufferInterrupts(uint32_t mask) {
+      can().IMASK1 |= mask;
+   }
+
+   /**
+    * Disable interrupts from selected message buffers
+    *
+    * @param[in] mask 1's in the mask disable interrupts from the corresponding message buffer.
+    */
+   static void disableMessageBufferInterrupts(uint32_t mask) {
+      can().IMASK1 &= ~mask;
+   }
+
+   /**
+    * Get message buffer flags.
+    * Each bit represents the flags from a message buffer
+    *
+    * @return
+    */
+   static uint32_t getMessageBufferFlags() {
+      return can().IFLAG1;
+   }
+
+   /**
+    * Clear message buffer flags.
+    * Each bit represents a message buffer flag to clear
+    *
+    * @param[in] mask 1's in the mask clear the flag from the corresponding message buffer.
+    */
+   static void clearMessageBufferFlags(uint32_t mask) {
+      can().IFLAG1 = mask;
+   }
+
+   /**
+    * Get FIFO flags.
+    * Bits 7,6 and 5 represent FIFO flags.
+    *
+    * @return bit mask\n
+    *  7 : Receive FIFO Overflow   - A message was lost
+    *  6 : Receive FIFO Warning    - The FIFO is nearly full
+    *  5 : Receive frame available - At least 1 frame available in Receive FIFO
+    */
+   static uint32_t getFifoFlags() {
+      return can().IFLAG1 & (CAN_IFLAG1_BUF7I_MASK|CAN_IFLAG1_BUF6I_MASK|CAN_IFLAG1_BUF5I_MASK);
+   }
+
+   /**
+    * Get FIFO information.\n
+    *
+    * This indicates which Identifier Acceptance Filter was hit by the received message that is in the output
+    * of the Receive FIFO. If multiple filters match the incoming message ID then the first matching IDAF found
+    * (lowest number) by the matching process is indicated. This field is valid only while the CAN_IFLAG1[BUF5I]
+    * is asserted.
+    *
+    * @return bit mask\n
+    */
+   static uint32_t getFifoInformation() {
+      return can().RXFIR;
+   }
+
+   /**
+    *
+    * @param phaseSegment1           Phase Buffer Segment 1 = phaseSegment1 x S-clock.
+    * @param phaseSegment2           Phase Buffer Segment 2 = phaseSegment2 x S-clock.
+    * @param propagationSegment      Propagation Segment Time = propagationSegment x S-clock.
+    * @param resyncJumpWidth         Resynchronisation Jump Width = resyncJumpWidth x S-clock.
+    * @param prescalerDivisionFactor S-clock frequency = PE clock frequency / prescalerDivisionFactor
+    */
+   static void setExtendedTiming(
+      unsigned phaseSegment1,
+      unsigned phaseSegment2,
+      unsigned propagationSegment,
+      unsigned resyncJumpWidth,
+      unsigned prescalerDivisionFactor
+   ) {
+      can().CBT =
+            CAN_CBT_EPSEG1(phaseSegment1-1) |
+            CAN_CBT_EPSEG2(phaseSegment2-1) |
+            CAN_CBT_EPROPSEG(propagationSegment-1) |
+            CAN_CBT_ERJW(resyncJumpWidth-1) |
+            CAN_CBT_EPRESDIV(prescalerDivisionFactor-1);
+   }
+
+   /**
+    * Get CRC value for last transmitted buffer
+    *
+    * @return CRC value and buffer number
+    */
+   static CanCrc15 getTransmittedCrc() {
+      return (CanCrc15)(can().CRCR);
    }
 
    /**
@@ -559,6 +1592,7 @@ public:
  * Callback table for programmatically set handlers
  */
 template<class Info> CanCallbackFunction Can_T<Info>::sCallbacks[] = {0};
+template<class Info> unsigned Can_T<Info>::reservedMessageBuffers = 0;
 
 #if defined(USBDM_CAN0_IS_DEFINED)
 using Can0 = Can_T<Can0Info>;

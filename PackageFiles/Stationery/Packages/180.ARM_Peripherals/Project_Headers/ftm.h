@@ -70,12 +70,12 @@ enum FtmChMode {
  * Control alignment of PWM function
  */
 enum FtmClockSource {
-   FtmClockSource_Disabled    = FTM_SC_CLKS(0),  //!< Timer is disabled
-   FtmClockSource_System      = FTM_SC_CLKS(1),  //!< System clock (usually the bus clock)
-   FtmClockSource_FixedFreq   = FTM_SC_CLKS(2),  //!< Fixed frequency clock (various sources such as FLL,PLL)
-   FtmClockSource_External    = FTM_SC_CLKS(3),  //!< External clock provided to FTM_CLKINx pin
+   FtmClockSource_Disabled    = FTM_SC_CLKS(0),            //!< Timer is disabled
+   FtmClockSource_System      = FTM_SC_CLKS(1),            //!< System clock (usually the bus clock)
+   FtmClockSource_FixedFreq   = FTM_SC_CLKS(2),            //!< Fixed frequency clock (various sources)
+   FtmClockSource_External    = FTM_SC_CLKS(3),            //!< External clock provided to FTM_CLKINx pin
 #if defined(USBDM_PCC_IS_DEFINED)
-   FtmClockSource_PccClockMux = FtmClockSource_External,  //!< External clock via PCC multiplexor
+   FtmClockSource_PccClockMux = FtmClockSource_External,   //!< External clock via PCC multiplexor
 #endif
    FtmClockSource_Default     = FtmClockSource_System,
 };
