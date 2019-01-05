@@ -1922,15 +1922,15 @@ Devices using this peripheral:
                         <bitWidth>1</bitWidth>
                         <enumeratedValues>
                            <enumeratedValue>
-			   <name>0b0</name>
-			   <description>Data frame</description>
-			   <value>0b0</value>
-			   </enumeratedValue>
+                              <name>0b0</name>
+                              <description>Data frame</description>
+                              <value>0b0</value>
+                           </enumeratedValue>
                            <enumeratedValue>
-			   <name>0b1</name>
-			   <description>Remote Request frame</description>
-			   <value>0b0</value>
-			   </enumeratedValue>
+                              <name>0b1</name>
+                              <description>Remote Request frame</description>
+                              <value>0b0</value>
+                           </enumeratedValue>
                         </enumeratedValues>
                      </field>
                      <field>
@@ -1939,18 +1939,34 @@ Devices using this peripheral:
                         <bitOffset>21</bitOffset>
                         <bitWidth>1</bitWidth>
                         <enumeratedValues>
-                           <enumeratedValue><name>0b0</name><description>Standard</description><value>0b0</value></enumeratedValue>
-                           <enumeratedValue><name>0b1</name><description>Extended</description><value>0b0</value></enumeratedValue>
+                           <enumeratedValue>
+                              <name>0b0</name>
+                              <description>Standard</description>
+                              <value>0b0</value>
+                           </enumeratedValue>
+                           <enumeratedValue>
+                              <name>0b1</name>
+                              <description>Extended</description>
+                              <value>0b0</value>
+                           </enumeratedValue>
                         </enumeratedValues>
                      </field>
                      <field>
                         <name>SRR</name>
-                        <description>Substitute Remote Request.</description>
+                        <description>Substitute Remote Request</description>
                         <bitOffset>22</bitOffset>
                         <bitWidth>1</bitWidth>
                         <enumeratedValues>
-                           <enumeratedValue><name>0b0</name><description>Dominant is not a valid value</description><value>0b0</value></enumeratedValue>
-                           <enumeratedValue><name>0b1</name><description>Recessive value is compulsory</description><value>0b0</value></enumeratedValue>
+                           <enumeratedValue>
+                              <name>0b0</name>
+                              <description>Dominant is not a valid value</description>
+                              <value>0b0</value>
+                           </enumeratedValue>
+                           <enumeratedValue>
+                              <name>0b1</name>
+                              <description>Recessive value is compulsory</description>
+                              <value>0b0</value>
+                           </enumeratedValue>
                         </enumeratedValues>
                      </field>
                      <field>
@@ -1968,16 +1984,16 @@ Devices using this peripheral:
                   <fields>
                      <field>
                         <name>EXT</name>
-                        <description>Extended identifier </description>
+                        <description>Extended identifier</description>
                         <bitOffset>0</bitOffset>
                         <bitWidth>29</bitWidth>
                      </field>
                      <field>
                         <name>STD</name>
-                        <description>Standard identifier </description>
+                        <?ignoreOverlap?>
+                        <description>Standard identifier</description>
                         <bitOffset>18</bitOffset>
                         <bitWidth>11</bitWidth>
-			<?ignoreOverlap?>
                      </field>
                      <field>
                         <name>PRIO</name>
@@ -2059,21 +2075,52 @@ This 3-bit fieldis only used when LPRIO_EN bit is set in MCR and it only makes s
                   <fields>
                      <field>
                         <name>RXID</name>
-                        <description>Rx Frame Identifier</description>
+                        <description>Rx Frame Identifier (Extended Format)</description>
                         <bitOffset>1</bitOffset>
                         <bitWidth>29</bitWidth>
+                     </field>
+                     <field>
+                        <name>RXID_STD</name>
+                        <?ignoreOverlap?>
+                        <description>Rx Frame Identifier (Standard format)</description>
+                        <bitOffset>19</bitOffset>
+                        <bitWidth>11</bitWidth>
                      </field>
                      <field>
                         <name>IDE</name>
                         <description>Extended Frame</description>
                         <bitOffset>30</bitOffset>
                         <bitWidth>1</bitWidth>
+                        <enumeratedValues>
+                           <enumeratedValue>
+                              <name>0b0</name>
+                              <description>Standard</description>
+                              <value>0b0</value>
+                           </enumeratedValue>
+                           <enumeratedValue>
+                              <name>0b1</name>
+                              <description>Extended</description>
+                              <value>0b0</value>
+                           </enumeratedValue>
+                        </enumeratedValues>
                      </field>
                      <field>
                         <name>RTR</name>
                         <description>Remote Frame</description>
                         <bitOffset>31</bitOffset>
                         <bitWidth>1</bitWidth>
+                        <enumeratedValues>
+                           <enumeratedValue>
+                              <name>0b0</name>
+                              <description>Data frame</description>
+                              <value>0b0</value>
+                           </enumeratedValue>
+                           <enumeratedValue>
+                              <name>0b1</name>
+                              <description>Remote Request frame</description>
+                              <value>0b0</value>
+                           </enumeratedValue>
+                        </enumeratedValues>
                      </field>
                   </fields>
                </register>
@@ -2081,11 +2128,11 @@ This 3-bit fieldis only used when LPRIO_EN bit is set in MCR and it only makes s
                   <dim>$(FILTER_COUNT)*2</dim>
                   <dimIncrement>2</dimIncrement>
                   <name>FILTER_ID_B</name>
+                  <?hide?>
                   <description>FIFO Message Filter ID</description>
                   <addressOffset>0x60</addressOffset>
                   <size>16</size>
                   <resetMask>0xFFFF</resetMask>
-		  <?hide?>
                   <fields>
                      <field>
                         <name>RXID</name>
@@ -2098,12 +2145,36 @@ This 3-bit fieldis only used when LPRIO_EN bit is set in MCR and it only makes s
                         <description>Extended Frame</description>
                         <bitOffset>14</bitOffset>
                         <bitWidth>1</bitWidth>
+                        <enumeratedValues>
+                           <enumeratedValue>
+                              <name>0b0</name>
+                              <description>Standard</description>
+                              <value>0b0</value>
+                           </enumeratedValue>
+                           <enumeratedValue>
+                              <name>0b1</name>
+                              <description>Extended</description>
+                              <value>0b0</value>
+                           </enumeratedValue>
+                        </enumeratedValues>
                      </field>
                      <field>
                         <name>RTR</name>
                         <description>Remote Frame</description>
                         <bitOffset>15</bitOffset>
                         <bitWidth>1</bitWidth>
+                        <enumeratedValues>
+                           <enumeratedValue>
+                              <name>0b0</name>
+                              <description>Data frame</description>
+                              <value>0b0</value>
+                           </enumeratedValue>
+                           <enumeratedValue>
+                              <name>0b1</name>
+                              <description>Remote Request frame</description>
+                              <value>0b0</value>
+                           </enumeratedValue>
+                        </enumeratedValues>
                      </field>
                   </fields>
                </register>
@@ -2111,11 +2182,11 @@ This 3-bit fieldis only used when LPRIO_EN bit is set in MCR and it only makes s
                   <dim>$(FILTER_COUNT)*4</dim>
                   <dimIncrement>1</dimIncrement>
                   <name>FILTER_ID_C</name>
+                  <?hide?>
                   <description>FIFO Message Filter ID</description>
                   <addressOffset>0x60</addressOffset>
                   <size>8</size>
                   <resetMask>0xFF</resetMask>
-		  <?hide?>
                   <fields>
                      <field>
                         <name>RTR_B</name>
@@ -2155,15 +2226,15 @@ This 3-bit fieldis only used when LPRIO_EN bit is set in MCR and it only makes s
                         <bitWidth>1</bitWidth>
                         <enumeratedValues>
                            <enumeratedValue>
-			   <name>0b0</name>
-			   <description>Data frame</description>
-			   <value>0b0</value>
-			   </enumeratedValue>
+                              <name>0b0</name>
+                              <description>Data frame</description>
+                              <value>0b0</value>
+                           </enumeratedValue>
                            <enumeratedValue>
-			   <name>0b1</name>
-			   <description>Remote Request frame</description>
-			   <value>0b0</value>
-			   </enumeratedValue>
+                              <name>0b1</name>
+                              <description>Remote Request frame</description>
+                              <value>0b0</value>
+                           </enumeratedValue>
                         </enumeratedValues>
                      </field>
                      <field>
@@ -2172,18 +2243,34 @@ This 3-bit fieldis only used when LPRIO_EN bit is set in MCR and it only makes s
                         <bitOffset>21</bitOffset>
                         <bitWidth>1</bitWidth>
                         <enumeratedValues>
-                           <enumeratedValue><name>0b0</name><description>Standard</description><value>0b0</value></enumeratedValue>
-                           <enumeratedValue><name>0b1</name><description>Extended</description><value>0b0</value></enumeratedValue>
+                           <enumeratedValue>
+                              <name>0b0</name>
+                              <description>Standard</description>
+                              <value>0b0</value>
+                           </enumeratedValue>
+                           <enumeratedValue>
+                              <name>0b1</name>
+                              <description>Extended</description>
+                              <value>0b0</value>
+                           </enumeratedValue>
                         </enumeratedValues>
                      </field>
                      <field>
                         <name>SRR</name>
-                        <description>Substitute Remote Request.</description>
+                        <description>Substitute Remote Request</description>
                         <bitOffset>22</bitOffset>
                         <bitWidth>1</bitWidth>
                         <enumeratedValues>
-                           <enumeratedValue><name>0b0</name><description>Dominant is not a valid value</description><value>0b0</value></enumeratedValue>
-                           <enumeratedValue><name>0b1</name><description>Recessive value is compulsory</description><value>0b0</value></enumeratedValue>
+                           <enumeratedValue>
+                              <name>0b0</name>
+                              <description>Dominant is not a valid value</description>
+                              <value>0b0</value>
+                           </enumeratedValue>
+                           <enumeratedValue>
+                              <name>0b1</name>
+                              <description>Recessive value is compulsory</description>
+                              <value>0b0</value>
+                           </enumeratedValue>
                         </enumeratedValues>
                      </field>
                      <field>
@@ -2192,17 +2279,61 @@ This 3-bit fieldis only used when LPRIO_EN bit is set in MCR and it only makes s
                         <bitOffset>24</bitOffset>
                         <bitWidth>4</bitWidth>
                         <enumeratedValues>
-                           <enumeratedValue><name>0b0000</name><description>Inactive   </description><value>0b0000</value></enumeratedValue>
-                           <enumeratedValue><name>0bXXX1</name><description>Busy       </description><value>0bXXX1</value></enumeratedValue>
-                           <enumeratedValue><name>0b0100</name><description>RxEmpty    </description><value>0b0100</value></enumeratedValue>
-                           <enumeratedValue><name>0b0010</name><description>RxFull     </description><value>0b0010</value></enumeratedValue>
-                           <enumeratedValue><name>0b0110</name><description>Overrun    </description><value>0b0110</value></enumeratedValue>
-                           <enumeratedValue><name>0b1010</name><description>RxAnswer   </description><value>0b1010</value></enumeratedValue>
-                           <enumeratedValue><name>0b1000</name><description>TxInactive </description><value>0b1000</value></enumeratedValue>
-                           <enumeratedValue><name>0b1001</name><description>TxAbort    </description><value>0b1001</value></enumeratedValue>
-                           <enumeratedValue><name>0b1100</name><description>TxData     </description><value>0b1100</value></enumeratedValue>
-                           <enumeratedValue><name>0b1100</name><description>TxRemote   </description><value>0b1100</value></enumeratedValue>
-                           <enumeratedValue><name>0b1110</name><description>TxAnswer   </description><value>0b1110</value></enumeratedValue>
+                           <enumeratedValue>
+                              <name>0b0000</name>
+                              <description>Inactive</description>
+                              <value>0b0000</value>
+                           </enumeratedValue>
+                           <enumeratedValue>
+                              <name>0bXXX1</name>
+                              <description>Busy</description>
+                              <value>0bXXX1</value>
+                           </enumeratedValue>
+                           <enumeratedValue>
+                              <name>0b0100</name>
+                              <description>RxEmpty</description>
+                              <value>0b0100</value>
+                           </enumeratedValue>
+                           <enumeratedValue>
+                              <name>0b0010</name>
+                              <description>RxFull</description>
+                              <value>0b0010</value>
+                           </enumeratedValue>
+                           <enumeratedValue>
+                              <name>0b0110</name>
+                              <description>Overrun</description>
+                              <value>0b0110</value>
+                           </enumeratedValue>
+                           <enumeratedValue>
+                              <name>0b1010</name>
+                              <description>RxAnswer</description>
+                              <value>0b1010</value>
+                           </enumeratedValue>
+                           <enumeratedValue>
+                              <name>0b1000</name>
+                              <description>TxInactive</description>
+                              <value>0b1000</value>
+                           </enumeratedValue>
+                           <enumeratedValue>
+                              <name>0b1001</name>
+                              <description>TxAbort</description>
+                              <value>0b1001</value>
+                           </enumeratedValue>
+                           <enumeratedValue>
+                              <name>0b1100</name>
+                              <description>TxData</description>
+                              <value>0b1100</value>
+                           </enumeratedValue>
+                           <enumeratedValue>
+                              <name>0b1100</name>
+                              <description>TxRemote</description>
+                              <value>0b1100</value>
+                           </enumeratedValue>
+                           <enumeratedValue>
+                              <name>0b1110</name>
+                              <description>TxAnswer</description>
+                              <value>0b1110</value>
+                           </enumeratedValue>
                         </enumeratedValues>
                      </field>
                      <field>
@@ -2211,8 +2342,16 @@ This 3-bit fieldis only used when LPRIO_EN bit is set in MCR and it only makes s
                         <bitOffset>29</bitOffset>
                         <bitWidth>1</bitWidth>
                         <enumeratedValues>
-                           <enumeratedValue><name>0b0</name><description>Error Active</description><value>0b0</value></enumeratedValue>
-                           <enumeratedValue><name>0b1</name><description>Error Passive</description><value>0b0</value></enumeratedValue>
+                           <enumeratedValue>
+                              <name>0b0</name>
+                              <description>Error Active</description>
+                              <value>0b0</value>
+                           </enumeratedValue>
+                           <enumeratedValue>
+                              <name>0b1</name>
+                              <description>Error Passive</description>
+                              <value>0b0</value>
+                           </enumeratedValue>
                         </enumeratedValues>
                      </field>
                      <field>
@@ -2221,8 +2360,16 @@ This 3-bit fieldis only used when LPRIO_EN bit is set in MCR and it only makes s
                         <bitOffset>30</bitOffset>
                         <bitWidth>1</bitWidth>
                         <enumeratedValues>
-                           <enumeratedValue><name>0b0</name><description>No switch</description><value>0b0</value></enumeratedValue>
-                           <enumeratedValue><name>0b1</name><description>Switch allowed</description><value>0b0</value></enumeratedValue>
+                           <enumeratedValue>
+                              <name>0b0</name>
+                              <description>No switch</description>
+                              <value>0b0</value>
+                           </enumeratedValue>
+                           <enumeratedValue>
+                              <name>0b1</name>
+                              <description>Switch allowed</description>
+                              <value>0b0</value>
+                           </enumeratedValue>
                         </enumeratedValues>
                      </field>
                      <field>
@@ -2231,8 +2378,16 @@ This 3-bit fieldis only used when LPRIO_EN bit is set in MCR and it only makes s
                         <bitOffset>31</bitOffset>
                         <bitWidth>1</bitWidth>
                         <enumeratedValues>
-                           <enumeratedValue><name>0b0</name><description>Standard data length</description><value>0b0</value></enumeratedValue>
-                           <enumeratedValue><name>0b1</name><description>Extended data length</description><value>0b0</value></enumeratedValue>
+                           <enumeratedValue>
+                              <name>0b0</name>
+                              <description>Standard data length</description>
+                              <value>0b0</value>
+                           </enumeratedValue>
+                           <enumeratedValue>
+                              <name>0b1</name>
+                              <description>Extended data length</description>
+                              <value>0b0</value>
+                           </enumeratedValue>
                         </enumeratedValues>
                      </field>
                   </fields>
@@ -2244,16 +2399,16 @@ This 3-bit fieldis only used when LPRIO_EN bit is set in MCR and it only makes s
                   <fields>
                      <field>
                         <name>EXT</name>
-                        <description>Extended identifier </description>
+                        <description>Extended identifier</description>
                         <bitOffset>0</bitOffset>
                         <bitWidth>29</bitWidth>
                      </field>
                      <field>
                         <name>STD</name>
-                        <description>Standard identifier </description>
+                        <?ignoreOverlap?>
+                        <description>Standard identifier</description>
                         <bitOffset>18</bitOffset>
                         <bitWidth>11</bitWidth>
-			<?ignoreOverlap?>
                      </field>
                      <field>
                         <name>PRIO</name>
@@ -2817,15 +2972,15 @@ This 3-bit fieldis only used when LPRIO_EN bit is set in MCR and it only makes s
                         <bitWidth>1</bitWidth>
                         <enumeratedValues>
                            <enumeratedValue>
-			   <name>0b0</name>
-			   <description>Data frame</description>
-			   <value>0b0</value>
-			   </enumeratedValue>
+                              <name>0b0</name>
+                              <description>Data frame</description>
+                              <value>0b0</value>
+                           </enumeratedValue>
                            <enumeratedValue>
-			   <name>0b1</name>
-			   <description>Remote Request frame</description>
-			   <value>0b0</value>
-			   </enumeratedValue>
+                              <name>0b1</name>
+                              <description>Remote Request frame</description>
+                              <value>0b0</value>
+                           </enumeratedValue>
                         </enumeratedValues>
                      </field>
                      <field>

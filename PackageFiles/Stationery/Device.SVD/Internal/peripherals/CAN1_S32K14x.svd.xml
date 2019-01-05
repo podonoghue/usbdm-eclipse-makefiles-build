@@ -46,7 +46,87 @@ Devices using this peripheral:
          </addressBlock>
          <addressBlock>
             <offset>0x80</offset>
-            <size>0x100</size>
+            <size>0x10</size>
+            <usage>registers</usage>
+         </addressBlock>
+         <addressBlock>
+            <offset>0x90</offset>
+            <size>0x10</size>
+            <usage>registers</usage>
+         </addressBlock>
+         <addressBlock>
+            <offset>0xA0</offset>
+            <size>0x10</size>
+            <usage>registers</usage>
+         </addressBlock>
+         <addressBlock>
+            <offset>0xB0</offset>
+            <size>0x10</size>
+            <usage>registers</usage>
+         </addressBlock>
+         <addressBlock>
+            <offset>0xC0</offset>
+            <size>0x10</size>
+            <usage>registers</usage>
+         </addressBlock>
+         <addressBlock>
+            <offset>0xD0</offset>
+            <size>0x10</size>
+            <usage>registers</usage>
+         </addressBlock>
+         <addressBlock>
+            <offset>0xE0</offset>
+            <size>0x10</size>
+            <usage>registers</usage>
+         </addressBlock>
+         <addressBlock>
+            <offset>0xE0</offset>
+            <size>0xA0</size>
+            <usage>registers</usage>
+         </addressBlock>
+         <addressBlock>
+            <offset>0xF0</offset>
+            <size>0x10</size>
+            <usage>registers</usage>
+         </addressBlock>
+         <addressBlock>
+            <offset>0x100</offset>
+            <size>0x10</size>
+            <usage>registers</usage>
+         </addressBlock>
+         <addressBlock>
+            <offset>0x110</offset>
+            <size>0x10</size>
+            <usage>registers</usage>
+         </addressBlock>
+         <addressBlock>
+            <offset>0x120</offset>
+            <size>0x10</size>
+            <usage>registers</usage>
+         </addressBlock>
+         <addressBlock>
+            <offset>0x130</offset>
+            <size>0x10</size>
+            <usage>registers</usage>
+         </addressBlock>
+         <addressBlock>
+            <offset>0x140</offset>
+            <size>0x10</size>
+            <usage>registers</usage>
+         </addressBlock>
+         <addressBlock>
+            <offset>0x150</offset>
+            <size>0x10</size>
+            <usage>registers</usage>
+         </addressBlock>
+         <addressBlock>
+            <offset>0x160</offset>
+            <size>0x10</size>
+            <usage>registers</usage>
+         </addressBlock>
+         <addressBlock>
+            <offset>0x170</offset>
+            <size>0x10</size>
             <usage>registers</usage>
          </addressBlock>
          <addressBlock>
@@ -90,22 +170,22 @@ Devices using this peripheral:
                      <enumeratedValues>
                         <enumeratedValue>
                            <name>0b00</name>
-                           <description>Format A: One full ID (standard and extended) per ID Filter Table element</description>
+                           <description>Format A:\t One full ID (standard and extended) per ID Filter Table element</description>
                            <value>0b00</value>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>0b01</name>
-                           <description>Format B: Two full standard IDs or two partial 14-bit (standard and extended) IDs per ID Filter Table element</description>
+                           <description>Format B:\t Two full standard IDs or two partial 14-bit (standard and extended) IDs per ID Filter Table element</description>
                            <value>0b01</value>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>0b10</name>
-                           <description>Format C: Four partial 8-bit Standard IDs per ID Filter Table element</description>
+                           <description>Format C:\t Four partial 8-bit Standard IDs per ID Filter Table element</description>
                            <value>0b10</value>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>0b11</name>
-                           <description>Format D: All frames rejected</description>
+                           <description>Format D:\t All frames rejected</description>
                            <value>0b11</value>
                         </enumeratedValue>
                      </enumeratedValues>
@@ -118,12 +198,12 @@ Devices using this peripheral:
                      <enumeratedValues>
                         <enumeratedValue>
                            <name>0b1</name>
-                           <description>CAN FD is enabled. FlexCAN is able to receive and transmit messages in both CAN FD and CAN 2.0 formats</description>
+                           <description>CAN FD is enabled.\t FlexCAN is able to receive and transmit messages in both CAN FD and CAN 2.0 formats</description>
                            <value>0b1</value>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>0b0</name>
-                           <description>CAN FD is disabled. FlexCAN is able to receive and transmit messages in CAN 2.0 format</description>
+                           <description>CAN FD is disabled.\tFlexCAN is able to receive and transmit messages in CAN 2.0 format</description>
                            <value>0b0</value>
                         </enumeratedValue>
                      </enumeratedValues>
@@ -281,12 +361,12 @@ Devices using this peripheral:
                      <enumeratedValues>
                         <enumeratedValue>
                            <name>0b0</name>
-                           <description>FlexCAN is in User mode. Affected registers allow both Supervisor and Unrestricted accesses</description>
+                           <description>FlexCAN is in User mode.\t Affected registers allow both Supervisor and Unrestricted accesses</description>
                            <value>0b0</value>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>0b1</name>
-                           <description>FlexCAN is in Supervisor mode. Affected registers allow only Supervisor access. Unrestricted access behaves as though the access was done to an unimplemented register location</description>
+                           <description>FlexCAN is in Supervisor mode.\t Affected registers allow only Supervisor access. Unrestricted access behaves as though the access was done to an unimplemented register location</description>
                            <value>0b1</value>
                         </enumeratedValue>
                      </enumeratedValues>
@@ -1447,6 +1527,88 @@ Devices using this peripheral:
                      <description>Number Of Rx FIFO Filters</description>
                      <bitOffset>24</bitOffset>
                      <bitWidth>4</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0000</name>
+                           <description>8 IDs</description>
+                           <value>0b0000</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b0001</name>
+                           <description>16 IDs</description>
+                           <value>0b0001</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b0010</name>
+                           <description>24 IDs</description>
+                           <value>0b0010</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b0011</name>
+                           <description>32 IDs</description>
+                           <value>0b0011</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b0100</name>
+                           <description>40 IDs</description>
+                           <value>0b0100</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b0101</name>
+                           <description>48 IDs</description>
+                           <value>0b0101</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b0110</name>
+                           <description>56 IDs</description>
+                           <value>0b0110</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b0111</name>
+                           <description>64 IDs</description>
+                           <value>0b0111</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1000</name>
+                           <description>74 IDs</description>
+                           <value>0b1000</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1001</name>
+                           <description>80 IDs</description>
+                           <value>0b1001</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1010</name>
+                           <description>88 IDs</description>
+                           <value>0b1010</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1011</name>
+                           <description>96 IDs</description>
+                           <value>0b1011</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1100</name>
+                           <description>104 IDs</description>
+                           <value>0b1100</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1101</name>
+                           <description>112 IDs</description>
+                           <value>0b1101</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1110</name>
+                           <description>120 IDs</description>
+                           <value>0b1110</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1111</name>
+                           <description>128 IDs</description>
+                           <value>0b1111</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
                   </field>
                   <field>
                      <name>BOFFDONEMSK</name>
@@ -1673,21 +1835,57 @@ Devices using this peripheral:
                      </field>
                      <field>
                         <name>RTR</name>
-                        <description>Remote Transmission Request. One/zero for remote/data frame</description>
+                        <description>Remote Transmission Request</description>
                         <bitOffset>20</bitOffset>
                         <bitWidth>1</bitWidth>
+                        <enumeratedValues>
+                           <enumeratedValue>
+                              <name>0b0</name>
+                              <description>Data frame</description>
+                              <value>0b0</value>
+                           </enumeratedValue>
+                           <enumeratedValue>
+                              <name>0b1</name>
+                              <description>Remote Request frame</description>
+                              <value>0b0</value>
+                           </enumeratedValue>
+                        </enumeratedValues>
                      </field>
                      <field>
                         <name>IDE</name>
-                        <description>ID Extended. One/zero for extended/standard format frame</description>
+                        <description>ID Extended.\t Selects format frame</description>
                         <bitOffset>21</bitOffset>
                         <bitWidth>1</bitWidth>
+                        <enumeratedValues>
+                           <enumeratedValue>
+                              <name>0b0</name>
+                              <description>Standard</description>
+                              <value>0b0</value>
+                           </enumeratedValue>
+                           <enumeratedValue>
+                              <name>0b1</name>
+                              <description>Extended</description>
+                              <value>0b0</value>
+                           </enumeratedValue>
+                        </enumeratedValues>
                      </field>
                      <field>
                         <name>SRR</name>
-                        <description>Substitute Remote Request. Contains a fixed recessive bit</description>
+                        <description>Substitute Remote Request</description>
                         <bitOffset>22</bitOffset>
                         <bitWidth>1</bitWidth>
+                        <enumeratedValues>
+                           <enumeratedValue>
+                              <name>0b0</name>
+                              <description>Dominant is not a valid value</description>
+                              <value>0b0</value>
+                           </enumeratedValue>
+                           <enumeratedValue>
+                              <name>0b1</name>
+                              <description>Recessive value is compulsory</description>
+                              <value>0b0</value>
+                           </enumeratedValue>
+                        </enumeratedValues>
                      </field>
                      <field>
                         <name>IDHIT</name>
@@ -1704,19 +1902,21 @@ Devices using this peripheral:
                   <fields>
                      <field>
                         <name>EXT</name>
-                        <description>Contains extended (LOW word) identifier of message buffer</description>
+                        <description>Extended identifier</description>
                         <bitOffset>0</bitOffset>
-                        <bitWidth>18</bitWidth>
+                        <bitWidth>29</bitWidth>
                      </field>
                      <field>
                         <name>STD</name>
-                        <description>Contains standard/extended (HIGH word) identifier of message buffer</description>
+                        <?ignoreOverlap?>
+                        <description>Standard identifier</description>
                         <bitOffset>18</bitOffset>
                         <bitWidth>11</bitWidth>
                      </field>
                      <field>
                         <name>PRIO</name>
-                        <description>Local priority. This 3-bit field is only used when LPRIO_EN bit is set in MCR and it only makes sense for Tx buffers. These bits are not transmitted. They are appended to the regular ID to define the transmission priority</description>
+                        <description>Local priority. 
+This 3-bit fieldis only used when LPRIO_EN bit is set in MCR and it only makes sense for Tx buffers. These bits are not transmitted. They are appended to the regular ID to define the transmission priority</description>
                         <bitOffset>29</bitOffset>
                         <bitWidth>3</bitWidth>
                      </field>
@@ -1793,21 +1993,52 @@ Devices using this peripheral:
                   <fields>
                      <field>
                         <name>RXID</name>
-                        <description>Rx Frame Identifier</description>
+                        <description>Rx Frame Identifier (Extended Format)</description>
                         <bitOffset>1</bitOffset>
                         <bitWidth>29</bitWidth>
+                     </field>
+                     <field>
+                        <name>RXID_STD</name>
+                        <?ignoreOverlap?>
+                        <description>Rx Frame Identifier (Standard format)</description>
+                        <bitOffset>19</bitOffset>
+                        <bitWidth>11</bitWidth>
                      </field>
                      <field>
                         <name>IDE</name>
                         <description>Extended Frame</description>
                         <bitOffset>30</bitOffset>
                         <bitWidth>1</bitWidth>
+                        <enumeratedValues>
+                           <enumeratedValue>
+                              <name>0b0</name>
+                              <description>Standard</description>
+                              <value>0b0</value>
+                           </enumeratedValue>
+                           <enumeratedValue>
+                              <name>0b1</name>
+                              <description>Extended</description>
+                              <value>0b0</value>
+                           </enumeratedValue>
+                        </enumeratedValues>
                      </field>
                      <field>
                         <name>RTR</name>
                         <description>Remote Frame</description>
                         <bitOffset>31</bitOffset>
                         <bitWidth>1</bitWidth>
+                        <enumeratedValues>
+                           <enumeratedValue>
+                              <name>0b0</name>
+                              <description>Data frame</description>
+                              <value>0b0</value>
+                           </enumeratedValue>
+                           <enumeratedValue>
+                              <name>0b1</name>
+                              <description>Remote Request frame</description>
+                              <value>0b0</value>
+                           </enumeratedValue>
+                        </enumeratedValues>
                      </field>
                   </fields>
                </register>
@@ -1815,6 +2046,7 @@ Devices using this peripheral:
                   <dim>$(FILTER_COUNT)*2</dim>
                   <dimIncrement>2</dimIncrement>
                   <name>FILTER_ID_B</name>
+                  <?hide?>
                   <description>FIFO Message Filter ID</description>
                   <addressOffset>0x60</addressOffset>
                   <size>16</size>
@@ -1831,12 +2063,36 @@ Devices using this peripheral:
                         <description>Extended Frame</description>
                         <bitOffset>14</bitOffset>
                         <bitWidth>1</bitWidth>
+                        <enumeratedValues>
+                           <enumeratedValue>
+                              <name>0b0</name>
+                              <description>Standard</description>
+                              <value>0b0</value>
+                           </enumeratedValue>
+                           <enumeratedValue>
+                              <name>0b1</name>
+                              <description>Extended</description>
+                              <value>0b0</value>
+                           </enumeratedValue>
+                        </enumeratedValues>
                      </field>
                      <field>
                         <name>RTR</name>
                         <description>Remote Frame</description>
                         <bitOffset>15</bitOffset>
                         <bitWidth>1</bitWidth>
+                        <enumeratedValues>
+                           <enumeratedValue>
+                              <name>0b0</name>
+                              <description>Data frame</description>
+                              <value>0b0</value>
+                           </enumeratedValue>
+                           <enumeratedValue>
+                              <name>0b1</name>
+                              <description>Remote Request frame</description>
+                              <value>0b0</value>
+                           </enumeratedValue>
+                        </enumeratedValues>
                      </field>
                   </fields>
                </register>
@@ -1844,6 +2100,7 @@ Devices using this peripheral:
                   <dim>$(FILTER_COUNT)*4</dim>
                   <dimIncrement>1</dimIncrement>
                   <name>FILTER_ID_C</name>
+                  <?hide?>
                   <description>FIFO Message Filter ID</description>
                   <addressOffset>0x60</addressOffset>
                   <size>8</size>
@@ -1862,6 +2119,7 @@ Devices using this peripheral:
                <dimIncrement>16</dimIncrement>
                <name>MB,@p@f@i</name>
                <addressOffset>0x80</addressOffset>
+               <?isolate?>
                <register>
                   <name>CS</name>
                   <description>Message Buffer 0 CS Register</description>
@@ -1869,57 +2127,186 @@ Devices using this peripheral:
                   <fields>
                      <field>
                         <name>TIME_STAMP</name>
-                        <description>Free-Running Counter Time stamp. This 16-bit field is a copy of the Free-Running Timer, captured for Tx and Rx frames at the time when the beginning of the Identifier field appears on the CAN bus</description>
+                        <description>Free-Running Counter Time stamp.\tThis 16-bit field is a copy of the Free-Running Timer, captured for Tx and Rx frames at the time when the beginning of the Identifier field appears on the CAN bus</description>
                         <bitOffset>0</bitOffset>
                         <bitWidth>16</bitWidth>
                      </field>
                      <field>
                         <name>DLC</name>
-                        <description>Length of the data to be stored/transmitted</description>
+                        <description>Length of the data to be received/transmitted</description>
                         <bitOffset>16</bitOffset>
                         <bitWidth>4</bitWidth>
                      </field>
                      <field>
                         <name>RTR</name>
-                        <description>Remote Transmission Request. One/zero for remote/data frame</description>
+                        <description>Remote Transmission Request</description>
                         <bitOffset>20</bitOffset>
                         <bitWidth>1</bitWidth>
+                        <enumeratedValues>
+                           <enumeratedValue>
+                              <name>0b0</name>
+                              <description>Data frame</description>
+                              <value>0b0</value>
+                           </enumeratedValue>
+                           <enumeratedValue>
+                              <name>0b1</name>
+                              <description>Remote Request frame</description>
+                              <value>0b0</value>
+                           </enumeratedValue>
+                        </enumeratedValues>
                      </field>
                      <field>
                         <name>IDE</name>
-                        <description>ID Extended. One/zero for extended/standard format frame</description>
+                        <description>ID Extended.\t Selects format frame</description>
                         <bitOffset>21</bitOffset>
                         <bitWidth>1</bitWidth>
+                        <enumeratedValues>
+                           <enumeratedValue>
+                              <name>0b0</name>
+                              <description>Standard</description>
+                              <value>0b0</value>
+                           </enumeratedValue>
+                           <enumeratedValue>
+                              <name>0b1</name>
+                              <description>Extended</description>
+                              <value>0b0</value>
+                           </enumeratedValue>
+                        </enumeratedValues>
                      </field>
                      <field>
                         <name>SRR</name>
-                        <description>Substitute Remote Request. Contains a fixed recessive bit</description>
+                        <description>Substitute Remote Request</description>
                         <bitOffset>22</bitOffset>
                         <bitWidth>1</bitWidth>
+                        <enumeratedValues>
+                           <enumeratedValue>
+                              <name>0b0</name>
+                              <description>Dominant is not a valid value</description>
+                              <value>0b0</value>
+                           </enumeratedValue>
+                           <enumeratedValue>
+                              <name>0b1</name>
+                              <description>Recessive value is compulsory</description>
+                              <value>0b0</value>
+                           </enumeratedValue>
+                        </enumeratedValues>
                      </field>
                      <field>
                         <name>CODE</name>
-                        <description>Reserved</description>
+                        <description>Message Buffer Code</description>
                         <bitOffset>24</bitOffset>
                         <bitWidth>4</bitWidth>
+                        <enumeratedValues>
+                           <enumeratedValue>
+                              <name>0b0000</name>
+                              <description>Inactive</description>
+                              <value>0b0000</value>
+                           </enumeratedValue>
+                           <enumeratedValue>
+                              <name>0bXXX1</name>
+                              <description>Busy</description>
+                              <value>0bXXX1</value>
+                           </enumeratedValue>
+                           <enumeratedValue>
+                              <name>0b0100</name>
+                              <description>RxEmpty</description>
+                              <value>0b0100</value>
+                           </enumeratedValue>
+                           <enumeratedValue>
+                              <name>0b0010</name>
+                              <description>RxFull</description>
+                              <value>0b0010</value>
+                           </enumeratedValue>
+                           <enumeratedValue>
+                              <name>0b0110</name>
+                              <description>Overrun</description>
+                              <value>0b0110</value>
+                           </enumeratedValue>
+                           <enumeratedValue>
+                              <name>0b1010</name>
+                              <description>RxAnswer</description>
+                              <value>0b1010</value>
+                           </enumeratedValue>
+                           <enumeratedValue>
+                              <name>0b1000</name>
+                              <description>TxInactive</description>
+                              <value>0b1000</value>
+                           </enumeratedValue>
+                           <enumeratedValue>
+                              <name>0b1001</name>
+                              <description>TxAbort</description>
+                              <value>0b1001</value>
+                           </enumeratedValue>
+                           <enumeratedValue>
+                              <name>0b1100</name>
+                              <description>TxData</description>
+                              <value>0b1100</value>
+                           </enumeratedValue>
+                           <enumeratedValue>
+                              <name>0b1100</name>
+                              <description>TxRemote</description>
+                              <value>0b1100</value>
+                           </enumeratedValue>
+                           <enumeratedValue>
+                              <name>0b1110</name>
+                              <description>TxAnswer</description>
+                              <value>0b1110</value>
+                           </enumeratedValue>
+                        </enumeratedValues>
                      </field>
                      <field>
                         <name>ESI</name>
-                        <description>Substitute Remote Request. Contains a fixed recessive bit</description>
+                        <description>Error State Indicator</description>
                         <bitOffset>29</bitOffset>
                         <bitWidth>1</bitWidth>
+                        <enumeratedValues>
+                           <enumeratedValue>
+                              <name>0b0</name>
+                              <description>Error Active</description>
+                              <value>0b0</value>
+                           </enumeratedValue>
+                           <enumeratedValue>
+                              <name>0b1</name>
+                              <description>Error Passive</description>
+                              <value>0b0</value>
+                           </enumeratedValue>
+                        </enumeratedValues>
                      </field>
                      <field>
                         <name>BRS</name>
-                        <description>Substitute Remote Request. Contains a fixed recessive bit</description>
+                        <description>Bit Rate Switch</description>
                         <bitOffset>30</bitOffset>
                         <bitWidth>1</bitWidth>
+                        <enumeratedValues>
+                           <enumeratedValue>
+                              <name>0b0</name>
+                              <description>No switch</description>
+                              <value>0b0</value>
+                           </enumeratedValue>
+                           <enumeratedValue>
+                              <name>0b1</name>
+                              <description>Switch allowed</description>
+                              <value>0b0</value>
+                           </enumeratedValue>
+                        </enumeratedValues>
                      </field>
                      <field>
                         <name>EDL</name>
-                        <description>Substitute Remote Request. Contains a fixed recessive bit</description>
+                        <description>Extended Data Length</description>
                         <bitOffset>31</bitOffset>
                         <bitWidth>1</bitWidth>
+                        <enumeratedValues>
+                           <enumeratedValue>
+                              <name>0b0</name>
+                              <description>Standard data length</description>
+                              <value>0b0</value>
+                           </enumeratedValue>
+                           <enumeratedValue>
+                              <name>0b1</name>
+                              <description>Extended data length</description>
+                              <value>0b0</value>
+                           </enumeratedValue>
+                        </enumeratedValues>
                      </field>
                   </fields>
                </register>
@@ -1930,19 +2317,21 @@ Devices using this peripheral:
                   <fields>
                      <field>
                         <name>EXT</name>
-                        <description>Contains extended (LOW word) identifier of message buffer</description>
+                        <description>Extended identifier</description>
                         <bitOffset>0</bitOffset>
-                        <bitWidth>18</bitWidth>
+                        <bitWidth>29</bitWidth>
                      </field>
                      <field>
                         <name>STD</name>
-                        <description>Contains standard/extended (HIGH word) identifier of message buffer</description>
+                        <?ignoreOverlap?>
+                        <description>Standard identifier</description>
                         <bitOffset>18</bitOffset>
                         <bitWidth>11</bitWidth>
                      </field>
                      <field>
                         <name>PRIO</name>
-                        <description>Local priority. This 3-bit fieldis only used when LPRIO_EN bit is set in MCR and it only makes sense for Tx buffers. These bits are not transmitted. They are appended to the regular ID to define the transmission priority</description>
+                        <description>Local priority. 
+This 3-bit fieldis only used when LPRIO_EN bit is set in MCR and it only makes sense for Tx buffers. These bits are not transmitted. They are appended to the regular ID to define the transmission priority</description>
                         <bitOffset>29</bitOffset>
                         <bitWidth>3</bitWidth>
                      </field>
@@ -2496,19 +2885,19 @@ Devices using this peripheral:
                      </field>
                      <field>
                         <name>RTR</name>
-                        <description>Remote Transmission Request Bit</description>
+                        <description>Remote Transmission Request</description>
                         <bitOffset>20</bitOffset>
                         <bitWidth>1</bitWidth>
                         <enumeratedValues>
                            <enumeratedValue>
                               <name>0b0</name>
-                              <description>Frame is data one (not remote)</description>
+                              <description>Data frame</description>
                               <value>0b0</value>
                            </enumeratedValue>
                            <enumeratedValue>
                               <name>0b1</name>
-                              <description>Frame is a remote one</description>
-                              <value>0b1</value>
+                              <description>Remote Request frame</description>
+                              <value>0b0</value>
                            </enumeratedValue>
                         </enumeratedValues>
                      </field>

@@ -5,7 +5,7 @@
  *           Equivalent: 
  *
  * @version  V1.6
- * @date     2018/12
+ * @date     2019/01
  *
  *******************************************************************************************************/
 
@@ -1269,9 +1269,9 @@ typedef struct CAN_Type {
 #define CAN_CS_IDHIT_SHIFT                       (24U)                                               /*!< CAN0_CS.IDHIT Position                  */
 #define CAN_CS_IDHIT(x)                          (((uint32_t)(((uint32_t)(x))<<24U))&0xFF000000UL)   /*!< CAN0_CS.IDHIT Field                     */
 /* ------- ID Bit Fields                            ------ */
-#define CAN_ID_EXT_MASK                          (0x3FFFFU)                                          /*!< CAN0_ID.EXT Mask                        */
+#define CAN_ID_EXT_MASK                          (0x1FFFFFFFU)                                       /*!< CAN0_ID.EXT Mask                        */
 #define CAN_ID_EXT_SHIFT                         (0U)                                                /*!< CAN0_ID.EXT Position                    */
-#define CAN_ID_EXT(x)                            (((uint32_t)(((uint32_t)(x))<<0U))&0x3FFFFUL)       /*!< CAN0_ID.EXT Field                       */
+#define CAN_ID_EXT(x)                            (((uint32_t)(((uint32_t)(x))<<0U))&0x1FFFFFFFUL)    /*!< CAN0_ID.EXT Field                       */
 #define CAN_ID_STD_MASK                          (0x1FFC0000U)                                       /*!< CAN0_ID.STD Mask                        */
 #define CAN_ID_STD_SHIFT                         (18U)                                               /*!< CAN0_ID.STD Position                    */
 #define CAN_ID_STD(x)                            (((uint32_t)(((uint32_t)(x))<<18U))&0x1FFC0000UL)   /*!< CAN0_ID.STD Field                       */
@@ -1308,6 +1308,9 @@ typedef struct CAN_Type {
 #define CAN_FILTER_ID_A_RXID_MASK                (0x3FFFFFFEU)                                       /*!< CAN0_FILTER_ID_A.RXID Mask              */
 #define CAN_FILTER_ID_A_RXID_SHIFT               (1U)                                                /*!< CAN0_FILTER_ID_A.RXID Position          */
 #define CAN_FILTER_ID_A_RXID(x)                  (((uint32_t)(((uint32_t)(x))<<1U))&0x3FFFFFFEUL)    /*!< CAN0_FILTER_ID_A.RXID Field             */
+#define CAN_FILTER_ID_A_RXID_STD_MASK            (0x3FF80000U)                                       /*!< CAN0_FILTER_ID_A.RXID_STD Mask          */
+#define CAN_FILTER_ID_A_RXID_STD_SHIFT           (19U)                                               /*!< CAN0_FILTER_ID_A.RXID_STD Position      */
+#define CAN_FILTER_ID_A_RXID_STD(x)              (((uint32_t)(((uint32_t)(x))<<19U))&0x3FF80000UL)   /*!< CAN0_FILTER_ID_A.RXID_STD Field         */
 #define CAN_FILTER_ID_A_IDE_MASK                 (0x40000000U)                                       /*!< CAN0_FILTER_ID_A.IDE Mask               */
 #define CAN_FILTER_ID_A_IDE_SHIFT                (30U)                                               /*!< CAN0_FILTER_ID_A.IDE Position           */
 #define CAN_FILTER_ID_A_IDE(x)                   (((uint32_t)(((uint32_t)(x))<<30U))&0x40000000UL)   /*!< CAN0_FILTER_ID_A.IDE Field              */

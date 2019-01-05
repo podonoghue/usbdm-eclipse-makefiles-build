@@ -720,7 +720,7 @@
       \t/**
       \t * Set SCG Clock out
       \t *
-      \t * @param scgClkOut
+      \t * @param scgClkOut Selections for output clock CLKOUT
       \t */
       \tstatic void setScgClkOut(ScgClkOut scgClkOut) {
       \t   scg().CLKOUTCNFG = scgClkOut;
@@ -732,8 +732,8 @@
       \t/**
       \t * Configure FIRC_CLK
       \t *
-      \t * @param scgFircControl
-      \t * @param scgFircRegulator
+      \t * @param scgFircControl    Enable
+      \t * @param scgFircRegulator  Regulator enable
       \t */
       \tstatic void configureFirc(
       \t      ScgFircControl   scgFircControl,
@@ -744,9 +744,9 @@
       \t/**
       \t * Configure SIRC_CLK
       \t *
-      \t * @param ScgSircControl
-      \t * @param ScgSircLowPower
-      \t * @param ScgSircStop
+      \t * @param scgSircControl   Enable
+      \t * @param scgSircLowPower  Enable in Low Power modes
+      \t * @param scgSircStop      SIRC Enable in Low Power modes
       \t */
       \tstatic void configureSirc(
       \t      ScgSircControl  scgSircControl,
@@ -758,8 +758,8 @@
       \t/**
       \t * Configure SOSC_CLK
       \t *
-      \t * @param ScgSoscControl
-      \t * @param ScgSoscMonitor 
+      \t * @param scgSoscControl   Enable
+      \t * @param scgSoscMonitor   Clock monitor
       \t */
       \tstatic void configureSosc(
       \t      ScgSoscControl  scgSoscControl,

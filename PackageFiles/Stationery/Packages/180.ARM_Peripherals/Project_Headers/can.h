@@ -238,7 +238,6 @@ public:
     *   - clksrc = 1 : System clock source
     *
     * @param bitRate    Desired bit rate
-    * @param clockFreq  Protocol Engine input clock frequency
     *
     * @note Use isValid to check for success or check USBDM error code
     */
@@ -330,14 +329,38 @@ union CanControlStatus {
    };
    void operator=(uint32_t value) volatile { raw = value; }
    void operator=(uint32_t value) { raw = value; }
-   void operator=(volatile CanControlStatus &other) { raw = other.raw; }
+   void operator=(volatile CanControlStatus &other) volatile { raw = other.raw; }
+   void operator=(const CanControlStatus &other) volatile { raw = other.raw; }
    void operator=(CanControlStatus &other) volatile { raw = other.raw; }
-   void operator=(CanControlStatus &other) { raw = other.raw; }
    constexpr CanControlStatus(uint32_t value) : raw(value) {}
    constexpr CanControlStatus(CanControlStatus &other) : raw(other.raw) {}
    constexpr CanControlStatus(const CanControlStatus &other) : raw(other.raw) {}
    constexpr CanControlStatus(volatile CanControlStatus &other) : raw(((CanControlStatus &)other).raw) {}
    constexpr CanControlStatus() : raw(0) {}
+   /**
+    * Constructor for CanControlStatus for use in Receive message buffers
+    *
+    * @param canMessageCode   Message type, usually CanMessageCode_RxEmpty, CanMessageCode_RxAnswer
+    * @param rtr              true => Accept remote requests, false => may be used as part of matching
+    */
+   constexpr CanControlStatus(
+         const CanMessageCode canMessageCode,
+         const bool           rtr=false) :
+         raw(CAN_CS_CODE(canMessageCode)|CAN_CS_RTR(rtr)) {}
+   /**
+    * Constructor for CanControlStatus for use in Transmit message buffers
+    *
+    * @param canMessageCode   Message type, usually CanMessageCode_TxData, CanMessageCode_TxRemote
+    * @param canMode          CAN Mode (affects ID size etc)
+    * @param canDataSize      Size of data to transmit
+    * @param rtr              false => Tx DATA, true => Tx REMOTE(MB switches to Rx EMPTY on success)
+    */
+   constexpr CanControlStatus(
+         const CanMessageCode canMessageCode,
+         const CanMode        canMode,
+         const CanDataSize    canDataSize,
+         const bool           rtr) :
+         raw(CAN_CS_CODE(canMessageCode)|CAN_CS_IDE(canMode)|CAN_CS_DLC(canDataSize)|CAN_CS_RTR(rtr)|CAN_CS_SRR(1)) {}
 } __attribute__((__packed__)) ;
 
 /**
@@ -355,11 +378,27 @@ union CanId {
       unsigned       :  3;
    };
    void operator=(uint32_t value) volatile { raw = value; }
-   void operator=(volatile CanId &other) { raw = other.raw; }
-   void operator=(CanId &other) volatile { raw = other.raw; }
+
+   void operator=(volatile CanId &other)       { raw = other.raw; }
+   void operator=(const CanId &other) volatile { raw = other.raw; }
+
    constexpr CanId(uint32_t value) : raw(value) {}
    constexpr CanId(const CanId &other) : raw(other.raw) {}
    constexpr CanId() : raw(0) {}
+
+   /**
+    * Constructor for CanId for use in Transmit or Receive message buffers
+    *
+    * @param canMode          CAN Mode (affects ID size etc)
+    * @param id               ID (std or extended)
+    * @param priority         Priority - only for transmission if MCR.LPRIO_EN=true
+    */
+   constexpr CanId(
+         const CanMode  canMode,
+         const unsigned id,
+         const unsigned priority=0) :
+         raw((canMode?CAN_ID_EXT(id):CAN_ID_STD(id))|CAN_ID_PRIO(priority)) {}
+
 }  __attribute__((__packed__));
 
 /**
@@ -573,7 +612,7 @@ union CanMailboxFilterMask {
    /**
     * Constructor for Mail box filter
     *
-    * @param canModeMask Mask for Select Standard or Extended mode
+    * @param canMode     Select Standard or Extended mode
     * @param idMask      Mask for MB[ID] (standard 11-bit, or extended 29-bit)
     * @param ideMask     Mask for MB[IDE] field
     * @param rtrMask     Mask for MB[RTR] field
@@ -625,7 +664,7 @@ union CanFifoFilterMask {
    /**
     * Constructor for filter table entry mask - Format A
     *
-    * @param canModeMask Mask for Select Standard or Extended mode
+    * @param canMode     Select Standard or Extended mode
     * @param rxidMask    Mask for Receive Frame Identifier (standard 11-bit, or extended 29-bit)
     * @param ideMask     Mask for Extended Frame
     * @param rtrMask     Mask for Remote Frame
@@ -690,18 +729,18 @@ union CanFifoFilter {
       unsigned  rtra   :  1; //!< Remote Frame
    };
    struct {
-      unsigned  rxidb0 : 14; //!< Receive Frame Identifier (standard 11-bit, or extended only 14 MSB bits)
-      unsigned  ideb0  :  1; //!< Extended Frame
-      unsigned  rtrb0  :  1; //!< Remote Frame
       unsigned  rxidb1 : 14; //!< Receive Frame Identifier (standard 11-bit, or extended only 14 MSB bits)
       unsigned  ideb1  :  1; //!< Extended Frame
       unsigned  rtrb1  :  1; //!< Remote Frame
+      unsigned  rxidb0 : 14; //!< Receive Frame Identifier (standard 11-bit, or extended only 14 MSB bits)
+      unsigned  ideb0  :  1; //!< Extended Frame
+      unsigned  rtrb0  :  1; //!< Remote Frame
    };
    struct {
-      unsigned  rxidc0 :  8; //!< Receive Frame Identifier (standard or extended only 8 MSB bits)
-      unsigned  rxidc1 :  8; //!< Receive Frame Identifier (standard or extended only 8 MSB bits)
-      unsigned  rxidc2 :  8; //!< Receive Frame Identifier (standard or extended only 8 MSB bits)
       unsigned  rxidc3 :  8; //!< Receive Frame Identifier (standard or extended only 8 MSB bits)
+      unsigned  rxidc2 :  8; //!< Receive Frame Identifier (standard or extended only 8 MSB bits)
+      unsigned  rxidc1 :  8; //!< Receive Frame Identifier (standard or extended only 8 MSB bits)
+      unsigned  rxidc0 :  8; //!< Receive Frame Identifier (standard or extended only 8 MSB bits)
    };
 
    /**
@@ -709,46 +748,51 @@ union CanFifoFilter {
     *
     * @param canMode Select Standard or Extended mode
     * @param rxid    Receive Frame Identifier (standard 11-bit, or extended 29-bit)
-    * @param ide     Extended Frame
-    * @param rtr     Remote Frame
+    * @param rtr     Accepted frame type, true => Remote frames, false => data frames
     */
    constexpr CanFifoFilter(
          CanMode   canMode,
          unsigned  rxid,
-         bool      ide,
-         bool      rtr) : fill1(0), rxida(canMode?rxid:(rxid<<18)), idea(ide), rtra(rtr) {}
+         bool      rtr) : fill1(0), rxida(canMode?rxid:(rxid<<18)), idea(canMode), rtra(rtr) {}
 
    /**
-    * Constructor filter table entry - Format A
+    * Constructor filter table entry - Format B
+    * Assumes both filters will accept the same type of frame.
     *
     * @param canMode  Select Standard or Extended mode
     * @param rxid0    Receive Frame Identifier (standard 11-bit, or extended only 14 MSB bits)
-    * @param ide0     Extended Frame
-    * @param rtr0     Remote Frame
+    * @param rtr0     Accepted frame type, true => Remote frames, false => data frames
     * @param rxid1    Receive Frame Identifier (standard 11-bit, or extended only 14 MSB bits)
-    * @param ide1     Extended Frame
-    * @param rtr1     Remote Frame
+    * @param rtr1     Accepted frame type, true => Remote frames, false => data frames
     */
    constexpr CanFifoFilter(
          CanMode   canMode,
          unsigned  rxid0,
-         unsigned  ide0,
-         unsigned  rtr0,
+         bool      rtr0,
          unsigned  rxid1,
-         unsigned  ide1,
-         unsigned  rtr1
-         ) : rxidb0(canMode?rxidb0:(rxid0<<3)), ideb0(ide0), rtrb0(rtr0), rxidb1(canMode?rxid1:(rxid1<<3)), ideb1(ide1), rtrb1(rtr1) {}
+         bool      rtr1
+         ) :
+         rxidb1(canMode?(rxid1>>15):(rxid1<<3)), ideb1(canMode), rtrb1(rtr1),
+         rxidb0(canMode?(rxid0>>15):(rxid0<<3)), ideb0(canMode), rtrb0(rtr0) {}
 
    /**
     * Filter table entry - Format C
+    * Frame type is ignored in filtering and only the top 8-bits of ID are checked.
     *
+    * @param canMode  Select Standard or Extended mode
     * @param rxid0    Receive Frame Identifier (standard or extended, only 8 MSB bits)
     * @param rxid1    Receive Frame Identifier (standard or extended, only 8 MSB bits)
     * @param rxid2    Receive Frame Identifier (standard or extended, only 8 MSB bits)
     * @param rxid3    Receive Frame Identifier (standard or extended, only 8 MSB bits)
     */
-   constexpr CanFifoFilter(unsigned  rxid0, unsigned  rxid1, unsigned  rxid2, unsigned  rxid3) :
-      rxidc0(rxid0), rxidc1(rxid1), rxidc2(rxid2), rxidc3(rxid3) {}
+   constexpr CanFifoFilter(
+         CanMode   canMode,
+         unsigned  rxid0, unsigned  rxid1, unsigned  rxid2, unsigned  rxid3) :
+      rxidc3(canMode?(rxid3>>21):(rxid3>>3)),
+      rxidc2(canMode?(rxid2>>21):(rxid2>>3)),
+      rxidc1(canMode?(rxid1>>21):(rxid1>>3)),
+      rxidc0(canMode?(rxid0>>21):(rxid0>>3))
+   {}
 
    // Don't allow implicit declaration
    constexpr CanFifoFilter() = delete;
@@ -770,7 +814,7 @@ union CanFifoFilter {
    /**
     * Assignment operator from uint32_t
     *
-    * @param raw
+    * @param value 32-bit value to assign
     */
    void operator=(uint32_t value) volatile { raw = value; }
 
@@ -811,14 +855,14 @@ union CanErrorCounts {
    /**
     * Assignment operator from uint32_t
     *
-    * @param raw
+    * @param value 32-bit value to assign
     */
    void operator=(uint32_t value) volatile { raw = value; }
 
    /**
     * Assignment operator
     *
-    * @param raw
+    * @param other
     */
    void operator=(CanErrorCounts &other) volatile { raw = other.raw; }
 };
@@ -851,7 +895,7 @@ union CanCrc15 {
    /**
     * Assignment operator from uint32_t
     *
-    * @param raw
+    * @param value 32-bit value to assign
     */
    void operator=(uint32_t value) volatile { this->raw = value; }
 
@@ -964,9 +1008,10 @@ public:
 
 protected:
    /**
-    * Set sCallbacks for ISR
+    * Set callbacks for ISR
     *
-    * @param sCallbacks The function to call from stub ISR
+    * @param callback The function to call from stub ISR
+    * @param index    Index of callback to install
     */
    static void setCallback(CanCallbackFunction callback, int index) {
       usbdm_assert(Info::irqHandlerInstalled, "DMA not configured for interrupts");
@@ -979,45 +1024,45 @@ protected:
 
 public:
    /**
-    * Set sCallbacks for ISR
+    * Set Ored callback for ISR
     *
-    * @param sCallbacks The function to call from stub ISR
+    * @param callback The function to call from stub ISR
     */
    static void setOredCallback(CanCallbackFunction callback) {
       setCallback(callback, Info::OredIrqNumIndex);
    }
 
    /**
-    * Set sCallbacks for ISR
+    * Set error callback for ISR
     *
-    * @param sCallbacks The function to call from stub ISR
+    * @param callback The function to call from stub ISR
     */
    static void setErrorCallback(CanCallbackFunction callback) {
       setCallback(callback, Info::ErrorIrqNumIndex);
    }
 
    /**
-    * Set sCallbacks for ISR
+    * Set wakeup callback for ISR
     *
-    * @param sCallbacks The function to call from stub ISR
+    * @param callback The function to call from stub ISR
     */
    static void setWakeupCallback(CanCallbackFunction callback) {
       setCallback(callback, Info::WakeupIrqNumIndex);
    }
 
    /**
-    * Set sCallbacks for ISR
+    * Set Ored 0-15 error callback for ISR
     *
-    * @param sCallbacks The function to call from stub ISR
+    * @param callback The function to call from stub ISR
     */
    static void setOred0_15_Callback(CanCallbackFunction callback) {
       setCallback(callback, Info::Ored_0_15_IrqNumIndex);
    }
 
    /**
-    * Set sCallbacks for ISR
+    * Set Ored 16-31 error callback for ISR
     *
-    * @param sCallbacks The function to call from stub ISR
+    * @param callback The function to call from stub ISR
     */
    static void setOred16_31_Callback(CanCallbackFunction callback) {
       setCallback(callback, Info::Ored_16_32_IrqNumIndex);
@@ -1028,8 +1073,8 @@ public:
     * Allowances are made for mailboxes lost to the Receive FIFO so the
     * index is relative to the first usable mailbox
     *
-    * @param size    Size of message buffers being used.
-    * @param index   Index of message buffer
+    * @param canMessageSize    Size of message buffers being used.
+    * @param index             Index of message buffer
     *
     * @return Pointer to message buffer.
     */
@@ -1167,7 +1212,7 @@ public:
          const CanFifoFilter        fifoFilters[/*fifoFilterMasks*/],
          const CanFifoFilterMask    fifoFilterMasks[/*min(8 + 2*((fifoFilterCount/8)-1),31)*/],
          const CanFifoFilterMask    fifoDefaultFilterMask,
-         const CanMailboxFilterMask mailboxFilterMask[]
+         const CanMailboxFilterMask mailboxFilterMasks[]
          ) {
       CanParameters      modifiedCanParameters(canParameters);
 
@@ -1199,7 +1244,7 @@ public:
       // Individual Mailbox filter masks
       auto mbMasks = Can_T::getMailboxFilterMaskTable();
       for (unsigned index=0; index<(32-min(8 + 2*((fifoFilterCount/8)-1),32)); index++) {
-         mbMasks[index] = mailboxFilterMask[index];
+         mbMasks[index] = mailboxFilterMasks[index];
       }
       can().MCR &= ~CAN_MCR_HALT_MASK;
    }
@@ -1275,6 +1320,55 @@ public:
       Info::disableClock();
    }
    
+   /**
+    * Calculates number of FIFO filter masks available based on number of FIFO filters.
+    * Each FIFO filter is masked by either an individual mask or a shared mask.
+    * This calculates the number of individual masks available to be applied to the FIFO filters.
+    * The remaining FIFO filters are masked by the shared mask.
+    *
+    * @param fifoFilterCount Number of FIFO filters implemented
+    *
+    * @return Number of individual FIFO filter masks
+    */
+   static constexpr unsigned fifoIndividualMaskCount(unsigned fifoFilterCount) {
+      return (fifoFilterCount<8)?
+            0:
+            min(8 + 2*((fifoFilterCount/8)-1), Info::NumberOfMessageBuffers);
+   }
+
+   /**
+    * Calculates the number of mailboxes and mailbox filters available based on number
+    * of FIFO filters and maximum mailboxes available.
+    * The mailboxes share storage with the FIFO and FIFO filters.
+    * The number of mailboxes decreases as the number of FIFO filters increases.
+    *
+    * @param fifoFilterCount     Number of FIFO filters implemented
+    * @param maximumMailboxCount Maximum number of mailboxes
+    *
+    * @return Number of CAN mailboxes available
+    *
+    * @note maximumMailboxCount is limited by the hardware and may be reduced by setting MCR.MAXMB.
+    */
+   static constexpr unsigned mailboxCount(unsigned fifoFilterCount, unsigned maximumMailboxCount) {
+      return maximumMailboxCount - fifoIndividualMaskCount(fifoFilterCount);
+   }
+
+   /**
+    * Calculates the maximum number of mailboxes and mailbox filters based on number of FIFO filters.
+    * The CAN mailboxes share storage with the FIFO and FIFO filters.
+    * The number of CAN mailboxes decreases as the number of FIFO filters increases.
+    *
+    * @param fifoFilterCount Number of FIFO filters implemented
+    *
+    * @return Maximum number of CAN mailboxes available
+    *
+    * @note This is a maximum determined by the hardware.
+    *       The number of mailboxes available may be reduced by setting MCR.MAXMB.
+    */
+   static constexpr unsigned maximimMailboxCount(unsigned fifoFilterCount) {
+      return mailboxCount(fifoFilterCount, Info::NumberOfMessageBuffers);
+   }
+
    /**
     * Write value to 16-bit free running counter
     * The timer is clocked by CAN bit clock or an external clock and does not count

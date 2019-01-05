@@ -280,6 +280,7 @@
       \t * Set $(instance::toupper) input clock source
       \t *
       \t * @param pccDiv2Clock Clock source selection
+      \t * @param pccDivider   Clock divider selection
       \t *
       \t * @note These peripherals use the DIV2 peripheral clocks e.g. SOSCDIV2_CLK.
       \t * @note The peripheral bus clock will be disabled before changing the clock source.  It is left disabled.

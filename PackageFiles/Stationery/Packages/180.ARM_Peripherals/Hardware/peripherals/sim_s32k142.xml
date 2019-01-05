@@ -346,8 +346,8 @@
       \t/**
       \t * Selects the clock and divider for output on the CLKOUT pin
       \t * 
-      \t * @param simClkOut      Clock to output
-      \t * @param simClkOutDiv   Divider for clock output
+      \t * @param simClkOutSelect  Clock to output
+      \t * @param simClkOutDiv     Divider for clock output
       \t */
       \tstatic void setClkout(SimClkOutSelect simClkOutSelect, SimClkOutDiv simClkOutDiv=SimClkOutDiv_Div1) {
       \t   // Disable first
