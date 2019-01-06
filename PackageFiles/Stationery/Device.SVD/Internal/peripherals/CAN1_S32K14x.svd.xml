@@ -1720,27 +1720,146 @@ Devices using this peripheral:
             </register>
             <register>
                <name>RXFGMASK</name>
+               <?hide?>
                <description>Rx FIFO Global Mask register</description>
+               <addressOffset>0x48</addressOffset>
+               <size>32</size>
+               <access>read-write</access>
+               <resetMask>0x0</resetMask>
+            </register>
+            <register>
+               <name>RXFGMASK_A</name>
+               <description>Rx FIFO Global Mask register (format A)</description>
                <addressOffset>0x48</addressOffset>
                <resetMask>0x0</resetMask>
                <fields>
                   <field>
-                     <name>FGM</name>
-                     <description>Rx FIFO Global Mask Bits</description>
-                     <bitOffset>0</bitOffset>
+                     <name>RXIDA_EXT</name>
+                     <description>Rx Frame Identifier (Extended Format)</description>
+                     <bitOffset>1</bitOffset>
+                     <bitWidth>29</bitWidth>
+                  </field>
+                  <field>
+                     <name>RXIDA_STD</name>
+                     <?ignoreOverlap?>
+                     <description>Rx Frame Identifier (Standard format)</description>
+                     <bitOffset>19</bitOffset>
+                     <bitWidth>11</bitWidth>
+                  </field>
+                  <field>
+                     <name>IDEA</name>
+                     <description>Extended Frame</description>
+                     <bitOffset>30</bitOffset>
+                     <bitWidth>1</bitWidth>
                      <enumeratedValues>
                         <enumeratedValue>
                            <name>0b0</name>
-                           <description>The corresponding bit in the filter is &quot;don&apos;t care.&quot;</description>
+                           <description>Standard</description>
                            <value>0b0</value>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>0b1</name>
-                           <description>The corresponding bit in the filter is checked</description>
-                           <value>0b1</value>
+                           <description>Extended</description>
+                           <value>0b0</value>
                         </enumeratedValue>
                      </enumeratedValues>
                   </field>
+                  <field>
+                     <name>RTRA</name>
+                     <description>Remote Frame</description>
+                     <bitOffset>31</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>Data frame</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>Remote Request frame</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>RXFGMASK_B</name>
+               <description>Rx FIFO Global Mask register (format B)</description>
+               <addressOffset>0x48</addressOffset>
+               <fields>
+                  <field>
+                     <name>RXIDB_EXT_1</name>
+                     <?ignoreOverlap?>
+                     <description>Rx Frame Identifier (Extended Format)</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>14</bitWidth>
+                  </field>
+                  <field>
+                     <name>RXIDB_STD_1</name>
+                     <?ignoreOverlap?>
+                     <description>Rx Frame Identifier (Standard Format)</description>
+                     <bitOffset>3</bitOffset>
+                     <bitWidth>11</bitWidth>
+                  </field>
+                  <field>
+                     <name>IDEB_1</name>
+                     <description>Extended Frame</description>
+                     <bitOffset>14</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>Standard</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>Extended</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>RTRB_1</name>
+                     <description>Remote Frame</description>
+                     <bitOffset>15</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>Data frame</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>Remote Request frame</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field derivedFrom="RXIDB_EXT_1" > <name>RXIDB_EXT_0</name> <bitOffset>16</bitOffset> <?ignoreOverlap?> </field>
+                  <field derivedFrom="RXIDB_STD_1" > <name>RXIDB_STD_0</name> <bitOffset>19</bitOffset> <?ignoreOverlap?> </field>
+                  <field derivedFrom="IDEB_1" > <name>IDEB_0</name> <bitOffset>30</bitOffset> </field>
+                  <field derivedFrom="RTRB_1" > <name>RTRB_0</name> <bitOffset>31</bitOffset> </field>
+               </fields>
+            </register>
+            <register>
+               <name>RXFGMASK_C</name>
+               <description>Rx FIFO Global Mask register (format C)</description>
+               <addressOffset>0x48</addressOffset>
+               <resetMask>0xFF</resetMask>
+               <fields>
+                  <field>
+                     <name>RXIDC_3</name>
+                     <description>Rx Frame Identifier</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>8</bitWidth>
+                  </field>
+                  <field derivedFrom="RXIDC_3" > <name>RXIDC_2</name> <bitOffset>8</bitOffset> </field>
+                  <field derivedFrom="RXIDC_3" > <name>RXIDC_1</name> <bitOffset>16</bitOffset> </field>
+                  <field derivedFrom="RXIDC_3" > <name>RXIDC_0</name> <bitOffset>24</bitOffset> </field>
                </fields>
             </register>
             <register>
@@ -1916,7 +2035,7 @@ Devices using this peripheral:
                      <field>
                         <name>PRIO</name>
                         <description>Local priority. 
-This 3-bit fieldis only used when LPRIO_EN bit is set in MCR and it only makes sense for Tx buffers. These bits are not transmitted. They are appended to the regular ID to define the transmission priority</description>
+This 3-bit field is only used when LPRIO_EN bit is set in MCR and it only makes sense for Tx buffers. These bits are not transmitted. They are appended to the regular ID to define the transmission priority</description>
                         <bitOffset>29</bitOffset>
                         <bitWidth>3</bitWidth>
                      </field>
@@ -1987,25 +2106,35 @@ This 3-bit fieldis only used when LPRIO_EN bit is set in MCR and it only makes s
                <register>
                   <dim>$(FILTER_COUNT)</dim>
                   <dimIncrement>4</dimIncrement>
-                  <name>FILTER_ID_A</name>
+                  <name>FILTER_ID</name>
+                  <?hide?>
                   <description>FIFO Message Filter ID</description>
+                  <addressOffset>0x60</addressOffset>
+                  <size>32</size>
+                  <access>read-write</access>
+               </register>
+               <register>
+                  <dim>$(FILTER_COUNT)</dim>
+                  <dimIncrement>4</dimIncrement>
+                  <name>FILTER_ID_A</name>
+                  <description>FIFO Message Filter ID (format A)</description>
                   <addressOffset>0x60</addressOffset>
                   <fields>
                      <field>
-                        <name>RXID</name>
+                        <name>RXIDA_EXT</name>
                         <description>Rx Frame Identifier (Extended Format)</description>
                         <bitOffset>1</bitOffset>
                         <bitWidth>29</bitWidth>
                      </field>
                      <field>
-                        <name>RXID_STD</name>
+                        <name>RXIDA_STD</name>
                         <?ignoreOverlap?>
                         <description>Rx Frame Identifier (Standard format)</description>
                         <bitOffset>19</bitOffset>
                         <bitWidth>11</bitWidth>
                      </field>
                      <field>
-                        <name>IDE</name>
+                        <name>IDEA</name>
                         <description>Extended Frame</description>
                         <bitOffset>30</bitOffset>
                         <bitWidth>1</bitWidth>
@@ -2023,7 +2152,7 @@ This 3-bit fieldis only used when LPRIO_EN bit is set in MCR and it only makes s
                         </enumeratedValues>
                      </field>
                      <field>
-                        <name>RTR</name>
+                        <name>RTRA</name>
                         <description>Remote Frame</description>
                         <bitOffset>31</bitOffset>
                         <bitWidth>1</bitWidth>
@@ -2043,23 +2172,29 @@ This 3-bit fieldis only used when LPRIO_EN bit is set in MCR and it only makes s
                   </fields>
                </register>
                <register>
-                  <dim>$(FILTER_COUNT)*2</dim>
-                  <dimIncrement>2</dimIncrement>
+                  <dim>$(FILTER_COUNT)</dim>
+                  <dimIncrement>4</dimIncrement>
                   <name>FILTER_ID_B</name>
-                  <?hide?>
-                  <description>FIFO Message Filter ID</description>
+                  <description>FIFO Message Filter ID (format B)</description>
                   <addressOffset>0x60</addressOffset>
-                  <size>16</size>
                   <resetMask>0xFFFF</resetMask>
                   <fields>
                      <field>
-                        <name>RXID</name>
-                        <description>Rx Frame Identifier</description>
+                        <name>RXIDB_EXT_1</name>
+                        <?ignoreOverlap?>
+                        <description>Rx Frame Identifier (Extended Format)</description>
                         <bitOffset>0</bitOffset>
                         <bitWidth>14</bitWidth>
                      </field>
                      <field>
-                        <name>IDE</name>
+                        <name>RXIDB_STD_1</name>
+                        <?ignoreOverlap?>
+                        <description>Rx Frame Identifier (Standard Format)</description>
+                        <bitOffset>3</bitOffset>
+                        <bitWidth>11</bitWidth>
+                     </field>
+                     <field>
+                        <name>IDEB_1</name>
                         <description>Extended Frame</description>
                         <bitOffset>14</bitOffset>
                         <bitWidth>1</bitWidth>
@@ -2077,7 +2212,7 @@ This 3-bit fieldis only used when LPRIO_EN bit is set in MCR and it only makes s
                         </enumeratedValues>
                      </field>
                      <field>
-                        <name>RTR</name>
+                        <name>RTRB_1</name>
                         <description>Remote Frame</description>
                         <bitOffset>15</bitOffset>
                         <bitWidth>1</bitWidth>
@@ -2094,23 +2229,29 @@ This 3-bit fieldis only used when LPRIO_EN bit is set in MCR and it only makes s
                            </enumeratedValue>
                         </enumeratedValues>
                      </field>
+                     <field derivedFrom="RXIDB_EXT_1" > <name>RXIDB_EXT_0</name> <bitOffset>16</bitOffset> <?ignoreOverlap?> </field>
+                     <field derivedFrom="RXIDB_STD_1" > <name>RXIDB_STD_0</name> <bitOffset>19</bitOffset> <?ignoreOverlap?> </field>
+                     <field derivedFrom="IDEB_1" > <name>IDEB_0</name> <bitOffset>30</bitOffset> </field>
+                     <field derivedFrom="RTRB_1" > <name>RTRB_0</name> <bitOffset>31</bitOffset> </field>
                   </fields>
                </register>
                <register>
-                  <dim>$(FILTER_COUNT)*4</dim>
-                  <dimIncrement>1</dimIncrement>
+                  <dim>$(FILTER_COUNT)</dim>
+                  <dimIncrement>4</dimIncrement>
                   <name>FILTER_ID_C</name>
-                  <?hide?>
-                  <description>FIFO Message Filter ID</description>
+                  <description>FIFO Message Filter ID (format C)</description>
                   <addressOffset>0x60</addressOffset>
-                  <size>8</size>
                   <resetMask>0xFF</resetMask>
                   <fields>
                      <field>
-                        <name>RTR_B</name>
-                        <description>Remote Frame</description>
+                        <name>RXIDC_3</name>
+                        <description>Rx Frame Identifier</description>
                         <bitOffset>0</bitOffset>
+                        <bitWidth>8</bitWidth>
                      </field>
+                     <field derivedFrom="RXIDC_3" > <name>RXIDC_2</name> <bitOffset>8</bitOffset> </field>
+                     <field derivedFrom="RXIDC_3" > <name>RXIDC_1</name> <bitOffset>16</bitOffset> </field>
+                     <field derivedFrom="RXIDC_3" > <name>RXIDC_0</name> <bitOffset>24</bitOffset> </field>
                   </fields>
                </register>
             </cluster>
