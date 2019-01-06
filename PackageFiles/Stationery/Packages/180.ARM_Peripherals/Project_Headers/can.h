@@ -85,7 +85,7 @@ public:
       bool     wrmfrz:1;     //!< Write-Access To Memory In Freeze Mode
 #else
       unsigned :1;     //!< WRMFRZ not available
-#endif // CAN_CTRL2_WRMFRZ
+#endif
 #ifdef CAN_CTRL2_BOFFDONEMSK_MASK
       bool     boffdonemsk:1;     //!< Mask for the Bus Off Done Interrupt in CAN_ESR1 register.
 #else
@@ -102,21 +102,46 @@ public:
       unsigned :1;
       unsigned idam:2;      //!< ID Acceptance Mode
       unsigned :1;
+#ifdef CAN_MCR_FDEN_MASK
       bool     fden:1;      //!< Flexible Data rate enable
+#else
+      unsigned :1;          //!< FDEN not available
+#endif
       bool     aen:1;       //!< Abort Enable
       bool     lprioen:1;   //!< Local Priority Enable
-      unsigned :2;
+#ifdef CAN_MCR_PNET_EN_MASK
+      unsigned :1;          //!< Pretended Networking Enable
+#else
+      unsigned :1;          //!< PNET_EN not available
+#endif
+#ifdef CAN_MCR_DMA_MASK
+      unsigned :1;          //!< DMA Enable
+#else
+      unsigned :1;          //!< DMA not available
+#endif
       bool     irmq:1;      //!< Individual Receive Masking And Queue Enable
       bool     srxdis:1;    //!< Self Reception Disable
       unsigned :1;
-      bool     waxsrc:1;    //!< Wake Up Source
+#ifdef CAN_MCR_WAKSRC_MASK
+      bool     waksrc:1;    //!< Wake Up Source
+#else
+      unsigned :1;          //!< WAKSRC not available
+#endif
       unsigned :1;          //!< LPMACK - Low-Power Mode Acknowledge
       bool     wrnen:1;     //!< Warning Interrupt Enable
+#ifdef CAN_MCR_SLFWAK_MASK
       bool     slfwak:1;    //!< Self Wake Up
+#else
+      unsigned :1;          //!< SLFWAK not available
+#endif
       bool     supv:1;      //!< Supervisor Mode
       unsigned :1;          //!< FRZACK - Freeze Mode Acknowledge
       unsigned :1;          //!< SOFTRST - Soft Reset
-      bool     waxmsk:1;    //!< Wake Up Interrupt Mask
+#ifdef CAN_MCR_WAKMSK_MASK
+      bool     wakmsk:1;    //!< Wake Up Interrupt Mask
+#else
+      unsigned :1;          //!< WAKMSK not available
+#endif
       unsigned :1;          //!< NOTRDY - FlexCAN Not Ready
       bool     :1;          //!< HALT - Halt FlexCAN
       bool     rfen:1;      //!< Receive FIFO Enable
@@ -1281,7 +1306,7 @@ public:
          const CanFifoFilterMask    fifoFilterMasks[/* calculateFifoIndividualMaskCount(fifoFilterCount) */ ],
          const CanFifoFilterMask    fifoDefaultFilterMask,
          const unsigned             mailboxCount,
-         const CanMailboxFilterMask mailboxFilterMasks[/* mailboxCount */]
+         const CanMailboxFilterMask mailboxFilterMasks[/* 3 or mailboxCount */]
          ) {
       usbdm_assert(
             CanParameters::calulateRequiredMessageBuffers(fifoFilterCount, mailboxCount)<Info::NumberOfMessageBuffers,
@@ -1304,26 +1329,36 @@ public:
       // Available mailboxes
       availableMailboxes = mailboxCount;
 
-      // Mask for Receive FIFO ID Filter Table elements not covered by an individual masks
-      can().RXFGMASK = fifoDefaultFilterMask.raw;
-
       // Individual FIFO ID filters
       auto filters = Can_T::getFifoFilterTable();
       for (unsigned index=0; index<fifoFilterCount; index++) {
          filters[index] = fifoFilters[index];
       }
 
-      // Individual FIFO ID filter masks
-      auto fifoMasks = Can_T::getFifoFilterMaskTable();
-      unsigned fifoMaskCount = calculateFifoIndividualMaskCount(fifoFilterCount);
-      for (unsigned index=0; index<fifoMaskCount; index++) {
-         fifoMasks[index] = fifoFilterMasks[index];
-      }
+      /*
+       * Mask for Receive FIFO ID Filter Table elements not covered by an
+       * individual masks or if individual masks are disabled (IRQM=0)
+       */
+      can().RXFGMASK = fifoDefaultFilterMask.raw;
 
-      // Individual Mailbox filter masks
-      auto mbMasks = Can_T::getMailboxFilterMaskTable();
-      for (unsigned index=0; index<mailboxCount; index++) {
-         mbMasks[index] = mailboxFilterMasks[index];
+      if (canParameters.irmq) {
+         // Individual FIFO ID filter masks
+         auto fifoMasks = Can_T::getFifoFilterMaskTable();
+         unsigned fifoMaskCount = calculateFifoIndividualMaskCount(fifoFilterCount);
+         for (unsigned index=0; index<fifoMaskCount; index++) {
+            fifoMasks[index] = fifoFilterMasks[index];
+         }
+         // Individual Mailbox filter masks
+         auto mbMasks = Can_T::getMailboxFilterMaskTable();
+         for (unsigned index=0; index<mailboxCount; index++) {
+            mbMasks[index] = mailboxFilterMasks[index];
+         }
+      }
+      else {
+         // Shared Mailbox filter masks
+         can().RXMGMASK = mailboxFilterMasks[0].raw;
+         can().RX14MASK = mailboxFilterMasks[1].raw;
+         can().RX15MASK = mailboxFilterMasks[2].raw;
       }
       can().MCR &= ~CAN_MCR_HALT_MASK;
    }
@@ -1524,20 +1559,21 @@ public:
    }
 
    /**
-    * Enable interrupts in NVIC
-    * Any pending NVIC interrupts are first cleared.
-    */
-   static void enableOredNvicInterrupts() {
-      enableNvicInterrupt(Info::irqNums[Info::OredIrqNumIndex]);
-   }
-
-   /**
     * Get Error Status
     *
     * @return Mask representing various errors.
     */
    static uint32_t getErrorStatus() {
       return can().ESR1;
+   }
+
+   /**
+    * Clear Error Status
+    *
+    * @param flags Mask representing various errors to clear
+    */
+   static uint32_t clearErrorStatus(uint32_t flags) {
+      return can().ESR1 = flags;
    }
 
    /**
@@ -1592,7 +1628,7 @@ public:
     *  5 : Receive frame available - At least 1 frame available in Receive FIFO
     */
    static void enableFifoInterrupts(uint32_t mask) {
-      can().IMASK1 |= (mask<<messageBuffersAllocatedToFifo);
+      can().IMASK1 |= mask & (CAN_IFLAG1_BUF7I_MASK|CAN_IFLAG1_BUF6I_MASK|CAN_IFLAG1_BUF5I_MASK);
    }
 
    /**
@@ -1605,7 +1641,7 @@ public:
     *  5 : Receive frame available - At least 1 frame available in Receive FIFO
     */
    static void disableFifoBufferInterrupts(uint32_t mask) {
-      can().IMASK1 &= ~(mask<<messageBuffersAllocatedToFifo);
+      can().IMASK1 &= ~(mask & (CAN_IFLAG1_BUF7I_MASK|CAN_IFLAG1_BUF6I_MASK|CAN_IFLAG1_BUF5I_MASK));
    }
 
    /**
@@ -1682,6 +1718,13 @@ public:
    }
 
    /**
+    * Enable interrupts in NVIC
+    */
+   static void enableOredNvicInterrupts() {
+      NVIC_EnableIRQ(Info::irqNums[Info::OredIrqNumIndex]);
+   }
+
+   /**
     * Enable and set priority of interrupts in NVIC
     * Any pending NVIC interrupts are first cleared.
     *
@@ -1700,10 +1743,9 @@ public:
 
    /**
     * Enable interrupts in NVIC
-    * Any pending NVIC interrupts are first cleared.
     */
    static void enableWakeupNvicInterrupts() {
-      enableNvicInterrupt(Info::irqNums[Info::WakeupIrqNumIndex]);
+      NVIC_EnableIRQ(Info::irqNums[Info::WakeupIrqNumIndex]);
    }
 
    /**
@@ -1725,10 +1767,9 @@ public:
 
    /**
     * Enable interrupts in NVIC
-    * Any pending NVIC interrupts are first cleared.
     */
    static void enableErrorNvicInterrupts() {
-      enableNvicInterrupt(Info::irqNums[Info::ErrorIrqNumIndex]);
+      NVIC_EnableIRQ(Info::irqNums[Info::ErrorIrqNumIndex]);
    }
 
    /**
@@ -1750,10 +1791,9 @@ public:
 
    /**
     * Enable interrupts in NVIC
-    * Any pending NVIC interrupts are first cleared.
     */
    static void enableOred_0_15_NvicInterrupts() {
-      enableNvicInterrupt(Info::irqNums[Info::Ored_0_15_IrqNumIndex]);
+      NVIC_EnableIRQ(Info::irqNums[Info::Ored_0_15_IrqNumIndex]);
    }
 
    /**
@@ -1775,10 +1815,9 @@ public:
 
    /**
     * Enable interrupts in NVIC
-    * Any pending NVIC interrupts are first cleared.
     */
    static void enableOred_16_32_NvicInterrupts() {
-      enableNvicInterrupt(Info::irqNums[Info::Ored_16_32_IrqNumIndex]);
+      NVIC_EnableIRQ(Info::irqNums[Info::Ored_16_32_IrqNumIndex]);
    }
 
    /**
