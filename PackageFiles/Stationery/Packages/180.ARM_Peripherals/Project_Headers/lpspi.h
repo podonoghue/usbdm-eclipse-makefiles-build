@@ -55,7 +55,6 @@ protected:
     * Construct LPSPI interface
     *
     * @param[in]  lpspi     Base address of LPSPI hardware
-    * @param[in]  lpspiMode Mode of operation (LpspiMode_Interrupt or LpspiMode_Polled)
     */
    Lpspi(volatile LPSPI_Type *lpspi) : lpspi(lpspi) {
    }
@@ -122,8 +121,6 @@ public:
     * Construct LPSPI interface
     *
     * @param[in]  bps        Tx/Rx rate
-    * @param[in]  lpspiMode    Mode of operation
-    * @param[in]  myAddress  Address of this device on bus (not currently used)
     */
    LpspiBase_T(unsigned bps=400000) : Lpspi(&Info::lpspi()) {
    }

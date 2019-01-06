@@ -1473,9 +1473,6 @@ public:
       /**
        * Configure channel and sets mode.
        *
-       * @param[in] ftmChMode         Mode of operation for FTM e.g.FtmChMode_PwmHighTruePulses
-       * @param[in] ftmChannelAction  Whether to enable the interrupt or DMA function on this channel
-       *
        * @note This method has the side-effect of clearing the register update synchronisation i.e.
        *       pending CnV register updates are discarded.
        */

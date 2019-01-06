@@ -24,7 +24,7 @@
 namespace USBDM {
 
 /**
- * @addtogroup SCG_Group SCG, Multipurpose Clock Generator
+ * @addtogroup SCG_Group SCG, System Clock Generator
  * @brief Abstraction for Multipurpose Clock Generator
  * @{
  */

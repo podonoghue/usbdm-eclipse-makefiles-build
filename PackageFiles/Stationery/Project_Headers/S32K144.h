@@ -873,7 +873,12 @@ typedef struct CAN_Type {
    __I  uint32_t  ESR2;                         /**< 0038: Error and Status 2 register                                  */
         uint8_t   RESERVED_3[8];                /**< 003C: 0x8 bytes                                                    */
    __I  uint32_t  CRCR;                         /**< 0044: CRC Register                                                 */
-   __IO uint32_t  RXFGMASK;                     /**< 0048: Rx FIFO Global Mask register                                 */
+   union {                                      /**< 0048: (size=0004)                                                  */
+      __IO uint32_t  RXFGMASK;                  /**< 0048: Rx FIFO Global Mask register                                 */
+      __IO uint32_t  RXFGMASK_A;                /**< 0048: Rx FIFO Global Mask register (format A)                      */
+      __IO uint32_t  RXFGMASK_B;                /**< 0048: Rx FIFO Global Mask register (format B)                      */
+      __IO uint32_t  RXFGMASK_C;                /**< 0048: Rx FIFO Global Mask register (format C)                      */
+   };
    __I  uint32_t  RXFIR;                        /**< 004C: Rx FIFO Information Register                                 */
    __IO uint32_t  CBT;                          /**< 0050: CAN Bit Timing Register                                      */
         uint8_t   RESERVED_4[44];               /**< 0054: 0x2C bytes                                                   */
@@ -885,9 +890,10 @@ typedef struct CAN_Type {
          __IO uint32_t  WORD1;                  /**< 008C: FIFO Message Buffer WORD1 Register                           */
               uint8_t   RESERVED_5[80];         /**< 0090: 0x50 bytes                                                   */
          union {                                /**< 00E0: (size=01A0)                                                  */
-            __IO uint32_t  FILTER_ID_A[CAN_FILTER_COUNT]; /**< 00E0: FIFO Message Filter ID                                       */
-            __IO uint16_t  FILTER_ID_B[CAN_FILTER_COUNT*2]; /**< 00E0: FIFO Message Filter ID                                       */
-            __IO uint8_t   FILTER_ID_C[CAN_FILTER_COUNT*4]; /**< 00E0: FIFO Message Filter ID                                       */
+            __IO uint32_t  FILTER_ID[CAN_FILTER_COUNT]; /**< 00E0: FIFO Message Filter ID                                       */
+            __IO uint32_t  FILTER_ID_A[CAN_FILTER_COUNT]; /**< 00E0: FIFO Message Filter ID (format A)                            */
+            __IO uint32_t  FILTER_ID_B[CAN_FILTER_COUNT]; /**< 00E0: FIFO Message Filter ID (format B)                            */
+            __IO uint32_t  FILTER_ID_C[CAN_FILTER_COUNT]; /**< 00E0: FIFO Message Filter ID (format C)                            */
          };
       } FIFO;                                   /**< 0080: (cluster: size=0x0200, 512)                                  */
       struct {
@@ -1223,9 +1229,57 @@ typedef struct CAN_Type {
 #define CAN_CRCR_MBCRC_SHIFT                     (16U)                                               /*!< CAN0_CRCR.MBCRC Position                */
 #define CAN_CRCR_MBCRC(x)                        (((uint32_t)(((uint32_t)(x))<<16U))&0x7F0000UL)     /*!< CAN0_CRCR.MBCRC Field                   */
 /* ------- RXFGMASK Bit Fields                      ------ */
-#define CAN_RXFGMASK_FGM_MASK                    (0xFFFFFFFFU)                                       /*!< CAN0_RXFGMASK.FGM Mask                  */
-#define CAN_RXFGMASK_FGM_SHIFT                   (0U)                                                /*!< CAN0_RXFGMASK.FGM Position              */
-#define CAN_RXFGMASK_FGM(x)                      (((uint32_t)(((uint32_t)(x))<<0U))&0xFFFFFFFFUL)    /*!< CAN0_RXFGMASK.FGM Field                 */
+/* ------- RXFGMASK_A Bit Fields                    ------ */
+#define CAN_RXFGMASK_A_RXIDA_EXT_MASK            (0x3FFFFFFEU)                                       /*!< CAN0_RXFGMASK_A.RXIDA_EXT Mask          */
+#define CAN_RXFGMASK_A_RXIDA_EXT_SHIFT           (1U)                                                /*!< CAN0_RXFGMASK_A.RXIDA_EXT Position      */
+#define CAN_RXFGMASK_A_RXIDA_EXT(x)              (((uint32_t)(((uint32_t)(x))<<1U))&0x3FFFFFFEUL)    /*!< CAN0_RXFGMASK_A.RXIDA_EXT Field         */
+#define CAN_RXFGMASK_A_RXIDA_STD_MASK            (0x3FF80000U)                                       /*!< CAN0_RXFGMASK_A.RXIDA_STD Mask          */
+#define CAN_RXFGMASK_A_RXIDA_STD_SHIFT           (19U)                                               /*!< CAN0_RXFGMASK_A.RXIDA_STD Position      */
+#define CAN_RXFGMASK_A_RXIDA_STD(x)              (((uint32_t)(((uint32_t)(x))<<19U))&0x3FF80000UL)   /*!< CAN0_RXFGMASK_A.RXIDA_STD Field         */
+#define CAN_RXFGMASK_A_IDEA_MASK                 (0x40000000U)                                       /*!< CAN0_RXFGMASK_A.IDEA Mask               */
+#define CAN_RXFGMASK_A_IDEA_SHIFT                (30U)                                               /*!< CAN0_RXFGMASK_A.IDEA Position           */
+#define CAN_RXFGMASK_A_IDEA(x)                   (((uint32_t)(((uint32_t)(x))<<30U))&0x40000000UL)   /*!< CAN0_RXFGMASK_A.IDEA Field              */
+#define CAN_RXFGMASK_A_RTRA_MASK                 (0x80000000U)                                       /*!< CAN0_RXFGMASK_A.RTRA Mask               */
+#define CAN_RXFGMASK_A_RTRA_SHIFT                (31U)                                               /*!< CAN0_RXFGMASK_A.RTRA Position           */
+#define CAN_RXFGMASK_A_RTRA(x)                   (((uint32_t)(((uint32_t)(x))<<31U))&0x80000000UL)   /*!< CAN0_RXFGMASK_A.RTRA Field              */
+/* ------- RXFGMASK_B Bit Fields                    ------ */
+#define CAN_RXFGMASK_B_RXIDB_EXT_1_MASK          (0x3FFFU)                                           /*!< CAN0_RXFGMASK_B.RXIDB_EXT_1 Mask        */
+#define CAN_RXFGMASK_B_RXIDB_EXT_1_SHIFT         (0U)                                                /*!< CAN0_RXFGMASK_B.RXIDB_EXT_1 Position    */
+#define CAN_RXFGMASK_B_RXIDB_EXT_1(x)            (((uint32_t)(((uint32_t)(x))<<0U))&0x3FFFUL)        /*!< CAN0_RXFGMASK_B.RXIDB_EXT_1 Field       */
+#define CAN_RXFGMASK_B_RXIDB_STD_1_MASK          (0x3FF8U)                                           /*!< CAN0_RXFGMASK_B.RXIDB_STD_1 Mask        */
+#define CAN_RXFGMASK_B_RXIDB_STD_1_SHIFT         (3U)                                                /*!< CAN0_RXFGMASK_B.RXIDB_STD_1 Position    */
+#define CAN_RXFGMASK_B_RXIDB_STD_1(x)            (((uint32_t)(((uint32_t)(x))<<3U))&0x3FF8UL)        /*!< CAN0_RXFGMASK_B.RXIDB_STD_1 Field       */
+#define CAN_RXFGMASK_B_IDEB_1_MASK               (0x4000U)                                           /*!< CAN0_RXFGMASK_B.IDEB_1 Mask             */
+#define CAN_RXFGMASK_B_IDEB_1_SHIFT              (14U)                                               /*!< CAN0_RXFGMASK_B.IDEB_1 Position         */
+#define CAN_RXFGMASK_B_IDEB_1(x)                 (((uint32_t)(((uint32_t)(x))<<14U))&0x4000UL)       /*!< CAN0_RXFGMASK_B.IDEB_1 Field            */
+#define CAN_RXFGMASK_B_RTRB_1_MASK               (0x8000U)                                           /*!< CAN0_RXFGMASK_B.RTRB_1 Mask             */
+#define CAN_RXFGMASK_B_RTRB_1_SHIFT              (15U)                                               /*!< CAN0_RXFGMASK_B.RTRB_1 Position         */
+#define CAN_RXFGMASK_B_RTRB_1(x)                 (((uint32_t)(((uint32_t)(x))<<15U))&0x8000UL)       /*!< CAN0_RXFGMASK_B.RTRB_1 Field            */
+#define CAN_RXFGMASK_B_RXIDB_EXT_0_MASK          (0x3FFF0000U)                                       /*!< CAN0_RXFGMASK_B.RXIDB_EXT_0 Mask        */
+#define CAN_RXFGMASK_B_RXIDB_EXT_0_SHIFT         (16U)                                               /*!< CAN0_RXFGMASK_B.RXIDB_EXT_0 Position    */
+#define CAN_RXFGMASK_B_RXIDB_EXT_0(x)            (((uint32_t)(((uint32_t)(x))<<16U))&0x3FFF0000UL)   /*!< CAN0_RXFGMASK_B.RXIDB_EXT_0 Field       */
+#define CAN_RXFGMASK_B_RXIDB_STD_0_MASK          (0x3FF80000U)                                       /*!< CAN0_RXFGMASK_B.RXIDB_STD_0 Mask        */
+#define CAN_RXFGMASK_B_RXIDB_STD_0_SHIFT         (19U)                                               /*!< CAN0_RXFGMASK_B.RXIDB_STD_0 Position    */
+#define CAN_RXFGMASK_B_RXIDB_STD_0(x)            (((uint32_t)(((uint32_t)(x))<<19U))&0x3FF80000UL)   /*!< CAN0_RXFGMASK_B.RXIDB_STD_0 Field       */
+#define CAN_RXFGMASK_B_IDEB_0_MASK               (0x40000000U)                                       /*!< CAN0_RXFGMASK_B.IDEB_0 Mask             */
+#define CAN_RXFGMASK_B_IDEB_0_SHIFT              (30U)                                               /*!< CAN0_RXFGMASK_B.IDEB_0 Position         */
+#define CAN_RXFGMASK_B_IDEB_0(x)                 (((uint32_t)(((uint32_t)(x))<<30U))&0x40000000UL)   /*!< CAN0_RXFGMASK_B.IDEB_0 Field            */
+#define CAN_RXFGMASK_B_RTRB_0_MASK               (0x80000000U)                                       /*!< CAN0_RXFGMASK_B.RTRB_0 Mask             */
+#define CAN_RXFGMASK_B_RTRB_0_SHIFT              (31U)                                               /*!< CAN0_RXFGMASK_B.RTRB_0 Position         */
+#define CAN_RXFGMASK_B_RTRB_0(x)                 (((uint32_t)(((uint32_t)(x))<<31U))&0x80000000UL)   /*!< CAN0_RXFGMASK_B.RTRB_0 Field            */
+/* ------- RXFGMASK_C Bit Fields                    ------ */
+#define CAN_RXFGMASK_C_RXIDC_3_MASK              (0xFFU)                                             /*!< CAN0_RXFGMASK_C.RXIDC_3 Mask            */
+#define CAN_RXFGMASK_C_RXIDC_3_SHIFT             (0U)                                                /*!< CAN0_RXFGMASK_C.RXIDC_3 Position        */
+#define CAN_RXFGMASK_C_RXIDC_3(x)                (((uint32_t)(((uint32_t)(x))<<0U))&0xFFUL)          /*!< CAN0_RXFGMASK_C.RXIDC_3 Field           */
+#define CAN_RXFGMASK_C_RXIDC_2_MASK              (0xFF00U)                                           /*!< CAN0_RXFGMASK_C.RXIDC_2 Mask            */
+#define CAN_RXFGMASK_C_RXIDC_2_SHIFT             (8U)                                                /*!< CAN0_RXFGMASK_C.RXIDC_2 Position        */
+#define CAN_RXFGMASK_C_RXIDC_2(x)                (((uint32_t)(((uint32_t)(x))<<8U))&0xFF00UL)        /*!< CAN0_RXFGMASK_C.RXIDC_2 Field           */
+#define CAN_RXFGMASK_C_RXIDC_1_MASK              (0xFF0000U)                                         /*!< CAN0_RXFGMASK_C.RXIDC_1 Mask            */
+#define CAN_RXFGMASK_C_RXIDC_1_SHIFT             (16U)                                               /*!< CAN0_RXFGMASK_C.RXIDC_1 Position        */
+#define CAN_RXFGMASK_C_RXIDC_1(x)                (((uint32_t)(((uint32_t)(x))<<16U))&0xFF0000UL)     /*!< CAN0_RXFGMASK_C.RXIDC_1 Field           */
+#define CAN_RXFGMASK_C_RXIDC_0_MASK              (0xFF000000U)                                       /*!< CAN0_RXFGMASK_C.RXIDC_0 Mask            */
+#define CAN_RXFGMASK_C_RXIDC_0_SHIFT             (24U)                                               /*!< CAN0_RXFGMASK_C.RXIDC_0 Position        */
+#define CAN_RXFGMASK_C_RXIDC_0(x)                (((uint32_t)(((uint32_t)(x))<<24U))&0xFF000000UL)   /*!< CAN0_RXFGMASK_C.RXIDC_0 Field           */
 /* ------- RXFIR Bit Fields                         ------ */
 #define CAN_RXFIR_IDHIT_MASK                     (0x1FFU)                                            /*!< CAN0_RXFIR.IDHIT Mask                   */
 #define CAN_RXFIR_IDHIT_SHIFT                    (0U)                                                /*!< CAN0_RXFIR.IDHIT Position               */
@@ -1304,33 +1358,58 @@ typedef struct CAN_Type {
 #define CAN_WORD1_DATA_BYTE_4_MASK               (0xFF000000U)                                       /*!< CAN0_WORD1.DATA_BYTE_4 Mask             */
 #define CAN_WORD1_DATA_BYTE_4_SHIFT              (24U)                                               /*!< CAN0_WORD1.DATA_BYTE_4 Position         */
 #define CAN_WORD1_DATA_BYTE_4(x)                 (((uint32_t)(((uint32_t)(x))<<24U))&0xFF000000UL)   /*!< CAN0_WORD1.DATA_BYTE_4 Field            */
+/* ------- FILTER_ID Bit Fields                     ------ */
 /* ------- FILTER_ID_A Bit Fields                   ------ */
-#define CAN_FILTER_ID_A_RXID_MASK                (0x3FFFFFFEU)                                       /*!< CAN0_FILTER_ID_A.RXID Mask              */
-#define CAN_FILTER_ID_A_RXID_SHIFT               (1U)                                                /*!< CAN0_FILTER_ID_A.RXID Position          */
-#define CAN_FILTER_ID_A_RXID(x)                  (((uint32_t)(((uint32_t)(x))<<1U))&0x3FFFFFFEUL)    /*!< CAN0_FILTER_ID_A.RXID Field             */
-#define CAN_FILTER_ID_A_RXID_STD_MASK            (0x3FF80000U)                                       /*!< CAN0_FILTER_ID_A.RXID_STD Mask          */
-#define CAN_FILTER_ID_A_RXID_STD_SHIFT           (19U)                                               /*!< CAN0_FILTER_ID_A.RXID_STD Position      */
-#define CAN_FILTER_ID_A_RXID_STD(x)              (((uint32_t)(((uint32_t)(x))<<19U))&0x3FF80000UL)   /*!< CAN0_FILTER_ID_A.RXID_STD Field         */
-#define CAN_FILTER_ID_A_IDE_MASK                 (0x40000000U)                                       /*!< CAN0_FILTER_ID_A.IDE Mask               */
-#define CAN_FILTER_ID_A_IDE_SHIFT                (30U)                                               /*!< CAN0_FILTER_ID_A.IDE Position           */
-#define CAN_FILTER_ID_A_IDE(x)                   (((uint32_t)(((uint32_t)(x))<<30U))&0x40000000UL)   /*!< CAN0_FILTER_ID_A.IDE Field              */
-#define CAN_FILTER_ID_A_RTR_MASK                 (0x80000000U)                                       /*!< CAN0_FILTER_ID_A.RTR Mask               */
-#define CAN_FILTER_ID_A_RTR_SHIFT                (31U)                                               /*!< CAN0_FILTER_ID_A.RTR Position           */
-#define CAN_FILTER_ID_A_RTR(x)                   (((uint32_t)(((uint32_t)(x))<<31U))&0x80000000UL)   /*!< CAN0_FILTER_ID_A.RTR Field              */
+#define CAN_FILTER_ID_A_RXIDA_EXT_MASK           (0x3FFFFFFEU)                                       /*!< CAN0_FILTER_ID_A.RXIDA_EXT Mask         */
+#define CAN_FILTER_ID_A_RXIDA_EXT_SHIFT          (1U)                                                /*!< CAN0_FILTER_ID_A.RXIDA_EXT Position     */
+#define CAN_FILTER_ID_A_RXIDA_EXT(x)             (((uint32_t)(((uint32_t)(x))<<1U))&0x3FFFFFFEUL)    /*!< CAN0_FILTER_ID_A.RXIDA_EXT Field        */
+#define CAN_FILTER_ID_A_RXIDA_STD_MASK           (0x3FF80000U)                                       /*!< CAN0_FILTER_ID_A.RXIDA_STD Mask         */
+#define CAN_FILTER_ID_A_RXIDA_STD_SHIFT          (19U)                                               /*!< CAN0_FILTER_ID_A.RXIDA_STD Position     */
+#define CAN_FILTER_ID_A_RXIDA_STD(x)             (((uint32_t)(((uint32_t)(x))<<19U))&0x3FF80000UL)   /*!< CAN0_FILTER_ID_A.RXIDA_STD Field        */
+#define CAN_FILTER_ID_A_IDEA_MASK                (0x40000000U)                                       /*!< CAN0_FILTER_ID_A.IDEA Mask              */
+#define CAN_FILTER_ID_A_IDEA_SHIFT               (30U)                                               /*!< CAN0_FILTER_ID_A.IDEA Position          */
+#define CAN_FILTER_ID_A_IDEA(x)                  (((uint32_t)(((uint32_t)(x))<<30U))&0x40000000UL)   /*!< CAN0_FILTER_ID_A.IDEA Field             */
+#define CAN_FILTER_ID_A_RTRA_MASK                (0x80000000U)                                       /*!< CAN0_FILTER_ID_A.RTRA Mask              */
+#define CAN_FILTER_ID_A_RTRA_SHIFT               (31U)                                               /*!< CAN0_FILTER_ID_A.RTRA Position          */
+#define CAN_FILTER_ID_A_RTRA(x)                  (((uint32_t)(((uint32_t)(x))<<31U))&0x80000000UL)   /*!< CAN0_FILTER_ID_A.RTRA Field             */
 /* ------- FILTER_ID_B Bit Fields                   ------ */
-#define CAN_FILTER_ID_B_RXID_MASK                (0x3FFFU)                                           /*!< CAN0_FILTER_ID_B.RXID Mask              */
-#define CAN_FILTER_ID_B_RXID_SHIFT               (0U)                                                /*!< CAN0_FILTER_ID_B.RXID Position          */
-#define CAN_FILTER_ID_B_RXID(x)                  (((uint16_t)(((uint16_t)(x))<<0U))&0x3FFFUL)        /*!< CAN0_FILTER_ID_B.RXID Field             */
-#define CAN_FILTER_ID_B_IDE_MASK                 (0x4000U)                                           /*!< CAN0_FILTER_ID_B.IDE Mask               */
-#define CAN_FILTER_ID_B_IDE_SHIFT                (14U)                                               /*!< CAN0_FILTER_ID_B.IDE Position           */
-#define CAN_FILTER_ID_B_IDE(x)                   (((uint16_t)(((uint16_t)(x))<<14U))&0x4000UL)       /*!< CAN0_FILTER_ID_B.IDE Field              */
-#define CAN_FILTER_ID_B_RTR_MASK                 (0x8000U)                                           /*!< CAN0_FILTER_ID_B.RTR Mask               */
-#define CAN_FILTER_ID_B_RTR_SHIFT                (15U)                                               /*!< CAN0_FILTER_ID_B.RTR Position           */
-#define CAN_FILTER_ID_B_RTR(x)                   (((uint16_t)(((uint16_t)(x))<<15U))&0x8000UL)       /*!< CAN0_FILTER_ID_B.RTR Field              */
+#define CAN_FILTER_ID_B_RXIDB_EXT_1_MASK         (0x3FFFU)                                           /*!< CAN0_FILTER_ID_B.RXIDB_EXT_1 Mask       */
+#define CAN_FILTER_ID_B_RXIDB_EXT_1_SHIFT        (0U)                                                /*!< CAN0_FILTER_ID_B.RXIDB_EXT_1 Position   */
+#define CAN_FILTER_ID_B_RXIDB_EXT_1(x)           (((uint32_t)(((uint32_t)(x))<<0U))&0x3FFFUL)        /*!< CAN0_FILTER_ID_B.RXIDB_EXT_1 Field      */
+#define CAN_FILTER_ID_B_RXIDB_STD_1_MASK         (0x3FF8U)                                           /*!< CAN0_FILTER_ID_B.RXIDB_STD_1 Mask       */
+#define CAN_FILTER_ID_B_RXIDB_STD_1_SHIFT        (3U)                                                /*!< CAN0_FILTER_ID_B.RXIDB_STD_1 Position   */
+#define CAN_FILTER_ID_B_RXIDB_STD_1(x)           (((uint32_t)(((uint32_t)(x))<<3U))&0x3FF8UL)        /*!< CAN0_FILTER_ID_B.RXIDB_STD_1 Field      */
+#define CAN_FILTER_ID_B_IDEB_1_MASK              (0x4000U)                                           /*!< CAN0_FILTER_ID_B.IDEB_1 Mask            */
+#define CAN_FILTER_ID_B_IDEB_1_SHIFT             (14U)                                               /*!< CAN0_FILTER_ID_B.IDEB_1 Position        */
+#define CAN_FILTER_ID_B_IDEB_1(x)                (((uint32_t)(((uint32_t)(x))<<14U))&0x4000UL)       /*!< CAN0_FILTER_ID_B.IDEB_1 Field           */
+#define CAN_FILTER_ID_B_RTRB_1_MASK              (0x8000U)                                           /*!< CAN0_FILTER_ID_B.RTRB_1 Mask            */
+#define CAN_FILTER_ID_B_RTRB_1_SHIFT             (15U)                                               /*!< CAN0_FILTER_ID_B.RTRB_1 Position        */
+#define CAN_FILTER_ID_B_RTRB_1(x)                (((uint32_t)(((uint32_t)(x))<<15U))&0x8000UL)       /*!< CAN0_FILTER_ID_B.RTRB_1 Field           */
+#define CAN_FILTER_ID_B_RXIDB_EXT_0_MASK         (0x3FFF0000U)                                       /*!< CAN0_FILTER_ID_B.RXIDB_EXT_0 Mask       */
+#define CAN_FILTER_ID_B_RXIDB_EXT_0_SHIFT        (16U)                                               /*!< CAN0_FILTER_ID_B.RXIDB_EXT_0 Position   */
+#define CAN_FILTER_ID_B_RXIDB_EXT_0(x)           (((uint32_t)(((uint32_t)(x))<<16U))&0x3FFF0000UL)   /*!< CAN0_FILTER_ID_B.RXIDB_EXT_0 Field      */
+#define CAN_FILTER_ID_B_RXIDB_STD_0_MASK         (0x3FF80000U)                                       /*!< CAN0_FILTER_ID_B.RXIDB_STD_0 Mask       */
+#define CAN_FILTER_ID_B_RXIDB_STD_0_SHIFT        (19U)                                               /*!< CAN0_FILTER_ID_B.RXIDB_STD_0 Position   */
+#define CAN_FILTER_ID_B_RXIDB_STD_0(x)           (((uint32_t)(((uint32_t)(x))<<19U))&0x3FF80000UL)   /*!< CAN0_FILTER_ID_B.RXIDB_STD_0 Field      */
+#define CAN_FILTER_ID_B_IDEB_0_MASK              (0x40000000U)                                       /*!< CAN0_FILTER_ID_B.IDEB_0 Mask            */
+#define CAN_FILTER_ID_B_IDEB_0_SHIFT             (30U)                                               /*!< CAN0_FILTER_ID_B.IDEB_0 Position        */
+#define CAN_FILTER_ID_B_IDEB_0(x)                (((uint32_t)(((uint32_t)(x))<<30U))&0x40000000UL)   /*!< CAN0_FILTER_ID_B.IDEB_0 Field           */
+#define CAN_FILTER_ID_B_RTRB_0_MASK              (0x80000000U)                                       /*!< CAN0_FILTER_ID_B.RTRB_0 Mask            */
+#define CAN_FILTER_ID_B_RTRB_0_SHIFT             (31U)                                               /*!< CAN0_FILTER_ID_B.RTRB_0 Position        */
+#define CAN_FILTER_ID_B_RTRB_0(x)                (((uint32_t)(((uint32_t)(x))<<31U))&0x80000000UL)   /*!< CAN0_FILTER_ID_B.RTRB_0 Field           */
 /* ------- FILTER_ID_C Bit Fields                   ------ */
-#define CAN_FILTER_ID_C_RTR_B_MASK               (0xFFU)                                             /*!< CAN0_FILTER_ID_C.RTR_B Mask             */
-#define CAN_FILTER_ID_C_RTR_B_SHIFT              (0U)                                                /*!< CAN0_FILTER_ID_C.RTR_B Position         */
-#define CAN_FILTER_ID_C_RTR_B(x)                 (((uint8_t)(((uint8_t)(x))<<0U))&0xFFUL)            /*!< CAN0_FILTER_ID_C.RTR_B Field            */
+#define CAN_FILTER_ID_C_RXIDC_3_MASK             (0xFFU)                                             /*!< CAN0_FILTER_ID_C.RXIDC_3 Mask           */
+#define CAN_FILTER_ID_C_RXIDC_3_SHIFT            (0U)                                                /*!< CAN0_FILTER_ID_C.RXIDC_3 Position       */
+#define CAN_FILTER_ID_C_RXIDC_3(x)               (((uint32_t)(((uint32_t)(x))<<0U))&0xFFUL)          /*!< CAN0_FILTER_ID_C.RXIDC_3 Field          */
+#define CAN_FILTER_ID_C_RXIDC_2_MASK             (0xFF00U)                                           /*!< CAN0_FILTER_ID_C.RXIDC_2 Mask           */
+#define CAN_FILTER_ID_C_RXIDC_2_SHIFT            (8U)                                                /*!< CAN0_FILTER_ID_C.RXIDC_2 Position       */
+#define CAN_FILTER_ID_C_RXIDC_2(x)               (((uint32_t)(((uint32_t)(x))<<8U))&0xFF00UL)        /*!< CAN0_FILTER_ID_C.RXIDC_2 Field          */
+#define CAN_FILTER_ID_C_RXIDC_1_MASK             (0xFF0000U)                                         /*!< CAN0_FILTER_ID_C.RXIDC_1 Mask           */
+#define CAN_FILTER_ID_C_RXIDC_1_SHIFT            (16U)                                               /*!< CAN0_FILTER_ID_C.RXIDC_1 Position       */
+#define CAN_FILTER_ID_C_RXIDC_1(x)               (((uint32_t)(((uint32_t)(x))<<16U))&0xFF0000UL)     /*!< CAN0_FILTER_ID_C.RXIDC_1 Field          */
+#define CAN_FILTER_ID_C_RXIDC_0_MASK             (0xFF000000U)                                       /*!< CAN0_FILTER_ID_C.RXIDC_0 Mask           */
+#define CAN_FILTER_ID_C_RXIDC_0_SHIFT            (24U)                                               /*!< CAN0_FILTER_ID_C.RXIDC_0 Position       */
+#define CAN_FILTER_ID_C_RXIDC_0(x)               (((uint32_t)(((uint32_t)(x))<<24U))&0xFF000000UL)   /*!< CAN0_FILTER_ID_C.RXIDC_0 Field          */
 /* ------- CS Bit Fields                            ------ */
 #define CAN_CS_CODE_MASK                         (0xF000000U)                                        /*!< CAN0_CS.CODE Mask                       */
 #define CAN_CS_CODE_SHIFT                        (24U)                                               /*!< CAN0_CS.CODE Position                   */
@@ -1600,7 +1679,12 @@ typedef struct CAN1_Type {
    __I  uint32_t  ESR2;                         /**< 0038: Error and Status 2 register                                  */
         uint8_t   RESERVED_3[8];                /**< 003C: 0x8 bytes                                                    */
    __I  uint32_t  CRCR;                         /**< 0044: CRC Register                                                 */
-   __IO uint32_t  RXFGMASK;                     /**< 0048: Rx FIFO Global Mask register                                 */
+   union {                                      /**< 0048: (size=0004)                                                  */
+      __IO uint32_t  RXFGMASK;                  /**< 0048: Rx FIFO Global Mask register                                 */
+      __IO uint32_t  RXFGMASK_A;                /**< 0048: Rx FIFO Global Mask register (format A)                      */
+      __IO uint32_t  RXFGMASK_B;                /**< 0048: Rx FIFO Global Mask register (format B)                      */
+      __IO uint32_t  RXFGMASK_C;                /**< 0048: Rx FIFO Global Mask register (format C)                      */
+   };
    __I  uint32_t  RXFIR;                        /**< 004C: Rx FIFO Information Register                                 */
    __IO uint32_t  CBT;                          /**< 0050: CAN Bit Timing Register                                      */
         uint8_t   RESERVED_4[44];               /**< 0054: 0x2C bytes                                                   */
@@ -1612,9 +1696,10 @@ typedef struct CAN1_Type {
          __IO uint32_t  WORD1;                  /**< 008C: FIFO Message Buffer WORD1 Register                           */
               uint8_t   RESERVED_5[80];         /**< 0090: 0x50 bytes                                                   */
          union {                                /**< 00E0: (size=00A0)                                                  */
-            __IO uint32_t  FILTER_ID_A[CAN1_FILTER_COUNT]; /**< 00E0: FIFO Message Filter ID                                       */
-            __IO uint16_t  FILTER_ID_B[CAN1_FILTER_COUNT*2]; /**< 00E0: FIFO Message Filter ID                                       */
-            __IO uint8_t   FILTER_ID_C[CAN1_FILTER_COUNT*4]; /**< 00E0: FIFO Message Filter ID                                       */
+            __IO uint32_t  FILTER_ID[CAN1_FILTER_COUNT]; /**< 00E0: FIFO Message Filter ID                                       */
+            __IO uint32_t  FILTER_ID_A[CAN1_FILTER_COUNT]; /**< 00E0: FIFO Message Filter ID (format A)                            */
+            __IO uint32_t  FILTER_ID_B[CAN1_FILTER_COUNT]; /**< 00E0: FIFO Message Filter ID (format B)                            */
+            __IO uint32_t  FILTER_ID_C[CAN1_FILTER_COUNT]; /**< 00E0: FIFO Message Filter ID (format C)                            */
          };
       } FIFO;                                   /**< 0080: (cluster: size=0x0100, 256)                                  */
       struct {
@@ -1677,12 +1762,16 @@ typedef struct CAN1_Type {
 /* ------- ESR2 Bit Fields                          ------ */
 /* ------- CRCR Bit Fields                          ------ */
 /* ------- RXFGMASK Bit Fields                      ------ */
+/* ------- RXFGMASK_A Bit Fields                    ------ */
+/* ------- RXFGMASK_B Bit Fields                    ------ */
+/* ------- RXFGMASK_C Bit Fields                    ------ */
 /* ------- RXFIR Bit Fields                         ------ */
 /* ------- CBT Bit Fields                           ------ */
 /* ------- CS Bit Fields                            ------ */
 /* ------- ID Bit Fields                            ------ */
 /* ------- WORD0 Bit Fields                         ------ */
 /* ------- WORD1 Bit Fields                         ------ */
+/* ------- FILTER_ID Bit Fields                     ------ */
 /* ------- FILTER_ID_A Bit Fields                   ------ */
 /* ------- FILTER_ID_B Bit Fields                   ------ */
 /* ------- FILTER_ID_C Bit Fields                   ------ */

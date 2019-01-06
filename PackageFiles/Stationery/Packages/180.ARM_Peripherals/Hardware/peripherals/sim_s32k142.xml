@@ -440,7 +440,7 @@
       \t/**
       \t * Set Source for RTC clock
       \t *
-      \t * @param rtcClockSource
+      \t * @param simRtcClockSource
       \t */
       \tstatic void setRtcClockSource(SimRtcClockSource simRtcClockSource) {
       \t   sim().LPOCLKS = (sim().LPOCLKS&~SIM_LPOCLKS_RTCCLKSEL_MASK)|simRtcClockSource;

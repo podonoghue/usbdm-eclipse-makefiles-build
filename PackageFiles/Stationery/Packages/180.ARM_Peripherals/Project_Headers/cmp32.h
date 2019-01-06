@@ -799,8 +799,6 @@ public:
    /**
     * This function allows the reference value for the comparison results to be set.
     * Only inputs that have been enabled will be checked.
-    *
-    * @param referenceResults    Reference comparison results for the up to 8 inputs.
     */
    static uint8_t getRoundRobinComparisonState() {
       return (cmp().C2 & CMP_C2_ACOn_MASK);
@@ -904,8 +902,8 @@ public:
    /**
     * Configure Comparator input sources
     *
-    * @param[in]  positiveInput (0..7) (7 => DAC)
-    * @param[in]  negativeInput (0..7) (7 => DAC)
+    * @param[in]  cmpInputP (0..7) (7 => DAC)
+    * @param[in]  cmpInputN (0..7) (7 => DAC)
     */
    static __attribute__((always_inline)) void selectInputs(CmpInput cmpInputP, CmpInput cmpInputN) {
       CmpBase_T::selectInputs(cmpInputP, cmpInputN);

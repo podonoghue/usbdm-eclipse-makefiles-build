@@ -126,6 +126,18 @@ public:
 
 private:
    /**
+    * Utility function to select the smaller of two unsigned values
+    *
+    * @param a
+    * @param b
+    *
+    * @return smaller of a and b
+    */
+   static constexpr unsigned min(unsigned a, unsigned b) {
+      return (a<b)?a:b;
+   }
+
+   /**
     * Constructor
     * Most parameters will be set to a default disabled value apart from:\n
     * Communication parameters calculated from bitRate and clockFreq:\n
@@ -256,7 +268,48 @@ public:
       return (propSeg != 0);
    }
 
+   /**
+    * Calculates number of FIFO filters available based on number of FIFO filters implemented.
+    *
+    * @param availableMailBoxes Number of Mailboxes available
+    *
+    * @return Number of individual FIFO filter masks
+    */
+   static constexpr unsigned calculateMaximumFifoFilters(unsigned availableMailBoxes) {
+      return min((availableMailBoxes-6)*4, 128);
+   }
+
+   /**
+    * Calculates the number of message buffers required.
+    * Some of the message buffers can be used as a receive FIFO with
+    * the remainder available as transmit or receive mailboxes.
+    * The total number of message buffers is limited by the hardware
+    * There are also timing constraints as the CAN hardware must scan
+    * the FIFO filters and mailboxes.
+    *
+    * @param fifoFilters   Number of FIFO filters
+    * @param mailboxes     Number of mailboxes
+    */
+   static constexpr unsigned calulateRequiredMessageBuffers(unsigned fifoFilters, unsigned mailboxes) {
+      return (fifoFilters==0?0:6)+(fifoFilters/4) + mailboxes;
+   }
+
+   /**
+    * Calculates number of FIFO filter masks available based on number of FIFO filters.
+    * Each FIFO filter is masked by either an individual mask or a shared mask.
+    * This calculates the number of individual masks available to be applied to the FIFO filters.
+    * The remaining FIFO filters are masked by the shared mask.
+    *
+    * @param fifoFilterCount Number of FIFO filters implemented
+    *
+    * @return Number of individual FIFO filter masks
+    */
+   static constexpr unsigned calculateFifoIndividualMaskCount(unsigned fifoFilterCount) {
+      return (fifoFilterCount<8)?0:(8 + 2*((fifoFilterCount/8)-1));
+   }
+
 };
+
 /**
  * @addtogroup CAN_Group CAN, Controller Area Network
  * @brief Abstraction for Controller Area Network
@@ -709,11 +762,22 @@ union CanFifoFilterMask {
    constexpr CanFifoFilterMask(unsigned  rxid0Mask, unsigned  rxid1Mask, unsigned  rxid2Mask, unsigned  rxid3Mask) :
       rxidc0Mask(rxid0Mask), rxidc1Mask(rxid1Mask), rxidc2Mask(rxid2Mask), rxidc3Mask(rxid3Mask) {}
 
-   constexpr CanFifoFilterMask(uint32_t value) : raw(value) {}
+   constexpr CanFifoFilterMask(uint32_t value)     : raw(value) {}
    constexpr CanFifoFilterMask(const CanId &other) : raw(other.raw) {}
    constexpr CanFifoFilterMask() : raw(~0U) {}
 
+   /**
+    * Assignment operator from uint32_t
+    *
+    * @param value 32-bit value to assign
+    */
    void operator=(uint32_t value) volatile { raw = value; }
+   /**
+    * Assignment operator
+    *
+    * @param other
+    */
+   void operator=(CanFifoFilterMask other) volatile { raw = other.raw; }
    };
 
 /**
@@ -978,7 +1042,10 @@ protected:
    }
 
    /** Number of Message Buffers used by FIFO (including filters) */
-   static unsigned reservedMessageBuffers;
+   static unsigned messageBuffersAllocatedToFifo;
+
+   /** The number of mailboxes available (after allocation to FIFO) */
+   static unsigned availableMailboxes;
 
 public:
    /** CAN interrupt handler */
@@ -1069,7 +1136,7 @@ public:
    }
 
    /**
-    * Get pointer to CAN Message Buffer.
+    * Get pointer to CAN mailbox
     * Allowances are made for mailboxes lost to the Receive FIFO so the
     * index is relative to the first usable mailbox
     *
@@ -1078,21 +1145,33 @@ public:
     *
     * @return Pointer to message buffer.
     */
-   static volatile CanMessageBuffer *getMessageBuffer(CanMessageSize canMessageSize, unsigned index) {
-      return (CanMessageBuffer *) (Info::baseAddress + offsetof(struct CAN_Type, MB) + reservedMessageBuffers*sizeof(CanMessageBuffer8) + index*(canMessageSize+8));
+   static volatile CanMessageBuffer *getMailbox(CanMessageSize canMessageSize, unsigned index) {
+      usbdm_assert(index<availableMailboxes, "Invalid mailbox index");
+      return (CanMessageBuffer *) (Info::baseAddress + offsetof(struct CAN_Type, MB) + messageBuffersAllocatedToFifo*sizeof(CanMessageBuffer8) + index*(canMessageSize+8));
    };
 
    /**
-    * Get pointer to CAN Message Buffer assuming default size (8 data bytes)
+    * Get pointer to CAN mailbox assuming default size (8 data bytes)
     * Allowances are made for mailboxes lost to the Receive FIFO so the
     * index is relative to the first usable mailbox
     *
     * @param index   Index of message buffer
     *
-    * @return Pointer to message buffer.
+    * @return Pointer to mailbox
     */
-   static inline volatile CanMessageBuffer *getMessageBuffer(unsigned index) {
-      return getMessageBuffer(CanMessageSize_8, index);
+   static inline volatile CanMessageBuffer8 *getMailbox(unsigned index) {
+      return (CanMessageBuffer8 *) getMailbox(CanMessageSize_8, index);
+   };
+
+   /**
+    * Get pointer to CAN mailboxes assuming default size (8 data bytes)
+    * Allowances are made for mailboxes lost to the Receive FIFO so array
+    * starts at first available mailbox
+    *
+    * @return Pointer to mailbox
+    */
+   static inline volatile CanMessageBuffer8 *getMailboxArray() {
+      return (CanMessageBuffer8 *) getMailbox(CanMessageSize_8, 0);
    };
 
    /**
@@ -1133,26 +1212,13 @@ public:
 
    /**
     * Get Mailbox Mask Table array.
-    * The result is formatted as an array of CanFilterMasks.
-    * These masks are applied to filtering of Received messages into the FIFO.
+    * The result is formatted as an array of CanMailboxFilterMask.
+    * These masks are applied to filtering of Received messages into the mailboxes.
     *
     * @return Pointer to start of filter mask table array
     */
    static CanMailboxFilterMask *getMailboxFilterMaskTable() {
-      return (CanMailboxFilterMask *) (can().RXIMR + reservedMessageBuffers);
-   }
-
-private:
-   /**
-    * Utility function to select the smaller of two unsigned values
-    *
-    * @param a
-    * @param b
-    *
-    * @return smaller of a and b
-    */
-   static constexpr unsigned min(unsigned a, unsigned b) {
-      return (a<b)?a:b;
+      return (CanMailboxFilterMask *) (can().RXIMR + messageBuffersAllocatedToFifo);
    }
 
 public:
@@ -1197,34 +1263,46 @@ public:
     * In this mode received packets are stored in a receive FIFO.
     * The packets are accepted/rejected using an acceptance filter table.
     * The acceptance filters are masked by a filter mask table and/or a default mask
+    *
     * @param[in] canParameters         CAN communication parameters
     * @param[in] canAcceptanceMode     Format for acceptance filters
     * @param[in] fifoFilterCount       Number of FIFO acceptance filters
-    * @param[in] fifoFilters           Acceptance filters applied to received messages to determine FIFO entry - [0..fifoFilterMasks-1]
-    * @param[in] fifoFilterMasks       Masks applied to FIFO acceptance filters [0..min(8 + 2*((fifoFilterCount/8)-1),31)]
+    * @param[in] fifoFilters           Acceptance filters applied to received messages for entry to FIFO [fifoFilterCount]
+    * @param[in] fifoFilterMasks       Masks applied to FIFO acceptance filters [calculateFifoIndividualMaskCount(fifoFilterCount)]
     * @param[in] fifoDefaultFilterMask Mask applied to FIFO acceptance filters not covered by fifoFilterMasks
-    * @param[in] mailBoxfilterMasks    Acceptance filters applied to received messages for mailboxes
+    * @param[in] mailboxCount          Number of mailboxes
+    * @param[in] mailboxFilterMasks    Acceptance filters applied to received messages for mailboxes [mailboxCount]
     */
-   static void configureWithReceiveFifo(
+   static void configure(
          const CanParameters        &canParameters,
          const CanAcceptanceMode    canAcceptanceMode,
          const unsigned             fifoFilterCount,
-         const CanFifoFilter        fifoFilters[/*fifoFilterMasks*/],
-         const CanFifoFilterMask    fifoFilterMasks[/*min(8 + 2*((fifoFilterCount/8)-1),31)*/],
+         const CanFifoFilter        fifoFilters[/* fifoFilterCount */],
+         const CanFifoFilterMask    fifoFilterMasks[/* calculateFifoIndividualMaskCount(fifoFilterCount) */ ],
          const CanFifoFilterMask    fifoDefaultFilterMask,
-         const CanMailboxFilterMask mailboxFilterMasks[]
+         const unsigned             mailboxCount,
+         const CanMailboxFilterMask mailboxFilterMasks[/* mailboxCount */]
          ) {
-      CanParameters      modifiedCanParameters(canParameters);
+      usbdm_assert(
+            CanParameters::calulateRequiredMessageBuffers(fifoFilterCount, mailboxCount)<Info::NumberOfMessageBuffers,
+            "Too many FIFO filters and Mailboxes");
 
+      CanParameters  modifiedCanParameters(canParameters);
       usbdm_assert(!canParameters.fden,"FIFO cannot be used with Flexible Data Rate");
-      modifiedCanParameters.rfen = true;
-      modifiedCanParameters.idam = canAcceptanceMode;
 
       unsigned rffn = (fifoFilterCount/8) - 1;
-      modifiedCanParameters.rffn = rffn;
+      modifiedCanParameters.rfen  = true;
+      modifiedCanParameters.idam  = canAcceptanceMode;
+      modifiedCanParameters.rffn  = rffn;
+      modifiedCanParameters.maxmb = CanParameters::calulateRequiredMessageBuffers(fifoFilterCount, mailboxCount)-1;
+
       configure(modifiedCanParameters);
 
-      reservedMessageBuffers = 2*rffn + 8; // Lost to FIFO + Filters
+      // Lost to FIFO + Filters
+      messageBuffersAllocatedToFifo = 2*rffn + 8;
+
+      // Available mailboxes
+      availableMailboxes = mailboxCount;
 
       // Mask for Receive FIFO ID Filter Table elements not covered by an individual masks
       can().RXFGMASK = fifoDefaultFilterMask.raw;
@@ -1237,13 +1315,14 @@ public:
 
       // Individual FIFO ID filter masks
       auto fifoMasks = Can_T::getFifoFilterMaskTable();
-      for (unsigned index=0; index<min(8 + 2*((fifoFilterCount/8)-1),32); index++) {
+      unsigned fifoMaskCount = calculateFifoIndividualMaskCount(fifoFilterCount);
+      for (unsigned index=0; index<fifoMaskCount; index++) {
          fifoMasks[index] = fifoFilterMasks[index];
       }
 
       // Individual Mailbox filter masks
       auto mbMasks = Can_T::getMailboxFilterMaskTable();
-      for (unsigned index=0; index<(32-min(8 + 2*((fifoFilterCount/8)-1),32)); index++) {
+      for (unsigned index=0; index<mailboxCount; index++) {
          mbMasks[index] = mailboxFilterMasks[index];
       }
       can().MCR &= ~CAN_MCR_HALT_MASK;
@@ -1256,9 +1335,6 @@ public:
     */
    static void configure(const CanParameters &canParameters) {
       enable();
-
-      // Assume no FIFO
-      reservedMessageBuffers = 0;
 
       // Make sure disabled so CLKSRC can be set
       can().MCR = CAN_MCR_MDIS(1);
@@ -1288,9 +1364,10 @@ public:
          __asm__("nop");
       }
 
-      // Clear message buffers
-      memset((void*)(can().MB),    0, Info::NumberOfMessageBuffers*sizeof(can().MB[0]));
-      memset((void*)(can().RXIMR), 0, 32*sizeof(can().RXIMR[0]));
+      // Clear message buffers and disable message buffer masks
+      // This will also clear the FIFO as it overlaps
+      memset((void*)(can().MB),     0, Info::NumberOfMessageBuffers*sizeof(can().MB[0]));
+      memset((void*)(can().RXIMR), -1, Info::NumberOfMessageBuffers*sizeof(can().RXIMR[0]));
 
       // Clear any pending flags
       can().IFLAG1 = ~0;
@@ -1303,7 +1380,6 @@ public:
       can().MCR = canParameters.mcr|
             CAN_MCR_HALT(1) |            // Stay in Freeze
             CAN_MCR_FRZ(1);
-
    }
    
    /**
@@ -1330,10 +1406,8 @@ public:
     *
     * @return Number of individual FIFO filter masks
     */
-   static constexpr unsigned fifoIndividualMaskCount(unsigned fifoFilterCount) {
-      return (fifoFilterCount<8)?
-            0:
-            min(8 + 2*((fifoFilterCount/8)-1), Info::NumberOfMessageBuffers);
+   static constexpr unsigned calculateFifoIndividualMaskCount(unsigned fifoFilterCount) {
+      return CanParameters::calculateFifoIndividualMaskCount(fifoFilterCount);
    }
 
    /**
@@ -1349,8 +1423,8 @@ public:
     *
     * @note maximumMailboxCount is limited by the hardware and may be reduced by setting MCR.MAXMB.
     */
-   static constexpr unsigned mailboxCount(unsigned fifoFilterCount, unsigned maximumMailboxCount) {
-      return maximumMailboxCount - fifoIndividualMaskCount(fifoFilterCount);
+   static constexpr unsigned calculateMailboxCount(unsigned fifoFilterCount, unsigned maximumMailboxCount) {
+      return maximumMailboxCount - calculateFifoIndividualMaskCount(fifoFilterCount);
    }
 
    /**
@@ -1363,10 +1437,10 @@ public:
     * @return Maximum number of CAN mailboxes available
     *
     * @note This is a maximum determined by the hardware.
-    *       The number of mailboxes available may be reduced by setting MCR.MAXMB.
+    *       The actual number of mailboxes available may be reduced by setting MCR.MAXMB.
     */
-   static constexpr unsigned maximimMailboxCount(unsigned fifoFilterCount) {
-      return mailboxCount(fifoFilterCount, Info::NumberOfMessageBuffers);
+   static constexpr unsigned calculateMaximumMailboxCount(unsigned fifoFilterCount) {
+      return calculateMailboxCount(fifoFilterCount, Info::NumberOfMessageBuffers);
    }
 
    /**
@@ -1391,7 +1465,7 @@ public:
    }
 
    /**
-    * Write value to 16-bit free running counter
+    * Read value from 16-bit free running counter
     *
     * @return Timer value
     */
@@ -1470,18 +1544,22 @@ public:
     * Enable interrupts from selected message buffers
     *
     * @param[in] mask 1's in the mask enable interrupts from the corresponding message buffer.
+    *
+    * @note The mask is realigned to take in to account the buffers allocated to the FIFO.
     */
-   static void enableMessageBufferInterrupts(uint32_t mask) {
-      can().IMASK1 |= mask;
+   static void enableMailboxInterrupts(uint32_t mask) {
+      can().IMASK1 |= (mask<<messageBuffersAllocatedToFifo);
    }
 
    /**
     * Disable interrupts from selected message buffers
     *
     * @param[in] mask 1's in the mask disable interrupts from the corresponding message buffer.
+    *
+    * @note The mask is realigned to take in to account the buffers allocated to the FIFO.
     */
-   static void disableMessageBufferInterrupts(uint32_t mask) {
-      can().IMASK1 &= ~mask;
+   static void disableMailboxInterrupts(uint32_t mask) {
+      can().IMASK1 &= ~(mask<<messageBuffersAllocatedToFifo);
    }
 
    /**
@@ -1490,8 +1568,8 @@ public:
     *
     * @return
     */
-   static uint32_t getMessageBufferFlags() {
-      return can().IFLAG1;
+   static uint32_t getMailboxFlags() {
+      return (can().IFLAG1>>messageBuffersAllocatedToFifo);
    }
 
    /**
@@ -1500,21 +1578,60 @@ public:
     *
     * @param[in] mask 1's in the mask clear the flag from the corresponding message buffer.
     */
-   static void clearMessageBufferFlags(uint32_t mask) {
-      can().IFLAG1 = mask;
+   static void clearMailboxFlags(uint32_t mask) {
+      can().IFLAG1 = mask<<messageBuffersAllocatedToFifo;
+   }
+
+   /**
+    * Enable interrupts from FIFO
+    * Bits 7, 6 and 5 represent FIFO flags.
+    *
+    * @param[in] mask 1's in the mask clear the flag from the corresponding message buffer.
+    *  7 : Receive FIFO Overflow   - A message was lost
+    *  6 : Receive FIFO Warning    - The FIFO is nearly full (set 4->5 messages)
+    *  5 : Receive frame available - At least 1 frame available in Receive FIFO
+    */
+   static void enableFifoInterrupts(uint32_t mask) {
+      can().IMASK1 |= (mask<<messageBuffersAllocatedToFifo);
+   }
+
+   /**
+    * Disable interrupts from FIFO
+    * Bits 7, 6 and 5 represent FIFO flags.
+    *
+    * @param[in] mask 1's in the mask clear the flag from the corresponding message buffer.
+    *  7 : Receive FIFO Overflow   - A message was lost
+    *  6 : Receive FIFO Warning    - The FIFO is nearly full (set 4->5 messages)
+    *  5 : Receive frame available - At least 1 frame available in Receive FIFO
+    */
+   static void disableFifoBufferInterrupts(uint32_t mask) {
+      can().IMASK1 &= ~(mask<<messageBuffersAllocatedToFifo);
    }
 
    /**
     * Get FIFO flags.
-    * Bits 7,6 and 5 represent FIFO flags.
+    * Bits 7, 6 and 5 represent FIFO flags.
     *
     * @return bit mask\n
     *  7 : Receive FIFO Overflow   - A message was lost
-    *  6 : Receive FIFO Warning    - The FIFO is nearly full
+    *  6 : Receive FIFO Warning    - The FIFO is nearly full (set 4->5 messages)
     *  5 : Receive frame available - At least 1 frame available in Receive FIFO
     */
    static uint32_t getFifoFlags() {
       return can().IFLAG1 & (CAN_IFLAG1_BUF7I_MASK|CAN_IFLAG1_BUF6I_MASK|CAN_IFLAG1_BUF5I_MASK);
+   }
+
+   /**
+    * Clear FIFO flags.
+    * Bits 7, 6 and 5 represent FIFO flags.
+    *
+    * @param[in] mask 1's in the mask clear the flag from the corresponding message buffer.
+    *  7 : Receive FIFO Overflow   - A message was lost
+    *  6 : Receive FIFO Warning    - The FIFO is nearly full (set 4->5 messages)
+    *  5 : Receive frame available - At least 1 frame available in Receive FIFO
+    */
+   static void clearFifoFlags(uint32_t mask) {
+      can().IFLAG1 = mask&(CAN_IFLAG1_BUF7I_MASK|CAN_IFLAG1_BUF6I_MASK|CAN_IFLAG1_BUF5I_MASK);
    }
 
    /**
@@ -1525,13 +1642,14 @@ public:
     * (lowest number) by the matching process is indicated. This field is valid only while the CAN_IFLAG1[BUF5I]
     * is asserted.
     *
-    * @return bit mask\n
+    * @return The index of the matching acceptance filter
     */
-   static uint32_t getFifoInformation() {
-      return can().RXFIR;
+   static uint32_t getFifoAcceptanceFilterHit() {
+      return can().RXFIR & CAN_RXFIR_IDHIT_MASK;
    }
 
    /**
+    * Set extended timing
     *
     * @param phaseSegment1           Phase Buffer Segment 1 = phaseSegment1 x S-clock.
     * @param phaseSegment2           Phase Buffer Segment 2 = phaseSegment2 x S-clock.
@@ -1685,8 +1803,15 @@ public:
 /**
  * Callback table for programmatically set handlers
  */
-template<class Info> CanCallbackFunction Can_T<Info>::sCallbacks[] = {0};
-template<class Info> unsigned Can_T<Info>::reservedMessageBuffers = 0;
+template<class Info> CanCallbackFunction Can_T<Info>::sCallbacks[]      = {0};
+/**
+ * Number of Message Buffers used by FIFO (including filters)
+ */
+template<class Info> unsigned Can_T<Info>::messageBuffersAllocatedToFifo = 0;
+/**
+ * The number of mailboxes available (after allocation to FIFO)
+ */
+template<class Info> unsigned Can_T<Info>::availableMailboxes        = 0;
 
 #if defined(USBDM_CAN0_IS_DEFINED)
 using Can0 = Can_T<Can0Info>;

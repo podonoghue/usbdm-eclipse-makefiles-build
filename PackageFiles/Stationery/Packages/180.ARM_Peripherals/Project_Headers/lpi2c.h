@@ -55,7 +55,6 @@ protected:
     * Construct LPI2C interface
     *
     * @param[in]  lpi2c     Base address of LPI2C hardware
-    * @param[in]  lpi2cMode Mode of operation (Lpi2cMode_Interrupt or Lpi2cMode_Polled)
     */
    Lpi2c(volatile LPI2C_Type *lpi2c) : lpi2c(lpi2c) {
    }
@@ -122,8 +121,6 @@ public:
     * Construct LPI2C interface
     *
     * @param[in]  bps        Tx/Rx rate
-    * @param[in]  lpi2cMode    Mode of operation
-    * @param[in]  myAddress  Address of this device on bus (not currently used)
     */
    Lpi2cBase_T(unsigned bps=400000) : Lpi2c(&Info::lpi2c()) {
    }
