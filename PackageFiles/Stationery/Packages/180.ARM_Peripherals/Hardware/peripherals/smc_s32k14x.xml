@@ -34,7 +34,39 @@
       <choice value="2" name="STOP2 - Partial Stop with system clock disabled and bus clock enabled" />
       <choice value="3" name="Reserved" />
    </choiceOption>
-      
+
+   <template name="enablePowerModes" namespace="all"  ><![CDATA[
+   \t/**
+   \t * Enable the given power modes.
+   \t * A mode must be enabled before it can be entered.
+   \t *
+   \t * @param[in] smcVeryLowPower        Allows VLPR, VLPW, and VLPS modes
+   \t * @param[in] smcHighSpeedRun        Allows HSRUN mode (if supported)
+   \t *
+   \t * @note This is a write-once-after-reset operation
+   \t */
+   \tstatic ErrorCode enablePowerModes(
+   \t      SmcVeryLowPower         smcVeryLowPower,
+   \t      SmcHighSpeedRun         smcHighSpeedRun) {
+
+   \t   smc().PMPROT = smcVeryLowPower|smcHighSpeedRun;
+   \t   return E_NO_ERROR;
+   \t}\n\n
+   ]]></template>
+
+   <template name="setStopOptions" namespace="all"  ><![CDATA[
+   \t/**
+   \t * Allows the detailed operation in STOP mode to be controlled.
+   \t *
+   \t * @param[in] smcPartialStopMode     Controls whether a Partial Stop mode is entered when STOPM=STOP
+   \t */
+   \tstatic void setStopOptions(
+   \t      SmcPartialStopMode      smcPartialStopMode      = SmcPartialStopMode_Normal) {
+   \t
+   \t   smc().STOPCTRL = smcPartialStopMode;
+   \t}\n\n
+   ]]></template>
+   
    <template><![CDATA[
       \t// VLLS Control Register
       \tstatic constexpr uint8_t stopctrl =  

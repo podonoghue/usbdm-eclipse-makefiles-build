@@ -55,6 +55,48 @@
       <choice value="7" name="Reserved" />
    </choiceOption>
 
+   <template name="enablePowerModes" namespace="all"  ><![CDATA[
+   \t/**
+   \t * Enable the given power modes.
+   \t * A mode must be enabled before it can be entered.
+   \t *
+   \t * @param[in] smcVeryLowPower        Allows VLPR, VLPW, and VLPS modes
+   \t * @param[in] smcLowLeakageStop      Allows LLSx modes
+   \t * @param[in] smcVeryLowLeakageStop  Allows VLLSx modes
+   \t * @param[in] smcHighSpeedRun        Allows HSRUN mode (if supported)
+   \t *
+   \t * @note This is a write-once-after-reset operation
+   \t */
+   \tstatic ErrorCode enablePowerModes(
+   \t      SmcVeryLowPower         smcVeryLowPower,
+   \t      SmcLowLeakageStop       smcLowLeakageStop       = SmcLowLeakageStop_Disabled,
+   \t      SmcVeryLowLeakageStop   smcVeryLowLeakageStop   = SmcVeryLowLeakageStop_Disabled,
+   \t      SmcHighSpeedRun         smcHighSpeedRun         = SmcHighSpeedRun_Disabled ) {
+   \t
+   \t   smc().PMPROT = smcVeryLowPower|smcLowLeakageStop|smcVeryLowLeakageStop|smcHighSpeedRun;
+   \t   return E_NO_ERROR;
+   \t}\n\n
+   ]]></template>
+
+   <template name="setStopOptions" namespace="all"  ><![CDATA[
+   \t/**
+   \t * Allows the detailed operation in STOP mode to be controlled.
+   \t *
+   \t * @param[in] smcLowLeakageStopMode  Controls which LLS/VLLS sub-mode to enter if STOPM=LLS/VLLS
+   \t * @param[in] smcPowerOnReset        Controls whether the POR detect circuit is enabled in VLLS0 mode
+   \t * @param[in] smcPartialStopMode     Controls whether a Partial Stop mode is entered when STOPM=STOP
+   \t * @param[in] smcLpoInLowLeakage     Controls whether the 1 kHz LPO clock is enabled in LLS/VLLSx modes (if supported).
+   \t */
+   \tstatic void setStopOptions(
+   \t      SmcLowLeakageStopMode   smcLowLeakageStopMode,
+   \t      SmcPowerOnReset         smcPowerOnReset         = SmcPowerOnReset_Disabled,
+   \t      SmcPartialStopMode      smcPartialStopMode      = SmcPartialStopMode_Normal,
+   \t      SmcLpoInLowLeakage      smcLpoInLowLeakage      = SmcLpoInLowLeakage_Disabled) {
+   \t
+   \t   smc().STOPCTRL = smcPartialStopMode|smcPowerOnReset|smcLowLeakageStopMode|smcLpoInLowLeakage;
+   \t}\n\n
+   ]]></template>
+   
    <template><![CDATA[
       \t// VLLS Control Register
       \tstatic constexpr uint8_t stopctrl =  
