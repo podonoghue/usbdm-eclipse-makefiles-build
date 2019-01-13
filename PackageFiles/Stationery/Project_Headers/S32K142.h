@@ -837,8 +837,8 @@ typedef struct AIPS_Type {
 /**
  * @brief Flex Controller Area Network module
  */
+#define CAN_FIFO_FILTER_COUNT 104       /**< Number of Filter IDs                               */
 #define CAN_MESSAGE_BUFFER_COUNT 32     /**< Number of message buffers                          */
-#define CAN_FILTER_COUNT     104        /**< Number of Filter IDs                               */
 #define CAN_WAKEUP_BUFFER_COUNT 4       /**< Number of wakeup buffers                           */
 /**
 * @addtogroup CAN_structs_GROUP CAN struct
@@ -880,10 +880,10 @@ typedef struct CAN_Type {
          __IO uint32_t  WORD1;                  /**< 008C: FIFO Message Buffer WORD1 Register                           */
               uint8_t   RESERVED_5[80];         /**< 0090: 0x50 bytes                                                   */
          union {                                /**< 00E0: (size=01A0)                                                  */
-            __IO uint32_t  FILTER_ID[CAN_FILTER_COUNT]; /**< 00E0: FIFO Message Filter ID                                       */
-            __IO uint32_t  FILTER_ID_A[CAN_FILTER_COUNT]; /**< 00E0: FIFO Message Filter ID (format A)                            */
-            __IO uint32_t  FILTER_ID_B[CAN_FILTER_COUNT]; /**< 00E0: FIFO Message Filter ID (format B)                            */
-            __IO uint32_t  FILTER_ID_C[CAN_FILTER_COUNT]; /**< 00E0: FIFO Message Filter ID (format C)                            */
+            __IO uint32_t  FILTER_ID[CAN_FIFO_FILTER_COUNT]; /**< 00E0: FIFO Message Filter ID                                       */
+            __IO uint32_t  FILTER_ID_A[CAN_FIFO_FILTER_COUNT]; /**< 00E0: FIFO Message Filter ID (format A)                            */
+            __IO uint32_t  FILTER_ID_B[CAN_FIFO_FILTER_COUNT]; /**< 00E0: FIFO Message Filter ID (format B)                            */
+            __IO uint32_t  FILTER_ID_C[CAN_FIFO_FILTER_COUNT]; /**< 00E0: FIFO Message Filter ID (format C)                            */
          };
       } FIFO;                                   /**< 0080: (cluster: size=0x0200, 512)                                  */
       struct {
@@ -1219,6 +1219,9 @@ typedef struct CAN_Type {
 #define CAN_CRCR_MBCRC_SHIFT                     (16U)                                               /*!< CAN0_CRCR.MBCRC Position                */
 #define CAN_CRCR_MBCRC(x)                        (((uint32_t)(((uint32_t)(x))<<16U))&0x7F0000UL)     /*!< CAN0_CRCR.MBCRC Field                   */
 /* ------- RXFGMASK Bit Fields                      ------ */
+#define CAN_RXFGMASK_FGM_MASK                    (0xFFFFFFFFU)                                       /*!< CAN0_RXFGMASK.FGM Mask                  */
+#define CAN_RXFGMASK_FGM_SHIFT                   (0U)                                                /*!< CAN0_RXFGMASK.FGM Position              */
+#define CAN_RXFGMASK_FGM(x)                      (((uint32_t)(((uint32_t)(x))<<0U))&0xFFFFFFFFUL)    /*!< CAN0_RXFGMASK.FGM Field                 */
 /* ------- RXFGMASK_A Bit Fields                    ------ */
 #define CAN_RXFGMASK_A_RXIDA_EXT_MASK            (0x3FFFFFFEU)                                       /*!< CAN0_RXFGMASK_A.RXIDA_EXT Mask          */
 #define CAN_RXFGMASK_A_RXIDA_EXT_SHIFT           (1U)                                                /*!< CAN0_RXFGMASK_A.RXIDA_EXT Position      */
@@ -1643,8 +1646,8 @@ typedef struct CAN_Type {
 /**
  * @brief Flex Controller Area Network module
  */
+#define CAN1_FIFO_FILTER_COUNT 40       /**< Number of Filter IDs                               */
 #define CAN1_MESSAGE_BUFFER_COUNT 16    /**< Number of message buffers                          */
-#define CAN1_FILTER_COUNT    40         /**< Number of Filter IDs                               */
 #define CAN1_WAKEUP_BUFFER_COUNT 4      /**< Number of wakeup buffers                           */
 /**
 * @addtogroup CAN_structs_GROUP CAN struct
@@ -1686,10 +1689,10 @@ typedef struct CAN1_Type {
          __IO uint32_t  WORD1;                  /**< 008C: FIFO Message Buffer WORD1 Register                           */
               uint8_t   RESERVED_5[80];         /**< 0090: 0x50 bytes                                                   */
          union {                                /**< 00E0: (size=00A0)                                                  */
-            __IO uint32_t  FILTER_ID[CAN1_FILTER_COUNT]; /**< 00E0: FIFO Message Filter ID                                       */
-            __IO uint32_t  FILTER_ID_A[CAN1_FILTER_COUNT]; /**< 00E0: FIFO Message Filter ID (format A)                            */
-            __IO uint32_t  FILTER_ID_B[CAN1_FILTER_COUNT]; /**< 00E0: FIFO Message Filter ID (format B)                            */
-            __IO uint32_t  FILTER_ID_C[CAN1_FILTER_COUNT]; /**< 00E0: FIFO Message Filter ID (format C)                            */
+            __IO uint32_t  FILTER_ID[CAN1_FIFO_FILTER_COUNT]; /**< 00E0: FIFO Message Filter ID                                       */
+            __IO uint32_t  FILTER_ID_A[CAN1_FIFO_FILTER_COUNT]; /**< 00E0: FIFO Message Filter ID (format A)                            */
+            __IO uint32_t  FILTER_ID_B[CAN1_FIFO_FILTER_COUNT]; /**< 00E0: FIFO Message Filter ID (format B)                            */
+            __IO uint32_t  FILTER_ID_C[CAN1_FIFO_FILTER_COUNT]; /**< 00E0: FIFO Message Filter ID (format C)                            */
          };
       } FIFO;                                   /**< 0080: (cluster: size=0x0100, 256)                                  */
       struct {
@@ -7675,10 +7678,10 @@ typedef struct PCC_Type {
 /**
  * @brief Programmable Delay Block (2 channels, 8 pre-triggers, 0 DAC, 1 pulse out)
  */
-#define PDB_DLY_COUNT        8          /**< Number of Pre-triggers                             */
 #define PDB_CH_COUNT         2          /**< Number of PDB channels                             */
-#define PDB_POnDLY_COUNT     1          /**< Number of Pulse outputs                            */
 #define PDB_DAC_COUNT        0          /**< Number of DAC outputs                              */
+#define PDB_DLY_COUNT        8          /**< Number of Pre-triggers                             */
+#define PDB_POnDLY_COUNT     1          /**< Number of Pulse outputs                            */
 /**
 * @addtogroup PDB_structs_GROUP PDB struct
 * @brief Struct for PDB

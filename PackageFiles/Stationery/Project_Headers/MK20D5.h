@@ -4734,10 +4734,10 @@ typedef struct OSC_Type {
 /**
  * @brief Programmable Delay Block (1 channel, 2 pre-triggers, 0 DAC, 2 pulse outputs)
  */
-#define PDB_DLY_COUNT        2          /**< Number of Pre-triggers                             */
 #define PDB_CH_COUNT         1          /**< Number of PDB channels                             */
-#define PDB_POnDLY_COUNT     2          /**< Number of Pulse outputs                            */
 #define PDB_DAC_COUNT        0          /**< Number of DAC outputs                              */
+#define PDB_DLY_COUNT        2          /**< Number of Pre-triggers                             */
+#define PDB_POnDLY_COUNT     2          /**< Number of Pulse outputs                            */
 /**
 * @addtogroup PDB_structs_GROUP PDB struct
 * @brief Struct for PDB
