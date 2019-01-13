@@ -342,19 +342,19 @@ Devices using this vector table:
       <peripheral>CAN0</peripheral>
    </interrupt>
    <interrupt>
-      <name>CAN0_Wake_Up</name>
+      <name>CAN0_WakeUp</name>
       <description>Flex Controller Area Network module</description>
       <value>80</value>
       <peripheral>CAN0</peripheral>
    </interrupt>
    <interrupt>
-      <name>CAN0_ORed_0_15_MB</name>
+      <name>CAN0_MessageBuffer_0_15</name>
       <description>Flex Controller Area Network module</description>
       <value>81</value>
       <peripheral>CAN0</peripheral>
    </interrupt>
    <interrupt>
-      <name>CAN0_ORed_16_31_MB</name>
+      <name>CAN0_MessageBuffer_16_31</name>
       <description>Flex Controller Area Network module</description>
       <value>82</value>
       <peripheral>CAN0</peripheral>
@@ -372,7 +372,7 @@ Devices using this vector table:
       <peripheral>CAN1</peripheral>
    </interrupt>
    <interrupt>
-      <name>CAN1_ORed_0_15_MB</name>
+      <name>CAN1_MessageBuffer_0_15</name>
       <description>Flex Controller Area Network module</description>
       <value>88</value>
       <peripheral>CAN1</peripheral>
@@ -390,7 +390,7 @@ Devices using this vector table:
       <peripheral>CAN2</peripheral>
    </interrupt>
    <interrupt>
-      <name>CAN2_ORed_0_15_MB</name>
+      <name>CAN2_MessageBuffer_0_15</name>
       <description>Flex Controller Area Network module</description>
       <value>95</value>
       <peripheral>CAN2</peripheral>

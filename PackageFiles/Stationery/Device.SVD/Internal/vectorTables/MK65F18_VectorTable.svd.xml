@@ -428,7 +428,7 @@ Devices using this vector table:
       <peripheral>I2C2</peripheral>
    </interrupt>
    <interrupt>
-      <name>CAN0_Message</name>
+      <name>CAN0_MessageBuffer</name>
       <description>Flex Controller Area Network module</description>
       <value>75</value>
       <peripheral>CAN0</peripheral>
@@ -446,13 +446,13 @@ Devices using this vector table:
       <peripheral>CAN0</peripheral>
    </interrupt>
    <interrupt>
-      <name>CAN0_Tx</name>
+      <name>CAN0_TxWarning</name>
       <description>Flex Controller Area Network module</description>
       <value>78</value>
       <peripheral>CAN0</peripheral>
    </interrupt>
    <interrupt>
-      <name>CAN0_Rx</name>
+      <name>CAN0_RxWarning</name>
       <description>Flex Controller Area Network module</description>
       <value>79</value>
       <peripheral>CAN0</peripheral>
@@ -542,7 +542,7 @@ Devices using this vector table:
       <peripheral>USBHS</peripheral>
    </interrupt>
    <interrupt>
-      <name>CAN1_Message</name>
+      <name>CAN1_MessageBuffer</name>
       <description>Flex Controller Area Network module</description>
       <value>94</value>
       <peripheral>CAN1</peripheral>
@@ -560,13 +560,13 @@ Devices using this vector table:
       <peripheral>CAN1</peripheral>
    </interrupt>
    <interrupt>
-      <name>CAN1_Tx</name>
+      <name>CAN1_TxWarning</name>
       <description>Flex Controller Area Network module</description>
       <value>97</value>
       <peripheral>CAN1</peripheral>
    </interrupt>
    <interrupt>
-      <name>CAN1_Rx</name>
+      <name>CAN1_RxWarning</name>
       <description>Flex Controller Area Network module</description>
       <value>98</value>
       <peripheral>CAN1</peripheral>

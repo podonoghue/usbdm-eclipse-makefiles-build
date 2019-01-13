@@ -311,29 +311,14 @@ Devices using this vector table:
       <value>79</value>
    </interrupt>
    <interrupt>
-      <name>CAN0_Wake_Up</name>
+      <name>CAN0_WakeUp</name>
       <description>Flex Controller Area Network module</description>
       <value>80</value>
    </interrupt>
    <interrupt>
-      <name>CAN0_ORed_Message_buffer</name>
+      <name>CAN0_MessageBuffer</name>
       <description>Flex Controller Area Network module</description>
       <value>81</value>
-   </interrupt>
-   <interrupt>
-      <name>CAN0_Reserved1</name>
-      <description>Flex Controller Area Network module</description>
-      <value>82</value>
-   </interrupt>
-   <interrupt>
-      <name>CAN0_Reserved2</name>
-      <description>Flex Controller Area Network module</description>
-      <value>83</value>
-   </interrupt>
-   <interrupt>
-      <name>CAN0_Reserved3</name>
-      <description>Flex Controller Area Network module</description>
-      <value>84</value>
    </interrupt>
    <interrupt>
       <name>CAN1_ORed</name>
@@ -351,24 +336,9 @@ Devices using this vector table:
       <value>87</value>
    </interrupt>
    <interrupt>
-      <name>CAN1_ORed_Message_buffer</name>
+      <name>CAN1_MessageBuffer</name>
       <description>Flex Controller Area Network module</description>
       <value>88</value>
-   </interrupt>
-   <interrupt>
-      <name>CAN1_Reserved1</name>
-      <description>Flex Controller Area Network module</description>
-      <value>89</value>
-   </interrupt>
-   <interrupt>
-      <name>CAN1_Reserved2</name>
-      <description>Flex Controller Area Network module</description>
-      <value>90</value>
-   </interrupt>
-   <interrupt>
-      <name>CAN1_Reserved3</name>
-      <description>Flex Controller Area Network module</description>
-      <value>91</value>
    </interrupt>
 </interrupts>
 

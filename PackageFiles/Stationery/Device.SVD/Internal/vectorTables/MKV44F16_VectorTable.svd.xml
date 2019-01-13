@@ -276,7 +276,7 @@ Devices using this vector table:
       <value>73</value>
    </interrupt>
    <interrupt>
-      <name>CAN0_Message</name>
+      <name>CAN0_MessageBuffer</name>
       <description>Flex Controller Area Network module</description>
       <value>75</value>
    </interrupt>
@@ -291,12 +291,12 @@ Devices using this vector table:
       <value>77</value>
    </interrupt>
    <interrupt>
-      <name>CAN0_Tx</name>
+      <name>CAN0_TxWarning</name>
       <description>Flex Controller Area Network module</description>
       <value>78</value>
    </interrupt>
    <interrupt>
-      <name>CAN0_Rx</name>
+      <name>CAN0_RxWarning</name>
       <description>Flex Controller Area Network module</description>
       <value>79</value>
    </interrupt>
