@@ -17,8 +17,8 @@ Devices using this peripheral:
          <resetValue>0x0</resetValue>
          <resetMask>0xFFFFFFFF</resetMask>
          <parameters>
+            <parameter> <value>104</value> <name>FIFO_FILTER_COUNT</name> <description>Number of Filter IDs</description></parameter>
             <parameter> <value>32</value> <name>MESSAGE_BUFFER_COUNT</name> <description>Number of message buffers</description></parameter>
-            <parameter> <value>104</value> <name>FILTER_COUNT</name> <description>Number of Filter IDs</description></parameter>
             <parameter> <value>4</value> <name>WAKEUP_BUFFER_COUNT</name> <description>Number of wakeup buffers</description></parameter>
          </parameters>
          <addressBlock>
@@ -1805,9 +1805,26 @@ Devices using this peripheral:
                <?hide?>
                <description>Rx FIFO Global Mask register</description>
                <addressOffset>0x48</addressOffset>
-               <size>32</size>
-               <access>read-write</access>
                <resetMask>0x0</resetMask>
+               <fields>
+                  <field>
+                     <name>FGM</name>
+                     <description>Rx FIFO Global Mask Bits</description>
+                     <bitOffset>0</bitOffset>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>The corresponding bit in the filter is &quot;don&apos;t care.&quot;</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>The corresponding bit in the filter is checked</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+               </fields>
             </register>
             <register>
                <name>RXFGMASK_A</name>
@@ -2186,7 +2203,7 @@ This 3-bit field is only used when LPRIO_EN bit is set in MCR and it only makes 
                   </fields>
                </register>
                <register>
-                  <dim>$(FILTER_COUNT)</dim>
+                  <dim>$(FIFO_FILTER_COUNT)</dim>
                   <dimIncrement>4</dimIncrement>
                   <name>FILTER_ID</name>
                   <?hide?>
@@ -2196,7 +2213,7 @@ This 3-bit field is only used when LPRIO_EN bit is set in MCR and it only makes 
                   <access>read-write</access>
                </register>
                <register>
-                  <dim>$(FILTER_COUNT)</dim>
+                  <dim>$(FIFO_FILTER_COUNT)</dim>
                   <dimIncrement>4</dimIncrement>
                   <name>FILTER_ID_A</name>
                   <description>FIFO Message Filter ID (format A)</description>
@@ -2254,7 +2271,7 @@ This 3-bit field is only used when LPRIO_EN bit is set in MCR and it only makes 
                   </fields>
                </register>
                <register>
-                  <dim>$(FILTER_COUNT)</dim>
+                  <dim>$(FIFO_FILTER_COUNT)</dim>
                   <dimIncrement>4</dimIncrement>
                   <name>FILTER_ID_B</name>
                   <description>FIFO Message Filter ID (format B)</description>
@@ -2318,7 +2335,7 @@ This 3-bit field is only used when LPRIO_EN bit is set in MCR and it only makes 
                   </fields>
                </register>
                <register>
-                  <dim>$(FILTER_COUNT)</dim>
+                  <dim>$(FIFO_FILTER_COUNT)</dim>
                   <dimIncrement>4</dimIncrement>
                   <name>FILTER_ID_C</name>
                   <description>FIFO Message Filter ID (format C)</description>

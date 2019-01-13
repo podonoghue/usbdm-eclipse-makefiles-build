@@ -18,7 +18,8 @@ Devices using this peripheral:
          <resetValue>0x0</resetValue>
          <resetMask>0xFFFFFFFF</resetMask>
          <parameters>
-            <parameter> <value>16</value> <name>MESSAGE_BUFFER_COUNT</name> <description>Number of message buffers</description></parameter>
+            <parameter> <value>128</value> <name>FIFO_FILTER_COUNT</name> <description>Number of Filter IDs</description></parameter>
+            <parameter> <value>64</value> <name>MESSAGE_BUFFER_COUNT</name> <description>Number of message buffers</description></parameter>
          </parameters>
          <addressBlock>
             <offset>0x0</offset>
@@ -37,12 +38,332 @@ Devices using this peripheral:
          </addressBlock>
          <addressBlock>
             <offset>0x80</offset>
-            <size>0x100</size>
+            <size>0x10</size>
+            <usage>registers</usage>
+         </addressBlock>
+         <addressBlock>
+            <offset>0x90</offset>
+            <size>0x10</size>
+            <usage>registers</usage>
+         </addressBlock>
+         <addressBlock>
+            <offset>0xA0</offset>
+            <size>0x10</size>
+            <usage>registers</usage>
+         </addressBlock>
+         <addressBlock>
+            <offset>0xB0</offset>
+            <size>0x10</size>
+            <usage>registers</usage>
+         </addressBlock>
+         <addressBlock>
+            <offset>0xC0</offset>
+            <size>0x10</size>
+            <usage>registers</usage>
+         </addressBlock>
+         <addressBlock>
+            <offset>0xD0</offset>
+            <size>0x10</size>
+            <usage>registers</usage>
+         </addressBlock>
+         <addressBlock>
+            <offset>0xE0</offset>
+            <size>0x10</size>
+            <usage>registers</usage>
+         </addressBlock>
+         <addressBlock>
+            <offset>0xE0</offset>
+            <size>0x200</size>
+            <usage>registers</usage>
+         </addressBlock>
+         <addressBlock>
+            <offset>0xF0</offset>
+            <size>0x10</size>
+            <usage>registers</usage>
+         </addressBlock>
+         <addressBlock>
+            <offset>0x100</offset>
+            <size>0x10</size>
+            <usage>registers</usage>
+         </addressBlock>
+         <addressBlock>
+            <offset>0x110</offset>
+            <size>0x10</size>
+            <usage>registers</usage>
+         </addressBlock>
+         <addressBlock>
+            <offset>0x120</offset>
+            <size>0x10</size>
+            <usage>registers</usage>
+         </addressBlock>
+         <addressBlock>
+            <offset>0x130</offset>
+            <size>0x10</size>
+            <usage>registers</usage>
+         </addressBlock>
+         <addressBlock>
+            <offset>0x140</offset>
+            <size>0x10</size>
+            <usage>registers</usage>
+         </addressBlock>
+         <addressBlock>
+            <offset>0x150</offset>
+            <size>0x10</size>
+            <usage>registers</usage>
+         </addressBlock>
+         <addressBlock>
+            <offset>0x160</offset>
+            <size>0x10</size>
+            <usage>registers</usage>
+         </addressBlock>
+         <addressBlock>
+            <offset>0x170</offset>
+            <size>0x10</size>
+            <usage>registers</usage>
+         </addressBlock>
+         <addressBlock>
+            <offset>0x180</offset>
+            <size>0x10</size>
+            <usage>registers</usage>
+         </addressBlock>
+         <addressBlock>
+            <offset>0x190</offset>
+            <size>0x10</size>
+            <usage>registers</usage>
+         </addressBlock>
+         <addressBlock>
+            <offset>0x1A0</offset>
+            <size>0x10</size>
+            <usage>registers</usage>
+         </addressBlock>
+         <addressBlock>
+            <offset>0x1B0</offset>
+            <size>0x10</size>
+            <usage>registers</usage>
+         </addressBlock>
+         <addressBlock>
+            <offset>0x1C0</offset>
+            <size>0x10</size>
+            <usage>registers</usage>
+         </addressBlock>
+         <addressBlock>
+            <offset>0x1D0</offset>
+            <size>0x10</size>
+            <usage>registers</usage>
+         </addressBlock>
+         <addressBlock>
+            <offset>0x1E0</offset>
+            <size>0x10</size>
+            <usage>registers</usage>
+         </addressBlock>
+         <addressBlock>
+            <offset>0x1F0</offset>
+            <size>0x10</size>
+            <usage>registers</usage>
+         </addressBlock>
+         <addressBlock>
+            <offset>0x200</offset>
+            <size>0x10</size>
+            <usage>registers</usage>
+         </addressBlock>
+         <addressBlock>
+            <offset>0x210</offset>
+            <size>0x10</size>
+            <usage>registers</usage>
+         </addressBlock>
+         <addressBlock>
+            <offset>0x220</offset>
+            <size>0x10</size>
+            <usage>registers</usage>
+         </addressBlock>
+         <addressBlock>
+            <offset>0x230</offset>
+            <size>0x10</size>
+            <usage>registers</usage>
+         </addressBlock>
+         <addressBlock>
+            <offset>0x240</offset>
+            <size>0x10</size>
+            <usage>registers</usage>
+         </addressBlock>
+         <addressBlock>
+            <offset>0x250</offset>
+            <size>0x10</size>
+            <usage>registers</usage>
+         </addressBlock>
+         <addressBlock>
+            <offset>0x260</offset>
+            <size>0x10</size>
+            <usage>registers</usage>
+         </addressBlock>
+         <addressBlock>
+            <offset>0x270</offset>
+            <size>0x10</size>
+            <usage>registers</usage>
+         </addressBlock>
+         <addressBlock>
+            <offset>0x280</offset>
+            <size>0x10</size>
+            <usage>registers</usage>
+         </addressBlock>
+         <addressBlock>
+            <offset>0x290</offset>
+            <size>0x10</size>
+            <usage>registers</usage>
+         </addressBlock>
+         <addressBlock>
+            <offset>0x2A0</offset>
+            <size>0x10</size>
+            <usage>registers</usage>
+         </addressBlock>
+         <addressBlock>
+            <offset>0x2B0</offset>
+            <size>0x10</size>
+            <usage>registers</usage>
+         </addressBlock>
+         <addressBlock>
+            <offset>0x2C0</offset>
+            <size>0x10</size>
+            <usage>registers</usage>
+         </addressBlock>
+         <addressBlock>
+            <offset>0x2D0</offset>
+            <size>0x10</size>
+            <usage>registers</usage>
+         </addressBlock>
+         <addressBlock>
+            <offset>0x2E0</offset>
+            <size>0x10</size>
+            <usage>registers</usage>
+         </addressBlock>
+         <addressBlock>
+            <offset>0x2F0</offset>
+            <size>0x10</size>
+            <usage>registers</usage>
+         </addressBlock>
+         <addressBlock>
+            <offset>0x300</offset>
+            <size>0x10</size>
+            <usage>registers</usage>
+         </addressBlock>
+         <addressBlock>
+            <offset>0x310</offset>
+            <size>0x10</size>
+            <usage>registers</usage>
+         </addressBlock>
+         <addressBlock>
+            <offset>0x320</offset>
+            <size>0x10</size>
+            <usage>registers</usage>
+         </addressBlock>
+         <addressBlock>
+            <offset>0x330</offset>
+            <size>0x10</size>
+            <usage>registers</usage>
+         </addressBlock>
+         <addressBlock>
+            <offset>0x340</offset>
+            <size>0x10</size>
+            <usage>registers</usage>
+         </addressBlock>
+         <addressBlock>
+            <offset>0x350</offset>
+            <size>0x10</size>
+            <usage>registers</usage>
+         </addressBlock>
+         <addressBlock>
+            <offset>0x360</offset>
+            <size>0x10</size>
+            <usage>registers</usage>
+         </addressBlock>
+         <addressBlock>
+            <offset>0x370</offset>
+            <size>0x10</size>
+            <usage>registers</usage>
+         </addressBlock>
+         <addressBlock>
+            <offset>0x380</offset>
+            <size>0x10</size>
+            <usage>registers</usage>
+         </addressBlock>
+         <addressBlock>
+            <offset>0x390</offset>
+            <size>0x10</size>
+            <usage>registers</usage>
+         </addressBlock>
+         <addressBlock>
+            <offset>0x3A0</offset>
+            <size>0x10</size>
+            <usage>registers</usage>
+         </addressBlock>
+         <addressBlock>
+            <offset>0x3B0</offset>
+            <size>0x10</size>
+            <usage>registers</usage>
+         </addressBlock>
+         <addressBlock>
+            <offset>0x3C0</offset>
+            <size>0x10</size>
+            <usage>registers</usage>
+         </addressBlock>
+         <addressBlock>
+            <offset>0x3D0</offset>
+            <size>0x10</size>
+            <usage>registers</usage>
+         </addressBlock>
+         <addressBlock>
+            <offset>0x3E0</offset>
+            <size>0x10</size>
+            <usage>registers</usage>
+         </addressBlock>
+         <addressBlock>
+            <offset>0x3F0</offset>
+            <size>0x10</size>
+            <usage>registers</usage>
+         </addressBlock>
+         <addressBlock>
+            <offset>0x400</offset>
+            <size>0x10</size>
+            <usage>registers</usage>
+         </addressBlock>
+         <addressBlock>
+            <offset>0x410</offset>
+            <size>0x10</size>
+            <usage>registers</usage>
+         </addressBlock>
+         <addressBlock>
+            <offset>0x420</offset>
+            <size>0x10</size>
+            <usage>registers</usage>
+         </addressBlock>
+         <addressBlock>
+            <offset>0x430</offset>
+            <size>0x10</size>
+            <usage>registers</usage>
+         </addressBlock>
+         <addressBlock>
+            <offset>0x440</offset>
+            <size>0x10</size>
+            <usage>registers</usage>
+         </addressBlock>
+         <addressBlock>
+            <offset>0x450</offset>
+            <size>0x10</size>
+            <usage>registers</usage>
+         </addressBlock>
+         <addressBlock>
+            <offset>0x460</offset>
+            <size>0x10</size>
+            <usage>registers</usage>
+         </addressBlock>
+         <addressBlock>
+            <offset>0x470</offset>
+            <size>0x10</size>
             <usage>registers</usage>
          </addressBlock>
          <addressBlock>
             <offset>0x880</offset>
-            <size>0x40</size>
+            <size>0x100</size>
             <usage>registers</usage>
          </addressBlock>
          <registers>
@@ -66,22 +387,22 @@ Devices using this peripheral:
                      <enumeratedValues>
                         <enumeratedValue>
                            <name>0b00</name>
-                           <description>Format A: One full ID (standard and extended) per ID Filter Table element</description>
+                           <description>Format A:\t One full ID (standard and extended) per ID Filter Table element</description>
                            <value>0b00</value>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>0b01</name>
-                           <description>Format B: Two full standard IDs or two partial 14-bit (standard and extended) IDs per ID Filter Table element</description>
+                           <description>Format B:\t Two full standard IDs or two partial 14-bit (standard and extended) IDs per ID Filter Table element</description>
                            <value>0b01</value>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>0b10</name>
-                           <description>Format C: Four partial 8-bit Standard IDs per ID Filter Table element</description>
+                           <description>Format C:\t Four partial 8-bit Standard IDs per ID Filter Table element</description>
                            <value>0b10</value>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>0b11</name>
-                           <description>Format D: All frames rejected</description>
+                           <description>Format D:\t All frames rejected</description>
                            <value>0b11</value>
                         </enumeratedValue>
                      </enumeratedValues>
@@ -276,12 +597,12 @@ Not present in all devices</description>
                      <enumeratedValues>
                         <enumeratedValue>
                            <name>0b0</name>
-                           <description>FlexCAN is in User mode. Affected registers allow both Supervisor and Unrestricted accesses</description>
+                           <description>FlexCAN is in User mode.\t Affected registers allow both Supervisor and Unrestricted accesses</description>
                            <value>0b0</value>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>0b1</name>
-                           <description>FlexCAN is in Supervisor mode. Affected registers allow only Supervisor access. Unrestricted access behaves as though the access was done to an unimplemented register location</description>
+                           <description>FlexCAN is in Supervisor mode.\t Affected registers allow only Supervisor access. Unrestricted access behaves as though the access was done to an unimplemented register location</description>
                            <value>0b1</value>
                         </enumeratedValue>
                      </enumeratedValues>
@@ -1154,7 +1475,7 @@ Not present in all devices</description>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>0b1</name>
-                           <description>Overrun has occured</description>
+                           <description>Overrun has occurred</description>
                            <value>0b1</value>
                         </enumeratedValue>
                      </enumeratedValues>
@@ -1403,6 +1724,88 @@ Not present in all devices</description>
                      <description>Number Of Rx FIFO Filters</description>
                      <bitOffset>24</bitOffset>
                      <bitWidth>4</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0000</name>
+                           <description>8 IDs</description>
+                           <value>0b0000</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b0001</name>
+                           <description>16 IDs</description>
+                           <value>0b0001</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b0010</name>
+                           <description>24 IDs</description>
+                           <value>0b0010</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b0011</name>
+                           <description>32 IDs</description>
+                           <value>0b0011</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b0100</name>
+                           <description>40 IDs</description>
+                           <value>0b0100</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b0101</name>
+                           <description>48 IDs</description>
+                           <value>0b0101</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b0110</name>
+                           <description>56 IDs</description>
+                           <value>0b0110</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b0111</name>
+                           <description>64 IDs</description>
+                           <value>0b0111</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1000</name>
+                           <description>74 IDs</description>
+                           <value>0b1000</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1001</name>
+                           <description>80 IDs</description>
+                           <value>0b1001</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1010</name>
+                           <description>88 IDs</description>
+                           <value>0b1010</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1011</name>
+                           <description>96 IDs</description>
+                           <value>0b1011</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1100</name>
+                           <description>104 IDs</description>
+                           <value>0b1100</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1101</name>
+                           <description>112 IDs</description>
+                           <value>0b1101</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1110</name>
+                           <description>120 IDs</description>
+                           <value>0b1110</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1111</name>
+                           <description>128 IDs</description>
+                           <value>0b1111</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
                   </field>
                   <field>
                      <name>BOFFDONEMSK</name>
@@ -1496,6 +1899,7 @@ Not present in all devices</description>
             </register>
             <register>
                <name>RXFGMASK</name>
+               <?hide?>
                <description>Rx FIFO Global Mask register</description>
                <addressOffset>0x48</addressOffset>
                <resetMask>0x0</resetMask>
@@ -1517,6 +1921,141 @@ Not present in all devices</description>
                         </enumeratedValue>
                      </enumeratedValues>
                   </field>
+               </fields>
+            </register>
+            <register>
+               <name>RXFGMASK_A</name>
+               <description>Rx FIFO Global Mask register (format A)</description>
+               <addressOffset>0x48</addressOffset>
+               <resetMask>0x0</resetMask>
+               <fields>
+                  <field>
+                     <name>RXIDA_EXT</name>
+                     <description>Rx Frame Identifier (Extended Format)</description>
+                     <bitOffset>1</bitOffset>
+                     <bitWidth>29</bitWidth>
+                  </field>
+                  <field>
+                     <name>RXIDA_STD</name>
+                     <?ignoreOverlap?>
+                     <description>Rx Frame Identifier (Standard format)</description>
+                     <bitOffset>19</bitOffset>
+                     <bitWidth>11</bitWidth>
+                  </field>
+                  <field>
+                     <name>IDEA</name>
+                     <description>Extended Frame</description>
+                     <bitOffset>30</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>Standard</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>Extended</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>RTRA</name>
+                     <description>Remote Frame</description>
+                     <bitOffset>31</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>Data frame</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>Remote Request frame</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>RXFGMASK_B</name>
+               <description>Rx FIFO Global Mask register (format B)</description>
+               <addressOffset>0x48</addressOffset>
+               <fields>
+                  <field>
+                     <name>RXIDB_EXT_1</name>
+                     <?ignoreOverlap?>
+                     <description>Rx Frame Identifier (Extended Format)</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>14</bitWidth>
+                  </field>
+                  <field>
+                     <name>RXIDB_STD_1</name>
+                     <?ignoreOverlap?>
+                     <description>Rx Frame Identifier (Standard Format)</description>
+                     <bitOffset>3</bitOffset>
+                     <bitWidth>11</bitWidth>
+                  </field>
+                  <field>
+                     <name>IDEB_1</name>
+                     <description>Extended Frame</description>
+                     <bitOffset>14</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>Standard</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>Extended</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>RTRB_1</name>
+                     <description>Remote Frame</description>
+                     <bitOffset>15</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>Data frame</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>Remote Request frame</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field derivedFrom="RXIDB_EXT_1" > <name>RXIDB_EXT_0</name> <bitOffset>16</bitOffset> <?ignoreOverlap?> </field>
+                  <field derivedFrom="RXIDB_STD_1" > <name>RXIDB_STD_0</name> <bitOffset>19</bitOffset> <?ignoreOverlap?> </field>
+                  <field derivedFrom="IDEB_1" > <name>IDEB_0</name> <bitOffset>30</bitOffset> </field>
+                  <field derivedFrom="RTRB_1" > <name>RTRB_0</name> <bitOffset>31</bitOffset> </field>
+               </fields>
+            </register>
+            <register>
+               <name>RXFGMASK_C</name>
+               <description>Rx FIFO Global Mask register (format C)</description>
+               <addressOffset>0x48</addressOffset>
+               <resetMask>0xFF</resetMask>
+               <fields>
+                  <field>
+                     <name>RXIDC_3</name>
+                     <description>Rx Frame Identifier</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>8</bitWidth>
+                  </field>
+                  <field derivedFrom="RXIDC_3" > <name>RXIDC_2</name> <bitOffset>8</bitOffset> </field>
+                  <field derivedFrom="RXIDC_3" > <name>RXIDC_1</name> <bitOffset>16</bitOffset> </field>
+                  <field derivedFrom="RXIDC_3" > <name>RXIDC_0</name> <bitOffset>24</bitOffset> </field>
                </fields>
             </register>
             <register>
@@ -1594,6 +2133,7 @@ Not present in all devices</description>
                <dimIncrement>16</dimIncrement>
                <name>MB,@p@f@i</name>
                <addressOffset>0x80</addressOffset>
+               <?isolate?>
                <register>
                   <name>CS</name>
                   <description>Message Buffer 0 CS Register</description>
@@ -1601,57 +2141,186 @@ Not present in all devices</description>
                   <fields>
                      <field>
                         <name>TIME_STAMP</name>
-                        <description>Free-Running Counter Time stamp. This 16-bit field is a copy of the Free-Running Timer, captured for Tx and Rx frames at the time when the beginning of the Identifier field appears on the CAN bus</description>
+                        <description>Free-Running Counter Time stamp.\tThis 16-bit field is a copy of the Free-Running Timer, captured for Tx and Rx frames at the time when the beginning of the Identifier field appears on the CAN bus</description>
                         <bitOffset>0</bitOffset>
                         <bitWidth>16</bitWidth>
                      </field>
                      <field>
                         <name>DLC</name>
-                        <description>Length of the data to be stored/transmitted</description>
+                        <description>Length of the data to be received/transmitted</description>
                         <bitOffset>16</bitOffset>
                         <bitWidth>4</bitWidth>
                      </field>
                      <field>
                         <name>RTR</name>
-                        <description>Remote Transmission Request. One/zero for remote/data frame</description>
+                        <description>Remote Transmission Request</description>
                         <bitOffset>20</bitOffset>
                         <bitWidth>1</bitWidth>
+                        <enumeratedValues>
+                           <enumeratedValue>
+                              <name>0b0</name>
+                              <description>Data frame</description>
+                              <value>0b0</value>
+                           </enumeratedValue>
+                           <enumeratedValue>
+                              <name>0b1</name>
+                              <description>Remote Request frame</description>
+                              <value>0b0</value>
+                           </enumeratedValue>
+                        </enumeratedValues>
                      </field>
                      <field>
                         <name>IDE</name>
-                        <description>ID Extended. One/zero for extended/standard format frame</description>
+                        <description>ID Extended.\t Selects format frame</description>
                         <bitOffset>21</bitOffset>
                         <bitWidth>1</bitWidth>
+                        <enumeratedValues>
+                           <enumeratedValue>
+                              <name>0b0</name>
+                              <description>Standard</description>
+                              <value>0b0</value>
+                           </enumeratedValue>
+                           <enumeratedValue>
+                              <name>0b1</name>
+                              <description>Extended</description>
+                              <value>0b0</value>
+                           </enumeratedValue>
+                        </enumeratedValues>
                      </field>
                      <field>
                         <name>SRR</name>
-                        <description>Substitute Remote Request. Contains a fixed recessive bit</description>
+                        <description>Substitute Remote Request</description>
                         <bitOffset>22</bitOffset>
                         <bitWidth>1</bitWidth>
+                        <enumeratedValues>
+                           <enumeratedValue>
+                              <name>0b0</name>
+                              <description>Dominant is not a valid value</description>
+                              <value>0b0</value>
+                           </enumeratedValue>
+                           <enumeratedValue>
+                              <name>0b1</name>
+                              <description>Recessive value is compulsory</description>
+                              <value>0b0</value>
+                           </enumeratedValue>
+                        </enumeratedValues>
                      </field>
                      <field>
                         <name>CODE</name>
-                        <description>Reserved</description>
+                        <description>Message Buffer Code</description>
                         <bitOffset>24</bitOffset>
                         <bitWidth>4</bitWidth>
+                        <enumeratedValues>
+                           <enumeratedValue>
+                              <name>0b0000</name>
+                              <description>Inactive</description>
+                              <value>0b0000</value>
+                           </enumeratedValue>
+                           <enumeratedValue>
+                              <name>0bXXX1</name>
+                              <description>Busy</description>
+                              <value>0bXXX1</value>
+                           </enumeratedValue>
+                           <enumeratedValue>
+                              <name>0b0100</name>
+                              <description>RxEmpty</description>
+                              <value>0b0100</value>
+                           </enumeratedValue>
+                           <enumeratedValue>
+                              <name>0b0010</name>
+                              <description>RxFull</description>
+                              <value>0b0010</value>
+                           </enumeratedValue>
+                           <enumeratedValue>
+                              <name>0b0110</name>
+                              <description>Overrun</description>
+                              <value>0b0110</value>
+                           </enumeratedValue>
+                           <enumeratedValue>
+                              <name>0b1010</name>
+                              <description>RxAnswer</description>
+                              <value>0b1010</value>
+                           </enumeratedValue>
+                           <enumeratedValue>
+                              <name>0b1000</name>
+                              <description>TxInactive</description>
+                              <value>0b1000</value>
+                           </enumeratedValue>
+                           <enumeratedValue>
+                              <name>0b1001</name>
+                              <description>TxAbort</description>
+                              <value>0b1001</value>
+                           </enumeratedValue>
+                           <enumeratedValue>
+                              <name>0b1100</name>
+                              <description>TxData</description>
+                              <value>0b1100</value>
+                           </enumeratedValue>
+                           <enumeratedValue>
+                              <name>0b1100</name>
+                              <description>TxRemote</description>
+                              <value>0b1100</value>
+                           </enumeratedValue>
+                           <enumeratedValue>
+                              <name>0b1110</name>
+                              <description>TxAnswer</description>
+                              <value>0b1110</value>
+                           </enumeratedValue>
+                        </enumeratedValues>
                      </field>
                      <field>
                         <name>ESI</name>
-                        <description>Reserved</description>
+                        <description>Error State Indicator</description>
                         <bitOffset>29</bitOffset>
                         <bitWidth>1</bitWidth>
+                        <enumeratedValues>
+                           <enumeratedValue>
+                              <name>0b0</name>
+                              <description>Error Active</description>
+                              <value>0b0</value>
+                           </enumeratedValue>
+                           <enumeratedValue>
+                              <name>0b1</name>
+                              <description>Error Passive</description>
+                              <value>0b0</value>
+                           </enumeratedValue>
+                        </enumeratedValues>
                      </field>
                      <field>
                         <name>BRS</name>
-                        <description>Reserved</description>
+                        <description>Bit Rate Switch</description>
                         <bitOffset>30</bitOffset>
                         <bitWidth>1</bitWidth>
+                        <enumeratedValues>
+                           <enumeratedValue>
+                              <name>0b0</name>
+                              <description>No switch</description>
+                              <value>0b0</value>
+                           </enumeratedValue>
+                           <enumeratedValue>
+                              <name>0b1</name>
+                              <description>Switch allowed</description>
+                              <value>0b0</value>
+                           </enumeratedValue>
+                        </enumeratedValues>
                      </field>
                      <field>
                         <name>EDL</name>
-                        <description>Reserved</description>
+                        <description>Extended Data Length</description>
                         <bitOffset>31</bitOffset>
                         <bitWidth>1</bitWidth>
+                        <enumeratedValues>
+                           <enumeratedValue>
+                              <name>0b0</name>
+                              <description>Standard data length</description>
+                              <value>0b0</value>
+                           </enumeratedValue>
+                           <enumeratedValue>
+                              <name>0b1</name>
+                              <description>Extended data length</description>
+                              <value>0b0</value>
+                           </enumeratedValue>
+                        </enumeratedValues>
                      </field>
                   </fields>
                </register>
@@ -1662,19 +2331,21 @@ Not present in all devices</description>
                   <fields>
                      <field>
                         <name>EXT</name>
-                        <description>Contains extended (LOW word) identifier of message buffer</description>
+                        <description>Extended identifier</description>
                         <bitOffset>0</bitOffset>
-                        <bitWidth>18</bitWidth>
+                        <bitWidth>29</bitWidth>
                      </field>
                      <field>
                         <name>STD</name>
-                        <description>Contains standard/extended (HIGH word) identifier of message buffer</description>
+                        <?ignoreOverlap?>
+                        <description>Standard identifier</description>
                         <bitOffset>18</bitOffset>
                         <bitWidth>11</bitWidth>
                      </field>
                      <field>
                         <name>PRIO</name>
-                        <description>Local priority. This 3-bit fieldis only used when LPRIO_EN bit is set in MCR and it only makes sense for Tx buffers. These bits are not transmitted. They are appended to the regular ID to define the transmission priority</description>
+                        <description>Local priority. 
+This 3-bit fieldis only used when LPRIO_EN bit is set in MCR and it only makes sense for Tx buffers. These bits are not transmitted. They are appended to the regular ID to define the transmission priority</description>
                         <bitOffset>29</bitOffset>
                         <bitWidth>3</bitWidth>
                      </field>
@@ -1740,6 +2411,329 @@ Not present in all devices</description>
                         <bitOffset>24</bitOffset>
                         <bitWidth>8</bitWidth>
                      </field>
+                  </fields>
+               </register>
+            </cluster>
+            <cluster>
+               <name>FIFO</name>
+               <addressOffset>0x80</addressOffset>
+               <register>
+                  <name>CS</name>
+                  <description>FIFO Message Buffer CS Register</description>
+                  <addressOffset>0x0</addressOffset>
+                  <fields>
+                     <field>
+                        <name>TIME_STAMP</name>
+                        <description>Free-Running Counter Time stamp. This 16-bit field is a copy of the Free-Running Timer, captured for Tx and Rx frames at the time when the beginning of the Identifier field appears on the CAN bus</description>
+                        <bitOffset>0</bitOffset>
+                        <bitWidth>16</bitWidth>
+                     </field>
+                     <field>
+                        <name>DLC</name>
+                        <description>Length of the data to be stored/transmitted</description>
+                        <bitOffset>16</bitOffset>
+                        <bitWidth>4</bitWidth>
+                     </field>
+                     <field>
+                        <name>RTR</name>
+                        <description>Remote Transmission Request</description>
+                        <bitOffset>20</bitOffset>
+                        <bitWidth>1</bitWidth>
+                        <enumeratedValues>
+                           <enumeratedValue>
+                              <name>0b0</name>
+                              <description>Data frame</description>
+                              <value>0b0</value>
+                           </enumeratedValue>
+                           <enumeratedValue>
+                              <name>0b1</name>
+                              <description>Remote Request frame</description>
+                              <value>0b0</value>
+                           </enumeratedValue>
+                        </enumeratedValues>
+                     </field>
+                     <field>
+                        <name>IDE</name>
+                        <description>ID Extended.\t Selects format frame</description>
+                        <bitOffset>21</bitOffset>
+                        <bitWidth>1</bitWidth>
+                        <enumeratedValues>
+                           <enumeratedValue>
+                              <name>0b0</name>
+                              <description>Standard</description>
+                              <value>0b0</value>
+                           </enumeratedValue>
+                           <enumeratedValue>
+                              <name>0b1</name>
+                              <description>Extended</description>
+                              <value>0b0</value>
+                           </enumeratedValue>
+                        </enumeratedValues>
+                     </field>
+                     <field>
+                        <name>SRR</name>
+                        <description>Substitute Remote Request</description>
+                        <bitOffset>22</bitOffset>
+                        <bitWidth>1</bitWidth>
+                        <enumeratedValues>
+                           <enumeratedValue>
+                              <name>0b0</name>
+                              <description>Dominant is not a valid value</description>
+                              <value>0b0</value>
+                           </enumeratedValue>
+                           <enumeratedValue>
+                              <name>0b1</name>
+                              <description>Recessive value is compulsory</description>
+                              <value>0b0</value>
+                           </enumeratedValue>
+                        </enumeratedValues>
+                     </field>
+                     <field>
+                        <name>IDHIT</name>
+                        <description>Identifier Acceptance Filter Hit Indicator</description>
+                        <bitOffset>24</bitOffset>
+                        <bitWidth>8</bitWidth>
+                     </field>
+                  </fields>
+               </register>
+               <register>
+                  <name>ID</name>
+                  <description>FIFO Message Buffer ID Register</description>
+                  <addressOffset>0x4</addressOffset>
+                  <fields>
+                     <field>
+                        <name>EXT</name>
+                        <description>Extended identifier</description>
+                        <bitOffset>0</bitOffset>
+                        <bitWidth>29</bitWidth>
+                     </field>
+                     <field>
+                        <name>STD</name>
+                        <?ignoreOverlap?>
+                        <description>Standard identifier</description>
+                        <bitOffset>18</bitOffset>
+                        <bitWidth>11</bitWidth>
+                     </field>
+                     <field>
+                        <name>PRIO</name>
+                        <description>Local priority. 
+This 3-bit field is only used when LPRIO_EN bit is set in MCR and it only makes sense for Tx buffers. These bits are not transmitted. They are appended to the regular ID to define the transmission priority</description>
+                        <bitOffset>29</bitOffset>
+                        <bitWidth>3</bitWidth>
+                     </field>
+                  </fields>
+               </register>
+               <register>
+                  <name>WORD0</name>
+                  <description>FIFO Message Buffer WORD0 Register</description>
+                  <addressOffset>0x8</addressOffset>
+                  <fields>
+                     <field>
+                        <name>DATA_BYTE_3</name>
+                        <description>Data byte 3 of Rx/Tx frame</description>
+                        <bitOffset>0</bitOffset>
+                        <bitWidth>8</bitWidth>
+                     </field>
+                     <field>
+                        <name>DATA_BYTE_2</name>
+                        <description>Data byte 2 of Rx/Tx frame</description>
+                        <bitOffset>8</bitOffset>
+                        <bitWidth>8</bitWidth>
+                     </field>
+                     <field>
+                        <name>DATA_BYTE_1</name>
+                        <description>Data byte 1 of Rx/Tx frame</description>
+                        <bitOffset>16</bitOffset>
+                        <bitWidth>8</bitWidth>
+                     </field>
+                     <field>
+                        <name>DATA_BYTE_0</name>
+                        <description>Data byte 0 of Rx/Tx frame</description>
+                        <bitOffset>24</bitOffset>
+                        <bitWidth>8</bitWidth>
+                     </field>
+                  </fields>
+               </register>
+               <register>
+                  <name>WORD1</name>
+                  <description>FIFO Message Buffer WORD1 Register</description>
+                  <addressOffset>0xC</addressOffset>
+                  <fields>
+                     <field>
+                        <name>DATA_BYTE_7</name>
+                        <description>Data byte 7 of Rx/Tx frame</description>
+                        <bitOffset>0</bitOffset>
+                        <bitWidth>8</bitWidth>
+                     </field>
+                     <field>
+                        <name>DATA_BYTE_6</name>
+                        <description>Data byte 6 of Rx/Tx frame</description>
+                        <bitOffset>8</bitOffset>
+                        <bitWidth>8</bitWidth>
+                     </field>
+                     <field>
+                        <name>DATA_BYTE_5</name>
+                        <description>Data byte 5 of Rx/Tx frame</description>
+                        <bitOffset>16</bitOffset>
+                        <bitWidth>8</bitWidth>
+                     </field>
+                     <field>
+                        <name>DATA_BYTE_4</name>
+                        <description>Data byte 4 of Rx/Tx frame</description>
+                        <bitOffset>24</bitOffset>
+                        <bitWidth>8</bitWidth>
+                     </field>
+                  </fields>
+               </register>
+               <register>
+                  <dim>$(FIFO_FILTER_COUNT)</dim>
+                  <dimIncrement>4</dimIncrement>
+                  <name>FILTER_ID</name>
+                  <?hide?>
+                  <description>FIFO Message Filter ID</description>
+                  <addressOffset>0x60</addressOffset>
+                  <size>32</size>
+                  <access>read-write</access>
+               </register>
+               <register>
+                  <dim>$(FIFO_FILTER_COUNT)</dim>
+                  <dimIncrement>4</dimIncrement>
+                  <name>FILTER_ID_A</name>
+                  <description>FIFO Message Filter ID (format A)</description>
+                  <addressOffset>0x60</addressOffset>
+                  <fields>
+                     <field>
+                        <name>RXIDA_EXT</name>
+                        <description>Rx Frame Identifier (Extended Format)</description>
+                        <bitOffset>1</bitOffset>
+                        <bitWidth>29</bitWidth>
+                     </field>
+                     <field>
+                        <name>RXIDA_STD</name>
+                        <?ignoreOverlap?>
+                        <description>Rx Frame Identifier (Standard format)</description>
+                        <bitOffset>19</bitOffset>
+                        <bitWidth>11</bitWidth>
+                     </field>
+                     <field>
+                        <name>IDEA</name>
+                        <description>Extended Frame</description>
+                        <bitOffset>30</bitOffset>
+                        <bitWidth>1</bitWidth>
+                        <enumeratedValues>
+                           <enumeratedValue>
+                              <name>0b0</name>
+                              <description>Standard</description>
+                              <value>0b0</value>
+                           </enumeratedValue>
+                           <enumeratedValue>
+                              <name>0b1</name>
+                              <description>Extended</description>
+                              <value>0b0</value>
+                           </enumeratedValue>
+                        </enumeratedValues>
+                     </field>
+                     <field>
+                        <name>RTRA</name>
+                        <description>Remote Frame</description>
+                        <bitOffset>31</bitOffset>
+                        <bitWidth>1</bitWidth>
+                        <enumeratedValues>
+                           <enumeratedValue>
+                              <name>0b0</name>
+                              <description>Data frame</description>
+                              <value>0b0</value>
+                           </enumeratedValue>
+                           <enumeratedValue>
+                              <name>0b1</name>
+                              <description>Remote Request frame</description>
+                              <value>0b0</value>
+                           </enumeratedValue>
+                        </enumeratedValues>
+                     </field>
+                  </fields>
+               </register>
+               <register>
+                  <dim>$(FIFO_FILTER_COUNT)</dim>
+                  <dimIncrement>4</dimIncrement>
+                  <name>FILTER_ID_B</name>
+                  <description>FIFO Message Filter ID (format B)</description>
+                  <addressOffset>0x60</addressOffset>
+                  <resetMask>0xFFFF</resetMask>
+                  <fields>
+                     <field>
+                        <name>RXIDB_EXT_1</name>
+                        <?ignoreOverlap?>
+                        <description>Rx Frame Identifier (Extended Format)</description>
+                        <bitOffset>0</bitOffset>
+                        <bitWidth>14</bitWidth>
+                     </field>
+                     <field>
+                        <name>RXIDB_STD_1</name>
+                        <?ignoreOverlap?>
+                        <description>Rx Frame Identifier (Standard Format)</description>
+                        <bitOffset>3</bitOffset>
+                        <bitWidth>11</bitWidth>
+                     </field>
+                     <field>
+                        <name>IDEB_1</name>
+                        <description>Extended Frame</description>
+                        <bitOffset>14</bitOffset>
+                        <bitWidth>1</bitWidth>
+                        <enumeratedValues>
+                           <enumeratedValue>
+                              <name>0b0</name>
+                              <description>Standard</description>
+                              <value>0b0</value>
+                           </enumeratedValue>
+                           <enumeratedValue>
+                              <name>0b1</name>
+                              <description>Extended</description>
+                              <value>0b0</value>
+                           </enumeratedValue>
+                        </enumeratedValues>
+                     </field>
+                     <field>
+                        <name>RTRB_1</name>
+                        <description>Remote Frame</description>
+                        <bitOffset>15</bitOffset>
+                        <bitWidth>1</bitWidth>
+                        <enumeratedValues>
+                           <enumeratedValue>
+                              <name>0b0</name>
+                              <description>Data frame</description>
+                              <value>0b0</value>
+                           </enumeratedValue>
+                           <enumeratedValue>
+                              <name>0b1</name>
+                              <description>Remote Request frame</description>
+                              <value>0b0</value>
+                           </enumeratedValue>
+                        </enumeratedValues>
+                     </field>
+                     <field derivedFrom="RXIDB_EXT_1" > <name>RXIDB_EXT_0</name> <bitOffset>16</bitOffset> <?ignoreOverlap?> </field>
+                     <field derivedFrom="RXIDB_STD_1" > <name>RXIDB_STD_0</name> <bitOffset>19</bitOffset> <?ignoreOverlap?> </field>
+                     <field derivedFrom="IDEB_1" > <name>IDEB_0</name> <bitOffset>30</bitOffset> </field>
+                     <field derivedFrom="RTRB_1" > <name>RTRB_0</name> <bitOffset>31</bitOffset> </field>
+                  </fields>
+               </register>
+               <register>
+                  <dim>$(FIFO_FILTER_COUNT)</dim>
+                  <dimIncrement>4</dimIncrement>
+                  <name>FILTER_ID_C</name>
+                  <description>FIFO Message Filter ID (format C)</description>
+                  <addressOffset>0x60</addressOffset>
+                  <resetMask>0xFF</resetMask>
+                  <fields>
+                     <field>
+                        <name>RXIDC_3</name>
+                        <description>Rx Frame Identifier</description>
+                        <bitOffset>0</bitOffset>
+                        <bitWidth>8</bitWidth>
+                     </field>
+                     <field derivedFrom="RXIDC_3" > <name>RXIDC_2</name> <bitOffset>8</bitOffset> </field>
+                     <field derivedFrom="RXIDC_3" > <name>RXIDC_1</name> <bitOffset>16</bitOffset> </field>
+                     <field derivedFrom="RXIDC_3" > <name>RXIDC_0</name> <bitOffset>24</bitOffset> </field>
                   </fields>
                </register>
             </cluster>

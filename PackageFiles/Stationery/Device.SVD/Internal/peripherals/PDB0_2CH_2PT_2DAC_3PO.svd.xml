@@ -30,10 +30,10 @@ Devices using this peripheral:
          <resetValue>0x0</resetValue>
          <resetMask>0xFFFFFFFF</resetMask>
          <parameters>
-            <parameter> <value>2</value> <name>DLY_COUNT</name> <description>Number of Pre-triggers</description></parameter>
             <parameter> <value>2</value> <name>CH_COUNT</name> <description>Number of PDB channels</description></parameter>
-            <parameter> <value>3</value> <name>POnDLY_COUNT</name> <description>Number of Pulse outputs</description></parameter>
             <parameter> <value>2</value> <name>DAC_COUNT</name> <description>Number of DAC outputs</description></parameter>
+            <parameter> <value>2</value> <name>DLY_COUNT</name> <description>Number of Pre-triggers</description></parameter>
+            <parameter> <value>3</value> <name>POnDLY_COUNT</name> <description>Number of Pulse outputs</description></parameter>
          </parameters>
          <addressBlock>
             <offset>0x0</offset>
