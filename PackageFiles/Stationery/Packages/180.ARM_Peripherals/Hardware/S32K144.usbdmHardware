@@ -29,23 +29,23 @@
          <clock clockEnable="PCC->PCC_FLEXCAN0 |= PCC_PCCn_CGC_MASK" clockDisable="PCC->PCC_FLEXCAN0 &amp;= ~PCC_PCCn_CGC_MASK" />
          <irq num="CAN0_ORed_IRQn" />
          <irq num="CAN0_Error_IRQn" />
-         <irq num="CAN0_Wake_Up_IRQn" />
-         <irq num="CAN0_ORed_0_15_MB_IRQn" />
-         <irq num="CAN0_ORed_16_31_MB_IRQn" />
+         <irq num="CAN0_WakeUp_IRQn" />
+         <irq num="CAN0_MessageBuffer_0_15_IRQn" />
+         <irq num="CAN0_MessageBuffer_16_31_IRQn" />
       </peripheral>
       <peripheral baseName="CAN"      instance="1"        version="can1_s32k14x">
          <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForFlexCan" />
          <clock clockEnable="PCC->PCC_FLEXCAN1 |= PCC_PCCn_CGC_MASK" clockDisable="PCC->PCC_FLEXCAN1 &amp;= ~PCC_PCCn_CGC_MASK" />
          <irq num="CAN1_ORed_IRQn" />
          <irq num="CAN1_Error_IRQn" />
-         <irq num="CAN1_ORed_0_15_MB_IRQn" />
+         <irq num="CAN1_MessageBuffer_0_15_IRQn" />
       </peripheral>
       <peripheral baseName="CAN"      instance="2"        version="can1_s32k14x">
          <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForFlexCan" />
          <clock clockEnable="PCC->PCC_FLEXCAN2 |= PCC_PCCn_CGC_MASK" clockDisable="PCC->PCC_FLEXCAN2 &amp;= ~PCC_PCCn_CGC_MASK" />
          <irq num="CAN2_ORed_IRQn" />
          <irq num="CAN2_Error_IRQn" />
-         <irq num="CAN2_ORed_0_15_MB_IRQn" />
+         <irq num="CAN2_MessageBuffer_0_15_IRQn" />
       </peripheral>
       <peripheral baseName="CMP"      instance="0"        version="cmp0_mke16f16">
          <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForCmp" />

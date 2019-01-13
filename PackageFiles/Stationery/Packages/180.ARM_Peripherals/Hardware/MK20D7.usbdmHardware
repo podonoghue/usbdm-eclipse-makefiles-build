@@ -25,11 +25,11 @@
       <peripheral baseName="CAN"      instance="0"        version="can0_2mask">
          <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForFlexCan" />
          <clock clockEnable="SIM->SCGC6 |= SIM_SCGC6_CAN0_MASK;" clockDisable="SIM->SCGC6 &amp;= ~SIM_SCGC6_CAN0_MASK;" />
-         <irq num="CAN0_Message_IRQn" />
+         <irq num="CAN0_MessageBuffer_IRQn" />
          <irq num="CAN0_BusOff_IRQn" />
          <irq num="CAN0_Error_IRQn" />
-         <irq num="CAN0_Tx_IRQn" />
-         <irq num="CAN0_Rx_IRQn" />
+         <irq num="CAN0_TxWarning_IRQn" />
+         <irq num="CAN0_RxWarning_IRQn" />
          <irq num="CAN0_WakeUp_IRQn" />
       </peripheral>
       <peripheral baseName="CMP"      instance="0"        version="cmp0">
