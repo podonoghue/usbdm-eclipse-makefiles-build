@@ -320,7 +320,7 @@ public:
     *       It is necessary to identify the originating channel in the callback
     */
    static ErrorCode INLINE_RELEASE setChannelCallback(unsigned channel, FtmChannelCallbackFunction callback) {
-      usbdm_assert(Info::irqHandlerInstalled, "FTM not configure for interrupts");
+      static_assert(Info::irqHandlerInstalled, "FTM not configure for interrupts");
       if (callback == nullptr) {
          sChannelCallbacks[channel/ChannelVectorRatio] = unhandledChannelCallback;
          return E_NO_ERROR;

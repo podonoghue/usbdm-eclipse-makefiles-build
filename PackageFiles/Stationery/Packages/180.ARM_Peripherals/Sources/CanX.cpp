@@ -15,26 +15,11 @@ using Led = GpioD<0, ActiveLow>;
 using Can     = Can0;
 using CanLimp = GpioE<13, ActiveLow>;
 
-void canOredCallback() {
-   uint32_t mailboxFlags  = Can::getMailboxFlags();
-   uint32_t fifoFlags     = Can::getFifoFlags();
-   Can::clearFifoFlags(fifoFlags);
-   Can::clearMailboxFlags(mailboxFlags);
-
-   console.setWidth(32);
-   console.setPadding(Padding_LeadingZeroes);
-   console.write("canOredCallback(), fifoFlags    = 0b").writeln(fifoFlags,    Radix_2);
-   console.write("canOredCallback(), mailboxFlags = 0b").writeln(mailboxFlags, Radix_2);
-   console.reset();
-}
-
-void canErrorCallback() {
-   uint32_t status        = Can::getErrorStatus();
+void canCallback() {
+   uint32_t status = Can::getErrorStatus();
    Can::clearErrorStatus(status);
-   console.setWidth(32);
-   console.setPadding(Padding_LeadingZeroes);
-   console.write("canErrorCallback(), status = 0b").writeln(status, Radix_2);
-   console.reset();
+   console.write("canCallback(), status  = 0b").writeln(status, Radix_2);
+   console.write("canCallback(), status' = 0b").writeln(Can::getErrorStatus(), Radix_2);
 }
 
 /**
@@ -168,7 +153,7 @@ int main() {
 //   printSizeTable("Can 2", Can2Info::NumberOfMessageBuffers);
 
    CanLimp::setInput();
-   console.writeln("\n\nStarting");
+
    console.write("Can Limp = ").writeln(CanLimp::read());
 
    CanParameters canParameters(125000);
@@ -176,13 +161,11 @@ int main() {
    canParameters.idam      = CanAcceptanceMode_FormatA;
    canParameters.wrnen     = true;
    canParameters.errmsk    = true;
-   canParameters.lpb       = true;
 
-   Can::setErrorCallback(canErrorCallback);
-   Can::setOred0_15_Callback(canOredCallback);
-   Can::setOred16_31_Callback(canOredCallback);
-//   Can::setWakeupCallback(canWakeupCallback);
-   Can::setOredCallback(canOredCallback);
+   Can::setErrorCallback(canCallback);
+   Can::setOred0_15_Callback(canCallback);
+   Can::setOred16_31_Callback(canCallback);
+   Can::setWakeupCallback(canCallback);
 
    Can::configure(
          canParameters,
@@ -204,7 +187,7 @@ int main() {
    Can::enableMailboxInterrupts(0b111);
 
    // Enable all interrupts from FIFO
-   Can::enableFifoInterrupts(CAN_FIFO_DATA_FLAG|CAN_FIFO_OVERFLOW_FLAG|CAN_FIFO_WARNING_FLAG);
+   Can::enableFifoInterrupts(-1U);
 
    Can::enableErrorNvicInterrupts(NvicPriority_Normal);
    Can::enableOredNvicInterrupts(NvicPriority_Normal);
@@ -212,51 +195,43 @@ int main() {
    Can::enableOred_16_32_NvicInterrupts(NvicPriority_Normal);
    Can::enableWakeupNvicInterrupts(NvicPriority_Normal);
 
-   volatile CanMessageBuffer8 *canTxMailbox1;
-   canTxMailbox1 = Can::getMailbox(0);
-   canTxMailbox1->ID = CanId(CAN_MODE, CAN_TEST_ID);
-   canTxMailbox1->data8(0) = 0x1;
-   canTxMailbox1->data8(1) = 0x2;
-   canTxMailbox1->data8(2) = 0x3;
-   canTxMailbox1->data8(3) = 0x4;
-   canTxMailbox1->data8(4) = 0x5;
-   canTxMailbox1->data8(5) = 0x6;
-   canTxMailbox1->data8(6) = 0x7;
-   canTxMailbox1->data8(7) = 0x8;
-   canTxMailbox1->CS = CanControlStatus(CanMessageCode_TxData, CAN_MODE, CanDataSize_7, false);
+   volatile CanMessageBuffer8 *canMailbox;
 
-   volatile CanMessageBuffer8 *canTxMailbox2;
-   canTxMailbox2 = Can::getMailbox(1);
-   canTxMailbox2->ID = CanId(CAN_MODE, CAN_TEST_ID);
-   canTxMailbox2->data8(0) = 0x11;
-   canTxMailbox2->data8(1) = 0x12;
-   canTxMailbox2->data8(2) = 0x13;
-   canTxMailbox2->data8(3) = 0x14;
-   canTxMailbox2->data8(4) = 0x15;
-   canTxMailbox2->data8(5) = 0x16;
-   canTxMailbox2->data8(6) = 0x17;
-   canTxMailbox2->data8(7) = 0x18;
-   canTxMailbox2->CS = CanControlStatus(CanMessageCode_TxData, CAN_MODE, CanDataSize_3, false);
+   canMailbox = Can::getMailbox(0);
+   canMailbox->ID = CanId(CAN_MODE, CAN_TEST_ID);
+   canMailbox->data8(0) = 0x1;
+   canMailbox->data8(1) = 0x2;
+   canMailbox->data8(2) = 0x3;
+   canMailbox->data8(3) = 0x4;
+   canMailbox->data8(4) = 0x5;
+   canMailbox->data8(5) = 0x6;
+   canMailbox->data8(6) = 0x7;
+   canMailbox->data8(7) = 0x8;
+   canMailbox->CS = CanControlStatus(CanMessageCode_TxData, CAN_MODE, CanDataSize_7, false);
 
-   volatile CanMessageBuffer8 *canRxMailbox1;
-   canRxMailbox1 = Can::getMailbox(2);
-   canRxMailbox1->ID = CanId(CAN_MODE, CAN_TEST_ID);
-   canRxMailbox1->DATA32[0] = ~0U;
-   canRxMailbox1->DATA32[1] = ~0U;
-   canRxMailbox1->CS = CanControlStatus(CanMessageCode_RxEmpty, false);
+   canMailbox = Can::getMailbox(1);
+   canMailbox->ID = CanId(CAN_MODE, CAN_TEST_ID);
+   canMailbox->data8(0) = 0x11;
+   canMailbox->data8(1) = 0x12;
+   canMailbox->data8(2) = 0x13;
+   canMailbox->data8(3) = 0x14;
+   canMailbox->data8(4) = 0x15;
+   canMailbox->data8(5) = 0x16;
+   canMailbox->data8(6) = 0x17;
+   canMailbox->data8(7) = 0x18;
+   canMailbox->CS = CanControlStatus(CanMessageCode_TxData, CAN_MODE, CanDataSize_3, false);
+
+   canMailbox = Can::getMailbox(2);
+   canMailbox->ID = CanId(CAN_MODE, CAN_TEST_ID);
+   canMailbox->DATA32[0] = ~0U;
+   canMailbox->DATA32[1] = ~0U;
+   canMailbox->CS = CanControlStatus(CanMessageCode_RxEmpty, false);
 
    Can::readTimer();
 
    for(;;) {
 //      console.write("CAN0->MCR =0b").writeln(CAN0->MCR, Radix_2);
       __asm__("nop");
-      waitMS(1000);
-      if (canTxMailbox1->CS.code == CanMessageCode_TxInactive) {
-         canTxMailbox1->CS = CanControlStatus(CanMessageCode_TxData, CAN_MODE, CanDataSize_7, false);
-      }
-      if (canTxMailbox2->CS.code == CanMessageCode_TxInactive) {
-         canTxMailbox1->CS = CanControlStatus(CanMessageCode_TxData, CAN_MODE, CanDataSize_3, false);
-      }
    }
 
    volatile CanFifoFilter *fifoFilterTable = Can::getFifoFilterTable();

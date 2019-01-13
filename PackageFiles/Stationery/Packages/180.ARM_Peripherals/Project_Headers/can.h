@@ -1041,6 +1041,17 @@ enum CanFifoFilterSize {
 };
 
 /**
+ * Receive FIFO flags
+ *
+ * for use with clearFifoFlags(), getFifoFlags(), enableFifoInterrupts(), disableFifoInterrupts()
+ */
+enum {
+   CAN_FIFO_OVERFLOW_FLAG  = 1<<7,     //!< Overflow   - A message was lost
+   CAN_FIFO_WARNING_FLAG   = 1<<6,     //!< Warning    - The FIFO is nearly full (set 4->5 messages)
+   CAN_FIFO_DATA_FLAG      = 1<<5,     //!< Frame available - At least 1 frame available in FIFO
+};
+
+/**
  * @brief Class representing a Controller Area Network (CAN() interface.
  *
  * <b>Example</b>
@@ -1089,13 +1100,8 @@ public:
    }
 
    /** CAN message buffer interrupt handler */
-   static void mb0_15_IrqHandler() {
-      Can_T::sCallbacks[Info::Ored_0_15_IrqNumIndex]();
-   }
-
-   /** CAN message buffer interrupt handler */
-   static void mb16_31_IrqHandler() {
-      Can_T::sCallbacks[Info::Ored_16_32_IrqNumIndex]();
+   static void messageBufferIrqHandler() {
+      Can_T::sCallbacks[Info::MessageBuffer_0_15_IrqNumIndex]();
    }
 
 protected:
@@ -1118,6 +1124,13 @@ public:
    /**
     * Set Ored callback for ISR
     *
+    *  Bus Off OR Bus Off Done OR Transmit Warning OR Receive Warning
+    *  (ESR1.BOFFINT, CTRL1.BOFFMSK, ESR1.BOFFDONEINT, CTRL1.BOFFDONEMSK)
+    *  Interrupt indicating Transmit Error Counter transition from < 96 to >= 96.
+    *  (ESR1.TWRNINT, CTRL1.TWRNMSK)
+    *  Interrupt indicating Receive Error Counter transition from < 96 to >= 96.
+    *  (ESR1.RWRNINT, CTRL1.RWRNMSK)
+    *
     * @param callback The function to call from stub ISR
     */
    static void setOredCallback(CanCallbackFunction callback) {
@@ -1125,7 +1138,13 @@ public:
    }
 
    /**
-    * Set error callback for ISR
+    * Set Error callback for ISR.
+    *
+    * Interrupt indicating that errors were detected on the CAN bus
+    * (ESR1.ERRINT, CTRL1.ERRMSK = BIT1ERR, BIT0ERR, ACKERR, CRCERR, FRMERR or STFERR)
+    * Interrupt indicating that errors were detected on the CAN bus for FD messages in the Fast
+    * Bit Rate region. (S32K)
+    * (ESR1.ERRINT_FAST, CTRL2.ERRMSK_FAST = BIT1ERR_FAST, BIT0ERR_FAST, CRCERR_FAST, FRMERR_FAST or STFERR_FAST)
     *
     * @param callback The function to call from stub ISR
     */
@@ -1134,7 +1153,19 @@ public:
    }
 
    /**
-    * Set wakeup callback for ISR
+    * Set Wake-up callback for ISR
+    *
+    * S32K (pretend networking)
+    * Interrupt asserted when Pretended Networking operation is enabled, and
+    * a valid message matches the selected filter criteria during Low Power mode
+    * (WU_MTC.WUMF, CTRL1_PN.WUMF_MSK)
+    * Interrupt asserted when Pretended Networking operation is enabled, and
+    * no-reception of a matching message for a defined quantity of time during low power mode
+    * (WU.WTOF, CTRL1_PN.WTOF_MSK)
+    *
+    * Other devices
+    * Interrupt asserted for Self Wake Up mechanism.
+    * (ESR1.WAKINT, MCR.WAKMSK, MCR.SLFWAK enables)
     *
     * @param callback The function to call from stub ISR
     */
@@ -1143,21 +1174,14 @@ public:
    }
 
    /**
-    * Set Ored 0-15 error callback for ISR
+    * Set Message buffer callback for ISR
+    *
+    * OR'ed Message buffer (IFLAG1, IMASK1)
     *
     * @param callback The function to call from stub ISR
     */
-   static void setOred0_15_Callback(CanCallbackFunction callback) {
-      setCallback(callback, Info::Ored_0_15_IrqNumIndex);
-   }
-
-   /**
-    * Set Ored 16-31 error callback for ISR
-    *
-    * @param callback The function to call from stub ISR
-    */
-   static void setOred16_31_Callback(CanCallbackFunction callback) {
-      setCallback(callback, Info::Ored_16_32_IrqNumIndex);
+   static void setMessageBufferCallback(CanCallbackFunction callback) {
+      setCallback(callback, Info::MessageBuffer_0_15_IrqNumIndex);
    }
 
    /**
@@ -1313,7 +1337,9 @@ public:
             "Too many FIFO filters and Mailboxes");
 
       CanParameters  modifiedCanParameters(canParameters);
+#ifdef CAN_MCR_FDEN_MASK
       usbdm_assert(!canParameters.fden,"FIFO cannot be used with Flexible Data Rate");
+#endif
 
       unsigned rffn = (fifoFilterCount/8) - 1;
       modifiedCanParameters.rfen  = true;
@@ -1577,7 +1603,7 @@ public:
    }
 
    /**
-    * Enable interrupts from selected message buffers
+    * Enable interrupts from selected mail boxes
     *
     * @param[in] mask 1's in the mask enable interrupts from the corresponding message buffer.
     *
@@ -1588,7 +1614,7 @@ public:
    }
 
    /**
-    * Disable interrupts from selected message buffers
+    * Disable interrupts from selected mail boxes
     *
     * @param[in] mask 1's in the mask disable interrupts from the corresponding message buffer.
     *
@@ -1600,19 +1626,23 @@ public:
 
    /**
     * Get message buffer flags.
-    * Each bit represents the flags from a message buffer
+    * Each bit represents the flags from a mail boxes
     *
-    * @return
+    * @return Bitmask representing the flags from mail boxes
+    *
+    * @note The mask is realigned to take in to account the buffers allocated to the FIFO.
     */
    static uint32_t getMailboxFlags() {
       return (can().IFLAG1>>messageBuffersAllocatedToFifo);
    }
 
    /**
-    * Clear message buffer flags.
-    * Each bit represents a message buffer flag to clear
+    * Clear mail box flags.
+    * Each bit represents a mail boxes flag to clear
     *
     * @param[in] mask 1's in the mask clear the flag from the corresponding message buffer.
+    *
+    * @note The mask is realigned to take in to account the buffers allocated to the FIFO.
     */
    static void clearMailboxFlags(uint32_t mask) {
       can().IFLAG1 = mask<<messageBuffersAllocatedToFifo;
@@ -1684,6 +1714,7 @@ public:
       return can().RXFIR & CAN_RXFIR_IDHIT_MASK;
    }
 
+#ifdef CAN_CBT_EPSEG1
    /**
     * Set extended timing
     *
@@ -1707,6 +1738,7 @@ public:
             CAN_CBT_ERJW(resyncJumpWidth-1) |
             CAN_CBT_EPRESDIV(prescalerDivisionFactor-1);
    }
+#endif
 
    /**
     * Get CRC value for last transmitted buffer
@@ -1715,30 +1747,6 @@ public:
     */
    static CanCrc15 getTransmittedCrc() {
       return (CanCrc15)(can().CRCR);
-   }
-
-   /**
-    * Enable interrupts in NVIC
-    */
-   static void enableOredNvicInterrupts() {
-      NVIC_EnableIRQ(Info::irqNums[Info::OredIrqNumIndex]);
-   }
-
-   /**
-    * Enable and set priority of interrupts in NVIC
-    * Any pending NVIC interrupts are first cleared.
-    *
-    * @param[in]  nvicPriority  Interrupt priority
-    */
-   static void enableOredNvicInterrupts(uint32_t nvicPriority) {
-      enableNvicInterrupt(Info::irqNums[Info::OredIrqNumIndex], nvicPriority);
-   }
-
-   /**
-    * Disable interrupts in NVIC
-    */
-   static void disableOredNvicInterrupts() {
-      NVIC_DisableIRQ(Info::irqNums[Info::OredIrqNumIndex]);
    }
 
    /**
@@ -1789,54 +1797,7 @@ public:
       NVIC_DisableIRQ(Info::irqNums[Info::ErrorIrqNumIndex]);
    }
 
-   /**
-    * Enable interrupts in NVIC
-    */
-   static void enableOred_0_15_NvicInterrupts() {
-      NVIC_EnableIRQ(Info::irqNums[Info::Ored_0_15_IrqNumIndex]);
-   }
-
-   /**
-    * Enable and set priority of interrupts in NVIC
-    * Any pending NVIC interrupts are first cleared.
-    *
-    * @param[in]  nvicPriority  Interrupt priority
-    */
-   static void enableOred_0_15_NvicInterrupts(uint32_t nvicPriority) {
-      enableNvicInterrupt(Info::irqNums[Info::Ored_0_15_IrqNumIndex], nvicPriority);
-   }
-
-   /**
-    * Disable interrupts in NVIC
-    */
-   static void disableOred_0_15_NvicInterrupts() {
-      NVIC_DisableIRQ(Info::irqNums[Info::Ored_0_15_IrqNumIndex]);
-   }
-
-   /**
-    * Enable interrupts in NVIC
-    */
-   static void enableOred_16_32_NvicInterrupts() {
-      NVIC_EnableIRQ(Info::irqNums[Info::Ored_16_32_IrqNumIndex]);
-   }
-
-   /**
-    * Enable and set priority of interrupts in NVIC
-    * Any pending NVIC interrupts are first cleared.
-    *
-    * @param[in]  nvicPriority  Interrupt priority
-    */
-   static void enableOred_16_32_NvicInterrupts(uint32_t nvicPriority) {
-      enableNvicInterrupt(Info::irqNums[Info::Ored_16_32_IrqNumIndex], nvicPriority);
-   }
-
-   /**
-    * Disable interrupts in NVIC
-    */
-   static void disableOred_16_32_NvicInterrupts() {
-      NVIC_DisableIRQ(Info::irqNums[Info::Ored_16_32_IrqNumIndex]);
-   }
-
+$(/CAN/NvicControl)
 };
 
 /**

@@ -37,29 +37,29 @@
      -  %c replaced with peripheral C++ base class name e.g. FTM1 => = Ftm
      -  _IRQHandler is appended to the pattern (only)
    -->
-   <irqOption name="irqHandlingMethod"  
-      description="Interrupt handlers"
+   <irqOption name="oredIrqHandlingMethod"  
+      description="ORed Interrupt handlers"
       toolTip="This selection allow the interrupt handler for this peripheral to be installed using several different methods"
       pattern="^%b%i_ORed$" 
       classHandler="%c%i::irqHandler" />
 
    <irqOption name="errorIrqHandlingMethod"  
-      description="Interrupt handlers"
+      description="Error Interrupt handlers"
       toolTip="This selection allow the interrupt handler for this peripheral to be installed using several different methods"
       pattern="^%b%i_Error$" 
       classHandler="%c%i::errorIrqHandler" />
 
    <irqOption name="wakeupIrqHandlingMethod"  
-      description="Interrupt handlers"
+      description="Wakeup Interrupt handlers"
       toolTip="This selection allow the interrupt handler for this peripheral to be installed using several different methods"
-      pattern="^%b%i_Wake_Up$" 
+      pattern="^%b%i_WakeUp$" 
       classHandler="%c%i::wakeupIrqHandler" />
 
-   <irqOption name="mbIrqHandlingMethod"  
-      description="Interrupt handlers"
+   <irqOption name="messagebufferIrqHandlingMethod"  
+      description="Message Buffer Interrupt handlers"
       toolTip="This selection allow the interrupt handler for this peripheral to be installed using several different methods"
-      pattern="^%b%i_ORed_(\d+_\d+)_MB$" 
-      classHandler="%c%i::mb$1_IrqHandler" />
+      pattern="^%b%i_MessageBuffer.*$" 
+      classHandler="%c%i::messageBufferIrqHandler" />
 
    <signals/>
    
@@ -67,13 +67,13 @@
    <!-- Template is added to class within pin_mapping.h -->
    <template><![CDATA[
        \t//! Class based callback handler has been installed in vector table\n
-       \tstatic constexpr bool irqHandlerInstalled = ($(irqHandlingMethod) == 1);\n\n
+       \tstatic constexpr bool irqHandlerInstalled = $(messagebufferIrqHandlingMethod);\n\n
        
-       \tstatic constexpr unsigned OredIrqNumIndex        = 0;
-       \tstatic constexpr unsigned ErrorIrqNumIndex       = 1;
-       \tstatic constexpr unsigned WakeupIrqNumIndex      = 2;
-       \tstatic constexpr unsigned Ored_0_15_IrqNumIndex  = 3;
-       \tstatic constexpr unsigned Ored_16_32_IrqNumIndex = 4;\n\n
+       \tstatic constexpr unsigned OredIrqNumIndex                 = 0;
+       \tstatic constexpr unsigned ErrorIrqNumIndex                = 1;
+       \tstatic constexpr unsigned WakeupIrqNumIndex               = 2;
+       \tstatic constexpr unsigned MessageBuffer_0_15_IrqNumIndex  = 3;
+       \tstatic constexpr unsigned MessageBuffer_16_32_IrqNumIndex = 4;\n\n
    ]]></template>
        
    <intOption name="irqLevel" 
@@ -113,6 +113,59 @@
    <template><![CDATA[
        \t//! Default IRQ level\n
        \tstatic constexpr uint32_t irqLevel =  $(irqLevel);\n\n
+   ]]></template>
+
+   <template name="/CAN/NvicControl" namespace="all" ><![CDATA[
+      \t/**
+      \t * Enable Ored interrupts in NVIC
+      \t */
+      \tstatic void enableOredNvicInterrupts() {
+      \t   NVIC_EnableIRQ(Info::irqNums[Info::OredIrqNumIndex]);
+      \t}
+      \t
+      \t/**
+      \t * Enable and set priority of Ored interrupts in NVIC
+      \t * Any pending NVIC interrupts are first cleared.
+      \t *
+      \t * @param[in]  nvicPriority  Interrupt priority
+      \t */
+      \tstatic void enableOredNvicInterrupts(uint32_t nvicPriority) {
+      \t   enableNvicInterrupt(Info::irqNums[Info::OredIrqNumIndex], nvicPriority);
+      \t}
+      \t
+      \t/**
+      \t * Disable Ored interrupts in NVIC
+      \t */
+      \tstatic void disableOredNvicInterrupts() {
+      \t   NVIC_DisableIRQ(Info::irqNums[Info::OredIrqNumIndex]);
+      \t}
+      \t
+      \t/**
+      \t * Enable Message Buffer interrupts in NVIC
+      \t */
+      \tstatic void enableMessageBufferNvicInterrupts() {
+      \t   NVIC_EnableIRQ(Info::irqNums[Info::MessageBuffer_0_15_IrqNumIndex]);
+      \t   NVIC_EnableIRQ(Info::irqNums[Info::MessageBuffer_16_32_IrqNumIndex]);
+      \t}
+      \t
+      \t/**
+      \t * Enable and set priority of Message Buffer interrupts in NVIC
+      \t * Any pending NVIC interrupts are first cleared.
+      \t *
+      \t * @param[in]  nvicPriority  Interrupt priority
+      \t */
+      \tstatic void enableMessageBufferNvicInterrupts(uint32_t nvicPriority) {
+      \t   enableNvicInterrupt(Info::irqNums[Info::MessageBuffer_0_15_IrqNumIndex], nvicPriority);
+      \t   enableNvicInterrupt(Info::irqNums[Info::MessageBuffer_16_32_IrqNumIndex], nvicPriority);
+      \t}
+      \t
+      \t/**
+      \t * Disable Message Buffer interrupts in NVIC
+      \t */
+      \tstatic void disableMessageBufferNvicInterrupts() {
+      \t   NVIC_DisableIRQ(Info::irqNums[Info::MessageBuffer_0_15_IrqNumIndex]);
+      \t   NVIC_DisableIRQ(Info::irqNums[Info::MessageBuffer_16_32_IrqNumIndex]);
+      \t}\n\n
    ]]></template>
 
    <xi:include href="_clockOption.xml"/>

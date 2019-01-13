@@ -37,29 +37,29 @@
      -  %c replaced with peripheral C++ base class name e.g. FTM1 => = Ftm
      -  _IRQHandler is appended to the pattern (only)
    -->
-   <irqOption name="irqHandlingMethod"  
-      description="Interrupt handlers"
+   <irqOption name="oredIrqHandlingMethod"  
+      description="ORed Interrupt handlers"
       toolTip="This selection allow the interrupt handler for this peripheral to be installed using several different methods"
       pattern="^%b%i_ORed$" 
       classHandler="%c%i::irqHandler" />
 
    <irqOption name="errorIrqHandlingMethod"  
-      description="Interrupt handlers"
+      description="Error Interrupt handlers"
       toolTip="This selection allow the interrupt handler for this peripheral to be installed using several different methods"
       pattern="^%b%i_Error$" 
       classHandler="%c%i::errorIrqHandler" />
 
    <irqOption name="wakeupIrqHandlingMethod"  
-      description="Interrupt handlers"
+      description="Wakeup Interrupt handlers"
       toolTip="This selection allow the interrupt handler for this peripheral to be installed using several different methods"
-      pattern="^%b%i_Wake_Up$" 
+      pattern="^%b%i_WakeUp$" 
       classHandler="%c%i::wakeupIrqHandler" />
 
-   <irqOption name="mbIrqHandlingMethod"  
-      description="Interrupt handlers"
+   <irqOption name="messagebufferIrqHandlingMethod"  
+      description="Message Buffer Interrupt handlers"
       toolTip="This selection allow the interrupt handler for this peripheral to be installed using several different methods"
-      pattern="^%b%i_ORed_(\d+_\d+)_MB$" 
-      classHandler="%c%i::mb$1_IrqHandler" />
+      pattern="^%b%i_MessageBuffer.*$" 
+      classHandler="%c%i::messageBufferIrqHandler" />
 
    <signals/>
    
@@ -67,11 +67,13 @@
    <!-- Template is added to class within pin_mapping.h -->
    <template><![CDATA[
        \t//! Class based callback handler has been installed in vector table\n
-       \tstatic constexpr bool irqHandlerInstalled = ($(irqHandlingMethod) == 1);\n\n
+       \tstatic constexpr bool irqHandlerInstalled = $(messagebufferIrqHandlingMethod);\n\n
        
-       \tstatic constexpr unsigned OredIrqNumIndex        = 0;
-       \tstatic constexpr unsigned ErrorIrqNumIndex       = 1;
-       \tstatic constexpr unsigned Ored_0_15_IrqNumIndex  = 2;\n\n
+       \tstatic constexpr unsigned OredIrqNumIndex                 = 0;
+       \tstatic constexpr unsigned ErrorIrqNumIndex                = 1;
+       \tstatic constexpr unsigned WakeupIrqNumIndex               = -1;
+       \tstatic constexpr unsigned MessageBuffer_0_15_IrqNumIndex  = 2;
+       \tstatic constexpr unsigned MessageBuffer_16_32_IrqNumIndex = 2;\n\n
    ]]></template>
        
    <intOption name="irqLevel" 
@@ -80,6 +82,33 @@
                Lower numbers represent higher priorities"
       value="7" min="0" max="15" 
    />
+   
+   <template><![CDATA[
+      \t/**
+      \t * Get Controller Host Interface input clock frequency
+      \t *
+      \t * @return Input clock frequency as a uint32_t in Hz
+      \t */
+      \tstatic uint32_t getChiClockFrequency() {
+      \t   return SystemCoreClock;
+      \t}\n\n
+   ]]></template>
+
+   <template><![CDATA[
+      \t/**
+      \t * Get Protocol Engine input clock frequency
+      \t *
+      \t * @return Input clock frequency as a uint32_t in Hz
+      \t */
+      \tstatic uint32_t getPeClockFrequency() {
+      \t   if (can().CTRL1 & CAN_CTRL1_CLKSRC_MASK) {
+      \t      return ScgInfo::getSoscDiv2Frequency();
+      \t   }
+      \t   else {
+      \t      return SystemCoreClock;
+      \t   }
+      \t}\n\n
+   ]]></template>
 
    <template><![CDATA[
        \t//! Default IRQ level\n

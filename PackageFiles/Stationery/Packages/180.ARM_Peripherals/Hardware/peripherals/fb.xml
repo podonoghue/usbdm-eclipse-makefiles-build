@@ -8,21 +8,10 @@
       \t//! Base value for PCR (excluding MUX value)
       \tstatic constexpr uint32_t defaultPcrValue  = 0;\n\n
    ]]></template>
-      
-   <template><![CDATA[
-     \t/** 
-     \t *  Enable clock to peripheral
-     \t */
-     \t__attribute__((always_inline)) static void enableClock() {
-     \t   SIM->$(clockRegister) |= $(clockMask);
-     \t}\n\n
 
-     \t/** 
-     \t *  Disable clock to peripheral
-     \t */
-     \t__attribute__((always_inline)) static void disableClock() {
-     \t   SIM->$(clockRegister) &= ~$(clockMask);
-     \t}\n\n
-   ]]></template>
+      
+   <signals/>
+   
+   <xi:include href="_clockOption.xml"/>
 
 </peripheralPage>

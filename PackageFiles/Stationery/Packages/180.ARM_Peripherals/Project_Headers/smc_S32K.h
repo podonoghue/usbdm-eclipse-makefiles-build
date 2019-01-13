@@ -271,34 +271,8 @@ public:
       smc().STOPCTRL = Info::stopctrl;
    }
    
-   /**
-    * Enable the given power modes.
-    * A mode must be enabled before it can be entered.
-    *
-    * @param[in] smcVeryLowPower        Allows VLPR, VLPW, and VLPS modes
-    * @param[in] smcHighSpeedRun        Allows HSRUN mode (if supported)
-    *
-    * @note This is a write-once-after-reset operation
-    */
-   static ErrorCode enablePowerModes(
-         SmcVeryLowPower         smcVeryLowPower,
-         SmcHighSpeedRun         smcHighSpeedRun) {
-
-      smc().PMPROT = smcVeryLowPower|smcHighSpeedRun;
-      return E_NO_ERROR;
-   }
-
-   /**
-    * Allows the detailed operation in STOP mode to be controlled.
-    *
-    * @param[in] smcPartialStopMode     Controls whether a Partial Stop mode is entered when STOPM=STOP
-    */
-   static void setStopOptions(
-         SmcPartialStopMode      smcPartialStopMode      = SmcPartialStopMode_Normal) {
-
-      smc().STOPCTRL = smcPartialStopMode;
-   }
-
+   $(/SMC/enablePowerModes)
+   $(/SMC/setStopOptions)
    /**
     * Get current power status
     *

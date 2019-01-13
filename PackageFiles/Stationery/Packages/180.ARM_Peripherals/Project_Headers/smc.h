@@ -270,44 +270,8 @@ public:
       smc().STOPCTRL = Info::stopctrl;
    }
    
-   /**
-    * Enable the given power modes.
-    * A mode must be enabled before it can be entered.
-    *
-    * @param[in] smcVeryLowPower        Allows VLPR, VLPW, and VLPS modes
-    * @param[in] smcLowLeakageStop      Allows LLSx modes
-    * @param[in] smcVeryLowLeakageStop  Allows VLLSx modes
-    * @param[in] smcHighSpeedRun        Allows HSRUN mode (if supported)
-    *
-    * @note This is a write-once-after-reset operation
-    */
-   static ErrorCode enablePowerModes(
-         SmcVeryLowPower         smcVeryLowPower,
-         SmcLowLeakageStop       smcLowLeakageStop       = SmcLowLeakageStop_Disabled,
-         SmcVeryLowLeakageStop   smcVeryLowLeakageStop   = SmcVeryLowLeakageStop_Disabled,
-         SmcHighSpeedRun         smcHighSpeedRun         = SmcHighSpeedRun_Disabled ) {
-
-      smc().PMPROT = smcVeryLowPower|smcLowLeakageStop|smcVeryLowLeakageStop|smcHighSpeedRun;
-      return E_NO_ERROR;
-   }
-
-   /**
-    * Allows the detailed operation in STOP mode to be controlled.
-    *
-    * @param[in] smcLowLeakageStopMode  Controls which LLS/VLLS sub-mode to enter if STOPM=LLS/VLLS
-    * @param[in] smcPowerOnReset        Controls whether the POR detect circuit is enabled in VLLS0 mode
-    * @param[in] smcPartialStopMode     Controls whether a Partial Stop mode is entered when STOPM=STOP
-    * @param[in] smcLpoInLowLeakage     Controls whether the 1 kHz LPO clock is enabled in LLS/VLLSx modes (if supported).
-    */
-   static void setStopOptions(
-         SmcLowLeakageStopMode   smcLowLeakageStopMode,
-         SmcPowerOnReset         smcPowerOnReset         = SmcPowerOnReset_Disabled,
-         SmcPartialStopMode      smcPartialStopMode      = SmcPartialStopMode_Normal,
-         SmcLpoInLowLeakage      smcLpoInLowLeakage      = SmcLpoInLowLeakage_Disabled) {
-
-      smc().STOPCTRL = smcPartialStopMode|smcPowerOnReset|smcLowLeakageStopMode|smcLpoInLowLeakage;
-   }
-
+   $(/SMC/enablePowerModes)
+   $(/SMC/setStopOptions)
    /**
     * Get current power status
     *

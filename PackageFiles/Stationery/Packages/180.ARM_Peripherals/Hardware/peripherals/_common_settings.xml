@@ -21,37 +21,37 @@
    
    #if defined(PCC_PCC_PORTA_CGC_MASK)
    /** Port information for PORTA*/
-   constexpr PortInfo  __attribute__((unused)) PortAInfo {PORTA_BasePtr, (uint32_t)&PCC->PCC_PORTA, PORTA_IRQn};
+   constexpr PortInfo  __attribute__((unused)) PortAInfo {PORTA_BasePtr, (uint32_t)(PCC_BasePtr+offsetof(PCC_Type, PCC_PORTA)), PORTA_IRQn};
    #endif\n\n
    
    #if defined(PCC_PCC_PORTB_CGC_MASK)
    /** Port information for PORTB*/
-   constexpr PortInfo  __attribute__((unused)) PortBInfo {PORTB_BasePtr, (uint32_t)&PCC->PCC_PORTB, PORTB_IRQn};
+   constexpr PortInfo  __attribute__((unused)) PortBInfo {PORTB_BasePtr, (uint32_t)(PCC_BasePtr+offsetof(PCC_Type, PCC_PORTB)), PORTB_IRQn};
    #endif\n\n
    
    #if defined(PCC_PCC_PORTC_CGC_MASK)
    /** Port information for PORTC*/
-   constexpr PortInfo  __attribute__((unused)) PortCInfo {PORTC_BasePtr, (uint32_t)&PCC->PCC_PORTC, PORTC_IRQn};
+   constexpr PortInfo  __attribute__((unused)) PortCInfo {PORTC_BasePtr, (uint32_t)(PCC_BasePtr+offsetof(PCC_Type, PCC_PORTC)), PORTC_IRQn};
    #endif\n\n
    
    #if defined(PCC_PCC_PORTD_CGC_MASK)
    /** Port information for PORTD*/
-   constexpr PortInfo  __attribute__((unused)) PortDInfo {PORTD_BasePtr, (uint32_t)&PCC->PCC_PORTD, PORTD_IRQn};
+   constexpr PortInfo  __attribute__((unused)) PortDInfo {PORTD_BasePtr, (uint32_t)(PCC_BasePtr+offsetof(PCC_Type, PCC_PORTD)), PORTD_IRQn};
    #endif\n\n
    
    #if defined(PCC_PCC_PORTE_CGC_MASK)
    /** Port information for PORTE*/
-   constexpr PortInfo  __attribute__((unused)) PortEInfo {PORTE_BasePtr, (uint32_t)&PCC->PCC_PORTE, PORTE_IRQn};
+   constexpr PortInfo  __attribute__((unused)) PortEInfo {PORTE_BasePtr, (uint32_t)(PCC_BasePtr+offsetof(PCC_Type, PCC_PORTE)), PORTE_IRQn};
    #endif\n\n
    
    #if defined(PCC_PCC_PORTF_CGC_MASK)
    /** Port information for PORTF*/
-   constexpr PortInfo  __attribute__((unused)) PortFInfo {PORTF_BasePtr, (uint32_t)&PCC->PCC_PORTF, PORTF_IRQn};
+   constexpr PortInfo  __attribute__((unused)) PortFInfo {PORTF_BasePtr, (uint32_t)(PCC_BasePtr+offsetof(PCC_Type, PCC_PORTF)), PORTF_IRQn};
    #endif\n\n
    
    #if defined(PCC_PCC_PORTG_CGC_MASK)
    /** Port information for PORTG*/
-   constexpr PortInfo  __attribute__((unused)) PortGInfo {PORTG_BasePtr, (uint32_t)&PCC->PCC_PORTG, PORTG_IRQn};
+   constexpr PortInfo  __attribute__((unused)) PortGInfo {PORTG_BasePtr, (uint32_t)(PCC_BasePtr+offsetof(PCC_Type, PCC_PORTG)), PORTG_IRQn};
    #endif\n\n
    
    #else // defined(PCC)

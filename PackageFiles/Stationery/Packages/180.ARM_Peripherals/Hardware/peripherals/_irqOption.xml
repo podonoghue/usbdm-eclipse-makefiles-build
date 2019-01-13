@@ -20,7 +20,7 @@
    <!-- Template is added to class within pin_mapping.h -->
    <template><![CDATA[
        \t//! Class based callback handler has been installed in vector table\n
-       \tstatic constexpr bool irqHandlerInstalled = ($(irqHandlingMethod) == 1);\n\n
+       \tstatic constexpr bool irqHandlerInstalled = $(irqHandlingMethod);\n\n
    ]]></template>
        
    <intOption name="irqLevel" 

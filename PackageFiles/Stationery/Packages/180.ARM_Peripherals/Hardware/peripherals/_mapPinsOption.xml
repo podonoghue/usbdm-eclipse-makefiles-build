@@ -18,5 +18,4 @@
       \tstatic constexpr bool mapPinsOnEnable = $(mapPinsOnEnable);\n\n
    ]]></template>
 
-      
 </fragment>
