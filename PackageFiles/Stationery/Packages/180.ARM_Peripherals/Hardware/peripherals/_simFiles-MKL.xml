@@ -7,6 +7,7 @@
    <!-- Convenient location for common files -->
    <projectActionList id = "sim_common_files" >
       <copy source="Project_Headers/hardware.h"                 target="Project_Headers/hardware.h"             overwrite="true"  derived="true" />
+      <copy source="Project_Headers/error.h"                    target="Project_Headers/error.h"                overwrite="true"  derived="true" />
       <copy source="Project_Headers/system.h"                   target="Project_Headers/system.h"               overwrite="true"  derived="true" />
       <copy source="Project_Headers/USBDM_Documentation_MKL.h"  target="Project_Headers/USBDM_Documentation.h"  overwrite="true"  derived="true" />
       <copy source="Sources/usbdmError.cpp"                     target="Sources/usbdmError.cpp"                 overwrite="true"  derived="true" />

@@ -27,41 +27,222 @@
  */
 
 #pragma pack(push, 1)
-//! Device Descriptor 
+
+//! Endpoint direction masks
+enum {
+//   EP_OUT =0x00, //!< Endpoint is OUT (host -> node)
+//   EP_IN  =0x80  //!< Endpoint is IN (node -> host)
+};
+
+/**
+ * USB Status Codes
+ */
+enum UsbStatus {
+   UsbStatus_ATTACHED     = 0x00,
+   UsbStatus_POWERED      = 0x01,
+   UsbStatus_DEFAULT      = 0x02,
+   UsbStatus_ADDRESSED    = 0x03,
+   UsbStatus_CONFIGURED   = 0x04,
+   UsbStatus_SUSPENDED    = 0x80,
+};
+
+/**
+ * USB Recipient Type (bmRequestType.recipient)
+ */
+enum UsbRequestRecipient {
+   UsbRequestRecipient_DEVICE     = 0,
+   UsbRequestRecipient_INTERFACE  = 1,
+   UsbRequestRecipient_ENDPOINT   = 2,
+   UsbRequestRecipient_OTHER      = 3,
+};
+
+/**
+ * USB Request Type (bmRequestType.type)
+ */
+enum UsbRequestType {
+   UsbRequestType_STANDARD    = 0,
+   UsbRequestType_CLASS       = 1,
+   UsbRequestType_VENDOR      = 2,
+   UsbRequestType_OTHER       = 3,
+};
+
+/**
+ * USB Request Direction (bmRequestType.direction)
+ */
+enum UsbRequestDirection {
+   UsbRequestDirection_OUT    = 0,
+   UsbRequestDirection_IN     = 1,
+};
+
+/**
+ * Extract Recipient from bmRequestType
+ *
+ * @param  bmRequestType
+ *
+ * @return UsbRequestRecipient
+ */
+constexpr inline UsbRequestRecipient REQ_RECIPIENT(uint8_t bmRequestType) {
+   return (UsbRequestRecipient)((bmRequestType>>0) & 0b11111);
+}
+
+/**
+ * Extract Request type from bmRequestType
+ *
+ * @param  bmRequestType
+ *
+ * @return UsbRequestType
+ */
+constexpr inline UsbRequestType REQ_TYPE(uint8_t bmRequestType) {
+   return (UsbRequestType)((bmRequestType>>5)&0b11);
+}
+
+/**
+ * Extract Request direction from bmRequestType
+ *
+ * @param  bmRequestType
+ *
+ * @return UsbRequestDirection
+ */
+constexpr inline UsbRequestDirection REQ_DIRECTION(uint8_t bmRequestType) {
+   return (UsbRequestDirection)((bmRequestType>>7)&0b1);
+}
+
+/**
+ * Create bmRequestType from recipient, type and direction
+ *
+ * @param recipient
+ * @param type
+ * @param direction
+ *
+ * @return
+ */
+constexpr uint8_t REQUEST_TYPE(
+      UsbRequestDirection  usbRequestDirection,
+      UsbRequestType       usbRequestType,
+      UsbRequestRecipient  usbRequestRecipient
+      ) {
+   return ((usbRequestDirection<<7)|(usbRequestType<<2)|(usbRequestRecipient<<0));
+}
+
+/*----------------------------------------------------------------------------
+ ** USB Standard Device Request Codes (bRequest)
+ */
+enum UsbRequestCodes {
+   GET_STATUS        =  0x00,
+   CLEAR_FEATURE     =  0x01,
+   SET_FEATURE       =  0x03,
+   SET_ADDRESS       =  0x05,
+   GET_DESCRIPTOR    =  0x06,
+   SET_DESCRIPTOR    =  0x07,
+   GET_CONFIGURATION =  0x08,
+   SET_CONFIGURATION =  0x09,
+   GET_INTERFACE     =  0x0a,
+   SET_INTERFACE     =  0x0b,
+   SYNCH_FRAME       =  0x0c,
+
+   /*----------------------------------------------------------------------------
+    ** CDC Class requests
+    */
+   SEND_ENCAPSULATED_COMMAND = 0x00,
+   GET_ENCAPSULATED_COMMAND  = 0x01,
+   SET_LINE_CODING           = 0x20,
+   GET_LINE_CODING           = 0x21,
+   SET_CONTROL_LINE_STATE    = 0x22,
+   SEND_BREAK                = 0x23,
+
+   /*----------------------------------------------------------------------------
+    ** MS special
+    */
+   GET_MS_FEATURE_DESCRIPTOR = 0x30,
+};
+
+/**
+ * Structure of Setup Packet sent during SETUP Stage of Standard Device Requests
+ */
+typedef struct {
+   union {
+      uint8_t      bmRequestType;       //!<  Characteristics (Direction,Type,Recipient)
+      struct {
+         UsbRequestRecipient  recipient:5;  //!< Device, Interface ..
+         UsbRequestType       type:2;       //!< Standard, CLoass, Vendor..
+         UsbRequestDirection  direction:1;  //!< In, Out
+      };
+   };
+   UsbRequestCodes  bRequest:8;          //!<  Standard Request Code
+   uint16_le        wValue;              //!<  Value Field
+   uint16_le        wIndex;              //!<  Index or Offset Field
+   uint16_le        wLength;             //!<  Number of bytes to transfer (Data Stage)
+} SetupPacket;
+
+/*----------------------------------------------------------------------------
+ ** Descriptor Types
+ */
+enum DescriptorTypes {
+   DT_DEVICE                  =   1,
+   DT_CONFIGURATION           =   2,
+   DT_STRING                  =   3,
+   DT_INTERFACE               =   4,
+   DT_ENDPOINT                =   5,
+   DT_DEVICEQUALIFIER         =   6,
+   DT_OTHERSPEEDCONFIGURATION =   7,
+   DT_INTERFACEPOWER          =   8,
+   DT_INTERFACEASSOCIATION    = 0xB,
+};
+
+/*----------------------------------------------------------------------------
+ ** USB Tokens
+ */
+enum UsbPids {
+   SOFToken     = 0x5, //!< Start of Frame token
+   SETUPToken   = 0xD, //!< Setup token
+   OUTToken     = 0x1, //!< Out token
+   INToken      = 0x9, //!< In token
+   DATA0Token   = 0x3, //!< Data 0
+   DATA1Token   = 0xB, //!< Data 1
+   DATA2Token   = 0x7, //!< Data 2
+   MDATAToken   = 0xF, //!< M data
+   ACKToken     = 0x2, //!< Acknowledge
+   NAKToken     = 0xA, //!< Negative Acknowledge
+   NYETToken    = 0x6, //!< No Response Yet
+   STALLToken   = 0xE, //!< Stall
+   PREToken     = 0xC, //!< Preamble
+};
+
+//! Device Descriptor
 typedef struct {
    uint8_t           bLength;             //!<  Size of this Descriptor in Bytes
    uint8_t           bDescriptorType;     //!<  Descriptor Type (=1)
    uint16_t          bcdUSB;              //!<  USB Spec Release Number in BCD
    uint8_t           bDeviceClass;        //!<  Device Class Code
-   uint8_t           bDeviceSubClass;     //!<  Device Subclass Code      
+   uint8_t           bDeviceSubClass;     //!<  Device Subclass Code
    uint8_t           bDeviceProtocol;     //!<  Device Protocol Code
    uint8_t           bMaxPacketSize0;     //!<  Maximum Packet Size for EP0
-   uint16_t          idVendor;            //!<  Vendor ID 
+   uint16_t          idVendor;            //!<  Vendor ID
    uint16_t          idProduct;           //!<  Product ID
    uint16_t          bcdDevice;           //!<  Device Release Number in BCD
    uint8_t           iManufacturer;       //!<  Index of String Desc for Manufacturer
    uint8_t           iProduct;            //!<  Index of String Desc for Product
    uint8_t           iSerialNumber;       //!<  Index of String Desc for SerNo
    uint8_t           bNumConfigurations;  //!<  Number of possible Configurations
-} DeviceDescriptor;                
+} DeviceDescriptor;
 
 //! USB Configuration Descriptor
 typedef struct {
    uint8_t           bLength;             //!<  Size of this Descriptor in Bytes
    uint8_t           bDescriptorType;     //!<  Descriptor Type (=2)
-   uint16_t          wTotalLength;        //!<  Total Length of Data for this Configuration 
-   uint8_t           bNumInterfaces;      //!<  No of Interfaces supported by this Configuration 
-   uint8_t           bConfigurationValue; //!<  Designator Value for this Configuration 
-   uint8_t           iConfiguration;      //!<  Index of String Desc for this Configuration 
-   uint8_t           bmAttributes;        //!<  Configuration Characteristics 
+   uint16_t          wTotalLength;        //!<  Total Length of Data for this Configuration
+   uint8_t           bNumInterfaces;      //!<  No of Interfaces supported by this Configuration
+   uint8_t           bConfigurationValue; //!<  Designator Value for this Configuration
+   uint8_t           iConfiguration;      //!<  Index of String Desc for this Configuration
+   uint8_t           bmAttributes;        //!<  Configuration Characteristics
    uint8_t           bMaxPower;           //!<  Max. Power Consumption in this Configuration (in 2mA steps)
 } ConfigurationDescriptor;
 
 //! USB Interface Descriptor
 typedef struct {
    uint8_t           bLength;             //!<  Size of this Descriptor in Bytes
-   uint8_t           bDescriptorType;     //!<  Descriptor Type (=4)            
-   uint8_t           bInterfaceNumber;    //!<  Number of this Interface (0..)  
+   uint8_t           bDescriptorType;     //!<  Descriptor Type (=4)
+   uint8_t           bInterfaceNumber;    //!<  Number of this Interface (0..)
    uint8_t           bAlternateSetting;   //!<  Alternative for this Interface (if any)
    uint8_t           bNumEndpoints;       //!<  No of EPs used by this IF (excl. EP0)
    uint8_t           bInterfaceClass;     //!<  Interface Class Code
@@ -79,16 +260,6 @@ typedef struct {
    uint16_t          wMaxPacketSize;      //!<  Max. Endpoint Packet Size
    uint8_t           bInterval;           //!<  Polling Interval (Interrupt) in ms
 } EndpointDescriptor;
-
-//! Structure of Setup Packet sent during SETUP Stage of Standard Device Requests
-//! @note Shuffled fields for MCFJM128 
-typedef struct {
-   uint8_t      bmRequestType;       //!<  Characteristics (Direction,Type,Recipient)
-   uint8_t      bRequest;            //!<  Standard Request Code
-   uint16_le    wValue;              //!<  Value Field
-   uint16_le    wIndex;              //!<  Index or Offset Field
-   uint16_le    wLength;             //!<  Number of bytes to transfer (Data Stage)
-} SetupPacket;
 
 //! Structure of Device Qualifier Descriptor
 typedef struct {
@@ -108,87 +279,6 @@ enum {
    EP_OUT=0x00, //!< Endpoint is OUT (host -> node)
    EP_IN=0x80   //!< Endpoint is IN (node -> host)
 };
-
-/*----------------------------------------------------------------------------
- ** USB Status Codes
- */
-#define US_ATTACHED             0x00
-#define US_POWERED              0x01
-#define US_DEFAULT              0x02
-#define US_ADDRESSED            0x03
-#define US_CONFIGURED           0x04
-#define US_SUSPENDED            0x80
-
-/*----------------------------------------------------------------------------
- ** USB Request Type (bmRequestType)
- */
-#define REQ_DIRECTION         (1<<7)
-#define REQ_OUT               (0<<7)
-#define REQ_IN                (1<<7)
-
-/*----------------------------------------------------------------------------
- ** USB Request Type (bmRequestType)
- */
-#define REQ_TYPE(x)  	      ((3<<5) & (x))
-#define REQ_TYPE_STANDARD      (0<<5)
-#define REQ_TYPE_CLASS         (1<<5)
-#define REQ_TYPE_VENDOR        (2<<5)
-#define REQ_TYPE_OTHER         (3<<5)
-#define IS_VENDOR_REQ(x)       (REQ_TYPE(x) == REQ_TYPE_VENDOR)
-
-/*----------------------------------------------------------------------------
- ** USB Request Type (bmRequestType)
- */
-#define REQ_RECIPIENT(x)  	      ((0x1F<<0) & (x))
-#define REQ_RECIPIENT_DEVICE      (0<<0)
-#define REQ_RECIPIENT_INTERFACE   (1<<0)
-#define REQ_RECIPIENT_ENDPOINT    (2<<0)
-#define REQ_RECIPIENT_OTHER       (3<<0)
-
-/*----------------------------------------------------------------------------
- ** USB Standard Device Request Codes (bRequest)
- */
-#define GET_STATUS              0x00
-#define CLEAR_FEATURE           0x01
-#define SET_FEATURE             0x03
-#define SET_ADDRESS             0x05
-#define GET_DESCRIPTOR          0x06
-#define SET_DESCRIPTOR          0x07
-#define GET_CONFIGURATION       0x08
-#define SET_CONFIGURATION       0x09
-#define GET_INTERFACE           0x0a
-#define SET_INTERFACE           0x0b
-#define SYNCH_FRAME             0x0c
-
-/*----------------------------------------------------------------------------
- ** Descriptor Types
- */
-#define DT_DEVICE                     1
-#define DT_CONFIGURATION              2
-#define DT_STRING                     3
-#define DT_INTERFACE                  4
-#define DT_ENDPOINT                   5
-#define DT_DEVICEQUALIFIER            6
-#define DT_OTHERSPEEDCONFIGURATION    7
-#define DT_INTERFACEPOWER             8
-#define DT_INTERFACEASSOCIATION     0xB
-
-/*----------------------------------------------------------------------------
- ** USB Tokens
- */
-#define SOFToken     (0x5) //!< Start of Frame token
-#define SETUPToken   (0xD) //!< Setup token
-#define OUTToken     (0x1) //!< Out token
-#define INToken      (0x9) //!< In token
-#define DATA0Token   (0x3) //!< Data 0
-#define DATA1Token   (0xB) //!< Data 1
-#define DATA2Token   (0x7) //!< Data 2
-#define MDATAToken   (0xF) //!< M data
-#define ACKToken     (0x2) //!< Acknowledge
-#define NAKToken     (0xA) //!< Negative Acknowledge
-#define NYETToken    (0x6) //!< No Response Yet
-#define STALLToken   (0xE) //!< Stall
-#define PREToken     (0xC) //!< Preamble
 
 /*----------------------------------------------------------------------------
  ** Feature selector values (for Clear/Set feature)
@@ -281,16 +371,6 @@ typedef struct {
    uint8_t  bSlaveInterface[1];	   //!< Slave interface
 } CDCUnionFunctionalDescriptor;
 
-/*----------------------------------------------------------------------------
- ** CDC Class requests
- */
-#define SEND_ENCAPSULATED_COMMAND  (0x00)
-#define GET_ENCAPSULATED_COMMAND   (0x01)
-#define SET_LINE_CODING            (0x20)
-#define GET_LINE_CODING            (0x21)
-#define SET_CONTROL_LINE_STATE     (0x22)
-#define SEND_BREAK                 (0x23)
-
 //! USB CDC Notification
 typedef struct {
    uint8_t  bmRequestType;	//!< Request type
@@ -326,14 +406,45 @@ struct MS_CompatibleIdFeatureDescriptor {
 struct MS_PropertiesFeatureDescriptor;
 
 // Data packet odd/even indicator
-typedef bool Data0_1;
-constexpr Data0_1 DATA0=false; //!< DATA0 indicator
-constexpr Data0_1 DATA1=true;  //!< DATA1 indicator
+enum DataToggle : bool {
+   DataToggle_0=false, //!< DATA0 indicator
+   DataToggle_1=true,  //!< DATA1 indicator
+};
+
+/**
+ * Toggle DATA0/1 value
+ *
+ * @param data0_1
+ *
+ * @return Toggled value
+ */
+inline DataToggle __attribute__((always_inline)) operator!(DataToggle volatile const& data0_1) {
+    return data0_1==DataToggle::DataToggle_0?DataToggle::DataToggle_1:DataToggle::DataToggle_0;
+}
 
 // Data packet odd/even indicator
-typedef bool EvenOdd;
-constexpr EvenOdd EVEN=false; //!< Even Buffer
-constexpr EvenOdd ODD =true;  //!< Odd Buffer
+enum BufferToggle : bool {
+   BufferToggle_Even = false, //!< Even Buffer
+   BufferToggle_Odd  = true,  //!< Odd Buffer
+};
+
+/**
+ * Toggle BufferToggle value
+ *
+ * @param evenOdd
+ *
+ * @return Toggled value
+ */
+constexpr BufferToggle __attribute__((always_inline)) operator!(BufferToggle const& evenOdd) {
+   return evenOdd==BufferToggle::BufferToggle_Even?BufferToggle::BufferToggle_Odd:BufferToggle::BufferToggle_Even;
+}
+
+// BDT ownership indicator
+enum BdtOwner : bool {
+   BdtOwner_MCU = false, //!< BDT available for modification bye MCU
+   BdtOwner_SIE = true,  //!< BDT being used by SIE
+};
+
 
 /**
  * Structure representing a BDT entry in USB controller
@@ -342,49 +453,71 @@ constexpr EvenOdd ODD =true;  //!< Odd Buffer
 // Little-endian on Kinetis
 struct BdtEntry {
    union {
-      volatile uint8_t bits:8;   // Access a bit masks
-      volatile struct {          // BDT setup access
-         uint8_t :2;
-         uint8_t bdt_stall:1;
-         uint8_t dts:1;
-         uint8_t ninc:1;
-         uint8_t keep:1;
-         uint8_t data0_1:1;
-         uint8_t own:1;
+      volatile uint8_t raw:8;    //!< Access as bit masks
+      volatile struct {          //!< BDT setup access
+         uint8_t     :2;
+         bool        bdt_stall:1;  //!< Stall End point
+         bool        dts:1;        //!< Enable Data toggle
+         bool        ninc:1;       //!< Disable DMA address increment
+         bool        keep:1;       //!< BDT is 'kept' by SIE, used for FIFO w/o MCU intervention
+         uint8_t     :2;
       } setup;
-      volatile struct {          // BDT result access
-         uint8_t :2;
-         uint8_t tok_pid:4;
-         uint8_t data0_1:1;
-         uint8_t own:1;
+      volatile struct {          //!< BDT result access
+         uint8_t     :2;
+         UsbPids     tok_pid:4;  //!< Token PID is written back by SIE
+         uint8_t     :2;
       } result;
-   } u;
+      volatile struct {          //!< BDT common access
+         uint8_t     :6;
+         DataToggle  data0_1:1;  //!< Data 0/1 toggle
+         BdtOwner    own:1;      //!< Ownership of the BDT.  MCU only modifies BDT if owned.
+      };
+   };
    volatile uint8_t  :8;
-   volatile uint16_t bc;          // Byte count
-   volatile uint32_t addr;        // Buffer address
+   volatile uint16_t bc;          //!< Byte count for transaction
+   volatile uint32_t addr;        //!< Buffer address for transaction
+
+   constexpr BdtEntry() :
+      raw(0), bc(0), addr(0) {};
+
+   constexpr BdtEntry(uint8_t value, uint16_t byteCount, uint32_t address) :
+      raw(value), bc(byteCount), addr(address) {};
+
+   void setByteCount(uint16_t byteCount) {
+      bc = byteCount;
+   }
+
+   void setAddress(uint32_t address) {
+      addr = address;
+   }
+
+   void setControl(uint8_t value) {
+      raw = value;
+   }
 };
 #else
+#error FIX ME!
 // Big-endian (Used on Coldfire)
 struct BdtEntry {
    union {
       struct {
-         uint8_t rsvd:2;
-         uint8_t bdt_stall:1;
-         uint8_t dts:1;
-         uint8_t ninc:1;
-         uint8_t keep:1;
-         uint8_t data0_1:1;
-         uint8_t own:1;
+         uint8_t     :2;
+         bool        bdt_stall:1;
+         bool        dts:1;
+         bool        ninc:1;
+         bool        keep:1;
+         DataToggle  data0_1:1;
+         BdtOwner    own:1;
       } setup;           // BDT setup access
       struct {
-         uint8_t rsvd:2;
-         uint8_t tok_pid:4;
-         uint8_t data0_1:1;
-         uint8_t own:1;
+         uint8_t     :2;
+         uint8_t     tok_pid:4;
+         DataToggle  data0_1:1;
+         BdtOwner    own:1;
       } result;          // BDT result access
-      uint8_t bits;      // Access as bit masks
-   } u;
-   uint8_t  rsvd2:8;
+      uint8_t raw;       // Access as bit masks
+   };
+   uint8_t  :8;
    uint16_t bc:16;       // Byte count
    uint32_t addr;        // Buffer address
 };
@@ -441,6 +574,21 @@ struct CdcLineState {
          uint8_t overrun:1;
       };
    };
+};
+
+/**
+ * Structure representing USB STAT register value
+ */
+union UsbStat {
+      uint8_t raw;
+      struct {
+         unsigned      :2;
+         BufferToggle  odd:1;
+         bool          tx:1;
+         unsigned      endp:4;
+      };
+   constexpr UsbStat(uint8_t status) : raw(status) {
+   }
 };
 
 #pragma pack(pop)

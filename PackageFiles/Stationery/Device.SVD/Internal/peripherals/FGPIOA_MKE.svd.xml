@@ -96,7 +96,6 @@ Controls the level driven on pin provided it is configured as GPIO output</descr
             </register>
             <register>
                <name>PDORA</name>
-               <?hide?>
                <description>Port Data Output Register\n
 Controls the level driven on pin provided it is configured as GPIO output</description>
                <addressOffset>0x0</addressOffset>
@@ -162,7 +161,6 @@ Writing 1 to a bit sets the corresponding bit in the PDOR</description>
             </register>
             <register>
                <name>PSORA</name>
-               <?hide?>
                <description>Port Set Output Register\n
 Writing 1 to a bit sets the corresponding bit in the PDOR</description>
                <addressOffset>0x4</addressOffset>
@@ -228,7 +226,6 @@ Writing 1 to a bit clears the corresponding bit in the PDOR</description>
             </register>
             <register>
                <name>PCORA</name>
-               <?hide?>
                <description>Port Clear Output Register\n
 Writing 1 to a bit clears the corresponding bit in the PDOR</description>
                <addressOffset>0x8</addressOffset>
@@ -294,7 +291,6 @@ Writing 1 to a bit toggles the corresponding bit in the PDOR</description>
             </register>
             <register>
                <name>PTORA</name>
-               <?hide?>
                <description>Port Toggle Output Register\n
 Writing 1 to a bit toggles the corresponding bit in the PDOR</description>
                <addressOffset>0xC</addressOffset>
@@ -365,7 +361,6 @@ This register directly reflects the value on the port pins if configured as GPIO
             </register>
             <register>
                <name>PDIRA</name>
-               <?hide?>
                <description>Port Data Input Register\n
 This register directly reflects the value on the port pins if configured as GPIO</description>
                <addressOffset>0x10</addressOffset>
@@ -435,7 +430,6 @@ Controls the direction of port pins</description>
             </register>
             <register>
                <name>PDDRA</name>
-               <?hide?>
                <description>Port Data Direction Register\n
 Controls the direction of port pins</description>
                <addressOffset>0x14</addressOffset>
@@ -507,7 +501,6 @@ Disables a pin as General Purpose Input. Corresponding Pin Data Input Register b
             </register>
             <register>
                <name>PIDRA</name>
-               <?hide?>
                <description>Port Input Disable Register\n
 Used to disable the pin input function</description>
                <addressOffset>0x18</addressOffset>

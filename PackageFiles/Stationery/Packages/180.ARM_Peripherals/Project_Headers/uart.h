@@ -19,12 +19,12 @@
  */
 #include <stdint.h>
 #include "derivative.h"
-#include "hardware.h"
-#include "formatted_io.h"
-#include "queue.h"
 #ifdef __CMSIS_RTOS
 #include "cmsis.h"
 #endif
+#include "hardware.h"
+#include "formatted_io.h"
+#include "queue.h"
 
 namespace USBDM {
 
@@ -395,7 +395,7 @@ public:
       // Obtain mutex
       osStatus status = mutex().wait(milliseconds);
       if (status != osOK) {
-         setCmsisErrorCode(status);
+         CMSIS::setCmsisErrorCode(status);
       }
       return status;
    }
@@ -413,7 +413,7 @@ public:
       // Release mutex
       osStatus status = mutex().release();
       if (status != osOK) {
-         setCmsisErrorCode(status);
+         CMSIS::setCmsisErrorCode(status);
       }
       return status;
    }
@@ -448,6 +448,7 @@ public:
       }
 
       uart.C2 = UART_C2_TE(1)|UART_C2_RE(1);
+      setNvicInterruptPriority(Info::irqLevel);
    }
 
    /**
@@ -541,6 +542,19 @@ public:
          callback = unhandledCallback;
       }
       lonCallback = callback;
+   }
+
+   /**
+    * Set interrupt priority in NVIC
+    */
+   static void setNvicInterruptPriority(uint32_t nvicPriority) {
+      NVIC_SetPriority(Info::irqNums[0], nvicPriority);
+      if (Info::irqCount>1) {
+         NVIC_SetPriority(Info::irqNums[1], nvicPriority);
+      }
+      if (Info::irqCount>2) {
+         NVIC_SetPriority(Info::irqNums[2], nvicPriority);
+      }
    }
 
    /**
@@ -733,14 +747,6 @@ public:
       Uart::enableInterrupt(UartInterrupt_TxHoldingEmpty, false);
    }
 
-protected:
-
-   /** Lock variable for writes */
-   static volatile uint32_t fWriteLock;
-
-   /** Lock variable for reads */
-   static volatile uint32_t fReadLock;
-
    /**
     * Queue for Buffered reception (if used)
     */
@@ -749,6 +755,14 @@ protected:
     * Queue for Buffered transmission (if used)
     */
    static Queue<char, txSize> txQueue;
+
+protected:
+
+   /** Lock variable for writes */
+   static volatile uint32_t fWriteLock;
+
+   /** Lock variable for reads */
+   static volatile uint32_t fReadLock;
 
    /**
     * Writes a character (blocking on queue full)

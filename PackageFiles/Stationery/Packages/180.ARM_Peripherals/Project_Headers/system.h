@@ -4,8 +4,8 @@
  * @version  V4.11.1.70
  * @date     13 Nov 2012
  */
-#ifndef SYSTEM_H_
-#define SYSTEM_H_
+#ifndef INCLUDE_USBDM_SYSTEM_H_
+#define INCLUDE_USBDM_SYSTEM_H_
 
 #include <stdint.h>
 
@@ -155,7 +155,7 @@ namespace USBDM {
 class CriticalSection {
 private:
    /** Used to record interrupt state on entry */
-   volatile uint32_t cpuSR=0;
+   volatile uint32_t cpuSR;
 
 public:
    /**
@@ -164,7 +164,7 @@ public:
     * Disables interrupts for a critical section
     * This would be from the declaration of the object until end of enclosing block.
     */
-   CriticalSection() {
+   CriticalSection() __attribute__((always_inline)) {
       __asm__ volatile (
             "  MRS   r0, PRIMASK       \n"   // Copy flags
             // It may be possible for a ISR to run here but it
@@ -180,7 +180,7 @@ public:
     * Enables interrupts IFF previously disabled by this object
     * This would be done implicitly by exiting the enclosing block.
     */
-   ~CriticalSection() {
+   inline ~CriticalSection() __attribute__((always_inline)) {
       __asm__ volatile (
             "  LDR r0, %[input]     \n"  // Retrieve original flags
             "  MSR  PRIMASK,r0;     \n"  // Restore
@@ -196,4 +196,4 @@ public:
 }
 #endif
 
-#endif /* SYSTEM_H_ */
+#endif /* INCLUDE_USBDM_SYSTEM_H_ */

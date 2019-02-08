@@ -1,9 +1,8 @@
 /**
- * @file    console.h
+ * @file    console.h (100.ARM_DeviceOptions/Project_Headers/console.h)
  * @brief   Basic UART routines for console
  * @date    13 June 2015
  */
-#include <derivative.h>
 
  /*
  * *****************************
@@ -14,8 +13,9 @@
  * Any manual changes will be lost.
  */
 
-#ifndef CONSOLE_H_
-#define CONSOLE_H_
+#ifndef INCLUDE_USBDM_CONSOLE_H_
+#define INCLUDE_USBDM_CONSOLE_H_
+#include <derivative.h>
 
 #ifdef __cplusplus
 extern "C" {
@@ -32,13 +32,13 @@ void console_initialise();
 /**
  * Set Console baud rate
  *
- * @param baudRate - the baud rate to use
+ * @param[in]  baudRate - the baud rate to use
  */
 void console_setBaudRate(int baudRate);
 /**
  * Transmits a single character over the Console (blocking)
  *
- * @param ch - character to send
+ * @param[in]  ch - character to send
  */
 void console_txChar(int ch);
 /**
@@ -51,4 +51,4 @@ int  console_rxChar(void);
 #ifdef __cplusplus
 }
 #endif
-#endif /* CONSOLE_H_ */
+#endif /* INCLUDE_USBDM_CONSOLE_H_ */

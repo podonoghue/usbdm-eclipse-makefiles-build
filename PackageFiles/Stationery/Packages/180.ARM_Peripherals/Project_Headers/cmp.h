@@ -441,7 +441,7 @@ public:
 
       // Initialise hardware
       cmp().CR1   = CmpMode_Enabled|cmpPower|cmpPolarity;
-      cmp().CR0   = CmpFilterSamples_None|cmpHysteresis;
+      cmp().CR0   = CMP_CR0_FILTER_CNT(0)|cmpHysteresis;
       cmp().FPR   = 0;
       cmp().SCR   = CMP_SCR_DMAEN(0)|CMP_SCR_IER(0)|CMP_SCR_IEF(0);
       cmp().DACCR = (CMP_DACCR_VOSEL_MASK>>1)&CMP_DACCR_VOSEL_MASK;
@@ -470,8 +470,8 @@ public:
     * 2a/b Continuous                          1      0      0      0              0     COUT == COUTA
     */
    static void setInputContinous() {
-      cmp().CR0 = (cmp().CR0&~CMP_CR0_FILTER_CNT_MASK)|CmpFilterSamples_None;
-      cmp().CR1 = (cmp().CR1&~(CMP_CR1_SE_MASK|CMP_CR1_WE_MASK))|CmpFilterClockSource_internal|CmpWindow_Disabled;
+      cmp().CR0 = (cmp().CR0&~CMP_CR0_FILTER_CNT_MASK)|CMP_CR0_FILTER_CNT(0);
+      cmp().CR1 = (cmp().CR1&~(CMP_CR1_SE_MASK|CMP_CR1_WE_MASK))|CmpFilterClockSource_Internal|CmpWindow_Disabled;
       cmp().FPR = 0;
    }
 
@@ -495,7 +495,7 @@ public:
          int                   cmpFilterSamplePeriod=1
          ) {
       usbdm_assert((cmpFilterClockSource == CmpFilterClockSource_External) || (cmpFilterSamplePeriod>=1), "Illegal parameters");
-      cmp().CR0 = (cmp().CR0&~CMP_CR0_FILTER_CNT_MASK)|CmpFilterSamples_1;
+      cmp().CR0 = (cmp().CR0&~CMP_CR0_FILTER_CNT_MASK)|CMP_CR0_FILTER_CNT(1);
       cmp().CR1 = (cmp().CR1&~(CMP_CR1_SE_MASK|CMP_CR1_WE_MASK))|cmpFilterClockSource|CmpWindow_Disabled;
       cmp().FPR = cmpFilterSamplePeriod;
    }
@@ -540,7 +540,7 @@ public:
     */
    static void setInputWindowed() {
       cmp().CR0 = (cmp().CR0&~CMP_CR0_FILTER_CNT_MASK)|0;
-      cmp().CR1 = (cmp().CR1&~(CMP_CR1_SE_MASK|CMP_CR1_WE_MASK))|CmpFilterClockSource_internal|CmpWindow_Enabled;
+      cmp().CR1 = (cmp().CR1&~(CMP_CR1_SE_MASK|CMP_CR1_WE_MASK))|CmpFilterClockSource_Internal|CmpWindow_Enabled;
       cmp().FPR = 0;
    }
 
@@ -557,8 +557,8 @@ public:
          int  cmpFilterSamplePeriod=1
          ) {
       usbdm_assert(cmpFilterSamplePeriod>=1, "Illegal parameters");
-      cmp().CR0 = (cmp().CR0&~CMP_CR0_FILTER_CNT_MASK)|CmpFilterSamples_1;
-      cmp().CR1 = (cmp().CR1&~(CMP_CR1_SE_MASK|CMP_CR1_WE_MASK))|CmpFilterClockSource_internal|CmpWindow_Enabled;
+      cmp().CR0 = (cmp().CR0&~CMP_CR0_FILTER_CNT_MASK)|CMP_CR0_FILTER_CNT(1);
+      cmp().CR1 = (cmp().CR1&~(CMP_CR1_SE_MASK|CMP_CR1_WE_MASK))|CmpFilterClockSource_Internal|CmpWindow_Enabled;
       cmp().FPR = cmpFilterSamplePeriod;
    }
 
@@ -579,7 +579,7 @@ public:
          ) {
       usbdm_assert(cmpFilterSamplePeriod>=1, "Illegal parameters");
       cmp().CR0 = (cmp().CR0&~CMP_CR0_FILTER_CNT_MASK)|cmpFilterSamples;
-      cmp().CR1 = (cmp().CR1&~(CMP_CR1_SE_MASK|CMP_CR1_WE_MASK))|CmpFilterClockSource_internal|CmpWindow_Enabled;
+      cmp().CR1 = (cmp().CR1&~(CMP_CR1_SE_MASK|CMP_CR1_WE_MASK))|CmpFilterClockSource_Internal|CmpWindow_Enabled;
       cmp().FPR = cmpFilterSamplePeriod;
    }
 

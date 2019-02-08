@@ -84,9 +84,9 @@ const MS_PropertiesFeatureDescriptor msPropertiesFeatureDescriptor = {
       ),
       /* uint32_t ldataType0;       */ nativeToLe32(7UL), // 7 == REG_MULTI_SZ
       /* uint16_t wNameLength0;     */ nativeToLe16(sizeof(msPropertiesFeatureDescriptor.bName0)),
-      /* char16_t  bName0[42];       */ MS_DEVICE_INTERFACE_GUIDs,
+      /* char16_t  bName0[42];      */ MS_DEVICE_INTERFACE_GUIDs,
       /* uint32_t wPropertyLength0; */ nativeToLe32(sizeof(msPropertiesFeatureDescriptor.bData0)),
-      /* char16_t  bData0[78];       */ MS_DEVICE_GUID,
+      /* char16_t  bData0[78];      */ MS_DEVICE_GUID,
       /*---------------------- Section 2 -----------------------------*/
       /* uint32_t lPropertySize1;   */ nativeToLe32(
             sizeof(msPropertiesFeatureDescriptor.lPropertySize1)+
@@ -108,7 +108,7 @@ const MS_PropertiesFeatureDescriptor msPropertiesFeatureDescriptor = {
 /**
  * Get name of USB token
  *
- * @param  token USB token
+ * @param[in]  token USB token
  *
  * @return Pointer to static string
  */
@@ -139,30 +139,9 @@ const char *UsbBase::getTokenName(unsigned token) {
 }
 
 /**
- * Get name of USB state
- *
- * @param  state USB state
- *
- * @return Pointer to static string
- */
-const char *UsbBase::getStateName(EndpointState state){
-   switch (state) {
-      default         : return "Unknown";
-      case EPIdle     : return "EPIdle";
-      case EPDataIn   : return "EPDataIn";
-      case EPDataOut  : return "EPDataOut,";
-      case EPStatusIn : return "EPStatusIn";
-      case EPStatusOut: return "EPStatusOut";
-      case EPThrottle : return "EPThrottle";
-      case EPStall    : return "EPStall";
-      case EPComplete : return "EPComplete";
-   }
-}
-
-/**
  * Get name of USB request
  *
- * @param  reqType Request type
+ * @param[in]  reqType Request type
  *
  * @return Pointer to static string
  */
@@ -195,25 +174,25 @@ const char *UsbBase::getRequestName(uint8_t reqType){
 /**
  * Report contents of BDT
  *
- * @param name    Descriptive name to use
- * @param bdt     BDT to report
+ * @param[in] name    Descriptive name to use
+ * @param[in] bdt     BDT to report
  */
 void UsbBase::reportBdt(const char *name, BdtEntry *bdt) {
    (void)name;
    (void)bdt;
-   if (bdt->u.setup.own) {
+   if (bdt->own) {
       console.write(name).
             write(" addr=0x").write(bdt->addr,Radix_16).
             write(", bc=").write(bdt->bc).
-            write(", ").write(bdt->u.setup.data0_1?"DATA1":"DATA0").
-            write(", ").write(bdt->u.setup.bdt_stall?"STALL":"OK").
+            write(", ").write(bdt->data0_1?"DATA1":"DATA0").
+            write(", ").write(bdt->setup.bdt_stall?"STALL":"OK").
             writeln("USB");
    }
    else {
       console.write(name).
             write(" addr=0x").write(bdt->addr,Radix_16).
             write(", bc=").write(bdt->bc).
-            write(", ").write(getTokenName(bdt->u.result.tok_pid)).
+            write(", ").write(getTokenName(bdt->result.tok_pid)).
             writeln("PROC");
    }
 }
@@ -221,7 +200,7 @@ void UsbBase::reportBdt(const char *name, BdtEntry *bdt) {
 /**
  * Report line code structure values
  *
- * @param lineCodingStructure
+ * @param[in] lineCodingStructure
  */
 void reportLineCoding(const LineCodingStructure *lineCodingStructure) {
    (void)lineCodingStructure;
@@ -234,11 +213,11 @@ void reportLineCoding(const LineCodingStructure *lineCodingStructure) {
 /**
  * Format SETUP packet as string
  *
- * @param p SETUP packet
+ * @param[in]  p SETUP packet
  *
  * @return Pointer to static buffer
  */
-const char *UsbBase::reportSetupPacket(SetupPacket *p) {
+const char *UsbBase::getSetupPacketDescription(SetupPacket *p) {
 #ifdef DEBUG_BUILD
    static char buff[100];
    StringFormatter sf(buff, sizeof(buff));
@@ -259,9 +238,9 @@ const char *UsbBase::reportSetupPacket(SetupPacket *p) {
 /**
  * Report line state value to stdout
  *
- * @param value
+ * @param[in] value
  */
-void UsbBase::reportLineState(uint8_t value) {
+void reportLineState(uint8_t value) {
    (void)value;
    console.
    writeln("Line state: RTS=").write((value&(1<<1))?1:0).
@@ -271,16 +250,16 @@ void UsbBase::reportLineState(uint8_t value) {
 /**
  *  Creates a valid string descriptor in UTF-16-LE from a limited UTF-8 string
  *
- *  @param to       Where to place descriptor
- *  @param from     Zero terminated UTF-8 C string
- *  @param maxSize  Size of destination
+ *  @param[in] to       Where to place descriptor
+ *  @param[in] from     Zero terminated UTF-8 C string
+ *  @param[in] maxSize  Size of destination
  *
  *  @note Only handles UTF-8 characters that fit in a single UTF-16 value.
  */
 void UsbBase::utf8ToStringDescriptor(uint8_t *to, const uint8_t *from, unsigned maxSize) {
    uint8_t *size = to; // 1st byte is where to place descriptor size
 
-   *to++ = 2;         // 1st byte = descriptor size (2 bytes so far)
+   *to++ = 2;         // 1st byte = descriptor size (2 bytes so far including DT_STRING)
    *to++ = DT_STRING; // 2nd byte = descriptor type, DT_STRING;
 
    while (*from != '\0') {

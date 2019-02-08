@@ -913,16 +913,18 @@ os_InRegs osEvent osWait (uint32_t millisec) {
 // ==== Timer Management ====
 
 // Timer definitions
-#define osTimerInvalid  0U
-#define osTimerStopped  1U
-#define osTimerRunning  2U
+typedef enum {
+   osTimerInvalid = 0U,
+   osTimerStopped = 1U,
+   osTimerRunning = 2U,
+} TimerState;
 
 // Timer structures
 
 typedef struct os_timer_cb_ {                   // Timer Control Block
   struct os_timer_cb_ *next;                    // Pointer to next active Timer
-  uint8_t             state;                    // Timer State
-  uint8_t              type;                    // Timer Type (Periodic/One-shot)
+  TimerState           state:8;                 // Timer State
+  os_timer_type         type:8;                 // Timer Type (Periodic/One-shot)
   uint16_t         reserved;                    // Reserved
   uint32_t             tcnt;                    // Timer Delay Count
   uint32_t             icnt;                    // Timer Initial Count
@@ -1480,7 +1482,7 @@ osStatus svcMutexDelete (osMutexId mutex_id) {
 
 // Mutex Public API
 
-/// Create and Initialize a Mutex object
+/// Create and Initialise a Mutex object
 osMutexId osMutexCreate (const osMutexDef_t *mutex_def) {
   if (__get_IPSR() != 0U) {
     return NULL;                                // Not allowed in ISR

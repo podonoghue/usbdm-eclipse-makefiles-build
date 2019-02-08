@@ -33,7 +33,9 @@ private:
    static constexpr uint8_t CDC_LINE_CONTROL_RTS_MASK = 1<<1;
 
 protected:
-   using simpleCallbak = bool (*)();
+
+   /** Type for call-back */
+   using SimpleCallbak = bool (*)();
 
 protected:
    CDC_Interface() {}
@@ -92,7 +94,7 @@ public:
     *
     * @param lineCoding Line coding information
     */
-   static void setLineCoding(LineCodingStructure * const lineCoding);
+   static void setLineCoding(LineCodingStructure *const lineCoding);
 
    /**
     *  Set CDC Line values
@@ -113,7 +115,7 @@ public:
     *       - breaks are sent after currently queued characters
     */
    static void sendBreak(uint16_t length);
-};
+}; // class CDC_interface
 
 }; // end namespace USBDM
 

@@ -30,6 +30,7 @@
  *
  * Under Linux drivers for bulk and CDC are automatically loaded
  */
+
 #define MS_COMPATIBLE_ID_FEATURE
 #include "usb_cdc_interface.h"
 
@@ -89,9 +90,11 @@ static constexpr unsigned  CDC_DATA_IN_EP_MAXSIZE       = 16; //!< CDC data in
  */
 class Usb0 : public UsbBase_T<Usb0Info, CONTROL_EP_MAXSIZE> {
 
+   // Allow superclass to access handleTokenComplete(void);
    friend UsbBase_T<Usb0Info, CONTROL_EP_MAXSIZE>;
 
 public:
+
    /**
     * String indexes
     *
@@ -207,8 +210,8 @@ public:
    /**
     *  Blocking transmission of data over bulk IN end-point
     *
-    *  @param size   Number of bytes to send
-    *  @param buffer Pointer to bytes to send
+    *  @param[in] size   Number of bytes to send
+    *  @param[in] buffer Pointer to bytes to send
     *
     *  @note : Waits for idle BEFORE transmission but\n
     *  returns before data has been transmitted
@@ -218,8 +221,8 @@ public:
    /**
     *  Blocking reception of data over bulk OUT end-point
     *
-    *   @param maxSize Maximum number of bytes to receive
-    *   @param buffer  Pointer to buffer for bytes received
+    *   @param[in] maxSize Maximum number of bytes to receive
+    *   @param[in] buffer  Pointer to buffer for bytes received
     *
     *   @return Number of bytes received
     *
@@ -230,16 +233,16 @@ public:
    /**
     * CDC Transmit
     *
-    * @param data Pointer to data to transmit
-    * @param size Number of bytes to transmit
+    * @param[in] data Pointer to data to transmit
+    * @param[in] size Number of bytes to transmit
     */
    static void sendCdcData(const uint8_t *data, unsigned size);
 
    /**
     * CDC Receive
     *
-    * @param data    Pointer to data to receive
-    * @param maxSize Maximum number of bytes to receive
+    * @param[in] data    Pointer to data to receive
+    * @param[in] maxSize Maximum number of bytes to receive
     *
     * @return Number of bytes received
     */
@@ -345,7 +348,7 @@ protected:
     * Checks for data and schedules transfer as necessary\n
     * Each transfer will have a ZLP as necessary.
     *
-    * @param state Current end-point state
+    * @param[in] state Current end-point state
     */
    static void cdcInTransactionCallback(EndpointState state);
 
@@ -353,7 +356,7 @@ protected:
     * Call-back handling CDC-OUT transaction complete\n
     * Data received is passed to the cdcInterface
     *
-    * @param state Current end-point state
+    * @param[in] state Current end-point state
     */
    static void cdcOutTransactionCallback(EndpointState state);
 
@@ -377,7 +380,7 @@ protected:
    /**
     * Handle SETUP requests not handled by base handler
     *
-    * @param setup SETUP packet received from host
+    * @param[in] setup SETUP packet received from host
     *
     * @note Provides CDC extensions
     */

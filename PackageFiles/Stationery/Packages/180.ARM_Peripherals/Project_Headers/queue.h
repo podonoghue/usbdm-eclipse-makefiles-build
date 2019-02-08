@@ -5,8 +5,8 @@
  *      Author: podonoghue
  */
 
-#ifndef PROJECT_HEADERS_QUEUE_H_
-#define PROJECT_HEADERS_QUEUE_H_
+#ifndef INCLUDE_USBDM_QUEUE_H_
+#define INCLUDE_USBDM_QUEUE_H_
 
 #include "system.h"
 
@@ -34,11 +34,10 @@ public:
     * Clear queue i.e. make empty
     */
    void clear() {
-//      lock(&fLock);
+      USBDM::CriticalSection cs;
       fHead             = fBuff;
       fTail             = fBuff;
       fNumberOfElements = 0;
-//      unlock(&fLock);
    }
    /*
     * Check if empty
@@ -75,7 +74,7 @@ public:
     * @return false => Queue full, element not added
     */
    bool enQueueDiscardOnFull(T element) {
-//      lock(&fLock);
+      USBDM::CriticalSection cs;
       bool hasSpace = !isFull();
       if (hasSpace) {
          *fTail++ = element;
@@ -84,7 +83,6 @@ public:
             fTail = fBuff;
          }
       }
-//      unlock(&fLock);
       return hasSpace;
    }
    /*
@@ -93,17 +91,16 @@ public:
     * @param[in]  element Element to add
     */
    T deQueue() {
-//      lock(&fLock);
+      USBDM::CriticalSection cs;
       usbdm_assert(!isEmpty(), "Queue empty");
       uint8_t t = *fHead++;
       fNumberOfElements--;
       if (fHead>=(fBuff+QUEUE_SIZE)) {
          fHead = fBuff;
       }
-//      unlock(&fLock);
       return t;
    }
 
 };
 
-#endif /* PROJECT_HEADERS_QUEUE_H_ */
+#endif /* INCLUDE_USBDM_QUEUE_H_ */

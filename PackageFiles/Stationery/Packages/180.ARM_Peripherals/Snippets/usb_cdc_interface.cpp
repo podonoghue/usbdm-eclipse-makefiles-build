@@ -19,22 +19,12 @@ namespace USBDM {
 // Which UART to use
 using UartInfo = Uart0Info;
 
+static UartBuffered_basic_T<UartInfo, 20, 20> uart;
+
 static uint8_t             cdcStatus            = 0;
 static LineCodingStructure currentLineCoding    = {0, 0, 0, 0};
 static uint8_t             breakCount           = 0;
 static bool              (*inCallback)()        = nullptr;
-
-/** Queue of outgoing characters CDC -> UART */
-static Queue<char, 100> outQueue;
-
-/** Queue of incoming characters UART -> CDC */
-static Queue<char, 100> inQueue;
-
-
-/**
- * Interrupt callback for UART
- */
-static void uartCallback(uint8_t status);
 
 /**
  * Initialise class
@@ -60,15 +50,14 @@ void CDC_Interface::setUsbInNotifyCallback(simpleCallbak cb) {
  * @note the Data is volatile so should be processed or saved immediately.
  */
 void CDC_Interface::putData(int size, const uint8_t *buff) {
+
    while (size-->0) {
-      if (outQueue.isFull()) {
+      if (uart.txQueue.isFull()) {
          cdcStatus |= UART_S1_OR_MASK;
          return;
       }
-      outQueue.enQueue(*buff++);
+      uart.txQueue.enQueueDiscardOnFull(*buff++);
    }
-   // Restart Transmit IRQ
-   UartInfo::uart->C2 |= UART_C2_TIE_MASK;
 }
 
 /**
@@ -82,11 +71,11 @@ void CDC_Interface::putData(int size, const uint8_t *buff) {
 int CDC_Interface::getData(int bufSize, uint8_t *buff) {
    int size = 0;
    while (size<bufSize) {
-      if (inQueue.isEmpty()) {
+      if (uart.rxQueue.isEmpty()) {
          break;
       }
       size++;
-      *buff++ = inQueue.deQueue();
+      *buff++ = uart.rxQueue.deQueue();
    }
    return size;
 }
@@ -135,9 +124,7 @@ void CDC_Interface::setLineCoding(LineCodingStructure * const lineCoding) {
    uint8_t  UARTC3Value = 0x00;
 
    // Initialise UART and set baud rate
-   Uart_T<UartInfo> uart(leToNative32(lineCoding->dwDTERate));
-
-   USBDM::UartIrq_T<UartInfo>::setCallback(uartCallback);
+   uart.setBaudRate(leToNative32(lineCoding->dwDTERate));
 
    cdcStatus  = CDC_STATE_CHANGE_MASK;
    breakCount = 0; // Clear any current BREAKs
@@ -151,7 +138,7 @@ void CDC_Interface::setLineCoding(LineCodingStructure * const lineCoding) {
    UartInfo::initPCRs();
 
    // Disable the transmitter and receiver while changing settings.
-   UartInfo::uart->C2 &= ~(UART_C2_TE_MASK | UART_C2_RE_MASK );
+   UartInfo::uart().C2 &= ~(UART_C2_TE_MASK | UART_C2_RE_MASK );
 
    // Note: lineCoding.bCharFormat is ignored (always 1 stop bit)
    //   switch (lineCoding.bCharFormat) {
@@ -195,12 +182,12 @@ void CDC_Interface::setLineCoding(LineCodingStructure * const lineCoding) {
    default :
       break;
    }
-   UartInfo::uart->C1 = UARTC1Value;
-   UartInfo::uart->C2 =
+   UartInfo::uart().C1 = UARTC1Value;
+   UartInfo::uart().C2 =
          UART_C2_RIE_MASK| // Receive interrupts (Transmit interrupts enabled when data written)
          UART_C2_RE_MASK|  // Receiver enable
          UART_C2_TE_MASK;  // Transmitter enable
-   UartInfo::uart->C3 = UARTC3Value|
+   UartInfo::uart().C3 = UARTC3Value|
          UART_C3_FEIE_MASK| // Framing error
          UART_C3_NEIE_MASK| // Noise error
          UART_C3_ORIE_MASK| // Overrun error
@@ -252,50 +239,6 @@ void CDC_Interface::sendBreak(uint16_t length) {
 void CDC_Interface::setControlLineState(uint8_t value) {
    (void) value;
    // Not implemented as no control signals
-}
-
-/**
- * Interrupt callback for UART
- */
-void uartCallback(uint8_t status) {
-   if (status&UART_S1_RDRF_MASK) {
-      // Transfers a char from the UART_D to CDC-IN queue
-      inQueue.enQueue(UartInfo::uart->D);
-      if (!inCallback()) {
-         cdcStatus |= UART_S1_OR_MASK;
-      }
-   }
-   else if (status&UART_S1_TDRE_MASK) {
-      //  Transfer a char from the CDC-OUT queue to UART_D
-      if (!outQueue.isEmpty()) {
-         UartInfo::uart->D = outQueue.deQueue(); // Send the char
-      }
-      else if (breakCount > 0) {
-         // Send another BREAK 'char'
-         UartInfo::uart->C2 |=  UART_C2_SBK_MASK;
-         UartInfo::uart->C2 &= ~UART_C2_SBK_MASK;
-         if (breakCount != 0xFF) {
-            breakCount--;
-         }
-      }
-      else {
-         // No characters available
-         // Disable further UART transmit interrupts
-         UartInfo::uart->C2 &= ~UART_C2_TIE_MASK;
-      }
-   }
-   else {
-      // Record and clear error status
-      cdcStatus |= status;
-      if (UartInfo::statusNeedsWrite) {
-         // Clear error flags
-         UartInfo::uart->S1 = 0xFF;
-      }
-      else {
-         // Reading data clears flags
-         (void)UartInfo::uart->D;
-      }
-   }
 }
 
 }; // end namespace USBDM

@@ -4,16 +4,49 @@
  *  Created on: 20Feb.,2017
  *      Author: podonoghue
  */
-#ifndef PROJECT_HEADERS_CMSIS_H_
-#define PROJECT_HEADERS_CMSIS_H_
+#ifndef INCLUDE_USBDM_CMSIS_H_
+#define INCLUDE_USBDM_CMSIS_H_
 
+#include <cmath>
 #include "cmsis_os.h"
-#include "hardware.h"
+#include "error.h"
 
 /**
  * Namespace enclosing wrapper classes for CMSIS-RTX
  */
 namespace CMSIS {
+
+/**
+ * Set error code
+ *
+ * @param[in]  err Error code to set
+ *
+ * @return Error code
+ */
+inline static USBDM::ErrorCode setCmsisErrorCode(int err) {
+   if (err != 0) {
+      // Bump error CMSIS error code to avoid conflict with USBDM error codes
+      err |= USBDM::E_CMSIS_ERR_OFFSET;
+   }
+   USBDM::errorCode = (USBDM::ErrorCode)err;
+   return USBDM::errorCode;
+}
+
+/**
+ * Set error code and check for error
+ *
+ * @param[in]  err Error code to set
+ *
+ * @return Error code
+ */
+inline static USBDM::ErrorCode setAndCheckCmsisErrorCode(int err) {
+   if (err != 0) {
+      // Bump error CMSIS error code to avoid conflict with USBDM error codes
+      err |= USBDM::E_CMSIS_ERR_OFFSET;
+   }
+   USBDM::errorCode = (USBDM::ErrorCode)(err);
+   return USBDM::checkError();
+}
 
 using Callback = void (*)(const void *);
 
@@ -71,8 +104,8 @@ private:
       const osTimerDef_t *timer;   // Pointer to Timer definition
    };
 
-   osTimerControlBlock_t  os_timer_cb  = {0,0,0,0,0,0,0,0};
-   const osTimerDef_t     os_timer_def;
+   volatile osTimerControlBlock_t  os_timer_cb  = {0,0,0,0,0,0,0,0};
+   const    osTimerDef_t           os_timer_def;
 
 public:
    /**
@@ -83,7 +116,7 @@ public:
     * @param[in] timerType Type of timer e.g. osTimerPeriodic, osTimerOnce
     */
    Timer(Callback callback, void *argument, os_timer_type timerType) :
-     os_timer_def{callback, (void*)&os_timer_cb} {
+      os_timer_def{callback, (void*)&os_timer_cb} {
       osTimerId timer_id __attribute__((unused)) = osTimerCreate(&os_timer_def, timerType, argument);
       usbdm_assert((void*)timer_id == (void*)&os_timer_cb, "Internal check failed");
    }
@@ -123,6 +156,12 @@ public:
     * @return false Failure
     */
    bool create(void *argument=nullptr, os_timer_type timerType=osTimerPeriodic) {
+      if (os_timer_cb.state != 0) {
+         osStatus rc = destroy();
+         if (rc != osOK) {
+            return rc;
+         }
+      }
       osTimerId timer_id __attribute__((unused)) = osTimerCreate(&os_timer_def, timerType, argument);
       return ((void*)timer_id == (void*)&os_timer_cb);
    }
@@ -149,7 +188,7 @@ public:
     * @param[in] millisec Interval in milliseconds
     */
    void start(int millisec) {
-      USBDM::setAndCheckCmsisErrorCode(osTimerStart((osTimerId)&os_timer_cb, millisec));
+      setAndCheckCmsisErrorCode(osTimerStart((osTimerId)&os_timer_cb, millisec));
    }
    /**
     * Start or restart timer
@@ -454,7 +493,7 @@ class Pool {
 
 private:
    uint32_t pool[3+((sizeof(T)+3)/4)*size] = {0};
-   const osPoolDef_t os_pool_def                 = { size, sizeof(T), pool };
+   const    osPoolDef_t os_pool_def        = { size, sizeof(T), pool };
 
 public:
    Pool() {
@@ -553,7 +592,7 @@ public:
     */
    void run(void *argument=nullptr) {
       thread_id = osThreadCreate(&thread_def, argument);
-      USBDM::setAndCheckCmsisErrorCode((thread_id != nullptr)?osOK:osErrorOS);
+      setAndCheckCmsisErrorCode((thread_id != nullptr)?osOK:osErrorOS);
    }
    /**
     * Get thread ID
@@ -1236,4 +1275,4 @@ public:
 };
 
 }; // end namespace CMSIS
-#endif /* PROJECT_HEADERS_CMSIS_H_ */
+#endif /* INCLUDE_USBDM_CMSIS_H_ */

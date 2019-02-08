@@ -18,6 +18,7 @@
  * Any manual changes will be lost.
  */
 #include <stdint.h>
+#include <math.h>
 //#include <cstdio>       // snprintf()
 #include <ctype.h>      // isspace() etc
 #include "hardware.h"

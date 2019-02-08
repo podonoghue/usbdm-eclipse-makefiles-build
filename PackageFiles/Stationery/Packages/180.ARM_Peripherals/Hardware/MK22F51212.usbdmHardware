@@ -52,6 +52,7 @@
       </peripheral>
       <peripheral baseName="DAC"      instance="1"        version="dac0_16ch_fifo16">
          <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForDac" />
+         <clock clockEnable="SIM->SCGC6 |= SIM_SCGC6_DAC1_MASK;" clockDisable="SIM->SCGC6 &amp;= ~SIM_SCGC6_DAC1_MASK;" />
          <irq num="DAC1_IRQn" />
       </peripheral>
       <peripheral baseName="DMA"      instance="0"        version="dma0_16ch_ears16">
@@ -169,6 +170,7 @@
       </peripheral>
       <peripheral baseName="FTM"      instance="3"        version="ftm0_8ch_icrst">
          <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForFtm" />
+         <clock clockEnable="SIM->SCGC6 |= SIM_SCGC6_FTM3_MASK;" clockDisable="SIM->SCGC6 &amp;= ~SIM_SCGC6_FTM3_MASK;" />
          <irq num="FTM3_IRQn" />
       </peripheral>
       <peripheral baseName="GPIO"     instance="A"        version="gpioa_0x400ff000">

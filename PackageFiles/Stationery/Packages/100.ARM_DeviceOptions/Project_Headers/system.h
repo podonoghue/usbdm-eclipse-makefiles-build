@@ -1,11 +1,11 @@
 /**
- * @file     system.h
+ * @file     system.h (100.ARM_DeviceOptions\Project_Headers\system.h)
  * @brief    System initialisation routines
  * @version  V4.11.1.70
  * @date     13 Nov 2012
  */
-#ifndef SYSTEM_H_
-#define SYSTEM_H_
+#ifndef INCLUDE_USBDM_SYSTEM_H_
+#define INCLUDE_USBDM_SYSTEM_H_
 
 #include <stdint.h>
 
@@ -30,6 +30,7 @@ void SystemInitLowLevel(void);
  * Setup the microcontroller system.
  */
 void SystemInit(void);
+
 /**
  * @brief Update SystemCoreClock variable
  *
@@ -86,4 +87,4 @@ extern int enableInterrupts();
 }
 #endif
 
-#endif /* SYSTEM_H_ */
+#endif /* INCLUDE_USBDM_SYSTEM_H_ */
