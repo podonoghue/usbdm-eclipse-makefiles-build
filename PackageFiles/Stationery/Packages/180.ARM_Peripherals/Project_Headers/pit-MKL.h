@@ -255,7 +255,9 @@ public:
     */
    static void configure(PitDebugMode pitDebugMode=PitDebugMode_Stop) {
       enable();
-      for (PitChannelNum channel = PitChannelNum_0; channel < PitInfo::NumChannels; channel = channel+1) {
+      for (PitChannelNum channel = PitChannelNum_0;
+           channel < PitInfo::NumChannels;
+           channel = channel+1) {
          disableChannel(channel);
       }
       pit().MCR = pitDebugMode|PIT_MCR_MDIS(0); // MDIS cleared => enabled!

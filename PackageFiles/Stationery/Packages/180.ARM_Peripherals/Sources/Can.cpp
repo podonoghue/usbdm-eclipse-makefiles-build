@@ -15,7 +15,7 @@ using Led = GpioD<0, ActiveLow>;
 using Can     = Can0;
 using CanLimp = GpioE<13, ActiveLow>;
 
-void canOredCallback() {
+void canMessageBufferCallback() {
    uint32_t mailboxFlags  = Can::getMailboxFlags();
    uint32_t fifoFlags     = Can::getFifoFlags();
    Can::clearFifoFlags(fifoFlags);
@@ -23,8 +23,10 @@ void canOredCallback() {
 
    console.setWidth(32);
    console.setPadding(Padding_LeadingZeroes);
-   console.write("canOredCallback(), fifoFlags    = 0b").writeln(fifoFlags,    Radix_2);
-   console.write("canOredCallback(), mailboxFlags = 0b").writeln(mailboxFlags, Radix_2);
+   console.writeln("                                                            OWF");
+   console.write(  "canOredCallback(), fifoFlags    = 0b").writeln(fifoFlags,    Radix_2);
+   console.writeln("                                    10987654321098765432109876543210");
+   console.write(  "canOredCallback(), mailboxFlags = 0b").writeln(mailboxFlags, Radix_2);
    console.reset();
 }
 
@@ -33,14 +35,33 @@ void canErrorCallback() {
    Can::clearErrorStatus(status);
    console.setWidth(32);
    console.setPadding(Padding_LeadingZeroes);
-   console.write("canErrorCallback(), status = 0b").writeln(status, Radix_2);
+   console.writeln("                               10987654321098765432109876543210");
+   console.writeln("                                         O BSTR10ACFSTRITFFRBE");
+   console.writeln("                                         V OYxxEECRRTxxDxLLxOR");
+   console.writeln("                                         R FNWWRRKCMFEEL TT FR");
+   console.write(  "canErrorCallback(), status = 0b").writeln(status, Radix_2);
    console.reset();
 }
 
+void canWakeupCallback() {
+   console.writeln("canWakeupCallback()");
+}
+
 /**
- * CAN Message ID
+ * CAN Message IDs for FIFO
  */
-static constexpr unsigned CAN_TEST_ID = 0x16;
+static constexpr unsigned CAN_FIFO_ID1 = 20;
+static constexpr unsigned CAN_FIFO_ID2 = 60;
+/**
+ * CAN Message ID for Rx Mailboxes
+ */
+static constexpr unsigned CAN_TX_MAILBOX_1_ID = 30;
+static constexpr unsigned CAN_TX_MAILBOX_2_ID = 31;
+/**
+ * CAN Message ID for Tx Mailboxes
+ */
+static constexpr unsigned CAN_RX_MAILBOX_1_ID = 40;
+static constexpr unsigned CAN_RX_MAILBOX_2_ID = 41;
 /**
  * CAN Message format
  */
@@ -48,13 +69,13 @@ static constexpr CanMode  CAN_MODE = CanMode_Standard;
 
 /**
  * Number of FIFO filter entries.
- * Must be a multiple of 8 and != 0 if FIFO is used.
+ * Must be a multiple of 8 and >0 if FIFO is used.
  * Use of more filters reduces mailbox message buffers available
  *
  * @note The filter entries may take A, B or C formats so the number
  *       of filters may be 1x, 2x or 4x this value.
  */
-static constexpr unsigned FIFO_FILTER_ENTRY_COUNT = 2*8;
+static constexpr unsigned FIFO_FILTER_ENTRY_COUNT = 1*8;
 
 /**
  * Number of FIFO filter masks.
@@ -69,45 +90,36 @@ static constexpr unsigned FIFO_MASK_COUNT = Can::calculateFifoIndividualMaskCoun
  */
 static constexpr unsigned MAILBOX_COUNT = 4;
 
-
 /**
  * Receive FIFO filters.
  * This table controls which messages are accepted into the receive FIFO.
  * All entries in this table must be provided.
  *
- * @note The type of CanFifoFilter constructor used must agree with the CanAcceptanceMode used.
+ * @note The type of CanFifoIdFilter constructor used must agree with the CanAcceptanceMode used.
  */
-static const CanFifoFilter fifoFilters[FIFO_FILTER_ENTRY_COUNT] = {
-      // canMode    rxid          rtr
-      { CAN_MODE,   CAN_TEST_ID,  false },
-      { CAN_MODE,     2,          true  },
-      { CAN_MODE,     3,          true  },
-      { CAN_MODE,     4,          true  },
-      { CAN_MODE,     5,          true  },
-      { CAN_MODE,     6,          true  },
-      { CAN_MODE,     7,          true  },
-      { CAN_MODE,     8,          true  },
-      { CAN_MODE,     9,          false },
-      { CAN_MODE,    10,          false },
-      { CAN_MODE,    11,          false },
-      { CAN_MODE,    12,          false },
-      { CAN_MODE,    13,          false },
-      { CAN_MODE,    14,          false },
-      { CAN_MODE,    15,          false },
-      { CAN_MODE,    16,          false },
+static const CanFifoIdFilter fifoIdFilters[FIFO_FILTER_ENTRY_COUNT] = {
+      // canMode    rxid          canFrameType
+      { CAN_MODE,   CAN_FIFO_ID1,  CanFrameType_Data },
+      { CAN_MODE,   CAN_FIFO_ID2,  CanFrameType_Data  },
+      { CAN_MODE,     3,           CanFrameType_Data  },
+      { CAN_MODE,     4,           CanFrameType_Data  },
+      { CAN_MODE,     5,           CanFrameType_Data  },
+      { CAN_MODE,     6,           CanFrameType_Data  },
+      { CAN_MODE,     7,           CanFrameType_Data  },
+      { CAN_MODE,     8,           CanFrameType_Data  },
 };
 
 /**
  * Receive FIFO filter masks.
- * These masks are applied to the first few fifoFilters entries.
+ * These masks are applied to the first few fifoIdFilters entries.
  * The remaining filters use a single shared mask.
  * The number of masks available depends on the number of filters: min(8 + 2*((FIFO_FILTER_ENTRY_COUNT/8)-1),31)
  */
-static const CanFifoFilterMask fifoFilterMasks[FIFO_MASK_COUNT] = {
-      // canMode   rxidMask ideMask rtrMask
-      { CAN_MODE,   0U,     false,  false },
-      { 0 },
+static const CanFifoIdFilterMask fifoIdFilterMasks[FIFO_MASK_COUNT] = {
       // Any unused entries will default to 0xFFFFFFFF i.e. no masking
+      // canMode    rxidMask ideMask frameTypeMask
+      {  CAN_MODE,   0xFFFEU,    false,  false },
+      {  CAN_MODE,   0xFFFCU,    false,  false },
 };
 
 /**
@@ -115,10 +127,8 @@ static const CanFifoFilterMask fifoFilterMasks[FIFO_MASK_COUNT] = {
  * These masks are applied to the mailboxes
  */
 static const CanMailboxFilterMask mailboxfilterMasks[MAILBOX_COUNT] = {
-      //   CanMode        idMask   ideMask rtrMask
-      {CAN_MODE,     ~0U,    true,   true },
-      {0},
-      {0},
+      // canMode     idMask   ideMask rtrMask
+//      {  CAN_MODE,    ~0U,    true,   true },
       // Any unused entries will default to 0xFFFFFFFF i.e. no masking
 };
 
@@ -134,8 +144,8 @@ void testSizes() {
    console.write("CanControlStatus     sz = ").writeln(sizeof(CanControlStatus));
    console.write("CanId                sz = ").writeln(sizeof(CanId));
    console.write("CanMessageBuffer8    sz = ").writeln(sizeof(CanMessageBuffer8));
-   console.write("CanFifoFilter        sz = ").writeln(sizeof(CanFifoFilter));
-   console.write("CanFilterMask        sz = ").writeln(sizeof(CanFifoFilterMask));
+   console.write("CanFifoIdFilter      sz = ").writeln(sizeof(CanFifoIdFilter));
+   console.write("CanFifoIdFilterMask  sz = ").writeln(sizeof(CanFifoIdFilterMask));
    console.write("CanMailboxFilterMask sz = ").writeln(sizeof(CanMailboxFilterMask));
 }
 
@@ -148,11 +158,11 @@ void printSizeTable(const char *title, unsigned maxMessageBuffers) {
    }
    console.writeln();
    unsigned maxFifoFilters = CanParameters::calculateMaximumFifoFilters(maxMessageBuffers);
-   for (unsigned fifoFilters=0; fifoFilters<=maxFifoFilters; fifoFilters += 8) {
-      console.write(fifoFilters).write(" ");
-      console.write(CanParameters::calculateFifoIndividualMaskCount(fifoFilters)).write("     ");
+   for (unsigned fifoIdFilters=0; fifoIdFilters<=maxFifoFilters; fifoIdFilters += 8) {
+      console.write(fifoIdFilters).write(" ");
+      console.write(CanParameters::calculateFifoIndividualMaskCount(fifoIdFilters)).write("     ");
       for (unsigned mailboxes=0; mailboxes<=maxMessageBuffers; mailboxes++) {
-         unsigned mbs = CanParameters::calulateRequiredMessageBuffers(fifoFilters, mailboxes);
+         unsigned mbs = CanParameters::calulateRequiredMessageBuffers(fifoIdFilters, mailboxes);
          if (mbs<=maxMessageBuffers) {
             console.write(mbs);
          }
@@ -160,6 +170,26 @@ void printSizeTable(const char *title, unsigned maxMessageBuffers) {
       console.writeln();
    }
    console.writeln("FF = FIFO Filters, FM = FIFO filter individual Masks, MB = MailBoxes");
+}
+
+void tx1MailboxCallback(unsigned mailboxNum) {
+   console.write("Mailbox ").writeln(mailboxNum);
+   Can::clearMailboxFlags(1<<mailboxNum);
+}
+
+void tx2MailboxCallback(unsigned mailboxNum) {
+   console.write("Mailbox ").writeln(mailboxNum);
+   Can::clearMailboxFlags(1<<mailboxNum);
+}
+
+void rx1MailboxCallback(unsigned mailboxNum) {
+   console.write("Mailbox ").writeln(mailboxNum);
+   Can::clearMailboxFlags(1<<mailboxNum);
+}
+
+void rx2MailboxCallback(unsigned mailboxNum) {
+   console.write("Mailbox ").writeln(mailboxNum);
+   Can::clearMailboxFlags(1<<mailboxNum);
 }
 
 int main() {
@@ -172,26 +202,45 @@ int main() {
    console.write("Can Limp = ").writeln(CanLimp::read());
 
    CanParameters canParameters(125000);
-   canParameters.rxfgmask  = CanFifoFilterMask(CAN_MODE, ~0U, true, true).raw;
    canParameters.idam      = CanAcceptanceMode_FormatA;
    canParameters.wrnen     = true;
    canParameters.errmsk    = true;
-   canParameters.lpb       = true;
+//   canParameters.lpb       = true;
+
+   Can::CanMailBox rxMailbox1 = Can::allocateMailbox();
+   Can::CanMailBox rxMailbox2 = Can::allocateMailbox();
+   Can::CanMailBox txMailbox1 = Can::allocateMailbox();
+   Can::CanMailBox txMailbox2 = Can::allocateMailbox();
+
+   if (!rxMailbox1.isValid() || !rxMailbox2.isValid() ||
+       !txMailbox1.isValid() || !txMailbox2.isValid()) {
+      console.writeln("Mailbox allocation failed");
+      __BKPT();
+   }
+   rxMailbox1.setCallback(rx1MailboxCallback);
+   rxMailbox2.setCallback(rx2MailboxCallback);
+   txMailbox1.setCallback(tx1MailboxCallback);
+   txMailbox2.setCallback(tx2MailboxCallback);
 
    Can::setErrorCallback(canErrorCallback);
-   Can::setOred0_15_Callback(canOredCallback);
-   Can::setOred16_31_Callback(canOredCallback);
-//   Can::setWakeupCallback(canWakeupCallback);
-   Can::setOredCallback(canOredCallback);
+   Can::setMessageBufferCallback(canMessageBufferCallback);
+   Can::setWakeupCallback(canWakeupCallback);
+
+   Can1::setErrorCallback(canErrorCallback);
+   Can1::setMessageBufferCallback(canMessageBufferCallback);
+   Can1::setWakeupCallback(canWakeupCallback);
+
+   Can2::setErrorCallback(canErrorCallback);
+   Can2::setMessageBufferCallback(canMessageBufferCallback);
+   Can2::setWakeupCallback(canWakeupCallback);
 
    Can::configure(
          canParameters,
          CanAcceptanceMode_FormatA,
          FIFO_FILTER_ENTRY_COUNT,
-         fifoFilters,
-         fifoFilterMasks,
-         CanFifoFilterMask(CAN_MODE, ~0U, true, true),
-         MAILBOX_COUNT,
+         fifoIdFilters,
+         fifoIdFilterMasks,
+         CanFifoIdFilterMask(CAN_MODE, ~0U, true, true),
          mailboxfilterMasks
          );
    Can::configureAllPins();
@@ -207,14 +256,26 @@ int main() {
    Can::enableFifoInterrupts(CAN_FIFO_DATA_FLAG|CAN_FIFO_OVERFLOW_FLAG|CAN_FIFO_WARNING_FLAG);
 
    Can::enableErrorNvicInterrupts(NvicPriority_Normal);
-   Can::enableOredNvicInterrupts(NvicPriority_Normal);
-   Can::enableOred_0_15_NvicInterrupts(NvicPriority_Normal);
-   Can::enableOred_16_32_NvicInterrupts(NvicPriority_Normal);
    Can::enableWakeupNvicInterrupts(NvicPriority_Normal);
+   Can::enableMessageBufferNvicInterrupts(NvicPriority_Normal);
+   Can::enableOredNvicInterrupts(NvicPriority_Normal);
+
+   Can1::enableErrorNvicInterrupts(NvicPriority_Normal);
+//   Can1::enableWakeupNvicInterrupts(NvicPriority_Normal);
+   Can1::enableMessageBufferNvicInterrupts(NvicPriority_Normal);
+   Can1::enableOredNvicInterrupts(NvicPriority_Normal);
+
+   Can2::enableErrorNvicInterrupts(NvicPriority_Normal);
+//   Can2::enableWakeupNvicInterrupts(NvicPriority_Normal);
+   Can2::enableMessageBufferNvicInterrupts(NvicPriority_Normal);
+   Can2::enableOredNvicInterrupts(NvicPriority_Normal);
+
+   console.write("Can::MailboxNone.isValid() => ").writeln(Can::MailboxNone.isValid());
+   console.write("Can::txMailbox1.isValid() => ").writeln(txMailbox1.isValid());
 
    volatile CanMessageBuffer8 *canTxMailbox1;
-   canTxMailbox1 = Can::getMailbox(0);
-   canTxMailbox1->ID = CanId(CAN_MODE, CAN_TEST_ID);
+   canTxMailbox1 = txMailbox1.getMailbox();
+   canTxMailbox1->ID = CanId(CAN_MODE, CAN_TX_MAILBOX_1_ID);
    canTxMailbox1->data8(0) = 0x1;
    canTxMailbox1->data8(1) = 0x2;
    canTxMailbox1->data8(2) = 0x3;
@@ -223,11 +284,11 @@ int main() {
    canTxMailbox1->data8(5) = 0x6;
    canTxMailbox1->data8(6) = 0x7;
    canTxMailbox1->data8(7) = 0x8;
-   canTxMailbox1->CS = CanControlStatus(CanMessageCode_TxData, CAN_MODE, CanDataSize_7, false);
+//   canTxMailbox1->CS = CanControlStatus(CanMessageCode_TxData, CAN_MODE, CanDataSize_7, CanFrameType_Data);
 
    volatile CanMessageBuffer8 *canTxMailbox2;
-   canTxMailbox2 = Can::getMailbox(1);
-   canTxMailbox2->ID = CanId(CAN_MODE, CAN_TEST_ID);
+   canTxMailbox2 = txMailbox2.getMailbox();
+   canTxMailbox2->ID = CanId(CAN_MODE, CAN_TX_MAILBOX_2_ID);
    canTxMailbox2->data8(0) = 0x11;
    canTxMailbox2->data8(1) = 0x12;
    canTxMailbox2->data8(2) = 0x13;
@@ -236,34 +297,44 @@ int main() {
    canTxMailbox2->data8(5) = 0x16;
    canTxMailbox2->data8(6) = 0x17;
    canTxMailbox2->data8(7) = 0x18;
-   canTxMailbox2->CS = CanControlStatus(CanMessageCode_TxData, CAN_MODE, CanDataSize_3, false);
+//   canTxMailbox2->CS = CanControlStatus(CanMessageCode_TxData, CAN_MODE, CanDataSize_3, CanFrameType_Data);
 
    volatile CanMessageBuffer8 *canRxMailbox1;
-   canRxMailbox1 = Can::getMailbox(2);
-   canRxMailbox1->ID = CanId(CAN_MODE, CAN_TEST_ID);
+   canRxMailbox1 = rxMailbox1.getMailbox();
+   canRxMailbox1->ID = CanId(CAN_MODE, CAN_RX_MAILBOX_1_ID);
    canRxMailbox1->DATA32[0] = ~0U;
    canRxMailbox1->DATA32[1] = ~0U;
-   canRxMailbox1->CS = CanControlStatus(CanMessageCode_RxEmpty, false);
+   canRxMailbox1->CS = CanControlStatus(CanMessageCode_RxEmpty, CanFrameType_Data);
+
+   volatile CanMessageBuffer8 *canRxMailbox2;
+   canRxMailbox2 = rxMailbox2.getMailbox();
+   canRxMailbox2->ID = CanId(CAN_MODE, CAN_RX_MAILBOX_2_ID);
+   canRxMailbox2->DATA32[0] = ~0U;
+   canRxMailbox2->DATA32[1] = ~0U;
+   canRxMailbox2->CS = CanControlStatus(CanMessageCode_RxEmpty, CanFrameType_Data);
+
+   txMailbox1.dispose();
+   console.write("Can::txMailbox1.isValid() => ").writeln(txMailbox1.isValid());
 
    Can::readTimer();
 
    for(;;) {
 //      console.write("CAN0->MCR =0b").writeln(CAN0->MCR, Radix_2);
       __asm__("nop");
-      waitMS(1000);
+      waitMS(100);
       if (canTxMailbox1->CS.code == CanMessageCode_TxInactive) {
-         canTxMailbox1->CS = CanControlStatus(CanMessageCode_TxData, CAN_MODE, CanDataSize_7, false);
+         canTxMailbox1->CS = CanControlStatus(CanMessageCode_TxData, CAN_MODE, CanDataSize_7, CanFrameType_Data);
       }
       if (canTxMailbox2->CS.code == CanMessageCode_TxInactive) {
-         canTxMailbox1->CS = CanControlStatus(CanMessageCode_TxData, CAN_MODE, CanDataSize_3, false);
+         canTxMailbox1->CS = CanControlStatus(CanMessageCode_TxData, CAN_MODE, CanDataSize_3, CanFrameType_Data);
       }
    }
 
-   volatile CanFifoFilter *fifoFilterTable = Can::getFifoFilterTable();
-   fifoFilterTable[2] = CanFifoFilter(CanMode_Standard, 3, false);
+   volatile CanFifoIdFilter *fifoIdFilterTable = Can::getFifoFilterTable();
+   fifoIdFilterTable[2] = CanFifoIdFilter(CanMode_Standard, 3, CanFrameType_Data);
 
-   volatile CanFifoFilterMask *fifoFilterMask = Can::getFifoFilterMaskTable();
-   fifoFilterMask[2] = CanFifoFilterMask(CanMode_Extended, ~0U, 0, 0);
+   volatile CanFifoIdFilterMask *fifoIdFilterMask = Can::getFifoFilterMaskTable();
+   fifoIdFilterMask[2] = CanFifoIdFilterMask(CanMode_Extended, ~0U, 0, 0);
 
 //   CanErrorCounts canErrorCounts = Can::getErrorCounters();
 //   console

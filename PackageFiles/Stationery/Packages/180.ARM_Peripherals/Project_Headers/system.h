@@ -31,29 +31,6 @@ void SystemInitLowLevel(void);
  */
 void SystemInit(void);
 
-/**
- * Check interrupt status
- *
- * @return true if interrupts are enabled
- */
-int areInterruptsEnabled();
-
-/**
- * Disable interrupts
- *
- * This function keeps a count of the number of times interrupts is enabled/disabled so may be called in recursive routines
- */
-extern void disableInterrupts();
-
-/**
- * Enable interrupts
- *
- * This function keeps a count of the number of times interrupts is enabled/disabled so may be called in recursive routines
- *
- * @return true if interrupts are now enabled
- */
-extern int enableInterrupts();
-
 #if defined(__CM3_REV) || defined(__CM4_REV) // Only available on Cortex M3 & M4
 /**
  * Obtain lock
@@ -70,6 +47,7 @@ static inline void lock(volatile uint32_t *lockVar) {
          if (__STREXW(1, lockVar) == 0) {
             // Succeeded
             // Do not start any other memory access
+            // until memory barrier is completed
             __DMB();
             return;
          }

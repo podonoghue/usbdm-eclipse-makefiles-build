@@ -113,16 +113,17 @@ typedef struct OS_XCB {
   U16    delta_time;              /* Time until time out                     */
 } *P_XCB;
 
+/** MessageBox Control block */
 typedef struct OS_MCB {
-  U8     cb_type;                 /* Control Block Type                      */
-  U8     state;                   /* State flag variable                     */
-  U8     isr_st;                  /* State flag variable for isr functions   */
-  struct OS_TCB *p_lnk;           /* Chain of tasks waiting for message      */
-  U16    first;                   /* Index of the message list begin         */
-  U16    last;                    /* Index of the message list end           */
-  U16    count;                   /* Actual number of stored messages        */
-  U16    size;                    /* Maximum number of stored messages       */
-  void   *msg[1];                 /* FIFO for Message pointers 1st element   */
+  U8     cb_type;                 /** Control Block Type                      */
+  U8     state;                   /** State flag variable                     */
+  U8     isr_st;                  /** State flag variable for isr functions   */
+  struct OS_TCB *p_lnk;           /** Chain of tasks waiting for message      */
+  U16    first;                   /** Index of the message list begin         */
+  U16    last;                    /** Index of the message list end           */
+  U16    count;                   /** Actual number of stored messages        */
+  U16    size;                    /** Maximum number of stored messages       */
+  void   *msg[1];                 /** FIFO for Message pointers 1st element   */
 } *P_MCB;
 
 typedef struct OS_SCB {

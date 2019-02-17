@@ -684,7 +684,7 @@ public:
          setConfiguration(configuration);
       }
       else {
-         CMSIS::setCmsisErrorCode(status);
+         CMSIS::setAndCheckCmsisErrorCode(status);
       }
       return status;
    }
@@ -709,7 +709,7 @@ public:
          spi->MCR &= ~SPI_MCR_HALT_MASK;
       }
       else {
-         CMSIS::setCmsisErrorCode(status);
+         CMSIS::setAndCheckCmsisErrorCode(status);
       }
       return status;
    }
@@ -728,7 +728,7 @@ public:
       spi->MCR |= SPI_MCR_HALT_MASK;
       osStatus status = mutex().release();
       if (status != osOK) {
-         CMSIS::setCmsisErrorCode(status);
+         CMSIS::setAndCheckCmsisErrorCode(status);
       }
       return status;
    }

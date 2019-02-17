@@ -137,8 +137,12 @@ uint32_t const os_stack_sz = sizeof(os_stack_mem);
  #define OS_FIFOSZ      16
 #endif
 
-/* Fifo Queue buffer for ISR requests.*/
+/**
+ *  FIFO Queue buffer for ISR requests.
+ *  (Post ISR execution)
+ */
 uint32_t       os_fifo[OS_FIFOSZ*2+1];
+/** Size of FIFO Queue buffer for ISR requests. */
 uint8_t  const os_fifo_size = OS_FIFOSZ;
 
 /* An array of Active task pointers. */

@@ -48,9 +48,16 @@ Change History
 namespace USBDM {
 
 /** BDTs organised by endpoint, odd/even, tx/rx */
-EndpointBdtEntry endPointBdts[Usb0::NUMBER_OF_ENDPOINTS] __attribute__ ((aligned (512)));
+volatile EndpointBdtEntry endPointBdts[Usb0::NUMBER_OF_ENDPOINTS] __attribute__ ((aligned (512)));
+
+/** End-points in use */
+Endpoint *UsbBase::fEndPoints[UsbImplementation::NUMBER_OF_ENDPOINTS];
 
 #ifdef MS_COMPATIBLE_ID_FEATURE
+
+const uint8_t UsbBase::fMsOsStringDescriptor[] = {
+      18, DT_STRING, 'M',0,'S',0,'F',0,'T',0,'1',0,'0',0,'0',0,GET_MS_FEATURE_DESCRIPTOR,0x00
+};
 
 // See https://github.com/pbatard/libwdi/wiki/WCID-Devices
 //
@@ -256,8 +263,8 @@ void reportLineState(uint8_t value) {
  *
  *  @note Only handles UTF-8 characters that fit in a single UTF-16 value.
  */
-void UsbBase::utf8ToStringDescriptor(uint8_t *to, const uint8_t *from, unsigned maxSize) {
-   uint8_t *size = to; // 1st byte is where to place descriptor size
+void UsbBase::utf8ToStringDescriptor(volatile uint8_t *to, volatile const uint8_t *from, unsigned maxSize) {
+   volatile uint8_t *size = to; // 1st byte is where to place descriptor size
 
    *to++ = 2;         // 1st byte = descriptor size (2 bytes so far including DT_STRING)
    *to++ = DT_STRING; // 2nd byte = descriptor type, DT_STRING;

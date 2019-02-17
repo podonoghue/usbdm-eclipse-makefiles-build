@@ -202,6 +202,16 @@ extern BIT dbg_msg;
  #define rt_dec(p)     __disable_irq();(*p)--;__enable_irq();
 #endif
 
+/**
+ *  Increment queue counter
+ *
+ * @param[in]     size    Size of queue
+ * @param[in,out] count   Occupancy count - will be incremented on success
+ * @param[in,out] first   First free entry in queue (Head index)
+ *
+ * @return  <  size : Index of new entry
+ * @return  >= size : Failed increment
+ */
 __inline static U32 rt_inc_qi (U32 size, U8 *count, U8 *first) {
   U32 cnt,c2;
 #ifdef __USE_EXCLUSIVE_ACCESS

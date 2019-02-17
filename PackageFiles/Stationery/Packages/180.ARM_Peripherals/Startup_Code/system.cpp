@@ -21,7 +21,9 @@ uint32_t SystemCoreClock = 4000000;
 __attribute__((__weak__))
 uint32_t SystemBusClock = 8000000;
 
+#ifdef __cplusplus
 extern "C" {
+#endif
 
 /* Actual Vector table */
 extern int const __vector_table[];
@@ -45,7 +47,10 @@ void rtc_initialise() {
 __attribute__((__weak__))
 void software_init_hook () {
 }
+
+#ifdef __cplusplus
 }
+#endif
 
 #ifdef __NO_STARTFILES__
 #warning Due to limited RAM the C library standard initialisation is not called - BSS and DATA are still initialised
@@ -156,6 +161,8 @@ void SystemInit(void) {
    rtc_initialise();
 
 #if defined(__VFP_FP__) && !defined(__SOFTFP__)
+//#warning "Using FP hardware"
+
    /* Initialise FPU if present & in use */
    __asm__ (
          "  .equ CPACR, 0xE000ED88     \n"
@@ -168,46 +175,4 @@ void SystemInit(void) {
          "  ISB                        \n"  // Reset pipeline now the FPU is enabled
    );
 #endif
-}
-
-// Code below assumes interrupts start out enabled!
-
-/** Nesting count for interrupt disable */
-static int disableInterruptCount = 0;
-
-/**
- * Check interrupt status
- *
- * @return true if interrupts are enabled
- */
-int areInterruptsEnabled() {
-   return disableInterruptCount == 0;
-}
-
-/**
- * Disable interrupts
- *
- * This function keeps a count of the number of times interrupts is enabled/disabled so may be called in recursive routines
- */
-void disableInterrupts() {
-   __disable_irq();
-   disableInterruptCount++;
-}
-
-/**
- * Enable interrupts
- *
- * This function keeps a count of the number of times interrupts is enabled/disabled so may be called in recursive routines
- *
- * @return true if interrupts are now enabled
- */
-int enableInterrupts() {
-   if (disableInterruptCount>0) {
-      disableInterruptCount--;
-   }
-   if (disableInterruptCount == 0) {
-      __enable_irq();
-      return 1;
-   }
-   return 0;
 }

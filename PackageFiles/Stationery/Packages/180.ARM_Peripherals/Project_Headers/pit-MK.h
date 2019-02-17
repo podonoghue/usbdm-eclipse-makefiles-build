@@ -74,10 +74,10 @@ enum PitChannelNum : unsigned {
 /**
  * Calculate a PIT channel number using an offset from an existing number
  *
- * @param channel Base slot to use
+ * @param channel Base channel to use
  * @param offset  Offset from base channel
  *
- * @return  PIT channel number calculated from slot+offset
+ * @return  PIT channel number calculated from channel+offset
  */
 constexpr PitChannelNum inline operator+(PitChannelNum channel, unsigned offset) {
    return (PitChannelNum)((unsigned)channel + offset);
@@ -86,15 +86,14 @@ constexpr PitChannelNum inline operator+(PitChannelNum channel, unsigned offset)
 /**
  * Calculate a PIT channel number using an offset from an existing number
  *
- * @param channel Base slot to use
+ * @param channel Base channel to use
  * @param offset  Offset from base channel
  *
- * @return  PIT channel number calculated from slot+offset
+ * @return  PIT channel number calculated from channel+offset
  */
 constexpr PitChannelNum inline operator+(PitChannelNum channel, int offset) {
    return channel + (unsigned)offset;
 }
-
 
 /**
  * @brief Class representing a Programmable Interrupt  Timer
@@ -276,7 +275,7 @@ public:
             Info::irqNums[0], Info::irqNums[1], Info::irqNums[2], Info::irqNums[3],
       };
       usbdm_assert(channel<Info::irqCount,"Illegal PIT channel");
-      enableNvicInterrupt(irqNums[channel]);
+      NVIC_EnableIRQ(irqNums[channel]);
    }
 
    /**

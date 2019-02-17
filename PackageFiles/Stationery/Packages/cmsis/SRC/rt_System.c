@@ -204,8 +204,10 @@ void rt_tsk_unlock (void) {
 
 /*--------------------------- rt_psh_req ------------------------------------*/
 
+/**
+ * Initiate a post service handling request if required.
+ */
 void rt_psh_req (void) {
-  /* Initiate a post service handling request if required. */
   if (os_lock == __FALSE) {
     OS_PEND_IRQ();
   }

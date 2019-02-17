@@ -87,7 +87,7 @@ Devices using this peripheral:
       description="IRQ Level in NVIC [0-15]"
       toolTip="Sets the priority level used to configure the NVIC\n
                Lower numbers represent higher priorities"
-      value="7" min="0" max="15" 
+      value="8" min="0" max="15" 
    />
 
    <template><![CDATA[

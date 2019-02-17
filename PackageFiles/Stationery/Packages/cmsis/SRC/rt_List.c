@@ -299,8 +299,13 @@ void rt_rmv_dly (P_TCB p_task) {
 
 /*--------------------------- rt_psq_enq ------------------------------------*/
 
+/**
+ * Insert post service request "entry" into ps-queue.
+ *
+ * @param entry   Entry to add
+ * @param arg     Argument for call-back??
+ */
 void rt_psq_enq (OS_ID entry, U32 arg) {
-  /* Insert post service request "entry" into ps-queue. */
   U32 idx;
 
   idx = rt_inc_qi (os_psq->size, &os_psq->count, &os_psq->first);

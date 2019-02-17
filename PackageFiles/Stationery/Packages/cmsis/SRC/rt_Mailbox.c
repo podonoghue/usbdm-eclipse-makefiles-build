@@ -176,9 +176,14 @@ OS_RESULT rt_mbx_wait (OS_ID mailbox, void **message, U16 timeout) {
 
 /*--------------------------- rt_mbx_check ----------------------------------*/
 
+/**
+ * Check for free space in a mailbox.
+ *
+ * @param mailbox Mailbox to check
+ *
+ * @return Number of messages that can be stored to a mailbox.
+ */
 OS_RESULT rt_mbx_check (OS_ID mailbox) {
-  /* Check for free space in a mailbox. Returns the number of messages     */
-  /* that can be stored to a mailbox. It returns 0 when mailbox is full.   */
   P_MCB p_MCB = mailbox;
 
   return ((U32)(p_MCB->size - p_MCB->count));
@@ -187,8 +192,13 @@ OS_RESULT rt_mbx_check (OS_ID mailbox) {
 
 /*--------------------------- isr_mbx_send ----------------------------------*/
 
+/**
+ * Same function as "os_mbx_send", but to be called by ISRs.
+ *
+ * @param mailbox Mailbox to use
+ * @param p_msg   Message to send
+ */
 void isr_mbx_send (OS_ID mailbox, void *p_msg) {
-  /* Same function as "os_mbx_send", but to be called by ISRs. */
   P_MCB p_MCB = mailbox;
 
   rt_psq_enq (p_MCB, (U32)p_msg);

@@ -218,14 +218,7 @@ ErrorCode Usb0::sofCallback(uint16_t frameNumber) {
       // Every ~256 ms
       switch (frameNumber&0x03) {
          case 0:
-            if (fConnectionState == USBconfigured) {
-               // Activity LED on when USB connection established
-//               UsbLed::on();
-            }
-            else {
-               // Activity LED off when no USB connection
-//               UsbLed::off();
-            }
+//            UsbLed::write(fConnectionState == USBconfigured);
             break;
          case 1:
          case 2:
@@ -274,7 +267,7 @@ void Usb0::epCdcSendNotification() {
    lastStatus = status;
 
    // Copy the data to Tx buffer
-   (void)memcpy(epCdcNotification.getBuffer(), &cdcNotification, sizeof(cdcNotification));
+   Endpoint::safeCopy(epCdcNotification.getBuffer(), &cdcNotification, sizeof(cdcNotification));
    epCdcNotification.getBuffer()[sizeof(cdcNotification)+0] = status;
    epCdcNotification.getBuffer()[sizeof(cdcNotification)+1] = 0;
 
@@ -293,7 +286,7 @@ static int cdcOutByteCount    = 8;
 void Usb0::startCdcIn() {
    if ((epCdcDataIn.getState() == EPIdle) && (cdcOutByteCount>0)) {
       static_assert(epCdcDataIn.BUFFER_SIZE>sizeof(cdcOutBuff), "Buffer too small");
-      memcpy(epCdcDataIn.getBuffer(), cdcOutBuff, cdcOutByteCount);
+      Endpoint::safeCopy(epCdcDataIn.getBuffer(), cdcOutBuff, cdcOutByteCount);
       //TODO Check if need ZLP
       epCdcDataIn.setNeedZLP();
       epCdcDataIn.startTxPhase(EPDataIn, cdcOutByteCount);

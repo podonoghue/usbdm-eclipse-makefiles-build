@@ -43,6 +43,13 @@ protected:
    /** Used to disable sensor */
    bool  enabled;
 
+   /** The result of last Temperature measurements */
+   float                lastTemperature;
+   /** The result of last Cold Reference Temperature measurements */
+   float                lastColdReference;
+   /** The status of last Temperature measurements */
+   ThermocoupleStatus   lastStatus;
+
 public:
    /**
     * Constructor
@@ -112,8 +119,10 @@ public:
    bool isEnabled() const {
       return enabled;
    }
+
    /**
-    * Read thermocouple
+    * Read the thermocouple.
+    * This initiates an measure of the thermocouple and updates internal state as well as returning the new values.
     *
     * @param[out] temperature   Temperature reading of external probe (.25 degree resolution)
     * @param[out] coldReference Temperature reading of internal cold-junction reference (.0625 degree resolution)
@@ -122,7 +131,7 @@ public:
     *
     * @note Temperature and cold-junction may be valid even if the thermocouple is disabled (TH_DISABLED).
     */
-   ThermocoupleStatus getReading(float &temperature, float &coldReference) {
+   ThermocoupleStatus getNewReading(float &temperature, float &coldReference) {
       uint8_t data[] = {
             0xFF, 0xFF, 0xFF, 0xFF,
       };
@@ -131,13 +140,13 @@ public:
       spi.endTransaction();
 
       // Temperature = sign-extended 14-bit value
-      temperature = (((int16_t)((data[0]<<8)|data[1]))>>2)/4.0;
+      lastTemperature = (((int16_t)((data[0]<<8)|data[1]))>>2)/4.0;
 
       // Add manual offset
-      temperature += offset;
+      lastTemperature += offset;
 
       // Cold junction = sign-extended 12-bit value
-      coldReference = (((int16_t)((data[2]<<8)|data[3]))>>4)/16.0;
+      lastColdReference = (((int16_t)((data[2]<<8)|data[3]))>>4)/16.0;
 
       /*  Raw status
        *    0x000 => OK
@@ -147,52 +156,79 @@ public:
        *    0b111 => No response - Max31855 not present at that address
        */
       int rawStatus = data[3]&0x07;
-      ThermocoupleStatus status = TH_ENABLED;
+      lastStatus = TH_ENABLED;
       if (rawStatus != 0) {
-         // Invalid temperature measurement
-         temperature = NAN;
+         // Invalid lastTemperature measurement
+         lastTemperature = NAN;
       }
       if (rawStatus == 0x111) {
          // No device so no Cold reference
-         coldReference = NAN;
-         status = TH_MISSING;
+         lastColdReference = NAN;
+         lastStatus = TH_MISSING;
       }
       else if (rawStatus & 0b001) {
          //Open
-         status = TH_OPEN;
+         lastStatus = TH_OPEN;
       }
       else if (rawStatus & 0b010) {
          // Ground short
-         status = TH_SHORT_GND;
+         lastStatus = TH_SHORT_GND;
       }
       else if (rawStatus & 0b100) {
          // Vcc short
-         status = TH_SHORT_VCC;
+         lastStatus = TH_SHORT_VCC;
       }
       else if (!enabled) {
          // Available but not enabled
-         status = TH_DISABLED;
+         lastStatus = TH_DISABLED;
       }
-      // Return error flag
-      return status;
+      // Return results
+      temperature   = lastTemperature;
+      coldReference = lastColdReference;
+
+      // Return status flag
+      return lastStatus;
    }
 
    /**
-    * Read enabled thermocouple
+    * Get thermocouple reading.
+    * This does not initiate a new measurement - it just return the last measurement taken.
     *
     * @param[out] temperature   Temperature reading of external probe (.25 degree resolution)
     * @param[out] coldReference Temperature reading of internal cold-junction reference (.0625 degree resolution)
     *
     * @return Status of sensor
+    *
     * @note Temperature will be zero if the thermocouple is disabled or unusable.
     * @note Cold-junction will be valid even if the thermocouple is disabled (TH_DISABLED).
     */
-   ThermocoupleStatus getEnabledReading(float &temperature, float &coldReference) {
-      ThermocoupleStatus status = getReading(temperature, coldReference);
-      if (status == TH_DISABLED) {
+   ThermocoupleStatus getLastEnabledReading(float &temperature, float &coldReference) {
+      USBDM::CriticalSection cs;
+      temperature = lastTemperature;
+      if (lastStatus == TH_DISABLED) {
          temperature = 0;
       }
-      return status;
+      coldReference = lastColdReference;
+      return lastStatus;
+   }
+
+   /**
+    * Get thermocouple reading.
+    * This does not initiate a new measurement - it just return the last measurement taken.
+    *
+    * @param[out] temperature   Temperature reading of external probe (.25 degree resolution)
+    * @param[out] coldReference Temperature reading of internal cold-junction reference (.0625 degree resolution)
+    *
+    * @return Status of sensor
+    *
+    * @note Temperature will be zero if the thermocouple is disabled or unusable.
+    * @note Cold-junction will be valid even if the thermocouple is disabled (TH_DISABLED).
+    */
+   ThermocoupleStatus getLastReading(float &temperature, float &coldReference) {
+      USBDM::CriticalSection cs;
+      temperature   = lastTemperature;
+      coldReference = lastColdReference;
+      return lastStatus;
    }
 
    /**

@@ -19,12 +19,12 @@
  */
 #include <stdint.h>
 #include "derivative.h"
-#ifdef __CMSIS_RTOS
-#include "cmsis.h"
-#endif
 #include "hardware.h"
 #include "formatted_io.h"
 #include "queue.h"
+#ifdef __CMSIS_RTOS
+#include "cmsis.h"
+#endif
 
 namespace USBDM {
 

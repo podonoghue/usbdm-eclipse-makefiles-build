@@ -93,10 +93,10 @@ FlashDriverError_t Flash::executeFlashCommand() {
    memcpy(space, (uint8_t*)(source), size);
 
    // Call executeFlashCommand_asm() on the stack with interrupts disabled
-   disableInterrupts();
-   (*fp)();
-   enableInterrupts();
-
+   {
+      USBDM::CriticalSection cs;
+      (*fp)();
+   }
    // Handle any errors
    if ((flashController().FSTAT & FTFA_FSTAT_FPVIOL_MASK ) != 0) {
       return FLASH_ERR_PROG_FPVIOL;

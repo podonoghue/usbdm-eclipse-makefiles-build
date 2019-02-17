@@ -1890,7 +1890,15 @@ os_InRegs osEvent_type svcMessageGet (osMessageQId queue_id, uint32_t millisec) 
 
 // Message Queue ISR Calls
 
-/// Put a Message to a Queue
+/**
+ * Put a Message to a Queue
+ *
+ * @param queue_id      ID of queue to use
+ * @param info          Arbitrary information to add
+ * @param millisec      Delay - must be zero
+ *
+ * @return Error if failed
+ */
 osStatus isrMessagePut (osMessageQId queue_id, uint32_t info, uint32_t millisec) {
 
   if ((queue_id == NULL) || (millisec != 0U)) {

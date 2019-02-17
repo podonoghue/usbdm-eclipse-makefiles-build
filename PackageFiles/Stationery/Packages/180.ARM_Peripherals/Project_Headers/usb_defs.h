@@ -267,7 +267,7 @@ typedef struct {
    uint8_t           bDescriptorType;     //!<  Descriptor Type (=6)
    uint16_t          bcdUSB;              //!<  USB Spec Release Number in BCD
    uint8_t           bDeviceClass;        //!<  Device Class Code
-   uint8_t           bDeviceSubClass;     //!<  Device Subclass Code      
+   uint8_t           bDeviceSubClass;     //!<  Device Subclass Code
    uint8_t           bDeviceProtocol;     //!<  Device Protocol Code
    uint8_t           bMaxPacketSize0;     //!<  Maximum Packet Size for EP0
    uint8_t           bNumConfigurations;  //!<  Number of possible Configurations
@@ -327,7 +327,7 @@ typedef struct {
 #define CS_INTERFACE  (0x24)
 #define CS_ENDPOINT   (0x25)
 
-// 
+//
 #define ST_HEADER     (0x00)
 #define ST_INTERFACE  (0x01)
 
@@ -454,23 +454,23 @@ enum BdtOwner : bool {
 struct BdtEntry {
    union {
       volatile uint8_t raw:8;    //!< Access as bit masks
-      volatile struct {          //!< BDT setup access
+      struct {          //!< BDT setup access
          uint8_t     :2;
-         bool        bdt_stall:1;  //!< Stall End point
-         bool        dts:1;        //!< Enable Data toggle
-         bool        ninc:1;       //!< Disable DMA address increment
-         bool        keep:1;       //!< BDT is 'kept' by SIE, used for FIFO w/o MCU intervention
+         volatile bool        bdt_stall:1;  //!< Stall End point
+         volatile bool        dts:1;        //!< Enable Data toggle
+         volatile bool        ninc:1;       //!< Disable DMA address increment
+         volatile bool        keep:1;       //!< BDT is 'kept' by SIE, used for FIFO w/o MCU intervention
          uint8_t     :2;
       } setup;
-      volatile struct {          //!< BDT result access
+      struct {          //!< BDT result access
          uint8_t     :2;
-         UsbPids     tok_pid:4;  //!< Token PID is written back by SIE
+         volatile UsbPids     tok_pid:4;  //!< Token PID is written back by SIE
          uint8_t     :2;
       } result;
-      volatile struct {          //!< BDT common access
+      struct {          //!< BDT common access
          uint8_t     :6;
-         DataToggle  data0_1:1;  //!< Data 0/1 toggle
-         BdtOwner    own:1;      //!< Ownership of the BDT.  MCU only modifies BDT if owned.
+         volatile DataToggle  data0_1:1;  //!< Data 0/1 toggle
+         volatile BdtOwner    own:1;      //!< Ownership of the BDT.  MCU only modifies BDT if owned.
       };
    };
    volatile uint8_t  :8;
@@ -483,15 +483,15 @@ struct BdtEntry {
    constexpr BdtEntry(uint8_t value, uint16_t byteCount, uint32_t address) :
       raw(value), bc(byteCount), addr(address) {};
 
-   void setByteCount(uint16_t byteCount) {
+   void setByteCount(uint16_t byteCount) volatile {
       bc = byteCount;
    }
 
-   void setAddress(uint32_t address) {
+   void setAddress(uint32_t address) volatile {
       addr = address;
    }
 
-   void setControl(uint8_t value) {
+   void setControl(uint8_t value) volatile {
       raw = value;
    }
 };
