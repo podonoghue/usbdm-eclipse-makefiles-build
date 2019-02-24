@@ -603,7 +603,7 @@ public:
       return thread_id;
    }
    /**
-    * Get thread ID of current process
+    * Get thread ID of current thread
     *
     * @return ID of thread
     */
@@ -617,6 +617,15 @@ public:
     */
    osPriority getPriority() {
       return osThreadGetPriority(thread_id);
+   }
+   /**
+    * Get priority of current thread
+    *
+    * @return Priority of thread
+    */
+   static osPriority getMyPriority() {
+      auto threadId = CMSIS::Thread::getMyId();
+      return osThreadGetPriority(threadId);
    }
    /**
     * Get thread Priority
@@ -654,6 +663,21 @@ public:
     * @return osErrorISR:        Cannot be called from interrupt service routines.
     */
    static osStatus setPriority(osThreadId threadId, osPriority osPriority) {
+      return osThreadSetPriority(threadId, osPriority);
+   }
+
+   /**
+    * Set priority of current thread
+    *
+    * @param[in] priority Priority to set for thread
+    *
+    * @return osOK:              The priority of the thread has been successfully changed.
+    * @return osErrorValue:      Incorrect priority value.
+    * @return osErrorResource:   Thread that is not an active thread.
+    * @return osErrorISR:        Cannot be called from interrupt service routines.
+    */
+   static osStatus setMyPriority(osPriority osPriority) {
+      auto threadId = CMSIS::Thread::getMyId();
       return osThreadSetPriority(threadId, osPriority);
    }
 
@@ -1255,17 +1279,6 @@ public:
    }
 
    /**
-    * Obtains pointer to object indicated by event.
-    *
-    * @param event Event to use.  Usually obtained from get().
-    *
-    * @return Object reference
-    */
-   static T *getValueFromEvent(osEvent event) {
-      return (T*)(event.value.p);
-   }
-
-   /**
     * Get a mail item from the mail queue.\n
     * For use in ISRs
     *
@@ -1275,6 +1288,17 @@ public:
     */
    osEvent getISR() {
       return osMailGet((os_mailQ_cb *)&pool, 0);
+   }
+
+   /**
+    * Obtains pointer to object indicated by event.
+    *
+    * @param event Event to use.  Usually obtained from get().
+    *
+    * @return Object reference
+    */
+   static T *getValueFromEvent(osEvent event) {
+      return (T*)(event.value.p);
    }
 
    /**
