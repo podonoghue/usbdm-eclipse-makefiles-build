@@ -124,7 +124,17 @@ protected:
    /**
     * Width used for integers numbers
     */
-   int fWidth = 0;
+   unsigned fWidth = 0;
+
+   /**
+    * Precision used for floating point numbers
+    */
+   unsigned fPrecision = 3;
+
+   /**
+    * Precision multiplier used for floating point numbers (10^fPrecision)
+    */
+   unsigned fPrecisionMultiplier = 1000;
 
    /**
     * Construct formatter interface
@@ -261,8 +271,24 @@ public:
     *
     * @return Reference to self
     */
-   FormattedIO &setWidth(int width) {
+   FormattedIO &setWidth(unsigned width) {
       fWidth = width;
+      return *this;
+   }
+
+   /**
+    * Set precision for floating point numbers
+    *
+    * @param precision Precision to use
+    *
+    * @return Reference to self
+    */
+   FormattedIO &setPrecision(unsigned precision) {
+      fPrecision = precision;
+      fPrecisionMultiplier = 1;
+      while (precision-->0) {
+         fPrecisionMultiplier *= 10;
+      }
       return *this;
    }
 
@@ -493,9 +519,11 @@ public:
     * @return Reference to self
     */
    FormattedIO NOINLINE_DEBUG &reset() {
-      fWidth   = 0;
-      fPadding = Padding_None;
-      fRadix   = Radix_10;
+      fWidth               = 0;
+      fPadding             = Padding_None;
+      fRadix               = Radix_10;
+      fPrecision           = 3;
+      fPrecisionMultiplier = 1000;
       return *this;
    }
 
@@ -741,7 +769,9 @@ public:
       }
       ultoa(buff, (long)value, Radix_10, Padding_None, 0);
       write(buff).write('.');
-      ultoa(buff, ((long)round(value*1000))%1000, Radix_10, Padding_LeadingZeroes, 3);
+      ultoa(buff, 
+           ((long)round(value*fPrecisionMultiplier))%fPrecisionMultiplier, 
+           Radix_10, Padding_LeadingZeroes, fPrecision);
       write(buff);
       return *this;
    }

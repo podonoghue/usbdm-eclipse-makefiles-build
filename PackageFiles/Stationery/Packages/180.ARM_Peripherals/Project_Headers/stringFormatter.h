@@ -88,9 +88,9 @@ public:
    }
 
    /**
-    * Convert buffer to string
+    * Convert buffer to string.
     *
-    * @return String (nul terminated)
+    * @return String ('\0' terminated)
     */
    const char *toString() {
       // Terminate
@@ -98,6 +98,13 @@ public:
 
       // Return ptr to internal buffer
       return buff;
+   }
+
+   /**
+    * Get length of buffer content.
+    */
+   unsigned length() const {
+      return ptr-buff;
    }
 
 protected:
