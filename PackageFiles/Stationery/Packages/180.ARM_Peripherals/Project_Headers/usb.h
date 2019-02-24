@@ -237,9 +237,9 @@ public:
    void reportLineCoding(const LineCodingStructure *lineCodingStructure);
 
    /**
-    * Format SETUP transaction as string
+    * Format SETUP packet as string
     *
-    * @param[in]  p SETUP transaction
+    * @param[in]  p SETUP packet
     *
     * @return Pointer to static buffer
     */

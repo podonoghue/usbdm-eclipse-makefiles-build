@@ -426,7 +426,7 @@ extern       osMessageQId    osMessageQId_osTimerMessageQ;
 
 // ==== Helper Functions ====
 
-/// Convert timeout in millisec to system ticks
+/// Convert timeout in millisecond to system ticks
 static uint16_t rt_ms2tick (uint32_t millisec) {
   uint32_t tick;
 
