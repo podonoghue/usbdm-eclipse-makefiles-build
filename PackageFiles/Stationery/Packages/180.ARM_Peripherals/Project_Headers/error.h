@@ -133,7 +133,7 @@ inline void _usbdm_assert(const char *msg) {
 
 } // End namespace USBDM
 
-#if defined (DEBUG_BUILD) && !defined (NDEBUG)
+#if !defined (NDEBUG)
 #define USBDM_STRINGIFY(x)  #x
 #define USBDM_TOSTRING(x)   USBDM_STRINGIFY(x)
 
