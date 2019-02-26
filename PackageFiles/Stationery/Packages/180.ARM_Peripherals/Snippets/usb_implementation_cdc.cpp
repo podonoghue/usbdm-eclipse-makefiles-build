@@ -85,7 +85,7 @@ const DeviceDescriptor Usb0::deviceDescriptor = {
       /* bMaxPacketSize0     */ CONTROL_EP_MAXSIZE,             // EndPt 0 max packet size
       /* idVendor            */ nativeToLe16(VENDOR_ID),        // Vendor ID
       /* idProduct           */ nativeToLe16(PRODUCT_ID),       // Product ID
-      /* bcdDevice           */ nativeToLe16(VERSION_ID),       // Device Release    [BCD = 4.10]
+      /* bcdDevice           */ nativeToLe16(VERSION_ID),       // Device Release
       /* iManufacturer       */ s_manufacturer_index,           // String index of Manufacturer name
       /* iProduct            */ s_product_index,                // String index of product description
       /* iSerialNumber       */ s_serial_index,                 // String index of serial number
@@ -190,13 +190,13 @@ const Usb0::Descriptors Usb0::otherDescriptors = {
 };
 
 /** In end-point for CDC notifications */
-InEndpoint  <Usb0Info, Usb0::CDC_NOTIFICATION_ENDPOINT, CDC_NOTIFICATION_EP_MAXSIZE>  Usb0::epCdcNotification;
+InEndpoint  <Usb0Info, Usb0::CDC_NOTIFICATION_ENDPOINT, CDC_NOTIFICATION_EP_MAXSIZE>  Usb0::epCdcNotification(EndPointType_Bulk);
 
 /** Out end-point for CDC data out */
-OutEndpoint <Usb0Info, Usb0::CDC_DATA_OUT_ENDPOINT,     CDC_DATA_OUT_EP_MAXSIZE>      Usb0::epCdcDataOut;
+OutEndpoint <Usb0Info, Usb0::CDC_DATA_OUT_ENDPOINT,     CDC_DATA_OUT_EP_MAXSIZE>      Usb0::epCdcDataOut(EndPointType_Interrupt);
 
 /** In end-point for CDC data in */
-InEndpoint  <Usb0Info, Usb0::CDC_DATA_IN_ENDPOINT,      CDC_DATA_IN_EP_MAXSIZE>       Usb0::epCdcDataIn;
+InEndpoint  <Usb0Info, Usb0::CDC_DATA_IN_ENDPOINT,      CDC_DATA_IN_EP_MAXSIZE>       Usb0::epCdcDataIn(EndPointType_Interrupt);
 /*
  * TODO Add additional end-points here
  */
@@ -218,6 +218,7 @@ ErrorCode Usb0::sofCallback(uint16_t frameNumber) {
       // Every ~256 ms
       switch (frameNumber&0x03) {
          case 0:
+            // LED on if configured, off if not
 //            UsbLed::write(fConnectionState == USBconfigured);
             break;
          case 1:
@@ -226,9 +227,9 @@ ErrorCode Usb0::sofCallback(uint16_t frameNumber) {
          case 3:
          default :
             if (fActivityFlag) {
-               // Activity LED flashes
+               // Flash LED to indicate activity
 //               UsbLed::toggle();
-               setActive(false);
+               fActivityFlag = false;
             }
             break;
       }
@@ -236,6 +237,19 @@ ErrorCode Usb0::sofCallback(uint16_t frameNumber) {
    // Check CDC status
    epCdcSendNotification();
 
+   return E_NO_ERROR;
+}
+
+ErrorCode userCallbackFunction(const Usb0::UserEvent event) {
+   switch(event) {
+      case Usb0::UserEvent_Suspend:
+      case Usb0::UserEvent_Reset:
+//         UsbLed::off();
+         break;
+
+      case Usb0::UserEvent_Resume:
+         break;
+   }
    return E_NO_ERROR;
 }
 
@@ -273,7 +287,7 @@ void Usb0::epCdcSendNotification() {
 
    // Set up to Tx packet
 //   console.write("epCdcSendNotification() 0x").writeln(epCdcNotification.getBuffer()[sizeof(cdcNotification)+0], USBDM::Radix_16);
-   epCdcNotification.startTxPhase(EPDataIn, sizeof(cdcNotification)+2);
+   epCdcNotification.startTxStage(EPDataIn, sizeof(cdcNotification)+2);
 }
 
 static uint8_t cdcOutBuff[10] = "Welcome\n";
@@ -330,15 +344,18 @@ void Usb0::handleTokenComplete(UsbStat usbStat) {
  * Call-back handling CDC-OUT transaction complete\n
  * Data received is passed to the cdcInterface
  *
- * @param[in] state Current end-point state
+ * @param[in] state Current end-point state (always EPDataOut)
+ *
+ * @return The endpoint state to set after call-back (EPDataOut)
  */
-void Usb0::cdcOutTransactionCallback(EndpointState state) {
-//   console.WRITELN("cdc_out");
-   if (state == EPDataOut) {
-      cdcInterface::putData(epCdcDataOut.getDataTransferredSize(), epCdcDataOut.getBuffer());
-   }
+EndpointState Usb0::cdcOutTransactionCallback(EndpointState state) {
+   //   console.WRITELN("cdc_out");
+   (void)state;
+   usbdm_assert(state == EPDataOut, "Incorrect endpoint state");
+   cdcInterface::putData(epCdcDataOut.getDataTransferredSize(), epCdcDataOut.getBuffer());
    // Set up for next transfer
-   epCdcDataOut.startRxPhase(EPDataOut, epCdcDataOut.BUFFER_SIZE);
+   epCdcDataOut.startRxStage(EPDataOut, epCdcDataOut.BUFFER_SIZE);
+   return EPDataOut;
 }
 
 /**
@@ -346,19 +363,23 @@ void Usb0::cdcOutTransactionCallback(EndpointState state) {
  * Checks for data and schedules transfer as necessary\n
  * Each transfer will have a ZLP as necessary.
  *
- * @param[in] state Current end-point state
+ * @param[in] state Current end-point state (always EPDataIn)
+ *
+ * @return The endpoint state to set after call-back (EPIdle/EPDataIn)
  */
-void Usb0::cdcInTransactionCallback(EndpointState state) {
+EndpointState Usb0::cdcInTransactionCallback(EndpointState state) {
+   usbdm_assert(state == EPDataIn, "Incorrect endpoint state");
    static uint8_t buffer[20];
 
-   if (state == EPDataIn) {
       int size = cdcInterface::getData(sizeof(buffer), buffer);
-      if (size != 0) {
-         // Schedules transfer
-         epCdcDataIn.setNeedZLP();
-         epCdcDataIn.startTxPhase(EPDataIn, size, buffer);
-      }
+      if (size == 0) {
+      // No messages waiting
+      return EPIdle;
    }
+   // Schedules transfer
+   epCdcDataIn.setNeedZLP();
+   epCdcDataIn.startTxStage(EPDataIn, size, buffer);
+   return EPDataIn;
 }
 
 /**
@@ -402,16 +423,17 @@ void Usb0::handleSetLineCoding() {
 //   console.WRITELN("handleSetLineCoding()");
 
    // Call-back to do after transaction complete
-   static auto callback = []() {
+   static auto callback = [](EndpointState) {
       // The controlEndpoint buffer will contain the LineCodingStructure data at call-back time
       cdcInterface::setLineCoding((LineCodingStructure *)fControlEndpoint.getBuffer());
-      setSetupCompleteCallback(nullptr);
+      fControlEndpoint.setCallback(nullptr);
+      return EPIdle;
    };
-   setSetupCompleteCallback(callback);
+   fControlEndpoint.setCallback(callback);
 
    // Don't use external buffer - this requires response to fit in internal EP buffer
    static_assert(sizeof(LineCodingStructure) < fControlEndpoint.BUFFER_SIZE, "Buffer insufficient size");
-   fControlEndpoint.startRxPhase(EPDataOut, sizeof(LineCodingStructure));
+   fControlEndpoint.startRxStage(EPDataOut, sizeof(LineCodingStructure));
 }
 
 /**
@@ -420,7 +442,7 @@ void Usb0::handleSetLineCoding() {
 void Usb0::handleGetLineCoding() {
 //   console.WRITELN("handleGetLineCoding()");
    // Send packet
-   ep0StartTxTransaction( sizeof(LineCodingStructure), (const uint8_t*)&cdcInterface::getLineCoding());
+   ep0StartTxStage( sizeof(LineCodingStructure), (const uint8_t*)&cdcInterface::getLineCoding());
 }
 
 /**
@@ -430,7 +452,7 @@ void Usb0::handleSetControlLineState() {
 //   console.write("handleSetControlLineState() ").writeln(fEp0SetupBuffer.wValue.lo(), USBDM::Radix_16);
    cdcInterface::setControlLineState(fEp0SetupBuffer.wValue.lo());
    // Tx empty Status packet
-   ep0StartTxTransaction( 0, nullptr );
+   ep0StartTxStage( 0, nullptr );
 }
 
 /**
@@ -440,7 +462,7 @@ void Usb0::handleSendBreak() {
 //   console.WRITELN("handleSendBreak()");
    cdcInterface::sendBreak(fEp0SetupBuffer.wValue);
    // Tx empty Status packet
-   ep0StartTxTransaction( 0, nullptr );
+   ep0StartTxStage( 0, nullptr );
 }
 
 /**

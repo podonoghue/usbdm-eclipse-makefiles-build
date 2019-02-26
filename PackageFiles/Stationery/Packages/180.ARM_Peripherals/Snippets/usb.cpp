@@ -226,16 +226,15 @@ void reportLineCoding(const LineCodingStructure *lineCodingStructure) {
  */
 const char *UsbBase::getSetupPacketDescription(SetupPacket *p) {
 #ifdef DEBUG_BUILD
-   static char buff[100];
-   StringFormatter sf(buff, sizeof(buff));
+   static StringFormatter_T<100> sf;
    sf.clear().
          write("[").
-         write(p->bmRequestType).write(",").
+         write(p->bmRequestType, Radix_2).write(",").
          write(getRequestName(p->bRequest)).write(",").
-         write((int)(p->wValue)).write(",").
-         write((int)(p->wIndex)).write(",").
-         write((int)(p->wLength)).write("]");
-   return buff;
+         write(p->wValue, Radix_16).write(",").
+         write(p->wIndex).write(",").
+         write(p->wLength).write("]");
+   return sf.toString();
 #else
    (void)p;
    return "";

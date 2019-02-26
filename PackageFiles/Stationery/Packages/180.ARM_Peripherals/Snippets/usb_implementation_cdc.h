@@ -163,7 +163,7 @@ public:
    static const uint8_t *const stringDescriptors[];
 
 protected:
-   /* end-points */
+   /* Additional end-points */
    /** In end-point for CDC notifications */
    static InEndpoint  <Usb0Info, Usb0::CDC_NOTIFICATION_ENDPOINT, CDC_NOTIFICATION_EP_MAXSIZE>  epCdcNotification;
 
@@ -255,8 +255,8 @@ protected:
       addEndpoint(&epCdcDataOut);
       epCdcDataOut.setCallback(cdcOutTransactionCallback);
 
-      // Make sure epCdcDataOut is ready for polling (OUT)
-      epCdcDataOut.startRxPhase(EPDataOut, epCdcDataOut.BUFFER_SIZE);
+      // Make sure epCdcDataOut is ready for polling (interrupt OUT)
+      epCdcDataOut.startRxStage(EPDataOut, epCdcDataOut.getMaximumTransferSize());
 
       epCdcDataIn.initialise();
       addEndpoint(&epCdcDataIn);
@@ -287,16 +287,20 @@ protected:
     * Each transfer will have a ZLP as necessary.
     *
     * @param[in] state Current end-point state
+    *
+    * @return The endpoint state to set after call-back (EPIdle)
     */
-   static void cdcInTransactionCallback(EndpointState state);
+   static EndpointState cdcInTransactionCallback(EndpointState state);
 
    /**
     * Call-back handling CDC-OUT transaction complete\n
     * Data received is passed to the cdcInterface
     *
     * @param[in] state Current end-point state
+    *
+    * @return The endpoint state to set after call-back (EPIdle)
     */
-   static void cdcOutTransactionCallback(EndpointState state);
+   static EndpointState cdcOutTransactionCallback(EndpointState state);
 
    /**
     * Handler for Token Complete USB interrupts for\n

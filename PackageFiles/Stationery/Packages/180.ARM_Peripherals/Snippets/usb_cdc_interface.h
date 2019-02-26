@@ -35,7 +35,7 @@ private:
 protected:
 
    /** Type for call-back */
-   using SimpleCallbak = bool (*)();
+   using SimpleCallback = bool (*)();
 
 protected:
    CDC_Interface() {}
@@ -52,7 +52,7 @@ public:
     *
     * @param cb The function to call to notify the USB In interface that new data is available
     */
-   static void setUsbInNotifyCallback(simpleCallbak cb);
+   static void setUsbInNotifyCallback(SimpleCallback cb);
 
    /**
     * Get state of serial interface
