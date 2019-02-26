@@ -9,20 +9,59 @@
 #define SOURCES_LCD_ST7920_H_
 
 #include <stdint.h>
-#include <string.h>
-#include <stdarg.h>
 #include "fonts.h"
 #include "hardware.h"
 #include "spi.h"
 #include "delay.h"
+#include "formatted_io.h"
 
 /**
  * Class representing an LCD connected over SPI
  */
-class LCD_ST7920 {
+class LCD_ST7920 : public USBDM::FormattedIO {
 
-protected:
-   constexpr static USBDM::Font &font = USBDM::smallFont;
+private:
+   constexpr static USBDM::Font &font = USBDM::fontSmall;
+
+   /**
+    * Check if character is available
+    *
+    * @return true  Character available i.e. _readChar() will not block
+    * @return false No character available
+    */
+   virtual bool _isCharAvailable() override {
+      return false;
+   }
+
+   /**
+    * Receives a character (blocking)
+    *
+    * @return Character received
+    */
+   virtual int _readChar() override {
+      return -1;
+   }
+
+   /**
+    * Write a character to the LCD in graphics mode at the current x,y location
+    *
+    * @param[in]  ch - character to send
+    */
+   virtual void _writeChar(char ch) override;
+
+   /**
+    *  Flush input data
+    */
+   virtual void flushInput() override {
+   }
+
+public:
+   /**
+    *  Flush output data
+    */
+   virtual void flushOutput() override {
+      refreshImage();
+   }
 
 public:
    /** Width of LCD in pixels */
@@ -100,7 +139,7 @@ public:
    /**
     * Clear text screen
     */
-   void clear();
+   LCD_ST7920 &clear();
 
    /**
     * Display text string using default LCD font
@@ -108,27 +147,27 @@ public:
     * @param[in] row Row on display (0..3)
     * @param[in] str String to display (up to 16 characters)
     */
-   void displayString(uint8_t row, const char* str);
+   LCD_ST7920 &displayString(uint8_t row, const char* str);
 
    /**
     * Switches the LCD to text mode
     */
-   void setTextMode();
+   LCD_ST7920 &setTextMode();
 
    /**
     * Switches the LCD to graphics mode
     */
-   void setGraphicMode();
+   LCD_ST7920 &setGraphicMode();
 
    /**
     * Clear frame buffer
     */
-   void clearFrameBuffer();
+   LCD_ST7920 &clearFrameBuffer();
 
    /**
     * Refreshes LCD from frame buffer
     */
-   void refreshImage();
+   LCD_ST7920 &refreshImage();
 
    /**
     * Write image to frame buffer
@@ -139,15 +178,16 @@ public:
     * @param[in] width   Width of image
     * @param[in] height  Height of image
     */
-   void writeImage(const uint8_t *dataPtr, int x, int y, int width, int height);
+   LCD_ST7920 &writeImage(const uint8_t *dataPtr, int x, int y, int width, int height);
 
    /**
     * Set inversion of images etc
     *
     * @param[in] enable True to invert writes, false to not invert
     */
-   void setInversion(bool enable=true) {
+   LCD_ST7920 &setInversion(bool enable=true) {
       invertMask = enable?0xFF:0x00;
+      return *this;
    }
 
    /**
@@ -155,8 +195,9 @@ public:
     *
     * @param[in] image The Image to write (must be 128x64 pixels i.e. 16x64 bytes)
     */
-   void writeImage(const uint8_t *image) {
+   LCD_ST7920 &writeImage(const uint8_t *image) {
       writeImage(image, 0, 0, 128, 64);
+      return *this;
    }
 
    /**
@@ -166,72 +207,59 @@ public:
     * @param[in] width  Width of the image
     * @param[in] height Height of character
     */
-   void putCustomChar(const uint8_t *image, int width, int height) {
+   LCD_ST7920 &putCustomChar(const uint8_t *image, int width, int height) {
       writeImage(image, x, y, width, height);
       x += width;
       fontHeight = max(fontHeight, height);
+      return *this;
    }
-
-   /**
-    * Write a character to the LCD in graphics mode at the current x,y location
-    *
-    * @param[in] ch The character to write
-    */
-   void __attribute__((noinline)) putChar(uint8_t ch);
 
    /**
     * Writes whitespace to the LCD in graphics mode at the current x,y location
     *
     * @param[in] width Width of white space in pixels
     */
-   void putSpace(int width);
+   LCD_ST7920 &putSpace(int width);
 
    /**
     * Write an Up arrow to the LCD in graphics mode at the current x,y location
     */
-   void putUpArrow() {
+   LCD_ST7920 &putUpArrow() {
       static const uint8_t upArrow[]   = {0x00,0x10,0x38,0x54,0x10,0x10,0x10,0x00,0x00};
-      putCustomChar(upArrow, 6, 8);
+      return putCustomChar(upArrow, 6, 8);
    }
 
    /**
     * Write a Down arrow to the LCD in graphics mode at the current x,y location
     */
-   void putDownArrow() {
+   LCD_ST7920 &putDownArrow() {
       static const uint8_t downArrow[] = {0x00,0x10,0x10,0x10,0x54,0x38,0x10,0x00,0x00};
-      putCustomChar(downArrow, 6, 8);
+      return putCustomChar(downArrow, 6, 8);
    }
 
    /**
     * Write a Left arrow to the LCD in graphics mode at the current x,y location
     */
-   void putLeftArrow() {
+   LCD_ST7920 &putLeftArrow() {
       static const uint8_t leftArrow[]   = {0x00,0x10,0x20,0x7E,0x20,0x10,0x00,0x00,0x00};
-      putCustomChar(leftArrow, 7, 8);
+      return putCustomChar(leftArrow, 7, 8);
    }
 
    /**
     * Write an Right arrow to the LCD in graphics mode at the current x,y location
     */
-   void putRightArrow() {
+   LCD_ST7920 &putRightArrow() {
       static const uint8_t rightArrow[] = {0x00,0x08,0x04,0x7E,0x04,0x08,0x00,0x00,0x00};
-      putCustomChar(rightArrow, 7, 8);
+      return putCustomChar(rightArrow, 7, 8);
    }
 
    /**
     * Write an Enter symbol to the LCD in graphics mode at the current x,y location
     */
-   void putEnter() {
+   LCD_ST7920 &putEnter() {
       static const uint8_t enter[] = {0x00,0x02,0x12,0x22,0x7E,0x20,0x10,0x00,0x00};
-      putCustomChar(enter, 7, 8);
+      return putCustomChar(enter, 7, 8);
    }
-
-   /**
-    * Write a string to the LCD in graphics mode at the current x,y location
-    *
-    * @param[in] str The string to write
-    */
-   void putString(const char *str);
 
    /**
     * Set the current X,Y location for graphics mode
@@ -239,10 +267,11 @@ public:
     * @param[in] x
     * @param[in] y
     */
-   void gotoXY(int x, int y) {
+   LCD_ST7920 &gotoXY(int x, int y) {
       this->x = x;
       this->y = y;
       fontHeight = 0;
+      return *this;
    }
 
    /**
@@ -251,9 +280,10 @@ public:
     * @param[out] x
     * @param[out] y
     */
-   void getXY(int &x, int &y) {
+   LCD_ST7920 &getXY(int &x, int &y) {
       x = this->x;
       y = this->y;
+      return *this;
    }
 
    /**
@@ -261,7 +291,7 @@ public:
     *
     * @param[in] value Digit to write (0-9)
     */
-   void putSmallDigit(int value) {
+   LCD_ST7920 &putSmallDigit(int value) {
       // Small digit font
       static const uint8_t smallNumberFont[10][6] = {
             {0x30,0x48,0x48,0x48,0x30,0x00},
@@ -275,7 +305,7 @@ public:
             {0x30,0x48,0x30,0x48,0x30,0x00},
             {0x30,0x48,0x30,0x08,0x30,0x00},
       };
-      putCustomChar(smallNumberFont[value], 5, 6);
+      return putCustomChar(smallNumberFont[value], 5, 6);
    }
 
    /**
@@ -313,7 +343,7 @@ public:
     *
     * @note Limited to 21 characters ~ 1 line
     */
-   int printf(const char *format, ...) __attribute__ ((format (printf, 2, 3)));
+//   int printf(const char *format, ...) __attribute__ ((format (printf, 2, 3)));
 };
 
 #endif /* SOURCES_LCD_ST7920_H_ */

@@ -4,8 +4,8 @@
  *  Created on: 18 Sep 2016
  *      Author: podonoghue
  */
-
 #include "lcd_st7920.h"
+#include "string.h"
 
 /**
  * Write command to LCD
@@ -70,12 +70,13 @@ void LCD_ST7920::initialise() {
 /**
  * Clear text screen
  */
-void LCD_ST7920::clear() {
+LCD_ST7920 &LCD_ST7920::clear() {
    setTextMode();
    writeCommand(0b00110000); // Basic instruction mode
    writeCommand(0b00000010); // Home
    writeCommand(0b00000001); // Clear
    USBDM::waitUS(CLEAR_TIME_US);
+   return *this;
 }
 
 /**
@@ -84,7 +85,7 @@ void LCD_ST7920::clear() {
  * @param[in] row Row on display (0..3)
  * @param[in] str String to display (up to 16 characters)
  */
-void LCD_ST7920::displayString(uint8_t row, const char* str) {
+LCD_ST7920 &LCD_ST7920::displayString(uint8_t row, const char* str) {
    uint8_t addr = 0x80;
    switch (row) {
       case 0: addr = 0x80; break;
@@ -103,46 +104,51 @@ void LCD_ST7920::displayString(uint8_t row, const char* str) {
       }
       writeData(*str++);
    }
+   return *this;
 }
 
 /**
  * Switches the LCD to text mode
  */
-void LCD_ST7920::setTextMode() {
+LCD_ST7920 &LCD_ST7920::setTextMode() {
    // Set Extended instructions
    writeCommand(0b110100);
    // Set Graphic off
    writeCommand(0b110100);
    // Set Basic instructions
    writeCommand(0b110000);
+   return *this;
 }
 
 /**
  * Switches the LCD to graphics mode
  */
-void LCD_ST7920::setGraphicMode() {
+LCD_ST7920 &LCD_ST7920::setGraphicMode() {
    // Set Extended instructions
    writeCommand(0b110100);
    // Set Graphic on
    writeCommand(0b110110);
    // Set Basic instructions
    writeCommand(0b110000);
+   return *this;
 }
 
 /**
  * Clear frame buffer
  */
-void LCD_ST7920::clearFrameBuffer() {
+LCD_ST7920 &LCD_ST7920::clearFrameBuffer() {
    memset(frameBuffer, invertMask, sizeof(frameBuffer));
    x          = 0;
    y          = 0;
    fontHeight = 0;
+   return *this;
 }
 
 /**
  * Refreshes LCD from frame buffer
  */
-void LCD_ST7920::refreshImage() {
+LCD_ST7920 &LCD_ST7920::refreshImage() {
+
    // Set Extended instructions
    writeCommand(0b110110);
 
@@ -166,6 +172,7 @@ void LCD_ST7920::refreshImage() {
    }
    // Set Basic instructions
    writeCommand(0b110000);
+   return *this;
 }
 
 /**
@@ -177,14 +184,14 @@ void LCD_ST7920::refreshImage() {
  * @param[in] width   Width of image
  * @param[in] height  Height of image
  */
-void LCD_ST7920::writeImage(const uint8_t *dataPtr, int x, int y, int width, int height) {
+LCD_ST7920 &LCD_ST7920::writeImage(const uint8_t *dataPtr, int x, int y, int width, int height) {
    if ((x<0)||(y<0)) {
       // Doesn't support negative clipping
-      return;
+      return *this;
    }
    if ((x>=LCD_WIDTH)||(y>=LCD_HEIGHT)) {
       // Entirely off screen
-      return;
+      return *this;
    }
    if ((x+width) > LCD_WIDTH) {
       // Clip on right
@@ -227,6 +234,7 @@ void LCD_ST7920::writeImage(const uint8_t *dataPtr, int x, int y, int width, int
       dataPtr += (width+7)/8;
    }
    //      refreshImage(); // Debug only
+   return *this;
 }
 
 /**
@@ -234,7 +242,7 @@ void LCD_ST7920::writeImage(const uint8_t *dataPtr, int x, int y, int width, int
  *
  * @param[in] ch The character to write
  */
-void LCD_ST7920::putChar(uint8_t ch) {
+void LCD_ST7920::_writeChar(char ch) {
    int width  = font.width;
    int height = font.height;
    if (ch == '\n') {
@@ -252,6 +260,7 @@ void LCD_ST7920::putChar(uint8_t ch) {
       x += width;
       fontHeight = max(fontHeight, height);
    }
+   return;
 }
 
 /**
@@ -259,7 +268,7 @@ void LCD_ST7920::putChar(uint8_t ch) {
  *
  * @param[in] width Width of white space in pixels
  */
-void LCD_ST7920::putSpace(int width) {
+LCD_ST7920 &LCD_ST7920::putSpace(int width) {
    static const uint8_t space[] = {0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00};
    while (width>0) {
       int t = 8;
@@ -269,18 +278,9 @@ void LCD_ST7920::putSpace(int width) {
       width -= t;
       putCustomChar(space, t, 8);
    }
+   return *this;
 }
 
-/**
- * Write a string to the LCD in graphics mode at the current x,y location
- *
- * @param[in] str The string to write
- */
-void LCD_ST7920::putString(const char *str) {
-   while (*str != '\0') {
-      putChar(*str++);
-   }
-}
 /**
  * Draw vertical line
  *
@@ -357,11 +357,11 @@ void LCD_ST7920::drawPixel(int x, int y) {
  *
  * @note Limited to 21 characters ~ 1 line
  */
-int LCD_ST7920::printf(const char *format, ...) {
-   static char buff[22];
-   va_list args;
-   va_start(args, format);
-   int rc = vsnprintf(buff, sizeof(buff), format, args);
-   putString(buff);
-   return rc;
-}
+//int LCD_ST7920::printf(const char *format, ...) {
+//   static char buff[22];
+//   va_list args;
+//   va_start(args, format);
+//   int rc = vsnprintf(buff, sizeof(buff), format, args);
+//   write(buff);
+//   return rc;
+//}
