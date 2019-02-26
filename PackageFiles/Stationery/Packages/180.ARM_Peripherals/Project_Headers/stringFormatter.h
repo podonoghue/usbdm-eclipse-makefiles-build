@@ -1,5 +1,5 @@
 /**
- * @file    stringFormatter.h  (180.ARM_Peripherals/Project_Headers/console.h)
+ * @file    stringFormatter.h  (180.ARM_Peripherals/Project_Headers/stringFormatter.h)
  * @brief   Basic string formatting routines
  * @date    9 June 2018
  */
@@ -42,8 +42,8 @@ namespace USBDM {
 class StringFormatter: public FormattedIO {
 protected:
    char * const buff;
-   const size_t  size;
-   char *ptr    = buff;
+   char *ptr;
+   const size_t  sizeMinusOne;
 
 public:
    /**
@@ -52,8 +52,10 @@ public:
     * @param[in] buffer      Buffer for characters
     * @param[in] bufferSize  Size of buffer - Note space will be reserved for a terminator
     */
-   StringFormatter(char buffer[], size_t bufferSize) : buff(buffer), size(bufferSize-1) {
+   StringFormatter(char buffer[], size_t bufferSize) : buff(buffer), ptr(buffer), sizeMinusOne(bufferSize-1) {
       usbdm_assert(bufferSize>=1, "Buffer size must be > 1");
+      // String is always terminated
+      *ptr = '\0';
    }
 
    /**
@@ -77,7 +79,6 @@ public:
       lookAhead = -1;
    };
 
-
    /**
     *  Clear buffer
     *  Resets buffer to empty
@@ -93,10 +94,7 @@ public:
     * @return String ('\0' terminated)
     */
    const char *toString() {
-      // Terminate
-      *ptr = '\0';
-
-      // Return ptr to internal buffer
+      // Return pointer to internal buffer
       return buff;
    }
 
@@ -109,9 +107,8 @@ public:
 
 protected:
    /**
-    * Check if character is available
+    * Check if character is available - not applicable.
     *
-    * @return true  Character available i.e. _readChar() will not block
     * @return false No character available
     */
    virtual bool _isCharAvailable() override {
@@ -119,7 +116,7 @@ protected:
    }
 
    /**
-    * Receives a single character - not applicable
+    * Receives a single character - not applicable.
     *
     * @return -1
     */
@@ -128,17 +125,46 @@ protected:
    }
 
    /**
-    * Writes a character
-    * Characters are discarded if buffer is full
+    * Writes a character.
+    * Characters are discarded if buffer is full.
     *
     * @param[in]  ch - character to send
     */
    virtual void _writeChar(char ch) override {
-      if (ptr < (buff+size)) {
-         *ptr++ = ch;
+      *ptr = ch;
+      if (ptr < (buff+sizeMinusOne)) {
+         ++ptr;
       }
+      // Keep string terminated
+      *ptr = '\0';
    }
 
+};
+
+/**
+ * Class for writing formatted information into character buffers (C strings)
+ *
+ * Example:
+ * @code
+ *    StringFormatter_T<100> formatter;
+ *
+ *    for(int count = 0;;count++) {
+ *       formatter.clear().write(count).writeln(": Tick...");
+ *       console.write(formatter.toString());
+ *    }
+ * @endcode
+ */
+template <int buffSize>
+class StringFormatter_T: public StringFormatter {
+private:
+   char buff[buffSize];
+
+public:
+   /**
+    * Create String Formatter
+    */
+   StringFormatter_T() : StringFormatter(buff, buffSize) {
+   }
 };
 
 /**
