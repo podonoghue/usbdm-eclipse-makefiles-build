@@ -1103,8 +1103,8 @@ public:
  *    - Messages are <b>allocated</b> from the pool and added to the mail queue.
  *    - Messages are then removed from the mail queue and <b>freed</b> after use.
  *
- * @tparam T      Type of items in mail queue (determines size of items in pool)
- * @tparam size   Size of mail queue in items (determines number of items that can be allocated from the pool)
+ * @tparam T           Type of items in mail queue (determines size of items in pool)
+ * @tparam queueSize   Size of mail queue in items (determines number of items that can be allocated from the pool)
  *
  * Example:
  * @code
@@ -1171,14 +1171,32 @@ public:
  * }
  * @endcode
  */
-template <typename T, size_t size, Thread *thread=nullptr>
+template <typename T, size_t queueSize, Thread *thread=nullptr>
 class MailQueue {
 
+   struct MainQueue_cb {
+      uint8_t     cb_type;          /** Control Block Type                      */
+      uint8_t     state;            /** State flag variable                     */
+      uint8_t     isr_st;           /** State flag variable for isr functions   */
+      void       *p_lnk;            /** Chain of tasks waiting for message      */
+      uint16_t    first;            /** Index of the message list begin         */
+      uint16_t    last;             /** Index of the message list end           */
+      uint16_t    count;            /** Actual number of stored messages        */
+      uint16_t    size;             /** Maximum number of stored messages       */
+      void        *msg[queueSize];  /** FIFO of Message pointers   */
+   };
+   struct MessageBuffer {
+     void      *free;                                 /** Pointer to first free memory block      */
+     void      *end;                                  /** Pointer to memory block end             */
+     uint32_t  blk_size;                              /** Memory block size                       */
+     uint32_t  messages[((sizeof(T)+3)/4)*queueSize]; /** Message pool*/
+   };
+
 private:
-   uint32_t            queue[4+size];
-   uint32_t            messages[3+((sizeof(T)+3)/4)*size];
-   const  void         *pool[2]       = {queue, messages};
-   const  os_mailQ_def os_mail_def    = {size, sizeof(T), pool};
+   MainQueue_cb         queue;
+   MessageBuffer        messages;
+   const  void         *pool[2]       = {&queue, &messages};
+   const  os_mailQ_def os_mail_def    = {queueSize, sizeof(T), pool};
 
    //   static void *operator new     (size_t) = delete;
    //   static void *operator new[]   (size_t) = delete;
@@ -1186,6 +1204,14 @@ private:
    //   static void  operator delete[](void*)  = delete;
 
 public:
+   bool checkBounds(void *p) {
+      return ((p == nullptr) || ((p>=messages.messages) && (p<messages.messages+((sizeof(T)+3)/4)*queueSize)));
+   }
+
+   void check() {
+      usbdm_assert(checkBounds(messages.free), "Pointer corrupted");
+   }
+
    /**
     * Create mail queue
     */
@@ -1205,7 +1231,7 @@ public:
     * @return Pointer to allocated block or nullptr on failure.
     */
    T *alloc(uint32_t millisec=osWaitForever) {
-      if ((messages[0]==0) && (messages[1]==0)) {
+      if ((messages.free==nullptr) && (messages.end==nullptr)) {
          create();
       }
       return (T *) osMailAlloc((os_mailQ_cb *)&pool, millisec);
@@ -1232,7 +1258,7 @@ public:
     * @return Pointer to allocated block or nullptr on failure.
     */
    T *calloc(uint32_t millisec=osWaitForever) {
-      if ((messages[0]==0) && (messages[0]==0)) {
+      if ((messages.free == nullptr) && (messages.end == nullptr)) {
          create();
       }
       return (T *)osMailCAlloc((os_mailQ_cb *)&pool, millisec);
