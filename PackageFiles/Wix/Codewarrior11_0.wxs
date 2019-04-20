@@ -88,7 +88,7 @@
       <CustomAction
          Id="Ca.CreateInstallPluginsCommand_$(var.ECLIPSE_VER)"
          Property="Ca.InstallPluginsCommand_$(var.ECLIPSE_VER)"
-         Value='&quot;[D.ECLIPSE_$(var.ECLIPSE_VER)_CDT]cwidec&quot; -nosplash -application $(var.P2Application) -repository &quot;file:/[D.UpdateSite]\&quot; -installIU $(var.FeatureGroup)'
+         Value='&quot;[D.ECLIPSE_$(var.ECLIPSE_VER)_CDT]cwidec&quot; -nosplash -application $(var.P2Application) -repository &quot;file:/[D.CodewarriorUpdateSite]\&quot; -installIU $(var.FeatureGroup)'
          Execute="immediate"/>
          
       <CustomAction

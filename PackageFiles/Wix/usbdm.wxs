@@ -60,7 +60,8 @@
             <Directory Id="D.CODESOURCERY" Name="CodeSourcery"/>
 
             <Directory Id='MANUFACTURER_FOLDER' Name="$(var.Manufacturer)">
-               <Directory Id="D.UpdateSite"       Name='UpdateSite' />
+               <Directory Id="D.CodewarriorUpdateSite"   Name='CodewarriorUpdateSite' />
+               <Directory Id="D.EclipseUpdateSite"       Name='EclipseUpdateSite' />
                <Directory Id='INSTALLDIR' Name="$(var.ProductName) $(var.ProductVersion)">
                   <Directory Id="D.Stationery"           Name='Stationery' />
                   <Directory Id="D.DeviceData"           Name='DeviceData' />

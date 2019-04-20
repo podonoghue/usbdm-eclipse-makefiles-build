@@ -56,7 +56,7 @@
       <CustomAction
          Id="Ca.CreateInstallPluginsCommand_$(var.ECLIPSE_VER)"
          Property="Ca.InstallPluginsCommand_$(var.ECLIPSE_VER)"
-         Value='&quot;[D.$(var.ECLIPSE_VER)_ECLIPSE]mcuxpressoidec&quot; -nosplash -application $(var.P2Application) -repository &quot;file:/[D.UpdateSite]\&quot; -installIU $(var.FeatureGroup)'
+         Value='&quot;[D.$(var.ECLIPSE_VER)_ECLIPSE]mcuxpressoidec&quot; -nosplash -application $(var.P2Application) -repository &quot;file:/[D.EclipseUpdateSite]\&quot; -installIU $(var.FeatureGroup)'
          Execute="immediate"/>
       <CustomAction Id="Ca.InstallPluginsCommand_$(var.ECLIPSE_VER)"   BinaryKey="WixCA" DllEntry="CAQuietExec" Execute="deferred" Return="ignore" Impersonate="no"/>
          
