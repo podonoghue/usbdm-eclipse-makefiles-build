@@ -49,7 +49,7 @@ class SingletonPluginFactory {
 #define STD__LINKAGE  __attribute__((__stdcall__))
 
 protected:
-   static std::shared_ptr<T> (STD__LINKAGE (*getSingletonInstance))();
+   static std::shared_ptr<T> (STD__LINKAGE *getSingletonInstance)();
    static MODULE_HANDLE     moduleHandle;
 
    SingletonPluginFactory() {};

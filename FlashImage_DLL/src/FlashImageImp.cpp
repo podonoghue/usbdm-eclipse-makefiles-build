@@ -1004,7 +1004,7 @@ USBDM_ErrorCode FlashImageImp::loadAbsoluteFile(const string &fileName) {
    fp = file.getfp();
 
    if (fp == NULL) {
-      log.print(" - Failed to open input file\n", fileName.c_str());
+      log.print(" - Failed to open input file %s\n", fileName.c_str());
       return SFILE_RC_FILE_OPEN_FAILED;
    }
    log.print("filename = \"%s\"\n", fileName.c_str());

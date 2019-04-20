@@ -119,7 +119,7 @@ extern "C" UINT __stdcall CheckInstallPaths(MSIHANDLE hInstall) {
       found = false;
       // Get path & validate
       char directory[MAX_PATH];
-      char path[MAX_PATH];
+      char path[MAX_PATH+1];
       rc = MsiGetTargetPath(hInstall, pathsToCheck[pathNum].directory, directory, &filePathLength);
       if (rc == ERROR_SUCCESS) {
          strncpy(path, directory, MAX_PATH);

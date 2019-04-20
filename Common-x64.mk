@@ -16,8 +16,8 @@ ifeq ($(OS),Windows_NT)
     UNAME_M := x86_64
     MULTIARCH := x86_64-win-gnu
 else
-    UNAME_S   := $(shell uname -s)
-    UNAME_M   := $(shell uname -m)
+    UNAME_S := $(shell uname -s)
+    UNAME_M := $(shell uname -m)
     MULTIARCH := $(shell gcc --print-multiarch)
 endif
 
@@ -55,7 +55,7 @@ ifeq ($(UNAME_S),Windows)
    LIB_PREFIX = 
    LIB_SUFFIX = .dll
    EXE_SUFFIX = .exe
-   MINGWBIN := C:/Apps/mingw-w64/mingw64/bin
+   MINGWBIN := C:/Apps/mingw-w64/x86_64-8.1.0-posix-seh-rt_v6-rev0/mingw64/bin
    MSYSBIN  := C:/Apps/MinGW/msys/1.0/bin
    RM       := $(MSYSBIN)/rm -f
    RMDIR    := $(MSYSBIN)/rm -R -f
@@ -178,9 +178,9 @@ endif
 #===========================================================
 # WXWIDGETS
 ifeq ($(UNAME_S),Windows)
-   WXWIDGETS_INSTALL_DIR=C:/Apps/wxWidgets-3.0.2
-   WXWIDGETS_VERSION_NUM=30
-   WXWIDGETS_INC     := -I$(WXWIDGETS_INSTALL_DIR)/lib/gcc_lib/mswu -I$(WXWIDGETS_INSTALL_DIR)/include -IC:\Apps\wxWidgets-3.0.2\lib\gcc_dll\mswu
+   WXWIDGETS_INSTALL_DIR=C:/Apps/wxWidgets-3.1.2
+   WXWIDGETS_VERSION_NUM=312
+   WXWIDGETS_INC     := -I$(WXWIDGETS_INSTALL_DIR)/lib/gcc_lib/mswu -I$(WXWIDGETS_INSTALL_DIR)/include -I$(WXWIDGETS_INSTALL_DIR)/lib/gcc_dll/mswu
    WXWIDGETS_DEFS    := -DuseWxWidgets -D__WXMSW__ -D__GNUWIN32__ -DUNICODE
 
    # Pick up shared DLLs from Shared_V4/lib
@@ -288,8 +288,8 @@ WIN_XML_INSTALLER_LIBS    := -lMsi
 PROGRAM_DIR_JAVA = C:/'Program Files'
 #PROGRAM_DIR_JAVA = C:/'Program Files (x86)'
 ifeq ($(UNAME_S),Windows)
-   JAVA_INC := -I$(PROGRAM_DIR_JAVA)/Java/jdk1.8.0_131/include
-   JAVA_INC += -I$(PROGRAM_DIR_JAVA)/Java/jdk1.8.0_131/include/win32
+   JAVA_INC := -I$(PROGRAM_DIR_JAVA)/Java/jdk1.8.0_201/include
+   JAVA_INC += -I$(PROGRAM_DIR_JAVA)/Java/jdk1.8.0_201/include/win32
 else
    JAVA_INC := -I/usr/lib/jvm/default-java/include $(jvm_includes)
 endif
@@ -343,18 +343,17 @@ ifdef DEBUG
    # Compiler flags
    CFLAGS += -O0 -g3
    # Compiler flags (Linking)
-   LDFLAGS = 
+   LDFLAGS = -O0 -g3
    # C Definitions
    DEFS   := -DLOG
 else
    # Compiler flags
-   CFLAGS += -O3 -g0 
+   CFLAGS += -O3 -g3 
    # Compiler flags (Linking)
    LDFLAGS = -s
 endif
 
 ifneq ($(OS),Windows_NT)
-   CFLAGS  +=
    LDFLAGS += -Wl,-rpath,${USBDM_LIBDIR}
    LDFLAGS += -Wl,-rpath-link,${TARGET_LIBDIR}
 
@@ -370,8 +369,6 @@ endif
 CFLAGS  += ${THREADS} -Wall -shared ${GCC_VISIBILITY_DEFS}
 LDFLAGS += ${THREADS}
 
-#CFLAGS += -Wshadow -DWINVER=0x500 -D_WIN32_IE=0x500 -std=gnu99 -Wall -Wundef -Wunused -Wstrict-prototypes -Werror-implicit-function-declaration -Wno-pointer-sign
-
 #===========================================================
 # Extra libraries for WINSOCK
 ifeq ($(UNAME_S),Windows)
@@ -381,5 +378,5 @@ else
 endif
 
 #===========================================================
-# Look in shared Library dir first
+# Look in build and shared library directories first
 LIBDIRS := -L$(TARGET_LIBDIR) -L$(SHARED_LIBDIRS)

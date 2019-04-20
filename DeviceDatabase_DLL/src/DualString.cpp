@@ -127,7 +127,7 @@ void StringManager::drain() throw() {
 	return ;
 }
 
-char* StringManager::disown( char* str ) throw( std::logic_error ) {
+char* StringManager::disown( char* str ){
 
    CStringList::iterator item = std::find( cStrings_.begin() , cStrings_.end() , str );
 	if( cStrings_.end() == item ){
@@ -139,7 +139,7 @@ char* StringManager::disown( char* str ) throw( std::logic_error ) {
 	return( result );
 }
 
-XMLCh* StringManager::disown( XMLCh* str ) throw( std::logic_error ) {
+XMLCh* StringManager::disown( XMLCh* str ){
 
 	XMLStringList::iterator item = std::find( xmlStrings_.begin() , xmlStrings_.end() , str );
 	if( xmlStrings_.end() == item ){

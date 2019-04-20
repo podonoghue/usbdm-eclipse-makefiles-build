@@ -8,7 +8,7 @@ set LIB_DIR=%ROOT%
 set MINGW=C:\Apps\MinGW
 rem set MINGW=C:\Apps\mingw-w64\i686-5.2.0-posix-dwarf-rt_v4-rev0\mingw32
 set MINGW64=C:\Apps\mingw-w64\x86_64-5.2.0-posix-seh-rt_v4-rev0\mingw64
-set WXWIGETS=C:\Apps\wxWidgets-3.0.2\lib\gcc_dll
+set WXWIGETS=C:\Apps\wxWidgets-3.1.2\lib\gcc_dll
 set LIBUSB=C:\Apps\libusb-1.0.20
 set COREUTILS=%ROOT%CoreUtils
 

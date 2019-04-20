@@ -146,7 +146,7 @@ int convertDirectory(const wxString &dirPath, const wxString &filename, MyTraver
 int modifyFiles(const char *directoryPath, const char *filename, MyTraverser &converter) {
 
    char buff[100];
-   strncpy(buff, filename, sizeof(buff));
+   strncpy(buff, filename, sizeof(buff)-1);
    char *filePattern = strtok(buff, "|\n");
    if (filePattern == 0){
       fprintf(stderr, "Missing pattern p=%s\n", filePattern);

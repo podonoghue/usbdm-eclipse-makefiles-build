@@ -154,7 +154,7 @@ class StringManager {
 
 	throw std::logic_error if the specified string isn't found
 	*/
-	char* disown( char* str ) throw( std::logic_error ) ;
+	char* disown( char* str );
 
 
 	/**
@@ -162,7 +162,7 @@ class StringManager {
 
 	throw std::logic_error if the specified string isn't found
 	*/
-	XMLCh* disown( XMLCh* str ) throw( std::logic_error ) ;
+	XMLCh* disown( XMLCh* str );
 
 
 	/**

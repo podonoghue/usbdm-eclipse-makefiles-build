@@ -1,11 +1,11 @@
 @echo off
 cls
-set VERSION=4_12_1_240
-set VERSIONn=4.12.1.240
+set VERSION=4_12_1_260
+set VERSIONn=4.12.1.260
 
 cd
 
-set WXWIDGETS_VERSION=311u
+set WXWIDGETS_VERSION=312u
 
 set WIX_DIR="C:\Program Files (x86)\WiX Toolset v3.11\bin"
 if not exist %WIX_DIR% set WIX_DIR="C:\Program Files\WiX Toolset v3.9\bin"
