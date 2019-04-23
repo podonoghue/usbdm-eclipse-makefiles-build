@@ -11,23 +11,52 @@
    
    <xi:include href="_mapPinsOption.xml"/>
    
-   <intOption name="NumberOfMessageBuffers" 
-      description="Number of message buffers available"
-      toolTip="This value is determined by the hardware"
+   <!-- Note: second entry gets the tick irrespective of true/false value -->
+   <binaryOption name="EnableFifo" 
+      description="Enable Receive FIFO"
+      toolTip="This option enables use of the receive FIFO in addition to the individual mailboxes.\n
+               The maximum number of individual mailboxes is reduced.">
+      <choice value="0" name="Disabled" />
+      <choice value="1" name="Enabled"  isDefault="true" />
+   </binaryOption>
+
+   <intOption name="MaxNumberOfMessageBuffers" 
+      description="Maximum number of message buffers available"
+      toolTip="This is the maximum value determined by the hardware.\n
+               The CAN memory is shared between the FIFO filters and message buffers so\n
+               the actual number available will be reduced by use of the FIFO and FIFO filters"  
       constant="true" 
       value="16" />
 
-   <intOption name="NumberOfMessageFilters" 
-      description="Number of message buffers available"
-      toolTip="This value is determined by the hardware"
+   <intOption name="MaxNumberOfFifoMessageFilters" 
+      description="Maximum number of FIFO message filters available"
+      toolTip="This is the maximum value determined by the hardware.\n
+               The CAN memory is shared between the FIFO filters and message buffers\n
+	       so a usable number will be less than this."  
       constant="true" 
       value="40" />
 
+   <intOption name="NumberOfFifoMessageFilters" 
+      description="Number of filters for FIFO"
+      toolTip="Used to configure number of FIFO filters"
+      value="16" step="8" min="0" max="40" />
+
+   <intOption name="NumberOfIndividualMailboxes" 
+      description="Number of individual Rx/Tx mailboxes"
+      toolTip="Used to configure number individually allocated mailboxes"
+      value="8" min="0" max="16" />
+
    <template><![CDATA[
-       \t//! Number of Message Buffers\n
-       \tstatic constexpr unsigned NumberOfMessageBuffers =  $(NumberOfMessageBuffers);\n\n
-       \t//! Number of Message Filters\n
-       \tstatic constexpr unsigned NumberOfMessageFilters =  $(NumberOfMessageFilters);\n\n
+       \t//! Whether FIFO is enable\n
+       \tstatic constexpr bool EnableFifo     =  $(EnableFifo);\n\n
+       \t//! Maximum number of Message Buffers\n
+       \tstatic constexpr unsigned MaxNumberOfMessageBuffers     =  $(MaxNumberOfMessageBuffers);\n\n
+       \t//! Maximum number of Message Filters\n
+       \tstatic constexpr unsigned MaxNumberOfFifoMessageFilters =  $(EnableFifo)?$(MaxNumberOfFifoMessageFilters):0;\n\n
+       \t//! Number of Mailbox Buffers\n
+       \tstatic constexpr unsigned NumberOfIndividualMailboxes   =  $(NumberOfIndividualMailboxes);\n\n
+       \t//! Number of FIFO Message Filters\n
+       \tstatic constexpr unsigned NumberOfFifoMessageFilters    =  $(EnableFifo)?$(NumberOfFifoMessageFilters):0;\n\n
    ]]></template>
 
    <!--
@@ -119,6 +148,8 @@
       
    <projectActionList id = "can_files" >
       <copy source="Project_Headers/can.h"                    target="Project_Headers/can.h"                    overwrite="true"  derived="true" />
+      <copy source="Snippets/can-mailbox-example.cpp"         target="Snippets/can-mailbox-example.cpp"         overwrite="true"  derived="true" />
+      <copy source="Snippets/can-fifo-example.cpp"            target="Snippets/can-fifo-example.cpp"            overwrite="true"  derived="true" />
    </projectActionList>
    
 </peripheralPage>

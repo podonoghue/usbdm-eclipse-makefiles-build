@@ -11,6 +11,15 @@
    
    <xi:include href="_mapPinsOption.xml"/>
    
+   <!-- Note: second entry gets the tick irrespective of true/false value -->
+   <binaryOption name="EnableFifo" 
+      description="Enable Receive FIFO"
+      toolTip="This option enables use of the receive FIFO in addition to the individual mailboxes.
+               The number of individual mailboxes is reduced.">
+      <choice value="0" name="Disabled" />
+      <choice value="1" name="Enabled" isdefault />
+   </binaryOption>
+
    <intOption name="NumberOfMessageBuffers" 
       description="Number of message buffers available"
       toolTip="This value is determined by the hardware"

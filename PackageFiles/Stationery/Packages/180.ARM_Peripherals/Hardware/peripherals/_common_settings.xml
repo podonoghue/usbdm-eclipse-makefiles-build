@@ -14,6 +14,18 @@
 <template namespace="usbdm"><![CDATA[
    /* Template:_common_settings.xml */\n\n
    
+\t/**
+\t * @tparam  T  Type of comparison object (inferred)
+\t * @param   a  Left-hand object for comparison
+\t * @param   b  Right-hand object for comparison
+\t *
+\t * @return Smaller of a or b
+\t */
+\ttemplate<class T> 
+\tconstexpr T min(const T a, const T b) {
+\t   return (b < a) ? b : a;
+\t}\n\n
+
    #if defined(PCC)\n\n
    
    /** Dummy port information for pins without an associated PCR */
@@ -103,7 +115,7 @@
    
 ]]></template>
 
-<!-- Convenient location for common files -->
+<!-- Convenient location for common file actions -->
 <projectActionList id = "CommonSettings_files" >
    <copy source="Project_Headers/formatted_io.h"    target="Project_Headers/formatted_io.h"    overwrite="true"  derived="true" />
    <copy source="Project_Headers/stringFormatter.h" target="Project_Headers/stringFormatter.h" overwrite="true"  derived="true" />
