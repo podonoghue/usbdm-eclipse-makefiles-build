@@ -24,8 +24,8 @@
       <xi:include href="peripherals/ADC0_S32K142.svd.xml"/>
       <peripheral derivedFrom="ADC0"><name>ADC1</name><baseAddress>0x40027000</baseAddress></peripheral>
       <xi:include href="peripherals/AIPS0_Lite_8Mx8Px12OP.svd.xml"/>
-      <xi:include href="peripherals/CAN0_S32K14x.svd.xml"/>
-      <xi:include href="peripherals/CAN1_S32K14x.svd.xml"/>
+      <xi:include href="peripherals/CAN0_FLEX_S32K14x.svd.xml"/>
+      <xi:include href="peripherals/CAN1_FLEX_S32K14x.svd.xml"/>
       <xi:include href="peripherals/CMP0_MKE16F16.svd.xml"/>
       <xi:include href="peripherals/CRC0_0x40032000.svd.xml"/>
       <xi:include href="peripherals/CSE_PRAM_S32K14x.svd.xml"/>

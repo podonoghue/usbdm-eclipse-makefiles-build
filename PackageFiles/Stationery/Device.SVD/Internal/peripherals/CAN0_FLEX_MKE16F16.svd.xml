@@ -1,15 +1,15 @@
 <!--
 Devices using this peripheral: 
-      S32K142
-      S32K144
+      MKE16F16
+      MKE18F16
 -->
       <peripheral>
-         <?sourceFile "CAN1_S32K14x" ?>
-         <name>CAN1</name>
+         <?sourceFile "CAN0_FLEX_MKE16F16" ?>
+         <name>CAN0</name>
          <description>Flex Controller Area Network module</description>
          <groupName>CAN</groupName>
-         <headerStructName>CAN1</headerStructName>
-         <baseAddress>0x40025000</baseAddress>
+         <headerStructName>CAN</headerStructName>
+         <baseAddress>0x40024000</baseAddress>
          <size>32</size>
          <access>read-write</access>
          <resetValue>0x0</resetValue>
@@ -144,11 +144,6 @@ Devices using this peripheral:
             <size>0x40</size>
             <usage>registers</usage>
          </addressBlock>
-         <addressBlock>
-            <offset>0xC00</offset>
-            <size>0xC</size>
-            <usage>registers</usage>
-         </addressBlock>
          <registers>
             <register>
                <name>MCR</name>
@@ -187,24 +182,6 @@ Devices using this peripheral:
                            <name>0b11</name>
                            <description>Format D:\t All frames rejected</description>
                            <value>0b11</value>
-                        </enumeratedValue>
-                     </enumeratedValues>
-                  </field>
-                  <field>
-                     <name>FDEN</name>
-                     <description>CAN FD operation enable</description>
-                     <bitOffset>11</bitOffset>
-                     <bitWidth>1</bitWidth>
-                     <enumeratedValues>
-                        <enumeratedValue>
-                           <name>0b1</name>
-                           <description>CAN FD is enabled.\t FlexCAN is able to receive and transmit messages in both CAN FD and CAN 2.0 formats</description>
-                           <value>0b1</value>
-                        </enumeratedValue>
-                        <enumeratedValue>
-                           <name>0b0</name>
-                           <description>CAN FD is disabled.\tFlexCAN is able to receive and transmit messages in CAN 2.0 format</description>
-                           <value>0b0</value>
                         </enumeratedValue>
                      </enumeratedValues>
                   </field>
@@ -317,6 +294,25 @@ Devices using this peripheral:
                      </enumeratedValues>
                   </field>
                   <field>
+                     <name>WAKSRC</name>
+                     <description>Wake Up Source\n
+Not present in all devices</description>
+                     <bitOffset>19</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>FlexCAN uses the unfiltered Rx input to detect recessive to dominant edges on the CAN bus</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>FlexCAN uses the filtered Rx input to detect recessive to dominant edges on the CAN bus</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
                      <name>LPMACK</name>
                      <description>Low Power Mode Acknowledge</description>
                      <bitOffset>20</bitOffset>
@@ -349,6 +345,24 @@ Devices using this peripheral:
                         <enumeratedValue>
                            <name>0b1</name>
                            <description>TWRNINT and RWRNINT bits are set when the respective error counter transitions from less than 96 to greater than or equal to 96</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>SLFWAK</name>
+                     <description>Self Wake Up</description>
+                     <bitOffset>22</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>FlexCAN Self Wake Up feature is disabled</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>FlexCAN Self Wake Up feature is enabled</description>
                            <value>0b1</value>
                         </enumeratedValue>
                      </enumeratedValues>
@@ -404,6 +418,24 @@ Devices using this peripheral:
                         <enumeratedValue>
                            <name>0b1</name>
                            <description>Resets the registers affected by soft reset</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>WAKMSK</name>
+                     <description>Wake Up Interrupt Mask</description>
+                     <bitOffset>26</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>Wake Up Interrupt is disabled</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>Wake Up Interrupt is enabled</description>
                            <value>0b1</value>
                         </enumeratedValue>
                      </enumeratedValues>
@@ -841,18 +873,6 @@ Devices using this peripheral:
                      <bitOffset>8</bitOffset>
                      <bitWidth>8</bitWidth>
                   </field>
-                  <field>
-                     <name>TXERRCNT_FAST</name>
-                     <description>Transmit Error Counter for fast bits</description>
-                     <bitOffset>16</bitOffset>
-                     <bitWidth>8</bitWidth>
-                  </field>
-                  <field>
-                     <name>RXERRCNT_FAST</name>
-                     <description>Receive Error Counter for fast bits</description>
-                     <bitOffset>24</bitOffset>
-                     <bitWidth>8</bitWidth>
-                  </field>
                </fields>
             </register>
             <register>
@@ -860,6 +880,24 @@ Devices using this peripheral:
                <description>Error and Status 1 register</description>
                <addressOffset>0x20</addressOffset>
                <fields>
+                  <field>
+                     <name>WAKINT</name>
+                     <description>Wake-Up Interrupt</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>No such occurrence</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>Indicates a recessive to dominant transition was received on the CAN bus</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
                   <field>
                      <name>ERRINT</name>
                      <description>Error Interrupt</description>
@@ -1203,24 +1241,6 @@ Devices using this peripheral:
                      </enumeratedValues>
                   </field>
                   <field>
-                     <name>ERRINT_FAST</name>
-                     <description>Error Interrupt for errors detected in the Data Phase of CAN FD frames with the BRS bit set</description>
-                     <bitOffset>20</bitOffset>
-                     <bitWidth>1</bitWidth>
-                     <enumeratedValues>
-                        <enumeratedValue>
-                           <name>0b0</name>
-                           <description>No such occurrence</description>
-                           <value>0b0</value>
-                        </enumeratedValue>
-                        <enumeratedValue>
-                           <name>0b1</name>
-                           <description>Indicates setting of any Error Bit detected in the Data Phase of CAN FD frames with the BRS bit set</description>
-                           <value>0b1</value>
-                        </enumeratedValue>
-                     </enumeratedValues>
-                  </field>
-                  <field>
                      <name>ERROVR</name>
                      <description>Error Overrun bit</description>
                      <bitOffset>21</bitOffset>
@@ -1238,11 +1258,6 @@ Devices using this peripheral:
                         </enumeratedValue>
                      </enumeratedValues>
                   </field>
-                  <field derivedFrom="STFERR" > <name>STFERR_FAST</name> <description>Stuffing Error in the Data Phase of CAN FD frames with the BRS bit set</description> <bitOffset>26</bitOffset> </field>
-                  <field derivedFrom="FRMERR" > <name>FRMERR_FAST</name> <description>Form Error in the Data Phase of CAN FD frames with the BRS bit set</description> <bitOffset>27</bitOffset> </field>
-                  <field derivedFrom="CRCERR" > <name>CRCERR_FAST</name> <description>Cyclic Redundancy Check Error in the CRC field of CAN FD frames with the BRS bit set</description> <bitOffset>28</bitOffset> </field>
-                  <field derivedFrom="BIT0ERR" > <name>BIT0ERR_FAST</name> <description>Bit0 Error in the Data Phase of CAN FD frames with the BRS bit set</description> <bitOffset>30</bitOffset> </field>
-                  <field derivedFrom="BIT1ERR" > <name>BIT1ERR_FAST</name> <description>Bit1 Error in the Data Phase of CAN FD frames with the BRS bit set</description> <bitOffset>31</bitOffset> </field>
                </fields>
             </register>
             <register>
@@ -1388,7 +1403,7 @@ Devices using this peripheral:
                <name>CTRL2</name>
                <description>Control 2 Register</description>
                <addressOffset>0x34</addressOffset>
-               <resetValue>0xA00000</resetValue>
+               <resetValue>0xB00000</resetValue>
                <fields>
                   <field>
                      <name>EDFLTDIS</name>
@@ -1409,19 +1424,19 @@ Devices using this peripheral:
                      </enumeratedValues>
                   </field>
                   <field>
-                     <name>ISOCANFDEN</name>
-                     <description>ISO CAN FD Enable</description>
+                     <name>STFCNTEN</name>
+                     <description>Stuff Count Enable</description>
                      <bitOffset>12</bitOffset>
                      <bitWidth>1</bitWidth>
                      <enumeratedValues>
                         <enumeratedValue>
                            <name>0b0</name>
-                           <description>FlexCAN operates using the non-ISO CAN FD protocol</description>
+                           <description>Stuff Count feature is disabled. Stuff Count bit field is not inserted before the CRC Sequence field</description>
                            <value>0b0</value>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>0b1</name>
-                           <description>FlexCAN operates using the ISO CAN FD protocol (ISO 11898-1)</description>
+                           <description>Stuff Count feature is enabled. Stuff Count bit field is inserted before the CRC Sequence field</description>
                            <value>0b1</value>
                         </enumeratedValue>
                      </enumeratedValues>
@@ -1624,24 +1639,6 @@ Devices using this peripheral:
                         <enumeratedValue>
                            <name>0b1</name>
                            <description>Bus Off Done interrupt enabled</description>
-                           <value>0b1</value>
-                        </enumeratedValue>
-                     </enumeratedValues>
-                  </field>
-                  <field>
-                     <name>ERRMSK_FAST</name>
-                     <description>Error Interrupt Mask for errors detected in the Data Phase of fast CAN FD frames</description>
-                     <bitOffset>31</bitOffset>
-                     <bitWidth>1</bitWidth>
-                     <enumeratedValues>
-                        <enumeratedValue>
-                           <name>0b0</name>
-                           <description>ERRINT_FAST Error interrupt disabled</description>
-                           <value>0b0</value>
-                        </enumeratedValue>
-                        <enumeratedValue>
-                           <name>0b1</name>
-                           <description>ERRINT_FAST Error interrupt enabled</description>
                            <value>0b1</value>
                         </enumeratedValue>
                      </enumeratedValues>
@@ -2412,60 +2409,6 @@ This 3-bit field is only used when LPRIO_EN bit is set in MCR and it only makes 
                            </enumeratedValue>
                         </enumeratedValues>
                      </field>
-                     <field>
-                        <name>ESI</name>
-                        <description>Error State Indicator</description>
-                        <bitOffset>29</bitOffset>
-                        <bitWidth>1</bitWidth>
-                        <enumeratedValues>
-                           <enumeratedValue>
-                              <name>0b0</name>
-                              <description>Error Active</description>
-                              <value>0b0</value>
-                           </enumeratedValue>
-                           <enumeratedValue>
-                              <name>0b1</name>
-                              <description>Error Passive</description>
-                              <value>0b0</value>
-                           </enumeratedValue>
-                        </enumeratedValues>
-                     </field>
-                     <field>
-                        <name>BRS</name>
-                        <description>Bit Rate Switch</description>
-                        <bitOffset>30</bitOffset>
-                        <bitWidth>1</bitWidth>
-                        <enumeratedValues>
-                           <enumeratedValue>
-                              <name>0b0</name>
-                              <description>No switch</description>
-                              <value>0b0</value>
-                           </enumeratedValue>
-                           <enumeratedValue>
-                              <name>0b1</name>
-                              <description>Switch allowed</description>
-                              <value>0b0</value>
-                           </enumeratedValue>
-                        </enumeratedValues>
-                     </field>
-                     <field>
-                        <name>EDL</name>
-                        <description>Extended Data Length</description>
-                        <bitOffset>31</bitOffset>
-                        <bitWidth>1</bitWidth>
-                        <enumeratedValues>
-                           <enumeratedValue>
-                              <name>0b0</name>
-                              <description>Standard data length</description>
-                              <value>0b0</value>
-                           </enumeratedValue>
-                           <enumeratedValue>
-                              <name>0b1</name>
-                              <description>Extended data length</description>
-                              <value>0b0</value>
-                           </enumeratedValue>
-                        </enumeratedValues>
-                     </field>
                   </fields>
                </register>
                <register>
@@ -3164,165 +3107,5 @@ This 3-bit fieldis only used when LPRIO_EN bit is set in MCR and it only makes s
                   </fields>
                </register>
             </cluster>
-            <register>
-               <name>FDCTRL</name>
-               <description>CAN FD Control Register</description>
-               <addressOffset>0xC00</addressOffset>
-               <resetValue>0x80000100</resetValue>
-               <fields>
-                  <field>
-                     <name>TDCVAL</name>
-                     <description>Transceiver Delay Compensation Value</description>
-                     <bitOffset>0</bitOffset>
-                     <bitWidth>6</bitWidth>
-                     <access>read-only</access>
-                  </field>
-                  <field>
-                     <name>TDCOFF</name>
-                     <description>Transceiver Delay Compensation Offset</description>
-                     <bitOffset>8</bitOffset>
-                     <bitWidth>5</bitWidth>
-                  </field>
-                  <field>
-                     <name>TDCFAIL</name>
-                     <description>Transceiver Delay Compensation Fail</description>
-                     <bitOffset>14</bitOffset>
-                     <bitWidth>1</bitWidth>
-                     <enumeratedValues>
-                        <enumeratedValue>
-                           <name>0b0</name>
-                           <description>Measured loop delay is in range</description>
-                           <value>0b0</value>
-                        </enumeratedValue>
-                        <enumeratedValue>
-                           <name>0b1</name>
-                           <description>Measured loop delay is out of range</description>
-                           <value>0b1</value>
-                        </enumeratedValue>
-                     </enumeratedValues>
-                  </field>
-                  <field>
-                     <name>TDCEN</name>
-                     <description>Transceiver Delay Compensation Enable</description>
-                     <bitOffset>15</bitOffset>
-                     <bitWidth>1</bitWidth>
-                     <enumeratedValues>
-                        <enumeratedValue>
-                           <name>0b0</name>
-                           <description>TDC is disabled</description>
-                           <value>0b0</value>
-                        </enumeratedValue>
-                        <enumeratedValue>
-                           <name>0b1</name>
-                           <description>TDC is enabled</description>
-                           <value>0b1</value>
-                        </enumeratedValue>
-                     </enumeratedValues>
-                  </field>
-                  <field>
-                     <name>MBDSR0</name>
-                     <description>Message Buffer Data Size for Region 0</description>
-                     <bitOffset>16</bitOffset>
-                     <bitWidth>2</bitWidth>
-                     <enumeratedValues>
-                        <enumeratedValue>
-                           <name>0b00</name>
-                           <description>Selects 8 bytes per Message Buffer</description>
-                           <value>0b00</value>
-                        </enumeratedValue>
-                        <enumeratedValue>
-                           <name>0b01</name>
-                           <description>Selects 16 bytes per Message Buffer</description>
-                           <value>0b01</value>
-                        </enumeratedValue>
-                        <enumeratedValue>
-                           <name>0b10</name>
-                           <description>Selects 32 bytes per Message Buffer</description>
-                           <value>0b10</value>
-                        </enumeratedValue>
-                        <enumeratedValue>
-                           <name>0b11</name>
-                           <description>Selects 64 bytes per Message Buffer</description>
-                           <value>0b11</value>
-                        </enumeratedValue>
-                     </enumeratedValues>
-                  </field>
-                  <field>
-                     <name>FDRATE</name>
-                     <description>Bit Rate Switch Enable</description>
-                     <bitOffset>31</bitOffset>
-                     <bitWidth>1</bitWidth>
-                     <enumeratedValues>
-                        <enumeratedValue>
-                           <name>0b0</name>
-                           <description>Transmit a frame in nominal rate. The BRS bit in the Tx MB has no effect</description>
-                           <value>0b0</value>
-                        </enumeratedValue>
-                        <enumeratedValue>
-                           <name>0b1</name>
-                           <description>Transmit a frame with bit rate switching if the BRS bit in the Tx MB is recessive</description>
-                           <value>0b1</value>
-                        </enumeratedValue>
-                     </enumeratedValues>
-                  </field>
-               </fields>
-            </register>
-            <register>
-               <name>FDCBT</name>
-               <description>CAN FD Bit Timing Register</description>
-               <addressOffset>0xC04</addressOffset>
-               <fields>
-                  <field>
-                     <name>FPSEG2</name>
-                     <description>Fast Phase Segment 2</description>
-                     <bitOffset>0</bitOffset>
-                     <bitWidth>3</bitWidth>
-                  </field>
-                  <field>
-                     <name>FPSEG1</name>
-                     <description>Fast Phase Segment 1</description>
-                     <bitOffset>5</bitOffset>
-                     <bitWidth>3</bitWidth>
-                  </field>
-                  <field>
-                     <name>FPROPSEG</name>
-                     <description>Fast Propagation Segment</description>
-                     <bitOffset>10</bitOffset>
-                     <bitWidth>5</bitWidth>
-                  </field>
-                  <field>
-                     <name>FRJW</name>
-                     <description>Fast Resync Jump Width</description>
-                     <bitOffset>16</bitOffset>
-                     <bitWidth>3</bitWidth>
-                  </field>
-                  <field>
-                     <name>FPRESDIV</name>
-                     <description>Fast Prescaler Division Factor</description>
-                     <bitOffset>20</bitOffset>
-                     <bitWidth>10</bitWidth>
-                  </field>
-               </fields>
-            </register>
-            <register>
-               <name>FDCRC</name>
-               <description>CAN FD CRC Register</description>
-               <addressOffset>0xC08</addressOffset>
-               <access>read-only</access>
-               <fields>
-                  <field>
-                     <name>FD_TXCRC</name>
-                     <description>Extended Transmitted CRC value</description>
-                     <bitOffset>0</bitOffset>
-                     <bitWidth>21</bitWidth>
-                  </field>
-                  <field>
-                     <name>FD_MBCRC</name>
-                     <description>CRC Mailbox Number for FD_TXCRC</description>
-                     <bitOffset>24</bitOffset>
-                     <bitWidth>7</bitWidth>
-                  </field>
-               </fields>
-            </register>
          </registers>
       </peripheral>

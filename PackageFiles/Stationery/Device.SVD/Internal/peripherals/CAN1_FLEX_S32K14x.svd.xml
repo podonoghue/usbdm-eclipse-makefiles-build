@@ -1,14 +1,15 @@
 <!--
 Devices using this peripheral: 
-      S32K146
+      S32K142
+      S32K144
 -->
       <peripheral>
-         <?sourceFile "CAN2_S32K14x" ?>
-         <name>CAN2</name>
+         <?sourceFile "CAN1_FLEX_S32K14x" ?>
+         <name>CAN1</name>
          <description>Flex Controller Area Network module</description>
          <groupName>CAN</groupName>
-         <headerStructName>CAN2</headerStructName>
-         <baseAddress>0x4002B000</baseAddress>
+         <headerStructName>CAN1</headerStructName>
+         <baseAddress>0x40025000</baseAddress>
          <size>32</size>
          <access>read-write</access>
          <resetValue>0x0</resetValue>

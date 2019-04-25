@@ -1,13 +1,13 @@
 <!--
 Devices using this peripheral: 
-      MKV40F16
-      MKV43F16
-      MKV44F16
-      MKV45F16
-      MKV46F16
+      MK10DZ10
+      MK20DZ10
+      MK30DZ10
+      MK40DZ10
+      MK60DZ10
 -->
       <peripheral>
-         <?sourceFile "CAN0_MKV" ?>
+         <?sourceFile "CAN0_FLEX_MKDZ" ?>
          <name>CAN0</name>
          <description>Flex Controller Area Network module</description>
          <groupName>CAN</groupName>
@@ -18,8 +18,8 @@ Devices using this peripheral:
          <resetValue>0x0</resetValue>
          <resetMask>0xFFFFFFFF</resetMask>
          <parameters>
-            <parameter> <value>128</value> <name>FIFO_FILTER_COUNT</name> <description>Number of Filter IDs</description></parameter>
-            <parameter> <value>64</value> <name>MESSAGE_BUFFER_COUNT</name> <description>Number of message buffers</description></parameter>
+            <parameter> <value>40</value> <name>FIFO_FILTER_COUNT</name> <description>Number of Filter IDs</description></parameter>
+            <parameter> <value>16</value> <name>MESSAGE_BUFFER_COUNT</name> <description>Number of message buffers</description></parameter>
          </parameters>
          <addressBlock>
             <offset>0x0</offset>
@@ -33,7 +33,7 @@ Devices using this peripheral:
          </addressBlock>
          <addressBlock>
             <offset>0x44</offset>
-            <size>0x10</size>
+            <size>0xC</size>
             <usage>registers</usage>
          </addressBlock>
          <addressBlock>
@@ -73,7 +73,7 @@ Devices using this peripheral:
          </addressBlock>
          <addressBlock>
             <offset>0xE0</offset>
-            <size>0x200</size>
+            <size>0xA0</size>
             <usage>registers</usage>
          </addressBlock>
          <addressBlock>
@@ -122,248 +122,8 @@ Devices using this peripheral:
             <usage>registers</usage>
          </addressBlock>
          <addressBlock>
-            <offset>0x180</offset>
-            <size>0x10</size>
-            <usage>registers</usage>
-         </addressBlock>
-         <addressBlock>
-            <offset>0x190</offset>
-            <size>0x10</size>
-            <usage>registers</usage>
-         </addressBlock>
-         <addressBlock>
-            <offset>0x1A0</offset>
-            <size>0x10</size>
-            <usage>registers</usage>
-         </addressBlock>
-         <addressBlock>
-            <offset>0x1B0</offset>
-            <size>0x10</size>
-            <usage>registers</usage>
-         </addressBlock>
-         <addressBlock>
-            <offset>0x1C0</offset>
-            <size>0x10</size>
-            <usage>registers</usage>
-         </addressBlock>
-         <addressBlock>
-            <offset>0x1D0</offset>
-            <size>0x10</size>
-            <usage>registers</usage>
-         </addressBlock>
-         <addressBlock>
-            <offset>0x1E0</offset>
-            <size>0x10</size>
-            <usage>registers</usage>
-         </addressBlock>
-         <addressBlock>
-            <offset>0x1F0</offset>
-            <size>0x10</size>
-            <usage>registers</usage>
-         </addressBlock>
-         <addressBlock>
-            <offset>0x200</offset>
-            <size>0x10</size>
-            <usage>registers</usage>
-         </addressBlock>
-         <addressBlock>
-            <offset>0x210</offset>
-            <size>0x10</size>
-            <usage>registers</usage>
-         </addressBlock>
-         <addressBlock>
-            <offset>0x220</offset>
-            <size>0x10</size>
-            <usage>registers</usage>
-         </addressBlock>
-         <addressBlock>
-            <offset>0x230</offset>
-            <size>0x10</size>
-            <usage>registers</usage>
-         </addressBlock>
-         <addressBlock>
-            <offset>0x240</offset>
-            <size>0x10</size>
-            <usage>registers</usage>
-         </addressBlock>
-         <addressBlock>
-            <offset>0x250</offset>
-            <size>0x10</size>
-            <usage>registers</usage>
-         </addressBlock>
-         <addressBlock>
-            <offset>0x260</offset>
-            <size>0x10</size>
-            <usage>registers</usage>
-         </addressBlock>
-         <addressBlock>
-            <offset>0x270</offset>
-            <size>0x10</size>
-            <usage>registers</usage>
-         </addressBlock>
-         <addressBlock>
-            <offset>0x280</offset>
-            <size>0x10</size>
-            <usage>registers</usage>
-         </addressBlock>
-         <addressBlock>
-            <offset>0x290</offset>
-            <size>0x10</size>
-            <usage>registers</usage>
-         </addressBlock>
-         <addressBlock>
-            <offset>0x2A0</offset>
-            <size>0x10</size>
-            <usage>registers</usage>
-         </addressBlock>
-         <addressBlock>
-            <offset>0x2B0</offset>
-            <size>0x10</size>
-            <usage>registers</usage>
-         </addressBlock>
-         <addressBlock>
-            <offset>0x2C0</offset>
-            <size>0x10</size>
-            <usage>registers</usage>
-         </addressBlock>
-         <addressBlock>
-            <offset>0x2D0</offset>
-            <size>0x10</size>
-            <usage>registers</usage>
-         </addressBlock>
-         <addressBlock>
-            <offset>0x2E0</offset>
-            <size>0x10</size>
-            <usage>registers</usage>
-         </addressBlock>
-         <addressBlock>
-            <offset>0x2F0</offset>
-            <size>0x10</size>
-            <usage>registers</usage>
-         </addressBlock>
-         <addressBlock>
-            <offset>0x300</offset>
-            <size>0x10</size>
-            <usage>registers</usage>
-         </addressBlock>
-         <addressBlock>
-            <offset>0x310</offset>
-            <size>0x10</size>
-            <usage>registers</usage>
-         </addressBlock>
-         <addressBlock>
-            <offset>0x320</offset>
-            <size>0x10</size>
-            <usage>registers</usage>
-         </addressBlock>
-         <addressBlock>
-            <offset>0x330</offset>
-            <size>0x10</size>
-            <usage>registers</usage>
-         </addressBlock>
-         <addressBlock>
-            <offset>0x340</offset>
-            <size>0x10</size>
-            <usage>registers</usage>
-         </addressBlock>
-         <addressBlock>
-            <offset>0x350</offset>
-            <size>0x10</size>
-            <usage>registers</usage>
-         </addressBlock>
-         <addressBlock>
-            <offset>0x360</offset>
-            <size>0x10</size>
-            <usage>registers</usage>
-         </addressBlock>
-         <addressBlock>
-            <offset>0x370</offset>
-            <size>0x10</size>
-            <usage>registers</usage>
-         </addressBlock>
-         <addressBlock>
-            <offset>0x380</offset>
-            <size>0x10</size>
-            <usage>registers</usage>
-         </addressBlock>
-         <addressBlock>
-            <offset>0x390</offset>
-            <size>0x10</size>
-            <usage>registers</usage>
-         </addressBlock>
-         <addressBlock>
-            <offset>0x3A0</offset>
-            <size>0x10</size>
-            <usage>registers</usage>
-         </addressBlock>
-         <addressBlock>
-            <offset>0x3B0</offset>
-            <size>0x10</size>
-            <usage>registers</usage>
-         </addressBlock>
-         <addressBlock>
-            <offset>0x3C0</offset>
-            <size>0x10</size>
-            <usage>registers</usage>
-         </addressBlock>
-         <addressBlock>
-            <offset>0x3D0</offset>
-            <size>0x10</size>
-            <usage>registers</usage>
-         </addressBlock>
-         <addressBlock>
-            <offset>0x3E0</offset>
-            <size>0x10</size>
-            <usage>registers</usage>
-         </addressBlock>
-         <addressBlock>
-            <offset>0x3F0</offset>
-            <size>0x10</size>
-            <usage>registers</usage>
-         </addressBlock>
-         <addressBlock>
-            <offset>0x400</offset>
-            <size>0x10</size>
-            <usage>registers</usage>
-         </addressBlock>
-         <addressBlock>
-            <offset>0x410</offset>
-            <size>0x10</size>
-            <usage>registers</usage>
-         </addressBlock>
-         <addressBlock>
-            <offset>0x420</offset>
-            <size>0x10</size>
-            <usage>registers</usage>
-         </addressBlock>
-         <addressBlock>
-            <offset>0x430</offset>
-            <size>0x10</size>
-            <usage>registers</usage>
-         </addressBlock>
-         <addressBlock>
-            <offset>0x440</offset>
-            <size>0x10</size>
-            <usage>registers</usage>
-         </addressBlock>
-         <addressBlock>
-            <offset>0x450</offset>
-            <size>0x10</size>
-            <usage>registers</usage>
-         </addressBlock>
-         <addressBlock>
-            <offset>0x460</offset>
-            <size>0x10</size>
-            <usage>registers</usage>
-         </addressBlock>
-         <addressBlock>
-            <offset>0x470</offset>
-            <size>0x10</size>
-            <usage>registers</usage>
-         </addressBlock>
-         <addressBlock>
             <offset>0x880</offset>
-            <size>0x100</size>
+            <size>0x40</size>
             <usage>registers</usage>
          </addressBlock>
          <registers>
@@ -444,24 +204,6 @@ Devices using this peripheral:
                      </enumeratedValues>
                   </field>
                   <field>
-                     <name>DMA</name>
-                     <description>DMA Enable</description>
-                     <bitOffset>15</bitOffset>
-                     <bitWidth>1</bitWidth>
-                     <enumeratedValues>
-                        <enumeratedValue>
-                           <name>0b0</name>
-                           <description>DMA feature for RX FIFO disabled</description>
-                           <value>0b0</value>
-                        </enumeratedValue>
-                        <enumeratedValue>
-                           <name>0b1</name>
-                           <description>DMA feature for RX FIFO enabled</description>
-                           <value>0b1</value>
-                        </enumeratedValue>
-                     </enumeratedValues>
-                  </field>
-                  <field>
                      <name>IRMQ</name>
                      <description>Individual Rx Masking and Queue Enable</description>
                      <bitOffset>16</bitOffset>
@@ -511,25 +253,6 @@ Devices using this peripheral:
                         <enumeratedValue>
                            <name>0b1</name>
                            <description>FlexCAN is enabled to enter low power mode when Doze Mode is requested</description>
-                           <value>0b1</value>
-                        </enumeratedValue>
-                     </enumeratedValues>
-                  </field>
-                  <field>
-                     <name>WAKSRC</name>
-                     <description>Wake Up Source\n
-Not present in all devices</description>
-                     <bitOffset>19</bitOffset>
-                     <bitWidth>1</bitWidth>
-                     <enumeratedValues>
-                        <enumeratedValue>
-                           <name>0b0</name>
-                           <description>FlexCAN uses the unfiltered Rx input to detect recessive to dominant edges on the CAN bus</description>
-                           <value>0b0</value>
-                        </enumeratedValue>
-                        <enumeratedValue>
-                           <name>0b1</name>
-                           <description>FlexCAN uses the filtered Rx input to detect recessive to dominant edges on the CAN bus</description>
                            <value>0b1</value>
                         </enumeratedValue>
                      </enumeratedValues>
@@ -1444,42 +1167,6 @@ Not present in all devices</description>
                         </enumeratedValue>
                      </enumeratedValues>
                   </field>
-                  <field>
-                     <name>BOFFDONEINT</name>
-                     <description>Bus Off Done Interrupt</description>
-                     <bitOffset>19</bitOffset>
-                     <bitWidth>1</bitWidth>
-                     <enumeratedValues>
-                        <enumeratedValue>
-                           <name>0b0</name>
-                           <description>No such occurrence</description>
-                           <value>0b0</value>
-                        </enumeratedValue>
-                        <enumeratedValue>
-                           <name>0b1</name>
-                           <description>FlexCAN module has completed Bus Off process</description>
-                           <value>0b1</value>
-                        </enumeratedValue>
-                     </enumeratedValues>
-                  </field>
-                  <field>
-                     <name>ERROVR</name>
-                     <description>Error Overrun bit</description>
-                     <bitOffset>21</bitOffset>
-                     <bitWidth>1</bitWidth>
-                     <enumeratedValues>
-                        <enumeratedValue>
-                           <name>0b0</name>
-                           <description>Overrun has not occurred</description>
-                           <value>0b0</value>
-                        </enumeratedValue>
-                        <enumeratedValue>
-                           <name>0b1</name>
-                           <description>Overrun has occurred</description>
-                           <value>0b1</value>
-                        </enumeratedValue>
-                     </enumeratedValues>
-                  </field>
                </fields>
             </register>
             <register>
@@ -1808,19 +1495,19 @@ Not present in all devices</description>
                      </enumeratedValues>
                   </field>
                   <field>
-                     <name>BOFFDONEMSK</name>
-                     <description>Bus Off Done Interrupt Mask</description>
-                     <bitOffset>30</bitOffset>
+                     <name>WRMFRZ</name>
+                     <description>Write-Access to Memory in Freeze mode</description>
+                     <bitOffset>28</bitOffset>
                      <bitWidth>1</bitWidth>
                      <enumeratedValues>
                         <enumeratedValue>
                            <name>0b0</name>
-                           <description>Bus Off Done interrupt disabled</description>
+                           <description>Maintain the write access restrictions</description>
                            <value>0b0</value>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>0b1</name>
-                           <description>Bus Off Done interrupt enabled</description>
+                           <description>Enable unrestricted write access to FlexCAN memory</description>
                            <value>0b1</value>
                         </enumeratedValue>
                      </enumeratedValues>
@@ -2073,347 +1760,6 @@ Not present in all devices</description>
                   </field>
                </fields>
             </register>
-            <register>
-               <name>CBT</name>
-               <description>CAN Bit Timing Register</description>
-               <addressOffset>0x50</addressOffset>
-               <fields>
-                  <field>
-                     <name>EPSEG2</name>
-                     <description>Extended Phase Segment 2</description>
-                     <bitOffset>0</bitOffset>
-                     <bitWidth>5</bitWidth>
-                  </field>
-                  <field>
-                     <name>EPSEG1</name>
-                     <description>Extended Phase Segment 1</description>
-                     <bitOffset>5</bitOffset>
-                     <bitWidth>5</bitWidth>
-                  </field>
-                  <field>
-                     <name>EPROPSEG</name>
-                     <description>Extended Propagation Segment</description>
-                     <bitOffset>10</bitOffset>
-                     <bitWidth>6</bitWidth>
-                  </field>
-                  <field>
-                     <name>ERJW</name>
-                     <description>Extended Resync Jump Width</description>
-                     <bitOffset>16</bitOffset>
-                     <bitWidth>4</bitWidth>
-                  </field>
-                  <field>
-                     <name>EPRESDIV</name>
-                     <description>Extended Prescaler Division Factor</description>
-                     <bitOffset>21</bitOffset>
-                     <bitWidth>10</bitWidth>
-                  </field>
-                  <field>
-                     <name>BTF</name>
-                     <description>Bit Timing Format Enable</description>
-                     <bitOffset>31</bitOffset>
-                     <bitWidth>1</bitWidth>
-                     <enumeratedValues>
-                        <enumeratedValue>
-                           <name>0b0</name>
-                           <description>Extended bit time definitions disabled</description>
-                           <value>0b0</value>
-                        </enumeratedValue>
-                        <enumeratedValue>
-                           <name>0b1</name>
-                           <description>Extended bit time definitions enabled</description>
-                           <value>0b1</value>
-                        </enumeratedValue>
-                     </enumeratedValues>
-                  </field>
-               </fields>
-            </register>
-            <cluster>
-               <dim>$(MESSAGE_BUFFER_COUNT)</dim>
-               <dimIncrement>16</dimIncrement>
-               <name>MB,@p@f@i</name>
-               <addressOffset>0x80</addressOffset>
-               <?isolate?>
-               <register>
-                  <name>CS</name>
-                  <description>Message Buffer 0 CS Register</description>
-                  <addressOffset>0x0</addressOffset>
-                  <fields>
-                     <field>
-                        <name>TIME_STAMP</name>
-                        <description>Free-Running Counter Time stamp.\tThis 16-bit field is a copy of the Free-Running Timer, captured for Tx and Rx frames at the time when the beginning of the Identifier field appears on the CAN bus</description>
-                        <bitOffset>0</bitOffset>
-                        <bitWidth>16</bitWidth>
-                     </field>
-                     <field>
-                        <name>DLC</name>
-                        <description>Length of the data to be received/transmitted</description>
-                        <bitOffset>16</bitOffset>
-                        <bitWidth>4</bitWidth>
-                     </field>
-                     <field>
-                        <name>RTR</name>
-                        <description>Remote Transmission Request</description>
-                        <bitOffset>20</bitOffset>
-                        <bitWidth>1</bitWidth>
-                        <enumeratedValues>
-                           <enumeratedValue>
-                              <name>0b0</name>
-                              <description>Data frame</description>
-                              <value>0b0</value>
-                           </enumeratedValue>
-                           <enumeratedValue>
-                              <name>0b1</name>
-                              <description>Remote Request frame</description>
-                              <value>0b0</value>
-                           </enumeratedValue>
-                        </enumeratedValues>
-                     </field>
-                     <field>
-                        <name>IDE</name>
-                        <description>ID Extended.\t Selects format frame</description>
-                        <bitOffset>21</bitOffset>
-                        <bitWidth>1</bitWidth>
-                        <enumeratedValues>
-                           <enumeratedValue>
-                              <name>0b0</name>
-                              <description>Standard</description>
-                              <value>0b0</value>
-                           </enumeratedValue>
-                           <enumeratedValue>
-                              <name>0b1</name>
-                              <description>Extended</description>
-                              <value>0b0</value>
-                           </enumeratedValue>
-                        </enumeratedValues>
-                     </field>
-                     <field>
-                        <name>SRR</name>
-                        <description>Substitute Remote Request</description>
-                        <bitOffset>22</bitOffset>
-                        <bitWidth>1</bitWidth>
-                        <enumeratedValues>
-                           <enumeratedValue>
-                              <name>0b0</name>
-                              <description>Dominant is not a valid value</description>
-                              <value>0b0</value>
-                           </enumeratedValue>
-                           <enumeratedValue>
-                              <name>0b1</name>
-                              <description>Recessive value is compulsory</description>
-                              <value>0b0</value>
-                           </enumeratedValue>
-                        </enumeratedValues>
-                     </field>
-                     <field>
-                        <name>CODE</name>
-                        <description>Message Buffer Code</description>
-                        <bitOffset>24</bitOffset>
-                        <bitWidth>4</bitWidth>
-                        <enumeratedValues>
-                           <enumeratedValue>
-                              <name>0b0000</name>
-                              <description>Inactive</description>
-                              <value>0b0000</value>
-                           </enumeratedValue>
-                           <enumeratedValue>
-                              <name>0bXXX1</name>
-                              <description>Busy</description>
-                              <value>0bXXX1</value>
-                           </enumeratedValue>
-                           <enumeratedValue>
-                              <name>0b0100</name>
-                              <description>RxEmpty</description>
-                              <value>0b0100</value>
-                           </enumeratedValue>
-                           <enumeratedValue>
-                              <name>0b0010</name>
-                              <description>RxFull</description>
-                              <value>0b0010</value>
-                           </enumeratedValue>
-                           <enumeratedValue>
-                              <name>0b0110</name>
-                              <description>Overrun</description>
-                              <value>0b0110</value>
-                           </enumeratedValue>
-                           <enumeratedValue>
-                              <name>0b1010</name>
-                              <description>RxAnswer</description>
-                              <value>0b1010</value>
-                           </enumeratedValue>
-                           <enumeratedValue>
-                              <name>0b1000</name>
-                              <description>TxInactive</description>
-                              <value>0b1000</value>
-                           </enumeratedValue>
-                           <enumeratedValue>
-                              <name>0b1001</name>
-                              <description>TxAbort</description>
-                              <value>0b1001</value>
-                           </enumeratedValue>
-                           <enumeratedValue>
-                              <name>0b1100</name>
-                              <description>TxData</description>
-                              <value>0b1100</value>
-                           </enumeratedValue>
-                           <enumeratedValue>
-                              <name>0b1100</name>
-                              <description>TxRemote</description>
-                              <value>0b1100</value>
-                           </enumeratedValue>
-                           <enumeratedValue>
-                              <name>0b1110</name>
-                              <description>TxAnswer</description>
-                              <value>0b1110</value>
-                           </enumeratedValue>
-                        </enumeratedValues>
-                     </field>
-                     <field>
-                        <name>ESI</name>
-                        <description>Error State Indicator</description>
-                        <bitOffset>29</bitOffset>
-                        <bitWidth>1</bitWidth>
-                        <enumeratedValues>
-                           <enumeratedValue>
-                              <name>0b0</name>
-                              <description>Error Active</description>
-                              <value>0b0</value>
-                           </enumeratedValue>
-                           <enumeratedValue>
-                              <name>0b1</name>
-                              <description>Error Passive</description>
-                              <value>0b0</value>
-                           </enumeratedValue>
-                        </enumeratedValues>
-                     </field>
-                     <field>
-                        <name>BRS</name>
-                        <description>Bit Rate Switch</description>
-                        <bitOffset>30</bitOffset>
-                        <bitWidth>1</bitWidth>
-                        <enumeratedValues>
-                           <enumeratedValue>
-                              <name>0b0</name>
-                              <description>No switch</description>
-                              <value>0b0</value>
-                           </enumeratedValue>
-                           <enumeratedValue>
-                              <name>0b1</name>
-                              <description>Switch allowed</description>
-                              <value>0b0</value>
-                           </enumeratedValue>
-                        </enumeratedValues>
-                     </field>
-                     <field>
-                        <name>EDL</name>
-                        <description>Extended Data Length</description>
-                        <bitOffset>31</bitOffset>
-                        <bitWidth>1</bitWidth>
-                        <enumeratedValues>
-                           <enumeratedValue>
-                              <name>0b0</name>
-                              <description>Standard data length</description>
-                              <value>0b0</value>
-                           </enumeratedValue>
-                           <enumeratedValue>
-                              <name>0b1</name>
-                              <description>Extended data length</description>
-                              <value>0b0</value>
-                           </enumeratedValue>
-                        </enumeratedValues>
-                     </field>
-                  </fields>
-               </register>
-               <register>
-                  <name>ID</name>
-                  <description>Message Buffer 0 ID Register</description>
-                  <addressOffset>0x4</addressOffset>
-                  <fields>
-                     <field>
-                        <name>EXT</name>
-                        <description>Extended identifier</description>
-                        <bitOffset>0</bitOffset>
-                        <bitWidth>29</bitWidth>
-                     </field>
-                     <field>
-                        <name>STD</name>
-                        <?ignoreOverlap?>
-                        <description>Standard identifier</description>
-                        <bitOffset>18</bitOffset>
-                        <bitWidth>11</bitWidth>
-                     </field>
-                     <field>
-                        <name>PRIO</name>
-                        <description>Local priority. 
-This 3-bit fieldis only used when LPRIO_EN bit is set in MCR and it only makes sense for Tx buffers. These bits are not transmitted. They are appended to the regular ID to define the transmission priority</description>
-                        <bitOffset>29</bitOffset>
-                        <bitWidth>3</bitWidth>
-                     </field>
-                  </fields>
-               </register>
-               <register>
-                  <name>WORD0</name>
-                  <description>Message Buffer 0 WORD0 Register</description>
-                  <addressOffset>0x8</addressOffset>
-                  <fields>
-                     <field>
-                        <name>DATA_BYTE_3</name>
-                        <description>Data byte 3 of Rx/Tx frame</description>
-                        <bitOffset>0</bitOffset>
-                        <bitWidth>8</bitWidth>
-                     </field>
-                     <field>
-                        <name>DATA_BYTE_2</name>
-                        <description>Data byte 2 of Rx/Tx frame</description>
-                        <bitOffset>8</bitOffset>
-                        <bitWidth>8</bitWidth>
-                     </field>
-                     <field>
-                        <name>DATA_BYTE_1</name>
-                        <description>Data byte 1 of Rx/Tx frame</description>
-                        <bitOffset>16</bitOffset>
-                        <bitWidth>8</bitWidth>
-                     </field>
-                     <field>
-                        <name>DATA_BYTE_0</name>
-                        <description>Data byte 0 of Rx/Tx frame</description>
-                        <bitOffset>24</bitOffset>
-                        <bitWidth>8</bitWidth>
-                     </field>
-                  </fields>
-               </register>
-               <register>
-                  <name>WORD1</name>
-                  <description>Message Buffer 0 WORD1 Register</description>
-                  <addressOffset>0xC</addressOffset>
-                  <fields>
-                     <field>
-                        <name>DATA_BYTE_7</name>
-                        <description>Data byte 7 of Rx/Tx frame</description>
-                        <bitOffset>0</bitOffset>
-                        <bitWidth>8</bitWidth>
-                     </field>
-                     <field>
-                        <name>DATA_BYTE_6</name>
-                        <description>Data byte 6 of Rx/Tx frame</description>
-                        <bitOffset>8</bitOffset>
-                        <bitWidth>8</bitWidth>
-                     </field>
-                     <field>
-                        <name>DATA_BYTE_5</name>
-                        <description>Data byte 5 of Rx/Tx frame</description>
-                        <bitOffset>16</bitOffset>
-                        <bitWidth>8</bitWidth>
-                     </field>
-                     <field>
-                        <name>DATA_BYTE_4</name>
-                        <description>Data byte 4 of Rx/Tx frame</description>
-                        <bitOffset>24</bitOffset>
-                        <bitWidth>8</bitWidth>
-                     </field>
-                  </fields>
-               </register>
-            </cluster>
             <cluster>
                <name>FIFO</name>
                <addressOffset>0x80</addressOffset>
@@ -2734,6 +2080,238 @@ This 3-bit field is only used when LPRIO_EN bit is set in MCR and it only makes 
                      <field derivedFrom="RXIDC_3" > <name>RXIDC_2</name> <bitOffset>8</bitOffset> </field>
                      <field derivedFrom="RXIDC_3" > <name>RXIDC_1</name> <bitOffset>16</bitOffset> </field>
                      <field derivedFrom="RXIDC_3" > <name>RXIDC_0</name> <bitOffset>24</bitOffset> </field>
+                  </fields>
+               </register>
+            </cluster>
+            <cluster>
+               <dim>$(MESSAGE_BUFFER_COUNT)</dim>
+               <dimIncrement>16</dimIncrement>
+               <name>MB,@p@f@i</name>
+               <addressOffset>0x80</addressOffset>
+               <?isolate?>
+               <register>
+                  <name>CS</name>
+                  <description>Message Buffer 0 CS Register</description>
+                  <addressOffset>0x0</addressOffset>
+                  <fields>
+                     <field>
+                        <name>TIME_STAMP</name>
+                        <description>Free-Running Counter Time stamp.\tThis 16-bit field is a copy of the Free-Running Timer, captured for Tx and Rx frames at the time when the beginning of the Identifier field appears on the CAN bus</description>
+                        <bitOffset>0</bitOffset>
+                        <bitWidth>16</bitWidth>
+                     </field>
+                     <field>
+                        <name>DLC</name>
+                        <description>Length of the data to be received/transmitted</description>
+                        <bitOffset>16</bitOffset>
+                        <bitWidth>4</bitWidth>
+                     </field>
+                     <field>
+                        <name>RTR</name>
+                        <description>Remote Transmission Request</description>
+                        <bitOffset>20</bitOffset>
+                        <bitWidth>1</bitWidth>
+                        <enumeratedValues>
+                           <enumeratedValue>
+                              <name>0b0</name>
+                              <description>Data frame</description>
+                              <value>0b0</value>
+                           </enumeratedValue>
+                           <enumeratedValue>
+                              <name>0b1</name>
+                              <description>Remote Request frame</description>
+                              <value>0b0</value>
+                           </enumeratedValue>
+                        </enumeratedValues>
+                     </field>
+                     <field>
+                        <name>IDE</name>
+                        <description>ID Extended.\t Selects format frame</description>
+                        <bitOffset>21</bitOffset>
+                        <bitWidth>1</bitWidth>
+                        <enumeratedValues>
+                           <enumeratedValue>
+                              <name>0b0</name>
+                              <description>Standard</description>
+                              <value>0b0</value>
+                           </enumeratedValue>
+                           <enumeratedValue>
+                              <name>0b1</name>
+                              <description>Extended</description>
+                              <value>0b0</value>
+                           </enumeratedValue>
+                        </enumeratedValues>
+                     </field>
+                     <field>
+                        <name>SRR</name>
+                        <description>Substitute Remote Request</description>
+                        <bitOffset>22</bitOffset>
+                        <bitWidth>1</bitWidth>
+                        <enumeratedValues>
+                           <enumeratedValue>
+                              <name>0b0</name>
+                              <description>Dominant is not a valid value</description>
+                              <value>0b0</value>
+                           </enumeratedValue>
+                           <enumeratedValue>
+                              <name>0b1</name>
+                              <description>Recessive value is compulsory</description>
+                              <value>0b0</value>
+                           </enumeratedValue>
+                        </enumeratedValues>
+                     </field>
+                     <field>
+                        <name>CODE</name>
+                        <description>Message Buffer Code</description>
+                        <bitOffset>24</bitOffset>
+                        <bitWidth>4</bitWidth>
+                        <enumeratedValues>
+                           <enumeratedValue>
+                              <name>0b0000</name>
+                              <description>Inactive</description>
+                              <value>0b0000</value>
+                           </enumeratedValue>
+                           <enumeratedValue>
+                              <name>0bXXX1</name>
+                              <description>Busy</description>
+                              <value>0bXXX1</value>
+                           </enumeratedValue>
+                           <enumeratedValue>
+                              <name>0b0100</name>
+                              <description>RxEmpty</description>
+                              <value>0b0100</value>
+                           </enumeratedValue>
+                           <enumeratedValue>
+                              <name>0b0010</name>
+                              <description>RxFull</description>
+                              <value>0b0010</value>
+                           </enumeratedValue>
+                           <enumeratedValue>
+                              <name>0b0110</name>
+                              <description>Overrun</description>
+                              <value>0b0110</value>
+                           </enumeratedValue>
+                           <enumeratedValue>
+                              <name>0b1010</name>
+                              <description>RxAnswer</description>
+                              <value>0b1010</value>
+                           </enumeratedValue>
+                           <enumeratedValue>
+                              <name>0b1000</name>
+                              <description>TxInactive</description>
+                              <value>0b1000</value>
+                           </enumeratedValue>
+                           <enumeratedValue>
+                              <name>0b1001</name>
+                              <description>TxAbort</description>
+                              <value>0b1001</value>
+                           </enumeratedValue>
+                           <enumeratedValue>
+                              <name>0b1100</name>
+                              <description>TxData</description>
+                              <value>0b1100</value>
+                           </enumeratedValue>
+                           <enumeratedValue>
+                              <name>0b1100</name>
+                              <description>TxRemote</description>
+                              <value>0b1100</value>
+                           </enumeratedValue>
+                           <enumeratedValue>
+                              <name>0b1110</name>
+                              <description>TxAnswer</description>
+                              <value>0b1110</value>
+                           </enumeratedValue>
+                        </enumeratedValues>
+                     </field>
+                  </fields>
+               </register>
+               <register>
+                  <name>ID</name>
+                  <description>Message Buffer 0 ID Register</description>
+                  <addressOffset>0x4</addressOffset>
+                  <fields>
+                     <field>
+                        <name>EXT</name>
+                        <description>Extended identifier</description>
+                        <bitOffset>0</bitOffset>
+                        <bitWidth>29</bitWidth>
+                     </field>
+                     <field>
+                        <name>STD</name>
+                        <?ignoreOverlap?>
+                        <description>Standard identifier</description>
+                        <bitOffset>18</bitOffset>
+                        <bitWidth>11</bitWidth>
+                     </field>
+                     <field>
+                        <name>PRIO</name>
+                        <description>Local priority. 
+This 3-bit fieldis only used when LPRIO_EN bit is set in MCR and it only makes sense for Tx buffers. These bits are not transmitted. They are appended to the regular ID to define the transmission priority</description>
+                        <bitOffset>29</bitOffset>
+                        <bitWidth>3</bitWidth>
+                     </field>
+                  </fields>
+               </register>
+               <register>
+                  <name>WORD0</name>
+                  <description>Message Buffer 0 WORD0 Register</description>
+                  <addressOffset>0x8</addressOffset>
+                  <fields>
+                     <field>
+                        <name>DATA_BYTE_3</name>
+                        <description>Data byte 3 of Rx/Tx frame</description>
+                        <bitOffset>0</bitOffset>
+                        <bitWidth>8</bitWidth>
+                     </field>
+                     <field>
+                        <name>DATA_BYTE_2</name>
+                        <description>Data byte 2 of Rx/Tx frame</description>
+                        <bitOffset>8</bitOffset>
+                        <bitWidth>8</bitWidth>
+                     </field>
+                     <field>
+                        <name>DATA_BYTE_1</name>
+                        <description>Data byte 1 of Rx/Tx frame</description>
+                        <bitOffset>16</bitOffset>
+                        <bitWidth>8</bitWidth>
+                     </field>
+                     <field>
+                        <name>DATA_BYTE_0</name>
+                        <description>Data byte 0 of Rx/Tx frame</description>
+                        <bitOffset>24</bitOffset>
+                        <bitWidth>8</bitWidth>
+                     </field>
+                  </fields>
+               </register>
+               <register>
+                  <name>WORD1</name>
+                  <description>Message Buffer 0 WORD1 Register</description>
+                  <addressOffset>0xC</addressOffset>
+                  <fields>
+                     <field>
+                        <name>DATA_BYTE_7</name>
+                        <description>Data byte 7 of Rx/Tx frame</description>
+                        <bitOffset>0</bitOffset>
+                        <bitWidth>8</bitWidth>
+                     </field>
+                     <field>
+                        <name>DATA_BYTE_6</name>
+                        <description>Data byte 6 of Rx/Tx frame</description>
+                        <bitOffset>8</bitOffset>
+                        <bitWidth>8</bitWidth>
+                     </field>
+                     <field>
+                        <name>DATA_BYTE_5</name>
+                        <description>Data byte 5 of Rx/Tx frame</description>
+                        <bitOffset>16</bitOffset>
+                        <bitWidth>8</bitWidth>
+                     </field>
+                     <field>
+                        <name>DATA_BYTE_4</name>
+                        <description>Data byte 4 of Rx/Tx frame</description>
+                        <bitOffset>24</bitOffset>
+                        <bitWidth>8</bitWidth>
+                     </field>
                   </fields>
                </register>
             </cluster>

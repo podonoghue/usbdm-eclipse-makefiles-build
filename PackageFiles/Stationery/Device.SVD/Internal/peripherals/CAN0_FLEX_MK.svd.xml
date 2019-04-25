@@ -1,10 +1,35 @@
 <!--
 Devices using this peripheral: 
-      MKE16F16
-      MKE18F16
+      MK10D7
+      MK10D10
+      MK10F12
+      MK20D7
+      MK20D10
+      MK20F12
+      MK21F12
+      MK21FA12
+      MK22F12
+      MK22FA12
+      MK24F12
+      MK30D7
+      MK30D10
+      MK40D7
+      MK40D10
+      MK60D10
+      MK60F12
+      MK60F15
+      MK61F15
+      MK61F15WS
+      MK63F12
+      MK64F12
+      MK65F18
+      MK66F18
+      MK70F15
+      MK70F15WS
+      MKV11Z7
 -->
       <peripheral>
-         <?sourceFile "CAN0_MKE16F16" ?>
+         <?sourceFile "CAN0_FLEX_MK" ?>
          <name>CAN0</name>
          <description>Flex Controller Area Network module</description>
          <groupName>CAN</groupName>
@@ -17,7 +42,6 @@ Devices using this peripheral:
          <parameters>
             <parameter> <value>40</value> <name>FIFO_FILTER_COUNT</name> <description>Number of Filter IDs</description></parameter>
             <parameter> <value>16</value> <name>MESSAGE_BUFFER_COUNT</name> <description>Number of message buffers</description></parameter>
-            <parameter> <value>4</value> <name>WAKEUP_BUFFER_COUNT</name> <description>Number of wakeup buffers</description></parameter>
          </parameters>
          <addressBlock>
             <offset>0x0</offset>
@@ -41,7 +65,7 @@ Devices using this peripheral:
          </addressBlock>
          <addressBlock>
             <offset>0x44</offset>
-            <size>0x10</size>
+            <size>0xC</size>
             <usage>registers</usage>
          </addressBlock>
          <addressBlock>
@@ -134,16 +158,6 @@ Devices using this peripheral:
             <size>0x40</size>
             <usage>registers</usage>
          </addressBlock>
-         <addressBlock>
-            <offset>0xB00</offset>
-            <size>0x28</size>
-            <usage>registers</usage>
-         </addressBlock>
-         <addressBlock>
-            <offset>0xB40</offset>
-            <size>0x40</size>
-            <usage>registers</usage>
-         </addressBlock>
          <registers>
             <register>
                <name>MCR</name>
@@ -217,42 +231,6 @@ Devices using this peripheral:
                         <enumeratedValue>
                            <name>0b1</name>
                            <description>Local Priority enabled</description>
-                           <value>0b1</value>
-                        </enumeratedValue>
-                     </enumeratedValues>
-                  </field>
-                  <field>
-                     <name>PNET_EN</name>
-                     <description>Pretended Networking Enable</description>
-                     <bitOffset>14</bitOffset>
-                     <bitWidth>1</bitWidth>
-                     <enumeratedValues>
-                        <enumeratedValue>
-                           <name>0b0</name>
-                           <description>Pretended Networking mode is disabled</description>
-                           <value>0b0</value>
-                        </enumeratedValue>
-                        <enumeratedValue>
-                           <name>0b1</name>
-                           <description>Pretended Networking mode is enabled</description>
-                           <value>0b1</value>
-                        </enumeratedValue>
-                     </enumeratedValues>
-                  </field>
-                  <field>
-                     <name>DMA</name>
-                     <description>DMA Enable</description>
-                     <bitOffset>15</bitOffset>
-                     <bitWidth>1</bitWidth>
-                     <enumeratedValues>
-                        <enumeratedValue>
-                           <name>0b0</name>
-                           <description>DMA feature for RX FIFO disabled</description>
-                           <value>0b0</value>
-                        </enumeratedValue>
-                        <enumeratedValue>
-                           <name>0b1</name>
-                           <description>DMA feature for RX FIFO enabled</description>
                            <value>0b1</value>
                         </enumeratedValue>
                      </enumeratedValues>
@@ -1222,42 +1200,6 @@ Not present in all devices</description>
                         </enumeratedValue>
                      </enumeratedValues>
                   </field>
-                  <field>
-                     <name>BOFFDONEINT</name>
-                     <description>Bus Off Done Interrupt</description>
-                     <bitOffset>19</bitOffset>
-                     <bitWidth>1</bitWidth>
-                     <enumeratedValues>
-                        <enumeratedValue>
-                           <name>0b0</name>
-                           <description>No such occurrence</description>
-                           <value>0b0</value>
-                        </enumeratedValue>
-                        <enumeratedValue>
-                           <name>0b1</name>
-                           <description>FlexCAN module has completed Bus Off process</description>
-                           <value>0b1</value>
-                        </enumeratedValue>
-                     </enumeratedValues>
-                  </field>
-                  <field>
-                     <name>ERROVR</name>
-                     <description>Error Overrun bit</description>
-                     <bitOffset>21</bitOffset>
-                     <bitWidth>1</bitWidth>
-                     <enumeratedValues>
-                        <enumeratedValue>
-                           <name>0b0</name>
-                           <description>Overrun has not occurred</description>
-                           <value>0b0</value>
-                        </enumeratedValue>
-                        <enumeratedValue>
-                           <name>0b1</name>
-                           <description>Overrun has occurred</description>
-                           <value>0b1</value>
-                        </enumeratedValue>
-                     </enumeratedValues>
-                  </field>
                </fields>
             </register>
             <register>
@@ -1266,7 +1208,7 @@ Not present in all devices</description>
                <addressOffset>0x28</addressOffset>
                <fields>
                   <field>
-                     <name>BUF31TO0M</name>
+                     <name>BUFLM</name>
                      <description>Buffer MB i Mask</description>
                      <bitOffset>0</bitOffset>
                      <enumeratedValues>
@@ -1290,10 +1232,10 @@ Not present in all devices</description>
                <addressOffset>0x30</addressOffset>
                <fields>
                   <field>
-                     <name>BUF0I</name>
-                     <description>Buffer MB0 Interrupt Or Clear FIFO bit</description>
+                     <name>BUF4TO0I</name>
+                     <description>Buffer MB i Interrupt Or &quot;reserved&quot;</description>
                      <bitOffset>0</bitOffset>
-                     <bitWidth>1</bitWidth>
+                     <bitWidth>5</bitWidth>
                      <enumeratedValues>
                         <enumeratedValue>
                            <name>0b0</name>
@@ -1304,24 +1246,6 @@ Not present in all devices</description>
                            <name>0b1</name>
                            <description>The corresponding buffer has successfully completed transmission or reception when MCR[RFEN]=0</description>
                            <value>0b1</value>
-                        </enumeratedValue>
-                     </enumeratedValues>
-                  </field>
-                  <field>
-                     <name>BUF4TO1I</name>
-                     <description>Buffer MB i Interrupt Or &quot;reserved&quot;</description>
-                     <bitOffset>1</bitOffset>
-                     <bitWidth>4</bitWidth>
-                     <enumeratedValues>
-                        <enumeratedValue>
-                           <name>0b0</name>
-                           <description>The corresponding buffer has no occurrence of successfully completed transmission or reception when MCR[RFEN]=0</description>
-                           <value>0b0000</value>
-                        </enumeratedValue>
-                        <enumeratedValue>
-                           <name>0b1</name>
-                           <description>The corresponding buffer has successfully completed transmission or reception when MCR[RFEN]=0</description>
-                           <value>0b0001</value>
                         </enumeratedValue>
                      </enumeratedValues>
                   </field>
@@ -1405,78 +1329,6 @@ Not present in all devices</description>
                <addressOffset>0x34</addressOffset>
                <resetValue>0xB00000</resetValue>
                <fields>
-                  <field>
-                     <name>EDFLTDIS</name>
-                     <description>Edge Filter Disable</description>
-                     <bitOffset>11</bitOffset>
-                     <bitWidth>1</bitWidth>
-                     <enumeratedValues>
-                        <enumeratedValue>
-                           <name>0b0</name>
-                           <description>Edge Filter is enabled</description>
-                           <value>0b0</value>
-                        </enumeratedValue>
-                        <enumeratedValue>
-                           <name>0b1</name>
-                           <description>Edge Filter is disabled</description>
-                           <value>0b1</value>
-                        </enumeratedValue>
-                     </enumeratedValues>
-                  </field>
-                  <field>
-                     <name>STFCNTEN</name>
-                     <description>Stuff Count Enable</description>
-                     <bitOffset>12</bitOffset>
-                     <bitWidth>1</bitWidth>
-                     <enumeratedValues>
-                        <enumeratedValue>
-                           <name>0b0</name>
-                           <description>Stuff Count feature is disabled. Stuff Count bit field is not inserted before the CRC Sequence field</description>
-                           <value>0b0</value>
-                        </enumeratedValue>
-                        <enumeratedValue>
-                           <name>0b1</name>
-                           <description>Stuff Count feature is enabled. Stuff Count bit field is inserted before the CRC Sequence field</description>
-                           <value>0b1</value>
-                        </enumeratedValue>
-                     </enumeratedValues>
-                  </field>
-                  <field>
-                     <name>PREXCEN</name>
-                     <description>Protocol Exception Enable</description>
-                     <bitOffset>14</bitOffset>
-                     <bitWidth>1</bitWidth>
-                     <enumeratedValues>
-                        <enumeratedValue>
-                           <name>0b0</name>
-                           <description>Protocol Exception is disabled</description>
-                           <value>0b0</value>
-                        </enumeratedValue>
-                        <enumeratedValue>
-                           <name>0b1</name>
-                           <description>Protocol Exception is enabled</description>
-                           <value>0b1</value>
-                        </enumeratedValue>
-                     </enumeratedValues>
-                  </field>
-                  <field>
-                     <name>TIMER_SRC</name>
-                     <description>Timer Source</description>
-                     <bitOffset>15</bitOffset>
-                     <bitWidth>1</bitWidth>
-                     <enumeratedValues>
-                        <enumeratedValue>
-                           <name>0b0</name>
-                           <description>The Free Running Timer is clocked by the CAN bit clock, which defines the baud rate on the CAN bus</description>
-                           <value>0b0</value>
-                        </enumeratedValue>
-                        <enumeratedValue>
-                           <name>0b1</name>
-                           <description>The Free Running Timer is clocked by an external time tick. The period can be either adjusted to be equal to the baud rate on the CAN bus, or a different value as required. See the device specific section for details about the external time tick</description>
-                           <value>0b1</value>
-                        </enumeratedValue>
-                     </enumeratedValues>
-                  </field>
                   <field>
                      <name>EACEN</name>
                      <description>Entire Frame Arbitration Field Comparison Enable for Rx Mailboxes</description>
@@ -1626,19 +1478,19 @@ Not present in all devices</description>
                      </enumeratedValues>
                   </field>
                   <field>
-                     <name>BOFFDONEMSK</name>
-                     <description>Bus Off Done Interrupt Mask</description>
-                     <bitOffset>30</bitOffset>
+                     <name>WRMFRZ</name>
+                     <description>Write-Access to Memory in Freeze mode</description>
+                     <bitOffset>28</bitOffset>
                      <bitWidth>1</bitWidth>
                      <enumeratedValues>
                         <enumeratedValue>
                            <name>0b0</name>
-                           <description>Bus Off Done interrupt disabled</description>
+                           <description>Maintain the write access restrictions</description>
                            <value>0b0</value>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>0b1</name>
-                           <description>Bus Off Done interrupt enabled</description>
+                           <description>Enable unrestricted write access to FlexCAN memory</description>
                            <value>0b1</value>
                         </enumeratedValue>
                      </enumeratedValues>
@@ -1888,61 +1740,6 @@ Not present in all devices</description>
                      <description>Identifier Acceptance Filter Hit Indicator</description>
                      <bitOffset>0</bitOffset>
                      <bitWidth>9</bitWidth>
-                  </field>
-               </fields>
-            </register>
-            <register>
-               <name>CBT</name>
-               <description>CAN Bit Timing Register</description>
-               <addressOffset>0x50</addressOffset>
-               <fields>
-                  <field>
-                     <name>EPSEG2</name>
-                     <description>Extended Phase Segment 2</description>
-                     <bitOffset>0</bitOffset>
-                     <bitWidth>5</bitWidth>
-                  </field>
-                  <field>
-                     <name>EPSEG1</name>
-                     <description>Extended Phase Segment 1</description>
-                     <bitOffset>5</bitOffset>
-                     <bitWidth>5</bitWidth>
-                  </field>
-                  <field>
-                     <name>EPROPSEG</name>
-                     <description>Extended Propagation Segment</description>
-                     <bitOffset>10</bitOffset>
-                     <bitWidth>6</bitWidth>
-                  </field>
-                  <field>
-                     <name>ERJW</name>
-                     <description>Extended Resync Jump Width</description>
-                     <bitOffset>16</bitOffset>
-                     <bitWidth>5</bitWidth>
-                  </field>
-                  <field>
-                     <name>EPRESDIV</name>
-                     <description>Extended Prescaler Division Factor</description>
-                     <bitOffset>21</bitOffset>
-                     <bitWidth>10</bitWidth>
-                  </field>
-                  <field>
-                     <name>BTF</name>
-                     <description>Bit Timing Format Enable</description>
-                     <bitOffset>31</bitOffset>
-                     <bitWidth>1</bitWidth>
-                     <enumeratedValues>
-                        <enumeratedValue>
-                           <name>0b0</name>
-                           <description>Extended bit time definitions disabled</description>
-                           <value>0b0</value>
-                        </enumeratedValue>
-                        <enumeratedValue>
-                           <name>0b1</name>
-                           <description>Extended bit time definitions enabled</description>
-                           <value>0b1</value>
-                        </enumeratedValue>
-                     </enumeratedValues>
                   </field>
                </fields>
             </register>
@@ -2528,584 +2325,5 @@ This 3-bit fieldis only used when LPRIO_EN bit is set in MCR and it only makes s
                   </field>
                </fields>
             </register>
-            <register>
-               <name>CTRL1_PN</name>
-               <description>Pretended Networking Control 1 Register</description>
-               <addressOffset>0xB00</addressOffset>
-               <resetValue>0x100</resetValue>
-               <fields>
-                  <field>
-                     <name>FCS</name>
-                     <description>Filtering Combination Selection</description>
-                     <bitOffset>0</bitOffset>
-                     <bitWidth>2</bitWidth>
-                     <enumeratedValues>
-                        <enumeratedValue>
-                           <name>0b00</name>
-                           <description>Message ID filtering only</description>
-                           <value>0b00</value>
-                        </enumeratedValue>
-                        <enumeratedValue>
-                           <name>0b01</name>
-                           <description>Message ID filtering and payload filtering</description>
-                           <value>0b01</value>
-                        </enumeratedValue>
-                        <enumeratedValue>
-                           <name>0b10</name>
-                           <description>Message ID filtering occurring a specified number of times</description>
-                           <value>0b10</value>
-                        </enumeratedValue>
-                        <enumeratedValue>
-                           <name>0b11</name>
-                           <description>Message ID filtering and payload filtering a specified number of times</description>
-                           <value>0b11</value>
-                        </enumeratedValue>
-                     </enumeratedValues>
-                  </field>
-                  <field>
-                     <name>IDFS</name>
-                     <description>ID Filtering Selection</description>
-                     <bitOffset>2</bitOffset>
-                     <bitWidth>2</bitWidth>
-                     <enumeratedValues>
-                        <enumeratedValue>
-                           <name>0b00</name>
-                           <description>Match upon a ID contents against an exact target value</description>
-                           <value>0b00</value>
-                        </enumeratedValue>
-                        <enumeratedValue>
-                           <name>0b01</name>
-                           <description>Match upon a ID value greater than or equal to a specified target value</description>
-                           <value>0b01</value>
-                        </enumeratedValue>
-                        <enumeratedValue>
-                           <name>0b10</name>
-                           <description>Match upon a ID value smaller than or equal to a specified target value</description>
-                           <value>0b10</value>
-                        </enumeratedValue>
-                        <enumeratedValue>
-                           <name>0b11</name>
-                           <description>Match upon a ID value inside a range, greater than or equal to a specified lower limit and smaller than or equal a specified upper limit</description>
-                           <value>0b11</value>
-                        </enumeratedValue>
-                     </enumeratedValues>
-                  </field>
-                  <field>
-                     <name>PLFS</name>
-                     <description>Payload Filtering Selection</description>
-                     <bitOffset>4</bitOffset>
-                     <bitWidth>2</bitWidth>
-                     <enumeratedValues>
-                        <enumeratedValue>
-                           <name>0b00</name>
-                           <description>Match upon a payload contents against an exact target value</description>
-                           <value>0b00</value>
-                        </enumeratedValue>
-                        <enumeratedValue>
-                           <name>0b01</name>
-                           <description>Match upon a payload value greater than or equal to a specified target value</description>
-                           <value>0b01</value>
-                        </enumeratedValue>
-                        <enumeratedValue>
-                           <name>0b10</name>
-                           <description>Match upon a payload value smaller than or equal to a specified target value</description>
-                           <value>0b10</value>
-                        </enumeratedValue>
-                        <enumeratedValue>
-                           <name>0b11</name>
-                           <description>Match upon a payload value inside a range, greater than or equal to a specified lower limit and smaller than or equal a specified upper limit</description>
-                           <value>0b11</value>
-                        </enumeratedValue>
-                     </enumeratedValues>
-                  </field>
-                  <field>
-                     <name>NMATCH</name>
-                     <description>Number of Messages Matching the Same Filtering Criteria</description>
-                     <bitOffset>8</bitOffset>
-                     <bitWidth>8</bitWidth>
-                     <enumeratedValues>
-                        <enumeratedValue>
-                           <name>0b00000001</name>
-                           <description>Received message must match the predefined filtering criteria for ID and/or PL once before generating a wake up event</description>
-                           <value>0b1</value>
-                        </enumeratedValue>
-                        <enumeratedValue>
-                           <name>0b00000010</name>
-                           <description>Received message must match the predefined filtering criteria for ID and/or PL twice before generating a wake up event</description>
-                           <value>0b10</value>
-                        </enumeratedValue>
-                        <enumeratedValue>
-                           <name>0b11111111</name>
-                           <description>Received message must match the predefined filtering criteria for ID and/or PL 255 times before generating a wake up event</description>
-                           <value>0b11111111</value>
-                        </enumeratedValue>
-                     </enumeratedValues>
-                  </field>
-                  <field>
-                     <name>WUMF_MSK</name>
-                     <description>Wake Up by Match Flag Mask Bit</description>
-                     <bitOffset>16</bitOffset>
-                     <bitWidth>1</bitWidth>
-                     <enumeratedValues>
-                        <enumeratedValue>
-                           <name>0b0</name>
-                           <description>Wake up match event is disabled</description>
-                           <value>0b0</value>
-                        </enumeratedValue>
-                        <enumeratedValue>
-                           <name>0b1</name>
-                           <description>Wake up match event is enabled</description>
-                           <value>0b1</value>
-                        </enumeratedValue>
-                     </enumeratedValues>
-                  </field>
-                  <field>
-                     <name>WTOF_MSK</name>
-                     <description>Wake Up by Timeout Flag Mask Bit</description>
-                     <bitOffset>17</bitOffset>
-                     <bitWidth>1</bitWidth>
-                     <enumeratedValues>
-                        <enumeratedValue>
-                           <name>0b0</name>
-                           <description>Timeout wake up event is disabled</description>
-                           <value>0b0</value>
-                        </enumeratedValue>
-                        <enumeratedValue>
-                           <name>0b1</name>
-                           <description>Timeout wake up event is enabled</description>
-                           <value>0b1</value>
-                        </enumeratedValue>
-                     </enumeratedValues>
-                  </field>
-               </fields>
-            </register>
-            <register>
-               <name>CTRL2_PN</name>
-               <description>Pretended Networking Control 2 Register</description>
-               <addressOffset>0xB04</addressOffset>
-               <fields>
-                  <field>
-                     <name>MATCHTO</name>
-                     <description>Timeout for No Message Matching the Filtering Criteria</description>
-                     <bitOffset>0</bitOffset>
-                     <bitWidth>16</bitWidth>
-                  </field>
-               </fields>
-            </register>
-            <register>
-               <name>WU_MTC</name>
-               <description>Pretended Networking Wake Up Match Register</description>
-               <addressOffset>0xB08</addressOffset>
-               <fields>
-                  <field>
-                     <name>MCOUNTER</name>
-                     <description>Number of Matches while in Pretended Networking</description>
-                     <bitOffset>8</bitOffset>
-                     <bitWidth>8</bitWidth>
-                     <access>read-only</access>
-                  </field>
-                  <field>
-                     <name>WUMF</name>
-                     <description>Wake Up by Match Flag Bit</description>
-                     <bitOffset>16</bitOffset>
-                     <bitWidth>1</bitWidth>
-                     <enumeratedValues>
-                        <enumeratedValue>
-                           <name>0b0</name>
-                           <description>No wake up by match event detected</description>
-                           <value>0b0</value>
-                        </enumeratedValue>
-                        <enumeratedValue>
-                           <name>0b1</name>
-                           <description>Wake up by match event detected</description>
-                           <value>0b1</value>
-                        </enumeratedValue>
-                     </enumeratedValues>
-                  </field>
-                  <field>
-                     <name>WTOF</name>
-                     <description>Wake Up by Timeout Flag Bit</description>
-                     <bitOffset>17</bitOffset>
-                     <bitWidth>1</bitWidth>
-                     <enumeratedValues>
-                        <enumeratedValue>
-                           <name>0b0</name>
-                           <description>No wake up by timeout event detected</description>
-                           <value>0b0</value>
-                        </enumeratedValue>
-                        <enumeratedValue>
-                           <name>0b1</name>
-                           <description>Wake up by timeout event detected</description>
-                           <value>0b1</value>
-                        </enumeratedValue>
-                     </enumeratedValues>
-                  </field>
-               </fields>
-            </register>
-            <register>
-               <name>FLT_ID1</name>
-               <description>Pretended Networking ID Filter 1 Register</description>
-               <addressOffset>0xB0C</addressOffset>
-               <fields>
-                  <field>
-                     <name>FLT_ID1</name>
-                     <description>ID Filter 1 for Pretended Networking filtering</description>
-                     <bitOffset>0</bitOffset>
-                     <bitWidth>29</bitWidth>
-                  </field>
-                  <field>
-                     <name>FLT_RTR</name>
-                     <description>Remote Transmission Request Filter</description>
-                     <bitOffset>29</bitOffset>
-                     <bitWidth>1</bitWidth>
-                     <enumeratedValues>
-                        <enumeratedValue>
-                           <name>0b0</name>
-                           <description>Reject remote frame (accept data frame)</description>
-                           <value>0b0</value>
-                        </enumeratedValue>
-                        <enumeratedValue>
-                           <name>0b1</name>
-                           <description>Accept remote frame</description>
-                           <value>0b1</value>
-                        </enumeratedValue>
-                     </enumeratedValues>
-                  </field>
-                  <field>
-                     <name>FLT_IDE</name>
-                     <description>ID Extended Filter</description>
-                     <bitOffset>30</bitOffset>
-                     <bitWidth>1</bitWidth>
-                     <enumeratedValues>
-                        <enumeratedValue>
-                           <name>0b0</name>
-                           <description>Accept standard frame format</description>
-                           <value>0b0</value>
-                        </enumeratedValue>
-                        <enumeratedValue>
-                           <name>0b1</name>
-                           <description>Accept extended frame format</description>
-                           <value>0b1</value>
-                        </enumeratedValue>
-                     </enumeratedValues>
-                  </field>
-               </fields>
-            </register>
-            <register>
-               <name>FLT_DLC</name>
-               <description>Pretended Networking DLC Filter Register</description>
-               <addressOffset>0xB10</addressOffset>
-               <resetValue>0x8</resetValue>
-               <fields>
-                  <field>
-                     <name>FLT_DLC_HI</name>
-                     <description>Upper Limit for Length of Data Bytes Filter</description>
-                     <bitOffset>0</bitOffset>
-                     <bitWidth>4</bitWidth>
-                  </field>
-                  <field>
-                     <name>FLT_DLC_LO</name>
-                     <description>Lower Limit for Length of Data Bytes Filter</description>
-                     <bitOffset>16</bitOffset>
-                     <bitWidth>4</bitWidth>
-                  </field>
-               </fields>
-            </register>
-            <register>
-               <name>PL1_LO</name>
-               <description>Pretended Networking payload Low Filter 1 Register</description>
-               <addressOffset>0xB14</addressOffset>
-               <fields>
-                  <field>
-                     <name>Data_byte_3</name>
-                     <description>Payload Filter 1 low order bits for Pretended Networking payload filtering corresponding to the data byte 3</description>
-                     <bitOffset>0</bitOffset>
-                     <bitWidth>8</bitWidth>
-                  </field>
-                  <field>
-                     <name>Data_byte_2</name>
-                     <description>Payload Filter 1 low order bits for Pretended Networking payload filtering corresponding to the data byte 2</description>
-                     <bitOffset>8</bitOffset>
-                     <bitWidth>8</bitWidth>
-                  </field>
-                  <field>
-                     <name>Data_byte_1</name>
-                     <description>Payload Filter 1 low order bits for Pretended Networking payload filtering corresponding to the data byte 1</description>
-                     <bitOffset>16</bitOffset>
-                     <bitWidth>8</bitWidth>
-                  </field>
-                  <field>
-                     <name>Data_byte_0</name>
-                     <description>Payload Filter 1 low order bits for Pretended Networking payload filtering corresponding to the data byte 0</description>
-                     <bitOffset>24</bitOffset>
-                     <bitWidth>8</bitWidth>
-                  </field>
-               </fields>
-            </register>
-            <register>
-               <name>PL1_HI</name>
-               <description>Pretended Networking payload High Filter 1 Register</description>
-               <addressOffset>0xB18</addressOffset>
-               <fields>
-                  <field>
-                     <name>Data_byte_7</name>
-                     <description>Payload Filter 1 high order bits for Pretended Networking payload filtering corresponding to the data byte 7</description>
-                     <bitOffset>0</bitOffset>
-                     <bitWidth>8</bitWidth>
-                  </field>
-                  <field>
-                     <name>Data_byte_6</name>
-                     <description>Payload Filter 1 high order bits for Pretended Networking payload filtering corresponding to the data byte 6</description>
-                     <bitOffset>8</bitOffset>
-                     <bitWidth>8</bitWidth>
-                  </field>
-                  <field>
-                     <name>Data_byte_5</name>
-                     <description>Payload Filter 1 high order bits for Pretended Networking payload filtering corresponding to the data byte 5</description>
-                     <bitOffset>16</bitOffset>
-                     <bitWidth>8</bitWidth>
-                  </field>
-                  <field>
-                     <name>Data_byte_4</name>
-                     <description>Payload Filter 1 high order bits for Pretended Networking payload filtering corresponding to the data byte 4</description>
-                     <bitOffset>24</bitOffset>
-                     <bitWidth>8</bitWidth>
-                  </field>
-               </fields>
-            </register>
-            <register>
-               <name>FLT_ID2_IDMASK</name>
-               <description>Pretended Networking ID Filter 2 Register / ID Mask Register</description>
-               <addressOffset>0xB1C</addressOffset>
-               <fields>
-                  <field>
-                     <name>FLT_ID2_IDMASK</name>
-                     <description>ID Filter 2 for Pretended Networking Filtering / ID Mask Bits for Pretended Networking ID Filtering</description>
-                     <bitOffset>0</bitOffset>
-                     <bitWidth>29</bitWidth>
-                  </field>
-                  <field>
-                     <name>RTR_MSK</name>
-                     <description>Remote Transmission Request Mask Bit</description>
-                     <bitOffset>29</bitOffset>
-                     <bitWidth>1</bitWidth>
-                     <enumeratedValues>
-                        <enumeratedValue>
-                           <name>0b0</name>
-                           <description>The corresponding bit in the filter is &quot;don&apos;t care&quot;</description>
-                           <value>0b0</value>
-                        </enumeratedValue>
-                        <enumeratedValue>
-                           <name>0b1</name>
-                           <description>The corresponding bit in the filter is checked</description>
-                           <value>0b1</value>
-                        </enumeratedValue>
-                     </enumeratedValues>
-                  </field>
-                  <field derivedFrom="RTR_MSK" > <name>IDE_MSK</name> <description>ID Extended Mask Bit</description> <bitOffset>30</bitOffset> </field>
-               </fields>
-            </register>
-            <register>
-               <name>PL2_PLMASK_LO</name>
-               <description>Pretended Networking payload Low Filter 2 Register / payload Low Mask Register</description>
-               <addressOffset>0xB20</addressOffset>
-               <fields>
-                  <field>
-                     <name>Data_byte_3</name>
-                     <description>Payload Filter 2 low order bits / Payload Mask low order bits for Pretended Networking payload filtering corresponding to the data byte 3</description>
-                     <bitOffset>0</bitOffset>
-                     <bitWidth>8</bitWidth>
-                  </field>
-                  <field>
-                     <name>Data_byte_2</name>
-                     <description>Payload Filter 2 low order bits / Payload Mask low order bits for Pretended Networking payload filtering corresponding to the data byte 2</description>
-                     <bitOffset>8</bitOffset>
-                     <bitWidth>8</bitWidth>
-                  </field>
-                  <field>
-                     <name>Data_byte_1</name>
-                     <description>Payload Filter 2 low order bits / Payload Mask low order bits for Pretended Networking payload filtering corresponding to the data byte 1</description>
-                     <bitOffset>16</bitOffset>
-                     <bitWidth>8</bitWidth>
-                  </field>
-                  <field>
-                     <name>Data_byte_0</name>
-                     <description>Payload Filter 2 low order bits / Payload Mask low order bits for Pretended Networking payload filtering corresponding to the data byte 0</description>
-                     <bitOffset>24</bitOffset>
-                     <bitWidth>8</bitWidth>
-                  </field>
-               </fields>
-            </register>
-            <register>
-               <name>PL2_PLMASK_HI</name>
-               <description>Pretended Networking payload High Filter 2 low order bits / payload High Mask Register</description>
-               <addressOffset>0xB24</addressOffset>
-               <fields>
-                  <field>
-                     <name>Data_byte_7</name>
-                     <description>Payload Filter 2 high order bits / Payload Mask high order bits for Pretended Networking payload filtering corresponding to the data byte 7</description>
-                     <bitOffset>0</bitOffset>
-                     <bitWidth>8</bitWidth>
-                  </field>
-                  <field>
-                     <name>Data_byte_6</name>
-                     <description>Payload Filter 2 high order bits / Payload Mask high order bits for Pretended Networking payload filtering corresponding to the data byte 6</description>
-                     <bitOffset>8</bitOffset>
-                     <bitWidth>8</bitWidth>
-                  </field>
-                  <field>
-                     <name>Data_byte_5</name>
-                     <description>Payload Filter 2 high order bits / Payload Mask high order bits for Pretended Networking payload filtering corresponding to the data byte 5</description>
-                     <bitOffset>16</bitOffset>
-                     <bitWidth>8</bitWidth>
-                  </field>
-                  <field>
-                     <name>Data_byte_4</name>
-                     <description>Payload Filter 2 high order bits / Payload Mask high order bits for Pretended Networking payload filtering corresponding to the data byte 4</description>
-                     <bitOffset>24</bitOffset>
-                     <bitWidth>8</bitWidth>
-                  </field>
-               </fields>
-            </register>
-            <cluster>
-               <dim>$(WAKEUP_BUFFER_COUNT)</dim>
-               <dimIncrement>16</dimIncrement>
-               <name>WMB,@p@f@i</name>
-               <addressOffset>0xB40</addressOffset>
-               <register>
-                  <name>WMBn_CS</name>
-                  <description>Wake Up Message Buffer Register for C/S</description>
-                  <addressOffset>0x0</addressOffset>
-                  <access>read-only</access>
-                  <fields>
-                     <field>
-                        <name>DLC</name>
-                        <description>Length of Data in Bytes</description>
-                        <bitOffset>16</bitOffset>
-                        <bitWidth>4</bitWidth>
-                     </field>
-                     <field>
-                        <name>RTR</name>
-                        <description>Remote Transmission Request</description>
-                        <bitOffset>20</bitOffset>
-                        <bitWidth>1</bitWidth>
-                        <enumeratedValues>
-                           <enumeratedValue>
-                              <name>0b0</name>
-                              <description>Data frame</description>
-                              <value>0b0</value>
-                           </enumeratedValue>
-                           <enumeratedValue>
-                              <name>0b1</name>
-                              <description>Remote Request frame</description>
-                              <value>0b0</value>
-                           </enumeratedValue>
-                        </enumeratedValues>
-                     </field>
-                     <field>
-                        <name>IDE</name>
-                        <description>ID Extended Bit</description>
-                        <bitOffset>21</bitOffset>
-                        <bitWidth>1</bitWidth>
-                        <enumeratedValues>
-                           <enumeratedValue>
-                              <name>0b0</name>
-                              <description>Frame format is standard</description>
-                              <value>0b0</value>
-                           </enumeratedValue>
-                           <enumeratedValue>
-                              <name>0b1</name>
-                              <description>Frame format is extended</description>
-                              <value>0b1</value>
-                           </enumeratedValue>
-                        </enumeratedValues>
-                     </field>
-                     <field>
-                        <name>SRR</name>
-                        <description>Substitute Remote Request</description>
-                        <bitOffset>22</bitOffset>
-                        <bitWidth>1</bitWidth>
-                     </field>
-                  </fields>
-               </register>
-               <register>
-                  <name>WMBn_ID</name>
-                  <description>Wake Up Message Buffer Register for ID</description>
-                  <addressOffset>0x4</addressOffset>
-                  <access>read-only</access>
-                  <fields>
-                     <field>
-                        <name>ID</name>
-                        <description>Received ID under Pretended Networking mode</description>
-                        <bitOffset>0</bitOffset>
-                        <bitWidth>29</bitWidth>
-                     </field>
-                  </fields>
-               </register>
-               <register>
-                  <name>WMBn_D03</name>
-                  <description>Wake Up Message Buffer Register for Data 0-3</description>
-                  <addressOffset>0x8</addressOffset>
-                  <access>read-only</access>
-                  <fields>
-                     <field>
-                        <name>Data_byte_3</name>
-                        <description>Received payload corresponding to the data byte 3 under Pretended Networking mode</description>
-                        <bitOffset>0</bitOffset>
-                        <bitWidth>8</bitWidth>
-                     </field>
-                     <field>
-                        <name>Data_byte_2</name>
-                        <description>Received payload corresponding to the data byte 2 under Pretended Networking mode</description>
-                        <bitOffset>8</bitOffset>
-                        <bitWidth>8</bitWidth>
-                     </field>
-                     <field>
-                        <name>Data_byte_1</name>
-                        <description>Received payload corresponding to the data byte 1 under Pretended Networking mode</description>
-                        <bitOffset>16</bitOffset>
-                        <bitWidth>8</bitWidth>
-                     </field>
-                     <field>
-                        <name>Data_byte_0</name>
-                        <description>Received payload corresponding to the data byte 0 under Pretended Networking mode</description>
-                        <bitOffset>24</bitOffset>
-                        <bitWidth>8</bitWidth>
-                     </field>
-                  </fields>
-               </register>
-               <register>
-                  <name>WMBn_D47</name>
-                  <description>Wake Up Message Buffer Register Data 4-7</description>
-                  <addressOffset>0xC</addressOffset>
-                  <access>read-only</access>
-                  <fields>
-                     <field>
-                        <name>Data_byte_7</name>
-                        <description>Received payload corresponding to the data byte 7 under Pretended Networking mode</description>
-                        <bitOffset>0</bitOffset>
-                        <bitWidth>8</bitWidth>
-                     </field>
-                     <field>
-                        <name>Data_byte_6</name>
-                        <description>Received payload corresponding to the data byte 6 under Pretended Networking mode</description>
-                        <bitOffset>8</bitOffset>
-                        <bitWidth>8</bitWidth>
-                     </field>
-                     <field>
-                        <name>Data_byte_5</name>
-                        <description>Received payload corresponding to the data byte 5 under Pretended Networking mode</description>
-                        <bitOffset>16</bitOffset>
-                        <bitWidth>8</bitWidth>
-                     </field>
-                     <field>
-                        <name>Data_byte_4</name>
-                        <description>Received payload corresponding to the data byte 4 under Pretended Networking mode</description>
-                        <bitOffset>24</bitOffset>
-                        <bitWidth>8</bitWidth>
-                     </field>
-                  </fields>
-               </register>
-            </cluster>
          </registers>
       </peripheral>

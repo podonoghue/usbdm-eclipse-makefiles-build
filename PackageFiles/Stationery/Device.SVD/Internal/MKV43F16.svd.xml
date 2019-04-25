@@ -24,7 +24,7 @@
       <xi:include href="peripherals/ADC0_MKV.svd.xml"/>
       <xi:include href="peripherals/AIPS0_Lite_8Mx16P.svd.xml"/>
       <xi:include href="peripherals/AOI_0.svd.xml"/>
-      <xi:include href="peripherals/CAN0_MKV.svd.xml"/>
+      <xi:include href="peripherals/CAN0_FLEX_MKV.svd.xml"/>
       <peripheral derivedFrom="CAN0"><name>CAN1</name><baseAddress>0x40025000</baseAddress></peripheral>
       <xi:include href="peripherals/CMP0_MKV.svd.xml"/>
       <peripheral derivedFrom="CMP0"><name>CMP1</name><baseAddress>0x40073008</baseAddress></peripheral>

@@ -319,49 +319,49 @@ Devices using this vector table:
    </interrupt>
    <interrupt>
       <name>CAN0_ORed</name>
-      <description>Flex Controller Area Network module</description>
+      <description>FlexCAN - Bus Off, Tx/Rx Warnings, Tx/Rx Error count transition</description>
       <value>78</value>
       <peripheral>CAN0</peripheral>
    </interrupt>
    <interrupt>
       <name>CAN0_Error</name>
-      <description>Flex Controller Area Network module</description>
+      <description>FlexCAN - Bus Error</description>
       <value>79</value>
       <peripheral>CAN0</peripheral>
    </interrupt>
    <interrupt>
       <name>CAN0_WakeUp</name>
-      <description>Flex Controller Area Network module</description>
+      <description>FlexCAN - Wakeup and Sleep (Pretend networking)</description>
       <value>80</value>
       <peripheral>CAN0</peripheral>
    </interrupt>
    <interrupt>
       <name>CAN0_MessageBuffer_0_15</name>
-      <description>Flex Controller Area Network module</description>
+      <description>FlexCAN - Message Buffers (FIFO and Mailboxes)</description>
       <value>81</value>
       <peripheral>CAN0</peripheral>
    </interrupt>
    <interrupt>
       <name>CAN0_MessageBuffer_16_31</name>
-      <description>Flex Controller Area Network module</description>
+      <description>FlexCAN - Message Buffers (FIFO and Mailboxes)</description>
       <value>82</value>
       <peripheral>CAN0</peripheral>
    </interrupt>
    <interrupt>
       <name>CAN1_ORed</name>
-      <description>Flex Controller Area Network module</description>
+      <description>FlexCAN - Bus Off, Tx/Rx Warnings, Tx/Rx Error count transition</description>
       <value>85</value>
       <peripheral>CAN1</peripheral>
    </interrupt>
    <interrupt>
       <name>CAN1_Error</name>
-      <description>Flex Controller Area Network module</description>
+      <description>FlexCAN - Bus Error</description>
       <value>86</value>
       <peripheral>CAN1</peripheral>
    </interrupt>
    <interrupt>
       <name>CAN1_MessageBuffer_0_15</name>
-      <description>Flex Controller Area Network module</description>
+      <description>FlexCAN - Message Buffers (FIFO and Mailboxes)</description>
       <value>88</value>
       <peripheral>CAN1</peripheral>
    </interrupt>

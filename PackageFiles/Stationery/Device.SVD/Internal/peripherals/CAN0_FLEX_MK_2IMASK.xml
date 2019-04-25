@@ -27,7 +27,7 @@ Devices using this peripheral:
       MKV11Z7
 -->
       <peripheral>
-         <?sourceFile "CAN0_2MASK" ?>
+         <?sourceFile "CAN0_FLEX_MK_2IMASK" ?>
          <name>CAN0</name>
          <description>Flex Controller Area Network module</description>
          <groupName>CAN</groupName>

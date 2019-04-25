@@ -657,7 +657,7 @@ To clear this flag it is necessary to clear the flag in the peripheral</descript
             <register>
                <dim>4</dim>
                <dimIncrement>1</dimIncrement>
-               <dimIndex>1,2,3,4</dimIndex>
+               <dimIndex>0,1,2,3</dimIndex>
                <name>FILT%s</name>
                <description>Pin Filter %s register\n
 Control and status register that is used to enable/disable the digital filter features for an external pin</description>
