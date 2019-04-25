@@ -1625,6 +1625,7 @@ template <int channel>
 class Tpm3Channel : public Tpm3::Channel<channel> {};
 #endif
 
+#ifdef TPM_QDCTRL_QUADEN_MASK
 /**
  *  Quadrature Decoder Mode\n
  *  Selects the encoding mode used in the Quadrature Decoder mode.
@@ -1666,7 +1667,7 @@ private:
 
 public:
    /** Hardware instance pointer */
-   static __attribute__((always_inline)) volatile TPM_Type &tpm() { return Info::tpm(); }
+   static __attribute__((always_inline)) volatile TPM_Type &tmr() { return Info::tpm(); }
 
    /** Allow more convenient access associated Tpm */
    using Tpm = TpmBase_T<Info>;
@@ -1798,10 +1799,10 @@ public:
       (void)tmr().SC;
       tmr().SC = TpmMode_Quadrature|TpmClockSource_Disabled|tpmPrescale;
 
-      tpm().QDCTRL =
+      tmr().QDCTRL =
             TPM_QDCTRL_QUADEN_MASK|      // Enable Quadrature decoder
             tpmQuadratureMode;           // Quadrature mode
-      tpm().CONF   = TPM_CONF_DBGMODE(3);
+      tmr().CONF   = TPM_CONF_DBGMODE(3);
    }
 
    /**
@@ -1809,8 +1810,9 @@ public:
     */
    static INLINE_RELEASE void resetPosition() {
       // Note: writing ANY value clears CNT (cannot set value)
-      tpm().CNT = 0;
+      tmr().CNT = 0;
    }
+
    /**
     * Get Quadrature decoder position
     *
@@ -1821,7 +1823,7 @@ public:
     *       with overflow at 0xFFFF and underflow at 0.
     */
    static INLINE_RELEASE int16_t getPosition() {
-      return (int16_t)(tpm().CNT);
+      return (int16_t)(tmr().CNT);
    }
 };
 #endif // defined(TPM_QDCTRL_QUADEN_MASK)

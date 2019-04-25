@@ -1968,6 +1968,7 @@ template <int channel>
 class Ftm3Channel : public Ftm3::Channel<channel> {};
 #endif
 
+#ifdef FTM_QDCTRL_QUADEN_MASK
 /**
  *  Quadrature Decoder Mode\n
  *  Selects the encoding mode used in the Quadrature Decoder mode.
@@ -2228,6 +2229,7 @@ public:
       return (bool)(tmr().QDCTRL & FTM_QDCTRL_TOFDIR_MASK);
    }
 };
+#endif // defined(FTM_QDCTRL_QUADEN_MASK)
 
 
 #ifdef USBDM_FTM0_INFOQUAD_IS_DEFINED

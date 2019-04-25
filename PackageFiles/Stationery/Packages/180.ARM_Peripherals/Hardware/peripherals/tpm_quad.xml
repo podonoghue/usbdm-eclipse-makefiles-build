@@ -9,7 +9,7 @@
       \tstatic constexpr uint32_t defaultPcrValue  = DEFAULT_PCR;\n\n
    ]]></template>
    
-   <xi:include href="_mapPinsOption.xml"/> 
+   <xi:include href="_mapPinsOption.xml"/>   
 
    <aliasOption key="/SIM/sim_sopt2_pllfllsel" constant="false" optional="true"/> 
    <aliasOption key="/SIM/sim_sopt2_tpmsrc" constant="false" />
@@ -184,7 +184,7 @@
       \t */
       \tstatic uint32_t getInputClockFrequency() {
       \t
-      \t   switch(tpm->SC&TPM_SC_CMOD_MASK) {
+      \t   switch(tpm().SC&TPM_SC_CMOD_MASK) {
       \t   default:
       \t   case TPM_SC_CMOD(0): return 0;
       \t   case TPM_SC_CMOD(1): return SimInfo::getTpmClock();
