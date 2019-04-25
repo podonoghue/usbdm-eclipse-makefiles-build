@@ -109,6 +109,16 @@ enum SmcStopMode {
 #endif
 };
 
+/**
+ * Control power to RAM2 in LLS2/VLLS2 power mode
+ */
+#ifdef SMC_STOPCTRL_RAM2PO_MASK
+enum SmcLowLeakageRam2 {
+   SmcLowLeakageRam2_Disabled = SMC_STOPCTRL_RAM2PO(0),  //! RAM2 not powered in LLS2/VLLS2
+   SmcLowLeakageRam2_Enabled  = SMC_STOPCTRL_RAM2PO(1),  //! RAM2 powered in LLS2/VLLS2
+};
+#endif
+
 #ifdef SMC_STOPCTRL_PSTOPO
 /**
  *  Partial Stop Option\n
