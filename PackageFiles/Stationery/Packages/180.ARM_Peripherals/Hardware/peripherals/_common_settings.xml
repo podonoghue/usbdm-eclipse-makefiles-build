@@ -26,6 +26,18 @@
 \t   return (b < a) ? b : a;
 \t}\n\n
 
+\t/**
+\t * @tparam  T  Type of comparison object (inferred)
+\t * @param   a  Left-hand object for comparison
+\t * @param   b  Right-hand object for comparison
+\t *
+\t * @return Larger of a or b
+\t */
+\ttemplate<class T> 
+\tconstexpr T max(const T a, const T b) {
+\t   return (b > a) ? b : a;
+\t}\n\n
+
    #if defined(PCC)\n\n
    
    /** Dummy port information for pins without an associated PCR */

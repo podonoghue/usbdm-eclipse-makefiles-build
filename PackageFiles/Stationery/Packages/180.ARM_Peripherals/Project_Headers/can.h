@@ -43,298 +43,6 @@ enum CanFrameType {
 };
 
 /**
- * Class holding CAN communication parameters
- */
-union CanParameters {
-public:
-   struct {
-      uint32_t    ctrl1;      //!< Control register 1
-      uint32_t    ctrl2;      //!< Control register 2
-      uint32_t    mcr;        //!< Mode control register
-   };
-   struct {
-      //--- CTRL1 --------------------------
-      unsigned propSeg:3;    //!< Propagation Segment
-      bool     lom:1;        //!< Listen-Only Mode
-      bool     lbuf:1;       //!< Lowest Buffer Transmitted First
-      bool     tsyn:1;       //!< Timer Sync
-      bool     boffrec:1;    //!< Bus Off Recovery
-      bool     smp:1;        //!< CAN Bit Sampling
-      unsigned :2;
-      bool     rwrnmsk:1;    //!< Receive Warning Interrupt Mask for ESR1.RWRNINT
-      bool     twrnmsk:1;    //!< Transmit Warning Interrupt Mask for ESR1.TWRNINT
-      bool     lpb:1;        //!< Loop Back Mode
-      bool     clksrc:1;     //!< CAN Engine Clock Source
-      bool     errmsk:1;     //!< Error Mask for ESR1.ERRINT (BIT1ERR, BIT0ERR, ACKERR, CRCERR, FRMERR or STFERR)
-      bool     boffmsk:1;    //!< Bus Off Mask
-      unsigned pSeg2:3;      //!< Phase Segment 2
-      unsigned pSeg1:3;      //!< Phase Segment 1
-      unsigned rjw:2;        //!< Resynchronisation Jump Width
-      unsigned presdiv:8;    //!< Prescaler Division Factor
-      //--- CTRL2 --------------------------
-      unsigned :16;
-      bool     eacen:1;      //!< Entire Frame Arbitration Field Comparison Enable For Receive Mailboxes
-      bool     rrs:1;        //!< Remote Request Stored (Automatic Remote Response Frame is not generated)
-      bool     mrp:1;        //!< Mailboxes Reception Priority
-      unsigned tasd:5;       //!< Transmit Arbitration Start Delay
-      unsigned rffn:4;       //!< Number Of Receive FIFO Filters
-#ifdef CAN_CTRL2_WRMFRZ
-      bool     wrmfrz:1;     //!< Write-Access To Memory In Freeze Mode
-#else
-      unsigned :1;     //!< WRMFRZ not available
-#endif
-#ifdef CAN_CTRL2_BOFFDONEMSK_MASK
-      bool     boffdonemsk:1;     //!< Mask for the Bus Off Done Interrupt in CAN_ESR1 register.
-#else
-      unsigned :1;     //!< BOFFDONEMSK not available
-#endif
-#ifdef CAN_CTRL2_ERRMSK_FAST_MASK
-      bool     errmsk_fast:1;     //!< Error Interrupt Mask for errors detected in the Data Phase of fast CAN FD frames
-#else
-      unsigned :1;     //!< ERRMSK_FAST not available
-#endif
-      unsigned :1;
-      //--- MCR --------------------------
-      unsigned maxmb:7;     //!< Number of the last message buffer
-      unsigned :1;
-      unsigned idam:2;      //!< ID Acceptance Mode
-      unsigned :1;
-#ifdef CAN_MCR_FDEN_MASK
-      bool     fden:1;      //!< Flexible Data rate enable
-#else
-      unsigned :1;          //!< FDEN not available
-#endif
-      bool     aen:1;       //!< Abort Enable
-      bool     lprioen:1;   //!< Local Priority Enable
-#ifdef CAN_MCR_PNET_EN_MASK
-      unsigned :1;          //!< Pretended Networking Enable
-#else
-      unsigned :1;          //!< PNET_EN not available
-#endif
-#ifdef CAN_MCR_DMA_MASK
-      unsigned :1;          //!< DMA Enable
-#else
-      unsigned :1;          //!< DMA not available
-#endif
-      bool     irmq:1;      //!< Individual mailbox and FIFO masking, or use of RXMGMASK, RX14MASK, RX15MASK and RXFGMASK
-      bool     srxdis:1;    //!< Self Reception Disable
-      unsigned :1;
-#ifdef CAN_MCR_WAKSRC_MASK
-      bool     waksrc:1;    //!< Wake Up Source
-#else
-      unsigned :1;          //!< WAKSRC not available
-#endif
-      unsigned :1;          //!< LPMACK - Low-Power Mode Acknowledge
-      bool     wrnen:1;     //!< Warning Interrupt Enable
-#ifdef CAN_MCR_SLFWAK_MASK
-      bool     slfwak:1;    //!< Self Wake Up
-#else
-      unsigned :1;          //!< SLFWAK not available
-#endif
-      bool     supv:1;      //!< Supervisor Mode
-      unsigned :1;          //!< FRZACK - Freeze Mode Acknowledge
-      unsigned :1;          //!< SOFTRST - Soft Reset
-#ifdef CAN_MCR_WAKMSK_MASK
-      bool     wakmsk:1;    //!< Wake Up Interrupt Mask
-#else
-      unsigned :1;          //!< WAKMSK not available
-#endif
-      unsigned :1;          //!< NOTRDY - FlexCAN Not Ready
-      bool     :1;          //!< HALT - Halt FlexCAN
-      bool     rfen:1;      //!< Receive FIFO Enable
-      bool     :1;          //!< FRZ - Freeze Enable
-      bool     :1;          //!< MDIS - Module Disable
-   };
-
-private:
-   /**
-    * Constructor
-    * Most parameters will be set to a default disabled value apart from:\n
-    * Communication parameters calculated from bitRate and clockFreq:\n
-    *   - presdiv Prescaler Division Factor
-    *   - propSeg Propagation Segment
-    *   - pSeg1   Phase Segment 1
-    *   - pSeg2   Phase Segment 2
-    *   - rjw     Resynchronisation Jump Width
-    *   - tasd    Transmit Arbitration Start Delay (=22, reset default)
-    *   - maxmb   Number Of The Last Message Buffer (=15, reset default)
-    *
-    * @param bitRate    Desired bit rate
-    * @param clockFreq  Protocol Engine input clock frequency
-    *
-    * @note Use isValid to check for success or check USBDM error code
-    */
-   CanParameters(unsigned bitRate, unsigned clockFreq) {
-
-      unsigned bestError        = INT_MAX;
-      unsigned bestPrescaler    = 1;  // 1..256
-      unsigned bestTq           = 0;  // 8..25 = 1 + timeSegment1 + timeSegment2
-
-      // Try each tq value checking for the best outcome
-      // Prefer higher tq if multiple equal best
-      for (uint8_t tq = 25; tq>=8; tq--) {
-         unsigned prescaler = clockFreq/tq/bitRate;  // 1..256
-
-         auto checkParams = [&] {
-            // Check settings
-            int error = clockFreq/tq/prescaler - bitRate;
-            if (error<0) {
-               error = -error;
-            }
-//            console.
-//               write("TQ =").write(tq).
-//               write(", PS = ").write(prescaler).
-//               write(", F =").write(clockFreq/tq/prescaler/1000.0).write(" kHz").
-//               write(", E =").write(error).write(" Hz");
-            if ((unsigned)error < bestError) {
-//               console.write(" *");
-               bestError     = (unsigned)error;
-               bestTq        = tq;
-               bestPrescaler = prescaler;
-            }
-//            console.writeln();
-         };
-         if (prescaler>=1) {
-            checkParams();
-         }
-         prescaler++;
-         if (prescaler<=256) {
-            checkParams();
-         }
-      }
-      if (bestTq == 0) {
-         // Indicates failure
-         propSeg = 0;
-         setErrorCode(E_ILLEGAL_PARAM);
-         return;
-      }
-      /*
-       * tq has to be allocated between
-       *   Sync segment   = fixed @ 1
-       *   Time segment 1 = 4..16
-       *   Time segment 2 = 2..8
-       * Time segment 1 gets subdivided into propSegment and pseg1
-       * Time segment 2 become pseg2
-       *
-       * Resync is equal to Time segment 2 up to a maximum of 4
-       */
-      unsigned timeSegment2 = (bestTq-1)/3;
-      unsigned timeSegment1 = (bestTq-1) - timeSegment2;
-      unsigned resyncJumpWidth = timeSegment2;
-      if (resyncJumpWidth>4) {
-         resyncJumpWidth = 4;
-      }
-      ctrl1   = 0; // Reset value
-      presdiv = bestPrescaler - 1;
-      propSeg = ((timeSegment1+1)/2) - 1;
-      pSeg1   = (timeSegment1 - propSeg) - 2;
-      pSeg2   = timeSegment2 - 1;
-      rjw     = resyncJumpWidth - 1;
-
-      ctrl2   = 0;
-      tasd    = 22; // Reset value
-
-      mcr     = 0;
-      maxmb   = 16-1;
-      aen     = true;
-      irmq    = true;
-   }
-
-public:
-   /**
-    * Constructor
-    * Most parameters will be set to a default disabled value apart from:\n
-    * Communication parameters calculated from bitRate and SystemCoreClock:\n
-    *   - presdiv Prescaler Division Factor
-    *   - propSeg Propagation Segment
-    *   - pSeg1   Phase Segment 1
-    *   - pSeg2   Phase Segment 2
-    *   - rjw     Resynchronisation Jump Width
-    *   - tasd    Transmit Arbitration Start Delay (=22, reset default)
-    *   - maxmb   Number Of The Last Message Buffer (=15, reset default)
-    *
-    *   - clksrc = 1 : System clock source
-    *
-    * @param bitRate    Desired bit rate
-    *
-    * @note Use isValid to check for success or check USBDM error code
-    */
-   CanParameters(unsigned bitRate) : CanParameters(bitRate, SystemCoreClock) {
-      clksrc  = true;  // SYS_CLK
-   }
-
-   /**
-    * Check if value was constructed correctly
-    *
-    * @return true  Values appear valid
-    * @return false Values appear invalid
-    */
-   bool isValid() const {
-      //TODO - Check values properly
-      return (propSeg != 0);
-   }
-
-   /**
-    * Calculates number of Message buffers required for the FIFO and FIFO filters.
-    * The remaining Message Buffers are available for individual mailboxes.
-    *
-    * @param fifoIdFilterCount   Number of FIFO filters implemented
-    *
-    * @return Number of Message Buffers occupied by the FIFO and FIFO filters.
-    */
-   static constexpr unsigned calculateMessageBuffersRequiredForFIFO(unsigned fifoIdFilterCount) {
-      return (fifoIdFilterCount==0?0:6)+(fifoIdFilterCount/4);
-   }
-
-   /**
-    * Calculates the number of message buffers required to accommodate FIFO, FIFO filters and mailboxes.
-    * The buffers are used for:
-    * - Receive FIFO (optional) (6 message buffers)
-    * - Receive FIFO filters (optional and number is software configurable) (8 filters = 1 message buffer)
-    * - Mailboxes (number is software configurable) (1 mailbox = 1 message buffer)
-    * The available Message Buffers is determined by the hardware maximum and the CAN_MCR.MAXMB value.
-    *
-    * @param fifoIdFilters   Number of FIFO filter entries (Format_A=x1, Format_B=x2, Format_C=x4)
-    * @param mailboxes       Number of mailboxes
-    *
-    * @return The number of message buffers required.
-    */
-   static constexpr unsigned calculateMessageBuffersRequired(unsigned fifoIdFilterCount, unsigned mailboxes) {
-      return calculateMessageBuffersRequiredForFIFO(fifoIdFilterCount)+ mailboxes;
-   }
-
-   /**
-    * Calculates maximum number of FIFO filters entries available based on number of Message buffers available.
-    * This assumes no Message buffers are used for individual mailboxes i.e. only the Rx FIFO is used.
-    * The available Message Buffers is determined by the hardware maximum and the CAN_MCR.MAXMB value.
-    * There are also timing constraints as the CAN hardware must scan the FIFO filters and mailboxes.
-    * This is not considered here.
-    *
-    * @param availableMessageBuffers Number of Message buffers available
-    *
-    * @return Number of FIFO filter entries. Each entry may be x1, x2 or x4 filters
-    */
-   static constexpr unsigned calculateMaximumFifoFilterEntries(unsigned availableMessageBuffers) {
-      return min((availableMessageBuffers-6)*4, 128U);
-   }
-
-   /**
-    * Calculates number of FIFO individual filter masks available based on number of FIFO filters.
-    * Each FIFO filter is masked by either an individual mask (RXIMR[]) or a shared mask (RXFGMASK).
-    * This calculates the number of individual masks available (RXIMR[]).
-    * The remaining FIFO filters are masked by the shared mask (RXFGMASK).
-    * (The remaining RXIMR[] entries are used for individual mailbox filter masking.)
-    *
-    * @param fifoIdFilterCount   Number of FIFO filters implemented.
-    *
-    * @return Number of individual FIFO filter masks
-    */
-   static constexpr unsigned calculateAvailableFifoIdFilterMasks(unsigned fifoIdFilterCount) {
-      return (fifoIdFilterCount<8)?0:(8 + 2*((fifoIdFilterCount/8)-1));
-   }
-};
-
-/**
  * @addtogroup CAN_Group CAN, Controller Area Network
  * @brief Abstraction for Controller Area Network
  * @{
@@ -345,42 +53,47 @@ public:
 typedef void (*CanCallbackFunction)(void);
 
 enum CanMessageCode {
-   CanMessageCode_RxInactive = 0b0000, //!< MB does not participate
-   CanMessageCode_RxEmpty    = 0b0100, //!< May be filled on reception
-   CanMessageCode_RxFull     = 0b0010, //!< Buffer holds received data
-   CanMessageCode_RxOverrun  = 0b0110, //!< Reception Overrun, Buffer holds received data
-   CanMessageCode_RxAnswer   = 0b1010, //!< Buffer used for remote answer reception
+   CanMessageCode_RxInactive = 0b0000U, //!< MB does not participate
+   CanMessageCode_RxEmpty    = 0b0100U, //!< May be filled on reception
+   CanMessageCode_RxFull     = 0b0010U, //!< Buffer holds received data
+   CanMessageCode_RxOverrun  = 0b0110U, //!< Reception Overrun, Buffer holds received data
+   CanMessageCode_RxAnswer   = 0b1010U, //!< Buffer used for remote answer reception
 
-   CanMessageCode_RxBusy     = 0b0001, //!< This bit indicate the buffer is busy (changing)
+   CanMessageCode_RxBusy     = 0b0001U, //!< This bit indicate the buffer is busy (changing)
 
-   CanMessageCode_TxInactive = 0b1000, //!< MB does not participate
-   CanMessageCode_TxAbort    = 0b1001, //!< Aborted, MB does not participate
-   CanMessageCode_TxData     = 0b1100, //!< (RTR=0) Transmit Data
-   CanMessageCode_TxRemote   = 0b1100, //!< (RTR=1) Transmit Remote request
-   CanMessageCode_TxAnswer   = 0b1110, //!< Buffer automatically used for remote answer response
+   CanMessageCode_TxInactive = 0b1000U, //!< MB does not participate
+   CanMessageCode_TxAbort    = 0b1001U, //!< Aborted, MB does not participate
+   CanMessageCode_TxData     = 0b1100U, //!< (RTR=0) Transmit Data
+   CanMessageCode_TxRemote   = 0b1100U, //!< (RTR=1) Transmit Remote request
+   CanMessageCode_TxAnswer   = 0b1110U, //!< Buffer automatically used for remote answer response
 };
 
 /**
  * Size of data in message
  */
 enum CanDataSize {
-   CanDataSize_0  = 0,   // No Data bytes in message
-   CanDataSize_1  = 1,   // 1 bytes in message
-   CanDataSize_2  = 2,   // 2 bytes in message
-   CanDataSize_3  = 3,   // 3 bytes in message
-   CanDataSize_4  = 4,   // 4 bytes in message
-   CanDataSize_5  = 5,   // 5 bytes in message
-   CanDataSize_6  = 6,   // 6 bytes in message
-   CanDataSize_7  = 7,   // 7 bytes in message
-   CanDataSize_8  = 8,   // 8 bytes in message
-   CanDataSize_12 = 9,   // 12 bytes in message
-   CanDataSize_16 = 10,  // 16 bytes in message
-   CanDataSize_20 = 11,  // 20 bytes in message
-   CanDataSize_24 = 12,  // 24 bytes in message
-   CanDataSize_32 = 13,  // 32 bytes in message
-   CanDataSize_48 = 14,  // 48 bytes in message
-   CanDataSize_64 = 15,  // 64 bytes in message
+   CanDataSize_0  =  0U,  // No Data bytes in message
+   CanDataSize_1  =  1U,  // 1 bytes in message
+   CanDataSize_2  =  2U,  // 2 bytes in message
+   CanDataSize_3  =  3U,  // 3 bytes in message
+   CanDataSize_4  =  4U,  // 4 bytes in message
+   CanDataSize_5  =  5U,  // 5 bytes in message
+   CanDataSize_6  =  6U,  // 6 bytes in message
+   CanDataSize_7  =  7U,  // 7 bytes in message
+   CanDataSize_8  =  8U,  // 8 bytes in message
+   CanDataSize_12 =  9U,  // 12 bytes in message
+   CanDataSize_16 = 10U,  // 16 bytes in message
+   CanDataSize_20 = 11U,  // 20 bytes in message
+   CanDataSize_24 = 12U,  // 24 bytes in message
+   CanDataSize_32 = 13U,  // 32 bytes in message
+   CanDataSize_48 = 14U,  // 48 bytes in message
+   CanDataSize_64 = 15U,  // 64 bytes in message
 };
+
+static constexpr unsigned CanDataSizeToUnsigned(CanDataSize canDataSize) {
+   constexpr unsigned sizes[] = {0,1,2,3,4,5,6,7,8,12,16,20,24,32,48,64};
+   return sizes[canDataSize];
+}
 
 /**
  * Can CS value in message
@@ -1103,6 +816,325 @@ template<class Info>
 class Can_T {
 
 public:
+
+   /**
+    * Class holding CAN communication parameters
+    */
+   union CanParameters {
+   public:
+      struct {
+         uint32_t    ctrl1;      //!< Control register 1
+         uint32_t    ctrl2;      //!< Control register 2
+         uint32_t    mcr;        //!< Mode control register
+      };
+      struct {
+         //--- CTRL1 --------------------------
+         unsigned propSeg:3;    //!< Propagation Segment
+         bool     lom:1;        //!< Listen-Only Mode
+         bool     lbuf:1;       //!< Lowest Buffer Transmitted First
+         bool     tsyn:1;       //!< Timer Sync
+         bool     boffrec:1;    //!< Bus Off Recovery
+         bool     smp:1;        //!< CAN Bit Sampling
+         unsigned :2;
+         bool     rwrnmsk:1;    //!< Receive Warning Interrupt Mask for ESR1.RWRNINT
+         bool     twrnmsk:1;    //!< Transmit Warning Interrupt Mask for ESR1.TWRNINT
+         bool     lpb:1;        //!< Loop Back Mode
+         bool     clksrc:1;     //!< CAN Engine Clock Source
+         bool     errmsk:1;     //!< Error Mask for ESR1.ERRINT (BIT1ERR, BIT0ERR, ACKERR, CRCERR, FRMERR or STFERR)
+         bool     boffmsk:1;    //!< Bus Off Mask
+         unsigned pSeg2:3;      //!< Phase Segment 2
+         unsigned pSeg1:3;      //!< Phase Segment 1
+         unsigned rjw:2;        //!< Resynchronisation Jump Width
+         unsigned presdiv:8;    //!< Prescaler Division Factor
+         //--- CTRL2 --------------------------
+         unsigned :16;
+         bool     eacen:1;      //!< Entire Frame Arbitration Field Comparison Enable For Receive Mailboxes
+         bool     rrs:1;        //!< Remote Request Stored (Automatic Remote Response Frame is not generated)
+         bool     mrp:1;        //!< Mailboxes Reception Priority
+         unsigned tasd:5;       //!< Transmit Arbitration Start Delay
+         unsigned rffn:4;       //!< Number Of Receive FIFO Filters
+   #ifdef CAN_CTRL2_WRMFRZ
+         bool     wrmfrz:1;     //!< Write-Access To Memory In Freeze Mode
+   #else
+         unsigned :1;     //!< WRMFRZ not available
+   #endif
+   #ifdef CAN_CTRL2_BOFFDONEMSK_MASK
+         bool     boffdonemsk:1;     //!< Mask for the Bus Off Done Interrupt in CAN_ESR1 register.
+   #else
+         unsigned :1;     //!< BOFFDONEMSK not available
+   #endif
+   #ifdef CAN_CTRL2_ERRMSK_FAST_MASK
+         bool     errmsk_fast:1;     //!< Error Interrupt Mask for errors detected in the Data Phase of fast CAN FD frames
+   #else
+         unsigned :1;     //!< ERRMSK_FAST not available
+   #endif
+         unsigned :1;
+         //--- MCR --------------------------
+         unsigned maxmb:7;     //!< Number of the last message buffer
+         unsigned :1;
+         unsigned idam:2;      //!< ID Acceptance Mode
+         unsigned :1;
+   #ifdef CAN_MCR_FDEN_MASK
+         bool     fden:1;      //!< Flexible Data rate enable
+   #else
+         unsigned :1;          //!< FDEN not available
+   #endif
+         bool     aen:1;       //!< Abort Enable
+         bool     lprioen:1;   //!< Local Priority Enable
+   #ifdef CAN_MCR_PNET_EN_MASK
+         unsigned :1;          //!< Pretended Networking Enable
+   #else
+         unsigned :1;          //!< PNET_EN not available
+   #endif
+   #ifdef CAN_MCR_DMA_MASK
+         unsigned :1;          //!< DMA Enable
+   #else
+         unsigned :1;          //!< DMA not available
+   #endif
+         bool     irmq:1;      //!< Individual mailbox and FIFO masking, or use of RXMGMASK, RX14MASK, RX15MASK and RXFGMASK
+         bool     srxdis:1;    //!< Self Reception Disable
+         unsigned :1;
+   #ifdef CAN_MCR_WAKSRC_MASK
+         bool     waksrc:1;    //!< Wake Up Source
+   #else
+         unsigned :1;          //!< WAKSRC not available
+   #endif
+         unsigned :1;          //!< LPMACK - Low-Power Mode Acknowledge
+         bool     wrnen:1;     //!< Warning Interrupt Enable
+   #ifdef CAN_MCR_SLFWAK_MASK
+         bool     slfwak:1;    //!< Self Wake Up
+   #else
+         unsigned :1;          //!< SLFWAK not available
+   #endif
+         bool     supv:1;      //!< Supervisor Mode
+         unsigned :1;          //!< FRZACK - Freeze Mode Acknowledge
+         unsigned :1;          //!< SOFTRST - Soft Reset
+   #ifdef CAN_MCR_WAKMSK_MASK
+         bool     wakmsk:1;    //!< Wake Up Interrupt Mask
+   #else
+         unsigned :1;          //!< WAKMSK not available
+   #endif
+         unsigned :1;          //!< NOTRDY - FlexCAN Not Ready
+         bool     :1;          //!< HALT - Halt FlexCAN
+         bool     rfen:1;      //!< Receive FIFO Enable
+         bool     :1;          //!< FRZ - Freeze Enable
+         bool     :1;          //!< MDIS - Module Disable
+      };
+
+   public:
+      /**
+       * Constructor
+       *
+       * Most parameters will be set to a default disabled value apart from:\n
+       * Communication parameters calculated from bitRate and SystemCoreClock:\n
+       *   - ctrl1.clksrc  = clockSource
+       *   - ctrl1.presdiv Prescaler Division Factor
+       *   - ctrl1.propSeg Propagation Segment
+       *   - ctrl1.pSeg1   Phase Segment 1
+       *   - ctrl1.pSeg2   Phase Segment 2
+       *   - ctrl1.rjw     Resynchronisation Jump Width
+       *
+       *   - ctrl2.tasd    Transmit Arbitration Start Delay (=22, reset default)
+       *
+       *   - mcr.maxmb   = Number Of The Last Message Buffer (MaxNumberOfFifoMessageFilters - 1)
+       *   - mcr.aen     = true
+       *   - mcr.irmq    = true
+       *
+       * @param bitRate      Desired bit rate
+       * @param clockFreq    CAN input clock frequency
+       *
+       *
+       * @param bitRate      Desired bit rate
+       * @param clockSource  Clock source used by CAN interface engine
+       *
+       * @note Use isValid to check for success or check USBDM error code
+       */
+      CanParameters(unsigned bitRate, CanClockSource clockSource) : ctrl1(0), ctrl2(0), mcr(0) {
+
+         clksrc = clockSource;
+         calculateParameters(bitRate, Info::getPeClockFrequency(clockSource));
+
+         maxmb   = Info::MaxNumberOfMessageBuffers-1;
+         aen     = true;
+         irmq    = true;
+      }
+
+      /**
+       * Communication parameters calculated from bitRate and SystemCoreClock:\n
+       *
+       *   - ctrl1.presdiv Prescaler Division Factor
+       *   - ctrl1.propSeg Propagation Segment
+       *   - ctrl1.pSeg1   Phase Segment 1
+       *   - ctrl1.pSeg2   Phase Segment 2
+       *   - ctrl1.rjw     Resynchronisation Jump Width
+       *
+       *   - ctrl2.tasd    Transmit Arbitration Start Delay (=22, reset default)
+       *
+       * @param bitRate      Desired bit rate
+       * @param clockFreq    CAN input clock frequency
+       *
+       * @return E_NO_ERROR      Success
+       * @return E_ILLEGAL_PARAM Failed to find suitable parameters for clocking
+       */
+      ErrorCode calculateParameters(unsigned bitRate, unsigned clockFreq) {
+
+         unsigned bestError        = INT_MAX;
+         unsigned bestPrescaler    = 1;  // 1..256
+         unsigned bestTq           = 0;  // 8..25 = 1 + timeSegment1 + timeSegment2
+
+         // Try each tq value checking for the best outcome
+         // Prefer higher tq if multiple equal best
+         for (uint8_t tq = 25; tq>=8; tq--) {
+            unsigned prescaler = clockFreq/tq/bitRate;  // 1..256
+
+            auto checkParams = [&] {
+               // Check settings
+               int error = clockFreq/tq/prescaler - bitRate;
+               if (error<0) {
+                  error = -error;
+               }
+   //            console.
+   //               write("TQ =").write(tq).
+   //               write(", PS = ").write(prescaler).
+   //               write(", F =").write(clockFreq/tq/prescaler/1000.0).write(" kHz").
+   //               write(", E =").write(error).write(" Hz");
+               if ((unsigned)error < bestError) {
+   //               console.write(" *");
+                  bestError     = (unsigned)error;
+                  bestTq        = tq;
+                  bestPrescaler = prescaler;
+               }
+   //            console.writeln();
+            };
+            if (prescaler>=1) {
+               checkParams();
+            }
+            prescaler++;
+            if (prescaler<=256) {
+               checkParams();
+            }
+         }
+         if (bestTq == 0) {
+            // Indicates failure
+            propSeg = 0;
+            return setErrorCode(E_ILLEGAL_PARAM);
+         }
+         /*
+          * tq has to be allocated between
+          *   Sync segment   = fixed @ 1
+          *   Time segment 1 = 4..16
+          *   Time segment 2 = 2..8
+          * Time segment 1 gets subdivided into propSegment and pseg1
+          * Time segment 2 become pseg2
+          *
+          * Resync is equal to Time segment 2 up to a maximum of 4
+          */
+         unsigned timeSegment2 = (bestTq-1)/3;
+         unsigned timeSegment1 = (bestTq-1) - timeSegment2;
+         unsigned resyncJumpWidth = timeSegment2;
+         if (resyncJumpWidth>4) {
+            resyncJumpWidth = 4;
+         }
+         presdiv = bestPrescaler - 1;
+         propSeg = ((timeSegment1+1)/2) - 1;
+         pSeg1   = (timeSegment1 - propSeg) - 2;
+         pSeg2   = timeSegment2 - 1;
+         rjw     = resyncJumpWidth - 1;
+
+         tasd    = 22; // Reset value
+
+         return E_NO_ERROR;
+      }
+
+      /**
+       * Check if value was constructed correctly
+       *
+       * @return true  Values appear valid
+       * @return false Values appear invalid
+       */
+      bool isValid() const {
+         //TODO - Check values properly
+         return (propSeg != 0);
+      }
+
+   };
+protected:
+   /**
+    * Calculates number of Message buffers required for the FIFO and FIFO filters.
+    * The remaining Message Buffers are available for individual mailboxes.
+    *
+    * @param fifoIdFilterCount   Number of FIFO filters implemented
+    *
+    * @return Number of Message Buffers occupied by the FIFO and FIFO filters.
+    */
+   static constexpr unsigned calculateMessageBuffersRequiredForFIFO(unsigned fifoIdFilterCount) {
+      return (fifoIdFilterCount==0?0:6)+(fifoIdFilterCount/4);
+   }
+
+   /**
+    * Calculates the number of message buffers required to accommodate FIFO, FIFO filters and mailboxes.
+    * The buffers are used for:
+    * - Receive FIFO (optional) (6 message buffers)
+    * - Receive FIFO filters (optional and number is software configurable) (8 filters = 1 message buffer)
+    * - Mailboxes (number is software configurable) (1 mailbox = 1 message buffer)
+    * The available Message Buffers is determined by the hardware maximum and the CAN_MCR.MAXMB value.
+    *
+    * @param fifoIdFilters   Number of FIFO filter entries (Format_A=x1, Format_B=x2, Format_C=x4)
+    * @param mailboxes       Number of mailboxes
+    *
+    * @return The number of message buffers required.
+    */
+   static constexpr unsigned calculateMessageBuffersRequired(unsigned fifoIdFilterCount, unsigned mailboxes) {
+      return calculateMessageBuffersRequiredForFIFO(fifoIdFilterCount)+ mailboxes;
+   }
+
+   /**
+    * Calculates maximum number of FIFO filters entries available based on number of Message buffers available.
+    * This assumes no Message buffers are used for individual mailboxes i.e. only the Rx FIFO is used.
+    * The available Message Buffers is determined by the hardware maximum and the CAN_MCR.MAXMB value.
+    * There are also timing constraints as the CAN hardware must scan the FIFO filters and mailboxes.
+    * This is not considered here.
+    *
+    * @param availableMessageBuffers Number of Message buffers available
+    *
+    * @return Number of FIFO filter entries. Each entry may be x1, x2 or x4 filters
+    */
+   static constexpr unsigned calculateMaximumFifoFilterEntries(unsigned availableMessageBuffers) {
+      return min((availableMessageBuffers-6)*4, 128U);
+   }
+
+   /**
+    * Calculates number of FIFO individual filter masks available based on number of FIFO filters.
+    * Each FIFO filter is masked by either an individual mask (RXIMR[]) or a shared mask (RXFGMASK).
+    * This calculates the number of individual masks available (RXIMR[]).
+    * The remaining FIFO filters are masked by the shared mask (RXFGMASK).
+    * (The remaining RXIMR[] entries are used for individual mailbox filter masking.)
+    *
+    * @param fifoIdFilterCount   Number of FIFO filters implemented.
+    *
+    * @return Number of individual FIFO filter masks
+    */
+   static constexpr unsigned calculateAvailableFifoIdFilterMasks(unsigned fifoIdFilterCount) {
+      return (fifoIdFilterCount<8)?0:(8 + 2*((fifoIdFilterCount/8)-1));
+   }
+
+   /**
+    * Calculates the maximum number of mailboxes and mailbox filters based on number of FIFO filters.
+    * The CAN mailboxes share storage with the FIFO and FIFO filters.
+    * The number of CAN mailboxes decreases as the number of FIFO filters increases.
+    *
+    * @param fifoIdFilterCount   Number of FIFO filters implemented
+    *
+    * @return Maximum number of CAN mailboxes available
+    *
+    * @note This is a maximum determined by the hardware.
+    *       The actual number of mailboxes available may be reduced by setting MCR.MAXMB.
+    */
+   static constexpr unsigned calculateMaximumMailboxCount(unsigned fifoIdFilterCount) {
+      return calculateMailboxCount(fifoIdFilterCount, Info::NumberOfMessageBuffers);
+   }
+
+public:
    //! Whether FIFO is configured
    static constexpr unsigned FIFO_AVAILABLE                 = Info::EnableFifo;
    //! Maximum number of Message buffers (determined by hardware, shared b/w FIFO use and mailboxes)
@@ -1114,27 +1146,27 @@ public:
    //! Number of FIFO Message filters
    static constexpr unsigned NUM_FIFO_MESSAGE_FILTERS       = Info::NumberOfFifoMessageFilters;
    //! Number of FIFO Message filter masks (remaining filters use a shared mask)
-   static constexpr unsigned NUM_FIFO_MESSAGE_FILTER_MASKS  = CanParameters::calculateAvailableFifoIdFilterMasks(Info::NumberOfFifoMessageFilters);
+   static constexpr unsigned NUM_FIFO_MESSAGE_FILTER_MASKS  = calculateAvailableFifoIdFilterMasks(Info::NumberOfFifoMessageFilters);
    //! Number of Mailbox filter masks (remaining filters use a shared mask)
    static constexpr unsigned NUM_MAILBOX_FILTER_MASKS       = min(Info::NumberOfIndividualMailboxes, 32U-NUM_FIFO_MESSAGE_FILTER_MASKS);
    //! Number of Message Buffers used by FIFO (including filters)
-   static constexpr unsigned MESSAGE_BUFFERS_ALLOCATED_TO_FIFO = CanParameters::calculateMessageBuffersRequiredForFIFO(Info::NumberOfFifoMessageFilters);
+   static constexpr unsigned MESSAGE_BUFFERS_ALLOCATED_TO_FIFO = calculateMessageBuffersRequiredForFIFO(Info::NumberOfFifoMessageFilters);
 
 protected:
 
-   /** Hardware instance pointer */
+   //! Hardware instance pointer
    static __attribute__((always_inline)) volatile CAN_Type &can() { return Info::can(); }
 
-   static constexpr unsigned MAILBOX_HANDLER_INDEX = 0;
-   static constexpr unsigned ERROR_HANDLER_INDEX   = 1;
-   static constexpr unsigned ORED_HANDLER_INDEX    = 2;
-   static constexpr unsigned WAKEUP_HANDLER_INDEX  = 3;
-   static constexpr unsigned NUM_HANDLERS          = 4;
+   static constexpr unsigned MAILBOX_HANDLER_INDEX       = 0;
+   static constexpr unsigned ERROR_HANDLER_INDEX         = 1;
+   static constexpr unsigned MISCELLANEOUS_HANDLER_INDEX = 2;
+   static constexpr unsigned WAKEUP_HANDLER_INDEX        = 3;
+   static constexpr unsigned NUM_HANDLERS                = 4;
 
-   /** sCallbacks functions for ISRs */
+   /** Callbacks functions for ISRs */
    static CanCallbackFunction sCallbacks[NUM_HANDLERS];
 
-   /** sCallbacks to catch unhandled interrupt */
+   /** Callback to catch unhandled interrupt */
    static void noHandlerCallback() {
       setAndCheckErrorCode(E_NO_HANDLER);
    }
@@ -1142,7 +1174,7 @@ protected:
 public:
    /** CAN interrupt handler */
    static void irqHandler() {
-      Can_T::sCallbacks[ORED_HANDLER_INDEX]();
+      Can_T::sCallbacks[MISCELLANEOUS_HANDLER_INDEX]();
    }
 
    /** CAN interrupt handler */
@@ -1178,29 +1210,33 @@ protected:
 
 public:
    /**
-    * Set Ored callback for ISR
+    * Set Miscellaneous callback for ISR
     *
-    *  Bus Off OR Bus Off Done OR Transmit Warning OR Receive Warning
-    *  (ESR1.BOFFINT, CTRL1.BOFFMSK, ESR1.BOFFDONEINT, CTRL1.BOFFDONEMSK)
-    *  Interrupt indicating Transmit Error Counter transition from < 96 to >= 96.
-    *  (ESR1.TWRNINT, CTRL1.TWRNMSK)
-    *  Interrupt indicating Receive Error Counter transition from < 96 to >= 96.
-    *  (ESR1.RWRNINT, CTRL1.RWRNMSK)
+    *  Meaning depends on MCU
+    *  For S32K:
+    *    * Bus Off OR Bus Off Done OR Transmit Warning OR Receive Warning
+    *      (ESR1.BOFFINT, CTRL1.BOFFMSK, ESR1.BOFFDONEINT, CTRL1.BOFFDONEMSK)
+    *    * Interrupt indicating Transmit Error Counter transition from < 96 to >= 96.
+    *      (ESR1.TWRNINT, CTRL1.TWRNMSK)
+    *    * Interrupt indicating Receive Error Counter transition from < 96 to >= 96.
+    *      (ESR1.RWRNINT, CTRL1.RWRNMSK)
     *
     * @param callback The function to call from stub ISR
     */
-   static void setOredCallback(CanCallbackFunction callback) {
-      setCallback(callback, ORED_HANDLER_INDEX);
+   static void setMiscellaneousCallback(CanCallbackFunction callback) {
+      setCallback(callback, MISCELLANEOUS_HANDLER_INDEX);
    }
 
    /**
     * Set Error callback for ISR.
     *
-    * Interrupt indicating that errors were detected on the CAN bus
-    * (ESR1.ERRINT, CTRL1.ERRMSK = BIT1ERR, BIT0ERR, ACKERR, CRCERR, FRMERR or STFERR)
-    * Interrupt indicating that errors were detected on the CAN bus for FD messages in the Fast
-    * Bit Rate region. (S32K)
-    * (ESR1.ERRINT_FAST, CTRL2.ERRMSK_FAST = BIT1ERR_FAST, BIT0ERR_FAST, CRCERR_FAST, FRMERR_FAST or STFERR_FAST)
+    *  Meaning depends on MCU
+    *  For S32K:
+    *  * Interrupt indicating that errors were detected on the CAN bus
+    *    (ESR1.ERRINT, CTRL1.ERRMSK = BIT1ERR, BIT0ERR, ACKERR, CRCERR, FRMERR or STFERR)
+    *  * Interrupt indicating that errors were detected on the CAN bus for FD messages in the Fast
+    *    Bit Rate region. (S32K)
+    *    (ESR1.ERRINT_FAST, CTRL2.ERRMSK_FAST = BIT1ERR_FAST, BIT0ERR_FAST, CRCERR_FAST, FRMERR_FAST or STFERR_FAST)
     *
     * @param callback The function to call from stub ISR
     */
@@ -1211,17 +1247,18 @@ public:
    /**
     * Set Wake-up callback for ISR
     *
-    * S32K (pretend networking)
-    * Interrupt asserted when Pretended Networking operation is enabled, and
-    * a valid message matches the selected filter criteria during Low Power mode
-    * (WU_MTC.WUMF, CTRL1_PN.WUMF_MSK)
-    * Interrupt asserted when Pretended Networking operation is enabled, and
-    * no-reception of a matching message for a defined quantity of time during low power mode
-    * (WU.WTOF, CTRL1_PN.WTOF_MSK)
+    *  Meaning depends on MCU
+    *  For S32K (pretend networking)
+    *    * Interrupt asserted when Pretended Networking operation is enabled, and
+    *      a valid message matches the selected filter criteria during Low Power mode
+    *      (WU_MTC.WUMF, CTRL1_PN.WUMF_MSK)
+    *    * Interrupt asserted when Pretended Networking operation is enabled, and
+    *      no-reception of a matching message for a defined quantity of time during low power mode
+    *      (WU.WTOF, CTRL1_PN.WTOF_MSK)
     *
-    * Other devices
-    * Interrupt asserted for Self Wake Up mechanism.
-    * (ESR1.WAKINT, MCR.WAKMSK, MCR.SLFWAK enables)
+    *  Other devices
+    *    * Interrupt asserted for Self Wake Up mechanism.
+    *      (ESR1.WAKINT, MCR.WAKMSK, MCR.SLFWAK enables)
     *
     * @param callback The function to call from stub ISR
     */
@@ -1232,7 +1269,7 @@ public:
    /**
     * Set Message buffer callback for ISR
     *
-    * OR'ed Message buffer (Mailbox + FIFO) interrupts (IFLAG1, IMASK1)
+    * Message buffer (Mailbox + FIFO) interrupts (IFLAG1, IMASK1)
     *
     * @param callback The function to call from stub ISR
     */
@@ -1380,7 +1417,7 @@ public:
    }
 
    /**
-    * Configure for Receive FIFO use (with FIFO and mailboxes)
+    * Configure for Receive FIFO use (with FIFO and optional mailboxes)
     *
     * In this mode received packets can be stored in a receive FIFO.
     * The received messages are accepted/rejected for entry to the FIFO using an acceptance filter table (fifoIdFilters).
@@ -1394,6 +1431,7 @@ public:
     * Each mailbox structure has its own selection filter (Rx only).
     * They also have individual acceptance filter masks as a separate table (mailboxFilterMasks).
     * The number of mailboxes is reduced as the number of the FIFO filters increases.
+    * Mailboxes are configured individually.
     *
     * @param[in] canParameters            CAN communication parameters
     * @param[in] canAcceptanceMode        Format for FIFO acceptance filters (A=1x,B=2x,C=4x/Entry)
@@ -1402,6 +1440,7 @@ public:
     * @param[in] fifoDefaultIdFilterMask  Mask applied to FIFO acceptance filters not covered by fifoIdFilterMasks
     *
     * @note The CAN interface is left stopped (in FREEZE mode).  Use start() to commence CAN operation.
+    *       This is necessary to allow mailbox to be configured etc. before starting operation.
     */
    static void configure(
          const CanParameters           &canParameters,
@@ -1428,7 +1467,7 @@ public:
 
       // Individual FIFO ID filter masks
       auto fifoMasks = Can_T::getFifoFilterMaskTable();
-      unsigned fifoMaskCount = CanParameters::calculateMessageBuffersRequiredForFIFO(Info::NumberOfFifoMessageFilters);
+      unsigned fifoMaskCount = calculateMessageBuffersRequiredForFIFO(Info::NumberOfFifoMessageFilters);
       for (unsigned index=0; index<fifoMaskCount; index++) {
          fifoMasks[index] = fifoIdFilterMasks[index];
       }
@@ -1456,7 +1495,7 @@ protected:
       enable();
 
       usbdm_assert(
-            CanParameters::calculateMessageBuffersRequired(Info::NumberOfFifoMessageFilters, Info::NumberOfIndividualMailboxes)<=Info::MaxNumberOfMessageBuffers,
+            calculateMessageBuffersRequired(Info::NumberOfFifoMessageFilters, Info::NumberOfIndividualMailboxes)<=Info::MaxNumberOfMessageBuffers,
             "Too many FIFO filters and Mailboxes");
 
       for(unsigned index=0; index<(sizeof(sCallbacks)/sizeof(sCallbacks[0])); index++) {
@@ -1466,7 +1505,7 @@ protected:
       }
 
       canParameters.rffn  = (Info::NumberOfFifoMessageFilters<8)?0:(Info::NumberOfFifoMessageFilters/8) - 1;
-      canParameters.maxmb = CanParameters::calculateMessageBuffersRequired(Info::NumberOfFifoMessageFilters, Info::NumberOfIndividualMailboxes) - 1;
+      canParameters.maxmb = calculateMessageBuffersRequired(Info::NumberOfFifoMessageFilters, Info::NumberOfIndividualMailboxes) - 1;
 
       // Make sure disabled so CLKSRC can be set
       can().MCR = CAN_MCR_MDIS(1);
@@ -1496,10 +1535,11 @@ protected:
          __asm__("nop");
       }
 
-      // Clear message buffers and disable message buffer masks
+      // Clear message buffers
       // This will also clear the FIFO as it overlaps
       memset((void*)(can().MB),     0, Info::MaxNumberOfMessageBuffers*sizeof(can().MB[0]));
-      memset((void*)(can().RXIMR), -1, 32*sizeof(can().RXIMR[0]));
+      // Disable message buffer/FIFO ID filter masks
+      memset((void*)(can().RXIMR), -1, Info::MaxNumberOfMessageBuffers*sizeof(can().RXIMR[0]));
 
       // Clear any pending flags
       can().IFLAG1 = ~0;
@@ -1512,12 +1552,6 @@ protected:
       can().MCR = canParameters.mcr|
             CAN_MCR_HALT(1) |            // Stay in Freeze
             CAN_MCR_FRZ(1);
-
-      // Clear individual Mailbox filter masks
-      auto mbMasks = Can_T::getMailboxFilterMaskTable();
-      for (unsigned index=0; index<Info::NumberOfIndividualMailboxes; index++) {
-         mbMasks[index].raw = ~0U;
-      }
    }
 
 public:
@@ -1550,22 +1584,6 @@ public:
       stop();
 
       Info::disableClock();
-   }
-
-   /**
-    * Calculates the maximum number of mailboxes and mailbox filters based on number of FIFO filters.
-    * The CAN mailboxes share storage with the FIFO and FIFO filters.
-    * The number of CAN mailboxes decreases as the number of FIFO filters increases.
-    *
-    * @param fifoIdFilterCount   Number of FIFO filters implemented
-    *
-    * @return Maximum number of CAN mailboxes available
-    *
-    * @note This is a maximum determined by the hardware.
-    *       The actual number of mailboxes available may be reduced by setting MCR.MAXMB.
-    */
-   static constexpr unsigned calculateMaximumMailboxCount(unsigned fifoIdFilterCount) {
-      return calculateMailboxCount(fifoIdFilterCount, Info::NumberOfMessageBuffers);
    }
 
    /**
@@ -1855,7 +1873,8 @@ public:
     * Enable interrupts in NVIC
     */
    static void enableWakeupNvicInterrupts() {
-      NVIC_EnableIRQ(Info::irqNums[Info::WakeupIrqNumIndex]);
+      static_assert(Info::Wakeup_IrqNumIndex>0, "Wakeup not supported");
+      NVIC_EnableIRQ(Info::irqNums[Info::Wakeup_IrqNumIndex]);
    }
 
    /**
@@ -1865,21 +1884,23 @@ public:
     * @param[in]  nvicPriority  Interrupt priority
     */
    static void enableWakeupNvicInterrupts(uint32_t nvicPriority) {
-      enableNvicInterrupt(Info::irqNums[Info::WakeupIrqNumIndex], nvicPriority);
+      static_assert(Info::Wakeup_IrqNumIndex>0, "Wakeup not supported");
+      enableNvicInterrupt(Info::irqNums[Info::Wakeup_IrqNumIndex], nvicPriority);
    }
 
    /**
     * Disable interrupts in NVIC
     */
    static void disableWakeupNvicInterrupts() {
-      NVIC_DisableIRQ(Info::irqNums[Info::WakeupIrqNumIndex]);
+      static_assert(Info::Wakeup_IrqNumIndex>0, "Wakeup not supported");
+      NVIC_DisableIRQ(Info::irqNums[Info::Wakeup_IrqNumIndex]);
    }
 
    /**
     * Enable interrupts in NVIC
     */
    static void enableErrorNvicInterrupts() {
-      NVIC_EnableIRQ(Info::irqNums[Info::ErrorIrqNumIndex]);
+      NVIC_EnableIRQ(Info::irqNums[Info::Error_IrqNumIndex]);
    }
 
    /**
@@ -1889,14 +1910,14 @@ public:
     * @param[in]  nvicPriority  Interrupt priority
     */
    static void enableErrorNvicInterrupts(uint32_t nvicPriority) {
-      enableNvicInterrupt(Info::irqNums[Info::ErrorIrqNumIndex], nvicPriority);
+      enableNvicInterrupt(Info::irqNums[Info::Error_IrqNumIndex], nvicPriority);
    }
 
    /**
     * Disable interrupts in NVIC
     */
    static void disableErrorNvicInterrupts() {
-      NVIC_DisableIRQ(Info::irqNums[Info::ErrorIrqNumIndex]);
+      NVIC_DisableIRQ(Info::irqNums[Info::Error_IrqNumIndex]);
    }
 
 $(/CAN/NvicControl)
@@ -1927,6 +1948,7 @@ typedef void (*CanMailboxCallbackFunction)(unsigned);
 template<class Info>
 class CanHandler_T : public Can_T<Info> {
 public:
+   using typename Can_T<Info>::CanParameters;
    //! Maximum number of Message buffers (determined by hardware, shared b/w FIFO use and mailboxes)
    using Can_T<Info>::MAX_NUM_MESSAGE_BUFFERS;
    //! Maximum number of Message Buffer filters (determined by hardware, shared b/w FIFO use and mailboxes)

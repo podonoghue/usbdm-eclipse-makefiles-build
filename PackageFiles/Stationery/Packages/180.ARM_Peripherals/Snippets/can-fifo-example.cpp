@@ -16,7 +16,38 @@ using Led = GpioD<0, ActiveLow>;
 
 // CAN interface to use
 using Can     = Can0;
-using CanLimp = GpioE<13, ActiveLow>;
+
+//using CanLimp = GpioE<13, ActiveLow>; // S32K
+
+/**
+ * Base Message IDs for FIFO
+ */
+static constexpr unsigned CAN_FIFO_ID1 = 40;
+static constexpr unsigned CAN_FIFO_ID2 = 60;
+
+/**
+ * CAN Message format
+ */
+static constexpr CanMode  CAN_MODE = CanMode_Standard;
+
+/**
+ * Print abbreviated contents of message buffer
+ *
+ * @param messageBuffer
+ */
+void printMessageBuffer(volatile CanMessageBuffer8 * messageBuffer) {
+   console
+      .write("ID(")
+      .write((CAN_MODE==CanMode_Standard)?messageBuffer->ID.idStd:messageBuffer->ID.idExt)
+      .write(") - ");
+   for (unsigned index=0; index<CanDataSizeToUnsigned(messageBuffer->CS.dlc); index++) {
+      if (index != 0) {
+         console.write(", ");
+      }
+      console.write(messageBuffer->data8(index), Radix_16);
+   }
+   console.writeln();
+}
 
 void canErrorCallback() {
    uint32_t status        = Can::getErrorStatus();
@@ -34,17 +65,6 @@ void canErrorCallback() {
 void canWakeupCallback() {
    console.writeln("canWakeupCallback()");
 }
-
-/**
- * Base Message IDs for FIFO
- */
-static constexpr unsigned CAN_FIFO_ID1 = 40;
-static constexpr unsigned CAN_FIFO_ID2 = 60;
-
-/**
- * CAN Message format
- */
-static constexpr CanMode  CAN_MODE = CanMode_Standard;
 
 /**
  * Receive FIFO filters.
@@ -91,18 +111,8 @@ void fifoCallback() {
    console.reset();
 
    auto mailbox = Can::getFifoMessageBuffer();
-   console
-      .write("fifoCallback() Message ID(")
-      .write((CAN_MODE==CanMode_Standard)?mailbox->ID.idStd:mailbox->ID.idExt)
-      .write(") - ");
-   for (unsigned index=0; ; index++) {
-      console.write(mailbox->data8(index), Radix_16);
-      if (index>=mailbox->CS.dlc) {
-         break;
-      }
-      console.write(", ");
-   }
-   console.writeln();
+   console.write("fifoCallback() - Rx ");
+   printMessageBuffer(mailbox);
 
    // Advance FIFO
    Can::clearFifoFlags(0b00100000);
@@ -113,7 +123,7 @@ void fifoCallback() {
  */
 void fifoExample() {
 
-   CanParameters canParameters(125000);
+   Can::CanParameters canParameters(125000, CanClockSource_1);
    canParameters.idam      = CanAcceptanceMode_FormatA;
    canParameters.wrnen     = true;
    canParameters.errmsk    = true;
@@ -139,7 +149,7 @@ void fifoExample() {
    Can::enableWakeupNvicInterrupts(NvicPriority_Normal);
    Can::enableMessageBufferNvicInterrupts(NvicPriority_Normal);
 
-   Can::enableOredNvicInterrupts(NvicPriority_Normal);
+   Can::enableMiscellaneousNvicInterrupts(NvicPriority_Normal);
 
    Can::start();
 
@@ -148,10 +158,8 @@ void fifoExample() {
    for(;;) {
       // Report errors
       CanErrorCounts canErrorCounts = Can::getErrorCounters();
-      if (canErrorCounts.receiveErrorCount > 0) {
+      if ((canErrorCounts.receiveErrorCount > 0) || (canErrorCounts.transmitFastErrorCount > 0)) {
          console.write("receiveErrorCount  = ").write(canErrorCounts.receiveErrorCount);
-      }
-      if (canErrorCounts.transmitFastErrorCount > 0) {
          console.write(", transmitErrorCount = ").writeln(canErrorCounts.transmitErrorCount);
       }
    }
@@ -165,8 +173,9 @@ int main() {
    console.write("MAX_NUM_MESSAGE_BUFFERS       = ").writeln(Can::MAX_NUM_MESSAGE_BUFFERS);
    console.write("MAX_NUM_FIFO_MESSAGE_FILTERS  = ").writeln(Can::MAX_NUM_FIFO_MESSAGE_FILTERS);
 
-   CanLimp::setInput();
-   console.write("CAN Limp mode is ").writeln(CanLimp::read()?"Active":"Inactive");
+   // S32K
+   //   CanLimp::setInput();
+   //   console.write("CAN Limp mode is ").writeln(CanLimp::read()?"Active":"Inactive");
 
    fifoExample();
 

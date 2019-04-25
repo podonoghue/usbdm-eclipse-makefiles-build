@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE peripheralPage SYSTEM "_menu.dtd" >
-<!-- can1_s32k14x.xml -->
+<!-- can0_flex_2mask.xml -->
 
 <peripheralPage xmlns:xi="http://www.w3.org/2001/XInclude" name="_instance" description="FlexCAN">
 
@@ -44,7 +44,7 @@
    <intOption name="NumberOfIndividualMailboxes" 
       description="Number of individual Rx/Tx mailboxes"
       toolTip="Used to configure number individually allocated mailboxes"
-      value="8" min="0" max="16" />
+      value="16" min="0" max="16" />
 
    <template><![CDATA[
        \t//! Whether FIFO is enable\n
@@ -66,27 +66,31 @@
      -  %c replaced with peripheral C++ base class name e.g. FTM1 => = Ftm
      -  _IRQHandler is appended to the pattern (only)
    -->
-   <irqOption name="oredIrqHandlingMethod"  
-      description="ORed Interrupt handlers"
-      toolTip="This selection allow the interrupt handler for this peripheral to be installed using several different methods"
-      pattern="^%b%i_ORed$" 
+   <irqOption name="miscellaneousIrqHandlingMethod"  
+      description="Miscellaneous Interrupt handlers"
+      toolTip="This selection allow the interrupt handler for this peripheral to be installed using several different methods\n
+               Handles: Bus Off, Transmit and Receive Warning"
+      pattern="^%b%i_(BusOff|TxWarning|RxWarning)$" 
       classHandler="%c%i::irqHandler" />
 
    <irqOption name="errorIrqHandlingMethod"  
       description="Error Interrupt handlers"
-      toolTip="This selection allow the interrupt handler for this peripheral to be installed using several different methods"
+      toolTip="This selection allow the interrupt handler for this peripheral to be installed using several different methods\n
+               Handles: Bus Error"
       pattern="^%b%i_Error$" 
       classHandler="%c%i::errorIrqHandler" />
 
    <irqOption name="wakeupIrqHandlingMethod"  
       description="Wakeup Interrupt handlers"
-      toolTip="This selection allow the interrupt handler for this peripheral to be installed using several different methods"
+      toolTip="This selection allow the interrupt handler for this peripheral to be installed using several different methods\n
+               Handles: Wakeup"
       pattern="^%b%i_WakeUp$" 
       classHandler="%c%i::wakeupIrqHandler" />
 
    <irqOption name="messagebufferIrqHandlingMethod"  
       description="Message Buffer Interrupt handlers"
-      toolTip="This selection allow the interrupt handler for this peripheral to be installed using several different methods"
+      toolTip="This selection allow the interrupt handler for this peripheral to be installed using several different methods\n
+               Handles: Message buffer events (FIFO and Mailboxes)"
       pattern="^%b%i_MessageBuffer.*$" 
       classHandler="%c%i::messageBufferIrqHandler" />
 
@@ -98,11 +102,12 @@
        \t//! Class based callback handler has been installed in vector table\n
        \tstatic constexpr bool irqHandlerInstalled = $(messagebufferIrqHandlingMethod);\n\n
        
-       \tstatic constexpr unsigned OredIrqNumIndex                 = 0;
-       \tstatic constexpr unsigned ErrorIrqNumIndex                = 1;
-       \tstatic constexpr unsigned WakeupIrqNumIndex               = -1;
-       \tstatic constexpr unsigned MessageBuffer_0_15_IrqNumIndex  = 2;
-       \tstatic constexpr unsigned MessageBuffer_16_32_IrqNumIndex = 2;\n\n
+       \tstatic constexpr int MessageBuffer_IrqNumIndex       = 0;
+       \tstatic constexpr int BusOff_IrqNumIndex              = 1;
+       \tstatic constexpr int Error_IrqNumIndex               = 2;
+       \tstatic constexpr int TransmitWarning_IrqNumIndex     = 3;
+       \tstatic constexpr int ReceiveWarning_IrqNumIndex      = 4;
+       \tstatic constexpr int Wakeup_IrqNumIndex              = 5;
    ]]></template>
        
    <intOption name="irqLevel" 
@@ -112,6 +117,20 @@
       value="8" min="0" max="15" 
    />
    
+      <template namespace="usbdm"><![CDATA[
+      #ifndef USBDM_CAN1_IS_DEFINED
+         \t/**
+         \t * FlexCAN Clock sources
+         \t */
+         \tenum CanClockSource {
+         \t   CanClockSource_0 = false,
+         \t   CanClockSource_1 = true,
+         \t   CanClockSource_Oserclk   = CanClockSource_0,
+         \t   CanClockSource_Busclk    = CanClockSource_1,
+         \t};
+      #endif\n\n
+      ]]></template>
+      
    <template><![CDATA[
       \t/**
       \t * Get Controller Host Interface input clock frequency
@@ -127,21 +146,88 @@
       \t/**
       \t * Get Protocol Engine input clock frequency
       \t *
-      \t * @return Input clock frequency as a uint32_t in Hz
+      \t * @param clksrc value for CAN_CTRL1_CLKSRC
+      \t *
+      \t * @return CAN input clock frequency as a uint32_t in Hz
       \t */
-      \tstatic uint32_t getPeClockFrequency() {
-      \t   if (can().CTRL1 & CAN_CTRL1_CLKSRC_MASK) {
-      \t      return ScgInfo::getSoscDiv2Frequency();
+      \tstatic uint32_t getPeClockFrequency(CanClockSource clksrc) {
+      \t   if (clksrc) {
+      \t      return SystemBusClock;
       \t   }
       \t   else {
-      \t      return SystemCoreClock;
+      \t      return Osc0Info::getOscerClock();
       \t   }
+      \t}\n\n
+      
+      \t/**
+      \t * Get Protocol Engine input clock frequency
+      \t *
+      \t * @return CAN input clock frequency as a uint32_t in Hz
+      \t */
+      \tstatic uint32_t getPeClockFrequency() {
+      \t    return getPeClockFrequency((CanClockSource)(can().CTRL1 & CAN_CTRL1_CLKSRC_MASK));
       \t}\n\n
    ]]></template>
 
    <template><![CDATA[
        \t//! Default IRQ level\n
        \tstatic constexpr uint32_t irqLevel =  $(irqLevel);\n\n
+   ]]></template>
+
+   <template name="/CAN/NvicControl" namespace="all" ><![CDATA[
+      \t/**
+      \t * Enable Miscellaneous interrupts in NVIC
+      \t */
+      \tstatic void enableMiscellaneousNvicInterrupts() {
+      \t   NVIC_EnableIRQ(Info::irqNums[Info::BusOff_IrqNumIndex]);
+      \t   NVIC_EnableIRQ(Info::irqNums[Info::TransmitWarning_IrqNumIndex]);
+      \t   NVIC_EnableIRQ(Info::irqNums[Info::ReceiveWarning_IrqNumIndex]);
+      \t}\n\n
+      
+      \t/**
+      \t * Enable and set priority of Miscellaneous interrupts in NVIC
+      \t * Any pending NVIC interrupts are first cleared.
+      \t *
+      \t * @param[in]  nvicPriority  Interrupt priority
+      \t */
+      \tstatic void enableMiscellaneousNvicInterrupts(uint32_t nvicPriority) {
+      \t   enableNvicInterrupt(Info::irqNums[Info::BusOff_IrqNumIndex], nvicPriority);
+      \t   enableNvicInterrupt(Info::irqNums[Info::TransmitWarning_IrqNumIndex], nvicPriority);
+      \t   enableNvicInterrupt(Info::irqNums[Info::ReceiveWarning_IrqNumIndex], nvicPriority);
+      \t}\n\n
+      
+      \t/**
+      \t * Disable Miscellaneous interrupts in NVIC
+      \t */
+      \tstatic void disableMiscellaneousNvicInterrupts() {
+      \t   NVIC_DisableIRQ(Info::irqNums[Info::BusOff_IrqNumIndex]);
+      \t   NVIC_DisableIRQ(Info::irqNums[Info::TransmitWarning_IrqNumIndex]);
+      \t   NVIC_DisableIRQ(Info::irqNums[Info::ReceiveWarning_IrqNumIndex]);
+      \t}\n\n
+      
+      \t/**
+      \t * Enable Message Buffer interrupts in NVIC
+      \t */
+      \tstatic void enableMessageBufferNvicInterrupts() {
+      \t   NVIC_EnableIRQ(Info::irqNums[Info::MessageBuffer_IrqNumIndex]);
+      \t}\n\n
+      
+      \t/**
+      \t * Enable and set priority of Message Buffer interrupts in NVIC
+      \t * Any pending NVIC interrupts are first cleared.
+      \t *
+      \t * @param[in]  nvicPriority  Interrupt priority
+      \t */
+      \tstatic void enableMessageBufferNvicInterrupts(uint32_t nvicPriority) {
+      \t   enableNvicInterrupt(Info::irqNums[Info::MessageBuffer_IrqNumIndex], nvicPriority);
+      \t}\n\n
+      
+      \t/**
+      \t * Disable Message Buffer interrupts in NVIC
+      \t */
+      \tstatic void disableMessageBufferNvicInterrupts() {
+      \t   NVIC_DisableIRQ(Info::irqNums[Info::MessageBuffer_IrqNumIndex]);
+      \t}\n
    ]]></template>
 
    <xi:include href="_clockOption.xml"/>
