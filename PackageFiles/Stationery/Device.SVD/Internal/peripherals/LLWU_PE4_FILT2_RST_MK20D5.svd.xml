@@ -306,7 +306,7 @@ Write 1 to clear the flag</description>
                </fields>
             </register>
             <register>
-               <name>F1</name>
+               <name>PF1</name>
                <description>Pin Flag 1 Register\n
 Contains the flags indicating if a wakeup source LLWU 7-0 caused the MCU to exit VLLS mode.\n
 Write 1 to clear the flag</description>
@@ -391,7 +391,7 @@ To clear this flag it is necessary to clear the flag in the peripheral</descript
                <fields>
                   <field>
                      <name>MWUF0</name>
-                     <description>Wakeup flag For module 0</description>
+                     <description>Wakeup flag for module 0</description>
                      <bitOffset>0</bitOffset>
                      <bitWidth>1</bitWidth>
                      <enumeratedValues>
@@ -407,13 +407,13 @@ To clear this flag it is necessary to clear the flag in the peripheral</descript
                         </enumeratedValue>
                      </enumeratedValues>
                   </field>
-                  <field derivedFrom="MWUF0" > <name>MWUF1</name> <description>Wakeup flag For module 1</description> <bitOffset>1</bitOffset> </field>
-                  <field derivedFrom="MWUF0" > <name>MWUF2</name> <description>Wakeup flag For module 2</description> <bitOffset>2</bitOffset> </field>
-                  <field derivedFrom="MWUF0" > <name>MWUF3</name> <description>Wakeup flag For module 3</description> <bitOffset>3</bitOffset> </field>
-                  <field derivedFrom="MWUF0" > <name>MWUF4</name> <description>Wakeup flag For module 4</description> <bitOffset>4</bitOffset> </field>
-                  <field derivedFrom="MWUF0" > <name>MWUF5</name> <description>Wakeup flag For module 5</description> <bitOffset>5</bitOffset> </field>
-                  <field derivedFrom="MWUF0" > <name>MWUF6</name> <description>Wakeup flag For module 6</description> <bitOffset>6</bitOffset> </field>
-                  <field derivedFrom="MWUF0" > <name>MWUF7</name> <description>Wakeup flag For module 7</description> <bitOffset>7</bitOffset> </field>
+                  <field derivedFrom="MWUF0" > <name>MWUF1</name> <description>Wakeup flag for module 1</description> <bitOffset>1</bitOffset> </field>
+                  <field derivedFrom="MWUF0" > <name>MWUF2</name> <description>Wakeup flag for module 2</description> <bitOffset>2</bitOffset> </field>
+                  <field derivedFrom="MWUF0" > <name>MWUF3</name> <description>Wakeup flag for module 3</description> <bitOffset>3</bitOffset> </field>
+                  <field derivedFrom="MWUF0" > <name>MWUF4</name> <description>Wakeup flag for module 4</description> <bitOffset>4</bitOffset> </field>
+                  <field derivedFrom="MWUF0" > <name>MWUF5</name> <description>Wakeup flag for module 5</description> <bitOffset>5</bitOffset> </field>
+                  <field derivedFrom="MWUF0" > <name>MWUF6</name> <description>Wakeup flag for module 6</description> <bitOffset>6</bitOffset> </field>
+                  <field derivedFrom="MWUF0" > <name>MWUF7</name> <description>Wakeup flag for module 7</description> <bitOffset>7</bitOffset> </field>
                </fields>
             </register>
             <register derivedFrom="F3"> <name>MF</name> <description>Module Flag Register\n
