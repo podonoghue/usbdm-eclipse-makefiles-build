@@ -92,24 +92,13 @@ enum AdcAveraging {
 };
 
 /**
- * ADC input clock source.
- */
-enum AdcClockSource {
-   AdcClockSource_PccAdcClk  = ADC_CFG1_ADICLK(0), //!< Clock from PCC_ADCn multiplexor
-   AdcClockSource_Reserved1  = ADC_CFG1_ADICLK(1), //!< Reserved
-   AdcClockSource_Reserved2  = ADC_CFG1_ADICLK(2), //!< Reserved
-   AdcClockSource_Reserved3  = ADC_CFG1_ADICLK(3), //!< Reserved
-   AdcClockSource_Default    = AdcClockSource_PccAdcClk
-};
-
-/**
  * ADC clock divider
  */
 enum AdcClockDivider {
    AdcClockDivider_1       = ADC_CFG1_ADIV(0), //!< Clock divide by 1
    AdcClockDivider_2       = ADC_CFG1_ADIV(1), //!< Clock divide by 2
-   AdcClockDivider_4       = ADC_CFG1_ADIV(2), //!< Clock divide by 3
-   AdcClockDivider_8       = ADC_CFG1_ADIV(3), //!< Clock divide by 4
+   AdcClockDivider_4       = ADC_CFG1_ADIV(2), //!< Clock divide by 4
+   AdcClockDivider_8       = ADC_CFG1_ADIV(3), //!< Clock divide by 8
 };
 
 /**
@@ -341,22 +330,40 @@ public:
     * Configure the ADC
     *
     * @param[in] adcResolution   Resolution for converter e.g. AdcResolution_16bit_se
-    * @param[in] adcClockSource  Clock source e.g. AdcClockSource_Asynch
-    * @param[in] adcClockDivider Clock divider e.g. AdcClockDivider_4
     * @param[in] adcSample       Input sample interval. Allows use of higher input impedance sources
+    * @param[in] adcClockSource  Clock source e.g. AdcClockSource_Asynch
     *
     * @note These settings apply to all channels on the ADC.
-    * @note The resulting ADC clock rate should be restricted to [2..40MHz]
     */
    static void configure(
          AdcResolution   adcResolution,
-         AdcClockSource  adcClockSource  = AdcClockSource_Default,
-         AdcClockDivider adcClockDivider = AdcClockDivider_1,
-         unsigned        adcSample       = 10
+         unsigned        adcSample       = 10,
+         AdcClockSource  adcClockSource  = AdcClockSource_Default
          ) {
       enable();
-      adc().CFG1 = adcResolution|adcClockSource|adcClockDivider;
+      adc().CFG1 = adcResolution|adcClockSource|calculateClockDivider(adcClockSource);
       adc().CFG2 = ADC_CFG2_SMPLTS(adcSample);
+   }
+
+   /**
+    * Calculate ADC clock divider (ADC_CFG1_ADIV)
+    * 
+    * @param adcClockSource
+    * 
+    * @return ADC_CFG1_ADIV value
+    */
+   static unsigned calculateClockDivider(AdcClockSource adcClockSource) {
+      static constexpr unsigned MinClock =  2000000;
+      static constexpr unsigned MaxClock = 50000000;
+      unsigned clockFrequency = Adc0Info::getInputClockFrequency(adcClockSource);
+      unsigned adiv;
+      for (adiv=0; adiv<=3; adiv++) {
+         if ((clockFrequency <= MaxClock) && (clockFrequency >= MinClock)) {
+            break;
+         }
+         clockFrequency /= 2;
+      }
+      return ADC_CFG1_ADIV(adiv);
    }
 
    /**
