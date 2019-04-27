@@ -1175,7 +1175,7 @@ public:
     *
     * @note The actual CnV register update may be delayed by the FTM register synchronisation mechanism
     */
-   static void setDutyCycle(int dutyCycle, int channel) {
+   static void setDutyCycle(unsigned dutyCycle, int channel) {
       if (tmr().SC&FTM_SC_CPWMS_MASK) {
          tmr().CONTROLS[channel].CnV  = (dutyCycle*tmr().MOD)/100;
       }
@@ -1485,7 +1485,7 @@ public:
        *
        * @note The actual CnV register update will be delayed by the FTM register synchronisation mechanism
        */
-      static INLINE_RELEASE void setDutyCycle(int dutyCycle) {
+      static INLINE_RELEASE void setDutyCycle(unsigned dutyCycle) {
          Ftm::setDutyCycle(dutyCycle, channel);
       }
 
