@@ -252,11 +252,7 @@ public:
    static void configure(LpitDozeMode lpitDozeMode, LpitDebugMode lpitDebugMode=LpitDebugMode_Stop) {
       enable();
       lpit().MCR = lpitDebugMode|lpitDozeMode|LPIT_MCR_M_CEN_MASK;
-      for (LpitChannelNum channel = LpitChannelNum_0;
-           channel < Lpit0Info::NumChannels;
-           channel = channel+1) {
-         disableChannel(channel);
-      }
+      disableChannels((1<<Lpit0Info::NumChannels)-1);
       allocatedChannels = -1;
    }
 
