@@ -120,7 +120,7 @@ Devices using this vector table:
       <peripheral>FTFC</peripheral>
    </interrupt>
    <interrupt>
-      <name>Read_Collision</name>
+      <name>FTFC_Read_Collision</name>
       <description>Flash Memory Module</description>
       <value>19</value>
       <peripheral>FTFC</peripheral>
@@ -427,7 +427,7 @@ Devices using this vector table:
    </interrupt>
    <interrupt>
       <name>CAN0_MessageBuffer_0_15</name>
-      <description>FlexCAN - Message Buffers (FIFO and Mailboxes)</description>
+      <description>FlexCAN - Message Buffers (Mailboxes and FIFO)</description>
       <value>81</value>
       <peripheral>CAN0</peripheral>
    </interrupt>
@@ -451,13 +451,13 @@ Devices using this vector table:
    </interrupt>
    <interrupt>
       <name>CAN1_MessageBuffer_0_15</name>
-      <description>FlexCAN - Message Buffers (FIFO and Mailboxes)</description>
+      <description>FlexCAN - Message Buffers (Mailboxes and FIFO)</description>
       <value>88</value>
       <peripheral>CAN1</peripheral>
    </interrupt>
    <interrupt>
       <name>CAN1_MessageBuffer_16_31</name>
-      <description>FlexCAN</description>
+      <description>FlexCAN - Message Buffers (Mailboxes)</description>
       <value>89</value>
       <peripheral>CAN1</peripheral>
    </interrupt>
@@ -475,13 +475,13 @@ Devices using this vector table:
    </interrupt>
    <interrupt>
       <name>CAN2_MessageBuffer_0_15</name>
-      <description>FlexCAN - Message Buffers (FIFO and Mailboxes)</description>
+      <description>FlexCAN - Message Buffers (Mailboxes and FIFO)</description>
       <value>95</value>
       <peripheral>CAN2</peripheral>
    </interrupt>
    <interrupt>
       <name>CAN2_MessageBuffer_16_31</name>
-      <description>FlexCAN - Message Buffers (FIFO and Mailboxes)</description>
+      <description>FlexCAN - Message Buffers (Mailboxes)</description>
       <value>96</value>
       <peripheral>CAN2</peripheral>
    </interrupt>

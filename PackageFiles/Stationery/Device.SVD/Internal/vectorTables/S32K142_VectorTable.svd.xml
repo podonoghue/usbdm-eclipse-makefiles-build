@@ -337,7 +337,7 @@ Devices using this vector table:
    </interrupt>
    <interrupt>
       <name>CAN0_MessageBuffer_0_15</name>
-      <description>FlexCAN - Message Buffers (FIFO and Mailboxes)</description>
+      <description>FlexCAN - Message Buffers (Mailboxes and FIFO)</description>
       <value>81</value>
       <peripheral>CAN0</peripheral>
    </interrupt>
@@ -361,7 +361,7 @@ Devices using this vector table:
    </interrupt>
    <interrupt>
       <name>CAN1_MessageBuffer_0_15</name>
-      <description>FlexCAN - Message Buffers (FIFO and Mailboxes)</description>
+      <description>FlexCAN - Message Buffers (Mailboxes and FIFO)</description>
       <value>88</value>
       <peripheral>CAN1</peripheral>
    </interrupt>
