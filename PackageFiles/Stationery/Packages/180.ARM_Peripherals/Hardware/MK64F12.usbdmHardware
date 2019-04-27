@@ -28,7 +28,7 @@
          <clock clockEnable="SIM->SCGC3 |= SIM_SCGC3_ADC1_MASK;" clockDisable="SIM->SCGC3 &amp;= ~SIM_SCGC3_ADC1_MASK;" />
          <irq num="ADC1_IRQn" />
       </peripheral>
-      <peripheral baseName="CAN"      instance="0"        version="can0_flex_2mask">
+      <peripheral baseName="CAN"      instance="0"        version="can0_flex_mk">
          <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForFlexCan" />
          <clock clockEnable="SIM->SCGC6 |= SIM_SCGC6_FLEXCAN0_MASK;" clockDisable="SIM->SCGC6 &amp;= ~SIM_SCGC6_FLEXCAN0_MASK;" />
          <irq num="CAN0_MessageBuffer_IRQn" />
@@ -70,7 +70,7 @@
       </peripheral>
       <peripheral baseName="DAC"      instance="0"        version="dac0_16ch_fifo16_0x400cc000">
          <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForDac" />
-         <clock clockEnable="SIM->SCGC2 |= SIM_SCGC2_DAC0_MASK;  SIM->SCGC6 |= SIM_SCGC6_DAC0_MASK;" clockDisable="SIM->SCGC2 &amp;= ~SIM_SCGC2_DAC0_MASK;  SIM->SCGC2 &amp;= ~SIM_SCGC2_DAC0_MASK;" />
+         <clock clockEnable="SIM->SCGC2 |= SIM_SCGC2_DAC0_MASK;\nSIM->SCGC6 |= SIM_SCGC6_DAC0_MASK;" clockDisable="SIM->SCGC2 &amp;= ~SIM_SCGC2_DAC0_MASK;\nSIM->SCGC2 &amp;= ~SIM_SCGC2_DAC0_MASK;" />
          <irq num="DAC0_IRQn" />
       </peripheral>
       <peripheral baseName="DAC"      instance="1"        version="dac0_16ch_fifo16_0x400cc000">
@@ -305,7 +305,7 @@
       </peripheral>
       <peripheral baseName="RNGA"     instance=""         version="rnga_0x40029000">
          <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForRnga" />
-         <clock clockEnable="SIM->SCGC3 |= SIM_SCGC3_RNGA_MASK;  SIM->SCGC6 |= SIM_SCGC6_RNGA_MASK;" clockDisable="SIM->SCGC3 &amp;= ~SIM_SCGC3_RNGA_MASK;  SIM->SCGC3 &amp;= ~SIM_SCGC3_RNGA_MASK;" />
+         <clock clockEnable="SIM->SCGC3 |= SIM_SCGC3_RNGA_MASK;\nSIM->SCGC6 |= SIM_SCGC6_RNGA_MASK;" clockDisable="SIM->SCGC3 &amp;= ~SIM_SCGC3_RNGA_MASK;\nSIM->SCGC3 &amp;= ~SIM_SCGC3_RNGA_MASK;" />
          <irq num="RNGA_IRQn" />
       </peripheral>
       <peripheral baseName="RTC"      instance=""         version="rtc_mk22f12810">

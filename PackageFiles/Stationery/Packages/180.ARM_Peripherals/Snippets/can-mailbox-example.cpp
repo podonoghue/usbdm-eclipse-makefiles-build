@@ -12,20 +12,18 @@
 
 using namespace USBDM;
 
-using Led = GpioD<0, ActiveLow>;
-
 // CAN interface to use
 using Can     = Can0;
-using CanLimp = GpioE<13, ActiveLow>;
+//using CanLimp = GpioE<13, ActiveLow>;
 
 /**
- * Message ID for Rx Mailboxes
+ * Message ID for Tx Mailboxes
  */
 static constexpr unsigned CAN_TX_MAILBOX_1_ID = 30;
 static constexpr unsigned CAN_TX_MAILBOX_2_ID = 31;
 
 /**
- * Message ID for Tx Mailboxes
+ * Message ID for Rx Mailboxes
  */
 static constexpr unsigned CAN_RX_MAILBOX_1_ID = 40; // Start of range
 static constexpr unsigned CAN_RX_MAILBOX_2_ID = 80; // Start of range
@@ -118,7 +116,7 @@ void canRxMailboxCallback(unsigned mailboxNum) {
 void mailboxOnlyExample() {
 
 //   usbdm_assert(!Can::FIFO_AVAILABLE, "This example assumes no FIFO is configured");
-   usbdm_assert(Can::NUM_MAILBOXES>=3, "This example requires > 3 mailboxes");
+   static_assert(Can::NUM_MAILBOXES>=4, "This example requires at least 3 mailboxes to be allocated");
 
    Can::CanParameters canParameters(125000, CanClockSource_1);
    canParameters.idam      = CanAcceptanceMode_FormatA;
@@ -141,52 +139,63 @@ void mailboxOnlyExample() {
 
    Can::enableMiscellaneousNvicInterrupts(NvicPriority_Normal);
 
-   static auto txMailbox1 = Can::allocateMailbox();
+   auto &txMailbox1 = Can::allocateMailbox();
+   // Check if any allocations failed
+   checkError();
    txMailbox1.setCallback(canTxMailboxCallback);
    txMailbox1.enableInterrupt();
-   auto *canTxMailbox1 = txMailbox1.getMailbox();
-   canTxMailbox1->ID = CanId(CAN_MODE, CAN_TX_MAILBOX_1_ID);
-   canTxMailbox1->data8(0) = 0x1;
-   canTxMailbox1->data8(1) = 0x2;
-   canTxMailbox1->data8(2) = 0x3;
-   canTxMailbox1->data8(3) = 0x4;
-   canTxMailbox1->data8(4) = 0x5;
-   canTxMailbox1->data8(5) = 0x6;
-   canTxMailbox1->data8(6) = 0x7;
-   canTxMailbox1->data8(7) = 0x8;
-   canTxMailbox1->CS = CanControlStatus(CanMessageCode_TxData, CAN_MODE, CanDataSize_7, CanFrameType_Data);
-   canTxMailbox1->CS;
+   auto &canTxMailbox1 = txMailbox1.getMailbox();
+   canTxMailbox1.ID = CanId(CAN_MODE, CAN_TX_MAILBOX_1_ID);
+   canTxMailbox1.data8(0) = 0x1;
+   canTxMailbox1.data8(1) = 0x2;
+   canTxMailbox1.data8(2) = 0x3;
+   canTxMailbox1.data8(3) = 0x4;
+   canTxMailbox1.data8(4) = 0x5;
+   canTxMailbox1.data8(5) = 0x6;
+   canTxMailbox1.data8(6) = 0x7;
+   canTxMailbox1.data8(7) = 0x8;
+   canTxMailbox1.CS = CanControlStatus(CanMessageCode_TxData, CAN_MODE, CanDataSize_7, CanFrameType_Data);
+   canTxMailbox1.CS;
 
-   static auto txMailbox2 = Can::allocateMailbox();
+   auto &txMailbox2 = Can::allocateMailbox();
+   // Check if any allocations failed
+   checkError();
    txMailbox2.setCallback(canTxMailboxCallback);
    txMailbox2.enableInterrupt();
-   auto *canTxMailbox2 = txMailbox2.getMailbox();
-   canTxMailbox2->ID = CanId(CAN_MODE, CAN_TX_MAILBOX_2_ID);
-   canTxMailbox2->data8(0) = 0x11;
-   canTxMailbox2->data8(1) = 0x12;
-   canTxMailbox2->data8(2) = 0x13;
-   canTxMailbox2->data8(3) = 0x14;
-   canTxMailbox2->data8(4) = 0x15;
-   canTxMailbox2->data8(5) = 0x16;
-   canTxMailbox2->data8(6) = 0x17;
-   canTxMailbox2->data8(7) = 0x18;
-   canTxMailbox2->CS = CanControlStatus(CanMessageCode_TxData, CAN_MODE, CanDataSize_3, CanFrameType_Data);
+   auto &canTxMailbox2 = txMailbox2.getMailbox();
+   canTxMailbox2.ID = CanId(CAN_MODE, CAN_TX_MAILBOX_2_ID);
+   canTxMailbox2.data8(0) = 0x11;
+   canTxMailbox2.data8(1) = 0x12;
+   canTxMailbox2.data8(2) = 0x13;
+   canTxMailbox2.data8(3) = 0x14;
+   canTxMailbox2.data8(4) = 0x15;
+   canTxMailbox2.data8(5) = 0x16;
+   canTxMailbox2.data8(6) = 0x17;
+   canTxMailbox2.data8(7) = 0x18;
+   canTxMailbox2.CS = CanControlStatus(CanMessageCode_TxData, CAN_MODE, CanDataSize_3, CanFrameType_Data);
 
-   static auto rxMailbox1 = Can::allocateMailbox();
+   auto &rxMailbox1 = Can::allocateMailbox();
+   // Check if any allocations failed
+   checkError();
    rxMailbox1.setCallback(canRxMailboxCallback);
    rxMailbox1.getMailboxFilterMask() = CanMailboxFilterMask(CAN_MODE, ~0b111, true, false); // ID 0-7
    rxMailbox1.enableInterrupt();
-   auto *canRxMailbox1 = rxMailbox1.getMailbox();
-   canRxMailbox1->ID = CanId(CAN_MODE, CAN_RX_MAILBOX_1_ID);
-   canRxMailbox1->CS = CanControlStatus(CanMessageCode_RxEmpty, CanFrameType_Remote);
+   auto &canRxMailbox1 = rxMailbox1.getMailbox();
+   canRxMailbox1.ID = CanId(CAN_MODE, CAN_RX_MAILBOX_1_ID);
+   canRxMailbox1.CS = CanControlStatus(CanMessageCode_RxEmpty, CanFrameType_Remote);
 
-   static auto rxMailbox2 = Can::allocateMailbox();
+   auto &rxMailbox2 = Can::allocateMailbox();
+   // Check if any allocations failed
+   checkError();
    rxMailbox2.setCallback(canRxMailboxCallback);
    rxMailbox2.getMailboxFilterMask() = CanMailboxFilterMask(CAN_MODE, ~0b11, true, false); // ID 0-3
    rxMailbox2.enableInterrupt();
-   auto *canRxMailbox2 = rxMailbox2.getMailbox();
-   canRxMailbox2->ID = CanId(CAN_MODE, CAN_RX_MAILBOX_2_ID);
-   canRxMailbox2->CS = CanControlStatus(CanMessageCode_RxEmpty, CanFrameType_Remote);
+   auto &canRxMailbox2 = rxMailbox2.getMailbox();
+   canRxMailbox2.ID = CanId(CAN_MODE, CAN_RX_MAILBOX_2_ID);
+   canRxMailbox2.CS = CanControlStatus(CanMessageCode_RxEmpty, CanFrameType_Remote);
+
+   // Check if any allocations failed
+   checkError();
 
    Can::start();
 
@@ -196,12 +205,12 @@ void mailboxOnlyExample() {
    for(;;) {
       __asm__("nop");
       waitMS(1000);
-      if (canTxMailbox1->CS.code == CanMessageCode_TxInactive) {
-         canTxMailbox1->CS = CanControlStatus(CanMessageCode_TxData, CAN_MODE, CanDataSize_7, CanFrameType_Data);
+      if (canTxMailbox1.CS.code == CanMessageCode_TxInactive) {
+         canTxMailbox1.CS = CanControlStatus(CanMessageCode_TxData, CAN_MODE, CanDataSize_7, CanFrameType_Data);
       }
       waitMS(1000);
-      if (canTxMailbox2->CS.code == CanMessageCode_TxInactive) {
-         canTxMailbox2->CS = CanControlStatus(CanMessageCode_TxData, CAN_MODE, CanDataSize_3, CanFrameType_Data);
+      if (canTxMailbox2.CS.code == CanMessageCode_TxInactive) {
+         canTxMailbox2.CS = CanControlStatus(CanMessageCode_TxData, CAN_MODE, CanDataSize_3, CanFrameType_Data);
       }
       CanErrorCounts canErrorCounts = Can::getErrorCounters();
       if ((canErrorCounts.receiveErrorCount > 0) || (canErrorCounts.transmitFastErrorCount > 0)) {
@@ -209,6 +218,12 @@ void mailboxOnlyExample() {
          console.write(", transmitErrorCount = ").writeln(canErrorCounts.transmitErrorCount);
       }
    }
+
+   // Never actually gets here
+   txMailbox1.release();
+   txMailbox2.release();
+   rxMailbox1.release();
+   rxMailbox2.release();
 }
 
 int main() {
@@ -219,8 +234,9 @@ int main() {
    console.write("MAX_NUM_MESSAGE_BUFFERS       = ").writeln(Can::MAX_NUM_MESSAGE_BUFFERS);
    console.write("MAX_NUM_FIFO_MESSAGE_FILTERS  = ").writeln(Can::MAX_NUM_FIFO_MESSAGE_FILTERS);
 
-//   CanLimp::setInput();
-//   console.write("CAN Limp mode is ").writeln(CanLimp::read()?"Active":"Inactive");
+   // S32K
+   //   CanLimp::setInput();
+   //   console.write("CAN Limp mode is ").writeln(CanLimp::read()?"Active":"Inactive");
 
    mailboxOnlyExample();
 

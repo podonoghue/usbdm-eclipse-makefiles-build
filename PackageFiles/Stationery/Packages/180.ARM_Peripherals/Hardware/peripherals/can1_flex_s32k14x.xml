@@ -126,6 +126,7 @@
          \t   CanClockSource_1 = true,
          \t   CanClockSource_SoscDiv2clk = CanClockSource_0,
          \t   CanClockSource_CoreClock   = CanClockSource_1,
+         \t   CanClockSource_Default     = CanClockSource_0,
          \t};
       #endif\n\n
       ]]></template>
@@ -178,6 +179,7 @@
    <projectActionList id = "can_files" >
       <copy source="Project_Headers/can.h"                    target="Project_Headers/can.h"                    overwrite="true"  derived="true" />
       <copy source="Snippets/can-mailbox-example.cpp"         target="Snippets/can-mailbox-example.cpp"         overwrite="true"  derived="true" />
+      <copy source="Snippets/can-sw-led-example.cpp"          target="Snippets/can-sw-led-example.cpp"          overwrite="true"  derived="true" />
       <copy source="Snippets/can-fifo-example.cpp"            target="Snippets/can-fifo-example.cpp"            overwrite="true"  derived="true" />
    </projectActionList>
    

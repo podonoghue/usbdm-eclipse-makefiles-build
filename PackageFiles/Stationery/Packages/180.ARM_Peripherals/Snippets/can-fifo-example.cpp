@@ -20,7 +20,7 @@ using Can     = Can0;
 //using CanLimp = GpioE<13, ActiveLow>; // S32K
 
 /**
- * Base Message IDs for FIFO
+ * Base Message IDs for Rx FIFO
  */
 static constexpr unsigned CAN_FIFO_ID1 = 40;
 static constexpr unsigned CAN_FIFO_ID2 = 60;
@@ -104,10 +104,10 @@ static const CanFifoIdFilterMask fifoIdFilterMasks[Can::NUM_FIFO_MESSAGE_FILTER_
 void fifoCallback() {
    uint32_t fifoFlags = Can::getFifoFlags();
 
-   console.setWidth(8);
+   console.setWidth(3);
    console.setPadding(Padding_LeadingZeroes);
-   console.writeln("                              OWF");
-   console.write(  "fifoCallback(), fifoFlags = 0b").writeln(fifoFlags,    Radix_2);
+   console.writeln("\n                              OWF");
+   console.write(  "fifoCallback(), fifoFlags = 0b").writeln(fifoFlags>>5,    Radix_2);
    console.reset();
 
    auto mailbox = Can::getFifoMessageBuffer();

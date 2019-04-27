@@ -949,7 +949,7 @@ public:
        *
        * @note Use isValid to check for success or check USBDM error code
        */
-      CanParameters(unsigned bitRate, CanClockSource clockSource) : ctrl1(0), ctrl2(0), mcr(0) {
+      CanParameters(unsigned bitRate, CanClockSource clockSource = CanClockSource_Default) : ctrl1(0), ctrl2(0), mcr(0) {
 
          clksrc = clockSource;
          calculateParameters(bitRate, Info::getPeClockFrequency(clockSource));
@@ -1085,7 +1085,7 @@ protected:
     * @return The number of message buffers required.
     */
    static constexpr unsigned calculateMessageBuffersRequired(unsigned fifoIdFilterCount, unsigned mailboxes) {
-      return calculateMessageBuffersRequiredForFIFO(fifoIdFilterCount)+ mailboxes;
+      return calculateMessageBuffersRequiredForFIFO(fifoIdFilterCount) + mailboxes;
    }
 
    /**
@@ -1170,6 +1170,9 @@ protected:
    static void noHandlerCallback() {
       setAndCheckErrorCode(E_NO_HANDLER);
    }
+
+   /** Bit-mask used to allocate mailbox slots */
+   static uint32_t       allocatedMailboxes;
 
 public:
    /** CAN interrupt handler */
@@ -1491,6 +1494,9 @@ protected:
       usbdm_assert(!canParameters.fden,"Flexible Data Rate not supported");
 #endif
       usbdm_assert(canParameters.irmq,"Legacy masking not supported");
+
+      // Release all mailboxes
+      allocatedMailboxes = (1<<NUM_MAILBOXES)-1;
 
       enable();
 
@@ -1921,12 +1927,51 @@ public:
    }
 
 $(/CAN/NvicControl)
+
+protected:
+   static constexpr unsigned MailboxNone = NUM_MAILBOXES;
+
+   /**
+    * Allocate CAN Mailbox.
+    *
+    * @return MailboxNone  No available mailbox.  Error code set.
+    * @return Otherwise    Mailbox number
+    */
+   static unsigned allocateMailbox() {
+      unsigned mailboxNum = __builtin_ffs(allocatedMailboxes);
+      if ((mailboxNum == 0)||(--mailboxNum>=NUM_MAILBOXES)) {
+         setErrorCode(E_NO_RESOURCE);
+         return MailboxNone;
+      }
+      allocatedMailboxes &= ~(1<<mailboxNum);
+      return mailboxNum;
+   }
+
+   /**
+    * Free CAN Mailbox.
+    *
+    * @param dmaChannelNum Channel to release
+    */
+   static void freeMailbox(unsigned mailboxNumber) {
+      usbdm_assert((mailboxNumber<NUM_MAILBOXES), "Illegal mailbox number");
+
+      const uint32_t mailboxMask = (1<<mailboxNumber);
+      usbdm_assert((allocatedMailboxes & mailboxMask) == 0,          "Freeing unallocated mailbox");
+
+      volatile CanMessageBuffer8 *mb = Can_T<Info>::getMailbox(mailboxNumber);
+      mb->CS = CanControlStatus(CanMessageCode_RxInactive);
+      allocatedMailboxes |= mailboxMask;
+   }
+
 };
 
 /**
  * Callback table for programmatically set handlers
  */
 template<class Info> CanCallbackFunction Can_T<Info>::sCallbacks[]      = {0};
+
+template<class Info>
+uint32_t Can_T<Info>::allocatedMailboxes = (1<<NUM_MAILBOXES)-1;
 
 typedef void (*CanMailboxCallbackFunction)(unsigned);
 
@@ -1948,6 +1993,7 @@ typedef void (*CanMailboxCallbackFunction)(unsigned);
 template<class Info>
 class CanHandler_T : public Can_T<Info> {
 public:
+   //! Inherit Can Parameters
    using typename Can_T<Info>::CanParameters;
    //! Maximum number of Message buffers (determined by hardware, shared b/w FIFO use and mailboxes)
    using Can_T<Info>::MAX_NUM_MESSAGE_BUFFERS;
@@ -1962,61 +2008,100 @@ public:
    //! Number of Mailbox filter masks (remaining filters use a shared mask)
    using Can_T<Info>::NUM_MAILBOX_FILTER_MASKS;
 
-private:
-   static CanMailboxCallbackFunction mailboxCallBacks[NUM_MAILBOXES];
-   static uint32_t allocatedMailboxes;
-
 public:
-   class CanMailBox {
+   class CanMailboxInfo {
+
+      // Only CanHandler_T can allocate
+      friend CanHandler_T<Info>;
+
    private:
-      unsigned                    mailboxNumber;
+      // CAN mailbox number (also index in mailboxInformation[])
+      unsigned mailboxNumber;
+
+      // Associated CAN mailbox
       volatile CanMessageBuffer8 *mailbox;
 
-   public:
-      /**
-       * Constructor
-       *
-       * @param number
-       */
-      constexpr CanMailBox(unsigned number) : mailboxNumber(number), mailbox(Can_T<Info>::getMailbox(mailboxNumber)) {
-         usbdm_assert(number<NUM_MAILBOXES,"");
-      }
+      // Callback to execute on mailbox event
+      CanMailboxCallbackFunction callback;
 
       /**
        * Constructor
-       *
-       * @param number
+       * The mailbox will not be associated with a CAN mailbox.
        */
-      constexpr CanMailBox(bool) : mailboxNumber(NUM_MAILBOXES), mailbox(nullptr) {
+      constexpr CanMailboxInfo() :
+            mailboxNumber(NUM_MAILBOXES),
+            mailbox(nullptr),
+            callback((CanMailboxCallbackFunction)Can_T<Info>::noHandlerCallback) {
       }
 
       /**
        * Destructor
        */
-      ~CanMailBox() {
-         dispose();
+      ~CanMailboxInfo() {};
+
+      /**
+       * Initialises the Mailbox Information.
+       * This assumes the CAN mailbox has been allocated.
+       *
+       * @param mailBoxNum CAN Mailbox number that has been allocated.
+       */
+      void initialise(unsigned mailBoxNum) {
+         mailboxNumber = mailBoxNum;
+         mailbox       = Can_T<Info>::getMailbox(mailBoxNum);
+         disableInterrupt();
+         setCallback(nullptr);
       }
 
       /**
-       * Set callbacks for ISR
+       * Initialises the Mailbox Information.
+       */
+      void initialise() {
+         mailboxNumber = NUM_MAILBOXES;
+         mailbox       = nullptr;
+         setCallback(nullptr);
+      }
+
+   public:
+      /**
+       * Check if mailbox is valid (allocated successfully)
        *
-       * @param callback The function to call from stub ISR
-       * @param index    Index of callback to install
+       * @return
+       */
+      bool isValid() {
+         return mailbox != nullptr;
+      }
+
+      /**
+       * Releases the associated CAN mailbox
+       */
+      void release() {
+         disableInterrupt();
+         Can_T<Info>::freeMailbox(mailboxNumber);
+         mailbox = nullptr;
+         setCallback(nullptr);
+         mailboxNumber = NUM_MAILBOXES;
+      }
+
+      /**
+       * Set callbacks to execute on Mailbox event.
+       * Use nullptr to remove handler.
+       *
+       * @param callback The function to call on Mailbox event
        */
       void setCallback(CanMailboxCallbackFunction callback) {
+         usbdm_assert((mailbox != nullptr)||(callback == nullptr), "CanMailboxInfo in invalid state");
          usbdm_assert(Info::irqHandlerInstalled, "CAN not configured for interrupts");
          if (callback == nullptr) {
             callback = (CanMailboxCallbackFunction)Can_T<Info>::noHandlerCallback;
          }
-         mailboxCallBacks[mailboxNumber] = callback;
+         this->callback = callback;
       }
 
       /**
-       * Get Mailbox Mask Table array.
-       * The result is formatted as an array of CanMailboxFilterMask.
-       * These masks are applied to filtering of Received messages into the mailboxes.
+       * Get Mailbox filter mask
+       * These masks are applied to filtering of received messages into the mailbox.
        *
-       * @return Pointer to start of filter mask table array
+       * @return Reference to mask
        *
        * @note Can only be accessed in Freeze mode.
        */
@@ -2026,23 +2111,13 @@ public:
 
       /**
        * Get pointer to CAN message buffer for the mailbox assuming default size (8 data bytes)
-       * Allowances are made for mailboxes lost to the Receive FIFO so the
-       * index is relative to the first usable mailbox
        *
        * @return Pointer to mailbox
        */
-      volatile CanMessageBuffer8 *getMailbox() {
-         return mailbox;
+      volatile CanMessageBuffer8 &getMailbox() {
+         usbdm_assert(mailbox != nullptr, "CanMailboxInfo in invalid state");
+         return *mailbox;
       };
-
-      /**
-       * Check if mailbox is valid (allocated successfully)
-       *
-       * @return
-       */
-      bool isValid() {
-         return mailboxNumber < NUM_MAILBOXES;
-      }
 
       /**
        * Obtain mailbox number
@@ -2050,33 +2125,33 @@ public:
        * @return Mailbox Number
        */
       unsigned getMailboxNumber() {
+         usbdm_assert(mailboxNumber < Can_T<Info>::NUM_MAILBOXES, "CanMailboxInfo in invalid state");
          return mailboxNumber;
       }
 
-      void dispose() {
-         freeMailbox(*this);
-         setCallback(nullptr);
-         mailboxNumber = NUM_MAILBOXES;
-         mailbox = nullptr;
-      }
-
       /**
-       * Enable interrupt from the mailbox.
+       * Enable interrupt associated with this mail box
        */
       void enableInterrupt() {
+         usbdm_assert(mailboxNumber < Can_T<Info>::NUM_MAILBOXES, "CanMailboxInfo in invalid state");
          Can_T<Info>::enableMailboxInterrupt(mailboxNumber);
       }
 
       /**
-       * Disable interrupt from the mailbox.
+       * Disable interrupt associated with this mail box
        */
       void disableInterrupt() {
+         usbdm_assert(mailboxNumber < Can_T<Info>::NUM_MAILBOXES, "CanMailboxInfo in invalid state");
          Can_T<Info>::disableMailboxInterrupt(mailboxNumber);
       }
    };
 
-   static CanMailBox MailboxNone;
+private:
+   static CanMailboxInfo mailboxInformation[NUM_MAILBOXES];
 
+   static CanMailboxInfo MailboxNone;
+
+public:
    /**
     * Configure for individual mailbox use only (no FIFO)
     *
@@ -2088,13 +2163,9 @@ public:
     *
     * @note The CAN interface is left stopped (in FREEZE mode).  Use start() to commence CAN operation.
     */
-   static void configure(
-         const CanParameters           &canParameters
-   ) {
+   static void configure(const CanParameters &canParameters) {
       for(unsigned index=0; index<NUM_MAILBOXES; index++) {
-         if (mailboxCallBacks[index] == nullptr) {
-            mailboxCallBacks[index] = (CanMailboxCallbackFunction)Can_T<Info>::noHandlerCallback;
-         }
+         mailboxInformation[index].initialise();
       }
       Can_T<Info>::configure(canParameters);
    }
@@ -2132,9 +2203,7 @@ public:
          const CanFifoIdFilterMask     fifoDefaultFilterMask
    ) {
       for(unsigned index=0; index<NUM_MAILBOXES; index++) {
-         if (mailboxCallBacks[index] == nullptr) {
-            mailboxCallBacks[index] = (CanMailboxCallbackFunction)Can_T<Info>::noHandlerCallback;
-         }
+         mailboxInformation[index].initialise();
       }
       Can_T<Info>::configure(
             canParameters,
@@ -2148,16 +2217,17 @@ public:
     * Allocate CAN Mailbox.
     *
     * @return MailboxNone  No available mailbox.  Error code set.
-    * @return Otherwise    Mailbox object Number of allocated channel
+    * @return Otherwise    Mailbox object
     */
-   static CanMailBox allocateMailbox() {
-      unsigned mailboxNum = __builtin_ffs(allocatedMailboxes);
-      if ((mailboxNum == 0)||(--mailboxNum>=NUM_MAILBOXES)) {
+   static CanMailboxInfo &allocateMailbox() {
+      int mailboxNum = Can_T<Info>::allocateMailbox();
+      if (mailboxNum == Can_T<Info>::MailboxNone) {
          setErrorCode(E_NO_RESOURCE);
          return MailboxNone;
       }
-      allocatedMailboxes &= ~(1<<mailboxNum);
-      return CanMailBox(mailboxNum);
+      CanMailboxInfo &mailboxInfo = mailboxInformation[mailboxNum];
+      mailboxInfo.initialise(mailboxNum);
+      return mailboxInfo;
    }
 
    /**
@@ -2165,13 +2235,8 @@ public:
     *
     * @param dmaChannelNum Channel to release
     */
-   static void freeMailbox(CanMailBox mailbox) {
-      const uint32_t mailboxMask = (1<<mailbox.getMailboxNumber());
-      usbdm_assert(mailbox.getMailboxNumber()<NUM_MAILBOXES,        "Illegal mailbox number");
-      usbdm_assert((allocatedMailboxes & mailboxMask) == 0, "Freeing unallocated mailbox");
-      volatile CanMessageBuffer8 *mb = mailbox.getMailbox();
-      mb->CS = CanControlStatus(CanMessageCode_RxInactive);
-      allocatedMailboxes |= mailboxMask;
+   static void freeMailbox(CanMailboxInfo mailboxInfo) {
+      mailboxInfo.release();
    }
 
    /**
@@ -2191,6 +2256,8 @@ public:
     */
    static void messageBufferIrqHandler() {
       uint32_t flags = Can_T<Info>::getMailboxFlags();
+
+      // Find lowest numbered busy Mailbox
       int channelNum = __builtin_ffs(flags);
 
       if (channelNum==0) {
@@ -2200,17 +2267,16 @@ public:
       else {
          // Pass to mailbox handler
          channelNum--;
-         mailboxCallBacks[channelNum](channelNum);
+         mailboxInformation[channelNum].callback(channelNum);
       }
    }
 };
 
 template<class Info>
-CanMailboxCallbackFunction CanHandler_T<Info>::mailboxCallBacks[CanHandler_T<Info>::NUM_MAILBOXES] = {0};
+typename CanHandler_T<Info>::CanMailboxInfo CanHandler_T<Info>::mailboxInformation[NUM_MAILBOXES];
+
 template<class Info>
-uint32_t CanHandler_T<Info>::allocatedMailboxes = ~0;
-template<class Info>
-typename CanHandler_T<Info>::CanMailBox CanHandler_T<Info>::MailboxNone{false};
+typename CanHandler_T<Info>::CanMailboxInfo CanHandler_T<Info>::MailboxNone;
 
 #if defined(USBDM_CAN0_IS_DEFINED)
 using Can0 = CanHandler_T<Can0Info>;

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE peripheralPage SYSTEM "_menu.dtd" >
-<!-- can0_flex_2mask.xml -->
+<!-- can0_flex_1mask.xml -->
 
 <peripheralPage xmlns:xi="http://www.w3.org/2001/XInclude" name="_instance" description="FlexCAN">
 
@@ -44,7 +44,7 @@
    <intOption name="NumberOfIndividualMailboxes" 
       description="Number of individual Rx/Tx mailboxes"
       toolTip="Used to configure number individually allocated mailboxes"
-      value="16" min="0" max="16" />
+      value="8" min="0" max="16" />
 
    <template><![CDATA[
        \t//! Whether FIFO is enable\n
@@ -127,6 +127,7 @@
          \t   CanClockSource_1 = true,
          \t   CanClockSource_Oserclk   = CanClockSource_0,
          \t   CanClockSource_Busclk    = CanClockSource_1,
+         \t   CanClockSource_Default   = CanClockSource_0,
          \t};
       #endif\n\n
       ]]></template>
@@ -235,6 +236,7 @@
    <projectActionList id = "can_files" >
       <copy source="Project_Headers/can.h"                    target="Project_Headers/can.h"                    overwrite="true"  derived="true" />
       <copy source="Snippets/can-mailbox-example.cpp"         target="Snippets/can-mailbox-example.cpp"         overwrite="true"  derived="true" />
+      <copy source="Snippets/can-sw-led-example.cpp"          target="Snippets/can-sw-led-example.cpp"          overwrite="true"  derived="true" />
       <copy source="Snippets/can-fifo-example.cpp"            target="Snippets/can-fifo-example.cpp"            overwrite="true"  derived="true" />
    </projectActionList>
    
