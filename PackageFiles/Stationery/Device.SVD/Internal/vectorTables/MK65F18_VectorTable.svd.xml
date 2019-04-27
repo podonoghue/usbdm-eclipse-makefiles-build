@@ -380,6 +380,11 @@ Devices using this vector table:
       <peripheral>PORTE</peripheral>
    </interrupt>
    <interrupt>
+      <name>SWI</name>
+      <description>Software interrupt</description>
+      <value>64</value>
+   </interrupt>
+   <interrupt>
       <name>SPI2</name>
       <description>Serial Peripheral Interface</description>
       <value>65</value>
@@ -429,37 +434,37 @@ Devices using this vector table:
    </interrupt>
    <interrupt>
       <name>CAN0_MessageBuffer</name>
-      <description>Flex Controller Area Network module</description>
+      <description>FlexCAN - Message Buffers (Mailboxes and FIFO)</description>
       <value>75</value>
       <peripheral>CAN0</peripheral>
    </interrupt>
    <interrupt>
       <name>CAN0_BusOff</name>
-      <description>Flex Controller Area Network module</description>
+      <description>FlexCAN - Bus off</description>
       <value>76</value>
       <peripheral>CAN0</peripheral>
    </interrupt>
    <interrupt>
       <name>CAN0_Error</name>
-      <description>Flex Controller Area Network module</description>
+      <description>FlexCAN - Error</description>
       <value>77</value>
       <peripheral>CAN0</peripheral>
    </interrupt>
    <interrupt>
       <name>CAN0_TxWarning</name>
-      <description>Flex Controller Area Network module</description>
+      <description>FlexCAN - Transmit Warning</description>
       <value>78</value>
       <peripheral>CAN0</peripheral>
    </interrupt>
    <interrupt>
       <name>CAN0_RxWarning</name>
-      <description>Flex Controller Area Network module</description>
+      <description>FlexCAN - Receive Warning</description>
       <value>79</value>
       <peripheral>CAN0</peripheral>
    </interrupt>
    <interrupt>
       <name>CAN0_WakeUp</name>
-      <description>Flex Controller Area Network module</description>
+      <description>FlexCAN - Wakeup</description>
       <value>80</value>
       <peripheral>CAN0</peripheral>
    </interrupt>
@@ -543,37 +548,37 @@ Devices using this vector table:
    </interrupt>
    <interrupt>
       <name>CAN1_MessageBuffer</name>
-      <description>Flex Controller Area Network module</description>
+      <description>FlexCAN - Message Buffers (Mailboxes and FIFO)</description>
       <value>94</value>
       <peripheral>CAN1</peripheral>
    </interrupt>
    <interrupt>
       <name>CAN1_BusOff</name>
-      <description>Flex Controller Area Network module</description>
+      <description>FlexCAN - Bus off</description>
       <value>95</value>
       <peripheral>CAN1</peripheral>
    </interrupt>
    <interrupt>
       <name>CAN1_Error</name>
-      <description>Flex Controller Area Network module</description>
+      <description>FlexCAN - Error</description>
       <value>96</value>
       <peripheral>CAN1</peripheral>
    </interrupt>
    <interrupt>
       <name>CAN1_TxWarning</name>
-      <description>Flex Controller Area Network module</description>
+      <description>FlexCAN - Transmit Warning</description>
       <value>97</value>
       <peripheral>CAN1</peripheral>
    </interrupt>
    <interrupt>
       <name>CAN1_RxWarning</name>
-      <description>Flex Controller Area Network module</description>
+      <description>FlexCAN - Receive Warning</description>
       <value>98</value>
       <peripheral>CAN1</peripheral>
    </interrupt>
    <interrupt>
       <name>CAN1_WakeUp</name>
-      <description>Flex Controller Area Network module</description>
+      <description>FlexCAN - Wakeup</description>
       <value>99</value>
       <peripheral>CAN1</peripheral>
    </interrupt>
