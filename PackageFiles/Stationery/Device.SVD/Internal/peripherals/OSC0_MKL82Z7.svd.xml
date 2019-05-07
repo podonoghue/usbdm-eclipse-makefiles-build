@@ -3,8 +3,8 @@ Devices using this peripheral:
       MKL82Z7
 -->
       <peripheral>
-         <?sourceFile "OSC_MKL82Z7" ?>
-         <name>OSC</name>
+         <?sourceFile "OSC0_MKL82Z7" ?>
+         <name>OSC0</name>
          <description>Oscillator</description>
          <groupName>OSC</groupName>
          <headerStructName>OSC</headerStructName>

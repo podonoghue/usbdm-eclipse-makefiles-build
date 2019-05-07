@@ -46,7 +46,7 @@
       <xi:include href="peripherals/MCM_MKE02Z2.svd.xml"/>
       <xi:include href="peripherals/NV_FTMRH.svd.xml"/>
       <xi:include href="peripherals/NVIC_CM0.svd.xml"/>
-      <xi:include href="peripherals/OSC_MKE.svd.xml"/>
+      <xi:include href="peripherals/OSC0_MKE.svd.xml"/>
       <xi:include href="peripherals/PIT_2CH_CHAIN_0x40037000.svd.xml"/>
       <xi:include href="peripherals/PMC_MKE.svd.xml"/>
       <xi:include href="peripherals/PORT_MKE02.svd.xml"/>

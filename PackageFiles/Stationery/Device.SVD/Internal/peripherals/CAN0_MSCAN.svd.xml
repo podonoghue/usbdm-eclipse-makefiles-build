@@ -4,11 +4,11 @@ Devices using this peripheral:
       SKEAZ1284
 -->
       <peripheral>
-         <?sourceFile "MSCAN_0" ?>
-         <name>MSCAN</name>
+         <?sourceFile "CAN0_MSCAN" ?>
+         <name>CAN0</name>
          <description>Scalable Controller Area Network</description>
-         <groupName>MSCAN</groupName>
-         <headerStructName>MSCAN</headerStructName>
+         <groupName>CAN</groupName>
+         <headerStructName>CAN</headerStructName>
          <baseAddress>0x40024000</baseAddress>
          <size>8</size>
          <access>read-write</access>

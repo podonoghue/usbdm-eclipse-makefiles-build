@@ -53,7 +53,7 @@
       <xi:include href="peripherals/MTB_MKE15Z7.svd.xml"/>
       <xi:include href="peripherals/MTBDWT_MKE15Z7.svd.xml"/>
       <xi:include href="peripherals/NV_MKM.svd.xml"/>
-      <xi:include href="peripherals/OSC_MKM.svd.xml"/>
+      <xi:include href="peripherals/OSC0_MKM.svd.xml"/>
       <xi:include href="peripherals/PIT0_2CH_CHAIN_0x4002D000.svd.xml"/>
       <peripheral derivedFrom="PIT0"><name>PIT1</name><baseAddress>0x4002E000</baseAddress></peripheral>
       <xi:include href="peripherals/PMC_MKM.svd.xml"/>

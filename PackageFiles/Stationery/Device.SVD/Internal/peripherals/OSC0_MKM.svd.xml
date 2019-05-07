@@ -1,22 +1,17 @@
 <!--
 Devices using this peripheral: 
-      MKE02Z2
-      MKE02Z4
-      MKE04Z4
-      MKE04Z1284
-      MKE06Z4
-      SKEAZ1284
-      SKEAZN84
-      SKEAZN642
+      MKM14Z5
+      MKM33Z5
+      MKM34Z5
 -->
       <peripheral>
-         <?sourceFile "OSC_MKE" ?>
-         <name>OSC</name>
-         <description>Oscillator</description>
+         <?sourceFile "OSC0_MKM" ?>
+         <name>OSC0</name>
+         <description>System Oscillator</description>
          <groupName>OSC</groupName>
          <headerStructName>OSC</headerStructName>
-         <baseAddress>0x40065000</baseAddress>
-         <size>32</size>
+         <baseAddress>0x40066000</baseAddress>
+         <size>8</size>
          <access>read-write</access>
          <resetValue>0x0</resetValue>
          <resetMask>0xFFFFFFFF</resetMask>
@@ -31,114 +26,120 @@ Devices using this peripheral:
                <name>CR</name>
                <description>Control Register</description>
                <addressOffset>0x0</addressOffset>
-               <size>8</size>
                <resetMask>0xFF</resetMask>
                <fields>
                   <field>
-                     <name>OSCINIT</name>
-                     <description>OSC Initialization\nThis field is set after the initialization cycles of oscillator are completed</description>
+                     <name>SCP</name>
+                     <?ignoreOverlap?>
+                     <description>Oscillator Capacitor Load (pF)</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>4</bitWidth>
+                  </field>
+                  <field>
+                     <name>SC16P</name>
+                     <description>Oscillator +16 pF Capacitor Load</description>
                      <bitOffset>0</bitOffset>
                      <bitWidth>1</bitWidth>
-                     <access>read-only</access>
                      <enumeratedValues>
                         <enumeratedValue>
                            <name>0b0</name>
-                           <description>Initialization is not complete</description>
+                           <description>Disabled</description>
                            <value>0b0</value>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>0b1</name>
-                           <description>Initialization is completed</description>
+                           <description>Add 16 pF</description>
                            <value>0b1</value>
                         </enumeratedValue>
                      </enumeratedValues>
                   </field>
                   <field>
-                     <name>HGO</name>
-                     <description>High Gain Oscillator Select\nControls the OSC mode of operation</description>
+                     <name>SC8P</name>
+                     <description>Oscillator +8 pF Capacitor Load</description>
                      <bitOffset>1</bitOffset>
                      <bitWidth>1</bitWidth>
                      <enumeratedValues>
                         <enumeratedValue>
                            <name>0b0</name>
-                           <description>Low-power mode</description>
+                           <description>Disabled</description>
                            <value>0b0</value>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>0b1</name>
-                           <description>High-gain mode</description>
+                           <description>Add 8 pF</description>
                            <value>0b1</value>
                         </enumeratedValue>
                      </enumeratedValues>
                   </field>
                   <field>
-                     <name>RANGE</name>
-                     <description>Frequency Range Select\nSelects the frequency range for the OSC module</description>
+                     <name>SC4P</name>
+                     <description>Oscillator +4 pF Capacitor Load</description>
                      <bitOffset>2</bitOffset>
                      <bitWidth>1</bitWidth>
                      <enumeratedValues>
                         <enumeratedValue>
                            <name>0b0</name>
-                           <description>Low range of 32 kHz</description>
+                           <description>Disabled</description>
                            <value>0b0</value>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>0b1</name>
-                           <description>High range of 4-20 MHz</description>
+                           <description>Add 4 pF</description>
                            <value>0b1</value>
                         </enumeratedValue>
                      </enumeratedValues>
                   </field>
                   <field>
-                     <name>OSCOS</name>
-                     <description>OSC Output Select\nSelects the output clock of the OSC module</description>
-                     <bitOffset>4</bitOffset>
+                     <name>SC2P</name>
+                     <description>Oscillator +2 pF Capacitor Load</description>
+                     <bitOffset>3</bitOffset>
                      <bitWidth>1</bitWidth>
                      <enumeratedValues>
                         <enumeratedValue>
                            <name>0b0</name>
-                           <description>External clock source</description>
+                           <description>Disabled</description>
                            <value>0b0</value>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>0b1</name>
-                           <description>Oscillator clock source</description>
+                           <description>Add 2 pF</description>
                            <value>0b1</value>
                         </enumeratedValue>
                      </enumeratedValues>
                   </field>
                   <field>
-                     <name>OSCSTEN</name>
-                     <description>OSC Enable in Stop mode\nControls whether or not the OSC clock remains enabled when MCU enters Stop mode and OSCEN is set. OSCSTEN has no effect if ICS requests OSC enable</description>
+                     <name>EREFSTEN</name>
+                     <description>External Reference Stop Enable\n
+Controls whether or not the external reference clock (OSCERCLK) remains enabled when MCU enters Stop mode</description>
                      <bitOffset>5</bitOffset>
                      <bitWidth>1</bitWidth>
                      <enumeratedValues>
                         <enumeratedValue>
                            <name>0b0</name>
-                           <description>Disabled in Stop mode</description>
+                           <description>Disabled in STOP</description>
                            <value>0b0</value>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>0b1</name>
-                           <description>Enabled in Stop mode</description>
+                           <description>Enabled in STOP\tif ERCLKEN is set before entering</description>
                            <value>0b1</value>
                         </enumeratedValue>
                      </enumeratedValues>
                   </field>
                   <field>
-                     <name>OSCEN</name>
-                     <description>OSC Enable\nEnables the OSC module. The OSC module can also be enabled by the ICS module</description>
+                     <name>ERCLKEN</name>
+                     <description>External Reference Enable\nEnables external reference clock (OSCERCLK)</description>
                      <bitOffset>7</bitOffset>
                      <bitWidth>1</bitWidth>
                      <enumeratedValues>
                         <enumeratedValue>
                            <name>0b0</name>
-                           <description>OSC disabled</description>
+                           <description>Clock disabled</description>
                            <value>0b0</value>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>0b1</name>
-                           <description>OSC enabled</description>
+                           <description>Clock is enabled</description>
                            <value>0b1</value>
                         </enumeratedValue>
                      </enumeratedValues>
