@@ -1,0 +1,933 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE root SYSTEM "_Hardware.dtd">
+<!-- MKE06Z4.usbdmHardware -->
+<!-- 
+   Generated from MKE06Z4.csv
+-->
+
+<root version="1.2.0">
+   <family name="MKE06Z4">
+      <device name="MKE06Z4-FRDM" manual="MKE06P80M48SF0RM" package="FRDM" />
+      <device name="MKE06Z4-LQFP80" manual="MKE06P80M48SF0RM" package="LQFP-80" />
+   </family>
+   <peripherals>
+      <peripheral baseName="ACMP"     instance="0"        version="acmp0_mke">
+         <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForCmp" />
+         <clock clockEnable="SIM->SCGC |= SIM_SCGC_ACMP0_MASK;" clockDisable="SIM->SCGC &amp;= ~SIM_SCGC_ACMP0_MASK;" />
+      </peripheral>
+      <peripheral baseName="ACMP"     instance="1"        version="acmp0_mke">
+         <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForCmp" />
+         <clock clockEnable="SIM->SCGC |= SIM_SCGC_ACMP1_MASK;" clockDisable="SIM->SCGC &amp;= ~SIM_SCGC_ACMP1_MASK;" />
+      </peripheral>
+      <peripheral baseName="ADC"      instance="0"        version="adc0_mke04">
+         <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForAdc" />
+         <clock clockEnable="SIM->SCGC |= SIM_SCGC_ADC0_MASK;" clockDisable="SIM->SCGC &amp;= ~SIM_SCGC_ADC0_MASK;" />
+      </peripheral>
+      <peripheral baseName="BUSOUT"   instance="">
+         <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForNull" />
+      </peripheral>
+      <peripheral baseName="CAN"      instance="0"        version="can0_mscan">
+         <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForFlexCan" />
+         <clock clockEnable="SIM->SCGC |= SIM_SCGC_CAN0_MASK;" clockDisable="SIM->SCGC &amp;= ~SIM_SCGC_CAN0_MASK;" />
+      </peripheral>
+      <peripheral baseName="CONTROL"  instance="">
+         <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForControl" />
+         <clock clockEnable="SIM->SCGC |= SIM_SCGC_SWD_MASK;" clockDisable="SIM->SCGC &amp;= ~SIM_SCGC_SWD_MASK;" />
+      </peripheral>
+      <peripheral baseName="CRC"      instance="0"        version="crc0_0x40032000">
+         <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForCrc" />
+         <clock clockEnable="SIM->SCGC |= SIM_SCGC_CRC0_MASK;" clockDisable="SIM->SCGC &amp;= ~SIM_SCGC_CRC0_MASK;" />
+      </peripheral>
+      <peripheral baseName="FTM"      instance="">
+         <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForFtmShared" />
+      </peripheral>
+      <peripheral baseName="FTM"      instance="0"        version="ftm0_2ch_mke">
+         <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForFtm" />
+         <clock clockEnable="SIM->SCGC |= SIM_SCGC_FTM0_MASK;" clockDisable="SIM->SCGC &amp;= ~SIM_SCGC_FTM0_MASK;" />
+      </peripheral>
+      <peripheral baseName="FTM"      instance="1"        version="ftm0_2ch_mke">
+         <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForFtm" />
+         <clock clockEnable="SIM->SCGC |= SIM_SCGC_FTM1_MASK;" clockDisable="SIM->SCGC &amp;= ~SIM_SCGC_FTM1_MASK;" />
+      </peripheral>
+      <peripheral baseName="FTM"      instance="2"        version="ftm2_6ch_mke">
+         <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForFtm" />
+         <clock clockEnable="SIM->SCGC |= SIM_SCGC_FTM2_MASK;" clockDisable="SIM->SCGC &amp;= ~SIM_SCGC_FTM2_MASK;" />
+      </peripheral>
+      <peripheral baseName="GPIO"     instance="A"        version="fgpioa_mke">
+         <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForGpio" />
+      </peripheral>
+      <peripheral baseName="GPIO"     instance="B"        version="fgpiob_mke">
+         <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForGpio" />
+      </peripheral>
+      <peripheral baseName="GPIO"     instance="C"        version="fgpioc_mke">
+         <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForGpio" />
+      </peripheral>
+      <peripheral baseName="I2C"      instance="0"        version="i2c0_mke">
+         <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForI2c" />
+         <clock clockEnable="SIM->SCGC |= SIM_SCGC_I2C0_MASK;" clockDisable="SIM->SCGC &amp;= ~SIM_SCGC_I2C0_MASK;" />
+      </peripheral>
+      <peripheral baseName="I2C"      instance="1"        version="i2c0_mke">
+         <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForI2c" />
+         <clock clockEnable="SIM->SCGC |= SIM_SCGC_I2C1_MASK;" clockDisable="SIM->SCGC &amp;= ~SIM_SCGC_I2C1_MASK;" />
+      </peripheral>
+      <peripheral baseName="IRQ"      instance=""         version="irq_mke">
+         <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForNull" />
+         <clock clockEnable="SIM->SCGC |= SIM_SCGC_IRQ_MASK;" clockDisable="SIM->SCGC &amp;= ~SIM_SCGC_IRQ_MASK;" />
+      </peripheral>
+      <peripheral baseName="KBI0"     instance=""         version="kbi0_mke06">
+         <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForNull" />
+         <clock clockEnable="SIM->SCGC |= SIM_SCGC_KBI0_MASK;" clockDisable="SIM->SCGC &amp;= ~SIM_SCGC_KBI0_MASK;" />
+      </peripheral>
+      <peripheral baseName="KBI0_P0"  instance="">
+         <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForNull" />
+      </peripheral>
+      <peripheral baseName="KBI0_P1"  instance="">
+         <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForNull" />
+      </peripheral>
+      <peripheral baseName="KBI0_P10" instance="">
+         <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForNull" />
+      </peripheral>
+      <peripheral baseName="KBI0_P11" instance="">
+         <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForNull" />
+      </peripheral>
+      <peripheral baseName="KBI0_P12" instance="">
+         <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForNull" />
+      </peripheral>
+      <peripheral baseName="KBI0_P13" instance="">
+         <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForNull" />
+      </peripheral>
+      <peripheral baseName="KBI0_P14" instance="">
+         <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForNull" />
+      </peripheral>
+      <peripheral baseName="KBI0_P15" instance="">
+         <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForNull" />
+      </peripheral>
+      <peripheral baseName="KBI0_P16" instance="">
+         <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForNull" />
+      </peripheral>
+      <peripheral baseName="KBI0_P17" instance="">
+         <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForNull" />
+      </peripheral>
+      <peripheral baseName="KBI0_P18" instance="">
+         <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForNull" />
+      </peripheral>
+      <peripheral baseName="KBI0_P19" instance="">
+         <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForNull" />
+      </peripheral>
+      <peripheral baseName="KBI0_P2"  instance="">
+         <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForNull" />
+      </peripheral>
+      <peripheral baseName="KBI0_P20" instance="">
+         <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForNull" />
+      </peripheral>
+      <peripheral baseName="KBI0_P21" instance="">
+         <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForNull" />
+      </peripheral>
+      <peripheral baseName="KBI0_P22" instance="">
+         <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForNull" />
+      </peripheral>
+      <peripheral baseName="KBI0_P23" instance="">
+         <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForNull" />
+      </peripheral>
+      <peripheral baseName="KBI0_P24" instance="">
+         <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForNull" />
+      </peripheral>
+      <peripheral baseName="KBI0_P25" instance="">
+         <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForNull" />
+      </peripheral>
+      <peripheral baseName="KBI0_P26" instance="">
+         <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForNull" />
+      </peripheral>
+      <peripheral baseName="KBI0_P27" instance="">
+         <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForNull" />
+      </peripheral>
+      <peripheral baseName="KBI0_P28" instance="">
+         <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForNull" />
+      </peripheral>
+      <peripheral baseName="KBI0_P29" instance="">
+         <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForNull" />
+      </peripheral>
+      <peripheral baseName="KBI0_P3"  instance="">
+         <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForNull" />
+      </peripheral>
+      <peripheral baseName="KBI0_P30" instance="">
+         <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForNull" />
+      </peripheral>
+      <peripheral baseName="KBI0_P31" instance="">
+         <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForNull" />
+      </peripheral>
+      <peripheral baseName="KBI0_P4"  instance="">
+         <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForNull" />
+      </peripheral>
+      <peripheral baseName="KBI0_P5"  instance="">
+         <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForNull" />
+      </peripheral>
+      <peripheral baseName="KBI0_P6"  instance="">
+         <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForNull" />
+      </peripheral>
+      <peripheral baseName="KBI0_P7"  instance="">
+         <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForNull" />
+      </peripheral>
+      <peripheral baseName="KBI0_P8"  instance="">
+         <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForNull" />
+      </peripheral>
+      <peripheral baseName="KBI0_P9"  instance="">
+         <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForNull" />
+      </peripheral>
+      <peripheral baseName="KBI1"     instance=""         version="kbi0_mke06">
+         <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForNull" />
+         <clock clockEnable="SIM->SCGC |= SIM_SCGC_KBI1_MASK;" clockDisable="SIM->SCGC &amp;= ~SIM_SCGC_KBI1_MASK;" />
+      </peripheral>
+      <peripheral baseName="KBI1_P0"  instance="">
+         <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForNull" />
+      </peripheral>
+      <peripheral baseName="KBI1_P1"  instance="">
+         <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForNull" />
+      </peripheral>
+      <peripheral baseName="KBI1_P10" instance="">
+         <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForNull" />
+      </peripheral>
+      <peripheral baseName="KBI1_P11" instance="">
+         <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForNull" />
+      </peripheral>
+      <peripheral baseName="KBI1_P12" instance="">
+         <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForNull" />
+      </peripheral>
+      <peripheral baseName="KBI1_P13" instance="">
+         <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForNull" />
+      </peripheral>
+      <peripheral baseName="KBI1_P14" instance="">
+         <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForNull" />
+      </peripheral>
+      <peripheral baseName="KBI1_P15" instance="">
+         <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForNull" />
+      </peripheral>
+      <peripheral baseName="KBI1_P16" instance="">
+         <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForNull" />
+      </peripheral>
+      <peripheral baseName="KBI1_P17" instance="">
+         <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForNull" />
+      </peripheral>
+      <peripheral baseName="KBI1_P18" instance="">
+         <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForNull" />
+      </peripheral>
+      <peripheral baseName="KBI1_P19" instance="">
+         <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForNull" />
+      </peripheral>
+      <peripheral baseName="KBI1_P2"  instance="">
+         <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForNull" />
+      </peripheral>
+      <peripheral baseName="KBI1_P20" instance="">
+         <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForNull" />
+      </peripheral>
+      <peripheral baseName="KBI1_P21" instance="">
+         <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForNull" />
+      </peripheral>
+      <peripheral baseName="KBI1_P22" instance="">
+         <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForNull" />
+      </peripheral>
+      <peripheral baseName="KBI1_P23" instance="">
+         <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForNull" />
+      </peripheral>
+      <peripheral baseName="KBI1_P24" instance="">
+         <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForNull" />
+      </peripheral>
+      <peripheral baseName="KBI1_P25" instance="">
+         <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForNull" />
+      </peripheral>
+      <peripheral baseName="KBI1_P26" instance="">
+         <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForNull" />
+      </peripheral>
+      <peripheral baseName="KBI1_P27" instance="">
+         <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForNull" />
+      </peripheral>
+      <peripheral baseName="KBI1_P28" instance="">
+         <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForNull" />
+      </peripheral>
+      <peripheral baseName="KBI1_P29" instance="">
+         <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForNull" />
+      </peripheral>
+      <peripheral baseName="KBI1_P3"  instance="">
+         <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForNull" />
+      </peripheral>
+      <peripheral baseName="KBI1_P30" instance="">
+         <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForNull" />
+      </peripheral>
+      <peripheral baseName="KBI1_P31" instance="">
+         <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForNull" />
+      </peripheral>
+      <peripheral baseName="KBI1_P4"  instance="">
+         <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForNull" />
+      </peripheral>
+      <peripheral baseName="KBI1_P5"  instance="">
+         <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForNull" />
+      </peripheral>
+      <peripheral baseName="KBI1_P6"  instance="">
+         <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForNull" />
+      </peripheral>
+      <peripheral baseName="KBI1_P7"  instance="">
+         <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForNull" />
+      </peripheral>
+      <peripheral baseName="KBI1_P8"  instance="">
+         <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForNull" />
+      </peripheral>
+      <peripheral baseName="KBI1_P9"  instance="">
+         <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForNull" />
+      </peripheral>
+      <peripheral baseName="OSC"      instance="0"        version="osc0_mke">
+         <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForOsc" />
+      </peripheral>
+      <peripheral baseName="PIT"      instance=""         version="pit_2ch_chain_0x40037000">
+         <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForPit" />
+         <clock clockEnable="SIM->SCGC |= SIM_SCGC_PIT_MASK;" clockDisable="SIM->SCGC &amp;= ~SIM_SCGC_PIT_MASK;" />
+      </peripheral>
+      <peripheral baseName="PWT"      instance=""         version="pwt_mke">
+         <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForNull" />
+         <clock clockEnable="SIM->SCGC |= SIM_SCGC_PWT_MASK;" clockDisable="SIM->SCGC &amp;= ~SIM_SCGC_PWT_MASK;" />
+      </peripheral>
+      <peripheral baseName="PWT_IN0"  instance="">
+         <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForNull" />
+      </peripheral>
+      <peripheral baseName="PWT_IN1"  instance="">
+         <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForNull" />
+      </peripheral>
+      <peripheral baseName="RTC"      instance=""         version="rtcntr_mke">
+         <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForRtc" />
+         <clock clockEnable="SIM->SCGC |= SIM_SCGC_RTC_MASK;" clockDisable="SIM->SCGC &amp;= ~SIM_SCGC_RTC_MASK;" />
+      </peripheral>
+      <peripheral baseName="SPI"      instance="0"        version="spi0_mke_8bit">
+         <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForSpi" />
+         <clock clockEnable="SIM->SCGC |= SIM_SCGC_SPI0_MASK;" clockDisable="SIM->SCGC &amp;= ~SIM_SCGC_SPI0_MASK;" />
+      </peripheral>
+      <peripheral baseName="SPI"      instance="1"        version="spi0_mke_8bit">
+         <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForSpi" />
+         <clock clockEnable="SIM->SCGC |= SIM_SCGC_SPI1_MASK;" clockDisable="SIM->SCGC &amp;= ~SIM_SCGC_SPI1_MASK;" />
+      </peripheral>
+      <peripheral baseName="UART"     instance="0"        version="uart0_mke">
+         <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForUart" />
+         <clock clockEnable="SIM->SCGC |= SIM_SCGC_UART0_MASK;" clockDisable="SIM->SCGC &amp;= ~SIM_SCGC_UART0_MASK;" />
+      </peripheral>
+      <peripheral baseName="UART"     instance="1"        version="uart0_mke">
+         <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForUart" />
+         <clock clockEnable="SIM->SCGC |= SIM_SCGC_UART1_MASK;" clockDisable="SIM->SCGC &amp;= ~SIM_SCGC_UART1_MASK;" />
+      </peripheral>
+      <peripheral baseName="UART"     instance="2"        version="uart0_mke">
+         <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForUart" />
+         <clock clockEnable="SIM->SCGC |= SIM_SCGC_UART2_MASK;" clockDisable="SIM->SCGC &amp;= ~SIM_SCGC_UART2_MASK;" />
+      </peripheral>
+   </peripherals>
+   <pins>
+      <pin name="PTA0">
+         <mux sel="mux0"          signal="GPIOA_0" />
+         <mux sel="mux1"          signal="KBI0_P0" />
+         <mux sel="mux2"          signal="FTM0_CH0" />
+         <mux sel="mux3"          signal="I2C0_4WSCLOUT" />
+         <mux sel="mux4"          signal="ACMP0_IN0" />
+         <mux sel="mux5"          signal="ADC0_SE0" />
+         <reset sel="mux5" />
+      </pin>
+      <pin name="PTA1">
+         <mux sel="mux0"          signal="GPIOA_1" />
+         <mux sel="mux1"          signal="KBI0_P1" />
+         <mux sel="mux2"          signal="FTM0_CH1" />
+         <mux sel="mux3"          signal="I2C0_4WSDAOUT" />
+         <mux sel="mux4"          signal="ACMP0_IN1" />
+         <mux sel="mux5"          signal="ADC0_SE1" />
+         <reset sel="mux5" />
+      </pin>
+      <pin name="PTA2">
+         <mux sel="mux0"          signal="GPIOA_2" />
+         <mux sel="mux1"          signal="KBI0_P2" />
+         <mux sel="mux2"          signal="UART0_RX" />
+         <mux sel="mux3"          signal="I2C0_SDA" />
+         <reset sel="unassigned" />
+      </pin>
+      <pin name="PTA3">
+         <mux sel="mux0"          signal="GPIOA_3" />
+         <mux sel="mux1"          signal="KBI0_P3" />
+         <mux sel="mux2"          signal="UART0_TX" />
+         <mux sel="mux3"          signal="I2C0_SCL" />
+         <reset sel="unassigned" />
+      </pin>
+      <pin name="PTA4">
+         <mux sel="mux0"          signal="GPIOA_4" />
+         <mux sel="mux1"          signal="KBI0_P4" />
+         <mux sel="mux3"          signal="ACMP0_OUT" />
+         <mux sel="mux4"          signal="SWD_DIO" />
+         <reset sel="mux4" />
+      </pin>
+      <pin name="PTA5">
+         <mux sel="mux0"          signal="GPIOA_5" />
+         <mux sel="mux1"          signal="KBI0_P5" />
+         <mux sel="mux2"          signal="IRQ" />
+         <mux sel="mux3"          signal="TCLK0" />
+         <mux sel="mux4"          signal="RESET_b" />
+         <reset sel="mux4" />
+      </pin>
+      <pin name="PTA6">
+         <mux sel="mux0"          signal="GPIOA_6" />
+         <mux sel="mux1"          signal="KBI0_P6" />
+         <mux sel="mux2"          signal="FTM2_FLT1" />
+         <mux sel="mux3"          signal="ACMP1_IN0" />
+         <mux sel="mux4"          signal="ADC0_SE2" />
+         <reset sel="mux4" />
+      </pin>
+      <pin name="PTA7">
+         <mux sel="mux0"          signal="GPIOA_7" />
+         <mux sel="mux1"          signal="KBI0_P7" />
+         <mux sel="mux2"          signal="FTM2_FLT2" />
+         <mux sel="mux3"          signal="ACMP1_IN1" />
+         <mux sel="mux4"          signal="ADC0_SE3" />
+         <reset sel="mux4" />
+      </pin>
+      <pin name="PTB0">
+         <mux sel="mux0"          signal="GPIOA_8" />
+         <mux sel="mux1"          signal="KBI0_P8" />
+         <mux sel="mux2"          signal="UART0_RX" />
+         <mux sel="mux3"          signal="PWT_IN1" />
+         <mux sel="mux4"          signal="ADC0_SE4" />
+         <reset sel="mux4" />
+      </pin>
+      <pin name="PTB1">
+         <mux sel="mux0"          signal="GPIOA_9" />
+         <mux sel="mux1"          signal="KBI0_P9" />
+         <mux sel="mux2"          signal="UART0_TX" />
+         <mux sel="mux4"          signal="ADC0_SE5" />
+         <reset sel="mux4" />
+      </pin>
+      <pin name="PTB2">
+         <mux sel="mux0"          signal="GPIOA_10" />
+         <mux sel="mux1"          signal="KBI0_P10" />
+         <mux sel="mux2"          signal="SPI0_SCK" />
+         <mux sel="mux3"          signal="FTM0_CH0" />
+         <mux sel="mux4"          signal="ADC0_SE6" />
+         <reset sel="mux4" />
+      </pin>
+      <pin name="PTB3">
+         <mux sel="mux0"          signal="GPIOA_11" />
+         <mux sel="mux1"          signal="KBI0_P11" />
+         <mux sel="mux2"          signal="SPI0_MOSI" />
+         <mux sel="mux3"          signal="FTM0_CH1" />
+         <mux sel="mux4"          signal="ADC0_SE7" />
+         <reset sel="mux4" />
+      </pin>
+      <pin name="PTB4">
+         <mux sel="mux0"          signal="GPIOA_12" />
+         <mux sel="mux1"          signal="KBI0_P12" />
+         <mux sel="mux2"          signal="FTM2_CH4" />
+         <mux sel="mux3"          signal="SPI0_MISO" />
+         <mux sel="mux4"          signal="ACMP1_IN2" />
+         <mux sel="mux5"          signal="NMI_b" />
+         <reset sel="mux5" />
+      </pin>
+      <pin name="PTB5">
+         <mux sel="mux0"          signal="GPIOA_13" />
+         <mux sel="mux1"          signal="KBI0_P13" />
+         <mux sel="mux2"          signal="FTM2_CH5" />
+         <mux sel="mux3"          signal="SPI0_PCS" />
+         <mux sel="mux4"          signal="ACMP1_OUT" />
+         <reset sel="unassigned" />
+      </pin>
+      <pin name="PTB6">
+         <mux sel="mux0"          signal="GPIOA_14" />
+         <mux sel="mux1"          signal="KBI0_P14" />
+         <mux sel="mux2"          signal="I2C0_SDA" />
+         <mux sel="mux6"          signal="XTAL" />
+         <reset sel="mux6" />
+      </pin>
+      <pin name="PTB7">
+         <mux sel="mux0"          signal="GPIOA_15" />
+         <mux sel="mux1"          signal="KBI0_P15" />
+         <mux sel="mux2"          signal="I2C0_SCL" />
+         <mux sel="mux6"          signal="EXTAL" />
+         <reset sel="mux6" />
+      </pin>
+      <pin name="PTC0">
+         <mux sel="mux0"          signal="GPIOA_16" />
+         <mux sel="mux1"          signal="KBI0_P16" />
+         <mux sel="mux2"          signal="FTM2_CH0" />
+         <mux sel="mux4"          signal="ADC0_SE8" />
+         <reset sel="mux4" />
+      </pin>
+      <pin name="PTC1">
+         <mux sel="mux0"          signal="GPIOA_17" />
+         <mux sel="mux1"          signal="KBI0_P17" />
+         <mux sel="mux2"          signal="FTM2_CH1" />
+         <mux sel="mux4"          signal="ADC0_SE9" />
+         <reset sel="mux4" />
+      </pin>
+      <pin name="PTC2">
+         <mux sel="mux0"          signal="GPIOA_18" />
+         <mux sel="mux1"          signal="KBI0_P18" />
+         <mux sel="mux2"          signal="FTM2_CH2" />
+         <mux sel="mux4"          signal="ADC0_SE10" />
+         <reset sel="mux4" />
+      </pin>
+      <pin name="PTC3">
+         <mux sel="mux0"          signal="GPIOA_19" />
+         <mux sel="mux1"          signal="KBI0_P19" />
+         <mux sel="mux2"          signal="FTM2_CH3" />
+         <mux sel="mux4"          signal="ADC0_SE11" />
+         <reset sel="mux4" />
+      </pin>
+      <pin name="PTC4">
+         <mux sel="mux0"          signal="GPIOA_20" />
+         <mux sel="mux1"          signal="KBI0_P20" />
+         <mux sel="mux2"          signal="RTC_CLKOUT" />
+         <mux sel="mux3"          signal="FTM1_CH0" />
+         <mux sel="mux4"          signal="ACMP0_IN2" />
+         <mux sel="mux5"          signal="SWD_CLK" />
+         <reset sel="mux5" />
+      </pin>
+      <pin name="PTC5">
+         <mux sel="mux0"          signal="GPIOA_21" />
+         <mux sel="mux1"          signal="KBI0_P21" />
+         <mux sel="mux3"          signal="FTM1_CH1" />
+         <mux sel="mux5"          signal="RTC_CLKOUT" />
+         <reset sel="unassigned" />
+      </pin>
+      <pin name="PTC6">
+         <mux sel="mux0"          signal="GPIOA_22" />
+         <mux sel="mux1"          signal="KBI0_P22" />
+         <mux sel="mux2"          signal="UART1_RX" />
+         <mux sel="mux5"          signal="CAN0_RX" />
+         <reset sel="unassigned" />
+      </pin>
+      <pin name="PTC7">
+         <mux sel="mux0"          signal="GPIOA_23" />
+         <mux sel="mux1"          signal="KBI0_P23" />
+         <mux sel="mux2"          signal="UART1_TX" />
+         <mux sel="mux5"          signal="CAN0_TX" />
+         <reset sel="unassigned" />
+      </pin>
+      <pin name="PTD0">
+         <mux sel="mux0"          signal="GPIOA_24" />
+         <mux sel="mux1"          signal="KBI0_P24" />
+         <mux sel="mux2"          signal="FTM2_CH2" />
+         <mux sel="mux3"          signal="SPI1_SCK" />
+         <reset sel="unassigned" />
+      </pin>
+      <pin name="PTD1">
+         <mux sel="mux0"          signal="GPIOA_25" />
+         <mux sel="mux1"          signal="KBI0_P25" />
+         <mux sel="mux2"          signal="FTM2_CH3" />
+         <mux sel="mux3"          signal="SPI1_MOSI" />
+         <reset sel="unassigned" />
+      </pin>
+      <pin name="PTD2">
+         <mux sel="mux0"          signal="GPIOA_26" />
+         <mux sel="mux1"          signal="KBI0_P26" />
+         <mux sel="mux2"          signal="SPI1_MISO" />
+         <reset sel="unassigned" />
+      </pin>
+      <pin name="PTD3">
+         <mux sel="mux0"          signal="GPIOA_27" />
+         <mux sel="mux1"          signal="KBI0_P27" />
+         <mux sel="mux2"          signal="SPI1_PCS" />
+         <reset sel="unassigned" />
+      </pin>
+      <pin name="PTD4">
+         <mux sel="mux0"          signal="GPIOA_28" />
+         <mux sel="mux1"          signal="KBI0_P28" />
+         <reset sel="unassigned" />
+      </pin>
+      <pin name="PTD5">
+         <mux sel="mux0"          signal="GPIOA_29" />
+         <mux sel="mux1"          signal="KBI0_P29" />
+         <mux sel="mux2"          signal="PWT_IN0" />
+         <reset sel="unassigned" />
+      </pin>
+      <pin name="PTD6">
+         <mux sel="mux0"          signal="GPIOA_30" />
+         <mux sel="mux1"          signal="KBI0_P30" />
+         <mux sel="mux2"          signal="UART2_RX" />
+         <reset sel="unassigned" />
+      </pin>
+      <pin name="PTD7">
+         <mux sel="mux0"          signal="GPIOA_31" />
+         <mux sel="mux1"          signal="KBI0_P31" />
+         <mux sel="mux2"          signal="UART2_TX" />
+         <reset sel="unassigned" />
+      </pin>
+      <pin name="PTE0">
+         <mux sel="mux0"          signal="GPIOB_0" />
+         <mux sel="mux1"          signal="KBI1_P0" />
+         <mux sel="mux2"          signal="SPI0_SCK" />
+         <mux sel="mux3"          signal="TCLK1" />
+         <mux sel="mux4"          signal="I2C1_SDA" />
+         <reset sel="unassigned" />
+      </pin>
+      <pin name="PTE1">
+         <mux sel="mux0"          signal="GPIOB_1" />
+         <mux sel="mux1"          signal="KBI1_P1" />
+         <mux sel="mux2"          signal="SPI0_MOSI" />
+         <mux sel="mux4"          signal="I2C1_SCL" />
+         <reset sel="unassigned" />
+      </pin>
+      <pin name="PTE2">
+         <mux sel="mux0"          signal="GPIOB_2" />
+         <mux sel="mux1"          signal="KBI1_P2" />
+         <mux sel="mux2"          signal="SPI0_MISO" />
+         <mux sel="mux3"          signal="PWT_IN0" />
+         <reset sel="unassigned" />
+      </pin>
+      <pin name="PTE3">
+         <mux sel="mux0"          signal="GPIOB_3" />
+         <mux sel="mux1"          signal="KBI1_P3" />
+         <mux sel="mux2"          signal="SPI0_PCS" />
+         <reset sel="unassigned" />
+      </pin>
+      <pin name="PTE4">
+         <mux sel="mux0"          signal="GPIOB_4" />
+         <mux sel="mux1"          signal="KBI1_P4" />
+         <reset sel="unassigned" />
+      </pin>
+      <pin name="PTE5">
+         <mux sel="mux0"          signal="GPIOB_5" />
+         <mux sel="mux1"          signal="KBI1_P5" />
+         <reset sel="unassigned" />
+      </pin>
+      <pin name="PTE6">
+         <mux sel="mux0"          signal="GPIOB_6" />
+         <mux sel="mux1"          signal="KBI1_P6" />
+         <reset sel="unassigned" />
+      </pin>
+      <pin name="PTE7">
+         <mux sel="mux0"          signal="GPIOB_7" />
+         <mux sel="mux1"          signal="KBI1_P7" />
+         <mux sel="mux2"          signal="TCLK2" />
+         <mux sel="mux4"          signal="FTM1_CH1" />
+         <mux sel="mux5"          signal="CAN0_TX" />
+         <reset sel="unassigned" />
+      </pin>
+      <pin name="PTF0">
+         <mux sel="mux0"          signal="GPIOB_8" />
+         <mux sel="mux1"          signal="KBI1_P8" />
+         <mux sel="mux2"          signal="FTM2_CH0" />
+         <reset sel="unassigned" />
+      </pin>
+      <pin name="PTF1">
+         <mux sel="mux0"          signal="GPIOB_9" />
+         <mux sel="mux1"          signal="KBI1_P9" />
+         <mux sel="mux2"          signal="FTM2_CH1" />
+         <reset sel="unassigned" />
+      </pin>
+      <pin name="PTF2">
+         <mux sel="mux0"          signal="GPIOB_10" />
+         <mux sel="mux1"          signal="KBI1_P10" />
+         <mux sel="mux2"          signal="UART1_RX" />
+         <reset sel="unassigned" />
+      </pin>
+      <pin name="PTF3">
+         <mux sel="mux0"          signal="GPIOB_11" />
+         <mux sel="mux1"          signal="KBI1_P11" />
+         <mux sel="mux2"          signal="UART1_TX" />
+         <reset sel="unassigned" />
+      </pin>
+      <pin name="PTF4">
+         <mux sel="mux0"          signal="GPIOB_12" />
+         <mux sel="mux1"          signal="KBI1_P12" />
+         <mux sel="mux4"          signal="ADC0_SE12" />
+         <reset sel="mux4" />
+      </pin>
+      <pin name="PTF5">
+         <mux sel="mux0"          signal="GPIOB_13" />
+         <mux sel="mux1"          signal="KBI1_P13" />
+         <mux sel="mux4"          signal="ADC0_SE13" />
+         <reset sel="mux4" />
+      </pin>
+      <pin name="PTF6">
+         <mux sel="mux0"          signal="GPIOB_14" />
+         <mux sel="mux1"          signal="KBI1_P14" />
+         <mux sel="mux4"          signal="ADC0_SE14" />
+         <reset sel="mux4" />
+      </pin>
+      <pin name="PTF7">
+         <mux sel="mux0"          signal="GPIOB_15" />
+         <mux sel="mux1"          signal="KBI1_P15" />
+         <mux sel="mux4"          signal="ADC0_SE15" />
+         <reset sel="mux4" />
+      </pin>
+      <pin name="PTG0">
+         <mux sel="mux0"          signal="GPIOB_16" />
+         <mux sel="mux1"          signal="KBI1_P16" />
+         <reset sel="unassigned" />
+      </pin>
+      <pin name="PTG1">
+         <mux sel="mux0"          signal="GPIOB_17" />
+         <mux sel="mux1"          signal="KBI1_P17" />
+         <reset sel="unassigned" />
+      </pin>
+      <pin name="PTG2">
+         <mux sel="mux0"          signal="GPIOB_18" />
+         <mux sel="mux1"          signal="KBI1_P18" />
+         <reset sel="unassigned" />
+      </pin>
+      <pin name="PTG3">
+         <mux sel="mux0"          signal="GPIOB_19" />
+         <mux sel="mux1"          signal="KBI1_P19" />
+         <reset sel="unassigned" />
+      </pin>
+      <pin name="PTG4">
+         <mux sel="mux0"          signal="GPIOB_20" />
+         <mux sel="mux1"          signal="KBI1_P20" />
+         <mux sel="mux2"          signal="FTM2_CH2" />
+         <mux sel="mux3"          signal="SPI1_SCK" />
+         <reset sel="unassigned" />
+      </pin>
+      <pin name="PTG5">
+         <mux sel="mux0"          signal="GPIOB_21" />
+         <mux sel="mux1"          signal="KBI1_P21" />
+         <mux sel="mux2"          signal="FTM2_CH3" />
+         <mux sel="mux3"          signal="SPI1_MOSI" />
+         <reset sel="unassigned" />
+      </pin>
+      <pin name="PTG6">
+         <mux sel="mux0"          signal="GPIOB_22" />
+         <mux sel="mux1"          signal="KBI1_P22" />
+         <mux sel="mux2"          signal="FTM2_CH4" />
+         <mux sel="mux3"          signal="SPI1_MISO" />
+         <reset sel="unassigned" />
+      </pin>
+      <pin name="PTG7">
+         <mux sel="mux0"          signal="GPIOB_23" />
+         <mux sel="mux1"          signal="KBI1_P23" />
+         <mux sel="mux2"          signal="FTM2_CH5" />
+         <mux sel="mux3"          signal="SPI1_PCS" />
+         <reset sel="unassigned" />
+      </pin>
+      <pin name="PTH0">
+         <mux sel="mux0"          signal="GPIOB_24" />
+         <mux sel="mux1"          signal="KBI1_P24" />
+         <mux sel="mux2"          signal="FTM2_CH0" />
+         <reset sel="unassigned" />
+      </pin>
+      <pin name="PTH1">
+         <mux sel="mux0"          signal="GPIOB_25" />
+         <mux sel="mux1"          signal="KBI1_P25" />
+         <mux sel="mux2"          signal="FTM2_CH1" />
+         <reset sel="unassigned" />
+      </pin>
+      <pin name="PTH2">
+         <mux sel="mux0"          signal="GPIOB_26" />
+         <mux sel="mux1"          signal="KBI1_P26" />
+         <mux sel="mux2"          signal="BUSOUT" />
+         <mux sel="mux4"          signal="FTM1_CH0" />
+         <mux sel="mux5"          signal="CAN0_RX" />
+         <reset sel="unassigned" />
+      </pin>
+      <pin name="PTH3">
+         <mux sel="mux0"          signal="GPIOB_27" />
+         <mux sel="mux1"          signal="KBI1_P27" />
+         <mux sel="mux2"          signal="I2C1_SDA" />
+         <reset sel="unassigned" />
+      </pin>
+      <pin name="PTH4">
+         <mux sel="mux0"          signal="GPIOB_28" />
+         <mux sel="mux1"          signal="KBI1_P28" />
+         <mux sel="mux2"          signal="I2C1_SCL" />
+         <reset sel="unassigned" />
+      </pin>
+      <pin name="PTH5">
+         <mux sel="mux0"          signal="GPIOB_29" />
+         <mux sel="mux1"          signal="KBI1_P29" />
+         <reset sel="unassigned" />
+      </pin>
+      <pin name="PTH6">
+         <mux sel="mux0"          signal="GPIOB_30" />
+         <mux sel="mux1"          signal="KBI1_P30" />
+         <reset sel="unassigned" />
+      </pin>
+      <pin name="PTH7">
+         <mux sel="mux0"          signal="GPIOB_31" />
+         <mux sel="mux1"          signal="KBI1_P31" />
+         <mux sel="mux2"          signal="PWT_IN1" />
+         <reset sel="unassigned" />
+      </pin>
+      <pin name="PTI0">
+         <mux sel="mux0"          signal="GPIOC_0" />
+         <mux sel="mux2"          signal="IRQ" />
+         <mux sel="mux3"          signal="UART2_RX" />
+         <reset sel="unassigned" />
+      </pin>
+      <pin name="PTI1">
+         <mux sel="mux0"          signal="GPIOC_1" />
+         <mux sel="mux2"          signal="IRQ" />
+         <mux sel="mux3"          signal="UART2_TX" />
+         <reset sel="unassigned" />
+      </pin>
+      <pin name="PTI2">
+         <mux sel="mux0"          signal="GPIOC_2" />
+         <mux sel="mux1"          signal="IRQ" />
+         <reset sel="unassigned" />
+      </pin>
+      <pin name="PTI3">
+         <mux sel="mux0"          signal="GPIOC_3" />
+         <mux sel="mux1"          signal="IRQ" />
+         <reset sel="unassigned" />
+      </pin>
+      <pin name="PTI4">
+         <mux sel="mux0"          signal="GPIOC_4" />
+         <mux sel="mux2"          signal="IRQ" />
+         <reset sel="unassigned" />
+      </pin>
+      <pin name="PTI5">
+         <mux sel="mux0"          signal="GPIOC_5" />
+         <mux sel="mux1"          signal="IRQ" />
+         <reset sel="unassigned" />
+      </pin>
+      <pin name="PTI6">
+         <mux sel="mux0"          signal="GPIOC_6" />
+         <mux sel="mux1"          signal="IRQ" />
+         <reset sel="unassigned" />
+      </pin>
+   </pins>
+   <packages>
+      <package name="FRDM">
+         <placement pin="PTA0"          location="" />
+         <placement pin="PTA1"          location="" />
+         <placement pin="PTA2"          location="" />
+         <placement pin="PTA3"          location="" />
+         <placement pin="PTA4"          location="" />
+         <placement pin="PTA5"          location="" />
+         <placement pin="PTA6"          location="" />
+         <placement pin="PTA7"          location="" />
+         <placement pin="PTB0"          location="" />
+         <placement pin="PTB1"          location="" />
+         <placement pin="PTB2"          location="" />
+         <placement pin="PTB3"          location="" />
+         <placement pin="PTB4"          location="" />
+         <placement pin="PTB5"          location="" />
+         <placement pin="PTB6"          location="" />
+         <placement pin="PTB7"          location="" />
+         <placement pin="PTC0"          location="" />
+         <placement pin="PTC1"          location="" />
+         <placement pin="PTC2"          location="" />
+         <placement pin="PTC3"          location="" />
+         <placement pin="PTC4"          location="" />
+         <placement pin="PTC5"          location="" />
+         <placement pin="PTC6"          location="" />
+         <placement pin="PTC7"          location="" />
+         <placement pin="PTD0"          location="" />
+         <placement pin="PTD1"          location="" />
+         <placement pin="PTD2"          location="" />
+         <placement pin="PTD3"          location="" />
+         <placement pin="PTD4"          location="" />
+         <placement pin="PTD5"          location="" />
+         <placement pin="PTD6"          location="" />
+         <placement pin="PTD7"          location="" />
+         <placement pin="PTE0"          location="" />
+         <placement pin="PTE1"          location="" />
+         <placement pin="PTE2"          location="" />
+         <placement pin="PTE3"          location="" />
+         <placement pin="PTE4"          location="" />
+         <placement pin="PTE5"          location="" />
+         <placement pin="PTE6"          location="" />
+         <placement pin="PTE7"          location="" />
+         <placement pin="PTF0"          location="" />
+         <placement pin="PTF1"          location="" />
+         <placement pin="PTF2"          location="" />
+         <placement pin="PTF3"          location="" />
+         <placement pin="PTF4"          location="" />
+         <placement pin="PTF5"          location="" />
+         <placement pin="PTF6"          location="" />
+         <placement pin="PTF7"          location="" />
+         <placement pin="PTG0"          location="" />
+         <placement pin="PTG1"          location="" />
+         <placement pin="PTG2"          location="" />
+         <placement pin="PTG3"          location="" />
+         <placement pin="PTG4"          location="" />
+         <placement pin="PTG5"          location="LED_RED" />
+         <placement pin="PTG6"          location="LED_GREEN" />
+         <placement pin="PTG7"          location="LED_BLUE" />
+         <placement pin="PTH0"          location="" />
+         <placement pin="PTH1"          location="" />
+         <placement pin="PTH2"          location="" />
+         <placement pin="PTH3"          location="" />
+         <placement pin="PTH4"          location="" />
+         <placement pin="PTH5"          location="" />
+         <placement pin="PTH6"          location="" />
+         <placement pin="PTH7"          location="" />
+         <placement pin="PTI0"          location="" />
+         <placement pin="PTI1"          location="" />
+         <placement pin="PTI2"          location="" />
+         <placement pin="PTI3"          location="" />
+         <placement pin="PTI4"          location="" />
+         <placement pin="PTI5"          location="" />
+         <placement pin="PTI6"          location="" />
+      </package>
+      <package name="LQFP-80">
+         <placement pin="PTA0"          location="" />
+         <placement pin="PTA1"          location="" />
+         <placement pin="PTA2"          location="" />
+         <placement pin="PTA3"          location="" />
+         <placement pin="PTA4"          location="" />
+         <placement pin="PTA5"          location="" />
+         <placement pin="PTA6"          location="" />
+         <placement pin="PTA7"          location="" />
+         <placement pin="PTB0"          location="" />
+         <placement pin="PTB1"          location="" />
+         <placement pin="PTB2"          location="" />
+         <placement pin="PTB3"          location="" />
+         <placement pin="PTB4"          location="" />
+         <placement pin="PTB5"          location="" />
+         <placement pin="PTB6"          location="" />
+         <placement pin="PTB7"          location="" />
+         <placement pin="PTC0"          location="" />
+         <placement pin="PTC1"          location="" />
+         <placement pin="PTC2"          location="" />
+         <placement pin="PTC3"          location="" />
+         <placement pin="PTC4"          location="" />
+         <placement pin="PTC5"          location="" />
+         <placement pin="PTC6"          location="" />
+         <placement pin="PTC7"          location="" />
+         <placement pin="PTD0"          location="" />
+         <placement pin="PTD1"          location="" />
+         <placement pin="PTD2"          location="" />
+         <placement pin="PTD3"          location="" />
+         <placement pin="PTD4"          location="" />
+         <placement pin="PTD5"          location="" />
+         <placement pin="PTD6"          location="" />
+         <placement pin="PTD7"          location="" />
+         <placement pin="PTE0"          location="" />
+         <placement pin="PTE1"          location="" />
+         <placement pin="PTE2"          location="" />
+         <placement pin="PTE3"          location="" />
+         <placement pin="PTE4"          location="" />
+         <placement pin="PTE5"          location="" />
+         <placement pin="PTE6"          location="" />
+         <placement pin="PTE7"          location="" />
+         <placement pin="PTF0"          location="" />
+         <placement pin="PTF1"          location="" />
+         <placement pin="PTF2"          location="" />
+         <placement pin="PTF3"          location="" />
+         <placement pin="PTF4"          location="" />
+         <placement pin="PTF5"          location="" />
+         <placement pin="PTF6"          location="" />
+         <placement pin="PTF7"          location="" />
+         <placement pin="PTG0"          location="" />
+         <placement pin="PTG1"          location="" />
+         <placement pin="PTG2"          location="" />
+         <placement pin="PTG3"          location="" />
+         <placement pin="PTG4"          location="" />
+         <placement pin="PTG5"          location="" />
+         <placement pin="PTG6"          location="" />
+         <placement pin="PTG7"          location="" />
+         <placement pin="PTH0"          location="" />
+         <placement pin="PTH1"          location="" />
+         <placement pin="PTH2"          location="" />
+         <placement pin="PTH3"          location="" />
+         <placement pin="PTH4"          location="" />
+         <placement pin="PTH5"          location="" />
+         <placement pin="PTH6"          location="" />
+         <placement pin="PTH7"          location="" />
+         <placement pin="PTI0"          location="" />
+         <placement pin="PTI1"          location="" />
+         <placement pin="PTI2"          location="" />
+         <placement pin="PTI3"          location="" />
+         <placement pin="PTI4"          location="" />
+         <placement pin="PTI5"          location="" />
+         <placement pin="PTI6"          location="" />
+      </package>
+   </packages>
+</root>
