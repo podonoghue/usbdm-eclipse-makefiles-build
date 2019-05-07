@@ -363,82 +363,68 @@ Test Devices:
       </memory>
 
       <!-- 
-            Cortex M0 RAM Memory (No break at 0x20000000 boundary)
+            RAM Memory
       -->
-      <memory id="kinetis_M0_256b_768b_Ram" type="ram">
+      <memory id="kinetis256b_768b_Ram" type="ram">
          <memoryRange start="0x1FFFFF00" size="1K" name="ram" />
       </memory>
-      <memory id="kinetis_M0_512b_1536b_Ram" type="ram">
+      <memory id="kinetis512b_1536b_Ram" type="ram">
          <memoryRange start="0x1FFFFE00" size="2K" name="ram" />
       </memory>
-      <memory id="kinetis_M0_1K_3K_Ram" type="ram">
+      <memory id="kinetis1K_3K_Ram" type="ram">
          <memoryRange start="0x1FFFFC00" size="4K" name="ram" />
       </memory>
-      <memory id="kinetis_M0_2K_6K_Ram" type="ram">
+      <memory id="kinetis2K_6K_Ram" type="ram">
          <memoryRange start="0x1FFFF800" size="8K" name="ram" />
       </memory>
-      <memory id="kinetis_M0_4K_12K_Ram" type="ram">
+      <memory id="kinetis4K_12K_Ram" type="ram">
          <memoryRange start="0x1FFFF000" size="16K"  name="ram" />
       </memory>
-      <memory id="kinetis_M0_8K_24K_Ram" type="ram">
+      <memory id="kinetis8K_24K_Ram" type="ram">
          <memoryRange start="0x1FFFE000" size="32K" name="ram" />
       </memory>
-      <memory id="kinetis_M0_16K_48K_Ram" type="ram">
+      <memory id="kinetis16K_48K_Ram" type="ram">
          <memoryRange start="0x1FFFC000" size="64K" name="ram" />
       </memory>
-      <memory id="kinetis_M0_24K_72K_Ram" type="ram">
+      <memory id="kinetis24K_72K_Ram" type="ram">
          <memoryRange start="0x1FFFA000" size="96K"  name="ram" />
       </memory>
-      <memory id="kinetis_M0_32K_96K_Ram" type="ram">
+      <memory id="kinetis32K_96K_Ram" type="ram">
          <memoryRange start="0x1FFF8000" size="128K" name="ram" />
       </memory>
-
-      <!-- 
-            Cortex M4 RAM Memory (Break at 0x20000000 boundary)
-      -->
-      <memory id="kinetis_M4_4K_4K_Ram" type="ram">
-         <memoryRange start="0x1FFFF000" size="4K" name="ram_low" />
-         <memoryRange start="0x20000000" size="4K" name="ram_high" />
+      <memory id="kinetis4K_4K_Ram" type="ram">
+         <memoryRange middle="0x20000000" size="8K" name="ram" />
       </memory>
-      <memory id="kinetis_M4_8K_8K_Ram" type="ram">
-         <memoryRange start="0x1FFFE000" size="8K" name="ram_low" />
-         <memoryRange start="0x20000000" size="8K" name="ram_high" />
+      <memory id="kinetis8K_8K_Ram" type="ram">
+         <memoryRange start="0x1FFFE000" size="8K" name="ram" />
+         <memoryRange start="0x20000000" size="8K" name="ram_hi" />
       </memory>
-      <memory id="kinetis_M4_8K_16K_Ram" type="ram">
-         <memoryRange start="0x1FFFE000" size="8K"  name="ram_low" />
-         <memoryRange start="0x20000000" size="16K" name="ram_high" />
+      <memory id="kinetis8K_16K_Ram" type="ram">
+         <memoryRange start="0x1FFFE000" size="24K" name="ram" />
       </memory>
-      <memory id="kinetis_M4_16K_16K_Ram" type="ram">
-         <memoryRange start="0x1FFFC000" size="16K" name="ram_low" />
-         <memoryRange start="0x20000000" size="16K" name="ram_high" />
+      <memory id="kinetis16K_16K_Ram" type="ram">
+         <memoryRange middle="0x20000000" size="32K" name="ram" />
       </memory>
-      <memory id="kinetis_M4_16K_32K_Ram" type="ram">
-         <memoryRange start="0x1FFFC000" size="16K" name="ram_low" />
-         <memoryRange start="0x20000000" size="32K" name="ram_high" />
+      <memory id="kinetis16K_32K_Ram" type="ram">
+         <memoryRange start="0x1FFFC000" size="48K" name="ram" />
       </memory>
-      <memory id="kinetis_M4_32K_32K_Ram" type="ram">
-         <memoryRange start="0x1FFF8000" size="32K" name="ram_low" />
-         <memoryRange start="0x20000000" size="32K" name="ram_high" />
+      <memory id="kinetis32K_32K_Ram" type="ram">
+         <memoryRange middle="0x20000000" size="64K" name="ram" />
       </memory>
-      <memory id="kinetis_M4_32K_64K_Ram" type="ram">
-         <memoryRange start="0x1FFF8000" size="32K" name="ram_low" />
-         <memoryRange start="0x20000000" size="64K" name="ram_high" />
+      <memory id="kinetis32K_64K_Ram" type="ram">
+         <memoryRange start="0x1FFF8000" size="96K" name="ram" />
       </memory>
-      <memory id="kinetis_M4_64K_64K_Ram" type="ram">
-         <memoryRange start="0x1FFF0000" size="64K" name="ram_low" />
-         <memoryRange start="0x20000000" size="64K" name="ram_high" />
+      <memory id="kinetis64K_64K_Ram" type="ram">
+         <memoryRange middle="0x20000000" size="128K" name="ram" />
       </memory>
-      <memory id="kinetis_M4_64K_128K_Ram" type="ram">
-         <memoryRange start="0x1FFF0000" size="64K" name="ram_low" />
-         <memoryRange start="0x20000000" size="128K" name="ram_high" />
+      <memory id="kinetis64K_128K_Ram" type="ram">
+         <memoryRange start="0x1FFF0000" size="192K"  name="ram" />
       </memory>
-      <memory id="kinetis_M4_64K_192K_Ram" type="ram">
-         <memoryRange start="0x1FFF0000" size="64K" name="ram_low" />
-         <memoryRange start="0x20000000" size="192K" name="ram_high" />
+      <memory id="kinetis64K_192K_Ram" type="ram">
+         <memoryRange start="0x1FFF0000" size="256K"  name="ram" />
       </memory>
-      <memory id="kinetis_M4_256K_256K_Ram" type="ram">
-         <memoryRange start="0x1FFE0000" size="256K" name="ram_low" />
-         <memoryRange start="0x20000000" size="256K" name="ram_high" />
+      <memory id="kinetis256K_256K_Ram" type="ram">
+         <memoryRange middle="0x20000000" size="512K" name="ram" />
       </memory>
       
       <!-- 
@@ -1059,7 +1045,7 @@ Test Devices:
 <!-- ===================================================================================== -->
 <!-- MKE02Z2 -->
       <device name="MKE02Z16M2" family="CortexM0plus" subfamily="MKE02Z2">
-         <memoryRef ref="kinetis_M0_512b_1536b_Ram" />
+         <memoryRef ref="kinetis512b_1536b_Ram" />
          <memoryRef ref="FTMRH_EEPROM_256b_2bS" />
          <memoryRef ref="FTMRH_PFlash0_SEC_16K_512bS" />
          <memoryRef ref="kinetisIO_MKE02" />
@@ -1070,7 +1056,7 @@ Test Devices:
          <note>MKE02Z64M20SF0RM</note>
       </device>
       <device name="MKE02Z32M2" family="CortexM0plus" subfamily="MKE02Z2">
-         <memoryRef ref="kinetis_M0_1K_3K_Ram" />
+         <memoryRef ref="kinetis1K_3K_Ram" />
          <memoryRef ref="FTMRH_EEPROM_256b_2bS" />
          <memoryRef ref="FTMRH_PFlash0_SEC_32K_512bS" />
          <memoryRef ref="kinetisIO_MKE02" />
@@ -1081,7 +1067,7 @@ Test Devices:
          <note>MKE02Z64M20SF0RM</note>
       </device>
       <device name="MKE02Z64M2" family="CortexM0plus" subfamily="MKE02Z2">
-         <memoryRef ref="kinetis_M0_1K_3K_Ram" />
+         <memoryRef ref="kinetis1K_3K_Ram" />
          <memoryRef ref="FTMRH_EEPROM_256b_2bS" />
          <memoryRef ref="FTMRH_PFlash0_SEC_64K_512bS" />
          <memoryRef ref="kinetisIO_MKE02" />
@@ -1093,7 +1079,7 @@ Test Devices:
       </device>
 <!-- MKE02Z4 -->
       <device name="MKE02Z16M4" family="CortexM0plus" subfamily="MKE02Z4">
-         <memoryRef ref="kinetis_M0_512b_1536b_Ram" />
+         <memoryRef ref="kinetis512b_1536b_Ram" />
          <memoryRef ref="FTMRH_EEPROM_256b_2bS" />
          <memoryRef ref="FTMRH_PFlash0_SEC_16K_512bS" />
          <memoryRef ref="kinetisIO_MKE02" />
@@ -1104,7 +1090,7 @@ Test Devices:
          <note>MKE02P64M40SF0RM</note>
       </device>
       <device name="MKE02Z32M4" family="CortexM0plus" subfamily="MKE02Z4">
-         <memoryRef ref="kinetis_M0_1K_3K_Ram" />
+         <memoryRef ref="kinetis1K_3K_Ram" />
          <memoryRef ref="FTMRH_EEPROM_256b_2bS" />
          <memoryRef ref="FTMRH_PFlash0_SEC_32K_512bS" />
          <memoryRef ref="kinetisIO_MKE02" />
@@ -1115,7 +1101,7 @@ Test Devices:
          <note>MKE02P64M40SF0RM</note>
       </device>
       <device name="MKE02Z64M4" family="CortexM0plus" subfamily="MKE02Z4">
-         <memoryRef ref="kinetis_M0_1K_3K_Ram" />
+         <memoryRef ref="kinetis1K_3K_Ram" />
          <memoryRef ref="FTMRH_EEPROM_256b_2bS" />
          <memoryRef ref="FTMRH_PFlash0_SEC_64K_512bS" />
          <memoryRef ref="kinetisIO_MKE02" />
@@ -1127,7 +1113,7 @@ Test Devices:
       </device>
 <!-- MKE04Z4 -->
       <device name="MKE04Z8M4" family="CortexM0plus" subfamily="MKE04Z4">
-         <memoryRef ref="kinetis_M0_256b_768b_Ram" />
+         <memoryRef ref="kinetis256b_768b_Ram" />
          <memoryRef ref="FTMRE_PFlash0_SEC_8K_512bS" />
          <memoryRef ref="kinetisIO_MKE" />
          <sdidAddress value="0x40048000" />
@@ -1137,7 +1123,7 @@ Test Devices:
          <note>MKE04P24M48SF0RM</note>
       </device>
       <device name="MKE04Z64M4" family="CortexM0plus" subfamily="MKE04Z4">
-         <memoryRef ref="kinetis_M0_2K_6K_Ram" />
+         <memoryRef ref="kinetis2K_6K_Ram" />
          <memoryRef ref="FTMRE_PFlash0_SEC_64K_512bS" />
          <memoryRef ref="kinetisIO_MKE" />
          <sdidAddress value="0x40048000" />
@@ -1147,7 +1133,7 @@ Test Devices:
          <note>MKE04P80M48SF0RM</note>
       </device>
       <device name="MKE04Z128M4" family="CortexM0plus" subfamily="MKE04Z4">
-         <memoryRef ref="kinetis_M0_4K_12K_Ram" />
+         <memoryRef ref="kinetis4K_12K_Ram" />
          <memoryRef ref="FTMRE_PFlash0_SEC_128K_512bS" />
          <memoryRef ref="kinetisIO_MKE" />
          <sdidAddress value="0x40048000" />
@@ -1158,7 +1144,7 @@ Test Devices:
       </device>
 <!-- MKE06Z4 -->
       <device name="MKE06Z64M4" family="CortexM0plus" subfamily="MKE06Z4">
-         <memoryRef ref="kinetis_M0_2K_6K_Ram" />
+         <memoryRef ref="kinetis2K_6K_Ram" />
          <memoryRef ref="FTMRE_PFlash0_SEC_64K_512bS" />
          <memoryRef ref="kinetisIO_MKE" />
          <sdidAddress value="0x40048000" />
@@ -1168,7 +1154,7 @@ Test Devices:
          <note>MKE06P80M48SF0RM</note>
       </device>
       <device name="MKE06Z128M4" family="CortexM0plus" subfamily="MKE06Z4">
-         <memoryRef ref="kinetis_M0_4K_12K_Ram" />
+         <memoryRef ref="kinetis4K_12K_Ram" />
          <memoryRef ref="FTMRE_PFlash0_SEC_128K_512bS" />
          <memoryRef ref="kinetisIO_MKE" />
          <sdidAddress value="0x40048000" />
@@ -1179,7 +1165,7 @@ Test Devices:
       </device>
 <!-- MKE1xZ7 -->
       <device name="MKE14Z128M7" family="CortexM0plus" subfamily="MKE1xZ7">
-         <memoryRef ref="kinetis_M0_4K_12K_Ram" />
+         <memoryRef ref="kinetis4K_12K_Ram" />
          <memoryRef ref="kinetis2K_FlexRam" />
          <memoryRef ref="FTFE_PFlash0_SEC_128K_2KS" />
          <memoryRef ref="FTFE_DFlash0_32K_2KS" />
@@ -1192,7 +1178,7 @@ Test Devices:
          <note>KE1xZP100M72SF0RM</note>
       </device>
       <device name="MKE14Z256M7" family="CortexM0plus" subfamily="MKE1xZ7">
-         <memoryRef ref="kinetis_M0_8K_24K_Ram" />
+         <memoryRef ref="kinetis8K_24K_Ram" />
          <memoryRef ref="kinetis2K_FlexRam" />
          <memoryRef ref="FTFE_PFlash0_SEC_256K_2KS" />
          <memoryRef ref="FTFE_DFlash0_32K_2KS" />
@@ -1214,7 +1200,7 @@ Test Devices:
      
 <!-- MKE1xF16 -->
       <device name="MKE14F256M16" family="CortexM4F" subfamily="MKE1xF16">
-         <memoryRef ref="kinetis_M4_16K_16K_Ram" />
+         <memoryRef ref="kinetis16K_16K_Ram" />
          <memoryRef ref="kinetis4K_FlexRam" />
          <memoryRef ref="FTFE_PFlash0_SEC_256K_4KS" />
          <memoryRef ref="FTFE_DFlash0_64K_2KS" />
@@ -1227,7 +1213,7 @@ Test Devices:
          <note>KE1xFP100M168SF0RM</note>
       </device>
       <device name="MKE14F512M16" family="CortexM4F" subfamily="MKE1xF16">
-         <memoryRef ref="kinetis_M4_32K_32K_Ram" />
+         <memoryRef ref="kinetis32K_32K_Ram" />
          <memoryRef ref="kinetis4K_FlexRam" />
          <memoryRef ref="FTFE_PFlash0_SEC_256K_4KS" />
          <memoryRef ref="FTFE_PFlash1_256K_4KS" />
@@ -1259,7 +1245,7 @@ Test Devices:
 <!-- ===================================================================================== -->
 <!-- MKW41Z4 -->
       <device name="MKW21Z512M4" family="CortexM0plus" subfamily="MKW41Z4">
-         <memoryRef ref="kinetis_M0_32K_96K_Ram" />
+         <memoryRef ref="kinetis32K_96K_Ram" />
          <memoryRef ref="FTFA_PFlash0_SEC_256K_2KS" />
          <memoryRef ref="FTFA_PFlash1_256K_2KS" />
          <memoryRef ref="kinetisIO_MKL" />
@@ -1269,7 +1255,7 @@ Test Devices:
          <registerDescriptionRef ref="CortexM0-register-description" />
       </device>
       <device name="MKW21Z256M4" family="CortexM0plus" subfamily="MKW41Z4">
-         <memoryRef ref="kinetis_M0_16K_48K_Ram" />
+         <memoryRef ref="kinetis16K_48K_Ram" />
          <memoryRef ref="FTFA_PFlash0_SEC_256K_2KS" />
          <memoryRef ref="kinetisIO_MKL" />
          <sdid value="0x21570000" mask="0xFFFF0000"/>
@@ -1279,7 +1265,7 @@ Test Devices:
       </device>
 
       <device name="MKW31Z512M4" family="CortexM0plus" subfamily="MKW41Z4">
-         <memoryRef ref="kinetis_M0_32K_96K_Ram" />
+         <memoryRef ref="kinetis32K_96K_Ram" />
          <memoryRef ref="FTFA_PFlash0_SEC_256K_2KS" />
          <memoryRef ref="FTFA_PFlash1_256K_2KS" />
          <memoryRef ref="kinetisIO_MKL" />
@@ -1289,7 +1275,7 @@ Test Devices:
          <registerDescriptionRef ref="CortexM0-register-description" />
       </device>
       <device name="MKW31Z256M4" family="CortexM0plus" subfamily="MKW41Z4">
-         <memoryRef ref="kinetis_M0_16K_48K_Ram" />
+         <memoryRef ref="kinetis16K_48K_Ram" />
          <memoryRef ref="FTFA_PFlash0_SEC_256K_2KS" />
          <memoryRef ref="kinetisIO_MKL" />
          <sdid value="0x31570000" mask="0xFFFF0000"/>
@@ -1299,7 +1285,7 @@ Test Devices:
       </device>
       
       <device name="MKW41Z512M4" family="CortexM0plus" subfamily="MKW41Z4">
-         <memoryRef ref="kinetis_M0_32K_96K_Ram" />
+         <memoryRef ref="kinetis32K_96K_Ram" />
          <memoryRef ref="FTFA_PFlash0_SEC_256K_2KS" />
          <memoryRef ref="FTFA_PFlash1_256K_2KS" />
          <memoryRef ref="kinetisIO_MKL" />
@@ -1309,7 +1295,7 @@ Test Devices:
          <registerDescriptionRef ref="CortexM0-register-description" />
       </device>
       <device name="MKW41Z256M4" family="CortexM0plus" subfamily="MKW41Z4">
-         <memoryRef ref="kinetis_M0_16K_48K_Ram" />
+         <memoryRef ref="kinetis16K_48K_Ram" />
          <memoryRef ref="FTFA_PFlash0_SEC_256K_2KS" />
          <memoryRef ref="kinetisIO_MKL" />
          <sdid value="0x41570000" mask="0xFFFF0000"/>
@@ -1321,7 +1307,7 @@ Test Devices:
 <!-- ===================================================================================== -->
 <!-- MKL02Z4 -->
       <device name="MKL02Z8M4"  family="CortexM0plus" subfamily="MKL02Z4">
-         <memoryRef ref="kinetis_M0_256b_768b_Ram" />
+         <memoryRef ref="kinetis256b_768b_Ram" />
          <memoryRef ref="FTFA_PFlash0_SEC_8K_1KS" />
          <memoryRef ref="kinetisIO_MKL" />
          <sdid value="0x02110602" mask="0xFFFF0000"/>
@@ -1330,7 +1316,7 @@ Test Devices:
          <registerDescriptionRef ref="CortexM0-register-description" />
       </device>
       <device name="MKL02Z16M4" family="CortexM0plus" subfamily="MKL02Z4">
-         <memoryRef ref="kinetis_M0_512b_1536b_Ram" />
+         <memoryRef ref="kinetis512b_1536b_Ram" />
          <memoryRef ref="FTFA_PFlash0_SEC_16K_1KS" />
          <memoryRef ref="kinetisIO_MKL" />
          <sdid value="0x02120602" mask="0xFFFF0000"/>
@@ -1339,7 +1325,7 @@ Test Devices:
          <registerDescriptionRef ref="CortexM0-register-description" />
       </device>
       <device name="MKL02Z32M4" family="CortexM0plus" subfamily="MKL02Z4">
-         <memoryRef ref="kinetis_M0_1K_3K_Ram" />
+         <memoryRef ref="kinetis1K_3K_Ram" />
          <memoryRef ref="FTFA_PFlash0_SEC_32K_1KS" />
          <memoryRef ref="kinetisIO_MKL" />
          <sdid value="0x02130602" mask="0xFFFF0000"/>
@@ -1349,7 +1335,7 @@ Test Devices:
       </device>
 <!-- MKL03Z4 -->
       <device name="MKL03Z8M4"  family="CortexM0plus" subfamily="MKL03Z4">
-         <memoryRef ref="kinetis_M0_512b_1536b_Ram" />
+         <memoryRef ref="kinetis512b_1536b_Ram" />
          <memoryRef ref="FTFA_PFlash0_SEC_8K_1KS" />
          <memoryRef ref="kinetisIO_MKL" />
          <memoryRef ref="kinetisBootROM_16K" />
@@ -1359,7 +1345,7 @@ Test Devices:
          <registerDescriptionRef ref="CortexM0-register-description" />
       </device>
       <device name="MKL03Z16M4" family="CortexM0plus" subfamily="MKL03Z4">
-         <memoryRef ref="kinetis_M0_512b_1536b_Ram" />
+         <memoryRef ref="kinetis512b_1536b_Ram" />
          <memoryRef ref="FTFA_PFlash0_SEC_16K_1KS" />
          <memoryRef ref="kinetisIO_MKL" />
          <memoryRef ref="kinetisBootROM_16K" />
@@ -1369,7 +1355,7 @@ Test Devices:
          <registerDescriptionRef ref="CortexM0-register-description" />
       </device>
       <device name="MKL03Z32M4" family="CortexM0plus" subfamily="MKL03Z4">
-         <memoryRef ref="kinetis_M0_512b_1536b_Ram" />
+         <memoryRef ref="kinetis512b_1536b_Ram" />
          <memoryRef ref="FTFA_PFlash0_SEC_32K_1KS" />
          <memoryRef ref="kinetisIO_MKL" />
          <memoryRef ref="kinetisBootROM_16K" />
@@ -1380,7 +1366,7 @@ Test Devices:
       </device>
 <!-- MKL04Z4 -->
       <device name="MKL04Z8M4"  family="CortexM0plus" subfamily="MKL04Z4">
-         <memoryRef ref="kinetis_M0_256b_768b_Ram" />
+         <memoryRef ref="kinetis256b_768b_Ram" />
          <memoryRef ref="FTFA_PFlash0_SEC_8K_1KS" />
          <memoryRef ref="kinetisIO_MKL" />
          <sdid value="0x04110480" mask="0xFFFF0000"/>
@@ -1389,7 +1375,7 @@ Test Devices:
          <registerDescriptionRef ref="CortexM0-register-description" />
       </device>
       <device name="MKL04Z16M4" family="CortexM0plus" subfamily="MKL04Z4">
-         <memoryRef ref="kinetis_M0_512b_1536b_Ram" />
+         <memoryRef ref="kinetis512b_1536b_Ram" />
          <memoryRef ref="FTFA_PFlash0_SEC_16K_1KS" />
          <memoryRef ref="kinetisIO_MKL" />
          <sdid value="0x04120480" mask="0xFFFF0000"/>
@@ -1398,7 +1384,7 @@ Test Devices:
          <registerDescriptionRef ref="CortexM0-register-description" />
       </device>
       <device name="MKL04Z32M4" family="CortexM0plus" subfamily="MKL04Z4">
-         <memoryRef ref="kinetis_M0_1K_3K_Ram" />
+         <memoryRef ref="kinetis1K_3K_Ram" />
          <memoryRef ref="FTFA_PFlash0_SEC_32K_1KS" />
          <memoryRef ref="kinetisIO_MKL" />
          <sdid value="0x04130480" mask="0xFFFF0000"/>
@@ -1408,7 +1394,7 @@ Test Devices:
       </device>
 <!-- MKL05Z4 -->
       <device name="MKL05Z8M4"  family="CortexM0plus" subfamily="MKL05Z4">
-         <memoryRef ref="kinetis_M0_256b_768b_Ram" />
+         <memoryRef ref="kinetis256b_768b_Ram" />
          <memoryRef ref="FTFA_PFlash0_SEC_8K_1KS" />
          <memoryRef ref="kinetisIO_MKL" />
          <sdid value="0x05110480" mask="0xFFFF0000"/>
@@ -1417,7 +1403,7 @@ Test Devices:
          <registerDescriptionRef ref="CortexM0-register-description" />
       </device>
       <device name="MKL05Z16M4" family="CortexM0plus" subfamily="MKL05Z4">
-         <memoryRef ref="kinetis_M0_512b_1536b_Ram" />
+         <memoryRef ref="kinetis512b_1536b_Ram" />
          <memoryRef ref="FTFA_PFlash0_SEC_16K_1KS" />
          <memoryRef ref="kinetisIO_MKL" />
          <sdid value="0x05120480" mask="0xFFFF0000"/>
@@ -1426,7 +1412,7 @@ Test Devices:
          <registerDescriptionRef ref="CortexM0-register-description" />
       </device>
       <device name="MKL05Z32M4" family="CortexM0plus" subfamily="MKL05Z4">
-         <memoryRef ref="kinetis_M0_1K_3K_Ram" />
+         <memoryRef ref="kinetis1K_3K_Ram" />
          <memoryRef ref="FTFA_PFlash0_SEC_32K_1KS" />
          <memoryRef ref="kinetisIO_MKL" />
          <sdid value="0x05130480" mask="0xFFFF0000"/>
@@ -1436,7 +1422,7 @@ Test Devices:
       </device>
 <!-- MKL14Z4 -->
       <device name="MKL14Z32M4" family="CortexM0plus" subfamily="MKL14Z4">
-         <memoryRef ref="kinetis_M0_1K_3K_Ram" />
+         <memoryRef ref="kinetis1K_3K_Ram" />
          <memoryRef ref="FTFA_PFlash0_SEC_32K_1KS" />
          <memoryRef ref="kinetisIO_MKL" />
          <sdid value="0x14130480" mask="0xFFFF0000"/>
@@ -1445,7 +1431,7 @@ Test Devices:
          <registerDescriptionRef ref="CortexM0-register-description" />
       </device>
       <device name="MKL14Z64M4" family="CortexM0plus" subfamily="MKL14Z4">
-         <memoryRef ref="kinetis_M0_2K_6K_Ram" />
+         <memoryRef ref="kinetis2K_6K_Ram" />
          <memoryRef ref="FTFA_PFlash0_SEC_64K_1KS" />
          <memoryRef ref="kinetisIO_MKL" />
          <sdid value="0x14140480" mask="0xFFFF0000"/>
@@ -1455,7 +1441,7 @@ Test Devices:
       </device>
 <!-- MKL15Z4 -->
       <device name="MKL15Z32M4"  family="CortexM0plus" subfamily="MKL15Z4">
-         <memoryRef ref="kinetis_M0_1K_3K_Ram" />
+         <memoryRef ref="kinetis1K_3K_Ram" />
          <memoryRef ref="FTFA_PFlash0_SEC_32K_1KS" />
          <memoryRef ref="kinetisIO_MKL" />
          <sdid value="0x15130480" mask="0xFFFF0000"/>
@@ -1464,7 +1450,7 @@ Test Devices:
          <registerDescriptionRef ref="CortexM0-register-description" />
       </device>
       <device name="MKL15Z64M4"  family="CortexM0plus" subfamily="MKL15Z4">
-         <memoryRef ref="kinetis_M0_2K_6K_Ram" />
+         <memoryRef ref="kinetis2K_6K_Ram" />
          <memoryRef ref="FTFA_PFlash0_SEC_64K_1KS" />
          <memoryRef ref="kinetisIO_MKL" />
          <sdid value="0x15140480" mask="0xFFFF0000"/>
@@ -1473,7 +1459,7 @@ Test Devices:
          <registerDescriptionRef ref="CortexM0-register-description" />
       </device>
       <device name="MKL15Z128M4" family="CortexM0plus" subfamily="MKL15Z4">
-         <memoryRef ref="kinetis_M0_4K_12K_Ram" />
+         <memoryRef ref="kinetis4K_12K_Ram" />
          <memoryRef ref="FTFA_PFlash0_SEC_128K_1KS" />
          <memoryRef ref="kinetisIO_MKL" />
          <sdid value="0x15150480" mask="0xFFFF0000"/>
@@ -1483,7 +1469,7 @@ Test Devices:
       </device>
 <!-- MKL16Z4 -->
       <device name="MKL16Z32M4"  family="CortexM0plus" subfamily="MKL16Z4">
-         <memoryRef ref="kinetis_M0_1K_3K_Ram" />
+         <memoryRef ref="kinetis1K_3K_Ram" />
          <memoryRef ref="FTFA_PFlash0_SEC_32K_1KS" />
          <memoryRef ref="kinetisIO_MKL" />
          <sdid value="0x16130000" mask="0xFFFF0000"/>
@@ -1492,7 +1478,7 @@ Test Devices:
          <registerDescriptionRef ref="CortexM0-register-description" />
       </device>
       <device name="MKL16Z64M4"  family="CortexM0plus" subfamily="MKL16Z4">
-         <memoryRef ref="kinetis_M0_2K_6K_Ram" />
+         <memoryRef ref="kinetis2K_6K_Ram" />
          <memoryRef ref="FTFA_PFlash0_SEC_64K_1KS" />
          <memoryRef ref="kinetisIO_MKL" />
          <sdid value="0x16140000" mask="0xFFFF0000"/>
@@ -1501,7 +1487,7 @@ Test Devices:
          <registerDescriptionRef ref="CortexM0-register-description" />
       </device>
       <device name="MKL16Z128M4" family="CortexM0plus" subfamily="MKL16Z4">
-         <memoryRef ref="kinetis_M0_4K_12K_Ram" />
+         <memoryRef ref="kinetis4K_12K_Ram" />
          <memoryRef ref="FTFA_PFlash0_SEC_128K_1KS" />
          <memoryRef ref="kinetisIO_MKL" />
          <sdid value="0x16150000" mask="0xFFFF0000"/>
@@ -1510,7 +1496,7 @@ Test Devices:
          <registerDescriptionRef ref="CortexM0-register-description" />
       </device>
       <device name="MKL16Z256M4" family="CortexM0plus" subfamily="MKL16Z4">
-         <memoryRef ref="kinetis_M0_8K_24K_Ram" />
+         <memoryRef ref="kinetis8K_24K_Ram" />
          <memoryRef ref="FTFA_PFlash0_SEC_256K_1KS" />
          <memoryRef ref="kinetisIO_MKL" />
          <sdid value="0x16160480" mask="0xFFFF0000"/>
@@ -1521,7 +1507,7 @@ Test Devices:
       
 <!-- MKL17Z4 -->
       <device name="MKL17Z32M4"  family="CortexM0plus" subfamily="MKL17Z644">
-         <memoryRef ref="kinetis_M0_2K_6K_Ram" />
+         <memoryRef ref="kinetis2K_6K_Ram" />
          <memoryRef ref="FTFA_PFlash0_SEC_32K_1KS" />
          <memoryRef ref="kinetisIO_MKL" />
          <memoryRef ref="kinetisBootROM_16K" />
@@ -1532,7 +1518,7 @@ Test Devices:
          <note>KL17P64M48SF2RM</note>
       </device>
       <device name="MKL17Z64M4"  family="CortexM0plus" subfamily="MKL17Z644">
-         <memoryRef ref="kinetis_M0_4K_12K_Ram" />
+         <memoryRef ref="kinetis4K_12K_Ram" />
          <memoryRef ref="FTFA_PFlash0_SEC_64K_1KS" />
          <memoryRef ref="kinetisIO_MKL" />
          <sdid value="0x17151C84" mask="0xFFFF0FF0"/>
@@ -1543,7 +1529,7 @@ Test Devices:
       </device>
 <!-- MKL17Z256M4 -->
       <device name="MKL17Z128M4" family="CortexM0plus" subfamily="MKL17Z4">
-         <memoryRef ref="kinetis_M0_8K_24K_Ram" />
+         <memoryRef ref="kinetis8K_24K_Ram" />
          <memoryRef ref="FTFA_PFlash0_SEC_64K_1KS" />
          <memoryRef ref="FTFA_PFlash1_64K_1KS" />
          <memoryRef ref="kinetisIO_MKL" />
@@ -1555,7 +1541,7 @@ Test Devices:
          <note>KL17P64M48SF6RM</note>
       </device>
       <device name="MKL17Z256M4" family="CortexM0plus" subfamily="MKL17Z4">
-         <memoryRef ref="kinetis_M0_8K_24K_Ram" />
+         <memoryRef ref="kinetis8K_24K_Ram" />
          <memoryRef ref="FTFA_PFlash0_SEC_128K_1KS" />
          <memoryRef ref="FTFA_PFlash1_128K_1KS" />
          <memoryRef ref="kinetisIO_MKL" />
@@ -1569,7 +1555,7 @@ Test Devices:
       
 <!-- MKL24Z4 -->
       <device name="MKL24Z32M4" family="CortexM0plus" subfamily="MKL24Z4">
-         <memoryRef ref="kinetis_M0_1K_3K_Ram" />
+         <memoryRef ref="kinetis1K_3K_Ram" />
          <memoryRef ref="FTFA_PFlash0_SEC_32K_1KS" />
          <memoryRef ref="kinetisIO_MKL" />
          <sdid value="0x24130480" mask="0xFFFF0000"/>
@@ -1578,7 +1564,7 @@ Test Devices:
          <registerDescriptionRef ref="CortexM0-register-description" />
       </device>
       <device name="MKL24Z64M4" family="CortexM0plus" subfamily="MKL24Z4">
-         <memoryRef ref="kinetis_M0_2K_6K_Ram" />
+         <memoryRef ref="kinetis2K_6K_Ram" />
          <memoryRef ref="FTFA_PFlash0_SEC_64K_1KS" />
          <memoryRef ref="kinetisIO_MKL" />
          <sdid value="0x24140480" mask="0xFFFF0000"/>
@@ -1588,7 +1574,7 @@ Test Devices:
       </device>
 <!-- MKL25Z4 -->
       <device name="MKL25Z32M4"  family="CortexM0plus" subfamily="MKL25Z4">
-         <memoryRef ref="kinetis_M0_1K_3K_Ram" />
+         <memoryRef ref="kinetis1K_3K_Ram" />
          <memoryRef ref="FTFA_PFlash0_SEC_32K_1KS" />
          <memoryRef ref="kinetisIO_MKL" />
          <sdid value="0x25100480" mask="0xFFF00F80" />
@@ -1597,7 +1583,7 @@ Test Devices:
          <registerDescriptionRef ref="CortexM0-register-description" />
       </device>
       <device name="MKL25Z64M4"  family="CortexM0plus" subfamily="MKL25Z4">
-         <memoryRef ref="kinetis_M0_2K_6K_Ram" />
+         <memoryRef ref="kinetis2K_6K_Ram" />
          <memoryRef ref="FTFA_PFlash0_SEC_64K_1KS" />
          <memoryRef ref="kinetisIO_MKL" />
          <sdid value="0x25100480" mask="0xFFF00F80" />
@@ -1606,7 +1592,7 @@ Test Devices:
          <registerDescriptionRef ref="CortexM0-register-description" />
       </device>
       <device name="MKL25Z128M4" family="CortexM0plus" subfamily="MKL25Z4">
-         <memoryRef ref="kinetis_M0_4K_12K_Ram" />
+         <memoryRef ref="kinetis4K_12K_Ram" />
          <memoryRef ref="FTFA_PFlash0_SEC_128K_1KS" />
          <memoryRef ref="kinetisIO_MKL" />
          <sdid value="0x25100480" mask="0xFFF00F80" />
@@ -1616,7 +1602,7 @@ Test Devices:
       </device>
 <!-- MKL26Z4 -->
       <device name="MKL26Z32M4"  family="CortexM0plus" subfamily="MKL26Z4">
-         <memoryRef ref="kinetis_M0_1K_3K_Ram" />
+         <memoryRef ref="kinetis1K_3K_Ram" />
          <memoryRef ref="FTFA_PFlash0_SEC_32K_1KS" />
          <memoryRef ref="kinetisIO_MKL" />
          <sdid value="0x26130480" mask="0xFFFF0000"/>
@@ -1625,7 +1611,7 @@ Test Devices:
          <registerDescriptionRef ref="CortexM0-register-description" />
       </device>
       <device name="MKL26Z64M4"  family="CortexM0plus" subfamily="MKL26Z4">
-         <memoryRef ref="kinetis_M0_2K_6K_Ram" />
+         <memoryRef ref="kinetis2K_6K_Ram" />
          <memoryRef ref="FTFA_PFlash0_SEC_64K_1KS" />
          <memoryRef ref="kinetisIO_MKL" />
          <sdid value="0x26140480" mask="0xFFFF0000"/>
@@ -1634,7 +1620,7 @@ Test Devices:
          <registerDescriptionRef ref="CortexM0-register-description" />
       </device>
       <device name="MKL26Z128M4" family="CortexM0plus" subfamily="MKL26Z4">
-         <memoryRef ref="kinetis_M0_4K_12K_Ram" />
+         <memoryRef ref="kinetis4K_12K_Ram" />
          <memoryRef ref="FTFA_PFlash0_SEC_128K_1KS" />
          <memoryRef ref="kinetisIO_MKL" />
          <sdid value="0x26150480" mask="0xFFFF0000"/>
@@ -1643,7 +1629,7 @@ Test Devices:
          <registerDescriptionRef ref="CortexM0-register-description" />
       </device>
       <device name="MKL26Z256M4" family="CortexM0plus" subfamily="MKL26Z4">
-         <memoryRef ref="kinetis_M0_8K_24K_Ram" />
+         <memoryRef ref="kinetis8K_24K_Ram" />
          <memoryRef ref="FTFA_PFlash0_SEC_256K_1KS" />
          <memoryRef ref="kinetisIO_MKL" />
          <sdid value="0x26160480" mask="0xFFFF0000"/>
@@ -1654,7 +1640,7 @@ Test Devices:
       
 <!-- MKL27Z4 -->
       <device name="MKL27Z32M4"  family="CortexM0plus" subfamily="MKL27Z644">
-         <memoryRef ref="kinetis_M0_2K_6K_Ram" />
+         <memoryRef ref="kinetis2K_6K_Ram" />
          <memoryRef ref="FTFA_PFlash0_SEC_32K_1KS" />
          <memoryRef ref="kinetisIO_MKL" />
          <memoryRef ref="kinetisBootROM_16K" />
@@ -1665,7 +1651,7 @@ Test Devices:
          <note>KL27P64M48SF2RM</note>
       </device>
       <device name="MKL27Z64M4"  family="CortexM0plus" subfamily="MKL27Z644">
-         <memoryRef ref="kinetis_M0_4K_12K_Ram" />
+         <memoryRef ref="kinetis4K_12K_Ram" />
          <memoryRef ref="FTFA_PFlash0_SEC_64K_1KS" />
          <memoryRef ref="kinetisIO_MKL" />
          <memoryRef ref="kinetisBootROM_16K" />
@@ -1678,7 +1664,7 @@ Test Devices:
       </device>
 <!-- MKL27Z256M4 -->
       <device name="MKL27Z128M4" family="CortexM0plus" subfamily="MKL27Z4">
-         <memoryRef ref="kinetis_M0_8K_24K_Ram" />
+         <memoryRef ref="kinetis8K_24K_Ram" />
          <memoryRef ref="FTFA_PFlash0_SEC_64K_1KS" />
          <memoryRef ref="FTFA_PFlash1_64K_1KS" />
          <memoryRef ref="kinetisIO_MKL" />
@@ -1690,7 +1676,7 @@ Test Devices:
          <note>KL27P64M48SF6RM</note>
       </device>
       <device name="MKL27Z256M4" family="CortexM0plus" subfamily="MKL27Z4">
-         <memoryRef ref="kinetis_M0_8K_24K_Ram" />
+         <memoryRef ref="kinetis8K_24K_Ram" />
          <memoryRef ref="FTFA_PFlash0_SEC_128K_1KS" />
          <memoryRef ref="FTFA_PFlash1_128K_1KS" />
          <memoryRef ref="kinetisIO_MKL" />
@@ -1704,7 +1690,7 @@ Test Devices:
       
 <!-- MKL34Z4 -->
       <device name="MKL34Z64M4"  family="CortexM0plus" subfamily="MKL34Z4">
-         <memoryRef ref="kinetis_M0_2K_6K_Ram" />
+         <memoryRef ref="kinetis2K_6K_Ram" />
          <memoryRef ref="FTFA_PFlash0_SEC_64K_1KS" />
          <memoryRef ref="kinetisIO_MKL" />
          <sdid value="0x34140480" mask="0xFFFF0000"/>
@@ -1715,7 +1701,7 @@ Test Devices:
       
 <!-- MKL36Z4 -->
       <device name="MKL36Z64M4"  family="CortexM0plus" subfamily="MKL36Z4">
-         <memoryRef ref="kinetis_M0_2K_6K_Ram" />
+         <memoryRef ref="kinetis2K_6K_Ram" />
          <memoryRef ref="FTFA_PFlash0_SEC_64K_1KS" />
          <memoryRef ref="kinetisIO_MKL" />
          <sdid value="0x36140480" mask="0xFFFF0000"/>
@@ -1724,7 +1710,7 @@ Test Devices:
          <registerDescriptionRef ref="CortexM0-register-description" />
       </device>
       <device name="MKL36Z128M4" family="CortexM0plus" subfamily="MKL36Z4">
-         <memoryRef ref="kinetis_M0_4K_12K_Ram" />
+         <memoryRef ref="kinetis4K_12K_Ram" />
          <memoryRef ref="FTFA_PFlash0_SEC_128K_1KS" />
          <memoryRef ref="kinetisIO_MKL" />
          <sdid value="0x36150480" mask="0xFFFF0000"/>
@@ -1733,7 +1719,7 @@ Test Devices:
          <registerDescriptionRef ref="CortexM0-register-description" />
       </device>
       <device name="MKL36Z256M4" family="CortexM0plus" subfamily="MKL36Z4">
-         <memoryRef ref="kinetis_M0_8K_24K_Ram" />
+         <memoryRef ref="kinetis8K_24K_Ram" />
          <memoryRef ref="FTFA_PFlash0_SEC_256K_1KS" />
          <memoryRef ref="kinetisIO_MKL" />
          <sdid value="0x36160480" mask="0xFFFF0000"/>
@@ -1743,7 +1729,7 @@ Test Devices:
       </device>
 <!-- MKL43Z4 -->
       <device name="MKL43Z128M4" family="CortexM0plus" subfamily="MKL43Z4">
-         <memoryRef ref="kinetis_M0_4K_12K_Ram" />
+         <memoryRef ref="kinetis4K_12K_Ram" />
          <memoryRef ref="FTFA_PFlash0_SEC_128K_1KS" />
          <memoryRef ref="kinetisIO_MKL" />
          <memoryRef ref="kinetisBootROM_16K" />
@@ -1753,7 +1739,7 @@ Test Devices:
          <registerDescriptionRef ref="CortexM0-register-description" />
       </device>
       <device name="MKL43Z256M4" family="CortexM0plus" subfamily="MKL43Z4">
-         <memoryRef ref="kinetis_M0_8K_24K_Ram" />
+         <memoryRef ref="kinetis8K_24K_Ram" />
          <memoryRef ref="FTFA_PFlash0_SEC_256K_1KS" />
          <memoryRef ref="kinetisIO_MKL" />
          <memoryRef ref="kinetisBootROM_16K" />
@@ -1764,7 +1750,7 @@ Test Devices:
       </device>
 <!-- MKL46Z4 -->
       <device name="MKL46Z128M4" family="CortexM0plus" subfamily="MKL46Z4">
-         <memoryRef ref="kinetis_M0_4K_12K_Ram" />
+         <memoryRef ref="kinetis4K_12K_Ram" />
          <memoryRef ref="FTFA_PFlash0_SEC_128K_1KS" />
          <memoryRef ref="kinetisIO_MKL" />
          <sdid value="0x46150588" mask="0xFFFF0000"/>
@@ -1773,7 +1759,7 @@ Test Devices:
          <registerDescriptionRef ref="CortexM0-register-description" />
       </device>
       <device name="MKL46Z256M4" family="CortexM0plus" subfamily="MKL46Z4">
-         <memoryRef ref="kinetis_M0_8K_24K_Ram" />
+         <memoryRef ref="kinetis8K_24K_Ram" />
          <memoryRef ref="FTFA_PFlash0_SEC_256K_1KS" />
          <memoryRef ref="kinetisIO_MKL" />
          <sdid value="0x46160588" mask="0xFFFF0000"/>
@@ -1784,7 +1770,7 @@ Test Devices:
 
 <!-- MKL82Z128M7 -->
       <device name="MKL82Z128M7" family="CortexM0plus" subfamily="MKL82Z7">
-         <memoryRef ref="kinetis_M0_24K_72K_Ram" />
+         <memoryRef ref="kinetis24K_72K_Ram" />
          <memoryRef ref="FTFA_PFlash0_SEC_128K_2KS" />
          <memoryRef ref="kinetisIO_MKL" />
          <memoryRef ref="kinetisBootROM_32K" />
@@ -1798,7 +1784,7 @@ Test Devices:
 <!-- ===================================================================================== -->
 <!-- MKM14Z5 -->
       <device name="MKM14Z64M5" family="CortexM0plus" subfamily="MKM33Z5">
-         <memoryRef ref="kinetis_M0_4K_12K_Ram" />
+         <memoryRef ref="kinetis4K_12K_Ram" />
          <memoryRef ref="FTFA_PFlash0_SEC_64K_1KS" />
          <memoryRef ref="kinetisIO_MKL" />
          <sdidAddress value="0x4003F024" />
@@ -1809,7 +1795,7 @@ Test Devices:
          <note>No LCD</note>
       </device>
       <device name="MKM14Z128M5" family="CortexM0plus" subfamily="MKM33Z5">
-         <memoryRef ref="kinetis_M0_4K_12K_Ram" />
+         <memoryRef ref="kinetis4K_12K_Ram" />
          <memoryRef ref="FTFA_PFlash0_SEC_128K_1KS" />
          <memoryRef ref="kinetisIO_MKL" />
          <sdidAddress value="0x4003F024" />
@@ -1821,7 +1807,7 @@ Test Devices:
       </device>
 <!-- MKM33Z5 -->
       <device name="MKM33Z64M5" family="CortexM0plus" subfamily="MKM33Z5">
-         <memoryRef ref="kinetis_M0_4K_12K_Ram" />
+         <memoryRef ref="kinetis4K_12K_Ram" />
          <memoryRef ref="FTFA_PFlash0_SEC_64K_1KS" />
          <memoryRef ref="kinetisIO_MKL" />
          <sdidAddress value="0x4003F024" />
@@ -1832,7 +1818,7 @@ Test Devices:
          <note>8x17 LCD</note>
       </device>
       <device name="MKM33Z128M5" family="CortexM0plus" subfamily="MKM33Z5">
-         <memoryRef ref="kinetis_M0_4K_12K_Ram" />
+         <memoryRef ref="kinetis4K_12K_Ram" />
          <memoryRef ref="FTFA_PFlash0_SEC_128K_1KS" />
          <memoryRef ref="kinetisIO_MKL" />
          <sdidAddress value="0x4003F024" />
@@ -1844,7 +1830,7 @@ Test Devices:
       </device>
 <!-- MKM34Z5 -->
       <device name="MKM34Z128M5" family="CortexM0plus" subfamily="MKM33Z5">
-         <memoryRef ref="kinetis_M0_4K_12K_Ram" />
+         <memoryRef ref="kinetis4K_12K_Ram" />
          <memoryRef ref="FTFA_PFlash0_SEC_128K_1KS" />
          <memoryRef ref="kinetisIO_MKL" />
          <sdidAddress value="0x4003F024" />
@@ -1858,7 +1844,7 @@ Test Devices:
 <!-- ===================================================================================== -->
 <!-- MKV10Z7 -->
       <device name="MKV10Z16M7" family="CortexM0plus" subfamily="MKV10Z7">
-         <memoryRef ref="kinetis_M0_2K_6K_Ram" />
+         <memoryRef ref="kinetis2K_6K_Ram" />
          <memoryRef ref="FTFA_PFlash0_SEC_16K_1KS" />
          <memoryRef ref="kinetisIO_MKL" /> <!--  check -->
          <sdid value="0x10600000" mask="0xFFF00000"/>
@@ -1868,7 +1854,7 @@ Test Devices:
          <note>KV10P48M75RM</note>
       </device>
       <device name="MKV10Z32M7" family="CortexM0plus" subfamily="MKV10Z7">
-         <memoryRef ref="kinetis_M0_2K_6K_Ram" />
+         <memoryRef ref="kinetis2K_6K_Ram" />
          <memoryRef ref="FTFA_PFlash0_SEC_32K_1KS" />
          <memoryRef ref="kinetisIO_MKL" /> <!--  check -->
          <sdid value="0x10600000" mask="0xFFF00000"/>
@@ -1879,7 +1865,7 @@ Test Devices:
       </device>
 <!-- MKV11Z7 -->
       <device name="MKV10Z64M7" family="CortexM0plus" subfamily="MKV11Z7">
-         <memoryRef ref="kinetis_M0_4K_12K_Ram" />
+         <memoryRef ref="kinetis4K_12K_Ram" />
          <memoryRef ref="FTFA_PFlash0_SEC_64K_2KS" />
          <memoryRef ref="kinetisIO_MKL" /> <!--  check -->
          <sdid value="0x10600080" mask="0xFFF00F80"/>
@@ -1889,7 +1875,7 @@ Test Devices:
          <note>KV11P64M75RM</note>
       </device>
       <device name="MKV10Z128M7" family="CortexM0plus" subfamily="MKV11Z7">
-         <memoryRef ref="kinetis_M0_4K_12K_Ram" />
+         <memoryRef ref="kinetis4K_12K_Ram" />
          <memoryRef ref="FTFA_PFlash0_SEC_128K_2KS" />
          <memoryRef ref="kinetisIO_MKL" /> <!--  check -->
          <sdid value="0x10600080" mask="0xFFF00F80"/>
@@ -1899,7 +1885,7 @@ Test Devices:
          <note>KV11P64M75RM</note>
       </device>
       <device name="MKV11Z128M7" family="CortexM0plus" subfamily="MKV11Z7">
-         <memoryRef ref="kinetis_M0_4K_12K_Ram" />
+         <memoryRef ref="kinetis4K_12K_Ram" />
          <memoryRef ref="FTFA_PFlash0_SEC_128K_2KS" />
          <memoryRef ref="kinetisIO_MKL" /> <!--  check -->
          <sdid value="0x11600080" mask="0xFFF00F80"/>
@@ -1910,7 +1896,7 @@ Test Devices:
       </device>
 <!-- MKV30F10 -->
       <device name="MKV30F64M10" family="CortexM4F" subfamily="MKV30F12810">
-         <memoryRef ref="kinetis_M4_8K_8K_Ram" />
+         <memoryRef ref="kinetis8K_8K_Ram" />
          <memoryRef ref="FTFA_PFlash0_SEC_64K_2KS" />
          <memoryRef ref="kinetisIO_MK" /> <!--  check -->
          <sdid value="0x30600280" mask="0xFFF00F80"/>
@@ -1920,7 +1906,7 @@ Test Devices:
          <note>KV30P64M100SFARM</note>
       </device>
       <device name="MKV30F128M10" family="CortexM4F" subfamily="MKV30F12810">
-         <memoryRef ref="kinetis_M4_8K_8K_Ram" />
+         <memoryRef ref="kinetis8K_8K_Ram" />
          <memoryRef ref="FTFA_PFlash0_SEC_128K_2KS" />
          <memoryRef ref="kinetisIO_MK" />
          <sdid value="0x30600280" mask="0xFFF00F80"/>
@@ -1931,7 +1917,7 @@ Test Devices:
       </device>
 <!-- MKV31F10-->
       <device name="MKV31F128M10" family="CortexM4F" subfamily="MKV31F12810">
-         <memoryRef ref="kinetis_M4_8K_16K_Ram" />
+         <memoryRef ref="kinetis8K_16K_Ram" />
          <memoryRef ref="FTFA_PFlash0_SEC_128K_2KS" />
          <memoryRef ref="kinetisIO_MK" />
          <sdid value="0x31600680" mask="0xFFF00F80"/>
@@ -1942,7 +1928,7 @@ Test Devices:
       </device>
 <!-- MKV31F12-->
       <device name="MKV31F256M12" family="CortexM4F" subfamily="MKV31F25612">
-         <memoryRef ref="kinetis_M4_16K_32K_Ram" />
+         <memoryRef ref="kinetis16K_32K_Ram" />
          <memoryRef ref="FTFA_PFlash0_SEC_256K_2KS" />
          <memoryRef ref="kinetisIO_MK" />
          <sdid value="0x31600A80" mask="0xFFF00F80"/>
@@ -1953,7 +1939,7 @@ Test Devices:
          <note>Tested</note>
       </device>
       <device name="MKV31F512M12" family="CortexM4F" subfamily="MKV31F51212">
-         <memoryRef ref="kinetis_M4_32K_64K_Ram" />
+         <memoryRef ref="kinetis32K_64K_Ram" />
          <memoryRef ref="FTFA_PFlash0_SEC_256K_2KS" />
          <memoryRef ref="FTFA_PFlash1_256K_2KS" />
          <memoryRef ref="kinetisIO_MK" />
@@ -1966,7 +1952,7 @@ Test Devices:
 
 <!-- MKV4xF-->
    <device name="MKV40F64M16" family="CortexM4F" subfamily="MKV40F16">
-      <memoryRef ref="kinetis_M4_16K_16K_Ram" />
+      <memoryRef ref="kinetis16K_16K_Ram" />
       <memoryRef ref="FTFA_PFlash0_SEC_64K_2KS" />
       <memoryRef ref="kinetisIO_MK" />
       <sdid value="0x40601145" mask="0xFFF00F80" />
@@ -1976,7 +1962,7 @@ Test Devices:
       <note>KV4XP100M150RM</note>
    </device>
    <device name="MKV40F128M16" family="CortexM4F" subfamily="MKV40F16">
-      <memoryRef ref="kinetis_M4_32K_32K_Ram" />
+      <memoryRef ref="kinetis32K_32K_Ram" />
       <memoryRef ref="FTFA_PFlash0_SEC_128K_2KS" />
       <memoryRef ref="kinetisIO_MK" />
       <sdid value="0x40601145" mask="0xFFF00F80" />
@@ -1986,7 +1972,7 @@ Test Devices:
       <note>KV4XP100M150RM</note>
    </device>
    <device name="MKV40F256M16" family="CortexM4F" subfamily="MKV40F16">
-      <memoryRef ref="kinetis_M4_32K_32K_Ram" />
+      <memoryRef ref="kinetis32K_32K_Ram" />
       <memoryRef ref="FTFA_PFlash0_SEC_256K_2KS" />
       <memoryRef ref="kinetisIO_MK" />
       <sdid value="0x40601145" mask="0xFFF00F80" />
@@ -1997,7 +1983,7 @@ Test Devices:
    </device>
 
    <device name="MKV41F64M16" family="CortexM4F" subfamily="MKV41F16">
-      <memoryRef ref="kinetis_M4_16K_16K_Ram" />
+      <memoryRef ref="kinetis16K_16K_Ram" />
       <memoryRef ref="FTFA_PFlash0_SEC_64K_2KS" />
       <memoryRef ref="kinetisIO_MK" />
       <sdid value="0x40601145" mask="0xFFF00F80" />
@@ -2007,7 +1993,7 @@ Test Devices:
       <note>KV4XP100M150RM</note>
    </device>
    <device name="MKV41F128M16" family="CortexM4F" subfamily="MKV41F16">
-      <memoryRef ref="kinetis_M4_32K_32K_Ram" />
+      <memoryRef ref="kinetis32K_32K_Ram" />
       <memoryRef ref="FTFA_PFlash0_SEC_128K_2KS" />
       <memoryRef ref="kinetisIO_MK" />
       <sdid value="0x41601145" mask="0xFFF00F80" />
@@ -2018,7 +2004,7 @@ Test Devices:
    </device>
 
    <device name="MKV43F64M16" family="CortexM4F" subfamily="MKV43F16">
-      <memoryRef ref="kinetis_M4_16K_16K_Ram" />
+      <memoryRef ref="kinetis16K_16K_Ram" />
       <memoryRef ref="FTFA_PFlash0_SEC_64K_2KS" />
       <memoryRef ref="kinetisIO_MK" />
       <sdid value="0x43601145" mask="0xFFF00F80" />
@@ -2028,7 +2014,7 @@ Test Devices:
       <note>KV4XP100M150RM</note>
    </device>
    <device name="MKV43F128M16" family="CortexM4F" subfamily="MKV43F16">
-      <memoryRef ref="kinetis_M4_32K_32K_Ram" />
+      <memoryRef ref="kinetis32K_32K_Ram" />
       <memoryRef ref="FTFA_PFlash0_SEC_128K_2KS" />
       <memoryRef ref="kinetisIO_MK" />
       <sdid value="0x43601145" mask="0xFFF00F80" />
@@ -2039,7 +2025,7 @@ Test Devices:
    </device>
 
    <device name="MKV44F64M16" family="CortexM4F" subfamily="MKV44F16">
-      <memoryRef ref="kinetis_M4_16K_16K_Ram" />
+      <memoryRef ref="kinetis16K_16K_Ram" />
       <memoryRef ref="FTFA_PFlash0_SEC_64K_2KS" />
       <memoryRef ref="kinetisIO_MK" />
       <sdid value="0x44601145" mask="0xFFF00F80" />
@@ -2049,7 +2035,7 @@ Test Devices:
       <note>KV4XP100M150RM</note>
    </device>
    <device name="MKV44F128M16" family="CortexM4F" subfamily="MKV44F16">
-      <memoryRef ref="kinetis_M4_32K_32K_Ram" />
+      <memoryRef ref="kinetis32K_32K_Ram" />
       <memoryRef ref="FTFA_PFlash0_SEC_128K_2KS" />
       <memoryRef ref="kinetisIO_MK" />
       <sdid value="0x44601145" mask="0xFFF00F80" />
@@ -2060,7 +2046,7 @@ Test Devices:
    </device>
 
    <device name="MKV45F128M16" family="CortexM4F" subfamily="MKV45F16">
-      <memoryRef ref="kinetis_M4_32K_32K_Ram" />
+      <memoryRef ref="kinetis32K_32K_Ram" />
       <memoryRef ref="FTFA_PFlash0_SEC_128K_2KS" />
       <memoryRef ref="kinetisIO_MK" />
       <sdid value="0x45601145" mask="0xFFF00F80" />
@@ -2070,7 +2056,7 @@ Test Devices:
       <note>KV4XP100M150RM</note>
    </device>
    <device name="MKV45F256M16" family="CortexM4F" subfamily="MKV45F16">
-      <memoryRef ref="kinetis_M4_32K_32K_Ram" />
+      <memoryRef ref="kinetis32K_32K_Ram" />
       <memoryRef ref="FTFA_PFlash0_SEC_256K_2KS" />
       <memoryRef ref="kinetisIO_MK" />
       <sdid value="0x45601145" mask="0xFFF00F80" />
@@ -2081,7 +2067,7 @@ Test Devices:
    </device>
 
    <device name="MKV46F128M16" family="CortexM4F" subfamily="MKV46F16">
-      <memoryRef ref="kinetis_M4_32K_32K_Ram" />
+      <memoryRef ref="kinetis32K_32K_Ram" />
       <memoryRef ref="FTFA_PFlash0_SEC_128K_2KS" />
       <memoryRef ref="kinetisIO_MK" />
       <sdid value="0x46601145" mask="0xFFF00F80" />
@@ -2091,7 +2077,7 @@ Test Devices:
       <note>KV4XP100M150RM</note>
    </device>
    <device name="MKV46F256M16" family="CortexM4F" subfamily="MKV46F16">
-      <memoryRef ref="kinetis_M4_32K_32K_Ram" />
+      <memoryRef ref="kinetis32K_32K_Ram" />
       <memoryRef ref="FTFA_PFlash0_SEC_256K_2KS" />
       <memoryRef ref="kinetisIO_MK" />
       <sdid value="0x46601145" mask="0xFFF00F80" />
@@ -2104,7 +2090,7 @@ Test Devices:
 <!-- ===================================================================================== -->
 <!-- MK10-M5-->
       <device name="MK10DN32M5"  family="CortexM4" subfamily="MK10D5">
-         <memoryRef ref="kinetis_M4_4K_4K_Ram" />
+         <memoryRef ref="kinetis4K_4K_Ram" />
          <memoryRef ref="FTFL_PFlash0_SEC_32K_1KS" />
          <memoryRef ref="kinetisIO_MK" />
          <sdid value="0x00000200" mask="0x00000FF0" />
@@ -2114,7 +2100,7 @@ Test Devices:
          <note>K10P32M50SF0RM, K10P48M50SF0RM, K10P64M50SF0RM</note>
       </device>
       <device name="MK10DN64M5"  family="CortexM4" subfamily="MK10D5">
-         <memoryRef ref="kinetis_M4_8K_8K_Ram" />
+         <memoryRef ref="kinetis8K_8K_Ram" />
          <memoryRef ref="FTFL_PFlash0_SEC_64K_1KS" />
          <memoryRef ref="kinetisIO_MK" />
          <sdid value="0x00000200" mask="0x00000FF0" />
@@ -2124,7 +2110,7 @@ Test Devices:
          <note>K10P32M50SF0RM, K10P48M50SF0RM, K10P64M50SF0RM</note>
       </device>
       <device name="MK10DN128M5" family="CortexM4" subfamily="MK10D5">
-         <memoryRef ref="kinetis_M4_8K_8K_Ram" />
+         <memoryRef ref="kinetis8K_8K_Ram" />
          <memoryRef ref="FTFL_PFlash0_SEC_128K_1KS" />
          <memoryRef ref="kinetisIO_MK" />
          <sdid value="0x00000200" mask="0x00000FF0" />
@@ -2134,7 +2120,7 @@ Test Devices:
          <note>K10P32M50SF0RM, K10P48M50SF0RM, K10P64M50SF0RM</note>
       </device>
       <device name="MK10DX32M5"  family="CortexM4" subfamily="MK10D5">
-         <memoryRef ref="kinetis_M4_4K_4K_Ram" />
+         <memoryRef ref="kinetis4K_4K_Ram" />
          <memoryRef ref="FTFL_PFlash0_SEC_32K_1KS" />
          <memoryRef ref="FTFL_DFlash0_32K_1KS" />
          <memoryRef ref="kinetisIO_MK" />
@@ -2145,7 +2131,7 @@ Test Devices:
          <note>K10P32M50SF0RM, K10P48M50SF0RM, K10P64M50SF0RM</note>
       </device>
       <device name="MK10DX64M5"  family="CortexM4" subfamily="MK10D5">
-         <memoryRef ref="kinetis_M4_8K_8K_Ram" />
+         <memoryRef ref="kinetis8K_8K_Ram" />
          <memoryRef ref="FTFL_PFlash0_SEC_64K_1KS" />
          <memoryRef ref="FTFL_DFlash0_32K_1KS" />
          <memoryRef ref="kinetisIO_MK" />
@@ -2156,7 +2142,7 @@ Test Devices:
          <note>K10P32M50SF0RM, K10P48M50SF0RM, K10P64M50SF0RM</note>
       </device>
       <device name="MK10DX128M5" family="CortexM4" subfamily="MK10D5">
-         <memoryRef ref="kinetis_M4_8K_8K_Ram" />
+         <memoryRef ref="kinetis8K_8K_Ram" />
          <memoryRef ref="FTFL_PFlash0_SEC_128K_1KS" />
          <memoryRef ref="FTFL_DFlash0_32K_1KS" />
          <memoryRef ref="kinetisIO_MK" />
@@ -2168,7 +2154,7 @@ Test Devices:
       </device>
 <!-- MK10-M7-->
       <device name="MK10DX64M7"  family="CortexM4" subfamily="MK10D7">
-         <memoryRef ref="kinetis_M4_8K_8K_Ram" />
+         <memoryRef ref="kinetis8K_8K_Ram" />
          <memoryRef ref="FTFL_PFlash0_SEC_64K_2KS" />
          <memoryRef ref="FTFL_DFlash0_32K_1KS" />
          <memoryRef ref="kinetisIO_MK" />
@@ -2179,7 +2165,7 @@ Test Devices:
          <note>K10P64M72SF1RM, K10P81M72SF1RM, K10P100M72SF1RM</note>
       </device>
       <device name="MK10DX128M7" family="CortexM4" subfamily="MK10D7">
-         <memoryRef ref="kinetis_M4_16K_16K_Ram" />
+         <memoryRef ref="kinetis16K_16K_Ram" />
          <memoryRef ref="FTFL_PFlash0_SEC_128K_2KS" />
          <memoryRef ref="FTFL_DFlash0_32K_1KS" />
          <memoryRef ref="kinetisIO_MK" />
@@ -2190,7 +2176,7 @@ Test Devices:
          <note>K10P64M72SF1RM, K10P81M72SF1RM, K10P100M72SF1RM</note>
       </device>
       <device name="MK10DX256M7" family="CortexM4" subfamily="MK10D7">
-         <memoryRef ref="kinetis_M4_32K_32K_Ram" />
+         <memoryRef ref="kinetis32K_32K_Ram" />
          <memoryRef ref="FTFL_PFlash0_SEC_256K_2KS" />
          <memoryRef ref="FTFL_DFlash0_32K_1KS" />
          <memoryRef ref="kinetisIO_MK" />
@@ -2202,7 +2188,7 @@ Test Devices:
       </device>
 <!-- MK10-M10-->
       <device name="MK10DN512M10"  family="CortexM4" subfamily="MK10D10">
-         <memoryRef ref="kinetis_M4_64K_64K_Ram" />
+         <memoryRef ref="kinetis64K_64K_Ram" />
          <memoryRef ref="FTFL_PFlash0_SEC_256K_2KS" />
          <memoryRef ref="FTFL_PFlash1_256K_2KS" />
          <memoryRef ref="kinetisIO_MK" />
@@ -2212,7 +2198,7 @@ Test Devices:
          <registerDescriptionRef ref="CortexM4-register-description" />
       </device>
       <device name="MK10DN512ZM10" family="CortexM4" subfamily="MK10DZ10">
-         <memoryRef ref="kinetis_M4_64K_64K_Ram" />
+         <memoryRef ref="kinetis64K_64K_Ram" />
          <memoryRef ref="FTFL_PFlash0_SEC_256K_2KS" />
          <memoryRef ref="FTFL_PFlash1_256K_2KS" />
          <memoryRef ref="kinetisIO_MK" />
@@ -2222,7 +2208,7 @@ Test Devices:
          <registerDescriptionRef ref="CortexM4-register-description" />
       </device>
       <device name="MK10DX128M10"  family="CortexM4" subfamily="MK10D10">
-         <memoryRef ref="kinetis_M4_16K_16K_Ram" />
+         <memoryRef ref="kinetis16K_16K_Ram" />
          <memoryRef ref="FTFL_PFlash0_SEC_128K_2KS" />
          <memoryRef ref="FTFL_DFlash0_64K_2KS" />
          <memoryRef ref="kinetisIO_MK" />
@@ -2232,7 +2218,7 @@ Test Devices:
          <registerDescriptionRef ref="CortexM4-register-description" />
       </device>
       <device name="MK10DX128ZM10" family="CortexM4" subfamily="MK10DZ10">
-         <memoryRef ref="kinetis_M4_16K_16K_Ram" />
+         <memoryRef ref="kinetis16K_16K_Ram" />
          <memoryRef ref="FTFL_PFlash0_SEC_128K_2KS" />
          <memoryRef ref="FTFL_DFlash0_128K_2KS" />
          <memoryRef ref="kinetisIO_MK" />
@@ -2242,7 +2228,7 @@ Test Devices:
          <registerDescriptionRef ref="CortexM4-register-description" />
       </device>
       <device name="MK10DX256M10"  family="CortexM4" subfamily="MK10D10">
-         <memoryRef ref="kinetis_M4_32K_32K_Ram" />
+         <memoryRef ref="kinetis32K_32K_Ram" />
          <memoryRef ref="FTFL_PFlash0_SEC_256K_2KS" />
          <memoryRef ref="FTFL_DFlash0_64K_2KS" />
          <memoryRef ref="kinetisIO_MK" />
@@ -2252,7 +2238,7 @@ Test Devices:
          <registerDescriptionRef ref="CortexM4-register-description" />
       </device>
       <device name="MK10DX256ZM10" family="CortexM4" subfamily="MK10DZ10">
-         <memoryRef ref="kinetis_M4_32K_32K_Ram" />
+         <memoryRef ref="kinetis32K_32K_Ram" />
          <memoryRef ref="FTFL_PFlash0_SEC_256K_2KS" />
          <memoryRef ref="FTFL_PFlash1_256K_2KS" />
          <memoryRef ref="FTFL_DFlash0_512K_2KS" />
@@ -2264,7 +2250,7 @@ Test Devices:
       </device>
 <!-- MK10-M12-->
       <device name="MK10FN1M0M12" family="CortexM4F" subfamily="MK10F12">
-         <memoryRef ref="kinetis_M4_64K_64K_Ram" />
+         <memoryRef ref="kinetis64K_64K_Ram" />
          <memoryRef ref="FTFE_PFlash0_SEC_256K_4KS" />
          <memoryRef ref="FTFE_PFlash1_256K_4KS" />
          <memoryRef ref="FTFE_PFlash2_256K_4KS" />
@@ -2277,7 +2263,7 @@ Test Devices:
          <note>K10P144M120SF3RM</note>
       </device>
       <device name="MK10FX512M12" family="CortexM4F" subfamily="MK10F12">
-         <memoryRef ref="kinetis_M4_64K_64K_Ram" />
+         <memoryRef ref="kinetis64K_64K_Ram" />
          <memoryRef ref="FTFE_PFlash0_SEC_256K_4KS" />
          <memoryRef ref="FTFE_PFlash1_256K_4KS" />
          <memoryRef ref="FTFE_DFlash0_512K_4KS" />
@@ -2290,7 +2276,7 @@ Test Devices:
       </device>
 <!-- MK11-M5 -->
       <device name="MK11DN512M5" family="CortexM4" subfamily="MK11D5">
-         <memoryRef ref="kinetis_M4_32K_32K_Ram" />
+         <memoryRef ref="kinetis32K_32K_Ram" />
          <memoryRef ref="FTFL_PFlash0_SEC_512K_2KS" />
          <memoryRef ref="kinetisIO_MK" />
          <sdid value="0x00001226" mask="0x00000FF0"/>
@@ -2300,7 +2286,7 @@ Test Devices:
          <note>K11P80M50SF4RM, K11P121M50SF4RM</note>
       </device>
       <device name="MK11DX128M5" family="CortexM4" subfamily="MK11D5">
-         <memoryRef ref="kinetis_M4_16K_16K_Ram" />
+         <memoryRef ref="kinetis16K_16K_Ram" />
          <memoryRef ref="FTFL_PFlash0_SEC_128K_2KS" />
          <memoryRef ref="FTFL_DFlash0_64K_2KS" />
          <memoryRef ref="kinetisIO_MK" />
@@ -2311,7 +2297,7 @@ Test Devices:
          <note>K11P80M50SF4RM, K11P121M50SF4RM</note>
       </device>
       <device name="MK11DX256M5" family="CortexM4" subfamily="MK11D5">
-         <memoryRef ref="kinetis_M4_16K_16K_Ram" />
+         <memoryRef ref="kinetis16K_16K_Ram" />
          <memoryRef ref="FTFL_PFlash0_SEC_256K_2KS" />
          <memoryRef ref="FTFL_DFlash0_64K_2KS" />
          <memoryRef ref="kinetisIO_MK" />
@@ -2323,7 +2309,7 @@ Test Devices:
       </device>
 <!-- MK20-M5 -->
       <device name="MK20DN32M5"  family="CortexM4" subfamily="MK20D5">
-         <memoryRef ref="kinetis_M4_4K_4K_Ram" />
+         <memoryRef ref="kinetis4K_4K_Ram" />
          <memoryRef ref="FTFL_PFlash0_SEC_32K_1KS" />
          <memoryRef ref="kinetisIO_MK" />
          <sdid value="0x00000012" mask="0xFFFF0FFF" />
@@ -2335,7 +2321,7 @@ Test Devices:
          <note>K20P32M50SF0RM, K20P48M50SF0RM, K20P64M50SF0RM</note>
       </device>
       <device name="MK20DN64M5"  family="CortexM4" subfamily="MK20D5">
-         <memoryRef ref="kinetis_M4_8K_8K_Ram" />
+         <memoryRef ref="kinetis8K_8K_Ram" />
          <memoryRef ref="FTFL_PFlash0_SEC_64K_1KS" />
          <memoryRef ref="kinetisIO_MK" />
          <sdid value="0x00000012" mask="0xFFFF0FFF" />
@@ -2347,7 +2333,7 @@ Test Devices:
          <note>K20P32M50SF0RM, K20P48M50SF0RM, K20P64M50SF0RM</note>
       </device>
       <device name="MK20DN128M5" family="CortexM4" subfamily="MK20D5">
-         <memoryRef ref="kinetis_M4_8K_8K_Ram" />
+         <memoryRef ref="kinetis8K_8K_Ram" />
          <memoryRef ref="FTFL_PFlash0_SEC_128K_1KS" />
          <memoryRef ref="kinetisIO_MK" />
          <sdid value="0x00000012" mask="0xFFFF0FFF" />
@@ -2359,7 +2345,7 @@ Test Devices:
          <note>K20P32M50SF0RM, K20P48M50SF0RM, K20P64M50SF0RM</note>
       </device>
       <device name="MK20DX32M5"  family="CortexM4" subfamily="MK20D5">
-         <memoryRef ref="kinetis_M4_4K_4K_Ram" />
+         <memoryRef ref="kinetis4K_4K_Ram" />
          <memoryRef ref="kinetis2K_FlexRam" />
          <memoryRef ref="FTFL_PFlash0_SEC_32K_1KS" />
          <memoryRef ref="FTFL_DFlash0_32K_1KS" />
@@ -2373,7 +2359,7 @@ Test Devices:
          <note>K20P32M50SF0RM, K20P48M50SF0RM, K20P64M50SF0RM</note>
      </device>
       <device name="MK20DX64M5"  family="CortexM4" subfamily="MK20D5">
-         <memoryRef ref="kinetis_M4_8K_8K_Ram" />
+         <memoryRef ref="kinetis8K_8K_Ram" />
          <memoryRef ref="kinetis2K_FlexRam" />
          <memoryRef ref="FTFL_PFlash0_SEC_64K_1KS" />
          <memoryRef ref="FTFL_DFlash0_32K_1KS" />
@@ -2387,7 +2373,7 @@ Test Devices:
          <note>K20P32M50SF0RM, K20P48M50SF0RM, K20P64M50SF0RM</note>
       </device>
       <device name="MK20DX128M5" family="CortexM4" subfamily="MK20D5">
-         <memoryRef ref="kinetis_M4_8K_8K_Ram" />
+         <memoryRef ref="kinetis8K_8K_Ram" />
          <memoryRef ref="kinetis2K_FlexRam" />
          <memoryRef ref="FTFL_PFlash0_SEC_128K_1KS" />
          <memoryRef ref="FTFL_DFlash0_32K_1KS" />
@@ -2403,7 +2389,7 @@ Test Devices:
       </device>
 <!-- MK20-M7 -->
       <device name="MK20DX64M7"  family="CortexM4" subfamily="MK20D7">
-         <memoryRef ref="kinetis_M4_16K_16K_Ram" />
+         <memoryRef ref="kinetis16K_16K_Ram" />
          <memoryRef ref="FTFL_PFlash0_SEC_64K_2KS" />
          <memoryRef ref="FTFL_DFlash0_32K_1KS" />
          <memoryRef ref="kinetisIO_MK" />
@@ -2415,7 +2401,7 @@ Test Devices:
          <note>K20P64M72SF1RM, K20P81M72SF1RM, K20P100M72SF1RM</note>
       </device>
       <device name="MK20DX128M7" family="CortexM4" subfamily="MK20D7">
-         <memoryRef ref="kinetis_M4_16K_16K_Ram" />
+         <memoryRef ref="kinetis16K_16K_Ram" />
          <memoryRef ref="FTFL_PFlash0_SEC_128K_2KS" />
          <memoryRef ref="FTFL_DFlash0_32K_1KS" />
          <memoryRef ref="kinetisIO_MK" />
@@ -2426,7 +2412,7 @@ Test Devices:
          <note>K20P64M72SF1RM, K20P81M72SF1RM, K20P100M72SF1RM</note>
       </device>
       <device name="MK20DX256M7" family="CortexM4" subfamily="MK20D7">
-         <memoryRef ref="kinetis_M4_32K_32K_Ram" />
+         <memoryRef ref="kinetis32K_32K_Ram" />
          <memoryRef ref="FTFL_PFlash0_SEC_256K_2KS" />
          <memoryRef ref="FTFL_DFlash0_32K_1KS" />
          <memoryRef ref="kinetisIO_MK" />
@@ -2439,7 +2425,7 @@ Test Devices:
       </device>
 <!-- MK20-M10 -->
       <device name="MK20DN512M10"  family="CortexM4" subfamily="MK20D10">
-         <memoryRef ref="kinetis_M4_64K_64K_Ram" />
+         <memoryRef ref="kinetis64K_64K_Ram" />
          <memoryRef ref="FTFL_PFlash0_SEC_512K_2KS" />
          <memoryRef ref="kinetisIO_MK" />
          <sdid value="0x00000000" mask="0x00000000" />
@@ -2448,7 +2434,7 @@ Test Devices:
          <registerDescriptionRef ref="CortexM4-register-description" />
       </device>
       <device name="MK20DN512ZM10" family="CortexM4" subfamily="MK20DZ10">
-         <memoryRef ref="kinetis_M4_64K_64K_Ram" />
+         <memoryRef ref="kinetis64K_64K_Ram" />
          <memoryRef ref="FTFL_PFlash0_SEC_512K_2KS" />
          <memoryRef ref="kinetisIO_MK" />
          <sdid value="0x00000000" mask="0x00000000" />
@@ -2457,7 +2443,7 @@ Test Devices:
          <registerDescriptionRef ref="CortexM4-register-description" />
       </device>
       <device name="MK20DX128M10"  family="CortexM4" subfamily="MK20D10">
-         <memoryRef ref="kinetis_M4_16K_16K_Ram" />
+         <memoryRef ref="kinetis16K_16K_Ram" />
          <memoryRef ref="FTFL_PFlash0_SEC_128K_1KS" />
          <memoryRef ref="FTFL_DFlash0_64K_2KS" />
          <memoryRef ref="kinetisIO_MK" />
@@ -2467,7 +2453,7 @@ Test Devices:
          <registerDescriptionRef ref="CortexM4-register-description" />
       </device>
       <device name="MK20DX128ZM10" family="CortexM4" subfamily="MK20DZ10">
-         <memoryRef ref="kinetis_M4_16K_16K_Ram" />
+         <memoryRef ref="kinetis16K_16K_Ram" />
          <memoryRef ref="FTFL_PFlash0_SEC_128K_1KS" />
          <memoryRef ref="FTFL_DFlash0_64K_2KS" />
          <memoryRef ref="kinetisIO_MK" />
@@ -2477,7 +2463,7 @@ Test Devices:
          <registerDescriptionRef ref="CortexM4-register-description" />
       </device>
       <device name="MK20DX256M10"  family="CortexM4" subfamily="MK20D10">
-         <memoryRef ref="kinetis_M4_32K_32K_Ram" />
+         <memoryRef ref="kinetis32K_32K_Ram" />
          <memoryRef ref="FTFL_PFlash0_SEC_256K_2KS" />
          <memoryRef ref="FTFL_DFlash0_256K_2KS" />
          <memoryRef ref="kinetisIO_MK" />
@@ -2487,7 +2473,7 @@ Test Devices:
          <registerDescriptionRef ref="CortexM4-register-description" />
       </device>
       <device name="MK20DX256ZM10" family="CortexM4" subfamily="MK20DZ10">
-         <memoryRef ref="kinetis_M4_32K_32K_Ram" />
+         <memoryRef ref="kinetis32K_32K_Ram" />
          <memoryRef ref="FTFL_PFlash0_SEC_256K_2KS" />
          <memoryRef ref="FTFL_DFlash0_256K_2KS" />
          <memoryRef ref="kinetisIO_MK" />
@@ -2498,7 +2484,7 @@ Test Devices:
       </device>
 <!-- MK20-M12 -->
       <device name="MK20FN1M0M12" family="CortexM4F" subfamily="MK20F12">
-         <memoryRef ref="kinetis_M4_64K_64K_Ram" />
+         <memoryRef ref="kinetis64K_64K_Ram" />
          <memoryRef ref="FTFE_PFlash0_SEC_256K_4KS" />
          <memoryRef ref="FTFE_PFlash1_256K_4KS" />
          <memoryRef ref="FTFE_PFlash2_256K_4KS" />
@@ -2510,7 +2496,7 @@ Test Devices:
          <registerDescriptionRef ref="CortexM4F-register-description" />
       </device>
       <device name="MK20FX512M12" family="CortexM4F" subfamily="MK20F12">
-         <memoryRef ref="kinetis_M4_64K_64K_Ram" />
+         <memoryRef ref="kinetis64K_64K_Ram" />
          <memoryRef ref="FTFE_PFlash0_SEC_512K_4KS" />
          <memoryRef ref="FTFE_DFlash0_512K_4KS" />
          <memoryRef ref="kinetisIO_MK" />
@@ -2521,7 +2507,7 @@ Test Devices:
       </device>
 <!-- MK21-M5 -->
       <device name="MK21DN512M5" family="CortexM4" subfamily="MK21D5">
-         <memoryRef ref="kinetis_M4_32K_32K_Ram" />
+         <memoryRef ref="kinetis32K_32K_Ram" />
          <memoryRef ref="FTFL_PFlash0_SEC_512K_2KS" />
          <memoryRef ref="kinetisIO_MK" />
          <sdid value="0x00009236" mask="0x00000FF0"/>
@@ -2531,7 +2517,7 @@ Test Devices:
          <note>K21P80M50SF4RM, K21P121M50SF4RM</note>
       </device>
       <device name="MK21DX128M5" family="CortexM4" subfamily="MK21D5">
-         <memoryRef ref="kinetis_M4_16K_16K_Ram" />
+         <memoryRef ref="kinetis16K_16K_Ram" />
          <memoryRef ref="FTFL_PFlash0_SEC_128K_2KS" />
          <memoryRef ref="FTFL_DFlash0_64K_2KS" />
          <memoryRef ref="kinetisIO_MK" />
@@ -2542,7 +2528,7 @@ Test Devices:
          <note>K21P80M50SF4RM, K21P121M50SF4RM</note>
       </device>
       <device name="MK21DX256M5" family="CortexM4" subfamily="MK21D5">
-         <memoryRef ref="kinetis_M4_16K_16K_Ram" />
+         <memoryRef ref="kinetis16K_16K_Ram" />
          <memoryRef ref="FTFL_PFlash0_SEC_256K_2KS" />
          <memoryRef ref="FTFL_DFlash0_64K_2KS" />
          <memoryRef ref="kinetisIO_MK" />
@@ -2554,7 +2540,7 @@ Test Devices:
       </device>
 <!-- MK21-M12 -->
       <device name="MK21FN1M0M12" family="CortexM4F" subfamily="MK21F12">
-         <memoryRef ref="kinetis_M4_64K_64K_Ram" />
+         <memoryRef ref="kinetis64K_64K_Ram" />
          <memoryRef ref="FTFE_PFlash0_SEC_256K_4KS" />
          <memoryRef ref="FTFE_PFlash1_256K_4KS" />
          <memoryRef ref="FTFE_PFlash2_256K_4KS" />
@@ -2566,7 +2552,7 @@ Test Devices:
          <registerDescriptionRef ref="CortexM4F-register-description" />
       </device>
       <device name="MK21FX512M12" family="CortexM4F" subfamily="MK21F12">
-         <memoryRef ref="kinetis_M4_64K_64K_Ram" />
+         <memoryRef ref="kinetis64K_64K_Ram" />
          <memoryRef ref="FTFE_PFlash0_SEC_512K_4KS" />
          <memoryRef ref="FTFE_DFlash0_512K_4KS" />
          <memoryRef ref="kinetisIO_MK" />
@@ -2577,7 +2563,7 @@ Test Devices:
       </device>
 <!-- MK22-M5 -->
       <device name="MK22DN512M5" family="CortexM4" subfamily="MK22D5">
-         <memoryRef ref="kinetis_M4_32K_32K_Ram" />
+         <memoryRef ref="kinetis32K_32K_Ram" />
          <memoryRef ref="FTFL_PFlash0_SEC_512K_2KS" />
          <memoryRef ref="kinetisIO_MK" />
          <sdid value="0x00000210" mask="0xFFFF0FF0"/>
@@ -2587,7 +2573,7 @@ Test Devices:
          <note>K22P48M50SF4RM,K22P64M50SF4RM,K22P80M50SF4RM,K22P121M50SF4RM</note>
       </device>
       <device name="MK22DX128M5" family="CortexM4" subfamily="MK22D5">
-         <memoryRef ref="kinetis_M4_16K_16K_Ram" />
+         <memoryRef ref="kinetis16K_16K_Ram" />
          <memoryRef ref="kinetis4K_FlexRam" />
          <memoryRef ref="FTFL_PFlash0_SEC_128K_2KS" />
          <memoryRef ref="FTFL_DFlash0_64K_2KS" />
@@ -2599,7 +2585,7 @@ Test Devices:
          <note>K22P48M50SF4RM,K22P64M50SF4RM,K22P80M50SF4RM,K22P121M50SF4RM</note>
       </device>
       <device name="MK22DX256M5" family="CortexM4" subfamily="MK22D5">
-         <memoryRef ref="kinetis_M4_16K_16K_Ram" />
+         <memoryRef ref="kinetis16K_16K_Ram" />
          <memoryRef ref="kinetis4K_FlexRam" />
          <memoryRef ref="FTFL_PFlash0_SEC_256K_2KS" />
          <memoryRef ref="FTFL_DFlash0_64K_2KS" />
@@ -2612,7 +2598,7 @@ Test Devices:
       </device>
 <!-- MK22-M10 -->
       <device name="MK22FN128M10" family="CortexM4F" subfamily="MK22F12810">
-         <memoryRef ref="kinetis_M4_8K_16K_Ram" />
+         <memoryRef ref="kinetis8K_16K_Ram" />
          <memoryRef ref="FTFA_PFlash0_SEC_128K_2KS" />
          <memoryRef ref="kinetisIO_MK" />
          <sdid value="0x22000680" mask="0xFFF00F80"/>
@@ -2623,7 +2609,7 @@ Test Devices:
       </device>
 <!-- MK22-M12 -->
       <device name="MK22FN256M12" family="CortexM4F" subfamily="MK22F51212">
-         <memoryRef ref="kinetis_M4_16K_32K_Ram" />
+         <memoryRef ref="kinetis16K_32K_Ram" />
          <memoryRef ref="FTFA_PFlash0_SEC_256K_2KS" />
          <memoryRef ref="kinetisIO_MK" />
          <sdid value="0x22000A80" mask="0xFFF00F80"/>
@@ -2633,7 +2619,7 @@ Test Devices:
          <note>K22P121M120SF8RM</note>
       </device>
       <device name="MK22FN512M12" family="CortexM4F" subfamily="MK22F51212">
-         <memoryRef ref="kinetis_M4_64K_64K_Ram" />
+         <memoryRef ref="kinetis64K_64K_Ram" />
          <memoryRef ref="FTFA_PFlash0_SEC_256K_2KS" />
          <memoryRef ref="FTFA_PFlash1_256K_2KS" />
          <memoryRef ref="kinetisIO_MK" />
@@ -2645,7 +2631,7 @@ Test Devices:
          <note>Tested(FRDM-MK22F)</note>
       </device>
       <device name="MK22FN1M0M12" family="CortexM4F" subfamily="MK22F12">
-         <memoryRef ref="kinetis_M4_64K_64K_Ram" />
+         <memoryRef ref="kinetis64K_64K_Ram" />
          <memoryRef ref="FTFE_PFlash0_SEC_512K_4KS" />
          <memoryRef ref="FTFE_PFlash1_512K_4KS" />
          <memoryRef ref="kinetisIO_MK" />
@@ -2656,7 +2642,7 @@ Test Devices:
          <note>K22P64M120SF5RM,K22P80M120SF5RM,K22P100M120SF5RM,K22P121M120SF5RM,K22P144M120SF5RM</note>
       </device>
       <device name="MK22FN1M0AM12" family="CortexM4F" subfamily="MK22FA12">
-         <memoryRef ref="kinetis_M4_64K_64K_Ram" />
+         <memoryRef ref="kinetis64K_64K_Ram" />
          <memoryRef ref="FTFE_PFlash0_SEC_512K_4KS" />
          <memoryRef ref="FTFE_PFlash1_512K_4KS" />
          <memoryRef ref="kinetisIO_MK" />
@@ -2667,7 +2653,7 @@ Test Devices:
          <note>K22P64M120SF5RM,K22P80M120SF5RM,K22P100M120SF5RM,K22P121M120SF5RM,K22P144M120SF5RM</note>
       </device>
       <device name="MK22FX512M12" family="CortexM4F" subfamily="MK22F12">
-         <memoryRef ref="kinetis_M4_64K_64K_Ram" />
+         <memoryRef ref="kinetis64K_64K_Ram" />
          <memoryRef ref="FTFE_PFlash0_SEC_256K_4KS" />
          <memoryRef ref="FTFE_PFlash1_256K_4KS" />
          <memoryRef ref="FTFE_DFlash0_512K_4KS" />
@@ -2679,7 +2665,7 @@ Test Devices:
          <note>K22P64M120SF5RM,K22P80M120SF5RM,K22P100M120SF5RM,K22P121M120SF5RM,K22P144M120SF5RM</note>
       </device>
       <device name="MK22FX512AM12" family="CortexM4F" subfamily="MK22FA12">
-         <memoryRef ref="kinetis_M4_64K_64K_Ram" />
+         <memoryRef ref="kinetis64K_64K_Ram" />
          <memoryRef ref="FTFE_PFlash0_SEC_256K_4KS" />
          <memoryRef ref="FTFE_PFlash1_256K_4KS" />
          <memoryRef ref="FTFE_DFlash0_512K_4KS" />
@@ -2692,7 +2678,7 @@ Test Devices:
       </device>
 <!-- MK24-M12 -->
       <device name="MK24FN256M12" family="CortexM4F" subfamily="MK24F25612">
-         <memoryRef ref="kinetis_M4_64K_192K_Ram" />
+         <memoryRef ref="kinetis64K_192K_Ram" />
          <memoryRef ref="FTFA_PFlash0_SEC_256K_2KS" />
          <memoryRef ref="kinetisIO_MK" />
          <sdid value="0x24000700" mask="0xFFF00F80"/>
@@ -2702,7 +2688,7 @@ Test Devices:
          <note>K24P121M120SF5RM</note>
       </device>
       <device name="MK24FN1M0M12" family="CortexM4F" subfamily="MK24F12">
-         <memoryRef ref="kinetis_M4_64K_192K_Ram" />
+         <memoryRef ref="kinetis64K_192K_Ram" />
          <memoryRef ref="FTFE_PFlash0_SEC_256K_4KS" />
          <memoryRef ref="FTFE_PFlash1_256K_4KS" />
          <memoryRef ref="FTFE_PFlash2_256K_4KS" />
@@ -2716,7 +2702,7 @@ Test Devices:
       </device>
 <!-- MK27-M15 -->
       <device name="MK27FN2M0M15" family="CortexM4F" subfamily="MK27F15">
-         <memoryRef ref="kinetis_M4_256K_256K_Ram" />
+         <memoryRef ref="kinetis256K_256K_Ram" />
          <memoryRef ref="FTFE_PFlash0_SEC_512K_4KS" />
          <memoryRef ref="FTFE_PFlash1_512K_4KS" />
          <memoryRef ref="FTFE_PFlash2_512K_4KS" />
@@ -2729,7 +2715,7 @@ Test Devices:
       </device>
 <!-- MK28-M15 -->
       <device name="MK28FN2M0M15" family="CortexM4F" subfamily="MK28F15">
-         <memoryRef ref="kinetis_M4_256K_256K_Ram" />
+         <memoryRef ref="kinetis256K_256K_Ram" />
          <memoryRef ref="FTFE_PFlash0_SEC_512K_4KS" />
          <memoryRef ref="FTFE_PFlash1_512K_4KS" />
          <memoryRef ref="FTFE_PFlash2_512K_4KS" />
@@ -2745,7 +2731,7 @@ Test Devices:
       </device>
 <!-- MK30-M7 -->
       <device name="MK30DX64M7" family="CortexM4" subfamily="MK30D7">
-         <memoryRef ref="kinetis_M4_16K_16K_Ram" />
+         <memoryRef ref="kinetis16K_16K_Ram" />
          <memoryRef ref="FTFL_PFlash0_SEC_64K_2KS" />
          <memoryRef ref="FTFL_DFlash0_32K_1KS" />
          <memoryRef ref="kinetisIO_MK" />
@@ -2756,7 +2742,7 @@ Test Devices:
          <note>K30P64M72SF1RM, K30P81M72SF1RM, K30P100M72SF1RM, </note>
       </device>
       <device name="MK30DX128M7" family="CortexM4" subfamily="MK30D7">
-         <memoryRef ref="kinetis_M4_16K_16K_Ram" />
+         <memoryRef ref="kinetis16K_16K_Ram" />
          <memoryRef ref="FTFL_PFlash0_SEC_128K_2KS" />
          <memoryRef ref="FTFL_DFlash0_32K_1KS" />
          <memoryRef ref="kinetisIO_MK" />
@@ -2767,7 +2753,7 @@ Test Devices:
          <note>K30P64M72SF1RM, K30P81M72SF1RM, K30P100M72SF1RM, </note>
       </device>
       <device name="MK30DX256M7" family="CortexM4" subfamily="MK30D7">
-         <memoryRef ref="kinetis_M4_32K_32K_Ram" />
+         <memoryRef ref="kinetis32K_32K_Ram" />
          <memoryRef ref="FTFL_PFlash0_SEC_256K_2KS" />
          <memoryRef ref="FTFL_DFlash0_32K_1KS" />
          <memoryRef ref="kinetisIO_MK" />
@@ -2780,7 +2766,7 @@ Test Devices:
       </device>
 <!-- MK30-M10 -->
       <device name="MK30DN512ZM10" family="CortexM4"  subfamily="MK30DZ10">
-         <memoryRef ref="kinetis_M4_64K_64K_Ram" />
+         <memoryRef ref="kinetis64K_64K_Ram" />
          <memoryRef ref="FTFL_PFlash0_SEC_512K_2KS" />
          <memoryRef ref="kinetisIO_MK" />
          <sdid value="0x00000000" mask="0x00000000" />
@@ -2789,7 +2775,7 @@ Test Devices:
          <registerDescriptionRef ref="CortexM4-register-description" />
       </device>
       <device name="MK30DX64M10" family="CortexM4" subfamily="MK30D10">
-         <memoryRef ref="kinetis_M4_8K_8K_Ram" />
+         <memoryRef ref="kinetis8K_8K_Ram" />
          <memoryRef ref="FTFL_PFlash0_SEC_64K_1KS" />
          <memoryRef ref="FTFL_DFlash0_32K_1KS" />
          <memoryRef ref="kinetisIO_MK" />
@@ -2799,7 +2785,7 @@ Test Devices:
          <registerDescriptionRef ref="CortexM4-register-description" />
       </device>
       <device name="MK30DX128M10"  family="CortexM4"  subfamily="MK30D10">
-         <memoryRef ref="kinetis_M4_16K_16K_Ram" />
+         <memoryRef ref="kinetis16K_16K_Ram" />
          <memoryRef ref="FTFL_PFlash0_SEC_128K_1KS" />
          <memoryRef ref="FTFL_DFlash0_32K_1KS" />
          <memoryRef ref="kinetisIO_MK" />
@@ -2809,7 +2795,7 @@ Test Devices:
          <registerDescriptionRef ref="CortexM4-register-description" />
       </device>
       <device name="MK30DX128ZM10" family="CortexM4"  subfamily="MK30DZ10">
-         <memoryRef ref="kinetis_M4_16K_16K_Ram" />
+         <memoryRef ref="kinetis16K_16K_Ram" />
          <memoryRef ref="FTFL_PFlash0_SEC_128K_1KS" />
          <memoryRef ref="FTFL_DFlash0_64K_2KS" />
          <memoryRef ref="kinetisIO_MK" />
@@ -2819,7 +2805,7 @@ Test Devices:
          <registerDescriptionRef ref="CortexM4-register-description" />
       </device>
       <device name="MK30DX256M10"  family="CortexM4"  subfamily="MK30D10">
-         <memoryRef ref="kinetis_M4_16K_16K_Ram" />
+         <memoryRef ref="kinetis16K_16K_Ram" />
          <memoryRef ref="FTFL_PFlash0_SEC_256K_2KS" />
          <memoryRef ref="FTFL_DFlash0_32K_1KS" />
          <memoryRef ref="kinetisIO_MK" />
@@ -2829,7 +2815,7 @@ Test Devices:
          <registerDescriptionRef ref="CortexM4-register-description" />
       </device>
       <device name="MK30DX256ZM10" family="CortexM4"  subfamily="MK30DZ10">
-         <memoryRef ref="kinetis_M4_32K_32K_Ram" />
+         <memoryRef ref="kinetis32K_32K_Ram" />
          <memoryRef ref="FTFL_PFlash0_SEC_256K_2KS" />
          <memoryRef ref="FTFL_DFlash0_256K_2KS" />
          <memoryRef ref="kinetisIO_MK" />
@@ -2840,7 +2826,7 @@ Test Devices:
       </device>
 <!-- MK40-M7 -->
       <device name="MK40DX64M7"  family="CortexM4" subfamily="MK40D7">
-         <memoryRef ref="kinetis_M4_8K_8K_Ram" />
+         <memoryRef ref="kinetis8K_8K_Ram" />
          <memoryRef ref="FTFL_PFlash0_SEC_64K_2KS" />
          <memoryRef ref="FTFL_DFlash0_32K_1KS" />
          <memoryRef ref="kinetisIO_MK" />
@@ -2851,7 +2837,7 @@ Test Devices:
          <note>K40P64M72SF1RM, K40P81M72SF1RM, K40P100M72SF1RM</note>
       </device>
       <device name="MK40DX128M7" family="CortexM4" subfamily="MK40D7">
-         <memoryRef ref="kinetis_M4_16K_16K_Ram" />
+         <memoryRef ref="kinetis16K_16K_Ram" />
          <memoryRef ref="FTFL_PFlash0_SEC_128K_2KS" />
          <memoryRef ref="FTFL_DFlash0_32K_1KS" />
          <memoryRef ref="kinetisIO_MK" />
@@ -2862,7 +2848,7 @@ Test Devices:
          <note>K40P64M72SF1RM, K40P81M72SF1RM, K40P100M72SF1RM</note>
       </device>
       <device name="MK40DX256M7" family="CortexM4" subfamily="MK40D7">
-         <memoryRef ref="kinetis_M4_32K_32K_Ram" />
+         <memoryRef ref="kinetis32K_32K_Ram" />
          <memoryRef ref="FTFL_PFlash0_SEC_256K_2KS" />
          <memoryRef ref="FTFL_DFlash0_32K_1KS" />
          <memoryRef ref="kinetisIO_MK" />
@@ -2874,7 +2860,7 @@ Test Devices:
       </device>
 <!-- MK40-M10 -->
       <device name="MK40DN512ZM10" family="CortexM4" subfamily="MK40DZ10">
-         <memoryRef ref="kinetis_M4_64K_64K_Ram" />
+         <memoryRef ref="kinetis64K_64K_Ram" />
          <memoryRef ref="FTFL_PFlash0_SEC_512K_2KS" />
          <memoryRef ref="kinetisIO_MK" />
          <sdid value="0x00000000" mask="0x00000000" />
@@ -2883,7 +2869,7 @@ Test Devices:
          <registerDescriptionRef ref="CortexM4-register-description" />
       </device>
       <device name="MK40DX64M10"   family="CortexM4" subfamily="MK40D10">
-         <memoryRef ref="kinetis_M4_8K_8K_Ram" />
+         <memoryRef ref="kinetis8K_8K_Ram" />
          <memoryRef ref="FTFL_PFlash0_SEC_64K_1KS" />
          <memoryRef ref="FTFL_DFlash0_32K_1KS" />
          <memoryRef ref="kinetisIO_MK" />
@@ -2893,7 +2879,7 @@ Test Devices:
          <registerDescriptionRef ref="CortexM4-register-description" />
       </device>
       <device name="MK40DX128M10"  family="CortexM4" subfamily="MK40D10">
-         <memoryRef ref="kinetis_M4_16K_16K_Ram" />
+         <memoryRef ref="kinetis16K_16K_Ram" />
          <memoryRef ref="FTFL_PFlash0_SEC_128K_1KS" />
          <memoryRef ref="FTFL_DFlash0_32K_1KS" />
          <memoryRef ref="kinetisIO_MK" />
@@ -2903,7 +2889,7 @@ Test Devices:
          <registerDescriptionRef ref="CortexM4-register-description" />
       </device>
       <device name="MK40DX128ZM10" family="CortexM4" subfamily="MK40DZ10">
-         <memoryRef ref="kinetis_M4_16K_16K_Ram" />
+         <memoryRef ref="kinetis16K_16K_Ram" />
          <memoryRef ref="FTFL_PFlash0_SEC_128K_1KS" />
          <memoryRef ref="FTFL_DFlash0_64K_2KS" />
          <memoryRef ref="kinetisIO_MK" />
@@ -2913,7 +2899,7 @@ Test Devices:
          <registerDescriptionRef ref="CortexM4-register-description" />
       </device>
       <device name="MK40DX256M10"  family="CortexM4" subfamily="MK40D10">
-         <memoryRef ref="kinetis_M4_32K_32K_Ram" />
+         <memoryRef ref="kinetis32K_32K_Ram" />
          <memoryRef ref="FTFL_PFlash0_SEC_256K_2KS" />
          <memoryRef ref="FTFL_DFlash0_256K_2KS" />
          <memoryRef ref="kinetisIO_MK" />
@@ -2923,7 +2909,7 @@ Test Devices:
          <registerDescriptionRef ref="CortexM4-register-description" />
       </device>
       <device name="MK40DX256ZM10" family="CortexM4" subfamily="MK40DZ10">
-         <memoryRef ref="kinetis_M4_32K_32K_Ram" />
+         <memoryRef ref="kinetis32K_32K_Ram" />
          <memoryRef ref="FTFL_PFlash0_SEC_256K_2KS" />
          <memoryRef ref="FTFL_DFlash0_256K_2KS" />
          <memoryRef ref="kinetisIO_MK" />
@@ -2934,7 +2920,7 @@ Test Devices:
       </device>
 <!-- MK50-M7 -->
       <device name="MK50DX128M7" family="CortexM4" subfamily="MK50D7">
-         <memoryRef ref="kinetis_M4_16K_16K_Ram" />
+         <memoryRef ref="kinetis16K_16K_Ram" />
          <memoryRef ref="FTFL_PFlash0_SEC_128K_2KS" />
          <memoryRef ref="FTFL_DFlash0_32K_1KS" />
          <memoryRef ref="kinetisIO_MK" />
@@ -2945,7 +2931,7 @@ Test Devices:
          <note>K50P100M72SF1RM</note>
       </device>
       <device name="MK50DX256M7" family="CortexM4" subfamily="MK50D7">
-         <memoryRef ref="kinetis_M4_32K_32K_Ram" />
+         <memoryRef ref="kinetis32K_32K_Ram" />
          <memoryRef ref="FTFL_PFlash0_SEC_256K_2KS" />
          <memoryRef ref="FTFL_DFlash0_32K_1KS" />
          <memoryRef ref="kinetisIO_MK" />
@@ -2957,7 +2943,7 @@ Test Devices:
       </device>
 <!-- MK50-M10 -->
       <device name="MK50DN512M10"  family="CortexM4" subfamily="MK50D10">
-         <memoryRef ref="kinetis_M4_64K_64K_Ram" />
+         <memoryRef ref="kinetis64K_64K_Ram" />
          <memoryRef ref="FTFL_PFlash0_SEC_512K_2KS" />
          <memoryRef ref="kinetisIO_MK" />
          <sdid value="0x00000000" mask="0x00000000" />
@@ -2966,7 +2952,7 @@ Test Devices:
          <registerDescriptionRef ref="CortexM4-register-description" />
       </device>
       <device name="MK50DN512ZM10" family="CortexM4" subfamily="MK50DZ10">
-         <memoryRef ref="kinetis_M4_64K_64K_Ram" />
+         <memoryRef ref="kinetis64K_64K_Ram" />
          <memoryRef ref="FTFL_PFlash0_SEC_512K_2KS" />
          <memoryRef ref="kinetisIO_MK" />
          <sdid value="0x00000000" mask="0x00000000" />
@@ -2975,7 +2961,7 @@ Test Devices:
          <registerDescriptionRef ref="CortexM4-register-description" />
       </device>
       <device name="MK50DX128M10" family="CortexM4"  subfamily="MK50D10">
-         <memoryRef ref="kinetis_M4_16K_16K_Ram" />
+         <memoryRef ref="kinetis16K_16K_Ram" />
          <memoryRef ref="FTFL_PFlash0_SEC_128K_1KS" />
          <memoryRef ref="FTFL_DFlash0_32K_1KS" />
          <memoryRef ref="kinetisIO_MK" />
@@ -2985,7 +2971,7 @@ Test Devices:
          <registerDescriptionRef ref="CortexM4-register-description" />
       </device>
       <device name="MK50DX256M10" family="CortexM4"  subfamily="MK50D10">
-         <memoryRef ref="kinetis_M4_32K_32K_Ram" />
+         <memoryRef ref="kinetis32K_32K_Ram" />
          <memoryRef ref="FTFL_PFlash0_SEC_256K_2KS" />
          <memoryRef ref="FTFL_DFlash0_32K_1KS" />
          <memoryRef ref="kinetisIO_MK" />
@@ -2995,7 +2981,7 @@ Test Devices:
          <registerDescriptionRef ref="CortexM4-register-description" />
       </device>
       <device name="MK50DX256ZM10" family="CortexM4" subfamily="MK50DZ10">
-         <memoryRef ref="kinetis_M4_32K_32K_Ram" />
+         <memoryRef ref="kinetis32K_32K_Ram" />
          <memoryRef ref="FTFL_PFlash0_SEC_256K_2KS" />
          <memoryRef ref="FTFL_DFlash0_256K_2KS" />
          <memoryRef ref="kinetisIO_MK" />
@@ -3006,7 +2992,7 @@ Test Devices:
       </device>
 <!-- MK51-M7 -->
       <device name="MK51DX128M7" family="CortexM4"  subfamily="MK51D7">
-         <memoryRef ref="kinetis_M4_16K_16K_Ram" />
+         <memoryRef ref="kinetis16K_16K_Ram" />
          <memoryRef ref="FTFL_PFlash0_SEC_128K_2KS" />
          <memoryRef ref="FTFL_DFlash0_32K_1KS" />
          <memoryRef ref="kinetisIO_MK" />
@@ -3017,7 +3003,7 @@ Test Devices:
          <note>K51P81M72SF1RM, K51P100M72SF1RM</note>
       </device>
       <device name="MK51DX256M7" family="CortexM4"  subfamily="MK51D7">
-         <memoryRef ref="kinetis_M4_32K_32K_Ram" />
+         <memoryRef ref="kinetis32K_32K_Ram" />
          <memoryRef ref="FTFL_PFlash0_SEC_256K_2KS" />
          <memoryRef ref="FTFL_DFlash0_32K_1KS" />
          <memoryRef ref="kinetisIO_MK" />
@@ -3029,7 +3015,7 @@ Test Devices:
       </device>
 <!-- MK51-M10 -->
       <device name="MK51DN512M10"  family="CortexM4" subfamily="MK51D10">
-         <memoryRef ref="kinetis_M4_64K_64K_Ram" />
+         <memoryRef ref="kinetis64K_64K_Ram" />
          <memoryRef ref="FTFL_PFlash0_SEC_512K_2KS" />
          <memoryRef ref="kinetisIO_MK" />
          <sdid value="0x00000000" mask="0x00000000" />
@@ -3038,7 +3024,7 @@ Test Devices:
          <registerDescriptionRef ref="CortexM4-register-description" />
       </device>
       <device name="MK51DN512ZM10" family="CortexM4" subfamily="MK51DZ10">
-         <memoryRef ref="kinetis_M4_64K_64K_Ram" />
+         <memoryRef ref="kinetis64K_64K_Ram" />
          <memoryRef ref="FTFL_PFlash0_SEC_512K_2KS" />
          <memoryRef ref="kinetisIO_MK" />
          <sdid value="0x00000000" mask="0x00000000" />
@@ -3047,7 +3033,7 @@ Test Devices:
          <registerDescriptionRef ref="CortexM4-register-description" />
       </device>
       <device name="MK51DN256M10"  family="CortexM4" subfamily="MK51D10">
-         <memoryRef ref="kinetis_M4_32K_32K_Ram" />
+         <memoryRef ref="kinetis32K_32K_Ram" />
          <memoryRef ref="FTFL_PFlash0_SEC_256K_2KS" />
          <memoryRef ref="kinetisIO_MK" />
          <sdid value="0x00000000" mask="0x00000000" />
@@ -3056,7 +3042,7 @@ Test Devices:
          <registerDescriptionRef ref="CortexM4-register-description" />
       </device>
       <device name="MK51DN256ZM10" family="CortexM4" subfamily="MK51DZ10">
-         <memoryRef ref="kinetis_M4_32K_32K_Ram" />
+         <memoryRef ref="kinetis32K_32K_Ram" />
          <memoryRef ref="FTFL_PFlash0_SEC_256K_2KS" />
          <memoryRef ref="kinetisIO_MK" />
          <sdid value="0x00000000" mask="0x00000000" />
@@ -3065,7 +3051,7 @@ Test Devices:
          <registerDescriptionRef ref="CortexM4-register-description" />
       </device>
       <device name="MK51DX128M10"  family="CortexM4" subfamily="MK51D10">
-         <memoryRef ref="kinetis_M4_16K_16K_Ram" />
+         <memoryRef ref="kinetis16K_16K_Ram" />
          <memoryRef ref="FTFL_PFlash0_SEC_128K_1KS" />
          <memoryRef ref="FTFL_DFlash0_32K_1KS" />
          <memoryRef ref="kinetisIO_MK" />
@@ -3075,7 +3061,7 @@ Test Devices:
          <registerDescriptionRef ref="CortexM4-register-description" />
       </device>
       <device name="MK51DX256M10"  family="CortexM4" subfamily="MK51D10">
-         <memoryRef ref="kinetis_M4_32K_32K_Ram" />
+         <memoryRef ref="kinetis32K_32K_Ram" />
          <memoryRef ref="FTFL_PFlash0_SEC_256K_2KS" />
          <memoryRef ref="FTFL_DFlash0_32K_1KS" />
          <memoryRef ref="kinetisIO_MK" />
@@ -3085,7 +3071,7 @@ Test Devices:
          <registerDescriptionRef ref="CortexM4-register-description" />
       </device>
       <device name="MK51DX256ZM10" family="CortexM4" subfamily="MK51DZ10">
-         <memoryRef ref="kinetis_M4_32K_32K_Ram" />
+         <memoryRef ref="kinetis32K_32K_Ram" />
          <memoryRef ref="FTFL_PFlash0_SEC_256K_2KS" />
          <memoryRef ref="FTFL_DFlash0_256K_2KS" />
          <memoryRef ref="kinetisIO_MK" />
@@ -3096,7 +3082,7 @@ Test Devices:
       </device>
 <!-- MK52-M10 -->
       <device name="MK52DN512M10"  family="CortexM4" subfamily="MK52D10">
-         <memoryRef ref="kinetis_M4_64K_64K_Ram" />
+         <memoryRef ref="kinetis64K_64K_Ram" />
          <memoryRef ref="FTFL_PFlash0_SEC_512K_2KS" />
          <memoryRef ref="kinetisIO_MK" />
          <sdid value="0x00000000" mask="0x00000000" />
@@ -3105,7 +3091,7 @@ Test Devices:
          <registerDescriptionRef ref="CortexM4-register-description" />
       </device>
       <device name="MK52DN512ZM10" family="CortexM4" subfamily="MK52DZ10">
-         <memoryRef ref="kinetis_M4_64K_64K_Ram" />
+         <memoryRef ref="kinetis64K_64K_Ram" />
          <memoryRef ref="FTFL_PFlash0_SEC_512K_2KS" />
          <memoryRef ref="kinetisIO_MK" />
          <sdid value="0x00000000" mask="0x00000000" />
@@ -3115,7 +3101,7 @@ Test Devices:
       </device>
 <!-- MK53-M10 -->
       <device name="MK53DN512M10"  family="CortexM4" subfamily="MK53D10">
-         <memoryRef ref="kinetis_M4_64K_64K_Ram" />
+         <memoryRef ref="kinetis64K_64K_Ram" />
          <memoryRef ref="FTFL_PFlash0_SEC_512K_2KS" />
          <memoryRef ref="kinetisIO_MK" />
          <sdid value="0x00000000" mask="0x00000000" />
@@ -3124,7 +3110,7 @@ Test Devices:
          <registerDescriptionRef ref="CortexM4-register-description" />
       </device>
       <device name="MK53DN512ZM10" family="CortexM4" subfamily="MK53DZ10">
-         <memoryRef ref="kinetis_M4_64K_64K_Ram" />
+         <memoryRef ref="kinetis64K_64K_Ram" />
          <memoryRef ref="FTFL_PFlash0_SEC_512K_2KS" />
          <memoryRef ref="kinetisIO_MK" />
          <sdid value="0x00000000" mask="0x00000000" />
@@ -3132,7 +3118,7 @@ Test Devices:
          <registerDescriptionRef ref="CortexM4-register-description" />
       </device>
       <device name="MK53DX256M10" family="CortexM4"  subfamily="MK53D10">
-         <memoryRef ref="kinetis_M4_32K_32K_Ram" />
+         <memoryRef ref="kinetis32K_32K_Ram" />
          <memoryRef ref="FTFL_PFlash0_SEC_256K_2KS" />
          <memoryRef ref="FTFL_DFlash0_32K_1KS" />
          <memoryRef ref="kinetisIO_MK" />
@@ -3142,7 +3128,7 @@ Test Devices:
          <registerDescriptionRef ref="CortexM4-register-description" />
       </device>
       <device name="MK53DX256ZM10" family="CortexM4" subfamily="MK53DZ10">
-         <memoryRef ref="kinetis_M4_32K_32K_Ram" />
+         <memoryRef ref="kinetis32K_32K_Ram" />
          <memoryRef ref="FTFL_PFlash0_SEC_256K_2KS" />
          <memoryRef ref="FTFL_DFlash0_256K_2KS" />
          <memoryRef ref="kinetisIO_MK" />
@@ -3153,7 +3139,7 @@ Test Devices:
       </device>
 <!-- MK60-M10 -->
       <device name="MK60DN256M10" family="CortexM4" subfamily="MK60D10">
-         <memoryRef ref="kinetis_M4_32K_32K_Ram" />
+         <memoryRef ref="kinetis32K_32K_Ram" />
          <memoryRef ref="FTFL_PFlash0_SEC_256K_2KS" />
          <memoryRef ref="kinetisIO_MK" />
          <sdid value="0x00000000" mask="0x00000000" />
@@ -3162,7 +3148,7 @@ Test Devices:
          <registerDescriptionRef ref="CortexM4-register-description" />
          <note>Ref K60P144M100SF2V2RM</note>
       </device><device name="MK60DN256ZM10" family="CortexM4" subfamily="MK60DZ10">
-         <memoryRef ref="kinetis_M4_32K_32K_Ram" />
+         <memoryRef ref="kinetis32K_32K_Ram" />
          <memoryRef ref="FTFL_PFlash0_SEC_256K_2KS" />
          <memoryRef ref="kinetisIO_MK" />
          <sdid value="0x00000000" mask="0x00000000" />
@@ -3172,7 +3158,7 @@ Test Devices:
          <note>Ref K60P144M100SF2RM</note>
       </device>
       <device name="MK60DN512M10" family="CortexM4" subfamily="MK60D10">
-         <memoryRef ref="kinetis_M4_64K_64K_Ram" />
+         <memoryRef ref="kinetis64K_64K_Ram" />
          <memoryRef ref="FTFL_PFlash0_SEC_512K_2KS" />
          <memoryRef ref="kinetisIO_MK" />
          <sdid value="0x00000000" mask="0x00000000" />
@@ -3181,7 +3167,7 @@ Test Devices:
          <registerDescriptionRef ref="CortexM4-register-description" />
          <note>Ref K60P144M100SF2V2RM</note>
       </device><device name="MK60DN512ZM10" family="CortexM4" subfamily="MK60DZ10">
-         <memoryRef ref="kinetis_M4_64K_64K_Ram" />
+         <memoryRef ref="kinetis64K_64K_Ram" />
          <memoryRef ref="FTFL_PFlash0_SEC_512K_2KS" />
          <memoryRef ref="kinetisIO_MK" />
          <sdid value="0x00000000" mask="0x00000000" />
@@ -3191,7 +3177,7 @@ Test Devices:
          <note>Ref K60P144M100SF2RM</note>
       </device>
       <device name="MK60DX256M10" family="CortexM4" subfamily="MK60D10">
-         <memoryRef ref="kinetis_M4_32K_32K_Ram" />
+         <memoryRef ref="kinetis32K_32K_Ram" />
          <memoryRef ref="FTFL_PFlash0_SEC_256K_2KS" />
          <memoryRef ref="FTFL_DFlash0_256K_2KS" />
          <memoryRef ref="kinetisIO_MK" />
@@ -3202,7 +3188,7 @@ Test Devices:
          <note>Ref K60P144M100SF2V2RM</note>
       </device>
       <device name="MK60DX256ZM10" family="CortexM4" subfamily="MK60DZ10">
-         <memoryRef ref="kinetis_M4_32K_32K_Ram" />
+         <memoryRef ref="kinetis32K_32K_Ram" />
          <memoryRef ref="FTFL_PFlash0_SEC_256K_2KS" />
          <memoryRef ref="FTFL_DFlash0_256K_2KS" />
          <memoryRef ref="kinetisIO_MK" />
@@ -3214,7 +3200,7 @@ Test Devices:
       </device>
 <!-- MK60-M12-M15 -->
       <device name="MK60FX512M12" family="CortexM4F" subfamily="MK60F12">
-         <memoryRef ref="kinetis_M4_64K_64K_Ram" />
+         <memoryRef ref="kinetis64K_64K_Ram" />
          <memoryRef ref="FTFE_PFlash0_SEC_512K_4KS" />
          <memoryRef ref="FTFE_DFlash0_512K_4KS" />
          <memoryRef ref="kinetisIO_MK" />
@@ -3226,7 +3212,7 @@ Test Devices:
       </device>
       <device name="MK60FX512M15"      alias="MK60FX512M12" /> <!-- These are identical apart from speed grade -->
       <device name="MK60FN1M0M12" family="CortexM4F" subfamily="MK60F12">
-         <memoryRef ref="kinetis_M4_64K_64K_Ram" />
+         <memoryRef ref="kinetis64K_64K_Ram" />
          <memoryRef ref="FTFE_PFlash0_SEC_256K_4KS" />
          <memoryRef ref="FTFE_PFlash1_256K_4KS" />
          <memoryRef ref="FTFE_PFlash2_256K_4KS" />
@@ -3241,7 +3227,7 @@ Test Devices:
       <device name="MK60FN1M0M15"      alias="MK60FN1M0M12" /> <!-- These are identical apart from speed grade -->
 <!-- MK61-M12 -->
       <device name="MK61FX512M12" family="CortexM4F" subfamily="MK61F12">
-         <memoryRef ref="kinetis_M4_64K_64K_Ram" />
+         <memoryRef ref="kinetis64K_64K_Ram" />
          <memoryRef ref="FTFE_PFlash0_SEC_512K_4KS" />
          <memoryRef ref="FTFE_DFlash0_512K_4KS" />
          <memoryRef ref="kinetisIO_MK" />
@@ -3252,7 +3238,7 @@ Test Devices:
       </device>
       <device name="MK61FX512M15"      alias="MK61FX512M12" /> <!-- These are identical apart from speed grade -->
       <device name="MK61FN1M0M12" family="CortexM4F" subfamily="MK61F12">
-         <memoryRef ref="kinetis_M4_64K_64K_Ram" />
+         <memoryRef ref="kinetis64K_64K_Ram" />
          <memoryRef ref="FTFE_PFlash0_SEC_256K_4KS" />
          <memoryRef ref="FTFE_PFlash1_256K_4KS" />
          <memoryRef ref="FTFE_PFlash2_256K_4KS" />
@@ -3266,7 +3252,7 @@ Test Devices:
       <device name="MK61FN1M0M15"      alias="MK61FN1M0M12" /> <!-- These are identical apart from speed grade -->
 <!-- MK63-M12 -->
       <device name="MK63FN1M0M12" family="CortexM4F" subfamily="MK63F12">
-         <memoryRef ref="kinetis_M4_64K_192K_Ram" />
+         <memoryRef ref="kinetis64K_192K_Ram" />
          <memoryRef ref="FTFE_PFlash0_SEC_512K_4KS" />
          <memoryRef ref="FTFE_PFlash1_512K_4KS" />
          <memoryRef ref="kinetisIO_MK" />
@@ -3278,7 +3264,7 @@ Test Devices:
       </device>
 <!-- MK64-M12 -->
       <device name="MK64FX512M12" family="CortexM4F" subfamily="MK64F12">
-         <memoryRef ref="kinetis_M4_64K_128K_Ram" />
+         <memoryRef ref="kinetis64K_128K_Ram" />
          <memoryRef ref="FTFE_PFlash0_SEC_512K_4KS" />
          <memoryRef ref="FTFE_DFlash0_128K_4KS" />
          <memoryRef ref="kinetisIO_MK" />
@@ -3290,7 +3276,7 @@ Test Devices:
          <note>K64P144M120SF5RM</note>
       </device>
       <device name="MK64FN1M0M12" family="CortexM4F" subfamily="MK64F12">
-         <memoryRef ref="kinetis_M4_64K_192K_Ram" />
+         <memoryRef ref="kinetis64K_192K_Ram" />
          <memoryRef ref="FTFE_PFlash0_SEC_512K_4KS" />
          <memoryRef ref="FTFE_PFlash1_512K_4KS" />
          <memoryRef ref="kinetisIO_MK" />
@@ -3304,7 +3290,7 @@ Test Devices:
       
 <!-- MK65-M18 -->
       <device name="MK65FX1M0M18" family="CortexM4F" subfamily="MK65F18">
-         <memoryRef ref="kinetis_M4_64K_192K_Ram" />
+         <memoryRef ref="kinetis64K_192K_Ram" />
          <memoryRef ref="FTFE_PFlash0_SEC_512K_4KS" />
          <memoryRef ref="FTFE_PFlash1_512K_4KS" />
          <memoryRef ref="FTFE_DFlash0_256K_4KS" />
@@ -3316,7 +3302,7 @@ Test Devices:
          <note>K65P169M180SF5RMV2</note>
       </device>
       <device name="MK65FN2M0M18" family="CortexM4F" subfamily="MK65F18">
-         <memoryRef ref="kinetis_M4_64K_192K_Ram" />
+         <memoryRef ref="kinetis64K_192K_Ram" />
          <memoryRef ref="FTFE_PFlash0_SEC_512K_4KS" />
          <memoryRef ref="FTFE_PFlash1_512K_4KS" />
          <memoryRef ref="FTFE_PFlash2_512K_4KS" />
@@ -3331,7 +3317,7 @@ Test Devices:
       
 <!-- MK66-M18 -->
       <device name="MK66FX1M0M18" family="CortexM4F" subfamily="MK66F18">
-         <memoryRef ref="kinetis_M4_64K_192K_Ram" />
+         <memoryRef ref="kinetis64K_192K_Ram" />
          <memoryRef ref="FTFE_PFlash0_SEC_512K_4KS" />
          <memoryRef ref="FTFE_PFlash1_512K_4KS" />
          <memoryRef ref="FTFE_DFlash0_256K_4KS" />
@@ -3344,7 +3330,7 @@ Test Devices:
          <note>Tested</note>
       </device>
       <device name="MK66FN2M0M18" family="CortexM4F" subfamily="MK66F18">
-         <memoryRef ref="kinetis_M4_64K_192K_Ram" />
+         <memoryRef ref="kinetis64K_192K_Ram" />
          <memoryRef ref="FTFE_PFlash0_SEC_512K_4KS" />
          <memoryRef ref="FTFE_PFlash1_512K_4KS" />
          <memoryRef ref="FTFE_PFlash2_512K_4KS" />
@@ -3359,7 +3345,7 @@ Test Devices:
       
 <!-- MK70-M12 -->
       <device name="MK70FX512M12" family="CortexM4F" subfamily="MK70F12">
-         <memoryRef ref="kinetis_M4_64K_64K_Ram" />
+         <memoryRef ref="kinetis64K_64K_Ram" />
          <memoryRef ref="FTFE_PFlash0_SEC_512K_4KS" />
          <memoryRef ref="FTFE_DFlash0_512K_4KS" />
          <memoryRef ref="kinetisIO_MK" />
@@ -3370,7 +3356,7 @@ Test Devices:
       </device>
       <device name="MK70FX512M15"      alias="MK70FX512M12" /> <!-- These are identical apart from speed grade -->
       <device name="MK70FN1M0M12" family="CortexM4F" subfamily="MK70F12">
-         <memoryRef ref="kinetis_M4_64K_64K_Ram" />
+         <memoryRef ref="kinetis64K_64K_Ram" />
          <memoryRef ref="FTFE_PFlash0_SEC_256K_4KS" />
          <memoryRef ref="FTFE_PFlash1_256K_4KS" />
          <memoryRef ref="FTFE_PFlash2_256K_4KS" />
@@ -3385,7 +3371,7 @@ Test Devices:
       
 <!-- MK82-M15 -->
       <device name="MK82FN256M15" family="CortexM4F" subfamily="MK82F25615">
-         <memoryRef ref="kinetis_M4_64K_192K_Ram" />
+         <memoryRef ref="kinetis64K_192K_Ram" />
          <memoryRef ref="FTFA_PFlash0_SEC_256K_2KS" />
          <memoryRef ref="kinetisIO_MK" />
          <sdid value="0x82001BD8" mask="0xFFF00F80"/>
