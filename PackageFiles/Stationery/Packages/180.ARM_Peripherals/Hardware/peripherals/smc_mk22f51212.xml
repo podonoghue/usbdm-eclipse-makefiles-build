@@ -82,6 +82,7 @@
    </choiceOption>
 
    <template name="enablePowerModes" namespace="all"  ><![CDATA[
+   \t/* smc_mk22f51212.xml */
    \t/**
    \t * Enable the given power modes.
    \t * A mode must be enabled before it can be entered.
@@ -105,6 +106,7 @@
    ]]></template>
 
    <template name="setStopOptions" namespace="all"  ><![CDATA[
+   \t/* smc_mk22f51212.xml */
    \t/**
    \t * Allows the detailed operation in STOP mode to be controlled.
    \t *

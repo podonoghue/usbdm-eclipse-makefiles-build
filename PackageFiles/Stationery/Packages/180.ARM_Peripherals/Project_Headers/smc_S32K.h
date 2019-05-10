@@ -271,8 +271,8 @@ public:
       smc().STOPCTRL = Info::stopctrl;
    }
    
-   $(/SMC/enablePowerModes)
-   $(/SMC/setStopOptions)
+$(/SMC/enablePowerModes)
+$(/SMC/setStopOptions)
    /**
     * Get current power status
     *

@@ -36,6 +36,7 @@
    </choiceOption>
 
    <template name="enablePowerModes" namespace="all"  ><![CDATA[
+   \t/* smc_s32k14x.xml */
    \t/**
    \t * Enable the given power modes.
    \t * A mode must be enabled before it can be entered.
@@ -55,6 +56,7 @@
    ]]></template>
 
    <template name="setStopOptions" namespace="all"  ><![CDATA[
+   \t/* smc_s32k14x.xml */
    \t/**
    \t * Allows the detailed operation in STOP mode to be controlled.
    \t *
