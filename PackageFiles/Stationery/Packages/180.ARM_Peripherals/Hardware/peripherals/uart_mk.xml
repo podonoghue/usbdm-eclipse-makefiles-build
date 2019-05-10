@@ -91,9 +91,9 @@ Devices using this peripheral:
    </validate>
 
    <projectActionList id = "uart_files">
-      <copy source="Snippets/uart-example.cpp"  target="Snippets/uart-example.cpp"  overwrite="true"  derived="true" />
-      <copy source="Project_Headers/uart.h"     target="Project_Headers/uart.h"     overwrite="true"  derived="true" macroReplace="true" />
-      <copy source="Project_Headers/queue.h"    target="Project_Headers/queue.h"    overwrite="true"  derived="true" />
+      <copy source="Snippets/uart-example.cpp"     target="Snippets/uart-example.cpp"  overwrite="true"  derived="true" />
+      <copy source="Project_Headers/uart.h"        target="Project_Headers/uart.h"     overwrite="true"  derived="true" macroReplace="true" />
+      <copy source="Project_Headers/uart_queue.h"  target="Project_Headers/uart_queue.h"    overwrite="true"  derived="true" />
    </projectActionList>
          
    <template><![CDATA[

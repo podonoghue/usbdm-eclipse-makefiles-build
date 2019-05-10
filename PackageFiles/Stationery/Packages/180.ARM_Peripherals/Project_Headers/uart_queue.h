@@ -10,6 +10,9 @@
 
 #include "system.h"
 
+
+namespace USBDM {
+
 /**
  * Simple queue implementation
  *
@@ -17,7 +20,7 @@
  * @tparam QUEUE_SIZE Size of queue
  */
 template<class T, int QUEUE_SIZE>
-class Queue {
+class UartQueue {
    T        fBuff[QUEUE_SIZE];
    T        *fHead, *fTail;
    int      fNumberOfElements;
@@ -25,9 +28,9 @@ class Queue {
 
 public:
    /*
-    * Create empty Queue
+    * Create empty UartQueue
     */
-   Queue() : fHead(fBuff), fTail(fBuff), fNumberOfElements(0) {
+   UartQueue() : fHead(fBuff), fTail(fBuff), fNumberOfElements(0) {
    }
 
    /**
@@ -63,7 +66,7 @@ public:
    void enQueue(T element) {
       bool success = enQueueDiscardOnFull(element);
       (void)success;
-      usbdm_assert(success, "Queue full");
+      usbdm_assert(success, "UartQueue full");
    }
    /*
     * Add element to queue. Discards on full.
@@ -92,7 +95,7 @@ public:
     */
    T deQueue() {
       USBDM::CriticalSection cs;
-      usbdm_assert(!isEmpty(), "Queue empty");
+      usbdm_assert(!isEmpty(), "UartQueue empty");
       uint8_t t = *fHead++;
       fNumberOfElements--;
       if (fHead>=(fBuff+QUEUE_SIZE)) {
@@ -102,5 +105,7 @@ public:
    }
 
 };
+
+} // End namespace USBDM
 
 #endif /* INCLUDE_USBDM_QUEUE_H_ */
