@@ -37,7 +37,7 @@
             <applyWhen>
                <variableRef idRef="hasCCNature" condition="isTrue" />
             </applyWhen>
-            <copy source="Sources/main-RTX.c" target="Sources/main.cpp" overwrite="true" />
+            <copy source="Sources/main-RTX.cpp" target="Sources/main.cpp" overwrite="true" />
          </projectActionList>
       </projectActionList>
       
@@ -54,14 +54,14 @@
             <applyWhen>
                <not><variableRef idRef="hasCCNature" condition="isTrue" /></not>
             </applyWhen>
-            <copy source="Sources/main-RTX-Blinky.c" target="Sources/main.c" overwrite="true" />
+            <copy source="Sources/main-RTX.c" target="Sources/main.c" overwrite="true" />
          </projectActionList>
          <!-- Blinky RTX CPP main -->
          <projectActionList>
             <applyWhen>
                <variableRef idRef="hasCCNature" condition="isTrue" />
             </applyWhen>
-            <copy source="Sources/main-RTX-Blinky.c" target="Sources/main.cpp" overwrite="true" />
+            <copy source="Sources/main-RTX.cpp" target="Sources/main.cpp" overwrite="true" />
          </projectActionList>
       </projectActionList>
 
@@ -80,27 +80,24 @@
             <variableRef idRef="projectOptionValue.FreeRTOS" />
          </applyWhen>
          <constant id="FreeRTOS.stack.size"   value="100" />
-         <createFolder target="FreeRTOS"            type="include" />
-	 
-         <copy source="../FreeRTOS/Doc/index.html"      target="FreeRTOS.html" type="link" />
-         <copy source="../FreeRTOS/Source"              target="FreeRTOS/Source" />
-         <copy source="../FreeRTOS/License/license.txt" target="FreeRTOS/License.txt" />
-         
-         <copy source="../FreeRTOS/Source/Portable/MemMang/heap_1.c"          target="FreeRTOS/Source/heap_1.c" />
-         <copy source="../FreeRTOS/Source/Portable/GCC/ARM_CM4F/port.c"       target="FreeRTOS/Source/port.c" />
-         <copy source="../FreeRTOS/Source/Portable/GCC/ARM_CM4F/portmacro.h"  target="FreeRTOS/Source/include/portmacro.h" />
-         
+
          <copy source="Sources/FreeRTOSConfig.h"     target="Sources/FreeRTOSConfig.h" />
          <copy source="Sources/FreeRTOSConfig.cfg"   target="Sources/FreeRTOSConfig.cfg" />
-         
-         <excludeSourceFolder target="FreeRTOS/Source/Portable" />
+	 
+         <copy source="Startup_Code/FreeRtosStubs.c" target="Startup_Code/FreeRtosStubs.c" overwrite="true" />
 
+         <createFolder target="FreeRTOS" />
+         <copy source="../FreeRTOS/license.txt"                                  target="FreeRTOS/license.txt" />
+         <copy source="../FreeRTOS/Source"                                       target="FreeRTOS/Source" />
+         <copy source="../FreeRTOS/Source/Portable/GCC/ARM_CM4F/port.c"         target="FreeRTOS/Source/port.c" />
+         <copy source="../FreeRTOS/Source/Portable/GCC/ARM_CM4F/portmacro.h"    target="FreeRTOS/Source/portmacro.h" />
+         <excludeSourceFolder target="FreeRTOS/Source/Portable" />
          <projectOption id="net.sourceforge.usbdm.gnu.c.compiler.option.include.paths">
-            <value>&quot;${ProjDirPath}/FreeRTOS/Source/include&quot;</value>
+            <value>&quot;${ProjDirPath}/FreeRTOS/Source/Include&quot;</value>
             <value>&quot;${ProjDirPath}/FreeRTOS/Source&quot;</value>
          </projectOption>
          <projectOption id="net.sourceforge.usbdm.gnu.cpp.compiler.option.include.paths">
-            <value>&quot;${ProjDirPath}/FreeRTOS/Source/include&quot;</value>
+            <value>&quot;${ProjDirPath}/FreeRTOS/Source/Include&quot;</value>
             <value>&quot;${ProjDirPath}/FreeRTOS/Source&quot;</value>
          </projectOption>
          <projectOption id="net.sourceforge.usbdm.gnu.c.compiler.option.preprocessor.def.symbols">

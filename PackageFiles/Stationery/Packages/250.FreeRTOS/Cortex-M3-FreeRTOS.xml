@@ -2,14 +2,11 @@
 <!DOCTYPE root SYSTEM "../package.dtd">
 
 <root version="1.0">
-   <!-- Cortex-M0 FreeRTOS RTOS -->
-   <projectActionList id="Cortex-M0-FreeRTOS" >
+   <!-- Cortex-M3 FreeRTOS RTOS -->
+   <projectActionList id="Cortex-M3-FreeRTOS" >
       <applyWhen>
          <and>
-	    <or>
-               <deviceFamilyIs>CortexM0</deviceFamilyIs>
-               <deviceFamilyIs>CortexM0plus</deviceFamilyIs>
-	    </or>
+            <deviceFamilyIs>CortexM3</deviceFamilyIs>
             <variableRef idRef="linkerRamSize"   condition="greaterThan" value="2048" />
             <variableRef idRef="linkerFlashSize" condition="greaterThan" value="4096" />
             <variableRef idRef="outputType"      condition="matches"     value=".*ProjectType\.exe$" />
@@ -17,7 +14,7 @@
       </applyWhen>
       <variable id="projectOptionValue.FreeRTOS" 
          name="FreeRTOS" 
-         description="Adds FreeRTOS framework for Cortex M0" 
+         description="Adds FreeRTOS framework for Cortex M3" 
          checkGroup="group-additional-options" />
       
       <projectActionList id="FreeRTOS-noCpp-noBlinky">
@@ -64,7 +61,7 @@
             <applyWhen>
                <variableRef idRef="hasCCNature" condition="isTrue" />
             </applyWhen>
-            <copy source="Sources/main-RTX.c" target="Sources/main.cpp" overwrite="true" />
+            <copy source="Sources/main-RTX.cpp" target="Sources/main.cpp" overwrite="true" />
          </projectActionList>
       </projectActionList>
 
@@ -76,7 +73,6 @@
                <variableRef idRef="projectOptionValue.CPP-abstraction"  defaultValue="false" />
             </and>
          </applyWhen>
-         <copy source="Sources/main-RTX.cpp" target="Sources/main.cpp" overwrite="true" />
       </projectActionList>
       
       <projectActionList id="FreeRTOS-base">
@@ -89,13 +85,12 @@
          <copy source="Sources/FreeRTOSConfig.cfg"   target="Sources/FreeRTOSConfig.cfg" />
 	 
          <copy source="Startup_Code/FreeRtosStubs.c" target="Startup_Code/FreeRtosStubs.c" overwrite="true" />
-         <copy source="${usbdm_application_path}\Stationery\Packages\FreeRTOS\FreeRTOS_Reference_Manual_V10.0.0.pdf" target="FreeRTOS.pdf" type="link" sourcePathType="absolute"/>
 
          <createFolder target="FreeRTOS" />
          <copy source="../FreeRTOS/license.txt"                                  target="FreeRTOS/license.txt" />
          <copy source="../FreeRTOS/Source"                                       target="FreeRTOS/Source" />
-         <copy source="../FreeRTOS/Source/Portable/GCC/ARM_CM0/port.c"         target="FreeRTOS/Source/port.c" />
-         <copy source="../FreeRTOS/Source/Portable/GCC/ARM_CM0/portmacro.h"    target="FreeRTOS/Source/portmacro.h" />
+         <copy source="../FreeRTOS/Source/Portable/GCC/ARM_CM3/port.c"         target="FreeRTOS/Source/port.c" />
+         <copy source="../FreeRTOS/Source/Portable/GCC/ARM_CM3/portmacro.h"    target="FreeRTOS/Source/portmacro.h" />
          <excludeSourceFolder target="FreeRTOS/Source/Portable" />
          <projectOption id="net.sourceforge.usbdm.gnu.c.compiler.option.include.paths">
             <value>&quot;${ProjDirPath}/FreeRTOS/Source/Include&quot;</value>
@@ -106,11 +101,11 @@
             <value>&quot;${ProjDirPath}/FreeRTOS/Source&quot;</value>
          </projectOption>
          <projectOption id="net.sourceforge.usbdm.gnu.c.compiler.option.preprocessor.def.symbols">
-            <value>__CORTEX_M0</value>
+            <value>__CORTEX_M3</value>
             <value>__FREERTOS</value>
          </projectOption>
          <projectOption id="net.sourceforge.usbdm.gnu.cpp.compiler.option.preprocessor.def.symbols">
-            <value>__CORTEX_M0</value>
+            <value>__CORTEX_M3</value>
             <value>__FREERTOS</value>
          </projectOption>
       </projectActionList>
