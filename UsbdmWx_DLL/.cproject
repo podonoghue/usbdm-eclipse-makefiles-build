@@ -3,10 +3,6 @@
 	<storageModule moduleId="org.eclipse.cdt.core.settings">
 		<cconfiguration id="cdt.managedbuild.toolchain.gnu.mingw.base.1792983171">
 			<storageModule buildSystemId="org.eclipse.cdt.managedbuilder.core.configurationDataProvider" id="cdt.managedbuild.toolchain.gnu.mingw.base.1792983171" moduleId="org.eclipse.cdt.core.settings" name="Default">
-				<macros>
-					<stringMacro name="WXWIN" type="VALUE_PATH_DIR" value="C:\Apps\wxWidgets-3.0.2"/>
-					<stringMacro name="XERCES" type="VALUE_PATH_DIR" value="C:\Apps\xerces-c-3.1.1"/>
-				</macros>
 				<externalSettings/>
 				<extensions>
 					<extension id="org.eclipse.cdt.core.PE" point="org.eclipse.cdt.core.BinaryParser"/>
@@ -28,21 +24,19 @@
 								</outputEntries>
 							</builder>
 							<tool id="cdt.managedbuild.tool.gnu.assembler.mingw.base.2121330370" name="GCC Assembler" superClass="cdt.managedbuild.tool.gnu.assembler.mingw.base">
-								<option id="gnu.both.asm.option.include.paths.1136630793" name="Include paths (-I)" superClass="gnu.both.asm.option.include.paths" valueType="includePath">
+								<option IS_BUILTIN_EMPTY="false" IS_VALUE_EMPTY="false" id="gnu.both.asm.option.include.paths.1136630793" name="Include paths (-I)" superClass="gnu.both.asm.option.include.paths" valueType="includePath">
 									<listOptionValue builtIn="false" value="&quot;${WXWIN}/include&quot;"/>
-									<listOptionValue builtIn="false" value="&quot;${WXWIN}/lib/gcc_lib/mswud&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${WXWIN}/lib/gcc_dll/mswu&quot;"/>
 								</option>
 								<inputType id="cdt.managedbuild.tool.gnu.assembler.input.769505028" superClass="cdt.managedbuild.tool.gnu.assembler.input"/>
 							</tool>
 							<tool id="cdt.managedbuild.tool.gnu.archiver.mingw.base.1881488886" name="GCC Archiver" superClass="cdt.managedbuild.tool.gnu.archiver.mingw.base"/>
 							<tool id="cdt.managedbuild.tool.gnu.cpp.compiler.mingw.base.1624802614" name="GCC C++ Compiler" superClass="cdt.managedbuild.tool.gnu.cpp.compiler.mingw.base">
-								<option id="gnu.cpp.compiler.option.include.paths.639773202" name="Include paths (-I)" superClass="gnu.cpp.compiler.option.include.paths" valueType="includePath">
+								<option IS_BUILTIN_EMPTY="false" IS_VALUE_EMPTY="false" id="gnu.cpp.compiler.option.include.paths.639773202" name="Include paths (-I)" superClass="gnu.cpp.compiler.option.include.paths" useByScannerDiscovery="false" valueType="includePath">
 									<listOptionValue builtIn="false" value="&quot;${WXWIN}/include&quot;"/>
-									<listOptionValue builtIn="false" value="&quot;${WXWIN}/lib/gcc_lib/mswud&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${WXWIN}/lib/gcc_dll/mswu&quot;"/>
 								</option>
-								<option id="gnu.cpp.compiler.option.preprocessor.def.1878407177" name="Defined symbols (-D)" superClass="gnu.cpp.compiler.option.preprocessor.def" valueType="definedSymbols">
+								<option IS_BUILTIN_EMPTY="false" IS_VALUE_EMPTY="false" id="gnu.cpp.compiler.option.preprocessor.def.1878407177" name="Defined symbols (-D)" superClass="gnu.cpp.compiler.option.preprocessor.def" useByScannerDiscovery="false" valueType="definedSymbols">
 									<listOptionValue builtIn="false" value="TARGET=ARM"/>
 									<listOptionValue builtIn="false" value="useWxWidgets"/>
 									<listOptionValue builtIn="false" value="__WXMSW__"/>
@@ -52,12 +46,11 @@
 								<inputType id="cdt.managedbuild.tool.gnu.cpp.compiler.input.179506931" superClass="cdt.managedbuild.tool.gnu.cpp.compiler.input"/>
 							</tool>
 							<tool id="cdt.managedbuild.tool.gnu.c.compiler.mingw.base.1771296721" name="GCC C Compiler" superClass="cdt.managedbuild.tool.gnu.c.compiler.mingw.base">
-								<option id="gnu.c.compiler.option.include.paths.882461399" name="Include paths (-I)" superClass="gnu.c.compiler.option.include.paths" valueType="includePath">
+								<option IS_BUILTIN_EMPTY="false" IS_VALUE_EMPTY="false" id="gnu.c.compiler.option.include.paths.882461399" name="Include paths (-I)" superClass="gnu.c.compiler.option.include.paths" useByScannerDiscovery="false" valueType="includePath">
 									<listOptionValue builtIn="false" value="&quot;${WXWIN}/include&quot;"/>
-									<listOptionValue builtIn="false" value="&quot;${WXWIN}/lib/gcc_lib/mswud&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${WXWIN}/lib/gcc_dll/mswu&quot;"/>
 								</option>
-								<option id="gnu.c.compiler.option.preprocessor.def.symbols.1702185299" name="Defined symbols (-D)" superClass="gnu.c.compiler.option.preprocessor.def.symbols" valueType="definedSymbols">
+								<option IS_BUILTIN_EMPTY="false" IS_VALUE_EMPTY="false" id="gnu.c.compiler.option.preprocessor.def.symbols.1702185299" name="Defined symbols (-D)" superClass="gnu.c.compiler.option.preprocessor.def.symbols" useByScannerDiscovery="false" valueType="definedSymbols">
 									<listOptionValue builtIn="false" value="TARGET=ARM"/>
 									<listOptionValue builtIn="false" value="useWxWidgets"/>
 									<listOptionValue builtIn="false" value="__WXMSW__"/>

@@ -292,7 +292,7 @@ USBDM_ErrorCode FlashProgrammer_ARM::getPageAddress(MemoryRegionConstPtr memoryR
    uint32_t virtualAddress = (physicalAddress&0xFFFF);
    uint16_t pageNum16 = memoryRegionPtr->getPageNo(physicalAddress);
    if (pageNum16 == MemoryRegion::NoPageNo) {
-      log.print("A=0x%06X - No page #!\n", physicalAddress);
+      log.error("A=0x%06X - No page #!\n", physicalAddress);
       return PROGRAMMING_RC_ERROR_INTERNAL_CHECK_FAILED;
    }
    *pageNo = (uint8_t)pageNum16;
@@ -331,6 +331,7 @@ USBDM_ErrorCode FlashProgrammer_ARM::setPageRegisters(uint32_t physicalAddress) 
          }
          uint16_t pageNum16 = memoryRegionPtr->getPageNo(physicalAddress);
          if (pageNum16 == MemoryRegion::NoPageNo) {
+        	log.error("pageNum16 == MemoryRegion::NoPageNo");
             return PROGRAMMING_RC_ERROR_INTERNAL_CHECK_FAILED;
          }
          uint8_t pageNum = (uint8_t)pageNum16;
@@ -954,11 +955,11 @@ USBDM_ErrorCode FlashProgrammer_ARM::loadLargeTargetProgram(uint8_t    *buffer,
    }
 #if TARGET != MC56F80xx
    if ((codeLoadAddress < device->getRamStart()) || (codeLoadAddress > device->getRamEnd())) {
-      log.error("Image load address is invalid.\n");
+      log.error("Image load address (0x%8X) is invalid: range [0x%8X, 0x%8X].\n", codeLoadAddress, device->getRamStart(), device->getRamEnd());
       return PROGRAMMING_RC_ERROR_INTERNAL_CHECK_FAILED;
    }
    if ((codeEntry < device->getRamStart()) || (codeEntry > device->getRamEnd())) {
-      log.error("Image Entry point is invalid.\n");
+      log.error("Image Entry point (0x%8X) is invalid: range [0x%8X, 0x%8X].\n", codeEntry, device->getRamStart(), device->getRamEnd());
       return PROGRAMMING_RC_ERROR_INTERNAL_CHECK_FAILED;
    }
 #endif
