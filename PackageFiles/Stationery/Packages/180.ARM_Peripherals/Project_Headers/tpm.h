@@ -322,7 +322,7 @@ public:
     * Disables peripheral including clocks
     */
    static INLINE_RELEASE void disable() {
-      // Disable FTM (clock source disabled)
+      // Disable TPM (clock source disabled)
       tmr().SC = 0;
 
       // Disable clock to peripheral interface
@@ -1054,12 +1054,12 @@ public:
       /** Allow access owning TPM */
       using Tpm = TpmBase_T<Info>;
 
-      /** @return Base address of FTM.CONTROL struct as uint32_t */
-      static constexpr uint32_t tpmCONTROL() { return tpmBase() + offsetof(FTM_Type, CONTROLS[channel]); }
-      /** @return Address of FTM.CONTROL.CnSC as uint32_t */
-      static constexpr uint32_t tpmCnSC() { return tpmBase() + offsetof(FTM_Type, CONTROLS[channel])+0; }
-      /** @return Address of FTM.CONTROL.CnV as uint32_t */
-      static constexpr uint32_t tpmCnV() { return tpmBase() + offsetof(FTM_Type, CONTROLS[channel])+sizeof(uint32_t); }
+      /** @return Base address of TPM.CONTROL struct as uint32_t */
+      static constexpr uint32_t tpmCONTROL() { return tpmBase() + offsetof(TPM_Type, CONTROLS[channel]); }
+      /** @return Address of TPM.CONTROL.CnSC as uint32_t */
+      static constexpr uint32_t tpmCnSC() { return tpmBase() + offsetof(TPM_Type, CONTROLS[channel])+0; }
+      /** @return Address of TPM.CONTROL.CnV as uint32_t */
+      static constexpr uint32_t tpmCnV() { return tpmBase() + offsetof(TPM_Type, CONTROLS[channel])+sizeof(uint32_t); }
 
       /**
        * Set TOI Callback function.
@@ -1167,7 +1167,7 @@ public:
       }
 
       /**
-       * Disables timer channel (sets mode to FtmChMode_Disabled)
+       * Disables timer channel (sets mode to TpmChMode_Disabled)
        */
       void disable() {
          setMode(TpmChMode_Disabled);
@@ -1631,8 +1631,8 @@ class Tpm3Channel : public Tpm3::Channel<channel> {};
  *  Selects the encoding mode used in the Quadrature Decoder mode.
  */
 enum TpmQuadratureMode {
-   TpmQuadratureMode_Phase_AB_Mode        = FTM_QDCTRL_QUADMODE(0),   //!< Phase A and phase B encoding mode.
-   TpmQuadratureMode_Count_Direction_Mode = FTM_QDCTRL_QUADMODE(1),   //!< Count and direction encoding mode.
+   TpmQuadratureMode_Phase_AB_Mode        = TPM_QDCTRL_QUADMODE(0),   //!< Phase A and phase B encoding mode.
+   TpmQuadratureMode_Count_Direction_Mode = TPM_QDCTRL_QUADMODE(1),   //!< Count and direction encoding mode.
 };
 
 /**
@@ -1768,7 +1768,7 @@ public:
     * Disables peripheral including clocks
     */
    static INLINE_RELEASE void disable() {
-      // Disable FTM (clock source disabled)
+      // Disable TPM (clock source disabled)
       tmr().QDCTRL = 0;
 
       // Disable clock to peripheral interface
