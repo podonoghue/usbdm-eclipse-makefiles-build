@@ -79,34 +79,54 @@
    #endif\n\n
    
    #else // defined(PCC)
-   /** Dummy port information for pins without an associated PCR */
-   constexpr PortInfo  __attribute__((unused)) NoPortInfo {0, 0, (IRQn_Type)-1};\n\n
-   
-   #ifdef SIM_SCGC5_PORTA_MASK
-   /** Port information for PORTA */
-   constexpr PortInfo  __attribute__((unused)) PortAInfo {PORTA_BasePtr, SIM_SCGC5_PORTA_MASK, PORTA_IRQn};
-   #endif\n\n
-   
-   #ifdef SIM_SCGC5_PORTB_MASK
-   /** Port information for PORTB */
-   constexpr PortInfo  __attribute__((unused)) PortBInfo {PORTB_BasePtr, SIM_SCGC5_PORTB_MASK, PORTB_IRQn};
-   #endif\n\n
-   
-   #ifdef SIM_SCGC5_PORTC_MASK
-   /** Port information for PORTC */
-   constexpr PortInfo  __attribute__((unused)) PortCInfo {PORTC_BasePtr, SIM_SCGC5_PORTC_MASK, PORTC_IRQn};
-   #endif\n\n
-   
-   #ifdef SIM_SCGC5_PORTD_MASK
-   /** Port information for PORTD */
-   constexpr PortInfo  __attribute__((unused)) PortDInfo {PORTD_BasePtr, SIM_SCGC5_PORTD_MASK, PORTD_IRQn};
-   #endif\n\n
-   
-   #ifdef SIM_SCGC5_PORTE_MASK
-   /** Port information for PORTE */
-   constexpr PortInfo  __attribute__((unused)) PortEInfo {PORTE_BasePtr, SIM_SCGC5_PORTE_MASK, PORTE_IRQn};
-   #endif\n\n
-   
+/** Dummy port information for pins without an associated PCR */
+constexpr PortInfo  __attribute__((unused)) NoPortInfo {0, 0, (IRQn_Type)-1};\n\n
+
+#ifdef SIM_SCGC5_PORTA_MASK
+/** Port information for PORTA */
+#ifndef PORTA_IRQS
+constexpr PortInfo  __attribute__((unused)) PortAInfo {PORTA_BasePtr, SIM_SCGC5_PORTA_MASK, ((IRQn_Type)-1)};
+#else
+constexpr PortInfo  __attribute__((unused)) PortAInfo {PORTA_BasePtr, SIM_SCGC5_PORTA_MASK, PORTA_IRQn};
+#endif
+#endif\n\n
+
+#ifdef SIM_SCGC5_PORTB_MASK
+/** Port information for PORTB */
+#ifndef PORTB_IRQS
+constexpr PortInfo  __attribute__((unused)) PortBInfo {PORTB_BasePtr, SIM_SCGC5_PORTB_MASK, ((IRQn_Type)-1)};
+#else
+constexpr PortInfo  __attribute__((unused)) PortBInfo {PORTB_BasePtr, SIM_SCGC5_PORTB_MASK, PORTB_IRQn};
+#endif
+#endif\n\n
+
+#ifdef SIM_SCGC5_PORTC_MASK
+/** Port information for PORTC */
+#ifndef PORTC_IRQS
+constexpr PortInfo  __attribute__((unused)) PortCInfo {PORTC_BasePtr, SIM_SCGC5_PORTC_MASK, ((IRQn_Type)-1)};
+#else
+constexpr PortInfo  __attribute__((unused)) PortCInfo {PORTC_BasePtr, SIM_SCGC5_PORTC_MASK, PORTC_IRQn};
+#endif
+#endif\n\n
+
+#ifdef SIM_SCGC5_PORTD_MASK
+/** Port information for PORTD */
+#ifndef PORTD_IRQS
+constexpr PortInfo  __attribute__((unused)) PortDInfo {PORTD_BasePtr, SIM_SCGC5_PORTD_MASK, ((IRQn_Type)-1)};
+#else
+constexpr PortInfo  __attribute__((unused)) PortDInfo {PORTD_BasePtr, SIM_SCGC5_PORTD_MASK, PORTD_IRQn};
+#endif
+#endif\n\n
+
+#ifdef SIM_SCGC5_PORTE_MASK
+/** Port information for PORTE */
+#ifndef PORTE_IRQS
+constexpr PortInfo  __attribute__((unused)) PortEInfo {PORTE_BasePtr, SIM_SCGC5_PORTE_MASK, ((IRQn_Type)-1)};
+#else
+constexpr PortInfo  __attribute__((unused)) PortEInfo {PORTE_BasePtr, SIM_SCGC5_PORTE_MASK, PORTE_IRQn};
+#endif
+#endif\n\n
+
    #endif // defined(PCC)\n\n
 
    /** Class to static check signal mapping is valid */
