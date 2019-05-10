@@ -99,7 +99,6 @@
    <projectActionList id = "dac_files" >
       <copy source="Project_Headers/dac.h"            target="Project_Headers/dac.h"            overwrite="true" derived="true" />
       <copy source="Snippets/dac-example.cpp"         target="Snippets/dac-example.cpp"         overwrite="true" derived="true" />
-      <copy source="Snippets/dma-dac-example-mkl.cpp" target="Snippets/dma-dac-example-mkl.cpp" overwrite="true" derived="true" />
    </projectActionList>
    
    <signals/>
