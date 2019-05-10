@@ -1,4 +1,4 @@
-/* ARMLtd_GCC-rom-mk-sramu.ld
+/* ARMLtd_GCC-rom-mk-sramu.ld (Packages\100.ARM_DeviceOptions\Project_Settings\Linker_Files)
  *
  * Kinetis version with optional SRAM_U allocation and bitband
  *
@@ -161,7 +161,7 @@ M_VECTOR_RAM_SIZE = DEFINED(__ram_vector_table__) ? (__VECTOR_TABLE_END - __VECT
     KEEP(*(.mtb_buf)) /* May not referenced by application */
     . = ALIGN(8);
     _mtb_end = .;
-  } > ram
+  } > mtb_ram
 
   .interrupts_ram :
   {
@@ -172,7 +172,7 @@ M_VECTOR_RAM_SIZE = DEFINED(__ram_vector_table__) ? (__VECTOR_TABLE_END - __VECT
     . += M_VECTOR_RAM_SIZE;
     . = ALIGN(4);
     __interrupts_ram_end__ = .; 
-  } > ram
+  } > interrupts_ram
 
   __VECTOR_RAM = DEFINED(__ram_vector_table__) ? __VECTOR_RAM__ : __VECTOR_TABLE;
   __RAM_VECTOR_TABLE_SIZE_BYTES = __interrupts_ram_end__ - __interrupts_ram_start__;
@@ -180,7 +180,7 @@ M_VECTOR_RAM_SIZE = DEFINED(__ram_vector_table__) ? (__VECTOR_TABLE_END - __VECT
    .bdts :
    {
       *(.bss*endPointBdts*) /* Load USB BDTs here as they are aligned */
-   } > ram
+   } > bdts_ram
   
    .data : AT (__etext)
    {
@@ -192,7 +192,7 @@ M_VECTOR_RAM_SIZE = DEFINED(__ram_vector_table__) ? (__VECTOR_TABLE_END - __VECT
       . = ALIGN(4);
       /* All data end */
       __data_end__ = .;
-   } > ram
+   } > data_ram
    
   /* KDS defines __DATA_END as the end of DATA in Flash */
   __DATA_END = __DATA_ROM + SIZEOF(.data);
@@ -208,7 +208,7 @@ M_VECTOR_RAM_SIZE = DEFINED(__ram_vector_table__) ? (__VECTOR_TABLE_END - __VECT
       . = ALIGN(4);
       __bss_end__ = .;
       __END_BSS = .;
-   } > ram
+   } > bss_ram
     
    /* Minimum HEAP - from top of BSS */
    .heap :
@@ -220,22 +220,22 @@ M_VECTOR_RAM_SIZE = DEFINED(__ram_vector_table__) ? (__VECTOR_TABLE_END - __VECT
       __HeapBase = .;
       __heap_addr = .;
       . = . + __heap_size__;
-   } > ram
+      __HeapLimit = .;
+   } > heap_ram
 
-$(linkerExtraRegions:)
    /* STACK space - between HEAP and end of RAM (or bitband_bytes) */
    PROVIDE ( __sram_u_size = 0 );
    .stack :
    {
       /* Make sure location doesn't move backwards as causes cryptic messages */
-      . = MAX( ., ABSOLUTE(ORIGIN(ram) + LENGTH(ram) - __stack_size__ - __sram_u_size - 3));
+      . = MAX( ., ABSOLUTE(ORIGIN(stack_ram) + LENGTH(stack_ram) - __stack_size__ - __sram_u_size - 3));
       . = ALIGN(4);
-      __HeapLimit = .;
       __StackLimit = .;
       . = . + __stack_size__;
       __StackTop = .;
-   } > ram
+   } > stack_ram
 
+$(linkerExtraRegions:)
    /* 
     * SRAM_U region
     *
@@ -247,7 +247,7 @@ $(linkerExtraRegions:)
    .sram_u (NOLOAD) :
    {
       *(.sram_u)
-   } > ram
+   } > sram_u_ram
 
    /*
     * Bitband region
@@ -257,7 +257,7 @@ $(linkerExtraRegions:)
    .bitband (NOLOAD) :
    {
       /* Allocate variables from top of region */
-      . = ORIGIN(bitband) + ((ORIGIN(ram) + LENGTH(ram) - __sram_u_size) & 0xFFFFFF) * 32;
+      . = ORIGIN(bitband) + ((ORIGIN(sram_u_ram) + LENGTH(sram_u_ram) - __sram_u_size) & 0xFFFFFF) * 32;
       *(.bitband)
    } > bitband
     
@@ -272,7 +272,7 @@ $(linkerExtraRegions:)
   PROVIDE(_read  = _usbdm_read);
 
   /*
-   RAM Memory map                                            Example
+   Typcal RAM Memory map                                     Example
   +----------------------+                                   0x1FFFFF00
   | Micro Trace Buffer   |
   | (if declared)        |
@@ -289,6 +289,8 @@ $(linkerExtraRegions:)
   | Heap                 |
   | (__heap_size__)      |  (minimum heap)                   (size=0x120)
   +----------------------+                                   0x200000A4
+  |//////////////////////|
+  |----------------------| <-- RAM Lower/Upper boundary
   |//////////////////////|
   +----------------------+ __HeapLimit = __StackLimit        0x200001fc
   | Stack                |

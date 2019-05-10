@@ -1,6 +1,6 @@
-/* ARMLtd_GCC-rom-lpc.ld (Packages\100.ARM_DeviceOptions\Project_Settings\Linker_Files)`
+/* ARMLtd_GCC-rom-mk-sramu.ld (Packages\100.ARM_DeviceOptions\Project_Settings\Linker_Files)
  *
- * LPC version without SRAM_U allocation or bitband
+ * Kinetis version with optional SRAM_U allocation and bitband
  *
  * Linker script based on example scripts provided with ARM Ltd GCC
  *
@@ -57,14 +57,22 @@ SECTIONS
       /* Vector table */
       __VECTOR_TABLE = .;
       KEEP(*(.interrupt_vectors))
+      KEEP(*(.isr_vector))         /* KDS vector table */
       /* Make sure we pulled in at least a reset vector.  */
       ASSERT (. != __flash_start, "No reset vector found");
       __VECTOR_TABLE_END = .;
-
+      
+      /* Uncomment to Emit a Bootloader configuration if present */
+      /*
+      . = __flash_start + 0x3C0;
+      KEEP(*(.bootloader_configuration))
+      */
+      
       /* Emit a Security field */
-      . = __flash_start + 0x2FC;
-      KEEP(*(.security_information))/* LPC Code Read Protection (CRP) */
-      ASSERT (. == __flash_start + 0x300, "No LPC CRP security information");
+      . = __flash_start + 0x400;
+      KEEP(*(.security_information))
+      KEEP(*(.FlashConfig))    /* KDS Flash Configuration Field (FCF) */
+      ASSERT (. == __flash_start + 0x410, "No Freescale security information");
     } > flash
 
 /* Size of RAM vector table (if needed) */
@@ -169,6 +177,11 @@ M_VECTOR_RAM_SIZE = DEFINED(__ram_vector_table__) ? (__VECTOR_TABLE_END - __VECT
   __VECTOR_RAM = DEFINED(__ram_vector_table__) ? __VECTOR_RAM__ : __VECTOR_TABLE;
   __RAM_VECTOR_TABLE_SIZE_BYTES = __interrupts_ram_end__ - __interrupts_ram_start__;
   
+   .bdts :
+   {
+      *(.bss*endPointBdts*) /* Load USB BDTs here as they are aligned */
+   } > ram
+  
    .data : AT (__etext)
    {
       __data_start__ = .;
@@ -211,10 +224,11 @@ M_VECTOR_RAM_SIZE = DEFINED(__ram_vector_table__) ? (__VECTOR_TABLE_END - __VECT
 
 $(linkerExtraRegions:)
    /* STACK space - between HEAP and end of RAM (or bitband_bytes) */
+   PROVIDE ( __sram_u_size = 0 );
    .stack :
    {
       /* Make sure location doesn't move backwards as causes cryptic messages */
-      . = MAX( ., ABSOLUTE(ORIGIN(ram) + LENGTH(ram) - __stack_size - 3));
+      . = MAX( ., ABSOLUTE(ORIGIN(ram) + LENGTH(ram) - __stack_size__ - __sram_u_size - 3));
       . = ALIGN(4);
       __HeapLimit = .;
       __StackLimit = .;
@@ -222,6 +236,31 @@ $(linkerExtraRegions:)
       __StackTop = .;
    } > ram
 
+   /* 
+    * SRAM_U region
+    *
+    * This area is partitioned from the top of SRAM
+    *
+    * Each bit in this region maps to a word in the .bitband region (if present)
+    * This region is also accessible to BME (if present and supports RAM access) 
+    */
+   .sram_u (NOLOAD) :
+   {
+      *(.sram_u)
+   } > ram
+
+   /*
+    * Bitband region
+    *
+    * Each word in this region maps to a bit in the .bitband_byte region 
+    */
+   .bitband (NOLOAD) :
+   {
+      /* Allocate variables from top of region */
+      . = ORIGIN(bitband) + ((ORIGIN(ram) + LENGTH(ram) - __sram_u_size) & 0xFFFFFF) * 32;
+      *(.bitband)
+   } > bitband
+    
   PROVIDE(__stack = __StackTop);
   PROVIDE(__cs3_stack = __StackTop);
   
@@ -233,7 +272,7 @@ $(linkerExtraRegions:)
   PROVIDE(_read  = _usbdm_read);
 
   /*
-   RAM Memory map                                            Example
+   Typcal RAM Memory map                                     Example
   +----------------------+                                   0x1FFFFF00
   | Micro Trace Buffer   |
   | (if declared)        |
@@ -255,6 +294,9 @@ $(linkerExtraRegions:)
   | Stack                |
   | (__stack_size__)     |                                   (size=0x100)
   +----------------------+ __StackTop                        0x200002ff
+  | Bitband/BME (sram_u) |
+  | (__sram_u_size)      |                                   (size=1)
+  +----------------------+                                   0x20000300
   
   */
 }

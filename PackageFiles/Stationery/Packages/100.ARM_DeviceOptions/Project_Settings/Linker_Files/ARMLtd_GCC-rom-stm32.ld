@@ -1,4 +1,4 @@
-/* ARMLtd_GCC-rom-stm32.ld 
+/* ARMLtd_GCC-rom-stm32.ld (Packages\100.ARM_DeviceOptions\Project_Settings\Linker_Files)
  *
  * STM32 version without SRAM_U allocation or bitband
  *

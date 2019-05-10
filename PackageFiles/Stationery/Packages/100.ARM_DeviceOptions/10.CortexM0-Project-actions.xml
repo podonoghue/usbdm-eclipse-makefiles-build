@@ -107,7 +107,7 @@ Cortex-M0
          <applyWhen>
             <deviceSubfamilyMatches>^MKE\d+.*</deviceSubfamilyMatches>
          </applyWhen>
-         <copy source="Project_Settings/Linker_Files/ARMLtd_GCC-rom-mk.ld"    target="Project_Settings/Linker_Files/Linker-rom.ld" />
+         <copy source="Project_Settings/Linker_Files/ARMLtd_GCC-rom-mkl.ld"   target="Project_Settings/Linker_Files/Linker-rom.ld" />
          <copy source="Startup_Code/system-kinetis.c"                         target="Startup_Code/system.c" />
          <copy source="Startup_Code/security-mke.c"                           target="Startup_Code/security.c" />
       </projectActionList>
@@ -117,7 +117,7 @@ Cortex-M0
          <applyWhen>
             <deviceSubfamilyMatches>^MKL\d+.*</deviceSubfamilyMatches>
          </applyWhen>
-         <copy source="Project_Settings/Linker_Files/ARMLtd_GCC-rom-mk.ld"    target="Project_Settings/Linker_Files/Linker-rom.ld" />
+         <copy source="Project_Settings/Linker_Files/ARMLtd_GCC-rom-mkl.ld"    target="Project_Settings/Linker_Files/Linker-rom.ld" />
          <copy source="Startup_Code/system-kinetis.c"                         target="Startup_Code/system.c" />
          <copy source="Startup_Code/security-mkl.c"                           target="Startup_Code/security.c" />
       </projectActionList>
@@ -127,7 +127,7 @@ Cortex-M0
          <applyWhen>
             <deviceSubfamilyMatches>^MKM\d+.*</deviceSubfamilyMatches>
          </applyWhen>
-         <copy source="Project_Settings/Linker_Files/ARMLtd_GCC-rom-mk.ld"    target="Project_Settings/Linker_Files/Linker-rom.ld" />
+         <copy source="Project_Settings/Linker_Files/ARMLtd_GCC-rom-mkl.ld"    target="Project_Settings/Linker_Files/Linker-rom.ld" />
          <copy source="Startup_Code/system-kinetis.c"                         target="Startup_Code/system.c" />
          <copy source="Startup_Code/security-mkm.c"                           target="Startup_Code/security.c" />
       </projectActionList>
@@ -137,7 +137,7 @@ Cortex-M0
          <applyWhen>
             <deviceSubfamilyMatches>^MKV1.*</deviceSubfamilyMatches>
          </applyWhen>
-         <copy source="Project_Settings/Linker_Files/ARMLtd_GCC-rom-mk.ld"    target="Project_Settings/Linker_Files/Linker-rom.ld" />
+         <copy source="Project_Settings/Linker_Files/ARMLtd_GCC-rom-mkl.ld"    target="Project_Settings/Linker_Files/Linker-rom.ld" />
          <copy source="Startup_Code/system-kinetis.c"                         target="Startup_Code/system.c" />
          <copy source="Startup_Code/security-mkv10.c"                         target="Startup_Code/security.c" />
       </projectActionList>
@@ -147,7 +147,7 @@ Cortex-M0
          <applyWhen>
             <deviceSubfamilyMatches>^MKW\d+.*</deviceSubfamilyMatches>
          </applyWhen>
-         <copy source="Project_Settings/Linker_Files/ARMLtd_GCC-rom-mk.ld"    target="Project_Settings/Linker_Files/Linker-rom.ld" />
+         <copy source="Project_Settings/Linker_Files/ARMLtd_GCC-rom-mkl.ld"    target="Project_Settings/Linker_Files/Linker-rom.ld" />
          <copy source="Startup_Code/system-kinetis.c"                         target="Startup_Code/system.c" />
          <copy source="Startup_Code/security-mkw.c"                           target="Startup_Code/security.c" />
       </projectActionList>

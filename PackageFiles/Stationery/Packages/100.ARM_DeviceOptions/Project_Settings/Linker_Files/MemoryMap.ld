@@ -1,4 +1,4 @@
-/* MemoryMap.ld
+/* MemoryMap.ld (Packages\100.ARM_DeviceOptions\Project_Settings\Linker_Files)
  *
  * Memory map for devices without SRAM_U allocation for bit-band/bme
  */
@@ -8,15 +8,16 @@
 /* <o> Stack Size
    <i> Required amount of stack space
    <i> In CMSIS this will determine the ISR stack size
-   <0x0-$(linkerRamSize)> 
+   <0x0-$(linkerRamSize):4> 
 */
 __stack_size = $(linkerStackSize);
 
-/* <o> Minimum Heap Size 
-   <i> Actual heap may be larger as it fills all unused RAM up to STACK
-   <0x0-$(linkerRamSize)> 
+/* <o> Heap Size 
+   <0x0-$(linkerRamSize):4> 
 */
 __heap_size  = $(linkerHeapSize);
   
 $(linkerInformation)
+
+
 

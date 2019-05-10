@@ -1,4 +1,5 @@
-/* Linker script for Codesourcery
+/* Codesourcery-rom-mk.ld  (Packages\100.ARM_DeviceOptions\Project_Settings\Linker_Files)
+ * Linker script for Codesourcery
  *
  * Derived from:
  *
