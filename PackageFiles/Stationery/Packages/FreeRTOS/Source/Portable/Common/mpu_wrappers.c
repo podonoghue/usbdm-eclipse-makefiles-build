@@ -38,7 +38,7 @@ task.h is included from an application file. */
 /* Scheduler includes. */
 #include "FreeRTOS.h"
 #include "task.h"
-#include <queue.h>
+#include "queue.h"
 #include "timers.h"
 #include "event_groups.h"
 #include "stream_buffer.h"

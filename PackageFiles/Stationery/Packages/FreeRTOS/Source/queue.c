@@ -35,7 +35,7 @@ task.h is included from an application file. */
 
 #include "FreeRTOS.h"
 #include "task.h"
-#include <queue.h>
+#include "queue.h"
 
 #if ( configUSE_CO_ROUTINES == 1 )
 	#include "croutine.h"
@@ -951,7 +951,7 @@ Queue_t * const pxQueue = xQueue;
 			return errQUEUE_FULL;
 		}
 	} /*lint -restore */
-	// unreachable - stop not return warning in indexer
+	// unreachable - stop "no return" warning in indexer
    return pdPASS;
 }
 /*-----------------------------------------------------------*/
@@ -1410,7 +1410,7 @@ Queue_t * const pxQueue = xQueue;
 			}
 		}
 	} /*lint -restore */
-   // unreachable - stop not return warning in indexer
+	// unreachable - stop "no return" warning in indexer
    return pdPASS;
 }
 /*-----------------------------------------------------------*/
@@ -1630,7 +1630,7 @@ Queue_t * const pxQueue = xQueue;
 			}
 		}
 	} /*lint -restore */
-   // unreachable - stop not return warning in indexer
+	// unreachable - stop "no return" warning in indexer
    return pdPASS;
 }
 /*-----------------------------------------------------------*/
@@ -1781,7 +1781,7 @@ Queue_t * const pxQueue = xQueue;
 			}
 		}
 	} /*lint -restore */
-   // unreachable - stop not return warning in indexer
+	// unreachable - stop "no return" warning in indexer
    return pdPASS;
 }
 /*-----------------------------------------------------------*/
