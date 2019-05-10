@@ -2,6 +2,7 @@
 <!DOCTYPE root SYSTEM "usbdmDeviceSchema.dtd" >
 
 <!-- 
+      V4.12.1.260  - Split MK RAM into upper+lower
       V4.12.1.210  - Added S32K144
       V4.12.1.210  - Added MKW41Z4 family (untested)
       V4.12.1.180  - Reviewed and rationalised TCL scripts
@@ -395,50 +396,51 @@ Test Devices:
 
       <!-- 
             Cortex M4 RAM Memory (Break at 0x20000000 boundary)
+	    Note: Programmer uses first RAM region which should include 0x20000000
       -->
       <memory id="kinetis_M4_4K_4K_Ram" type="ram">
-         <memoryRange start="0x1FFFF000" size="4K" name="ram_low" />
          <memoryRange start="0x20000000" size="4K" name="ram_high" />
+         <memoryRange start="0x1FFFF000" size="4K" name="ram_low" />
       </memory>
       <memory id="kinetis_M4_8K_8K_Ram" type="ram">
-         <memoryRange start="0x1FFFE000" size="8K" name="ram_low" />
          <memoryRange start="0x20000000" size="8K" name="ram_high" />
+         <memoryRange start="0x1FFFE000" size="8K" name="ram_low" />
       </memory>
       <memory id="kinetis_M4_8K_16K_Ram" type="ram">
-         <memoryRange start="0x1FFFE000" size="8K"  name="ram_low" />
          <memoryRange start="0x20000000" size="16K" name="ram_high" />
+         <memoryRange start="0x1FFFE000" size="8K"  name="ram_low" />
       </memory>
       <memory id="kinetis_M4_16K_16K_Ram" type="ram">
-         <memoryRange start="0x1FFFC000" size="16K" name="ram_low" />
          <memoryRange start="0x20000000" size="16K" name="ram_high" />
+         <memoryRange start="0x1FFFC000" size="16K" name="ram_low" />
       </memory>
       <memory id="kinetis_M4_16K_32K_Ram" type="ram">
-         <memoryRange start="0x1FFFC000" size="16K" name="ram_low" />
          <memoryRange start="0x20000000" size="32K" name="ram_high" />
+         <memoryRange start="0x1FFFC000" size="16K" name="ram_low" />
       </memory>
       <memory id="kinetis_M4_32K_32K_Ram" type="ram">
-         <memoryRange start="0x1FFF8000" size="32K" name="ram_low" />
          <memoryRange start="0x20000000" size="32K" name="ram_high" />
+         <memoryRange start="0x1FFF8000" size="32K" name="ram_low" />
       </memory>
       <memory id="kinetis_M4_32K_64K_Ram" type="ram">
-         <memoryRange start="0x1FFF8000" size="32K" name="ram_low" />
          <memoryRange start="0x20000000" size="64K" name="ram_high" />
+         <memoryRange start="0x1FFF8000" size="32K" name="ram_low" />
       </memory>
       <memory id="kinetis_M4_64K_64K_Ram" type="ram">
-         <memoryRange start="0x1FFF0000" size="64K" name="ram_low" />
          <memoryRange start="0x20000000" size="64K" name="ram_high" />
+         <memoryRange start="0x1FFF0000" size="64K" name="ram_low" />
       </memory>
       <memory id="kinetis_M4_64K_128K_Ram" type="ram">
-         <memoryRange start="0x1FFF0000" size="64K" name="ram_low" />
          <memoryRange start="0x20000000" size="128K" name="ram_high" />
+         <memoryRange start="0x1FFF0000" size="64K" name="ram_low" />
       </memory>
       <memory id="kinetis_M4_64K_192K_Ram" type="ram">
-         <memoryRange start="0x1FFF0000" size="64K" name="ram_low" />
          <memoryRange start="0x20000000" size="192K" name="ram_high" />
+         <memoryRange start="0x1FFF0000" size="64K" name="ram_low" />
       </memory>
       <memory id="kinetis_M4_256K_256K_Ram" type="ram">
-         <memoryRange start="0x1FFE0000" size="256K" name="ram_low" />
          <memoryRange start="0x20000000" size="256K" name="ram_high" />
+         <memoryRange start="0x1FFE0000" size="256K" name="ram_low" />
       </memory>
       
       <!-- 

@@ -40,7 +40,7 @@
       <Property Id='ARPCOMMENTS'>Programmer for Freescale processors</Property>
       <Property Id='ARPURLINFOABOUT'>$(var.InfoURL)</Property>
       <Property Id='DiskPrompt' Value="$(var.ProductName) $(var.ProductVersion) Installation" />
-      <Property Id="ARPPRODUCTICON" Value="ChipIcon.ico" />
+      <Property Id="ARPPRODUCTICON" Value="ChipIcon.exe" />
 <!--
       <Property Id='ARPCONTACT'>contact info</Property>
       <Property Id='ARPHELPLINK'>URL for technical support</Property>
@@ -218,22 +218,22 @@
 
          <Component Id='C.UsbdmProgrammer' Guid='67513fca-471b-4f11-9987-b7c0cc38ab9f'>
             <File Id='UsbdmFlashProgrammerEXE' DiskId='1' Source='$(var.SrcDir)\bin\UsbdmFlashProgrammer.exe' KeyPath='yes' >
-               <Shortcut Id="SC_ARMProgrammer"   Directory="D.UsbdmProgramMenuDir" Name="ARM Programmer"   Arguments="-target=ARM"   WorkingDirectory='INSTALLDIR' Icon="ChipIcon.ico" IconIndex="0" Advertise="yes"/>
-               <Shortcut Id="SC_CFV1Programmer"  Directory="D.UsbdmProgramMenuDir" Name="CFV1 Programmer"  Arguments="-target=CFV1"  WorkingDirectory='INSTALLDIR' Icon="ChipIcon.ico" IconIndex="0" Advertise="yes"/>
-               <Shortcut Id="SC_CFVXProgrammer"  Directory="D.UsbdmProgramMenuDir" Name="CFVx Programmer"  Arguments="-target=CFVx"  WorkingDirectory='INSTALLDIR' Icon="ChipIcon.ico" IconIndex="0" Advertise="yes"/>
-               <Shortcut Id="SC_DSCProgrammer"   Directory="D.UsbdmProgramMenuDir" Name="MC56F Programmer" Arguments="-target=MC56F" WorkingDirectory='INSTALLDIR' Icon="ChipIcon.ico" IconIndex="0" Advertise="yes"/>
-               <Shortcut Id="SC_HCS08Programmer" Directory="D.UsbdmProgramMenuDir" Name="HCS08 Programmer" Arguments="-target=HCS08" WorkingDirectory='INSTALLDIR' Icon="ChipIcon.ico" IconIndex="0" Advertise="yes"/>
-               <Shortcut Id="SC_HCS12Programmer" Directory="D.UsbdmProgramMenuDir" Name="HCS12 Programmer" Arguments="-target=HCS12" WorkingDirectory='INSTALLDIR' Icon="ChipIcon.ico" IconIndex="0" Advertise="yes"/>
-               <Shortcut Id="SC_RS08Programmer"  Directory="D.UsbdmProgramMenuDir" Name="RS08 Programmer"  Arguments="-target=RS08"  WorkingDirectory='INSTALLDIR' Icon="ChipIcon.ico" IconIndex="0" Advertise="yes"/>
-               <Shortcut Id="SC_S12ZProgrammer"  Directory="D.UsbdmProgramMenuDir" Name="S12Z Programmer"  Arguments="-target=S12Z"  WorkingDirectory='INSTALLDIR' Icon="ChipIcon.ico" IconIndex="0" Advertise="yes"/>
+               <Shortcut Id="SC_ARMProgrammer"   Directory="D.UsbdmProgramMenuDir" Name="ARM Programmer"   Arguments="-target=ARM"   WorkingDirectory='INSTALLDIR' Icon="ChipIcon.exe" IconIndex="0" Advertise="yes"/>
+               <Shortcut Id="SC_CFV1Programmer"  Directory="D.UsbdmProgramMenuDir" Name="CFV1 Programmer"  Arguments="-target=CFV1"  WorkingDirectory='INSTALLDIR' Icon="ChipIcon.exe" IconIndex="0" Advertise="yes"/>
+               <Shortcut Id="SC_CFVXProgrammer"  Directory="D.UsbdmProgramMenuDir" Name="CFVx Programmer"  Arguments="-target=CFVx"  WorkingDirectory='INSTALLDIR' Icon="ChipIcon.exe" IconIndex="0" Advertise="yes"/>
+               <Shortcut Id="SC_DSCProgrammer"   Directory="D.UsbdmProgramMenuDir" Name="MC56F Programmer" Arguments="-target=MC56F" WorkingDirectory='INSTALLDIR' Icon="ChipIcon.exe" IconIndex="0" Advertise="yes"/>
+               <Shortcut Id="SC_HCS08Programmer" Directory="D.UsbdmProgramMenuDir" Name="HCS08 Programmer" Arguments="-target=HCS08" WorkingDirectory='INSTALLDIR' Icon="ChipIcon.exe" IconIndex="0" Advertise="yes"/>
+               <Shortcut Id="SC_HCS12Programmer" Directory="D.UsbdmProgramMenuDir" Name="HCS12 Programmer" Arguments="-target=HCS12" WorkingDirectory='INSTALLDIR' Icon="ChipIcon.exe" IconIndex="0" Advertise="yes"/>
+               <Shortcut Id="SC_RS08Programmer"  Directory="D.UsbdmProgramMenuDir" Name="RS08 Programmer"  Arguments="-target=RS08"  WorkingDirectory='INSTALLDIR' Icon="ChipIcon.exe" IconIndex="0" Advertise="yes"/>
+               <Shortcut Id="SC_S12ZProgrammer"  Directory="D.UsbdmProgramMenuDir" Name="S12Z Programmer"  Arguments="-target=S12Z"  WorkingDirectory='INSTALLDIR' Icon="ChipIcon.exe" IconIndex="0" Advertise="yes"/>
             </File>
             <File Id='UsbdmFlashProgrammerDebugEXE'  DiskId='1' Source='$(var.SrcDir)\bin\UsbdmFlashProgrammer-debug.exe'         />
          </Component>
          <Component Id='C.UsbdmGdbServer' Guid='ea658088-dbaa-4878-a4b9-3a8eb4cbe418'>
             <File Id='UsbdmGdbServerEXE' DiskId='1' Source='$(var.SrcDir)\bin\UsbdmGdbServer.exe' KeyPath='yes' >
-               <Shortcut Id="SC.ARMGdbServer"   Directory="D.UsbdmProgramMenuDir"  Name="ARM GDB Server"   Arguments="-target=ARM"   WorkingDirectory='INSTALLDIR' Icon="ChipIcon.ico" IconIndex="0" Advertise="yes" />
-               <Shortcut Id="SC.CFV1GdbServer"  Directory="D.UsbdmProgramMenuDir"  Name="CFV1 GDB Server"  Arguments="-target=CFV1"  WorkingDirectory='INSTALLDIR' Icon="ChipIcon.ico" IconIndex="0" Advertise="yes" />
-               <Shortcut Id="SC.CFVXGdbServer"  Directory="D.UsbdmProgramMenuDir"  Name="CFVx GDB Server"  Arguments="-target=CFVx"  WorkingDirectory='INSTALLDIR' Icon="ChipIcon.ico" IconIndex="0" Advertise="yes" />
+               <Shortcut Id="SC.ARMGdbServer"   Directory="D.UsbdmProgramMenuDir"  Name="ARM GDB Server"   Arguments="-target=ARM"   WorkingDirectory='INSTALLDIR' Icon="ChipIcon.exe" IconIndex="0" Advertise="yes" />
+               <Shortcut Id="SC.CFV1GdbServer"  Directory="D.UsbdmProgramMenuDir"  Name="CFV1 GDB Server"  Arguments="-target=CFV1"  WorkingDirectory='INSTALLDIR' Icon="ChipIcon.exe" IconIndex="0" Advertise="yes" />
+               <Shortcut Id="SC.CFVXGdbServer"  Directory="D.UsbdmProgramMenuDir"  Name="CFVx GDB Server"  Arguments="-target=CFVx"  WorkingDirectory='INSTALLDIR' Icon="ChipIcon.exe" IconIndex="0" Advertise="yes" />
             </File>
             <File Id='UsbdmGdbServerDebugEXE' DiskId='1' Source='$(var.SrcDir)\bin\UsbdmGdbServer-debug.exe' />
          </Component>
@@ -241,35 +241,35 @@
             <File Id='FirmwareChangerEXE' DiskId='1'
                Source='$(var.SrcDir)\bin\FirmwareChanger.exe' KeyPath='yes'>
                <Shortcut Id="startmenuUSBDM_7" Directory="D.UsbdmProgramMenuDir" Name="USBDM Firmware Updater"
-                  WorkingDirectory='D.FlashImages' Icon="ChipIcon.ico" IconIndex="0" Advertise="yes" />
+                  WorkingDirectory='D.FlashImages' Icon="ChipIcon.exe" IconIndex="0" Advertise="yes" />
             </File>
          </Component>
          <Component Id='C.UsbdmMemoryDump' Guid='*'>
             <File Id='UsbdmMemoryDumpEXE' DiskId='1'
                Source='$(var.SrcDir)\bin\UsbdmMemoryDump.exe' KeyPath='yes'>
                <Shortcut Id="startmenuUSBDM_8" Directory="D.UsbdmProgramMenuDir" Name="USBDM Memory Dump"
-                  WorkingDirectory='INSTALLDIR' Icon="ChipIcon.ico" IconIndex="0" Advertise="yes" />
+                  WorkingDirectory='INSTALLDIR' Icon="ChipIcon.exe" IconIndex="0" Advertise="yes" />
             </File>
          </Component>
          <Component Id='C.UsbdmScript' Guid='*'>
             <File Id='UsbdmScriptEXE' DiskId='1'
                Source='$(var.SrcDir)\bin\UsbdmScript.exe' KeyPath='yes'>
                <Shortcut Id="startmenuUSBDM_9" Directory="D.UsbdmProgramMenuDir" Name="USBDM TCL Interpreter"
-                  WorkingDirectory='INSTALLDIR' Icon="ChipIcon.ico" IconIndex="0" Advertise="yes" />
+                  WorkingDirectory='INSTALLDIR' Icon="ChipIcon.exe" IconIndex="0" Advertise="yes" />
             </File>
          </Component>
          <Component Id='C.JB16_Bootloader' Guid='*'>
             <File Id='JB16_BootloaderEXE' DiskId='1'
                Source='$(var.SrcDir)\bin\JB16_Bootloader.exe' KeyPath='yes'>
                <Shortcut Id="startmenuUSBDM_10" Directory="D.UsbdmProgramMenuDir" Name="JB16 Bootloader"
-                  WorkingDirectory='INSTALLDIR' Icon="ChipIcon.ico" IconIndex="0" Advertise="yes" />
+                  WorkingDirectory='INSTALLDIR' Icon="ChipIcon.exe" IconIndex="0" Advertise="yes" />
             </File>
          </Component>
          <Component Id='C.JS16_Bootloader' Guid='*'>
             <File Id='JS16_BootloaderEXE' DiskId='1'
                Source='$(var.SrcDir)\bin\JS16_Bootloader.exe' KeyPath='yes'>
                <Shortcut Id="startmenuUSBDM_11" Directory="D.UsbdmProgramMenuDir" Name="JS16 Bootloader"
-                  WorkingDirectory='INSTALLDIR' Icon="ChipIcon.ico" IconIndex="0" Advertise="yes" />
+                  WorkingDirectory='INSTALLDIR' Icon="ChipIcon.exe" IconIndex="0" Advertise="yes" />
             </File>
          </Component>
 
@@ -489,7 +489,7 @@
       <!-- GUI Installer -->
       <UIRef Id="MyFeatureTree" />
       <UIRef Id="WixUI_ErrorProgressText" />
-      <Icon Id="ChipIcon.ico" SourceFile="$(var.SrcDir)\bin\Hardware-Chip.ico" />
+      <Icon Id="ChipIcon.exe" SourceFile="$(var.SrcDir)\bin\Hardware-Chip.ico" />
       <!--Icon Id="HelpIcon" SourceFile="hh.exe" /-->
    </Product>
 </Wix>

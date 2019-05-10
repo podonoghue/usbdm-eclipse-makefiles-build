@@ -396,19 +396,19 @@
                Name="Modify CW for MCU $(var.CW_VER_UC) New Project Wizard"
                Target="[INSTALLDIR]mergeXml.exe"
                Description="Adds USBDM targets to CW for MCU 10.$(var.CW_VER_UC) New Project Wizard"
-               WorkingDirectory='INSTALLDIR' Icon="ChipIcon.ico" IconIndex="0" Advertise="no" 
+               WorkingDirectory='INSTALLDIR' Icon="ChipIcon.exe" IconIndex="0" Advertise="no" 
                Arguments="-p &quot;[D.CW_$(var.CW_VER_UC)_EclipsePlugins]com.freescale.mcu.projectwizard_1.*.*.*\\&quot; &quot;plugin.xml&quot; &quot;[D.WizardPatchData]PatchNewWizardPlugin_$(var.CW_VER_UC).xml&quot;"/>
             <Shortcut Id="Sc.PatchCW_V10_ChangeWizard_$(var.CW_VER_UC)" 
                Name="Modify CW for MCU $(var.CW_VER_UC) ELF Importer Wizard"
                Target="[INSTALLDIR]mergeXml.exe"
                Description="Adds USBDM targets to CW for MCU $(var.CW_VER_UC) ELF Importer Project Wizard"
-               WorkingDirectory='INSTALLDIR' Icon="ChipIcon.ico" IconIndex="0" Advertise="no" 
+               WorkingDirectory='INSTALLDIR' Icon="ChipIcon.exe" IconIndex="0" Advertise="no" 
                Arguments="-p &quot;[D.CW_$(var.CW_VER_UC)_EclipsePlugins]com.freescale.mcu.elfimporter_10.*.*.*\\&quot; &quot;plugin.xml&quot; &quot;[D.WizardPatchData]PatchElfImporterWizardPlugin_$(var.CW_VER_UC).xml&quot;"/>
             <Shortcut Id="Sc.PatchCW_V10_MQXLiteNewWizard_$(var.CW_VER_UC)" 
                Name="Modify CW for MCU $(var.CW_VER_UC) MQX Lite New Project Wizard"
                Target="[INSTALLDIR]mergeXml.exe"
                Description="Adds USBDM targets to CW for MCU 10.$(var.CW_VER_UC) MQX Lite New Project Wizard"
-               WorkingDirectory='INSTALLDIR' Icon="ChipIcon.ico" IconIndex="0" Advertise="no" 
+               WorkingDirectory='INSTALLDIR' Icon="ChipIcon.exe" IconIndex="0" Advertise="no" 
                Arguments="-p &quot;[D.CW_$(var.CW_VER_UC)_EclipsePlugins]com.freescale.mcu.mqxlite.projectwizard_1.*.*.*\\&quot; &quot;plugin.xml&quot; &quot;[D.WizardPatchData]PatchMQXLiteNewProjectWizard_$(var.CW_VER_UC).xml&quot;"/>
             <Shortcut Id="Sc.RefreshCodewarrior_$(var.CW_VER_UC)"
                Name="Refresh Codewarrior $(var.CW_VER_UC) Configuration"

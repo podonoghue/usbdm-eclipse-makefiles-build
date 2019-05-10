@@ -157,7 +157,7 @@
                Name = "Add USBDM target to CodeWarrior for S12(X) V5.$(var.CW_Ver)"
                Target="[INSTALLDIR]mergeXml.exe"
                Description="Add USBDM target to CodeWarrior for S12(X) V5.$(var.CW_Ver) device files"
-               WorkingDirectory='INSTALLDIR' Icon="ChipIcon.ico" IconIndex="0" Advertise="no" 
+               WorkingDirectory='INSTALLDIR' Icon="ChipIcon.exe" IconIndex="0" Advertise="no" 
                Arguments="-p &quot;[D.CWS12_X_V5_$(var.CW_Ver)_XML]\&quot; &quot;MC9S12|MM912*.xml*.xml&quot; &quot;[D.WizardPatchData]CWHCS12_Device_5_$(var.CW_Ver).xml&quot; "/>
             <RegistryValue Root='HKCU' Key="Software\$(var.Manufacturer)\$(var.ProductName)"
                            Type='string' Name='PatchCodewarriorDeviceMenu_HCS12_V5_$(var.CW_Ver)' Value="" KeyPath='yes' />
