@@ -398,6 +398,22 @@ Test Devices:
             Cortex M4 RAM Memory (Break at 0x20000000 boundary)
 	    Note: Programmer uses first RAM region which should include 0x20000000
       -->
+      <memory id="kinetis_S32K142_Ram" type="ram">
+         <memoryRange start="0x20000000" end="0x20002FFF" name="ram_high" />
+         <memoryRange start="0x1FFFC000" end="0x1FFFFFFF" name="ram_low" />
+      </memory>
+      <memory id="kinetis_S32K144_Ram" type="ram">
+         <memoryRange start="0x20000000" end="0x20006FFF" name="ram_high" />
+         <memoryRange start="0x1FFF8000" end="0x1FFFFFFF" name="ram_low" />
+      </memory>
+      <memory id="kinetis_S32K146_Ram" type="ram">
+         <memoryRange start="0x20000000" end="0x2000EFFF" name="ram_high" />
+         <memoryRange start="0x1FFF0000" end="0x1FFFFFFF" name="ram_low" />
+      </memory>
+      <memory id="kinetis_S32K148_Ram" type="ram">
+         <memoryRange start="0x20000000" end="0x2001EFFF" name="ram_high" />
+         <memoryRange start="0x1FFE0000" end="0x1FFFFFFF" name="ram_low" />
+      </memory>
       <memory id="kinetis_M4_4K_4K_Ram" type="ram">
          <memoryRange start="0x20000000" size="4K" name="ram_high" />
          <memoryRange start="0x1FFFF000" size="4K" name="ram_low" />
@@ -993,9 +1009,7 @@ Test Devices:
 <!-- S32K14 -->
       <device name="S32K142" family="CortexM4F" subfamily="S32K14">
 	 <!-- 28KB RAM, 4KB FlexRAM, 256KB PFlash, 64KB DFlash/FlexNVM -->
-         <memory type="ram">
-            <memoryRange start="0x1FFFC000" end="0x20002FFF" name="ram" />
-         </memory>
+         <memoryRef ref="kinetis_S32K142_Ram" />
          <memoryRef ref="kinetis256b_csePRAM" />
          <memoryRef ref="kinetis4K_FlexRam" />
          <memoryRef ref="FTFE_PFlash0_SEC_256K_2KS" /> <!-- Non-interleaved 256K => 2K sector -->
@@ -1009,9 +1023,7 @@ Test Devices:
       </device>
       <device name="S32K144" family="CortexM4F" subfamily="S32K14">
 	 <!-- 60KB RAM, 4KB FlexRAM 512KB PFlash, 64KB DFlash/FlexNVM -->
-         <memory type="ram">
-            <memoryRange start="0x1FFF8000" end="0x20006FFF" name="ram" />
-         </memory>
+         <memoryRef ref="kinetis_S32K144_Ram" />
          <memoryRef ref="kinetis256b_csePRAM" />
          <memoryRef ref="kinetis4K_FlexRam" />
          <memoryRef ref="FTFE_PFlash0_SEC_512K_4KS" /> <!-- Interleaved 2x256K => 4K sector -->
@@ -1025,9 +1037,7 @@ Test Devices:
       </device>
       <device name="S32K146" family="CortexM4F" subfamily="S32K14">
 	 <!-- 124KB RAM, 4KB FlexRAM, 1MB PFlash, 64KB DFlash/FlexNVM -->
-         <memory type="ram">
-            <memoryRange start="0x1FFF0000" end="0x2000EFFF" name="ram" />
-         </memory>
+         <memoryRef ref="kinetis_S32K146_Ram" />
          <memoryRef ref="kinetis256b_csePRAM" />
          <memoryRef ref="kinetis4K_FlexRam" />
          <memoryRef ref="FTFE_PFlash0_SEC_512K_4KS" /> <!-- Interleaved 2x256K => 4K sector -->
@@ -1042,9 +1052,7 @@ Test Devices:
       </device>
       <device name="S32K148" family="CortexM4F" subfamily="S32K14">
 	 <!-- 252KB RAM, 4KB FlexRAM, 1.5MB PFlash, 512KB DFlash/64K FlexNVM -->
-         <memory type="ram">
-            <memoryRange start="0x1FFE0000" end="0x2001EFFF" name="ram" />
-         </memory>
+         <memoryRef ref="kinetis_S32K148_Ram" />
          <memoryRef ref="kinetis256b_csePRAM" />
          <memoryRef ref="kinetis4K_FlexRam" />
          <memoryRef ref="FTFE_PFlash0_SEC_512K_4KS" /> <!-- Interleaved 2x256K => 4K sector -->
