@@ -152,7 +152,7 @@ enum AdcMuxsel {
  */
 enum AdcPower {
    AdcPower_Normal  = ADC_CFG1_ADLPC(0), //!< Normal power operation
-   AdcPower_Lowl    = ADC_CFG1_ADLPC(1), //!< Low power operation
+   AdcPower_Low     = ADC_CFG1_ADLPC(1), //!< Low power operation
 };
 
 /**
@@ -416,7 +416,7 @@ public:
    static unsigned calculateClockDivider(AdcClockSource adcClockSource) {
       static constexpr unsigned MinClock =  2000000;
       static constexpr unsigned MaxClock = 12000000;
-      unsigned clockFrequency = Adc0Info::getInputClockFrequency(adcClockSource);
+      unsigned clockFrequency = Info::getInputClockFrequency(adcClockSource);
       unsigned adiv;
       for (adiv=0; adiv<=3; adiv++) {
          if ((clockFrequency <= MaxClock) && (clockFrequency >= MinClock)) {
@@ -429,10 +429,9 @@ public:
 
    /**
     * Enable interrupts in NVIC
-    * Any pending NVIC interrupts are first cleared.
     */
    static void enableNvicInterrupts() {
-      enableNvicInterrupt(Info::irqNums[0]);
+      NVIC_EnableIRQ(Info::irqNums[0]);
    }
 
    /**

@@ -40,8 +40,7 @@ int main() {
    // Enable and configure ADC
    PccInfo::setAdc0ClockSource(PccDiv2Clock_Sirc);
 #endif
-
-   Adc::configure(AdcResolution_10bit_se, AdcClockSource_PccAdcClk, AdcClockDivider_1, 256);
+   Adc::configure(AdcResolution_10bit_se);
 
    // Calibrate before use
    Adc::calibrate();

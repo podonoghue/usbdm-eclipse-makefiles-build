@@ -110,9 +110,9 @@ constexpr inline UsbRequestDirection REQ_DIRECTION(uint8_t bmRequestType) {
 /**
  * Create bmRequestType from recipient, type and direction
  *
- * @param recipient
- * @param type
- * @param direction
+ * @param usbRequestDirection
+ * @param usbRequestType
+ * @param usbRequestRecipient
  *
  * @return
  */

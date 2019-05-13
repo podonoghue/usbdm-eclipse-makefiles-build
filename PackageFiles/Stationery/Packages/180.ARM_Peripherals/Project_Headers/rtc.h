@@ -227,12 +227,11 @@ public:
 
    /**
     * Enable interrupts in NVIC
-    * Any pending NVIC interrupts are first cleared.
     */
    static void enableNvicInterrupts() {
-      enableNvicInterrupt(Info::irqNums[0]);
+      NVIC_EnableIRQ(Info::irqNums[0]);
       if (Info::irqCount>1) {
-         enableNvicInterrupt(Info::irqNums[1]);
+         NVIC_EnableIRQ(Info::irqNums[1]);
       }
    }
 

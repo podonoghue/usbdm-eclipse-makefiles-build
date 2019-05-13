@@ -205,7 +205,7 @@ public:
     * @param[in] pmcLowVoltageDetectAction Action to take on Low Voltage Detect
     * @param[in] pmcLowVoltageDetectLevel  Level at which Low Voltage Detect operates
     */
-   static void setResetAction (
+   static void setLowVoltageReset (
          PmcLowVoltageDetectAction pmcLowVoltageDetectAction = PmcLowVoltageDetectAction_None,
          PmcLowVoltageDetectLevel  pmcLowVoltageDetectLevel  = PmcLowVoltageDetectLevel_High
          ) {
@@ -218,7 +218,7 @@ public:
     *
     * @param[in] pmcLowVoltageDetectAction Action to take on Low Voltage Detect
     */
-   static void setResetAction (PmcLowVoltageDetectAction pmcLowVoltageDetectAction = PmcLowVoltageDetectAction_None) {
+   static void setLowVoltageReset (PmcLowVoltageDetectAction pmcLowVoltageDetectAction = PmcLowVoltageDetectAction_None) {
       pmc().LVDSC1 = pmcLowVoltageDetectAction;
    }
 
@@ -231,7 +231,7 @@ public:
     * @param[in] pmcLowVoltageWarningAction   Action to take on Low Voltage Warning
     * @param[in] pmcLowVoltageWarningLevel    Level at which Low Voltage Warning operates
     */
-   static void setWarningAction (
+   static void setLowVoltageWarning (
          PmcLowVoltageWarningAction pmcLowVoltageWarningAction = PmcLowVoltageWarningAction_None,
          PmcLowVoltageWarningLevel  pmcLowVoltageWarningLevel  = PmcLowVoltageWarningLevel_High
          ) {
@@ -244,7 +244,7 @@ public:
     *
     * @param[in] pmcLowVoltageWarningAction   Action to take on Low Voltage Warning
     */
-   static void setWarningAction (
+   static void setLowVoltageWarning (
          PmcLowVoltageWarningAction pmcLowVoltageWarningAction = PmcLowVoltageWarningAction_None
          ) {
       pmc().LVDSC2 = pmcLowVoltageWarningAction;
@@ -382,10 +382,9 @@ public:
 
    /**
     * Enable interrupts in NVIC
-    * Any pending NVIC interrupts are first cleared.
     */
    static void enableNvicInterrupts() {
-      enableNvicInterrupt(Info::irqNums[0]);
+      NVIC_EnableIRQ(Info::irqNums[0]);
    }
 
    /**

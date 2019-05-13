@@ -274,10 +274,9 @@ public:
 
    /**
     * Enable interrupts in NVIC
-    * Any pending NVIC interrupts are first cleared.
     */
    static void enableNvicInterrupts() {
-      enableNvicInterrupt(irqNums[0]);
+      NVIC_EnableIRQ(irqNums[0]);
    }
 
    /**
@@ -471,6 +470,7 @@ protected:
        * @param[in]  callbackFunction  Function to call from stub ISR
        */
       static void setCallback(PitCallbackFunction callbackFunction) {
+         static_assert(Info::irqHandlerInstalled, "PIT not configured for interrupts");
          PitBase_T<Info>::setCallback(CHANNEL, callbackFunction);
       }
 

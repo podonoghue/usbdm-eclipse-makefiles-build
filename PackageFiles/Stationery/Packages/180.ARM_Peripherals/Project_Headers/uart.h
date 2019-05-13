@@ -169,7 +169,7 @@ public:
    /**
     * Construct UART interface
     *
-    * @param[in]  lpuart Reference to UART hardware
+    * @param[in]  uart Reference to UART hardware
     */
    Uart(volatile UART_Type &uart) : uart(uart) {
    }
@@ -559,7 +559,6 @@ public:
 
    /**
     * Enable interrupts in NVIC
-    * Any pending NVIC interrupts are first cleared.
     */
    static void enableNvicInterrupts() {
       NVIC_EnableIRQ(Info::irqNums[0]);

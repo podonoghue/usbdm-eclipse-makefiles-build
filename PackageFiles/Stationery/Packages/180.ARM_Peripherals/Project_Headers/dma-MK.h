@@ -1301,10 +1301,9 @@ public:
 
    /**
     * Enable error interrupts in NVIC.
-    * Any pending NVIC interrupts are first cleared.
     */
    static void enableNvicErrorInterrupt() {
-      enableNvicInterrupt(Info::irqNums[Info::irqCount-1]);
+      NVIC_EnableIRQ(Info::irqNums[Info::irqCount-1]);
    }
 
    /**
@@ -1333,7 +1332,7 @@ public:
     */
    static void __attribute__((always_inline)) setCallback(DmaChannelNum dmaChannelNum, DmaCallbackFunction callback) {
 
-      usbdm_assert(Info::irqHandlerInstalled, "DMA not configured for interrupts");
+      static_assert(Info::irqHandlerInstalled, "DMA not configured for interrupts");
       usbdm_assert(dmaChannelNum<Info::NumChannels, "Illegal DMA channel");
 
       if (callback == nullptr) {

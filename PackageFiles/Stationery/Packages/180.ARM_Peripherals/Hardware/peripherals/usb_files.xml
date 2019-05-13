@@ -4,7 +4,6 @@
 <!-- usb_files.xml -->
 <fragment xmlns:xi="http://www.w3.org/2001/XInclude">
    <projectActionList id = "usb_files">
-      <copy source="Project_Headers/queue.h"                   target="Project_Headers/queue.h"                   overwrite="true"  derived="true" />
       <copy source="Project_Headers/usb.h"                     target="Project_Headers/usb.h"                     overwrite="true"  derived="true" />
       <copy source="Project_Headers/usb_defs.h"                target="Project_Headers/usb_defs.h"                overwrite="true"  derived="true" />
       <copy source="Project_Headers/usb_endpoint.h"            target="Project_Headers/usb_endpoint.h"            overwrite="true"  derived="true" />

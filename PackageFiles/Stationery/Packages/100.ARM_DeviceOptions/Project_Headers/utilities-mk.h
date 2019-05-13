@@ -119,7 +119,7 @@
 #error "Unexpected __BYTE_ORDER__ value"
 #endif
 
-// Variable Argument Macro (VA_MACRO) up to 3 arguments
+// Variable Argument Macro (VA_MACRO) up to 6 arguments
 #define NUM_ARGS_(_1, _2, _3, _4, _5, _6, TOTAL, ...) TOTAL
 #define NUM_ARGS(...) NUM_ARGS_(__VA_ARGS__, 6, 5, 4, 3, 2, 1)
 

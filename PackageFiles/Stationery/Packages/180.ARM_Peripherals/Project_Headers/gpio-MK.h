@@ -503,6 +503,8 @@ public:
     * Sets pin interrupt mode
     *
     * @param[in] pinAction Interrupt/DMA mode
+    *
+    * @note This is a convenience function for Pcr::setPinAction(pinAction)
     */
    static void setPinAction(PinAction pinAction) {
       Pcr::setPinAction(pinAction);
@@ -510,6 +512,8 @@ public:
 
    /**
     * Clear interrupt flag for pin
+    *
+    * @note This is a convenience function for Pcr::clearInterruptFlag()
     */
    static void clearInterruptFlag() {
       Pcr::clearInterruptFlag();
@@ -519,6 +523,8 @@ public:
     * Set pull device on pin
     *
     * @param[in] pinPull Pin pull control value (PinPull_None, PinPull_Up, PinPull_Down)
+    *
+    * @note This is a convenience function for Pcr::setPullDevice(pinPull)
     */
    static void setPullDevice(PinPull pinPull) {
       Pcr::setPullDevice(pinPull);
@@ -528,6 +534,8 @@ public:
     * Set drive strength on pin
     *
     *  @param[in] pinDriveStrength Pin drive strength to set (PinDriveLow, PinDriveHigh)
+    *
+    * @note This is a convenience function for Pcr::setDriveStrength(pinDriveStrength)
     */
    static void setDriveStrength(PinDriveStrength pinDriveStrength) {
       Pcr::setDriveStrength(pinDriveStrength);
@@ -537,6 +545,8 @@ public:
     * Set drive mode on pin
     *
     *  @param[in] pinDriveMode Pin drive mode (PinPushPull, PinOpenDrain)
+    *
+    * @note This is a convenience function for Pcr::setDriveMode(pinDriveMode)
     */
    static void setDriveMode(PinDriveMode pinDriveMode) {
       Pcr::setDriveMode(pinDriveMode);
@@ -545,7 +555,9 @@ public:
    /**
     * Set slew rate on pin
     *
-    *  @param[in] pinSlewRate Slew rate. Either PinSlewRate_Slow or PinSlewRate_Fast
+    * @param[in] pinSlewRate Slew rate. Either PinSlewRate_Slow or PinSlewRate_Fast
+    *
+    * @note This is a convenience function for Pcr::setSlewRate(pinSlewRate)
     */
    static void setSlewRate(PinSlewRate  pinSlewRate) {
       Pcr::setSlewRate(pinSlewRate);
@@ -554,7 +566,9 @@ public:
    /**
     * Set filter on pin
     *
-    *  @param[in] pinFilter Pin filter option. Either PinFilter_None or PinFilter_Passive
+    * @param[in] pinFilter Pin filter option. Either PinFilter_None or PinFilter_Passive
+    *
+    * @note This is a convenience function for Pcr::setFilter(pinFilter)
     */
    static void setFilter(PinFilter pinFilter) {
       Pcr::setFilter(pinFilter);
@@ -562,6 +576,8 @@ public:
    /**
     * Locks most of the pin properties e.g. drive strength, pull-device etc.
     * The pin properties remains locked until the next reset
+    *
+    * @note This is a convenience function for Pcr::lock()
     */
    static void lock() {
       Pcr::lock();
@@ -570,13 +586,13 @@ public:
 #ifdef PORT_DFCR_CS_MASK
    /**
     * Configures Digital Pin Filter
-    * Convenience wrapper for PCR function
     *
     * @param pinDigitalFilterClock  Clock source
     * @param filterLength           Filter length in clock ticks
     *
     * @note Not all ports support this feature
     * @note This affects the digital filter for all pins of this port
+    * @note This is a convenience function for Pcr::configureDigitalFilter(pinDigitalFilterClock, filterLength)
     */
    static void configureDigitalFilter(PinDigitalFilterClock pinDigitalFilterClock, int filterLength) {
       Pcr::configureDigitalFilter(pinDigitalFilterClock, filterLength);
@@ -584,11 +600,11 @@ public:
 
    /**
     * Enable/disable digital filter on the pin
-    * Convenience wrapper for PCR function
     *
     * @param enable  True => enable, False => disable
     *
     * @note Not all ports support this feature
+    * @note This is a convenience function for Pcr::enableDigitalFilter()
     */
    static void enableDigitalFilter(bool enable) {
       Pcr::enableDigitalFilter(enable);
@@ -597,8 +613,8 @@ public:
 
    /**
     * Enable pin interrupt in NVIC.
-    * Any pending NVIC interrupts are first cleared.
-    * Convenience wrapper for PCR function
+    *
+    * @note This is a convenience function for Pcr::enableNvicInterrupts()
     */
    static void enableNvicInterrupts() {
       Pcr::enableNvicInterrupts();
@@ -607,9 +623,10 @@ public:
    /**
     * Enable and set priority of pin interrupt in NVIC.
     * Any pending NVIC interrupts are first cleared.
-    * Convenience wrapper for PCR function
     *
     * @param[in] nvicPriority  Interrupt priority
+    *
+    * @note This is a convenience function for Pcr::enableNvicInterrupts(nvicPriority)
     */
    static void enableNvicInterrupts(uint32_t nvicPriority) {
       Pcr::enableNvicInterrupts(nvicPriority);
@@ -617,7 +634,8 @@ public:
 
    /**
     * Disable pin interrupt in NVIC.
-    * Convenience wrapper for PCR function
+    *
+    * @note This is a convenience function for Pcr::disableNvicInterrupts()
     */
    static void disableNvicInterrupts() {
       Pcr::disableNvicInterrupts();
@@ -633,7 +651,8 @@ public:
     * @return E_HANDLER_ALREADY_SET Handler already set
     *
     * @note There is a single callback function for all pins on the related port.
-    *       It is necessary to identify the originating pin in the callback
+    *       It is necessary to identify the originating pin in the callback.
+    * @note This is a convenience function for Pcr::setCallback(callback)
     */
    static ErrorCode setCallback(PinCallbackFunction callback) {
       return Pcr::setCallback(callback);
@@ -1001,8 +1020,8 @@ public:
 
    /**
     * Enable pin interrupt in NVIC.
-    * Any pending NVIC interrupts are first cleared.
-    * Convenience wrapper for PCR function
+    *
+    * @note This is a convenience function for Pcr::enableNvicInterrupts()
     */
    static void enableNvicInterrupts() {
       Pcr::enableNvicInterrupts();
@@ -1011,9 +1030,10 @@ public:
    /**
     * Enable and set priority of pin interrupt in NVIC.
     * Any pending NVIC interrupts are first cleared.
-    * Convenience wrapper for PCR function
     *
     * @param[in] nvicPriority  Interrupt priority
+    *
+    * @note This is a convenience function for Pcr::enableNvicInterrupts(nvicPriority)
     */
    static void enableNvicInterrupts(uint32_t nvicPriority) {
       Pcr::enableNvicInterrupts(nvicPriority);
@@ -1022,6 +1042,8 @@ public:
    /**
     * Disable pin interrupt in NVIC.
     * Convenience wrapper for PCR function
+    *
+    * @note This is a convenience function for Pcr::disableNvicInterrupts()
     */
    static void disableNvicInterrupts() {
       Pcr::disableNvicInterrupts();
@@ -1038,6 +1060,7 @@ public:
     *
     * @note There is a single callback function for all pins on the related port.
     *       It is necessary to identify the originating pin in the callback
+    * @note This is a convenience function for Pcr::setCallback(callback)
     */
    static ErrorCode setCallback(PinCallbackFunction callback) {
       return Pcr::setCallback(callback);

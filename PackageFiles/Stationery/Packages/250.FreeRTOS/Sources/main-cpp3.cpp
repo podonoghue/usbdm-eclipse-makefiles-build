@@ -44,7 +44,7 @@ public:
     * @param delayTime  Flash On time
     * @param toggler    Method to toggle LED
     */
-   Flasher(char const *name, long delayTime, void (*flasher)()) :
+   Flasher(char const *name, long delayTime, void (*toggler)()) :
       TaskClass(name, TaskPrio_Low, configMINIMAL_STACK_SIZE), name(name), delayTime(delayTime), toggler(toggler) {
    }
 

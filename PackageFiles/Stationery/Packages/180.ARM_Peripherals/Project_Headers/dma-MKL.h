@@ -596,7 +596,6 @@ public:
 
    /**
     * Enable channel interrupts in NVIC.
-    * Any pending NVIC interrupts are first cleared.
     *
     * @param[in]  dmaChannelNum  Channel being modified
     */
@@ -604,7 +603,7 @@ public:
       usbdm_assert(dmaChannelNum<Info::NumChannels, "Illegal DMA channel");
 
       const IRQn_Type irqNum = Dma0Info::irqNums[0] + (dmaChannelNum&(Dma0Info::NumChannels-1));
-      enableNvicInterrupt(irqNum);
+      NVIC_EnableIRQ(irqNum);
    }
 
    /**
@@ -637,8 +636,8 @@ public:
    /**
     * Set callback for ISR.
     *
-    * @param[in]  channel  The DMA channel to set callback for
-    * @param[in]  callback The function to call from stub ISR
+    * @param[in]  dmaChannelNum  The DMA channel to set callback for
+    * @param[in]  callback       The function to call from stub ISR
     */
    static void __attribute__((always_inline)) setCallback(DmaChannelNum dmaChannelNum, DmaCallbackFunction callback) {
       if (callback == nullptr) {

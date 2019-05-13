@@ -192,7 +192,7 @@ public:
     *                        Use nullptr to remove callback.
     */
    static void setCallback(TSICallbackFunction callback) {
-      usbdm_assert(Info::irqHandlerInstalled, "TSI not configure for interrupts");
+      static_assert(Info::irqHandlerInstalled, "TSI not configure for interrupts");
       if (callback == nullptr) {
          callback = TsiBase_T<Info>::unhandledCallback;
       }
@@ -248,10 +248,9 @@ public:
 
    /**
     * Enable interrupts in NVIC
-    * Any pending NVIC interrupts are first cleared.
     */
    static void enableNvicInterrupts() {
-      enableNvicInterrupt(Info::irqNums[0]);
+      NVIC_EnableIRQ(Info::irqNums[0]);
    }
 
    /**

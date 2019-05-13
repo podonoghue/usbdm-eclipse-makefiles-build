@@ -89,7 +89,7 @@ FlashDriverError_t Flash::executeFlashCommand() {
 
    // Call executeFlashCommand_asm() on the stack with interrupts disabled
    {
-      USBDM::CriticalSection cs;
+      CriticalSection cs;
       (*fp)();
    }
    // Handle any errors

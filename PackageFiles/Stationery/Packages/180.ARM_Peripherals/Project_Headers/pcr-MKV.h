@@ -459,11 +459,10 @@ public:
 
    /**
     * Enable Pin interrupts in NVIC.
-    * Any pending NVIC interrupts are first cleared.
     */
    static void enableNvicInterrupts() {
       static_assert(irqNum>=0, "Pin does not support interrupts");
-      enableNvicInterrupt(irqNum);
+      NVIC_EnableIRQ(irqNum);
    }
 
    /**
@@ -795,11 +794,10 @@ public:
 
    /**
     * Enable Pin interrupts in NVIC.
-    * Any pending NVIC interrupts are first cleared.
     */
    static void enableNvicInterrupts() {
       static_assert(irqNum>=0, "Pin does not support interrupts");
-      enableNvicInterrupt(irqNum);
+      NVIC_EnableIRQ(irqNum);
    }
 
    /**

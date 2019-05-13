@@ -68,7 +68,7 @@ void printDump(uint8_t *address, uint32_t size) {
    constexpr unsigned RowWidth = 32;
 
    console.setPadding(Padding_LeadingZeroes).setWidth(2);
-   console.write("      ");
+   console.write("          ");
    for (unsigned index=0; index<RowWidth; index++) {
       console.write(index).write(" ");
    }
@@ -76,7 +76,9 @@ void printDump(uint8_t *address, uint32_t size) {
    bool needNewline = true;
    for (unsigned index=0; index<size; index++) {
       if (needNewline) {
+         console.setPadding(Padding_LeadingZeroes).setWidth(8);
          console.write((int)address+index, Radix_16).write(": ");
+         console.setPadding(Padding_LeadingZeroes).setWidth(2);
       }
       console.write(address[index], Radix_16).write(" ");
       needNewline = (((index+1)&(RowWidth-1))==0);
@@ -94,7 +96,7 @@ int main(void) {
    console.writeln("Starting");
 
    static_assert(((sizeof(copy)&(Flash::programFlashSectorSize-1)) == 0), "Data must be correct size");
-   usbdm_assert((((unsigned)copy&(Flash::programFlashSectorSize-1)) == 0), "Data must be correct size");
+   usbdm_assert((((unsigned)copy&(Flash::programFlashSectorSize-1)) == 0), "Data must be correctly aligned");
 
    // Report original flash contents
    console.writeln("Flash before programming");

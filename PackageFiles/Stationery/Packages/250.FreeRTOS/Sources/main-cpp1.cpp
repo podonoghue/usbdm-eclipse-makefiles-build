@@ -49,8 +49,8 @@ public:
          console
             .write("Hello from ")
             .write(name)
-            .write(", ").
-            writeln(count++);
+            .write(", ")
+            .writeln(count++);
          // Wait a while
          delay(delayTime);
       }

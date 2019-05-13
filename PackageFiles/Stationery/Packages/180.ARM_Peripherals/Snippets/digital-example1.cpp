@@ -16,6 +16,7 @@ using namespace USBDM;
  */
 
 // Connection mapping - change as required
+using BlueLed  = $(demo.cpp.blue.led:GpioA<2,ActiveLow>);
 using RedLed   = $(demo.cpp.red.led:GpioB<0,ActiveLow>);
 using GreenLed = $(demo.cpp.green.led:GpioB<1,ActiveLow>);
 
@@ -28,14 +29,19 @@ int main() {
          PinDriveStrength_High,
          PinDriveMode_PushPull,
          PinSlewRate_Slow);
+   BlueLed::setOutput(
+         PinDriveStrength_High,
+         PinDriveMode_PushPull,
+         PinSlewRate_Slow);
 
    console.setEcho(EchoMode_Off);
 
    for(;;) {
-      console.write("\rPress (R)ed or (G)reen :");
+      console.write("\rPress (R)ed or (G)reen or (B)lue :");
       switch(console.readChar()) {
          case 'r': case 'R' : RedLed::toggle();   break;
          case 'g': case 'G' : GreenLed::toggle(); break;
+         case 'b': case 'B' : BlueLed::toggle();   break;
          default: break;
       }
    }

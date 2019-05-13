@@ -99,6 +99,9 @@ static inline void disablePortClocks(uint32_t clockMask) {
    __DMB();
 };
 
+/*
+ * PORT clock masks
+ */
 #if defined(SIM_SCGC5_PORTA_MASK)
 static constexpr uint32_t PORTA_CLOCK_MASK = SIM_SCGC5_PORTA_MASK;
 #endif

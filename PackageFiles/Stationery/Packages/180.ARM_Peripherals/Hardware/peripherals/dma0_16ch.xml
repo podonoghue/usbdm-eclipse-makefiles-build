@@ -12,9 +12,11 @@
 
    <intOption name="NumVectors" constant="true" derived="true"
       description="Number of DMA interrupt vectors" 
-      toolTip="Number of DMA channel interrupt vectors - \n
+      toolTip="Number of DMA interrupt vectors - \n
                Multiple channels may be mapped to the same vector" 
       value="16" />
+      
+   <xi:include href="_clockOption.xml"/>
 
    <!--
    Patterns for pattern and classHandler 

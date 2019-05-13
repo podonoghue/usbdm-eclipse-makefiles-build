@@ -117,6 +117,7 @@ enum DacBufferMode {
 };
 #endif
 
+#ifdef DAC_C1_DACBFWM
 /**
  * DAC Buffer Watermark Select.
  * Controls when SR[DACBFWMF] is set.
@@ -138,6 +139,7 @@ enum DacWaterMark {
    DacWaterMark_FifoMaxDiv2   = DAC_C1_DACBFWM(0),  //!< FIFO mode: Threshold <= Max/2 remaining FIFO entries
    DacWaterMark_FifoMaxMinus2 = DAC_C1_DACBFWM(0),  //!< FIFO mode: Threshold <= Max-2 remaining FIFO entries
 };
+#endif // DAC_C1_DACBFWM
 
 /**
  * DAC status value as individual flags
@@ -247,7 +249,7 @@ public:
     *                     Use nullptr to remove callback.
     */
    static void setCallback(DACCallbackFunction callback) {
-      usbdm_assert(Info::irqHandlerInstalled, "DAC not configured for interrupts");
+      static_assert(Info::irqHandlerInstalled, "DAC not configured for interrupts");
       if (callback == nullptr) {
          callback = unhandledCallback;
       }
@@ -325,7 +327,6 @@ public:
     *  Configure DAC buffer operation
     *
     * @param dacBufferMode  Select if buffer is used and how the buffer pointer changes.
-    * @param waterMarkLevel Selects water mark level for buffer.
     */
    static void configureBuffer(
          DacBufferMode dacBufferMode  = DacBufferMode_Disabled
@@ -460,10 +461,9 @@ public:
 
    /**
     * Enable interrupts in NVIC
-    * Any pending NVIC interrupts are first cleared.
     */
    static void enableNvicInterrupts() {
-      enableNvicInterrupt(Info::irqNums[0]);
+      NVIC_EnableIRQ(Info::irqNums[0]);
    }
 
    /**

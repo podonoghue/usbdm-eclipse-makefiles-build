@@ -3,7 +3,6 @@
  * @file   rcm-example.cpp (180.ARM_Peripherals/Snippets)
  * @brief  RCM Example code
  * @date   12 Jul 2018
- * @author podonoghue
  ============================================================================
  */
 

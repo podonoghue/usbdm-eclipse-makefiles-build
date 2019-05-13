@@ -15,6 +15,8 @@
       toolTip="Number of DMA interrupt vectors - \n
                Multiple channels may be mapped to the same vector" 
       value="4" />
+      
+   <xi:include href="_clockOption.xml"/>
 
    <!--
    Patterns for pattern and classHandler 

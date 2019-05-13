@@ -597,7 +597,6 @@ public:
 
    /**
     * Enable pin interrupt in NVIC.
-    * Any pending NVIC interrupts are first cleared.
     * Convenience wrapper for PCR function
     */
    static void enableNvicInterrupts() {
@@ -1001,7 +1000,6 @@ public:
 
    /**
     * Enable pin interrupt in NVIC.
-    * Any pending NVIC interrupts are first cleared.
     * Convenience wrapper for PCR function
     */
    static void enableNvicInterrupts() {

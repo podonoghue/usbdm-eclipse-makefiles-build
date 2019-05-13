@@ -15,7 +15,16 @@
       toolTip="Number of DMA interrupt vectors - \n
                Multiple channels may be mapped to the same vector" 
       value="4" />
+      
+   <xi:include href="_clockOption.xml"/>
 
+   <!--
+   Patterns for pattern and classHandler 
+     -  %i replaced with peripheral instance e.g. FTM1 => 1, PTA => A
+     -  %b replaced with peripheral base name e.g. FTM1 => = FTM
+     -  %c replaced with peripheral C++ base class name e.g. FTM1 => = Ftm
+     -  _IRQHandler is appended to the pattern (only)
+   -->
    <irqOption name="irqHandlers"  
       description="Interrupt handlers"
       toolTip="This selection allow the interrupt handlers for this peripheral to be installed using several different methods"

@@ -189,7 +189,7 @@ public:
     * @note It is expected that the callback will clear the status flag that triggered the interrupt. See getStatus().
     */
    static void setCallback(CMTCallbackFunction callback) {
-      usbdm_assert(Info::irqHandlerInstalled, "CMT not configured for interrupts");
+      static_assert(Info::irqHandlerInstalled, "CMT not configured for interrupts");
       if (callback == nullptr) {
          callback = unhandledCallback;
       }
@@ -276,7 +276,7 @@ public:
     */
    static void configure(CmtMode cmtMode, CmtClockDivideBy cmtClockDivideBy=CmtClockDivideBy_1) {
       enable();
-      setPrescaler((CmtPrescaler)((USBDM::SystemBusClock/8000000)-1));
+      setPrescaler((CmtPrescaler)((SystemBusClock/8000000)-1));
       cmt().MSC = cmtMode|cmtClockDivideBy;
    }
 
@@ -430,10 +430,9 @@ public:
 
    /**
     * Enable interrupts in NVIC
-    * Any pending NVIC interrupts are first cleared.
     */
    static void enableNvicInterrupts() {
-      enableNvicInterrupt(Info::irqNums[0]);
+      NVIC_EnableIRQ(Info::irqNums[0]);
    }
 
    /**
