@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no" ?>
+<!DOCTYPE root SYSTEM "../package.dtd"
+[
+<!ENTITY DEVICE_NAME  "EVB_S32K144">
+<!ENTITY DEVICE_FILE  "MK20D5-FRDM">
+]>
+
+<root version="1.0" >
+   <projectActionList id="CPP-abstraction-&DEVICE_NAME;">
+      <applyWhen>
+         <and>
+            <deviceNameIs>&DEVICE_NAME;</deviceNameIs>
+            <variableRef idRef="hasCCNature" condition="isTrue" />
+         </and>
+      </applyWhen>
+
+      <!-- These constant enables external peripheral features -->
+      <constant id="cpp.peripheral.external.max30100"          value="true" />
+      <constant id="cpp.peripheral.external.elecfreaks-lcd"    value="true" />
+      <constant id="cpp.peripheral.external.gps"               value="true" />
+      <constant id="demo.lcd.elecfreaks.backlight"             value="GpioC&lt;2&gt;" />
+      <constant id="demo.lcd.elecfreaks.cs"                    value="GpioA&lt;2&gt;" />
+      <constant id="demo.lcd.elecfreaks.reset"                 value="GpioA&lt;12&gt;" />
+      <constant id="demo.lcd.elecfreaks.backlight.ftm"         value="Ftm0&lt;1&gt;" />
+
+      <projectActionList>
+         <applyWhen >
+            <variableRef idRef="projectOptionValue.CPP-abstraction" />
+         </applyWhen>
+
+         <!-- Definitions used by main.cpp see hardware/peripherals/symbols for definitions used by snippets -->
+         <constant id="demo.cpp.console"    value="USBDM::Uart##1" />            <!-- Console for I/O -->
+         <constant id="demo.cpp.led"        value="GpioD&lt;0,ActiveLow&gt;" />  <!-- Digital I/O generic LED -->
+	 
+         <!-- Custom settings file -->
+         <copy source="projectFiles/&DEVICE_NAME;.usbdmProject"  target="Configure.usbdmProject"  overwrite="true" />
+	 
+      </projectActionList>
+   </projectActionList>
+</root>
