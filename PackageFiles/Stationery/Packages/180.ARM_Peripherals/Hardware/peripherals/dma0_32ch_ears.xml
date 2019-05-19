@@ -16,7 +16,30 @@
                Multiple channels may be mapped to the same vector" 
       value="16" />
       
-   <xi:include href="_clockOption.xml"/>
+<template><![CDATA[
+   \t/** 
+   \t *  Enable clock to $(_class)
+   \t */
+   \tstatic void enableClock() {
+   #ifdef PCC
+   \t   // DMA is always clocked
+   #else
+   \t   $(clockEnable)
+   #endif
+   \t}\n\n
+
+   \t/** 
+   \t *  Disable clock to $(_class)
+   \t */
+   \tstatic void disableClock() {
+   #ifdef PCC
+   \t   // DMA is always clocked
+   #else
+   \t   $(clockDisable)
+   #endif
+   \t}\n\n
+]]></template>
+      
 
    <!--
    Patterns for pattern and classHandler 

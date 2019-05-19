@@ -108,7 +108,7 @@
       var="instance" 
       enumeration="
          Ftfc, 
-         Dmamux, 
+         Dmamux0, 
          Can0, Can1, Can2, 
          Cmp0,
          Crc0,
@@ -333,7 +333,7 @@
    var="instance" 
    enumeration="
       Ftfc, 
-      Dmamux, 
+      Dmamux0, 
       Can0, Can1, Can2, 
       Cmp0,
       Crc0,
@@ -383,7 +383,7 @@
       Ftm0, Ftm1, Ftm2, Ftm3, 
       Enet,
       Ftfc, 
-      Dmamux, 
+      Dmamux0, 
       Can0, Can1, Can2, 
       Cmp0,
       Crc0,
