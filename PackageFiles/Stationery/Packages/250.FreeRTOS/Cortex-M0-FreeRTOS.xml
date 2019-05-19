@@ -28,19 +28,19 @@
                <not><variableRef idRef="projectOptionValue.FRDM-Blinky"      defaultValue="false" /></not>
             </and>
          </applyWhen>
-         <!-- Default RTX C main -->
+         <!-- Default RTOS C main -->
          <projectActionList>
             <applyWhen>
                <not><variableRef idRef="hasCCNature" condition="isTrue" /></not>
             </applyWhen>
-            <copy source="Sources/main-RTX.c" target="Sources/main.c" overwrite="true" />
+            <copy source="Sources/main.cpp" target="Sources/main.c" overwrite="true" />
          </projectActionList>
-         <!-- Default RTX CPP main -->
+         <!-- Default RTOS CPP main -->
          <projectActionList>
             <applyWhen>
                <variableRef idRef="hasCCNature" condition="isTrue" />
             </applyWhen>
-            <copy source="Sources/main-RTX.cpp" target="Sources/main.cpp" overwrite="true" />
+            <copy source="Sources/main.cpp" target="Sources/main.cpp" overwrite="true" />
          </projectActionList>
       </projectActionList>
       
@@ -52,58 +52,49 @@
                <variableRef      idRef="projectOptionValue.FRDM-Blinky"      defaultValue="false" />
             </and>
          </applyWhen>
-         <!-- Blinky RTX C main -->
+         <!-- Blinky RTOS C main -->
          <projectActionList>
             <applyWhen>
                <not><variableRef idRef="hasCCNature" condition="isTrue" /></not>
             </applyWhen>
-            <copy source="Sources/main-RTX.c" target="Sources/main.c" overwrite="true" />
+            <copy source="Sources/main.cpp" target="Sources/main.c" overwrite="true" />
          </projectActionList>
-         <!-- Blinky RTX CPP main -->
+         <!-- Blinky RTOS CPP main -->
          <projectActionList>
             <applyWhen>
                <variableRef idRef="hasCCNature" condition="isTrue" />
             </applyWhen>
-            <copy source="Sources/main-RTX.c" target="Sources/main.cpp" overwrite="true" />
+            <copy source="Sources/main.cpp" target="Sources/main.cpp" overwrite="true" />
          </projectActionList>
       </projectActionList>
 
-      <!-- CPP-abstraction RTX files -->
-      <projectActionList id="FreeRTOS-Cpp">
-         <applyWhen>
-            <and>
-               <variableRef idRef="projectOptionValue.FreeRTOS" />
-               <variableRef idRef="projectOptionValue.CPP-abstraction"  defaultValue="false" />
-            </and>
-         </applyWhen>
-         <copy source="Sources/main-RTX.cpp" target="Sources/main.cpp" overwrite="true" />
-      </projectActionList>
-      
       <projectActionList id="FreeRTOS-base">
          <applyWhen>
             <variableRef idRef="projectOptionValue.FreeRTOS" />
          </applyWhen>
          <constant id="FreeRTOS.stack.size"   value="100" />
 
-         <copy source="Sources/FreeRTOSConfig.h"     target="Sources/FreeRTOSConfig.h" />
          <copy source="Sources/FreeRTOSConfig.cfg"   target="Sources/FreeRTOSConfig.cfg" />
 	 
          <copy source="Startup_Code/FreeRtosStubs.c" target="Startup_Code/FreeRtosStubs.c" overwrite="true" />
          <copy source="${usbdm_application_path}\Stationery\Packages\FreeRTOS\FreeRTOS_Reference_Manual_V10.0.0.pdf" target="FreeRTOS.pdf" type="link" sourcePathType="absolute"/>
 
          <createFolder target="FreeRTOS" />
-         <copy source="../FreeRTOS/license.txt"                                  target="FreeRTOS/license.txt" />
-         <copy source="../FreeRTOS/Source"                                       target="FreeRTOS/Source" />
-         <copy source="../FreeRTOS/Source/Portable/GCC/ARM_CM0/port.c"         target="FreeRTOS/Source/port.c" />
-         <copy source="../FreeRTOS/Source/Portable/GCC/ARM_CM0/portmacro.h"    target="FreeRTOS/Source/portmacro.h" />
+         <copy source="FreeRTOS/FreeRTOSConfig.h"                               target="FreeRTOS/FreeRTOSConfig.h" />
+         <copy source="../FreeRTOS/license.txt"                                 target="FreeRTOS/license.txt" />
+         <copy source="../FreeRTOS/Source"                                      target="FreeRTOS/Source" />
+         <copy source="../FreeRTOS/Source/Portable/GCC/ARM_CM0/port.c"          target="FreeRTOS/Source/port.c" />
+         <copy source="../FreeRTOS/Source/Portable/GCC/ARM_CM0/portmacro.h"     target="FreeRTOS/Source/portmacro.h" />
          <excludeSourceFolder target="FreeRTOS/Source/Portable" />
          <projectOption id="net.sourceforge.usbdm.gnu.c.compiler.option.include.paths">
             <value>&quot;${ProjDirPath}/FreeRTOS/Source/Include&quot;</value>
             <value>&quot;${ProjDirPath}/FreeRTOS/Source&quot;</value>
+            <value>&quot;${ProjDirPath}/FreeRTOS&quot;</value>
          </projectOption>
          <projectOption id="net.sourceforge.usbdm.gnu.cpp.compiler.option.include.paths">
             <value>&quot;${ProjDirPath}/FreeRTOS/Source/Include&quot;</value>
             <value>&quot;${ProjDirPath}/FreeRTOS/Source&quot;</value>
+            <value>&quot;${ProjDirPath}/FreeRTOS&quot;</value>
          </projectOption>
          <projectOption id="net.sourceforge.usbdm.gnu.c.compiler.option.preprocessor.def.symbols">
             <value>__CORTEX_M0</value>
@@ -114,6 +105,33 @@
             <value>__FREERTOS</value>
          </projectOption>
       </projectActionList>
+      
+      <!-- CPP-abstraction RTOS files -->
+      <projectActionList id="FreeRTOS-Cpp-abstraction">
+         <applyWhen>
+            <and>
+               <variableRef idRef="projectOptionValue.FreeRTOS" />
+               <variableRef idRef="projectOptionValue.CPP-abstraction"  defaultValue="false" />
+            </and>
+         </applyWhen>
+	 <copy source="FreeRTOS/FreeRTOS_CPP.h" target="FreeRTOS/FreeRTOS_CPP.h"   overwrite="true" />
+         <copy source="FreeRTOS/Lock.h"         target="FreeRTOS/Lock.h"           overwrite="true" />
+         <copy source="FreeRTOS/Lock.cpp"       target="FreeRTOS/Lock.cpp"         overwrite="true" />
+         <copy source="FreeRTOS/MutexCPP.h"     target="FreeRTOS/MutexCPP.h"       overwrite="true" />
+         <copy source="FreeRTOS/QueueCPP.h"     target="FreeRTOS/QueueCPP.h"       overwrite="true" />
+         <copy source="FreeRTOS/SemaphoreCPP.h" target="FreeRTOS/SemaphoreCPP.h"   overwrite="true" />
+         <copy source="FreeRTOS/TaskCPP.h"      target="FreeRTOS/TaskCPP.h"        overwrite="true" />
+         <copy source="FreeRTOS/TimerCPP.h"     target="FreeRTOS/TimerCPP.h"       overwrite="true" />
+	 
+         <deleteResource target="Sources/main.c" />
+         <deleteResource target="Sources/main.cpp" />
+         <copy source="Sources/main-1.cpp"   target="Sources/main-1.cpp"        overwrite="true" />
+         <copy source="Sources/main-2.cpp"   target="Sources/main-2.cpp"        overwrite="true" />
+         <copy source="Sources/main-3.cpp"   target="Sources/main-3.cpp"        overwrite="true" />
+         <excludeSourceFile target="Sources/main-2.cpp" />
+         <excludeSourceFile target="Sources/main-3.cpp" />
+      </projectActionList>
+      
    </projectActionList>
 
 </root>

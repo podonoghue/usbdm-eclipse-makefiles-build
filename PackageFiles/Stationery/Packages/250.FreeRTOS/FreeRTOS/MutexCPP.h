@@ -38,6 +38,7 @@
 #define MUTEXCPP_H
 
 #include "FreeRTOS.h"
+
 #include "semphr.h"
 
 namespace FREERTOS_CPP {
@@ -65,19 +66,21 @@ namespace FREERTOS_CPP {
  * @endcode
  *
  * @ingroup FreeRTOSCpp
- * @todo should we make a 'Lock' object that takes/gives the mutex?
- * @todo Support static allocation added in FreeRTOS V9.
  */
 
-class Mutex {
+class Mutex : public Lockable {
 public:
 	/**
 	 * @brief Constructor.
 	 * @param name Name to give mutex, used for Debug Registry if setup
 	 */
 	Mutex(char const* name) {
-	   (void)name;
+	   (void) name;
+#if( configSUPPORT_STATIC_ALLOCATION == 1 )
+		handle = xSemaphoreCreateMutexStatic(&mutexBuffer);
+#else
 		handle = xSemaphoreCreateMutex();
+#endif
 #if configQUEUE_REGISTRY_SIZE > 0
 		vQueueAddToRegistry(handle, name);
 #endif
@@ -107,6 +110,9 @@ private:
     Mutex(Mutex const&) = delete;      ///< We are not copyable.
     void operator =(Mutex const&) = delete;  ///< We are not assignable.
 #endif // __cplusplus
+#if( configSUPPORT_STATIC_ALLOCATION == 1 )
+    StaticSemaphore_t mutexBuffer;
+#endif
 
 };
 
@@ -141,14 +147,17 @@ private:
  *
  * @endcode
  * @ingroup FreeRTOSCpp
- * @todo Support static allocation added in FreeRTOS V9.
  */
 
-class RecursiveMutex {
+class RecursiveMutex : public Lockable {
 public:
 	RecursiveMutex(char const* name) {
-      (void)name;
+      (void) name;
+#if( configSUPPORT_STATIC_ALLOCATION == 1 )
+		handle = xSemaphoreCreateRecursiveMutexStatic(&mutexBuffer);
+#else
 		handle = xSemaphoreCreateRecursiveMutex();
+#endif
 #if configQUEUE_REGISTRY_SIZE > 0
 		vQueueAddToRegistry(handle, name);
 #endif
@@ -175,10 +184,12 @@ private:
     RecursiveMutex(RecursiveMutex const&) = delete;      ///< We are not copyable.
     void operator =(RecursiveMutex const&) = delete;  ///< We are not assignable.
 #endif // __cplusplus
+#if( configSUPPORT_STATIC_ALLOCATION == 1 )
+    StaticSemaphore_t mutexBuffer;
+#endif
 };
-
 #endif // configUSE_RECURSIVE_MUTEXES
 
-} // namespace
+} // end namespace FREERTOS_CPP
 
 #endif // MUTEXCPP_H

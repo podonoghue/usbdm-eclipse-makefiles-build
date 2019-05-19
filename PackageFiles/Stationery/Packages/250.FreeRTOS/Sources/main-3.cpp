@@ -8,8 +8,8 @@
 #include "FreeRTOS_CPP.h"
 #include "hardware.h"
 
-using namespace FREERTOS_CPP; // Open namespace for CMSIS wrapper functions
-using namespace USBDM;        // Open namespace for USBDM functions
+using namespace FREERTOS_CPP; // Open namespace for FREERTOS wrapper functions
+using namespace USBDM;        // Open namespace for USBDM wrapper functions
 
 // LEDs to use
 using RedLed   = GpioC<3, ActiveLow>;
@@ -55,9 +55,9 @@ public:
     */
    void task() override {
       for(;;) {
-         console.write("Blink from ").writeln(name);
+         console.lock().write("Blink from ").writeln(name).unlock();
          toggler();
-         delay(delayTime);
+         delayMilliseconds(delayTime);
       }
    }
 };

@@ -8,6 +8,9 @@
 #ifndef SRC_FREERTOS_CPP_H_
 #define SRC_FREERTOS_CPP_H_
 
+#include "FreeRTOS.h"
+
+#include "Lock.h"
 #include "MutexCPP.h"
 #include "QueueCPP.h"
 #include "SemaphoreCPP.h"

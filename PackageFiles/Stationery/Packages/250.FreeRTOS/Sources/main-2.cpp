@@ -8,8 +8,8 @@
 #include "FreeRTOS_CPP.h"
 #include "hardware.h"
 
-using namespace FREERTOS_CPP; // Open namespace for CMSIS wrapper functions
-using namespace USBDM; // Open namespace for CMSIS wrapper functions
+using namespace FREERTOS_CPP; // Open namespace for FREERTOS wrapper functions
+using namespace USBDM;        // Open namespace for USBDM wrapper functions
 
 //! Number of messages in pool to send
 static constexpr int NUM_MESSAGES = 5;
@@ -17,7 +17,9 @@ static constexpr int NUM_MESSAGES = 5;
 //! Queue used to communicate between processes
 static Queue<const char *> *queue;
 
-static Mutex mutex(nullptr);
+// Two threads are created dynamically
+static TaskClass *task1;
+static TaskClass *task2;
 
 /**
  * Task producing messages which are added to the queue
@@ -32,7 +34,7 @@ private:
    // Messages pool to send
    const char            *messages[NUM_MESSAGES];
    // Delay between message transmission
-   static constexpr long  DELAY_TIME = 400;
+   static constexpr long  DELAY_TIME = 400; // ms
 
 public:
    /**
@@ -43,7 +45,7 @@ public:
     * Other task parameters are defaulted.
     */
    Producer(char const *name) :
-      TaskClass(name, TaskPrio_Low, configMINIMAL_STACK_SIZE), name(name) {
+      TaskClass(name, TaskPrio_Low, 100), name(name) {
       messages[0] = "Message 0";
       messages[1] = "Message 1";
       messages[2] = "Message 2";
@@ -60,15 +62,15 @@ public:
       int messageIndex = 0;
       for(;;) {
          queue->add(messages[messageIndex%NUM_MESSAGES]);
-         mutex.take();
          console
+		    .lock()
             .write("Producer sent ")
             .write(messageIndex)
             .write(", ")
-            .writeln(messages[messageIndex%NUM_MESSAGES]);
-         mutex.give();
+            .writeln(messages[messageIndex%NUM_MESSAGES])
+			.unlock();
          messageIndex++;
-         delay(rand()%DELAY_TIME);
+         delayMilliseconds(rand()%DELAY_TIME);
       }
    }
 };
@@ -93,7 +95,7 @@ public:
     * Other task parameters are defaulted.
     */
    Consumer(char const *name) :
-      TaskClass(name, TaskPrio_Idle, configMINIMAL_STACK_SIZE), name(name) {
+      TaskClass(name, TaskPrio_Idle, 100), name(name) {
    }
 
    /**
@@ -105,19 +107,15 @@ public:
       for(;;) {
          const char *message;
          queue->pop(message);
-         mutex.take();
          console
+		    .lock()
             .write("                              Consumer: ")
-            .writeln(message);
-         mutex.give();
-         delay(rand()%DELAY_TIME);
+            .writeln(message)
+			.unlock();
+         delayMilliseconds(rand()%DELAY_TIME);
       }
    }
 };
-
-// Create two static threads with default priority and stack sizes
-static Producer *task1;
-static Consumer *task2;
 
 int main() {
    console.writeln("Starting");

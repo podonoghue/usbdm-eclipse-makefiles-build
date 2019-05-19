@@ -8,11 +8,11 @@
 #include "FreeRTOS_CPP.h"
 #include "hardware.h"
 
-using namespace FREERTOS_CPP; // Open namespace for CMSIS wrapper functions
-using namespace USBDM; // Open namespace for CMSIS wrapper functions
+using namespace FREERTOS_CPP; // Open namespace for FREERTOS wrapper functions
+using namespace USBDM;        // Open namespace for USBDM wrapper functions
 
 /**
- * Class representing the Thread
+ * Class representing the Threads
  */
 class MyThread : public TaskClass {
 
@@ -30,36 +30,38 @@ public:
     * This creates the thread instance.
     * It also records some information about the task
     *
-    * @param name       Name of the task
-    * @param delayTime  How long to wait between messages
-    * @param priority   Priority for the task
-    * @param stackDepth How much stack space to allocate to the task
+    * @param[in] name       Name of the task
+    * @param[in] delayTime  How long to wait between messages in milliseconds
+    *
+    * @note  Default values for priority and stack size are used.
     */
    MyThread(
          char const          *name,
-         long                 delayTime,
-         TaskPriority         priority    =  TaskPrio_Idle,
-         unsigned portSHORT   stackDepth  =  configMINIMAL_STACK_SIZE) :
-            TaskClass(name, priority, stackDepth), name(name), delayTime(delayTime) {
+         long                 delayTime) :
+            TaskClass(name, TaskPrio_Idle, 100), name(name), delayTime(delayTime) {
    }
 
    void task() override {
       for(;;) {
          // Print message
          console
+            .lock()
             .write("Hello from ")
             .write(name)
             .write(", ")
-            .writeln(count++);
+            .writeln(count++)
+            .unlock();
+
+//         yield();
          // Wait a while
-         delay(delayTime);
+         delayMilliseconds(delayTime);
       }
    }
 };
 
-// Create two static threads with default priority and stack sizes
-static MyThread task1("Task 1", 1000);
-static MyThread task2("Task 2", 1100);
+// Create two static threads
+static MyThread task1("Task 1", 500);
+static MyThread task2("Task 2", 1500);
 
 int main() {
    console.write("Starting\n\r");
@@ -76,6 +78,4 @@ int main() {
    for( ;; ) {
       __asm__("BKPT");
    }
-
 }
-
