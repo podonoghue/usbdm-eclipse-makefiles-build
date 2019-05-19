@@ -32,7 +32,8 @@
 /* Scheduler includes. */
 #include "FreeRTOS.h"
 #include "task.h"
-#include "system.h"
+
+extern uint32_t SystemCoreClock; /* in Kinetis this contains the system core clock speed */
 
 /* Constants required to manipulate the NVIC. */
 #define portNVIC_SYSTICK_CTRL			( ( volatile uint32_t * ) 0xe000e010 )

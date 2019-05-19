@@ -32,7 +32,8 @@
 /* Scheduler includes. */
 #include "FreeRTOS.h"
 #include "task.h"
-#include "system.h"
+
+extern uint32_t SystemCoreClock; /* in Kinetis this contains the system core clock speed */
 
 /* For backward compatibility, ensure configKERNEL_INTERRUPT_PRIORITY is
 defined.  The value should also ensure backward compatibility.

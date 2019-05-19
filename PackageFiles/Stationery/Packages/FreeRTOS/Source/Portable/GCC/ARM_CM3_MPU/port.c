@@ -37,7 +37,8 @@ task.h is included from an application file. */
 /* Scheduler includes. */
 #include "FreeRTOS.h"
 #include "task.h"
-#include "system.h"
+
+extern uint32_t SystemCoreClock; /* in Kinetis this contains the system core clock speed */
 
 
 #undef MPU_WRAPPERS_INCLUDED_FROM_API_FILE
