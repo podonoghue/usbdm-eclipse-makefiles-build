@@ -12,7 +12,9 @@
 */
 __stack_size = $(linkerStackSize);
 
-/* <o> Heap Size 
+/* <o> Minimum Heap Size 
+   <i> This is the minimum allocated.  
+   <i> Available heap may be larger.
    <0x0-$(linkerRamSize):4> 
 */
 __heap_size  = $(linkerHeapSize);

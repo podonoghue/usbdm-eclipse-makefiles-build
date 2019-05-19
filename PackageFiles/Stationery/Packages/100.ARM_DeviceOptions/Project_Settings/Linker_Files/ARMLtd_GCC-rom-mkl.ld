@@ -11,13 +11,13 @@
  *      __exidx_start
  *      __exidx_end
  *      __etext
- *      __data_start__
  *      __preinit_array_start
  *      __preinit_array_end
  *      __init_array_start
  *      __init_array_end
  *      __fini_array_start
  *      __fini_array_end
+ *      __data_start__
  *      __data_end__
  *      __bss_start__
  *      __bss_end__
@@ -141,15 +141,15 @@ M_VECTOR_RAM_SIZE = DEFINED(__ram_vector_table__) ? (__VECTOR_TABLE_END - __VECT
    } > flash
    __exidx_end = .;
 
-   __etext = .;    /* define a global symbol at end of code */
-   __DATA_ROM = .; /* Symbol is used by startup for data initialization */
-
    /* Flash region for programming */
    .flash (NOLOAD) : 
    {
       . = ALIGN(4);
       KEEP(*(.flash))
    } > flash
+
+   __etext = .;    /* define a global symbol at end of code */
+   __DATA_ROM = .; /* Symbol is used by startup for data initialization */
 
   /* reserve MTB memory at the beginning of data */
   .mtb : /* MTB buffer no0load */
@@ -208,7 +208,7 @@ M_VECTOR_RAM_SIZE = DEFINED(__ram_vector_table__) ? (__VECTOR_TABLE_END - __VECT
       __END_BSS = .;
    } > ram
     
-   /* Minimum HEAP - from top of BSS */
+   /* Start of HEAP - usually from top of BSS */
    .heap :
    {
       . = ALIGN(4);
@@ -220,7 +220,6 @@ M_VECTOR_RAM_SIZE = DEFINED(__ram_vector_table__) ? (__VECTOR_TABLE_END - __VECT
       . = . + __heap_size__;
    } > ram
 
-$(linkerExtraRegions:)
    /* STACK space - between HEAP and end of RAM (or bitband_bytes) */
    PROVIDE ( __sram_u_size = 0 );
    .stack :
@@ -228,12 +227,14 @@ $(linkerExtraRegions:)
       /* Make sure location doesn't move backwards as causes cryptic messages */
       . = MAX( ., ABSOLUTE(ORIGIN(ram) + LENGTH(ram) - __stack_size__ - __sram_u_size - 3));
       . = ALIGN(4);
+      /* Heap limit is at bottom of stack */
       __HeapLimit = .;
       __StackLimit = .;
       . = . + __stack_size__;
       __StackTop = .;
    } > ram
 
+$(linkerExtraRegions:)
   PROVIDE(__stack = __StackTop);
   PROVIDE(__cs3_stack = __StackTop);
   
@@ -245,7 +246,7 @@ $(linkerExtraRegions:)
   PROVIDE(_read  = _usbdm_read);
 
   /*
-   RAM Memory map                                            Example
+   Typcal RAM Memory map                                     Example
   +----------------------+                                   0x1FFFFF00
   | Micro Trace Buffer   |
   | (if declared)        |
