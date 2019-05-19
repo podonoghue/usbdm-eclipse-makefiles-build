@@ -366,7 +366,7 @@ public:
       cmp().DACCR = Info::daccr;
       cmp().MUXCR = Info::muxcr;
 
-      enableNvicInterrupts();
+      enableNvicInterrupts(Info::irqLevel);
    }
 
    /**

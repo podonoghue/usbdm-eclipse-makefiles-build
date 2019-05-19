@@ -290,7 +290,7 @@ public:
     *                        Use nullptr to remove callback.
     */
    static void setCallback(LPTMRCallbackFunction callback) {
-      usbdm_assert(Info::irqHandlerInstalled, "LPTMR not configure for interrupts");
+      static_assert(Info::irqHandlerInstalled, "LPTMR not configure for interrupts");
       if (callback == nullptr) {
          callback = unhandledCallback;
       }

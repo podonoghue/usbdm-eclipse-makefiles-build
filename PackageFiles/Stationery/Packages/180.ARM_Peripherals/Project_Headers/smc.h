@@ -376,7 +376,9 @@ $(/SMC/setStopOptions)
       SCB->SCR |= SCB_SCR_SLEEPDEEP_Msk;
       // Make sure write completes
       (void)(SCB->SCR);
-      __WFI();
+      __asm volatile( "dsb" ::: "memory" );
+      __asm volatile( "wfi" );
+      __asm volatile( "isb" );
    }
 
    /**
@@ -436,7 +438,9 @@ $(/SMC/setStopOptions)
       SCB->SCR &= ~SCB_SCR_SLEEPDEEP_Msk;
       // Make sure write completes
       (void)(SCB->SCR);
-      __WFI();
+      __asm volatile( "dsb" ::: "memory" );
+      __asm volatile( "wfi" );
+      __asm volatile( "isb" );
    }
 
    /**

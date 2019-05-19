@@ -130,7 +130,7 @@ public:
     *                        Use nullptr to remove callback.
     */
    static void setCallback(LLWUCallbackFunction callback) {
-      usbdm_assert(Info::irqHandlerInstalled, "LLWU not configured for interrupts");
+      static_assert(Info::irqHandlerInstalled, "LLWU not configured for interrupts");
       if (callback == nullptr) {
          callback = unhandledCallback;
       }
@@ -181,7 +181,7 @@ public:
       llwu().RST   = Info::rst;
 #endif
 
-      enableNvicInterrupts();
+      enableNvicInterrupts(Info::irqLevel);
    }
 
    /*
@@ -493,7 +493,7 @@ public:
        * Any pending NVIC interrupts are first cleared.
        */
       static void enablePinNvicInterrupts() {
-         Pcr::enableNvicInterrupt();
+         Pcr::enableNvicInterrupts();
       }
 
       /**

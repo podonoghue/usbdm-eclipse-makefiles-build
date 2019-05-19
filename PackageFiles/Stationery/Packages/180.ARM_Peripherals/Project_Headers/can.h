@@ -481,7 +481,7 @@ union CanFifoIdFilterMask {
     * @param frameType0Mask   Enables filtering on Frame Type (Data or Remote) (MB[RTR] field)
     * @param rxid1Mask        Mask for Receive Frame Identifier (standard 11-bit, or extended 29-bit - only 14 MSBs retained)
     * @param ide1Mask         Mask for Extended Frame
-    * @param frameType0Mask   Enables filtering on Frame Type (Data or Remote) (MB[RTR] field)
+    * @param frameType1Mask   Enables filtering on Frame Type (Data or Remote) (MB[RTR] field)
     */
    constexpr CanFifoIdFilterMask(
          CanMode   canMode,
@@ -941,7 +941,7 @@ public:
        *   - mcr.irmq    = true
        *
        * @param bitRate      Desired bit rate
-       * @param clockFreq    CAN input clock frequency
+       * @param clockSource  Clock source
        *
        *
        * @param bitRate      Desired bit rate
@@ -1079,8 +1079,8 @@ protected:
     * - Mailboxes (number is software configurable) (1 mailbox = 1 message buffer)
     * The available Message Buffers is determined by the hardware maximum and the CAN_MCR.MAXMB value.
     *
-    * @param fifoIdFilters   Number of FIFO filter entries (Format_A=x1, Format_B=x2, Format_C=x4)
-    * @param mailboxes       Number of mailboxes
+    * @param fifoIdFilterCount   Number of FIFO filter entries (Format_A=x1, Format_B=x2, Format_C=x4)
+    * @param mailboxes           Number of mailboxes
     *
     * @return The number of message buffers required.
     */
@@ -1950,7 +1950,7 @@ protected:
    /**
     * Free CAN Mailbox.
     *
-    * @param dmaChannelNum Channel to release
+    * @param mailboxNumber CAN mailbox to release
     */
    static void freeMailbox(unsigned mailboxNumber) {
       usbdm_assert((mailboxNumber<NUM_MAILBOXES), "Illegal mailbox number");
@@ -2233,7 +2233,7 @@ public:
    /**
     * Free CAN Mailbox.
     *
-    * @param dmaChannelNum Channel to release
+    * @param mailboxInfo Channel to release
     */
    static void freeMailbox(CanMailboxInfo mailboxInfo) {
       mailboxInfo.release();

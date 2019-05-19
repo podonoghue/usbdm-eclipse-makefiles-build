@@ -243,7 +243,7 @@ public:
       tsi().THRESHOLD = Info::tsi_threshold;
       tsi().PEN       = Info::tsi_pen;
 
-      enableNvicInterrupts();
+      enableNvicInterrupts(Info::irqLevel);
    }
 
    /**

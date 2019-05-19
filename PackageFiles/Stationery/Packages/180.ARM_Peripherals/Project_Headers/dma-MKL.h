@@ -518,6 +518,7 @@ public:
     * @return Channel number     - Number of allocated channel
     */
    static DmaChannelNum allocateChannel() {
+      CriticalSection cs;
       unsigned channelNum = __builtin_ffs(allocatedChannels);
       if ((channelNum == 0)||(--channelNum>=Info::NumChannels)) {
          setErrorCode(E_NO_RESOURCE);
@@ -535,6 +536,7 @@ public:
     * @return Channel number           - Number of allocated channel
     */
    static DmaChannelNum allocatePeriodicChannel() {
+      CriticalSection cs;
       unsigned channelNum = __builtin_ffs(allocatedChannels);
       if ((channelNum == 0)||(--channelNum>=Info::NumChannels)||(channelNum>=USBDM::PitInfo::NumChannels)) {
          setErrorCode(E_NO_RESOURCE);
@@ -550,9 +552,12 @@ public:
     * @param dmaChannelNum Channel to release
     */
    static void freeChannel(DmaChannelNum dmaChannelNum) {
+      const uint32_t channelMask = (1<<dmaChannelNum);
       usbdm_assert(dmaChannelNum<Info::NumChannels,        "Illegal DMA channel");
       usbdm_assert((allocatedChannels & channelMask) == 0, "Freeing unallocated DMA channel");
-      allocatedChannels |= (1<<dmaChannelNum);
+
+      CriticalSection cs;
+      allocatedChannels |= channelMask;
    }
 
    /**

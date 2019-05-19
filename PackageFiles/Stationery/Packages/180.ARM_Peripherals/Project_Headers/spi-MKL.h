@@ -608,7 +608,7 @@ public:
       thisPtr = this;
 
       // Enable and configure interrupts
-      enableNvicInterrupts();
+      enableNvicInterrupts(Info::irqLevel);
    }
 
    /**

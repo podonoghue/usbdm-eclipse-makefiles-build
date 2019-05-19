@@ -129,8 +129,11 @@ namespace USBDM {
  *       ...
  *    }
  * @endcode
+ *
+ * @note uses PRIMASK
  */
 class CriticalSection {
+
 private:
    /** Used to record interrupt state on entry */
    volatile uint32_t cpuSR;

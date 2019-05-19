@@ -345,7 +345,7 @@ public:
       tmr().MOD     = Info::modulo;
       tmr().SC      = Info::sc;
 
-      enableNvicInterrupts();
+      enableNvicInterrupts(Info::irqLevel);
    }
 
    /**

@@ -260,7 +260,7 @@ public:
       tsi().GENCS  = Info::tsi_gencs|TSI_GENCS_TSIEN_MASK;
       tsi().TSHD   = Info::tsi_tshd;
 
-      enableNvicInterrupts();
+      enableNvicInterrupts(Info::irqLevel);
    }
 
    /**

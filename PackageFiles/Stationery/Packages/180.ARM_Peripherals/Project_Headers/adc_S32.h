@@ -323,7 +323,7 @@ public:
       adc().CV1  = Info::cv1;
       adc().CV1  = Info::cv2;
 	  
-      enableNvicInterrupts();
+      enableNvicInterrupts(Info::irqLevel);
    }
 
    /**

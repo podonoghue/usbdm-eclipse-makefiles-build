@@ -195,7 +195,7 @@ public:
       pmc().LVDSC2 = Info::pmc_lvdsc2;
       pmc().REGSC  = Info::pmc_regsc;
 
-      enableNvicInterrupts();
+      enableNvicInterrupts(Info::irqLevel);
    }
 
 #ifdef PMC_LVDSC1_LVDV

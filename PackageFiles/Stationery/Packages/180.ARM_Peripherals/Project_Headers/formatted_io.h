@@ -23,6 +23,11 @@
 #include <ctype.h>      // isspace() etc
 #include "hardware.h"
 
+#ifdef __FREERTOS
+#include "FreeRTOS.h"
+#include "semphr.h"
+#endif
+
 namespace USBDM {
 
 /**
@@ -146,16 +151,26 @@ protected:
     */
    unsigned fFloatPrecisionMultiplier = 1000;
 
+#if( ( configSUPPORT_DYNAMIC_ALLOCATION == 1 ) && ( configUSE_RECURSIVE_MUTEXES == 1 ) )
+   SemaphoreHandle_t mutex;
+#endif
+
    /**
     * Construct formatter interface
     */
    FormattedIO() {
+#if( ( configSUPPORT_DYNAMIC_ALLOCATION == 1 ) && ( configUSE_RECURSIVE_MUTEXES == 1 ) )
+      mutex = xSemaphoreCreateRecursiveMutex();
+#endif
    }
 
    /**
     * Destructor
     */
    virtual ~FormattedIO() {
+#if( ( configSUPPORT_DYNAMIC_ALLOCATION == 1 ) && ( configUSE_RECURSIVE_MUTEXES == 1 ) )
+      vSemaphoreDelete(mutex);
+#endif
    }
 
    /**
@@ -206,6 +221,7 @@ protected:
     */
    virtual void _writeChar(char ch) = 0;
 
+public:
    /**
     *  Flush output data
     */
@@ -216,7 +232,29 @@ protected:
     */
    virtual void flushInput() = 0;
 
-public:
+   /**
+    * Lock the object
+    *
+    * @note Requires use of RTOS + Mutexes
+    */
+   FormattedIO &lock() {
+#if( ( configSUPPORT_DYNAMIC_ALLOCATION == 1 ) && ( configUSE_RECURSIVE_MUTEXES == 1 ) )
+      xSemaphoreTakeRecursive(mutex, portMAX_DELAY);
+#endif
+      return *this;
+   }
+
+   /**
+    * Unlock the object
+    *
+    * @note Requires use of RTOS + Mutexes
+    */
+   void unlock() {
+#if( ( configSUPPORT_DYNAMIC_ALLOCATION == 1 ) && ( configUSE_RECURSIVE_MUTEXES == 1 ) )
+      xSemaphoreGiveRecursive(mutex);
+#endif
+   }
+
    /**
     * Peek at lookahead (non-blocking).
     *

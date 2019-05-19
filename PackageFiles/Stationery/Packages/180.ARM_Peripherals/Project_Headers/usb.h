@@ -356,7 +356,7 @@ public:
 
       configureAllPins();
 
-      enableNvicInterrupts();
+      enableNvicInterrupts(Info::irqLevel);
    }
 
    /**

@@ -654,8 +654,8 @@ public:
    /**
     * Set thread Priority
     *
-    * @param[in] threadId Thread ID of thread to adjust priority of
-    * @param[in] priority Priority to set for thread
+    * @param[in] threadId   Thread ID of thread to adjust priority of
+    * @param[in] osPriority Priority to set for thread
     *
     * @return osOK:              The priority of the thread has been successfully changed.
     * @return osErrorValue:      Incorrect priority value.
@@ -669,7 +669,7 @@ public:
    /**
     * Set priority of current thread
     *
-    * @param[in] priority Priority to set for thread
+    * @param[in] osPriority Priority to set for thread
     *
     * @return osOK:              The priority of the thread has been successfully changed.
     * @return osErrorValue:      Incorrect priority value.

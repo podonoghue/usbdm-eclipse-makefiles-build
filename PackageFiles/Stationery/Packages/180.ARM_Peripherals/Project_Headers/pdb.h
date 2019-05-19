@@ -331,7 +331,7 @@ public:
       // Configure and trigger register load
       pdb().SC = Info::pdb_sc|PDB_SC_PDBEN_MASK|PDB_SC_LDOK_MASK;
 
-      enableNvicInterrupts();
+      enableNvicInterrupts(Info::irqLevel);
    }
 
    /**

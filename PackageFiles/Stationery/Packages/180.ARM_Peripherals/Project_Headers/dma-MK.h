@@ -940,6 +940,7 @@ public:
     * @return Channel number     - Number of allocated channel
     */
    static DmaChannelNum allocateChannel() {
+      CriticalSection cs;
       unsigned channelNum = __builtin_ffs(allocatedChannels);
       if ((channelNum == 0)||(--channelNum>=Info::NumChannels)) {
          setErrorCode(E_NO_RESOURCE);
@@ -961,6 +962,8 @@ public:
       const uint32_t channelMask = (1<<pitChannelNum);
       usbdm_assert(pitChannelNum<Info::NumChannels,        "No DMA channel associated with PIT channel");
       usbdm_assert((allocatedChannels & channelMask) != 0, "DMA channel already allocated");
+
+      CriticalSection cs;
       if ((allocatedChannels & channelMask) == 0) {
          setErrorCode(E_NO_RESOURCE);
          return DmaChannelNum_None;
@@ -978,6 +981,7 @@ public:
     * @return Channel number           - Number of allocated channel
     */
    static DmaChannelNum allocatePeriodicChannel() {
+      CriticalSection cs;
       unsigned channelNum = __builtin_ffs(allocatedChannels);
       if ((channelNum == 0)||(--channelNum>=Info::NumChannels)||(channelNum>=USBDM::Lpit0Info::NumChannels)) {
          setErrorCode(E_NO_RESOURCE);
@@ -997,6 +1001,7 @@ public:
     * @return Channel number           - Number of allocated channel
     */
    static DmaChannelNum allocatePeriodicChannel() {
+      CriticalSection cs;
       unsigned channelNum = __builtin_ffs(allocatedChannels);
       if ((channelNum == 0)||(--channelNum>=Info::NumChannels)||(channelNum>=USBDM::PitInfo::NumChannels)) {
          setErrorCode(E_NO_RESOURCE);
@@ -1016,6 +1021,8 @@ public:
       const uint32_t channelMask = (1<<dmaChannelNum);
       usbdm_assert(dmaChannelNum<Info::NumChannels,        "Illegal DMA channel");
       usbdm_assert((allocatedChannels & channelMask) == 0, "Freeing unallocated DMA channel");
+
+      CriticalSection cs;
       allocatedChannels |= channelMask;
    }
 

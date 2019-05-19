@@ -362,7 +362,7 @@ public:
       cmp().C0 = Info::cr0 | CMP_C0_EN_MASK;
       cmp().C1 = Info::daccr;
 
-      enableNvicInterrupts();
+      enableNvicInterrupts(Info::irqLevel);
    }
 
    /**

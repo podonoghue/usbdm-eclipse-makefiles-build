@@ -422,7 +422,7 @@ public:
       //TODO Make configurable
       tmr().COMBINE = FTM_COMBINE_FAULTEN0_MASK|FTM_COMBINE_FAULTEN1_MASK|FTM_COMBINE_FAULTEN2_MASK|FTM_COMBINE_FAULTEN3_MASK;
 
-      enableNvicInterrupts();
+      enableNvicInterrupts(Info::irqLevel);
    }
 
    /**
@@ -775,7 +775,8 @@ public:
    /**
     * Set period
     *
-    * @param[in] period Period in seconds as a float
+    * @param[in] period   Period in seconds as a float
+    * @param[in] suspend  Whether to suspend timer during change.
     *
     * @return E_NO_ERROR  => success
     * @return E_TOO_SMALL => failed to find suitable values
@@ -786,7 +787,7 @@ public:
     * @note The Timer is stopped while being modified
     * @note The counter load value (CNTIN) is cleared
     */
-   static ErrorCode setPeriod(float period) {
+   static ErrorCode setPeriod(float period, bool suspend=false) {
       float inputClock = Info::getInputClockFrequency();
       int prescaleFactor=1;
       int prescalerValue=0;
@@ -814,7 +815,7 @@ public:
             uint32_t sc = tmr().SC;
             tmr().SC = 0;
             (void)tmr().SC;
-            setPeriodInTicks(periodInTicks, false);
+            setPeriodInTicks(periodInTicks, suspend);
             tmr().SC  = (sc&~FTM_SC_PS_MASK)|FTM_SC_PS(prescalerValue);
             return E_NO_ERROR;
          }
@@ -2086,6 +2087,7 @@ template <int channel>
 class Ftm3Channel : public Ftm3::Channel<channel> {};
 #endif
 
+#ifdef FTM_QDCTRL_QUADEN_MASK
 /**
  *  Quadrature Decoder Mode\n
  *  Selects the encoding mode used in the Quadrature Decoder mode.
@@ -2346,6 +2348,7 @@ public:
       return (bool)(tmr().QDCTRL & FTM_QDCTRL_TOFDIR_MASK);
    }
 };
+#endif // defined(FTM_QDCTRL_QUADEN_MASK)
 
 
 #ifdef USBDM_FTM0_INFOQUAD_IS_DEFINED
