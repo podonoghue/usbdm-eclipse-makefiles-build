@@ -7,13 +7,14 @@
    <projectActionList id="FRDM-Defaults" >
       <applyWhen>
          <or>
+            <deviceNameMatches>^EVB[-_].*</deviceNameMatches>
             <deviceNameMatches>^FRDM[-_].*</deviceNameMatches>
             <deviceNameMatches>^TWR[-_].*</deviceNameMatches>
          </or>
       </applyWhen>
 
       <!-- Enable BDM power option -->
-      <constant id="bdmTargetVdd" value="BDM_TARGET_VDD_3V3" overwrite="true" />
+      <constant id="bdmTargetVdd"       value="BDM_TARGET_VDD_3V3" overwrite="true" />
 
    </projectActionList>
 
