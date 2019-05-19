@@ -3426,6 +3426,8 @@ Test Devices:
 <!-- 
    Aliases used for hardware
  -->
+ 
+      <device name="EVB_S32K144"     alias="S32K144"        hardware="evbs32k144" />
       <device name="FRDM_K20D50M"    alias="MK20DX128M5"    hardware="frdmk20d50m" />
       <device name="FRDM_K22F1M0"    alias="MK22FN1M0AM12"  hardware="frdmk22f1m0" />
       <device name="FRDM_K22F"       alias="MK22FN512M12"   hardware="frdmk22f" />
