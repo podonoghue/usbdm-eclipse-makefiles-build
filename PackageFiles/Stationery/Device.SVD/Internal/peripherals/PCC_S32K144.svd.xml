@@ -172,7 +172,7 @@ Devices using this peripheral:
                   </field>
                </fields>
             </register>
-            <register derivedFrom="PCC_FTFC"> <name>PCC_DMAMUX</name> <description>PCC DMAMUX Register</description> <addressOffset>0x84</addressOffset> <resetValue>0x80000000</resetValue> </register>
+            <register derivedFrom="PCC_FTFC"> <name>PCC_DMAMUX0</name> <description>PCC DMAMUX Register</description> <addressOffset>0x84</addressOffset> <resetValue>0x80000000</resetValue> </register>
             <register derivedFrom="PCC_FTFC"> <name>PCC_CAN0</name> <description>PCC FLEXCAN0 Register</description> <addressOffset>0x90</addressOffset> <resetValue>0x80000000</resetValue> </register>
             <register derivedFrom="PCC_FTFC"> <name>PCC_FLEXCAN0</name> <description>PCC FLEXCAN0 Register</description> <addressOffset>0x90</addressOffset> <resetValue>0x80000000</resetValue> </register>
             <register derivedFrom="PCC_FTFC"> <name>PCC_CAN1</name> <description>PCC FLEXCAN1 Register</description> <addressOffset>0x94</addressOffset> <resetValue>0x80000000</resetValue> </register>
