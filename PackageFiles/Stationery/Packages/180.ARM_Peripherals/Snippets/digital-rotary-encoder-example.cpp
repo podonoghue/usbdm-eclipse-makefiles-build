@@ -136,7 +136,7 @@ void startEncoder() {
    // Configure encoder pins as inputs with dual-edge interrupts
    Encoder::setCallback(pinIrqCallback);
    Encoder::setInput(PinPull_Up, PinAction_IrqEither, PinFilter_Passive);
-   Encoder::enableNvicInterrupts();
+   Encoder::enableNvicInterrupts(NvicPriority_Normal);
 }
 
 /**

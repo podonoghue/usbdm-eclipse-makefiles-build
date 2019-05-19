@@ -68,7 +68,7 @@ int main() {
    Lptmr::setCallback(flash);
 #endif
 
-   Lptmr::enableNvicInterrupts();
+   Lptmr::enableNvicInterrupts(NvicPriority_Normal);
 
    // Check for errors so far
    checkError();

@@ -71,7 +71,7 @@ static void configurePdb() {
    while (!Pdb::isRegisterLoadComplete()) {
       __asm__("nop");
    }
-   Pdb::enableNvicInterrupts();
+   Pdb::enableNvicInterrupts(NvicPriority_Normal);
 }
 
 static void adcCallback(uint32_t value, int) {
@@ -87,7 +87,7 @@ static void configureAdc() {
    Adc::setResolution(AdcResolution_8bit_se);
    Adc::calibrate();
    Adc::setCallback(adcCallback);
-   Adc::enableNvicInterrupts();
+   Adc::enableNvicInterrupts(NvicPriority_Normal);
 
    AdcChannel::enableHardwareConversion(AdcPretrigger_0, AdcInterrupt_Enabled);
 }

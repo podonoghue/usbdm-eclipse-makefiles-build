@@ -79,7 +79,7 @@ int main() {
 
    // Enable interrupts on Rising and Falling edges
    Cmp::enableInterrupts(CmpInterrupt_Both);
-   Cmp::enableNvicInterrupts();
+   Cmp::enableNvicInterrupts(NvicPriority_Normal);
 
    for(;;) {
       //      Led::toggle();

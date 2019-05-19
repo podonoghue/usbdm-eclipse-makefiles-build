@@ -231,7 +231,7 @@ void enablePin(Test test, bool enable) {
                LlwuPinMode_FallingEdge);
       }
       Llwu::setCallback(llwuCallback);
-      Llwu::enableNvicInterrupts();
+      Llwu::enableNvicInterrupts(NvicPriority_Normal);
    }
    if (enable && (test<LLS)) {
 
@@ -246,7 +246,7 @@ void enablePin(Test test, bool enable) {
 
       WakeupPin::clearInterruptFlag();
       WakeupPin::setCallback(pinCallback);
-      WakeupPin::enableNvicInterrupts();
+      WakeupPin::enableNvicInterrupts(NvicPriority_Normal);
    }
    else {
       WakeupPin::disableNvicInterrupts();
@@ -273,7 +273,7 @@ void enableTimer(Test test, bool enable) {
             LptmrClockSel_Lpoclk);
       WakeupTimer::setPeriod(5*seconds);
       WakeupTimer::setCallback(wakeupTimerCallback);
-      WakeupTimer::enableNvicInterrupts();
+      WakeupTimer::enableNvicInterrupts(NvicPriority_Normal);
 
       if (test>=LLS) {
 

@@ -59,7 +59,7 @@ void configureCmtFrequencyShiftKeying() {
 
    Cmt::setCallback(cmtCallback);
    Cmt::enableInterruptDma(CmtInterruptDma_Irq);
-   Cmt::enableNvicInterrupts();
+   Cmt::enableNvicInterrupts(NvicPriority_Normal);
    Cmt::setMode(CmtMode_FreqShiftKeying);
 }
 
@@ -72,7 +72,7 @@ void configureCmtTime() {
 
    Cmt::setCallback(cmtCallback);
    Cmt::enableInterruptDma(CmtInterruptDma_Irq);
-   Cmt::enableNvicInterrupts();
+   Cmt::enableNvicInterrupts(NvicPriority_Normal);
    Cmt::setMode(CmtMode_Time);
 }
 

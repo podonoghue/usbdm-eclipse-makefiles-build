@@ -120,9 +120,9 @@ enum {
 /**
  * Constructor
  *
- * @param[in] i2c      - The I2C interface to use
- * @param[in] mode     - Mode of operation (gain and filtering)
- * @param[in] cr1      - Data rate etc (see cr1Value())
+ * @param[in] i2c                - The I2C interface to use
+ * @param[in] accelerometerMode  - Mode of operation (gain and filtering)
+ * @param[in] cr1                - Data rate etc (see cr1Value())
  */
 MMA845x::MMA845x(USBDM::I2c &i2c, AccelerometerMode accelerometerMode, uint8_t cr1) : i2c(i2c) {
    if (readReg(WHO_AM_I) != WHO_AM_I_VALUE) {
@@ -208,8 +208,8 @@ void MMA845x::readAccelerometerXYZ(int &status, int16_t &x, int16_t &y, int16_t 
 /**
  * Configure accelerometer
  *
- * @param[in] mode - One of ACCEL_2Gmode etc.
- * @param[in] cr1  - Data rate etc (see cr1Value())
+ * @param[in] accelerometerMode - One of ACCEL_2Gmode etc.
+ * @param[in] cr1               - Data rate etc (see cr1Value())
  */
 void MMA845x::configure(AccelerometerMode accelerometerMode, uint8_t cr1) {
    writeReg(CTRL_REG1, 0x00);

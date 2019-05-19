@@ -179,7 +179,7 @@ void configurePit() {
 
    // Configure channel
    Tmr_Channel::configure(1*ms, PitChannelIrq_Enabled);
-   Tmr_Channel::enableNvicInterrupts();
+   Tmr_Channel::enableNvicInterrupts(NvicPriority_Normal);
 
    // Check for errors so far
    checkError();

@@ -122,7 +122,7 @@ static void configureDmaChannel() {
 
    // Set callback (Interrupts are enabled in TCD)
    Dma0::setCallback(dmaChannel, dmaCallback);
-   Dma0::enableNvicInterrupts(dmaChannel);
+   Dma0::enableNvicInterrupts(dmaChannel, NvicPriority_Normal);
 
    // Connect DMA channel to UART but throttle by PIT Channel 1 (matches DMA channel 1)
    DmaMux0::configure(dmaChannel, DMA_SLOT, DmaMuxEnable_Continuous);
@@ -180,7 +180,7 @@ void configureTimer() {
    data[3] = Timer::convertSecondsToTicks(300*us);
 
    // Enable interrupts for entire timer
-   Timer::enableNvicInterrupts();
+   Timer::enableNvicInterrupts(NvicPriority_Normal);
 
    // Pin high-drive
    TimerChannel::setOutput(PinDriveStrength_High);

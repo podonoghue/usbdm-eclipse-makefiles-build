@@ -217,7 +217,7 @@ void configurePit() {
 
    // Configure channel
    PITChannel::configure(SAMPLE_RATE, PitChannelIrq_Enabled);
-   PITChannel::enableNvicInterrupts();
+   PITChannel::enableNvicInterrupts(NvicPriority_Normal);
 }
 
 /**

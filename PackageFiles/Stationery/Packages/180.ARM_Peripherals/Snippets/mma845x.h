@@ -132,9 +132,9 @@ public:
    /**
     * Constructor
     *
-    * @param[in] i2c   - The I2C interface to use
-    * @param[in] mode  - Mode of operation (gain and filtering)
-    * @param[in] cr1   - Data rate etc (see cr1Value())
+    * @param[in] i2c                - The I2C interface to use
+    * @param[in] accelerometerMode  - Mode of operation (gain and filtering)
+    * @param[in] cr1                - Data rate etc (see cr1Value())
     */
    MMA845x(USBDM::I2c &i2c, AccelerometerMode accelerometerMode, uint8_t cr1=cr1Value());
    /**
@@ -157,8 +157,8 @@ public:
    /**
     * Configure accelerometer
     *
-    * @param[in] mode - One of AccelerometerMode_2Gmode etc.
-    * @param[in] cr1  - Data rate etc (see cr1Value())
+    * @param[in] accelerometerMode - One of AccelerometerMode_2Gmode etc.
+    * @param[in] cr1               - Data rate etc (see cr1Value())
     */
    void configure(AccelerometerMode accelerometerMode, uint8_t cr1=cr1Value());
    /**

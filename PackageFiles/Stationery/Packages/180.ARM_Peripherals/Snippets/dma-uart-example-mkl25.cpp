@@ -118,7 +118,7 @@ static void configureDma(DmaChannelNum dmaChannel) {
 
    // Set callback (Interrupts are enabled in TCD)
    Dma0::setCallback(dmaChannel, dmaCallback);
-   Dma0::enableNvicInterrupts(dmaChannel);
+   Dma0::enableNvicInterrupts(dmaChannel, NvicPriority_Normal);
 
    // Connect DMA channel to UART but throttle by PIT Channel 1 (matches DMA channel 1)
    DmaMux0::configure(dmaChannel, DMA_SLOT, DmaMuxEnable_Triggered);

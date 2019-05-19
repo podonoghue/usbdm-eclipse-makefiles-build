@@ -45,7 +45,7 @@ int main() {
 
    for(;;) {
       // Using percentage duty-cycle
-      for (int i=1; i<=99; i++) {
+      for (unsigned i=1; i<=99; i++) {
          PwmLed::setDutyCycle(i);
          waitMS(10);
          console.write("Duty = ").write(i).writeln(" %");

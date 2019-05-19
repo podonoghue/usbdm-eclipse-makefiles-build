@@ -43,7 +43,7 @@ int main() {
          PinPull_Up,
          PinAction_IrqFalling,
          PinFilter_Passive);
-   Switch::enableNvicInterrupts();
+   Switch::enableNvicInterrupts(NvicPriority_Normal);
 
    for(;;) {
       Led::write(Switch::read());

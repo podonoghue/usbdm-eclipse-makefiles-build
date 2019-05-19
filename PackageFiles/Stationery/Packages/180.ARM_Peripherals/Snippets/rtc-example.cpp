@@ -44,7 +44,7 @@ int main() {
    Rtc::setAlarmCallback(handler);
    Rtc::setAlarmTime(Rtc::getTime()+5);
    Rtc::enableAlarmInterrupts();
-   Rtc::enableNvicInterrupts();
+   Rtc::enableNvicInterrupts(NvicPriority_Normal);
 
    Led::setOutput();
    for(;;) {

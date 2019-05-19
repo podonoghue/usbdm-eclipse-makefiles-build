@@ -41,7 +41,7 @@ int main(){
 
    // Set up call-back to execute
    Ewm::setCallback(callback);
-   Ewm::enableNvicInterrupts();
+   Ewm::enableNvicInterrupts(NvicPriority_Normal);
    Ewm::enableInterrupt();
 
    // Watch for key-press while servicing watchdog

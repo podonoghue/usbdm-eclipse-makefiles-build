@@ -201,7 +201,7 @@ public:
       IrqPin::setInput(pcrValue(PinPull_Up));
       IrqPin::setCallback(callback);
       IrqPin::setPinAction(PinAction_IrqFalling);
-      IrqPin::enableNvicInterrupts();
+      IrqPin::enableNvicInterrupts(NvicPriority_Normal);
    }
 };
 

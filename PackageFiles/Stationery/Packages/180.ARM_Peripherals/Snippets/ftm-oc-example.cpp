@@ -82,7 +82,7 @@ int main() {
    timerHalfPeriodInTicks = Timer::convertSecondsToTicks(WAVEFORM_PERIOD/2.0);
 
    // Enable interrupts for entire timer
-   Timer::enableNvicInterrupts();
+   Timer::enableNvicInterrupts(NvicPriority_Normal);
 
    // Configure pin associated with channel
    TimerChannel::setOutput(

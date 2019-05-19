@@ -54,7 +54,7 @@ int main() {
     * In comparison mode this only occurs when the converted value matches the comparison set.
     */
    Adc::setCallback(adcComparisonCallback);
-   Adc::enableNvicInterrupts();
+   Adc::enableNvicInterrupts(NvicPriority_Normal);
 
    // Connect ADC channel to pin
    AdcChannel::setInput();

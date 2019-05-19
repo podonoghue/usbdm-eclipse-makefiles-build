@@ -46,8 +46,8 @@ public:
     *
     * @param position Position as an angle 0-180
     */
-   static ErrorCode setPosition(int position) {
-      if ((position<0) || (position>180)) {
+   static ErrorCode setPosition(unsigned position) {
+      if (position>180) {
          return setErrorCode(E_ILLEGAL_PARAM);
       }
       return FtmChannel::setHighTime(SERVO_MIN+((position/180.0f)*(SERVO_MAX-SERVO_MIN)));
@@ -68,7 +68,7 @@ int main() {
    USBDM::checkError();
 
    for (;;) {
-      for(int i=0;i<=180;i++) {
+      for(unsigned i=0; i<=180; i++) {
          servo::setPosition(i);
          waitMS(50);
          console.write("Position = ").writeln(i);

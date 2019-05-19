@@ -76,7 +76,7 @@ static void configureFtm() {
    FtmChannel::setDriveStrength(PinDriveStrength_High);
    FtmChannel::configure(FtmChMode_PwmHighTruePulses, FtmChannelAction_Irq);
    FtmChannel::setHighTime(HIGH_TIME);
-   Ftm::enableNvicInterrupts();
+   Ftm::enableNvicInterrupts(NvicPriority_Normal);
    //   FtmChannel::enableInterrupts();
 
    // Check if configuration failed
@@ -133,7 +133,7 @@ static void configurePdb() {
    // Update registers
    Pdb::configureRegisterLoad(PdbLoadMode_Immediate);
 
-   Pdb::enableNvicInterrupts();
+   Pdb::enableNvicInterrupts(NvicPriority_Normal);
 
    //   Pdb::softwareTrigger();
 
@@ -171,7 +171,7 @@ static void configureAdc() {
    Adc::calibrate();
 
    Adc::setCallback(adcCallback);
-   Adc::enableNvicInterrupts();
+   Adc::enableNvicInterrupts(NvicPriority_Normal);
 
    // Configure the ADC to use hardware with trigger 0 & 1 + interrupts
    AdcChannelA::enableHardwareConversion(AdcPretrigger_0, AdcInterrupt_Enabled);
@@ -260,7 +260,7 @@ static void configureDma() {
    Dma0::configureTransfer(DMA_CHANNEL, tcd);
 
 //   Dma0::waitUntilComplete(DMA_CHANNEL);
-   Dma0::enableNvicInterrupts(DMA_CHANNEL);
+   Dma0::enableNvicInterrupts(DMA_CHANNEL, NvicPriority_Normal);
    Dma0::setCallback(DMA_CHANNEL, dmaCallback);
 
 

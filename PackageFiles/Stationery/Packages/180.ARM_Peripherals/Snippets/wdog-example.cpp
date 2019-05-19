@@ -58,7 +58,7 @@ int main(){
 
    // Set up interrupt handling
    Wdog::setCallback(callback);
-   Wdog::enableNvicInterrupts();
+   Wdog::enableNvicInterrupts(NvicPriority_Normal);
    Wdog::enableInterrupt();
 
    // Watch for key-press while servicing watchdog

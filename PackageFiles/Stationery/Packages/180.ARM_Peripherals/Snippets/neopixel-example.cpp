@@ -252,7 +252,7 @@ static void initialiseDma(DmaChannelNum dmaSetChannel, DmaChannelNum dmaDataChan
 
    // Set callback (Interrupts are enabled in one TCD above)
    Dma0::setCallback(dmaClearChannel, dmaCallback);
-   Dma0::enableNvicInterrupts(dmaClearChannel);
+   Dma0::enableNvicInterrupts(dmaClearChannel, NvicPriority_Normal);
 
    // Connect DMA channels to FTM for triggering
    DmaMux0::configure(dmaSetChannel,   Dma0Slot_FTM0_Ch1, DmaMuxEnable_Continuous);
@@ -618,7 +618,6 @@ void test() {
       writeLEDs(pixel1DataA, pixel1DataA);
       waitMS(DELAY_VALUE);
    }
-
 }
 
 /**

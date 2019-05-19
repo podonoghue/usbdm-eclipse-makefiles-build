@@ -27,7 +27,7 @@ int main(){
 
    Rnga::setCallback(callback);
    Rnga::enableInterrupt();
-   Rnga::enableNvicInterrupts();
+   Rnga::enableNvicInterrupts(NvicPriority_Normal);
 
 #if 0
    // Used to test underflow handler

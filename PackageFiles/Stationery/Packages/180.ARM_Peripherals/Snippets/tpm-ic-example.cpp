@@ -91,7 +91,7 @@ int main() {
    Timer::setChannelCallback(ftmCallback);
 
    // Enable interrupts for entire timer
-   Timer::enableNvicInterrupts();
+   Timer::enableNvicInterrupts(NvicPriority_Normal);
 
    // Configure pin associated with channel
    TimerChannel::setInput(

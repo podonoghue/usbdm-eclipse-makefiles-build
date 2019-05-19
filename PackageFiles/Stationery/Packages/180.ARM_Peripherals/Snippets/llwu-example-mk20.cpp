@@ -15,6 +15,7 @@
  * Interrupts must be configured for GPIO pin used, LLWU, LPTMR
  * It will also be necessary to modify the linker memory map so that only
  * lowest 32K of SRAM_U (0x10000000..) is used if testing of LLS2 is intended.
+ * Interrupts will need to be enabled for Pin (GPIO), and LPTMR.
  *
  * Note: The STOP mode doesn't seem to work from RUN mode while using the
  * debugger.  INVSTATE occurs occasionally. Stand-alone it's OK.
@@ -238,7 +239,7 @@ void enablePin(Test test, bool enable) {
                LlwuPinMode_FallingEdge);
       }
       Llwu::setCallback(llwuCallback);
-      Llwu::enableNvicInterrupts();
+      Llwu::enableNvicInterrupts(NvicPriority_Normal);
    }
    if (enable && (test<LLS)) {
 
@@ -253,10 +254,10 @@ void enablePin(Test test, bool enable) {
 
       WakeupPin::clearInterruptFlag();
       WakeupPin::setCallback(pinCallback);
-      WakeupPin::enableNvicInterrupts();
+      WakeupPin::enablePinNvicInterrupts();
    }
    else {
-      WakeupPin::disableNvicInterrupts();
+      WakeupPin::disablePinNvicInterrupts();
    }
 }
 
@@ -280,7 +281,7 @@ void enableTimer(Test test, bool enable) {
             LptmrClockSel_Lpoclk);
       WakeupTimer::setPeriod(5*seconds);
       WakeupTimer::setCallback(wakeupTimerCallback);
-      WakeupTimer::enableNvicInterrupts();
+      WakeupTimer::enableNvicInterrupts(NvicPriority_Normal);
 
       if (test>=LLS) {
 
@@ -348,7 +349,7 @@ void runTest(
    }
    Llwu::disableNvicInterrupts();
    WakeupTimer::disableNvicInterrupts();
-   WakeupPin::disableNvicInterrupts();
+   WakeupPin::disablePinNvicInterrupts();
 
    console.write("Timer callback() ").writeln(timerHandlerRan?"Ran":"Didn't run");
    console.write("Pin callback()   ").writeln(pinHandlerRan?"Ran":"Didn't run");

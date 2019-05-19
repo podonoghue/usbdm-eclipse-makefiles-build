@@ -191,11 +191,11 @@ static void initDma(DmaChannelNum dmaTransmitChannel, DmaChannelNum dmaReceiveCh
 
    // Set callback (Interrupts are enabled in TCD)
    Dma0::setCallback(dmaTransmitChannel, dmaCallback);
-   Dma0::enableNvicInterrupts(dmaTransmitChannel);
+   Dma0::enableNvicInterrupts(dmaTransmitChannel, NvicPriority_Normal);
 
    // Set callback (Interrupts are enabled in TCD)
    Dma0::setCallback(dmaReceiveChannel, dmaCallback);
-   Dma0::enableNvicInterrupts(dmaReceiveChannel);
+   Dma0::enableNvicInterrupts(dmaReceiveChannel, NvicPriority_Normal);
 
    // Connect DMA channel to SPI Tx
    DmaMux0::configure(dmaTransmitChannel, Dma0Slot_SPI0_Tx, DmaMuxEnable_Continuous);

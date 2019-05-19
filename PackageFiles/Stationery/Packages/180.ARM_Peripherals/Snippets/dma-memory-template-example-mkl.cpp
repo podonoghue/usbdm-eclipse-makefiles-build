@@ -100,7 +100,7 @@ static ErrorCode dmaTransfer(T1 *source, T2 *destination, const uint32_t size) {
 
    // Set callback (Interrupts are enabled in TCD)
    Dma0::setCallback(dmaChannelNum, dmaCallback);
-   Dma0::enableNvicInterrupts(dmaChannelNum);
+   Dma0::enableNvicInterrupts(dmaChannelNum, NvicPriority_Normal);
 
    // Configure the transfer
    Dma0::configureTransfer(dmaChannelNum, tcd);

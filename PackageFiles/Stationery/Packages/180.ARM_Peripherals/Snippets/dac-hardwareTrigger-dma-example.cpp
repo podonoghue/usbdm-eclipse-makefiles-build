@@ -140,6 +140,8 @@ static void configureDma(DmaChannelNum dmaChannel) {
    // Enable hardware requests
    Dma0::enableRequests(dmaChannel);
 
+   Dma0::enableNvicErrorInterrupt(NvicPriority_Normal);
+
 #ifdef DMA_EARS_EDREQ_0_MASK
    // Enable asynchronous requests (if available)
    Dma0::enableAsynchronousRequests(dmaChannel);
@@ -170,7 +172,7 @@ static void configurePdb() {
    Pdb0::configureDacTrigger(0, PdbDacTriggerMode_Delayed, PDB_PERIOD);
 
    // Registers load on next event
-   Pdb0::confirmRegisterLoad(PdbLoadMode_Event);
+   Pdb0::configureRegisterLoad(PdbLoadMode_Event);
 
    // Start timer and load values
    Pdb0::softwareTrigger();

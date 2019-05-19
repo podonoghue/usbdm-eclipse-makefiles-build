@@ -45,7 +45,7 @@ int main() {
    Usbdcd::configure();
    Usbdcd::setCallback(callback);
    Usbdcd::enableInterrupt();
-   Usbdcd::enableNvicInterrupts();
+   Usbdcd::enableNvicInterrupts(NvicPriority_Normal);
 
    Usbdcd::startDetection();
 

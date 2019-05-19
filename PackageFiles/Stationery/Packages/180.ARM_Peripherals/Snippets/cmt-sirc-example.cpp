@@ -132,7 +132,7 @@ static void configureCmtTime() {
 
    Cmt::setCallback(cmtCallback);
    Cmt::enableInterruptDma(CmtInterruptDma_Irq);
-   Cmt::enableNvicInterrupts();
+   Cmt::enableNvicInterrupts(NvicPriority_Normal);
 
    // Set carrier frequency
    Cmt::setPrimaryTiming(PrimaryCarrierHalfTime,PrimaryCarrierHalfTime);

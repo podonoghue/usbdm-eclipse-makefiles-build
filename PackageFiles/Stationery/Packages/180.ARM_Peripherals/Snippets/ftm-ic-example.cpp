@@ -88,7 +88,7 @@ int main() {
    Timer::setMaximumInterval(MAX_IC_INTERVAL);
 
    // Enable interrupts for entire timer
-   Timer::enableNvicInterrupts();
+   Timer::enableNvicInterrupts(NvicPriority_Normal);
 
    // Configure pin associated with channel
    TimerChannel::setInput(

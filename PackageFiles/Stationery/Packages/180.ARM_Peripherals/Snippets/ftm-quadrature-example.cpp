@@ -54,7 +54,7 @@ int main() {
    // Set up callback for quadrature overflow or underflow
    QuadDecoder::setTimerOverflowCallback(callBack);
    QuadDecoder::enableTimerOverflowInterrupts();
-   QuadDecoder::enableNvicInterrupts();
+   QuadDecoder::enableNvicInterrupts(NvicPriority_Normal);
 
    // Check if configuration failed
    USBDM::checkError();

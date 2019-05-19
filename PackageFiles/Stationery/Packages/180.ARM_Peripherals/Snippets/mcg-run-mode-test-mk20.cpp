@@ -55,7 +55,7 @@ int main() {
    Lptmr::configureTimeCountingMode(LptmrResetOn_Compare, LptmrInterrupt_Enabled, LptmrClockSel_Lpoclk);
    Lptmr::setPeriod(100*ms);
    Lptmr::setCallback(toggleLED);
-   Lptmr::enableNvicInterrupts();
+   Lptmr::enableNvicInterrupts(NvicPriority_Normal);
 
    for(;;) {
       /*
