@@ -163,7 +163,8 @@
    <xi:include href="_irqOption.xml"/>
       
    <template namespace="usbdm"><![CDATA[
-   #ifndef USBDM_ADC1_IS_DEFINED
+   #ifndef USBDM_CLOCK_SOURCES_DEFINED
+   #define USBDM_CLOCK_SOURCES_DEFINED
       \t/**
       \t * ADC input clock source.
       \t */
@@ -176,6 +177,7 @@
       \t};
    #endif\n\n
    ]]></template>
+   
    <template><![CDATA[
      \t/**
      \t *  Get input clock frequency for ADC

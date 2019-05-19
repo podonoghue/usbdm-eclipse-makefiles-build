@@ -199,7 +199,7 @@
    <signals/>
    
    <xi:include href="_clockOption.xml"/>
-
+      
    <validate
       class="net.sourceforge.usbdm.deviceEditor.validators.AdcValidate">
    </validate>
