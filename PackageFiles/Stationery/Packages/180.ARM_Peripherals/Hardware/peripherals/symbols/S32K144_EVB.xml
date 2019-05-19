@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE section>
-<!-- FRDM_K20D50M.xml -->
+<!-- S32K144_EVB.xml -->
 
 <section name="DeviceSettings" >
    <!-- Definitions used by example programs -->
