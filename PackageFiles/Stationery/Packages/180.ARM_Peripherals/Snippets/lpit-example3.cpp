@@ -58,8 +58,9 @@ int main() {
    // Check for errors so far
    checkError();
 
+   Smc::enablePowerModes(SmcVeryLowPower_Enabled, SmcHighSpeedRun_Enabled);
    for(;;) {
       // Sleep between interrupts
-      Smc::enterWaitMode();
+      Smc::enterStopMode(SmcStopMode_VeryLowPowerStop);
    }
 }

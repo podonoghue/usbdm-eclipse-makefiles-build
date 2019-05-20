@@ -12,7 +12,7 @@
 using namespace USBDM;
 
 /**
- * Programmable Interrupt Timer (LPIT) Example
+ * Low-power Programmable Interrupt Timer (LPIT) Example
  *
  * Demonstrates LPIT call-back or static handler
  *
@@ -46,7 +46,7 @@ namespace USBDM {
 
 /*
  * If using a naked handler it must be named exactly as shown
- * S32 version - individual handler for each LPIT channel
+ * LPIT version - individual handler for each LPIT channel
  *
  * This method avoids the overhead of the indirection through a call-back
  */

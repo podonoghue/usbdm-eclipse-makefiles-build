@@ -189,7 +189,7 @@ static void initialiseDma(DmaChannelNum dmaSetChannel, DmaChannelNum dmaDataChan
     * This selectively clears pins driving strings of pixels.
     */
    static constexpr DmaTcd dataTCD (
-      /* Source address              */ (uint32_t)(pixelBuffer),           // Source = Pixel buffer
+      /* Source address              */ (uint32_t)(pixelBuffer),           // Source = Pixel data
       /* Source address offset       */ sizeof(pixelBuffer[0]),            // Source address advances
       /* Source size                 */ dmaSize(pixelBuffer[0]),           // 8-bit read from Destination address
       /* Source address modulo       */ DmaModulo_Disabled,                // No modulo
