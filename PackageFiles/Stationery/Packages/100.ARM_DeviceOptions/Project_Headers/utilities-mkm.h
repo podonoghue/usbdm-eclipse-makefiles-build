@@ -7,10 +7,6 @@
 #ifndef UTILTIES_H_
 #define UTILTIES_H_
 
-#ifdef __cplusplus
-extern "C" {
-#endif
-
 /**
  * @brief Concatenate two tokens
  *
@@ -71,9 +67,5 @@ extern "C" {
  * @param port Port name e.g. A => SIM_SCGC5_PORTA_MASK
  */
 #define PORT_CLOCK_MASK(port)  CONCAT4_(SIM_SCGC5,_PORT,port,_MASK)
-
-#ifdef __cplusplus
-   }
-#endif
 
 #endif /* UTILTIES_H_ */
