@@ -72,13 +72,13 @@ namespace USBDM {
  *
  * @endcode
  *
- * @tparam clockMask       Clock mask for PORT (PCR register) associated with GPIO
+ * @tparam clockInfo       Clock mask for PORT (PCR register) associated with GPIO
  * @tparam portAddress     Address of PORT (PCR register array) associated with GPIO
  * @tparam gpioAddress     GPIO hardware address
  * @tparam bitNum          Bit number within PORT/GPIO
  * @tparam polarity        Polarity of pin. Either ActiveHigh or ActiveLow
  */
-template<uint32_t clockMask, uint32_t portAddress, IRQn_Type irqNum, uint32_t gpioAddress, int bitNum, Polarity polarity>
+template<uint32_t clockInfo, uint32_t portAddress, IRQn_Type irqNum, uint32_t gpioAddress, int bitNum, Polarity polarity>
 class GpioBase_T {
 
 private:
@@ -91,7 +91,7 @@ private:
 
 public:
    /** PCR associated with this GPIO pin */
-   using Pcr = Pcr_T<clockMask, portAddress, irqNum, bitNum, GPIO_DEFAULT_PCR>;
+   using Pcr = Pcr_T<clockInfo, portAddress, irqNum, bitNum, GPIO_DEFAULT_PCR>;
 
    /** Get base address of GPIO hardware as pointer to struct */
    static volatile GPIO_Type &gpio() { return *reinterpret_cast<volatile GPIO_Type *>(gpioAddress); }
@@ -230,12 +230,12 @@ public:
     *
     * @param[in] pinDriveStrength One of PinDriveStrength_Low, PinDriveStrength_High
     * @param[in] pinDriveMode     One of PinDriveMode_PushPull, PinDriveMode_OpenDrain (defaults to PinPushPull)
-    * @param[in] pinSlewRate      One of PinSlewRate_Slow, PinSlewRate_Fast (defaults to PinSlewRate_Fast)
+    * @param[in] pinSlewRate      One of PinSlewRate_Slow, PinSlewRate_Fast (defaults to PinSlewRate_Slow)
     */
    static void setOutput(
          PinDriveStrength  pinDriveStrength,
          PinDriveMode      pinDriveMode      = PinDriveMode_PushPull,
-         PinSlewRate       pinSlewRate       = PinSlewRate_Fast
+         PinSlewRate       pinSlewRate       = PinSlewRate_Slow
          ) {
       setOutput(pinDriveStrength|pinDriveMode|pinSlewRate);
    }
@@ -503,6 +503,8 @@ public:
     * Sets pin interrupt mode
     *
     * @param[in] pinAction Interrupt/DMA mode
+    *
+    * @note This is a convenience function for Pcr::setPinAction(pinAction)
     */
    static void setPinAction(PinAction pinAction) {
       Pcr::setPinAction(pinAction);
@@ -510,6 +512,8 @@ public:
 
    /**
     * Clear interrupt flag for pin
+    *
+    * @note This is a convenience function for Pcr::clearInterruptFlag()
     */
    static void clearInterruptFlag() {
       Pcr::clearInterruptFlag();
@@ -519,6 +523,8 @@ public:
     * Set pull device on pin
     *
     * @param[in] pinPull Pin pull control value (PinPull_None, PinPull_Up, PinPull_Down)
+    *
+    * @note This is a convenience function for Pcr::setPullDevice(pinPull)
     */
    static void setPullDevice(PinPull pinPull) {
       Pcr::setPullDevice(pinPull);
@@ -528,6 +534,8 @@ public:
     * Set drive strength on pin
     *
     *  @param[in] pinDriveStrength Pin drive strength to set (PinDriveLow, PinDriveHigh)
+    *
+    * @note This is a convenience function for Pcr::setDriveStrength(pinDriveStrength)
     */
    static void setDriveStrength(PinDriveStrength pinDriveStrength) {
       Pcr::setDriveStrength(pinDriveStrength);
@@ -537,6 +545,8 @@ public:
     * Set drive mode on pin
     *
     *  @param[in] pinDriveMode Pin drive mode (PinPushPull, PinOpenDrain)
+    *
+    * @note This is a convenience function for Pcr::setDriveMode(pinDriveMode)
     */
    static void setDriveMode(PinDriveMode pinDriveMode) {
       Pcr::setDriveMode(pinDriveMode);
@@ -545,7 +555,9 @@ public:
    /**
     * Set slew rate on pin
     *
-    *  @param[in] pinSlewRate Slew rate. Either PinSlewRate_Slow or PinSlewRate_Fast
+    * @param[in] pinSlewRate Slew rate. Either PinSlewRate_Slow or PinSlewRate_Fast
+    *
+    * @note This is a convenience function for Pcr::setSlewRate(pinSlewRate)
     */
    static void setSlewRate(PinSlewRate  pinSlewRate) {
       Pcr::setSlewRate(pinSlewRate);
@@ -554,7 +566,9 @@ public:
    /**
     * Set filter on pin
     *
-    *  @param[in] pinFilter Pin filter option. Either PinFilter_None or PinFilter_Passive
+    * @param[in] pinFilter Pin filter option. Either PinFilter_None or PinFilter_Passive
+    *
+    * @note This is a convenience function for Pcr::setFilter(pinFilter)
     */
    static void setFilter(PinFilter pinFilter) {
       Pcr::setFilter(pinFilter);
@@ -562,6 +576,8 @@ public:
    /**
     * Locks most of the pin properties e.g. drive strength, pull-device etc.
     * The pin properties remains locked until the next reset
+    *
+    * @note This is a convenience function for Pcr::lock()
     */
    static void lock() {
       Pcr::lock();
@@ -570,13 +586,13 @@ public:
 #ifdef PORT_DFCR_CS_MASK
    /**
     * Configures Digital Pin Filter
-    * Convenience wrapper for PCR function
     *
     * @param pinDigitalFilterClock  Clock source
     * @param filterLength           Filter length in clock ticks
     *
     * @note Not all ports support this feature
     * @note This affects the digital filter for all pins of this port
+    * @note This is a convenience function for Pcr::configureDigitalFilter(pinDigitalFilterClock, filterLength)
     */
    static void configureDigitalFilter(PinDigitalFilterClock pinDigitalFilterClock, int filterLength) {
       Pcr::configureDigitalFilter(pinDigitalFilterClock, filterLength);
@@ -584,11 +600,11 @@ public:
 
    /**
     * Enable/disable digital filter on the pin
-    * Convenience wrapper for PCR function
     *
     * @param enable  True => enable, False => disable
     *
     * @note Not all ports support this feature
+    * @note This is a convenience function for Pcr::enableDigitalFilter()
     */
    static void enableDigitalFilter(bool enable) {
       Pcr::enableDigitalFilter(enable);
@@ -597,7 +613,8 @@ public:
 
    /**
     * Enable pin interrupt in NVIC.
-    * Convenience wrapper for PCR function
+    *
+    * @note This is a convenience function for Pcr::enableNvicInterrupts()
     */
    static void enableNvicInterrupts() {
       Pcr::enableNvicInterrupts();
@@ -606,9 +623,10 @@ public:
    /**
     * Enable and set priority of pin interrupt in NVIC.
     * Any pending NVIC interrupts are first cleared.
-    * Convenience wrapper for PCR function
     *
     * @param[in] nvicPriority  Interrupt priority
+    *
+    * @note This is a convenience function for Pcr::enableNvicInterrupts(nvicPriority)
     */
    static void enableNvicInterrupts(uint32_t nvicPriority) {
       Pcr::enableNvicInterrupts(nvicPriority);
@@ -616,7 +634,8 @@ public:
 
    /**
     * Disable pin interrupt in NVIC.
-    * Convenience wrapper for PCR function
+    *
+    * @note This is a convenience function for Pcr::disableNvicInterrupts()
     */
    static void disableNvicInterrupts() {
       Pcr::disableNvicInterrupts();
@@ -632,7 +651,8 @@ public:
     * @return E_HANDLER_ALREADY_SET Handler already set
     *
     * @note There is a single callback function for all pins on the related port.
-    *       It is necessary to identify the originating pin in the callback
+    *       It is necessary to identify the originating pin in the callback.
+    * @note This is a convenience function for Pcr::setCallback(callback)
     */
    static ErrorCode setCallback(PinCallbackFunction callback) {
       return Pcr::setCallback(callback);
@@ -648,7 +668,7 @@ public:
  * @tparam polarity      Polarity of pin. Either ActiveHigh or ActiveLow
  */
 template<class Info, const int bitNum, Polarity polarity>
-class  Gpio_T : public GpioBase_T<Info::pinInfo.clockMask, Info::pinInfo.portAddress, Info::pinInfo.irqNum, Info::pinInfo.gpioAddress, bitNum, polarity> {
+class  Gpio_T : public GpioBase_T<Info::pinInfo.clockInfo, Info::pinInfo.portAddress, Info::pinInfo.irqNum, Info::pinInfo.gpioAddress, bitNum, polarity> {
 
    static_assert(((bitNum>=0)&&(bitNum<=31)), "Illegal bit number in Gpio");
 };
@@ -661,7 +681,7 @@ class  Gpio_T : public GpioBase_T<Info::pinInfo.clockMask, Info::pinInfo.portAdd
  * @tparam polarity      Polarity of pin. Either ActiveHigh or ActiveLow
  */
 template<class Info, const uint32_t index, Polarity polarity>
-using  GpioTable_T = GpioBase_T<Info::info[index].clockMask, Info::info[index].portAddress, Info::info[index].irqNum, Info::info[index].gpioAddress, Info::info[index].gpioBit, polarity>;
+using  GpioTable_T = GpioBase_T<Info::info[index].clockInfo, Info::info[index].portAddress, Info::info[index].irqNum, Info::info[index].gpioAddress, Info::info[index].gpioBit, polarity>;
 
 /**
  * @brief Template representing a field within a port
@@ -757,7 +777,7 @@ public:
    /**
     * Mask for the bits being manipulated within underlying port hardware
     */
-   static constexpr uint32_t MASK = ((1<<(left-right+1))-1)<<right;
+   static constexpr uint32_t MASK = (uint32_t)((1ULL<<(left-right+1))-1)<<right;
 
    /**
     * Calculate Port bit-mask from field bit number
@@ -782,7 +802,7 @@ public:
     */
    static void setInOut(PcrValue pcrValue=GPIO_DEFAULT_PCR) {
       // Enable clock to GPCLR & GPCHR
-      enablePortClocks(Info::pinInfo.clockMask);
+      enablePortClocks(Info::pinInfo.clockInfo);
 
       // Default to input
       gpio().PDDR &= ~MASK;
@@ -916,7 +936,7 @@ public:
          PinFilter         pinFilter         = PinFilter_None
          ) {
       // Enable clock to GPCLR & GPCHR
-      enablePortClocks(Info::pinInfo.clockMask);
+      enablePortClocks(Info::pinInfo.clockInfo);
 
       // Set to input
       gpio().PDDR &= ~MASK;
@@ -925,7 +945,7 @@ public:
       write(0);
 
       // Set individual PCRs (required for IRQ function)
-      for (int bit=right; bit<=left; bit++) {
+      for (unsigned bit=right; bit<=left; bit++) {
          port().PCR[bit] = pinPull|pinAction|pinFilter|PinMux_Gpio;
       }
    }
@@ -1000,7 +1020,8 @@ public:
 
    /**
     * Enable pin interrupt in NVIC.
-    * Convenience wrapper for PCR function
+    *
+    * @note This is a convenience function for Pcr::enableNvicInterrupts()
     */
    static void enableNvicInterrupts() {
       Pcr::enableNvicInterrupts();
@@ -1009,9 +1030,10 @@ public:
    /**
     * Enable and set priority of pin interrupt in NVIC.
     * Any pending NVIC interrupts are first cleared.
-    * Convenience wrapper for PCR function
     *
     * @param[in] nvicPriority  Interrupt priority
+    *
+    * @note This is a convenience function for Pcr::enableNvicInterrupts(nvicPriority)
     */
    static void enableNvicInterrupts(uint32_t nvicPriority) {
       Pcr::enableNvicInterrupts(nvicPriority);
@@ -1020,6 +1042,8 @@ public:
    /**
     * Disable pin interrupt in NVIC.
     * Convenience wrapper for PCR function
+    *
+    * @note This is a convenience function for Pcr::disableNvicInterrupts()
     */
    static void disableNvicInterrupts() {
       Pcr::disableNvicInterrupts();
@@ -1036,6 +1060,7 @@ public:
     *
     * @note There is a single callback function for all pins on the related port.
     *       It is necessary to identify the originating pin in the callback
+    * @note This is a convenience function for Pcr::setCallback(callback)
     */
    static ErrorCode setCallback(PinCallbackFunction callback) {
       return Pcr::setCallback(callback);
@@ -1083,7 +1108,7 @@ public:
  * @tparam polarity      Polarity of pin. Either ActiveHigh or ActiveLow
  */
 template<int bitNum, Polarity polarity=ActiveHigh> class GpioA :
-      public GpioBase_T<GpioAInfo::pinInfo.clockMask, GpioAInfo::pinInfo.portAddress, GpioAInfo::pinInfo.irqNum, GpioAInfo::pinInfo.gpioAddress, bitNum, polarity> {};
+      public GpioBase_T<GpioAInfo::pinInfo.clockInfo, GpioAInfo::pinInfo.portAddress, GpioAInfo::pinInfo.irqNum, GpioAInfo::pinInfo.gpioAddress, bitNum, polarity> {};
 using PortA = PcrBase_T<GpioAInfo::pinInfo.portAddress, GpioAInfo::pinInfo.irqNum>;
 
 /**
@@ -1166,7 +1191,7 @@ class GpioAField : public Field_T<GpioAInfo, left, right, polarity> {};
  * @tparam polarity      Polarity of pin. Either ActiveHigh or ActiveLow
  */
 template<int bitNum, Polarity polarity=ActiveHigh> class GpioB :
-      public GpioBase_T<GpioBInfo::pinInfo.clockMask, GpioBInfo::pinInfo.portAddress, GpioBInfo::pinInfo.irqNum, GpioBInfo::pinInfo.gpioAddress, bitNum, polarity> {};
+      public GpioBase_T<GpioBInfo::pinInfo.clockInfo, GpioBInfo::pinInfo.portAddress, GpioBInfo::pinInfo.irqNum, GpioBInfo::pinInfo.gpioAddress, bitNum, polarity> {};
 using PortB = PcrBase_T<GpioBInfo::pinInfo.portAddress, GpioBInfo::pinInfo.irqNum>;
 
 /**
@@ -1249,7 +1274,7 @@ class GpioBField : public Field_T<GpioBInfo, left, right, polarity> {};
  * @tparam polarity      Polarity of pin. Either ActiveHigh or ActiveLow
  */
 template<int bitNum, Polarity polarity=ActiveHigh> class GpioC :
-      public GpioBase_T<GpioCInfo::pinInfo.clockMask, GpioCInfo::pinInfo.portAddress, GpioCInfo::pinInfo.irqNum, GpioCInfo::pinInfo.gpioAddress, bitNum, polarity> {};
+      public GpioBase_T<GpioCInfo::pinInfo.clockInfo, GpioCInfo::pinInfo.portAddress, GpioCInfo::pinInfo.irqNum, GpioCInfo::pinInfo.gpioAddress, bitNum, polarity> {};
 using PortC = PcrBase_T<GpioCInfo::pinInfo.portAddress, GpioCInfo::pinInfo.irqNum>;
 
 /**
@@ -1332,7 +1357,7 @@ class GpioCField : public Field_T<GpioCInfo, left, right, polarity> {};
  * @tparam polarity      Polarity of pin. Either ActiveHigh or ActiveLow
  */
 template<int bitNum, Polarity polarity=ActiveHigh> class GpioD :
-      public GpioBase_T<GpioDInfo::pinInfo.clockMask, GpioDInfo::pinInfo.portAddress, GpioDInfo::pinInfo.irqNum, GpioDInfo::pinInfo.gpioAddress, bitNum, polarity> {};
+      public GpioBase_T<GpioDInfo::pinInfo.clockInfo, GpioDInfo::pinInfo.portAddress, GpioDInfo::pinInfo.irqNum, GpioDInfo::pinInfo.gpioAddress, bitNum, polarity> {};
 using PortD = PcrBase_T<GpioDInfo::pinInfo.portAddress, GpioDInfo::pinInfo.irqNum>;
 
 /**
@@ -1415,7 +1440,7 @@ class GpioDField : public Field_T<GpioDInfo, left, right, polarity> {};
  * @tparam polarity      Polarity of pin. Either ActiveHigh or ActiveLow
  */
 template<int bitNum, Polarity polarity=ActiveHigh> class GpioE :
-      public GpioBase_T<GpioEInfo::pinInfo.clockMask, GpioEInfo::pinInfo.portAddress, GpioEInfo::pinInfo.irqNum, GpioEInfo::pinInfo.gpioAddress, bitNum, polarity> {};
+      public GpioBase_T<GpioEInfo::pinInfo.clockInfo, GpioEInfo::pinInfo.portAddress, GpioEInfo::pinInfo.irqNum, GpioEInfo::pinInfo.gpioAddress, bitNum, polarity> {};
 using PortE = PcrBase_T<GpioEInfo::pinInfo.portAddress, GpioEInfo::pinInfo.irqNum>;
 
 /**

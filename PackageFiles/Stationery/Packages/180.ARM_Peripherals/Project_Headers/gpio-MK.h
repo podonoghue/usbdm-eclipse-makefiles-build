@@ -72,13 +72,13 @@ namespace USBDM {
  *
  * @endcode
  *
- * @tparam clockMask       Clock mask for PORT (PCR register) associated with GPIO
+ * @tparam clockInfo       Clock mask for PORT (PCR register) associated with GPIO
  * @tparam portAddress     Address of PORT (PCR register array) associated with GPIO
  * @tparam gpioAddress     GPIO hardware address
  * @tparam bitNum          Bit number within PORT/GPIO
  * @tparam polarity        Polarity of pin. Either ActiveHigh or ActiveLow
  */
-template<uint32_t clockMask, uint32_t portAddress, IRQn_Type irqNum, uint32_t gpioAddress, int bitNum, Polarity polarity>
+template<uint32_t clockInfo, uint32_t portAddress, IRQn_Type irqNum, uint32_t gpioAddress, int bitNum, Polarity polarity>
 class GpioBase_T {
 
 private:
@@ -91,7 +91,7 @@ private:
 
 public:
    /** PCR associated with this GPIO pin */
-   using Pcr = Pcr_T<clockMask, portAddress, irqNum, bitNum, GPIO_DEFAULT_PCR>;
+   using Pcr = Pcr_T<clockInfo, portAddress, irqNum, bitNum, GPIO_DEFAULT_PCR>;
 
    /** Get base address of GPIO hardware as pointer to struct */
    static volatile GPIO_Type &gpio() { return *reinterpret_cast<volatile GPIO_Type *>(gpioAddress); }
@@ -777,7 +777,7 @@ public:
    /**
     * Mask for the bits being manipulated within underlying port hardware
     */
-   static constexpr uint32_t MASK = ((1<<(left-right+1))-1)<<right;
+   static constexpr uint32_t MASK = (uint32_t)((1ULL<<(left-right+1))-1)<<right;
 
    /**
     * Calculate Port bit-mask from field bit number
