@@ -94,7 +94,7 @@ const DeviceDescriptor Usb0::deviceDescriptor = {
       /* bMaxPacketSize0     */ CONTROL_EP_MAXSIZE,             // EndPt 0 max packet size
       /* idVendor            */ nativeToLe16(VENDOR_ID),        // Vendor ID
       /* idProduct           */ nativeToLe16(PRODUCT_ID),       // Product ID
-      /* bcdDevice           */ nativeToLe16(VERSION_ID),       // Device Release    [BCD = 5.1]
+      /* bcdDevice           */ nativeToLe16(VERSION_ID),       // Device Release
       /* iManufacturer       */ s_manufacturer_index,           // String index of Manufacturer name
       /* iProduct            */ s_product_index,                // String index of product description
       /* iSerialNumber       */ s_serial_index,                 // String index of serial number
@@ -273,6 +273,7 @@ ErrorCode Usb0::sofCallback(uint16_t frameNumber) {
       // Every ~256 ms
       switch ((frameNumber>>8)&0x3) {
          case 0:
+            // LED on if configured, off if not
 //            UsbLed::write(fConnectionState == USBconfigured);
             break;
          case 1:

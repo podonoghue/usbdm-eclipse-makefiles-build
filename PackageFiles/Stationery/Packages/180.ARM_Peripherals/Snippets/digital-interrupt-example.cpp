@@ -21,7 +21,7 @@ using namespace USBDM;
 
 // Connections - change as required
 using Led      = USBDM::GpioA<2,USBDM::ActiveLow>;
-using Switch   = USBDM::GpioC<0,USBDM::ActiveLow>;
+using Switch   = USBDM::GpioD<5,USBDM::ActiveLow>;
 
 /**
  * PORT interrupt call back.
@@ -31,8 +31,20 @@ using Switch   = USBDM::GpioC<0,USBDM::ActiveLow>;
  */
 static void callBack(uint32_t status) {
    static int count = 0;
-   console.write(count++).write(": Status = 0x").writeln(status, Radix_16);
+   console.write(count++).write(": Status = 0x").writeln(status, Radix_2);
 }
+
+// Can explicitly instantiate the handler instead of using the trampoline
+//template<>
+//void USBDM::PortD::irqHandler() {
+//   uint32_t status = port().ISFR;
+//
+//   // Clear IRQ flags
+//   port().ISFR = status;
+//
+//   static int count = 0;
+//   console.write(count++).write(": Status = 0b").writeln(status, Radix_2);
+//}
 
 int main() {
    Led::setOutput();

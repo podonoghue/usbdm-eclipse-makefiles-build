@@ -39,9 +39,9 @@ using Timer = Ftm0;
 
 // Fixed Timer channels.
 // These are used to trigger DMA transfers to the PORT registers.
-using HighChannel = Timer::Channel<1>; //!< PSOR - Sets pin high
-using DataChannel = Timer::Channel<2>; //!< PCOR - Set pin low/unchanged according to data
-using LowChannel  = Timer::Channel<3>; //!< PCOR - Sets pin low
+using TimerHighChannel = Timer::Channel<1>; //!< PSOR - Sets pin high
+using TimerDataChannel = Timer::Channel<2>; //!< PCOR - Set pin low/unchanged according to data
+using TimerLowChannel  = Timer::Channel<3>; //!< PCOR - Sets pin low
 
 /** Used to indicate transfer has completed */
 static volatile bool complete;
@@ -54,9 +54,9 @@ static volatile bool complete;
  */
 static void dmaCallback(DmaChannelNum channel) {
    Dma0::clearInterruptRequest(channel);
-   HighChannel::configure(FtmChMode_Disabled);
-   DataChannel::configure(FtmChMode_Disabled);
-   LowChannel::configure(FtmChMode_Disabled);
+   TimerHighChannel::configure(FtmChMode_Disabled);
+   TimerDataChannel::configure(FtmChMode_Disabled);
+   TimerLowChannel::configure(FtmChMode_Disabled);
    complete = true;
 }
 
@@ -111,6 +111,9 @@ void unpackPixels(uint8_t pixelMask, const uint32_t pixelData[PIXEL_LENGTH]) {
  *  - Fixed Bit-mask -> GPIO.PCOR Clear all used bits
  */
 static void initialiseDma(DmaChannelNum dmaSetChannel, DmaChannelNum dmaDataChannel, DmaChannelNum dmaClearChannel) {
+
+   // This example assumes the Pixels lie within the 1st byte of the port
+   static_assert((Pixel::MASK&~0xFF) == 0);
 
    /** Mask corresponding to above GPIO */
    static const uint8_t bitmask = Pixel::MASK;
@@ -313,7 +316,7 @@ static void startTransfer(DmaChannelNum dmaSetChannel, DmaChannelNum dmaDataChan
    complete = false;
 
    const uint32_t dmaChannelMask = (1<<dmaSetChannel)|(1<<dmaDataChannel)|(1<<dmaClearChannel);
-   const uint32_t ftmChannelMask = HighChannel::CHANNEL_MASK|DataChannel::CHANNEL_MASK|LowChannel::CHANNEL_MASK;
+   const uint32_t ftmChannelMask = TimerHighChannel::CHANNEL_MASK|TimerDataChannel::CHANNEL_MASK|TimerLowChannel::CHANNEL_MASK;
 
    /**
     * It is important that the FTM and DMA start in the correct sequence.
@@ -327,9 +330,9 @@ static void startTransfer(DmaChannelNum dmaSetChannel, DmaChannelNum dmaDataChan
    Timer::clearSelectedInterruptFlags(ftmChannelMask);
 
    // Configure the three channels for DMA (timing is already set)
-   HighChannel::configure(FtmChMode_OutputCompare, FtmChannelAction_Dma);
-   DataChannel::configure(FtmChMode_OutputCompare, FtmChannelAction_Dma);
-   LowChannel::configure(FtmChMode_OutputCompare, FtmChannelAction_Dma);
+   TimerHighChannel::configure(FtmChMode_OutputCompare, FtmChannelAction_Dma);
+   TimerDataChannel::configure(FtmChMode_OutputCompare, FtmChannelAction_Dma);
+   TimerLowChannel::configure(FtmChMode_OutputCompare, FtmChannelAction_Dma);
 
    // Enable timer->DMA hardware requests
    Dma0::enableMultipleRequests(dmaChannelMask);
@@ -361,14 +364,14 @@ static void initialiseFtm() {
    Timer::setPeriod(PERIOD);
 
    // Configure the channels for O.C so event times can be set - no DMA initially
-   HighChannel::configure(FtmChMode_OutputCompare, FtmChannelAction_None);
-   DataChannel::configure(FtmChMode_OutputCompare, FtmChannelAction_None);
-   LowChannel::configure(FtmChMode_OutputCompare, FtmChannelAction_None);
+   TimerHighChannel::configure(FtmChMode_OutputCompare, FtmChannelAction_None);
+   TimerDataChannel::configure(FtmChMode_OutputCompare, FtmChannelAction_None);
+   TimerLowChannel::configure(FtmChMode_OutputCompare, FtmChannelAction_None);
 
    // Set channel event times
-   HighChannel::setEventTime(0);
-   DataChannel::setEventTime(Timer::convertSecondsToTicks(T0_HIGH));
-   LowChannel::setEventTime(Timer::convertSecondsToTicks(T1_HIGH));
+   TimerHighChannel::setEventTime(0);
+   TimerDataChannel::setEventTime(Timer::convertSecondsToTicks(T0_HIGH));
+   TimerLowChannel::setEventTime(Timer::convertSecondsToTicks(T1_HIGH));
 
    // Check if configuration failed
    checkError();
@@ -478,7 +481,7 @@ uint32_t mix(uint32_t from, uint32_t to, int percentage, int brightness=100) {
  */
 void panLeds(uint32_t from, uint32_t to, int delay, uint32_t pixelData[PIXEL_LENGTH]) {
    for(unsigned percentage=0; percentage<=100; percentage+=10) {
-      memcpy(pixelData, pixelData+1, (PIXEL_LENGTH-1)*sizeof(*pixelData));
+      memmove(pixelData, pixelData+1, (PIXEL_LENGTH-1)*sizeof(*pixelData));
       pixelData[PIXEL_LENGTH-1] = mix(from, to, percentage, 100);
       writeLEDs(pixelData, pixelData);
       waitMS(delay);

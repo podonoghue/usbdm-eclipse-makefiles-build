@@ -119,7 +119,7 @@ static constexpr DmaTcd tcd = DmaTcd (
  * @param errorFlags Channel error information (DMA_ES)
  */
 void dmaErrorCallbackFunction(uint32_t errorFlags) {
-   console.write("DMA error DMA_ES = 0x").writeln(errorFlags, Radix_2);
+   console.write("DMA error DMA_ES = 0b").writeln(errorFlags, Radix_2);
    __BKPT();
 }
 
@@ -297,10 +297,7 @@ int main() {
 
    Smc::setStopOptions(
          SmcLowLeakageStopMode_VLLS3,    // Retains RAM
-         SmcPowerOnReset_Enabled,        // Brown-out detection
-         SmcPartialStopMode_Normal,      // No bus clock in stop!
-         // SmcPartialStopMode_Partial1 - Bus clock active (for DMAC)
-         SmcLpoInLowLeakage_Disabled);   // LPO stops in LLS/VLLS
+         SmcPowerOnReset_Enabled);       // Brown-out detection
 
    console.writeln("\nDoing DMA while sleeping....").flushOutput();
 

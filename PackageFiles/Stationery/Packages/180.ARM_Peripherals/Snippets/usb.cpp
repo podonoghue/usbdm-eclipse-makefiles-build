@@ -63,14 +63,14 @@ const uint8_t UsbBase::fMsOsStringDescriptor[] = {
 //
 const MS_CompatibleIdFeatureDescriptor msCompatibleIdFeatureDescriptor = {
       /* lLength;             */  nativeToLe32((uint32_t)sizeof(MS_CompatibleIdFeatureDescriptor)),
-      /* wVersion;            */  nativeToLe16(0x0100),
-      /* wIndex;              */  nativeToLe16(0x0004),
+      /* wVersion;            */  nativeToLe16((uint16_t)0x0100),
+      /* wIndex;              */  nativeToLe16((uint16_t)0x0004),
       /* bnumSections;        */  1,
-      /*---------------------- Section 1 -----------------------------*/
       /* bReserved1[7];       */  {0},
+      /*---------------------- Section 1 -----------------------------*/
       /* bInterfaceNum;       */  0,
       /* bReserved2;          */  1,
-      /* bCompatibleId[8];    */  "WINUSB\0",
+      /* bCompatibleId[8];    */  {'W','I','N','U','S','B','\0','\0'},
       /* bSubCompatibleId[8]; */  {0},
       /* bReserved3[6];       */  {0}
 };
