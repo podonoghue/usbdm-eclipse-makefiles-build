@@ -624,7 +624,7 @@ protected:
     */
    static void handleUnexpectedSetup() {
       if (fUnhandledSetupCallback(fEp0SetupBuffer) != E_NO_ERROR) {
-         console.WRITE("handleUnexpectedSetup(").WRITE(getSetupPacketDescription(&fEp0SetupBuffer)).WRITELN(")");
+//         console.WRITE("handleUnexpectedSetup(").WRITE(getSetupPacketDescription(&fEp0SetupBuffer)).WRITELN(")");
          fControlEndpoint.stall();
       }
    }

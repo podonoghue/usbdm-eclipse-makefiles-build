@@ -400,7 +400,6 @@ struct MS_CompatibleIdFeatureDescriptor {
    uint8_t  bCompatibleId[8];        //!<
    uint8_t  bSubCompatibleId[8];     //!<
    uint8_t  bReserved3[6];
-
 };
 
 struct MS_PropertiesFeatureDescriptor;
