@@ -29,22 +29,22 @@ Cortex-M0
       <createFolder target="Project_Headers"                 type="include" />
       <createFolder target="Project_Settings/Linker_Files"                  />
    
-      <copy source="Startup_Code/newlib_stubs.c"                              target="Startup_Code/newlib_stubs.c" />
+      <copy source="Startup_Code/newlib_stubs.c"                              target="Startup_Code/newlib_stubs.c"  derived="true" />
       <copy source="Startup_Code/vectors-cm0.c"                               target="Startup_Code/vectors.c" />
 
-      <copy source="Startup_Code/startup_ARMLtdGCC_CortexM0.S"                target="Startup_Code/startup_ARMLtdGCC.S" />
+      <copy source="Startup_Code/startup_ARMLtdGCC_CortexM0.S"                target="Startup_Code/startup_ARMLtdGCC.S"  derived="true" />
 
       <copy source="Project_Settings/Debug.launch"                            target="Project_Settings/$(projectName)-Debug.launch" />
 
       <copy source="Project_Settings/Linker_Files/MemoryMap.ld"               target="Project_Settings/Linker_Files/MemoryMap-$(targetDeviceName).ld" />
 
-      <copy source="Project_Headers/derivative.h"                             target="Project_Headers/derivative.h" />
-      <copy source="Project_Headers/TargetDevice.h"                           target="Project_Headers/$(targetDeviceSubFamily).h" />
-      <copy source="Project_Headers/system.h"                                 target="Project_Headers/system.h" />
-      <copy source="Project_Headers/cmsis_gcc.h"                              target="Project_Headers/cmsis_gcc.h" />
-      <copy source="Project_Headers/core_cmFunc.h"                            target="Project_Headers/core_cmFunc.h" />
-      <copy source="Project_Headers/core_cmInstr.h"                           target="Project_Headers/core_cmInstr.h" />
-      <copy source="Project_Headers/utilities-mke.h"                          target="Project_Headers/utilities.h" />
+      <copy source="Project_Headers/derivative.h"                             target="Project_Headers/derivative.h"    derived="true" />
+      <copy source="Project_Headers/TargetDevice.h"                           target="Project_Headers/$(targetDeviceSubFamily).h"  derived="true" />
+      <copy source="Project_Headers/system.h"                                 target="Project_Headers/system.h"        derived="true" />
+      <copy source="Project_Headers/cmsis_gcc.h"                              target="Project_Headers/cmsis_gcc.h"     derived="true" />
+      <copy source="Project_Headers/core_cmFunc.h"                            target="Project_Headers/core_cmFunc.h"   derived="true" />
+      <copy source="Project_Headers/core_cmInstr.h"                           target="Project_Headers/core_cmInstr.h"  derived="true" />
+      <copy source="Project_Headers/utilities-mke.h"                          target="Project_Headers/utilities.h"     derived="true" />
 
       <copy source="$(externalHeaderFile)"                                    target="Project_Headers/$(targetDeviceSubFamily).h" overwrite="true" />
 
@@ -52,7 +52,7 @@ Cortex-M0
          <applyWhen>
             <deviceFamilyMatches>CortexM0</deviceFamilyMatches>
          </applyWhen>
-         <copy source="Project_Headers/core_cm0.h"                         target="Project_Headers/core_cm0.h" />
+         <copy source="Project_Headers/core_cm0.h"                         target="Project_Headers/core_cm0.h"  derived="true" />
       </projectActionList>
 
       <projectActionList>
@@ -68,6 +68,7 @@ Cortex-M0
          </applyWhen>
          <copy source="Project_Headers/bme-c.h"                       target="Project_Headers/bme.h" />
          <copy source="Sources/main.c"                                target="Sources/main.c" />
+         <constant id="projectMainlineFile"                           value="main.c" />
       </projectActionList>
 
       <projectActionList>
@@ -77,6 +78,7 @@ Cortex-M0
          <copy source="Startup_Code/system-gcc.cpp"                   target="Startup_Code/system-gcc.cpp" />
          <copy source="Project_Headers/bme-cpp.h"                     target="Project_Headers/bme.h" />
          <copy source="Sources/main.cpp"                              target="Sources/main.cpp" />
+         <constant id="projectMainlineFile"                           value="main.cpp" />
       </projectActionList>
 
       <!-- No Start up files for devices with very limited RAM -->

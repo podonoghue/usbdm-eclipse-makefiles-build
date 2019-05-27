@@ -26,44 +26,46 @@ Cortex-M4
       <createFolder target="Project_Settings/Linker_Files"                  />
    
       <copy source="Startup_Code/vectors-cm4.c"                               target="Startup_Code/vectors.c" />
-      <copy source="Startup_Code/newlib_stubs.c"                              target="Startup_Code/newlib_stubs.c" />
+      <copy source="Startup_Code/newlib_stubs.c"                              target="Startup_Code/newlib_stubs.c"  derived="true" />
       <copy source="Startup_Code/security-mk.c"                               target="Startup_Code/security.c" />
 
-      <copy source="Startup_Code/startup_ARMLtdGCC_CortexM4.S"                target="Startup_Code/startup_ARMLtdGCC.S" />
-      <copy source="Startup_Code/system-kinetis.c"                            target="Startup_Code/system.c" />
+      <copy source="Startup_Code/startup_ARMLtdGCC_CortexM4.S"                target="Startup_Code/startup_ARMLtdGCC.S"  derived="true" />
+      <copy source="Startup_Code/system-kinetis.c"                            target="Startup_Code/system.c"  derived="true" />
 
       <copy source="Project_Settings/Debug.launch"                            target="Project_Settings/$(projectName)-Debug.launch" />
 
       <copy source="Project_Settings/Linker_Files/ARMLtd_GCC-rom-mk-sramu.ld" target="Project_Settings/Linker_Files/Linker-rom.ld" overwrite="true" />
       <copy source="Project_Settings/Linker_Files/MemoryMap-mk-sramu.ld"      target="Project_Settings/Linker_Files/MemoryMap-$(targetDeviceName).ld"  overwrite="true" />
 
-      <copy source="Project_Headers/derivative.h"                             target="Project_Headers/derivative.h" />
-      <copy source="Project_Headers/TargetDevice.h"                           target="Project_Headers/$(externalHeaderFilename)" />
-      <copy source="Project_Headers/system.h"                                 target="Project_Headers/system.h" />
-      <copy source="Project_Headers/core_cm4.h"                               target="Project_Headers/core_cm4.h" />
-      <copy source="Project_Headers/core_cmSimd.h"                            target="Project_Headers/core_cmSimd.h" />
-      <copy source="Project_Headers/cmsis_gcc.h"                              target="Project_Headers/cmsis_gcc.h" />
-      <copy source="Project_Headers/core_cmFunc.h"                            target="Project_Headers/core_cmFunc.h" />
-      <copy source="Project_Headers/core_cmInstr.h"                           target="Project_Headers/core_cmInstr.h" />
-      <copy source="Project_Headers/utilities-mk.h"                           target="Project_Headers/utilities.h" />
+      <copy source="Project_Headers/derivative.h"                             target="Project_Headers/derivative.h"  derived="true" />
+      <copy source="Project_Headers/TargetDevice.h"                           target="Project_Headers/$(externalHeaderFilename)"  derived="true" />
+      <copy source="Project_Headers/system.h"                                 target="Project_Headers/system.h"  derived="true" />
+      <copy source="Project_Headers/core_cm4.h"                               target="Project_Headers/core_cm4.h"  derived="true" />
+      <copy source="Project_Headers/core_cmSimd.h"                            target="Project_Headers/core_cmSimd.h"  derived="true" />
+      <copy source="Project_Headers/cmsis_gcc.h"                              target="Project_Headers/cmsis_gcc.h"  derived="true" />
+      <copy source="Project_Headers/core_cmFunc.h"                            target="Project_Headers/core_cmFunc.h"  derived="true" />
+      <copy source="Project_Headers/core_cmInstr.h"                           target="Project_Headers/core_cmInstr.h"  derived="true" />
+      <copy source="Project_Headers/utilities-mk.h"                           target="Project_Headers/utilities.h"  derived="true" />
 
-      <copy source="$(externalHeaderFile)"                                    target="Project_Headers/$(externalHeaderFilename)" overwrite="true" />
+      <copy source="$(externalHeaderFile)"                                    target="Project_Headers/$(externalHeaderFilename)" overwrite="true"  derived="true" />
 
       <projectActionList>
          <applyWhen>
             <not><variableRef idRef="hasCCNature" condition="isTrue" /></not>
          </applyWhen>
-         <copy source="Project_Headers/bitband-c-mk.h"                target="Project_Headers/bitband.h" />
+         <copy source="Project_Headers/bitband-c-mk.h"                target="Project_Headers/bitband.h"  derived="true" />
          <copy source="Sources/main.c"                                target="Sources/main.c" />
+         <constant id="projectMainlineFile"                           value="main.c" />
       </projectActionList>
 
       <projectActionList>
          <applyWhen>
             <variableRef idRef="hasCCNature" condition="isTrue" />
          </applyWhen>
-         <copy source="Startup_Code/system-gcc.cpp"                   target="Startup_Code/system-gcc.cpp" />
-         <copy source="Project_Headers/bitband-cpp-mk.h"              target="Project_Headers/bitband.h" />
+         <copy source="Startup_Code/system-gcc.cpp"                   target="Startup_Code/system-gcc.cpp"  derived="true" />
+         <copy source="Project_Headers/bitband-cpp-mk.h"              target="Project_Headers/bitband.h"    derived="true" />
          <copy source="Sources/main.cpp"                              target="Sources/main.cpp" />
+         <constant id="projectMainlineFile"                           value="main.cpp" />
       </projectActionList>
 
    </projectActionList>

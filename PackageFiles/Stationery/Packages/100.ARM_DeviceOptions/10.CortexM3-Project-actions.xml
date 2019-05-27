@@ -27,21 +27,21 @@
       <createFolder target="Project_Settings/Linker_Files"                  />
    
       <copy source="Startup_Code/vectors-cm3.c"                               target="Startup_Code/vectors.c" />
-      <copy source="Startup_Code/newlib_stubs.c"                              target="Startup_Code/newlib_stubs.c" />
-      <copy source="Startup_Code/startup_ARMLtdGCC_CortexM3.S"                target="Startup_Code/startup_ARMLtdGCC.S" />
+      <copy source="Startup_Code/newlib_stubs.c"                              target="Startup_Code/newlib_stubs.c"       derived="true" />
+      <copy source="Startup_Code/startup_ARMLtdGCC_CortexM3.S"                target="Startup_Code/startup_ARMLtdGCC.S"  derived="true" />
 
       <copy source="Project_Settings/Debug.launch"                            target="Project_Settings/$(projectName)-Debug.launch" />
 
       <copy source="Project_Settings/Linker_Files/MemoryMap.ld"               target="Project_Settings/Linker_Files/MemoryMap-$(targetDeviceName).ld" />
 
-      <copy source="Project_Headers/derivative.h"                             target="Project_Headers/derivative.h" />
-      <copy source="Project_Headers/TargetDevice.h"                           target="Project_Headers/$(targetDeviceSubFamily).h" />
-      <copy source="Project_Headers/core_cm3.h"                               target="Project_Headers/core_cm3.h" />
-      <copy source="Project_Headers/core_cmFunc.h"                            target="Project_Headers/core_cmFunc.h" />
-      <copy source="Project_Headers/cmsis_gcc.h"                              target="Project_Headers/cmsis_gcc.h" />
-      <copy source="Project_Headers/core_cmFunc.h"                            target="Project_Headers/core_cmFunc.h" />
-      <copy source="Project_Headers/core_cmInstr.h"                           target="Project_Headers/core_cmInstr.h" />
-      <copy source="$(externalHeaderFile)"                                    target="Project_Headers/$(targetDeviceSubFamily).h" overwrite="true" />
+      <copy source="Project_Headers/derivative.h"                             target="Project_Headers/derivative.h"     derived="true" />
+      <copy source="Project_Headers/TargetDevice.h"                           target="Project_Headers/$(targetDeviceSubFamily).h"  derived="true" />
+      <copy source="Project_Headers/core_cm3.h"                               target="Project_Headers/core_cm3.h"       derived="true"  />
+      <copy source="Project_Headers/core_cmFunc.h"                            target="Project_Headers/core_cmFunc.h"    derived="true" />
+      <copy source="Project_Headers/cmsis_gcc.h"                              target="Project_Headers/cmsis_gcc.h"      derived="true" />
+      <copy source="Project_Headers/core_cmFunc.h"                            target="Project_Headers/core_cmFunc.h"    derived="true" />
+      <copy source="Project_Headers/core_cmInstr.h"                           target="Project_Headers/core_cmInstr.h"   derived="true" />
+      <copy source="$(externalHeaderFile)"                                    target="Project_Headers/$(targetDeviceSubFamily).h" overwrite="true"  derived="true" />
 
 
       <!-- Base STM32 files -->
@@ -50,24 +50,26 @@
             <deviceSubfamilyMatches>^STM32.*</deviceSubfamilyMatches>
          </applyWhen>
       
-         <copy source="Startup_Code/system-stm32f10x.c"                          target="Startup_Code/system.c" />
-         <copy source="Project_Headers/derivative-STM32xx.h"                     target="Project_Headers/derivative.h" />
-         <copy source="Project_Headers/stm32f10x.h"                              target="Project_Headers/stm32f10x.h" />
-         <copy source="Project_Headers/system_stm32f10x.h"                       target="Project_Headers/system_stm32f10x.h" />
-         <copy source="Project_Headers/utilities-stm32.h"                        target="Project_Headers/utilities.h" />
+         <copy source="Startup_Code/system-stm32f10x.c"                          target="Startup_Code/system.c"               derived="true" />
+         <copy source="Project_Headers/derivative-STM32xx.h"                     target="Project_Headers/derivative.h"        derived="true" />
+         <copy source="Project_Headers/stm32f10x.h"                              target="Project_Headers/stm32f10x.h"         derived="true" />
+         <copy source="Project_Headers/system_stm32f10x.h"                       target="Project_Headers/system_stm32f10x.h"  derived="true" />
+         <copy source="Project_Headers/utilities-stm32.h"                        target="Project_Headers/utilities.h"         derived="true" />
 
          <projectActionList>
             <applyWhen>
                <not><variableRef idRef="hasCCNature" condition="isTrue" /></not>
             </applyWhen>
-            <copy source="Sources/main-stm32.c"                                 target="Sources/main.c" />
+            <copy source="Sources/main-stm32.c"                       target="Sources/main.c" />
+            <constant id="projectMainlineFile"                        value="main.c" />
          </projectActionList>
 
          <projectActionList>
             <applyWhen>
                <variableRef idRef="hasCCNature" condition="isTrue" />
             </applyWhen>
-            <copy source="Sources/main-stm32.cpp"                               target="Sources/main.cpp" />
+            <copy source="Sources/main-stm32.cpp"                     target="Sources/main.cpp" />
+            <constant id="projectMainlineFile"                        value="main.cpp" />
          </projectActionList>
 
          <projectOption id="net.sourceforge.usbdm.gnu.cpp.compiler.option.preprocessor.def.symbols" >
@@ -84,25 +86,27 @@
             <deviceSubfamilyMatches>^LPC\d+.*</deviceSubfamilyMatches>
          </applyWhen>
       
-         <copy source="Startup_Code/system-lpc.c"                                target="Startup_Code/system.c" />
-         <copy source="Startup_Code/security-lpc.c"                              target="Startup_Code/security.c" />
+         <copy source="Startup_Code/system-lpc.c"                                target="Startup_Code/system.c"        derived="true" />
+         <copy source="Startup_Code/security-lpc.c"                              target="Startup_Code/security.c"      derived="true" />
          <copy source="Project_Settings/Linker_Files/ARMLtd_GCC-rom-lpc.ld"      target="Project_Settings/Linker_Files/Linker-rom.ld" />
-         <copy source="Project_Headers/system.h"                                 target="Project_Headers/system.h" />
-         <copy source="Project_Headers/utilities-lpc.h"                          target="Project_Headers/utilities.h" />
+         <copy source="Project_Headers/system.h"                                 target="Project_Headers/system.h"     derived="true" />
+         <copy source="Project_Headers/utilities-lpc.h"                          target="Project_Headers/utilities.h"  derived="true" />
       
          <projectActionList>
             <applyWhen>
                <not><variableRef idRef="hasCCNature" condition="isTrue" /></not>
             </applyWhen>
             <copy source="Sources/main.c"                                  target="Sources/main.c" />
+            <constant id="projectMainlineFile"                             value="main.c" />
          </projectActionList>
 
          <projectActionList>
             <applyWhen>
                <variableRef idRef="hasCCNature" condition="isTrue" />
             </applyWhen>
-            <copy source="Startup_Code/system-gcc.cpp"                     target="Startup_Code/system-gcc.cpp" />
+            <copy source="Startup_Code/system-gcc.cpp"                     target="Startup_Code/system-gcc.cpp"  derived="true" />
             <copy source="Sources/main.cpp"                                target="Sources/main.cpp" />
+            <constant id="projectMainlineFile"                             value="main.cpp" />
          </projectActionList>
       </projectActionList>
    </projectActionList>

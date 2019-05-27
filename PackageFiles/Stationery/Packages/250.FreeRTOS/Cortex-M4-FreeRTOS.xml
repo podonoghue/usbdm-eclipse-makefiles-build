@@ -73,15 +73,15 @@
 
          <copy source="Sources/FreeRTOSConfig.cfg"   target="Sources/FreeRTOSConfig.cfg" />
 	 
-         <copy source="Startup_Code/FreeRtosStubs.c" target="Startup_Code/FreeRtosStubs.c" overwrite="true" />
+         <copy source="Startup_Code/FreeRtosStubs.c" target="Startup_Code/FreeRtosStubs.c" overwrite="true"  derived="true" />
          <copy source="${usbdm_application_path}\Stationery\Packages\FreeRTOS\FreeRTOS_Reference_Manual_V10.0.0.pdf" target="FreeRTOS.pdf" type="link" sourcePathType="absolute"/>
 
          <createFolder target="FreeRTOS" />
-         <copy source="FreeRTOS/FreeRTOSConfig.h"                               target="FreeRTOS/FreeRTOSConfig.h" />
-         <copy source="../FreeRTOS/license.txt"                                 target="FreeRTOS/license.txt" />
-         <copy source="../FreeRTOS/Source"                                      target="FreeRTOS/Source" />
-         <copy source="../FreeRTOS/Source/Portable/GCC/ARM_CM4/port.c"          target="FreeRTOS/Source/port.c" />
-         <copy source="../FreeRTOS/Source/Portable/GCC/ARM_CM4/portmacro.h"     target="FreeRTOS/Source/portmacro.h" />
+         <copy source="FreeRTOS/FreeRTOSConfig.h"                               target="FreeRTOS/FreeRTOSConfig.h"  derived="true" />
+         <copy source="../FreeRTOS/license.txt"                                 target="FreeRTOS/license.txt"  derived="true" />
+         <copy source="../FreeRTOS/Source"                                      target="FreeRTOS/Source"  derived="true" />
+         <copy source="../FreeRTOS/Source/Portable/GCC/ARM_CM4/port.c"          target="FreeRTOS/Source/port.c"  derived="true" />
+         <copy source="../FreeRTOS/Source/Portable/GCC/ARM_CM4/portmacro.h"     target="FreeRTOS/Source/portmacro.h"  derived="true" />
          <excludeSourceFolder target="FreeRTOS/Source/Portable" />
          <projectOption id="net.sourceforge.usbdm.gnu.c.compiler.option.include.paths">
             <value>&quot;${ProjDirPath}/FreeRTOS/Source/Include&quot;</value>
@@ -111,18 +111,17 @@
                <variableRef idRef="projectOptionValue.CPP-abstraction"  defaultValue="false" />
             </and>
          </applyWhen>
-	 <copy source="FreeRTOS/FreeRTOS_CPP.h" target="FreeRTOS/FreeRTOS_CPP.h"   overwrite="true" />
-         <copy source="FreeRTOS/Lock.h"         target="FreeRTOS/Lock.h"           overwrite="true" />
-         <copy source="FreeRTOS/Lock.cpp"       target="FreeRTOS/Lock.cpp"         overwrite="true" />
-         <copy source="FreeRTOS/MutexCPP.h"     target="FreeRTOS/MutexCPP.h"       overwrite="true" />
-         <copy source="FreeRTOS/QueueCPP.h"     target="FreeRTOS/QueueCPP.h"       overwrite="true" />
-         <copy source="FreeRTOS/SemaphoreCPP.h" target="FreeRTOS/SemaphoreCPP.h"   overwrite="true" />
-         <copy source="FreeRTOS/TaskCPP.h"      target="FreeRTOS/TaskCPP.h"        overwrite="true" />
-         <copy source="FreeRTOS/TimerCPP.h"     target="FreeRTOS/TimerCPP.h"       overwrite="true" />
+         <copy source="FreeRTOS/FreeRTOS_CPP.h" target="FreeRTOS/FreeRTOS_CPP.h"   overwrite="true"  derived="true" />
+         <copy source="FreeRTOS/Lock.h"         target="FreeRTOS/Lock.h"           overwrite="true"  derived="true" />
+         <copy source="FreeRTOS/Lock.cpp"       target="FreeRTOS/Lock.cpp"         overwrite="true"  derived="true" />
+         <copy source="FreeRTOS/MutexCPP.h"     target="FreeRTOS/MutexCPP.h"       overwrite="true"  derived="true" />
+         <copy source="FreeRTOS/QueueCPP.h"     target="FreeRTOS/QueueCPP.h"       overwrite="true"  derived="true" />
+         <copy source="FreeRTOS/SemaphoreCPP.h" target="FreeRTOS/SemaphoreCPP.h"   overwrite="true"  derived="true" />
+         <copy source="FreeRTOS/TaskCPP.h"      target="FreeRTOS/TaskCPP.h"        overwrite="true"  derived="true" />
+         <copy source="FreeRTOS/TimerCPP.h"     target="FreeRTOS/TimerCPP.h"       overwrite="true"  derived="true" />
 	 
          <deleteResource target="Sources/main.c" />
-         <deleteResource target="Sources/main.cpp" />
-         <copy source="Sources/main-1.cpp"   target="Sources/main-1.cpp"        overwrite="true" />
+         <copy source="Sources/main-1.cpp"   target="Sources/main.cpp"          overwrite="true" />
          <copy source="Sources/main-2.cpp"   target="Sources/main-2.cpp"        overwrite="true" />
          <copy source="Sources/main-3.cpp"   target="Sources/main-3.cpp"        overwrite="true" />
          <excludeSourceFile target="Sources/main-2.cpp" />
