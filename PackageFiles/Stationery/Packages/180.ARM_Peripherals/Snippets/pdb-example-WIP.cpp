@@ -277,7 +277,7 @@ static void configureDma() {
 }
 
 int main() {
-   printf("Starting\n");
+   console.writeln("Starting\n");
 
    Led::setOutput();
 
@@ -288,9 +288,8 @@ int main() {
    configureDma();
 
    for(;;) {
-      printf("ch1=%6lu, ch2=%6lu\n", results[0], results[1]);
+      console.write("ch1=").write(results[0]).write(", ch2=").writeln(results[1]);
       __asm__("nop");
-      //      __WFI();
    }
    return 0;
 }
