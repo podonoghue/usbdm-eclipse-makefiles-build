@@ -9,4 +9,5 @@
       \tstatic constexpr uint32_t defaultPcrValue  = DEFAULT_PCR;\n\n
    ]]></template>
    
+   <signals/>
 </peripheralPage>

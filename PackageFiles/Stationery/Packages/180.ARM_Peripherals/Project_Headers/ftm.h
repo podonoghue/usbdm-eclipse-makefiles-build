@@ -306,7 +306,7 @@ public:
 
    /**
     * Set channel Callback function\n
-    * Note that one callback may be shared by mutiple channels of the timer
+    * Note that one callback may be shared by multiple channels of the timer
     *
     * @param[in] callback Callback function to execute on channel interrupt.\n
     *                     Use nullptr to remove callback.
@@ -328,6 +328,7 @@ public:
 #ifdef DEBUG_BUILD
       // Callback is shared across multiple channels. Check if callback already assigned
       if ((sChannelCallbacks[channel/ChannelVectorRatio] != unhandledChannelCallback) &&
+          (sChannelCallbacks[channel/ChannelVectorRatio] != nullptr) &&
           (sChannelCallbacks[channel/ChannelVectorRatio] != callback)) {
          return setErrorCode(ErrorCode::E_HANDLER_ALREADY_SET);
       }
@@ -359,6 +360,7 @@ public:
 #ifdef DEBUG_BUILD
       // Callback is shared across multiple channels. Check if callback already assigned
       if ((sChannelCallbacks[0] != unhandledChannelCallback) &&
+          (sChannelCallbacks[0] != nullptr) &&
           (sChannelCallbacks[0] != callback)) {
          return setErrorCode(ErrorCode::E_HANDLER_ALREADY_SET);
       }
@@ -471,9 +473,11 @@ public:
 
       enable();
 	  
-      // Clear call-backs
+      // Map NULL callback to unhandledChannelCallback
       for (unsigned channel=0; channel<Info::NumChannelVectors; channel++) {
-         sChannelCallbacks[channel] = unhandledChannelCallback;
+         if (sChannelCallbacks[channel] == nullptr) {
+            sChannelCallbacks[channel] = unhandledChannelCallback;
+         }
       }
 
       // Disable so immediate effect
@@ -1645,9 +1649,13 @@ public:
        *       It is necessary to identify the originating channel in the callback
        */
       static ErrorCode INLINE_RELEASE setChannelCallback(FtmChannelCallbackFunction callback) {
-         return Ftm::setChannelCallback(callback, channel);
+         if constexpr (Info::NumChannelVectors > 1) {
+            return Ftm::setChannelCallback(callback, channel);
+         }
+         else {
+            return Ftm::setChannelCallback(callback);
+         }
       }
-
 
       /*******************************
        *  PIN Functions
@@ -1931,7 +1939,7 @@ public:
 
 template<class Info> FtmCallbackFunction         FtmBase_T<Info>::sToiCallback        = FtmBase_T<Info>::unhandledCallback;
 template<class Info> FtmCallbackFunction         FtmBase_T<Info>::sFaultCallback      = FtmBase_T<Info>::unhandledCallback;
-template<class Info> FtmChannelCallbackFunction  FtmBase_T<Info>::sChannelCallbacks[];
+template<class Info> FtmChannelCallbackFunction  FtmBase_T<Info>::sChannelCallbacks[] = {nullptr};
 
 #ifdef USBDM_FTM0_IS_DEFINED
 /**

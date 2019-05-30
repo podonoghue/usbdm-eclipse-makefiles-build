@@ -119,7 +119,7 @@ int main() {
          CriticalSection cs;
          tPeriodInTicks = periodInTicks;
       }
-      int intervalInMilliseconds = (int)(1000*Timer::convertTicksToSeconds(tPeriodInTicks));
+      float intervalInMilliseconds = (1000.0*Timer::convertTicksToSeconds(tPeriodInTicks));
       console.write("Period = ").write(intervalInMilliseconds).writeln(" ms");
    }
    return 0;
