@@ -63,16 +63,16 @@ namespace USBDM {
 //   Lcd Dimension Definitions
 //
 //********************************************************************
-constexpr unsigned ROW_LENGTH       = 132;
-constexpr unsigned COL_HEIGHT       = 132;
-constexpr unsigned ENDPAGE          = 132;
-constexpr unsigned ENDCOL           = 130;
+constexpr int ROW_LENGTH       = 132;
+constexpr int COL_HEIGHT       = 132;
+constexpr int ENDPAGE          = 132;
+constexpr int ENDCOL           = 130;
 
 // Usable area
-constexpr unsigned LCD_X_MIN        = 1;
-constexpr unsigned LCD_X_MAX        = 130;
-constexpr unsigned LCD_Y_MIN        = 1;
-constexpr unsigned LCD_Y_MAX        = 130;
+constexpr int LCD_X_MIN        = 1;
+constexpr int LCD_X_MAX        = 130;
+constexpr int LCD_Y_MIN        = 1;
+constexpr int LCD_Y_MAX        = 130;
 
 /**
  * Calculates colour as 16-bit value in 4:4:4 format
@@ -217,7 +217,7 @@ constexpr unsigned DEFAULT_LCD_CONTRAST = 65;
  * <b>Example</b>
  * @code
  * // Instantiate interface
- *	Lcd *lcd = new Lcd(new SPI_0());
+ * Lcd *lcd = new Lcd(new SPI_0());
  *
  * lcd.clear(RED);
  * lcd.drawCircle(65, 65, 20, WHITE);
@@ -483,7 +483,7 @@ public:
     * @param y        Column address (0 .. 131)
     */
    void putChar(char c, unsigned x, unsigned y) {
-	   putChar(c, x, y, *fSettings.font, fSettings.foregroundColour, fSettings.backgroundColour);
+      putChar(c, x, y, *fSettings.font, fSettings.foregroundColour, fSettings.backgroundColour);
    }
 
    /** Draws a null-terminated character string at the specified (x,y) address, font and colours
@@ -548,8 +548,8 @@ public:
    void flushOutput() override {}
 
 private:
-   unsigned     fX;
-   unsigned     fY;
+   int     fX;
+   int     fY;
    FontSettings fSettings;
 
 public:
