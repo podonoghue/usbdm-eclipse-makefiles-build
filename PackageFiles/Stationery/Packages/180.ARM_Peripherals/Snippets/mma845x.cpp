@@ -190,12 +190,16 @@ void MMA845x::active() {
  * @param[out] x       - X axis as 16-bit signed value (14-bit range)
  * @param[out] y       - Y axis as 16-bit signed value (14-bit range)
  * @param[out] z       - Z axis as 16-bit signed value (14-bit range)
+ *
+ * @note Waits until a new measurement is available.
  */
 void MMA845x::readAccelerometerXYZ(int &status, int16_t &x, int16_t &y, int16_t &z) {
    uint8_t dataXYZ[7] = {STATUS};
 
-   // Receive 7 registers (status, X-high, X-low, Y-high, Y-low, Z-high & Z-low)
-   i2c.txRx(DEVICE_ADDRESS, 1, sizeof(dataXYZ), dataXYZ);
+   do {
+      // Receive 7 registers (status, X-high, X-low, Y-high, Y-low, Z-high & Z-low)
+      i2c.txRx(DEVICE_ADDRESS, 1, sizeof(dataXYZ), dataXYZ);
+   } while ((dataXYZ[0] & MMA845x_STATUS_ZYXDR_MASK) == 0);
 
    // Unpack data and return
    // X,Y & Z values are sign-extended to 16-bit values
@@ -265,9 +269,7 @@ ErrorCode MMA845x::calibrateAccelerometer() {
    // Average 8 samples to reduce noise
    for (int i=0; i<8; i++) {
       int status;
-      do {
-         readAccelerometerXYZ(status, Xout_Accel_14_bit, Yout_Accel_14_bit, Zout_Accel_14_bit);
-      } while ((status & MMA845x_STATUS_ZYXDR_MASK) == 0);
+      readAccelerometerXYZ(status, Xout_Accel_14_bit, Yout_Accel_14_bit, Zout_Accel_14_bit);
       Xout_Accel += Xout_Accel_14_bit;
       Yout_Accel += Yout_Accel_14_bit;
       Zout_Accel += Zout_Accel_14_bit;
@@ -286,7 +288,7 @@ ErrorCode MMA845x::calibrateAccelerometer() {
    }
 
    // Make inactive so setting can be modified
-   writeReg(CTRL_REG1, 0x00);
+   writeReg(CTRL_REG1, 0x10);
 
    // Set new offsets
    int8_t correction[] = { OFF_X, (int8_t)Xout_Accel, (int8_t)Yout_Accel, (int8_t)Zout_Accel };
