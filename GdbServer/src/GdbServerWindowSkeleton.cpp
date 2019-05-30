@@ -26,7 +26,7 @@ GdbServerWindowSkeleton::GdbServerWindowSkeleton( wxWindow* parent, wxWindowID i
 	m_menuItem3 = new wxMenuItem( serverMenu, wxID_ANY, wxString( wxT("E&xit\tAlt-X") ) , wxT("Quit server"), wxITEM_NORMAL );
 	serverMenu->Append( m_menuItem3 );
 	
-	menuBar->Append( serverMenu, wxT("Server") ); 
+	menuBar->Append( serverMenu, wxT("&Server") );
 	
 	logMenu = new wxMenu();
 	wxMenuItem* m_menuItem6;
@@ -47,7 +47,7 @@ GdbServerWindowSkeleton::GdbServerWindowSkeleton( wxWindow* parent, wxWindowID i
 	m_menuItem9 = new wxMenuItem( logMenu, wxID_ANY, wxString( wxT("&Verbose") ) , wxT("Turn on verbose logging"), wxITEM_RADIO );
 	logMenu->Append( m_menuItem9 );
 	
-	menuBar->Append( logMenu, wxT("Log") ); 
+	menuBar->Append( logMenu, wxT("&Log") );
 	
 	targetMenu = new wxMenu();
 	wxMenuItem* m_menuItem121;
@@ -70,7 +70,7 @@ GdbServerWindowSkeleton::GdbServerWindowSkeleton( wxWindow* parent, wxWindowID i
 	m_menuItem13 = new wxMenuItem( targetMenu, wxID_CATCH_VLLS_ID, wxString( wxT("&Catch VLLS reset") ) , wxT("Stop target during VLLS resets"), wxITEM_CHECK );
 	targetMenu->Append( m_menuItem13 );
 	
-	menuBar->Append( targetMenu, wxT("Target") ); 
+	menuBar->Append( targetMenu, wxT("&Target") );
 	
 	this->SetMenuBar( menuBar );
 	

@@ -210,9 +210,14 @@ GdbHandler::GdbMessageLevel GdbServerWindow::getLoggingLevel() {
   */
  void GdbServerWindow::OnDropConnection(wxCommandEvent& WXUNUSED(event)) {
     LOGGING_Q;
-    if ((clientSocket != NULL) && confirmDropConnection()) {
-       log.print("GdbServerWindow::OnDropConnection()\n");
-       dropConnection();
+    if (clientSocket != NULL) {
+       if (confirmDropConnection()) {
+          log.print("GdbServerWindow::OnDropConnection()\n");
+          dropConnection();
+       }
+    }
+    else {
+       statusTextControl->AppendText(_("No target open\n"));
     }
  }
 
@@ -282,16 +287,26 @@ GdbHandler::GdbMessageLevel GdbServerWindow::getLoggingLevel() {
   * Handler for Halt Target menu item
   */
  void GdbServerWindow::OnHaltTarget(wxCommandEvent& event) {
-    gdbHandler->haltTarget();
-    statusTextControl->AppendText(_("User halt of target - step GDB to synchronise\n"));
+    if (gdbHandler != 0) {
+       gdbHandler->haltTarget();
+       statusTextControl->AppendText(_("User halt of target - step GDB to synchronise\n"));
+    }
+    else {
+       statusTextControl->AppendText(_("No target open\n"));
+    }
  }
 
  /**
   * Handler for Reset Target menu item
   */
  void GdbServerWindow::OnResetTarget(wxCommandEvent& event) {
-    gdbHandler->resetTarget();
-    statusTextControl->AppendText(_("User reset of target - step GDB to synchronise\n"));
+    if (gdbHandler != 0) {
+       gdbHandler->resetTarget();
+       statusTextControl->AppendText(_("User reset of target - step GDB to synchronise\n"));
+    }
+    else {
+       statusTextControl->AppendText(_("No target open\n"));
+    }
  }
 
  /**
@@ -427,7 +442,9 @@ GdbHandler::GdbMessageLevel GdbServerWindow::getLoggingLevel() {
        delete statusTimer;
        statusTimer = NULL;
     }
-    gdbHandler.reset();
+    if (gdbHandler != 0) {
+       gdbHandler.reset();
+    }
     bdmInterface->closeBdm();
     if (clientSocket != NULL) {
        clientSocket->Destroy();
