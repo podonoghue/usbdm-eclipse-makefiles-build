@@ -1,6 +1,6 @@
 <?xml version='1.0' encoding='windows-1252'?>
 <Wix xmlns='http://schemas.microsoft.com/wix/2006/wi'>
-   <?define ECLIPSE_VER="CDT_1" ?> 
+   <?define ECLIPSE_VER="CDT_Auto" ?> 
 
    <?define Manufacturer="pgo" ?>
    <?define ProductName="USBDM" ?>
@@ -97,7 +97,7 @@
             Eclipse feature
       =======================================================-->
       <Feature Id='F.$(var.ECLIPSE_VER)'
-            Title='Eclipse CDT Plugins #1'
+            Title='Eclipse CDT Plugins'
             Description='Add USBDM support to Eclipse CDT:&#10;  - C/C++ New Project wizards&#10;  - GDB Debug interfaces&#10;  - Device Peripheral Viewer.'
             ConfigurableDirectory="D.$(var.ECLIPSE_VER)_ECLIPSE"
             AllowAdvertise="no"
