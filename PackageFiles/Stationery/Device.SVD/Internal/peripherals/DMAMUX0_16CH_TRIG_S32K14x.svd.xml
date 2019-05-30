@@ -291,8 +291,8 @@ Specifies which DMA source, if any, is routed to a particular DMA channel</descr
                            <value>49</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>POSRTB</name>
-                           <description>POSRTB</description>
+                           <name>PORTB</name>
+                           <description>PORTB</description>
                            <value>50</value>
                         </enumeratedValue>
                         <enumeratedValue>
