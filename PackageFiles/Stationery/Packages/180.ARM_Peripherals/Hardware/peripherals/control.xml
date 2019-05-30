@@ -9,4 +9,6 @@
       \tstatic constexpr uint32_t defaultPcrValue  = 0;\n\n
    ]]></template>
    
+   <signals/>
+
 </peripheralPage>
