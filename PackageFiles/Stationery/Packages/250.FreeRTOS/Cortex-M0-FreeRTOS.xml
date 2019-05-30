@@ -20,54 +20,6 @@
          description="Adds FreeRTOS framework for Cortex M0" 
          checkGroup="group-additional-options" />
       
-      <projectActionList id="FreeRTOS-noCpp-noBlinky">
-         <applyWhen>
-            <and>
-               <variableRef      idRef="projectOptionValue.FreeRTOS"         defaultValue="false" />
-               <not><variableRef idRef="projectOptionValue.CPP-abstraction"  defaultValue="false" /></not>
-               <not><variableRef idRef="projectOptionValue.FRDM-Blinky"      defaultValue="false" /></not>
-            </and>
-         </applyWhen>
-         <!-- Default RTOS C main -->
-         <projectActionList>
-            <applyWhen>
-               <not><variableRef idRef="hasCCNature" condition="isTrue" /></not>
-            </applyWhen>
-            <copy source="Sources/main.cpp" target="Sources/main.c" overwrite="true" />
-         </projectActionList>
-         <!-- Default RTOS CPP main -->
-         <projectActionList>
-            <applyWhen>
-               <variableRef idRef="hasCCNature" condition="isTrue" />
-            </applyWhen>
-            <copy source="Sources/main.cpp" target="Sources/main.cpp" overwrite="true" />
-         </projectActionList>
-      </projectActionList>
-      
-      <projectActionList id="FreeRTOS-noCpp-blinky">
-         <applyWhen>
-            <and>
-               <variableRef      idRef="projectOptionValue.FreeRTOS" />
-               <not><variableRef idRef="projectOptionValue.CPP-abstraction"  defaultValue="false" /></not>
-               <variableRef      idRef="projectOptionValue.FRDM-Blinky"      defaultValue="false" />
-            </and>
-         </applyWhen>
-         <!-- Blinky RTOS C main -->
-         <projectActionList>
-            <applyWhen>
-               <not><variableRef idRef="hasCCNature" condition="isTrue" /></not>
-            </applyWhen>
-            <copy source="Sources/main.cpp" target="Sources/main.c" overwrite="true" />
-         </projectActionList>
-         <!-- Blinky RTOS CPP main -->
-         <projectActionList>
-            <applyWhen>
-               <variableRef idRef="hasCCNature" condition="isTrue" />
-            </applyWhen>
-            <copy source="Sources/main.cpp" target="Sources/main.cpp" overwrite="true" />
-         </projectActionList>
-      </projectActionList>
-
       <projectActionList id="FreeRTOS-base">
          <applyWhen>
             <variableRef idRef="projectOptionValue.FreeRTOS" />
@@ -106,6 +58,29 @@
          </projectOption>
       </projectActionList>
       
+      <projectActionList id="FreeRTOS-noCppLibrary">
+         <applyWhen>
+            <and>
+               <variableRef      idRef="projectOptionValue.FreeRTOS"         defaultValue="false" />
+               <not><variableRef idRef="projectOptionValue.CPP-abstraction"  defaultValue="false" /></not>
+            </and>
+         </applyWhen>
+         <!-- Default RTOS C main -->
+         <projectActionList>
+            <applyWhen>
+               <not><variableRef idRef="hasCCNature" condition="isTrue" /></not>
+            </applyWhen>
+            <copy source="Sources/main.c" target="Sources/main.c" overwrite="true" />
+         </projectActionList>
+         <!-- Default RTOS CPP main -->
+         <projectActionList>
+            <applyWhen>
+               <variableRef idRef="hasCCNature" condition="isTrue" />
+            </applyWhen>
+            <copy source="Sources/main.c" target="Sources/main.cpp" overwrite="true" />
+         </projectActionList>
+      </projectActionList>
+      
       <!-- CPP-abstraction RTOS files -->
       <projectActionList id="FreeRTOS-Cpp-abstraction">
          <applyWhen>
@@ -123,12 +98,10 @@
          <copy source="FreeRTOS/TaskCPP.h"      target="FreeRTOS/TaskCPP.h"        overwrite="true"  derived="true" />
          <copy source="FreeRTOS/TimerCPP.h"     target="FreeRTOS/TimerCPP.h"       overwrite="true"  derived="true" />
 	 
-         <deleteResource target="Sources/main.c" />
-         <copy source="Sources/main-1.cpp"   target="Sources/main.cpp"          overwrite="true" />
-         <copy source="Sources/main-2.cpp"   target="Sources/main-2.cpp"        overwrite="true" />
-         <copy source="Sources/main-3.cpp"   target="Sources/main-3.cpp"        overwrite="true" />
-         <excludeSourceFile target="Sources/main-2.cpp" />
-         <excludeSourceFile target="Sources/main-3.cpp" />
+         <copy source="Sources/main.cpp"        target="Sources/main.cpp"          overwrite="true" />
+         
+         <copy source="Snippets/FreeRTOS-cpp-flasher-example.cpp"    target="Snippets/FreeRTOS-cpp-flasher-example.cpp"   overwrite="true" />
+         <copy source="Snippets/FreeRTOS-cpp-producer-consumer.cpp"  target="Snippets/FreeRTOS-cpp-producer-consumer.cpp" overwrite="true" />         
       </projectActionList>
       
    </projectActionList>
