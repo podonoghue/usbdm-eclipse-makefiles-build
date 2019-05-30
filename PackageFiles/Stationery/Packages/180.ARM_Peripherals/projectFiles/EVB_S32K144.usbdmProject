@@ -58,31 +58,14 @@
    <item key="$signal$PTE5_descriptionSetting"             value="CAN Tx" />
    <item key="$signal$PTE5_muxSetting"                     value="mux5" />
    <item key="$signal$PTE6_muxSetting"                     value="mux0" />
-   <item key="/ADC0/irqHandlingMethod"                     value="$ClassMethod" />
    <item key="/CAN0/EnableFifo"                            value="false" />
    <item key="/CAN0/NumberOfFifoMessageFilters"            value="8" />
    <item key="/CAN0/NumberOfIndividualMailboxes"           value="4" />
-   <item key="/CAN0/errorIrqHandlingMethod"                value="$ClassMethod" />
-   <item key="/CAN0/messagebufferIrqHandlingMethod"        value="$ClassMethod" />
-   <item key="/CAN0/miscellaneousIrqHandlingMethod"        value="$ClassMethod" />
-   <item key="/CAN0/wakeupIrqHandlingMethod"               value="$ClassMethod" />
    <item key="/CAN1/EnableFifo"                            value="false" />
    <item key="/CAN1/NumberOfFifoMessageFilters"            value="8" />
-   <item key="/CAN1/errorIrqHandlingMethod"                value="$ClassMethod" />
-   <item key="/CAN1/messagebufferIrqHandlingMethod"        value="$ClassMethod" />
-   <item key="/CAN1/miscellaneousIrqHandlingMethod"        value="$ClassMethod" />
-   <item key="/CAN1/wakeupIrqHandlingMethod"               value="$ClassMethod" />
    <item key="/CAN2/EnableFifo"                            value="false" />
    <item key="/CAN2/NumberOfFifoMessageFilters"            value="8" />
-   <item key="/CAN2/errorIrqHandlingMethod"                value="$ClassMethod" />
-   <item key="/CAN2/messagebufferIrqHandlingMethod"        value="$ClassMethod" />
-   <item key="/CAN2/miscellaneousIrqHandlingMethod"        value="$ClassMethod" />
-   <item key="/CAN2/wakeupIrqHandlingMethod"               value="$ClassMethod" />
    <item key="/Console/consoleDevice"                      value="USBDM::Lpuart1" />
-   <item key="/FTM0/faultIrqHandlingMethod"                value="$ClassMethod" />
-   <item key="/FTM0/irqHandlingMethod"                     value="$ClassMethod" />
-   <item key="/FTM0/overflowIrqHandlingMethod"             value="$ClassMethod" />
-   <item key="/LPIT0/irqHandlers"                          value="$ClassMethod" />
    <item key="/LPIT0/lpit_mcr_dbg_en"                      value="false" />
    <item key="/LPTMR0/lptmr_psr_pcs"                       value="3" />
    <item key="/LPTMR0/minimumResolution"                   value="10" />
