@@ -544,14 +544,16 @@ public:
    }
 
    /**
-    * Receive string until terminator character\n
-    * The terminating character is discarded and the string '\0' terminated
+    * Receive string until terminator character or buffer full.\n
+    * The terminating character is discarded and the string always '\0' terminated
     *
     * @param[out] data       Data buffer for reception
-    * @param[in]  size       Size of data buffer (including '\0')
+    * @param[in]  size       Size of data buffer (including space for '\0')
     * @param[in]  terminator Terminating character
     *
     * @return number of characters read (excluding terminator)
+    *
+    * @note Excess characters are discarded once the buffer is full.
     *
     * Usage
     * @code
@@ -561,14 +563,15 @@ public:
     */
    int __attribute__((noinline)) gets(char data[], uint16_t size, char terminator='\n') {
       char *ptr = data;
-      while (size-->1) {
-         char ch = readChar();
-         if (ch == terminator) {
-            break;
+
+      char ch;
+      do {
+         ch = readChar();
+         if (ptr<(data+size)) {
+            *ptr++ = ch;
          }
-         *ptr++ = ch;
-      }
-      *ptr = '\0';
+      } while(ch != terminator);
+      *--ptr = '\0';
       return ptr-data;
    }
 
