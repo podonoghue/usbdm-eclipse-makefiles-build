@@ -102,7 +102,7 @@ public:
     *                     Use nullptr to remove callback.
     */
    static void setCallback(EWMCallbackFunction callback) {
-      usbdm_assert(Info::irqHandlerInstalled, "EWM not configured for interrupts");
+      static_assert(Info::irqHandlerInstalled, "EWM not configured for interrupts");
       if (callback == nullptr) {
          callback = unhandledCallback;
       }
