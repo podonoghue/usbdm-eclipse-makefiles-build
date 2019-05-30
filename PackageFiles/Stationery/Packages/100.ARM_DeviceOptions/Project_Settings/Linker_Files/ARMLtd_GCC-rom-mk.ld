@@ -197,6 +197,14 @@ M_VECTOR_RAM_SIZE = DEFINED(__ram_vector_table__) ? (__VECTOR_TABLE_END - __VECT
   /* KDS defines __DATA_END as the end of DATA in Flash */
   __DATA_END = __DATA_ROM + SIZEOF(.data);
 
+   /* Start of not initialised region */
+   .noinit :
+   {
+      . = ALIGN(4);
+      *(.noinit)
+   } > noinit_ram
+   
+   /* Start of BSS */
    .bss :
    {
       . = ALIGN(4);

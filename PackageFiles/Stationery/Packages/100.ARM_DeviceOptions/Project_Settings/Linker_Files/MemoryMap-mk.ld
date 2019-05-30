@@ -32,13 +32,15 @@ REGION_ALIAS("mtb_ram", 	   "ram_low");
 REGION_ALIAS("interrupts_ram", "ram_low");
 /*  <s1>  USB Endpoint buffers              <"ram_low"=> ram_low <"ram_high"=> ram_high <i> bdts_ram       */
 REGION_ALIAS("bdts_ram",       "ram_low");
-/*  <s1>  DATA                              <"ram_low"=> ram_low <"ram_high"=> ram_high <i> data_ram       */
+/*  <s1>  Initialised DATA                  <"ram_low"=> ram_low <"ram_high"=> ram_high <i> data_ram       */
 REGION_ALIAS("data_ram",       "ram_low");
-/*  <s1>  BSS                               <"ram_low"=> ram_low <"ram_high"=> ram_high <i> bss_ram        */
+/*  <s1>  Non-initialised DATA              <"ram_low"=> ram_low <"ram_high"=> ram_high <i> noinit_ram     */
+REGION_ALIAS("noinit_ram",     "ram_low");
+/*  <s1>  Zeroed Data (BSS)                 <"ram_low"=> ram_low <"ram_high"=> ram_high <i> bss_ram        */
 REGION_ALIAS("bss_ram",        "ram_low");
-/*  <s1>  HEAP                              <"ram_low"=> ram_low <"ram_high"=> ram_high <i> heap_ram       */
+/*  <s1>  Heap                              <"ram_low"=> ram_low <"ram_high"=> ram_high <i> heap_ram       */
 REGION_ALIAS("heap_ram",       "ram_low");
-/*  <s1>  STACK                             <"ram_low"=> ram_low <"ram_high"=> ram_high <i> stack_ram      */
+/*  <s1>  Stack                             <"ram_low"=> ram_low <"ram_high"=> ram_high <i> stack_ram      */
 REGION_ALIAS("stack_ram",      "ram_high");
 /* </h> */
 
