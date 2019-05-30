@@ -6,10 +6,25 @@
 
    <xi:include href="_irqOption.xml"/>         
 
-   
    <projectActionList id = "wdog_files" >
       <copy source="Project_Headers/wdog.h"         target="Project_Headers/wdog.h"          overwrite="true" derived="true" />
       <copy source="Snippets/wdog-example.cpp"      target="Snippets/wdog-example.cpp"       overwrite="true" derived="true" />
    </projectActionList>
+   
+   <template><![CDATA[
+   \t/**
+   \t * Get input clock frequency
+   \t *
+   \t * @return Input clock frequency as a uint32_t in Hz
+   \t */
+   \tstatic uint32_t getInputClockFrequency() {
+   \t
+   \t   switch(wdog().STCTRLH&WDOG_STCTRLH_CLKSRC_MASK) {
+   \t   default:
+   \t   case WDOG_STCTRLH_CLKSRC(0): return SystemLpoClock; // LPO
+   \t   case WDOG_STCTRLH_CLKSRC(1): return SystemBusClock; // Alt = System Bus Clock
+   \t   }
+   \t}\n\n
+   ]]></template>
    
 </peripheralPage>
