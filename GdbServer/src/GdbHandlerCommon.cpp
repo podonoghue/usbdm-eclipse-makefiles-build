@@ -950,6 +950,7 @@ USBDM_ErrorCode GdbHandlerCommon::readRegs(void) {
    if (useFastRegisterRead) {
       // Try reading registers using fast method
       USBDM_ErrorCode rc = bdmInterface->readMultipleRegs(registerBuffer, 0, targetLastRegIndex);
+
       if (rc == BDM_RC_OK) {
          // OK
          registerBufferSize = 4*(targetLastRegIndex+1);
@@ -1023,6 +1024,7 @@ void GdbHandlerCommon::sendRegs(void) {
    USBDM_ErrorCode rc = BDM_RC_OK;
    if (registerBufferSize == 0) {
       rc = readRegs();
+      debug_print_regs();
    }
    if ((rc != BDM_RC_OK) || (registerBufferSize == 0)) {
       log.error("Failed to read regs\n");
@@ -1114,16 +1116,6 @@ void GdbHandlerCommon::writeMemory(const char *ccPtr, uint32_t address, uint32_t
    convertFromHex(numBytes, ccPtr, buff);
    bdmInterface->writeMemory(align, numBytes, address, buff);
    gdbInOut->sendGdbString("OK");
-}
-
-/*
- *  Get cached value of PC
- *  Note: Assumes cache valid
- *
- *  @return 32-bit value
- */
-uint32_t GdbHandlerCommon::getCachedPC() {
-   return 0;
 }
 
 USBDM_ErrorCode GdbHandlerCommon::readReg(unsigned regNo, unsigned char *&buffPtr) {

@@ -122,13 +122,13 @@ USBDM_ErrorCode GdbHandler_ARM::resetTarget(DeviceData::ResetMethod resetMethod)
    if (rc != BDM_RC_OK) {
       return rc;
    }
-   return configureKinetisMDM_AP();
+   return configureMDM_AP();
 }
 
 USBDM_ErrorCode GdbHandler_ARM::continueTarget(void) {
    LOGGING_Q;
 
-   configureKinetisMDM_AP();
+   configureMDM_AP();
 
    return GdbHandlerCommon::continueTarget();
 }
@@ -204,10 +204,6 @@ static int registerMap[] = {
       ARM_RegFPS0+0x1C, ARM_RegFPS0+0x1D, ARM_RegFPS0+0x1E, ARM_RegFPS0+0x1F,
 };
 
-#define CACHED_PC_VALUE_OFFSET  (registerBuffer+(4*ARM_RegPC))
-#define CACHED_R0_VALUE_OFFSET  (registerBuffer+(4*ARM_RegR0))
-#define CACHED_R1_VALUE_OFFSET  (registerBuffer+(4*ARM_RegR1))
-
 /*!  Sets up the register description from device XML
  *   or hard-coded default
  */
@@ -276,13 +272,54 @@ USBDM_ErrorCode GdbHandler_ARM::readReg(unsigned regNo, char *&buffPtr) {
 }
 
 /*
+ *  Get cached value of register from cache
+ *  Note: Assumes cache valid
+ *
+ *  @param reg Register number
+ *
+ *  @return 32-bit value
+ */
+uint32_t GdbHandler_ARM::getCachedRegister(ARM_Registers_t reg) {
+   return get32bitLE((registerBuffer+(4*reg)));
+}
+
+void GdbHandler_ARM::debug_print_regs() {
+   static const char *regNames[] = {
+         "R0",
+         "R1",
+         "R2",
+         "R3",
+         "R4",
+         "R5",
+         "R6",
+         "R7",
+         "R8",
+         "R9",
+         "R10",
+         "R11",
+         "R12",
+         "SP",
+         "LR",
+         "PC",
+         "xPSR",
+         "MSP",
+         "PSP",
+         "???",
+         "MISC",
+   };
+   for (int reg=ARM_RegR0; reg<=ARM_RegMISC; reg++) {
+      reportGdbPrintf(M_INFO, "%-10s = 0x%08X\n", regNames[reg], getCachedRegister((ARM_Registers_t)reg));
+   }
+}
+
+/*
  *  Get cached value of PC
  *  Note: Assumes cache valid
  *
  *  @return 32-bit value
  */
 uint32_t GdbHandler_ARM::getCachedPC() {
-   return get32bitLE(CACHED_PC_VALUE_OFFSET);
+   return get32bitLE((registerBuffer+(4*ARM_RegPC)));
 }
 
 /*
@@ -292,7 +329,7 @@ uint32_t GdbHandler_ARM::getCachedPC() {
  *  @return 32-bit value
  */
 uint32_t GdbHandler_ARM::getCachedR0() {
-   return get32bitLE(CACHED_R0_VALUE_OFFSET);
+   return get32bitLE((registerBuffer+(4*ARM_RegR0)));
 }
 
 /*
@@ -302,7 +339,7 @@ uint32_t GdbHandler_ARM::getCachedR0() {
  *  @return 32-bit value
  */
 uint32_t GdbHandler_ARM::getCachedR1() {
-   return get32bitLE(CACHED_R1_VALUE_OFFSET);
+   return get32bitLE((registerBuffer+(4*ARM_RegR1)));
 }
 
 /**
@@ -440,8 +477,16 @@ GdbHandler::GdbTargetStatus GdbHandler_ARM::getTargetStatus() {
          }
          if (targetBreakPending) {
             // Do this as soon as possible after OK connection
-            bdmInterface->writeCReg(ARM_CRegMDM_AP_Control, MDM_AP_Control_Debug_Request);
-            log.print("Asserting MDM_AP_Control_Debug_Request\n");
+            unsigned long  mdm_ap;
+            bdmInterface->readCReg(ARM_CRegMDM_AP_Control, &mdm_ap);
+            mdm_ap &= ~(MDM_AP_Control_Debug_Request|MDM_AP_Control_VLLDBGACK);
+            // Use Kinetis specific debug (halt) method
+            bdmInterface->writeCReg(ARM_CRegMDM_AP_Control, mdm_ap|MDM_AP_Control_Debug_Request);
+            // Use ARM debug (halt) method
+            bdmInterface->halt();
+            // Release Kinetis specific debug (halt) method
+            bdmInterface->writeCReg(ARM_CRegMDM_AP_Control, mdm_ap);
+            log.print("Asserting MDM_AP_Control_Debug_Request - modified\n");
          }
          if (mdm_ap_status&MDM_AP_Status_VLLSx_Mode_Exit) {
             // Target is being held in reset until mdm-ap_control.VLLDBGACK is written
@@ -910,7 +955,7 @@ GdbHandler::GdbTargetStatus GdbHandler_ARM::handleHalted() {
    LOGGING;
    bool looping = false;
 
-   if (runState == Running) {
+   if ((runState == Running) || (runState == Breaking) || (runState == Stepping)) {
       // Target has just halted - cache registers
       readRegs();
       uint32_t currentPC = getCachedPC();
@@ -1005,6 +1050,7 @@ GdbHandler::GdbTargetStatus GdbHandler_ARM::pollTarget(void) {
       if (targetBreakPending) {
          // Halt target
          log.print("Breaking - halting target\n");
+         reportGdbPrintf(M_INFO, "Breaking - halting target\n");
          bdmInterface->halt();
       }
 

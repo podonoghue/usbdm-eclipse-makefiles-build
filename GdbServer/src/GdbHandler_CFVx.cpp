@@ -243,6 +243,10 @@ USBDM_ErrorCode GdbHandler_CFVx::readReg(unsigned regNo, char *&buffPtr) {
    return rc;
 }
 
+void GdbHandler_CFVx::debug_print_regs() {
+// ToDo Implement this
+}
+
 /*
  *  Get cached value of PC
  *  Note: Assumes cache valid

@@ -97,7 +97,7 @@ protected:
 
    virtual USBDM_ErrorCode       programImage(FlashImagePtr flashImage);
    virtual void                  maskInterrupts(bool disableInterrupts) = 0;
-   virtual uint32_t              getCachedPC();
+   virtual uint32_t              getCachedPC() = 0;
    virtual const char           *getCachedPcAsString();
    virtual USBDM_ErrorCode       readRegs(void);
    virtual USBDM_ErrorCode       readReg(unsigned regNo, unsigned char *&buffPtr);
@@ -164,6 +164,7 @@ protected:
    bool     streq(const char *s1, const char *s2);
    bool     strneq(const char *s1, const char *s2, int length);
 
+   virtual void debug_print_regs() = 0;
 };
 
 #endif /* SRC_GDBHANDLERCOMMON_H_ */

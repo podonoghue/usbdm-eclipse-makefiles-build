@@ -52,6 +52,8 @@ protected:
    virtual USBDM_ErrorCode   readPC(unsigned long *value) override;
    virtual USBDM_ErrorCode   writeSP(unsigned long value) override;
    virtual USBDM_ErrorCode   updateTarget() override;
+
+   virtual void debug_print_regs() override;
 };
 
 GdbHandler *createCFVxGdbHandler(GdbInOut *gdbInOut, BdmInterfacePtr bdmInterface, DeviceInterfacePtr deviceInterface, GdbHandler::GdbCallback gdbCallBackPtr, IGdbTty *tty) ;

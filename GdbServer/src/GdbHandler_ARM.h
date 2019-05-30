@@ -61,6 +61,10 @@ public:
    USBDM_ErrorCode           readR1(unsigned long *value);
    virtual USBDM_ErrorCode   writeSP(unsigned long value) override;
    virtual USBDM_ErrorCode   updateTarget() override;
+
+   uint32_t          getCachedRegister(ARM_Registers_t reg);
+
+   virtual void debug_print_regs() override;
 };
 
 GdbHandler *createARMGdbHandler(GdbInOut *gdbInOut, BdmInterfacePtr bdmInterface, DeviceInterfacePtr deviceInterface, GdbHandler::GdbCallback gdbCallBackPtr, IGdbTty *tty) ;
