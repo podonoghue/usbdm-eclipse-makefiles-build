@@ -5,7 +5,7 @@
  *           Equivalent: 
  *
  * @version  V1.6
- * @date     2019/01
+ * @date     2019/04
  *
  *******************************************************************************************************/
 
@@ -5367,12 +5367,7 @@ typedef struct LLWU_Type {
    };
    __I  uint8_t   MF;                           /**< 000D: Module Flag Register                                         */
    union {                                      /**< 000E: (size=0004)                                                  */
-      struct {                                  /**< 000E: (size=0004)                                                  */
-      __IO uint8_t   FILT1;                     /**< 000E: Pin Filter 1 register                                        */
-      __IO uint8_t   FILT2;                     /**< 000F: Pin Filter 2 register                                        */
-      __IO uint8_t   FILT3;                     /**< 0010: Pin Filter 3 register                                        */
-      __IO uint8_t   FILT4;                     /**< 0011: Pin Filter 4 register                                        */
-      };
+      __IO uint8_t   FILT[4];                   /**< 000E: Pin Filter  register                                         */
       struct {                                  /**< 000E: (size=0004)                                                  */
          __IO uint8_t   FILT1;                  /**< 000E: Pin Filter  register                                         */
          __IO uint8_t   FILT2;                  /**< 000F: Pin Filter  register                                         */

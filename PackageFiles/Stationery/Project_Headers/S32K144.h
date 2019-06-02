@@ -5,7 +5,7 @@
  *           Equivalent: 
  *
  * @version  V1.6
- * @date     2019/01
+ * @date     2019/04
  *
  *******************************************************************************************************/
 
@@ -94,17 +94,17 @@ typedef enum {
   SWI_IRQn                      =  64,   /**<  80                                                                                  */
   PDB1_IRQn                     =  68,   /**<  84 Programmable Delay Block                                                         */
   FLEXIO_IRQn                   =  69,   /**<  85 FLEXIO module                                                                    */
-  CAN0_ORed_IRQn                =  78,   /**<  94 Flex Controller Area Network module                                              */
-  CAN0_Error_IRQn               =  79,   /**<  95 Flex Controller Area Network module                                              */
-  CAN0_Wake_Up_IRQn             =  80,   /**<  96 Flex Controller Area Network module                                              */
-  CAN0_ORed_0_15_MB_IRQn        =  81,   /**<  97 Flex Controller Area Network module                                              */
-  CAN0_ORed_16_31_MB_IRQn       =  82,   /**<  98 Flex Controller Area Network module                                              */
-  CAN1_ORed_IRQn                =  85,   /**< 101 Flex Controller Area Network module                                              */
-  CAN1_Error_IRQn               =  86,   /**< 102 Flex Controller Area Network module                                              */
-  CAN1_ORed_0_15_MB_IRQn        =  88,   /**< 104 Flex Controller Area Network module                                              */
-  CAN2_ORed_IRQn                =  92,   /**< 108 Flex Controller Area Network module                                              */
-  CAN2_Error_IRQn               =  93,   /**< 109 Flex Controller Area Network module                                              */
-  CAN2_ORed_0_15_MB_IRQn        =  95,   /**< 111 Flex Controller Area Network module                                              */
+  CAN0_ORed_IRQn                =  78,   /**<  94 FlexCAN - Bus Off, Tx/Rx Warnings, Tx/Rx Error count transition                  */
+  CAN0_Error_IRQn               =  79,   /**<  95 FlexCAN - Bus Error                                                              */
+  CAN0_WakeUp_IRQn              =  80,   /**<  96 FlexCAN - Wakeup and Sleep (Pretend networking)                                  */
+  CAN0_MessageBuffer_0_15_IRQn  =  81,   /**<  97 FlexCAN - Message Buffers (Mailboxes and FIFO)                                   */
+  CAN0_MessageBuffer_16_31_IRQn =  82,   /**<  98 FlexCAN - Message Buffers (FIFO and Mailboxes)                                   */
+  CAN1_ORed_IRQn                =  85,   /**< 101 FlexCAN - Bus Off, Tx/Rx Warnings, Tx/Rx Error count transition                  */
+  CAN1_Error_IRQn               =  86,   /**< 102 FlexCAN - Bus Error                                                              */
+  CAN1_MessageBuffer_0_15_IRQn  =  88,   /**< 104 FlexCAN - Message Buffers (Mailboxes and FIFO)                                   */
+  CAN2_ORed_IRQn                =  92,   /**< 108 FlexCAN - Bus Off, Tx/Rx Warnings, Tx/Rx Error count transition                  */
+  CAN2_Error_IRQn               =  93,   /**< 109 FlexCAN - Bus Error                                                              */
+  CAN2_MessageBuffer_0_15_IRQn  =  95,   /**< 111 FlexCAN - Message Buffers (Mailboxes and FIFO)                                   */
   FTM0_Ch0_Ch1_IRQn             =  99,   /**< 115 FlexTimer Module                                                                 */
   FTM0_Ch2_Ch3_IRQn             = 100,   /**< 116 FlexTimer Module                                                                 */
   FTM0_Ch4_Ch5_IRQn             = 101,   /**< 117 FlexTimer Module                                                                 */
@@ -203,17 +203,17 @@ extern void PORTE_IRQHandler(void);                  /**< Pin Control and Interr
 extern void SWI_IRQHandler(void);                    /**<                                                                                  */
 extern void PDB1_IRQHandler(void);                   /**< Programmable Delay Block                                                         */
 extern void FLEXIO_IRQHandler(void);                 /**< FLEXIO module                                                                    */
-extern void CAN0_ORed_IRQHandler(void);              /**< Flex Controller Area Network module                                              */
-extern void CAN0_Error_IRQHandler(void);             /**< Flex Controller Area Network module                                              */
-extern void CAN0_Wake_Up_IRQHandler(void);           /**< Flex Controller Area Network module                                              */
-extern void CAN0_ORed_0_15_MB_IRQHandler(void);      /**< Flex Controller Area Network module                                              */
-extern void CAN0_ORed_16_31_MB_IRQHandler(void);     /**< Flex Controller Area Network module                                              */
-extern void CAN1_ORed_IRQHandler(void);              /**< Flex Controller Area Network module                                              */
-extern void CAN1_Error_IRQHandler(void);             /**< Flex Controller Area Network module                                              */
-extern void CAN1_ORed_0_15_MB_IRQHandler(void);      /**< Flex Controller Area Network module                                              */
-extern void CAN2_ORed_IRQHandler(void);              /**< Flex Controller Area Network module                                              */
-extern void CAN2_Error_IRQHandler(void);             /**< Flex Controller Area Network module                                              */
-extern void CAN2_ORed_0_15_MB_IRQHandler(void);      /**< Flex Controller Area Network module                                              */
+extern void CAN0_ORed_IRQHandler(void);              /**< FlexCAN - Bus Off, Tx/Rx Warnings, Tx/Rx Error count transition                  */
+extern void CAN0_Error_IRQHandler(void);             /**< FlexCAN - Bus Error                                                              */
+extern void CAN0_WakeUp_IRQHandler(void);            /**< FlexCAN - Wakeup and Sleep (Pretend networking)                                  */
+extern void CAN0_MessageBuffer_0_15_IRQHandler(void);   /**< FlexCAN - Message Buffers (Mailboxes and FIFO)                                   */
+extern void CAN0_MessageBuffer_16_31_IRQHandler(void);   /**< FlexCAN - Message Buffers (FIFO and Mailboxes)                                   */
+extern void CAN1_ORed_IRQHandler(void);              /**< FlexCAN - Bus Off, Tx/Rx Warnings, Tx/Rx Error count transition                  */
+extern void CAN1_Error_IRQHandler(void);             /**< FlexCAN - Bus Error                                                              */
+extern void CAN1_MessageBuffer_0_15_IRQHandler(void);   /**< FlexCAN - Message Buffers (Mailboxes and FIFO)                                   */
+extern void CAN2_ORed_IRQHandler(void);              /**< FlexCAN - Bus Off, Tx/Rx Warnings, Tx/Rx Error count transition                  */
+extern void CAN2_Error_IRQHandler(void);             /**< FlexCAN - Bus Error                                                              */
+extern void CAN2_MessageBuffer_0_15_IRQHandler(void);   /**< FlexCAN - Message Buffers (Mailboxes and FIFO)                                   */
 extern void FTM0_Ch0_Ch1_IRQHandler(void);           /**< FlexTimer Module                                                                 */
 extern void FTM0_Ch2_Ch3_IRQHandler(void);           /**< FlexTimer Module                                                                 */
 extern void FTM0_Ch4_Ch5_IRQHandler(void);           /**< FlexTimer Module                                                                 */
@@ -841,7 +841,7 @@ typedef struct AIPS_Type {
 */
 
 /* ================================================================================ */
-/* ================           CAN0 (file:CAN0_S32K14x)             ================ */
+/* ================           CAN0 (file:CAN0_FLEX_S32K14x)        ================ */
 /* ================================================================================ */
 
 /**
@@ -1638,7 +1638,7 @@ typedef struct CAN_Type {
 #define CAN0_BasePtr                   0x40024000UL //!< Peripheral base address
 #define CAN0                           ((CAN_Type *) CAN0_BasePtr) //!< Freescale base pointer
 #define CAN0_BASE_PTR                  (CAN0) //!< Freescale style base pointer
-#define CAN0_IRQS { CAN0_ORed_IRQn, CAN0_Error_IRQn, CAN0_Wake_Up_IRQn, CAN0_ORed_0_15_MB_IRQn, CAN0_ORed_16_31_MB_IRQn,  }
+#define CAN0_IRQS { CAN0_ORed_IRQn, CAN0_Error_IRQn, CAN0_WakeUp_IRQn, CAN0_MessageBuffer_0_15_IRQn, CAN0_MessageBuffer_16_31_IRQn,  }
 
 /**
  * @} */ /* End group CAN_Peripheral_access_layer_GROUP 
@@ -1650,7 +1650,7 @@ typedef struct CAN_Type {
 */
 
 /* ================================================================================ */
-/* ================           CAN1 (file:CAN1_S32K14x)             ================ */
+/* ================           CAN1 (file:CAN1_FLEX_S32K14x)        ================ */
 /* ================================================================================ */
 
 /**
@@ -1808,7 +1808,7 @@ typedef struct CAN1_Type {
 #define CAN1_BasePtr                   0x40025000UL //!< Peripheral base address
 #define CAN1                           ((CAN1_Type *) CAN1_BasePtr) //!< Freescale base pointer
 #define CAN1_BASE_PTR                  (CAN1) //!< Freescale style base pointer
-#define CAN1_IRQS { CAN1_ORed_IRQn, CAN1_Error_IRQn, CAN1_ORed_0_15_MB_IRQn,  }
+#define CAN1_IRQS { CAN1_ORed_IRQn, CAN1_Error_IRQn, CAN1_MessageBuffer_0_15_IRQn,  }
 
 /**
  * @} */ /* End group CAN_Peripheral_access_layer_GROUP 
@@ -1831,7 +1831,7 @@ typedef struct CAN1_Type {
 #define CAN2_BasePtr                   0x4002B000UL //!< Peripheral base address
 #define CAN2                           ((CAN1_Type *) CAN2_BasePtr) //!< Freescale base pointer
 #define CAN2_BASE_PTR                  (CAN2) //!< Freescale style base pointer
-#define CAN2_IRQS { CAN2_ORed_IRQn, CAN2_Error_IRQn, CAN2_ORed_0_15_MB_IRQn,  }
+#define CAN2_IRQS { CAN2_ORed_IRQn, CAN2_Error_IRQn, CAN2_MessageBuffer_0_15_IRQn,  }
 
 /**
  * @} */ /* End group CAN_Peripheral_access_layer_GROUP 

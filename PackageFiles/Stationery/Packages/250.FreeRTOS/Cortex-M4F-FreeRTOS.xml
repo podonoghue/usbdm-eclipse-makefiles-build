@@ -47,12 +47,12 @@
          </projectOption>
          <projectOption id="net.sourceforge.usbdm.gnu.c.compiler.option.preprocessor.def.symbols">
             <value>__CORTEX_M4F</value>
-            <value>__FREERTOS</value>
+            <value>__FREE_RTOS</value>
             <value>__FPU_PRESENT</value>
          </projectOption>
          <projectOption id="net.sourceforge.usbdm.gnu.cpp.compiler.option.preprocessor.def.symbols">
             <value>__CORTEX_M4F</value>
-            <value>__FREERTOS</value>
+            <value>__FREE_RTOS</value>
             <value>__FPU_PRESENT</value>
          </projectOption>
       </projectActionList>

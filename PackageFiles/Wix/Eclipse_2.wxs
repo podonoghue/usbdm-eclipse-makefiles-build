@@ -36,7 +36,7 @@
      
       <!-- Look in likely locations for MCUExpresso and update directory-->
       <Property Id="D.$(var.ECLIPSE_VER)_ECLIPSE">
-         <DirectorySearch Id='Ds.$(var.ECLIPSE_VER)_DirectorySearch' Path='Apps\eclipse2' AssignToProperty="yes" />
+         <DirectorySearch Id='Ds.$(var.ECLIPSE_VER)_DirectorySearch' Path='Apps\eclipse' AssignToProperty="yes" />
       </Property>
       
       <!--=================================================================================

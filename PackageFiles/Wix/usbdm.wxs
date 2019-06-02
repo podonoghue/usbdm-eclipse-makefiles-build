@@ -410,8 +410,8 @@
          <FeatureRef Id='F.KDS_3_0_0' />
          <FeatureRef Id='F.S32DS_1_0_0' />
          <FeatureRef Id='F.MCU_EXPRESSO' />
-         <FeatureRef Id='F.CDT_1' />
-         <FeatureRef Id='F.CDT_2' />
+         <FeatureRef Id='F.CDT_AUTO' />
+         <FeatureRef Id='F.CDT' />
          <Feature Id='F.UsbdmProgrammers'
             Title='Programmers'
             Description='Stand-alone flash programmers.'

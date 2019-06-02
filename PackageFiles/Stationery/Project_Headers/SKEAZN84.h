@@ -5,7 +5,7 @@
  *           Equivalent: 
  *
  * @version  V1.6
- * @date     2019/01
+ * @date     2019/04
  *
  *******************************************************************************************************/
 
@@ -2208,7 +2208,7 @@ typedef struct NV_Type {
 */
 
 /* ================================================================================ */
-/* ================           OSC (file:OSC_MKE)                   ================ */
+/* ================           OSC0 (file:OSC0_MKE)                 ================ */
 /* ================================================================================ */
 
 /**
@@ -2228,7 +2228,7 @@ typedef struct OSC_Type {
  */
 
 /* -------------------------------------------------------------------------------- */
-/* -----------     'OSC' Position & Mask macros                         ----------- */
+/* -----------     'OSC0' Position & Mask macros                        ----------- */
 /* -------------------------------------------------------------------------------- */
 
 /**
@@ -2237,32 +2237,32 @@ typedef struct OSC_Type {
 * @{
 */
 /* ------- CR Bit Fields                            ------ */
-#define OSC_CR_OSCINIT_MASK                      (0x1U)                                              /*!< OSC_CR.OSCINIT Mask                     */
-#define OSC_CR_OSCINIT_SHIFT                     (0U)                                                /*!< OSC_CR.OSCINIT Position                 */
-#define OSC_CR_OSCINIT(x)                        (((uint8_t)(((uint8_t)(x))<<0U))&0x1UL)             /*!< OSC_CR.OSCINIT Field                    */
-#define OSC_CR_HGO_MASK                          (0x2U)                                              /*!< OSC_CR.HGO Mask                         */
-#define OSC_CR_HGO_SHIFT                         (1U)                                                /*!< OSC_CR.HGO Position                     */
-#define OSC_CR_HGO(x)                            (((uint8_t)(((uint8_t)(x))<<1U))&0x2UL)             /*!< OSC_CR.HGO Field                        */
-#define OSC_CR_RANGE_MASK                        (0x4U)                                              /*!< OSC_CR.RANGE Mask                       */
-#define OSC_CR_RANGE_SHIFT                       (2U)                                                /*!< OSC_CR.RANGE Position                   */
-#define OSC_CR_RANGE(x)                          (((uint8_t)(((uint8_t)(x))<<2U))&0x4UL)             /*!< OSC_CR.RANGE Field                      */
-#define OSC_CR_OSCOS_MASK                        (0x10U)                                             /*!< OSC_CR.OSCOS Mask                       */
-#define OSC_CR_OSCOS_SHIFT                       (4U)                                                /*!< OSC_CR.OSCOS Position                   */
-#define OSC_CR_OSCOS(x)                          (((uint8_t)(((uint8_t)(x))<<4U))&0x10UL)            /*!< OSC_CR.OSCOS Field                      */
-#define OSC_CR_OSCSTEN_MASK                      (0x20U)                                             /*!< OSC_CR.OSCSTEN Mask                     */
-#define OSC_CR_OSCSTEN_SHIFT                     (5U)                                                /*!< OSC_CR.OSCSTEN Position                 */
-#define OSC_CR_OSCSTEN(x)                        (((uint8_t)(((uint8_t)(x))<<5U))&0x20UL)            /*!< OSC_CR.OSCSTEN Field                    */
-#define OSC_CR_OSCEN_MASK                        (0x80U)                                             /*!< OSC_CR.OSCEN Mask                       */
-#define OSC_CR_OSCEN_SHIFT                       (7U)                                                /*!< OSC_CR.OSCEN Position                   */
-#define OSC_CR_OSCEN(x)                          (((uint8_t)(((uint8_t)(x))<<7U))&0x80UL)            /*!< OSC_CR.OSCEN Field                      */
+#define OSC_CR_OSCINIT_MASK                      (0x1U)                                              /*!< OSC0_CR.OSCINIT Mask                    */
+#define OSC_CR_OSCINIT_SHIFT                     (0U)                                                /*!< OSC0_CR.OSCINIT Position                */
+#define OSC_CR_OSCINIT(x)                        (((uint8_t)(((uint8_t)(x))<<0U))&0x1UL)             /*!< OSC0_CR.OSCINIT Field                   */
+#define OSC_CR_HGO_MASK                          (0x2U)                                              /*!< OSC0_CR.HGO Mask                        */
+#define OSC_CR_HGO_SHIFT                         (1U)                                                /*!< OSC0_CR.HGO Position                    */
+#define OSC_CR_HGO(x)                            (((uint8_t)(((uint8_t)(x))<<1U))&0x2UL)             /*!< OSC0_CR.HGO Field                       */
+#define OSC_CR_RANGE_MASK                        (0x4U)                                              /*!< OSC0_CR.RANGE Mask                      */
+#define OSC_CR_RANGE_SHIFT                       (2U)                                                /*!< OSC0_CR.RANGE Position                  */
+#define OSC_CR_RANGE(x)                          (((uint8_t)(((uint8_t)(x))<<2U))&0x4UL)             /*!< OSC0_CR.RANGE Field                     */
+#define OSC_CR_OSCOS_MASK                        (0x10U)                                             /*!< OSC0_CR.OSCOS Mask                      */
+#define OSC_CR_OSCOS_SHIFT                       (4U)                                                /*!< OSC0_CR.OSCOS Position                  */
+#define OSC_CR_OSCOS(x)                          (((uint8_t)(((uint8_t)(x))<<4U))&0x10UL)            /*!< OSC0_CR.OSCOS Field                     */
+#define OSC_CR_OSCSTEN_MASK                      (0x20U)                                             /*!< OSC0_CR.OSCSTEN Mask                    */
+#define OSC_CR_OSCSTEN_SHIFT                     (5U)                                                /*!< OSC0_CR.OSCSTEN Position                */
+#define OSC_CR_OSCSTEN(x)                        (((uint8_t)(((uint8_t)(x))<<5U))&0x20UL)            /*!< OSC0_CR.OSCSTEN Field                   */
+#define OSC_CR_OSCEN_MASK                        (0x80U)                                             /*!< OSC0_CR.OSCEN Mask                      */
+#define OSC_CR_OSCEN_SHIFT                       (7U)                                                /*!< OSC0_CR.OSCEN Position                  */
+#define OSC_CR_OSCEN(x)                          (((uint8_t)(((uint8_t)(x))<<7U))&0x80UL)            /*!< OSC0_CR.OSCEN Field                     */
 /**
  * @} */ /* End group OSC_Register_Masks_GROUP 
  */
 
-/* OSC - Peripheral instance base addresses */
-#define OSC_BasePtr                    0x40065000UL //!< Peripheral base address
-#define OSC                            ((OSC_Type *) OSC_BasePtr) //!< Freescale base pointer
-#define OSC_BASE_PTR                   (OSC) //!< Freescale style base pointer
+/* OSC0 - Peripheral instance base addresses */
+#define OSC0_BasePtr                   0x40065000UL //!< Peripheral base address
+#define OSC0                           ((OSC_Type *) OSC0_BasePtr) //!< Freescale base pointer
+#define OSC0_BASE_PTR                  (OSC0) //!< Freescale style base pointer
 /**
  * @} */ /* End group OSC_Peripheral_access_layer_GROUP 
  */

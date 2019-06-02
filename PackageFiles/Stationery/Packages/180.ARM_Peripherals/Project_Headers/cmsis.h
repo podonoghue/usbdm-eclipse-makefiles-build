@@ -1081,10 +1081,11 @@ public:
     * @return osErrorParameter: a parameter is invalid or outside of a permitted range.
     */
    osEvent getISR() {
-      osEvent event = osMessageGet((osMessageQId)queue, 0);
+      auto event = osMessageGet((osMessageQId)queue, 0U);
       usbdm_assert (event.status != osErrorParameter, "Internal check failed");
       return event;
    }
+
    /**
     * Get pool ID
     *

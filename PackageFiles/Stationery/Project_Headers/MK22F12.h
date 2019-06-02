@@ -5,7 +5,7 @@
  *           Equivalent: 
  *
  * @version  V1.6
- * @date     2019/01
+ * @date     2019/04
  *
  *******************************************************************************************************/
 
@@ -113,11 +113,11 @@ typedef enum {
   DAC1_IRQn                     =  72,   /**<  88 Digital to Analogue Converter                                                    */
   ADC1_IRQn                     =  73,   /**<  89 Analogue to Digital Converter                                                    */
   I2C2_IRQn                     =  74,   /**<  90 Inter-Integrated Circuit                                                         */
-  CAN0_Message_IRQn             =  75,   /**<  91 Flex Controller Area Network module                                              */
+  CAN0_MessageBuffer_IRQn       =  75,   /**<  91 Flex Controller Area Network module                                              */
   CAN0_BusOff_IRQn              =  76,   /**<  92 Flex Controller Area Network module                                              */
   CAN0_Error_IRQn               =  77,   /**<  93 Flex Controller Area Network module                                              */
-  CAN0_Tx_IRQn                  =  78,   /**<  94 Flex Controller Area Network module                                              */
-  CAN0_Rx_IRQn                  =  79,   /**<  95 Flex Controller Area Network module                                              */
+  CAN0_TxWarning_IRQn           =  78,   /**<  94 Flex Controller Area Network module                                              */
+  CAN0_RxWarning_IRQn           =  79,   /**<  95 Flex Controller Area Network module                                              */
   CAN0_WakeUp_IRQn              =  80,   /**<  96 Flex Controller Area Network module                                              */
   SDHC_IRQn                     =  81,   /**<  97 Secured Digital Host Controller                                                  */
 } IRQn_Type;
@@ -213,11 +213,11 @@ extern void FTM3_IRQHandler(void);                   /**< FlexTimer Module      
 extern void DAC1_IRQHandler(void);                   /**< Digital to Analogue Converter                                                    */
 extern void ADC1_IRQHandler(void);                   /**< Analogue to Digital Converter                                                    */
 extern void I2C2_IRQHandler(void);                   /**< Inter-Integrated Circuit                                                         */
-extern void CAN0_Message_IRQHandler(void);           /**< Flex Controller Area Network module                                              */
+extern void CAN0_MessageBuffer_IRQHandler(void);     /**< Flex Controller Area Network module                                              */
 extern void CAN0_BusOff_IRQHandler(void);            /**< Flex Controller Area Network module                                              */
 extern void CAN0_Error_IRQHandler(void);             /**< Flex Controller Area Network module                                              */
-extern void CAN0_Tx_IRQHandler(void);                /**< Flex Controller Area Network module                                              */
-extern void CAN0_Rx_IRQHandler(void);                /**< Flex Controller Area Network module                                              */
+extern void CAN0_TxWarning_IRQHandler(void);         /**< Flex Controller Area Network module                                              */
+extern void CAN0_RxWarning_IRQHandler(void);         /**< Flex Controller Area Network module                                              */
 extern void CAN0_WakeUp_IRQHandler(void);            /**< Flex Controller Area Network module                                              */
 extern void SDHC_IRQHandler(void);                   /**< Secured Digital Host Controller                                                  */
 
@@ -658,7 +658,7 @@ typedef struct AXBS_Type {
 */
 
 /* ================================================================================ */
-/* ================           CAN0 (file:CAN0_1MASK)               ================ */
+/* ================           CAN0 (file:CAN0_FLEX_MK)             ================ */
 /* ================================================================================ */
 
 /**
@@ -1161,7 +1161,7 @@ typedef struct CAN_Type {
 #define CAN0_BasePtr                   0x40024000UL //!< Peripheral base address
 #define CAN0                           ((CAN_Type *) CAN0_BasePtr) //!< Freescale base pointer
 #define CAN0_BASE_PTR                  (CAN0) //!< Freescale style base pointer
-#define CAN0_IRQS { CAN0_Message_IRQn, CAN0_BusOff_IRQn, CAN0_Error_IRQn, CAN0_Tx_IRQn, CAN0_Rx_IRQn, CAN0_WakeUp_IRQn,  }
+#define CAN0_IRQS { CAN0_MessageBuffer_IRQn, CAN0_BusOff_IRQn, CAN0_Error_IRQn, CAN0_TxWarning_IRQn, CAN0_RxWarning_IRQn, CAN0_WakeUp_IRQn,  }
 
 /**
  * @} */ /* End group CAN_Peripheral_access_layer_GROUP 

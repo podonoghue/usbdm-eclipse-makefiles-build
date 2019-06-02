@@ -5,7 +5,7 @@
  *           Equivalent: 
  *
  * @version  V1.6
- * @date     2019/01
+ * @date     2019/04
  *
  *******************************************************************************************************/
 
@@ -59,7 +59,7 @@ typedef enum {
   DMA_Error_IRQn                =  16,   /**<  32 Enhanced Direct Memory Access                                                    */
   MCM_IRQn                      =  17,   /**<  33 Core Platform Miscellaneous Control Module                                       */
   FTFC_IRQn                     =  18,   /**<  34 Flash Memory Module                                                              */
-  Read_Collision_IRQn           =  19,   /**<  35 Flash Memory Module                                                              */
+  FTFC_Read_Collision_IRQn      =  19,   /**<  35 Flash Memory Module                                                              */
   LVD_LVW_IRQn                  =  20,   /**<  36 Power Management Controller                                                      */
   FTFC_Fault_IRQn               =  21,   /**<  37 Flash Memory Module                                                              */
   WDOG_EWM_IRQn                 =  22,   /**<  38 Watchdog timer                                                                   */
@@ -107,19 +107,19 @@ typedef enum {
   ENET_ERR_IRQn                 =  75,   /**<  91 Ethernet MAC-NET Core                                                            */
   ENET_STOP_IRQn                =  76,   /**<  92 Ethernet MAC-NET Core                                                            */
   ENET_WAKE_IRQn                =  77,   /**<  93 Ethernet MAC-NET Core                                                            */
-  CAN0_ORed_IRQn                =  78,   /**<  94 Flex Controller Area Network module                                              */
-  CAN0_Error_IRQn               =  79,   /**<  95 Flex Controller Area Network module                                              */
-  CAN0_Wake_Up_IRQn             =  80,   /**<  96 Flex Controller Area Network module                                              */
-  CAN0_ORed_0_15_MB_IRQn        =  81,   /**<  97 Flex Controller Area Network module                                              */
-  CAN0_ORed_16_31_MB_IRQn       =  82,   /**<  98 Flex Controller Area Network module                                              */
-  CAN1_ORed_IRQn                =  85,   /**< 101 Flex Controller Area Network module                                              */
-  CAN1_Error_IRQn               =  86,   /**< 102 Flex Controller Area Network module                                              */
-  CAN1_ORed_0_15_MB_IRQn        =  88,   /**< 104 Flex Controller Area Network module                                              */
-  CAN1_ORed_16_31_MB_IRQn       =  89,   /**< 105 Flex Controller Area Network module                                              */
-  CAN2_ORed_IRQn                =  92,   /**< 108 Flex Controller Area Network module                                              */
-  CAN2_Error_IRQn               =  93,   /**< 109 Flex Controller Area Network module                                              */
-  CAN2_ORed_0_15_MB_IRQn        =  95,   /**< 111 Flex Controller Area Network module                                              */
-  CAN2_ORed_16_31_MB_IRQn       =  96,   /**< 112 Flex Controller Area Network module                                              */
+  CAN0_ORed_IRQn                =  78,   /**<  94 FlexCAN - Bus Off, Tx/Rx Warnings, Tx/Rx Error count transition                  */
+  CAN0_Error_IRQn               =  79,   /**<  95 FlexCAN - Bus Error                                                              */
+  CAN0_WakeUp_IRQn              =  80,   /**<  96 FlexCAN - Wakeup and Sleep (Pretend networking)                                  */
+  CAN0_MessageBuffer_0_15_IRQn  =  81,   /**<  97 FlexCAN - Message Buffers (Mailboxes and FIFO)                                   */
+  CAN0_MessageBuffer_16_31_IRQn =  82,   /**<  98 FlexCAN - Message Buffers (FIFO and Mailboxes)                                   */
+  CAN1_ORed_IRQn                =  85,   /**< 101 FlexCAN - Bus Off, Tx/Rx Warnings, Tx/Rx Error count transition                  */
+  CAN1_Error_IRQn               =  86,   /**< 102 FlexCAN - Bus Error                                                              */
+  CAN1_MessageBuffer_0_15_IRQn  =  88,   /**< 104 FlexCAN - Message Buffers (Mailboxes and FIFO)                                   */
+  CAN1_MessageBuffer_16_31_IRQn =  89,   /**< 105 FlexCAN - Message Buffers (Mailboxes)                                            */
+  CAN2_ORed_IRQn                =  92,   /**< 108 FlexCAN - Bus Off, Tx/Rx Warnings, Tx/Rx Error count transition                  */
+  CAN2_Error_IRQn               =  93,   /**< 109 FlexCAN - Bus Error                                                              */
+  CAN2_MessageBuffer_0_15_IRQn  =  95,   /**< 111 FlexCAN - Message Buffers (Mailboxes and FIFO)                                   */
+  CAN2_MessageBuffer_16_31_IRQn =  96,   /**< 112 FlexCAN - Message Buffers (Mailboxes)                                            */
   FTM0_Ch0_Ch1_IRQn             =  99,   /**< 115 FlexTimer Module                                                                 */
   FTM0_Ch2_Ch3_IRQn             = 100,   /**< 116 FlexTimer Module                                                                 */
   FTM0_Ch4_Ch5_IRQn             = 101,   /**< 117 FlexTimer Module                                                                 */
@@ -207,7 +207,7 @@ extern void DMA15_IRQHandler(void);                  /**< Enhanced Direct Memory
 extern void DMA_Error_IRQHandler(void);              /**< Enhanced Direct Memory Access                                                    */
 extern void MCM_IRQHandler(void);                    /**< Core Platform Miscellaneous Control Module                                       */
 extern void FTFC_IRQHandler(void);                   /**< Flash Memory Module                                                              */
-extern void Read_Collision_IRQHandler(void);         /**< Flash Memory Module                                                              */
+extern void FTFC_Read_Collision_IRQHandler(void);    /**< Flash Memory Module                                                              */
 extern void LVD_LVW_IRQHandler(void);                /**< Power Management Controller                                                      */
 extern void FTFC_Fault_IRQHandler(void);             /**< Flash Memory Module                                                              */
 extern void WDOG_EWM_IRQHandler(void);               /**< Watchdog timer                                                                   */
@@ -255,19 +255,19 @@ extern void ENET_RX_IRQHandler(void);                /**< Ethernet MAC-NET Core 
 extern void ENET_ERR_IRQHandler(void);               /**< Ethernet MAC-NET Core                                                            */
 extern void ENET_STOP_IRQHandler(void);              /**< Ethernet MAC-NET Core                                                            */
 extern void ENET_WAKE_IRQHandler(void);              /**< Ethernet MAC-NET Core                                                            */
-extern void CAN0_ORed_IRQHandler(void);              /**< Flex Controller Area Network module                                              */
-extern void CAN0_Error_IRQHandler(void);             /**< Flex Controller Area Network module                                              */
-extern void CAN0_Wake_Up_IRQHandler(void);           /**< Flex Controller Area Network module                                              */
-extern void CAN0_ORed_0_15_MB_IRQHandler(void);      /**< Flex Controller Area Network module                                              */
-extern void CAN0_ORed_16_31_MB_IRQHandler(void);     /**< Flex Controller Area Network module                                              */
-extern void CAN1_ORed_IRQHandler(void);              /**< Flex Controller Area Network module                                              */
-extern void CAN1_Error_IRQHandler(void);             /**< Flex Controller Area Network module                                              */
-extern void CAN1_ORed_0_15_MB_IRQHandler(void);      /**< Flex Controller Area Network module                                              */
-extern void CAN1_ORed_16_31_MB_IRQHandler(void);     /**< Flex Controller Area Network module                                              */
-extern void CAN2_ORed_IRQHandler(void);              /**< Flex Controller Area Network module                                              */
-extern void CAN2_Error_IRQHandler(void);             /**< Flex Controller Area Network module                                              */
-extern void CAN2_ORed_0_15_MB_IRQHandler(void);      /**< Flex Controller Area Network module                                              */
-extern void CAN2_ORed_16_31_MB_IRQHandler(void);     /**< Flex Controller Area Network module                                              */
+extern void CAN0_ORed_IRQHandler(void);              /**< FlexCAN - Bus Off, Tx/Rx Warnings, Tx/Rx Error count transition                  */
+extern void CAN0_Error_IRQHandler(void);             /**< FlexCAN - Bus Error                                                              */
+extern void CAN0_WakeUp_IRQHandler(void);            /**< FlexCAN - Wakeup and Sleep (Pretend networking)                                  */
+extern void CAN0_MessageBuffer_0_15_IRQHandler(void);   /**< FlexCAN - Message Buffers (Mailboxes and FIFO)                                   */
+extern void CAN0_MessageBuffer_16_31_IRQHandler(void);   /**< FlexCAN - Message Buffers (FIFO and Mailboxes)                                   */
+extern void CAN1_ORed_IRQHandler(void);              /**< FlexCAN - Bus Off, Tx/Rx Warnings, Tx/Rx Error count transition                  */
+extern void CAN1_Error_IRQHandler(void);             /**< FlexCAN - Bus Error                                                              */
+extern void CAN1_MessageBuffer_0_15_IRQHandler(void);   /**< FlexCAN - Message Buffers (Mailboxes and FIFO)                                   */
+extern void CAN1_MessageBuffer_16_31_IRQHandler(void);   /**< FlexCAN - Message Buffers (Mailboxes)                                            */
+extern void CAN2_ORed_IRQHandler(void);              /**< FlexCAN - Bus Off, Tx/Rx Warnings, Tx/Rx Error count transition                  */
+extern void CAN2_Error_IRQHandler(void);             /**< FlexCAN - Bus Error                                                              */
+extern void CAN2_MessageBuffer_0_15_IRQHandler(void);   /**< FlexCAN - Message Buffers (Mailboxes and FIFO)                                   */
+extern void CAN2_MessageBuffer_16_31_IRQHandler(void);   /**< FlexCAN - Message Buffers (Mailboxes)                                            */
 extern void FTM0_Ch0_Ch1_IRQHandler(void);           /**< FlexTimer Module                                                                 */
 extern void FTM0_Ch2_Ch3_IRQHandler(void);           /**< FlexTimer Module                                                                 */
 extern void FTM0_Ch4_Ch5_IRQHandler(void);           /**< FlexTimer Module                                                                 */
@@ -919,7 +919,7 @@ typedef struct AIPS_Type {
 */
 
 /* ================================================================================ */
-/* ================           CAN0 (file:CAN0_S32K14x)             ================ */
+/* ================           CAN0 (file:CAN0_FLEX_S32K14x)        ================ */
 /* ================================================================================ */
 
 /**
@@ -1716,7 +1716,7 @@ typedef struct CAN_Type {
 #define CAN0_BasePtr                   0x40024000UL //!< Peripheral base address
 #define CAN0                           ((CAN_Type *) CAN0_BasePtr) //!< Freescale base pointer
 #define CAN0_BASE_PTR                  (CAN0) //!< Freescale style base pointer
-#define CAN0_IRQS { CAN0_ORed_IRQn, CAN0_Error_IRQn, CAN0_Wake_Up_IRQn, CAN0_ORed_0_15_MB_IRQn, CAN0_ORed_16_31_MB_IRQn,  }
+#define CAN0_IRQS { CAN0_ORed_IRQn, CAN0_Error_IRQn, CAN0_WakeUp_IRQn, CAN0_MessageBuffer_0_15_IRQn, CAN0_MessageBuffer_16_31_IRQn,  }
 
 /**
  * @} */ /* End group CAN_Peripheral_access_layer_GROUP 
@@ -1739,7 +1739,7 @@ typedef struct CAN_Type {
 #define CAN1_BasePtr                   0x40025000UL //!< Peripheral base address
 #define CAN1                           ((CAN_Type *) CAN1_BasePtr) //!< Freescale base pointer
 #define CAN1_BASE_PTR                  (CAN1) //!< Freescale style base pointer
-#define CAN1_IRQS { CAN1_ORed_IRQn, CAN1_Error_IRQn, CAN1_ORed_0_15_MB_IRQn, CAN1_ORed_16_31_MB_IRQn,  }
+#define CAN1_IRQS { CAN1_ORed_IRQn, CAN1_Error_IRQn, CAN1_MessageBuffer_0_15_IRQn, CAN1_MessageBuffer_16_31_IRQn,  }
 
 /**
  * @} */ /* End group CAN_Peripheral_access_layer_GROUP 
@@ -1762,7 +1762,7 @@ typedef struct CAN_Type {
 #define CAN2_BasePtr                   0x4002B000UL //!< Peripheral base address
 #define CAN2                           ((CAN_Type *) CAN2_BasePtr) //!< Freescale base pointer
 #define CAN2_BASE_PTR                  (CAN2) //!< Freescale style base pointer
-#define CAN2_IRQS { CAN2_ORed_IRQn, CAN2_Error_IRQn, CAN2_ORed_0_15_MB_IRQn, CAN2_ORed_16_31_MB_IRQn,  }
+#define CAN2_IRQS { CAN2_ORed_IRQn, CAN2_Error_IRQn, CAN2_MessageBuffer_0_15_IRQn, CAN2_MessageBuffer_16_31_IRQn,  }
 
 /**
  * @} */ /* End group CAN_Peripheral_access_layer_GROUP 
@@ -4548,7 +4548,7 @@ typedef struct FTFC_Type {
 #define FTFC_BasePtr                   0x40020000UL //!< Peripheral base address
 #define FTFC                           ((FTFC_Type *) FTFC_BasePtr) //!< Freescale base pointer
 #define FTFC_BASE_PTR                  (FTFC) //!< Freescale style base pointer
-#define FTFC_IRQS { FTFC_IRQn, Read_Collision_IRQn, FTFC_Fault_IRQn,  }
+#define FTFC_IRQS { FTFC_IRQn, FTFC_Read_Collision_IRQn, FTFC_Fault_IRQn,  }
 
 /**
  * @} */ /* End group FTFC_Peripheral_access_layer_GROUP 

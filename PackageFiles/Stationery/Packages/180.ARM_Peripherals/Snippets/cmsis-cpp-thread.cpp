@@ -11,36 +11,47 @@
 #include "cmsis.h"                      // CMSIS RTX
 
 using namespace USBDM;
+using namespace CMSIS;
 
-using GREEN_LED   = USBDM::$(demo.cpp.green.led:GpioB<0>);
+using GREEN_LED   = GpioB<0>;
 
-/*
- * Thread example
- */
-static void threadExample() {
-   /** Thread function */
-   static auto threadFn = [] (const void *) {
-      for(;;) {
-         GREEN_LED::toggle();
-         osDelay(2000);
-      }
-   };
-   /** Thread class */
-   static CMSIS::Thread thread(threadFn);
+class MyThread : public ThreadClass {
+private:
+   const char     *fName;
+   const unsigned  fDelayTime;
+   unsigned count = 0;
 
-   GREEN_LED::setOutput();
+   virtual void task() override {
+            for(;;) {
+               console
+                  .lock()
+                  .write("Hello from ").write(fName).write(", ").writeln(count++)
+                  .unlock();
+               delay(fDelayTime);
+            }
+         }
 
-   /* Start thread */
-   thread.run();
+public:
+   MyThread(const char *name, unsigned delayTime) :
+      ThreadClass(), fName(name), fDelayTime(delayTime) {
+   }
+};
 
-   console.write(" thread::getId() = ").write(thread.getId());
-}
 
 int main() {
-   threadExample();
+   MyThread thread1("Thread 1", 200);
+   MyThread thread2("             Thread 2", 400);
+
+   thread1.run();
+   thread2.run();
 
    for(;;) {
-      console.writeln("This is the main thread running in a loop");
+      __asm("nop");
+      console
+         .lock()
+         .writeln("This is the main thread running in a loop")
+         .unlock();
+      Thread::delay(100);
    }
    return 0;
 }

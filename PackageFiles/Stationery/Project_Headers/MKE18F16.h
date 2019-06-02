@@ -5,7 +5,7 @@
  *           Equivalent: 
  *
  * @version  V1.6
- * @date     2019/01
+ * @date     2019/04
  *
  *******************************************************************************************************/
 
@@ -101,18 +101,12 @@ typedef enum {
   PDB2_IRQn                     =  77,   /**<  93 Programmable Delay Block                                                         */
   CAN0_ORed_IRQn                =  78,   /**<  94 Flex Controller Area Network module                                              */
   CAN0_Error_IRQn               =  79,   /**<  95 Flex Controller Area Network module                                              */
-  CAN0_Wake_Up_IRQn             =  80,   /**<  96 Flex Controller Area Network module                                              */
-  CAN0_ORed_Message_buffer_IRQn =  81,   /**<  97 Flex Controller Area Network module                                              */
-  CAN0_Reserved1_IRQn           =  82,   /**<  98 Flex Controller Area Network module                                              */
-  CAN0_Reserved2_IRQn           =  83,   /**<  99 Flex Controller Area Network module                                              */
-  CAN0_Reserved3_IRQn           =  84,   /**< 100 Flex Controller Area Network module                                              */
+  CAN0_WakeUp_IRQn              =  80,   /**<  96 Flex Controller Area Network module                                              */
+  CAN0_MessageBuffer_IRQn       =  81,   /**<  97 Flex Controller Area Network module                                              */
   CAN1_ORed_IRQn                =  85,   /**< 101 Flex Controller Area Network module                                              */
   CAN1_Error_IRQn               =  86,   /**< 102 Flex Controller Area Network module                                              */
   CAN1_Wake_Up_IRQn             =  87,   /**< 103 Flex Controller Area Network module                                              */
-  CAN1_ORed_Message_buffer_IRQn =  88,   /**< 104 Flex Controller Area Network module                                              */
-  CAN1_Reserved1_IRQn           =  89,   /**< 105 Flex Controller Area Network module                                              */
-  CAN1_Reserved2_IRQn           =  90,   /**< 106 Flex Controller Area Network module                                              */
-  CAN1_Reserved3_IRQn           =  91,   /**< 107 Flex Controller Area Network module                                              */
+  CAN1_MessageBuffer_IRQn       =  88,   /**< 104 Flex Controller Area Network module                                              */
 } IRQn_Type;
 
 /**
@@ -194,18 +188,12 @@ extern void ADC2_IRQHandler(void);                   /**< Analog-to-Digital Conv
 extern void PDB2_IRQHandler(void);                   /**< Programmable Delay Block                                                         */
 extern void CAN0_ORed_IRQHandler(void);              /**< Flex Controller Area Network module                                              */
 extern void CAN0_Error_IRQHandler(void);             /**< Flex Controller Area Network module                                              */
-extern void CAN0_Wake_Up_IRQHandler(void);           /**< Flex Controller Area Network module                                              */
-extern void CAN0_ORed_Message_buffer_IRQHandler(void);   /**< Flex Controller Area Network module                                              */
-extern void CAN0_Reserved1_IRQHandler(void);         /**< Flex Controller Area Network module                                              */
-extern void CAN0_Reserved2_IRQHandler(void);         /**< Flex Controller Area Network module                                              */
-extern void CAN0_Reserved3_IRQHandler(void);         /**< Flex Controller Area Network module                                              */
+extern void CAN0_WakeUp_IRQHandler(void);            /**< Flex Controller Area Network module                                              */
+extern void CAN0_MessageBuffer_IRQHandler(void);     /**< Flex Controller Area Network module                                              */
 extern void CAN1_ORed_IRQHandler(void);              /**< Flex Controller Area Network module                                              */
 extern void CAN1_Error_IRQHandler(void);             /**< Flex Controller Area Network module                                              */
 extern void CAN1_Wake_Up_IRQHandler(void);           /**< Flex Controller Area Network module                                              */
-extern void CAN1_ORed_Message_buffer_IRQHandler(void);   /**< Flex Controller Area Network module                                              */
-extern void CAN1_Reserved1_IRQHandler(void);         /**< Flex Controller Area Network module                                              */
-extern void CAN1_Reserved2_IRQHandler(void);         /**< Flex Controller Area Network module                                              */
-extern void CAN1_Reserved3_IRQHandler(void);         /**< Flex Controller Area Network module                                              */
+extern void CAN1_MessageBuffer_IRQHandler(void);     /**< Flex Controller Area Network module                                              */
 
 /**
  * @} */ /* End group Interrupt_handler_prototypes_GROUP 
@@ -814,7 +802,7 @@ typedef struct AIPS_Type {
 */
 
 /* ================================================================================ */
-/* ================           CAN0 (file:CAN0_MKE16F16)            ================ */
+/* ================           CAN0 (file:CAN0_FLEX_MKE16F16)       ================ */
 /* ================================================================================ */
 
 /**

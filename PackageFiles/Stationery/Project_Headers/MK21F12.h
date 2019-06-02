@@ -5,7 +5,7 @@
  *           Equivalent: 
  *
  * @version  V1.6
- * @date     2019/01
+ * @date     2019/04
  *
  *******************************************************************************************************/
 
@@ -110,11 +110,11 @@ typedef enum {
   DAC1_IRQn                     =  72,   /**<  88 Digital to Analogue Converter                                                    */
   ADC1_IRQn                     =  73,   /**<  89 Analogue to Digital Converter                                                    */
   I2C2_IRQn                     =  74,   /**<  90 Inter-Integrated Circuit                                                         */
-  CAN0_Message_IRQn             =  75,   /**<  91 Flex Controller Area Network module                                              */
+  CAN0_MessageBuffer_IRQn       =  75,   /**<  91 Flex Controller Area Network module                                              */
   CAN0_BusOff_IRQn              =  76,   /**<  92 Flex Controller Area Network module                                              */
   CAN0_Error_IRQn               =  77,   /**<  93 Flex Controller Area Network module                                              */
-  CAN0_Tx_IRQn                  =  78,   /**<  94 Flex Controller Area Network module                                              */
-  CAN0_Rx_IRQn                  =  79,   /**<  95 Flex Controller Area Network module                                              */
+  CAN0_TxWarning_IRQn           =  78,   /**<  94 Flex Controller Area Network module                                              */
+  CAN0_RxWarning_IRQn           =  79,   /**<  95 Flex Controller Area Network module                                              */
   CAN0_WakeUp_IRQn              =  80,   /**<  96 Flex Controller Area Network module                                              */
   SDHC_IRQn                     =  81,   /**<  97 Secured Digital Host Controller                                                  */
 } IRQn_Type;
@@ -207,11 +207,11 @@ extern void FTM3_IRQHandler(void);                   /**< FlexTimer Module      
 extern void DAC1_IRQHandler(void);                   /**< Digital to Analogue Converter                                                    */
 extern void ADC1_IRQHandler(void);                   /**< Analogue to Digital Converter                                                    */
 extern void I2C2_IRQHandler(void);                   /**< Inter-Integrated Circuit                                                         */
-extern void CAN0_Message_IRQHandler(void);           /**< Flex Controller Area Network module                                              */
+extern void CAN0_MessageBuffer_IRQHandler(void);     /**< Flex Controller Area Network module                                              */
 extern void CAN0_BusOff_IRQHandler(void);            /**< Flex Controller Area Network module                                              */
 extern void CAN0_Error_IRQHandler(void);             /**< Flex Controller Area Network module                                              */
-extern void CAN0_Tx_IRQHandler(void);                /**< Flex Controller Area Network module                                              */
-extern void CAN0_Rx_IRQHandler(void);                /**< Flex Controller Area Network module                                              */
+extern void CAN0_TxWarning_IRQHandler(void);         /**< Flex Controller Area Network module                                              */
+extern void CAN0_RxWarning_IRQHandler(void);         /**< Flex Controller Area Network module                                              */
 extern void CAN0_WakeUp_IRQHandler(void);            /**< Flex Controller Area Network module                                              */
 extern void SDHC_IRQHandler(void);                   /**< Secured Digital Host Controller                                                  */
 
@@ -867,7 +867,7 @@ typedef struct AXBS_Type {
 */
 
 /* ================================================================================ */
-/* ================           CAN0 (file:CAN0_2MASK)               ================ */
+/* ================           CAN0 (file:CAN0_FLEX_MK)             ================ */
 /* ================================================================================ */
 
 /**
@@ -890,13 +890,13 @@ typedef struct CAN_Type {
    __IO uint32_t  RX15MASK;                     /**< 0018: Rx 15 Mask register                                          */
    __IO uint32_t  ECR;                          /**< 001C: Error Counter                                                */
    __IO uint32_t  ESR1;                         /**< 0020: Error and Status 1 register                                  */
-   __IO uint32_t  IMASK2;                       /**< 0024: Interrupt Masks 2 Register                                   */
+        uint8_t   RESERVED_1[4];                /**< 0024: 0x4 bytes                                                    */
    __IO uint32_t  IMASK1;                       /**< 0028: Interrupt Masks 1 register                                   */
-   __IO uint32_t  IFLAG2;                       /**< 002C: Interrupt Flags 2 Register                                   */
+        uint8_t   RESERVED_2[4];                /**< 002C: 0x4 bytes                                                    */
    __IO uint32_t  IFLAG1;                       /**< 0030: Interrupt Flags 1 register                                   */
    __IO uint32_t  CTRL2;                        /**< 0034: Control 2 Register                                           */
    __I  uint32_t  ESR2;                         /**< 0038: Error and Status 2 register                                  */
-        uint8_t   RESERVED_1[8];                /**< 003C: 0x8 bytes                                                    */
+        uint8_t   RESERVED_3[8];                /**< 003C: 0x8 bytes                                                    */
    __I  uint32_t  CRCR;                         /**< 0044: CRC Register                                                 */
    union {                                      /**< 0048: (size=0004)                                                  */
       __IO uint32_t  RXFGMASK;                  /**< 0048: Rx FIFO Global Mask register                                 */
@@ -905,14 +905,14 @@ typedef struct CAN_Type {
       __IO uint32_t  RXFGMASK_C;                /**< 0048: Rx FIFO Global Mask register (format C)                      */
    };
    __I  uint32_t  RXFIR;                        /**< 004C: Rx FIFO Information Register                                 */
-        uint8_t   RESERVED_2[48];               /**< 0050: 0x30 bytes                                                   */
+        uint8_t   RESERVED_4[48];               /**< 0050: 0x30 bytes                                                   */
    union {                                      /**< 0080: (size=0100)                                                  */
       struct {
          __IO uint32_t  CS;                     /**< 0080: FIFO Message Buffer CS Register                              */
          __IO uint32_t  ID;                     /**< 0084: FIFO Message Buffer ID Register                              */
          __IO uint32_t  WORD0;                  /**< 0088: FIFO Message Buffer WORD0 Register                           */
          __IO uint32_t  WORD1;                  /**< 008C: FIFO Message Buffer WORD1 Register                           */
-              uint8_t   RESERVED_3[80];         /**< 0090: 0x50 bytes                                                   */
+              uint8_t   RESERVED_5[80];         /**< 0090: 0x50 bytes                                                   */
          union {                                /**< 00E0: (size=00A0)                                                  */
             __IO uint32_t  FILTER_ID[CAN_FIFO_FILTER_COUNT]; /**< 00E0: FIFO Message Filter ID                                       */
             __IO uint32_t  FILTER_ID_A[CAN_FIFO_FILTER_COUNT]; /**< 00E0: FIFO Message Filter ID (format A)                            */
@@ -927,7 +927,7 @@ typedef struct CAN_Type {
          __IO uint32_t  WORD1;                  /**< 008C: Message Buffer 0 WORD1 Register                              */
       } MB[CAN_MESSAGE_BUFFER_COUNT];           /**< 0080: (cluster: size=0x0100, 256)                                  */
    };
-        uint8_t   RESERVED_5[1792];             /**< 0180: 0x700 bytes                                                  */
+        uint8_t   RESERVED_7[1792];             /**< 0180: 0x700 bytes                                                  */
    __IO uint32_t  RXIMR[CAN_MESSAGE_BUFFER_COUNT]; /**< 0880: Rx Individual Mask                                           */
 } CAN_Type;
 
@@ -1129,18 +1129,10 @@ typedef struct CAN_Type {
 #define CAN_ESR1_SYNCH_MASK                      (0x40000U)                                          /*!< CAN0_ESR1.SYNCH Mask                    */
 #define CAN_ESR1_SYNCH_SHIFT                     (18U)                                               /*!< CAN0_ESR1.SYNCH Position                */
 #define CAN_ESR1_SYNCH(x)                        (((uint32_t)(((uint32_t)(x))<<18U))&0x40000UL)      /*!< CAN0_ESR1.SYNCH Field                   */
-/* ------- IMASK2 Bit Fields                        ------ */
-#define CAN_IMASK2_BUFHM_MASK                    (0xFFFFFFFFU)                                       /*!< CAN0_IMASK2.BUFHM Mask                  */
-#define CAN_IMASK2_BUFHM_SHIFT                   (0U)                                                /*!< CAN0_IMASK2.BUFHM Position              */
-#define CAN_IMASK2_BUFHM(x)                      (((uint32_t)(((uint32_t)(x))<<0U))&0xFFFFFFFFUL)    /*!< CAN0_IMASK2.BUFHM Field                 */
 /* ------- IMASK1 Bit Fields                        ------ */
 #define CAN_IMASK1_BUFLM_MASK                    (0xFFFFFFFFU)                                       /*!< CAN0_IMASK1.BUFLM Mask                  */
 #define CAN_IMASK1_BUFLM_SHIFT                   (0U)                                                /*!< CAN0_IMASK1.BUFLM Position              */
 #define CAN_IMASK1_BUFLM(x)                      (((uint32_t)(((uint32_t)(x))<<0U))&0xFFFFFFFFUL)    /*!< CAN0_IMASK1.BUFLM Field                 */
-/* ------- IFLAG2 Bit Fields                        ------ */
-#define CAN_IFLAG2_BUFHI_MASK                    (0xFFFFFFFFU)                                       /*!< CAN0_IFLAG2.BUFHI Mask                  */
-#define CAN_IFLAG2_BUFHI_SHIFT                   (0U)                                                /*!< CAN0_IFLAG2.BUFHI Position              */
-#define CAN_IFLAG2_BUFHI(x)                      (((uint32_t)(((uint32_t)(x))<<0U))&0xFFFFFFFFUL)    /*!< CAN0_IFLAG2.BUFHI Field                 */
 /* ------- IFLAG1 Bit Fields                        ------ */
 #define CAN_IFLAG1_BUF4TO0I_MASK                 (0x1FU)                                             /*!< CAN0_IFLAG1.BUF4TO0I Mask               */
 #define CAN_IFLAG1_BUF4TO0I_SHIFT                (0U)                                                /*!< CAN0_IFLAG1.BUF4TO0I Position           */
@@ -1378,7 +1370,7 @@ typedef struct CAN_Type {
 #define CAN0_BasePtr                   0x40024000UL //!< Peripheral base address
 #define CAN0                           ((CAN_Type *) CAN0_BasePtr) //!< Freescale base pointer
 #define CAN0_BASE_PTR                  (CAN0) //!< Freescale style base pointer
-#define CAN0_IRQS { CAN0_Message_IRQn, CAN0_BusOff_IRQn, CAN0_Error_IRQn, CAN0_Tx_IRQn, CAN0_Rx_IRQn, CAN0_WakeUp_IRQn,  }
+#define CAN0_IRQS { CAN0_MessageBuffer_IRQn, CAN0_BusOff_IRQn, CAN0_Error_IRQn, CAN0_TxWarning_IRQn, CAN0_RxWarning_IRQn, CAN0_WakeUp_IRQn,  }
 
 /**
  * @} */ /* End group CAN_Peripheral_access_layer_GROUP 

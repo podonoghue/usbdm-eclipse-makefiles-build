@@ -5,7 +5,7 @@
  *           Equivalent: 
  *
  * @version  V1.6
- * @date     2019/01
+ * @date     2019/04
  *
  *******************************************************************************************************/
 
@@ -3231,12 +3231,7 @@ typedef struct LLWU_Type {
    };
    __I  uint8_t   MF;                           /**< 000D: Module Flag Register                                         */
    union {                                      /**< 000E: (size=0004)                                                  */
-      struct {                                  /**< 000E: (size=0004)                                                  */
-      __IO uint8_t   FILT1;                     /**< 000E: Pin Filter 1 register                                        */
-      __IO uint8_t   FILT2;                     /**< 000F: Pin Filter 2 register                                        */
-      __IO uint8_t   FILT3;                     /**< 0010: Pin Filter 3 register                                        */
-      __IO uint8_t   FILT4;                     /**< 0011: Pin Filter 4 register                                        */
-      };
+      __IO uint8_t   FILT[4];                   /**< 000E: Pin Filter  register                                         */
       struct {                                  /**< 000E: (size=0004)                                                  */
          __IO uint8_t   FILT1;                  /**< 000E: Pin Filter  register                                         */
          __IO uint8_t   FILT2;                  /**< 000F: Pin Filter  register                                         */
@@ -5524,7 +5519,7 @@ typedef struct NV_Type {
 */
 
 /* ================================================================================ */
-/* ================           OSC (file:OSC_MKL82Z7)               ================ */
+/* ================           OSC0 (file:OSC0_MKL82Z7)             ================ */
 /* ================================================================================ */
 
 /**
@@ -5546,7 +5541,7 @@ typedef struct OSC_Type {
  */
 
 /* -------------------------------------------------------------------------------- */
-/* -----------     'OSC' Position & Mask macros                         ----------- */
+/* -----------     'OSC0' Position & Mask macros                        ----------- */
 /* -------------------------------------------------------------------------------- */
 
 /**
@@ -5555,36 +5550,36 @@ typedef struct OSC_Type {
 * @{
 */
 /* ------- CR Bit Fields                            ------ */
-#define OSC_CR_SC16P_MASK                        (0x1U)                                              /*!< OSC_CR.SC16P Mask                       */
-#define OSC_CR_SC16P_SHIFT                       (0U)                                                /*!< OSC_CR.SC16P Position                   */
-#define OSC_CR_SC16P(x)                          (((uint8_t)(((uint8_t)(x))<<0U))&0x1UL)             /*!< OSC_CR.SC16P Field                      */
-#define OSC_CR_SC8P_MASK                         (0x2U)                                              /*!< OSC_CR.SC8P Mask                        */
-#define OSC_CR_SC8P_SHIFT                        (1U)                                                /*!< OSC_CR.SC8P Position                    */
-#define OSC_CR_SC8P(x)                           (((uint8_t)(((uint8_t)(x))<<1U))&0x2UL)             /*!< OSC_CR.SC8P Field                       */
-#define OSC_CR_SC4P_MASK                         (0x4U)                                              /*!< OSC_CR.SC4P Mask                        */
-#define OSC_CR_SC4P_SHIFT                        (2U)                                                /*!< OSC_CR.SC4P Position                    */
-#define OSC_CR_SC4P(x)                           (((uint8_t)(((uint8_t)(x))<<2U))&0x4UL)             /*!< OSC_CR.SC4P Field                       */
-#define OSC_CR_SC2P_MASK                         (0x8U)                                              /*!< OSC_CR.SC2P Mask                        */
-#define OSC_CR_SC2P_SHIFT                        (3U)                                                /*!< OSC_CR.SC2P Position                    */
-#define OSC_CR_SC2P(x)                           (((uint8_t)(((uint8_t)(x))<<3U))&0x8UL)             /*!< OSC_CR.SC2P Field                       */
-#define OSC_CR_EREFSTEN_MASK                     (0x20U)                                             /*!< OSC_CR.EREFSTEN Mask                    */
-#define OSC_CR_EREFSTEN_SHIFT                    (5U)                                                /*!< OSC_CR.EREFSTEN Position                */
-#define OSC_CR_EREFSTEN(x)                       (((uint8_t)(((uint8_t)(x))<<5U))&0x20UL)            /*!< OSC_CR.EREFSTEN Field                   */
-#define OSC_CR_ERCLKEN_MASK                      (0x80U)                                             /*!< OSC_CR.ERCLKEN Mask                     */
-#define OSC_CR_ERCLKEN_SHIFT                     (7U)                                                /*!< OSC_CR.ERCLKEN Position                 */
-#define OSC_CR_ERCLKEN(x)                        (((uint8_t)(((uint8_t)(x))<<7U))&0x80UL)            /*!< OSC_CR.ERCLKEN Field                    */
+#define OSC_CR_SC16P_MASK                        (0x1U)                                              /*!< OSC0_CR.SC16P Mask                      */
+#define OSC_CR_SC16P_SHIFT                       (0U)                                                /*!< OSC0_CR.SC16P Position                  */
+#define OSC_CR_SC16P(x)                          (((uint8_t)(((uint8_t)(x))<<0U))&0x1UL)             /*!< OSC0_CR.SC16P Field                     */
+#define OSC_CR_SC8P_MASK                         (0x2U)                                              /*!< OSC0_CR.SC8P Mask                       */
+#define OSC_CR_SC8P_SHIFT                        (1U)                                                /*!< OSC0_CR.SC8P Position                   */
+#define OSC_CR_SC8P(x)                           (((uint8_t)(((uint8_t)(x))<<1U))&0x2UL)             /*!< OSC0_CR.SC8P Field                      */
+#define OSC_CR_SC4P_MASK                         (0x4U)                                              /*!< OSC0_CR.SC4P Mask                       */
+#define OSC_CR_SC4P_SHIFT                        (2U)                                                /*!< OSC0_CR.SC4P Position                   */
+#define OSC_CR_SC4P(x)                           (((uint8_t)(((uint8_t)(x))<<2U))&0x4UL)             /*!< OSC0_CR.SC4P Field                      */
+#define OSC_CR_SC2P_MASK                         (0x8U)                                              /*!< OSC0_CR.SC2P Mask                       */
+#define OSC_CR_SC2P_SHIFT                        (3U)                                                /*!< OSC0_CR.SC2P Position                   */
+#define OSC_CR_SC2P(x)                           (((uint8_t)(((uint8_t)(x))<<3U))&0x8UL)             /*!< OSC0_CR.SC2P Field                      */
+#define OSC_CR_EREFSTEN_MASK                     (0x20U)                                             /*!< OSC0_CR.EREFSTEN Mask                   */
+#define OSC_CR_EREFSTEN_SHIFT                    (5U)                                                /*!< OSC0_CR.EREFSTEN Position               */
+#define OSC_CR_EREFSTEN(x)                       (((uint8_t)(((uint8_t)(x))<<5U))&0x20UL)            /*!< OSC0_CR.EREFSTEN Field                  */
+#define OSC_CR_ERCLKEN_MASK                      (0x80U)                                             /*!< OSC0_CR.ERCLKEN Mask                    */
+#define OSC_CR_ERCLKEN_SHIFT                     (7U)                                                /*!< OSC0_CR.ERCLKEN Position                */
+#define OSC_CR_ERCLKEN(x)                        (((uint8_t)(((uint8_t)(x))<<7U))&0x80UL)            /*!< OSC0_CR.ERCLKEN Field                   */
 /* ------- DIV Bit Fields                           ------ */
-#define OSC_DIV_ERPS_MASK                        (0xC0U)                                             /*!< OSC_DIV.ERPS Mask                       */
-#define OSC_DIV_ERPS_SHIFT                       (6U)                                                /*!< OSC_DIV.ERPS Position                   */
-#define OSC_DIV_ERPS(x)                          (((uint8_t)(((uint8_t)(x))<<6U))&0xC0UL)            /*!< OSC_DIV.ERPS Field                      */
+#define OSC_DIV_ERPS_MASK                        (0xC0U)                                             /*!< OSC0_DIV.ERPS Mask                      */
+#define OSC_DIV_ERPS_SHIFT                       (6U)                                                /*!< OSC0_DIV.ERPS Position                  */
+#define OSC_DIV_ERPS(x)                          (((uint8_t)(((uint8_t)(x))<<6U))&0xC0UL)            /*!< OSC0_DIV.ERPS Field                     */
 /**
  * @} */ /* End group OSC_Register_Masks_GROUP 
  */
 
-/* OSC - Peripheral instance base addresses */
-#define OSC_BasePtr                    0x40065000UL //!< Peripheral base address
-#define OSC                            ((OSC_Type *) OSC_BasePtr) //!< Freescale base pointer
-#define OSC_BASE_PTR                   (OSC) //!< Freescale style base pointer
+/* OSC0 - Peripheral instance base addresses */
+#define OSC0_BasePtr                   0x40065000UL //!< Peripheral base address
+#define OSC0                           ((OSC_Type *) OSC0_BasePtr) //!< Freescale base pointer
+#define OSC0_BASE_PTR                  (OSC0) //!< Freescale style base pointer
 /**
  * @} */ /* End group OSC_Peripheral_access_layer_GROUP 
  */

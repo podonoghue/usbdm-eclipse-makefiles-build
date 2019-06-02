@@ -353,6 +353,7 @@ public:
     * @note The USBDM error code will also be set on error
     */
    virtual osStatus endTransaction() = 0;
+//#elif defined(__FREE_RTOS)
 #else
    /**
     * Obtain SPI - dummy routine (non RTOS)

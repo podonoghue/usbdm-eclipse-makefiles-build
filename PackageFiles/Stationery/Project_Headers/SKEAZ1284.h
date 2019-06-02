@@ -5,7 +5,7 @@
  *           Equivalent: 
  *
  * @version  V1.6
- * @date     2019/01
+ * @date     2019/04
  *
  *******************************************************************************************************/
 
@@ -498,6 +498,253 @@ typedef struct BP_Type {
 #define BP_BASE_PTR                    (BP) //!< Freescale style base pointer
 /**
  * @} */ /* End group BP_Peripheral_access_layer_GROUP 
+ */
+/**
+* @addtogroup CAN_Peripheral_access_layer_GROUP CAN Peripheral Access Layer
+* @brief C Struct for CAN
+* @{
+*/
+
+/* ================================================================================ */
+/* ================           CAN0 (file:CAN0_MSCAN)               ================ */
+/* ================================================================================ */
+
+/**
+ * @brief Scalable Controller Area Network
+ */
+/**
+* @addtogroup CAN_structs_GROUP CAN struct
+* @brief Struct for CAN
+* @{
+*/
+typedef struct CAN_Type {
+   __IO uint8_t   CANCTL0;                      /**< 0000: Control Register 0                                           */
+   __IO uint8_t   CANCTL1;                      /**< 0001: Control Register 1                                           */
+   __IO uint8_t   CANBTR0;                      /**< 0002: Bus Timing Register 0                                        */
+   __IO uint8_t   CANBTR1;                      /**< 0003: Bus Timing Register 1                                        */
+   __IO uint8_t   CANRFLG;                      /**< 0004: Receiver Flag Register                                       */
+   __IO uint8_t   CANRIER;                      /**< 0005: Receiver Interrupt Enable Register                           */
+   __IO uint8_t   CANTFLG;                      /**< 0006: Transmitter Flag Register                                    */
+   __IO uint8_t   CANTIER;                      /**< 0007: Transmitter Interrupt Enable Register                        */
+   __IO uint8_t   CANTARQ;                      /**< 0008: Transmitter Message Abort Request Register                   */
+   __IO uint8_t   CANTAAK;                      /**< 0009: Transmitter Message Abort Acknowledge Register               */
+   __IO uint8_t   CANTBSEL;                     /**< 000A: Transmit Buffer Selection Register                           */
+   __IO uint8_t   CANIDAC;                      /**< 000B: Identifier Acceptance Control Register                       */
+        uint8_t   RESERVED_0;                   /**< 000C: 0x1 bytes                                                    */
+   __IO uint8_t   CANMISC;                      /**< 000D: Miscellaneous Register                                       */
+   __IO uint8_t   CANRXERR;                     /**< 000E: Receive Error Counter                                        */
+   __IO uint8_t   CANTXERR;                     /**< 000F: Transmit Error Counter                                       */
+   __IO uint8_t   CANIDAR[4];                   /**< 0010: Identifier Acceptance Register n of First Bank               */
+   __IO uint8_t   CANIDMR[4];                   /**< 0014: Identifier Mask Register n of First Bank                     */
+   __IO uint8_t   CANIDAR4;                     /**< 0018: Identifier Acceptance Register n of Second Bank              */
+   __IO uint8_t   CANIDAR5;                     /**< 0019: Identifier Acceptance Register n of Second Bank              */
+   __IO uint8_t   CANIDAR6;                     /**< 001A: Identifier Acceptance Register n of Second Bank              */
+   __IO uint8_t   CANIDAR7;                     /**< 001B: Identifier Acceptance Register n of Second Bank              */
+   __IO uint8_t   CANIDMR4;                     /**< 001C: Identifier Mask Register n of Second Bank                    */
+   __IO uint8_t   CANIDMR5;                     /**< 001D: Identifier Mask Register n of Second Bank                    */
+   __IO uint8_t   CANIDMR6;                     /**< 001E: Identifier Mask Register n of Second Bank                    */
+   __IO uint8_t   CANIDMR7;                     /**< 001F: Identifier Mask Register n of Second Bank                    */
+   union {                                      /**< 0020: (size=0004)                                                  */
+      __IO uint8_t   REIDR[4];                  /**< 0020: Receive Extended Identifier Register %n                      */
+      __IO uint8_t   RSIDR[2];                  /**< 0020: Receive Standard Identifier Register %n                      */
+   };
+   __IO uint8_t   REDSR[8];                     /**< 0024: Receive Extended Data Segment Register %n                    */
+   __IO uint8_t   RDLR;                         /**< 002C: Receive Data Length Register                                 */
+        uint8_t   RESERVED_1;                   /**< 002D: 0x1 bytes                                                    */
+   __IO uint8_t   RTSRH;                        /**< 002E: Receive Time Stamp Register High                             */
+   __IO uint8_t   RTSRL;                        /**< 002F: Receive Time Stamp Register Low                              */
+   union {                                      /**< 0030: (size=0004)                                                  */
+      __IO uint8_t   TEIDR[4];                  /**< 0030: Transmit Extended Identifier Register %n                     */
+      __IO uint8_t   TSIDR[2];                  /**< 0030: Transmit Standard Identifier Register %n                     */
+   };
+   __IO uint8_t   TEDSR[8];                     /**< 0034: Transmit Extended Data Segment Register %n                   */
+   __IO uint8_t   TDLR;                         /**< 003C: Transmit Data Length Register                                */
+   __IO uint8_t   TBPR;                         /**< 003D: Transmit Buffer Priority Register                            */
+   __IO uint8_t   TTSRH;                        /**< 003E: Transmit Time Stamp Register High                            */
+   __IO uint8_t   TTSRL;                        /**< 003F: Transmit Time Stamp Register Low                             */
+} CAN_Type;
+
+/**
+ * @} */ /* End group CAN_structs_GROUP 
+ */
+
+/* -------------------------------------------------------------------------------- */
+/* -----------     'CAN0' Position & Mask macros                        ----------- */
+/* -------------------------------------------------------------------------------- */
+
+/**
+* @addtogroup CAN_Register_Masks_GROUP CAN Register Masks
+* @brief Register Masks for CAN
+* @{
+*/
+/* ------- CANCTL0 Bit Fields                       ------ */
+#define CAN_CANCTL0_INITRQ_MASK                  (0x1U)                                              /*!< CAN0_CANCTL0.INITRQ Mask                */
+#define CAN_CANCTL0_INITRQ_SHIFT                 (0U)                                                /*!< CAN0_CANCTL0.INITRQ Position            */
+#define CAN_CANCTL0_INITRQ(x)                    (((uint8_t)(((uint8_t)(x))<<0U))&0x1UL)             /*!< CAN0_CANCTL0.INITRQ Field               */
+#define CAN_CANCTL0_SLPRQ_MASK                   (0x2U)                                              /*!< CAN0_CANCTL0.SLPRQ Mask                 */
+#define CAN_CANCTL0_SLPRQ_SHIFT                  (1U)                                                /*!< CAN0_CANCTL0.SLPRQ Position             */
+#define CAN_CANCTL0_SLPRQ(x)                     (((uint8_t)(((uint8_t)(x))<<1U))&0x2UL)             /*!< CAN0_CANCTL0.SLPRQ Field                */
+#define CAN_CANCTL0_WUPE_MASK                    (0x4U)                                              /*!< CAN0_CANCTL0.WUPE Mask                  */
+#define CAN_CANCTL0_WUPE_SHIFT                   (2U)                                                /*!< CAN0_CANCTL0.WUPE Position              */
+#define CAN_CANCTL0_WUPE(x)                      (((uint8_t)(((uint8_t)(x))<<2U))&0x4UL)             /*!< CAN0_CANCTL0.WUPE Field                 */
+#define CAN_CANCTL0_TIME_MASK                    (0x8U)                                              /*!< CAN0_CANCTL0.TIME Mask                  */
+#define CAN_CANCTL0_TIME_SHIFT                   (3U)                                                /*!< CAN0_CANCTL0.TIME Position              */
+#define CAN_CANCTL0_TIME(x)                      (((uint8_t)(((uint8_t)(x))<<3U))&0x8UL)             /*!< CAN0_CANCTL0.TIME Field                 */
+#define CAN_CANCTL0_SYNCH_MASK                   (0x10U)                                             /*!< CAN0_CANCTL0.SYNCH Mask                 */
+#define CAN_CANCTL0_SYNCH_SHIFT                  (4U)                                                /*!< CAN0_CANCTL0.SYNCH Position             */
+#define CAN_CANCTL0_SYNCH(x)                     (((uint8_t)(((uint8_t)(x))<<4U))&0x10UL)            /*!< CAN0_CANCTL0.SYNCH Field                */
+#define CAN_CANCTL0_CSWAI_MASK                   (0x20U)                                             /*!< CAN0_CANCTL0.CSWAI Mask                 */
+#define CAN_CANCTL0_CSWAI_SHIFT                  (5U)                                                /*!< CAN0_CANCTL0.CSWAI Position             */
+#define CAN_CANCTL0_CSWAI(x)                     (((uint8_t)(((uint8_t)(x))<<5U))&0x20UL)            /*!< CAN0_CANCTL0.CSWAI Field                */
+#define CAN_CANCTL0_RXACT_MASK                   (0x40U)                                             /*!< CAN0_CANCTL0.RXACT Mask                 */
+#define CAN_CANCTL0_RXACT_SHIFT                  (6U)                                                /*!< CAN0_CANCTL0.RXACT Position             */
+#define CAN_CANCTL0_RXACT(x)                     (((uint8_t)(((uint8_t)(x))<<6U))&0x40UL)            /*!< CAN0_CANCTL0.RXACT Field                */
+#define CAN_CANCTL0_RXFRM_MASK                   (0x80U)                                             /*!< CAN0_CANCTL0.RXFRM Mask                 */
+#define CAN_CANCTL0_RXFRM_SHIFT                  (7U)                                                /*!< CAN0_CANCTL0.RXFRM Position             */
+#define CAN_CANCTL0_RXFRM(x)                     (((uint8_t)(((uint8_t)(x))<<7U))&0x80UL)            /*!< CAN0_CANCTL0.RXFRM Field                */
+/* ------- CANCTL1 Bit Fields                       ------ */
+#define CAN_CANCTL1_INITAK_MASK                  (0x1U)                                              /*!< CAN0_CANCTL1.INITAK Mask                */
+#define CAN_CANCTL1_INITAK_SHIFT                 (0U)                                                /*!< CAN0_CANCTL1.INITAK Position            */
+#define CAN_CANCTL1_INITAK(x)                    (((uint8_t)(((uint8_t)(x))<<0U))&0x1UL)             /*!< CAN0_CANCTL1.INITAK Field               */
+#define CAN_CANCTL1_SLPAK_MASK                   (0x2U)                                              /*!< CAN0_CANCTL1.SLPAK Mask                 */
+#define CAN_CANCTL1_SLPAK_SHIFT                  (1U)                                                /*!< CAN0_CANCTL1.SLPAK Position             */
+#define CAN_CANCTL1_SLPAK(x)                     (((uint8_t)(((uint8_t)(x))<<1U))&0x2UL)             /*!< CAN0_CANCTL1.SLPAK Field                */
+#define CAN_CANCTL1_WUPM_MASK                    (0x4U)                                              /*!< CAN0_CANCTL1.WUPM Mask                  */
+#define CAN_CANCTL1_WUPM_SHIFT                   (2U)                                                /*!< CAN0_CANCTL1.WUPM Position              */
+#define CAN_CANCTL1_WUPM(x)                      (((uint8_t)(((uint8_t)(x))<<2U))&0x4UL)             /*!< CAN0_CANCTL1.WUPM Field                 */
+#define CAN_CANCTL1_BORM_MASK                    (0x8U)                                              /*!< CAN0_CANCTL1.BORM Mask                  */
+#define CAN_CANCTL1_BORM_SHIFT                   (3U)                                                /*!< CAN0_CANCTL1.BORM Position              */
+#define CAN_CANCTL1_BORM(x)                      (((uint8_t)(((uint8_t)(x))<<3U))&0x8UL)             /*!< CAN0_CANCTL1.BORM Field                 */
+#define CAN_CANCTL1_LISTEN_MASK                  (0x10U)                                             /*!< CAN0_CANCTL1.LISTEN Mask                */
+#define CAN_CANCTL1_LISTEN_SHIFT                 (4U)                                                /*!< CAN0_CANCTL1.LISTEN Position            */
+#define CAN_CANCTL1_LISTEN(x)                    (((uint8_t)(((uint8_t)(x))<<4U))&0x10UL)            /*!< CAN0_CANCTL1.LISTEN Field               */
+#define CAN_CANCTL1_LOOPB_MASK                   (0x20U)                                             /*!< CAN0_CANCTL1.LOOPB Mask                 */
+#define CAN_CANCTL1_LOOPB_SHIFT                  (5U)                                                /*!< CAN0_CANCTL1.LOOPB Position             */
+#define CAN_CANCTL1_LOOPB(x)                     (((uint8_t)(((uint8_t)(x))<<5U))&0x20UL)            /*!< CAN0_CANCTL1.LOOPB Field                */
+#define CAN_CANCTL1_CLKSRC_MASK                  (0x40U)                                             /*!< CAN0_CANCTL1.CLKSRC Mask                */
+#define CAN_CANCTL1_CLKSRC_SHIFT                 (6U)                                                /*!< CAN0_CANCTL1.CLKSRC Position            */
+#define CAN_CANCTL1_CLKSRC(x)                    (((uint8_t)(((uint8_t)(x))<<6U))&0x40UL)            /*!< CAN0_CANCTL1.CLKSRC Field               */
+#define CAN_CANCTL1_CANE_MASK                    (0x80U)                                             /*!< CAN0_CANCTL1.CANE Mask                  */
+#define CAN_CANCTL1_CANE_SHIFT                   (7U)                                                /*!< CAN0_CANCTL1.CANE Position              */
+#define CAN_CANCTL1_CANE(x)                      (((uint8_t)(((uint8_t)(x))<<7U))&0x80UL)            /*!< CAN0_CANCTL1.CANE Field                 */
+/* ------- CANBTR0 Bit Fields                       ------ */
+#define CAN_CANBTR0_BRP_MASK                     (0x1FU)                                             /*!< CAN0_CANBTR0.BRP Mask                   */
+#define CAN_CANBTR0_BRP_SHIFT                    (0U)                                                /*!< CAN0_CANBTR0.BRP Position               */
+#define CAN_CANBTR0_BRP(x)                       (((uint8_t)(((uint8_t)(x))<<0U))&0x1FUL)            /*!< CAN0_CANBTR0.BRP Field                  */
+#define CAN_CANBTR0_SJW_MASK                     (0xC0U)                                             /*!< CAN0_CANBTR0.SJW Mask                   */
+#define CAN_CANBTR0_SJW_SHIFT                    (6U)                                                /*!< CAN0_CANBTR0.SJW Position               */
+#define CAN_CANBTR0_SJW(x)                       (((uint8_t)(((uint8_t)(x))<<6U))&0xC0UL)            /*!< CAN0_CANBTR0.SJW Field                  */
+/* ------- CANBTR1 Bit Fields                       ------ */
+#define CAN_CANBTR1_TSEG1_MASK                   (0xFU)                                              /*!< CAN0_CANBTR1.TSEG1 Mask                 */
+#define CAN_CANBTR1_TSEG1_SHIFT                  (0U)                                                /*!< CAN0_CANBTR1.TSEG1 Position             */
+#define CAN_CANBTR1_TSEG1(x)                     (((uint8_t)(((uint8_t)(x))<<0U))&0xFUL)             /*!< CAN0_CANBTR1.TSEG1 Field                */
+#define CAN_CANBTR1_TSEG2_MASK                   (0x70U)                                             /*!< CAN0_CANBTR1.TSEG2 Mask                 */
+#define CAN_CANBTR1_TSEG2_SHIFT                  (4U)                                                /*!< CAN0_CANBTR1.TSEG2 Position             */
+#define CAN_CANBTR1_TSEG2(x)                     (((uint8_t)(((uint8_t)(x))<<4U))&0x70UL)            /*!< CAN0_CANBTR1.TSEG2 Field                */
+#define CAN_CANBTR1_SAMP_MASK                    (0x80U)                                             /*!< CAN0_CANBTR1.SAMP Mask                  */
+#define CAN_CANBTR1_SAMP_SHIFT                   (7U)                                                /*!< CAN0_CANBTR1.SAMP Position              */
+#define CAN_CANBTR1_SAMP(x)                      (((uint8_t)(((uint8_t)(x))<<7U))&0x80UL)            /*!< CAN0_CANBTR1.SAMP Field                 */
+/* ------- CANRFLG Bit Fields                       ------ */
+#define CAN_CANRFLG_RXF_MASK                     (0x1U)                                              /*!< CAN0_CANRFLG.RXF Mask                   */
+#define CAN_CANRFLG_RXF_SHIFT                    (0U)                                                /*!< CAN0_CANRFLG.RXF Position               */
+#define CAN_CANRFLG_RXF(x)                       (((uint8_t)(((uint8_t)(x))<<0U))&0x1UL)             /*!< CAN0_CANRFLG.RXF Field                  */
+#define CAN_CANRFLG_OVRIF_MASK                   (0x2U)                                              /*!< CAN0_CANRFLG.OVRIF Mask                 */
+#define CAN_CANRFLG_OVRIF_SHIFT                  (1U)                                                /*!< CAN0_CANRFLG.OVRIF Position             */
+#define CAN_CANRFLG_OVRIF(x)                     (((uint8_t)(((uint8_t)(x))<<1U))&0x2UL)             /*!< CAN0_CANRFLG.OVRIF Field                */
+#define CAN_CANRFLG_TSTAT_MASK                   (0xCU)                                              /*!< CAN0_CANRFLG.TSTAT Mask                 */
+#define CAN_CANRFLG_TSTAT_SHIFT                  (2U)                                                /*!< CAN0_CANRFLG.TSTAT Position             */
+#define CAN_CANRFLG_TSTAT(x)                     (((uint8_t)(((uint8_t)(x))<<2U))&0xCUL)             /*!< CAN0_CANRFLG.TSTAT Field                */
+#define CAN_CANRFLG_RSTAT_MASK                   (0x30U)                                             /*!< CAN0_CANRFLG.RSTAT Mask                 */
+#define CAN_CANRFLG_RSTAT_SHIFT                  (4U)                                                /*!< CAN0_CANRFLG.RSTAT Position             */
+#define CAN_CANRFLG_RSTAT(x)                     (((uint8_t)(((uint8_t)(x))<<4U))&0x30UL)            /*!< CAN0_CANRFLG.RSTAT Field                */
+#define CAN_CANRFLG_CSCIF_MASK                   (0x40U)                                             /*!< CAN0_CANRFLG.CSCIF Mask                 */
+#define CAN_CANRFLG_CSCIF_SHIFT                  (6U)                                                /*!< CAN0_CANRFLG.CSCIF Position             */
+#define CAN_CANRFLG_CSCIF(x)                     (((uint8_t)(((uint8_t)(x))<<6U))&0x40UL)            /*!< CAN0_CANRFLG.CSCIF Field                */
+#define CAN_CANRFLG_WUPIF_MASK                   (0x80U)                                             /*!< CAN0_CANRFLG.WUPIF Mask                 */
+#define CAN_CANRFLG_WUPIF_SHIFT                  (7U)                                                /*!< CAN0_CANRFLG.WUPIF Position             */
+#define CAN_CANRFLG_WUPIF(x)                     (((uint8_t)(((uint8_t)(x))<<7U))&0x80UL)            /*!< CAN0_CANRFLG.WUPIF Field                */
+/* ------- CANRIER Bit Fields                       ------ */
+#define CAN_CANRIER_RXFIE_MASK                   (0x1U)                                              /*!< CAN0_CANRIER.RXFIE Mask                 */
+#define CAN_CANRIER_RXFIE_SHIFT                  (0U)                                                /*!< CAN0_CANRIER.RXFIE Position             */
+#define CAN_CANRIER_RXFIE(x)                     (((uint8_t)(((uint8_t)(x))<<0U))&0x1UL)             /*!< CAN0_CANRIER.RXFIE Field                */
+#define CAN_CANRIER_OVRIE_MASK                   (0x2U)                                              /*!< CAN0_CANRIER.OVRIE Mask                 */
+#define CAN_CANRIER_OVRIE_SHIFT                  (1U)                                                /*!< CAN0_CANRIER.OVRIE Position             */
+#define CAN_CANRIER_OVRIE(x)                     (((uint8_t)(((uint8_t)(x))<<1U))&0x2UL)             /*!< CAN0_CANRIER.OVRIE Field                */
+#define CAN_CANRIER_TSTATE_MASK                  (0xCU)                                              /*!< CAN0_CANRIER.TSTATE Mask                */
+#define CAN_CANRIER_TSTATE_SHIFT                 (2U)                                                /*!< CAN0_CANRIER.TSTATE Position            */
+#define CAN_CANRIER_TSTATE(x)                    (((uint8_t)(((uint8_t)(x))<<2U))&0xCUL)             /*!< CAN0_CANRIER.TSTATE Field               */
+#define CAN_CANRIER_RSTATE_MASK                  (0x30U)                                             /*!< CAN0_CANRIER.RSTATE Mask                */
+#define CAN_CANRIER_RSTATE_SHIFT                 (4U)                                                /*!< CAN0_CANRIER.RSTATE Position            */
+#define CAN_CANRIER_RSTATE(x)                    (((uint8_t)(((uint8_t)(x))<<4U))&0x30UL)            /*!< CAN0_CANRIER.RSTATE Field               */
+#define CAN_CANRIER_CSCIE_MASK                   (0x40U)                                             /*!< CAN0_CANRIER.CSCIE Mask                 */
+#define CAN_CANRIER_CSCIE_SHIFT                  (6U)                                                /*!< CAN0_CANRIER.CSCIE Position             */
+#define CAN_CANRIER_CSCIE(x)                     (((uint8_t)(((uint8_t)(x))<<6U))&0x40UL)            /*!< CAN0_CANRIER.CSCIE Field                */
+#define CAN_CANRIER_WUPIE_MASK                   (0x80U)                                             /*!< CAN0_CANRIER.WUPIE Mask                 */
+#define CAN_CANRIER_WUPIE_SHIFT                  (7U)                                                /*!< CAN0_CANRIER.WUPIE Position             */
+#define CAN_CANRIER_WUPIE(x)                     (((uint8_t)(((uint8_t)(x))<<7U))&0x80UL)            /*!< CAN0_CANRIER.WUPIE Field                */
+/* ------- CANTFLG Bit Fields                       ------ */
+#define CAN_CANTFLG_TXE_MASK                     (0x7U)                                              /*!< CAN0_CANTFLG.TXE Mask                   */
+#define CAN_CANTFLG_TXE_SHIFT                    (0U)                                                /*!< CAN0_CANTFLG.TXE Position               */
+#define CAN_CANTFLG_TXE(x)                       (((uint8_t)(((uint8_t)(x))<<0U))&0x7UL)             /*!< CAN0_CANTFLG.TXE Field                  */
+/* ------- CANTIER Bit Fields                       ------ */
+#define CAN_CANTIER_TXEIE_MASK                   (0x7U)                                              /*!< CAN0_CANTIER.TXEIE Mask                 */
+#define CAN_CANTIER_TXEIE_SHIFT                  (0U)                                                /*!< CAN0_CANTIER.TXEIE Position             */
+#define CAN_CANTIER_TXEIE(x)                     (((uint8_t)(((uint8_t)(x))<<0U))&0x7UL)             /*!< CAN0_CANTIER.TXEIE Field                */
+/* ------- CANTARQ Bit Fields                       ------ */
+#define CAN_CANTARQ_ABTRQ_MASK                   (0x7U)                                              /*!< CAN0_CANTARQ.ABTRQ Mask                 */
+#define CAN_CANTARQ_ABTRQ_SHIFT                  (0U)                                                /*!< CAN0_CANTARQ.ABTRQ Position             */
+#define CAN_CANTARQ_ABTRQ(x)                     (((uint8_t)(((uint8_t)(x))<<0U))&0x7UL)             /*!< CAN0_CANTARQ.ABTRQ Field                */
+/* ------- CANTAAK Bit Fields                       ------ */
+#define CAN_CANTAAK_ABTAK_MASK                   (0x7U)                                              /*!< CAN0_CANTAAK.ABTAK Mask                 */
+#define CAN_CANTAAK_ABTAK_SHIFT                  (0U)                                                /*!< CAN0_CANTAAK.ABTAK Position             */
+#define CAN_CANTAAK_ABTAK(x)                     (((uint8_t)(((uint8_t)(x))<<0U))&0x7UL)             /*!< CAN0_CANTAAK.ABTAK Field                */
+/* ------- CANTBSEL Bit Fields                      ------ */
+#define CAN_CANTBSEL_TX_MASK                     (0x7U)                                              /*!< CAN0_CANTBSEL.TX Mask                   */
+#define CAN_CANTBSEL_TX_SHIFT                    (0U)                                                /*!< CAN0_CANTBSEL.TX Position               */
+#define CAN_CANTBSEL_TX(x)                       (((uint8_t)(((uint8_t)(x))<<0U))&0x7UL)             /*!< CAN0_CANTBSEL.TX Field                  */
+/* ------- CANIDAC Bit Fields                       ------ */
+#define CAN_CANIDAC_IDHIT_MASK                   (0x7U)                                              /*!< CAN0_CANIDAC.IDHIT Mask                 */
+#define CAN_CANIDAC_IDHIT_SHIFT                  (0U)                                                /*!< CAN0_CANIDAC.IDHIT Position             */
+#define CAN_CANIDAC_IDHIT(x)                     (((uint8_t)(((uint8_t)(x))<<0U))&0x7UL)             /*!< CAN0_CANIDAC.IDHIT Field                */
+#define CAN_CANIDAC_IDAM_MASK                    (0x30U)                                             /*!< CAN0_CANIDAC.IDAM Mask                  */
+#define CAN_CANIDAC_IDAM_SHIFT                   (4U)                                                /*!< CAN0_CANIDAC.IDAM Position              */
+#define CAN_CANIDAC_IDAM(x)                      (((uint8_t)(((uint8_t)(x))<<4U))&0x30UL)            /*!< CAN0_CANIDAC.IDAM Field                 */
+/* ------- CANMISC Bit Fields                       ------ */
+#define CAN_CANMISC_BOHOLD_MASK                  (0x1U)                                              /*!< CAN0_CANMISC.BOHOLD Mask                */
+#define CAN_CANMISC_BOHOLD_SHIFT                 (0U)                                                /*!< CAN0_CANMISC.BOHOLD Position            */
+#define CAN_CANMISC_BOHOLD(x)                    (((uint8_t)(((uint8_t)(x))<<0U))&0x1UL)             /*!< CAN0_CANMISC.BOHOLD Field               */
+/* ------- CANRXERR Bit Fields                      ------ */
+/* ------- CANTXERR Bit Fields                      ------ */
+/* ------- CANIDAR Bit Fields                       ------ */
+/* ------- CANIDMR Bit Fields                       ------ */
+/* ------- CANIDAR Bit Fields                       ------ */
+/* ------- CANIDMR Bit Fields                       ------ */
+/* ------- REIDR Bit Fields                         ------ */
+/* ------- RSIDR Bit Fields                         ------ */
+/* ------- REDSR Bit Fields                         ------ */
+/* ------- RDLR Bit Fields                          ------ */
+#define CAN_RDLR_RDLC_MASK                       (0xFU)                                              /*!< CAN0_RDLR.RDLC Mask                     */
+#define CAN_RDLR_RDLC_SHIFT                      (0U)                                                /*!< CAN0_RDLR.RDLC Position                 */
+#define CAN_RDLR_RDLC(x)                         (((uint8_t)(((uint8_t)(x))<<0U))&0xFUL)             /*!< CAN0_RDLR.RDLC Field                    */
+/* ------- RTSRH Bit Fields                         ------ */
+/* ------- RTSRL Bit Fields                         ------ */
+/* ------- TEIDR Bit Fields                         ------ */
+/* ------- TSIDR Bit Fields                         ------ */
+/* ------- TEDSR Bit Fields                         ------ */
+/* ------- TDLR Bit Fields                          ------ */
+/* ------- TBPR Bit Fields                          ------ */
+/* ------- TTSRH Bit Fields                         ------ */
+/* ------- TTSRL Bit Fields                         ------ */
+/**
+ * @} */ /* End group CAN_Register_Masks_GROUP 
+ */
+
+/* CAN0 - Peripheral instance base addresses */
+#define CAN0_BasePtr                   0x40024000UL //!< Peripheral base address
+#define CAN0                           ((CAN_Type *) CAN0_BasePtr) //!< Freescale base pointer
+#define CAN0_BASE_PTR                  (CAN0) //!< Freescale style base pointer
+/**
+ * @} */ /* End group CAN_Peripheral_access_layer_GROUP 
  */
 /**
 * @addtogroup CRC_Peripheral_access_layer_GROUP CRC Peripheral Access Layer
@@ -2460,253 +2707,6 @@ typedef struct MCM_Type {
  * @} */ /* End group MCM_Peripheral_access_layer_GROUP 
  */
 /**
-* @addtogroup MSCAN_Peripheral_access_layer_GROUP MSCAN Peripheral Access Layer
-* @brief C Struct for MSCAN
-* @{
-*/
-
-/* ================================================================================ */
-/* ================           MSCAN (file:MSCAN_0)                 ================ */
-/* ================================================================================ */
-
-/**
- * @brief Scalable Controller Area Network
- */
-/**
-* @addtogroup MSCAN_structs_GROUP MSCAN struct
-* @brief Struct for MSCAN
-* @{
-*/
-typedef struct MSCAN_Type {
-   __IO uint8_t   CANCTL0;                      /**< 0000: Control Register 0                                           */
-   __IO uint8_t   CANCTL1;                      /**< 0001: Control Register 1                                           */
-   __IO uint8_t   CANBTR0;                      /**< 0002: Bus Timing Register 0                                        */
-   __IO uint8_t   CANBTR1;                      /**< 0003: Bus Timing Register 1                                        */
-   __IO uint8_t   CANRFLG;                      /**< 0004: Receiver Flag Register                                       */
-   __IO uint8_t   CANRIER;                      /**< 0005: Receiver Interrupt Enable Register                           */
-   __IO uint8_t   CANTFLG;                      /**< 0006: Transmitter Flag Register                                    */
-   __IO uint8_t   CANTIER;                      /**< 0007: Transmitter Interrupt Enable Register                        */
-   __IO uint8_t   CANTARQ;                      /**< 0008: Transmitter Message Abort Request Register                   */
-   __IO uint8_t   CANTAAK;                      /**< 0009: Transmitter Message Abort Acknowledge Register               */
-   __IO uint8_t   CANTBSEL;                     /**< 000A: Transmit Buffer Selection Register                           */
-   __IO uint8_t   CANIDAC;                      /**< 000B: Identifier Acceptance Control Register                       */
-        uint8_t   RESERVED_0;                   /**< 000C: 0x1 bytes                                                    */
-   __IO uint8_t   CANMISC;                      /**< 000D: Miscellaneous Register                                       */
-   __IO uint8_t   CANRXERR;                     /**< 000E: Receive Error Counter                                        */
-   __IO uint8_t   CANTXERR;                     /**< 000F: Transmit Error Counter                                       */
-   __IO uint8_t   CANIDAR[4];                   /**< 0010: Identifier Acceptance Register n of First Bank               */
-   __IO uint8_t   CANIDMR[4];                   /**< 0014: Identifier Mask Register n of First Bank                     */
-   __IO uint8_t   CANIDAR4;                     /**< 0018: Identifier Acceptance Register n of Second Bank              */
-   __IO uint8_t   CANIDAR5;                     /**< 0019: Identifier Acceptance Register n of Second Bank              */
-   __IO uint8_t   CANIDAR6;                     /**< 001A: Identifier Acceptance Register n of Second Bank              */
-   __IO uint8_t   CANIDAR7;                     /**< 001B: Identifier Acceptance Register n of Second Bank              */
-   __IO uint8_t   CANIDMR4;                     /**< 001C: Identifier Mask Register n of Second Bank                    */
-   __IO uint8_t   CANIDMR5;                     /**< 001D: Identifier Mask Register n of Second Bank                    */
-   __IO uint8_t   CANIDMR6;                     /**< 001E: Identifier Mask Register n of Second Bank                    */
-   __IO uint8_t   CANIDMR7;                     /**< 001F: Identifier Mask Register n of Second Bank                    */
-   union {                                      /**< 0020: (size=0004)                                                  */
-      __IO uint8_t   REIDR[4];                  /**< 0020: Receive Extended Identifier Register %n                      */
-      __IO uint8_t   RSIDR[2];                  /**< 0020: Receive Standard Identifier Register %n                      */
-   };
-   __IO uint8_t   REDSR[8];                     /**< 0024: Receive Extended Data Segment Register %n                    */
-   __IO uint8_t   RDLR;                         /**< 002C: Receive Data Length Register                                 */
-        uint8_t   RESERVED_1;                   /**< 002D: 0x1 bytes                                                    */
-   __IO uint8_t   RTSRH;                        /**< 002E: Receive Time Stamp Register High                             */
-   __IO uint8_t   RTSRL;                        /**< 002F: Receive Time Stamp Register Low                              */
-   union {                                      /**< 0030: (size=0004)                                                  */
-      __IO uint8_t   TEIDR[4];                  /**< 0030: Transmit Extended Identifier Register %n                     */
-      __IO uint8_t   TSIDR[2];                  /**< 0030: Transmit Standard Identifier Register %n                     */
-   };
-   __IO uint8_t   TEDSR[8];                     /**< 0034: Transmit Extended Data Segment Register %n                   */
-   __IO uint8_t   TDLR;                         /**< 003C: Transmit Data Length Register                                */
-   __IO uint8_t   TBPR;                         /**< 003D: Transmit Buffer Priority Register                            */
-   __IO uint8_t   TTSRH;                        /**< 003E: Transmit Time Stamp Register High                            */
-   __IO uint8_t   TTSRL;                        /**< 003F: Transmit Time Stamp Register Low                             */
-} MSCAN_Type;
-
-/**
- * @} */ /* End group MSCAN_structs_GROUP 
- */
-
-/* -------------------------------------------------------------------------------- */
-/* -----------     'MSCAN' Position & Mask macros                       ----------- */
-/* -------------------------------------------------------------------------------- */
-
-/**
-* @addtogroup MSCAN_Register_Masks_GROUP MSCAN Register Masks
-* @brief Register Masks for MSCAN
-* @{
-*/
-/* ------- CANCTL0 Bit Fields                       ------ */
-#define MSCAN_CANCTL0_INITRQ_MASK                (0x1U)                                              /*!< MSCAN_CANCTL0.INITRQ Mask               */
-#define MSCAN_CANCTL0_INITRQ_SHIFT               (0U)                                                /*!< MSCAN_CANCTL0.INITRQ Position           */
-#define MSCAN_CANCTL0_INITRQ(x)                  (((uint8_t)(((uint8_t)(x))<<0U))&0x1UL)             /*!< MSCAN_CANCTL0.INITRQ Field              */
-#define MSCAN_CANCTL0_SLPRQ_MASK                 (0x2U)                                              /*!< MSCAN_CANCTL0.SLPRQ Mask                */
-#define MSCAN_CANCTL0_SLPRQ_SHIFT                (1U)                                                /*!< MSCAN_CANCTL0.SLPRQ Position            */
-#define MSCAN_CANCTL0_SLPRQ(x)                   (((uint8_t)(((uint8_t)(x))<<1U))&0x2UL)             /*!< MSCAN_CANCTL0.SLPRQ Field               */
-#define MSCAN_CANCTL0_WUPE_MASK                  (0x4U)                                              /*!< MSCAN_CANCTL0.WUPE Mask                 */
-#define MSCAN_CANCTL0_WUPE_SHIFT                 (2U)                                                /*!< MSCAN_CANCTL0.WUPE Position             */
-#define MSCAN_CANCTL0_WUPE(x)                    (((uint8_t)(((uint8_t)(x))<<2U))&0x4UL)             /*!< MSCAN_CANCTL0.WUPE Field                */
-#define MSCAN_CANCTL0_TIME_MASK                  (0x8U)                                              /*!< MSCAN_CANCTL0.TIME Mask                 */
-#define MSCAN_CANCTL0_TIME_SHIFT                 (3U)                                                /*!< MSCAN_CANCTL0.TIME Position             */
-#define MSCAN_CANCTL0_TIME(x)                    (((uint8_t)(((uint8_t)(x))<<3U))&0x8UL)             /*!< MSCAN_CANCTL0.TIME Field                */
-#define MSCAN_CANCTL0_SYNCH_MASK                 (0x10U)                                             /*!< MSCAN_CANCTL0.SYNCH Mask                */
-#define MSCAN_CANCTL0_SYNCH_SHIFT                (4U)                                                /*!< MSCAN_CANCTL0.SYNCH Position            */
-#define MSCAN_CANCTL0_SYNCH(x)                   (((uint8_t)(((uint8_t)(x))<<4U))&0x10UL)            /*!< MSCAN_CANCTL0.SYNCH Field               */
-#define MSCAN_CANCTL0_CSWAI_MASK                 (0x20U)                                             /*!< MSCAN_CANCTL0.CSWAI Mask                */
-#define MSCAN_CANCTL0_CSWAI_SHIFT                (5U)                                                /*!< MSCAN_CANCTL0.CSWAI Position            */
-#define MSCAN_CANCTL0_CSWAI(x)                   (((uint8_t)(((uint8_t)(x))<<5U))&0x20UL)            /*!< MSCAN_CANCTL0.CSWAI Field               */
-#define MSCAN_CANCTL0_RXACT_MASK                 (0x40U)                                             /*!< MSCAN_CANCTL0.RXACT Mask                */
-#define MSCAN_CANCTL0_RXACT_SHIFT                (6U)                                                /*!< MSCAN_CANCTL0.RXACT Position            */
-#define MSCAN_CANCTL0_RXACT(x)                   (((uint8_t)(((uint8_t)(x))<<6U))&0x40UL)            /*!< MSCAN_CANCTL0.RXACT Field               */
-#define MSCAN_CANCTL0_RXFRM_MASK                 (0x80U)                                             /*!< MSCAN_CANCTL0.RXFRM Mask                */
-#define MSCAN_CANCTL0_RXFRM_SHIFT                (7U)                                                /*!< MSCAN_CANCTL0.RXFRM Position            */
-#define MSCAN_CANCTL0_RXFRM(x)                   (((uint8_t)(((uint8_t)(x))<<7U))&0x80UL)            /*!< MSCAN_CANCTL0.RXFRM Field               */
-/* ------- CANCTL1 Bit Fields                       ------ */
-#define MSCAN_CANCTL1_INITAK_MASK                (0x1U)                                              /*!< MSCAN_CANCTL1.INITAK Mask               */
-#define MSCAN_CANCTL1_INITAK_SHIFT               (0U)                                                /*!< MSCAN_CANCTL1.INITAK Position           */
-#define MSCAN_CANCTL1_INITAK(x)                  (((uint8_t)(((uint8_t)(x))<<0U))&0x1UL)             /*!< MSCAN_CANCTL1.INITAK Field              */
-#define MSCAN_CANCTL1_SLPAK_MASK                 (0x2U)                                              /*!< MSCAN_CANCTL1.SLPAK Mask                */
-#define MSCAN_CANCTL1_SLPAK_SHIFT                (1U)                                                /*!< MSCAN_CANCTL1.SLPAK Position            */
-#define MSCAN_CANCTL1_SLPAK(x)                   (((uint8_t)(((uint8_t)(x))<<1U))&0x2UL)             /*!< MSCAN_CANCTL1.SLPAK Field               */
-#define MSCAN_CANCTL1_WUPM_MASK                  (0x4U)                                              /*!< MSCAN_CANCTL1.WUPM Mask                 */
-#define MSCAN_CANCTL1_WUPM_SHIFT                 (2U)                                                /*!< MSCAN_CANCTL1.WUPM Position             */
-#define MSCAN_CANCTL1_WUPM(x)                    (((uint8_t)(((uint8_t)(x))<<2U))&0x4UL)             /*!< MSCAN_CANCTL1.WUPM Field                */
-#define MSCAN_CANCTL1_BORM_MASK                  (0x8U)                                              /*!< MSCAN_CANCTL1.BORM Mask                 */
-#define MSCAN_CANCTL1_BORM_SHIFT                 (3U)                                                /*!< MSCAN_CANCTL1.BORM Position             */
-#define MSCAN_CANCTL1_BORM(x)                    (((uint8_t)(((uint8_t)(x))<<3U))&0x8UL)             /*!< MSCAN_CANCTL1.BORM Field                */
-#define MSCAN_CANCTL1_LISTEN_MASK                (0x10U)                                             /*!< MSCAN_CANCTL1.LISTEN Mask               */
-#define MSCAN_CANCTL1_LISTEN_SHIFT               (4U)                                                /*!< MSCAN_CANCTL1.LISTEN Position           */
-#define MSCAN_CANCTL1_LISTEN(x)                  (((uint8_t)(((uint8_t)(x))<<4U))&0x10UL)            /*!< MSCAN_CANCTL1.LISTEN Field              */
-#define MSCAN_CANCTL1_LOOPB_MASK                 (0x20U)                                             /*!< MSCAN_CANCTL1.LOOPB Mask                */
-#define MSCAN_CANCTL1_LOOPB_SHIFT                (5U)                                                /*!< MSCAN_CANCTL1.LOOPB Position            */
-#define MSCAN_CANCTL1_LOOPB(x)                   (((uint8_t)(((uint8_t)(x))<<5U))&0x20UL)            /*!< MSCAN_CANCTL1.LOOPB Field               */
-#define MSCAN_CANCTL1_CLKSRC_MASK                (0x40U)                                             /*!< MSCAN_CANCTL1.CLKSRC Mask               */
-#define MSCAN_CANCTL1_CLKSRC_SHIFT               (6U)                                                /*!< MSCAN_CANCTL1.CLKSRC Position           */
-#define MSCAN_CANCTL1_CLKSRC(x)                  (((uint8_t)(((uint8_t)(x))<<6U))&0x40UL)            /*!< MSCAN_CANCTL1.CLKSRC Field              */
-#define MSCAN_CANCTL1_CANE_MASK                  (0x80U)                                             /*!< MSCAN_CANCTL1.CANE Mask                 */
-#define MSCAN_CANCTL1_CANE_SHIFT                 (7U)                                                /*!< MSCAN_CANCTL1.CANE Position             */
-#define MSCAN_CANCTL1_CANE(x)                    (((uint8_t)(((uint8_t)(x))<<7U))&0x80UL)            /*!< MSCAN_CANCTL1.CANE Field                */
-/* ------- CANBTR0 Bit Fields                       ------ */
-#define MSCAN_CANBTR0_BRP_MASK                   (0x1FU)                                             /*!< MSCAN_CANBTR0.BRP Mask                  */
-#define MSCAN_CANBTR0_BRP_SHIFT                  (0U)                                                /*!< MSCAN_CANBTR0.BRP Position              */
-#define MSCAN_CANBTR0_BRP(x)                     (((uint8_t)(((uint8_t)(x))<<0U))&0x1FUL)            /*!< MSCAN_CANBTR0.BRP Field                 */
-#define MSCAN_CANBTR0_SJW_MASK                   (0xC0U)                                             /*!< MSCAN_CANBTR0.SJW Mask                  */
-#define MSCAN_CANBTR0_SJW_SHIFT                  (6U)                                                /*!< MSCAN_CANBTR0.SJW Position              */
-#define MSCAN_CANBTR0_SJW(x)                     (((uint8_t)(((uint8_t)(x))<<6U))&0xC0UL)            /*!< MSCAN_CANBTR0.SJW Field                 */
-/* ------- CANBTR1 Bit Fields                       ------ */
-#define MSCAN_CANBTR1_TSEG1_MASK                 (0xFU)                                              /*!< MSCAN_CANBTR1.TSEG1 Mask                */
-#define MSCAN_CANBTR1_TSEG1_SHIFT                (0U)                                                /*!< MSCAN_CANBTR1.TSEG1 Position            */
-#define MSCAN_CANBTR1_TSEG1(x)                   (((uint8_t)(((uint8_t)(x))<<0U))&0xFUL)             /*!< MSCAN_CANBTR1.TSEG1 Field               */
-#define MSCAN_CANBTR1_TSEG2_MASK                 (0x70U)                                             /*!< MSCAN_CANBTR1.TSEG2 Mask                */
-#define MSCAN_CANBTR1_TSEG2_SHIFT                (4U)                                                /*!< MSCAN_CANBTR1.TSEG2 Position            */
-#define MSCAN_CANBTR1_TSEG2(x)                   (((uint8_t)(((uint8_t)(x))<<4U))&0x70UL)            /*!< MSCAN_CANBTR1.TSEG2 Field               */
-#define MSCAN_CANBTR1_SAMP_MASK                  (0x80U)                                             /*!< MSCAN_CANBTR1.SAMP Mask                 */
-#define MSCAN_CANBTR1_SAMP_SHIFT                 (7U)                                                /*!< MSCAN_CANBTR1.SAMP Position             */
-#define MSCAN_CANBTR1_SAMP(x)                    (((uint8_t)(((uint8_t)(x))<<7U))&0x80UL)            /*!< MSCAN_CANBTR1.SAMP Field                */
-/* ------- CANRFLG Bit Fields                       ------ */
-#define MSCAN_CANRFLG_RXF_MASK                   (0x1U)                                              /*!< MSCAN_CANRFLG.RXF Mask                  */
-#define MSCAN_CANRFLG_RXF_SHIFT                  (0U)                                                /*!< MSCAN_CANRFLG.RXF Position              */
-#define MSCAN_CANRFLG_RXF(x)                     (((uint8_t)(((uint8_t)(x))<<0U))&0x1UL)             /*!< MSCAN_CANRFLG.RXF Field                 */
-#define MSCAN_CANRFLG_OVRIF_MASK                 (0x2U)                                              /*!< MSCAN_CANRFLG.OVRIF Mask                */
-#define MSCAN_CANRFLG_OVRIF_SHIFT                (1U)                                                /*!< MSCAN_CANRFLG.OVRIF Position            */
-#define MSCAN_CANRFLG_OVRIF(x)                   (((uint8_t)(((uint8_t)(x))<<1U))&0x2UL)             /*!< MSCAN_CANRFLG.OVRIF Field               */
-#define MSCAN_CANRFLG_TSTAT_MASK                 (0xCU)                                              /*!< MSCAN_CANRFLG.TSTAT Mask                */
-#define MSCAN_CANRFLG_TSTAT_SHIFT                (2U)                                                /*!< MSCAN_CANRFLG.TSTAT Position            */
-#define MSCAN_CANRFLG_TSTAT(x)                   (((uint8_t)(((uint8_t)(x))<<2U))&0xCUL)             /*!< MSCAN_CANRFLG.TSTAT Field               */
-#define MSCAN_CANRFLG_RSTAT_MASK                 (0x30U)                                             /*!< MSCAN_CANRFLG.RSTAT Mask                */
-#define MSCAN_CANRFLG_RSTAT_SHIFT                (4U)                                                /*!< MSCAN_CANRFLG.RSTAT Position            */
-#define MSCAN_CANRFLG_RSTAT(x)                   (((uint8_t)(((uint8_t)(x))<<4U))&0x30UL)            /*!< MSCAN_CANRFLG.RSTAT Field               */
-#define MSCAN_CANRFLG_CSCIF_MASK                 (0x40U)                                             /*!< MSCAN_CANRFLG.CSCIF Mask                */
-#define MSCAN_CANRFLG_CSCIF_SHIFT                (6U)                                                /*!< MSCAN_CANRFLG.CSCIF Position            */
-#define MSCAN_CANRFLG_CSCIF(x)                   (((uint8_t)(((uint8_t)(x))<<6U))&0x40UL)            /*!< MSCAN_CANRFLG.CSCIF Field               */
-#define MSCAN_CANRFLG_WUPIF_MASK                 (0x80U)                                             /*!< MSCAN_CANRFLG.WUPIF Mask                */
-#define MSCAN_CANRFLG_WUPIF_SHIFT                (7U)                                                /*!< MSCAN_CANRFLG.WUPIF Position            */
-#define MSCAN_CANRFLG_WUPIF(x)                   (((uint8_t)(((uint8_t)(x))<<7U))&0x80UL)            /*!< MSCAN_CANRFLG.WUPIF Field               */
-/* ------- CANRIER Bit Fields                       ------ */
-#define MSCAN_CANRIER_RXFIE_MASK                 (0x1U)                                              /*!< MSCAN_CANRIER.RXFIE Mask                */
-#define MSCAN_CANRIER_RXFIE_SHIFT                (0U)                                                /*!< MSCAN_CANRIER.RXFIE Position            */
-#define MSCAN_CANRIER_RXFIE(x)                   (((uint8_t)(((uint8_t)(x))<<0U))&0x1UL)             /*!< MSCAN_CANRIER.RXFIE Field               */
-#define MSCAN_CANRIER_OVRIE_MASK                 (0x2U)                                              /*!< MSCAN_CANRIER.OVRIE Mask                */
-#define MSCAN_CANRIER_OVRIE_SHIFT                (1U)                                                /*!< MSCAN_CANRIER.OVRIE Position            */
-#define MSCAN_CANRIER_OVRIE(x)                   (((uint8_t)(((uint8_t)(x))<<1U))&0x2UL)             /*!< MSCAN_CANRIER.OVRIE Field               */
-#define MSCAN_CANRIER_TSTATE_MASK                (0xCU)                                              /*!< MSCAN_CANRIER.TSTATE Mask               */
-#define MSCAN_CANRIER_TSTATE_SHIFT               (2U)                                                /*!< MSCAN_CANRIER.TSTATE Position           */
-#define MSCAN_CANRIER_TSTATE(x)                  (((uint8_t)(((uint8_t)(x))<<2U))&0xCUL)             /*!< MSCAN_CANRIER.TSTATE Field              */
-#define MSCAN_CANRIER_RSTATE_MASK                (0x30U)                                             /*!< MSCAN_CANRIER.RSTATE Mask               */
-#define MSCAN_CANRIER_RSTATE_SHIFT               (4U)                                                /*!< MSCAN_CANRIER.RSTATE Position           */
-#define MSCAN_CANRIER_RSTATE(x)                  (((uint8_t)(((uint8_t)(x))<<4U))&0x30UL)            /*!< MSCAN_CANRIER.RSTATE Field              */
-#define MSCAN_CANRIER_CSCIE_MASK                 (0x40U)                                             /*!< MSCAN_CANRIER.CSCIE Mask                */
-#define MSCAN_CANRIER_CSCIE_SHIFT                (6U)                                                /*!< MSCAN_CANRIER.CSCIE Position            */
-#define MSCAN_CANRIER_CSCIE(x)                   (((uint8_t)(((uint8_t)(x))<<6U))&0x40UL)            /*!< MSCAN_CANRIER.CSCIE Field               */
-#define MSCAN_CANRIER_WUPIE_MASK                 (0x80U)                                             /*!< MSCAN_CANRIER.WUPIE Mask                */
-#define MSCAN_CANRIER_WUPIE_SHIFT                (7U)                                                /*!< MSCAN_CANRIER.WUPIE Position            */
-#define MSCAN_CANRIER_WUPIE(x)                   (((uint8_t)(((uint8_t)(x))<<7U))&0x80UL)            /*!< MSCAN_CANRIER.WUPIE Field               */
-/* ------- CANTFLG Bit Fields                       ------ */
-#define MSCAN_CANTFLG_TXE_MASK                   (0x7U)                                              /*!< MSCAN_CANTFLG.TXE Mask                  */
-#define MSCAN_CANTFLG_TXE_SHIFT                  (0U)                                                /*!< MSCAN_CANTFLG.TXE Position              */
-#define MSCAN_CANTFLG_TXE(x)                     (((uint8_t)(((uint8_t)(x))<<0U))&0x7UL)             /*!< MSCAN_CANTFLG.TXE Field                 */
-/* ------- CANTIER Bit Fields                       ------ */
-#define MSCAN_CANTIER_TXEIE_MASK                 (0x7U)                                              /*!< MSCAN_CANTIER.TXEIE Mask                */
-#define MSCAN_CANTIER_TXEIE_SHIFT                (0U)                                                /*!< MSCAN_CANTIER.TXEIE Position            */
-#define MSCAN_CANTIER_TXEIE(x)                   (((uint8_t)(((uint8_t)(x))<<0U))&0x7UL)             /*!< MSCAN_CANTIER.TXEIE Field               */
-/* ------- CANTARQ Bit Fields                       ------ */
-#define MSCAN_CANTARQ_ABTRQ_MASK                 (0x7U)                                              /*!< MSCAN_CANTARQ.ABTRQ Mask                */
-#define MSCAN_CANTARQ_ABTRQ_SHIFT                (0U)                                                /*!< MSCAN_CANTARQ.ABTRQ Position            */
-#define MSCAN_CANTARQ_ABTRQ(x)                   (((uint8_t)(((uint8_t)(x))<<0U))&0x7UL)             /*!< MSCAN_CANTARQ.ABTRQ Field               */
-/* ------- CANTAAK Bit Fields                       ------ */
-#define MSCAN_CANTAAK_ABTAK_MASK                 (0x7U)                                              /*!< MSCAN_CANTAAK.ABTAK Mask                */
-#define MSCAN_CANTAAK_ABTAK_SHIFT                (0U)                                                /*!< MSCAN_CANTAAK.ABTAK Position            */
-#define MSCAN_CANTAAK_ABTAK(x)                   (((uint8_t)(((uint8_t)(x))<<0U))&0x7UL)             /*!< MSCAN_CANTAAK.ABTAK Field               */
-/* ------- CANTBSEL Bit Fields                      ------ */
-#define MSCAN_CANTBSEL_TX_MASK                   (0x7U)                                              /*!< MSCAN_CANTBSEL.TX Mask                  */
-#define MSCAN_CANTBSEL_TX_SHIFT                  (0U)                                                /*!< MSCAN_CANTBSEL.TX Position              */
-#define MSCAN_CANTBSEL_TX(x)                     (((uint8_t)(((uint8_t)(x))<<0U))&0x7UL)             /*!< MSCAN_CANTBSEL.TX Field                 */
-/* ------- CANIDAC Bit Fields                       ------ */
-#define MSCAN_CANIDAC_IDHIT_MASK                 (0x7U)                                              /*!< MSCAN_CANIDAC.IDHIT Mask                */
-#define MSCAN_CANIDAC_IDHIT_SHIFT                (0U)                                                /*!< MSCAN_CANIDAC.IDHIT Position            */
-#define MSCAN_CANIDAC_IDHIT(x)                   (((uint8_t)(((uint8_t)(x))<<0U))&0x7UL)             /*!< MSCAN_CANIDAC.IDHIT Field               */
-#define MSCAN_CANIDAC_IDAM_MASK                  (0x30U)                                             /*!< MSCAN_CANIDAC.IDAM Mask                 */
-#define MSCAN_CANIDAC_IDAM_SHIFT                 (4U)                                                /*!< MSCAN_CANIDAC.IDAM Position             */
-#define MSCAN_CANIDAC_IDAM(x)                    (((uint8_t)(((uint8_t)(x))<<4U))&0x30UL)            /*!< MSCAN_CANIDAC.IDAM Field                */
-/* ------- CANMISC Bit Fields                       ------ */
-#define MSCAN_CANMISC_BOHOLD_MASK                (0x1U)                                              /*!< MSCAN_CANMISC.BOHOLD Mask               */
-#define MSCAN_CANMISC_BOHOLD_SHIFT               (0U)                                                /*!< MSCAN_CANMISC.BOHOLD Position           */
-#define MSCAN_CANMISC_BOHOLD(x)                  (((uint8_t)(((uint8_t)(x))<<0U))&0x1UL)             /*!< MSCAN_CANMISC.BOHOLD Field              */
-/* ------- CANRXERR Bit Fields                      ------ */
-/* ------- CANTXERR Bit Fields                      ------ */
-/* ------- CANIDAR Bit Fields                       ------ */
-/* ------- CANIDMR Bit Fields                       ------ */
-/* ------- CANIDAR Bit Fields                       ------ */
-/* ------- CANIDMR Bit Fields                       ------ */
-/* ------- REIDR Bit Fields                         ------ */
-/* ------- RSIDR Bit Fields                         ------ */
-/* ------- REDSR Bit Fields                         ------ */
-/* ------- RDLR Bit Fields                          ------ */
-#define MSCAN_RDLR_RDLC_MASK                     (0xFU)                                              /*!< MSCAN_RDLR.RDLC Mask                    */
-#define MSCAN_RDLR_RDLC_SHIFT                    (0U)                                                /*!< MSCAN_RDLR.RDLC Position                */
-#define MSCAN_RDLR_RDLC(x)                       (((uint8_t)(((uint8_t)(x))<<0U))&0xFUL)             /*!< MSCAN_RDLR.RDLC Field                   */
-/* ------- RTSRH Bit Fields                         ------ */
-/* ------- RTSRL Bit Fields                         ------ */
-/* ------- TEIDR Bit Fields                         ------ */
-/* ------- TSIDR Bit Fields                         ------ */
-/* ------- TEDSR Bit Fields                         ------ */
-/* ------- TDLR Bit Fields                          ------ */
-/* ------- TBPR Bit Fields                          ------ */
-/* ------- TTSRH Bit Fields                         ------ */
-/* ------- TTSRL Bit Fields                         ------ */
-/**
- * @} */ /* End group MSCAN_Register_Masks_GROUP 
- */
-
-/* MSCAN - Peripheral instance base addresses */
-#define MSCAN_BasePtr                  0x40024000UL //!< Peripheral base address
-#define MSCAN                          ((MSCAN_Type *) MSCAN_BasePtr) //!< Freescale base pointer
-#define MSCAN_BASE_PTR                 (MSCAN) //!< Freescale style base pointer
-/**
- * @} */ /* End group MSCAN_Peripheral_access_layer_GROUP 
- */
-/**
 * @addtogroup NV_Peripheral_access_layer_GROUP NV Peripheral Access Layer
 * @brief C Struct for NV
 * @{
@@ -2797,7 +2797,7 @@ typedef struct NV_Type {
 */
 
 /* ================================================================================ */
-/* ================           OSC (file:OSC_MKE)                   ================ */
+/* ================           OSC0 (file:OSC0_MKE)                 ================ */
 /* ================================================================================ */
 
 /**
@@ -2817,7 +2817,7 @@ typedef struct OSC_Type {
  */
 
 /* -------------------------------------------------------------------------------- */
-/* -----------     'OSC' Position & Mask macros                         ----------- */
+/* -----------     'OSC0' Position & Mask macros                        ----------- */
 /* -------------------------------------------------------------------------------- */
 
 /**
@@ -2826,32 +2826,32 @@ typedef struct OSC_Type {
 * @{
 */
 /* ------- CR Bit Fields                            ------ */
-#define OSC_CR_OSCINIT_MASK                      (0x1U)                                              /*!< OSC_CR.OSCINIT Mask                     */
-#define OSC_CR_OSCINIT_SHIFT                     (0U)                                                /*!< OSC_CR.OSCINIT Position                 */
-#define OSC_CR_OSCINIT(x)                        (((uint8_t)(((uint8_t)(x))<<0U))&0x1UL)             /*!< OSC_CR.OSCINIT Field                    */
-#define OSC_CR_HGO_MASK                          (0x2U)                                              /*!< OSC_CR.HGO Mask                         */
-#define OSC_CR_HGO_SHIFT                         (1U)                                                /*!< OSC_CR.HGO Position                     */
-#define OSC_CR_HGO(x)                            (((uint8_t)(((uint8_t)(x))<<1U))&0x2UL)             /*!< OSC_CR.HGO Field                        */
-#define OSC_CR_RANGE_MASK                        (0x4U)                                              /*!< OSC_CR.RANGE Mask                       */
-#define OSC_CR_RANGE_SHIFT                       (2U)                                                /*!< OSC_CR.RANGE Position                   */
-#define OSC_CR_RANGE(x)                          (((uint8_t)(((uint8_t)(x))<<2U))&0x4UL)             /*!< OSC_CR.RANGE Field                      */
-#define OSC_CR_OSCOS_MASK                        (0x10U)                                             /*!< OSC_CR.OSCOS Mask                       */
-#define OSC_CR_OSCOS_SHIFT                       (4U)                                                /*!< OSC_CR.OSCOS Position                   */
-#define OSC_CR_OSCOS(x)                          (((uint8_t)(((uint8_t)(x))<<4U))&0x10UL)            /*!< OSC_CR.OSCOS Field                      */
-#define OSC_CR_OSCSTEN_MASK                      (0x20U)                                             /*!< OSC_CR.OSCSTEN Mask                     */
-#define OSC_CR_OSCSTEN_SHIFT                     (5U)                                                /*!< OSC_CR.OSCSTEN Position                 */
-#define OSC_CR_OSCSTEN(x)                        (((uint8_t)(((uint8_t)(x))<<5U))&0x20UL)            /*!< OSC_CR.OSCSTEN Field                    */
-#define OSC_CR_OSCEN_MASK                        (0x80U)                                             /*!< OSC_CR.OSCEN Mask                       */
-#define OSC_CR_OSCEN_SHIFT                       (7U)                                                /*!< OSC_CR.OSCEN Position                   */
-#define OSC_CR_OSCEN(x)                          (((uint8_t)(((uint8_t)(x))<<7U))&0x80UL)            /*!< OSC_CR.OSCEN Field                      */
+#define OSC_CR_OSCINIT_MASK                      (0x1U)                                              /*!< OSC0_CR.OSCINIT Mask                    */
+#define OSC_CR_OSCINIT_SHIFT                     (0U)                                                /*!< OSC0_CR.OSCINIT Position                */
+#define OSC_CR_OSCINIT(x)                        (((uint8_t)(((uint8_t)(x))<<0U))&0x1UL)             /*!< OSC0_CR.OSCINIT Field                   */
+#define OSC_CR_HGO_MASK                          (0x2U)                                              /*!< OSC0_CR.HGO Mask                        */
+#define OSC_CR_HGO_SHIFT                         (1U)                                                /*!< OSC0_CR.HGO Position                    */
+#define OSC_CR_HGO(x)                            (((uint8_t)(((uint8_t)(x))<<1U))&0x2UL)             /*!< OSC0_CR.HGO Field                       */
+#define OSC_CR_RANGE_MASK                        (0x4U)                                              /*!< OSC0_CR.RANGE Mask                      */
+#define OSC_CR_RANGE_SHIFT                       (2U)                                                /*!< OSC0_CR.RANGE Position                  */
+#define OSC_CR_RANGE(x)                          (((uint8_t)(((uint8_t)(x))<<2U))&0x4UL)             /*!< OSC0_CR.RANGE Field                     */
+#define OSC_CR_OSCOS_MASK                        (0x10U)                                             /*!< OSC0_CR.OSCOS Mask                      */
+#define OSC_CR_OSCOS_SHIFT                       (4U)                                                /*!< OSC0_CR.OSCOS Position                  */
+#define OSC_CR_OSCOS(x)                          (((uint8_t)(((uint8_t)(x))<<4U))&0x10UL)            /*!< OSC0_CR.OSCOS Field                     */
+#define OSC_CR_OSCSTEN_MASK                      (0x20U)                                             /*!< OSC0_CR.OSCSTEN Mask                    */
+#define OSC_CR_OSCSTEN_SHIFT                     (5U)                                                /*!< OSC0_CR.OSCSTEN Position                */
+#define OSC_CR_OSCSTEN(x)                        (((uint8_t)(((uint8_t)(x))<<5U))&0x20UL)            /*!< OSC0_CR.OSCSTEN Field                   */
+#define OSC_CR_OSCEN_MASK                        (0x80U)                                             /*!< OSC0_CR.OSCEN Mask                      */
+#define OSC_CR_OSCEN_SHIFT                       (7U)                                                /*!< OSC0_CR.OSCEN Position                  */
+#define OSC_CR_OSCEN(x)                          (((uint8_t)(((uint8_t)(x))<<7U))&0x80UL)            /*!< OSC0_CR.OSCEN Field                     */
 /**
  * @} */ /* End group OSC_Register_Masks_GROUP 
  */
 
-/* OSC - Peripheral instance base addresses */
-#define OSC_BasePtr                    0x40065000UL //!< Peripheral base address
-#define OSC                            ((OSC_Type *) OSC_BasePtr) //!< Freescale base pointer
-#define OSC_BASE_PTR                   (OSC) //!< Freescale style base pointer
+/* OSC0 - Peripheral instance base addresses */
+#define OSC0_BasePtr                   0x40065000UL //!< Peripheral base address
+#define OSC0                           ((OSC_Type *) OSC0_BasePtr) //!< Freescale base pointer
+#define OSC0_BASE_PTR                  (OSC0) //!< Freescale style base pointer
 /**
  * @} */ /* End group OSC_Peripheral_access_layer_GROUP 
  */

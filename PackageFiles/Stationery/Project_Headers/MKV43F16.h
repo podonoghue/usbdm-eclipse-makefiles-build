@@ -5,7 +5,7 @@
  *           Equivalent: 
  *
  * @version  V1.6
- * @date     2019/01
+ * @date     2019/04
  *
  *******************************************************************************************************/
 
@@ -93,11 +93,11 @@ typedef enum {
   ENC_INDEX_IRQn                =  69,   /**<  85 Quadrature Decoder                                                               */
   CMP2_IRQn                     =  70,   /**<  86 High-Speed Comparator                                                            */
   ADCB_IRQn                     =  73,   /**<  89 Analogue to digital converter                                                    */
-  CAN0_Message_IRQn             =  75,   /**<  91 Flex Controller Area Network module                                              */
+  CAN0_MessageBuffer_IRQn       =  75,   /**<  91 Flex Controller Area Network module                                              */
   CAN0_BusOff_IRQn              =  76,   /**<  92 Flex Controller Area Network module                                              */
   CAN0_Error_IRQn               =  77,   /**<  93 Flex Controller Area Network module                                              */
-  CAN0_Tx_IRQn                  =  78,   /**<  94 Flex Controller Area Network module                                              */
-  CAN0_Rx_IRQn                  =  79,   /**<  95 Flex Controller Area Network module                                              */
+  CAN0_TxWarning_IRQn           =  78,   /**<  94 Flex Controller Area Network module                                              */
+  CAN0_RxWarning_IRQn           =  79,   /**<  95 Flex Controller Area Network module                                              */
   CAN0_WakeUp_IRQn              =  80,   /**<  96 Flex Controller Area Network module                                              */
   PWMA_CMP0_IRQn                =  81,   /**<  97 Pulse Width Modulator with nano edge placement                                   */
   PWMA_RELOAD0_IRQn             =  82,   /**<  98 Pulse Width Modulator with nano edge placement                                   */
@@ -111,11 +111,11 @@ typedef enum {
   PWMA_RERR_IRQn                =  90,   /**< 106 Pulse Width Modulator with nano edge placement                                   */
   PWMA_FAULT_IRQn               =  91,   /**< 107 Pulse Width Modulator with nano edge placement                                   */
   CMP3_IRQn                     =  92,   /**< 108 High-Speed Comparator                                                            */
-  CAN1_Message_IRQn             =  94,   /**< 110 Flex Controller Area Network module                                              */
+  CAN1_MessageBuffer_IRQn       =  94,   /**< 110 Flex Controller Area Network module                                              */
   CAN1_BusOff_IRQn              =  95,   /**< 111 Flex Controller Area Network module                                              */
   CAN1_Error_IRQn               =  96,   /**< 112 Flex Controller Area Network module                                              */
-  CAN1_Tx_IRQn                  =  97,   /**< 113 Flex Controller Area Network module                                              */
-  CAN1_Rx_IRQn                  =  98,   /**< 114 Flex Controller Area Network module                                              */
+  CAN1_TxWarning_IRQn           =  97,   /**< 113 Flex Controller Area Network module                                              */
+  CAN1_RxWarning_IRQn           =  98,   /**< 114 Flex Controller Area Network module                                              */
   CAN1_WakeUp_IRQn              =  99,   /**< 115 Flex Controller Area Network module                                              */
 } IRQn_Type;
 
@@ -190,11 +190,11 @@ extern void ENC_WDOG_SAB_IRQHandler(void);           /**< Quadrature Decoder    
 extern void ENC_INDEX_IRQHandler(void);              /**< Quadrature Decoder                                                               */
 extern void CMP2_IRQHandler(void);                   /**< High-Speed Comparator                                                            */
 extern void ADCB_IRQHandler(void);                   /**< Analogue to digital converter                                                    */
-extern void CAN0_Message_IRQHandler(void);           /**< Flex Controller Area Network module                                              */
+extern void CAN0_MessageBuffer_IRQHandler(void);     /**< Flex Controller Area Network module                                              */
 extern void CAN0_BusOff_IRQHandler(void);            /**< Flex Controller Area Network module                                              */
 extern void CAN0_Error_IRQHandler(void);             /**< Flex Controller Area Network module                                              */
-extern void CAN0_Tx_IRQHandler(void);                /**< Flex Controller Area Network module                                              */
-extern void CAN0_Rx_IRQHandler(void);                /**< Flex Controller Area Network module                                              */
+extern void CAN0_TxWarning_IRQHandler(void);         /**< Flex Controller Area Network module                                              */
+extern void CAN0_RxWarning_IRQHandler(void);         /**< Flex Controller Area Network module                                              */
 extern void CAN0_WakeUp_IRQHandler(void);            /**< Flex Controller Area Network module                                              */
 extern void PWMA_CMP0_IRQHandler(void);              /**< Pulse Width Modulator with nano edge placement                                   */
 extern void PWMA_RELOAD0_IRQHandler(void);           /**< Pulse Width Modulator with nano edge placement                                   */
@@ -208,11 +208,11 @@ extern void PWMA_CAP_IRQHandler(void);               /**< Pulse Width Modulator 
 extern void PWMA_RERR_IRQHandler(void);              /**< Pulse Width Modulator with nano edge placement                                   */
 extern void PWMA_FAULT_IRQHandler(void);             /**< Pulse Width Modulator with nano edge placement                                   */
 extern void CMP3_IRQHandler(void);                   /**< High-Speed Comparator                                                            */
-extern void CAN1_Message_IRQHandler(void);           /**< Flex Controller Area Network module                                              */
+extern void CAN1_MessageBuffer_IRQHandler(void);     /**< Flex Controller Area Network module                                              */
 extern void CAN1_BusOff_IRQHandler(void);            /**< Flex Controller Area Network module                                              */
 extern void CAN1_Error_IRQHandler(void);             /**< Flex Controller Area Network module                                              */
-extern void CAN1_Tx_IRQHandler(void);                /**< Flex Controller Area Network module                                              */
-extern void CAN1_Rx_IRQHandler(void);                /**< Flex Controller Area Network module                                              */
+extern void CAN1_TxWarning_IRQHandler(void);         /**< Flex Controller Area Network module                                              */
+extern void CAN1_RxWarning_IRQHandler(void);         /**< Flex Controller Area Network module                                              */
 extern void CAN1_WakeUp_IRQHandler(void);            /**< Flex Controller Area Network module                                              */
 
 /**
@@ -1139,7 +1139,7 @@ typedef struct AOI_Type {
 */
 
 /* ================================================================================ */
-/* ================           CAN0 (file:CAN0_MKV)                 ================ */
+/* ================           CAN0 (file:CAN0_FLEX_MKV)            ================ */
 /* ================================================================================ */
 
 /**
