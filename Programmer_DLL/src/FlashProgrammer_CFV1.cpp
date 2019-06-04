@@ -290,7 +290,7 @@ USBDM_ErrorCode FlashProgrammer_CFV1::getPageAddress(MemoryRegionConstPtr memory
    uint32_t virtualAddress = (physicalAddress&0xFFFF);
    uint16_t pageNum16 = memoryRegionPtr->getPageNo(physicalAddress);
    if (pageNum16 == MemoryRegion::NoPageNo) {
-      log.print("A=0x%06X - No page #!\n", physicalAddress);
+      log.error("A=0x%06X - No page #!\n", physicalAddress);
       return PROGRAMMING_RC_ERROR_INTERNAL_CHECK_FAILED;
    }
    *pageNo = (uint8_t)pageNum16;
@@ -329,6 +329,7 @@ USBDM_ErrorCode FlashProgrammer_CFV1::setPageRegisters(uint32_t physicalAddress)
          }
          uint16_t pageNum16 = memoryRegionPtr->getPageNo(physicalAddress);
          if (pageNum16 == MemoryRegion::NoPageNo) {
+        	log.error("pageNum16 == MemoryRegion::NoPageNo");
             return PROGRAMMING_RC_ERROR_INTERNAL_CHECK_FAILED;
          }
          uint8_t pageNum = (uint8_t)pageNum16;
@@ -516,7 +517,7 @@ USBDM_ErrorCode FlashProgrammer_CFV1::confirmSDID() {
       // Return this error even though the cause may be different
       return PROGRAMMING_RC_ERROR_WRONG_SDID;
    }
-   if (!device->isThisDevice(targetSDID)) {
+   if (!device->isThisDeviceOrAlias(targetSDID)) {
       log.error("M=0x%8.8X, V=0x%8.8X => Failed (Target SDID=0x%8.8X)\n",
             device->getSDID().mask,
             device->getSDID().value,
@@ -854,35 +855,24 @@ USBDM_ErrorCode FlashProgrammer_CFV1::loadTargetProgram(FlashProgramConstPtr fla
       return PROGRAMMING_RC_ERROR_INTERNAL_CHECK_FAILED;
    }
 
+   // Find RAM region to use
+   device->getRamRegionFor(loadAddress, ramStart, ramEnd);
+   log.print("Using RAM region [0x%8X..0x%8X]\n", ramStart, ramEnd);
+
    memset(&targetProgramInfo, 0, sizeof(targetProgramInfo));
 
-#if TARGET == MC56F80xx
-   MemorySpace_t memorySpace = MS_XWord;
-#else
    MemorySpace_t memorySpace = MS_Byte;
-#endif
    // Probe RAM buffer
-   rc = probeMemory(memorySpace, device->getRamStart());
+   rc = probeMemory(memorySpace, ramStart);
    if (rc == BDM_RC_OK) {
-      rc = probeMemory(memorySpace, device->getRamEnd());
+      rc = probeMemory(memorySpace, ramEnd);
    }
    if (rc != BDM_RC_OK) {
       log.error("Failed, probeMemory() failed\n");
       return rc;
    }
-#if (TARGET==HCS08)
-   LoadInfoStruct *infoPtr = (LoadInfoStruct *)buffer;
-   targetProgramInfo.smallProgram = (infoPtr->flags&OPT_SMALL_CODE) != 0;
-   if (targetProgramInfo.smallProgram) {
-      return loadSmallTargetProgram(buffer, loadAddress, size, flashProgram, flashOperation);
-   }
-   else {
-      return loadLargeTargetProgram(buffer, loadAddress, size, flashProgram, flashOperation);
-   }
-#else
    targetProgramInfo.smallProgram = false;
    return loadLargeTargetProgram(buffer, loadAddress, size, flashProgram, flashOperation);
-#endif
 }
 
 //=======================================================================
@@ -944,7 +934,7 @@ USBDM_ErrorCode FlashProgrammer_CFV1::loadLargeTargetProgram(uint8_t    *buffer,
 
    if ((capabilities&CAP_RELOCATABLE)!=0) {
       // Relocate Code
-      codeLoadAddress = (device->getRamStart()+3)&~3; // Relocate to start of RAM
+      codeLoadAddress = (ramStart+3)&~3; // Relocate to start of RAM
       if (loadAddress != codeLoadAddress) {
          log.print("Loading at non-default address, load@0x%04X (relocated from=%04X)\n",
                codeLoadAddress, loadAddress);
@@ -952,33 +942,19 @@ USBDM_ErrorCode FlashProgrammer_CFV1::loadLargeTargetProgram(uint8_t    *buffer,
          codeEntry += codeLoadAddress - loadAddress;
       }
    }
-#if TARGET != MC56F80xx
-   if ((codeLoadAddress < device->getRamStart()) || (codeLoadAddress > device->getRamEnd())) {
-      log.error("Image load address is invalid.\n");
+   if ((codeLoadAddress < ramStart) || (codeLoadAddress > ramEnd)) {
+      log.error("Image load address (0x%8X) is invalid: range [0x%8X, 0x%8X].\n", codeLoadAddress, ramStart, ramEnd);
       return PROGRAMMING_RC_ERROR_INTERNAL_CHECK_FAILED;
    }
-   if ((codeEntry < device->getRamStart()) || (codeEntry > device->getRamEnd())) {
-      log.error("Image Entry point is invalid.\n");
+   if ((codeEntry < ramStart) || (codeEntry > ramEnd)) {
+      log.error("Image Entry point (0x%8X) is invalid: range [0x%8X, 0x%8X].\n", codeEntry, ramStart, ramEnd);
       return PROGRAMMING_RC_ERROR_INTERNAL_CHECK_FAILED;
    }
-#endif
-#if TARGET == MC56F80xx
-   // Update location of where programming info will be located
-   if ((capabilities&CAP_DSC_OVERLAY)!=0) {
-      // Loading code into shared RAM - load data offset by code size
-      log.print(" - loading data into overlayed RAM @ 0x%06X\n", dataHeaderAddress);
-   }
-   else {
-      // Loading code into separate program RAM - load data RAM separately
-      log.print(" - loading data into separate RAM @ 0x%06X\n", dataHeaderAddress);
-   }
-#else
    if ((capabilities&CAP_DATA_FIXED)==0) {
       // Relocate Data Entry to immediately after code
       dataHeaderAddress = codeLoadAddress + size;
       log.print("Relocating flashData @ 0x%06X\n", dataHeaderAddress);
    }
-#endif
 
    // Required flash flashAlignmentMask
    uint32_t flashAlignmentMask = flashOperationInfo.alignment-1;
@@ -994,7 +970,7 @@ USBDM_ErrorCode FlashProgrammer_CFV1::loadLargeTargetProgram(uint8_t    *buffer,
    dataLoadAddress = (dataLoadAddress+procAlignmentMask)&~procAlignmentMask;
    targetProgramInfo.dataOffset   = dataLoadAddress-dataHeaderAddress;
    // Save maximum size of the buffer (in uint8_t)
-   targetProgramInfo.maxDataSize  = device->getRamEnd()-dataLoadAddress+1;
+   targetProgramInfo.maxDataSize  = ramEnd-dataLoadAddress+1;
    // Align buffer size to worse case alignment for processor read
    targetProgramInfo.maxDataSize  = targetProgramInfo.maxDataSize&~procAlignmentMask;
    // Align buffer size to flash alignment requirement
@@ -1026,28 +1002,21 @@ USBDM_ErrorCode FlashProgrammer_CFV1::loadLargeTargetProgram(uint8_t    *buffer,
       log.error("FlashProgramHeader.dataOffset is not aligned\n");
       return PROGRAMMING_RC_ERROR_INTERNAL_CHECK_FAILED;
    }
-#if (TARGET != ARM)
    if ((targetProgramInfo.entry & procAlignmentMask) != 0){
       log.error("FlashProgramHeader.entry is not aligned\n");
       return PROGRAMMING_RC_ERROR_INTERNAL_CHECK_FAILED;
    }
-#else
-   if ((targetProgramInfo.entry & procAlignmentMask) != 1){
-      log.error("FlashProgramHeader.entry is not aligned\n");
-      return PROGRAMMING_RC_ERROR_INTERNAL_CHECK_FAILED;
-   }
-#endif
    // Sanity check buffer
-   if (((uint32_t)(targetProgramInfo.headerAddress+targetProgramInfo.dataOffset)<device->getRamStart()) ||
-       ((uint32_t)(targetProgramInfo.headerAddress+targetProgramInfo.dataOffset+targetProgramInfo.maxDataSize-1)>device->getRamEnd())) {
+   if (((uint32_t)(targetProgramInfo.headerAddress+targetProgramInfo.dataOffset)<ramStart) ||
+       ((uint32_t)(targetProgramInfo.headerAddress+targetProgramInfo.dataOffset+targetProgramInfo.maxDataSize-1)>ramEnd)) {
       log.error("Data buffer location [0x%06X..0x%06X] is outside target RAM [0x%06X-0x%06X]\n",
             targetProgramInfo.headerAddress+targetProgramInfo.dataOffset,
             targetProgramInfo.headerAddress+targetProgramInfo.dataOffset+targetProgramInfo.maxDataSize-1,
-            device->getRamStart(), device->getRamEnd());
+            ramStart, ramEnd);
       return PROGRAMMING_RC_ERROR_INTERNAL_CHECK_FAILED;
    }
-   if ((dataLoadAddress+40) > device->getRamEnd()) {
-      log.error("Data buffer is too small [0x%X..0x%X] \n", dataLoadAddress, device->getRamEnd());
+   if ((dataLoadAddress+40) > ramEnd) {
+      log.error("Data buffer is too small [0x%X..0x%X] \n", dataLoadAddress, ramEnd);
       return PROGRAMMING_RC_ERROR_INTERNAL_CHECK_FAILED;
    }
 #if TARGET == MC56F80xx
@@ -1685,31 +1654,14 @@ USBDM_ErrorCode FlashProgrammer_CFV1::selectiveEraseFlashSecurity(void) {
       if (rc != PROGRAMMING_RC_OK) {
          return rc;
       }
+      
       uint32_t addressFlag = 0;
-
-#if (TARGET == HCS08) || (TARGET == HCS12)
-      if (memoryRegionPtr->getAddressType() == AddrLinear) {
-         addressFlag |= ADDRESS_LINEAR;
-      }
-      if (memoryRegionPtr->getMemoryType() == MemEEPROM) {
-         addressFlag |= ADDRESS_EEPROM;
-      }
-#endif
-#if (TARGET == MC56F80xx)
-      MemType_t memoryType = memoryRegionPtr->getMemoryType();
-      if (memoryType == MemXROM) {
-         // Flag used to indicate data (X:) address
-         log.print("Setting MemXROM address\n");
-         addressFlag |= ADDRESS_DATA;
-      }
-#endif
-#if (TARGET == CFV1) || (TARGET == ARM)
       MemType_t memoryType = memoryRegionPtr->getMemoryType();
       if ((memoryType == MemFlexNVM) || (memoryType == MemDFlash)) {
          // Flag need for DFLASH/flexNVM access
          addressFlag |= ADDRESS_A23;
       }
-#endif
+
       flashOperationInfo.flashAddress = securityAddress|addressFlag;
       if (flashOperationInfo.sectorSize == 0) {
          log.error("sectorSize must not be zero\n");
@@ -2072,16 +2024,6 @@ USBDM_ErrorCode FlashProgrammer_CFV1::doFlashBlock(FlashImagePtr flashImage,
    MemorySpace_t memorySpace       = MS_None;     // Memory space for target access
    uint32_t      memoryAddressMask = 0xFFFFFFFF;  // Mask to apply to flash address to get memory address
 
-#if (TARGET == MC56F80xx)
-   // MC56F80xx map DATA addresses as high addresses in flashImage
-   if (flashAddress >= FlashImage::DataOffset) {
-      memorySpace       = MS_XWord;
-      memoryAddressMask = 0x00FFFFFF;
-   }
-   else {
-      memorySpace       = MS_PWord;
-   }
-#endif
    // Locate containing Memory region (Programmable or RAM)
    MemoryRegionConstPtr memoryRegionPtr = device->getMemoryRegionFor(flashAddress&memoryAddressMask, memorySpace);
    if (memoryRegionPtr == NULL) {
@@ -2207,18 +2149,6 @@ USBDM_ErrorCode FlashProgrammer_CFV1::doFlashBlock(FlashImagePtr flashImage,
 
    uint32_t addressFlag = 0;        // Modifier for target memory address
 
-#if (TARGET == HCS08) || (TARGET == HCS12)
-   if (memoryRegionPtr->getMemoryType() == MemEEPROM) {
-      log.print("Setting EEPROM address flag\n");
-      addressFlag |= ADDRESS_EEPROM;
-   }
-   // Set up linear address
-   if (memoryRegionPtr->getAddressType() == AddrLinear) {
-      // Set Linear address
-      log.print("Setting Linear address\n");
-      addressFlag |= ADDRESS_LINEAR;
-   }
-#endif
    if ((memoryType == MemFlexNVM) || (memoryType == MemDFlash)) {
       // Flag needed for DFLASH/FlexNVM access on CFV1
       addressFlag |= ADDRESS_A23;
@@ -2266,17 +2196,6 @@ USBDM_ErrorCode FlashProgrammer_CFV1::doFlashBlock(FlashImagePtr flashImage,
       }
       uint32_t targetAddress = flashAddress&memoryAddressMask;
 
-#if (TARGET == HCS08) || (TARGET == HCS12)
-      // Map paged address
-      if (memoryRegionPtr->getAddressType() != AddrLinear) {
-         uint8_t pageNo;
-         rc = getPageAddress(memoryRegionPtr, flashAddress, &pageNo);
-         if (rc != PROGRAMMING_RC_OK) {
-            return rc;
-         }
-         targetAddress = (pageNo<<16)|(flashAddress&0xFFFF);
-      }
-#endif
       flashOperationInfo.flashAddress = addressFlag|targetAddress;
       flashOperationInfo.dataSize     = flashIndex;
       if (splitBlockSize==0) {
@@ -2292,14 +2211,7 @@ USBDM_ErrorCode FlashProgrammer_CFV1::doFlashBlock(FlashImagePtr flashImage,
           */
          log.print("ramBlock splitBlock %s, %s[0x%06X..0x%06X]\n",
                MemoryRegion::getMemoryTypeName(memoryType), getMemSpaceName(memorySpace), targetAddress, targetAddress+splitBlockSize-1);
-#if (TARGET == ARM)
-         rc = bdmInterface->writeMemory(MS_Long, splitBlockSize*sizeof(uint8_t), targetAddress, (const uint8_t *)bufferData);
-#elif (TARGET == MC56F80xx)
-         rc = bdmInterface->writeMemory(memorySpace, splitBlockSize*sizeof(uint8_t), targetAddress, (const uint8_t *)bufferData);
-//         log.printDump((const uint8_t *)bufferData, splitBlockSize*sizeof(uint8_t), targetAddress, WORD_ADDRESS);
-#else
          rc = bdmInterface->writeMemory(MS_Word, splitBlockSize*sizeof(uint8_t), targetAddress, (const uint8_t *)bufferData);
-#endif
       }
       else {
          /*
@@ -2452,37 +2364,10 @@ USBDM_ErrorCode FlashProgrammer_CFV1::doReadbackVerify(FlashImagePtr flashImage)
    while (enumerator->isValid()) {
       uint32_t imageAddress    = enumerator->getAddress();
       uint32_t memoryAddress;
-
-#if (TARGET==HCS08)||(TARGET==HC12)
-      USBDM_ErrorCode rc = setPageRegisters(imageAddress);
-      if (rc != PROGRAMMING_RC_OK) {
-         return rc;
-      }
-#endif
-
       uint32_t      offset      = 0;
       MemorySpace_t memorySpace = MS_None;
 
-#if (TARGET==RS08)
-      memorySpace = MS_Byte;
-#elif (TARGET == MC56F80xx)
-      if (imageAddress >= FlashImage::DataOffset) {
-         memorySpace = MS_XWord;
-         offset      = FlashImage::DataOffset;
-      }
-      else {
-         memorySpace = MS_PWord;
-         offset      = 0;
-      }
-#elif (TARGET == ARM)
-      memorySpace = MS_Long;
-#elif (TARGET == HCS08) || (TARGET == HCS12)
-      memorySpace = (MemorySpace_t)(MS_Fast|MS_Byte);
-#elif (TARGET == S12Z)
       memorySpace = MS_Word;
-#else
-      memorySpace = MS_Word;
-#endif
 
       // Find end of block to verify
       enumerator->lastValid();
@@ -2501,11 +2386,6 @@ USBDM_ErrorCode FlashProgrammer_CFV1::doReadbackVerify(FlashImagePtr flashImage)
             log.error("Verifying Block %s[0x%8.8X..0x%8.8X] - Not in valid memory region\n", getMemSpaceName(memorySpace), memoryAddress, memoryAddress+regionSize-1);
             return PROGRAMMING_RC_ERROR_OUTSIDE_TARGET_FLASH;
          }
-#if (TARGET == ARM)
-         if (memRegion->getAlignment()<memorySpace) {
-            memorySpace = (MemorySpace_t)memRegion->getAlignment();
-         }
-#endif
          // Get size of continuous block containing address
          uint32_t lastContinuous=0;
          memRegion->findLastContiguous(memoryAddress, &lastContinuous);
@@ -2677,9 +2557,7 @@ USBDM_ErrorCode FlashProgrammer_CFV1::verifyFlash(FlashImagePtr flashImage,
    log.print("\tTrim, F=%ld, NVA@%4.4X, clock@%4.4X\n",   device->getClockTrimFreq(),
                                                           device->getClockTrimNVAddress(),
                                                           device->getClockAddress());
-   log.print("\tRam[%4.4X...%4.4X]\n",                    device->getRamStart(), device->getRamEnd());
-   log.print("\tErase=%s\n",                              DeviceData::getEraseMethodName(device->getEraseMethod()));
-   log.print("\tReset=%s\n",                              DeviceData::getResetMethodName(device->getResetMethod()));
+   log.print("\tReset=%s\n",                              DeviceData::getResetMethodName(getResetMethod()));
    log.print("\tSecurity=%s\n",                           getSecurityName(device->getSecurity()));
    log.print("\tTotal bytes=%d\n",                        flashImage->getByteCount());
    log.print("===========================================================\n");
@@ -2779,7 +2657,6 @@ USBDM_ErrorCode FlashProgrammer_CFV1::programFlash(FlashImagePtr flashImage,
          "Programming target\n"
          "\tDevice = \'%s\'\n"
          "\tTrim, F=%ld, NVA@%4.4X, clock@%4.4X\n"
-         "\tRam[%4.4X...%4.4X]\n"
          "\tErase=%s\n"
          "\tReset=%s\n"
          "\tSecurity=%s\n"
@@ -2789,8 +2666,6 @@ USBDM_ErrorCode FlashProgrammer_CFV1::programFlash(FlashImagePtr flashImage,
          device->getClockTrimFreq(),
          device->getClockTrimNVAddress(),
          device->getClockAddress(),
-         device->getRamStart(),
-         device->getRamEnd(),
          DeviceData::getEraseMethodName(device->getEraseMethod()),
          DeviceData::getResetMethodName(device->getResetMethod()),
          getSecurityName(device->getSecurity()),
@@ -2803,9 +2678,8 @@ USBDM_ErrorCode FlashProgrammer_CFV1::programFlash(FlashImagePtr flashImage,
    log.print("\tTrim, F=%ld, NVA@%4.4X, clock@%4.4X\n",   device->getClockTrimFreq(),
                                                           device->getClockTrimNVAddress(),
                                                           device->getClockAddress());
-   log.print("\tRam[%4.4X...%4.4X]\n",                    device->getRamStart(), device->getRamEnd());
-   log.print("\tErase=%s\n",                              DeviceData::getEraseMethodName(device->getEraseMethod()));
-   log.print("\tReset=%s\n",                              DeviceData::getResetMethodName(device->getResetMethod()));
+   log.print("\tErase=%s\n",                              DeviceData::getEraseMethodName(getEraseMethod()));
+   log.print("\tReset=%s\n",                              DeviceData::getResetMethodName(getResetMethod()));
    log.print("\tSecurity=%s\n",                           getSecurityName(device->getSecurity()));
    log.print("\tTotal bytes=%d\n",                        flashImage->getByteCount());
    log.print("\tdoRamWrites=%s\n",                        doRamWrites?"T":"F");
@@ -2852,20 +2726,6 @@ USBDM_ErrorCode FlashProgrammer_CFV1::programFlash(FlashImagePtr flashImage,
       // Can't program if secured
       return PROGRAMMING_RC_ERROR_SECURED;
    }
-#if (TARGET == HCS12)
-   // Check for nasty chip of death
-   rc = checkUnsupportedTarget();
-   if (rc != PROGRAMMING_RC_OK) {
-      return rc;
-   }
-#endif
-#if (TARGET == RS08) || (TARGET == HCS08) || (TARGET == HCS12) || (TARGET == MC56F80xx)
-   // Check target SDID (RS08/HCS08/HCS12 allows SDID to be read on secured device)
-   rc = confirmSDID();
-   if (rc != PROGRAMMING_RC_OK) {
-      return rc;
-   }
-#endif
    // Mass erase if selected
    if (getEraseMethod() == DeviceData::eraseMass) {
       rc = massEraseTarget(true);
@@ -2887,12 +2747,6 @@ USBDM_ErrorCode FlashProgrammer_CFV1::programFlash(FlashImagePtr flashImage,
       if (rc != PROGRAMMING_RC_OK) {
          break;
       }
-#if (TARGET == CFVx) || (TARGET == MC56F80xx)// || (TARGET == ARM)
-      rc = determineTargetSpeed();
-      if (rc != PROGRAMMING_RC_OK) {
-         break;
-      }
-#endif
 #if (TARGET == RS08) || (TARGET == CFV1) || (TARGET == HCS08)
       // Calculate clock trim values & update memory image
       // log.print("setFlashTrimValues() - trimming\n");

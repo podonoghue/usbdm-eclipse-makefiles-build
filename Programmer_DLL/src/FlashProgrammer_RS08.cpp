@@ -658,6 +658,8 @@ USBDM_ErrorCode FlashProgrammer_RS08::loadAndStartExecutingTargetProgram() {
 
    log.print("FlashProgrammer_RS08::loadAndExecuteTargetProgram()\n");
 
+   device->getLargestRamRegion(ramStart, ramEnd);
+
    // Create & patch image of program for target memory
    memcpy(programImage, RS08_flashProgram, sizeof(RS08_flashProgram));
    // Patch relocated addresses
@@ -666,7 +668,7 @@ USBDM_ErrorCode FlashProgrammer_RS08::loadAndStartExecutingTargetProgram() {
    // Write Flash programming code to Target memory
    BDMrc = bdmInterface->writeMemory(1,
                           sizeof(programImage),
-                          device->getRamStart(),
+                          ramStart,
                           programImage );
    if (BDMrc != BDM_RC_OK)
       return PROGRAMMING_RC_ERROR_BDM_WRITE;
@@ -674,7 +676,7 @@ USBDM_ErrorCode FlashProgrammer_RS08::loadAndStartExecutingTargetProgram() {
    // Read back to verify
    BDMrc = bdmInterface->readMemory(1,
                          sizeof(programImage),
-                         device->getRamStart(),
+                         ramStart,
                          verifyBuffer );
    if (BDMrc != BDM_RC_OK)
       return PROGRAMMING_RC_ERROR_BDM_READ;
@@ -687,7 +689,7 @@ USBDM_ErrorCode FlashProgrammer_RS08::loadAndStartExecutingTargetProgram() {
       return PROGRAMMING_RC_ERROR_BDM_READ;
    }
    // Start flash code on target
-   BDMrc = bdmInterface->writePC(device->getRamStart());
+   BDMrc = bdmInterface->writePC(ramStart);
    if (BDMrc != BDM_RC_OK)
       return PROGRAMMING_RC_ERROR_BDM_WRITE;
 
@@ -769,12 +771,12 @@ USBDM_ErrorCode FlashProgrammer_RS08::writeFlashBlock( unsigned int        byteC
          // Using large buffer
          rc = bdmInterface->writeMemory(1,
                                 byteCount,
-                                device->getRamStart()+sizeof(RS08_flashProgram),
+                                ramStart+sizeof(RS08_flashProgram),
                                 data);
          if (rc != BDM_RC_OK)
             break;
          // Set buffer address
-         flashCommand[0xC] = device->getRamStart()+sizeof(RS08_flashProgram);
+         flashCommand[0xC] = ramStart+sizeof(RS08_flashProgram);
       }
       // Write command data - triggers flash write
       rc = bdmInterface->writeMemory(1, sizeof(flashCommand), 0, flashCommand);
@@ -893,10 +895,10 @@ USBDM_ErrorCode FlashProgrammer_RS08::programBlock(FlashImagePtr flashImage,
    MemType_t memoryType = memoryRegionPtr->getMemoryType();
    log.print("FlashProgrammer_RS08::doFlashBlock() - Processing %s\n", MemoryRegion::getMemoryTypeName(memoryType));
    // Initially assume buffer directly follows program in direct memory
-   bufferAddress = device->getRamStart() + sizeof(RS08_flashProgram);
+   bufferAddress = ramStart + sizeof(RS08_flashProgram);
 
    // Calculate available space
-   bufferSize = device->getRamEnd() - bufferAddress + 1;
+   bufferSize = ramEnd - bufferAddress + 1;
 
    if (bufferSize <= 8) {
       // Use small buffer in Tiny RAM
@@ -1390,7 +1392,6 @@ USBDM_ErrorCode FlashProgrammer_RS08::verifyFlash(FlashImagePtr flashImage,
    log.print("\tTrim, F=%ld, NVA@%4.4X, clock@%4.4X\n",   device->getClockTrimFreq(),
                                                           device->getClockTrimNVAddress(),
                                                           device->getClockAddress());
-   log.print("\tRam[%4.4X...%4.4X]\n",                    device->getRamStart(), device->getRamEnd());
    log.print("\tErase=%s\n",                              DeviceData::getEraseMethodName(device->getEraseMethod()));
    log.print("\tSecurity=%s\n",                           getSecurityName(device->getSecurity()));
    log.print("\tTotal bytes=%d\n",                        flashImage->getByteCount());
@@ -1497,7 +1498,6 @@ USBDM_ErrorCode FlashProgrammer_RS08::programFlash(FlashImagePtr flashImage,
          "Programming target\n"
          "\tDevice = \'%s\'\n"
          "\tTrim, F=%ld, NVA@%4.4X, clock@%4.4X\n"
-         "\tRam[%4.4X...%4.4X]\n"
          "\tErase=%s\n"
          "\tSecurity=%s\n"
          "\tTotal bytes=%d\n"
@@ -1506,8 +1506,6 @@ USBDM_ErrorCode FlashProgrammer_RS08::programFlash(FlashImagePtr flashImage,
          device->getClockTrimFreq(),
          device->getClockTrimNVAddress(),
          device->getClockAddress(),
-         device->getRamStart(),
-         device->getRamEnd(),
          DeviceData::getEraseMethodName(device->getEraseMethod()),
          getSecurityName(device->getSecurity()),
          flashImage->getByteCount(),
@@ -1519,7 +1517,6 @@ USBDM_ErrorCode FlashProgrammer_RS08::programFlash(FlashImagePtr flashImage,
    log.print("\tTrim, F=%ld, NVA@%4.4X, clock@%4.4X\n",   device->getClockTrimFreq(),
                                                           device->getClockTrimNVAddress(),
                                                           device->getClockAddress());
-   log.print("\tRam[%4.4X...%4.4X]\n",                    device->getRamStart(), device->getRamEnd());
    log.print("\tErase=%s\n",                              DeviceData::getEraseMethodName(device->getEraseMethod()));
    log.print("\tSecurity=%s\n",                           getSecurityName(device->getSecurity()));
    log.print("\tTotal bytes=%d\n",                        flashImage->getByteCount());
@@ -1724,7 +1721,7 @@ USBDM_ErrorCode FlashProgrammer_RS08::programFlash(FlashImagePtr flashImage,
 //!
 //! @return error code see \ref USBDM_ErrorCode
 //!
-USBDM_ErrorCode FlashProgrammer_RS08::setDeviceData(const DeviceDataConstPtr device) {
+USBDM_ErrorCode FlashProgrammer_RS08::setDeviceData(const DeviceDataPtr device) {
    LOGGING_Q;
    currentFlashProgram.reset();
    this->device = device;

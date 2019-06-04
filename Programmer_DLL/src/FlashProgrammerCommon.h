@@ -134,8 +134,11 @@ protected:
    unsigned                   securityAreaCount;
    SecurityDataCache          securityData[2];
 
-   const DeviceData::EraseMethod   defaultEraseMethod;
-   const DeviceData::ResetMethod   defaultResetMethod;
+   const DeviceData::EraseMethod   defaultEraseMethod;   //!< Default erase method if none found for device
+   const DeviceData::ResetMethod   defaultResetMethod;   //!< Default reset method if none found for device
+
+   uint32_t                ramStart; //!< Start of RAM region for programming
+   uint32_t                ramEnd;   //!< End of RAM region for programming
 
    static const char *getFlashOperationName(FlashOperation flashOperation);
 

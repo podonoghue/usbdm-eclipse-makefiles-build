@@ -265,93 +265,6 @@ FlashProgrammer_CFVx::~FlashProgrammer_CFVx() {
    LOGGING_E;
 }
 
-#if (TARGET == HCS08) || (TARGET == HCS12)
-//=======================================================================
-//! Gets the page number portion of a physical address (Flash)
-//!
-//! @param memoryRegionPtr - memory region to check
-//! @param physicalAddress - address to examine
-//! @param pageNo          - corresponding page number
-//!
-USBDM_ErrorCode FlashProgrammer_CFVx::getPageAddress(MemoryRegionConstPtr memoryRegionPtr, uint32_t physicalAddress, uint8_t *pageNo) {
-   LOGGING_Q;
-   *pageNo = 0x00;
-   if ((memoryRegionPtr == NULL) || !memoryRegionPtr->contains(physicalAddress)) {
-      log.error("A=0x%06X - Invalid Flash address\n", physicalAddress);
-      return PROGRAMMING_RC_ERROR_INTERNAL_CHECK_FAILED;
-   }
-   if (memoryRegionPtr->getAddressType() != AddrPaged) {
-      log.print("A=0x%06X - Not paged\n", physicalAddress);
-      return PROGRAMMING_RC_OK;
-   }
-   uint32_t ppageAddress = memoryRegionPtr->getPageAddress();
-   if (ppageAddress == 0) {
-      log.print("A=0x%06X - Not mapped\n", physicalAddress);
-      return PROGRAMMING_RC_OK;
-   }
-   uint32_t virtualAddress = (physicalAddress&0xFFFF);
-   uint16_t pageNum16 = memoryRegionPtr->getPageNo(physicalAddress);
-   if (pageNum16 == MemoryRegion::NoPageNo) {
-      log.print("A=0x%06X - No page #!\n", physicalAddress);
-      return PROGRAMMING_RC_ERROR_INTERNAL_CHECK_FAILED;
-   }
-   *pageNo = (uint8_t)pageNum16;
-   log.print("(0x%06X) - PPAGE=%2.2X (Mapped Address=%06X)\n", physicalAddress, *pageNo, ((*pageNo)<<16)|virtualAddress);
-
-   return PROGRAMMING_RC_OK;
-}
-
-//=======================================================================
-//! Set PAGE registers (PPAGE/EPAGE)
-//!
-//! @param physicalAddress - memory address being accessed
-//!
-//! @return error code see \ref USBDM_ErrorCode.
-//!
-USBDM_ErrorCode FlashProgrammer_CFVx::setPageRegisters(uint32_t physicalAddress) {
-   LOGGING_Q;
-
-   // Process each flash region
-   USBDM_ErrorCode rc = BDM_RC_OK;
-   for (int index=0; ; index++) {
-      MemoryRegionConstPtr memoryRegionPtr = device->getMemoryRegion(index);
-      if (memoryRegionPtr == NULL) {
-         break;
-      }
-      if (memoryRegionPtr && memoryRegionPtr->contains(physicalAddress)) {
-         if (memoryRegionPtr->getAddressType() != AddrPaged) {
-            return PROGRAMMING_RC_OK;
-         }
-         uint32_t ppageAddress   = memoryRegionPtr->getPageAddress();
-         uint32_t virtualAddress = (physicalAddress&0xFFFF);
-         if (ppageAddress == 0) {
-            // Not paged memory
-            log.print("Not mapped (VirtAddr=PhyAddr=%06X)\n", physicalAddress);
-            return PROGRAMMING_RC_OK;
-         }
-         uint16_t pageNum16 = memoryRegionPtr->getPageNo(physicalAddress);
-         if (pageNum16 == MemoryRegion::NoPageNo) {
-            return PROGRAMMING_RC_ERROR_INTERNAL_CHECK_FAILED;
-         }
-         uint8_t pageNum = (uint8_t)pageNum16;
-         log.print("Setting E/PPAGE(0x%04X)=%2.2X (PhyAddr=%06X, VirAddr=%04X)\n", ppageAddress, pageNum, physicalAddress, virtualAddress);
-         if (bdmInterface->writeMemory(1, 1, ppageAddress, &pageNum) != BDM_RC_OK) {
-            return PROGRAMMING_RC_ERROR_PPAGE_FAIL;
-         }
-         uint8_t pageNumRead;
-         if (bdmInterface->readMemory(1, 1, ppageAddress, &pageNumRead) != BDM_RC_OK) {
-            return PROGRAMMING_RC_ERROR_PPAGE_FAIL;
-         }
-         if (pageNum != pageNumRead) {
-            return PROGRAMMING_RC_ERROR_PPAGE_FAIL;
-         }
-         return BDM_RC_OK;
-      }
-   }
-   return rc;
-}
-#endif
-
 //=============================================================================
 //! Connects to the target. \n
 //! - Resets target to special mode
@@ -860,13 +773,17 @@ USBDM_ErrorCode FlashProgrammer_CFVx::loadTargetProgram(FlashProgramConstPtr fla
       return PROGRAMMING_RC_ERROR_INTERNAL_CHECK_FAILED;
    }
 
+   // Find RAM region to use
+   device->getRamRegionFor(loadAddress, ramStart, ramEnd);
+   log.print("Using RAM region [0x%8X..0x%8X]\n", ramStart, ramEnd);
+
    memset(&targetProgramInfo, 0, sizeof(targetProgramInfo));
 
    MemorySpace_t memorySpace = MS_Byte;
    // Probe RAM buffer
-   rc = probeMemory(memorySpace, device->getRamStart());
+   rc = probeMemory(memorySpace, ramStart);
    if (rc == BDM_RC_OK) {
-      rc = probeMemory(memorySpace, device->getRamEnd());
+      rc = probeMemory(memorySpace, ramEnd);
    }
    if (rc != BDM_RC_OK) {
       log.error("Failed, probeMemory() failed\n");
@@ -936,7 +853,7 @@ USBDM_ErrorCode FlashProgrammer_CFVx::loadLargeTargetProgram(uint8_t    *buffer,
 
    if ((capabilities&CAP_RELOCATABLE)!=0) {
       // Relocate Code
-      codeLoadAddress = (device->getRamStart()+3)&~3; // Relocate to start of RAM
+      codeLoadAddress = (ramStart+3)&~3; // Relocate to start of RAM
       if (loadAddress != codeLoadAddress) {
          log.print("Loading at non-default address, load@0x%04X (relocated from=%04X)\n",
                codeLoadAddress, loadAddress);
@@ -944,12 +861,12 @@ USBDM_ErrorCode FlashProgrammer_CFVx::loadLargeTargetProgram(uint8_t    *buffer,
          codeEntry += codeLoadAddress - loadAddress;
       }
    }
-   if ((codeLoadAddress < device->getRamStart()) || (codeLoadAddress > device->getRamEnd())) {
-      log.error("Image load address is invalid.\n");
+   if ((codeLoadAddress < ramStart) || (codeLoadAddress > ramEnd)) {
+      log.error("Image load address (0x%8X) is invalid: range [0x%8X, 0x%8X].\n", codeLoadAddress, ramStart, ramEnd);
       return PROGRAMMING_RC_ERROR_INTERNAL_CHECK_FAILED;
    }
-   if ((codeEntry < device->getRamStart()) || (codeEntry > device->getRamEnd())) {
-      log.error("Image Entry point is invalid.\n");
+   if ((codeEntry < ramStart) || (codeEntry > ramEnd)) {
+      log.error("Image Entry point (0x%8X) is invalid: range [0x%8X, 0x%8X].\n", codeEntry, ramStart, ramEnd);
       return PROGRAMMING_RC_ERROR_INTERNAL_CHECK_FAILED;
    }
    if ((capabilities&CAP_DATA_FIXED)==0) {
@@ -972,7 +889,7 @@ USBDM_ErrorCode FlashProgrammer_CFVx::loadLargeTargetProgram(uint8_t    *buffer,
    dataLoadAddress = (dataLoadAddress+procAlignmentMask)&~procAlignmentMask;
    targetProgramInfo.dataOffset   = dataLoadAddress-dataHeaderAddress;
    // Save maximum size of the buffer (in uint8_t)
-   targetProgramInfo.maxDataSize  = device->getRamEnd()-dataLoadAddress+1;
+   targetProgramInfo.maxDataSize  = ramEnd-dataLoadAddress+1;
    // Align buffer size to worse case alignment for processor read
    targetProgramInfo.maxDataSize  = targetProgramInfo.maxDataSize&~procAlignmentMask;
    // Align buffer size to flash alignment requirement
@@ -1009,16 +926,16 @@ USBDM_ErrorCode FlashProgrammer_CFVx::loadLargeTargetProgram(uint8_t    *buffer,
       return PROGRAMMING_RC_ERROR_INTERNAL_CHECK_FAILED;
    }
    // Sanity check buffer
-   if (((uint32_t)(targetProgramInfo.headerAddress+targetProgramInfo.dataOffset)<device->getRamStart()) ||
-       ((uint32_t)(targetProgramInfo.headerAddress+targetProgramInfo.dataOffset+targetProgramInfo.maxDataSize-1)>device->getRamEnd())) {
+   if (((uint32_t)(targetProgramInfo.headerAddress+targetProgramInfo.dataOffset)<ramStart) ||
+       ((uint32_t)(targetProgramInfo.headerAddress+targetProgramInfo.dataOffset+targetProgramInfo.maxDataSize-1)>ramEnd)) {
       log.error("Data buffer location [0x%06X..0x%06X] is outside target RAM [0x%06X-0x%06X]\n",
             targetProgramInfo.headerAddress+targetProgramInfo.dataOffset,
             targetProgramInfo.headerAddress+targetProgramInfo.dataOffset+targetProgramInfo.maxDataSize-1,
-            device->getRamStart(), device->getRamEnd());
+            ramStart, ramEnd);
       return PROGRAMMING_RC_ERROR_INTERNAL_CHECK_FAILED;
    }
-   if ((dataLoadAddress+40) > device->getRamEnd()) {
-      log.error("Data buffer is too small [0x%X..0x%X] \n", dataLoadAddress, device->getRamEnd());
+   if ((dataLoadAddress+40) > ramEnd) {
+      log.error("Data buffer is too small [0x%X..0x%X] \n", dataLoadAddress, ramEnd);
       return PROGRAMMING_RC_ERROR_INTERNAL_CHECK_FAILED;
    }
 #if TARGET == MC56F80xx
@@ -1470,16 +1387,6 @@ USBDM_ErrorCode FlashProgrammer_CFVx::executeTargetProgram(uint8_t *pBuffer, uin
       executionResult.dataSize = targetToNative16(executionResult.dataSize);
       log.print("   Address = 0x%06X, Data = 0x%04X\n", executionResult.data, executionResult.dataSize);
 #endif
-#if TARGET == CFV1
-      uint8_t SRSreg;
-      bdmInterface->readMemory(1, 1, 0xFF9800, &SRSreg);
-      log.error("SRS = 0x%02X\n", SRSreg);
-#endif
-#if TARGET == HCS08
-      uint8_t SRSreg;
-      bdmInterface->readMemory(1, 1, 0x1800, &SRSreg);
-      log.error("SRS = 0x%02X\n", SRSreg);
-#endif
    }
 #if defined(LOG) && 0
    uint8_t stackBuffer[50];
@@ -1593,14 +1500,6 @@ USBDM_ErrorCode FlashProgrammer_CFVx::eraseFlash(void) {
       uint32_t addressFlag  = 0;
       uint32_t flashAddress = memoryRegionPtr->getDummyAddress();
 
-#if (TARGET == HCS08) || (TARGET == HCS12)
-      if (memoryRegionPtr->getAddressType() == AddrLinear) {
-         addressFlag |= ADDRESS_LINEAR;
-      }
-      if (memoryRegionPtr->getMemoryType() == MemEEPROM) {
-         addressFlag |= ADDRESS_EEPROM;
-      }
-#endif
 #if (TARGET == MC56F80xx)
       MemType_t memoryType = memoryRegionPtr->getMemoryType();
       if (memoryType == MemXROM) {
@@ -2501,9 +2400,7 @@ USBDM_ErrorCode FlashProgrammer_CFVx::verifyFlash(FlashImagePtr flashImage,
    log.print("\tTrim, F=%ld, NVA@%4.4X, clock@%4.4X\n",   device->getClockTrimFreq(),
                                                           device->getClockTrimNVAddress(),
                                                           device->getClockAddress());
-   log.print("\tRam[%4.4X...%4.4X]\n",                    device->getRamStart(), device->getRamEnd());
-   log.print("\tErase=%s\n",                              DeviceData::getEraseMethodName(device->getEraseMethod()));
-   log.print("\tReset=%s\n",                              DeviceData::getResetMethodName(device->getResetMethod()));
+   log.print("\tReset=%s\n",                              DeviceData::getResetMethodName(getResetMethod()));
    log.print("\tSecurity=%s\n",                           getSecurityName(device->getSecurity()));
    log.print("\tTotal bytes=%d\n",                        flashImage->getByteCount());
    log.print("===========================================================\n");
@@ -2603,7 +2500,6 @@ USBDM_ErrorCode FlashProgrammer_CFVx::programFlash(FlashImagePtr flashImage,
          "Programming target\n"
          "\tDevice = \'%s\'\n"
          "\tTrim, F=%ld, NVA@%4.4X, clock@%4.4X\n"
-         "\tRam[%4.4X...%4.4X]\n"
          "\tErase=%s\n"
          "\tReset=%s\n"
          "\tSecurity=%s\n"
@@ -2613,8 +2509,6 @@ USBDM_ErrorCode FlashProgrammer_CFVx::programFlash(FlashImagePtr flashImage,
          device->getClockTrimFreq(),
          device->getClockTrimNVAddress(),
          device->getClockAddress(),
-         device->getRamStart(),
-         device->getRamEnd(),
          DeviceData::getEraseMethodName(device->getEraseMethod()),
          DeviceData::getResetMethodName(device->getResetMethod()),
          getSecurityName(device->getSecurity()),
@@ -2627,9 +2521,8 @@ USBDM_ErrorCode FlashProgrammer_CFVx::programFlash(FlashImagePtr flashImage,
    log.print("\tTrim, F=%ld, NVA@%4.4X, clock@%4.4X\n",   device->getClockTrimFreq(),
                                                           device->getClockTrimNVAddress(),
                                                           device->getClockAddress());
-   log.print("\tRam[%4.4X...%4.4X]\n",                    device->getRamStart(), device->getRamEnd());
-   log.print("\tErase=%s\n",                              DeviceData::getEraseMethodName(device->getEraseMethod()));
-   log.print("\tReset=%s\n",                              DeviceData::getResetMethodName(device->getResetMethod()));
+   log.print("\tErase=%s\n",                              DeviceData::getEraseMethodName(getEraseMethod()));
+   log.print("\tReset=%s\n",                              DeviceData::getResetMethodName(getResetMethod()));
    log.print("\tSecurity=%s\n",                           getSecurityName(device->getSecurity()));
    log.print("\tTotal bytes=%d\n",                        flashImage->getByteCount());
    log.print("\tdoRamWrites=%s\n",                        doRamWrites?"T":"F");

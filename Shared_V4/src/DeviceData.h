@@ -1153,8 +1153,6 @@ private:
    TargetType_t                  targetType;             //!< Type of target
    std::string                   targetName;             //!< Name of target
    bool                          hidden;                 //!< Device is hidden in programmer
-   uint32_t                      ramStart;               //!< Start of internal RAM
-   uint32_t                      ramEnd;                 //!< End of internal RAM
    ClockTypes_t                  clockType;              //!< Type of clock
    uint32_t                      clockAddress;           //!< Address of Clock register block
    uint32_t                      clockTrimNVAddress;     //!< Address of Non-volatile storage of trim value
@@ -1192,8 +1190,24 @@ public:
    const std::string              getTargetName() const;
    TargetType_t                   getTargetType() const;
    bool                           isHidden() const;
-   uint32_t                       getRamStart() const;
-   uint32_t                       getRamEnd() const;
+   /**
+    * Find RAM region containing the given address
+    *
+    * @param[in]  includedAddress Address to look for
+    * @param[out] ramStart        Start of region found
+    * @param[out] ramEnd          End of region found
+    *
+    * @return true  => Found region including includedAddress
+    * @return false => No region including includedAddress was found
+    */
+   bool                           getRamRegionFor(uint32_t includedAddress, uint32_t &ramStart, uint32_t &ramEnd) const;
+   /**
+    * Find the largest RAM region
+    *
+    * @param[out] ramStart        Start of region found
+    * @param[out] ramEnd          End of region found
+    */
+   void                           getLargestRamRegion(uint32_t &ramStart, uint32_t &ramEnd) const;
    ClockTypes_t                   getClockType() const;
    uint32_t                       getClockAddress() const;
    uint32_t                       getClockTrimNVAddress() const;
@@ -1249,8 +1263,6 @@ public:
    void                           addMemoryRegion(MemoryRegionPtr pMemoryRegion);
    void                           setTargetName(const std::string &name);
    void                           setHidden(bool value = true);
-   void                           setRamStart(uint32_t addr);
-   void                           setRamEnd(uint32_t addr);
    void                           setClockType(ClockTypes_t type);
    void                           setClockAddress(uint32_t addr);
    void                           setClockTrimNVAddress(uint32_t addr);

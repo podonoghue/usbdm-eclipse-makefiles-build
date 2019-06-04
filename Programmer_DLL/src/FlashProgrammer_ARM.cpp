@@ -377,6 +377,7 @@ USBDM_ErrorCode FlashProgrammer_ARM::resetAndConnectTarget(void) {
    TargetMode_t targetMode;
 
    DeviceData::ResetMethod resetMethod = getResetMethod();
+   log.print("Setting reset method to %s\n", DeviceData::getResetMethodName(resetMethod));
    switch (resetMethod) {
       default:
       case DeviceData::resetTargetDefault:
@@ -855,17 +856,17 @@ USBDM_ErrorCode FlashProgrammer_ARM::loadTargetProgram(FlashProgramConstPtr flas
       return PROGRAMMING_RC_ERROR_INTERNAL_CHECK_FAILED;
    }
 
+   // Find RAM region to use
+   device->getRamRegionFor(loadAddress, ramStart, ramEnd);
+   log.print("Using RAM region [0x%8X..0x%8X]\n", ramStart, ramEnd);
+
    memset(&targetProgramInfo, 0, sizeof(targetProgramInfo));
 
-#if TARGET == MC56F80xx
-   MemorySpace_t memorySpace = MS_XWord;
-#else
    MemorySpace_t memorySpace = MS_Byte;
-#endif
    // Probe RAM buffer
-   rc = probeMemory(memorySpace, device->getRamStart());
+   rc = probeMemory(memorySpace, ramStart);
    if (rc == BDM_RC_OK) {
-      rc = probeMemory(memorySpace, device->getRamEnd());
+      rc = probeMemory(memorySpace, ramEnd);
    }
    if (rc != BDM_RC_OK) {
       log.error("Failed, probeMemory() failed\n");
@@ -945,7 +946,7 @@ USBDM_ErrorCode FlashProgrammer_ARM::loadLargeTargetProgram(uint8_t    *buffer,
 
    if ((capabilities&CAP_RELOCATABLE)!=0) {
       // Relocate Code
-      codeLoadAddress = (device->getRamStart()+3)&~3; // Relocate to start of RAM
+      codeLoadAddress = (ramStart+3)&~3; // Relocate to start of RAM
       if (loadAddress != codeLoadAddress) {
          log.print("Loading at non-default address, load@0x%04X (relocated from=%04X)\n",
                codeLoadAddress, loadAddress);
@@ -954,12 +955,12 @@ USBDM_ErrorCode FlashProgrammer_ARM::loadLargeTargetProgram(uint8_t    *buffer,
       }
    }
 #if TARGET != MC56F80xx
-   if ((codeLoadAddress < device->getRamStart()) || (codeLoadAddress > device->getRamEnd())) {
-      log.error("Image load address (0x%8X) is invalid: range [0x%8X, 0x%8X].\n", codeLoadAddress, device->getRamStart(), device->getRamEnd());
+   if ((codeLoadAddress < ramStart) || (codeLoadAddress > ramEnd)) {
+      log.error("Image load address (0x%8X) is invalid: range [0x%8X, 0x%8X].\n", codeLoadAddress, ramStart, ramEnd);
       return PROGRAMMING_RC_ERROR_INTERNAL_CHECK_FAILED;
    }
-   if ((codeEntry < device->getRamStart()) || (codeEntry > device->getRamEnd())) {
-      log.error("Image Entry point (0x%8X) is invalid: range [0x%8X, 0x%8X].\n", codeEntry, device->getRamStart(), device->getRamEnd());
+   if ((codeEntry < ramStart) || (codeEntry > ramEnd)) {
+      log.error("Image Entry point (0x%8X) is invalid: range [0x%8X, 0x%8X].\n", codeEntry, ramStart, ramEnd);
       return PROGRAMMING_RC_ERROR_INTERNAL_CHECK_FAILED;
    }
 #endif
@@ -995,7 +996,7 @@ USBDM_ErrorCode FlashProgrammer_ARM::loadLargeTargetProgram(uint8_t    *buffer,
    dataLoadAddress = (dataLoadAddress+procAlignmentMask)&~procAlignmentMask;
    targetProgramInfo.dataOffset   = dataLoadAddress-dataHeaderAddress;
    // Save maximum size of the buffer (in uint8_t)
-   targetProgramInfo.maxDataSize  = device->getRamEnd()-dataLoadAddress+1;
+   targetProgramInfo.maxDataSize  = ramEnd-dataLoadAddress+1;
    // Align buffer size to worse case alignment for processor read
    targetProgramInfo.maxDataSize  = targetProgramInfo.maxDataSize&~procAlignmentMask;
    // Align buffer size to flash alignment requirement
@@ -1039,16 +1040,16 @@ USBDM_ErrorCode FlashProgrammer_ARM::loadLargeTargetProgram(uint8_t    *buffer,
    }
 #endif
    // Sanity check buffer
-   if (((uint32_t)(targetProgramInfo.headerAddress+targetProgramInfo.dataOffset)<device->getRamStart()) ||
-       ((uint32_t)(targetProgramInfo.headerAddress+targetProgramInfo.dataOffset+targetProgramInfo.maxDataSize-1)>device->getRamEnd())) {
+   if (((uint32_t)(targetProgramInfo.headerAddress+targetProgramInfo.dataOffset)<ramStart) ||
+       ((uint32_t)(targetProgramInfo.headerAddress+targetProgramInfo.dataOffset+targetProgramInfo.maxDataSize-1)>ramEnd)) {
       log.error("Data buffer location [0x%06X..0x%06X] is outside target RAM [0x%06X-0x%06X]\n",
             targetProgramInfo.headerAddress+targetProgramInfo.dataOffset,
             targetProgramInfo.headerAddress+targetProgramInfo.dataOffset+targetProgramInfo.maxDataSize-1,
-            device->getRamStart(), device->getRamEnd());
+            ramStart, ramEnd);
       return PROGRAMMING_RC_ERROR_INTERNAL_CHECK_FAILED;
    }
-   if ((dataLoadAddress+40) > device->getRamEnd()) {
-      log.error("Data buffer is too small [0x%X..0x%X] \n", dataLoadAddress, device->getRamEnd());
+   if ((dataLoadAddress+40) > ramEnd) {
+      log.error("Data buffer is too small [0x%X..0x%X] \n", dataLoadAddress, ramEnd);
       return PROGRAMMING_RC_ERROR_INTERNAL_CHECK_FAILED;
    }
 #if TARGET == MC56F80xx
@@ -2789,9 +2790,7 @@ USBDM_ErrorCode FlashProgrammer_ARM::verifyFlash(FlashImagePtr flashImage,
    log.print("\tTrim, F=%ld, NVA@%4.4X, clock@%4.4X\n",   device->getClockTrimFreq(),
                                                           device->getClockTrimNVAddress(),
                                                           device->getClockAddress());
-   log.print("\tRam[%4.4X...%4.4X]\n",                    device->getRamStart(), device->getRamEnd());
-   log.print("\tErase=%s\n",                              DeviceData::getEraseMethodName(device->getEraseMethod()));
-   log.print("\tReset=%s\n",                              DeviceData::getResetMethodName(device->getResetMethod()));
+   log.print("\tReset=%s\n",                              DeviceData::getResetMethodName(getResetMethod()));
    log.print("\tSecurity=%s\n",                           getSecurityName(device->getSecurity()));
    log.print("\tTotal bytes=%d\n",                        flashImage->getByteCount());
    log.print("===========================================================\n");
@@ -2895,7 +2894,6 @@ USBDM_ErrorCode FlashProgrammer_ARM::programFlash(FlashImagePtr flashImage,
          "Programming target\n"
          "\tDevice = \'%s\'\n"
          "\tTrim, F=%ld, NVA@%4.4X, clock@%4.4X\n"
-         "\tRam[%4.4X...%4.4X]\n"
          "\tErase=%s\n"
          "\tReset=%s\n"
          "\tSecurity=%s\n"
@@ -2905,8 +2903,6 @@ USBDM_ErrorCode FlashProgrammer_ARM::programFlash(FlashImagePtr flashImage,
          device->getClockTrimFreq(),
          device->getClockTrimNVAddress(),
          device->getClockAddress(),
-         device->getRamStart(),
-         device->getRamEnd(),
          DeviceData::getEraseMethodName(device->getEraseMethod()),
          DeviceData::getResetMethodName(device->getResetMethod()),
          getSecurityName(device->getSecurity()),
@@ -2919,9 +2915,8 @@ USBDM_ErrorCode FlashProgrammer_ARM::programFlash(FlashImagePtr flashImage,
    log.print("\tTrim, F=%ld, NVA@%4.4X, clock@%4.4X\n",   device->getClockTrimFreq(),
                                                           device->getClockTrimNVAddress(),
                                                           device->getClockAddress());
-   log.print("\tRam[%4.4X...%4.4X]\n",                    device->getRamStart(), device->getRamEnd());
-   log.print("\tErase=%s\n",                              DeviceData::getEraseMethodName(device->getEraseMethod()));
-   log.print("\tReset=%s\n",                              DeviceData::getResetMethodName(device->getResetMethod()));
+   log.print("\tErase=%s\n",                              DeviceData::getEraseMethodName(getEraseMethod()));
+   log.print("\tReset=%s\n",                              DeviceData::getResetMethodName(getResetMethod()));
    log.print("\tSecurity=%s\n",                           getSecurityName(device->getSecurity()));
    log.print("\tTotal bytes=%d\n",                        flashImage->getByteCount());
    log.print("\tdoRamWrites=%s\n",                        doRamWrites?"T":"F");

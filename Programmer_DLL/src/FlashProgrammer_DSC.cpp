@@ -617,6 +617,10 @@ USBDM_ErrorCode FlashProgrammer_DSC::loadTargetProgram(FlashProgramConstPtr flas
       return PROGRAMMING_RC_ERROR_INTERNAL_CHECK_FAILED;
    }
 
+   // Find RAM region to use
+   device->getRamRegionFor(loadAddress, ramStart, ramEnd);
+   log.print("Using RAM region [0x%8X..0x%8X]\n", ramStart, ramEnd);
+   
 #if 1
    log.printDump(buffer, size, loadAddress/2, UsbdmSystem::WORD_ADDRESS);
 #endif
@@ -625,9 +629,9 @@ USBDM_ErrorCode FlashProgrammer_DSC::loadTargetProgram(FlashProgramConstPtr flas
 
    MemorySpace_t memorySpace = MS_XWord;
    // Probe RAM buffer
-   rc = probeMemory(memorySpace, device->getRamStart());
+   rc = probeMemory(memorySpace, ramStart);
    if (rc == BDM_RC_OK) {
-      rc = probeMemory(memorySpace, device->getRamEnd());
+      rc = probeMemory(memorySpace, ramEnd);
    }
    if (rc != BDM_RC_OK) {
       log.error("Failed, probeMemory() failed\n");
@@ -697,7 +701,7 @@ USBDM_ErrorCode FlashProgrammer_DSC::loadLargeTargetProgram(uint8_t             
 
    if ((capabilities&CAP_RELOCATABLE)!=0) {
       // Relocate Code
-      codeLoadAddress = (device->getRamStart()+3)&~3; // Relocate to start of RAM
+      codeLoadAddress = (ramStart+3)&~3; // Relocate to start of RAM
       if (loadAddress != codeLoadAddress) {
          log.print("Loading at non-default address, load@w:0x%04X (relocated from=w:0x%04X)\n",
                codeLoadAddress, loadAddress);
@@ -708,7 +712,7 @@ USBDM_ErrorCode FlashProgrammer_DSC::loadLargeTargetProgram(uint8_t             
    // Update location of where programming info will be located
    if ((capabilities&CAP_DSC_OVERLAY)!=0) {
       // Loading code into shared RAM - load data offset by code size
-      log.print(" - loading data into overlaid RAM @ w:0x%06X\n", dataHeaderAddress/2);
+      log.error(" - loading data into overlaid RAM @ w:0x%06X\n", dataHeaderAddress/2);
    }
    else {
       // Loading code into separate program RAM - load data RAM separately
@@ -730,7 +734,7 @@ USBDM_ErrorCode FlashProgrammer_DSC::loadLargeTargetProgram(uint8_t             
    dataLoadAddress = (dataLoadAddress+procAlignmentMask)&~procAlignmentMask;
    targetProgramInfo.dataOffset   = dataLoadAddress-dataHeaderAddress;
    // Save maximum size of the buffer (in uint8_t)
-   targetProgramInfo.maxDataSize  = device->getRamEnd()-dataLoadAddress+1;
+   targetProgramInfo.maxDataSize  = ramEnd-dataLoadAddress+1;
    // Align buffer size to worse case alignment for processor read
    targetProgramInfo.maxDataSize  = targetProgramInfo.maxDataSize&~procAlignmentMask;
    // Align buffer size to flash alignment requirement
@@ -764,12 +768,12 @@ USBDM_ErrorCode FlashProgrammer_DSC::loadLargeTargetProgram(uint8_t             
       return PROGRAMMING_RC_ERROR_INTERNAL_CHECK_FAILED;
    }
    // Sanity check buffer
-   if (((uint32_t)(targetProgramInfo.headerAddress+targetProgramInfo.dataOffset)<device->getRamStart()) ||
-       ((uint32_t)(targetProgramInfo.headerAddress+targetProgramInfo.dataOffset+targetProgramInfo.maxDataSize-1)>device->getRamEnd())) {
+   if (((uint32_t)(targetProgramInfo.headerAddress+targetProgramInfo.dataOffset)<ramStart) ||
+       ((uint32_t)(targetProgramInfo.headerAddress+targetProgramInfo.dataOffset+targetProgramInfo.maxDataSize-1)>ramEnd)) {
       log.error("Data buffer location [w:0x%06X..w:0x%06X] is outside target RAM [w:0x%06X-w:0x%06X]\n",
             (targetProgramInfo.headerAddress+targetProgramInfo.dataOffset)/2,
             (targetProgramInfo.headerAddress+targetProgramInfo.dataOffset+targetProgramInfo.maxDataSize)/2-1,
-            device->getRamStart()/2, (device->getRamEnd()-1)/2+1);
+            ramStart/2, (ramEnd-1)/2+1);
       return PROGRAMMING_RC_ERROR_INTERNAL_CHECK_FAILED;
    }
    if (targetProgramInfo.maxDataSize<40) {
@@ -1077,9 +1081,6 @@ USBDM_ErrorCode FlashProgrammer_DSC::executeTargetProgram(uint8_t *pBuffer, uint
    if (rc != BDM_RC_OK) {
       return rc;
    }
-#if 0 && defined(LOG) && (TARGET==ARM)
-   report("FlashProgrammer::executeTargetProgram()");
-#endif
    log.print("Writing Header+Data\n");
 
    MemorySpace_t memorySpace = MS_XWord;
@@ -2209,7 +2210,6 @@ USBDM_ErrorCode FlashProgrammer_DSC::verifyFlash(FlashImagePtr flashImage,
    log.print("\tTrim, F=%ld, NVA@%4.4X, clock@%4.4X\n",   device->getClockTrimFreq(),
                                                           device->getClockTrimNVAddress(),
                                                           device->getClockAddress());
-   log.print("\tRam[%4.4X...%4.4X]\n",                    device->getRamStart(), device->getRamEnd());
    log.print("\tErase=%s\n",                              DeviceData::getEraseMethodName(device->getEraseMethod()));
    log.print("\tReset=%s\n",                              DeviceData::getResetMethodName(device->getResetMethod()));
    log.print("\tSecurity=%s\n",                           getSecurityName(device->getSecurity()));
@@ -2302,7 +2302,6 @@ USBDM_ErrorCode FlashProgrammer_DSC::programFlash(FlashImagePtr flashImage,
          "Programming target\n"
          "\tDevice = \'%s\'\n"
          "\tTrim, F=%ld, NVA@%4.4X, clock@%4.4X\n"
-         "\tRam[%4.4X...%4.4X]\n"
          "\tErase=%s\n"
          "\tReset=%s\n"
          "\tSecurity=%s\n"
@@ -2312,8 +2311,6 @@ USBDM_ErrorCode FlashProgrammer_DSC::programFlash(FlashImagePtr flashImage,
          device->getClockTrimFreq(),
          device->getClockTrimNVAddress(),
          device->getClockAddress(),
-         device->getRamStart(),
-         device->getRamEnd(),
          DeviceData::getEraseMethodName(device->getEraseMethod()),
          DeviceData::getResetMethodName(device->getResetMethod()),
          getSecurityName(device->getSecurity()),
@@ -2326,7 +2323,6 @@ USBDM_ErrorCode FlashProgrammer_DSC::programFlash(FlashImagePtr flashImage,
    log.print("\tTrim, F=%ld, NVA@%4.4X, clock@%4.4X\n",   device->getClockTrimFreq(),
                                                           device->getClockTrimNVAddress(),
                                                           device->getClockAddress());
-   log.print("\tRam[%4.4X...%4.4X]\n",                    device->getRamStart(), device->getRamEnd());
    log.print("\tErase=%s\n",                              DeviceData::getEraseMethodName(device->getEraseMethod()));
    log.print("\tReset=%s\n",                              DeviceData::getResetMethodName(device->getResetMethod()));
    log.print("\tSecurity=%s\n",                           getSecurityName(device->getSecurity()));

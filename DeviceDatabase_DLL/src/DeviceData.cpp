@@ -874,13 +874,63 @@ bool DeviceData::isHidden() const {
    return hidden;
 }
 
-uint32_t DeviceData::getRamStart() const {
-   return ramStart;
+/**
+ * Find RAM region containing the given address
+ *
+ * @param[in]  includedAddress Address to look for
+ * @param[out] ramStart        Start of region found
+ * @param[out] ramEnd          End of region found
+ *
+ * @return true  => Found region including includedAddress
+ * @return false => No region including includedAddress was found
+ */
+bool DeviceData::getRamRegionFor(uint32_t includedAddress, uint32_t &ramStart, uint32_t &ramEnd) const {
+
+   // Assume failed
+   bool success = false;
+   for (auto it = memoryRegions.begin() ; it != memoryRegions.end(); ++it) {
+      MemoryRegionPtr pMemoryRegion = *it;
+      if (((pMemoryRegion->getMemoryType() == MemRAM)||
+            (pMemoryRegion->getMemoryType() == MemXRAM))) {
+         // Get range containing address
+         const MemoryRegion::MemoryRange *mr = pMemoryRegion->getMemoryRangeFor(includedAddress);
+         if (mr == nullptr) {
+            // Not included continue looking
+            continue;
+         }
+         // Check - Will always be true
+         assert((mr->start <= includedAddress) && (mr->end >= includedAddress));
+         ramStart = mr->start;
+         ramEnd   = mr->end;
+         break;
+      }
+   }
+   return success;
 }
 
-uint32_t DeviceData::getRamEnd() const {
-   return ramEnd;
+/**
+ * Find the largest RAM region
+ *
+ * @param[out] ramStart        Start of region found
+ * @param[out] ramEnd          End of region found
+ */
+void DeviceData::getLargestRamRegion(uint32_t &ramStart, uint32_t &ramEnd) const {
+   uint32_t largest = 0;
+
+   for (auto it = memoryRegions.begin() ; it != memoryRegions.end(); ++it) {
+      MemoryRegionPtr pMemoryRegion = *it;
+      if ((pMemoryRegion->getMemoryType() == MemRAM) ||
+          (pMemoryRegion->getMemoryType() == MemXRAM)) {
+         // Only consider 1st range
+         const MemoryRegion::MemoryRange *mr = pMemoryRegion->getMemoryRange(0);
+         if ((mr->end - mr->start) > largest) {
+         ramStart = mr->start;
+         ramEnd   = mr->end;
+         }
+      }
+   }
 }
+
 
 ClockTypes_t DeviceData::getClockType() const {
    return clockType;
@@ -1038,17 +1088,6 @@ ResetMethodsConstPtr  DeviceData::getResetMethods() const {
 void DeviceData::addMemoryRegion(MemoryRegionPtr pMemoryRegion) {
    memoryRegions.push_back(pMemoryRegion);
 
-   if (((pMemoryRegion->getMemoryType() == MemRAM)||
-        (pMemoryRegion->getMemoryType() == MemXRAM))) {
-      const MemoryRegion::MemoryRange *mr = pMemoryRegion->getMemoryRange(0);
-      if ((ramStart == 0) || ((mr->end-mr->start)>(ramEnd-ramStart))) {
-         // Set default RAM range to largest added RAM memory region
-         if ((mr->end-mr->start)>(ramEnd-ramStart)) {
-            ramStart = mr->start;
-            ramEnd   = mr->end;
-         }
-      }
-   }
    if (pMemoryRegion->getMemoryType() == MemFlexNVM) {
       // Copy FlexInfo from memory region to device - Only one FlexNVM in device allowed
       if (getflexNVMInfo() != NULL) {
@@ -1064,14 +1103,6 @@ void DeviceData::setTargetName(const std::string &name) {
 
 void DeviceData::setHidden(bool value) {
    hidden = value;
-}
-
-void DeviceData::setRamStart(uint32_t addr)  {
-   ramStart = addr;
-}
-
-void DeviceData::setRamEnd(uint32_t addr) {
-   ramEnd = addr;
 }
 
 void DeviceData::setClockType(ClockTypes_t type) {
@@ -1859,9 +1890,8 @@ void DeviceDataBase::listDevices() const {
             UsbdmSystem::Log::print("#======================================================================================================================\n");
          }
 
-         UsbdmSystem::Log::print("%-17s %08X %08X %13s %08X %08X %6.2f %08X %08X %08X %4s %4s\n",
+         UsbdmSystem::Log::print("%-17s %13s %08X %08X %6.2f %08X %08X %08X %4s %4s\n",
                deviceData->getTargetName().c_str(),
-               deviceData->getRamStart(), deviceData->getRamEnd(),
                ClockTypes::getClockName(deviceData->getClockType()).c_str(),
                deviceData->getClockAddress(),
                deviceData->getClockTrimNVAddress(),
@@ -1937,8 +1967,6 @@ DeviceData::DeviceData(
            ) : targetType(targetType),
                targetName(targetName),
                hidden(false),
-               ramStart(0),
-               ramEnd(0),
                clockType(CLKINVALID),
                clockAddress(0),
                clockTrimNVAddress(0),

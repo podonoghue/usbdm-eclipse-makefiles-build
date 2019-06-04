@@ -368,6 +368,9 @@ USBDM_ErrorCode FlashProgrammer_S12Z::resetAndConnectTarget(void) {
    LOGGING;
    USBDM_ErrorCode rc;
 
+   if (device == nullptr) {
+      return PROGRAMMING_RC_ERROR_ILLEGAL_PARAMS;
+   }
    if (device->getTargetName().empty()) {
       return PROGRAMMING_RC_ERROR_ILLEGAL_PARAMS;
    }
@@ -803,6 +806,10 @@ USBDM_ErrorCode FlashProgrammer_S12Z::loadTargetProgram(FlashProgramConstPtr fla
       return PROGRAMMING_RC_ERROR_INTERNAL_CHECK_FAILED;
    }
 
+   // Find RAM region to use
+   device->getRamRegionFor(loadAddress, ramStart, ramEnd);
+   log.print("Using RAM region [0x%8X..0x%8X]\n", ramStart, ramEnd);
+
    memset(&targetProgramInfo, 0, sizeof(targetProgramInfo));
 
 #if TARGET == MC56F80xx
@@ -811,9 +818,9 @@ USBDM_ErrorCode FlashProgrammer_S12Z::loadTargetProgram(FlashProgramConstPtr fla
    MemorySpace_t memorySpace = MS_Byte;
 #endif
    // Probe RAM buffer
-   rc = probeMemory(memorySpace, device->getRamStart());
+   rc = probeMemory(memorySpace, ramStart);
    if (rc == BDM_RC_OK) {
-      rc = probeMemory(memorySpace, device->getRamEnd());
+      rc = probeMemory(memorySpace, ramEnd);
    }
    if (rc != BDM_RC_OK) {
       log.error("Failed, probeMemory() failed\n");
@@ -865,7 +872,7 @@ USBDM_ErrorCode FlashProgrammer_S12Z::loadLargeTargetProgram(uint8_t    *buffer,
    log.print("Op=%s\n", getFlashOperationName(flashOperation));
 
    // Find 'header' in download image
-   uint32_t headerAddress = loadAddress; // Header is at start image
+   uint32_t headerAddress = loadAddress; // Header is at start of image
    LargeTargetImageHeader *headerPtr = (LargeTargetImageHeader*) (buffer+(headerAddress-loadAddress));
    if (headerPtr > (LargeTargetImageHeader*)(buffer+size)) {
       log.error("Header ptr out of range\n");
@@ -894,7 +901,7 @@ USBDM_ErrorCode FlashProgrammer_S12Z::loadLargeTargetProgram(uint8_t    *buffer,
 
    if ((capabilities&CAP_RELOCATABLE)!=0) {
       // Relocate Code
-      codeLoadAddress = (device->getRamStart()+3)&~3; // Relocate to start of RAM
+      codeLoadAddress = (ramStart+3)&~3; // Relocate to start of RAM
       if (loadAddress != codeLoadAddress) {
          log.print("Loading at non-default address, load@0x%04X (relocated from=%04X)\n",
                codeLoadAddress, loadAddress);
@@ -903,11 +910,11 @@ USBDM_ErrorCode FlashProgrammer_S12Z::loadLargeTargetProgram(uint8_t    *buffer,
       }
    }
 #if TARGET != MC56F80xx
-   if ((codeLoadAddress < device->getRamStart()) || (codeLoadAddress > device->getRamEnd())) {
+   if ((codeLoadAddress < ramStart) || (codeLoadAddress > ramEnd)) {
       log.error("Image load address is invalid.\n");
       return PROGRAMMING_RC_ERROR_INTERNAL_CHECK_FAILED;
    }
-   if ((codeEntry < device->getRamStart()) || (codeEntry > device->getRamEnd())) {
+   if ((codeEntry < ramStart) || (codeEntry > ramEnd)) {
       log.error("Image Entry point is invalid.\n");
       return PROGRAMMING_RC_ERROR_INTERNAL_CHECK_FAILED;
    }
@@ -944,7 +951,7 @@ USBDM_ErrorCode FlashProgrammer_S12Z::loadLargeTargetProgram(uint8_t    *buffer,
    dataLoadAddress = (dataLoadAddress+procAlignmentMask)&~procAlignmentMask;
    targetProgramInfo.dataOffset   = dataLoadAddress-dataHeaderAddress;
    // Save maximum size of the buffer (in uint8_t)
-   targetProgramInfo.maxDataSize  = device->getRamEnd()-dataLoadAddress+1;
+   targetProgramInfo.maxDataSize  = ramEnd-dataLoadAddress+1;
    // Align buffer size to worse case alignment for processor read
    targetProgramInfo.maxDataSize  = targetProgramInfo.maxDataSize&~procAlignmentMask;
    // Align buffer size to flash alignment requirement
@@ -988,16 +995,16 @@ USBDM_ErrorCode FlashProgrammer_S12Z::loadLargeTargetProgram(uint8_t    *buffer,
    }
 #endif
    // Sanity check buffer
-   if (((uint32_t)(targetProgramInfo.headerAddress+targetProgramInfo.dataOffset)<device->getRamStart()) ||
-       ((uint32_t)(targetProgramInfo.headerAddress+targetProgramInfo.dataOffset+targetProgramInfo.maxDataSize-1)>device->getRamEnd())) {
+   if (((uint32_t)(targetProgramInfo.headerAddress+targetProgramInfo.dataOffset)<ramStart) ||
+       ((uint32_t)(targetProgramInfo.headerAddress+targetProgramInfo.dataOffset+targetProgramInfo.maxDataSize-1)>ramEnd)) {
       log.error("Data buffer location [0x%06X..0x%06X] is outside target RAM [0x%06X-0x%06X]\n",
             targetProgramInfo.headerAddress+targetProgramInfo.dataOffset,
             targetProgramInfo.headerAddress+targetProgramInfo.dataOffset+targetProgramInfo.maxDataSize-1,
-            device->getRamStart(), device->getRamEnd());
+            ramStart, ramEnd);
       return PROGRAMMING_RC_ERROR_INTERNAL_CHECK_FAILED;
    }
-   if ((dataLoadAddress+40) > device->getRamEnd()) {
-      log.error("Data buffer is too small [0x%X..0x%X] \n", dataLoadAddress, device->getRamEnd());
+   if ((dataLoadAddress+40) > ramEnd) {
+      log.error("Data buffer is too small [0x%X..0x%X] \n", dataLoadAddress, ramEnd);
       return PROGRAMMING_RC_ERROR_INTERNAL_CHECK_FAILED;
    }
 #if TARGET == MC56F80xx
@@ -1928,8 +1935,8 @@ USBDM_ErrorCode FlashProgrammer_S12Z::setFlashSecurity(FlashImagePtr flashImage,
    // Save contents of current security area in Flash image
    recordSecurityArea(flashImage, securityAddress, size);
    if (memcmp(securityData, memory, size) == 0) {
-      if ((device->getEraseMethod() == DeviceData::eraseMass) ||
-          (device->getEraseMethod() == DeviceData::eraseNone)) {
+      if ((getEraseMethod() == DeviceData::eraseMass) ||
+          (getEraseMethod() == DeviceData::eraseNone)) {
          // Clear security area in image to prevent re-programming
          log.print("Removing security area from image as already valid and not being erased\n");
          for(int index=0; index<size; index++) {
@@ -2167,19 +2174,6 @@ USBDM_ErrorCode FlashProgrammer_S12Z::doFlashBlock(FlashImagePtr flashImage,
       addressFlag |= ADDRESS_LINEAR;
    }
 #endif
-#if (TARGET == MC56F80xx)
-      if (memoryType == MemXROM) {
-         // Flag used to indicate data (X:) address
-         log.print("Setting MemXROM address\n");
-         addressFlag |= ADDRESS_DATA;
-      }
-#endif
-#if (TARGET == CFV1)
-   if ((memoryType == MemFlexNVM) || (memoryType == MemDFlash)) {
-      // Flag needed for DFLASH/FlexNVM access on CFV1
-      addressFlag |= ADDRESS_A23;
-   }
-#endif
    // Round start address off to alignment requirements
    flashAddress  &= ~alignMask;
 
@@ -2402,7 +2396,6 @@ USBDM_ErrorCode FlashProgrammer_S12Z::doReadbackVerify(FlashImagePtr flashImage)
    flashImage->printMemoryMap();
 
    FlashImage::EnumeratorPtr enumerator = flashImage->getEnumerator();
-   //ToDo - handle linear addressing on HCS12
    if (!enumerator->isValid()) {
       log.print("Empty Memory region\n");
       flashImage->printMemoryMap();
@@ -2635,8 +2628,7 @@ USBDM_ErrorCode FlashProgrammer_S12Z::verifyFlash(FlashImagePtr flashImage,
    log.print("\tTrim, F=%ld, NVA@%4.4X, clock@%4.4X\n",   device->getClockTrimFreq(),
                                                           device->getClockTrimNVAddress(),
                                                           device->getClockAddress());
-   log.print("\tRam[%4.4X...%4.4X]\n",                    device->getRamStart(), device->getRamEnd());
-   log.print("\tErase=%s\n",                              DeviceData::getEraseMethodName(device->getEraseMethod()));
+   log.print("\tReset=%s\n",                              DeviceData::getResetMethodName(getResetMethod()));
    log.print("\tSecurity=%s\n",                           getSecurityName(device->getSecurity()));
    log.print("\tTotal bytes=%d\n",                        flashImage->getByteCount());
    log.print("===========================================================\n");
@@ -2736,7 +2728,6 @@ USBDM_ErrorCode FlashProgrammer_S12Z::programFlash(FlashImagePtr flashImage,
          "Programming target\n"
          "\tDevice = \'%s\'\n"
          "\tTrim, F=%ld, NVA@%4.4X, clock@%4.4X\n"
-         "\tRam[%4.4X...%4.4X]\n"
          "\tErase=%s\n"
          "\tSecurity=%s\n"
          "\tTotal bytes=%d\n"
@@ -2745,8 +2736,6 @@ USBDM_ErrorCode FlashProgrammer_S12Z::programFlash(FlashImagePtr flashImage,
          device->getClockTrimFreq(),
          device->getClockTrimNVAddress(),
          device->getClockAddress(),
-         device->getRamStart(),
-         device->getRamEnd(),
          DeviceData::getEraseMethodName(device->getEraseMethod()),
          getSecurityName(device->getSecurity()),
          flashImage->getByteCount(),
@@ -2758,8 +2747,8 @@ USBDM_ErrorCode FlashProgrammer_S12Z::programFlash(FlashImagePtr flashImage,
    log.print("\tTrim, F=%ld, NVA@%4.4X, clock@%4.4X\n",   device->getClockTrimFreq(),
                                                           device->getClockTrimNVAddress(),
                                                           device->getClockAddress());
-   log.print("\tRam[%4.4X...%4.4X]\n",                    device->getRamStart(), device->getRamEnd());
-   log.print("\tErase=%s\n",                              DeviceData::getEraseMethodName(device->getEraseMethod()));
+   log.print("\tErase=%s\n",                              DeviceData::getEraseMethodName(getEraseMethod()));
+   log.print("\tReset=%s\n",                              DeviceData::getResetMethodName(getResetMethod()));
    log.print("\tSecurity=%s\n",                           getSecurityName(device->getSecurity()));
    log.print("\tTotal bytes=%d\n",                        flashImage->getByteCount());
    log.print("\tdoRamWrites=%s\n",                        doRamWrites?"T":"F");
@@ -2791,7 +2780,7 @@ USBDM_ErrorCode FlashProgrammer_S12Z::programFlash(FlashImagePtr flashImage,
    // Ignore some errors if mass erasing target as it is possible to mass
    // erase some targets without a complete debug connection
    if ((rc != BDM_RC_OK) &&
-       ((device->getEraseMethod() != DeviceData::eraseMass) ||
+       ((getEraseMethod() != DeviceData::eraseMass) ||
         ((rc != PROGRAMMING_RC_ERROR_SECURED) &&      // Secured device
          (rc != BDM_RC_SECURED) &&                    // Secured device
          (rc != BDM_RC_BDM_EN_FAILED) &&              // BDM enable failed (on HCS devices)
@@ -2821,7 +2810,7 @@ USBDM_ErrorCode FlashProgrammer_S12Z::programFlash(FlashImagePtr flashImage,
    }
 #endif
    // Mass erase if selected
-   if (device->getEraseMethod() == DeviceData::eraseMass) {
+   if (getEraseMethod() == DeviceData::eraseMass) {
       rc = massEraseTarget(false);
       if (rc != PROGRAMMING_RC_OK) {
          return rc;
@@ -2866,7 +2855,7 @@ USBDM_ErrorCode FlashProgrammer_S12Z::programFlash(FlashImagePtr flashImage,
       // The above leaves the Flash ready for programming
       //
 #if (TARGET==ARM) || (TARGET == CFV1) || (TARGET == S12Z) || (TARGET == MC56F80xx)
-      if (device->getEraseMethod() == DeviceData::eraseMass) {
+      if (getEraseMethod() == DeviceData::eraseMass) {
          // Erase the security area as Mass erase programs it to a non-blank value
          rc = selectiveEraseFlashSecurity();
          if (rc != PROGRAMMING_RC_OK) {
@@ -2881,11 +2870,11 @@ USBDM_ErrorCode FlashProgrammer_S12Z::programFlash(FlashImagePtr flashImage,
       }
 #endif
 #endif
-      if (device->getEraseMethod() == DeviceData::eraseAll) {
+      if (getEraseMethod() == DeviceData::eraseAll) {
          // Erase all flash arrays
          rc = eraseFlash();
       }
-      else if (device->getEraseMethod() == DeviceData::eraseSelective) {
+      else if (getEraseMethod() == DeviceData::eraseSelective) {
          // Selective erase area to be programmed - this may have collateral damage!
          rc = doSelectiveErase(flashImage);
       }

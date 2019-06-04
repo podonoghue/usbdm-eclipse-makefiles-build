@@ -49,7 +49,9 @@ FlashProgrammerCommon::FlashProgrammerCommon(DeviceData::EraseMethod defaultEras
    calculatedClockTrimValue(0),
    securityAreaCount(0),
    defaultEraseMethod(defaultEraseMethod),
-   defaultResetMethod(defaultResetMethod) {
+   defaultResetMethod(defaultResetMethod),
+   ramStart(0),
+   ramEnd(0) {
    LOGGING_E;
 
    log.print("defaultResetMethod = %s\n", DeviceData::getResetMethodName(defaultResetMethod));

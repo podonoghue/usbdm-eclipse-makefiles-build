@@ -151,11 +151,13 @@ UsbdmSystem::Log::Timestamp  UsbdmSystem::Log::timestampMode   = relative;  //!<
  *  @return time value
  */
 double UsbdmSystem::Log::getCurrentTime(void) {
-   struct timeval tv;
-   if (gettimeofday(&tv, NULL) != 0) {
-      return 0;
+   struct timespec   now;
+
+   if (clock_gettime(CLOCK_REALTIME, &now) < 0) {
+      UsbdmSystem::Log::print(" UsbdmSystem::Log::getCurrentTime() - clock_gettime() failed!\n");
+      return 1.0;
    }
-   return (tv.tv_sec*1000.0)+(tv.tv_usec/1000.0);
+   return now.tv_sec*1000.0 + (now.tv_nsec/1000000.0);
 }
 
 const char *UsbdmSystem::Log::getTimeStamp(void) {
