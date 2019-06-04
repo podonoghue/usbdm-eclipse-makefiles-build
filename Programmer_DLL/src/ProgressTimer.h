@@ -24,13 +24,13 @@ public:
    typedef USBDM_ErrorCode (*CallBackT)(USBDM_ErrorCode status, int percent, const char *message);
 
 private:
-   CallBackT       progressCallBack;
-   unsigned        maximumBytes;
-   struct timeval  timeCreation;
-   struct timeval  timeStart;
-   const char     *message;
-   int             lastBytesDone;
-   int             bytesDone;
+   CallBackT        progressCallBack;
+   unsigned         maximumBytes;
+   struct timespec  timeCreation;
+   struct timespec  timeStart;
+   const char      *message;
+   int              lastBytesDone;
+   int              bytesDone;
 
 public:
    //! Create NULL timer

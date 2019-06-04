@@ -21,7 +21,9 @@ ProgressTimer::ProgressTimer()
      lastBytesDone(0),
      bytesDone(0)
 {
-   gettimeofday(&timeCreation, NULL);
+   if (clock_gettime(CLOCK_REALTIME, &timeCreation) < 0) {
+      UsbdmSystem::Log::print("ProgressTimer::Timer::elapsedTime() - clock_gettime() failed!\n");
+   }
    timeStart = timeCreation;
 }
 
@@ -37,7 +39,9 @@ ProgressTimer::ProgressTimer(CallBackT progressCallBack, unsigned maximum)
      lastBytesDone(0),
      bytesDone(0)
 {
-   gettimeofday(&timeCreation, NULL);
+   if (clock_gettime(CLOCK_REALTIME, &timeCreation) < 0) {
+      UsbdmSystem::Log::print("ProgressTimer::Timer::elapsedTime() - clock_gettime() failed!\n");
+   }
    timeStart = timeCreation;
 }
 
@@ -50,8 +54,9 @@ USBDM_ErrorCode ProgressTimer::restart(const char *message) {
 
    lastBytesDone = 0;
    bytesDone     = 0;
-   if (gettimeofday(&timeStart, NULL) != 0) {
-      UsbdmSystem::Log::print("ProgressTimer::Timer::restart() - gettimeofday() failed!\n");
+
+   if (clock_gettime(CLOCK_REALTIME, &timeStart) < 0) {
+      UsbdmSystem::Log::print("ProgressTimer::Timer::elapsedTime() - clock_gettime() failed!\n");
       return PROGRAMMING_RC_ERROR_INTERNAL_CHECK_FAILED;
    }
    if (message != NULL) {
@@ -105,21 +110,24 @@ USBDM_ErrorCode ProgressTimer::progress(int progress, const char *message) {
 //! @return - elapsed time in seconds since creation or restart()
 //!
 double ProgressTimer::elapsedTime(void) {
-   struct timeval now;
-   if (gettimeofday(&now, NULL) != 0) {
-      UsbdmSystem::Log::print("ProgressTimer::Timer::elapsedTime() - gettimeofday() failed!\n");
+   struct timespec   now;
+
+   if (clock_gettime(CLOCK_REALTIME, &now) < 0) {
+      UsbdmSystem::Log::print("ProgressTimer::Timer::elapsedTime() - clock_gettime() failed!\n");
       return 1.0;
    }
-   return (now.tv_sec-timeStart.tv_sec) + ((now.tv_usec-timeStart.tv_usec)/1000000.0);
+   return (now.tv_sec-timeStart.tv_sec) + ((now.tv_nsec-timeStart.tv_nsec)/1000000000.0);
 }
 
 //! @return - total time in seconds since creation
 //!
 double ProgressTimer::totalTime(void) {
-   struct timeval now;
-   if (gettimeofday(&now, NULL) != 0) {
-      UsbdmSystem::Log::print("ProgressTimer::Timer::elapsedTime() - gettimeofday() failed!\n");
+   struct timespec   now;
+
+   if (clock_gettime(CLOCK_REALTIME, &now) < 0) {
+      UsbdmSystem::Log::print("ProgressTimer::Timer::elapsedTime() - clock_gettime() failed!\n");
       return 1.0;
    }
-   return (now.tv_sec-timeCreation.tv_sec) + ((now.tv_usec-timeCreation.tv_usec)/1000000.0);
+
+   return (now.tv_sec-timeCreation.tv_sec) + ((now.tv_nsec-timeCreation.tv_nsec)/1000000000.0);
 }
