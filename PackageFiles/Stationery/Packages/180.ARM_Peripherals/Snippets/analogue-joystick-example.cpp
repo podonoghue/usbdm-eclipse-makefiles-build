@@ -41,9 +41,9 @@ int main(void) {
    JOYSTICK_K::setInput(PinPull_Up);
 
    for(;;) {
-      int  x = JOYSTICK_X::readAnalogue();
-      int  y = JOYSTICK_Y::readAnalogue();
-      bool k = JOYSTICK_K::isPressed();
-      console.write("Joystick (X,Y,K) = ").write(x).write(", ").write(y).write(", ").writeln(k?"Pressed":"Released");
+      int  x      = JOYSTICK_X::readAnalogue();
+      int  y      = JOYSTICK_Y::readAnalogue();
+      bool button = JOYSTICK_K::isPressed();
+      console.write("Joystick (X,Y,K) = ").write(x).write(", ").write(y).write(", ").writeln(button?"Pressed":"Released");
    }
 }

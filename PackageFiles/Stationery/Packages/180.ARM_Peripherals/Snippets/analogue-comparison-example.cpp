@@ -7,10 +7,9 @@
  *      Author: podonoghue
  ============================================================================
  */
-#include "system.h"
-#include "derivative.h"
 #include "hardware.h"
 #include "adc.h"
+#include "smc.h"
 
 using namespace USBDM;
 
@@ -20,8 +19,21 @@ using namespace USBDM;
 
 // Connection - change as required
 using Led         = $(demo.cpp.red.led:GpioB<0,ActiveLow>);
-using Adc         = Adc0;
-using AdcChannel  = Adc::Channel<0>;
+
+// Shared ADC to use
+using Adc        = Adc0;
+
+// ADC channel to use
+using AdcChannel = Adc::Channel<0>;
+
+// Resolution to use for ADC
+constexpr AdcResolution adcResolution = AdcResolution_10bit_se;
+
+// Lower window threshold for comparison 20%
+constexpr int LOWER_THRESHOLD = Adc::getSinglendeddMaximum(adcResolution)*0.2;
+
+// Upper window threshold for comparison 60%
+constexpr int UPPER_THRESHOLD = Adc::getSinglendeddMaximum(adcResolution)*0.6;
 
 /**
  * ADC callback
@@ -40,13 +52,13 @@ int main() {
    // Enable and configure ADC
    PccInfo::setAdc0ClockSource(PccDiv2Clock_Sirc);
 #endif
-   Adc::configure(AdcResolution_10bit_se);
+   Adc::configure(adcResolution);
 
-   // Calibrate before use
+   // Calibrate before first use
    Adc::calibrate();
 
    // Set up comparison range
-   Adc::enableComparison(AdcCompare_OutsideRangeExclusive, 80, 160);
+   Adc::enableComparison(AdcCompare_OutsideRangeExclusive, LOWER_THRESHOLD, UPPER_THRESHOLD);
 
    /**
     * Set callback
@@ -67,6 +79,6 @@ int main() {
    AdcChannel::startConversion(AdcInterrupt_Enabled);
 
    for(;;) {
-      __asm__("nop");
+      Smc::enterWaitMode();
    }
 }

@@ -24,6 +24,9 @@ using Adc        = Adc0;
 // ADC channel to use
 using AdcChannel = Adc::DiffChannel<0>;
 
+// Resolution to use for ADC
+constexpr AdcResolution adcResolution = AdcResolution_9bit_diff;
+
 int main(void) {
 
    // Enable and configure ADC
@@ -32,8 +35,8 @@ int main(void) {
    // Calibrate before first use
    Adc::calibrate();
 
-   // May change default resolution as needed e.g.
-   Adc::setResolution(USBDM::AdcResolution_9bit_diff);
+   // May change current resolution as needed e.g.
+   Adc::setResolution(adcResolution);
 
    // Connect ADC channel to pin
    AdcChannel::setInput();
@@ -41,6 +44,6 @@ int main(void) {
    for(;;) {
       // Do next conversion
       int32_t value = AdcChannel::readAnalogue();
-      console.write("Difference  = ").write(value*3.3/(1<<8)-1).writeln(" volts");
+      console.write("Difference  = ").write(value*3.3/Adc::getDifferentialMaximum(adcResolution)).writeln(" volts");
    }
 }
