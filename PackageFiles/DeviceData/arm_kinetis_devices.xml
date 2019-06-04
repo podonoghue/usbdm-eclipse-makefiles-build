@@ -456,7 +456,7 @@ Test Devices:
       </memory>
       <memory id="kinetis_M4_256K_256K_Ram" type="ram">
          <memoryRange start="0x20000000" size="256K" name="ram_high" />
-         <memoryRange start="0x1FFE0000" size="256K" name="ram_low" />
+         <memoryRange start="0x1FFC0000" size="256K" name="ram_low" />
       </memory>
       
       <!-- 
