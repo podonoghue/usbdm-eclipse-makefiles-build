@@ -12,8 +12,8 @@
 using namespace USBDM;
 
 // Address (LSB = R/W bit)
-static const int I2C_ADDRESS = 0x1D<<1;
-static const int I2C_SPEED   = 400*kHz;
+static const unsigned I2C_ADDRESS = 0x1D<<1;
+static const unsigned I2C_SPEED   = 400*kHz;
 
 int main() {
 
