@@ -1721,7 +1721,7 @@ USBDM_ErrorCode FlashProgrammer_RS08::programFlash(FlashImagePtr flashImage,
 //!
 //! @return error code see \ref USBDM_ErrorCode
 //!
-USBDM_ErrorCode FlashProgrammer_RS08::setDeviceData(const DeviceDataPtr device) {
+USBDM_ErrorCode FlashProgrammer_RS08::setDeviceData(const DeviceDataConstPtr device) {
    LOGGING_Q;
    currentFlashProgram.reset();
    this->device = device;
