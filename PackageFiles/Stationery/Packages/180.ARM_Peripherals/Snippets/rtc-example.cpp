@@ -16,6 +16,7 @@
 #include <ctime>
 #include "hardware.h"
 #include "rtc.h"
+#include "smc.h"
 
 using namespace USBDM;
 
@@ -25,13 +26,29 @@ using namespace USBDM;
 // LED connection - change as required
 using Led = GpioA<2,ActiveLow>;
 
+void reportTime(const char *msg, time_t rawtime) {
+   char buffer[80];
+   struct tm * timeinfo;
+   timeinfo = localtime(&rawtime);
+   strftime(buffer, sizeof(buffer), "%d-%m-%Y %I:%M:%S : ", timeinfo);
+   console.write(buffer).writeln(msg).flushOutput();
+}
+
 /**
- * Callback handler from RTC Alarm
+ * Callback alarm handler from RTC Alarm
  */
-void handler(uint32_t timeSinceEpoch) {
+void alarmHandler(uint32_t timeSinceEpoch) {
    // Set repeat callback for 5 seconds from now
    Rtc::setAlarmTime(timeSinceEpoch+4);
+   reportTime("Alarm !!!!!!", timeSinceEpoch);
+}
+
+/**
+ * Callback seconds handler from RTC Alarm
+ */
+void secondsHandler(uint32_t timeSinceEpoch) {
    Led::toggle();
+   reportTime("Tick", timeSinceEpoch);
 }
 
 int main() {
@@ -40,8 +57,11 @@ int main() {
    // Enable RTC - done by startup code
 //   Rtc::initialise();
 
-   // Set initial callback
-   Rtc::setAlarmCallback(handler);
+   // Set callbacks
+   Rtc::setSecondsCallback(secondsHandler);
+   Rtc::enableSecondsInterrupts();
+
+   Rtc::setAlarmCallback(alarmHandler);
    Rtc::setAlarmTime(Rtc::getTime()+5);
    Rtc::enableAlarmInterrupts();
    Rtc::enableNvicInterrupts(NvicPriority_Normal);
@@ -49,14 +69,12 @@ int main() {
    Led::setOutput();
    for(;;) {
       time_t rawtime;
-      struct tm * timeinfo;
-      char buffer[80];
-
       time (&rawtime);
-      timeinfo = localtime(&rawtime);
-      strftime(buffer, sizeof(buffer), "%d-%m-%Y %I:%M:%S", timeinfo);
-      console.writeln(buffer);
-      __WFE();
+
+      // Sleep between events
+//      Smc::enterWaitMode();
+      Smc::enterStopMode(SmcStopMode_NormalStop);
+      reportTime("Woke", rawtime);
    }
    return 0;
 }
