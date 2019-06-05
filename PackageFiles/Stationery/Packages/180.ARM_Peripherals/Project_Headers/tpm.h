@@ -282,7 +282,7 @@ public:
     *       It is necessary to identify the originating channel in the callback
     */
    static ErrorCode INLINE_RELEASE setChannelCallback(TpmChannelCallbackFunction callback) {
-      usbdm_assert(Info::irqHandlerInstalled, "TPM not configure for interrupts");
+      static_assert(Info::irqHandlerInstalled, "TPM not configure for interrupts");
       if (callback == nullptr) {
          sChannelCallback = unhandledChannelCallback;
          return E_NO_ERROR;

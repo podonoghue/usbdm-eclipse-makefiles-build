@@ -207,7 +207,7 @@ public:
     *                        Use nullptr to remove callback.
     */
    static void setCallback(PitChannelNum channel, PitCallbackFunction callback) {
-      usbdm_assert(Info::irqHandlerInstalled, "PIT not configure for interrupts");
+      static_assert(Info::irqHandlerInstalled, "PIT not configure for interrupts");
       if (callback == nullptr) {
          callback = unhandledCallback;
       }
@@ -270,7 +270,6 @@ public:
 
    /**
     * Enable interrupts in NVIC
-    * Any pending NVIC interrupts are first cleared.
     *
     * @param[in]  channel       Channel being modified
     */
@@ -480,7 +479,6 @@ public:
        * @param[in]  callbackFunction  Function to call from stub ISR
        */
       static void setCallback(PitCallbackFunction callbackFunction) {
-         static_assert(Info::irqHandlerInstalled, "PIT not configured for interrupts");
          PitBase_T<Info>::setCallback(CHANNEL, callbackFunction);
       }
 

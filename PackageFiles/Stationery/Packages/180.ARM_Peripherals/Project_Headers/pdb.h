@@ -239,7 +239,7 @@ public:
     */
    static void setErrorCallback(PDBCallbackFunction callback) {
 
-      usbdm_assert(Info::irqHandlerInstalled, "PDB not configure for interrupts");
+      static_assert(Info::irqHandlerInstalled, "PDB not configure for interrupts");
       if (callback == nullptr) {
          callback = unhandledCallback;
       }

@@ -399,7 +399,7 @@ public:
     *                     Use nullptr to remove callback.
     */
    static __attribute__((always_inline)) void setCallback(I2cCallbackFunction callback) {
-      usbdm_assert(Info::irqHandlerInstalled, "I2C not configured for interrupts");
+      static_assert(Info::irqHandlerInstalled, "I2C not configured for interrupts");
       if (callback == nullptr) {
          callback = I2c::unhandledCallback;
       }

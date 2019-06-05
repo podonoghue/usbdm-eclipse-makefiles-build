@@ -323,7 +323,7 @@ public:
     *                     Use nullptr to remove callback.
     */
    static void setCallback(CMPCallbackFunction callback) {
-      usbdm_assert(Info::irqHandlerInstalled, "CMP not configured for interrupts");
+      static_assert(Info::irqHandlerInstalled, "CMP not configured for interrupts");
       if (callback == nullptr) {
          callback = unhandledCallback;
       }

@@ -134,6 +134,7 @@ public:
     * @return Channel number     - Number of allocated channel
     */
    static PitChannelNum allocateChannel() {
+      CriticalSection cs;
       unsigned channelNum = __builtin_ffs(allocatedChannels);
       if ((channelNum == 0)||(--channelNum>=Info::NumChannels)) {
          setErrorCode(E_NO_RESOURCE);
@@ -155,6 +156,7 @@ public:
    static PitChannelNum allocateDmaAssociatedChannel(DmaChannelNum dmaChannelNum) {
       const uint32_t channelMask = (1<<dmaChannelNum);
       usbdm_assert(dmaChannelNum<Info::NumChannels, "No PIT channel associated with DMA channel");
+      CriticalSection cs;
       usbdm_assert((allocatedChannels & channelMask) != 0, "PIT channel already allocated");
       if ((allocatedChannels & channelMask) == 0) {
          setErrorCode(E_NO_RESOURCE);
@@ -173,6 +175,8 @@ public:
       const uint32_t channelMask = (1<<pitChannelNum);
       usbdm_assert(pitChannelNum<Info::NumChannels, "Illegal PIT channel");
       usbdm_assert((allocatedChannels & channelMask) == 0, "Freeing unallocated PIT channel");
+
+      CriticalSection cs;
       allocatedChannels |= channelMask;
    }
 
@@ -211,7 +215,7 @@ public:
     *                        Use nullptr to remove callback.
     */
    static void setCallback(PitChannelNum channel, PitCallbackFunction callback) {
-      usbdm_assert(Info::irqHandlerInstalled, "PIT not configure for interrupts");
+      static_assert(Info::irqHandlerInstalled, "PIT not configure for interrupts");
       if (callback == nullptr) {
          callback = unhandledCallback;
       }
@@ -470,7 +474,6 @@ protected:
        * @param[in]  callbackFunction  Function to call from stub ISR
        */
       static void setCallback(PitCallbackFunction callbackFunction) {
-         static_assert(Info::irqHandlerInstalled, "PIT not configured for interrupts");
          PitBase_T<Info>::setCallback(CHANNEL, callbackFunction);
       }
 

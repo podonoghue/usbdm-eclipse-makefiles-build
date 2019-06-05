@@ -163,7 +163,7 @@ public:
     *                        Use nullptr to remove callback.
     */
    static void setCallback(PMCCallbackFunction callback) {
-      usbdm_assert(Info::irqHandlerInstalled, "PMC not configure for interrupts");
+      static_assert(Info::irqHandlerInstalled, "PMC not configure for interrupts");
       if (callback == nullptr) {
          callback = unhandledCallback;
       }

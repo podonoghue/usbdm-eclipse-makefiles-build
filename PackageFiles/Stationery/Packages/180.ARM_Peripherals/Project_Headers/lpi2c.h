@@ -138,7 +138,7 @@ public:
     *                     Use nullptr to remove callback.
     */
    static __attribute__((always_inline)) void setCallback(Lpi2cCallbackFunction callback) {
-      usbdm_assert(Info::irqHandlerInstalled, "LPI2C not configured for interrupts");
+      static_assert(Info::irqHandlerInstalled, "LPI2C not configured for interrupts");
       if (callback == nullptr) {
          callback = Lpi2c::unhandledCallback;
       }

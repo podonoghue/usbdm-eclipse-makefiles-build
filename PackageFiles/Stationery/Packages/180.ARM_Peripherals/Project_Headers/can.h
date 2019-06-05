@@ -1203,7 +1203,7 @@ protected:
     * @param index    Index of callback to install
     */
    static void setCallback(CanCallbackFunction callback, int index) {
-      usbdm_assert(Info::irqHandlerInstalled, "CAN not configured for interrupts");
+      static_assert(Info::irqHandlerInstalled, "CAN not configured for interrupts");
 
       if (callback == nullptr) {
          callback = noHandlerCallback;
@@ -2089,8 +2089,8 @@ public:
        * @param callback The function to call on Mailbox event
        */
       void setCallback(CanMailboxCallbackFunction callback) {
+         static_assert(Info::irqHandlerInstalled, "CAN not configured for interrupts");
          usbdm_assert((mailbox != nullptr)||(callback == nullptr), "CanMailboxInfo in invalid state");
-         usbdm_assert(Info::irqHandlerInstalled, "CAN not configured for interrupts");
          if (callback == nullptr) {
             callback = (CanMailboxCallbackFunction)Can_T<Info>::noHandlerCallback;
          }

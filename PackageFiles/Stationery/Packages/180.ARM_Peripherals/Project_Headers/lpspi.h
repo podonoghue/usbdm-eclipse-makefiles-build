@@ -138,7 +138,7 @@ public:
     *                     Use nullptr to remove callback.
     */
    static __attribute__((always_inline)) void setCallback(LpspiCallbackFunction callback) {
-      usbdm_assert(Info::irqHandlerInstalled, "LPSPI not configured for interrupts");
+      static_assert(Info::irqHandlerInstalled, "LPSPI not configured for interrupts");
       if (callback == nullptr) {
          callback = Lpspi::unhandledCallback;
       }
