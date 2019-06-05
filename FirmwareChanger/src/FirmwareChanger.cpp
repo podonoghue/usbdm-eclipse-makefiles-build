@@ -159,7 +159,7 @@ void FirmwareChangerDialogue::setSerialNumber(const wxString &serialNumber) {
    uint16_t Checksum_Address = flashImageDescription.protectAddr-1;
 
    // Patch image with serial #
-   uint8_t buff[sizeof(ICP_data.serialNumber)];
+   uint8_t buff[sizeof(ICP_data.serialNumber)+1];
    strncpy((char*)buff, serialNumber.ToUTF8(), sizeof(ICP_data.serialNumber));
    flashImage->loadData(sizeof(ICP_data.serialNumber), SN_Address, buff);
 
