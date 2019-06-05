@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE fragment SYSTEM "_menu.dtd" >
+<!-- _clockOption.xml -->
+
+<fragment xmlns:xi="http://www.w3.org/2001/XInclude">
+         
+<!-- 
+      Predefined symbols generated for current peripheral
+      _base_class FTM0 => Ftm
+      _instance   FTM0 => 0
+      _class      FTM0 => Ftm0
+      _name       FTM0 => FTM0
+ -->
+ 
+<template><![CDATA[
+      \t//! Hardware base address as uint32_t 
+      \tstatic constexpr uint32_t baseAddress = $(_name)_BasePtr;\n\n
+
+      \t//! Hardware base pointer
+      \t__attribute__((always_inline)) static volatile $(_base_class::toupper)_Type &$(_base_class::tolower)() {
+      \t   return *($(_base_class::toupper)_Type *)baseAddress;
+      \t}\n\n
+]]></template>
+      
+</fragment>

@@ -4,6 +4,8 @@
 
 <peripheralPage xmlns:xi="http://www.w3.org/2001/XInclude" name="_instance" description="LP LPIT">
 
+   <xi:include href="_default_instance.xml"/>
+
    <aliasOption key="/PCC/pcc_lpit$(_instance)" constant="false" optional="true" />
 
    <intOption name="lpit_ldval" description="Reload value"

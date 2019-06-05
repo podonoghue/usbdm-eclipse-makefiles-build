@@ -4,6 +4,8 @@
 
 <peripheralPage xmlns:xi="http://www.w3.org/2001/XInclude" name="_instance" description="SIM">
    
+   <xi:include href="_default_instance.xml"/>
+
    <xi:include href="_simFiles-MK.xml"/>
 
    <binaryOption name="chipctl_sraml_reten"

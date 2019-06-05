@@ -4,6 +4,8 @@
 <!-- smc_lpopo_mkl03z4.xml -->
 
 <peripheralPage xmlns:xi="http://www.w3.org/2001/XInclude" name="_instance" description="System Mode Controller">
+   
+   <xi:include href="_default_instance.xml"/>
 
    <binaryOption name="smc_pmprot_avlp" 
       description="Allow very low power modes" 

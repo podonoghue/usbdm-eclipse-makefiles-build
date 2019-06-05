@@ -3,6 +3,9 @@
 <!-- lptmr0.xml -->
 
 <peripheralPage xmlns:xi="http://www.w3.org/2001/XInclude" name="_instance" description="Low Power Timer">
+
+   <xi:include href="_default_instance.xml"/>
+   
    <template><![CDATA[
       \t//! Base value for PCR (excluding MUX value)
       \tstatic constexpr uint32_t defaultPcrValue  = DEFAULT_PCR;\n\n
@@ -142,7 +145,22 @@
       When lptmr_csr_tfc=0 this is the lptmr_cnr roll-over frequency"
       derived="true"
       min="0" units="Hz"/>
-    
+  
+   <template><![CDATA[
+      \t//! IRQ numbers for hardware
+      \tstatic constexpr IRQn_Type irqNums[]  = $(_name)_IRQS;\n\n
+   
+      \t//! Number of IRQs for hardware
+      \tstatic constexpr uint32_t irqCount  = sizeof(irqNums)/sizeof(irqNums[0]);\n\n
+   ]]></template>
+
+   <!--
+   Patterns for pattern and classHandler 
+     -  %i replaced with peripheral instance e.g. FTM1 => 1, PTA => A
+     -  %b replaced with peripheral base name e.g. FTM1 => = FTM
+     -  %c replaced with peripheral C++ base class name e.g. FTM1 => = Ftm
+     -  _IRQHandler is appended to the pattern (only)
+   -->
    <irqOption name="irqHandlingMethod"  
       description="Peripheral interrupt handler"
       toolTip="This selection allow the interrupt handler for this peripheral to be installed using several different methods"
@@ -151,7 +169,7 @@
       
    <template><![CDATA[
        \t//! Class based callback handler has been installed in vector table\n
-       \tstatic constexpr bool irqHandlerInstalled = ($(irqHandlingMethod) == 1);\n\n
+       \tstatic constexpr bool irqHandlerInstalled = $(irqHandlingMethod);\n\n
    ]]></template>
        
    <intOption name="irqLevel" 

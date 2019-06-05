@@ -5,6 +5,8 @@
 
 <peripheralPage xmlns:xi="http://www.w3.org/2001/XInclude" name="_instance" description="Power Management Controller">
 
+   <xi:include href="_default_instance.xml"/>
+
    <binaryOption name="pmc_lvdsc1_lvdie" 
       description="Low-Voltage Detect Interrupt Enable"
       toolTip="Enables hardware interrupt requests for LVDF">

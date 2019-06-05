@@ -4,6 +4,15 @@
 
 <fragment xmlns:xi="http://www.w3.org/2001/XInclude">
 
+   
+   <template><![CDATA[
+      \t//! IRQ numbers for hardware
+      \tstatic constexpr IRQn_Type irqNums[]  = $(_name)_IRQS;\n\n
+   
+      \t//! Number of IRQs for hardware
+      \tstatic constexpr uint32_t irqCount  = sizeof(irqNums)/sizeof(irqNums[0]);\n\n
+   ]]></template>
+
    <!--
    Patterns for pattern and classHandler 
      -  %i replaced with peripheral instance e.g. FTM1 => 1, PTA => A
@@ -16,7 +25,7 @@
       toolTip="This selection allow the interrupt handler for this peripheral to be installed using several different methods"
       pattern="^%b%i$" 
       classHandler="%c%i::irqHandler" />
-
+      
    <!-- Template is added to class within pin_mapping.h -->
    <template><![CDATA[
        \t//! Class based callback handler has been installed in vector table\n

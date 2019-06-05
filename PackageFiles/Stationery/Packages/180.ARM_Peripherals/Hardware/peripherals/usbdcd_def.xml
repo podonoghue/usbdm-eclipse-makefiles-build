@@ -4,6 +4,13 @@
 
 <peripheralPage xmlns:xi="http://www.w3.org/2001/XInclude" name="_instance" description="USB Device Charger Detection">
 
+   <template><![CDATA[
+   \tusing USBHSDCD_Type = USBDCD_Type;\n\n
+   ]]></template>
+
+
+   <xi:include href="_default_instance.xml"/>
+
    <xi:include href="_irqOption.xml"/>         
 
    <template><![CDATA[

@@ -4,12 +4,10 @@
 
 <peripheralPage xmlns:xi="http://www.w3.org/2001/XInclude" name="_instance" description="External Watchdog Monitor">
 
+   <xi:include href="_default_instance.xml"/>
+
    <xi:include href="_irqOption.xml"/>         
    
-   <projectActionList id = "rnga_files" >
-      <copy source="Project_Headers/rnga.h"         target="Project_Headers/rnga.h"          overwrite="true" derived="true" />
-      <copy source="Snippets/rnga-example.cpp"      target="Snippets/rnga-example.cpp"       overwrite="true" derived="true" />
-   </projectActionList>
    
    <xi:include href="_clockOption.xml"/>
    

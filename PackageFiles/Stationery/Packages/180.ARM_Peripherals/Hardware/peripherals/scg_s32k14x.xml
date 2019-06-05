@@ -3,6 +3,8 @@
 <!-- scg_s32k14x.xml -->
 
 <peripheralPage xmlns:xi="http://www.w3.org/2001/XInclude" name="_instance" description="System Clock Generator">
+   
+   <xi:include href="_default_instance.xml"/>
 
    <category name="Internal Clocks" 
       description="Clock Sources"

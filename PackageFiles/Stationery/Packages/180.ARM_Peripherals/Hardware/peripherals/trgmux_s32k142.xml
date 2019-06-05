@@ -5,6 +5,8 @@
 
 <peripheralPage xmlns:xi="http://www.w3.org/2001/XInclude" name="_instance" description="Trigger Multiplexor">
 
+   <xi:include href="_default_instance.xml"/>
+
    <template><![CDATA[
       \t//! Base value for PCR (excluding MUX value)
       \tstatic constexpr uint32_t defaultPcrValue  = 0;\n\n

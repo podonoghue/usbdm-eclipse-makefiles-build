@@ -3,6 +3,9 @@
 <!-- rcm_mk10d5.xml -->
 
 <peripheralPage xmlns:xi="http://www.w3.org/2001/XInclude" name="RCM" description="Reset Control Module" >
+
+   <xi:include href="_default_instance.xml"/>
+
    <binaryOption name="rcm_rpfc_rstfltss" 
       description="Reset pin filter select in stop mode"
       toolTip="Selects how the reset pin filter is enabled in STOP and VLPS modes">

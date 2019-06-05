@@ -3,6 +3,8 @@
 <!-- rtc_s32k14x.xml -->
 
 <peripheralPage xmlns:xi="http://www.w3.org/2001/XInclude" name="_instance" description="Real-time Clock">
+   
+   <xi:include href="_default_instance.xml"/>
 
    <template><![CDATA[
       \t//! Base value for PCR (excluding MUX value)

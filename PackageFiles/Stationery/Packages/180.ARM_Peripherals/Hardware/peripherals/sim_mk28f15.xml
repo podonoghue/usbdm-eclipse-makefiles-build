@@ -5,6 +5,8 @@
 Devices using this peripheral: 
 -->
 <peripheralPage xmlns:xi="http://www.w3.org/2001/XInclude" name="_instance" description="SIM">
+
+   <xi:include href="_default_instance.xml"/>
    
    <!-- Indicates RTC/OSC0 don't share XTAL/EXTAL pins -->
    <constant name="rtcSharesPins" value="false"   derived="true" />
@@ -31,7 +33,7 @@ Devices using this peripheral:
       
       <intOption name="system_erclk32k_clock" 
          units="Hz"
-	 derived="true"
+         derived="true"
          description="Frequency of External 32k Reference Clock [ERCLK32K]"
          toolTip="External reference clock available to some peripherals (usually ~32kHz)" 
          origin="Derived from OSC32KCLK, RTCCLK or LPO" 

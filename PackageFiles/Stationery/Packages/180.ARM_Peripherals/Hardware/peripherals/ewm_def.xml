@@ -4,6 +4,8 @@
 
 <peripheralPage xmlns:xi="http://www.w3.org/2001/XInclude" name="_instance" description="External Watchdog Monitor">
 
+   <xi:include href="_default_instance.xml"/>
+
    <template><![CDATA[
       \t//! Base value for PCR (excluding MUX value)
       \tstatic constexpr uint32_t defaultPcrValue  = DEFAULT_PCR;\n\n
@@ -11,6 +13,14 @@
    
    <xi:include href="_mapPinsOption.xml"/>  
    
+   <template><![CDATA[
+      \t//! IRQ numbers for hardware
+      \tstatic constexpr IRQn_Type irqNums[]  = $(_name)_IRQS;\n\n
+   
+      \t//! Number of IRQs for hardware
+      \tstatic constexpr uint32_t irqCount  = sizeof(irqNums)/sizeof(irqNums[0]);\n\n
+   ]]></template>
+
    <irqOption name="irqHandlingMethod"  
       description="Peripheral interrupt handler"
       toolTip="This selection allow the interrupt handler for this peripheral to be installed using several different methods"

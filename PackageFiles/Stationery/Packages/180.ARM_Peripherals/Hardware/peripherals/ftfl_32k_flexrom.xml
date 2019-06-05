@@ -5,6 +5,8 @@
 
 <peripheralPage xmlns:xi="http://www.w3.org/2001/XInclude" name="_instance" description="Flash Memory Module" >
 
+   <xi:include href="_default_instance.xml"/>
+
    <stringOption name="pflash_sector_size" constant="true" derived="true"
       description="Sector size for program flash (minimum erase element)"/>
 
@@ -141,6 +143,8 @@
       \t//! FlexNVM - EEPROM partition - not available
       \tstatic constexpr SplitSel partitionSplit = SplitSel_disabled;\n\n
    ]]></template>
+   
+   <xi:include href="_irqOption.xml"/>
    
    <xi:include href="_clockOption.xml"/>
 

@@ -135,7 +135,7 @@
          <dma source="PDB1"                 num="47" />
          <dma source="CMP0"                 num="48" />
          <dma source="PORTA"                num="49" />
-         <dma source="POSRTB"               num="50" />
+         <dma source="PORTB"                num="50" />
          <dma source="PORTC"                num="51" />
          <dma source="PORTD"                num="52" />
          <dma source="PORTE"                num="53" />

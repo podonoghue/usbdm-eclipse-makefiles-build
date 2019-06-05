@@ -4,6 +4,8 @@
 
 <peripheralPage xmlns:xi="http://www.w3.org/2001/XInclude" name="_instance" description="Serial Peripheral Interface">
 
+   <xi:include href="_default_instance.xml"/>
+
    <template><![CDATA[
       \t//! Base value for PCR (excluding MUX value)
       \tstatic constexpr uint32_t defaultPcrValue  = DEFAULT_PCR;\n\n

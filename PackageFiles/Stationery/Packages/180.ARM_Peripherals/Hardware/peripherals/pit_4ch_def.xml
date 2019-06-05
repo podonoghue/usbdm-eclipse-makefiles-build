@@ -4,6 +4,8 @@
 
 <fragment xmlns:xi="http://www.w3.org/2001/XInclude">
 
+   <xi:include href="_default_instance.xml"/>
+
    <aliasOption key="/SIM/system_bus_clock" displayName="PIT input clock" constant="true"/>
 
    <intOption name="pit_ldval" description="Reload value"
@@ -37,15 +39,22 @@
       <choice value="0" name="Timers are not chained" />
       <choice value="1" name="Timers are chained" />
    </binaryOption>
+   <template><![CDATA[
+      \t//! IRQ numbers for hardware
+      \tstatic constexpr IRQn_Type irqNums[]  = $(_name)_IRQS;\n\n
+   
+      \t//! Number of IRQs for hardware
+      \tstatic constexpr uint32_t irqCount  = sizeof(irqNums)/sizeof(irqNums[0]);\n\n
+   ]]></template>
 
-    <!--
-     Patterns for pattern and classHandler 
+   <!--
+   Patterns for pattern and classHandler 
      -  %i replaced with peripheral instance e.g. FTM1 => 1, PTA => A
      -  %b replaced with peripheral base name e.g. FTM1 => = FTM
      -  %c replaced with peripheral C++ base class name e.g. FTM1 => = Ftm
      -  _IRQHandler is appended to the pattern (only)
-     -->
-   <irqOption name="irqHandlers"  
+   -->
+   <irqOption name="irqHandlingMethod"  
       description="Channel interrupt handlers"
       toolTip="This selection allow the interrupt handler for this peripheral to be installed using several different methods"
       pattern="^%b(\d+)$" 
@@ -53,7 +62,7 @@
       
    <template><![CDATA[
        \t//! Class based callback handler has been installed in vector table\n
-       \tstatic constexpr bool irqHandlerInstalled = ($(irqHandlers) == 1);\n\n
+       \tstatic constexpr bool irqHandlerInstalled = $(irqHandlingMethod);\n\n
    ]]></template>
        
    <intOption name="irqLevel" 
@@ -100,5 +109,5 @@
    ]]></template>
    
    <xi:include href="_clockOption.xml"/>
-   
+
 </fragment>

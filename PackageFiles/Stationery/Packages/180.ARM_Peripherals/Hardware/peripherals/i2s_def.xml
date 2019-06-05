@@ -4,6 +4,8 @@
 
 <peripheralPage xmlns:xi="http://www.w3.org/2001/XInclude" name="_instance" description="Inter-Integrated-Circuit">
 
+   <xi:include href="_default_instance.xml"/>
+
    <template><![CDATA[
       \t//! Base value for PCR (excluding MUX value)
       \tstatic constexpr uint32_t defaultPcrValue  = I2C_DEFAULT_PCR;\n\n
@@ -13,7 +15,15 @@
    
    <aliasOption key="/SIM/system_bus_clock" />
    
-   <irqOption name="irqHandlers"  
+   <template><![CDATA[
+      \t//! IRQ numbers for hardware
+      \tstatic constexpr IRQn_Type irqNums[]  = $(_name)_IRQS;\n\n
+   
+      \t//! Number of IRQs for hardware
+      \tstatic constexpr uint32_t irqCount  = sizeof(irqNums)/sizeof(irqNums[0]);\n\n
+   ]]></template>
+
+   <irqOption name="irqHandlingMethod"  
       description="I2S Tx/Rx interrupt handler"
       toolTip="This selection allow the interrupt handlers for this peripheral to be installed using several different methods"
       pattern="^I2S%i_?(Rx|Tx)?$"
@@ -21,7 +31,7 @@
         
    <template><![CDATA[
        \t//! Class based callback handler has been installed in vector table\n
-       \tstatic constexpr bool irqHandlerInstalled = ($(irqHandlers) == 1);\n\n
+       \tstatic constexpr bool irqHandlerInstalled = $(irqHandlingMethod);\n\n
    ]]></template>
        
    <intOption name="irqLevel" 

@@ -4,6 +4,8 @@
 
 <peripheralPage xmlns:xi="http://www.w3.org/2001/XInclude" name="_instance" description="Cyclic Redundancy Check (CRC)">
 
+   <xi:include href="_default_instance.xml"/>
+
    <intOption
       name="crc_gpoly"
       description="CRC Polynomial register"

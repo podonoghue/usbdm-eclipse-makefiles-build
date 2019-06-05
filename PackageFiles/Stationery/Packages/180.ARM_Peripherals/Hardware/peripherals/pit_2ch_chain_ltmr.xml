@@ -11,5 +11,5 @@
       
    ]]></template>
 
-   <xi:include href="pit_shared_irq.xml"/>
+   <xi:include href="pit_shared_irq_def.xml"/>
 </peripheralPage>

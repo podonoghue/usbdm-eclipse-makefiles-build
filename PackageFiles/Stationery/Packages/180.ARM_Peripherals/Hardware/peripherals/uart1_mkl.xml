@@ -6,6 +6,8 @@ Devices using this peripheral:
 -->
 <peripheralPage xmlns:xi="http://www.w3.org/2001/XInclude" name="_instance" description="UART">
 
+   <xi:include href="_default_instance.xml"/>
+
    <template><![CDATA[
       \t//! Base value for PCR (excluding MUX value)
       \tstatic constexpr uint32_t defaultPcrValue  = DEFAULT_PCR;\n\n
@@ -60,8 +62,23 @@ Devices using this peripheral:
       <aliasOption key="/SIM/sim_sopt5_uart$(_instance)txsrc" optional="true" constant="false" />
       <aliasOption key="/SIM/sim_sopt5_uart$(_instance)rxsrc" optional="true" constant="false" />
    </category>
+   
+   <template><![CDATA[
+      \t//! IRQ numbers for hardware
+      \tstatic constexpr IRQn_Type irqNums[]  = $(_name)_IRQS;\n\n
+   
+      \t//! Number of IRQs for hardware
+      \tstatic constexpr uint32_t irqCount  = sizeof(irqNums)/sizeof(irqNums[0]);\n\n
+   ]]></template>
 
-   <irqOption name="irqHandlers"  
+   <!--
+   Patterns for pattern and classHandler 
+     -  %i replaced with peripheral instance e.g. FTM1 => 1, PTA => A
+     -  %b replaced with peripheral base name e.g. FTM1 => = FTM
+     -  %c replaced with peripheral C++ base class name e.g. FTM1 => = Ftm
+     -  _IRQHandler is appended to the pattern (only)
+   -->
+   <irqOption name="irqHandlingMethod"  
       description="Interrupt handlers"
       toolTip="This selection allow the interrupt handlers for this peripheral to be installed using several different methods"
       pattern="^UART%i_?(RxTx|Error|Lon)?$" 
@@ -69,7 +86,7 @@ Devices using this peripheral:
         
    <template><![CDATA[
        \t//! Class based callback handler has been installed in vector table\n
-       \tstatic constexpr bool irqHandlerInstalled = ($(irqHandlers) == 1);\n\n
+       \tstatic constexpr bool irqHandlerInstalled = $(irqHandlingMethod);\n\n
    ]]></template>
        
    <intOption name="irqLevel" 

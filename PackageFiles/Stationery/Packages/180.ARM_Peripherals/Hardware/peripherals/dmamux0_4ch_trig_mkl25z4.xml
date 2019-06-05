@@ -5,6 +5,8 @@
 
 <peripheralPage xmlns:xi="http://www.w3.org/2001/XInclude" name="_instance" description="Flash Memory Module">
 
+   <xi:include href="_default_instance.xml"/>
+
    <aliasOption key="/DMA0/NumChannels" displayName="NumChannels" constant="true" />
 
    <choiceOption name="dma_chcfg0"

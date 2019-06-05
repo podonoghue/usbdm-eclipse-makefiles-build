@@ -2,6 +2,17 @@
 <!DOCTYPE peripheralPage SYSTEM "_menu.dtd" >
 <!-- examples.xml -->
 
+<!--
+Symbols
+
+     $(key:default:modifier)  toupper, tolower   
+     
+      _instance   -  FTM0 => 0
+      _name       -  FTM0 => FTM0
+      _class      -  FTM0 => Ftm0
+      _base_class -  FTM0 => Ftm
+-->
+
 <fragment xmlns:xi="http://www.w3.org/2001/XInclude">
    <category name="OSC0" description="Oscillator">
    

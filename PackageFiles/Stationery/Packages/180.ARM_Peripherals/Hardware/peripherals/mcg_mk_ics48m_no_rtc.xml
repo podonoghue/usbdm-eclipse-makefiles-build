@@ -2,7 +2,9 @@
 <!DOCTYPE peripheralPage SYSTEM "_menu.dtd" >
 <!-- mcg_mk_ics48m.xml -->
 
-<peripheralPage xmlns:xi="http://www.w3.org/2001/XInclude" name="MCG" description="Multipurpose Clock Generator">
+<peripheralPage xmlns:xi="http://www.w3.org/2001/XInclude" name="_instance" description="Multipurpose Clock Generator">
+   
+   <xi:include href="_default_instance.xml"/>
 
    <category name="OSC0 (Main Oscillator)" description="OSC External Reference Clock/Oscillator [OSCCLK]" >
       <aliasOption key="/OSC0/osc_input_freq" constant="false" />

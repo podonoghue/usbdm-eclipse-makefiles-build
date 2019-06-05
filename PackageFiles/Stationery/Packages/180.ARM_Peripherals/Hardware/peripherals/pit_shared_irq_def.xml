@@ -4,6 +4,8 @@
 
 <fragment xmlns:xi="http://www.w3.org/2001/XInclude">
 
+   <xi:include href="_default_instance.xml"/>
+
    <aliasOption key="/SIM/system_bus_clock" displayName="PIT input clock" constant="true"/>
 
    <intOption name="pit_ldval" description="Reload value"
