@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE peripheralPage SYSTEM "_menu.dtd" >
+<!-- mcm_def.xml -->
+
+<peripheralPage xmlns:xi="http://www.w3.org/2001/XInclude" name="_instance" description="Miscellaneous Control Module (MCM)">
+
+   <xi:include href="_default_instance.xml"/>
+
+   <projectActionList id = "mcm_files" >
+      <copy source="Project_Headers/mcm.h"         target="Project_Headers/mcm.h"          overwrite="true" derived="true" />
+   </projectActionList>
+
+</peripheralPage>
