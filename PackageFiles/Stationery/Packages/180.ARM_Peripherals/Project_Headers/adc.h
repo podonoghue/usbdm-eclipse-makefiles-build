@@ -642,6 +642,7 @@ public:
       }
    }
 
+#ifdef ADC_SC2_DMAEN_MASK
    /**
     * Enable/disable DMA.
     *
@@ -656,6 +657,7 @@ public:
          adc().SC2 &= ~ADC_SC2_DMAEN_MASK;
       }
    }
+#endif
 
 protected:
    /**
