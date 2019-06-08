@@ -433,7 +433,7 @@ Devices using this vector table:
       <peripheral>PDB0</peripheral>
    </interrupt>
    <interrupt>
-      <name>SDHC</name>
+      <name>SDHC0</name>
       <description>Secured Digital Host Controller</description>
       <value>80</value>
       <peripheral>SDHC0</peripheral>

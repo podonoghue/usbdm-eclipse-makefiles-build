@@ -1,42 +1,12 @@
 <!--
 Devices using this peripheral: 
-      MK20D5
-      MK20D7
-      MK20D10
-      MK20DZ10
-      MK20F12
-      MK21D5
-      MK21DA5
-      MK21D5WS
-      MK22D5
-      MK40D7
-      MK40D10
-      MK40DZ10
-      MK50D7
-      MK50D10
-      MK50DZ10
-      MK51D7
-      MK51D10
-      MK51DZ10
-      MK52D10
-      MK52DZ10
-      MK53D10
-      MK53DZ10
-      MK60D10
-      MK60DZ10
-      MK60F12
-      MK60F15
-      MK61F15
-      MK61F15WS
-      MK70F15
-      MK70F15WS
-      MKW22D5
-      MKW24D5
+      MK28F15
+      MK82F25615
 -->
       <peripheral>
-         <?sourceFile "USBDCD_V1_1" ?>
-         <name>USBDCD</name>
-         <description>USB Device Charger Detection module (USB DCD V1.1)</description>
+         <?sourceFile "USBDCD0_V1_2_MK28F15" ?>
+         <name>USBDCD0</name>
+         <description>USB Device Charger Detection module (USB DCD V1.2)</description>
          <groupName>USBDCD</groupName>
          <headerStructName>USBDCD</headerStructName>
          <baseAddress>0x40035000</baseAddress>
@@ -46,12 +16,7 @@ Devices using this peripheral:
          <resetMask>0xFFFFFFFF</resetMask>
          <addressBlock>
             <offset>0x0</offset>
-            <size>0xC</size>
-            <usage>registers</usage>
-         </addressBlock>
-         <addressBlock>
-            <offset>0x10</offset>
-            <size>0xC</size>
+            <size>0x1C</size>
             <usage>registers</usage>
          </addressBlock>
          <registers>
@@ -108,6 +73,24 @@ Devices using this peripheral:
                         <enumeratedValue>
                            <name>0b1</name>
                            <description>Interrupts enabled</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>BC12</name>
+                     <description>BC1.2 compatibility level\n This bit cannot be changed after start detection</description>
+                     <bitOffset>17</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>Compatible with BC1.1 (default)</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>Compatible with BC1.2</description>
                            <value>0b1</value>
                         </enumeratedValue>
                      </enumeratedValues>
@@ -307,6 +290,41 @@ See the SEQ_STAT field to determine the phase in which the error occurred</descr
                </fields>
             </register>
             <register>
+               <name>SIGNAL_OVERRIDE</name>
+               <description>Signal Override Register</description>
+               <addressOffset>0xC</addressOffset>
+               <fields>
+                  <field>
+                     <name>PS</name>
+                     <description>Phase Selection</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>2</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b00</name>
+                           <description>No overrides. Bit field must remain at this value during normal USB data communication to prevent unexpected conditions on USB_DP and USB_DM pins. (Default)</description>
+                           <value>0b00</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b01</name>
+                           <description>Reserved, not for customer use</description>
+                           <value>0b01</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b10</name>
+                           <description>Enables VDP_SRC voltage source for the USB_DP pin and IDM_SINK current source for the USB_DM pin</description>
+                           <value>0b10</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b11</name>
+                           <description>Reserved, not for customer use</description>
+                           <value>0b11</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+               </fields>
+            </register>
+            <register>
                <name>TIMER0</name>
                <description>TIMER0 Register</description>
                <addressOffset>0x10</addressOffset>
@@ -348,8 +366,8 @@ See the SEQ_STAT field to determine the phase in which the error occurred</descr
                </fields>
             </register>
             <register>
-               <name>TIMER2</name>
-               <description>Timing parameters for USBDCD</description>
+               <name>TIMER2_BC11</name>
+               <description>Timing parameters for USBDCD v1.1</description>
                <addressOffset>0x18</addressOffset>
                <resetValue>0x280001</resetValue>
                <fields>
@@ -362,6 +380,28 @@ See the SEQ_STAT field to determine the phase in which the error occurred</descr
                   <field>
                      <name>TVDPSRC_CON</name>
                      <description>Time Period Before Enabling D+ Pullup</description>
+                     <bitOffset>16</bitOffset>
+                     <bitWidth>10</bitWidth>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>TIMER2_BC12</name>
+               <description>Timing parameters for USBDCD v1.2</description>
+               <addressOffset>0x18</addressOffset>
+               <resetValue>0x10028</resetValue>
+               <fields>
+                  <field>
+                     <name>TVDMSRC_ON</name>
+                     <description>Sets the amount of time (in ms) that the module enables the VDM_SRC.\n
+Valid values are 0-40ms</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>10</bitWidth>
+                  </field>
+                  <field>
+                     <name>TWAIT_AFTER_PRD</name>
+                     <description>Sets the amount of time (in ms) that the module waits after primary detection before start to secondary detection.\n
+Valid values are 1-1023ms. Default is 1ms</description>
                      <bitOffset>16</bitOffset>
                      <bitWidth>10</bitWidth>
                   </field>

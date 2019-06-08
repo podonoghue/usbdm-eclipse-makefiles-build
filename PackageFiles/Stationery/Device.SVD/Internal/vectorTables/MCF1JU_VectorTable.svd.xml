@@ -236,8 +236,8 @@ Devices using this vector table:
       <value>110</value>
    </interrupt>
    <interrupt>
-      <name>USBDCD</name>
-      <description>USBDCD</description>
+      <name>USBDCD0</name>
+      <description>USBDCD0</description>
       <value>111</value>
    </interrupt>
    <interrupt>

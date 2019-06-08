@@ -5,7 +5,7 @@
  *           Equivalent: 
  *
  * @version  V0.0
- * @date     2019/04
+ * @date     2019/06
  *
  *******************************************************************************************************/
 
@@ -109,7 +109,7 @@ typedef enum {
   L2_SWI_IRQn                   = 108,   /**< 108 Level 2 Software Interrupt                                                       */
   L1_SWI_IRQn                   = 109,   /**< 109 Level 1 Software Interrupt                                                       */
   MTIM0_IRQn                    = 110,   /**< 110 MTIM0                                                                            */
-  USBDCD_IRQn                   = 111,   /**< 111 USBDCD                                                                           */
+  USBDCD0_IRQn                  = 111,   /**< 111 USBDCD0                                                                          */
   PORT_AB_IRQn                  = 112,   /**< 112 EGPIO Port A & EGPIO Port B                                                      */
   PORT_CD_IRQn                  = 113,   /**< 113 EGPIO Port C & EGPIO Port D                                                      */
   PORT_EF_IRQn                  = 114,   /**< 114 EGPIO Port E & EGPIO Port F                                                      */
@@ -199,7 +199,7 @@ extern void L3_SWI_IRQHandler(void);                 /**< Level 3 Software Inter
 extern void L2_SWI_IRQHandler(void);                 /**< Level 2 Software Interrupt                                                       */
 extern void L1_SWI_IRQHandler(void);                 /**< Level 1 Software Interrupt                                                       */
 extern void MTIM0_IRQHandler(void);                  /**< MTIM0                                                                            */
-extern void USBDCD_IRQHandler(void);                 /**< USBDCD                                                                           */
+extern void USBDCD0_IRQHandler(void);                /**< USBDCD0                                                                          */
 extern void PORT_AB_IRQHandler(void);                /**< EGPIO Port A & EGPIO Port B                                                      */
 extern void PORT_CD_IRQHandler(void);                /**< EGPIO Port C & EGPIO Port D                                                      */
 extern void PORT_EF_IRQHandler(void);                /**< EGPIO Port E & EGPIO Port F                                                      */

@@ -3,8 +3,8 @@ Devices using this peripheral:
       MK28F15
 -->
       <peripheral>
-         <?sourceFile "USBPHY_MK28F15" ?>
-         <name>USBPHY</name>
+         <?sourceFile "USBPHY0_MK28F15" ?>
+         <name>USBPHY0</name>
          <description>USBPHY Register Reference Index</description>
          <groupName>USBPHY</groupName>
          <headerStructName>USBPHY</headerStructName>

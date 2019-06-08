@@ -9,10 +9,10 @@ Devices using this peripheral:
       MK70F15WS
 -->
       <peripheral>
-         <?sourceFile "USBHS_4ENDPT" ?>
-         <name>USBHS</name>
+         <?sourceFile "USBHS0_4ENDPT" ?>
+         <name>USBHS0</name>
          <description>USB HS/FS/LS OTG Controller</description>
-         <groupName>USBHS</groupName>
+         <groupName>USBHS0</groupName>
          <headerStructName>USBHS</headerStructName>
          <baseAddress>0x40034000</baseAddress>
          <size>32</size>

@@ -1490,7 +1490,7 @@ Devices using this peripheral:
                         </enumeratedValue>
                      </enumeratedValues>
                   </field>
-                  <field derivedFrom="RNGA" > <name>FLEXCAN1</name> <description>FlexCAN1 Clock Gate Control</description> <bitOffset>4</bitOffset> </field>
+                  <field derivedFrom="RNGA" > <name>CAN1</name> <description>CAN1 Clock Gate Control</description> <bitOffset>4</bitOffset> </field>
                   <field derivedFrom="RNGA" > <name>NFC</name> <description>NFC Clock Gate Control</description> <bitOffset>8</bitOffset> </field>
                   <field derivedFrom="RNGA" > <name>SPI2</name> <description>SPI2 Clock Gate Control</description> <bitOffset>12</bitOffset> </field>
                   <field derivedFrom="RNGA" > <name>DDR</name> <description>DDR Clock Gate Control</description> <bitOffset>14</bitOffset> </field>
@@ -1600,7 +1600,7 @@ Devices using this peripheral:
                      </enumeratedValues>
                   </field>
                   <field derivedFrom="DMAMUX0" > <name>DMAMUX1</name> <description>DMAMUX1 Clock Gate Control</description> <bitOffset>2</bitOffset> </field>
-                  <field derivedFrom="DMAMUX0" > <name>FLEXCAN0</name> <description>FlexCAN0 Clock Gate Control</description> <bitOffset>4</bitOffset> </field>
+                  <field derivedFrom="DMAMUX0" > <name>CAN0</name> <description>CAN0 Clock Gate Control</description> <bitOffset>4</bitOffset> </field>
                   <field derivedFrom="DMAMUX0" > <name>SPI0</name> <description>SPI0 Clock Gate Control</description> <bitOffset>12</bitOffset> </field>
                   <field derivedFrom="DMAMUX0" > <name>SPI1</name> <description>SPI1 Clock Gate Control</description> <bitOffset>13</bitOffset> </field>
                   <field derivedFrom="DMAMUX0" > <name>SAI0</name> <description>SAI0 Clock Gate Control</description> <bitOffset>15</bitOffset> </field>

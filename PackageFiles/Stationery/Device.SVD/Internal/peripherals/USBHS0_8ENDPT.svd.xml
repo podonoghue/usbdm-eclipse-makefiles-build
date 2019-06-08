@@ -5,8 +5,8 @@ Devices using this peripheral:
       MK66F18
 -->
       <peripheral>
-         <?sourceFile "USBHS_8ENDPT" ?>
-         <name>USBHS</name>
+         <?sourceFile "USBHS0_8ENDPT" ?>
+         <name>USBHS0</name>
          <description>USB HS/FS/LS OTG Controller</description>
          <groupName>USBHS</groupName>
          <headerStructName>USBHS</headerStructName>

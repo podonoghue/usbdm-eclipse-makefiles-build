@@ -1259,7 +1259,7 @@ Devices using this peripheral:
                      </enumeratedValues>
                   </field>
                   <field derivedFrom="FTFL" > <name>DMAMUX0</name> <description>DMA Mux Clock Gate Control</description> <bitOffset>1</bitOffset> </field>
-                  <field derivedFrom="FTFL" > <name>FLEXCAN0</name> <description>FlexCAN0 Clock Gate Control</description> <bitOffset>4</bitOffset> </field>
+                  <field derivedFrom="FTFL" > <name>CAN0</name> <description>CAN0 Clock Gate Control</description> <bitOffset>4</bitOffset> </field>
                   <field derivedFrom="FTFL" > <name>SPI0</name> <description>SPI0 Clock Gate Control</description> <bitOffset>12</bitOffset> </field>
                   <field derivedFrom="FTFL" > <name>SPI1</name> <description>SPI1 Clock Gate Control</description> <bitOffset>13</bitOffset> </field>
                   <field derivedFrom="FTFL" > <name>I2S</name> <description>I2S Clock Gate Control</description> <bitOffset>15</bitOffset> </field>

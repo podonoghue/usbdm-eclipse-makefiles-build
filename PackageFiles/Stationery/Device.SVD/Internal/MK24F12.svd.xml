@@ -99,7 +99,7 @@
       <peripheral derivedFrom="UART1"><name>UART4</name><baseAddress>0x400EA000</baseAddress></peripheral>
       <peripheral derivedFrom="UART1"><name>UART5</name><baseAddress>0x400EB000</baseAddress></peripheral>
       <xi:include href="peripherals/USB0_OTG_CLKRCV_B.svd.xml"/>
-      <xi:include href="peripherals/USBDCD_V1_2.svd.xml"/>
+      <xi:include href="peripherals/USBDCD0_V1_2.svd.xml"/>
       <xi:include href="peripherals/VREF_C.svd.xml"/>
       <xi:include href="peripherals/WDOG_MK.svd.xml"/>
    </peripherals>

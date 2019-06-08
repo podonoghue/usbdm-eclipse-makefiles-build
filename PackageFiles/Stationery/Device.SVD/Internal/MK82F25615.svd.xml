@@ -96,7 +96,7 @@
       <xi:include href="peripherals/TRNG0_0x400A0000.svd.xml"/>
       <xi:include href="peripherals/TSI0_DMA_MK28F15.svd.xml"/>
       <xi:include href="peripherals/USB0_OTG_CLKRCV_D.svd.xml"/>
-      <xi:include href="peripherals/USBDCD_V1_2_MK28F15.svd.xml"/>
+      <xi:include href="peripherals/USBDCD0_V1_2_MK28F15.svd.xml"/>
       <xi:include href="peripherals/VREF_C.svd.xml"/>
       <xi:include href="peripherals/WDOG_MK.svd.xml"/>
    </peripherals>

@@ -12,8 +12,8 @@ Devices using this peripheral:
       MK66F18
 -->
       <peripheral>
-         <?sourceFile "USBDCD_V1_2" ?>
-         <name>USBDCD</name>
+         <?sourceFile "USBDCD0_V1_2" ?>
+         <name>USBDCD0</name>
          <description>USB Device Charger Detection module (USB DCD V1.2)</description>
          <groupName>USBDCD</groupName>
          <headerStructName>USBDCD</headerStructName>

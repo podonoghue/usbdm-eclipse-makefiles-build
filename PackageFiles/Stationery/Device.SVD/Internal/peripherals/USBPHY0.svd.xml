@@ -4,8 +4,8 @@ Devices using this peripheral:
       MK66F18
 -->
       <peripheral>
-         <?sourceFile "USBPHY_0" ?>
-         <name>USBPHY</name>
+         <?sourceFile "USBPHY0" ?>
+         <name>USBPHY0</name>
          <description>USBPHY Register Reference Index</description>
          <groupName>USBPHY</groupName>
          <headerStructName>USBPHY</headerStructName>

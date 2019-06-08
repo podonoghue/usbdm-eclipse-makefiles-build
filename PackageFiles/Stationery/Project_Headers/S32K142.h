@@ -5,7 +5,7 @@
  *           Equivalent: 
  *
  * @version  V1.6
- * @date     2019/04
+ * @date     2019/06
  *
  *******************************************************************************************************/
 
@@ -3049,7 +3049,7 @@ typedef enum DmaSlot {
    Dma0Slot_PDB1                       =       47, //!<  PDB1
    Dma0Slot_CMP0                       =       48, //!<  CMP0
    Dma0Slot_PORTA                      =       49, //!<  PORTA
-   Dma0Slot_POSRTB                     =       50, //!<  POSRTB
+   Dma0Slot_PORTB                      =       50, //!<  PORTB
    Dma0Slot_PORTC                      =       51, //!<  PORTC
    Dma0Slot_PORTD                      =       52, //!<  PORTD
    Dma0Slot_PORTE                      =       53, //!<  PORTE
@@ -7286,7 +7286,7 @@ typedef struct PCC_Type {
       struct {                                  /**< 0000: (size=0200)                                                  */
               uint8_t   RESERVED_0[128];        /**< 0000: 0x80 bytes                                                   */
          __IO uint32_t  PCC_FTFC;               /**< 0080: PCC FTFC Register                                            */
-         __IO uint32_t  PCC_DMAMUX;             /**< 0084: PCC DMAMUX Register                                          */
+         __IO uint32_t  PCC_DMAMUX0;            /**< 0084: PCC DMAMUX Register                                          */
               uint8_t   RESERVED_1[8];          /**< 0088: 0x8 bytes                                                    */
          union {                                /**< 0090: (size=0004)                                                  */
             __IO uint32_t  PCC_CAN0;            /**< 0090: PCC FLEXCAN0 Register                                        */
@@ -7379,13 +7379,13 @@ typedef struct PCC_Type {
 #define PCC_PCC_FTFC_PR_MASK                     (0x80000000U)                                       /*!< PCC_PCC_FTFC.PR Mask                    */
 #define PCC_PCC_FTFC_PR_SHIFT                    (31U)                                               /*!< PCC_PCC_FTFC.PR Position                */
 #define PCC_PCC_FTFC_PR(x)                       (((uint32_t)(((uint32_t)(x))<<31U))&0x80000000UL)   /*!< PCC_PCC_FTFC.PR Field                   */
-/* ------- PCC_DMAMUX Bit Fields                    ------ */
-#define PCC_PCC_DMAMUX_CGC_MASK                  (0x40000000U)                                       /*!< PCC_PCC_DMAMUX.CGC Mask                 */
-#define PCC_PCC_DMAMUX_CGC_SHIFT                 (30U)                                               /*!< PCC_PCC_DMAMUX.CGC Position             */
-#define PCC_PCC_DMAMUX_CGC(x)                    (((uint32_t)(((uint32_t)(x))<<30U))&0x40000000UL)   /*!< PCC_PCC_DMAMUX.CGC Field                */
-#define PCC_PCC_DMAMUX_PR_MASK                   (0x80000000U)                                       /*!< PCC_PCC_DMAMUX.PR Mask                  */
-#define PCC_PCC_DMAMUX_PR_SHIFT                  (31U)                                               /*!< PCC_PCC_DMAMUX.PR Position              */
-#define PCC_PCC_DMAMUX_PR(x)                     (((uint32_t)(((uint32_t)(x))<<31U))&0x80000000UL)   /*!< PCC_PCC_DMAMUX.PR Field                 */
+/* ------- PCC_DMAMUX0 Bit Fields                   ------ */
+#define PCC_PCC_DMAMUX0_CGC_MASK                 (0x40000000U)                                       /*!< PCC_PCC_DMAMUX0.CGC Mask                */
+#define PCC_PCC_DMAMUX0_CGC_SHIFT                (30U)                                               /*!< PCC_PCC_DMAMUX0.CGC Position            */
+#define PCC_PCC_DMAMUX0_CGC(x)                   (((uint32_t)(((uint32_t)(x))<<30U))&0x40000000UL)   /*!< PCC_PCC_DMAMUX0.CGC Field               */
+#define PCC_PCC_DMAMUX0_PR_MASK                  (0x80000000U)                                       /*!< PCC_PCC_DMAMUX0.PR Mask                 */
+#define PCC_PCC_DMAMUX0_PR_SHIFT                 (31U)                                               /*!< PCC_PCC_DMAMUX0.PR Position             */
+#define PCC_PCC_DMAMUX0_PR(x)                    (((uint32_t)(((uint32_t)(x))<<31U))&0x80000000UL)   /*!< PCC_PCC_DMAMUX0.PR Field                */
 /* ------- PCC_CAN0 Bit Fields                      ------ */
 #define PCC_PCC_CAN0_CGC_MASK                    (0x40000000U)                                       /*!< PCC_PCC_CAN0.CGC Mask                   */
 #define PCC_PCC_CAN0_CGC_SHIFT                   (30U)                                               /*!< PCC_PCC_CAN0.CGC Position               */

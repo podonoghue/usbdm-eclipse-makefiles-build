@@ -50,6 +50,7 @@
       <xi:include href="peripherals/LLWU_PE4_FILT2_RST_MK20D5.svd.xml"/>
       <xi:include href="peripherals/LPTMR0.svd.xml"/>
       <xi:include href="peripherals/MCG_MK.svd.xml"/>
+      <xi:include href="peripherals/MCM_MK11D5.svd.xml"/>
       <xi:include href="peripherals/NV_FTFL.svd.xml"/>
       <xi:include href="peripherals/NVIC_CM4.svd.xml"/>
       <xi:include href="peripherals/OSC0_MK.svd.xml"/>
@@ -76,7 +77,7 @@
       <xi:include href="peripherals/UART1_MK10D10.svd.xml"/>
       <peripheral derivedFrom="UART1"><name>UART2</name><baseAddress>0x4006C000</baseAddress></peripheral>
       <xi:include href="peripherals/USB0_OTG_C.svd.xml"/>
-      <xi:include href="peripherals/USBDCD_V1_1.svd.xml"/>
+      <xi:include href="peripherals/USBDCD0_V1_1.svd.xml"/>
       <xi:include href="peripherals/VREF_C.svd.xml"/>
       <xi:include href="peripherals/WDOG_MK.svd.xml"/>
    </peripherals>

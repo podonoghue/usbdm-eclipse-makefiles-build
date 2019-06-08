@@ -2225,7 +2225,7 @@ Devices using this peripheral:
                   <field derivedFrom="RNGA" > <name>USBHS</name> <description>USBHS Clock Gate Control</description> <bitOffset>1</bitOffset> </field>
                   <field derivedFrom="RNGA" > <name>USBHSPHY</name> <description>USBHS PHY Clock Gate Control</description> <bitOffset>2</bitOffset> </field>
                   <field derivedFrom="RNGA" > <name>USBHSDCD</name> <description>USBHS DCD Clock Gate Control</description> <bitOffset>3</bitOffset> </field>
-                  <field derivedFrom="RNGA" > <name>FLEXCAN1</name> <description>FlexCAN1 Clock Gate Control</description> <bitOffset>4</bitOffset> </field>
+                  <field derivedFrom="RNGA" > <name>CAN1</name> <description>CAN1 Clock Gate Control</description> <bitOffset>4</bitOffset> </field>
                   <field derivedFrom="RNGA" > <name>SPI2</name> <description>SPI2 Clock Gate Control</description> <bitOffset>12</bitOffset> </field>
                   <field derivedFrom="RNGA" > <name>SDHC</name> <description>SDHC Clock Gate Control</description> <bitOffset>17</bitOffset> </field>
                   <field derivedFrom="RNGA" > <name>FTM2</name> <description>FTM2 Clock Gate Control</description> <bitOffset>24</bitOffset> </field>
@@ -2343,7 +2343,7 @@ Devices using this peripheral:
                      </enumeratedValues>
                   </field>
                   <field derivedFrom="FTF" > <name>DMAMUX0</name> <description>DMA Mux Clock Gate Control</description> <bitOffset>1</bitOffset> </field>
-                  <field derivedFrom="FTF" > <name>FLEXCAN0</name> <description>FlexCAN0 Clock Gate Control</description> <bitOffset>4</bitOffset> </field>
+                  <field derivedFrom="FTF" > <name>CAN0</name> <description>CAN0 Clock Gate Control</description> <bitOffset>4</bitOffset> </field>
                   <field>
                      <name>RNGA</name>
                      <description>RNGA Clock Gate Control</description>

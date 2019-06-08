@@ -1398,7 +1398,7 @@ This bit controls the clock gate to the I2C2 module</description>
                      </enumeratedValues>
                   </field>
                   <field derivedFrom="FTF" > <name>DMAMUX0</name> <description>DMAMUX0 Clock Gate Control</description> <bitOffset>1</bitOffset> </field>
-                  <field derivedFrom="FTF" > <name>FLEXCAN0</name> <description>FlexCAN0 Clock Gate Control</description> <bitOffset>4</bitOffset> </field>
+                  <field derivedFrom="FTF" > <name>CAN0</name> <description>CAN0 Clock Gate Control</description> <bitOffset>4</bitOffset> </field>
                   <field derivedFrom="FTF" > <name>RNGA</name> <description>RNGA Clock Gate Control</description> <bitOffset>9</bitOffset> </field>
                   <field derivedFrom="FTF" > <name>SPI0</name> <description>SPI0 Clock Gate Control</description> <bitOffset>12</bitOffset> </field>
                   <field derivedFrom="FTF" > <name>SPI1</name> <description>SPI1 Clock Gate Control</description> <bitOffset>13</bitOffset> </field>

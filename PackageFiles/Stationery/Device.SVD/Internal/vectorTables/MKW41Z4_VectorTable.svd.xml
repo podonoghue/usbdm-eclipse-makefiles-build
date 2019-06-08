@@ -79,7 +79,7 @@ Devices using this vector table:
    </interrupt>
    <interrupt>
       <name>TRNG0</name>
-      <description>TRNG0</description>
+      <description>Random Number Generator Accelerator</description>
       <value>13</value>
       <peripheral>TRNG0</peripheral>
    </interrupt>

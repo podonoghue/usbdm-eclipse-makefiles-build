@@ -5,7 +5,7 @@
  *           Equivalent: 
  *
  * @version  V1.6
- * @date     2019/04
+ * @date     2019/06
  *
  *******************************************************************************************************/
 
@@ -97,7 +97,7 @@ typedef enum {
   PIT3_IRQn                     =  71,   /**<  87 Periodic Interrupt Timer                                                         */
   PDB0_IRQn                     =  72,   /**<  88 Programmable Delay Block                                                         */
   USB0_IRQn                     =  73,   /**<  89 Universal Serial Bus                                                             */
-  USBDCD_IRQn                   =  74,   /**<  90 USB Device Charger Detection                                                     */
+  USBDCD0_IRQn                  =  74,   /**<  90 USB Device Charger Detection                                                     */
   DAC0_IRQn                     =  81,   /**<  97 Digital to Analogue Converter                                                    */
   TSI0_IRQn                     =  83,   /**<  99 Touch Sense Interface                                                            */
   MCG_IRQn                      =  84,   /**< 100 Multipurpose Clock Generator                                                     */
@@ -185,7 +185,7 @@ extern void PIT2_IRQHandler(void);                   /**< Periodic Interrupt Tim
 extern void PIT3_IRQHandler(void);                   /**< Periodic Interrupt Timer                                                         */
 extern void PDB0_IRQHandler(void);                   /**< Programmable Delay Block                                                         */
 extern void USB0_IRQHandler(void);                   /**< Universal Serial Bus                                                             */
-extern void USBDCD_IRQHandler(void);                 /**< USB Device Charger Detection                                                     */
+extern void USBDCD0_IRQHandler(void);                /**< USB Device Charger Detection                                                     */
 extern void DAC0_IRQHandler(void);                   /**< Digital to Analogue Converter                                                    */
 extern void TSI0_IRQHandler(void);                   /**< Touch Sense Interface                                                            */
 extern void MCG_IRQHandler(void);                    /**< Multipurpose Clock Generator                                                     */
@@ -9049,7 +9049,7 @@ typedef struct USB_Type {
 */
 
 /* ================================================================================ */
-/* ================           USBDCD (file:USBDCD_V1_1)            ================ */
+/* ================           USBDCD0 (file:USBDCD0_V1_1)          ================ */
 /* ================================================================================ */
 
 /**
@@ -9075,7 +9075,7 @@ typedef struct USBDCD_Type {
  */
 
 /* -------------------------------------------------------------------------------- */
-/* -----------     'USBDCD' Position & Mask macros                      ----------- */
+/* -----------     'USBDCD0' Position & Mask macros                     ----------- */
 /* -------------------------------------------------------------------------------- */
 
 /**
@@ -9084,74 +9084,74 @@ typedef struct USBDCD_Type {
 * @{
 */
 /* ------- CONTROL Bit Fields                       ------ */
-#define USBDCD_CONTROL_IACK_MASK                 (0x1U)                                              /*!< USBDCD_CONTROL.IACK Mask                */
-#define USBDCD_CONTROL_IACK_SHIFT                (0U)                                                /*!< USBDCD_CONTROL.IACK Position            */
-#define USBDCD_CONTROL_IACK(x)                   (((uint32_t)(((uint32_t)(x))<<0U))&0x1UL)           /*!< USBDCD_CONTROL.IACK Field               */
-#define USBDCD_CONTROL_IF_MASK                   (0x100U)                                            /*!< USBDCD_CONTROL.IF Mask                  */
-#define USBDCD_CONTROL_IF_SHIFT                  (8U)                                                /*!< USBDCD_CONTROL.IF Position              */
-#define USBDCD_CONTROL_IF(x)                     (((uint32_t)(((uint32_t)(x))<<8U))&0x100UL)         /*!< USBDCD_CONTROL.IF Field                 */
-#define USBDCD_CONTROL_IE_MASK                   (0x10000U)                                          /*!< USBDCD_CONTROL.IE Mask                  */
-#define USBDCD_CONTROL_IE_SHIFT                  (16U)                                               /*!< USBDCD_CONTROL.IE Position              */
-#define USBDCD_CONTROL_IE(x)                     (((uint32_t)(((uint32_t)(x))<<16U))&0x10000UL)      /*!< USBDCD_CONTROL.IE Field                 */
-#define USBDCD_CONTROL_START_MASK                (0x1000000U)                                        /*!< USBDCD_CONTROL.START Mask               */
-#define USBDCD_CONTROL_START_SHIFT               (24U)                                               /*!< USBDCD_CONTROL.START Position           */
-#define USBDCD_CONTROL_START(x)                  (((uint32_t)(((uint32_t)(x))<<24U))&0x1000000UL)    /*!< USBDCD_CONTROL.START Field              */
-#define USBDCD_CONTROL_SR_MASK                   (0x2000000U)                                        /*!< USBDCD_CONTROL.SR Mask                  */
-#define USBDCD_CONTROL_SR_SHIFT                  (25U)                                               /*!< USBDCD_CONTROL.SR Position              */
-#define USBDCD_CONTROL_SR(x)                     (((uint32_t)(((uint32_t)(x))<<25U))&0x2000000UL)    /*!< USBDCD_CONTROL.SR Field                 */
+#define USBDCD_CONTROL_IACK_MASK                 (0x1U)                                              /*!< USBDCD0_CONTROL.IACK Mask               */
+#define USBDCD_CONTROL_IACK_SHIFT                (0U)                                                /*!< USBDCD0_CONTROL.IACK Position           */
+#define USBDCD_CONTROL_IACK(x)                   (((uint32_t)(((uint32_t)(x))<<0U))&0x1UL)           /*!< USBDCD0_CONTROL.IACK Field              */
+#define USBDCD_CONTROL_IF_MASK                   (0x100U)                                            /*!< USBDCD0_CONTROL.IF Mask                 */
+#define USBDCD_CONTROL_IF_SHIFT                  (8U)                                                /*!< USBDCD0_CONTROL.IF Position             */
+#define USBDCD_CONTROL_IF(x)                     (((uint32_t)(((uint32_t)(x))<<8U))&0x100UL)         /*!< USBDCD0_CONTROL.IF Field                */
+#define USBDCD_CONTROL_IE_MASK                   (0x10000U)                                          /*!< USBDCD0_CONTROL.IE Mask                 */
+#define USBDCD_CONTROL_IE_SHIFT                  (16U)                                               /*!< USBDCD0_CONTROL.IE Position             */
+#define USBDCD_CONTROL_IE(x)                     (((uint32_t)(((uint32_t)(x))<<16U))&0x10000UL)      /*!< USBDCD0_CONTROL.IE Field                */
+#define USBDCD_CONTROL_START_MASK                (0x1000000U)                                        /*!< USBDCD0_CONTROL.START Mask              */
+#define USBDCD_CONTROL_START_SHIFT               (24U)                                               /*!< USBDCD0_CONTROL.START Position          */
+#define USBDCD_CONTROL_START(x)                  (((uint32_t)(((uint32_t)(x))<<24U))&0x1000000UL)    /*!< USBDCD0_CONTROL.START Field             */
+#define USBDCD_CONTROL_SR_MASK                   (0x2000000U)                                        /*!< USBDCD0_CONTROL.SR Mask                 */
+#define USBDCD_CONTROL_SR_SHIFT                  (25U)                                               /*!< USBDCD0_CONTROL.SR Position             */
+#define USBDCD_CONTROL_SR(x)                     (((uint32_t)(((uint32_t)(x))<<25U))&0x2000000UL)    /*!< USBDCD0_CONTROL.SR Field                */
 /* ------- CLOCK Bit Fields                         ------ */
-#define USBDCD_CLOCK_CLOCK_UNIT_MASK             (0x1U)                                              /*!< USBDCD_CLOCK.CLOCK_UNIT Mask            */
-#define USBDCD_CLOCK_CLOCK_UNIT_SHIFT            (0U)                                                /*!< USBDCD_CLOCK.CLOCK_UNIT Position        */
-#define USBDCD_CLOCK_CLOCK_UNIT(x)               (((uint32_t)(((uint32_t)(x))<<0U))&0x1UL)           /*!< USBDCD_CLOCK.CLOCK_UNIT Field           */
-#define USBDCD_CLOCK_CLOCK_SPEED_MASK            (0xFFCU)                                            /*!< USBDCD_CLOCK.CLOCK_SPEED Mask           */
-#define USBDCD_CLOCK_CLOCK_SPEED_SHIFT           (2U)                                                /*!< USBDCD_CLOCK.CLOCK_SPEED Position       */
-#define USBDCD_CLOCK_CLOCK_SPEED(x)              (((uint32_t)(((uint32_t)(x))<<2U))&0xFFCUL)         /*!< USBDCD_CLOCK.CLOCK_SPEED Field          */
+#define USBDCD_CLOCK_CLOCK_UNIT_MASK             (0x1U)                                              /*!< USBDCD0_CLOCK.CLOCK_UNIT Mask           */
+#define USBDCD_CLOCK_CLOCK_UNIT_SHIFT            (0U)                                                /*!< USBDCD0_CLOCK.CLOCK_UNIT Position       */
+#define USBDCD_CLOCK_CLOCK_UNIT(x)               (((uint32_t)(((uint32_t)(x))<<0U))&0x1UL)           /*!< USBDCD0_CLOCK.CLOCK_UNIT Field          */
+#define USBDCD_CLOCK_CLOCK_SPEED_MASK            (0xFFCU)                                            /*!< USBDCD0_CLOCK.CLOCK_SPEED Mask          */
+#define USBDCD_CLOCK_CLOCK_SPEED_SHIFT           (2U)                                                /*!< USBDCD0_CLOCK.CLOCK_SPEED Position      */
+#define USBDCD_CLOCK_CLOCK_SPEED(x)              (((uint32_t)(((uint32_t)(x))<<2U))&0xFFCUL)         /*!< USBDCD0_CLOCK.CLOCK_SPEED Field         */
 /* ------- STATUS Bit Fields                        ------ */
-#define USBDCD_STATUS_SEQ_RES_MASK               (0x30000U)                                          /*!< USBDCD_STATUS.SEQ_RES Mask              */
-#define USBDCD_STATUS_SEQ_RES_SHIFT              (16U)                                               /*!< USBDCD_STATUS.SEQ_RES Position          */
-#define USBDCD_STATUS_SEQ_RES(x)                 (((uint32_t)(((uint32_t)(x))<<16U))&0x30000UL)      /*!< USBDCD_STATUS.SEQ_RES Field             */
-#define USBDCD_STATUS_SEQ_STAT_MASK              (0xC0000U)                                          /*!< USBDCD_STATUS.SEQ_STAT Mask             */
-#define USBDCD_STATUS_SEQ_STAT_SHIFT             (18U)                                               /*!< USBDCD_STATUS.SEQ_STAT Position         */
-#define USBDCD_STATUS_SEQ_STAT(x)                (((uint32_t)(((uint32_t)(x))<<18U))&0xC0000UL)      /*!< USBDCD_STATUS.SEQ_STAT Field            */
-#define USBDCD_STATUS_ERR_MASK                   (0x100000U)                                         /*!< USBDCD_STATUS.ERR Mask                  */
-#define USBDCD_STATUS_ERR_SHIFT                  (20U)                                               /*!< USBDCD_STATUS.ERR Position              */
-#define USBDCD_STATUS_ERR(x)                     (((uint32_t)(((uint32_t)(x))<<20U))&0x100000UL)     /*!< USBDCD_STATUS.ERR Field                 */
-#define USBDCD_STATUS_TO_MASK                    (0x200000U)                                         /*!< USBDCD_STATUS.TO Mask                   */
-#define USBDCD_STATUS_TO_SHIFT                   (21U)                                               /*!< USBDCD_STATUS.TO Position               */
-#define USBDCD_STATUS_TO(x)                      (((uint32_t)(((uint32_t)(x))<<21U))&0x200000UL)     /*!< USBDCD_STATUS.TO Field                  */
-#define USBDCD_STATUS_ACTIVE_MASK                (0x400000U)                                         /*!< USBDCD_STATUS.ACTIVE Mask               */
-#define USBDCD_STATUS_ACTIVE_SHIFT               (22U)                                               /*!< USBDCD_STATUS.ACTIVE Position           */
-#define USBDCD_STATUS_ACTIVE(x)                  (((uint32_t)(((uint32_t)(x))<<22U))&0x400000UL)     /*!< USBDCD_STATUS.ACTIVE Field              */
+#define USBDCD_STATUS_SEQ_RES_MASK               (0x30000U)                                          /*!< USBDCD0_STATUS.SEQ_RES Mask             */
+#define USBDCD_STATUS_SEQ_RES_SHIFT              (16U)                                               /*!< USBDCD0_STATUS.SEQ_RES Position         */
+#define USBDCD_STATUS_SEQ_RES(x)                 (((uint32_t)(((uint32_t)(x))<<16U))&0x30000UL)      /*!< USBDCD0_STATUS.SEQ_RES Field            */
+#define USBDCD_STATUS_SEQ_STAT_MASK              (0xC0000U)                                          /*!< USBDCD0_STATUS.SEQ_STAT Mask            */
+#define USBDCD_STATUS_SEQ_STAT_SHIFT             (18U)                                               /*!< USBDCD0_STATUS.SEQ_STAT Position        */
+#define USBDCD_STATUS_SEQ_STAT(x)                (((uint32_t)(((uint32_t)(x))<<18U))&0xC0000UL)      /*!< USBDCD0_STATUS.SEQ_STAT Field           */
+#define USBDCD_STATUS_ERR_MASK                   (0x100000U)                                         /*!< USBDCD0_STATUS.ERR Mask                 */
+#define USBDCD_STATUS_ERR_SHIFT                  (20U)                                               /*!< USBDCD0_STATUS.ERR Position             */
+#define USBDCD_STATUS_ERR(x)                     (((uint32_t)(((uint32_t)(x))<<20U))&0x100000UL)     /*!< USBDCD0_STATUS.ERR Field                */
+#define USBDCD_STATUS_TO_MASK                    (0x200000U)                                         /*!< USBDCD0_STATUS.TO Mask                  */
+#define USBDCD_STATUS_TO_SHIFT                   (21U)                                               /*!< USBDCD0_STATUS.TO Position              */
+#define USBDCD_STATUS_TO(x)                      (((uint32_t)(((uint32_t)(x))<<21U))&0x200000UL)     /*!< USBDCD0_STATUS.TO Field                 */
+#define USBDCD_STATUS_ACTIVE_MASK                (0x400000U)                                         /*!< USBDCD0_STATUS.ACTIVE Mask              */
+#define USBDCD_STATUS_ACTIVE_SHIFT               (22U)                                               /*!< USBDCD0_STATUS.ACTIVE Position          */
+#define USBDCD_STATUS_ACTIVE(x)                  (((uint32_t)(((uint32_t)(x))<<22U))&0x400000UL)     /*!< USBDCD0_STATUS.ACTIVE Field             */
 /* ------- TIMER0 Bit Fields                        ------ */
-#define USBDCD_TIMER0_TUNITCON_MASK              (0xFFFU)                                            /*!< USBDCD_TIMER0.TUNITCON Mask             */
-#define USBDCD_TIMER0_TUNITCON_SHIFT             (0U)                                                /*!< USBDCD_TIMER0.TUNITCON Position         */
-#define USBDCD_TIMER0_TUNITCON(x)                (((uint32_t)(((uint32_t)(x))<<0U))&0xFFFUL)         /*!< USBDCD_TIMER0.TUNITCON Field            */
-#define USBDCD_TIMER0_TSEQ_INIT_MASK             (0x3FF0000U)                                        /*!< USBDCD_TIMER0.TSEQ_INIT Mask            */
-#define USBDCD_TIMER0_TSEQ_INIT_SHIFT            (16U)                                               /*!< USBDCD_TIMER0.TSEQ_INIT Position        */
-#define USBDCD_TIMER0_TSEQ_INIT(x)               (((uint32_t)(((uint32_t)(x))<<16U))&0x3FF0000UL)    /*!< USBDCD_TIMER0.TSEQ_INIT Field           */
+#define USBDCD_TIMER0_TUNITCON_MASK              (0xFFFU)                                            /*!< USBDCD0_TIMER0.TUNITCON Mask            */
+#define USBDCD_TIMER0_TUNITCON_SHIFT             (0U)                                                /*!< USBDCD0_TIMER0.TUNITCON Position        */
+#define USBDCD_TIMER0_TUNITCON(x)                (((uint32_t)(((uint32_t)(x))<<0U))&0xFFFUL)         /*!< USBDCD0_TIMER0.TUNITCON Field           */
+#define USBDCD_TIMER0_TSEQ_INIT_MASK             (0x3FF0000U)                                        /*!< USBDCD0_TIMER0.TSEQ_INIT Mask           */
+#define USBDCD_TIMER0_TSEQ_INIT_SHIFT            (16U)                                               /*!< USBDCD0_TIMER0.TSEQ_INIT Position       */
+#define USBDCD_TIMER0_TSEQ_INIT(x)               (((uint32_t)(((uint32_t)(x))<<16U))&0x3FF0000UL)    /*!< USBDCD0_TIMER0.TSEQ_INIT Field          */
 /* ------- TIMER1 Bit Fields                        ------ */
-#define USBDCD_TIMER1_TVDPSRC_ON_MASK            (0x3FFU)                                            /*!< USBDCD_TIMER1.TVDPSRC_ON Mask           */
-#define USBDCD_TIMER1_TVDPSRC_ON_SHIFT           (0U)                                                /*!< USBDCD_TIMER1.TVDPSRC_ON Position       */
-#define USBDCD_TIMER1_TVDPSRC_ON(x)              (((uint32_t)(((uint32_t)(x))<<0U))&0x3FFUL)         /*!< USBDCD_TIMER1.TVDPSRC_ON Field          */
-#define USBDCD_TIMER1_TDCD_DBNC_MASK             (0x3FF0000U)                                        /*!< USBDCD_TIMER1.TDCD_DBNC Mask            */
-#define USBDCD_TIMER1_TDCD_DBNC_SHIFT            (16U)                                               /*!< USBDCD_TIMER1.TDCD_DBNC Position        */
-#define USBDCD_TIMER1_TDCD_DBNC(x)               (((uint32_t)(((uint32_t)(x))<<16U))&0x3FF0000UL)    /*!< USBDCD_TIMER1.TDCD_DBNC Field           */
+#define USBDCD_TIMER1_TVDPSRC_ON_MASK            (0x3FFU)                                            /*!< USBDCD0_TIMER1.TVDPSRC_ON Mask          */
+#define USBDCD_TIMER1_TVDPSRC_ON_SHIFT           (0U)                                                /*!< USBDCD0_TIMER1.TVDPSRC_ON Position      */
+#define USBDCD_TIMER1_TVDPSRC_ON(x)              (((uint32_t)(((uint32_t)(x))<<0U))&0x3FFUL)         /*!< USBDCD0_TIMER1.TVDPSRC_ON Field         */
+#define USBDCD_TIMER1_TDCD_DBNC_MASK             (0x3FF0000U)                                        /*!< USBDCD0_TIMER1.TDCD_DBNC Mask           */
+#define USBDCD_TIMER1_TDCD_DBNC_SHIFT            (16U)                                               /*!< USBDCD0_TIMER1.TDCD_DBNC Position       */
+#define USBDCD_TIMER1_TDCD_DBNC(x)               (((uint32_t)(((uint32_t)(x))<<16U))&0x3FF0000UL)    /*!< USBDCD0_TIMER1.TDCD_DBNC Field          */
 /* ------- TIMER2 Bit Fields                        ------ */
-#define USBDCD_TIMER2_CHECK_DM_MASK              (0xFU)                                              /*!< USBDCD_TIMER2.CHECK_DM Mask             */
-#define USBDCD_TIMER2_CHECK_DM_SHIFT             (0U)                                                /*!< USBDCD_TIMER2.CHECK_DM Position         */
-#define USBDCD_TIMER2_CHECK_DM(x)                (((uint32_t)(((uint32_t)(x))<<0U))&0xFUL)           /*!< USBDCD_TIMER2.CHECK_DM Field            */
-#define USBDCD_TIMER2_TVDPSRC_CON_MASK           (0x3FF0000U)                                        /*!< USBDCD_TIMER2.TVDPSRC_CON Mask          */
-#define USBDCD_TIMER2_TVDPSRC_CON_SHIFT          (16U)                                               /*!< USBDCD_TIMER2.TVDPSRC_CON Position      */
-#define USBDCD_TIMER2_TVDPSRC_CON(x)             (((uint32_t)(((uint32_t)(x))<<16U))&0x3FF0000UL)    /*!< USBDCD_TIMER2.TVDPSRC_CON Field         */
+#define USBDCD_TIMER2_CHECK_DM_MASK              (0xFU)                                              /*!< USBDCD0_TIMER2.CHECK_DM Mask            */
+#define USBDCD_TIMER2_CHECK_DM_SHIFT             (0U)                                                /*!< USBDCD0_TIMER2.CHECK_DM Position        */
+#define USBDCD_TIMER2_CHECK_DM(x)                (((uint32_t)(((uint32_t)(x))<<0U))&0xFUL)           /*!< USBDCD0_TIMER2.CHECK_DM Field           */
+#define USBDCD_TIMER2_TVDPSRC_CON_MASK           (0x3FF0000U)                                        /*!< USBDCD0_TIMER2.TVDPSRC_CON Mask         */
+#define USBDCD_TIMER2_TVDPSRC_CON_SHIFT          (16U)                                               /*!< USBDCD0_TIMER2.TVDPSRC_CON Position     */
+#define USBDCD_TIMER2_TVDPSRC_CON(x)             (((uint32_t)(((uint32_t)(x))<<16U))&0x3FF0000UL)    /*!< USBDCD0_TIMER2.TVDPSRC_CON Field        */
 /**
  * @} */ /* End group USBDCD_Register_Masks_GROUP 
  */
 
-/* USBDCD - Peripheral instance base addresses */
-#define USBDCD_BasePtr                 0x40035000UL //!< Peripheral base address
-#define USBDCD                         ((USBDCD_Type *) USBDCD_BasePtr) //!< Freescale base pointer
-#define USBDCD_BASE_PTR                (USBDCD) //!< Freescale style base pointer
-#define USBDCD_IRQS { USBDCD_IRQn,  }
+/* USBDCD0 - Peripheral instance base addresses */
+#define USBDCD0_BasePtr                0x40035000UL //!< Peripheral base address
+#define USBDCD0                        ((USBDCD_Type *) USBDCD0_BasePtr) //!< Freescale base pointer
+#define USBDCD0_BASE_PTR               (USBDCD0) //!< Freescale style base pointer
+#define USBDCD0_IRQS { USBDCD0_IRQn,  }
 
 /**
  * @} */ /* End group USBDCD_Peripheral_access_layer_GROUP 

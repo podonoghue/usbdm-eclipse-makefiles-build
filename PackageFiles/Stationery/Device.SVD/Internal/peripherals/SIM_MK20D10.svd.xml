@@ -1190,8 +1190,8 @@ Allows extra drive-strength for PTD7</description>
                <addressOffset>0x1030</addressOffset>
                <fields>
                   <field>
-                     <name>FLEXCAN1</name>
-                     <description>FlexCAN1 Clock Gate Control</description>
+                     <name>CAN1</name>
+                     <description>CAN1 Clock Gate Control</description>
                      <bitOffset>4</bitOffset>
                      <bitWidth>1</bitWidth>
                      <enumeratedValues>
@@ -1207,10 +1207,10 @@ Allows extra drive-strength for PTD7</description>
                         </enumeratedValue>
                      </enumeratedValues>
                   </field>
-                  <field derivedFrom="FLEXCAN1" > <name>SPI2</name> <description>SPI2 Clock Gate Control</description> <bitOffset>12</bitOffset> </field>
-                  <field derivedFrom="FLEXCAN1" > <name>SDHC</name> <description>SDHC Clock Gate Control</description> <bitOffset>17</bitOffset> </field>
-                  <field derivedFrom="FLEXCAN1" > <name>FTM2</name> <description>FTM2 Clock Gate Control</description> <bitOffset>24</bitOffset> </field>
-                  <field derivedFrom="FLEXCAN1" > <name>ADC1</name> <description>ADC1 Clock Gate Control</description> <bitOffset>27</bitOffset> </field>
+                  <field derivedFrom="CAN1" > <name>SPI2</name> <description>SPI2 Clock Gate Control</description> <bitOffset>12</bitOffset> </field>
+                  <field derivedFrom="CAN1" > <name>SDHC</name> <description>SDHC Clock Gate Control</description> <bitOffset>17</bitOffset> </field>
+                  <field derivedFrom="CAN1" > <name>FTM2</name> <description>FTM2 Clock Gate Control</description> <bitOffset>24</bitOffset> </field>
+                  <field derivedFrom="CAN1" > <name>ADC1</name> <description>ADC1 Clock Gate Control</description> <bitOffset>27</bitOffset> </field>
                </fields>
             </register>
             <register>
@@ -1341,7 +1341,7 @@ Allows extra drive-strength for PTD7</description>
                      </enumeratedValues>
                   </field>
                   <field derivedFrom="FTFL" > <name>DMAMUX0</name> <description>DMA Mux Clock Gate Control</description> <bitOffset>1</bitOffset> </field>
-                  <field derivedFrom="FTFL" > <name>FLEXCAN0</name> <description>FlexCAN0 Clock Gate Control</description> <bitOffset>4</bitOffset> </field>
+                  <field derivedFrom="FTFL" > <name>CAN0</name> <description>CAN0 Clock Gate Control</description> <bitOffset>4</bitOffset> </field>
                   <field derivedFrom="FTFL" > <name>SPI0</name> <description>SPI0 Clock Gate Control</description> <bitOffset>12</bitOffset> </field>
                   <field derivedFrom="FTFL" > <name>SPI1</name> <description>SPI1 Clock Gate Control</description> <bitOffset>13</bitOffset> </field>
                   <field derivedFrom="FTFL" > <name>I2S</name> <description>I2S Clock Gate Control</description> <bitOffset>15</bitOffset> </field>

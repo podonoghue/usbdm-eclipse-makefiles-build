@@ -1455,8 +1455,8 @@ Devices using this peripheral:
                      </enumeratedValues>
                   </field>
                   <field derivedFrom="FTF" > <name>DMAMUX0</name> <description>DMA Mux Clock Gate Control</description> <bitOffset>1</bitOffset> </field>
-                  <field derivedFrom="FTF" > <name>FLEXCAN0</name> <description>FlexCAN0 Clock Gate Control</description> <bitOffset>4</bitOffset> </field>
-                  <field derivedFrom="FTF" > <name>FLEXCAN1</name> <description>FlexCAN1 Clock Gate Control</description> <bitOffset>5</bitOffset> </field>
+                  <field derivedFrom="FTF" > <name>CAN0</name> <description>CAN0 Clock Gate Control</description> <bitOffset>4</bitOffset> </field>
+                  <field derivedFrom="FTF" > <name>CAN1</name> <description>CAN1 Clock Gate Control</description> <bitOffset>5</bitOffset> </field>
                   <field derivedFrom="FTF" > <name>FTM3</name> <description>FTM3 Clock Gate Control</description> <bitOffset>6</bitOffset> </field>
                   <field derivedFrom="FTF" > <name>SPI0</name> <description>SPI0 Clock Gate Control</description> <bitOffset>12</bitOffset> </field>
                   <field derivedFrom="FTF" > <name>PDB1</name> <description>PDB1 Clock Gate Control</description> <bitOffset>17</bitOffset> </field>

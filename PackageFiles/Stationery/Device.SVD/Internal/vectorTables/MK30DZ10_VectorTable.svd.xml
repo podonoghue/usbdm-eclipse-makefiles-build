@@ -415,7 +415,7 @@ Devices using this vector table:
       <peripheral>I2S0</peripheral>
    </interrupt>
    <interrupt>
-      <name>SDHC</name>
+      <name>SDHC0</name>
       <description>Secured Digital Host Controller</description>
       <value>80</value>
       <peripheral>SDHC0</peripheral>

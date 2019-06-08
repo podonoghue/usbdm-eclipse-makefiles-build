@@ -1,12 +1,10 @@
 <!--
 Devices using this peripheral: 
-      MKL25Z4
-      MKL27Z644
-      MKL43Z4
-      MKL46Z4
+      MK22F12810
+      MK22F51212
 -->
       <peripheral>
-         <?sourceFile "LLWU_PE4_FILT2_MKL25Z4" ?>
+         <?sourceFile "LLWU_PE4_FILT2_MKV31F" ?>
          <name>LLWU</name>
          <description>Low leakage wakeup unit</description>
          <groupName>LLWU</groupName>
@@ -260,11 +258,11 @@ Enable and selects the internal module flag as a wakeup input source for inputs 
                   </field>
                   <field derivedFrom="WUME0" > <name>WUME1</name> <description>Module Enable 1 - CMP0</description> <bitOffset>1</bitOffset> </field>
                   <field derivedFrom="WUME0" > <name>WUME2</name> <description>Module Enable 2 - CMP1</description> <bitOffset>2</bitOffset> </field>
-                  <field derivedFrom="WUME0" > <name>WUME3</name> <description>Module Enable 3 - Reserved</description> <bitOffset>3</bitOffset> </field>
-                  <field derivedFrom="WUME0" > <name>WUME4</name> <description>Module Enable 4 - Reserved</description> <bitOffset>4</bitOffset> </field>
-                  <field derivedFrom="WUME0" > <name>WUME5</name> <description>Module Enable 5 - Reserved</description> <bitOffset>5</bitOffset> </field>
+                  <field derivedFrom="WUME0" > <name>WUME3</name> <description>Module Enable 3 - CMP2</description> <bitOffset>3</bitOffset> </field>
+                  <field derivedFrom="WUME0" > <name>WUME4</name> <description>Module Enable 4 - TSI</description> <bitOffset>4</bitOffset> </field>
+                  <field derivedFrom="WUME0" > <name>WUME5</name> <description>Module Enable 5 - RTC Alarm</description> <bitOffset>5</bitOffset> </field>
                   <field derivedFrom="WUME0" > <name>WUME6</name> <description>Module Enable 6 - Reserved</description> <bitOffset>6</bitOffset> </field>
-                  <field derivedFrom="WUME0" > <name>WUME7</name> <description>Module Enable 7 - Reserved</description> <bitOffset>7</bitOffset> </field>
+                  <field derivedFrom="WUME0" > <name>WUME7</name> <description>Module Enable 7 - RTC Seconds</description> <bitOffset>7</bitOffset> </field>
                </fields>
             </register>
             <register>
