@@ -6,11 +6,11 @@
    
    <xi:include href="_default_instance.xml"/>
 
-   <category name="OSC0 (RF Oscillator)" description="OSC External Reference Clock/Oscillator [OSCCLK]" >
+      <category name="OSC" description="OSC External Reference Clock/Oscillator [OSCCLK]" >
       <aliasOption key="/OSC_RF0/osc_input_freq" optional="true" constant="false" />
    </category>
    
-   <category name="OSC1 (Real Time Clock)" description="RTC External Reference Clock/Oscillator [ERCLK32K]">
+   <category name="Real Time Clock" description="RTC External Reference Clock/Oscillator [ERCLK32K]">
       <aliasOption key="/RTC/rtc_cr_osce"           optional="true" constant="false"/>
       <aliasOption key="/RTC/osc_clock"             optional="true"/>
       <aliasOption key="/SIM/sim_sopt1_osc32ksel"   optional="true" constant="false" />

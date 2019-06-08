@@ -8,13 +8,13 @@
 <root version="1.2.0">
    <family name="MKL02Z4">
       <device name="FRDM_KL02Z"   manual="KL02P32M48SF0RM" package="FRDM_KL02Z" />
-      <device name="MKL02Z16VFG4" manual="KL02P32M48SF0RM" package="QFN16" />
-      <device name="MKL02Z16VFK4" manual="KL02P32M48SF0RM" package="QFN24" />
-      <device name="MKL02Z16VFM4" manual="KL02P32M48SF0RM" package="QFN32" />
-      <device name="MKL02Z32VFG4" manual="KL02P32M48SF0RM" package="QFN16" />
-      <device name="MKL02Z32VFK4" manual="KL02P32M48SF0RM" package="QFN24" />
-      <device name="MKL02Z32VFM4" manual="KL02P32M48SF0RM" package="QFN32" />
-      <device name="MKL02Z8VFG4"  manual="KL02P32M48SF0RM" package="QFN16" />
+      <device name="MKL02Z16VFG4" manual="KL02P32M48SF0RM" package="QFN_16" />
+      <device name="MKL02Z16VFK4" manual="KL02P32M48SF0RM" package="QFN_24" />
+      <device name="MKL02Z16VFM4" manual="KL02P32M48SF0RM" package="QFN_32" />
+      <device name="MKL02Z32VFG4" manual="KL02P32M48SF0RM" package="QFN_16" />
+      <device name="MKL02Z32VFK4" manual="KL02P32M48SF0RM" package="QFN_24" />
+      <device name="MKL02Z32VFM4" manual="KL02P32M48SF0RM" package="QFN_32" />
+      <device name="MKL02Z8VFG4"  manual="KL02P32M48SF0RM" package="QFN_16" />
    </family>
    <peripherals>
       <peripheral baseName="ADC"      instance="0"        version="adc0_mkl">
@@ -342,7 +342,7 @@
          <placement pin="VREFL"         location="VREFL" />
          <placement pin="VSS"           location="VSS" />
       </package>
-      <package name="QFN16">
+      <package name="QFN_16">
          <placement pin="PTA0"          location="p14" />
          <placement pin="PTA1"          location="p15" />
          <placement pin="PTA2"          location="p16" />
@@ -362,7 +362,7 @@
          <placement pin="VREFL"         location="p2" />
          <placement pin="VSS"           location="p2" />
       </package>
-      <package name="QFN24">
+      <package name="QFN_24">
          <placement pin="PTA0"          location="p22" />
          <placement pin="PTA1"          location="p23" />
          <placement pin="PTA12"         location="p20" />
@@ -390,7 +390,7 @@
          <placement pin="VREFL"         location="p4" />
          <placement pin="VSS"           location="p4" />
       </package>
-      <package name="QFN32">
+      <package name="QFN_32">
          <placement pin="PTA0"          location="p30" />
          <placement pin="PTA1"          location="p31" />
          <placement pin="PTA10"         location="p21" />

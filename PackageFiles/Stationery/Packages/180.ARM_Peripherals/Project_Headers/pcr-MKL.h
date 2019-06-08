@@ -386,6 +386,12 @@ static constexpr PcrValue GPIO_DEFAULT_PCR = pcrValue(PinPull_None, PinDriveStre
 static constexpr PcrValue I2C_DEFAULT_PCR =  pcrValue(PinPull_Up, PinDriveStrength_High, PinDriveMode_OpenDrain);
 
 /**
+ * Default PCR setting for I2S pins (excluding multiplexor value)
+ * High drive strength + Pull-up + Open-drain (if available)
+ */
+static constexpr PcrValue I2S_DEFAULT_PCR =  pcrValue(PinPull_Up, PinDriveStrength_High, PinDriveMode_OpenDrain);
+
+/**
  * Default PCR setting for (E)XTAL pins (excluding multiplexor value)
  */
 static constexpr PcrValue XTAL_DEFAULT_PCR = pcrValue(PinPull_None, PinDriveStrength_Low, PinDriveMode_PushPull);

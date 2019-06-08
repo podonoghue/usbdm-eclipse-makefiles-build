@@ -52,7 +52,7 @@ void secondsHandler(uint32_t timeSinceEpoch) {
 }
 
 int main() {
-   console.writeln("Starting");
+   console.writeln("Starting").flushOutput();
 
    // Enable RTC - done by startup code
 //   Rtc::initialise();
@@ -68,12 +68,12 @@ int main() {
 
    Led::setOutput();
    for(;;) {
-      time_t rawtime;
-      time (&rawtime);
-
       // Sleep between events
 //      Smc::enterWaitMode();
       Smc::enterStopMode(SmcStopMode_NormalStop);
+
+      time_t rawtime;
+      time (&rawtime);
       reportTime("Woke", rawtime);
    }
    return 0;

@@ -380,10 +380,12 @@
    <choiceOption name="rtc_year"
       description="Initial Year" 
       toolTip="Used for coldstart" >
-      <choice value="2017"  name="2017" isDefault="true" />
+      <choice value="2017"  name="2017" />
       <choice value="2018"  name="2018" />
-      <choice value="2019"  name="2019" />
+      <choice value="2019"  name="2019" isDefault="true" />
       <choice value="2020"  name="2020" />
+      <choice value="2021"  name="2021" />
+      <choice value="2022"  name="2022" />
    </choiceOption>
 
    <choiceOption name="rtc_month"

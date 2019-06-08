@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE peripheralPage SYSTEM "_menu.dtd" >
-<!-- mcg_nopll_mkl04z4.xml -->
+<!-- trng0_0x40029000.svd.xml -->
 
 <fragment xmlns:xi="http://www.w3.org/2001/XInclude">
-<xi:include href="mcg_nopll_def.xml"/>
+<xi:include href="trnga_def.xml"/>
 </fragment>

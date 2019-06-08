@@ -514,7 +514,7 @@ public:
 
 template<class Info> LPTMRCallbackFunction LptmrBase_T<Info>::sCallback = LptmrBase_T<Info>::unhandledCallback;
 
-#ifdef LPTMR0
+#ifdef USBDM_LPTMR0_IS_DEFINED
 /**
  * @brief Class representing LPTMR0
  *
@@ -543,7 +543,7 @@ template<class Info> LPTMRCallbackFunction LptmrBase_T<Info>::sCallback = LptmrB
 using Lptmr0 = LptmrBase_T<Lptmr0Info>;
 #endif
 
-#ifdef LPTMR1
+#ifdef USBDM_LPTMR1_IS_DEFINED
 /**
  * @brief Class representing LPTMR1
  *

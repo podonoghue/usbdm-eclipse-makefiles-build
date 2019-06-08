@@ -38,9 +38,9 @@ extern volatile uint32_t SystemMcgFllClock;
 /** MCGPLLCLK - Output of PLL */
 extern volatile uint32_t SystemMcgPllClock;
 /** Core/System clock (from MCGOUTCLK/CLKDIV) */
-extern volatile uint32_t SystemCoreClock;
+//extern volatile uint32_t SystemCoreClock;
 /** Bus clock (from MCGOUTCLK/CLKDIV) */
-extern volatile uint32_t SystemBusClock;
+//extern volatile uint32_t SystemBusClock;
 /** LPO - Low power oscillator 1kHz clock available in LP modes */
 extern volatile uint32_t SystemLpoClock;
 
@@ -73,15 +73,15 @@ private:
    /** Callback function for ISR */
    static MCGCallbackFunction callback;
 
-   /** Pointer to hardware */
-   static constexpr volatile MCG_Type *mcg = McgInfo::mcg;
+   /** Hardware instance */
+   static __attribute__((always_inline)) volatile MCG_Type &mcg() { return McgInfo::mcg(); }
 
+public:
    /**
     * Table of clock settings
     */
    static const McgInfo::ClockInfo clockInfo[];
 
-public:
    /**
     * Transition from current clock mode to mode given
     *

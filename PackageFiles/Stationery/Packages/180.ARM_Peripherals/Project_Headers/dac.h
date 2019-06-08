@@ -205,7 +205,7 @@ protected:
       static constexpr void check() {}
    };
 
-   CheckPinMapping<0> check;
+//   CheckPinMapping<0> check;
 
    /**
     * Callback to catch unhandled interrupt

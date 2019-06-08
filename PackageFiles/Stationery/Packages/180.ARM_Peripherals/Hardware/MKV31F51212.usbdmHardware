@@ -156,7 +156,7 @@
          <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForI2c" />
          <clock clockEnable="SIM->SCGC4 |= SIM_SCGC4_I2C1_MASK;" clockDisable="SIM->SCGC4 &amp;= ~SIM_SCGC4_I2C1_MASK;" />
       </peripheral>
-      <peripheral baseName="LLWU"     instance=""         version="llwu_pe4_filt2">
+      <peripheral baseName="LLWU"     instance=""         version="llwu_pe4_filt2_mkv31f">
          <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForLlwu" />
       </peripheral>
       <peripheral baseName="LPTMR"    instance="0"        version="lptmr0">

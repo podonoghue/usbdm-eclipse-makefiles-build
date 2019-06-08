@@ -84,10 +84,9 @@
    \tstatic ErrorCode enablePowerModes(
    \t      SmcVeryLowPower         smcVeryLowPower,
    \t      SmcLowLeakageStop       smcLowLeakageStop       = SmcLowLeakageStop_Disabled,
-   \t      SmcVeryLowLeakageStop   smcVeryLowLeakageStop   = SmcVeryLowLeakageStop_Disabled,
-   \t      SmcHighSpeedRun         smcHighSpeedRun         = SmcHighSpeedRun_Disabled ) {
+   \t      SmcVeryLowLeakageStop   smcVeryLowLeakageStop   = SmcVeryLowLeakageStop_Disabled) {
    \t
-   \t   smc().PMPROT = smcVeryLowPower|smcLowLeakageStop|smcVeryLowLeakageStop|smcHighSpeedRun;
+   \t   smc().PMPROT = smcVeryLowPower|smcLowLeakageStop|smcVeryLowLeakageStop;
    \t   return E_NO_ERROR;
    \t}\n\n
    ]]></template>
@@ -103,12 +102,9 @@
    \t * @param[in] smcLpoInLowLeakage     Controls whether the 1 kHz LPO clock is enabled in LLS/VLLSx modes (if supported).
    \t */
    \tstatic void setStopOptions(
-   \t      SmcLowLeakageStopMode   smcLowLeakageStopMode,
-   \t      SmcPowerOnReset         smcPowerOnReset         = SmcPowerOnReset_Disabled,
-   \t      SmcPartialStopMode      smcPartialStopMode      = SmcPartialStopMode_Normal,
-   \t      SmcLpoInLowLeakage      smcLpoInLowLeakage      = SmcLpoInLowLeakage_Disabled) {
+   \t      SmcLowLeakageStopMode   smcLowLeakageStopMode) {
    \t
-   \t   smc().STOPCTRL = smcPartialStopMode|smcPowerOnReset|smcLowLeakageStopMode|smcLpoInLowLeakage;
+   \t   smc().STOPCTRL = smcLowLeakageStopMode;
    \t}\n\n
    ]]></template>
    

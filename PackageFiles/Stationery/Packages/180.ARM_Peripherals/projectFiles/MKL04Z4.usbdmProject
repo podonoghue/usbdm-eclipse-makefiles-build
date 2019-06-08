@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Configure.usbdmProject -->
+<!-- 
+   Settings
+-->
+
+<section name="USBDM">
+   <item key="$$DeviceInfo_Device_Variant"                 value="MKL04Z32VLF4" />
+   <item key="$$DeviceInfo_SubFamily"                      value="MKL04Z4" />
+   <item key="$$Hardware_Source_Filename"                  value="MKL04Z4.usbdmHardware" />
+   <item key="$signal$PTA0_descriptionSetting"             value="Debug" />
+   <item key="$signal$PTA0_muxSetting"                     value="mux3" />
+   <item key="$signal$PTA2_descriptionSetting"             value="Debug" />
+   <item key="$signal$PTA2_muxSetting"                     value="mux3" />
+   <item key="$signal$PTB1_muxSetting"                     value="mux2" />
+   <item key="$signal$PTB2_muxSetting"                     value="mux2" />
+   <item key="/FTFA/peripheral_file"                       value="ftfa" />
+   <item key="/MCG/ClockConfig[0]"                         value="ClockConfig_FEE_42MHz" />
+   <item key="/MCG/ClockConfig[1]"                         value="ClockConfig_BLPE_32kHz" />
+   <item key="/MCG/ClockConfig[2]"                         value="ClockConfig_BLPI_4MHz" />
+   <item key="/MCG/clock_mode[0]"                          value="ClockMode_FEE" />
+   <item key="/MCG/clock_mode[1]"                          value="ClockMode_BLPE" />
+   <item key="/MCG/clock_mode[2]"                          value="ClockMode_BLPI" />
+   <item key="/MCG/system_mcgfllclk_clock[0]"              value="41943040" />
+   <item key="/MCG/system_mcgfllclk_clock[2]"              value="40000000" />
+   <item key="/OSC0/osc_input_freq"                        value="32768" />
+   <item key="/SIM/sim_sopt1_osc32ksel"                    value="0" />
+   <item key="/SIM/system_bus_clock[0]"                    value="20971520" />
+   <item key="/SIM/system_bus_clock[1]"                    value="32768" />
+   <item key="/SIM/system_bus_clock[2]"                    value="4000000" />
+   <item key="/SIM/system_core_clock[0]"                   value="41943040" />
+   <item key="/SIM/system_core_clock[1]"                   value="32768" />
+   <item key="/SIM/system_core_clock[2]"                   value="4000000" />
+</section>

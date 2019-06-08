@@ -39,10 +39,12 @@
       </peripheral>
       <peripheral baseName="CMP"      instance="1"        version="cmp0">
          <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForCmp" />
+         <clock clockEnable="SIM->SCGC4 |= SIM_SCGC4_CMP_MASK;" clockDisable="SIM->SCGC4 &amp;= ~SIM_SCGC4_CMP_MASK;" />
          <irq num="CMP1_IRQn" />
       </peripheral>
       <peripheral baseName="CMP"      instance="2"        version="cmp0">
          <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForCmp" />
+         <clock clockEnable="SIM->SCGC4 |= SIM_SCGC4_CMP_MASK;" clockDisable="SIM->SCGC4 &amp;= ~SIM_SCGC4_CMP_MASK;" />
          <irq num="CMP2_IRQn" />
       </peripheral>
       <peripheral baseName="CMT"      instance=""         version="cmt_0">
@@ -235,6 +237,9 @@
          <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForMcg" />
          <irq num="MCG_IRQn" />
       </peripheral>
+      <peripheral baseName="MCM"      instance=""         version="mcm_mk10d7">
+         <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForMcm" />
+      </peripheral>
       <peripheral baseName="OSC"      instance="0"        version="osc0_mk">
          <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForOsc" />
       </peripheral>
@@ -309,10 +314,10 @@
          <clock clockEnable="SIM->SCGC4 |= SIM_SCGC4_USBOTG_MASK;" clockDisable="SIM->SCGC4 &amp;= ~SIM_SCGC4_USBOTG_MASK;" />
          <irq num="USB0_IRQn" />
       </peripheral>
-      <peripheral baseName="USBDCD"   instance=""         version="usbdcd_v1_1">
+      <peripheral baseName="USBDCD"   instance="0"        version="usbdcd0_v1_1">
          <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForUsbdcd" />
          <clock clockEnable="SIM->SCGC6 |= SIM_SCGC6_USBDCD_MASK;" clockDisable="SIM->SCGC6 &amp;= ~SIM_SCGC6_USBDCD_MASK;" />
-         <irq num="USBDCD_IRQn" />
+         <irq num="USBDCD0_IRQn" />
       </peripheral>
       <peripheral baseName="VREF"     instance=""         version="vref_c">
          <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForVref" />

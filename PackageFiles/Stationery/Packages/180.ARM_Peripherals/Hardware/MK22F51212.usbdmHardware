@@ -232,6 +232,10 @@
          <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForMcg" />
          <irq num="MCG_IRQn" />
       </peripheral>
+      <peripheral baseName="MCM"      instance=""         version="mcm_mk22f51212">
+         <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForMcm" />
+         <irq num="MCM_IRQn" />
+      </peripheral>
       <peripheral baseName="OSC"      instance="0"        version="osc0_div">
          <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForOsc" />
       </peripheral>

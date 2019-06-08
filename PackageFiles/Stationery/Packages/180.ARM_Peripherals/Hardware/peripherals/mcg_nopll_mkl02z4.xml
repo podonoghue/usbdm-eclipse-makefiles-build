@@ -3,5 +3,5 @@
 <!-- mcg_nopll_mkl02z4.xml -->
 
 <fragment xmlns:xi="http://www.w3.org/2001/XInclude">
-<xi:include href="mcg_nopll_mkl04z4.xml"/>
+<xi:include href="mcg_nopll_def.xml"/>
 </fragment>

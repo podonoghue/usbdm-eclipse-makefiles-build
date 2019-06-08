@@ -197,7 +197,7 @@ public:
 
    /** PIT interrupt handler -  Calls PIT callback */
    static void irqHandler() {
-      for (unsigned channel=0; channel<Info::numChannels; channel++) {
+      for (unsigned channel=0; channel<Info::NumChannels; channel++) {
          if (pit().CHANNEL[channel].TFLG & PIT_TFLG_TIF_MASK) {
             // Clear interrupt flag
             pit().CHANNEL[channel].TFLG = PIT_TFLG_TIF_MASK;
@@ -280,7 +280,7 @@ public:
     * Enable interrupts in NVIC
     */
    static void enableNvicInterrupts() {
-      NVIC_EnableIRQ(irqNums[0]);
+      NVIC_EnableIRQ(Info::irqNums[0]);
    }
 
    /**
@@ -290,14 +290,14 @@ public:
     * @param[in]  nvicPriority  Interrupt priority
     */
    static void enableNvicInterrupts(uint32_t nvicPriority) {
-      enableNvicInterrupt(irqNums[0], nvicPriority);
+      enableNvicInterrupt(Info::irqNums[0], nvicPriority);
    }
 
    /**
     * Disable interrupts in NVIC
     */
    static void disableNvicInterrupts() {
-      NVIC_DisableIRQ(irqNums[0]);
+      NVIC_DisableIRQ(Info::irqNums[0]);
    }
    
    /**

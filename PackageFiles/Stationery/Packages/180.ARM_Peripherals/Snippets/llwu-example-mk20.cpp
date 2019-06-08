@@ -412,6 +412,7 @@ int main() {
 
    console.writeln("\n**************************************");
    console.write("Executing from RESET, SRS=").writeln(Rcm::getResetSourceDescription());
+
    // Configure LEDs
    GreenLed::setOutput(
          PinDriveStrength_High,

@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no" ?>
 <!DOCTYPE root SYSTEM "../package.dtd"
 [
-<!ENTITY DEVICE_SUB_FAMILY  "MKV31F51212">
-<!ENTITY DEVICE_FAMILY      "MKV">
-<!ENTITY DEVICE_FILE        "MKV31F51212">
+<!ENTITY DEVICE_SUB_FAMILY  "MKL04Z4">
+<!ENTITY DEVICE_FAMILY      "MKL">
+<!ENTITY DEVICE_FILE        "MKL04Z4">
 ]>
 
 <root 
@@ -23,7 +23,7 @@
       
       <!-- These constants enable peripheral features -->
       <constant id="cpp.peripheral.internal.adc"    value="true" />
-      <constant id="cpp.peripheral.internal.ftm"    value="true" />
+      <constant id="cpp.peripheral.internal.tpm"    value="true" />
       <constant id="cpp.peripheral.internal.i2c"    value="true" />
       <constant id="cpp.peripheral.internal.lptmr"  value="true" />
       <constant id="cpp.peripheral.internal.pit"    value="true" />
@@ -39,6 +39,6 @@
          </applyWhen>
          <copy source="projectFiles/&DEVICE_SUB_FAMILY;.usbdmProject"  target="Configure.usbdmProject" />
       </projectActionList>
-      <xi:include href="shared/CPP-abstraction-Common-MK.xml"/>
+      <xi:include href="shared/CPP-abstraction-Common-MKL.xml"/>
    </projectActionList>
 </root>

@@ -1,6 +1,6 @@
 /**
  * @file     lpuart.h (180.ARM_Peripherals/Project_Headers/lpuart.h)
- * @brief    Universal Asynchronous Receiver/Transmitter interface
+ * @brief    Low Power Universal Asynchronous Receiver/Transmitter
  *
  * @version  V4.12.1.210
  * @date     13 April 2016

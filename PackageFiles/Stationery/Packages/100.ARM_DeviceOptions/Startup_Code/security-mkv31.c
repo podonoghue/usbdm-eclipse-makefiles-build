@@ -1,12 +1,11 @@
 /*
  *  @file security.c
- *  Derived from security-mk.c
+ *  Derived from security-mkv31.c
  *
  *  Security and NV options for flash
- *  Reference K20P64M50SF0RM, K20P100M72SF1RM, K20P144M100SF2V2RM, K20P144M120SF3RM(no NMI_DIS),
- *            K22P121M120SF7RM(FAST_INIT)
- *  Created on: 20/5/2017
- *  Devices: Most early MK devices
+ *  Reference KV31P100M120SF8RM
+ *  Created on: 20/5/2019
+ *  Devices: KV31
  */
 #include <stdint.h>
 #include <string.h>
@@ -20,8 +19,8 @@ typedef struct {
     uint32_t fprot;
     uint8_t  fsec;
     uint8_t  fopt;
-    uint8_t  feprot;
-    uint8_t  fdprot;
+    uint8_t  reserved1;
+    uint8_t  reserved2;
 } SecurityInfo;
 
 //-------- <<< Use Configuration Wizard in Context Menu >>> -----------------
@@ -71,40 +70,6 @@ typedef struct {
    </h>
 */
 #define FPROT_VALUE 0xFFFFFFFF
-/*
-   <h> EEPROM Region Protect
-      <i> Each bit protects a 1/8 region of the EEPROM memory.
-      <i> (FlexNVM devices only)
-	  <i> Only available on devices with FlexNVM
-      <info>NV_FEPROT
-      <q.0>   FEPROT.0	<0=>protected  <1=>unprotected   <info> lowest 1/8 block
-      <q.1>   FEPROT.1  <0=>protected  <1=>unprotected
-      <q.2>   FEPROT.2  <0=>protected  <1=>unprotected
-      <q.3>   FEPROT.3  <0=>protected  <1=>unprotected
-      <q.4>   FEPROT.4  <0=>protected  <1=>unprotected
-      <q.5>   FEPROT.5  <0=>protected  <1=>unprotected
-      <q.6>   FEPROT.6  <0=>protected  <1=>unprotected
-      <q.7>   FEPROT.7	<0=>protected  <1=>unprotected   <info> highest 1/8 block
-   </h>
-*/
-#define FEPROT_VALUE 0xFF
-/*
-   <h> Data Flash Region Protect
-      <i> Each bit protects a 1/8 region of the flash memory.
-      <i> (Device with Data flash only)
-	  <i> Only available on devices with FlexNVM
-      <info>NV_FDPROT
-      <q.0>   FDPROT.0	<0=>protected  <1=>unprotected   <info> lowest 1/8 block
-      <q.1>   FDPROT.1  <0=>protected  <1=>unprotected
-      <q.2>   FDPROT.2  <0=>protected  <1=>unprotected
-      <q.3>   FDPROT.3  <0=>protected  <1=>unprotected
-      <q.4>   FDPROT.4  <0=>protected  <1=>unprotected
-      <q.5>   FDPROT.5  <0=>protected  <1=>unprotected
-      <q.6>   FDPROT.6  <0=>protected  <1=>unprotected
-      <q.7>   FDPROT.7	<0=>protected  <1=>unprotected   <info> highest 1/8 block
-   </h>
-*/
-#define FDPROT_VALUE 0xFF
 
 /*
 <h> Flash security value
@@ -203,7 +168,7 @@ const SecurityInfo securityInfo = {
     /* fprot    */ FPROT_VALUE,
     /* fsec     */ FSEC_VALUE,
     /* fopt     */ FOPT_VALUE,
-    /* feprot   */ FEPROT_VALUE,
-    /* fdprot   */ FDPROT_VALUE,
+    /* -        */ 0xFF,
+    /* -        */ 0xFF,
 };
 

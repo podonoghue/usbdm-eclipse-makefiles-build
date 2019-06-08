@@ -8,7 +8,7 @@
 
    <template><![CDATA[
       \t//! Base value for PCR (excluding MUX value)
-      \tstatic constexpr uint32_t defaultPcrValue  = I2C_DEFAULT_PCR;\n\n
+      \tstatic constexpr uint32_t defaultPcrValue  = I2S_DEFAULT_PCR;\n\n
    ]]></template>
    
    <xi:include href="_mapPinsOption_on.xml"/>
@@ -23,11 +23,18 @@
       \tstatic constexpr uint32_t irqCount  = sizeof(irqNums)/sizeof(irqNums[0]);\n\n
    ]]></template>
 
+   <!--
+   Patterns for pattern and classHandler 
+     -  %i replaced with peripheral instance e.g. FTM1 => 1, PTA => A
+     -  %b replaced with peripheral base name e.g. FTM1 => = FTM
+     -  %c replaced with peripheral C++ base class name e.g. FTM1 => = Ftm
+     -  _IRQHandler is appended to the pattern (only)
+   -->
    <irqOption name="irqHandlingMethod"  
       description="I2S Tx/Rx interrupt handler"
       toolTip="This selection allow the interrupt handlers for this peripheral to be installed using several different methods"
       pattern="^I2S%i_?(Rx|Tx)?$"
-      classHandler="%c%i::irq$1Handler" />
+      classHandler="%c%i::irqHandler" />
         
    <template><![CDATA[
        \t//! Class based callback handler has been installed in vector table\n
@@ -40,6 +47,10 @@
                Lower numbers represent higher priorities"
       value="8" min="0" max="15" 
    />
+   
+   <projectActionList id = "i2s_files" >
+      <copy source="Project_Headers/i2s.h"            target="Project_Headers/i2s.h"            overwrite="true"  derived="true" />
+   </projectActionList>
    
    <xi:include href="_clockOption.xml"/>
 

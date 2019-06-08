@@ -71,17 +71,15 @@
    \t * A mode must be enabled before it can be entered.
    \t *
    \t * @param[in] smcVeryLowPower        Allows VLPR, VLPW, and VLPS modes
-   \t * @param[in] smcLowLeakageStop      Allows LLSx modes
    \t * @param[in] smcVeryLowLeakageStop  Allows VLLSx modes
    \t *
    \t * @note This is a write-once-after-reset operation
    \t */
    \tstatic ErrorCode enablePowerModes(
    \t      SmcVeryLowPower         smcVeryLowPower,
-   \t      SmcLowLeakageStop       smcLowLeakageStop       = SmcLowLeakageStop_Disabled,
    \t      SmcVeryLowLeakageStop   smcVeryLowLeakageStop   = SmcVeryLowLeakageStop_Disabled) {
    \t
-   \t   smc().PMPROT = smcVeryLowPower|smcLowLeakageStop|smcVeryLowLeakageStop;
+   \t   smc().PMPROT = smcVeryLowPower|smcVeryLowLeakageStop;
    \t   return E_NO_ERROR;
    \t}\n\n
    ]]></template>

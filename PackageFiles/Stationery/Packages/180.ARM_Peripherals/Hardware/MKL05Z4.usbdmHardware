@@ -8,17 +8,17 @@
 <root version="1.2.0">
    <family name="MKL05Z4">
       <device name="FRDM_KL05Z"   manual="KL05P48M48SF1RM" package="FRDM_KL05Z" />
-      <device name="MKL05Z16VFK4" manual="KL05P48M48SF1RM" package="QFN24" />
-      <device name="MKL05Z16VFM4" manual="KL05P48M48SF1RM" package="QFN32" />
-      <device name="MKL05Z16VLC4" manual="KL05P48M48SF1RM" package="LQFP32" />
-      <device name="MKL05Z16VLF4" manual="KL05P48M48SF1RM" package="LQFP48" />
-      <device name="MKL05Z32VFK4" manual="KL05P48M48SF1RM" package="QFN24" />
-      <device name="MKL05Z32VFM4" manual="KL05P48M48SF1RM" package="QFN32" />
-      <device name="MKL05Z32VLC4" manual="KL05P48M48SF1RM" package="LQFP32" />
-      <device name="MKL05Z32VLF4" manual="KL05P48M48SF1RM" package="LQFP48" />
-      <device name="MKL05Z8VFK4"  manual="KL05P48M48SF1RM" package="QFN24" />
-      <device name="MKL05Z8VFM4"  manual="KL05P48M48SF1RM" package="QFN32" />
-      <device name="MKL05Z8VLC4"  manual="KL05P48M48SF1RM" package="LQFP32" />
+      <device name="MKL05Z16VFK4" manual="KL05P48M48SF1RM" package="QFN_24" />
+      <device name="MKL05Z16VFM4" manual="KL05P48M48SF1RM" package="QFN_32" />
+      <device name="MKL05Z16VLC4" manual="KL05P48M48SF1RM" package="LQFP_32" />
+      <device name="MKL05Z16VLF4" manual="KL05P48M48SF1RM" package="LQFP_48" />
+      <device name="MKL05Z32VFK4" manual="KL05P48M48SF1RM" package="QFN_24" />
+      <device name="MKL05Z32VFM4" manual="KL05P48M48SF1RM" package="QFN_32" />
+      <device name="MKL05Z32VLC4" manual="KL05P48M48SF1RM" package="LQFP_32" />
+      <device name="MKL05Z32VLF4" manual="KL05P48M48SF1RM" package="LQFP_48" />
+      <device name="MKL05Z8VFK4"  manual="KL05P48M48SF1RM" package="QFN_24" />
+      <device name="MKL05Z8VFM4"  manual="KL05P48M48SF1RM" package="QFN_32" />
+      <device name="MKL05Z8VLC4"  manual="KL05P48M48SF1RM" package="LQFP_32" />
    </family>
    <peripherals>
       <peripheral baseName="ADC"      instance="0"        version="adc0_mkl_dma">
@@ -560,7 +560,7 @@
          <placement pin="VREFL"         location="VREFL" />
          <placement pin="VSS"           location="VSS" />
       </package>
-      <package name="LQFP32">
+      <package name="LQFP_32">
          <placement pin="PTA0"          location="p30" />
          <placement pin="PTA1"          location="p31" />
          <placement pin="PTA10"         location="p21" />
@@ -594,7 +594,7 @@
          <placement pin="VREFL"         location="p5" />
          <placement pin="VSS"           location="p6" />
       </package>
-      <package name="LQFP48">
+      <package name="LQFP_48">
          <placement pin="PTA0"          location="p46" />
          <placement pin="PTA1"          location="p47" />
          <placement pin="PTA10"         location="p33" />
@@ -644,7 +644,7 @@
          <placement pin="VSS1"          location="p11" />
          <placement pin="VSS2"          location="p30" />
       </package>
-      <package name="QFN24">
+      <package name="QFN_24">
          <placement pin="PTA0"          location="p22" />
          <placement pin="PTA1"          location="p23" />
          <placement pin="PTA12"         location="p20" />
@@ -672,7 +672,7 @@
          <placement pin="VREFL"         location="p4" />
          <placement pin="VSS"           location="p4" />
       </package>
-      <package name="QFN32">
+      <package name="QFN_32">
          <placement pin="PTA0"          location="p30" />
          <placement pin="PTA1"          location="p31" />
          <placement pin="PTA10"         location="p21" />

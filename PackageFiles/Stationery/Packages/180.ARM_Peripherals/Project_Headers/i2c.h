@@ -513,6 +513,27 @@ using I2c1 = I2cBase_T<I2c1Info>;
  * Refer @ref I2cBase_T
  */
 using I2c2 = I2cBase_T<I2c2Info>;
+
+#if defined(USBDM_I2C3_IS_DEFINED)
+/**
+ * @brief Class representing the I2C2 interface
+ *
+ * <b>Example</b>
+ * Refer @ref I2cBase_T
+ */
+using I2c3 = I2cBase_T<I2c3Info>;
+#endif
+
+#if defined(USBDM_I2C4_IS_DEFINED)
+/**
+ * @brief Class representing the I2C4 interface
+ *
+ * <b>Example</b>
+ * Refer @ref I2cBase_T
+ */
+using I2c4 = I2cBase_T<I2c4Info>;
+#endif
+
 #endif
 
 /**

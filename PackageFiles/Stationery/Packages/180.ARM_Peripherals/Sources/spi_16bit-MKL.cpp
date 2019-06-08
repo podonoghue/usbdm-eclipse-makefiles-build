@@ -69,8 +69,8 @@ uint8_t Spi::calculateBr(uint32_t clockFrequency, uint32_t frequency) {
  * Note: Chooses the highest speed that is not greater than frequency.
  */
 uint32_t Spi::calculateSpeed(uint32_t clockFrequency, uint32_t br) {
-   uint sppr = (br&SPI_BR_SPPR_MASK)>>SPI_BR_SPPR_SHIFT;
-   uint spr  = (br&SPI_BR_SPR_MASK)>>SPI_BR_SPR_SHIFT;
+   uint32_t sppr = (br&SPI_BR_SPPR_MASK)>>SPI_BR_SPPR_SHIFT;
+   uint32_t spr  = (br&SPI_BR_SPR_MASK)>>SPI_BR_SPR_SHIFT;
    return clockFrequency/(spprFactors[sppr]*sprFactors[spr]);
 }
 

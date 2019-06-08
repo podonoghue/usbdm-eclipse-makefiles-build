@@ -253,6 +253,10 @@
          <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForMcg" />
          <irq num="MCG_IRQn" />
       </peripheral>
+      <peripheral baseName="MCM"      instance=""         version="mcm_mk21fa12">
+         <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForMcm" />
+         <irq num="MCM_IRQn" />
+      </peripheral>
       <peripheral baseName="MPU"      instance=""         version="mpu_mk21f12_r12">
          <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForToDo" />
          <clock clockEnable="SIM->SCGC7 |= SIM_SCGC7_MPU_MASK;" clockDisable="SIM->SCGC7 &amp;= ~SIM_SCGC7_MPU_MASK;" />
@@ -320,10 +324,10 @@
          <clock clockEnable="SIM->SCGC4 |= SIM_SCGC4_USBOTG_MASK;" clockDisable="SIM->SCGC4 &amp;= ~SIM_SCGC4_USBOTG_MASK;" />
          <irq num="USB0_IRQn" />
       </peripheral>
-      <peripheral baseName="USBDCD"   instance=""         version="usbdcd_v1_2">
+      <peripheral baseName="USBDCD"   instance="0"        version="usbdcd0_v1_2">
          <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForUsbdcd" />
          <clock clockEnable="SIM->SCGC6 |= SIM_SCGC6_USBDCD_MASK;" clockDisable="SIM->SCGC6 &amp;= ~SIM_SCGC6_USBDCD_MASK;" />
-         <irq num="USBDCD_IRQn" />
+         <irq num="USBDCD0_IRQn" />
       </peripheral>
       <peripheral baseName="VREF"     instance=""         version="vref_c">
          <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForVref" />

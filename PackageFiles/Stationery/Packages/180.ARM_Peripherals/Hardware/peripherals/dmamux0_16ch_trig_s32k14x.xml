@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"
 ?>
 <!DOCTYPE peripheralPage SYSTEM "_menu.dtd" >
-<!-- dmamux0.xml -->
+<!-- dmamux0_16ch_trig_s32k14x.xml -->
 
 <peripheralPage xmlns:xi="http://www.w3.org/2001/XInclude" name="_instance" description="Flash Memory Module">
 

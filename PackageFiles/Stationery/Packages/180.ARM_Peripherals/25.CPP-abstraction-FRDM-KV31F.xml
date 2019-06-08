@@ -2,6 +2,7 @@
 <!DOCTYPE root SYSTEM "../package.dtd"
 [
 <!ENTITY DEVICE_NAME  "FRDM_KV31F">
+<!ENTITY DEVICE_FILE  "MK20D5-FRDM">
 ]>
 
 <root version="1.0" >

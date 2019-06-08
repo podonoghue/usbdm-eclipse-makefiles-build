@@ -486,6 +486,7 @@ public:
       }
    }
 
+#ifdef TPM_SC_DMA_MASK
    /**
     * Enable/disable Timer Overflow DMA requests
     *
@@ -499,6 +500,7 @@ public:
          tmr().SC &= ~TPM_SC_DMA_MASK;
       }
    }
+#endif
 
    /**
     * Set maximum value of timer counter.

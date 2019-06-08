@@ -2,14 +2,21 @@
 <!DOCTYPE peripheralPage SYSTEM "_menu.dtd" >
 <!-- flexio_def.xml -->
 
-<peripheralPage xmlns:xi="http://www.w3.org/2001/XInclude" name="_instance" description="Inter-Integrated-Circuit">
-
-   <xi:include href="_default_instance.xml"/>
+<peripheralPage xmlns:xi="http://www.w3.org/2001/XInclude" name="_instance" description="Flexible I/O">
 
    <template><![CDATA[
       \t//! Base value for PCR (excluding MUX value)
       \tstatic constexpr uint32_t defaultPcrValue  = 0;\n\n
    ]]></template>
+
+   <xi:include href="_default_instance.xml"/>
+
+   <xi:include href="_irqOption.xml"/>         
+   
+   <projectActionList id = "flexio_files" >
+      <copy source="Project_Headers/flexio.h"       target="Project_Headers/flexio.h"        overwrite="true" derived="true" />
+   </projectActionList>
+
    
    <!-- xi:include href="_clockOption.xml"/ -->
 

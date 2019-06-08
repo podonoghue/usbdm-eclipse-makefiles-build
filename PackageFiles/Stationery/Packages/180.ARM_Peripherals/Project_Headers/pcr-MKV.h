@@ -32,7 +32,7 @@ namespace USBDM {
  *
  * @note Any pending interrupts are cleared before enabling.
  */
-void enableNvicInterrupt(IRQn_Type irqNum, uint32_t nvicPriority=NvicPriority_Normal);
+void enableNvicInterrupt(IRQn_Type irqNum, uint32_t nvicPriority);
 
 /**
  * @addtogroup PeripheralPinTables Peripheral Information Classes
@@ -111,7 +111,7 @@ constexpr   int8_t UNMAPPED_PCR         = 0xA4;
 class PortInfo {
 public:
    const uint32_t  portAddress;   //!< Port hardware base pointer
-   const uint32_t  clockMask;     //!< Port clock mask
+   const uint32_t  clockInfo;     //!< Either clock mask or port clock control register address
    const IRQn_Type irqNum;        //!< Port interrupt number
 };
 
@@ -121,7 +121,7 @@ public:
 class PinInfo {
 public:
    const uint32_t   portAddress;  //!< Port hardware base pointer
-   const uint32_t   clockMask;    //!< Port clock mask
+   const uint32_t   clockInfo;    //!< Either clock mask or port clock control register address
    const IRQn_Type  irqNum;       //!< Port interrupt number
    const uint32_t   gpioAddress;  //!< GPIO Hardware base pointer
    const uint32_t   gpioBit;      //!< Bit number for pin
@@ -139,7 +139,7 @@ public:
          uint32_t        gpioAddress,
          int             gpioBit,
          uint32_t        pcrValue) :
-                     portAddress(portInfo.portAddress), clockMask(portInfo.clockMask), irqNum(portInfo.irqNum),
+                     portAddress(portInfo.portAddress), clockInfo(portInfo.clockInfo), irqNum(portInfo.irqNum),
                      gpioAddress(gpioAddress), gpioBit(gpioBit), pcrValue(pcrValue) {}
 };
 
@@ -348,13 +348,19 @@ static constexpr PcrValue DEFAULT_PCR = pcrValue(PinPull_Up, PinDriveStrength_Hi
  * Default PCR value for pins used as GPIO (including multiplexor value)
  * High drive strength + Pull-up + GPIO_MUX value
  */
-static constexpr PcrValue GPIO_DEFAULT_PCR = pcrValue(PinPull_Up, PinDriveStrength_High, PinDriveMode_PushPull, PinAction_None, PinFilter_None, PinSlewRate_Fast, PinMux_Gpio);
+static constexpr PcrValue GPIO_DEFAULT_PCR = pcrValue(PinPull_None, PinDriveStrength_Low, PinDriveMode_PushPull, PinAction_None, PinFilter_None, PinSlewRate_Fast, PinMux_Gpio);
 
 /**
  * Default PCR setting for I2C pins (excluding multiplexor value)
  * High drive strength + Pull-up + Open-drain (if available)
  */
 static constexpr PcrValue I2C_DEFAULT_PCR =  pcrValue(PinPull_Up, PinDriveStrength_High, PinDriveMode_OpenDrain);
+
+/**
+ * Default PCR setting for I2S pins (excluding multiplexor value)
+ * High drive strength + Pull-up + Open-drain (if available)
+ */
+static constexpr PcrValue I2S_DEFAULT_PCR =  pcrValue(PinPull_Up, PinDriveStrength_High, PinDriveMode_OpenDrain);
 
 /**
  * Default PCR setting for (E)XTAL pins (excluding multiplexor value)
@@ -481,7 +487,6 @@ public:
     */
    static void disableNvicInterrupts() {
       static_assert(irqNum>=0, "Pin does not support interrupts");
-      // Disable interrupts
       NVIC_DisableIRQ(irqNum);
    }
 };
@@ -501,12 +506,12 @@ public:
  * PortC_3::disableClock();
  * @endcode
  *
- * @tparam clockMask       Mask for SIM clock register associated with this PCR
+ * @tparam clockInfo       PCC register address or mask for SIM clock register associated with this PCR
  * @tparam portAddress     PORT to be manipulated e.g. PORTA (PCR array)
  * @tparam bitNum          Bit number e.g. 3
  * @tparam defPcrValue     Default value for PCR (including MUX value)
  */
-template<uint32_t clockMask, uint32_t portAddress, IRQn_Type irqNum, int bitNum, PcrValue defPcrValue>
+template<uint32_t clockInfo, uint32_t portAddress, IRQn_Type irqNum, int bitNum, PcrValue defPcrValue>
 class Pcr_T : public PcrBase_T<portAddress, irqNum> {
 
 #ifdef DEBUG_BUILD
@@ -536,17 +541,17 @@ private:
 
 public:
    /**
-    * Enable/disable clock associated with PORT
-    *
-    * @param[in] enable true => enable, false => disable
+    * Enable clock associated with PORT
     */
-   static void enableClock(bool enable=true) {
-      if (enable) {
-         enablePortClocks(clockMask);
-      }
-      else {
-         disablePortClocks(clockMask);
-      }
+   static void enableClock() {
+      enablePortClocks(clockInfo);
+   }
+
+   /**
+    * Disable clock associated with PORT
+    */
+   static void disableClock() {
+      disablePortClocks(clockInfo);
    }
 
    /**
@@ -558,7 +563,7 @@ public:
     */
    static void setPCR(PcrValue pcrValue=defPcrValue) {
       if (portAddress != 0) {
-         enablePortClocks(clockMask);
+         enablePortClocks(clockInfo);
 
 #ifdef PORT_DFCR_CS_MASK
          enableDigitalFilter(pcrValue&PinFilter_Digital);
@@ -577,7 +582,7 @@ public:
       if (portAddress == 0) {
          return (PcrValue) 0;
       }
-      enablePortClocks(clockMask);
+      enablePortClocks(clockInfo);
       return pcrReg();
    }
    /**
@@ -602,7 +607,7 @@ public:
          PinMux            pinMux            = (PinMux)(defPcrValue&PORT_PCR_MUX_MASK)
          ) {
       if (portAddress != 0) {
-         enablePortClocks(clockMask);
+         enablePortClocks(clockInfo);
 
 #ifdef PORT_DFCR_CS_MASK
          enableDigitalFilter(pinFilter == PinFilter_Digital);
@@ -935,7 +940,7 @@ void processPcrs(uint32_t pcrValue) {
  * @tparam index         Index of pin in configuration table
  */
 template<class Info, uint8_t index> using PcrTable_T =
-      Pcr_T<Info::info[index].clockMask, Info::info[index].portAddress, Info::info[index].irqNum, Info::info[index].gpioBit, Info::info[index].pcrValue>;
+      Pcr_T<Info::info[index].clockInfo, Info::info[index].portAddress, Info::info[index].irqNum, Info::info[index].gpioBit, Info::info[index].pcrValue>;
 
 /**
  * @}
