@@ -22,6 +22,7 @@
 
    <projectActionList id = "usbdcd_files" >
       <copy source="Project_Headers/usbdcd.h"       target="Project_Headers/usbdcd.h"          overwrite="true" derived="true" />
+      <copy source="Project_Headers/usbhsdcd.h"     target="Project_Headers/usbhsdcd.h"        overwrite="true" derived="true" />
       <copy source="Snippets/usbdcd-example.cpp"    target="Snippets/usbdcd-example.cpp"       overwrite="true" derived="true" />
    </projectActionList>
    

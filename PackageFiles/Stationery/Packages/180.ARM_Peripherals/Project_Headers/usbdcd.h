@@ -1,6 +1,6 @@
 /**
  * @file     usbdcd.h (180.ARM_Peripherals/Project_Headers/usbdcd.h)
- * @brief    External Watchdog Monitor
+ * @brief    USB Device Charger Detection
  *
  * @version  V4.12.1.230
  * @date     13 April 2016
@@ -54,20 +54,23 @@ enum UsbdcdSeqResult {
    UsbdcdSeqResult_Unknown          = 0b00, //!< No results to report.
    UsbdcdSeqResult_StandardHost     = 0b01, //!< Attached to a standard host. Must comply with USB 2.0 by drawing only 2.5 mA (max) until connected.
    UsbdcdSeqResult_ChargingPort     = 0b10, //!< Attached to a charging port. The exact meaning depends on bit 18:
-   UsbdcdSeqResult_DedicatedCHarger = 0b11, //!< Attached to a dedicated charger.
+   UsbdcdSeqResult_DedicatedCharger = 0b11, //!< Attached to a dedicated charger.
 };
 
 /**
  * USBDCD status
  */
-struct UsbdcdStatus {
-   unsigned :16;
-   UsbdcdSeqResult usbdcdSeqResult:2;
-   UsbdcdSeqStatus usbdcdSeqStatus:2;
-   bool            error:1;
-   bool            timeout:1;
-   bool            active:1;
-   unsigned        :9;
+union UsbdcdStatus {
+   uint32_t mask;
+   struct {
+      unsigned :16;
+      UsbdcdSeqResult usbdcdSeqResult:2;
+      UsbdcdSeqStatus usbdcdSeqStatus:2;
+      bool            error:1;
+      bool            timeout:1;
+      bool            active:1;
+      unsigned        :9;
+   };
 };
 /**
  * Type definition for USBDCD interrupt call back
@@ -150,7 +153,7 @@ public:
     */
    static void enable() {
 
-      // Enable clock to CMP interface
+      // Enable clock to interface
       Info::enableClock();
    }
 
@@ -166,10 +169,12 @@ public:
    /**
     * Configure
     *
+    * Sets default clock settings based on SystemBusClock
     */
    static __attribute__((always_inline)) void configure() {
       enable();
       softwareReset();
+      setClock(SystemBusClock/1000000, UsbdcdClockUnit_MHz);
    }
 
    /**
@@ -177,8 +182,8 @@ public:
     * @param freq
     * @param usbdcdClockUnit
     */
-   void setClock(unsigned freq, UsbdcdClockUnit usbdcdClockUnit) {
-      USBDCD->CLOCK = USBDCD_CLOCK_CLOCK_SPEED(freq)|usbdcdClockUnit;
+   static void setClock(unsigned freq, UsbdcdClockUnit usbdcdClockUnit) {
+      usbdcd().CLOCK = USBDCD_CLOCK_CLOCK_SPEED(freq)|usbdcdClockUnit;
    }
 
    /**
@@ -252,8 +257,8 @@ public:
 
 template<class Info> USBDCDCallbackFunction UsbdcdBase_T<Info>::callback = UsbdcdBase_T<Info>::unhandledCallback;
 
-#if defined(USBDM_USBDCD_IS_DEFINED)
-class Usbdcd : public UsbdcdBase_T<UsbdcdInfo> {};
+#if defined(USBDM_USBDCD0_IS_DEFINED)
+class Usbdcd0 : public UsbdcdBase_T<Usbdcd0Info> {};
 #endif
 
 /**
