@@ -71,7 +71,7 @@ int main() {
       }
       {
          /*
-          * Transmit with configuration 1
+          * Transmit with configuration 2
           * 12-bit transfers @ 24 MHz
           */
          static const uint16_t txDataB[] = { 0xA01,0xB02,0xC03,0xD04,0xE05, };

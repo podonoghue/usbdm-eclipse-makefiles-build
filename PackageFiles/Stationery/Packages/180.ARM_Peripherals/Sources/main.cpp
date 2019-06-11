@@ -21,8 +21,8 @@ using Led   = $(demo.cpp.led:GpioB<3,ActiveLow>);
 
 int main() {
    console.writeln("Starting\n");
-   console.write("SystemCoreClock = ").writeln(::SystemCoreClock);
-   console.write("SystemBusClock  = ").writeln(::SystemBusClock);
+   console.write("SystemCoreClock = ").writeln(SystemCoreClock);
+   console.write("SystemBusClock  = ").writeln(SystemBusClock);
 
    Led::setOutput();
 

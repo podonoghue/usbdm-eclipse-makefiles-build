@@ -79,7 +79,7 @@
       
    <template><![CDATA[
        \t//! Class based callback handler has been installed in vector table\n
-       \tstatic constexpr bool irqHandlerInstalled = ($(irqHandlers) == 1);\n\n
+       \tstatic constexpr bool irqHandlerInstalled = $(irqHandlers);\n\n
    ]]></template>
        
    <intOption name="irqLevel" 

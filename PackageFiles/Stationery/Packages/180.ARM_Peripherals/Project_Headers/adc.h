@@ -914,52 +914,6 @@ template<class Info> ADCCallbackFunction AdcBase_T<Info>::sCallback = AdcBase::u
  */
 class Adc0 : public AdcBase_T<Adc0Info> {};
 
-/**
- * Template class representing an ADC0 channel
- *
- * Example
- * @code
- * // Instantiate the ADC channel (for ADC0 channel 6)
- * using Adc = USBDM::Adc0Channel<6>;
- *
- * // Set ADC resolution
- * Adc.setMode(AdcResolution_16bit_se);
- *
- * // Read ADC value
- * uint32_t value = Adc.readAnalogue();
- * @endcode
- *
- * @tparam channel ADC channel
- *
- * @deprecated
- */
-template<int channel>
-class Adc0Channel : public Adc0::Channel<channel> {};
-
-#ifdef USBDM_ADC0_INFODM_IS_DEFINED
-/**
- * Template class representing an ADC0 differential channel
- *
- * Example
- * @code
- * // Instantiate the differential ADC0 channels (for ADC0_DM0, ADC0_DP0)
- * using Adc = USBDM::Adc0DiffChannel<0>;
- *
- * // Set ADC resolution
- * Adc.setMode(AdcResolution_11bit_diff );
- *
- * // Read ADC value
- * uint32_t value = Adc0.readAnalogue();
- * @endcode
- *
- * @tparam channel ADC channel
- *
- * @deprecated
- */
-template<int channel>
-class Adc0DiffChannel : public Adc0::DiffChannel<channel> {};
-#endif
-
 #endif
 
 #ifdef USBDM_ADC1_IS_DEFINED
@@ -968,51 +922,6 @@ class Adc0DiffChannel : public Adc0::DiffChannel<channel> {};
  */
 class Adc1 : public AdcBase_T<Adc1Info> {};
 
-/**
- * Template class representing an ADC1 channel
- *
- * Example
- * @code
- * // Instantiate the ADC channel (for ADC1 channel 6)
- * using Adc = USBDM::Adc1Channel<6>;
- *
- * // Set ADC resolution
- * Adc.setMode(AdcResolution_16bit_se);
- *
- * // Read ADC value
- * uint32_t value = Adc.readAnalogue();
- * @endcode
- *
- * @tparam channel ADC channel
- *
- * @deprecated
- */
-template<int channel>
-class Adc1Channel : public Adc1::Channel<channel> {};
-
-#ifdef USBDM_ADC1_INFODM_IS_DEFINED
-/**
- * Template class representing an ADC1 differential channel
- *
- * Example
- * @code
- * // Instantiate the differential ADC1 channels (for ADC1_DM0, ADC1_DP0)
- * using Adc = USBDM::Adc1DiffChannel<0>;
- *
- * // Set ADC resolution
- * Adc.setMode(AdcResolution_11bit_diff );
- *
- * // Read ADC value
- * uint32_t value = Adc.readAnalogue();
- * @endcode
- *
- * @tparam channel ADC channel
- *
- * @deprecated
- */
-template<int channel>
-class Adc1DiffChannel : public Adc1::DiffChannel<channel> {};
-#endif
 #endif
 
 /**

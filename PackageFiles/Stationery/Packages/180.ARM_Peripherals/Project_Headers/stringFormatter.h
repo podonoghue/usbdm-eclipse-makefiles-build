@@ -51,6 +51,13 @@ public:
     *
     * @param[in] buffer      Buffer for characters
     * @param[in] bufferSize  Size of buffer - Note space will be reserved for a terminator
+    *
+    * Example:
+    * @code
+    *   char buff[100];
+    *   StringFormatter sf(buff, sizeof(buff));
+    *   sf.write("Hello ").writeln("and bye bye");
+    * @endcode
     */
    StringFormatter(char buffer[], size_t bufferSize) : buff(buffer), ptr(buffer), sizeMinusOne(bufferSize-1) {
       usbdm_assert(bufferSize>=1, "Buffer size must be > 1");
@@ -162,6 +169,12 @@ private:
 public:
    /**
     * Create String Formatter
+    * Example:
+    *
+    * @code
+    *   StringFormatter<100> sf;
+    *   sf.write("Hello ").writeln("and bye bye");
+    * @endcode
     */
    StringFormatter_T() : StringFormatter(buff, buffSize) {
    }

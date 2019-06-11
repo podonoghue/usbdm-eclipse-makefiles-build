@@ -1,7 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE peripheralPage SYSTEM "_menu.dtd" >
-<!-- reference.xml -->
-
-<fragment xmlns:xi="http://www.w3.org/2001/XInclude">
-<xi:include href="mcg_mkl.xml"/>
-</fragment>

@@ -450,9 +450,7 @@ public:
       tmr().MOD     = Info::modulo;
       tmr().SC      = Info::sc;
       tmr().EXTTRIG = Info::exttrig;
-      //TODO Make configurable
       tmr().CONF    = FTM_CONF_BDMMODE(1);
-      //TODO Make configurable
       tmr().COMBINE = FTM_COMBINE_FAULTEN0_MASK|FTM_COMBINE_FAULTEN1_MASK|FTM_COMBINE_FAULTEN2_MASK|FTM_COMBINE_FAULTEN3_MASK;
 
       enableNvicInterrupts(Info::irqLevel);
@@ -1335,6 +1333,17 @@ public:
       tmr().SWOCTRL = (enableMask&0xFF)|((outputMask<<8)&0xFF00);
    }
 
+   /**
+    * Set current value of channel outputs.\n
+    * This value is overwritten by the next channel action.
+    *
+    * @param channelValueMask
+    */
+   static void setChanelOutputs(uint32_t channelValueMask) {
+      tmr().OUTINIT = channelValueMask;
+      tmr().MODE    |= FTM_MODE_INIT_MASK;
+   }
+
 public:
    /**
     * Template class representing a timer channel
@@ -1947,15 +1956,6 @@ template<class Info> FtmChannelCallbackFunction  FtmBase_T<Info>::sChannelCallba
  */
 class Ftm0 : public FtmBase_T<Ftm0Info> {};
 
-/**
- * Template class representing a FTM0 Timer channel.
- *
- * @tparam channel Timer channel
- *
- * @deprecated
- */
-template <int channel>
-class Ftm0Channel : public Ftm0::Channel<channel> {};
 #endif
 
 #ifdef USBDM_FTM1_IS_DEFINED
@@ -1964,15 +1964,6 @@ class Ftm0Channel : public Ftm0::Channel<channel> {};
  */
 class Ftm1 : public FtmBase_T<Ftm1Info> {};
 
-/**
- * Template class representing a FTM0 Timer channel.
- *
- * @tparam channel Timer channel
- *
- * @deprecated
- */
-template <int channel>
-class Ftm1Channel : public Ftm1::Channel<channel> {};
 #endif
 
 #ifdef USBDM_FTM2_IS_DEFINED
@@ -1981,15 +1972,6 @@ class Ftm1Channel : public Ftm1::Channel<channel> {};
  */
 class Ftm2 : public FtmBase_T<Ftm2Info> {};
 
-/**
- * Template class representing a FTM0 Timer channel.
- *
- * @tparam channel Timer channel
- *
- * @deprecated
- */
-template <int channel>
-class Ftm2Channel : public Ftm2::Channel<channel> {};
 #endif
 
 #ifdef USBDM_FTM3_IS_DEFINED
@@ -1998,15 +1980,6 @@ class Ftm2Channel : public Ftm2::Channel<channel> {};
  */
 class Ftm3 : public FtmBase_T<Ftm3Info> {};
 
-/**
- * Template class representing a FTM0 Timer channel.
- *
- * @tparam channel Timer channel
- *
- * @deprecated
- */
-template <int channel>
-class Ftm3Channel : public Ftm3::Channel<channel> {};
 #endif
 
 #ifdef FTM_QDCTRL_QUADEN_MASK

@@ -6,11 +6,13 @@
 
    <xi:include href="_default_instance.xml"/>
 
-   <template><![CDATA[
-      \t//! Base value for PCR (excluding MUX value)
-      \tstatic constexpr uint32_t defaultPcrValue  = DEFAULT_PCR;\n\n
-   ]]></template>
+   <xi:include href="_default_pcr.xml"/>
    
+   <binaryOption name="check_minimums" description="Check minimumInterval and minimumResolution"
+         toolTip="Enables boundary checks of minimum interval and minimum resolution when setting FTM values." >
+      <choice value="0" name="No checks done" />
+      <choice value="1" name="Do checks"  isDefault="true" />
+   </binaryOption>
    <intOption name="minimumInterval" description="Minimum usable interval in ticks"
       toolTip="This value is used as a minimum acceptable value for the timer interval in ticks\n
                when using convertMicrosecondsToTicks() or convertSecondsToTicks()"
@@ -152,10 +154,10 @@
          
    <template><![CDATA[
       \t/** Minimum resolution for PWM interval */
-      \tstatic constexpr uint32_t minimumResolution=$(minimumResolution);\n\n
+      \tstatic constexpr uint32_t minimumResolution=$(check_minimums)?$(minimumResolution):0;\n\n
       
       \t/** Minimum usable interval in ticks */      
-      \tstatic constexpr uint32_t minimumInterval=$(minimumInterval);\n\n
+      \tstatic constexpr uint32_t minimumInterval=$(check_minimums)?$(minimumInterval):0;\n\n
       
       \t/**
       \t * Get input clock frequency

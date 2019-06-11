@@ -271,16 +271,8 @@ Convenience template for ADC inputs. Use the following classes:\n
 <li>USBDM::Adc0
 <li>USBDM::Adc1
 </ul>
-<li>USBDM::AdcChannel_T
-<ul>
-<li>USBDM::Adc0Channel
-<li>USBDM::Adc1Channel
-</ul>
-<li>USBDM::AdcDiffChannel_T
-<ul>
-<li>USBDM::Adc0DiffChannel
-<li>USBDM::Adc1DiffChannel
-</ul>
+<li>USBDM::AdcBase_T::Channel
+<li>USBDM::AdcBase_T::DiffChannel
 </ul>
 This template is an interface for the ADC input pins. \n
 
@@ -368,10 +360,10 @@ The interface is divided into a number of templates:
 <ul>
 <li>USBDM::TpmQuadDecoder1
 </ul>
-<li>USBDM::TpmChannel_T Representing individual channels of a single TPM.
+<li>USBDM::TpmBase_T Representing individual channels of a single TPM.
 <ul>
-<li>USBDM::Tpm0Channel
-<li>USBDM::Tpm1Channel
+<li>USBDM::Tpm0::Channel
+<li>USBDM::Tpm1::Channel
 </ul>
 </ul>
 It provides:\n

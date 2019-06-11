@@ -3,8 +3,8 @@
  * @file    cmt-sirc-example.cpp  (180.ARM_Peripherals/Snippets)
  * @brief   Basic C++ demo using Cmt class to send Sony SIRC protocol
  *
- * It will be necessary to configure the CMT interrupt handling in
- * the USBDM configuration.
+ * It will be necessary to configure the CMT interrupt handling and CMT
+ * output pin in the USBDM configuration.
  *
  *  Created on: 1/6/2018
  *      Author: podonoghue
@@ -39,9 +39,6 @@
  *    <---- Training (start) ------> <------------------ Packet ----------------------->
  */
 using namespace USBDM;
-
-// Debug LED connection - change as required
-using Led   = GpioA<2,ActiveLow>;
 
 // Constant describing transmission
 constexpr unsigned SONY_CARRIER     = 40000;  //!< Sony SIRC carrier frequency (Hz)
@@ -79,7 +76,7 @@ static void cmtCallback() {
    /** Time since start of current packet */
    static unsigned repeatTime;
 
-   //   Led::toggle();
+   //   ActivityLed::toggle();
    if (Cmt::getStatus()) {
       if(bitNum==0) {
          if (repeatCount++ >= SONY_REPEATS) {
@@ -251,8 +248,8 @@ enum CmtCommand {
  * Start transmission of 12-bit sequence.
  * START + N*(7-bit COMMAND, 5-bit ADDRESS)
  *
- * @param address 5-bit address
- * @param command 7-bit command
+ * @param cmtAddress 5-bit address
+ * @param cmtCommand 7-bit command
  */
 void send12(CmtAddress cmtAddress, CmtCommand cmtCommand) {
    data         = (cmtAddress<<7)|cmtCommand;
@@ -264,8 +261,8 @@ void send12(CmtAddress cmtAddress, CmtCommand cmtCommand) {
  * Start transmission of 15-bit sequence.
  * START + N*(7-bit COMMAND, 8-bit ADDRESS)
  *
- * @param address 8-bit address
- * @param command 7-bit command
+ * @param cmtAddress 8-bit address
+ * @param cmtCommand 7-bit command
  */
 void send15(CmtAddress cmtAddress, CmtCommand cmtCommand) {
    data         = (cmtAddress<<7)|cmtCommand;
@@ -277,9 +274,9 @@ void send15(CmtAddress cmtAddress, CmtCommand cmtCommand) {
  * Start transmission of 20-bit sequence.
  * START + N*(7-bit COMMAND, 5-bit ADDRESS, 8-bit EXTENDED)
  *
- * @param address  5-bit address
- * @param command  7-bit command
- * @param extended 8-bit extended value
+ * @param cmtAddress  5-bit address
+ * @param cmtCommand  7-bit command
+ * @param extended8   8-bit extended value
  */
 void send20(CmtAddress cmtAddress, CmtCommand cmtCommand, uint8_t extended8) {
    data         = (extended8<<12)|(cmtAddress<<7)|cmtCommand;
@@ -288,6 +285,9 @@ void send20(CmtAddress cmtAddress, CmtCommand cmtCommand, uint8_t extended8) {
 }
 
 int main() {
+   // Activity LED connection - change as required
+   using ActivityLed   = GpioA<2,ActiveLow>;
+
    console.writeln("Starting\n");
    console.write("SystemCoreClock = ").writeln(::SystemCoreClock);
    console.write("SystemBusClock  = ").writeln(::SystemBusClock);
@@ -298,11 +298,23 @@ int main() {
          PinDriveMode_PushPull,
          PinSlewRate_Slow);
 
-   Led::setOutput();
+   ActivityLed::setOutput(
+         PinDriveStrength_High,
+         PinDriveMode_PushPull,
+         PinSlewRate_Slow);
 
+   console.setEcho(EchoMode_Off);
+
+   bool failed = false;
    for(int count = 0;;count++) {
+      if (!failed) {
+         console.write("\n0-9,v,c,m,s ? ");
+      }
+      // Assume OK input
+      failed = false;
+
       int ch = console.readChar();
-      Led::toggle();
+
       // Send pattern
       switch(ch) {
          case '0': send12(CmtAddress_tv, CmtCommand_digit0      );      break;
@@ -324,12 +336,20 @@ int main() {
          case 'S':
          case 's': send12(CmtAddress_tv, CmtCommand_standby     );      break;
          default:
-            // 'untoggle' LED
-            Led::toggle();
+            // Not recognized command
+            failed = true;
             break;
       }
-      waitUntilComplete();
-      waitMS(100);
+      if (!failed) {
+         // Pulse LED during transmission
+         ActivityLed::on();
+         console.write((char)ch);
+         waitUntilComplete();
+         ActivityLed::off();
+
+         // Minimum delay between transmissions
+         waitMS(100);
+      }
    }
    return 0;
 }

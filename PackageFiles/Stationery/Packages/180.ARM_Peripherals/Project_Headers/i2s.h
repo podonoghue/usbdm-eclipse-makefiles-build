@@ -25,7 +25,7 @@
 namespace USBDM {
 
 /**
- * @addtogroup I2S_Group I2S, Inter-Integrated-Circuit Interface
+ * @addtogroup I2S_Group I2S, Synchronous Audio Interface
  * @brief C++ Class allowing access to I2S interface
  * @{
  */
@@ -129,7 +129,6 @@ public:
     * Construct I2S interface
     *
     * @param[in]  bps        Tx/Rx rate
-    * @param[in]  i2sMode    Mode of operation
     * @param[in]  myAddress  Address of this device on bus (not currently used)
     */
    I2sBase_T(unsigned bps=400000, uint8_t myAddress=0) : I2s(&Info::i2s()) {

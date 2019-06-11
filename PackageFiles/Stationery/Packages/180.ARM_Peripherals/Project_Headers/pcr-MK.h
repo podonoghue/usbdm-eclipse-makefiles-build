@@ -363,7 +363,7 @@ static constexpr PcrValue pcrValue(uint32_t flags) {
  * Default PCR setting for pins (excluding multiplexor value)
  * High drive strength + Pull-up
  */
-static constexpr PcrValue DEFAULT_PCR = pcrValue(PinPull_Up, PinDriveStrength_High);
+static constexpr PcrValue DEFAULT_PCR = pcrValue(PinPull_None, PinDriveStrength_Low);
 
 /**
  * Default PCR value for pins used as GPIO (including multiplexor value)

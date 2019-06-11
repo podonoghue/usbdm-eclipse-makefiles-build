@@ -4,9 +4,6 @@
 
 <peripheralPage xmlns:xi="http://www.w3.org/2001/XInclude" name="_instance" description="External Triggers">
 
-   <template><![CDATA[
-      \t//! Base value for PCR (excluding MUX value)
-      \tstatic constexpr uint32_t defaultPcrValue  = DEFAULT_PCR;\n\n
-   ]]></template>
+   <xi:include href="_default_pcr.xml"/>
    
 </peripheralPage>

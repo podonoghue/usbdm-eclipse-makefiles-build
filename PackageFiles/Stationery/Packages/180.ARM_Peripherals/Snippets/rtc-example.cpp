@@ -3,7 +3,7 @@
  * @file   rtc-example.cpp (180.ARM_Peripherals/Snippets)
  * @brief  Real Time CLock (RTC) Example
  * @date   12 Jul 2018
- * @author podonoghue
+ * Author podonoghue
  ============================================================================
  */
  /*
@@ -69,8 +69,8 @@ int main() {
    Led::setOutput();
    for(;;) {
       // Sleep between events
-//      Smc::enterWaitMode();
-      Smc::enterStopMode(SmcStopMode_NormalStop);
+      Smc::enterWaitMode();
+//      Smc::enterStopMode(SmcStopMode_NormalStop);
 
       time_t rawtime;
       time (&rawtime);

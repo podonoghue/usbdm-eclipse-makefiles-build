@@ -183,7 +183,7 @@ static void configureDma(DmaChannelNum dmaChannel) {
  * Configure the PIT
  * - Generates regular events which throttles the DMA -> UART Tx.
  *
- * @param dmaChannel  PIT channel being used.  Must be associated with DMA channel.
+ * @param pitChannel  PIT channel being used.  Must be associated with DMA channel.
  */
 static void configurePit(PitChannelNum pitChannel) {
    // Configure base PIT

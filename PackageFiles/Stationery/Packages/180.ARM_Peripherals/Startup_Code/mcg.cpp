@@ -182,7 +182,6 @@ const char *Mcg::getClockModeName(McgInfo::ClockMode clockMode) {
 ErrorCode Mcg::clockTransition(const McgInfo::ClockInfo &clockInfo) {
    McgInfo::ClockMode to = clockInfo.clockMode;
 
-   //TODO move!
 #ifdef USB_CLK_RECOVER_IRC_EN_IRC_EN_MASK
    if (clockInfo.c7&&MCG_C7_OSCSEL_MASK) {
       // Note IRC48M Internal Oscillator automatically enable if MCG_C7_OSCSEL = 2

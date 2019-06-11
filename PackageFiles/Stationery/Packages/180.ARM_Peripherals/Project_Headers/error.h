@@ -1,6 +1,6 @@
 /**
  * @file error.h
- * @brief TODO
+ * @brief USBDM Error codes and messages
  *
  *  Created on: 27 Jan 2019
  *      Author: podonoghue

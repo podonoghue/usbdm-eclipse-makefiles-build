@@ -15,7 +15,7 @@
       \tstatic constexpr PinInfo pinInfo { Port$(_instance)Info, GPIO$(_instance)_BasePtr, 0, GPIO_DEFAULT_PCR  };\n\n
    
        \t//! Class based callback handler has been installed in vector table\n
-       \tstatic constexpr bool irqHandlerInstalled = ($(irqHandlingMethod) == 1);\n\n
+       \tstatic constexpr bool irqHandlerInstalled = $(irqHandlingMethod);\n\n
    ]]></template>
        
    <intOption name="irqLevel" 

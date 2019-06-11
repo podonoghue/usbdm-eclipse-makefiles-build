@@ -6,10 +6,7 @@
 
    <xi:include href="_default_instance.xml"/>
 
-   <template><![CDATA[
-      \t//! Base value for PCR (excluding MUX value)
-      \tstatic constexpr uint32_t defaultPcrValue  = DEFAULT_PCR;\n\n
-   ]]></template>
+   <xi:include href="_default_pcr.xml"/>
    
    <xi:include href="_mapPinsOption_on.xml"/>
    

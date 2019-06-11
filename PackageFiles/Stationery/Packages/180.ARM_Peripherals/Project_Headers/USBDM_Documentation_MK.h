@@ -62,7 +62,7 @@ Convenience template for UART. Uses the following classes:\n
 <li>USBDM::Console
 <li>USBDM::Uart0
 <li>USBDM::Uart1
-<li>USBDM::Uart2
+<li>USBDM::Uart
 </ul>
 </ul>
 
@@ -273,16 +273,8 @@ Convenience template for ADC inputs. Use the following classes:\n
 <li>USBDM::Adc0
 <li>USBDM::Adc1
 </ul>
-<li>USBDM::AdcChannel_T
-<ul>
-<li>USBDM::Adc0Channel
-<li>USBDM::Adc1Channel
-</ul>
-<li>USBDM::AdcDiffChannel_T
-<ul>
-<li>USBDM::Adc0DiffChannel
-<li>USBDM::Adc1DiffChannel
-</ul>
+<li>USBDM::AdcBase_T::Channel
+<li>USBDM::AdcBase_T::DiffChannel
 </ul>
 This template is an interface for the ADC input pins. \n
 
@@ -366,14 +358,14 @@ The interface is divided into a number of templates:
 <li>USBDM::Ftm0
 <li>USBDM::Ftm1
 </ul>
-<li>USBDM::QuadDecoder_T Representing a FTM operating as a quadrature encoder.
+<li>USBDM::FtmQuadDecoder_T Representing a FTM operating as a quadrature encoder.
 <ul>
-<li>USBDM::QuadDecoder1
+<li>USBDM::FtmQuadDecoder1
 </ul>
-<li>USBDM::FtmChannel_T Representing individual channels of a single FTM.
+<li>USBDM::FtmBase_T::Channel Representing individual channels of a single FTM.
 <ul>
-<li>USBDM::Ftm0Channel
-<li>USBDM::Ftm1Channel
+<li>USBDM::Ftm0::Channel
+<li>USBDM::Ftm1::Channel
 </ul>
 </ul>
 It provides:\n
@@ -562,8 +554,10 @@ This is a template class with static methods.\n
 @example analogue-example.cpp
 @example analogue-interrupt-example.cpp
 @example analogue-joystick-example.cpp
+@example clkout-example.cpp
 @example cmp-example.cpp
 @example cmt-example.cpp
+@example cmt-sirc-example.cpp
 @example console-example.cpp
 @example crc-example.cpp
 @example dac-example.cpp
@@ -605,7 +599,7 @@ This is a template class with static methods.\n
 @example mma8491q-example.cpp
 @example mma8491q.cpp
 @example mma8491q.h
-@example rnga-example.cpp
+@example neopixel-example.cpp
 @example nonvolatile-example.cpp
 @example pca9685-example.cpp
 @example pca9685.cpp
@@ -615,6 +609,7 @@ This is a template class with static methods.\n
 @example pit-example2.cpp
 @example pit-example3.cpp
 @example rcm-example.cpp
+@example rnga-example.cpp
 @example rtc-example.cpp
 @example spi-example.cpp
 @example tsi-mk-example.cpp
@@ -630,6 +625,7 @@ This is a template class with static methods.\n
 @example usb_implementation_composite.h
 @example usb.cpp
 @example usbdcd-example.cpp
+@example vlpr-run-example.cpp
 @example vlpr-run-hsrun-example.cpp
 @example wdog-example.cpp
 

@@ -1,5 +1,5 @@
 /**
- * @file     usbhsdcd (180.ARM_Peripherals/Project_Headers/usbhsdcd.h)
+ * @file     usbhsdcd.h (180.ARM_Peripherals/Project_Headers/usbhsdcd.h)
  * @brief    usbhsdcd interface
  *
  * @version  V4.12.1.80

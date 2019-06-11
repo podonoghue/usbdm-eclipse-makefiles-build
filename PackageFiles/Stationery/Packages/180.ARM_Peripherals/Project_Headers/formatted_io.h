@@ -358,7 +358,8 @@ public:
    /**
     * Receives a single character
     *
-    * @return Character received
+    * @return >0 Character received
+    * @return <0 No character available
     */
    int NOINLINE_DEBUG readChar() {
       int ch;

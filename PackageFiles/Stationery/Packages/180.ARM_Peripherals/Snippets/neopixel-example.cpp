@@ -1,5 +1,5 @@
 /**
- ============================================================================
+ * ============================================================================
  * @file    neopixel-example.cpp (180.ARM_Peripherals/Snippets)
  * @brief   Demo using Ftm class to implement a basic driver for a neopixel
  *
@@ -13,11 +13,12 @@
  *
  *  Created on: 3/10/2018
  *      Author: podonoghue
- ============================================================================
+ * ============================================================================
  */
 #include <string.h>
 #include "hardware.h"
 #include "dma.h"
+#include "smc.h"
 
 using namespace USBDM;
 
@@ -39,9 +40,14 @@ using Timer = Ftm0;
 
 // Fixed Timer channels.
 // These are used to trigger DMA transfers to the PORT registers.
-using TimerHighChannel = Timer::Channel<1>; //!< PSOR - Sets pin high
-using TimerDataChannel = Timer::Channel<2>; //!< PCOR - Set pin low/unchanged according to data
-using TimerLowChannel  = Timer::Channel<3>; //!< PCOR - Sets pin low
+using TimerSetChannel   = Timer::Channel<1>; //!< PSOR - Sets pin high
+using TimerDataChannel  = Timer::Channel<2>; //!< PCOR - Sets pin low/unchanged according to data
+using TimerClearChannel = Timer::Channel<3>; //!< PCOR - Sets pin low
+
+// These must match the above channels
+constexpr DmaSlot TimerSetChannel_dmaSlot   = Dma0Slot_FTM0_Ch1;
+constexpr DmaSlot TimerDataChannel_dmaSlot  = Dma0Slot_FTM0_Ch2;
+constexpr DmaSlot TimerClearChannel_dmaSlot = Dma0Slot_FTM0_Ch3;
 
 /** Used to indicate transfer has completed */
 static volatile bool complete;
@@ -54,9 +60,9 @@ static volatile bool complete;
  */
 static void dmaCallback(DmaChannelNum channel) {
    Dma0::clearInterruptRequest(channel);
-   TimerHighChannel::configure(FtmChMode_Disabled);
+   TimerSetChannel::configure(FtmChMode_Disabled);
    TimerDataChannel::configure(FtmChMode_Disabled);
-   TimerLowChannel::configure(FtmChMode_Disabled);
+   TimerClearChannel::configure(FtmChMode_Disabled);
    complete = true;
 }
 
@@ -67,11 +73,18 @@ static constexpr unsigned PIXEL_LENGTH = 12;
 static constexpr unsigned PIXEL_BIT_LENGTH = 24;
 
 /**
- * Transmit Data.
+ * Transmit Data (used with TimerData DMA channel)
  * This holds the unpacked pixel RGB information.\n
- * Each bit represents a different pixel string.
+ * Each bit in an element represents a different pixel string.
+ * For consistent DMA latency this must be allocated in same region as pixelBitmask.
  */
 static uint8_t pixelBuffer[PIXEL_LENGTH*PIXEL_BIT_LENGTH] = {0};
+
+/**
+ * Mask for GPIO pins (used with TimerData DMA channel)
+ * For consistent DMA latency this must be allocated in same region as pixelBuffer.
+ */
+static uint8_t pixelBitmask = Pixel::MASK;
 
 /**
  * Unpack RGB pixel data into format for transmission.
@@ -115,8 +128,6 @@ static void initialiseDma(DmaChannelNum dmaSetChannel, DmaChannelNum dmaDataChan
    // This example assumes the Pixels lie within the 1st byte of the port
    static_assert((Pixel::MASK&~0xFF) == 0);
 
-   /** Mask corresponding to above GPIO */
-   static const uint8_t bitmask = Pixel::MASK;
 
    /**
     * @verbatim
@@ -162,19 +173,19 @@ static void initialiseDma(DmaChannelNum dmaSetChannel, DmaChannelNum dmaDataChan
     * Sets all pins driving strings of pixels.
     */
    static constexpr DmaTcd setTCD (
-      /* Source address              */ (uint32_t)(&bitmask),              // Source = Fixed bit-mask
+      /* Source address              */ (uint32_t)(&pixelBitmask),         // Source = Fixed bit-mask
       /* Source address offset       */ 0,                                 // Source address doesn't advance
-      /* Source size                 */ dmaSize(bitmask),                  // 8-bit read from Destination address
+      /* Source size                 */ dmaSize(pixelBitmask),             // 8-bit read from Destination address
       /* Source address modulo       */ DmaModulo_Disabled,                // No modulo
       /* Source last adjustment      */ 0,                                 // Source address doesn't change
 
       /* Destination address         */ Pixel::gpioPSOR(),                 // Destination is GPIO.PSOR register
       /* Destination address offset  */ 0,                                 // Destination address doesn't change
-      /* Destination size            */ dmaSize(bitmask),                  // 8-bit write to Source address
+      /* Destination size            */ dmaSize(pixelBitmask),             // 8-bit write to Source address
       /* Destination address modulo  */ DmaModulo_Disabled,                // No modulo
       /* Destination last adjustment */ 0,                                 // Destination address doesn't change
 
-      /* Minor loop byte count       */ sizeof(bitmask),                   // Total transfer in one minor-loop
+      /* Minor loop byte count       */ sizeof(pixelBitmask),              // Total transfer in one minor-loop
 
       /* Major loop count            */ dmaCiter(sizeof(pixelBuffer))/
       /*                             */          sizeof(pixelBuffer[0]),   // Transfer count matches entire pixelBuffer
@@ -222,19 +233,19 @@ static void initialiseDma(DmaChannelNum dmaSetChannel, DmaChannelNum dmaDataChan
     * Clears all pins driving strings of pixels.
     */
    static constexpr DmaTcd clearTCD (
-      /* Source address              */ (uint32_t)(&bitmask),               // Source = Fixed bit-mask
+      /* Source address              */ (uint32_t)(&pixelBitmask),          // Source = Fixed bit-mask
       /* Source address offset       */ 0,                                  // Source address doesn't advance
-      /* Source size                 */ dmaSize(bitmask),                   // 8-bit read from Destination address
+      /* Source size                 */ dmaSize(pixelBitmask),              // 8-bit read from Destination address
       /* Source address modulo       */ DmaModulo_Disabled,                 // No modulo
       /* Source last adjustment      */ 0,                                  // Source address doesn't change
 
       /* Destination address         */ Pixel::gpioPCOR(),                  // Destination is GPIO.PCOR register
       /* Destination address offset  */ 0,                                  // Destination address doesn't change
-      /* Destination size            */ dmaSize(bitmask),                   // 8-bit write to Source address
+      /* Destination size            */ dmaSize(pixelBitmask),                   // 8-bit write to Source address
       /* Destination address modulo  */ DmaModulo_Disabled,                 // No modulo
       /* Destination last adjustment */ 0,                                  // Destination address doesn't change
 
-      /* Minor loop byte count       */ sizeof(bitmask),                    // Total transfer in one minor-loop
+      /* Minor loop byte count       */ sizeof(pixelBitmask),               // Total transfer in one minor-loop
 
       /* Major loop count            */ dmaCiter(sizeof(pixelBuffer))/
       /*                             */          sizeof(pixelBuffer[0]),    // Transfer count matches entire pixelBuffer
@@ -258,9 +269,9 @@ static void initialiseDma(DmaChannelNum dmaSetChannel, DmaChannelNum dmaDataChan
    Dma0::enableNvicInterrupts(dmaClearChannel, NvicPriority_Normal);
 
    // Connect DMA channels to FTM for triggering
-   DmaMux0::configure(dmaSetChannel,   Dma0Slot_FTM0_Ch1, DmaMuxEnable_Continuous);
-   DmaMux0::configure(dmaDataChannel,  Dma0Slot_FTM0_Ch2, DmaMuxEnable_Continuous);
-   DmaMux0::configure(dmaClearChannel, Dma0Slot_FTM0_Ch3, DmaMuxEnable_Continuous);
+   DmaMux0::configure(dmaSetChannel,   TimerSetChannel_dmaSlot,   DmaMuxEnable_Continuous);
+   DmaMux0::configure(dmaDataChannel,  TimerDataChannel_dmaSlot,  DmaMuxEnable_Continuous);
+   DmaMux0::configure(dmaClearChannel, TimerClearChannel_dmaSlot, DmaMuxEnable_Continuous);
 
    // Configure the DMA transfers
    Dma0::configureTransfer(dmaSetChannel,   setTCD);
@@ -272,13 +283,15 @@ static void initialiseDma(DmaChannelNum dmaSetChannel, DmaChannelNum dmaDataChan
 }
 
 /*
- * FTM       Set       Clear/None     Clear
+ * FTM/DMA   Set       Clear/None     Clear
  * Channels  (1)          (2)          (3)
  *            |            |            |
  *            V            V            V
- *            +------------+                         +--
- *    0 =>    |  T0_HIGH   |       T0_LOW            |
+ *            .            .            .
+ *            +------------+            .            +--
+ *    0 =>    |  T0_HIGH   |            .  T0_LOW    |
  *          --+            +-------------------------+
+ *            .                         .
  *            +-------------------------+            +--
  *    1 =>    |       T1_HIGH           |  T1_LOW    |
  *          --+                         +------------+
@@ -288,23 +301,25 @@ static void initialiseDma(DmaChannelNum dmaSetChannel, DmaChannelNum dmaDataChan
 //#define WS2812B
 #define SK6812
 #if defined WS2812
-static constexpr float T0_HIGH = 400*ns;   // 350 +/- 150 us
-static constexpr float T1_HIGH = 600*ns;   // 700 +/- 150 us
+static constexpr float T0_HIGH = 400*ns;   // 350 +/- 150 ns
+static constexpr float T1_HIGH = 600*ns;   // 700 +/- 150 ns
 static constexpr float PERIOD  = 1200*ns;
-//static constexpr float T0_LOW  = 800*ns; // 800 +/- 150 us
-//static constexpr float T1_LOW  = 600*ns; // 600 +/- 150 us
+//static constexpr float T0_LOW  = 800*ns; // 800 +/- 150 ns
+//static constexpr float T1_LOW  = 600*ns; // 600 +/- 150 ns
 #elif defined WS2812B
-static constexpr float T0_HIGH = 500*ns;   // 400 +/- 150 us
-static constexpr float T1_HIGH = 800*ns;   // 800 +/- 150 us
+static constexpr float T0_HIGH = 500*ns;   // 400 +/- 150 ns
+static constexpr float T1_HIGH = 800*ns;   // 800 +/- 150 ns
 static constexpr float PERIOD  = 1350*ns;
-//static constexpr float T0_LOW  = 850*ns; // 850 +/- 150 us
-//static constexpr float T1_LOW  = 550*ns; // 450 +/- 150 us
+//static constexpr float T0_LOW  = 850*ns; // 850 +/- 150 ns
+//static constexpr float T1_LOW  = 550*ns; // 450 +/- 150 ns
 #elif defined SK6812
-static constexpr float T0_HIGH = 300*ns;     // 300 +/- 150 us
-static constexpr float T1_HIGH = 600*ns;     // 600 +/- 150 us
+static constexpr float T0_HIGH = 300*ns+20*ns; // 300 +/- 150 ns (20ns tweak for latency)
+static constexpr float T1_HIGH = 600*ns;       // 600 +/- 150 ns
 static constexpr float PERIOD  = 1200*ns;
-//static constexpr float T0_LOW  = 900*ns;   // 900 +/- 150 us
-//static constexpr float T1_LOW  = 600*ns;   // 600 +/- 150 us
+//static constexpr float T0_LOW  = 900*ns;     // 900 +/- 150 ns
+//static constexpr float T1_LOW  = 600*ns;     // 600 +/- 150 ns
+#else
+#error "Unknown Neopixel type"
 #endif
 
 /**
@@ -316,7 +331,7 @@ static void startTransfer(DmaChannelNum dmaSetChannel, DmaChannelNum dmaDataChan
    complete = false;
 
    const uint32_t dmaChannelMask = (1<<dmaSetChannel)|(1<<dmaDataChannel)|(1<<dmaClearChannel);
-   const uint32_t ftmChannelMask = TimerHighChannel::CHANNEL_MASK|TimerDataChannel::CHANNEL_MASK|TimerLowChannel::CHANNEL_MASK;
+   const uint32_t ftmChannelMask = TimerSetChannel::CHANNEL_MASK|TimerDataChannel::CHANNEL_MASK|TimerClearChannel::CHANNEL_MASK;
 
    /**
     * It is important that the FTM and DMA start in the correct sequence.
@@ -330,10 +345,22 @@ static void startTransfer(DmaChannelNum dmaSetChannel, DmaChannelNum dmaDataChan
    Timer::clearSelectedInterruptFlags(ftmChannelMask);
 
    // Configure the three channels for DMA (timing is already set)
-   TimerHighChannel::configure(FtmChMode_OutputCompare, FtmChannelAction_Dma);
+#if 1
+   TimerSetChannel::configure(FtmChMode_OutputCompare, FtmChannelAction_Dma);
    TimerDataChannel::configure(FtmChMode_OutputCompare, FtmChannelAction_Dma);
-   TimerLowChannel::configure(FtmChMode_OutputCompare, FtmChannelAction_Dma);
+   TimerClearChannel::configure(FtmChMode_OutputCompare, FtmChannelAction_Dma);
+#else
+   // For debug - output FTM channels to pins
+   TimerSetChannel::configure(FtmChMode_OutputCompareToggle, FtmChannelAction_Dma);
+   TimerDataChannel::configure(FtmChMode_OutputCompareToggle, FtmChannelAction_Dma);
+   TimerClearChannel::configure(FtmChMode_OutputCompareToggle, FtmChannelAction_Dma);
 
+   Timer::setChanelOutputs(0);
+
+   TimerSetChannel::setOutput();
+   TimerDataChannel::setOutput();
+   TimerClearChannel::setOutput();
+#endif
    // Enable timer->DMA hardware requests
    Dma0::enableMultipleRequests(dmaChannelMask);
 
@@ -364,14 +391,14 @@ static void initialiseFtm() {
    Timer::setPeriod(PERIOD);
 
    // Configure the channels for O.C so event times can be set - no DMA initially
-   TimerHighChannel::configure(FtmChMode_OutputCompare, FtmChannelAction_None);
+   TimerSetChannel::configure(FtmChMode_OutputCompare, FtmChannelAction_None);
    TimerDataChannel::configure(FtmChMode_OutputCompare, FtmChannelAction_None);
-   TimerLowChannel::configure(FtmChMode_OutputCompare, FtmChannelAction_None);
+   TimerClearChannel::configure(FtmChMode_OutputCompare, FtmChannelAction_None);
 
    // Set channel event times
-   TimerHighChannel::setEventTime(0);
+   TimerSetChannel::setEventTime(0);
    TimerDataChannel::setEventTime(Timer::convertSecondsToTicks(T0_HIGH));
-   TimerLowChannel::setEventTime(Timer::convertSecondsToTicks(T1_HIGH));
+   TimerClearChannel::setEventTime(Timer::convertSecondsToTicks(T1_HIGH));
 
    // Check if configuration failed
    checkError();
@@ -401,7 +428,7 @@ void writeLEDs(const uint32_t *pixel0Data, const uint32_t *pixel1Data) {
 
    // Wait for completion of 1 Major-loop = 1 pixelBuffer transfer
    while (!complete) {
-      __asm__("nop");
+      Smc::enterWaitMode();
    }
    //   console.writeln("Transfer complete");
 }
@@ -624,6 +651,26 @@ void test() {
 }
 
 /**
+ * Sends fixed pattern for testing timing
+ */
+void testRandom() {
+
+   // Delay between changes
+   constexpr int DELAY_VALUE = 100;
+
+   //                                 RRGGBB    RRGGBB    RRGGBB    RRGGBB    RRGGBB    RRGGBB    RRGGBB    RRGGBB    RRGGBB    RRGGBB    RRGGBB    RRGGBB
+   static uint32_t pixel1DataA[] = {0xFFFFFF, 0xFFFFFF, 0xFFFFFF, 0xFFFFFF, 0xFFFFFF, 0xFFFFFF, 0xFFFFFF, 0xFFFFFF, 0xFFFFFF, 0xFFFFFF, };
+   for(;;) {
+      uint32_t value = rand();
+      for (unsigned index=0; index<PIXEL_LENGTH; index++) {
+         pixel1DataA[index] = value;
+      }
+      writeLEDs(pixel1DataA, pixel1DataA);
+      waitMS(DELAY_VALUE);
+   }
+}
+
+/**
  * Demonstration main-line
  *
  * @return Not used.
@@ -635,6 +682,8 @@ int main() {
    initialiseFtm();
 
    initialiseDma(DmaChannelNum_0, DmaChannelNum_1, DmaChannelNum_2);
+
+//   testRandom();
 
    animate2();
 

@@ -227,7 +227,7 @@ public:
    /**
     * Sets the watchdog time-out value in seconds.
     *
-    * @param value
+    * @param seconds
     *
     * @note This is a protected operation which uses unlock
     * @note This adjusts both the prescaler and the timeout value.
@@ -283,9 +283,9 @@ public:
     * @param wdogRefresh1 1st value to write (WdogRefresh1)
     * @param wdogRefresh2 2nd value to write (WdogRefresh2)
     */
-   static void writeRefresh(uint16_t WdogRefresh1, uint16_t WdogRefresh2) {
-      wdog().REFRESH = WdogRefresh1;
-      wdog().REFRESH = WdogRefresh2;
+   static void writeRefresh(uint16_t wdogRefresh1, uint16_t wdogRefresh2) {
+      wdog().REFRESH = wdogRefresh1;
+      wdog().REFRESH = wdogRefresh2;
    }
 
    /**
@@ -295,9 +295,9 @@ public:
     * @param wdogUnlock1 1st value to write (WdogUnlock1)
     * @param wdogUnlock2 2nd value to write (WdogUnlock2)
     */
-   static void writeUnlock(uint16_t WdogUnlock1, uint16_t WdogUnlock2) {
-      wdog().UNLOCK = WdogUnlock1;
-      wdog().UNLOCK = WdogUnlock2;
+   static void writeUnlock(uint16_t wdogUnlock1, uint16_t wdogUnlock2) {
+      wdog().UNLOCK = wdogUnlock1;
+      wdog().UNLOCK = wdogUnlock2;
    }
 
    /**

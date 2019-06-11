@@ -14,6 +14,7 @@
       <copy source="Startup_Code/console.cpp"                   target="Startup_Code/console.cpp"               overwrite="true"  derived="true" />
       <copy source="Startup_Code/system-gcc.cpp"                target="Startup_Code/system-gcc.cpp"            overwrite="true"  derived="true" />
       <copy source="Startup_Code/system.cpp"                    target="Startup_Code/system.cpp"                overwrite="true"  derived="true" />
+      <copy source="Snippets/clkout-example.cpp"                target="Snippets/clkout-example.cpp"            overwrite="true"  derived="true" />
    </projectActionList>
 
    <projectActionList id = "sim_port_files_mk" >

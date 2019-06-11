@@ -1,13 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE peripheralPage SYSTEM "_menu.dtd" >
 <!-- sim_mk22f12810.xml -->
-<!--
-Devices using this peripheral: 
--->
-<peripheralPage xmlns:xi="http://www.w3.org/2001/XInclude" name="_instance" description="SIM">
-   
-   <xi:include href="_default_instance.xml"/>
 
+<peripheralPage xmlns:xi="http://www.w3.org/2001/XInclude" name="_instance" description="SIM">
+
+   <xi:include href="_default_instance.xml"/>
+   
    <!-- Indicates RTC/OSC0 don't share XTAL/EXTAL pins -->
    <constant name="rtcSharesPins" value="false"   derived="true" />
    
@@ -71,9 +69,29 @@ Devices using this peripheral:
          \t      case SIM_SOPT1_OSC32KSEL(3) : return 1000;
          \t   }
          \t}\n\n
+	 
+         \t/**
+         \t * Set ERCLK32K clock source
+         \t *
+         \t * @param simOsc32kSel Clock source
+         \t */
+         \tstatic void setErc32kClock(SimOsc32kSel simOsc32kSel) {
+         \t   sim().SOPT1 = (sim().SOPT1&~SIM_SOPT1_OSC32KSEL_MASK) | simOsc32kSel;
+         \t}\n\n
       ]]></template>
    </category>
    
+   <template namespace="usbdm"><![CDATA[
+         \t/**
+         \t * Selects the ERCLK32K clock source
+         \t */
+         \tenum SimOsc32kSel {
+         \t   SimOsc32kSel_Osc32kClk  = SIM_SOPT1_OSC32KSEL(0), //!< OSC0 operating as 32K oscillator
+         \t   SimOsc32kSel_Rtc32kClk  = SIM_SOPT1_OSC32KSEL(2), //!< Rtc32k clock
+         \t   SimOsc32kSel_LpoClk     = SIM_SOPT1_OSC32KSEL(3), //!< LPO Clock
+         \t};\n\n   
+   ]]></template>
+
    <category name="SOPT2" description="Clock Gating">
       <binaryOption name="sim_sopt2_rtcclkoutsel" 
          description="RTC clock out select [RTC_CLKOUT pin]"
@@ -99,8 +117,36 @@ Devices using this peripheral:
          \t */
          \tenum SimPeripheralClockSource {
          \t   SimPeripheralClockSource_McgFll = SIM_SOPT2_PLLFLLSEL(0), //!< MCG FLL Clock
+         \t   SimPeripheralClockSource_McgPll = SIM_SOPT2_PLLFLLSEL(1), //!< MCG PLL Clock
          \t   SimPeripheralClockSource_Irc48m = SIM_SOPT2_PLLFLLSEL(3), //!< IRC 48MHz clock
          \t};\n\n
+      ]]></template>
+      
+      <template namespace="usbdm"><![CDATA[
+         \t/**
+         \t * Selects the clock to output on the CLKOUT pin.
+         \t */
+         \tenum SimClkoutSel {
+         \t   SimClkoutSel_Reserved0 = SIM_SOPT2_CLKOUTSEL(0),  //!<
+         \t   SimClkoutSel_Reserved1 = SIM_SOPT2_CLKOUTSEL(1),  //!<
+         \t   SimClkoutSel_Flash     = SIM_SOPT2_CLKOUTSEL(2),  //!< Flash
+         \t   SimClkoutSel_Lpo       = SIM_SOPT2_CLKOUTSEL(3),  //!< LPO (1kHz)
+         \t   SimClkoutSel_McgirClk  = SIM_SOPT2_CLKOUTSEL(4),  //!< McgirClk
+         \t   SimClkoutSel_RTC       = SIM_SOPT2_CLKOUTSEL(5),  //!< RTC 32.768kHz
+         \t   SimClkoutSel_OscerClk0 = SIM_SOPT2_CLKOUTSEL(6),  //!< OscerClk0
+         \t   SimClkoutSel_Irc48MHz  = SIM_SOPT2_CLKOUTSEL(7),  //!< IRC 48 MHz clock
+         \t};\n\n
+      ]]></template>
+      
+      <template><![CDATA[
+         \t/**
+         \t * Selects the clock to output on the CLKOUT pin.
+         \t *
+         \t * @param simClkoutSel
+         \t */
+         \tstatic void setClkout(SimClkoutSel simClkoutSel) {
+         \t   sim().SOPT2 = (sim().SOPT2&~SIM_SOPT2_CLKOUTSEL_MASK) | simClkoutSel;
+         \t}\n\n
       ]]></template>
       
       <template><![CDATA[

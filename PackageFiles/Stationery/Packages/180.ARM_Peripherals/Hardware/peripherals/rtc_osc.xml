@@ -6,10 +6,7 @@
    
    <xi:include href="_default_instance.xml"/>
 
-   <template><![CDATA[
-      \t//! Base value for PCR (excluding MUX value)
-      \tstatic constexpr uint32_t defaultPcrValue  = 0;\n\n
-   ]]></template>
+   <xi:include href="_default_pcr.xml"/>
 
    <aliasOption key="/MCG/system_low_power_clock"  constant="true" optional="true" />
    <aliasOption key="/SIM/sim_sopt1_osc32ksel"     optional="true" constant="false" />
