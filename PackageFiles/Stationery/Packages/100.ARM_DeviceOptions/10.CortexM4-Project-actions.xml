@@ -32,7 +32,7 @@ Cortex-M4
       <copy source="Startup_Code/startup_ARMLtdGCC_CortexM4.S"                target="Startup_Code/startup_ARMLtdGCC.S"  derived="true" />
       <copy source="Startup_Code/system-kinetis.c"                            target="Startup_Code/system.c"  derived="true" />
 
-      <copy source="Project_Settings/Debug.launch"                            target="Project_Settings/$(projectName)-Debug.launch" />
+      <copy source="Project_Settings/Debug_USBDM.launch"                      target="Project_Settings/$(projectName)_Debug_USBDM.launch" />
 
       <copy source="Project_Settings/Linker_Files/ARMLtd_GCC-rom-mk-sramu.ld" target="Project_Settings/Linker_Files/Linker-rom.ld" overwrite="true" />
       <copy source="Project_Settings/Linker_Files/MemoryMap-mk-sramu.ld"      target="Project_Settings/Linker_Files/MemoryMap-$(targetDeviceName).ld"  overwrite="true" />

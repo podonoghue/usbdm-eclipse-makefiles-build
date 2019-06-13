@@ -30,7 +30,7 @@
       <copy source="Startup_Code/newlib_stubs.c"                              target="Startup_Code/newlib_stubs.c"       derived="true" />
       <copy source="Startup_Code/startup_ARMLtdGCC_CortexM3.S"                target="Startup_Code/startup_ARMLtdGCC.S"  derived="true" />
 
-      <copy source="Project_Settings/Debug.launch"                            target="Project_Settings/$(projectName)-Debug.launch" />
+      <copy source="Project_Settings/Debug_USBDM.launch"                      target="Project_Settings/$(projectName)_Debug_USBDM.launch" />
 
       <copy source="Project_Settings/Linker_Files/MemoryMap.ld"               target="Project_Settings/Linker_Files/MemoryMap-$(targetDeviceName).ld" />
 
