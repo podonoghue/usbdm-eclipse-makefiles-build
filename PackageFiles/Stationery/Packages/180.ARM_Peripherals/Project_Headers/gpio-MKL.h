@@ -78,8 +78,10 @@ namespace USBDM {
  * @tparam bitNum          Bit number within PORT/GPIO
  * @tparam polarity        Polarity of pin. Either ActiveHigh or ActiveLow
  */
-template<uint32_t clockInfo, uint32_t portAddress, IRQn_Type irqNum, uint32_t gpioAddress, int bitNum, Polarity polarity>
+template<uint32_t clockInfo, uint32_t portAddress, IRQn_Type irqNum, uint32_t gpioAddress, unsigned bitNum, Polarity polarity>
 class GpioBase_T {
+
+   static_assert((bitNum<=31), "Illegal bit number in Gpio");
 
 private:
    /**
@@ -140,10 +142,13 @@ public:
 #endif
 
    /** Bit number of accessed bit in port */
-   static constexpr int BITNUM = bitNum;
+   static constexpr unsigned BITNUM = bitNum;
 
    /** Mask for bit within port */
    static constexpr uint32_t MASK   = (1<<bitNum);
+
+   /** Polarity of pin */
+   static constexpr Polarity POLARITY = polarity;
 
    /**
     * Set pin as digital I/O.
@@ -679,10 +684,8 @@ public:
  * @tparam bitNum        Bit number within PORT/GPIO
  * @tparam polarity      Polarity of pin. Either ActiveHigh or ActiveLow
  */
-template<class Info, const int bitNum, Polarity polarity>
+template<class Info, const unsigned bitNum, Polarity polarity>
 class  Gpio_T : public GpioBase_T<Info::pinInfo.clockInfo, Info::pinInfo.portAddress, Info::pinInfo.irqNum, Info::pinInfo.gpioAddress, bitNum, polarity> {
-
-   static_assert(((bitNum>=0)&&(bitNum<=31)), "Illegal bit number in Gpio");
 };
 
 /**
@@ -730,10 +733,10 @@ using  GpioTable_T = GpioBase_T<Info::info[index].clockInfo, Info::info[index].p
  * @tparam right          Bit number of rightmost bit in GPIO (inclusive)
  * @tparam polarity       Polarity of all pins. Either ActiveHigh or ActiveLow
  */
-template<class Info, const uint32_t left, const uint32_t right, Polarity polarity=ActiveHigh>
+template<class Info, const unsigned left, const unsigned right, Polarity polarity=ActiveHigh>
 class Field_T {
 
-   static_assert(((left<=31)&&(left>=right)&&(right>=0)), "Illegal bit number for left or right in GpioField");
+   static_assert(((left<=31)&&(left>=right)), "Illegal bit number for left or right in GpioField");
 
 public:
    /** Get base address of GPIO hardware as pointer to struct */
@@ -786,10 +789,17 @@ public:
    using Pcr = PcrBase_T<Info::pinInfo.portAddress, Info::pinInfo.irqNum>;
 
 public:
-   /**
-    * Mask for the bits being manipulated within underlying port hardware
-    */
+   /** Bit number of left bit in port */
+   static constexpr unsigned LEFT = left;
+
+   /** Bit number of right bit in port */
+   static constexpr unsigned RIGHT = right;
+
+   /** Mask for the bits being manipulated within underlying port hardware */
    static constexpr uint32_t MASK = (uint32_t)((1ULL<<(left-right+1))-1)<<right;
+
+   /** Polarity of field */
+   static constexpr Polarity POLARITY = polarity;
 
    /**
     * Calculate Port bit-mask from field bit number
@@ -1117,7 +1127,7 @@ public:
  * @tparam bitNum        Bit number in the port
  * @tparam polarity      Polarity of pin. Either ActiveHigh or ActiveLow
  */
-template<int bitNum, Polarity polarity=ActiveHigh> class GpioA :
+template<unsigned bitNum, Polarity polarity=ActiveHigh> class GpioA :
       public GpioBase_T<GpioAInfo::pinInfo.clockInfo, GpioAInfo::pinInfo.portAddress, GpioAInfo::pinInfo.irqNum, GpioAInfo::pinInfo.gpioAddress, bitNum, polarity> {};
 using PortA = PcrBase_T<GpioAInfo::pinInfo.portAddress, GpioAInfo::pinInfo.irqNum>;
 
@@ -1157,7 +1167,7 @@ using PortA = PcrBase_T<GpioAInfo::pinInfo.portAddress, GpioAInfo::pinInfo.irqNu
  * @tparam right         Bit number of rightmost bit in port (inclusive)
  * @tparam polarity      Polarity of all pins. Either ActiveHigh or ActiveLow
  */
-template<int left, int right, Polarity polarity=ActiveHigh>
+template<unsigned left, unsigned right, Polarity polarity=ActiveHigh>
 class GpioAField : public Field_T<GpioAInfo, left, right, polarity> {};
 #endif
 
@@ -1200,7 +1210,7 @@ class GpioAField : public Field_T<GpioAInfo, left, right, polarity> {};
  * @tparam bitNum        Bit number in the port
  * @tparam polarity      Polarity of pin. Either ActiveHigh or ActiveLow
  */
-template<int bitNum, Polarity polarity=ActiveHigh> class GpioB :
+template<unsigned bitNum, Polarity polarity=ActiveHigh> class GpioB :
       public GpioBase_T<GpioBInfo::pinInfo.clockInfo, GpioBInfo::pinInfo.portAddress, GpioBInfo::pinInfo.irqNum, GpioBInfo::pinInfo.gpioAddress, bitNum, polarity> {};
 using PortB = PcrBase_T<GpioBInfo::pinInfo.portAddress, GpioBInfo::pinInfo.irqNum>;
 
@@ -1240,7 +1250,7 @@ using PortB = PcrBase_T<GpioBInfo::pinInfo.portAddress, GpioBInfo::pinInfo.irqNu
  * @tparam right         Bit number of rightmost bit in port (inclusive)
  * @tparam polarity      Polarity of all pins. Either ActiveHigh or ActiveLow
  */
-template<int left, int right, Polarity polarity=ActiveHigh>
+template<unsigned left, unsigned right, Polarity polarity=ActiveHigh>
 class GpioBField : public Field_T<GpioBInfo, left, right, polarity> {};
 #endif
 
@@ -1283,7 +1293,7 @@ class GpioBField : public Field_T<GpioBInfo, left, right, polarity> {};
  * @tparam bitNum        Bit number in the port
  * @tparam polarity      Polarity of pin. Either ActiveHigh or ActiveLow
  */
-template<int bitNum, Polarity polarity=ActiveHigh> class GpioC :
+template<unsigned bitNum, Polarity polarity=ActiveHigh> class GpioC :
       public GpioBase_T<GpioCInfo::pinInfo.clockInfo, GpioCInfo::pinInfo.portAddress, GpioCInfo::pinInfo.irqNum, GpioCInfo::pinInfo.gpioAddress, bitNum, polarity> {};
 using PortC = PcrBase_T<GpioCInfo::pinInfo.portAddress, GpioCInfo::pinInfo.irqNum>;
 
@@ -1323,7 +1333,7 @@ using PortC = PcrBase_T<GpioCInfo::pinInfo.portAddress, GpioCInfo::pinInfo.irqNu
  * @tparam right         Bit number of rightmost bit in port (inclusive)
  * @tparam polarity      Polarity of all pins. Either ActiveHigh or ActiveLow
  */
-template<int left, int right, Polarity polarity=ActiveHigh>
+template<unsigned left, unsigned right, Polarity polarity=ActiveHigh>
 class GpioCField : public Field_T<GpioCInfo, left, right, polarity> {};
 #endif
 
@@ -1366,7 +1376,7 @@ class GpioCField : public Field_T<GpioCInfo, left, right, polarity> {};
  * @tparam bitNum        Bit number in the port
  * @tparam polarity      Polarity of pin. Either ActiveHigh or ActiveLow
  */
-template<int bitNum, Polarity polarity=ActiveHigh> class GpioD :
+template<unsigned bitNum, Polarity polarity=ActiveHigh> class GpioD :
       public GpioBase_T<GpioDInfo::pinInfo.clockInfo, GpioDInfo::pinInfo.portAddress, GpioDInfo::pinInfo.irqNum, GpioDInfo::pinInfo.gpioAddress, bitNum, polarity> {};
 using PortD = PcrBase_T<GpioDInfo::pinInfo.portAddress, GpioDInfo::pinInfo.irqNum>;
 
@@ -1406,7 +1416,7 @@ using PortD = PcrBase_T<GpioDInfo::pinInfo.portAddress, GpioDInfo::pinInfo.irqNu
  * @tparam right         Bit number of rightmost bit in port (inclusive)
  * @tparam polarity      Polarity of all pins. Either ActiveHigh or ActiveLow
  */
-template<int left, int right, Polarity polarity=ActiveHigh>
+template<unsigned left, unsigned right, Polarity polarity=ActiveHigh>
 class GpioDField : public Field_T<GpioDInfo, left, right, polarity> {};
 #endif
 
@@ -1449,7 +1459,7 @@ class GpioDField : public Field_T<GpioDInfo, left, right, polarity> {};
  * @tparam bitNum        Bit number in the port
  * @tparam polarity      Polarity of pin. Either ActiveHigh or ActiveLow
  */
-template<int bitNum, Polarity polarity=ActiveHigh> class GpioE :
+template<unsigned bitNum, Polarity polarity=ActiveHigh> class GpioE :
       public GpioBase_T<GpioEInfo::pinInfo.clockInfo, GpioEInfo::pinInfo.portAddress, GpioEInfo::pinInfo.irqNum, GpioEInfo::pinInfo.gpioAddress, bitNum, polarity> {};
 using PortE = PcrBase_T<GpioEInfo::pinInfo.portAddress, GpioEInfo::pinInfo.irqNum>;
 
@@ -1489,7 +1499,7 @@ using PortE = PcrBase_T<GpioEInfo::pinInfo.portAddress, GpioEInfo::pinInfo.irqNu
  * @tparam right         Bit number of rightmost bit in port (inclusive)
  * @tparam polarity      Polarity of all pins. Either ActiveHigh or ActiveLow
  */
-template<int left, int right, Polarity polarity=ActiveHigh>
+template<unsigned left, unsigned right, Polarity polarity=ActiveHigh>
 class GpioEField : public Field_T<GpioEInfo, left, right, polarity> {};
 #endif
 
