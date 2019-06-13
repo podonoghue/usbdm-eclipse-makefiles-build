@@ -16,8 +16,9 @@
 using namespace USBDM;
 
 // Connections - change as required
-using Cmp    = Cmp0;
-using CmpPin = Cmp::Pin<Cmp0Input_CmpIn2>;
+using Cmp     = Cmp0;
+using CmpPin1 = Cmp::Pin<Cmp0Input_CmpIn2>;
+using CmpPin2 = Cmp::Pin<Cmp0Input_DacRef>;
 
 // Led to control - change as required
 using Led   = GpioA<2, ActiveLow>;
@@ -57,22 +58,25 @@ int main() {
 
    // LED initially off (active low)
    Led::setOutput();
-   Led::off();
 
-   // Enable comparator before use
-   Cmp::configure();
+   // Configure comparator before use
+   Cmp::configure(
+         CmpPower_HighSpeed,
+         CmpHysteresis_2,
+         CmpPolarity_Noninverted);
 
-   // Internal DAC used for one input - set level
-   Cmp::setDacLevel(20);
+   // Internal DAC used for one input - set level to 50%
+   Cmp::setDacLevel(Cmp::MAXIMUM_DAC_VALUE/2);
 
    // Set callback to execute on event
    Cmp::setCallback(callback);
 
-   // Connect CMP input to pin
-   CmpPin::setInput();
+   // Connect CMP inputs to pins as needed
+   CmpPin1::setInput();
+//   CmpPin2::setInput(); // No actual pin for DacRef as internal connection
 
-   // Set Comparator inputs
-   Cmp::selectInputs(CmpPin::pinNum, Cmp0Input_DacRef);
+   // Select comparator inputs
+   Cmp::selectInputs(CmpPin1::pinNum, CmpPin2::pinNum);
 
    // Connect CMP output to pin
    Cmp::setOutput(PinDriveStrength_High, PinDriveMode_PushPull);

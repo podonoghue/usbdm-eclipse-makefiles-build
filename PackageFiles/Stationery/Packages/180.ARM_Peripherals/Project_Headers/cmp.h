@@ -257,23 +257,13 @@ template<class Info>
 class CmpBase_T {
 
 protected:
-   /** Class to static check inputNum is mapped to a pin */
-   template<int inputNum> class CheckPinMapping {
-      static_assert((inputNum>=Info::numSignals)||(Info::info[inputNum].gpioBit != UNMAPPED_PCR),
-            "CMP input is not mapped to a pin - Modify Configure.usbdm");
-   public:
-      /** Dummy function to allow convenient in-line checking */
-      static constexpr void check() {}
-   };
-
-   /** Class to static check valid inputNum - it does not check that it is mapped to a pin */
-   template<int inputNum> class CheckChannel {
-      static_assert((inputNum<Info::numSignals),
-            "Non-existent CMP input  - Check Configure.usbdm for available inputs");
-      static_assert((inputNum>=Info::numSignals)||(Info::info[inputNum].gpioBit != INVALID_PCR),
-            "CMP input  doesn't exist in this device/package - Check Configure.usbdm for available inputs");
-      static_assert((inputNum>=Info::numSignals)||((Info::info[inputNum].gpioBit == UNMAPPED_PCR)||(Info::info[inputNum].gpioBit == INVALID_PCR)||(Info::info[inputNum].gpioBit >= 0)),
-            "Illegal CMP input - Check Configure.usbdm for available inputs");
+   /** Class to static check inputNum input exists and is mapped to an input pin */
+   template<int cmpInput> class CheckInputPin {
+      static_assert((cmpInput<(Cmp0Info::numSignals-1)), "Illegal Input Pin");
+      static_assert((cmpInput>=(Cmp0Info::numSignals-1))||(Info::info[cmpInput].gpioBit != INVALID_PCR),
+            "CMP input pin doesn't exist in this device/package - Check Configure.usbdm for available input pins");
+      static_assert(((cmpInput<(Cmp0Info::numSignals-1))&&(Info::info[cmpInput].gpioBit == INVALID_PCR))||
+            (Info::info[cmpInput].gpioBit >= 0), "CMP input is not mapped to a pin - Modify Configure.usbdm");
    public:
       /** Dummy function to allow convenient in-line checking */
       static constexpr void check() {}
@@ -405,6 +395,9 @@ public:
          PinDriveMode      pinDriveMode      = PinDriveMode_PushPull,
          PinSlewRate       pinSlewRate       = PinSlewRate_Fast
          ) {
+      static_assert((Info::info[Cmp0Info::numSignals-1].gpioBit != UNMAPPED_PCR),
+            "CMP output is not mapped to a pin - Modify Configure.usbdm");
+
       setOutput(pinDriveStrength|pinDriveMode|pinSlewRate);
    }
 
@@ -446,21 +439,6 @@ public:
       cmp().SCR   = CMP_SCR_DMAEN(0)|CMP_SCR_IER(0)|CMP_SCR_IEF(0);
       cmp().DACCR = (CMP_DACCR_VOSEL_MASK>>1)&CMP_DACCR_VOSEL_MASK;
       cmp().MUXCR = Info::muxcr;
-   }
-
-   /**
-    * Configure Comparator input sources
-    *
-    * @param[in]  positiveInput (0..7) (7 => DAC)
-    * @param[in]  negativeInput (0..7) (7 => DAC)
-    */
-   static void selectInputs(unsigned positiveInput, unsigned negativeInput) {
-      usbdm_assert((positiveInput<=7)&&(negativeInput<=7),"Illegal comparator input");
-
-      //! MUX Control Register
-      cmp().MUXCR =
-         CMP_MUXCR_PSEL(positiveInput)| // Plus Input Mux Control
-         CMP_MUXCR_MSEL(negativeInput); // Minus Input Mux Control
    }
 
    /**
@@ -767,19 +745,36 @@ public:
       cmp().DACCR = (cmp().DACCR&~CMP_DACCR_VOSEL_MASK) | CMP_DACCR_VOSEL(level);
    }
 
+protected:
+   /**
+    * Configure Comparator input sources
+    *
+    * @param[in]  positiveInput (0..7) (7 => DAC)
+    * @param[in]  negativeInput (0..7) (7 => DAC)
+    */
+   static void selectInputs(unsigned positiveInput, unsigned negativeInput) {
+      usbdm_assert((positiveInput<=7)&&(negativeInput<=7),"Illegal comparator input");
+
+      //! MUX Control Register
+      cmp().MUXCR =
+         CMP_MUXCR_PSEL(positiveInput)| // Plus Input Mux Control
+         CMP_MUXCR_MSEL(negativeInput); // Minus Input Mux Control
+   }
+
    /**
     * Class representing a Comparator 0 pin
     *
     * @tparam cmpInput Number of comparator input (0-7) for associated pin.
     */
-   template<int cmpInput>
-   class Pin {
+   template<typename T, T cmpInput>
+   class PinBase_T {
+
    public:
       // CmpInput number for use with selectInputs()
-      static constexpr Cmp0Input pinNum = (Cmp0Input)cmpInput;
+      static constexpr T pinNum = cmpInput;
 
       // Pin mask for use with Round Robin mode
-      static constexpr uint8_t  pinMask = (1<<cmpInput);
+      static constexpr uint8_t  pinMask = (1<<(unsigned)cmpInput);
 
       /**
        * Configure pin associated with CMP input.
@@ -789,11 +784,11 @@ public:
        * @note Resets the entire Pin Control Register value (PCR value).
        */
       static void setInput() {
-         using Pcr = PcrTable_T<Info, cmpInput>;
-         CmpBase_T::CheckPinMapping<cmpInput>::check();
+         using Pcr = PcrTable_T<Info, (unsigned)cmpInput>;
+         CmpBase_T::CheckInputPin<(unsigned)cmpInput>::check();
 
          // Map pin
-         Pcr::setPCR(Info::info[cmpInput].pcrValue);
+         Pcr::setPCR(Info::info[(unsigned)cmpInput].pcrValue);
       }
    };
 };
@@ -816,6 +811,14 @@ public:
    static __attribute__((always_inline)) void selectInputs(Cmp0Input positiveInput, Cmp0Input negativeInput) {
       CmpBase_T::selectInputs((unsigned)positiveInput, (unsigned)negativeInput);
    }
+
+   /**
+    * Class representing a Comparator 0 pin
+    *
+    * @tparam cmpInput Number of comparator input (0-7) for associated pin.
+    */
+   template<Cmp0Input cmpInput>
+   using Pin = CmpBase_T<Cmp0Info>::PinBase_T<Cmp0Input, cmpInput>;
 };
 #endif
 
@@ -831,6 +834,14 @@ public:
    static __attribute__((always_inline)) void selectInputs(Cmp1Input positiveInput, Cmp1Input negativeInput) {
       CmpBase_T::selectInputs((unsigned)positiveInput, (unsigned)negativeInput);
    }
+
+   /**
+    * Class representing a Comparator 1 pin
+    *
+    * @tparam cmpInput Number of comparator input (0-7) for associated pin.
+    */
+   template<Cmp1Input cmpInput>
+   using Pin = CmpBase_T<Cmp1Info>::PinBase_T<Cmp1Input, cmpInput>;
 };
 #endif
 
@@ -846,6 +857,14 @@ public:
    static __attribute__((always_inline)) void selectInputs(Cmp2Input positiveInput, Cmp2Input negativeInput) {
       CmpBase_T::selectInputs((unsigned)positiveInput, (unsigned)negativeInput);
    }
+
+   /**
+    * Class representing a Comparator 2 pin
+    *
+    * @tparam cmpInput Number of comparator input (0-7) for associated pin.
+    */
+   template<Cmp2Input cmpInput>
+   using Pin = CmpBase_T<Cmp2Info>::PinBase_T<Cmp2Input, cmpInput>;
 };
 #endif
 
@@ -861,6 +880,14 @@ public:
    static __attribute__((always_inline)) void selectInputs(Cmp3Input positiveInput, Cmp3Input negativeInput) {
       CmpBase_T::selectInputs((unsigned)positiveInput, (unsigned)negativeInput);
    }
+
+   /**
+    * Class representing a Comparator 3 pin
+    *
+    * @tparam cmpInput Number of comparator input (0-7) for associated pin.
+    */
+   template<Cmp3Input cmpInput>
+   using Pin = CmpBase_T<Cmp3Info>::PinBase_T<Cmp3Input, cmpInput>;
 };
 #endif
 /**
