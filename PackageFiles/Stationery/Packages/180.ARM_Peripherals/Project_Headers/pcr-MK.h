@@ -145,7 +145,7 @@ public:
    const uint32_t   clockInfo;    //!< Either clock mask or port clock control register address
    const IRQn_Type  irqNum;       //!< Port interrupt number
    const uint32_t   gpioAddress;  //!< GPIO Hardware base pointer
-   const uint32_t   gpioBit;      //!< Bit number for pin
+   const int32_t    gpioBit;      //!< Bit number for pin - must be signed for error checks
    const uint32_t   pcrValue;     //!< Default PCR value for pin
 
    /**
