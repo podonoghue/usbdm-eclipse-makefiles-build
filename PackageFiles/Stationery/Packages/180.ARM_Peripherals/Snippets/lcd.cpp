@@ -102,7 +102,7 @@ void LcdBase::init() {
    reset();
 
    // Lock SPI
-   spi.startTransaction(0);
+   spi.startTransaction();
 
    // 10 MHz
    spi.setSpeed(10000000);

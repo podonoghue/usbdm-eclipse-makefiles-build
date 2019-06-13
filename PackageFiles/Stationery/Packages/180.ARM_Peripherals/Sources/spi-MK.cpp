@@ -128,7 +128,7 @@ void Spi::calculateDelay(float clockFrequency, float delay, int &bestPrescale, i
  *
  * @return Data received
  */
-uint32_t Spi::txRx(uint32_t data) {
+uint32_t Spi::txRx(uint16_t data) {
    spi->PUSHR = data|pushrMask;
    while ((spi->SR & SPI_SR_TCF_MASK)==0) {
    }

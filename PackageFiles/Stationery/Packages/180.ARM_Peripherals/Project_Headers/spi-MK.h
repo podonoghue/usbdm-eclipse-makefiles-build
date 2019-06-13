@@ -447,13 +447,14 @@ public:
     * @param[in]  spiPeripheralSelect  Which peripheral to select using SPI_PCSx signal
     * @param[in]  polarity             Polarity of SPI_PCSx, ActiveHigh or ActiveLow to select device
     * @param[in]  spiSelectMode        Whether SPI_PCSx signal is returned to idle between transfers
-    * @param[in]  spiCtarSelect  Which CTAR to use for transaction
+    * @param[in]  spiCtarSelect        Which CTAR to use for transaction
     */
    void setPeripheralSelect(
          SpiPeripheralSelect spiPeripheralSelect,
          Polarity            polarity,
          SpiSelectMode       spiSelectMode       = SpiSelectMode_Idle,
          SpiCtarSelect       spiCtarSelect       = SpiCtarSelect_0) {
+
       pushrMask = spiPeripheralSelect|spiSelectMode|SPI_PUSHR_CTAS(spiCtarSelect);
 
       if (polarity) {
@@ -489,7 +490,7 @@ public:
     *
     * @return Data received
     */
-   uint32_t txRx(uint32_t data);
+   uint32_t txRx(uint16_t data);
 
    /**
     *  Set Configuration\n
@@ -796,12 +797,10 @@ public:
     */
    SpiBase_T() : Spi(reinterpret_cast<volatile SPI_Type*>(&Info::spi())) {
 
-#ifdef DEBUG_BUILD
       // Check pin assignments
       static_assert(Info::info[0].gpioBit != UNMAPPED_PCR, "SPIx_SCK has not been assigned to a pin - Modify Configure.usbdm");
       static_assert(Info::info[1].gpioBit != UNMAPPED_PCR, "SPIx_SIN has not been assigned to a pin - Modify Configure.usbdm");
       static_assert(Info::info[2].gpioBit != UNMAPPED_PCR, "SPIx_SOUT has not been assigned to a pin - Modify Configure.usbdm");
-#endif
 
       if (Info::mapPinsOnEnable) {
          configureAllPins();

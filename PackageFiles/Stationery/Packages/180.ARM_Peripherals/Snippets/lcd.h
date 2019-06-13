@@ -658,9 +658,9 @@ public:
 /**
  * Template for LCD
  *
- * tparam SpiCS_n   Display CS     (D9 on Arduino)
- * tparam Reset_n   Display reset  (D8 on Arduino)
- * tparam BackLight Display back-light control (may be PWM) (D10 on Arduino)
+ * @tparam SpiCS_n   Display CS     (D9 on Arduino)
+ * @tparam Reset_n   Display reset  (D8 on Arduino)
+ * @tparam BackLight Display back-light control (may be PWM) (D10 on Arduino)
  */
 template<typename SpiCS_n, typename Reset_n, typename BackLight>
 class Lcd_T : public LcdBase {
