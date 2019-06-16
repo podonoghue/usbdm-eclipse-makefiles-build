@@ -54,8 +54,8 @@ char const *getAutoConnectName(AutoConnect_t mode);
 char const *getMemSpaceName(MemorySpace_t memSpace);
 char const *getMemSpaceAbbreviatedName(MemorySpace_t memSpace);
 char const *getStatusRegName(unsigned int targetType, unsigned int value);
-const char *getSRSLName(uint32_t srslValue);
-const char *getSRSHName(uint32_t srshValue);
+const char *getRCM_SRS0Name(uint32_t srs0Value);
+const char *getRCM_SRS1Name(uint32_t srs1Value);
 const char *printBdmOptions(const USBDM_ExtendedOptions_t *options);
 const char *getOnceStatusName(int status);
 

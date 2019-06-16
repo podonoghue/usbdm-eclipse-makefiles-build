@@ -27,6 +27,7 @@ public:
 
    virtual USBDM_ErrorCode   resetTarget(DeviceData::ResetMethod=DeviceData::resetTargetDefault) override;
    virtual USBDM_ErrorCode   continueTarget(void) override;
+   virtual USBDM_ErrorCode   haltTarget() override;
    virtual void              maskInterrupts(bool disableInterrupts) override;
    virtual void              writeReg(unsigned regNo, unsigned long regValue) override;
 

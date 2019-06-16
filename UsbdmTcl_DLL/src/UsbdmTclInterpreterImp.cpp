@@ -1202,26 +1202,26 @@ static int cmd_status(ClientData, Tcl_Interp *interp, int argc, Tcl_Obj *const *
          data = getData32(value);
          PRINT("DEMCR          => 0x%08X %s\n", data, getDEMCRName(data));
       }
-      if (checkUsbdmRC(interp,  bdmInterface->readMemory(1,1,MC_SRSH,value)) != BDM_RC_OK) {
-         PRINT("MC_SRSH        => Failed\n");
+      if (checkUsbdmRC(interp,  bdmInterface->readMemory(1,1,RCM_SRS0,value)) != BDM_RC_OK) {
+         PRINT("RCM_SRS0       => Failed\n");
       }
       else {
          data = value[0];
-         PRINT("MC_SRSH        => 0x%8.2X %s\n", data, getSRSHName(data));
+         PRINT("RCM_SRS0       =>       0x%2.2X %s\n", data, getRCM_SRS0Name(data));
       }
-      if (checkUsbdmRC(interp,  bdmInterface->readMemory(1,1,MC_SRSL,value)) != BDM_RC_OK) {
-         PRINT("MC_SRSL        => Failed\n");
+      if (checkUsbdmRC(interp,  bdmInterface->readMemory(1,1,RCM_SRS1,value)) != BDM_RC_OK) {
+         PRINT("RCM_SRS1       => Failed\n");
       }
       else {
          data = value[0];
-         PRINT("MC_SRSL        => 0x%8.2X %s\n", data, getSRSLName(data));
+         PRINT("RCM_SRS1       =>       0x%2.2X %s\n", data, getRCM_SRS1Name(data));
       }
       if (checkUsbdmRC(interp,  bdmInterface->readMemory(2,2,WDOG_RSTCNT,value)) != BDM_RC_OK) {
          PRINT("WDOG_RSTCNT    => Failed\n");
       }
       else {
          data = getData16(value);
-         PRINT("WDOG_RSTCNT    => 0x%8.4X\n", data);
+         PRINT("WDOG_RSTCNT    =>     0x%4.4X\n", data);
       }
       reportState(interp);
       Tcl_SetObjResult(interp, Tcl_NewIntObj(0));

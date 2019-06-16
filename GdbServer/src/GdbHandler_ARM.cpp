@@ -86,6 +86,7 @@ USBDM_ErrorCode GdbHandler_ARM::configureMDM_AP() {
    rc = bdmInterface->readCReg(ARM_CRegMDM_AP_Ident, &mdm_ap_ident);
    isKinetisDevice = (rc == BDM_RC_OK) && ((mdm_ap_ident & 0xFFFFFF00)== 0x001C0000);
    log.print("Kinetis device? %s\n", isKinetisDevice?"true":"false");
+   reportGdbPrintf(M_BORINGINFO, "Found Kinetis device\n");
    configureKinetisMDM_AP();
 
    return rc;
@@ -133,7 +134,8 @@ USBDM_ErrorCode GdbHandler_ARM::continueTarget(void) {
    return GdbHandlerCommon::continueTarget();
 }
 
-/*! Mask/unmask interrupts (in DHCSR)
+/**
+ * Mask/unmask interrupts (in DHCSR)
  *
  * @param disableInterrupts - true/false -> disable/enable interrupts
  */
@@ -204,7 +206,7 @@ static int registerMap[] = {
       ARM_RegFPS0+0x1C, ARM_RegFPS0+0x1D, ARM_RegFPS0+0x1E, ARM_RegFPS0+0x1F,
 };
 
-/*!  Sets up the register description from device XML
+/**  Sets up the register description from device XML
  *   or hard-coded default
  */
 bool GdbHandler_ARM::initRegisterDescription(void) {
@@ -228,16 +230,17 @@ bool GdbHandler_ARM::isValidRegister(unsigned regNo) {
    return registerMap[regNo]>=0;
 }
 
-//! Read register into string buffer as hex chars
-//!
-//! @param regNo    - number of register to read (GDB numbering)
-//! @param buffPtr  - reference to pointer to buffer
-//!
-//! @return Error code
-//!
-//! @note The pointer is incremented by size of register
-//! @note Bytes are read in target byte order
-//!
+/**
+ *  Read register into string buffer as hex chars
+ *
+ *  @param regNo    - number of register to read (GDB numbering)
+ *  @param buffPtr  - reference to pointer to buffer
+ *
+ *  @return Error code
+ *
+ *  @note The pointer is incremented by size of register
+ *  @note Bytes are read in target byte order
+ */
 USBDM_ErrorCode GdbHandler_ARM::readReg(unsigned regNo, char *&buffPtr) {
    LOGGING_Q;
    unsigned long regValue;
@@ -271,7 +274,7 @@ USBDM_ErrorCode GdbHandler_ARM::readReg(unsigned regNo, char *&buffPtr) {
    return rc;
 }
 
-/*
+/**
  *  Get cached value of register from cache
  *  Note: Assumes cache valid
  *
@@ -312,7 +315,7 @@ void GdbHandler_ARM::debug_print_regs() {
    }
 }
 
-/*
+/**
  *  Get cached value of PC
  *  Note: Assumes cache valid
  *
@@ -322,7 +325,7 @@ uint32_t GdbHandler_ARM::getCachedPC() {
    return get32bitLE((registerBuffer+(4*ARM_RegPC)));
 }
 
-/*
+/**
  *  Get cached value of R0
  *  Note: Assumes cache valid
  *
@@ -332,7 +335,7 @@ uint32_t GdbHandler_ARM::getCachedR0() {
    return get32bitLE((registerBuffer+(4*ARM_RegR0)));
 }
 
-/*
+/**
  *  Get cached value of R1
  *  Note: Assumes cache valid
  *
@@ -359,6 +362,7 @@ USBDM_ErrorCode GdbHandler_ARM::configureKinetisMDM_AP() {
       rc = bdmInterface->writeCReg(ARM_CRegMDM_AP_Control, mdm_ap_control|MDM_AP_Control_LLS_VLLSx_Ack);
       if (rc != BDM_RC_OK) {
          log.error("Writing MDM_AP_Control failed, rc=%s\n", bdmInterface->getErrorString(rc));
+         reportGdbPrintf(M_ERROR, "Activating MDM_AP_Control_VLLDBGREQ\n");
          return rc;
       }
 
@@ -378,7 +382,12 @@ USBDM_ErrorCode GdbHandler_ARM::configureKinetisMDM_AP() {
       rc = bdmInterface->writeCReg(ARM_CRegMDM_AP_Control, mdm_ap_control);
       if (rc != BDM_RC_OK) {
          log.error("Writing MDM_AP_Control failed, rc=%s", bdmInterface->getErrorString(rc));
+         reportGdbPrintf(M_ERROR, "Activating MDM_AP_Control_VLLDBGREQ\n");
          return rc;
+      }
+      // Do connect as well
+      if (bdmInterface->connect() != BDM_RC_OK) {
+         log.print("Re-connect failed\n");
       }
    }
    return rc;
@@ -401,13 +410,14 @@ void GdbHandler_ARM::writeReg(unsigned regNo, unsigned long regValue) {
    regValue = targetToBE32(regValue);
 }
 
-//! Reads a word from ARM target memory
-//!
-//! @param address  - 32-bit address (aligned)
-//! @param data     - pointer to buffer for word
-//!
-//! @return error code
-//!
+/**
+ *  Reads a word from ARM target memory
+ *
+ *  @param address  - 32-bit address (aligned)
+ *  @param data     - pointer to buffer for word
+ *
+ *  @return error code
+ */
 USBDM_ErrorCode GdbHandler_ARM::armReadMemoryWord(unsigned long address, unsigned long *data) {
    LOGGING_Q;
    uint8_t buff[4];
@@ -421,6 +431,77 @@ USBDM_ErrorCode GdbHandler_ARM::armReadMemoryWord(unsigned long address, unsigne
       log.print("DHCSR => %s)\n", getDHCSRName(*data));
       break;
    default: break;
+   }
+   return rc;
+}
+
+/**
+ * Halt target
+ * May use Kinetis specific method
+ *
+ * @return
+ */
+USBDM_ErrorCode GdbHandler_ARM::haltTarget() {
+   LOGGING;
+
+   USBDM_ErrorCode   rc;
+
+   // Read status for debugging
+   static auto readStatus = [log, this] () {
+         // Read status (for debug)
+         unsigned long  mdm_ap_status;
+         USBDM_ErrorCode rc;
+         rc = bdmInterface->readCReg(ARM_CRegMDM_AP_Status, &mdm_ap_status);
+         if (rc != BDM_RC_OK) {
+            log.print("Failed to read mdm_ap_status, rc = %s(0x%08X)\n", bdmInterface->getErrorString(rc), rc);
+         }
+         else {
+            log.print("mdm_ap_status - %s(0x%08lX)\n", getMDM_APStatusName(mdm_ap_status), mdm_ap_status);
+         }
+   };
+
+   // Try ARM debug halt method
+   rc = bdmInterface->halt();
+   if (rc != BDM_RC_OK) {
+      log.print("Failed to halt target, rc = %s(0x%08X)\n", bdmInterface->getErrorString(rc), rc);
+      if (bdmInterface->connect() != BDM_RC_OK) {
+         log.print("Re-connect failed\n");
+      }
+      else {
+         log.print("Re-connect OK\n");
+      }
+      rc = bdmInterface->halt();
+   }
+
+   if ((rc != BDM_RC_OK) && isKinetisDevice) {
+      // Use Kinetis specific debug (halt) method
+
+      log.print("Asserting MDM_AP_Control_Debug_Request\n");
+      unsigned long  mdm_ap_control;
+
+      do {
+         readStatus();
+         rc = bdmInterface->readCReg(ARM_CRegMDM_AP_Control, &mdm_ap_control);
+         if (rc != BDM_RC_OK) {
+            break;
+         }
+         log.print("original mdm_ap_control - %s(0x%08lX)\n", getMDM_APControlName(mdm_ap_control), mdm_ap_control);
+         mdm_ap_control &= ~(MDM_AP_Control_Debug_Request|MDM_AP_Control_VLLDBGACK);
+
+         rc = bdmInterface->writeCReg(ARM_CRegMDM_AP_Control, mdm_ap_control|MDM_AP_Control_Debug_Request);
+         if (rc != BDM_RC_OK) {
+            break;
+         }
+         // Release Kinetis specific debug (halt) method
+         rc = bdmInterface->writeCReg(ARM_CRegMDM_AP_Control, mdm_ap_control);
+         if (rc != BDM_RC_OK) {
+            break;
+         }
+      } while (false);
+      if (rc != BDM_RC_OK) {
+         log.print("target access failed, rc = %s(0x%08X)\n", bdmInterface->getErrorString(rc), rc);
+      }
+      readStatus();
    }
    return rc;
 }
@@ -474,19 +555,6 @@ GdbHandler::GdbTargetStatus GdbHandler_ARM::getTargetStatus() {
          if (rc != BDM_RC_OK) {
             status = T_NOCONNECTION;
             break;
-         }
-         if (targetBreakPending) {
-            // Do this as soon as possible after OK connection
-            unsigned long  mdm_ap;
-            bdmInterface->readCReg(ARM_CRegMDM_AP_Control, &mdm_ap);
-            mdm_ap &= ~(MDM_AP_Control_Debug_Request|MDM_AP_Control_VLLDBGACK);
-            // Use Kinetis specific debug (halt) method
-            bdmInterface->writeCReg(ARM_CRegMDM_AP_Control, mdm_ap|MDM_AP_Control_Debug_Request);
-            // Use ARM debug (halt) method
-            bdmInterface->halt();
-            // Release Kinetis specific debug (halt) method
-            bdmInterface->writeCReg(ARM_CRegMDM_AP_Control, mdm_ap);
-            log.print("Asserting MDM_AP_Control_Debug_Request - modified\n");
          }
          if (mdm_ap_status&MDM_AP_Status_VLLSx_Mode_Exit) {
             // Target is being held in reset until mdm-ap_control.VLLDBGACK is written
@@ -1011,7 +1079,7 @@ GdbHandler::GdbTargetStatus GdbHandler_ARM::handleHalted() {
    return T_HALT;
 }
 
-/*!
+/**
  *   Check for change in target run state
  *   - Polls target
  *   - Report changes to GDB
@@ -1050,8 +1118,9 @@ GdbHandler::GdbTargetStatus GdbHandler_ARM::pollTarget(void) {
       if (targetBreakPending) {
          // Halt target
          log.print("Breaking - halting target\n");
+         haltTarget();
          reportGdbPrintf(M_INFO, "Breaking - halting target\n");
-         bdmInterface->halt();
+         gdbTargetStatus = getTargetStatus();
       }
 
       if (gdbTargetStatus == T_NOCONNECTION) {

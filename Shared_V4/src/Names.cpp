@@ -1463,7 +1463,7 @@ static const bitInfo bitNames[] = {
       {"MASS_ERASE_ACK|",  MDM_AP_Status_Flash_Mass_Erase_Ack},
       {"FLASH_READY|",     MDM_AP_Status_Flash_Ready},
       {"SECURE|",          MDM_AP_Status_System_Security},
-      {"RESETn|",          MDM_AP_Status_System_Reset},
+      {"RESET|",           MDM_AP_Status_System_Reset},
       {"MASS_ERASE_EN|",   MDM_AP_Status_Mass_Erase_Enable},
       {"BACKDOOR_EN|",     MDM_AP_Status_Backdoor_Access_Enable},
       {"LOW_POWER_EN|",    MDM_AP_Status_LP_Enable},
@@ -1516,15 +1516,18 @@ const bitInfo *bitPtr = bitNames;
    return buffer;
 }
 
-const char *getSRSHName(uint32_t srshValue) {
+const char *getRCM_SRS1Name(uint32_t srshValue) {
 typedef struct {
    const char *bitName;
    const uint32_t   bitMask;
 } bitInfo;
 bitInfo bitNames[] = {
-      {"SW|",     1<<2},
-      {"LOCKUP|", 1<<1},
-      {"JTAG|",   1<<0},
+      {"SACKERR|", 1<<5},
+      {"EZPT|",    1<<4},
+      {"MDM_AP|",  1<<3},
+      {"SW|",      1<<2},
+      {"LOCKUP|",  1<<1},
+      {"JTAG|",    1<<0},
       {NULL, 0},
 };
 bitInfo *bitPtr = bitNames;
@@ -1539,7 +1542,7 @@ bitInfo *bitPtr = bitNames;
    return buffer;
 }
 
-const char *getSRSLName(uint32_t srslValue) {
+const char *getRCM_SRS0Name(uint32_t srslValue) {
 typedef struct {
    const char *bitName;
    const uint32_t   bitMask;
@@ -1547,7 +1550,8 @@ typedef struct {
 bitInfo bitNames[] = {
       {"POR|",    1<<7},
       {"PIN|",    1<<6},
-      {"COP|",    1<<5},
+      {"WDOG|",   1<<5},
+      {"LOL",     1<<3},
       {"LOC",     1<<2},
       {"LVD|",    1<<1},
       {"WAKEUP|", 1<<0},

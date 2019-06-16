@@ -92,7 +92,7 @@ protected:
     */
    virtual USBDM_ErrorCode       resetTarget(DeviceData::ResetMethod resetMethod=DeviceData::resetTargetDefault) override;
    virtual USBDM_ErrorCode       stepTarget(bool disableInterrupts) override;
-   virtual USBDM_ErrorCode       continueTarget(void) override;
+   virtual USBDM_ErrorCode       continueTarget() override;
    virtual USBDM_ErrorCode       haltTarget() override;
 
    virtual USBDM_ErrorCode       programImage(FlashImagePtr flashImage);

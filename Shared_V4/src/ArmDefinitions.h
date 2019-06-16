@@ -265,8 +265,8 @@
 #define DWT_FUNCTION_RW_WATCH    (0x7)
 #define DWT_FUNCTION_NONE        (0x0)
 
-#define MC_SRSH (0x4007E000) // System Reset Status Register High
-#define MC_SRSL (0x4007E001) // System Reset Status Register Low
+#define RCM_SRS0 (0x4007F000) // System Reset Status Register 0
+#define RCM_SRS1 (0x4007F001) // System Reset Status Register 1
 
 #define WDOG_STCTRLH (0x40052000)
 #define WDOG_STCTRLL (0x40052002)
