@@ -392,6 +392,7 @@
          <ComponentRef Id="C.UninstallProductShortcut" />
          <ComponentRef Id="C.InternetShortcut" />
          <ComponentRef Id='C.ApplicationDirectoryKey'/>
+         <ComponentGroupRef Id='Cg.StationeryInstall' />
          <Feature Id='F.CodewarriorSupport'
                Title='CodeWarrior'
                Description='Add USBDM support to various versions of CodeWarrior software.'
