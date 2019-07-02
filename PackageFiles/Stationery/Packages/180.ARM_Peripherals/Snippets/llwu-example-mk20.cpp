@@ -1,7 +1,7 @@
 /*
  ============================================================================
  * @file    llwu-example-mk20.cpp (180.ARM_Peripherals/Snippets/)
- * @brief   Basic C++ LLWU demo
+ * @brief   Demonstrates various Run and Low-power modes and LLWU
  *
  *  Created on: 25/09/2017
  *      Author: podonoghue
@@ -14,8 +14,8 @@
  *
  * Interrupts must be configured for GPIO pin used, LLWU, LPTMR
  * It will also be necessary to modify the linker memory map so that only
- * lowest 32K of SRAM_U (0x10000000..) is used if testing of LLS2 is intended.
- * Interrupts will need to be enabled for Pin (GPIO), and LPTMR.
+ * lowest portion of SRAM_U (0x10000000..) is used if testing of LLS2 is intended.
+ * Interrupts will need to be enabled for Pin (GPIO), LPTMR and LLWU.
  *
  * Note: The STOP mode doesn't seem to work from RUN mode while using the
  * debugger.  INVSTATE occurs occasionally. Stand-alone it's OK.
@@ -46,32 +46,53 @@ static constexpr int BAUD_RATE = 115200;
 // Using LEDs rather defeats VLLSx mode!
 using RedLed    = GpioC<3,ActiveLow>;
 using GreenLed  = GpioD<4,ActiveLow>;
+using BlueLed   = GpioA<2,ActiveLow>;
 
 // Timer to use for timed wake-up
 using WakeupTimer = Lptmr0;
 
 // LLWU Pin Filter to use
-static constexpr unsigned FILTER_NUM = 0;
+static constexpr LlwuFilterNum FILTER_NUM = LlwuFilterNum_0;
 
 // LLWU Pin to use for wake-up
 using WakeupPin = Llwu::Pin<LlwuPin_Ptc1>;
 
-// Flag to indicate Pin handler ran
-bool pinHandlerRan;
+/** Possible tests - must be in this order */
+enum Test {
+   NONE, STOP, VLPS, WAIT, VLPW, LLS, VLLS0, VLLS1, VLLS2, VLLS3,
+};
 
-// Flag to indicate Timer handler ran
-bool timerHandlerRan;
+/** Names of tests - must match enum Test{} */
+static const char *TestNames[] = {
+   "NONE ", "STOP ", "VLPS ", "WAIT ", "VLPW ", "LLS  ", "VLLS0", "VLLS1", "VLLS2", "VLLS3",
+};
 
-// Flag to indicate LLWU handler ran
-bool llwuHandlerRan;
+struct PreservedData {
+   Test     test;                ///< Test being run
+   unsigned testCount;           ///< Current repeated test count
+   uint8_t  timerDelay;          ///< Delay for timer (seconds)
+   bool     continuousTest;      ///< Whether to run test continuously
+   bool     enablePin;           ///< Whether to enable Pin interrupt/wake-up
+   bool     enableTimer;         ///< Whether to enable Timer interrupt/wake-up
+   bool     pinHandlerRan;       ///< Flag to indicate Pin handler ran
+   bool     timerHandlerRan;     ///< Flag to indicate Timer handler ran
+   bool     llwuHandlerRan;      ///< Flag to indicate LLWU handler ran
+};
+
+static_assert(sizeof(PreservedData) < sizeof(RFSYS_Type));
+
+/**
+ * The following are located in the Register file which is maintained in
+ * Low-leakage modes and preserved across reset.
+ */
+static PreservedData preservedData = (*(PreservedData*)(RFSYS_BASE_PTR));
 
 /**
  * Call-back for Timer
  */
-void wakeupTimerCallback() {
+static void wakeupTimerCallback() {
    // We could also put code here that would execute on LPTMR event
-   timerHandlerRan = true;
-   GreenLed::toggle();
+   preservedData.timerHandlerRan = true;
    WakeupTimer::clearInterruptFlag();
    WakeupTimer::enableInterrupts(false);
    __asm__("nop");
@@ -82,40 +103,41 @@ void wakeupTimerCallback() {
  *
  * @param[in] status 32-bit value from ISFR (each bit indicates a pin interrupt source)
  */
-void pinCallback(uint32_t status __attribute__((unused))) {
-   pinHandlerRan = true;
-   GreenLed::toggle();
+static void pinCallback(uint32_t status __attribute__((unused))) {
+   usbdm_assert(status & (WakeupPin::PORT_BITMASK), "Unexpected pin interrupt");
+
+   if (status & (WakeupPin::PORT_BITMASK)) {
+      preservedData.pinHandlerRan = true;
+   }
 }
 
 /**
  * Call-back for LLWU events
  */
-void llwuCallback() {
-   llwuHandlerRan = true;
+static void llwuCallback() {
+   preservedData.llwuHandlerRan = true;
    if (Llwu::isPeripheralWakeupSource(LlwuPeripheral_Lptmr)) {
       // Wake-up from LPTMR
-      RedLed::toggle();
       WakeupTimer::clearInterruptFlag();
       WakeupTimer::enableInterrupts(false);
    }
    if (Llwu::isPinWakeupSource(WakeupPin::pin)) {
       // Wake-up from pin
-      RedLed::toggle();
       Llwu::clearPinWakeupFlag(WakeupPin::pin);
    }
    if (Llwu::isFilteredPinWakeupSource(FILTER_NUM)) {
       // Wake-up from filtered pin
-      RedLed::toggle();
       Llwu::clearFilteredPinWakeupFlag(FILTER_NUM);
    }
 }
 
 /**
+ *  Test Stop Modes
  *
  * @param smcStopMode            STOP mode to enter - STOP,VLPS,LLS,VLLS
  * @param smcLowLeakageStopMode  VLLS mode to enter VLLS0,1,2,3 (for VLLS only)
  */
-void testStopMode(
+static void testStopMode(
       SmcStopMode             smcStopMode,
       SmcLowLeakageStopMode   smcLowLeakageStopMode=SmcLowLeakageStopMode_VLLS3) {
 
@@ -167,7 +189,12 @@ void testStopMode(
    }
 }
 
-void testWaitMode(SmcRunMode smcRunMode) {
+/**
+ * Test Wait modes
+ *
+ * @param smcRunMode Mode to test
+ */
+static void testWaitMode(SmcRunMode smcRunMode) {
    /*
     * Go to sleep - LPTMR or PIN wake-up
     */
@@ -176,29 +203,17 @@ void testWaitMode(SmcRunMode smcRunMode) {
       case SmcRunMode_VeryLowPower:     console.write("Doing Very Low Power Wait\n");   break;
       default: break;
    };
-
    console.writeln("Sleeping...").flushOutput();
    Smc::enterWaitMode();
    console.writeln("Awake!").flushOutput();
 }
 
-/** Possible tests - must be in this order */
-enum Test {
-   NONE, STOP, VLPS, WAIT, VLPW, LLS, VLLS0, VLLS1, VLLS2, VLLS3,
-};
-
-/** Names of tests - must match enum Test{} */
-static const char *TestNames[] = {
-   "NONE ", "STOP ", "VLPS ", "WAIT ", "VLPW ", "LLS  ", "VLLS0", "VLLS1", "VLLS2", "VLLS3",
-};
-
 /**
  * Enable pin wake-up
  *
- * @param test    Test being run
- * @param enable  Whether to enable pin wake-up or interrupt
+ * @param[in] preservedData Setting for test
  */
-void enablePin(Test test, bool enable) {
+static void enablePin(const PreservedData preservedData) {
 
    // Disable filtered pin
    Llwu::configureFilteredPinSource(
@@ -217,12 +232,12 @@ void enablePin(Test test, bool enable) {
          PinAction_None,
          PinFilter_Passive);
 
-   if (enable && (test>=LLS)) {
+   if (preservedData.enablePin && (preservedData.test>=LLS)) {
 
       // Use LLWU in most Low-leakage modes
       Llwu::clearAllFlags();
 
-      if (test!=VLLS0) {
+      if (preservedData.test!=VLLS0) {
          // LLWU from filtered pin
          // Not available in VLLS0 as LPO not running
          console.writeln("Configuring filtered LLWU pin wake-up").flushOutput();
@@ -241,7 +256,7 @@ void enablePin(Test test, bool enable) {
       Llwu::setCallback(llwuCallback);
       Llwu::enableNvicInterrupts(NvicPriority_Normal);
    }
-   if (enable && (test<LLS)) {
+   if (preservedData.enablePin && (preservedData.test<LLS)) {
 
       // Enable pin interrupt if not low-leakage mode
       console.writeln("Configuring pin interrupt for wake-up").flushOutput();
@@ -254,7 +269,7 @@ void enablePin(Test test, bool enable) {
 
       WakeupPin::clearInterruptFlag();
       WakeupPin::setCallback(pinCallback);
-      WakeupPin::enablePinNvicInterrupts();
+      WakeupPin::enablePinNvicInterrupts(NvicPriority_Normal);
    }
    else {
       WakeupPin::disablePinNvicInterrupts();
@@ -264,12 +279,11 @@ void enablePin(Test test, bool enable) {
 /**
  * Enable LPTMR wake-up
  *
- * @param test    Test being run
- * @param enable  Whether to enable timer wake-up or interrupt
+ * @param[in] preservedData Setting for test
  */
-void enableTimer(Test test, bool enable) {
+static void enableTimer(const PreservedData preservedData) {
 
-   if (enable) {
+   if (preservedData.enableTimer) {
       // Set up wake-up timer
       // Note - need a clock source that operates in LLSx e.g. ERCLK32
 
@@ -279,11 +293,11 @@ void enableTimer(Test test, bool enable) {
             LptmrResetOn_Compare,
             LptmrInterrupt_Enabled,
             LptmrClockSel_Lpoclk);
-      WakeupTimer::setPeriod(5*seconds);
+      WakeupTimer::setPeriod(preservedData.timerDelay*seconds);
       WakeupTimer::setCallback(wakeupTimerCallback);
       WakeupTimer::enableNvicInterrupts(NvicPriority_Normal);
 
-      if (test>=LLS) {
+      if (preservedData.test>=LLS) {
 
          // Use LLWU with timer
          Llwu::clearAllFlags();
@@ -298,44 +312,49 @@ void enableTimer(Test test, bool enable) {
 }
 
 /**
- * Run test
- *
- * @param test          Test to run
- * @param pinEnable     Enable pin wake-up
- * @param timerEnable   Enable timer wake-up
+ * Report which handlers ran
  */
-void runTest(
-      Test  test,
-      bool  pinEnable,
-      bool  timerEnable) {
+static void reportHandlersRun() {
+   console.write("Timer callback() ").writeln(preservedData.timerHandlerRan?"Ran":"Didn't run");
+   console.write("Pin callback()   ").writeln(preservedData.pinHandlerRan?"Ran":"Didn't run");
+   console.write("LLWU callback()  ").writeln(preservedData.llwuHandlerRan?"Ran":"Didn't run");
+   console.writeln("**************************************").flushOutput();
+}
+
+/**
+ * Run single test
+ *
+ * @param[in, out] preservedData Setting for test
+ */
+static void runSingleTest(PreservedData &preservedData) {
 
    // Timer can't be used with VLLS0
-   timerEnable = timerEnable&&(test!=VLLS0);
+   preservedData.enableTimer =  preservedData.enableTimer && (preservedData.test!=VLLS0);
 
    console.writeln("\n**************************************").flushOutput();
-   console.write("Running Test: ").writeln(TestNames[test]);
+   console.write("Running Test: ").write(TestNames[preservedData.test]).write(", #").writeln(preservedData.testCount);
 
-   if (test == NONE) {
+   if (preservedData.test == NONE) {
       // Not a test
       return;
    }
 
-   if (!pinEnable && !timerEnable) {
+   if (!preservedData.enablePin && !preservedData.enableTimer) {
       console.writeln("Can't do test without Pin or Timer wake-up method\n");
       return;
    }
 
    // Clear call-back flags
-   pinHandlerRan   = false;
-   llwuHandlerRan  = false;
-   timerHandlerRan = false;
+   preservedData.pinHandlerRan   = false;
+   preservedData.llwuHandlerRan  = false;
+   preservedData.timerHandlerRan = false;
 
-   enableTimer(test, timerEnable);
-   enablePin(test, pinEnable);
+   enableTimer(preservedData);
+   enablePin(preservedData);
 
-   console.write("Wake-up using ").write(pinEnable?"Pin, ":"").writeln(timerEnable?"Timer":"");
+   console.write("Wake-up using ").write(preservedData.enablePin?"Pin, ":"").writeln(preservedData.enableTimer?"Timer":"");
 
-   switch(test) {
+   switch(preservedData.test) {
       case WAIT:  testWaitMode(SmcRunMode_Normal);             break;
       case VLPW:  testWaitMode(SmcRunMode_VeryLowPower);       break;
       case STOP:  testStopMode(SmcStopMode_NormalStop);        break;
@@ -351,10 +370,24 @@ void runTest(
    WakeupTimer::disableNvicInterrupts();
    WakeupPin::disablePinNvicInterrupts();
 
-   console.write("Timer callback() ").writeln(timerHandlerRan?"Ran":"Didn't run");
-   console.write("Pin callback()   ").writeln(pinHandlerRan?"Ran":"Didn't run");
-   console.write("LLWU callback()  ").writeln(llwuHandlerRan?"Ran":"Didn't run");
-   console.writeln("**************************************").flushOutput();
+   reportHandlersRun();
+}
+
+/**
+ * Run repeated test
+ *
+ * @param[in] preservedData Setting for test
+ */
+static void runRepeatedTest(PreservedData &preservedData) {
+   do {
+      preservedData.testCount++;
+      runSingleTest(preservedData);
+   } while (preservedData.continuousTest & (console.peek() < 0));
+
+   if (preservedData.continuousTest) {
+      // Discard break char
+      console.readChar();
+   }
 }
 
 /**
@@ -363,7 +396,7 @@ void runTest(
  *
  * @return Run mode entered
  */
-SmcStatus changeRunMode() {
+static SmcStatus changeRunMode() {
    SmcStatus smcStatus = Smc::getStatus();
    if (smcStatus == SmcStatus_RUN) {
       // RUN->VLPR
@@ -382,26 +415,29 @@ SmcStatus changeRunMode() {
    return Smc::getStatus();
 }
 
-void help() {
+static void help() {
    console.write(
          "\n\n"
-         "***************************************************************\n"
+         "********************************************************************************\n"
 #ifdef SMC_PMCTRL_LPWUI_MASK
-         "LPWUI - Whether to exit VLPR,VLPW,VLPS to RUN mode on interrupt\n"
+         "LPWUI - Whether to exit VLPR, VLPW and VLPS to RUN mode on interrupt\n"
 #endif
+         "RUN   - Full speed run mode\n"
+         "VLPR  - Very Low Power Run mode (reduced speed)\n"
          "WAIT  - Wait mode (enter from RUN only)\n"
          "VLPW  - Very low power wait (enter from VLPR only)\n"
          "STOP  - Stop mode (enter from RUN only)\n"
          "VLPS  - Very low power Stop\n"
-         "LLS2  - Low Leakage Stop 2 - 32K SRAMU retained\n"
+         "LLS2  - Low Leakage Stop 2 - Partial SRAMU retained\n"
          "LLS3  - Low Leakage Stop 3 - All RAM retained\n"
-         "VLLS0 - Very Low Leakage Stop 0 - Exit via LLWU reset\n"
-         "VLLS1 - Very Low Leakage Stop 1 - Exit via LLWU reset\n"
-         "VLLS2 - Very Low Leakage Stop 2 - Exit via LLWU reset\n"
-         "VLLS3 - Very Low Leakage Stop 3 - Exit via LLWU reset\n"
-         "LPTMR - Uses LPO clock so not available in VLLS0\n"
+         "VLLS0 - Very Low Leakage Stop 0 - No SRAM, exit via LLWU reset\n"
+         "VLLS1 - Very Low Leakage Stop 1 - No SRAM, exit via LLWU reset\n"
+         "VLLS2 - Very Low Leakage Stop 2 - Partial SRAMU retained, exit via LLWU reset\n"
+         "VLLS3 - Very Low Leakage Stop 3 - All RAM retained, exit via LLWU reset\n"
+         "LPTMR - Low Power Timer (Uses LPO so not available in VLLS0)\n"
          "Pin   - Port Pin used for interrupt or wake-up source\n"
-         "***************************************************************\n"
+         "Cont  - Run tests continuously until a key is pressed\n"
+         "********************************************************************************\n"
    );
 }
 
@@ -413,15 +449,28 @@ int main() {
    console.writeln("\n**************************************");
    console.write("Executing from RESET, SRS=").writeln(Rcm::getResetSourceDescription());
 
-   // Configure LEDs
-   GreenLed::setOutput(
-         PinDriveStrength_High,
-         PinDriveMode_PushPull,
-         PinSlewRate_Slow);
-   RedLed::setOutput(
-         PinDriveStrength_High,
-         PinDriveMode_PushPull,
-         PinSlewRate_Slow);
+   if ((Rcm::getResetSource() & RcmSource_Wakeup) != 0) {
+      console.writeln("========================================");
+      console.writeln("Reset due to LLWU");
+
+      bool llwuDeviceFlag  = Llwu::getPeripheralWakeupSources()&LlwuPeripheral_Lptmr;
+      bool llwuPinFlags    = Llwu::isPinWakeupSource(WakeupPin::pin);
+      bool llwuFilterFlag  = Llwu::isFilteredPinWakeupSource(FILTER_NUM);
+
+      console.write("LLWU DeviceFlag = ").writeln(llwuDeviceFlag);
+      console.write("LLWU PinFlag    = ").writeln(llwuPinFlags);
+      console.write("LLWU FilterFlag = ").writeln(llwuFilterFlag);
+      reportHandlersRun();
+   }
+   else {
+      // Only allows repeated tests from reset if LLWU
+      preservedData.continuousTest = false;
+   }
+
+   // Configure LEDs as off to reduce power
+   RedLed::setOutput(   PinDriveStrength_High, PinDriveMode_PushPull, PinSlewRate_Slow);
+   GreenLed::setOutput( PinDriveStrength_High, PinDriveMode_PushPull, PinSlewRate_Slow);
+   BlueLed::setOutput(  PinDriveStrength_High, PinDriveMode_PushPull, PinSlewRate_Slow);
 
    // Enable all power modes
    Smc::enablePowerModes(
@@ -434,12 +483,18 @@ int main() {
 
    checkError();
 
-   console.setEcho(EchoMode_Off);
+   if (preservedData.continuousTest) {
+      // Must be running repeated VLLS test
+      runRepeatedTest(preservedData);
+   }
 
-   Test  test        = STOP;
-   bool  refresh     = true;
-   bool  enablePin   = true;
-   bool  enableTimer = true;
+   preservedData.test           = STOP;
+   preservedData.continuousTest = false;
+   preservedData.enablePin      = true;
+   preservedData.enableTimer    = true;
+   preservedData.timerDelay     = 5;
+
+   bool  refresh                 = true;
 
 #ifdef SMC_PMCTRL_LPWUI_MASK
    bool lpwui = false;
@@ -455,39 +510,43 @@ int main() {
             default:
             case SmcStatus_RUN:
                console.write(
-                     "\n\nTests\n"
+                     "\nTests\n"
                      "====================================\n"
-                     "R - Change run mode - VLPR, RUN\n"
-                     "S - Select STOP,VLPS test\n"
-                     "W - Select WAIT test\n"
-                     "L - Select LLS test\n"
-                     "V - Select VLLS0, VLLS1, VLLS2, VLLS3 test\n"
+                     "R   - Change run mode - VLPR, RUN\n"
+                     "S   - Select STOP, VLPS test\n"
+                     "W   - Select WAIT test\n"
+                     "L   - Select LLS test\n"
+                     "V   - Select VLLS0, VLLS1, VLLS2, VLLS3 test\n"
 #ifdef SMC_PMCTRL_LPWUI_MASK
-                     "I - Toggle LPWUI\n"
+                     "I   - Toggle LPWUI (Exit VLP to Run mode on interrupt)\n"
 #endif
-                     "T - Toggle LPTMR wake-up (not available in VLLS0)\n"
-                     "P - Toggle PIN wake-up source\n"
+                     "T   - Toggle LPTMR wake-up (not available in VLLS0)\n"
+                     "P   - Toggle PIN wake-up source\n"
+                     "C   - Toggle Continuous tests\n"
+                     "+/- - Change timer delay\n"
                      "H - Help\n"
                );
                break;
             case SmcStatus_VLPR:
                console.write(
-                     "\n\nTests\n"
+                     "\nTests\n"
                      "====================================\n"
-                     "R - Change run mode - VLPR, RUN\n"
-                     "S - Select VLPS test\n"
-                     "W - Select VLPW test\n"
-                     "L - Select LLS test\n"
-                     "V - Select VLLS0, VLLS1, VLLS2, VLLS3 test\n"
-                     "T - Toggle LPTMR wake-up (not available in VLLS0)\n"
-                     "P - Toggle PIN wake-up\n"
-                     "H - Help\n"
+                     "R   - Change run mode - VLPR, RUN\n"
+                     "S   - Select VLPS test\n"
+                     "W   - Select VLPW test\n"
+                     "L   - Select LLS test\n"
+                     "V   - Select VLLS0, VLLS1, VLLS2, VLLS3 test\n"
+                     "T   - Toggle LPTMR wake-up (not available in VLLS0)\n"
+                     "P   - Toggle PIN wake-up\n"
+                     "C   - Toggle Continuous tests\n"
+                     "+/- - Change timer delay\n"
+                     "H   - Help\n"
                );
                break;
          }
          refresh = false;
       }
-      console.write("\rE - Execute test (");
+      console.write("\rE - Run Test (");
       console.write(Smc::getSmcStatusName());
       console.write(":");
       console.write(Mcg::getClockModeName());
@@ -496,35 +555,46 @@ int main() {
 #ifdef SMC_PMCTRL_LPWUI_MASK
       console.write(lpwui?", LPWUI":"       ");
 #endif
-      console.write(enablePin?", Pin":"     ");
-      console.write((enableTimer&&(test!=VLLS0))?", Timer":"       ");
+      console.write(preservedData.continuousTest?", Cont":"      ");
+      console.write(preservedData.enablePin?", Pin":"     ");
+      if (preservedData.enableTimer&&(preservedData.test!=VLLS0)) {
+         console.write(", Timer(").setWidth(2).setPadding(Padding_LeadingSpaces).write(preservedData.timerDelay).write(")");
+      }
+      else {
+         console.write("           ");
+      }
+      console.resetFormat();
       console.write(", Test=");
-      console.write(TestNames[test]);
+      console.write(TestNames[preservedData.test]);
       console.write(") :   ");
       console.flushOutput();
+      console.setEcho(EchoMode_Off);
       int command = toupper(console.readChar());
       switch(command) {
          case 'S':
             if (smcStatus==SmcStatus_RUN) {
-               test = (test==VLPS)?STOP:VLPS;
+               preservedData.test = (preservedData.test==VLPS)?STOP:VLPS;
             }
             else if (smcStatus==SmcStatus_VLPR) {
-               test = VLPS;
+               preservedData.test = VLPS;
             }
             break;
          case 'W':
             if (smcStatus==SmcStatus_RUN) {
-               test = WAIT;
+               preservedData.test = WAIT;
             }
             else if (smcStatus==SmcStatus_VLPR) {
-               test = VLPW;
+               preservedData.test = VLPW;
             }
             break;
          case 'L':
-               test = LLS;
+               preservedData.test = LLS;
             break;
          case 'V':
-               test = ((test != VLLS0)&&(test != VLLS1)&&(test != VLLS2))?VLLS0:(Test)(test+1);
+            preservedData.test =
+                 ((preservedData.test != VLLS0)&&
+                  (preservedData.test != VLLS1)&&
+                  (preservedData.test != VLLS2))?VLLS0:(Test)(preservedData.test+1);
             break;
          case 'R':
             console.writeln("\n").flushOutput();
@@ -532,11 +602,11 @@ int main() {
                default:
                   break;
                case SmcStatus_VLPR:
-                  if (test==WAIT) {
-                     test=VLPW;
+                  if (preservedData.test==WAIT) {
+                     preservedData.test=VLPW;
                   }
-                  else if (test==STOP) {
-                     test=VLPS;
+                  else if (preservedData.test==STOP) {
+                     preservedData.test=VLPS;
                   }
                break;
             }
@@ -551,19 +621,34 @@ int main() {
             break;
 #endif
          case 'P':
-            enablePin = !enablePin;
+            preservedData.enablePin = !preservedData.enablePin;
             break;
          case 'T':
-            enableTimer = !enableTimer;
+            preservedData.enableTimer = !preservedData.enableTimer;
             break;
          case 'H':
+         case '?':
             help();
             refresh = true;
             break;
+         case 'C':
+            preservedData.continuousTest = !preservedData.continuousTest;
+            break;
+         case '+':
+            if (preservedData.timerDelay<99) {
+               preservedData.timerDelay++;
+            }
+            break;
+         case '-':
+            if (preservedData.timerDelay>1) {
+               preservedData.timerDelay--;
+            }
+            break;
          case 'E':
-            if (test != NONE) {
+            if (preservedData.test != NONE) {
                console.writeln().flushOutput();
-               runTest(test, enablePin, enableTimer);
+               preservedData.testCount = 0;
+               runRepeatedTest(preservedData);
                refresh = true;
             }
             break;

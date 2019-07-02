@@ -3,7 +3,8 @@
  * @file    cmp-example.cpp (180.ARM_Peripherals/Snippets)
  * @brief   Basic C++ demo using Cmp class
  *
- * It will be necessary to configure the CMP in the USBDM configuration
+ * It will be necessary to configure the CMP inputs and output in the
+ * USBDM configuration.
  *
  *  Created on: 10/1/2016
  *      Author: podonoghue
@@ -16,9 +17,9 @@
 using namespace USBDM;
 
 // Connections - change as required
-using Cmp     = Cmp0;
-using CmpPin1 = Cmp::Pin<Cmp0Input_CmpIn2>;
-using CmpPin2 = Cmp::Pin<Cmp0Input_DacRef>;
+using Cmp              = Cmp0;
+using CmpPositiveInput = Cmp::Pin<Cmp0Input_Ptc8>;
+using CmpNegativeInput = Cmp::Pin<Cmp0Input_Cmp0Dac>;
 
 // Led to control - change as required
 using Led   = GpioA<2, ActiveLow>;
@@ -72,11 +73,11 @@ int main() {
    Cmp::setCallback(callback);
 
    // Connect CMP inputs to pins as needed
-   CmpPin1::setInput();
-//   CmpPin2::setInput(); // No actual pin for DacRef as internal connection
+   CmpPositiveInput::setInput();
+//   CmpNegativeInput::setInput(); // No actual pin for DacRef as internal connection
 
    // Select comparator inputs
-   Cmp::selectInputs(CmpPin1::pinNum, CmpPin2::pinNum);
+   Cmp::selectInputs(CmpPositiveInput::pinNum, CmpNegativeInput::pinNum);
 
    // Connect CMP output to pin
    Cmp::setOutput(PinDriveStrength_High, PinDriveMode_PushPull);
