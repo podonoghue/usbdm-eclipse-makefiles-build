@@ -158,8 +158,8 @@
    <xi:include href="_irqOption.xml"/>
       
    <template namespace="usbdm"><![CDATA[
-   #ifndef USBDM_CLOCK_SOURCES_DEFINED
-   #define USBDM_CLOCK_SOURCES_DEFINED
+   #ifndef USBDM_ADC_CLOCK_SOURCES_DEFINED
+   #define USBDM_ADC_CLOCK_SOURCES_DEFINED
       \t/**
       \t * ADC input clock source.
       \t */

@@ -26,10 +26,8 @@ using AdcChannel = Adc::Channel<19>;
  */
 void handler(uint32_t result, int) {
    result = result/10;
-   for (unsigned i=0; i<75; i++) {
-      if (i<result) {
-         console.write('X');
-      }
+   for (unsigned i=0; i<result; i++) {
+      console.write('X');
    }
    console.writeln();
 }
