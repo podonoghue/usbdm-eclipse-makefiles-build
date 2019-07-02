@@ -23,6 +23,7 @@ using namespace USBDM;
 using Led      = USBDM::GpioA<2,USBDM::ActiveLow>;
 using Switch   = USBDM::GpioD<5,USBDM::ActiveLow>;
 
+#if 1
 /**
  * PORT interrupt call back.
  * This callback is _shared_ by all port pins
@@ -31,26 +32,43 @@ using Switch   = USBDM::GpioD<5,USBDM::ActiveLow>;
  */
 static void callBack(uint32_t status) {
    static int count = 0;
-   console.write(count++).write(": Status = 0x").writeln(status, Radix_2);
+   if (status & Switch::MASK) {
+      console.write(count++).write(": Status = 0x").writeln(status, Radix_2);
+   }
+   else {
+      console.write("Unexpected Pin interrupt");
+   }
 }
+#else
+/**
+ * PORT interrupt call back.
+ * This callback is _shared_ by all port pins
+ *
+ * Can explicitly instantiate the handler instead of using the trampoline
+ */
+template<>
+void Switch::Port::irqHandler() {
+   static int count = 0;
 
-// Can explicitly instantiate the handler instead of using the trampoline
-//template<>
-//void USBDM::PortD::irqHandler() {
-//   uint32_t status = port().ISFR;
-//
-//   // Clear IRQ flags
-//   port().ISFR = status;
-//
-//   static int count = 0;
-//   console.write(count++).write(": Status = 0b").writeln(status, Radix_2);
-//}
+   // Get and clear IRQ flags
+   uint32_t status = port().ISFR;
+   port().ISFR = status;
+   if (status & Switch::MASK) {
+      console.write(count++).write(": Status = 0x").writeln(status, Radix_2);
+   }
+   else {
+      console.write("Unexpected Pin interrupt");
+   }
+}
+#endif
 
 int main() {
    Led::setOutput();
 
    // Install interrupt call-back
    Switch::setCallback(callBack);
+
+   // PUP + IRQ on falling edge
    Switch::setInput(
          PinPull_Up,
          PinAction_IrqFalling,
