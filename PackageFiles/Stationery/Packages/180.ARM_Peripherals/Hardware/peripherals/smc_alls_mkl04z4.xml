@@ -101,7 +101,7 @@
    \t      SmcPartialStopMode      smcPartialStopMode      = SmcPartialStopMode_Normal,
    \t      SmcPowerOnReset         smcPowerOnReset         = SmcPowerOnReset_Disabled ) {
    \t
-   \t   smc().STOPCTRL = smcPowerOnReset|smcLowLeakageStopMode;
+   \t   smc().STOPCTRL = smcLowLeakageStopMode|smcPartialStopMode|smcPowerOnReset;
    \t}\n\n
    ]]></template>
    

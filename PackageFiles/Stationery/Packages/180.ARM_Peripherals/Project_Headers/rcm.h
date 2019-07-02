@@ -155,32 +155,37 @@ public:
    /**
     * Returns a string indicating the source of the reset indicated by source.
     *
-    * @param source Pointer to string in static buffer representing reset sources
+    * @param source Pointer to string in SHARED static buffer representing reset sources
     */
    static const char *getResetSourceDescription(uint32_t source) {
       static const char *names[] = {
-            "Wakeup,",
-            "Lvd,",
-            "Loc,",
-            "Lol,",
-            "4,",
-            "Wdog,",
-            "Pin,",
-            "Por,",
-            "Jtag,",
-            "Lockup,",
-            "Sw,",
-            "Mdm_Ap,",
-            "Ezpt,",
-            "Sackerr,",
-            "14,",
-            "15,",
+            "Wakeup",
+            "Lvd",
+            "Loc",
+            "Lol",
+            "4",
+            "Wdog",
+            "Pin",
+            "Por",
+            "Jtag",
+            "Lockup",
+            "Sw",
+            "Mdm_Ap",
+            "Ezpt",
+            "Sackerr",
+            "14",
+            "15",
       };
       static char buff[20];
       USBDM::StringFormatter stringFormatter(buff, sizeof(buff));
+      bool commaFlag = false;
       for (unsigned index=0; index<(sizeof(names)/sizeof(names[0])); index++) {
          if (source&(1<<index)) {
+            if (commaFlag) {
+               stringFormatter.write(",");
+            }
             stringFormatter.write(names[index]);
+            commaFlag = true;
          }
       }
       return buff;

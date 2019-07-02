@@ -202,7 +202,7 @@ enum SmcLowLeakageStopMode {
 enum SmcStatus {
    // Run modes
 #ifdef SMC_PMPROT_AHSRUN
-   SmcStatus_hsrun  = SMC_PMSTAT_PMSTAT(1<<7),    //!< Processor is in High Speed Run mode
+   SmcStatus_HSRUN  = SMC_PMSTAT_PMSTAT(1<<7),    //!< Processor is in High Speed Run mode
 #endif
    SmcStatus_RUN    = SMC_PMSTAT_PMSTAT(1<<0),    //!< Processor is in Normal Run mode
    SmcStatus_VLPR   = SMC_PMSTAT_PMSTAT(1<<2),    //!< Processor is in Very Low Power Run mode
@@ -243,7 +243,7 @@ public:
     */
    static const char *getSmcStatusName(SmcStatus status) {
 #ifdef SMC_PMPROT_AHSRUN
-      if (status == SmcStatus_hsrun) {
+      if (status == SmcStatus_HSRUN) {
          return "HSRUN";
       }
 #endif
@@ -323,7 +323,7 @@ $(/SMC/setStopOptions)
             }
             smc().PMCTRL = (smc().PMCTRL&~SMC_PMCTRL_RUNM_MASK)|smcRunMode;
             // Wait for power status to change
-            while (getStatus() != SmcStatus_hsrun) {
+            while (getStatus() != SmcStatus_HSRUN) {
                __asm__("nop");
             }
             break;

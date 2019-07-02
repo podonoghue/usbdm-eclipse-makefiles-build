@@ -20,7 +20,19 @@ Table of Contents
  - \ref PDBExamples \n
  - \ref PinSummary  \n
  - \ref PITExamples \n
+ - \ref PowerModes \n
  - \ref SPIExamples \n
+
+@page PowerModes Power Modes
+Support for Kinetis Power Modes
+<ul>
+<li>USBDM::SmcBase_T < Info >
+</ul>
+ Partially based on Freescale Application note AN4503\n
+ Support for Kinetis Low Power operation.
+
+ @image html KinetisPowerModes.png
+ @image html PowerModes.png
 
 @page I2CExamples  I2C interface
 

@@ -111,6 +111,7 @@
    <projectActionList id = "smc_files" >
       <copy source="Project_Headers/smc.h"                  target="Project_Headers/smc.h"                  overwrite="true" derived="true" />
       <copy source="Project_Headers/KinetisPowerModes.png"  target="Project_Headers/KinetisPowerModes.png"  overwrite="true" derived="true" macroReplace="false" />
+      <copy source="Project_Headers/PowerModes.png"         target="Project_Headers/PowerModes.png"         overwrite="true" derived="true" macroReplace="false" />
    </projectActionList>
          
 </peripheralPage>
