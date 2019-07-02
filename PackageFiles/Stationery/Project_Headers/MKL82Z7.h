@@ -78,7 +78,7 @@ typedef enum {
   MCG_IRQn                      =  43,   /**<  59 Interrupt Multiplexer                                                            */
   WDOG_EWM_IRQn                 =  44,   /**<  60 External Watchdog Monitor                                                        */
   DAC0_IRQn                     =  45,   /**<  61 12-Bit Digital-to-Analog Converter                                               */
-  TRNG0_IRQn                    =  46,   /**<  62 Interrupt Multiplexer                                                            */
+  TRNG0_IRQn                    =  46,   /**<  62 Random Number Generator Accelerator                                              */
   CMP0_IRQn                     =  48,   /**<  64 High-Speed Comparator (CMP), Voltage Reference (VREF) Digital-to-Analog Converter (DAC), and Analog Mux */
   RTC_Alarm_IRQn                =  50,   /**<  66 Interrupt Multiplexer                                                            */
   DMA4_IRQn                     =  56,   /**<  72 Interrupt Multiplexer                                                            */
@@ -143,7 +143,7 @@ extern void FTF_IRQHandler(void);                    /**< Flash Memory Interface
 extern void MCG_IRQHandler(void);                    /**< Interrupt Multiplexer                                                            */
 extern void WDOG_EWM_IRQHandler(void);               /**< External Watchdog Monitor                                                        */
 extern void DAC0_IRQHandler(void);                   /**< 12-Bit Digital-to-Analog Converter                                               */
-extern void TRNG0_IRQHandler(void);                  /**< Interrupt Multiplexer                                                            */
+extern void TRNG0_IRQHandler(void);                  /**< Random Number Generator Accelerator                                              */
 extern void CMP0_IRQHandler(void);                   /**< High-Speed Comparator (CMP), Voltage Reference (VREF) Digital-to-Analog Converter (DAC), and Analog Mux */
 extern void RTC_Alarm_IRQHandler(void);              /**< Interrupt Multiplexer                                                            */
 extern void DMA4_IRQHandler(void);                   /**< Interrupt Multiplexer                                                            */
@@ -3231,12 +3231,12 @@ typedef struct LLWU_Type {
    };
    __I  uint8_t   MF;                           /**< 000D: Module Flag Register                                         */
    union {                                      /**< 000E: (size=0004)                                                  */
-      __IO uint8_t   FILT[4];                   /**< 000E: Pin Filter  register                                         */
+      __IO uint8_t   FILT[4];                   /**< 000E: Pin Filter register                                          */
       struct {                                  /**< 000E: (size=0004)                                                  */
-         __IO uint8_t   FILT1;                  /**< 000E: Pin Filter  register                                         */
-         __IO uint8_t   FILT2;                  /**< 000F: Pin Filter  register                                         */
-         __IO uint8_t   FILT3;                  /**< 0010: Pin Filter  register                                         */
-         __IO uint8_t   FILT4;                  /**< 0011: Pin Filter  register                                         */
+         __IO uint8_t   FILT1;                  /**< 000E: Pin Filter register                                          */
+         __IO uint8_t   FILT2;                  /**< 000F: Pin Filter register                                          */
+         __IO uint8_t   FILT3;                  /**< 0010: Pin Filter register                                          */
+         __IO uint8_t   FILT4;                  /**< 0011: Pin Filter register                                          */
       };
    };
 } LLWU_Type;

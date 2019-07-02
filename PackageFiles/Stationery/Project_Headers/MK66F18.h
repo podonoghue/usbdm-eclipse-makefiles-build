@@ -117,7 +117,7 @@ typedef enum {
   CAN0_TxWarning_IRQn           =  78,   /**<  94 FlexCAN - Transmit Warning                                                       */
   CAN0_RxWarning_IRQn           =  79,   /**<  95 FlexCAN - Receive Warning                                                        */
   CAN0_WakeUp_IRQn              =  80,   /**<  96 FlexCAN - Wakeup                                                                 */
-  SDHC_IRQn                     =  81,   /**<  97 Secured Digital Host Controller                                                  */
+  SDHC0_IRQn                    =  81,   /**<  97 Secured Digital Host Controller                                                  */
   ENET_1588Timeout_IRQn         =  82,   /**<  98 Ethernet MAC-NET Core                                                            */
   ENET_Transmit_IRQn            =  83,   /**<  99 Ethernet MAC-NET Core                                                            */
   ENET_Receive_IRQn             =  84,   /**< 100 Ethernet MAC-NET Core                                                            */
@@ -233,7 +233,7 @@ extern void CAN0_Error_IRQHandler(void);             /**< FlexCAN - Error       
 extern void CAN0_TxWarning_IRQHandler(void);         /**< FlexCAN - Transmit Warning                                                       */
 extern void CAN0_RxWarning_IRQHandler(void);         /**< FlexCAN - Receive Warning                                                        */
 extern void CAN0_WakeUp_IRQHandler(void);            /**< FlexCAN - Wakeup                                                                 */
-extern void SDHC_IRQHandler(void);                   /**< Secured Digital Host Controller                                                  */
+extern void SDHC0_IRQHandler(void);                  /**< Secured Digital Host Controller                                                  */
 extern void ENET_1588Timeout_IRQHandler(void);       /**< Ethernet MAC-NET Core                                                            */
 extern void ENET_Transmit_IRQHandler(void);          /**< Ethernet MAC-NET Core                                                            */
 extern void ENET_Receive_IRQHandler(void);           /**< Ethernet MAC-NET Core                                                            */
@@ -7699,12 +7699,12 @@ typedef struct LLWU_Type {
    };
    __I  uint8_t   MF;                           /**< 000D: Module Flag Register                                         */
    union {                                      /**< 000E: (size=0004)                                                  */
-      __IO uint8_t   FILT[4];                   /**< 000E: Pin Filter  register                                         */
+      __IO uint8_t   FILT[4];                   /**< 000E: Pin Filter register                                          */
       struct {                                  /**< 000E: (size=0004)                                                  */
-         __IO uint8_t   FILT1;                  /**< 000E: Pin Filter  register                                         */
-         __IO uint8_t   FILT2;                  /**< 000F: Pin Filter  register                                         */
-         __IO uint8_t   FILT3;                  /**< 0010: Pin Filter  register                                         */
-         __IO uint8_t   FILT4;                  /**< 0011: Pin Filter  register                                         */
+         __IO uint8_t   FILT1;                  /**< 000E: Pin Filter register                                          */
+         __IO uint8_t   FILT2;                  /**< 000F: Pin Filter register                                          */
+         __IO uint8_t   FILT3;                  /**< 0010: Pin Filter register                                          */
+         __IO uint8_t   FILT4;                  /**< 0011: Pin Filter register                                          */
       };
    };
 } LLWU_Type;
@@ -11238,7 +11238,7 @@ typedef struct SDHC_Type {
 #define SDHC0_BasePtr                  0x400B1000UL //!< Peripheral base address
 #define SDHC0                          ((SDHC_Type *) SDHC0_BasePtr) //!< Freescale base pointer
 #define SDHC0_BASE_PTR                 (SDHC0) //!< Freescale style base pointer
-#define SDHC0_IRQS { SDHC_IRQn,  }
+#define SDHC0_IRQS { SDHC0_IRQn,  }
 
 /**
  * @} */ /* End group SDHC_Peripheral_access_layer_GROUP 
@@ -11743,9 +11743,9 @@ typedef struct SIM_Type {
 #define SIM_SCGC3_USBHSDCD_MASK                  (0x8U)                                              /*!< SIM_SCGC3.USBHSDCD Mask                 */
 #define SIM_SCGC3_USBHSDCD_SHIFT                 (3U)                                                /*!< SIM_SCGC3.USBHSDCD Position             */
 #define SIM_SCGC3_USBHSDCD(x)                    (((uint32_t)(((uint32_t)(x))<<3U))&0x8UL)           /*!< SIM_SCGC3.USBHSDCD Field                */
-#define SIM_SCGC3_FLEXCAN1_MASK                  (0x10U)                                             /*!< SIM_SCGC3.FLEXCAN1 Mask                 */
-#define SIM_SCGC3_FLEXCAN1_SHIFT                 (4U)                                                /*!< SIM_SCGC3.FLEXCAN1 Position             */
-#define SIM_SCGC3_FLEXCAN1(x)                    (((uint32_t)(((uint32_t)(x))<<4U))&0x10UL)          /*!< SIM_SCGC3.FLEXCAN1 Field                */
+#define SIM_SCGC3_CAN1_MASK                      (0x10U)                                             /*!< SIM_SCGC3.CAN1 Mask                     */
+#define SIM_SCGC3_CAN1_SHIFT                     (4U)                                                /*!< SIM_SCGC3.CAN1 Position                 */
+#define SIM_SCGC3_CAN1(x)                        (((uint32_t)(((uint32_t)(x))<<4U))&0x10UL)          /*!< SIM_SCGC3.CAN1 Field                    */
 #define SIM_SCGC3_SPI2_MASK                      (0x1000U)                                           /*!< SIM_SCGC3.SPI2 Mask                     */
 #define SIM_SCGC3_SPI2_SHIFT                     (12U)                                               /*!< SIM_SCGC3.SPI2 Position                 */
 #define SIM_SCGC3_SPI2(x)                        (((uint32_t)(((uint32_t)(x))<<12U))&0x1000UL)       /*!< SIM_SCGC3.SPI2 Field                    */
@@ -11824,9 +11824,9 @@ typedef struct SIM_Type {
 #define SIM_SCGC6_DMAMUX0_MASK                   (0x2U)                                              /*!< SIM_SCGC6.DMAMUX0 Mask                  */
 #define SIM_SCGC6_DMAMUX0_SHIFT                  (1U)                                                /*!< SIM_SCGC6.DMAMUX0 Position              */
 #define SIM_SCGC6_DMAMUX0(x)                     (((uint32_t)(((uint32_t)(x))<<1U))&0x2UL)           /*!< SIM_SCGC6.DMAMUX0 Field                 */
-#define SIM_SCGC6_FLEXCAN0_MASK                  (0x10U)                                             /*!< SIM_SCGC6.FLEXCAN0 Mask                 */
-#define SIM_SCGC6_FLEXCAN0_SHIFT                 (4U)                                                /*!< SIM_SCGC6.FLEXCAN0 Position             */
-#define SIM_SCGC6_FLEXCAN0(x)                    (((uint32_t)(((uint32_t)(x))<<4U))&0x10UL)          /*!< SIM_SCGC6.FLEXCAN0 Field                */
+#define SIM_SCGC6_CAN0_MASK                      (0x10U)                                             /*!< SIM_SCGC6.CAN0 Mask                     */
+#define SIM_SCGC6_CAN0_SHIFT                     (4U)                                                /*!< SIM_SCGC6.CAN0 Position                 */
+#define SIM_SCGC6_CAN0(x)                        (((uint32_t)(((uint32_t)(x))<<4U))&0x10UL)          /*!< SIM_SCGC6.CAN0 Field                    */
 #define SIM_SCGC6_RNGA_MASK                      (0x200U)                                            /*!< SIM_SCGC6.RNGA Mask                     */
 #define SIM_SCGC6_RNGA_SHIFT                     (9U)                                                /*!< SIM_SCGC6.RNGA Position                 */
 #define SIM_SCGC6_RNGA(x)                        (((uint32_t)(((uint32_t)(x))<<9U))&0x200UL)         /*!< SIM_SCGC6.RNGA Field                    */

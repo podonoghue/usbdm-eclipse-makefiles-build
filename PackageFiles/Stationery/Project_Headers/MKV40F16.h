@@ -4669,10 +4669,10 @@ typedef struct LLWU_Type {
    };
    __I  uint8_t   MF;                           /**< 000D: Module Flag Register                                         */
    union {                                      /**< 000E: (size=0002)                                                  */
-      __IO uint8_t   FILT[2];                   /**< 000E: Pin Filter  register                                         */
+      __IO uint8_t   FILT[2];                   /**< 000E: Pin Filter register                                          */
       struct {                                  /**< 000E: (size=0002)                                                  */
-         __IO uint8_t   FILT1;                  /**< 000E: Pin Filter  register                                         */
-         __IO uint8_t   FILT2;                  /**< 000F: Pin Filter  register                                         */
+         __IO uint8_t   FILT1;                  /**< 000E: Pin Filter register                                          */
+         __IO uint8_t   FILT2;                  /**< 000F: Pin Filter register                                          */
       };
    };
 } LLWU_Type;
@@ -6644,12 +6644,12 @@ typedef struct SIM_Type {
 #define SIM_SCGC6_DMAMUX0_MASK                   (0x2U)                                              /*!< SIM_SCGC6.DMAMUX0 Mask                  */
 #define SIM_SCGC6_DMAMUX0_SHIFT                  (1U)                                                /*!< SIM_SCGC6.DMAMUX0 Position              */
 #define SIM_SCGC6_DMAMUX0(x)                     (((uint32_t)(((uint32_t)(x))<<1U))&0x2UL)           /*!< SIM_SCGC6.DMAMUX0 Field                 */
-#define SIM_SCGC6_FLEXCAN0_MASK                  (0x10U)                                             /*!< SIM_SCGC6.FLEXCAN0 Mask                 */
-#define SIM_SCGC6_FLEXCAN0_SHIFT                 (4U)                                                /*!< SIM_SCGC6.FLEXCAN0 Position             */
-#define SIM_SCGC6_FLEXCAN0(x)                    (((uint32_t)(((uint32_t)(x))<<4U))&0x10UL)          /*!< SIM_SCGC6.FLEXCAN0 Field                */
-#define SIM_SCGC6_FLEXCAN1_MASK                  (0x20U)                                             /*!< SIM_SCGC6.FLEXCAN1 Mask                 */
-#define SIM_SCGC6_FLEXCAN1_SHIFT                 (5U)                                                /*!< SIM_SCGC6.FLEXCAN1 Position             */
-#define SIM_SCGC6_FLEXCAN1(x)                    (((uint32_t)(((uint32_t)(x))<<5U))&0x20UL)          /*!< SIM_SCGC6.FLEXCAN1 Field                */
+#define SIM_SCGC6_CAN0_MASK                      (0x10U)                                             /*!< SIM_SCGC6.CAN0 Mask                     */
+#define SIM_SCGC6_CAN0_SHIFT                     (4U)                                                /*!< SIM_SCGC6.CAN0 Position                 */
+#define SIM_SCGC6_CAN0(x)                        (((uint32_t)(((uint32_t)(x))<<4U))&0x10UL)          /*!< SIM_SCGC6.CAN0 Field                    */
+#define SIM_SCGC6_CAN1_MASK                      (0x20U)                                             /*!< SIM_SCGC6.CAN1 Mask                     */
+#define SIM_SCGC6_CAN1_SHIFT                     (5U)                                                /*!< SIM_SCGC6.CAN1 Position                 */
+#define SIM_SCGC6_CAN1(x)                        (((uint32_t)(((uint32_t)(x))<<5U))&0x20UL)          /*!< SIM_SCGC6.CAN1 Field                    */
 #define SIM_SCGC6_FTM3_MASK                      (0x40U)                                             /*!< SIM_SCGC6.FTM3 Mask                     */
 #define SIM_SCGC6_FTM3_SHIFT                     (6U)                                                /*!< SIM_SCGC6.FTM3 Position                 */
 #define SIM_SCGC6_FTM3(x)                        (((uint32_t)(((uint32_t)(x))<<6U))&0x40UL)          /*!< SIM_SCGC6.FTM3 Field                    */

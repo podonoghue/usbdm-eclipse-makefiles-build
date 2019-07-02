@@ -63,7 +63,7 @@ typedef enum {
   PMC_IRQn                      =  20,   /**<  36 Power Management Controller                                                      */
   LLWU_IRQn                     =  21,   /**<  37 Low Leakage Wakeup                                                               */
   WDOG_IRQn                     =  22,   /**<  38 External Watchdog Monitor                                                        */
-  RNGA_IRQn                     =  23,   /**<  39 Random Number Generator Accelerator                                              */
+  TRNG0_IRQn                    =  23,   /**<  39 Random Number Generator Accelerator                                              */
   I2C0_IRQn                     =  24,   /**<  40 Inter-Integrated Circuit                                                         */
   I2C1_IRQn                     =  25,   /**<  41 Inter-Integrated Circuit                                                         */
   SPI0_IRQn                     =  26,   /**<  42 Serial Peripheral Interface                                                      */
@@ -106,7 +106,7 @@ typedef enum {
   FLEXIO_IRQn                   =  70,   /**<  86 The FLEXIO Memory Map/Register Definition can be found here                      */
   FTM3_IRQn                     =  71,   /**<  87 FlexTimer Module                                                                 */
   I2C2_IRQn                     =  74,   /**<  90 Inter-Integrated Circuit                                                         */
-  SDHC_IRQn                     =  81,   /**<  97 Secured Digital Host Controller                                                  */
+  SDHC0_IRQn                    =  81,   /**<  97 Secured Digital Host Controller                                                  */
   TSI0_IRQn                     =  87,   /**< 103 Touch sense input                                                                */
   TPM1_IRQn                     =  88,   /**< 104 Timer/PWM Module                                                                 */
   TPM2_IRQn                     =  89,   /**< 105 Timer/PWM Module                                                                 */
@@ -156,7 +156,7 @@ extern void FTF_ReadCollision_IRQHandler(void);      /**< Flash Memory Interface
 extern void PMC_IRQHandler(void);                    /**< Power Management Controller                                                      */
 extern void LLWU_IRQHandler(void);                   /**< Low Leakage Wakeup                                                               */
 extern void WDOG_IRQHandler(void);                   /**< External Watchdog Monitor                                                        */
-extern void RNGA_IRQHandler(void);                   /**< Random Number Generator Accelerator                                              */
+extern void TRNG0_IRQHandler(void);                  /**< Random Number Generator Accelerator                                              */
 extern void I2C0_IRQHandler(void);                   /**< Inter-Integrated Circuit                                                         */
 extern void I2C1_IRQHandler(void);                   /**< Inter-Integrated Circuit                                                         */
 extern void SPI0_IRQHandler(void);                   /**< Serial Peripheral Interface                                                      */
@@ -199,7 +199,7 @@ extern void SPI2_IRQHandler(void);                   /**< Serial Peripheral Inte
 extern void FLEXIO_IRQHandler(void);                 /**< The FLEXIO Memory Map/Register Definition can be found here                      */
 extern void FTM3_IRQHandler(void);                   /**< FlexTimer Module                                                                 */
 extern void I2C2_IRQHandler(void);                   /**< Inter-Integrated Circuit                                                         */
-extern void SDHC_IRQHandler(void);                   /**< Secured Digital Host Controller                                                  */
+extern void SDHC0_IRQHandler(void);                  /**< Secured Digital Host Controller                                                  */
 extern void TSI0_IRQHandler(void);                   /**< Touch sense input                                                                */
 extern void TPM1_IRQHandler(void);                   /**< Timer/PWM Module                                                                 */
 extern void TPM2_IRQHandler(void);                   /**< Timer/PWM Module                                                                 */
@@ -5645,12 +5645,12 @@ typedef struct LLWU_Type {
    };
    __I  uint8_t   MF;                           /**< 000D: Module Flag Register                                         */
    union {                                      /**< 000E: (size=0004)                                                  */
-      __IO uint8_t   FILT[4];                   /**< 000E: Pin Filter  register                                         */
+      __IO uint8_t   FILT[4];                   /**< 000E: Pin Filter register                                          */
       struct {                                  /**< 000E: (size=0004)                                                  */
-         __IO uint8_t   FILT1;                  /**< 000E: Pin Filter  register                                         */
-         __IO uint8_t   FILT2;                  /**< 000F: Pin Filter  register                                         */
-         __IO uint8_t   FILT3;                  /**< 0010: Pin Filter  register                                         */
-         __IO uint8_t   FILT4;                  /**< 0011: Pin Filter  register                                         */
+         __IO uint8_t   FILT1;                  /**< 000E: Pin Filter register                                          */
+         __IO uint8_t   FILT2;                  /**< 000F: Pin Filter register                                          */
+         __IO uint8_t   FILT3;                  /**< 0010: Pin Filter register                                          */
+         __IO uint8_t   FILT4;                  /**< 0011: Pin Filter register                                          */
       };
    };
 } LLWU_Type;
@@ -10418,7 +10418,7 @@ typedef struct SDHC_Type {
 #define SDHC0_BasePtr                  0x400B1000UL //!< Peripheral base address
 #define SDHC0                          ((SDHC_Type *) SDHC0_BasePtr) //!< Freescale base pointer
 #define SDHC0_BASE_PTR                 (SDHC0) //!< Freescale style base pointer
-#define SDHC0_IRQS { SDHC_IRQn,  }
+#define SDHC0_IRQS { SDHC0_IRQn,  }
 
 /**
  * @} */ /* End group SDHC_Peripheral_access_layer_GROUP 
@@ -12285,7 +12285,7 @@ typedef struct TRNG_Type {
 #define TRNG0_BasePtr                  0x400A0000UL //!< Peripheral base address
 #define TRNG0                          ((TRNG_Type *) TRNG0_BasePtr) //!< Freescale base pointer
 #define TRNG0_BASE_PTR                 (TRNG0) //!< Freescale style base pointer
-#define TRNG0_IRQS { RNGA_IRQn,  }
+#define TRNG0_IRQS { TRNG0_IRQn,  }
 
 /**
  * @} */ /* End group TRNG_Peripheral_access_layer_GROUP 
