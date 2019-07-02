@@ -91,9 +91,12 @@ private:
    GpioBase_T(const GpioBase_T&) = delete;
    GpioBase_T(GpioBase_T&&) = delete;
 
-public:
    /** PCR associated with this GPIO pin */
    using Pcr = Pcr_T<clockInfo, portAddress, irqNum, bitNum, GPIO_DEFAULT_PCR>;
+
+public:
+   /** Port associated with this GPIO */
+   using Port = PcrBase_T<portAddress, irqNum>;
 
    /** Get base address of GPIO hardware as pointer to struct */
    static volatile GPIO_Type &gpio() { return *reinterpret_cast<volatile GPIO_Type *>(gpioAddress); }
@@ -339,7 +342,7 @@ public:
     * @note Polarity _is_ significant
     */
    static void setActive() {
-      if (polarity) {
+      if constexpr (polarity) {
          set();
       }
       else {
@@ -352,7 +355,7 @@ public:
     * @note Polarity _is_ significant
     */
    static void setInactive() {
-      if (polarity) {
+      if constexpr (polarity) {
          clear();
       }
       else {
@@ -386,7 +389,7 @@ public:
     */
    static void write(bool value) {
 #ifdef RELEASE_BUILD
-      if (polarity) {
+      if constexpr (polarity) {
          bmeInsert(gpio().PDOR, bitNum, 1, value);
       }
       else {
@@ -440,7 +443,7 @@ public:
     * @note Polarity _is_ significant
     */
    static bool read() {
-      if (polarity) {
+      if constexpr (polarity) {
          return isHigh();
       }
       else {
@@ -509,7 +512,7 @@ public:
 #else
       uint32_t t = gpio().PDOR & MASK;
 #endif
-      if (polarity) {
+      if constexpr (polarity) {
          return t;
       }
       else {
@@ -634,7 +637,7 @@ public:
     * @note This is a convenience function for Pcr::enableNvicInterrupts()
     */
    static void enableNvicInterrupts() {
-      Pcr::enableNvicInterrupts();
+      Port::enableNvicInterrupts();
    }
 
    /**
@@ -646,7 +649,7 @@ public:
     * @note This is a convenience function for Pcr::enableNvicInterrupts(nvicPriority)
     */
    static void enableNvicInterrupts(uint32_t nvicPriority) {
-      Pcr::enableNvicInterrupts(nvicPriority);
+      Port::enableNvicInterrupts(nvicPriority);
    }
 
    /**
@@ -655,7 +658,7 @@ public:
     * @note This is a convenience function for Pcr::disableNvicInterrupts()
     */
    static void disableNvicInterrupts() {
-      Pcr::disableNvicInterrupts();
+      Port::disableNvicInterrupts();
    }
 
    /**
@@ -672,7 +675,7 @@ public:
     * @note This is a convenience function for Pcr::setCallback(callback)
     */
    static ErrorCode setCallback(PinCallbackFunction callback) {
-      return Pcr::setCallback(callback);
+      return Port::setCallback(callback);
    }
 
 };
@@ -785,10 +788,10 @@ public:
    static constexpr uint32_t portISFR() { return portBase() + offsetof(PORT_Type, ISFR); }
 #endif
 
-   // PCR associated with port
-   using Pcr = PcrBase_T<Info::pinInfo.portAddress, Info::pinInfo.irqNum>;
-
 public:
+   /** Port associated with this GPIO Field */
+   using Port = PcrBase_T<Info::pinInfo.portAddress, Info::pinInfo.irqNum>;
+
    /** Bit number of left bit in port */
    static constexpr unsigned LEFT = left;
 
@@ -833,10 +836,10 @@ public:
       write(0);
 
       // Include the if's as I expect one branch to be removed by optimization unless the field spans the boundary
-      if ((MASK&0xFFFFUL) != 0) {
+      if constexpr ((MASK&0xFFFFUL) != 0) {
          port().GPCLR = PORT_GPCLR_GPWE(MASK)|(pcrValue&~PORT_PCR_MUX_MASK)|PinMux_Gpio;
       }
-      if ((MASK&~0xFFFFUL) != 0) {
+      if constexpr ((MASK&~0xFFFFUL) != 0) {
          port().GPCHR = PORT_GPCHR_GPWE(MASK>>16)|(pcrValue&~PORT_PCR_MUX_MASK)|PinMux_Gpio;
       }
    }
@@ -1010,6 +1013,16 @@ public:
       gpio().PTOR = (mask<<right)&MASK;
    }
    /**
+    * Read field as unmodified bit field
+    *
+    * @return value from field
+    *
+    * @note Polarity _is_ _not_ significant
+    */
+   static uint32_t bitRead() {
+         return bmeExtract(gpio().PDIR, right, left-right+1);
+   }
+   /**
     * Read field
     *
     * @return value from field
@@ -1017,7 +1030,7 @@ public:
     * @note Polarity _is_ significant
     */
    static uint32_t read() {
-      if (polarity) {
+      if constexpr (polarity) {
          return bmeExtract(gpio().PDIR, right, left-right+1);
       }
       else {
@@ -1032,9 +1045,20 @@ public:
     * @note Polarity _is_ significant
     */
    static void write(uint32_t value) {
-      if (!polarity) {
+      if constexpr (!polarity) {
          value = ~value;
       }
+      bmeInsert(gpio().PDOR, right, left-right+1, value);
+   }
+
+   /**
+    * Write bit field
+    *
+    * @param[in] value to insert as field
+    *
+    * @note Polarity _is_ _not_ significant
+    */
+   static void bitWrite(uint32_t value) {
       bmeInsert(gpio().PDOR, right, left-right+1, value);
    }
 
@@ -1044,7 +1068,7 @@ public:
     * @note This is a convenience function for Pcr::enableNvicInterrupts()
     */
    static void enableNvicInterrupts() {
-      Pcr::enableNvicInterrupts();
+      Port::enableNvicInterrupts();
    }
 
    /**
@@ -1056,7 +1080,7 @@ public:
     * @note This is a convenience function for Pcr::enableNvicInterrupts(nvicPriority)
     */
    static void enableNvicInterrupts(uint32_t nvicPriority) {
-      Pcr::enableNvicInterrupts(nvicPriority);
+      Port::enableNvicInterrupts(nvicPriority);
    }
 
    /**
@@ -1066,7 +1090,7 @@ public:
     * @note This is a convenience function for Pcr::disableNvicInterrupts()
     */
    static void disableNvicInterrupts() {
-      Pcr::disableNvicInterrupts();
+      Port::disableNvicInterrupts();
    }
 
    /**
@@ -1083,7 +1107,7 @@ public:
     * @note This is a convenience function for Pcr::setCallback(callback)
     */
    static ErrorCode setCallback(PinCallbackFunction callback) {
-      return Pcr::setCallback(callback);
+      return Port::setCallback(callback);
    }
 
 };
