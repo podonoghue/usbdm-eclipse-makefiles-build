@@ -618,6 +618,7 @@ Write 1 to clear the flag</description>
             </register>
             <register>
                <name>MF</name>
+               <?hide?>
                <description>Module Flag Register\n
 Contains the flags indicating if an internal wakeup source caused the MCU to exit VLLS mode.\n
 This flag reflects the flag in the related peripheral.\n
@@ -659,7 +660,8 @@ To clear this flag it is necessary to clear the flag in the peripheral</descript
                <dimIncrement>1</dimIncrement>
                <dimIndex>0,1,2,3</dimIndex>
                <name>FILT%s</name>
-               <description>Pin Filter %s register\n
+               <?hide?>
+               <description>Pin Filter register\n
 Control and status register that is used to enable/disable the digital filter features for an external pin</description>
                <addressOffset>0xE</addressOffset>
                <size>8</size>

@@ -259,7 +259,7 @@ Enable and selects the internal module flag as a wakeup input source for inputs 
                   <field derivedFrom="WUME0" > <name>WUME1</name> <description>Module Enable 1 - CMP0</description> <bitOffset>1</bitOffset> </field>
                   <field derivedFrom="WUME0" > <name>WUME2</name> <description>Module Enable 2 - CMP1</description> <bitOffset>2</bitOffset> </field>
                   <field derivedFrom="WUME0" > <name>WUME3</name> <description>Module Enable 3 - CMP2</description> <bitOffset>3</bitOffset> </field>
-                  <field derivedFrom="WUME0" > <name>WUME4</name> <description>Module Enable 4 - TSI</description> <bitOffset>4</bitOffset> </field>
+                  <field derivedFrom="WUME0" > <name>WUME4</name> <description>Module Enable 4 - Reserved</description> <bitOffset>4</bitOffset> </field>
                   <field derivedFrom="WUME0" > <name>WUME5</name> <description>Module Enable 5 - RTC Alarm</description> <bitOffset>5</bitOffset> </field>
                   <field derivedFrom="WUME0" > <name>WUME6</name> <description>Module Enable 6 - Reserved</description> <bitOffset>6</bitOffset> </field>
                   <field derivedFrom="WUME0" > <name>WUME7</name> <description>Module Enable 7 - RTC Seconds</description> <bitOffset>7</bitOffset> </field>
@@ -306,7 +306,7 @@ Write 1 to clear the flag</description>
                </fields>
             </register>
             <register>
-               <name>F1</name>
+               <name>PF1</name>
                <description>Pin Flag 1 Register\n
 Contains the flags indicating if a wakeup source LLWU 7-0 caused the MCU to exit VLLS mode.\n
 Write 1 to clear the flag</description>
@@ -316,7 +316,7 @@ Write 1 to clear the flag</description>
                <fields>
                   <field>
                      <name>WUF0</name>
-                     <description>Wakeup flag for pin 0</description>
+                     <description>Wakeup flag for PTE1</description>
                      <bitOffset>0</bitOffset>
                      <bitWidth>1</bitWidth>
                      <enumeratedValues>
@@ -332,17 +332,17 @@ Write 1 to clear the flag</description>
                         </enumeratedValue>
                      </enumeratedValues>
                   </field>
-                  <field derivedFrom="WUF0" > <name>WUF1</name> <description>Wakeup flag for pin 1</description> <bitOffset>1</bitOffset> </field>
-                  <field derivedFrom="WUF0" > <name>WUF2</name> <description>Wakeup flag for pin 2</description> <bitOffset>2</bitOffset> </field>
-                  <field derivedFrom="WUF0" > <name>WUF3</name> <description>Wakeup flag for pin 3</description> <bitOffset>3</bitOffset> </field>
-                  <field derivedFrom="WUF0" > <name>WUF4</name> <description>Wakeup flag for pin 4</description> <bitOffset>4</bitOffset> </field>
-                  <field derivedFrom="WUF0" > <name>WUF5</name> <description>Wakeup flag for pin 5</description> <bitOffset>5</bitOffset> </field>
-                  <field derivedFrom="WUF0" > <name>WUF6</name> <description>Wakeup flag for pin 6</description> <bitOffset>6</bitOffset> </field>
-                  <field derivedFrom="WUF0" > <name>WUF7</name> <description>Wakeup flag for pin 7</description> <bitOffset>7</bitOffset> </field>
+                  <field derivedFrom="WUF0" > <name>WUF1</name> <description>Wakeup flag for PTE2</description> <bitOffset>1</bitOffset> </field>
+                  <field derivedFrom="WUF0" > <name>WUF2</name> <description>Wakeup flag for PTE4</description> <bitOffset>2</bitOffset> </field>
+                  <field derivedFrom="WUF0" > <name>WUF3</name> <description>Wakeup flag for PTA4</description> <bitOffset>3</bitOffset> </field>
+                  <field derivedFrom="WUF0" > <name>WUF4</name> <description>Wakeup flag for PTA13</description> <bitOffset>4</bitOffset> </field>
+                  <field derivedFrom="WUF0" > <name>WUF5</name> <description>Wakeup flag for PTB0</description> <bitOffset>5</bitOffset> </field>
+                  <field derivedFrom="WUF0" > <name>WUF6</name> <description>Wakeup flag for PTC1</description> <bitOffset>6</bitOffset> </field>
+                  <field derivedFrom="WUF0" > <name>WUF7</name> <description>Wakeup flag for PTC3</description> <bitOffset>7</bitOffset> </field>
                </fields>
             </register>
             <register>
-               <name>F2</name>
+               <name>PF2</name>
                <description>Pin Flag 2 Register\n
 Contains the flags indicating if a wakeup source LLWU 15-8 caused the MCU to exit VLLS mode.\n
 Write 1 to clear the flag</description>
@@ -352,7 +352,7 @@ Write 1 to clear the flag</description>
                <fields>
                   <field>
                      <name>WUF8</name>
-                     <description>Wakeup flag for pin 8</description>
+                     <description>Wakeup flag for PTC4</description>
                      <bitOffset>0</bitOffset>
                      <bitWidth>1</bitWidth>
                      <enumeratedValues>
@@ -368,19 +368,19 @@ Write 1 to clear the flag</description>
                         </enumeratedValue>
                      </enumeratedValues>
                   </field>
-                  <field derivedFrom="WUF8" > <name>WUF9</name> <description>Wakeup flag for pin 9</description> <bitOffset>1</bitOffset> </field>
-                  <field derivedFrom="WUF8" > <name>WUF10</name> <description>Wakeup flag for pin 10</description> <bitOffset>2</bitOffset> </field>
-                  <field derivedFrom="WUF8" > <name>WUF11</name> <description>Wakeup flag for pin 11</description> <bitOffset>3</bitOffset> </field>
-                  <field derivedFrom="WUF8" > <name>WUF12</name> <description>Wakeup flag for pin 12</description> <bitOffset>4</bitOffset> </field>
-                  <field derivedFrom="WUF8" > <name>WUF13</name> <description>Wakeup flag for pin 13</description> <bitOffset>5</bitOffset> </field>
-                  <field derivedFrom="WUF8" > <name>WUF14</name> <description>Wakeup flag for pin 14</description> <bitOffset>6</bitOffset> </field>
-                  <field derivedFrom="WUF8" > <name>WUF15</name> <description>Wakeup flag for pin 15</description> <bitOffset>7</bitOffset> </field>
+                  <field derivedFrom="WUF8" > <name>WUF9</name> <description>Wakeup flag for PTC5</description> <bitOffset>1</bitOffset> </field>
+                  <field derivedFrom="WUF8" > <name>WUF10</name> <description>Wakeup flag for PTC6</description> <bitOffset>2</bitOffset> </field>
+                  <field derivedFrom="WUF8" > <name>WUF11</name> <description>Wakeup flag for PTC11</description> <bitOffset>3</bitOffset> </field>
+                  <field derivedFrom="WUF8" > <name>WUF12</name> <description>Wakeup flag for PTD0</description> <bitOffset>4</bitOffset> </field>
+                  <field derivedFrom="WUF8" > <name>WUF13</name> <description>Wakeup flag for PTD2</description> <bitOffset>5</bitOffset> </field>
+                  <field derivedFrom="WUF8" > <name>WUF14</name> <description>Wakeup flag for PTD4</description> <bitOffset>6</bitOffset> </field>
+                  <field derivedFrom="WUF8" > <name>WUF15</name> <description>Wakeup flag for PTD6</description> <bitOffset>7</bitOffset> </field>
                </fields>
             </register>
             <register>
-               <name>F3</name>
+               <name>MF</name>
                <?hide?>
-               <description>Module Flag 3 Register\n
+               <description>Module Flag Register\n
 Contains the flags indicating if an internal wakeup source caused the MCU to exit VLLS mode.\n
 This flag reflects the flag in the related peripheral.\n
 To clear this flag it is necessary to clear the flag in the peripheral</description>
@@ -391,7 +391,7 @@ To clear this flag it is necessary to clear the flag in the peripheral</descript
                <fields>
                   <field>
                      <name>MWUF0</name>
-                     <description>Wakeup flag For module 0</description>
+                     <description>Wakeup flag for LPTMR</description>
                      <bitOffset>0</bitOffset>
                      <bitWidth>1</bitWidth>
                      <enumeratedValues>
@@ -407,25 +407,22 @@ To clear this flag it is necessary to clear the flag in the peripheral</descript
                         </enumeratedValue>
                      </enumeratedValues>
                   </field>
-                  <field derivedFrom="MWUF0" > <name>MWUF1</name> <description>Wakeup flag For module 1</description> <bitOffset>1</bitOffset> </field>
-                  <field derivedFrom="MWUF0" > <name>MWUF2</name> <description>Wakeup flag For module 2</description> <bitOffset>2</bitOffset> </field>
-                  <field derivedFrom="MWUF0" > <name>MWUF3</name> <description>Wakeup flag For module 3</description> <bitOffset>3</bitOffset> </field>
-                  <field derivedFrom="MWUF0" > <name>MWUF4</name> <description>Wakeup flag For module 4</description> <bitOffset>4</bitOffset> </field>
-                  <field derivedFrom="MWUF0" > <name>MWUF5</name> <description>Wakeup flag For module 5</description> <bitOffset>5</bitOffset> </field>
-                  <field derivedFrom="MWUF0" > <name>MWUF6</name> <description>Wakeup flag For module 6</description> <bitOffset>6</bitOffset> </field>
-                  <field derivedFrom="MWUF0" > <name>MWUF7</name> <description>Wakeup flag For module 7</description> <bitOffset>7</bitOffset> </field>
+                  <field derivedFrom="MWUF0" > <name>MWUF1</name> <description>Wakeup flag for CMP0</description> <bitOffset>1</bitOffset> </field>
+                  <field derivedFrom="MWUF0" > <name>MWUF2</name> <description>Wakeup flag for CMP1</description> <bitOffset>2</bitOffset> </field>
+                  <field derivedFrom="MWUF0" > <name>MWUF3</name> <description>Wakeup flag for CMP2</description> <bitOffset>3</bitOffset> </field>
+                  <field derivedFrom="MWUF0" > <name>MWUF4</name> <description>Wakeup flag for Reserved_4</description> <bitOffset>4</bitOffset> </field>
+                  <field derivedFrom="MWUF0" > <name>MWUF5</name> <description>Wakeup flag for RTC Alarm</description> <bitOffset>5</bitOffset> </field>
+                  <field derivedFrom="MWUF0" > <name>MWUF6</name> <description>Wakeup flag for Reserved_6</description> <bitOffset>6</bitOffset> </field>
+                  <field derivedFrom="MWUF0" > <name>MWUF7</name> <description>Wakeup flag for RTC Seconds</description> <bitOffset>7</bitOffset> </field>
                </fields>
             </register>
-            <register derivedFrom="F3"> <name>MF</name> <description>Module Flag Register\n
-Contains the flags indicating if an internal wakeup source caused the MCU to exit VLLS mode.\n
-This flag reflects the flag in the related peripheral.\n
-To clear this flag it is necessary to clear the flag in the peripheral</description> <addressOffset>0x7</addressOffset> </register>
             <register>
                <dim>2</dim>
                <dimIncrement>1</dimIncrement>
                <dimIndex>0,1</dimIndex>
                <name>FILT%s</name>
-               <description>Pin Filter %s register\n
+               <?hide?>
+               <description>Pin Filter register\n
 Control and status register that is used to enable/disable the digital filter features for an external pin</description>
                <addressOffset>0x8</addressOffset>
                <size>8</size>
