@@ -37,6 +37,10 @@
          <copy source="../FreeRTOS/Source"                                      target="FreeRTOS/Source"  derived="true" />
          <copy source="../FreeRTOS/Source/Portable/GCC/ARM_CM0/port.c"          target="FreeRTOS/Source/port.c"  derived="true" />
          <copy source="../FreeRTOS/Source/Portable/GCC/ARM_CM0/portmacro.h"     target="FreeRTOS/Source/portmacro.h"  derived="true" />
+
+         <copy source="Snippets/FreeRTOS-queue-1P1C-example.cpp"           target="Snippets/FreeRTOS-queue-1P1C-example.cpp"   overwrite="true" />
+         <copy source="Snippets/FreeRTOS-semaphore-1P1C-example.cpp"       target="Snippets/FreeRTOS-semaphore-1P1C-example.cpp"   overwrite="true" />
+         <copy source="Snippets/FreeRTOS-queue-pointer-1P1C-example.cpp"   target="Snippets/FreeRTOS-queue-pointer-1P1C-example.cpp"   overwrite="true" />
          <excludeSourceFolder target="FreeRTOS/Source/Portable" />
          <projectOption id="net.sourceforge.usbdm.gnu.c.compiler.option.include.paths">
             <value>&quot;${ProjDirPath}/FreeRTOS/Source/Include&quot;</value>
@@ -100,8 +104,8 @@
 	 
          <copy source="Sources/main.cpp"        target="Sources/main.cpp"          overwrite="true" />
          
-         <copy source="Snippets/FreeRTOS-cpp-flasher-example.cpp"    target="Snippets/FreeRTOS-cpp-flasher-example.cpp"   overwrite="true" />
-         <copy source="Snippets/FreeRTOS-cpp-producer-consumer.cpp"  target="Snippets/FreeRTOS-cpp-producer-consumer.cpp" overwrite="true" />         
+         <copy source="Snippets/FreeRTOS-cpp-flasher-example.cpp"            target="Snippets/FreeRTOS-cpp-flasher-example.cpp"   overwrite="true" />
+         <copy source="Snippets/FreeRTOS-cpp-producer-consumer-example.cpp"  target="Snippets/FreeRTOS-cpp-producer-consumer-example.cpp" overwrite="true" />         
       </projectActionList>
       
    </projectActionList>
