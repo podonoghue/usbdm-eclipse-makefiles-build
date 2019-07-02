@@ -35,7 +35,7 @@ sudo apt-get -y install libxerces-c-dev
 sudo apt-get -y install libwxgtk3.0-dev
 sudo apt-get -y install libwxbase3.0-dev
 sudo apt-get -y install g++
-sudo apt-get -y install openjdk-7-jdk
+sudo apt-get -y install openjdk-8-jdk
 sudo apt-get -y install libusb-1.0-0
 
 elif [ "${BITNESS}" == "64" ]; then
