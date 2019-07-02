@@ -153,7 +153,7 @@ public:
    const uint32_t   clockInfo;    //!< Either clock mask or port clock control register address
    const IRQn_Type  irqNum;       //!< Port interrupt number
    const uint32_t   gpioAddress;  //!< GPIO Hardware base pointer
-   const uint32_t   gpioBit;      //!< Bit number for pin
+   const int32_t    gpioBit;      //!< Bit number for pin - must be signed for error checks
    const uint32_t   pcrValue;     //!< Default PCR value for pin
 
    /**
@@ -171,6 +171,13 @@ public:
                      portAddress(portInfo.portAddress), clockInfo(portInfo.clockInfo), irqNum(portInfo.irqNum),
                      gpioAddress(gpioAddress), gpioBit(gpioBit), pcrValue(pcrValue) {}
 };
+
+#ifndef PORT_PCR_LK
+/**
+ * Some devices don't have LK function on pin
+ */
+#define PORT_PCR_LK(x) (0)
+#endif
 
 #ifndef PORT_PCR_DSE
 /**
@@ -371,7 +378,7 @@ static constexpr PcrValue pcrValue(uint32_t flags) {
  * Default PCR setting for pins (excluding multiplexor value)
  * High drive strength + Pull-up
  */
-static constexpr PcrValue DEFAULT_PCR = pcrValue(PinPull_Up, PinDriveStrength_High);
+static constexpr PcrValue DEFAULT_PCR = pcrValue(PinPull_None, PinDriveStrength_Low);
 
 /**
  * Default PCR value for pins used as GPIO (including multiplexor value)
@@ -550,8 +557,8 @@ class Pcr_T : public PcrBase_T<portAddress, irqNum> {
 //#endif
 
 public:
-   static constexpr int      BITNUM  = bitNum;
-   static constexpr uint32_t BITMASK = (1<<bitNum);
+   static constexpr int      BITNUM  = bitNum;        ///< Bit number for port bit
+   static constexpr uint32_t BITMASK = (1<<bitNum);   ///< Bit mask for port bit
 
 private:
    /**

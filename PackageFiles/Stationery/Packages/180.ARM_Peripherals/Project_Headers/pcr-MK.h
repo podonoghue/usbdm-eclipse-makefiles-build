@@ -164,6 +164,13 @@ public:
                      gpioAddress(gpioAddress), gpioBit(gpioBit), pcrValue(pcrValue) {}
 };
 
+#ifndef PORT_PCR_LK
+/**
+ * Some devices don't have LK function on pin
+ */
+#define PORT_PCR_LK(x) (0)
+#endif
+
 #ifndef PORT_PCR_DSE
 /**
  * Some devices don't have DSE function on pin
@@ -542,8 +549,8 @@ class Pcr_T : public PcrBase_T<portAddress, irqNum> {
 //#endif
 
 public:
-   static constexpr int      BITNUM  = bitNum;
-   static constexpr uint32_t BITMASK = (1<<bitNum);
+   static constexpr int      BITNUM  = bitNum;        ///< Bit number for port bit
+   static constexpr uint32_t BITMASK = (1<<bitNum);   ///< Bit mask for port bit
 
 private:
    /**
@@ -586,6 +593,15 @@ public:
       if (portAddress != 0) {
          enablePortClocks(clockInfo);
 
+#ifdef PORT_DFCR_CS_MASK
+         if (pcrValue&PinFilter_Digital) {
+            enableDigitalFilter();
+            pcrValue &= ~PinFilter_Digital;
+         }
+         else {
+           disableDigitalFilter();
+         }
+#endif
          // Pointer to PCR register for pin
          pcrReg() = pcrValue;
       }
@@ -626,7 +642,15 @@ public:
          ) {
       if (portAddress != 0) {
          enablePortClocks(clockInfo);
-
+#ifdef PORT_DFCR_CS_MASK
+         if (pinFilter == PinFilter_Digital) {
+            enableDigitalFilter();
+            pinFilter = PinFilter_None;
+         }
+         else {
+           disableDigitalFilter();
+         }
+#endif
          // Set PCR register for pin
          pcrReg() = pinPull|pinDriveStrength|pinDriveMode|pinAction|pinFilter|pinSlewRate|pinMux;
       }
@@ -715,12 +739,23 @@ public:
     * @param[in] pinPull          One of PinPull_None, PinPull_Up, PinPull_Down
     * @param[in] pinAction        One of PinAction_None, etc (defaults to PinAction_None)
     * @param[in] pinFilter        One of PinFilter_None, PinFilter_Passive (defaults to PinFilter_None)
+    *
+    *  @note see also configureDigitalFilter()
     */
    static void setInput(
          PinPull           pinPull,
          PinAction         pinAction         = PinAction_None,
          PinFilter         pinFilter         = PinFilter_None) {
 
+#ifdef PORT_DFCR_CS_MASK
+         if (pinFilter == PinFilter_Digital) {
+            enableDigitalFilter();
+            pinFilter = PinFilter_None;
+         }
+         else {
+           disableDigitalFilter();
+         }
+#endif
       pcrReg() =
             (pcrReg()&~(PORT_PCR_PD_MASK|PORT_PCR_IRQC_MASK|PORT_PCR_PFE_MASK)) |
             (pinPull|pinAction|pinFilter);
@@ -809,14 +844,23 @@ public:
 
 #if defined PORT_PCR_PFE_MASK
    /**
-    * Set passive filter on pin.
+    * Set filter on pin.
     * Assumes clock to the port has already been enabled.
     *
     *  @param[in] pinFilter Pin filter option. Either PinFilter_None or PinFilter_Passive
     *
-    *  @note see also enableDigitalFilter(), disableDigitalFilter()
+    *  @note see also configureDigitalFilter()
     */
    static void setFilter(PinFilter pinFilter) {
+#ifdef PORT_DFCR_CS_MASK
+         if (pinFilter == PinFilter_Digital) {
+            enableDigitalFilter();
+            pinFilter = PinFilter_None;
+         }
+         else {
+           disableDigitalFilter();
+         }
+#endif
          pcrReg() = (pcrReg()&~PORT_PCR_PFE_MASK) | pinFilter;
    }
 #endif
