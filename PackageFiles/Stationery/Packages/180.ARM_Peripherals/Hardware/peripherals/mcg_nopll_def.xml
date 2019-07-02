@@ -52,6 +52,22 @@
          description="Frequency of Internal Low Power Oscillator [LPO] Clock"
          toolTip="Dependent on device. [Typically ~1kHz]" 
          value="1000"/>
+    
+      <intOption name="system_irc48m_clock" 
+         constant="true"  
+         units="Hz"
+         description="Frequency of Internal 48MHz Clock [IRC48MCLK] (if present)"
+         toolTip="48 MHz Internal Oscillator [Trimmed against USB bus]"
+	 origin="48MHz clock from IRC48MCLK"
+         value="48000000"/>
+
+      <intOption name="system_usb_clkin_clock"  
+         constant="true" 
+         origin="USB Clock In pin"
+         units="Hz"
+         description="Frequency of External USB Clock"
+         toolTip="Externally provided clock for USB on USB_CLKIN" 
+         value="48000000" />
    </category>
    
    <xi:include href="_irqOption.xml"/>
@@ -124,6 +140,14 @@
             toolTip="Derived from system_slow_irc_clock or system_fast_irc_clock/fcrdiv"
             value="48000000" />
       </category>
+   
+      <choiceOption name="mcg_c7_oscsel." 
+         description="MCG External Reference Clock source [OSCSEL]"
+         toolTip="Selects the MCG FLL/PLL external reference clock source">
+         <choice value="0" name="OSC0 - Main System Oscillator (OSCCLK0)" />
+         <choice value="1" name="OSC1 - 32 kHz RTC Oscillator (RTC_32K)" />
+         <choice value="2" name="OSC2 - 48 MHz Internal Oscillator (OSCCLK1 = IRC48MCLK)" />
+      </choiceOption>
    
       <intOption name="mcg_erc_clock." 
          derived="true"
@@ -264,6 +288,7 @@
 
       <aliasOption name="system_mcgirclk_clock." />
       <aliasOption name="system_mcgffclk_clock." />
+      <aliasOption name="system_irc48m_clock" optional="true" />
       <aliasOption key="/OSC0/oscer_undiv_clock" optional="true" />
       <aliasOption key="/OSC0/oscer_clock" />
       <aliasOption key="/SIM/system_erclk32k_clock" />
@@ -381,6 +406,9 @@
       \t   ClockMode_BLPE,
       \t};\n\n
       
+      \t//! Frequency of Internal 48MHz Clock
+      \tstatic constexpr uint32_t irc48m_clock = $(system_irc48m_clock)UL;\n\n
+      
       \t//! Frequency of Slow Internal Reference Clock [~32kHz]
       \tstatic constexpr uint32_t system_slow_irc_clock = $(system_slow_irc_clock)UL;\n\n
       
@@ -405,6 +433,8 @@
       \t   const uint8_t c6;
       \t   //! Status and Control Register - FCRDIV
       \t   const uint8_t sc;
+      \t   //! Control Register 7 - OSCSEL
+      \t   const uint8_t c7;
       \t};\n\n
       
       \t/**
@@ -486,6 +516,10 @@
               
       \t      //! Status and Control Register
       \t      MCG_SC_FCRDIV($(mcg_sc_fcrdiv.)), // FCRDIV Internal Clock Reference Divider\n\n
+              
+      \t      //! Control Register 7
+      \t      MCG_C7_OSCSEL($(mcg_c7_oscsel.)), // OSCSEL MCG OSC Clock Select\n\n
+              
       \t   },
    ]]></template>
 </peripheralPage>
