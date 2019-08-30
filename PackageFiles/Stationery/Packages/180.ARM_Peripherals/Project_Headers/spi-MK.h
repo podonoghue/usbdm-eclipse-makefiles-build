@@ -465,8 +465,24 @@ public:
          // ActiveLow
          spi->MCR |= spiPeripheralSelect;
       }
-
    }
+
+   /**
+    * Set the current SPI Selection mode.
+    * This is used to change from the mode set by setPeripheralSelect() or startTransaction().
+    *
+    * Common usage:
+    * - Configure the overall transaction to use SpiSelectMode_Continuous using setPeripheralSelect() or startTransaction().
+    * - Do multiple txRx() operations.  The CS will remain selected _between_ operations.
+    * - Change the mode to SpiSelectMode_Idle before the final operation using setPeripheralSelectMode().
+    *   This will cause the active peripheral select to return to idle after the final operation.
+    *
+    *  @param[in]  spiSelectMode        Whether SPI_PCSx signal is returned to idle between transfers
+    */
+   void setPeripheralSelectMode(SpiSelectMode spiSelectMode) {
+      pushrMask = (pushrMask&~SPI_PUSHR_CONT_MASK)|spiSelectMode;
+   }
+
    /**
     *  Transmit and receive a series of values
     *
