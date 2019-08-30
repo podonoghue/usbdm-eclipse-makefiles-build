@@ -279,7 +279,7 @@ typedef void (*LPUARTCallbackFunction)(uint8_t status);
  *  Uart *uart0 = new USBDM::Lpuart_T<Uart0Info>(115200);
  *
  *  for(int i=0; i++;) {
- *     lpuart<<"Hello world, i="<<i<<"\n";
+ *     lpuart.write("Hello world,").writeln(i)
  *  }
  *  @endcode
  *
@@ -495,7 +495,7 @@ template<class Info> LPUARTCallbackFunction Lpuart_T<Info>::rxTxCallback  = unha
  *  Uart *lpuart = new USBDM::Lpuart_T<Lpuart0Info>(115200);
  *
  *  for(int i=0; i++;) {
- *     lpuart<<"Hello world, i="<<i<<"\n";
+ *     lpuart.write("Hello world,").writeln(i)
  *  }
  *  @endcode
  *
@@ -637,7 +637,7 @@ template<class Info, int rxSize, int txSize> volatile uint32_t   LpuartBuffered_
  *  USBDM::Lpuart0 lpuart;
  *
  *  for(int i=0; i++;) {
- *     lpuart<<"Hello world, i="<<i<<"\n";
+ *     lpuart.write("Hello world,").writeln(i)
  *  }
  *  @endcode
  */
@@ -654,7 +654,7 @@ typedef  $(/LPUART0/lpuartClass:Lpuart_T)<Lpuart0Info> Lpuart0;
  *  USBDM::Lpuart1 lpuart;
  *
  *  for(int i=0; i++;) {
- *     lpuart<<"Hello world, i="<<i<<"\n";
+ *     lpuart.write("Hello world,").writeln(i)
  *  }
  *  @endcode
  */
@@ -671,7 +671,7 @@ typedef  $(/LPUART1/lpuartClass:Lpuart_T)<Lpuart1Info> Lpuart1;
  *  USBDM::Lpuart2 lpuart;
  *
  *  for(int i=0; i++;) {
- *     lpuart<<"Hello world, i="<<i<<"\n";
+ *     lpuart.write("Hello world,").writeln(i)
  *  }
  *  @endcode
  */
@@ -688,7 +688,7 @@ typedef  $(/LPUART2/lpuartClass:Lpuart_T)<Lpuart2Info> Lpuart2;
  *  USBDM::Lpuart3 lpuart;
  *
  *  for(int i=0; i++;) {
- *     lpuart<<"Hello world, i="<<i<<"\n";
+ *     lpuart.write("Hello world,").writeln(i)
  *  }
  *  @endcode
  */
@@ -705,7 +705,7 @@ typedef  $(/LPUART3/lpuartClass:Lpuart_T)<Lpuart3Info> Lpuart3;
  *  USBDM::Lpuart4 lpuart;
  *
  *  for(int i=0; i++;) {
- *     lpuart<<"Hello world, i="<<i<<"\n";
+ *     lpuart.write("Hello world,").writeln(i)
  *  }
  *  @endcode
  */
@@ -722,7 +722,7 @@ typedef  $(/LPUART4/lpuartClass:Lpuart_T)<Lpuart4Info> Lpuart4;
  *  USBDM::Lpuart5 lpuart;
  *
  *  for(int i=0; i++;) {
- *     lpuart<<"Hello world, i="<<i<<"\n";
+ *     lpuart.write("Hello world,").writeln(i)
  *  }
  *  @endcode
  */

@@ -345,7 +345,7 @@ typedef void (*UARTCallbackFunction)(uint8_t status);
  *  Uart *uart0 = new USBDM::Uart_T<Uart0Info>(115200);
  *
  *  for(int i=0; i++;) {
- *     uart<<"Hello world, i="<<i<<"\n";
+ *     uart.write("Hello world,").writeln(i);
  *  }
  *  @endcode
  *
@@ -724,7 +724,7 @@ public:
  *  Uart *uart0 = new USBDM::UartBuffered_T<Uart0Info, 20, 30>(115200);
  *
  *  for(int i=0; i++;) {
- *     uart<<"Hello world, i="<<i<<"\n";
+ *     uart.write("Hello world,").writeln(i);
  *  }
  *  @endcode
  *
@@ -995,7 +995,7 @@ template<class Info, int rxSize, int txSize> volatile uint32_t   UartBuffered_T<
  *  USBDM::Uart0 uart;
  *
  *  for(int i=0; i++;) {
- *     uart<<"Hello world, i="<<i<<"\n";
+ *     uart.write("Hello world,").writeln(i);
  *  }
  *  @endcode
  */
@@ -1012,7 +1012,7 @@ typedef  $(/UART0/uartClass)<Uart0Info> Uart0;
  *  USBDM::Uart1 uart;
  *
  *  for(int i=0; i++;) {
- *     uart<<"Hello world, i="<<i<<"\n";
+ *     uart.write("Hello world,").writeln(i);
  *  }
  *  @endcode
  */
@@ -1029,7 +1029,7 @@ typedef  $(/UART1/uartClass)<Uart1Info> Uart1;
  *  USBDM::Uart2 uart;
  *
  *  for(int i=0; i++;) {
- *     uart<<"Hello world, i="<<i<<"\n";
+ *     uart.write("Hello world,").writeln(i);
  *  }
  *  @endcode
  */
@@ -1046,7 +1046,7 @@ typedef  $(/UART2/uartClass)<Uart2Info> Uart2;
  *  USBDM::Uart3 uart;
  *
  *  for(int i=0; i++;) {
- *     uart<<"Hello world, i="<<i<<"\n";
+ *     uart.write("Hello world,").writeln(i);
  *  }
  *  @endcode
  */
@@ -1063,7 +1063,7 @@ typedef  $(/UART3/uartClass)<Uart3Info> Uart3;
  *  USBDM::Uart4 uart;
  *
  *  for(int i=0; i++;) {
- *     uart<<"Hello world, i="<<i<<"\n";
+ *     uart.write("Hello world,").writeln(i);
  *  }
  *  @endcode
  */
@@ -1080,7 +1080,7 @@ typedef  $(/UART4/uartClass)<Uart4Info> Uart4;
  *  USBDM::Uart5 uart;
  *
  *  for(int i=0; i++;) {
- *     uart<<"Hello world, i="<<i<<"\n";
+ *     uart.write("Hello world,").writeln(i);
  *  }
  *  @endcode
  */
