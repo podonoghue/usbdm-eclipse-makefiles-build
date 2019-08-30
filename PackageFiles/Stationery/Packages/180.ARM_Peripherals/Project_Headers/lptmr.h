@@ -344,6 +344,75 @@ public:
    }
 
    /**
+    * Converts a number in ticks to time in microseconds.
+    *
+    * @param[in]  time Time in ticks
+    *
+    * @return Time in microseconds
+    *
+    * @note Assumes prescale has been chosen appropriately.
+    * @note Rudimentary range checking only. Sets error code.
+    */
+   static uint32_t convertTicksToMicroseconds(unsigned ticks) {
+      uint32_t tickRate = Info::getClockFrequency();
+      uint64_t rv       = (((uint64_t)ticks)*1000000)/tickRate;
+
+#ifdef DEBUG_BUILD
+      if (rv > UINT_MAX) {
+         // Attempt to set too long a period
+         setErrorCode(E_TOO_LARGE);
+      }
+      if (rv == 0) {
+         // Attempt to set too short a period
+         setErrorCode(E_TOO_SMALL);
+      }
+#endif
+      return rv;
+   }
+
+   /**
+    * Converts a number in ticks to time in milliseconds.
+    *
+    * @param[in]  time Time in ticks
+    *
+    * @return Time in milliseconds
+    *
+    * @note Assumes prescale has been chosen appropriately.
+    * @note Rudimentary range checking only. Sets error code.
+    */
+   static unsigned convertTicksToMilliseconds(unsigned ticks) {
+      uint32_t tickRate = Info::getClockFrequency();
+      uint64_t rv       = (((uint64_t)ticks)*1000)/tickRate;
+
+#ifdef DEBUG_BUILD
+      if (rv > UINT_MAX) {
+         // Attempt to set too long a period
+         setErrorCode(E_TOO_LARGE);
+      }
+      if (rv == 0) {
+         // Attempt to set too short a period
+         setErrorCode(E_TOO_SMALL);
+      }
+#endif
+      return rv;
+   }
+
+   /**
+    * Converts a number in ticks to time in seconds.
+    *
+    * @param[in]  time Time in ticks
+    *
+    * @return Time in seconds (as float)
+    *
+    * @note Assumes prescale has been chosen appropriately.
+    * @note Rudimentary range checking only. Sets error code.
+    */
+   static float convertTicksToSeconds(unsigned ticks) {
+      uint32_t tickRate = Info::getClockFrequency();
+      return ((float)ticks)/tickRate;
+   }
+
+   /**
     * Converts a time in microseconds to number of ticks.
     *
     * @param[in]  time Time in microseconds
@@ -508,6 +577,8 @@ public:
     * @return Timer value in ticks.
     */
    static uint32_t getCounterValue() {
+      // It is necessary to write to the CNR to capture current value
+      lptmr().CNR = 0;
       return lptmr().CNR;
    }
 };
