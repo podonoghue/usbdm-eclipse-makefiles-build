@@ -40,17 +40,20 @@
  */
 using namespace USBDM;
 
+// Debug LED connection - change as required
+//using DebugLed = GpioC<3,ActiveLow>;
+   
 // Constant describing transmission
-constexpr unsigned SONY_CARRIER     = 40000;  //!< Sony SIRC carrier frequency (Hz)
-constexpr unsigned SONY_ONE_TIME    =  1200;  //!< Sony SIRC on time (us) for '1'
-constexpr unsigned SONY_ZERO_TIME   =   600;  //!< Sony SIRC on time (us) for '0'
-constexpr unsigned SONY_START_TIME  =  2400;  //!< Sony SIRC on time (us) for start
-constexpr unsigned SONY_OFF_TIME    =   600;  //!< Sony SIRC off time (us)
-constexpr unsigned SONY_REPEAT_TIME = 45000;  //!< Sony SIRC repeat packet time (us)
-constexpr unsigned SONY_REPEATS     =     4;  //!< How many times to repeat packet in transmission
+static constexpr unsigned SONY_CARRIER     = 40000;  //!< Sony SIRC carrier frequency (Hz)
+static constexpr unsigned SONY_ONE_TIME    =  1200;  //!< Sony SIRC on time (us) for '1'
+static constexpr unsigned SONY_ZERO_TIME   =   600;  //!< Sony SIRC on time (us) for '0'
+static constexpr unsigned SONY_START_TIME  =  2400;  //!< Sony SIRC on time (us) for start
+static constexpr unsigned SONY_OFF_TIME    =   600;  //!< Sony SIRC off time (us)
+static constexpr unsigned SONY_REPEAT_TIME = 45000;  //!< Sony SIRC repeat packet time (us)
+static constexpr unsigned SONY_REPEATS     =     4;  //!< How many times to repeat packet in transmission
 
 /** Carrier half period in CMT clock cycles (Based on 8MHz CMT clock) */
-constexpr uint8_t  PrimaryCarrierHalfTime = ((8000000UL/SONY_CARRIER)/2);
+static constexpr uint8_t  PrimaryCarrierHalfTime = ((8000000UL/SONY_CARRIER)/2);
 
 /** Command/address/extended value to transmit */
 static volatile uint32_t data;
@@ -76,7 +79,7 @@ static void cmtCallback() {
    /** Time since start of current packet */
    static unsigned repeatTime;
 
-   //   ActivityLed::toggle();
+//   DebugLed::toggle();
    if (Cmt::getStatus()) {
       if(bitNum==0) {
          if (repeatCount++ >= SONY_REPEATS) {
@@ -113,6 +116,7 @@ static void cmtCallback() {
          bitNum = 0;
       }
    }
+//   DebugLed::off();
 }
 
 /**
@@ -285,8 +289,15 @@ void send20(CmtAddress cmtAddress, CmtCommand cmtCommand, uint8_t extended8) {
 }
 
 int main() {
-   // Activity LED connection - change as required
+
+   // Activity LED connection - indicates command being sent
    using ActivityLed   = GpioA<2,ActiveLow>;
+
+   // Debug LED
+//   DebugLed::setOutput(
+//         PinDriveStrength_High,
+//         PinDriveMode_PushPull,
+//         PinSlewRate_Fast);
 
    console.writeln("Starting\n");
    console.write("SystemCoreClock = ").writeln(::SystemCoreClock);
