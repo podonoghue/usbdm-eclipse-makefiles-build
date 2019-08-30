@@ -29,13 +29,10 @@ constexpr AdcResolution adcResolution = AdcResolution_10bit_se;
 
 int main(void) {
    // Enable and configure ADC
-   Adc::configure(AdcResolution_12bit_se);
+   Adc::configure(adcResolution);
 
    // Calibrate before first use
    Adc::calibrate();
-
-   // May change current resolution as needed e.g.
-   Adc::setResolution(adcResolution);
 
    // Connect ADC channel to pin
    AdcChannel::setInput();
@@ -43,6 +40,11 @@ int main(void) {
    for(;;) {
       // Do next conversion
       uint32_t value = AdcChannel::readAnalogue();
-      console.write("Value = ").write(value*3.3/Adc::getSinglendeddMaximum(adcResolution)).writeln(" volts");
+
+      // Scale value for input voltage range (Assumes Vrh=3.3V, Vrl=0.0V)
+      float voltage = value*3.3/Adc::getSingleEndedMaximum(adcResolution);
+
+      // Report
+      console.write("Value = ").write(voltage).writeln(" volts");
    }
 }
