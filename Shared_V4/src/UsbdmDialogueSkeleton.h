@@ -1,12 +1,11 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Apr 24 2017)
+// C++ code generated with wxFormBuilder (version Oct 26 2018)
 // http://www.wxformbuilder.org/
 //
-// PLEASE DO "NOT" EDIT THIS FILE!
+// PLEASE DO *NOT* EDIT THIS FILE!
 ///////////////////////////////////////////////////////////////////////////
 
-#ifndef __USBDMDIALOGUESKELETON_H__
-#define __USBDMDIALOGUESKELETON_H__
+#pragma once
 
 #include <wx/artprov.h>
 #include <wx/xrc/xmlres.h>
@@ -19,6 +18,9 @@ class SecurityTextEditCtrl;
 #include <wx/font.h>
 #include <wx/colour.h>
 #include <wx/settings.h>
+#include <wx/bitmap.h>
+#include <wx/image.h>
+#include <wx/icon.h>
 #include <wx/button.h>
 #include <wx/sizer.h>
 #include <wx/stattext.h>
@@ -27,9 +29,6 @@ class SecurityTextEditCtrl;
 #include <wx/checkbox.h>
 #include <wx/textctrl.h>
 #include <wx/panel.h>
-#include <wx/bitmap.h>
-#include <wx/image.h>
-#include <wx/icon.h>
 #include <wx/gbsizer.h>
 #include <wx/notebook.h>
 #include <wx/dialog.h>
@@ -39,10 +38,10 @@ class SecurityTextEditCtrl;
 ///////////////////////////////////////////////////////////////////////////////
 /// Class UsbdmDialogueSkeleton
 ///////////////////////////////////////////////////////////////////////////////
-class UsbdmDialogueSkeleton : public wxDialog 
+class UsbdmDialogueSkeleton : public wxDialog
 {
 	private:
-	
+
 	protected:
 		enum
 		{
@@ -52,7 +51,7 @@ class UsbdmDialogueSkeleton : public wxDialog
 			wxID_KEEPCHANGES,
 			wxID_DISCARDCHANGES
 		};
-		
+
 		wxNotebook* fNotebook;
 		wxPanel* fInterfacePanel;
 		wxChoice* bdmSelectChoiceControl;
@@ -140,7 +139,7 @@ class UsbdmDialogueSkeleton : public wxDialog
 		wxButton* keepChangesButton;
 		wxButton* discardChangesButton;
 		wxButton* closeButton;
-		
+
 		// Virtual event handlers, overide them in your derived class
 		virtual void OnClose( wxCloseEvent& event ) { event.Skip(); }
 		virtual void OnBdmSelectComboSelected( wxCommandEvent& event ) { event.Skip(); }
@@ -193,13 +192,12 @@ class UsbdmDialogueSkeleton : public wxDialog
 		virtual void OnKeepChangesClick( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnDiscardChangesClick( wxCommandEvent& event ) { event.Skip(); }
 		virtual void onCloseButton( wxCommandEvent& event ) { event.Skip(); }
-		
-	
+
+
 	public:
-		
-		UsbdmDialogueSkeleton( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = wxT("USBDM"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 529,1017 ), long style = wxDEFAULT_DIALOG_STYLE|wxMINIMIZE_BOX|wxRESIZE_BORDER ); 
+
+		UsbdmDialogueSkeleton( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = wxT("USBDM"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 529,1017 ), long style = wxDEFAULT_DIALOG_STYLE|wxMINIMIZE_BOX|wxRESIZE_BORDER );
 		~UsbdmDialogueSkeleton();
-	
+
 };
 
-#endif //__USBDMDIALOGUESKELETON_H__

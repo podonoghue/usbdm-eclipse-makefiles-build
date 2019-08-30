@@ -1,12 +1,11 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Jun  5 2014)
+// C++ code generated with wxFormBuilder (version Oct 26 2018)
 // http://www.wxformbuilder.org/
 //
-// PLEASE DO "NOT" EDIT THIS FILE!
+// PLEASE DO *NOT* EDIT THIS FILE!
 ///////////////////////////////////////////////////////////////////////////
 
-#ifndef __MEMORYDUMPDIALOGUESKELETON_H__
-#define __MEMORYDUMPDIALOGUESKELETON_H__
+#pragma once
 
 #include <wx/artprov.h>
 #include <wx/xrc/xmlres.h>
@@ -16,6 +15,9 @@
 #include <wx/font.h>
 #include <wx/colour.h>
 #include <wx/settings.h>
+#include <wx/bitmap.h>
+#include <wx/image.h>
+#include <wx/icon.h>
 #include <wx/button.h>
 #include <wx/combobox.h>
 #include <wx/sizer.h>
@@ -35,10 +37,10 @@
 ///////////////////////////////////////////////////////////////////////////////
 /// Class MemoryDumpDialogueSkeleton
 ///////////////////////////////////////////////////////////////////////////////
-class MemoryDumpDialogueSkeleton : public wxDialog 
+class MemoryDumpDialogueSkeleton : public wxDialog
 {
 	private:
-	
+
 	protected:
 		wxRadioBox* targetTypeRadioBox;
 		wxButton* bdmRefreshButtonControl;
@@ -60,7 +62,7 @@ class MemoryDumpDialogueSkeleton : public wxDialog
 		wxCheckBox* keepEmptySRECsCheckbox;
 		wxStaticText* m_staticText2;
 		wxTextCtrl* statusText;
-		
+
 		// Virtual event handlers, overide them in your derived class
 		virtual void OnTargetTypeRadioBoxSelect( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnRefreshBDMClick( wxCommandEvent& event ) { event.Skip(); }
@@ -74,13 +76,12 @@ class MemoryDumpDialogueSkeleton : public wxDialog
 		virtual void OnReadMemoryButtonClick( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnSaveToFileButton( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnKeepEmptySRECsCheckboxClick( wxCommandEvent& event ) { event.Skip(); }
-		
-	
+
+
 	public:
-		
-		MemoryDumpDialogueSkeleton( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = wxT("USBDM Memory Dump"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 752,1043 ), long style = wxDEFAULT_DIALOG_STYLE|wxMAXIMIZE_BOX|wxMINIMIZE_BOX|wxRESIZE_BORDER|wxSYSTEM_MENU ); 
+
+		MemoryDumpDialogueSkeleton( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = wxT("USBDM Memory Dump"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 752,1043 ), long style = wxDEFAULT_DIALOG_STYLE|wxMAXIMIZE_BOX|wxMINIMIZE_BOX|wxRESIZE_BORDER|wxSYSTEM_MENU );
 		~MemoryDumpDialogueSkeleton();
-	
+
 };
 
-#endif //__MEMORYDUMPDIALOGUESKELETON_H__

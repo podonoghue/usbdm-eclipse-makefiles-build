@@ -1,12 +1,11 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Jun  5 2014)
+// C++ code generated with wxFormBuilder (version Oct 26 2018)
 // http://www.wxformbuilder.org/
 //
-// PLEASE DO "NOT" EDIT THIS FILE!
+// PLEASE DO *NOT* EDIT THIS FILE!
 ///////////////////////////////////////////////////////////////////////////
 
-#ifndef __GDBSERVERWINDOWSKELETON_H__
-#define __GDBSERVERWINDOWSKELETON_H__
+#pragma once
 
 #include <wx/artprov.h>
 #include <wx/xrc/xmlres.h>
@@ -33,10 +32,10 @@
 ///////////////////////////////////////////////////////////////////////////////
 /// Class GdbServerWindowSkeleton
 ///////////////////////////////////////////////////////////////////////////////
-class GdbServerWindowSkeleton : public wxFrame 
+class GdbServerWindowSkeleton : public wxFrame
 {
 	private:
-	
+
 	protected:
 		wxMenuBar* menuBar;
 		wxMenu* serverMenu;
@@ -50,7 +49,7 @@ class GdbServerWindowSkeleton : public wxFrame
 		wxTextCtrl* statusTextControl;
 		wxTextCtrl* entryTextControl;
 		wxStatusBar* statusBar;
-		
+
 		// Virtual event handlers, overide them in your derived class
 		virtual void OnCloseWindow( wxCloseEvent& event ) { event.Skip(); }
 		virtual void OnChangeSettings( wxCommandEvent& event ) { event.Skip(); }
@@ -66,14 +65,13 @@ class GdbServerWindowSkeleton : public wxFrame
 		virtual void OnToggleMaskISR( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnToggleCatchVLLS( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnEntryTextEnter( wxCommandEvent& event ) { event.Skip(); }
-		
-	
+
+
 	public:
-		
+
 		GdbServerWindowSkeleton( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = wxT("GDB Server"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 510,618 ), long style = wxDEFAULT_FRAME_STYLE|wxTAB_TRAVERSAL );
-		
+
 		~GdbServerWindowSkeleton();
-	
+
 };
 
-#endif //__GDBSERVERWINDOWSKELETON_H__

@@ -1,12 +1,11 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Jun  5 2014)
+// C++ code generated with wxFormBuilder (version Oct 26 2018)
 // http://www.wxformbuilder.org/
 //
-// PLEASE DO "NOT" EDIT THIS FILE!
+// PLEASE DO *NOT* EDIT THIS FILE!
 ///////////////////////////////////////////////////////////////////////////
 
-#ifndef __GDIDIALOGUESKELETON_H__
-#define __GDIDIALOGUESKELETON_H__
+#pragma once
 
 #include <wx/artprov.h>
 #include <wx/xrc/xmlres.h>
@@ -18,6 +17,9 @@ class NumberTextEditCtrl;
 #include <wx/font.h>
 #include <wx/colour.h>
 #include <wx/settings.h>
+#include <wx/bitmap.h>
+#include <wx/image.h>
+#include <wx/icon.h>
 #include <wx/button.h>
 #include <wx/sizer.h>
 #include <wx/stattext.h>
@@ -26,9 +28,6 @@ class NumberTextEditCtrl;
 #include <wx/checkbox.h>
 #include <wx/textctrl.h>
 #include <wx/panel.h>
-#include <wx/bitmap.h>
-#include <wx/image.h>
-#include <wx/icon.h>
 #include <wx/notebook.h>
 #include <wx/dialog.h>
 
@@ -37,10 +36,10 @@ class NumberTextEditCtrl;
 ///////////////////////////////////////////////////////////////////////////////
 /// Class GdiDialogueSkeleton
 ///////////////////////////////////////////////////////////////////////////////
-class GdiDialogueSkeleton : public wxDialog 
+class GdiDialogueSkeleton : public wxDialog
 {
 	private:
-	
+
 	protected:
 		wxNotebook* fNotebook;
 		wxPanel* fInterfacePanel;
@@ -84,7 +83,7 @@ class GdiDialogueSkeleton : public wxDialog
 		wxCheckBox* dontShowAgainControl;
 		wxButton* cancelButton;
 		wxButton* openBdmButton;
-		
+
 		// Virtual event handlers, overide them in your derived class
 		virtual void OnClose( wxCloseEvent& event ) { event.Skip(); }
 		virtual void OnBdmSelectComboSelected( wxCommandEvent& event ) { event.Skip(); }
@@ -110,13 +109,12 @@ class GdiDialogueSkeleton : public wxDialog
 		virtual void OnDontShowAgainControlClick( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnCancelClick( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnOpenBdmClick( wxCommandEvent& event ) { event.Skip(); }
-		
-	
+
+
 	public:
-		
-		GdiDialogueSkeleton( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = wxT("USBDM"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 529,1017 ), long style = wxDEFAULT_DIALOG_STYLE|wxMINIMIZE_BOX|wxRESIZE_BORDER ); 
+
+		GdiDialogueSkeleton( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = wxT("USBDM"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 529,1017 ), long style = wxDEFAULT_DIALOG_STYLE|wxMINIMIZE_BOX|wxRESIZE_BORDER );
 		~GdiDialogueSkeleton();
-	
+
 };
 
-#endif //__GDIDIALOGUESKELETON_H__

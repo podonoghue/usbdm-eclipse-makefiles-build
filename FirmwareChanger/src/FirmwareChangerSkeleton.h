@@ -1,20 +1,22 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Jun  5 2014)
+// C++ code generated with wxFormBuilder (version Oct 26 2018)
 // http://www.wxformbuilder.org/
 //
-// PLEASE DO "NOT" EDIT THIS FILE!
+// PLEASE DO *NOT* EDIT THIS FILE!
 ///////////////////////////////////////////////////////////////////////////
 
-#ifndef __FIRMWARECHANGERSKELETON_H__
-#define __FIRMWARECHANGERSKELETON_H__
+#pragma once
 
 #include <wx/artprov.h>
 #include <wx/xrc/xmlres.h>
 class NumberTextEditCtrl;
 
 #include <wx/string.h>
-#include <wx/button.h>
+#include <wx/bitmap.h>
+#include <wx/image.h>
+#include <wx/icon.h>
 #include <wx/gdicmn.h>
+#include <wx/button.h>
 #include <wx/font.h>
 #include <wx/colour.h>
 #include <wx/settings.h>
@@ -30,10 +32,10 @@ class NumberTextEditCtrl;
 ///////////////////////////////////////////////////////////////////////////////
 /// Class FirmwareChangerSkeleton
 ///////////////////////////////////////////////////////////////////////////////
-class FirmwareChangerSkeleton : public wxDialog 
+class FirmwareChangerSkeleton : public wxDialog
 {
 	private:
-	
+
 	protected:
 		wxButton* loadFirmwareButton;
 		wxCheckBox* autoSelectFirmwareCheckbox;
@@ -47,7 +49,7 @@ class FirmwareChangerSkeleton : public wxDialog
 		wxButton* programFlashButton;
 		wxButton* verifyButton;
 		wxButton* exitButton;
-		
+
 		// Virtual event handlers, overide them in your derived class
 		virtual void OnLoadFirmwareButtonClick( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnAutoSelectFirmwareCheckboxClick( wxCommandEvent& event ) { event.Skip(); }
@@ -58,13 +60,12 @@ class FirmwareChangerSkeleton : public wxDialog
 		virtual void OnProgramFlashButtonClick( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnVerifyFlashButtonClick( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnExitButtonClick( wxCommandEvent& event ) { event.Skip(); }
-		
-	
+
+
 	public:
-		
-		FirmwareChangerSkeleton( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = wxT("Firmware Changer"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 441,692 ), long style = wxCLOSE_BOX|wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER ); 
+
+		FirmwareChangerSkeleton( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = wxT("Firmware Changer"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 441,692 ), long style = wxCLOSE_BOX|wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER );
 		~FirmwareChangerSkeleton();
-	
+
 };
 
-#endif //__FIRMWARECHANGERSKELETON_H__
