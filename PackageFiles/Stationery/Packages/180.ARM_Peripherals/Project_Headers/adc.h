@@ -413,7 +413,7 @@ public:
     *
     * @return range e.g. AdcResolution_8bit_se => (2^8)-1
     */
-   static constexpr unsigned getSinglendeddMaximum(AdcResolution adcResolution) {
+   static constexpr unsigned getSingleEndedMaximum(AdcResolution adcResolution) {
       switch(adcResolution) {
          case AdcResolution_8bit_se:  return (1<<8)-1;
          case AdcResolution_10bit_se: return (1<<10)-1;
