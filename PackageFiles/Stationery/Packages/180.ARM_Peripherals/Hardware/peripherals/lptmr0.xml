@@ -186,8 +186,9 @@
    </validate>
 
    <projectActionList id = "lptmr_files" >
-      <copy source="Project_Headers/lptmr.h"     target="Project_Headers/lptmr.h"      overwrite="true" derived="true" />
-      <copy source="Snippets/lptmr-example.cpp"  target="Snippets/lptmr-example.cpp"   overwrite="true" derived="true"/>
+      <copy source="Project_Headers/lptmr.h"          target="Project_Headers/lptmr.h"          overwrite="true" derived="true" />
+      <copy source="Snippets/lptmr-example.cpp"       target="Snippets/lptmr-example.cpp"       overwrite="true" derived="true"/>
+      <copy source="Snippets/lptmr-reaction-time.cpp" target="Snippets/lptmr-reaction-time.cpp" overwrite="true" derived="true"/>
    </projectActionList>
       
    <template><![CDATA[
