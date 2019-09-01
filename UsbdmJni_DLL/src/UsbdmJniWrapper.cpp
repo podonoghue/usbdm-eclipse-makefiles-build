@@ -125,6 +125,41 @@ Java_net_sourceforge_usbdm_jni_Usbdm_usbdmGetUsbdmDataPath(JNIEnv *env, jclass, 
 }
 
 /*
+ * Class:     net_sourceforge_usbdm_jni_Usbdm
+ * Method:    usbdmReadWindowsRegistry
+ * Signature: (Ljava/lang/String;Ljava/lang/String;)Ljava/lang/String;
+ */
+JNIEXPORT jstring JNICALL
+Java_net_sourceforge_usbdm_jni_Usbdm_usbdmReadWindowsRegistry(
+      JNIEnv *env, jclass,
+      jstring jRegPath,
+      jstring jName) {
+
+   // Assumed Unicode -> ASCII OK
+   const char *pRegPath = env->GetStringUTFChars(jRegPath, NULL);
+   const char *pName    = env->GetStringUTFChars(jName,    NULL);
+
+   if ((pRegPath == nullptr) || (pName == nullptr)) {
+      // Allocation failed
+      return nullptr;
+   }
+   std::string regPath(pRegPath);
+   std::string name(pName);
+
+   std::string value;
+
+   bool ok = getRegistryValue(regPath, name, value);
+
+   env->ReleaseStringUTFChars(jRegPath, pRegPath);
+   env->ReleaseStringUTFChars(jName,    pName);
+
+   if (!ok) {
+      return nullptr;
+   }
+   return env->NewStringUTF(value.c_str());
+}
+
+/*
  * Class:     net.sourceforge.usbdm.jni.usbdm
  * Method:    usbdm_init
  * Signature: ()I
@@ -808,6 +843,36 @@ Java_net_sourceforge_usbdm_jni_Usbdm_usbdmGetBDMStatus(JNIEnv *env, jclass objCl
       }
       env->SetIntField(jStatus, fieldID, values[indx]);
    }
+   return rc;
+}
+
+/*
+ * Class:     net_sourceforge_usbdm_jni_Usbdm
+ * Method:    getVersion
+ * Signature: ([I)I
+ */
+JNIEXPORT jint JNICALL
+Java_net_sourceforge_usbdm_jni_Usbdm_usbdmGetVersion(JNIEnv *env, jclass objClass, jobject jStatus) {
+   USBDM_Version_t version;
+   int rc = USBDM_GetVersion(&version);
+   if (rc != BDM_RC_OK) {
+      return rc;
+   }
+   jclass cls = env->GetObjectClass(jStatus);
+   if (cls == NULL) {
+      return BDM_RC_ILLEGAL_PARAMS;
+   }
+   jfieldID fieldID = env->GetFieldID(cls, "bdmSoftwareVersion", "I");
+   if (fieldID == NULL) {
+      return BDM_RC_ILLEGAL_PARAMS;
+   }
+   env->SetIntField(jStatus, fieldID, version.bdmSoftwareVersion);
+
+   fieldID = env->GetFieldID(cls, "bdmHardwareVersion", "I");
+   if (fieldID == NULL) {
+      return BDM_RC_ILLEGAL_PARAMS;
+   }
+   env->SetIntField(jStatus, fieldID, version.bdmHardwareVersion);
    return rc;
 }
 

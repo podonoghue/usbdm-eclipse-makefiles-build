@@ -62,5 +62,18 @@ bool getUsbdmDataPath(std::string &path) {
    path = home + "/.usbdm/";
    return true;
 }
+/**
+ * Obtain registry value
+ *
+ * @param [in]  regPath       Registry path e.g. "SOFTWARE\\pgo\\USBDM"
+ * @param [in]  strValueName  Name of value e.g. "InstallationDirectory"
+ *
+ * @param [out] value         Value from registry
+ *
+ * @return false if failed
+ */
+bool getRegistryValue(std::string &regPath, std::string &strValueName, std::string &value) {
+   return false;
+}
 
 #endif

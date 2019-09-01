@@ -23,7 +23,7 @@
 #define CONFIGURATION_DIRECTORY_NAME "usbdm"
 #define CONFIG_WITH_SLASHES "/" CONFIGURATION_DIRECTORY_NAME "/"
 
-/*!
+/**
  * Get registry value as string
  *
  * @param hKey             - Registry Key from call to RegOpenKeyExA()
@@ -33,8 +33,8 @@
  *
  * @return error code
  */
-static LONG GetStringRegKey(HKEY hKey, const std::string &strValueName, std::string &strValue, const std::string &strDefaultValue)
-{
+static LONG GetStringRegKey(HKEY hKey, const std::string &strValueName, std::string &strValue, const std::string &strDefaultValue) {
+
     strValue = strDefaultValue;
     char szBuffer[512];
     memset(szBuffer, 0, sizeof(szBuffer));
@@ -46,7 +46,8 @@ static LONG GetStringRegKey(HKEY hKey, const std::string &strValueName, std::str
     return nError;
 }
 
-/* Obtain the path of the application directory
+/**
+ * Obtain the path of the application directory
  *
  * @param path - Path found
  *
@@ -61,7 +62,27 @@ bool getUsbdmApplicationPath(std::string &path) {
    return true;
 }
 
-/* Obtain the path of the resource directory
+/**
+ * Obtain registry value
+ *
+ * @param [in]  regPath       Registry path e.g. "SOFTWARE\\pgo\\USBDM"
+ * @param [in]  strValueName  Name of value e.g. "InstallationDirectory"
+ *
+ * @param [out] value         Value from registry
+ *
+ * @return false if failed
+ */
+bool getRegistryValue(std::string &regPath, std::string &strValueName, std::string &value) {
+   HKEY hKey;
+   if ((RegOpenKeyExA(HKEY_LOCAL_MACHINE, regPath.c_str(), 0, KEY_READ|KEY_WOW64_32KEY, &hKey) != ERROR_SUCCESS) ||
+       (GetStringRegKey(hKey, strValueName, value, "") != ERROR_SUCCESS)) {
+      return false;
+   }
+   return true;
+}
+
+/**
+ *  Obtain the path of the resource directory
  *
  * @param path - Path found
  *
@@ -71,7 +92,8 @@ bool getUsbdmResourcePath(std::string &path) {
    return getUsbdmApplicationPath(path);
 }
 
-/* Obtain the path of the configuration directory
+/**
+ *  Obtain the path of the configuration directory
  *
  * @param path - Path found
  *
