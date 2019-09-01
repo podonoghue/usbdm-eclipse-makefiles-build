@@ -13,7 +13,7 @@ fi
 KDS_DIR_LIST="/usr/local/Freescale/KDS_* /opt/Freescale/KDS_*"
 
 # Where to look for Eclipse
-ECLIPSE_DIR_LIST="/usr/local/eclipse* /opt/eclipse* /usr/lib/eclipse* /opt/cpp-neon/eclipse*"
+ECLIPSE_DIR_LIST="/usr/local/eclipse* /opt/eclipse* /usr/lib/eclipse* /opt/cpp-neon/eclipse* $HOME/eclipse/cpp-2019-09/eclipse $HOME/eclipse/cpp-2019-06/eclipse $HOME/eclipse/cpp-2019-03/eclipse"
 
 #======================================================
 #  USB Hardware Installation
