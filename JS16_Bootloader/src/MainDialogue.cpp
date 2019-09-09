@@ -6,6 +6,7 @@
 ///////////////////////////////////////////////////////////////////////////
 
 #include <wx/wx.h>
+#include <wx/cmdline.h>
 
 #include "MainDialogue.h"
 #include "UsbdmSystem.h"
@@ -21,30 +22,42 @@ struct BdmInfo {
    const char *description;
 };
 
+const std::string firmwareSelection[] = {"Custom",
+		                              "HCS08/HCS12/CFV1",
+		                              "HCS08/HCS12/CFV1 + Serial",
+									  "CFVx/DSC/ARM-JTAG",
+									  "CFVx/DSC/ARM-JTAG + Serial",
+									  "HCS08/HCS12/CFV1/ARM-SWD",
+									  "HCS08/HCS12/CFV1/ARM-SWD + Serial"};
+
 BdmInfo bdmInfo[] = {
-   {_("Custom"), "", ""},
-  {_("HCS08/HCS12/CFV1"),
+  {_(firmwareSelection[0]), "", ""},
+  {_(firmwareSelection[1]),
         "FlashImages/JS16/USBDM_JS16CWJ_V4.sx",
         "Basic HCS08/HCS12/CFV1 BDM \n e.g. Witztronics, Wytec or TechnologicalArts."},
-  {_("HCS08/HCS12/CFV1 + Serial"),
+  {_(firmwareSelection[2]),
         "FlashImages/JS16/USBDM_SER_JS16CWJ_V4.sx",
         "HCS08/HCS12/CFV1 BDM with  \n USB serial function."},
-  {_("CFVx/DSC/ARM-JTAG"),
+  {_(firmwareSelection[3]),
         "FlashImages/JS16/USBDM_CF_JS16CWJ_V4.sx",
         "Basic CFVx/DSC/Kinetis-JTAG BDM."},
-  {_("CFVx/DSC/ARM-JTAG + Serial"),
+  {_(firmwareSelection[4]),
         "FlashImages/JS16/USBDM_CF_SER_JS16CWJ_V4.sx",
         "CFVx/DSC/Kinetis-JTAG BDM with  \n USB serial function."},
-  {_("HCS08/HCS12/CFV1/ARM-SWD"),
+  {_(firmwareSelection[5]),
         "FlashImages/JS16/USBDM_SWD_JS16CWJ_V4.sx",
         "Basic HCS08/HCS12/CFV1/Kinetis-SWD BDM."},
-  {_("HCS08/HCS12/CFV1/ARM-SWD + Serial"),
+  {_(firmwareSelection[6]),
         "FlashImages/JS16/USBDM_SWD_SER_JS16CWJ_V4.sx",
         "HCS08/HCS12/CFV1/Kinetis-SWD BDM with  \n USB serial function."},
 };
 
 MainDialogue::MainDialogue( wxWindow* parent ) :
-      BootloaderDialogueSkeleton( parent) {
+   BootloaderDialogueSkeleton( parent),
+   verbose(false),
+   enableConsole(false),
+   activeMode(CMD_LINE_MODE)
+   {
 
    for (unsigned index=0; index < sizeof(bdmInfo)/sizeof(bdmInfo[0]); index++) {
       firmwareSelectionBox->SetString(index, bdmInfo[index].radioBoxChoice);
@@ -57,14 +70,14 @@ void MainDialogue::OnProgramButtonClick( wxCommandEvent& event ) {
    LOGGING_E;
    int bdmType = firmwareSelectionBox->GetSelection();
 
-   std::string filename;
    if (bdmType>0) {
-      filename = UsbdmSystem::getResourcePath(bdmInfo[bdmType].filename);
+	   filePath = UsbdmSystem::getResourcePath(bdmInfo[bdmType].filename);
    }
    else {
-      filename = this->customPath;
+	   filePath = this->customPath;
    }
-   USBDM_ErrorCode rc = ProgramDevice(filename);
+   ProgressDialoguePtr progressCallback = ProgressDialogueFactory::create("Accessing Target", 0);
+   USBDM_ErrorCode rc = ProgramDevice(filePath, progressCallback);
    if (rc != BDM_RC_OK) {
       log.error("Programming failed, rc = %s\n", UsbdmSystem::getErrorString(rc));
       wxString msg = wxString::Format(_("Programming Failed   \n"
@@ -132,4 +145,67 @@ void MainDialogue::saveSettings(AppSettings &settings) {
    LOGGING_E;
 
    settings.addValue("defaultDirectory",   defaultDirectory);
+}
+
+//! Parse command line arguments
+//!
+//! @param parser      - wxCmdLineParser
+//! @return USBDM_ErrorCode
+USBDM_ErrorCode MainDialogue::parseCommandLine(wxCmdLineParser& parser) {
+	LOGGING;
+
+	long lValue;
+
+	if(!parser.Found(_("firmware"), &lValue)){
+		activeMode = GUI_MODE;
+		return BDM_RC_OK;
+	}
+
+    unsigned index = (unsigned)lValue;
+    if(index < 0 || index >= sizeof(bdmInfo)/sizeof(bdmInfo[0])){
+    	logUsageError(parser, _("\n****** Error: Invalid firmware option"));
+    	return BDM_RC_ILLEGAL_PARAMS;
+    }
+
+    if(index == 0 && parser.GetParamCount() == 0){
+    	logUsageError(parser, _("\n****** Error: Custom firmware file path missing"));
+    	return BDM_RC_ILLEGAL_PARAMS;
+    }
+
+    if(index == 0){
+    	filePath = parser.GetParam(0);
+    }
+    else{
+    	filePath = UsbdmSystem::getResourcePath(bdmInfo[index].filename);
+    }
+
+	verbose = parser.Found(_("verbose"));
+
+#ifdef _WIN32
+	enableConsole = parser.Found(_("console"));
+#else
+	enableConsole = true;
+#endif
+
+	return BDM_RC_OK;
+}
+
+//! Execute program in command line
+//!
+//! @param None
+//! @return USBDM_ErrorCode
+USBDM_ErrorCode MainDialogue::doCommandLineProgram(){
+	LOGGING_E;
+
+	ProgressDialoguePtr progressCallback = ProgressDialogueFactory::create(0, verbose, enableConsole);
+	USBDM_ErrorCode rc = ProgramDevice(filePath, progressCallback);
+
+	return rc;
+}
+
+void MainDialogue::logUsageError(wxCmdLineParser& parser, const wxString& text){
+   UsbdmSystem::Log::error("%s", (const char *)text.c_str());
+#if (wxCHECK_VERSION(2, 9, 0))
+   parser.AddUsageText(text);
+#endif
 }

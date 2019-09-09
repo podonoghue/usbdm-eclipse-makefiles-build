@@ -11,7 +11,8 @@
 
 #include "USBDM_API.h"
 #include "ICP.h"
+#include "ProgressDialogueFactory.h"
 
-USBDM_ErrorCode ProgramDevice(std::string hexFileName);
+USBDM_ErrorCode ProgramDevice(std::string hexFileName, ProgressDialoguePtr progressCallback);
 
 #endif /* JS16_BOOTLOADER_H_ */
