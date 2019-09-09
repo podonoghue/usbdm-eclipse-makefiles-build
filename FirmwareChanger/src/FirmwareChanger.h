@@ -65,6 +65,10 @@ typedef struct {
 class FirmwareChangerDialogue : public FirmwareChangerSkeleton {
 
 protected:
+	enum DialogueMode{
+	    	       GUI_MODE,
+	    		   CMD_LINE_MODE
+	    	    };
     FlashImageData            flashImageDescription;
     wxString                  errMessage;
     ICP_dataType              ICP_data;
@@ -78,6 +82,12 @@ protected:
     bool                      autoSequenceFlag;
     int                       autoSequenceNumber;
     bool                      autoUpdateBdm;
+    bool                      verify;
+    bool                      program;
+    bool                      verbose;
+    bool                      enableAutoLoad;
+    bool                      enableConsole;
+    DialogueMode              activeMode;
 
     bool   loadFlashImageFile(wxString path);
     void   setSerialNumber(const wxString &serialNumber);
@@ -106,6 +116,7 @@ protected:
     void   textControlToSerialNumber(void);
     void   parseSerialNumber(const wxString &serialNumber, wxString &serialNumberPrefix);
     void   updateControls(void);
+    virtual void logUsageError(wxCmdLineParser& parser, const wxString& text);
 
 public:
     enum {
@@ -168,6 +179,15 @@ public:
     void   loadSettings(const AppSettings &settings);
     void   saveSettings(AppSettings &settings);
     void   setAutoLoad(bool value);
+
+    // command line functions
+    virtual int doCommandLineProgram();
+    virtual int parseCommandLine(wxCmdLineParser& parser);
+
+    virtual std::string getConsoleMessage();
+    bool inGUIMode(){return activeMode == GUI_MODE;}
+    bool doAutoLoad(){return enableAutoLoad;}
+    bool consoleIsEnabled(){return enableConsole;}
 };
 
 #endif

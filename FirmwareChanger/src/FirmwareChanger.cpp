@@ -67,7 +67,7 @@ using namespace std;
 #include "ProgressDialogueFactory.h"
 
 const char *logFilename("FirmwareChanger.log");
-const char *configFileName("FirmwareChanger");
+const char *configFileName("FirmwareChanger.cfg");
 
 #ifdef LOG
 // Define to cause flash verification to run multiple times in loop
@@ -86,9 +86,12 @@ const char *configFileName("FirmwareChanger");
 #endif
 
 enum {
-   FLASH_ERR_OK      = 0,
-   FLASH_ERR_FAIL    = 1,
-   FLASH_ERR_CANCEL  = 2,
+   FLASH_ERR_OK             = 0,
+   CMD_LINE_OK              = 0,
+   FLASH_ERR_FAIL           = 1,
+   CMD_LINE_ILLEGAL_PARAMS  = 2,
+   CMD_LINE_ILLEGAL_COMMAND = 3,
+   FLASH_ERR_CANCEL         = 4,
 };
 
 /*!
@@ -282,10 +285,12 @@ bool FirmwareChangerDialogue::getICPData(void) {
 bool FirmwareChangerDialogue::loadFlashImageFile(wxString path) {
    LOGGING;
 
-   // Clear File information
-   filename   = wxEmptyString;
-   filePath   = wxEmptyString;
-   fileInformationStaticText->SetLabel(wxEmptyString);
+   if(inGUIMode()){
+	   // Clear File information
+	   filename   = wxEmptyString;
+	   filePath   = wxEmptyString;
+	   fileInformationStaticText->SetLabel(wxEmptyString);
+   }
 
    flashImage.reset();
    flashImage = FlashImageFactory::createFlashImage(T_HCS08);
@@ -294,41 +299,49 @@ bool FirmwareChangerDialogue::loadFlashImageFile(wxString path) {
 
    // Extract the ICP information from the image
    if (!isOK) {
-      log.error("Failed to load \'%s\'\n", (const char *)path.c_str());
+      log.error("Failed to load \'%s\'\n", (const char *)path.c_str());  
       flashImage.reset();
-      wxMessageBox(_("Flash Image is invalid.\n"
-                     "File is incorrect or corrupt?"),
-                   _("Flash File Format Error"),
-                   wxOK|wxICON_ERROR|wxSTAY_ON_TOP|wxCENTER
-                   );
-      return FLASH_ERR_FAIL;
+      if(inGUIMode()){
+    	  wxMessageBox(_("Flash Image is invalid.\n"
+ 		         "File is incorrect or corrupt?"),
+    	               _("Flash File Format Error"),
+    	               wxOK|wxICON_ERROR|wxSTAY_ON_TOP|wxCENTER
+    	               );
+      }
+      else{
+          errMessage = "Flash Image is invalid. File is incorrect or corrupt?";
+      }
+      return false;
    }
-   wxString hardwareDescription(getBriefHardwareDescription(flashImageDescription.hardwareVersion), wxConvUTF8);
-   wxString fileInformation;
 
-   fileInformation.Printf("Serial # = \n  %s\n",              (const char *)flashImageDescription.serialNumber.c_str());
-   fileInformationStaticText->AppendText(fileInformation);
-   fileInformation.Printf("Hardware Version =\n  %s\n",       (const char *)hardwareDescription.c_str());
-   fileInformationStaticText->AppendText(fileInformation);
-   fileInformation.Printf("Software Version\t = %d.%d\n",     flashImageDescription.softwareVersion>>4, flashImageDescription.softwareVersion&0x0F);
-   fileInformationStaticText->AppendText(fileInformation);
-   fileInformation.Printf("Flash Start   \t = 0x%4.4X\n",     flashImageDescription.flashStart);
-   fileInformationStaticText->AppendText(fileInformation);
-   fileInformation.Printf("Protect Address   \t = 0x%4.4X\n", flashImageDescription.protectAddr);
-   fileInformationStaticText->AppendText(fileInformation);
-   fileInformation.Printf("Code Start Address\t = 0x%4.4X\n", flashImageDescription.firstAddr);
-   fileInformationStaticText->AppendText(fileInformation);
-   fileInformation.Printf("Code End Address\t = 0x%4.4X\n",   flashImageDescription.lastAddr);
-   fileInformationStaticText->AppendText(fileInformation);
-   fileInformation.Printf("UserDetectICP()   \t = 0x%4.4X\n", flashImageDescription.userDetectICP);
-   fileInformationStaticText->AppendText(fileInformation);
+   if(inGUIMode()){
+      wxString hardwareDescription(getBriefHardwareDescription(flashImageDescription.hardwareVersion), wxConvUTF8);
+      wxString fileInformation;
 
-   parseSerialNumber(flashImageDescription.serialNumber, serialNumberPrefix);
-   if (autoSequenceFlag && !autoUpdateBdm) {
-      serialNumberToTextControl();
-   }
-   else {
-      serialNumberText->ChangeValue(flashImageDescription.serialNumber);
+      fileInformation.Printf("Serial # = \n  %s\n",              (const char *)flashImageDescription.serialNumber.c_str());
+      fileInformationStaticText->AppendText(fileInformation);
+      fileInformation.Printf("Hardware Version =\n  %s\n",       (const char *)hardwareDescription.c_str());
+      fileInformationStaticText->AppendText(fileInformation);
+      fileInformation.Printf("Software Version\t = %d.%d\n",     flashImageDescription.softwareVersion>>4, flashImageDescription.softwareVersion&0x0F);
+      fileInformationStaticText->AppendText(fileInformation);
+      fileInformation.Printf("Flash Start   \t = 0x%4.4X\n",     flashImageDescription.flashStart);
+      fileInformationStaticText->AppendText(fileInformation);
+      fileInformation.Printf("Protect Address   \t = 0x%4.4X\n", flashImageDescription.protectAddr);
+      fileInformationStaticText->AppendText(fileInformation);
+      fileInformation.Printf("Code Start Address\t = 0x%4.4X\n", flashImageDescription.firstAddr);
+      fileInformationStaticText->AppendText(fileInformation);
+      fileInformation.Printf("Code End Address\t = 0x%4.4X\n",   flashImageDescription.lastAddr);
+      fileInformationStaticText->AppendText(fileInformation);
+      fileInformation.Printf("UserDetectICP()   \t = 0x%4.4X\n", flashImageDescription.userDetectICP);
+      fileInformationStaticText->AppendText(fileInformation);
+
+      parseSerialNumber(flashImageDescription.serialNumber, serialNumberPrefix);
+      if (autoSequenceFlag && !autoUpdateBdm) {
+         serialNumberToTextControl();
+      }
+      else {
+         serialNumberText->ChangeValue(flashImageDescription.serialNumber);
+      }
    }
    return true;
 }
@@ -352,8 +365,14 @@ int FirmwareChangerDialogue::openSingleDevice(void) {
       return FLASH_ERR_FAIL;
    }
    if (numDevices > 1) {
-      errMessage = _("Too many USBDM devices found\n"
-            "Only a single device may be connected during update");
+	   if(inGUIMode()){
+		   errMessage = _("Too many USBDM devices found\n"
+		               "Only a single device may be connected during update");
+	   }
+	   else{
+		   errMessage = _("Too many USBDM devices found. "
+				          "Only a single device may be connected during update");
+	   }
       return FLASH_ERR_FAIL;
    }
    USBDM_ErrorCode rc = USBDM_Open(0);
@@ -402,8 +421,13 @@ int FirmwareChangerDialogue::readBdmSerialNumber(const char **bdmSerialNumber) {
    rc = USBDM_GetBDMSerialNumber(bdmSerialNumber);
    USBDM_Close();
    if (rc != BDM_RC_OK) {
-      errMessage = _("Unable to read BDM serial number.\n\n"
-                     "Using default value.");
+	   if(inGUIMode()){
+		   errMessage = _("Unable to read BDM serial number.\n\n"
+		                        "Using default value.");
+	   }
+	   else{
+		   errMessage = _("Unable to read BDM serial number.");
+	   }
       return FLASH_ERR_FAIL;
    }
    return FLASH_ERR_OK;
@@ -512,8 +536,13 @@ int FirmwareChangerDialogue::doFirmware(int updateFirmware) {
    USBDM_ErrorCode bdm_rc = BDM_RC_OK;
    USBDM_ErrorCode icp_rc = BDM_RC_OK;
 
-   ProgressDialoguePtr callBack = ProgressDialogueFactory::create("Accessing Target", flashImage->getByteCount());
-
+   ProgressDialoguePtr callBack;
+   if(inGUIMode()){
+      callBack = ProgressDialogueFactory::create("Accessing Target", flashImage->getByteCount());
+   }
+   else{
+	  callBack = ProgressDialogueFactory::create(flashImage->getByteCount(), verbose, enableConsole);
+   }
    USBDM_ICP_SetCallback(callBack.get());
 
    rc = openSingleDevice();
@@ -522,15 +551,26 @@ int FirmwareChangerDialogue::doFirmware(int updateFirmware) {
    }
    bdm_rc = USBDM_GetVersion(&USBDM_Version);
    if (bdm_rc != BDM_RC_OK) {
-      errMessage = _("Unable to determine BDM Version\n"
-            "Device is not a USBDM?");
+      if(inGUIMode()){
+    	  errMessage = _("Unable to determine BDM Version\n"
+    	              "Device is not a USBDM?");
+      }
+      else{
+    	  errMessage = _("Unable to determine BDM Version. Device is not a USBDM?");
+      }
       USBDM_Close();
       return FLASH_ERR_FAIL;
    }
    if ((USBDM_Version.bdmHardwareVersion&0xC0)==0) {
-      errMessage = _("JB16 USBDMs cannot be updated or verified\n"
-            "using this software.\n"
-            "Please use the Freescale ICP utility");
+	   if(inGUIMode()){
+		   errMessage = _("JB16 USBDMs cannot be updated or verified\n"
+		               "using this software.\n"
+		               "Please use the Freescale ICP utility");
+	   }
+	   else{
+		   errMessage = _("JB16 USBDMs cannot be updated or verified using this software. "
+				          "Please use the Freescale ICP utility");
+	   }
       USBDM_Close();
       return FLASH_ERR_FAIL;
    }
@@ -541,17 +581,19 @@ int FirmwareChangerDialogue::doFirmware(int updateFirmware) {
       return FLASH_ERR_FAIL;
    }
 #if !defined(DEBUG_VER) && !defined(DEBUG_REBOOT)
-   int getOkCancel = wxMessageBox(_("The BDM will be re-booted into ICP mode for firmware update.\n\n"
-                                    "The device may then require driver installation.  Please check for\n"
-                                    "and allow this to complete.\n\n"
-                                    "Please remove any equipment connected to the USB hardware. \n\n"
-                                    "Press OK to continue"),
-                                  _("Preparing to verify/update firmware"),
-                                  wxOK|wxCANCEL|wxICON_INFORMATION|wxSTAY_ON_TOP|wxCENTER,
-                                  this
-   );
-   if (getOkCancel != wxOK) {
-      return FLASH_ERR_CANCEL;
+   if(inGUIMode()){
+      int getOkCancel = wxMessageBox(_("The BDM will be re-booted into ICP mode for firmware update.\n\n"
+                                       "The device may then require driver installation.  Please check for\n"
+                                       "and allow this to complete.\n\n"
+                                       "Please remove any equipment connected to the USB hardware. \n\n"
+                                       "Press OK to continue"),
+                                     _("Preparing to verify/update firmware"),
+                                     wxOK|wxCANCEL|wxICON_INFORMATION|wxSTAY_ON_TOP|wxCENTER,
+                                     this
+      );
+      if (getOkCancel != wxOK) {
+         return FLASH_ERR_CANCEL;
+      }
    }
 #endif
 
@@ -566,15 +608,20 @@ int FirmwareChangerDialogue::doFirmware(int updateFirmware) {
          do {
             // Try opening (should now be in ICP mode)
             bdm_rc = reOpenBDM();
-            if (bdm_rc != BDM_RC_OK) {
-               getYesNo = wxMessageBox(_("Device failed to re-open after reboot into ICP mode.\n\n"
-                                         "This may indicate that the drivers have not been installed.\n"
-                                         "Please check the driver installation before retrying.\n\n"
-                                         "Retry?"),
-                                       _("Firmware Update Failed"),
-                                        wxYES_NO|wxICON_ERROR|wxSTAY_ON_TOP|wxCENTER,
-                                        this
-                                        );
+            if(inGUIMode()){
+               if (bdm_rc != BDM_RC_OK) {
+                  getYesNo = wxMessageBox(_("Device failed to re-open after reboot into ICP mode.\n\n"
+                                            "This may indicate that the drivers have not been installed.\n"
+                                            "Please check the driver installation before retrying.\n\n"
+                                            "Retry?"),
+                                          _("Firmware Update Failed"),
+                                           wxYES_NO|wxICON_ERROR|wxSTAY_ON_TOP|wxCENTER,
+                                           this
+                                           );
+               }
+            }
+            else{
+            	break;
             }
          } while (getYesNo == wxYES);
       }
@@ -596,7 +643,7 @@ int FirmwareChangerDialogue::doFirmware(int updateFirmware) {
       }
       if (updateFirmware) {
          // Erase Flash image area (ICP area is protected)
-         callBack->update(0, "Erasing BDM Firmware...");
+    	 callBack->update(0, "Erasing BDM Firmware...");
          log.print("doFirmware(): Erasing\n");
          icp_rc = USBDM_ICP_Erase( flashImageDescription.firstAddr, flashImageDescription.protectAddr-flashImageDescription.firstAddr );
          if (icp_rc != BDM_RC_OK) {
@@ -639,38 +686,47 @@ int FirmwareChangerDialogue::doFirmware(int updateFirmware) {
    log.print("doFirmware(): Doing Normal reboot (ignore errors)\n");
    USBDM_ICP_Reboot();   // Cause Target to reboot into normal mode
    if (reOpenBDM() != BDM_RC_OK) {
-      // Try manual reboot
-      wxMessageBox(_("Please manually reboot the BDM by removing it from \n"
-                    "the PC and then replacing it after a brief wait.\n\n"
-                    "Click OK when ready"),
-                   _("Automatic Reboot Failed"),
-                   wxOK|wxSTAY_ON_TOP|wxCENTER,
-                   this
-                   );
+	  if(inGUIMode()){
+		  // Try manual reboot
+		  wxMessageBox(_("Please manually reboot the BDM by removing it from \n"
+		                 "the PC and then replacing it after a brief wait.\n\n"
+		                 "Click OK when ready"),
+		                _("Automatic Reboot Failed"),
+		                wxOK|wxSTAY_ON_TOP|wxCENTER,
+		                this
+		                );
+	  }
+	  else{
+		  errMessage = _("Failed to re-open after automatic reboot\r\n");
+          return FLASH_ERR_FAIL;
+	  }
    }
-   if (reOpenBDM() != BDM_RC_OK) {
-      errMessage = _("Failed to re-open after 2nd reboot\r\n");
-      statusStaticText->SetLabel(_("Status: Last flash operation failed"));
-      return FLASH_ERR_FAIL;
+   if(inGUIMode()){
+	  if (reOpenBDM() != BDM_RC_OK) {
+	     errMessage = _("Failed to re-open after 2nd reboot\r\n");
+	     statusStaticText->SetLabel(_("Status: Last flash operation failed"));
+	     return FLASH_ERR_FAIL;
+	  }
    }
    callBack->close();
    log.print("doFirmware() getting serial #\n");
-
    const char *buffer;
    USBDM_GetBDMSerialNumber(&buffer);
    log.print("Serial #%s\n", (const char *)convertUtfToString(buffer).ToAscii());
 
    USBDM_Close();
-
-   statusStaticText->SetLabel(_("Status: Last flash operation successful"));
+   if(inGUIMode()){
+	  statusStaticText->SetLabel(_("Status: Last flash operation successful"));
+   }
    log.print("doFirmware(): Successful\n");
 
    return rc;
 }
 
 FirmwareChangerDialogue::FirmwareChangerDialogue( wxWindow* parent)
-  : FirmwareChangerSkeleton(parent) {
-    Init();
+  : FirmwareChangerSkeleton(parent),
+	enableAutoLoad(false),
+	enableConsole(false){
 }
 
 /*
@@ -686,15 +742,14 @@ void FirmwareChangerDialogue::Init() {
    LOGGING_E;
 
    autoSelectFirmwareCheckbox->SetValue(autoUpdateBdm);
-
    serialNumberText->SetMaxLength(sizeof(ICP_data.serialNumber));
    serialNumberText->SetValue(serialNumber);
    serialNumberText->Enable(!autoSequenceFlag);
-
    autoSequenceText->SetDecimalValue(autoSequenceNumber);
    autoSequenceText->Enable(autoSequenceFlag);
-
    autoSequenceCheckbox->SetValue(autoSequenceFlag);
+   programFlashButton->Enable(flashImage != 0);
+   verifyButton->Enable(flashImage != 0);
 
    if (autoSequenceFlag) {
       serialNumberToTextControl();
@@ -764,8 +819,7 @@ void FirmwareChangerDialogue::OnLoadFirmwareButtonClick( wxCommandEvent& event )
    wxString defaultFilename   = wxEmptyString;
    wxFileDialog dialog(this, caption, defaultDir, defaultFilename, wildcard, wxFD_OPEN);
    if (dialog.ShowModal() == wxID_OK) {
-      int rc = loadFlashImageFile(dialog.GetPath());
-      if (rc == BDM_RC_OK) {
+      if (loadFlashImageFile(dialog.GetPath())) {
          filename         = dialog.GetFilename();
          defaultDirectory = dialog.GetDirectory();
       }
@@ -791,17 +845,20 @@ int FirmwareChangerDialogue::readSerialNumber(void) {
    const char *bdmDescription;
    int rc = readBdmSerialNumber(&bdmDescription);
    if (rc != FLASH_ERR_OK) {
-      wxMessageBox(errMessage,
-                   _("Reading serial number failed"),
-                   wxOK|wxICON_ERROR|wxSTAY_ON_TOP|wxCENTER,
-                   this
-                   );
+	 if(inGUIMode()){
+		 wxMessageBox(errMessage,
+		             _("Reading serial number failed"),
+		             wxOK|wxICON_ERROR|wxSTAY_ON_TOP|wxCENTER,
+		             this
+		             );
+	 }
       return rc;
    }
    serialNumber = convertUtfToString(bdmDescription);
-   serialNumberText->ChangeValue(serialNumber);
-
-   textControlToSerialNumber();
+   if(inGUIMode()){
+	  serialNumberText->ChangeValue(serialNumber);
+	  textControlToSerialNumber();
+   }
    return rc;
 }
 
@@ -876,12 +933,17 @@ int FirmwareChangerDialogue::loadUpdateInformation() {
    FILE *fp = fopen(path.c_str(), "rt");
    if (fp == NULL) {
       log.error("Failed to open \'%s\'\n", path.c_str());
-      wxMessageBox(_("Unable to open file image configuration file.\n"
-            "Please check that USBDM has been correctly installed."),
-            _("Configuration error "),
-            wxOK|wxICON_ERROR|wxSTAY_ON_TOP|wxCENTER,
-            this
-      );
+      if(inGUIMode()){
+         wxMessageBox(_("Unable to open file image configuration file.\n"
+        		 "Please check that USBDM has been correctly installed."),
+        		         _("Configuration error "),
+        		         wxOK|wxICON_ERROR|wxSTAY_ON_TOP|wxCENTER,
+        		         this);
+      }
+      else{
+          errMessage = _("Unable to open file image configuration file. "
+        		         "Please check that USBDM has been correctly installed.");
+      }
       return FLASH_ERR_FAIL;
    }
    for (unsigned index=0;
@@ -898,13 +960,19 @@ int FirmwareChangerDialogue::loadUpdateInformation() {
       unsigned index = 0;
       char lineBuff[200];
       if (sscanf(buff, "%u, %s", &index, lineBuff) != 2) {
-         wxMessageBox(_("Invalid file image configuration file.\n"
-               "Please check that USBDM has been correctly installed."),
-               _("Configuration error "),
-               wxOK|wxICON_ERROR|wxSTAY_ON_TOP|wxCENTER,
-               this
-         );
-         return FLASH_ERR_FAIL;
+    	if(inGUIMode()){
+            wxMessageBox(_("Invalid file image configuration file.\n"
+                  "Please check that USBDM has been correctly installed."),
+                  _("Configuration error "),
+                  wxOK|wxICON_ERROR|wxSTAY_ON_TOP|wxCENTER,
+                  this
+            );
+    	}
+        else{
+            errMessage = _("Invalid file image configuration file. "
+            		       "Please check that USBDM has been correctly installed.");
+        }
+        return FLASH_ERR_FAIL;
       }
       log.print("loadUpdateInformation(): %2d : \'%s\'\n", index, lineBuff);
       if (strcmp(lineBuff, "-") == 0) {
@@ -925,12 +993,14 @@ int FirmwareChangerDialogue::doAutoUpdate() {
    autoUpdateBdm = false;
    int rc = readBdmInformation(&bdmInfo);
    if (rc != FLASH_ERR_OK) {
-      wxMessageBox(errMessage,
-                   _("Reading BDM Information failed"),
-                   wxOK|wxICON_ERROR|wxSTAY_ON_TOP|wxCENTER,
-                   this
-                   );
-      return rc;
+	  if(inGUIMode()){
+          wxMessageBox(errMessage,
+                       _("Reading BDM Information failed"),
+                       wxOK|wxICON_ERROR|wxSTAY_ON_TOP|wxCENTER,
+                       this
+                       );
+	  }
+	  return rc;
    }
    unsigned bdmType = bdmInfo.ICPhardwareVersion & 0x3F;
 
@@ -941,29 +1011,45 @@ int FirmwareChangerDialogue::doAutoUpdate() {
    log.print("FirmwareChangerDialogue::autoLoadFile(): ICPhardwareVersion = %d (%s)\n", bdmType, getBriefHardwareDescription(bdmType));
    if (bdmType > (sizeof(firmwareFilepaths)/sizeof(firmwareFilepaths[0])) ||
          (firmwareFilepaths[bdmType] == NULL)) {
-      wxMessageBox(_("Unrecognised or unsupported BDM device   \n\n"
-                     "Only JMxx or JS16 based USBDM devices \n"
-                     "may be updated this way."),
-                   _("Device Update Error"),
-                   wxOK|wxICON_ERROR|wxSTAY_ON_TOP|wxCENTER,
-                   this
-                   );
-      return FLASH_ERR_FAIL;
+	  if(inGUIMode()){
+         wxMessageBox(_("Unrecognised or unsupported BDM device   \n\n"
+                 "Only JMxx or JS16 based USBDM devices \n"
+                 "may be updated this way."),
+                      _("Device Update Error"),
+                      wxOK|wxICON_ERROR|wxSTAY_ON_TOP|wxCENTER,
+                      this
+                      );
+	  }
+      else{
+          errMessage = _("Unrecognised or unsupported BDM device. "
+        		         "Only JMxx or JS16 based USBDM devices may be updated this way.");
+      }
+	  return FLASH_ERR_FAIL;
    }
    if (!loadFlashImageFile(UsbdmSystem::getResourcePath(firmwareFilepaths[bdmType]))) {
-      wxMessageBox(_("The Flash update file cannot be loaded.\n\n"
-                     "Please check that USBDM has been correctly installed."),
-                   _("Flash image error"),
-                   wxOK|wxICON_ERROR|wxSTAY_ON_TOP|wxCENTER,
-                   this
-                   );
-      return FLASH_ERR_FAIL;
+	  if(inGUIMode()){
+         wxMessageBox(_("The Flash update file cannot be loaded.\n\n"
+                 "Please check that USBDM has been correctly installed."),
+                      _("Flash image error"),
+                      wxOK|wxICON_ERROR|wxSTAY_ON_TOP|wxCENTER,
+                      this
+                      );
+	  }
+      else{
+          errMessage = _("The Flash update file cannot be loaded. "
+        		         "Please check that USBDM has been correctly installed.");
+      }
+	  return FLASH_ERR_FAIL;
    }
 
    filename = firmwareFilepaths[bdmType];
 
-   // Get current serial number from device (if possible)
-   readSerialNumber();
+   // Get current serial number from device (if possible) in GUI mode
+   int readSerialRC = readSerialNumber();
+   // For command line mode return fail if read serial fails
+   if(!inGUIMode() && readSerialRC != FLASH_ERR_OK){
+	   return FLASH_ERR_FAIL;
+   }
    autoUpdateBdm = true;
 
    return rc;
@@ -1109,10 +1195,119 @@ void FirmwareChangerDialogue::OnExitButtonClick( wxCommandEvent& event ) {
    EndModal(0);
 }
 
+/**
+ * Command line parsing
+ *
+ * @return Error code
+ */
+int FirmwareChangerDialogue::parseCommandLine(wxCmdLineParser& parser) {
+	LOGGING;
+	wxString sValue;
+
+	activeMode = CMD_LINE_MODE;
+
+	if (parser.Found(_("auto"))) {
+	   enableAutoLoad = true;
+    }
+	if(!parser.Found(_("program")) && !parser.Found(_("verify"))){
+		activeMode = GUI_MODE;
+		return CMD_LINE_OK;
+	}
+	if(!enableAutoLoad){
+		// The firmware file must be specified
+	    if(parser.GetParamCount() == 0){
+	       logUsageError(parser, _("\n****** Error: Firmware file not specified.\n"));
+	       return CMD_LINE_ILLEGAL_PARAMS;
+	    }
+	    filename = parser.GetParam(0);
+	    if(parser.Found(_("serial"), &sValue)){
+	       unsigned int maxSerialNumberLength = sizeof(ICP_data.serialNumber)/sizeof(ICP_data.serialNumber[0]);
+	       if(sValue.length() == 0 || sValue.length() > maxSerialNumberLength){
+	    	   logUsageError(parser, _("\n****** Error: Serial number length must be from 1 to " +
+	    			                   std::to_string(maxSerialNumberLength)));
+	    	   return CMD_LINE_ILLEGAL_PARAMS;
+	       }
+	       serialNumber = sValue;
+	    }
+	    else{
+	       serialNumber = _("");
+	    }
+	}
+
+	verbose = parser.Found(_("verbose"));
+
+#ifdef _WIN32
+	enableConsole = parser.Found(_("console"));
+#else
+	enableConsole = true;
+#endif
+
+	program = parser.Found(_("program"));
+	verify = parser.Found(_("verify"));
+	// Programming includes verification
+	if(program){
+		verify = false;
+	}
+	return CMD_LINE_OK;
+}
+
+/**
+ * Command line operation
+ *
+ * @return Error code
+ */
+int FirmwareChangerDialogue::doCommandLineProgram() {
+   LOGGING;
+
+   int rc = FLASH_ERR_OK;
+
+   if(enableAutoLoad){
+	   rc = doAutoUpdate();
+	   if(rc != FLASH_ERR_OK){
+		   return rc;
+	   }
+   }
+   else if(!loadFlashImageFile(filename)){
+	  return FLASH_ERR_FAIL;
+   }
+
+   if(!serialNumber.IsEmpty()){
+	  setSerialNumber(serialNumber);
+   }
+
+   if(program){
+      rc = doFirmware(true);
+   }
+   else{
+      rc = doFirmware(false);
+   }
+
+   return rc;
+}
+
+void FirmwareChangerDialogue::logUsageError(wxCmdLineParser& parser, const wxString& text){
+   UsbdmSystem::Log::error("%s", (const char *)text.c_str());
+#if (wxCHECK_VERSION(2, 9, 0))
+   parser.AddUsageText(text);
+#endif
+}
+
+std::string FirmwareChangerDialogue::getConsoleMessage(){
+	std::string baseMessage = program ? "Firmware update" : "Firmware verification";
+	if(errMessage.IsEmpty()){
+		return baseMessage + " has completed successfully";
+	}
+	else{
+		errMessage.Replace("\n", "");
+		errMessage.Replace("\r", "");
+		return std::string(baseMessage + " failed. Error: " + errMessage.mb_str());
+	}
+}
+
 class OpenLog {
 public:
    OpenLog() {
-      UsbdmSystem::Log::openLogFile("FirmwareChanger.log", "Firmware Changer");
+      UsbdmSystem::Log::openLogFile(logFilename, "Firmware Changer");
       UsbdmSystem::Log::setLoggingLevel(100);
    }
    ~OpenLog() {
@@ -1123,12 +1318,19 @@ public:
  * FirmwareChangerApp class declaration
  */
 class FirmwareChangerApp: public wxApp {
+
     DECLARE_CLASS( FirmwareChangerApp )
     DECLARE_EVENT_TABLE()
 
 private:
     OpenLog openLog;
-    bool doAutoLoad;
+    AppSettingsPtr               appSettings;
+    FirmwareChangerDialogue      *dialogue;
+    int                          applicationRC;
+    bool                         consoleIsAttached;
+
+    void attachConsole();
+    void freeConsole();
 
 public:
     // Constructor
@@ -1138,13 +1340,12 @@ public:
 
     // Initialises the application
     virtual bool OnInit();
-
+    // Runs the application
+    virtual int OnRun();
     // Called on exit
     virtual int OnExit();
-
     virtual void OnInitCmdLine(wxCmdLineParser& parser);
     virtual bool OnCmdLineParsed(wxCmdLineParser& parser);
-
 };
 
 // Implements MyApp& GetApp()
@@ -1169,7 +1370,7 @@ END_EVENT_TABLE()
  */
 FirmwareChangerApp::FirmwareChangerApp() :
    openLog(),
-   doAutoLoad(false)
+   consoleIsAttached(false)
 {
     Init();
     (void)wxGetApp(); // To avoid warning
@@ -1185,6 +1386,7 @@ void FirmwareChangerApp::Init() {
  * Initialisation for FirmwareChangerApp
  */
 bool FirmwareChangerApp::OnInit() {
+   LOGGING;
 
 #if wxUSE_XPM
    wxImage::AddHandler(new wxXPMHandler);
@@ -1206,37 +1408,96 @@ bool FirmwareChangerApp::OnInit() {
 
    SetAppName(_("usbdm")); // So application files are kept in the correct directory
 
-   // call default behaviour (mandatory)
+   // Create application dialogue. Will first be used to parse the command line
+   dialogue = new FirmwareChangerDialogue(NULL);
+
+   // Call for default command parsing behaviour
    if (!wxApp::OnInit()) {
-       return false;
+	   log.error("Failed OnInit()\n");
+	   applicationRC = CMD_LINE_ILLEGAL_COMMAND;
    }
-   if (USBDM_Init() != BDM_RC_OK) {
-      return false;
+   else if(applicationRC == CMD_LINE_OK){
+	   if (USBDM_Init() == BDM_RC_OK) {
+		   if(dialogue->inGUIMode()){
+		   	 // Create empty app settings
+		   	 appSettings.reset(new AppSettings (configFileName, "Firmware Changer"));
+		   	 appSettings->load();
+		   	 dialogue->Init();
+		   	 dialogue->loadSettings(*appSettings);
+		   	 dialogue->setAutoLoad(dialogue->doAutoLoad());
+		   	 SetTopWindow(dialogue);
+		   	 dialogue->ShowModal();
+		   	 dialogue->saveSettings(*appSettings);
+		   	 appSettings->save();
+		   }
+		   else{
+		     attachConsole();
+		     applicationRC = dialogue->doCommandLineProgram();
+		     if(dialogue->consoleIsEnabled()){
+		    	 if(applicationRC != FLASH_ERR_OK){
+		    	    fprintf(stderr, "%s\n", dialogue->getConsoleMessage().c_str());
+		    	 }
+		    	 else{
+		    		fprintf(stdout, "%s\n", dialogue->getConsoleMessage().c_str());
+		    	 }
+		     }
+		     freeConsole();
+		   }
+	   }
+	   else{
+		   log.error("Failed to initialize USB interface");
+		   if(!dialogue->inGUIMode()){
+		       attachConsole();
+			   if(dialogue->consoleIsEnabled()){
+			   	  fprintf(stderr, "Failed to initialize USB interface\n");
+			   }
+			   freeConsole();
+		   }
+		   applicationRC = FLASH_ERR_FAIL;
+	   }
    }
-   AppSettings settings(configFileName, "Firmware Changer");
-   settings.load();
-
-   FirmwareChangerDialogue *dialogue = new FirmwareChangerDialogue(0);
-   dialogue->loadSettings(settings);
-   dialogue->setAutoLoad(doAutoLoad);
-   dialogue->ShowModal();
-   dialogue->saveSettings(settings);
    dialogue->Destroy();
+   return true; // Return true regardless as we want OnRun() to execute
+}
 
-   settings.save();
-   return true;
+/*
+ * Run function for FirmwareChangerApp
+ */
+int FirmwareChangerApp::OnRun(){
+	LOGGING;
+
+	// Everything is done in OnInit()
+	if(applicationRC != FLASH_ERR_OK){
+		log.error("Firmware update failed");
+	}
+	return applicationRC;
 }
 
 /*
  * Cleanup for FirmwareChangerApp
  */
 int FirmwareChangerApp::OnExit() {
-
+   LOGGING;
    return wxApp::OnExit();
 }
 
+static const std::string returnCodeText = std::string("\nReturn codes:\n") +
+		                                              "\t0 = SUCCESS\n" +
+													  "\t1 = FAILURE\n" +
+													  "\t2 = INVALID PARAMETER\n"   +
+													  "\t3 = INVALID COMMAND";
 static const wxCmdLineEntryDesc g_cmdLineDesc[] = {
-      { wxCMD_LINE_SWITCH, _("auto"),    NULL, _("Auto select & load firmware file") },
+	  { wxCMD_LINE_PARAM,      NULL,          NULL, _("Firmware file (including path)"),          wxCMD_LINE_VAL_STRING,  wxCMD_LINE_PARAM_OPTIONAL },
+      { wxCMD_LINE_SWITCH,     _("auto"),     NULL, _("Auto select & load firmware file")      },
+	  { wxCMD_LINE_OPTION,     _("serial"),   NULL, _("Serial number to write to BDM device"),    wxCMD_LINE_VAL_STRING },
+	  { wxCMD_LINE_SWITCH,     _("program"),  NULL, _("Program and verify flash contents"),    },
+	  { wxCMD_LINE_SWITCH,     _("verify"),   NULL, _("Verify flash contents")                 },
+	  { wxCMD_LINE_SWITCH,     _("verbose"),  NULL, _("Print progress messages to stdout")     },
+#ifdef _WIN32
+	  { wxCMD_LINE_SWITCH,     _("console"),  NULL, _("Enable output to stdout and stderr")    },
+#endif
+	  { wxCMD_LINE_SWITCH,     _("help"),     NULL, _("Show this help message"),                   wxCMD_LINE_VAL_NONE,    wxCMD_LINE_OPTION_HELP },
+	  { wxCMD_LINE_USAGE_TEXT, NULL,          NULL, _(returnCodeText)                          },
       { wxCMD_LINE_NONE }
 };
 
@@ -1244,23 +1505,72 @@ void FirmwareChangerApp::OnInitCmdLine(wxCmdLineParser& parser) {
     parser.SetDesc (g_cmdLineDesc);
     // must refuse '/' as parameter starter or cannot use "/path" style paths
     parser.SetSwitchChars (_("-"));
-    parser.SetLogo(_("USBDM Flash Programmer \n"));
+    parser.SetLogo(_("Firmware Changer \n"));
 
 #if (wxCHECK_VERSION(2, 9, 0))
     parser.AddUsageText(_(
           "\nExamples:\n"
-          "-auto\n"
-          "   Auto load and select firmware file"
+          "-auto -program\n"
+          "   Auto-select firmware file and program BDM device\n"
+    	  "-program -serial=USBDM-JS16-SWD_SER-0001 Image.sx\n"
+    	  "   This will program and set the serial number of the BDM "
      ));
+#ifdef _WIN32
+    parser.AddUsageText(_("\nRecommendation! When running as console, use \"start/wait\" to execute the application."
+    		              " For example:\n\tstart/wait FirmwareChanger -auto -program"));
+#endif // _WIN32
 #endif
 }
 
 //! Process command line arguments
 //!
 bool FirmwareChangerApp::OnCmdLineParsed(wxCmdLineParser& parser) {
-   LOGGING;
-   if (parser.Found(_("auto"))) {
-      doAutoLoad = true;
-   }
-   return true;
+
+	applicationRC = dialogue->parseCommandLine(parser);
+	if (applicationRC != CMD_LINE_OK) {
+	   parser.Usage();
+	}
+	return true; // return true regardless to catch unknown/illegal command line option in OnInit()
+}
+
+void FirmwareChangerApp::attachConsole(){
+	LOGGING;
+
+	if(consoleIsAttached){
+		return;
+	}
+#ifdef _WIN32
+	if ((GetConsoleWindow() == NULL) && dialogue->consoleIsEnabled()) {
+		if(AttachConsole(ATTACH_PARENT_PROCESS)){
+			consoleIsAttached = true;
+			log.print("Parent console attached\n");
+		}
+		else{
+			log.print("Unable to attach parent console. Error: %lu\n", GetLastError());
+		}
+		if(consoleIsAttached){
+			freopen("CONOUT$", "w", stdout);
+			freopen("CONOUT$", "w", stderr);
+		}
+		// Set stdout to no buffering; stderr is unbuffered by default
+		setvbuf(stdout, NULL, _IONBF, 0);
+	}
+#else
+	consoleIsAttached = true;
+#endif
+}
+
+void FirmwareChangerApp::freeConsole(){
+	LOGGING;
+
+	if(!consoleIsAttached){
+		return;
+	}
+#ifdef _WIN32
+	FreeConsole();
+	consoleIsAttached = false;
+	log.print("Console detached\n");
+#else
+	consoleIsAttached = false;
+#endif
 }
