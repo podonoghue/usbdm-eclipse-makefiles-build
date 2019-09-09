@@ -133,6 +133,11 @@ USBDM_ErrorCode ICP_Program(unsigned int         addr,
             log.print("Failed bdm_usb_raw_send_ep0()\n");
             return rc;
          }
+	 // Wait 2ms before we try to get the result to ensure that the
+	 // operation won't still be in progress the first time getResult()
+	 // polls the device. This avoids an extra 100ms retry timeout that
+	 // getResult() would otherwise add.
+         UsbdmSystem::milliSleep(2);
          rc = getResult();
          if (rc != BDM_RC_OK) {
             log.print("Failed icp_get_result() rc = %d\n", rc);
