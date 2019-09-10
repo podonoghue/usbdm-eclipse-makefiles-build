@@ -63,6 +63,7 @@ typedef std::shared_ptr<ProgressDialogue> ProgressDialoguePtr;
 class ProgressDialogueFactory {
 public:
    static ProgressDialoguePtr create(std::string title, uint32_t maximum, void *owner=0);
+   static ProgressDialoguePtr create(uint32_t maximum, bool verbose, bool enableOutput = true);
 };
 
 #endif /* SRC_PROGRESSCALLBACKFACTORY_H_ */

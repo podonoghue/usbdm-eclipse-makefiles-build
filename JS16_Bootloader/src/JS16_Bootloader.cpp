@@ -16,7 +16,6 @@
 #include "ICP.h"
 #include "Names.h"
 #include "FlashImageFactory.h"
-#include "ProgressDialogueFactory.h"
 #include "JS16_Bootloader.h"
 
 USBDM_ErrorCode programBlock(FlashImagePtr flashImage, uint32_t size, uint32_t startBlock, ProgressDialoguePtr callBack) {
@@ -72,7 +71,7 @@ USBDM_ErrorCode programFlashImage(FlashImagePtr flashImage, ProgressDialoguePtr 
    return progRc;
 }
 
-USBDM_ErrorCode ProgramDevice(std::string filePath) {
+USBDM_ErrorCode ProgramDevice(std::string filePath, ProgressDialoguePtr progressCallback) {
    LOGGING_Q;
    USBDM_ErrorCode rc;
 
@@ -89,8 +88,7 @@ USBDM_ErrorCode ProgramDevice(std::string filePath) {
                           flashImage->getFirstAllocatedAddress(), 0xFF);
 
    do {
-      ProgressDialoguePtr progressCallback = ProgressDialogueFactory::create("Accessing Target", flashImage->getByteCount());
-
+	  progressCallback->setRange(flashImage->getByteCount());
       progressCallback->update(0, "Initialising...");
       log.print("Initialising\n");
       rc = ICP_Init();
