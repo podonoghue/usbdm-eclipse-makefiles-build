@@ -2,6 +2,11 @@
  ============================================================================
  * @file  pit-example3.cpp (180.ARM_Peripherals/Snippets/pit-example3-MK.cpp)
  * @brief Programmable Interrupt Timer (PIT) Example
+ *
+ * Programmable Interrupt Timer (PIT) Example
+ *
+ * Demonstrates PIT call-back
+
  * @author   podonoghue
 ============================================================================
  */
@@ -12,18 +17,11 @@
 using namespace USBDM;
 
 /**
- * Programmable Interrupt Timer (PIT) Example
- *
- * Demonstrates PIT call-back
- *
- * Toggles LED
- */
-/**
  * This example uses PIT interrupts.
  *
  * It is necessary to enable these in Configure.usbdmProject
  * under the "Peripheral Parameters"->PIT tab.
- * Select irqHandlers option (Class Method - Software ...)
+ * Select irqHandlingMethod option (Software (Use setCallback() or override class method)
  */
 
 // Connection mapping - change as required

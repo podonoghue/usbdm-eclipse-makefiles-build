@@ -19,7 +19,7 @@ using namespace USBDM;
  *
  * It is necessary to enable these in Configure.usbdmProject
  * under the "Peripheral Parameters"->FTM tab.
- * Select irqHandlingMethod option (Class Method - Software ...)
+ * Select irqHandlingMethod option (Software (Use setCallback() or override class method)
  */
 
 /**

@@ -207,7 +207,7 @@ public:
     *                        Use nullptr to remove callback.
     */
    static void setCallback(PitChannelNum channel, PitCallbackFunction callback) {
-      static_assert(Info::irqHandlerInstalled, "PIT not configure for interrupts");
+      static_assert(Info::irqHandlerInstalled, "PIT not configure for interrupts - Modify Configure.usbdm");
       if (callback == nullptr) {
          callback = unhandledCallback;
       }

@@ -2,6 +2,9 @@
  ============================================================================
  * @file  pit-example2.cpp (180.ARM_Peripherals/Snippets/pit-example2-MKM.cpp)
  * @brief Programmable Interrupt Timer (PIT) Example
+ *
+ * Demonstrates PIT call-back or static handler
+ *
  * @author   podonoghue
 ============================================================================
  */
@@ -11,11 +14,11 @@
 using namespace USBDM;
 
 /**
- * Programmable Interrupt Timer (PIT) Example
+ * This example uses PIT interrupts.
  *
- * Demonstrates PIT call-back or static handler
- *
- * Toggles LEDs
+ * It is necessary to enable these in Configure.usbdmProject
+ * under the "Peripheral Parameters"->PIT tab.
+ * Select irqHandlingMethod option (Software (Use setCallback() or override class method)
  */
 
 // Comment out the following line to use static interrupt handlers
@@ -27,7 +30,8 @@ using GREEN_LED = $(demo.cpp.green.led:USBDM::GpioB<1>);
 
 #ifndef SET_HANDLERS_PROGRAMMATICALLY
 /**
- * Example showing how to create custom IRQ handlers for PIT channels
+ * Example showing how to create custom IRQ handlers for PIT channels by
+ * providing an explicit instantiation of the PIT template function for ISR
  */
 namespace USBDM {
 

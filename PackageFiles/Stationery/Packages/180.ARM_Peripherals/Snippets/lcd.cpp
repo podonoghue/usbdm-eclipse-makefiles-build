@@ -786,7 +786,48 @@ void LcdBase::setContrast(uint8_t setting) {
    unlock();
 }
 
-/** Draws a line circle in the specified colour at center (x0,y0) with radius
+/** Draws a filled circle
+ *
+ * @param centreX      Circle centre-X in pixels
+ * @param centreY      Circle centre-Y in pixels
+ * @param radius       Radius in pixels
+ * @param colour       12-bit colour value rrrrggggbbbb
+ */
+void LcdBase::drawFilledCircle(unsigned centreX, unsigned centreY, unsigned radius, Colour colour) {
+   int xMin, yMin, xMax, yMax;
+   xMin = centreX-radius;
+   if (xMin <= LCD_X_MIN) {
+      xMin = LCD_X_MIN;
+   }
+   yMin = centreY-radius;
+   if (yMin <= LCD_Y_MIN) {
+      yMin = LCD_Y_MIN;
+   }
+   xMax = centreX + radius;
+   if (xMax>LCD_X_MAX) {
+      xMax = LCD_X_MAX;
+   }
+   yMax = centreY + radius;
+   if (yMax>LCD_Y_MAX) {
+      yMax = LCD_Y_MAX;
+   }
+   const int radiusSq = radius * radius;
+
+   lock();
+
+   for (int px = xMin; px <= xMax; px++) {
+      for (int py = yMin; py <= yMax; py++) {
+         int x_off = px - centreX;
+         int y_off = py - centreY;
+         if ((x_off*x_off + y_off*y_off) < radiusSq) {
+            drawPixel(px, py, colour);
+         }
+      }
+   }
+   unlock();
+}
+
+/** Draws a line circle
  *
  * @param centreX      Row address (0 .. 131)
  * @param centreY      Column address (0 .. 131)

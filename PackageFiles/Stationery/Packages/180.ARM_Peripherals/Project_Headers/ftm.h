@@ -718,7 +718,6 @@ public:
     * Set period
     *
     * @param[in] period   Period in seconds as a float
-    * @param[in] suspend  Whether to suspend timer during change.
     *
     * @return E_NO_ERROR  => success
     * @return E_TOO_SMALL => failed to find suitable values
@@ -729,7 +728,7 @@ public:
     * @note The Timer is stopped while being modified
     * @note The counter load value (CNTIN) is cleared
     */
-   static ErrorCode setPeriod(float period, bool suspend=false) {
+   static ErrorCode setPeriod(float period) {
       float inputClock = Info::getInputClockFrequency();
       int prescaleFactor=1;
       int prescalerValue=0;
@@ -757,7 +756,7 @@ public:
             uint32_t sc = tmr().SC;
             tmr().SC = 0;
             (void)tmr().SC;
-            setPeriodInTicks(periodInTicks, suspend);
+            setPeriodInTicks(periodInTicks, true);
             tmr().SC  = (sc&~FTM_SC_PS_MASK)|FTM_SC_PS(prescalerValue);
             return E_NO_ERROR;
          }

@@ -431,6 +431,28 @@ public:
     *        http://www.wikipedia.org
     */
 
+   /** Draws a filled circle
+    *
+    * @param centreX      Circle centre-X in pixels
+    * @param centreY      Circle centre-Y in pixels
+    * @param radius       Radius in pixels
+    * @param colour       12-bit colour value rrrrggggbbbb
+    */
+   void drawFilledCircle(unsigned centreX, unsigned centreY, unsigned radius, Colour colour);
+
+   /** Draws a line circle in the specified colour at center (x0,y0) with radius
+    *
+    * @param centreX      Circle centre-X in pixels
+    * @param centreY      Circle centre-Y in pixels
+    * @param radius       Radius in pixels
+    * @param colour       12-bit colour value rrrrggggbbbb
+    * @param circleType   Controls which segments of the circle are drawn
+    *
+    * @author Jack Bresenham IBM, Winthrop University (Father of this algorithm, 1962)
+    *
+    * @note Taken verbatim Wikipedia article on Bresenham's line algorithm \n
+    *        http://www.wikipedia.org
+    */
    void drawCircle(unsigned centreX, unsigned centreY, unsigned radius, Colour colour, unsigned circleType=FULLCIRCLE);
    /** Writes the entire LCD screen from a bmp file
     *
