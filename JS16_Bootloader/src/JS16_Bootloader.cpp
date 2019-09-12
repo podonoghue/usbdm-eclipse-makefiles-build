@@ -3,7 +3,7 @@
 // Author      : Peter O'Donoghue
 // Version     :
 // Copyright   : Your copyright notice
-// Description : Hello World in C++, Ansi-style
+// Description : Boot-loader for Freescale JS16
 //============================================================================
 
 #include <stdint.h>
@@ -18,21 +18,45 @@
 #include "FlashImageFactory.h"
 #include "JS16_Bootloader.h"
 
-USBDM_ErrorCode programBlock(FlashImagePtr flashImage, uint32_t size, uint32_t startBlock, ProgressDialoguePtr callBack) {
+/**
+ * Program contiguous block to device.
+ * The block is subdivided into <=256 byte sub-blocks for programming
+ *
+ * @param flashImage    Image being programmed to device
+ * @param size          Size of current block
+ * @param startBlock    Address of current block
+ *
+ * @param progressCallback   Progress dialogue for reporting progress to user
+ *
+ * @return BDM_RC_OK on success
+ * @return Error code on failure
+ */
+USBDM_ErrorCode programBlock(
+      FlashImagePtr        flashImage,
+      uint32_t             size,
+      uint32_t             startBlock,
+      ProgressDialoguePtr  callBack) {
+
    LOGGING;
+
+   // Buffer to assemble data in
    uint8_t buffer[256];
+
    memset(buffer, 0xFF, sizeof(buffer));
    USBDM_ErrorCode rc = BDM_RC_OK;
+
    while(size>0) {
       uint32_t blockSize = size;
       if (blockSize > sizeof(buffer)) {
          blockSize = sizeof(buffer);
       }
       log.print("Programming block [0x%04X...0x%04X]\n", startBlock, startBlock+blockSize-1);
+
       // Copy data to buffer
       for (uint32_t index=0; index<blockSize; index++) {
          buffer[index] = flashImage->getValue(startBlock+index);
       }
+
       // Program buffer
       rc = ICP_Program(startBlock, blockSize, buffer, callBack);
       if (rc != BDM_RC_OK) {
@@ -44,7 +68,19 @@ USBDM_ErrorCode programBlock(FlashImagePtr flashImage, uint32_t size, uint32_t s
    return rc;
 }
 
-USBDM_ErrorCode programFlashImage(FlashImagePtr flashImage, ProgressDialoguePtr callBack) {
+/**
+ * Program image to device
+ *
+ * @param flashImage          Image to program
+ * @param progressCallback    Progress dialogue for reporting progress to user
+ *
+ * @return BDM_RC_OK on success
+ * @return Error code on failure
+ */
+USBDM_ErrorCode programFlashImage(
+      FlashImagePtr        flashImage,
+      ProgressDialoguePtr  callBack) {
+
    LOGGING_Q;
    FlashImage::EnumeratorPtr enumerator = flashImage->getEnumerator();
    USBDM_ErrorCode progRc = BDM_RC_OK;
@@ -71,7 +107,19 @@ USBDM_ErrorCode programFlashImage(FlashImagePtr flashImage, ProgressDialoguePtr 
    return progRc;
 }
 
-USBDM_ErrorCode ProgramDevice(std::string filePath, ProgressDialoguePtr progressCallback) {
+/**
+ * Program file to device
+ *
+ * @param filePath            Path to file to program.
+ * @param progressCallback    Progress dialogue for reporting progress to user
+ *
+ * @return BDM_RC_OK on success
+ * @return Error code on failure
+ */
+USBDM_ErrorCode ProgramDevice(
+      std::string          filePath,
+      ProgressDialoguePtr  progressCallback) {
+
    LOGGING_Q;
    USBDM_ErrorCode rc;
 
