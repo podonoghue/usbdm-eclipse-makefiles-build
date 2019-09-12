@@ -6,7 +6,7 @@
 #define USBDM_VERSION_MAJOR  4       //!< DLL Major version #
 #define USBDM_VERSION_MINOR  12      //!< DLL Minor version #
 #define USBDM_VERSION_MICRO  1       //!< DLL Micro version #
-#define USBDM_VERSION_NANO   262     //!< DLL Nano version #
+#define USBDM_VERSION_NANO   265     //!< DLL Nano version #
 
 #ifdef LOG
 #define USBDM_VERSION_STRING "4.12.1.262-Debug" //!< Version as string
