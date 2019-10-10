@@ -460,9 +460,9 @@ public:
     * Enables clock to peripheral and configures all pins.
     * Configures main operating settings for timer.
     *
-    * @param[in] ftmMode        Mode of operation
-    * @param[in] ftmClockSource Clock source for timer
-    * @param[in] ftmPrescale    Clock prescaler. Used to divide clock source before use
+    * @param[in] ftmMode        Mode of operation.
+    * @param[in] ftmClockSource Clock source for timer.
+    * @param[in] ftmPrescale    Clock prescaler. Used to divide input clock.
     */
    static void configure(
          FtmMode        ftmMode,
@@ -483,17 +483,6 @@ public:
       (void)tmr().SC;
       tmr().SC = ftmMode|ftmClockSource|ftmPrescale;
    }
-
-   /**
-    * Check if timer is enabled.
-    * Just checks for clock enable
-    *
-    * @return True  enabled
-    * @return False disabled
-    */
-   //static INLINE_RELEASE bool isEnabled() {
-   //   return ((clockReg() & Info::clockMask) != 0);
-   //}
 
    /**
     * Set timer mode
@@ -539,7 +528,7 @@ public:
       uint32_t sc = (tmr().SC&~FTM_SC_CLKS_MASK)|ftmClockSource;
       // Disable timer to change clock (can't switch directly between clock sources)
       tmr().SC = 0;
-      // Make sure write complete (disabled)
+      // Make sure write has completed (disabled)
       (void)tmr().SC;
       // Write new value
       tmr().SC = sc;
@@ -628,7 +617,7 @@ public:
     * This value is write-buffered and updated by CNTIN synchronisation unless suspend is true.
     *
     * @param[in] startValue  Starting value in ticks (<65535)
-    * @param[in] suspend  Whether to suspend FTM during change.
+    * @param[in] suspend     Whether to suspend FTM during change.
     *
     * @note This function will affect all channels of the timer.
     */
@@ -660,8 +649,9 @@ public:
     * @param[in] suspend  Whether to suspend timer during change.
     *
     * @return E_NO_ERROR       Success
-    * @return E_TOO_LARGE      Failed to find suitable pre-scaler values
+    * @return E_TOO_LARGE      Requested period is too large
     *
+    * @note Prescaler is not affected.
     * @note Assumes prescale has been set to an appropriate value.
     * @note Only rudimentary range checking.
     * @note This function will affect all channels of the timer.
@@ -715,23 +705,20 @@ public:
    }
 
    /**
-    * Set period
+    * Calculate FTM timing parameters to achieve a given period
     *
-    * @param[in] period   Period in seconds as a float
+    * @param period           Period in seconds
+    * @param pPrescalerValue  Calculated prescaler value (for SC register)
+    * @param pPeriodInTicks   Calculated period in ticks.
     *
-    * @return E_NO_ERROR  => success
-    * @return E_TOO_SMALL => failed to find suitable values
-    * @return E_TOO_LARGE => failed to find suitable values
-    *
-    * @note Adjusts Timer pre-scaler to appropriate value.
-    * @note This function will affect all channels of the timer.
-    * @note The Timer is stopped while being modified
-    * @note The counter load value (CNTIN) is cleared
+    * @return E_NO_ERROR   Success.
+    * @return E_TOO_SMALL  Requested period is too small for resolution (required resolution check to be enabled).
+    * @return E_TOO_LARGE  Requested period is too large.
     */
-   static ErrorCode setPeriod(float period) {
+   static ErrorCode calculateTimingParameters(float period, unsigned &pPrescalerValue, unsigned &pPeriodInTicks) {
       float inputClock = Info::getInputClockFrequency();
-      int prescaleFactor=1;
-      int prescalerValue=0;
+      unsigned prescaleFactor=1;
+      unsigned prescalerValue=0;
 
       // Maximum period value in ticks
       uint32_t maxPeriodInTicks = 65536;
@@ -752,12 +739,8 @@ public:
             return setErrorCode(E_TOO_SMALL);
          }
          if (periodInTicks <= maxPeriodInTicks) {
-            // Disable timer to change prescaler
-            uint32_t sc = tmr().SC;
-            tmr().SC = 0;
-            (void)tmr().SC;
-            setPeriodInTicks(periodInTicks, true);
-            tmr().SC  = (sc&~FTM_SC_PS_MASK)|FTM_SC_PS(prescalerValue);
+            pPrescalerValue = prescalerValue;
+            pPeriodInTicks  = periodInTicks;
             return E_NO_ERROR;
          }
          prescalerValue++;
@@ -769,41 +752,86 @@ public:
    }
 
    /**
+    * Set period
+    *
+    * @param[in] period   Period in seconds as a float
+    *
+    * @return E_NO_ERROR  => success
+    * @return E_TOO_SMALL  Requested period is too small for resolution (required resolution check to be enabled).
+    * @return E_TOO_LARGE  Requested period is too large.
+    *
+    * @note This function will affect all channels of the timer.
+    * @note Adjusts Timer pre-scaler to appropriate value.
+    * @note The counter load value (CNTIN) is cleared
+    * @note The counter modulo value (MOD) is modified to obtain the requested period
+    * @note The Timer is stopped while being modified.
+    * @note The Timer counter is restarted from zero
+    */
+   static ErrorCode setPeriod(float period) {
+
+      unsigned prescalerValue;
+      unsigned periodInTicks;
+      ErrorCode rc = calculateTimingParameters(period, prescalerValue, periodInTicks);
+
+      if (rc != E_NO_ERROR) {
+         return rc;
+      }
+      // Disable timer to change prescaler and period
+      uint32_t sc = tmr().SC;
+      tmr().SC = 0;
+      (void)tmr().SC;
+      setPeriodInTicks(periodInTicks, false);
+
+      // Restart counter
+      tmr().CNT   = 0;
+
+      tmr().SC  = (sc&~FTM_SC_PS_MASK)|FTM_SC_PS(prescalerValue);
+
+      return E_NO_ERROR;
+   }
+
+   /**
     * Set maximum interval for input-capture or output compare.
     * Input Capture and Output Compare will be able to operate over 
     * at least this period without overflow.
     *
     * @param[in] interval Interval in seconds as a float
-    * @param[in] suspend  Whether to suspend timer during change.
     *
     * @return E_NO_ERROR  => success
-    * @return E_TOO_SMALL => failed to find suitable values
-    * @return E_TOO_LARGE => failed to find suitable values
+    * @return E_TOO_SMALL  Requested period is too small for resolution (required resolution check to be enabled).
+    * @return E_TOO_LARGE  Requested period is too large.
     *
-    * @note Adjusts Timer pre-scaler to appropriate value.
-    * @note Timer period in ticks is set to maximum.
     * @note This function will affect all channels of the timer.
+    * @note Adjusts Timer pre-scaler to appropriate value.
+    * @note FTM counter is configured for free-running mode i.e. 0-65535
     * @note The Timer is stopped while being modified.
+    * @note The Timer counter is restarted from zero
     */
-   static INLINE_RELEASE ErrorCode setMaximumInterval(float interval, bool suspend=false) {
-      // Try to set capture period
-      ErrorCode rc = setPeriod(interval);
-      // Set actual period to maximum ticks in any case
-      // This is the usual value for IC or OC set-up
-      setPeriodInTicks(0x10000, suspend);
-      return rc;
-   }
+   static INLINE_RELEASE ErrorCode setMaximumInterval(float interval) {
 
-   /**
-    * Set measurement period.
-    *
-    * @param[in] period   Period in seconds as a float
-    * @param[in] suspend  Whether to suspend timer during change.
-    *
-    * @deprecated Use setMaximumInterval()
-    */
-   static INLINE_RELEASE ErrorCode setMeasurementPeriod(float period, bool suspend=false) {
-      return setMaximumInterval(period, suspend);
+      unsigned prescalerValue;
+      unsigned periodInTicks;
+      ErrorCode rc = calculateTimingParameters(interval, prescalerValue, periodInTicks);
+
+      if (rc != E_NO_ERROR) {
+         return rc;
+      }
+      // Disable timer to change prescaler and period
+      uint32_t sc = tmr().SC;
+      tmr().SC = 0;
+      (void)tmr().SC;
+
+      // Configure for free-running mode
+      // This is the usual value for IC or OC set-up
+      tmr().MOD = 0;
+      tmr().CNTIN = 0;
+
+      // Restart counter
+      tmr().CNT   = 0;
+
+      tmr().SC  = (sc&~FTM_SC_PS_MASK)|FTM_SC_PS(prescalerValue);
+
+      return E_NO_ERROR;
    }
 
    /**
@@ -1141,7 +1169,7 @@ public:
     *
     * @param[in] channel    Timer channel
     *
-    * @return Absolute time of last event i.e. value from timer event register
+    * @return Absolute time of last event in ticks i.e. value from timer event register
     */
    static INLINE_RELEASE uint16_t getEventTime(int channel) {
       return tmr().CONTROLS[channel].CnV;
@@ -1152,7 +1180,7 @@ public:
     *
     * This value is write-buffered and updated by Cnv synchronisation.
     *
-    * @param[in] eventTime  Absolute event time i.e. value to use as timer comparison value
+    * @param[in] eventTime  Absolute event time in ticks i.e. value to use as timer comparison value
     * @param[in] channel    Timer channel
     */
    static INLINE_RELEASE void setEventTime(uint16_t eventTime, int channel) {
@@ -1162,7 +1190,7 @@ public:
    /**
     * Set Timer event time relative to current event time
     *
-    * @param[in] eventTime  Event time relative to current event time (i.e. Timer channel CnV value)
+    * @param[in] eventTime  Event time in ticks relative to current event time (i.e. Timer channel CnV value)
     * @param[in] channel    Timer channel
     *
     * @note This value is write-buffered and updated by CnV synchronisation.
@@ -1174,7 +1202,7 @@ public:
    /**
     * Set Timer event time relative to current timer count value
     *
-    * @param[in] eventTime  Event time relative to current time (i.e. Timer CNT value)
+    * @param[in] eventTime  Event time in ticks relative to current time (i.e. Timer CNT value)
     * @param[in] channel    Timer channel
     *
     * @note This value is write-buffered and updated by CnV synchronisation.
@@ -1548,7 +1576,7 @@ public:
       /**
        * Set Timer event time.
        *
-       * @param[in] offset  Event time relative to current event time (i.e. Timer channel CnV value)
+       * @param[in] offset  Event time in ticks relative to current event time (i.e. Timer channel CnV value)
        *
        * @note The actual CnV register update will be delayed by the FTM register synchronisation mechanism
        */
@@ -1559,7 +1587,7 @@ public:
       /**
        * Set Timer event time relative to current timer count value.
        *
-       * @param[in] offset  Event time relative to current time (i.e. Timer CNT value)
+       * @param[in] offset  Event time in ticks relative to current time (i.e. Timer CNT value)
        *
        * @note The actual CnV register update will be delayed by the FTM register synchronisation mechanism
        */
@@ -1570,7 +1598,7 @@ public:
       /**
        * Set Absolute Timer event time.
        *
-       * @param[in] eventTime  Absolute event time i.e. value to use as timer comparison value
+       * @param[in] eventTime  Absolute event time in ticks i.e. value to use as timer comparison value
        *
        * @note The actual CnV register update will be delayed by the FTM register synchronisation mechanism
        */
@@ -1581,7 +1609,7 @@ public:
       /**
        * Get Absolute Timer event time.
        *
-       * @return Absolute time of last event i.e. value from timer event register
+       * @return Absolute time of last event in ticks i.e. value from timer event register
        */
       static INLINE_RELEASE uint16_t getEventTime() {
          return Ftm::getEventTime(channel);
