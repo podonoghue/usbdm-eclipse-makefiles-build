@@ -637,15 +637,6 @@ PitCallbackFunction PitBase_T<Info>::sCallbacks[] = {
  * @brief class representing the PIT
  */
 using Pit = PitBase_T<PitInfo>;
-
-/**
- * @brief Class representing a PIT channel
- *
- * @tparam channel Channel number
- */
-template <int channel>
-using PitChannel = Pit::Channel<channel>;
-
 #endif
 
 /**
