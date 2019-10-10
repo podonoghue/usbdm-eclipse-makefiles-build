@@ -105,16 +105,16 @@ Coldfire+
          <partitionEntry description="DFlash=16, EEPROM=16" eeSize="16K" value="0x02" />
       </flexNVMInfo>
       <memory id="coldfire8K_Ram" type="ram">
-         <memoryRange start="0x800000" size="8K" />
+         <memoryRange start="0x800000" size="8K"  name="ram"/>
       </memory>
       <memory id="coldfire16K_Ram" type="ram">
-         <memoryRange start="0x800000" size="16K" />
+         <memoryRange start="0x800000" size="16K"  name="ram"/>
       </memory>
       <memory id="coldfire24K_Ram" type="ram">
-         <memoryRange start="0x800000" size="24K" />
+         <memoryRange start="0x800000" size="24K"  name="ram"/>
       </memory>
       <memory id="coldfire32K_Ram" type="ram">
-         <memoryRange start="0x800000" size="32K" />
+         <memoryRange start="0x800000" size="32K"  name="ram"/>
       </memory>
       <memory id="coldfirePlus32K_Flash" type="flash" registerAddress="0xFF84E0" securityAddress="0x0400"
          sectorSize="1024" alignment="4" >
@@ -756,7 +756,7 @@ Coldfire+
       <device family="CFV1" name="MCF51EVE">
          <clock registerAddress="0xFF8048" type="S08MCGV3" />
          <memory type="ram">
-            <memoryRange end="0x300FFF" start="0x300000" />
+            <memoryRange end="0x300FFF" start="0x300000" name="ram" />
          </memory>
          <memory registerAddress="0xFF9820" type="flash" securityAddress="0x0400">
             <securityEntryRef ref="CFV1-default-security" />
@@ -773,7 +773,7 @@ Coldfire+
       <device family="CFV1" name="MCF51FD256">
          <clock registerAddress="0xFF8048" type="S08MCGV3" />
          <memory type="ram">
-            <memoryRange end="0x03FFFF" start="0x020410" />
+            <memoryRange end="0x03FFFF" start="0x020410" name="ram" />
          </memory>
          <memory registerAddress="0xFF9820" type="flash" securityAddress="0x0400">
             <securityEntryRef ref="CFV1-default-security" />
@@ -790,7 +790,7 @@ Coldfire+
       <device family="CFV1Plus" name="MCF51JG128">
          <clock registerAddress="0xFF8048" type="S08MCGV3" />
          <memory type="ram">
-            <memoryRange end="0x01FFFF" start="0x010410" />
+            <memoryRange end="0x01FFFF" start="0x010410" name="ram" />
          </memory>
          <memory registerAddress="0xFF9820" type="flash" securityAddress="0x0400">
             <securityEntryRef ref="CFV1-default-security" />
@@ -807,7 +807,7 @@ Coldfire+
       <device family="CFV1Plus" name="MCF51JG256">
          <clock registerAddress="0xFF8048" type="S08MCGV3" />
          <memory type="ram">
-            <memoryRange end="0x03FFFF" start="0x020410" />
+            <memoryRange end="0x03FFFF" start="0x020410" name="ram" />
          </memory>
          <memory registerAddress="0xFF9820" type="flash" securityAddress="0x0400">
             <securityEntryRef ref="CFV1-default-security" />
@@ -824,7 +824,7 @@ Coldfire+
       <device family="CFV1Plus" name="MCF51JG64">
          <clock registerAddress="0xFF8048" type="S08MCGV3" />
          <memory type="ram">
-            <memoryRange end="0x00FFFF" start="0x008410" />
+            <memoryRange end="0x00FFFF" start="0x008410" name="ram" />
          </memory>
          <memory registerAddress="0xFF9820" type="flash" securityAddress="0x0400">
             <securityEntryRef ref="CFV1-default-security" />
@@ -841,7 +841,7 @@ Coldfire+
       <device family="CFV1" name="uuuMMA9540">
          <clock type="External" />
          <memory type="ram">
-            <memoryRange end="0x300FFF" start="0x300000" />
+            <memoryRange end="0x300FFF" start="0x300000" name="ram" />
          </memory>
          <memory registerAddress="0xFF9820" type="flash" securityAddress="0x0400">
             <securityEntryRef ref="CFV1-default-security" />
@@ -858,7 +858,7 @@ Coldfire+
       <device family="CFV1" name="uuuMMA9550">
          <clock type="External" />
          <memory type="ram">
-            <memoryRange end="0x8001FE" start="0x800000" />
+            <memoryRange end="0x8001FE" start="0x800000" name="ram" />
          </memory>
          <memory registerAddress="0xFF9820" type="flash" securityAddress="0x0400">
             <securityEntryRef ref="CFV1-default-security" />
