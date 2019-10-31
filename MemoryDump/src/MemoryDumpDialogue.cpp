@@ -286,7 +286,7 @@ USBDM_ErrorCode MemoryDumpDialogue::readMemoryBlocks(ProgressDialoguePtr progres
             }
             if ((pagedStart<0xC000) && (pagedEnd>=0xC000)) {
                // Stop at end of paged area
-               end = 0xC000;
+               end = 0xBFFF;
             }
             if ((pagedStart>=0x8000) && (pagedEnd<0xC000)) {
                // Within paged area
