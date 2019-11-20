@@ -2,8 +2,8 @@
  * @file     gpio.h  (180.ARM_Peripherals/Project_Headers/gpio-MKE.h)
  * @brief    GPIO Pin routines
  *
- * @version  V4.11.1.70
- * @date     18 June 2015
+ * @version  V4.12.1.262
+ * @date     18 Oct 2019
  */
 #ifndef HEADER_GPIO_H
 #define HEADER_GPIO_H
@@ -17,8 +17,6 @@
  */
 #include <stddef.h>
 #include "derivative.h"
-#include "bme.h"
-#include "pin_mapping.h"
 
 namespace USBDM {
 
