@@ -155,6 +155,8 @@ protected:
    void                    fixElfSectionHeaderSex(Elf32_Shdr *elfsHeader);
    USBDM_ErrorCode         loadElfBlock(FILE *fp, long fOffset, Elf32_Word size, Elf32_Addr addr);
    USBDM_ErrorCode         loadElfBlockByProgramHeader(Elf32_Phdr *programHeader);
+   Elf32_Phdr              *findRelatedProgramHeader(Elf32_Shdr *sectionHeader);
+
    USBDM_ErrorCode         loadElfBlockBySectionHeader(Elf32_Shdr *sectionHeader);
    USBDM_ErrorCode         recordElfProgramBlock(Elf32_Phdr *programHeader);
    USBDM_ErrorCode         loadElfFile(const std::string &fileName);

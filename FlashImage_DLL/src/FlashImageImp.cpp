@@ -198,7 +198,7 @@ uint32_t EnumeratorImp::getAddress() const {
  *  @return false => current location is unoccupied/unallocated
  */
 bool EnumeratorImp::isValid() const {
-//   UsbdmSystem::Log::print("addr = 0x%06X\n", address);
+   //   UsbdmSystem::Log::print("addr = 0x%06X\n", address);
    return memoryImage.isValid(address);
 }
 
@@ -209,7 +209,7 @@ bool EnumeratorImp::isValid() const {
  *  @return false => current location is unoccupied/unallocated
  */
 bool EnumeratorImp::setAddress(uint32_t addr) {
-//   log.print("addr = 0x%06X\n", address);
+   //   log.print("addr = 0x%06X\n", address);
    address = addr;
    if (!memoryImage.isValid(address)) {
       return nextValid();
@@ -230,7 +230,7 @@ bool EnumeratorImp::nextValid() {
    address++;
    do {
       FlashImageImp::addressToPageOffset(address, pageNum, offset);
-//      log.print("Checking 0x%06X)\n", address);
+      //      log.print("Checking 0x%06X)\n", address);
 
       // At start of page or haven't checked this page yet
       if ((offset == 0) || (memoryPage == NULL)) {
@@ -248,8 +248,8 @@ bool EnumeratorImp::nextValid() {
          address += FlashImageImp::PAGE_SIZE;
          address &= ~FlashImageImp::PAGE_MASK;
          if (address > memoryImage.lastAllocatedAddress) {
-//            address = memoryImage.lastAllocatedAddress;
-//            log.print("end = 0x%06X, no remaining valid addresses\n", address);
+            //            address = memoryImage.lastAllocatedAddress;
+            //            log.print("end = 0x%06X, no remaining valid addresses\n", address);
             return false;
          }
          continue;
@@ -271,25 +271,25 @@ bool EnumeratorImp::nextValid() {
 void EnumeratorImp::lastValid() {
    uint16_t pageNum, offset;
    LOGGING_Q;
-//   log.print("start=0x%06X\n", address);
+   //   log.print("start=0x%06X\n", address);
 
    FlashImageImp::addressToPageOffset(address, pageNum, offset);
    typename map<uint32_t, MemoryPagePtr>::iterator iter = memoryImage.memoryPages.find(pageNum);
    if (iter == memoryImage.memoryPages.end()) {
-//      log.print("end=0x%06), start address not allocated\n", address);
+      //      log.print("end=0x%06), start address not allocated\n", address);
       return;
    }
    MemoryPagePtr memoryPage = iter->second;
    do {
-//      log.print("Checking 0x%06X)\n", address);
+      //      log.print("Checking 0x%06X)\n", address);
       if (address == memoryImage.lastAllocatedAddress) {
-//         log.print("end=0x%06X, end of memory\n", address);
+         //         log.print("end=0x%06X, end of memory\n", address);
          return;
       }
       FlashImageImp::addressToPageOffset(address, pageNum, offset);
       // Check if at page boundary or probing one ahead fails
       if ((offset == FlashImageImp::PAGE_SIZE-1) || !memoryPage->isValid(++offset)) {
-//         log.print("end=0x%06X\n", address);
+         //         log.print("end=0x%06X\n", address);
          return;
       }
       address++;
@@ -304,19 +304,19 @@ void EnumeratorImp::lastValid() {
  *   Constructor - creates an empty Flash image
  */
 FlashImageImp::FlashImageImp() :
-      targetType(T_NONE),
-      wordAddresses(false),
-      firstAllocatedAddress((unsigned )(-1)),
-      lastAllocatedAddress(0),
-      lastPageNumAccessed((uint16_t )(-1)),
-      elementCount(0),
-      littleEndian(false),
-      allowOverwrite(false),
-      fp(0),
-      discardFF(true),
-      printHeader(true),
-      programHeaders(0),
-      symTable(0) {
+            targetType(T_NONE),
+            wordAddresses(false),
+            firstAllocatedAddress((unsigned )(-1)),
+            lastAllocatedAddress(0),
+            lastPageNumAccessed((uint16_t )(-1)),
+            elementCount(0),
+            littleEndian(false),
+            allowOverwrite(false),
+            fp(0),
+            discardFF(true),
+            printHeader(true),
+            programHeaders(0),
+            symTable(0) {
    LOGGING;
 }
 
@@ -477,7 +477,7 @@ MemoryPagePtr FlashImageImp::allocatePage(uint32_t pageNum) {
 
    memoryPage = getmemoryPage(pageNum);
    if (memoryPage == NULL) {
-// log.print( "Allocating page #%2.2X [0x%06X-0x%06X]\n", pageNum, pageOffsetToAddress(pageNum, 0), pageOffsetToAddress(pageNum, PAGE_SIZE-1));
+      // log.print( "Allocating page #%2.2X [0x%06X-0x%06X]\n", pageNum, pageOffsetToAddress(pageNum, 0), pageOffsetToAddress(pageNum, PAGE_SIZE-1));
       memoryPage.reset(new MemoryPage);
       memoryPages.insert(pair<const uint32_t, MemoryPagePtr>(pageNum, memoryPage));
       // Update cache
@@ -522,7 +522,7 @@ USBDM_ErrorCode  FlashImageImp::loadFile(const string &filePath, bool clearBuffe
             firstAllocatedAddress,  // first non-0xFF address
             lastAllocatedAddress    // last non-0xFF address
       );
-//      printMemoryMap();
+      //      printMemoryMap();
 
       sourcePath      = filePath;
       sourceFilename  = filePath;
@@ -837,14 +837,14 @@ USBDM_ErrorCode FlashImageImp::loadData(uint32_t       bufferSize,
  *  @note This is only of use if uint8_t is not a byte
  */
 USBDM_ErrorCode FlashImageImp::loadDataBytes(uint32_t        bufferSize,
-                                             uint32_t        address,
-                                             const uint8_t   data[],
-                                             bool            dontOverwrite) {
+      uint32_t        address,
+      const uint8_t   data[],
+      bool            dontOverwrite) {
    LOGGING_Q;
    log.print("load[0x%04X...0x%04X]\n", address, address+bufferSize-1);
    uint32_t bufferAddress = 0;
    while (bufferAddress < bufferSize) {
-//      log.print("image[0x%08X] <= 0x%04X\n", address, data[bufferAddress]);
+      //      log.print("image[0x%08X] <= 0x%04X\n", address, data[bufferAddress]);
       if (!this->isValid(address) || !dontOverwrite) {
          this->setValue(address, data[bufferAddress]);
       }
@@ -915,8 +915,8 @@ uint32_t FlashImageImp::targetToNative(uint32_t &value) {
    }
    uint32_t relocAddress = ((value<<24)&0xFF000000) + ((value<<8)&0x00FF0000) +
          ((value>>8) &0x0000FF00) + ((value>>24)&0x000000FF);
-//   UsbdmSystem::Log::print("0x%08X => 0x%08X\n", value, relocAddress);
-//   value = relocAddress;
+   //   UsbdmSystem::Log::print("0x%08X => 0x%08X\n", value, relocAddress);
+   //   value = relocAddress;
    return relocAddress;
 }
 
@@ -975,8 +975,8 @@ int16_t FlashImageImp::targetToNative(int16_t &value) {
  *
  */
 inline bool ends_with(std::string const & value, std::string const & ending) {
-    if (ending.size() > value.size()) return false;
-    return std::equal(ending.rbegin(), ending.rend(), value.rbegin());
+   if (ending.size() > value.size()) return false;
+   return std::equal(ending.rbegin(), ending.rend(), value.rbegin());
 }
 
 /*
@@ -1054,7 +1054,7 @@ USBDM_ErrorCode FlashImageImp::loadS1S9File(const string &fileName) {
    unsigned int lineNum  = 0;
    while (fgets(buffer, sizeof(buffer)-1, fp) != NULL) {
       lineNum++;
-//      log.print("Input: %s",buffer);
+      //      log.print("Input: %s",buffer);
       ptr = buffer;
       // Find first non-blank
       while ((*ptr == ' ') || (*ptr == '\t') || (*ptr == '\n') || (*ptr == '\r'))
@@ -1070,49 +1070,49 @@ USBDM_ErrorCode FlashImageImp::loadS1S9File(const string &fileName) {
          }
       }
       switch (*(ptr+1)) {
-      case '0': // Information header
-      case '7': // 32-bit start address
-      case '8': // 24-bit start address
-      case '9': // 16-bit start address
-      case '5': // 16-bit record length
-      case '6': // 24-bit record length
-         // Discard S0, S5, S6, S7, S8 & S9 records
-         continue;
-      case '1':
-         // S1 = 16-bit address, data record
-         ptr +=2; // Skip 'S1'
-         srecSize = hex2ToDecimal( &ptr );
-         addr = hex4ToDecimal( &ptr );
-         checkSum = (uint8_t)srecSize + (uint8_t)(addr>>8) + (uint8_t)addr;
-         srecSize -= 3; // subtract 3 from byte count (srecSize + 2 addr bytes)
-//         log.print("(%2.2X)%4.4lX:\n",srecSize,addr);
-         break;
-      case '2':
-         // S2 = 24-bit address, data record
-         ptr +=2; // Skip 'S2'
-         srecSize = hex2ToDecimal( &ptr );
-         addr = hex6ToDecimal( &ptr );
-         checkSum = (uint8_t)srecSize + (uint8_t)(addr>>16) + (uint8_t)(addr>>8) + (uint8_t)addr;
-         srecSize -= 4; // subtract 4 from byte count (srecSize + 3 addr bytes)
-//         log.print("srecSize=0x%02X, addr=0x%06X\n",srecSize,addr);
-         break;
-      case '3':
-         // S3 32-bit address, data record
-         ptr +=2; // Skip 'S3'
-         srecSize = hex2ToDecimal( &ptr );
-         addr = hex8ToDecimal( &ptr );
-         checkSum = (uint8_t)srecSize + (uint8_t)(addr>>24) + (uint8_t)(addr>>16) + (uint8_t)(addr>>8) + (uint8_t)addr;
-         srecSize -= 5; // subtract 5 from byte count (srecSize + 4 addr bytes)
-//         log.print("S3: srecSize=0x%02X, addr=0x%08X, initial chk=0x%02X\n", srecSize, addr, checkSum);
-         break;
-      default:
-         log.print("- illegal line #%5d-%s", lineNum, buffer);
-         if (fileRecognized) {
-            return SFILE_RC_ILLEGAL_LINE;
-         }
-         else {
-            return SFILE_RC_UNKNOWN_FILE_FORMAT;
-         }
+         case '0': // Information header
+         case '7': // 32-bit start address
+         case '8': // 24-bit start address
+         case '9': // 16-bit start address
+         case '5': // 16-bit record length
+         case '6': // 24-bit record length
+            // Discard S0, S5, S6, S7, S8 & S9 records
+            continue;
+         case '1':
+            // S1 = 16-bit address, data record
+            ptr +=2; // Skip 'S1'
+            srecSize = hex2ToDecimal( &ptr );
+            addr = hex4ToDecimal( &ptr );
+            checkSum = (uint8_t)srecSize + (uint8_t)(addr>>8) + (uint8_t)addr;
+            srecSize -= 3; // subtract 3 from byte count (srecSize + 2 addr bytes)
+            //         log.print("(%2.2X)%4.4lX:\n",srecSize,addr);
+            break;
+         case '2':
+            // S2 = 24-bit address, data record
+            ptr +=2; // Skip 'S2'
+            srecSize = hex2ToDecimal( &ptr );
+            addr = hex6ToDecimal( &ptr );
+            checkSum = (uint8_t)srecSize + (uint8_t)(addr>>16) + (uint8_t)(addr>>8) + (uint8_t)addr;
+            srecSize -= 4; // subtract 4 from byte count (srecSize + 3 addr bytes)
+            //         log.print("srecSize=0x%02X, addr=0x%06X\n",srecSize,addr);
+            break;
+         case '3':
+            // S3 32-bit address, data record
+            ptr +=2; // Skip 'S3'
+            srecSize = hex2ToDecimal( &ptr );
+            addr = hex8ToDecimal( &ptr );
+            checkSum = (uint8_t)srecSize + (uint8_t)(addr>>24) + (uint8_t)(addr>>16) + (uint8_t)(addr>>8) + (uint8_t)addr;
+            srecSize -= 5; // subtract 5 from byte count (srecSize + 4 addr bytes)
+            //         log.print("S3: srecSize=0x%02X, addr=0x%08X, initial chk=0x%02X\n", srecSize, addr, checkSum);
+            break;
+         default:
+            log.print("- illegal line #%5d-%s", lineNum, buffer);
+            if (fileRecognized) {
+               return SFILE_RC_ILLEGAL_LINE;
+            }
+            else {
+               return SFILE_RC_UNKNOWN_FILE_FORMAT;
+            }
       }
       if (wordAddresses) {
          addr *= 2;
@@ -1128,7 +1128,7 @@ USBDM_ErrorCode FlashImageImp::loadS1S9File(const string &fileName) {
             }
             this->setValue(addr++, (uint8_t)data);
             srecSize--;
-//         log.print("%02X",data);
+            //         log.print("%02X",data);
          }
       }
       // Get checksum from record
@@ -1141,10 +1141,10 @@ USBDM_ErrorCode FlashImageImp::loadS1S9File(const string &fileName) {
          return SFILE_RC_CHECKSUM;
       }
       fileRecognized = true; // Read at least 1 record - assume it's a SREC file
-//      log.print("\n");
+      //      log.print("\n");
    }
-//   log.print("FlashImageImp::MemorySpace::loadS1S9File()\n");
-//   printMemoryMap();
+   //   log.print("FlashImageImp::MemorySpace::loadS1S9File()\n");
+   //   printMemoryMap();
    return SFILE_RC_OK;
 }
 
@@ -1183,15 +1183,15 @@ static const char* get_pFlagsName(unsigned int flags) {
  */
 static const char* get_pTypeName(unsigned int type) {
    switch (type) {
-   case PT_NULL:      return "PT_NULL";
-   case PT_LOAD:      return "PT_LOAD";
-   case PT_DYNAMIC:   return "PT_DYNAMIC";
-   case PT_INTERP:    return "PT_INTERP";
-   case PT_NOTE:      return "PT_NOTE";
-   case PT_SHLIB:     return "PT_SHLIB";
-   case PT_PHDR:      return "PT_PHDR";
-   case PT_ARM_EXIDX: return "PT_ARM_EXIDX";
-   default :          return "????";
+      case PT_NULL:      return "PT_NULL";
+      case PT_LOAD:      return "PT_LOAD";
+      case PT_DYNAMIC:   return "PT_DYNAMIC";
+      case PT_INTERP:    return "PT_INTERP";
+      case PT_NOTE:      return "PT_NOTE";
+      case PT_SHLIB:     return "PT_SHLIB";
+      case PT_PHDR:      return "PT_PHDR";
+      case PT_ARM_EXIDX: return "PT_ARM_EXIDX";
+      default :          return "????";
    }
 }
 
@@ -1207,27 +1207,27 @@ static const char *getshTypeName(Elf32_Word shtype) {
    buff[0] = '\0';
    strcat(buff, "(");
    switch (shtype) {
-   case SHT_ARM_EXIDX           : strcat(buff, "ARM_EXIDX ");          break;
-   case SHT_ARM_PREEMPTMAP      : strcat(buff, "ARM_PREEMPTMAP ");     break;
-   case SHT_ARM_ATTRIBUTES      : strcat(buff, "ARM_ATTRIBUTES ");     break;
-   case SHT_ARM_DEBUGOVERLAY    : strcat(buff, "ARM_DEBUGOVERLAY ");   break;
-   case SHT_ARM_OVERLAYSECTION  : strcat(buff, "ARM_OVERLAYSECTION "); break;
+      case SHT_ARM_EXIDX           : strcat(buff, "ARM_EXIDX ");          break;
+      case SHT_ARM_PREEMPTMAP      : strcat(buff, "ARM_PREEMPTMAP ");     break;
+      case SHT_ARM_ATTRIBUTES      : strcat(buff, "ARM_ATTRIBUTES ");     break;
+      case SHT_ARM_DEBUGOVERLAY    : strcat(buff, "ARM_DEBUGOVERLAY ");   break;
+      case SHT_ARM_OVERLAYSECTION  : strcat(buff, "ARM_OVERLAYSECTION "); break;
 
-   case SHT_NULL                : strcat(buff, "NULL ");               break;
-   case SHT_PROGBITS            : strcat(buff, "PROGBITS");            break;
-   case SHT_SYMTAB              : strcat(buff, "SYMTAB ");             break;
-   case SHT_STRTAB              : strcat(buff, "STRTAB ");             break;
-   case SHT_RELA                : strcat(buff, "RELA ");               break;
-   case SHT_HASH                : strcat(buff, "HASH ");               break;
-   case SHT_DYNAMIC             : strcat(buff, "DYNAMIC ");            break;
-   case SHT_NOTE                : strcat(buff, "NOTE ");               break;
-   case SHT_NOBITS              : strcat(buff, "NOBITS ");             break;
-   case SHT_REL                 : strcat(buff, "REL ");                break;
-   case SHT_SHLIB               : strcat(buff, "SHLIB ");              break;
-   case SHT_DYNSYM              : strcat(buff, "DYNSYM ");             break;
-   case SHT_INIT_ARRAY          : strcat(buff, "INIT_ARRAY ");         break;
-   case SHT_FINI_ARRAY          : strcat(buff, "FINI_ARRAY ");         break;
-   case SHT_PREINIT_ARRAY       : strcat(buff, "PREINIT_ARRAY ");      break;
+      case SHT_NULL                : strcat(buff, "NULL ");               break;
+      case SHT_PROGBITS            : strcat(buff, "PROGBITS");            break;
+      case SHT_SYMTAB              : strcat(buff, "SYMTAB ");             break;
+      case SHT_STRTAB              : strcat(buff, "STRTAB ");             break;
+      case SHT_RELA                : strcat(buff, "RELA ");               break;
+      case SHT_HASH                : strcat(buff, "HASH ");               break;
+      case SHT_DYNAMIC             : strcat(buff, "DYNAMIC ");            break;
+      case SHT_NOTE                : strcat(buff, "NOTE ");               break;
+      case SHT_NOBITS              : strcat(buff, "NOBITS ");             break;
+      case SHT_REL                 : strcat(buff, "REL ");                break;
+      case SHT_SHLIB               : strcat(buff, "SHLIB ");              break;
+      case SHT_DYNSYM              : strcat(buff, "DYNSYM ");             break;
+      case SHT_INIT_ARRAY          : strcat(buff, "INIT_ARRAY ");         break;
+      case SHT_FINI_ARRAY          : strcat(buff, "FINI_ARRAY ");         break;
+      case SHT_PREINIT_ARRAY       : strcat(buff, "PREINIT_ARRAY ");      break;
    }
    strcat(buff, ")");
    return buff;
@@ -1330,11 +1330,11 @@ USBDM_ErrorCode FlashImageImp::loadElfBlock(
       //      log.print("[empty]\n");
       return BDM_RC_OK;
    }
-//#if defined(TARGET) && (TARGET == MC56F80xx)
-//      log.print("[0x%08X..0x%08X]\n", addr, addr+size/2-1);
-//#else
-//      log.print("[0x%08X..0x%08X]\n", addr, addr+size-1);
-//#endif
+   //#if defined(TARGET) && (TARGET == MC56F80xx)
+   //      log.print("[0x%08X..0x%08X]\n", addr, addr+size/2-1);
+   //#else
+   //      log.print("[0x%08X..0x%08X]\n", addr, addr+size-1);
+   //#endif
    fseek(fp, fOffset, SEEK_SET);
    while (size>0) {
       uint8_t buff[1024];
@@ -1347,11 +1347,11 @@ USBDM_ErrorCode FlashImageImp::loadElfBlock(
          log.print("- Failed - Undersize read of Block (Expected %lu, read %lu)\n", (unsigned long)blockSize, (unsigned long)sz);
          return SFILE_RC_ELF_FORMAT_ERROR;
       }
-//      #if defined(TARGET) && (TARGET == MC56F80xx)
-//            printDump(buff, blockSize, addr, UsbdmSystem::WORD_ADDRESS|UsbdmSystem::WORD_DISPLAY);
-//      #else
-//            log.printDump(buff, blockSize, addr, UsbdmSystem::BYTE_ADDRESS);
-//      #endif
+      //      #if defined(TARGET) && (TARGET == MC56F80xx)
+      //            printDump(buff, blockSize, addr, UsbdmSystem::WORD_ADDRESS|UsbdmSystem::WORD_DISPLAY);
+      //      #else
+      //            log.printDump(buff, blockSize, addr, UsbdmSystem::BYTE_ADDRESS);
+      //      #endif
       for (unsigned index=0; index<blockSize; ) {
          uint16_t value;
 #if defined(TARGET) && (TARGET == MC56F80xx)
@@ -1568,7 +1568,7 @@ const char * FlashImageImp::getElfString(unsigned index) {
    return symTable+index;
 }
 
-//#define USE_SECTIONS
+#define USE_SECTIONS
 
 /**
  *  Load a ELF file into the buffer. \n
@@ -1597,8 +1597,8 @@ USBDM_ErrorCode FlashImageImp::loadElfFile(const string &filePath) {
    //   printElfHeader(&elfHeader);
 
    if ((elfHeader.e_ident[EI_MAG0]  != ELFMAG0V) || (elfHeader.e_ident[EI_MAG1] != ELFMAG1V) ||
-       (elfHeader.e_ident[EI_MAG2]  != ELFMAG2V) || (elfHeader.e_ident[EI_MAG3] != ELFMAG3V) ||
-       (elfHeader.e_ident[EI_CLASS] != ELFCLASS32)) {
+         (elfHeader.e_ident[EI_MAG2]  != ELFMAG2V) || (elfHeader.e_ident[EI_MAG3] != ELFMAG3V) ||
+         (elfHeader.e_ident[EI_CLASS] != ELFCLASS32)) {
       log.error("Unsupported ELF format\n");
       return SFILE_RC_UNKNOWN_FILE_FORMAT;
    }
@@ -1703,6 +1703,25 @@ USBDM_ErrorCode FlashImageImp::loadElfFile(const string &filePath) {
 
 #ifdef USE_SECTIONS
 /**
+ * Find Program header associated with a given section header
+ *
+ * @param sectionHeader Section header to use
+ *
+ * @return  Associated header or nullptr if not found
+ */
+Elf32_Phdr *FlashImageImp::findRelatedProgramHeader(Elf32_Shdr *sectionHeader) {
+   for(Elf32_Phdr *programHeader=programHeaders;
+         programHeader<(programHeaders+elfHeader.e_phnum);
+         programHeader++) {
+      if ((sectionHeader->sh_offset>=programHeader->p_offset) &&
+            ((sectionHeader->sh_offset+sectionHeader->sh_size)<=(programHeader->p_offset+programHeader->p_filesz))) {
+         return programHeader;
+      }
+   }
+   return nullptr;
+}
+
+/**
  *  Gets load address (physical address)
  *  Most needed for .data
  *
@@ -1711,18 +1730,14 @@ USBDM_ErrorCode FlashImageImp::loadElfFile(const string &filePath) {
  *  @return Corresponding load address (may be the same)
  */
 Elf32_Addr FlashImageImp::getLoadAddress(Elf32_Shdr *sectionHeader) {
-   for(Elf32_Phdr *programHeader=programHeaders;
-         programHeader<(programHeaders+elfHeader.e_phnum);
-         programHeader++) {
-      if ((programHeader->p_offset<=sectionHeader->sh_offset) &&
-          ((programHeader->p_offset+programHeader->p_filesz)>=(sectionHeader->sh_offset+sectionHeader->sh_size))) {
-         Elf32_Addr lAddress = sectionHeader->sh_addr;
-         Elf32_Addr pAddress = sectionHeader->sh_offset - programHeader->p_offset + programHeader->p_paddr;
-         UsbdmSystem::Log::print("L:0x%08X ==> P:0x%08X\n", lAddress, pAddress);
-         return pAddress;
-      }
+   Elf32_Phdr *programHeader = findRelatedProgramHeader(sectionHeader);
+   if (programHeader == nullptr) {
+      throw new MyException(SFILE_RC_ELF_FORMAT_ERROR);
    }
-   throw new MyException(SFILE_RC_ELF_FORMAT_ERROR);
+   Elf32_Addr lAddress = sectionHeader->sh_addr;
+   Elf32_Addr pAddress = sectionHeader->sh_addr-(programHeader->p_vaddr-programHeader->p_paddr);
+   UsbdmSystem::Log::print("L:0x%08X ==> P:0x%08X\n", lAddress, pAddress);
+   return pAddress;
 }
 
 /**
@@ -1741,7 +1756,7 @@ USBDM_ErrorCode FlashImageImp::loadElfBlockBySectionHeader(Elf32_Shdr *sectionHe
    if (sectionHeader->sh_type == SHT_NOBITS) {
       return BDM_RC_OK;
    }
-   Elf32_Addr loadAddress = sectionHeader->sh_addr; //getLoadAddress(sectionHeader);
+   Elf32_Addr loadAddress = getLoadAddress(sectionHeader);
    Elf32_Word size        = sectionHeader->sh_size;
 
 #if defined(TARGET) && (TARGET == MC56F80xx)
@@ -1749,13 +1764,13 @@ USBDM_ErrorCode FlashImageImp::loadElfBlockBySectionHeader(Elf32_Shdr *sectionHe
    addr /= 2;
 #endif
    if (size == 0) {
-//      log.print("[empty]\n");
+      //      log.print("[empty]\n");
       return BDM_RC_OK;
    }
 #if defined(TARGET) && (TARGET == MC56F80xx)
-      log.print("loading [0x%08X..0x%08X] @0x%08X\n", sectionHeader->sh_addr, sectionHeader->sh_addr+size/2-1 loadAddress);
+   log.print("loading [0x%08X..0x%08X] @0x%08X\n", sectionHeader->sh_addr, sectionHeader->sh_addr+size/2-1 loadAddress);
 #else
-      log.print("loading [0x%08X..0x%08X] @0x%08X\n", sectionHeader->sh_addr, sectionHeader->sh_addr+size-1, loadAddress);
+   log.print("loading [0x%08X..0x%08X] @0x%08X\n", sectionHeader->sh_addr, sectionHeader->sh_addr+size-1, loadAddress);
 #endif
    fseek(fp, sectionHeader->sh_offset, SEEK_SET);
    while (size>0) {
@@ -1769,7 +1784,7 @@ USBDM_ErrorCode FlashImageImp::loadElfBlockBySectionHeader(Elf32_Shdr *sectionHe
          log.print("- Failed - Undersize read of Block (Expected %lu, read %lu)\n", (unsigned long)blockSize, (unsigned long)sz);
          return SFILE_RC_ELF_FORMAT_ERROR;
       }
-//      log.printDump(buff, blockSize, loadAddress);
+      //      log.printDump(buff, blockSize, loadAddress);
       for (unsigned index=0; index<blockSize; ) {
          uint16_t value;
 #if defined(TARGET) && (TARGET == MC56F80xx)
@@ -1795,7 +1810,7 @@ USBDM_ErrorCode FlashImageImp::loadElfBlockBySectionHeader(Elf32_Shdr *sectionHe
 USBDM_ErrorCode FlashImageImp::loadElfBlockByProgramHeader(Elf32_Phdr *programHeader) {
    LOGGING_Q;
 
-//   printElfProgramHeader(programHeader);
+   //   printElfProgramHeader(programHeader);
 
    Elf32_Addr loadAddress;
    if (programHeader->p_type != PT_LOAD) {
