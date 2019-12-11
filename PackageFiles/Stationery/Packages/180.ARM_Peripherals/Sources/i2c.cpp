@@ -69,11 +69,17 @@ uint8_t I2c::getBPSValue(uint32_t bps, uint32_t clockFrequency) {
  * @param[in]  address - address of slave to access
  */
 void I2c::sendAddress(uint8_t address) {
+
+   unsigned timeout = TIMEOUT_LIMIT;
+
    // Wait for bus idle
-   while ((i2c->S & I2C_S_BUSY_MASK) != 0) {
+   while (((i2c->S & I2C_S_BUSY_MASK) != 0) && (--timeout>0)) {
       __asm("nop");
    }
-
+   if (timeout == 0) {
+      errorCode = E_TIMEOUT;
+      return;
+   }
    addressedDevice = address;
 
    // Configure for Tx of address

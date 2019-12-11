@@ -289,7 +289,7 @@ $(/SMC/setStopOptions)
     */
    static SmcStatus getStatus() {
 
-      return (SmcStatus)(smc().PMSTAT);
+      return static_cast<SmcStatus>(smc().PMSTAT);
    }
 
    /**

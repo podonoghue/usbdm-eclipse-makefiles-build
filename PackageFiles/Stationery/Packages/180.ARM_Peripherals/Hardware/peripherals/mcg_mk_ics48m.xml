@@ -47,13 +47,7 @@
          toolTip="Dependent on device and clock Trim. [Typically ~4MHz]"
          value="4000000" />
 
-      <intOption name="system_low_power_clock"
-         constant="true" 
-         origin="LPO Clock"
-         units="Hz"
-         description="Frequency of Internal Low Power Oscillator [LPO] Clock"
-         toolTip="Dependent on device. [Typically ~1kHz]" 
-         value="1000"/>
+      <aliasOption name="/PMC/system_low_power_clock" />
     
       <intOption name="system_irc48m_clock" 
          constant="true"  
@@ -407,8 +401,8 @@
       <aliasOption name="system_irc48m_clock" optional="true" />
       <aliasOption key="/OSC0/oscer_undiv_clock" optional="true" />
       <aliasOption key="/OSC0/oscer_clock" />
-      <aliasOption key="/SIM/system_erclk32k_clock" />
-      <aliasOption name="system_low_power_clock" />
+      <aliasOption key="/SIM/system_erclk32k_clock" constant="true" />
+      <aliasOption key="/PMC/system_low_power_clock" constant="true" />
    
       <stringOption name="system_mcgoutclk_clock_source."
          derived="true" 

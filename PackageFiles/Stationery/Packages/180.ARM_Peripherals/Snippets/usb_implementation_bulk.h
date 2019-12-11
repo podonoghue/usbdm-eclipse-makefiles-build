@@ -29,6 +29,9 @@
  */
 #define MS_COMPATIBLE_ID_FEATURE
 
+#define UNIQUE_ID
+//#include "configure.h"
+
 namespace USBDM {
 
 //======================================================================
@@ -38,39 +41,27 @@ namespace USBDM {
 /** Causes a semi-unique serial number to be generated for each USB device */
 #define UNIQUE_ID
 
-#ifndef SERIAL_NO
 #ifdef UNIQUE_ID
-#define SERIAL_NO           "USBDM-%lu"
+#define SERIAL_NO           "USBDM-"
 #else
 #define SERIAL_NO           "USBDM-0001"
 #endif
-#endif
-#ifndef PRODUCT_DESCRIPTION
-#define PRODUCT_DESCRIPTION "USB-Test"
-#endif
-#ifndef MANUFACTURER
+#define PRODUCT_DESCRIPTION "Digital Logic Board"
 #define MANUFACTURER        "pgo"
-#endif
 
-#ifndef VENDOR_ID
-#define VENDOR_ID             (0x16D0)    // Vendor (actually MCS)
-#endif
-#ifndef PRODUCT_ID
-#define PRODUCT_ID            (0x9999)
-#endif
-#ifndef VERSION_ID
-#define VERSION_ID            (0x0100)
-#endif
+static constexpr uint16_t  VENDOR_ID   = 0x16D0;    // Vendor ID (actually MCS)
+static constexpr uint16_t  PRODUCT_ID  = 0x4325;    // Product ID
+static constexpr uint16_t  VERSION_ID  = 0x0100;    // Version ID
 
 //======================================================================
 // Maximum packet sizes for each endpoint
 //
-static constexpr uint  CONTROL_EP_MAXSIZE           = 64; //!< Control in/out
+static constexpr unsigned  CONTROL_EP_MAXSIZE           = 64; //!< Control in/out
 /*
  *  TODO Define additional end-point sizes
  */
-static constexpr uint  BULK_OUT_EP_MAXSIZE          = 64; //!< Bulk out
-static constexpr uint  BULK_IN_EP_MAXSIZE           = 64; //!< Bulk in
+static constexpr unsigned  BULK_OUT_EP_MAXSIZE          = 64; //!< Bulk out
+static constexpr unsigned  BULK_IN_EP_MAXSIZE           = 64; //!< Bulk in
 
 #ifdef USBDM_USB0_IS_DEFINED
 /**
@@ -78,9 +69,11 @@ static constexpr uint  BULK_IN_EP_MAXSIZE           = 64; //!< Bulk in
  */
 class Usb0 : public UsbBase_T<Usb0Info, CONTROL_EP_MAXSIZE> {
 
+   // Allow superclass to access handleTokenComplete(void);
    friend UsbBase_T<Usb0Info, CONTROL_EP_MAXSIZE>;
 
 public:
+
    /**
     * String indexes
     *
@@ -176,7 +169,7 @@ public:
     *  @note : Waits for idle BEFORE transmission but\n
     *  returns before data has been transmitted
     */
-   static void sendBulkData(const uint8_t size, const uint8_t *buffer);
+   static void sendBulkData(const uint16_t size, const uint8_t *buffer);
 
    /**
     *  Blocking reception of data over bulk OUT end-point
@@ -188,7 +181,7 @@ public:
     *
     *   @note Doesn't return until command has been received.
     */
-   static int receiveBulkData(uint8_t maxSize, uint8_t *buffer);
+   static int receiveBulkData(uint16_t maxSize, uint8_t *buffer);
 
    /**
     * Device Descriptor
@@ -235,24 +228,38 @@ protected:
 
    /**
     * Callback for SOF tokens
+    *
+    * @param frameNumber Frame number from SOF token
+    *
+    * @return  Error code
     */
-   static void sofCallback();
+   static ErrorCode sofCallback(uint16_t frameNumber);
 
    /**
     * Call-back handling BULK-OUT transaction complete
+    *
+    * @param[in] state Current end-point state (always EPDataOut)
+    *
+    * @return The endpoint state to set after call-back (EPDataOut)
     */
-   static void bulkOutTransactionCallback(EndpointState state);
+   static EndpointState bulkOutTransactionCallback(EndpointState state);
 
    /**
     * Call-back handling BULK-IN transaction complete
+    *
+    * @param[in] state Current end-point state (always EPDataIn)
+    *
+    * @return The endpoint state to set after call-back (EPIdle/EPDataIn)
     */
-   static void bulkInTransactionCallback(EndpointState state);
+   static EndpointState bulkInTransactionCallback(EndpointState state);
 
    /**
-    * Handler for Token Complete USB interrupts for\n
+    * Handler for Token Complete USB interrupts for
     * end-points other than EP0
+    *
+    * @param usbStat USB Status value from USB hardware
     */
-   static void handleTokenComplete(void);
+   static void handleTokenComplete(UsbStat usbStat);
 
 };
 

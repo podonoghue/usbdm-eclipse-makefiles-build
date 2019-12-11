@@ -8,7 +8,6 @@
 #include <stdint.h>
 #include "system.h"
 #include "derivative.h"
-#include "utilities.h"
 #include "hardware.h"
 #include "spi.h"
 /*

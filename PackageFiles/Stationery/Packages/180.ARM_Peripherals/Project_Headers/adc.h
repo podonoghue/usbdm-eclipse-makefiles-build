@@ -270,6 +270,9 @@ public:
    static volatile ADC_Type &adc() { return Info::adc(); }
 
 public:
+   /** Default ADC resolution */
+   static constexpr AdcResolution defaultAdcResolution = static_cast<AdcResolution>(Info::defaultAdcResolution);
+
    /** Get reference to ADC hardware as struct */
    static volatile ADC_Type &adcPtr() { return Info::adc(); }
 
@@ -328,8 +331,10 @@ public:
    static void configureAllPins() {
       // Configure pins
       Info::initPCRs();
+#ifdef ADC_SC1_DIFF_MASK
       Info::InfoDP::initPCRs();
       Info::InfoDM::initPCRs();
+#endif
    }
 
    /**
@@ -703,6 +708,17 @@ protected:
    };
 
    /**
+    * Gets result of last software initiated conversion
+    *
+    * @return COnversion result
+    *
+    * @note This will also clear the conversion flag if set
+    */
+   static uint32_t getConversionResult() {
+      return adc().R[0];
+   };
+
+   /**
     * Initiates a conversion and waits for it to complete.
     *
     * @param[in] sc1Value SC1 register value including the ADC channel to use
@@ -718,7 +734,7 @@ protected:
       while ((adc().SC1[0]&ADC_SC1_COCO_MASK) == 0) {
          __asm__("nop");
       }
-      return (uint16_t)adc().R[0];
+      return static_cast<uint16_t>(adc().R[0]);
    };
 
 public:
@@ -799,8 +815,10 @@ public:
        * @param[in] adcInterrupt   Determines if an interrupt is generated when conversions are complete
        */
       static void startConversion(AdcInterrupt adcInterrupt=AdcInterrupt_Disabled) {
-         usbdm_assert(Info::irqHandlerInstalled || (adcInterrupt == AdcInterrupt_Disabled),
-               "Enabling interrupts without a handler installed in vector table");
+         if constexpr(!Info::irqHandlerInstalled) {
+            usbdm_assert((adcInterrupt == AdcInterrupt_Disabled),
+                  "ADC not configured for interrupts. Modify Configure.usbdmProject");
+         }
          AdcBase_T<Info>::startConversion(channel|adcInterrupt);
       };
 
@@ -811,7 +829,7 @@ public:
        */
       static uint32_t readAnalogue() {
          // Zero extended to 32 bits
-         return (uint32_t)(uint16_t)Adc::readAnalogue(channel);
+         return static_cast<uint16_t>(Adc::readAnalogue(channel));
       };
    };
 
@@ -899,7 +917,7 @@ public:
        */
       static int32_t readAnalogue() {
          // Sign-extended to 32 bits
-         return (int32_t)(int16_t)Adc::readAnalogue(channel|ADC_SC1_DIFF_MASK);
+         return static_cast<int16_t>(Adc::readAnalogue(channel|ADC_SC1_DIFF_MASK));
       };
    };
 #endif
@@ -912,7 +930,7 @@ template<class Info> ADCCallbackFunction AdcBase_T<Info>::sCallback = AdcBase::u
 /**
  * Class representing ADC0
  */
-class Adc0 : public AdcBase_T<Adc0Info> {};
+using Adc0 = AdcBase_T<Adc0Info>;
 
 #endif
 
@@ -920,7 +938,7 @@ class Adc0 : public AdcBase_T<Adc0Info> {};
 /**
  * Class representing ADC1
  */
-class Adc1 : public AdcBase_T<Adc1Info> {};
+using Adc1 = AdcBase_T<Adc1Info>;
 
 #endif
 

@@ -799,7 +799,7 @@ public:
    static constexpr unsigned RIGHT = right;
 
    /** Mask for the bits being manipulated within underlying port hardware */
-   static constexpr uint32_t MASK = (uint32_t)((1ULL<<(left-right+1))-1)<<right;
+   static constexpr uint32_t MASK = static_cast<uint32_t>((1ULL<<(left-right+1))-1)<<right;
 
    /** Polarity of field */
    static constexpr Polarity POLARITY = polarity;

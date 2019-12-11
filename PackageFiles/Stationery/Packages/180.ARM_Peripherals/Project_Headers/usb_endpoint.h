@@ -101,8 +101,8 @@ public:
     * @param size    Number of bytes to copy
     */
    static void safeCopy(volatile void *to, volatile const void *from, unsigned size) {
-      volatile uint8_t *_to   = (volatile uint8_t *)to;
-      volatile uint8_t *_from = (volatile uint8_t *)from;
+      volatile uint8_t       *_to   = reinterpret_cast<volatile uint8_t *>(to);
+      volatile const uint8_t *_from = reinterpret_cast<volatile const uint8_t *>(from);
       while(size-->0) {
          *_to++ = *_from++;
       }
@@ -110,31 +110,31 @@ public:
 
 protected:
    /** Data 0/1 flag */
-   volatile DataToggle fDataToggle;
+   volatile DataToggle fDataToggle = DataToggle_0;
 
    /** Odd/Even Transmit buffer flag */
-   volatile BufferToggle fTxOdd;
+   volatile BufferToggle fTxOdd = BufferToggle_Even;
 
    /** Odd/Even Receive buffer flag */
-   volatile BufferToggle fRxOdd;
+   volatile BufferToggle fRxOdd = BufferToggle_Even;
 
    /** End-point state */
-   volatile EndpointState fState;
+   volatile EndpointState fState = EPIdle;
 
    /**
     *  Indicates that the IN transaction needs to be
     *  terminated with ZLP if size is a multiple of fEndpointSize
     */
-   volatile bool fNeedZLP;
+   volatile bool fNeedZLP = false;
 
    /** Pointer to external data buffer for transmit/receive */
-   volatile uint8_t* fDataPtr;
+   volatile uint8_t* fDataPtr = nullptr;
 
    /** Count of remaining bytes in external data buffer to transmit/receive */
-   volatile uint16_t fDataRemaining;
+   volatile uint16_t fDataRemaining = 0;
 
    /** Count of data bytes transferred to/from data buffer */
-   volatile uint16_t fDataTransferred;
+   volatile uint16_t fDataTransferred = 0;
 
    /**
     *  Callback used on completion of data and handshake phases of transaction.
@@ -150,7 +150,7 @@ protected:
     *
     * @return The endpoint state to set after call-back
     */
-   EndpointState (*fCallback)(EndpointState endpointState);
+   EndpointState (*fCallback)(EndpointState endpointState) = unsetHandlerCallback;
 
    /**
     *  Dummy callback used to catch use of unset callback
@@ -191,15 +191,6 @@ protected:
          uint8_t dataBuffer[],
          volatile USB_Type &usb) :
             fEndPointType(endPointType),
-            fDataToggle(DataToggle_0),
-            fTxOdd(BufferToggle_Even),
-            fRxOdd(BufferToggle_Even),
-            fState(EPIdle),
-            fNeedZLP(false),
-            fDataPtr(nullptr),
-            fDataRemaining(0),
-            fDataTransferred(0),
-            fCallback(unsetHandlerCallback),
             fUsb(usb),
             fDataBuffer(dataBuffer),
             fEndpointNumber(endpointNumber),
@@ -396,7 +387,7 @@ public:
     * @param[in]  bufSize Size of buffer to send (may be zero)
     * @param[in]  bufPtr  Pointer to external buffer (may be NULL to indicate fDatabuffer is being used directly)
     */
-   void startTxStage(EndpointState state, uint8_t bufSize=0, volatile const uint8_t *bufPtr=nullptr) {
+   void startTxStage(EndpointState state, uint16_t bufSize=0, volatile const uint8_t *bufPtr=nullptr) {
       // Pointer to data
       fDataPtr = (uint8_t*)bufPtr;
 
@@ -465,7 +456,7 @@ public:
     *   @param[in]  bufSize - Size of data to transfer (may be zero)
     *   @param[in]  bufPtr  - Buffer for data (may be nullptr)
     */
-   void startRxStage(EndpointState state, uint8_t bufSize=0, uint8_t *bufPtr=nullptr) {
+   void startRxStage(EndpointState state, uint16_t bufSize=0, uint8_t *bufPtr=nullptr) {
       // Count of bytes transferred
       fDataTransferred     = 0;
       // Total bytes to Receive

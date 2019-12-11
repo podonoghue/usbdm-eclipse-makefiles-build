@@ -25,6 +25,41 @@ static uint8_t data[ArraySize];
 
 int main(){
 
+   console.setWidth(8).setPadding(Padding_LeadingZeroes);
+
+   /*
+    * Simple tests
+    * Verify against https://crccalc.com
+    */
+   console.setWidth(8).setPadding(Padding_LeadingZeroes);
+
+   static const uint8_t simpleData[] = "123456789";
+
+   Crc0::configure_Crc32();
+   console.write("Crc32(").write((const char *)simpleData).write("          => ").
+         writeln(Crc0::calculateCrc(simpleData, sizeof(simpleData)-1), Radix_16);
+
+   Crc0::configure_Crc32_BZIP();
+   console.write("Crc32_BZIP(").write((const char *)simpleData).write("     => ").
+         writeln(Crc0::calculateCrc(simpleData, sizeof(simpleData)-1), Radix_16);
+
+   Crc0::configure_Crc32_C();
+   console.write("Crc32_C(").write((const char *)simpleData).write("        => ").
+         writeln(Crc0::calculateCrc(simpleData, sizeof(simpleData)-1), Radix_16);
+
+   Crc0::configure_Crc32_D();
+   console.write("Crc32_D(").write((const char *)simpleData).write("        => ").
+         writeln(Crc0::calculateCrc(simpleData, sizeof(simpleData)-1), Radix_16);
+
+   Crc0::configure_Crc32_MPEG_2();
+   console.write("Crc32_MPEG_2(").write((const char *)simpleData).write("   => ").
+         writeln(Crc0::calculateCrc(simpleData, sizeof(simpleData)-1), Radix_16);
+
+   Crc0::configure_Crc32_POSIX();
+   console.write("Crc32_POSIX(").write((const char *)simpleData).write("    => ").
+         writeln(Crc0::calculateCrc(simpleData, sizeof(simpleData)-1), Radix_16);
+
+
    // Fill source with random data
    srand (time(0));
    for (unsigned index=0; index<sizeof(data); index++) {

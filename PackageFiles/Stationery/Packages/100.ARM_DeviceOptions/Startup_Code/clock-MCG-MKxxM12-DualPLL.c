@@ -16,8 +16,6 @@
 #include "derivative.h" /* include peripheral declarations */
 #include "system.h"
 #include "clock_configure.h"
-#include "utilities.h"
-#include "stdbool.h"
 
 // Some MCUs call OSC0 just OSC
 #ifndef OSC0

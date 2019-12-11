@@ -202,7 +202,7 @@ int _stat(const char *filepath __attribute__((unused)), struct stat *st __attrib
  */
 __attribute__((__weak__))
 clock_t _times(struct tms *buf __attribute__((unused))) {
-   return -1;
+   return 0;
 }
 
 /**
@@ -278,7 +278,7 @@ int _usbdm_read(int file, char *ptr, int len) {
    int ch;
    do {
       ch = console_rxChar();
-      *ptr++ = ch;
+      *ptr++ = (char)ch;
    } while ((++done<len) && (ch != '\n'));
    return done;
 }

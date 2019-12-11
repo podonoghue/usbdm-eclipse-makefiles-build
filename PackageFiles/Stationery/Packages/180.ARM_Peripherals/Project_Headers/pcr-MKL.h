@@ -52,10 +52,10 @@ enum Polarity {
 constexpr   int8_t FIXED_NO_PCR         = 0x00;
 
 /** Pin number indicating the function doesn't exist. Note: -ve value*/
-constexpr   int8_t INVALID_PCR          = 0xA5;
+constexpr   int8_t INVALID_PCR          = static_cast<int8_t>(0xA5);
 
 /** Pin number indicating the function is not currently mapped to a pin. Note: -ve value */
-constexpr   int8_t UNMAPPED_PCR         = 0xA4;
+constexpr   int8_t UNMAPPED_PCR         = static_cast<int8_t>(0xA4);
 
 #ifdef PCC
 /**
@@ -91,7 +91,7 @@ static inline void enablePortClocks(uint32_t clockMask) {
    SIM->SCGC5 |= clockMask;
 #endif
    __DMB();
-};
+}
 
 /**
  * Disable clock to selected ports
@@ -105,7 +105,7 @@ static inline void disablePortClocks(uint32_t clockMask) {
    SIM->SCGC5 &= ~clockMask;
 #endif
    __DMB();
-};
+}
 
 /*
  * PORT clock masks
@@ -613,7 +613,7 @@ public:
     */
    static PcrValue getPCR() {
       if (portAddress == 0) {
-         return (PcrValue) 0;
+         return static_cast<PcrValue>(0);
       }
       enablePortClocks(clockInfo);
       return pcrReg();
@@ -637,7 +637,7 @@ public:
          PinAction         pinAction         = PinAction_None,
          PinFilter         pinFilter         = PinFilter_None,
          PinSlewRate       pinSlewRate       = PinSlewRate_Fast,
-         PinMux            pinMux            = (PinMux)(defPcrValue&PORT_PCR_MUX_MASK)
+         PinMux            pinMux            = static_cast<PinMux>(defPcrValue&PORT_PCR_MUX_MASK)
          ) {
       if (portAddress != 0) {
          enablePortClocks(clockInfo);

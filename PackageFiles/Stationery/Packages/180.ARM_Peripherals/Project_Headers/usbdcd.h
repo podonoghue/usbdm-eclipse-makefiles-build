@@ -140,6 +140,7 @@ public:
     * @note It is expected that the callback will clear the status flag that triggered the interrupt. See getStatus().
     */
    static void setCallback(USBDCDCallbackFunction theCallback) {
+      static_assert(Info::irqHandlerInstalled, "USBDCD not configure for interrupts - Modify Configure.usbdm");
       if (theCallback == nullptr) {
          theCallback = unhandledCallback;
       }

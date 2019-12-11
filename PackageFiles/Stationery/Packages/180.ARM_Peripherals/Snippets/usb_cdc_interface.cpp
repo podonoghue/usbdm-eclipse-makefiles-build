@@ -11,7 +11,7 @@
 
 #include "hardware.h"
 #include "uart.h"
-#include "queue.h"
+#include "uart_queue.h"
 #include "usb_cdc_interface.h"
 
 namespace USBDM {
@@ -21,10 +21,9 @@ using UartInfo = Uart0Info;
 
 static UartBuffered_basic_T<UartInfo, 20, 20> uart;
 
-static uint8_t             cdcStatus            = 0;
-static LineCodingStructure currentLineCoding    = {0, 0, 0, 0};
-static uint8_t             breakCount           = 0;
-static bool              (*inCallback)()        = nullptr;
+static volatile uint8_t  cdcStatus            = 0;
+static volatile uint8_t  breakCount           = 0;
+static bool              (*inCallback)()      = nullptr;
 
 /**
  * Initialise class
@@ -37,7 +36,7 @@ void CDC_Interface::initialise() {
  *
  * @param cb The function to call to notify the USB In interface that new data is available
  */
-void CDC_Interface::setUsbInNotifyCallback(simpleCallbak cb) {
+void CDC_Interface::setUsbInNotifyCallback(SimpleCallback cb) {
    inCallback = cb;
 }
 
@@ -49,14 +48,15 @@ void CDC_Interface::setUsbInNotifyCallback(simpleCallbak cb) {
  *
  * @note the Data is volatile so should be processed or saved immediately.
  */
-void CDC_Interface::putData(int size, const uint8_t *buff) {
+void CDC_Interface::putData(int size, const volatile uint8_t *buff) {
 
    while (size-->0) {
       if (uart.txQueue.isFull()) {
+         // Discard data and flag overrun
          cdcStatus |= UART_S1_OR_MASK;
          return;
       }
-      uart.txQueue.enQueueDiscardOnFull(*buff++);
+      uart.txQueue.enQueue(*buff++);
    }
 }
 
@@ -90,7 +90,7 @@ CdcLineState CDC_Interface::getSerialState() {
    static uint8_t lastSciStatus = 0x00;
 
    // Assume DCD & DSR
-   CdcLineState status = {CDC_STATE_DCD_MASK|CDC_STATE_DSR_MASK};
+   CdcLineState status{(uint8_t)(CDC_STATE_DCD_MASK|CDC_STATE_DSR_MASK)};
 
    if (cdcStatus&UART_S1_FE_MASK) {
       status.bits |= CDC_STATE_FRAME_MASK;
@@ -119,17 +119,21 @@ CdcLineState CDC_Interface::getSerialState() {
  * by LineCodingStructure.
  * It does not support many of the combinations available.
  */
-void CDC_Interface::setLineCoding(LineCodingStructure * const lineCoding) {
+void CDC_Interface::setLineCoding(volatile LineCodingStructure &lineCoding) {
    uint8_t  UARTC1Value = 0x00;
    uint8_t  UARTC3Value = 0x00;
 
+   // Ignore illegal values
+   volatile unsigned newBaud = lineCoding.dwDTERate;
+   if ((newBaud == 0) || (newBaud>115200)) {
+      return;
+   }
+
    // Initialise UART and set baud rate
-   uart.setBaudRate(leToNative32(lineCoding->dwDTERate));
+   uart.setBaudRate(newBaud);
 
    cdcStatus  = CDC_STATE_CHANGE_MASK;
    breakCount = 0; // Clear any current BREAKs
-
-   (void)memcpy(&currentLineCoding, lineCoding, sizeof(LineCodingStructure));
 
    //! Note - for a 48MHz bus speed the useful baud range is ~300 to ~115200 for 0.5% error
    //  230400 & 460800 have a 8.5% error
@@ -161,17 +165,17 @@ void CDC_Interface::setLineCoding(LineCodingStructure * const lineCoding) {
    //--------------------------------------------
    //   All other values default to 8-None-1
 
-   switch (lineCoding->bDataBits) {
+   switch (lineCoding.bDataBits) {
    // 5,6,7,8,16
    case 7 :
-      switch (lineCoding->bParityType) {
+      switch (lineCoding.bParityType) {
       case 1:  UARTC1Value = UART_C1_PE_MASK|UART_C1_PT_MASK; break; // Odd
       case 2:  UARTC1Value = UART_C1_PE_MASK;                 break; // Even
       }
       break;
    case 8 :
       UARTC1Value = UART_C1_M_MASK; // 9-data or 8-data+parity
-      switch (lineCoding->bParityType) {
+      switch (lineCoding.bParityType) {
       case 0:  UARTC1Value  = 0;                               break; // None
       case 1:  UARTC1Value |= UART_C1_PE_MASK|UART_C1_PT_MASK; break; // Odd
       case 2:  UARTC1Value |= UART_C1_PE_MASK;                 break; // Even
@@ -194,15 +198,6 @@ void CDC_Interface::setLineCoding(LineCodingStructure * const lineCoding) {
          UART_C3_PEIE_MASK; // Parity error
 
    NVIC_EnableIRQ(UartInfo::irqNums[0]);
-}
-
-/**
- *  Get CDC communication characteristics\n
- *
- *  @return lineCodingStructure - Static structure describing current settings
- */
-LineCodingStructure const *CDC_Interface::getLineCoding() {
-   return &currentLineCoding;
 }
 
 /**

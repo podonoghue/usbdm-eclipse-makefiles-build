@@ -21,6 +21,34 @@
 extern "C" {
 #endif
 
+//-------- <<< Use Configuration Wizard in Context Menu >>> -----------------
+
+//   <o> UART default baud rate
+//   <i> Used by default UART setup for stdio
+//   <i> Note: Manually change Custom value
+//     <110=> 110
+//     <300=> 300
+//     <600=> 600
+//     <1200=> 1200
+//     <2400=> 2400
+//     <4800=> 4800
+//     <9600=> 9600
+//     <14400=> 14400
+//     <19200=> 19200
+//     <28800=> 28800
+//     <38400=> 38400
+//     <56000=> 56000
+//     <57600=> 57600
+//     <115200=> 115200
+//     <115200=> Default
+
+#ifndef DEFAULT_BAUD_RATE
+/**
+ * Default baud rate for UART used for stdio
+ */
+#define DEFAULT_BAUD_RATE 115200
+#endif
+
 /**
  * The following functions are a C-wrapper used by the C library
  * low-level stdio support.

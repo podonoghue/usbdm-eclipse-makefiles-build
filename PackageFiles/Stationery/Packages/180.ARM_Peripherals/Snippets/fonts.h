@@ -28,6 +28,7 @@ public:
    const uint8_t height;         // Height of the character in pixels
    const uint8_t bytesPerChar;   // Bytes used for each character in data table
 
+   // Font data is organised from left to right x top to bottom as bytes
    const uint8_t *const data;    // Data describing the character pixels (index starts at BASE_CHAR)
 };
 
@@ -37,6 +38,8 @@ extern Font fontSmall;
 extern Font fontMedium;
 /** Large 8x16 font */
 extern Font fontLarge;
+/** Very Large 16x32 font */
+extern Font fontVeryLarge;
 
 }; // end namespace USBDM
 

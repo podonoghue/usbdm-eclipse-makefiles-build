@@ -67,9 +67,9 @@ public:
     * @param size Amount of data
     * @param buff Buffer for data
     *
-    * @note the Data is volatile so should be processed or saved immediately.
+    * @note The data is volatile so should be processed or saved immediately.
     */
-   static void putData(int size, const uint8_t *buff);
+   static void putData(int size, const volatile uint8_t *buff);
 
    /**
     * Get data to transmit to host
@@ -81,20 +81,13 @@ public:
     */
    static int getData(int bufSize, uint8_t *buff);
 
-   /**
-    *  Get CDC communication characteristics\n
-    *
-    *  @return lineCodingStructure - Static structure describing current settings
-    */
-   static LineCodingStructure const *getLineCoding();
-
 public:
    /**
     * Set line coding
     *
     * @param lineCoding Line coding information
     */
-   static void setLineCoding(LineCodingStructure *const lineCoding);
+   static void setLineCoding(volatile LineCodingStructure &lineCoding);
 
    /**
     *  Set CDC Line values

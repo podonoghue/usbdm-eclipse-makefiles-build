@@ -112,30 +112,30 @@ Control extended Boot features on these devices
    <info>NV_FOPT
    <e0> Boot ROM Options
       <i> Only available on devices with internal ROM
-      <0=> Options Disabled
+      <0=> Options Disabled (Boot from bootloader ROM)
       <1=> Options Enabled
    <o1> Boot Source Selection
       <i> These bits select the boot sources
-      <info>BOOTSRC_SEL
+      <info>FOPT[7-6] BOOTSRC_SEL
       <0=> 0: Boot from Flash
       <64=> 1: Reserved
-      <128=> 2: Boot from ROM with enabled QSPI0
-      <192=> 3: Boot from ROM
+      <128=> 2: Boot from bootloader ROM with enabled QSPI0
+      <192=> 3: Boot from bootloader ROM
    <q2.1> External pin selects boot options
       <i> Note: RESET pin must be enabled if BOOTCFG0 is used.
-	  <info>[1] BOOTPIN_OPT
-      <0=> Boot from ROM if BOOTCFG0 (NMI pin) asserted.
+	  <info>FOPT[1]    BOOTPIN_OPT
+      <0=> Boot from bootloader ROM if BOOTCFG0 (NMI pin) asserted.
       <1=> Boot source controlled by BOOTSRC_SEL
    </e>
 
    <q2.5> Fast initialisation control
       <i> Selects initialization speed on POR, VLLSx, and system reset.
-	  <info>[5] FAST_INIT
+	  <info>FOPT[5]    FAST_INIT
       <0=> Slow - Slower initialization and reduced average current.
       <1=> Fast - Faster initialization and higher average current.
    <q2.2> NMI pin control
       <i> Enables or disables the NMI function
-      <info>[2] NMI_DIS
+      <info>FOPT[2]    NMI_DIS
       <0=> NMI interrupts are always blocked.
       <1=> NMI interrupts default to enabled
    <q2.0> Low power boot control
@@ -144,13 +144,13 @@ Control extended Boot features on these devices
       <i> Larger divide value selections produce lower average power consumption
       <i> during POR and reset sequencing and after reset exit.
       <i> The recovery times are also extended.
-      <info>[0] LPBOOT
+      <info>FOPT[0] LPBOOT
       <0=> OUTDIV1 = /8, RUNM = VLPR
       <1=> OUTDIV1 = /1, RUNM = RUN
 </h>
  */
 #define BOOT_ENABLE    (1)      // e0
-#define FOPT_BOOTSRC   (0x0)   // o1
+#define FOPT_BOOTSRC   (0x0)    // o1
 #define FOPT_MISC      (0x27)   // q2
 #define FOPT_RESERVED  (0x18)   // Bits not controlled by above
 #define FOPT_BOOT_OFF  (0xC2)   // Value to use when (BOOT_ENABLE=0)
@@ -215,20 +215,81 @@ typedef struct {
     uint8_t  reserved2[12];
 } BootloaderConfiguration;
 
+/*
+   <e0> Boot ROM Configuration
+      <i> Only available on devices with internal ROM
+      <i> Not all options are available on all devices
+      <0=> Options Disabled
+      <1=> Options Enabled
+   <h> Peripherals available for bootloader
+   <q1.0> UART boot option
+      <0=> Disabled
+      <1=> Device available for bootloader
+   <q1.1> I2C boot option
+      <0=> Disabled
+      <1=> Device available for bootloader
+   <q1.2> SPI boot option
+      <0=> Disabled
+      <1=> Device available for bootloader
+   <q1.3> CAN boot option
+      <0=> Disabled
+      <1=> Device available for bootloader
+   <q1.4> USB HID boot option
+      <0=> Disabled
+      <1=> Device available for bootloader
+   <q1.7> USB Miscellaneous boot option
+      <0=> Disabled
+      <1=> Device available for bootloader
+  </h>
+  <o2.0..7> I2C Address
+      <i>  Address used for I2C boot device
+      <info> 7-it address, -1 to disable
+  <o3> CRC Start Address
+      <i>  ROM address to start CRC calculation
+      <info> -1 to disable CRC calcuation
+  <o4> CRC Size
+      <i>  Size of range in bytes for CRC calculation
+  <o5> CRC Expected value
+      <i>  The expected value for the resulting CRC calculation
+  <o6.0..15>Timeout for active peripheral detection
+  <i> Timeout in milliseconds
+  <o7.0..15>USB Vendor ID
+  <o8.0..15>USB Peripheral ID
+  <q9.0> Clock mode
+      <0=> High speed
+      <1=> Low speed
+  <o10.0..15>Clock Divider <0-15>
+  <i>Divider to use for core and bus clocks when in high speed mode
+  </e>
+*/
+
+#define ENABLE_BOOTLOADER               (0)             // e0
+#define BOOTLOADER_ENABLED_DEVICES      (0x7)           // q1
+#define BOOTLOADER_I2C_ADDRESS          (uint8_t)(0xFF) // o2
+#define BOOTLOADER_CRC_START_ADDRESS    (0xFFFFFFFF)    // o3
+#define BOOTLOADER_CRC_BYTE_COUNT       (0xFFFFFFFF)    // o4
+#define BOOTLOADER_CRC_EXPECTED_VALUE   (0xFFFFFFFF)    // o5
+#define BOOTLOADER_PERIPHERAL_TIMEOUT   (10000)         // o6
+#define BOOTLOADER_USB_VID              (0xFFFF)        // o7
+#define BOOTLOADER_USB_PID              (0xFFFF)        // o8
+#define BOOTLOADER_CLOCK_FLAGS          (0x0)           // q9
+#define BOOTLOADER_CLOCK_DIVIDER        (0x2)           // o10
+
+#if ENABLE_BOOTLOADER
 __attribute__ ((section(".bootloader_configuration")))
 const BootloaderConfiguration bootloaderConfiguration = {
-    /* tag[4];                */ {0xFF, 0xFF, 0xFF, 0xFF, }, //"kcfg" to activate,
-    /* crcStartAddress;       */ 0xFFFFFFFF,
-    /* crcByteCount;          */ 0xFFFFFFFF,
-    /* crcExpectedValue;      */ 0xFFFFFFFF,
-    /* enabledPeripherals;    */ 0xFF,
-    /* i2cAddress;            */ 0xFF,
-    /* peripheralTimeout;     */ 0xFFFF,
-    /* usbVid;                */ 0xFFFF,
-    /* usbPid;                */ 0xFFFF,
+    /* tag[4];                */ "kcfg",
+    /* crcStartAddress;       */ BOOTLOADER_CRC_START_ADDRESS,
+    /* crcByteCount;          */ BOOTLOADER_CRC_BYTE_COUNT,
+    /* crcExpectedValue;      */ BOOTLOADER_CRC_EXPECTED_VALUE,
+    /* enabledPeripherals;    */ BOOTLOADER_ENABLED_DEVICES,
+    /* i2cAddress;            */ BOOTLOADER_I2C_ADDRESS,
+    /* peripheralTimeout;     */ BOOTLOADER_PERIPHERAL_TIMEOUT,
+    /* usbVid;                */ BOOTLOADER_USB_VID,
+    /* usbPid;                */ BOOTLOADER_USB_PID,
     /* usbStringsPointer;     */ 0xFFFFFFFF,
-    /* clockFlags;            */ 0xFF,
-    /* clockDivider;          */ 0xFF,
+    /* clockFlags;            */ BOOTLOADER_CLOCK_FLAGS,
+    /* clockDivider;          */ BOOTLOADER_CLOCK_DIVIDER,
     /* bootFlags;             */ 0xFF,
     /* padbyte;               */ 0xFF,
     /* reserved[4];           */ {0xFF, 0xFF, 0xFF, 0xFF, },
@@ -237,4 +298,5 @@ const BootloaderConfiguration bootloaderConfiguration = {
     /* qspiConfigBlockPointer */ 0xFFFFFFFF,
     /* reserved[12];          */ {0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, },
 };
+#endif
 #endif

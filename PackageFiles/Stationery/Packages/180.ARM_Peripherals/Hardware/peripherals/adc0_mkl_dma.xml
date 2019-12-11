@@ -209,11 +209,14 @@
      \t *  @return Frequency in Hz
      \t */
      \tstatic unsigned getInputClockFrequency() {
-     \t   return getInputClockFrequency((AdcClockSource)(adc().CFG1 & ADC_CFG1_ADICLK_MASK));
+     \t   return getInputClockFrequency(static_cast<AdcClockSource>(adc().CFG1 & ADC_CFG1_ADICLK_MASK));
      \t}\n\n
    ]]></template>
    
    <template><![CDATA[
+     \t//! Default resolution
+     \tstatic constexpr uint32_t defaultAdcResolution = ADC_CFG1_MODE($(adc_cfg1_mode));\n\n
+
      \t//! Default value for ADCx_CFG1 register
      \tstatic constexpr uint32_t cfg1  = 
      \t    ADC_CFG1_ADICLK($(adc_cfg1_adiclk))|

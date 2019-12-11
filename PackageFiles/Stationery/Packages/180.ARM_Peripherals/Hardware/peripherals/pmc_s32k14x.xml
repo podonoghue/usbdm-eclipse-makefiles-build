@@ -6,6 +6,16 @@
 
    <xi:include href="_default_instance.xml"/>
 
+   <category name="LPO" description="Low Power Clock Sources" >
+      <intOption name="system_low_power_clock_128kHz"
+         constant="true" 
+         origin="LPO Clock - 128kHz"
+         units="Hz"
+         description="Frequency of Internal Low Power Oscillator [LPO] Clock"
+         toolTip="Dependent on device. [Typically ~128kHz]" 
+         value="128000"/>
+      </category>
+
    <binaryOption name="pmc_lvdsc1_lvdie" 
       description="Low-Voltage Detect Interrupt Enable"
       toolTip="Enables hardware interrupt requests for LVDF">

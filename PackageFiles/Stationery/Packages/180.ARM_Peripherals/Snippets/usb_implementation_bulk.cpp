@@ -78,7 +78,7 @@ const DeviceDescriptor Usb0::deviceDescriptor = {
       /* bMaxPacketSize0     */ CONTROL_EP_MAXSIZE,             // EndPt 0 max packet size
       /* idVendor            */ nativeToLe16(VENDOR_ID),        // Vendor ID
       /* idProduct           */ nativeToLe16(PRODUCT_ID),       // Product ID
-      /* bcdDevice           */ nativeToLe16(VERSION_ID),       // Device Release    [BCD = 4.10]
+      /* bcdDevice           */ nativeToLe16(VERSION_ID),       // Device Release
       /* iManufacturer       */ s_manufacturer_index,           // String index of Manufacturer name
       /* iProduct            */ s_product_index,                // String index of product description
       /* iSerialNumber       */ s_serial_index,                 // String index of serial number
@@ -135,61 +135,62 @@ const Usb0::Descriptors Usb0::otherDescriptors = {
 };
 
 /** Out end-point for BULK data out */
-OutEndpoint <Usb0Info, Usb0::BULK_OUT_ENDPOINT, BULK_OUT_EP_MAXSIZE> Usb0::epBulkOut;
+OutEndpoint <Usb0Info, Usb0::BULK_OUT_ENDPOINT, BULK_OUT_EP_MAXSIZE> Usb0::epBulkOut(EndPointType_Bulk);
 
 /** In end-point for BULK data in */
-InEndpoint  <Usb0Info, Usb0::BULK_IN_ENDPOINT,  BULK_IN_EP_MAXSIZE>  Usb0::epBulkIn;
+InEndpoint  <Usb0Info, Usb0::BULK_IN_ENDPOINT,  BULK_IN_EP_MAXSIZE>  Usb0::epBulkIn(EndPointType_Bulk);
+
 /*
  * TODO Add additional end-points here
  */
 
 /**
  * Handler for Start of Frame Token interrupt (~1ms interval)
+ *
+ * @param frameNumber Frame number from SOF token
+ *
+ * @return  E_NO_ERROR on success
  */
-void Usb0::sofCallback() {
+ErrorCode Usb0::sofCallback(uint16_t frameNumber) {
    // Activity LED
    // Off                     - no USB activity, not connected
    // On                      - no USB activity, connected
    // Off, flash briefly on   - USB activity, not connected
    // On,  flash briefly off  - USB activity, connected
-   if (fUsb->FRMNUML==0) { // Every ~256 ms
-      switch (fUsb->FRMNUMH&0x03) {
+   if ((frameNumber&0xFF)==0) {
+      // Every ~256 ms
+      switch ((frameNumber>>8)&0x3) {
          case 0:
-            if (connectionState == USBconfigured) {
-               // Activity LED on when USB connection established
-//               UsbLed::on();
-            }
-            else {
-               // Activity LED off when no USB connection
-//               UsbLed::off();
-            }
+            // LED on if configured, off if not
+            // UsbLed::write(fConnectionState == USBconfigured);
             break;
          case 1:
          case 2:
             break;
          case 3:
          default :
-            if (activityFlag) {
-               // Activity LED flashes
-//               UsbLed::toggle();
-               setActive(false);
+            if (fActivityFlag) {
+               // Flash LED to indicate activity
+               // UsbLed::toggle();
+               fActivityFlag = false;
             }
             break;
       }
    }
+
+   return E_NO_ERROR;
 }
 
 /**
  * Handler for Token Complete USB interrupts for
  * end-points other than EP0
+ *
+ * @param usbStat USB Status value from USB hardware
  */
-void Usb0::handleTokenComplete() {
-
-   // Status from Token
-   uint8_t   usbStat  = fUsb->STAT;
+void Usb0::handleTokenComplete(UsbStat usbStat) {
 
    // Endpoint number
-   uint8_t   endPoint = ((uint8_t)usbStat)>>4;
+   uint8_t endPoint = usbStat.endp;
 
    fEndPoints[endPoint]->flipOddEven(usbStat);
    switch (endPoint) {
@@ -209,26 +210,25 @@ void Usb0::handleTokenComplete() {
 /**
  * Call-back handling BULK-OUT transaction complete
  *
- * @param state Current end-point state
+ * @param[in] state Current end-point state (always EPDataOut)
+ *
+ * @return The endpoint state to set after call-back (EPIdle/EPDataOut)
  */
-void Usb0::bulkOutTransactionCallback(EndpointState state) {
-   static uint8_t buff[] = "";
-//   PRINTF("%c\n", buff[0]);
-   if (state == EPDataOut) {
-      epBulkOut.startRxTransaction(EPDataOut, sizeof(buff), buff);
-   }
+EndpointState Usb0::bulkOutTransactionCallback(EndpointState state) {
+   (void)state;
+   return EPIdle;
 }
 
 /**
  * Call-back handling BULK-IN transaction complete
  *
- * @param state Current end-point state
+ * @param[in] state Current end-point state (always EPDataIn)
+ *
+ * @return The endpoint state to set after call-back (EPIdle/EPDataIn)
  */
-void Usb0::bulkInTransactionCallback(EndpointState state) {
-   static const uint8_t buff[] = "Hello There\n\r";
-   if (state == EPDataIn) {
-      epBulkIn.startTxTransaction(EPDataIn, sizeof(buff), buff);
-   }
+EndpointState Usb0::bulkInTransactionCallback(EndpointState state) {
+   (void)state;
+   return EPIdle;
 }
 
 /**
@@ -258,8 +258,8 @@ void Usb0::initialise() {
  *
  *   @note Doesn't return until command has been received.
  */
-int Usb0::receiveBulkData(uint8_t maxSize, uint8_t *buffer) {
-   epBulkOut.startRxTransaction(EPDataOut, maxSize, buffer);
+int Usb0::receiveBulkData(uint16_t maxSize, uint8_t *buffer) {
+   epBulkOut.startRxStage(EPDataOut, maxSize, buffer);
    while(epBulkOut.getState() != EPIdle) {
       __WFI();
    }
@@ -277,13 +277,11 @@ int Usb0::receiveBulkData(uint8_t maxSize, uint8_t *buffer) {
  *   returns before data has been transmitted
  *
  */
-void Usb0::sendBulkData(uint8_t size, const uint8_t *buffer) {
-//   commandBusyFlag = false;
-   //   enableUSBIrq();
+void Usb0::sendBulkData(uint16_t size, const uint8_t *buffer) {
    while (epBulkIn.getState() != EPIdle) {
       __WFI();
    }
-   epBulkIn.startTxTransaction(EPDataIn, size, buffer);
+   epBulkIn.startTxStage(EPDataIn, size, buffer);
 }
 
 

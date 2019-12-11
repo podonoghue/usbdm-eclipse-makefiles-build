@@ -1519,7 +1519,7 @@ void UsbBase_T<Info, EP0_SIZE>::irqHandler() {
       //          console.WRITE("Irq ").WRITELN(pendingInterruptFlags, Radix_16);
       //      }
       if ((pendingInterruptFlags&USB_ISTAT_USBRST_MASK) != 0) {
-         console.WRITELN("========\nRes");
+//         console.WRITELN("========\nRes");
          // Reset signaled on Bus
          handleUSBReset();
          return;

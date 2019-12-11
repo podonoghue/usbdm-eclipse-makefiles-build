@@ -202,7 +202,7 @@
       \t   switch(lptmr().PSR&LPTMR_PSR_PCS_MASK) {
       \t   default:
       \t   case LPTMR_PSR_PCS(0): return McgInfo::getMcgIrClock();
-      \t   case LPTMR_PSR_PCS(1): return SystemLpoClock;
+      \t   case LPTMR_PSR_PCS(1): return PmcInfo::getLpoClock();
       \t   case LPTMR_PSR_PCS(2): return SimInfo::getErc32kClock();
       \t   case LPTMR_PSR_PCS(3): return Osc0Info::getOscerClock();
       \t   }

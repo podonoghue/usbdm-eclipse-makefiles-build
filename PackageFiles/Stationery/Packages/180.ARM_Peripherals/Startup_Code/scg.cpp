@@ -11,7 +11,6 @@
 #include "string.h"
 #include "derivative.h" /* include peripheral declarations */
 #include "system.h"
-#include "utilities.h"
 #include "stdbool.h"
 #include "hardware.h"
 #include "scg.h"
@@ -40,9 +39,6 @@ volatile uint32_t SystemCoreClock;
 
 /** Bus clock (from SCGOUTCLK/CLKDIV) */
 volatile uint32_t SystemBusClock;
-
-/** LPO - Low power oscillator 1kHz clock available in LP modes */
-volatile uint32_t SystemLpoClock;
 
 /** Callback for programmatically set handler */
 SCGCallbackFunction Scg::callback = {0};
@@ -179,8 +175,6 @@ ErrorCode Scg::clockTransition(const ScgInfo::ClockInfo &clockInfo) {
  * Updates the SystemCoreClock variable with current core Clock retrieved from CPU registers.
  */
 void Scg::SystemCoreClockUpdate() {
-
-   SystemLpoClock    = 1000;
 
    uint32_t clockFrequency = 0;
 

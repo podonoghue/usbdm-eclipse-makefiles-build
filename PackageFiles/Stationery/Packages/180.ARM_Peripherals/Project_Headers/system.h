@@ -68,11 +68,11 @@ static inline void unlock(volatile uint32_t *lockVar) {
 }
 #else
 // Not available on Cortex M0
-static inline void lock(uint32_t * dummy) {(void)dummy;}
-static inline void unlock(uint32_t * dummy) {(void)dummy;}
+static inline void lock(volatile uint32_t * dummy) {(void)dummy;}
+static inline void unlock(volatile uint32_t * dummy) {(void)dummy;}
 #endif
 
-#ifdef __cplusplus
+#ifndef __cplusplus
 /**
  * Enter critical section
  *
@@ -81,7 +81,55 @@ static inline void unlock(uint32_t * dummy) {(void)dummy;}
  * @param cpuSR Variable to hold interrupt state so it can be restored
  *
  * @code
- * uint8_t *cpuSR;
+ * uint8_t cpuSR;
+ * ...
+ * enterCriticalSection(&cpuSR);
+ *  // Critical section
+ * exitCriticalSection(&cpuSR);
+ * @endcode
+ */
+static inline void enterCriticalSection(uint8_t *cpuSR) {
+   __asm__ volatile (
+         "  MRS   r0, PRIMASK       \n"   // Copy flags
+         // It may be possible for a ISR to run here but it
+         // would save/restore PRIMASK so this code is OK
+         "  CPSID I                 \n"   // Disable interrupts
+         "  STRB  r0, %[output]     \n"   // Save flags
+         : [output] "=m" (cpuSR) : : "r0");
+}
+
+/**
+ * Exit critical section
+ *
+ * Restores interrupt state saved by enterCriticalSection()
+ *
+ * @param cpuSR Variable to holding interrupt state to be restored
+ */
+static inline void exitCriticalSection(uint8_t *cpuSR) {
+   __asm__ volatile (
+         "  LDRB r0, %[input]    \n"  // Retrieve original flags
+         "  MSR  PRIMASK,r0;     \n"  // Restore
+         : :[input] "m" (cpuSR) : "r0");
+}
+#endif // __cplusplus
+
+#ifdef __cplusplus
+}
+#endif
+
+#ifdef __cplusplus
+
+namespace USBDM {
+
+/**
+ * Enter critical section
+ *
+ * Disables interrupts for a critical section
+ *
+ * @param cpuSR Variable to hold interrupt state so it can be restored
+ *
+ * @code
+ * uint8_t cpuSR;
  * ...
  * enterCriticalSection(cpuSR);
  *  // Critical section
@@ -111,8 +159,6 @@ static inline void exitCriticalSection(uint8_t &cpuSR) {
          "  MSR  PRIMASK,r0;     \n"  // Restore
          : :[input] "m" (cpuSR) : "r0");
 }
-
-namespace USBDM {
 
 /**
  * Class to implement simple critical sections by disabling interrupts.
@@ -172,9 +218,5 @@ public:
 }  // namespace USBDM
 
 #endif // __cplusplus
-
-#ifdef __cplusplus
-}
-#endif
 
 #endif /* INCLUDE_USBDM_SYSTEM_H_ */

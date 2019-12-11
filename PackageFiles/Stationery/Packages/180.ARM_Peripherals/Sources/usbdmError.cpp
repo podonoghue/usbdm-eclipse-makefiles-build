@@ -12,6 +12,8 @@ namespace USBDM {
 /** Last error set by USBDM code */
 volatile ErrorCode errorCode = E_NO_ERROR;
 
+#if USE_CONSOLE
+
 /** Table of error messages indexed by error code */
 static const char *messages[] {
       "No error",
@@ -31,6 +33,7 @@ static const char *messages[] {
       "Callback already installed",
       "Failed resource allocation",
 };
+#endif
 
 /**
  * Get error message from error code or last error if not provided
@@ -46,10 +49,15 @@ const char *getErrorMessage(ErrorCode err) {
       return "CMSIS error";
    }
 #endif
+#if USE_CONSOLE
    if (err>(sizeof(messages)/sizeof(messages[0]))) {
       return "Unknown error";
    }
    return messages[err];
+#else
+   (void) err;
+   return "";
+#endif
 }
 
 #ifdef DEBUG_BUILD
@@ -86,7 +94,7 @@ ErrorCode checkError() {
  * Startup code for C++ classes
  */
 extern "C" void __attribute__((constructor)) cpp_initialise() {
-   if (MAP_ALL_PINS) {
+   if constexpr (MAP_ALL_PINS) {
       mapAllPins();
    }
 }

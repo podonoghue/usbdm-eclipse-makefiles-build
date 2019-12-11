@@ -61,10 +61,8 @@ SECTIONS
       __VECTOR_TABLE_END = .;
       
       /* Uncomment to Emit a Bootloader configuration if present */
-      /*
       . = __flash_start + 0x3C0;
       KEEP(*(.bootloader_configuration))
-      */
       
       /* Emit a Security field */
       . = __flash_start + 0x400;

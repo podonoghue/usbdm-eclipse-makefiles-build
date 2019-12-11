@@ -57,10 +57,6 @@ extern volatile uint32_t SystemMcgFllClock;
 
 /** MCGPLLCLK - Output of PLL */
 extern volatile uint32_t SystemMcgPllClock;
-
-/** LPO - Low power oscillator 1kHz clock available in LP modes */
-extern volatile uint32_t SystemLpoClock;
-
 } // End namespace USBDM
 
 /**
@@ -90,7 +86,7 @@ enum NvicPriority {
  * @return  Vector number calculated from vector+offset
  */
 constexpr IRQn_Type inline operator+(IRQn_Type vector, unsigned offset) {
-   return (IRQn_Type)((unsigned)vector + offset);
+   return static_cast<IRQn_Type>(static_cast<unsigned>(vector) + offset);
 }
 
 /**
@@ -103,7 +99,7 @@ constexpr IRQn_Type inline operator+(IRQn_Type vector, unsigned offset) {
  * @return  Vector number calculated from vector+offset
  */
 constexpr IRQn_Type inline operator+(IRQn_Type vector, int offset) {
-   return vector + (unsigned)offset;
+   return vector + static_cast<unsigned>(offset);
 }
 
 #endif /* INCLUDE_USBDM_HARDWARE_H_ */

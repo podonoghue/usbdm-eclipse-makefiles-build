@@ -6,20 +6,20 @@
    
    <xi:include href="_default_instance.xml"/>
 
-      <category name="OSC" description="OSC External Reference Clock/Oscillator [OSCCLK]" >
-         <aliasOption key="/OSC0/osc_input_freq" constant="false" />
-         <binaryOption name="mcg_c2_erefs0"
-            description="External Reference Select" 
-            toolTip="Determines whether a clock or crystal is used for the external reference clock" >
-            <choice value="0" name="External clock" />
-            <choice value="1" name="Oscillator" isDefault="true" />
-         </binaryOption>
-         <binaryOption name="mcg_c2_hgo0"
-            description="Oscillator Gain" 
-            toolTip="Controls the crystal oscillator mode of operation">
-            <choice value="0" name="Low power" isDefault="true"/>
-            <choice value="1" name="High gain" />
-         </binaryOption>
+   <category name="OSC0 (Main Oscillator)" description="OSC External Reference Clock/Oscillator [OSCCLK]" >
+      <aliasOption key="/OSC0/osc_input_freq" constant="false" />
+      <binaryOption name="mcg_c2_erefs0"
+         description="External Reference Select" 
+         toolTip="Determines whether a clock or crystal is used for the external reference clock" >
+         <choice value="0" name="External clock" />
+         <choice value="1" name="Oscillator" isDefault="true" />
+      </binaryOption>
+      <binaryOption name="mcg_c2_hgo0"
+         description="Oscillator Gain" 
+         toolTip="Controls the crystal oscillator mode of operation">
+         <choice value="0" name="Low power" isDefault="true"/>
+         <choice value="1" name="High gain" />
+      </binaryOption>
    </category>
    
    <category name="Real Time Clock" description="RTC External Reference Clock/Oscillator 32k mode [ERCLK32K]">
@@ -29,7 +29,7 @@
       <aliasOption key="/SIM/system_erclk32k_clock" optional="true"/>
    </category>
    
-   <category name="MCG Internal Clocks" description="Clock Sources"
+   <category name="Internal Clocks" description="Clock Sources"
       toolTip="SLOW_IRC, FAST_IRC, USB_CLKIN, LPO" >
       <intOption name="system_slow_irc_clock"
          origin="SLOW IRC"
@@ -45,13 +45,7 @@
          toolTip="Dependent on device and clock Trim. [Typically ~4MHz]"
          value="4000000" />
 
-      <intOption name="system_low_power_clock"
-         constant="true" 
-         origin="LPO Clock"
-         units="Hz"
-         description="Frequency of Internal Low Power Oscillator [LPO] Clock"
-         toolTip="Dependent on device. [Typically ~1kHz]" 
-         value="1000"/>
+      <aliasOption name="/PMC/system_low_power_clock" />
     
       <intOption name="system_irc48m_clock" 
          constant="true"  
@@ -292,7 +286,7 @@
       <aliasOption key="/OSC0/oscer_undiv_clock" optional="true" />
       <aliasOption key="/OSC0/oscer_clock" />
       <aliasOption key="/SIM/system_erclk32k_clock" />
-      <aliasOption name="system_low_power_clock" />
+      <aliasOption key="/PMC/system_low_power_clock" />
    
       <stringOption name="system_mcgoutclk_clock_source."
          derived="true" 
@@ -436,7 +430,7 @@
       \t   //! Control Register 7 - OSCSEL
       \t   const uint8_t c7;
       \t};\n\n
-      
+
       \t/**
       \t * Get MCGERCLK
       \t *

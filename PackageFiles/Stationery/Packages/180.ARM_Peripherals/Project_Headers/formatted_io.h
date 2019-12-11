@@ -328,7 +328,7 @@ public:
          return -1;
       }
       lookAhead = _readChar();
-      if (lookAhead == (uint8_t)'\r') {
+      if (lookAhead == static_cast<uint8_t>('\r')) {
          lookAhead = '\n';
       }
       if (fFormat.fEcho) {
@@ -343,7 +343,7 @@ public:
     * @param[in] ch Character to push
     */
    void NOINLINE_DEBUG pushBack(char ch) {
-      lookAhead = (uint8_t)ch;
+      lookAhead = static_cast<uint8_t>(ch);
    }
 
    /**
@@ -754,7 +754,7 @@ public:
       if (isNegative) {
          value = -value;
       }
-      ultoa(buff, (unsigned long)value, radix, fFormat.fPadding, fFormat.fWidth, isNegative);
+      ultoa(buff, static_cast<unsigned long>(value), radix, fFormat.fPadding, fFormat.fWidth, isNegative);
       return write(buff);
    }
 
@@ -780,7 +780,7 @@ public:
     * @return Reference to self
     */
    FormattedIO __attribute__((noinline)) &write(const void *value, Radix radix=Radix_16) {
-      return write((unsigned long) value, radix);
+      return write(reinterpret_cast<unsigned long>(value), radix);
    }
 
    /**
@@ -792,7 +792,7 @@ public:
     * @return Reference to self
     */
    FormattedIO NOINLINE_DEBUG &writeln(const void *value, Radix radix=Radix_16) {
-      return writeln((unsigned long) value, radix);
+      return writeln(reinterpret_cast<unsigned long>(value), radix);
    }
 
    /**
@@ -817,7 +817,7 @@ public:
     * @return Reference to self
     */
    FormattedIO NOINLINE_DEBUG &write(unsigned value, Radix radix=Radix_10) {
-      return write((unsigned long)value, radix);
+      return write(static_cast<unsigned long>(value), radix);
    }
 
    /**
@@ -829,7 +829,7 @@ public:
     * @return Reference to self
     */
    FormattedIO NOINLINE_DEBUG &writeln(unsigned value, Radix radix=Radix_10) {
-      return writeln((unsigned long)value, radix);
+      return writeln(static_cast<unsigned long>(value), radix);
    }
 
    /**
@@ -841,7 +841,7 @@ public:
     * @return Reference to self
     */
    FormattedIO NOINLINE_DEBUG &write(int value, Radix radix=Radix_10) {
-      return write((long)value, radix);
+      return write(static_cast<long>(value), radix);
    }
 
    /**
@@ -853,7 +853,7 @@ public:
     * @return Reference to self
     */
    FormattedIO NOINLINE_DEBUG  &writeln(int value, Radix radix=Radix_10) {
-      return writeln((long)value, radix);
+      return writeln(static_cast<long>(value), radix);
    }
 
 #if 0
@@ -887,10 +887,10 @@ public:
          write('-');
          value = -value;
       }
-      ultoa(buff, (long)value, Radix_10, fFormat.fFloatPadding, fFormat.fFloatWidth);
+      ultoa(buff, static_cast<long>(value), Radix_10, fFormat.fFloatPadding, fFormat.fFloatWidth);
       write(buff).write('.');
       ultoa(buff, 
-           ((long)round(value*fFormat.fFloatPrecisionMultiplier))%fFormat.fFloatPrecisionMultiplier,
+           (static_cast<long>(round(value*fFormat.fFloatPrecisionMultiplier)))%fFormat.fFloatPrecisionMultiplier,
            Radix_10, Padding_LeadingZeroes, fFormat.fFloatPrecision);
       write(buff);
       return *this;
@@ -916,7 +916,7 @@ public:
     * @return Reference to self
     */
    FormattedIO NOINLINE_DEBUG &write(float value) {
-      return write((double)value);
+      return write(static_cast<double>(value));
    }
 
    /**
@@ -927,7 +927,7 @@ public:
     * @return Reference to self
     */
    FormattedIO NOINLINE_DEBUG &writeln(float value) {
-      return writeln((double)value);
+      return writeln(static_cast<double>(value));
    }
 
    /**
@@ -1015,7 +1015,7 @@ public:
     * @return Reference to self
     */
    FormattedIO NOINLINE_DEBUG &operator <<(const void *value) {
-      return write((unsigned long)value, fFormat.fRadix);
+      return write(reinterpret_cast<unsigned long>(value), fFormat.fRadix);
    }
 
    /**
@@ -1026,7 +1026,7 @@ public:
     * @return Reference to self
     */
    FormattedIO NOINLINE_DEBUG &operator <<(float value) {
-      return write((double)value);
+      return write(static_cast<double>(value));
    }
 
    /**
@@ -1429,7 +1429,7 @@ public:
     * @return Radix corresponding to base
     */
    static constexpr Radix NOINLINE_DEBUG radix(unsigned radix) {
-      return (Radix)radix;
+      return static_cast<Radix>(radix);
    }
 
    /**
@@ -1440,7 +1440,7 @@ public:
     * @return Width corresponding to width
     */
    static constexpr Width NOINLINE_DEBUG width(int width) {
-      return (Width)width;
+      return static_cast<Width>(width);
    }
 
    /**

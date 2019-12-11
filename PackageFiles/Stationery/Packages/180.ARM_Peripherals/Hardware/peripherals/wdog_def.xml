@@ -23,8 +23,8 @@
    \t
    \t   switch(wdog().STCTRLH&WDOG_STCTRLH_CLKSRC_MASK) {
    \t   default:
-   \t   case WDOG_STCTRLH_CLKSRC(0): return SystemLpoClock; // LPO
-   \t   case WDOG_STCTRLH_CLKSRC(1): return SystemBusClock; // Alt = System Bus Clock
+   \t   case WDOG_STCTRLH_CLKSRC(0): return PmcInfo::getLpoClock(); // LPO
+   \t   case WDOG_STCTRLH_CLKSRC(1): return SystemBusClock;         // Alt = System Bus Clock
    \t   }
    \t}\n\n
    ]]></template>

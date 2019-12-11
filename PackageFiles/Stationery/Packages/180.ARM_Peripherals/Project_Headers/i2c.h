@@ -15,9 +15,8 @@
  * This file is generated automatically.
  * Any manual changes will be lost.
  */
-#include <stdint.h>
-#include "derivative.h"
 #include "hardware.h"
+
 #ifdef __CMSIS_RTOS
 #include "cmsis.h"
 #endif
@@ -56,6 +55,8 @@ public:
    I2C_State           state;               //!< State of current transaction
 
 protected:
+   static constexpr unsigned TIMEOUT_LIMIT = 1000000;
+
    /** Callback to catch unhandled interrupt */
    static void unhandledCallback() {
       // Not considered an error as may be using polling
@@ -169,7 +170,14 @@ public:
     * Wait for current sequence to complete
     */
    void waitWhileBusy(void) {
-      while (state != i2c_idle) {
+      I2C_State lastState = state;
+      unsigned timeout = TIMEOUT_LIMIT;
+      while ((state != i2c_idle) && (--timeout>0)) {
+         if (state != lastState) {
+            // Restart timeout
+            timeout = TIMEOUT_LIMIT;
+            lastState = state;
+         }
          if ((i2c->C1&I2C_C1_IICIE_MASK) == 0) {
             poll();
          }
@@ -177,6 +185,10 @@ public:
             __asm__("wfi");
          }
       }
+      if (state != i2c_idle) {
+         errorCode = E_TIMEOUT;
+      }
+      busHangReset();
    }
 
    /**
@@ -380,9 +392,7 @@ public:
       init(myAddress);
       setBPS(bps);
 
-      if (Info::mapPinsOnEnable) {
-         configureAllPins();
-      }
+      configureAllPins();
    }
 
    /**
@@ -461,7 +471,7 @@ public:
             __asm__("nop");
          }
          // If data is high bus is OK
-         if (sdaGpio::read()) {
+         if (sdaGpio::isHigh()) {
             break;
          }
          // Set clock low
@@ -470,6 +480,8 @@ public:
             __asm__("nop");
          }
       }
+      // Restore pins
+      configureAllPins();
    }
 
    static void irqHandler() {

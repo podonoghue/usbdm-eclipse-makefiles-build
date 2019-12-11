@@ -6,18 +6,18 @@
    
    <xi:include href="_default_instance.xml"/>
 
-      <category name="OSC" description="OSC External Reference Clock/Oscillator [OSCCLK]" >
+   <category name="OSC0 (Main Oscillator)" description="OSC External Reference Clock/Oscillator [OSCCLK]" >
       <aliasOption key="/OSC_RF0/osc_input_freq" optional="true" constant="false" />
    </category>
    
-   <category name="Real Time Clock" description="RTC External Reference Clock/Oscillator [ERCLK32K]">
+   <category name="Real Time Clock" description="RTC External Reference Clock/Oscillator 32k mode [ERCLK32K]">
       <aliasOption key="/RTC/rtc_cr_osce"           optional="true" constant="false"/>
       <aliasOption key="/RTC/osc_clock"             optional="true"/>
       <aliasOption key="/SIM/sim_sopt1_osc32ksel"   optional="true" constant="false" />
       <aliasOption key="/SIM/system_erclk32k_clock" optional="true"/>
    </category>
    
-   <category name="MCG Internal Clocks" description="Clock Sources"
+   <category name="Internal Clocks" description="Clock Sources"
       toolTip="SLOW_IRC, FAST_IRC, USB_CLKIN, LPO" >
       <intOption name="system_slow_irc_clock"
          origin="SLOW IRC"
@@ -33,13 +33,7 @@
          toolTip="Dependent on device and clock Trim. [Typically ~4MHz]"
          value="4000000" />
 
-      <intOption name="system_low_power_clock"
-         constant="true" 
-         origin="LPO Clock"
-         units="Hz"
-         description="Frequency of Internal Low Power Oscillator [LPO] Clock"
-         toolTip="Dependent on device. [Typically ~1kHz]" 
-         value="1000"/>
+      <aliasOption name="/PMC/system_low_power_clock" />
    </category>
    
    <xi:include href="_irqOption.xml"/>
@@ -278,7 +272,7 @@
       <aliasOption key="/OSC0/oscer_undiv_clock" optional="true" />
       <aliasOption key="/OSC0/oscer_clock" />
       <aliasOption key="/SIM/system_erclk32k_clock" />
-      <aliasOption name="system_low_power_clock" />
+      <aliasOption key="/PMC/system_low_power_clock" />
    
       <stringOption name="system_mcgoutclk_clock_source."
          derived="true" 
@@ -448,9 +442,9 @@
       \t * @return MCGIRCLK as uint32_t
       \t */
       \tstatic uint32_t getInternalIrcClock() {
-      \t      if (mcg()->C2&MCG_C2_IRCS_MASK) {
+      \t      if (mcg().C2&MCG_C2_IRCS_MASK) {
       \t#ifdef MCG_SC_FCRDIV_MASK
-      \t         return (system_fast_irc_clock/(1<<((mcg()->SC&MCG_SC_FCRDIV_MASK)>>MCG_SC_FCRDIV_SHIFT)));
+      \t         return (system_fast_irc_clock/(1<<((mcg().SC&MCG_SC_FCRDIV_MASK)>>MCG_SC_FCRDIV_SHIFT)));
       \t#else
       \t         return system_fast_irc_clock;
       \t#endif
@@ -466,7 +460,7 @@
       \t * @return MCGIRCLK as uint32_t
       \t */
       \tstatic uint32_t getMcgIrClock() {
-      \t   if (mcg()->C1&MCG_C1_IRCLKEN_MASK) {
+      \t   if (mcg().C1&MCG_C1_IRCLKEN_MASK) {
       \t      return getInternalIrcClock();
       \t   }
       \t   else {
@@ -497,7 +491,7 @@
       \t      MCG_C1_IREFSTEN($(mcg_c1_irefsten.)), // IREFSTEN Internal Reference Stop Enable\n\n
               
       \t      //! Control Register 2 - Excluding LP
-      \t      MCG_C2_LOCRE0($(mcg_c2_locre0.)) | // LOCRE0  Loss of lock Reset Enable
+      \t      MCG_C2_LOCRE0($(mcg_c2_locre0.)) | // LOCRE0  Loss of Clock Reset Enable
       \t      MCG_C2_RANGE0($(mcg_c2_range.)) | // RANGE   Frequency Range Select
       \t      MCG_C2_IRCS($(mcg_c2_ircs.)),    // IRCS    Internal Reference Clock Select\n\n
               

@@ -147,7 +147,7 @@
 #define WRITELN3(_1, _2, _3) null()
 #endif
 
-#if defined(__cplusplus) && 0
+#if defined(__cplusplus) && NEED_ENDIAN_CONVERSIONS
 /**
  * Class to encapsulate 16-bit little-endian values
  */

@@ -1,5 +1,5 @@
 /**
- * @file     bme.h (derived from bme-cpp.h)
+ * @file     bme.h (derived from 180.ARM_Peripherals/Project_Headers/bme.h)
  * @brief    Macros to access bit manipulation engine
  * @version  V4.12.1.50
  * @date     5 Dec 2015

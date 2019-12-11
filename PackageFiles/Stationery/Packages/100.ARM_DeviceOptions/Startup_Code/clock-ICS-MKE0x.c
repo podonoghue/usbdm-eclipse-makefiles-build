@@ -9,7 +9,6 @@
 #include "derivative.h" /* include peripheral declarations */
 #include "system.h"
 #include "clock_configure.h"
-#include "utilities.h"
 
 // Some MCUs call OSC_CR0 just OSC_CR
 #ifndef OSC0
@@ -98,7 +97,7 @@ void SystemCoreClockUpdate(void) {
          if ((ICS->C1&ICS_C1_IREFS_MASK) == 0) {
             int factor = (FLL_FACTOR/(1<<8))*(1<<(8-((ICS->C1&ICS_C1_RDIV_MASK)>>ICS_C1_RDIV_SHIFT)));
             SystemCoreClock = SYSTEM_OSCER_CLOCK*factor;
-            if ((OSC->CR&OSC_CR_RANGE_MASK) != 0) {
+            if ((OSC0->CR&OSC_CR_RANGE_MASK) != 0) {
                SystemCoreClock /= (1<<5);
             }
          }

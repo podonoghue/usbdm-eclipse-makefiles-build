@@ -160,7 +160,7 @@
       
    <template><![CDATA[
        \t//! Class based callback handler has been installed in vector table\n
-       \tstatic constexpr bool irqHandlerInstalled = ($(irqAlarmHandler) == 1);\n\n
+       \tstatic constexpr bool irqHandlerInstalled = $(irqAlarmHandler);\n\n
    ]]></template>
        
    <intOption name="irqLevel" 

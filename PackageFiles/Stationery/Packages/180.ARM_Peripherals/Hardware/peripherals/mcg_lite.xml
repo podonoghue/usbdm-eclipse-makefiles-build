@@ -41,46 +41,40 @@
          value="48000000" />
    </category>
    
-   <category name="LPO" description="Internal Clock Sources" >
-      <intOption name="system_low_power_clock"
-         constant="true" 
-         origin="LPO Clock"
-         units="Hz"
-         description="Frequency of Internal Low Power Oscillator [LPO] Clock"
-         toolTip="Dependent on device. [Typically ~1kHz]" 
-         value="1000"/>
-      </category>
+   <category name="LPO" description="Low Power Clock Sources" >
+      <aliasOption key="/PMC/system_low_power_clock"/>
+   </category>
 
-      <category name="OSC" description="OSC External Reference Clock/Oscillator [OSCCLK]" >
-         <aliasOption key="/OSC0/osc_input_freq" constant="false" />
-         <binaryOption name="mcg_c2_erefs0"
-            description="External Reference Select" 
-            toolTip="Determines whether a clock or crystal is used for the external reference clock" >
-            <choice value="0" name="External clock" />
-            <choice value="1" name="Oscillator" isDefault="true" />
-         </binaryOption>
-         <binaryOption name="mcg_c2_hgo0"
-            description="Oscillator Gain" 
-            toolTip="Controls the crystal oscillator mode of operation">
-            <choice value="0" name="Low power" isDefault="true"/>
-            <choice value="1" name="High gain" />
-         </binaryOption>
-         <choiceOption name="mcg_c2_range"
-            derived="true"
-            constant="true"
-            description="Frequency Range Select"
-            toolTip="Selects the frequency range for the crystal oscillator">
-            <choice value="0" name="Low range" />
-            <choice value="1" name="High range" />
-            <choice value="2" name="Very High range" />
+   <category name="OSC" description="OSC External Reference Clock/Oscillator [OSCCLK]" >
+      <aliasOption key="/OSC0/osc_input_freq" constant="false" />
+      <binaryOption name="mcg_c2_erefs0"
+         description="External Reference Select" 
+         toolTip="Determines whether a clock or crystal is used for the external reference clock" >
+         <choice value="0" name="External clock" />
+         <choice value="1" name="Oscillator" isDefault="true" />
+      </binaryOption>
+      <binaryOption name="mcg_c2_hgo0"
+         description="Oscillator Gain" 
+         toolTip="Controls the crystal oscillator mode of operation">
+         <choice value="0" name="Low power" isDefault="true"/>
+         <choice value="1" name="High gain" />
+      </binaryOption>
+      <choiceOption name="mcg_c2_range"
+         derived="true"
+         constant="true"
+         description="Frequency Range Select"
+         toolTip="Selects the frequency range for the crystal oscillator">
+         <choice value="0" name="Low range" />
+         <choice value="1" name="High range" />
+         <choice value="2" name="Very High range" />
             <choice value="0" name="Unused" />
-            </choiceOption>
-      </category>
+      </choiceOption>
+   </category>
 
-      <category name="RTC" description="RTC External Reference Clock/Oscillator [ERCLK32K]">
-         <aliasOption key="/SIM/sim_sopt1_osc32ksel"   optional="true" constant="false" />
-         <aliasOption key="/SIM/system_erclk32k_clock" optional="true"/>
-      </category>
+   <category name="RTC" description="RTC External Reference Clock/Oscillator [ERCLK32K]">
+      <aliasOption key="/SIM/sim_sopt1_osc32ksel"   optional="true" constant="false" />
+      <aliasOption key="/SIM/system_erclk32k_clock" optional="true"/>
+   </category>
 
    <indexedCategory name="ClockConfig."  dim="3"
          description="Clock configuration" 
@@ -190,7 +184,7 @@
       <aliasOption key="/OSC0/osc_undiv_clock" optional="true" />
       <aliasOption key="/OSC0/osc_clock" constant="true" />
       <aliasOption key="/SIM/system_erclk32k_clock" constant="true" />
-      <aliasOption name="system_low_power_clock" constant="true" />
+      <aliasOption key="/PMC/system_low_power_clock" constant="true" />
    
       <stringOption name="system_mcgoutclk_clock_source."
          derived="true" 

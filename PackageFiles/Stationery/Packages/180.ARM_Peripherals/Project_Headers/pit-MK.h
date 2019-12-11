@@ -237,15 +237,17 @@ public:
 
       // Enable timer
       pit().MCR = Info::mcr;
-      for (unsigned i=0; i<Info::irqCount; i++) {
-         configureChannelInTicks(i, Info::pit_ldval);
+      for (PitChannelNum channel = PitChannelNum_0;
+           channel < PitInfo::NumChannels;
+           channel = channel+1) {
+         configureChannelInTicks(channel, Info::pit_ldval);
          disableNvicInterrupts(Info::irqLevel);
       }
    }
 
    /**
     *  Enables and configures the PIT.
-    *  This also clears all channels and channel reservations.
+    *  This also disables all channel interrupts and channel reservations.
     *
     *  @param[in]  pitDebugMode  Determined whether the PIT halts when suspended during debug
     */
@@ -254,7 +256,7 @@ public:
       for (PitChannelNum channel = PitChannelNum_0;
            channel < PitInfo::NumChannels;
            channel = channel+1) {
-         disableChannel(channel);
+         disableNvicInterrupts(channel);
       }
       pit().MCR = pitDebugMode|PIT_MCR_MDIS(0); // MDIS cleared => enabled!
       allocatedChannels = -1;

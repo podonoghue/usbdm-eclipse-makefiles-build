@@ -7,7 +7,6 @@
 
 #include <sys/time.h>
 #include "derivative.h"
-#include "utilities.h"
 #include "clock_configure.h"
 #include "rtc.h"
 

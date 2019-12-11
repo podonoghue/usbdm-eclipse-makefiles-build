@@ -7,6 +7,7 @@
  *      Author: podonoghue
  ============================================================================
  */
+#include "hardware.h"
 #include "i2c.h"
 
 using namespace USBDM;
@@ -15,12 +16,14 @@ using namespace USBDM;
 static const unsigned I2C_ADDRESS = 0x1D<<1;
 static const unsigned I2C_SPEED   = 400*kHz;
 
-int main() {
-
    // Declare I2C interface
    I2c0 i2c{I2C_SPEED, I2cMode_Polled};
 
+int main() {
+#define SELECT 2
+
    for(;;) {
+#if SELECT == 0
       {
          /*
           * Transmits 4 bytes and receives 2 bytes using different buffers
@@ -30,9 +33,10 @@ int main() {
          uint8_t rxData[2] = {};
 
          i2c.startTransaction();
-         i2c.txRx(I2C_ADDRESS, sizeof(txData), txData, sizeof(txData), rxData);
+         i2c.txRx(I2C_ADDRESS, sizeof(txData), txData, sizeof(rxData), rxData);
          i2c.endTransaction();
       }
+#elif SELECT == 1
       {
          /*
           * Transmits 2 bytes and receives 4 bytes into same buffer
@@ -44,6 +48,7 @@ int main() {
          i2c.txRx(I2C_ADDRESS, 2, sizeof(data), data);
          i2c.endTransaction();
       }
+#elif SELECT == 2
       {
          /*
           * Transmits 4 bytes
@@ -54,6 +59,7 @@ int main() {
          i2c.transmit(I2C_ADDRESS, sizeof(data), data);
          i2c.endTransaction();
       }
+#else
       {
          /*
           * Receive 4 bytes
@@ -64,6 +70,7 @@ int main() {
          i2c.receive(I2C_ADDRESS, sizeof(data), data);
          i2c.endTransaction();
       }
+#endif
       waitMS(100);
    }
 }

@@ -10,7 +10,6 @@
 #include <stdio.h>
 #include "system.h"
 #include "derivative.h"
-#include "utilities.h"
 
 // Simple delay - not for real programs!
 void delay(void) {

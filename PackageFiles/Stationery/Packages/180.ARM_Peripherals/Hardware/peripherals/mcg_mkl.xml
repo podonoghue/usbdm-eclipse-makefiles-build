@@ -29,7 +29,7 @@
       <aliasOption key="/SIM/system_erclk32k_clock" optional="true"/>
    </category>
    
-   <category name="Clocks" description="Clock Sources"
+   <category name="Internal Clocks" description="Clock Sources"
       toolTip="SLOW_IRC, FAST_IRC, USB_CLKIN, LPO" >
       <intOption name="system_slow_irc_clock"
          origin="SLOW IRC"
@@ -45,13 +45,7 @@
          toolTip="Dependent on device and clock Trim. [Typically ~4MHz]"
          value="4000000" />
 
-      <intOption name="system_low_power_clock"
-         constant="true" 
-         origin="LPO Clock"
-         units="Hz"
-         description="Frequency of Internal Low Power Oscillator [LPO] Clock"
-         toolTip="Dependent on device. [Typically ~1kHz]" 
-         value="1000"/>
+      <aliasOption name="/PMC/system_low_power_clock" />
 
       <intOption name="system_usb_clkin_clock"  
          constant="true" 
@@ -373,7 +367,7 @@
       <aliasOption key="/OSC0/oscer_undiv_clock" optional="true" />
       <aliasOption key="/OSC0/oscer_clock" />
       <aliasOption key="/SIM/system_erclk32k_clock" />
-      <aliasOption name="system_low_power_clock" />
+      <aliasOption key="/PMC/system_low_power_clock" />
    
       <stringOption name="system_mcgoutclk_clock_source."
          derived="true" 

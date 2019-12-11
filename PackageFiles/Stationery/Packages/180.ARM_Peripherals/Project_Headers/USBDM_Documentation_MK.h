@@ -1,5 +1,5 @@
 /**
- * @file     USBDM_Documentation.h (180.ARM_Peripherals/Project_Headers/USBDM_Documentation_MK.h)
+ * @file     USBDM_Documentation.h (Generated from 180.ARM_Peripherals/Project_Headers/USBDM_Documentation_MK.h)
  * @brief    USBDM Documentation
  */
  

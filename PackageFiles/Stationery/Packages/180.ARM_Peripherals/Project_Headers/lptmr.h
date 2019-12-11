@@ -346,7 +346,7 @@ public:
    /**
     * Converts a number in ticks to time in microseconds.
     *
-    * @param[in]  time Time in ticks
+    * @param[in]  ticks Time in ticks
     *
     * @return Time in microseconds
     *
@@ -373,7 +373,7 @@ public:
    /**
     * Converts a number in ticks to time in milliseconds.
     *
-    * @param[in]  time Time in ticks
+    * @param[in]  ticks Time in ticks
     *
     * @return Time in milliseconds
     *
@@ -400,7 +400,7 @@ public:
    /**
     * Converts a number in ticks to time in seconds.
     *
-    * @param[in]  time Time in ticks
+    * @param[in]  ticks Time in ticks
     *
     * @return Time in seconds (as float)
     *

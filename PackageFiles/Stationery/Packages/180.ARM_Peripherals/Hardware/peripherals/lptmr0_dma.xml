@@ -28,7 +28,7 @@
    <choiceOption name="lptmr_psr_pcs" description="Clock Source"
       toolTip="Low Power Timer clock source">
       <choice value="0" name="SIRC Div 2 Internal Reference Clock (SIRCDIV2_CLK)" />
-      <choice value="1" name="Low power oscillator 1kHz (LPO1K_CLK)" />
+      <choice value="1" name="Low power oscillator (LPO1K_CLK - 1kHz)" />
       <choice value="2" name="32kHz Clock Source (RTC_CLK)" />
       <choice value="3" name="Clock from PCC_LPTMR0 mux (PCC)" />
    </choiceOption>
@@ -202,8 +202,9 @@
    </validate -->
 
    <projectActionList id = "lptmr_files" >
-      <copy source="Project_Headers/lptmr.h"     target="Project_Headers/lptmr.h"      overwrite="true" derived="true" />
-      <copy source="Snippets/lptmr-example.cpp"  target="Snippets/lptmr-example.cpp"   overwrite="true" derived="true"/>
+      <copy source="Project_Headers/lptmr.h"          target="Project_Headers/lptmr.h"          overwrite="true" derived="true" />
+      <copy source="Snippets/lptmr-example.cpp"       target="Snippets/lptmr-example.cpp"       overwrite="true" derived="true"/>
+      <copy source="Snippets/lptmr-reaction-time.cpp" target="Snippets/lptmr-reaction-time.cpp" overwrite="true" derived="true"/>
    </projectActionList>
       
    <template><![CDATA[
@@ -217,7 +218,7 @@
       \t   switch(lptmr().PSR&LPTMR_PSR_PCS_MASK) {
       \t   default:
       \t   case LPTMR_PSR_PCS(0): return ScgInfo::getSircDiv2Frequency();
-      \t   case LPTMR_PSR_PCS(1): return SimInfo::getLpo1kFrequency();
+      \t   case LPTMR_PSR_PCS(1): return PmcInfo::getLpo1kFrequency();
       \t   case LPTMR_PSR_PCS(2): return SimInfo::getRtcFrequency();
       \t   case LPTMR_PSR_PCS(3): return PccInfo::getLptmr0Frequency();
       \t   }

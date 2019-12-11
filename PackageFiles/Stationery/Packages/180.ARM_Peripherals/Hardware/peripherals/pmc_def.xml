@@ -7,6 +7,16 @@
 
    <xi:include href="_default_instance.xml"/>
 
+   <category name="LPO" description="Low Power Clock Sources" >
+      <intOption name="system_low_power_clock"
+         constant="true" 
+         origin="LPO Clock"
+         units="Hz"
+         description="Frequency of Internal Low Power Oscillator [LPO] Clock"
+         toolTip="Dependent on device. [Typically ~1kHz]" 
+         value="1000"/>
+      </category>
+
    <binaryOption name="pmc_lvdsc1_lvdie" 
       description="Low-Voltage Detect Interrupt Enable"
       toolTip="Enables hardware interrupt requests for LVDF">
@@ -59,12 +69,24 @@
    </choiceOption>
 
    <template><![CDATA[
+      \t//! Frequency of Low Power Oscillator (LPO) Clock [~1kHz]
+      \tstatic constexpr uint32_t system_low_power_clock = $(system_low_power_clock)UL;\n\n
+      
       \t//! Default value for Low Voltage Detect Status And Control 2 register\n
       \tstatic constexpr uint32_t pmc_lvdsc2  = 
       \t#ifdef PMC_LVDSC2_LVWV
       \t   PMC_LVDSC2_LVWV($(pmc_lvdsc2_lvwv))   | // Low-Voltage Warning Voltage Select
       \t#endif
       \t   PMC_LVDSC2_LVWIE($(pmc_lvdsc2_lvwie));  // Low-Voltage Warning Interrupt Enable\n\n
+
+      \t/**
+      \t * Get LPO clock
+      \t *
+      \t * @return frequency in Hz as uint32_t
+      \t */
+      \tstatic constexpr uint32_t getLpoClock() {
+      \t   return system_low_power_clock;
+      \t}\n\n
    ]]></template>
 
    <binaryOption name="pmc_regsc_bgen" 

@@ -29,7 +29,7 @@
  * Under Linux drivers for bulk and CDC are automatically loaded
  */
 
-#define MS_COMPATIBLE_ID_FEATURE
+//#define MS_COMPATIBLE_ID_FEATURE // Incompatible with CDC
 #include "usb_cdc_interface.h"
 
 #define UNIQUE_ID
@@ -176,6 +176,8 @@ protected:
     * TODO Add additional End-points here
     */
 
+   static LineCodingStructure lineCoding;
+
    using cdcInterface = USBDM::CDC_Interface;
 
 public:
@@ -193,7 +195,7 @@ public:
     * @param[in] data Pointer to data to transmit
     * @param[in] size Number of bytes to transmit
     */
-   static void sendCdcData(const uint8_t *data, unsigned size);
+//   static void sendCdcData(const uint8_t *data, unsigned size);
 
    /**
     * CDC Receive
@@ -203,7 +205,7 @@ public:
     *
     * @return Number of bytes received
     */
-   static int receiveCdcData(uint8_t *data, unsigned maxSize);
+//   static int receiveCdcData(uint8_t *data, unsigned maxSize);
 
    /**
     * Notify IN (device->host) endpoint that data is available

@@ -1,5 +1,5 @@
 /**
- * @file     system.h (100.ARM_DeviceOptions\Project_Headers\system.h)
+ * @file     system.h (100.ARM_DeviceOptions/Project_Headers/system.h)
  * @brief    System initialisation routines
  * @version  V4.11.1.70
  * @date     13 Nov 2012
@@ -38,53 +38,192 @@ void SystemInit(void);
  */
 void SystemCoreClockUpdate(void);
 
-//-------- <<< Use Configuration Wizard in Context Menu >>> -----------------
-
-//   <o> UART default baud rate
-//   <i> Used by default UART setup for stdio
-//   <i> Note: Manually change Custom value
-//     <110=> 110
-//     <300=> 300
-//     <600=> 600
-//     <1200=> 1200
-//     <2400=> 2400
-//     <4800=> 4800
-//     <9600=> 9600
-//     <14400=> 14400
-//     <19200=> 19200
-//     <28800=> 28800
-//     <38400=> 38400
-//     <56000=> 56000
-//     <57600=> 57600
-//     <115200=> 115200
-//     <115200=> Restore default
-//     <115200=> Custom
-
-#ifndef DEFAULT_BAUD_RATE
+#if defined(__CM3_REV) || defined(__CM4_REV) // Only available on Cortex M3 & M4
 /**
- * Default baud rate for UART used for stdio
+ * Obtain lock
+ *
+ * @param lockVar Locking variable to use
+ *
+ * @note This is a spin-lock - don't use on interrupts
  */
-#define DEFAULT_BAUD_RATE 115200 
+static inline void lock(volatile uint32_t *lockVar) {
+   do {
+      // If not locked
+      if (__LDREXW(lockVar) == 0) {
+         // Try to obtain lock by writing 1
+         if (__STREXW(1, lockVar) == 0) {
+            // Succeeded
+            // Do not start any other memory access
+            // until memory barrier is completed
+            __DMB();
+            return;
+         }
+      }
+   } while (1);
+}
+
+/**
+ * Release lock
+ *
+ * @param addr Locking variable to use
+ */
+static inline void unlock(volatile uint32_t *lockVar) {
+   // Ensure memory operations completed before
+   __DMB();
+   // Release lock
+   *lockVar = 0;
+}
+#else
+// Not available on Cortex M0
+static inline void lock(uint32_t * dummy) {(void)dummy;}
+static inline void unlock(uint32_t * dummy) {(void)dummy;}
 #endif
 
+#ifndef __cplusplus
 /**
- * Disable interrupts
+ * Enter critical section
  *
- * This function keeps a count of the number of times interrupts is enabled/disabled so may be called in recursive routines
+ * Disables interrupts for a critical section
+ *
+ * @param cpuSR Variable to hold interrupt state so it can be restored
+ *
+ * @code
+ * uint8_t cpuSR;
+ * ...
+ * enterCriticalSection(&cpuSR);
+ *  // Critical section
+ * exitCriticalSection(&cpuSR);
+ * @endcode
  */
-extern void disableInterrupts();
+static inline void enterCriticalSection(uint8_t *cpuSR) {
+   __asm__ volatile (
+         "  MRS   r0, PRIMASK       \n"   // Copy flags
+         // It may be possible for a ISR to run here but it
+         // would save/restore PRIMASK so this code is OK
+         "  CPSID I                 \n"   // Disable interrupts
+         "  STRB  r0, %[output]     \n"   // Save flags
+         : [output] "=m" (cpuSR) : : "r0");
+}
 
 /**
- * Enable interrupts
+ * Exit critical section
  *
- * This function keeps a count of the number of times interrupts is enabled/disabled so may be called in recursive routines
+ * Restores interrupt state saved by enterCriticalSection()
  *
- * @return true if interrupts are now enabled
+ * @param cpuSR Variable to holding interrupt state to be restored
  */
-extern int enableInterrupts();
+static inline void exitCriticalSection(uint8_t *cpuSR) {
+   __asm__ volatile (
+         "  LDRB r0, %[input]    \n"  // Retrieve original flags
+         "  MSR  PRIMASK,r0;     \n"  // Restore
+         : :[input] "m" (cpuSR) : "r0");
+}
+#endif // __cplusplus
 
 #ifdef __cplusplus
 }
 #endif
+
+#ifdef __cplusplus
+
+namespace USBDM {
+
+/**
+ * Enter critical section
+ *
+ * Disables interrupts for a critical section
+ *
+ * @param cpuSR Variable to hold interrupt state so it can be restored
+ *
+ * @code
+ * uint8_t cpuSR;
+ * ...
+ * enterCriticalSection(cpuSR);
+ *  // Critical section
+ * exitCriticalSection(cpuSR);
+ * @endcode
+ */
+static inline void enterCriticalSection(uint8_t &cpuSR) {
+   __asm__ volatile (
+         "  MRS   r0, PRIMASK       \n"   // Copy flags
+         // It may be possible for a ISR to run here but it
+         // would save/restore PRIMASK so this code is OK
+         "  CPSID I                 \n"   // Disable interrupts
+         "  STRB  r0, %[output]     \n"   // Save flags
+         : [output] "=m" (cpuSR) : : "r0");
+}
+
+/**
+ * Exit critical section
+ *
+ * Restores interrupt state saved by enterCriticalSection()
+ *
+ * @param cpuSR Variable to holding interrupt state to be restored
+ */
+static inline void exitCriticalSection(uint8_t &cpuSR) {
+   __asm__ volatile (
+         "  LDRB r0, %[input]    \n"  // Retrieve original flags
+         "  MSR  PRIMASK,r0;     \n"  // Restore
+         : :[input] "m" (cpuSR) : "r0");
+}
+
+/**
+ * Class to implement simple critical sections by disabling interrupts.
+ *
+ * Disables interrupts for a critical section.
+ * This would be from the declaration of the object until the end of
+ * enclosing block. An object of this class should be declared at the
+ * start of a block. e.g.
+ * @code
+ *    {
+ *       CriticalSection cs;
+ *       ...
+ *       Protected code
+ *       ...
+ *    }
+ * @endcode
+ *
+ * @note uses PRIMASK
+ */
+class CriticalSection {
+
+private:
+   /** Used to record interrupt state on entry */
+   volatile uint32_t cpuSR;
+
+public:
+   /**
+    * Constructor - Enter critical section
+    *
+    * Disables interrupts for a critical section
+    * This would be from the declaration of the object until end of enclosing block.
+    */
+   CriticalSection() __attribute__((always_inline)) {
+      __asm__ volatile (
+            "  MRS   r0, PRIMASK       \n"   // Copy flags
+            // It may be possible for a ISR to run here but it
+            // would save/restore PRIMASK so this code is OK
+            "  CPSID I                 \n"   // Disable interrupts
+            "  STR  r0, %[output]      \n"   // Save flags
+            : [output] "=m" (cpuSR) : : "r0");
+   }
+
+   /**
+    * Destructor - Exit critical section
+    *
+    * Enables interrupts IFF previously disabled by this object
+    * This would be done implicitly by exiting the enclosing block.
+    */
+   inline ~CriticalSection() __attribute__((always_inline)) {
+      __asm__ volatile (
+            "  LDR r0, %[input]     \n"  // Retrieve original flags
+            "  MSR  PRIMASK,r0;     \n"  // Restore
+            : :[input] "m" (cpuSR) : "r0");
+   }
+};
+
+}  // namespace USBDM
+
+#endif // __cplusplus
 
 #endif /* INCLUDE_USBDM_SYSTEM_H_ */

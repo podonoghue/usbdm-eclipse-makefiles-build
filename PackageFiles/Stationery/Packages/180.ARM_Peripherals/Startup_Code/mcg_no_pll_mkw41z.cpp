@@ -11,7 +11,6 @@
 #include "string.h"
 #include "derivative.h" /* include peripheral declarations */
 #include "system.h"
-#include "utilities.h"
 #include "stdbool.h"
 #include "hardware.h"
 #ifdef USBDM_RTC_IS_DEFINED
@@ -64,9 +63,6 @@ volatile uint32_t SystemMcgPllClock;
 
 /** Bus clock (from MCGOUTCLK/CLKDIV) */
 //volatile uint32_t SystemBusClock;
-
-/** LPO - Low power oscillator 1kHz clock available in LP modes */
-volatile uint32_t SystemLpoClock;
 
 /** Callback for programmatically set handler */
 MCGCallbackFunction Mcg::callback = {0};
@@ -334,11 +330,6 @@ void Mcg::SystemCoreClockUpdate(void) {
    SystemMcgPllClock = 0; // PLL - not available
    SystemCoreClock   = SystemMcgOutClock/(((SIM->CLKDIV1&SIM_CLKDIV1_OUTDIV1_MASK)>>SIM_CLKDIV1_OUTDIV1_SHIFT)+1);
    SystemBusClock    = SystemMcgOutClock/(((SIM->CLKDIV1&SIM_CLKDIV1_OUTDIV4_MASK)>>SIM_CLKDIV1_OUTDIV4_SHIFT)+1);
-
-   SystemLpoClock    = 1000;
-
-//   ::SystemBusClock  = SystemBusClock;
-//   ::SystemCoreClock = SystemCoreClock;
 }
 
 /**

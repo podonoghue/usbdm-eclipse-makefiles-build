@@ -159,7 +159,7 @@ static void configureDma(DmaChannelNum dmaChannel) {
    Dma0::setCallback(dmaChannel, dmaCallback);
    Dma0::setErrorCallback(dmaErrorCallbackFunction);
    Dma0::enableNvicInterrupts(dmaChannel, NvicPriority_Normal);
-   Dma0::enableNvicErrorInterrupt();
+   Dma0::enableNvicErrorInterrupt(NvicPriority_Normal);
 
    // Connect DMA channel to UART but throttle by PIT Channel N (matches DMA channel N)
    DmaMux0::configure(dmaChannel, DMA_SLOT, DmaMuxEnable_Triggered);

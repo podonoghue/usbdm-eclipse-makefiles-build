@@ -33,8 +33,6 @@ namespace USBDM {
 extern volatile uint32_t SystemCoreClock;
 /** Bus clock (from SCGOUTCLK/CLKDIV) */
 extern volatile uint32_t SystemBusClock;
-/** LPO - Low power oscillator 1kHz clock available in LP modes */
-extern volatile uint32_t SystemLpoClock;
 
 /**
  * Clock configuration names

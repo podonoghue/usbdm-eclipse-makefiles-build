@@ -222,6 +222,9 @@ public:
    static volatile ADC_Type &adc() { return Info::adc(); }
 
 public:
+   /** Default ADC resolution */
+   static constexpr AdcResolution defaultAdcResolution = static_cast<AdcResolution>(Info::defaultAdcResolution);
+
    /** Get reference to ADC hardware as struct */
    static volatile ADC_Type &adcPtr() { return Info::adc(); }
 

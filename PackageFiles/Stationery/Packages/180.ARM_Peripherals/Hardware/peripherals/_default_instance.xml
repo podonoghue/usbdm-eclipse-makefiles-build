@@ -18,7 +18,7 @@
 
       \t//! Hardware base pointer
       \t__attribute__((always_inline)) static volatile $(_base_class::toupper)_Type &$(_base_class::tolower)() {
-      \t   return *($(_base_class::toupper)_Type *)baseAddress;
+      \t   return *reinterpret_cast<$(_base_class::toupper)_Type *>(baseAddress);
       \t}\n\n
 ]]></template>
       

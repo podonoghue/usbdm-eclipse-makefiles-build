@@ -68,6 +68,31 @@ enum RcmResetPinStopFilter {
    RcmResetPinStopFilter_LowPowerOscillator = RCM_RPFC_RSTFLTSS(1), //!< LPO clock filter enabled
 };
 
+#ifdef RCM_FM_FORCEROM_MASK
+/**
+ * Force ROM boot options
+ */
+enum RcmRomBoot {
+   RcmRomBoot_None              = RCM_FM_FORCEROM(0b00), //!< Default boot action (as for POR)
+   RcmRomBoot_ForceRom_Pin      = RCM_FM_FORCEROM(0b01), //!< Force boot from ROM with getBootSource() = RcmBootSource_Rom_Pin on next reset
+   RcmRomBoot_ForceRom_Fopt     = RCM_FM_FORCEROM(0b10), //!< Force boot from ROM with getBootSource() = RcmBootSource_Rom_Fopt on next reset
+   RcmRomBoot_ForceRom_Fopt_Pin = RCM_FM_FORCEROM(0b11), //!< Force boot from ROM with getBootSource() = RcmBootSource_Rom_Fopt_Pin on next reset
+};
+#endif // RCM_FM_FORCEROM_MASK
+
+#ifdef RCM_MR_BOOTROM_MASK
+/**
+ * Force ROM boot options
+ */
+enum RcmBootSource {
+   RcmBootSource_Flash        = RCM_MR_BOOTROM(0b00), //!< Booted from Flash
+   RcmBootSource_Rom_Pin      = RCM_MR_BOOTROM(0b01), //!< Booted from ROM due to BOOTCFG0 pin assertion
+   RcmBootSource_Rom_Fopt     = RCM_MR_BOOTROM(0b10), //!< Booted form ROM due to FOPT[7] configuration
+   RcmBootSource_Rom_Fopt_Pin = RCM_MR_BOOTROM(0b11), //!< Booted from ROM due to both BOOTCFG0 pin assertion and FOPT[7] configuration
+};
+#endif // RCM_MR_BOOTROM_MASK
+
+
 /**
  * Template class providing interface to Reset Control Module.
  *
@@ -115,7 +140,7 @@ public:
       usbdm_assert(resetWidth<=RCM_RPFW_RSTFLTSEL_MASK, "Reset width out of range");
 
       rcm().RPFC = rcmResetPinRunWaitFilter|rcmResetPinStopFilter;
-      rcm().RPFW = RCM_RPFW_RSTFLTSEL(resetWidth);
+      rcm().RPFW = RCM_RPFW_RSTFLTSEL(resetWidth-1);
    }
 
    /**
@@ -196,13 +221,51 @@ public:
    static const char *getResetSourceDescription() {
       return getResetSourceDescription(getResetSource());
    }
+
+#ifdef RCM_FM_FORCEROM_MASK
+   /**
+    * ROM Boot loader entry
+    */
+   static __attribute__((always_inline)) void romBootloader() {
+      reinterpret_cast<void (*)()>(0x1c00001c)();
+   }
+
+   /**
+    * Set Force boot from ROM options
+    * This setting is preserved through non-POR resets and affects the boot behaviour of the chip.
+    */
+   static void setRomBootOption(RcmRomBoot rcmRomBoot) {
+      rcm().MR = rcmRomBoot;
+   }
+#endif // RCM_FM_FORCEROM_MASK
+
+#ifdef RCM_MR_BOOTROM_MASK
+   /**
+    * Indicates the boot source.
+    * The boot source remains set until the next System Reset or software can clear these bits.
+    * While non-zero, the NMI input is disabled and the vector table is relocated to the ROM base address
+    * at 0x1C00_0000.
+    */
+   static RcmBootSource getBootSource() {
+      return reinterpret_cast<RcmBootSource>(rcm().MR&RCM_MR_BOOTROM_MASK);
+   }
+
+   /**
+    * Clear the boot source flags.
+    * This disables the vector table relocation and restores NMI operation (if enabled)
+    */
+   static void clearBootSource() {
+      rcm().MR = RCM_MR_BOOTROM_MASK;
+   }
+#endif // RCM_MR_BOOTROM_MASK
+
 };
 
 #ifdef USBDM_RCM_IS_DEFINED
 /**
  * Class providing interface to Reset Control Module
  */
-class Rcm : public RcmBase_T<RcmInfo> {};
+using Rcm = RcmBase_T<RcmInfo>;
 
 #endif
 
