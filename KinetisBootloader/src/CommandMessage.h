@@ -22,6 +22,7 @@ enum Command : uint32_t {
    Command_EraseFlash,     // Erase all of flash image
    Command_ReadBlock,      // Read block from flash
    Command_ProgramBlock,   // Program block to flash
+   Command_Reset,          // Reset device
 };
 
 /**

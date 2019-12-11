@@ -56,11 +56,16 @@ void BootloaderDialogue::onLoadFile(wxCommandEvent &event) {
 }
 
 void BootloaderDialogue::onProgramDevice(wxCommandEvent &event) {
+   programAction_static->SetLabel("Busy");
    if (flashImage != nullptr) {
       Bootloader bl;
       const char *errorMessage = bl.download(flashImage);
       if (errorMessage != nullptr) {
-         wxMessageBox(errorMessage, "Failed to download image to device");
+         programAction_static->SetLabel(errorMessage);
+//         wxMessageBox(errorMessage, "Failed to download image to device");
+      }
+      else {
+         programAction_static->SetLabel("Success");
       }
    }
 }

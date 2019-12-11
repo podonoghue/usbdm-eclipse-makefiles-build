@@ -49,6 +49,16 @@ private:
    libusb_device_handle *findDevice();
 
    /**
+    * Reset device
+    *
+    * @param device  LIBUSB device handle
+    *
+    * @return nullptr   => success
+    * @return !=nullptr => failed, error message
+    */
+   const char *resetDevice(libusb_device_handle *device);
+
+   /**
     * Program a block to device
     *
     * @param device  LIBUSB device handle

@@ -157,6 +157,34 @@ const char *Bootloader::eraseFlash(libusb_device_handle *device) {
 }
 
 /**
+ * Reset device
+ *
+ * @param device  LIBUSB device handle
+ *
+ * @return nullptr   => success
+ * @return !=nullptr => failed, error message
+ */
+const char *Bootloader::resetDevice(libusb_device_handle *device) {
+   int rc = 0;
+
+   SimpleCommandMessage  command = {
+         /* command      */ Command_Reset,
+         /* startAddress */ 0,
+         /* byteLength   */ 0,
+   };
+
+   int bytesSent = 0;
+   rc = libusb_bulk_transfer(device, EP_OUT, (uint8_t*)&command, sizeof(command), &bytesSent, 10000);
+   if (rc < 0) {
+      return libusb_error_name(rc);
+   }
+   if ((unsigned)bytesSent != sizeof(command)) {
+      return "Incomplete transmission";
+   }
+   return nullptr;
+}
+
+/**
  * Program a block to device
  *
  * @param device  LIBUSB device handle
@@ -435,6 +463,10 @@ const char *Bootloader::download(FlashImagePtr flashImage) {
          break;
       }
       errorMessage = program(device, flashImage);
+      if (errorMessage != nullptr) {
+         break;
+      }
+      errorMessage = resetDevice(device);
       if (errorMessage != nullptr) {
          break;
       }
