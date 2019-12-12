@@ -35,8 +35,11 @@ private:
    Bootloader& operator=(const Bootloader &other) = delete;
    Bootloader& operator=(Bootloader &&other) = delete;
 
-   static constexpr uint32_t FLASH_START = 0x08000;
-   static constexpr uint32_t FLASH_SIZE  = 0x18000;
+   libusb_device_handle *device = nullptr;
+   uint32_t flashStart        = 0;
+   uint32_t flashSize         = 0;
+   uint16_t hardwareVersion   = 0;
+   uint16_t bootloaderVersion = 0;
 
    Crc32 crc32;
 
@@ -46,78 +49,51 @@ private:
     * @return nullptr   => failed
     * @return !=nullptr => LIBUSB device handle
     */
-   libusb_device_handle *findDevice();
+   static libusb_device_handle *findDevice();
 
    /**
     * Reset device
     *
-    * @param device  LIBUSB device handle
-    *
     * @return nullptr   => success
     * @return !=nullptr => failed, error message
     */
-   const char *resetDevice(libusb_device_handle *device);
+   const char *resetDevice();
 
    /**
     * Program a block to device
     *
-    * @param device  LIBUSB device handle
     * @param message Information to send to device
     *
     * @return nullptr   => success
     * @return !=nullptr => failed, error message
     */
-   const char *programBlock(libusb_device_handle *device, CommandMessage &message);
+   const char *programBlock(CommandMessage &message);
 
    /**
-    * Program a block to device
-    *
-    * @param device  LIBUSB device handle
+    * Erase device flash
     *
     * @return nullptr   => success
     * @return !=nullptr => failed, error message
     */
-   const char *eraseFlash(libusb_device_handle *device);
+   const char *eraseFlash();
 
    /**
     * Program a block to device
     *
-    * @param device  LIBUSB device handle
-    *
     * @return nullptr   => success
     * @return !=nullptr => failed, error message
     */
-   const char *checkVersion(libusb_device_handle *device);
+   const char *getDeviceInformation();
 
    /**
-    * Program a block to device
+    * Program image to device
     *
-    * @param device        LIBUSB device handle
-    * @param flashImage    Flash image being programmed to device
-    * @param blockSize     Size of block to program
-    * @param flashAddress  Address to program
-    *
-    * @return nullptr   => success
-    * @return !=nullptr => failed, error message
-    */
-   const char *doFlashBlock(
-         libusb_device_handle *device,
-         FlashImagePtr        flashImage,
-         unsigned int         blockSize,
-         uint32_t             &flashAddress);
-
-   /**
-    * Program a flash image to device
-    *
-    * @param device        LIBUSB device handle
     * @param flashImage    Flash image being programmed to device
     *
     * @return nullptr   => success
     * @return !=nullptr => failed, error message
     */
-   const char *program(
-         libusb_device_handle *device,
-         FlashImagePtr        flashImage);
+   const char *programFlash(FlashImagePtr flashImage);
 };
 
 #endif /* BOOTLOADER_H_ */

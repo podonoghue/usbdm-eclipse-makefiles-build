@@ -46,7 +46,7 @@ BootloaderDialogueSkeleton::BootloaderDialogueSkeleton( wxWindow* parent, wxWind
 	programAction_static->Wrap( -1 );
 	programAction_static->SetToolTip( wxT("Result of last programming attempt") );
 
-	sbSizer3->Add( programAction_static, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5 );
+	sbSizer3->Add( programAction_static, 1, wxALIGN_CENTER_VERTICAL|wxALL, 5 );
 
 
 	bSizer1->Add( sbSizer3, 1, wxEXPAND, 5 );

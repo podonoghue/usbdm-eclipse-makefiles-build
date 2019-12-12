@@ -42,7 +42,7 @@ void BootloaderDialogue::onLoadFile(wxCommandEvent &event) {
       loadedFile_static->SetLabel(fileName);
       programDevice_button->Enable(true);
       fprintf(
-            stderr, "Flash[0x%08X..0x%08X]",
+            stderr, "Image loaded: Flash[0x%08X..0x%08X]\n",
             flashImage->getFirstAllocatedAddress(),
             flashImage->getLastAllocatedAddress());
       fflush(stderr);

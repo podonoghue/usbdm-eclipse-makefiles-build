@@ -18,7 +18,7 @@ static constexpr uint16_t BOOTLOADER_V1     = 1;
  */
 enum Command : uint32_t {
    Command_Nop,            // No operation
-   Command_Identify,       // Identify boot-loader and hardware versions
+   Command_Identify,       // Identify boot-loader and hardware versions etc
    Command_EraseFlash,     // Erase all of flash image
    Command_ReadBlock,      // Read block from flash
    Command_ProgramBlock,   // Program block to flash
@@ -108,6 +108,8 @@ struct ResponseMessage {
       struct {
          uint16_t hardwareVersion;    // Hardware version
          uint16_t bootloaderVersion;  // Boot-loader version
+         uint32_t flashStart;         // Start of flash region
+         uint32_t flashSize;          // Size of flash region
       };
       uint8_t  data[1024];    // Data
    };
@@ -129,6 +131,8 @@ struct ResponseIdentify {
    uint32_t byteLength;         // Size of data (not used)
    uint16_t hardwareVersion;    // Hardware version
    uint16_t bootloaderVersion;  // Boot-loader version
+   uint32_t flashStart;         // Start of flash region
+   uint32_t flashSize;          // Size of flash region
 };
 #pragma pack(pop)
 
