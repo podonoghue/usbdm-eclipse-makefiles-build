@@ -163,25 +163,26 @@ public:
    /**
     *  Blocking transmission of data over bulk IN end-point
     *
-    *  @param size   Number of bytes to send
-    *  @param buffer Pointer to bytes to send
+    *  @param[IN] size    Number of bytes to send
+    *  @param[IN] buffer  Pointer to bytes to send
+    *  @param[IN] timeout Maximum time to wait for packet
     *
     *  @note : Waits for idle BEFORE transmission but\n
-    *  returns before data has been transmitted
+    *          returns before data has been transmitted
     */
-   static void sendBulkData(const uint16_t size, const uint8_t *buffer);
+   static ErrorCode sendBulkData(const uint16_t size, const uint8_t *buffer, uint32_t timeout);
 
    /**
     *  Blocking reception of data over bulk OUT end-point
     *
-    *   @param maxSize Maximum number of bytes to receive
-    *   @param buffer  Pointer to buffer for bytes received
+    *   @param[IN/OUT] size    Max Number of bytes to receive/Actual number received
+    *   @param[IN]     buffer  Pointer to buffer for bytes received
     *
-    *   @return Number of bytes received
+    *   @return Error code
     *
-    *   @note Doesn't return until command has been received.
+    *   @note Doesn't return until some bytes have been received
     */
-   static int receiveBulkData(uint16_t maxSize, uint8_t *buffer);
+   static ErrorCode receiveBulkData(uint16_t &size, uint8_t *buffer);
 
    /**
     * Device Descriptor

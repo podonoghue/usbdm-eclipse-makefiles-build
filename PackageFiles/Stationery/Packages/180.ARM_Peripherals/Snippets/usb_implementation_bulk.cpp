@@ -18,6 +18,7 @@
 
 #include "usb.h"
 #include "usb_implementation_bulk.h"
+#include "pit.h"
 
 namespace USBDM {
 
@@ -242,6 +243,7 @@ void Usb0::initialise() {
    // Add extra handling of CDC packets directed to EP0
 //   setUnhandledSetupCallback(handleUserEp0SetupRequests);
 
+   Pit::configure();
    setSOFCallback(sofCallback);
    /*
     * TODO Additional initialisation
@@ -251,39 +253,54 @@ void Usb0::initialise() {
 /**
  *  Blocking reception of data over bulk OUT end-point
  *
- *   @param maxSize  = max # of bytes to receive
- *   @param buffer   = ptr to buffer for bytes received
+ *   @param[IN/OUT] size    Max Number of bytes to receive/Actual number received
+ *   @param[IN]     buffer  Pointer to buffer for bytes received
  *
- *   @return Number of bytes received
+ *   @return Error code
  *
- *   @note Doesn't return until command has been received.
+ *   @note Doesn't return until some bytes have been received or timeout
  */
-int Usb0::receiveBulkData(uint16_t maxSize, uint8_t *buffer) {
-   epBulkOut.startRxStage(EPDataOut, maxSize, buffer);
-   while(epBulkOut.getState() != EPIdle) {
+ErrorCode Usb0::receiveBulkData(uint16_t &size, uint8_t *buffer) {
+   epBulkOut.startRxStage(EPDataOut, size, buffer);
+
+   while (epBulkOut.getState() != EPIdle) {
       __WFI();
    }
    setActive();
-   return epBulkOut.getDataTransferredSize();
+   size = epBulkOut.getDataTransferredSize();
+   return E_NO_ERROR;
 }
 
 /**
  *  Blocking transmission of data over bulk IN end-point
  *
- *  @param size   Number of bytes to send
- *  @param buffer Pointer to bytes to send
+ *  @param[IN] size    Number of bytes to send
+ *  @param[IN] buffer  Pointer to bytes to send
+ *  @param[IN] timeout Maximum time to wait for packet
  *
- *   @note : Waits for idle BEFORE transmission but\n
- *   returns before data has been transmitted
- *
+ *  @note : Waits for idle BEFORE transmission but\n
+ *          returns before data has been transmitted
  */
-void Usb0::sendBulkData(uint16_t size, const uint8_t *buffer) {
-   while (epBulkIn.getState() != EPIdle) {
+ErrorCode Usb0::sendBulkData(uint16_t size, const uint8_t *buffer, uint32_t timeout) {
+   static bool expired = false;
+
+   USBDM::PitChannelNum pitChannel = Pit::allocateChannel();
+   static auto cb = [] () {
+      expired = true;
+   };
+   if (pitChannel != PitChannelNum_None) {
+      Pit::oneShotInMilliseconds(pitChannel, cb, timeout);
+   }
+   while (!expired && (epBulkIn.getState() != EPIdle)) {
       __WFI();
    }
+   Pit::freeChannel(pitChannel);
+   if (epBulkIn.getState() != EPIdle) {
+      return E_TIMEOUT;
+   }
    epBulkIn.startTxStage(EPDataIn, size, buffer);
+   return E_NO_ERROR;
 }
-
 
 } // End namespace USBDM
 
