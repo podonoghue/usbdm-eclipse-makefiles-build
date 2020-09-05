@@ -45,10 +45,12 @@ installEclipsePlugins() {
    echo 
    echo "Installing Eclipse CDT plugins to ${ECLIPSE_DIR}"
    echo "=================================================================="
+   echo  "FEATURES=$FEATURES"   
+   echo  "REPOS=$REPOS"
    for FILENAME in kinetis-design-studio cwide eclipse; do
       if [[ -x "${ECLIPSE_DIR}/${FILENAME}" ]]; then
-         echo ${ECLIPSE_DIR}/${FILENAME} -nosplash -application ${P2_APPLICATION} -repository ${REPOS} -installIU ${FEATURES}
-         ${ECLIPSE_DIR}/${FILENAME} -nosplash -application ${P2_APPLICATION} -repository ${REPOS} -installIU ${FEATURES} || true
+         echo ${ECLIPSE_DIR}/${FILENAME} -nosplash -application ${P2_APPLICATION} ${REPOS} ${FEATURES}
+         ${ECLIPSE_DIR}/${FILENAME} -nosplash -application ${P2_APPLICATION} ${REPOS} ${FEATURES} || true
          break;
       fi
    done
@@ -66,7 +68,7 @@ installEclipse() {
       echo -n "Looking for Eclipse in '${ECLIPSE_DIR}'"
       if [[ -d ${ECLIPSE_DIR} ]]; then
          echo " - Found"
-         installEclipsePlugins ${ECLIPSE_DIR} ${CDT_FEATURES} ${CDT_REPOS}
+         installEclipsePlugins "${ECLIPSE_DIR}" "${CDT_FEATURES}" "${CDT_REPOS}"
       else
         echo " - Not Found"
       fi
@@ -133,7 +135,7 @@ installKDSInstance() {
    fi
 
    # Add USBDM plugins to eclipse
-   installEclipsePlugins ${KDS_ECLIPSE_DIR} ${CDT_FEATURES} ${CDT_REPOS}
+   installEclipsePlugins "${KDS_ECLIPSE_DIR}" "${CDT_FEATURES}" "${CDT_REPOS}"
 }
 
 #======================================================
@@ -265,7 +267,7 @@ installCodewarriorInstance() {
    echo touch ${WIZARD_BASE_DIR}\*
    touch ${WIZARD_BASE_DIR}*
 
-   installEclipsePlugins "${CODEWARRIOR_ECLIPSE_DIR}" ${CW_FEATURE_GROUP} ${CW_REPOS}
+   installEclipsePlugins "${CODEWARRIOR_ECLIPSE_DIR}" "${CW_FEATURE_GROUP}" "${CW_REPOS}"
 }
 
 #======================================================
@@ -327,12 +329,17 @@ USBDM_LAUNCH_CONFIG_DIR="${USBDM_SHARED_DIR}/LaunchConfig"
 USBDM_WIZARD_PATCH_DIR="${USBDM_SHARED_DIR}/WizardPatches"
 
 # CDT Features and where to look for them
-CDT_FEATURES="net.sourceforge.usbdm.cdt.feature.feature.group"
-CDT_REPOS="file:/${USBDM_UPDATE_SITE}"
+CDT_FEATURES=""
+CDT_FEATURES="${CDT_FEATURES} -installIU org.eclipse.cdt.feature.group"
+CDT_FEATURES="${CDT_FEATURES} -installIU net.sourceforge.usbdm.cdt.feature.feature.group"
+
+CDT_REPOS=""
+CDT_REPOS="${CDT_REPOS} -repository file:/${USBDM_UPDATE_SITE}"
+CDT_REPOS="${CDT_REPOS} -repository https://download.eclipse.org/releases/2020-06/"
 
 # CW Features and where to look for them
-CW_FEATURE_GROUP="net.sourceforge.usbdm.cw.feature.feature.group"
-CW_REPOS="file:/${USBDM_UPDATE_SITE}"
+CW_FEATURE_GROUP="-installIU net.sourceforge.usbdm.cw.feature.feature.group"
+CW_REPOS="-repository file:/${USBDM_UPDATE_SITE}"
 
 # System directories
 LIB_DIR="/usr/lib"
