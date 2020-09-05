@@ -483,6 +483,12 @@ struct BdtEntry {
    constexpr BdtEntry(uint8_t value, uint16_t byteCount, uint32_t address) :
       raw(value), bc(byteCount), addr(address) {};
 
+   void initialise(uint8_t value, uint16_t byteCount, uint32_t address) volatile {
+      raw  = value;
+      bc   = byteCount;
+      addr = address;
+   }
+
    void setByteCount(uint16_t byteCount) volatile {
       bc = byteCount;
    }

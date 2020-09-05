@@ -693,7 +693,7 @@ public:
       static void irqHandler() {
          // Clear interrupt flag
          PitBase_T<Info>::pit().CHANNEL[channel].TFLG = PIT_TFLG_TIF_MASK;
-         if (clearOnEvent) {
+         if (clearOnEvent[channel]) {
             disable();
             clearOnEvent[channel] = false;
          }

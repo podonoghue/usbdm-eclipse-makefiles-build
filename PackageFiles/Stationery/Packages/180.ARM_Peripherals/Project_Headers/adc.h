@@ -490,6 +490,16 @@ public:
    }
 
    /**
+    * Check if ADC is current doing a conversion
+    *
+    * @return true   => ADC is busy doing a conversion
+    * @return false  => ADC is idle
+    */
+   static bool isBusy() {
+      return adc().SC2&ADC_SC2_ADACT_MASK;
+   }
+   
+   /**
     * Set conversion mode
     *
     * @param[in] adcResolution Resolution for converter e.g. AdcResolution_16bit_se

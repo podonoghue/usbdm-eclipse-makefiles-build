@@ -345,14 +345,33 @@ public:
     * Calculate CRC over a range
     * Call configure_...() before this function
     *
-    * @param data Data to process
+    * @param data Data to process (1, 2 or 4 byte objects)
     * @param size Size of data in bytes
     *
     * @return Calculated CRC value
+    *
+    * Example:
+    * @code
+    *    uint32_t data[100] = {...};
+    *    uint32_t crc = calculateCrc(data, sizeof(data));
+    * @endcode
     */
-   static uint32_t calculateCrc(const uint8_t *data, unsigned size) {
-      while (size-->0) {
-         writeData8(*data++);
+   template<typename T>
+   static uint32_t calculateCrc(const T *data, unsigned size) {
+      static_assert((sizeof(T) == 1) || (sizeof(T) == 2) || (sizeof(T) == 4), "Illegal size");
+      while (size>0) {
+         if constexpr (sizeof(T) == 1) {
+            writeData8(*data++);
+            size -= 1;
+         }
+         else if constexpr (sizeof(T) == 2) {
+            writeData16(*data++);
+            size -= 2;
+         }
+         else if constexpr (sizeof(T) == 4) {
+            writeData32(*data++);
+            size -= 4;
+         }
       }
       return getCalculatedCrc();
    }

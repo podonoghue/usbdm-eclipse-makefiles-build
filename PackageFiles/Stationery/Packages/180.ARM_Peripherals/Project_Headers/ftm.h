@@ -1442,6 +1442,10 @@ public:
       }
 
    public:
+      // GPIO Pin associated with this channel
+      template<Polarity polarity>
+      using Gpio = GpioTable_T<Info, channel, polarity>; // Inactive is high
+
       /** Allow access to PCR of associated pin */
       using Pcr = PcrTable_T<Info, limitChannel()>;
 

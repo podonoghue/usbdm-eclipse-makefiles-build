@@ -23,8 +23,7 @@
  */
 typedef void( *const intfunc )( void );
 
-#define WEAK_DEFAULT_HANDLER __attribute__ ((__weak__, alias("Default_Handler")))
-
+#define WEAK_DEFAULT_HANDLER __attribute__ ((__nothrow__, __weak__, alias("Default_Handler")))
 /**
  * Default handler for interrupts
  *

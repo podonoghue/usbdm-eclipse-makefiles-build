@@ -19,6 +19,7 @@
  */
 #include "usb_defs.h"
 #include "derivative.h"
+#include "error.h"
 
 namespace USBDM {
 
@@ -32,7 +33,7 @@ namespace USBDM {
 extern volatile EndpointBdtEntry endPointBdts[];
 
 /** BDTs as simple array */
-constexpr BdtEntry *bdts() { return (BdtEntry *)endPointBdts; }
+static BdtEntry *bdts() { return (BdtEntry *)endPointBdts; }
 
 /** Endpoint state values */
 enum EndpointState {
@@ -161,9 +162,8 @@ protected:
     */
    static EndpointState unsetHandlerCallback(EndpointState endpointState) {
       (void)endpointState;
-
+//      setAndCheckErrorCode(E_NO_HANDLER);
       return EPIdle;
-      //      setAndCheckErrorCode(E_NO_HANDLER);
    }
 
    /** Reference to hardware instance */
@@ -224,11 +224,13 @@ public:
       fDataTransferred  = 0;
       fCallback         = unsetHandlerCallback;
 
+      volatile EndpointBdtEntry &bdt = endPointBdts[fEndpointNumber];
+
       // Assumes single shared buffer
-      endPointBdts[fEndpointNumber].rxEven.setAddress(nativeToLe32((uint32_t)fDataBuffer));
-      endPointBdts[fEndpointNumber].rxOdd.setAddress(nativeToLe32((uint32_t)fDataBuffer));
-      endPointBdts[fEndpointNumber].txEven.setAddress(nativeToLe32((uint32_t)fDataBuffer));
-      endPointBdts[fEndpointNumber].txOdd.setAddress(nativeToLe32((uint32_t)fDataBuffer));
+      bdt.rxEven.initialise( 0, 0, nativeToLe32((uint32_t)fDataBuffer));
+      bdt.rxOdd.initialise(  0, 0, nativeToLe32((uint32_t)fDataBuffer));
+      bdt.txEven.initialise( 0, 0, nativeToLe32((uint32_t)fDataBuffer));
+      bdt.txOdd.initialise(  0, 0, nativeToLe32((uint32_t)fDataBuffer));
    }
 
    /**
@@ -523,9 +525,9 @@ public:
          // Count down bytes to go
          fDataRemaining   -= size;
       }
-      else {
-         console.WRITELN("RxSize = 0\n");
-      }
+//      else {
+//         console.WRITELN("RxSize = 0\n");
+//      }
       return size;
    }
 

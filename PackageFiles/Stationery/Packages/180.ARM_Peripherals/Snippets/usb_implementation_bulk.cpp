@@ -217,7 +217,7 @@ void Usb0::handleTokenComplete(UsbStat usbStat) {
  */
 EndpointState Usb0::bulkOutTransactionCallback(EndpointState state) {
    (void)state;
-   return EPIdle;
+   return EPComplete;
 }
 
 /**
@@ -229,7 +229,7 @@ EndpointState Usb0::bulkOutTransactionCallback(EndpointState state) {
  */
 EndpointState Usb0::bulkInTransactionCallback(EndpointState state) {
    (void)state;
-   return EPIdle;
+   return EPComplete;
 }
 
 /**
@@ -239,6 +239,8 @@ EndpointState Usb0::bulkInTransactionCallback(EndpointState state) {
  */
 void Usb0::initialise() {
    UsbBase_T::initialise();
+   setUserCallback(fUserCallbackFunction);
+}
 
    // Add extra handling of CDC packets directed to EP0
 //   setUnhandledSetupCallback(handleUserEp0SetupRequests);

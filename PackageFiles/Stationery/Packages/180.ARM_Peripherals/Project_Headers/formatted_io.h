@@ -680,6 +680,37 @@ public:
    /**
     * Write a C string
     *
+    * @param[in]  str   String to print
+    * @param[in]  width Width of string (either truncated or padded to this width)
+    *
+    * @return Reference to self
+    */
+   FormattedIO __attribute__((noinline)) &write(const char *str, unsigned width) {
+      while ((*str != '\0') && (width-->0)) {
+         write(*str++);
+      }
+      while (width-->0) {
+         write(' ');
+      }
+      return *this;
+   }
+
+   /**
+    * Write a C string
+    *
+    * @param[in]  str   String to print
+    * @param[in]  width Width of string (either truncated or padded to this width)
+    *
+    * @return Reference to self
+    */
+   FormattedIO __attribute__((noinline)) &writeln(const char *str, unsigned width) {
+      write(str, width);
+      return writeln();
+   }
+
+   /**
+    * Write a C string
+    *
     * @param[in]  str String to print
     *
     * @return Reference to self

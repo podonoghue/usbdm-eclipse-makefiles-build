@@ -144,6 +144,16 @@ const char *UsbBase::getTokenName(unsigned token) {
    }
    return rc;
 }
+/**
+ * Get name of USB end-point state
+ *
+ * @param[in]  state End-point state
+ *
+ * @return Pointer to static string
+ */
+const char *UsbBase::getStateName(EndpointState state) {
+   return Endpoint::getStateName(state);
+}
 
 /**
  * Get name of USB request
@@ -249,8 +259,8 @@ const char *UsbBase::getSetupPacketDescription(SetupPacket *p) {
 void reportLineState(uint8_t value) {
    (void)value;
    console.
-   writeln("Line state: RTS=").write((value&(1<<1))?1:0).
-   write("DTR=").writeln((value&(1<<0))?1:0);
+      writeln("Line state: RTS=").write((value&(1<<1))?1:0).
+      write("DTR=").writeln((value&(1<<0))?1:0);
 }
 
 /**

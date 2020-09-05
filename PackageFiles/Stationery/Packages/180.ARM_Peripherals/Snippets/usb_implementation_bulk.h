@@ -74,6 +74,8 @@ class Usb0 : public UsbBase_T<Usb0Info, CONTROL_EP_MAXSIZE> {
 
 public:
 
+   using UsbBase_T<Usb0Info, CONTROL_EP_MAXSIZE>::setUserCallback;
+
    /**
     * String indexes
     *
