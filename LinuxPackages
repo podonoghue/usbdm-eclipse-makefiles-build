@@ -31,7 +31,7 @@ sudo apt-get -y install libxerces-c-dev
 sudo apt-get -y install libwxgtk3.0-dev
 sudo apt-get -y install libwxbase3.0-dev
 sudo apt-get -y install g++
-sudo apt-get -y install openjdk-8-jdk
+sudo apt-get -y install openjdk-11-jdk
 sudo apt-get -y install libusb-1.0-0
 sudo apt-get -y install default-jdk
 
@@ -40,13 +40,13 @@ elif [ "${BITNESS}" == "64" ]; then
 # =====================================================
 sudo apt-get update
 sudo apt-get -y install libusb-1.0-0-dev
-sudo apt-get -y install tcl8.6-dev
-sudo apt-get -y install tcl8.6
+sudo apt-get -y install tcl-dev
+sudo apt-get -y install tcl
 sudo apt-get -y install libxerces-c-dev
 sudo apt-get -y install libwxgtk3.0-dev
 sudo apt-get -y install libwxbase3.0-dev
 sudo apt-get -y install g++
-sudo apt-get -y install openjdk-8-jdk
+sudo apt-get -y install openjdk-11-jdk
 sudo apt-get -y install libusb-1.0-0
 sudo apt-get -y install default-jdk
 

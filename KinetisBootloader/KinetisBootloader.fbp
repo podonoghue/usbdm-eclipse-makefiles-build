@@ -25,6 +25,7 @@
         <property name="skip_php_events">1</property>
         <property name="skip_python_events">1</property>
         <property name="ui_table">UI</property>
+        <property name="use_array_enum">0</property>
         <property name="use_enum">1</property>
         <property name="use_microsoft_bom">0</property>
         <object class="Dialog" expanded="1">
@@ -60,7 +61,7 @@
                 <property name="permission">none</property>
                 <object class="sizeritem" expanded="1">
                     <property name="border">5</property>
-                    <property name="flag">wxEXPAND</property>
+                    <property name="flag">wxALL|wxEXPAND</property>
                     <property name="proportion">1</property>
                     <object class="wxStaticBoxSizer" expanded="1">
                         <property name="id">wxID_ANY</property>
@@ -175,7 +176,7 @@
                                 <property name="gripper">0</property>
                                 <property name="hidden">0</property>
                                 <property name="id">wxID_ANY</property>
-                                <property name="label">-- No file loaded --</property>
+                                <property name="label">-- no file loaded --</property>
                                 <property name="markup">0</property>
                                 <property name="max_size"></property>
                                 <property name="maximize_button">0</property>
@@ -208,7 +209,7 @@
                 </object>
                 <object class="sizeritem" expanded="1">
                     <property name="border">5</property>
-                    <property name="flag">wxEXPAND</property>
+                    <property name="flag">wxALL|wxEXPAND</property>
                     <property name="proportion">1</property>
                     <object class="wxStaticBoxSizer" expanded="1">
                         <property name="id">wxID_ANY</property>
@@ -231,6 +232,7 @@
                                 <property name="aui_name"></property>
                                 <property name="aui_position"></property>
                                 <property name="aui_row"></property>
+                                <property name="auth_needed">0</property>
                                 <property name="best_size"></property>
                                 <property name="bg"></property>
                                 <property name="bitmap"></property>
@@ -323,7 +325,7 @@
                                 <property name="gripper">0</property>
                                 <property name="hidden">0</property>
                                 <property name="id">wxID_ANY</property>
-                                <property name="label">No Action</property>
+                                <property name="label">-- no action --</property>
                                 <property name="markup">0</property>
                                 <property name="max_size"></property>
                                 <property name="maximize_button">0</property>
