@@ -124,17 +124,22 @@
       <!-- CW for HCS(X)12 support -->
       <DirectoryRef Id="D.CWS12_X_V5_$(var.CW_Ver)_gdi">
          <Component Id='C.CWS12_X_V5_$(var.CW_Ver).Files' Guid='8c272ce1-3c91-4910-b2e9-acd6edbc727e' >
-            <File Id='CWS12_X_V5_$(var.CW_Ver)MinGW_1'         DiskId='1' Source='$(var.SrcDir)\bin\libgcc_s_dw2-1.dll' />
-            <File Id='CWS12_X_V5_$(var.CW_Ver)MinGW_2'         DiskId='1' Source='$(var.SrcDir)\bin\libstdc++-6.dll' />
+            <File Id='CWS12_X_V5_$(var.CW_Ver)CommonFiles_1'   DiskId='1' Source='$(var.SrcDir)\bin\i386-win-gnu\usbdm.dll'    KeyPath='yes' />
+            <File Id='CWS12_X_V5_$(var.CW_Ver)CommonFiles_1d'  DiskId='1' Source='$(var.SrcDir)\bin\i386-win-gnu\usbdm-debug.dll' />
+            <File Id='CWS12_X_V5_$(var.CW_Ver)CommonFiles_2'   DiskId='1' Source='$(var.SrcDir)\bin\i386-win-gnu\usbdm_gdi12.dll' />
 
-            <File Id='CWS12_X_V5_$(var.CW_Ver)CommonFiles_1'   DiskId='1' Source='$(var.SrcDir)\bin\usbdm.4.dll'/>
-            <File Id='CWS12_X_V5_$(var.CW_Ver)CommonFiles_1d'  DiskId='1' Source='$(var.SrcDir)\bin\usbdm-debug.4.dll'/>
-            <File Id='CWS12_X_V5_$(var.CW_Ver)CommonFiles_2'   DiskId='1' Source='$(var.SrcDir)\bin\usbdm-system.4.dll'/>
-            <File Id='CWS12_X_V5_$(var.CW_Ver)CommonFiles_2d'  DiskId='1' Source='$(var.SrcDir)\bin\usbdm-system-debug.4.dll'/>
+            <File Id='CWS12_X_V5_$(var.CW_Ver)CommonFiles_3'   DiskId='1' Source='$(var.SrcDir)\bin\i386-win-gnu\usbdm.4.dll'/>
+            <File Id='CWS12_X_V5_$(var.CW_Ver)CommonFiles_3d'  DiskId='1' Source='$(var.SrcDir)\bin\i386-win-gnu\usbdm-debug.4.dll'/>
+            <File Id='CWS12_X_V5_$(var.CW_Ver)CommonFiles_4'   DiskId='1' Source='$(var.SrcDir)\bin\i386-win-gnu\usbdm-system.4.dll'/>
+            <File Id='CWS12_X_V5_$(var.CW_Ver)CommonFiles_4d'  DiskId='1' Source='$(var.SrcDir)\bin\i386-win-gnu\usbdm-system-debug.4.dll'/>
+
+            <File Id='CWS12_X_V5_$(var.CW_Ver)MinGW_1'         DiskId='1' Source='$(var.SrcDir)\bin\i386-win-gnu\libgcc_s_dw2-1.dll' />
+            <File Id='CWS12_X_V5_$(var.CW_Ver)MinGW_2'         DiskId='1' Source='$(var.SrcDir)\bin\i386-win-gnu\libstdc++-6.dll' />
+            <File Id='CWS12_X_V5_$(var.CW_Ver)MinGW_3'         DiskId='1' Source='$(var.SrcDir)\bin\i386-win-gnu\libwinpthread-1.dll' />
+            <File Id='CWS12_X_V5_$(var.CW_Ver)MinGW_4'         DiskId='1' Source='$(var.SrcDir)\bin\i386-win-gnu\libdl.dll' />
+            <File Id='CWS12_X_V5_$(var.CW_Ver)MinGW_5'         DiskId='1' Source='$(var.SrcDir)\bin\i386-win-gnu\libusb-1.0.dll' />
+
 	    
-            <File Id='CWS12_X_V5_$(var.CW_Ver)CommonFiles_3'   DiskId='1' Source='$(var.SrcDir)\bin\usbdm.dll'    KeyPath='yes' />
-            <File Id='CWS12_X_V5_$(var.CW_Ver)CommonFiles_3d'  DiskId='1' Source='$(var.SrcDir)\bin\usbdm-debug.dll' />
-            <File Id='CWS12_X_V5_$(var.CW_Ver)CommonFiles_4'   DiskId='1' Source='$(var.SrcDir)\bin\usbdm_gdi12.dll' />
          </Component>
       </DirectoryRef>
 
@@ -163,8 +168,7 @@
                            Type='string' Name='PatchCodewarriorDeviceMenu_HCS12_V5_$(var.CW_Ver)' Value="" KeyPath='yes' />
          </Component>
       </DirectoryRef>
-
-
+           
       <!--======================================================
             Features
       =======================================================-->

@@ -1,26 +1,25 @@
-include ../Common-x64.mk
+include ../Common.mk
 
 TARGET = usbdm-jni
-MODULE = module
 
 DLL_DEFS = 
 
 $(TARGET):
 	@echo ''
-	@echo  Building $@
+	@echo  Building $@ 64-bit
 	@echo "================================================================"
-	$(MAKE) dll -f Target-x64.mk BUILDDIR=$@$(BUILDDIR_SUFFIX) TARGET=$@${VSUFFIX}     MODULE=$(MODULE)  CDEFS='$(DLL_DEFS)'
+	$(MAKE) dll -f Target.mk BUILDDIR=$@ CDEFS='$(DLL_DEFS)' BITNESS=64
 
 $(TARGET)-debug:
 	@echo ''
-	@echo  Building $@
+	@echo  Building $@ 64-bit
 	@echo "================================================================"
-	$(MAKE) dll -f Target-x64.mk BUILDDIR=$@$(BUILDDIR_SUFFIX) TARGET=$@${VSUFFIX}     MODULE=$(MODULE)  CDEFS='$(DLL_DEFS)'  DEBUG='Y'
+	$(MAKE) dll -f Target.mk BUILDDIR=$@ CDEFS='$(DLL_DEFS)' DEBUG='Y' BITNESS=64
 
 all: $(TARGET) $(TARGET)-debug
 
 clean:
-	${RMDIR} $(TARGET)$(BUILDDIR_SUFFIX) $(TARGET)-debug$(BUILDDIR_SUFFIX)
+	-${RMDIR} $(TARGET)$(BUILDDIR_SUFFIXx64) $(TARGET)-debug$(BUILDDIR_SUFFIXx64)
 
 .PHONY: all clean 
 .PHONY: $(TARGET) $(TARGET)-debug

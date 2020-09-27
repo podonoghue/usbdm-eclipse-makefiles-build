@@ -13,8 +13,12 @@
 
 #include <wx/regex.h>
 
+#include "helper-classes.h"
+#include "xmlParser.h"
+
 #pragma GCC visibility push(default)
 
+#include <xercesc/dom/DOMDocument.hpp>
 #include <xercesc/util/PlatformUtils.hpp>
 #include <xercesc/dom/DOM.hpp>
 #include <xercesc/dom/DOMNode.hpp>
@@ -27,9 +31,6 @@
 #pragma GCC visibility pop
 
 XERCES_CPP_NAMESPACE_USE
-
-#include "helper-classes.h"
-#include "xmlParser.h"
 
 using namespace std;
 
@@ -55,7 +56,7 @@ public:
       index          = 0;
       findElement(0);
    };
-   DOMChildIterator(DOMDocument *document, const char *tagName) {
+   DOMChildIterator(xercesc::DOMDocument *document, const char *tagName) {
       elementList    = document->getElementsByTagName(DualString(tagName).asXMLString());
       index          = 0;
       findElement(0);
@@ -102,7 +103,7 @@ public:
 //   }
 //}
 
-void XmlParser::load(XercesDOMParser* &parser, DOMDocument* &document, const char* xmlFile) {
+void XmlParser::load(XercesDOMParser* &parser, xercesc::DOMDocument* &document, const char* xmlFile) {
 
    parser = new XercesDOMParser();
    parser->setValidationScheme(XercesDOMParser::Val_Never);

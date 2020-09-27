@@ -3,14 +3,23 @@
 set OLD_PATH=%PATH%
 rem echo %PATH%
 
-set MAKE=mingw32-make
+rem Unix style utilities
+set MSYS_HOME=C:\Apps\msys64
 
-set PATH=C:\Apps\mingw-w64\x86_64-8.1.0-posix-seh-rt_v6-rev0\mingw64\bin;%OLD_PATH%
-%MAKE% -f Makefile-x64.mk clean
+rem 64-bit version of compiler etc
+set MINGW_HOME_64=C:\Apps\msys64\mingw64
+
+rem 32-bit version of compiler etc
+set MINGW_HOME_32=C:\Apps\msys64\mingw32
+
+rem Do 64-bit builds
+set PATH=%MINGW_HOME_64%\bin;%MSYS_HOME%\bin;%MSYS_HOME%\usr\bin;
+make -f Makefile-x64.mk clean BITNESS=64
 
 rem pause
-rem set PATH=C:\Apps\mingw-w64\i686-5.2.0-posix-dwarf-rt_v4-rev0\mingw32\bin;%OLD_PATH%
-set PATH=C:\Apps\MinGW\bin;%OLD_PATH%
-%MAKE% -f Makefile.mk clean
+
+rem Do 32-bit builds
+set PATH=%MINGW_HOME_32%\bin;%MSYS_HOME%\bin;%MSYS_HOME%\usr\bin;
+make -f Makefile-x32.mk clean BITNESS=32 
 
 pause

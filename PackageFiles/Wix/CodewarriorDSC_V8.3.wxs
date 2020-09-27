@@ -60,7 +60,9 @@
       <!--======================================================
             Components
       =======================================================-->
-      <!-- USBDM Installed Marker -->
+     <!-- 
+           USBDM Installed Marker
+     -->
       <DirectoryRef Id="D.CODEWARRIOR_DSC_V8_3">
          <Component Id='C.CODEWARRIOR_DSC_V8_3.Marker' Guid='77a808df-6ae2-4c6f-9e58-22bc02171248' >
             <File Id='CODEWARRIOR_DSC_V8_3_Marker' DiskId='1' Source='USBDM_Installed.txt' KeyPath='yes' />
@@ -70,19 +72,16 @@
       <!-- CW for DSC support -->
       <DirectoryRef Id="D.CODEWARRIOR_DSC_V8_3_bin_Plugins_Support_USBDM">
          <Component Id='C.CODEWARRIOR_DSC_V8_3.Files' Guid='38a3f397-4ffd-4edb-8642-d086279430e8' >
-            <File Id='CODEWARRIOR_DSC_V8_3_MinGW_1'         DiskId='1' Source='$(var.SrcDir)\bin\libgcc_s_dw2-1.dll' />
-            <File Id='CODEWARRIOR_DSC_V8_3_MinGW_2'         DiskId='1' Source='$(var.SrcDir)\bin\libstdc++-6.dll' />
+            <File Id='CODEWARRIOR_DSC_V8_3_CommonGDI_1'     DiskId='1' Source='$(var.SrcDir)\bin\i386-win-gnu\usbdm-gdi-dsc-legacy.4.dll'   KeyPath='yes' />
+            <File Id='CODEWARRIOR_DSC_V8_3_CommonGDI_1d'    DiskId='1' Source='$(var.SrcDir)\bin\i386-win-gnu\usbdm-gdi-dsc-legacy-debug.4.dll'/>
+            <File Id='CODEWARRIOR_DSC_V8_3_CommonUsbdm_2'   DiskId='1' Source='$(var.SrcDir)\bin\i386-win-gnu\usbdm-system.4.dll' />
+            <File Id='CODEWARRIOR_DSC_V8_3_CommonUsbdm_2d'  DiskId='1' Source='$(var.SrcDir)\bin\i386-win-gnu\usbdm-system-debug.4.dll' />
 
-            <File Id='CODEWARRIOR_DSC_V8_3_WxWidgets_1'     DiskId='1' Source='$(var.SrcDir)\bin\wxbase$(var.WxWidgetsVer)_gcc_custom.dll' />
-            <File Id='CODEWARRIOR_DSC_V8_3_WxWidgets_2'     DiskId='1' Source='$(var.SrcDir)\bin\wxmsw$(var.WxWidgetsVer)_core_gcc_custom.dll' />
-
-            <File Id='CODEWARRIOR_DSC_V8_3_CommonUsbdm_1'   DiskId='1' Source='$(var.SrcDir)\bin\usbdm.4.dll'/>
-            <File Id='CODEWARRIOR_DSC_V8_3_CommonUsbdm_1d'  DiskId='1' Source='$(var.SrcDir)\bin\usbdm-debug.4.dll'/>
-            <File Id='CODEWARRIOR_DSC_V8_3_CommonUsbdm_2'   DiskId='1' Source='$(var.SrcDir)\bin\usbdm-system.4.dll' />
-            <File Id='CODEWARRIOR_DSC_V8_3_CommonUsbdm_2d'  DiskId='1' Source='$(var.SrcDir)\bin\usbdm-system-debug.4.dll' />
+            <File Id='CODEWARRIOR_DSC_V8_3_MinGW_1'         DiskId='1' Source='$(var.SrcDir)\bin\i386-win-gnu\libgcc_s_dw2-1.dll' />
+            <File Id='CODEWARRIOR_DSC_V8_3_MinGW_2'         DiskId='1' Source='$(var.SrcDir)\bin\i386-win-gnu\libstdc++-6.dll' />
+            <File Id='CODEWARRIOR_DSC_V8_3_MinGW_3'         DiskId='1' Source='$(var.SrcDir)\bin\i386-win-gnu\libwinpthread-1.dll' />
+            <File Id='CODEWARRIOR_DSC_V8_3_MinGW_4'         DiskId='1' Source='$(var.SrcDir)\bin\i386-win-gnu\libdl.dll' />
 	    
-            <File Id='CODEWARRIOR_DSC_V8_3_CommonGDI_1'     DiskId='1' Source='$(var.SrcDir)\bin\usbdm-gdi-dsc-legacy.4.dll'   KeyPath='yes' />
-            <File Id='CODEWARRIOR_DSC_V8_3_CommonGDI_1d'    DiskId='1' Source='$(var.SrcDir)\bin\usbdm-gdi-dsc-legacy-debug.4.dll'/>
          </Component>
       </DirectoryRef>
 

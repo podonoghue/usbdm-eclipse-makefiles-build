@@ -21,12 +21,12 @@ Change History
 #include <wx/app.h>
 #include <wx/evtloop.h>
 #include <wx/msgdlg.h>
-#include <exception>
-
 #include <wx/msgdlg.h>
 #include <wx/app.h>
 //#include <wx/events.h>
 #include <wx/app.h>
+#include <wx/msgdlg.h>
+#include <exception>
 
 #include "UsbdmSystem.h"
 #include "WxPluginImp.h"

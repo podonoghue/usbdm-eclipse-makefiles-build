@@ -918,10 +918,11 @@ public:
          write('-');
          value = -value;
       }
-      ultoa(buff, static_cast<long>(value), Radix_10, fFormat.fFloatPadding, fFormat.fFloatWidth);
+      long scaledValue = static_cast<long>(round(value*fFormat.fFloatPrecisionMultiplier));
+      ultoa(buff, scaledValue/fFormat.fFloatPrecisionMultiplier, Radix_10, fFormat.fFloatPadding, fFormat.fFloatWidth);
       write(buff).write('.');
       ultoa(buff, 
-           (static_cast<long>(round(value*fFormat.fFloatPrecisionMultiplier)))%fFormat.fFloatPrecisionMultiplier,
+           (scaledValue)%fFormat.fFloatPrecisionMultiplier,
            Radix_10, Padding_LeadingZeroes, fFormat.fFloatPrecision);
       write(buff);
       return *this;

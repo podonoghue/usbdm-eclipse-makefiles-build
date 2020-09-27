@@ -1,4 +1,5 @@
-#include "Version.h"
+// There is a bug in windres that prevents finding files in -Idirectories so this hack
+#include "../../Shared/src/Version.h"
 
 #include <windows.h>
 
@@ -16,7 +17,11 @@ LANGUAGE LANG_ENGLISH, SUBLANG_ENGLISH_AUS
     FILEVERSION     USBDM_VERSION_MAJOR,USBDM_VERSION_MINOR,USBDM_VERSION_MICRO,USBDM_VERSION_NANO
     PRODUCTVERSION  USBDM_VERSION_MAJOR,USBDM_VERSION_MINOR,USBDM_VERSION_MICRO,USBDM_VERSION_NANO
     FILEOS          VOS_NT
+#ifdef INTERACTIVE    
+    FILETYPE        VFT_APP
+#else
     FILETYPE        VFT_DLL
+#endif
 
 BEGIN
     BLOCK "StringFileInfo"

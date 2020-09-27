@@ -17,7 +17,7 @@
  */
 typedef void( *const intfunc )( void );
 
-#define WEAK_DEFAULT_HANDLER __attribute__ ((__weak__, alias("Default_Handler")))
+#define WEAK_DEFAULT_HANDLER __attribute__ ((__nothrow__, __weak__, alias("Default_Handler")))
 
 /**
  * Default handler for interrupts
@@ -76,6 +76,7 @@ void HardFault_Handler(void) {
      __asm__ volatile ( "  ite   eq                  \n");  // Get active SP in r0
      __asm__ volatile ( "  mrseq r0, msp             \n");
      __asm__ volatile ( "  mrsne r0, psp             \n");
+     __asm__ volatile ( "  mov   r1, lr              \n");  // Get LR=EXC_RETURN in r1
      __asm__ volatile ( "  b     _HardFault_Handler  \n");  // Go to C handler
 }
 
@@ -93,7 +94,9 @@ void HardFault_Handler(void) {
  *
  */
 __attribute__((__naked__))
-void _HardFault_Handler(volatile ExceptionFrame *exceptionFrame __attribute__((__unused__))) {
+void _HardFault_Handler(
+      volatile ExceptionFrame *exceptionFrame __attribute__((__unused__)),
+      uint32_t execReturn                     __attribute__((__unused__)) ) {
    while (1) {
       // Stop here for debugger
       __asm__("bkpt");

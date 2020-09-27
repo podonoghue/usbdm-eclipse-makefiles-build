@@ -1,8 +1,8 @@
 <?xml version='1.0' encoding='windows-1252'?>
 <Wix xmlns='http://schemas.microsoft.com/wix/2006/wi'>
-   <?define ECLIPSE_VER="CW_11.0" ?> 
-   <?define CW_VER_UC="V11.0" ?> 
-   <?define CW_Ver="v11.0" ?> 
+   <?define ECLIPSE_VER="CW_11.0" ?>
+   <?define CW_VER_UC="V11.0" ?>
+   <?define CW_Ver="v11.0" ?>
 
    <?define Manufacturer="pgo" ?>
    <?define ProductName="USBDM" ?>
@@ -10,7 +10,7 @@
    <?define ProductCode="17b2306b-6310-4c23-8e96-fdac4c922b3d" ?> <!-- Don't change        -->
    <?define UpgradeCode="9bd8ce56-449a-4787-9c20-feb701416411" ?> <!-- Don't change        -->
    <?define InfoURL="http://usbdm.sourceforge.net" ?>
-   
+
    <?define DescSRecord="Freescale S-Record binary file" ?>
    <?define ExplorerMenuOpen="Open" ?>
 
@@ -61,11 +61,11 @@
             </Directory>
          </Directory>
       </DirectoryRef>
-     
+
       <!--======================================================
                Registry searches
       =======================================================-->
-     
+
       <!-- Check for presence of CW for MCU V10.x -->
       <Property Id="P.CW_FOR_MCU_$(var.CW_VER_UC)">
          <RegistrySearch Id="Rs.CW_FOR_MCU_$(var.CW_VER_UC)"
@@ -80,7 +80,7 @@
       <Property Id="D.CW_FOR_MCU_$(var.CW_VER_UC)">
          <RegistrySearchRef Id="Rs.CW_FOR_MCU_$(var.CW_VER_UC)" />
       </Property>
-      
+
       <!--=================================================================================
            Actions
       ==================================================================================-->
@@ -90,13 +90,13 @@
          Property="Ca.InstallPluginsCommand_$(var.ECLIPSE_VER)"
          Value='&quot;[D.ECLIPSE_$(var.ECLIPSE_VER)_CDT]cwidec&quot; -nosplash -application $(var.P2Application) -repository &quot;file:/[D.CodewarriorUpdateSite]\&quot; -installIU $(var.FeatureGroup)'
          Execute="immediate"/>
-         
+
       <CustomAction
          Id="Ca.CreateUnInstallPluginsCommand_$(var.ECLIPSE_VER)"
          Property="Ca.UnInstallPluginsCommand_$(var.ECLIPSE_VER)"
          Value='&quot;[D.ECLIPSE_$(var.ECLIPSE_VER)_CDT]cwidec&quot; -nosplash -application $(var.P2Application) -uninstallIU $(var.FeatureGroup)'
          Execute="immediate"/>
-         
+
       <CustomAction Id="Ca.InstallPluginsCommand_$(var.ECLIPSE_VER)"   BinaryKey="WixCA" DllEntry="CAQuietExec" Execute="deferred" Return="ignore" Impersonate="no"/>
       <CustomAction Id="Ca.UnInstallPluginsCommand_$(var.ECLIPSE_VER)" BinaryKey="WixCA" DllEntry="CAQuietExec" Execute="deferred" Return="ignore" Impersonate="no"/>
 
@@ -121,7 +121,7 @@
       <!-- Patch Eclipse ELF Importer Project Wizard XLM-->
       <CustomAction
          Id="Ca.CreateEclipseMergeElfImporterWizardCommand_$(var.CW_VER_UC)"
-         Property="Ca.MergeElfImporterWizardEclipseCommand_$(var.CW_VER_UC)"  
+         Property="Ca.MergeElfImporterWizardEclipseCommand_$(var.CW_VER_UC)"
          Value="&quot;[INSTALLDIR]mergeXml.exe&quot; &quot;[D.CW_$(var.CW_VER_UC)_EclipsePlugins]com.freescale.mcu.elfimporter_10.*.*.*\\&quot; plugin.xml &quot;[D.WizardPatchData]PatchElfImporterWizardPlugin_$(var.CW_VER_UC).xml&quot; "
          Execute="immediate"/>
       <CustomAction Id="Ca.MergeElfImporterWizardEclipseCommand_$(var.CW_VER_UC)"   BinaryKey="WixCA" DllEntry="CAQuietExec" Execute="deferred" Return="ignore" Impersonate="no"/>
@@ -154,21 +154,21 @@
       <InstallExecuteSequence>
           <Custom Action="Ca.CreateInstallPluginsCommand_$(var.ECLIPSE_VER)"   After="CostFinalize"><![CDATA[$C.CW_FOR_MCU_$(var.CW_VER_UC).LaunchFiles>2]]></Custom>
           <Custom Action="Ca.CreateUnInstallPluginsCommand_$(var.ECLIPSE_VER)" After="CostFinalize"><![CDATA[$C.CW_FOR_MCU_$(var.CW_VER_UC).LaunchFiles=2]]></Custom>
-          
+
           <!-- These actions set Properties used by later actions -->
           <Custom Action="Ca.CreateEclipseMergeNewProjectWizardCommand_$(var.CW_VER_UC)"           After="CostFinalize"><![CDATA[$C.CW_FOR_MCU_$(var.CW_VER_UC).LaunchFiles>2]]></Custom>
           <Custom Action="Ca.CreateEclipseUnMergeNewProjectWizardCommand_$(var.CW_VER_UC)"         After="CostFinalize"><![CDATA[$C.CW_FOR_MCU_$(var.CW_VER_UC).LaunchFiles=2]]></Custom>
-             <!-- Ver 10.3 -->                                                                     
+             <!-- Ver 10.3 -->
           <Custom Action="Ca.CreateEclipseMergeElfImporterWizardCommand_$(var.CW_VER_UC)"          After="CostFinalize"><![CDATA[$C.CW_FOR_MCU_$(var.CW_VER_UC).LaunchFiles>2]]></Custom>
           <Custom Action="Ca.CreateEclipseUnMergeElfImporterWizardCommand_$(var.CW_VER_UC)"        After="CostFinalize"><![CDATA[$C.CW_FOR_MCU_$(var.CW_VER_UC).LaunchFiles=2]]></Custom>
           <Custom Action="Ca.CreateEclipseMergeMQXLiteNewProjectWizardCommand_$(var.CW_VER_UC)"    After="CostFinalize"><![CDATA[$C.CW_FOR_MCU_$(var.CW_VER_UC).LaunchFiles>2]]></Custom>
           <Custom Action="Ca.CreateEclipseUnMergeMQXLiteNewProjectWizardCommand_$(var.CW_VER_UC)"  After="CostFinalize"><![CDATA[$C.CW_FOR_MCU_$(var.CW_VER_UC).LaunchFiles=2]]></Custom>
-          
+
 
           <!-- These actions patch or restore the various Codewarrior XML files -->
           <Custom Action="Ca.MergeNewProjectWizardEclipseCommand_$(var.CW_VER_UC)"                 After="PublishProduct"><![CDATA[$C.CW_FOR_MCU_$(var.CW_VER_UC).LaunchFiles>2]]></Custom>
           <Custom Action="Ca.UnMergeNewProjectWizardEclipseCommand_$(var.CW_VER_UC)"               Before="RemoveFiles">  <![CDATA[$C.CW_FOR_MCU_$(var.CW_VER_UC).LaunchFiles=2]]></Custom>
-             <!-- Ver 10.3 -->                                                                     
+             <!-- Ver 10.3 -->
           <Custom Action="Ca.MergeElfImporterWizardEclipseCommand_$(var.CW_VER_UC)"                After="PublishProduct"><![CDATA[$C.CW_FOR_MCU_$(var.CW_VER_UC).LaunchFiles>2]]></Custom>
           <Custom Action="Ca.UnMergeElfImporterWizardEclipseCommand_$(var.CW_VER_UC)"              Before="RemoveFiles">  <![CDATA[$C.CW_FOR_MCU_$(var.CW_VER_UC).LaunchFiles=2]]></Custom>
           <Custom Action="Ca.MergeMQXLiteNewProjectWizardEclipseCommand_$(var.CW_VER_UC)"          After="PublishProduct"><![CDATA[$C.CW_FOR_MCU_$(var.CW_VER_UC).LaunchFiles>2]]></Custom>
@@ -178,11 +178,11 @@
           <Custom Action="Ca.UnInstallPluginsCommand_$(var.ECLIPSE_VER)" Before="RemoveFiles"><![CDATA[$C.CW_FOR_MCU_$(var.CW_VER_UC).LaunchFiles=2]]></Custom>
 
       </InstallExecuteSequence>
-      
+
       <!--======================================================
                Components
       =======================================================-->
-      <!-- 
+      <!--
            USBDM Marker
       -->
       <DirectoryRef Id="D.CW_FOR_MCU_$(var.CW_VER_UC)">
@@ -190,189 +190,237 @@
             <File Id='CW_FOR_MCU_$(var.CW_VER_UC)_Marker' DiskId='1' Source='USBDM_Installed.txt' KeyPath='yes' />
          </Component>
       </DirectoryRef>
-      
+
       <!-- CW Eclipse RS08/HCS08 support -->
       <DirectoryRef Id="D.CW_FOR_MCU_$(var.CW_VER_UC)_MCU_bin_plugins_support_HC08_gdi">
          <Component Id='C.CW_FOR_MCU_$(var.CW_VER_UC).HCSFiles' Guid='7bdfb6e9-4428-4911-bc30-90f03bdb81f1'>
-            <File Id='EclipseHCSFiles_$(var.CW_VER_UC)_1'   DiskId='1' Source='$(var.SrcDir)\bin\libgcc_s_dw2-1.dll' />
-            <File Id='EclipseHCSFiles_$(var.CW_VER_UC)_2'   DiskId='1' Source='$(var.SrcDir)\bin\libstdc++-6.dll' />
-            <File Id='EclipseHCSFiles_$(var.CW_VER_UC)_5'   DiskId='1' Source='$(var.SrcDir)\bin\libxerces-c-3-1.dll' />
-         
-            <!--
-            <File Id='EclipseHCSFiles_$(var.CW_VER_UC)_3'   DiskId='1' Source='$(var.SrcDir)\bin\wxbase$(var.WxWidgetsVer)_gcc_custom.dll' />
-            <File Id='EclipseHCSFiles_$(var.CW_VER_UC)_4'   DiskId='1' Source='$(var.SrcDir)\bin\wxmsw$(var.WxWidgetsVer)_core_gcc_custom.dll' />
-            <File Id='EclipseHCSFiles_$(var.CW_VER_UC)_6'   DiskId='1' Source='$(var.SrcDir)\bin\tcl85.dll' />
-            -->
-            <File Id='EclipseHCSFiles_$(var.CW_VER_UC)_10'  DiskId='1' Source='$(var.SrcDir)\bin\usbdm.4.dll'/>
-            <File Id='EclipseHCSFiles_$(var.CW_VER_UC)_10d' DiskId='1' Source='$(var.SrcDir)\bin\usbdm-debug.4.dll' />
-            <!--
-            <File Id='EclipseHCSFiles_$(var.CW_VER_UC)_11'  DiskId='1' Source='$(var.SrcDir)\bin\usbdm-dsc.4.dll' />
-            <File Id='EclipseHCSFiles_$(var.CW_VER_UC)_11d' DiskId='1' Source='$(var.SrcDir)\bin\usbdm-dsc-debug.4.dll' />
-            <File Id='EclipseHCSFiles_$(var.CW_VER_UC)_12'  DiskId='1' Source='$(var.SrcDir)\bin\usbdm-tcl.4.dll' />
-            <File Id='EclipseHCSFiles_$(var.CW_VER_UC)_12d' DiskId='1' Source='$(var.SrcDir)\bin\usbdm-tcl-debug.4.dll' />
-            <File Id='EclipseHCSFiles_$(var.CW_VER_UC)_13'  DiskId='1' Source='$(var.SrcDir)\bin\usbdm-wx-plugin.4.dll' />
-            <File Id='EclipseHCSFiles_$(var.CW_VER_UC)_13d' DiskId='1' Source='$(var.SrcDir)\bin\usbdm-wx-plugin-debug.4.dll' />
-            -->
-            <File Id='EclipseHCSFiles_$(var.CW_VER_UC)_14'  DiskId='1' Source='$(var.SrcDir)\bin\usbdm-system.4.dll' />
-            <File Id='EclipseHCSFiles_$(var.CW_VER_UC)_14d' DiskId='1' Source='$(var.SrcDir)\bin\usbdm-system-debug.4.dll' />
-            <File Id='EclipseHCSFiles_$(var.CW_VER_UC)_15'  DiskId='1' Source='$(var.SrcDir)\bin\usbdm-device-database.4.dll' />
-            <File Id='EclipseHCSFiles_$(var.CW_VER_UC)_15d' DiskId='1' Source='$(var.SrcDir)\bin\usbdm-device-database-debug.4.dll' />
-            <!--
-            <File Id='EclipseHCSFiles_$(var.CW_VER_UC)_20'  DiskId='1' Source='$(var.SrcDir)\bin\usbdm-programmer-hcs08.4.dll' />
-            <File Id='EclipseHCSFiles_$(var.CW_VER_UC)_20d' DiskId='1' Source='$(var.SrcDir)\bin\usbdm-programmer-hcs08-debug.4.dll' />
-            <File Id='EclipseHCSFiles_$(var.CW_VER_UC)_21'  DiskId='1' Source='$(var.SrcDir)\bin\usbdm-programmer-rs08.4.dll' />
-            <File Id='EclipseHCSFiles_$(var.CW_VER_UC)_21d' DiskId='1' Source='$(var.SrcDir)\bin\usbdm-programmer-rs08-debug.4.dll' />
-            -->
-            <File Id='EclipseHCSFiles_$(var.CW_VER_UC)_30'  DiskId='1' Source='$(var.SrcDir)\bin\usbdm-gdi-hcs08.4.dll' KeyPath='yes' />
-            <File Id='EclipseHCSFiles_$(var.CW_VER_UC)_30d' DiskId='1' Source='$(var.SrcDir)\bin\usbdm-gdi-hcs08-debug.4.dll' />
-            <File Id='EclipseHCSFiles_$(var.CW_VER_UC)_31'  DiskId='1' Source='$(var.SrcDir)\bin\usbdm-gdi-rs08.4.dll' />
-            <File Id='EclipseHCSFiles_$(var.CW_VER_UC)_31d' DiskId='1' Source='$(var.SrcDir)\bin\usbdm-gdi-rs08-debug.4.dll' />
+            <File Id='EclipseHCSFiles_$(var.CW_VER_UC)_01'  DiskId='1' Source='$(var.SrcDir)\bin\i386-win-gnu\usbdm-gdi-hcs08.4.dll' KeyPath='yes' />
+            <File Id='EclipseHCSFiles_$(var.CW_VER_UC)_01d' DiskId='1' Source='$(var.SrcDir)\bin\i386-win-gnu\usbdm-gdi-hcs08-debug.4.dll' />
+            <File Id='EclipseHCSFiles_$(var.CW_VER_UC)_02'  DiskId='1' Source='$(var.SrcDir)\bin\i386-win-gnu\usbdm-gdi-rs08.4.dll' />
+            <File Id='EclipseHCSFiles_$(var.CW_VER_UC)_02d' DiskId='1' Source='$(var.SrcDir)\bin\i386-win-gnu\usbdm-gdi-rs08-debug.4.dll' />
+            
+            <File Id='EclipseHCSFiles_$(var.CW_VER_UC)_03'  DiskId='1' Source='$(var.SrcDir)\bin\i386-win-gnu\usbdm-device-database.4.dll' />
+            <File Id='EclipseHCSFiles_$(var.CW_VER_UC)_03d' DiskId='1' Source='$(var.SrcDir)\bin\i386-win-gnu\usbdm-device-database-debug.4.dll' />
+            <File Id='EclipseHCSFiles_$(var.CW_VER_UC)_04'  DiskId='1' Source='$(var.SrcDir)\bin\i386-win-gnu\usbdm-system.4.dll' />
+            <File Id='EclipseHCSFiles_$(var.CW_VER_UC)_04d' DiskId='1' Source='$(var.SrcDir)\bin\i386-win-gnu\usbdm-system-debug.4.dll' />
+            <File Id='EclipseHCSFiles_$(var.CW_VER_UC)_05'  DiskId='1' Source='$(var.SrcDir)\bin\i386-win-gnu\usbdm.4.dll'/>
+            <File Id='EclipseHCSFiles_$(var.CW_VER_UC)_05d' DiskId='1' Source='$(var.SrcDir)\bin\i386-win-gnu\usbdm-debug.4.dll' />
+            <File Id='EclipseHCSFiles_$(var.CW_VER_UC)_06'  DiskId='1' Source='$(var.SrcDir)\bin\i386-win-gnu\usbdm-wx-plugin.4.dll' />
+            <File Id='EclipseHCSFiles_$(var.CW_VER_UC)_06d' DiskId='1' Source='$(var.SrcDir)\bin\i386-win-gnu\usbdm-wx-plugin-debug.4.dll' />
+
+            <File Id='EclipseHCSFiles_$(var.CW_VER_UC)_mingw00'  DiskId='1' Source='$(var.SrcDir)\bin\i386-win-gnu\libbrotlicommon.dll' />
+            <File Id='EclipseHCSFiles_$(var.CW_VER_UC)_mingw01'  DiskId='1' Source='$(var.SrcDir)\bin\i386-win-gnu\libbrotlidec.dll' />
+            <File Id='EclipseHCSFiles_$(var.CW_VER_UC)_mingw02'  DiskId='1' Source='$(var.SrcDir)\bin\i386-win-gnu\libcrypto-1_1.dll' />
+            <File Id='EclipseHCSFiles_$(var.CW_VER_UC)_mingw03'  DiskId='1' Source='$(var.SrcDir)\bin\i386-win-gnu\libcurl-4.dll' />
+            <File Id='EclipseHCSFiles_$(var.CW_VER_UC)_mingw04'  DiskId='1' Source='$(var.SrcDir)\bin\i386-win-gnu\libdl.dll' />
+            <File Id='EclipseHCSFiles_$(var.CW_VER_UC)_mingw05'  DiskId='1' Source='$(var.SrcDir)\bin\i386-win-gnu\libgcc_s_dw2-1.dll' />
+            <File Id='EclipseHCSFiles_$(var.CW_VER_UC)_mingw06'  DiskId='1' Source='$(var.SrcDir)\bin\i386-win-gnu\libiconv-2.dll' />
+            <File Id='EclipseHCSFiles_$(var.CW_VER_UC)_mingw07'  DiskId='1' Source='$(var.SrcDir)\bin\i386-win-gnu\libicudt67.dll' />
+            <File Id='EclipseHCSFiles_$(var.CW_VER_UC)_mingw08'  DiskId='1' Source='$(var.SrcDir)\bin\i386-win-gnu\libicuuc67.dll' />
+            <File Id='EclipseHCSFiles_$(var.CW_VER_UC)_mingw09'  DiskId='1' Source='$(var.SrcDir)\bin\i386-win-gnu\libidn2-0.dll' />
+            <File Id='EclipseHCSFiles_$(var.CW_VER_UC)_mingw10'  DiskId='1' Source='$(var.SrcDir)\bin\i386-win-gnu\libintl-8.dll' />
+            <File Id='EclipseHCSFiles_$(var.CW_VER_UC)_mingw11'  DiskId='1' Source='$(var.SrcDir)\bin\i386-win-gnu\libnghttp2-14.dll' />
+            <File Id='EclipseHCSFiles_$(var.CW_VER_UC)_mingw12'  DiskId='1' Source='$(var.SrcDir)\bin\i386-win-gnu\libpsl-5.dll' />
+            <File Id='EclipseHCSFiles_$(var.CW_VER_UC)_mingw13'  DiskId='1' Source='$(var.SrcDir)\bin\i386-win-gnu\libssh2-1.dll' />
+            <File Id='EclipseHCSFiles_$(var.CW_VER_UC)_mingw14'  DiskId='1' Source='$(var.SrcDir)\bin\i386-win-gnu\libssl-1_1.dll' />
+            <File Id='EclipseHCSFiles_$(var.CW_VER_UC)_mingw15'  DiskId='1' Source='$(var.SrcDir)\bin\i386-win-gnu\libstdc++-6.dll' />
+            <File Id='EclipseHCSFiles_$(var.CW_VER_UC)_mingw16'  DiskId='1' Source='$(var.SrcDir)\bin\i386-win-gnu\libunistring-2.dll' />
+            <File Id='EclipseHCSFiles_$(var.CW_VER_UC)_mingw17'  DiskId='1' Source='$(var.SrcDir)\bin\i386-win-gnu\libwinpthread-1.dll' />
+            <File Id='EclipseHCSFiles_$(var.CW_VER_UC)_mingw18'  DiskId='1' Source='$(var.SrcDir)\bin\i386-win-gnu\libxerces-c-3-2.dll' />
+            <File Id='EclipseHCSFiles_$(var.CW_VER_UC)_mingw19'  DiskId='1' Source='$(var.SrcDir)\bin\i386-win-gnu\libzstd.dll' />
+            <File Id='EclipseHCSFiles_$(var.CW_VER_UC)_mingw20'  DiskId='1' Source='$(var.SrcDir)\bin\i386-win-gnu\zlib1.dll' />
+            <File Id='EclipseHCSFiles_$(var.CW_VER_UC)_mingw21'  DiskId='1' Source='$(var.SrcDir)\bin\i386-win-gnu\libusb-1.0.dll' />
+            <File Id='EclipseHCSFiles_$(var.CW_VER_UC)_mingw22'  DiskId='1' Source='$(var.SrcDir)\bin\i386-win-gnu\libjpeg-8.dll' />
+            <File Id='EclipseHCSFiles_$(var.CW_VER_UC)_mingw23'  DiskId='1' Source='$(var.SrcDir)\bin\i386-win-gnu\libpng16-16.dll' />
+            <File Id='EclipseHCSFiles_$(var.CW_VER_UC)_mingw24'  DiskId='1' Source='$(var.SrcDir)\bin\i386-win-gnu\libtiff-5.dll' />
+            <File Id='EclipseHCSFiles_$(var.CW_VER_UC)_mingw25'  DiskId='1' Source='$(var.SrcDir)\bin\i386-win-gnu\wxbase30u_gcc_custom.dll' />
+            <File Id='EclipseHCSFiles_$(var.CW_VER_UC)_mingw26'  DiskId='1' Source='$(var.SrcDir)\bin\i386-win-gnu\wxmsw30u_core_gcc_custom.dll' />
          </Component>
       </DirectoryRef>
 
       <!-- CW Eclipse Coldfire V1/Vx support -->
       <DirectoryRef Id="D.CW_FOR_MCU_$(var.CW_VER_UC)_MCU_bin_plugins_support_Coldfire_gdi">
          <Component Id='C.CW_FOR_MCU_$(var.CW_VER_UC).CFFiles' Guid='d8a7443c-a63f-4829-9e15-aef8219372ee' >
-            <File Id='EclipseCFFiles_$(var.CW_VER_UC)_1'   DiskId='1' Source='$(var.SrcDir)\bin\libgcc_s_dw2-1.dll' />
-            <File Id='EclipseCFFiles_$(var.CW_VER_UC)_2'   DiskId='1' Source='$(var.SrcDir)\bin\libstdc++-6.dll' />
-            <File Id='EclipseCFFiles_$(var.CW_VER_UC)_5'   DiskId='1' Source='$(var.SrcDir)\bin\libxerces-c-3-1.dll' />
+            <File Id='EclipseCFFiles_$(var.CW_VER_UC)_01'  DiskId='1' Source='$(var.SrcDir)\bin\i386-win-gnu\usbdm-gdi-cfv1.4.dll' KeyPath='yes' />
+            <File Id='EclipseCFFiles_$(var.CW_VER_UC)_01d' DiskId='1' Source='$(var.SrcDir)\bin\i386-win-gnu\usbdm-gdi-cfv1-debug.4.dll' />
+            <File Id='EclipseCFFiles_$(var.CW_VER_UC)_02'  DiskId='1' Source='$(var.SrcDir)\bin\i386-win-gnu\usbdm-gdi-cfvx.4.dll' />
+            <File Id='EclipseCFFiles_$(var.CW_VER_UC)_02d' DiskId='1' Source='$(var.SrcDir)\bin\i386-win-gnu\usbdm-gdi-cfvx-debug.4.dll' />
             
-            <!--
-            <File Id='EclipseCFFiles_$(var.CW_VER_UC)_3'   DiskId='1' Source='$(var.SrcDir)\bin\wxbase$(var.WxWidgetsVer)_gcc_custom.dll' />
-            <File Id='EclipseCFFiles_$(var.CW_VER_UC)_4'   DiskId='1' Source='$(var.SrcDir)\bin\wxmsw$(var.WxWidgetsVer)_core_gcc_custom.dll' />
-            <File Id='EclipseCFFiles_$(var.CW_VER_UC)_6'   DiskId='1' Source='$(var.SrcDir)\bin\tcl85.dll' />
-            -->
+            <File Id='EclipseCFFiles_$(var.CW_VER_UC)_03'  DiskId='1' Source='$(var.SrcDir)\bin\i386-win-gnu\usbdm-device-database.4.dll' />
+            <File Id='EclipseCFFiles_$(var.CW_VER_UC)_03d' DiskId='1' Source='$(var.SrcDir)\bin\i386-win-gnu\usbdm-device-database-debug.4.dll' />
+            <File Id='EclipseCFFiles_$(var.CW_VER_UC)_04'  DiskId='1' Source='$(var.SrcDir)\bin\i386-win-gnu\usbdm-system.4.dll' />
+            <File Id='EclipseCFFiles_$(var.CW_VER_UC)_04d' DiskId='1' Source='$(var.SrcDir)\bin\i386-win-gnu\usbdm-system-debug.4.dll' />
+            <File Id='EclipseCFFiles_$(var.CW_VER_UC)_05'  DiskId='1' Source='$(var.SrcDir)\bin\i386-win-gnu\usbdm.4.dll'/>
+            <File Id='EclipseCFFiles_$(var.CW_VER_UC)_05d' DiskId='1' Source='$(var.SrcDir)\bin\i386-win-gnu\usbdm-debug.4.dll' />
+            <File Id='EclipseCFFiles_$(var.CW_VER_UC)_06'  DiskId='1' Source='$(var.SrcDir)\bin\i386-win-gnu\usbdm-wx-plugin.4.dll' />
+            <File Id='EclipseCFFiles_$(var.CW_VER_UC)_06d' DiskId='1' Source='$(var.SrcDir)\bin\i386-win-gnu\usbdm-wx-plugin-debug.4.dll' />
 
-            <File Id='EclipseCFFiles_$(var.CW_VER_UC)_10'  DiskId='1' Source='$(var.SrcDir)\bin\usbdm.4.dll'/>
-            <File Id='EclipseCFFiles_$(var.CW_VER_UC)_10d' DiskId='1' Source='$(var.SrcDir)\bin\usbdm-debug.4.dll' />
-            <!--
-            <File Id='EclipseCFFiles_$(var.CW_VER_UC)_11'  DiskId='1' Source='$(var.SrcDir)\bin\usbdm-dsc.4.dll' />
-            <File Id='EclipseCFFiles_$(var.CW_VER_UC)_11d' DiskId='1' Source='$(var.SrcDir)\bin\usbdm-dsc-debug.4.dll' />
-            <File Id='EclipseCFFiles_$(var.CW_VER_UC)_12'  DiskId='1' Source='$(var.SrcDir)\bin\usbdm-tcl.4.dll' />
-            <File Id='EclipseCFFiles_$(var.CW_VER_UC)_12d' DiskId='1' Source='$(var.SrcDir)\bin\usbdm-tcl-debug.4.dll' />
-            <File Id='EclipseCFFiles_$(var.CW_VER_UC)_13'  DiskId='1' Source='$(var.SrcDir)\bin\usbdm-wx-plugin.4.dll' />
-            <File Id='EclipseCFFiles_$(var.CW_VER_UC)_13d' DiskId='1' Source='$(var.SrcDir)\bin\usbdm-wx-plugin-debug.4.dll' />
-            -->
-            <File Id='EclipseCFFiles_$(var.CW_VER_UC)_14'  DiskId='1' Source='$(var.SrcDir)\bin\usbdm-system.4.dll' />
-            <File Id='EclipseCFFiles_$(var.CW_VER_UC)_14d' DiskId='1' Source='$(var.SrcDir)\bin\usbdm-system-debug.4.dll' />
-            <File Id='EclipseCFFiles_$(var.CW_VER_UC)_15'  DiskId='1' Source='$(var.SrcDir)\bin\usbdm-device-database.4.dll' />
-            <File Id='EclipseCFFiles_$(var.CW_VER_UC)_15d' DiskId='1' Source='$(var.SrcDir)\bin\usbdm-device-database-debug.4.dll' />
-            <!--
-            <File Id='EclipseCFFiles_$(var.CW_VER_UC)_20'  DiskId='1' Source='$(var.SrcDir)\bin\usbdm-programmer-cfv1.4.dll' />
-            <File Id='EclipseCFFiles_$(var.CW_VER_UC)_20d' DiskId='1' Source='$(var.SrcDir)\bin\usbdm-programmer-cfv1-debug.4.dll' />
-            <File Id='EclipseCFFiles_$(var.CW_VER_UC)_21'  DiskId='1' Source='$(var.SrcDir)\bin\usbdm-programmer-cfvx.4.dll' />
-            <File Id='EclipseCFFiles_$(var.CW_VER_UC)_21d' DiskId='1' Source='$(var.SrcDir)\bin\usbdm-programmer-cfvx-debug.4.dll' />
-            -->
-            <File Id='EclipseCFFiles_$(var.CW_VER_UC)_30'  DiskId='1' Source='$(var.SrcDir)\bin\usbdm-gdi-cfv1.4.dll' KeyPath='yes' />
-            <File Id='EclipseCFFiles_$(var.CW_VER_UC)_30d' DiskId='1' Source='$(var.SrcDir)\bin\usbdm-gdi-cfv1-debug.4.dll' />
-            <File Id='EclipseCFFiles_$(var.CW_VER_UC)_31'  DiskId='1' Source='$(var.SrcDir)\bin\usbdm-gdi-cfvx.4.dll' />
-            <File Id='EclipseCFFiles_$(var.CW_VER_UC)_31d' DiskId='1' Source='$(var.SrcDir)\bin\usbdm-gdi-cfvx-debug.4.dll' />
-         </Component>
+            <File Id='EclipseCFFiles_$(var.CW_VER_UC)_mingw00'  DiskId='1' Source='$(var.SrcDir)\bin\i386-win-gnu\libbrotlicommon.dll' />
+            <File Id='EclipseCFFiles_$(var.CW_VER_UC)_mingw01'  DiskId='1' Source='$(var.SrcDir)\bin\i386-win-gnu\libbrotlidec.dll' />
+            <File Id='EclipseCFFiles_$(var.CW_VER_UC)_mingw02'  DiskId='1' Source='$(var.SrcDir)\bin\i386-win-gnu\libcrypto-1_1.dll' />
+            <File Id='EclipseCFFiles_$(var.CW_VER_UC)_mingw03'  DiskId='1' Source='$(var.SrcDir)\bin\i386-win-gnu\libcurl-4.dll' />
+            <File Id='EclipseCFFiles_$(var.CW_VER_UC)_mingw04'  DiskId='1' Source='$(var.SrcDir)\bin\i386-win-gnu\libdl.dll' />
+            <File Id='EclipseCFFiles_$(var.CW_VER_UC)_mingw05'  DiskId='1' Source='$(var.SrcDir)\bin\i386-win-gnu\libgcc_s_dw2-1.dll' />
+            <File Id='EclipseCFFiles_$(var.CW_VER_UC)_mingw06'  DiskId='1' Source='$(var.SrcDir)\bin\i386-win-gnu\libiconv-2.dll' />
+            <File Id='EclipseCFFiles_$(var.CW_VER_UC)_mingw07'  DiskId='1' Source='$(var.SrcDir)\bin\i386-win-gnu\libicudt67.dll' />
+            <File Id='EclipseCFFiles_$(var.CW_VER_UC)_mingw08'  DiskId='1' Source='$(var.SrcDir)\bin\i386-win-gnu\libicuuc67.dll' />
+            <File Id='EclipseCFFiles_$(var.CW_VER_UC)_mingw09'  DiskId='1' Source='$(var.SrcDir)\bin\i386-win-gnu\libidn2-0.dll' />
+            <File Id='EclipseCFFiles_$(var.CW_VER_UC)_mingw10'  DiskId='1' Source='$(var.SrcDir)\bin\i386-win-gnu\libintl-8.dll' />
+            <File Id='EclipseCFFiles_$(var.CW_VER_UC)_mingw11'  DiskId='1' Source='$(var.SrcDir)\bin\i386-win-gnu\libnghttp2-14.dll' />
+            <File Id='EclipseCFFiles_$(var.CW_VER_UC)_mingw12'  DiskId='1' Source='$(var.SrcDir)\bin\i386-win-gnu\libpsl-5.dll' />
+            <File Id='EclipseCFFiles_$(var.CW_VER_UC)_mingw13'  DiskId='1' Source='$(var.SrcDir)\bin\i386-win-gnu\libssh2-1.dll' />
+            <File Id='EclipseCFFiles_$(var.CW_VER_UC)_mingw14'  DiskId='1' Source='$(var.SrcDir)\bin\i386-win-gnu\libssl-1_1.dll' />
+            <File Id='EclipseCFFiles_$(var.CW_VER_UC)_mingw15'  DiskId='1' Source='$(var.SrcDir)\bin\i386-win-gnu\libstdc++-6.dll' />
+            <File Id='EclipseCFFiles_$(var.CW_VER_UC)_mingw16'  DiskId='1' Source='$(var.SrcDir)\bin\i386-win-gnu\libunistring-2.dll' />
+            <File Id='EclipseCFFiles_$(var.CW_VER_UC)_mingw17'  DiskId='1' Source='$(var.SrcDir)\bin\i386-win-gnu\libwinpthread-1.dll' />
+            <File Id='EclipseCFFiles_$(var.CW_VER_UC)_mingw18'  DiskId='1' Source='$(var.SrcDir)\bin\i386-win-gnu\libxerces-c-3-2.dll' />
+            <File Id='EclipseCFFiles_$(var.CW_VER_UC)_mingw19'  DiskId='1' Source='$(var.SrcDir)\bin\i386-win-gnu\libzstd.dll' />
+            <File Id='EclipseCFFiles_$(var.CW_VER_UC)_mingw20'  DiskId='1' Source='$(var.SrcDir)\bin\i386-win-gnu\zlib1.dll' />
+            <File Id='EclipseCFFiles_$(var.CW_VER_UC)_mingw21'  DiskId='1' Source='$(var.SrcDir)\bin\i386-win-gnu\libusb-1.0.dll' />
+            <File Id='EclipseCFFiles_$(var.CW_VER_UC)_mingw22'  DiskId='1' Source='$(var.SrcDir)\bin\i386-win-gnu\libjpeg-8.dll' />
+            <File Id='EclipseCFFiles_$(var.CW_VER_UC)_mingw23'  DiskId='1' Source='$(var.SrcDir)\bin\i386-win-gnu\libpng16-16.dll' />
+            <File Id='EclipseCFFiles_$(var.CW_VER_UC)_mingw24'  DiskId='1' Source='$(var.SrcDir)\bin\i386-win-gnu\libtiff-5.dll' />
+            <File Id='EclipseCFFiles_$(var.CW_VER_UC)_mingw25'  DiskId='1' Source='$(var.SrcDir)\bin\i386-win-gnu\wxbase30u_gcc_custom.dll' />
+            <File Id='EclipseCFFiles_$(var.CW_VER_UC)_mingw26'  DiskId='1' Source='$(var.SrcDir)\bin\i386-win-gnu\wxmsw30u_core_gcc_custom.dll' />
+        </Component>
       </DirectoryRef>
 
       <!-- CW Eclipse ARM support -->
       <DirectoryRef Id="D.CW_FOR_MCU_$(var.CW_VER_UC)_MCU_bin_plugins_support_ARM_gdi">
          <Component Id='C.CW_FOR_MCU_$(var.CW_VER_UC).ArmFiles' Guid='4d08d194-f997-408e-9da7-cf2b1d158c13' >
-            <File Id='EclipseARMFiles_$(var.CW_VER_UC)_1'   DiskId='1' Source='$(var.SrcDir)\bin\libgcc_s_dw2-1.dll' />
-            <File Id='EclipseARMFiles_$(var.CW_VER_UC)_2'   DiskId='1' Source='$(var.SrcDir)\bin\libstdc++-6.dll' />
-            <File Id='EclipseARMFiles_$(var.CW_VER_UC)_5'   DiskId='1' Source='$(var.SrcDir)\bin\libxerces-c-3-1.dll' />
-            <!--
-            <File Id='EclipseARMFiles_$(var.CW_VER_UC)_3'   DiskId='1' Source='$(var.SrcDir)\bin\wxbase$(var.WxWidgetsVer)_gcc_custom.dll' />
-            <File Id='EclipseARMFiles_$(var.CW_VER_UC)_4'   DiskId='1' Source='$(var.SrcDir)\bin\wxmsw$(var.WxWidgetsVer)_core_gcc_custom.dll' />
-            <File Id='EclipseARMFiles_$(var.CW_VER_UC)_6'   DiskId='1' Source='$(var.SrcDir)\bin\tcl85.dll' />
-            -->
-            <File Id='EclipseARMFiles_$(var.CW_VER_UC)_10'  DiskId='1' Source='$(var.SrcDir)\bin\usbdm.4.dll'/>
-            <File Id='EclipseARMFiles_$(var.CW_VER_UC)_10d' DiskId='1' Source='$(var.SrcDir)\bin\usbdm-debug.4.dll' />
-            <!--
-            <File Id='EclipseARMFiles_$(var.CW_VER_UC)_11'  DiskId='1' Source='$(var.SrcDir)\bin\usbdm-dsc.4.dll' />
-            <File Id='EclipseARMFiles_$(var.CW_VER_UC)_11d' DiskId='1' Source='$(var.SrcDir)\bin\usbdm-dsc-debug.4.dll' />
-            <File Id='EclipseARMFiles_$(var.CW_VER_UC)_12'  DiskId='1' Source='$(var.SrcDir)\bin\usbdm-tcl.4.dll' />
-            <File Id='EclipseARMFiles_$(var.CW_VER_UC)_12d' DiskId='1' Source='$(var.SrcDir)\bin\usbdm-tcl-debug.4.dll' />
-            <File Id='EclipseARMFiles_$(var.CW_VER_UC)_13'  DiskId='1' Source='$(var.SrcDir)\bin\usbdm-wx-plugin.4.dll' />
-            <File Id='EclipseARMFiles_$(var.CW_VER_UC)_13d' DiskId='1' Source='$(var.SrcDir)\bin\usbdm-wx-plugin-debug.4.dll' />
-            -->
-            <File Id='EclipseARMFiles_$(var.CW_VER_UC)_14'  DiskId='1' Source='$(var.SrcDir)\bin\usbdm-system.4.dll' />
-            <File Id='EclipseARMFiles_$(var.CW_VER_UC)_14d' DiskId='1' Source='$(var.SrcDir)\bin\usbdm-system-debug.4.dll' />
-            <File Id='EclipseARMFiles_$(var.CW_VER_UC)_15'  DiskId='1' Source='$(var.SrcDir)\bin\usbdm-device-database.4.dll' />
-            <File Id='EclipseARMFiles_$(var.CW_VER_UC)_15d' DiskId='1' Source='$(var.SrcDir)\bin\usbdm-device-database-debug.4.dll' />
-            <!--
-            <File Id='EclipseARMFiles_$(var.CW_VER_UC)_20'  DiskId='1' Source='$(var.SrcDir)\bin\usbdm-programmer-arm.4.dll' />
-            <File Id='EclipseARMFiles_$(var.CW_VER_UC)_20d' DiskId='1' Source='$(var.SrcDir)\bin\usbdm-programmer-arm-debug.4.dll' />
-            -->
-            <File Id='EclipseARMFiles_$(var.CW_VER_UC)_30'  DiskId='1' Source='$(var.SrcDir)\bin\usbdm-gdi-arm.4.dll' KeyPath='yes' />
-            <File Id='EclipseARMFiles_$(var.CW_VER_UC)_30d' DiskId='1' Source='$(var.SrcDir)\bin\usbdm-gdi-arm-debug.4.dll' />
+            <File Id='EclipseARMFiles_$(var.CW_VER_UC)_01'  DiskId='1' Source='$(var.SrcDir)\bin\i386-win-gnu\usbdm-gdi-arm.4.dll' KeyPath='yes' />
+            <File Id='EclipseARMFiles_$(var.CW_VER_UC)_01d' DiskId='1' Source='$(var.SrcDir)\bin\i386-win-gnu\usbdm-gdi-arm-debug.4.dll' />
+            <File Id='EclipseARMFiles_$(var.CW_VER_UC)_03'  DiskId='1' Source='$(var.SrcDir)\bin\i386-win-gnu\usbdm-device-database.4.dll' />
+            <File Id='EclipseARMFiles_$(var.CW_VER_UC)_03d' DiskId='1' Source='$(var.SrcDir)\bin\i386-win-gnu\usbdm-device-database-debug.4.dll' />
+            
+            <File Id='EclipseARMFiles_$(var.CW_VER_UC)_04'  DiskId='1' Source='$(var.SrcDir)\bin\i386-win-gnu\usbdm-system.4.dll' />
+            <File Id='EclipseARMFiles_$(var.CW_VER_UC)_04d' DiskId='1' Source='$(var.SrcDir)\bin\i386-win-gnu\usbdm-system-debug.4.dll' />
+            <File Id='EclipseARMFiles_$(var.CW_VER_UC)_05'  DiskId='1' Source='$(var.SrcDir)\bin\i386-win-gnu\usbdm.4.dll'/>
+            <File Id='EclipseARMFiles_$(var.CW_VER_UC)_05d' DiskId='1' Source='$(var.SrcDir)\bin\i386-win-gnu\usbdm-debug.4.dll' />
+            <File Id='EclipseARMFiles_$(var.CW_VER_UC)_06'  DiskId='1' Source='$(var.SrcDir)\bin\i386-win-gnu\usbdm-wx-plugin.4.dll' />
+            <File Id='EclipseARMFiles_$(var.CW_VER_UC)_06d' DiskId='1' Source='$(var.SrcDir)\bin\i386-win-gnu\usbdm-wx-plugin-debug.4.dll' />
+         
+            <File Id='EclipseARMFiles_$(var.CW_VER_UC)_mingw00'  DiskId='1' Source='$(var.SrcDir)\bin\i386-win-gnu\libbrotlicommon.dll' />
+            <File Id='EclipseARMFiles_$(var.CW_VER_UC)_mingw01'  DiskId='1' Source='$(var.SrcDir)\bin\i386-win-gnu\libbrotlidec.dll' />
+            <File Id='EclipseARMFiles_$(var.CW_VER_UC)_mingw02'  DiskId='1' Source='$(var.SrcDir)\bin\i386-win-gnu\libcrypto-1_1.dll' />
+            <File Id='EclipseARMFiles_$(var.CW_VER_UC)_mingw03'  DiskId='1' Source='$(var.SrcDir)\bin\i386-win-gnu\libcurl-4.dll' />
+            <File Id='EclipseARMFiles_$(var.CW_VER_UC)_mingw04'  DiskId='1' Source='$(var.SrcDir)\bin\i386-win-gnu\libdl.dll' />
+            <File Id='EclipseARMFiles_$(var.CW_VER_UC)_mingw05'  DiskId='1' Source='$(var.SrcDir)\bin\i386-win-gnu\libgcc_s_dw2-1.dll' />
+            <File Id='EclipseARMFiles_$(var.CW_VER_UC)_mingw06'  DiskId='1' Source='$(var.SrcDir)\bin\i386-win-gnu\libiconv-2.dll' />
+            <File Id='EclipseARMFiles_$(var.CW_VER_UC)_mingw07'  DiskId='1' Source='$(var.SrcDir)\bin\i386-win-gnu\libicudt67.dll' />
+            <File Id='EclipseARMFiles_$(var.CW_VER_UC)_mingw08'  DiskId='1' Source='$(var.SrcDir)\bin\i386-win-gnu\libicuuc67.dll' />
+            <File Id='EclipseARMFiles_$(var.CW_VER_UC)_mingw09'  DiskId='1' Source='$(var.SrcDir)\bin\i386-win-gnu\libidn2-0.dll' />
+            <File Id='EclipseARMFiles_$(var.CW_VER_UC)_mingw10'  DiskId='1' Source='$(var.SrcDir)\bin\i386-win-gnu\libintl-8.dll' />
+            <File Id='EclipseARMFiles_$(var.CW_VER_UC)_mingw11'  DiskId='1' Source='$(var.SrcDir)\bin\i386-win-gnu\libnghttp2-14.dll' />
+            <File Id='EclipseARMFiles_$(var.CW_VER_UC)_mingw12'  DiskId='1' Source='$(var.SrcDir)\bin\i386-win-gnu\libpsl-5.dll' />
+            <File Id='EclipseARMFiles_$(var.CW_VER_UC)_mingw13'  DiskId='1' Source='$(var.SrcDir)\bin\i386-win-gnu\libssh2-1.dll' />
+            <File Id='EclipseARMFiles_$(var.CW_VER_UC)_mingw14'  DiskId='1' Source='$(var.SrcDir)\bin\i386-win-gnu\libssl-1_1.dll' />
+            <File Id='EclipseARMFiles_$(var.CW_VER_UC)_mingw15'  DiskId='1' Source='$(var.SrcDir)\bin\i386-win-gnu\libstdc++-6.dll' />
+            <File Id='EclipseARMFiles_$(var.CW_VER_UC)_mingw16'  DiskId='1' Source='$(var.SrcDir)\bin\i386-win-gnu\libunistring-2.dll' />
+            <File Id='EclipseARMFiles_$(var.CW_VER_UC)_mingw17'  DiskId='1' Source='$(var.SrcDir)\bin\i386-win-gnu\libwinpthread-1.dll' />
+            <File Id='EclipseARMFiles_$(var.CW_VER_UC)_mingw18'  DiskId='1' Source='$(var.SrcDir)\bin\i386-win-gnu\libxerces-c-3-2.dll' />
+            <File Id='EclipseARMFiles_$(var.CW_VER_UC)_mingw19'  DiskId='1' Source='$(var.SrcDir)\bin\i386-win-gnu\libzstd.dll' />
+            <File Id='EclipseARMFiles_$(var.CW_VER_UC)_mingw20'  DiskId='1' Source='$(var.SrcDir)\bin\i386-win-gnu\zlib1.dll' />
+            <File Id='EclipseARMFiles_$(var.CW_VER_UC)_mingw21'  DiskId='1' Source='$(var.SrcDir)\bin\i386-win-gnu\libusb-1.0.dll' />
+            <File Id='EclipseARMFiles_$(var.CW_VER_UC)_mingw22'  DiskId='1' Source='$(var.SrcDir)\bin\i386-win-gnu\libjpeg-8.dll' />
+            <File Id='EclipseARMFiles_$(var.CW_VER_UC)_mingw23'  DiskId='1' Source='$(var.SrcDir)\bin\i386-win-gnu\libpng16-16.dll' />
+            <File Id='EclipseARMFiles_$(var.CW_VER_UC)_mingw24'  DiskId='1' Source='$(var.SrcDir)\bin\i386-win-gnu\libtiff-5.dll' />
+            <File Id='EclipseARMFiles_$(var.CW_VER_UC)_mingw25'  DiskId='1' Source='$(var.SrcDir)\bin\i386-win-gnu\wxbase30u_gcc_custom.dll' />
+            <File Id='EclipseARMFiles_$(var.CW_VER_UC)_mingw26'  DiskId='1' Source='$(var.SrcDir)\bin\i386-win-gnu\wxmsw30u_core_gcc_custom.dll' />
          </Component>
       </DirectoryRef>
 
       <!-- CW Eclipse DSC support V10.2 -->
       <DirectoryRef Id="D.CW_FOR_MCU_$(var.CW_VER_UC)_MCU_bin_plugins_support_DSC_gdi">
          <Component Id='C.CW_FOR_MCU_$(var.CW_VER_UC).DscFiles' Guid='b305b8ef-2f8e-4bc4-81a7-82f6d2c22867' >
-            <File Id='EclipseDSCFiles_$(var.CW_VER_UC)_1'   DiskId='1' Source='$(var.SrcDir)\bin\libgcc_s_dw2-1.dll' />
-            <File Id='EclipseDSCFiles_$(var.CW_VER_UC)_2'   DiskId='1' Source='$(var.SrcDir)\bin\libstdc++-6.dll' />
-            <File Id='EclipseDSCFiles_$(var.CW_VER_UC)_5'   DiskId='1' Source='$(var.SrcDir)\bin\libxerces-c-3-1.dll' />
-            <!--
-            <File Id='EclipseDSCFiles_$(var.CW_VER_UC)_3'   DiskId='1' Source='$(var.SrcDir)\bin\wxbase$(var.WxWidgetsVer)_gcc_custom.dll' />
-            <File Id='EclipseDSCFiles_$(var.CW_VER_UC)_4'   DiskId='1' Source='$(var.SrcDir)\bin\wxmsw$(var.WxWidgetsVer)_core_gcc_custom.dll' />
-            <File Id='EclipseDSCFiles_$(var.CW_VER_UC)_6'   DiskId='1' Source='$(var.SrcDir)\bin\tcl85.dll' />
-            -->
-            <File Id='EclipseDSCFiles_$(var.CW_VER_UC)_10'  DiskId='1' Source='$(var.SrcDir)\bin\usbdm.4.dll'/>
-            <File Id='EclipseDSCFiles_$(var.CW_VER_UC)_10d' DiskId='1' Source='$(var.SrcDir)\bin\usbdm-debug.4.dll' />
-            <!--
-            <File Id='EclipseDSCFiles_$(var.CW_VER_UC)_11'  DiskId='1' Source='$(var.SrcDir)\bin\usbdm-dsc.4.dll' />
-            <File Id='EclipseDSCFiles_$(var.CW_VER_UC)_11d' DiskId='1' Source='$(var.SrcDir)\bin\usbdm-dsc-debug.4.dll' />
-            <File Id='EclipseDSCFiles_$(var.CW_VER_UC)_12'  DiskId='1' Source='$(var.SrcDir)\bin\usbdm-tcl.4.dll' />
-            <File Id='EclipseDSCFiles_$(var.CW_VER_UC)_12d' DiskId='1' Source='$(var.SrcDir)\bin\usbdm-tcl-debug.4.dll' />
-            <File Id='EclipseDSCFiles_$(var.CW_VER_UC)_13'  DiskId='1' Source='$(var.SrcDir)\bin\usbdm-wx-plugin.4.dll' />
-            <File Id='EclipseDSCFiles_$(var.CW_VER_UC)_13d' DiskId='1' Source='$(var.SrcDir)\bin\usbdm-wx-plugin-debug.4.dll' />
-            -->
-            <File Id='EclipseDSCFiles_$(var.CW_VER_UC)_14'  DiskId='1' Source='$(var.SrcDir)\bin\usbdm-system.4.dll' />
-            <File Id='EclipseDSCFiles_$(var.CW_VER_UC)_14d' DiskId='1' Source='$(var.SrcDir)\bin\usbdm-system-debug.4.dll' />
-            <File Id='EclipseDSCFiles_$(var.CW_VER_UC)_15'  DiskId='1' Source='$(var.SrcDir)\bin\usbdm-device-database.4.dll' />
-            <File Id='EclipseDSCFiles_$(var.CW_VER_UC)_15d' DiskId='1' Source='$(var.SrcDir)\bin\usbdm-device-database-debug.4.dll' />
-            <!--
-            <File Id='EclipseDSCFiles_$(var.CW_VER_UC)_20'  DiskId='1' Source='$(var.SrcDir)\bin\usbdm-programmer-dsc.4.dll' />
-            <File Id='EclipseDSCFiles_$(var.CW_VER_UC)_20d' DiskId='1' Source='$(var.SrcDir)\bin\usbdm-programmer-dsc-debug.4.dll' />
-            -->
-            <File Id='EclipseDSCFiles_$(var.CW_VER_UC)_30'  DiskId='1' Source='$(var.SrcDir)\bin\usbdm-gdi-dsc.4.dll' KeyPath='yes' />
-            <File Id='EclipseDSCFiles_$(var.CW_VER_UC)_30d' DiskId='1' Source='$(var.SrcDir)\bin\usbdm-gdi-dsc-debug.4.dll' />
+            <File Id='EclipseDSCFiles_$(var.CW_VER_UC)_01'  DiskId='1' Source='$(var.SrcDir)\bin\i386-win-gnu\usbdm-gdi-dsc.4.dll' KeyPath='yes' />
+            <File Id='EclipseDSCFiles_$(var.CW_VER_UC)_01d' DiskId='1' Source='$(var.SrcDir)\bin\i386-win-gnu\usbdm-gdi-dsc-debug.4.dll' />
+            
+            <File Id='EclipseDSCFiles_$(var.CW_VER_UC)_03'  DiskId='1' Source='$(var.SrcDir)\bin\i386-win-gnu\usbdm-device-database.4.dll' />
+            <File Id='EclipseDSCFiles_$(var.CW_VER_UC)_03d' DiskId='1' Source='$(var.SrcDir)\bin\i386-win-gnu\usbdm-device-database-debug.4.dll' />
+            <File Id='EclipseDSCFiles_$(var.CW_VER_UC)_04'  DiskId='1' Source='$(var.SrcDir)\bin\i386-win-gnu\usbdm-system.4.dll' />
+            <File Id='EclipseDSCFiles_$(var.CW_VER_UC)_04d' DiskId='1' Source='$(var.SrcDir)\bin\i386-win-gnu\usbdm-system-debug.4.dll' />
+            <File Id='EclipseDSCFiles_$(var.CW_VER_UC)_05'  DiskId='1' Source='$(var.SrcDir)\bin\i386-win-gnu\usbdm.4.dll'/>
+            <File Id='EclipseDSCFiles_$(var.CW_VER_UC)_05d' DiskId='1' Source='$(var.SrcDir)\bin\i386-win-gnu\usbdm-debug.4.dll' />
+            <File Id='EclipseDSCFiles_$(var.CW_VER_UC)_06'  DiskId='1' Source='$(var.SrcDir)\bin\i386-win-gnu\usbdm-wx-plugin.4.dll' />
+            <File Id='EclipseDSCFiles_$(var.CW_VER_UC)_06d' DiskId='1' Source='$(var.SrcDir)\bin\i386-win-gnu\usbdm-wx-plugin-debug.4.dll' />
+         
+            <File Id='EclipseDSCFiles_$(var.CW_VER_UC)_mingw00'  DiskId='1' Source='$(var.SrcDir)\bin\i386-win-gnu\libbrotlicommon.dll' />
+            <File Id='EclipseDSCFiles_$(var.CW_VER_UC)_mingw01'  DiskId='1' Source='$(var.SrcDir)\bin\i386-win-gnu\libbrotlidec.dll' />
+            <File Id='EclipseDSCFiles_$(var.CW_VER_UC)_mingw02'  DiskId='1' Source='$(var.SrcDir)\bin\i386-win-gnu\libcrypto-1_1.dll' />
+            <File Id='EclipseDSCFiles_$(var.CW_VER_UC)_mingw03'  DiskId='1' Source='$(var.SrcDir)\bin\i386-win-gnu\libcurl-4.dll' />
+            <File Id='EclipseDSCFiles_$(var.CW_VER_UC)_mingw04'  DiskId='1' Source='$(var.SrcDir)\bin\i386-win-gnu\libdl.dll' />
+            <File Id='EclipseDSCFiles_$(var.CW_VER_UC)_mingw05'  DiskId='1' Source='$(var.SrcDir)\bin\i386-win-gnu\libgcc_s_dw2-1.dll' />
+            <File Id='EclipseDSCFiles_$(var.CW_VER_UC)_mingw06'  DiskId='1' Source='$(var.SrcDir)\bin\i386-win-gnu\libiconv-2.dll' />
+            <File Id='EclipseDSCFiles_$(var.CW_VER_UC)_mingw07'  DiskId='1' Source='$(var.SrcDir)\bin\i386-win-gnu\libicudt67.dll' />
+            <File Id='EclipseDSCFiles_$(var.CW_VER_UC)_mingw08'  DiskId='1' Source='$(var.SrcDir)\bin\i386-win-gnu\libicuuc67.dll' />
+            <File Id='EclipseDSCFiles_$(var.CW_VER_UC)_mingw09'  DiskId='1' Source='$(var.SrcDir)\bin\i386-win-gnu\libidn2-0.dll' />
+            <File Id='EclipseDSCFiles_$(var.CW_VER_UC)_mingw10'  DiskId='1' Source='$(var.SrcDir)\bin\i386-win-gnu\libintl-8.dll' />
+            <File Id='EclipseDSCFiles_$(var.CW_VER_UC)_mingw11'  DiskId='1' Source='$(var.SrcDir)\bin\i386-win-gnu\libnghttp2-14.dll' />
+            <File Id='EclipseDSCFiles_$(var.CW_VER_UC)_mingw12'  DiskId='1' Source='$(var.SrcDir)\bin\i386-win-gnu\libpsl-5.dll' />
+            <File Id='EclipseDSCFiles_$(var.CW_VER_UC)_mingw13'  DiskId='1' Source='$(var.SrcDir)\bin\i386-win-gnu\libssh2-1.dll' />
+            <File Id='EclipseDSCFiles_$(var.CW_VER_UC)_mingw14'  DiskId='1' Source='$(var.SrcDir)\bin\i386-win-gnu\libssl-1_1.dll' />
+            <File Id='EclipseDSCFiles_$(var.CW_VER_UC)_mingw15'  DiskId='1' Source='$(var.SrcDir)\bin\i386-win-gnu\libstdc++-6.dll' />
+            <File Id='EclipseDSCFiles_$(var.CW_VER_UC)_mingw16'  DiskId='1' Source='$(var.SrcDir)\bin\i386-win-gnu\libunistring-2.dll' />
+            <File Id='EclipseDSCFiles_$(var.CW_VER_UC)_mingw17'  DiskId='1' Source='$(var.SrcDir)\bin\i386-win-gnu\libwinpthread-1.dll' />
+            <File Id='EclipseDSCFiles_$(var.CW_VER_UC)_mingw18'  DiskId='1' Source='$(var.SrcDir)\bin\i386-win-gnu\libxerces-c-3-2.dll' />
+            <File Id='EclipseDSCFiles_$(var.CW_VER_UC)_mingw19'  DiskId='1' Source='$(var.SrcDir)\bin\i386-win-gnu\libzstd.dll' />
+            <File Id='EclipseDSCFiles_$(var.CW_VER_UC)_mingw20'  DiskId='1' Source='$(var.SrcDir)\bin\i386-win-gnu\zlib1.dll' />
+            <File Id='EclipseDSCFiles_$(var.CW_VER_UC)_mingw21'  DiskId='1' Source='$(var.SrcDir)\bin\i386-win-gnu\libusb-1.0.dll' />
+            <File Id='EclipseDSCFiles_$(var.CW_VER_UC)_mingw22'  DiskId='1' Source='$(var.SrcDir)\bin\i386-win-gnu\libjpeg-8.dll' />
+            <File Id='EclipseDSCFiles_$(var.CW_VER_UC)_mingw23'  DiskId='1' Source='$(var.SrcDir)\bin\i386-win-gnu\libpng16-16.dll' />
+            <File Id='EclipseDSCFiles_$(var.CW_VER_UC)_mingw24'  DiskId='1' Source='$(var.SrcDir)\bin\i386-win-gnu\libtiff-5.dll' />
+            <File Id='EclipseDSCFiles_$(var.CW_VER_UC)_mingw25'  DiskId='1' Source='$(var.SrcDir)\bin\i386-win-gnu\wxbase30u_gcc_custom.dll' />
+            <File Id='EclipseDSCFiles_$(var.CW_VER_UC)_mingw26'  DiskId='1' Source='$(var.SrcDir)\bin\i386-win-gnu\wxmsw30u_core_gcc_custom.dll' />
          </Component>
       </DirectoryRef>
 
       <!-- CW Eclipse S12Z support V10.2 -->
       <DirectoryRef Id="D.CW_FOR_MCU_$(var.CW_VER_UC)_MCU_bin_plugins_support_S12Z_gdi">
          <Component Id='C.CW_FOR_MCU_$(var.CW_VER_UC).S12ZFiles' Guid='61b33712-04c2-4a83-a6f4-bf3737770dc0' >
-            <File Id='EclipseS12ZFiles_$(var.CW_VER_UC)_1'   DiskId='1' Source='$(var.SrcDir)\bin\libgcc_s_dw2-1.dll' />
-            <File Id='EclipseS12ZFiles_$(var.CW_VER_UC)_2'   DiskId='1' Source='$(var.SrcDir)\bin\libstdc++-6.dll' />
-            <File Id='EclipseS12ZFiles_$(var.CW_VER_UC)_5'   DiskId='1' Source='$(var.SrcDir)\bin\libxerces-c-3-1.dll' />
-            <!--
-            <File Id='EclipseS12ZFiles_$(var.CW_VER_UC)_3'   DiskId='1' Source='$(var.SrcDir)\bin\wxbase$(var.WxWidgetsVer)_gcc_custom.dll' />
-            <File Id='EclipseS12ZFiles_$(var.CW_VER_UC)_4'   DiskId='1' Source='$(var.SrcDir)\bin\wxmsw$(var.WxWidgetsVer)_core_gcc_custom.dll' />
-            <File Id='EclipseS12ZFiles_$(var.CW_VER_UC)_6'   DiskId='1' Source='$(var.SrcDir)\bin\tcl85.dll' />
-            -->
-            <File Id='EclipseS12ZFiles_$(var.CW_VER_UC)_10'  DiskId='1' Source='$(var.SrcDir)\bin\usbdm.4.dll'/>
-            <File Id='EclipseS12ZFiles_$(var.CW_VER_UC)_10d' DiskId='1' Source='$(var.SrcDir)\bin\usbdm-debug.4.dll' />
-            <!--
-            <File Id='EclipseS12ZFiles_$(var.CW_VER_UC)_11'  DiskId='1' Source='$(var.SrcDir)\bin\usbdm-dsc.4.dll' />
-            <File Id='EclipseS12ZFiles_$(var.CW_VER_UC)_11d' DiskId='1' Source='$(var.SrcDir)\bin\usbdm-dsc-debug.4.dll' />
-            <File Id='EclipseS12ZFiles_$(var.CW_VER_UC)_12'  DiskId='1' Source='$(var.SrcDir)\bin\usbdm-tcl.4.dll' />
-            <File Id='EclipseS12ZFiles_$(var.CW_VER_UC)_12d' DiskId='1' Source='$(var.SrcDir)\bin\usbdm-tcl-debug.4.dll' />
-            <File Id='EclipseS12ZFiles_$(var.CW_VER_UC)_13'  DiskId='1' Source='$(var.SrcDir)\bin\usbdm-wx-plugin.4.dll' />
-            <File Id='EclipseS12ZFiles_$(var.CW_VER_UC)_13d' DiskId='1' Source='$(var.SrcDir)\bin\usbdm-wx-plugin-debug.4.dll' />
-            -->
-            <File Id='EclipseS12ZFiles_$(var.CW_VER_UC)_14'  DiskId='1' Source='$(var.SrcDir)\bin\usbdm-system.4.dll' />
-            <File Id='EclipseS12ZFiles_$(var.CW_VER_UC)_14d' DiskId='1' Source='$(var.SrcDir)\bin\usbdm-system-debug.4.dll' />
-            <File Id='EclipseS12ZFiles_$(var.CW_VER_UC)_15'  DiskId='1' Source='$(var.SrcDir)\bin\usbdm-device-database.4.dll' />
-            <File Id='EclipseS12ZFiles_$(var.CW_VER_UC)_15d' DiskId='1' Source='$(var.SrcDir)\bin\usbdm-device-database-debug.4.dll' />
-            <!--
-            <File Id='EclipseS12ZFiles_$(var.CW_VER_UC)_20'  DiskId='1' Source='$(var.SrcDir)\bin\usbdm-programmer-s12z.4.dll' />
-            <File Id='EclipseS12ZFiles_$(var.CW_VER_UC)_20d' DiskId='1' Source='$(var.SrcDir)\bin\usbdm-programmer-s12z-debug.4.dll' />
-            -->
-            <File Id='EclipseS12ZFiles_$(var.CW_VER_UC)_30'  DiskId='1' Source='$(var.SrcDir)\bin\usbdm-gdi-s12z.4.dll' KeyPath='yes' />
-            <File Id='EclipseS12ZFiles_$(var.CW_VER_UC)_30d' DiskId='1' Source='$(var.SrcDir)\bin\usbdm-gdi-s12z-debug.4.dll' />
+            <File Id='EclipseS12ZFiles_$(var.CW_VER_UC)_01'  DiskId='1' Source='$(var.SrcDir)\bin\i386-win-gnu\usbdm-gdi-s12z.4.dll' KeyPath='yes' />
+            <File Id='EclipseS12ZFiles_$(var.CW_VER_UC)_01d' DiskId='1' Source='$(var.SrcDir)\bin\i386-win-gnu\usbdm-gdi-s12z-debug.4.dll' />
+            
+            <File Id='EclipseS12ZFiles_$(var.CW_VER_UC)_03'  DiskId='1' Source='$(var.SrcDir)\bin\i386-win-gnu\usbdm-device-database.4.dll' />
+            <File Id='EclipseS12ZFiles_$(var.CW_VER_UC)_03d' DiskId='1' Source='$(var.SrcDir)\bin\i386-win-gnu\usbdm-device-database-debug.4.dll' />
+            <File Id='EclipseS12ZFiles_$(var.CW_VER_UC)_04'  DiskId='1' Source='$(var.SrcDir)\bin\i386-win-gnu\usbdm-system.4.dll' />
+            <File Id='EclipseS12ZFiles_$(var.CW_VER_UC)_04d' DiskId='1' Source='$(var.SrcDir)\bin\i386-win-gnu\usbdm-system-debug.4.dll' />
+            <File Id='EclipseS12ZFiles_$(var.CW_VER_UC)_05'  DiskId='1' Source='$(var.SrcDir)\bin\i386-win-gnu\usbdm.4.dll'/>
+            <File Id='EclipseS12ZFiles_$(var.CW_VER_UC)_05d' DiskId='1' Source='$(var.SrcDir)\bin\i386-win-gnu\usbdm-debug.4.dll' />
+            <File Id='EclipseS12ZFiles_$(var.CW_VER_UC)_06'  DiskId='1' Source='$(var.SrcDir)\bin\i386-win-gnu\usbdm-wx-plugin.4.dll' />
+            <File Id='EclipseS12ZFiles_$(var.CW_VER_UC)_06d' DiskId='1' Source='$(var.SrcDir)\bin\i386-win-gnu\usbdm-wx-plugin-debug.4.dll' />
+         
+            <File Id='EclipseS12ZFiles_$(var.CW_VER_UC)_mingw00'  DiskId='1' Source='$(var.SrcDir)\bin\i386-win-gnu\libbrotlicommon.dll' />
+            <File Id='EclipseS12ZFiles_$(var.CW_VER_UC)_mingw01'  DiskId='1' Source='$(var.SrcDir)\bin\i386-win-gnu\libbrotlidec.dll' />
+            <File Id='EclipseS12ZFiles_$(var.CW_VER_UC)_mingw02'  DiskId='1' Source='$(var.SrcDir)\bin\i386-win-gnu\libcrypto-1_1.dll' />
+            <File Id='EclipseS12ZFiles_$(var.CW_VER_UC)_mingw03'  DiskId='1' Source='$(var.SrcDir)\bin\i386-win-gnu\libcurl-4.dll' />
+            <File Id='EclipseS12ZFiles_$(var.CW_VER_UC)_mingw04'  DiskId='1' Source='$(var.SrcDir)\bin\i386-win-gnu\libdl.dll' />
+            <File Id='EclipseS12ZFiles_$(var.CW_VER_UC)_mingw05'  DiskId='1' Source='$(var.SrcDir)\bin\i386-win-gnu\libgcc_s_dw2-1.dll' />
+            <File Id='EclipseS12ZFiles_$(var.CW_VER_UC)_mingw06'  DiskId='1' Source='$(var.SrcDir)\bin\i386-win-gnu\libiconv-2.dll' />
+            <File Id='EclipseS12ZFiles_$(var.CW_VER_UC)_mingw07'  DiskId='1' Source='$(var.SrcDir)\bin\i386-win-gnu\libicudt67.dll' />
+            <File Id='EclipseS12ZFiles_$(var.CW_VER_UC)_mingw08'  DiskId='1' Source='$(var.SrcDir)\bin\i386-win-gnu\libicuuc67.dll' />
+            <File Id='EclipseS12ZFiles_$(var.CW_VER_UC)_mingw09'  DiskId='1' Source='$(var.SrcDir)\bin\i386-win-gnu\libidn2-0.dll' />
+            <File Id='EclipseS12ZFiles_$(var.CW_VER_UC)_mingw10'  DiskId='1' Source='$(var.SrcDir)\bin\i386-win-gnu\libintl-8.dll' />
+            <File Id='EclipseS12ZFiles_$(var.CW_VER_UC)_mingw11'  DiskId='1' Source='$(var.SrcDir)\bin\i386-win-gnu\libnghttp2-14.dll' />
+            <File Id='EclipseS12ZFiles_$(var.CW_VER_UC)_mingw12'  DiskId='1' Source='$(var.SrcDir)\bin\i386-win-gnu\libpsl-5.dll' />
+            <File Id='EclipseS12ZFiles_$(var.CW_VER_UC)_mingw13'  DiskId='1' Source='$(var.SrcDir)\bin\i386-win-gnu\libssh2-1.dll' />
+            <File Id='EclipseS12ZFiles_$(var.CW_VER_UC)_mingw14'  DiskId='1' Source='$(var.SrcDir)\bin\i386-win-gnu\libssl-1_1.dll' />
+            <File Id='EclipseS12ZFiles_$(var.CW_VER_UC)_mingw15'  DiskId='1' Source='$(var.SrcDir)\bin\i386-win-gnu\libstdc++-6.dll' />
+            <File Id='EclipseS12ZFiles_$(var.CW_VER_UC)_mingw16'  DiskId='1' Source='$(var.SrcDir)\bin\i386-win-gnu\libunistring-2.dll' />
+            <File Id='EclipseS12ZFiles_$(var.CW_VER_UC)_mingw17'  DiskId='1' Source='$(var.SrcDir)\bin\i386-win-gnu\libwinpthread-1.dll' />
+            <File Id='EclipseS12ZFiles_$(var.CW_VER_UC)_mingw18'  DiskId='1' Source='$(var.SrcDir)\bin\i386-win-gnu\libxerces-c-3-2.dll' />
+            <File Id='EclipseS12ZFiles_$(var.CW_VER_UC)_mingw19'  DiskId='1' Source='$(var.SrcDir)\bin\i386-win-gnu\libzstd.dll' />
+            <File Id='EclipseS12ZFiles_$(var.CW_VER_UC)_mingw20'  DiskId='1' Source='$(var.SrcDir)\bin\i386-win-gnu\zlib1.dll' />
+            <File Id='EclipseS12ZFiles_$(var.CW_VER_UC)_mingw21'  DiskId='1' Source='$(var.SrcDir)\bin\i386-win-gnu\libusb-1.0.dll' />
+            <File Id='EclipseS12ZFiles_$(var.CW_VER_UC)_mingw22'  DiskId='1' Source='$(var.SrcDir)\bin\i386-win-gnu\libjpeg-8.dll' />
+            <File Id='EclipseS12ZFiles_$(var.CW_VER_UC)_mingw23'  DiskId='1' Source='$(var.SrcDir)\bin\i386-win-gnu\libpng16-16.dll' />
+            <File Id='EclipseS12ZFiles_$(var.CW_VER_UC)_mingw24'  DiskId='1' Source='$(var.SrcDir)\bin\i386-win-gnu\libtiff-5.dll' />
+            <File Id='EclipseS12ZFiles_$(var.CW_VER_UC)_mingw25'  DiskId='1' Source='$(var.SrcDir)\bin\i386-win-gnu\wxbase30u_gcc_custom.dll' />
+            <File Id='EclipseS12ZFiles_$(var.CW_VER_UC)_mingw26'  DiskId='1' Source='$(var.SrcDir)\bin\i386-win-gnu\wxmsw30u_core_gcc_custom.dll' />
          </Component>
       </DirectoryRef>
 
-      <!-- CW Eclipse launch configartions support -->
+      <!-- CW Eclipse launch configurations support -->
       <DirectoryRef Id="D.CW_FOR_MCU_$(var.CW_VER_UC)_MCU_lib_wizard_data_launch_config">
          <Component Id='C.CW_FOR_MCU_$(var.CW_VER_UC).LaunchFiles' Guid='f4843212-af5f-4c1a-b8a4-c5aba8692649' >
             <File Id='EclipseLaunchFiles1_$(var.CW_VER_UC)' DiskId='1' Source='$(var.SrcDir)\LaunchConfig\usbdm_arm.xml'     KeyPath='yes' />
@@ -392,29 +440,29 @@
          <Component Id='C.PatchCodewarriorWizardsMenu_$(var.CW_VER_UC)' Guid='*'>
             <RegistryValue Root='HKCU' Key="Software\$(var.Manufacturer)\$(var.ProductName)"
                            Type='string' Name='PatchCodewarriorWizardsMenu_MCU_10.$(var.CW_VER_UC)' Value="" KeyPath='yes' />
-            <Shortcut Id="Sc.PatchCW_V10_NewWizard_$(var.CW_VER_UC)" 
+            <Shortcut Id="Sc.PatchCW_V10_NewWizard_$(var.CW_VER_UC)"
                Name="Modify CW for MCU $(var.CW_VER_UC) New Project Wizard"
                Target="[INSTALLDIR]mergeXml.exe"
                Description="Adds USBDM targets to CW for MCU 10.$(var.CW_VER_UC) New Project Wizard"
-               WorkingDirectory='INSTALLDIR' Icon="ChipIcon.exe" IconIndex="0" Advertise="no" 
+               WorkingDirectory='INSTALLDIR' Icon="ChipIcon.exe" IconIndex="0" Advertise="no"
                Arguments="-p &quot;[D.CW_$(var.CW_VER_UC)_EclipsePlugins]com.freescale.mcu.projectwizard_1.*.*.*\\&quot; &quot;plugin.xml&quot; &quot;[D.WizardPatchData]PatchNewWizardPlugin_$(var.CW_VER_UC).xml&quot;"/>
-            <Shortcut Id="Sc.PatchCW_V10_ChangeWizard_$(var.CW_VER_UC)" 
+            <Shortcut Id="Sc.PatchCW_V10_ChangeWizard_$(var.CW_VER_UC)"
                Name="Modify CW for MCU $(var.CW_VER_UC) ELF Importer Wizard"
                Target="[INSTALLDIR]mergeXml.exe"
                Description="Adds USBDM targets to CW for MCU $(var.CW_VER_UC) ELF Importer Project Wizard"
-               WorkingDirectory='INSTALLDIR' Icon="ChipIcon.exe" IconIndex="0" Advertise="no" 
+               WorkingDirectory='INSTALLDIR' Icon="ChipIcon.exe" IconIndex="0" Advertise="no"
                Arguments="-p &quot;[D.CW_$(var.CW_VER_UC)_EclipsePlugins]com.freescale.mcu.elfimporter_10.*.*.*\\&quot; &quot;plugin.xml&quot; &quot;[D.WizardPatchData]PatchElfImporterWizardPlugin_$(var.CW_VER_UC).xml&quot;"/>
-            <Shortcut Id="Sc.PatchCW_V10_MQXLiteNewWizard_$(var.CW_VER_UC)" 
+            <Shortcut Id="Sc.PatchCW_V10_MQXLiteNewWizard_$(var.CW_VER_UC)"
                Name="Modify CW for MCU $(var.CW_VER_UC) MQX Lite New Project Wizard"
                Target="[INSTALLDIR]mergeXml.exe"
                Description="Adds USBDM targets to CW for MCU 10.$(var.CW_VER_UC) MQX Lite New Project Wizard"
-               WorkingDirectory='INSTALLDIR' Icon="ChipIcon.exe" IconIndex="0" Advertise="no" 
+               WorkingDirectory='INSTALLDIR' Icon="ChipIcon.exe" IconIndex="0" Advertise="no"
                Arguments="-p &quot;[D.CW_$(var.CW_VER_UC)_EclipsePlugins]com.freescale.mcu.mqxlite.projectwizard_1.*.*.*\\&quot; &quot;plugin.xml&quot; &quot;[D.WizardPatchData]PatchMQXLiteNewProjectWizard_$(var.CW_VER_UC).xml&quot;"/>
             <Shortcut Id="Sc.RefreshCodewarrior_$(var.CW_VER_UC)"
                Name="Refresh Codewarrior $(var.CW_VER_UC) Configuration"
                Target="[D.ECLIPSE_$(var.ECLIPSE_VER)_CDT]cwide.exe"
-               Description="Causes Codewarrior Eclipse to re-initialise its configuration cache." 
-               WorkingDirectory='D.ECLIPSE_$(var.ECLIPSE_VER)_CDT' Advertise="no" 
+               Description="Causes Codewarrior Eclipse to re-initialise its configuration cache."
+               WorkingDirectory='D.ECLIPSE_$(var.ECLIPSE_VER)_CDT' Advertise="no"
                Arguments="-clean -initialize" />
          </Component>
       </DirectoryRef>

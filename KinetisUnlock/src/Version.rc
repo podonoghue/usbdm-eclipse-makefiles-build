@@ -1,4 +1,5 @@
-#include "Version.h"
+// There is a bug in windres that prevents finding files in -Idirectories so this hack
+#include "../../Shared/src/Version.h"
 
 #include <windows.h>
 
@@ -13,8 +14,8 @@
 //
 LANGUAGE LANG_ENGLISH, SUBLANG_ENGLISH_AUS
 1 VERSIONINFO
-    FILEVERSION     VERSION_MAJOR,VERSION_MINOR,VERSION_MICRO,VERSION_NANO
-    PRODUCTVERSION  VERSION_MAJOR,VERSION_MINOR,VERSION_MICRO,VERSION_NANO
+    FILEVERSION     USBDM_VERSION_MAJOR,USBDM_VERSION_MINOR,USBDM_VERSION_MICRO,USBDM_VERSION_NANO
+    PRODUCTVERSION  USBDM_VERSION_MAJOR,USBDM_VERSION_MINOR,USBDM_VERSION_MICRO,USBDM_VERSION_NANO
     FILEOS          VOS_NT
 #ifdef INTERACTIVE    
     FILETYPE        VFT_APP
@@ -28,11 +29,11 @@ BEGIN
         BLOCK "040904E4"
         BEGIN
             VALUE "CompanyName",      "pgo"
-            VALUE "FileDescription",  "USBDM API Example"
-            VALUE "FileVersion",      VERSION_STRING
+            VALUE "FileDescription",  "Kinetis Unlocker"
+            VALUE "FileVersion",      USBDM_VERSION_STRING
             VALUE "InternalName",     ""
             VALUE "ProductName",      "USBDM"
-            VALUE "ProductVersion",   VERSION_STRING
+            VALUE "ProductVersion",   USBDM_VERSION_STRING
         END
     END
 
@@ -52,3 +53,11 @@ END
 
 LANGUAGE LANG_ENGLISH, SUBLANG_ENGLISH_AUS
 
+#define RT_MANIFEST  24
+#define APP_MANIFEST  1
+
+APP_MANIFEST RT_MANIFEST manifest.xml
+
+#ifdef USE_ICON    
+   IDI_APPICON ICON "Hardware-Chip.ico"
+#endif

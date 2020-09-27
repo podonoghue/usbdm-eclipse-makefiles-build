@@ -50,17 +50,19 @@
          <Component Id='C.FREEMASTER_V$(var.FM_VER).Marker' Guid='46e06be2-2b72-4c5f-a1f6-8c95dd679569' >
             <File Id='FREEMASTER_V$(var.FM_VER)' DiskId='1' Source='USBDM_Installed.txt' KeyPath='yes' />
             <!-- Needs these DLLs in EXEs directory as Freemaster already installs old version in Windows directory -->
-            <File Id='FREEMASTER_V$(var.FM_VER)Files4' DiskId='1' Source='$(var.SrcDir)\bin\libgcc_s_dw2-1.dll' />
-            <File Id='FREEMASTER_V$(var.FM_VER)Files5' DiskId='1' Source='$(var.SrcDir)\bin\libstdc++-6.dll' />
+            <File Id='FREEMASTER_V$(var.FM_VER)Files1' DiskId='1' Source='$(var.SrcDir)\bin\i386-win-gnu\libgcc_s_dw2-1.dll' />
+            <File Id='FREEMASTER_V$(var.FM_VER)Files2' DiskId='1' Source='$(var.SrcDir)\bin\i386-win-gnu\libstdc++-6.dll' />
+            <File Id='FREEMASTER_V$(var.FM_VER)Files3' DiskId='1' Source='$(var.SrcDir)\bin\i386-win-gnu\libusb-1.0.dll' />
+            <File Id='FREEMASTER_V$(var.FM_VER)Files4' DiskId='1' Source='$(var.SrcDir)\bin\i386-win-gnu\libwinpthread-1.dll' />
          </Component>
       </DirectoryRef>
 
       <!-- Freemaster Support -->
       <DirectoryRef Id="D.FREEMASTER_V$(var.FM_VER)_Plugins_bdm">
          <Component Id='C.FREEMASTER_V$(var.FM_VER).Files' Guid='b11e7e67-d646-473d-b4d5-662a4d12c160' >
-            <File Id='FREEMASTER_V$(var.FM_VER)Files1' DiskId='1' Source='$(var.SrcDir)\bin\usbdm.4.dll'  KeyPath='yes'  />
-            <File Id='FREEMASTER_V$(var.FM_VER)Files2' DiskId='1' Source='$(var.SrcDir)\bin\usbdm-arm.4.dll' />
-            <File Id='FREEMASTER_V$(var.FM_VER)Files3' DiskId='1' Source='$(var.SrcDir)\bin\usbdm-dsc.4.dll' />
+            <File Id='FREEMASTER_V$(var.FM_VER)Files10' DiskId='1' Source='$(var.SrcDir)\bin\i386-win-gnu\usbdm.4.dll'  KeyPath='yes'  />
+            <File Id='FREEMASTER_V$(var.FM_VER)Files11' DiskId='1' Source='$(var.SrcDir)\bin\i386-win-gnu\usbdm-arm.4.dll' />
+            <File Id='FREEMASTER_V$(var.FM_VER)Files12' DiskId='1' Source='$(var.SrcDir)\bin\i386-win-gnu\usbdm-dsc.4.dll' />
          </Component>
       </DirectoryRef>
 

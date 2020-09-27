@@ -4,7 +4,6 @@
 
    <?define Manufacturer="pgo" ?>
    <?define ProductName="USBDM" ?>
-   <!--?define ProductVersion="4.9.0" ?-->                        <!-- Defined on command line -->
    <?define ProductCode="*" ?> 
    <?define UpgradeCode="9bd8ce56-449a-4787-9c20-feb701416411" ?> <!-- Don't change        -->
    <?define InfoURL="http://usbdm.sourceforge.net" ?>
@@ -12,8 +11,9 @@
    <?define DescSRecord="Freescale S-Record binary file" ?>
    <?define ExplorerMenuOpen="Open" ?>
 
-   <!-- ?define WxWidgetsVer="295u" ?-->
-   
+   <?define i386_Bin="i386_Bin" ?>
+   <?define x86_64_Bin="x86_64_Bin" ?>
+
    <Product
       Name="$(var.ProductName)"
       Id="$(var.ProductCode)"
@@ -29,12 +29,14 @@
          Description="$(var.ProductName) Installer"
          Comments="$(var.ProductName) Package"
          Manufacturer="$(var.Manufacturer)"
-         InstallerVersion='100' Languages='1033' Compressed='yes' SummaryCodepage='1252' />
+         InstallerVersion='200' Languages='1033' Compressed='yes' SummaryCodepage='1252' 
+         Platform="x64" />
 
       <Media Id='1' Cabinet="disk1.cab" EmbedCab='yes' DiskPrompt="$(var.ProductCode) Media" />
 
       <MajorUpgrade
-         AllowSameVersionUpgrades="yes"
+         AllowDowngrades="no"
+         MigrateFeatures="yes"
          DowngradeErrorMessage="A later version of [ProductName] is already installed. Setup will now exit." />
 
       <Property Id='ARPCOMMENTS'>Programmer for Freescale processors</Property>
@@ -56,19 +58,20 @@
       <!--====================================================== -->
       <!--           Directory structure                         -->
       <Directory Id='TARGETDIR' Name='SourceDir'>
-         <Directory Id='ProgramFilesFolder' Name='PFiles'>
+         <Directory Id='ProgramFiles64Folder' Name='PFiles'>
             <Directory Id="D.CODESOURCERY" Name="CodeSourcery"/>
 
             <Directory Id='MANUFACTURER_FOLDER' Name="$(var.Manufacturer)">
                <Directory Id="D.CodewarriorUpdateSite"   Name='CodewarriorUpdateSite' />
                <Directory Id="D.EclipseUpdateSite"       Name='EclipseUpdateSite' />
                <Directory Id='INSTALLDIR' Name="$(var.ProductName) $(var.ProductVersion)">
+                  <Directory Id="D.i386_Bin"             Name='i386-win-gnu' />
                   <Directory Id="D.Stationery"           Name='Stationery' />
                   <Directory Id="D.DeviceData"           Name='DeviceData' />
                   <Directory Id="D.WizardPatchData"      Name='WizardPatches' />
                   <Directory Id="D.FlashImages"          Name='FlashImages' />
                   <Directory Id="D.Examples"             Name='Examples' />
-                  <Component Id='C.ApplicationDirectoryKey' Guid='*'>
+                  <Component Id='C.ApplicationDirectoryKey' Guid='*' Win64="yes">
                      <RegistryValue Root='HKLM' Key="Software\$(var.Manufacturer)\$(var.ProductName)"
                                     Type='string' Name='InstallationDirectory' Value="[INSTALLDIR]" KeyPath='yes' />
                   </Component>
@@ -97,22 +100,13 @@
       
       <!--======================================================-->
       <!-- Binary containing custom actions -->
-      <Binary Id='MyCustomAction' SourceFile='$(var.SrcDir)\bin\MyCustomAction.dll' />
+      <!--Binary Id='MyCustomAction' SourceFile='$(var.SrcDir)\bin\i386-win-gnu\MyCustomAction.dll' /-->
+      <Binary Id='MyCustomAction' SourceFile='$(var.SrcDir)\bin\i386-win-gnu\MyCustomAction.dll' />
+      <!-- Binary Id='MyCustomAction' SourceFile='$(var.SrcDir)\bin\x86_64-win-gnu\MyCustomAction.dll' /-->
       
       <!-- Custom action to validate install paths -->
       <CustomAction Id='CheckInstallPaths' BinaryKey='MyCustomAction' DllEntry='CheckInstallPaths@4' />
-      
-      <!-- Custom action to write Eclipse plugin link files -->
-      <CustomAction Id='WriteLinkFiles' BinaryKey='MyCustomAction' DllEntry='WriteLinkFiles@4' />      
-
-      <!-- Custom action to remove Eclipse plugin link files -->
-      <CustomAction Id='RemoveLinkFiles' BinaryKey='MyCustomAction' DllEntry='RemoveLinkFiles@4' />      
-
-      <!-- InstallExecuteSequence>
-         <Custom Action='WriteLinkFiles'  After='InstallFiles'/>
-         <Custom Action='RemoveLinkFiles' Before='RemoveFiles'/>
-      </InstallExecuteSequence -->
-      
+            
       <!--======================================================-->
       <!--          Menu & Application components               -->
       <!--======================================================-->
@@ -173,7 +167,7 @@
 
       <!-- Patch Codewarrior ReadMe file -->
       <DirectoryRef Id="INSTALLDIR">
-         <Component Id='C.WizardsReadme' Guid='*'>
+         <Component Id='C.WizardsReadme' Guid='*' Win64="yes">
             <File Id='F.ReadMeWizardTXT' DiskId='1' Source='$(var.SrcDir)\bin\ReadMeWizard.txt'  KeyPath='yes' >
                <Shortcut Id="Sc.ReadMeWizardTXT"
                   Name="Read Me"
@@ -186,8 +180,8 @@
       
       <!-- Patch Codewarrior Executable file (XML merge) -->
       <DirectoryRef Id="INSTALLDIR">
-         <Component Id='C.MergeEXE' Guid='*'>
-            <File Id='F.MergeEXE' DiskId='1' Source='$(var.SrcDir)\bin\mergeXml.exe' KeyPath='yes'/>
+         <Component Id='C.MergeEXE' Guid='*' Win64="yes">
+            <File Id='F.MergeEXE' DiskId='1' Source='$(var.SrcDir)\bin\x86_64-win-gnu\mergeXml.exe' KeyPath='yes'/>
          </Component>
       </DirectoryRef>
       
@@ -196,7 +190,6 @@
          <ComponentRef Id='C.ProgramMenuPatchDir' />
          <ComponentRef Id='C.MergeEXE'/>
          <ComponentRef Id='C.WizardsReadme'/>
-         <ComponentRef Id='C.CommonFiles'/>
          <ComponentGroupRef Id='Cg.WizardPatchData' />
       </ComponentGroup>
 
@@ -216,60 +209,81 @@
       <!--         Application Components & shortcuts            -->
       <DirectoryRef Id='INSTALLDIR'>
 
-         <Component Id='C.UsbdmProgrammer' Guid='67513fca-471b-4f11-9987-b7c0cc38ab9f'>
-            <File Id='UsbdmFlashProgrammerEXE' DiskId='1' Source='$(var.SrcDir)\bin\UsbdmFlashProgrammer.exe' KeyPath='yes' >
-               <Shortcut Id="SC_ARMProgrammer"   Directory="D.UsbdmProgramMenuDir" Name="ARM Programmer"   Arguments="-target=ARM"   WorkingDirectory='INSTALLDIR' Icon="ChipIcon.exe" IconIndex="0" Advertise="yes"/>
-               <Shortcut Id="SC_CFV1Programmer"  Directory="D.UsbdmProgramMenuDir" Name="CFV1 Programmer"  Arguments="-target=CFV1"  WorkingDirectory='INSTALLDIR' Icon="ChipIcon.exe" IconIndex="0" Advertise="yes"/>
-               <Shortcut Id="SC_CFVXProgrammer"  Directory="D.UsbdmProgramMenuDir" Name="CFVx Programmer"  Arguments="-target=CFVx"  WorkingDirectory='INSTALLDIR' Icon="ChipIcon.exe" IconIndex="0" Advertise="yes"/>
-               <Shortcut Id="SC_DSCProgrammer"   Directory="D.UsbdmProgramMenuDir" Name="MC56F Programmer" Arguments="-target=MC56F" WorkingDirectory='INSTALLDIR' Icon="ChipIcon.exe" IconIndex="0" Advertise="yes"/>
-               <Shortcut Id="SC_HCS08Programmer" Directory="D.UsbdmProgramMenuDir" Name="HCS08 Programmer" Arguments="-target=HCS08" WorkingDirectory='INSTALLDIR' Icon="ChipIcon.exe" IconIndex="0" Advertise="yes"/>
-               <Shortcut Id="SC_HCS12Programmer" Directory="D.UsbdmProgramMenuDir" Name="HCS12 Programmer" Arguments="-target=HCS12" WorkingDirectory='INSTALLDIR' Icon="ChipIcon.exe" IconIndex="0" Advertise="yes"/>
-               <Shortcut Id="SC_RS08Programmer"  Directory="D.UsbdmProgramMenuDir" Name="RS08 Programmer"  Arguments="-target=RS08"  WorkingDirectory='INSTALLDIR' Icon="ChipIcon.exe" IconIndex="0" Advertise="yes"/>
-               <Shortcut Id="SC_S12ZProgrammer"  Directory="D.UsbdmProgramMenuDir" Name="S12Z Programmer"  Arguments="-target=S12Z"  WorkingDirectory='INSTALLDIR' Icon="ChipIcon.exe" IconIndex="0" Advertise="yes"/>
+         <Component Id='C.UsbdmProgrammer' Guid='67513fca-471b-4f11-9987-b7c0cc38ab9f' Win64="yes">
+            <File Id='UsbdmFlashProgrammerEXE' DiskId='1' Source='$(var.SrcDir)\bin\x86_64-win-gnu\UsbdmFlashProgrammer.exe' KeyPath='yes' >
+               <Shortcut Id="SC.ARMProgrammer"   Directory="D.UsbdmProgramMenuDir" Name="ARM Programmer"   Arguments="-target=ARM"   WorkingDirectory='INSTALLDIR' Icon="ChipIcon.exe" IconIndex="0" Advertise="yes"/>
+               <Shortcut Id="SC.CFV1Programmer"  Directory="D.UsbdmProgramMenuDir" Name="CFV1 Programmer"  Arguments="-target=CFV1"  WorkingDirectory='INSTALLDIR' Icon="ChipIcon.exe" IconIndex="0" Advertise="yes"/>
+               <Shortcut Id="SC.CFVXProgrammer"  Directory="D.UsbdmProgramMenuDir" Name="CFVx Programmer"  Arguments="-target=CFVx"  WorkingDirectory='INSTALLDIR' Icon="ChipIcon.exe" IconIndex="0" Advertise="yes"/>
+               <Shortcut Id="SC.DSCProgrammer"   Directory="D.UsbdmProgramMenuDir" Name="MC56F Programmer" Arguments="-target=MC56F" WorkingDirectory='INSTALLDIR' Icon="ChipIcon.exe" IconIndex="0" Advertise="yes"/>
+               <Shortcut Id="SC.HCS08Programmer" Directory="D.UsbdmProgramMenuDir" Name="HCS08 Programmer" Arguments="-target=HCS08" WorkingDirectory='INSTALLDIR' Icon="ChipIcon.exe" IconIndex="0" Advertise="yes"/>
+               <Shortcut Id="SC.HCS12Programmer" Directory="D.UsbdmProgramMenuDir" Name="HCS12 Programmer" Arguments="-target=HCS12" WorkingDirectory='INSTALLDIR' Icon="ChipIcon.exe" IconIndex="0" Advertise="yes"/>
+               <Shortcut Id="SC.RS08Programmer"  Directory="D.UsbdmProgramMenuDir" Name="RS08 Programmer"  Arguments="-target=RS08"  WorkingDirectory='INSTALLDIR' Icon="ChipIcon.exe" IconIndex="0" Advertise="yes"/>
+               <Shortcut Id="SC.S12ZProgrammer"  Directory="D.UsbdmProgramMenuDir" Name="S12Z Programmer"  Arguments="-target=S12Z"  WorkingDirectory='INSTALLDIR' Icon="ChipIcon.exe" IconIndex="0" Advertise="yes"/>
             </File>
-            <File Id='UsbdmFlashProgrammerDebugEXE'  DiskId='1' Source='$(var.SrcDir)\bin\UsbdmFlashProgrammer-debug.exe'         />
+            <File Id='UsbdmFlashProgrammerDebugEXE'  DiskId='1' Source='$(var.SrcDir)\bin\x86_64-win-gnu\UsbdmFlashProgrammer-debug.exe'         />
          </Component>
-         <Component Id='C.UsbdmGdbServer' Guid='ea658088-dbaa-4878-a4b9-3a8eb4cbe418'>
-            <File Id='UsbdmGdbServerEXE' DiskId='1' Source='$(var.SrcDir)\bin\UsbdmGdbServer.exe' KeyPath='yes' >
+         <Component Id='C.UsbdmGdbServer' Guid='ea658088-dbaa-4878-a4b9-3a8eb4cbe418' Win64="yes">
+            <File Id='UsbdmGdbServerEXE' DiskId='1' Source='$(var.SrcDir)\bin\x86_64-win-gnu\UsbdmGdbServer.exe' KeyPath='yes' >
                <Shortcut Id="SC.ARMGdbServer"   Directory="D.UsbdmProgramMenuDir"  Name="ARM GDB Server"   Arguments="-target=ARM"   WorkingDirectory='INSTALLDIR' Icon="ChipIcon.exe" IconIndex="0" Advertise="yes" />
                <Shortcut Id="SC.CFV1GdbServer"  Directory="D.UsbdmProgramMenuDir"  Name="CFV1 GDB Server"  Arguments="-target=CFV1"  WorkingDirectory='INSTALLDIR' Icon="ChipIcon.exe" IconIndex="0" Advertise="yes" />
                <Shortcut Id="SC.CFVXGdbServer"  Directory="D.UsbdmProgramMenuDir"  Name="CFVx GDB Server"  Arguments="-target=CFVx"  WorkingDirectory='INSTALLDIR' Icon="ChipIcon.exe" IconIndex="0" Advertise="yes" />
             </File>
-            <File Id='UsbdmGdbServerDebugEXE' DiskId='1' Source='$(var.SrcDir)\bin\UsbdmGdbServer-debug.exe' />
+            <File Id='UsbdmGdbServerDebugEXE' DiskId='1' Source='$(var.SrcDir)\bin\x86_64-win-gnu\UsbdmGdbServer-debug.exe' />
          </Component>
-         <Component Id='C.FirmwareChanger' Guid='*'>
+         <Component Id='C.FirmwareChanger' Guid='*' Win64="yes">
             <File Id='FirmwareChangerEXE' DiskId='1'
-               Source='$(var.SrcDir)\bin\FirmwareChanger.exe' KeyPath='yes'>
-               <Shortcut Id="startmenuUSBDM_7" Directory="D.UsbdmProgramMenuDir" Name="USBDM Firmware Updater"
+               Source='$(var.SrcDir)\bin\x86_64-win-gnu\FirmwareChanger.exe' KeyPath='yes'>
+               <Shortcut Id="SC.FirmwareChanger" Directory="D.UsbdmProgramMenuDir" Name="USBDM Firmware Updater"
                   WorkingDirectory='D.FlashImages' Icon="ChipIcon.exe" IconIndex="0" Advertise="yes" />
             </File>
          </Component>
-         <Component Id='C.UsbdmMemoryDump' Guid='*'>
+         <Component Id='C.UsbdmMemoryDump' Guid='*' Win64="yes">
             <File Id='UsbdmMemoryDumpEXE' DiskId='1'
-               Source='$(var.SrcDir)\bin\UsbdmMemoryDump.exe' KeyPath='yes'>
-               <Shortcut Id="startmenuUSBDM_8" Directory="D.UsbdmProgramMenuDir" Name="USBDM Memory Dump"
+               Source='$(var.SrcDir)\bin\x86_64-win-gnu\UsbdmMemoryDump.exe' KeyPath='yes'>
+               <Shortcut Id="SC.UsbdmMemoryDump" Directory="D.UsbdmProgramMenuDir" Name="USBDM Memory Dump"
                   WorkingDirectory='INSTALLDIR' Icon="ChipIcon.exe" IconIndex="0" Advertise="yes" />
             </File>
          </Component>
-         <Component Id='C.UsbdmScript' Guid='*'>
+         <Component Id='C.UsbdmScript' Guid='*' Win64="yes">
             <File Id='UsbdmScriptEXE' DiskId='1'
-               Source='$(var.SrcDir)\bin\UsbdmScript.exe' KeyPath='yes'>
-               <Shortcut Id="startmenuUSBDM_9" Directory="D.UsbdmProgramMenuDir" Name="USBDM TCL Interpreter"
+               Source='$(var.SrcDir)\bin\x86_64-win-gnu\UsbdmScript.exe' KeyPath='yes'>
+               <Shortcut Id="SC.UsbdmScript" Directory="D.UsbdmProgramMenuDir" Name="USBDM TCL Interpreter"
                   WorkingDirectory='INSTALLDIR' Icon="ChipIcon.exe" IconIndex="0" Advertise="yes" />
             </File>
          </Component>
-         <Component Id='C.JB16_Bootloader' Guid='*'>
+         <Component Id='C.JB16_Bootloader' Guid='*' Win64="yes">
             <File Id='JB16_BootloaderEXE' DiskId='1'
-               Source='$(var.SrcDir)\bin\JB16_Bootloader.exe' KeyPath='yes'>
-               <Shortcut Id="startmenuUSBDM_10" Directory="D.UsbdmProgramMenuDir" Name="JB16 Bootloader"
+               Source='$(var.SrcDir)\bin\x86_64-win-gnu\JB16_Bootloader.exe' KeyPath='yes'>
+               <Shortcut Id="SC.JB16_Bootloader" Directory="D.UsbdmProgramMenuDir" Name="JB16 Bootloader"
                   WorkingDirectory='INSTALLDIR' Icon="ChipIcon.exe" IconIndex="0" Advertise="yes" />
             </File>
          </Component>
-         <Component Id='C.JS16_Bootloader' Guid='*'>
+         <Component Id='C.JS16_Bootloader' Guid='*' Win64="yes">
             <File Id='JS16_BootloaderEXE' DiskId='1'
-               Source='$(var.SrcDir)\bin\JS16_Bootloader.exe' KeyPath='yes'>
-               <Shortcut Id="startmenuUSBDM_11" Directory="D.UsbdmProgramMenuDir" Name="JS16 Bootloader"
+               Source='$(var.SrcDir)\bin\x86_64-win-gnu\JS16_Bootloader.exe' KeyPath='yes'>
+               <Shortcut Id="SC.JS16_Bootloader" Directory="D.UsbdmProgramMenuDir" Name="JS16 Bootloader"
                   WorkingDirectory='INSTALLDIR' Icon="ChipIcon.exe" IconIndex="0" Advertise="yes" />
+            </File>
+         </Component>
+      </DirectoryRef>
+
+      <!-- Bintils use with eclipse make -->
+      <DirectoryRef Id='INSTALLDIR'>
+         <Component Id='C.BinUtils' Guid='d4b987d1-9cb0-45b7-aba5-619ad6b74442' Win64="yes">
+            <File Id='Echo' DiskId='1'
+               Source='$(var.SrcDir)\bin\i386-win-gnu\echo.exe' >
+            </File>
+            <File Id='Usmdm_rm' DiskId='1'
+               Source='$(var.SrcDir)\bin\i386-win-gnu\usbdm-rm.exe' >
+            </File>
+            <File Id='Usmdm_make' DiskId='1'
+               Source='$(var.SrcDir)\bin\i386-win-gnu\usbdm-make.exe'>
+            </File>
+            <File Id='libiconv2' DiskId='1'
+               Source='$(var.SrcDir)\bin\i386-win-gnu\libiconv2.dll'>
+            </File>
+            <File Id='libintl3' DiskId='1'
+               Source='$(var.SrcDir)\bin\i386-win-gnu\libintl3.dll'>
             </File>
          </Component>
 
@@ -279,89 +293,6 @@
                Components
       =======================================================-->
 
-      <!-- Shared files -->
-      <DirectoryRef Id="INSTALLDIR">
-         <Component Id='C.CommonFiles' Guid='7c988e6d-bf01-439a-9829-43e9cfeff9f9'>
-            <File Id='CommonMinGW1'      DiskId='1' Source='$(var.SrcDir)\bin\libgcc_s_dw2-1.dll' />
-            <File Id='CommonMinGW2'      DiskId='1' Source='$(var.SrcDir)\bin\libstdc++-6.dll' />
-            <File Id='CommonMinGW3'      DiskId='1' Source='$(var.SrcDir)\bin\pthreadGC-3.dll' />
-            <File Id='CommonMinGW4'      DiskId='1' Source='$(var.SrcDir)\bin\libiconv-2.dll' />
-            <File Id='CommonMinGW5'      DiskId='1' Source='$(var.SrcDir)\bin\libintl-8.dll' />  
-            
-            <File Id='CommonWx1'         DiskId='1' Source='$(var.SrcDir)\bin\wxbase$(var.WxWidgetsVer)_gcc_custom.dll' />
-            <File Id='CommonWx2'         DiskId='1' Source='$(var.SrcDir)\bin\wxbase$(var.WxWidgetsVer)_net_gcc_custom.dll' />
-            <File Id='CommonWx3'         DiskId='1' Source='$(var.SrcDir)\bin\wxmsw$(var.WxWidgetsVer)_adv_gcc_custom.dll' />
-            <File Id='CommonWx4'         DiskId='1' Source='$(var.SrcDir)\bin\wxmsw$(var.WxWidgetsVer)_core_gcc_custom.dll' />
-
-            <File Id='CommonXerces1'     DiskId='1' Source='$(var.SrcDir)\bin\libxerces-c-3-1.dll' />
-
-            <File Id='CommonCoreUtils1'  DiskId='1' Source='$(var.SrcDir)\bin\usbdm-make.exe' />
-            <File Id='CommonCoreUtils2'  DiskId='1' Source='$(var.SrcDir)\bin\usbdm-rm.exe' />
-            <File Id='CommonCoreUtils3'  DiskId='1' Source='$(var.SrcDir)\bin\echo.exe' />
-            <File Id='CommonCoreUtils4'  DiskId='1' Source='$(var.SrcDir)\bin\libiconv2.dll' />
-            <File Id='CommonCoreUtils5'  DiskId='1' Source='$(var.SrcDir)\bin\libintl3.dll' />
-            
-            <File Id='CommonTcl1'        DiskId='1' Source='$(var.SrcDir)\bin\tcl86.dll' />
-            <File Id='CommonTcl2'        DiskId='1' Source='$(var.SrcDir)\bin\zlib1.dll' />
-
-            <File Id='CommonUsbdm1'      DiskId='1' Source='$(var.SrcDir)\bin\usbdm.4.dll' KeyPath='yes' />
-            <File Id='CommonUsbdm1d'     DiskId='1' Source='$(var.SrcDir)\bin\usbdm-debug.4.dll' />
-            <File Id='CommonUsbdm2'      DiskId='1' Source='$(var.SrcDir)\bin\usbdm-dsc.4.dll' />
-            <File Id='CommonUsbdm2d'     DiskId='1' Source='$(var.SrcDir)\bin\usbdm-dsc-debug.4.dll' />
-            <File Id='CommonUsbdm3'      DiskId='1' Source='$(var.SrcDir)\bin\usbdm-tcl.4.dll' />
-            <File Id='CommonUsbdm3d'     DiskId='1' Source='$(var.SrcDir)\bin\usbdm-tcl-debug.4.dll' />
-            <File Id='CommonUsbdm4'      DiskId='1' Source='$(var.SrcDir)\bin\usbdm-wx-plugin.4.dll' />
-            <File Id='CommonUsbdm4d'     DiskId='1' Source='$(var.SrcDir)\bin\usbdm-wx-plugin-debug.4.dll' />
-            <File Id='CommonUsbdm5'      DiskId='1' Source='$(var.SrcDir)\bin\usbdm-system.4.dll' />
-            <File Id='CommonUsbdm5d'     DiskId='1' Source='$(var.SrcDir)\bin\usbdm-system-debug.4.dll' />
-            <File Id='CommonUsbdm6'      DiskId='1' Source='$(var.SrcDir)\bin\usbdm-device-database.4.dll' />
-            <File Id='CommonUsbdm6d'     DiskId='1' Source='$(var.SrcDir)\bin\usbdm-device-database-debug.4.dll' />
-            <File Id='CommonUsbdm7'      DiskId='1' Source='$(var.SrcDir)\bin\usbdm-flash-image.4.dll' />
-            <File Id='CommonUsbdm7d'     DiskId='1' Source='$(var.SrcDir)\bin\usbdm-flash-image-debug.4.dll' />
-            <File Id='CommonUsbdm8'      DiskId='1' Source='$(var.SrcDir)\bin\usbdm-gdi-dialogue.4.dll' />
-            <File Id='CommonUsbdm8d'     DiskId='1' Source='$(var.SrcDir)\bin\usbdm-gdi-dialogue-debug.4.dll' />
-
-            <File Id='CommonInter1'       DiskId='1' Source='$(var.SrcDir)\bin\usbdm-interface-arm.4.dll' />
-            <File Id='CommonInter1d'      DiskId='1' Source='$(var.SrcDir)\bin\usbdm-interface-arm-debug.4.dll' />
-            <File Id='CommonInter2'       DiskId='1' Source='$(var.SrcDir)\bin\usbdm-interface-cfv1.4.dll' />
-            <File Id='CommonInter2d'      DiskId='1' Source='$(var.SrcDir)\bin\usbdm-interface-cfv1-debug.4.dll' />
-            <File Id='CommonInter3'       DiskId='1' Source='$(var.SrcDir)\bin\usbdm-interface-cfvx.4.dll' />
-            <File Id='CommonInter3d'      DiskId='1' Source='$(var.SrcDir)\bin\usbdm-interface-cfvx-debug.4.dll' />
-            <File Id='CommonInter4'       DiskId='1' Source='$(var.SrcDir)\bin\usbdm-interface-dsc.4.dll' />
-            <File Id='CommonInter4d'      DiskId='1' Source='$(var.SrcDir)\bin\usbdm-interface-dsc-debug.4.dll' />
-            <File Id='CommonInter5'       DiskId='1' Source='$(var.SrcDir)\bin\usbdm-interface-hcs08.4.dll' />
-            <File Id='CommonInter5d'      DiskId='1' Source='$(var.SrcDir)\bin\usbdm-interface-hcs08-debug.4.dll' />
-            <File Id='CommonInter6'       DiskId='1' Source='$(var.SrcDir)\bin\usbdm-interface-hcs12.4.dll' />
-            <File Id='CommonInter6d'      DiskId='1' Source='$(var.SrcDir)\bin\usbdm-interface-hcs12-debug.4.dll' />
-            <File Id='CommonInter7'       DiskId='1' Source='$(var.SrcDir)\bin\usbdm-interface-jtag.4.dll' />
-            <File Id='CommonInter7d'      DiskId='1' Source='$(var.SrcDir)\bin\usbdm-interface-jtag-debug.4.dll' />
-            <File Id='CommonInter8'       DiskId='1' Source='$(var.SrcDir)\bin\usbdm-interface-rs08.4.dll' />
-            <File Id='CommonInter8d'      DiskId='1' Source='$(var.SrcDir)\bin\usbdm-interface-rs08-debug.4.dll' />
-            <File Id='CommonInter9'       DiskId='1' Source='$(var.SrcDir)\bin\usbdm-interface-s12z.4.dll' />
-            <File Id='CommonInter9d'      DiskId='1' Source='$(var.SrcDir)\bin\usbdm-interface-s12z-debug.4.dll' />
-            
-            <File Id='CommonProg1'       DiskId='1' Source='$(var.SrcDir)\bin\usbdm-programmer-arm.4.dll' />
-            <File Id='CommonProg1d'      DiskId='1' Source='$(var.SrcDir)\bin\usbdm-programmer-arm-debug.4.dll' />
-            <File Id='CommonProg2'       DiskId='1' Source='$(var.SrcDir)\bin\usbdm-programmer-cfv1.4.dll' />
-            <File Id='CommonProg2d'      DiskId='1' Source='$(var.SrcDir)\bin\usbdm-programmer-cfv1-debug.4.dll' />
-            <File Id='CommonProg3'       DiskId='1' Source='$(var.SrcDir)\bin\usbdm-programmer-cfvx.4.dll' />
-            <File Id='CommonProg3d'      DiskId='1' Source='$(var.SrcDir)\bin\usbdm-programmer-cfvx-debug.4.dll' />
-            <File Id='CommonProg4'       DiskId='1' Source='$(var.SrcDir)\bin\usbdm-programmer-dsc.4.dll' />
-            <File Id='CommonProg4d'      DiskId='1' Source='$(var.SrcDir)\bin\usbdm-programmer-dsc-debug.4.dll' />
-            <File Id='CommonProg5'       DiskId='1' Source='$(var.SrcDir)\bin\usbdm-programmer-hcs08.4.dll' />
-            <File Id='CommonProg5d'      DiskId='1' Source='$(var.SrcDir)\bin\usbdm-programmer-hcs08-debug.4.dll' />
-            <File Id='CommonProg6'       DiskId='1' Source='$(var.SrcDir)\bin\usbdm-programmer-hcs12.4.dll' />
-            <File Id='CommonProg6d'      DiskId='1' Source='$(var.SrcDir)\bin\usbdm-programmer-hcs12-debug.4.dll' />
-            <File Id='CommonProg8'       DiskId='1' Source='$(var.SrcDir)\bin\usbdm-programmer-rs08.4.dll' />
-            <File Id='CommonProg8d'      DiskId='1' Source='$(var.SrcDir)\bin\usbdm-programmer-rs08-debug.4.dll' />
-            <File Id='CommonProg9'       DiskId='1' Source='$(var.SrcDir)\bin\usbdm-programmer-s12z.4.dll' />
-            <File Id='CommonProg9d'      DiskId='1' Source='$(var.SrcDir)\bin\usbdm-programmer-s12z-debug.4.dll' />
-            
-            <File Id='CommonMisc1'       DiskId='1' Source='$(var.SrcDir)\bin\error.wav' />
-            <File Id='CommonMisc2'       DiskId='1' Source='$(var.SrcDir)\bin\usbdm_rc.tcl' />
-         </Component>
-      </DirectoryRef>
-
       <!-- License file -->
       <WixVariable Id="WixUILicenseRtf" 
          Value="..\licenses\GNU General Public License - GNU Project - Free Software Foundation (FSF).rtf" />
@@ -370,6 +301,13 @@
       <ComponentGroup Id='Cg.DeviceDataInstall'>
          <ComponentGroupRef Id='Cg.DeviceData' /> <!-- Generated elsewhere -->
          <ComponentRef Id='C.ApplicationDirectoryKey'/>
+      </ComponentGroup>
+
+      <!-- Common file -->
+      <ComponentGroup Id='Cg.CommonFiles'>
+         <ComponentGroupRef Id='Cg.i386_Bin' /> <!-- Generated elsewhere -->
+         <ComponentGroupRef Id='Cg.x86_64_Bin' /> <!-- Generated elsewhere -->
+         <ComponentRef      Id='C.BinUtils' />
       </ComponentGroup>
 
       <!-- Device data -->
@@ -393,6 +331,7 @@
          <ComponentRef Id="C.InternetShortcut" />
          <ComponentRef Id='C.ApplicationDirectoryKey'/>
          <ComponentGroupRef Id='Cg.StationeryInstall' />
+         <ComponentGroupRef Id='Cg.CommonFiles' />
          <Feature Id='F.CodewarriorSupport'
                Title='CodeWarrior'
                Description='Add USBDM support to various versions of CodeWarrior software.'
@@ -419,7 +358,6 @@
             AllowAdvertise="no"
             Level='1'>
             <ComponentRef Id='C.UsbdmProgrammer' />
-            <ComponentRef Id='C.CommonFiles' />
             <ComponentGroupRef Id='Cg.DeviceDataInstall'/>
          </Feature>
          <Feature Id='F.UsbdmGdbServers'
@@ -428,7 +366,6 @@
             AllowAdvertise="no"
             Level='1'>
             <ComponentRef Id='C.UsbdmGdbServer' />
-            <ComponentRef Id='C.CommonFiles' />
             <ComponentGroupRef Id='Cg.DeviceDataInstall'/>
          </Feature>
          <Feature Id='F.FirmwareChanger'
@@ -437,7 +374,6 @@
                AllowAdvertise="no"
                Level='1'>
             <ComponentRef Id='C.FirmwareChanger' />
-            <ComponentRef Id='C.CommonFiles' />
             <ComponentRef Id="C.FlashShortCut" />
             <ComponentGroupRef Id='Cg.FlashImages' />
          </Feature>
@@ -447,7 +383,6 @@
                AllowAdvertise="no"
                Level='1'>
             <ComponentRef Id='C.UsbdmMemoryDump' />
-            <ComponentRef Id='C.CommonFiles' />
          </Feature>
          <Feature Id='F.UsbdmScript'
                Title='TCL Interpreter'
@@ -455,7 +390,6 @@
                AllowAdvertise="no"
                Level='1'>
             <ComponentRef Id='C.UsbdmScript' />
-            <ComponentRef Id='C.CommonFiles' />
          </Feature>
          <Feature Id='F.JB16_Bootloader'
                Title='JB16 Flash update utility'
@@ -463,7 +397,6 @@
                AllowAdvertise="no"
                Level='1'>
             <ComponentRef Id='C.JB16_Bootloader' />
-            <ComponentRef Id='C.CommonFiles' />
             <ComponentRef Id="C.FlashShortCut" />
             <ComponentGroupRef Id='Cg.FlashImages' />
          </Feature>
@@ -473,7 +406,6 @@
                AllowAdvertise="no"
                Level='1'>
             <ComponentRef Id='C.JS16_Bootloader' />
-            <ComponentRef Id='C.CommonFiles' />
             <ComponentRef Id="C.FlashShortCut" />
             <ComponentGroupRef Id='Cg.FlashImages' />
          </Feature>

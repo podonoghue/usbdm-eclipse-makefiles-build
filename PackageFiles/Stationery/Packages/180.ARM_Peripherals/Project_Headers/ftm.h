@@ -1390,6 +1390,44 @@ public:
    }
 
    /**
+    * Force channel output
+    *
+    * This enables software control of channel output and
+    * defines the value forced to the channel output.
+    * This value is write-buffered and updated by SWOCTRL synchronisation.
+    *
+    * @param channel  Number of channels to be forced
+    * @param value    Value to be forced on that channel
+    */
+   static void forceChannelOutput(uint32_t channel, bool value) {
+#define FTM_SWOCTRL_CHxOC(x)  (((uint32_t)(((uint32_t)(x))<<0U))&0xFFUL)
+#define FTM_SWOCTRL_CHxOCV(x) (((uint32_t)(((uint32_t)(x))<<8U))&0xFF00UL)
+
+      uint32_t channelMask = FTM_SWOCTRL_CHxOC(1<<channel);
+      uint32_t valueMask   = FTM_SWOCTRL_CHxOCV(value<<channel);
+
+      tmr().SWOCTRL = (tmr().SWOCTRL&~FTM_SWOCTRL_CHxOCV(1<<channel)) | (channelMask | valueMask);
+   }
+
+   /**
+    * Release forced channel output
+    *
+    * This enables software control of channel output and
+    * defines the value forced to the channel output.
+    * This value is write-buffered and updated by SWOCTRL synchronisation.
+    *
+    * @param channel  Number of channels to be released
+    */
+   static void releaseForcedChannelOutput(uint32_t channel) {
+#define FTM_SWOCTRL_CHxOC(x)  (((uint32_t)(((uint32_t)(x))<<0U))&0xFFUL)
+#define FTM_SWOCTRL_CHxOCV(x) (((uint32_t)(((uint32_t)(x))<<8U))&0xFF00UL)
+
+      uint32_t channelMask = FTM_SWOCTRL_CHxOC(1<<channel);
+
+      tmr().SWOCTRL &= ~channelMask;
+   }
+
+   /**
     * Set current value of channel outputs.\n
     * This value is overwritten by the next channel action.
     *
@@ -2014,7 +2052,7 @@ template<class Info> FtmChannelCallbackFunction  FtmBase_T<Info>::sChannelCallba
 /**
  * Class representing FTM0.
  */
-class Ftm0 : public FtmBase_T<Ftm0Info> {};
+using Ftm0 = FtmBase_T<Ftm0Info>;
 
 #endif
 
@@ -2022,7 +2060,7 @@ class Ftm0 : public FtmBase_T<Ftm0Info> {};
 /**
  * Class representing FTM0.
  */
-class Ftm1 : public FtmBase_T<Ftm1Info> {};
+using Ftm1 = FtmBase_T<Ftm1Info>;
 
 #endif
 
@@ -2030,7 +2068,7 @@ class Ftm1 : public FtmBase_T<Ftm1Info> {};
 /**
  * Class representing FTM0.
  */
-class Ftm2 : public FtmBase_T<Ftm2Info> {};
+using Ftm2 = FtmBase_T<Ftm2Info>;
 
 #endif
 
@@ -2038,7 +2076,7 @@ class Ftm2 : public FtmBase_T<Ftm2Info> {};
 /**
  * Class representing FTM0.
  */
-class Ftm3 : public FtmBase_T<Ftm3Info> {};
+using Ftm3 = FtmBase_T<Ftm3Info>;
 
 #endif
 
@@ -2218,6 +2256,7 @@ public:
     * Disables peripheral including clocks
     */
    static INLINE_RELEASE void disable() {
+      // Disable FTM (clock source disabled)
       tmr().QDCTRL = 0;
 
       // Disable clock to peripheral interface

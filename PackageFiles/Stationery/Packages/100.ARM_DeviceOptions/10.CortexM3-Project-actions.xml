@@ -16,7 +16,7 @@
                <deviceFamilyMatches>CortexM3</deviceFamilyMatches>
                <deviceFamilyMatches>CortexM3F</deviceFamilyMatches>
             </or>
-            <variableRef idRef="outputType" condition="matches" value=".*ProjectType\.exe$" />
+            <variableRef idRef="outputType" condition="matches" value=".*\.newProjectType\.exe$" />
          </and>
       </applyWhen>
 
@@ -39,10 +39,8 @@
       <copy source="Project_Headers/core_cm3.h"                               target="Project_Headers/core_cm3.h"       derived="true"  />
       <copy source="Project_Headers/core_cmFunc.h"                            target="Project_Headers/core_cmFunc.h"    derived="true" />
       <copy source="Project_Headers/cmsis_gcc.h"                              target="Project_Headers/cmsis_gcc.h"      derived="true" />
-      <copy source="Project_Headers/core_cmFunc.h"                            target="Project_Headers/core_cmFunc.h"    derived="true" />
       <copy source="Project_Headers/core_cmInstr.h"                           target="Project_Headers/core_cmInstr.h"   derived="true" />
-      <copy source="$(externalHeaderFile)"                                    target="Project_Headers/$(targetDeviceSubFamily).h" overwrite="true"  derived="true" />
-
+      <copy source="$(externalHeaderFile)"                                    target="Project_Headers/$(targetDeviceSubFamily).h" derived="true" overwrite="true" />
 
       <!-- Base STM32 files -->
       <projectActionList id="STM32F10xx-files" >
@@ -51,10 +49,11 @@
          </applyWhen>
       
          <copy source="Startup_Code/system-stm32f10x.c"                          target="Startup_Code/system.c"               derived="true" />
-         <copy source="Project_Headers/derivative-STM32xx.h"                     target="Project_Headers/derivative.h"        derived="true" />
+         <copy source="Project_Headers/derivative-STM32xx.h"                     target="Project_Headers/derivative.h"        derived="true" overwrite="true" />
          <copy source="Project_Headers/stm32f10x.h"                              target="Project_Headers/stm32f10x.h"         derived="true" />
          <copy source="Project_Headers/system_stm32f10x.h"                       target="Project_Headers/system_stm32f10x.h"  derived="true" />
          <copy source="Project_Headers/utilities-stm32.h"                        target="Project_Headers/utilities.h"         derived="true" />
+         <copy source="Project_Settings/Linker_Files/ARMLtd_GCC-rom-stm32.ld"    target="Project_Settings/Linker_Files/Linker-rom.ld" />
 
          <projectActionList>
             <applyWhen>

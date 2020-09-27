@@ -70,7 +70,7 @@ int main(int argc, const char *argv[]) {
    FlashImagePtr flashImage(FlashImageFactory::createFlashImage(T_S12Z));
 
 //   fprintf(stderr, "Loading image from \'%s\' \n", (const char *)sourceFilename.c_str());
-   CHECK(flashImage->loadFile(sourceFilename.c_str(), T_S12Z));
+   CHECK(flashImage->loadFile(sourceFilename.c_str(), true));
 
 //   fprintf(stderr, "Saving image to \'%s\' \n", (const char *)destinationFilename.c_str());
    fprintf(stderr, "\'%s\' => \'%s\' \n", (const char *)sourceFilename.c_str(), (const char *)destinationFilename.c_str());

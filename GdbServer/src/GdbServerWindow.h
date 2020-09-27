@@ -12,7 +12,7 @@
 #include <wx/timer.h>
 typedef  wxIPV4address IPaddress;
 
-#include "../../Shared_V4/src/BdmInterface.h"
+#include "BdmInterface.h"
 #include "DeviceData.h"
 #include "USBDM_API.h"
 #include "GdbInOutWx.h"

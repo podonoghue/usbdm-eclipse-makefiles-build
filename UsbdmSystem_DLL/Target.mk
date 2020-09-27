@@ -3,17 +3,24 @@
 #CDEFS     = -DLOG
 #MODULE    = module
 #TARGET    = BUILDDIR
-
-# Makefiles in subdirs used to collect targets (default 'module.mk')
-MODULE ?= module
-
-# Main target name (default same as build directory)
-TARGET ?= $(BUILDDIR)
-
-TARGET_DLL=$(LIB_PREFIX)$(TARGET)$(LIB_SUFFIX)
-TARGET_EXE=$(TARGET)$(EXE_SUFFIX)
+#LFLAGS    = 
 
 include ../Common.mk
+
+# Makefiles in subdirs used to collect targets (default 'module.mk')
+ifeq ($(origin MODULE), undefined)
+	MODULE := module
+endif
+
+# Main target name (default same as build directory)
+ifeq ($(origin TARGET), undefined)
+	TARGET := $(BUILDDIR)$(VSUFFIX)
+endif
+
+TARGET_DLL = $(LIB_PREFIX)$(TARGET)$(LIB_SUFFIX)
+TARGET_EXE = $(TARGET)$(EXE_SUFFIX)
+
+override BUILDDIR:=$(BUILDDIR)$(BUILDDIR_SUFFIX)
 
 VPATH      := src $(BUILDDIR) 
 SOURCEDIRS := src
@@ -117,18 +124,7 @@ endif
 $(BUILDDIR) :
 	@echo -- Making directory $(BUILDDIR)
 	-$(MKDIR) $(BUILDDIR)
-    
-ifneq ($(TARGET_LIBDIR),$(TARGET_BINDIR))
-$(TARGET_LIBDIR) :
-	@echo -- Making directory $(TARGET_LIBDIR)
-	-$(MKDIR) $(TARGET_LIBDIR)
-    
-endif
-
-$(TARGET_BINDIR) :
-	@echo -- Making directory $(TARGET_BINDIR)
-	-$(MKDIR) $(TARGET_BINDIR)
-    
+       
 $(TARGET_LIBDIR)/$(TARGET_DLL): | $(TARGET_LIBDIR)
 
 $(TARGET_BINDIR)/$(TARGET_EXE): | $(TARGET_BINDIR)
@@ -140,9 +136,9 @@ $(BUILDDIR)/$(TARGET_DLL) $(OBJ) $(RESOURCE_OBJ): | $(BUILDDIR)
 clean:
 	-$(RMDIR) $(BUILDDIR)
 
-dll: $(TARGET_LIBDIR)/$(TARGET_DLL)
+dll: commonFiles $(TARGET_LIBDIR)/$(TARGET_DLL)
 
-exe: $(TARGET_BINDIR)/$(TARGET_EXE)
+exe: commonFiles $(TARGET_BINDIR)/$(TARGET_EXE)
    
 .PHONY: clean dll exe
 

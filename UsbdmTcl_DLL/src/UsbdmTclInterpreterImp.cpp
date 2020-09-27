@@ -28,6 +28,7 @@ Change History
 #include <unistd.h>
 #include <cerrno>
 #include <stdarg.h>
+#include <exception>
 
 #include "ArmDefinitions.h"
 #include "Names.h"
@@ -46,7 +47,7 @@ Change History
 #include "DeviceInterface.h"
 #include "FlashProgrammerFactory.h"
 
-#ifdef _WIN32
+#if defined(_WIN32) && 0
 #include <io.h>
 #endif
 
@@ -138,8 +139,14 @@ static void checkRC(USBDM_ErrorCode rc) {
  * Main function used for interactive TCL interpreter
  */
 int UsbdmTclInterpreterImp::main(int argc, char *argv[]) {
-   Tcl_Main(argc, argv, appInitProc);
-   return EXIT_SUCCESS;
+   LOGGING;
+   try {
+      Tcl_Main(argc, argv, appInitProc);
+      return EXIT_SUCCESS;
+   } catch (std::exception &e) {
+      log.print("%s\n", e.what());
+      return EXIT_FAILURE;
+   }
 };
 /**
  * Does clean up of TCL interpreter
@@ -197,7 +204,10 @@ void UsbdmTclInterpreterImp::redirectStdOut() {
 
    FILE *fp = UsbdmSystem::Log::getLogFileHandle();
 
-#ifdef WIN32
+#ifndef HANDLE
+#define HANDLE intptr_t
+#endif
+#if defined(WIN32)
    if (fp == NULL) {
       // Create sink
       fp = fopen ("nul", "w");
@@ -210,8 +220,8 @@ void UsbdmTclInterpreterImp::redirectStdOut() {
 
    log.print("fileNo == %d\n", fileNo );
    HANDLE fileHandle = (HANDLE)_get_osfhandle(fileNo);
-   log.print("fileHandle == %p\n", fileHandle );
-   tclChannel = Tcl_MakeFileChannel(fileHandle, TCL_WRITABLE);
+   log.print("fileHandle == %p\n", (void *)fileHandle );
+   tclChannel = Tcl_MakeFileChannel((ClientData)fileHandle, TCL_WRITABLE);
    log.print("tclChannel == %p\n", tclChannel );
 #else
    if (fp == NULL) {
@@ -395,7 +405,7 @@ void UsbdmTclInterpreterImp::unSetVariable(const char *varName, TclSetVarFlag fl
 int UsbdmTclInterpreterImp::setTCLExecutable() {
    LOGGING;
 
-#ifdef __WIN32
+#if defined(__WIN32) && 0
    // Not necessary in WIN32??
    char executableName[MAX_PATH];
    if (GetModuleFileNameA(NULL, executableName, sizeof(executableName)) > 0) {
@@ -3396,7 +3406,7 @@ static int setLogCommand(ClientData, Tcl_Interp *interp, int argc, Tcl_Obj *cons
 
 static int cmd_dialogue(ClientData, Tcl_Interp *interp, int argc, Tcl_Obj *const *argv) {
 
-#ifdef _WIN32
+#if defined(_WIN32) && 0
    static HWND hwnd = 0;
 
    if (hwnd == 0) {

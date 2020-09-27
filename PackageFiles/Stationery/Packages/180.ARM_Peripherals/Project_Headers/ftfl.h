@@ -134,9 +134,11 @@ protected:
 //      write("residual flash=").write(partitionInformation[partition].eeepromSize>>10).writeln("K)");
 
       if (isFlexRamConfigured()) {
+//         console.write("flashController().FCNFG.FTFL_FCNFG_EEERDY = ").writeln((bool)(flashController().FCNFG&FTFL_FCNFG_EEERDY_MASK));
 //         console.writeln("Flex RAM is already configured");
          return FLASH_ERR_OK;
       }
+//      console.write("flashController().FCNFG.FTFL_FCNFG_EEERDY = ").writeln((bool)(flashController().FCNFG&FTFL_FCNFG_EEERDY_MASK));
       if ((eepromSizes[eeprom].size*MINIMUM_BACKING_RATIO)>(partitionInformation[partition].eeepromSize)) {
 //         console.writeln("Backing ratio (Flash/EEPROM) is too small\n");
          USBDM::setErrorCode(E_FLASH_INIT_FAILED);

@@ -3,6 +3,8 @@
  *
  *  Created on: 31 Oct 2019
  *      Author: podonoghue
+ *
+ *  Based loosely on Adafruit library (initialisation sequences and constants)
  */
 
 #ifndef SOURCES_OLED_H_

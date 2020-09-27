@@ -1,30 +1,48 @@
 include ../Common.mk
 
+TARGET = usbdm-wx-plugin
+
 DEFS = -DMINIMAL_APP=wxPluginApp
+
+$(TARGET):
+	@echo ''
+	@echo  Building $@ 64-bit
+	@echo "================================================================"
+	$(MAKE) dll -f Target.mk BUILDDIR=$@ CDEFS='$(DEFS) -DCOMPILE_WX_PLUGIN_DLL' BITNESS=64
+	@echo ''
+	@echo  Building $@ 32-bit
+	@echo "================================================================"
+	$(MAKE) dll -f Target.mk BUILDDIR=$@ CDEFS='$(DEFS) -DCOMPILE_WX_PLUGIN_DLL' BITNESS=32
+
+$(TARGET)-debug:
+	@echo ''
+	@echo  Building $@ 64-bit
+	@echo "================================================================"
+	$(MAKE) dll -f Target.mk BUILDDIR=$@ CDEFS='$(DEFS) -DCOMPILE_WX_PLUGIN_DLL' DEBUG='Y' BITNESS=64
+	@echo ''
+	@echo  Building $@ 32-bit
+	@echo "================================================================"
+	$(MAKE) dll -f Target.mk BUILDDIR=$@ CDEFS='$(DEFS) -DCOMPILE_WX_PLUGIN_DLL' DEBUG='Y' BITNESS=32
 
 TestWx-debug:
 	@echo ''
-	@echo  Building $@
+	@echo  Building $@ 64-bit
 	@echo "================================================================"
-	$(MAKE) exe -f Target.mk BUILDDIR=$@$(BUILDDIR_SUFFIX) MODULE=TestWx TARGET=$@ CDEFS='$(DEFS)' DEBUG='Y'
-
-usbdm-wx-plugin:
+	$(MAKE) exe -f Target.mk BUILDDIR=$@ MODULE=TestWx TARGET=$@ CDEFS='$(DEFS)' DEBUG='Y' BITNESS=64
 	@echo ''
-	@echo  Building $@
+	@echo  Building $@ 32-bit
 	@echo "================================================================"
-	$(MAKE) dll -f Target.mk BUILDDIR=$@$(BUILDDIR_SUFFIX) MODULE=wxPlugin TARGET=$@$(VSUFFIX) CDEFS='$(DEFS) -DCOMPILE_WX_PLUGIN_DLL'
-	
-usbdm-wx-plugin-debug:
-	@echo ''
-	@echo  Building $@
-	@echo "================================================================"
-	$(MAKE) dll -f Target.mk BUILDDIR=$@$(BUILDDIR_SUFFIX) MODULE=wxPlugin TARGET=$@$(VSUFFIX) CDEFS='$(DEFS) -DCOMPILE_WX_PLUGIN_DLL' DEBUG='Y'
+	$(MAKE) exe -f Target.mk BUILDDIR=$@ MODULE=TestWx TARGET=$@ CDEFS='$(DEFS)' DEBUG='Y' BITNESS=32
 
-all: usbdm-wx-plugin-debug usbdm-wx-plugin 
+all: $(TARGET) $(TARGET)-debug
 all: TestWx-debug 
 
 clean:
-	${RMDIR} TestWx-debug$(BUILDDIR_SUFFIX) usbdm-wx-plugin-debug$(BUILDDIR_SUFFIX) usbdm-wx-plugin$(BUILDDIR_SUFFIX)
+	-${RMDIR} $(TARGET)$(BUILDDIR_SUFFIXx32)     $(TARGET)-debug$(BUILDDIR_SUFFIXx32)
+	-${RMDIR} $(TARGET)$(BUILDDIR_SUFFIXx64)     $(TARGET)-debug$(BUILDDIR_SUFFIXx64)
+	-${RMDIR} TestWx-debug$(BUILDDIR_SUFFIXx32)
+	-${RMDIR} TestWx-debug$(BUILDDIR_SUFFIXx64)
 
 .PHONY: all clean 
-.PHONY: TestWx-debug  usbdm-wx-plugin usbdm-wx-plugin-debug
+.PHONY: $(TARGET) $(TARGET)-debug
+.PHONY: TestWx-debug

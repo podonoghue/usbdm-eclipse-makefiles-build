@@ -3,6 +3,8 @@
  *
  *  Created on: 31 Oct 2019
  *      Author: podonoghue
+ *
+ *  Based loosely on Adafruit library (initialisation sequences and constants)
  */
 #include "malloc.h"
 #include "Oled.h"
@@ -35,6 +37,7 @@ Oled &Oled::clearDisplay(void) {
  * @return true on success
  *
  * @note   This function must be called before any drawing or updates!
+ * @note   Based loosely on Adafruit library initialisation sequence
  */
 void Oled::initialise() {
 
@@ -45,7 +48,7 @@ void Oled::initialise() {
          MULTIPLE_COMMANDS,                    // Co = 0, D/C = 0
          SSD1306_DISPLAYOFF,                   // 0xAE
          SSD1306_SETDISPLAYCLOCKDIV,           // 0xD5
-         0x80,                                 // = Reset value
+         0x80,                                 // = Reset value (105Hz)
          SSD1306_SETMULTIPLEX,                 // 0xA8
          (HEIGHT - 1),
          SSD1306_SETDISPLAYOFFSET,             // 0xD3
@@ -238,7 +241,7 @@ void Oled::putPixel(unsigned index, uint8_t mask, bool pixel, WriteMode writeMod
          }
          break;
       case WriteMode_Xor:
-         if (!pixel) {
+         if (pixel) {
             buffer.buffer[index] ^= mask;
          }
          break;

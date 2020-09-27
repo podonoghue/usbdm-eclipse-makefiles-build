@@ -205,7 +205,7 @@ public:
     * @param[in] pmcLowVoltageDetectAction Action to take on Low Voltage Detect
     * @param[in] pmcLowVoltageDetectLevel  Level at which Low Voltage Detect operates
     */
-   static void setLowVoltageReset (
+   static void configureLowVoltageReset (
          PmcLowVoltageDetectAction pmcLowVoltageDetectAction = PmcLowVoltageDetectAction_None,
          PmcLowVoltageDetectLevel  pmcLowVoltageDetectLevel  = PmcLowVoltageDetectLevel_High
          ) {
@@ -218,7 +218,7 @@ public:
     *
     * @param[in] pmcLowVoltageDetectAction Action to take on Low Voltage Detect
     */
-   static void setLowVoltageReset (PmcLowVoltageDetectAction pmcLowVoltageDetectAction = PmcLowVoltageDetectAction_None) {
+   static void configureLowVoltageReset (PmcLowVoltageDetectAction pmcLowVoltageDetectAction = PmcLowVoltageDetectAction_None) {
       pmc().LVDSC1 = pmcLowVoltageDetectAction;
    }
 
@@ -231,7 +231,7 @@ public:
     * @param[in] pmcLowVoltageWarningAction   Action to take on Low Voltage Warning
     * @param[in] pmcLowVoltageWarningLevel    Level at which Low Voltage Warning operates
     */
-   static void setLowVoltageWarning (
+   static void configureLowVoltageWarning (
          PmcLowVoltageWarningAction pmcLowVoltageWarningAction = PmcLowVoltageWarningAction_None,
          PmcLowVoltageWarningLevel  pmcLowVoltageWarningLevel  = PmcLowVoltageWarningLevel_High
          ) {
@@ -244,7 +244,7 @@ public:
     *
     * @param[in] pmcLowVoltageWarningAction   Action to take on Low Voltage Warning
     */
-   static void setLowVoltageWarning (
+   static void configureLowVoltageWarning (
          PmcLowVoltageWarningAction pmcLowVoltageWarningAction = PmcLowVoltageWarningAction_None
          ) {
       pmc().LVDSC2 = pmcLowVoltageWarningAction;
@@ -268,7 +268,7 @@ public:
     * @param[in] pmcBandgapBuffer         Controls whether the band-gap reference is available to internal devices e.g. CMP etc
     * @param[in] pmcBandgapLowPowerEnable Controls operation of the band-gap in low power modes
     */
-   static void setBandgapOperation(
+   static void configureBandgapOperation(
          PmcBandgapBuffer           pmcBandgapBuffer,
          PmcBandgapLowPowerEnable   pmcBandgapLowPowerEnable=PmcBandgapLowPowerEnable_Off) {
       pmc().REGSC = pmcBandgapBuffer|pmcBandgapLowPowerEnable;

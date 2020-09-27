@@ -16,7 +16,7 @@ USBDM_LIBDIR64="/usr/lib/x86_64-linux-gnu/usbdm"
 #===========================================================
 # Shared directories - Relative to child directory
 SHARED_SRC     := ../Shared_V4/src
-SHARED_LIBDIRS := ../Shared_V4/lib
+SHARED_LIBDIR := ../Shared_V4/lib
 
 # Used as prefix with the above when in build directory $(DUMMY_CHILD)/$(SHARED_SRC) = PackageFiles/src
 DUMMY_CHILD    := PackageFiles
@@ -338,7 +338,7 @@ endif
 
 #===========================================================
 # Look in shared Library dir first
-LIBDIRS := -L$(SHARED_LIBDIRS) -L$(TARGET_LIBDIR)
+LIBDIRS := -L$(SHARED_LIBDIR) -L$(TARGET_LIBDIR)
 
 #===========================================================
 # Common Definitions for building Programmer, GDI & GDB

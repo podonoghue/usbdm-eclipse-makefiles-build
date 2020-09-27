@@ -120,19 +120,16 @@
       <!-- CW for Coldfire support -->
       <DirectoryRef Id="D.CODEWARRIOR_COLDFIRE_V7_2_bin_Plugins_Support_ColdFire_USBDM">
          <Component Id='C.CODEWARRIOR_COLDFIRE_V7_2.Files' Guid='6072e6a2-7c0a-4c4a-8769-88d40b7945c2' >
-            <File Id='CODEWARRIOR_COLDFIRE_V7_2_MinGW_1'         DiskId='1' Source='$(var.SrcDir)\bin\libgcc_s_dw2-1.dll' />
-            <File Id='CODEWARRIOR_COLDFIRE_V7_2_MinGW_2'         DiskId='1' Source='$(var.SrcDir)\bin\libstdc++-6.dll' />
+            <File Id='CODEWARRIOR_COLDFIRE_V7_2_CommonGDI_1'     DiskId='1' Source='$(var.SrcDir)\bin\i386-win-gnu\usbdm-gdi-cfvx-legacy.4.dll' KeyPath='yes' />
+            <File Id='CODEWARRIOR_COLDFIRE_V7_2_CommonGDI_1d'    DiskId='1' Source='$(var.SrcDir)\bin\i386-win-gnu\usbdm-gdi-cfvx-legacy-debug.4.dll'/>
 
-            <File Id='CODEWARRIOR_COLDFIRE_V7_2_WxWidgets_1'     DiskId='1' Source='$(var.SrcDir)\bin\wxbase$(var.WxWidgetsVer)_gcc_custom.dll' />
-            <File Id='CODEWARRIOR_COLDFIRE_V7_2_WxWidgets_2'     DiskId='1' Source='$(var.SrcDir)\bin\wxmsw$(var.WxWidgetsVer)_core_gcc_custom.dll' />
+            <File Id='CODEWARRIOR_COLDFIRE_V7_2_CommonUsbdm_1'   DiskId='1' Source='$(var.SrcDir)\bin\i386-win-gnu\usbdm-system.4.dll' />
+            <File Id='CODEWARRIOR_COLDFIRE_V7_2_CommonUsbdm_1d'  DiskId='1' Source='$(var.SrcDir)\bin\i386-win-gnu\usbdm-system-debug.4.dll' />
 
-            <File Id='CODEWARRIOR_COLDFIRE_V7_2_CommonUsbdm_1'   DiskId='1' Source='$(var.SrcDir)\bin\usbdm.4.dll'/>
-            <File Id='CODEWARRIOR_COLDFIRE_V7_2_CommonUsbdm_1d'  DiskId='1' Source='$(var.SrcDir)\bin\usbdm-debug.4.dll'/>
-            <File Id='CODEWARRIOR_COLDFIRE_V7_2_CommonUsbdm_2'   DiskId='1' Source='$(var.SrcDir)\bin\usbdm-system.4.dll' />
-            <File Id='CODEWARRIOR_COLDFIRE_V7_2_CommonUsbdm_2d'  DiskId='1' Source='$(var.SrcDir)\bin\usbdm-system-debug.4.dll' />
-	    
-            <File Id='CODEWARRIOR_COLDFIRE_V7_2_CommonGDI_1'     DiskId='1' Source='$(var.SrcDir)\bin\usbdm-gdi-cfvx-legacy.4.dll' KeyPath='yes' />
-            <File Id='CODEWARRIOR_COLDFIRE_V7_2_CommonGDI_1d'    DiskId='1' Source='$(var.SrcDir)\bin\usbdm-gdi-cfvx-legacy-debug.4.dll'/>
+            <File Id='CODEWARRIOR_COLDFIRE_V7_2_MinGW_00'        DiskId='1' Source='$(var.SrcDir)\bin\i386-win-gnu\libgcc_s_dw2-1.dll' />
+            <File Id='CODEWARRIOR_COLDFIRE_V7_2_MinGW_01'        DiskId='1' Source='$(var.SrcDir)\bin\i386-win-gnu\libstdc++-6.dll' />
+            <File Id='CODEWARRIOR_COLDFIRE_V7_2_MinGW_02'        DiskId='1' Source='$(var.SrcDir)\bin\i386-win-gnu\libwinpthread-1.dll' />
+            <File Id='CODEWARRIOR_COLDFIRE_V7_2_MinGW_03'        DiskId='1' Source='$(var.SrcDir)\bin\i386-win-gnu\libdl.dll' />
          </Component>
       </DirectoryRef>
 

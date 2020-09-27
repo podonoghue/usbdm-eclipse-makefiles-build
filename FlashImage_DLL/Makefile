@@ -1,44 +1,50 @@
 include ../Common.mk
 
 TARGET  = usbdm-flash-image
-MODULE = module
-TEST_MODULE = test
 
 DLL_DEFS ='-DCOMPILE_FLASH_IMAGE_DLL'
 
 $(TARGET):
 	@echo ''
-	@echo  Building $@
+	@echo  Building $@ 64-bit
 	@echo "================================================================"
-	$(MAKE) dll -f Target.mk BUILDDIR=$@$(BUILDDIR_SUFFIX) TARGET=$@$(VSUFFIX) MODULE=$(MODULE) CDEFS='$(DLL_DEFS)'
+	$(MAKE) dll -f Target.mk BUILDDIR=$@ CDEFS='$(DLL_DEFS)' BITNESS=64
+	@echo ''
+	@echo  Building $@ 32-bit
+	@echo "================================================================"
+	$(MAKE) dll -f Target.mk BUILDDIR=$@ CDEFS='$(DLL_DEFS)' BITNESS=32
 
 $(TARGET)-debug:
 	@echo ''
-	@echo  Building $@
+	@echo  Building $@ 64-bit
 	@echo "================================================================"
-	$(MAKE) dll -f Target.mk BUILDDIR=$@$(BUILDDIR_SUFFIX) TARGET=$@$(VSUFFIX) MODULE=$(MODULE) CDEFS='$(DLL_DEFS)'  DEBUG='Y'
+	$(MAKE) dll -f Target.mk BUILDDIR=$@ CDEFS='$(DLL_DEFS)' DEBUG='Y' BITNESS=64
+	@echo ''
+	@echo  Building $@ 32-bit
+	@echo "================================================================"
+	$(MAKE) dll -f Target.mk BUILDDIR=$@ CDEFS='$(DLL_DEFS)' DEBUG='Y' BITNESS=32
 
 EXE_DEFS = -DUSE_ICON
 
 $(TARGET)-test:
 	@echo ''
-	@echo  Building $@
+	@echo  Building $@ 64-bit
 	@echo "================================================================"
-	$(MAKE) exe -f Target.mk BUILDDIR=$@$(BUILDDIR_SUFFIX) TARGET=$@ MODULE=$(TEST_MODULE) CDEFS='$(EXE_DEFS)'
+	$(MAKE) exe -f Target.mk BUILDDIR=$@ MODULE=test TARGET=$@ CDEFS='$(EXE_DEFS)' BITNESS=64
 
 $(TARGET)-debug-test:
 	@echo ''
-	@echo  Building $@
+	@echo  Building $@ 64-bit
 	@echo "================================================================"
-	$(MAKE) exe -f Target.mk BUILDDIR=$@$(BUILDDIR_SUFFIX) TARGET=$@ MODULE=$(TEST_MODULE) CDEFS='$(EXE_DEFS)' DEBUG='Y'
+	$(MAKE) exe -f Target.mk BUILDDIR=$@ MODULE=test TARGET=$@ CDEFS='$(EXE_DEFS)' DEBUG='Y' BITNESS=64
 
 all: $(TARGET) $(TARGET)-debug $(TARGET)-test $(TARGET)-debug-test
 
 clean:
-	${RMDIR} $(TARGET)$(BUILDDIR_SUFFIX)   
-	${RMDIR} $(TARGET)-debug$(BUILDDIR_SUFFIX)
-	${RMDIR} $(TARGET)-test$(BUILDDIR_SUFFIX)   
-	${RMDIR} $(TARGET)-debug-test$(BUILDDIR_SUFFIX)
+	-${RMDIR} $(TARGET)$(BUILDDIR_SUFFIXx32)         $(TARGET)-debug$(BUILDDIR_SUFFIXx32)
+	-${RMDIR} $(TARGET)$(BUILDDIR_SUFFIXx64)         $(TARGET)-debug$(BUILDDIR_SUFFIXx64)
+	-${RMDIR} $(TARGET)-test$(BUILDDIR_SUFFIXx64)    $(TARGET)-debug-test$(BUILDDIR_SUFFIXx64)
 
 .PHONY: all clean 
-.PHONY: $(TARGET) $(TARGET)-debug $(TARGET)-test $(TARGET)-debug-test
+.PHONY: $(TARGET) $(TARGET)-debug
+.PHONY: $(TARGET)-test $(TARGET)-debug-test

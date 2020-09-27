@@ -30,9 +30,12 @@ public:
 
 int main(int argc, char *argv[]) {
    OpenLog ol;
-
+   LOGGING;
+   log.print("Creating TCL interpreter\n");
    UsbdmTclInterperPtr ti = UsbdmTclInterperFactory::createInteractiveUsbdmTclInterpreter(BdmInterfaceFactory::createInterface(T_OFF));
+   log.print("Creating TCL interpreter - done\n");
    ti->main(argc, argv);
+   log.print("ti->main() completed\n");
 }
 #endif
 

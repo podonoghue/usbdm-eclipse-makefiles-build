@@ -3,17 +3,24 @@
 #CDEFS     = -DLOG
 #MODULE    = module
 #TARGET    = BUILDDIR
-
-# Makefiles in subdirs used to collect targets (default 'module.mk')
-MODULE ?= module
-
-# Main target name (default same as build directory)
-TARGET ?= $(BUILDDIR)
-
-TARGET_DLL=$(LIB_PREFIX)$(TARGET)$(LIB_SUFFIX)
-TARGET_EXE=$(TARGET)$(EXE_SUFFIX)
+#LFLAGS    = 
 
 include ../Common.mk
+
+# Makefiles in subdirs used to collect targets (default 'module.mk')
+ifeq ($(origin MODULE), undefined)
+	MODULE := module
+endif
+
+# Main target name (default same as build directory)
+ifeq ($(origin TARGET), undefined)
+	TARGET := $(BUILDDIR)$(VSUFFIX)
+endif
+
+TARGET_DLL = $(LIB_PREFIX)$(TARGET)$(LIB_SUFFIX)
+TARGET_EXE = $(TARGET)$(EXE_SUFFIX)
+
+override BUILDDIR:=$(BUILDDIR)$(BUILDDIR_SUFFIX)
 
 VPATH      := src $(BUILDDIR) 
 SOURCEDIRS := src
@@ -37,15 +44,14 @@ LIBDIRS += $(XERCES_LIBDIRS)
 
 # Extra libraries
 ifneq ($(UNAME_S),Windows)
-LIBS += -ldl
 LIBS += -lm
 endif
-
+LIBS += $(USBDM_DYNAMIC_LIBS)
+LIBS += $(USBDM_SYSTEM_LIBS)
 LIBS += $(XERCES_LIBS)
 
-LIBS += $(USBDM_SYSTEM_LIBS)
-
 # Extra libraries for EXE only
+EXELIBS += 
 
 # Each module will add to this
 SRC :=
@@ -93,7 +99,7 @@ $(BUILDDIR)/%.o : %.cpp
 $(BUILDDIR)/$(TARGET_EXE): $(OBJ) $(RESOURCE_OBJ)
 	@echo --
 	@echo -- Linking Target $@
-	$(CC) -o $@  $(LDFLAGS) $(OBJ) $(RESOURCE_OBJ) $(LIBDIRS) $(LIBS) ${EXELIBS}
+	$(CC) -o $@ $(LDFLAGS) $(OBJ) $(RESOURCE_OBJ) $(LIBDIRS) $(LIBS) $(EXELIBS)
 
 # How to copy EXE to target directory
 #==============================================
@@ -108,8 +114,8 @@ $(TARGET_BINDIR)/$(TARGET_EXE): $(BUILDDIR)/$(TARGET_EXE)
 $(BUILDDIR)/$(TARGET_DLL): $(OBJ) $(RESOURCE_OBJ)
 	@echo --
 	@echo -- Linking Target $@
-	$(CC) -shared -o $@ -Wl,-soname,$(basename $(notdir $@)) $(LDFLAGS) $(OBJ) $(RESOURCE_OBJ) $(LIBDIRS) $(LIBS) ${EXELIBS}
-
+	$(CC) -shared -o $@ -Wl,-soname,$(basename $(notdir $@)) $(LDFLAGS) $(OBJ) $(RESOURCE_OBJ) $(LIBDIRS) $(LIBS) # ${EXELIBS}
+	
 # How to copy LIBRARY to target directory
 #==============================================
 $(TARGET_LIBDIR)/$(TARGET_DLL): $(BUILDDIR)/$(TARGET_DLL)
@@ -127,18 +133,7 @@ endif
 $(BUILDDIR) :
 	@echo -- Making directory $(BUILDDIR)
 	-$(MKDIR) $(BUILDDIR)
-    
-ifneq ($(TARGET_LIBDIR),$(TARGET_BINDIR))
-$(TARGET_LIBDIR) :
-	@echo -- Making directory $(TARGET_LIBDIR)
-	-$(MKDIR) $(TARGET_LIBDIR)
-    
-endif
-
-$(TARGET_BINDIR) :
-	@echo -- Making directory $(TARGET_BINDIR)
-	-$(MKDIR) $(TARGET_BINDIR)
-    
+       
 $(TARGET_LIBDIR)/$(TARGET_DLL): | $(TARGET_LIBDIR)
 
 $(TARGET_BINDIR)/$(TARGET_EXE): | $(TARGET_BINDIR)
@@ -150,9 +145,9 @@ $(BUILDDIR)/$(TARGET_DLL) $(OBJ) $(RESOURCE_OBJ): | $(BUILDDIR)
 clean:
 	-$(RMDIR) $(BUILDDIR)
 
-dll: $(TARGET_LIBDIR)/$(TARGET_DLL)
+dll: commonFiles $(TARGET_LIBDIR)/$(TARGET_DLL)
 
-exe: $(TARGET_BINDIR)/$(TARGET_EXE)
+exe: commonFiles $(TARGET_BINDIR)/$(TARGET_EXE)
    
 .PHONY: clean dll exe
 

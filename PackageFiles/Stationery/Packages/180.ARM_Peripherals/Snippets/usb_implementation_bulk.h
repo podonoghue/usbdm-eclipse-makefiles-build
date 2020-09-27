@@ -46,7 +46,7 @@ namespace USBDM {
 #else
 #define SERIAL_NO           "USBDM-0001"
 #endif
-#define PRODUCT_DESCRIPTION "Digital Logic Board"
+#define PRODUCT_DESCRIPTION "Kinetis"
 #define MANUFACTURER        "pgo"
 
 static constexpr uint16_t  VENDOR_ID   = 0x16D0;    // Vendor ID (actually MCS)

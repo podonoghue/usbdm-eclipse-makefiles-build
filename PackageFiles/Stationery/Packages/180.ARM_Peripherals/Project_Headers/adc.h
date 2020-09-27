@@ -88,7 +88,8 @@ enum AdcAveraging {
    AdcAveraging_8   = ADC_SC3_AVGE(1)|ADC_SC3_AVGS(1),  //!< Average across 8 conversions
    AdcAveraging_16  = ADC_SC3_AVGE(1)|ADC_SC3_AVGS(2),  //!< Average across 16 conversions
    AdcAveraging_32  = ADC_SC3_AVGE(1)|ADC_SC3_AVGS(3),  //!< Average across 32 conversions
-   AdcAveraging_Cal = AdcAveraging_32|ADC_SC3_CAL(1),   //!< Average across 32 conversions + start calibration
+   /// Average across 32 conversions + clear flag + start calibration
+   AdcAveraging_Cal = AdcAveraging_32|ADC_SC3_CAL_MASK|ADC_SC3_CALF_MASK,
 };
 
 /**
@@ -160,8 +161,8 @@ enum AdcPower {
  * This actually extends the number of conversion clock cycles but is offset by allowing a faster input clock.
  */
 enum AdcClockRange {
-   AdcClockRange_normal = ADC_CFG2_ADHSC(0), //!< Normal input clock range
-   AdcClockRange_high   = ADC_CFG2_ADHSC(1), //!< Higher speed input clock range selected
+   AdcClockRange_Normal = ADC_CFG2_ADHSC(0), //!< Normal input clock range
+   AdcClockRange_High   = ADC_CFG2_ADHSC(1), //!< Higher speed input clock range selected
 };
 
 /**
@@ -199,7 +200,7 @@ enum AdcCompare {
 /**
  * Type definition for ADC interrupt call back.
  *
- * @param[in] value   Conversion result from channel
+ * @param[in] result  Conversion result from channel
  * @param[in] channel Channel providing the result
  */
 typedef void (*ADCCallbackFunction)(uint32_t result, int channel);
@@ -393,7 +394,7 @@ public:
     * @param[in] adcAsyncClock   Controls whether the internal ADC clock is always enabled or only when needed for a conversion
     *
     * @note These settings apply to all channels on the ADC.\n
-    * The resulting ADC clock rate should be restricted to the following ranges (assumes AdcPower_Normal, AdcClockRange_high):\n
+    * The resulting ADC clock rate should be restricted to the following ranges (assumes AdcPower_Normal, AdcClockRange_High):\n
     *  [2..12MHz] for 16-bit conversion modes  \n
     *  [1..18MHz] for other conversion modes
     */
@@ -403,11 +404,11 @@ public:
          AdcSample       adcSample       = AdcSample_Normal,
          AdcPower        adcPower        = AdcPower_Normal,
          AdcMuxsel       adcMuxsel       = AdcMuxsel_B,
-         AdcClockRange   adcClockRange   = AdcClockRange_high,
+         AdcClockRange   adcClockRange   = AdcClockRange_High,
          AdcAsyncClock   adcAsyncClock   = AdcAsyncClock_Disabled
          ) {
       enable();
-      adc().CFG1 = adcResolution|adcClockSource|calculateClockDivider(adcClockSource)|adcPower|(adcSample&ADC_CFG1_ADLSMP_MASK);
+      adc().CFG1 = adcResolution|adcClockSource|calculateClockDivider(adcClockSource, adcClockRange, adcPower)|adcPower|(adcSample&ADC_CFG1_ADLSMP_MASK);
       adc().CFG2 = adcMuxsel|adcClockRange|adcAsyncClock|(adcSample&ADC_CFG2_ADLSTS_MASK);
    }
 
@@ -451,13 +452,27 @@ public:
     *
     * @return ADC_CFG1_ADIV value
     */
-   static unsigned calculateClockDivider(AdcClockSource adcClockSource) {
+   static unsigned calculateClockDivider(AdcClockSource adcClockSource, AdcClockRange adcClockRange, AdcPower adcPower) {
       static constexpr unsigned MinClock =  2000000;
-      static constexpr unsigned MaxClock = 12000000;
+      unsigned maxClock = 0;
+      switch(adcPower|adcClockRange) {
+         case AdcPower_Low|AdcClockRange_Normal :
+            maxClock =  4000000;
+            break;
+         case AdcPower_Low|AdcClockRange_High :
+            maxClock =  6000000; // Guess
+            break;
+         case AdcPower_Normal|AdcClockRange_Normal :
+            maxClock =  8000000;
+            break;
+         case AdcPower_Normal|AdcClockRange_High :
+            maxClock = 12000000;
+            break;
+      }
       unsigned clockFrequency = Info::getInputClockFrequency(adcClockSource);
       unsigned adiv;
       for (adiv=0; adiv<=3; adiv++) {
-         if ((clockFrequency <= MaxClock) && (clockFrequency >= MinClock)) {
+         if ((clockFrequency <= maxClock) && (clockFrequency >= MinClock)) {
             break;
          }
          clockFrequency /= 2;

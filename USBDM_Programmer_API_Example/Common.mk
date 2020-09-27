@@ -1,24 +1,38 @@
 # Shared make definitions
-# Modified for Raspberry Pi
-
 #.SILENT :
 
 MAJOR_VERSION := 4
 MINOR_VERSION := 12
 MICRO_VERSION := 1
-USBDM_VERSION := $(MAJOR_VERSION).$(MINOR_VERSION)
+
+PKG_VERSION := $(MAJOR_VERSION).$(MINOR_VERSION)
+PKG_NAME = usbdm
 
 # Used as prefix with the above when in build directory $(DUMMY_CHILD)/$(SHARED_SRC) = PackageFiles/src
 DUMMY_CHILD    := PackageFiles
 
+ifeq ('$(OS)','')
+   OS=Windows_NT
+endif
+
+BITNESS ?= 64
+
 ifeq ($(OS),Windows_NT)
-    UNAME_S := Windows
-    UNAME_M := i386
-    MULTIARCH := i386-win-gnu
+   UNAME_S := Windows
+   ifeq ($(BITNESS),32)
+      UNAME_M   := i386
+      MULTIARCH := i386-win-gnu
+   else
+      UNAME_M   := x86_64
+      MULTIARCH := x86_64-win-gnu
+   endif
+   export TMP  ?= C:\Users\PETERO~1\AppData\Local\Temp
+   export TEMP ?= C:\Users\PETERO~1\AppData\Local\Temp
 else
-    UNAME_S := $(shell uname -s)
-    UNAME_M := $(shell uname -m)
-    MULTIARCH := $(shell gcc --print-multiarch)
+   UNAME_S   := $(shell uname -s)
+   UNAME_M   := $(shell uname -m)
+   MULTIARCH := $(shell gcc --print-multiarch)
+   BITNESS   ?= $(shell getconf LONG_BIT)
 endif
 
 #===========================================================
@@ -28,14 +42,16 @@ SHARED_LIBDIRS := ../Shared_V4/$(MULTIARCH)
 
 #===========================================================
 # Where to find private libraries on linux
-USBDM_LIBDIR="/usr/lib/$(MULTIARCH)/usbdm"
+PKG_LIBDIR="/usr/lib/$(MULTIARCH)/${PKG_NAME}"
+
+BUILDDIR_SUFFIXx32 ?= .i386-win-gnu
+BUILDDIR_SUFFIXx64 ?= .x86_64-win-gnu
 
 #===========================================================
 # Where to build
 # These may be forced on the command line
 ifeq ($(UNAME_S),Windows)
    DIRS = $(COMMON_DIRS) $(WIN_DIRS)
-   BITNESS         ?= 32
    TARGET_BINDIR   ?= ../PackageFiles/bin/$(MULTIARCH)
    TARGET_LIBDIR   ?= ../PackageFiles/bin/$(MULTIARCH)
    BUILDDIR_SUFFIX ?= .$(MULTIARCH)
@@ -43,7 +59,6 @@ ifeq ($(UNAME_S),Windows)
 else
    # Assume Linux
    DIRS = $(COMMON_DIRS)
-   BITNESS ?= $(shell getconf LONG_BIT)
    TARGET_BINDIR   ?= ../PackageFiles/bin/$(MULTIARCH)
    TARGET_LIBDIR   ?= ../PackageFiles/lib/$(MULTIARCH)
    BUILDDIR_SUFFIX ?= .$(MULTIARCH)
@@ -55,22 +70,30 @@ ifeq ($(UNAME_S),Windows)
    LIB_PREFIX = 
    LIB_SUFFIX = .dll
    EXE_SUFFIX = .exe
-   MINGWBIN := c:/Apps/MinGW/bin
-#   MINGWBIN := C:/Apps/mingw-w64/i686-5.2.0-posix-dwarf-rt_v4-rev0/mingw32/bin
-   MSYSBIN  := C:/Apps/MinGW/msys/1.0/bin
-   RM       := $(MSYSBIN)/rm -f
-   RMDIR    := $(MSYSBIN)/rm -R -f
-   TOUCH    := $(MSYSBIN)/touch
-   MKDIR    := $(MSYSBIN)/mkdir -p
-   CP       := $(MSYSBIN)/cp
-   MAKE     := $(MINGWBIN)/mingw32-make
-   GCC      := $(MINGWBIN)/gcc
-   GPP      := $(MINGWBIN)/g++
-   WINDRES  := $(MINGWBIN)/windres
-   STRIP    := $(MINGWBIN)/strip
-   STRIPFLAGS := --strip-unneeded
-   #PROGRAM_DIR = C:/"Program Files"
-   PROGRAM_DIR = C:/'Program Files (x86)'
+   
+   MSYS_HOME_64  := 
+   MINGW_HOME    := /mingw$(BITNESS)
+#   MSYS_HOME_64  := C:/Apps/msys64
+#   MINGW_HOME    := C:/Apps/msys64/mingw$(BITNESS)
+   MSYS_BIN      := $(MSYS_HOME_64)/usr/bin
+   MINGW_BIN     := $(MINGW_HOME)/bin
+   RM            := $(MSYS_BIN)/rm -fy
+   RMDIR         := $(MSYS_BIN)/rm -R -f
+   TOUCH         := $(MSYS_BIN)/touch
+   MKDIR         := $(MSYS_BIN)/mkdir -p
+   CP            := $(MSYS_BIN)/cp
+#   MAKE          := $(MSYS_BIN)/make
+   MAKE          := make
+   GCC           := $(MINGW_BIN)/gcc
+   GPP           := $(MINGW_BIN)/g++
+   WINDRES       := $(MINGW_BIN)/windres   --use-temp-file 
+   STRIP         := $(MINGW_BIN)/strip
+   STRIPFLAGS    := --strip-unneeded
+#	export PATH=/usr/bin:/usr/local/bin:/mingw64/bin:
+	export PATH=$(MSYS_BIN):$(MINGW_BIN)
+
+   PROGRAM_DIR_x64 = C:\'Program Files'
+   PROGRAM_DIR_x32 = C:\'Program Files (x86)'
 else
    .SUFFIXES : .d
    LIB_PREFIX 			:= lib
@@ -79,8 +102,8 @@ else
    LIB_NO_SUFFIX 		:= .so
    EXE_SUFFIX 			:= 
 
-   MINGWBIN := 
-   MSYSBIN  := 
+   MINGW_BIN := 
+   MSYS_BIN  := 
    RM       := rm -f
    RMDIR    := rm -R -f
    TOUCH    := touch
@@ -105,12 +128,14 @@ ifeq ($(UNAME_S),Windows)
 endif
 
 #===========================================================
-# WIN32
+# Should change to using $(GUI_OPTS)
+#
 ifeq ($(UNAME_S),Windows)
-   WIN32_GUI_OPTS     := -Wl,--subsystem,windows -mwindows
+   GUI_OPTS := -Wl,--subsystem,windows -mwindows
 else
-   WIN32_GUI_OPTS     := 
+   GUI_OPTS     := 
 endif
+WIN32_GUI_OPTS  := GUI_OPTS
 
 #===========================================================
 # WDI
@@ -125,7 +150,7 @@ WDI_LIBS       := -lwdi-static -lsetupapi -lole32  -lcomctl32
 # Pick up shared DLLs from Shared_V4/lib
 TCL_LIBDIRS    := 
 ifeq ($(UNAME_S),Windows)
-   TCL_INC        := -IC:/Apps/Tcl/include
+   TCL_INC        := -Itcl8.6
    TCL_LIBS       := -ltcl86
 else
    TCL_INC        := -I/usr/include/tcl8.6
@@ -151,7 +176,7 @@ endif
 #===========================================================
 # Dynamic Library loading
 ifeq ($(UNAME_S),Windows)
-   USBDM_DYNAMIC_LIBS    := 
+   USBDM_DYNAMIC_LIBS    := -ldl
 else
    USBDM_DYNAMIC_LIBS    := -ldl
 endif
@@ -179,62 +204,16 @@ endif
 #===========================================================
 # WXWIDGETS
 ifeq ($(UNAME_S),Windows)
-   WXWIDGETS_INSTALL_DIR=C:/Apps/wxWidgets-3.1.0
-   WXWIDGETS_VERSION_NUM=311
-   WXWIDGETS_INC     := -I$(WXWIDGETS_INSTALL_DIR)/lib/gcc_lib/mswu -I$(WXWIDGETS_INSTALL_DIR)/include -I$(WXWIDGETS_INSTALL_DIR)/lib/gcc_dll/mswu
-   WXWIDGETS_DEFS    := -DuseWxWidgets -D__WXMSW__ -D__GNUWIN32__ -DUNICODE
-
-   # Pick up shared DLLs from Shared_V4/lib
-   WXWIDGETS_SHARED_LIBDIRS :=
-   WXWIDGETS_SHARED_LIBS    := \
-   -lwxmsw$(WXWIDGETS_VERSION_NUM)u_core_gcc_custom       \
-   -lwxbase$(WXWIDGETS_VERSION_NUM)u_gcc_custom           \
-   -lwxmsw$(WXWIDGETS_VERSION_NUM)u_adv_gcc_custom        
-   
-   #-lwxmsw$(WXWIDGETS_VERSION_NUM)u_richtext_gcc_custom     \
-   #-lwxbase$(WXWIDGETS_VERSION_NUM)u_xml_gcc_custom         \
-   #-lwxmsw$(WXWIDGETS_VERSION_NUM)u_html_gcc_custom         \
-   #-lwxbase$(WXWIDGETS_VERSION_NUM)u_net_gcc_custom         \
-   #-lwxmsw$(WXWIDGETS_VERSION_NUM)u_aui_gcc_custom          \
-   #-lwxmsw$(WXWIDGETS_VERSION_NUM)u_gl_gcc_custom           \
-   #-lwxmsw$(WXWIDGETS_VERSION_NUM)u_media_gcc_custom      -lwxmsw$(WXWIDGETS_VERSION_NUM)u_propgrid_gcc_custom \
-   #-lwxmsw$(WXWIDGETS_VERSION_NUM)u_ribbon_gcc_custom     -lwxmsw$(WXWIDGETS_VERSION_NUM)u_richtext_gcc_custom \
-   #-lwxmsw$(WXWIDGETS_VERSION_NUM)u_stc_gcc_custom        -lwxmsw$(WXWIDGETS_VERSION_NUM)u_webview_gcc_custom  \
-   #-lwxmsw$(WXWIDGETS_VERSION_NUM)u_xrc_gcc_custom   
-
-   WXWIDGETS_STATIC_LIBDIRS := -L$(WXWIDGETS_INSTALL_DIR)/lib/gcc_lib
-   WXWIDGETS_STATIC_LIBS    := \
-   -lwxmsw29u_core \
-   -lwxpng \
-   -lwxzlib \
-   -lwxbase29u \
-   -lgdi32 -lcomdlg32 -lwinspool -lcomctl32 -lole32 -loleaut32 -luuid 
-   
-   #-luser32 -lshell32 -lwinmm -lkernel32 -ladvapi32 -lwsock32
-   #-lwxjpeg \
-   #-lwxbase29u_xml \
-   #-lwxbase29u_net \
-   #-lwxmsw29u_xrc  \
-   #-lwxmsw29u_html \
-   #-lwxmsw29u_aui \
-   #-lwxbase29u \
-   #-lwxmsw29u_adv \
-   #-lwxtiff \
-   #-lwxmsw29u_richtext \
-   #-lwxzlib -lwxregexu  \
-   #-lwxexpat
-   #-lrpcrt4 
-   #-lwxmsw29u_gl -lwxmsw29u_media -lwxmsw29u_propgrid -lwxmsw29u_ribbon \
-   #-lwxmsw29u_stc -lwxmsw29u_webview \
-   #-lwxscintilla           
-
+   WXWIDGETS_INC            := $(shell $(MINGW_BIN)/wx-config --cppflags)
+   WXWIDGETS_SHARED_LIBS    := $(shell $(MINGW_BIN)/wx-config --libs)
+#   WXWIDGETS_INC            := '$(shell wx-config --cppflags)'
+#   WXWIDGETS_INC            := `wx-config --cppflags` #$(shell wx-config --cppflags)
+#   WXWIDGETS_SHARED_LIBS    := `wx-config --libs`     #$(shell wx-config --libs)
+   WXWIDGETS_DEFS           := -DuseWxWidgets -D__WXMSW__ -D__GNUWIN32__ -D_UNICODE -DUNICODE
 else
-   WXWIDGETS_INC     := $(shell wx-config --cppflags)
-   WXWIDGETS_DEFS    := -DuseWxWidgets
-
-   WXWIDGETS_SHARED_LIBDIRS :=
+   WXWIDGETS_INC            := $(shell wx-config --cppflags)
+   WXWIDGETS_DEFS           := -DuseWxWidgets
    WXWIDGETS_SHARED_LIBS    := $(shell wx-config --libs)
-
    WXWIDGETS_STATIC_LIBDIRS := 
    WXWIDGETS_STATIC_LIBS    := 
 endif
@@ -249,46 +228,23 @@ endif
 
 #===========================================================
 # XERCES
-ifeq ($(UNAME_S),Windows)
-   XERCES_INC     := -IC:/Apps/xerces-c-3.1.1/src/
-
-   # Pick up shared DLLs from Shared_V4/lib
-   XERCES_SHARED_LIBDIRS := 
-   XERCES_STATIC_LIBDIRS := -LC:/Apps/xerces-c-3.1.1/src/.libs
-   XERCES_SHARED_LIBS    := -lxerces-c-3-1
-   XERCES_STATIC_LIBS    := -lxerces-c
-else
-   XERCES_INC     :=
-
-   # Pick up shared DLLs from Shared_V4/lib
-   XERCES_SHARED_LIBDIRS := 
-   XERCES_STATIC_LIBDIRS := 
    XERCES_SHARED_LIBS    := -lxerces-c
-   XERCES_STATIC_LIBS    := 
-endif
-
-ifdef SHARED_XERCES
    XERCES_LIBS    := $(XERCES_SHARED_LIBS)
-   XERCES_LIBDIRS := $(XERCES_SHARED_LIBDIRS)
-else
-   XERCES_LIBS    := $(XERCES_STATIC_LIBS)
-   XERCES_LIBDIRS := $(XERCES_STATIC_LIBDIRS)
-endif
 
 #===========================================================
 # Windows Installer XML v3.5 & Windows Installer v4.5 SDK
 
-WIN_XML_INSTALLER_INC     := -I$(PROGRAM_DIR)/'Windows Installer 4.5 SDK'/INCLUDE
-WIN_XML_INSTALLER_LIBDIRS := -L$(PROGRAM_DIR)/'Windows Installer 4.5 SDK'/LIB/x86
+WIN_XML_INSTALLER_INC     := -I$(PROGRAM_DIR_x32)/'Windows Installer 4.5 SDK'/INCLUDE
+WIN_XML_INSTALLER_LIBDIRS := -L$(PROGRAM_DIR_x32)/'Windows Installer 4.5 SDK'/LIB/x86
 WIN_XML_INSTALLER_LIBS    := -lMsi
 
 #===========================================================
 # Java for JNI
-PROGRAM_DIR_JAVA = C:/'Program Files'
-#PROGRAM_DIR_JAVA = C:/'Program Files (x86)'
+#JAVA_DIR = 'C:/Program Files/Java/jdk1.8.0_201/'
+JAVA_DIR = C:/Apps/jdk-14.0.2
 ifeq ($(UNAME_S),Windows)
-   JAVA_INC := -I$(PROGRAM_DIR_JAVA)/Java/jdk1.8.0_60/include
-   JAVA_INC += -I$(PROGRAM_DIR_JAVA)/Java/jdk1.8.0_60/include/win32
+   JAVA_INC := -I$(JAVA_DIR)/include
+   JAVA_INC += -I$(JAVA_DIR)/include/win32
 else
    JAVA_INC := -I/usr/lib/jvm/default-java/include $(jvm_includes)
 endif
@@ -297,11 +253,12 @@ endif
 # Common USBDM DLLs in debug and non-debug versions as needed
 USBDM_WX_LIBS := -lusbdm-wx-plugin$(VSUFFIX)
 
-_LIB_USB_SHARED  := usb-1.0
-_LIB_USB_STATIC  := usb-static-1.0
+LIB_USB_SHARED  := -lusb-1.0
+LIB_USB_STATIC  := -l:libusb-1.0.a
 
 ifeq ($(UNAME_S),Windows)
-   LIB_USB = -l$(_LIB_USB_STATIC)
+   LIB_USB = $(LIB_USB_SHARED)
+#   LIB_USB = $(LIB_USB_STATIC)
    ifdef DEBUG
       USBDM_LIBS     := -lusbdm-debug$(VSUFFIX) 
       USBDM_DSC_LIBS := -lusbdm-dsc-debug$(VSUFFIX) 
@@ -331,7 +288,6 @@ endif
 ifeq ($(UNAME_S),Windows)
    GCC_VISIBILITY_DEFS :=
    THREADS := -mthreads
-   CFLAGS  := -DWINVER=_WIN32_WINNT_WIN6 -D_WIN32_WINNT=_WIN32_WINNT_WIN6
 else
    GCC_VISIBILITY_DEFS :=-fvisibility=hidden -fvisibility-inlines-hidden
    THREADS := 
@@ -353,7 +309,11 @@ else
 endif
 
 ifneq ($(OS),Windows_NT)
-   LDFLAGS += -Wl,-rpath,${USBDM_LIBDIR}
+   # Executable will look here for libraries
+   LDFLAGS += -Wl,-rpath,${PKG_LIBDIR}
+   
+   # Linker will look here
+   LDFLAGS += -Wl,-rpath-link,${SHARED_LIBDIRS}
    LDFLAGS += -Wl,-rpath-link,${TARGET_LIBDIR}
 
    ifeq ($(UNAME_M),x86)
@@ -365,11 +325,8 @@ ifneq ($(OS),Windows_NT)
    endif
 endif
 
-CFLAGS += -std=gnu++14
-CFLAGS  += ${THREADS} -Wall -shared ${GCC_VISIBILITY_DEFS}
+CFLAGS  += -std=gnu++14 ${THREADS} -Wall -shared ${GCC_VISIBILITY_DEFS}
 LDFLAGS += ${THREADS}
-
-#CFLAGS += -Wshadow -DWINVER=0x500 -D_WIN32_IE=0x500 -std=gnu99 -Wall -Wundef -Wunused -Wstrict-prototypes -Werror-implicit-function-declaration -Wno-pointer-sign
 
 #===========================================================
 # Extra libraries for WINSOCK

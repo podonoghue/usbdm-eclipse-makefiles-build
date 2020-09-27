@@ -8,6 +8,7 @@
  ============================================================================
  */
 #include "hardware.h"
+#include "pmc.h"
 
 using namespace USBDM;
 
@@ -22,10 +23,25 @@ using namespace USBDM;
 using Adc        = Adc0;
 
 // ADC channel to use
-using AdcChannel = Adc::Channel<0>;
+using BandgapAdcChannel     = Adc0::Channel<0b11011>;  // Internal bandgap
+using AdcChannel    = Adc0::Channel<21>;  // FRDM_K20 temp sensor
 
 // Resolution to use for ADC
-constexpr AdcResolution adcResolution = AdcResolution_10bit_se;
+constexpr AdcResolution adcResolution = AdcResolution_16bit_se;
+
+void reportChipTemperature() {
+   using TemperatureChannel    = Adc0::Channel<0b11010>;  // Internal temp sensor
+   constexpr float VREF_H      = 3.3;                     // External Vref voltage ~ Vcc
+
+   unsigned tMeasure        = TemperatureChannel::readAnalogue();
+   float    tVoltage        = tMeasure*(VREF_H/Adc0::getSingleEndedMaximum(adcResolution));
+   // Formula from data sheets
+   float    chipTemperature = 25 - (tVoltage-0.719)/.001715;
+
+   console.setFloatFormat(1, Padding_LeadingSpaces, 2);
+   console.write("Temp = ").write(chipTemperature).writeln(" degrees");
+   console.resetFormat();
+}
 
 int main(void) {
    // Enable and configure ADC
@@ -37,14 +53,22 @@ int main(void) {
    // Connect ADC channel to pin
    AdcChannel::setInput();
 
+   // Enable band-gap voltage reference buffer in PMC
+   Pmc::configureBandgapOperation(PmcBandgapBuffer_On, PmcBandgapLowPowerEnable_Off);
+
+   console.setFloatFormat(6, Padding_LeadingSpaces, 2);
+
    for(;;) {
+//      reportChipTemperature();
+
       // Do next conversion
-      uint32_t value = AdcChannel::readAnalogue();
+      uint32_t value = BandgapAdcChannel::readAnalogue();
 
       // Scale value for input voltage range (Assumes Vrh=3.3V, Vrl=0.0V)
       float voltage = value*3.3/Adc::getSingleEndedMaximum(adcResolution);
 
       // Report
       console.write("Value = ").write(voltage).writeln(" volts");
+      waitMS(200);
    }
 }

@@ -269,6 +269,18 @@ public:
    }
 
    /**
+    *  Enables and configures the PIT if not already done.
+    *  This also disables all channel interrupts and channel reservations if newly configured.
+    *
+    *  @param[in]  pitDebugMode  Determined whether the PIT halts when suspended during debug
+    */
+   static void configureIfNeeded(PitDebugMode pitDebugMode=PitDebugMode_Stop) {
+      if ((pit().MCR & PIT_MCR_MDIS_MASK) == 0) {
+         configure(pitDebugMode);
+      }
+   }
+
+   /**
     *   Disable the PIT (all channels)
     */
    static void disable() {

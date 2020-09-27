@@ -787,7 +787,7 @@ public:
    static constexpr unsigned RIGHT = right;
 
    /** Mask for the bits being manipulated within underlying port hardware */
-   static constexpr uint32_t MASK = (uint32_t)((1ULL<<(left-right+1))-1)<<right;
+   static constexpr uint32_t MASK = static_cast<uint32_t>((1ULL<<(left-right+1))-1)<<right;
 
    /** Polarity of field */
    static constexpr Polarity POLARITY = polarity;
@@ -1077,6 +1077,26 @@ public:
       return Port::setCallback(callback);
    }
 
+   /**
+    * @brief Convenience template for Gpios associated with this field. See @ref Gpio_T
+    *
+    * <b>Usage</b>
+    * @code
+    * using namespace USBDM;
+    *
+    * // Instantiate a 4-bit field in GPIO C
+    * using Field = GpioCField<5, 2, ActiveHigh>;
+    *
+    * // Instantiate a GPIO within the field ( <=> GpioC<4, ActiveLow>)
+    * using Bit = Field::Bit<2, ActiveLow>;
+    *
+    * @endcode
+    *
+    * @tparam bitNum        Bit number in the port
+    * @tparam polarity      Polarity of pin. Either ActiveHigh or ActiveLow
+    */
+   template<unsigned bitNum, Polarity bitPolarity=polarity> class Bit :
+   public GpioBase_T<Info::pinInfo.clockInfo, Info::pinInfo.portAddress, Info::pinInfo.irqNum, Info::pinInfo.gpioAddress, bitNum+RIGHT, bitPolarity> {};
 };
 
 #ifdef USBDM_GPIOA_IS_DEFINED

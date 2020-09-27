@@ -201,7 +201,7 @@
       <ComponentGroup Id='Cg.Patch_ECLIPSE_$(var.ECLIPSE_VER)Common'>
          <!-- ComponentRef Id='C.ProgramMenuPatchDir' -->
          <ComponentRef Id='C.MergeEXE'/>
-         <ComponentRef Id='C.CommonFiles'/>
+         <ComponentGroupRef Id='Cg.CommonFiles'/>
          <ComponentGroupRef Id='Cg.WizardPatchData' />
       </ComponentGroup>
 
@@ -223,7 +223,7 @@
          <ComponentRef Id='C.$(var.ECLIPSE_VER)_CDT.Marker' />
          <ComponentRef Id='C.$(var.ECLIPSE_VER)_PE_Config' />
          <ComponentGroupRef Id='Cg.Patch_ECLIPSE_$(var.ECLIPSE_VER)Common' />
-         <ComponentRef Id='C.CommonFiles' />
+         <ComponentGroupRef Id='Cg.CommonFiles' />
          <ComponentRef Id='C.UsbdmGdbServer' />
          <ComponentGroupRef Id='Cg.UpdateSite' />
          <ComponentGroupRef Id='Cg.DeviceDataInstall' />

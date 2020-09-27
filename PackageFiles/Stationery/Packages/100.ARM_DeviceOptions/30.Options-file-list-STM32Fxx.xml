@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no" ?>
+<!DOCTYPE root SYSTEM "../package.dtd">
+
+<root version="1.0">
+   <!-- Extra Optional files for STM32F103RBT6 -->
+   <projectActionList id="Options-file-list-STM32F103RBT6">
+      <applyWhen>
+         <and>
+	    <deviceSubfamilyIs>STM32</deviceSubfamilyIs>
+            <variableRef idRef="outputType" condition="matches" value=".*\.newProjxectType\.exe$" />
+         </and>
+      </applyWhen>
+      <!-- Header file -->
+      <!-- C Include paths -->
+      <projectOption id="net.sourceforge.usbdm.gnu.c.compiler.option.include.paths">
+         <value>&quot;${ProjDirPath}/Project_Headers&quot;</value>
+      </projectOption>
+      <!-- C++ Include paths -->
+      <projectOption id="net.sourceforge.usbdm.gnu.cpp.compiler.option.include.paths">
+         <value>&quot;${ProjDirPath}/Project_Headers&quot;</value>
+      </projectOption>
+   </projectActionList>
+</root>

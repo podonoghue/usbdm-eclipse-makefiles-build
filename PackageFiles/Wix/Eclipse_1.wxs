@@ -107,8 +107,8 @@
          </Condition>
          <ComponentRef Id='C.ProgramMenuFolder' />
          <ComponentRef Id='C.$(var.ECLIPSE_VER)_CDT.Marker' />
-         <ComponentRef Id='C.CommonFiles' />
          <ComponentRef Id='C.UsbdmGdbServer' />
+         <ComponentGroupRef Id='Cg.CommonFiles' />
          <ComponentGroupRef Id='Cg.UpdateSite' />
          <ComponentGroupRef Id='Cg.DeviceDataInstall' />
          <ComponentGroupRef Id='Cg.StationeryInstall' />
