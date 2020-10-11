@@ -319,7 +319,7 @@ public:
     *       It is necessary to identify the originating channel in the callback
     */
    static ErrorCode INLINE_RELEASE setChannelCallback(FtmChannelCallbackFunction callback, unsigned channel) {
-      static_assert(Info::irqHandlerInstalled, "FTM not configure for interrupts");
+      static_assert(Info::irqHandlerInstalled, "FTM not configured for interrupts - Modify Configure.usbdm");
       static_assert(Info::NumChannelVectors > 1, "This function should not be used when all timer channels share a single callback");
       if (callback == nullptr) {
          sChannelCallbacks[channel/ChannelVectorRatio] = unhandledChannelCallback;
@@ -351,7 +351,7 @@ public:
     *       It is necessary to identify the originating channel in the callback
     */
    static ErrorCode INLINE_RELEASE setChannelCallback(FtmChannelCallbackFunction callback) {
-      static_assert(Info::irqHandlerInstalled, "FTM not configure for interrupts");
+      static_assert(Info::irqHandlerInstalled, "FTM not configured for interrupts - Modify Configure.usbdm");
       static_assert(Info::NumChannelVectors == 1, "This function should only be used when all timer channels share a single callback");
       if (callback == nullptr) {
          sChannelCallbacks[0] = unhandledChannelCallback;
@@ -392,7 +392,7 @@ public:
     *                        nullptr to indicate none
     */
    static INLINE_RELEASE void setTimerOverflowCallback(FtmCallbackFunction theCallback) {
-      static_assert(Info::irqHandlerInstalled, "FTM not configure for interrupts");
+      static_assert(Info::irqHandlerInstalled, "FTM not configured for interrupts - Modify Configure.usbdmF");
       if (theCallback == nullptr) {
          sToiCallback = unhandledCallback;
          return;
