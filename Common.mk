@@ -266,7 +266,7 @@ ifeq ($(UNAME_S),Windows)
       USBDM_DSC_LIBS := -lusbdm-dsc$(VSUFFIX) 
    endif
 else
-   LIB_USB = -l$(_LIB_USB_SHARED)
+   LIB_USB = $(LIB_USB_SHARED)
    ifdef DEBUG
       USBDM_LIBS     := -lusbdm-debug
       USBDM_DSC_LIBS := -lusbdm-dsc-debug 
