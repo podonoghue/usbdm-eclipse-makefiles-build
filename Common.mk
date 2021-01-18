@@ -11,10 +11,6 @@ PKG_NAME = usbdm
 # Used as prefix with the above when in build directory $(DUMMY_CHILD)/$(SHARED_SRC) = PackageFiles/src
 DUMMY_CHILD    := PackageFiles
 
-ifeq ('$(OS)','')
-   OS=Windows_NT
-endif
-
 #BITNESS ?= 64
 
 ifeq ($(OS),Windows_NT)
