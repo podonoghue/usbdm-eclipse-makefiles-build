@@ -15,7 +15,8 @@ ifeq ('$(OS)','')
    OS=Windows_NT
 endif
 
-BITNESS ?= 64
+OS=
+#BITNESS ?= 64
 
 ifeq ($(OS),Windows_NT)
    UNAME_S := Windows
@@ -37,8 +38,8 @@ endif
 
 #===========================================================
 # Shared directories - Relative to child directory
-SHARED_SRC     := ../Shared_V4/src
-SHARED_LIBDIRS := ../Shared_V4/$(MULTIARCH)
+SHARED_SRC     := ../Shared/src
+SHARED_LIBDIR := ../Shared/$(MULTIARCH)
 
 #===========================================================
 # Where to find private libraries on linux
@@ -73,21 +74,23 @@ ifeq ($(UNAME_S),Windows)
    
    MSYS_HOME_64  := 
    MINGW_HOME    := /mingw$(BITNESS)
-#   MSYS_HOME_64  := C:/Apps/msys64
-#   MINGW_HOME    := C:/Apps/msys64/mingw$(BITNESS)
-   MSYS_BIN      := $(MSYS_HOME_64)/usr/bin
-   MINGW_BIN     := $(MINGW_HOME)/bin
-   RM            := $(MSYS_BIN)/rm -fy
-   RMDIR         := $(MSYS_BIN)/rm -R -f
-   TOUCH         := $(MSYS_BIN)/touch
-   MKDIR         := $(MSYS_BIN)/mkdir -p
-   CP            := $(MSYS_BIN)/cp
-#   MAKE          := $(MSYS_BIN)/make
+#   MSYS_HOME_64  := C:/Apps/msys64/
+#   MINGW_HOME    := C:/Apps/msys64/mingw$(BITNESS)/
+   MSYS_BIN      := $(MSYS_HOME_64)/usr/bin/
+   MINGW_BIN     := $(MINGW_HOME)/bin/
+   RM            := $(MSYS_BIN)rm -fy
+   RMDIR         := $(MSYS_BIN)rm -R -f
+   TOUCH         := $(MSYS_BIN)touch
+   MKDIR         := $(MSYS_BIN)mkdir -p
+   CP            := $(MSYS_BIN)cp
+#   MAKE          := $(MSYS_BIN)make
    MAKE          := make
-   GCC           := $(MINGW_BIN)/gcc
-   GPP           := $(MINGW_BIN)/g++
-   WINDRES       := $(MINGW_BIN)/windres   --use-temp-file 
-   STRIP         := $(MINGW_BIN)/strip
+   AR            := $(MINGW_BIN)ar
+   GCC           := $(MINGW_BIN)gcc
+   GPP           := $(MINGW_BIN)g++
+   WINDRES       := $(MINGW_BIN)windres  --use-temp-file
+#   WINDRES       := $(MINGW_BIN)windres   --use-temp-file 
+   STRIP         := $(MINGW_BIN)strip
    STRIPFLAGS    := --strip-unneeded
 #	export PATH=/usr/bin:/usr/local/bin:/mingw64/bin:
 	export PATH=$(MSYS_BIN):$(MINGW_BIN)
@@ -111,6 +114,7 @@ else
    CP       := cp
    LN       := ln -s -f
    MAKE     := make
+   AR       := ar
    GCC      := gcc
    GPP      := g++
    STRIP    := strip
@@ -124,7 +128,7 @@ SHARED_XERCES    := "Y"
 #===========================================================
 # Options to build standalone DLL (windows)
 ifeq ($(UNAME_S),Windows)
-   STATIC_GCC_OPTION := -static-libstdc++ -static-libgcc
+   STATIC_GCC_OPTION := -static -static-libstdc++ -static-libgcc
 endif
 
 #===========================================================
@@ -141,13 +145,13 @@ WIN32_GUI_OPTS  := GUI_OPTS
 # WDI
 # Header files in local dir
 WDI_INC        := 
-# Pick up shared DLLs from Shared_V4/lib
+# Pick up shared DLLs from Shared/lib
 WDI_LIBDIRS    := 
 WDI_LIBS       := -lwdi-static -lsetupapi -lole32  -lcomctl32
 
 #===========================================================
 # TCL
-# Pick up shared DLLs from Shared_V4/lib
+# Pick up shared DLLs from Shared/lib
 TCL_LIBDIRS    := 
 ifeq ($(UNAME_S),Windows)
    TCL_INC        := -Itcl8.6
@@ -219,7 +223,7 @@ else
 endif
 
 ifdef SHARED_WXWIDGETS
-   WXWIDGETS_LIBDIRS := $(WXWIDGETS_SHARED_LIBDIRS)
+   WXWIDGETS_LIBDIRS := $(WXWIDGETS_SHARED_LIBDIR)
    WXWIDGETS_LIBS    := $(WXWIDGETS_SHARED_LIBS)
 else
    WXWIDGETS_LIBDIRS := $(WXWIDGETS_STATIC_LIBDIRS)
@@ -267,7 +271,7 @@ ifeq ($(UNAME_S),Windows)
       USBDM_DSC_LIBS := -lusbdm-dsc$(VSUFFIX) 
    endif
 else
-   LIB_USB = -l$(_LIB_USB_SHARED)
+   LIB_USB = $(LIB_USB_SHARED)
    ifdef DEBUG
       USBDM_LIBS     := -lusbdm-debug
       USBDM_DSC_LIBS := -lusbdm-dsc-debug 
@@ -313,7 +317,7 @@ ifneq ($(OS),Windows_NT)
    LDFLAGS += -Wl,-rpath,${PKG_LIBDIR}
    
    # Linker will look here
-   LDFLAGS += -Wl,-rpath-link,${SHARED_LIBDIRS}
+   LDFLAGS += -Wl,-rpath-link,${SHARED_LIBDIR}
    LDFLAGS += -Wl,-rpath-link,${TARGET_LIBDIR}
 
    ifeq ($(UNAME_M),x86)
@@ -338,4 +342,4 @@ endif
 
 #===========================================================
 # Look in build and shared library directories first
-LIBDIRS := -L$(TARGET_LIBDIR) -L$(SHARED_LIBDIRS)
+LIBDIRS := -L$(TARGET_LIBDIR) -L$(SHARED_LIBDIR)

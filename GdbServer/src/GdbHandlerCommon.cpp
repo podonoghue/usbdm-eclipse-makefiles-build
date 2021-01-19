@@ -581,17 +581,26 @@ USBDM_ErrorCode GdbHandlerCommon::doQCommands(const GdbPacket *pkt) {
 #endif
       gdbInOut->sendGdbString(buff);
    }
-#if THREAD_MODE
+// This was an experiment - in any case obsolete
+//   else if (strncmp(cmd, "qL", sizeof("qL")-1) == 0) { // set current thread
+//      //                       qMnne<-----pid------><-----pid------>
+//      gdbInOut->sendGdbString("qM01100000000000000000000000000000100");
+//   }//qL1200000000000000000
+#if THREAD_MODE || 1
    else if (strncmp(cmd, "qC", sizeof("qC")-1) == 0) { // set current thread
-      gdbInOut->sendGdbString("QC1");
+      // Empty reply => use old thread ID
+      gdbInOut->sendGdbString("");
    }
+//   else if (strncmp(cmd, "qfThreadInfo", sizeof("qfThreadInfo")-1) == 0) {
+//      if (getTargetStatus() != T_NOCONNECTION) {
+//         gdbInOut->sendGdbString("m-1");
+//      }
+//      else {
+//         gdbInOut->sendGdbString("l");
+//      }
+//   }
    else if (strncmp(cmd, "qfThreadInfo", sizeof("qfThreadInfo")-1) == 0) {
-      if (getTargetStatus() != T_NOCONNECTION) {
-         gdbInOut->sendGdbString("m1");
-      }
-      else {
-         gdbInOut->sendGdbString("l");
-      }
+      gdbInOut->sendGdbString("1");
    }
    else if (strncmp(cmd, "qsThreadInfo", sizeof("qsThreadInfo")-1) == 0) {
       gdbInOut->sendGdbString("l");

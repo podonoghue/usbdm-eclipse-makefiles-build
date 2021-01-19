@@ -48,7 +48,7 @@ public:
    USBDM_ErrorCode           readReg(unsigned regNo, char *&buffPtr);
 
    USBDM_ErrorCode           armReadMemoryWord(unsigned long address, unsigned long *data);
-   GdbTargetStatus           getTargetStatus();
+   GdbTargetStatus           getTargetStatus() override;
 
    virtual uint16_t          targetToNative16(uint16_t data) override;
    virtual uint32_t          targetToNative32(uint32_t data) override;

@@ -32,9 +32,9 @@ CC = $(GPP)
 CFLAGS += -fno-exceptions
 
 LDFLAGS += $(LFLAGS)
-LDFLAGS += -Wl,--kill-at -shared 
+
 ifeq ($(UNAME_S),Windows)
-LDFLAGS += 
+LDFLAGS += -Wl,--kill-at -shared 
 else	
 LDFLAGS += -Wl,-soname,$(basename $(notdir $@))
 endif

@@ -132,7 +132,7 @@ makeDebFile() {
    ${RM} ${USBDM_BINDIR}/CopyFlash
    ${RM} ${USBDM_BINDIR}/*TestImage
    ${RM} ${USBDM_BINDIR}/*Example*   
-   ${RM} ${USBDM_BINDIR}/*-debug
+#   ${RM} ${USBDM_BINDIR}/*-debug
    ${RM} ${USBDM_BINDIR}/Test*
    chmod 755  ${USBDM_BINDIR}/*
 

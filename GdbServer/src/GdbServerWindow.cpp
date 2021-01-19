@@ -422,7 +422,7 @@ GdbHandler::GdbMessageLevel GdbServerWindow::getLoggingLevel() {
   *   - Handles polling target when running
   */
  void GdbServerWindow::OnTimer(wxTimerEvent& event) {
-    LOGGING;
+    LOGGING_Q;
     pollTarget();
  }
 
@@ -630,7 +630,9 @@ GdbHandler::GdbMessageLevel GdbServerWindow::getLoggingLevel() {
   * Poll target to check run status
   */
  void GdbServerWindow::pollTarget() {
-    LOGGING;
+    LOGGING_Q;
+    log.setLoggingLevel(0);
+
     static GdbHandler::GdbTargetStatus lastTargetStatus = GdbHandler::T_UNKNOWN;
 
     static unsigned recurse = 0;
@@ -659,8 +661,14 @@ GdbHandler::GdbMessageLevel GdbServerWindow::getLoggingLevel() {
           break;
        }
        targetStatus = gdbHandler->pollTarget();
-       log.print("Status = %s\n", GdbHandler::getStatusName(targetStatus));
-
+       {
+    	   static const char *lastStatus = nullptr;
+    	   const char *status = GdbHandler::getStatusName(targetStatus);
+    	   if (status != lastStatus) {
+    		   log.print("Status changed to %s\n", status);
+    	   }
+		   lastStatus = status;
+       }
        switch (targetStatus) {
           case GdbHandler::T_HALT:
           case GdbHandler::T_RESET:

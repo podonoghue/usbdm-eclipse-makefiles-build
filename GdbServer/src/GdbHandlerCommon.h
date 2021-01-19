@@ -152,6 +152,7 @@ protected:
    virtual uint16_t        targetToBE16(uint16_t data) = 0;
    virtual uint32_t        targetToBE32(uint32_t data) = 0;
    virtual uint32_t        getTarget32Bits(uint8_t buff[], int offset) = 0;
+   virtual GdbTargetStatus getTargetStatus() = 0;
 
    unsigned char registerBuffer[1000];
    unsigned registerBufferSize;       // Number of bytes valid in buffer, 0 => register cache invalid
