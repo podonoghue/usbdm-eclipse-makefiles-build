@@ -8,8 +8,3 @@ export OS
 # Do 64-bit builds
 echo make -f Makefile-x64.mk all BITNESS=64
 make -f Makefile-x64.mk all BITNESS=64
-
-# Uncomment to build 32-bit binaries on linux 64-bit
-#echo make -f Makefile all BITNESS=32
-#make -f Makefile all BITNESS=32
-

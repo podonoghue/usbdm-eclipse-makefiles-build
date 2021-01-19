@@ -15,8 +15,7 @@ ifeq ('$(OS)','')
    OS=Windows_NT
 endif
 
-OS=
-#BITNESS ?= 64
+BITNESS ?= 64
 
 ifeq ($(OS),Windows_NT)
    UNAME_S := Windows

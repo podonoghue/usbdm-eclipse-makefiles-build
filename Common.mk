@@ -11,12 +11,10 @@ PKG_NAME = usbdm
 # Used as prefix with the above when in build directory $(DUMMY_CHILD)/$(SHARED_SRC) = PackageFiles/src
 DUMMY_CHILD    := PackageFiles
 
+# Default to Windows NT
 ifeq ('$(OS)','')
    OS=Windows_NT
 endif
-
-OS=
-#BITNESS ?= 64
 
 ifeq ($(OS),Windows_NT)
    UNAME_S := Windows
@@ -27,6 +25,7 @@ ifeq ($(OS),Windows_NT)
       UNAME_M   := x86_64
       MULTIARCH := x86_64-win-gnu
    endif
+   # This is a hack because of resource compiler bugs
    export TMP  ?= C:\Users\PETERO~1\AppData\Local\Temp
    export TEMP ?= C:\Users\PETERO~1\AppData\Local\Temp
 else
@@ -45,9 +44,6 @@ SHARED_LIBDIR := ../Shared/$(MULTIARCH)
 # Where to find private libraries on linux
 PKG_LIBDIR="/usr/lib/$(MULTIARCH)/${PKG_NAME}"
 
-BUILDDIR_SUFFIXx32 ?= .i386-win-gnu
-BUILDDIR_SUFFIXx64 ?= .x86_64-win-gnu
-
 #===========================================================
 # Where to build
 # These may be forced on the command line
@@ -56,6 +52,10 @@ ifeq ($(UNAME_S),Windows)
    TARGET_BINDIR   ?= ../PackageFiles/bin/$(MULTIARCH)
    TARGET_LIBDIR   ?= ../PackageFiles/bin/$(MULTIARCH)
    BUILDDIR_SUFFIX ?= .$(MULTIARCH)
+   # Windows stills builds some 32-bit DLLs
+   BUILDDIR_SUFFIXx32 ?= .i386-win-gnu
+   BUILDDIR_SUFFIXx64 ?= .x86_64-win-gnu
+
    VSUFFIX         ?= .$(MAJOR_VERSION)
 else
    # Assume Linux
@@ -63,6 +63,10 @@ else
    TARGET_BINDIR   ?= ../PackageFiles/bin/$(MULTIARCH)
    TARGET_LIBDIR   ?= ../PackageFiles/lib/$(MULTIARCH)
    BUILDDIR_SUFFIX ?= .$(MULTIARCH)
+   #Linux only builds 64-bit
+   BUILDDIR_SUFFIXx32 ?= .$(MULTIARCH)
+   BUILDDIR_SUFFIXx64 ?= .$(MULTIARCH)
+
    include /usr/share/java/java_defaults.mk
 endif
 

@@ -16,7 +16,8 @@ rem Where Device data is kept
 set DEVICE_DATA=%PACKAGE_FILES%\DeviceData
 
 rem Where Binaries are kept
-set BINARY_FILES=%PACKAGE_FILES%\bin\i386-win-gnu
+set BINARY_FILES=%PACKAGE_FILES%\bin\x86_64-win-gnu
+rem set BINARY_FILES=%PACKAGE_FILES%\bin\i386-win-gnu
 
 if not exist "%TEST_DIR%" mkdir "%TEST_DIR%"
 
