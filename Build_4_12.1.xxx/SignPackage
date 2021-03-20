@@ -1,0 +1,11 @@
+#!/bin/bash
+
+# Assumes file is in executable directory - not current!
+cd `dirname $0`
+#pwd
+
+signwindowsfiles -n "USBDM_Package"  USBDM_4_12_1_*_Win.msi
+
+# Pause to see result
+read -p "Press [Enter] to close"
+
