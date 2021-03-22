@@ -49,9 +49,12 @@ class MemoryDumpDialogueSkeleton : public wxDialog
 		wxRadioBox* targetVddControl;
 		wxChoice* interfaceSpeedControl;
 		wxRadioButton* flatAddressRadioButton;
-		wxRadioButton* pagedAddressRadioButton;
-		wxStaticText* pageRegisterStaticText;
-		wxTextCtrl* pageTextCntrl;
+		wxRadioButton* pagedFlashAddressRadioButton;
+		wxRadioButton* pagedEepromAddressRadioButton;
+		wxStaticText* flashPageRegisterStaticText;
+		wxStaticText* eepromPageRegisterStaticText;
+		wxTextCtrl* flashPageTextCntrl;
+		wxTextCtrl* eepromPageTextCntrl;
 		wxCheckBox* initializationCheckbox;
 		wxTextCtrl* initialializeTextCntrl;
 		wxGrid* memoryRangesGrid;
@@ -70,7 +73,8 @@ class MemoryDumpDialogueSkeleton : public wxDialog
 		virtual void OnTargetVddControlClick( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnInterfaceSpeedSelectComboSelected( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnFlatAddressSelect( wxCommandEvent& event ) { event.Skip(); }
-		virtual void OnPagedAddressSelect( wxCommandEvent& event ) { event.Skip(); }
+		virtual void OnPagedFlashAddressSelect( wxCommandEvent& event ) { event.Skip(); }
+		virtual void OnPagedEepromAddressSelect( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnPageAddressChange( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnInitializationCheckboxChange( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnReadMemoryButtonClick( wxCommandEvent& event ) { event.Skip(); }
@@ -80,7 +84,7 @@ class MemoryDumpDialogueSkeleton : public wxDialog
 
 	public:
 
-		MemoryDumpDialogueSkeleton( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = wxT("USBDM Memory Dump"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 752,1043 ), long style = wxDEFAULT_DIALOG_STYLE|wxMAXIMIZE_BOX|wxMINIMIZE_BOX|wxRESIZE_BORDER|wxSYSTEM_MENU );
+		MemoryDumpDialogueSkeleton( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = wxT("USBDM Memory Dump"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 800,1043 ), long style = wxDEFAULT_DIALOG_STYLE|wxMAXIMIZE_BOX|wxMINIMIZE_BOX|wxRESIZE_BORDER|wxSYSTEM_MENU );
 		~MemoryDumpDialogueSkeleton();
 
 };

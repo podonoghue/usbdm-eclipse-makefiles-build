@@ -49,7 +49,8 @@ MemoryDumpDialogue::MemoryDumpDialogue(wxWindow* parent, AppSettingsPtr appSetti
    bdmDeviceNum(-1),
    bdmCapabilities(BDM_CAP_NONE),
    hcs08PPageAddress(0x08),
-   hcs12PPageAddress(0x30)
+   hcs12PPageAddress(0x30),
+   hcs12EPageAddress(0x17)
 {
    memoryRangesGrid->SetColFormatNumber(2);
    saveToFileButton->Enable(false);
@@ -258,21 +259,34 @@ USBDM_ErrorCode MemoryDumpDialogue::readMemoryBlocks(ProgressDialoguePtr progres
 //      if ((flatAddressRadioButton->IsEnabled())&&(flatAddressRadioButton->GetValue())) {
 //         addressModifier |= FlashProgrammer::ADDRESS_LINEAR;
 //      }
-      long currentPPageAddress = 0;
-      bool isPaged = isPagedDevice() && pagedAddressRadioButton->GetValue();
-      if (isPaged) {
-         // Get current page value
-         currentPPageAddress = 0;
-         pageTextCntrl->GetValue().ToLong(&currentPPageAddress, 16);
-         writeStatus("Using paged addresses (PPAGE address=0x%02lx)\n", currentPPageAddress);
+      long currentPageAddress = 0;
+      enum { FLAT, PAGED_FLASH, PAGED_EEPROM } memType = FLAT;
+      if (isPagedDevice()) {
+    	  if (pagedFlashAddressRadioButton->GetValue()){
+    		  memType = PAGED_FLASH;
+
+			 // Get current page value
+			 flashPageTextCntrl->GetValue().ToLong(&currentPageAddress, 16);
+			 writeStatus("Using paged addresses (PPAGE address=0x%02lx)\n", currentPageAddress);
+
+    	  }
+    	  else if (pagedEepromAddressRadioButton->GetValue()){
+    		  memType = PAGED_EEPROM;
+
+    		  // Get current page value
+    		  eepromPageTextCntrl->GetValue().ToLong(&currentPageAddress, 16);
+			  writeStatus("Using paged addresses (EPAGE address=0x%02lx)\n", currentPageAddress);
+    	  }
       }
+
       while (start <= end) {
          unsigned char data[4096];
          long int size = end-start+1;
          if (size>(long)sizeof(data)) {
             size = sizeof(data);
          }
-         if (isPaged) {
+         switch (memType) {
+         case PAGED_FLASH: {
             uint8_t page = (start>>16)&0xFF;
             long int pagedStart = start & 0xFFFF;
             if (((end>>16)&0xFF) != page) {
@@ -290,7 +304,7 @@ USBDM_ErrorCode MemoryDumpDialogue::readMemoryBlocks(ProgressDialoguePtr progres
             }
             if ((pagedStart>=0x8000) && (pagedEnd<0xC000)) {
                // Within paged area
-               rc = bdmInterface->writeMemory(1, 1, currentPPageAddress, &page);
+               rc = bdmInterface->writeMemory(1, 1, currentPageAddress, &page);
                if (rc != BDM_RC_OK) {
                   return rc;
                }
@@ -305,8 +319,44 @@ USBDM_ErrorCode MemoryDumpDialogue::readMemoryBlocks(ProgressDialoguePtr progres
             size = pagedEnd-pagedStart+1;
             writeStatus("Reading memory-block[0x%02X:%04lX, 0x%02X:%04lX, %ld]...\n", page, pagedStart, page, pagedStart+size-1, width);
             rc = bdmInterface->readMemory(width, size, pagedStart, data);
+			break;
          }
-         else {
+         case PAGED_EEPROM: {
+        	 uint8_t page = (start>>16)&0xFF;
+			 long int pagedStart = start & 0xFFFF;
+			 if (((end>>16)&0xFF) != page) {
+				writeStatus("Illegal paged range (entry #%d), [0x%06lX, 0x%06lX]\n", row+1, start, end);
+				return BDM_RC_ILLEGAL_PARAMS;
+			 }
+			 long int pagedEnd = pagedStart+size-1;
+			 if (pagedStart<0x0800 || pagedStart>0x0BFF) {
+				writeStatus("Illegal paged range (entry #%d), [0x%06lX, 0x%06lX]: Start address outside paged area\n",
+						row+1, start, end);
+				return BDM_RC_ILLEGAL_PARAMS;
+			 }
+			 if (pagedEnd<0x0800 || pagedEnd>0x0BFF) {
+				writeStatus("Illegal paged range (entry #%d), [0x%06lX, 0x%06lX]: End address outside paged area\n",
+						row+1, start, end);
+				return BDM_RC_ILLEGAL_PARAMS;
+			 }
+			 if (pagedStart>pagedEnd) {
+				writeStatus("Illegal paged range (entry #%d), [0x%06lX, 0x%06lX]: Start address > End address\n",
+						row+1, start, end);
+				return BDM_RC_ILLEGAL_PARAMS;
+			 }
+
+			 rc = bdmInterface->writeMemory(1, 1, currentPageAddress, &page);
+			 if (rc != BDM_RC_OK) {
+			    return rc;
+			 }
+
+			 size = pagedEnd-pagedStart+1;
+			 writeStatus("Reading memory-block[0x%02X:%04lX, 0x%02X:%04lX, %ld]...\n", page, pagedStart, page, pagedStart+size-1, width);
+			 rc = bdmInterface->readMemory(width, size, pagedStart, data);
+        	 break;
+         }
+         case FLAT:
+         default:
             writeStatus("Reading memory-block[0x%06lX, 0x%06lX, %ld]...\n", start, start+size-1, width);
             rc = bdmInterface->readMemory(width, size, start, data);
          }
@@ -348,13 +398,14 @@ void MemoryDumpDialogue::loadSettings() {
 
    hcs08PPageAddress = appSettings->getValue("hcs08PPageAddress", 0x08);
    hcs12PPageAddress = appSettings->getValue("hcs12PPageAddress", 0x30);
+   hcs12EPageAddress = appSettings->getValue("hcs12EPageAddress", 0x17);
 
    currentDirectory = appSettings->getValue("directory", "");
    currentFilename  = appSettings->getValue("filename", "");
 
    keepEmptySRECsCheckbox->SetValue(appSettings->getValue("keepEmptySRECs", false));
    flatAddressRadioButton->SetValue(appSettings->getValue("pagedAddressing", false));
-   pagedAddressRadioButton->SetValue(!appSettings->getValue("pagedAddressing", false));
+   pagedFlashAddressRadioButton->SetValue(!appSettings->getValue("pagedAddressing", false));
 
    initializationCheckbox->SetValue(appSettings->getValue("initializeTarget", false));
    initialializeTextCntrl->SetValue(wxString(appSettings->getValue("initializationString", "")));
@@ -397,7 +448,7 @@ void MemoryDumpDialogue::loadSettings() {
 void MemoryDumpDialogue::saveSettings() {
    LOGGING_E;
 
-   appSettings->addValue("pageAddress", pageTextCntrl->GetValue());
+   appSettings->addValue("pageAddress", flashPageTextCntrl->GetValue());
    appSettings->addValue("directory", currentDirectory);
    appSettings->addValue("filename", currentFilename);
    appSettings->addValue("keepEmptySRECs", keepEmptySRECsCheckbox->IsChecked());
@@ -447,7 +498,7 @@ void MemoryDumpDialogue::saveSettings() {
    }
    // Save current page value
    long currentValue;
-   if (pageTextCntrl->GetValue().ToLong(&currentValue, 16)) {
+   if (flashPageTextCntrl->GetValue().ToLong(&currentValue, 16)) {
       switch(this->targetType) {
       case T_HCS08 :
          hcs08PPageAddress = currentValue;
@@ -458,8 +509,13 @@ void MemoryDumpDialogue::saveSettings() {
       default: break;
       }
    }
+   if (eepromPageTextCntrl->GetValue().ToLong(&currentValue, 16)
+		   && (this->targetType == T_HCS12)) {
+	   hcs12EPageAddress = currentValue;
+   }
    appSettings->addValue("hcs08PPageAddress", hcs08PPageAddress);
    appSettings->addValue("hcs12PPageAddress", hcs12PPageAddress);
+   appSettings->addValue("hcs12EPageAddress", hcs12EPageAddress);
    appSettings->addValue("initializeTarget", initializationCheckbox->GetValue());
    appSettings->addValue("initializationString", initialializeTextCntrl->GetValue());
 }
@@ -510,9 +566,19 @@ void MemoryDumpDialogue::update() {
       interfaceSpeedControl->Enable(false);
       break;
    }
-   bool pagedAddressMode = isPagedDevice() && pagedAddressRadioButton->GetValue();
-   pageRegisterStaticText->Enable(pagedAddressMode);
-   pageTextCntrl->Enable(pagedAddressMode);
+   bool pagedFlashAddressMode = isPagedDevice() && pagedFlashAddressRadioButton->GetValue();
+   flashPageRegisterStaticText->Enable(pagedFlashAddressMode);
+   flashPageTextCntrl->Enable(pagedFlashAddressMode);
+
+   if (targetType == T_HCS12) {
+	   bool pagedEepromAddressMode = isPagedDevice() && pagedEepromAddressRadioButton->GetValue();
+	   eepromPageRegisterStaticText->Enable(pagedEepromAddressMode);
+	   eepromPageTextCntrl->Enable(pagedEepromAddressMode);
+   }
+   else {
+	   eepromPageRegisterStaticText->Disable();
+	   eepromPageTextCntrl->Disable();
+   }
 
    bool doTargetInit = initializationCheckbox->IsEnabled() && initializationCheckbox->GetValue();
    initialializeTextCntrl->Enable(doTargetInit);
@@ -670,7 +736,7 @@ void MemoryDumpDialogue::setTargetType(TargetType_t targetType) {
    }
    // Save current page value
    long currentPPageAddress = 0;
-   if (pageTextCntrl->GetValue().ToLong(&currentPPageAddress, 16)) {
+   if (flashPageTextCntrl->GetValue().ToLong(&currentPPageAddress, 16)) {
       switch(this->targetType) {
       case T_HCS08 :
          hcs08PPageAddress = currentPPageAddress;
@@ -681,19 +747,26 @@ void MemoryDumpDialogue::setTargetType(TargetType_t targetType) {
       default: break;
       }
    }
+   long currentEPageAddress = 0;
+   if (eepromPageTextCntrl->GetValue().ToLong(&currentEPageAddress, 16)
+		   && (this->targetType == T_HCS12)) {
+	   hcs12EPageAddress = currentEPageAddress;
+     }
    this->targetType = targetType;
 
-   // Update page value
+   // Update page values
    switch(targetType) {
    case T_HCS08 :
       currentPPageAddress = hcs08PPageAddress;
       break;
    case T_HCS12 :
       currentPPageAddress = hcs12PPageAddress;
+      currentEPageAddress = hcs12EPageAddress;
       break;
    default: break;
    }
-   pageTextCntrl->SetValue(wxString::Format("%lX", currentPPageAddress));
+   flashPageTextCntrl->SetValue(wxString::Format("%lX", currentPPageAddress));
+   eepromPageTextCntrl->SetValue(wxString::Format("%lX", currentEPageAddress));
 
    bool enableAddressMode  = isPagedDevice();
    bool enableSpeedControl = (targetType == T_ARM) || (targetType == T_CFVx);
@@ -701,7 +774,8 @@ void MemoryDumpDialogue::setTargetType(TargetType_t targetType) {
    bdmInterface = BdmInterfaceFactory::createInterface(targetType);
    targetTypeRadioBox->SetSelection(selection);
    flatAddressRadioButton->Enable(enableAddressMode);
-   pagedAddressRadioButton->Enable(enableAddressMode);
+   pagedFlashAddressRadioButton->Enable(enableAddressMode);
+   pagedEepromAddressRadioButton->Enable(this->targetType == T_HCS12);
    interfaceSpeedControl->Enable(enableSpeedControl);
    populateInterfaceSpeeds();
 }
@@ -753,11 +827,19 @@ void MemoryDumpDialogue::OnFlatAddressSelect( wxCommandEvent& event ) {
 void MemoryDumpDialogue::OnInitializationCheckboxChange( wxCommandEvent& event ) {
    update();
 }
-/*! Handler for OnPagedAddressSelect Button
+/*! Handler for OnPagedFlashAddressSelect Button
  *
  *  @param event The event to handle
  */
-void MemoryDumpDialogue::OnPagedAddressSelect( wxCommandEvent& event ) {
+void MemoryDumpDialogue::OnPagedFlashAddressSelect( wxCommandEvent& event ) {
+   update();
+}
+
+/*! Handler for OnPagedEepromAddressSelect Button
+ *
+ *  @param event The event to handle
+ */
+void MemoryDumpDialogue::OnPagedEepromAddressSelect( wxCommandEvent& event ) {
    update();
 }
 
