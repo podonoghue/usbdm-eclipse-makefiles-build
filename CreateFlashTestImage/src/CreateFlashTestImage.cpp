@@ -179,8 +179,9 @@ void dumpWords(FILE *fp, uint32_t startAddress, uint32_t endAddress) {
 
 void usage(void) {
    fprintf(stderr, "\n\nUsage:\n"
-                   "CreateDummyImage [-word] [-hcs08|-hcs12|-kin|-cfv1] imageFile.s19 [startAddress endAddress]*\n\n"
-                   "-word - create image with word addresses (DSC)\n"
+                   "CreateDummyImage [-alt] [-word] [-hcs08|-hcs12|-kin|-cfv1] imageFile.s19 [startAddress endAddress]*\n\n"
+                   "-alt   - Create file with alternative name\n" 
+                   "-word  - create image with word addresses (DSC)\n"
                    "-hcs08 - set image as unsecured for hcs08 devices\n"
                    "-s12z  - set image as unsecured for s12z devices\n"
                    "-hcs12 - set image as unsecured for hcs12 devices\n"
