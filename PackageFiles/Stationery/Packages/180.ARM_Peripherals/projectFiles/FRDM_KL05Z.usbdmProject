@@ -31,16 +31,17 @@
    <item key="/RTC/rtc_hour"                               value="20" />
    <item key="/RTC/rtc_minute"                             value="5" />
    <item key="/RTC/rtc_month"                              value="335" />
+   <item key="/SIM/ClockConfig[0]"                         value="" />
+   <item key="/SIM/ClockConfig[1]"                         value="" />
+   <item key="/SIM/ClockConfig[2]"                         value="" />
    <item key="/SIM/sim_sopt2_rtcclkoutsel"                 value="false" />
    <item key="/SIM/sim_sopt2_uart0src"                     value="3" />
    <item key="/SIM/system_bus_clock[0]"                    value="20971520" />
    <item key="/SIM/system_bus_clock[1]"                    value="32768" />
-   <item key="/SIM/system_bus_clock[2]"                    value="800000" />
+   <item key="/SIM/system_bus_clock[2]"                    value="4000000" />
    <item key="/SIM/system_core_clock[0]"                   value="41943040" />
    <item key="/SIM/system_core_clock[1]"                   value="32768" />
    <item key="/SIM/system_core_clock[2]"                   value="4000000" />
-   <item key="/SIM/system_erclk32k_clock"                  value="1000" />
-   <item key="/SIM/system_uart0_clock"                     value="4000000" />
    <item key="/SMC/smc_stopctrl_porpo"                     value="true" />
    <item key="/SMC/smc_stopctrl_pstopo"                    value="2" />
    <item key="/UART0/oversampleRatio"                      value="4" />
