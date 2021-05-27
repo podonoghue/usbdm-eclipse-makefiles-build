@@ -42,6 +42,7 @@ $(linkerInformation)
   <h> Section placement in RAM
   <i> The RAM on Cortex-M4 Kinetis devices is divided into upper and lower memory regions.
   <i> These settings control which region is used for various linker sections.
+  <i> These sections cannot cross regions as unaligned half-word and long-word accesses are not supported.
 */
 /*  <s1>  Micro Trace Buffer                <"ram_low"=> ram_low <"ram_high"=> ram_high <i> mtb_ram        */
 REGION_ALIAS("mtb_ram", 	   "ram_low");
