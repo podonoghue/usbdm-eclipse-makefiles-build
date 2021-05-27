@@ -78,10 +78,10 @@ namespace USBDM {
  * @tparam bitNum          Bit number within PORT/GPIO
  * @tparam polarity        Polarity of pin. Either ActiveHigh or ActiveLow
  */
-template<uint32_t clockInfo, uint32_t portAddress, IRQn_Type irqNum, uint32_t gpioAddress, unsigned bitNum, Polarity polarity>
+template<uint32_t clockInfo, uint32_t portAddress, IRQn_Type irqNum, uint32_t gpioAddress, int bitNum, Polarity polarity>
 class GpioBase_T {
 
-   static_assert((bitNum<=31), "Illegal bit number in Gpio");
+   static_assert((static_cast<unsigned>(bitNum)<=31), "Illegal bit number in Gpio");
 
 private:
    /**
@@ -91,10 +91,10 @@ private:
    GpioBase_T(const GpioBase_T&) = delete;
    GpioBase_T(GpioBase_T&&) = delete;
 
+public:
    /** PCR associated with this GPIO pin */
    using Pcr = Pcr_T<clockInfo, portAddress, irqNum, bitNum, GPIO_DEFAULT_PCR>;
 
-public:
    /** Port associated with this GPIO */
    using Port = PcrBase_T<portAddress, irqNum>;
 

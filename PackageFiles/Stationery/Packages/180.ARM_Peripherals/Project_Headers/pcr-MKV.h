@@ -505,7 +505,7 @@ public:
     *
     * @param[in]  nvicPriority  Interrupt priority
     */
-   static void enableNvicInterrupts(uint32_t nvicPriority=NvicPriority_Normal) {
+   static void enableNvicInterrupts(uint32_t nvicPriority) {
       static_assert(irqNum>=0, "Pin does not support interrupts");
       enableNvicInterrupt(irqNum, nvicPriority);
    }
@@ -740,7 +740,7 @@ public:
     * @param[in] pinAction        One of PinAction_None, etc (defaults to PinAction_None)
     * @param[in] pinFilter        One of PinFilter_None, PinFilter_Passive (defaults to PinFilter_None)
     *
-    *  @note see also configureDigitalFilter()
+    *  @note see also configureDigitalFilter(), enableDigitalFilter(), disableDigitalFilter()
     */
    static void setInput(
          PinPull           pinPull,
@@ -849,7 +849,7 @@ public:
     *
     *  @param[in] pinFilter Pin filter option. Either PinFilter_None or PinFilter_Passive
     *
-    *  @note see also configureDigitalFilter()
+    *  @note see also configureDigitalFilter(), enableDigitalFilter(), disableDigitalFilter()
     */
    static void setFilter(PinFilter pinFilter) {
 #ifdef PORT_DFCR_CS_MASK
