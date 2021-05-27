@@ -1236,7 +1236,8 @@ USBDM_ErrorCode FlashProgrammerCommon::probeMemory(MemorySpace_t memorySpace, ui
    uint8_t              savedData[sizeof(probe1)];
    bool                 savedDataValid = false;
 
-   address &= ~((1<<(memorySpace&MS_SIZE))-1);
+//   address &= ~((1<<(memorySpace&MS_SIZE))-1);
+   address &= ~((memorySpace&MS_SIZE)-1);
    USBDM_ErrorCode rc = BDM_RC_OK;
    do {
       if (bdmInterface->readMemory(memorySpace,memorySpace&MS_SIZE,address,savedData) != BDM_RC_OK) {
