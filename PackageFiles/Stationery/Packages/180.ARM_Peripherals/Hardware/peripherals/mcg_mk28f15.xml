@@ -68,7 +68,9 @@
    
    <xi:include href="_irqOption.xml"/>
       
-   <indexedCategory name="ClockConfig."  dim="3"
+   <aliasOption key="/SIM/numberOfClockSettings" />     
+
+   <indexedCategory name="ClockConfig."  dim="/SIM/numberOfClockSettings"
          description="Clock configuration" 
          toolTip="Clock configurations for different run modes"
          value="ClockConfig_."  >
@@ -244,7 +246,6 @@
                   Bypassed Low Power External (BLPE/FBELP)\n
                   In BLPE mode, MCGOUT is derived from the external reference clock. The FLL is disabled and PLL is disabled even if the\n
                   C5[PLLCLKEN] is set to 1.">
-         <choice name="No setup (Reset default)"            value="ClockMode_None" />
          <choice name="FLL Engaged Internal (FEI)"          value="ClockMode_FEI" />
          <choice name="FLL Engaged External (FEE)"          value="ClockMode_FEE" />
          <choice name="FLL bypassed internal (FBI)"         value="ClockMode_FBI" />
@@ -586,7 +587,7 @@
    </indexedCategory>
    
    <validate
-      class="net.sourceforge.usbdm.deviceEditor.validators.ClockValidator_MK_ICS48M" dim="3" >
+      class="net.sourceforge.usbdm.deviceEditor.validators.ClockValidator_MK_ICS48M" dim="/SIM/numberOfClockSettings" >
       <param type="long" value="3" />              <!-- mcg_c4_drst_drs   -->
       <param type="long" value="8000000" />        <!-- pllInMin     -->
       <param type="long" value="16000000" />       <!-- pllInMax     -->
@@ -613,8 +614,7 @@
       \t//! Not present on these devices
       \tstatic constexpr int ERRATA_E2448 = 0;\n\n
       
-      \tenum ClockMode {
-      \t   ClockMode_None     = -1,
+      \tenum ClockMode : uint8_t {
       \t   ClockMode_FEI      = 0,
       \t   ClockMode_FEE,
       \t   ClockMode_FBI,
@@ -726,11 +726,11 @@
       \t}\n\n
    ]]></template>
    
-   <template name="ClockConfig" dim="3" namespace="all" ><![CDATA[
+   <template name="ClockConfig" dim="/SIM/numberOfClockSettings" namespace="all" ><![CDATA[
       \t$(ClockConfig.://-- missing name for configuration --),
    ]]></template>
    
-   <template name="McgClockInfoEntries" dim="3" namespace="all" ><![CDATA[
+   <template name="McgClockInfoEntries" dim="/SIM/numberOfClockSettings" namespace="all" ><![CDATA[
       \t   {  // $(ClockConfig.) ($(clock_mode.))\n
       \t      
       \t      //! SIM CLKDIV1 System Clock Divider Register 1

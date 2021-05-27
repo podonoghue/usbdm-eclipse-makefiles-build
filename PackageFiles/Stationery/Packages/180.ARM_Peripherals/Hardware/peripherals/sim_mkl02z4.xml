@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE peripheralPage SYSTEM "_menu.dtd" >
 <!-- sim_mkl04z.xml -->
-<!--
+<!-- 
 Devices using this peripheral: 
 -->
 <peripheralPage xmlns:xi="http://www.w3.org/2001/XInclude" name="_instance" description="SIM">
@@ -90,7 +90,7 @@ Devices using this peripheral:
          \t   sim().SOPT2 = (sim().SOPT2&~SIM_SOPT2_UART0SRC_MASK) | simUart0ClockSource;
          \t}\n\n
          
-         \t/**
+         \t/** 
          \t * Get UART0 input clock frequency
          \t *
          \t * @return Clock frequency in Hz
@@ -334,7 +334,9 @@ Devices using this peripheral:
       ]]></template>
    </category>
    
-   <indexedCategory name="ClockConfig." dim="3" 
+   <xi:include href="_simCommon.xml"/>
+
+   <indexedCategory name="ClockConfig." dim="/SIM/numberOfClockSettings" 
         description="Clock configurations" 
         toolTip="Clock configurations for different run modes" 
         value="" >
@@ -376,7 +378,7 @@ Devices using this peripheral:
    </indexedCategory>
    
    <validate
-      class="net.sourceforge.usbdm.deviceEditor.validators.SimValidateMKL" dim="3">
+      class="net.sourceforge.usbdm.deviceEditor.validators.SimValidateMKL" dim="/SIM/numberOfClockSettings">
       <param type="long" value="48MHz" />    <!-- Core         -->
       <param type="long" value="24MHz" />    <!-- Bus          -->
    </validate>

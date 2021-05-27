@@ -557,7 +557,7 @@ Devices using this peripheral:
       
       <template namespace="usbdm"><![CDATA[
          \t/**
-         \t * Select the ADC0 Trigger source in STOP and VLPS modes, or when ADC0 Alternative Trigger is active.
+         \t * Selects the ADC0 Trigger source in STOP and VLPS modes, or when ADC0 Alternative Trigger is active.
          \t */
          \tenum SimAdc0Trigger {
          \t   SimAdc0Trigger_External     = SIM_SOPT7_ADC0TRGSEL(0),   //!< External Trigger Source
@@ -618,10 +618,11 @@ Devices using this peripheral:
       ]]></template>
    </category>
    
-   <indexedCategory name="ClockConfig." dim="3" 
+   <xi:include href="_simCommon.xml"/>
+
+   <indexedCategory name="ClockConfig." dim="/SIM/numberOfClockSettings" 
         description="Clock configurations" 
-        toolTip="Clock configurations for different run modes" 
-        value="" >
+        toolTip="Clock configurations for different run modes" >
       
       <aliasOption key="/MCG/ClockConfig."
         constant="true"/>
@@ -660,7 +661,7 @@ Devices using this peripheral:
    </indexedCategory>
    
    <validate
-      class="net.sourceforge.usbdm.deviceEditor.validators.SimValidateMKL_lite" dim="3">
+      class="net.sourceforge.usbdm.deviceEditor.validators.SimValidateMKL_lite" dim="/SIM/numberOfClockSettings">
       <param type="long" value="48MHz" />    <!-- Core         -->
       <param type="long" value="24MHz" />    <!-- Bus          -->
    </validate>

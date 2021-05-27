@@ -435,7 +435,9 @@ Devices using this peripheral:
       ]]></template>
    </category>
    
-   <indexedCategory name="ClockConfig." dim="3" 
+   <xi:include href="_simCommon.xml"/>
+
+   <indexedCategory name="ClockConfig." dim="/SIM/numberOfClockSettings" 
         description="Clock configurations" 
         toolTip="Clock configurations for different run modes" 
         value="" >
@@ -477,7 +479,7 @@ Devices using this peripheral:
    </indexedCategory>
    
    <validate
-      class="net.sourceforge.usbdm.deviceEditor.validators.SimValidate_fll" dim="3">
+      class="net.sourceforge.usbdm.deviceEditor.validators.SimValidate_fll" dim="/SIM/numberOfClockSettings">
       <param type="long" value="48MHz" />    <!-- Core         -->
       <param type="long" value="24MHz" />    <!-- Bus          -->
    </validate>

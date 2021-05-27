@@ -800,10 +800,11 @@ Devices using this peripheral:
       ]]></template>
    </category>
    
-   <indexedCategory name="ClockConfig." dim="3" 
+   <xi:include href="_simCommon.xml"/>
+
+   <indexedCategory name="ClockConfig." dim="/SIM/numberOfClockSettings" 
         description="Clock configurations" 
-        toolTip="Clock configurations for different run modes" 
-        value="" >
+        toolTip="Clock configurations for different run modes" >
       
       <aliasOption key="/MCG/ClockConfig."
         constant="true"/>
@@ -891,7 +892,7 @@ Devices using this peripheral:
    </indexedCategory>
    
    <validate
-      class="net.sourceforge.usbdm.deviceEditor.validators.SimValidate" dim="3">
+      class="net.sourceforge.usbdm.deviceEditor.validators.SimValidate" dim="/SIM/numberOfClockSettings">
       <param type="long" value="120MHz" />    <!-- Core         -->
       <param type="long" value="60MHz" />     <!-- Bus          -->
       <param type="long" value="27MHz" />     <!-- Flash        -->

@@ -1041,10 +1041,11 @@ Devices using this peripheral:
       \t#endif\n\n
    ]]></template>
    
-   <indexedCategory name="ClockConfig." dim="3" 
+   <xi:include href="_simCommon.xml"/>
+
+   <indexedCategory name="ClockConfig." dim="/SIM/numberOfClockSettings" 
         description="Clock configurations" 
-        toolTip="Clock configurations for different run modes" 
-        value="" >
+        toolTip="Clock configurations for different run modes" >
       
       <aliasOption key="/MCG/ClockConfig."
         constant="true"/>
@@ -1161,7 +1162,7 @@ Devices using this peripheral:
    </indexedCategory>
    
    <validate
-      class="net.sourceforge.usbdm.deviceEditor.validators.SimValidate" dim="3">
+      class="net.sourceforge.usbdm.deviceEditor.validators.SimValidate" dim="/SIM/numberOfClockSettings">
       <param type="long" value="150MHz" />    <!-- Core         -->
       <param type="long" value="75MHz" />     <!-- Bus          -->
       <param type="long" value="25MHz" />     <!-- Flash        -->

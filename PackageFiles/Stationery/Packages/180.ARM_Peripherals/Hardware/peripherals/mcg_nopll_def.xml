@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE peripheralPage SYSTEM "_menu.dtd" >
 <!-- mcg_nopll_def.xml -->
-
+ 
 <peripheralPage xmlns:xi="http://www.w3.org/2001/XInclude" name="_instance" description="Multipurpose Clock Generator">
    
    <xi:include href="_default_instance.xml"/>
@@ -47,26 +47,13 @@
 
       <aliasOption name="/PMC/system_low_power_clock" />
     
-      <intOption name="system_irc48m_clock" 
-         constant="true"  
-         units="Hz"
-         description="Frequency of Internal 48MHz Clock [IRC48MCLK] (if present)"
-         toolTip="48 MHz Internal Oscillator [Trimmed against USB bus]"
-	 origin="48MHz clock from IRC48MCLK"
-         value="48000000"/>
-
-      <intOption name="system_usb_clkin_clock"  
-         constant="true" 
-         origin="USB Clock In pin"
-         units="Hz"
-         description="Frequency of External USB Clock"
-         toolTip="Externally provided clock for USB on USB_CLKIN" 
-         value="48000000" />
    </category>
    
    <xi:include href="_irqOption.xml"/>
       
-   <indexedCategory name="ClockConfig."  dim="3"
+   <aliasOption key="/SIM/numberOfClockSettings" />     
+
+   <indexedCategory name="ClockConfig."  dim="/SIM/numberOfClockSettings"
          description="Clock configuration" 
          toolTip="Clock configurations for different run modes"
          value="ClockConfig_."  >
@@ -135,14 +122,6 @@
             value="48000000" />
       </category>
    
-      <choiceOption name="mcg_c7_oscsel." 
-         description="MCG External Reference Clock source [OSCSEL]"
-         toolTip="Selects the MCG FLL/PLL external reference clock source">
-         <choice value="0" name="OSC0 - Main System Oscillator (OSCCLK0)" />
-         <choice value="1" name="OSC1 - 32 kHz RTC Oscillator (RTC_32K)" />
-         <choice value="2" name="OSC2 - 48 MHz Internal Oscillator (OSCCLK1 = IRC48MCLK)" />
-      </choiceOption>
-   
       <intOption name="mcg_erc_clock." 
          derived="true"
          constant="true"  
@@ -184,7 +163,6 @@
                   Bypassed Low Power External (BLPE/FBELP)\n
                   In BLPE mode, MCGOUT is derived from the external reference clock. The FLL is disabled and PLL is disabled even if the\n
                   C5[PLLCLKEN] is set to 1.">
-         <choice name="No setup (Reset default)"            value="ClockMode_None" />
          <choice name="FLL Engaged Internal (FEI)"          value="ClockMode_FEI" />
          <choice name="FLL Engaged External (FEE)"          value="ClockMode_FEE" />
          <choice name="FLL bypassed internal (FBI)"         value="ClockMode_FBI" />
@@ -282,7 +260,6 @@
 
       <aliasOption name="system_mcgirclk_clock." />
       <aliasOption name="system_mcgffclk_clock." />
-      <aliasOption name="system_irc48m_clock" optional="true" />
       <aliasOption key="/OSC0/oscer_undiv_clock" optional="true" />
       <aliasOption key="/OSC0/oscer_clock" />
       <aliasOption key="/SIM/system_erclk32k_clock" />
@@ -374,7 +351,7 @@
    </indexedCategory>
    
    <validate
-      class="net.sourceforge.usbdm.deviceEditor.validators.ClockValidator_MCG_no_pll" dim="3" >
+      class="net.sourceforge.usbdm.deviceEditor.validators.ClockValidator_MCG_no_pll" dim="/SIM/numberOfClockSettings" >
       <param type="long" value="1" />              <!-- mcg_c4_drst_drs max -->
    </validate>
 
@@ -390,8 +367,7 @@
       \t//! Not present on these devices
       \tstatic constexpr int ERRATA_E2448 = 0;\n\n
       
-      \tenum ClockMode {
-      \t   ClockMode_None     = -1,
+      \tenum ClockMode : uint8_t {
       \t   ClockMode_FEI      = 0,
       \t   ClockMode_FEE,
       \t   ClockMode_FBI,
@@ -399,9 +375,6 @@
       \t   ClockMode_FBE,
       \t   ClockMode_BLPE,
       \t};\n\n
-      
-      \t//! Frequency of Internal 48MHz Clock
-      \tstatic constexpr uint32_t irc48m_clock = $(system_irc48m_clock)UL;\n\n
       
       \t//! Frequency of Slow Internal Reference Clock [~32kHz]
       \tstatic constexpr uint32_t system_slow_irc_clock = $(system_slow_irc_clock)UL;\n\n
@@ -427,8 +400,6 @@
       \t   const uint8_t c6;
       \t   //! Status and Control Register - FCRDIV
       \t   const uint8_t sc;
-      \t   //! Control Register 7 - OSCSEL
-      \t   const uint8_t c7;
       \t};\n\n
 
       \t/**
@@ -473,11 +444,11 @@
       \t}\n\n
    ]]></template>
    
-   <template name="ClockConfig" dim="3" namespace="all" ><![CDATA[
+   <template name="ClockConfig" dim="/SIM/numberOfClockSettings" namespace="all" ><![CDATA[
       \t$(ClockConfig.://-- missing name for configuration --),
    ]]></template>
    
-   <template name="McgClockInfoEntries" dim="3" namespace="all" ><![CDATA[
+   <template name="McgClockInfoEntries" dim="/SIM/numberOfClockSettings" namespace="all" ><![CDATA[
       \t   {  // $(ClockConfig.) ($(clock_mode.))\n
       \t      
       \t      //! SIM CLKDIV1 System Clock Divider Register 1
@@ -510,9 +481,6 @@
               
       \t      //! Status and Control Register
       \t      MCG_SC_FCRDIV($(mcg_sc_fcrdiv.)), // FCRDIV Internal Clock Reference Divider\n\n
-              
-      \t      //! Control Register 7
-      \t      MCG_C7_OSCSEL($(mcg_c7_oscsel.)), // OSCSEL MCG OSC Clock Select\n\n
               
       \t   },
    ]]></template>

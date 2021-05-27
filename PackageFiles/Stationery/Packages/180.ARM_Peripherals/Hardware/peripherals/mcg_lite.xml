@@ -76,7 +76,9 @@
       <aliasOption key="/SIM/system_erclk32k_clock" optional="true"/>
    </category>
 
-   <indexedCategory name="ClockConfig."  dim="3"
+   <aliasOption key="/SIM/numberOfClockSettings" />     
+
+   <indexedCategory name="ClockConfig."  dim="/SIM/numberOfClockSettings"
          description="Clock configuration" 
          toolTip="Clock configurations for different run modes"
          value="ClockConfig_."  >
@@ -89,7 +91,6 @@
             LIRC_2MHZ -  2 MHz low power internal reference clock\n
             HIRC            -  48 MHz high speed internal reference clock\n
             EXT              -  External reference clock (OSCCLK)" >
-         <choice name="No setup (Reset default)"         value="ClockMode_None" />
          <choice name="8 MHz low power IRC (LIRC_8MHz)"  value="ClockMode_LIRC_8M" />
          <choice name="2 MHz low power IRC (LIRC_2MHz)"  value="ClockMode_LIRC_2M" />
          <choice name="48 MHz IRC (HIRC)"                value="ClockMode_HIRC_48M" />
@@ -240,7 +241,7 @@
    </indexedCategory>
    
    <validate
-      class="net.sourceforge.usbdm.deviceEditor.validators.ClockValidator_MCG_Lite" dim="3">
+      class="net.sourceforge.usbdm.deviceEditor.validators.ClockValidator_MCG_Lite" dim="/SIM/numberOfClockSettings">
    </validate>
 
    <projectActionList id = "mcg_files" >
@@ -254,8 +255,7 @@
    </projectActionList>
          
    <template><![CDATA[
-      \tenum ClockMode {
-      \t   ClockMode_None     = -1,
+      \tenum ClockMode : uint8_t {
       \t   ClockMode_LIRC_2M  = 0,
       \t   ClockMode_LIRC_8M,
       \t   ClockMode_HIRC_48M,
@@ -363,11 +363,11 @@
       \t}\n\n
    ]]></template>
    
-   <template name="ClockConfig" dim="3" namespace="all" ><![CDATA[
+   <template name="ClockConfig" dim="/SIM/numberOfClockSettings" namespace="all" ><![CDATA[
       \t$(ClockConfig.://-- missing name for configuration --),
    ]]></template>
    
-   <template name="McgClockInfoEntries" dim="3" namespace="all" ><![CDATA[
+   <template name="McgClockInfoEntries" dim="/SIM/numberOfClockSettings" namespace="all" ><![CDATA[
       \t   {  // $(ClockConfig.) ($(clock_mode.))\n
       \t      
       \t      //! SIM CLKDIV1 System Clock Divider Register 1
