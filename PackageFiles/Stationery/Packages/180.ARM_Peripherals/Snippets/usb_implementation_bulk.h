@@ -17,6 +17,8 @@
 #ifndef PROJECT_HEADERS_USB_IMPLEMENTATION_BULK_H_
 #define PROJECT_HEADERS_USB_IMPLEMENTATION_BULK_H_
 
+#include <stdint.h>
+
 /*
  * Under Windows 8, or 10 there is no need to install a driver for
  * the bulk end-points if the MS_COMPATIBLE_ID_FEATURE is enabled.
@@ -146,7 +148,11 @@ public:
 
 protected:
    /* end-points */
+
+   /** Out end-point for Bulk */
    static OutEndpoint <Usb0Info, Usb0::BULK_OUT_ENDPOINT, BULK_OUT_EP_MAXSIZE> epBulkOut;
+
+   /** In end-point for Bulk */
    static InEndpoint  <Usb0Info, Usb0::BULK_IN_ENDPOINT,  BULK_IN_EP_MAXSIZE>  epBulkIn;
 
    /*
@@ -212,6 +218,16 @@ public:
    static const Descriptors otherDescriptors;
 
 protected:
+   /**
+    * Clear value reflecting selected hardware based ping-pong buffer.
+    * This would normally only be called when resetting the USB hardware or using
+    * USBx_CTL_ODDRST.
+    */
+   static void clearPinPongToggle() {
+      epBulkOut.clearPinPongToggle();
+      epBulkIn.clearPinPongToggle();
+   }
+
    /**
     * Initialises all end-points
     */

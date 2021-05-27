@@ -214,7 +214,7 @@ public:
     *  @param[in] buffer Pointer to bytes to send
     *
     *  @note : Waits for idle BEFORE transmission but\n
-    *  returns before data has been transmitted
+    *          returns before data has been transmitted
     */
    static void sendBulkData(const uint8_t size, const uint8_t *buffer);
 
@@ -293,6 +293,19 @@ public:
 
 protected:
    /**
+    * Clear value reflecting selected hardware based ping-pong buffer.
+    * This would normally only be called when resetting the USB hardware or using
+    * USBx_CTL_ODDRST.
+    */
+   static void clearPinPongToggle() {
+      epBulkOut.clearPinPongToggle();
+      epBulkIn.clearPinPongToggle();
+      epCdcNotification.clearPinPongToggle();
+      epCdcDataOut.clearPinPongToggle();
+      epCdcDataIn.clearPinPongToggle();
+   }
+
+   /**
     * Initialises all end-points
     */
    static void initialiseEndpoints(void) {
@@ -330,6 +343,10 @@ protected:
 
    /**
     * Callback for SOF tokens
+    *
+    * @param frameNumber Frame number from SOF token
+    *
+    * @return  Error code
     */
    static ErrorCode sofCallback(uint16_t frameNumber);
 

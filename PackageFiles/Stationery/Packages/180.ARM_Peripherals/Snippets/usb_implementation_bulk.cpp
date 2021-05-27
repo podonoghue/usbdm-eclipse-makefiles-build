@@ -44,7 +44,7 @@ static const uint8_t s_product[]         = PRODUCT_DESCRIPTION;         //!< Pro
 static const uint8_t s_serial[]          = SERIAL_NO;                   //!< Serial Number
 static const uint8_t s_config[]          = "Default configuration";     //!< Configuration name
 
-static const uint8_t s_bulk_interface[]  = "Bulk Interface";           //!< Bulk Interface
+static const uint8_t s_bulk_interface[]  = "Bulk Interface";            //!< Bulk Interface
 
 /*
  * Add additional String descriptors here
@@ -70,20 +70,20 @@ const uint8_t *const Usb0::stringDescriptors[] = {
  * Device Descriptor
  */
 const DeviceDescriptor Usb0::deviceDescriptor = {
-      /* bLength             */ sizeof(DeviceDescriptor),
-      /* bDescriptorType     */ DT_DEVICE,
-      /* bcdUSB              */ nativeToLe16(0x0200),           // USB specification release No. [BCD = 2.00]
-      /* bDeviceClass        */ 0xFF,                           // Class code        [none]
-      /* bDeviceSubClass     */ 0xFF,                           // Sub Class code    [none]
-      /* bDeviceProtocol     */ 0xFF,                           // Protocol          [none]
-      /* bMaxPacketSize0     */ CONTROL_EP_MAXSIZE,             // EndPt 0 max packet size
-      /* idVendor            */ nativeToLe16(VENDOR_ID),        // Vendor ID
-      /* idProduct           */ nativeToLe16(PRODUCT_ID),       // Product ID
-      /* bcdDevice           */ nativeToLe16(VERSION_ID),       // Device Release
-      /* iManufacturer       */ s_manufacturer_index,           // String index of Manufacturer name
-      /* iProduct            */ s_product_index,                // String index of product description
-      /* iSerialNumber       */ s_serial_index,                 // String index of serial number
-      /* bNumConfigurations  */ NUMBER_OF_CONFIGURATIONS        // Number of configurations
+      /* bLength             */ (uint8_t) sizeof(DeviceDescriptor),
+      /* bDescriptorType     */ (uint8_t) DT_DEVICE,
+      /* bcdUSB              */ (uint8_t) nativeToLe16(0x0200),           // USB specification release No. [BCD = 2.00]
+      /* bDeviceClass        */ (uint8_t) 0xFF,                           // Class code        [none]
+      /* bDeviceSubClass     */ (uint8_t) 0xFF,                           // Sub Class code    [none]
+      /* bDeviceProtocol     */ (uint8_t) 0xFF,                           // Protocol          [none]
+      /* bMaxPacketSize0     */ (uint8_t) CONTROL_EP_MAXSIZE,             // EndPt 0 max packet size
+      /* idVendor            */ (uint16_t)nativeToLe16(VENDOR_ID),        // Vendor ID
+      /* idProduct           */ (uint16_t)nativeToLe16(PRODUCT_ID),       // Product ID
+      /* bcdDevice           */ (uint16_t)nativeToLe16(VERSION_ID),       // Device Release
+      /* iManufacturer       */ (uint8_t) s_manufacturer_index,           // String index of Manufacturer name
+      /* iProduct            */ (uint8_t) s_product_index,                // String index of product description
+      /* iSerialNumber       */ (uint8_t) s_serial_index,                 // String index of serial number
+      /* bNumConfigurations  */ (uint8_t) NUMBER_OF_CONFIGURATIONS        // Number of configurations
 };
 
 /**
@@ -91,44 +91,44 @@ const DeviceDescriptor Usb0::deviceDescriptor = {
  */
 const Usb0::Descriptors Usb0::otherDescriptors = {
       { // configDescriptor
-            /* bLength                 */ sizeof(ConfigurationDescriptor),
-            /* bDescriptorType         */ DT_CONFIGURATION,
-            /* wTotalLength            */ nativeToLe16(sizeof(otherDescriptors)),
-            /* bNumInterfaces          */ NUMBER_OF_INTERFACES,
-            /* bConfigurationValue     */ CONFIGURATION_NUM,
-            /* iConfiguration          */ s_config_index,
-            /* bmAttributes            */ 0x80,     //  = Bus powered, no wake-up
-            /* bMaxPower               */ USBMilliamps(500)
+            /* bLength                 */ (uint8_t) sizeof(ConfigurationDescriptor),
+            /* bDescriptorType         */ (uint8_t) DT_CONFIGURATION,
+            /* wTotalLength            */ (uint16_t)nativeToLe16(sizeof(otherDescriptors)),
+            /* bNumInterfaces          */ (uint8_t) NUMBER_OF_INTERFACES,
+            /* bConfigurationValue     */ (uint8_t) CONFIGURATION_NUM,
+            /* iConfiguration          */ (uint8_t) s_config_index,
+            /* bmAttributes            */ (uint8_t) 0x80,     //  = Bus powered, no wake-up
+            /* bMaxPower               */ (uint8_t) USBMilliamps(500)
       },
       /**
        * Bulk interface, 2 end-points
        */
       { // bulk_interface
-            /* bLength                 */ sizeof(InterfaceDescriptor),
-            /* bDescriptorType         */ DT_INTERFACE,
-            /* bInterfaceNumber        */ BULK_INTF_ID,
-            /* bAlternateSetting       */ 0,
-            /* bNumEndpoints           */ 2,
-            /* bInterfaceClass         */ 0xFF,                         // (Vendor specific)
-            /* bInterfaceSubClass      */ 0xFF,                         // (Vendor specific)
-            /* bInterfaceProtocol      */ 0xFF,                         // (Vendor specific)
-            /* iInterface desc         */ s_bulk_interface_index,
+            /* bLength                 */ (uint8_t) sizeof(InterfaceDescriptor),
+            /* bDescriptorType         */ (uint8_t) DT_INTERFACE,
+            /* bInterfaceNumber        */ (uint8_t) BULK_INTF_ID,
+            /* bAlternateSetting       */ (uint8_t) 0,
+            /* bNumEndpoints           */ (uint8_t) 2,
+            /* bInterfaceClass         */ (uint8_t) 0xFF,                         // (Vendor specific)
+            /* bInterfaceSubClass      */ (uint8_t) 0xFF,                         // (Vendor specific)
+            /* bInterfaceProtocol      */ (uint8_t) 0xFF,                         // (Vendor specific)
+            /* iInterface desc         */ (uint8_t) s_bulk_interface_index,
       },
       { // bulk_out_endpoint - OUT, Bulk
-            /* bLength                 */ sizeof(EndpointDescriptor),
-            /* bDescriptorType         */ DT_ENDPOINT,
-            /* bEndpointAddress        */ EP_OUT|BULK_OUT_ENDPOINT,
-            /* bmAttributes            */ ATTR_BULK,
-            /* wMaxPacketSize          */ nativeToLe16(BULK_OUT_EP_MAXSIZE),
-            /* bInterval               */ USBMilliseconds(1)
+            /* bLength                 */ (uint8_t) sizeof(EndpointDescriptor),
+            /* bDescriptorType         */ (uint8_t) DT_ENDPOINT,
+            /* bEndpointAddress        */ (uint8_t) EP_OUT|BULK_OUT_ENDPOINT,
+            /* bmAttributes            */ (uint8_t) ATTR_BULK,
+            /* wMaxPacketSize          */ (uint16_t)nativeToLe16(BULK_OUT_EP_MAXSIZE),
+            /* bInterval               */ (uint8_t) USBMilliseconds(1)
       },
       { // bulk_in_endpoint - IN, Bulk
-            /* bLength                 */ sizeof(EndpointDescriptor),
-            /* bDescriptorType         */ DT_ENDPOINT,
-            /* bEndpointAddress        */ EP_IN|BULK_IN_ENDPOINT,
-            /* bmAttributes            */ ATTR_BULK,
-            /* wMaxPacketSize          */ nativeToLe16(BULK_IN_EP_MAXSIZE),
-            /* bInterval               */ USBMilliseconds(1)
+            /* bLength                 */ (uint8_t) sizeof(EndpointDescriptor),
+            /* bDescriptorType         */ (uint8_t) DT_ENDPOINT,
+            /* bEndpointAddress        */ (uint8_t) EP_IN|BULK_IN_ENDPOINT,
+            /* bmAttributes            */ (uint8_t) ATTR_BULK,
+            /* wMaxPacketSize          */ (uint16_t)nativeToLe16(BULK_IN_EP_MAXSIZE),
+            /* bInterval               */ (uint8_t) USBMilliseconds(1)
       },
       /*
        * TODO Add additional Descriptors here
@@ -136,10 +136,10 @@ const Usb0::Descriptors Usb0::otherDescriptors = {
 };
 
 /** Out end-point for BULK data out */
-OutEndpoint <Usb0Info, Usb0::BULK_OUT_ENDPOINT, BULK_OUT_EP_MAXSIZE> Usb0::epBulkOut(EndPointType_Bulk);
+OutEndpoint <Usb0Info, Usb0::BULK_OUT_ENDPOINT,         BULK_OUT_EP_MAXSIZE>          Usb0::epBulkOut(EndPointType_Bulk);
 
 /** In end-point for BULK data in */
-InEndpoint  <Usb0Info, Usb0::BULK_IN_ENDPOINT,  BULK_IN_EP_MAXSIZE>  Usb0::epBulkIn(EndPointType_Bulk);
+InEndpoint  <Usb0Info, Usb0::BULK_IN_ENDPOINT,          BULK_IN_EP_MAXSIZE>           Usb0::epBulkIn(EndPointType_Bulk);
 
 /*
  * TODO Add additional end-points here
@@ -186,7 +186,7 @@ ErrorCode Usb0::sofCallback(uint16_t frameNumber) {
  * Handler for Token Complete USB interrupts for
  * end-points other than EP0
  *
- * @param usbStat USB Status value from USB hardware
+ * @param[in] usbStat USB Status value from USB hardware
  */
 void Usb0::handleTokenComplete(UsbStat usbStat) {
 
