@@ -60,7 +60,8 @@ uint32_t Spi::calculateDividers(uint32_t clockFrequency, uint32_t frequency) {
    }
    uint32_t clockFactors = SPI_CTAR_BR(bestBR)|SPI_CTAR_PBR(bestPBR);
    if ((clockFactors == 0) && (clockFrequency<=(2*frequency))) {
-      // Use highest possible rate
+      // Use highest possible rate - but only when prescalers are zero.
+      // This still results in 50% duty cycle
       clockFactors = SPI_CTAR_DBR_MASK;
    }
    return clockFactors;
@@ -120,15 +121,30 @@ void Spi::calculateDelay(float clockFrequency, float delay, int &bestPrescale, i
 }
 
 /**
- * Transmit and receive a value over SPI
+ * Transmit and receive a value over SPI using current settings
  *
- * @param[in] data - Data to send (4-16 bits) <br>
- *                   May include other control bits
+ * @param[in] data Data to send (4-16 bits)
  *
  * @return Data received
  */
-uint32_t Spi::txRx(uint16_t data) {
+uint16_t Spi::txRx(uint16_t data) {
    spi->PUSHR = data|pushrMask;
+   while ((spi->SR & SPI_SR_TCF_MASK)==0) {
+   }
+   spi->SR = SPI_SR_TCF_MASK|SPI_SR_EOQF_MASK;
+   return spi->POPR;  // Return read data
+}
+
+/**
+ * Transmit and receive a value over SPI
+ *
+ * @param[in] data - Data to send (4-16 bits) <br>
+ *                   May include other control bits as for PUSHR
+ *
+ * @return Data received
+ */
+uint32_t Spi::txRxRaw(uint32_t value) {
+   spi->PUSHR = value;
    while ((spi->SR & SPI_SR_TCF_MASK)==0) {
    }
    spi->SR = SPI_SR_TCF_MASK|SPI_SR_EOQF_MASK;

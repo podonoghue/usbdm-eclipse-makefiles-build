@@ -565,15 +565,6 @@ struct LineCodingStructure {
    uint8_t  bCharFormat;   //!< character format
    uint8_t  bParityType;   //!< parity type
    uint8_t  bDataBits;     //!< number of bits
-
-   void operator=(LineCodingStructure volatile &other) volatile {
-      *this = other;
-   }
-
-   LineCodingStructure &operator=(LineCodingStructure &other) {
-      *this = other;
-      return *this;
-   }
 };
 
 struct CdcLineState {

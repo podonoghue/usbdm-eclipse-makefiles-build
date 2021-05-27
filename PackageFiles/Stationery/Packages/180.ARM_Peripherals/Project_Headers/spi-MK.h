@@ -42,19 +42,48 @@ typedef void (*SpiCallbackFunction)(uint32_t status);
  * SPI mode - Controls clock polarity and the timing relationship between clock and data
  */
 enum SpiMode {
-   SpiMode_0 = SPI_CTAR_CPOL(0)|SPI_CTAR_CPHA(0), // Active-high clock (idles low), Data is captured on leading edge of SCK and changes on the following edge.
-   SpiMode_1 = SPI_CTAR_CPOL(0)|SPI_CTAR_CPHA(1), // Active-high clock (idles low), Data is changes on leading edge of SCK and captured on the following edge.
-   SpiMode_2 = SPI_CTAR_CPOL(1)|SPI_CTAR_CPHA(0), // Active-low clock (idles high), Data is captured on leading edge of SCK and changes on the following edge.
-   SpiMode_3 = SPI_CTAR_CPOL(1)|SPI_CTAR_CPHA(1), // Active-low clock (idles high), Data is changes on leading edge of SCK and captured on the following edge.
+   SpiMode_0 = SPI_CTAR_CPOL(0)|SPI_CTAR_CPHA(0), //!< Active-high clock (idles low), Data is captured on leading edge of SCK and changes on the following edge.
+   SpiMode_1 = SPI_CTAR_CPOL(0)|SPI_CTAR_CPHA(1), //!< Active-high clock (idles low), Data is changes on leading edge of SCK and captured on the following edge.
+   SpiMode_2 = SPI_CTAR_CPOL(1)|SPI_CTAR_CPHA(0), //!< Active-low clock (idles high), Data is captured on leading edge of SCK and changes on the following edge.
+   SpiMode_3 = SPI_CTAR_CPOL(1)|SPI_CTAR_CPHA(1), //!< Active-low clock (idles high), Data is changes on leading edge of SCK and captured on the following edge.
+};
+
+/**
+ *  Clock polarity
+ *  Selects the inactive state of the Serial Communications Clock (SCK).
+ */
+enum SpiPolarity {
+   SpiPolarity_InactiveLow   = SPI_CTAR_CPOL(0),/**< The inactive state value of SCK is low.  */
+   SpiPolarity_InactiveHigh  = SPI_CTAR_CPOL(1),/**< The inactive state value of SCK is high. */
+};
+
+/**
+ *  Clock Phase
+ *  Selects which edge of SCK causes data to change and which edge causes data to be captured
+ */
+enum SpiPhase {
+   SpiPhase_LeadingCapture = SPI_CTAR_CPHA(0),/**< Data is captured on the leading edge of SCK and changed on the following edge. */
+   SpiPhase_LeadingChange  = SPI_CTAR_CPHA(1),/**< Data is changed on the leading edge of SCK and captured on the following edge */
 };
 
 /**
  * Bit transmission order (LSB/MSB first)
  */
 enum SpiOrder {
-   SpiOrder_MsbFirst = SPI_CTAR_LSBFE(0),
-   SpiOrder_LsbFirst = SPI_CTAR_LSBFE(1),
+   SpiOrder_MsbFirst = SPI_CTAR_LSBFE(0), /**< Transmit data LSB first */
+   SpiOrder_LsbFirst = SPI_CTAR_LSBFE(1), /**< Transmit data MSB first */
 };
+
+/**
+ * Calculate SPI.CTAR value from required frame-size
+ *
+ * @param frameSize Frame size i.e. number of bits to transfer
+ *
+ * @return Mask for CTAR.FMSZ
+ */
+uint32_t constexpr SpiFrameSize(unsigned frameSize) {
+   return SPI_CTAR_FMSZ(frameSize-1);
+}
 
 /**
  * Transmit FIFO Fill Request interrupt/DMA enable (TFFF flag)
@@ -177,6 +206,20 @@ public:
     */
    static uint32_t calculateSpeed(uint32_t clockFrequency, uint32_t clockFactors);
 
+   /**
+    *
+    * @param[in]  clockFrequency => Clock frequency of SPI in Hz
+    * @param[in]  frequency      => Communication frequency in Hz
+    * @param[in]  cssck          => PCS assertion to SCK Delay Scaler
+    * @param[in]  asc            => SCK to PCS negation delay
+    * @param[in]  dt             => PCS negation to PCS assertion delay between transfers
+    *
+    * @return Combined masks for CTAR.BR, CTAR.PBR, CTAR.PCSSCK, CTAR.CSSCK, CTAR.PDT, CTAR.DT, CTAR.PCSSCK and CTAR.CSSCK
+    */
+   static uint32_t calculateCtar(uint32_t clockFrequency, uint32_t frequency, float cssck, float asc, float dt) {
+      return calculateDividers(clockFrequency, frequency)|calculateDelays(clockFrequency, cssck, asc, dt);
+   }
+
 protected:
    uint32_t  pushrMask;            //!< Value to combine with data
 
@@ -199,8 +242,8 @@ protected:
     * Calculate Delay factors
     * Used for ASC, DT and CSSCK
     *
-    * @param[in]  delay          => Desired delay in seconds
     * @param[in]  clockFrequency => Clock frequency of SPI in Hz
+    * @param[in]  delay          => Desired delay in seconds
     * @param[in]  bestPrescale   => Best prescaler value (0=>/1, 1=>/3, 2=/5, 3=>/7)
     * @param[in]  bestDivider    => Best divider value (N=>/(2**(N+1)))
     *
@@ -213,10 +256,10 @@ protected:
    /**
     * Calculate Delay factors for CSSCK (PCS assertion to SCK Delay Scaler)
     *
-    * @param[in]  delay          => Desired delay in seconds
     * @param[in]  clockFrequency => Clock frequency of SPI in Hz
+    * @param[in]  delay          => Desired delay in seconds
     *
-    * @return Masks for CTAR register
+    * @return Combined masks for CTAR.PCSSCK and CTAR.CSSCK
     *
     * Note: Determines value for the smallest delay that is not less than delay.
     */
@@ -229,10 +272,10 @@ protected:
    /**
     * Calculate Delay factors for ASC (SCK to PCS negation delay)
     *
-    * @param[in]  delay          => Desired delay in seconds
     * @param[in]  clockFrequency => Clock frequency of SPI in Hz
+    * @param[in]  delay          => Desired delay in seconds
     *
-    * @return Masks for CTAR register
+    * @return Combined masks for CTAR.PASC and CTAR.ASC
     *
     * Note: Determines value for the smallest delay that is not less than delay.
     */
@@ -245,10 +288,10 @@ protected:
    /**
     * Calculate Delay factors for DT (PCS negation to PCS assertion delay between transfers)
     *
-    * @param[in]  delay          => Desired delay in seconds
     * @param[in]  clockFrequency => Clock frequency of SPI in Hz
+    * @param[in]  delay          => Desired delay in seconds
     *
-    * @return Masks for CTAR register
+    * @return Combined masks for CTAR.PDT and CTAR.DT
     *
     * Note: Determines value for the smallest delay that is not less than delay.
     */
@@ -266,7 +309,7 @@ protected:
     * @param[in]  asc            => SCK to PCS negation delay
     * @param[in]  dt             => PCS negation to PCS assertion delay between transfers
     *
-    * @return Masks for CTAR register
+    * @return Combined masks for CTAR.PCSSCK, CTAR.CSSCK, CTAR.PDT, CTAR.DT, CTAR.PCSSCK and CTAR.CSSCK
     *
     * Note: Determines values for the smallest delay that is not less than specified delays.
     */
@@ -419,12 +462,27 @@ public:
     *
     * @param[in] spiMode   Controls clock polarity and the timing relationship between clock and data
     * @param[in] spiOrder  Bit transmission order (LSB/MSB first)
-    * @param[in]  spiCtarSelect => Index of CTAR register to modify
+    * @param[in] spiCtarSelect => Index of CTAR register to modify
     */
    void setMode(SpiMode spiMode=SpiMode_0, SpiOrder spiOrder=SpiOrder_MsbFirst, SpiCtarSelect spiCtarSelect=SpiCtarSelect_0) {
       // Sets the default CTAR value with 8 bits
       spi->CTAR[spiCtarSelect] =
          (spiMode|spiOrder)|
+         (spi->CTAR[spiCtarSelect]&~(SPI_CTAR_MODE_MASK|SPI_CTAR_LSBFE_MASK));
+   }
+
+   /**
+    * Sets Communication mode for SPI
+    *
+    * @param[in] spiPolarity      Selects the inactive state of the Serial Communications Clock (SCK).
+    * @param[in] spiPhase         Selects which edge of SCK causes data to change and which edge causes data to be captured
+    * @param[in] spiOrder         Bit transmission order (LSB/MSB first)
+    * @param[in] spiCtarSelect    Index of CTAR register to modify
+    */
+   void setMode(SpiPolarity spiPolarity, SpiPhase spiPhase, SpiOrder spiOrder=SpiOrder_MsbFirst, SpiCtarSelect spiCtarSelect=SpiCtarSelect_0) {
+      // Sets the default CTAR value with 8 bits
+      spi->CTAR[spiCtarSelect] =
+         (spiPolarity|spiPhase|spiOrder)|
          (spi->CTAR[spiCtarSelect]&~(SPI_CTAR_MODE_MASK|SPI_CTAR_LSBFE_MASK));
    }
 
@@ -499,14 +557,23 @@ public:
    void txRx(uint32_t dataSize, const T *txData, T *rxData=nullptr);
 
    /**
-    * Transmit and receive a value over SPI
+    * Transmit and receive a value over SPI using current settings
     *
-    * @param[in] data - Data to send (4-16 bits) <br>
-    *                   May include other control bits
+    * @param[in] data Data to send (4-16 bits)
     *
     * @return Data received
     */
-   uint32_t txRx(uint16_t data);
+   uint16_t txRx(uint16_t data);
+
+   /**
+    * Transmit and receive a value over SPI
+    *
+    * @param[in] data - Data to send (4-16 bits) <br>
+    *                   May include other control bits as for PUSHR
+    *
+    * @return Data received
+    */
+   uint32_t txRxRaw(uint32_t value);
 
    /**
     *  Set Configuration\n
@@ -807,6 +874,19 @@ public:
    void setDelays(float cssck=1*USBDM::us, float asc=1*USBDM::us, float dt=1*USBDM::us, SpiCtarSelect spiCtarSelect=SpiCtarSelect_0) override {
       Spi::setDelays(Info::getClockFrequency(), cssck, asc, dt, spiCtarSelect);
    }
+
+   /**
+    * Calculates the timing aspects of a CTAR value based on frequency
+    
+    * @param[in]  frequency      => Communication frequency in Hz
+    *
+    * @return Combined masks for CTAR.BR, CTAR.PBR, CTAR.PCSSCK, CTAR.CSSCK, CTAR.PDT, CTAR.DT, CTAR.PCSSCK and CTAR.CSSCK
+    */
+   static uint32_t calculateCtar(uint32_t frequency) {
+      float SPI_PADDING2 = 1/(5.0*frequency);
+      return calculateDividers(Info::getClockFrequency(), frequency, SPI_PADDING2, SPI_PADDING2, SPI_PADDING2);
+   }
+
 
    /**
     * Constructor
