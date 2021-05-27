@@ -166,14 +166,22 @@ USBDM_ErrorCode loadSRec(const char          *pSrec,
       switch (*(pSrec+1)) {
          case '0': { // Information header
 //            log.print("Discarding\n");
-            pSrec +=8; // Skip 'S0nnaaaa'
+            pSrec +=2; // Skip 'Sx'
+            srecSize = hex2ToDecimal( &pSrec ); // Get size
+            hex4ToDecimal( &pSrec ); // Skip address
             char buff[1000];
             char *cp=buff;
-            while ((*pSrec != '\n') && (*pSrec != '\0') && (cp < (buff+sizeof(buff)))) {
-               *cp++ = hex2ToDecimal( &pSrec );
+            srecSize -= 3; // subtract 3 from byte count (size + 2 addr bytes)
+            while (srecSize-->0) {
+               if (cp < (buff+sizeof(buff))) {
+                  *cp++ = hex2ToDecimal( &pSrec );
+               }
             }
-            *--cp = '\0'; // Terminate & discard last char
+            *cp = '\0'; // Terminate & discard last char
             log.print("ID = \'%s\'\n", buff);
+            while ((*pSrec != '\n') && (*pSrec != '\0')) {
+               pSrec++;
+            }
             continue;
             }
          case '7': // 32-bit start address
