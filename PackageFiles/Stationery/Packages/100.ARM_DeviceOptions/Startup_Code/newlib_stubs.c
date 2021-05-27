@@ -175,10 +175,9 @@ caddr_t _sbrk(int incr) {
       /* Heap and stack collision */
 #ifdef DEBUG_BUILD
       __asm__("bkpt");
-#else
+#endif
       errno = ENOMEM;
       return (caddr_t)-1;
-#endif
    }
    heap_end = next_heap_end;
    return prev_heap_end;
