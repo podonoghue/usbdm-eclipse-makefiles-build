@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Oct 26 2018)
+// C++ code generated with wxFormBuilder (version 3.9.0 Sep 11 2020)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -85,7 +85,7 @@ MemoryDumpDialogueSkeleton::MemoryDumpDialogueSkeleton( wxWindow* parent, wxWind
 
 	bSizer6->Add( flatAddressRadioButton, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5 );
 
-	pagedFlashAddressRadioButton = new wxRadioButton( sbSizer3->GetStaticBox(), wxID_ANY, wxT("Paged Flash"), wxDefaultPosition, wxDefaultSize);
+	pagedFlashAddressRadioButton = new wxRadioButton( sbSizer3->GetStaticBox(), wxID_ANY, wxT("Paged Flash"), wxDefaultPosition, wxDefaultSize, 0 );
 	pagedFlashAddressRadioButton->SetToolTip( wxT("Use PPAGE register for flash memory in range [0x8000 0xBFFF]") );
 
 	bSizer6->Add( pagedFlashAddressRadioButton, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5 );
@@ -96,9 +96,7 @@ MemoryDumpDialogueSkeleton::MemoryDumpDialogueSkeleton( wxWindow* parent, wxWind
 
 	bSizer6->Add( flashPageRegisterStaticText, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5 );
 
-	wxSize textctrl_size = wxDefaultSize;
-	textctrl_size.SetWidth(40);
-	flashPageTextCntrl = new wxTextCtrl( sbSizer3->GetStaticBox(), wxID_ANY, wxT("30"), wxDefaultPosition, textctrl_size, 0 );
+	flashPageTextCntrl = new wxTextCtrl( sbSizer3->GetStaticBox(), wxID_ANY, wxT("30"), wxDefaultPosition, wxDefaultSize, 0 );
 	#ifdef __WXGTK__
 	if ( !flashPageTextCntrl->HasFlag( wxTE_MULTILINE ) )
 	{
@@ -111,31 +109,21 @@ MemoryDumpDialogueSkeleton::MemoryDumpDialogueSkeleton( wxWindow* parent, wxWind
 
 	bSizer6->Add( flashPageTextCntrl, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5 );
 
-	//=======
-	pagedEepromAddressRadioButton = new wxRadioButton( sbSizer3->GetStaticBox(), wxID_ANY, wxT("Paged EEPROM"), wxDefaultPosition, wxDefaultSize);
+	pagedEepromAddressRadioButton = new wxRadioButton( sbSizer3->GetStaticBox(), wxID_ANY, wxT("Paged EEPROM"), wxDefaultPosition, wxDefaultSize, 0 );
 	pagedEepromAddressRadioButton->SetToolTip( wxT("Use EPAGE register for flash memory in range [0x0800 0x0BFF]") );
 
-	bSizer6->Add( pagedEepromAddressRadioButton, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5 );
+	bSizer6->Add( pagedEepromAddressRadioButton, 0, wxALL|wxALIGN_CENTER_VERTICAL, 5 );
 
 	eepromPageRegisterStaticText = new wxStaticText( sbSizer3->GetStaticBox(), wxID_ANY, wxT("EPAGE Register Address:"), wxDefaultPosition, wxDefaultSize, 0 );
 	eepromPageRegisterStaticText->Wrap( -1 );
 	eepromPageRegisterStaticText->SetToolTip( wxT("Address of EPAGE Register used to select flash page accessed in [0x0800 0x0BFF]\nAssumes 24-bit paged addresses") );
 
-	bSizer6->Add( eepromPageRegisterStaticText, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5 );
+	bSizer6->Add( eepromPageRegisterStaticText, 0, wxALL|wxALIGN_CENTER_VERTICAL, 5 );
 
-	eepromPageTextCntrl = new wxTextCtrl( sbSizer3->GetStaticBox(), wxID_ANY, wxT("17"), wxDefaultPosition, textctrl_size, 0 );
-	#ifdef __WXGTK__
-	if ( !eepromPageTextCntrl->HasFlag( wxTE_MULTILINE ) )
-	{
-		eepromPageTextCntrl->SetMaxLength( 5 );
-	}
-	#else
-	eepromPageTextCntrl->SetMaxLength( 5 );
-	#endif
+	eepromPageTextCntrl = new wxTextCtrl( sbSizer3->GetStaticBox(), wxID_ANY, wxT("17"), wxDefaultPosition, wxDefaultSize, 0 );
 	eepromPageTextCntrl->SetToolTip( wxT("Address of EPAGE Register used to select page accessed in [0x0800 0x0BFF]\nAssumes 24-bit paged addresses") );
 
-	bSizer6->Add( eepromPageTextCntrl, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5 );
-	//=========
+	bSizer6->Add( eepromPageTextCntrl, 0, wxALL|wxALIGN_CENTER_VERTICAL, 5 );
 
 
 	sbSizer3->Add( bSizer6, 0, 0, 5 );
@@ -174,10 +162,10 @@ MemoryDumpDialogueSkeleton::MemoryDumpDialogueSkeleton( wxWindow* parent, wxWind
 	memoryRangesGrid->SetColSize( 2, 80 );
 	memoryRangesGrid->EnableDragColMove( false );
 	memoryRangesGrid->EnableDragColSize( true );
-	memoryRangesGrid->SetColLabelSize( 30 );
 	memoryRangesGrid->SetColLabelValue( 0, wxT("Start") );
 	memoryRangesGrid->SetColLabelValue( 1, wxT("End") );
 	memoryRangesGrid->SetColLabelValue( 2, wxT("Width") );
+	memoryRangesGrid->SetColLabelSize( 30 );
 	memoryRangesGrid->SetColLabelAlignment( wxALIGN_CENTER, wxALIGN_CENTER );
 
 	// Rows
@@ -251,8 +239,8 @@ MemoryDumpDialogueSkeleton::MemoryDumpDialogueSkeleton( wxWindow* parent, wxWind
 	interfaceSpeedControl->Connect( wxEVT_COMMAND_CHOICE_SELECTED, wxCommandEventHandler( MemoryDumpDialogueSkeleton::OnInterfaceSpeedSelectComboSelected ), NULL, this );
 	flatAddressRadioButton->Connect( wxEVT_COMMAND_RADIOBUTTON_SELECTED, wxCommandEventHandler( MemoryDumpDialogueSkeleton::OnFlatAddressSelect ), NULL, this );
 	pagedFlashAddressRadioButton->Connect( wxEVT_COMMAND_RADIOBUTTON_SELECTED, wxCommandEventHandler( MemoryDumpDialogueSkeleton::OnPagedFlashAddressSelect ), NULL, this );
-	pagedEepromAddressRadioButton->Connect( wxEVT_COMMAND_RADIOBUTTON_SELECTED, wxCommandEventHandler( MemoryDumpDialogueSkeleton::OnPagedEepromAddressSelect ), NULL, this );
 	flashPageTextCntrl->Connect( wxEVT_COMMAND_TEXT_UPDATED, wxCommandEventHandler( MemoryDumpDialogueSkeleton::OnPageAddressChange ), NULL, this );
+	pagedEepromAddressRadioButton->Connect( wxEVT_COMMAND_RADIOBUTTON_SELECTED, wxCommandEventHandler( MemoryDumpDialogueSkeleton::OnPagedEepromAddressSelect ), NULL, this );
 	initializationCheckbox->Connect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( MemoryDumpDialogueSkeleton::OnInitializationCheckboxChange ), NULL, this );
 	readMemoryButton->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( MemoryDumpDialogueSkeleton::OnReadMemoryButtonClick ), NULL, this );
 	saveToFileButton->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( MemoryDumpDialogueSkeleton::OnSaveToFileButton ), NULL, this );
@@ -270,6 +258,7 @@ MemoryDumpDialogueSkeleton::~MemoryDumpDialogueSkeleton()
 	flatAddressRadioButton->Disconnect( wxEVT_COMMAND_RADIOBUTTON_SELECTED, wxCommandEventHandler( MemoryDumpDialogueSkeleton::OnFlatAddressSelect ), NULL, this );
 	pagedFlashAddressRadioButton->Disconnect( wxEVT_COMMAND_RADIOBUTTON_SELECTED, wxCommandEventHandler( MemoryDumpDialogueSkeleton::OnPagedFlashAddressSelect ), NULL, this );
 	flashPageTextCntrl->Disconnect( wxEVT_COMMAND_TEXT_UPDATED, wxCommandEventHandler( MemoryDumpDialogueSkeleton::OnPageAddressChange ), NULL, this );
+	pagedEepromAddressRadioButton->Disconnect( wxEVT_COMMAND_RADIOBUTTON_SELECTED, wxCommandEventHandler( MemoryDumpDialogueSkeleton::OnPagedEepromAddressSelect ), NULL, this );
 	initializationCheckbox->Disconnect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( MemoryDumpDialogueSkeleton::OnInitializationCheckboxChange ), NULL, this );
 	readMemoryButton->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( MemoryDumpDialogueSkeleton::OnReadMemoryButtonClick ), NULL, this );
 	saveToFileButton->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( MemoryDumpDialogueSkeleton::OnSaveToFileButton ), NULL, this );

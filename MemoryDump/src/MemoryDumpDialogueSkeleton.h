@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Oct 26 2018)
+// C++ code generated with wxFormBuilder (version 3.9.0 Sep 11 2020)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -15,10 +15,10 @@
 #include <wx/font.h>
 #include <wx/colour.h>
 #include <wx/settings.h>
+#include <wx/button.h>
 #include <wx/bitmap.h>
 #include <wx/image.h>
 #include <wx/icon.h>
-#include <wx/button.h>
 #include <wx/combobox.h>
 #include <wx/sizer.h>
 #include <wx/stattext.h>
@@ -50,10 +50,10 @@ class MemoryDumpDialogueSkeleton : public wxDialog
 		wxChoice* interfaceSpeedControl;
 		wxRadioButton* flatAddressRadioButton;
 		wxRadioButton* pagedFlashAddressRadioButton;
-		wxRadioButton* pagedEepromAddressRadioButton;
 		wxStaticText* flashPageRegisterStaticText;
-		wxStaticText* eepromPageRegisterStaticText;
 		wxTextCtrl* flashPageTextCntrl;
+		wxRadioButton* pagedEepromAddressRadioButton;
+		wxStaticText* eepromPageRegisterStaticText;
 		wxTextCtrl* eepromPageTextCntrl;
 		wxCheckBox* initializationCheckbox;
 		wxTextCtrl* initialializeTextCntrl;
@@ -74,8 +74,8 @@ class MemoryDumpDialogueSkeleton : public wxDialog
 		virtual void OnInterfaceSpeedSelectComboSelected( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnFlatAddressSelect( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnPagedFlashAddressSelect( wxCommandEvent& event ) { event.Skip(); }
-		virtual void OnPagedEepromAddressSelect( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnPageAddressChange( wxCommandEvent& event ) { event.Skip(); }
+		virtual void OnPagedEepromAddressSelect( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnInitializationCheckboxChange( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnReadMemoryButtonClick( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnSaveToFileButton( wxCommandEvent& event ) { event.Skip(); }
