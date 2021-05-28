@@ -85,29 +85,57 @@ MemoryDumpDialogueSkeleton::MemoryDumpDialogueSkeleton( wxWindow* parent, wxWind
 
 	bSizer6->Add( flatAddressRadioButton, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5 );
 
-	pagedAddressRadioButton = new wxRadioButton( sbSizer3->GetStaticBox(), wxID_ANY, wxT("Paged"), wxDefaultPosition, wxDefaultSize, 0 );
-	pagedAddressRadioButton->SetToolTip( wxT("Use page register for memory in range [0x8000 0xBFFF]") );
+	pagedFlashAddressRadioButton = new wxRadioButton( sbSizer3->GetStaticBox(), wxID_ANY, wxT("Paged Flash"), wxDefaultPosition, wxDefaultSize);
+	pagedFlashAddressRadioButton->SetToolTip( wxT("Use PPAGE register for flash memory in range [0x8000 0xBFFF]") );
 
-	bSizer6->Add( pagedAddressRadioButton, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5 );
+	bSizer6->Add( pagedFlashAddressRadioButton, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5 );
 
-	pageRegisterStaticText = new wxStaticText( sbSizer3->GetStaticBox(), wxID_ANY, wxT("Page Register Address:"), wxDefaultPosition, wxDefaultSize, 0 );
-	pageRegisterStaticText->Wrap( -1 );
-	pageRegisterStaticText->SetToolTip( wxT("Address of Page Register used to select page accessed in [0x8000 0xBFFF]\nAssumes 24-bit paged addresses") );
+	flashPageRegisterStaticText = new wxStaticText( sbSizer3->GetStaticBox(), wxID_ANY, wxT("PPAGE Register Address:"), wxDefaultPosition, wxDefaultSize, 0 );
+	flashPageRegisterStaticText->Wrap( -1 );
+	flashPageRegisterStaticText->SetToolTip( wxT("Address of PPAGE Register used to select flash page accessed in [0x8000 0xBFFF]\nAssumes 24-bit paged addresses") );
 
-	bSizer6->Add( pageRegisterStaticText, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5 );
+	bSizer6->Add( flashPageRegisterStaticText, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5 );
 
-	pageTextCntrl = new wxTextCtrl( sbSizer3->GetStaticBox(), wxID_ANY, wxT("30"), wxDefaultPosition, wxDefaultSize, 0 );
+	wxSize textctrl_size = wxDefaultSize;
+	textctrl_size.SetWidth(40);
+	flashPageTextCntrl = new wxTextCtrl( sbSizer3->GetStaticBox(), wxID_ANY, wxT("30"), wxDefaultPosition, textctrl_size, 0 );
 	#ifdef __WXGTK__
-	if ( !pageTextCntrl->HasFlag( wxTE_MULTILINE ) )
+	if ( !flashPageTextCntrl->HasFlag( wxTE_MULTILINE ) )
 	{
-	pageTextCntrl->SetMaxLength( 5 );
+	flashPageTextCntrl->SetMaxLength( 5 );
 	}
 	#else
-	pageTextCntrl->SetMaxLength( 5 );
+	flashPageTextCntrl->SetMaxLength( 5 );
 	#endif
-	pageTextCntrl->SetToolTip( wxT("Address of Page Register used to select page accessed in [0x8000 0xBFFF]\nAssumes 24-bit paged addresses") );
+	flashPageTextCntrl->SetToolTip( wxT("Address of PPAGE Register used to select page accessed in [0x8000 0xBFFF]\nAssumes 24-bit paged addresses") );
 
-	bSizer6->Add( pageTextCntrl, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5 );
+	bSizer6->Add( flashPageTextCntrl, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5 );
+
+	//=======
+	pagedEepromAddressRadioButton = new wxRadioButton( sbSizer3->GetStaticBox(), wxID_ANY, wxT("Paged EEPROM"), wxDefaultPosition, wxDefaultSize);
+	pagedEepromAddressRadioButton->SetToolTip( wxT("Use EPAGE register for flash memory in range [0x0800 0x0BFF]") );
+
+	bSizer6->Add( pagedEepromAddressRadioButton, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5 );
+
+	eepromPageRegisterStaticText = new wxStaticText( sbSizer3->GetStaticBox(), wxID_ANY, wxT("EPAGE Register Address:"), wxDefaultPosition, wxDefaultSize, 0 );
+	eepromPageRegisterStaticText->Wrap( -1 );
+	eepromPageRegisterStaticText->SetToolTip( wxT("Address of EPAGE Register used to select flash page accessed in [0x0800 0x0BFF]\nAssumes 24-bit paged addresses") );
+
+	bSizer6->Add( eepromPageRegisterStaticText, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5 );
+
+	eepromPageTextCntrl = new wxTextCtrl( sbSizer3->GetStaticBox(), wxID_ANY, wxT("17"), wxDefaultPosition, textctrl_size, 0 );
+	#ifdef __WXGTK__
+	if ( !eepromPageTextCntrl->HasFlag( wxTE_MULTILINE ) )
+	{
+		eepromPageTextCntrl->SetMaxLength( 5 );
+	}
+	#else
+	eepromPageTextCntrl->SetMaxLength( 5 );
+	#endif
+	eepromPageTextCntrl->SetToolTip( wxT("Address of EPAGE Register used to select page accessed in [0x0800 0x0BFF]\nAssumes 24-bit paged addresses") );
+
+	bSizer6->Add( eepromPageTextCntrl, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5 );
+	//=========
 
 
 	sbSizer3->Add( bSizer6, 0, 0, 5 );
@@ -222,8 +250,9 @@ MemoryDumpDialogueSkeleton::MemoryDumpDialogueSkeleton( wxWindow* parent, wxWind
 	targetVddControl->Connect( wxEVT_COMMAND_RADIOBOX_SELECTED, wxCommandEventHandler( MemoryDumpDialogueSkeleton::OnTargetVddControlClick ), NULL, this );
 	interfaceSpeedControl->Connect( wxEVT_COMMAND_CHOICE_SELECTED, wxCommandEventHandler( MemoryDumpDialogueSkeleton::OnInterfaceSpeedSelectComboSelected ), NULL, this );
 	flatAddressRadioButton->Connect( wxEVT_COMMAND_RADIOBUTTON_SELECTED, wxCommandEventHandler( MemoryDumpDialogueSkeleton::OnFlatAddressSelect ), NULL, this );
-	pagedAddressRadioButton->Connect( wxEVT_COMMAND_RADIOBUTTON_SELECTED, wxCommandEventHandler( MemoryDumpDialogueSkeleton::OnPagedAddressSelect ), NULL, this );
-	pageTextCntrl->Connect( wxEVT_COMMAND_TEXT_UPDATED, wxCommandEventHandler( MemoryDumpDialogueSkeleton::OnPageAddressChange ), NULL, this );
+	pagedFlashAddressRadioButton->Connect( wxEVT_COMMAND_RADIOBUTTON_SELECTED, wxCommandEventHandler( MemoryDumpDialogueSkeleton::OnPagedFlashAddressSelect ), NULL, this );
+	pagedEepromAddressRadioButton->Connect( wxEVT_COMMAND_RADIOBUTTON_SELECTED, wxCommandEventHandler( MemoryDumpDialogueSkeleton::OnPagedEepromAddressSelect ), NULL, this );
+	flashPageTextCntrl->Connect( wxEVT_COMMAND_TEXT_UPDATED, wxCommandEventHandler( MemoryDumpDialogueSkeleton::OnPageAddressChange ), NULL, this );
 	initializationCheckbox->Connect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( MemoryDumpDialogueSkeleton::OnInitializationCheckboxChange ), NULL, this );
 	readMemoryButton->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( MemoryDumpDialogueSkeleton::OnReadMemoryButtonClick ), NULL, this );
 	saveToFileButton->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( MemoryDumpDialogueSkeleton::OnSaveToFileButton ), NULL, this );
@@ -239,8 +268,8 @@ MemoryDumpDialogueSkeleton::~MemoryDumpDialogueSkeleton()
 	targetVddControl->Disconnect( wxEVT_COMMAND_RADIOBOX_SELECTED, wxCommandEventHandler( MemoryDumpDialogueSkeleton::OnTargetVddControlClick ), NULL, this );
 	interfaceSpeedControl->Disconnect( wxEVT_COMMAND_CHOICE_SELECTED, wxCommandEventHandler( MemoryDumpDialogueSkeleton::OnInterfaceSpeedSelectComboSelected ), NULL, this );
 	flatAddressRadioButton->Disconnect( wxEVT_COMMAND_RADIOBUTTON_SELECTED, wxCommandEventHandler( MemoryDumpDialogueSkeleton::OnFlatAddressSelect ), NULL, this );
-	pagedAddressRadioButton->Disconnect( wxEVT_COMMAND_RADIOBUTTON_SELECTED, wxCommandEventHandler( MemoryDumpDialogueSkeleton::OnPagedAddressSelect ), NULL, this );
-	pageTextCntrl->Disconnect( wxEVT_COMMAND_TEXT_UPDATED, wxCommandEventHandler( MemoryDumpDialogueSkeleton::OnPageAddressChange ), NULL, this );
+	pagedFlashAddressRadioButton->Disconnect( wxEVT_COMMAND_RADIOBUTTON_SELECTED, wxCommandEventHandler( MemoryDumpDialogueSkeleton::OnPagedFlashAddressSelect ), NULL, this );
+	flashPageTextCntrl->Disconnect( wxEVT_COMMAND_TEXT_UPDATED, wxCommandEventHandler( MemoryDumpDialogueSkeleton::OnPageAddressChange ), NULL, this );
 	initializationCheckbox->Disconnect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( MemoryDumpDialogueSkeleton::OnInitializationCheckboxChange ), NULL, this );
 	readMemoryButton->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( MemoryDumpDialogueSkeleton::OnReadMemoryButtonClick ), NULL, this );
 	saveToFileButton->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( MemoryDumpDialogueSkeleton::OnSaveToFileButton ), NULL, this );

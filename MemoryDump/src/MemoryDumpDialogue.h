@@ -41,7 +41,8 @@ protected:
   virtual void OnInterfaceSpeedSelectComboSelected( wxCommandEvent& event );
   virtual void OnInitializationCheckboxChange( wxCommandEvent& event );
   virtual void OnFlatAddressSelect( wxCommandEvent& event );
-  virtual void OnPagedAddressSelect( wxCommandEvent& event );
+  virtual void OnPagedFlashAddressSelect( wxCommandEvent& event );
+  virtual void OnPagedEepromAddressSelect( wxCommandEvent& event );
   virtual void OnPageAddressChange( wxCommandEvent& event );
   virtual void populateBDMChoices();
   virtual void populateInterfaceSpeeds();
@@ -70,6 +71,7 @@ protected:
 
   uint8_t  hcs08PPageAddress;
   uint8_t  hcs12PPageAddress;
+  uint8_t  hcs12EPageAddress;
 
 public:
    MemoryDumpDialogue(wxWindow* parent, AppSettingsPtr appSettings);
