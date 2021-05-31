@@ -703,9 +703,9 @@ USBDM_ErrorCode BdmInterfaceCommon::targetConnectWithRetry(USBDMStatus_t *usbdmS
                   "Retry connection?";
          }
          getYesNo = callback(message,
-                                "USBDM - Target Connection Failure",
-                                style
-                                );
+               "USBDM - Target Connection Failure",
+               style
+         );
          rc = retryConnection(usbdmStatus);
       } while ((rc != BDM_RC_OK) && (getYesNo == YES));
    }
@@ -732,49 +732,49 @@ int BdmInterfaceCommon::handleError(USBDM_ErrorCode rc) {
    log.print("handleError(%d (%s))\n", rc, USBDM_GetErrorString(rc));
 
    switch (rc) {
-   case BDM_RC_UNKNOWN_TARGET:
-      getYesNo = callback("USBDM interface does not support target device.\n\n"
-                                 "Change BDM and Retry?",
-                                 "USBDM - BDM Not Suitable",
-                                 YES_NO|YES_DEFAULT|ICON_QUESTION
-                                 );
-      break;
-   case BDM_RC_NO_USBDM_DEVICE:
-      getYesNo = callback("No suitable USBDM interface was found.\n\n"
-                                 "Retry?",
-                                 "USBDM - BDM Not Found",
-                                 YES_NO|YES_DEFAULT|ICON_QUESTION
-                                 );
-      break;
-   case BDM_RC_VDD_NOT_PRESENT:
-      getYesNo = callback("The target appears to have no power.\n\n"
-                                 "Please supply power to the target.\n\n"
-                                 "Retry?",
-                                 "USBDM - No Target Power",
-                                 YES_NO|YES_DEFAULT|ICON_QUESTION
-                                 );
-      break;
-   case BDM_RC_BDM_EN_FAILED:
-      getYesNo = callback("Enabling BDM interface on target failed.\n"
-                                 "The target may be secured.\n\n"
-                                 "Retry?",
-                                 "USBDM - Target Connection Failure",
-                                 YES_NO|YES_DEFAULT|ICON_QUESTION
-                                 );
-      break;
-   default: {
-      std::string s;
-      s += "An error occurred while accessing the BDM.\n\n"
-           "Reason: ";
-      s += USBDM_GetErrorString(rc);
-      s += "\n\n"
-           "Please cycle power to the target\n\n"
-           "Retry?";
-      getYesNo = callback(s.c_str(),
-                                 "USBDM - Error",
-                                 YES_NO|YES_DEFAULT|ICON_QUESTION
-                                 );
-      break;
+      case BDM_RC_UNKNOWN_TARGET:
+         getYesNo = callback("USBDM interface does not support target device.\n\n"
+               "Change BDM and Retry?",
+               "USBDM - BDM Not Suitable",
+               YES_NO|YES_DEFAULT|ICON_QUESTION
+         );
+         break;
+      case BDM_RC_NO_USBDM_DEVICE:
+         getYesNo = callback("No suitable USBDM interface was found.\n\n"
+               "Retry?",
+               "USBDM - BDM Not Found",
+               YES_NO|YES_DEFAULT|ICON_QUESTION
+         );
+         break;
+      case BDM_RC_VDD_NOT_PRESENT:
+         getYesNo = callback("The target appears to have no power.\n\n"
+               "Please supply power to the target.\n\n"
+               "Retry?",
+               "USBDM - No Target Power",
+               YES_NO|YES_DEFAULT|ICON_QUESTION
+         );
+         break;
+      case BDM_RC_BDM_EN_FAILED:
+         getYesNo = callback("Enabling BDM interface on target failed.\n"
+               "The target may be secured.\n\n"
+               "Retry?",
+               "USBDM - Target Connection Failure",
+               YES_NO|YES_DEFAULT|ICON_QUESTION
+         );
+         break;
+      default: {
+         std::string s;
+         s += "An error occurred while accessing the BDM.\n\n"
+               "Reason: ";
+         s += USBDM_GetErrorString(rc);
+         s += "\n\n"
+               "Please cycle power to the target\n\n"
+               "Retry?";
+         getYesNo = callback(s.c_str(),
+               "USBDM - Error",
+               YES_NO|YES_DEFAULT|ICON_QUESTION
+         );
+         break;
       }
    }
    log.print("(%d (%s)) => Retry = %s\n", rc, USBDM_GetErrorString(rc), (getYesNo==YES)?"Yes":"No");
@@ -846,30 +846,30 @@ USBDM_ErrorCode BdmInterfaceCommon::setTargetTypeWithRetry() {
 static const char *utf16leToUtf8(const char *source) {
    const  uint8_t  *inPtr  = (const uint8_t*) source;
    static uint8_t  buffer[100];
-          uint8_t  *outPtr = buffer;
-          uint16_t utf16leValue;
+   uint8_t  *outPtr = buffer;
+   uint16_t utf16leValue;
 
-    while ((*inPtr != 0) && (outPtr < (buffer+100))) {
-       utf16leValue  = *inPtr++;
-       utf16leValue += *inPtr++<<8;
-       if (utf16leValue < 0x80) {  // 1-byte
-          *outPtr++ = (uint8_t)utf16leValue;
-       }
-       else if (utf16leValue <0x0800) {   // 2-byte
-          *outPtr++ = (uint8_t)(0xC0 + (utf16leValue>>6));
-          *outPtr++ = (uint8_t)(0x80 + (utf16leValue&0x3F));
-       }
-       else {   // 3-byte
-          *outPtr++ = (uint8_t)(0xE0 + (utf16leValue>>12));
-          *outPtr++ = (uint8_t)(0x80 + ((utf16leValue>>6)&0x3F));
-          *outPtr++ = (uint8_t)(0x80 + (utf16leValue&0x3F));
-       }
-    }
-    // Make sure '\0' terminated
-    if (outPtr < (buffer+sizeof(buffer)/sizeof(buffer[0])))
-       *outPtr = 0;
-    buffer[sizeof(buffer)-1] = 0;
-    return (const char *)buffer;
+   while ((*inPtr != 0) && (outPtr < (buffer+100))) {
+      utf16leValue  = *inPtr++;
+      utf16leValue += *inPtr++<<8;
+      if (utf16leValue < 0x80) {  // 1-byte
+         *outPtr++ = (uint8_t)utf16leValue;
+      }
+      else if (utf16leValue <0x0800) {   // 2-byte
+         *outPtr++ = (uint8_t)(0xC0 + (utf16leValue>>6));
+         *outPtr++ = (uint8_t)(0x80 + (utf16leValue&0x3F));
+      }
+      else {   // 3-byte
+         *outPtr++ = (uint8_t)(0xE0 + (utf16leValue>>12));
+         *outPtr++ = (uint8_t)(0x80 + ((utf16leValue>>6)&0x3F));
+         *outPtr++ = (uint8_t)(0x80 + (utf16leValue&0x3F));
+      }
+   }
+   // Make sure '\0' terminated
+   if (outPtr < (buffer+sizeof(buffer)/sizeof(buffer[0])))
+      *outPtr = 0;
+   buffer[sizeof(buffer)-1] = 0;
+   return (const char *)buffer;
 }
 
 USBDM_ErrorCode BdmInterfaceCommon::readBDMSerialNumber(string &serialNumber) {
@@ -942,7 +942,7 @@ USBDM_ErrorCode BdmInterfaceCommon::findBDMs(vector<BdmInformation> &bdmInformat
             bdmInfo.setSuitable(bdmRc);
             break;
          }
-         USBDM_bdmInformation_t theBdmInfo = {sizeof(theBdmInfo)};
+         USBDM_bdmInformation_t theBdmInfo = {(unsigned)sizeof(theBdmInfo)};
          bdmRc = USBDM_GetBdmInformation(&theBdmInfo);
          if (bdmRc != BDM_RC_OK) {
             log.error("USBDM_GetBdmInformation(BDM #%d) failed, rc = %s\n", index, USBDM_GetErrorString(bdmRc));
@@ -1036,29 +1036,29 @@ USBDM_ErrorCode BdmInterfaceCommon::openBySerialNumber(const string &serialnumbe
       if (it->getSerialNumber().compare(serialnumber) == 0) {
          // Found preferred device
          log.print("Found preferred BDM #%d, Desc=\'%s\', SN=\'%s\'\n",
-                        it->getDeviceNumber(), it->getDescription().c_str(), it->getSerialNumber().c_str());
+               it->getDeviceNumber(), it->getDescription().c_str(), it->getSerialNumber().c_str());
          if (it->isSuitable()) {
             // OK, use this one
             log.print("Opening preferred BDM #%d, Desc=\'%s\', SN=\'%s\'\n",
-                           it->getDeviceNumber(), it->getDescription().c_str(), it->getSerialNumber().c_str());
+                  it->getDeviceNumber(), it->getDescription().c_str(), it->getSerialNumber().c_str());
             return USBDM_Open(it->getDeviceNumber());
          }
          if (mustMatch) {
             // Required BDM is not suitable - return reason
             log.print("Rejecting preferred BDM #%d, Desc=\'%s\', SN=\'%s\' as unsuitable, rc = %s\n",
-                           it->getDeviceNumber(), it->getDescription().c_str(), it->getSerialNumber().c_str(),
-                           USBDM_GetErrorString(it->getSuitable()));
+                  it->getDeviceNumber(), it->getDescription().c_str(), it->getSerialNumber().c_str(),
+                  USBDM_GetErrorString(it->getSuitable()));
             return it->getSuitable();
          }
          // Keep looking
       }
       if (it->isSuitable()) {
          log.print("First suitable but not preferred BDM found = #%d, Desc=\'%s\', SN=\'%s\'\n",
-                        it->getDeviceNumber(), it->getDescription().c_str(), it->getSerialNumber().c_str());
+               it->getDeviceNumber(), it->getDescription().c_str(), it->getSerialNumber().c_str());
          if (firstSuitableDevice == bdmInformation.end())
             // Remember first suitable device found
             firstSuitableDevice = it;
-         }
+      }
       it++;
    }
    if (mustMatch) {
@@ -1073,9 +1073,9 @@ USBDM_ErrorCode BdmInterfaceCommon::openBySerialNumber(const string &serialnumbe
    }
    // Suitable but not preferred device found
    log.print("Opening first suitable BDM #%d, Desc=\'%s\', SN=\'%s\'\n",
-                  firstSuitableDevice->getDeviceNumber(),
-                  firstSuitableDevice->getDescription().c_str(),
-                  firstSuitableDevice->getSerialNumber().c_str());
+         firstSuitableDevice->getDeviceNumber(),
+         firstSuitableDevice->getDescription().c_str(),
+         firstSuitableDevice->getSerialNumber().c_str());
    rc = USBDM_Open(firstSuitableDevice->getDeviceNumber());
    log.print("rc = %s\n", USBDM_GetErrorString(rc));
    return rc;
@@ -1123,10 +1123,10 @@ char const *BdmInterfaceCommon::getConnectionRetryName(RetryMode mode) {
    static char buff[150] = "";
 
    switch (mode & retryMask) {
-   case retryAlways     : strcpy(buff,"ALWAYS");      break;
-   case retryNever      : strcpy(buff,"NEVER");       break;
-   case retryNotPartial : strcpy(buff,"NOTPARTIAL");  break;
-   default              : strcpy(buff,"UNKNOWN!!!");  break;
+      case retryAlways     : strcpy(buff,"ALWAYS");      break;
+      case retryNever      : strcpy(buff,"NEVER");       break;
+      case retryNotPartial : strcpy(buff,"NOTPARTIAL");  break;
+      default              : strcpy(buff,"UNKNOWN!!!");  break;
    }
    if (mode & retryWithInit) {
       strcat(buff,"+INIT");
@@ -1144,7 +1144,7 @@ char const *BdmInterfaceCommon::getConnectionRetryName(RetryMode mode) {
 }
 
 long BdmInterfaceCommon::callback(std::string message, std::string  caption, long style) {
-//   LOGGING_Q;
+   //   LOGGING_Q;
 
    if ((callbackPtr == 0) && (wxPlugin == 0)) {
       // Create default callback on 1st use
@@ -1152,16 +1152,16 @@ long BdmInterfaceCommon::callback(std::string message, std::string  caption, lon
    }
 
    long rc = NO;
-//   UsbdmSystem::Log::print("\n%s\n%s\n", caption.c_str(), message.c_str());
+   //   UsbdmSystem::Log::print("\n%s\n%s\n", caption.c_str(), message.c_str());
    if (callbackPtr != 0) {
-//      log.print("Using external callback\n");
+      //      log.print("Using external callback\n");
       rc = (*callbackPtr)(message, caption, style);
    }
    if (wxPlugin != 0) {
-//      log.print("Using wxPlugin\n");
+      //      log.print("Using wxPlugin\n");
       rc = wxPlugin->display(message, caption, style);
    }
-//   UsbdmSystem::Log::print("rc = 0x%lX\n", rc);
+   //   UsbdmSystem::Log::print("rc = 0x%lX\n", rc);
    return rc;
 }
 
@@ -1274,8 +1274,8 @@ USBDM_ErrorCode BdmInterfaceCommon::readMultipleRegs(unsigned char regValueBuffe
 USBDM_ErrorCode BdmInterfaceCommon::setProgrammingBdmOptions() {
    // BDM Options to be used with the target when Flash programming
    USBDM_ExtendedOptions_t bdmProgrammingOptions = {
-      sizeof(USBDM_ExtendedOptions_t),
-      bdmOptions.targetType,
+         sizeof(USBDM_ExtendedOptions_t),
+         bdmOptions.targetType,
    };
 
    // Get copy of current BDM options
@@ -1339,19 +1339,19 @@ USBDM_ErrorCode USBDM_UnifiedReadReg(TargetType_t targetType, unsigned int regNo
    unsigned int mappedRegno;
 
    switch (targetType) {
-   case T_ARM:
-   case T_ARM_JTAG:
-   case T_ARM_SWD:
-      mappedRegno = armRegisterMap[regNo];
-      break;
-   case T_CFV1:
-      mappedRegno = cfv1RegisterMap[regNo];
-      break;
-   case T_CFVx:
-      mappedRegno = cfvxRegisterMap[regNo];
-      break;
-   default:
-      return BDM_RC_UNKNOWN_TARGET;
+      case T_ARM:
+      case T_ARM_JTAG:
+      case T_ARM_SWD:
+         mappedRegno = armRegisterMap[regNo];
+         break;
+      case T_CFV1:
+         mappedRegno = cfv1RegisterMap[regNo];
+         break;
+      case T_CFVx:
+         mappedRegno = cfvxRegisterMap[regNo];
+         break;
+      default:
+         return BDM_RC_UNKNOWN_TARGET;
    }
    if (mappedRegno&creg) {
       return USBDM_ReadCReg(mappedRegno&~creg, value);
@@ -1366,19 +1366,19 @@ USBDM_ErrorCode USBDM_UnifiedWriteReg(TargetType_t targetType, unsigned int regN
    unsigned int mappedRegno;
 
    switch (targetType) {
-   case T_ARM:
-   case T_ARM_JTAG:
-   case T_ARM_SWD:
-      mappedRegno = armRegisterMap[regNo];
-      break;
-   case T_CFV1:
-      mappedRegno = cfv1RegisterMap[regNo];
-      break;
-   case T_CFVx:
-      mappedRegno = cfvxRegisterMap[regNo];
-      break;
-   default:
-      return BDM_RC_UNKNOWN_TARGET;
+      case T_ARM:
+      case T_ARM_JTAG:
+      case T_ARM_SWD:
+         mappedRegno = armRegisterMap[regNo];
+         break;
+      case T_CFV1:
+         mappedRegno = cfv1RegisterMap[regNo];
+         break;
+      case T_CFVx:
+         mappedRegno = cfvxRegisterMap[regNo];
+         break;
+      default:
+         return BDM_RC_UNKNOWN_TARGET;
    }
    if (mappedRegno&creg) {
       return USBDM_WriteCReg(mappedRegno&~creg, value);

@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Oct 26 2018)
+// C++ code generated with wxFormBuilder (version 3.9.0 Sep 11 2020)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -48,7 +48,7 @@ GdiDialogueSkeleton::GdiDialogueSkeleton( wxWindow* parent, wxWindowID id, const
 
 	bdmDescriptionStaticControl = new wxStaticText( sbSizerSelectBdm->GetStaticBox(), wxID_ANY, wxT("USBDM ARM-SWD for OpenSDA2"), wxDefaultPosition, wxDefaultSize, 0 );
 	bdmDescriptionStaticControl->Wrap( -1 );
-	sbSizerSelectBdm->Add( bdmDescriptionStaticControl, 0, wxEXPAND|wxRIGHT|wxLEFT, 5 );
+	sbSizerSelectBdm->Add( bdmDescriptionStaticControl, 0, wxEXPAND|wxBOTTOM|wxRIGHT|wxLEFT, 5 );
 
 
 	sbSizerInterfacePanel->Add( sbSizerSelectBdm, 0, wxEXPAND|wxLEFT|wxRIGHT, 5 );
@@ -255,7 +255,7 @@ GdiDialogueSkeleton::GdiDialogueSkeleton( wxWindow* parent, wxWindowID id, const
 	resetRecoveryIntervalTextControl = new NumberTextEditCtrl( sbSizerBdmParameters->GetStaticBox(), wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
 	resetRecoveryIntervalTextControl->SetToolTip( wxT("Interval to wait after target reset") );
 
-	fgSizerBdmParameters->Add( resetRecoveryIntervalTextControl, 0, wxRIGHT|wxLEFT, 5 );
+	fgSizerBdmParameters->Add( resetRecoveryIntervalTextControl, 0, wxBOTTOM|wxRIGHT|wxLEFT, 5 );
 
 	m_staticText10 = new wxStaticText( sbSizerBdmParameters->GetStaticBox(), wxID_ANY, wxT("ms"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticText10->Wrap( -1 );
