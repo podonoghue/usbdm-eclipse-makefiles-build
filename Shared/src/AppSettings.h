@@ -105,9 +105,9 @@ private:
          }
    };
 
-   std::map<std::string,Value *>  mymap;          //!< Container for key/attribute pairs
-   std::string                    fileName;       //!< Path to load/save settings from
-   std::string                    description;    //!< Description of settings
+   std::map<std::string,Value *>  fMap;            //!< Container for key/attribute pairs
+   std::string                    fFileName;       //!< Path to load/save settings from
+   std::string                    fDescription;    //!< Description of settings
 
    void loadFromFile(FILE *fp);
    void writeToFile(FILE *fp, const std::string &comment) const;
@@ -122,7 +122,7 @@ public:
     * @param value - value to save
     */
    void addValue(std::string const &key, int value) {
-      mymap[key] = new Value(value);
+      fMap[key] = new Value(value);
    }
    /**
     * Add a string attribute
@@ -131,7 +131,7 @@ public:
     * @param value - value to save
     */
    void addValue(std::string const &key, std::string const &value) {
-      mymap[key] = new Value(value);
+      fMap[key] = new Value(value);
    }
    /**
     * Add a string attribute
@@ -140,7 +140,7 @@ public:
     * @param value - value to save
     */
    void addValue(std::string const &key, const char *value) {
-      mymap[key] = new Value(value);
+      fMap[key] = new Value(value);
    }
    /**
     * Retrieve an integer attribute
@@ -150,8 +150,8 @@ public:
     */
    int getValue(std::string const &key, int defValue) const {
       std::map<std::string,Value *>::const_iterator it;
-      it = mymap.find(key);
-      if (it != mymap.end())
+      it = fMap.find(key);
+      if (it != fMap.end())
          return it->second->getIntValue();
       else
          return defValue;
@@ -164,8 +164,8 @@ public:
     */
    std::string getValue(std::string const &key, std::string const &defValue) const {
       std::map<std::string,Value *>::const_iterator it;
-      it = mymap.find(key);
-      if (it != mymap.end())
+      it = fMap.find(key);
+      if (it != fMap.end())
          return it->second->getStringValue();
       else
          return defValue;
@@ -188,8 +188,8 @@ public:
     * @param description  Description added to settings file
     */
    AppSettings(std::string baseFilename, TargetType_t targetType, std::string description) :
-      fileName(getSettingsFilename(baseFilename, targetType)),
-      description(description)  {
+      fFileName(getSettingsFilename(baseFilename, targetType)),
+      fDescription(description)  {
       LOGGING_Q;
       log.print("baseFilename = %s\n", (const char *)getSettingsFilename(baseFilename, targetType).c_str());
    }
@@ -198,10 +198,25 @@ public:
     * @param description  Description added to settings file
     */
    AppSettings(std::string filename, std::string description) :
-      fileName(filename),
-      description(description)  {
+      fFileName(filename),
+      fDescription(description)  {
       LOGGING_Q;
       log.print("baseFilename = %s\n", (const char *)filename.c_str());
+   }
+
+   AppSettings(const AppSettings &other) :
+      fMap(other.fMap),
+      fFileName(other.fFileName),
+      fDescription(other.fDescription)
+   {
+   }
+
+   AppSettings & operator=(const AppSettings &other) {
+      fMap           = other.fMap;
+      fFileName      = other.fFileName;
+      fDescription   = other.fDescription;
+
+      return *this;
    }
 };
 

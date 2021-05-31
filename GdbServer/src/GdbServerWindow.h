@@ -22,9 +22,9 @@ typedef  wxIPV4address IPaddress;
 #include "WxWidgetsTty.h"
 #include "IGdbTty.h"
 
-class GdbServerWindow: public GdbServerWindowSkeleton {
+#define CONFIG_FILE_NAME "GDBServer_"
 
-private:
+class GdbServerWindow: public GdbServerWindowSkeleton {
 
 protected:
    class GdbMessageWrapper {
@@ -66,7 +66,7 @@ protected:
    void UpdateStatusBar();
    void pollTarget();
 
-   USBDM_ErrorCode        doSettingsDialogue(bool reloadSettings);
+   USBDM_ErrorCode        doSettingsDialogue();
    bool                   confirmDropConnection();
    void                   createServer();
    void                   closeServer();
@@ -89,7 +89,7 @@ protected:
 
    BdmInterfacePtr               bdmInterface;
    DeviceInterfacePtr            deviceInterface;
-   AppSettingsPtr                appSettings;
+   AppSettings                   appSettings;
 
    GdbHandler::GdbMessageLevel   loggingLevel;
    GdbHandler::GdbTargetStatus   targetStatus;
@@ -107,6 +107,7 @@ protected:
 
    bool                          deferredFail;
    bool                          deferredOpen;
+   bool                          useGui;
 
    IGdbTty                      *tty;
    GdbHandlerPtr                 gdbHandler;
@@ -123,10 +124,13 @@ protected:
    };
 
 public:
-   GdbServerWindow(BdmInterfacePtr bdmInterface, DeviceInterfacePtr deviceInterface, AppSettingsPtr appSettings);
+   GdbServerWindow(
+         BdmInterfacePtr      bdmInterface,
+         DeviceInterfacePtr   deviceInterface,
+         bool                 useGui);
    virtual ~GdbServerWindow();
 
-   USBDM_ErrorCode   execute(bool skipOpeningDialogue);
+   USBDM_ErrorCode   execute();
 };
 
 #endif /* SRC_GDBSERVERWINDOW_H_ */

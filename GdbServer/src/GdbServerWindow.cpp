@@ -17,18 +17,22 @@
 
 using namespace std;
 
-GdbServerWindow::GdbServerWindow(BdmInterfacePtr bdmInterface, DeviceInterfacePtr deviceInterface, AppSettingsPtr appSettings) :
+GdbServerWindow::GdbServerWindow(
+      BdmInterfacePtr      bdmInterface,
+      DeviceInterfacePtr   deviceInterface,
+      bool                 useGui) :
    GdbServerWindowSkeleton( (wxFrame *)0, wxID_ANY, _("USBDM GDB Server"), wxDefaultPosition, wxDefaultSize),
    bdmInterface(bdmInterface),
    deviceInterface(deviceInterface),
-   appSettings(appSettings),
+   appSettings(AppSettings(CONFIG_FILE_NAME, deviceInterface->getTargetType(), "GDB Server settings")),
    loggingLevel(GdbHandler::M_ERROR),
    targetStatus(GdbHandler::T_UNKNOWN),
    serverState(idle),
    gdbInOut(NULL),
    statusTimer(NULL),
    deferredFail(false),
-   deferredOpen(false) {
+   deferredOpen(false),
+   useGui(useGui) {
    LOGGING;
 
    serverSocket = NULL;
@@ -56,9 +60,12 @@ GdbServerWindow::~GdbServerWindow() {
    statusTimer = NULL;
 }
 
-USBDM_ErrorCode GdbServerWindow::execute(bool skipOpeningDialogue) {
-   if (!skipOpeningDialogue) {
-      doSettingsDialogue(true);
+USBDM_ErrorCode GdbServerWindow::execute() {
+   if (useGui) {
+      // Load interactive settings
+      appSettings.load();
+      appSettings.printToLog();
+      doSettingsDialogue();
    }
    updateMenu();
    Show();
@@ -68,13 +75,28 @@ USBDM_ErrorCode GdbServerWindow::execute(bool skipOpeningDialogue) {
    return BDM_RC_OK;
 }
 
-USBDM_ErrorCode GdbServerWindow::doSettingsDialogue(bool reloadSettings) {
+USBDM_ErrorCode GdbServerWindow::doSettingsDialogue() {
    LOGGING;
+   USBDM_ErrorCode rc;
+
+   AppSettings tempSettings(appSettings);
 
    // Create the setting dialogue
-   GdbServerDialogue gdbServerDialogue(this, bdmInterface, deviceInterface);
-   USBDM_ErrorCode rc = gdbServerDialogue.execute(appSettings, reloadSettings);
+   GdbServerDialogue *gdbServerDialogue = new GdbServerDialogue(this, bdmInterface, deviceInterface, tempSettings);
+   Show(false);
+   rc = gdbServerDialogue->execute();
+   if (rc == BDM_RC_OK) {
+      appSettings = tempSettings;
+      appSettings.printToLog();
+      if (useGui) {
+         // Save interactive settings
+         appSettings.save();
+      }
+   }
+   bdmInterface->loadSettings(appSettings);
+   deviceInterface->loadSettings(appSettings);
    updateMenu();
+   Show();
    return rc;
 }
 
@@ -222,13 +244,13 @@ GdbHandler::GdbMessageLevel GdbServerWindow::getLoggingLevel() {
  }
 
  /**
-  *   Handler for Quit button
+  *   Handler for Change Settings button
   */
  void GdbServerWindow::OnChangeSettings(wxCommandEvent& WXUNUSED(event)) {
     if (confirmDropConnection()) {
        closeServer();
        serverState = abort;
-       doSettingsDialogue(false);
+       doSettingsDialogue();
        createServer();
     }
  }
@@ -315,6 +337,7 @@ GdbHandler::GdbMessageLevel GdbServerWindow::getLoggingLevel() {
  void GdbServerWindow::OnToggleMaskISR(wxCommandEvent& event) {
     bool disableInterrupts = event.IsChecked();
     bdmInterface->setMaskISR(disableInterrupts);
+    bdmInterface->saveSettings(appSettings);
     if (gdbHandler != 0) {
        gdbHandler->updateTarget();
     }
@@ -326,6 +349,7 @@ GdbHandler::GdbMessageLevel GdbServerWindow::getLoggingLevel() {
  void GdbServerWindow::OnToggleCatchVLLS(wxCommandEvent& event) {
     bool catchVLLS = event.IsChecked();
     bdmInterface->setCatchVLLSx(catchVLLS);
+    bdmInterface->saveSettings(appSettings);
     if (gdbHandler != 0) {
        gdbHandler->updateTarget();
     }

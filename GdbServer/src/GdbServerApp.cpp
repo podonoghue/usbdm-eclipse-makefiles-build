@@ -55,8 +55,6 @@
 
 using namespace std;
 
-#define CONFIG_FILE_NAME "GDBServer_"
-
 class OpenLog {
 public:
    OpenLog() {
@@ -81,11 +79,9 @@ private:
    bool                         program;
    double                       trimFrequency;
    long                         trimNVAddress;
-   int                          returnValue;
    OpenLog                      openLog;
    BdmInterfacePtr              bdmInterface;
    DeviceInterfacePtr           deviceInterface;
-   AppSettingsPtr               appSettings;
    USBDM_ErrorCode              commandLineRC;
 
    USBDM_ErrorCode parseCommandLine(wxCmdLineParser& parser);
@@ -125,7 +121,6 @@ GdbServerApp::GdbServerApp() :
    useGUI         = true;
    trimNVAddress  = 0;
    trimFrequency  = 0;
-   returnValue    = 0;
    verify         = false;
    program        = false;
    commandLineRC  = BDM_RC_OK;
@@ -139,7 +134,6 @@ USBDM_ErrorCode callBack(USBDM_ErrorCode status, int percent, const char *messag
 
 bool GdbServerApp::OnInit() {
    LOGGING;
-   returnValue = 0;
 
 #ifndef _WIN32
    // Otherwise wxWidgets doesn't look in the correct location
@@ -158,20 +152,10 @@ bool GdbServerApp::OnInit() {
    DSC_SetLogFile(0);
 #endif
 
-   // Create empty app settings
-   appSettings.reset(new AppSettings(CONFIG_FILE_NAME, targetType, "GDB Server settings"));
-   if (useGUI) {
-      // Using GUI so load saved settings
-      appSettings->load();
-   }
-#if TARGET == MC56F80xx
-   DSC_SetLogFile(0);
-#endif
-
-   GdbServerWindow *serverWindow = new GdbServerWindow(bdmInterface, deviceInterface, appSettings);
+   GdbServerWindow *serverWindow = new GdbServerWindow(bdmInterface, deviceInterface, useGUI);
    serverWindow->SetTitle(_("GDB Server"));
    SetTopWindow(serverWindow);
-   serverWindow->execute(!useGUI);
+   serverWindow->execute();
 
    return true;
 }
@@ -183,12 +167,10 @@ int GdbServerApp::OnRun(void) {
       return commandLineRC;
    }
    int exitcode = wxApp::OnRun();
-   if (exitcode != 0) {
-      return exitcode;
-   }
+
    // Everything is done in OnInit()!
-   log.print(" - return value = %d\n", returnValue);
-   return returnValue;
+   log.print(" - return value = %d\n", exitcode);
+   return exitcode;
 }
 
 int GdbServerApp::OnExit(void) {
@@ -196,10 +178,6 @@ int GdbServerApp::OnExit(void) {
 
    bdmInterface.reset();
 
-   if (useGUI) {
-      // Using GUI so save changed settings
-      appSettings->save();
-   }
    return wxApp::OnExit();
 }
 
@@ -296,7 +274,8 @@ USBDM_ErrorCode GdbServerApp::parseCommandLine(wxCmdLineParser& parser) {
    LOGGING;
    wxString  sValue;
 
-   useGUI             = true;
+   useGUI = true;
+
    // "-target=..." option may always be given
    if (parser.Found(_("target"), &sValue)) {
       if (sValue.CmpNoCase(_("cfv1")) == 0) {
@@ -347,7 +326,8 @@ USBDM_ErrorCode GdbServerApp::parseCommandLine(wxCmdLineParser& parser) {
 
    /*
     *  If a device name is given the server will open without the GUI configuration dialogue
-    *  and it will not load default parameters.
+    *  and it will not load default parameters nor save them when finished.
+    *  This is to allow use of the server from command line or when launched from another application e.g. Eclipse.
     */
    useGUI = false;
 

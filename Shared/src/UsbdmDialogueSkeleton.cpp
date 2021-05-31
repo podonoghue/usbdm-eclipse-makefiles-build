@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Oct 26 2018)
+// C++ code generated with wxFormBuilder (version 3.9.0 Sep 11 2020)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -49,7 +49,7 @@ UsbdmDialogueSkeleton::UsbdmDialogueSkeleton( wxWindow* parent, wxWindowID id, c
 
 	bdmDescriptionStaticControl = new wxStaticText( sbSizer4->GetStaticBox(), wxID_ANY, wxT("USBDM ARM-SWD for OpenSDA2"), wxDefaultPosition, wxDefaultSize, 0 );
 	bdmDescriptionStaticControl->Wrap( -1 );
-	sbSizer4->Add( bdmDescriptionStaticControl, 0, wxEXPAND|wxRIGHT|wxLEFT, 5 );
+	sbSizer4->Add( bdmDescriptionStaticControl, 0, wxEXPAND|wxBOTTOM|wxRIGHT|wxLEFT, 5 );
 
 
 	bSizer3->Add( sbSizer4, 0, wxEXPAND|wxLEFT|wxRIGHT, 5 );
@@ -63,23 +63,23 @@ UsbdmDialogueSkeleton::UsbdmDialogueSkeleton( wxWindow* parent, wxWindowID id, c
 	targetVddControl->SetSelection( 0 );
 	targetVddControl->SetToolTip( wxT("Off\t- Target Vdd is externally supplied\n3.3V\t- BDM supplies target Vdd @3.3V\n5V\t- BDM supplies target Vdd @5V") );
 
-	sbSizer5->Add( targetVddControl, 0, wxEXPAND|wxRIGHT|wxLEFT, 5 );
+	sbSizer5->Add( targetVddControl, 0, wxEXPAND|wxBOTTOM|wxRIGHT|wxLEFT, 5 );
 
 	cycleVddOnResetControl = new wxCheckBox( sbSizer5->GetStaticBox(), wxID_ANY, wxT("Cycle target Vdd on reset"), wxDefaultPosition, wxDefaultSize, 0 );
 	cycleVddOnResetControl->SetToolTip( wxT("Target Vdd supply is cycled whenever the BDM resets the target") );
 
-	sbSizer5->Add( cycleVddOnResetControl, 0, wxALL, 5 );
+	sbSizer5->Add( cycleVddOnResetControl, 0, wxBOTTOM|wxRIGHT|wxLEFT, 5 );
 
 	cycleVddOnConnectionControl = new wxCheckBox( sbSizer5->GetStaticBox(), wxID_ANY, wxT("Cycle target Vdd on connection problems"), wxDefaultPosition, wxDefaultSize, 0 );
 	cycleVddOnConnectionControl->SetToolTip( wxT("Target Vdd supply is cycled whenever the BDM fails to connect to the target") );
 
-	sbSizer5->Add( cycleVddOnConnectionControl, 0, wxALL, 5 );
+	sbSizer5->Add( cycleVddOnConnectionControl, 0, wxBOTTOM|wxRIGHT|wxLEFT, 5 );
 
 	leaveTargetPoweredControl = new wxCheckBox( sbSizer5->GetStaticBox(), wxID_ANY, wxT("Leave target powered on exit"), wxDefaultPosition, wxDefaultSize, 0 );
 	leaveTargetPoweredControl->SetValue(true);
 	leaveTargetPoweredControl->SetToolTip( wxT("BDM supplied Target Vdd is left on when application is closed") );
 
-	sbSizer5->Add( leaveTargetPoweredControl, 0, wxALL, 5 );
+	sbSizer5->Add( leaveTargetPoweredControl, 0, wxBOTTOM|wxRIGHT|wxLEFT, 5 );
 
 
 	bSizer3->Add( sbSizer5, 0, wxEXPAND|wxRIGHT|wxLEFT, 5 );
@@ -97,40 +97,40 @@ UsbdmDialogueSkeleton::UsbdmDialogueSkeleton( wxWindow* parent, wxWindowID id, c
 	useResetSignalControl->SetValue(true);
 	useResetSignalControl->SetToolTip( wxT("Drive RESET signal when resetting target\nThis may be applied with another reset method.") );
 
-	sbSizer6->Add( useResetSignalControl, 0, wxALL, 5 );
+	sbSizer6->Add( useResetSignalControl, 0, wxBOTTOM|wxRIGHT|wxLEFT, 5 );
 
 	usePstSignalControl = new wxCheckBox( sbSizer6->GetStaticBox(), wxID_ANY, wxT("Use PST signals"), wxDefaultPosition, wxDefaultSize, 0 );
 	usePstSignalControl->SetToolTip( wxT("Use PST signals to detect target run state") );
 
-	sbSizer6->Add( usePstSignalControl, 0, wxALL, 5 );
+	sbSizer6->Add( usePstSignalControl, 0, wxBOTTOM|wxRIGHT|wxLEFT, 5 );
 
 	guessTargetSpeedControl = new wxCheckBox( sbSizer6->GetStaticBox(), wxID_ANY, wxT("Guess target speed if no sync"), wxDefaultPosition, wxDefaultSize, 0 );
 	guessTargetSpeedControl->SetValue(true);
 	guessTargetSpeedControl->SetToolTip( wxT("Guess target speed when target does not support sync operation") );
 
-	sbSizer6->Add( guessTargetSpeedControl, 0, wxALL, 5 );
+	sbSizer6->Add( guessTargetSpeedControl, 0, wxBOTTOM|wxRIGHT|wxLEFT, 5 );
 
 	maskInterruptWhenSteppingControl = new wxCheckBox( sbSizer6->GetStaticBox(), wxID_ANY, wxT("Mask interrupts when stepping"), wxDefaultPosition, wxDefaultSize, 0 );
 	maskInterruptWhenSteppingControl->SetToolTip( wxT("Interrupts are temporarily masked when single-stepping the target.\nInterrupts are unaffected when running.") );
 
-	sbSizer6->Add( maskInterruptWhenSteppingControl, 0, wxALL, 5 );
+	sbSizer6->Add( maskInterruptWhenSteppingControl, 0, wxBOTTOM|wxRIGHT|wxLEFT, 5 );
 
 	catchVllsResetControl = new wxCheckBox( sbSizer6->GetStaticBox(), wxID_ANY, wxT("Catch VLLS Reset"), wxDefaultPosition, wxDefaultSize, 0 );
 	catchVllsResetControl->SetToolTip( wxT("Stop the target when a VLLS reset occurs") );
 
-	sbSizer6->Add( catchVllsResetControl, 0, wxALL, 5 );
+	sbSizer6->Add( catchVllsResetControl, 0, wxRIGHT|wxLEFT, 5 );
 
 	wxBoxSizer* bSizer121;
 	bSizer121 = new wxBoxSizer( wxHORIZONTAL );
 
 	m_staticText32 = new wxStaticText( sbSizer6->GetStaticBox(), wxID_ANY, wxT("Connection Timeout"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticText32->Wrap( -1 );
-	bSizer121->Add( m_staticText32, 0, wxALL, 5 );
+	bSizer121->Add( m_staticText32, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT|wxLEFT, 5 );
 
 	connectionTimeoutTextControl = new NumberTextEditCtrl( sbSizer6->GetStaticBox(), wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
 	connectionTimeoutTextControl->SetToolTip( wxT("How long to wait for an unresponsive target.\n0=>indefinite wait - This is useful when using low-power modes.") );
 
-	bSizer121->Add( connectionTimeoutTextControl, 0, wxALL, 5 );
+	bSizer121->Add( connectionTimeoutTextControl, 0, wxRIGHT|wxLEFT|wxALIGN_CENTER_VERTICAL, 5 );
 
 
 	sbSizer6->Add( bSizer121, 1, wxEXPAND, 5 );
@@ -140,14 +140,14 @@ UsbdmDialogueSkeleton::UsbdmDialogueSkeleton( wxWindow* parent, wxWindowID id, c
 
 	interfaceSpeedStaticText = new wxStaticText( sbSizer6->GetStaticBox(), wxID_ANY, wxT("Interface Speed"), wxDefaultPosition, wxDefaultSize, 0 );
 	interfaceSpeedStaticText->Wrap( -1 );
-	bSizer11->Add( interfaceSpeedStaticText, 0, wxALL, 5 );
+	bSizer11->Add( interfaceSpeedStaticText, 0, wxALIGN_CENTER_VERTICAL|wxBOTTOM|wxRIGHT|wxLEFT, 5 );
 
 	wxArrayString interfaceSpeedControlChoices;
 	interfaceSpeedControl = new wxChoice( sbSizer6->GetStaticBox(), wxID_ANY, wxDefaultPosition, wxDefaultSize, interfaceSpeedControlChoices, 0 );
 	interfaceSpeedControl->SetSelection( 0 );
 	interfaceSpeedControl->SetToolTip( wxT("Maximum target connection speed\n(Actual speed made be lower)") );
 
-	bSizer11->Add( interfaceSpeedControl, 0, wxALL, 5 );
+	bSizer11->Add( interfaceSpeedControl, 0, wxALIGN_CENTER_VERTICAL|wxBOTTOM|wxRIGHT|wxLEFT, 5 );
 
 
 	sbSizer6->Add( bSizer11, 1, wxEXPAND, 5 );
@@ -185,7 +185,7 @@ UsbdmDialogueSkeleton::UsbdmDialogueSkeleton( wxWindow* parent, wxWindowID id, c
 	fInterfacePanel->SetSizer( bSizer3 );
 	fInterfacePanel->Layout();
 	bSizer3->Fit( fInterfacePanel );
-	fNotebook->AddPage( fInterfacePanel, wxT("Interface"), true );
+	fNotebook->AddPage( fInterfacePanel, wxT("Interface"), false );
 	fTargetPanel = new wxPanel( fNotebook, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL );
 	wxBoxSizer* bSizer4;
 	bSizer4 = new wxBoxSizer( wxVERTICAL );
@@ -217,7 +217,7 @@ UsbdmDialogueSkeleton::UsbdmDialogueSkeleton( wxWindow* parent, wxWindowID id, c
 
 	loadedFilenameStaticControl = new wxStaticText( sbSizer7->GetStaticBox(), wxID_ANY, wxT("No File Loaded"), wxDefaultPosition, wxDefaultSize, 0 );
 	loadedFilenameStaticControl->Wrap( -1 );
-	sbSizer7->Add( loadedFilenameStaticControl, 0, wxEXPAND|wxRIGHT|wxLEFT, 5 );
+	sbSizer7->Add( loadedFilenameStaticControl, 0, wxEXPAND|wxBOTTOM|wxRIGHT|wxLEFT, 5 );
 
 
 	bSizer4->Add( sbSizer7, 0, wxEXPAND|wxRIGHT|wxLEFT, 5 );
@@ -233,7 +233,7 @@ UsbdmDialogueSkeleton::UsbdmDialogueSkeleton( wxWindow* parent, wxWindowID id, c
 	deviceTypeChoiceControl->SetSelection( 0 );
 	deviceTypeChoiceControl->SetToolTip( wxT("Type of target device") );
 
-	bSizer13->Add( deviceTypeChoiceControl, 1, wxALIGN_CENTER_VERTICAL|wxLEFT|wxRIGHT, 5 );
+	bSizer13->Add( deviceTypeChoiceControl, 1, wxALIGN_CENTER_VERTICAL|wxLEFT|wxRIGHT|wxEXPAND, 5 );
 
 	detectChipButtonControl = new wxButton( sbSizer12->GetStaticBox(), wxID_ANY, wxT("Detect Chip"), wxDefaultPosition, wxDefaultSize, 0 );
 	detectChipButtonControl->SetToolTip( wxT("Query target chip ID\n(More than a single device may be associated with a given ID)") );
@@ -246,7 +246,7 @@ UsbdmDialogueSkeleton::UsbdmDialogueSkeleton( wxWindow* parent, wxWindowID id, c
 	filterByChipIdCheckBoxControl = new wxCheckBox( sbSizer12->GetStaticBox(), wxID_ANY, wxT("Filter by chip ID (none)"), wxDefaultPosition, wxDefaultSize, 0 );
 	filterByChipIdCheckBoxControl->SetToolTip( wxT("Restrict displayed chips to those matching chip ID") );
 
-	sbSizer12->Add( filterByChipIdCheckBoxControl, 0, wxTOP|wxRIGHT|wxLEFT|wxEXPAND, 5 );
+	sbSizer12->Add( filterByChipIdCheckBoxControl, 0, wxEXPAND|wxALL, 5 );
 
 
 	bSizer4->Add( sbSizer12, 0, wxEXPAND|wxRIGHT|wxLEFT, 5 );
@@ -307,7 +307,7 @@ UsbdmDialogueSkeleton::UsbdmDialogueSkeleton( wxWindow* parent, wxWindowID id, c
 
 	busFrequencyStaticControl = new wxStaticText( sbSizer132->GetStaticBox(), wxID_ANY, wxT("Bus Frequency (Crystal/2)"), wxDefaultPosition, wxDefaultSize, 0 );
 	busFrequencyStaticControl->Wrap( -1 );
-	sbSizer132->Add( busFrequencyStaticControl, 0, wxALL, 5 );
+	sbSizer132->Add( busFrequencyStaticControl, 0, wxALL|wxALIGN_CENTER_VERTICAL, 5 );
 
 	busFrequencyTextControl = new NumberTextEditCtrl( sbSizer132->GetStaticBox(), wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
 	busFrequencyTextControl->SetToolTip( wxT("Bus frequency to assume when mass erasing if it cannot be measured") );
@@ -316,7 +316,7 @@ UsbdmDialogueSkeleton::UsbdmDialogueSkeleton( wxWindow* parent, wxWindowID id, c
 
 	busFrequencyStaticControlkHz = new wxStaticText( sbSizer132->GetStaticBox(), wxID_ANY, wxT("kHz"), wxDefaultPosition, wxDefaultSize, 0 );
 	busFrequencyStaticControlkHz->Wrap( -1 );
-	sbSizer132->Add( busFrequencyStaticControlkHz, 0, wxALL, 5 );
+	sbSizer132->Add( busFrequencyStaticControlkHz, 0, wxALL|wxALIGN_CENTER_VERTICAL, 5 );
 
 
 	bSizer4->Add( sbSizer132, 0, wxEXPAND|wxRIGHT|wxLEFT, 5 );
@@ -340,7 +340,7 @@ UsbdmDialogueSkeleton::UsbdmDialogueSkeleton( wxWindow* parent, wxWindowID id, c
 	eraseChoiceControl->SetSelection( 0 );
 	eraseChoiceControl->SetToolTip( wxT("TargetDefault - Use target dependent default\nNone\t      - Don't erase before programming\nSelective\t      - Erase only sectors being programmed\nAll\t      - Erase entire chip\nMass\t      - Use device specific mass erase method") );
 
-	sbSizer131->Add( eraseChoiceControl, 1, wxTOP|wxRIGHT|wxLEFT, 5 );
+	sbSizer131->Add( eraseChoiceControl, 1, wxALL|wxEXPAND, 5 );
 
 
 	bSizer133->Add( sbSizer131, 1, wxALL|wxEXPAND|wxLEFT|wxRIGHT, 5 );
@@ -351,12 +351,12 @@ UsbdmDialogueSkeleton::UsbdmDialogueSkeleton( wxWindow* parent, wxWindowID id, c
 	eraseNowButtonControl = new wxButton( sbSizer151->GetStaticBox(), wxID_ANY, wxT("Mass Erase Now"), wxDefaultPosition, wxDefaultSize, 0 );
 	eraseNowButtonControl->SetToolTip( wxT("Mass erase and unsecure target") );
 
-	sbSizer151->Add( eraseNowButtonControl, 0, wxRIGHT|wxLEFT, 5 );
+	sbSizer151->Add( eraseNowButtonControl, 0, wxALL, 5 );
 
 	unlockButtonControl = new wxButton( sbSizer151->GetStaticBox(), wxID_ANY, wxT("Unlock Now"), wxDefaultPosition, wxDefaultSize, 0 );
 	unlockButtonControl->SetToolTip( wxT("Unlock - Requires device in JTAG mode") );
 
-	sbSizer151->Add( unlockButtonControl, 0, wxLEFT|wxRIGHT, 5 );
+	sbSizer151->Add( unlockButtonControl, 0, wxALL, 5 );
 
 
 	bSizer133->Add( sbSizer151, 0, wxALL|wxEXPAND, 5 );
@@ -386,7 +386,7 @@ UsbdmDialogueSkeleton::UsbdmDialogueSkeleton( wxWindow* parent, wxWindowID id, c
 	enableSoundsCheckBoxControl = new wxCheckBox( sbSizer141->GetStaticBox(), wxID_ANY, wxT("Enable Sounds"), wxDefaultPosition, wxDefaultSize, 0 );
 	enableSoundsCheckBoxControl->SetToolTip( wxT("Enable sounds when programming is complete") );
 
-	sbSizer141->Add( enableSoundsCheckBoxControl, 0, wxALL, 5 );
+	sbSizer141->Add( enableSoundsCheckBoxControl, 0, wxALL|wxEXPAND, 5 );
 
 
 	bSizer14->Add( sbSizer141, 0, wxEXPAND|wxRIGHT|wxLEFT, 5 );
@@ -399,21 +399,21 @@ UsbdmDialogueSkeleton::UsbdmDialogueSkeleton( wxWindow* parent, wxWindowID id, c
 
 	gdbServerPortNumberStaticControl = new wxStaticText( sbSizer14->GetStaticBox(), wxID_ANY, wxT("Debug Port"), wxDefaultPosition, wxDefaultSize, 0 );
 	gdbServerPortNumberStaticControl->Wrap( -1 );
-	sbSizer14->Add( gdbServerPortNumberStaticControl, 0, wxALL, 5 );
+	sbSizer14->Add( gdbServerPortNumberStaticControl, 0, wxALL|wxALIGN_CENTER_VERTICAL, 5 );
 
 	gdbServerPortNumberTextControl = new NumberTextEditCtrl( sbSizer14->GetStaticBox(), wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
 	gdbServerPortNumberTextControl->SetToolTip( wxT("Socket port number for GDB debug connection") );
 
-	sbSizer14->Add( gdbServerPortNumberTextControl, 0, wxALL, 5 );
+	sbSizer14->Add( gdbServerPortNumberTextControl, 0, wxALL|wxALIGN_CENTER_VERTICAL, 5 );
 
 	gdbTtyPortNumberStaticControl = new wxStaticText( sbSizer14->GetStaticBox(), wxID_ANY, wxT("TTY (semi-hosting)"), wxDefaultPosition, wxDefaultSize, 0 );
 	gdbTtyPortNumberStaticControl->Wrap( -1 );
-	sbSizer14->Add( gdbTtyPortNumberStaticControl, 0, wxALL, 5 );
+	sbSizer14->Add( gdbTtyPortNumberStaticControl, 0, wxALL|wxALIGN_CENTER_VERTICAL, 5 );
 
 	gdbTtyPortNumberTextControl = new NumberTextEditCtrl( sbSizer14->GetStaticBox(), wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
 	gdbTtyPortNumberTextControl->SetToolTip( wxT("Socket port number for GDB TTY connection") );
 
-	sbSizer14->Add( gdbTtyPortNumberTextControl, 0, wxALL, 5 );
+	sbSizer14->Add( gdbTtyPortNumberTextControl, 0, wxALL|wxALIGN_CENTER_VERTICAL, 5 );
 
 
 	bSizer4->Add( sbSizer14, 0, wxEXPAND|wxBOTTOM|wxRIGHT|wxLEFT, 5 );
@@ -425,19 +425,19 @@ UsbdmDialogueSkeleton::UsbdmDialogueSkeleton( wxWindow* parent, wxWindowID id, c
 	programFlashButtonControl->Enable( false );
 	programFlashButtonControl->SetToolTip( wxT("Program image to target") );
 
-	sbSizer15->Add( programFlashButtonControl, 1, wxRIGHT|wxLEFT, 5 );
+	sbSizer15->Add( programFlashButtonControl, 1, wxBOTTOM|wxRIGHT|wxLEFT, 5 );
 
 	verifyFlashButtonControl = new wxButton( sbSizer15->GetStaticBox(), wxID_ANY, wxT("Verify Flash"), wxDefaultPosition, wxDefaultSize, 0 );
 	verifyFlashButtonControl->Enable( false );
 	verifyFlashButtonControl->SetToolTip( wxT("Verify target flash against flash image buffer") );
 
-	sbSizer15->Add( verifyFlashButtonControl, 1, wxRIGHT|wxLEFT, 5 );
+	sbSizer15->Add( verifyFlashButtonControl, 1, wxBOTTOM|wxRIGHT|wxLEFT, 5 );
 
 	loadAndGoButtonControl = new wxButton( sbSizer15->GetStaticBox(), wxID_ANY, wxT("Load and Go"), wxDefaultPosition, wxDefaultSize, 0 );
 	loadAndGoButtonControl->Enable( false );
 	loadAndGoButtonControl->SetToolTip( wxT("Program image to target and start target execution") );
 
-	sbSizer15->Add( loadAndGoButtonControl, 1, wxRIGHT|wxLEFT, 5 );
+	sbSizer15->Add( loadAndGoButtonControl, 1, wxBOTTOM|wxRIGHT|wxLEFT, 5 );
 
 
 	bSizer4->Add( sbSizer15, 0, wxEXPAND|wxBOTTOM|wxRIGHT|wxLEFT, 5 );
@@ -446,7 +446,7 @@ UsbdmDialogueSkeleton::UsbdmDialogueSkeleton( wxWindow* parent, wxWindowID id, c
 	fTargetPanel->SetSizer( bSizer4 );
 	fTargetPanel->Layout();
 	bSizer4->Fit( fTargetPanel );
-	fNotebook->AddPage( fTargetPanel, wxT("Target"), false );
+	fNotebook->AddPage( fTargetPanel, wxT("Target"), true );
 	fAdvancedPanel = new wxPanel( fNotebook, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL );
 	wxBoxSizer* bSizer1;
 	bSizer1 = new wxBoxSizer( wxVERTICAL );
@@ -461,74 +461,74 @@ UsbdmDialogueSkeleton::UsbdmDialogueSkeleton( wxWindow* parent, wxWindowID id, c
 
 	powerOffDurationStaticControl = new wxStaticText( sbSizer1->GetStaticBox(), wxID_ANY, wxT("Power Off duration"), wxDefaultPosition, wxDefaultSize, 0 );
 	powerOffDurationStaticControl->Wrap( -1 );
-	fgSizer1->Add( powerOffDurationStaticControl, 0, wxRIGHT|wxLEFT, 5 );
+	fgSizer1->Add( powerOffDurationStaticControl, 0, wxALIGN_CENTER_VERTICAL|wxBOTTOM|wxRIGHT|wxLEFT, 5 );
 
 	powerOffDurationTextControl = new NumberTextEditCtrl( sbSizer1->GetStaticBox(), wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
 	powerOffDurationTextControl->SetToolTip( wxT("Duration to power off when cycling target power") );
 
-	fgSizer1->Add( powerOffDurationTextControl, 0, wxBOTTOM|wxLEFT|wxRIGHT, 5 );
+	fgSizer1->Add( powerOffDurationTextControl, 0, wxALIGN_CENTER_VERTICAL|wxBOTTOM|wxRIGHT|wxLEFT, 5 );
 
 	m_textCtrl1 = new wxStaticText( sbSizer1->GetStaticBox(), wxID_ANY, wxT("ms"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_textCtrl1->Wrap( -1 );
-	fgSizer1->Add( m_textCtrl1, 0, wxRIGHT|wxLEFT, 5 );
+	fgSizer1->Add( m_textCtrl1, 0, wxALIGN_CENTER_VERTICAL|wxBOTTOM|wxRIGHT|wxLEFT, 5 );
 
 	powerOnRecoveryIntervalStaticControl = new wxStaticText( sbSizer1->GetStaticBox(), wxID_ANY, wxT("Power On Recover interval"), wxDefaultPosition, wxDefaultSize, 0 );
 	powerOnRecoveryIntervalStaticControl->Wrap( -1 );
-	fgSizer1->Add( powerOnRecoveryIntervalStaticControl, 0, wxRIGHT|wxLEFT, 5 );
+	fgSizer1->Add( powerOnRecoveryIntervalStaticControl, 0, wxALIGN_CENTER_VERTICAL|wxBOTTOM|wxRIGHT|wxLEFT, 5 );
 
 	powerOnRecoveryIntervalTextControl = new NumberTextEditCtrl( sbSizer1->GetStaticBox(), wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
 	powerOnRecoveryIntervalTextControl->SetToolTip( wxT("Interval to wait after power on of target") );
 
-	fgSizer1->Add( powerOnRecoveryIntervalTextControl, 0, wxBOTTOM|wxRIGHT|wxLEFT, 5 );
+	fgSizer1->Add( powerOnRecoveryIntervalTextControl, 0, wxBOTTOM|wxRIGHT|wxLEFT|wxALIGN_CENTER_VERTICAL, 5 );
 
 	m_staticText4 = new wxStaticText( sbSizer1->GetStaticBox(), wxID_ANY, wxT("ms"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticText4->Wrap( -1 );
-	fgSizer1->Add( m_staticText4, 0, wxRIGHT|wxLEFT, 5 );
+	fgSizer1->Add( m_staticText4, 0, wxALIGN_CENTER_VERTICAL|wxBOTTOM|wxRIGHT|wxLEFT, 5 );
 
 	resetDurationStaticControl = new wxStaticText( sbSizer1->GetStaticBox(), wxID_ANY, wxT("Reset duration"), wxDefaultPosition, wxDefaultSize, 0 );
 	resetDurationStaticControl->Wrap( -1 );
-	fgSizer1->Add( resetDurationStaticControl, 0, wxRIGHT|wxLEFT, 5 );
+	fgSizer1->Add( resetDurationStaticControl, 0, wxALIGN_CENTER_VERTICAL|wxBOTTOM|wxRIGHT|wxLEFT, 5 );
 
 	resetDurationTextControl = new NumberTextEditCtrl( sbSizer1->GetStaticBox(), wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
 	resetDurationTextControl->SetToolTip( wxT("Duration to apply reset to target") );
 
-	fgSizer1->Add( resetDurationTextControl, 0, wxBOTTOM|wxRIGHT|wxLEFT, 5 );
+	fgSizer1->Add( resetDurationTextControl, 0, wxBOTTOM|wxRIGHT|wxLEFT|wxALIGN_CENTER_VERTICAL, 5 );
 
 	m_staticText6 = new wxStaticText( sbSizer1->GetStaticBox(), wxID_ANY, wxT("ms"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticText6->Wrap( -1 );
-	fgSizer1->Add( m_staticText6, 0, wxRIGHT|wxLEFT, 5 );
+	fgSizer1->Add( m_staticText6, 0, wxALIGN_CENTER_VERTICAL|wxBOTTOM|wxRIGHT|wxLEFT, 5 );
 
 	resetReleaseIntervalStaticControl = new wxStaticText( sbSizer1->GetStaticBox(), wxID_ANY, wxT("Reset Release interval"), wxDefaultPosition, wxDefaultSize, 0 );
 	resetReleaseIntervalStaticControl->Wrap( -1 );
-	fgSizer1->Add( resetReleaseIntervalStaticControl, 0, wxRIGHT|wxLEFT, 5 );
+	fgSizer1->Add( resetReleaseIntervalStaticControl, 0, wxALIGN_CENTER_VERTICAL|wxBOTTOM|wxRIGHT|wxLEFT, 5 );
 
 	resetReleaseIntervalTextControl = new NumberTextEditCtrl( sbSizer1->GetStaticBox(), wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
 	resetReleaseIntervalTextControl->SetToolTip( wxT("Interval to hold other target signals after reset release") );
 
-	fgSizer1->Add( resetReleaseIntervalTextControl, 0, wxBOTTOM|wxRIGHT|wxLEFT, 5 );
+	fgSizer1->Add( resetReleaseIntervalTextControl, 0, wxBOTTOM|wxRIGHT|wxLEFT|wxALIGN_CENTER_VERTICAL, 5 );
 
 	m_staticText8 = new wxStaticText( sbSizer1->GetStaticBox(), wxID_ANY, wxT("ms"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticText8->Wrap( -1 );
-	fgSizer1->Add( m_staticText8, 0, wxRIGHT|wxLEFT, 5 );
+	fgSizer1->Add( m_staticText8, 0, wxALIGN_CENTER_VERTICAL|wxBOTTOM|wxRIGHT|wxLEFT, 5 );
 
 	resetRecoveryIntervalStaticControl = new wxStaticText( sbSizer1->GetStaticBox(), wxID_ANY, wxT("Reset Recovery Interval"), wxDefaultPosition, wxDefaultSize, 0 );
 	resetRecoveryIntervalStaticControl->Wrap( -1 );
-	fgSizer1->Add( resetRecoveryIntervalStaticControl, 0, wxRIGHT|wxLEFT, 5 );
+	fgSizer1->Add( resetRecoveryIntervalStaticControl, 0, wxALIGN_CENTER_VERTICAL|wxBOTTOM|wxRIGHT|wxLEFT, 5 );
 
 	resetRecoveryIntervalTextControl = new NumberTextEditCtrl( sbSizer1->GetStaticBox(), wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
 	resetRecoveryIntervalTextControl->SetToolTip( wxT("Interval to wait after target reset") );
 
-	fgSizer1->Add( resetRecoveryIntervalTextControl, 0, wxRIGHT|wxLEFT, 5 );
+	fgSizer1->Add( resetRecoveryIntervalTextControl, 0, wxBOTTOM|wxRIGHT|wxLEFT|wxALIGN_CENTER_VERTICAL, 5 );
 
 	m_staticText10 = new wxStaticText( sbSizer1->GetStaticBox(), wxID_ANY, wxT("ms"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticText10->Wrap( -1 );
-	fgSizer1->Add( m_staticText10, 0, wxRIGHT|wxLEFT, 5 );
+	fgSizer1->Add( m_staticText10, 0, wxALIGN_CENTER_VERTICAL|wxBOTTOM|wxRIGHT|wxLEFT, 5 );
 
 
 	sbSizer1->Add( fgSizer1, 1, wxEXPAND, 5 );
 
 
-	bSizer1->Add( sbSizer1, 0, wxEXPAND|wxRIGHT|wxLEFT, 5 );
+	bSizer1->Add( sbSizer1, 0, wxEXPAND|wxBOTTOM|wxRIGHT|wxLEFT, 5 );
 
 	wxStaticBoxSizer* sbSizer3;
 	sbSizer3 = new wxStaticBoxSizer( new wxStaticBox( fAdvancedPanel, wxID_ANY, wxT("FlexNVM Parameters") ), wxVERTICAL );
@@ -541,7 +541,7 @@ UsbdmDialogueSkeleton::UsbdmDialogueSkeleton( wxWindow* parent, wxWindowID id, c
 
 	eeepromSizeStaticText = new wxStaticText( sbSizer3->GetStaticBox(), wxID_ANY, wxT("EEEPROM Size (FF)"), wxDefaultPosition, wxDefaultSize, 0 );
 	eeepromSizeStaticText->Wrap( -1 );
-	fgSizer2->Add( eeepromSizeStaticText, 0, wxALL, 5 );
+	fgSizer2->Add( eeepromSizeStaticText, 0, wxBOTTOM|wxRIGHT|wxLEFT|wxALIGN_CENTER_VERTICAL, 5 );
 
 	wxArrayString eeepromSizeChoiceControlChoices;
 	eeepromSizeChoiceControl = new wxChoice( sbSizer3->GetStaticBox(), wxID_ANY, wxDefaultPosition, wxDefaultSize, eeepromSizeChoiceControlChoices, 0 );
@@ -552,11 +552,11 @@ UsbdmDialogueSkeleton::UsbdmDialogueSkeleton( wxWindow* parent, wxWindowID id, c
 
 	m_staticText12 = new wxStaticText( sbSizer3->GetStaticBox(), wxID_ANY, wxT("bytes"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticText12->Wrap( -1 );
-	fgSizer2->Add( m_staticText12, 0, wxALL, 5 );
+	fgSizer2->Add( m_staticText12, 0, wxALL|wxALIGN_CENTER_VERTICAL, 5 );
 
 	flexNvmPartitionStaticText = new wxStaticText( sbSizer3->GetStaticBox(), wxID_ANY, wxT("FlexNVM Partition (FF)"), wxDefaultPosition, wxDefaultSize, 0 );
 	flexNvmPartitionStaticText->Wrap( -1 );
-	fgSizer2->Add( flexNvmPartitionStaticText, 0, wxALL, 5 );
+	fgSizer2->Add( flexNvmPartitionStaticText, 0, wxALL|wxALIGN_CENTER_VERTICAL, 5 );
 
 	wxArrayString flexNvmPartitionChoiceControlChoices;
 	flexNvmPartitionChoiceControl = new wxChoice( sbSizer3->GetStaticBox(), wxID_ANY, wxDefaultPosition, wxDefaultSize, flexNvmPartitionChoiceControlChoices, 0 );
@@ -567,7 +567,7 @@ UsbdmDialogueSkeleton::UsbdmDialogueSkeleton( wxWindow* parent, wxWindowID id, c
 
 	m_staticText14 = new wxStaticText( sbSizer3->GetStaticBox(), wxID_ANY, wxT("Kbytes"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticText14->Wrap( -1 );
-	fgSizer2->Add( m_staticText14, 0, wxALL, 5 );
+	fgSizer2->Add( m_staticText14, 0, wxALL|wxALIGN_CENTER_VERTICAL|wxALIGN_CENTER_HORIZONTAL, 5 );
 
 
 	sbSizer3->Add( fgSizer2, 1, wxEXPAND, 5 );
@@ -577,7 +577,7 @@ UsbdmDialogueSkeleton::UsbdmDialogueSkeleton( wxWindow* parent, wxWindowID id, c
 	sbSizer3->Add( flexNvmDescriptionStaticControl, 0, wxALL, 5 );
 
 
-	bSizer1->Add( sbSizer3, 0, wxEXPAND|wxRIGHT|wxLEFT, 5 );
+	bSizer1->Add( sbSizer3, 0, wxEXPAND|wxBOTTOM|wxRIGHT|wxLEFT, 5 );
 
 	wxStaticBoxSizer* sbSizer41;
 	sbSizer41 = new wxStaticBoxSizer( new wxStaticBox( fAdvancedPanel, wxID_ANY, wxT("Custom Security Parameters") ), wxVERTICAL );
@@ -600,7 +600,7 @@ UsbdmDialogueSkeleton::UsbdmDialogueSkeleton( wxWindow* parent, wxWindowID id, c
 	resetCustomButtonControl = new wxButton( sbSizer41->GetStaticBox(), wxID_ANY, wxT("Reset Values"), wxDefaultPosition, wxDefaultSize, 0 );
 	resetCustomButtonControl->SetToolTip( wxT("Reset custom values to unsecured default") );
 
-	bSizer131->Add( resetCustomButtonControl, 0, wxALL, 5 );
+	bSizer131->Add( resetCustomButtonControl, 0, wxALL|wxALIGN_CENTER_VERTICAL, 5 );
 
 
 	sbSizer41->Add( bSizer131, 0, wxEXPAND, 5 );
@@ -608,17 +608,17 @@ UsbdmDialogueSkeleton::UsbdmDialogueSkeleton( wxWindow* parent, wxWindowID id, c
 	securityValuesTextControl = new SecurityTextEditCtrl( sbSizer41->GetStaticBox(), wxID_ANY, wxT("12345678901234567890123456789012"), wxDefaultPosition, wxDefaultSize, 0 );
 	securityValuesTextControl->SetToolTip( wxT("Security value used for device") );
 
-	sbSizer41->Add( securityValuesTextControl, 0, wxALL|wxEXPAND, 5 );
+	sbSizer41->Add( securityValuesTextControl, 0, wxALL|wxEXPAND|wxALIGN_CENTER_HORIZONTAL, 5 );
 
 	securityDescriptionStaticText = new wxStaticText( sbSizer41->GetStaticBox(), wxID_ANY, wxT("hello there\nbye bye"), wxDefaultPosition, wxDefaultSize, wxST_NO_AUTORESIZE );
 	securityDescriptionStaticText->Wrap( -1 );
 	securityDescriptionStaticText->SetToolTip( wxT("See Target tab to change how these value are used") );
 	securityDescriptionStaticText->SetMinSize( wxSize( -1,100 ) );
 
-	sbSizer41->Add( securityDescriptionStaticText, 1, wxALL|wxEXPAND, 5 );
+	sbSizer41->Add( securityDescriptionStaticText, 1, wxEXPAND|wxALL, 5 );
 
 
-	bSizer1->Add( sbSizer41, 1, wxEXPAND|wxRIGHT|wxLEFT, 5 );
+	bSizer1->Add( sbSizer41, 1, wxEXPAND|wxBOTTOM|wxRIGHT|wxLEFT, 5 );
 
 
 	fAdvancedPanel->SetSizer( bSizer1 );
@@ -626,7 +626,7 @@ UsbdmDialogueSkeleton::UsbdmDialogueSkeleton( wxWindow* parent, wxWindowID id, c
 	bSizer1->Fit( fAdvancedPanel );
 	fNotebook->AddPage( fAdvancedPanel, wxT("Advanced"), false );
 
-	bSizer2->Add( fNotebook, 1, wxEXPAND | wxALL, 5 );
+	bSizer2->Add( fNotebook, 1, wxEXPAND|wxALL, 5 );
 
 	StatusText = new wxStaticText( this, wxID_ANY, wxT("No Status"), wxDefaultPosition, wxDefaultSize, 0 );
 	StatusText->Wrap( -1 );
@@ -645,7 +645,7 @@ UsbdmDialogueSkeleton::UsbdmDialogueSkeleton( wxWindow* parent, wxWindowID id, c
 
 	bSizer132->Add( discardChangesButton, 0, wxALL, 5 );
 
-	closeButton = new wxButton( this, wxID_OK, wxT("Close"), wxDefaultPosition, wxDefaultSize, 0 );
+	closeButton = new wxButton( this, wxID_CLOSE, wxT("Close"), wxDefaultPosition, wxDefaultSize, 0 );
 	closeButton->SetToolTip( wxT("Close Programmer") );
 
 	bSizer132->Add( closeButton, 0, wxALL, 5 );
@@ -767,5 +767,23 @@ UsbdmDialogueSkeleton::~UsbdmDialogueSkeleton()
 	keepChangesButton->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( UsbdmDialogueSkeleton::OnKeepChangesClick ), NULL, this );
 	discardChangesButton->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( UsbdmDialogueSkeleton::OnDiscardChangesClick ), NULL, this );
 	closeButton->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( UsbdmDialogueSkeleton::onCloseButton ), NULL, this );
+
+}
+
+UsbdmDialogueSkeletonX::UsbdmDialogueSkeletonX( wxWindow* parent, wxWindowID id, const wxString& title, const wxPoint& pos, const wxSize& size, long style ) : wxFrame( parent, id, title, pos, size, style )
+{
+	this->SetSizeHints( wxDefaultSize, wxDefaultSize );
+
+
+	this->Centre( wxBOTH );
+
+	// Connect Events
+	this->Connect( wxEVT_CLOSE_WINDOW, wxCloseEventHandler( UsbdmDialogueSkeletonX::OnCloseHandler ) );
+}
+
+UsbdmDialogueSkeletonX::~UsbdmDialogueSkeletonX()
+{
+	// Disconnect Events
+	this->Disconnect( wxEVT_CLOSE_WINDOW, wxCloseEventHandler( UsbdmDialogueSkeletonX::OnCloseHandler ) );
 
 }

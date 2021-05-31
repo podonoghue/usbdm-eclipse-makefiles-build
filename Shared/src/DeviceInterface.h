@@ -98,6 +98,10 @@ public:
     */
    virtual void saveSettings(AppSettings &settings);
 
+   virtual TargetType_t getTargetType() const {
+      return targetType;
+   }
+
 private:
    TargetType_t       targetType;
    DeviceDataBasePtr  deviceDatabase;                  //!< Database of available devices

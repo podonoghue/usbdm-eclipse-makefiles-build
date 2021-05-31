@@ -9,18 +9,20 @@
 #define GDBSERVER_SRC_GDBSERVERDIALOGUE_H_
 
 #include "UsbdmDialogue.h"
+#include "wx/utils.h"
 
 class GdbServerDialogue: public UsbdmDialogue {
+
 protected:
-   virtual uint32_t  getTargetProperties(TargetType_t targetType);
-   virtual void      OnKeepChangesClick( wxCommandEvent& event );
-   virtual void      OnDiscardChangesClick( wxCommandEvent& event );
+   virtual uint32_t getTargetProperties(TargetType_t targetType) override;
 
 public:
-   GdbServerDialogue(wxWindow* parent, BdmInterfacePtr bdmInterface, DeviceInterfacePtr deviceInterface);
+   GdbServerDialogue(
+         wxWindow            *parent,
+         BdmInterfacePtr      bdmInterface,
+         DeviceInterfacePtr   deviceInterface,
+         AppSettings         &appSettings);
    virtual ~GdbServerDialogue();
-
-   USBDM_ErrorCode execute(AppSettingsPtr appSettings, bool reloadSettings=true);
 };
 
 #endif /* GDBSERVER_SRC_GDBSERVERDIALOGUE_H_ */

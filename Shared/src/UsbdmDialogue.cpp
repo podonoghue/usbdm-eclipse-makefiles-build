@@ -76,7 +76,6 @@ const uint32_t UsbdmDialogue::targetPropertyFlags[] = {
  * Get properties of target type
  *
  * @return Bit-mask describing properties
- *
  */
 uint32_t UsbdmDialogue::getTargetProperties(TargetType_t targetType) {
    LOGGING_E;
@@ -93,7 +92,7 @@ typedef struct {
 } DropDownType;
 
 //! Mappings for Frequency drop-down box
-static const DropDownType CFVx_Speeds[] = {
+static const DropDownType connectionSpeeds[] = {
    {  250, _("250kHz") },
    {  500, _("500kHz") },
    {  750, _("750kHz") },
@@ -140,9 +139,11 @@ static int searchDropDown(const DropDownType information[], int value) {
 int sub;
 
    // Search the list
-   for (sub = 0; information[sub].value != 0; sub++)
-      if (information[sub].value == value)
+   for (sub = 0; information[sub].value != 0; sub++) {
+      if (information[sub].value == value) {
          return sub;
+      }
+   }
    return -1;
 }
 
@@ -185,10 +186,17 @@ void UsbdmDialogue::updateFilterDescription() {
 //===================================================================================
 //===================================================================================
 
-UsbdmDialogue::UsbdmDialogue(wxWindow* parent, const wxString& title, BdmInterfacePtr bdmInterface, DeviceInterfacePtr deviceInterface) :
+UsbdmDialogue::UsbdmDialogue(
+      wxWindow              *parent,
+      const wxString        &title,
+      BdmInterfacePtr        bdmInterface,
+      DeviceInterfacePtr     deviceInterface,
+      AppSettings           &appSettings) :
    UsbdmDialogueSkeleton(parent, wxID_ANY, title),
    bdmInterface(bdmInterface),
-   deviceInterface(deviceInterface) {
+   deviceInterface(deviceInterface),
+   appSettings(appSettings) {
+
    LOGGING_E;
 
    initialEraseMethod      = DeviceData::eraseTargetDefault;
@@ -212,6 +220,8 @@ UsbdmDialogue::UsbdmDialogue(wxWindow* parent, const wxString& title, BdmInterfa
    beep                    = 0;
    bdmCapabilities         = BDM_CAP_NONE;
    customSecurityIndex     = -1;
+
+   loadSettings();
 }
 
 UsbdmDialogue::~UsbdmDialogue() {
@@ -273,7 +283,7 @@ void UsbdmDialogue::Init() {
    log.print("targetProperties = 0x%X\n", targetProperties);
 
    populateInterfaceSpeeds();
-   populateBDMChoices();
+//   populateBDMChoices();
    populateInterfaceSpeeds();
    populateDeviceDropDown();
 
@@ -291,6 +301,47 @@ void UsbdmDialogue::Init() {
    updateFilterDescription();
    updateFlashNVM();
    updateSecurity();
+//   update();
+}
+
+/**
+ *  This displays the Dialogue for the GDB server
+ *
+ *  @param reloadSettings Whether to reload settings from settings object
+ *
+ *  @return BDM_RC_OK - Dialogue was completed (closed by save button)
+ *  @return other     - Dialogue was cancelled
+ */
+USBDM_ErrorCode UsbdmDialogue::execute() {
+   LOGGING;
+
+   hideUnusedControls();
+   Fit();
+   Init();
+
+   return (USBDM_ErrorCode)ShowModal();
+}
+
+/**
+ *  This displays the Dialogue which represents the entire application
+ *  for the stand-alone flash programmers.
+ *
+ *  @param hexFilename  Optional hex file to load
+ *
+ *  @return BDM_RC_OK - Dialogue was completed (closed by save button)
+ *  @return other     - Dialogue was cancelled
+ */
+USBDM_ErrorCode UsbdmDialogue::execute(wxString const &hexFilename) {
+   LOGGING;
+
+   hideUnusedControls();
+   Fit();
+   Init();
+   if (!hexFilename.IsEmpty() && (loadHexFile(hexFilename, true) != PROGRAMMING_RC_OK)) {
+      log.print(" - Failed to load Hex file\n");
+   }
+
+   return (USBDM_ErrorCode)ShowModal();
 }
 
 /**
@@ -470,9 +521,10 @@ std::string UsbdmDialogue::update() {
 
    if (targetProperties & HAS_SELECT_SPEED) {
       // Clock selection present in dialogue
-      int index = searchDropDown(CFVx_Speeds, bdmInterface->getBdmOptions().interfaceFrequency);
-      if (index < 0)
+      int index = searchDropDown(connectionSpeeds, bdmInterface->getBdmOptions().interfaceFrequency);
+      if (index < 0) {
          index = 0;
+      }
       interfaceSpeedControl->SetSelection(index);
    }
 
@@ -686,8 +738,11 @@ void UsbdmDialogue::populateResetControl() {
  *
  *  @param appSettings - Object containing settings
  */
-void UsbdmDialogue::loadSettings(const AppSettings &appSettings) {
+void UsbdmDialogue::loadSettings() {
    LOGGING;
+
+   // load saved settings
+   appSettings.printToLog();
 
    bdmInterface->loadSettings(appSettings);
    deviceInterface->loadSettings(appSettings);
@@ -708,7 +763,7 @@ void UsbdmDialogue::loadSettings(const AppSettings &appSettings) {
  *
  *  @param appSettings - Object containing settings
  */
-void UsbdmDialogue::saveSettings(AppSettings &appSettings) {
+void UsbdmDialogue::saveSettings() {
    LOGGING;
 
    // Update current device from dialogue
@@ -721,6 +776,8 @@ void UsbdmDialogue::saveSettings(AppSettings &appSettings) {
    appSettings.addValue(settingsKey+".autoFileLoad",     autoFileLoad?1:0);
    appSettings.addValue(settingsKey+".playSounds",       (int)sound);
    appSettings.addValue(settingsKey+".currentDirectory", currentDirectory);
+
+   appSettings.printToLog();
 }
 
 /**
@@ -891,11 +948,11 @@ void UsbdmDialogue::populateInterfaceSpeeds() {
       default         : maxSpeed = 12000; break;
       }
       wxArrayString connectionSpeedControlStrings;
-      for (int sub=0; CFVx_Speeds[sub].value != 0; sub++) {
-         if (CFVx_Speeds[sub].value > maxSpeed) {
+      for (int sub=0; connectionSpeeds[sub].value != 0; sub++) {
+         if (connectionSpeeds[sub].value > maxSpeed) {
             continue;
          }
-         connectionSpeedControlStrings.Add(CFVx_Speeds[sub].name);
+         connectionSpeedControlStrings.Add(connectionSpeeds[sub].name);
       }
       interfaceSpeedControl->Set(connectionSpeedControlStrings);
       if (bdmInterface->getBdmOptions().targetType == T_CFVx) {
@@ -2592,7 +2649,7 @@ void UsbdmDialogue::OnConnectionTimeoutTextTextUpdated( wxCommandEvent& event ) 
  *  @param event The event to handle
  */
 void UsbdmDialogue::OnInterfaceSpeedSelectComboSelected( wxCommandEvent& event ) {
-   bdmInterface->getBdmOptions().interfaceFrequency = CFVx_Speeds[event.GetSelection()].value;
+   bdmInterface->getBdmOptions().interfaceFrequency = connectionSpeeds[event.GetSelection()].value;
 //   log.print("sel = %d, f = %d\n", event.GetSelection(), bdmInterface->getBdmOptions().interfaceSpeed);
 }
 
@@ -3094,11 +3151,61 @@ void UsbdmDialogue::OnResetReleaseIntervalText( wxCommandEvent& event ) {
 void UsbdmDialogue::OnResetRecoveryIntervalText( wxCommandEvent& event ) {
    bdmInterface->getBdmOptions().resetRecoveryInterval = resetRecoveryIntervalTextControl->GetDecimalValue();
 }
+/**
+ * Handler for onCloseButton
+ *
+ * Closes the application
+ *
+ * @param event
+ */
+void UsbdmDialogue::onCloseButton( wxCommandEvent& event ) {
+   saveSettings();
+   modalReturnValue = BDM_RC_OK;
+   Close(true);
+}
+/**
+ * Handler for onCloseButton
+ *
+ * Closes the application
+ *
+ * @param event
+ */
+void UsbdmDialogue::OnKeepChangesClick( wxCommandEvent& event ) {
+   saveSettings();
+   modalReturnValue = BDM_RC_OK;
+//   Close(true);
+   EndModal(modalReturnValue);
+}
+/**
+ * Handler for onCloseButton
+ *
+ * Closes the application
+ *
+ * @param event
+ */
+void UsbdmDialogue::OnDiscardChangesClick( wxCommandEvent& event ) {
+   modalReturnValue = BDM_RC_FAIL;
+//   Close(true);
+   EndModal(modalReturnValue);
+}
 
-//void UsbdmDialogue::OnOkClick( wxCommandEvent& event ) {
-//   LOGGING;
-//}
+/**
+ * Handler for OnCloseHandler
+ *
+ * Saves settings on close
+ *
+ * @param event
+ */
+void UsbdmDialogue::OnClose( wxCloseEvent& event ) {
+   LOGGING_Q;
 
-//void UsbdmDialogue::OnCloseHandler( wxCloseEvent& event ) {
-//   event.Skip();
-//}
+   if (modalReturnValue == BDM_RC_OK) {
+      TransferDataFromWindow();
+      log.print("done TransferDataFromWindow() - OK\n");
+      saveSettings();
+   }
+
+   EndModal(modalReturnValue);
+
+   event.Skip();
+}

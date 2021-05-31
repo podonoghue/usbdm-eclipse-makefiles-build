@@ -87,7 +87,7 @@ void AppSettings::writeToFile(FILE *fp, const string &comment) const {
    fprintf(fp, "# %s\n\n", comment.c_str()); fflush(fp);
 
    map<string,Value*>::const_iterator it;
-   for (it=mymap.begin(); it != mymap.end(); it++ ) {
+   for (it=fMap.begin(); it != fMap.end(); it++ ) {
       switch (it->second->getType()) {
          case intType:
             fprintf(fp, "%s %d,%d\n", it->first.c_str(), it->second->getType(), it->second->getIntValue());
@@ -122,12 +122,12 @@ FILE *openConfigurationFile(string fileName, const char *attributes) {
  */
 bool AppSettings::save() const {
    LOGGING;
-   FILE *fp = openConfigurationFile(fileName, "wt");
+   FILE *fp = openConfigurationFile(fFileName, "wt");
    if (fp== NULL) {
-      log.error("- Failed to open Settings File for writing: File = \'%s\'\n", fileName.c_str());
+      log.error("- Failed to open Settings File for writing: File = \'%s\'\n", fFileName.c_str());
       return false;
    }
-   writeToFile(fp, description.c_str());
+   writeToFile(fp, fDescription.c_str());
    fclose(fp);
    return true;
 }
@@ -137,9 +137,9 @@ bool AppSettings::save() const {
  */
 void AppSettings::printToLog() const {
    UsbdmSystem::Log::print("=============================================================\n");
-   UsbdmSystem::Log::print("filename = \'%s\'\n", fileName.c_str());
+   UsbdmSystem::Log::print("filename = \'%s\'\n", fFileName.c_str());
    map<string,Value*>::const_iterator it;
-   for (it=mymap.begin(); it != mymap.end(); it++) {
+   for (it=fMap.begin(); it != fMap.end(); it++) {
       switch (it->second->getType()) {
          case intType:
             UsbdmSystem::Log::print("%s => %d, %d\n", it->first.c_str(), it->second->getType(), it->second->getIntValue());
@@ -214,10 +214,10 @@ void AppSettings::loadFromFile(FILE *fp) {
  */
 bool AppSettings::load() {
    LOGGING_Q;
-   FILE *fp = openConfigurationFile(fileName, "rt");
+   FILE *fp = openConfigurationFile(fFileName, "rt");
    if (fp== NULL) {
       log.error("AppSettings::loadFromAppDirFile() - Failed to open Settings File for reading: File = \'%s\'\n",
-            fileName.c_str());
+            fFileName.c_str());
       return false;
    }
    loadFromFile(fp);

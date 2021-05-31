@@ -73,123 +73,128 @@ protected:
 
    static const uint32_t targetPropertyFlags[];
 
-//   virtual void OnClose( wxCloseEvent& event );
-//   virtual void OnOkClick( wxCommandEvent& event );
+//   virtual void OnClose( wxCloseEvent&  event ) override;
+//   virtual void OnOkClick( wxCommandEvent&  event ) override;
 
    // Handlers for Interface page
-   virtual void OnBdmSelectComboSelected( wxCommandEvent& event );
-   virtual void OnRefreshBDMClick( wxCommandEvent& event );
-   virtual void OnVddSelectBoxSelected( wxCommandEvent& event );
-   virtual void OnCycleVddOnResetCheckboxClick( wxCommandEvent& event );
-   virtual void OnCycleTargetVddOnConnectionCheckboxClick( wxCommandEvent& event );
-   virtual void OnLeaveTargetOnCheckboxClick( wxCommandEvent& event );
-   virtual void OnReconnectCheckboxClick( wxCommandEvent& event );
-   virtual void OnUseResetCheckboxClick( wxCommandEvent& event );
-   virtual void OnUseUsePstSignalCheckboxClick( wxCommandEvent& event );
-   virtual void OnGuessSpeedCheckboxClick( wxCommandEvent& event );
-   virtual void OnMaskInterruptsWhenSteppingCheckboxClick( wxCommandEvent& event );
-   virtual void OnCatchVllsResetCheckboxClick( wxCommandEvent& event );
-   virtual void OnConnectionTimeoutTextTextUpdated( wxCommandEvent& event );
-   virtual void OnInterfaceSpeedSelectComboSelected( wxCommandEvent& event );
-   virtual void OnBdmClockSelectRadioboxSelected( wxCommandEvent& event );
+   virtual void OnBdmSelectComboSelected( wxCommandEvent&  event ) override;
+   virtual void OnRefreshBDMClick( wxCommandEvent&  event ) override;
+   virtual void OnVddSelectBoxSelected( wxCommandEvent&  event ) override;
+   virtual void OnCycleVddOnResetCheckboxClick( wxCommandEvent&  event ) override;
+   virtual void OnCycleTargetVddOnConnectionCheckboxClick( wxCommandEvent&  event ) override;
+   virtual void OnLeaveTargetOnCheckboxClick( wxCommandEvent&  event ) override;
+   virtual void OnReconnectCheckboxClick( wxCommandEvent&  event ) override;
+   virtual void OnUseResetCheckboxClick( wxCommandEvent&  event ) override;
+   virtual void OnUseUsePstSignalCheckboxClick( wxCommandEvent&  event ) override;
+   virtual void OnGuessSpeedCheckboxClick( wxCommandEvent&  event ) override;
+   virtual void OnMaskInterruptsWhenSteppingCheckboxClick( wxCommandEvent&  event ) override;
+   virtual void OnCatchVllsResetCheckboxClick( wxCommandEvent&  event ) override;
+   virtual void OnConnectionTimeoutTextTextUpdated( wxCommandEvent&  event ) override;
+   virtual void OnInterfaceSpeedSelectComboSelected( wxCommandEvent&  event ) override;
+   virtual void OnBdmClockSelectRadioboxSelected( wxCommandEvent&  event ) override;
 
    // Handlers for Target page
-   virtual void OnLoadFileButtonClick( wxCommandEvent& event );
-   virtual void OnIncrementalFileLoadCheckboxClick( wxCommandEvent& event );
-   virtual void OnAutoFileReloadCheckboxClick( wxCommandEvent& event );
-   virtual void OnDeviceTypeChoiceSelected( wxCommandEvent& event );
-   virtual void OnFilterByChipIdCheckboxClick( wxCommandEvent& event );
-   virtual void OnDetectChipButtonClick( wxCommandEvent& event );
-   virtual void OnNonvolatileAddressTextTextUpdated( wxCommandEvent& event );
-   virtual void OnTrimFrequencyTextTextUpdated( wxCommandEvent& event );
-   virtual void OnTrimFrequencyCheckboxClick( wxCommandEvent& event );
-   virtual void OnBusFrequencyTextTextUpdated( wxCommandEvent& event );
-   virtual void OnSecurityRadioboxSelected( wxCommandEvent& event );
-   virtual void OnMassEraseButtonClick( wxCommandEvent& event );
-   virtual void OnUnlockButtonClick( wxCommandEvent& event );
-   virtual void OnSoundCheckboxClick( wxCommandEvent& event );
-   virtual void OnGdbServerPortNumberTextUpdated( wxCommandEvent& event );
-   virtual void OnGdbTtyPortNumberTextUpdated( wxCommandEvent& event );
-   virtual void OnProgramFlashButtonClick( wxCommandEvent& event );
-   virtual void OnVerifyFlashButtonClick( wxCommandEvent& event );
-   virtual void OnLoadAndGoButtonClick( wxCommandEvent& event );
+   virtual void OnLoadFileButtonClick( wxCommandEvent&  event ) override;
+   virtual void OnIncrementalFileLoadCheckboxClick( wxCommandEvent&  event ) override;
+   virtual void OnAutoFileReloadCheckboxClick( wxCommandEvent&  event ) override;
+   virtual void OnDeviceTypeChoiceSelected( wxCommandEvent&  event ) override;
+   virtual void OnFilterByChipIdCheckboxClick( wxCommandEvent&  event ) override;
+   virtual void OnDetectChipButtonClick( wxCommandEvent&  event ) override;
+   virtual void OnNonvolatileAddressTextTextUpdated( wxCommandEvent&  event ) override;
+   virtual void OnTrimFrequencyTextTextUpdated( wxCommandEvent&  event ) override;
+   virtual void OnTrimFrequencyCheckboxClick( wxCommandEvent& event ) override;
+   virtual void OnBusFrequencyTextTextUpdated( wxCommandEvent& event ) override;
+   virtual void OnSecurityRadioboxSelected( wxCommandEvent& event ) override;
+   virtual void OnMassEraseButtonClick( wxCommandEvent& event ) override;
+   virtual void OnUnlockButtonClick( wxCommandEvent& event ) override;
+   virtual void OnSoundCheckboxClick( wxCommandEvent& event ) override;
+   virtual void OnGdbServerPortNumberTextUpdated( wxCommandEvent& event ) override;
+   virtual void OnGdbTtyPortNumberTextUpdated( wxCommandEvent& event ) override;
+   virtual void OnProgramFlashButtonClick( wxCommandEvent& event ) override;
+   virtual void OnVerifyFlashButtonClick( wxCommandEvent& event ) override;
+   virtual void OnLoadAndGoButtonClick( wxCommandEvent& event ) override;
 
    // Handlers for Advanced page
-   virtual void OnEeepromSizeChoiceSelected( wxCommandEvent& event );
-   virtual void OnFlexNvmPartionChoiceSelected( wxCommandEvent& event );
-   virtual void OnSecurityMemoryRegionChoiceSelected( wxCommandEvent& event );
-   virtual void OnResetCustomValueClick( wxCommandEvent& event );
-   virtual void OnSecurityEditUpdate(wxCommandEvent& event);
-   virtual void OnSecurityCheckboxClick( wxCommandEvent& event );
-   virtual void OnPowerOffDurationText( wxCommandEvent& event );
-   virtual void OnPowerOnDurationText( wxCommandEvent& event );
-   virtual void OnResetDurationText( wxCommandEvent& event );
-   virtual void OnResetReleaseIntervalText( wxCommandEvent& event );
-   virtual void OnResetRecoveryIntervalText( wxCommandEvent& event );
+   virtual void OnEeepromSizeChoiceSelected( wxCommandEvent& event ) override;
+   virtual void OnFlexNvmPartionChoiceSelected( wxCommandEvent& event ) override;
+   virtual void OnSecurityMemoryRegionChoiceSelected( wxCommandEvent& event ) override;
+   virtual void OnResetCustomValueClick( wxCommandEvent& event ) override;
+   virtual void OnSecurityEditUpdate(wxCommandEvent& event) override;
+   virtual void OnSecurityCheckboxClick( wxCommandEvent& event ) override;
+   virtual void OnPowerOffDurationText( wxCommandEvent& event ) override;
+   virtual void OnPowerOnDurationText( wxCommandEvent& event ) override;
+   virtual void OnResetDurationText( wxCommandEvent& event ) override;
+   virtual void OnResetReleaseIntervalText( wxCommandEvent& event ) override;
+   virtual void OnResetRecoveryIntervalText( wxCommandEvent& event ) override;
+   virtual void OnClose( wxCloseEvent& event ) override;
+   virtual void onCloseButton( wxCommandEvent& event ) override;
+   virtual void OnKeepChangesClick( wxCommandEvent& event );
+   virtual void OnDiscardChangesClick( wxCommandEvent& event );
 
    static USBDM_ErrorCode progressCallBack(USBDM_ErrorCode status, int percent, const char *message);
 
-   /*!
+   /**
     * Get properties of target type
     *
     * @return Bit-mask describing properties
     */
-   virtual uint32_t     getTargetProperties(TargetType_t targetType);
-   void                 failBeep();
+   virtual uint32_t        getTargetProperties(TargetType_t targetType);
+   void                    failBeep();
 
-   virtual void         Init();
-   bool                 setDialogueValuesToDefault();
-   bool                 TransferDataToWindow();
-   bool                 TransferDataFromWindow();
+   virtual void            Init();
+   bool                    setDialogueValuesToDefault();
+   bool                    TransferDataToWindow();
+   bool                    TransferDataFromWindow();
 
-   void                 hideUnusedControls();
-   void                 addValidators();
+   void                    hideUnusedControls();
+   void                    addValidators();
 
-   std::string          update();
+   std::string             update();
 
    DeviceData::EraseMethod getCurrentEraseSelection();
-   void                     setCurrentEraseSelection(DeviceData::EraseMethod eraseMethod);
+   void                    setCurrentEraseSelection(DeviceData::EraseMethod eraseMethod);
    DeviceData::ResetMethod getCurrentResetSelection();
-   void                     setCurrentResetSelection(DeviceData::ResetMethod eraseMethod);
+   void                    setCurrentResetSelection(DeviceData::ResetMethod eraseMethod);
 
    // Interface
-   void                 populateBDMChoices(void);
-   void                 populateInterfaceSpeeds();
-   const wxString   &   bdmGetDllVersion(void);
-   void                 updateFilterDescription();
+   void                    populateBDMChoices(void);
+   void                    populateInterfaceSpeeds();
+   const wxString   &      bdmGetDllVersion(void);
+   void                    updateFilterDescription();
 
-   void                 findBDMs(void);
+   void                    findBDMs(void);
 
    // Target
-   void                 populateDeviceDropDown();
-   void                 populateEraseControl();
-   void                 populateResetControl();
-   const wxString       makeDeviceName(const wxString& targetName);
-   USBDM_ErrorCode      massEraseTarget();
-   void                 reportError(USBDM_ErrorCode rc);
+   void                    populateDeviceDropDown();
+   void                    populateEraseControl();
+   void                    populateResetControl();
+   const wxString          makeDeviceName(const wxString& targetName);
+   USBDM_ErrorCode         massEraseTarget();
+   void                    reportError(USBDM_ErrorCode rc);
 
-   void                 setDeviceIndex(int newDeviceIndex);
-   USBDM_ErrorCode      autoDetectTargetDevice(void);
-   USBDM_ErrorCode      loadHexFile( wxString hexFilename, bool clearBuffer );
-   USBDM_ErrorCode      checkFileChange(void);
-   USBDM_ErrorCode      programFlash(bool loadAndGo = false);
-   USBDM_ErrorCode      verifyFlash(void);
-   USBDM_ErrorCode      hcs12Check(void);
+   void                    setDeviceIndex(int newDeviceIndex);
+   USBDM_ErrorCode         autoDetectTargetDevice(void);
+   USBDM_ErrorCode         loadHexFile( wxString hexFilename, bool clearBuffer );
+   USBDM_ErrorCode         checkFileChange(void);
+   USBDM_ErrorCode         programFlash(bool loadAndGo = false);
+   USBDM_ErrorCode         verifyFlash(void);
+   USBDM_ErrorCode         hcs12Check(void);
 
    // Advanced
-   void                 populateEeepromControl();
-   void                 populatePartitionControl();
-   void                 populateSecurityControl();
+   void                    populateEeepromControl();
+   void                    populatePartitionControl();
+   void                    populateSecurityControl();
 
-   int                  findEeepromSizeIndex(unsigned eepromSize);
-   int                  findPartitionControlIndex(unsigned backingStoreSize);
-   void                 updateFlashNVM();
-   wxString             parseSecurityValue();
-   void                 updateSecurityDescription();
-   void                 updateSecurity();
+   int                     findEeepromSizeIndex(unsigned eepromSize);
+   int                     findPartitionControlIndex(unsigned backingStoreSize);
+   void                    updateFlashNVM();
+   wxString                parseSecurityValue();
+   void                    updateSecurityDescription();
+   void                    updateSecurity();
 
    BdmInterfacePtr               bdmInterface;                       //!< Interface to the BDM
    DeviceInterfacePtr            deviceInterface;                    //!< Device interface
+
    std::vector<BdmInformation>   connectedBDMs;                      //!< Table of connected BDMs
    wxString                      bdmIdentification;                  //!< ID of current BDM
    int                           bdmDeviceNum;                       //!< Index of current BDM in BDM table and drop-down
@@ -200,8 +205,8 @@ protected:
    std::map<uint32_t,uint32_t>   filterChipIds;                      //!< The SDIDs being filtered by
    bool                          incrementalLoad;                    //!< Don't clear buffer when loading a file
    bool                          autoFileLoad;                       //!< Auto load changed files before programming
-   DeviceData::EraseMethod      initialEraseMethod;                 //!< Initial erase setting loaded
-   DeviceData::ResetMethod      initialResetMethod;                 //!< Initial reset setting loaded
+   DeviceData::EraseMethod       initialEraseMethod;                 //!< Initial erase setting loaded
+   DeviceData::ResetMethod       initialResetMethod;                 //!< Initial reset setting loaded
    bool                          fileLoaded;                         //!< Flag indicating Hex file loaded
    bool                          doTrim;                             //!< Trim target clock (if possible)
    bool                          needManualFrequencySet;             //!< Connection speed has been manually set
@@ -230,12 +235,25 @@ protected:
 
    wxString                      currentDirectory;                   //!< Current directory for file
 
+   USBDM_ErrorCode               modalReturnValue = BDM_RC_FAIL;     //!< Value to return from showModal()
+
+protected:
+   AppSettings &appSettings;
+
 public:
-   UsbdmDialogue(wxWindow* parent, const wxString& title, BdmInterfacePtr bdmInterface, DeviceInterfacePtr deviceInterface);
+   UsbdmDialogue(
+         wxWindow            *parent,
+         const wxString      &title,
+         BdmInterfacePtr      bdmInterface,
+         DeviceInterfacePtr   deviceInterface,
+         AppSettings         &appSettings);
    virtual ~UsbdmDialogue();
 
-   void loadSettings(const AppSettings &appSettings);
-   void saveSettings(AppSettings &appSettings);
+   void loadSettings();
+   void saveSettings();
+   USBDM_ErrorCode execute();
+   USBDM_ErrorCode execute(wxString const &hexFilename);
+
 };
 
 #endif

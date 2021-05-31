@@ -11,7 +11,9 @@ PKG_NAME = usbdm
 # Used as prefix with the above when in build directory $(DUMMY_CHILD)/$(SHARED_SRC) = PackageFiles/src
 DUMMY_CHILD    := PackageFiles
 
-# Default to Windows NT
+OS   := $(shell uname)
+
+# Default to Windows NT if uname not available
 ifeq ('$(OS)','')
    OS=Windows_NT
 endif
@@ -120,7 +122,7 @@ else
    MAKE     := make
    AR       := ar
    GCC      := gcc
-   GPP      := g++
+   GPP      := g++ -std=c++0x
    STRIP    := strip
    STRIPFLAGS := --strip-unneeded
    WINDRES  := 
@@ -208,7 +210,7 @@ else
    USBDM_PROGRAMMERS_LIBS   += -lusbdm-programmer-rs08$(VSUFFIX)
    USBDM_PROGRAMMERS_LIBS   += -lusbdm-programmer-s12z$(VSUFFIX)
 endif
-
+ 
 #===========================================================
 # WXWIDGETS
 ifeq ($(UNAME_S),Windows)

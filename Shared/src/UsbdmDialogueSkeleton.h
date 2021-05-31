@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Oct 26 2018)
+// C++ code generated with wxFormBuilder (version 3.9.0 Sep 11 2020)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -18,10 +18,10 @@ class SecurityTextEditCtrl;
 #include <wx/font.h>
 #include <wx/colour.h>
 #include <wx/settings.h>
+#include <wx/button.h>
 #include <wx/bitmap.h>
 #include <wx/image.h>
 #include <wx/icon.h>
-#include <wx/button.h>
 #include <wx/sizer.h>
 #include <wx/stattext.h>
 #include <wx/statbox.h>
@@ -32,6 +32,7 @@ class SecurityTextEditCtrl;
 #include <wx/gbsizer.h>
 #include <wx/notebook.h>
 #include <wx/dialog.h>
+#include <wx/frame.h>
 
 ///////////////////////////////////////////////////////////////////////////
 
@@ -196,8 +197,29 @@ class UsbdmDialogueSkeleton : public wxDialog
 
 	public:
 
-		UsbdmDialogueSkeleton( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = wxT("USBDM"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 529,1017 ), long style = wxDEFAULT_DIALOG_STYLE|wxMINIMIZE_BOX|wxRESIZE_BORDER );
+		UsbdmDialogueSkeleton( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = wxT("USBDM"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 529,1017 ), long style = wxCLOSE_BOX|wxDEFAULT_DIALOG_STYLE|wxMINIMIZE_BOX|wxRESIZE_BORDER );
 		~UsbdmDialogueSkeleton();
+
+};
+
+///////////////////////////////////////////////////////////////////////////////
+/// Class UsbdmDialogueSkeletonX
+///////////////////////////////////////////////////////////////////////////////
+class UsbdmDialogueSkeletonX : public wxFrame
+{
+	private:
+
+	protected:
+
+		// Virtual event handlers, overide them in your derived class
+		virtual void OnCloseHandler( wxCloseEvent& event ) { event.Skip(); }
+
+
+	public:
+
+		UsbdmDialogueSkeletonX( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = wxEmptyString, const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 529,1017 ), long style = wxDEFAULT_FRAME_STYLE|wxTAB_TRAVERSAL );
+
+		~UsbdmDialogueSkeletonX();
 
 };
 

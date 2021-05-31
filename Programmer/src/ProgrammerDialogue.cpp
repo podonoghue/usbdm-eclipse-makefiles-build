@@ -9,18 +9,22 @@
 
 #include <wx/wx.h>
 
-ProgrammerDialogue::ProgrammerDialogue(wxWindow* parent, BdmInterfacePtr bdmInterface, DeviceInterfacePtr deviceInterface) :
-   UsbdmDialogue(parent, _("Flash Programmer"), bdmInterface, deviceInterface) {
+ProgrammerDialogue::ProgrammerDialogue(
+      wxWindow            *parent,
+      BdmInterfacePtr      bdmInterface,
+      DeviceInterfacePtr   deviceInterface,
+      AppSettings          &appsettings) :
+   UsbdmDialogue(parent, _("Flash Programmer"), bdmInterface, deviceInterface, appsettings) {
 }
 
 ProgrammerDialogue::~ProgrammerDialogue() {
    LOGGING_E;
 }
 
-/*!
- * Get properties of target type modified for programmer
+/**
+ *  Get properties of target type modified for programmer
  *
- * @return Bit-mask describing properties
+ *  @return Bit-mask describing properties
  *
  */
 uint32_t ProgrammerDialogue::getTargetProperties(TargetType_t targetType) {
@@ -42,50 +46,4 @@ uint32_t ProgrammerDialogue::getTargetProperties(TargetType_t targetType) {
    return flags;
 }
 
-///*! Handler for OnOk
-// *
-// *  @param event The event to handle
-// */
-//void ProgrammerDialogue::OnOkClick( wxCommandEvent& event ) {
-//   LOGGING;
-//   if (TransferDataFromWindow()) {
-//      wxWindow::Close();
-////      EndModal(BDM_RC_OK);
-//   }
-//}
 
-/*! This displays the Dialogue which represents the entire application
- *  for the stand-alone flash programmers.
- *
- *  @param hexFilename  Optional hex file to load
- *
- *  @return value from wxDialog::Show();
- */
-bool ProgrammerDialogue::setUpAndShow(wxString const &hexFilename) {
-   LOGGING;
-
-   hideUnusedControls();
-   Fit();
-   Init();
-   if (!hexFilename.IsEmpty() && (loadHexFile(hexFilename, true) != PROGRAMMING_RC_OK)) {
-      log.print(" - Failed to load Hex file\n");
-   }
-   return Show();
-}
-
-extern wxApp& wxGetApp();
-
-void ProgrammerDialogue::OnClose( wxCloseEvent& event ) {
-   LOGGING;
-   if (TransferDataFromWindow()) {
-      log.print("done TransferDataFromWindow() - OK\n");
-      wxGetApp().ExitMainLoop();
-//      log.print("doing Destroy()\n");
-//      Destroy();
-   }
-}
-
-void ProgrammerDialogue::onCloseButton( wxCommandEvent& event ) {
-   LOGGING;
-   Close();
-}

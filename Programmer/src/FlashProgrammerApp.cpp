@@ -82,9 +82,8 @@ private:
    OpenLog                      openLog;
    BdmInterfacePtr              bdmInterface;
    DeviceInterfacePtr           deviceInterface;
-   AppSettingsPtr               appSettings;
-   ProgrammerDialogue          *dialogue;
    USBDM_ErrorCode              commandLineRC;
+   AppSettings                  appSettings;
 
    USBDM_ErrorCode doCommandLineProgram();
    USBDM_ErrorCode parseCommandLine(wxCmdLineParser& parser);
@@ -120,14 +119,15 @@ END_EVENT_TABLE()
 
 FlashProgrammerApp::FlashProgrammerApp() :
    targetType(T_ARM),
-   openLog() {
+   openLog(),
+   appSettings(CONFIG_FILE_NAME, targetType, "Programmer settings"){
    useGUI         = true;
    trimNVAddress  = 0;
    verbose        = false;
    trimFrequency  = 0;
    verify         = false;
    program        = false;
-   dialogue       = 0;
+//   dialogue       = 0;
    commandLineRC  = BDM_RC_OK;
 }
 
@@ -228,20 +228,6 @@ bool FlashProgrammerApp::OnInit() {
    DSC_SetLogFile(0);
 #endif
 
-   // Create empty app settings
-   appSettings.reset(new AppSettings(CONFIG_FILE_NAME, targetType, "Programmer settings"));
-   if (useGUI) {
-      // Create the main application window
-      dialogue = new ProgrammerDialogue(NULL, bdmInterface, deviceInterface);
-
-      // load saved settings
-      appSettings->load();
-      appSettings->printToLog();
-      dialogue->loadSettings(*appSettings);
-
-      SetTopWindow((wxWindow*)dialogue);
-      dialogue->setUpAndShow(hexFileName);
-   }
    return true;
 }
 
@@ -254,11 +240,20 @@ int FlashProgrammerApp::OnRun(void) {
 
    USBDM_ErrorCode returnValue = BDM_RC_OK;
    if (useGUI) {
-      wxApp::OnRun();
-      dialogue->saveSettings(*appSettings);
-      appSettings->printToLog();
-      appSettings->save();
-      dialogue->Destroy();
+
+      // Load interactive settings
+      appSettings.load();
+
+      // Create the main application window
+      ProgrammerDialogue *dialogue = new ProgrammerDialogue(NULL, bdmInterface, deviceInterface, appSettings);
+
+//      SetTopWindow((wxWindow*)dialogue);
+      USBDM_ErrorCode rc =  dialogue->execute(hexFileName);
+      if (rc == BDM_RC_OK) {
+         // Save changed settings
+         appSettings.save();
+      }
+//         wxApp::OnRun();
    }
    else {
       returnValue = doCommandLineProgram();

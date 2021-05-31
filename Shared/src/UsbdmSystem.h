@@ -328,4 +328,40 @@ public:
 
 };
 
+#if __cplusplus >= 201103L
+#include <chrono>
+
+class TimeIt {
+
+private:
+   std::chrono::time_point<std::chrono::system_clock> start;
+   const char *label;
+
+public:
+   /**
+    * Time an interval and report on log
+    *
+    * @param label Label to use to identify timing in log.  Must exist for timing interval since not copied.
+    */
+   TimeIt(const char* label) : label(label) {
+      LOGGING_Q;
+
+      start = std::chrono::system_clock::now();
+      log.print("%s ===================\n", label);
+   }
+
+   ~TimeIt() {
+      LOGGING_Q;
+
+      std::chrono::time_point<std::chrono::system_clock> end;
+      end = std::chrono::system_clock::now();
+
+      std::chrono::duration<double> elapsed_seconds = end - start;
+
+      log.print("          %s =================== %f s\n", label, elapsed_seconds.count());
+   }
+
+};
+#endif /* __cplusplus > */
+
 #endif /* SRC_USBDMSYSTEM_H_ */
