@@ -875,6 +875,40 @@ bool DeviceData::isHidden() const {
 }
 
 /**
+ * Find RAM region containing the given address.
+ * Adjacent RAM regions following found region are coalesced to obtain the largest region.
+ * This may mean there are boundary alignment issues within the region.
+ *
+ * @param[in]  includedAddress Address to look for
+ * @param[out] ramStart        Start of region found
+ * @param[out] ramEnd          End of region found
+ *
+ * @return true  => Found region including includedAddress
+ * @return false => No region including includedAddress was found
+ */
+bool DeviceData::getCoalescedRamRegionFor(uint32_t includedAddress, uint32_t &ramStart, uint32_t &ramEnd) const {
+   LOGGING_Q;
+
+   bool foundRegion = getRamRegionFor(includedAddress, ramStart, ramEnd);
+   if (!foundRegion) {
+      return foundRegion;
+   }
+   log.print("Found RAM region[%08X..%08X]\n", ramStart, ramEnd);
+   uint32_t ramStartExtra;
+   uint32_t ramEndExtra;
+   while (getRamRegionFor(ramEnd+1, ramStartExtra, ramEndExtra)) {
+      log.print("Found adjacent RAM region[%08X..%08X]\n", ramStartExtra, ramEndExtra);
+      if (ramStartExtra != ramEnd+1) {
+         log.error("Adjacent RAM region found but strange alignment\n");
+         break;
+      }
+      // Grow region found
+      ramEnd = ramEndExtra;
+   }
+   return foundRegion;
+}
+
+/**
  * Find RAM region containing the given address
  *
  * @param[in]  includedAddress Address to look for
@@ -902,6 +936,7 @@ bool DeviceData::getRamRegionFor(uint32_t includedAddress, uint32_t &ramStart, u
          assert((mr->start <= includedAddress) && (mr->end >= includedAddress));
          ramStart = mr->start;
          ramEnd   = mr->end;
+         success = true;
          break;
       }
    }
@@ -1763,7 +1798,7 @@ DeviceDataConstPtr DeviceDataBase::findDeviceFromName(const string &targetName) 
       }
    }
    if (theDevice == nullptr) {
-      log.print("findDeviceFromName(%s) => Device not found\n", (const char *)targetName.c_str());
+      log.error("findDeviceFromName(%s) => Device not found\n", (const char *)targetName.c_str());
    }
    return theDevice;
 }
@@ -1788,7 +1823,7 @@ DeviceDataPtr DeviceDataBase::findMutableDeviceFromName(const string &targetName
       }
    }
    if (theDevice == nullptr) {
-      log.print("findMutableDeviceFromName(%s) => Device not found\n", (const char *)targetName.c_str());
+      log.error("findMutableDeviceFromName(%s) => Device not found\n", (const char *)targetName.c_str());
    }
    return theDevice;
 }
@@ -1809,7 +1844,7 @@ int DeviceDataBase::findDeviceIndexFromName(const string &targetName) const {
       }
 
    }
-   log.print("findDeviceIndexFromName(%s) => Device not found\n", targetName.c_str());
+   log.error("findDeviceIndexFromName(%s) => Device not found\n", targetName.c_str());
    return -1;
 }
 
@@ -1832,7 +1867,7 @@ void DeviceDataBase::loadDeviceData() {
          case T_ARM_JTAG :  deviceFile = DEVICE_DATABASE_DIRECTORY "/arm_devices.xml";    break;
          case T_MC56F80xx : deviceFile = DEVICE_DATABASE_DIRECTORY "/dsc_devices.xml";    break;
          default:
-            log.print("Unknown target type\n");
+            log.error("Unknown target type\n");
             throw MyException("DeviceDataBase::loadDeviceData() - illegal target type");
       }
       string deviceFilePath = UsbdmSystem::getResourcePath(deviceFile);
@@ -1843,11 +1878,11 @@ void DeviceDataBase::loadDeviceData() {
       DeviceXmlParser::loadDeviceData(targetType, deviceFilePath, this);
    }
    catch (MyException &exception) {
-      log.print(" - Exception \'%s\'\n", exception.what());
+      log.error(" - Exception \'%s\'\n", exception.what());
       deviceData.clear();
    }
    catch (...) {
-      log.print(" - Unknown exception\n");
+      log.error(" - Unknown exception\n");
       deviceData.clear();
    }
    if ((getDefaultDevice() == NULL) || (deviceData.size() == 0)) {
@@ -2047,7 +2082,7 @@ DeviceData::ResetMethod DeviceData::getActiveResetMethod() const {
    if ((resetMethod == DeviceData::resetTargetDefault)) {
       ResetMethodsConstPtr resetMethods = getResetMethods();
       if (resetMethods == nullptr) {
-         log.print("resetMethods not set!\n");
+         log.error("resetMethods not set!\n");
          resetMethod = ResetMethod::resetHardware;
       }
       else {
@@ -2088,7 +2123,7 @@ DeviceData::EraseMethod DeviceData::getActiveEraseMethod() const {
    if ((eraseMethod == DeviceData::eraseTargetDefault)) {
       EraseMethodsConstPtr eraseMethods = getEraseMethods();
       if (eraseMethods == nullptr) {
-         log.print("eraseMethods not set!\n");
+         log.error("eraseMethods not set!\n");
          eraseMethod = EraseMethod::eraseMass;
       }
       else {

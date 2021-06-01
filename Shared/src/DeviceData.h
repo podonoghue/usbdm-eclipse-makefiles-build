@@ -1202,6 +1202,19 @@ public:
     */
    bool                           getRamRegionFor(uint32_t includedAddress, uint32_t &ramStart, uint32_t &ramEnd) const;
    /**
+    * Find RAM region containing the given address.
+    * Adjacent RAM regions following found region are coalesced to obtain the largest region.
+    * This may mean there are boundary alignment issues within the region.
+    *
+    * @param[in]  includedAddress Address to look for
+    * @param[out] ramStart        Start of region found
+    * @param[out] ramEnd          End of region found
+    *
+    * @return true  => Found region including includedAddress
+    * @return false => No region including includedAddress was found
+    */
+   bool                           getCoalescedRamRegionFor(uint32_t includedAddress, uint32_t &ramStart, uint32_t &ramEnd) const;
+   /**
     * Find the largest RAM region
     *
     * @param[out] ramStart        Start of region found
