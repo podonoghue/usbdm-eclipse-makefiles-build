@@ -857,7 +857,10 @@ USBDM_ErrorCode FlashProgrammer_ARM::loadTargetProgram(FlashProgramConstPtr flas
    }
 
    // Find RAM region to use
-   device->getRamRegionFor(loadAddress, ramStart, ramEnd);
+   if (!device->getCoalescedRamRegionFor(loadAddress, ramStart, ramEnd)) {
+      log.error("Failed to find suitable ram region for load address %08X.\n", loadAddress);
+      return PROGRAMMING_RC_ERROR_INTERNAL_CHECK_FAILED;
+   }
    log.print("Using RAM region [0x%8X..0x%8X]\n", ramStart, ramEnd);
 
    memset(&targetProgramInfo, 0, sizeof(targetProgramInfo));
