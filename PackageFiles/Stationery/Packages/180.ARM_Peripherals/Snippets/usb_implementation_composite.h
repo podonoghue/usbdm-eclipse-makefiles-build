@@ -61,13 +61,13 @@ namespace USBDM {
 #endif
 
 #ifndef VENDOR_ID
-#define VENDOR_ID  (0x16D0)
+#define VENDOR_ID             (0x16D0)    // Vendor (actually MCS)
 #endif
 #ifndef PRODUCT_ID
-#define PRODUCT_ID (0xFFFF)
+#define PRODUCT_ID            (0xFFFF)    // Product ID
 #endif
 #ifndef VERSION_ID
-#define VERSION_ID (0x0100)
+#define VERSION_ID            (0x0200)
 #endif
 
 //======================================================================
