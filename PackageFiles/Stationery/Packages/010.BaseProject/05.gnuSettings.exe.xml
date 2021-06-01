@@ -12,7 +12,7 @@
 
       <!-- C Linker file and path -->
       <projectOption id="net.sourceforge.usbdm.cdt.toolchain.c.linker.linkerFile">
-         <value>Linker-rom.ld</value>
+         <value>MemoryMap-$(targetDeviceName).ld</value>
       </projectOption>
       <projectOption id="gnu.c.link.option.paths">
          <value>&quot;${ProjDirPath}/Project_Settings/Linker_Files&quot;</value>
@@ -53,6 +53,7 @@
       <projectOption id="net.sourceforge.usbdm.gnu.c.compiler.option.include.paths">
          <value>&quot;${ProjDirPath}/Sources&quot;</value>
       </projectOption>
+      
       <!-- C++ Include paths -->
       <projectOption id="net.sourceforge.usbdm.gnu.cpp.compiler.option.include.paths">
          <value>&quot;${ProjDirPath}/Sources&quot;</value>
@@ -60,7 +61,7 @@
       
       <!-- C++ Linker file and path -->
       <projectOption id="net.sourceforge.usbdm.cdt.toolchain.cpp.linker.linkerFile">
-         <value>Linker-rom.ld</value>
+         <value>MemoryMap-$(targetDeviceName).ld</value>
       </projectOption>
       <projectOption id="gnu.cpp.link.option.paths">
          <value>&quot;${ProjDirPath}/Project_Settings/Linker_Files&quot;</value>

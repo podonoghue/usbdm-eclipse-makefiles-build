@@ -33,9 +33,6 @@
 OUTPUT_FORMAT ("elf32-littlearm", "elf32-bigarm", "elf32-littlearm")
 SEARCH_DIR(.)
 
-/* Include external memory map defining ram and Flash memory etc */
-INCLUDE "MemoryMap-$(targetDeviceName).ld"
-
 ENTRY(Reset_Handler)
 
 PROVIDE(__stack_size__ = __stack_size);
@@ -157,7 +154,7 @@ M_VECTOR_RAM_SIZE = DEFINED(__ram_vector_table__) ? (__VECTOR_TABLE_END - __VECT
     KEEP(*(.mtb_buf)) /* May not referenced by application */
     . = ALIGN(8);
     _mtb_end = .;
-  } > ram
+  } > mtb_ram
 
   .interrupts_ram :
   {
@@ -168,7 +165,7 @@ M_VECTOR_RAM_SIZE = DEFINED(__ram_vector_table__) ? (__VECTOR_TABLE_END - __VECT
     . += M_VECTOR_RAM_SIZE;
     . = ALIGN(4);
     __interrupts_ram_end__ = .; 
-  } > ram
+  } > interrupts_ram
 
   __VECTOR_RAM = DEFINED(__ram_vector_table__) ? __VECTOR_RAM__ : __VECTOR_TABLE;
   __RAM_VECTOR_TABLE_SIZE_BYTES = __interrupts_ram_end__ - __interrupts_ram_start__;
@@ -176,7 +173,7 @@ M_VECTOR_RAM_SIZE = DEFINED(__ram_vector_table__) ? (__VECTOR_TABLE_END - __VECT
    .bdts :
    {
       *(.bss*endPointBdts*) /* Load USB BDTs here as they are aligned */
-   } > ram
+   } > bdts_ram
   
    .data : AT (__etext)
    {
@@ -188,7 +185,7 @@ M_VECTOR_RAM_SIZE = DEFINED(__ram_vector_table__) ? (__VECTOR_TABLE_END - __VECT
       . = ALIGN(4);
       /* All data end */
       __data_end__ = .;
-   } > ram
+   } > data_ram
    
   /* KDS defines __DATA_END as the end of DATA in Flash */
   __DATA_END = __DATA_ROM + SIZEOF(.data);
@@ -198,7 +195,7 @@ M_VECTOR_RAM_SIZE = DEFINED(__ram_vector_table__) ? (__VECTOR_TABLE_END - __VECT
    {
       . = ALIGN(4);
       *(.noinit)
-   } > ram
+   } > noinit_ram
    
    /* Start of BSS */
    .bss :
@@ -212,7 +209,7 @@ M_VECTOR_RAM_SIZE = DEFINED(__ram_vector_table__) ? (__VECTOR_TABLE_END - __VECT
       . = ALIGN(4);
       __bss_end__ = .;
       __END_BSS = .;
-   } > ram
+   } > bss_ram
     
    /* Start of HEAP - usually from top of BSS */
    .heap :
@@ -224,21 +221,21 @@ M_VECTOR_RAM_SIZE = DEFINED(__ram_vector_table__) ? (__VECTOR_TABLE_END - __VECT
       __HeapBase = .;
       __heap_addr = .;
       . = . + __heap_size__;
-   } > ram
+      /* Heap limit is at Top of ram_low or bottom of stack */
+      __HeapLimit = MIN( ABSOLUTE(ORIGIN(heap_ram)+LENGTH(heap_ram)-1), __StackLimit);
+   } > heap_ram
 
    /* STACK space - between HEAP and end of RAM (or bitband_bytes) */
    PROVIDE ( __sram_u_size = 0 );
    .stack :
    {
       /* Make sure location doesn't move backwards as causes cryptic messages */
-      . = MAX( ., ABSOLUTE(ORIGIN(ram) + LENGTH(ram) - __stack_size__ - __sram_u_size - 3));
+      . = MAX( ., ABSOLUTE(ORIGIN(stack_ram) + LENGTH(stack_ram) - __stack_size__ - __sram_u_size - 3));
       . = ALIGN(4);
-      /* Heap limit is at bottom of stack */
-      __HeapLimit = .;
       __StackLimit = .;
       . = . + __stack_size__;
       __StackTop = .;
-   } > ram
+   } > stack_ram
 
 $(linkerExtraRegions:)
   PROVIDE(__stack = __StackTop);
@@ -269,6 +266,8 @@ $(linkerExtraRegions:)
   | Heap                 |
   | (__heap_size__)      |  (minimum heap)                   (size=0x120)
   +----------------------+                                   0x200000A4
+  |//////////////////////|
+  |----------------------| <-- RAM Lower/Upper boundary
   |//////////////////////|
   +----------------------+ __HeapLimit = __StackLimit        0x200001fc
   | Stack                |

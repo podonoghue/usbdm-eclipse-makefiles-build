@@ -49,4 +49,5 @@ REGION_ALIAS("stack_ram",      "ram_high");
 REGION_ALIAS("sram_u_ram",     "ram_high");
 REGION_ALIAS("bitband_ram",    "ram_high");
 
+INCLUDE Linker-rom.ld
 

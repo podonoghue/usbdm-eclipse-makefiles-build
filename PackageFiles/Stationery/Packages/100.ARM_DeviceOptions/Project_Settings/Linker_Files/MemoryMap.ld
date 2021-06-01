@@ -21,5 +21,33 @@ __heap_size  = $(linkerHeapSize);
   
 $(linkerInformation)
 
+/*
+  <h> Section placement in RAM
+  <i> The RAM on Cortex-M4 Kinetis devices is divided into upper and lower memory regions.
+  <i> These settings control which region is used for various linker sections.
+  <i> These sections cannot cross regions as unaligned half-word and long-word accesses are not supported.
+*/
+/*  <s1>  Micro Trace Buffer                <"ram_low"=> ram_low <"ram_high"=> ram_high <i> mtb_ram        */
+REGION_ALIAS("mtb_ram", 	   "ram_low");
+/*  <s1>  Vector table relocated to RAM     <"ram_low"=> ram_low <"ram_high"=> ram_high <i> interrupts_ram */
+REGION_ALIAS("interrupts_ram", "ram_low");
+/*  <s1>  USB Endpoint buffers              <"ram_low"=> ram_low <"ram_high"=> ram_high <i> bdts_ram       */
+REGION_ALIAS("bdts_ram",       "ram_low");
+/*  <s1>  Initialised DATA                  <"ram_low"=> ram_low <"ram_high"=> ram_high <i> data_ram       */
+REGION_ALIAS("data_ram",       "ram_low");
+/*  <s1>  Non-initialised DATA              <"ram_low"=> ram_low <"ram_high"=> ram_high <i> noinit_ram     */
+REGION_ALIAS("noinit_ram",     "ram_low");
+/*  <s1>  Zeroed Data (BSS)                 <"ram_low"=> ram_low <"ram_high"=> ram_high <i> bss_ram        */
+REGION_ALIAS("bss_ram",        "ram_low");
+/*  <s1>  Heap                              <"ram_low"=> ram_low <"ram_high"=> ram_high <i> heap_ram       */
+REGION_ALIAS("heap_ram",       "ram_low");
+/*  <s1>  Stack                             <"ram_low"=> ram_low <"ram_high"=> ram_high <i> stack_ram      */
+REGION_ALIAS("stack_ram",      "ram_high");
+/* </h> */
 
+/* These must be in upper RAM */
+REGION_ALIAS("sram_u_ram",     "ram_high");
+REGION_ALIAS("bitband_ram",    "ram_high");
+
+INCLUDE Linker-rom.ld
 

@@ -35,9 +35,6 @@
 OUTPUT_FORMAT ("elf32-littlearm", "elf32-bigarm", "elf32-littlearm")
 SEARCH_DIR(.)
 
-/* Include external memory map defining ram and Flash memory etc */
-INCLUDE "MemoryMap-$(targetDeviceName).ld"
-
 ENTRY(Reset_Handler)
 
 PROVIDE(__stack_size__ = __stack_size);
