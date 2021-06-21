@@ -419,7 +419,7 @@ public:
     *
     * @return range e.g. AdcResolution_8bit_se => (2^8)-1
     */
-   static constexpr unsigned getSingleEndedMaximum(AdcResolution adcResolution) {
+   static constexpr int getSingleEndedMaximum(AdcResolution adcResolution) {
       switch(adcResolution) {
          case AdcResolution_8bit_se:  return (1<<8)-1;
          case AdcResolution_10bit_se: return (1<<10)-1;
@@ -722,17 +722,6 @@ protected:
 #endif
 
    /**
-    * Initiates a conversion but does not wait for it to complete.
-    * Intended for use with interrupts or DMA.
-    *
-    * @param[in] sc1Value       SC1 register value. This includes channel, differential mode and interrupts enable.
-    */
-   static void startConversion(const int sc1Value) {
-      // Trigger conversion
-      adc().SC1[0] = sc1Value;
-   };
-
-   /**
     * Gets result of last software initiated conversion
     *
     * @return COnversion result
@@ -748,7 +737,7 @@ protected:
     *
     * @param[in] sc1Value SC1 register value including the ADC channel to use
     *
-    * @return The result of the conversion. This should be treated as a signed value if differential mode
+    * @return The result of the conversion. This should be treated as a signed value if in differential mode
     */
    static uint16_t readAnalogue(const int sc1Value) {
 
@@ -763,6 +752,17 @@ protected:
    };
 
 public:
+   /**
+    * Initiates a conversion but does not wait for it to complete.
+    * Intended for use with interrupts or DMA.
+    *
+    * @param[in] sc1Value       SC1 register value. This includes channel, differential mode and interrupts enable.
+    */
+   static void startConversion(const int sc1Value) {
+      // Trigger conversion
+      adc().SC1[0] = sc1Value;
+   };
+
    /**
     * Template class representing an ADC channel.
     *
@@ -850,9 +850,11 @@ public:
       /**
        * Initiates a conversion and waits for it to complete.
        *
-       * @return - the result of the conversion
+       * @return - The 16-bit result of the conversion
+       *
+       * @note Result is always positive
        */
-      static uint32_t readAnalogue() {
+      static uint16_t readAnalogue() {
          // Zero extended to 32 bits
          return static_cast<uint16_t>(Adc::readAnalogue(channel));
       };
@@ -938,9 +940,11 @@ public:
       /**
        * Initiates a conversion and waits for it to complete.
        *
-       * @return - the result of the conversion
+       * @return - The 16-bit result of the conversion
+       *
+       * @note Result may be negative
        */
-      static int32_t readAnalogue() {
+      static int16_t readAnalogue() {
          // Sign-extended to 32 bits
          return static_cast<int16_t>(Adc::readAnalogue(channel|ADC_SC1_DIFF_MASK));
       };

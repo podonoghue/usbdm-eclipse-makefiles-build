@@ -914,12 +914,12 @@ public:
     */
    FormattedIO __attribute__((noinline)) &write(double value) {
       char buff[20];
-      if (value<0) {
-         write('-');
+      bool isNegative = value<0;
+      if (isNegative) {
          value = -value;
       }
       long scaledValue = static_cast<long>(round(value*fFormat.fFloatPrecisionMultiplier));
-      ultoa(buff, scaledValue/fFormat.fFloatPrecisionMultiplier, Radix_10, fFormat.fFloatPadding, fFormat.fFloatWidth);
+      ultoa(buff, scaledValue/fFormat.fFloatPrecisionMultiplier, Radix_10, fFormat.fFloatPadding, fFormat.fFloatWidth, isNegative);
       write(buff).write('.');
       ultoa(buff, 
            (scaledValue)%fFormat.fFloatPrecisionMultiplier,

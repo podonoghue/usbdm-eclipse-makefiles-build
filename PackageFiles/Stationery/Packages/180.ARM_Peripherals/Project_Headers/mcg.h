@@ -41,7 +41,7 @@ extern volatile uint32_t SystemMcgPllClock;
 extern void setSysDividersStub(uint32_t simClkDiv1);
 
 /**
- * Clock configuration names
+ * Clock configurations
  */
 enum ClockConfig : uint8_t {
 $(/MCG/ClockConfig:// XXXX !!!!!!!ClockConfig - Not found!!!!!!!)

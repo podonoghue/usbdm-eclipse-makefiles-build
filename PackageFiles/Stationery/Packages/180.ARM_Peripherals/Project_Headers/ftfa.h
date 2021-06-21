@@ -56,9 +56,15 @@ $(/FTFA/FlashConfig:!!!!!!!Not found!!!!!!!)
 protected:
 
    /**
-    * Constructor
+    * Constructor.
+    * Typically this method would be overridden in a derived class
+    * to do the initialisation of the flash and non-volatile variables.
+    * Alternatively, the startup code may call the static methods directly.
     */
    Flash() {
+      static int singletonFlag __attribute__((unused)) = false;
+      usbdm_assert (!singletonFlag, "Creating multiple instances of Flash");
+      singletonFlag = true;
       waitForFlashReady();
    }
 

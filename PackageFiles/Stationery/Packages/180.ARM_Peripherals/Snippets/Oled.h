@@ -18,7 +18,7 @@ namespace USBDM {
 
 enum OledVccControl : int8_t {
    OledVccControl_Internal = 0,
-   OledVccControl_External = 1,
+         OledVccControl_External = 1,
 };
 
 enum WriteMode {
@@ -37,37 +37,37 @@ enum SSD1306_Colours {
 
 enum SSD1306_Commands : uint8_t {
    SSD1306_MEMORYMODE                            = 0x20, ///< See datasheet
-   SSD1306_COLUMNADDR                            = 0x21, ///< See datasheet
-   SSD1306_PAGEADDR                              = 0x22, ///< See datasheet
-   SSD1306_SETCONTRAST                           = 0x81, ///< See datasheet
-   SSD1306_CHARGEPUMP                            = 0x8D, ///< See datasheet
-   SSD1306_SEGREMAP                              = 0xA0, ///< See datasheet
-   SSD1306_DISPLAYALLON_RESUME                   = 0xA4, ///< See datasheet
-   SSD1306_DISPLAYALLON                          = 0xA5, ///< Not currently used
-   SSD1306_NORMALDISPLAY                         = 0xA6, ///< See datasheet
-   SSD1306_INVERTDISPLAY                         = 0xA7, ///< See datasheet
-   SSD1306_SETMULTIPLEX                          = 0xA8, ///< See datasheet
-   SSD1306_DISPLAYOFF                            = 0xAE, ///< See datasheet
-   SSD1306_DISPLAYON                             = 0xAF, ///< See datasheet
-   SSD1306_COMSCANINC                            = 0xC0, ///< Not currently used
-   SSD1306_COMSCANDEC                            = 0xC0, ///< See datasheet
-   SSD1306_SETDISPLAYOFFSET                      = 0xD3, ///< See datasheet
-   SSD1306_SETDISPLAYCLOCKDIV                    = 0xD5, ///< See datasheet
-   SSD1306_SETPRECHARGE                          = 0xD9, ///< See datasheet
-   SSD1306_SETCOMPINS                            = 0xDA, ///< See datasheet
-   SSD1306_SETVCOMDETECT                         = 0xDB, ///< See datasheet
+         SSD1306_COLUMNADDR                            = 0x21, ///< See datasheet
+         SSD1306_PAGEADDR                              = 0x22, ///< See datasheet
+         SSD1306_SETCONTRAST                           = 0x81, ///< See datasheet
+         SSD1306_CHARGEPUMP                            = 0x8D, ///< See datasheet
+         SSD1306_SEGREMAP                              = 0xA0, ///< See datasheet
+         SSD1306_DISPLAYALLON_RESUME                   = 0xA4, ///< See datasheet
+         SSD1306_DISPLAYALLON                          = 0xA5, ///< Not currently used
+         SSD1306_NORMALDISPLAY                         = 0xA6, ///< See datasheet
+         SSD1306_INVERTDISPLAY                         = 0xA7, ///< See datasheet
+         SSD1306_SETMULTIPLEX                          = 0xA8, ///< See datasheet
+         SSD1306_DISPLAYOFF                            = 0xAE, ///< See datasheet
+         SSD1306_DISPLAYON                             = 0xAF, ///< See datasheet
+         SSD1306_COMSCANINC                            = 0xC0, ///< Not currently used
+         SSD1306_COMSCANDEC                            = 0xC0, ///< See datasheet
+         SSD1306_SETDISPLAYOFFSET                      = 0xD3, ///< See datasheet
+         SSD1306_SETDISPLAYCLOCKDIV                    = 0xD5, ///< See datasheet
+         SSD1306_SETPRECHARGE                          = 0xD9, ///< See datasheet
+         SSD1306_SETCOMPINS                            = 0xDA, ///< See datasheet
+         SSD1306_SETVCOMDETECT                         = 0xDB, ///< See datasheet
 
-   SSD1306_SETLOWCOLUMN                          = 0x00, ///< Not currently used
-   SSD1306_SETHIGHCOLUMN                         = 0x10, ///< Not currently used
-   SSD1306_SETSTARTLINE                          = 0x40, ///< See datasheet
+         SSD1306_SETLOWCOLUMN                          = 0x00, ///< Not currently used
+         SSD1306_SETHIGHCOLUMN                         = 0x10, ///< Not currently used
+         SSD1306_SETSTARTLINE                          = 0x40, ///< See datasheet
 
-   SSD1306_RIGHT_HORIZONTAL_SCROLL               = 0x26, ///< Init rt scroll
-   SSD1306_LEFT_HORIZONTAL_SCROLL                = 0x27, ///< Init left scroll
-   SSD1306_VERTICAL_AND_RIGHT_HORIZONTAL_SCROLL  = 0x29, ///< Init diag scroll
-   SSD1306_VERTICAL_AND_LEFT_HORIZONTAL_SCROLL   = 0x2A, ///< Init diag scroll
-   SSD1306_DEACTIVATE_SCROLL                     = 0x2E, ///< Stop scroll
-   SSD1306_ACTIVATE_SCROLL                       = 0x2F, ///< Start scroll
-   SSD1306_SET_VERTICAL_SCROLL_AREA              = 0xA3, ///< Set scroll range
+         SSD1306_RIGHT_HORIZONTAL_SCROLL               = 0x26, ///< Init rt scroll
+         SSD1306_LEFT_HORIZONTAL_SCROLL                = 0x27, ///< Init left scroll
+         SSD1306_VERTICAL_AND_RIGHT_HORIZONTAL_SCROLL  = 0x29, ///< Init diag scroll
+         SSD1306_VERTICAL_AND_LEFT_HORIZONTAL_SCROLL   = 0x2A, ///< Init diag scroll
+         SSD1306_DEACTIVATE_SCROLL                     = 0x2E, ///< Stop scroll
+         SSD1306_ACTIVATE_SCROLL                       = 0x2F, ///< Start scroll
+         SSD1306_SET_VERTICAL_SCROLL_AREA              = 0xA3, ///< Set scroll range
 };
 
 class Oled : public USBDM::FormattedIO {
@@ -120,9 +120,12 @@ public:
    static constexpr unsigned   I2C_ADDRESS   = 0b01111000;
    static constexpr unsigned   I2C_SPEED     = 400*kHz;
 
-   static const int            WIDTH         = 128;
-   static const int            HEIGHT        =  32;
-   static const OledVccControl VCC_CONTROL   = OledVccControl_Internal;
+   static constexpr int            WIDTH         = 128;
+   static constexpr int            HEIGHT        =  64;
+   static constexpr OledVccControl VCC_CONTROL   = OledVccControl_Internal;
+
+   enum Orientation {Orientation_Normal, Orientation_Rotated_180};
+   static constexpr Orientation orientation = Orientation_Rotated_180;
 
 #pragma pack(push,1)
    /// Buffer type for display data
@@ -149,8 +152,8 @@ public:
    int fontHeight = 0;
 
    template<typename T> T max(T a, T b) {
-         return (a>b)?a:b;
-      }
+      return (a>b)?a:b;
+   }
 
 public:
    Oled(USBDM::I2c &i2c) : i2c(i2c) {
@@ -171,29 +174,106 @@ public:
       return *this;
    }
 
+   /**
+    * Set font to use for subsequent operations
+    *
+    * @param font
+    * @return
+    */
    Oled &setFont(USBDM::Font &font) {
       this->font = &font;
       return *this;
    }
 
-   void initialise();
-   Oled &clearDisplay();
-//   void executeCommand1(uint8_t c);
-   void refreshImage();
+   /**
+    * Initialise OLED peripheral
+    *
+    * @return true on success
+    *
+    * @note   This function must be called before any drawing or updates!
+    * @note   Based loosely on Adafruit library initialisation sequence
+    */   void initialise();
 
-   Oled &writeImage(const uint8_t *dataPtr, int x, int y, int width, int height, WriteMode writeMode=WriteMode_Write);
-   Oled &putSpace(int width);
-   void putPixel(unsigned index, uint8_t mask, bool pixel, WriteMode writeMode);
-   void drawPixel(int x, int y, bool pixel, WriteMode writeMode=WriteMode_Write);
-   void drawVerticalLine(int x, int y1, int y2, WriteMode writeMode=WriteMode_Write);
-   void drawHorizontalLine(int x1, int x2, int y, WriteMode writeMode=WriteMode_Write);
-   void drawRect(int x1, int y1, int x2, int y2, WriteMode writeMode=WriteMode_Write);
+    /**
+     * Clear internal frame buffer
+     * The OLED is not affected until refreshImage() is called.
+     */
+    Oled &clearDisplay();
 
-   Oled &moveXY(int x, int y) {
-      this->x = x;
-      this->y = y;
-      return *this;
-   }
+    /**
+     * Refresh OLED from frame buffer
+     */
+    void refreshImage();
+
+    /**
+     * Write image to frame buffer
+     *
+     * @param[in] dataPtr Pointer to start of image
+     * @param[in] x       X position of top-left corner
+     * @param[in] y       Y position of top-left corner
+     * @param[in] width   Width of image
+     * @param[in] height  Height of image
+     */
+    Oled &writeImage(const uint8_t *dataPtr, int x, int y, int width, int height, WriteMode writeMode=WriteMode_Write);
+
+    /**
+     * Writes whitespace to the frame buffer at the current x,y location
+     *
+     * @param[in] width Width of white space in pixels
+     */
+    Oled &putSpace(int width);
+
+    void putPixel(unsigned index, uint8_t mask, bool pixel, WriteMode writeMode);
+    void drawPixel(int x, int y, bool pixel, WriteMode writeMode=WriteMode_Write);
+    void drawVerticalLine(int x, int y1, int y2, WriteMode writeMode=WriteMode_Write);
+    void drawHorizontalLine(int x1, int x2, int y, WriteMode writeMode=WriteMode_Write);
+    void drawRect(int x1, int y1, int x2, int y2, WriteMode writeMode=WriteMode_Write);
+
+    /**
+     * Move current location
+     *
+     * @param x
+     * @param y
+     *
+     * @return Reference to self
+     */
+    Oled &moveXY(int x, int y) {
+       this->x = x;
+       this->y = y;
+       return *this;
+    }
+
+    /**
+     * Get current X location
+     *
+     * @return X location in pixels
+     */
+    int getX() {
+       return x;
+    }
+
+    /**
+     * Get current Y location
+     *
+     * @return Y location in pixels
+     */
+    int getY() {
+       return y;
+    }
+
+    /**
+     * Get current X,Y location
+     *
+     * @param[out] x X location in pixels
+     * @param[out] y Y location in pixels
+     *
+     * @return Reference to self
+     */
+    Oled &getXY(int &x, int &y) {
+       x = this->x;
+       y = this->y;
+       return *this;
+    }
 };
 
 } // namespace USBDM

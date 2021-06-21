@@ -42,7 +42,7 @@ enum FlashDriverError_t {
    FLASH_ERR_ILLEGAL_SECURITY  = (12), // Kinetis/CFV1+ - Illegal value for security location
    FLASH_ERR_UNKNOWN           = (13), // Unspecified error
    FLASH_ERR_PROG_RDCOLERR     = (14), // Read Collision
-   FLASH_ERR_NEW_EEPROM        = (15), // Indicates EEPROM has just bee partitioned and need initialisation
+   FLASH_ERR_NEW_EEPROM        = (15), // Indicates EEPROM has just been partitioned and needs initialisation
    FLASH_ERR_NOT_AVAILABLE     = (16), // Attempt to do flash operation when not available (e.g. while in VLPR mode)
 };
 
@@ -366,23 +366,31 @@ private:
 public:
    /**
     * Assign to underlying type.
-    * This adds a wait for the Flash to be updated
+    * This adds a wait for the Flash to be updated.
     *
     * @param[in]  data The data to assign
+    *
+    * @note Write only occurs if the NV data is changing.
     */
    void operator=(const Nonvolatile<T> &data ) {
-      this->data = (T)data;
-      Flash::waitUntilFlexIdle();
+      if (this->data != (T)data) {
+         this->data = (T)data;
+         Flash::waitUntilFlexIdle();
+      }
    }
    /**
     * Assign to underlying type.
     * This adds a wait for the Flash to be updated
     *
     * @param[in]  data The data to assign
+    *
+    * @note Write only occurs if the NV data is changing.
     */
    void operator=(const T &data ) {
-      this->data = data;
-      Flash::waitUntilFlexIdle();
+      if (this->data != data) {
+         this->data = data;
+         Flash::waitUntilFlexIdle();
+      }
    }
    /**
     * Increment underlying type.
@@ -463,7 +471,7 @@ private:
 
    /** Array of elements in FlexRAM.
     *
-    *  FlexRAM required data to be aligned according to its size.\n
+    *  FlexRAM requires data to be aligned according to its size.\n
     *  Be careful how you order variables otherwise space will be wasted
     */
    __attribute__ ((aligned (sizeof(T))))
@@ -471,43 +479,44 @@ private:
 
 public:
    /**
-    * Assign to underlying array.
+    * Assign from underlying array.
     *
     * @param[in]  other TArray to assign from
     *
     * This adds a wait for the Flash to be updated after each element is assigned
+    *
+    * @note Flash write only occurs if the NV data element is changing value.
     */
    void operator=(const TArray &other ) {
-      for (int index=0; index<dimension; index++) {
-         data[index] = other[index];
-         Flash::waitUntilFlexIdle();
-      }
-   }
-
-   /**
-    * Assign to underlying array.
-    *
-    * @param[in]  other NonvolatileArray to assign from
-    *
-    * This adds a wait for the Flash to be updated after each element is assigned
-    */
-   void operator=(const NonvolatileArray &other ) {
-      if (this == &other) {
+      if (&this->data == &other) {
          // Identity check
          return;
       }
       for (int index=0; index<dimension; index++) {
-         data[index] = other[index];
-         Flash::waitUntilFlexIdle();
+         if (data[index] != other[index]) {
+            data[index] = other[index];
+            Flash::waitUntilFlexIdle();
+         }
       }
    }
 
    /**
-    * Assign to underlying array.
+    * Assign from NonvolatileArray array.
     *
-    * @param[in]  other NonvolatileArray to assign to
+    * @param[in]other NonvolatileArray to assign from
     *
     * This adds a wait for the Flash to be updated after each element is assigned
+    *
+    * @note Flash write only occurs if the NV data element is changing value.
+    */
+   void operator=(const NonvolatileArray &other ) {
+      *this = other.data;
+   }
+
+   /**
+    * Copy from underlying array.
+    *
+    * @param[in]  other array to assign to
     */
    void copyTo(T *other) const {
       for (int index=0; index<dimension; index++) {
@@ -520,7 +529,7 @@ public:
     *
     * @param[in]  index Index of element to return
     *
-    * @return Reference to underlying array
+    * @return Reference to underlying array element
     */
    const T operator [](int index) {
       return data[index];
@@ -538,20 +547,25 @@ public:
     *
     * @param[in]  index Array index of element to change
     * @param[in]  value Value to initialise array elements to
+    *
+    * @note Flash write only occurs if the NV data element is changing value.
     */
    void set(int index, T value) {
-      data[index] = value;
-      Flash::waitUntilFlexIdle();
+      if (data[index] != value) {
+         data[index] = value;
+         Flash::waitUntilFlexIdle();
+      }
    }
    /**
     * Set all elements of the array to the value provided.
     *
     * @param[in]  value Value to initialise array elements to
+    *
+    * @note Flash write only occurs if the NV data element is changing value.
     */
    void set(T value) {
       for (int index=0; index<dimension; index++) {
-         data[index] = value;
-         Flash::waitUntilFlexIdle();
+         set(index, value);
       }
    }
 };

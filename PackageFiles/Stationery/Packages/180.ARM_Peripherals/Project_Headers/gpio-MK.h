@@ -1074,6 +1074,7 @@ public:
     * @note This is a convenience function for Pcr::setCallback(callback)
     */
    static ErrorCode setCallback(PinCallbackFunction callback) {
+      static_assert(Info::irqHandlerInstalled, "GpioField not configured for interrupts - Modify Configure.usbdm");
       return Port::setCallback(callback);
    }
 

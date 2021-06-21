@@ -76,7 +76,6 @@ void Oled::initialise() {
             SSD1306_SETCOMPINS,                   // 0xDA
             0x02,                                 // = default
             SSD1306_SETCONTRAST,                  // 0x81
-//            0x8F,
             0x10,
       };
       i2c.transmit(I2C_ADDRESS, sizeof(init4a), init4a);
@@ -155,15 +154,20 @@ Oled &Oled::writeImage(const uint8_t *dataPtr, int x, int y, int width, int heig
             // Clip on right
             break;
          }
+         // Get pixel value from image
          unsigned pixelIndex = (h*((width+7)/8))+(w/8);
          bool pixel = (dataPtr[pixelIndex]&(1<<(7-(w&0b111))));
-         uint8_t mask = 0b1<<((y+h)&0b111);
-         unsigned index = (x+w)+(((y+h)/8)*WIDTH);
-         putPixel(index, mask, pixel, writeMode);
-//         console.write(pixel?'*':' ');
+         if constexpr (orientation == Orientation_Normal) {
+            uint8_t mask = 0b1<<((y+h)&0b111);
+            unsigned index = (x+w)+(((y+h)/8)*WIDTH);
+            putPixel(index, mask, pixel, writeMode);
+         }
+         if constexpr (orientation == Orientation_Rotated_180) {
+            uint8_t mask = 0b1<<(7-((y+h)&0b111));
+            unsigned index = ((WIDTH-1)-x-w)+((((HEIGHT-1)-y-h)/8)*WIDTH);
+            putPixel(index, mask, pixel, writeMode);
+         }
       }
-//      console.writeln();
-//      refreshImage();
    }
    return *this;
 }
@@ -212,7 +216,15 @@ Oled &Oled::putSpace(int width) {
    return *this;
 }
 
+/**
+ *
+ * @param index      Index into frame buffer in bytes
+ * @param mask       Mask for pixel being manipulated in byte
+ * @param pixel      Pixel value
+ * @param writeMode  Mode of modification
+ */
 void Oled::putPixel(unsigned index, uint8_t mask, bool pixel, WriteMode writeMode) {
+   usbdm_assert(index < (sizeof(buffer.buffer)/sizeof(buffer.buffer[0])), "Illegal index");
    switch(writeMode) {
       case WriteMode_Write:
          if (pixel) {
@@ -262,6 +274,10 @@ void Oled::drawVerticalLine(int x, int y1, int y2, WriteMode writeMode) {
       // Off screen
       return;
    }
+   if constexpr (orientation == Orientation_Rotated_180) {
+      x = (WIDTH-1)-x;
+      y = (HEIGHT-1)-y;
+   }
    if (y1>y2) {
       int t = y1;
       y1 = y2;
@@ -302,6 +318,11 @@ void Oled::drawHorizontalLine(int x1, int x2, int y, WriteMode writeMode) {
       // Off screen
       return;
    }
+   if constexpr (orientation == Orientation_Rotated_180) {
+      x1 = (WIDTH-1)-x1;
+      x2 = (WIDTH-1)-x2;
+      y = (HEIGHT-1)-y;
+   }
    if (x1>x2) {
       int t = x1;
       x1 = x2;
@@ -335,6 +356,10 @@ void Oled::drawPixel(int x, int y, bool pixel, WriteMode writeMode) {
    if ((y<0)||(y>=HEIGHT)) {
       // Off screen
       return;
+   }
+   if constexpr (orientation == Orientation_Rotated_180) {
+      x = (WIDTH-1)-x;
+      y = (HEIGHT-1)-y;
    }
    uint8_t mask = 0b1<<(y&7);
    unsigned index = x+((y>>3)*WIDTH);

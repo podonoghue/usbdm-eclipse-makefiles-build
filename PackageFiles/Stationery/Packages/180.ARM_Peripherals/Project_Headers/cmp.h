@@ -517,7 +517,7 @@ public:
    static void setInputFiltered(
          CmpFilterSamples      cmpFilterSamples,
          CmpFilterClockSource  cmpFilterClockSource=CmpFilterClockSource_Internal,
-         int                   cmpFilterSamplePeriod=1
+         uint8_t               cmpFilterSamplePeriod=1
          ) {
       usbdm_assert((cmpFilterClockSource == CmpFilterClockSource_External) || (cmpFilterSamplePeriod>=1), "Illegal parameters");
       usbdm_assert((cmpFilterSamples>1) , "Illegal parameter combination");
