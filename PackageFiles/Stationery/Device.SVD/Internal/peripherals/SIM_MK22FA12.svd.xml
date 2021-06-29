@@ -285,7 +285,6 @@ Devices using this peripheral:
                <name>SOPT2</name>
                <description>System Options Register 2</description>
                <addressOffset>0x1004</addressOffset>
-               <resetValue>0x1000</resetValue>
                <fields>
                   <field>
                      <name>RTCCLKOUTSEL</name>
@@ -1108,7 +1107,7 @@ Selects the clock source for the SDHC clock</description>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>0b1011</name>
-                           <description>Custom</description>
+                           <description>Custom pinout (WLCSP)</description>
                            <value>0b1011</value>
                         </enumeratedValue>
                         <enumeratedValue>
@@ -1141,27 +1140,27 @@ Selects the clock source for the SDHC clock</description>
                      <enumeratedValues>
                         <enumeratedValue>
                            <name>0b000</name>
-                           <description>K1x Family (without tamper)</description>
+                           <description>K1x Family</description>
                            <value>0b000</value>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>0b001</name>
-                           <description>K2x Family (without tamper)</description>
+                           <description>K2x Family</description>
                            <value>0b001</value>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>0b010</name>
-                           <description>K3x Family or K1x/K6x Family (with tamper)</description>
+                           <description>K1x, K3x or K61 Family</description>
                            <value>0b010</value>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>0b011</name>
-                           <description>K4x Family or K2x Family (with tamper)</description>
+                           <description>K4x Family or K21 Family</description>
                            <value>0b011</value>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>0b100</name>
-                           <description>K6x Family (without tamper)</description>
+                           <description>K6x Family</description>
                            <value>0b100</value>
                         </enumeratedValue>
                         <enumeratedValue>
@@ -1183,7 +1182,7 @@ Selects the clock source for the SDHC clock</description>
                   </field>
                   <field>
                      <name>DIEID</name>
-                     <description>Device Revision Number</description>
+                     <description>Device Die Number</description>
                      <bitOffset>7</bitOffset>
                      <bitWidth>5</bitWidth>
                   </field>
@@ -1397,7 +1396,7 @@ This bit controls the clock gate to the I2C2 module</description>
                         </enumeratedValue>
                      </enumeratedValues>
                   </field>
-                  <field derivedFrom="FTF" > <name>DMAMUX0</name> <description>DMA Mux Clock Gate Control</description> <bitOffset>1</bitOffset> </field>
+                  <field derivedFrom="FTF" > <name>DMAMUX0</name> <description>DMAMUX0 Clock Gate Control</description> <bitOffset>1</bitOffset> </field>
                   <field derivedFrom="FTF" > <name>CAN0</name> <description>CAN0 Clock Gate Control</description> <bitOffset>4</bitOffset> </field>
                   <field derivedFrom="FTF" > <name>SPI0</name> <description>SPI0 Clock Gate Control</description> <bitOffset>12</bitOffset> </field>
                   <field derivedFrom="FTF" > <name>SPI1</name> <description>SPI1 Clock Gate Control</description> <bitOffset>13</bitOffset> </field>

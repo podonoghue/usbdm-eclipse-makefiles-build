@@ -405,15 +405,15 @@ public:
     *
     * @param precision Number of digits to the right of decimal point
     * @param padding   How to pad on the left of the number (Padding_LeadingSpaces, Padding_None, Padding_LeadingZeroes)
-    * @param width     Number of characters to the left of decimal point
+    * @param width     Number of characters to the left of decimal point (ignored for padding_None)
     * @return
     */
    FormattedIO &setFloatFormat( unsigned  precision,
                                 Padding   padding  = Padding_None,
                                 unsigned  width    = 0) {
-      if (padding == Padding_TrailingSpaces) {
-         padding = Padding_LeadingSpaces;
-      }
+
+      usbdm_assert(padding != Padding_TrailingSpaces, "Not supported format");
+
       fFormat.fFloatPrecision           = precision;
       fFormat.fFloatPrecisionMultiplier = 1;
       while (precision-->0) {
@@ -464,8 +464,10 @@ public:
 
       // Add leading padding
       switch (padding) {
+         case Padding_TrailingSpaces:
          case Padding_None:
             if (isNegative) {
+                width--;
                 *ptr++ = '-';
              }
              break;
@@ -487,8 +489,6 @@ public:
             if ((ptr-beginPtr) < width) {
                *ptr++ = '0';
             }
-            break;
-         case Padding_TrailingSpaces:
             break;
       }
       // Reverse digits

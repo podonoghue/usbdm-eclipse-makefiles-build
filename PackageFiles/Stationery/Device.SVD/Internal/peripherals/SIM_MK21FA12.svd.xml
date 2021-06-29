@@ -1,5 +1,6 @@
 <!--
 Devices using this peripheral: 
+      MK21F12
       MK21FA12
 -->
       <peripheral>
@@ -54,9 +55,19 @@ Devices using this peripheral:
                      <access>read-only</access>
                      <enumeratedValues>
                         <enumeratedValue>
+                           <name>0b0000</name>
+                           <description>Undefined</description>
+                           <value>0b0000</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
                            <name>0b0001</name>
                            <description>8 KB</description>
                            <value>0b0001</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b0010</name>
+                           <description>Undefined</description>
+                           <value>0b0010</value>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>0b0011</name>
@@ -94,9 +105,34 @@ Devices using this peripheral:
                            <value>0b1001</value>
                         </enumeratedValue>
                         <enumeratedValue>
+                           <name>0b1010</name>
+                           <description>Undefined</description>
+                           <value>0b1010</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
                            <name>0b1011</name>
                            <description>256 KB</description>
                            <value>0b1011</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1100</name>
+                           <description>Undefined</description>
+                           <value>0b1100</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1101</name>
+                           <description>Undefined</description>
+                           <value>0b1101</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1110</name>
+                           <description>Undefined</description>
+                           <value>0b1110</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1111</name>
+                           <description>Undefined</description>
+                           <value>0b1111</value>
                         </enumeratedValue>
                      </enumeratedValues>
                   </field>
@@ -110,6 +146,11 @@ Devices using this peripheral:
                            <name>0b00</name>
                            <description>System oscillator (OSC32KCLK)</description>
                            <value>0b00</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b01</name>
+                           <description>Reserved</description>
+                           <value>0b01</value>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>0b10</name>
@@ -244,7 +285,6 @@ Devices using this peripheral:
                <name>SOPT2</name>
                <description>System Options Register 2</description>
                <addressOffset>0x1004</addressOffset>
-               <resetValue>0x1000</resetValue>
                <fields>
                   <field>
                      <name>RTCCLKOUTSEL</name>
@@ -276,6 +316,11 @@ Devices using this peripheral:
                            <value>0b000</value>
                         </enumeratedValue>
                         <enumeratedValue>
+                           <name>0b001</name>
+                           <description>Reserved</description>
+                           <value>0b001</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
                            <name>0b010</name>
                            <description>Flash clock</description>
                            <value>0b010</value>
@@ -299,6 +344,11 @@ Devices using this peripheral:
                            <name>0b110</name>
                            <description>OSCERCLK0</description>
                            <value>0b110</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b111</name>
+                           <description>Reserved</description>
+                           <value>0b111</value>
                         </enumeratedValue>
                      </enumeratedValues>
                   </field>
@@ -332,7 +382,8 @@ Devices using this peripheral:
                   </field>
                   <field>
                      <name>PTD7PAD</name>
-                     <description>PTD7 pad drive strength</description>
+                     <description>PTD7 pad drive strength\n
+Controls the output drive strength of the PTD7 pin by selecting either one or two pads to drive it</description>
                      <bitOffset>11</bitOffset>
                      <bitWidth>1</bitWidth>
                      <enumeratedValues>
@@ -386,7 +437,8 @@ Devices using this peripheral:
                   </field>
                   <field>
                      <name>USBSRC</name>
-                     <description>USB clock source select</description>
+                     <description>USB clock source select\n
+Selects the clock source for the USB 48 MHz clock</description>
                      <bitOffset>18</bitOffset>
                      <bitWidth>1</bitWidth>
                      <enumeratedValues>
@@ -397,14 +449,15 @@ Devices using this peripheral:
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>0b1</name>
-                           <description>MCGFLLCLK, or MCGPLLCLK clock as selected by SOPT2.PLLFLLSEL, and then divided by the USB fractional divider as configured by SIM_CLKDIV2[USBFRAC, USBDIV]</description>
+                           <description>MCGPLLCLK/MCGFLLCLK clock divided by the USB fractional divider. See the SIM_CLKDIV2[USBFRAC, USBDIV] descriptions</description>
                            <value>0b1</value>
                         </enumeratedValue>
                      </enumeratedValues>
                   </field>
                   <field>
                      <name>SDHCSRC</name>
-                     <description>SDHC clock source select</description>
+                     <description>SDHC clock source select\n
+Selects the clock source for the SDHC clock</description>
                      <bitOffset>28</bitOffset>
                      <bitWidth>2</bitWidth>
                      <enumeratedValues>
@@ -415,7 +468,7 @@ Devices using this peripheral:
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>0b01</name>
-                           <description>MCGFLLCLK, or MCGPLLCLK clock as selected by SOPT2.PLLFLLSEL</description>
+                           <description>MCGPLLCLK/MCGFLLCLK clock</description>
                            <value>0b01</value>
                         </enumeratedValue>
                         <enumeratedValue>
@@ -594,6 +647,11 @@ Devices using this peripheral:
                            <description>CMP1_OUT</description>
                            <value>0b10</value>
                         </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b11</name>
+                           <description>Reserved</description>
+                           <value>0b11</value>
+                        </enumeratedValue>
                      </enumeratedValues>
                   </field>
                   <field>
@@ -660,6 +718,11 @@ Devices using this peripheral:
                      <bitWidth>1</bitWidth>
                      <enumeratedValues>
                         <enumeratedValue>
+                           <name>0b0</name>
+                           <description>CMP3 OUT</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
                            <name>0b1</name>
                            <description>FTM1 channel match</description>
                            <value>0b1</value>
@@ -672,6 +735,11 @@ Devices using this peripheral:
                      <bitOffset>31</bitOffset>
                      <bitWidth>1</bitWidth>
                      <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>PDB output trigger 3</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
                         <enumeratedValue>
                            <name>0b1</name>
                            <description>FTM2 channel match</description>
@@ -707,6 +775,11 @@ Devices using this peripheral:
                            <description>UART0_TX pin modulated by FTM2 CH0</description>
                            <value>0b10</value>
                         </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b11</name>
+                           <description>Reserved</description>
+                           <value>0b11</value>
+                        </enumeratedValue>
                      </enumeratedValues>
                   </field>
                   <field>
@@ -729,6 +802,11 @@ Devices using this peripheral:
                            <name>0b10</name>
                            <description>CMP1</description>
                            <value>0b10</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b11</name>
+                           <description>Reserved</description>
+                           <value>0b11</value>
                         </enumeratedValue>
                      </enumeratedValues>
                   </field>
@@ -753,6 +831,11 @@ Devices using this peripheral:
                            <description>UART1_TX pin modulated by FTM2 CH0</description>
                            <value>0b10</value>
                         </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b11</name>
+                           <description>Reserved</description>
+                           <value>0b11</value>
+                        </enumeratedValue>
                      </enumeratedValues>
                   </field>
                   <field>
@@ -776,6 +859,11 @@ Devices using this peripheral:
                            <description>CMP1</description>
                            <value>0b10</value>
                         </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b11</name>
+                           <description>Reserved</description>
+                           <value>0b11</value>
+                        </enumeratedValue>
                      </enumeratedValues>
                   </field>
                </fields>
@@ -798,7 +886,7 @@ Devices using this peripheral:
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>0b0001</name>
-                           <description>CMP1 out</description>
+                           <description>CMP0 out</description>
                            <value>0b0001</value>
                         </enumeratedValue>
                         <enumeratedValue>
@@ -863,8 +951,13 @@ Devices using this peripheral:
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>0b1110</name>
-                           <description>Low-power timer (LPTMR) trigger</description>
+                           <description>Low-power timer trigger</description>
                            <value>0b1110</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1111</name>
+                           <description>Reserved</description>
+                           <value>0b1111</value>
                         </enumeratedValue>
                      </enumeratedValues>
                   </field>
@@ -958,9 +1051,24 @@ Devices using this peripheral:
                      <bitWidth>4</bitWidth>
                      <enumeratedValues>
                         <enumeratedValue>
+                           <name>0b0000</name>
+                           <description>Reserved</description>
+                           <value>0b0000</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b0001</name>
+                           <description>Reserved</description>
+                           <value>0b0001</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
                            <name>0b0010</name>
                            <description>32-pin</description>
                            <value>0b0010</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b0011</name>
+                           <description>Reserved</description>
+                           <value>0b0011</value>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>0b0100</name>
@@ -1003,9 +1111,24 @@ Devices using this peripheral:
                            <value>0b1011</value>
                         </enumeratedValue>
                         <enumeratedValue>
+                           <name>0b1100</name>
+                           <description>196-pin</description>
+                           <value>0b1100</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1101</name>
+                           <description>Reserved</description>
+                           <value>0b1101</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
                            <name>0b1110</name>
                            <description>256-pin</description>
                            <value>0b1110</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1111</name>
+                           <description>Reserved</description>
+                           <value>0b1111</value>
                         </enumeratedValue>
                      </enumeratedValues>
                   </field>
@@ -1017,33 +1140,43 @@ Devices using this peripheral:
                      <enumeratedValues>
                         <enumeratedValue>
                            <name>0b000</name>
-                           <description>K10 or K12 Family</description>
+                           <description>K1x Family</description>
                            <value>0b000</value>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>0b001</name>
-                           <description>K20 or K22 Family</description>
+                           <description>K2x Family</description>
                            <value>0b001</value>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>0b010</name>
-                           <description>K30 Family or K11 Family or K61 Family</description>
+                           <description>K1x, K3x or K61 Family</description>
                            <value>0b010</value>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>0b011</name>
-                           <description>K40 Family or K21 Family</description>
+                           <description>K4x Family or K21 Family</description>
                            <value>0b011</value>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>0b100</name>
-                           <description>K60 or K62 Family</description>
+                           <description>K6x Family</description>
                            <value>0b100</value>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>0b101</name>
-                           <description>K70 Family</description>
+                           <description>K7x Family</description>
                            <value>0b101</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b110</name>
+                           <description>Reserved</description>
+                           <value>0b110</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b111</name>
+                           <description>Reserved</description>
+                           <value>0b111</value>
                         </enumeratedValue>
                      </enumeratedValues>
                   </field>
@@ -1059,6 +1192,34 @@ Devices using this peripheral:
                      <bitOffset>12</bitOffset>
                      <bitWidth>4</bitWidth>
                   </field>
+                  <field>
+                     <name>SERIESID</name>
+                     <description>Kinetis Series ID: Specifies the Kinetis series of the device</description>
+                     <bitOffset>20</bitOffset>
+                     <bitWidth>4</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0000</name>
+                           <description>Kinetis K series</description>
+                           <value>0b0000</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b0001</name>
+                           <description>Kinetis L series</description>
+                           <value>0b0001</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b0101</name>
+                           <description>Kinetis W series</description>
+                           <value>0b0101</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b0110</name>
+                           <description>Kinetis V series</description>
+                           <value>0b0110</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
                </fields>
             </register>
             <register>
@@ -1068,7 +1229,8 @@ Devices using this peripheral:
                <fields>
                   <field>
                      <name>I2C2</name>
-                     <description>I2C2 Clock Gate Control</description>
+                     <description>I2C2 Clock Gate Control\n
+This bit controls the clock gate to the I2C2 module</description>
                      <bitOffset>6</bitOffset>
                      <bitWidth>1</bitWidth>
                      <enumeratedValues>
@@ -1188,26 +1350,8 @@ Devices using this peripheral:
                <fields>
                   <field>
                      <name>LPTMR</name>
-                     <description>Low Power Timer Access Control</description>
+                     <description>LPTMR Clock Gate Control</description>
                      <bitOffset>0</bitOffset>
-                     <bitWidth>1</bitWidth>
-                     <enumeratedValues>
-                        <enumeratedValue>
-                           <name>0b0</name>
-                           <description>Access disabled</description>
-                           <value>0b0</value>
-                        </enumeratedValue>
-                        <enumeratedValue>
-                           <name>0b1</name>
-                           <description>Access enabled</description>
-                           <value>0b1</value>
-                        </enumeratedValue>
-                     </enumeratedValues>
-                  </field>
-                  <field>
-                     <name>PORTA</name>
-                     <description>Port A Clock Gate Control</description>
-                     <bitOffset>9</bitOffset>
                      <bitWidth>1</bitWidth>
                      <enumeratedValues>
                         <enumeratedValue>
@@ -1222,10 +1366,11 @@ Devices using this peripheral:
                         </enumeratedValue>
                      </enumeratedValues>
                   </field>
-                  <field derivedFrom="PORTA" > <name>PORTB</name> <description>Port B Clock Gate Control</description> <bitOffset>10</bitOffset> </field>
-                  <field derivedFrom="PORTA" > <name>PORTC</name> <description>Port C Clock Gate Control</description> <bitOffset>11</bitOffset> </field>
-                  <field derivedFrom="PORTA" > <name>PORTD</name> <description>Port D Clock Gate Control</description> <bitOffset>12</bitOffset> </field>
-                  <field derivedFrom="PORTA" > <name>PORTE</name> <description>Port E Clock Gate Control</description> <bitOffset>13</bitOffset> </field>
+                  <field derivedFrom="LPTMR" > <name>PORTA</name> <description>PORTA Clock Gate Control</description> <bitOffset>9</bitOffset> </field>
+                  <field derivedFrom="LPTMR" > <name>PORTB</name> <description>PORTB Clock Gate Control</description> <bitOffset>10</bitOffset> </field>
+                  <field derivedFrom="LPTMR" > <name>PORTC</name> <description>PORTC Clock Gate Control</description> <bitOffset>11</bitOffset> </field>
+                  <field derivedFrom="LPTMR" > <name>PORTD</name> <description>PORTD Clock Gate Control</description> <bitOffset>12</bitOffset> </field>
+                  <field derivedFrom="LPTMR" > <name>PORTE</name> <description>PORTE Clock Gate Control</description> <bitOffset>13</bitOffset> </field>
                </fields>
             </register>
             <register>
@@ -1252,14 +1397,9 @@ Devices using this peripheral:
                         </enumeratedValue>
                      </enumeratedValues>
                   </field>
-                  <field derivedFrom="FTF" > <name>DMAMUX0</name> <description>DMA Mux Clock Gate Control</description> <bitOffset>1</bitOffset> </field>
+                  <field derivedFrom="FTF" > <name>DMAMUX0</name> <description>DMAMUX0 Clock Gate Control</description> <bitOffset>1</bitOffset> </field>
                   <field derivedFrom="FTF" > <name>CAN0</name> <description>CAN0 Clock Gate Control</description> <bitOffset>4</bitOffset> </field>
-                  <field>
-                     <name>RNGA</name>
-                     <description>RNGA Clock Gate Control</description>
-                     <bitOffset>9</bitOffset>
-                     <bitWidth>1</bitWidth>
-                  </field>
+                  <field derivedFrom="FTF" > <name>RNGA</name> <description>RNGA Clock Gate Control</description> <bitOffset>9</bitOffset> </field>
                   <field derivedFrom="FTF" > <name>SPI0</name> <description>SPI0 Clock Gate Control</description> <bitOffset>12</bitOffset> </field>
                   <field derivedFrom="FTF" > <name>SPI1</name> <description>SPI1 Clock Gate Control</description> <bitOffset>13</bitOffset> </field>
                   <field derivedFrom="FTF" > <name>I2S</name> <description>I2S Clock Gate Control</description> <bitOffset>15</bitOffset> </field>
@@ -1271,24 +1411,7 @@ Devices using this peripheral:
                   <field derivedFrom="FTF" > <name>FTM1</name> <description>FTM1 Clock Gate Control</description> <bitOffset>25</bitOffset> </field>
                   <field derivedFrom="FTF" > <name>FTM2</name> <description>FTM2 Clock Gate Control</description> <bitOffset>26</bitOffset> </field>
                   <field derivedFrom="FTF" > <name>ADC0</name> <description>ADC0 Clock Gate Control</description> <bitOffset>27</bitOffset> </field>
-                  <field>
-                     <name>RTC</name>
-                     <description>RTC Access Control</description>
-                     <bitOffset>29</bitOffset>
-                     <bitWidth>1</bitWidth>
-                     <enumeratedValues>
-                        <enumeratedValue>
-                           <name>0b0</name>
-                           <description>Access and interrupts disabled</description>
-                           <value>0b0</value>
-                        </enumeratedValue>
-                        <enumeratedValue>
-                           <name>0b1</name>
-                           <description>Access and interrupts enabled</description>
-                           <value>0b1</value>
-                        </enumeratedValue>
-                     </enumeratedValues>
-                  </field>
+                  <field derivedFrom="FTF" > <name>RTC</name> <description>RTC Clock Gate Control</description> <bitOffset>29</bitOffset> </field>
                   <field derivedFrom="FTF" > <name>DAC0</name> <description>DAC0 Clock Gate Control</description> <bitOffset>31</bitOffset> </field>
                </fields>
             </register>
@@ -1426,13 +1549,19 @@ Devices using this peripheral:
                <fields>
                   <field>
                      <name>USBFRAC</name>
-                     <description>USB clock divider fraction</description>
+                     <description>USB clock divider fraction\n
+This field sets the fraction multiply value for the fractional clock divider when the MCGFLLCLK/
+MCGPLLCLK clock is the USB clock source (SOPT2[USBSRC] = 1).\n
+Divider output clock = Divider input clock*[(USBFRAC+1)/(USBDIV+1)]</description>
                      <bitOffset>0</bitOffset>
                      <bitWidth>1</bitWidth>
                   </field>
                   <field>
                      <name>USBDIV</name>
-                     <description>USB clock divider divisor</description>
+                     <description>USB clock divider divisor\n
+This field sets the divide value for the fractional clock divider when the MCGFLLCLK/MCGPLLCLK clock is
+the USB clock source (SOPT2[USBSRC] = 1).\n
+Divider output clock = Divider input clock*[(USBFRAC+1)/(USBDIV+1)]</description>
                      <bitOffset>1</bitOffset>
                      <bitWidth>3</bitWidth>
                   </field>
@@ -1559,9 +1688,29 @@ Devices using this peripheral:
                      <access>read-only</access>
                      <enumeratedValues>
                         <enumeratedValue>
+                           <name>0b0000</name>
+                           <description>Reserved</description>
+                           <value>0b0000</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b0001</name>
+                           <description>Reserved</description>
+                           <value>0b0001</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b0010</name>
+                           <description>Reserved</description>
+                           <value>0b0010</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
                            <name>0b0011</name>
                            <description>32 KB of program flash memory</description>
                            <value>0b0011</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b0100</name>
+                           <description>Reserved</description>
+                           <value>0b0100</value>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>0b0101</name>
@@ -1569,9 +1718,19 @@ Devices using this peripheral:
                            <value>0b0101</value>
                         </enumeratedValue>
                         <enumeratedValue>
+                           <name>0b0110</name>
+                           <description>Reserved</description>
+                           <value>0b0110</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
                            <name>0b0111</name>
                            <description>128 KB of program flash memory</description>
                            <value>0b0111</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1000</name>
+                           <description>Reserved</description>
+                           <value>0b1000</value>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>0b1001</name>
@@ -1579,14 +1738,29 @@ Devices using this peripheral:
                            <value>0b1001</value>
                         </enumeratedValue>
                         <enumeratedValue>
+                           <name>0b1010</name>
+                           <description>Reserved</description>
+                           <value>0b1010</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
                            <name>0b1011</name>
                            <description>512 KB of program flash memory</description>
                            <value>0b1011</value>
                         </enumeratedValue>
                         <enumeratedValue>
+                           <name>0b1100</name>
+                           <description>Reserved</description>
+                           <value>0b1100</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
                            <name>0b1101</name>
                            <description>1024 KB of program flash memory</description>
                            <value>0b1101</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1110</name>
+                           <description>Reserved</description>
+                           <value>0b1110</value>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>0b1111</name>
@@ -1608,9 +1782,24 @@ Devices using this peripheral:
                            <value>0b0000</value>
                         </enumeratedValue>
                         <enumeratedValue>
+                           <name>0b0001</name>
+                           <description>Reserved</description>
+                           <value>0b0001</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b0010</name>
+                           <description>Reserved</description>
+                           <value>0b0010</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
                            <name>0b0011</name>
                            <description>32 KB of FlexNVM</description>
                            <value>0b0011</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b0100</name>
+                           <description>Reserved</description>
+                           <value>0b0100</value>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>0b0101</name>
@@ -1618,9 +1807,19 @@ Devices using this peripheral:
                            <value>0b0101</value>
                         </enumeratedValue>
                         <enumeratedValue>
+                           <name>0b0110</name>
+                           <description>Reserved</description>
+                           <value>0b0110</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
                            <name>0b0111</name>
                            <description>128 KB of FlexNVM</description>
                            <value>0b0111</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1000</name>
+                           <description>Reserved</description>
+                           <value>0b1000</value>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>0b1001</name>
@@ -1628,9 +1827,29 @@ Devices using this peripheral:
                            <value>0b1001</value>
                         </enumeratedValue>
                         <enumeratedValue>
+                           <name>0b1010</name>
+                           <description>Reserved</description>
+                           <value>0b1010</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
                            <name>0b1011</name>
                            <description>512 KB of FlexNVM</description>
                            <value>0b1011</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1100</name>
+                           <description>Reserved</description>
+                           <value>0b1100</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1101</name>
+                           <description>Reserved</description>
+                           <value>0b1101</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1110</name>
+                           <description>Reserved</description>
+                           <value>0b1110</value>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>0b1111</name>
@@ -1656,31 +1875,37 @@ Devices using this peripheral:
                   </field>
                   <field>
                      <name>PFLSH</name>
-                     <description>Program flash only</description>
+                     <description>Program flash\n
+For devices with FlexNVM, this bit is always clear.\n
+For devices without FlexNVM, this bit is always set</description>
                      <bitOffset>23</bitOffset>
                      <bitWidth>1</bitWidth>
                      <enumeratedValues>
                         <enumeratedValue>
                            <name>0b0</name>
-                           <description>Device supports FlexNVM</description>
+                           <description>Physical flash block 1 is used as FlexNVM - Reserved for devices without FlexNVM</description>
                            <value>0b0</value>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>0b1</name>
-                           <description>Program Flash only, device does not support FlexNVM</description>
+                           <description>Physical flash block 1 is used as program flash</description>
                            <value>0b1</value>
                         </enumeratedValue>
                      </enumeratedValues>
                   </field>
                   <field>
                      <name>MAXADDR0</name>
-                     <description>Max address block 0</description>
+                     <description>Max address block 0\n
+This field concatenated with 13 trailing zeros indicates the first invalid address of flash block 0 (program flash 0).
+For example, if MAXADDR0 = 0x20 the first invalid address of flash block 0 is 0x0004_0000. 
+This would be the MAXADDR0 value for a device with 256 KB program flash in flash block 0</description>
                      <bitOffset>24</bitOffset>
                      <bitWidth>7</bitWidth>
                   </field>
                   <field>
                      <name>SWAPPFLSH</name>
-                     <description>Swap program flash</description>
+                     <description>Swap program flash\n
+For devices without FlexNVM: Indicates that swap is active</description>
                      <bitOffset>31</bitOffset>
                      <bitWidth>1</bitWidth>
                      <enumeratedValues>

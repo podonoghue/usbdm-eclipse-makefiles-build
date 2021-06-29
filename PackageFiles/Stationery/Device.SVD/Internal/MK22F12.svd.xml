@@ -34,7 +34,7 @@
       <xi:include href="peripherals/DAC0_16CH_FIFO16_0x400CC000.svd.xml"/>
       <peripheral derivedFrom="DAC0"><name>DAC1</name><baseAddress>0x400CD000</baseAddress></peripheral>
       <xi:include href="peripherals/DMA0_16CH_EARS4.svd.xml"/>
-      <xi:include href="peripherals/DMAMUX0_16CH_TRIG.svd.xml"/>
+      <xi:include href="peripherals/DMAMUX0_16CH_TRIG_MK22FA12.svd.xml"/>
       <xi:include href="peripherals/DWT_CM4.svd.xml"/>
       <xi:include href="peripherals/ETB_0.svd.xml"/>
       <xi:include href="peripherals/ETF_0.svd.xml"/>
@@ -72,9 +72,9 @@
       <xi:include href="peripherals/PMC_MK.svd.xml"/>
       <xi:include href="peripherals/PORTA.svd.xml"/>
       <peripheral derivedFrom="PORTA"><name>PORTB</name><baseAddress>0x4004A000</baseAddress></peripheral>
-      <peripheral derivedFrom="PORTA"><name>PORTC</name><baseAddress>0x4004B000</baseAddress></peripheral>
-      <peripheral derivedFrom="PORTA"><name>PORTD</name><baseAddress>0x4004C000</baseAddress></peripheral>
-      <peripheral derivedFrom="PORTA"><name>PORTE</name><baseAddress>0x4004D000</baseAddress></peripheral>
+      <peripheral derivedFrom="PORTB"><name>PORTC</name><baseAddress>0x4004B000</baseAddress></peripheral>
+      <xi:include href="peripherals/PORTD_DFER.svd.xml"/>
+      <peripheral derivedFrom="PORTB"><name>PORTE</name><baseAddress>0x4004D000</baseAddress></peripheral>
       <xi:include href="peripherals/RCM_MK10D5.svd.xml"/>
       <xi:include href="peripherals/RFSYS_0.svd.xml"/>
       <xi:include href="peripherals/RFVBAT_0.svd.xml"/>
@@ -82,13 +82,13 @@
       <xi:include href="peripherals/SCB_CM4_CPACR.svd.xml"/>
       <xi:include href="peripherals/SDHC0_MK21F12.svd.xml"/>
       <xi:include href="peripherals/SIM_MK22FA12.svd.xml"/>
-      <xi:include href="peripherals/SMC_MK22FA12.svd.xml"/>
+      <xi:include href="peripherals/SMC_MK22F12.svd.xml"/>
       <xi:include href="peripherals/SPI0_MK_PCSIS6_PCSSE.svd.xml"/>
-      <xi:include href="peripherals/SPI1_MK_FIFO_DEPTH1.svd.xml"/>
-      <peripheral derivedFrom="SPI1"><name>SPI2</name><baseAddress>0x400AC000</baseAddress></peripheral>
+      <peripheral derivedFrom="SPI0"><name>SPI1</name><baseAddress>0x4002D000</baseAddress></peripheral>
+      <peripheral derivedFrom="SPI0"><name>SPI2</name><baseAddress>0x400AC000</baseAddress></peripheral>
       <xi:include href="peripherals/SYST.svd.xml"/>
       <xi:include href="peripherals/TPIU_0.svd.xml"/>
-      <xi:include href="peripherals/UART0_MK10D10_C7816_CEA709.svd.xml"/>
+      <xi:include href="peripherals/UART0_MK10D7_C7816.svd.xml"/>
       <xi:include href="peripherals/UART1_MK10D10.svd.xml"/>
       <peripheral derivedFrom="UART1"><name>UART2</name><baseAddress>0x4006C000</baseAddress></peripheral>
       <peripheral derivedFrom="UART1"><name>UART3</name><baseAddress>0x4006D000</baseAddress></peripheral>
@@ -100,6 +100,6 @@
       <xi:include href="peripherals/WDOG_MK.svd.xml"/>
    </peripherals>
    <vendorExtensions>
-   <xi:include href="vectorTables/MK22F12_VectorTable.svd.xml"/>
+   <xi:include href="vectorTables/MK22FA12_VectorTable.svd.xml"/>
    </vendorExtensions>
 </device>

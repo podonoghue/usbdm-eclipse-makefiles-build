@@ -3,7 +3,7 @@
 [
 <!ENTITY DEVICE_SUB_FAMILY  "MK22F12">
 <!ENTITY DEVICE_FAMILY      "MK">
-<!ENTITY DEVICE_FILE        "MK22FA12">
+<!ENTITY DEVICE_FILE        "MK22F12">
 ]>
 
 <root 
@@ -19,7 +19,7 @@
       </applyWhen>
 
       <!-- Affects later CPP peripheral options -->
-      <constant id="cpp.peripheral.subfamily"       value="&DEVICE_FILE;" />
+      <constant id="cpp.peripheral.subfamily"       value="&DEVICE_SUB_FAMILY;" />
       
       <!-- These constants enable peripheral features -->
       <constant id="cpp.peripheral.internal.adc"    value="true" />

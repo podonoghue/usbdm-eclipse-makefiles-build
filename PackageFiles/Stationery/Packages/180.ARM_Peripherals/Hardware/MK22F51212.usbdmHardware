@@ -7,12 +7,12 @@
 
 <root version="1.2.0">
    <family name="MK22F51212">
-      <device name="FRDM_K22F"    manual="K22P121M120SF8RM" package="FRDM_K22F" />
+      <device name="FRDM_K22F"    manual="K22P121M120SF7RM" package="FRDM_K22F" />
       <device name="MK22FN512VDC12" manual="K22P121M120SF7RM" package="BGA_121" />
       <device name="MK22FN512VLH12" manual="K22P121M120SF7RM" package="LQFP_64" />
       <device name="MK22FN512VLL12" manual="K22P121M120SF7RM" package="LQFP_100" />
       <device name="MK22FN512VMP12" manual="K22P121M120SF7RM" package="BGA_64" />
-      <device name="MK22F_Module" manual="K22P121M120SF8RM" package="MK22F_DIPModule" />
+      <device name="MK22F_Module" manual="K22P121M120SF7RM" package="MK22F_DIPModule" />
    </family>
    <peripherals>
       <peripheral baseName="ADC"      instance="0"        version="adc0_diff_a">
@@ -380,6 +380,10 @@
          <mux sel="fixed"         signal="ADC0_SE22" />
          <reset sel="fixed" />
       </pin>
+      <pin name="BandGap"      isFixed="true">
+         <mux sel="fixed"         signal="ADC0_SE27" />
+         <reset sel="fixed" />
+      </pin>
       <pin name="DAC0_OUT"     isFixed="true">
          <mux sel="fixed"         signal="DAC0_OUT" />
          <mux sel="fixed"         signal="CMP1_IN3" />
@@ -402,6 +406,10 @@
       </pin>
       <pin name="RTC_WAKEUP_b" isFixed="true">
          <mux sel="fixed"         signal="RTC_WAKEUP_b" />
+         <reset sel="fixed" />
+      </pin>
+      <pin name="TempSensor"   isFixed="true">
+         <mux sel="fixed"         signal="ADC0_SE26" />
          <reset sel="fixed" />
       </pin>
       <pin name="USB0_DM"      isFixed="true">
@@ -1170,6 +1178,7 @@
          <placement pin="ADC1_DP0"      location="L1" />
          <placement pin="ADC1_DP1"      location="J1" />
          <placement pin="ADC1_SE16"     location="J3" />
+         <placement pin="BandGap"       location="BandGap" />
          <placement pin="DAC0_OUT"      location="K5" />
          <placement pin="DAC1_OUT"      location="K4" />
          <placement pin="EXTAL32"       location="L5" />
@@ -1256,6 +1265,7 @@
          <placement pin="PTE6"          location="F3" />
          <placement pin="RESET_b"       location="J11" />
          <placement pin="RTC_WAKEUP_b"  location="L7" />
+         <placement pin="TempSensor"    location="TempSensor" />
          <placement pin="USB0_DM"       location="F2" />
          <placement pin="USB0_DP"       location="F1" />
          <placement pin="VBAT"          location="K6" />
@@ -1282,6 +1292,7 @@
          <placement pin="ADC0_DP0"      location="G1" />
          <placement pin="ADC1_DM0"      location="F2" />
          <placement pin="ADC1_DP0"      location="G2" />
+         <placement pin="BandGap"       location="BandGap" />
          <placement pin="DAC0_OUT"      location="H2" />
          <placement pin="EXTAL32"       location="H4" />
          <placement pin="PTA0"          location="D3" />
@@ -1325,6 +1336,7 @@
          <placement pin="PTE0"          location="A1" />
          <placement pin="PTE1"          location="B1" />
          <placement pin="RESET_b"       location="F8" />
+         <placement pin="TempSensor"    location="TempSensor" />
          <placement pin="USB0_DM"       location="D1" />
          <placement pin="USB0_DP"       location="E1" />
          <placement pin="VBAT"          location="H5" />
@@ -1348,6 +1360,7 @@
          <placement pin="ADC0_DP0"      location="A6/J24_1" />
          <placement pin="ADC1_DM0"      location="A9/J24_7" />
          <placement pin="ADC1_DP0"      location="A8/J24_5" />
+         <placement pin="BandGap"       location="BandGap" />
          <placement pin="DAC0_OUT"      location="A11/J24_11" />
          <placement pin="EXTAL32"       location="EXTAL32" />
          <placement pin="PTA0"          location="SWD_CLK" />
@@ -1391,6 +1404,7 @@
          <placement pin="PTE0"          location="D14/J2_18/ConTx" />
          <placement pin="PTE1"          location="D15/J2_19/ConRx" />
          <placement pin="RESET_b"       location="RESET_b" />
+         <placement pin="TempSensor"    location="TempSensor" />
          <placement pin="USB0_DM"       location="USB0_DM" />
          <placement pin="USB0_DP"       location="USB0_DP" />
          <placement pin="VBAT"          location="VBAT" />
@@ -1418,6 +1432,7 @@
          <placement pin="ADC1_DM1"      location="p17" />
          <placement pin="ADC1_DP0"      location="p20" />
          <placement pin="ADC1_DP1"      location="p16" />
+         <placement pin="BandGap"       location="BandGap" />
          <placement pin="DAC0_OUT"      location="p27" />
          <placement pin="EXTAL32"       location="p29" />
          <placement pin="PTA0"          location="p34" />
@@ -1487,6 +1502,7 @@
          <placement pin="PTE5"          location="p6" />
          <placement pin="PTE6"          location="p7" />
          <placement pin="RESET_b"       location="p52" />
+         <placement pin="TempSensor"    location="TempSensor" />
          <placement pin="USB0_DM"       location="p11" />
          <placement pin="USB0_DP"       location="p10" />
          <placement pin="VBAT"          location="p30" />
@@ -1516,6 +1532,7 @@
          <placement pin="ADC0_DP0"      location="p9" />
          <placement pin="ADC1_DM0"      location="p12" />
          <placement pin="ADC1_DP0"      location="p11" />
+         <placement pin="BandGap"       location="BandGap" />
          <placement pin="DAC0_OUT"      location="p18" />
          <placement pin="EXTAL32"       location="p20" />
          <placement pin="PTA0"          location="p22" />
@@ -1559,6 +1576,7 @@
          <placement pin="PTE0"          location="p1" />
          <placement pin="PTE1"          location="p2" />
          <placement pin="RESET_b"       location="p34" />
+         <placement pin="TempSensor"    location="TempSensor" />
          <placement pin="USB0_DM"       location="p6" />
          <placement pin="USB0_DP"       location="p5" />
          <placement pin="VBAT"          location="p21" />
@@ -1582,6 +1600,7 @@
          <placement pin="ADC0_DP0"      location="p11b_An_plus" />
          <placement pin="ADC1_DM0"      location="" />
          <placement pin="ADC1_DP0"      location="" />
+         <placement pin="BandGap"       location="BandGap" />
          <placement pin="DAC0_OUT"      location="p14_Vo" />
          <placement pin="EXTAL32"       location="extal_32kHz" />
          <placement pin="PTA0"          location="SWD_CLK" />
@@ -1624,6 +1643,7 @@
          <placement pin="PTE0"          location="p10_E0" />
          <placement pin="PTE1"          location="p11_E1" />
          <placement pin="RESET_b"       location="p16b_Rst" />
+         <placement pin="TempSensor"    location="TempSensor" />
          <placement pin="USB0_DM"       location="USB0_DM" />
          <placement pin="USB0_DP"       location="USB0_DP" />
          <placement pin="VBAT"          location="p14b_Vs" />

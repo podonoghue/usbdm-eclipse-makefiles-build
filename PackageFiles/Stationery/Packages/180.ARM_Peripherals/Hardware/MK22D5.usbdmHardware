@@ -286,12 +286,20 @@
          <mux sel="fixed"         signal="ADC0_SE0" />
          <reset sel="fixed" />
       </pin>
+      <pin name="BandGap"      isFixed="true">
+         <mux sel="fixed"         signal="ADC0_SE27" />
+         <reset sel="fixed" />
+      </pin>
       <pin name="EXTAL32"      isFixed="true">
          <mux sel="fixed"         signal="EXTAL32" />
          <reset sel="fixed" />
       </pin>
       <pin name="RESET_b"      isFixed="true">
          <mux sel="fixed"         signal="RESET_b" />
+         <reset sel="fixed" />
+      </pin>
+      <pin name="TempSensor"   isFixed="true">
+         <mux sel="fixed"         signal="ADC0_SE26" />
          <reset sel="fixed" />
       </pin>
       <pin name="USB0_DM"      isFixed="true">
@@ -606,6 +614,7 @@
       <package name="LQFP_48">
          <placement pin="ADC0_DM0"      location="p8" />
          <placement pin="ADC0_DP0"      location="p7" />
+         <placement pin="BandGap"       location="Internal" />
          <placement pin="EXTAL32"       location="p15" />
          <placement pin="PTA0"          location="p17" />
          <placement pin="PTA1"          location="p18" />
@@ -637,6 +646,7 @@
          <placement pin="PTD6"          location="p47" />
          <placement pin="PTD7"          location="p48" />
          <placement pin="RESET_b"       location="p26" />
+         <placement pin="TempSensor"    location="Internal" />
          <placement pin="USB0_DM"       location="p4" />
          <placement pin="USB0_DP"       location="p3" />
          <placement pin="VBAT"          location="p16" />

@@ -41,57 +41,12 @@ Devices using this peripheral:
                </fields>
             </register>
             <register>
-               <name>FPROT3</name>
-               <description>Non-volatile P-Flash Protection 1 - Low Register</description>
+               <dim>4</dim>
+               <dimIncrement>1</dimIncrement>
+               <dimIndex>3,2,1,0</dimIndex>
+               <name>FPROT%s</name>
+               <description>Non-volatile P-Flash Protection Register</description>
                <addressOffset>0x8</addressOffset>
-               <size>8</size>
-               <access>read-only</access>
-               <resetValue>0xFF</resetValue>
-               <resetMask>0xFF</resetMask>
-               <fields>
-                  <field>
-                     <name>PROT</name>
-                     <description>P-Flash Region Protect</description>
-                     <bitOffset>0</bitOffset>
-                  </field>
-               </fields>
-            </register>
-            <register>
-               <name>FPROT2</name>
-               <description>Non-volatile P-Flash Protection 1 - High Register</description>
-               <addressOffset>0x9</addressOffset>
-               <size>8</size>
-               <access>read-only</access>
-               <resetValue>0xFF</resetValue>
-               <resetMask>0xFF</resetMask>
-               <fields>
-                  <field>
-                     <name>PROT</name>
-                     <description>P-Flash Region Protect</description>
-                     <bitOffset>0</bitOffset>
-                  </field>
-               </fields>
-            </register>
-            <register>
-               <name>FPROT1</name>
-               <description>Non-volatile P-Flash Protection 0 - Low Register</description>
-               <addressOffset>0xA</addressOffset>
-               <size>8</size>
-               <access>read-only</access>
-               <resetValue>0xFF</resetValue>
-               <resetMask>0xFF</resetMask>
-               <fields>
-                  <field>
-                     <name>PROT</name>
-                     <description>P-Flash Region Protect</description>
-                     <bitOffset>0</bitOffset>
-                  </field>
-               </fields>
-            </register>
-            <register>
-               <name>FPROT0</name>
-               <description>Non-volatile P-Flash Protection 0 - High Register</description>
-               <addressOffset>0xB</addressOffset>
                <size>8</size>
                <access>read-only</access>
                <resetValue>0xFF</resetValue>
@@ -240,7 +195,7 @@ Allows the MCU to be unsecured if the key is known</description>
                <fields>
                   <field>
                      <name>LPBOOT</name>
-                     <description>no description available</description>
+                     <description>Low-power boot enabled</description>
                      <bitOffset>0</bitOffset>
                      <bitWidth>1</bitWidth>
                      <enumeratedValues>
@@ -258,18 +213,18 @@ Allows the MCU to be unsecured if the key is known</description>
                   </field>
                   <field>
                      <name>EZPORT_DIS</name>
-                     <description>no description available</description>
+                     <description>EzPort operation boot status</description>
                      <bitOffset>1</bitOffset>
                      <bitWidth>1</bitWidth>
                      <enumeratedValues>
                         <enumeratedValue>
                            <name>0b00</name>
-                           <description>EzPort operation is disabled</description>
+                           <description>EzPort disabled</description>
                            <value>0b00</value>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>0b01</name>
-                           <description>EzPort operation is enabled</description>
+                           <description>EzPort enabled</description>
                            <value>0b01</value>
                         </enumeratedValue>
                      </enumeratedValues>

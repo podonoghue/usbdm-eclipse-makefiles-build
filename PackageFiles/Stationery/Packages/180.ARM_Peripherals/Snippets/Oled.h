@@ -16,7 +16,7 @@
 
 namespace USBDM {
 
-enum OledVccControl : int8_t {
+enum OledVccControl : uint8_t {
    OledVccControl_Internal = 0,
          OledVccControl_External = 1,
 };
@@ -131,7 +131,9 @@ public:
    /// Buffer type for display data
    /// This is prefixed by a command byte for transmission to OLED
    struct Buffer {
+      /// Command byte
       uint8_t  controlByte;
+      /// Data values
       uint8_t  buffer[WIDTH * ((HEIGHT + 7) / 8)];
    };
 #pragma pack(pop)
@@ -199,6 +201,15 @@ public:
      * The OLED is not affected until refreshImage() is called.
      */
     Oled &clearDisplay();
+
+    /**
+     * Control display contrast/brightness
+     *
+     *  Has no appreciable effect on display tested
+     *
+     * @param level
+     */
+    void setContrast(uint8_t level);
 
     /**
      * Refresh OLED from frame buffer

@@ -2,6 +2,7 @@
 Devices using this peripheral: 
       MK21DA5
       MK21FA12
+      MK22FA12
 -->
       <peripheral>
          <?sourceFile "USB0_OTG_B" ?>

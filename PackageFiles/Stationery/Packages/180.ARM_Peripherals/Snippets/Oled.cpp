@@ -120,6 +120,22 @@ void Oled::initialise() {
 }
 
 /**
+ * Control display contrast/brightness
+ *
+ *  Has no appreciable effect on display tested
+ *
+ * @param level
+ */
+void Oled::setContrast(uint8_t level) {
+   uint8_t contrastCommand[] = {
+         MULTIPLE_COMMANDS,                    // Co = 0, D/C = 0
+         SSD1306_SETCONTRAST,                  // 0x81
+         level,
+   };
+   i2c.transmit(I2C_ADDRESS, sizeof(contrastCommand), contrastCommand);
+}
+
+/**
  * Refresh OLED from frame buffer
  */
 void Oled::refreshImage() {

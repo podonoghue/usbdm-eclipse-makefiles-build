@@ -5,7 +5,7 @@
  *           Equivalent: 
  *
  * @version  V1.6
- * @date     2019/06
+ * @date     2021/06
  *
  *******************************************************************************************************/
 
@@ -39,7 +39,7 @@ typedef enum {
   DebugMonitor_IRQn             =  -4,   /**<  12 Debug Monitor                                                                    */
   PendSV_IRQn                   =  -2,   /**<  14 Pendable request for system service                                              */
   SysTick_IRQn                  =  -1,   /**<  15 System Tick Timer                                                                */
-/* ----------------------   MK21F12 VectorTable                      ---------------------- */
+/* ----------------------   MK21FA12 VectorTable                     ---------------------- */
   DMA0_IRQn                     =   0,   /**<  16 Direct memory access controller                                                  */
   DMA1_IRQn                     =   1,   /**<  17 Direct memory access controller                                                  */
   DMA2_IRQn                     =   2,   /**<  18 Direct memory access controller                                                  */
@@ -57,6 +57,7 @@ typedef enum {
   DMA14_IRQn                    =  14,   /**<  30 Direct memory access controller                                                  */
   DMA15_IRQn                    =  15,   /**<  31 Direct memory access controller                                                  */
   DMA_Error_IRQn                =  16,   /**<  32 DMA error interrupt all channels                                                 */
+  MCM_IRQn                      =  17,   /**<  33 Miscellaneous Control Module                                                     */
   FTF_Command_IRQn              =  18,   /**<  34 Flash Memory Interface                                                           */
   FTF_ReadCollision_IRQn        =  19,   /**<  35 Flash Memory Interface                                                           */
   PMC_IRQn                      =  20,   /**<  36 Power Management Controller                                                      */
@@ -69,6 +70,7 @@ typedef enum {
   SPI1_IRQn                     =  27,   /**<  43 Serial Peripheral Interface                                                      */
   I2S0_Tx_IRQn                  =  28,   /**<  44 Synchronous Serial Interface                                                     */
   I2S0_Rx_IRQn                  =  29,   /**<  45 Synchronous Serial Interface                                                     */
+  UART0_Lon_IRQn                =  30,   /**<  46 Serial Communication Interface                                                   */
   UART0_RxTx_IRQn               =  31,   /**<  47 Serial Communication Interface                                                   */
   UART0_Error_IRQn              =  32,   /**<  48 Serial Communication Interface                                                   */
   UART1_RxTx_IRQn               =  33,   /**<  49 Serial Communication Interface                                                   */
@@ -94,12 +96,14 @@ typedef enum {
   USB0_IRQn                     =  53,   /**<  69 Universal Serial Bus                                                             */
   USBDCD0_IRQn                  =  54,   /**<  70 USB Device Charger Detection                                                     */
   DAC0_IRQn                     =  56,   /**<  72 Digital to Analogue Converter                                                    */
+  MCG_IRQn                      =  57,   /**<  73 Multipurpose Clock Generator                                                     */
   LPTMR0_IRQn                   =  58,   /**<  74 Low Power Timer                                                                  */
   PORTA_IRQn                    =  59,   /**<  75 General Purpose Input/Output                                                     */
   PORTB_IRQn                    =  60,   /**<  76 General Purpose Input/Output                                                     */
   PORTC_IRQn                    =  61,   /**<  77 General Purpose Input/Output                                                     */
   PORTD_IRQn                    =  62,   /**<  78 General Purpose Input/Output                                                     */
   PORTE_IRQn                    =  63,   /**<  79 General Purpose Input/Output                                                     */
+  SWI_IRQn                      =  64,   /**<  80 Software interrupt                                                               */
   SPI2_IRQn                     =  65,   /**<  81 Serial Peripheral Interface                                                      */
   UART4_RxTx_IRQn               =  66,   /**<  82 Serial Communication Interface                                                   */
   UART4_Error_IRQn              =  67,   /**<  83 Serial Communication Interface                                                   */
@@ -154,6 +158,7 @@ extern void DMA13_IRQHandler(void);                  /**< Direct memory access c
 extern void DMA14_IRQHandler(void);                  /**< Direct memory access controller                                                  */
 extern void DMA15_IRQHandler(void);                  /**< Direct memory access controller                                                  */
 extern void DMA_Error_IRQHandler(void);              /**< DMA error interrupt all channels                                                 */
+extern void MCM_IRQHandler(void);                    /**< Miscellaneous Control Module                                                     */
 extern void FTF_Command_IRQHandler(void);            /**< Flash Memory Interface                                                           */
 extern void FTF_ReadCollision_IRQHandler(void);      /**< Flash Memory Interface                                                           */
 extern void PMC_IRQHandler(void);                    /**< Power Management Controller                                                      */
@@ -166,6 +171,7 @@ extern void SPI0_IRQHandler(void);                   /**< Serial Peripheral Inte
 extern void SPI1_IRQHandler(void);                   /**< Serial Peripheral Interface                                                      */
 extern void I2S0_Tx_IRQHandler(void);                /**< Synchronous Serial Interface                                                     */
 extern void I2S0_Rx_IRQHandler(void);                /**< Synchronous Serial Interface                                                     */
+extern void UART0_Lon_IRQHandler(void);              /**< Serial Communication Interface                                                   */
 extern void UART0_RxTx_IRQHandler(void);             /**< Serial Communication Interface                                                   */
 extern void UART0_Error_IRQHandler(void);            /**< Serial Communication Interface                                                   */
 extern void UART1_RxTx_IRQHandler(void);             /**< Serial Communication Interface                                                   */
@@ -191,12 +197,14 @@ extern void PDB0_IRQHandler(void);                   /**< Programmable Delay Blo
 extern void USB0_IRQHandler(void);                   /**< Universal Serial Bus                                                             */
 extern void USBDCD0_IRQHandler(void);                /**< USB Device Charger Detection                                                     */
 extern void DAC0_IRQHandler(void);                   /**< Digital to Analogue Converter                                                    */
+extern void MCG_IRQHandler(void);                    /**< Multipurpose Clock Generator                                                     */
 extern void LPTMR0_IRQHandler(void);                 /**< Low Power Timer                                                                  */
 extern void PORTA_IRQHandler(void);                  /**< General Purpose Input/Output                                                     */
 extern void PORTB_IRQHandler(void);                  /**< General Purpose Input/Output                                                     */
 extern void PORTC_IRQHandler(void);                  /**< General Purpose Input/Output                                                     */
 extern void PORTD_IRQHandler(void);                  /**< General Purpose Input/Output                                                     */
 extern void PORTE_IRQHandler(void);                  /**< General Purpose Input/Output                                                     */
+extern void SWI_IRQHandler(void);                    /**< Software interrupt                                                               */
 extern void SPI2_IRQHandler(void);                   /**< Serial Peripheral Interface                                                      */
 extern void UART4_RxTx_IRQHandler(void);             /**< Serial Communication Interface                                                   */
 extern void UART4_Error_IRQHandler(void);            /**< Serial Communication Interface                                                   */
@@ -531,221 +539,6 @@ typedef struct ADC_Type {
 
 /**
  * @} */ /* End group ADC_Peripheral_access_layer_GROUP 
- */
-/**
-* @addtogroup AIPS_Peripheral_access_layer_GROUP AIPS Peripheral Access Layer
-* @brief C Struct for AIPS
-* @{
-*/
-
-/* ================================================================================ */
-/* ================           AIPS0 (file:AIPS0_Lite_8Mx16P)       ================ */
-/* ================================================================================ */
-
-/**
- * @brief AIPS-Lite Bridge
- */
-/**
-* @addtogroup AIPS_structs_GROUP AIPS struct
-* @brief Struct for AIPS
-* @{
-*/
-typedef struct AIPS_Type {
-   __IO uint32_t  MPRA;                         /**< 0000: Master Privilege Register A                                  */
-        uint8_t   RESERVED_0[28];               /**< 0004: 0x1C bytes                                                   */
-   __IO uint32_t  PACR[16];                     /**< 0020: Peripheral Access Control Register                           */
-} AIPS_Type;
-
-/**
- * @} */ /* End group AIPS_structs_GROUP 
- */
-
-/* -------------------------------------------------------------------------------- */
-/* -----------     'AIPS0' Position & Mask macros                       ----------- */
-/* -------------------------------------------------------------------------------- */
-
-/**
-* @addtogroup AIPS_Register_Masks_GROUP AIPS Register Masks
-* @brief Register Masks for AIPS
-* @{
-*/
-/* ------- MPRA Bit Fields                          ------ */
-#define AIPS_MPRA_MPL7_MASK                      (0x1U)                                              /*!< AIPS0_MPRA.MPL7 Mask                    */
-#define AIPS_MPRA_MPL7_SHIFT                     (0U)                                                /*!< AIPS0_MPRA.MPL7 Position                */
-#define AIPS_MPRA_MPL7(x)                        (((uint32_t)(((uint32_t)(x))<<0U))&0x1UL)           /*!< AIPS0_MPRA.MPL7 Field                   */
-#define AIPS_MPRA_MTW7_MASK                      (0x2U)                                              /*!< AIPS0_MPRA.MTW7 Mask                    */
-#define AIPS_MPRA_MTW7_SHIFT                     (1U)                                                /*!< AIPS0_MPRA.MTW7 Position                */
-#define AIPS_MPRA_MTW7(x)                        (((uint32_t)(((uint32_t)(x))<<1U))&0x2UL)           /*!< AIPS0_MPRA.MTW7 Field                   */
-#define AIPS_MPRA_MTR7_MASK                      (0x4U)                                              /*!< AIPS0_MPRA.MTR7 Mask                    */
-#define AIPS_MPRA_MTR7_SHIFT                     (2U)                                                /*!< AIPS0_MPRA.MTR7 Position                */
-#define AIPS_MPRA_MTR7(x)                        (((uint32_t)(((uint32_t)(x))<<2U))&0x4UL)           /*!< AIPS0_MPRA.MTR7 Field                   */
-#define AIPS_MPRA_MPL6_MASK                      (0x10U)                                             /*!< AIPS0_MPRA.MPL6 Mask                    */
-#define AIPS_MPRA_MPL6_SHIFT                     (4U)                                                /*!< AIPS0_MPRA.MPL6 Position                */
-#define AIPS_MPRA_MPL6(x)                        (((uint32_t)(((uint32_t)(x))<<4U))&0x10UL)          /*!< AIPS0_MPRA.MPL6 Field                   */
-#define AIPS_MPRA_MTW6_MASK                      (0x20U)                                             /*!< AIPS0_MPRA.MTW6 Mask                    */
-#define AIPS_MPRA_MTW6_SHIFT                     (5U)                                                /*!< AIPS0_MPRA.MTW6 Position                */
-#define AIPS_MPRA_MTW6(x)                        (((uint32_t)(((uint32_t)(x))<<5U))&0x20UL)          /*!< AIPS0_MPRA.MTW6 Field                   */
-#define AIPS_MPRA_MTR6_MASK                      (0x40U)                                             /*!< AIPS0_MPRA.MTR6 Mask                    */
-#define AIPS_MPRA_MTR6_SHIFT                     (6U)                                                /*!< AIPS0_MPRA.MTR6 Position                */
-#define AIPS_MPRA_MTR6(x)                        (((uint32_t)(((uint32_t)(x))<<6U))&0x40UL)          /*!< AIPS0_MPRA.MTR6 Field                   */
-#define AIPS_MPRA_MPL5_MASK                      (0x100U)                                            /*!< AIPS0_MPRA.MPL5 Mask                    */
-#define AIPS_MPRA_MPL5_SHIFT                     (8U)                                                /*!< AIPS0_MPRA.MPL5 Position                */
-#define AIPS_MPRA_MPL5(x)                        (((uint32_t)(((uint32_t)(x))<<8U))&0x100UL)         /*!< AIPS0_MPRA.MPL5 Field                   */
-#define AIPS_MPRA_MTW5_MASK                      (0x200U)                                            /*!< AIPS0_MPRA.MTW5 Mask                    */
-#define AIPS_MPRA_MTW5_SHIFT                     (9U)                                                /*!< AIPS0_MPRA.MTW5 Position                */
-#define AIPS_MPRA_MTW5(x)                        (((uint32_t)(((uint32_t)(x))<<9U))&0x200UL)         /*!< AIPS0_MPRA.MTW5 Field                   */
-#define AIPS_MPRA_MTR5_MASK                      (0x400U)                                            /*!< AIPS0_MPRA.MTR5 Mask                    */
-#define AIPS_MPRA_MTR5_SHIFT                     (10U)                                               /*!< AIPS0_MPRA.MTR5 Position                */
-#define AIPS_MPRA_MTR5(x)                        (((uint32_t)(((uint32_t)(x))<<10U))&0x400UL)        /*!< AIPS0_MPRA.MTR5 Field                   */
-#define AIPS_MPRA_MPL4_MASK                      (0x1000U)                                           /*!< AIPS0_MPRA.MPL4 Mask                    */
-#define AIPS_MPRA_MPL4_SHIFT                     (12U)                                               /*!< AIPS0_MPRA.MPL4 Position                */
-#define AIPS_MPRA_MPL4(x)                        (((uint32_t)(((uint32_t)(x))<<12U))&0x1000UL)       /*!< AIPS0_MPRA.MPL4 Field                   */
-#define AIPS_MPRA_MTW4_MASK                      (0x2000U)                                           /*!< AIPS0_MPRA.MTW4 Mask                    */
-#define AIPS_MPRA_MTW4_SHIFT                     (13U)                                               /*!< AIPS0_MPRA.MTW4 Position                */
-#define AIPS_MPRA_MTW4(x)                        (((uint32_t)(((uint32_t)(x))<<13U))&0x2000UL)       /*!< AIPS0_MPRA.MTW4 Field                   */
-#define AIPS_MPRA_MTR4_MASK                      (0x4000U)                                           /*!< AIPS0_MPRA.MTR4 Mask                    */
-#define AIPS_MPRA_MTR4_SHIFT                     (14U)                                               /*!< AIPS0_MPRA.MTR4 Position                */
-#define AIPS_MPRA_MTR4(x)                        (((uint32_t)(((uint32_t)(x))<<14U))&0x4000UL)       /*!< AIPS0_MPRA.MTR4 Field                   */
-#define AIPS_MPRA_MPL3_MASK                      (0x10000U)                                          /*!< AIPS0_MPRA.MPL3 Mask                    */
-#define AIPS_MPRA_MPL3_SHIFT                     (16U)                                               /*!< AIPS0_MPRA.MPL3 Position                */
-#define AIPS_MPRA_MPL3(x)                        (((uint32_t)(((uint32_t)(x))<<16U))&0x10000UL)      /*!< AIPS0_MPRA.MPL3 Field                   */
-#define AIPS_MPRA_MTW3_MASK                      (0x20000U)                                          /*!< AIPS0_MPRA.MTW3 Mask                    */
-#define AIPS_MPRA_MTW3_SHIFT                     (17U)                                               /*!< AIPS0_MPRA.MTW3 Position                */
-#define AIPS_MPRA_MTW3(x)                        (((uint32_t)(((uint32_t)(x))<<17U))&0x20000UL)      /*!< AIPS0_MPRA.MTW3 Field                   */
-#define AIPS_MPRA_MTR3_MASK                      (0x40000U)                                          /*!< AIPS0_MPRA.MTR3 Mask                    */
-#define AIPS_MPRA_MTR3_SHIFT                     (18U)                                               /*!< AIPS0_MPRA.MTR3 Position                */
-#define AIPS_MPRA_MTR3(x)                        (((uint32_t)(((uint32_t)(x))<<18U))&0x40000UL)      /*!< AIPS0_MPRA.MTR3 Field                   */
-#define AIPS_MPRA_MPL2_MASK                      (0x100000U)                                         /*!< AIPS0_MPRA.MPL2 Mask                    */
-#define AIPS_MPRA_MPL2_SHIFT                     (20U)                                               /*!< AIPS0_MPRA.MPL2 Position                */
-#define AIPS_MPRA_MPL2(x)                        (((uint32_t)(((uint32_t)(x))<<20U))&0x100000UL)     /*!< AIPS0_MPRA.MPL2 Field                   */
-#define AIPS_MPRA_MTW2_MASK                      (0x200000U)                                         /*!< AIPS0_MPRA.MTW2 Mask                    */
-#define AIPS_MPRA_MTW2_SHIFT                     (21U)                                               /*!< AIPS0_MPRA.MTW2 Position                */
-#define AIPS_MPRA_MTW2(x)                        (((uint32_t)(((uint32_t)(x))<<21U))&0x200000UL)     /*!< AIPS0_MPRA.MTW2 Field                   */
-#define AIPS_MPRA_MTR2_MASK                      (0x400000U)                                         /*!< AIPS0_MPRA.MTR2 Mask                    */
-#define AIPS_MPRA_MTR2_SHIFT                     (22U)                                               /*!< AIPS0_MPRA.MTR2 Position                */
-#define AIPS_MPRA_MTR2(x)                        (((uint32_t)(((uint32_t)(x))<<22U))&0x400000UL)     /*!< AIPS0_MPRA.MTR2 Field                   */
-#define AIPS_MPRA_MPL1_MASK                      (0x1000000U)                                        /*!< AIPS0_MPRA.MPL1 Mask                    */
-#define AIPS_MPRA_MPL1_SHIFT                     (24U)                                               /*!< AIPS0_MPRA.MPL1 Position                */
-#define AIPS_MPRA_MPL1(x)                        (((uint32_t)(((uint32_t)(x))<<24U))&0x1000000UL)    /*!< AIPS0_MPRA.MPL1 Field                   */
-#define AIPS_MPRA_MTW1_MASK                      (0x2000000U)                                        /*!< AIPS0_MPRA.MTW1 Mask                    */
-#define AIPS_MPRA_MTW1_SHIFT                     (25U)                                               /*!< AIPS0_MPRA.MTW1 Position                */
-#define AIPS_MPRA_MTW1(x)                        (((uint32_t)(((uint32_t)(x))<<25U))&0x2000000UL)    /*!< AIPS0_MPRA.MTW1 Field                   */
-#define AIPS_MPRA_MTR1_MASK                      (0x4000000U)                                        /*!< AIPS0_MPRA.MTR1 Mask                    */
-#define AIPS_MPRA_MTR1_SHIFT                     (26U)                                               /*!< AIPS0_MPRA.MTR1 Position                */
-#define AIPS_MPRA_MTR1(x)                        (((uint32_t)(((uint32_t)(x))<<26U))&0x4000000UL)    /*!< AIPS0_MPRA.MTR1 Field                   */
-#define AIPS_MPRA_MPL0_MASK                      (0x10000000U)                                       /*!< AIPS0_MPRA.MPL0 Mask                    */
-#define AIPS_MPRA_MPL0_SHIFT                     (28U)                                               /*!< AIPS0_MPRA.MPL0 Position                */
-#define AIPS_MPRA_MPL0(x)                        (((uint32_t)(((uint32_t)(x))<<28U))&0x10000000UL)   /*!< AIPS0_MPRA.MPL0 Field                   */
-#define AIPS_MPRA_MTW0_MASK                      (0x20000000U)                                       /*!< AIPS0_MPRA.MTW0 Mask                    */
-#define AIPS_MPRA_MTW0_SHIFT                     (29U)                                               /*!< AIPS0_MPRA.MTW0 Position                */
-#define AIPS_MPRA_MTW0(x)                        (((uint32_t)(((uint32_t)(x))<<29U))&0x20000000UL)   /*!< AIPS0_MPRA.MTW0 Field                   */
-#define AIPS_MPRA_MTR0_MASK                      (0x40000000U)                                       /*!< AIPS0_MPRA.MTR0 Mask                    */
-#define AIPS_MPRA_MTR0_SHIFT                     (30U)                                               /*!< AIPS0_MPRA.MTR0 Position                */
-#define AIPS_MPRA_MTR0(x)                        (((uint32_t)(((uint32_t)(x))<<30U))&0x40000000UL)   /*!< AIPS0_MPRA.MTR0 Field                   */
-/* ------- PACR Bit Fields                          ------ */
-#define AIPS_PACR_TP7_MASK                       (0x1U)                                              /*!< AIPS0_PACR.TP7 Mask                     */
-#define AIPS_PACR_TP7_SHIFT                      (0U)                                                /*!< AIPS0_PACR.TP7 Position                 */
-#define AIPS_PACR_TP7(x)                         (((uint32_t)(((uint32_t)(x))<<0U))&0x1UL)           /*!< AIPS0_PACR.TP7 Field                    */
-#define AIPS_PACR_WP7_MASK                       (0x2U)                                              /*!< AIPS0_PACR.WP7 Mask                     */
-#define AIPS_PACR_WP7_SHIFT                      (1U)                                                /*!< AIPS0_PACR.WP7 Position                 */
-#define AIPS_PACR_WP7(x)                         (((uint32_t)(((uint32_t)(x))<<1U))&0x2UL)           /*!< AIPS0_PACR.WP7 Field                    */
-#define AIPS_PACR_SP7_MASK                       (0x4U)                                              /*!< AIPS0_PACR.SP7 Mask                     */
-#define AIPS_PACR_SP7_SHIFT                      (2U)                                                /*!< AIPS0_PACR.SP7 Position                 */
-#define AIPS_PACR_SP7(x)                         (((uint32_t)(((uint32_t)(x))<<2U))&0x4UL)           /*!< AIPS0_PACR.SP7 Field                    */
-#define AIPS_PACR_TP6_MASK                       (0x10U)                                             /*!< AIPS0_PACR.TP6 Mask                     */
-#define AIPS_PACR_TP6_SHIFT                      (4U)                                                /*!< AIPS0_PACR.TP6 Position                 */
-#define AIPS_PACR_TP6(x)                         (((uint32_t)(((uint32_t)(x))<<4U))&0x10UL)          /*!< AIPS0_PACR.TP6 Field                    */
-#define AIPS_PACR_WP6_MASK                       (0x20U)                                             /*!< AIPS0_PACR.WP6 Mask                     */
-#define AIPS_PACR_WP6_SHIFT                      (5U)                                                /*!< AIPS0_PACR.WP6 Position                 */
-#define AIPS_PACR_WP6(x)                         (((uint32_t)(((uint32_t)(x))<<5U))&0x20UL)          /*!< AIPS0_PACR.WP6 Field                    */
-#define AIPS_PACR_SP6_MASK                       (0x40U)                                             /*!< AIPS0_PACR.SP6 Mask                     */
-#define AIPS_PACR_SP6_SHIFT                      (6U)                                                /*!< AIPS0_PACR.SP6 Position                 */
-#define AIPS_PACR_SP6(x)                         (((uint32_t)(((uint32_t)(x))<<6U))&0x40UL)          /*!< AIPS0_PACR.SP6 Field                    */
-#define AIPS_PACR_TP5_MASK                       (0x100U)                                            /*!< AIPS0_PACR.TP5 Mask                     */
-#define AIPS_PACR_TP5_SHIFT                      (8U)                                                /*!< AIPS0_PACR.TP5 Position                 */
-#define AIPS_PACR_TP5(x)                         (((uint32_t)(((uint32_t)(x))<<8U))&0x100UL)         /*!< AIPS0_PACR.TP5 Field                    */
-#define AIPS_PACR_WP5_MASK                       (0x200U)                                            /*!< AIPS0_PACR.WP5 Mask                     */
-#define AIPS_PACR_WP5_SHIFT                      (9U)                                                /*!< AIPS0_PACR.WP5 Position                 */
-#define AIPS_PACR_WP5(x)                         (((uint32_t)(((uint32_t)(x))<<9U))&0x200UL)         /*!< AIPS0_PACR.WP5 Field                    */
-#define AIPS_PACR_SP5_MASK                       (0x400U)                                            /*!< AIPS0_PACR.SP5 Mask                     */
-#define AIPS_PACR_SP5_SHIFT                      (10U)                                               /*!< AIPS0_PACR.SP5 Position                 */
-#define AIPS_PACR_SP5(x)                         (((uint32_t)(((uint32_t)(x))<<10U))&0x400UL)        /*!< AIPS0_PACR.SP5 Field                    */
-#define AIPS_PACR_TP4_MASK                       (0x1000U)                                           /*!< AIPS0_PACR.TP4 Mask                     */
-#define AIPS_PACR_TP4_SHIFT                      (12U)                                               /*!< AIPS0_PACR.TP4 Position                 */
-#define AIPS_PACR_TP4(x)                         (((uint32_t)(((uint32_t)(x))<<12U))&0x1000UL)       /*!< AIPS0_PACR.TP4 Field                    */
-#define AIPS_PACR_WP4_MASK                       (0x2000U)                                           /*!< AIPS0_PACR.WP4 Mask                     */
-#define AIPS_PACR_WP4_SHIFT                      (13U)                                               /*!< AIPS0_PACR.WP4 Position                 */
-#define AIPS_PACR_WP4(x)                         (((uint32_t)(((uint32_t)(x))<<13U))&0x2000UL)       /*!< AIPS0_PACR.WP4 Field                    */
-#define AIPS_PACR_SP4_MASK                       (0x4000U)                                           /*!< AIPS0_PACR.SP4 Mask                     */
-#define AIPS_PACR_SP4_SHIFT                      (14U)                                               /*!< AIPS0_PACR.SP4 Position                 */
-#define AIPS_PACR_SP4(x)                         (((uint32_t)(((uint32_t)(x))<<14U))&0x4000UL)       /*!< AIPS0_PACR.SP4 Field                    */
-#define AIPS_PACR_TP3_MASK                       (0x10000U)                                          /*!< AIPS0_PACR.TP3 Mask                     */
-#define AIPS_PACR_TP3_SHIFT                      (16U)                                               /*!< AIPS0_PACR.TP3 Position                 */
-#define AIPS_PACR_TP3(x)                         (((uint32_t)(((uint32_t)(x))<<16U))&0x10000UL)      /*!< AIPS0_PACR.TP3 Field                    */
-#define AIPS_PACR_WP3_MASK                       (0x20000U)                                          /*!< AIPS0_PACR.WP3 Mask                     */
-#define AIPS_PACR_WP3_SHIFT                      (17U)                                               /*!< AIPS0_PACR.WP3 Position                 */
-#define AIPS_PACR_WP3(x)                         (((uint32_t)(((uint32_t)(x))<<17U))&0x20000UL)      /*!< AIPS0_PACR.WP3 Field                    */
-#define AIPS_PACR_SP3_MASK                       (0x40000U)                                          /*!< AIPS0_PACR.SP3 Mask                     */
-#define AIPS_PACR_SP3_SHIFT                      (18U)                                               /*!< AIPS0_PACR.SP3 Position                 */
-#define AIPS_PACR_SP3(x)                         (((uint32_t)(((uint32_t)(x))<<18U))&0x40000UL)      /*!< AIPS0_PACR.SP3 Field                    */
-#define AIPS_PACR_TP2_MASK                       (0x100000U)                                         /*!< AIPS0_PACR.TP2 Mask                     */
-#define AIPS_PACR_TP2_SHIFT                      (20U)                                               /*!< AIPS0_PACR.TP2 Position                 */
-#define AIPS_PACR_TP2(x)                         (((uint32_t)(((uint32_t)(x))<<20U))&0x100000UL)     /*!< AIPS0_PACR.TP2 Field                    */
-#define AIPS_PACR_WP2_MASK                       (0x200000U)                                         /*!< AIPS0_PACR.WP2 Mask                     */
-#define AIPS_PACR_WP2_SHIFT                      (21U)                                               /*!< AIPS0_PACR.WP2 Position                 */
-#define AIPS_PACR_WP2(x)                         (((uint32_t)(((uint32_t)(x))<<21U))&0x200000UL)     /*!< AIPS0_PACR.WP2 Field                    */
-#define AIPS_PACR_SP2_MASK                       (0x400000U)                                         /*!< AIPS0_PACR.SP2 Mask                     */
-#define AIPS_PACR_SP2_SHIFT                      (22U)                                               /*!< AIPS0_PACR.SP2 Position                 */
-#define AIPS_PACR_SP2(x)                         (((uint32_t)(((uint32_t)(x))<<22U))&0x400000UL)     /*!< AIPS0_PACR.SP2 Field                    */
-#define AIPS_PACR_TP1_MASK                       (0x1000000U)                                        /*!< AIPS0_PACR.TP1 Mask                     */
-#define AIPS_PACR_TP1_SHIFT                      (24U)                                               /*!< AIPS0_PACR.TP1 Position                 */
-#define AIPS_PACR_TP1(x)                         (((uint32_t)(((uint32_t)(x))<<24U))&0x1000000UL)    /*!< AIPS0_PACR.TP1 Field                    */
-#define AIPS_PACR_WP1_MASK                       (0x2000000U)                                        /*!< AIPS0_PACR.WP1 Mask                     */
-#define AIPS_PACR_WP1_SHIFT                      (25U)                                               /*!< AIPS0_PACR.WP1 Position                 */
-#define AIPS_PACR_WP1(x)                         (((uint32_t)(((uint32_t)(x))<<25U))&0x2000000UL)    /*!< AIPS0_PACR.WP1 Field                    */
-#define AIPS_PACR_SP1_MASK                       (0x4000000U)                                        /*!< AIPS0_PACR.SP1 Mask                     */
-#define AIPS_PACR_SP1_SHIFT                      (26U)                                               /*!< AIPS0_PACR.SP1 Position                 */
-#define AIPS_PACR_SP1(x)                         (((uint32_t)(((uint32_t)(x))<<26U))&0x4000000UL)    /*!< AIPS0_PACR.SP1 Field                    */
-#define AIPS_PACR_TP0_MASK                       (0x10000000U)                                       /*!< AIPS0_PACR.TP0 Mask                     */
-#define AIPS_PACR_TP0_SHIFT                      (28U)                                               /*!< AIPS0_PACR.TP0 Position                 */
-#define AIPS_PACR_TP0(x)                         (((uint32_t)(((uint32_t)(x))<<28U))&0x10000000UL)   /*!< AIPS0_PACR.TP0 Field                    */
-#define AIPS_PACR_WP0_MASK                       (0x20000000U)                                       /*!< AIPS0_PACR.WP0 Mask                     */
-#define AIPS_PACR_WP0_SHIFT                      (29U)                                               /*!< AIPS0_PACR.WP0 Position                 */
-#define AIPS_PACR_WP0(x)                         (((uint32_t)(((uint32_t)(x))<<29U))&0x20000000UL)   /*!< AIPS0_PACR.WP0 Field                    */
-#define AIPS_PACR_SP0_MASK                       (0x40000000U)                                       /*!< AIPS0_PACR.SP0 Mask                     */
-#define AIPS_PACR_SP0_SHIFT                      (30U)                                               /*!< AIPS0_PACR.SP0 Position                 */
-#define AIPS_PACR_SP0(x)                         (((uint32_t)(((uint32_t)(x))<<30U))&0x40000000UL)   /*!< AIPS0_PACR.SP0 Field                    */
-/**
- * @} */ /* End group AIPS_Register_Masks_GROUP 
- */
-
-/* AIPS0 - Peripheral instance base addresses */
-#define AIPS0_BasePtr                  0x40000000UL //!< Peripheral base address
-#define AIPS0                          ((AIPS_Type *) AIPS0_BasePtr) //!< Freescale base pointer
-#define AIPS0_BASE_PTR                 (AIPS0) //!< Freescale style base pointer
-/**
- * @} */ /* End group AIPS_Peripheral_access_layer_GROUP 
- */
-/**
-* @addtogroup AIPS_Peripheral_access_layer_GROUP AIPS Peripheral Access Layer
-* @brief C Struct for AIPS
-* @{
-*/
-
-/* ================================================================================ */
-/* ================           AIPS1 (derived from AIPS0)           ================ */
-/* ================================================================================ */
-
-/**
- * @brief AIPS-Lite Bridge
- */
-
-/* AIPS1 - Peripheral instance base addresses */
-#define AIPS1_BasePtr                  0x40080000UL //!< Peripheral base address
-#define AIPS1                          ((AIPS_Type *) AIPS1_BasePtr) //!< Freescale base pointer
-#define AIPS1_BASE_PTR                 (AIPS1) //!< Freescale style base pointer
-/**
- * @} */ /* End group AIPS_Peripheral_access_layer_GROUP 
  */
 /**
 * @addtogroup AXBS_Peripheral_access_layer_GROUP AXBS Peripheral Access Layer
@@ -2824,7 +2617,7 @@ typedef struct DMA_Type {
 */
 
 /* ================================================================================ */
-/* ================           DMAMUX0 (file:DMAMUX0_16CH_TRIG)       ================ */
+/* ================           DMAMUX0 (file:DMAMUX0_16CH_TRIG_MK22FA12)       ================ */
 /* ================================================================================ */
 
 /**
@@ -2876,65 +2669,57 @@ typedef struct DMAMUX_Type {
  */
 typedef enum DmaSlot {
    Dma0Slot_Disabled                   =        0, //!<  Disabled
-   Dma0Slot_Slot1                      =        1, //!<  Slot1
-   Dma0Slot_Slot2                      =        2, //!<  Slot2
-   Dma0Slot_Slot3                      =        3, //!<  Slot3
-   Dma0Slot_Slot4                      =        4, //!<  Slot4
-   Dma0Slot_Slot5                      =        5, //!<  Slot5
-   Dma0Slot_Slot6                      =        6, //!<  Slot6
-   Dma0Slot_Slot7                      =        7, //!<  Slot7
-   Dma0Slot_Slot8                      =        8, //!<  Slot8
-   Dma0Slot_Slot9                      =        9, //!<  Slot9
-   Dma0Slot_Slot10                     =       10, //!<  Slot10
-   Dma0Slot_Slot11                     =       11, //!<  Slot11
-   Dma0Slot_Slot12                     =       12, //!<  Slot12
-   Dma0Slot_Slot13                     =       13, //!<  Slot13
-   Dma0Slot_Slot14                     =       14, //!<  Slot14
-   Dma0Slot_Slot15                     =       15, //!<  Slot15
-   Dma0Slot_Slot16                     =       16, //!<  Slot16
-   Dma0Slot_Slot17                     =       17, //!<  Slot17
-   Dma0Slot_Slot18                     =       18, //!<  Slot18
-   Dma0Slot_Slot19                     =       19, //!<  Slot19
-   Dma0Slot_Slot20                     =       20, //!<  Slot20
-   Dma0Slot_Slot21                     =       21, //!<  Slot21
-   Dma0Slot_Slot22                     =       22, //!<  Slot22
-   Dma0Slot_Slot23                     =       23, //!<  Slot23
-   Dma0Slot_Slot24                     =       24, //!<  Slot24
-   Dma0Slot_Slot25                     =       25, //!<  Slot25
-   Dma0Slot_Slot26                     =       26, //!<  Slot26
-   Dma0Slot_Slot27                     =       27, //!<  Slot27
-   Dma0Slot_Slot28                     =       28, //!<  Slot28
-   Dma0Slot_Slot29                     =       29, //!<  Slot29
-   Dma0Slot_Slot30                     =       30, //!<  Slot30
-   Dma0Slot_Slot31                     =       31, //!<  Slot31
-   Dma0Slot_Slot32                     =       32, //!<  Slot32
-   Dma0Slot_Slot33                     =       33, //!<  Slot33
-   Dma0Slot_Slot34                     =       34, //!<  Slot34
-   Dma0Slot_Slot35                     =       35, //!<  Slot35
-   Dma0Slot_Slot36                     =       36, //!<  Slot36
-   Dma0Slot_Slot37                     =       37, //!<  Slot37
-   Dma0Slot_Slot38                     =       38, //!<  Slot38
-   Dma0Slot_Slot39                     =       39, //!<  Slot39
-   Dma0Slot_Slot40                     =       40, //!<  Slot40
-   Dma0Slot_Slot41                     =       41, //!<  Slot41
-   Dma0Slot_Slot42                     =       42, //!<  Slot42
-   Dma0Slot_Slot43                     =       43, //!<  Slot43
-   Dma0Slot_Slot44                     =       44, //!<  Slot44
-   Dma0Slot_Slot45                     =       45, //!<  Slot45
-   Dma0Slot_Slot46                     =       46, //!<  Slot46
-   Dma0Slot_Slot47                     =       47, //!<  Slot47
-   Dma0Slot_Slot48                     =       48, //!<  Slot48
-   Dma0Slot_Slot49                     =       49, //!<  Slot49
-   Dma0Slot_Slot50                     =       50, //!<  Slot50
-   Dma0Slot_Slot51                     =       51, //!<  Slot51
-   Dma0Slot_Slot52                     =       52, //!<  Slot52
-   Dma0Slot_Slot53                     =       53, //!<  Slot53
-   Dma0Slot_Slot54                     =       54, //!<  Slot54
-   Dma0Slot_Slot55                     =       55, //!<  Slot55
-   Dma0Slot_Slot56                     =       56, //!<  Slot56
-   Dma0Slot_Slot57                     =       57, //!<  Slot57
-   Dma0Slot_Slot58                     =       58, //!<  Slot58
-   Dma0Slot_Slot59                     =       59, //!<  Slot59
+   Dma0Slot_UART0_Rx                   =        2, //!<  UART0 Receive
+   Dma0Slot_UART0_Tx                   =        3, //!<  UART0 Transmit
+   Dma0Slot_UART1_Rx                   =        4, //!<  UART1 Receive
+   Dma0Slot_UART1_Tx                   =        5, //!<  UART1 Transmit
+   Dma0Slot_UART2_Rx                   =        6, //!<  UART2 Receive
+   Dma0Slot_UART2_Tx                   =        7, //!<  UART2 Transmit
+   Dma0Slot_I2S0_Rx                    =       12, //!<  I2S0 Receive
+   Dma0Slot_I2S0_Tx                    =       13, //!<  I2S0 Transmit
+   Dma0Slot_SPI0_Rx                    =       14, //!<  SPI0 Receive
+   Dma0Slot_SPI0_Tx                    =       15, //!<  SPI0 Transmit
+   Dma0Slot_I2C0                       =       18, //!<  I2C0 Receive/Transmit
+   Dma0Slot_I2C1_I2C2                  =       19, //!<  I2C1_I2C2
+   Dma0Slot_FTM0_Ch0                   =       20, //!<  FTM0 Channel 0
+   Dma0Slot_FTM0_Ch1                   =       21, //!<  FTM0 Channel 1
+   Dma0Slot_FTM0_Ch2                   =       22, //!<  FTM0 Channel 2
+   Dma0Slot_FTM0_Ch3                   =       23, //!<  FTM0 Channel 3
+   Dma0Slot_FTM0_Ch4                   =       24, //!<  FTM0 Channel 4
+   Dma0Slot_FTM0_Ch5                   =       25, //!<  FTM0 Channel 5
+   Dma0Slot_FTM0_Ch6                   =       26, //!<  FTM0 Channel 6
+   Dma0Slot_FTM0_Ch7                   =       27, //!<  FTM0 Channel 7
+   Dma0Slot_FTM1_Ch0                   =       28, //!<  FTM1 Channel 0
+   Dma0Slot_FTM1_Ch1                   =       29, //!<  FTM1 Channel 1
+   Dma0Slot_FTM2_Ch0                   =       30, //!<  FTM2 Channel 0
+   Dma0Slot_FTM2_Ch1                   =       31, //!<  FTM2 Channel 1
+   Dma0Slot_FTM3_Ch0                   =       32, //!<  FTM3 Channel 0
+   Dma0Slot_FTM3_Ch1                   =       33, //!<  FTM3 Channel 1
+   Dma0Slot_FTM3_Ch2                   =       34, //!<  FTM3 Channel 2
+   Dma0Slot_FTM3_Ch3                   =       35, //!<  FTM3 Channel 3
+   Dma0Slot_FTM3_Ch4                   =       36, //!<  FTM3 Channel 4
+   Dma0Slot_FTM3_Ch5                   =       37, //!<  FTM3 Channel 5
+   Dma0Slot_FTM3_Ch6                   =       38, //!<  FTM3 Channel 6
+   Dma0Slot_FTM3_Ch7                   =       39, //!<  FTM3 Channel 7
+   Dma0Slot_ADC0                       =       40, //!<  ADC0
+   Dma0Slot_ADC1                       =       41, //!<  ADC1
+   Dma0Slot_CMP0                       =       42, //!<  CMP0
+   Dma0Slot_CMP1                       =       43, //!<  CMP1
+   Dma0Slot_CMP2                       =       44, //!<  CMP2
+   Dma0Slot_DAC0                       =       45, //!<  DAC0
+   Dma0Slot_CMT                        =       47, //!<  CMT
+   Dma0Slot_PDB                        =       48, //!<  PDB
+   Dma0Slot_PortA                      =       49, //!<  Port A
+   Dma0Slot_PortB                      =       50, //!<  Port B
+   Dma0Slot_PortC                      =       51, //!<  Port C
+   Dma0Slot_PortD                      =       52, //!<  Port D
+   Dma0Slot_PortE                      =       53, //!<  Port E
+   Dma0Slot_AlwaysEnabled54            =       54, //!<  AlwaysEnabled54
+   Dma0Slot_AlwaysEnabled55            =       55, //!<  AlwaysEnabled55
+   Dma0Slot_AlwaysEnabled56            =       56, //!<  AlwaysEnabled56
+   Dma0Slot_AlwaysEnabled57            =       57, //!<  AlwaysEnabled57
+   Dma0Slot_AlwaysEnabled58            =       58, //!<  AlwaysEnabled58
+   Dma0Slot_AlwaysEnabled59            =       59, //!<  AlwaysEnabled59
    Dma0Slot_AlwaysEnabled60            =       60, //!<  AlwaysEnabled60
    Dma0Slot_AlwaysEnabled61            =       61, //!<  AlwaysEnabled61
    Dma0Slot_AlwaysEnabled62            =       62, //!<  AlwaysEnabled62
@@ -6854,6 +6639,8 @@ typedef struct MCG_Type {
 #define MCG_BasePtr                    0x40064000UL //!< Peripheral base address
 #define MCG                            ((MCG_Type *) MCG_BasePtr) //!< Freescale base pointer
 #define MCG_BASE_PTR                   (MCG) //!< Freescale style base pointer
+#define MCG_IRQS { MCG_IRQn,  }
+
 /**
  * @} */ /* End group MCG_Peripheral_access_layer_GROUP 
  */
@@ -6995,6 +6782,8 @@ typedef struct MCM_Type {
 #define MCM_BasePtr                    0xE0080000UL //!< Peripheral base address
 #define MCM                            ((MCM_Type *) MCM_BasePtr) //!< Freescale base pointer
 #define MCM_BASE_PTR                   (MCM) //!< Freescale style base pointer
+#define MCM_IRQS { MCM_IRQn,  }
+
 /**
  * @} */ /* End group MCM_Peripheral_access_layer_GROUP 
  */
@@ -7880,7 +7669,7 @@ typedef struct PORT_Type {
 */
 
 /* ================================================================================ */
-/* ================           PORTC (derived from PORTA)           ================ */
+/* ================           PORTC (derived from PORTB)           ================ */
 /* ================================================================================ */
 
 /**
@@ -7903,16 +7692,62 @@ typedef struct PORT_Type {
 */
 
 /* ================================================================================ */
-/* ================           PORTD (derived from PORTA)           ================ */
+/* ================           PORTD (file:PORTD_DFER)              ================ */
 /* ================================================================================ */
 
 /**
  * @brief Pin Control and Interrupts
  */
+/**
+* @addtogroup PORT_structs_GROUP PORT struct
+* @brief Struct for PORT
+* @{
+*/
+typedef struct PORT_DFER_Type {
+   __IO uint32_t  PCR[32];                      /**< 0000: Pin Control Register                                         */
+   __O  uint32_t  GPCLR;                        /**< 0080: Global Pin Control Low Register                              */
+   __O  uint32_t  GPCHR;                        /**< 0084: Global Pin Control High Register                             */
+        uint8_t   RESERVED_0[24];               /**< 0088: 0x18 bytes                                                   */
+   __IO uint32_t  ISFR;                         /**< 00A0: Interrupt Status Flag Register                               */
+        uint8_t   RESERVED_1[28];               /**< 00A4: 0x1C bytes                                                   */
+   __IO uint32_t  DFER;                         /**< 00C0: Digital Filter Enable Register                               */
+   __IO uint32_t  DFCR;                         /**< 00C4: Digital Filter Clock Register                                */
+   __IO uint32_t  DFWR;                         /**< 00C8: Digital Filter Width Register                                */
+} PORT_DFER_Type;
+
+/**
+ * @} */ /* End group PORT_structs_GROUP 
+ */
+
+/* -------------------------------------------------------------------------------- */
+/* -----------     'PORTD' Position & Mask macros                       ----------- */
+/* -------------------------------------------------------------------------------- */
+
+/**
+* @addtogroup PORT_Register_Masks_GROUP PORT Register Masks
+* @brief Register Masks for PORT
+* @{
+*/
+/* ------- PCR Bit Fields                           ------ */
+/* ------- GPCLR Bit Fields                         ------ */
+/* ------- GPCHR Bit Fields                         ------ */
+/* ------- ISFR Bit Fields                          ------ */
+/* ------- DFER Bit Fields                          ------ */
+/* ------- DFCR Bit Fields                          ------ */
+#define PORT_DFCR_CS_MASK                        (0x1U)                                              /*!< PORTD_DFCR.CS Mask                      */
+#define PORT_DFCR_CS_SHIFT                       (0U)                                                /*!< PORTD_DFCR.CS Position                  */
+#define PORT_DFCR_CS(x)                          (((uint32_t)(((uint32_t)(x))<<0U))&0x1UL)           /*!< PORTD_DFCR.CS Field                     */
+/* ------- DFWR Bit Fields                          ------ */
+#define PORT_DFWR_FILT_MASK                      (0x1FU)                                             /*!< PORTD_DFWR.FILT Mask                    */
+#define PORT_DFWR_FILT_SHIFT                     (0U)                                                /*!< PORTD_DFWR.FILT Position                */
+#define PORT_DFWR_FILT(x)                        (((uint32_t)(((uint32_t)(x))<<0U))&0x1FUL)          /*!< PORTD_DFWR.FILT Field                   */
+/**
+ * @} */ /* End group PORT_Register_Masks_GROUP 
+ */
 
 /* PORTD - Peripheral instance base addresses */
 #define PORTD_BasePtr                  0x4004C000UL //!< Peripheral base address
-#define PORTD                          ((PORT_Type *) PORTD_BasePtr) //!< Freescale base pointer
+#define PORTD                          ((PORT_DFER_Type *) PORTD_BasePtr) //!< Freescale base pointer
 #define PORTD_BASE_PTR                 (PORTD) //!< Freescale style base pointer
 #define PORTD_IRQS { PORTD_IRQn,  }
 
@@ -7926,7 +7761,7 @@ typedef struct PORT_Type {
 */
 
 /* ================================================================================ */
-/* ================           PORTE (derived from PORTA)           ================ */
+/* ================           PORTE (derived from PORTB)           ================ */
 /* ================================================================================ */
 
 /**
@@ -9106,7 +8941,7 @@ typedef struct SDHC_Type {
 */
 
 /* ================================================================================ */
-/* ================           SIM (file:SIM_MK21F12)               ================ */
+/* ================           SIM (file:SIM_MK21FA12)              ================ */
 /* ================================================================================ */
 
 /**
@@ -9544,7 +9379,7 @@ typedef struct SIM_Type {
 */
 
 /* ================================================================================ */
-/* ================           SMC (file:SMC_MK22FA12)              ================ */
+/* ================           SMC (file:SMC_MK22F12)               ================ */
 /* ================================================================================ */
 
 /**
@@ -10729,7 +10564,7 @@ typedef struct UART_Type {
 #define UART0_BasePtr                  0x4006A000UL //!< Peripheral base address
 #define UART0                          ((UART_Type *) UART0_BasePtr) //!< Freescale base pointer
 #define UART0_BASE_PTR                 (UART0) //!< Freescale style base pointer
-#define UART0_IRQS { UART0_RxTx_IRQn, UART0_Error_IRQn,  }
+#define UART0_IRQS { UART0_Lon_IRQn, UART0_RxTx_IRQn, UART0_Error_IRQn,  }
 
 /**
  * @} */ /* End group UART_Peripheral_access_layer_GROUP 

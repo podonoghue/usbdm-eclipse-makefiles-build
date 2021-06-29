@@ -1,7 +1,7 @@
 <!--
 Devices using this vector table: 
-   MKE04Z4
    SKEAZN84
+   MKE04Z4
 -->
 <interrupts>
    <name>MKE04Z4_VectorTable</name>

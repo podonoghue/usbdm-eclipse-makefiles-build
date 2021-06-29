@@ -53,6 +53,11 @@ Devices using this peripheral:
             <size>0x4</size>
             <usage>registers</usage>
          </addressBlock>
+         <addressBlock>
+            <offset>0xF34</offset>
+            <size>0xC</size>
+            <usage>registers</usage>
+         </addressBlock>
          <registers>
             <register>
                <name>ACTLR</name>
@@ -1225,6 +1230,279 @@ Devices using this peripheral:
                      </enumeratedValues>
                   </field>
                   <field derivedFrom="CP10" > <name>CP11</name> <description>Access privileges for coprocessor 11</description> <bitOffset>22</bitOffset> </field>
+               </fields>
+            </register>
+            <register>
+               <name>FPCCR</name>
+               <description>Floating-point Context Control Register</description>
+               <addressOffset>0xF34</addressOffset>
+               <resetValue>0xC0000000</resetValue>
+               <fields>
+                  <field>
+                     <name>LSPACT</name>
+                     <description>Lazy state preservation</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>Lazy state preservation is not active</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>Lazy state preservation is active. floating-point stack frame has been allocated but saving state to it has been deferred</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>USER</name>
+                     <description>Privilege level when the floating-point stack frame was allocated</description>
+                     <bitOffset>1</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>Privilege level was not user when the floating-point stack frame was allocated</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>Privilege level was user when the floating-point stack frame was allocated</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>THREAD</name>
+                     <description>Mode when the floating-point stack frame was allocated</description>
+                     <bitOffset>3</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>Mode was not Thread Mode when the floating-point stack frame was allocated</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>Mode was Thread Mode when the floating-point stack frame was allocated</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>HFRDY</name>
+                     <description>Permission to set the HardFault handler to the pending state when the floating-point stack frame was allocated</description>
+                     <bitOffset>4</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>Priority did not permit setting the HardFault handler to the pending state when the floating-point stack frame was allocated</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>Priority permitted setting the HardFault handler to the pending state when the floating-point stack frame was allocated</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>MMRDY</name>
+                     <description>Permission to set the MemManage handler to the pending state when the floating-point stack frame was allocated</description>
+                     <bitOffset>5</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>MemManage is disabled or priority did not permit setting the MemManage handler to the pending state when the floating-point stack frame was allocated</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>MemManage is enabled and priority permitted setting the MemManage handler to the pending state when the floating-point stack frame was allocated</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>BFRDY</name>
+                     <description>Permission to set the BusFault handler to the pending state when the floating-point stack frame was allocated</description>
+                     <bitOffset>6</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>BusFault is disabled or priority did not permit setting the BusFault handler to the pending state when the floating-point stack frame was allocated</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>BusFault is disabled or priority did not permit setting the BusFault handler to the pending state when the floating-point stack frame was allocated</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>MONRDY</name>
+                     <description>Permission to set the MON_PEND when the floating-point stack frame was allocated</description>
+                     <bitOffset>8</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>DebugMonitor is disabled or priority did not permit setting MON_PEND when the floating-point stack frame was allocated</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>DebugMonitor is enabled and priority permits setting MON_PEND when the floating-point stack frame was allocated</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>LSPEN</name>
+                     <description>Lazy state preservation for floating-point context</description>
+                     <bitOffset>30</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>Disable automatic lazy state preservation for floating-point context</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>Enable automatic lazy state preservation for floating-point context</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>ASPEN</name>
+                     <description>Enables CONTROL2 setting on execution of a floating-point instruction. This results in automatic hardware state preservation and restoration, for floating-point context, on exception entry and exit</description>
+                     <bitOffset>31</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>Disable CONTROL2 setting on execution of a floating-point instruction</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>Enable CONTROL2 setting on execution of a floating-point instruction</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>FPCAR</name>
+               <description>Floating-point Context Address Register</description>
+               <addressOffset>0xF38</addressOffset>
+               <resetMask>0x0</resetMask>
+               <fields>
+                  <field>
+                     <name>ADDRESS</name>
+                     <description>The location of the unpopulated floating-point register space allocated on an exception stack frame</description>
+                     <bitOffset>3</bitOffset>
+                     <bitWidth>29</bitWidth>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>FPDSCR</name>
+               <description>Floating-point Default Status Control Register</description>
+               <addressOffset>0xF3C</addressOffset>
+               <fields>
+                  <field>
+                     <name>RMode</name>
+                     <description>Default value for FPSCR.RMode (Rounding Mode control field)</description>
+                     <bitOffset>22</bitOffset>
+                     <bitWidth>2</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b00</name>
+                           <description>Round to Nearest (RN) mode</description>
+                           <value>0b00</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b01</name>
+                           <description>Round towards Plus Infinity (RP) mode</description>
+                           <value>0b01</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b10</name>
+                           <description>Round towards Minus Infinity (RM) mode</description>
+                           <value>0b10</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b11</name>
+                           <description>Round towards Zero (RZ) mode</description>
+                           <value>0b11</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>FZ</name>
+                     <description>Default value for FPSCR.FZ (Flush-to-zero mode control bit)</description>
+                     <bitOffset>24</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>Flush-to-zero mode disabled. Behavior of the floating-point system is fully compliant with the IEEE 754 standard</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>Flush-to-zero mode enabled</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>DN</name>
+                     <description>Default value for FPSCR.DN (Default NaN mode control bit)</description>
+                     <bitOffset>25</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>NaN operands propagate through to the output of a floating-point operation</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>Any operation involving one or more NaNs returns the Default NaN</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>AHP</name>
+                     <description>Default value for FPSCR.AHP (Alternative half-precision control bit)</description>
+                     <bitOffset>26</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>IEEE half-precision format selected</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>Alternative half-precision format selected</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
                </fields>
             </register>
          </registers>

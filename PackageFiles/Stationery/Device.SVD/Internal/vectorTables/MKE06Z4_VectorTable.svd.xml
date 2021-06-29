@@ -1,7 +1,7 @@
 <!--
 Devices using this vector table: 
-   MKE06Z4
    SKEAZ1284
+   MKE06Z4
 -->
 <interrupts>
    <name>MKE06Z4_VectorTable</name>
@@ -146,16 +146,16 @@ Devices using this vector table:
       <peripheral>PWT</peripheral>
    </interrupt>
    <interrupt>
-      <name>MSCAN_RX</name>
+      <name>CAN_RX</name>
       <description>Scalable Controller Area Network</description>
       <value>30</value>
-      <peripheral>MSCAN</peripheral>
+      <peripheral>CAN0</peripheral>
    </interrupt>
    <interrupt>
-      <name>MSCAN_TX</name>
+      <name>CAN_TX</name>
       <description>Scalable Controller Area Network</description>
       <value>31</value>
-      <peripheral>MSCAN</peripheral>
+      <peripheral>CAN0</peripheral>
    </interrupt>
 </interrupts>
 

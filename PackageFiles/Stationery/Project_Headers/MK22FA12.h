@@ -5,7 +5,7 @@
  *           Equivalent: 
  *
  * @version  V1.6
- * @date     2019/06
+ * @date     2021/06
  *
  *******************************************************************************************************/
 
@@ -69,6 +69,7 @@ typedef enum {
   SPI1_IRQn                     =  27,   /**<  43 Serial Peripheral Interface                                                      */
   I2S0_Tx_IRQn                  =  28,   /**<  44 Synchronous Serial Interface                                                     */
   I2S0_Rx_IRQn                  =  29,   /**<  45 Synchronous Serial Interface                                                     */
+  UART0_Lon_IRQn                =  30,   /**<  46 Serial Communication Interface                                                   */
   UART0_RxTx_IRQn               =  31,   /**<  47 Serial Communication Interface                                                   */
   UART0_Error_IRQn              =  32,   /**<  48 Serial Communication Interface                                                   */
   UART1_RxTx_IRQn               =  33,   /**<  49 Serial Communication Interface                                                   */
@@ -168,6 +169,7 @@ extern void SPI0_IRQHandler(void);                   /**< Serial Peripheral Inte
 extern void SPI1_IRQHandler(void);                   /**< Serial Peripheral Interface                                                      */
 extern void I2S0_Tx_IRQHandler(void);                /**< Synchronous Serial Interface                                                     */
 extern void I2S0_Rx_IRQHandler(void);                /**< Synchronous Serial Interface                                                     */
+extern void UART0_Lon_IRQHandler(void);              /**< Serial Communication Interface                                                   */
 extern void UART0_RxTx_IRQHandler(void);             /**< Serial Communication Interface                                                   */
 extern void UART0_Error_IRQHandler(void);            /**< Serial Communication Interface                                                   */
 extern void UART1_RxTx_IRQHandler(void);             /**< Serial Communication Interface                                                   */
@@ -1783,7 +1785,7 @@ typedef struct DAC_Type {
 */
 
 /* ================================================================================ */
-/* ================           DMA0 (file:DMA0_16CH_EARS4)          ================ */
+/* ================           DMA0 (file:DMA0_16CH)                ================ */
 /* ================================================================================ */
 
 /**
@@ -1815,9 +1817,7 @@ typedef struct DMA_Type {
    __IO uint32_t  ERR;                          /**< 002C: Error Register                                               */
         uint8_t   RESERVED_4[4];                /**< 0030: 0x4 bytes                                                    */
    __I  uint32_t  HRS;                          /**< 0034: Hardware Request Status Register                             */
-        uint8_t   RESERVED_5[12];               /**< 0038: 0xC bytes                                                    */
-   __IO uint32_t  EARS;                         /**< 0044: Enable Asynchronous Request in Stop Register                 */
-        uint8_t   RESERVED_6[184];              /**< 0048: 0xB8 bytes                                                   */
+        uint8_t   RESERVED_5[200];              /**< 0038: 0xC8 bytes                                                   */
    union {                                      /**< 0100: (size=0010)                                                  */
       struct {                                  /**< 0100: (size=0010)                                                  */
       __IO uint8_t   DCHPRI3;                   /**< 0100: Channel 3 Priority Register                                  */
@@ -1839,7 +1839,7 @@ typedef struct DMA_Type {
       };
       __IO uint8_t   DCHPRI[16];                /**< 0100: Channel  Priority Register                                   */
    };
-        uint8_t   RESERVED_7[3824];             /**< 0110: 0xEF0 bytes                                                  */
+        uint8_t   RESERVED_6[3824];             /**< 0110: 0xEF0 bytes                                                  */
    struct {
       __IO uint32_t  SADDR;                     /**< 1000: Source Address                                               */
       __IO uint16_t  SOFF;                      /**< 1004: Signed Source Address Offset                                 */
@@ -2265,19 +2265,6 @@ typedef struct DMA_Type {
 #define DMA_HRS_HRS15_MASK                       (0x8000U)                                           /*!< DMA0_HRS.HRS15 Mask                     */
 #define DMA_HRS_HRS15_SHIFT                      (15U)                                               /*!< DMA0_HRS.HRS15 Position                 */
 #define DMA_HRS_HRS15(x)                         (((uint32_t)(((uint32_t)(x))<<15U))&0x8000UL)       /*!< DMA0_HRS.HRS15 Field                    */
-/* ------- EARS Bit Fields                          ------ */
-#define DMA_EARS_EDREQ_0_MASK                    (0x1U)                                              /*!< DMA0_EARS.EDREQ_0 Mask                  */
-#define DMA_EARS_EDREQ_0_SHIFT                   (0U)                                                /*!< DMA0_EARS.EDREQ_0 Position              */
-#define DMA_EARS_EDREQ_0(x)                      (((uint32_t)(((uint32_t)(x))<<0U))&0x1UL)           /*!< DMA0_EARS.EDREQ_0 Field                 */
-#define DMA_EARS_EDREQ_1_MASK                    (0x2U)                                              /*!< DMA0_EARS.EDREQ_1 Mask                  */
-#define DMA_EARS_EDREQ_1_SHIFT                   (1U)                                                /*!< DMA0_EARS.EDREQ_1 Position              */
-#define DMA_EARS_EDREQ_1(x)                      (((uint32_t)(((uint32_t)(x))<<1U))&0x2UL)           /*!< DMA0_EARS.EDREQ_1 Field                 */
-#define DMA_EARS_EDREQ_2_MASK                    (0x4U)                                              /*!< DMA0_EARS.EDREQ_2 Mask                  */
-#define DMA_EARS_EDREQ_2_SHIFT                   (2U)                                                /*!< DMA0_EARS.EDREQ_2 Position              */
-#define DMA_EARS_EDREQ_2(x)                      (((uint32_t)(((uint32_t)(x))<<2U))&0x4UL)           /*!< DMA0_EARS.EDREQ_2 Field                 */
-#define DMA_EARS_EDREQ_3_MASK                    (0x8U)                                              /*!< DMA0_EARS.EDREQ_3 Mask                  */
-#define DMA_EARS_EDREQ_3_SHIFT                   (3U)                                                /*!< DMA0_EARS.EDREQ_3 Position              */
-#define DMA_EARS_EDREQ_3(x)                      (((uint32_t)(((uint32_t)(x))<<3U))&0x8UL)           /*!< DMA0_EARS.EDREQ_3 Field                 */
 /* ------- DCHPRI Bit Fields                        ------ */
 #define DMA_DCHPRI_CHPRI_MASK                    (0xFU)                                              /*!< DMA0_DCHPRI.CHPRI Mask                  */
 #define DMA_DCHPRI_CHPRI_SHIFT                   (0U)                                                /*!< DMA0_DCHPRI.CHPRI Position              */
@@ -7499,7 +7486,7 @@ typedef struct PORT_Type {
 */
 
 /* ================================================================================ */
-/* ================           PORTC (derived from PORTA)           ================ */
+/* ================           PORTC (derived from PORTB)           ================ */
 /* ================================================================================ */
 
 /**
@@ -7522,16 +7509,62 @@ typedef struct PORT_Type {
 */
 
 /* ================================================================================ */
-/* ================           PORTD (derived from PORTA)           ================ */
+/* ================           PORTD (file:PORTD_DFER)              ================ */
 /* ================================================================================ */
 
 /**
  * @brief Pin Control and Interrupts
  */
+/**
+* @addtogroup PORT_structs_GROUP PORT struct
+* @brief Struct for PORT
+* @{
+*/
+typedef struct PORT_DFER_Type {
+   __IO uint32_t  PCR[32];                      /**< 0000: Pin Control Register                                         */
+   __O  uint32_t  GPCLR;                        /**< 0080: Global Pin Control Low Register                              */
+   __O  uint32_t  GPCHR;                        /**< 0084: Global Pin Control High Register                             */
+        uint8_t   RESERVED_0[24];               /**< 0088: 0x18 bytes                                                   */
+   __IO uint32_t  ISFR;                         /**< 00A0: Interrupt Status Flag Register                               */
+        uint8_t   RESERVED_1[28];               /**< 00A4: 0x1C bytes                                                   */
+   __IO uint32_t  DFER;                         /**< 00C0: Digital Filter Enable Register                               */
+   __IO uint32_t  DFCR;                         /**< 00C4: Digital Filter Clock Register                                */
+   __IO uint32_t  DFWR;                         /**< 00C8: Digital Filter Width Register                                */
+} PORT_DFER_Type;
+
+/**
+ * @} */ /* End group PORT_structs_GROUP 
+ */
+
+/* -------------------------------------------------------------------------------- */
+/* -----------     'PORTD' Position & Mask macros                       ----------- */
+/* -------------------------------------------------------------------------------- */
+
+/**
+* @addtogroup PORT_Register_Masks_GROUP PORT Register Masks
+* @brief Register Masks for PORT
+* @{
+*/
+/* ------- PCR Bit Fields                           ------ */
+/* ------- GPCLR Bit Fields                         ------ */
+/* ------- GPCHR Bit Fields                         ------ */
+/* ------- ISFR Bit Fields                          ------ */
+/* ------- DFER Bit Fields                          ------ */
+/* ------- DFCR Bit Fields                          ------ */
+#define PORT_DFCR_CS_MASK                        (0x1U)                                              /*!< PORTD_DFCR.CS Mask                      */
+#define PORT_DFCR_CS_SHIFT                       (0U)                                                /*!< PORTD_DFCR.CS Position                  */
+#define PORT_DFCR_CS(x)                          (((uint32_t)(((uint32_t)(x))<<0U))&0x1UL)           /*!< PORTD_DFCR.CS Field                     */
+/* ------- DFWR Bit Fields                          ------ */
+#define PORT_DFWR_FILT_MASK                      (0x1FU)                                             /*!< PORTD_DFWR.FILT Mask                    */
+#define PORT_DFWR_FILT_SHIFT                     (0U)                                                /*!< PORTD_DFWR.FILT Position                */
+#define PORT_DFWR_FILT(x)                        (((uint32_t)(((uint32_t)(x))<<0U))&0x1FUL)          /*!< PORTD_DFWR.FILT Field                   */
+/**
+ * @} */ /* End group PORT_Register_Masks_GROUP 
+ */
 
 /* PORTD - Peripheral instance base addresses */
 #define PORTD_BasePtr                  0x4004C000UL //!< Peripheral base address
-#define PORTD                          ((PORT_Type *) PORTD_BasePtr) //!< Freescale base pointer
+#define PORTD                          ((PORT_DFER_Type *) PORTD_BasePtr) //!< Freescale base pointer
 #define PORTD_BASE_PTR                 (PORTD) //!< Freescale style base pointer
 #define PORTD_IRQS { PORTD_IRQn,  }
 
@@ -7545,7 +7578,7 @@ typedef struct PORT_Type {
 */
 
 /* ================================================================================ */
-/* ================           PORTE (derived from PORTA)           ================ */
+/* ================           PORTE (derived from PORTB)           ================ */
 /* ================================================================================ */
 
 /**
@@ -9060,7 +9093,7 @@ typedef struct SIM_Type {
 */
 
 /* ================================================================================ */
-/* ================           SMC (file:SMC_MK22FA12)              ================ */
+/* ================           SMC (file:SMC_MK21FA12)              ================ */
 /* ================================================================================ */
 
 /**
@@ -9124,9 +9157,6 @@ typedef struct SMC_Type {
 #define SMC_STOPCTRL_VLLSM_MASK                  (0x7U)                                              /*!< SMC_STOPCTRL.VLLSM Mask                 */
 #define SMC_STOPCTRL_VLLSM_SHIFT                 (0U)                                                /*!< SMC_STOPCTRL.VLLSM Position             */
 #define SMC_STOPCTRL_VLLSM(x)                    (((uint8_t)(((uint8_t)(x))<<0U))&0x7UL)             /*!< SMC_STOPCTRL.VLLSM Field                */
-#define SMC_STOPCTRL_LPOPO_MASK                  (0x8U)                                              /*!< SMC_STOPCTRL.LPOPO Mask                 */
-#define SMC_STOPCTRL_LPOPO_SHIFT                 (3U)                                                /*!< SMC_STOPCTRL.LPOPO Position             */
-#define SMC_STOPCTRL_LPOPO(x)                    (((uint8_t)(((uint8_t)(x))<<3U))&0x8UL)             /*!< SMC_STOPCTRL.LPOPO Field                */
 #define SMC_STOPCTRL_RAM2PO_MASK                 (0x10U)                                             /*!< SMC_STOPCTRL.RAM2PO Mask                */
 #define SMC_STOPCTRL_RAM2PO_SHIFT                (4U)                                                /*!< SMC_STOPCTRL.RAM2PO Position            */
 #define SMC_STOPCTRL_RAM2PO(x)                   (((uint8_t)(((uint8_t)(x))<<4U))&0x10UL)            /*!< SMC_STOPCTRL.RAM2PO Field               */
@@ -9140,9 +9170,6 @@ typedef struct SMC_Type {
 #define SMC_VLLSCTRL_VLLSM_MASK                  (0x7U)                                              /*!< SMC_VLLSCTRL.VLLSM Mask                 */
 #define SMC_VLLSCTRL_VLLSM_SHIFT                 (0U)                                                /*!< SMC_VLLSCTRL.VLLSM Position             */
 #define SMC_VLLSCTRL_VLLSM(x)                    (((uint8_t)(((uint8_t)(x))<<0U))&0x7UL)             /*!< SMC_VLLSCTRL.VLLSM Field                */
-#define SMC_VLLSCTRL_LPOPO_MASK                  (0x8U)                                              /*!< SMC_VLLSCTRL.LPOPO Mask                 */
-#define SMC_VLLSCTRL_LPOPO_SHIFT                 (3U)                                                /*!< SMC_VLLSCTRL.LPOPO Position             */
-#define SMC_VLLSCTRL_LPOPO(x)                    (((uint8_t)(((uint8_t)(x))<<3U))&0x8UL)             /*!< SMC_VLLSCTRL.LPOPO Field                */
 #define SMC_VLLSCTRL_RAM2PO_MASK                 (0x10U)                                             /*!< SMC_VLLSCTRL.RAM2PO Mask                */
 #define SMC_VLLSCTRL_RAM2PO_SHIFT                (4U)                                                /*!< SMC_VLLSCTRL.RAM2PO Position            */
 #define SMC_VLLSCTRL_RAM2PO(x)                   (((uint8_t)(((uint8_t)(x))<<4U))&0x10UL)            /*!< SMC_VLLSCTRL.RAM2PO Field               */
@@ -9442,69 +9469,16 @@ typedef struct SPI_Type {
 */
 
 /* ================================================================================ */
-/* ================           SPI1 (file:SPI1_MK_FIFO_DEPTH1)       ================ */
+/* ================           SPI1 (derived from SPI0)             ================ */
 /* ================================================================================ */
 
 /**
  * @brief Serial Peripheral Interface
  */
-/**
-* @addtogroup SPI_structs_GROUP SPI struct
-* @brief Struct for SPI
-* @{
-*/
-typedef struct SPI1_Type {
-   __IO uint32_t  MCR;                          /**< 0000: Module Configuration Register                                */
-        uint8_t   RESERVED_0[4];                /**< 0004: 0x4 bytes                                                    */
-   __IO uint32_t  TCR;                          /**< 0008: Transfer Count Register                                      */
-   union {                                      /**< 000C: (size=0008)                                                  */
-      __IO uint32_t  CTAR[2];                   /**< 000C: Clock and Transfer Attributes Register (In Master Mode)      */
-      __IO uint32_t  CTAR_SLAVE;                /**< 000C: Clock and Transfer Attributes Register (In Slave Mode)       */
-   };
-        uint8_t   RESERVED_1[24];               /**< 0014: 0x18 bytes                                                   */
-   __IO uint32_t  SR;                           /**< 002C: Status register                                              */
-   __IO uint32_t  RSER;                         /**< 0030: DMA/Interrupt Request Select and Enable Register             */
-   union {                                      /**< 0034: (size=0004)                                                  */
-      __IO uint32_t  PUSHR;                     /**< 0034: PUSH TX FIFO Register In Master Mode                         */
-      __IO uint32_t  PUSHR_SLAVE;               /**< 0034: PUSH TX FIFO Register In Slave Mode                          */
-   };
-   __I  uint32_t  POPR;                         /**< 0038: POP RX FIFO Register                                         */
-   __I  uint32_t  TXFR[1];                      /**< 003C: Transmit FIFO                                                */
-        uint8_t   RESERVED_2[60];               /**< 0040: 0x3C bytes                                                   */
-   __I  uint32_t  RXFR[1];                      /**< 007C: Receive FIFO                                                 */
-} SPI1_Type;
-
-/**
- * @} */ /* End group SPI_structs_GROUP 
- */
-
-/* -------------------------------------------------------------------------------- */
-/* -----------     'SPI1' Position & Mask macros                        ----------- */
-/* -------------------------------------------------------------------------------- */
-
-/**
-* @addtogroup SPI_Register_Masks_GROUP SPI Register Masks
-* @brief Register Masks for SPI
-* @{
-*/
-/* ------- MCR Bit Fields                           ------ */
-/* ------- TCR Bit Fields                           ------ */
-/* ------- CTAR Bit Fields                          ------ */
-/* ------- CTAR_SLAVE Bit Fields                    ------ */
-/* ------- SR Bit Fields                            ------ */
-/* ------- RSER Bit Fields                          ------ */
-/* ------- PUSHR Bit Fields                         ------ */
-/* ------- PUSHR_SLAVE Bit Fields                   ------ */
-/* ------- POPR Bit Fields                          ------ */
-/* ------- TXFR Bit Fields                          ------ */
-/* ------- RXFR Bit Fields                          ------ */
-/**
- * @} */ /* End group SPI_Register_Masks_GROUP 
- */
 
 /* SPI1 - Peripheral instance base addresses */
 #define SPI1_BasePtr                   0x4002D000UL //!< Peripheral base address
-#define SPI1                           ((SPI1_Type *) SPI1_BasePtr) //!< Freescale base pointer
+#define SPI1                           ((SPI_Type *) SPI1_BasePtr) //!< Freescale base pointer
 #define SPI1_BASE_PTR                  (SPI1) //!< Freescale style base pointer
 #define SPI1_IRQS { SPI1_IRQn,  }
 
@@ -9518,7 +9492,7 @@ typedef struct SPI1_Type {
 */
 
 /* ================================================================================ */
-/* ================           SPI2 (derived from SPI1)             ================ */
+/* ================           SPI2 (derived from SPI0)             ================ */
 /* ================================================================================ */
 
 /**
@@ -9527,7 +9501,7 @@ typedef struct SPI1_Type {
 
 /* SPI2 - Peripheral instance base addresses */
 #define SPI2_BasePtr                   0x400AC000UL //!< Peripheral base address
-#define SPI2                           ((SPI1_Type *) SPI2_BasePtr) //!< Freescale base pointer
+#define SPI2                           ((SPI_Type *) SPI2_BasePtr) //!< Freescale base pointer
 #define SPI2_BASE_PTR                  (SPI2) //!< Freescale style base pointer
 #define SPI2_IRQS { SPI2_IRQn,  }
 
@@ -9883,7 +9857,7 @@ typedef struct TPIU_Type {
 */
 
 /* ================================================================================ */
-/* ================           UART0 (file:UART0_MK10D7_C7816)       ================ */
+/* ================           UART0 (file:UART0_MK21FA12_C7816)       ================ */
 /* ================================================================================ */
 
 /**
@@ -9922,14 +9896,24 @@ typedef struct UART_Type {
    __IO uint8_t   C7816;                        /**< 0018: 7816 Control Register                                        */
    __IO uint8_t   IE7816;                       /**< 0019: 7816 Interrupt Enable Register                               */
    __IO uint8_t   IS7816;                       /**< 001A: 7816 Interrupt Status Register                               */
-   union {                                      /**< 001B: (size=0001)                                                  */
-      __IO uint8_t   WP7816T0;                  /**< 001B: 7816 Wait Parameter Register                                 */
-      __IO uint8_t   WP7816T1;                  /**< 001B: 7816 Wait Parameter Register                                 */
-   };
+   __IO uint8_t   WP7816;                       /**< 001B: 7816 Wait Parameter Register                                 */
    __IO uint8_t   WN7816;                       /**< 001C: 7816 Wait N Register                                         */
    __IO uint8_t   WF7816;                       /**< 001D: 7816 Wait FD Register                                        */
    __IO uint8_t   ET7816;                       /**< 001E: 7816 Error Threshold Register                                */
    __IO uint8_t   TL7816;                       /**< 001F: 7816 Transmit Length Register                                */
+        uint8_t   RESERVED_2[26];               /**< 0020: 0x1A bytes                                                   */
+   __IO uint8_t   AP7816A_T0;                   /**< 003A: 7816 ATR Duration Timer Register A                           */
+   __IO uint8_t   AP7816B_T0;                   /**< 003B: 7816 ATR Duration Timer Register B                           */
+   union {                                      /**< 003C: (size=0001)                                                  */
+      __IO uint8_t   WP7816A_T0;                /**< 003C: 7816 Wait Parameter Register A                               */
+      __IO uint8_t   WP7816A_T1;                /**< 003C: 7816 Wait Parameter Register A                               */
+   };
+   union {                                      /**< 003D: (size=0001)                                                  */
+      __IO uint8_t   WP7816B_T0;                /**< 003D: 7816 Wait Parameter Register B                               */
+      __IO uint8_t   WP7816B_T1;                /**< 003D: 7816 Wait Parameter Register B                               */
+   };
+   __IO uint8_t   WGP7816_T1;                   /**< 003E: 7816 Wait and Guard Parameter Register                       */
+   __IO uint8_t   WP7816C_T1;                   /**< 003F: 7816 Wait Parameter Register C                               */
 } UART_Type;
 
 /**
@@ -10226,6 +10210,9 @@ typedef struct UART_Type {
 #define UART_IE7816_GTVE_MASK                    (0x4U)                                              /*!< UART0_IE7816.GTVE Mask                  */
 #define UART_IE7816_GTVE_SHIFT                   (2U)                                                /*!< UART0_IE7816.GTVE Position              */
 #define UART_IE7816_GTVE(x)                      (((uint8_t)(((uint8_t)(x))<<2U))&0x4UL)             /*!< UART0_IE7816.GTVE Field                 */
+#define UART_IE7816_ADTE_MASK                    (0x8U)                                              /*!< UART0_IE7816.ADTE Mask                  */
+#define UART_IE7816_ADTE_SHIFT                   (3U)                                                /*!< UART0_IE7816.ADTE Position              */
+#define UART_IE7816_ADTE(x)                      (((uint8_t)(((uint8_t)(x))<<3U))&0x8UL)             /*!< UART0_IE7816.ADTE Field                 */
 #define UART_IE7816_INITDE_MASK                  (0x10U)                                             /*!< UART0_IE7816.INITDE Mask                */
 #define UART_IE7816_INITDE_SHIFT                 (4U)                                                /*!< UART0_IE7816.INITDE Position            */
 #define UART_IE7816_INITDE(x)                    (((uint8_t)(((uint8_t)(x))<<4U))&0x10UL)            /*!< UART0_IE7816.INITDE Field               */
@@ -10248,6 +10235,9 @@ typedef struct UART_Type {
 #define UART_IS7816_GTV_MASK                     (0x4U)                                              /*!< UART0_IS7816.GTV Mask                   */
 #define UART_IS7816_GTV_SHIFT                    (2U)                                                /*!< UART0_IS7816.GTV Position               */
 #define UART_IS7816_GTV(x)                       (((uint8_t)(((uint8_t)(x))<<2U))&0x4UL)             /*!< UART0_IS7816.GTV Field                  */
+#define UART_IS7816_ADT_MASK                     (0x8U)                                              /*!< UART0_IS7816.ADT Mask                   */
+#define UART_IS7816_ADT_SHIFT                    (3U)                                                /*!< UART0_IS7816.ADT Position               */
+#define UART_IS7816_ADT(x)                       (((uint8_t)(((uint8_t)(x))<<3U))&0x8UL)             /*!< UART0_IS7816.ADT Field                  */
 #define UART_IS7816_INITD_MASK                   (0x10U)                                             /*!< UART0_IS7816.INITD Mask                 */
 #define UART_IS7816_INITD_SHIFT                  (4U)                                                /*!< UART0_IS7816.INITD Position             */
 #define UART_IS7816_INITD(x)                     (((uint8_t)(((uint8_t)(x))<<4U))&0x10UL)            /*!< UART0_IS7816.INITD Field                */
@@ -10260,17 +10250,10 @@ typedef struct UART_Type {
 #define UART_IS7816_WT_MASK                      (0x80U)                                             /*!< UART0_IS7816.WT Mask                    */
 #define UART_IS7816_WT_SHIFT                     (7U)                                                /*!< UART0_IS7816.WT Position                */
 #define UART_IS7816_WT(x)                        (((uint8_t)(((uint8_t)(x))<<7U))&0x80UL)            /*!< UART0_IS7816.WT Field                   */
-/* ------- WP7816T0 Bit Fields                      ------ */
-#define UART_WP7816T0_WI_MASK                    (0xFFU)                                             /*!< UART0_WP7816T0.WI Mask                  */
-#define UART_WP7816T0_WI_SHIFT                   (0U)                                                /*!< UART0_WP7816T0.WI Position              */
-#define UART_WP7816T0_WI(x)                      (((uint8_t)(((uint8_t)(x))<<0U))&0xFFUL)            /*!< UART0_WP7816T0.WI Field                 */
-/* ------- WP7816T1 Bit Fields                      ------ */
-#define UART_WP7816T1_BWI_MASK                   (0xFU)                                              /*!< UART0_WP7816T1.BWI Mask                 */
-#define UART_WP7816T1_BWI_SHIFT                  (0U)                                                /*!< UART0_WP7816T1.BWI Position             */
-#define UART_WP7816T1_BWI(x)                     (((uint8_t)(((uint8_t)(x))<<0U))&0xFUL)             /*!< UART0_WP7816T1.BWI Field                */
-#define UART_WP7816T1_CWI_MASK                   (0xF0U)                                             /*!< UART0_WP7816T1.CWI Mask                 */
-#define UART_WP7816T1_CWI_SHIFT                  (4U)                                                /*!< UART0_WP7816T1.CWI Position             */
-#define UART_WP7816T1_CWI(x)                     (((uint8_t)(((uint8_t)(x))<<4U))&0xF0UL)            /*!< UART0_WP7816T1.CWI Field                */
+/* ------- WP7816 Bit Fields                        ------ */
+#define UART_WP7816_WTX_MASK                     (0xFFU)                                             /*!< UART0_WP7816.WTX Mask                   */
+#define UART_WP7816_WTX_SHIFT                    (0U)                                                /*!< UART0_WP7816.WTX Position               */
+#define UART_WP7816_WTX(x)                       (((uint8_t)(((uint8_t)(x))<<0U))&0xFFUL)            /*!< UART0_WP7816.WTX Field                  */
 /* ------- WN7816 Bit Fields                        ------ */
 #define UART_WN7816_GTN_MASK                     (0xFFU)                                             /*!< UART0_WN7816.GTN Mask                   */
 #define UART_WN7816_GTN_SHIFT                    (0U)                                                /*!< UART0_WN7816.GTN Position               */
@@ -10290,6 +10273,41 @@ typedef struct UART_Type {
 #define UART_TL7816_TLEN_MASK                    (0xFFU)                                             /*!< UART0_TL7816.TLEN Mask                  */
 #define UART_TL7816_TLEN_SHIFT                   (0U)                                                /*!< UART0_TL7816.TLEN Position              */
 #define UART_TL7816_TLEN(x)                      (((uint8_t)(((uint8_t)(x))<<0U))&0xFFUL)            /*!< UART0_TL7816.TLEN Field                 */
+/* ------- AP7816A_T0 Bit Fields                    ------ */
+#define UART_AP7816A_T0_ADTI_H_MASK              (0xFFU)                                             /*!< UART0_AP7816A_T0.ADTI_H Mask            */
+#define UART_AP7816A_T0_ADTI_H_SHIFT             (0U)                                                /*!< UART0_AP7816A_T0.ADTI_H Position        */
+#define UART_AP7816A_T0_ADTI_H(x)                (((uint8_t)(((uint8_t)(x))<<0U))&0xFFUL)            /*!< UART0_AP7816A_T0.ADTI_H Field           */
+/* ------- AP7816B_T0 Bit Fields                    ------ */
+#define UART_AP7816B_T0_ADTI_L_MASK              (0xFFU)                                             /*!< UART0_AP7816B_T0.ADTI_L Mask            */
+#define UART_AP7816B_T0_ADTI_L_SHIFT             (0U)                                                /*!< UART0_AP7816B_T0.ADTI_L Position        */
+#define UART_AP7816B_T0_ADTI_L(x)                (((uint8_t)(((uint8_t)(x))<<0U))&0xFFUL)            /*!< UART0_AP7816B_T0.ADTI_L Field           */
+/* ------- WP7816A_T0 Bit Fields                    ------ */
+#define UART_WP7816A_T0_WI_H_MASK                (0xFFU)                                             /*!< UART0_WP7816A_T0.WI_H Mask              */
+#define UART_WP7816A_T0_WI_H_SHIFT               (0U)                                                /*!< UART0_WP7816A_T0.WI_H Position          */
+#define UART_WP7816A_T0_WI_H(x)                  (((uint8_t)(((uint8_t)(x))<<0U))&0xFFUL)            /*!< UART0_WP7816A_T0.WI_H Field             */
+/* ------- WP7816A_T1 Bit Fields                    ------ */
+#define UART_WP7816A_T1_BWI_H_MASK               (0xFFU)                                             /*!< UART0_WP7816A_T1.BWI_H Mask             */
+#define UART_WP7816A_T1_BWI_H_SHIFT              (0U)                                                /*!< UART0_WP7816A_T1.BWI_H Position         */
+#define UART_WP7816A_T1_BWI_H(x)                 (((uint8_t)(((uint8_t)(x))<<0U))&0xFFUL)            /*!< UART0_WP7816A_T1.BWI_H Field            */
+/* ------- WP7816B_T0 Bit Fields                    ------ */
+#define UART_WP7816B_T0_WI_L_MASK                (0xFFU)                                             /*!< UART0_WP7816B_T0.WI_L Mask              */
+#define UART_WP7816B_T0_WI_L_SHIFT               (0U)                                                /*!< UART0_WP7816B_T0.WI_L Position          */
+#define UART_WP7816B_T0_WI_L(x)                  (((uint8_t)(((uint8_t)(x))<<0U))&0xFFUL)            /*!< UART0_WP7816B_T0.WI_L Field             */
+/* ------- WP7816B_T1 Bit Fields                    ------ */
+#define UART_WP7816B_T1_BWI_L_MASK               (0xFFU)                                             /*!< UART0_WP7816B_T1.BWI_L Mask             */
+#define UART_WP7816B_T1_BWI_L_SHIFT              (0U)                                                /*!< UART0_WP7816B_T1.BWI_L Position         */
+#define UART_WP7816B_T1_BWI_L(x)                 (((uint8_t)(((uint8_t)(x))<<0U))&0xFFUL)            /*!< UART0_WP7816B_T1.BWI_L Field            */
+/* ------- WGP7816_T1 Bit Fields                    ------ */
+#define UART_WGP7816_T1_BGI_MASK                 (0xFU)                                              /*!< UART0_WGP7816_T1.BGI Mask               */
+#define UART_WGP7816_T1_BGI_SHIFT                (0U)                                                /*!< UART0_WGP7816_T1.BGI Position           */
+#define UART_WGP7816_T1_BGI(x)                   (((uint8_t)(((uint8_t)(x))<<0U))&0xFUL)             /*!< UART0_WGP7816_T1.BGI Field              */
+#define UART_WGP7816_T1_CWI1_MASK                (0xF0U)                                             /*!< UART0_WGP7816_T1.CWI1 Mask              */
+#define UART_WGP7816_T1_CWI1_SHIFT               (4U)                                                /*!< UART0_WGP7816_T1.CWI1 Position          */
+#define UART_WGP7816_T1_CWI1(x)                  (((uint8_t)(((uint8_t)(x))<<4U))&0xF0UL)            /*!< UART0_WGP7816_T1.CWI1 Field             */
+/* ------- WP7816C_T1 Bit Fields                    ------ */
+#define UART_WP7816C_T1_CWI2_MASK                (0x1FU)                                             /*!< UART0_WP7816C_T1.CWI2 Mask              */
+#define UART_WP7816C_T1_CWI2_SHIFT               (0U)                                                /*!< UART0_WP7816C_T1.CWI2 Position          */
+#define UART_WP7816C_T1_CWI2(x)                  (((uint8_t)(((uint8_t)(x))<<0U))&0x1FUL)            /*!< UART0_WP7816C_T1.CWI2 Field             */
 /**
  * @} */ /* End group UART_Register_Masks_GROUP 
  */
@@ -10298,7 +10316,7 @@ typedef struct UART_Type {
 #define UART0_BasePtr                  0x4006A000UL //!< Peripheral base address
 #define UART0                          ((UART_Type *) UART0_BasePtr) //!< Freescale base pointer
 #define UART0_BASE_PTR                 (UART0) //!< Freescale style base pointer
-#define UART0_IRQS { UART0_RxTx_IRQn, UART0_Error_IRQn,  }
+#define UART0_IRQS { UART0_Lon_IRQn, UART0_RxTx_IRQn, UART0_Error_IRQn,  }
 
 /**
  * @} */ /* End group UART_Peripheral_access_layer_GROUP 
@@ -10493,7 +10511,7 @@ typedef struct UART1_Type {
 */
 
 /* ================================================================================ */
-/* ================           USB0 (file:USB0_OTG_C)               ================ */
+/* ================           USB0 (file:USB0_OTG_B)               ================ */
 /* ================================================================================ */
 
 /**
@@ -10593,9 +10611,6 @@ typedef struct USB_Type {
 #define USB_ADDINFO_IEHOST_MASK                  (0x1U)                                              /*!< USB0_ADDINFO.IEHOST Mask                */
 #define USB_ADDINFO_IEHOST_SHIFT                 (0U)                                                /*!< USB0_ADDINFO.IEHOST Position            */
 #define USB_ADDINFO_IEHOST(x)                    (((uint8_t)(((uint8_t)(x))<<0U))&0x1UL)             /*!< USB0_ADDINFO.IEHOST Field               */
-#define USB_ADDINFO_IRQNUM_MASK                  (0xF8U)                                             /*!< USB0_ADDINFO.IRQNUM Mask                */
-#define USB_ADDINFO_IRQNUM_SHIFT                 (3U)                                                /*!< USB0_ADDINFO.IRQNUM Position            */
-#define USB_ADDINFO_IRQNUM(x)                    (((uint8_t)(((uint8_t)(x))<<3U))&0xF8UL)            /*!< USB0_ADDINFO.IRQNUM Field               */
 /* ------- OTGISTAT Bit Fields                      ------ */
 #define USB_OTGISTAT_AVBUSCHG_MASK               (0x1U)                                              /*!< USB0_OTGISTAT.AVBUSCHG Mask             */
 #define USB_OTGISTAT_AVBUSCHG_SHIFT              (0U)                                                /*!< USB0_OTGISTAT.AVBUSCHG Position         */

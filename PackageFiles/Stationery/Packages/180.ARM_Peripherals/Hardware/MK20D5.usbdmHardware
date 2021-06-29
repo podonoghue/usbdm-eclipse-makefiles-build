@@ -287,14 +287,6 @@
       </peripheral>
    </peripherals>
    <pins>
-      <pin name="TempSensor"      isFixed="true">
-         <mux sel="fixed"         signal="ADC0_SE26" />
-         <reset sel="fixed" />
-      </pin>
-      <pin name="BandGap"         isFixed="true">
-         <mux sel="fixed"         signal="ADC0_SE27" />
-         <reset sel="fixed" />
-      </pin>
       <pin name="ADC0_DM0"     isFixed="true">
          <mux sel="fixed"         signal="ADC0_DM0" />
          <mux sel="fixed"         signal="ADC0_SE19" />
@@ -320,12 +312,20 @@
          <mux sel="fixed"         signal="CMP1_IN3" />
          <reset sel="fixed" />
       </pin>
+      <pin name="BandGap"      isFixed="true">
+         <mux sel="fixed"         signal="ADC0_SE27" />
+         <reset sel="fixed" />
+      </pin>
       <pin name="EXTAL32"      isFixed="true">
          <mux sel="fixed"         signal="EXTAL32" />
          <reset sel="fixed" />
       </pin>
       <pin name="RESET_b"      isFixed="true">
          <mux sel="fixed"         signal="RESET_b" />
+         <reset sel="fixed" />
+      </pin>
+      <pin name="TempSensor"   isFixed="true">
+         <mux sel="fixed"         signal="ADC0_SE26" />
          <reset sel="fixed" />
       </pin>
       <pin name="USB0_DM"      isFixed="true">
@@ -721,13 +721,12 @@
    </pins>
    <packages>
       <package name="BGA_64">
-         <placement pin="TempSensor"    location="Internal" />
-         <placement pin="BandGap"       location="Internal" />
          <placement pin="ADC0_DM0"      location="F1" />
          <placement pin="ADC0_DM3"      location="F2" />
          <placement pin="ADC0_DP0"      location="G1" />
          <placement pin="ADC0_DP3"      location="G2" />
          <placement pin="ADC0_SE23"     location="H2" />
+         <placement pin="BandGap"       location="Internal" />
          <placement pin="EXTAL32"       location="H4" />
          <placement pin="PTA0"          location="D3" />
          <placement pin="PTA1"          location="D4" />
@@ -770,6 +769,7 @@
          <placement pin="PTE0"          location="A1" />
          <placement pin="PTE1"          location="B1" />
          <placement pin="RESET_b"       location="F8" />
+         <placement pin="TempSensor"    location="Internal" />
          <placement pin="USB0_DM"       location="D1" />
          <placement pin="USB0_DP"       location="E1" />
          <placement pin="VBAT"          location="H5" />
@@ -789,13 +789,12 @@
          <placement pin="XTAL32"        location="H3" />
       </package>
       <package name="FRDM_K20D50M">
-         <placement pin="TempSensor"    location="Internal" />
-         <placement pin="BandGap"       location="Internal" />
          <placement pin="ADC0_DM0"      location="A11" />
          <placement pin="ADC0_DM3"      location="A9" />
          <placement pin="ADC0_DP0"      location="A10" />
          <placement pin="ADC0_DP3"      location="A8" />
          <placement pin="ADC0_SE23"     location="A7" />
+         <placement pin="BandGap"       location="Internal" />
          <placement pin="EXTAL32"       location="EXTAL32" />
          <placement pin="PTA0"          location="SWD_CLK" />
          <placement pin="PTA1"          location="D5" />
@@ -838,6 +837,7 @@
          <placement pin="PTE0"          location="D1" />
          <placement pin="PTE1"          location="D0" />
          <placement pin="RESET_b"       location="RESET_b" />
+         <placement pin="TempSensor"    location="Internal" />
          <placement pin="USB0_DM"       location="USB0_DM" />
          <placement pin="USB0_DP"       location="USB0_DP" />
          <placement pin="VBAT"          location="VBAT" />
@@ -857,10 +857,9 @@
          <placement pin="XTAL32"        location="XTAL32" />
       </package>
       <package name="LQFP_48">
-         <placement pin="TempSensor"    location="Internal" />
-         <placement pin="BandGap"       location="Internal" />
          <placement pin="ADC0_DM0"      location="p8" />
          <placement pin="ADC0_DP0"      location="p7" />
+         <placement pin="BandGap"       location="Internal" />
          <placement pin="EXTAL32"       location="p15" />
          <placement pin="PTA0"          location="p17" />
          <placement pin="PTA1"          location="p18" />
@@ -892,6 +891,7 @@
          <placement pin="PTD6"          location="p47" />
          <placement pin="PTD7"          location="p48" />
          <placement pin="RESET_b"       location="p26" />
+         <placement pin="TempSensor"    location="Internal" />
          <placement pin="USB0_DM"       location="p4" />
          <placement pin="USB0_DP"       location="p3" />
          <placement pin="VBAT"          location="p16" />
@@ -909,13 +909,12 @@
          <placement pin="XTAL32"        location="p14" />
       </package>
       <package name="LQFP_64">
-         <placement pin="TempSensor"    location="Internal" />
-         <placement pin="BandGap"       location="Internal" />
          <placement pin="ADC0_DM0"      location="p10" />
          <placement pin="ADC0_DM3"      location="p12" />
          <placement pin="ADC0_DP0"      location="p9" />
          <placement pin="ADC0_DP3"      location="p11" />
          <placement pin="ADC0_SE23"     location="p18" />
+         <placement pin="BandGap"       location="Internal" />
          <placement pin="EXTAL32"       location="p20" />
          <placement pin="PTA0"          location="p22" />
          <placement pin="PTA1"          location="p23" />
@@ -958,6 +957,7 @@
          <placement pin="PTE0"          location="p1" />
          <placement pin="PTE1"          location="p2" />
          <placement pin="RESET_b"       location="p34" />
+         <placement pin="TempSensor"    location="Internal" />
          <placement pin="USB0_DM"       location="p6" />
          <placement pin="USB0_DP"       location="p5" />
          <placement pin="VBAT"          location="p21" />
@@ -977,7 +977,6 @@
          <placement pin="XTAL32"        location="p19" />
       </package>
       <package name="QFN_32">
-         <placement pin="TempSensor"    location="Internal" />
          <placement pin="BandGap"       location="Internal" />
          <placement pin="EXTAL32"       location="p10" />
          <placement pin="PTA0"          location="p12" />
@@ -1001,6 +1000,7 @@
          <placement pin="PTD6"          location="p31" />
          <placement pin="PTD7"          location="p32" />
          <placement pin="RESET_b"       location="p19" />
+         <placement pin="TempSensor"    location="Internal" />
          <placement pin="USB0_DM"       location="p4" />
          <placement pin="USB0_DP"       location="p3" />
          <placement pin="VBAT"          location="p11" />

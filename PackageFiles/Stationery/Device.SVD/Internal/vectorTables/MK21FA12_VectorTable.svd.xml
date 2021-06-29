@@ -1,11 +1,11 @@
 <!--
 Devices using this vector table: 
-   MK22FA12
-   MK22F12
+   MK21FA12
+   MK21F12
 -->
 <interrupts>
-   <name>MK22FA12_VectorTable</name>
-   <description>MK22FA12 VectorTable</description>
+   <name>MK21FA12_VectorTable</name>
+   <description>MK21FA12 VectorTable</description>
    <interrupt>
       <name>DMA0</name>
       <description>Direct memory access controller</description>
@@ -104,7 +104,7 @@ Devices using this vector table:
    </interrupt>
    <interrupt>
       <name>DMA_Error</name>
-      <description>Direct memory access controller</description>
+      <description>DMA error interrupt all channels</description>
       <value>16</value>
       <peripheral>DMA0</peripheral>
    </interrupt>
@@ -144,6 +144,12 @@ Devices using this vector table:
       <value>22</value>
       <peripheral>EWM</peripheral>
       <peripheral>WDOG</peripheral>
+   </interrupt>
+   <interrupt>
+      <name>RNGA</name>
+      <description>Random Number Generator Accelerator</description>
+      <value>23</value>
+      <peripheral>RNGA</peripheral>
    </interrupt>
    <interrupt>
       <name>I2C0</name>

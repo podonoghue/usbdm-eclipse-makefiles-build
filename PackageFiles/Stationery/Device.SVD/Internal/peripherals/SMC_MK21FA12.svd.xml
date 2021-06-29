@@ -1,19 +1,10 @@
 <!--
 Devices using this peripheral: 
-      MK11D5
-      MK11DA5
-      MK11D5WS
-      MK12D5
-      MK21D5
-      MK21DA5
-      MK21D5WS
-      MK22D5
-      MKW21D5
-      MKW22D5
-      MKW24D5
+      MK21FA12
+      MK22FA12
 -->
       <peripheral>
-         <?sourceFile "SMC_MK11D5" ?>
+         <?sourceFile "SMC_MK21FA12" ?>
          <name>SMC</name>
          <description>System Mode Controller</description>
          <groupName>SMC</groupName>
@@ -299,12 +290,12 @@ Controls powering of RAM partition 2 in VLLS2 mode</description>
                      <enumeratedValues>
                         <enumeratedValue>
                            <name>0b0</name>
-                           <description>RAM2 not powered in VLLS2</description>
+                           <description>RAM2 not powered in LLS2/VLLS2</description>
                            <value>0b0</value>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>0b1</name>
-                           <description>RAM2 powered in VLLS2</description>
+                           <description>RAM2 powered in LLS2/VLLS2</description>
                            <value>0b1</value>
                         </enumeratedValue>
                      </enumeratedValues>

@@ -1,7 +1,7 @@
 <!--
 Devices using this vector table: 
-   MK63F12
    MK64F12
+   MK63F12
 -->
 <interrupts>
    <name>MK63F12_VectorTable</name>
