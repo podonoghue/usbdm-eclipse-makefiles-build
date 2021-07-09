@@ -24,7 +24,7 @@
       </peripheral>
       <peripheral baseName="CAN"      instance="0"        version="can0_flex_mk">
          <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForFlexCan" />
-         <clock clockEnable="SIM->SCGC6 |= SIM_SCGC6_FLEXCAN0_MASK;" clockDisable="SIM->SCGC6 &amp;= ~SIM_SCGC6_FLEXCAN0_MASK;" />
+         <clock clockEnable="SIM->SCGC6 |= SIM_SCGC6_CAN0_MASK;" clockDisable="SIM->SCGC6 &amp;= ~SIM_SCGC6_CAN0_MASK;" />
          <irq num="CAN0_MessageBuffer_IRQn" />
          <irq num="CAN0_BusOff_IRQn" />
          <irq num="CAN0_Error_IRQn" />
@@ -88,69 +88,61 @@
          <irq num="DMA15_IRQn" />
          <irq num="DMA_Error_IRQn" />
       </peripheral>
-      <peripheral baseName="DMAMUX"   instance="0"        version="dmamux0_16ch_trig">
+      <peripheral baseName="DMAMUX"   instance="0"        version="dmamux0_16ch_trig_mk22fa12">
          <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForDmaMux" />
          <clock clockEnable="SIM->SCGC6 |= SIM_SCGC6_DMAMUX0_MASK;" clockDisable="SIM->SCGC6 &amp;= ~SIM_SCGC6_DMAMUX0_MASK;" />
          <dma source="Disabled"             num="0" />
-         <dma source="Slot1"                num="1" />
-         <dma source="Slot2"                num="2" />
-         <dma source="Slot3"                num="3" />
-         <dma source="Slot4"                num="4" />
-         <dma source="Slot5"                num="5" />
-         <dma source="Slot6"                num="6" />
-         <dma source="Slot7"                num="7" />
-         <dma source="Slot8"                num="8" />
-         <dma source="Slot9"                num="9" />
-         <dma source="Slot10"               num="10" />
-         <dma source="Slot11"               num="11" />
-         <dma source="Slot12"               num="12" />
-         <dma source="Slot13"               num="13" />
-         <dma source="Slot14"               num="14" />
-         <dma source="Slot15"               num="15" />
-         <dma source="Slot16"               num="16" />
-         <dma source="Slot17"               num="17" />
-         <dma source="Slot18"               num="18" />
-         <dma source="Slot19"               num="19" />
-         <dma source="Slot20"               num="20" />
-         <dma source="Slot21"               num="21" />
-         <dma source="Slot22"               num="22" />
-         <dma source="Slot23"               num="23" />
-         <dma source="Slot24"               num="24" />
-         <dma source="Slot25"               num="25" />
-         <dma source="Slot26"               num="26" />
-         <dma source="Slot27"               num="27" />
-         <dma source="Slot28"               num="28" />
-         <dma source="Slot29"               num="29" />
-         <dma source="Slot30"               num="30" />
-         <dma source="Slot31"               num="31" />
-         <dma source="Slot32"               num="32" />
-         <dma source="Slot33"               num="33" />
-         <dma source="Slot34"               num="34" />
-         <dma source="Slot35"               num="35" />
-         <dma source="Slot36"               num="36" />
-         <dma source="Slot37"               num="37" />
-         <dma source="Slot38"               num="38" />
-         <dma source="Slot39"               num="39" />
-         <dma source="Slot40"               num="40" />
-         <dma source="Slot41"               num="41" />
-         <dma source="Slot42"               num="42" />
-         <dma source="Slot43"               num="43" />
-         <dma source="Slot44"               num="44" />
-         <dma source="Slot45"               num="45" />
-         <dma source="Slot46"               num="46" />
-         <dma source="Slot47"               num="47" />
-         <dma source="Slot48"               num="48" />
-         <dma source="Slot49"               num="49" />
-         <dma source="Slot50"               num="50" />
-         <dma source="Slot51"               num="51" />
-         <dma source="Slot52"               num="52" />
-         <dma source="Slot53"               num="53" />
-         <dma source="Slot54"               num="54" />
-         <dma source="Slot55"               num="55" />
-         <dma source="Slot56"               num="56" />
-         <dma source="Slot57"               num="57" />
-         <dma source="Slot58"               num="58" />
-         <dma source="Slot59"               num="59" />
+         <dma source="UART0 Receive"        num="2" />
+         <dma source="UART0 Transmit"       num="3" />
+         <dma source="UART1 Receive"        num="4" />
+         <dma source="UART1 Transmit"       num="5" />
+         <dma source="UART2 Receive"        num="6" />
+         <dma source="UART2 Transmit"       num="7" />
+         <dma source="I2S0 Receive"         num="12" />
+         <dma source="I2S0 Transmit"        num="13" />
+         <dma source="SPI0 Receive"         num="14" />
+         <dma source="SPI0 Transmit"        num="15" />
+         <dma source="I2C0 Receive/Transmit" num="18" />
+         <dma source="I2C1_I2C2"            num="19" />
+         <dma source="FTM0 Channel 0"       num="20" />
+         <dma source="FTM0 Channel 1"       num="21" />
+         <dma source="FTM0 Channel 2"       num="22" />
+         <dma source="FTM0 Channel 3"       num="23" />
+         <dma source="FTM0 Channel 4"       num="24" />
+         <dma source="FTM0 Channel 5"       num="25" />
+         <dma source="FTM0 Channel 6"       num="26" />
+         <dma source="FTM0 Channel 7"       num="27" />
+         <dma source="FTM1 Channel 0"       num="28" />
+         <dma source="FTM1 Channel 1"       num="29" />
+         <dma source="FTM2 Channel 0"       num="30" />
+         <dma source="FTM2 Channel 1"       num="31" />
+         <dma source="FTM3 Channel 0"       num="32" />
+         <dma source="FTM3 Channel 1"       num="33" />
+         <dma source="FTM3 Channel 2"       num="34" />
+         <dma source="FTM3 Channel 3"       num="35" />
+         <dma source="FTM3 Channel 4"       num="36" />
+         <dma source="FTM3 Channel 5"       num="37" />
+         <dma source="FTM3 Channel 6"       num="38" />
+         <dma source="FTM3 Channel 7"       num="39" />
+         <dma source="ADC0"                 num="40" />
+         <dma source="ADC1"                 num="41" />
+         <dma source="CMP0"                 num="42" />
+         <dma source="CMP1"                 num="43" />
+         <dma source="CMP2"                 num="44" />
+         <dma source="DAC0"                 num="45" />
+         <dma source="CMT"                  num="47" />
+         <dma source="PDB"                  num="48" />
+         <dma source="Port A"               num="49" />
+         <dma source="Port B"               num="50" />
+         <dma source="Port C"               num="51" />
+         <dma source="Port D"               num="52" />
+         <dma source="Port E"               num="53" />
+         <dma source="AlwaysEnabled54"      num="54" />
+         <dma source="AlwaysEnabled55"      num="55" />
+         <dma source="AlwaysEnabled56"      num="56" />
+         <dma source="AlwaysEnabled57"      num="57" />
+         <dma source="AlwaysEnabled58"      num="58" />
+         <dma source="AlwaysEnabled59"      num="59" />
          <dma source="AlwaysEnabled60"      num="60" />
          <dma source="AlwaysEnabled61"      num="61" />
          <dma source="AlwaysEnabled62"      num="62" />
@@ -295,10 +287,10 @@
          <irq num="RTC_Alarm_IRQn" />
          <irq num="RTC_Seconds_IRQn" />
       </peripheral>
-      <peripheral baseName="SIM"      instance=""         version="sim_mk22fa12">
+      <peripheral baseName="SIM"      instance=""         version="sim_mk22f12">
          <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForSim" />
       </peripheral>
-      <peripheral baseName="SMC"      instance=""         version="smc_mk22fa12">
+      <peripheral baseName="SMC"      instance=""         version="smc_mk21f12">
          <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForSmc" />
       </peripheral>
       <peripheral baseName="SPI"      instance="0"        version="spi0_mk_pcsis6_pcsse">
@@ -306,7 +298,7 @@
          <clock clockEnable="SIM->SCGC6 |= SIM_SCGC6_SPI0_MASK;" clockDisable="SIM->SCGC6 &amp;= ~SIM_SCGC6_SPI0_MASK;" />
          <irq num="SPI0_IRQn" />
       </peripheral>
-      <peripheral baseName="UART"     instance="0"        version="uart0_mk10d10_c7816_cea709">
+      <peripheral baseName="UART"     instance="0"        version="uart0_mk10d7_c7816">
          <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForUart" />
          <clock clockEnable="SIM->SCGC4 |= SIM_SCGC4_UART0_MASK;" clockDisable="SIM->SCGC4 &amp;= ~SIM_SCGC4_UART0_MASK;" />
          <irq num="UART0_Lon_IRQn" />

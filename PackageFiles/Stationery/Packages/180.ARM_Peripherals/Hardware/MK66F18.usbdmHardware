@@ -26,7 +26,7 @@
       </peripheral>
       <peripheral baseName="CAN"      instance="0"        version="can0_flex_mk">
          <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForFlexCan" />
-         <clock clockEnable="SIM->SCGC6 |= SIM_SCGC6_FLEXCAN0_MASK;" clockDisable="SIM->SCGC6 &amp;= ~SIM_SCGC6_FLEXCAN0_MASK;" />
+         <clock clockEnable="SIM->SCGC6 |= SIM_SCGC6_CAN0_MASK;" clockDisable="SIM->SCGC6 &amp;= ~SIM_SCGC6_CAN0_MASK;" />
          <irq num="CAN0_MessageBuffer_IRQn" />
          <irq num="CAN0_BusOff_IRQn" />
          <irq num="CAN0_Error_IRQn" />
@@ -36,7 +36,7 @@
       </peripheral>
       <peripheral baseName="CAN"      instance="1"        version="can0_flex_mk">
          <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForFlexCan" />
-         <clock clockEnable="SIM->SCGC3 |= SIM_SCGC3_FLEXCAN1_MASK;" clockDisable="SIM->SCGC3 &amp;= ~SIM_SCGC3_FLEXCAN1_MASK;" />
+         <clock clockEnable="SIM->SCGC3 |= SIM_SCGC3_CAN1_MASK;" clockDisable="SIM->SCGC3 &amp;= ~SIM_SCGC3_CAN1_MASK;" />
          <irq num="CAN1_MessageBuffer_IRQn" />
          <irq num="CAN1_BusOff_IRQn" />
          <irq num="CAN1_Error_IRQn" />

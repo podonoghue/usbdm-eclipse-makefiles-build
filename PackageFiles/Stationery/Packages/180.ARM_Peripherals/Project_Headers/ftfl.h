@@ -380,32 +380,34 @@ private:
 
 public:
    /**
-    * Assign to underlying type.
+    * Assignment
     * This adds a wait for the Flash to be updated.
     *
     * @param[in]  data The data to assign
     *
     * @note Write only occurs if the NV data is changing.
     */
-   void operator=(const Nonvolatile<T> &data ) {
+   Nonvolatile<T> &operator=(const Nonvolatile<T> &data ) {
       if (this->data != (T)data) {
          this->data = (T)data;
          Flash::waitUntilFlexIdle();
       }
+      return *this;
    }
    /**
-    * Assign to underlying type.
+    * Assignment from underlying type.
     * This adds a wait for the Flash to be updated
     *
     * @param[in]  data The data to assign
     *
     * @note Write only occurs if the NV data is changing.
     */
-   void operator=(const T &data ) {
+   Nonvolatile<T> &operator=(const T &data ) {
       if (this->data != data) {
          this->data = data;
          Flash::waitUntilFlexIdle();
       }
+      return *this;
    }
    /**
     * Increment underlying type.
@@ -413,9 +415,10 @@ public:
     *
     * @param[in]  change The amount to increment
     */
-   void operator+=(const Nonvolatile<T> &change ) {
+   Nonvolatile<T> &operator+=(const Nonvolatile<T> &change ) {
       this->data += (T)change;
       Flash::waitUntilFlexIdle();
+      return *this;
    }
    /**
     * Increment underlying type.
@@ -423,9 +426,10 @@ public:
     *
     * @param[in]  change The amount to increment
     */
-   void operator+=(const T &change ) {
+   Nonvolatile<T> &operator+=(const T &change ) {
       this->data += change;
       Flash::waitUntilFlexIdle();
+      return *this;
    }
    /**
     * Decrement underlying type.
@@ -433,9 +437,10 @@ public:
     *
     * @param[in]  change The amount to increment
     */
-   void operator-=(const Nonvolatile<T> &change ) {
+   Nonvolatile<T> &operator-=(const Nonvolatile<T> &change ) {
       this->data -= (T)change;
       Flash::waitUntilFlexIdle();
+      return *this;
    }
    /**
     * Decrement underlying type.
@@ -443,16 +448,17 @@ public:
     *
     * @param[in]  change The amount to increment
     */
-   void operator-=(const T &change ) {
+   Nonvolatile<T> &operator-=(const T &change ) {
       this->data -= change;
       Flash::waitUntilFlexIdle();
+      return *this;
    }
    /**
     * Return the underlying object - <b>read-only</b>.
     *
     * @return underlying object
     */
-   operator T() const {
+   operator const T() const {
       Flash::waitUntilFlexIdle();
       return data;
    }
@@ -502,10 +508,10 @@ public:
     *
     * @note Flash write only occurs if the NV data element is changing value.
     */
-   void operator=(const TArray &other ) {
+   NonvolatileArray &operator=(const TArray &other ) {
       if (&this->data == &other) {
          // Identity check
-         return;
+         return *this;
       }
       for (int index=0; index<dimension; index++) {
          if (data[index] != other[index]) {
@@ -513,6 +519,7 @@ public:
             Flash::waitUntilFlexIdle();
          }
       }
+      return *this;
    }
 
    /**
@@ -524,8 +531,9 @@ public:
     *
     * @note Flash write only occurs if the NV data element is changing value.
     */
-   void operator=(const NonvolatileArray &other ) {
+   NonvolatileArray &operator=(const NonvolatileArray &other ) {
       *this = other.data;
+      return *this;
    }
 
    /**
@@ -546,8 +554,9 @@ public:
     *
     * @return Reference to underlying array element
     */
-   const T operator [](int index) {
-      return data[index];
+   Nonvolatile<T> &operator [](int index) const {
+      usbdm_assert(static_cast<unsigned>(index)<dimension, "Index out of range");
+      return *(Nonvolatile<T> *)(&data[index]);
    }
 
    /**
@@ -565,7 +574,8 @@ public:
     *
     * @note Flash write only occurs if the NV data element is changing value.
     */
-   void set(int index, T value) {
+   void set(unsigned index, T value) {
+      usbdm_assert(static_cast<unsigned>(index)<dimension, "Index out of range");
       if (data[index] != value) {
          data[index] = value;
          Flash::waitUntilFlexIdle();

@@ -81,7 +81,7 @@
       <xi:include href="peripherals/RTC_TAMPER_WPS.svd.xml"/>
       <xi:include href="peripherals/SCB_CM4_CPACR.svd.xml"/>
       <xi:include href="peripherals/SDHC0_MK21F12.svd.xml"/>
-      <xi:include href="peripherals/SIM_MK22FA12.svd.xml"/>
+      <xi:include href="peripherals/SIM_MK22F12.svd.xml"/>
       <xi:include href="peripherals/SMC_MK21FA12.svd.xml"/>
       <xi:include href="peripherals/SPI0_MK_PCSIS6_PCSSE.svd.xml"/>
       <peripheral derivedFrom="SPI0"><name>SPI1</name><baseAddress>0x4002D000</baseAddress></peripheral>

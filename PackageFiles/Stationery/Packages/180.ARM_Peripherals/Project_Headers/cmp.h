@@ -65,7 +65,7 @@ enum CmpInterrupt {
 /**
  * Comparator event identification
  */
-enum CmpEvent {
+enum CmpEvent : uint8_t {
    CmpEvent_None    = CMP_SCR_CFR(0)|CMP_SCR_CFF(0),  //!< Neither edge
    CmpEvent_Rising  = CMP_SCR_CFR(1)|CMP_SCR_CFF(0),  //!< Rising edge
    CmpEvent_Falling = CMP_SCR_CFR(0)|CMP_SCR_CFF(1),  //!< Falling edge
@@ -77,7 +77,7 @@ enum CmpEvent {
  */
 struct CmpStatus {
    CmpEvent event;   //!< Event triggering handler
-   bool     state;   //!< State of CMPO at event
+   uint8_t  state;   //!< State of CMPO at event
 };
 
 /**

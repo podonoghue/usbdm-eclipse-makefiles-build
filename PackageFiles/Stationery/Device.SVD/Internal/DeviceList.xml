@@ -23,7 +23,8 @@
       <device name="MK20DxxxM10"      svdFileName="MK20D10"    pattern="MK20D.*M10" />
       <device name="MK20FxxxM12"      svdFileName="MK20F12"    pattern="MK20F.*M12" />
       <device name="MK21DN512M5"      svdFileName="MK21D5"     pattern="MK21D.*M5" />
-      <device name="MK21FN1M0M12"     svdFileName="MK21F12"    pattern="MK21F.*M12" />
+      <device name="MK21FxxxAM12"     svdFileName="MK21FA12"   pattern="MK21F.*AM12" />
+      <device name="MK21FxxxM12 "     svdFileName="MK21F12"    pattern="MK21F.*M12" />
       <device name="MK22DxxxxM5"      svdFileName="MK22D5"     pattern="MK22D.*M5" />
       <device name="MK22FN128M10"     svdFileName="MK22F12810" />
       <device name="MK22FN256M12"     svdFileName="MK22F25612" />
@@ -266,7 +267,8 @@
       
       <device name="FRDM_K20D50M"     svdFileName="MK20D5"      />
       <device name="FRDM_K22F"        svdFileName="MK22F51212"  />
-      <device name="FRDM_K22F1M0"     svdFileName="MK22FA12"    />
+      <device name="FRDM_K22F1M0"     svdFileName="MK22F12"     />
+      <device name="FRDM_K22FA1M0"    svdFileName="MK22FA12"    />
       <device name="FRDM_K28F"        svdFileName="MK28F15"     />
       <device name="FRDM_K64F"        svdFileName="MK64F12"     />
       <device name="FRDM_K66F"        svdFileName="MK66F18"     />

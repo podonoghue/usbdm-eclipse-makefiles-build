@@ -408,7 +408,7 @@ public:
          AdcAsyncClock   adcAsyncClock   = AdcAsyncClock_Disabled
          ) {
       enable();
-      adc().CFG1 = adcResolution|adcClockSource|calculateClockDivider(adcClockSource, adcClockRange, adcPower)|adcPower|(adcSample&ADC_CFG1_ADLSMP_MASK);
+      adc().CFG1 = adcResolution|calculateClockDivider(adcClockSource, adcClockRange, adcPower)|adcPower|(adcSample&ADC_CFG1_ADLSMP_MASK);
       adc().CFG2 = adcMuxsel|adcClockRange|adcAsyncClock|(adcSample&ADC_CFG2_ADLSTS_MASK);
    }
 
@@ -446,11 +446,12 @@ public:
       }
    }
    /**
-    * Calculate ADC clock divider (ADC_CFG1_ADIV)
+    * Calculate ADC clock divider (ADC_CFG1_ADIV) and confirm clock source (ADC_CFG1_ADICLK)
+    * @note adcClockSource may be modified in return value
     *
     * @param adcClockSource
     *
-    * @return ADC_CFG1_ADIV value
+    * @return ADC_CFG1_ADIV|ADC_CFG1_ADICLK value
     */
    static unsigned calculateClockDivider(AdcClockSource adcClockSource, AdcClockRange adcClockRange, AdcPower adcPower) {
       static constexpr unsigned MinClock =  2000000;
@@ -469,15 +470,24 @@ public:
             maxClock = 12000000;
             break;
       }
-      unsigned clockFrequency = Info::getInputClockFrequency(adcClockSource);
       unsigned adiv;
-      for (adiv=0; adiv<=3; adiv++) {
-         if ((clockFrequency <= maxClock) && (clockFrequency >= MinClock)) {
-            break;
+      for(;;) {
+         unsigned clockFrequency = Info::getInputClockFrequency(adcClockSource);
+         for (adiv=0; adiv<=3; adiv++) {
+            if ((clockFrequency <= maxClock) && (clockFrequency >= MinClock)) {
+               break;
+            }
+            clockFrequency /= 2;
          }
-         clockFrequency /= 2;
+         if ((adiv>3) && (adcClockSource == AdcClockSource_Bus)) {
+               // Automatically switch from  AdcClockSource_Bus -> AdcClockSource_Busdiv2
+               adcClockSource = AdcClockSource_Busdiv2;
+               continue;
+         }
+         break;
       }
-      return ADC_CFG1_ADIV(adiv);
+      usbdm_assert(adiv<4, "Unable to find suitable ADC clock");
+      return ADC_CFG1_ADIV(adiv)|adcClockSource;
    }
 
    /**
@@ -797,6 +807,13 @@ public:
 
       /** Channel number */
       static constexpr int CHANNEL=channel;
+
+      /** GPIO pin associated with this channel (Not all channels have an associated GPIO!) */
+      template<Polarity polarity=ActiveHigh>
+      class GpioPin : public GpioTable_T<Info, channel, polarity> {
+         static_assert((Adc0Info::info[channel].portAddress != 0),
+               "ADC channel does not have corresponding GPIO pin");
+      };
 
       /**
        * Configure the pin associated with this ADC channel.
