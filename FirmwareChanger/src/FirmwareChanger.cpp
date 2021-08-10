@@ -739,8 +739,9 @@ FirmwareChangerDialogue::~FirmwareChangerDialogue() {
  * Member initialisation
  */
 void FirmwareChangerDialogue::Init() {
-   LOGGING_E;
+   LOGGING;
 
+   log.print("serialNumber = '%s'\n", (const char *)serialNumber.c_str());
    autoSelectFirmwareCheckbox->SetValue(autoUpdateBdm);
    serialNumberText->SetMaxLength(sizeof(ICP_data.serialNumber));
    serialNumberText->SetValue(serialNumber);
@@ -760,11 +761,11 @@ void FirmwareChangerDialogue::Init() {
 //! @param settings      - Object to load settings from
 //!
 void FirmwareChangerDialogue::loadSettings(const AppSettings &settings) {
-   LOGGING_E;
+   LOGGING;
 
-   autoUpdateBdm      = settings.getValue("autoUpdateBdm",          true);
    autoSequenceFlag   = settings.getValue("autoSequence",           false);
    autoSequenceNumber = settings.getValue("autoSequenceNumber",     1);
+   autoUpdateBdm      = settings.getValue("autoUpdateBdm",          true);
    defaultDirectory   = settings.getValue("defaultDirectory",       "");
    serialNumber       = settings.getValue("serialNumber",           "USBDM");
    parseSerialNumber(serialNumber, serialNumberPrefix);
@@ -831,6 +832,7 @@ void FirmwareChangerDialogue::OnLoadFirmwareButtonClick( wxCommandEvent& event )
  * wxEVT_COMMAND_TEXT_UPDATED event handler for ID_TEXTCTRL
  */
 void FirmwareChangerDialogue::OnSerialnumTextctrlTextUpdated( wxCommandEvent& event ) {
+	serialNumber = serialNumberText->GetValue();
 }
 
 /*
@@ -884,8 +886,22 @@ void FirmwareChangerDialogue::serialNumberToTextControl(void) {
          );
 }
 
+/**
+ * Parse serial number
+ *
+ * @param[in]  serialNumber
+ * @param[out] serialNumberPrefix
+ */
 void FirmwareChangerDialogue::parseSerialNumber(const wxString &serialNumber, wxString &serialNumberPrefix) {
-   unsigned separatorIndex = serialNumber.length()-1;
+   LOGGING_Q;
+
+   unsigned separatorIndex = serialNumber.length();
+   if (separatorIndex == 0) {
+	   serialNumberPrefix = _("");
+	   return;
+   }
+   // Start at end of string
+   separatorIndex -= 1;
    while (isdigit((char)serialNumber.at(separatorIndex))) {
       separatorIndex--;
    }
@@ -896,6 +912,10 @@ void FirmwareChangerDialogue::parseSerialNumber(const wxString &serialNumber, wx
       separatorIndex = sizeof(ICP_data.serialNumber)-5;
    }
    serialNumberPrefix = serialNumber.substr(0,separatorIndex+1);
+   log.print(" s=\'%s\' p=\'%s\'\n",
+         (const char *)serialNumber.c_str(),
+         (const char *)serialNumberPrefix.c_str()
+         );
 }
 
 void FirmwareChangerDialogue::textControlToSerialNumber(void) {
@@ -1422,8 +1442,8 @@ bool FirmwareChangerApp::OnInit() {
 		   	 // Create empty app settings
 		   	 appSettings.reset(new AppSettings (configFileName, "Firmware Changer"));
 		   	 appSettings->load();
-		   	 dialogue->Init();
 		   	 dialogue->loadSettings(*appSettings);
+		   	 dialogue->Init();
 		   	 dialogue->setAutoLoad(dialogue->doAutoLoad());
 		   	 SetTopWindow(dialogue);
 		   	 dialogue->ShowModal();
