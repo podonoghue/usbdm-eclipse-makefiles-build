@@ -3,6 +3,10 @@
 # ====================================================
 
 echo This installs the packages to build USBDM
+echo Updated for Linux Mint 20.2
+echo Found it necessary to downgrade libc6 using 
+echo sudo apt install libc6=2.31-0ubuntu9.2
+
 echo
 
 if [ "$1" == "" ]; then
@@ -28,7 +32,7 @@ sudo apt-get -y install libusb-1.0-0-dev
 sudo apt-get -y install tcl8.6-dev
 sudo apt-get -y install tcl8.6
 sudo apt-get -y install libxerces-c-dev
-sudo apt-get -y install libwxgtk3.0-dev
+sudo apt-get -y install libwxgtk3.0-gtk3-dev
 sudo apt-get -y install libwxbase3.0-dev
 sudo apt-get -y install g++
 sudo apt-get -y install openjdk-11-jdk
@@ -43,7 +47,7 @@ sudo apt-get -y install libusb-1.0-0-dev
 sudo apt-get -y install tcl-dev
 sudo apt-get -y install tcl
 sudo apt-get -y install libxerces-c-dev
-sudo apt-get -y install libwxgtk3.0-dev
+sudo apt-get -y install libwxgtk3.0-gtk3-dev
 sudo apt-get -y install libwxbase3.0-dev
 sudo apt-get -y install g++
 sudo apt-get -y install openjdk-11-jdk
