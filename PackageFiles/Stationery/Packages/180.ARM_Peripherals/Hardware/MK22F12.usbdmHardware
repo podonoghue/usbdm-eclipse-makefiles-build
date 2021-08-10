@@ -281,6 +281,9 @@
       <peripheral baseName="POWER"    instance="">
          <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForPower" />
       </peripheral>
+      <peripheral baseName="RCM"      instance=""         version="rcm_mk10d5">
+         <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForRcm" />
+      </peripheral>
       <peripheral baseName="RTC"      instance=""         version="rtc_tamper_wps">
          <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForRtc" />
          <clock clockEnable="SIM->SCGC6 |= SIM_SCGC6_RTC_MASK;" clockDisable="SIM->SCGC6 &amp;= ~SIM_SCGC6_RTC_MASK;" />
@@ -336,21 +339,29 @@
       <pin name="ADC0_DM0"     isFixed="true">
          <mux sel="fixed"         signal="ADC0_DM0" />
          <mux sel="fixed"         signal="ADC1_DM3" />
+         <mux sel="fixed"         signal="ADC0_SE19" />
+         <mux sel="fixed"         signal="ADC1_SE21" />
          <reset sel="fixed" />
       </pin>
       <pin name="ADC0_DP0"     isFixed="true">
          <mux sel="fixed"         signal="ADC0_DP0" />
          <mux sel="fixed"         signal="ADC1_DP3" />
+         <mux sel="fixed"         signal="ADC0_SE0" />
+         <mux sel="fixed"         signal="ADC1_SE3" />
          <reset sel="fixed" />
       </pin>
       <pin name="ADC1_DM0"     isFixed="true">
          <mux sel="fixed"         signal="ADC1_DM0" />
          <mux sel="fixed"         signal="ADC0_DM3" />
+         <mux sel="fixed"         signal="ADC1_SE19" />
+         <mux sel="fixed"         signal="ADC0_SE21" />
          <reset sel="fixed" />
       </pin>
       <pin name="ADC1_DP0"     isFixed="true">
          <mux sel="fixed"         signal="ADC1_DP0" />
          <mux sel="fixed"         signal="ADC0_DP3" />
+         <mux sel="fixed"         signal="ADC1_SE0" />
+         <mux sel="fixed"         signal="ADC0_SE3" />
          <reset sel="fixed" />
       </pin>
       <pin name="BandGap"      isFixed="true">

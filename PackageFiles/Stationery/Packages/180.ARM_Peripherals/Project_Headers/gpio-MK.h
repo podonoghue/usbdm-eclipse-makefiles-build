@@ -1079,7 +1079,7 @@ public:
    }
 
    /**
-    * @brief Convenience template for Gpios associated with this field. See @ref Gpio_T
+    * @brief Convenience template for Gpios associated with a bit of this field. See @ref Gpio_T
     *
     * <b>Usage</b>
     * @code
@@ -1093,11 +1093,16 @@ public:
     *
     * @endcode
     *
-    * @tparam bitNum        Bit number in the port
+    * @tparam bitNum        Bit number within the <em>field<em>
     * @tparam polarity      Polarity of pin. Either ActiveHigh or ActiveLow
     */
    template<unsigned bitNum, Polarity bitPolarity=polarity> class Bit :
-   public GpioBase_T<Info::pinInfo.clockInfo, Info::pinInfo.portAddress, Info::pinInfo.irqNum, Info::pinInfo.gpioAddress, bitNum+RIGHT, bitPolarity> {};
+   public GpioBase_T<Info::pinInfo.clockInfo, Info::pinInfo.portAddress, Info::pinInfo.irqNum, Info::pinInfo.gpioAddress, bitNum+RIGHT, bitPolarity> {
+      static_assert(bitNum<=(left-right), "Bit does not exist in field");
+   public:
+      // Allow access to owning field
+      using Owner = Field_T;
+   };
 };
 
 #ifdef USBDM_GPIOA_IS_DEFINED

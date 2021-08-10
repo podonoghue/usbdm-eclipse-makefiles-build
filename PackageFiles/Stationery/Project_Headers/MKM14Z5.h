@@ -5,7 +5,7 @@
  *           Equivalent: 
  *
  * @version  V1.6
- * @date     2019/06
+ * @date     2021/06
  *
  *******************************************************************************************************/
 
@@ -1363,34 +1363,6 @@ typedef enum DmaSlot {
    Dma0Slot_AlwaysEnabled61            =       61, //!<  AlwaysEnabled61
    Dma0Slot_AlwaysEnabled62            =       62, //!<  AlwaysEnabled62
    Dma0Slot_AlwaysEnabled63            =       63, //!<  AlwaysEnabled63
-} DmaSlot;
-
-/**
- * @} */ /* End group DMAMUX_Peripheral_access_layer_GROUP 
- */
-/**
-* @addtogroup DMAMUX_Peripheral_access_layer_GROUP DMAMUX Peripheral Access Layer
-* @brief C Struct for DMAMUX
-* @{
-*/
-
-/* ================================================================================ */
-/* ================           DMAMUX1 (derived from DMAMUX0)       ================ */
-/* ================================================================================ */
-
-/**
- * @brief DMA channel multiplexor
- */
-
-/* DMAMUX1 - Peripheral instance base addresses */
-#define DMAMUX1_BasePtr                0x40022000UL //!< Peripheral base address
-#define DMAMUX1                        ((DMAMUX_Type *) DMAMUX1_BasePtr) //!< Freescale base pointer
-#define DMAMUX1_BASE_PTR               (DMAMUX1) //!< Freescale style base pointer
-
-/**
- * DMA multiplexor slot (source) numbers
- */
-typedef enum DmaSlot {
    Dma1Slot_Disabled                   =        0, //!<  Disabled
    Dma1Slot_Slot1                      =        1, //!<  Slot1
    Dma1Slot_Slot2                      =        2, //!<  Slot2
@@ -1455,34 +1427,6 @@ typedef enum DmaSlot {
    Dma1Slot_AlwaysEnabled61            =       61, //!<  AlwaysEnabled61
    Dma1Slot_AlwaysEnabled62            =       62, //!<  AlwaysEnabled62
    Dma1Slot_AlwaysEnabled63            =       63, //!<  AlwaysEnabled63
-} DmaSlot;
-
-/**
- * @} */ /* End group DMAMUX_Peripheral_access_layer_GROUP 
- */
-/**
-* @addtogroup DMAMUX_Peripheral_access_layer_GROUP DMAMUX Peripheral Access Layer
-* @brief C Struct for DMAMUX
-* @{
-*/
-
-/* ================================================================================ */
-/* ================           DMAMUX2 (derived from DMAMUX0)       ================ */
-/* ================================================================================ */
-
-/**
- * @brief DMA channel multiplexor
- */
-
-/* DMAMUX2 - Peripheral instance base addresses */
-#define DMAMUX2_BasePtr                0x40023000UL //!< Peripheral base address
-#define DMAMUX2                        ((DMAMUX_Type *) DMAMUX2_BasePtr) //!< Freescale base pointer
-#define DMAMUX2_BASE_PTR               (DMAMUX2) //!< Freescale style base pointer
-
-/**
- * DMA multiplexor slot (source) numbers
- */
-typedef enum DmaSlot {
    Dma2Slot_Disabled                   =        0, //!<  Disabled
    Dma2Slot_Slot1                      =        1, //!<  Slot1
    Dma2Slot_Slot2                      =        2, //!<  Slot2
@@ -1547,34 +1491,6 @@ typedef enum DmaSlot {
    Dma2Slot_AlwaysEnabled61            =       61, //!<  AlwaysEnabled61
    Dma2Slot_AlwaysEnabled62            =       62, //!<  AlwaysEnabled62
    Dma2Slot_AlwaysEnabled63            =       63, //!<  AlwaysEnabled63
-} DmaSlot;
-
-/**
- * @} */ /* End group DMAMUX_Peripheral_access_layer_GROUP 
- */
-/**
-* @addtogroup DMAMUX_Peripheral_access_layer_GROUP DMAMUX Peripheral Access Layer
-* @brief C Struct for DMAMUX
-* @{
-*/
-
-/* ================================================================================ */
-/* ================           DMAMUX3 (derived from DMAMUX0)       ================ */
-/* ================================================================================ */
-
-/**
- * @brief DMA channel multiplexor
- */
-
-/* DMAMUX3 - Peripheral instance base addresses */
-#define DMAMUX3_BasePtr                0x40024000UL //!< Peripheral base address
-#define DMAMUX3                        ((DMAMUX_Type *) DMAMUX3_BasePtr) //!< Freescale base pointer
-#define DMAMUX3_BASE_PTR               (DMAMUX3) //!< Freescale style base pointer
-
-/**
- * DMA multiplexor slot (source) numbers
- */
-typedef enum DmaSlot {
    Dma3Slot_Disabled                   =        0, //!<  Disabled
    Dma3Slot_Slot1                      =        1, //!<  Slot1
    Dma3Slot_Slot2                      =        2, //!<  Slot2
@@ -1641,6 +1557,69 @@ typedef enum DmaSlot {
    Dma3Slot_AlwaysEnabled63            =       63, //!<  AlwaysEnabled63
 } DmaSlot;
 
+/**
+ * @} */ /* End group DMAMUX_Peripheral_access_layer_GROUP 
+ */
+/**
+* @addtogroup DMAMUX_Peripheral_access_layer_GROUP DMAMUX Peripheral Access Layer
+* @brief C Struct for DMAMUX
+* @{
+*/
+
+/* ================================================================================ */
+/* ================           DMAMUX1 (derived from DMAMUX0)       ================ */
+/* ================================================================================ */
+
+/**
+ * @brief DMA channel multiplexor
+ */
+
+/* DMAMUX1 - Peripheral instance base addresses */
+#define DMAMUX1_BasePtr                0x40022000UL //!< Peripheral base address
+#define DMAMUX1                        ((DMAMUX_Type *) DMAMUX1_BasePtr) //!< Freescale base pointer
+#define DMAMUX1_BASE_PTR               (DMAMUX1) //!< Freescale style base pointer
+/**
+ * @} */ /* End group DMAMUX_Peripheral_access_layer_GROUP 
+ */
+/**
+* @addtogroup DMAMUX_Peripheral_access_layer_GROUP DMAMUX Peripheral Access Layer
+* @brief C Struct for DMAMUX
+* @{
+*/
+
+/* ================================================================================ */
+/* ================           DMAMUX2 (derived from DMAMUX0)       ================ */
+/* ================================================================================ */
+
+/**
+ * @brief DMA channel multiplexor
+ */
+
+/* DMAMUX2 - Peripheral instance base addresses */
+#define DMAMUX2_BasePtr                0x40023000UL //!< Peripheral base address
+#define DMAMUX2                        ((DMAMUX_Type *) DMAMUX2_BasePtr) //!< Freescale base pointer
+#define DMAMUX2_BASE_PTR               (DMAMUX2) //!< Freescale style base pointer
+/**
+ * @} */ /* End group DMAMUX_Peripheral_access_layer_GROUP 
+ */
+/**
+* @addtogroup DMAMUX_Peripheral_access_layer_GROUP DMAMUX Peripheral Access Layer
+* @brief C Struct for DMAMUX
+* @{
+*/
+
+/* ================================================================================ */
+/* ================           DMAMUX3 (derived from DMAMUX0)       ================ */
+/* ================================================================================ */
+
+/**
+ * @brief DMA channel multiplexor
+ */
+
+/* DMAMUX3 - Peripheral instance base addresses */
+#define DMAMUX3_BasePtr                0x40024000UL //!< Peripheral base address
+#define DMAMUX3                        ((DMAMUX_Type *) DMAMUX3_BasePtr) //!< Freescale base pointer
+#define DMAMUX3_BASE_PTR               (DMAMUX3) //!< Freescale style base pointer
 /**
  * @} */ /* End group DMAMUX_Peripheral_access_layer_GROUP 
  */
