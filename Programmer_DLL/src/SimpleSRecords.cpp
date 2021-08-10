@@ -120,8 +120,8 @@ static uint32_t hex8ToDecimal(const char **ptr) {
 //! @param pSrec        : SRECs to load
 //! @param buffer       : Buffer for the image
 //! @param bufferSize   : Size of buffer (in uint8_t)
-//! @param loadedSize   : Size of loaded image (in uint8_t)
-//! @param loadAddr     : Memory address for start of buffer (byte address)
+//! @param imageSize    : Size of loaded image (in uint8_t)
+//! @param imageAddress : Memory address for start of image/buffer (byte address)
 //!
 //! @return error code
 //!
@@ -131,8 +131,8 @@ static uint32_t hex8ToDecimal(const char **ptr) {
 USBDM_ErrorCode loadSRec(const char          *pSrec,
                          uint8_t              buffer[],
                          unsigned             bufferSize,
-                         unsigned            *loadedSize,
-                         uint32_t            *loadAddr,
+                         unsigned            *imageSize,
+                         uint32_t            *imageAddress,
                          bool                 wordAddresses) {
    LOGGING_Q;
    uint8_t *ptr         = buffer;
@@ -144,8 +144,8 @@ USBDM_ErrorCode loadSRec(const char          *pSrec,
    uint32_t  addr;
    uint8_t   checkSum;
 
-   *loadAddr   = 0xFFFFFFFF;
-   *loadedSize = 0x0;
+   *imageAddress   = 0xFFFFFFFF;
+   *imageSize = 0x0;
 
 //   log.print("Loading:\n%s\n", pSrec);
 
@@ -233,9 +233,9 @@ USBDM_ErrorCode loadSRec(const char          *pSrec,
          // Convert to byte address
          addr *= 2;
       }
-      if ((*loadAddr == 0xFFFFFFFF) && !discardSrec) {
-         *loadAddr = addr;
-         log.print("Load address = 0x%08X\n", *loadAddr);
+      if ((*imageAddress == 0xFFFFFFFF) && !discardSrec) {
+         *imageAddress = addr;
+         log.print("Load address = 0x%08X\n", *imageAddress);
          nextAddr  = addr;
       }
       if ((addr != nextAddr) && !discardSrec) {
@@ -267,6 +267,6 @@ USBDM_ErrorCode loadSRec(const char          *pSrec,
       }
    }
    log.print("Size         = 0x%08X\n", size);
-   *loadedSize = size;
+   *imageSize = size;
    return BDM_RC_OK;
 }

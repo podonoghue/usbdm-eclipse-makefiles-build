@@ -238,9 +238,23 @@ inline uint32_t getData16Target(uint16_t *data) {
 #define nativeToTarget16(x) swap16(x)
 #define nativeToTarget32(x) swap32(x)
 
+/**
+ * Get 32-bit target value from buffer i.e. converts from target to native format
+ *
+ * @param data Pointer to 1st byte of data in target format
+ *
+ * @return Data value in native format
+ */
 inline uint32_t getData32Target(uint8_t *data) {
    return getData32Be(data);
 }
+/**
+ * Get 16-bit target value from buffer i.e. converts from target to native format
+ *
+ * @param data Pointer to 1st byte of data in target format
+ *
+ * @return Data value in native format
+ */
 inline uint32_t getData16Target(uint8_t *data) {
    return getData16Be(data);
 }
@@ -814,19 +828,23 @@ USBDM_ErrorCode FlashProgrammer_HCS12::loadTargetProgram(FlashProgramConstPtr fl
    currentFlashOperation = OpNone;
 
    unsigned size; // In uint8_t
-   uint32_t loadAddress;
+   uint32_t imageAddress;
    USBDM_ErrorCode rc = loadSRec(flashProgram->getFlashProgram().c_str(),
                                  buffer,
                                  sizeof(buffer)/sizeof(buffer[0]),
                                  &size,
-                                 &loadAddress);
+                                 &imageAddress);
    if (rc !=  BDM_RC_OK) {
       log.error("Failed, loadSRec() failed\n");
       return PROGRAMMING_RC_ERROR_INTERNAL_CHECK_FAILED;
    }
 
    // Find RAM region to use
-   device->getRamRegionFor(loadAddress, ramStart, ramEnd);
+   if (!device->getRamRegionFor(imageAddress, ramStart, ramEnd)) {
+      log.warning("Failed to locate RAM region nominated in image\nUsing largest region available instead\n");
+      // This will trigger relocation later (or fail)
+      device->getLargestRamRegion(ramStart, ramEnd);
+   }
    log.print("Using RAM region [0x%8X..0x%8X]\n", ramStart, ramEnd);
 
    memset(&targetProgramInfo, 0, sizeof(targetProgramInfo));
@@ -849,14 +867,14 @@ USBDM_ErrorCode FlashProgrammer_HCS12::loadTargetProgram(FlashProgramConstPtr fl
    LoadInfoStruct *infoPtr = (LoadInfoStruct *)buffer;
    targetProgramInfo.smallProgram = (infoPtr->flags&OPT_SMALL_CODE) != 0;
    if (targetProgramInfo.smallProgram) {
-      return loadSmallTargetProgram(buffer, loadAddress, size, flashProgram, flashOperation);
+      return loadSmallTargetProgram(buffer, imageAddress, size, flashProgram, flashOperation);
    }
    else {
-      return loadLargeTargetProgram(buffer, loadAddress, size, flashProgram, flashOperation);
+      return loadLargeTargetProgram(buffer, imageAddress, size, flashProgram, flashOperation);
    }
 #else
    targetProgramInfo.smallProgram = false;
-   return loadLargeTargetProgram(buffer, loadAddress, size, flashProgram, flashOperation);
+   return loadLargeTargetProgram(buffer, imageAddress, size, flashProgram, flashOperation);
 #endif
 }
 
@@ -864,8 +882,8 @@ USBDM_ErrorCode FlashProgrammer_HCS12::loadTargetProgram(FlashProgramConstPtr fl
 //! Loads the given Flash programming code to target memory
 //!
 //! @param  buffer            buffer containing program image
-//! @param  loadAddress       address to load image at
-//! @param  size              size of image (in uint8_t)
+//! @param  imageAddress      address of start of image (may be relocated)
+//! @param  imageSize         size of image (in uint8_t)s
 //! @param  flashProgram      flash program corresponding to image
 //! @param  flashOperation    intended operation in case of partial loading
 //!
@@ -878,22 +896,26 @@ USBDM_ErrorCode FlashProgrammer_HCS12::loadTargetProgram(FlashProgramConstPtr fl
 //! Target Memory map
 //! +---------------------------------------------------+ -+
 //! |   LargeTargetImageHeader  flashProgramHeader;     |  |
-//! +---------------------------------------------------+   > Unchanging written once
+//! +---------------------------------------------------+   > Unchanging for repeated operations
 //! |   Flash program code....                          |  |
 //! +---------------------------------------------------+ -+
 //!
-USBDM_ErrorCode FlashProgrammer_HCS12::loadLargeTargetProgram(uint8_t    *buffer,
-                                                        uint32_t              loadAddress,
-                                                        uint32_t              size,
-                                                        FlashProgramConstPtr  flashProgram,
-                                                        FlashOperation        flashOperation) {
+USBDM_ErrorCode FlashProgrammer_HCS12::loadLargeTargetProgram(
+                                          uint8_t               *buffer,
+                                          uint32_t               imageAddress,
+                                          uint32_t               imageSize,
+                                          FlashProgramConstPtr   flashProgram,
+                                          FlashOperation         flashOperation) {
    LOGGING;
    log.print("Op=%s\n", getFlashOperationName(flashOperation));
 
    // Find 'header' in download image
+   // First 2 bytes are address of header in target memory
    uint32_t headerAddress = getData16Target(buffer);
-   LargeTargetImageHeader *headerPtr = (LargeTargetImageHeader*) (buffer+(headerAddress-loadAddress));
-   if (headerPtr > (LargeTargetImageHeader*)(buffer+size)) {
+
+   // Convert to pointer to header in download image - note still target endian!
+   LargeTargetImageHeader *headerPtr = (LargeTargetImageHeader*) (buffer+(headerAddress-imageAddress));
+   if (headerPtr > (LargeTargetImageHeader*)(buffer+imageSize)) {
       log.error("Header ptr out of range\n");
       return PROGRAMMING_RC_ERROR_INTERNAL_CHECK_FAILED;
    }
@@ -911,21 +933,21 @@ USBDM_ErrorCode FlashProgrammer_HCS12::loadLargeTargetProgram(uint8_t    *buffer
    log.print("   flashProgramHeader.capabilities    = 0x%08X(%s)\n", capabilities, getProgramCapabilityNames(capabilities));
    log.print("   flashProgramHeader.flashData       = 0x%08X\n",     dataHeaderAddress);
 
-   if (codeLoadAddress != loadAddress) {
-      log.error("Inconsistent actual (0x%06X) and image load addresses (0x%06X).\n",
-            loadAddress, codeLoadAddress);
+   if (codeLoadAddress != imageAddress) {
+      log.error("Inconsistent actual (0x%06X) and image addresses (0x%06X).\n",
+            imageAddress, codeLoadAddress);
       return PROGRAMMING_RC_ERROR_INTERNAL_CHECK_FAILED;
    }
-   uint32_t codeLoadSize = size*sizeof(uint8_t);
+   uint32_t codeLoadSize = imageSize*sizeof(uint8_t);
 
-   if ((capabilities&CAP_RELOCATABLE)!=0) {
+   if ((capabilities&CAP_RELOCATABLE) !=0 ) {
       // Relocate Code
       codeLoadAddress = (ramStart+3)&~3; // Relocate to start of RAM
-      if (loadAddress != codeLoadAddress) {
+      if (imageAddress != codeLoadAddress) {
          log.print("Loading at non-default address, load@0x%04X (relocated from=%04X)\n",
-               codeLoadAddress, loadAddress);
+               codeLoadAddress, imageAddress);
          // Relocate entry point
-         codeEntry += codeLoadAddress - loadAddress;
+         codeEntry += codeLoadAddress - imageAddress;
       }
    }
 #if TARGET != MC56F80xx
@@ -951,7 +973,7 @@ USBDM_ErrorCode FlashProgrammer_HCS12::loadLargeTargetProgram(uint8_t    *buffer
 #else
    if ((capabilities&CAP_DATA_FIXED)==0) {
       // Relocate Data Entry to immediately after code
-      dataHeaderAddress = codeLoadAddress + size;
+      dataHeaderAddress = codeLoadAddress + imageSize;
       log.print("Relocating flashData @ 0x%06X\n", dataHeaderAddress);
    }
 #endif
@@ -983,7 +1005,7 @@ USBDM_ErrorCode FlashProgrammer_HCS12::loadLargeTargetProgram(uint8_t    *buffer
    log.print("AlignmentMask=0x%08X\n",
          flashAlignmentMask);
    log.print("Program code[0x%06X...0x%06X]\n",
-         codeLoadAddress, codeLoadAddress+size-1);
+         codeLoadAddress, codeLoadAddress+imageSize-1);
    log.print("Parameters[0x%06X...0x%06X]\n",
          targetProgramInfo.headerAddress,
          targetProgramInfo.headerAddress+targetProgramInfo.dataOffset-1);
@@ -1037,7 +1059,8 @@ USBDM_ErrorCode FlashProgrammer_HCS12::loadLargeTargetProgram(uint8_t    *buffer
 #else
    MemorySpace_t memorySpace = MS_Byte;
 #endif
-   headerPtr->flashData   = nativeToTarget16(targetProgramInfo.headerAddress);
+   headerPtr->loadAddress   = nativeToTarget16(codeLoadAddress);
+   headerPtr->flashData     = nativeToTarget16(targetProgramInfo.headerAddress);
    headerPtr->copctlAddress = nativeToTarget16(device->getWatchdogAddress());
 
    log.print("Loaded Image (modified) :\n");
@@ -1091,11 +1114,12 @@ USBDM_ErrorCode FlashProgrammer_HCS12::loadLargeTargetProgram(uint8_t    *buffer
 //! |   Flash program code....                |   > Unchanging written once
 //! +-----------------------------------------+ -+
 //!
-USBDM_ErrorCode FlashProgrammer_HCS12::loadSmallTargetProgram(uint8_t    *buffer,
-                                                        uint32_t              loadAddress,
-                                                        uint32_t              size,
-                                                        FlashProgramConstPtr  flashProgram,
-                                                        FlashOperation        flashOperation) {
+USBDM_ErrorCode FlashProgrammer_HCS12::loadSmallTargetProgram(
+        uint8_t    *buffer,
+        uint32_t              loadAddress,
+        uint32_t              size,
+        FlashProgramConstPtr  flashProgram,
+        FlashOperation        flashOperation) {
    LOGGING;
 
    log.error("Not supported\n");
@@ -1205,6 +1229,7 @@ USBDM_ErrorCode FlashProgrammer_HCS12::convertTargetErrorCode(FlashDriverError_t
    }
 }
 
+//=======================================================================
 USBDM_ErrorCode FlashProgrammer_HCS12::initLargeTargetBuffer(uint8_t *buffer) {
    LOGGING;
    LargeTargetFlashDataHeader *pFlashHeader = (LargeTargetFlashDataHeader*)buffer;
@@ -2025,7 +2050,8 @@ USBDM_ErrorCode FlashProgrammer_HCS12::setFlashSecurity(FlashImagePtr flashImage
 //! @note - Assumes flash programming code has already been loaded to target.
 //! @note - The memory range must be within one page for paged devices.
 //!
-USBDM_ErrorCode FlashProgrammer_HCS12::doFlashBlock(FlashImagePtr   flashImage,
+USBDM_ErrorCode FlashProgrammer_HCS12::doFlashBlock(
+                                                    FlashImagePtr   flashImage,
                                                     unsigned int    blockSize,
                                                     uint32_t       &flashAddress,
                                                     FlashOperation  flashOperation) {
