@@ -65,130 +65,132 @@ typedef struct {
 class FirmwareChangerDialogue : public FirmwareChangerSkeleton {
 
 protected:
-	enum DialogueMode{
-	    	       GUI_MODE,
-	    		   CMD_LINE_MODE
-	    	    };
-    FlashImageData            flashImageDescription;
-    wxString                  errMessage;
-    ICP_dataType              ICP_data;
-    wxString                  serialNumber;
-    wxString                  serialNumberPrefix;
-    wxString                  filename;
-    wxString                  defaultDirectory;
-    wxString                  filePath;
-    FlashImagePtr             flashImage;
+   enum DialogueMode{
+      GUI_MODE,
+      CMD_LINE_MODE
+   };
+   FlashImageData            flashImageDescription;
+   wxString                  errMessage;
+   ICP_dataType              ICP_data;
+   wxString                  serialNumber;
+   wxString                  serialNumberPrefix;
+   wxString                  filename;
+   wxString                  defaultDirectory;
+   wxString                  filePath;
+   FlashImagePtr             flashImage;
 
-    bool                      autoSequenceFlag;
-    int                       autoSequenceNumber;
-    bool                      autoUpdateBdm;
-    bool                      verify;
-    bool                      program;
-    bool                      verbose;
-    bool                      enableAutoLoad;
-    bool                      enableConsole;
-    DialogueMode              activeMode;
+   bool                      autoSequenceFlag;
+   int                       autoSequenceNumber;
+   bool                      autoUpdateBdm;
+   bool                      verify;
+   bool                      program;
+   bool                      verbose;
+   bool                      enableAutoLoad;
+   bool                      enableConsole;
+   DialogueMode              activeMode;
 
-    bool   loadFlashImageFile(wxString path);
-    void   setSerialNumber(const wxString &serialNumber);
-    bool   consistencyCheck(unsigned int protectAddress);
-    int    doFirmware(int  updateFirmware);
-    bool   getICPData(void);
-    void   dumpFile();
-    int    readBdmSerialNumber(const char **bdmDescription);
-    int    readBdmInformation(USBDM_bdmInformation_t *info);
-    int    loadUpdateInformation();
-    int    doAutoUpdate();
-    int    readSerialNumber(void);
-    USBDM_ErrorCode reOpenBDM(void);
+   bool   loadFlashImageFile(wxString path);
+   void   setSerialNumber(const wxString &serialNumber);
+   bool   consistencyCheck(unsigned int protectAddress);
+   int    doFirmware(int  updateFirmware);
+   bool   getICPData(void);
+   void   dumpFile();
+   int    readBdmSerialNumber(const char **bdmDescription);
+   int    readBdmInformation(USBDM_bdmInformation_t *info);
+   int    loadUpdateInformation();
+   int    doAutoUpdate();
+   int    readSerialNumber(void);
+   USBDM_ErrorCode reOpenBDM(void);
 
-#ifdef _WIN32
-    typedef USBDM_ErrorCode (__attribute__((__stdcall__))Operation)(unsigned int, unsigned int, unsigned char*);
+#ifndef linux
+   typedef USBDM_ErrorCode (__attribute__((__stdcall__))Operation)(unsigned int, unsigned int, unsigned char*);
 #else
-    typedef USBDM_ErrorCode (Operation)(unsigned int, unsigned int, unsigned char*);
+   typedef USBDM_ErrorCode (Operation)(unsigned int, unsigned int, unsigned char*);
 #endif
 
-    USBDM_ErrorCode doBlockOperation(FlashImagePtr, uint32_t, uint32_t, Operation);
-    USBDM_ErrorCode doFlashOperation(Operation);
+   USBDM_ErrorCode doBlockOperation(FlashImagePtr, uint32_t, uint32_t, Operation);
+   USBDM_ErrorCode doFlashOperation(Operation);
 
-    int    openSingleDevice(void);
-    void   serialNumberToTextControl(void);
-    void   textControlToSerialNumber(void);
-    void   parseSerialNumber(const wxString &serialNumber, wxString &serialNumberPrefix);
-    void   updateControls(void);
-    virtual void logUsageError(wxCmdLineParser& parser, const wxString& text);
+   int    openSingleDevice(void);
+   void   serialNumberToTextControl(void);
+   void   textControlToSerialNumber(void);
+   void   parseSerialNumber(const wxString &serialNumber, wxString &serialNumberPrefix);
+   void   updateControls(void);
+   virtual void logUsageError(wxCmdLineParser& parser, const wxString& text);
 
 public:
-    enum {
-       ID_BOOTLOADERDIALOGUE  = 10000,
-       ID_FILE_LOAD_BUTTON,
-       ID_PROGRAM_FLASH_BUTTON,
-       ID_VERIFY_FLASH_BUTTON,
-       ID_EXIT_BUTTON,
-       ID_SERIALNUM_TEXTCTRL,
-       ID_READ_SERIAL_NUM_BUTTON,
-       ID_AUTO_SEQUENCE_CHECKBOX,
-       ID_AUTO_SEQUENCE_TEXTCTRL,
-       ID_AUTO_SELECT_FILE_CHECKBOX,
-    };
+   enum {
+      ID_BOOTLOADERDIALOGUE  = 10000,
+      ID_FILE_LOAD_BUTTON,
+      ID_PROGRAM_FLASH_BUTTON,
+      ID_VERIFY_FLASH_BUTTON,
+      ID_EXIT_BUTTON,
+      ID_SERIALNUM_TEXTCTRL,
+      ID_READ_SERIAL_NUM_BUTTON,
+      ID_AUTO_SEQUENCE_CHECKBOX,
+      ID_AUTO_SEQUENCE_TEXTCTRL,
+      ID_AUTO_SELECT_FILE_CHECKBOX,
+   };
 
-    /// Constructors
-    FirmwareChangerDialogue( wxWindow* parent);
+   /// Constructors
+   FirmwareChangerDialogue( wxWindow* parent);
 
-    /// Destructor
-    ~FirmwareChangerDialogue();
+   /// Destructor
+   ~FirmwareChangerDialogue();
 
-    /// Initialises member variables
-    void Init();
+   /// Initialises member variables
+   void Init();
 
-    /// wxEVT_COMMAND_BUTTON_CLICKED event handler for ID_FILE_LOAD_BUTTON
-    virtual void OnLoadFirmwareButtonClick( wxCommandEvent& event );
+   /// wxEVT_COMMAND_BUTTON_CLICKED event handler for ID_FILE_LOAD_BUTTON
+   virtual void OnLoadFirmwareButtonClick( wxCommandEvent& event );
 
-    /// wxEVT_COMMAND_BUTTON_CLICKED event handler for ID_PROGRAM_FLASH_BUTTON
-    virtual void OnProgramFlashButtonClick( wxCommandEvent& event );
+   /// wxEVT_COMMAND_BUTTON_CLICKED event handler for ID_PROGRAM_FLASH_BUTTON
+   virtual void OnProgramFlashButtonClick( wxCommandEvent& event );
 
-    /// wxEVT_COMMAND_BUTTON_CLICKED event handler for ID_VERIFY_FLASH_BUTTON
-    virtual void OnVerifyFlashButtonClick( wxCommandEvent& event );
+   /// wxEVT_COMMAND_BUTTON_CLICKED event handler for ID_VERIFY_FLASH_BUTTON
+   virtual void OnVerifyFlashButtonClick( wxCommandEvent& event );
 
-    /// wxEVT_COMMAND_BUTTON_CLICKED event handler for ID_EXIT_BUTTON
-    virtual void OnExitButtonClick( wxCommandEvent& event );
+   /// wxEVT_COMMAND_BUTTON_CLICKED event handler for ID_EXIT_BUTTON
+   virtual void OnExitButtonClick( wxCommandEvent& event );
 
-    /// wxEVT_COMMAND_TEXT_UPDATED event handler for ID_TEXTCTRL
-    virtual void OnSerialnumTextctrlTextUpdated( wxCommandEvent& event );
+   /// wxEVT_COMMAND_TEXT_UPDATED event handler for ID_TEXTCTRL
+   virtual void OnSerialnumTextctrlTextUpdated( wxCommandEvent& event );
 
-    ///  wxEVT_COMMAND_BUTTON_CLICKED event handler for ID_BUTTON
-    virtual void OnReadSerialNumButtonClick( wxCommandEvent& event );
+   ///  wxEVT_COMMAND_BUTTON_CLICKED event handler for ID_BUTTON
+   virtual void OnReadSerialNumButtonClick( wxCommandEvent& event );
 
-    ///  wxEVT_COMMAND_BUTTON_CLICKED event handler for ID_BUTTON
-    virtual void OnAutoSequenceCheckboxClick( wxCommandEvent& event );
+   ///  wxEVT_COMMAND_BUTTON_CLICKED event handler for ID_BUTTON
+   virtual void OnAutoSequenceCheckboxClick( wxCommandEvent& event );
 
-    ///  wxEVT_COMMAND_BUTTON_CLICKED event handler for ID_BUTTON
-    virtual void OnAutoSelectFirmwareCheckboxClick( wxCommandEvent& event );
+   ///  wxEVT_COMMAND_BUTTON_CLICKED event handler for ID_BUTTON
+   virtual void OnAutoSelectFirmwareCheckboxClick( wxCommandEvent& event );
 
-    virtual void OnAutoSequenceTextControlTextUpdated( wxCommandEvent& event );
+   virtual void OnAutoSequenceTextControlTextUpdated( wxCommandEvent& event );
 
-    /// Retrieves bitmap resources
-    wxBitmap GetBitmapResource( const wxString& name );
+   /// Retrieves bitmap resources
+   wxBitmap GetBitmapResource( const wxString& name );
 
-    /// Retrieves icon resources
-    wxIcon GetIconResource( const wxString& name );
+   /// Retrieves icon resources
+   wxIcon GetIconResource( const wxString& name );
 
-    /// Should we show tooltips?
-    static bool ShowToolTips();
+   /// Should we show tooltips?
+   static bool ShowToolTips();
 
-    void   loadSettings(const AppSettings &settings);
-    void   saveSettings(AppSettings &settings);
-    void   setAutoLoad(bool value);
+   void   loadSettings(const AppSettings &settings);
+   void   saveSettings(AppSettings &settings);
+   void   setAutoLoad(bool value);
 
-    // command line functions
-    virtual int doCommandLineProgram();
-    virtual int parseCommandLine(wxCmdLineParser& parser);
+   // command line functions
+   virtual int doCommandLineProgram();
+   virtual int parseCommandLine(wxCmdLineParser& parser);
 
-    virtual std::string getConsoleMessage();
-    bool inGUIMode(){return activeMode == GUI_MODE;}
-    bool doAutoLoad(){return enableAutoLoad;}
-    bool consoleIsEnabled(){return enableConsole;}
+   virtual std::string getConsoleMessage();
+   bool inGUIMode(){return activeMode == GUI_MODE;}
+   bool doAutoLoad(){return enableAutoLoad;}
+   bool consoleIsEnabled(){return enableConsole;}
+
+   void setStatus(wxString status=_("Idle"));
 };
 
 #endif
-    // _BOOTLOADERDIALOGUE_H_
+// _BOOTLOADERDIALOGUE_H_

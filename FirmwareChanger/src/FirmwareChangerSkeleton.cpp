@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Oct 26 2018)
+// C++ code generated with wxFormBuilder (version 3.9.0 Sep 11 2020)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -29,6 +29,8 @@ FirmwareChangerSkeleton::FirmwareChangerSkeleton( wxWindow* parent, wxWindowID i
 
 	autoSelectFirmwareCheckbox = new wxCheckBox( sbSizer2->GetStaticBox(), wxID_ANY, wxT("Auto select BDM firmware"), wxDefaultPosition, wxDefaultSize, 0 );
 	autoSelectFirmwareCheckbox->SetValue(true);
+	autoSelectFirmwareCheckbox->SetToolTip( wxT("Select firmware and serial number based on current firmware in device") );
+
 	bSizer5->Add( autoSelectFirmwareCheckbox, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5 );
 
 
@@ -39,18 +41,20 @@ FirmwareChangerSkeleton::FirmwareChangerSkeleton( wxWindow* parent, wxWindowID i
 	sbSizer2->Add( filenameStaticText, 0, wxALL, 5 );
 
 
-	bSizer1->Add( sbSizer2, 0, wxEXPAND, 5 );
+	bSizer1->Add( sbSizer2, 0, wxALL|wxEXPAND, 5 );
 
-	wxBoxSizer* bSizer2;
-	bSizer2 = new wxBoxSizer( wxVERTICAL );
+	wxStaticBoxSizer* sbSizer31;
+	sbSizer31 = new wxStaticBoxSizer( new wxStaticBox( this, wxID_ANY, wxT("Device serial number") ), wxVERTICAL );
 
 	wxBoxSizer* bSizer3;
 	bSizer3 = new wxBoxSizer( wxHORIZONTAL );
 
-	serialNumberText = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
+	serialNumberText = new wxTextCtrl( sbSizer31->GetStaticBox(), wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
+	serialNumberText->SetToolTip( wxT("Serial number to be written to device") );
+
 	bSizer3->Add( serialNumberText, 1, wxALL, 5 );
 
-	autoSequenceText = new NumberTextEditCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
+	autoSequenceText = new NumberTextEditCtrl( sbSizer31->GetStaticBox(), wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
 	#ifdef __WXGTK__
 	if ( !autoSequenceText->HasFlag( wxTE_MULTILINE ) )
 	{
@@ -59,41 +63,52 @@ FirmwareChangerSkeleton::FirmwareChangerSkeleton( wxWindow* parent, wxWindowID i
 	#else
 	autoSequenceText->SetMaxLength( 5 );
 	#endif
+	autoSequenceText->SetToolTip( wxT("Number for sequence") );
+
 	bSizer3->Add( autoSequenceText, 0, wxALL, 5 );
 
 
-	bSizer2->Add( bSizer3, 0, wxEXPAND, 5 );
+	sbSizer31->Add( bSizer3, 0, wxEXPAND, 5 );
 
 	wxBoxSizer* bSizer4;
 	bSizer4 = new wxBoxSizer( wxHORIZONTAL );
 
-	readSerialNumberButton = new wxButton( this, wxID_ANY, wxT("Read From Device"), wxDefaultPosition, wxDefaultSize, 0 );
+	readSerialNumberButton = new wxButton( sbSizer31->GetStaticBox(), wxID_ANY, wxT("Read serial number from device"), wxDefaultPosition, wxDefaultSize, 0 );
 	bSizer4->Add( readSerialNumberButton, 0, wxALL, 5 );
 
-	autoSequenceCheckbox = new wxCheckBox( this, wxID_ANY, wxT("Auto sequence"), wxDefaultPosition, wxDefaultSize, 0 );
+	autoSequenceCheckbox = new wxCheckBox( sbSizer31->GetStaticBox(), wxID_ANY, wxT("Auto sequence"), wxDefaultPosition, wxDefaultSize, 0 );
+	autoSequenceCheckbox->SetToolTip( wxT("Append sequental number to serial number") );
+
 	bSizer4->Add( autoSequenceCheckbox, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5 );
 
 
-	bSizer2->Add( bSizer4, 0, wxEXPAND, 5 );
+	sbSizer31->Add( bSizer4, 0, wxEXPAND, 5 );
 
 
-	bSizer1->Add( bSizer2, 0, wxEXPAND, 5 );
+	bSizer1->Add( sbSizer31, 0, wxEXPAND|wxALL, 5 );
 
 	wxStaticBoxSizer* sbSizer3;
-	sbSizer3 = new wxStaticBoxSizer( new wxStaticBox( this, wxID_ANY, wxT("File Information") ), wxVERTICAL );
+	sbSizer3 = new wxStaticBoxSizer( new wxStaticBox( this, wxID_ANY, wxT("Firmware File Information") ), wxVERTICAL );
 
 	fileInformationStaticText = new wxTextCtrl( sbSizer3->GetStaticBox(), wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxTE_CHARWRAP|wxTE_MULTILINE|wxTE_READONLY|wxTE_WORDWRAP );
+	fileInformationStaticText->SetFont( wxFont( 10, wxFONTFAMILY_DEFAULT, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_BOLD, false, wxT("Tlwg Typewriter") ) );
 	fileInformationStaticText->Enable( false );
 	fileInformationStaticText->SetToolTip( wxT("Description of Flash image") );
 
 	sbSizer3->Add( fileInformationStaticText, 1, wxALL|wxEXPAND, 5 );
 
 
-	bSizer1->Add( sbSizer3, 1, wxEXPAND, 5 );
+	bSizer1->Add( sbSizer3, 1, wxALL|wxEXPAND, 5 );
+
+	wxBoxSizer* bSizer71;
+	bSizer71 = new wxBoxSizer( wxVERTICAL );
 
 	statusStaticText = new wxStaticText( this, wxID_ANY, wxT("Status: Idle"), wxDefaultPosition, wxDefaultSize, 0 );
 	statusStaticText->Wrap( -1 );
-	bSizer1->Add( statusStaticText, 0, wxALL|wxEXPAND, 5 );
+	bSizer71->Add( statusStaticText, 0, wxEXPAND|wxTOP|wxBOTTOM|wxRIGHT, 5 );
+
+
+	bSizer1->Add( bSizer71, 0, wxEXPAND|wxALL, 5 );
 
 	wxBoxSizer* bSizer7;
 	bSizer7 = new wxBoxSizer( wxHORIZONTAL );
@@ -108,7 +123,7 @@ FirmwareChangerSkeleton::FirmwareChangerSkeleton( wxWindow* parent, wxWindowID i
 	bSizer7->Add( exitButton, 1, wxALL|wxEXPAND, 5 );
 
 
-	bSizer1->Add( bSizer7, 0, wxEXPAND, 5 );
+	bSizer1->Add( bSizer7, 0, wxALL|wxEXPAND, 5 );
 
 
 	this->SetSizer( bSizer1 );
