@@ -466,7 +466,7 @@ extern "C" {
 //      <1=> High range
 //      <2=> Very High range
 #define MCG_C2_RANGE_V   1
-#define MCG_C2_RANGE_M   (MCG_C2_RANGE_V<<MCG_C2_RANGE_SHIFT)
+#define MCG_C2_RANGE_M   (MCG_C2_RANGE_V<<MCG_C2_RANGE0_SHIFT)
 
 // MCG_C2_HGO =============================
 //
@@ -475,7 +475,7 @@ extern "C" {
 //      <0=> Low power
 //      <1=> High gain
 #define MCG_C2_HGO_V   0
-#define MCG_C2_HGO_M   (MCG_C2_HGO_V<<MCG_C2_HGO_SHIFT)
+#define MCG_C2_HGO_M   (MCG_C2_HGO_V<<MCG_C2_HGO0_SHIFT)
 
 // MCG_C2_EREFS0 =============================
 //
@@ -484,7 +484,7 @@ extern "C" {
 //      <0=> External clock
 //      <1=> Oscillator
 #define MCG_C2_EREFS_V  0
-#define MCG_C2_EREFS_M (MCG_C2_EREFS_V<<MCG_C2_EREFS_SHIFT)
+#define MCG_C2_EREFS_M (MCG_C2_EREFS_V<<MCG_C2_EREFS0_SHIFT)
 
 // MCG_C2_LP =============================
 //

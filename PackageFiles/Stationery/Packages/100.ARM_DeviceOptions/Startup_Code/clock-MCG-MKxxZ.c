@@ -327,7 +327,7 @@ void SystemCoreClockUpdate(void) {
       case MCG_S_CLKST(0) : // FLL
          if ((MCG->C1&MCG_C1_IREFS_MASK) == 0) {
             SystemCoreClock = oscerclk/(1<<((MCG->C1&MCG_C1_FRDIV_MASK)>>MCG_C1_FRDIV_SHIFT));
-            if ((MCG->C2&MCG_C2_RANGE_MASK) != 0) {
+            if ((MCG->C2&MCG_C2_RANGE0_MASK) != 0) {
                if ((MCG->C1&MCG_C1_FRDIV_MASK) == MCG_C1_FRDIV(6)) {
                   SystemCoreClock /= 20;
                }
@@ -357,8 +357,8 @@ void SystemCoreClockUpdate(void) {
          SystemCoreClock = oscerclk;
          break;
       case MCG_S_CLKST(3) : // PLL
-         SystemCoreClock  = (oscerclk/10)*(((MCG->C6&MCG_C6_VDIV_MASK)>>MCG_C6_VDIV_SHIFT)+24);
-         SystemCoreClock /= ((MCG->C5&MCG_C5_PRDIV_MASK)>>MCG_C5_PRDIV_SHIFT)+1;
+         SystemCoreClock  = (oscerclk/10)*(((MCG->C6&MCG_C6_VDIV0_MASK)>>MCG_C6_VDIV0_SHIFT)+24);
+         SystemCoreClock /= ((MCG->C5&MCG_C5_PRDIV0_MASK)>>MCG_C5_PRDIV0_SHIFT)+1;
          SystemCoreClock *= 10;
          break;
    }
