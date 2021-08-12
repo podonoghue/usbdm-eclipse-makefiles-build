@@ -14,6 +14,7 @@
         <property name="file">BootloaderDialogueSkeleton</property>
         <property name="first_id">1000</property>
         <property name="help_provider">none</property>
+        <property name="image_path_wrapper_function_name"></property>
         <property name="indent_with_spaces"></property>
         <property name="internationalize">0</property>
         <property name="name">BootloaderDialogueSkeleton</property>
@@ -25,6 +26,7 @@
         <property name="skip_php_events">1</property>
         <property name="skip_python_events">1</property>
         <property name="ui_table">UI</property>
+        <property name="use_array_enum">0</property>
         <property name="use_enum">1</property>
         <property name="use_microsoft_bom">0</property>
         <object class="Dialog" expanded="1">
@@ -45,7 +47,7 @@
             <property name="minimum_size"></property>
             <property name="name">BootloaderDialogueSkeleton</property>
             <property name="pos"></property>
-            <property name="size">371,560</property>
+            <property name="size">371,500</property>
             <property name="style">wxDEFAULT_DIALOG_STYLE|wxMINIMIZE_BOX|wxRESIZE_BORDER</property>
             <property name="subclass"></property>
             <property name="title">JS16 ICP Bootloader</property>
@@ -59,7 +61,7 @@
                 <property name="orient">wxVERTICAL</property>
                 <property name="permission">none</property>
                 <object class="sizeritem" expanded="1">
-                    <property name="border">5</property>
+                    <property name="border">10</property>
                     <property name="flag">wxALL</property>
                     <property name="proportion">1</property>
                     <object class="wxStaticText" expanded="1">
@@ -90,7 +92,7 @@
                         <property name="gripper">0</property>
                         <property name="hidden">0</property>
                         <property name="id">wxID_ANY</property>
-                        <property name="label">If the JS16 device is non-blank, tie the BLMS pin low before plugging it in.&#x0A;&#x0A;Choose the firmware matching your hardware and then press the Program button.</property>
+                        <property name="label">If the JS16 device is non-blank, tie the BLMS pin (DIP-p7, QFN-p4) low before plugging it in.&#x0A;&#x0A;Choose the firmware matching your hardware and then press the Program button.&#x0A;&#x0A;NOTE: The JS16 onchip ROM bootloader has a bug that may prevent its use with USB3 interfaces.</property>
                         <property name="markup">0</property>
                         <property name="max_size"></property>
                         <property name="maximize_button">0</property>
@@ -120,7 +122,7 @@
                     </object>
                 </object>
                 <object class="sizeritem" expanded="1">
-                    <property name="border">5</property>
+                    <property name="border">10</property>
                     <property name="flag">wxALL|wxEXPAND</property>
                     <property name="proportion">0</property>
                     <object class="wxRadioBox" expanded="1">
@@ -187,7 +189,7 @@
                     </object>
                 </object>
                 <object class="sizeritem" expanded="1">
-                    <property name="border">5</property>
+                    <property name="border">10</property>
                     <property name="flag">wxALL|wxEXPAND</property>
                     <property name="proportion">0</property>
                     <object class="wxStaticText" expanded="1">
@@ -320,6 +322,7 @@
                                     <property name="aui_name"></property>
                                     <property name="aui_position"></property>
                                     <property name="aui_row"></property>
+                                    <property name="auth_needed">0</property>
                                     <property name="best_size"></property>
                                     <property name="bg"></property>
                                     <property name="bitmap"></property>
@@ -393,6 +396,7 @@
                                     <property name="aui_name"></property>
                                     <property name="aui_position"></property>
                                     <property name="aui_row"></property>
+                                    <property name="auth_needed">0</property>
                                     <property name="best_size"></property>
                                     <property name="bg"></property>
                                     <property name="bitmap"></property>

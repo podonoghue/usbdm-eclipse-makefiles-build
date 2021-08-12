@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Oct 26 2018)
+// C++ code generated with wxFormBuilder (version 3.9.0 Sep 11 2020)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -16,10 +16,10 @@
 #include <wx/colour.h>
 #include <wx/settings.h>
 #include <wx/radiobox.h>
+#include <wx/button.h>
 #include <wx/bitmap.h>
 #include <wx/image.h>
 #include <wx/icon.h>
-#include <wx/button.h>
 #include <wx/sizer.h>
 #include <wx/panel.h>
 #include <wx/dialog.h>
@@ -58,7 +58,7 @@ class BootloaderDialogueSkeleton : public wxDialog
 
 	public:
 
-		BootloaderDialogueSkeleton( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = wxT("JB16 ICP Bootloader"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 371,579 ), long style = wxDEFAULT_DIALOG_STYLE|wxMINIMIZE_BOX|wxRESIZE_BORDER );
+		BootloaderDialogueSkeleton( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = wxT("JB16 ICP Bootloader"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 371,542 ), long style = wxDEFAULT_DIALOG_STYLE|wxMINIMIZE_BOX|wxRESIZE_BORDER );
 		~BootloaderDialogueSkeleton();
 
 };

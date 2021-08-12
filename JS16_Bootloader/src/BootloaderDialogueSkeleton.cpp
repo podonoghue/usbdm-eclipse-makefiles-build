@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Oct 26 2018)
+// C++ code generated with wxFormBuilder (version 3.9.0 Sep 11 2020)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -16,9 +16,9 @@ BootloaderDialogueSkeleton::BootloaderDialogueSkeleton( wxWindow* parent, wxWind
 	wxBoxSizer* bSizer1;
 	bSizer1 = new wxBoxSizer( wxVERTICAL );
 
-	instructionText = new wxStaticText( this, wxID_ANY, wxT("If the JS16 device is non-blank, tie the BLMS pin low before plugging it in.\n\nChoose the firmware matching your hardware and then press the Program button."), wxDefaultPosition, wxDefaultSize, 0 );
+	instructionText = new wxStaticText( this, wxID_ANY, wxT("If the JS16 device is non-blank, tie the BLMS pin (DIP-p7, QFN-p4) low before plugging it in.\n\nChoose the firmware matching your hardware and then press the Program button.\n\nNOTE: The JS16 onchip ROM bootloader has a bug that may prevent its use with USB3 interfaces."), wxDefaultPosition, wxDefaultSize, 0 );
 	instructionText->Wrap( -1 );
-	bSizer1->Add( instructionText, 1, wxALL, 5 );
+	bSizer1->Add( instructionText, 1, wxALL, 10 );
 
 	wxString firmwareSelectionBoxChoices[] = { wxT("0"), wxT("1"), wxT("2"), wxT("3"), wxT("4"), wxT("5"), wxT("6") };
 	int firmwareSelectionBoxNChoices = sizeof( firmwareSelectionBoxChoices ) / sizeof( wxString );
@@ -26,13 +26,13 @@ BootloaderDialogueSkeleton::BootloaderDialogueSkeleton( wxWindow* parent, wxWind
 	firmwareSelectionBox->SetSelection( 0 );
 	firmwareSelectionBox->SetToolTip( wxT("Select firmware version to load") );
 
-	bSizer1->Add( firmwareSelectionBox, 0, wxALL|wxEXPAND, 5 );
+	bSizer1->Add( firmwareSelectionBox, 0, wxALL|wxEXPAND, 10 );
 
 	descriptionText = new wxStaticText( this, wxID_ANY, wxT("Custom file:\n"), wxDefaultPosition, wxDefaultSize, 0 );
 	descriptionText->Wrap( -1 );
 	descriptionText->SetToolTip( wxT("Description of selected firmware") );
 
-	bSizer1->Add( descriptionText, 0, wxALL|wxEXPAND, 5 );
+	bSizer1->Add( descriptionText, 0, wxALL|wxEXPAND, 10 );
 
 	buttonPanel = new wxPanel( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL );
 	wxBoxSizer* bSizer2;
