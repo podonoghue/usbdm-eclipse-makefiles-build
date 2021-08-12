@@ -222,7 +222,9 @@ public:
     * Set up the RTC out of reset.
     */
    static void initialise() {
-      defaultConfigure();
+      if (RtcInfo::configure_rtc) {
+         defaultConfigure();
+      }
    }
 
    /**

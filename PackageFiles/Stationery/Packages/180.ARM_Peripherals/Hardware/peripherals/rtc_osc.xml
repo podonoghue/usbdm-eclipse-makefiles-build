@@ -4,6 +4,13 @@
 
 <peripheralPage xmlns:xi="http://www.w3.org/2001/XInclude" name="_instance" description="Real-time Clock">
    
+   <binaryOption name="configure_rtc"
+      description="Configure RTC"
+      toolTip="Enables configuration of RTC\n If disabled no RTC registers are accessed.">
+      <choice value="0" name="Disabled" />
+      <choice value="1" name="Enabled" isDefault="true" />
+   </binaryOption>
+
    <xi:include href="_default_instance.xml"/>
 
    <xi:include href="_default_pcr.xml"/>
@@ -108,6 +115,11 @@
    <aliasOption key="/SIM/rtc_clkout" constant="true" optional="true" />
 
    <template><![CDATA[
+      \t//! Whether to configure RTC\n
+      \t//! If disabled then no RTC registers are touched.
+      \t//! This is useful if RTC is not powered as register access will trap.
+      \tstatic constexpr bool configure_rtc = $(configure_rtc);\n\n
+   
       \t//! Frequency of RTC External Clock or Crystal
       \tstatic constexpr uint32_t osc_input_freq = $(osc_input_freq)UL;\n\n
       

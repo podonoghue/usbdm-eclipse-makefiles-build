@@ -4,6 +4,13 @@
 
 <peripheralPage xmlns:xi="http://www.w3.org/2001/XInclude" name="_instance" description="Real-time Clock">
    
+   <binaryOption name="configure_rtc"
+      description="Configure RTC"
+      toolTip="Enables configuration of RTC\n If disabled no RTC registers are accessed.">
+      <choice value="0" name="Disabled" />
+      <choice value="1" name="Enabled" isDefault="true" />
+   </binaryOption>
+
    <xi:include href="_default_instance.xml"/>
 
    <template><![CDATA[
