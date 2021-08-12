@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Configure.usbdmProject -->
+<!-- 
+   Settings
+-->
+
+<section name="USBDM">
+   <item key="$$DeviceInfo_Device_Variant"                 value="MK20DX128VLF5" />
+   <item key="$$DeviceInfo_SubFamily"                      value="MK20D5" />
+   <item key="$$Hardware_Source_Filename"                  value="MK20D5.usbdmHardware" />
+   <item key="$signal$PTA0_descriptionSetting"             value="SWD_CLK" />
+   <item key="$signal$PTA0_muxSetting"                     value="mux7" />
+   <item key="$signal$PTA18_descriptionSetting"            value="16 MHz Crystal" />
+   <item key="$signal$PTA18_muxSetting"                    value="mux0" />
+   <item key="$signal$PTA19_descriptionSetting"            value="16 MHz Crystal" />
+   <item key="$signal$PTA19_muxSetting"                    value="mux0" />
+   <item key="$signal$PTA1_descriptionSetting"             value="SWD_Rx" />
+   <item key="$signal$PTA1_muxSetting"                     value="mux2" />
+   <item key="$signal$PTA2_descriptionSetting"             value="SWD_Tx" />
+   <item key="$signal$PTA2_muxSetting"                     value="mux2" />
+   <item key="$signal$PTA3_descriptionSetting"             value="SWD_DIO" />
+   <item key="$signal$PTA3_muxSetting"                     value="mux7" />
+   <item key="$signal$PTA4_descriptionSetting"             value="BOOT_BTN" />
+   <item key="$signal$PTA4_muxSetting"                     value="mux1" />
+   <item key="$signal$RESET_b_descriptionSetting"          value="Reset" />
+   <item key="$signal$USB0_DM_descriptionSetting"          value="USBDM" />
+   <item key="$signal$USB0_DP_descriptionSetting"          value="USBDP" />
+   <item key="$signal$VBAT_descriptionSetting"             value="Vdd" />
+   <item key="$signal$VDD1_descriptionSetting"             value="Vdd" />
+   <item key="$signal$VDD2_descriptionSetting"             value="Vdd" />
+   <item key="$signal$VDDA_descriptionSetting"             value="Vdd" />
+   <item key="$signal$VOUT33_descriptionSetting"           value="Vdd" />
+   <item key="$signal$VREFH_descriptionSetting"            value="Vdd" />
+   <item key="$signal$VREFL_descriptionSetting"            value="Vss" />
+   <item key="$signal$VREF_OUT_descriptionSetting"         value="Unused" />
+   <item key="$signal$VREGIN_descriptionSetting"           value="5V_Fused" />
+   <item key="$signal$VSS1_descriptionSetting"             value="Vss" />
+   <item key="$signal$VSS2_descriptionSetting"             value="Vss" />
+   <item key="$signal$VSSA_descriptionSetting"             value="Vss" />
+   <item key="$signal$XTAL32_descriptionSetting"           value="Unused" />
+   <item key="/Console/consoleEnable"                      value="false" />
+   <item key="/FTFL/peripheral_file"                       value="ftfl_32k_flexrom" />
+   <item key="/MCG/ClockConfig[0]"                         value="ClockConfig_PEE_48MHz" />
+   <item key="/MCG/ClockConfig[1]"                         value="ClockConfig_BLPE_4MHz" />
+   <item key="/MCG/ClockConfig[2]"                         value="ClockConfig_FEE_40MHz" />
+   <item key="/MCG/clock_mode[0]"                          value="ClockMode_PEE" />
+   <item key="/MCG/clock_mode[1]"                          value="ClockMode_BLPE" />
+   <item key="/MCG/clock_mode[2]"                          value="ClockMode_FEE" />
+   <item key="/MCG/pll0OutputFrequency[0]"                 value="96000000" />
+   <item key="/MCG/system_mcgfllclk_clock[1]"              value="80000000" />
+   <item key="/MCG/system_mcgfllclk_clock[2]"              value="80000000" />
+   <item key="/OSC0/osc_input_freq"                        value="16000000" />
+   <item key="/PIT/irqHandlingMethod"                      value="$ClassMethod" />
+   <item key="/RTC/configure_rtc"                          value="false" />
+   <item key="/RTC/rtc_cr_osce"                            value="false" />
+   <item key="/SIM/ClockConfig[0]"                         value="" />
+   <item key="/SIM/ClockConfig[1]"                         value="" />
+   <item key="/SIM/ClockConfig[2]"                         value="" />
+   <item key="/SIM/sim_clkdiv2_usb"                        value="2" />
+   <item key="/SIM/sim_sopt2_pllfllsel[0]"                 value="1" />
+   <item key="/SIM/system_bus_clock[1]"                    value="4000000" />
+   <item key="/SIM/system_bus_clock[2]"                    value="40000000" />
+   <item key="/SIM/system_core_clock[1]"                   value="4000000" />
+   <item key="/SIM/system_core_clock[2]"                   value="40000000" />
+   <item key="/SIM/system_flash_clock[1]"                  value="1000000" />
+   <item key="/SIM/system_flash_clock[2]"                  value="20000000" />
+   <item key="/USB0/irqHandlingMethod"                     value="$ClassMethod" />
+</section>

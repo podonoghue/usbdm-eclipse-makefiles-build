@@ -58,6 +58,8 @@ void software_init_hook () {
 void* __dso_handle;
 #endif
 
+void checkICP();
+
 /**
  *  @brief Low-level initialize the system
  *
@@ -134,6 +136,12 @@ void SystemInitLowLevel(void) {
          WDOG_STCTRLH_ALLOWUPDATE(1)|     // Allow future updates
          WDOG_STCTRLH_CLKSRC(0);          // WDOG clk=LPO
 #endif
+
+   /**
+    * Hook for ICP code
+    * Needed to be done before too much uC configuration
+    */
+   checkICP();
 }
 
 /**
@@ -147,7 +155,7 @@ void SystemInit(void) {
     * This is generic initialization code
     * It may not be correct for a specific target
     */
-
+	
 #ifdef PMC_REGSC_ACKISO
    USBDM::Pmc::releasePins();
 #endif
