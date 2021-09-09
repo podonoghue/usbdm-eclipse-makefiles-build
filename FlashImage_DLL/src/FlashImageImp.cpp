@@ -304,19 +304,19 @@ void EnumeratorImp::lastValid() {
  *   Constructor - creates an empty Flash image
  */
 FlashImageImp::FlashImageImp() :
-            targetType(T_NONE),
-            wordAddresses(false),
-            firstAllocatedAddress((unsigned )(-1)),
-            lastAllocatedAddress(0),
-            lastPageNumAccessed((uint16_t )(-1)),
-            elementCount(0),
-            littleEndian(false),
-            allowOverwrite(false),
-            fp(0),
-            discardFF(true),
-            printHeader(true),
-            programHeaders(0),
-            symTable(0) {
+                  targetType(T_NONE),
+                  wordAddresses(false),
+                  firstAllocatedAddress((unsigned )(-1)),
+                  lastAllocatedAddress(0),
+                  lastPageNumAccessed((uint16_t )(-1)),
+                  elementCount(0),
+                  littleEndian(false),
+                  allowOverwrite(false),
+                  fp(0),
+                  discardFF(true),
+                  printHeader(true),
+                  programHeaders(0),
+                  symTable(0) {
    LOGGING;
 }
 
@@ -1568,8 +1568,6 @@ const char * FlashImageImp::getElfString(unsigned index) {
    return symTable+index;
 }
 
-#define USE_SECTIONS
-
 /**
  *  Load a ELF file into the buffer. \n
  *
@@ -1666,42 +1664,41 @@ USBDM_ErrorCode FlashImageImp::loadElfFile(const string &filePath) {
       }
    }
 #endif
-
-#ifdef USE_SECTIONS
-   log.print("Loading by Section Headers\n");
-   if (elfHeader.e_shoff == 0) {
-      log.print("No section headers present\n");
-      return SFILE_RC_ELF_FORMAT_ERROR;
+   if ((targetType == T_HCS12) || (targetType == T_HC12)) {
+      // Load image based on suitable segments
+      log.print("Loading by Program Headers\n");
+      printHeader = true;
+      for(Elf32_Phdr *programHeader=programHeaders;
+            programHeader<(programHeaders+elfHeader.e_phnum);
+            programHeader++) {
+         USBDM_ErrorCode rc = loadElfBlockByProgramHeader(programHeader);
+         if (rc != BDM_RC_OK) {
+            return rc;
+         }
+      }
    }
-   // Load image based on suitable sections
-   for(Elf32_Half sectionIndex=0; sectionIndex<elfHeader.e_shnum; sectionIndex++) {
-      Elf32_Shdr sectionHeader;
-      fseek(fp, elfHeader.e_shoff+sectionIndex*elfHeader.e_shentsize, SEEK_SET);
-      size_t sz;
-      if ((sz=fread(&sectionHeader, 1, sizeof(sectionHeader), fp)) != sizeof(sectionHeader)) {
-         log.error("Undersize read of Section Header (Expected %lu, read %lu)\n", (unsigned long)sizeof(sectionHeader), (unsigned long)sz);
+   else {
+      log.print("Loading by Section Headers\n");
+      if (elfHeader.e_shoff == 0) {
+         log.print("No section headers present\n");
          return SFILE_RC_ELF_FORMAT_ERROR;
       }
-      fixElfSectionHeaderSex(&sectionHeader);
-      loadElfBlockBySectionHeader(&sectionHeader);
-   }
-#else
-   // Load image based on suitable segments
-   log.print("Loading by Program Headers\n");
-   printHeader = true;
-   for(Elf32_Phdr *programHeader=programHeaders;
-         programHeader<(programHeaders+elfHeader.e_phnum);
-         programHeader++) {
-      USBDM_ErrorCode rc = loadElfBlockByProgramHeader(programHeader);
-      if (rc != BDM_RC_OK) {
-         return rc;
+      // Load image based on suitable sections
+      for(Elf32_Half sectionIndex=0; sectionIndex<elfHeader.e_shnum; sectionIndex++) {
+         Elf32_Shdr sectionHeader;
+         fseek(fp, elfHeader.e_shoff+sectionIndex*elfHeader.e_shentsize, SEEK_SET);
+         size_t sz;
+         if ((sz=fread(&sectionHeader, 1, sizeof(sectionHeader), fp)) != sizeof(sectionHeader)) {
+            log.error("Undersize read of Section Header (Expected %lu, read %lu)\n", (unsigned long)sizeof(sectionHeader), (unsigned long)sz);
+            return SFILE_RC_ELF_FORMAT_ERROR;
+         }
+         fixElfSectionHeaderSex(&sectionHeader);
+         loadElfBlockBySectionHeader(&sectionHeader);
       }
    }
-#endif
    return SFILE_RC_OK;
 }
 
-#ifdef USE_SECTIONS
 /**
  * Find Program header associated with a given section header
  *
@@ -1799,7 +1796,7 @@ USBDM_ErrorCode FlashImageImp::loadElfBlockBySectionHeader(Elf32_Shdr *sectionHe
    }
    return SFILE_RC_OK;
 }
-#else
+
 /**
  *  Load ELF block based on program header
  *
@@ -1839,5 +1836,4 @@ USBDM_ErrorCode FlashImageImp::loadElfBlockByProgramHeader(Elf32_Phdr *programHe
    }
    return loadElfBlock(fp, programHeader->p_offset, programHeader->p_filesz, loadAddress);
 }
-#endif // USE_SECTIONS
 

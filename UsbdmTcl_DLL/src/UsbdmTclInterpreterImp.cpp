@@ -156,10 +156,10 @@ int UsbdmTclInterpreterImp::main(int argc, char *argv[]) {
 void UsbdmTclInterpreterImp::deleteInterpreter(Tcl_Interp *interp) {
    LOGGING;
    // Calling Tcl_DeleteInterp() from the destructor fails badly if a different thread.
-//   if (!Tcl_InterpDeleted(interp)) {
-//      log.print("Tcl_DeleteInterp(@%p)\n", interp);
-//      Tcl_DeleteInterp(interp);
-//   }
+   //   if (!Tcl_InterpDeleted(interp)) {
+   //      log.print("Tcl_DeleteInterp(@%p)\n", interp);
+   //      Tcl_DeleteInterp(interp);
+   //   }
    log.print("Tcl_Finalize()\n");
    Tcl_Finalize();
 }
@@ -175,16 +175,11 @@ UsbdmTclInterpreterImp::UsbdmTclInterpreterImp(bool doInit) {
 
    tclChannel   = 0;
 
-//#ifdef __unix__
-//   // Load wxWindows Stub
-//   (void)dlopen(WXSTUB_DLL_NAME, RTLD_NOW|RTLD_NODELETE);
-//#endif
-
    if (doInit) {
       setTCLExecutable();
       interp.reset(Tcl_CreateInterp(), deleteInterpreter);
       Tcl_Init(interp.get());
-//      log.print("Created interp@%p\n", interp.get());
+      log.print("Created interp@%p\n", interp.get());
       registerUSBDMCommands(interp.get());
    }
 }
@@ -232,9 +227,9 @@ void UsbdmTclInterpreterImp::redirectStdOut() {
       PRINT_ERROR("(fp == NULL)\n");
    }
    long fileNo = dup(fileno(fp));
-//   log.print("createTclInterpreter() fileNo == %ld\n", fileNo );
+   //   log.print("createTclInterpreter() fileNo == %ld\n", fileNo );
    tclChannel = Tcl_MakeFileChannel((ClientData)fileNo, TCL_WRITABLE);
-//   log.print("createTclInterpreter() tclChannel == %p\n", tclChannel );
+   //   log.print("createTclInterpreter() tclChannel == %p\n", tclChannel );
 #endif
 
    // Register channel
@@ -423,7 +418,7 @@ int UsbdmTclInterpreterImp::setTCLExecutable() {
    }
    Tcl_FindExecutable(executableName);
 #endif
-//   log.print("Tcl_GetNameOfExecutable() = \'%s\'\n", Tcl_GetNameOfExecutable());
+   //   log.print("Tcl_GetNameOfExecutable() = \'%s\'\n", Tcl_GetNameOfExecutable());
    return BDM_RC_OK;
 }
 
@@ -449,11 +444,14 @@ static void printChannel(int ch, const char *format, ...)  {
 
    Tcl_Channel channel = Tcl_GetStdChannel(ch);
    if (channel != NULL) {
-     Tcl_WriteChars(channel, buff, -1);
-     Tcl_Flush(channel);
+      Tcl_WriteChars(channel, buff, -1);
+      Tcl_Flush(channel);
    }
 }
 
+/**
+ * Print list of BDMs available
+ */
 static void listBdms() {
    PRINT("BDM List:\n");
    bdmInterface->findBDMs(bdmList);
@@ -475,17 +473,40 @@ public:
    }
 };
 
+/**
+ * Callback use for TCL interpreter
+ *
+ * @param interp The interpreter to use
+ */
 int UsbdmTclInterpreterImp::appInitProc(Tcl_Interp *interp) {
    LOGGING;
    MyLock lock;
+
+   if ((Tcl_Init)(interp) == TCL_ERROR) {
+      return TCL_ERROR;
+   }
+
+   if (Tcl_InitStubs(interp, "8.1", 0) == NULL) {
+      return TCL_ERROR;
+   }
+   if (Tcl_PkgRequire(interp, "Tcl", "8.1", 0) == NULL) {
+      return TCL_ERROR;
+   }
+
+   // Ignore error optional
+   Tcl_PkgRequire (interp, "tclreadline", 0, 1);
 
    PRINT("USBDMScript incorporating TCL - Copyright(c) 2011\n");
    PRINT("Press ? for help\n");
 
    registerUSBDMCommands(interp);
 
+   //   Tcl_StaticPackage(nullptr, "", initProc, safeInitProc)
    // Set script to run on startup (if it exists)
-   Tcl_Eval(interp, "set tcl_rcFileName usbdm_rc.tcl");
+//   Tcl_SetVar(interp, "tcl_rcFileName", "$env(HOME)/usbdm_rc.tcl", TCL_GLOBAL_ONLY);
+
+   Tcl_Eval(interp, "set tcl_rcFileName $env(HOME)/usbdm_rc.tcl");
+
    return TCL_OK;
 }
 
@@ -561,11 +582,11 @@ const char *UsbdmTclInterpreterImp::getTclResult() {
    memset(buff, 0, sizeof(buff));
    if (res != NULL) {
       strncpy(buff, res, sizeof(buff)-1);
-//      log.print("%s\n", res);
+      //      log.print("%s\n", res);
    }
-//   else {
-//      log.print("<null>\n");
-//   }
+   //   else {
+   //      log.print("<null>\n");
+   //   }
    return buff;
 }
 
@@ -587,7 +608,11 @@ static int checkUsbdmRC(Tcl_Interp *interp, USBDM_ErrorCode errorCode) {
    return TCL_OK;
 }
 
-//! Quietly report BDM status
+/**
+ * Report BDM status
+ *
+ * @param interp
+ */
 static void reportBdmStatus(Tcl_Interp *interp) {
    USBDMStatus_t usbdmStatus;
    if (bdmInterface->getBDMStatus(&usbdmStatus) != BDM_RC_OK) {
@@ -597,7 +622,11 @@ static void reportBdmStatus(Tcl_Interp *interp) {
    PRINT("BDM status => %s\n", getBDMStatusName(&usbdmStatus));
 }
 
-//! Report Target status
+/**
+ * Report Target status
+ *
+ * @param interp
+ */
 static int reportState(Tcl_Interp *interp) {
    USBDMStatus_t usbdmStatus;
    unsigned long speed;
@@ -614,15 +643,23 @@ static int reportState(Tcl_Interp *interp) {
       else {
          speed = round(speed/1000.0);
          PRINT("Speed = %d kHz (%.0f ticks, sync=%.1f us)\n",
-                 (int)speed, (60000.0 * 128)/speed, (1000.0 * 128)/speed);
+               (int)speed, (60000.0 * 128)/speed, (1000.0 * 128)/speed);
       }
    }
    Tcl_SetResult(interp, (char*)getBDMStatusName(&usbdmStatus), TCL_VOLATILE);
    return (TCL_OK);
 }
 
-//! S12Z Mass erase
-static int cmd_massErase(ClientData, Tcl_Interp *interp, int argc, Tcl_Obj *const *argv) {
+/**
+ *  S12Z Mass erase
+ *
+ * @param
+ * @param interp
+ * @param argc
+ * @param argv
+ * @return
+ */
+static int cmd_s12zMassErase(ClientData, Tcl_Interp *interp, int argc, Tcl_Obj *const *argv) {
    static const uint32_t CMD_CUSTOM_COMMAND  = 18;  //!< Custom command
 
    // massErase
@@ -640,7 +677,16 @@ static int cmd_massErase(ClientData, Tcl_Interp *interp, int argc, Tcl_Obj *cons
    return TCL_OK;
 }
 
-//! Set target Vcc - This has no affect until target is set
+/**
+ * settargetvdd <0|3|5|on|off>  - Set target Vdd (only has effect if target set)
+ * This has no affect until target is set
+ *
+ * @param
+ * @param interp
+ * @param argc
+ * @param argv
+ * @return
+ */
 static int cmd_setVdd(ClientData, Tcl_Interp *interp, int argc, Tcl_Obj *const *argv) {
    // setTargetVdd <0|3|5|on|off>
    bool immediateEffect = false;
@@ -666,7 +712,7 @@ static int cmd_setVdd(ClientData, Tcl_Interp *interp, int argc, Tcl_Obj *const *
       immediateEffect = true;
       if (checkUsbdmRC(interp, bdmInterface->setTargetVdd(BDM_TARGET_VDD_ENABLE)))
          return TCL_ERROR;
-      }
+   }
    else if (strncasecmp(arg, "off", 2) == 0) {
       immediateEffect = true;
       if (checkUsbdmRC(interp, bdmInterface->setTargetVdd(BDM_TARGET_VDD_DISABLE)))
@@ -679,6 +725,15 @@ static int cmd_setVdd(ClientData, Tcl_Interp *interp, int argc, Tcl_Obj *const *
    return TCL_OK;
 }
 
+/**
+ * memorySpace [<N|X|P>]        - set memory space (DSC)\n
+ *
+ * @param
+ * @param interp
+ * @param argc
+ * @param argv
+ * @return
+ */
 static int cmd_setMemorySpace(ClientData, Tcl_Interp *interp, int argc, Tcl_Obj *const *argv) {
    // setMemorySpace <space>
    if (argc > 1) {
@@ -713,9 +768,17 @@ static int cmd_setMemorySpace(ClientData, Tcl_Interp *interp, int argc, Tcl_Obj 
    return TCL_OK;
 }
 
-//! Close BDM
+/**
+ * closeBDM                     - Close BDM connection\n
+ *
+ * @param
+ * @param interp
+ * @param argc
+ * @param argv
+ * @return
+ */
 static int cmd_closeBDM(ClientData, Tcl_Interp *interp, int argc, Tcl_Obj *const *argv) {
-// cmd_openBDM [<deviceNum>]
+   // cmd_openBDM [<deviceNum>]
 
    if (argc > 1) {
       Tcl_WrongNumArgs(interp, 1, argv, "");
@@ -727,7 +790,7 @@ static int cmd_closeBDM(ClientData, Tcl_Interp *interp, int argc, Tcl_Obj *const
 
 //! Open BDM before 1st use
 static int cmd_openBDM(ClientData, Tcl_Interp *interp, int argc, Tcl_Obj *const *argv) {
-// cmd_openBDM [<deviceNum>]
+   // cmd_openBDM [<deviceNum>]
    int deviceNum;
 
    if (argc > 2) {
@@ -768,7 +831,15 @@ long nullCallback(std::string message, std::string caption, long style) {
    return UsbdmWxConstants::NO;
 }
 
-//! Set target Type
+/**
+ * settarget <target>           - HCS12/HCS08/RS08/CFV1/DSC/JTAG/ARM\n
+ *
+ * @param
+ * @param interp
+ * @param argc
+ * @param argv
+ * @return
+ */
 static int cmd_setTarget(ClientData, Tcl_Interp *interp, int argc, Tcl_Obj *const *argv) {
    LOGGING;
    if (argc != 2) {
@@ -835,6 +906,15 @@ static int cmd_setTarget(ClientData, Tcl_Interp *interp, int argc, Tcl_Obj *cons
    return TCL_OK;
 }
 
+/**
+ * usereset <T|F|0|1>           - Apply reset signal when using S/W reset methods
+ *
+ * @param
+ * @param interp
+ * @param argc
+ * @param argv
+ * @return
+ */
 static int cmd_useReset(ClientData, Tcl_Interp *interp, int argc, Tcl_Obj *const *argv) {
    // useReset T|F
    if (argc > 2) {
@@ -856,7 +936,16 @@ static int cmd_useReset(ClientData, Tcl_Interp *interp, int argc, Tcl_Obj *const
    return TCL_OK;
 }
 
-//! Set target Vpp - This has no affect until target is set
+/**
+ * settargetvpp <standby|on|off>- Set target Vpp
+ * This has no affect until target is set
+ *
+ * @param
+ * @param interp
+ * @param argc
+ * @param argv
+ * @return
+ */
 static int cmd_setVpp(ClientData, Tcl_Interp *interp, int argc, Tcl_Obj *const *argv) {
    // setTargetVpp <standby|on|off>
    if (argc != 2) {
@@ -886,8 +975,14 @@ static int cmd_setVpp(ClientData, Tcl_Interp *interp, int argc, Tcl_Obj *const *
    return TCL_OK;
 }
 
-/*
- *  Reset Target to Special Mode
+/**
+ * reset <N|S><H|S|P|V|A>       - Reset (N=normal,S=Special), (H=Hardware,S=Software,P=Power,V=Vendor,A=All\n
+ *
+ * @param
+ * @param interp
+ * @param argc
+ * @param argv
+ * @return
  */
 static int cmd_reset(ClientData, Tcl_Interp *interp, int argc, Tcl_Obj *const *argv) {
    TargetMode_t targetMode = (TargetMode_t)(RESET_SPECIAL|RESET_DEFAULT);
@@ -898,16 +993,16 @@ static int cmd_reset(ClientData, Tcl_Interp *interp, int argc, Tcl_Obj *const *a
       // Reset method
       if (currentToken != NULL) {
          switch(*currentToken) {
-         case 'n':
-         case 'N' :
-            targetMode = (TargetMode_t)(targetMode & ~RESET_MODE_MASK);
-            targetMode = (TargetMode_t)(targetMode | RESET_NORMAL);
-            break;
-         case 's':
-         case 'S' :
-            targetMode = (TargetMode_t)(targetMode & ~RESET_MODE_MASK);
-            targetMode = (TargetMode_t)(targetMode | RESET_SPECIAL);
-            break;
+            case 'n':
+            case 'N' :
+               targetMode = (TargetMode_t)(targetMode & ~RESET_MODE_MASK);
+               targetMode = (TargetMode_t)(targetMode | RESET_NORMAL);
+               break;
+            case 's':
+            case 'S' :
+               targetMode = (TargetMode_t)(targetMode & ~RESET_MODE_MASK);
+               targetMode = (TargetMode_t)(targetMode | RESET_SPECIAL);
+               break;
          }
       }
    }
@@ -918,36 +1013,36 @@ static int cmd_reset(ClientData, Tcl_Interp *interp, int argc, Tcl_Obj *const *a
    if (argc > 1) {
       if (currentToken != NULL) {
          switch(*currentToken) {
-         case 'h':
-         case 'H' :
-            targetMode = (TargetMode_t)(targetMode & ~RESET_METHOD_MASK);
-            targetMode = (TargetMode_t)(targetMode | RESET_HARDWARE);
-            break;
-         case 's':
-         case 'S' :
-            targetMode = (TargetMode_t)(targetMode & ~RESET_METHOD_MASK);
-            targetMode = (TargetMode_t)(targetMode | RESET_SOFTWARE);
-            break;
-         case 'a':
-         case 'A' :
-            targetMode = (TargetMode_t)(targetMode & ~RESET_METHOD_MASK);
-            targetMode = (TargetMode_t)(targetMode | RESET_ALL);
-            break;
-         case 'd':
-         case 'D' :
-            targetMode = (TargetMode_t)(targetMode & ~RESET_METHOD_MASK);
-            targetMode = (TargetMode_t)(targetMode | RESET_DEFAULT);
-            break;
-         case 'p':
-         case 'P' :
-            targetMode = (TargetMode_t)(targetMode & ~RESET_METHOD_MASK);
-            targetMode = (TargetMode_t)(targetMode | RESET_POWER);
-            break;
-         case 'v':
-         case 'V' :
-            targetMode = (TargetMode_t)(targetMode & ~RESET_METHOD_MASK);
-            targetMode = (TargetMode_t)(targetMode | RESET_VENDOR);
-            break;
+            case 'h':
+            case 'H' :
+               targetMode = (TargetMode_t)(targetMode & ~RESET_METHOD_MASK);
+               targetMode = (TargetMode_t)(targetMode | RESET_HARDWARE);
+               break;
+            case 's':
+            case 'S' :
+               targetMode = (TargetMode_t)(targetMode & ~RESET_METHOD_MASK);
+               targetMode = (TargetMode_t)(targetMode | RESET_SOFTWARE);
+               break;
+            case 'a':
+            case 'A' :
+               targetMode = (TargetMode_t)(targetMode & ~RESET_METHOD_MASK);
+               targetMode = (TargetMode_t)(targetMode | RESET_ALL);
+               break;
+            case 'd':
+            case 'D' :
+               targetMode = (TargetMode_t)(targetMode & ~RESET_METHOD_MASK);
+               targetMode = (TargetMode_t)(targetMode | RESET_DEFAULT);
+               break;
+            case 'p':
+            case 'P' :
+               targetMode = (TargetMode_t)(targetMode & ~RESET_METHOD_MASK);
+               targetMode = (TargetMode_t)(targetMode | RESET_POWER);
+               break;
+            case 'v':
+            case 'V' :
+               targetMode = (TargetMode_t)(targetMode & ~RESET_METHOD_MASK);
+               targetMode = (TargetMode_t)(targetMode | RESET_VENDOR);
+               break;
          }
       }
    }
@@ -959,7 +1054,15 @@ static int cmd_reset(ClientData, Tcl_Interp *interp, int argc, Tcl_Obj *const *a
    return TCL_OK;
 }
 
-//! Connect to target
+/**
+ * connect                      - Connect to target\n
+ *
+ * @param
+ * @param interp
+ * @param argc
+ * @param argv
+ * @return
+ */
 static int cmd_connect(ClientData, Tcl_Interp *interp, int argc, Tcl_Obj *const *argv) {
    // connect
    if (argc != 1) {
@@ -973,7 +1076,7 @@ static int cmd_connect(ClientData, Tcl_Interp *interp, int argc, Tcl_Obj *const 
 
    TargetType_t targetType = bdmInterface->getBdmOptions().targetType;
    if ((targetType != T_CFVx) && (targetType != T_JTAG) &&
-       (targetType != T_ARM) && (targetType != T_MC56F80xx)) {
+         (targetType != T_ARM) && (targetType != T_MC56F80xx)) {
       reportState(interp);
    }
    return TCL_OK;
@@ -1018,23 +1121,38 @@ static const char *translateTAValue( uint16_t value ) {
 }
 #endif
 
+/**
+ * Used to convert a character into value for pin control
+ *
+ * @param ch
+ *
+ * @return '1','h','H'->3; '0','l','L'->2; '3','t','T'->1, '-'-> 0
+ */
 static int getPinControlValue(const char *ch) {
    switch (*ch) {
-   case '1' :
-   case 'h' :
-   case 'H' : return 3;
-   case '0' :
-   case 'l' :
-   case 'L' : return 2;
-   case 't' :
-   case 'T' :
-   case '3' : return 1;
-   case '-' : return 0;
-   default  : return 0;
+      case '1' :
+      case 'h' :
+      case 'H' : return 3;
+      case '0' :
+      case 'l' :
+      case 'L' : return 2;
+      case 't' :
+      case 'T' :
+      case '3' : return 1;
+      case '-' : return 0;
+      default  : return 0;
    }
 }
 
-//! Control interface pins
+/**
+ * pinSet <pin=level>           - Control pins, pin=RST|BKGD|TRST|BKPT|TA|SWD,\n
+ *
+ * @param
+ * @param interp
+ * @param argc
+ * @param argv
+ * @return
+ */
 static int cmd_pinSet(ClientData, Tcl_Interp *interp, int argc, Tcl_Obj *const *argv) {
    uint32_t value = 0;
 
@@ -1082,9 +1200,17 @@ static int cmd_pinSet(ClientData, Tcl_Interp *interp, int argc, Tcl_Obj *const *
    return TCL_OK;
 }
 
-//! Halt Target
+/**
+ * halt                         - Halt the target\n
+ *
+ * @param
+ * @param interp
+ * @param argc
+ * @param argv
+ * @return
+ */
 static int cmd_halt(ClientData, Tcl_Interp *interp, int argc, Tcl_Obj *const *argv) {
-// halt
+   // halt
    if (argc != 1) {
       Tcl_WrongNumArgs(interp, 1, argv, "");
       return TCL_ERROR;
@@ -1096,9 +1222,17 @@ static int cmd_halt(ClientData, Tcl_Interp *interp, int argc, Tcl_Obj *const *ar
    return TCL_OK;
 }
 
-//! Start Target execution
+/**
+ * go                           - Start from current PC
+ *
+ * @param
+ * @param interp
+ * @param argc
+ * @param argv
+ * @return
+ */
 static int cmd_go(ClientData, Tcl_Interp *interp, int argc, Tcl_Obj *const *argv) {
-// go
+   // go
    if (argc != 1) {
       Tcl_WrongNumArgs(interp, 1, argv, "");
       return TCL_ERROR;
@@ -1114,13 +1248,21 @@ static int cmd_go(ClientData, Tcl_Interp *interp, int argc, Tcl_Obj *const *argv
       return TCL_ERROR;
    }
    PRINT(":go, from PC = 0x%08X : 0x%4.4X 0x%4.4X\n",
-          (int)oldPC, oldInstruction>>16, oldInstruction&0xFFFF);
+         (int)oldPC, oldInstruction>>16, oldInstruction&0xFFFF);
    return TCL_OK;
 }
 
-//! Step Target
+/**
+ * step                         - Execute a single instruction
+ *
+ * @param
+ * @param interp
+ * @param argc
+ * @param argv
+ * @return
+ */
 static int cmd_step(ClientData, Tcl_Interp *interp, int argc, Tcl_Obj *const *argv) {
-// step
+   // step
    if (argc > 2) {
       Tcl_WrongNumArgs(interp, 1, argv, "");
       return TCL_ERROR;
@@ -1153,7 +1295,16 @@ static int cmd_step(ClientData, Tcl_Interp *interp, int argc, Tcl_Obj *const *ar
    return TCL_OK;
 }
 
-//! Read & report Status Value from Target status register
+/**
+ * getcap                       - Get BDM Capabilities\n
+ * Read & report Status Value from Target status register
+ *
+ * @param
+ * @param interp
+ * @param argc
+ * @param argv
+ * @return
+ */
 static int cmd_getCapabilities(ClientData, Tcl_Interp *interp, int argc, Tcl_Obj *const *argv) {
    HardwareCapabilities_t bdmCapabilities;
 
@@ -1167,7 +1318,16 @@ static int cmd_getCapabilities(ClientData, Tcl_Interp *interp, int argc, Tcl_Obj
    return TCL_OK;
 }
 
-//! Read & report Status Value from Target status register
+/**
+ * gs                           - Read status register
+ * Read & report Status Value from Target status register
+ *
+ * @param
+ * @param interp
+ * @param argc
+ * @param argv
+ * @return
+ */
 static int cmd_status(ClientData, Tcl_Interp *interp, int argc, Tcl_Obj *const *argv) {
    unsigned long BDMStatus = 0x00;
 
@@ -1249,21 +1409,37 @@ static int cmd_status(ClientData, Tcl_Interp *interp, int argc, Tcl_Obj *const *
          return TCL_ERROR;
       }
       PRINT("Target status reg => %s\n",
-             getStatusRegName(targetType, BDMStatus));
+            getStatusRegName(targetType, BDMStatus));
       reportState(interp);
       Tcl_SetObjResult(interp, Tcl_NewIntObj(BDMStatus));
       return TCL_OK;
    }
 }
 
-//! Get last USBDM error code as number
+/**
+ * getLastError                 - Get last USBDM rc as number
+ *
+ * @param
+ * @param interp
+ * @param argc
+ * @param argv
+ * @return
+ */
 static int cmd_getLastError(ClientData, Tcl_Interp *interp, int argc, Tcl_Obj *const *argv) {
    Tcl_SetObjResult(interp, Tcl_NewIntObj(lastError));
    lastError = BDM_RC_OK;
    return TCL_OK;
 }
 
-//! Get last USBDM error code as message
+/**
+ * getErrorMessage <rc>         - Get given USBDM rc as String
+ *
+ * @param
+ * @param interp
+ * @param argc
+ * @param argv
+ * @return
+ */
 static int cmd_getErrorMessage(ClientData, Tcl_Interp *interp, int argc, Tcl_Obj *const *argv) {
    if (argc > 2) {
       Tcl_WrongNumArgs(interp, 1, argv, "");
@@ -1281,14 +1457,30 @@ static int cmd_getErrorMessage(ClientData, Tcl_Interp *interp, int argc, Tcl_Obj
    return TCL_OK;
 }
 
-//! Get last USBDM error code as message
+/**
+ * getLastErrorMessage          - Get last USBDM rc as string
+ *
+ * @param
+ * @param interp
+ * @param argc
+ * @param argv
+ * @return
+ */
 static int cmd_getLastErrorMessage(ClientData, Tcl_Interp *interp, int argc, Tcl_Obj *const *argv) {
    Tcl_SetResult(interp, (char*)bdmInterface->getErrorString(lastError), TCL_STATIC);
    lastError = BDM_RC_OK;
    return TCL_OK;
 }
 
-//! Read & report Status Value from Target status register - no sync
+/**
+ * rs                           - Report Status Value from Target status register - no sync
+ *
+ * @param
+ * @param interp
+ * @param argc
+ * @param argv
+ * @return
+ */
 static int cmd_readStatus(ClientData, Tcl_Interp *interp, int argc, Tcl_Obj *const *argv) {
    uint8_t value[4];
    unsigned long regValue;
@@ -1299,44 +1491,52 @@ static int cmd_readStatus(ClientData, Tcl_Interp *interp, int argc, Tcl_Obj *con
    }
    TargetType_t targetType = bdmInterface->getBdmOptions().targetType;
    switch (targetType) {
-   case  T_ARM:
-      if (checkUsbdmRC(interp,  bdmInterface->readMemory(1,4,DHCSR,value)) != BDM_RC_OK) {
-         return TCL_ERROR;
-      }{
-      uint32_t data = getData32(value);
-      PRINT("DHCSR reg => %s(0x%08X)\n", getDHCSRName(data), data);
-      Tcl_SetObjResult(interp, Tcl_NewIntObj(data));
-      }
-      return TCL_OK;
-   case T_CFV1:
-      if (checkUsbdmRC(interp,  bdmInterface->readDReg(CFV1_DRegXCSRbyte,&regValue)) != BDM_RC_OK) {
-         return TCL_ERROR;
-      }
-      PRINT("XCSR.byte reg => %s(0x%02X)\n", getCFV1_XCSR_Name(regValue), (unsigned int)regValue);
-      Tcl_SetObjResult(interp, Tcl_NewIntObj(regValue));
-      return TCL_OK;
-   case T_HCS08:
-      if (checkUsbdmRC(interp,  bdmInterface->readStatusReg(&regValue)) != BDM_RC_OK) {
-         return TCL_ERROR;
-      }
-      PRINT("BDCSCR reg => %s(0x%02X)\n", getHCS08_BDCSCR_Name(regValue), (unsigned int)regValue);
-      Tcl_SetObjResult(interp, Tcl_NewIntObj(regValue));
-      return TCL_OK;
-   default:
-      break;
+      case  T_ARM:
+         if (checkUsbdmRC(interp,  bdmInterface->readMemory(1,4,DHCSR,value)) != BDM_RC_OK) {
+            return TCL_ERROR;
+         }{
+            uint32_t data = getData32(value);
+            PRINT("DHCSR reg => %s(0x%08X)\n", getDHCSRName(data), data);
+            Tcl_SetObjResult(interp, Tcl_NewIntObj(data));
+         }
+         return TCL_OK;
+      case T_CFV1:
+         if (checkUsbdmRC(interp,  bdmInterface->readDReg(CFV1_DRegXCSRbyte,&regValue)) != BDM_RC_OK) {
+            return TCL_ERROR;
+         }
+         PRINT("XCSR.byte reg => %s(0x%02X)\n", getCFV1_XCSR_Name(regValue), (unsigned int)regValue);
+         Tcl_SetObjResult(interp, Tcl_NewIntObj(regValue));
+         return TCL_OK;
+      case T_HCS08:
+         if (checkUsbdmRC(interp,  bdmInterface->readStatusReg(&regValue)) != BDM_RC_OK) {
+            return TCL_ERROR;
+         }
+         PRINT("BDCSCR reg => %s(0x%02X)\n", getHCS08_BDCSCR_Name(regValue), (unsigned int)regValue);
+         Tcl_SetObjResult(interp, Tcl_NewIntObj(regValue));
+         return TCL_OK;
+      default:
+         break;
    }
    return TCL_ERROR;
 }
 
-//! Read Registers from Target
+/**
+ * regs                         - PRINT out registers
+ *
+ * @param
+ * @param interp
+ * @param argc
+ * @param argv
+ * @return
+ */
 static int cmd_registers(ClientData, Tcl_Interp *interp, int argc, Tcl_Obj *const *argv) {
    static const int HCS12regList[] = {HCS12_RegPC, HCS12_RegD, HCS12_RegX, HCS12_RegY, HCS12_RegSP};
    static const int HCS12ZregList[] = {
-        S12Z_RegD0, S12Z_RegD1, S12Z_RegD2, S12Z_RegD3, S12Z_RegD4, S12Z_RegD5, S12Z_RegD6, S12Z_RegD7,
-        S12Z_RegX, S12Z_RegY, S12Z_RegSP, S12Z_RegPC, S12Z_RegCCR
+         S12Z_RegD0, S12Z_RegD1, S12Z_RegD2, S12Z_RegD3, S12Z_RegD4, S12Z_RegD5, S12Z_RegD6, S12Z_RegD7,
+         S12Z_RegX, S12Z_RegY, S12Z_RegSP, S12Z_RegPC, S12Z_RegCCR
    };
    static const int HCS12ZregListWidth[] = {
-       1, 1, 2, 2, 2, 2, 4, 4, 3, 3, 3, 3, 2
+         1, 1, 2, 2, 2, 2, 4, 4, 3, 3, 3, 3, 2
    };
    static const int HCS08regList[] = {HCS08_RegPC, HCS08_RegA, HCS08_RegHX, HCS08_RegSP};
    static const int RS08regList[]  = {RS08_RegCCR_PC, RS08_RegSPC, RS08_RegA};
@@ -1398,8 +1598,8 @@ static int cmd_registers(ClientData, Tcl_Interp *interp, int argc, Tcl_Obj *cons
          break;
       case T_S12Z :
          for (regIndex =0;
-             (regIndex<sizeof(HCS12ZregList)/sizeof(HCS12ZregList[0])) && (rc == TCL_OK);
-             regIndex++) {
+               (regIndex<sizeof(HCS12ZregList)/sizeof(HCS12ZregList[0])) && (rc == TCL_OK);
+               regIndex++) {
             regNo = HCS12ZregList[regIndex];
             if (regNo>=0) {
                if (checkUsbdmRC(interp,  bdmInterface->readReg(regNo, &regVal))) {
@@ -1426,8 +1626,8 @@ static int cmd_registers(ClientData, Tcl_Interp *interp, int argc, Tcl_Obj *cons
          break;
       case T_HCS08 :
          for (regIndex =0;
-              (regIndex<sizeof(HCS08regList)/sizeof(HCS08regList[0])) && (rc == TCL_OK);
-              regIndex++) {
+               (regIndex<sizeof(HCS08regList)/sizeof(HCS08regList[0])) && (rc == TCL_OK);
+               regIndex++) {
             regNo = HCS08regList[regIndex];
             if (checkUsbdmRC(interp,  bdmInterface->readReg(regNo, &regVal))) {
                return TCL_ERROR;
@@ -1449,8 +1649,8 @@ static int cmd_registers(ClientData, Tcl_Interp *interp, int argc, Tcl_Obj *cons
          break;
       case T_RS08 :
          for (regIndex =0;
-              (regIndex<sizeof(RS08regList)/sizeof(RS08regList[0])) && (rc == TCL_OK);
-              regIndex++) {
+               (regIndex<sizeof(RS08regList)/sizeof(RS08regList[0])) && (rc == TCL_OK);
+               regIndex++) {
             regNo = RS08regList[regIndex];
             if (checkUsbdmRC(interp,  bdmInterface->readReg(regNo, &regVal))) {
                return TCL_ERROR;
@@ -1491,16 +1691,16 @@ static int cmd_registers(ClientData, Tcl_Interp *interp, int argc, Tcl_Obj *cons
             return TCL_ERROR;
          }
          PRINT("%3s =%C-%C%C-%d---%C%C%C%C%C,          ",
-                getCFV1ControlRegName(CFV1_CRegSR),
-                (regVal&0x8000)?'T':'-',
-                (regVal&0x2000)?'S':'-',
-                (regVal&0x1000)?'M':'-',
-                (uint8_t)(regVal>>8)&0x7,
-                (regVal&0x0010)?'X':'-',
-                (regVal&0x0008)?'N':'-',
-                (regVal&0x0004)?'Z':'-',
-                (regVal&0x0002)?'V':'-',
-                (regVal&0x0001)?'C':'-' );
+               getCFV1ControlRegName(CFV1_CRegSR),
+               (regVal&0x8000)?'T':'-',
+                     (regVal&0x2000)?'S':'-',
+                           (regVal&0x1000)?'M':'-',
+                                 (uint8_t)(regVal>>8)&0x7,
+                                 (regVal&0x0010)?'X':'-',
+                                       (regVal&0x0008)?'N':'-',
+                                             (regVal&0x0004)?'Z':'-',
+                                                   (regVal&0x0002)?'V':'-',
+                                                         (regVal&0x0001)?'C':'-' );
          if (checkUsbdmRC(interp,  bdmInterface->readCReg(CFV1_CRegOTHER_A7, &regVal))) { // Other A7
             return TCL_ERROR;
          }
@@ -1543,16 +1743,16 @@ static int cmd_registers(ClientData, Tcl_Interp *interp, int argc, Tcl_Obj *cons
             return TCL_ERROR;
          }
          PRINT("%3s =%C-%C%C-%d---%C%C%C%C%C,          ",
-                getCFVxControlRegName(CFVx_CRegSR),
-                (regVal&0x8000)?'T':'-',
-                (regVal&0x2000)?'S':'-',
-                (regVal&0x1000)?'M':'-',
-                (uint8_t)(regVal>>8)&0x7,
-                (regVal&0x0010)?'X':'-',
-                (regVal&0x0008)?'N':'-',
-                (regVal&0x0004)?'Z':'-',
-                (regVal&0x0002)?'V':'-',
-                (regVal&0x0001)?'C':'-' );
+               getCFVxControlRegName(CFVx_CRegSR),
+               (regVal&0x8000)?'T':'-',
+                     (regVal&0x2000)?'S':'-',
+                           (regVal&0x1000)?'M':'-',
+                                 (uint8_t)(regVal>>8)&0x7,
+                                 (regVal&0x0010)?'X':'-',
+                                       (regVal&0x0008)?'N':'-',
+                                             (regVal&0x0004)?'Z':'-',
+                                                   (regVal&0x0002)?'V':'-',
+                                                         (regVal&0x0001)?'C':'-' );
          if (checkUsbdmRC(interp,  bdmInterface->readCReg(CFVx_CRegOTHER_SP, &regVal))) { // Other A7
             return TCL_ERROR;
          }
@@ -1583,8 +1783,8 @@ static int cmd_registers(ClientData, Tcl_Interp *interp, int argc, Tcl_Obj *cons
          break;
       case T_ARM :
          for (regIndex =0;
-             (regIndex<sizeof(ARMregList)/sizeof(ARMregList[0])) && (rc == TCL_OK);
-             regIndex++) {
+               (regIndex<sizeof(ARMregList)/sizeof(ARMregList[0])) && (rc == TCL_OK);
+               regIndex++) {
             regNo = ARMregList[regIndex];
             if (regNo>=0) {
                if (checkUsbdmRC(interp,  bdmInterface->readReg(regNo, &regVal))) {
@@ -1611,8 +1811,8 @@ static int cmd_registers(ClientData, Tcl_Interp *interp, int argc, Tcl_Obj *cons
       case T_MC56F80xx:
          DSC_SetLogFile(NULL);
          for (regIndex =0;
-              (regIndex<sizeof(DSCregList)/sizeof(DSCregList[0])) && (rc == TCL_OK);
-              regIndex++) {
+               (regIndex<sizeof(DSCregList)/sizeof(DSCregList[0])) && (rc == TCL_OK);
+               regIndex++) {
             regNo = DSCregList[regIndex];
             if (regNo >= 0) {
                if (checkUsbdmRC(interp,  bdmInterface->readReg(regNo, &regVal))) {
@@ -1646,14 +1846,14 @@ static int strToULong(const char *start, uint32_t *value) {
    char *end_t;
    unsigned long value_t = strtoul(start, &end_t, 0);
 
-//   PRINT("strToULong() - s=\'%s\', e='%s', val=%ld(0x%lX)\n", start, end_t, value_t, value_t);
+   //   PRINT("strToULong() - s=\'%s\', e='%s', val=%ld(0x%lX)\n", start, end_t, value_t, value_t);
    if (end_t == start) { // no String found
       PRINT("strToLong() - No number found\n");
       return TCL_ERROR;
    }
    if ((ULONG_MAX == value_t) && (ERANGE == errno)) { // too large
-     PRINT("strToULong() - Number too large\n");
-     return TCL_ERROR;
+      PRINT("strToULong() - Number too large\n");
+      return TCL_ERROR;
    }
    // If end is not used then check if at end of string
    // Skip trailing spaces
@@ -1726,9 +1926,17 @@ static int getAddress(Tcl_Obj *const arg, uint32_t *value, int *memorySpace) {
    return rc;
 }
 
-//! Write a byte to target Memory
+/**
+ * wb <addr> <data>             - Write byte
+ *
+ * @param
+ * @param interp
+ * @param argc
+ * @param argv
+ * @return
+ */
 static int cmd_writeByte(ClientData, Tcl_Interp *interp, int argc, Tcl_Obj *const *argv) {
-// wb <addr> <data>...
+   // wb <addr> <data>...
    uint32_t address;
    int data;
    int count;
@@ -1767,9 +1975,17 @@ static int cmd_writeByte(ClientData, Tcl_Interp *interp, int argc, Tcl_Obj *cons
    return TCL_OK;
 }
 
-//! Write a word to target Memory
+/**
+ * ww <addr><value>             - Write word
+ *
+ * @param
+ * @param interp
+ * @param argc
+ * @param argv
+ * @return
+ */
 static int cmd_writeWord(ClientData, Tcl_Interp *interp, int argc, Tcl_Obj *const *argv) {
-// ww <addr> <data>
+   // ww <addr> <data>
    uint32_t address;
    int data;
    int count;
@@ -1804,9 +2020,17 @@ static int cmd_writeWord(ClientData, Tcl_Interp *interp, int argc, Tcl_Obj *cons
    return TCL_OK;
 }
 
-//! Write a long word to target Memory
+/**
+ * wl <addr><value>             - Write longword (CFV1 only)
+ *
+ * @param
+ * @param interp
+ * @param argc
+ * @param argv
+ * @return
+ */
 static int cmd_writeLong(ClientData, Tcl_Interp *interp, int argc, Tcl_Obj *const *argv) {
-// wl <addr> <data>
+   // wl <addr> <data>
    uint32_t address;
    int data;
    int count;
@@ -1848,9 +2072,17 @@ static int cmd_writeLong(ClientData, Tcl_Interp *interp, int argc, Tcl_Obj *cons
    return TCL_OK;
 }
 
-//! Write to Target PC (HC12, HCS08 & RS08)
+/**
+ * wpc <value>                  - Write to PC
+ *
+ * @param
+ * @param interp
+ * @param argc
+ * @param argv
+ * @return
+ */
 static int cmd_writeProgramCounter(ClientData, Tcl_Interp *interp, int argc, Tcl_Obj *const *argv) {
-// wpc<addr> <data>
+   // wpc<addr> <data>
    int  data;
 
    if (argc != 2) {
@@ -1867,9 +2099,17 @@ static int cmd_writeProgramCounter(ClientData, Tcl_Interp *interp, int argc, Tcl
    return TCL_OK;
 }
 
-//! Write to Target Core Register
+/**
+ * wreg <regNo><value>          - Write core register
+ *
+ * @param
+ * @param interp
+ * @param argc
+ * @param argv
+ * @return
+ */
 static int cmd_writeReg(ClientData, Tcl_Interp *interp, int argc, Tcl_Obj *const *argv) {
-// wreg <addr> <data>
+   // wreg <addr> <data>
    int  data;
    int  regNo;
 
@@ -1893,13 +2133,21 @@ static int cmd_writeReg(ClientData, Tcl_Interp *interp, int argc, Tcl_Obj *const
    }
    TargetType_t targetType = bdmInterface->getBdmOptions().targetType;
    PRINT(":wReg r=0x%X(%s)<-0x%08X\n",
-          regNo, getRegName( targetType, regNo ), data);
+         regNo, getRegName( targetType, regNo ), data);
    return TCL_OK;
 }
 
-//! Write to Target Core Register
+/**
+ * wdreg <regNo><value>         - Write debug register
+ *
+ * @param
+ * @param interp
+ * @param argc
+ * @param argv
+ * @return
+ */
 static int cmd_writeDReg(ClientData, Tcl_Interp *interp, int argc, Tcl_Obj *const *argv) {
-// wdreg <addr> <data>
+   // wdreg <addr> <data>
    int  data;
    int  regNo;
 
@@ -1942,9 +2190,17 @@ static int cmd_writeDReg(ClientData, Tcl_Interp *interp, int argc, Tcl_Obj *cons
    return TCL_OK;
 }
 
-//! Write to Target Core Register
+/**
+ * wcreg <regNo><value>         - Write control register
+ *
+ * @param
+ * @param interp
+ * @param argc
+ * @param argv
+ * @return
+ */
 static int cmd_writeCReg(ClientData, Tcl_Interp *interp, int argc, Tcl_Obj *const *argv) {
-// wcreg <addr> <data>
+   // wcreg <addr> <data>
    int data;
    int regNo;
    int rc;
@@ -1971,35 +2227,43 @@ static int cmd_writeCReg(ClientData, Tcl_Interp *interp, int argc, Tcl_Obj *cons
    }
    TargetType_t targetType = bdmInterface->getBdmOptions().targetType;
    switch(targetType) {
-   case T_CFV1 :
-      PRINT(":wCreg r=0x%X(%s)<-0x%08X\n", regNo, getCFV1ControlRegName(regNo), data);
-      break;
-   case T_CFVx :
-      PRINT(":wCreg r=0x%X(%s)<-0x%08X\n", regNo, getCFVxControlRegName(regNo), data);
-      break;
-   case T_ARM :
-      switch (regNo) {
-      case ARM_CRegMDM_AP_Status:
-         PRINT("reg=MDM-AP.Status(0x%08X)<-%s(0x%08X)\n", regNo, getMDM_APStatusName(data), data);
+      case T_CFV1 :
+         PRINT(":wCreg r=0x%X(%s)<-0x%08X\n", regNo, getCFV1ControlRegName(regNo), data);
          break;
-      case ARM_CRegMDM_AP_Control:
-         PRINT("reg=MDM-AP.Control(0x%08X)<-%s(0x%08X)\n", regNo, getMDM_APControlName(data), data);
+      case T_CFVx :
+         PRINT(":wCreg r=0x%X(%s)<-0x%08X\n", regNo, getCFVxControlRegName(regNo), data);
          break;
-      default:
-         PRINT(":rCreg r=0x%08X(%s)<-0x%08X\n", regNo, getARMControlRegName(regNo), (int)data);
+      case T_ARM :
+         switch (regNo) {
+            case ARM_CRegMDM_AP_Status:
+               PRINT("reg=MDM-AP.Status(0x%08X)<-%s(0x%08X)\n", regNo, getMDM_APStatusName(data), data);
+               break;
+            case ARM_CRegMDM_AP_Control:
+               PRINT("reg=MDM-AP.Control(0x%08X)<-%s(0x%08X)\n", regNo, getMDM_APControlName(data), data);
+               break;
+            default:
+               PRINT(":rCreg r=0x%08X(%s)<-0x%08X\n", regNo, getARMControlRegName(regNo), (int)data);
+               break;
+         }
          break;
-      }
-      break;
-   default :
-      PRINT(":wCreg r=0x%X<-0x%08X\n", regNo, data);
-      break;
+            default :
+               PRINT(":wCreg r=0x%X<-0x%08X\n", regNo, data);
+               break;
    }
    return TCL_OK;
 }
 
-//! Read from Target Register (Coldfire)
+/**
+ * rreg <regNo>                 - Read core register
+ *
+ * @param
+ * @param interp
+ * @param argc
+ * @param argv
+ * @return
+ */
 static int cmd_readReg(ClientData, Tcl_Interp *interp, int argc, Tcl_Obj *const *argv) {
-// rreg<addr> <data>
+   // rreg<addr> <data>
    unsigned long data;
    int regNo;
 
@@ -2018,14 +2282,22 @@ static int cmd_readReg(ClientData, Tcl_Interp *interp, int argc, Tcl_Obj *const 
    }
    TargetType_t targetType = bdmInterface->getBdmOptions().targetType;
    PRINT(":rReg r=0x%X(%s)->0x%08X\n",
-          regNo, getRegName( targetType, regNo ), (int)data);
+         regNo, getRegName( targetType, regNo ), (int)data);
    Tcl_SetObjResult(interp, Tcl_NewIntObj(data));
    return TCL_OK;
 }
 
-//! Read from Target Debug Register (Coldfire)
+/**
+ * rdreg <regNo>                - Read debug register
+ *
+ * @param
+ * @param interp
+ * @param argc
+ * @param argv
+ * @return
+ */
 static int cmd_readDReg(ClientData, Tcl_Interp *interp, int argc, Tcl_Obj *const *argv) {
-// rdreg <addr>
+   // rdreg <addr>
    const char *currentToken;
    unsigned long data;
    int regNo;
@@ -2066,9 +2338,17 @@ static int cmd_readDReg(ClientData, Tcl_Interp *interp, int argc, Tcl_Obj *const
    return TCL_OK;
 }
 
-//! Read from Target Control Register (Coldfire)
+/**
+ * rcreg <regNo>                - Read control register
+ *
+ * @param
+ * @param interp
+ * @param argc
+ * @param argv
+ * @return
+ */
 static int cmd_readCReg(ClientData, Tcl_Interp *interp, int argc, Tcl_Obj *const *argv) {
-// rcreg <addr>
+   // rcreg <addr>
    const char *currentToken;
    unsigned long data;
    int regNo;
@@ -2090,31 +2370,31 @@ static int cmd_readCReg(ClientData, Tcl_Interp *interp, int argc, Tcl_Obj *const
    Tcl_SetObjResult(interp, Tcl_NewIntObj(data));
    TargetType_t targetType = bdmInterface->getBdmOptions().targetType;
    switch (targetType) {
-   case T_CFV1 :
-      PRINT(":rCreg r=0x%X(%s)->0x%08X\n", regNo, getCFV1ControlRegName(regNo), (int)data);
-      break;
-   case T_CFVx :
-      PRINT(":rCreg r=0x%X(%s)->0x%08X\n", regNo, getCFVxControlRegName(regNo), (int)data);
-      break;
-   case T_ARM :
-      switch (regNo) {
-      case ARM_CRegMDM_AP_Status:
-         PRINT("reg=MDM-AP.Status(0x%08X)->%s(0x%08X)\n", regNo, getMDM_APStatusName(data), (int)data);
+      case T_CFV1 :
+         PRINT(":rCreg r=0x%X(%s)->0x%08X\n", regNo, getCFV1ControlRegName(regNo), (int)data);
          break;
-      case ARM_CRegMDM_AP_Control:
-         PRINT("reg=MDM-AP.Control(0x%08X)->%s(0x%08X)\n", regNo, getMDM_APControlName(data), (int)data);
+      case T_CFVx :
+         PRINT(":rCreg r=0x%X(%s)->0x%08X\n", regNo, getCFVxControlRegName(regNo), (int)data);
          break;
-      case ARM_CRegMDM_AP_Ident:
-         PRINT("reg=MDM-AP.IDR(0x%08X)->0x%08X\n", regNo, (int)data);
+      case T_ARM :
+         switch (regNo) {
+            case ARM_CRegMDM_AP_Status:
+               PRINT("reg=MDM-AP.Status(0x%08X)->%s(0x%08X)\n", regNo, getMDM_APStatusName(data), (int)data);
+               break;
+            case ARM_CRegMDM_AP_Control:
+               PRINT("reg=MDM-AP.Control(0x%08X)->%s(0x%08X)\n", regNo, getMDM_APControlName(data), (int)data);
+               break;
+            case ARM_CRegMDM_AP_Ident:
+               PRINT("reg=MDM-AP.IDR(0x%08X)->0x%08X\n", regNo, (int)data);
+               break;
+            default:
+               PRINT(":rCreg r=0x%08X(%s)->0x%08X\n", regNo, getARMControlRegName(regNo), (int)data);
+               break;
+         }
          break;
-      default:
-         PRINT(":rCreg r=0x%08X(%s)->0x%08X\n", regNo, getARMControlRegName(regNo), (int)data);
-         break;
-      }
-      break;
-   default :
-      PRINT(":rCreg r=0x%X->0x%08X\n", regNo, (int)data);
-      break;
+            default :
+               PRINT(":rCreg r=0x%X->0x%08X\n", regNo, (int)data);
+               break;
    }
    return TCL_OK;
 }
@@ -2122,7 +2402,7 @@ static int cmd_readCReg(ClientData, Tcl_Interp *interp, int argc, Tcl_Obj *const
 #if 0
 //! Testing
 static int cmd_testCReg(ClientData, Tcl_Interp *interp, int argc, Tcl_Obj *const *argv) {
-// test
+   // test
    if (argc != 1) {
       Tcl_WrongNumArgs(interp, 1, argv, "<address> <value>");
       return TCL_ERROR;
@@ -2130,7 +2410,7 @@ static int cmd_testCReg(ClientData, Tcl_Interp *interp, int argc, Tcl_Obj *const
    unsigned long dataH, dataL;
    int regNo;
    static const char *names[] = {"_A7","VBR","CPUCR","?","?","?","?","?",
-                                "?","?","?","?","?","?","SR","PC",
+         "?","?","?","?","?","?","SR","PC",
    };
 
    for( regNo = 0; regNo<=15; regNo++) {
@@ -2140,15 +2420,23 @@ static int cmd_testCReg(ClientData, Tcl_Interp *interp, int argc, Tcl_Obj *const
       bdmInterface->readCReg(regNo, &dataL);
 
       PRINT(":testCreg%d(%5s) 0x00000000->%8X, 0xFFFFFFFF->%8X\n",
-               regNo, names[regNo], (int)dataL, (int)dataH);
+            regNo, names[regNo], (int)dataL, (int)dataH);
    }
    return TCL_OK;
 }
 #endif
 
-//! Write block to Target memory
+/**
+ * wblock <addr> <size> <data>  - Write block
+ *
+ * @param
+ * @param interp
+ * @param argc
+ * @param argv
+ * @return
+ */
 static int cmd_writeBlock(ClientData, Tcl_Interp *interp, int argc, Tcl_Obj *const *argv) {
-// wblock <addr> <number> <start_data>
+   // wblock <addr> <number> <start_data>
    unsigned  address;
    int       count;
    int       data;
@@ -2199,6 +2487,15 @@ static int cmd_writeBlock(ClientData, Tcl_Interp *interp, int argc, Tcl_Obj *con
 #define DISPLAY_LONG   (2<<3)  // Display as longs (32-bits)
 #define DISPLAY_MASK   (3<<3)
 
+/**
+ * Formatted print of block of data
+ *
+ * @param address
+ * @param size
+ * @param buff
+ * @param attributes
+ * @return
+ */
 static uint32_t printRange(uint32_t address, unsigned size, uint8_t *buff, int attributes) {
 
    unsigned sub;
@@ -2208,34 +2505,34 @@ static uint32_t printRange(uint32_t address, unsigned size, uint8_t *buff, int a
          PRINT("  0x%08X :", address);
       }
       switch(attributes&DISPLAY_MASK) {
-      case DISPLAY_BYTE:
-         data = buff[sub];
-         PRINT(" %02X", data);
-         sub     += 1;
-         address += 1;
-         break;
-      case DISPLAY_WORD:
-         data = getData16(buff+sub);
-         PRINT(" %04X", data);
-         sub += 2;
-         if ((attributes&ADDRESS_MASK) == ADDRESS_WORD) {
+         case DISPLAY_BYTE:
+            data = buff[sub];
+            PRINT(" %02X", data);
+            sub     += 1;
             address += 1;
-          }
-         else {
-            address += 2;
-         }
-         break;
-      case DISPLAY_LONG:
-         data = getData32(buff+sub);
-         PRINT(" %08X", data);
-         sub += 4;
-         if ((attributes&ADDRESS_MASK) == ADDRESS_WORD) {
-            address += 2;
-          }
-         else {
-            address += 4;
-         }
-         break;
+            break;
+         case DISPLAY_WORD:
+            data = getData16(buff+sub);
+            PRINT(" %04X", data);
+            sub += 2;
+            if ((attributes&ADDRESS_MASK) == ADDRESS_WORD) {
+               address += 1;
+            }
+            else {
+               address += 2;
+            }
+            break;
+         case DISPLAY_LONG:
+            data = getData32(buff+sub);
+            PRINT(" %08X", data);
+            sub += 4;
+            if ((attributes&ADDRESS_MASK) == ADDRESS_WORD) {
+               address += 2;
+            }
+            else {
+               address += 4;
+            }
+            break;
       }
       if ((sub % 16)==0) {
          PRINT("\n");
@@ -2247,9 +2544,17 @@ static uint32_t printRange(uint32_t address, unsigned size, uint8_t *buff, int a
    return data;
 }
 
-//! Read byte from Target memory
+/**
+ * rb <addr> <count>            - Read byte
+ *
+ * @param
+ * @param interp
+ * @param argc
+ * @param argv
+ * @return
+ */
 static int cmd_readByte(ClientData, Tcl_Interp *interp, int argc, Tcl_Obj *const *argv) {
-// rb <addr> [<number>]
+   // rb <addr> [<number>]
    uint32_t  address;
    int       numArgs;
    uint8_t   data = 0;
@@ -2287,9 +2592,17 @@ static int cmd_readByte(ClientData, Tcl_Interp *interp, int argc, Tcl_Obj *const
    return TCL_OK;
 }
 
-//! Read word from Target memory
+/**
+ * rw <addr> <count>            - Read word
+ *
+ * @param
+ * @param interp
+ * @param argc
+ * @param argv
+ * @return
+ */
 static int cmd_readWord(ClientData, Tcl_Interp *interp, int argc, Tcl_Obj *const *argv) {
-// rw <addr> [<number>]
+   // rw <addr> [<number>]
    uint32_t   address;
    int        numArgs;
    uint16_t   data = 0;
@@ -2328,9 +2641,17 @@ static int cmd_readWord(ClientData, Tcl_Interp *interp, int argc, Tcl_Obj *const
    return TCL_OK;
 }
 
-//! Read long word from Target memory
+/**
+ * rl <addr> <count>            - Read longword (CFV1 only)
+ *
+ * @param
+ * @param interp
+ * @param argc
+ * @param argv
+ * @return
+ */
 static int cmd_readLong(ClientData, Tcl_Interp *interp, int argc, Tcl_Obj *const *argv) {
-// rw <addr> [<number>]
+   // rw <addr> [<number>]
    uint32_t  address;
    int       numArgs;
    uint32_t  data = 0;
@@ -2397,7 +2718,15 @@ static int listDevices() {
    return TCL_OK;
 }
 
-//! Set a device to me manipulated
+/**
+ * setdevice <deviceName|-list> - Set targetdevice (e.g. MK20DX128M5)
+ *
+ * @param
+ * @param interp
+ * @param argc
+ * @param argv
+ * @return
+ */
 static int cmd_setDevice(ClientData, Tcl_Interp *interp, int argc, Tcl_Obj *const *argv) {
    LOGGING;
    // setdevice <deviceName>
@@ -2446,7 +2775,15 @@ static int cmd_setDevice(ClientData, Tcl_Interp *interp, int argc, Tcl_Obj *cons
    return TCL_OK;
 }
 
-//! Load a memory image
+/**
+ * load <filename>              - Load file image into buffer
+ *
+ * @param
+ * @param interp
+ * @param argc
+ * @param argv
+ * @return
+ */
 static int cmd_loadFile(ClientData, Tcl_Interp *interp, int argc, Tcl_Obj *const *argv) {
    LOGGING;
 
@@ -2471,7 +2808,15 @@ static int cmd_loadFile(ClientData, Tcl_Interp *interp, int argc, Tcl_Obj *const
    return TCL_OK;
 }
 
-//! Load a memory image
+/**
+ * program                      - Program image to target
+ *
+ * @param
+ * @param interp
+ * @param argc
+ * @param argv
+ * @return
+ */
 static int cmd_program(ClientData, Tcl_Interp *interp, int argc, Tcl_Obj *const *argv) {
    LOGGING;
    // program
@@ -2512,7 +2857,15 @@ static int cmd_program(ClientData, Tcl_Interp *interp, int argc, Tcl_Obj *const 
    return TCL_OK;
 }
 
-//! Load a memory image
+/**
+ * verify                       - Verify image against target
+ *
+ * @param
+ * @param interp
+ * @param argc
+ * @param argv
+ * @return
+ */
 static int cmd_verify(ClientData, Tcl_Interp *interp, int argc, Tcl_Obj *const *argv) {
    LOGGING;
    // program
@@ -2553,9 +2906,17 @@ static int cmd_verify(ClientData, Tcl_Interp *interp, int argc, Tcl_Obj *const *
    return TCL_OK;
 }
 
-//! Test a block of target memory
+/**
+ * tblock <start> <end> <count> - Random RAM write/read block test
+ *
+ * @param
+ * @param interp
+ * @param argc
+ * @param argv
+ * @return
+ */
 static int cmd_testBlock(ClientData, Tcl_Interp *interp, int argc, Tcl_Obj *const *argv) {
-// tBlock <addr> <size> <repeatcount>
+   // tBlock <addr> <size> <repeatcount>
 
    int       address;
    int       repeatCount;
@@ -2598,7 +2959,7 @@ static int cmd_testBlock(ClientData, Tcl_Interp *interp, int argc, Tcl_Obj *cons
       count = sizeof(dataWriteBlock);
 
    PRINT(":tblock [0x%4.4X-0x%4.4X] (0x%X bytes), %d times\n",
-          address, address+count-1, count, maxRepeat);
+         address, address+count-1, count, maxRepeat);
 
    if (((address & 0x03)!= 0) || ((count & 0x03)!= 0)) {
       PRINT(":tblock - Alignment error\n");
@@ -2623,7 +2984,7 @@ static int cmd_testBlock(ClientData, Tcl_Interp *interp, int argc, Tcl_Obj *cons
       for (int sub = 0; sub <count; sub++)
          if (dataWriteBlock[sub] != dataReadBlock[sub]) {
             PRINT("addr = %4X, wrote 0x%2.2X, read 0x%2.2X\n",
-                   address+sub, dataWriteBlock[sub], dataReadBlock[sub]);
+                  address+sub, dataWriteBlock[sub], dataReadBlock[sub]);
             errorCount++;
          }
 #if 0
@@ -2643,7 +3004,7 @@ static int cmd_testBlock(ClientData, Tcl_Interp *interp, int argc, Tcl_Obj *cons
    PRINT("Completed: %s\n",  asctime(localtime(&time_end)));
 
    PRINT("\n:tblock [%4X-%4X], error count = %d\n",
-          address, address+count-1, errorCount);
+         address, address+count-1, errorCount);
    if (errorCount != 0) {
       PRINT(":tblock Failed\n");
       return TCL_ERROR;
@@ -2651,9 +3012,17 @@ static int cmd_testBlock(ClientData, Tcl_Interp *interp, int argc, Tcl_Obj *cons
    return TCL_OK;
 }
 
-//! Test Target status command
+/**
+ * testStatus                   - Read target status in an infinite loop
+ *
+ * @param
+ * @param interp
+ * @param argc
+ * @param argv
+ * @return
+ */
 static int cmd_testStatus(ClientData, Tcl_Interp *interp, int argc, Tcl_Obj *const *argv) {
-//testStatus <expected value>
+   //testStatus <expected value>
    unsigned long BDMStatus = 0x00;
    USBDM_ErrorCode rc;
    int             value;
@@ -2673,7 +3042,7 @@ static int cmd_testStatus(ClientData, Tcl_Interp *interp, int argc, Tcl_Obj *con
 
    TargetType_t targetType = bdmInterface->getBdmOptions().targetType;
    PRINT("Target status reg = 0x%X => %s\n",
-          (int)BDMStatus, getStatusRegName(targetType, BDMStatus));
+         (int)BDMStatus, getStatusRegName(targetType, BDMStatus));
    return TCL_OK;
 }
 
@@ -2682,12 +3051,12 @@ static int cmd_testStatus(ClientData, Tcl_Interp *interp, int argc, Tcl_Obj *con
 //! target speed multiple times to obtain an average
 //
 static float getAverageTargetSpeed(int addrICSSC, int addrICSTRM, int currentTrimValue) {
-float currentSpeed;
-int   iteration;
-const int maxSamples = 5;
-int   currentTrimValueX;
-unsigned long temp1;
-unsigned char ctemp1, ctemp2;
+   float currentSpeed;
+   int   iteration;
+   const int maxSamples = 5;
+   int   currentTrimValueX;
+   unsigned long temp1;
+   unsigned char ctemp1, ctemp2;
 
    // Re-trim target clock (LSB first!)
    ctemp1 = currentTrimValue&0x01;
@@ -2711,9 +3080,9 @@ unsigned char ctemp1, ctemp2;
 
    if (currentTrimValueX != currentTrimValue) {
       PRINT_ERROR("getAverageTargetSpeed(): Error in writing trim value,\n\r"
-                      "Wrote 0x%2.2X(%2.2x,%1X), read 0x%2.2X(%2.2x,%1X)\n",
-              currentTrimValue,  currentTrimValue>>1,  currentTrimValue&0x01,
-              currentTrimValueX, currentTrimValueX>>1, currentTrimValueX&0x01);
+            "Wrote 0x%2.2X(%2.2x,%1X), read 0x%2.2X(%2.2x,%1X)\n",
+            currentTrimValue,  currentTrimValue>>1,  currentTrimValue&0x01,
+            currentTrimValueX, currentTrimValueX>>1, currentTrimValueX&0x01);
    }
 
    // Measure target speed several times
@@ -2735,7 +3104,7 @@ unsigned char ctemp1, ctemp2;
 #if 0
 //! Trim Target Clock
 static int trimCommand(ClientData, Tcl_Interp *interp, int argc, Tcl_Obj *const *argv) {
-//trim <mode=8/9 bit> <ICSTRM> <ICSSC> <NV_ICSTRM> <NV_FTRIM> <Target_Frequency>
+   //trim <mode=8/9 bit> <ICSTRM> <ICSSC> <NV_ICSTRM> <NV_FTRIM> <Target_Frequency>
    const char *currentToken;
    int mode;
    int addrICSSC, addrICSTRM, addrNV_FTRIM, addrNV_ICSTRM;
@@ -2800,13 +3169,13 @@ static int trimCommand(ClientData, Tcl_Interp *interp, int argc, Tcl_Obj *const 
 
    PRINT("trim <mode=8/9 bit> <ICSTRM> <ICSSC> <NV_ICSTRM> <NV_FTRIM> <Target_Frequency>\n");
    PRINT("         %3s         %5.4X    %5.4X   %5.4X       %5.4X      %7.2f\n",
-          mode==8?"8":"9",
-          addrICSTRM,
-          addrICSSC,
-          addrNV_ICSTRM,
-          addrNV_FTRIM,
-          targetFrequency
-          );
+         mode==8?"8":"9",
+               addrICSTRM,
+               addrICSSC,
+               addrNV_ICSTRM,
+               addrNV_FTRIM,
+               targetFrequency
+   );
 
    PRINT("1. Binary search\n");
    for (trialBit = 0x100; trialBit > 0x0; trialBit >>= 1){
@@ -2815,7 +3184,7 @@ static int trimCommand(ClientData, Tcl_Interp *interp, int argc, Tcl_Obj *const 
       currentSpeed = getAverageTargetSpeed(addrICSSC, addrICSTRM, currentTrimValue);
 
       PRINT(" Trim values 0x%2.2X,%1X, Freq=%5.3f",
-             currentTrimValue>>1, currentTrimValue&0x01, currentSpeed);
+            currentTrimValue>>1, currentTrimValue&0x01, currentSpeed);
       PRINT("%s %5.3f\n", (currentSpeed < targetFrequency)?" <":">=", targetFrequency);
       if (currentSpeed < targetFrequency){ // Too slow - remove trial bit
          currentTrimValue &= ~trialBit;
@@ -2864,14 +3233,14 @@ static int trimCommand(ClientData, Tcl_Interp *interp, int argc, Tcl_Obj *const 
    }
 
    PRINT("=Trim values ICSTRM=%3d(0x%2.2X), ICSSC=%3d(0x%2.2X), Freq=%5.3f\n",
-            bestValue>>1, bestValue>>1, bestValue&0x01, bestValue&0x01, bestFreq);
+         bestValue>>1, bestValue>>1, bestValue&0x01, bestValue&0x01, bestFreq);
 
    return 0;
 }
 #elif 0
 //! Trim Target Clock
 static int trimCommand(ClientData, Tcl_Interp *interp, int argc, Tcl_Obj *const *argv) {
-//trim <mode=8/9 bit> <ICSTRM> <ICSSC> <NV_ICSTRM> <NV_FTRIM> <Target_Frequency>
+   //trim <mode=8/9 bit> <ICSTRM> <ICSSC> <NV_ICSTRM> <NV_FTRIM> <Target_Frequency>
    char *currentToken;
    int rc;
    int mode;
@@ -2916,22 +3285,30 @@ static int trimCommand(ClientData, Tcl_Interp *interp, int argc, Tcl_Obj *const 
    }
 
    rc = USBDM_TrimTargetClock((long int)(1000*targetFrequency) /*kHz*/,
-                              &trimValue, &measuredFrequency);
+         &trimValue, &measuredFrequency);
    if (rc != BDM_RC_OK)
       PRINT("Trim Failed rc=%s\r\n", getErrorName(rc));
    else
-         PRINT("Trim value calculated=%2X.%1X, Measured Freq = %d\r\n",
-          trimValue>>1,
-          trimValue&0x01,
-          measuredFrequency);
+      PRINT("Trim value calculated=%2X.%1X, Measured Freq = %d\r\n",
+            trimValue>>1,
+            trimValue&0x01,
+            measuredFrequency);
 
    return 0;
 }
 #endif
 
-//! Write Control Register
+/**
+ * wc <value>                   - Write control register
+ *
+ * @param
+ * @param interp
+ * @param argc
+ * @param argv
+ * @return
+ */
 static int cmd_writeControl(ClientData, Tcl_Interp *interp, int argc, Tcl_Obj *const *argv) {
-// wc <control_value>
+   // wc <control_value>
    int value;
 
    if (argc != 2) {
@@ -2951,9 +3328,17 @@ static int cmd_writeControl(ClientData, Tcl_Interp *interp, int argc, Tcl_Obj *c
    return 0;
 }
 
-//! Set communication speed
+/**
+ * speed ?Hz?                   - Set/Get speed
+ *
+ * @param
+ * @param interp
+ * @param argc
+ * @param argv
+ * @return
+ */
 static int cmd_setSpeed(ClientData, Tcl_Interp *interp, int argc, Tcl_Obj *const *argv) {
-// speed <Hz>
+   // speed <Hz>
    unsigned long freq;
 
    if (argc > 1) {
@@ -2974,7 +3359,7 @@ static int cmd_setSpeed(ClientData, Tcl_Interp *interp, int argc, Tcl_Obj *const
       }
       else {
          PRINT("Speed set to %.2f MHz (%.0f ticks, sync=%.1f us)\n",
-                speed, (60.0 * 128)/speed, (2 * 128)/speed);
+               speed, (60.0 * 128)/speed, (2 * 128)/speed);
       }
    }
    if (checkUsbdmRC(interp, bdmInterface->getSpeedHz(&freq))) {
@@ -2985,25 +3370,20 @@ static int cmd_setSpeed(ClientData, Tcl_Interp *interp, int argc, Tcl_Obj *const
    return TCL_OK;
 }
 
-////! Set Target to re-boot into ICP mode
-//static int cmd_setBoot(ClientData, Tcl_Interp *interp, int argc, Tcl_Obj *const *argv) {
-//// setBoot
-//   if (argc != 1) {
-//      Tcl_WrongNumArgs(interp, 1, argv, "<delay_time>");
-//      return TCL_ERROR;
-//   }
-//   USBDM_RebootToICP();
-//
-//   PRINT("cmd_setBoot Complete\n");
-//   return TCL_OK;
-//}
-
 #include <USBDM_API.h>
 #include <USBDM_API_Private.h>
 
-//! Send low-level sync command to BDM
+/**
+ * sync                         - Execute a low level sync
+ *
+ * @param
+ * @param interp
+ * @param argc
+ * @param argv
+ * @return
+ */
 static int cmd_sync(ClientData, Tcl_Interp *interp, int argc, Tcl_Obj *const *argv) {
-// sync <control_value>
+   // sync <control_value>
    static const char *connectionStates[] = {
          "Not Connected", "Sync Speed", "Guess Speed", "Manual Speed"
    };
@@ -3027,10 +3407,10 @@ static int cmd_sync(ClientData, Tcl_Interp *interp, int argc, Tcl_Obj *const *ar
       return TCL_ERROR;
    }
 
-//   PRINT(":sync => 0x%2.2X(%2.2d), 0x%2.2X(%2.2d), "
-//          "%2.2X(%2.2d), 0x%2.2X(%2.2d) \n",
-//          usb_data[0], usb_data[0], usb_data[1], usb_data[1],
-//          usb_data[2], usb_data[2], usb_data[3], usb_data[3] );
+   //   PRINT(":sync => 0x%2.2X(%2.2d), 0x%2.2X(%2.2d), "
+   //          "%2.2X(%2.2d), 0x%2.2X(%2.2d) \n",
+   //          usb_data[0], usb_data[0], usb_data[1], usb_data[1],
+   //          usb_data[2], usb_data[2], usb_data[3], usb_data[3] );
 
    BDMStatus = usb_data[1];
 
@@ -3047,9 +3427,9 @@ static int cmd_sync(ClientData, Tcl_Interp *interp, int argc, Tcl_Obj *const *ar
    PRINT("status = %s\n", getBDMStatusName(&bdm_status));
 
    PRINT("sync: Status = %s, %s, %s, %s\r\n", bdm_status.ackn_state?"Ackn":"Wait",
-                                               connectionStates[bdm_status.connection_state],
-                                               bdm_status.reset_state?"Reset":"No Reset",
-                                              (BDMStatus&S_POWER_MASK)?"Power":"No Power" );
+         connectionStates[bdm_status.connection_state],
+         bdm_status.reset_state?"Reset":"No Reset",
+               (BDMStatus&S_POWER_MASK)?"Power":"No Power" );
 
    PRINT("%2.2X 0x%2.2X 0x%2.2X 0x%2.2X \n", usb_data[0], usb_data[1], usb_data[2], usb_data[3]);
    PRINT("%2.2X 0x%4.4X \n", *(usb_data+2), *(uint16_t*)(usb_data+2) );
@@ -3059,13 +3439,21 @@ static int cmd_sync(ClientData, Tcl_Interp *interp, int argc, Tcl_Obj *const *ar
    speed =  (60.0 * 128) / ticks;
 
    PRINT("sync: Speed = %.2f MHz (%d ticks, sync=%.1f us)\n",
-          speed, ticks, ticks/60.0);
+         speed, ticks, ticks/60.0);
    return TCL_OK;
 }
 
-//! Send debug command to BDM
+/**
+ * debug <value>                - Debug commands
+ *
+ * @param
+ * @param interp
+ * @param argc
+ * @param argv
+ * @return
+ */
 static int cmd_debug(ClientData, Tcl_Interp *interp, int argc, Tcl_Obj *const *argv) {
-// debug <control_value>
+   // debug <control_value>
    const char *currentToken;
    int command, arg1 = 0, arg2=0;
    unsigned temp;
@@ -3132,17 +3520,17 @@ static int cmd_debug(ClientData, Tcl_Interp *interp, int argc, Tcl_Obj *const *a
                "\n"
                "0x%2.2X(%2.2d), 0x%2.2X(%2.2d), "
                "\n",
-                getDebugCommandName(command), arg1, arg2,
-                usb_data[1],  usb_data[1],  usb_data[2],  usb_data[2],
-                usb_data[3],  usb_data[3],  usb_data[4],  usb_data[4],
-                usb_data[5],  usb_data[5],  usb_data[6],  usb_data[6],
-                usb_data[7],  usb_data[7],  usb_data[8],  usb_data[8],
-                usb_data[9],  usb_data[9],  usb_data[10], usb_data[10],
-                usb_data[11], usb_data[11], usb_data[12], usb_data[12],
-                usb_data[13], usb_data[13], usb_data[14], usb_data[14],
-                usb_data[15], usb_data[15], usb_data[16], usb_data[16],
-                usb_data[17], usb_data[17], usb_data[18], usb_data[18]
-                );
+               getDebugCommandName(command), arg1, arg2,
+               usb_data[1],  usb_data[1],  usb_data[2],  usb_data[2],
+               usb_data[3],  usb_data[3],  usb_data[4],  usb_data[4],
+               usb_data[5],  usb_data[5],  usb_data[6],  usb_data[6],
+               usb_data[7],  usb_data[7],  usb_data[8],  usb_data[8],
+               usb_data[9],  usb_data[9],  usb_data[10], usb_data[10],
+               usb_data[11], usb_data[11], usb_data[12], usb_data[12],
+               usb_data[13], usb_data[13], usb_data[14], usb_data[14],
+               usb_data[15], usb_data[15], usb_data[16], usb_data[16],
+               usb_data[17], usb_data[17], usb_data[18], usb_data[18]
+         );
          return BDM_RC_OK;
       default :
          PRINT(":debug %10s 0x%2.2X 0x%2.2X => "
@@ -3151,17 +3539,25 @@ static int cmd_debug(ClientData, Tcl_Interp *interp, int argc, Tcl_Obj *const *a
                "0x%2.2X(%2.2d), 0x%2.2X(%2.2d), "
                "0x%2.2X(%2.2d), 0x%2.2X(%2.2d), "
                "\n",
-                getDebugCommandName(command), arg1, arg2,
-                usb_data[1], usb_data[1], usb_data[2], usb_data[2],
-                usb_data[3], usb_data[3], usb_data[4], usb_data[4],
-                usb_data[5], usb_data[5], usb_data[6], usb_data[6],
-                usb_data[7], usb_data[7], usb_data[8], usb_data[8]);
+               getDebugCommandName(command), arg1, arg2,
+               usb_data[1], usb_data[1], usb_data[2], usb_data[2],
+               usb_data[3], usb_data[3], usb_data[4], usb_data[4],
+               usb_data[5], usb_data[5], usb_data[6], usb_data[6],
+               usb_data[7], usb_data[7], usb_data[8], usb_data[8]);
          break;
    }
    return reportState(interp);
 }
 
-//! Reset JTAG chain
+/**
+ * jtag-reset                   - Take JTAG TAP to TEST-LOGIC-RESET state
+ *
+ * @param
+ * @param interp
+ * @param argc
+ * @param argv
+ * @return
+ */
 static int jtagResetCommand(ClientData, Tcl_Interp *interp, int argc, Tcl_Obj *const *argv) {
    if (argc != 1) {
       Tcl_WrongNumArgs(interp, 1, argv, "");
@@ -3173,7 +3569,16 @@ static int jtagResetCommand(ClientData, Tcl_Interp *interp, int argc, Tcl_Obj *c
    return TCL_OK;
 }
 
-//! Shift JTAG chain
+/**
+ * jtag-shift <S|R|D|I><#bits><values>  - Shift given values into current chain
+ *                                        S=stay, R=exit Run-test/Idle, D=shift-DR, I=shiftIR
+ *
+ * @param
+ * @param interp
+ * @param argc
+ * @param argv
+ * @return
+ */
 static int jtagShiftCommand(ClientData, Tcl_Interp *interp, int argc, Tcl_Obj *const *argv) {
    // jtag-shift exitMode numBits data...
    int exitMode;
@@ -3232,7 +3637,15 @@ static int jtagShiftCommand(ClientData, Tcl_Interp *interp, int argc, Tcl_Obj *c
    return TCL_OK;
 }
 
-//! Move JTAG chain to SHIFT-DR state
+/**
+ * jtag-shift-dr                - Set up for DR chain shift
+ *
+ * @param
+ * @param interp
+ * @param argc
+ * @param argv
+ * @return
+ */
 static int jtagShiftDRCommand(ClientData, Tcl_Interp *interp, int argc, Tcl_Obj *const *argv) {
    // jtag-shift-dr
    if (argc != 1) {
@@ -3245,7 +3658,15 @@ static int jtagShiftDRCommand(ClientData, Tcl_Interp *interp, int argc, Tcl_Obj 
    return TCL_OK;
 }
 
-//! Move JTAG chain to SHIFT-IR state
+/**
+ * jtag-shift-ir                - Set up for IR chain shift
+ *
+ * @param
+ * @param interp
+ * @param argc
+ * @param argv
+ * @return
+ */
 static int jtagShiftIRCommand(ClientData, Tcl_Interp *interp, int argc, Tcl_Obj *const *argv) {
    // jtag-shift-ir
    if (argc != 1) {
@@ -3258,7 +3679,15 @@ static int jtagShiftIRCommand(ClientData, Tcl_Interp *interp, int argc, Tcl_Obj 
    return TCL_OK;
 }
 
-//! Run identify command on JTAG device
+/**
+ * jtag-idcode                  - Read IDCODE from JTAG
+ *
+ * @param
+ * @param interp
+ * @param argc
+ * @param argv
+ * @return
+ */
 static int jtagIdentifyCommand(ClientData, Tcl_Interp *interp, int argc, Tcl_Obj *const *argv) {
    uint32_t buff;
    uint8_t  temp;
@@ -3392,11 +3821,11 @@ static int setLogCommand(ClientData, Tcl_Interp *interp, int argc, Tcl_Obj *cons
       FILE *fp = logging?stderr:NULL;
       TargetType_t targetType = bdmInterface->getBdmOptions().targetType;
       switch(targetType) {
-      case T_MC56F80xx:
-         DSC_SetLogFile(fp);
-         break;
-      default:
-         break;
+         case T_MC56F80xx:
+            DSC_SetLogFile(fp);
+            break;
+         default:
+            break;
       }
    }
    Tcl_SetObjResult(interp, Tcl_NewIntObj(logging));
@@ -3404,6 +3833,16 @@ static int setLogCommand(ClientData, Tcl_Interp *interp, int argc, Tcl_Obj *cons
 }
 #endif
 
+/**
+ * dialogue <title> <body> yes_no|cancel|ok|i_exclaim|i_question|i_info|i_err
+ *        returns 0=>cancel, 1=yes, 2=no, 3=ok
+ *
+ * @param
+ * @param interp
+ * @param argc
+ * @param argv
+ * @return
+ */
 static int cmd_dialogue(ClientData, Tcl_Interp *interp, int argc, Tcl_Obj *const *argv) {
 
 #if defined(_WIN32) && 0
@@ -3411,9 +3850,9 @@ static int cmd_dialogue(ClientData, Tcl_Interp *interp, int argc, Tcl_Obj *const
 
    if (hwnd == 0) {
       //Todo Fix
-//      hwnd = GetConsoleHwnd();
-//      PRINT_ERROR("HWND=%p\n", hwnd);
-//      setDefaultWindowParent(hwnd);
+      //      hwnd = GetConsoleHwnd();
+      //      PRINT_ERROR("HWND=%p\n", hwnd);
+      //      setDefaultWindowParent(hwnd);
    }
 #endif
 
@@ -3423,8 +3862,8 @@ static int cmd_dialogue(ClientData, Tcl_Interp *interp, int argc, Tcl_Obj *const
 
    // dialogue title message options
    if (argc <= 3) {
-       Tcl_WrongNumArgs(interp, 1, argv, "title message style");
-       return TCL_ERROR;
+      Tcl_WrongNumArgs(interp, 1, argv, "title message style");
+      return TCL_ERROR;
    }
    // title
    const char *title   = Tcl_GetString(argv[1]);
@@ -3445,16 +3884,16 @@ static int cmd_dialogue(ClientData, Tcl_Interp *interp, int argc, Tcl_Obj *const
          //      else if  (stricmp(s, "NO_DEFAULT"))      style |= wxNO_DEFAULT;
          //      else if  (stricmp(s, "CANCEL_DEFAULT"))  style |= wxCANCEL_DEFAULT;
          //      else if  (stricmp(s, "OK_DEFAULT"))      style |= wxOK_DEFAULT;
-//         PRINT_ERROR("s=\'%s\', style = 0x%X\n", s, style);
+         //         PRINT_ERROR("s=\'%s\', style = 0x%X\n", s, style);
          s = strtok(NULL, "| \n\t");
       }
    }
-//   PRINT_ERROR("style = 0x%X\n", style);
+   //   PRINT_ERROR("style = 0x%X\n", style);
    if (style == 0) {
       style = OK;
    }
-  //    4    2    8       0             0x80         0x80000000     0             10
-  //  wxOK,wxYES,wxNO,wxYES_DEFAULT,wxNO_DEFAULT,wxCANCEL_DEFAULT,wxOK_DEFAULT,wxCANCEL;
+   //    4    2    8       0             0x80         0x80000000     0             10
+   //  wxOK,wxYES,wxNO,wxYES_DEFAULT,wxNO_DEFAULT,wxCANCEL_DEFAULT,wxOK_DEFAULT,wxCANCEL;
 
    int rc = wxPlugin->display(message, title, style);
    switch (rc) {
@@ -3468,23 +3907,32 @@ static int cmd_dialogue(ClientData, Tcl_Interp *interp, int argc, Tcl_Obj *const
    return TCL_OK;
 }
 
+/**
+ * exit                         - Exit program
+ *
+ * @param
+ * @param interp
+ * @param argc
+ * @param argv
+ * @return
+ */
 static int cmd_exit(ClientData, Tcl_Interp *interp, int argc, Tcl_Obj *const *argv) {
-    long exitCode = 0;
+   long exitCode = 0;
 
-    bdmInterface->closeBdm();
-    bdmInterface.reset();
-//    bdmInterface = BdmInterfaceFactory::createInterface(T_OFF, nullCallback);
+   bdmInterface->closeBdm();
+   bdmInterface.reset();
+   //    bdmInterface = BdmInterfaceFactory::createInterface(T_OFF, nullCallback);
 
-    wxPlugin.reset();
+   wxPlugin.reset();
 
-    if (argc > 2) {
-        Tcl_WrongNumArgs(interp, 1, argv, "?exitCode?");
-    }
-    if (argc == 2) {
-       Tcl_GetLongFromObj(interp, argv[1], &exitCode);
-    }
-    Tcl_Exit(exitCode);
-    return TCL_ERROR;
+   if (argc > 2) {
+      Tcl_WrongNumArgs(interp, 1, argv, "?exitCode?");
+   }
+   if (argc == 2) {
+      Tcl_GetLongFromObj(interp, argv[1], &exitCode);
+   }
+   Tcl_Exit(exitCode);
+   return TCL_ERROR;
 }
 
 //! Usage message
@@ -3513,16 +3961,18 @@ static const char usageText[] =
       "load <filename>              - Load file image into buffer\n"
       "log 0|1                      - setting ARM loggin OFF/ON\n"
       "memorySpace [<N|X|P>]        - set memory space (DSC)\n"
+      "massErase                    - S12Z Mass erase\n"
       "openbdm [<bdmNumber>]        - Open given BDM\n"
       "pinSet <pin=level>           - Control pins, pin=RST|BKGD|TRST|BKPT|TA|SWD,\n"
       "                                level=H|L|3|-\n"
       "program                      - Program image to target\n"
-      "regs                         - PRINT out registers\n"
+      "regs                         - Print out registers\n"
       "reset <N|S><H|S|P|V|A>       - Reset (N=normal,S=Special), (H=Hardware,S=Software,P=Power,V=Vendor,A=All\n"
       "rblock <addr> <size>         - Read block\n"
       "rb <addr> <count>            - Read byte\n"
       "rw <addr> <count>            - Read word\n"
       "rl <addr> <count>            - Read longword (CFV1 only)\n"
+      "rs                           - Report Status Value from Target status register - no sync\n"
       "rreg <regNo>                 - Read core register\n"
       "rdreg <regNo>                - Read debug register\n"
       "rcreg <regNo>                - Read control register\n"
@@ -3557,10 +4007,19 @@ static int cmd_help(ClientData, Tcl_Interp *interp, int argc, Tcl_Obj *const *ar
    return TCL_OK;
 }
 
+/**
+ * setbytesex <big|little>      - Set big/little endian target
+ *
+ * @param
+ * @param interp
+ * @param argc
+ * @param argv
+ * @return
+ */
 static int cmd_setByteSex(ClientData, Tcl_Interp *interp, int argc, Tcl_Obj *const *argv) {
    if (argc > 2) {
-       Tcl_WrongNumArgs(interp, 1, argv, "[<big|little>]");
-       return TCL_ERROR;
+      Tcl_WrongNumArgs(interp, 1, argv, "[<big|little>]");
+      return TCL_ERROR;
    }
    if (argc == 1) {
       PRINT("bytesex => %s\n", bigEndian?"Big-endian":"Little-endian");
@@ -3591,11 +4050,11 @@ typedef int (*TclCommand)(ClientData, Tcl_Interp *interp, int argc, Tcl_Obj *con
 static struct {
    TclCommand command;
 
-const char *name;
+   const char *name;
 } myCommands[] = {
       { cmd_connect,              "connect" },
       { cmd_debug,                "debug"},
-//    { initialiseCommand,        "initialise" },
+      //    { initialiseCommand,        "initialise" },
       { cmd_setMemorySpace,       "memorySpace" },
       { cmd_pinSet,               "pinSet" },
       { cmd_go,                   "go"},
@@ -3619,7 +4078,7 @@ const char *name;
       { cmd_readStatus,           "rs"},
       { cmd_readDReg,             "rdreg"},
       { cmd_readCReg,             "rcreg"},
-//      { cmd_setBoot,              "setboot" },
+      //      { cmd_setBoot,              "setboot" },
       { cmd_setSpeed,             "speed" },
       { cmd_sync,                 "sync" },
       { cmd_setByteSex,           "setbytesex" },
@@ -3638,8 +4097,8 @@ const char *name;
       { cmd_setVpp,               "settargetvpp" },
       { cmd_setVdd,               "settargetvcc" },
       { cmd_setVdd,               "settargetvdd" },
-      { cmd_massErase,            "massErase"},
-//      { setLogCommand,          "log"},
+      { cmd_s12zMassErase,        "massErase"},
+      //      { setLogCommand,          "log"},
       { cmd_dialogue,             "dialogue"},
       { cmd_openBDM,              "openbdm" },
       { cmd_closeBDM,             "closebdm" },
@@ -3653,7 +4112,7 @@ const char *name;
       { cmd_program,              "program"},
       { cmd_verify,               "verify"},
       { cmd_useReset,             "usereset"},
-//      { cmd_testCReg,           "testcreg"},
+      //      { cmd_testCReg,           "testcreg"},
       { NULL, NULL }
 };
 
