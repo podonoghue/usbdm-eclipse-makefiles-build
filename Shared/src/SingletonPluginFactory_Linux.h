@@ -124,8 +124,16 @@ void SingletonPluginFactory<T>::loadClass(const char *moduleName, const char *cr
       throw MyException("Module already loaded\n");
    }
 
-   moduleHandle = dlopen(moduleName, RTLD_LAZY);
+#ifdef HACK_PATH_FOR_TESTING
+   string extendedPath = "./";
+   extendedPath.append(moduleName);
 
+   moduleHandle = dlopen(extendedPath.c_str(), RTLD_LAZY);
+#endif
+
+   if (moduleHandle == nullptr) {
+      moduleHandle = dlopen(moduleName, RTLD_LAZY);
+   }
    if (moduleHandle == NULL) {
       log.print("Module \'%s\' failed to load! Retrying...\n", moduleName);
       SingletonPluginFactory::printSystemErrorMessage();
