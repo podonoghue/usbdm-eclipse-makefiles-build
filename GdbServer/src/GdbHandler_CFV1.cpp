@@ -13,18 +13,28 @@
 #include "signals.h"
 #include "GdbBreakpoints_CFV1.h"
 
-GdbHandler *createCFV1GdbHandler(GdbInOut *gdbInOut, BdmInterfacePtr bdmInterface, DeviceInterfacePtr deviceInterface, GdbHandler::GdbCallback gdbCallBackPtr, IGdbTty *tty) {
-   return new GdbHandler_CFV1(gdbInOut, bdmInterface, deviceInterface, gdbCallBackPtr, tty);
+GdbHandler *createCFV1GdbHandler(
+      GdbHandler::GdbHandlerOwner    &owner,
+      GdbInOut                       *gdbInOut,
+      BdmInterfacePtr                 bdmInterface,
+      DeviceInterfacePtr              deviceInterface,
+      IGdbTty                        *tty) {
+   return new GdbHandler_CFV1(owner, gdbInOut, bdmInterface, deviceInterface, tty);
 }
 
-GdbHandler_CFV1::GdbHandler_CFV1(GdbInOut *gdbInOut, BdmInterfacePtr bdmInterface, DeviceInterfacePtr deviceInterface, GdbCallback gdbCallBackPtr, IGdbTty *tty) :
+GdbHandler_CFV1::GdbHandler_CFV1(
+      GdbHandlerOwner     &owner,
+      GdbInOut            *gdbInOut,
+      BdmInterfacePtr      bdmInterface,
+      DeviceInterfacePtr   deviceInterface,
+      IGdbTty              *tty) :
    GdbHandlerCommon(
          T_CFVx,
+         owner,
          gdbInOut,
          bdmInterface,
          deviceInterface,
          new GdbBreakpoints_CFV1(bdmInterface),
-         gdbCallBackPtr,
          tty,
          DeviceData::resetHardware) {
 }
@@ -37,22 +47,41 @@ GdbHandler_CFV1::~GdbHandler_CFV1() {
 /*
  * Convert 16-bit value Native <-> Target
  */
-uint16_t GdbHandler_CFV1::targetToNative16(uint16_t data) {
+uint16_t GdbHandler_CFV1::targetToFromNative16(uint16_t data) {
    return ((data<<8)&0xFF00) + ((data>>8)&0xFF);
 }
 /*
  * Convert 32-bit value Native <-> Target
  */
-uint32_t GdbHandler_CFV1::targetToNative32(uint32_t data) {
+uint32_t GdbHandler_CFV1::targetToFromNative32(uint32_t data) {
    return ((data<<24)&0xFF000000) + ((data<<8)&0xFF0000) + ((data>>8)&0xFF00) + ((data>>24)&0xFF);
 }
-/*
- * read 32-bit value from memory buffer in target format
+
+/**
+ * Extract a 32-bit value from byte buffer in target byte order
+ *
+ * @param[in]  buff    Buffer to read value from
+ * @param[out] value   32-bit value from buffer
  */
-uint32_t GdbHandler_CFV1::getTarget32Bits(uint8_t buff[], int offset) {
-   uint32_t value = (buff[offset]<<24) + (buff[offset+1]<<16) +(buff[offset+2]<<8) +buff[offset+3];
-   return targetToNative32(value);
+void GdbHandler_CFV1::extractTarget32Bits(uint8_t buff[], uint32_t &value) {
+   // Big-endian
+   value = buff[3] + (buff[2]<<8) +(buff[1]<<16) +(buff[0]<<24);
 }
+
+/**
+ * Encode a 32-bit value into byte buffer in target byte order
+ *
+ * @param[out] value   32-bit value to enter
+ * @param[in]  buff    Buffer to add value to
+ */
+void GdbHandler_CFV1::encodeTarget32Bits(uint32_t value, uint8_t buff[]) {
+   // Big-endian
+   buff[3] = static_cast<uint8_t>(value);
+   buff[2] = static_cast<uint8_t>(value>>8);
+   buff[1] = static_cast<uint8_t>(value>>16);
+   buff[0] = static_cast<uint8_t>(value>>24);
+}
+
 
 // Target is BE == BE
 //=================================
@@ -71,13 +100,20 @@ uint32_t GdbHandler_CFV1::targetToBE32(uint32_t data) {
 }
 
 USBDM_ErrorCode GdbHandler_CFV1::initialise() {
+   LOGGING;
 
    USBDM_ErrorCode rc = GdbHandlerCommon::initialise();
    // Ignore Secured as may still be able to program device after mass-erase
    if ((rc != BDM_RC_OK)&&(rc != BDM_RC_SECURED)) {
-      return rc;
+      resetTarget();
+      rc = GdbHandlerCommon::initialise();
    }
-   return BDM_RC_OK;
+   if ((rc != BDM_RC_OK)&&(rc != BDM_RC_SECURED)) {
+      // In case target is in LLSx or VLLSx with debug interface unavailable
+      resetTarget(DeviceData::resetHardware);
+      rc = GdbHandlerCommon::initialise();
+   }
+   return rc;
 }
 
 USBDM_ErrorCode GdbHandler_CFV1::resetTarget(DeviceData::ResetMethod resetMethod) {
@@ -116,7 +152,8 @@ USBDM_ErrorCode GdbHandler_CFV1::continueTarget(void) {
    return GdbHandlerCommon::continueTarget();
 }
 
-/*! Mask/unmask interrupts (in SR)
+/**
+ * Mask/unmask interrupts (in SR)
  *
  * @param disableInterrupts - true/false -> disable/enable interrupts
  */
@@ -220,7 +257,7 @@ bool GdbHandler_CFV1::isValidRegister(unsigned regNo) {
 //! @note The pointer is incremented by size of register
 //! @note Bytes are read in target byte order
 //!
-USBDM_ErrorCode GdbHandler_CFV1::readReg(unsigned regNo, char *&buffPtr) {
+USBDM_ErrorCode GdbHandler_CFV1::readReg(unsigned regNo, uint8_t *&buffPtr) {
    LOGGING_Q;
    unsigned long regValue;
 
@@ -255,7 +292,7 @@ USBDM_ErrorCode GdbHandler_CFV1::readReg(unsigned regNo, char *&buffPtr) {
       reportGdbPrintf(GdbHandler::M_ERROR, rc, "Register read failed. ");
       regValue = 0;
    }
-   regValue = targetToNative32(regValue);
+   regValue = targetToFromNative32(regValue);
    memcpy(buffPtr, &regValue, 4);
    buffPtr += 4;
    return rc;
@@ -273,6 +310,17 @@ void GdbHandler_CFV1::debug_print_regs() {
  */
 uint32_t GdbHandler_CFV1::getCachedPC() {
    return get32bitBE(CACHED_PC_VALUE_OFFSET);
+}
+
+/**
+ * Get register values of important registers for stop reporting etc.
+ *
+ * @return Static string describing values.
+ */
+const char *GdbHandler_CFV1::getImportantRegisters() {
+   static char buff[100];
+   snprintf(buff, sizeof(buff), "0F:%08X;", getCachedPC());
+   return buff;
 }
 
 //! Write to target register
@@ -303,8 +351,8 @@ void GdbHandler_CFV1::writeReg(unsigned regNo, unsigned long regValue) {
 GdbHandler::GdbTargetStatus GdbHandler_CFV1::getTargetStatus() {
    LOGGING_Q;
 
-   static GdbTargetStatus  lastStatus = T_UNKNOWN;
-   GdbTargetStatus         status     = T_UNKNOWN;
+   static GdbTargetStatus  lastStatus = GdbTargetStatus_NOCONNECTION;
+   GdbTargetStatus         status     = GdbTargetStatus_NOCONNECTION;
 
    do {
       unsigned long value;
@@ -322,19 +370,19 @@ GdbHandler::GdbTargetStatus GdbHandler_CFV1::getTargetStatus() {
       }
       if (rc != BDM_RC_OK) {
          log.print("Failed, rc = %s\n", bdmInterface->getErrorString(rc));
-         status = T_UNKNOWN;
+         status = GdbTargetStatus_UNKNOWN;
          break;
       }
       if ((value & CFV1_XCSR_ENBDM) == 0) {
          log.print("ENBDM=0\n");
-         status = T_UNKNOWN;
+         status = GdbTargetStatus_UNKNOWN;
          break;
       }
       if (value&CFV1_XCSR_RUNSTATE) {
-         status = T_HALT;
+         status = GdbTargetStatus_HALT;
          break;
       }
-      status = T_RUNNING;
+      status = GdbTargetStatus_RUNNING;
       break;
    } while (0);
 
@@ -347,12 +395,18 @@ GdbHandler::GdbTargetStatus GdbHandler_CFV1::getTargetStatus() {
 
 //#define REPORT_LONG_LOCATION
 
-void GdbHandler_CFV1::reportLocation(char mode, int reason) {
+/**
+ *
+ * @param mode          Indicates the reply mode e.g. S T etc
+ * @param signal        Signal value e.g. TARGET_SIGNAL_TRAP TARGET_SIGNAL_INT
+ * @param stopReason    Optional Reason for stop if T=TARGET_SIGNAL_TRAP
+ */
+void GdbHandler_CFV1::reportHalt(char mode, int signal) {
    LOGGING_Q;
    char buff[100];
    char *cPtr = buff;
 
-   cPtr += sprintf(buff, "%c%2.2X", mode, reason);
+   cPtr += sprintf(buff, "%c%2.2X", mode, signal);
 #if defined(REPORT_LONG_LOCATION)
    static const int regsToReport[] = {17, 15, 14, 16}; // PC, SP, FP, SR
    for (unsigned index=0; index<(sizeof(regsToReport)/sizeof(regsToReport[0])); index++) {
@@ -375,7 +429,7 @@ bool GdbHandler_CFV1::checkHostedBreak(uint32_t currentPC) {
  * Handles target halted due to semi-hosting break
  */
 GdbHandler::GdbTargetStatus GdbHandler_CFV1::handleHostedBreak() {
-   return T_HALT;
+   return GdbTargetStatus_HALT;
 }
 
 /**
@@ -384,7 +438,10 @@ GdbHandler::GdbTargetStatus GdbHandler_CFV1::handleHostedBreak() {
 GdbHandler::GdbTargetStatus GdbHandler_CFV1::handleHalted() {
    LOGGING;
    bool looping = false;
-   if (runState != Halted) {
+   if (runState != RunState_Halted) {
+
+   forceTargetHalt = false;
+
       // Target has just halted - cache registers
       readRegs();
       uint32_t currentPC = getCachedPC();
@@ -392,49 +449,42 @@ GdbHandler::GdbTargetStatus GdbHandler_CFV1::handleHalted() {
       lastStoppedPC = currentPC;
    }
    switch(runState) {
-   case Halted :  // halted -> halted
+   case RunState_Halted :  // halted -> halted
       // No change
       break;
-   case Breaking : // user breaking -> halted
-      reportLocation('T', TARGET_SIGNAL_INT);
-      log.print("Target has halted (from breaking) @0x%08X\n", lastStoppedPC);
-      reportGdbPrintf(M_INFO, "Target has halted (due to user break)  @0x%08X\n", lastStoppedPC);
-      deactivateBreakpoints();
-      checkAndAdjustBreakpointHalt();
-      runState = Halted;
-      break;
-   case Stepping : // stepping -> halted
+   case RunState_Stepping : // stepping -> halted
       // GDB has a bug where stepping on an empty loop will cause an infinite loop of trying to step to the next location
       // This detects the PC not changing on step and return TARGET_SIGNAL_INT rather than TARGET_SIGNAL_TRAP to abort stepping
-      if (looping) {
-            reportLocation('T', TARGET_SIGNAL_INT);
-         }
-         else {
-            reportLocation('T', TARGET_SIGNAL_TRAP);
-         }
       log.print("Target has halted (from stepping) @0x%08X\n", lastStoppedPC);
       reportGdbPrintf(M_BORINGINFO, "Target has halted (from stepping) @0x%08X\n", lastStoppedPC);
       deactivateBreakpoints();
       checkAndAdjustBreakpointHalt();
-      runState = Halted;
+      runState = RunState_Halted;
+      vStoppedAvailable = true;
+      if (looping) {
+            reportHalt('T', TARGET_SIGNAL_INT);
+         }
+         else {
+            reportHalt('T', TARGET_SIGNAL_TRAP);
+         }
       break;
    default:       // ???     -> halted
-   case Running : // running -> halted
-      if (atBreakpoint(getCachedPC())) {
-         reportLocation('T', TARGET_SIGNAL_TRAP);
-      }
-      else {
-         reportLocation('T', TARGET_SIGNAL_INT);
-      }
-      log.print("Target has halted (from running) @%s\n", getCachedPcAsString());
-      reportGdbPrintf(M_INFO, "Target has halted (from running)  @%s\n", getCachedPcAsString());
+   case RunState_Running : // running -> halted
+      log.print("Target has halted (from running) @0x%08X\n", getCachedPC());
+      reportGdbPrintf(M_INFO, "Target has halted (from %s) @0x%08X\n", getRunStateName(runState), getCachedPC());
       deactivateBreakpoints();
       checkAndAdjustBreakpointHalt();
-      runState = Halted;
+      runState = RunState_Halted;
+      vStoppedAvailable = true;
+      if (atBreakpoint(getCachedPC())) {
+         reportHalt('T', TARGET_SIGNAL_TRAP);
+      }
+      else {
+         reportHalt('T', TARGET_SIGNAL_INT);
+      }
       break;
    }
-   targetBreakPending = false;
-   return T_HALT;
+   return GdbTargetStatus_HALT;
 }
 
 /*!
@@ -451,7 +501,7 @@ GdbHandler::GdbTargetStatus GdbHandler_CFV1::pollTarget(void) {
    static bool resetAttempted = false;                       // Set if reset already tried
    int         timeoutLimit   = getConnectionTimeout() * 10; // Scale to 100 ms ticks
 
-   if (targetBreakPending) {
+   if (forceTargetHalt) {
       // Halt target
       bdmInterface->halt();
    }
@@ -459,22 +509,22 @@ GdbHandler::GdbTargetStatus GdbHandler_CFV1::pollTarget(void) {
    log.print("gdbTargetStatus(on poll) = %s\n", getStatusName(gdbTargetStatus));
    log.print("runState(on entry)       = %s\n", getRunStateName(runState));
 
-   if (gdbTargetStatus == T_NOCONNECTION) {
+   if (gdbTargetStatus == GdbTargetStatus_NOCONNECTION) {
       if (resetAttempted) {
-         return T_NOCONNECTION;
+         return GdbTargetStatus_NOCONNECTION;
       }
       if ((unsuccessfulPollCount++ < timeoutLimit) || (timeoutLimit == 0)) {
-         return T_UNKNOWN;
+         return GdbTargetStatus_UNKNOWN;
       }
       reportGdbPrintf((GdbMessageLevel)(M_ERROR|M_DIALOGUE), "Resetting target due to connection failure\n");
       resetTarget();
       resetAttempted = true;
-      return T_UNKNOWN;
+      return GdbTargetStatus_UNKNOWN;
    }
    resetAttempted = false;
    unsuccessfulPollCount = 0;
 
-   if ((gdbTargetStatus == T_HALT)) {
+   if ((gdbTargetStatus == GdbTargetStatus_HALT)) {
       // Check for semi-hosting
       unsigned long pc;
       readPC(&pc);
@@ -482,7 +532,7 @@ GdbHandler::GdbTargetStatus GdbHandler_CFV1::pollTarget(void) {
          gdbTargetStatus = handleHostedBreak();
       }
    }
-   if ((gdbTargetStatus == T_HALT)) {
+   if ((gdbTargetStatus == GdbTargetStatus_HALT)) {
       gdbTargetStatus = handleHalted();
    }
    log.print("gdbTargetStatus(on exit) = %s\n", getStatusName(gdbTargetStatus));

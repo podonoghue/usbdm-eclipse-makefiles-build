@@ -465,19 +465,32 @@ public:
    */
    virtual USBDM_ErrorCode            reset(TargetMode_t mode = (TargetMode_t)(RESET_SPECIAL|RESET_DEFAULT)) = 0;
 
-  /**
-   * Connects to Target.
-   *
-   *  This will cause the BDM module to attempt to connect to the Target.
-   *  In most cases the BDM module will automatically determine the connection
-   *  speed and successfully connect.  If unsuccessful, it may be necessary
-   *  to manually set the speed using set_speed().
-   *
-   *  @return
-   *      BDM_RC_OK  => OK \n
-   *      other      => Error code - see \ref USBDM_ErrorCode
-   */
-   virtual USBDM_ErrorCode            connect() = 0;
+   /**
+    * Connects to Target.
+    *
+    *  This will cause the BDM module to attempt to connect to the Target.
+    *  In most cases the BDM module will automatically determine the connection
+    *  speed and successfully connect.  If unsuccessful, it may be necessary
+    *  to manually set the speed using set_speed().
+    *
+    *  @return
+    *      BDM_RC_OK  => OK \n
+    *      other      => Error code - see \ref USBDM_ErrorCode
+    */
+    virtual USBDM_ErrorCode            connect() = 0;
+
+    /**
+     * Connects to Target.
+     *
+     *  This will cause the BDM module to attempt to connect to the Target.
+     *  ARM-SWD - Does JTAG to Serial Wire switching only
+     *  Other targets same as connect()
+     *
+     *  @return
+     *      BDM_RC_OK  => OK \n
+     *      other      => Error code - see \ref USBDM_ErrorCode
+     */
+     virtual USBDM_ErrorCode            basicConnect() = 0;
 
   /**
    * Get the BDM communication speed in Hz
@@ -751,7 +764,7 @@ public:
   /**
    * Read Multiple Core registers
    *
-   *  @param regValueBuffer Values in Target byte order??
+   *  @param regValueBuffer    Values in Target byte order??
    *  @param startRegIndex     Register index (inclusive) to start reading at
    *  @param endRegIndex       Register index (inclusive) to stop reading at
    *
@@ -762,7 +775,7 @@ public:
    *  @note The indexes mentioned above are magic numbers indexing an arbitrary table.\n
    *        Use only the predefined values provided - \ref ARM_RegisterIndex_t, \ref CFV1_RegisterIndex_t, \ref CFVx_RegisterIndex_t
    */
-   virtual USBDM_ErrorCode            readMultipleRegs(unsigned char regValueBuffer[], unsigned int startRegIndex, unsigned int endRegIndex) = 0;
+   virtual USBDM_ErrorCode            readMultipleRegs(uint8_t regValueBuffer[], unsigned int startRegIndex, unsigned int endRegIndex) = 0;
 
    // JTAG
    //==============================================================================================

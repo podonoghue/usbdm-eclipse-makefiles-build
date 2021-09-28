@@ -21,13 +21,14 @@ public:
    FlashProgrammerCommon(DeviceData::EraseMethod defaultEraseMethod, DeviceData::ResetMethod defaultResetMethod);
    virtual ~FlashProgrammerCommon();
 
-   virtual USBDM_ErrorCode    setDeviceData(const DeviceDataConstPtr device);
-   virtual USBDM_ErrorCode    setDeviceData(const DeviceDataConstPtr device, UsbdmTclInterperPtr tclInterpreter);
-   virtual DeviceDataConstPtr getDeviceData();
-   virtual USBDM_ErrorCode    setTargetInterface(BdmInterfacePtr bdmInterface);
+   virtual USBDM_ErrorCode    releaseDeviceData() override;
+   virtual USBDM_ErrorCode    setDeviceData(const DeviceDataConstPtr device) override;
+   virtual USBDM_ErrorCode    setDeviceData(const DeviceDataConstPtr device, UsbdmTclInterperPtr tclInterpreter) override;
+   virtual DeviceDataConstPtr getDeviceData() override;
+   virtual USBDM_ErrorCode    setTargetInterface(BdmInterfacePtr bdmInterface) override;
 
-   virtual USBDM_ErrorCode    massEraseTarget() { return massEraseTarget(true); };
-   virtual uint16_t           getCalculatedTrimValue() { return calculatedClockTrimValue; };
+   virtual USBDM_ErrorCode    massEraseTarget()  override { return massEraseTarget(true); };
+   virtual uint16_t           getCalculatedTrimValue()  override { return calculatedClockTrimValue; };
 
 protected:
    static const int MaxSecurityAreaSize = 100;  //<! Maximum size of a security area that may be saved

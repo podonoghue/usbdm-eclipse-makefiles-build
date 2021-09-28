@@ -9,8 +9,8 @@
 
 const char *GdbHandler::getStatusName(GdbTargetStatus status) {
    const char *names[] = {
-         "UNKNOWN(LLSx/VLLSx?)",
          "NO CONNECTION",
+         "UNKNOWN(LLSx/VLLSx?)",
          "RUN",
          "HALT",
          "RESET",
@@ -37,7 +37,6 @@ const char *GdbHandler::getRunStateName(RunState runState) {
          "Halted",
          "Stepping",
          "Running",
-         "Breaking",
          "UserInput",
          };
 

@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Oct 26 2018)
+// C++ code generated with wxFormBuilder (version 3.9.0 Sep 11 2020)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -67,7 +67,7 @@ GdbServerWindowSkeleton::GdbServerWindowSkeleton( wxWindow* parent, wxWindowID i
 	targetMenu->Append( m_menuItem11 );
 
 	wxMenuItem* m_menuItem13;
-	m_menuItem13 = new wxMenuItem( targetMenu, wxID_CATCH_VLLS_ID, wxString( wxT("&Catch VLLS reset") ) , wxT("Stop target during VLLS resets"), wxITEM_CHECK );
+	m_menuItem13 = new wxMenuItem( targetMenu, wxID_CATCH_VLLS_ID, wxString( wxT("&Stop on VLLS reset") ) , wxT("Target stops on VLLS reset"), wxITEM_CHECK );
 	targetMenu->Append( m_menuItem13 );
 
 	menuBar->Append( targetMenu, wxT("Target") );
@@ -96,7 +96,7 @@ GdbServerWindowSkeleton::GdbServerWindowSkeleton( wxWindow* parent, wxWindowID i
 
 	this->SetSizer( bSizer1 );
 	this->Layout();
-	statusBar = this->CreateStatusBar( 3, wxSTB_SIZEGRIP, wxID_ANY );
+	statusBar = this->CreateStatusBar( 2, wxSTB_SIZEGRIP, wxID_ANY );
 	statusBar->Enable( false );
 
 

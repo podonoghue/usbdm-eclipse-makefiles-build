@@ -33,6 +33,7 @@
 */
 
 #include <math.h>
+#include <assert.h>
 
 #include "UsbdmTclInterpreterFactory.h"
 #include "FlashProgrammerCommon.h"
@@ -70,13 +71,13 @@ FlashProgrammerCommon::~FlashProgrammerCommon() {
 }
 
 /**
- * Sets target intyerface to use when communicating with BDM
+ * Sets target interface to use when communicating with BDM
  *
  * @param bdmInterface Interface to use
  */
 USBDM_ErrorCode FlashProgrammerCommon::setTargetInterface(BdmInterfacePtr bdmInterface) {
    this->bdmInterface = bdmInterface;
-   initTCL();
+//   initTCL();
    return BDM_RC_OK;
 }
 
@@ -174,15 +175,32 @@ USBDM_ErrorCode FlashProgrammerCommon::runTCLCommand(const char *command) {
    }
    return rc;
 }
+
+/**
+ * Release device data
+ *
+ * @note This will also release the TCL interpreter
+ */
+USBDM_ErrorCode FlashProgrammerCommon::releaseDeviceData() {
+
+   device.reset();
+
+   return BDM_RC_OK;
+}
+
 /**
  * Set device data for flash operations
  *
  * @param theParameters   -   data describing the device
  *
  * @return error code see \ref USBDM_ErrorCode
+ *
+ * @note This will create a default TCL interpreter
  */
 USBDM_ErrorCode FlashProgrammerCommon::setDeviceData(const DeviceDataConstPtr device) {
    LOGGING_Q;
+
+   assert(device != nullptr);
 
    log.print("Target=%s\n", device->getTargetName().c_str());
 
@@ -203,6 +221,8 @@ USBDM_ErrorCode FlashProgrammerCommon::setDeviceData(const DeviceDataConstPtr de
  */
 USBDM_ErrorCode FlashProgrammerCommon::setDeviceData(const DeviceDataConstPtr device, UsbdmTclInterperPtr tclInterpreter) {
    LOGGING_Q;
+
+   assert(device != nullptr);
 
    log.print("Target=%s\n", device->getTargetName().c_str());
 

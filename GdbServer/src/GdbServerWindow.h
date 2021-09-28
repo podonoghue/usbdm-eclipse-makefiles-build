@@ -24,36 +24,39 @@ typedef  wxIPV4address IPaddress;
 
 #define CONFIG_FILE_NAME "GDBServer_"
 
-class GdbServerWindow: public GdbServerWindowSkeleton {
+class GdbServerWindow: public GdbServerWindowSkeleton, GdbHandler::GdbHandlerOwner {
 
 protected:
-   class GdbMessageWrapper {
-   private:
-      static GdbServerWindow *me;
-      static USBDM_ErrorCode callback(const char *msg, GdbHandler::GdbMessageLevel level, USBDM_ErrorCode rc);
-
-   public:
-      static GdbHandler::GdbCallback getCallBack(GdbServerWindow *me) {
-         GdbMessageWrapper::me = me;
-         return callback;
-      }
-   };
-
    // Virtual event handlers
-   virtual void OnCloseWindow( wxCloseEvent& event );
-   virtual void OnChangeSettings( wxCommandEvent& event );
-   virtual void OnDropConnection( wxCommandEvent& event );
-   virtual void OnQuit( wxCommandEvent& event );
-   virtual void OnClearLog( wxCommandEvent& event );
-   virtual void OnDisableLog( wxCommandEvent& event );
-   virtual void OnModerateLog( wxCommandEvent& event );
-   virtual void OnVerboseLog( wxCommandEvent& event );
-   virtual void OnHaltTarget( wxCommandEvent& event );
-   virtual void OnResetTarget( wxCommandEvent& event );
-   virtual void OnToggleMaskISR( wxCommandEvent& event );
-   virtual void OnSetTimeout( wxCommandEvent& event );
-   virtual void OnToggleCatchVLLS( wxCommandEvent& event );
-   virtual void OnEntryTextEnter( wxCommandEvent& event );
+   virtual void OnCloseWindow( wxCloseEvent& event ) override;
+   virtual void OnChangeSettings( wxCommandEvent& event ) override;
+   virtual void OnDropConnection( wxCommandEvent& event ) override;
+   virtual void OnQuit( wxCommandEvent& event ) override;
+   virtual void OnClearLog( wxCommandEvent& event ) override;
+   virtual void OnDisableLog( wxCommandEvent& event ) override;
+   virtual void OnModerateLog( wxCommandEvent& event ) override;
+   virtual void OnVerboseLog( wxCommandEvent& event ) override;
+   virtual void OnHaltTarget( wxCommandEvent& event ) override;
+   virtual void OnResetTarget( wxCommandEvent& event ) override;
+   virtual void OnToggleMaskISR( wxCommandEvent& event ) override;
+   virtual void OnSetTimeout( wxCommandEvent& event ) override;
+   virtual void OnToggleCatchVLLS( wxCommandEvent& event ) override;
+   virtual void OnEntryTextEnter( wxCommandEvent& event ) override;
+
+   /**
+    * Display/Notify message
+    *
+    * @param msg     Text of message
+    * @param level   Severity of message (used to filter uninteresting messages)
+    * @param rc      Error code associated with message (if any)
+    *
+    * @return Modified error code
+    */
+   virtual USBDM_ErrorCode displayMessage(const char *msg, GdbHandler::GdbMessageLevel level, USBDM_ErrorCode rc) override;
+   /**
+    * Close connection in near future when inactive (i.e. polling etc not actually executing)
+    */
+   virtual void            setDeferredCloseClient() override;
 
    // Timer Event handler
    void OnTimer(wxTimerEvent& event);
@@ -79,7 +82,6 @@ protected:
    USBDM_ErrorCode        reportError(const char *msg, GdbHandler::GdbMessageLevel level, USBDM_ErrorCode rc);
 
    static wxString        getAddr(IPaddress addr);
-   void                   setDeferredFail(bool value = true);
    void                   setDeferredOpen(bool value = true);
 
    wxString                      serverAddr;         // Current server address as string

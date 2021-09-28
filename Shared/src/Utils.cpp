@@ -1,5 +1,5 @@
 /*! \file
-    \brief Implements USBDM Flash Programmer dialogue
+    \brief Some utilitty routines
 
     Utils.cpp
 
@@ -37,14 +37,14 @@
 
 using namespace std;
 
-/*! Convert a single HEX character ('0'-'9', 'a'-'f' or 'A'-'F') into a number
+/** Convert a single HEX character ('0'-'9', 'a'-'f' or 'A'-'F') into a number
  *
- * @param ptr  -  Ptr to the ptr to the character to convert. *ptr is advanced
+ * @param[in/out] ptr Ptr to the character to convert. ptr is advanced
  *
  * @return - a value in the range 0 to 15
  */
-uint8_t hex1ToDecimal(char **ptr) {
-   uint8_t data = *(*ptr)++;
+uint8_t hex1ToDecimal(char *&ptr) {
+   uint8_t data = *ptr++;
    if ((data >= '0') && (data <= '9'))
       return data - '0';
    if ((data >= 'a') && (data <= 'f'))
@@ -54,26 +54,26 @@ uint8_t hex1ToDecimal(char **ptr) {
    return 0;
 }
 
-/*! Convert two HEX characters ('0'-'9', 'a'-'f' or 'A'-'F') into a number
+/** Convert two HEX characters ('0'-'9', 'a'-'f' or 'A'-'F') into a number
  *
- * @param ptr  -  Ptr to the ptr to the character to convert. *ptr is advanced
+ * @param[in/out] ptr  -  Ptr to the 1st character to convert. ptr is advanced
  *
  * @return - a value in the range 0 to 255
  */
-uint8_t hex2ToDecimal( char **ptr) {
+uint8_t hex2ToDecimal(char *&ptr) {
    uint8_t data;
    data =             hex1ToDecimal(ptr);
    data = data * 16 + hex1ToDecimal(ptr);
    return data;
 }
 
-/*! Convert four HEX characters ('0'-'9', 'a'-'f' or 'A'-'F') into a number
+/** Convert four HEX characters ('0'-'9', 'a'-'f' or 'A'-'F') into a number
  *
- * @param ptr  -  Ptr to the ptr to the character to convert. *ptr is advanced
+ * @param[in/out] ptr  -  Ptr to the 1st character to convert. ptr is advanced
  *
  * @return - a value in the range 0 to 65535
  */
-uint16_t hex4ToDecimal( char **ptr) {
+uint16_t hex4ToDecimal(char *&ptr) {
    int data  =             hex1ToDecimal(ptr);
    data      = data * 16 + hex1ToDecimal(ptr);
    data      = data * 16 + hex1ToDecimal(ptr);
@@ -81,13 +81,13 @@ uint16_t hex4ToDecimal( char **ptr) {
    return data;
 }
 
-/*! Convert six HEX characters ('0'-'9', 'a'-'f' or 'A'-'F') into a number
+/** Convert six HEX characters ('0'-'9', 'a'-'f' or 'A'-'F') into a number
  *
- * @param ptr  -  Ptr to the ptr to the character to convert. *ptr is advanced
+ * @param[in/out] ptr  -  Ptr to the 1st character to convert. ptr is advanced
  *
  * @return - a value in the range 0 to 0xFFFFFFU
  */
-uint32_t hex6ToDecimal( char **ptr) {
+uint32_t hex6ToDecimal(char *&ptr) {
    int data  =             hex1ToDecimal(ptr);
    data      = data * 16 + hex1ToDecimal(ptr);
    data      = data * 16 + hex1ToDecimal(ptr);
@@ -97,13 +97,13 @@ uint32_t hex6ToDecimal( char **ptr) {
    return data;
 }
 
-/*! Convert six HEX characters ('0'-'9', 'a'-'f' or 'A'-'F') into a number
+/** Convert six HEX characters ('0'-'9', 'a'-'f' or 'A'-'F') into a number
  *
- * @param ptr  -  Ptr to the ptr to the character to convert. *ptr is advanced
+ * @param[in/out] ptr  -  Ptr to the 1st character to convert. ptr is advanced
  *
  * @return - a value in the range 0 to 0xFFFFFFU
  */
-uint32_t hex8ToDecimal( char **ptr) {
+uint32_t hex8ToDecimal(char *&ptr) {
    int data  =             hex1ToDecimal(ptr);
    data      = data * 16 + hex1ToDecimal(ptr);
    data      = data * 16 + hex1ToDecimal(ptr);
@@ -115,13 +115,14 @@ uint32_t hex8ToDecimal( char **ptr) {
    return data;
 }
 
-//! Filters a string to only contain a set of permitted values
-//!
-//! @param data    string to filter
-//! @param pattern string containing permitted chars
-//!
-//! @return filtered string
-//!
+/**
+ * Filters a string to only contain a set of permitted values
+ *
+ * @param data    string to filter
+ * @param pattern string containing permitted chars
+ *
+ * @return filtered string
+ */
 string filter(const string &data, const string &pattern) {
    string s;
 

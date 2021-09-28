@@ -26,7 +26,7 @@ GdbServerWindow::GdbServerWindow(
    deviceInterface(deviceInterface),
    appSettings(AppSettings(CONFIG_FILE_NAME, deviceInterface->getTargetType(), "GDB Server settings")),
    loggingLevel(GdbHandler::M_ERROR),
-   targetStatus(GdbHandler::T_UNKNOWN),
+   targetStatus(GdbHandler::GdbTargetStatus_NOCONNECTION),
    serverState(idle),
    gdbInOut(NULL),
    statusTimer(NULL),
@@ -51,13 +51,9 @@ GdbServerWindow::GdbServerWindow(
 /* Destructor
  */
 GdbServerWindow::~GdbServerWindow() {
+   LOGGING;
    // No delayed deletion here, as the frame is dying anyway
-   delete serverSocket;
-   serverSocket = NULL;
-   delete clientSocket;
-   clientSocket = NULL;
-   delete statusTimer;
-   statusTimer = NULL;
+   closeServer();
 }
 
 USBDM_ErrorCode GdbServerWindow::execute() {
@@ -113,8 +109,8 @@ GdbHandler::GdbMessageLevel GdbServerWindow::getLoggingLevel() {
    loggingLevel = level;
 }
 
- void GdbServerWindow::setDeferredFail(bool value) {
-    deferredFail = value;
+ void GdbServerWindow::setDeferredCloseClient() {
+    deferredFail = true;
  }
 
  void GdbServerWindow::setDeferredOpen(bool value) {
@@ -145,7 +141,7 @@ GdbHandler::GdbMessageLevel GdbServerWindow::getLoggingLevel() {
   *  Subscribes to connection events with ID SERVER_ID
   */
  void GdbServerWindow::createServer() {
-    LOGGING_E;
+    LOGGING;
 
     // Create the address
     IPaddress listenAddr;
@@ -197,12 +193,13 @@ GdbHandler::GdbMessageLevel GdbServerWindow::getLoggingLevel() {
  }
 
  void GdbServerWindow::closeServer() {
-    LOGGING_E;
+    LOGGING;
 
     dropConnection();
 
     if (serverSocket != NULL) {
        statusTextControl->AppendText(_("Stopping Server\n"));
+       log.print("Stopping Server\n");
        serverSocket->Destroy();
        serverSocket = NULL;
     }
@@ -268,8 +265,8 @@ GdbHandler::GdbMessageLevel GdbServerWindow::getLoggingLevel() {
  void GdbServerWindow::OnCloseWindow(wxCloseEvent& event) {
     LOGGING_Q;
     if (!event.CanVeto() || confirmDropConnection())  {
-       log.print("GdbServerWindow::OnCloseWindow()\n");
-       dropConnection();
+       log.print("Closing Window\n");
+       closeServer();
        this->Destroy();
     }
     else {
@@ -310,8 +307,8 @@ GdbHandler::GdbMessageLevel GdbServerWindow::getLoggingLevel() {
   */
  void GdbServerWindow::OnHaltTarget(wxCommandEvent& event) {
     if (gdbHandler != 0) {
+       statusTextControl->AppendText(_("User halt of target\n"));
        gdbHandler->haltTarget();
-       statusTextControl->AppendText(_("User halt of target - step GDB to synchronise\n"));
     }
     else {
        statusTextControl->AppendText(_("No target open\n"));
@@ -323,8 +320,9 @@ GdbHandler::GdbMessageLevel GdbServerWindow::getLoggingLevel() {
   */
  void GdbServerWindow::OnResetTarget(wxCommandEvent& event) {
     if (gdbHandler != 0) {
+       statusTextControl->AppendText(_("User reset of target\n"));
        gdbHandler->resetTarget();
-       statusTextControl->AppendText(_("User reset of target - step GDB to synchronise\n"));
+       gdbHandler->notifyGdb();
     }
     else {
        statusTextControl->AppendText(_("No target open\n"));
@@ -344,7 +342,7 @@ GdbHandler::GdbMessageLevel GdbServerWindow::getLoggingLevel() {
  }
 
  /**
-  * Handler for Reset Target menu item
+  * Handler for ToggleCatchVLLS Target menu item
   */
  void GdbServerWindow::OnToggleCatchVLLS(wxCommandEvent& event) {
     bool catchVLLS = event.IsChecked();
@@ -364,7 +362,10 @@ GdbHandler::GdbMessageLevel GdbServerWindow::getLoggingLevel() {
   */
  void GdbServerWindow::OnSetTimeout(wxCommandEvent& WXUNUSED(event)) {
     unsigned long int value = bdmInterface->getConnectionTimeout();
-    wxTextEntryDialog dlg(this, "Enter Timeout value in seconds\n0 means indefinite wait", "Timeout Value", wxString::Format("%lu", value));
+    wxTextEntryDialog dlg(this,
+          "Enter Timeout value in seconds\n0 means indefinite wait",
+          "Timeout Value",
+          wxString::Format("%lu", value));
     if (dlg.ShowModal() ==  wxID_OK) {
        wxString s = dlg.GetValue();
        if (!s.ToULong(&value, 10)) {
@@ -393,8 +394,8 @@ GdbHandler::GdbMessageLevel GdbServerWindow::getLoggingLevel() {
 
     if (clientSocket != NULL) {
        statusTextControl->AppendText(_("Client connection while busy - rejected\n"));
-       wxSocketBase *clientSocket = serverSocket->Accept(false);
-       clientSocket->Destroy();
+       wxSocketBase *newClientSocket = serverSocket->Accept(false);
+       newClientSocket->Destroy();
        return;
     }
 
@@ -427,7 +428,7 @@ GdbHandler::GdbMessageLevel GdbServerWindow::getLoggingLevel() {
     clientSocket->SetNotify(wxSOCKET_INPUT_FLAG | wxSOCKET_LOST_FLAG);
     clientSocket->Notify(true);
 
-    setDeferredFail(false);
+    deferredFail = false;
     setDeferredOpen(true);
 
     if (statusTimer == 0) {
@@ -452,19 +453,18 @@ GdbHandler::GdbMessageLevel GdbServerWindow::getLoggingLevel() {
 
  /**
   *  Drop client connection and clean up
-  *
   */
  void GdbServerWindow::dropConnection() {
     LOGGING;
-    if (gdbInOut != NULL) {
-       gdbInOut->finish();
-       delete gdbInOut;
-       gdbInOut = NULL;
-    }
     if (statusTimer != NULL) {
        statusTimer->Stop();
        delete statusTimer;
        statusTimer = NULL;
+    }
+    if (gdbInOut != NULL) {
+       gdbInOut->finish();
+       delete gdbInOut;
+       gdbInOut = NULL;
     }
     if (gdbHandler != 0) {
        gdbHandler.reset();
@@ -483,8 +483,21 @@ GdbHandler::GdbMessageLevel GdbServerWindow::getLoggingLevel() {
     }
     serverState  = listening;
     clientAddr = _("None");
-    targetStatus = GdbHandler::T_UNKNOWN;
+    targetStatus = GdbHandler::GdbTargetStatus_NOCONNECTION;
     UpdateStatusBar();
+ }
+
+ /**
+  * Display/Notify message
+  *
+  * @param msg     Text of message
+  * @param level   Severity of message (used to filter uninteresting messages)
+  * @param rc      Error code associated with message (if any)
+  *
+  * @return Modified error code
+  */
+ USBDM_ErrorCode GdbServerWindow::displayMessage(const char *msg, GdbHandler::GdbMessageLevel level, USBDM_ErrorCode rc) {
+    return reportError(msg, level, rc);
  }
 
  /**
@@ -498,7 +511,7 @@ GdbHandler::GdbMessageLevel GdbServerWindow::getLoggingLevel() {
     if ((rc != BDM_RC_OK) || (level >= getLoggingLevel())) {
        statusTextControl->AppendText(wxString(msg, wxConvUTF8));
        if (level == GdbHandler::M_FATAL) {
-          setDeferredFail();
+          setDeferredCloseClient();
        }
     }
     if (level&GdbHandler::M_DIALOGUE) {
@@ -529,21 +542,6 @@ GdbHandler::GdbMessageLevel GdbServerWindow::getLoggingLevel() {
           );
     }
     return rc;
- }
-
- GdbServerWindow *GdbServerWindow::GdbMessageWrapper::me = NULL; //!< handle on GdbServerWindow
-
- /**
-  *  Call back to display messages from GDB handler
-  *
-  *   @param msg   Message to display
-  *   @param level Level
-  *   @param rc    Error code
-  *
-  *   @return      Modified error code
-  */
- USBDM_ErrorCode GdbServerWindow::GdbMessageWrapper::callback(const char *msg, GdbHandler::GdbMessageLevel level, USBDM_ErrorCode rc) {
-    return me->reportError(msg, level, rc);
  }
 
  /**
@@ -585,14 +583,16 @@ GdbHandler::GdbMessageLevel GdbServerWindow::getLoggingLevel() {
              }
 
              gdbInOut = new GdbInOutWx(clientSocket, statusTextControl);
-             GdbHandler::GdbCallback cb = GdbMessageWrapper::getCallBack(this);
 
+//             auto cbx = [this](const char *msg, GdbHandler::GdbMessageLevel level, USBDM_ErrorCode rc) {
+//                return reportError(msg, level, rc);
+//             };
              gdbHandler = GdbHandlerFactory::createGdbHandler(
                    bdmInterface->getBdmOptions().targetType,
+                   *this,
                    gdbInOut,
                    bdmInterface,
                    deviceInterface,
-                   cb,
                    tty);
 
              rc = gdbHandler->initialise();
@@ -655,9 +655,10 @@ GdbHandler::GdbMessageLevel GdbServerWindow::getLoggingLevel() {
   */
  void GdbServerWindow::pollTarget() {
     LOGGING_Q;
+    // Suppress logging in polling otherwise log is verbose!
     log.setLoggingLevel(0);
 
-    static GdbHandler::GdbTargetStatus lastTargetStatus = GdbHandler::T_UNKNOWN;
+    static GdbHandler::GdbTargetStatus lastTargetStatus = GdbHandler::GdbTargetStatus_NOCONNECTION;
 
     static unsigned recurse = 0;
 
@@ -668,7 +669,7 @@ GdbHandler::GdbMessageLevel GdbServerWindow::getLoggingLevel() {
 
     recurse++;
     do {
-       targetStatus = GdbHandler::T_NOCONNECTION;
+       targetStatus = GdbHandler::GdbTargetStatus_UNKNOWN;
 
        int pollInterval = pollIntervalFast;
 
@@ -681,25 +682,24 @@ GdbHandler::GdbMessageLevel GdbServerWindow::getLoggingLevel() {
        }
 
        if (deferredOpen || deferredFail) {
-          // Don't poll before opening target or shutting down
+          // Don't poll before opening target or while shutting down
           break;
        }
        targetStatus = gdbHandler->pollTarget();
        {
-    	   static const char *lastStatus = nullptr;
-    	   const char *status = GdbHandler::getStatusName(targetStatus);
-    	   if (status != lastStatus) {
-    		   log.print("Status changed to %s\n", status);
+    	   static GdbHandler::GdbTargetStatus lastTargetStatus = GdbHandler::GdbTargetStatus_NOCONNECTION;
+    	   if (targetStatus != lastTargetStatus) {
+    		   log.print("Status changed to %s\n", GdbHandler::getStatusName(targetStatus));
     	   }
-		   lastStatus = status;
+    	  lastTargetStatus = targetStatus;
        }
        switch (targetStatus) {
-          case GdbHandler::T_HALT:
-          case GdbHandler::T_RESET:
+          case GdbHandler::GdbTargetStatus_HALT:
+          case GdbHandler::GdbTargetStatus_RESET:
              pollInterval = pollIntervalSlow;
              entryTextControl->Enable(false);
              break;
-          case GdbHandler::T_USER_INPUT:
+          case GdbHandler::GdbTargetStatus_USER_INPUT:
              entryTextControl->Enable();
              pollInterval = pollIntervalSlow;
              break;
@@ -740,8 +740,8 @@ GdbHandler::GdbMessageLevel GdbServerWindow::getLoggingLevel() {
           serverStatusString = _("Server Abort");
           break;
     }
-    SetStatusText(serverStatusString, 1);
+    SetStatusText(serverStatusString, 0);
 
-    SetStatusText(GdbHandler::getStatusName(targetStatus), 2);
+    SetStatusText(GdbHandler::getStatusName(targetStatus), 1);
  #endif // wxUSE_STATUSBAR
  }

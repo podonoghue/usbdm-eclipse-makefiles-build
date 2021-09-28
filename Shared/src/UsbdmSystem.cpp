@@ -59,6 +59,10 @@
 #undef UNICODE
 #endif
 
+#if defined(LOG)
+UsbdmSystem::Log::LogState UsbdmSystem::Log::logState;
+#endif
+
 /* Open a file within the application directory - read-only
  *
  * @param path to append to directory
@@ -139,12 +143,8 @@ void UsbdmSystem::milliSleep(int milliSeconds) {
 #define ADDRESS_SIZE_MASK    (3<<0)
 #define DISPLAY_SIZE_MASK    (3<<2)
 
-const char                  *UsbdmSystem::Log::currentName     = NULL;      //!< Name of current function
-FILE                        *UsbdmSystem::Log::logFile         = NULL;      //!< File handle for logging file
-int                          UsbdmSystem::Log::indent          = 0;         //!< Indent level for listing
-int                          UsbdmSystem::Log::currentLogLevel = 100;       //!< Level below which to log messages
-bool                         UsbdmSystem::Log::loggingEnabled  = true;      //!< Log on/off
-UsbdmSystem::Log::Timestamp  UsbdmSystem::Log::timestampMode   = relative;  //!< Time-stamp messages
+FILE *                       UsbdmSystem::Log::logFile(nullptr);         //!< File handle for logging file
+UsbdmSystem::Log::Timestamp  UsbdmSystem::Log::timestampMode(relative);  //!< Time-stamp messages
 
 /** \brief Get current time in milliseconds
  *
@@ -160,6 +160,10 @@ double UsbdmSystem::Log::getCurrentTime(void) {
    return now.tv_sec*1000.0 + (now.tv_nsec/1000000.0);
 }
 
+/**
+ * Get timestamp string.
+ * @note This is a pointer to a static location.
+ */
 const char *UsbdmSystem::Log::getTimeStamp(void) {
    static double loggingStartTime = -1.0;
    static double lastTimestamp    = -1;
@@ -191,29 +195,27 @@ const char *UsbdmSystem::Log::getTimeStamp(void) {
 
 /**  \brief Object to allow logging the execution of a function
  *
- *  @param name Name of the function to use in messages
- *  @param when Whether to log entry/exit etc of this function
+ *  @param name  Name of the function to use in messages
+ *  @param pWhen Whether to log entry/exit etc of this function
  */
-UsbdmSystem::Log::Log(const char *name, When when) : when(when) {
-   indent++;
-   lastName      = currentName;
-   lastLogLevel  = currentLogLevel;
-   currentName   = name;
+UsbdmSystem::Log::Log(const char *name, When pWhen) : when(pWhen), lastLogState(logState) {
+   logState.indent++;
+   logState.name       = name;
+   logState.forced     = (when==forced) || lastLogState.forced;
 
-   if ((when==entry)||(when==both)) {
-      print("Entry ===============\n");
+   if (lastLogState.enabled && ((when==entry)||(when==both)||(when==forced))) {
+      print("Entry %d:%p ===============\n", logState.indent, this);
    }
 }
 /**  \brief Record exit from a function
  *
  */
 UsbdmSystem::Log::~Log(){
-   currentLogLevel = lastLogLevel;
-   if ((when==exit)||(when==both)) {
-      print("Exit ================\n");
+   logState.enabled = lastLogState.enabled;
+   if (lastLogState.enabled && ((when==entry)||(when==both)||(when==forced))) {
+      print("Exit %d:%p ===============\n", logState.indent, this);
    }
-   currentName     = lastName;
-   indent--;
+   logState = lastLogState;
 }
 
 /**  \brief Open log file
@@ -243,12 +245,12 @@ void UsbdmSystem::Log::openLogFile(const char *logFileName, const char *descript
    }
 #endif
 
-   indent = 0;
-   currentName = NULL;
+   logState.indent = 0;
+   logState.name = NULL;
    if (logFile == NULL) {
       return;
    }
-   loggingEnabled     = true;
+   logState.enabled     = true;
    timestampMode      = incremental;
    getTimeStamp();
 
@@ -286,9 +288,11 @@ FILE* UsbdmSystem::Log::getLogFileHandle(void) {
 /** \brief Turns logging on or off
  *
  *  @param value - true/false => on/off logging
+ *
+ *  @note This change is discarded on exit from the enclosing function.
  */
 void UsbdmSystem::Log::enableLogging(bool value) {
-   loggingEnabled = value;
+   logState.enabled = value;
 }
 
 /**  \brief Set logging level relative to current level
@@ -297,13 +301,13 @@ void UsbdmSystem::Log::enableLogging(bool value) {
  *         A 0 value suppresses logging below the current level.
  */
 void UsbdmSystem::Log::setLoggingLevel(int level) {
-   currentLogLevel = indent + level;
+   logState.level = logState.indent + level;
 }
 /**  \brief Get logging level relative to current level
  *
  */
 int UsbdmSystem::Log::getLoggingLevel() {
-   return indent - currentLogLevel;
+   return logState.indent - logState.level;
 }
 /** \brief Sets timestamping mode
  *
@@ -322,30 +326,39 @@ void UsbdmSystem::Log::closeLogFile() {
    time_t time_now;
    time(&time_now);
 
-   loggingEnabled = true;
+   logState.enabled = true;
    fprintf(logFile,
          "\n==========================================\n"
          "End of log file: %s\r", ctime(&time_now));
-   loggingEnabled = false;
+   logState.enabled = false;
 
    fclose(logFile);
    logFile = NULL;
 }
 /** \brief Provides a print function which prints data into a log file.
  *
- *  @param format Format and parameters as for printf()
+ * @param format        Format as for printf()
+ * @param list          Argument list as for printf()
+ * @param doPrefix      True to print time-stamp etc. at start of line
  */
-void UsbdmSystem::Log::printq(const char *format, ...) {
-   va_list list;
-   if ((logFile == NULL) || (!loggingEnabled) || (indent > currentLogLevel)) {
+void UsbdmSystem::Log::doPrint(bool doPrefix, const char *format, va_list list) {
+   if (logFile == nullptr) {
       return;
    }
-   if (format == NULL) {
-      format = "printq() - Error - empty format string!\n";
+   if (doPrefix) {
+      fprintf(logFile, "%s", getTimeStamp());
+      fprintf(logFile, "%*s", 3*logState.indent, "");
+      if (logState.name!=NULL) {
+         fprintf(logFile, "%s: ", (const char *)logState.name);
+      }
+      else {
+         fprintf(logFile, "--: ");
+      }
    }
-   va_start(list, format);
+   if (format == nullptr) {
+      format = "error() - Error - empty format string!\n";
+   }
    vfprintf(logFile, format, list);
-   va_end(list);
    fflush(logFile);
 }
 
@@ -354,24 +367,27 @@ void UsbdmSystem::Log::printq(const char *format, ...) {
  *  @param format Format and parameters as for printf()
  */
 void UsbdmSystem::Log::print(const char *format, ...)  {
-   va_list list;
-   if ((logFile == NULL) || (!loggingEnabled) || (indent > currentLogLevel)) {
-      return;
+   if (logState.forced || (logState.enabled && (logState.indent < logState.level))) {
+      va_list list;
+      va_start(list, format);
+      doPrint(timestampMode != none, format, list);
+      va_end(list);
+      fflush(logFile);
    }
-   if (format == NULL) {
-      format = "print() - Error - empty format string!\n";
+}
+
+/** \brief Provides a print function which prints data into a log file.
+ *
+ *  @param format Format and parameters as for printf()
+ */
+void UsbdmSystem::Log::printq(const char *format, ...) {
+   if (logState.forced || (logState.enabled && (logState.indent < logState.level))) {
+      va_list list;
+      va_start(list, format);
+      doPrint(false, format, list);
+      va_end(list);
+      fflush(logFile);
    }
-   if (timestampMode != none) {
-      fprintf(logFile, "%s", getTimeStamp());
-   }
-   fprintf(logFile, "%*s", 3*indent, "");
-   if (currentName!=NULL) {
-      fprintf(logFile, "%s: ", currentName);
-   }
-   va_start(list, format);
-   vfprintf(logFile, format, list);
-   va_end(list);
-   fflush(logFile);
 }
 
 /** \brief Provides a print function which prints data into a log file.
@@ -380,45 +396,43 @@ void UsbdmSystem::Log::print(const char *format, ...)  {
  */
 void UsbdmSystem::Log::error(const char *format, ...)  {
    va_list list;
-   if (logFile == NULL) {
-      return;
-   }
-   if (format == NULL) {
-      format = "error() - Error - empty format string!\n";
-   }
-   if (timestampMode != none) {
-      fprintf(logFile, "%s", getTimeStamp());
-   }
-   fprintf(logFile, "%*s", 3*indent, "");
-   if (currentName!=NULL) {
-      fprintf(logFile, "%s: ", currentName);
-   }
    va_start(list, format);
-   vfprintf(logFile, format, list);
+   doPrint(timestampMode != none, format, list);
    va_end(list);
    fflush(logFile);
 }
+
+/** \brief Provides a print function which prints data into a log file. No time stamp.
+ *
+ *  @param format Format and parameters as for printf()
+ */
+void UsbdmSystem::Log::errorq(const char *format, ...) {
+   va_list list;
+   va_start(list, format);
+   doPrint(false, format, list);
+   va_end(list);
+   fflush(logFile);
+}
+
 /** \brief Provides a print function which prints data into a log file.
  *
  *  @param format Format and parameters as for printf()
  */
 void UsbdmSystem::Log::warning(const char *format, ...) {
    va_list list;
-   if (logFile == NULL) {
-      return;
-   }
-   if (format == NULL) {
-      format = "error() - Error - empty format string!\n";
-   }
-   if (timestampMode != none) {
-      fprintf(logFile, "%s", getTimeStamp());
-   }
-   fprintf(logFile, "%*s", 3*indent, "");
-   if (currentName!=NULL) {
-      fprintf(logFile, "%s: ", currentName);
-   }
    va_start(list, format);
-   vfprintf(logFile, format, list);
+   doPrint(timestampMode != none, format, list);
+   va_end(list);
+   fflush(logFile);
+}
+/** \brief Provides a print function which prints data into a log file. No time stamp.
+ *
+ *  @param format Format and parameters as for printf()
+ */
+void UsbdmSystem::Log::warningq(const char *format, ...) {
+   va_list list;
+   va_start(list, format);
+   doPrint(false, format, list);
    va_end(list);
    fflush(logFile);
 }
@@ -439,7 +453,7 @@ void UsbdmSystem::Log::printDump(const uint8_t *data,
    unsigned int address      = startAddress;
    bool         littleEndian = (organization & DLITTLE_ENDIAN)!= 0;
 
-   if ((logFile == NULL) || (!loggingEnabled) || (indent > currentLogLevel)) {
+   if ((logFile == nullptr) || (!logState.forced && ((!logState.enabled) || (logState.indent > logState.level)))) {
       return;
    }
    switch (organization&DISPLAY_SIZE_MASK){
@@ -472,7 +486,7 @@ void UsbdmSystem::Log::printDump(const uint8_t *data,
          if (timestampMode) {
             fprintf(logFile, "%s", getTimeStamp());
          }
-         fprintf(logFile, "%*s", 3*indent, "");
+         fprintf(logFile, "%*s", 3*logState.indent, "");
          fprintf(logFile,"   %s%8.8X:", prefix, address>>addressShift);
       }
       unsigned char dataTemp[4];

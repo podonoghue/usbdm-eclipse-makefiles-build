@@ -52,8 +52,8 @@
  /*!  GDB Packet that indicate a break has been received.
   */
 const GdbPacket GdbPacket::breakToken  = {
-      sizeof("break"),
-      "break"
+      sizeof("!!break!!"-1),
+      "!!break!!"
 };
 
 //======================================================================
@@ -91,9 +91,9 @@ GdbInOut::~GdbInOut() {
  */
 void GdbInOut::finish(void) {
    LOGGING_E;
-   if (connectionActive) {
-      sendErrorMessage(E_Fatal, "Closing connection");
-   }
+//   if (connectionActive) {
+//      sendErrorMessage(E_Fatal, "Closing connection");
+//   }
    connectionActive = false;
 }
 
@@ -409,19 +409,32 @@ void GdbInOut::putGdbChecksum(void) {
 void GdbInOut::txGdbPkt(void) {
    LOGGING_Q;
    writeBuffer(gdbTxBuffer, gdbTxCharCount);
-   log.print( "txGdbPkt()=>:%3d%*s\n", gdbTxCharCount, gdbTxCharCount, gdbTxBuffer);
+//   log.error( "Tx=>:%d%*s\n", gdbTxCharCount, gdbTxCharCount, gdbTxBuffer);
+   log.errorq( "Tx=>\"%*s\"\n", gdbTxCharCount, gdbTxBuffer);
 }
 
- /*!  Immediately send string to GDB (pre-amble and postscript are added)
-  *
-  *  @param str  - string to send ('\0' terminated)
-  *  @param size - size of packet (-1 ignored)
-  */
+/*!  Immediately send string to GDB (pre-amble and postscript are added)
+ *
+ *  @param str  - string to send ('\0' terminated)
+ *  @param size - size of packet (-1 ignored)
+ */
 void GdbInOut::sendGdbString(const char *str, int size) {
-   putGdbPreamble();
-   putGdbString(str, size);
-   putGdbChecksum();
-   txGdbPkt();
+  putGdbPreamble();
+  putGdbString(str, size);
+  putGdbChecksum();
+  txGdbPkt();
+}
+
+/*!  Immediately send notification string to GDB (pre-amble and postscript are added)
+ *
+ *  @param str  - string to send ('\0' terminated)
+ *  @param size - size of packet (-1 ignored)
+ */
+void GdbInOut::sendGdbNotificationString(const char *str, int size) {
+  putGdbPreamble('%');
+  putGdbString(str, size);
+  putGdbChecksum();
+  txGdbPkt();
 }
 
 /*!  Immediately send a string to GDB as a series of hex digit pairs with leading id string
@@ -464,9 +477,9 @@ void GdbInOut::sendGdbHexDataString(const char *id, const uint8_t *data, unsigne
   *   @param buffer   - data to put
   *   @param size     - size of data (-1 ignored)
   */
-void GdbInOut::sendGdbHex(const unsigned char *buffer, unsigned size) {
+void GdbInOut::sendGdbHex(uint8_t *data, unsigned size) {
    putGdbPreamble();
-   putGdbHex(buffer, size);
+   putGdbHex(data, size);
    putGdbChecksum();
    txGdbPkt();
 }
@@ -478,7 +491,6 @@ void GdbInOut::sendGdbHex(const unsigned char *buffer, unsigned size) {
   */
 void GdbInOut::sendGdbNotification(const char *buffer, int size) {
    putGdbPreamble('%');
-   putGdbString("Stop:");
    putGdbString(buffer, size);
    putGdbChecksum();
    txGdbPkt();

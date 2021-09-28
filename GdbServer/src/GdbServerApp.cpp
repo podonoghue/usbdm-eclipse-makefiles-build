@@ -38,10 +38,6 @@
 #include <wx/cmdline.h>
 #include <wx/stdpaths.h>
 
-#include <wx/wx.h>
-#include <wx/cmdline.h>
-#include <wx/stdpaths.h>
-
 #include "GdbServerDialogue.h"
 #include "GdbServerWindow.h"
 
@@ -133,7 +129,7 @@ USBDM_ErrorCode callBack(USBDM_ErrorCode status, int percent, const char *messag
 
 
 bool GdbServerApp::OnInit() {
-   LOGGING;
+   LOGGING_E;
 
 #ifndef _WIN32
    // Otherwise wxWidgets doesn't look in the correct location
@@ -161,7 +157,7 @@ bool GdbServerApp::OnInit() {
 }
 
 int GdbServerApp::OnRun(void) {
-   LOGGING;
+   LOGGING_Q;
 
    if (commandLineRC != BDM_RC_OK) {
       return commandLineRC;

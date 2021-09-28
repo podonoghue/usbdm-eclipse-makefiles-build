@@ -112,8 +112,9 @@ public:
    // Send data to GDB
    void sendGdbBuffer(void);
    void sendGdbHexDataString(const char *id, const uint8_t *data, unsigned size);
-   void sendGdbHex(const unsigned char *buffer, unsigned size);
+   void sendGdbHex(uint8_t *data, unsigned size);
    void sendGdbString(const char *buffer, int size=-1);
+   void sendGdbNotificationString(const char *buffer, int size=-1);
    void sendGdbHexString(const char *id, const char *buffer, int size=-1);
    void sendGdbNotification(const char *buffer, int size=-1);
    void sendErrorMessage(ErrorType errorType, const char *msg);

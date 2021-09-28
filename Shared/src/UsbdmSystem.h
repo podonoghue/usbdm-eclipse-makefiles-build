@@ -60,7 +60,7 @@
 
 #include <stdint.h>
 #include <string>
-
+#include <atomic>
 
 /**
  * System routines: Logging, paths
@@ -175,69 +175,183 @@ public:
         DLITTLE_ENDIAN  = (1<<4),  //!< Little-endian order
       };
 
-#ifdef LOG
+#if defined(LOG)
    class USBDM_SYSTEM_DECLSPEC Log {
+   private:
+      /**
+       * This class is not intended to be copied
+       */
+      Log(const Log&) = delete;
+      Log(Log&&) = delete;
+
    public:
-      enum When      {neither, entry, exit, both};
+      enum When      {neither, entry, exit, both, forced};
       enum Timestamp {none, relative, incremental };
 
+      struct LogState {
+         const  char *  name;
+         unsigned       indent;
+         unsigned       level;
+         bool           forced;
+         bool           enabled;
+      };
+
    private:
-      static FILE       *logFile;
-      static bool        loggingEnabled;
-      static Timestamp   timestampMode;
-      static int         indent;
-      static int         currentLogLevel;
-      static const char *currentName;
-      const  char       *lastName;
-      int                lastLogLevel;
-      When               when;
+      static FILE *                     logFile;
+      static Timestamp                  timestampMode;
+      static LogState                   logState;
+
+      When     when;
+      LogState lastLogState;
+
+      /** \brief Provides a print function which prints data into a log file.
+       *
+       * @param format        Format as for printf()
+       * @param list          Argument list as for printf()
+       * @param bdoPrefix     True to print time-stamp etc. at start of line
+       */
+      static void    doPrint(bool doPrefix, const char *format, va_list list);
 
    public:
-      Log(const char *name, When when=both);
-      ~Log();
-
-      static void    openLogFile(const char *logFileName, const char *description="");
-      static void    closeLogFile();
-      static void    enableLogging(bool value = true);
-      static void    enableTimestamp(Timestamp mode = incremental);
-      static void    setLoggingLevel(int level);
-      static int     getLoggingLevel();
-      static double  getCurrentTime();
-      static const char   *getTimeStamp();
-      static void    error(const char *format, ...)   __attribute__ ((format (printf, 1, 2)));
-      static void    warning(const char *format, ...) __attribute__ ((format (printf, 1, 2)));
-      static void    print(const char *format, ...)   __attribute__ ((format (printf, 1, 2)));
-      static void    printq(const char *format, ...)  __attribute__ ((format (printf, 1, 2)));
-      static void    printDump(const uint8_t *data,
-                               unsigned int size,
-                               unsigned int startAddress=0x0000,
-                               unsigned int organization=BYTE_ADDRESS|BYTE_DISPLAY);
-      static void    setLogFileHandle(FILE *logFile);
-      static FILE*   getLogFileHandle();
-   };
-
-#define LOGGING_Q UsbdmSystem::Log log(__PRETTY_FUNCTION__, UsbdmSystem::Log::neither)
-#define LOGGING_E UsbdmSystem::Log log(__PRETTY_FUNCTION__, UsbdmSystem::Log::entry)
-#define LOGGING_X UsbdmSystem::Log log(__PRETTY_FUNCTION__, UsbdmSystem::Log::exit)
-#define LOGGING   UsbdmSystem::Log log(__PRETTY_FUNCTION__, UsbdmSystem::Log::both)
-
-#else
-   /**
-    * Class providing logging features
-    */
-public:
-   class USBDM_SYSTEM_DECLSPEC Log {
-   public:
-      enum When {neither, entry, exit, both};
       /**  \brief Object to allow logging the execution of a function
        *
        *  @param name Name of the function to use in messages
        *  @param when Whether to log entry/exit etc of this function
        */
-      Log(const char *name, When when=both) { (void)name; (void)when; };
-      Log() {};
-      /**  \brief Record exit from a function
+      Log(const char *name, When when=both);
+      /**
+       * Destructor
+       */
+      ~Log();
+
+      /**  \brief Open log file
        *
+       *  @param logFileName - Name of log file
+       *  @param description - Description written to log file
+       *
+       *  @note logging is enabled and timestamp disabled
+       */
+      static void    openLogFile(const char *logFileName, const char *description="");
+      /**  \brief Close the log file
+       *
+       */
+      static void    closeLogFile();
+      /** \brief Turns logging on or off
+       *
+       *  @param value - true/false => on/off logging
+       *
+       *  @note This change is discarded on exit from the enclosing function.
+       */
+      static void    enableLogging(bool value = true);
+      /** \brief Sets timestamping mode
+       *
+       *  @param mode - mode of timestamping
+       */
+      static void    enableTimestamp(Timestamp mode = incremental);
+      /**  \brief Set logging level relative to current level
+       *
+       *  @param level - level to log below \n
+       *         A 0 value suppresses logging below the current level.
+       */
+      static void    setLoggingLevel(int level);
+      /**  \brief Get logging level relative to current level
+       *
+       */
+      static int     getLoggingLevel();
+      /** \brief Get current time in milliseconds
+       *
+       *  @return time value
+       */
+      static double  getCurrentTime();
+      /**
+       * Get timestamp string.
+       * @note This is a pointer to a static location.
+       */
+      static const char   *getTimeStamp();
+      /** \brief Provides a print function which prints data into a log file.
+       *
+       *  @param format Format and parameters as for printf()
+       */
+      static void    error(const char *format, ...)   __attribute__ ((format (printf, 1, 2)));
+      /** \brief Provides a print function which prints data into a log file. No time stamp.
+       *
+       *  @param format Format and parameters as for printf()
+       */
+      static void    errorq(const char *format, ...)   __attribute__ ((format (printf, 1, 2)));
+      /** \brief Provides a print function which prints data into a log file.
+       *
+       *  @param format Format and parameters as for printf()
+       */
+      static void    warning(const char *format, ...) __attribute__ ((format (printf, 1, 2)));
+      /** \brief Provides a print function which prints data into a log file. No time stamp.
+       *
+       *  @param format Format and parameters as for printf()
+       */
+      static void    warningq(const char *format, ...) __attribute__ ((format (printf, 1, 2)));
+      /** \brief Provides a print function which prints data into a log file.
+       *
+       *  @param format Format and parameters as for printf()
+       */
+      static void    print(const char *format, ...)   __attribute__ ((format (printf, 1, 2)));
+      /** \brief Provides a print function which prints data into a log file. No time stamp.
+       *
+       *  @param format Format and parameters as for printf()
+       */
+      static void    printq(const char *format, ...)  __attribute__ ((format (printf, 1, 2)));
+      /** \brief Print a formatted dump of binary data in Hex
+       *
+       * @param data         Pointer to data to print
+       * @param size         Number of bytes to print
+       * @param startAddress Address to display against values
+       * @param organisation Size of data & address increment
+       */
+      static void    printDump(const uint8_t *data,
+                               unsigned int size,
+                               unsigned int startAddress=0x0000,
+                               unsigned int organization=BYTE_ADDRESS|BYTE_DISPLAY);
+      /**
+       * Set logging handle
+       *
+       * @param newLogFile file handle to set
+       */
+      static void    setLogFileHandle(FILE *logFile);
+      /**
+       * Get logging handle
+       *
+       * @return file handle
+       */
+      static FILE*   getLogFileHandle();
+   };
+
+#define LOGGING_F UsbdmSystem::Log log(__PRETTY_FUNCTION__, UsbdmSystem::Log::forced)
+#define LOGGING_Q UsbdmSystem::Log log(__PRETTY_FUNCTION__, UsbdmSystem::Log::neither)
+#define LOGGING_E UsbdmSystem::Log log(__PRETTY_FUNCTION__, UsbdmSystem::Log::entry)
+#define LOGGING_X UsbdmSystem::Log log(__PRETTY_FUNCTION__, UsbdmSystem::Log::exit)
+#define LOGGING   UsbdmSystem::Log log(__PRETTY_FUNCTION__, UsbdmSystem::Log::both)
+#define LOGGING_NONAME   UsbdmSystem::Log log("", UsbdmSystem::Log::neither)
+
+#else // !defined(LOG)
+   /**
+    * Class providing logging features
+    */
+public:
+   class USBDM_SYSTEM_DECLSPEC Log {
+   private:
+      /**
+       * This class is not intended to be copied
+       */
+      Log(const Log&) = delete;
+      Log(Log&&) = delete;
+
+   public:
+      enum When {neither, entry, exit, both};
+
+      /**
+       * Minimum constructor
+       */
+      Log() {};
+      /**
+       * Minimum destructor
        */
       ~Log() {};
       /**  \brief Open log file
@@ -255,6 +369,8 @@ public:
       /** \brief Turns logging on or off
        *
        *  @param value - true/false => on/off logging
+       *
+       *  @note This change is discarded on exit from the enclosing function.
        */
       static void enableLogging(bool value) {(void)value;}
       /**  \brief Set logging level relative to current level
@@ -276,13 +392,23 @@ public:
        *
        *  @param format Format and parameters as for printf()
        */
+      static void errorq(const char *format, ...) {(void)format;}
+      /** \brief Provides a print function which prints data into a log file. No time stamp.
+       *
+       *  @param format Format and parameters as for printf()
+       */
       static void print(const char *format, ...) {(void)format;}
       /** \brief Provides a print function which prints data into a log file.
        *
        *  @param format Format and parameters as for printf()
        */
       static void warning(const char *format, ...) {(void)format;}
-      /** \brief Provides a print function which prints data into a log file.
+      /** \brief Provides a print function which prints data into a log file. No time stamp.
+       *
+       *  @param format Format and parameters as for printf()
+       */
+      static void warningq(const char *format, ...) {(void)format;}
+      /** \brief Provides a print function which prints data into a log file. No time stamp.
        *
        *  @param format Format and parameters as for printf()
        */
@@ -316,6 +442,8 @@ public:
        */
       static void enableTimestamping(bool enable=true) {(void)enable;}
    };
+   //! Force logging in function
+   #define LOGGING_F UsbdmSystem::Log log
    //! Enable logging in function
    #define LOGGING_Q UsbdmSystem::Log log
    //! Enable logging in function & log entry
@@ -324,6 +452,9 @@ public:
    #define LOGGING_X UsbdmSystem::Log log
    //! Enable logging in function & log entry and exit
    #define LOGGING   UsbdmSystem::Log log
+   //! Enable logging in function & suppress function name
+   #define LOGGING_NONAME   UsbdmSystem::Log log
+
 #endif
 
 };

@@ -1480,11 +1480,14 @@ USBDM_ErrorCode USBDM_GetCommandStatus(void) {
 
 /**
  * Does basic connect to target
+ *
+ * ARM-SWD - Does JTAG to Serial Wire switching only
+ * Other targets same as USBDM_Connect()
  */
-CPP_DLL_LOCAL
+USBDM_API
 USBDM_ErrorCode USBDM_BasicConnect(void) {
    USBDM_ErrorCode rc;
-   LOGGING;
+   LOGGING_F;
 
    usb_data[0] = 0;
    usb_data[1] = CMD_USBDM_CONNECT;
@@ -1511,10 +1514,9 @@ USBDM_ErrorCode USBDM_BasicConnect(void) {
 USBDM_API
 USBDM_ErrorCode USBDM_Connect(void) {
 USBDM_ErrorCode rc;
-   LOGGING;
-   log.setLoggingLevel(10); // Always log connect sequence
+   LOGGING_F;
+//   log.setLoggingLevel(10); // Always log connect sequence
    bdmState.activityFlag = BDM_ACTIVE;
-
 
    if ((bdmOptions.targetType == T_ARM_SWD) || (bdmOptions.targetType == T_ARM_JTAG)) {
       rc = armConnect(bdmOptions.targetType);
@@ -1774,7 +1776,7 @@ USBDM_ErrorCode USBDM_WriteControlReg(unsigned int value) {
 
    bdmState.activityFlag = BDM_ACTIVE;
 
-   log.print("reg=%s\n", getStatusRegName(bdmState.targetType, value));
+   log.warning("reg=%s\n", getStatusRegName(bdmState.targetType, value));
    usb_data[0] = 0;
    usb_data[1] = CMD_USBDM_WRITE_CONTROL_REG;
    usb_data[2] = 0;     // 32-bit BE
@@ -1997,7 +1999,7 @@ USBDM_ErrorCode USBDM_TargetReset(TargetMode_t target_mode) {
    LOGGING;
    USBDM_ErrorCode rc;
    bdmState.activityFlag = BDM_ACTIVE;
-   log.print("mode=%s\n", getTargetModeName(target_mode));
+   log.warning("mode=%s\n", getTargetModeName(target_mode));
 
    switch (bdmState.targetType) {
    case T_HC12:
@@ -2104,7 +2106,7 @@ USBDM_ErrorCode USBDM_WriteReg(unsigned int regNo, unsigned long regValue) {
    LOGGING_Q;
 
 #ifdef LOG
-   log.print("reg=%s(%d), 0x%lX\n",
+   log.warning("reg=%s(%d), 0x%lX\n",
          getRegName( bdmState.targetType, regNo ), regNo, regValue);
 #endif
 
@@ -2176,7 +2178,7 @@ USBDM_ErrorCode USBDM_ReadReg(unsigned int regNo, unsigned long *regValue) {
                   (usb_data[4]);
    }
 #ifdef LOG
-   log.print("reg=%s => 0x%lX\n",
+   log.warning("reg=%s => 0x%lX\n",
          getRegName( bdmState.targetType, regNo ), *regValue);
 #endif
 
@@ -2252,32 +2254,30 @@ USBDM_ErrorCode USBDM_WriteCReg(unsigned int regNo, unsigned long regValue) {
 
    bdmState.activityFlag = BDM_ACTIVE;
 
-#ifdef LOG
+#if defined(LOG)
    switch (bdmState.targetType) {
       case T_CFV1 :
-         log.print("reg=%s(0x%X), 0x%lX\n",
-               getCFV1ControlRegName(regNo), regNo, regValue);
+         log.warning("reg=%s(0x%X), 0x%lX\n", getCFV1ControlRegName(regNo), regNo, regValue);
          break;
       case T_CFVx :
-         log.print("reg=%s(0x%X), 0x%lX\n",
-               getCFVxControlRegName(regNo), regNo, regValue);
+         log.warning("reg=%s(0x%X), 0x%lX\n", getCFVxControlRegName(regNo), regNo, regValue);
          break;
       case T_ARM_SWD :
       case T_ARM_JTAG :
          switch (regNo) {
          case ARM_CRegMDM_AP_Status:
-            log.print("reg=MDM-AP.Status,  %s(0x%08lX)\n", getMDM_APStatusName((uint32_t)regValue), regValue);
+            log.warning("reg=MDM_AP.Status,  %s(0x%08lX)\n", getMDM_APStatusName((uint32_t)regValue), regValue);
             break;
          case ARM_CRegMDM_AP_Control:
-            log.print("reg=MDM-AP.Control, %s(0x%08lX)\n", getMDM_APControlName((uint32_t)regValue),regValue);
+            log.warning("reg=MDM_AP.Control, %s(0x%08lX)\n", getMDM_APControlName((uint32_t)regValue),regValue);
             break;
          default:
-            log.print("reg=%s(0x%X), 0x%08lX)\n", getARMControlRegName(regNo), regNo, regValue);
+            log.warning("reg=%s(0x%X), 0x%08lX)\n", getARMControlRegName(regNo), regNo, regValue);
             break;
          }
          break;
       default :
-         log.print("Failed - Unknown mode, register(0x%4X) = 0x%lX\n",
+         log.warning("Failed - Unknown mode, register(0x%4X) = 0x%lX\n",
                regNo, regValue);
          break;
    };
@@ -2353,27 +2353,27 @@ USBDM_ErrorCode USBDM_ReadCReg(unsigned int regNo, unsigned long *regValue) {
 #ifdef LOG
    switch (bdmState.targetType) {
       case T_CFV1 :
-         log.print("reg=%s(0x%X), 0x%lX\n", getCFV1ControlRegName(regNo), regNo, *regValue);
+         log.warning("reg=%s(0x%X), 0x%lX\n", getCFV1ControlRegName(regNo), regNo, *regValue);
          break;
       case T_CFVx :
-         log.print("reg=%s(0x%X), 0x%lX\n", getCFVxControlRegName(regNo), regNo, *regValue);
+         log.warning("reg=%s(0x%X), 0x%lX\n", getCFVxControlRegName(regNo), regNo, *regValue);
          break;
       case T_ARM_SWD :
       case T_ARM_JTAG :
          switch (regNo) {
          case ARM_CRegMDM_AP_Status:
-            log.print("reg=MDM-AP.Status,  %s(0x%08lX)\n", getMDM_APStatusName(*regValue), *regValue);
+            log.warning("reg=MDM_AP.Status,  %s(0x%08lX)\n", getMDM_APStatusName(*regValue), *regValue);
             break;
          case ARM_CRegMDM_AP_Control:
-            log.print("reg=MDM-AP.Control, %s(0x%08lX)\n", getMDM_APControlName(*regValue),*regValue);
+            log.warning("reg=MDM_AP.Control, %s(0x%08lX)\n", getMDM_APControlName(*regValue),*regValue);
             break;
          default:
-            log.print("reg=%s(0x%X), 0x%08lX\n", getARMControlRegName(regNo), regNo, *regValue);
+            log.warning("reg=%s(0x%X), 0x%08lX\n", getARMControlRegName(regNo), regNo, *regValue);
             break;
          }
          break;
       default :
-         log.print("Failed - Unknown mode, register(0x%4X) = 0x%lX\n", regNo, *regValue);
+         log.warning("Failed - Unknown mode, register(0x%4X) = 0x%lX\n", regNo, *regValue);
          break;
    };
 #endif
@@ -2401,37 +2401,37 @@ USBDM_ErrorCode USBDM_WriteDReg(unsigned int regNo, unsigned long regValue) {
    LOGGING_Q;
 
    bdmState.activityFlag = BDM_ACTIVE;
-#ifdef LOG
+#if defined(LOG)
    switch (bdmState.targetType) {
       case T_HC12 :
-         log.print("%s(0x%X) <= 0x%lX\n",
+         log.warning("%s(0x%X) <= 0x%lX\n",
                getHCS12DebugRegName(regNo), regNo, regValue);
          break;
       case T_HCS08 :
-         log.print("BKPT <= 0x%lX\n", regValue);
+         log.warning("BKPT <= 0x%lX\n", regValue);
          break;
       case T_RS08 :
-         log.print("BKPT <= 0x%lX\n", regValue);
+         log.warning("BKPT <= 0x%lX\n", regValue);
          break;
       case T_CFV1 :
-         log.print("%s(0x%X) <= 0x%lX\n",
+         log.warning("%s(0x%X) <= 0x%lX\n",
                getCFV1DebugRegName(regNo), regNo, regValue);
          break;
       case T_CFVx :
-         log.print("%s(0x%X) <= 0x%lX\n",
+         log.warning("%s(0x%X) <= 0x%lX\n",
                getCFVxDebugRegName(regNo), regNo, regValue);
          break;
       case T_ARM_SWD :
       case T_ARM_JTAG :
          if (regNo == ARM_DRegCONTROL) {
-            log.print("reg=%s(0x%X) <= %s)\n", getSWDDebugRegName(regNo), regNo, getARM_CTRL_STATUSRName(regValue));
+            log.warning("reg=%s(0x%X) <= %s)\n", getSWDDebugRegName(regNo), regNo, getARM_CTRL_STATUSRName(regValue));
          }
          else {
-            log.print("%s(0x%X) <= 0x%lX\n", getSWDDebugRegName(regNo), regNo, regValue);
+            log.warning("%s(0x%X) <= 0x%lX\n", getSWDDebugRegName(regNo), regNo, regValue);
          }
          break;
       default :
-         log.print("Unknown mode, register(0x%4X) <= 0x%lX\n",
+         log.warning("Unknown mode, register(0x%4X) <= 0x%lX\n",
                regNo, regValue);
          break;
    };
@@ -2495,35 +2495,35 @@ USBDM_ErrorCode USBDM_ReadDReg(unsigned int regNo, unsigned long *regValue) {
 #ifdef LOG
    switch (bdmState.targetType) {
       case T_HC12 :
-         log.print("%s(0x%X) => 0x%lX\n",
+         log.warning("%s(0x%X) => 0x%lX\n",
                getHCS12DebugRegName(regNo), regNo, *regValue);
          break;
       case T_HCS08 :
-         log.print("BKPT => 0x%lX\n", *regValue);
+         log.warning("BKPT => 0x%lX\n", *regValue);
          break;
       case T_RS08 :
-         log.print("BKPT => 0x%lX\n", *regValue);
+         log.warning("BKPT => 0x%lX\n", *regValue);
          break;
       case T_CFV1 :
          log.print("%s(0x%X) => 0x%lX\n",
                   getCFV1DebugRegName(regNo), regNo, *regValue);
          break;
       case T_CFVx :
-         log.print("%s(0x%X) => 0x%lX=>%s\n",
+         log.warning("%s(0x%X) => 0x%lX=>%s\n",
                   getCFVxDebugRegName(regNo), regNo, *regValue,
                   getCFVx_CSR_Name(*regValue));
          break;
       case T_ARM_SWD :
       case T_ARM_JTAG :
          if (regNo == ARM_DRegCONTROL) {
-            log.print("reg=%s(0x%X) => (0x%lX)%s)\n", getSWDDebugRegName(regNo), regNo, *regValue, getARM_CTRL_STATUSRName(*regValue));
+            log.warning("reg=%s(0x%X) => (0x%lX)%s)\n", getSWDDebugRegName(regNo), regNo, *regValue, getARM_CTRL_STATUSRName(*regValue));
          }
          else {
-            log.print("%s(0x%X) => 0x%lX\n", getSWDDebugRegName(regNo), regNo, *regValue);
+            log.warning("%s(0x%X) => 0x%lX\n", getSWDDebugRegName(regNo), regNo, *regValue);
          }
          break;
       default :
-         log.print("Failed - Unknown target, register(0x%4X) => 0x%lX\n",
+         log.warning("Failed - Unknown target, register(0x%4X) => 0x%lX\n",
                regNo, *regValue);
          break;
    };
@@ -2620,7 +2620,7 @@ USBDM_ErrorCode USBDM_WriteMemory( unsigned int        memorySpace,
 
    bdmState.activityFlag = BDM_ACTIVE;
 
-   log.print("elementSize=%d, count=0x%X(%d), addr=[%s0x%06X..0x%06X]\n",
+   log.warning("elementSize=%d, count=0x%X(%d), addr=[%s0x%06X..0x%06X]\n",
          elementSize, byteCount, byteCount, getMemSpaceAbbreviatedName((MemorySpace_t)memorySpace), address, address+byteCount-1);
 
    log.printDump(data, byteCount, address);
@@ -2704,7 +2704,7 @@ USBDM_ErrorCode USBDM_WriteMemory( unsigned int        memorySpace,
          }
       }
       if ((bdmState.targetType == T_ARM_SWD)||(bdmState.targetType == T_ARM_JTAG)) {
-         // Make sure ARM memory access doesn't cross 2^10 boundary as limitation of MDM-AP
+         // Make sure ARM memory access doesn't cross 2^10 boundary as limitation of MDM_AP
          uint32_t nextPageBoundary = (address + (1UL<<10))&~((1UL<<10)-1);
          if ((address+blockSize-1) >= nextPageBoundary) {
             log.print("Access split due to crossing 2^10 boundary, A=0x%X, B=0x%X\n", address, nextPageBoundary);
@@ -2768,7 +2768,7 @@ USBDM_ErrorCode USBDM_ReadMemory( unsigned int  memorySpace,
 
    bdmState.activityFlag = BDM_ACTIVE;
 
-   log.print("elementSize=%d, count=0x%X(%d), addr=[%s0x%06X..0x%06X]\n",
+   log.warning("elementSize=%d, count=0x%X(%d), addr=[%s0x%06X..0x%06X]\n",
           elementSize, byteCount, byteCount, getMemSpaceAbbreviatedName((MemorySpace_t)memorySpace), address, address+byteCount-1);
 
    #ifdef FIX_ALIGNMENT
@@ -2849,7 +2849,7 @@ USBDM_ErrorCode USBDM_ReadMemory( unsigned int  memorySpace,
          }
       }
       if ((bdmState.targetType == T_ARM_SWD) || (bdmState.targetType == T_ARM_JTAG)) {
-         // Make sure ARM memory access doesn't cross 2^10 boundary as limitation of MDM-AP
+         // Make sure ARM memory access doesn't cross 2^10 boundary as limitation of MDM_AP
          uint32_t nextPageBoundary = (address + (1UL<<10))&~((1UL<<10)-1);
          if ((address+blockSize-1) >= nextPageBoundary) {
             log.print("Access split due to crossing 2^10 boundary, A=0x%X, B=0x%X\n", address, nextPageBoundary);

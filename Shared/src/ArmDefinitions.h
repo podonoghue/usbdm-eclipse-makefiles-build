@@ -194,6 +194,8 @@
 #define AIRCR_VECTRESET     (1<<0)                       // Local system reset (only in debug state!)
 
 #define FP_CTRL   (0xE0002000) // See Flash Patch Control Register on page 11-8
+inline constexpr uint32_t FP_CTRL_NUM_CODE(uint32_t fpCont) {return ((fpCont>>(12-4))&(0b111<<4))|((fpCont>>4)&0b1111); }
+
 #define FP_REMAP  (0xE0002004) // See Flash Patch Remap Register on page 11-9
 #define FP_COMP0  (0xE0002008) // See Flash Patch Comparator Registers on page 11-10
 #define FP_COMP1  (0xE000200C) // See Flash Patch Comparator Registers on page 11-10
@@ -227,6 +229,8 @@
 #define FP_COMP_DISABLE    (0)                  // Disable for this comparator
 
 #define DWT_CTRL       (0xE0001000) // See DWT Control Register on page 11-14
+inline constexpr uint32_t DWT_CTRL_NUMCOMP(uint32_t dwtCtrl) {return (dwtCtrl>>28)&0b1111; }
+
 #define DWT_CYCCNT     (0xE0001004) // See DWT Current PC Sampler Cycle Count Register on page 11-17
 #define DWT_CPICNT     (0xE0001008) // See DWT CPI Count Register on page 11-18
 #define DWT_EXCCNT     (0xE000100C) // See DWT Exception Overhead Count Register on page 11-19
@@ -258,7 +262,8 @@
 //#define PCELLID2       (0xE0001FF8) // Value 0x05
 //#define PCELLID3       (0xE0001FFC) // Value 0xB1
 
-#define DWT_MASK_MASK (0x0F)
+#define DWT_FUNCTION_MASK (0x0F)
+#define DWT_FUNCTION_MATCHED (1<<24)
 
 #define DWT_FUNCTION_READ_WATCH  (0x5)
 #define DWT_FUNCTION_WRITE_WATCH (0x6)

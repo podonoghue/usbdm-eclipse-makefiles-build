@@ -520,8 +520,6 @@ static USBDM_ErrorCode armCheckAPs(void) {
    USBDM_ErrorCode rc;
    unsigned long dataIn;
 
-   log.print("\n");
-
    // Check if Kinetis MDM-AP is present
    rc = USBDM_ReadCReg(ARM_CRegMDM_AP_Ident, &dataIn);
    if (rc != BDM_RC_OK) {

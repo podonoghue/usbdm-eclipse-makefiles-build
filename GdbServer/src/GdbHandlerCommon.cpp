@@ -16,7 +16,11 @@
 #include "UsbdmTclInterpreterFactory.h"
 #include "signals.h"
 #include "Names.h"
-#include "Utils.h"
+
+#define THREAD_STOPPED_STRING    "thread:1;"
+#define THREAD_INFO_STRING       "m1"
+//#define THREAD_STOPPED_STRING    ""
+//#define THREAD_INFO_STRING       ""
 
 GdbHandlerCommon *GdbHandlerCommon::This=0;
 
@@ -30,42 +34,38 @@ static const char targetXML[] =
 
 GdbHandlerCommon::GdbHandlerCommon(
       TargetType_t              targetType,
+      GdbHandlerOwner          &owner,
       GdbInOut                 *gdbInOut,
       BdmInterfacePtr           bdmInterface,
       DeviceInterfacePtr        deviceInterface,
       GdbBreakpoints           *gdbBreakpoints,
-      GdbCallback               gdbCallBackPtr,
       IGdbTty                  *tty,
       DeviceData::ResetMethod   defaultResetMethod) :
-         GdbHandler(),
-         gdbBreakpoints(gdbBreakpoints),
-         initBreakpointsDone(false),
-         programmingDone(false),
          targetType(targetType),
+         owner(owner),
          gdbInOut(gdbInOut),
          bdmInterface(bdmInterface),
          deviceInterface(deviceInterface),
-         deviceData(deviceInterface->getCurrentDevice()),
+         gdbBreakpoints(gdbBreakpoints),
          tty(tty),
-         defaultResetMethod(defaultResetMethod)
-         {
+         defaultResetMethod(defaultResetMethod),
+         initBreakpointsDone(false),
+         programmingDone(false),
+         deviceData(deviceInterface->getCurrentDevice()),
+         nonStopMode(false),
+         haltNotice(nullptr)
+{
    LOGGING;
 
-   if (gdbCallBackPtr == 0) {
-      this->gdbCallBackPtr      = dummyCallback;
-   }
-   else {
-      this->gdbCallBackPtr      = gdbCallBackPtr;
-   }
-   runState                     = Halted;
+   runState                     = RunState_Halted;
+   vStoppedAvailable            = false;
    useFastRegisterRead          = true;
    unsuccessfulPollCount        = 0;
-   targetBreakPending           = false;
+   forceTargetHalt              = false;
    registerBufferSize           = 0;
    targetRegsXMLSize            = 0;
    targetLastRegIndex           = 0;
    targetRegsXMLSize            = 0;
-   lastStoppedPC                = 0;
 
    This = this;
 
@@ -92,21 +92,36 @@ USBDM_ErrorCode GdbHandlerCommon::initialise() {
    if (rc != BDM_RC_OK) {
       log.error("Connect failed, rc = %s\n", bdmInterface->getErrorString(rc));
    }
+   rc = bdmInterface->halt();
+   if (rc == BDM_RC_OK) {
+      // Immediately update status
+      pollTarget();
+   }
    return rc;
-}
-
-USBDM_ErrorCode GdbHandlerCommon::dummyCallback(const char *msg, GdbMessageLevel level, USBDM_ErrorCode rc) {
-   return BDM_RC_FAIL;
 }
 
 void GdbHandlerCommon::errorLogger(const char *msg) {
    This->reportGdbPrintf(M_ERROR, "%s\n", msg);
 }
 
+/**
+ * Extract a 32-bit big value from a byte array
+ *
+ * @param buff Array containing value
+ *
+ * @return 32-bit value from 4-bytes of the array
+ */
 uint32_t GdbHandlerCommon::get32bitBE(uint8_t buff[]) {
    return (buff[0]<<24)+(buff[1]<<16)+(buff[2]<<8)+(buff[3]);
 }
 
+/**
+ * Extract a 32-bit little-endian value from a byte array
+ *
+ * @param buff Array containing value
+ *
+ * @return 32-bit value from 4-bytes of the array
+ */
 uint32_t GdbHandlerCommon::get32bitLE(uint8_t buff[]) {
    return (buff[0])+(buff[1]<<8)+(buff[2]<<16)+(buff[3]<<24);
 }
@@ -123,15 +138,11 @@ uint32_t GdbHandlerCommon::get32bitLE(uint8_t buff[]) {
  *   @note assumes BDM_RC_OK error code (i.e. no error)
  */
 USBDM_ErrorCode GdbHandlerCommon::reportGdbPrintf(GdbMessageLevel level, USBDM_ErrorCode rc, const char *format, ...) {
-   if (gdbCallBackPtr != NULL) {
-      char buff[200];
-      va_list list;
-      va_start(list, format);
-      vsnprintf(buff, sizeof(buff), format, list);
-
-      return (*gdbCallBackPtr)(buff, level, rc);
-   }
-   return BDM_RC_OK;
+   char buff[200];
+   va_list list;
+   va_start(list, format);
+   vsnprintf(buff, sizeof(buff), format, list);
+   return    owner.displayMessage(buff, level, rc);
 }
 
 /**  Writes status message in 'printf' manner
@@ -145,14 +156,11 @@ USBDM_ErrorCode GdbHandlerCommon::reportGdbPrintf(GdbMessageLevel level, USBDM_E
  *   @note assumes BDM_RC_OK error code (i.e. no error)
  */
 USBDM_ErrorCode GdbHandlerCommon::reportGdbPrintf(GdbMessageLevel level, const char *format, ...) {
-   if (gdbCallBackPtr != NULL) {
-      char buff[200];
-      va_list list;
-      va_start(list, format);
-      vsnprintf(buff, sizeof(buff), format, list);
-      return (*gdbCallBackPtr)(buff, level, BDM_RC_OK);
-   }
-   return BDM_RC_OK;
+   char buff[200];
+   va_list list;
+   va_start(list, format);
+   vsnprintf(buff, sizeof(buff), format, list);
+   return owner.displayMessage(buff, level, BDM_RC_OK);
 }
 
 /**  Writes status message in 'printf' manner
@@ -166,18 +174,23 @@ USBDM_ErrorCode GdbHandlerCommon::reportGdbPrintf(GdbMessageLevel level, const c
  *   @note assumed M_BORINGINFO interest level
  */
 USBDM_ErrorCode GdbHandlerCommon::reportGdbPrintf(const char *format, ...) {
-   if (gdbCallBackPtr != NULL) {
-      char buff[200];
-      va_list list;
-      va_start(list, format);
-      vsnprintf(buff, sizeof(buff), format, list);
-
-      return (*gdbCallBackPtr)(buff, M_BORINGINFO, BDM_RC_OK);
-   }
+   char buff[200];
+   va_list list;
+   va_start(list, format);
+   vsnprintf(buff, sizeof(buff), format, list);
+   return owner.displayMessage(buff, M_BORINGINFO, BDM_RC_OK);
    return BDM_RC_OK;
 }
 
-// Note - the following assume bigendian
+/**
+ * Convert a ASCII-HEX character to integer
+ *
+ * @param[in]  ch      Character to convert ('0'-'9', 'a'-'f' or 'A'-'F')
+ * @param[out] value   Value in range 0-15
+ *
+ * @return true  => successful conversion
+ * @return false => unsuccessful conversion (invalid character found)
+ */
 bool GdbHandlerCommon::hexToInt(char ch, int *value) {
    if ((ch >= '0') && (ch <= '9')) {
       *value = (ch - '0');
@@ -194,6 +207,15 @@ bool GdbHandlerCommon::hexToInt(char ch, int *value) {
    return false;
 }
 
+/**
+ * Convert ASCII-HEX 8-character string to integer
+ *
+ * @param[in]  ch      Characters to convert ('0'-'9', 'a'-'f' or 'A'-'F')
+ * @param[out] value   32-bit value
+ *
+ * @return true  => successful conversion
+ * @return false => unsuccessful conversion (invalid character found)
+ */
 bool GdbHandlerCommon::hexToInt32(const char *ch, unsigned long *value) {
    *value = 0;
    for (int i=0; i<8; i++) {
@@ -206,7 +228,16 @@ bool GdbHandlerCommon::hexToInt32(const char *ch, unsigned long *value) {
    return true;
 }
 
-long GdbHandlerCommon::hexToInt16(const char *ch, unsigned long *value) {
+/**
+ * Convert ASCII-HEX 4-character string to integer
+ *
+ * @param[in]  ch      Characters to convert ('0'-'9', 'a'-'f' or 'A'-'F')
+ * @param[out] value   16-bit value
+ *
+ * @return true  => successful conversion
+ * @return false => unsuccessful conversion (invalid character found)
+ */
+bool GdbHandlerCommon::hexToInt16(const char *ch, unsigned long *value) {
    *value = 0;
    for (int i=0; i<4; i++) {
       int temp;
@@ -218,7 +249,16 @@ long GdbHandlerCommon::hexToInt16(const char *ch, unsigned long *value) {
    return true;
 }
 
-long GdbHandlerCommon::hexToInt8(const char *ch, unsigned long *value) {
+/**
+ * Convert ASCII-HEX 2-character string to integer
+ *
+ * @param[in]  ch      Characters to convert ('0'-'9', 'a'-'f' or 'A'-'F')
+ * @param[out] value   8-bit value
+ *
+ * @return true  => successful conversion
+ * @return false => unsuccessful conversion (invalid character found)
+ */
+bool GdbHandlerCommon::hexToInt8(const char *ch, unsigned long *value) {
    *value = 0;
    for (int i=0; i<2; i++) {
       int temp;
@@ -230,32 +270,12 @@ long GdbHandlerCommon::hexToInt8(const char *ch, unsigned long *value) {
    return true;
 }
 
-/** Checks if two string are equal
- *  @param s1 first string
- *  @paran s2 second string
+/**
+ * Report status to GDB ("O...")
  *
- *  @return true if equal, false otherwise
+ *   @param s    - '\0' terminated string to send encoded
+ *   @param size - maximum size of encoded string to send (-1 ignored)
  */
-bool GdbHandlerCommon::streq(const char *s1, const char *s2) {
-   return strcmp(s1,s2) == 0;
-}
-
-/** Checks if two string are equal
- *
- *  @param s1 first string
- *  @paran s2 second string
- *  @param length number of characters to check
- *
- *  @return true if equal in the first length characters, false otherwise
- */
-bool GdbHandlerCommon::strneq(const char *s1, const char *s2, int length) {
-   return strncmp(s1,s2,length) == 0;
-}
-
-//! Report status to GDB ("O...")
-//!
-//! @param s          - string describing status
-//!
 void GdbHandlerCommon::reportStatusToGdb(const char *s, int size) {
    LOGGING_Q;
    gdbInOut->sendGdbHexString("O", s, size);
@@ -279,9 +299,10 @@ UsbdmTclInterperPtr GdbHandlerCommon::getTclInterface() {
  * @param command Command to execute
  */
 USBDM_ErrorCode GdbHandlerCommon::runTCLCommand(const char *command) {
-   LOGGING;
+   LOGGING_Q;
    log.print("Command = '%s'\n", command);
 
+   log.enableLogging(false);
    USBDM_ErrorCode rc = getTclInterface()->evalTclScript(command);
    if (rc != BDM_RC_OK) {
       log.error("Failed - rc = %d (%s)\n", rc, bdmInterface->getErrorString(rc));
@@ -312,7 +333,7 @@ DeviceData::ResetMethod GdbHandlerCommon::getResetMethod() {
          resetMethod = resetMethods->getDefaultMethod();
       }
    }
-   log.print("Reset method = %s\n", DeviceData::getResetMethodName(resetMethod));
+//   log.print("Reset method = %s\n", DeviceData::getResetMethodName(resetMethod));
    return resetMethod;
 }
 
@@ -321,10 +342,12 @@ USBDM_ErrorCode GdbHandlerCommon::resetTarget(DeviceData::ResetMethod resetMetho
 
    TargetMode_t targetMode;
 
-   log.error("Reset method %s\n", DeviceData::getResetMethodName(resetMethod));
    if (resetMethod == DeviceData::resetTargetDefault) {
       resetMethod = getResetMethod();
       log.error("Reset defaulted to method %s\n", DeviceData::getResetMethodName(resetMethod));
+   }
+   else {
+      log.error("Reset method %s\n", DeviceData::getResetMethodName(resetMethod));
    }
    switch (resetMethod) {
       default:
@@ -347,13 +370,26 @@ USBDM_ErrorCode GdbHandlerCommon::resetTarget(DeviceData::ResetMethod resetMetho
       return rc;
    }
    runTCLCommand("initTarget");
+   readRegs();
    return rc;
 }
 
 USBDM_ErrorCode GdbHandlerCommon::haltTarget() {
-   LOGGING;
+//   LOGGING;
 
    return bdmInterface->halt();
+}
+
+/**
+ * Notify GDB of target status change
+ *
+ * @return
+ */
+USBDM_ErrorCode GdbHandlerCommon::notifyGdb() {
+   if (runState != RunState_Running) {
+      reportHalt('T', TARGET_SIGNAL_INT);
+   }
+   return BDM_RC_OK;
 }
 
 /**
@@ -367,30 +403,29 @@ USBDM_ErrorCode GdbHandlerCommon::stepTarget(bool disableInterrupts) {
    unsigned long pc;
    readPC(&pc);
    log.print("step from 0x%lX\n", pc);
-   return bdmInterface->step();
+   bdmInterface->step();
+   runState = RunState_Stepping;
+   registerBufferSize = 0;
+
+   return BDM_RC_OK;
 }
 
 /**
  *    Continue target
  *
- *    If at a breakpoint then a single step is done (with interrupts masked) before
- *    continuing at full execution.
  *    Breakpoints are activated.
  */
 USBDM_ErrorCode GdbHandlerCommon::continueTarget(void) {
    LOGGING_Q;
    unsigned long currentPC;
    readPC(&currentPC);
-   if (atBreakpoint(currentPC)) {
-      // Do 1 step before activating memory breakpoints
-      log.print("Continue - stepping one instruction...\n");
-      stepTarget(true);
-   }
    maskInterrupts(false);
    activateBreakpoints();
-   log.print("Continue - executing...\n");
    bdmInterface->go();
+   runState = RunState_Running;
    log.print("Continue - Now running\n");
+   registerBufferSize = 0;
+
    return BDM_RC_OK;
 }
 
@@ -472,18 +507,21 @@ USBDM_ErrorCode GdbHandlerCommon::doMonitorCommand(const char *cmd) {
    }
    *bPtr = '\0';
    log.print("%s\n", command);
-   if (strneq(command, "read", sizeof("read")-1)) {
+   if (strStartsWith("read", command)) {
       doReadCommand(command);
    }
-   else if (strneq(command, "reset", sizeof("reset")-1)) {
+   else if (strStartsWith("reset", command)) {
       //TODO Handle parameters
       reportGdbPrintf(M_INFO, "User reset of target\n");
       resetTarget();
       gdbInOut->sendGdbHexString("O", "User reset of target\n", -1);
       gdbInOut->sendGdbString("OK");
+      if (nonStopMode) {
+         reportHalt('T', TARGET_SIGNAL_INT);
+      }
       registerBufferSize = 0;
    }
-   else if (strneq(command, "run", sizeof("run")-1)) {
+   else if (strStartsWith("run", command)) {
       // ignore any parameters
       reportGdbPrintf(M_INFO, "User run of target\n");
       bdmInterface->go();
@@ -491,7 +529,7 @@ USBDM_ErrorCode GdbHandlerCommon::doMonitorCommand(const char *cmd) {
       gdbInOut->sendGdbString("OK");
       registerBufferSize = 0;
    }
-   else if (strneq(command, "halt", sizeof("halt")-1)) {
+   else if (strStartsWith("halt", command)) {
       // ignore any parameters
       reportGdbPrintf(M_INFO, "User halt of target\n");
       bdmInterface->halt();
@@ -499,7 +537,7 @@ USBDM_ErrorCode GdbHandlerCommon::doMonitorCommand(const char *cmd) {
       gdbInOut->sendGdbString("OK");
       registerBufferSize = 0;
    }
-   else if (strneq(command, "speed", sizeof("speed")-1)) {
+   else if (strStartsWith("speed", command)) {
       int speedValue = 1000 * atoi(command+sizeof("speed"));
       bdmInterface->setSpeedHz(speedValue);
       reportGdbPrintf(M_INFO, "Setting speed %d\n", speedValue);
@@ -507,7 +545,7 @@ USBDM_ErrorCode GdbHandlerCommon::doMonitorCommand(const char *cmd) {
       gdbInOut->sendGdbHexString("O", "Done", -1);
       gdbInOut->sendGdbString("OK");
    }
-   else if (strneq(command, "delay", sizeof("delay")-1)) {
+   else if (strStartsWith("delay", command)) {
       // Ignored
       int delayValue = atoi(command+sizeof("delay"));
       reportGdbPrintf(M_INFO, "Executing delay %d ms\n", delayValue);
@@ -515,19 +553,19 @@ USBDM_ErrorCode GdbHandlerCommon::doMonitorCommand(const char *cmd) {
       gdbInOut->sendGdbHexString("O", "Done", -1);
       gdbInOut->sendGdbString("OK");
    }
-   else if (strneq(command, "maskisr", sizeof("maskisr")-1)) {
+   else if (strStartsWith("maskisr", command)) {
       char *ptr = command+sizeof("maskisr")-1;
       while (isspace(*ptr)) {
          ptr++;
       }
-      if (strneq(ptr, "1",  sizeof("1")-1) ||
-            strneq(ptr, "on", sizeof("on")-1) ||
-            strneq(ptr, "t",  sizeof("t")-1)) {
+      if (strStartsWith("1", ptr) ||
+            strStartsWith("on", ptr) ||
+            strStartsWith("t", ptr)) {
          bdmInterface->setMaskISR(true);
       }
-      else if (strneq(ptr, "0",   sizeof("1")-1) ||
-            strneq(ptr, "off", sizeof("off")-1) ||
-            strneq(ptr, "f",   sizeof("f")-1)) {
+      else if (strStartsWith("0", ptr) ||
+            strStartsWith("off", ptr) ||
+            strStartsWith("f", ptr)) {
          reportGdbPrintf(M_INFO, "maskisr On\n");
          bdmInterface->setMaskISR(false);
       }
@@ -542,7 +580,7 @@ USBDM_ErrorCode GdbHandlerCommon::doMonitorCommand(const char *cmd) {
       gdbInOut->sendGdbString("OK");
       registerBufferSize = 0;
    }
-   else if (strneq(command, "help", sizeof("help")-1)) {
+   else if (strStartsWith("help", command)) {
       gdbInOut->sendGdbHexString("O",
                                  "MON commands\n"
                                  "=====================\n"
@@ -553,10 +591,6 @@ USBDM_ErrorCode GdbHandlerCommon::doMonitorCommand(const char *cmd) {
                                  -1);
       gdbInOut->sendGdbString("OK");
    }
-//   else if (strneq(command, "status", sizeof("status")-1)) {
-//      // '?' Indicate the reason the target stopped.
-//      reportLocation('T', TARGET_SIGNAL_TRAP);
-//   }
    else {
       log.print("Unrecognised mon command: \'%s\'\n", cmd);
       reportGdbPrintf(M_INFO, "Unrecognised command: \'%s\'\n", cmd);
@@ -574,68 +608,76 @@ USBDM_ErrorCode GdbHandlerCommon::doQCommands(const GdbPacket *pkt) {
    if (strncmp(cmd, "qSupported", sizeof("qSupported")-1) == 0) {
       log.print("qSupported\n");
       char buff[200];
-#if NON_STOP_MODE
-      sprintf(buff,"QStartNoAckMode+;qXfer:memory-map:read+;PacketSize=%X;QNonStop+;qXfer:features:read+",GdbPacket::MAX_MESSAGE-10);
-#else
-      sprintf(buff,"QStartNoAckMode+;qXfer:memory-map:read+;PacketSize=%X;qXfer:features:read+",GdbPacket::MAX_MESSAGE-10);
+      char *cptr = buff;
+      cptr += sprintf(cptr,
+            "QStartNoAckMode+;qXfer:memory-map:read+;PacketSize=%X;qXfer:features:read+;hwbreak+;swbreak+;vContSupported+",
+            GdbPacket::MAX_MESSAGE-10);
+#if NON_STOP_SUPPORTED
+      cptr += sprintf(cptr,";QNonStop+");
 #endif
       gdbInOut->sendGdbString(buff);
    }
 // This was an experiment - in any case obsolete
-//   else if (strncmp(cmd, "qL", sizeof("qL")-1) == 0) { // set current thread
+//   else if (strStartsWith("qL", cmd)) {
 //      //                       qMnne<-----pid------><-----pid------>
 //      gdbInOut->sendGdbString("qM01100000000000000000000000000000100");
 //   }//qL1200000000000000000
-#if THREAD_MODE || 1
-   else if (strncmp(cmd, "qC", sizeof("qC")-1) == 0) { // set current thread
-      // Empty reply => use old thread ID
+#if THREAD_MODE
+   else if (strStartsWith("qC", cmd)) {
+      // Return the current thread ID.
+      // Empty response indicates use the previously selected thread
       gdbInOut->sendGdbString("");
    }
-//   else if (strncmp(cmd, "qfThreadInfo", sizeof("qfThreadInfo")-1) == 0) {
-//      if (getTargetStatus() != T_NOCONNECTION) {
-//         gdbInOut->sendGdbString("m-1");
-//      }
-//      else {
-//         gdbInOut->sendGdbString("l");
-//      }
-//   }
-   else if (strncmp(cmd, "qfThreadInfo", sizeof("qfThreadInfo")-1) == 0) {
-      gdbInOut->sendGdbString("1");
+   else if (strStartsWith("qfThreadInfo", cmd)) {
+      log.print("Thread Information - initial\n");
+      // All threads are active
+      gdbInOut->sendGdbString(THREAD_INFO_STRING);
    }
-   else if (strncmp(cmd, "qsThreadInfo", sizeof("qsThreadInfo")-1) == 0) {
+   else if (strStartsWith("qsThreadInfo", cmd)) {
+      log.print("Thread Information - later\n");
       gdbInOut->sendGdbString("l");
    }
-   else if (strncmp(cmd, "qThreadExtraInfo", sizeof("qThreadExtraInfo")-1) == 0) {
+   else if (strStartsWith("qThreadExtraInfo", cmd)) {
+      log.print("Thread Extra Info\n");
       gdbInOut->sendGdbHexString(NULL, "Runnable");
    }
 #endif
 #if DUMMY_TRACE_MODE
-   else if (strncmp(cmd, "qTStatus", sizeof("qTStatus")-1) == 0) {
+   else if (strStartsWith("qTStatus", cmd)) {
+      // Trace not supported
       // No trace experiment running right now
       gdbInOut->sendGdbString("T0;tnotrun:0");
    }
 #endif
-#if NON_STOP_MODE
-   else if (strncmp(cmd, "QNonStop", sizeof("QNonStop")-1) == 0) {
-      log.print("QNonStop\n");
+#if NON_STOP_SUPPORTED
+   else if (strStartsWith("QNonStop", cmd)) {
+      nonStopMode = cmd[sizeof("QNonStop")] == '1';
+      log.print("QNonStop %s\n", nonStopMode?"On":"Off");
       gdbInOut->sendGdbString("OK");
    }
 #endif
-   else if (strncmp(cmd, "qAttached", sizeof("qAttached")-1) == 0) {
-      log.print("qAttached\n");
-      gdbInOut->sendGdbString("1"); // TODO - try this change from 0
+   else if (strStartsWith("qSymbol", cmd)) {
+      log.print("qSymbol\n");
+      // Don't need symbol value
+      gdbInOut->sendGdbString("OK");
    }
-   else if (strncmp(cmd, "QStartNoAckMode", sizeof("QStartNoAckMode")-1) == 0) {
+   else if (strStartsWith("qAttached", cmd)) {
+      log.print("qAttached\n");
+      // 0 => The remote server created a new process.
+      // 1 => The remote server attached to an existing process.
+      gdbInOut->sendGdbString("1");
+   }
+   else if (strStartsWith("QStartNoAckMode", cmd)) {
       log.print("QStartNoAckMode\n");
       gdbInOut->sendGdbString("OK");
       gdbInOut->setAckMode(false);
    }
-   else if (strncmp(cmd, "qOffsets", sizeof("qOffsets")-1) == 0) {
+   else if (strStartsWith("qOffsets", cmd)) {
       log.print("qOffsets\n");
       // No relocation done
       gdbInOut->sendGdbString("Text=0;Data=0;Bss=0");
    }
-   else if (strncmp(cmd, "qXfer:memory-map:read::", sizeof("qXfer:memory-map:read::")-1) == 0) {
+   else if (strStartsWith("qXfer:memory-map:read::", cmd)) {
       if (sscanf(cmd,"qXfer:memory-map:read::%X,%X",&offset, &size) != 2) {
          log.print("Ill formed:\'%s\'", cmd);
          gdbInOut->sendGdbString("");
@@ -648,7 +690,7 @@ USBDM_ErrorCode GdbHandlerCommon::doQCommands(const GdbPacket *pkt) {
          sendXML(size, offset, xmlBuffer, xmlBufferSize);
       }
    }
-   else if (strncmp(cmd, "qXfer:features:read:target.xml:", sizeof("qXfer:features:read:target.xml:")-1) == 0) {
+   else if (strStartsWith("qXfer:features:read:target.xml:", cmd)) {
       if (targetRegsXMLSize > 0) {
          reportGdbPrintf(M_INFO, "Sending target description\n");
          if (sscanf(cmd,"qXfer:features:read:target.xml:%X,%X",&offset, &size) != 2) {
@@ -665,7 +707,7 @@ USBDM_ErrorCode GdbHandlerCommon::doQCommands(const GdbPacket *pkt) {
          gdbInOut->sendGdbString("");
       }
    }
-   else if (strncmp(cmd, "qXfer:features:read:targetRegs.xml:", sizeof("qXfer:features:read:targetRegs.xml:")-1) == 0) {
+   else if (strStartsWith("qXfer:features:read:targetRegs.xml:", cmd)) {
       reportGdbPrintf(M_INFO, "Sending register description\n");
       if (targetRegsXMLSize > 0) {
          if (sscanf(cmd,"qXfer:features:read:targetRegs.xml:%X,%X",&offset, &size) != 2) {
@@ -682,12 +724,12 @@ USBDM_ErrorCode GdbHandlerCommon::doQCommands(const GdbPacket *pkt) {
          gdbInOut->sendGdbString("");
       }
    }
-   else if (strncmp(cmd, "qRcmd,", sizeof("qRcmd,")-1) == 0) {
+   else if (strStartsWith("qRcmd", cmd)) {
       // Monitor command
       doMonitorCommand(cmd);
    }
    else {
-      log.print("Unrecognized command:\'%s\'\n", cmd);
+      log.print("Unrecognised command:\'%s\'\n", cmd);
       gdbInOut->sendGdbString("");
    }
    return BDM_RC_OK;
@@ -701,7 +743,7 @@ USBDM_ErrorCode GdbHandlerCommon::doVCommands(const GdbPacket *pkt) {
    int address, length;
    const char *cmd = pkt->buffer;
 
-   if (strncmp(cmd, "vFlashErase", 11) == 0) {
+   if (strStartsWith("vFlashErase", cmd)) {
       // vFlashErase:addr,length
       if (sscanf(cmd, "vFlashErase:%x,%x", &address, &length) != 2) {
          gdbInOut->sendErrorMessage(0x11);
@@ -712,7 +754,7 @@ USBDM_ErrorCode GdbHandlerCommon::doVCommands(const GdbPacket *pkt) {
          gdbInOut->sendGdbString("OK");
       }
    }
-   else if (strncmp(cmd, "vFlashWrite", 11) == 0) {
+   else if (strStartsWith("vFlashWrite", cmd)) {
       // vFlashWrite:addr:XX...
       if (sscanf(cmd, "vFlashWrite:%x:", &address) != 1) {
          log.print(" vFlashWrite:error:\n");
@@ -729,24 +771,25 @@ USBDM_ErrorCode GdbHandlerCommon::doVCommands(const GdbPacket *pkt) {
          vPtr = strchr(++vPtr, ':');
          vPtr++;
          int size=pkt->size-(vPtr-pkt->buffer);
-         bool newLine = true;
+//         bool newLine = true;
          while(size-->0) {
             flashImage->setValue(address, *vPtr);
-            if (newLine)
-               log.printq("\n%8.8X:", address);
-            log.printq("%2.2X", (unsigned char)*vPtr);
+//            if (newLine)
+//               log.printq("\n%8.8X:", address);
+//            log.printq("%2.2X", (unsigned char)*vPtr);
             address++;
             vPtr++;
-            newLine = (address & 0x0F) == 0;
+//            newLine = (address & 0x0F) == 0;
          }
          reportGdbPrintf(M_INFO, "%X]\n", address-1);
-         log.printq("\n");
+//         log.printq("\n");
          gdbInOut->sendGdbString("OK");
       }
    }
-   else if (strncmp(cmd, "vFlashDone", 10) == 0) {
+   else if (strStartsWith("vFlashDone", cmd)) {
       // vFlashDone
       log.print("vFlashDone\n");
+      log.enableLogging(false);
       if (flashImage != NULL) {
          reportGdbPrintf(M_INFO, "Programming Target Flash....\n");
          USBDM_ErrorCode rc = programImage(flashImage);
@@ -767,17 +810,52 @@ USBDM_ErrorCode GdbHandlerCommon::doVCommands(const GdbPacket *pkt) {
       }
       else {
          reportGdbPrintf(M_INFO, "Programming Flash Image skipped (empty image)\n");
-         log.print("vFlashDone: Memory image empty, programming skipped\n");
+         log.error("vFlashDone: Memory image empty, programming skipped\n");
+      }
+      log.enableLogging(true);
+      gdbInOut->sendGdbString("OK");
+   }
+   else if (strStartsWith("vCont", cmd)) {
+      doVContCommands(pkt);
+   }
+   else if (strStartsWith("vRun", cmd)) {
+      log.print("vRun\n");
+      log.print("Target Reset\n");
+      reportGdbPrintf(M_INFO, "Resetting target\n");
+      resetTarget();
+      tty->closeAll();
+      gdbInOut->sendGdbString("OK");
+   }
+   else if (strStartsWith("vKill", cmd)) {
+      log.print("vKill\n");
+      log.print("Target Reset\n");
+      reportGdbPrintf(M_INFO, "Resetting target\n");
+      resetTarget();
+      tty->closeAll();
+      gdbInOut->sendGdbString("OK");
+   }
+   else if (strStartsWith("vCtrlC", cmd)) {
+      log.print("vCtrlC\n");
+      reportGdbPrintf(M_INFO, "^C - Halting target\n");
+      forceTargetHalt = true;
+      if (runState == RunState_Running) {
+         haltTarget();
       }
       gdbInOut->sendGdbString("OK");
    }
-   else if (strncmp(cmd, "vCont", 5) == 0) {
-#ifdef VCONT_SUPPORTED
-      doVContCommands(pkt);
-#else
-      // Not yet supported
+   else if (strStartsWith("vStopped", cmd)) {
+      reportGdbPrintf(M_INFO, "vStopped\n");
+      if (vStoppedAvailable && (runState == RunState_Halted)) {
+         sendLocation();
+      }
+      else {
+         gdbInOut->sendGdbString("OK");
+      }
+   }
+   else if (strStartsWith("vMustReplyEmpty", cmd)) {
+      // Special unknown command which is really known so no error log
+      // requited response is that which is usual for an unknown 'v' command
       gdbInOut->sendGdbString("");
-#endif
    }
    else {
       log.print("Unrecognised command:\'%s\'\n", cmd);
@@ -787,7 +865,10 @@ USBDM_ErrorCode GdbHandlerCommon::doVCommands(const GdbPacket *pkt) {
 }
 
 USBDM_ErrorCode GdbHandlerCommon::programImage(FlashImagePtr flashImage) {
-   LOGGING;
+   LOGGING_F;
+//   log.enableLogging(false);
+   // Suppress detailed reporting of the programming operation
+   log.setLoggingLevel(0);
 
    if (deviceData->getEraseMethod() == DeviceData::eraseNone) {
       return BDM_RC_ILLEGAL_PARAMS;
@@ -866,9 +947,9 @@ void GdbHandlerCommon::createMemoryMapXML(const char **buffer, unsigned *bufferS
             size  = memoryRange->end - start + 1;
             log.printq(" - FLASH[0x%08X..0x%08X]\n", memoryRange->start, memoryRange->end);
             xmlPtr += sprintf(xmlPtr,
-                           "   <memory type=\"flash\" start=\"0x%X\" length=\"0x%X\" > \n"
-                           "      <property name=\"blocksize\">0x400</property> \n"
-                           "   </memory>\n",
+                           "<memory type=\"flash\" start=\"0x%X\" length=\"0x%X\" > \n"
+                           "   <property name=\"blocksize\">0x400</property> \n"
+                           "</memory>\n",
                            start, size);
             break;
          case MemFlexRAM:// Treat FlexRAM as RAM
@@ -944,17 +1025,91 @@ const char *GdbHandlerCommon::getCachedPcAsString() {
    return buff;
 }
 
-//! Read all registers from target into registerBuffer
-//! Sets registerBufferSize to number of bytes valid in buffer
-//!
-//! @note values are returned in target byte order
-//!
-//! ToDo Handle errors
-//!
+void GdbHandlerCommon::sendLocation() {
+   LOGGING;
+
+   if (haltNotice==nullptr) {
+      // No information available - just send bare stop
+      gdbInOut->sendGdbString("S05" THREAD_STOPPED_STRING);
+   }
+   else {
+      gdbInOut->sendGdbString(haltNotice);
+   }
+   // Prevent repeated vStopped responses
+   vStoppedAvailable = false;
+}
+
+/**
+ * Send notification that the target has stopped.
+ * Only applicable if in non-stop mode and the target is actually stopped.
+ *
+ * Sets stateChanged so response is available when polled by vStopped.
+ */
+void GdbHandlerCommon::notifyStop() {
+   LOGGING;
+
+   if (haltNotice==nullptr) {
+      // No information available - just send bare stop notice
+      gdbInOut->sendGdbNotification("Stop:S05" THREAD_STOPPED_STRING);
+      return;
+   }
+   else {
+      char buff[100];
+      snprintf(buff, sizeof(buff), "Stop:%s", haltNotice);
+      gdbInOut->sendGdbNotification(buff);
+   }
+   // Set so vStopped response is available
+   vStoppedAvailable = true;
+}
+
+/**
+ * Report halted.
+ * In non-stop mode this will be a notification otherwise assumed to be a response to a expected halt e.g. after 'vCont' etc.
+ *
+ * @param mode          Indicates the reply mode e.g. S T etc
+ * @param signal        Signal value e.g. TARGET_SIGNAL_TRAP TARGET_SIGNAL_INT
+ */
+void GdbHandlerCommon::reportHalt(char mode, int signal) {
+   LOGGING;
+   static char buff[100];
+   char *cPtr = buff;
+   char breakType[20] = "";
+
+   uint32_t address;
+   GdbBreakpoints::BreakType watchType;
+
+   if (atBreakpoint(getCachedPC())) {
+      strcpy(breakType,"hwbreak:;");
+   }
+   else if (gdbBreakpoints->findMatchedDataWatchPoint(address, watchType)) {
+      snprintf(breakType, sizeof(breakType), "%s:%X;", GdbBreakpoints::getGdbBreakpointName(watchType), address);
+   }
+
+   haltNotice = buff;
+   cPtr += sprintf(buff, "%c%02X%s%s" THREAD_STOPPED_STRING, mode, signal, breakType, getImportantRegisters());
+   *cPtr++ = '\0';
+
+   log.print("\"%s\"\n", buff);
+   if (nonStopMode) {
+      // Notify for later report
+      notifyStop();
+   }
+   else {
+      // Send expected response
+      gdbInOut->sendGdbString(haltNotice);
+   }
+}
+
+/**
+ * Read all registers from target into registerBuffer
+ * Sets registerBufferSize to number of bytes valid in buffer
+ *
+ * @note values are written in target byte order
+ */
 USBDM_ErrorCode GdbHandlerCommon::readRegs(void) {
    LOGGING;
 
-   reportGdbPrintf("Reading Registers\n");
+   reportGdbPrintf("Refreshing Register cache\n");
 
    if (useFastRegisterRead) {
       // Try reading registers using fast method
@@ -1014,7 +1169,7 @@ USBDM_ErrorCode GdbHandlerCommon::readRegs(void) {
    if (!useFastRegisterRead) {
       unsigned regNo;
       registerBufferSize = 0;
-      unsigned char *buffPtr = registerBuffer;
+      uint8_t *buffPtr = registerBuffer;
       for (regNo = 0; regNo<=targetLastRegIndex; regNo++) {
          readReg(regNo, buffPtr);
       }
@@ -1022,12 +1177,12 @@ USBDM_ErrorCode GdbHandlerCommon::readRegs(void) {
    }
    return BDM_RC_OK;
 }
-
-//! Report register values to GDB
-//! Reads registers from target if necessary
-//!
-//! @note values are returned in target byte order
-//!
+/**
+ * Report register values to GDB
+ * Reads registers from target if necessary
+ *
+ * @note values are sent to GDB in target byte order
+ */
 void GdbHandlerCommon::sendRegs(void) {
    LOGGING_E;
    USBDM_ErrorCode rc = BDM_RC_OK;
@@ -1041,25 +1196,25 @@ void GdbHandlerCommon::sendRegs(void) {
       return;
    }
    gdbInOut->sendGdbHex(registerBuffer, registerBufferSize);
-   registerBufferSize = 0;
 }
 
-//! Write target registers from string buffer containing hex chars
-//!
-//! @param ccPtr  - ptr to buffer
-//!
-//! @note characters are written in target byte order
-//!
-void GdbHandlerCommon::writeRegs(const char *ccPtr) {
+/**
+ * Write target register set from buffer containing ASCII-HEX chars (received from GDB)
+ *
+ * @param buff Buffer containing register values
+ *
+ * @note Buffer is in target byte order
+ */
+void GdbHandlerCommon::writeRegs(const char *buff) {
    LOGGING;
    unsigned long regValue = 0;
    unsigned regNo;
 
    reportGdbPrintf("Writing Registers\n");
    for (regNo = 0; regNo<=targetLastRegIndex; regNo++) {
-      if (!hexToInt32(ccPtr, &regValue))
+      if (!hexToInt32(buff, &regValue))
          break;
-      ccPtr += 8;
+      buff += 8;
       regValue = targetToBE32(regValue);
       writeReg(regNo, regValue);
    }
@@ -1079,6 +1234,12 @@ static MemorySpace_t getAlignment(uint32_t address, uint32_t numBytes) {
    return align;
 }
 
+/**
+ * Read bytes from target memory and send to GDB as packet
+ *
+ * @param address    Memory address to read from
+ * @param numBytes   NUmber of bytes to transfer
+ */
 void GdbHandlerCommon::readMemory(uint32_t address, uint32_t numBytes) {
    LOGGING;
    unsigned char buff[1000] = {0};
@@ -1093,16 +1254,17 @@ void GdbHandlerCommon::readMemory(uint32_t address, uint32_t numBytes) {
    gdbInOut->sendGdbHex(buff, numBytes);
 }
 
-//! Convert a hex string to a series of byte values
-//!
-//! @param numBytes - number of bytes to convert
-//! @param dataIn   - ptr to string of Hex chars (2 * numBytes)
-//! @param dataOut  - ptr to output buffer (numBytes)
-//!
-//! @return true => ok conversion\n
-//!         false => failed
-//!
-bool GdbHandlerCommon::convertFromHex(unsigned numBytes, const char *dataIn, unsigned char *dataOut) {
+/**
+ * Convert a hex string into a series of byte values
+ *
+ * @param[in]  numBytes - number of bytes to convert
+ * @param[in]  dataIn   - Pointer to string of ASCII-HEX chars (2 * numBytes) as received from GDB
+ * @param[out] dataOut  - Pointer to output buffer (numBytes)
+ *
+ * @return true => ok conversion\n
+ *         false => failed
+ */
+bool GdbHandlerCommon::convertFromHex(unsigned numBytes, const char *dataIn, uint8_t *dataOut) {
 //   log.print("convertFromHex()\n");
    for (unsigned index=0; index<numBytes; index++) {
       unsigned long value;
@@ -1116,6 +1278,37 @@ bool GdbHandlerCommon::convertFromHex(unsigned numBytes, const char *dataIn, uns
    return true;
 }
 
+/**
+ * Convert a series of byte values into a ASCII-HEX string
+ *
+ * @param[in]  numBytes - number of bytes to convert
+ * @param[in]  dataIn   - Pointer to string of byte values (numBytes)
+ * @param[out] dataOut  - Pointer to output buffer (2 * numBytes) suitable to send to GDB
+ */
+void GdbHandlerCommon::convertToHex(unsigned numBytes, const uint8_t *dataIn, char *dataOut) {
+   auto convert = [](int value) {
+      value &= 0xF;
+      if (value>=10) {
+         return 'A'+value;
+      }
+      else {
+         return '0'+value;
+      }
+   };
+   //   log.print("convertFromHex()\n");
+   for (unsigned index=0; index<numBytes; index++) {
+      *dataOut++ = convert(*dataIn++>>4);
+      *dataOut++ = convert(*dataIn++);
+   }
+}
+
+/**
+ * Write value to target memory from GDB format buffer
+ *
+ * @param ccPtr      Values to write (buffer)
+ * @param address    Memory address
+ * @param numBytes   Number of bytyes to write
+ */
 void GdbHandlerCommon::writeMemory(const char *ccPtr, uint32_t address, uint32_t numBytes) {
    unsigned char buff[1000];
 
@@ -1127,56 +1320,91 @@ void GdbHandlerCommon::writeMemory(const char *ccPtr, uint32_t address, uint32_t
    gdbInOut->sendGdbString("OK");
 }
 
-USBDM_ErrorCode GdbHandlerCommon::readReg(unsigned regNo, unsigned char *&buffPtr) {
-   return BDM_RC_ILLEGAL_COMMAND;
-}
-
-void GdbHandlerCommon::writeReg(unsigned regNo, unsigned long regValue) {
-}
-
-uint32_t GdbHandlerCommon::targetToNative32(uint32_t data) { return 0; }
-uint16_t GdbHandlerCommon::targetToNative16(uint16_t data) { return 0; }
-uint32_t GdbHandlerCommon::targetToBE32(uint32_t data)     { return 0; }
-uint16_t GdbHandlerCommon::targetToBE16(uint16_t data)     { return 0; }
-
 //! Handle 'vCont' commands
 //!
 USBDM_ErrorCode GdbHandlerCommon::doVContCommands(const GdbPacket *pkt) {
-#ifdef VCONT_SUPPORTED
    LOGGING;
 //   int address, length;
    const char *cmd = pkt->buffer;
-   if (strncmp(cmd, "vCont?", sizeof("vCont?")) == 0) {
+   if (strStartsWith("vCont?", cmd)) {
+      log.print("vCont?\n");
       gdbInOut->sendGdbString("vCont;c;s;t");
    }
-   else if (strncmp(cmd, "vCont;c", sizeof("vCont;c")) == 0) {
-      log.print("vCont;c - continue", cmd);
+//   else if (strStartsWith("vCont;", cmd)) {
+//      bool skip = false;
+//      bool sendExtraNotify = false;
+//      const char *cPtr = cmd+sizeof("vCont")-1;
+//      while (cPtr<(pkt->buffer+pkt->size)) {
+//         char ch = *cPtr++;
+//         if (ch == ';') {
+//            // New command
+//            skip = false;
+//            continue;
+//         }
+//         if (skip) {
+//            // Skip rest of current command
+//            continue;
+//         }
+//         // Process command
+//         switch(ch) {
+//            case 'c': // Continue
+//               log.print("vCont;c - continue\n");
+//               continueTarget();
+//               break;
+//            case 's': // Step
+//               log.print("vCont;s - step\n");
+//               stepTarget(bdmInterface->isMaskISR());
+//               break;
+//            case 't': // Halt
+//               log.print("vCont;t - halt\n");
+//               if (runState == RunState_Halted) {
+//                  // Stopped already
+//                  // Notify in case earlier notice missed
+//                  sendExtraNotify = true;
+//               }
+//               haltTarget();
+//               break;
+//         }
+//         // Discard rest of command if any (thread id)
+//         skip = true;
+//      }
+//      gdbInOut->sendGdbString("OK");
+//      if (sendExtraNotify) {
+//         notifyStop();
+//      }
+//   }
+   else if (strStartsWith("vCont;c", cmd)) {
+      log.print("vCont;c - continue\n");
+      continueTarget();
       gdbInOut->sendGdbString("OK");
    }
-   else if (strncmp(cmd, "vCont;s", sizeof("vCont;s")) == 0) {
-      log.print("vCont;s - step", cmd);
+   else if (strStartsWith("vCont;s", cmd)) {
+      log.print("vCont;s - step\n");
+      stepTarget(bdmInterface->isMaskISR());
       gdbInOut->sendGdbString("OK");
    }
-   else if (strncmp(cmd, "vCont;s", sizeof("vCont;t")) == 0) {
-      log.print("vCont;t - halt", cmd);
-      gdbInOut->sendGdbString("OK");
+   else if (strStartsWith("vCont;t", cmd)) {
+      log.print("vCont;t - halt\n");
+      if (runState == RunState_Halted) {
+         // Stopped already
+         // Notify in case earlier notice missed
+         gdbInOut->sendGdbString("OK");
+         notifyStop();
+      }
+      else {
+         haltTarget();
+         gdbInOut->sendGdbString("OK");
+      }
    }
    else {
-      log.print("Unrecognized command:\'%s\'\n", cmd);
+      log.print("Unrecognised command:\'%s\'\n", cmd);
       gdbInOut->sendGdbString("OK");
    }
-#endif
    return BDM_RC_OK;
 }
 
-//#define REPORT_LONG_LOCATION
-
-void GdbHandlerCommon::reportLocation(char mode, int reason) {
-
-}
-
 USBDM_ErrorCode GdbHandlerCommon::doCommand(const GdbPacket *pkt) {
-   LOGGING;
+   LOGGING_Q;
    unsigned address;
    unsigned numBytes;
    const char *ccptr;
@@ -1185,26 +1413,14 @@ USBDM_ErrorCode GdbHandlerCommon::doCommand(const GdbPacket *pkt) {
    int regNo;
    int value;
 
-//   log.print("doGdbCommand()\n");
    if (pkt->isBreak()) {
-//      if ((runState != Running)) {
-//         log.print("Ignoring Break\n");
-//         reportGdbPrintf(M_INFO, "Ignoring Break as not running\n");
-//         return BDM_RC_OK;
-//      }
-      runState = Breaking;
-      log.print("Breaking...\n");
-      reportGdbPrintf(M_INFO, "Breaking...\n");
-      targetBreakPending = true;
-//      USBDM_ErrorCode rc = bdmInterface->connect();
-//      if (rc != BDM_RC_OK) {
-//         return rc;
-//      }
-//      rc = bdmInterface->halt();
-//      if (rc != BDM_RC_OK) {
-//         return rc;
-//      }
-//      targetBreakPending = false;
+      // Break command
+      log.print("Break\n");
+      reportGdbPrintf(M_INFO, "BREAK - Halting target\n");
+      forceTargetHalt = true;
+      if (runState == RunState_Running) {
+         haltTarget();
+      }
       return BDM_RC_OK;
    }
    switch (pkt->buffer[0]) {
@@ -1278,7 +1494,7 @@ USBDM_ErrorCode GdbHandlerCommon::doCommand(const GdbPacket *pkt) {
    case 'c' : // 'c [addr]' - Continue
       //      Continue. addr is address to resume. If addr is omitted, resume at current
       //      address.
-      //      Reply: See [Stop Reply Packets] for the reply specifications.
+      //      Reply: See [Stop Reply Packets] for the reply specification or notification.
       if (sscanf(pkt->buffer, "c%X", &address) == 1) {
          // Set PC to address
          address = targetToBE32(address);
@@ -1291,9 +1507,6 @@ USBDM_ErrorCode GdbHandlerCommon::doCommand(const GdbPacket *pkt) {
          reportGdbPrintf(M_INFO, "Continue @PC\n");
       }
       continueTarget();
-      runState = Running;
-      registerBufferSize = 0;
-//      gdbPollTarget();
       break;
    case 's' :
       // 's' [addr] - Single step.
@@ -1309,15 +1522,12 @@ USBDM_ErrorCode GdbHandlerCommon::doCommand(const GdbPacket *pkt) {
          log.print("Single step @PC\n");
          reportGdbPrintf(M_INFO, "Single step @PC\n");
       }
-      runState = Stepping;
       stepTarget(bdmInterface->isMaskISR());
-      registerBufferSize = 0;
-//      gdbPollTarget();
       break;
    case 'Z' :
       // 'z type,addr,kind' - insert/remove breakpoint
-      log.print("Z - Set breakpoint\n");
-      if (sscanf(pkt->buffer, "Z%d,%x,%d", &type, &address, &kind) != 3) {
+      log.print("Z - Insert breakpoint\n");
+      if (sscanf(pkt->buffer, "Z%d,%x,%x", &type, &address, &kind) != 3) {
          log.print("Illegal cmd format\n");
          gdbInOut->sendErrorMessage(0x11);
          break;
@@ -1334,7 +1544,7 @@ USBDM_ErrorCode GdbHandlerCommon::doCommand(const GdbPacket *pkt) {
       break;
    case 'z' : // 'z type,addr,kind' - insert/remove breakpoint
       log.print("z - Remove breakpoint\n");
-      if (sscanf(pkt->buffer, "z%d,%x,%d", &type, &address, &kind) != 3) {
+      if (sscanf(pkt->buffer, "z%d,%x,%x", &type, &address, &kind) != 3) {
          gdbInOut->sendErrorMessage(0x11);
          break;
       }
@@ -1382,6 +1592,9 @@ USBDM_ErrorCode GdbHandlerCommon::doCommand(const GdbPacket *pkt) {
          unsigned char *tBuff = buff;
          readReg(regNo, tBuff);
          int size = tBuff-buff;
+         uint32_t t;
+         extractTarget32Bits(buff, t);
+         log.print("Read reg %d => %X\n", regNo, t);
          gdbInOut->sendGdbHex(buff, size);
       }
 //      if (isValidRegister(regNo)) {
@@ -1393,9 +1606,31 @@ USBDM_ErrorCode GdbHandlerCommon::doCommand(const GdbPacket *pkt) {
 //      }
       break;
 #if THREAD_MODE
-   case 'H' : // 'H c thread-id' Set thread (e.g. Hc0, Hc-1, Hg0)
-      // Dummy response
-      gdbInOut->sendGdbString("OK");
+   case 'H' : // 'H c thread-id' Set thread (e.g. Hg0)
+      if (strStartsWith("Hg-1", pkt->buffer)) {
+         currentThread = -1;
+         log.print("Current thread = All\n");
+         gdbInOut->sendGdbString("OK");
+         break;
+      }
+      else if (sscanf(pkt->buffer, "Hg%d", &value) == 1) {
+         currentThread = value;
+         log.print("Current thread = %X\n", currentThread);
+         gdbInOut->sendGdbString("OK");
+         break;
+      }
+      else if (strStartsWith("Hc-1", pkt->buffer)) {
+         // Deprecated so ignored
+         gdbInOut->sendGdbString("");
+         break;
+      }
+      else if (sscanf(pkt->buffer, "Hc%d", &value) == 1) {
+         // Deprecated so ignored
+         gdbInOut->sendGdbString("");
+         break;
+      }
+      log.error("Failed to parse threadID\n");
+      gdbInOut->sendErrorMessage(0x11);
       break;
    case 'T' : // Thread status
       log.print("Thread Status\n");
@@ -1403,7 +1638,14 @@ USBDM_ErrorCode GdbHandlerCommon::doCommand(const GdbPacket *pkt) {
       break;
 #endif
    case '?' : // '?' Indicate the reason the target stopped.
-      reportLocation('T', TARGET_SIGNAL_TRAP);
+      if (runState == RunState_Halted) {
+         sendLocation();
+         vStoppedAvailable = true;
+      }
+      else {
+         // Not stopped
+         gdbInOut->sendGdbString("OK");
+      }
       break;
    case 'k' : // Kill
       reportGdbPrintf(M_INFO, "Kill...\n");
@@ -1411,6 +1653,7 @@ USBDM_ErrorCode GdbHandlerCommon::doCommand(const GdbPacket *pkt) {
       tty->closeAll();
       gdbInOut->sendGdbString("OK");
       gdbInOut->finish();
+      reportGdbPrintf(M_FATAL, "Closed connection\n");
       return BDM_RC_OK;
    case 'D' : // Detach
       reportGdbPrintf(M_INFO, "Detach...\n");
@@ -1419,6 +1662,7 @@ USBDM_ErrorCode GdbHandlerCommon::doCommand(const GdbPacket *pkt) {
       gdbInOut->sendGdbString("OK");
       continueTarget();
       gdbInOut->finish();
+      reportGdbPrintf(M_FATAL, "Closed connection\n");
       return BDM_RC_OK;
       break;
    case 'q' : // q commands
@@ -1428,8 +1672,8 @@ USBDM_ErrorCode GdbHandlerCommon::doCommand(const GdbPacket *pkt) {
    case 'v' : // v commands
       doVCommands(pkt);
       break;
-   default : // Unrecognized command
-      log.print("Unrecognized command:\'%s\'\n", pkt->buffer);
+   default : // Unrecognised command
+      log.print("Unrecognised command:\'%s\'\n", pkt->buffer);
       gdbInOut->sendGdbString("");
       break;
    }
@@ -1457,6 +1701,8 @@ USBDM_ErrorCode GdbHandlerCommon::initBreakpoints() {
    }
    initBreakpointsDone = true;
    log.print("Number of hardware breakpoints = %d\n", gdbBreakpoints->getNumberOfHardwareBreakpoints());
+   log.print("Number of hardware watches     = %d\n", gdbBreakpoints->getNumberOfHardwareWatches());
    reportGdbPrintf("Number of hardware breakpoints = %d\n", gdbBreakpoints->getNumberOfHardwareBreakpoints());
+   reportGdbPrintf("Number of hardware watches     = %d\n", gdbBreakpoints->getNumberOfHardwareWatches());
    return rc;
 };

@@ -1254,6 +1254,15 @@ USBDM_ErrorCode  USBDM_GetBDMStatus(USBDMStatus_t *USBDMStatus);
 USBDM_API
 USBDM_ErrorCode  USBDM_Connect(void);
 
+/**
+ * Does basic connect to target
+ *
+ * ARM-SWD - Does JTAG to Serial Wire switching only
+ * Other targets same as USBDM_Connect()
+ */
+USBDM_API
+USBDM_ErrorCode USBDM_BasicConnect(void);
+
 //! Sets the BDM communication speed.
 //!
 //! @param frequency => BDM Communication speed in kHz \n
@@ -1424,7 +1433,7 @@ USBDM_ErrorCode USBDM_ReadReg(unsigned int regNo, unsigned long *regValue);
 
 //! Read Multiple Core registers
 //!
-//! @param regValueBuffer Values in Target byte order??
+//! @param regValueBuffer    Values in Target byte order??
 //! @param startRegIndex     Register index (inclusive) to start reading at
 //! @param endRegIndex       Register index (inclusive) to stop reading at
 //!

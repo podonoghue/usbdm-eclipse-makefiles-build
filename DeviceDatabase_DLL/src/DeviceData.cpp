@@ -1896,7 +1896,7 @@ void DeviceDataBase::loadDeviceData() {
 }
 
 void DeviceDataBase::listDevices() const {
-   UsbdmSystem::Log log("", UsbdmSystem::Log::neither);
+   LOGGING_NONAME;
 
    vector<DeviceDataPtr>::const_iterator it;
    int lineCount = 0;

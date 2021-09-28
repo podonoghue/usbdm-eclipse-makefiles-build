@@ -44,7 +44,7 @@ void GdbBreakpoints_CFV1::activateBreakpoints(void) {
         bpPtr < memoryBreakpoints+MAX_MEMORY_BREAKPOINTS;
         bpPtr++) {
       if (bpPtr->inUse) {
-         log.print("(%s@%08X)\n", getBreakpointName(memoryBreak), bpPtr->address);
+         log.print("(%s@%08X)\n", getBreakpointName(BreakType_softwareBreak), bpPtr->address);
          bdmInterface->readMemory(sizeof(haltOpcode),sizeof(haltOpcode),bpPtr->address,bpPtr->opcode);
          bdmInterface->writeMemory(sizeof(haltOpcode),sizeof(haltOpcode),bpPtr->address,haltOpcode);
          breakpointsActive = true;
@@ -57,14 +57,14 @@ void GdbBreakpoints_CFV1::activateBreakpoints(void) {
       bdmInterface->writeDReg(CFVx_DRegPBR0, hardwareBreakpoints[0].address&~0x1);
       bdmInterface->writeDReg(CFVx_DRegPBMR, 0x00000000);
       breakpointsActive = true;
-      log.print("(%s@%08X)\n", getBreakpointName(hardBreak),
+      log.print("(%s@%08X)\n", getBreakpointName(BreakType_hardwareBreak),
                                               hardwareBreakpoints[0].address&~0x1);
    }
    if (hardwareBreakpoints[1].inUse) {
       tdrValue |= TDR_TRC_HALT|TDR_L1T|TDR_L1EBL|TDR_L1EPC;
       bdmInterface->writeDReg(CFVx_DRegPBR1, hardwareBreakpoints[1].address|0x1);
       breakpointsActive = true;
-      log.print("(%s@%08X)\n", getBreakpointName(hardBreak),
+      log.print("(%s@%08X)\n", getBreakpointName(BreakType_hardwareBreak),
                                               hardwareBreakpoints[1].address&~0x1);
    }
    else {
@@ -75,7 +75,7 @@ void GdbBreakpoints_CFV1::activateBreakpoints(void) {
       tdrValue |= TDR_TRC_HALT|TDR_L1T|TDR_L1EBL|TDR_L1EPC;
       bdmInterface->writeDReg(CFVx_DRegPBR2, hardwareBreakpoints[2].address|0x1);
       breakpointsActive = true;
-      log.print("(%s@%08X)\n", getBreakpointName(hardBreak),
+      log.print("(%s@%08X)\n", getBreakpointName(BreakType_hardwareBreak),
                                               hardwareBreakpoints[2].address&~0x1);
    }
    else {
@@ -85,7 +85,7 @@ void GdbBreakpoints_CFV1::activateBreakpoints(void) {
       tdrValue |= TDR_TRC_HALT|TDR_L1T|TDR_L1EBL|TDR_L1EPC;
       bdmInterface->writeDReg(CFVx_DRegPBR3, hardwareBreakpoints[3].address|0x1);
       breakpointsActive = true;
-      log.print("(%s@%08X)\n", getBreakpointName(hardBreak),
+      log.print("(%s@%08X)\n", getBreakpointName(BreakType_hardwareBreak),
                                               hardwareBreakpoints[3].address&~0x1);
    }
    else {
@@ -107,8 +107,10 @@ void GdbBreakpoints_CFV1::activateBreakpoints(void) {
 void GdbBreakpoints_CFV1::deactivateBreakpoints(void) {
    LOGGING_E;
    MemoryBreakInfo *bpPtr;
-   if (!breakpointsActive)
+   if (!breakpointsActive) {
+      // No active breakpoints in target
       return;
+   }
    // Memory breakpoints
    for (bpPtr = memoryBreakpoints;
         bpPtr < memoryBreakpoints+MAX_MEMORY_BREAKPOINTS;
@@ -149,7 +151,23 @@ USBDM_ErrorCode GdbBreakpoints_CFV1::initBreakpoints() {
    return BDM_RC_OK;
 };
 
+/**
+ * Find a hardware watchpoint that has been matched
+ *
+ * @param[out] address    Updated with watchpoint address if found
+ * @param[out] breakType  Updated with type of watchpoint found
+ *
+ * @return true  => Watchpoint has been matched since last checked.
+ * @return false => Watchpoint has not been matched since last checked.
+ */
+bool GdbBreakpoints_CFV1::findMatchedDataWatchPoint(uint32_t &address, BreakType &breakType) {
+   return false;
+}
 
 int  GdbBreakpoints_CFV1::getNumberOfHardwareBreakpoints() {
    return maxNumHardwareBreakPoints;
+}
+
+int  GdbBreakpoints_CFV1::getNumberOfHardwareWatches() {
+   return 0;
 }

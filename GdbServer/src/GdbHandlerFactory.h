@@ -15,12 +15,12 @@
 class GdbHandlerFactory {
 public:
    static GdbHandlerPtr createGdbHandler(
-         TargetType_t             targetType,
-         GdbInOut                *gdbInOut,
-         BdmInterfacePtr          bdmInterface,
-         DeviceInterfacePtr       deviceInterface,
-         GdbHandler::GdbCallback  gdbCallBackPtr,
-         IGdbTty                  *tty);
+         TargetType_t                  targetType,
+         GdbHandler::GdbHandlerOwner  &owner,
+         GdbInOut                     *gdbInOut,
+         BdmInterfacePtr               bdmInterface,
+         DeviceInterfacePtr            deviceInterface,
+         IGdbTty                       *tty);
 
 protected:
    GdbHandlerFactory() {};

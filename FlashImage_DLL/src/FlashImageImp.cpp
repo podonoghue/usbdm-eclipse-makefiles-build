@@ -1081,8 +1081,8 @@ USBDM_ErrorCode FlashImageImp::loadS1S9File(const string &fileName) {
          case '1':
             // S1 = 16-bit address, data record
             ptr +=2; // Skip 'S1'
-            srecSize = hex2ToDecimal( &ptr );
-            addr = hex4ToDecimal( &ptr );
+            srecSize = hex2ToDecimal( ptr );
+            addr = hex4ToDecimal( ptr );
             checkSum = (uint8_t)srecSize + (uint8_t)(addr>>8) + (uint8_t)addr;
             srecSize -= 3; // subtract 3 from byte count (srecSize + 2 addr bytes)
             //         log.print("(%2.2X)%4.4lX:\n",srecSize,addr);
@@ -1090,8 +1090,8 @@ USBDM_ErrorCode FlashImageImp::loadS1S9File(const string &fileName) {
          case '2':
             // S2 = 24-bit address, data record
             ptr +=2; // Skip 'S2'
-            srecSize = hex2ToDecimal( &ptr );
-            addr = hex6ToDecimal( &ptr );
+            srecSize = hex2ToDecimal( ptr );
+            addr = hex6ToDecimal( ptr );
             checkSum = (uint8_t)srecSize + (uint8_t)(addr>>16) + (uint8_t)(addr>>8) + (uint8_t)addr;
             srecSize -= 4; // subtract 4 from byte count (srecSize + 3 addr bytes)
             //         log.print("srecSize=0x%02X, addr=0x%06X\n",srecSize,addr);
@@ -1099,8 +1099,8 @@ USBDM_ErrorCode FlashImageImp::loadS1S9File(const string &fileName) {
          case '3':
             // S3 32-bit address, data record
             ptr +=2; // Skip 'S3'
-            srecSize = hex2ToDecimal( &ptr );
-            addr = hex8ToDecimal( &ptr );
+            srecSize = hex2ToDecimal( ptr );
+            addr = hex8ToDecimal( ptr );
             checkSum = (uint8_t)srecSize + (uint8_t)(addr>>24) + (uint8_t)(addr>>16) + (uint8_t)(addr>>8) + (uint8_t)addr;
             srecSize -= 5; // subtract 5 from byte count (srecSize + 4 addr bytes)
             //         log.print("S3: srecSize=0x%02X, addr=0x%08X, initial chk=0x%02X\n", srecSize, addr, checkSum);
@@ -1120,7 +1120,7 @@ USBDM_ErrorCode FlashImageImp::loadS1S9File(const string &fileName) {
       if (sizeof(uint8_t) == 1) {
          while (srecSize>0) {
             uint8_t data;
-            data = hex2ToDecimal( &ptr );
+            data = hex2ToDecimal( ptr );
             checkSum += (uint8_t)data;
             if (this->isValid(addr) && !allowOverwrite) {
                // Occupied address
@@ -1132,7 +1132,7 @@ USBDM_ErrorCode FlashImageImp::loadS1S9File(const string &fileName) {
          }
       }
       // Get checksum from record
-      uint8_t data = hex2ToDecimal( &ptr );
+      uint8_t data = hex2ToDecimal( ptr );
       if ((uint8_t)~checkSum != data) {
          log.print("- illegal line #%5d:\n%s", lineNum, buffer);
          log.print("- checksum error, Checksum=0x%02X, "

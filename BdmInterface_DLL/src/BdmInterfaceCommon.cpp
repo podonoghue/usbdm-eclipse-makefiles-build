@@ -1193,6 +1193,9 @@ USBDM_ErrorCode BdmInterfaceCommon::bdmCommand(unsigned txSize, unsigned rxSize,
 USBDM_ErrorCode BdmInterfaceCommon::connect() {
    return USBDM_Connect();
 };
+USBDM_ErrorCode BdmInterfaceCommon::basicConnect() {
+   return USBDM_BasicConnect();
+};
 USBDM_ErrorCode BdmInterfaceCommon::reset(TargetMode_t mode=(TargetMode_t)(RESET_DEFAULT|RESET_NORMAL)) {
    return USBDM_TargetReset(mode);
 };

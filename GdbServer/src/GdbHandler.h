@@ -25,27 +25,63 @@ public:
       M_SEMI_HOSTING,
       M_DIALOGUE = 0x80,
    };
-   typedef USBDM_ErrorCode (*GdbCallback)(const char *msg, GdbMessageLevel level, USBDM_ErrorCode rc);
 
-   enum GdbTargetStatus {
-      T_UNKNOWN =  0,         // Unknown - not yet polled or may be LLSx/VLLSx without timeout
-      T_NOCONNECTION,         // Unable to connect to target - may be in LLSx or VLLSx.
-      T_RUNNING,              // Currently executing
-      T_HALT,                 // Currently in debug halt
-      T_RESET,                // Currently in reset
-      T_WAIT,                 // Currently in sleep (WAIT)
-      T_STOP,                 // Currently in deep-sleep (STOP)
-      T_VLPR,                 // Currently in low-power run (VLPR)
-      T_VLPW,                 // Currently in low power sleep (VLPW)
-      T_VLPS,                 // Currently in low power deep-sleep (VLPS)
-      T_LLSxEXIT,             // Exited LLSx state
-      T_VLLSxEXIT,            // Exited VLLSx state
-      T_USER_INPUT,           // Stopped waiting for character in semi-hosting
+   class GdbHandlerOwner {
+
+   public:
+      /**
+       * Constructor
+       */
+      GdbHandlerOwner(){}
+      /**
+       * Destructor
+       */
+      virtual ~GdbHandlerOwner(){}
+
+      /**
+       * Display/Notify message
+       *
+       * @param msg     Text of message
+       * @param level   Severity of message (used to filter uninteresting messages)
+       * @param rc      Error code associated with message (if any)
+       *
+       * @return Modified error code
+       */
+      virtual USBDM_ErrorCode displayMessage(const char *msg, GdbMessageLevel level, USBDM_ErrorCode rc) = 0;
+
+      /**
+       * Close connection in near future when inactive (i.e. polling etc not actually executing)
+       */
+      virtual void            setDeferredCloseClient() = 0;
    };
 
-public:
    GdbHandler() {};
    virtual ~GdbHandler() {};
+
+   enum GdbTargetStatus {
+      GdbTargetStatus_NOCONNECTION = 0,     // No connection
+      GdbTargetStatus_UNKNOWN,              // Unable to poll target- may be due to LLSx/VLLSx (within timeout)
+      GdbTargetStatus_RUNNING,              // Currently executing
+      GdbTargetStatus_HALT,                 // Currently in debug halt
+      GdbTargetStatus_RESET,                // Currently in reset
+      GdbTargetStatus_WAIT,                 // Currently in sleep (WAIT)
+      GdbTargetStatus_STOP,                 // Currently in deep-sleep (STOP)
+      GdbTargetStatus_VLPR,                 // Currently in low-power run (VLPR)
+      GdbTargetStatus_VLPW,                 // Currently in low power sleep (VLPW)
+      GdbTargetStatus_VLPS,                 // Currently in low power deep-sleep (VLPS)
+      GdbTargetStatus_LLSxEXIT,             // Exited LLSx mode and is executing
+      GdbTargetStatus_VLLSxEXIT,            // Exited VLLSx state and held in reset (Debug state lost)
+      GdbTargetStatus_USER_INPUT,           // Stopped waiting for character in semi-hosting
+   };
+
+   /**
+    * Get name for target status
+    *
+    * @param status
+    *
+    * @return
+    */
+   static const char           *getStatusName(GdbTargetStatus status);
 
    /**
     * Initialize target
@@ -68,6 +104,7 @@ public:
     */
    virtual GdbTargetStatus      pollTarget() = 0;
    /**
+    * Notify that there has been a change in the bdmInterface settings etc.
     *
     * @return
     */
@@ -100,18 +137,22 @@ public:
     * @return
     */
    virtual USBDM_ErrorCode      haltTarget() = 0;
+
    /**
-    * Get name for target status
-    *
-    * @param status
+    * Notify GDB of target status change
     *
     * @return
     */
-   static const char           *getStatusName(GdbTargetStatus status);
+   virtual USBDM_ErrorCode      notifyGdb() = 0;
 
 protected:
-   enum RunState {Halted, Stepping, Running, Breaking, UserInput};
-   static const char           *getRunStateName(RunState runState);
+   enum RunState {
+      RunState_Halted,
+      RunState_Stepping,
+      RunState_Running,
+      RunState_UserInput};
+
+   static const char     *getRunStateName(RunState runState);
 };
 
 typedef std::shared_ptr<GdbHandler> GdbHandlerPtr;

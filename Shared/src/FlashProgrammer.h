@@ -60,6 +60,18 @@
  */
 class USBDM_FLASHPROGRAMMER_DECLSPEC FlashProgrammer {
 
+private:
+   friend class FlashProgrammerFactory;
+
+   /**
+    * Set target interface to use
+    *
+    * @param bdmInterface BDM interface
+    *
+    * @return error code
+    */
+   virtual USBDM_ErrorCode    setTargetInterface(BdmInterfacePtr bdmInterface) = 0;
+
 public:
    /**
     * Address modifiers used by various targets
@@ -84,11 +96,19 @@ public:
    virtual ~FlashProgrammer() {}
 
    /**
+    * Release device data
+    *
+    * @note This will also release the TCL interpreter
+    */
+   virtual USBDM_ErrorCode    releaseDeviceData() = 0;
+   /**
     * Set data for device being programmed
     *
     * @param device Device data
     *
     * @return error code
+    *
+    * @note This will create a default TCL interpreter if necessary
     */
    virtual USBDM_ErrorCode    setDeviceData(const DeviceDataConstPtr device) = 0;
    /**
@@ -106,14 +126,6 @@ public:
     * @return Pointer to device data
     */
    virtual DeviceDataConstPtr getDeviceData() = 0;
-   /**
-    * Set target interface to use
-    *
-    * @param bdmInterface BDM interface
-    *
-    * @return error code
-    */
-   virtual USBDM_ErrorCode    setTargetInterface(BdmInterfacePtr bdmInterface) = 0;
    /**
     * Check if target is unsecured
     *

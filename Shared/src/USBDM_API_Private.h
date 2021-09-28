@@ -198,12 +198,6 @@ extern BDMState_t bdmState;
 
 extern USBDM_bdmInformation_t bdmInfo;
 
-/**
- * Does basic connect to target
- */
-CPP_DLL_LOCAL
-USBDM_ErrorCode USBDM_BasicConnect(void);
-
 #if defined __cplusplus
     }
 #endif

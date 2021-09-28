@@ -490,7 +490,7 @@ DeviceXmlParser::~DeviceXmlParser() {
 //! @throws MyException() - on any error
 //!
 void DeviceXmlParser::loadFile(const string &xmlFile) {
-   LOGGING;
+   LOGGING_Q;
 
    // Convert simple path to crude URI
    char fixedName[xmlFile.size()+100] = "file:///";
@@ -804,6 +804,7 @@ SecurityDescriptionPtr DeviceXmlParser::parseSecurityDescription(DOMElement *cur
 //!
 void DeviceXmlParser::parseSharedXML(void) {
    LOGGING;
+   log.enableLogging(false);
 
    setCurrentName("Shared Data");
 
@@ -1944,7 +1945,8 @@ DeviceDataPtr DeviceXmlParser::parseAlias(DOMElement *deviceEl) {
 //!         != 0 - fail
 //!
 void DeviceXmlParser::parseDeviceXML(void) {
-   LOGGING;
+   LOGGING_Q;
+   log.enableLogging(false);
 
    DOMChildIterator deviceIt(document, tag_device.asCString());
    if (deviceIt.getCurrentElement() == NULL) {
@@ -2021,8 +2023,8 @@ void DeviceXmlParser::parseDeviceXML(void) {
 //!         != 0 => fail
 //!
 void DeviceXmlParser::loadDeviceData(TargetType_t targetType, const std::string &deviceFilePath, DeviceDataBase *deviceDataBase) {
-   LOGGING;
-   log.setLoggingLevel(0); // Don't log below this level
+   LOGGING_Q;
+
    try {
       xercesc::XMLPlatformUtils::Initialize();
    }

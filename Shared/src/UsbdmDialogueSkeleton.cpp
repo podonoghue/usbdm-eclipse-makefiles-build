@@ -115,8 +115,8 @@ UsbdmDialogueSkeleton::UsbdmDialogueSkeleton( wxWindow* parent, wxWindowID id, c
 
 	sbSizer6->Add( maskInterruptWhenSteppingControl, 0, wxBOTTOM|wxRIGHT|wxLEFT, 5 );
 
-	catchVllsResetControl = new wxCheckBox( sbSizer6->GetStaticBox(), wxID_ANY, wxT("Catch VLLS Reset"), wxDefaultPosition, wxDefaultSize, 0 );
-	catchVllsResetControl->SetToolTip( wxT("Stop the target when a VLLS reset occurs") );
+	catchVllsResetControl = new wxCheckBox( sbSizer6->GetStaticBox(), wxID_ANY, wxT("Stop on VLLS Reset"), wxDefaultPosition, wxDefaultSize, 0 );
+	catchVllsResetControl->SetToolTip( wxT("VLLS resets are captured by the debugger so that\nbreakpoints may be restored.\nIf this option is not set then the target is then resumed.") );
 
 	sbSizer6->Add( catchVllsResetControl, 0, wxRIGHT|wxLEFT, 5 );
 

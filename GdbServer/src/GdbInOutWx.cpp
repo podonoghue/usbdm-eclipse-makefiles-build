@@ -32,6 +32,7 @@
 
 #include "GdbInOutWx.h"
 #include "UsbdmSystem.h"
+#include "Utils.h"
 
 /*
  *
@@ -61,11 +62,11 @@ GdbInOutWx::~GdbInOutWx() {
 /*!  Finish up
  *
  *  - Set end of file
- *  - Close client socket
  */
 void GdbInOutWx::finish(void) {
    LOGGING_Q;
-   clientSocket->SetFlags(wxSOCKET_WAITALL);
+   clientSocket->SetFlags(wxSOCKET_WAITALL); // Why?
+   clientSocket->Destroy();
    log.print("GdbInOutWx::finish()\n");
    GdbInOut::finish();
 }
@@ -95,7 +96,17 @@ const GdbPacket *GdbInOutWx::getGdbPacket(void) {
    } while ((byte >= 0) && (packet == NULL));
 //   logScreen->AppendText('\n');
    if (packet != NULL) {
-      log.print("Rx<=#:%d:%03d$%*.*s#%2.2x\n", packet->sequence, packet->size, packet->size, packet->size, packet->buffer, packet->checkSum);
+      if (strStartsWith("vFlashWrite", packet->buffer)) {
+         // Omit binary data from log
+         log.printq("Rx<=\"FlashWrite...(%d bytes omitted)\"\n", packet->size);
+      }
+      else {
+         log.printq("Rx<=\"%*s\"\n", packet->size, packet->buffer);
+      }
+//      log.print("Rx<=#:%d:%03d$%*.*s#%2.2x\n", packet->sequence, packet->size, packet->size, packet->size, packet->buffer, packet->checkSum);
+      if (packet->buffer[0] == ' ') {
+         log.print("Opps!!!");
+      }
 //      wxString s;
 //      s.Printf("Rx<=#:%d:%03d$%*.*s#%2.2x\n", packet->sequence, packet->size, packet->size, packet->size, packet->buffer, packet->checkSum);
 //      logScreen->AppendText(s);
