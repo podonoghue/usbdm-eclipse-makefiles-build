@@ -1,0 +1,6 @@
+#!/bin/bash
+
+HOME_DIR="$(dirname $(readlink -f $0))"
+echo "Building in ${HOME_DIR}"
+
+${HOME_DIR}/MakeAll && ${HOME_DIR}/CreateDebFile && ${HOME_DIR}/Update

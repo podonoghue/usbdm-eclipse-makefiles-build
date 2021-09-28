@@ -13,6 +13,20 @@ ARCH=`uname -m`
 
 BITNESS=`getconf LONG_BIT`
 
+SOURCE_DIRECTORY="$(dirname $(readlink -f $0))"
+echo "Updating from file in ${SOURCE_DIRECTORY}"
+
+pausing() {
+   x=5
+   echo -n Pausing ...
+   while [ $x -gt 0 ];  do
+      sleep 1s
+      echo -n " $x"
+      x=$(( $x - 1 ))
+   done
+   echo 
+}
+
 # Where to construct the install tree
 PACKAGE_FILE="../usbdm_${VERSION}-${DEBIAN_VERSION}-${ARCH}.deb"
 
@@ -22,3 +36,13 @@ sudo apt-get -y remove usbdm
 echo "Installing ${PACKAGE_FILE}"
 sudo dpkg -i ${PACKAGE_FILE}
 
+if [ $? -eq 0 ]
+then
+  echo "Finished updating installation"
+  pausing
+  exit 0
+else
+  echo "Updating failed" >&2
+  read -p "Press any key to continue... " -n1 -s  exit 1
+  exit 1
+fi

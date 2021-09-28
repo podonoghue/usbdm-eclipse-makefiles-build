@@ -2,9 +2,30 @@
 
 # Build with native BITNESS
 
+HOME_DIR="$(dirname $(readlink -f $0))"
+echo "Building in ${HOME_DIR}"
+pushd ${HOME_DIR}
+
 OS=linux
 export OS
+
+pausing() {
+   x=5
+   echo -n Pausing ...
+   while [ $x -gt 0 ];  do
+      sleep 1s
+      echo -n " $x"
+      x=$(( $x - 1 ))
+   done
+   echo 
+}
+
+clear
 
 # Do 64-bit builds
 echo make -f Makefile-x64.mk clean BITNESS=64
 make -f Makefile-x64.mk clean BITNESS=64
+
+echo
+echo "Finished Buiding files"
+pausing

@@ -14,9 +14,20 @@ ARCH=`uname -m`
 clear
 
 SOURCE_DIRECTORY="$(dirname $(readlink -f $0))"
-echo "SOURCE_DIRECTORY=${SOURCE_DIRECTORY}"
+echo "Building DEB file in ${SOURCE_DIRECTORY}"
 
 DATE=`date +"%Y%m%d%H%M%S"`
+
+pausing() {
+   x=5
+   echo -n Pausing ...
+   while [ $x -gt 0 ];  do
+      sleep 1s
+      echo -n " $x"
+      x=$(( $x - 1 ))
+   done
+   echo 
+}
 
 #======================================================
 # Create ARCH dependent DEB file
@@ -185,6 +196,19 @@ echo "Building `getconf LONG_BIT` version"
 echo "========================================="
 makeDebFile `getconf LONG_BIT`
 
+if [ $? -eq 0 ]
+then
+  echo "makeDebFile successfully completed"
+  pausing
+  exit 0
+else
+  echo "makeDebFile failed" >&2
+  read -p "Press any key to continue... " -n1 -s  exit 1
+  exit 1
+fi
+
+
+
 # Build for i386 on x86_64 platform
 #if [ `getconf LONG_BIT` != 32 ]; then
 #   echo "========================================="
@@ -192,8 +216,4 @@ makeDebFile `getconf LONG_BIT`
 #   echo "========================================="
 #   makeDebFile 32
 #fi
-
-echo
-echo "Finished Buid"
-read -p "Press enter"
 
