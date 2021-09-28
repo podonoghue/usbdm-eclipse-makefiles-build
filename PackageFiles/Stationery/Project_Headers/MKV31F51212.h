@@ -5,7 +5,7 @@
  *           Equivalent: 
  *
  * @version  V1.6
- * @date     2021/06
+ * @date     2021/08
  *
  *******************************************************************************************************/
 
@@ -4159,7 +4159,7 @@ typedef struct LPUART_Type {
 */
 
 /* ================================================================================ */
-/* ================           MCG (file:MCG_MK_ICS48M_NO_RTC)       ================ */
+/* ================           MCG (file:MCG_MK_ICS48M)             ================ */
 /* ================================================================================ */
 
 /**
@@ -4184,6 +4184,7 @@ typedef struct MCG_Type {
    __IO uint8_t   ATCVH;                        /**< 000A: ATM Compare Value High                                       */
    __IO uint8_t   ATCVL;                        /**< 000B: ATM Compare Value Low                                        */
    __IO uint8_t   C7;                           /**< 000C: Control 7 Register                                           */
+   __IO uint8_t   C8;                           /**< 000D: Control 8 Register                                           */
 } MCG_Type;
 
 /**
@@ -4330,6 +4331,19 @@ typedef struct MCG_Type {
 #define MCG_C7_OSCSEL_MASK                       (0x3U)                                              /*!< MCG_C7.OSCSEL Mask                      */
 #define MCG_C7_OSCSEL_SHIFT                      (0U)                                                /*!< MCG_C7.OSCSEL Position                  */
 #define MCG_C7_OSCSEL(x)                         (((uint8_t)(((uint8_t)(x))<<0U))&0x3UL)             /*!< MCG_C7.OSCSEL Field                     */
+/* ------- C8 Bit Fields                            ------ */
+#define MCG_C8_LOCS1_MASK                        (0x1U)                                              /*!< MCG_C8.LOCS1 Mask                       */
+#define MCG_C8_LOCS1_SHIFT                       (0U)                                                /*!< MCG_C8.LOCS1 Position                   */
+#define MCG_C8_LOCS1(x)                          (((uint8_t)(((uint8_t)(x))<<0U))&0x1UL)             /*!< MCG_C8.LOCS1 Field                      */
+#define MCG_C8_CME1_MASK                         (0x20U)                                             /*!< MCG_C8.CME1 Mask                        */
+#define MCG_C8_CME1_SHIFT                        (5U)                                                /*!< MCG_C8.CME1 Position                    */
+#define MCG_C8_CME1(x)                           (((uint8_t)(((uint8_t)(x))<<5U))&0x20UL)            /*!< MCG_C8.CME1 Field                       */
+#define MCG_C8_LOLRE_MASK                        (0x40U)                                             /*!< MCG_C8.LOLRE Mask                       */
+#define MCG_C8_LOLRE_SHIFT                       (6U)                                                /*!< MCG_C8.LOLRE Position                   */
+#define MCG_C8_LOLRE(x)                          (((uint8_t)(((uint8_t)(x))<<6U))&0x40UL)            /*!< MCG_C8.LOLRE Field                      */
+#define MCG_C8_LOCRE1_MASK                       (0x80U)                                             /*!< MCG_C8.LOCRE1 Mask                      */
+#define MCG_C8_LOCRE1_SHIFT                      (7U)                                                /*!< MCG_C8.LOCRE1 Position                  */
+#define MCG_C8_LOCRE1(x)                         (((uint8_t)(((uint8_t)(x))<<7U))&0x80UL)            /*!< MCG_C8.LOCRE1 Field                     */
 /**
  * @} */ /* End group MCG_Register_Masks_GROUP 
  */

@@ -5,7 +5,7 @@
  *           Equivalent: 
  *
  * @version  V1.6
- * @date     2021/06
+ * @date     2021/08
  *
  *******************************************************************************************************/
 
@@ -8540,7 +8540,7 @@ typedef struct RCM_Type {
    __IO uint8_t   RPFC;                         /**< 0004: Reset Pin Filter Control Register                            */
    __IO uint8_t   RPFW;                         /**< 0005: Reset Pin Filter Width Register                              */
    __IO uint8_t   FM;                           /**< 0006: Force Mode Register                                          */
-   __I  uint8_t   MR;                           /**< 0007: Mode Register                                                */
+   __IO uint8_t   MR;                           /**< 0007: Mode Register                                                */
    __IO uint8_t   SSRS0;                        /**< 0008: Sticky System Reset Status Register 0                        */
    __IO uint8_t   SSRS1;                        /**< 0009: Sticky System Reset Status Register 1                        */
 } RCM_Type;
