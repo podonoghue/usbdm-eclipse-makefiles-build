@@ -273,7 +273,7 @@ USBDM_ErrorCode UsbdmTclInterpreterImp::setBdmInterface(BdmInterfacePtr bdmInter
    log.print("Getting bdm options\n");
    USBDM_ExtendedOptions_t &options = bdmInterface->getBdmOptions();
 
-   log.error("Setting variables\n");
+   log.print("Setting variables\n");
    setVariable("RESET_DURATION",      options.resetDuration);
    setVariable("RESET_RECOVERY",      options.resetRecoveryInterval);
    setVariable("RESET_RELEASE",       options.resetReleaseInterval);
@@ -3384,6 +3384,13 @@ static int cmd_setSpeed(ClientData, Tcl_Interp *interp, int argc, Tcl_Obj *const
  */
 static int cmd_sync(ClientData, Tcl_Interp *interp, int argc, Tcl_Obj *const *argv) {
    // sync <control_value>
+
+   TargetType_t targetType = bdmInterface->getBdmOptions().targetType;
+   if (((targetType == T_ARM)||(targetType == T_ARM_SWD)||targetType == T_ARM_JTAG)) {
+      bdmInterface->basicConnect();
+      return TCL_OK;
+   }
+
    static const char *connectionStates[] = {
          "Not Connected", "Sync Speed", "Guess Speed", "Manual Speed"
    };
@@ -3995,7 +4002,7 @@ static const char usageText[] =
       "wblock <addr> <size> <data>  - Write block\n"
       "wb <addr> <data>             - Write byte\n"
       "ww <addr><value>             - Write word\n"
-      "wl <addr><value>             - Write longword (CFV1 only)\n"
+      "wl <addr><value>             - Write longword\n"
       "wreg <regNo><value>          - Write core register\n"
       "wdreg <regNo><value>         - Write debug register\n"
       "wcreg <regNo><value>         - Write control register\n"
