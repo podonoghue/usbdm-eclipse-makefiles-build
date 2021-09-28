@@ -311,7 +311,7 @@ public:
     *
     * @param[in]  nvicPriority  Interrupt priority
     */
-   static void enableNvicInterrupts(uint32_t nvicPriority) {
+   static void enableNvicInterrupts(NvicPriority nvicPriority) {
       enableNvicInterrupt(Info::irqNums[0], nvicPriority);
    }
 
@@ -383,8 +383,8 @@ public:
 
 #ifdef DEBUG_BUILD
       // Check pin assignments
-      static_assert(Info::info[0].gpioBit != UNMAPPED_PCR, "I2Cx_SCL has not been assigned to a pin - Modify Configure.usbdm");
-      static_assert(Info::info[1].gpioBit != UNMAPPED_PCR, "I2Cx_SDA has not been assigned to a pin - Modify Configure.usbdm");
+      static_assert(Info::info[0].gpioBit >= 0, "I2Cx_SCL has not been assigned to a pin - Modify Configure.usbdm");
+      static_assert(Info::info[1].gpioBit >= 0, "I2Cx_SDA has not been assigned to a pin - Modify Configure.usbdm");
 #endif
 
       busHangReset();

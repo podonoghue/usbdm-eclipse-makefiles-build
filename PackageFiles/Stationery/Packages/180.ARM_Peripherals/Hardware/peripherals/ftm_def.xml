@@ -101,7 +101,7 @@
          bitmask="0x3F" 
          bitList="CH2TRIG,CH3TRIG,CH4TRIG,CH5TRIG,CH0TRIG,CH1TRIG," 
          />
-      <binaryOption name="ftm_exttrig_inittrigen" description="Initialization Trigger Enable"
+      <binaryOption name="ftm_exttrig_inittrigen" description="Initialisation Trigger Enable"
          toolTip="Enables the generation of the trigger when the FTM counter \n
           is equal to the CNTIN register.">
          <choice value="0" name="Disabled" />
@@ -112,7 +112,7 @@
       \t//! Default value for EXTTRIG) register\n
       \tstatic constexpr uint32_t exttrig  = 
       \t    $(ftm_exttrig_trig)|                              // External Trigger Enable
-      \t    FTM_EXTTRIG_INITTRIGEN($(ftm_exttrig_inittrigen));    // Initialization Trigger Enable \n\n
+      \t    FTM_EXTTRIG_INITTRIGEN($(ftm_exttrig_inittrigen));    // Initialisation Trigger Enable \n\n
    ]]></template>
 
    <category name="Advanced" description="Advanced options">
@@ -154,10 +154,10 @@
          
    <template><![CDATA[
       \t/** Minimum resolution for PWM interval */
-      \tstatic constexpr uint32_t minimumResolution=$(check_minimums)?$(minimumResolution):0;\n\n
+      \tstatic constexpr uint32_t minimumResolution=$(?check_minimums:$(minimumResolution):0);\n\n
       
       \t/** Minimum usable interval in ticks */      
-      \tstatic constexpr uint32_t minimumInterval=$(check_minimums)?$(minimumInterval):0;\n\n
+      \tstatic constexpr uint32_t minimumInterval=$(?check_minimums:$(minimumInterval):0);\n\n
       
       \t/**
       \t * Get input clock frequency

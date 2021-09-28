@@ -5,8 +5,6 @@
  *
  *  Generic vectors Kinetis Cortex-M0 devices
  *
- *  Based on Keil Application Note 209
- *
  *  Created on: 22/05/2017
  *      Author: podonoghue
  */
@@ -24,16 +22,17 @@
 typedef void( *const intfunc )( void );
 
 #define WEAK_DEFAULT_HANDLER __attribute__ ((__nothrow__, __weak__, alias("Default_Handler")))
+
 /**
  * Default handler for interrupts
  *
  * Most of the vector table is initialised to point at this handler.
  *
  * If you end up here it probably means:
- *   - Failed to enable the interrupt handler in the USBDM device configuration
+ *   - Failed to enable the interrupt handler in the USBDM configuration (Configure.usbdmProject)
  *   - You have accidently enabled an interrupt source in a peripheral
  *   - Enabled the wrong interrupt source
- *   - Failed to install or create a handler for an interrupt you intended using e.g. mis-spelled the name.
+ *   - Failed to install or create a handler for an interrupt you intended using e.g. misspelled the name.
  *     Compare your handler (C function) name to that used in the vector table.
  *
  * You can check 'vectorNum' below to determine the interrupt source.  Look this up in the vector table below.
@@ -91,6 +90,7 @@ void HardFault_Handler(void) {
    __asm__ volatile ( "      mov   r1, lr                                  \n"); // Get LR=EXC_RETURN in r1
    __asm__ volatile ("       ldr r2, handler_addr_const                    \n"); // Go to C handler
    __asm__ volatile ("       bx r2                                         \n");
+   __asm__ volatile ("      .align 4                                       \n");
    __asm__ volatile ("       handler_addr_const: .word _HardFault_Handler  \n");
 }
 

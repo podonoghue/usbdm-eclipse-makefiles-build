@@ -33,7 +33,7 @@ namespace USBDM {
 enum EwmInput {
    EwmInput_Disabled    = EWM_CTRL_INEN(0)|EWM_CTRL_ASSIN(0), //!< EWM_in Pin disabled
    EwmInput_ActiveLow   = EWM_CTRL_INEN(1)|EWM_CTRL_ASSIN(0), //!< EWM_in Pin activeLow
-   EwmInput_ActiveHighe = EWM_CTRL_INEN(1)|EWM_CTRL_ASSIN(1), //!< EWM_in Pin activeHigh
+   EwmInput_ActiveHigh  = EWM_CTRL_INEN(1)|EWM_CTRL_ASSIN(1), //!< EWM_in Pin activeHigh
 };
 
 /**
@@ -55,7 +55,7 @@ static constexpr uint8_t EwmKey2 = 0x2C;
  *
  * @param[in]  status Struct indicating interrupt source and state
  */
-typedef void (*EWMCallbackFunction)();
+typedef void (*EwmCallbackFunction)();
 
 /**
  * Template class representing the External Watchdog Monitor
@@ -69,6 +69,32 @@ template<class Info>
 class EwmBase_T {
 
 protected:
+   /** Class to static check output is mapped to a pin - assumes existence */
+   template<int ewmOutPin> class CheckOutputPinIsMapped {
+
+      // Check mapping - no need to check existence
+      static constexpr bool Test1 = (Info::info[ewmOutPin].gpioBit >= 0);
+
+      static_assert(Test1, "EWM output is not mapped to a pin - Modify Configure.usbdm");
+
+   public:
+      /** Dummy function to allow convenient in-line checking */
+      static constexpr void check() {}
+   };
+
+   /** Class to static check output is mapped to a pin - assumes existence */
+   template<int ewmInPin> class CheckInputPinIsMapped {
+
+      // Check mapping - no need to check existence
+      static constexpr bool Test1 = (Info::info[ewmInPin].gpioBit != UNMAPPED_PCR);
+
+      static_assert(Test1, "EWM input is not mapped to a pin - Modify Configure.usbdm");
+
+   public:
+      /** Dummy function to allow convenient in-line checking */
+      static constexpr void check() {}
+   };
+
    /**
     * Callback to catch unhandled interrupt
     */
@@ -77,7 +103,7 @@ protected:
    }
 
    /** Callback function for ISR */
-   static EWMCallbackFunction sCallback;
+   static EwmCallbackFunction sCallback;
 
 public:
    /**
@@ -86,6 +112,10 @@ public:
     * @return Reference to EWM hardware
     */
    static __attribute__((always_inline)) volatile EWM_Type &ewm() { return Info::ewm(); }
+
+   /** Allow access to PCR of associated pin */
+   using InputPin  = PcrTable_T<Info, 0>;
+   using OutputPin = PcrTable_T<Info, 1>;
 
    /**
     * IRQ handler
@@ -96,12 +126,91 @@ public:
    }
 
    /**
+    * Wrapper to allow the use of a class member as a callback function
+    * @note Only usable with static objects.
+    *
+    * @tparam T         Type of the object containing the callback member function
+    * @tparam callback  Member function pointer
+    * @tparam object    Object containing the member function
+    *
+    * @return  Pointer to a function suitable for the use as a callback
+    *
+    * @code
+    * class AClass {
+    * public:
+    *    int y;
+    *
+    *    // Member function used as callback
+    *    // This function must match EwmCallbackFunction
+    *    void callback() {
+    *       ...;
+    *    }
+    * };
+    * ...
+    * // Instance of class containing callback member function
+    * static AClass aClass;
+    * ...
+    * // Wrap member function
+    * auto fn = Ewm::wrapCallback<AClass, &AClass::callback, aClass>();
+    * // Use as callback
+    * Ewm::setCallback(fn);
+    * @endcode
+    */
+   template<class T, void(T::*callback)(), T &object>
+   static EwmCallbackFunction wrapCallback() {
+      static EwmCallbackFunction fn = []() {
+         (object.*callback)();
+      };
+      return fn;
+   }
+
+   /**
+    * Wrapper to allow the use of a class member as a callback function
+    * @note There is a considerable space and time overhead to using this method
+    *
+    * @tparam T         Type of the object containing the callback member function
+    * @tparam callback  Member function pointer
+    * @tparam object    Object containing the member function
+    *
+    * @return  Pointer to a function suitable for the use as a callback
+    *
+    * @code
+    * class AClass {
+    * public:
+    *    int y;
+    *
+    *    // Member function used as callback
+    *    // This function must match EwmCallbackFunction
+    *    void callback() {
+    *       ...;
+    *    }
+    * };
+    * ...
+    * // Instance of class containing callback member function
+    * AClass aClass;
+    * ...
+    * // Wrap member function
+    * auto fn = Ewm::wrapCallback<AClass, &AClass::callback>(aClass);
+    * // Use as callback
+    * Ewm::setCallback(fn);
+    * @endcode
+    */
+   template<class T, void(T::*callback)()>
+   static EwmCallbackFunction wrapCallback(T &object) {
+      static T &obj = object;
+      static EwmCallbackFunction fn = []() {
+         (obj.*callback)();
+      };
+      return fn;
+   }
+
+   /**
     * Set callback function
     *
     * @param[in] callback Callback function to execute on interrupt.\n
     *                     Use nullptr to remove callback.
     */
-   static void setCallback(EWMCallbackFunction callback) {
+   static void setCallback(EwmCallbackFunction callback) {
       static_assert(Info::irqHandlerInstalled, "EWM not configured for interrupts");
       if (callback == nullptr) {
          callback = unhandledCallback;
@@ -178,41 +287,19 @@ public:
    /**
     * Enable EWM_in pin as input and connected to EWM.
     * Configures all Pin Control Register (PCR) values.
-    */
-   static void setInput(PcrValue pcrValue) {
-      constexpr int PinNum = 0;
-      using Pcr = PcrTable_T<Info, PinNum>;
-      Pcr::setPCR((pcrValue&~PORT_PCR_MUX_MASK)|(Info::info[PinNum].pcrValue&PORT_PCR_MUX_MASK));
-   }
-
-   /**
-    * Enable EWM_in pin as input and connected to EWM.
-    * Configures all Pin Control Register (PCR) values.
     *
     * @param[in] pinPull          One of PinPull_None, PinPull_Up, PinPull_Down
     * @param[in] pinAction        One of PinAction_None, etc (defaults to PinAction_None)
     * @param[in] pinFilter        One of PinFilter_None, PinFilter_Passive (defaults to PinFilter_None)
     */
    static void setInput(
-         PinPull           pinPull,
-         PinAction         pinAction         = PinAction_None,
-         PinFilter         pinFilter         = PinFilter_None
+         PinPull           pinPull           = InputPin::defaultPcrValue,
+         PinAction         pinAction         = InputPin::defaultPcrValue,
+         PinFilter         pinFilter         = InputPin::defaultPcrValue
          ) {
-      setInput(pinPull|pinAction|pinFilter);
-   }
+      CheckInputPinIsMapped<0>::check();
 
-   /**
-    * Enable EWM_out pin as output and connected to EWM.
-    * Configures all Pin Control Register (PCR) values.
-    *
-    * @param[in] pcrValue PCR value to use in configuring port (excluding MUX value). See pcrValue()
-    */
-   static void setOutput(PcrValue pcrValue) {
-      constexpr int PinNum = 1;
-      using Pcr = PcrTable_T<Info, PinNum>;
-
-      // Enable and map pin to CMP_OUT
-      Pcr::setPCR((pcrValue&~PORT_PCR_MUX_MASK)|(Info::info[PinNum].pcrValue&PORT_PCR_MUX_MASK));
+      InputPin::setInput(pinPull, pinAction, pinFilter);
    }
 
    /**
@@ -224,11 +311,13 @@ public:
     * @param[in] pinSlewRate      One of PinSlewRate_Slow, PinSlewRate_Fast (defaults to PinSlewRate_Fast)
     */
    static void setOutput(
-         PinDriveStrength  pinDriveStrength,
-         PinDriveMode      pinDriveMode      = PinDriveMode_PushPull,
-         PinSlewRate       pinSlewRate       = PinSlewRate_Fast
+         PinDriveStrength  pinDriveStrength  = OutputPin::defaultPcrValue,
+         PinDriveMode      pinDriveMode      = OutputPin::defaultPcrValue,
+         PinSlewRate       pinSlewRate       = OutputPin::defaultPcrValue
          ) {
-      setOutput(pinDriveStrength|pinDriveMode|pinSlewRate);
+      CheckOutputPinIsMapped<0>::check();
+
+      OutputPin::setOutput(pinDriveStrength, pinDriveMode, pinSlewRate);
    }
 
    /**
@@ -263,7 +352,7 @@ public:
     *
     * @param[in]  nvicPriority  Interrupt priority
     */
-   static void enableNvicInterrupts(uint32_t nvicPriority) {
+   static void enableNvicInterrupts(NvicPriority nvicPriority) {
       enableNvicInterrupt(Info::irqNums[0], nvicPriority);
    }
 
@@ -289,7 +378,7 @@ public:
    }
 };
 
-template<class Info> EWMCallbackFunction EwmBase_T<Info>::sCallback = EwmBase_T<Info>::unhandledCallback;
+template<class Info> EwmCallbackFunction EwmBase_T<Info>::sCallback = EwmBase_T<Info>::unhandledCallback;
 
 #if defined(USBDM_EWM_IS_DEFINED)
 class Ewm : public EwmBase_T<EwmInfo> {};

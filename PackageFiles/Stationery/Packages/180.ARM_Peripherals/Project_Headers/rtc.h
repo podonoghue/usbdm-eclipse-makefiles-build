@@ -32,7 +32,7 @@ namespace USBDM {
  *
  *  @param[in]  timeSinceEpoch - Time since the epoch in seconds
  */
-typedef void (*RTCCallbackFunction)(uint32_t timeSinceEpoch);
+typedef void (*RtcCallbackFunction)(uint32_t timeSinceEpoch);
 
 /**
  * Template class providing interface to Real Time Clock
@@ -57,10 +57,10 @@ public:
 
 protected:
    /** Callback function for alarm ISR */
-   static RTCCallbackFunction sAlarmCallback;
+   static RtcCallbackFunction sAlarmCallback;
 
    /** Callback function for seconds ISR */
-   static RTCCallbackFunction sSecondsCallback;
+   static RtcCallbackFunction sSecondsCallback;
 
 public:
    /**
@@ -107,13 +107,93 @@ public:
          rtc().IER   &= ~RTC_IER_TSIE_MASK;
       }
    }
+
+   /**
+    * Wrapper to allow the use of a class member as a callback function
+    * @note Only usable with static objects.
+    *
+    * @tparam T         Type of the object containing the callback member function
+    * @tparam callback  Member function pointer
+    * @tparam object    Object containing the member function
+    *
+    * @return  Pointer to a function suitable for the use as a callback
+    *
+    * @code
+    * class AClass {
+    * public:
+    *    int y;
+    *
+    *    // Member function used as callback
+    *    // This function must match RtcCallbackFunction
+    *    void callback() {
+    *       ...;
+    *    }
+    * };
+    * ...
+    * // Instance of class containing callback member function
+    * static AClass aClass;
+    * ...
+    * // Wrap member function
+    * auto fn = Rtc::wrapCallback<AClass, &AClass::callback, aClass>();
+    * // Use as callback
+    * Rtc::setCallback(fn);
+    * @endcode
+    */
+   template<class T, void(T::*callback)(uint32_t), T &object>
+   static RtcCallbackFunction wrapCallback() {
+      static RtcCallbackFunction fn = [](uint32_t timeSinceEpoch) {
+         (object.*callback)(timeSinceEpoch);
+      };
+      return fn;
+   }
+
+   /**
+    * Wrapper to allow the use of a class member as a callback function
+    * @note There is a considerable space and time overhead to using this method
+    *
+    * @tparam T         Type of the object containing the callback member function
+    * @tparam callback  Member function pointer
+    * @tparam object    Object containing the member function
+    *
+    * @return  Pointer to a function suitable for the use as a callback
+    *
+    * @code
+    * class AClass {
+    * public:
+    *    int y;
+    *
+    *    // Member function used as callback
+    *    // This function must match RtcCallbackFunction
+    *    void callback() {
+    *       ...;
+    *    }
+    * };
+    * ...
+    * // Instance of class containing callback member function
+    * AClass aClass;
+    * ...
+    * // Wrap member function
+    * auto fn = Rtc::wrapCallback<AClass, &AClass::callback>(aClass);
+    * // Use as callback
+    * Rtc::setCallback(fn);
+    * @endcode
+    */
+   template<class T, void(T::*callback)(uint32_t)>
+   static RtcCallbackFunction wrapCallback(T &object) {
+      static T &obj = object;
+      static RtcCallbackFunction fn = [](uint32_t timeSinceEpoch) {
+         (obj.*callback)(timeSinceEpoch);
+      };
+      return fn;
+   }
+
    /**
     * Set Alarm callback function
     *
     *  @param[in]  callback  Callback function to be executed on alarm interrupt.\n
     *                        Use nullptr to remove callback.
     */
-   static void setAlarmCallback(RTCCallbackFunction callback) {
+   static void setAlarmCallback(RtcCallbackFunction callback) {
       static_assert(Info::irqAlarmHandlerInstalled, "RTC not configure for alarm interrupts");
       if (callback == nullptr) {
          callback = unhandledCallback;
@@ -127,7 +207,7 @@ public:
     *  @param[in]  callback  Callback function to be executed on seconds interrupt.\n
     *                        Use nullptr to remove callback.
     */
-   static void setSecondsCallback(RTCCallbackFunction callback) {
+   static void setSecondsCallback(RtcCallbackFunction callback) {
       static_assert(Info::irqSecondsHandlerInstalled, "RTC not configure for seconds interrupts");
       if (callback == nullptr) {
          callback = unhandledCallback;
@@ -243,7 +323,7 @@ public:
     *
     * @param[in]  nvicPriority  Interrupt priority
     */
-   static void enableNvicInterrupts(uint32_t nvicPriority) {
+   static void enableNvicInterrupts(NvicPriority nvicPriority) {
       enableNvicInterrupt(Info::irqNums[0], nvicPriority);
       if (Info::irqCount>1) {
          enableNvicInterrupt(Info::irqNums[1], nvicPriority);
@@ -300,8 +380,8 @@ public:
 
 };
 
-template<class Info> RTCCallbackFunction RtcBase_T<Info>::sAlarmCallback   = unhandledCallback;
-template<class Info> RTCCallbackFunction RtcBase_T<Info>::sSecondsCallback = unhandledCallback;
+template<class Info> RtcCallbackFunction RtcBase_T<Info>::sAlarmCallback   = unhandledCallback;
+template<class Info> RtcCallbackFunction RtcBase_T<Info>::sSecondsCallback = unhandledCallback;
 
 #ifdef USBDM_RTC_IS_DEFINED
 /**

@@ -163,7 +163,7 @@ public:
     *
     * @param[in] pcrValue PCR value to use in configuring pin (excluding MUX value). See pcrValue()
     */
-   static void setInOut(PcrValue pcrValue=GPIO_DEFAULT_PCR) {
+   static void setInOut(PcrValue pcrValue) {
       // Make input initially
       setIn();
       // Set inactive pin state (if later made output)
@@ -187,15 +187,22 @@ public:
     * @param[in] pinSlewRate      One of PinSlewRate_Slow, PinSlewRate_Fast (defaults to PinSlewRate_Fast)
     */
    static void setInOut(
-         PinPull           pinPull,
+         PinPull           pinPull           = PinPull_None,
          PinDriveStrength  pinDriveStrength  = PinDriveStrength_Low,
          PinDriveMode      pinDriveMode      = PinDriveMode_PushPull,
          PinAction         pinAction         = PinAction_None,
          PinFilter         pinFilter         = PinFilter_None,
          PinSlewRate       pinSlewRate       = PinSlewRate_Fast
    ) {
-      setInOut(pinPull|pinDriveStrength|pinDriveMode|pinAction|pinFilter|pinSlewRate|PinMux_Gpio);
-   }
+      const PcrValue pcrValue = pinPull|pinDriveStrength|pinDriveMode|pinAction|pinFilter|pinSlewRate;
+
+      // Make input initially
+      setIn();
+      // Set inactive pin state (if later made output)
+      setInactive();
+      // Configure PCR
+      Pcr::setPCR((pcrValue&~PORT_PCR_MUX_MASK)|PinMux_Gpio);
+      }
    /**
     * Set pin as digital output
     *
@@ -219,7 +226,7 @@ public:
     *
     * @param[in] pcrValue PCR value to use in configuring port (excluding MUX value). See pcrValue()
     */
-   static void setOutput(PcrValue pcrValue=GPIO_DEFAULT_PCR) {
+   static void setOutput(PcrValue pcrValue) {
       // Set initial level before enabling pin drive
       setInactive();
       // Make pin an output
@@ -241,12 +248,18 @@ public:
     * @param[in] pinSlewRate      One of PinSlewRate_Slow, PinSlewRate_Fast (defaults to PinSlewRate_Slow)
     */
    static void setOutput(
-         PinDriveStrength  pinDriveStrength,
+         PinDriveStrength  pinDriveStrength  = PinDriveStrength_Low,
          PinDriveMode      pinDriveMode      = PinDriveMode_PushPull,
          PinSlewRate       pinSlewRate       = PinSlewRate_Fast
    ) {
-      setOutput(pinDriveStrength|pinDriveMode|pinSlewRate);
-   }
+      const PcrValue pcrValue = pinDriveStrength|pinDriveMode|pinSlewRate;
+      // Set initial level before enabling pin drive
+      setInactive();
+      // Make pin an output
+      setOut();
+      // Configure pin
+      Pcr::setPCR((pcrValue&~PORT_PCR_MUX_MASK)|PinMux_Gpio);
+      }
    /**
     * Set pin as digital input
     *
@@ -270,7 +283,7 @@ public:
     *
     * @param[in] pcrValue PCR value to use in configuring port (excluding MUX value)
     */
-   static void setInput(PcrValue pcrValue=GPIO_DEFAULT_PCR) {
+   static void setInput(PcrValue pcrValue) {
       // Make pin an input
       setIn();
       Pcr::setPCR((pcrValue&~PORT_PCR_MUX_MASK)|PinMux_Gpio);
@@ -288,12 +301,16 @@ public:
     * @param[in] pinFilter        One of PinFilter_None, PinFilter_Passive (defaults to PinFilter_None)
     */
    static void setInput(
-         PinPull           pinPull,
+         PinPull           pinPull           = PinPull_None,
          PinAction         pinAction         = PinAction_None,
          PinFilter         pinFilter         = PinFilter_None
    ) {
-      setInput(pinPull|pinAction|pinFilter|PinMux_Gpio);
-   }
+      const PcrValue pcrValue = pinPull|pinAction|pinFilter;
+
+      // Make pin an input
+      setIn();
+      Pcr::setPCR((pcrValue&~PORT_PCR_MUX_MASK)|PinMux_Gpio);
+      }
    /**
     * Set pin. Pin will be high if configured as an output.
     *
@@ -636,7 +653,7 @@ public:
     *
     * @note This is a convenience function for Pcr::enableNvicInterrupts(nvicPriority)
     */
-   static void enableNvicInterrupts(uint32_t nvicPriority) {
+   static void enableNvicInterrupts(NvicPriority nvicPriority) {
       Port::enableNvicInterrupts(nvicPriority);
    }
 
@@ -647,6 +664,85 @@ public:
     */
    static void disableNvicInterrupts() {
       Port::disableNvicInterrupts();
+   }
+
+   /**
+    * Wrapper to allow the use of a class member as a callback function
+    * @note Only usable with static objects.
+    *
+    * @tparam T         Type of the object containing the callback member function
+    * @tparam callback  Member function pointer
+    * @tparam object    Object containing the member function
+    *
+    * @return  Pointer to a function suitable for the use as a callback
+    *
+    * @code
+    * class AClass {
+    * public:
+    *    int y;
+    *
+    *    // Member function used as callback
+    *    // This function must match PinCallbackFunction
+    *    void callback(uint8_t status) {
+    *       ...;
+    *    }
+    * };
+    * ...
+    * // Instance of class containing callback member function
+    * static AClass aClass;
+    * ...
+    * // Wrap member function
+    * auto fn = GpioA::wrapCallback<AClass, &AClass::callback, aClass>();
+    * // Use as callback
+    * GpioA::setCallback(fn);
+    * @endcode
+    */
+   template<class T, void(T::*callback)(uint32_t), T &object>
+   static PinCallbackFunction wrapCallback() {
+      static PinCallbackFunction fn = [](uint32_t status) {
+         (object.*callback)(status);
+      };
+      return fn;
+   }
+
+   /**
+    * Wrapper to allow the use of a class member as a callback function
+    * @note There is a considerable space and time overhead to using this method
+    *
+    * @tparam T         Type of the object containing the callback member function
+    * @tparam callback  Member function pointer
+    * @tparam object    Object containing the member function
+    *
+    * @return  Pointer to a function suitable for the use as a callback
+    *
+    * @code
+    * class AClass {
+    * public:
+    *    int y;
+    *
+    *    // Member function used as callback
+    *    // This function must match PinCallbackFunction
+    *    void callback(uint8_t status) {
+    *       ...;
+    *    }
+    * };
+    * ...
+    * // Instance of class containing callback member function
+    * AClass aClass;
+    * ...
+    * // Wrap member function
+    * auto fn = GpioA::wrapCallback<AClass, &AClass::callback>(aClass);
+    * // Use as callback
+    * GpioA::setCallback(fn);
+    * @endcode
+    */
+   template<class T, void(T::*callback)(uint32_t)>
+   static PinCallbackFunction wrapCallback(T &object) {
+      static T &obj = object;
+      static PinCallbackFunction fn = [](uint32_t status) {
+         (obj.*callback)(status);
+      };
+      return fn;
    }
 
    /**
@@ -1046,7 +1142,7 @@ public:
     *
     * @note This is a convenience function for Pcr::enableNvicInterrupts(nvicPriority)
     */
-   static void enableNvicInterrupts(uint32_t nvicPriority) {
+   static void enableNvicInterrupts(NvicPriority nvicPriority) {
       Port::enableNvicInterrupts(nvicPriority);
    }
 
@@ -1058,6 +1154,85 @@ public:
     */
    static void disableNvicInterrupts() {
       Port::disableNvicInterrupts();
+   }
+
+   /**
+    * Wrapper to allow the use of a class member as a callback function
+    * @note Only usable with static objects.
+    *
+    * @tparam T         Type of the object containing the callback member function
+    * @tparam callback  Member function pointer
+    * @tparam object    Object containing the member function
+    *
+    * @return  Pointer to a function suitable for the use as a callback
+    *
+    * @code
+    * class AClass {
+    * public:
+    *    int y;
+    *
+    *    // Member function used as callback
+    *    // This function must match PinCallbackFunction
+    *    void callback(uint8_t status) {
+    *       ...;
+    *    }
+    * };
+    * ...
+    * // Instance of class containing callback member function
+    * static AClass aClass;
+    * ...
+    * // Wrap member function
+    * auto fn = GpioA::wrapCallback<AClass, &AClass::callback, aClass>();
+    * // Use as callback
+    * GpioA::setCallback(fn);
+    * @endcode
+    */
+   template<class T, void(T::*callback)(uint32_t), T &object>
+   static PinCallbackFunction wrapCallback() {
+      static PinCallbackFunction fn = [](uint32_t status) {
+         (object.*callback)(status);
+      };
+      return fn;
+   }
+
+   /**
+    * Wrapper to allow the use of a class member as a callback function
+    * @note There is a considerable space and time overhead to using this method
+    *
+    * @tparam T         Type of the object containing the callback member function
+    * @tparam callback  Member function pointer
+    * @tparam object    Object containing the member function
+    *
+    * @return  Pointer to a function suitable for the use as a callback
+    *
+    * @code
+    * class AClass {
+    * public:
+    *    int y;
+    *
+    *    // Member function used as callback
+    *    // This function must match PinCallbackFunction
+    *    void callback(uint8_t status) {
+    *       ...;
+    *    }
+    * };
+    * ...
+    * // Instance of class containing callback member function
+    * AClass aClass;
+    * ...
+    * // Wrap member function
+    * auto fn = GpioA::wrapCallback<AClass, &AClass::callback>(aClass);
+    * // Use as callback
+    * GpioA::setCallback(fn);
+    * @endcode
+    */
+   template<class T, void(T::*callback)(uint32_t)>
+   static PinCallbackFunction wrapCallback(T &object) {
+      static T &obj = object;
+      static PinCallbackFunction fn = [](uint32_t status) {
+         (obj.*callback)(status);
+      };
+      return fn;
    }
 
    /**
@@ -1074,11 +1249,12 @@ public:
     * @note This is a convenience function for Pcr::setCallback(callback)
     */
    static ErrorCode setCallback(PinCallbackFunction callback) {
+      static_assert(Info::irqHandlerInstalled, "GpioField not configured for interrupts - Modify Configure.usbdm");
       return Port::setCallback(callback);
    }
 
    /**
-    * @brief Convenience template for Gpios associated with this field. See @ref Gpio_T
+    * @brief Convenience template for Gpios associated with a bit of this field. See @ref Gpio_T
     *
     * <b>Usage</b>
     * @code
@@ -1092,11 +1268,16 @@ public:
     *
     * @endcode
     *
-    * @tparam bitNum        Bit number in the port
+    * @tparam bitNum        Bit number within the <em>field<em>
     * @tparam polarity      Polarity of pin. Either ActiveHigh or ActiveLow
     */
    template<unsigned bitNum, Polarity bitPolarity=polarity> class Bit :
-   public GpioBase_T<Info::pinInfo.clockInfo, Info::pinInfo.portAddress, Info::pinInfo.irqNum, Info::pinInfo.gpioAddress, bitNum+RIGHT, bitPolarity> {};
+   public GpioBase_T<Info::pinInfo.clockInfo, Info::pinInfo.portAddress, Info::pinInfo.irqNum, Info::pinInfo.gpioAddress, bitNum+RIGHT, bitPolarity> {
+      static_assert(bitNum<=(left-right), "Bit does not exist in field");
+   public:
+      // Allow access to owning field
+      using Owner = Field_T;
+   };
 };
 
 #ifdef USBDM_GPIOA_IS_DEFINED

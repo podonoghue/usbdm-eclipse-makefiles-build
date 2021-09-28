@@ -144,7 +144,7 @@ enum DacWaterMark {
 /**
  * DAC status value as individual flags
  */
-union DacStatusValue {
+union DacStatus {
    uint8_t raw;
    struct {
       bool     readPointerBottomFlag:1;
@@ -153,7 +153,7 @@ union DacStatusValue {
       bool     watermarkFlag:1;
 #endif
    };
-   constexpr DacStatusValue(uint8_t value) : raw(value) {
+   constexpr DacStatus(uint8_t value) : raw(value) {
    }
 };
 
@@ -165,7 +165,7 @@ union DacStatusValue {
 /**
  * Type definition for DAC interrupt call back
  */
-typedef void (*DACCallbackFunction)(DacStatusValue);
+typedef void (*DacCallbackFunction)(DacStatus);
 
 /**
  * Template class representing a Digital to Analogue Converter
@@ -183,39 +183,29 @@ template<class Info>
 class Dac_T {
 
 protected:
-   /** Class to static check outputNum is mapped to a pin */
-   template<int outputNum> class CheckPinMapping {
-      static_assert((outputNum>=Info::numSignals)||(Info::info[outputNum].gpioBit != UNMAPPED_PCR),
-            "DAC output is not mapped to a pin - Modify Configure.usbdm");
+
+   /** Class to static check output is mapped to a pin - Assumes existence */
+   template<int dacOutput> class CheckOutputIsMapped {
+
+      // Check mapping - no need to check existence
+      static constexpr bool Test1 = (Info::info[dacOutput].gpioBit >= 0);
+
+      static_assert(Test1, "DAC output is not mapped to a pin - Modify Configure.usbdm");
+
    public:
       /** Dummy function to allow convenient in-line checking */
       static constexpr void check() {}
    };
-
-   /** Class to static check valid outputNum - it does not check that it is mapped to a pin */
-   template<int outputNum> class CheckOutput {
-      static_assert((outputNum<Info::numSignals),
-            "Non-existent DAC output  - Check Configure.usbdm for available outputs");
-      static_assert((outputNum>=Info::numSignals)||(Info::info[outputNum].gpioBit != INVALID_PCR),
-            "DAC output  doesn't exist in this device/package - Check Configure.usbdm for available outputs");
-      static_assert((outputNum>=Info::numSignals)||((Info::info[outputNum].gpioBit == UNMAPPED_PCR)||(Info::info[outputNum].gpioBit == INVALID_PCR)||(Info::info[outputNum].gpioBit >= 0)),
-            "Illegal DAC output - Check Configure.usbdm for available outputs");
-   public:
-      /** Dummy function to allow convenient in-line checking */
-      static constexpr void check() {}
-   };
-
-//   CheckPinMapping<0> check;
 
    /**
     * Callback to catch unhandled interrupt
     */
-   static void unhandledCallback(DacStatusValue) {
+   static void unhandledCallback(DacStatus) {
       setAndCheckErrorCode(E_NO_HANDLER);
    }
 
    /** Callback function for ISR */
-   static DACCallbackFunction sCallback;
+   static DacCallbackFunction sCallback;
 
 public:
    /**
@@ -243,12 +233,91 @@ public:
    }
 
    /**
+    * Wrapper to allow the use of a class member as a callback function
+    * @note Only usable with static objects.
+    *
+    * @tparam T         Type of the object containing the callback member function
+    * @tparam callback  Member function pointer
+    * @tparam object    Object containing the member function
+    *
+    * @return  Pointer to a function suitable for the use as a callback
+    *
+    * @code
+    * class AClass {
+    * public:
+    *    int y;
+    *
+    *    // Member function used as callback
+    *    // This function must match DacCallbackFunction
+    *    void callback() {
+    *       ...;
+    *    }
+    * };
+    * ...
+    * // Instance of class containing callback member function
+    * static AClass aClass;
+    * ...
+    * // Wrap member function
+    * auto fn = Dac::wrapCallback<AClass, &AClass::callback, aClass>();
+    * // Use as callback
+    * Dac::setCallback(fn);
+    * @endcode
+    */
+   template<class T, void(T::*callback)(DacStatus), T &object>
+   static DacCallbackFunction wrapCallback() {
+      static DacCallbackFunction fn = [](DacStatus status) {
+         (object.*callback)(status);
+      };
+      return fn;
+   }
+
+   /**
+    * Wrapper to allow the use of a class member as a callback function
+    * @note There is a considerable space and time overhead to using this method
+    *
+    * @tparam T         Type of the object containing the callback member function
+    * @tparam callback  Member function pointer
+    * @tparam object    Object containing the member function
+    *
+    * @return  Pointer to a function suitable for the use as a callback
+    *
+    * @code
+    * class AClass {
+    * public:
+    *    int y;
+    *
+    *    // Member function used as callback
+    *    // This function must match DacCallbackFunction
+    *    void callback() {
+    *       ...;
+    *    }
+    * };
+    * ...
+    * // Instance of class containing callback member function
+    * AClass aClass;
+    * ...
+    * // Wrap member function
+    * auto fn = Pit::wrapCallback<AClass, &AClass::callback>(aClass);
+    * // Use as callback
+    * Dac::setCallback(fn);
+    * @endcode
+    */
+   template<class T, void(T::*callback)(DacStatus)>
+   static DacCallbackFunction wrapCallback(T &object) {
+      static T &obj = object;
+      static DacCallbackFunction fn = [](DacStatus status) {
+         (obj.*callback)(status);
+      };
+      return fn;
+   }
+
+   /**
     * Set callback function
     *
     * @param[in] callback Callback function to execute on interrupt.\n
     *                     Use nullptr to remove callback.
     */
-   static void setCallback(DACCallbackFunction callback) {
+   static void setCallback(DacCallbackFunction callback) {
       static_assert(Info::irqHandlerInstalled, "DAC not configured for interrupts");
       if (callback == nullptr) {
          callback = unhandledCallback;
@@ -472,7 +541,7 @@ public:
     *
     * @param[in]  nvicPriority  Interrupt priority
     */
-   static void enableNvicInterrupts(uint32_t nvicPriority) {
+   static void enableNvicInterrupts(NvicPriority nvicPriority) {
       enableNvicInterrupt(Info::irqNums[0], nvicPriority);
    }
 
@@ -488,34 +557,36 @@ public:
     * Configures all Pin Control Register (PCR) values
     */
    static void setOutput() {
-      CheckOutput<0>::check();
+
+      CheckOutputIsMapped<0>::check();
+
       using Pcr = PcrTable_T<Info, 0>;
 
       // Enable and map pin to CMP_OUT
-      Pcr::setPCR(Info::info[0].pcrValue&PORT_PCR_MUX_MASK);
+      Pcr::setPCR();
    }
 
    /**
     * Get DAC status
     *
-    * @return DAC status value see DacStatusValue
+    * @return DAC status value see DacStatus
     */
-   static DacStatusValue getStatus() {
-      return (DacStatusValue)dac().SR;
+   static DacStatus getStatus() {
+      return (DacStatus)dac().SR;
    }
 
    /**
     * Get and clear DAC status
     *
-    * @return DAC status value see DacStatusValue
+    * @return DAC status value see DacStatus
     */
-   static DacStatusValue getAndClearStatus() {
+   static DacStatus getAndClearStatus() {
       // Get status
       uint8_t status = dac().SR;
       // Clear set flags
       dac().SR = ~status;
       // return original status
-      return (DacStatusValue)status;
+      return (DacStatus)status;
    }
    /**
     *   Disable the DAC
@@ -551,7 +622,7 @@ public:
 /**
  * Callback table for programmatically set handlers
  */
-template<class Info> DACCallbackFunction Dac_T<Info>::sCallback =  Dac_T<Info>::unhandledCallback;
+template<class Info> DacCallbackFunction Dac_T<Info>::sCallback =  Dac_T<Info>::unhandledCallback;
 
 #if defined(USBDM_DAC0_IS_DEFINED)
 using Dac0 = Dac_T<Dac0Info>;

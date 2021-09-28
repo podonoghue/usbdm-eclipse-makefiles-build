@@ -57,41 +57,34 @@
      -  %b replaced with peripheral base name e.g. FTM1 => = FTM
      -  %c replaced with peripheral C++ base class name e.g. FTM1 => = Ftm
      -  _IRQHandler is appended to the pattern (only)
+   Multiple patterns and classsHandlers may be used separated by ';'
    -->
-   <irqOption name="irqHandlers"  
+   <irqOption name="irqHandlingMethod"  
       description="Interrupt handlers"
       toolTip="This selection allow the interrupt handlers for this peripheral to be installed using several different methods"
-      pattern="^%b_?(\d+)(_DMA.*)?$" 
-      classHandler="%c%i::irqHandler&lt;$1&gt;" />
-      
-   <!--
-   Patterns for pattern and classHandler 
-     -  %i replaced with peripheral instance e.g. FTM1 => 1, PTA => A
-     -  %b replaced with peripheral base name e.g. FTM1 => = FTM
-     -  %c replaced with peripheral C++ base class name e.g. FTM1 => = Ftm
-     -  _IRQHandler is appended to the pattern (only)
-   -->
-   <irqOption name="errorIrqHandler"  
-      description="Interrupt handlers"
-      toolTip="This selection allow the interrupt handlers for this peripheral to be installed using several different methods"
-      pattern="^%b_Error.*$" 
-      classHandler="%c%i::errorIrqHandler" />
+      pattern="^%b_?(\d+)(_DMA.*)?$;^%b_Error.*$" 
+      classHandler="%c%i::irqHandler&lt;$1&gt;;%c%i::errorIrqHandler" />
       
    <template><![CDATA[
        \t//! Class based callback handler has been installed in vector table\n
-       \tstatic constexpr bool irqHandlerInstalled = $(irqHandlers);\n\n
+       \tstatic constexpr bool irqHandlerInstalled = $(irqHandlingMethod);\n\n
    ]]></template>
        
-   <intOption name="irqLevel" 
-      description="IRQ Level in NVIC [0-15]"
-      toolTip="Sets the priority level used to configure the NVIC\n
-               Lower numbers represent higher priorities"
-      value="8" min="0" max="15" 
-   />
+   <choiceOption name="irqLevel"
+      description="Default IRQ level for this peripheral"
+      toolTip="Sets the default priority level used to configure the NVIC">
+      <choice name="VeryHigh"      value="NvicPriority_VeryHigh" />
+      <choice name="High"          value="NvicPriority_High" />
+      <choice name="MidHigh"       value="NvicPriority_MidHigh" />
+      <choice name="Normal"        value="NvicPriority_Normal" isDefault="true"/>
+      <choice name="Midlow"        value="NvicPriority_Midlow" />
+      <choice name="Low"           value="NvicPriority_Low" />
+      <choice name="VeryLow"       value="NvicPriority_VeryLow" />
+   </choiceOption>
 
    <template><![CDATA[
        \t//! Default IRQ level\n
-       \tstatic constexpr uint32_t irqLevel =  $(irqLevel);\n\n
+       \tstatic constexpr NvicPriority irqLevel =  $(?irqHandlingMethod:$(irqLevel):NvicPriority_NotInstalled);\n\n
    ]]></template>
  
    <validate

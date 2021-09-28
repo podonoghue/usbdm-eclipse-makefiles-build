@@ -7,6 +7,7 @@ Devices using this peripheral:
       MK63F12
       MK64F12
       MKV31F25612
+      MKV31F51212
 -->
       <peripheral>
          <?sourceFile "MCG_MK_ICS48M" ?>

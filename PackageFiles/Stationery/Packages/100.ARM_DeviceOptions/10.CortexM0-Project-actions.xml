@@ -39,14 +39,14 @@ Cortex-M0
       <copy source="Project_Settings/Linker_Files/MemoryMap.ld"               target="Project_Settings/Linker_Files/MemoryMap-$(targetDeviceName).ld" />
 
       <copy source="Project_Headers/derivative.h"                             target="Project_Headers/derivative.h"    derived="true" />
-      <copy source="Project_Headers/TargetDevice.h"                           target="Project_Headers/$(targetDeviceSubFamily).h"  derived="true" />
+      <copy source="Project_Headers/TargetDevice.h"                           target="Project_Headers/$(externalHeaderFilename)"  derived="true" />
       <copy source="Project_Headers/system.h"                                 target="Project_Headers/system.h"        derived="true" />
       <copy source="Project_Headers/cmsis_gcc.h"                              target="Project_Headers/cmsis_gcc.h"     derived="true" />
       <copy source="Project_Headers/core_cmFunc.h"                            target="Project_Headers/core_cmFunc.h"   derived="true" />
       <copy source="Project_Headers/core_cmInstr.h"                           target="Project_Headers/core_cmInstr.h"  derived="true" />
       <copy source="Project_Headers/utilities-mke.h"                          target="Project_Headers/utilities.h"     derived="true" />
 
-      <copy source="$(externalHeaderFile)"                                    target="Project_Headers/$(targetDeviceSubFamily).h" overwrite="true" />
+      <copy source="$(externalHeaderFile)"                                    target="Project_Headers/$(externalHeaderFilename)" overwrite="true" />
 
       <projectActionList>
          <applyWhen>

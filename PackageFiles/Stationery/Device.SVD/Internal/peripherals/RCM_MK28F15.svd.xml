@@ -409,7 +409,6 @@ Selects the reset pin bus clock filter width (1-32 bus clocks)</description>
 This register includes flags to indicate the state of the mode pins during the last Chip Reset</description>
                <addressOffset>0x7</addressOffset>
                <size>8</size>
-               <access>read-only</access>
                <resetMask>0xFF</resetMask>
                <fields>
                   <field>

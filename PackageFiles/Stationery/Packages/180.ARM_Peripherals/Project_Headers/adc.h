@@ -56,7 +56,7 @@ namespace USBDM {
 /**
  * Default PCR value for pins used as GPIO (including multiplexor value)
  */
-static constexpr PcrValue ADC_DEFAULT_PCR = pcrValue(
+static constexpr PcrValue ADC_DEFAULT_PCR(
       PinPull_None, PinDriveStrength_Low, PinDriveMode_PushPull, PinAction_None, PinFilter_None, PinSlewRate_Fast, PinMux_Analogue);
 
 /**
@@ -203,7 +203,7 @@ enum AdcCompare {
  * @param[in] result  Conversion result from channel
  * @param[in] channel Channel providing the result
  */
-typedef void (*ADCCallbackFunction)(uint32_t result, int channel);
+typedef void (*AdcCallbackFunction)(uint32_t result, int channel);
 
 /**
  * Provides common unhandledCallback for all ADCs.
@@ -213,20 +213,42 @@ class AdcBase {
 
 private:
    AdcBase() = delete;
-   AdcBase(const PcrBase&) = delete;
-   AdcBase(PcrBase&&) = delete;
+   AdcBase(const AdcBase&) = delete;
+   AdcBase(AdcBase&&) = delete;
 
 public:
-   /** Class to static check channel pin mapping is valid */
-   template<class Info, int channel> class CheckSignal {
-      static_assert((channel<Info::numSignals),
-            "Non-existent ADC channel - Check Configure.usbdm for available channels");
-      static_assert((channel>=Info::numSignals)||(Info::info[channel].gpioBit != UNMAPPED_PCR),
-            "ADC channel is not mapped to a pin - Modify Configure.usbdm");
-      static_assert((channel>=Info::numSignals)||(Info::info[channel].gpioBit != INVALID_PCR),
-            "ADC channel doesn't exist in this device/package - Check Configure.usbdm for available channels");
-      static_assert((channel>=Info::numSignals)||((Info::info[channel].gpioBit == UNMAPPED_PCR)||(Info::info[channel].gpioBit == INVALID_PCR)||(Info::info[channel].gpioBit >= 0)),
-            "Illegal ADC Channel - Check Configure.usbdm for available channels");
+   /**
+    * Limit index to permitted pin index range
+    * Used to prevent noise from static assertion checks that detect a condition already detected in a more useful fashion.
+    *
+    * @param index   Index to limit
+    *
+    * @return Index limited to permitted range
+    */
+   template<class Info>
+   static inline constexpr int limitIndex(int channel) {
+      if (channel<0) {
+         return 0;
+      }
+      if (channel>(Info::numSignals-1)) {
+         return Info::numSignals-1;
+      }
+      return channel;
+   }
+
+   /** Class to static check channel exists and is mapped to an input pin */
+   template<class Info, int channel> class CheckInputPin {
+      // Tests are chained so only a single assertion can fail so as to reduce noise
+
+      // Out of bounds value for function index
+      static constexpr bool Test1 = (channel>=0) && (channel<(Info::numSignals));
+      // Function is not currently mapped to a pin
+      static constexpr bool Test2 = !Test1 || (Info::info[channel].gpioBit != UNMAPPED_PCR);
+      // Non-existent function and catch-all. (should be INVALID_PCR)
+      static constexpr bool Test3 = !Test1 || !Test2 || (Info::info[channel].gpioBit >= 0);
+      static_assert(Test1, "Non-existent ADC channel - Check Configure.usbdm for available inputs");
+      static_assert(Test2, "ADC channel is not mapped to a pin - Modify Configure.usbdm");
+      static_assert(Test3, "ADC channel doesn't exist in this device/package - Check Configure.usbdm for available channels");
    public:
       /** Dummy function to allow convenient in-line checking */
       static constexpr void check() {}
@@ -264,7 +286,7 @@ private:
 
 protected:
    /** Callback function for ISR */
-   static ADCCallbackFunction sCallback;
+   static AdcCallbackFunction sCallback;
 
 public:
    /** Hardware instance pointer */
@@ -302,6 +324,81 @@ public:
    }
 
    /**
+    * Wrapper to allow the use of a class member as a callback function
+    * @note Only usable with static objects.
+    *
+    * @tparam T         Type of the object containing the callback member function
+    * @tparam callback  Member function pointer
+    * @tparam object    Object containing the member function
+    *
+    * @return  Pointer to a function suitable for the use as a callback
+    *
+    * @code
+    * class AClass {
+    * public:
+    *    // Member function used as callback
+    *    // This function must match AdcCallbackFunction
+    *    void callback(uint32_t result, int channel) {
+    *       ...;
+    *    }
+    * };
+    * ...
+    * // Instance of class containing callback member function
+    * static AClass aClass;
+    * ...
+    * // Wrap member function to create handler
+    * auto fn = Adc0::wrapCallback<AClass, &AClass::callback, aClass>();
+    * // Use as callback
+    * Adc0::setCallback(fn);
+    * @endcode
+    */
+   template<class T, void(T::*callback)(uint32_t result, int channel), T &object>
+   static constexpr AdcCallbackFunction wrapCallback() {
+      AdcCallbackFunction fn = [](uint32_t result, int channel) {
+         (object.*callback)(result, channel);
+      };
+      return fn;
+   }
+
+   /**
+    * Wrapper to allow the use of a class member as a callback function
+    * @note There is a considerable space and time overhead to using this method
+    *
+    * @tparam T         Type of the object containing the callback member function
+    * @tparam callback  Member function pointer
+    * @tparam object    Object containing the member function
+    *
+    * @return  Pointer to a function suitable for the use as a callback
+    *
+    * @code
+    * class AClass {
+    * public:
+    *    // Member function used as callback
+    *    // This function must match AdcCallbackFunction
+    *    void callback(uint32_t result, int channel) {
+    *       ...;
+    *    }
+    * };
+    * ...
+    * // Instance of class containing callback member function
+    * static AClass aClass;
+    * ...
+    * // Wrap member function to create handler
+    * auto fn = Adc0::wrapCallback<AClass, &AClass::callback, aClass>();
+    * // Use as callback
+    * Adc0::setCallback(fn);
+    * @endcode
+    */
+   template<class T, void(T::*callback)(uint32_t result, int channel)>
+   static AdcCallbackFunction wrapCallback(T &object) {
+      static T &obj = object;
+      AdcCallbackFunction fn = [](uint32_t result, int channel) {
+         (obj.*callback)(result, channel);
+      };
+      return fn;
+   }
+
+   /**
     * Set callback for conversion complete interrupts
     *
     * @param[in] callback Callback function to execute on interrupt.\n
@@ -314,7 +411,7 @@ public:
     *       It is necessary to identify the originating channel in the callback.
     * @note To change between handlers first use setCallback(nullptr).
     */
-   static void setCallback(ADCCallbackFunction callback) {
+   static void setCallback(AdcCallbackFunction callback) {
       static_assert(Info::irqHandlerInstalled, "ADC not configured for interrupts. Modify Configure.usbdmProject");
       if (callback == nullptr) {
          sCallback = AdcBase::unhandledCallback;
@@ -503,7 +600,7 @@ public:
     *
     * @param[in]  nvicPriority  Interrupt priority
     */
-   static void enableNvicInterrupts(uint32_t nvicPriority) {
+   static void enableNvicInterrupts(NvicPriority nvicPriority) {
       enableNvicInterrupt(Info::irqNums[0], nvicPriority);
    }
 
@@ -794,10 +891,10 @@ public:
    template<int channel>
    class Channel {
 
-      AdcBase::CheckSignal<Info, channel> check;
+      AdcBase::CheckInputPin<Info, channel> check;
 
    public:
-      using Pcr = PcrTable_T<Info, channel>;
+      using Pcr = PcrTable_T<Info, AdcBase::limitIndex<Info>(channel)>;
 
       /** Allow convenient access to owning ADC */
       using Adc =  AdcBase_T<Info>;
@@ -900,15 +997,15 @@ public:
    class DiffChannel {
 
    private:
-      AdcBase::CheckSignal<typename Info::InfoDP, channel> checkPos;
-      AdcBase::CheckSignal<typename Info::InfoDM, channel> checkNeg;
+      AdcBase::CheckInputPin<typename Info::InfoDP, channel> checkPos;
+      AdcBase::CheckInputPin<typename Info::InfoDM, channel> checkNeg;
 
    public:
       /** PCR associated with plus channel */
-      using PcrP = PcrTable_T<typename Info::InfoDP, channel>;
+      using PcrP = PcrTable_T<typename Info::InfoDP, AdcBase::limitIndex<typename Info::InfoDP>(channel)>;
 
       /** PCR associated with minus channel */
-      using PcrM = PcrTable_T<typename Info::InfoDM, channel>;
+      using PcrM = PcrTable_T<typename Info::InfoDM, AdcBase::limitIndex<typename Info::InfoDM>(channel)>;
 
       /** Allow convenient access to owning ADC */
       using Adc =  AdcBase_T<Info>;
@@ -970,7 +1067,7 @@ public:
 
 };
 
-template<class Info> ADCCallbackFunction AdcBase_T<Info>::sCallback = AdcBase::unhandledCallback;
+template<class Info> AdcCallbackFunction AdcBase_T<Info>::sCallback = AdcBase::unhandledCallback;
 
 #ifdef USBDM_ADC0_IS_DEFINED
 /**

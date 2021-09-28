@@ -1,7 +1,7 @@
 <!--
 Devices using this vector table: 
-   MK21FA12
    MK21F12
+   MK21FA12
 -->
 <interrupts>
    <name>MK21FA12_VectorTable</name>

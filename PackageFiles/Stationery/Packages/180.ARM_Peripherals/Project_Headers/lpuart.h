@@ -376,6 +376,10 @@ public:
 #ifdef PCC_BASE_PTR
       Info::setClockSource(Info::defaultClockSource);
 #endif
+      // Check pin assignments
+      static_assert(Info::info[0].gpioBit >= 0, "LpUart_Tx has not been assigned to a pin - Modify Configure.usbdm");
+      static_assert(Info::info[1].gpioBit >= 0, "LpUart_Rx has not been assigned to a pin - Modify Configure.usbdm");
+      
       Info::enableClock();
 
       if (Info::mapPinsOnEnable) {
@@ -460,7 +464,7 @@ public:
     *
     * @param[in]  nvicPriority  Interrupt priority
     */
-   static void enableNvicInterrupts(uint32_t nvicPriority) {
+   static void enableNvicInterrupts(NvicPriority nvicPriority) {
       enableNvicInterrupt(Info::irqNums[0], nvicPriority);
       if (Info::irqCount>1) {
           enableNvicInterrupt(Info::irqNums[1], nvicPriority);

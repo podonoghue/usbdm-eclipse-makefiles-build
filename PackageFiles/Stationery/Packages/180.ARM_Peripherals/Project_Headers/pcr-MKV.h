@@ -505,7 +505,7 @@ public:
     *
     * @param[in]  nvicPriority  Interrupt priority
     */
-   static void enableNvicInterrupts(uint32_t nvicPriority) {
+   static void enableNvicInterrupts(NvicPriority nvicPriority) {
       static_assert(irqNum>=0, "Pin does not support interrupts");
       enableNvicInterrupt(irqNum, nvicPriority);
    }
@@ -915,7 +915,7 @@ public:
     *
     * @param[in]  nvicPriority  Interrupt priority
     */
-   static void enableNvicInterrupts(uint32_t nvicPriority) {
+   static void enableNvicInterrupts(NvicPriority nvicPriority) {
       static_assert(irqNum>=0, "Pin does not support interrupts");
       enableNvicInterrupt(irqNum, nvicPriority);
    }

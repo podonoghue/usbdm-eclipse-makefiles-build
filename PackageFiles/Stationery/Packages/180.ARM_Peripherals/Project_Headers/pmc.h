@@ -39,7 +39,7 @@ enum PmcInterruptReason {
  *
  * @param pmcInterruptReason Reason for interrupt leading to call-back
  */
-typedef void (*PMCCallbackFunction)(PmcInterruptReason pmcInterruptReason);
+typedef void (*PmcCallbackFunction)(PmcInterruptReason pmcInterruptReason);
 
 /**
  * Action to take on Low Voltage Detect
@@ -122,7 +122,7 @@ class PmcBase_T {
 
 protected:
    /** Callback function for ISR */
-   static PMCCallbackFunction sCallback;
+   static PmcCallbackFunction sCallback;
 
    /** Handler for unexpected interrupts */
    static void unhandledCallback(PmcInterruptReason) {
@@ -157,12 +157,91 @@ public:
    }
 
    /**
+    * Wrapper to allow the use of a class member as a callback function
+    * @note Only usable with static objects.
+    *
+    * @tparam T         Type of the object containing the callback member function
+    * @tparam callback  Member function pointer
+    * @tparam object    Object containing the member function
+    *
+    * @return  Pointer to a function suitable for the use as a callback
+    *
+    * @code
+    * class AClass {
+    * public:
+    *    int y;
+    *
+    *    // Member function used as callback
+    *    // This function must match PmcCallbackFunction
+    *    void callback() {
+    *       ...;
+    *    }
+    * };
+    * ...
+    * // Instance of class containing callback member function
+    * static AClass aClass;
+    * ...
+    * // Wrap member function
+    * auto fn = Cmp0::wrapCallback<AClass, &AClass::callback, aClass>();
+    * // Use as callback
+    * Cmp0::setCallback(fn);
+    * @endcode
+    */
+   template<class T, void(T::*callback)(PmcInterruptReason reason), T &object>
+   static PmcCallbackFunction wrapCallback() {
+      static PmcCallbackFunction fn = [](PmcInterruptReason reason) {
+         (object.*callback)(reason);
+      };
+      return fn;
+   }
+
+   /**
+    * Wrapper to allow the use of a class member as a callback function
+    * @note There is a considerable space and time overhead to using this method
+    *
+    * @tparam T         Type of the object containing the callback member function
+    * @tparam callback  Member function pointer
+    * @tparam object    Object containing the member function
+    *
+    * @return  Pointer to a function suitable for the use as a callback
+    *
+    * @code
+    * class AClass {
+    * public:
+    *    int y;
+    *
+    *    // Member function used as callback
+    *    // This function must match PmcCallbackFunction
+    *    void callback() {
+    *       ...;
+    *    }
+    * };
+    * ...
+    * // Instance of class containing callback member function
+    * AClass aClass;
+    * ...
+    * // Wrap member function
+    * auto fn = Cmp0::wrapCallback<AClass, &AClass::callback>(aClass);
+    * // Use as callback
+    * Cmp0::setCallback(fn);
+    * @endcode
+    */
+   template<class T, void(T::*callback)(PmcInterruptReason reason)>
+   static PmcCallbackFunction wrapCallback(T &object) {
+      static T &obj = object;
+      static PmcCallbackFunction fn = [](PmcInterruptReason reason) {
+         (obj.*callback)(reason);
+      };
+      return fn;
+   }
+
+   /**
     * Set Callback function
     *
     *  @param[in]  callback  Callback function to be executed on interrupt.\n
     *                        Use nullptr to remove callback.
     */
-   static void setCallback(PMCCallbackFunction callback) {
+   static void setCallback(PmcCallbackFunction callback) {
       static_assert(Info::irqHandlerInstalled, "PMC not configure for interrupts");
       if (callback == nullptr) {
          callback = unhandledCallback;
@@ -393,7 +472,7 @@ public:
     *
     * @param[in]  nvicPriority  Interrupt priority
     */
-   static void enableNvicInterrupts(uint32_t nvicPriority) {
+   static void enableNvicInterrupts(NvicPriority nvicPriority) {
       enableNvicInterrupt(Info::irqNums[0], nvicPriority);
    }
 
@@ -416,7 +495,7 @@ public:
 #endif
 };
 
-template<class Info> PMCCallbackFunction PmcBase_T<Info>::sCallback = PmcBase_T<Info>::unhandledCallback;
+template<class Info> PmcCallbackFunction PmcBase_T<Info>::sCallback = PmcBase_T<Info>::unhandledCallback;
 
 #ifdef USBDM_PMC_IS_DEFINED
 /**

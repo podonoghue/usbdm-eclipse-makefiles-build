@@ -37,13 +37,13 @@ Cortex-M4
       <copy source="Project_Settings/Linker_Files/ARMLtd_GCC-rom-mk-sramu.ld" target="Project_Settings/Linker_Files/Linker-rom.ld" overwrite="true" />
       <copy source="Project_Settings/Linker_Files/MemoryMap-mk-sramu.ld"      target="Project_Settings/Linker_Files/MemoryMap-$(targetDeviceName).ld"  overwrite="true" />
 
-      <copy source="Project_Headers/derivative.h"                             target="Project_Headers/derivative.h"  derived="true" />
+      <copy source="Project_Headers/derivative.h"                             target="Project_Headers/derivative.h"    derived="true" />
       <copy source="Project_Headers/TargetDevice.h"                           target="Project_Headers/$(externalHeaderFilename)"  derived="true" />
-      <copy source="Project_Headers/system.h"                                 target="Project_Headers/system.h"  derived="true" />
+      <copy source="Project_Headers/system.h"                                 target="Project_Headers/system.h"        derived="true" />
       <copy source="Project_Headers/core_cm4.h"                               target="Project_Headers/core_cm4.h"  derived="true" />
       <copy source="Project_Headers/core_cmSimd.h"                            target="Project_Headers/core_cmSimd.h"  derived="true" />
-      <copy source="Project_Headers/cmsis_gcc.h"                              target="Project_Headers/cmsis_gcc.h"  derived="true" />
-      <copy source="Project_Headers/core_cmFunc.h"                            target="Project_Headers/core_cmFunc.h"  derived="true" />
+      <copy source="Project_Headers/cmsis_gcc.h"                              target="Project_Headers/cmsis_gcc.h"     derived="true" />
+      <copy source="Project_Headers/core_cmFunc.h"                            target="Project_Headers/core_cmFunc.h"   derived="true" />
       <copy source="Project_Headers/core_cmInstr.h"                           target="Project_Headers/core_cmInstr.h"  derived="true" />
       <copy source="Project_Headers/utilities-mk.h"                           target="Project_Headers/utilities.h"  derived="true" />
 

@@ -1,4 +1,4 @@
-/* MemoryMap-mk-sramu.ld (Packages\100.ARM_DeviceOptions\Project_Settings\Linker_Files)
+/* MemoryMap-sramu.ld (Packages\100.ARM_DeviceOptions\Project_Settings\Linker_Files)
  *
  * Memory map for devices with SRAM_U allocation for bit-band/bme
  */
@@ -76,7 +76,7 @@ REGION_ALIAS("noinit_ram",     "ram_low");
 /*  <s1>  Zeroed Data (BSS)                 <"ram_low"=> ram_low <"ram_high"=> ram_high <i> bss_ram        */
 REGION_ALIAS("bss_ram",        "ram_low");
 /*  <s1>  Heap                              <"ram_low"=> ram_low <"ram_high"=> ram_high <i> heap_ram       */
-REGION_ALIAS("heap_ram",       "ram_low");
+REGION_ALIAS("heap_ram",       "ram_high");
 /*  <s1>  Stack                             <"ram_low"=> ram_low <"ram_high"=> ram_high <i> stack_ram      */
 REGION_ALIAS("stack_ram",      "ram_high");
 /* </h> */

@@ -35,12 +35,12 @@
       <copy source="Project_Settings/Linker_Files/MemoryMap.ld"               target="Project_Settings/Linker_Files/MemoryMap-$(targetDeviceName).ld" />
 
       <copy source="Project_Headers/derivative.h"                             target="Project_Headers/derivative.h"     derived="true" />
-      <copy source="Project_Headers/TargetDevice.h"                           target="Project_Headers/$(targetDeviceSubFamily).h"  derived="true" />
+      <copy source="Project_Headers/TargetDevice.h"                           target="Project_Headers/$(externalHeaderFilename)"  derived="true" />
       <copy source="Project_Headers/core_cm3.h"                               target="Project_Headers/core_cm3.h"       derived="true"  />
       <copy source="Project_Headers/core_cmFunc.h"                            target="Project_Headers/core_cmFunc.h"    derived="true" />
       <copy source="Project_Headers/cmsis_gcc.h"                              target="Project_Headers/cmsis_gcc.h"      derived="true" />
       <copy source="Project_Headers/core_cmInstr.h"                           target="Project_Headers/core_cmInstr.h"   derived="true" />
-      <copy source="$(externalHeaderFile)"                                    target="Project_Headers/$(targetDeviceSubFamily).h" derived="true" overwrite="true" />
+      <copy source="$(externalHeaderFile)"                                    target="Project_Headers/$(externalHeaderFilename)" derived="true" overwrite="true" />
 
       <!-- Base STM32 files -->
       <projectActionList id="STM32F10xx-files" >

@@ -13,12 +13,12 @@
  *  - RUN_CLOCK_CONFIG   = ClockConfig_PEE_80MHz   For RUN mode (Core=80MHz, Bus=40MHz, Flash=27MHz)
  *  - VLPR_CLOCK_CONFIG  = ClockConfig_BLPE_4MHz   For VLPR (Core/Bus = 4MHz, Flash = 1MHz)
  *
- * Interrupts must be configured for GPIO pin used, LLWU, LPTMR
  * It will also be necessary to modify the linker memory map so that only
- * lowest 32K of SRAM_U (0x10000000..) is used if testing of LLS2 is intended.
- * Interrupts will need to be enabled for Pin (GPIO), LPTMR and LLWU.
+ * lowest 32K of SRAM_U ([0x20000000..0x0x2008000]) is used if testing of LLS2 is intended.
+ * This necessary as only use the lower 32K of SRAM_U is preserved in this mode.
+ * Interrupt handler will need to be enabled for Pin (GPIOC), LPTMR and LLWU.
  *
-  */
+ */
 #include "hardware.h"
 #include "mcg.h"
 #include "smc.h"
@@ -80,7 +80,19 @@ static_assert(sizeof(PreservedData) < sizeof(RFSYS_Type));
  * The following are located in the Register file which is maintained in
  * Low-leakage modes and preserved across reset.
  */
-static PreservedData preservedData = (*(PreservedData*)(RFSYS_BASE_PTR));
+static PreservedData &preservedData = (*(PreservedData*)(RFSYS_BASE_PTR));
+
+void disableWakeupInterruptSources() {
+
+   // Timer
+   WakeupTimer::disableNvicInterrupts();
+
+   // LLWU
+   Llwu::disableNvicInterrupts();
+
+   // Disable wake-up pin
+   WakeupPin::disableNvicInterrupts();
+}
 
 /**
  * Call-back for Timer
@@ -99,9 +111,9 @@ static void wakeupTimerCallback() {
  * @param[in] status 32-bit value from ISFR (each bit indicates a pin interrupt source)
  */
 static void pinCallback(uint32_t status __attribute__((unused))) {
-   usbdm_assert(status & (WakeupPin::PORT_BITMASK), "Unexpected pin interrupt");
+   usbdm_assert(status & (WakeupPin::BITMASK), "Unexpected pin interrupt");
 
-   if (status & (WakeupPin::PORT_BITMASK)) {
+   if (status & (WakeupPin::BITMASK)) {
       preservedData.pinHandlerRan = true;
    }
 }
@@ -161,6 +173,7 @@ static void testStopMode(
    Smc::enterStopMode();
 
    Llwu::disableAllSources();
+   WakeupTimer::disableNvicInterrupts();
 
    // Make sure handlers have run
    waitMS(10);
@@ -172,6 +185,7 @@ static void testStopMode(
     * This assumes run mode is PEE
     */
    if (Smc::getStatus() == SmcStatus_RUN) {
+      console.flushOutput();
       Mcg::clockTransition(Mcg::clockInfo[RUN_CLOCK_CONFIG]);
       console.setBaudRate(BAUD_RATE);
       console.writeln("**** Awake ****").flushOutput();
@@ -210,6 +224,9 @@ static void testWaitMode(SmcRunMode smcRunMode) {
  */
 static void enablePin(const PreservedData preservedData) {
 
+   // Disable LLWU interrupts
+   Llwu::disableNvicInterrupts();
+
    // Disable filtered pin
    Llwu::configureFilteredPinSource(
          FILTER_NUM,
@@ -221,11 +238,13 @@ static void enablePin(const PreservedData preservedData) {
          WakeupPin::pin,
          LlwuPinMode_Disabled);
 
-   // Disable wake-up pin
+   // Disable wake-up pin interrupts
+   WakeupPin::disableNvicInterrupts();
    WakeupPin::setInput(
          PinPull_Up,
          PinAction_None,
          PinFilter_Passive);
+   WakeupPin::disablePortClock();
 
    if (preservedData.enablePin && (preservedData.test>=LLS2)) {
 
@@ -262,12 +281,14 @@ static void enablePin(const PreservedData preservedData) {
             PinAction_IrqFalling,
             PinFilter_Passive);
 
-      WakeupPin::clearInterruptFlag();
-      WakeupPin::setCallback(pinCallback);
-      WakeupPin::enablePinNvicInterrupts(NvicPriority_Normal);
+      WakeupPin::clearPinInterruptFlag();
+      WakeupPin::setPinCallback(pinCallback);
+      WakeupPin::enableNvicInterrupts(NvicPriority_Normal);
    }
    else {
-      WakeupPin::disablePinNvicInterrupts();
+      WakeupPin::disableNvicInterrupts();
+      WakeupPin::setPinCallback(pinCallback);
+      WakeupPin::disablePin();
    }
 }
 
@@ -303,6 +324,7 @@ static void enableTimer(const PreservedData preservedData) {
    }
    else {
       WakeupTimer::disableNvicInterrupts();
+      WakeupTimer::disable();
    }
 }
 
@@ -362,9 +384,7 @@ static void runSingleTest(PreservedData &preservedData) {
       case VLLS3: testStopMode(SmcStopMode_VeryLowLeakageStop, SmcLowLeakageStopMode_VLLS3); break;
       case NONE: break;
    }
-   Llwu::disableNvicInterrupts();
-   WakeupTimer::disableNvicInterrupts();
-   WakeupPin::disablePinNvicInterrupts();
+   disableWakeupInterruptSources();
 
    reportHandlersRun();
 }
@@ -394,6 +414,7 @@ static void runRepeatedTest(PreservedData &preservedData) {
  */
 static SmcStatus changeRunMode() {
    SmcStatus smcStatus = Smc::getStatus();
+   console.flushOutput();
    if (smcStatus == SmcStatus_HSRUN) {
       // HSRUN->RUN
       Mcg::clockTransition(Mcg::clockInfo[RUN_CLOCK_CONFIG]);
@@ -443,7 +464,7 @@ static void help() {
          "VLLS2 - Very Low Leakage Stop 2 - Partial SRAMU retained, exit via LLWU reset\n"
          "VLLS3 - Very Low Leakage Stop 3 - All RAM retained, exit via LLWU reset\n"
          "LPTMR - Low Power Timer (Uses LPO so not available in VLLS0)\n"
-         "Pin   - Port Pin used for interrupt or wake-up source\n"
+         "Pin   - Port Pin used for interrupt or (filtered) wake-up source\n"
          "Cont  - Run tests continuously until a key is pressed\n"
          "********************************************************************************\n"
    );
@@ -475,10 +496,23 @@ int main() {
       preservedData.continuousTest = false;
    }
 
+   if (preservedData.timerDelay == 0) {
+      console.writeln("Preserved Data cleared!");
+      preservedData.test           = STOP;
+      preservedData.continuousTest = false;
+      preservedData.enablePin      = true;
+      preservedData.enableTimer    = true;
+      preservedData.timerDelay     = 5;
+//      __asm__("bkpt");
+   }
+   else {
+      console.writeln("Preserved Data retained");
+   }
+
    // Configure LEDs as off to reduce power
-   RedLed::setOutput(   PinDriveStrength_High, PinDriveMode_PushPull, PinSlewRate_Slow);
-   GreenLed::setOutput( PinDriveStrength_High, PinDriveMode_PushPull, PinSlewRate_Slow);
-   BlueLed::setOutput(  PinDriveStrength_High, PinDriveMode_PushPull, PinSlewRate_Slow);
+   RedLed::disablePin();
+   GreenLed::disablePin();
+   BlueLed::disablePin();
 
    // Enable all power modes
    Smc::enablePowerModes(
@@ -489,7 +523,7 @@ int main() {
    );
 
    //Errata e4481 STOP mode recovery unstable
-//   Pmc::setBandgapOperation(PmcBandgapBuffer_Off, PmcBandgapLowPowerEnable_On);
+//   Pmc::configureBandgapOperation(PmcBandgapBuffer_Off, PmcBandgapLowPowerEnable_On);
 
    // Retain all RAM during LLS2 mode and VLLS2 modes.
 //   Pmc::setVlpRamRetention(0b11111111);
@@ -500,12 +534,6 @@ int main() {
       // Must be running repeated VLLS test
       runRepeatedTest(preservedData);
    }
-
-   preservedData.test           = STOP;
-   preservedData.continuousTest = false;
-   preservedData.enablePin      = true;
-   preservedData.enableTimer    = true;
-   preservedData.timerDelay     = 5;
 
    bool  refresh                 = true;
    Test  oldTest     = STOP;
@@ -524,10 +552,10 @@ int main() {
             case SmcStatus_HSRUN:
                console.write(
                      "\nTests\n"
-                     "====================================\n"
+                     "=======================================\n"
                      "R - Change run mode - VLPR, RUN, HSRUN\n"
                      "T - Toggle LPTMR wake-up source\n"
-                     "P - Toggle PIN wake-up source\n"
+                     "P - Toggle PIN wake-up\n"
                      "H - Help\n"
                );
                break;
@@ -535,7 +563,7 @@ int main() {
             case SmcStatus_RUN:
                console.write(
                      "\nTests\n"
-                     "====================================\n"
+                     "=========================================\n"
                      "R   - Change run mode - VLPR, RUN, HSRUN\n"
                      "S   - Select STOP, VLPS test\n"
                      "W   - Select WAIT test\n"
@@ -545,7 +573,7 @@ int main() {
                      "I   - Toggle LPWUI (Exit VLP to Run mode on interrupt)\n"
 #endif
                      "T   - Toggle LPTMR wake-up (not available in VLLS0)\n"
-                     "P   - Toggle PIN wake-up source\n"
+                     "P   - Toggle PIN wake-up\n"
                      "C   - Toggle Continuous tests\n"
                      "+/- - Change timer delay\n"
                      "H - Help\n"
@@ -554,7 +582,7 @@ int main() {
             case SmcStatus_VLPR:
                console.write(
                      "\nTests\n"
-                     "====================================\n"
+                     "=========================================\n"
                      "R   - Change run mode - VLPR, RUN, HSRUN\n"
                      "S   - Select VLPS test\n"
                      "W   - Select VLPW test\n"
@@ -582,7 +610,7 @@ int main() {
       console.write(preservedData.continuousTest?", Cont":"      ");
       console.write(preservedData.enablePin?", Pin":"     ");
       if (preservedData.enableTimer&&(preservedData.test!=VLLS0)) {
-         console.write(", Timer(").setWidth(2).setPadding(Padding_LeadingSpaces).write(preservedData.timerDelay).write(")");
+         console.write(", Timer(").setWidth(2).setPadding(Padding_LeadingSpaces).write(preservedData.timerDelay).write("s)");
       }
       else {
          console.write("           ");

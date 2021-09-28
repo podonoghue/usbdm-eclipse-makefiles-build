@@ -31,7 +31,7 @@ namespace USBDM {
 /**
  * Type definition for LPTMR interrupt call back
  */
-typedef void (*LPTMRCallbackFunction)(void);
+typedef void (*LptmrCallbackFunction)(void);
 
 #ifdef PCC_PCC_LPTMR0_CGC_MASK
 /**
@@ -132,7 +132,7 @@ protected:
    static constexpr int MINIMUM_RESOLUTION = 100;
 
    /** Callback function for ISR */
-   static LPTMRCallbackFunction sCallback;
+   static LptmrCallbackFunction sCallback;
 
    /** Hardware instance */
    static __attribute__((always_inline)) volatile LPTMR_Type &lptmr()     { return Info::lptmr(); }
@@ -284,13 +284,92 @@ public:
    }
 
    /**
+    * Wrapper to allow the use of a class member as a callback function
+    * @note Only usable with static objects.
+    *
+    * @tparam T         Type of the object containing the callback member function
+    * @tparam callback  Member function pointer
+    * @tparam object    Object containing the member function
+    *
+    * @return  Pointer to a function suitable for the use as a callback
+    *
+    * @code
+    * class AClass {
+    * public:
+    *    int y;
+    *
+    *    // Member function used as callback
+    *    // This function must match LptmrCallbackFunction
+    *    void callback() {
+    *       ...;
+    *    }
+    * };
+    * ...
+    * // Instance of class containing callback member function
+    * static AClass aClass;
+    * ...
+    * // Wrap member function
+    * auto fn = Lptmr0::wrapCallback<AClass, &AClass::callback, aClass>();
+    * // Use as callback
+    * Lptmr0::setCallback(fn);
+    * @endcode
+    */
+   template<class T, void(T::*callback)(), T &object>
+   static LptmrCallbackFunction wrapCallback() {
+      static LptmrCallbackFunction fn = []() {
+         (object.*callback)();
+      };
+      return fn;
+   }
+
+   /**
+    * Wrapper to allow the use of a class member as a callback function
+    * @note There is a considerable space and time overhead to using this method
+    *
+    * @tparam T         Type of the object containing the callback member function
+    * @tparam callback  Member function pointer
+    * @tparam object    Object containing the member function
+    *
+    * @return  Pointer to a function suitable for the use as a callback
+    *
+    * @code
+    * class AClass {
+    * public:
+    *    int y;
+    *
+    *    // Member function used as callback
+    *    // This function must match LptmrCallbackFunction
+    *    void callback() {
+    *       ...;
+    *    }
+    * };
+    * ...
+    * // Instance of class containing callback member function
+    * AClass aClass;
+    * ...
+    * // Wrap member function
+    * auto fn = Lptmr0::wrapCallback<AClass, &AClass::callback>(aClass);
+    * // Use as callback
+    * Lptmr0::setCallback(fn);
+    * @endcode
+    */
+   template<class T, void(T::*callback)()>
+   static LptmrCallbackFunction wrapCallback(T &object) {
+      static T &obj = object;
+      static LptmrCallbackFunction fn = []() {
+         (obj.*callback)();
+      };
+      return fn;
+   }
+
+   /**
     * Set callback for ISR and enable NVIC interrupts.
     *
     *   @param[in]  callback Callback function to be executed on interrupt\n
     *                        Use nullptr to remove callback.
     */
-   static void setCallback(LPTMRCallbackFunction callback) {
-      static_assert(Info::irqHandlerInstalled, "LPTMR not configure for interrupts");
+   static void setCallback(LptmrCallbackFunction callback) {
+      static_assert(Info::irqLevel>=0, "LPTMR not configure for interrupts");
       if (callback == nullptr) {
          callback = unhandledCallback;
       }
@@ -338,6 +417,7 @@ public:
     */
    static void disable(void) {
       // Disable timer
+      Info::enableClock();
       lptmr().CSR = 0;
       NVIC_DisableIRQ(Info::irqNums[0]);
       Info::disableClock();
@@ -583,7 +663,7 @@ public:
    }
 };
 
-template<class Info> LPTMRCallbackFunction LptmrBase_T<Info>::sCallback = LptmrBase_T<Info>::unhandledCallback;
+template<class Info> LptmrCallbackFunction LptmrBase_T<Info>::sCallback = LptmrBase_T<Info>::unhandledCallback;
 
 #ifdef USBDM_LPTMR0_IS_DEFINED
 /**

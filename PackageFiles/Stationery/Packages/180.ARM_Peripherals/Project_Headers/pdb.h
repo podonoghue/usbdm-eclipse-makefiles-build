@@ -28,7 +28,7 @@ namespace USBDM {
 /**
  * Type definition for PDB interrupt call back
  */
-typedef void (*PDBCallbackFunction)();
+typedef void (*PdbCallbackFunction)();
 
 /**
  * Select the PDB clock pre-scale which affects counter speed
@@ -190,10 +190,10 @@ class PdbBase_T {
 
 protected:
    /** Callback function for ISR */
-   static PDBCallbackFunction sCallback;
+   static PdbCallbackFunction sCallback;
 
    /** Callback function for error ISR */
-   static PDBCallbackFunction sErrorCallback;
+   static PdbCallbackFunction sErrorCallback;
 
    /** Handler for unexpected interrupts */
    static void unhandledCallback() {
@@ -217,12 +217,91 @@ public:
    }
 
    /**
+    * Wrapper to allow the use of a class member as a callback function
+    * @note Only usable with static objects.
+    *
+    * @tparam T         Type of the object containing the callback member function
+    * @tparam callback  Member function pointer
+    * @tparam object    Object containing the member function
+    *
+    * @return  Pointer to a function suitable for the use as a callback
+    *
+    * @code
+    * class AClass {
+    * public:
+    *    int y;
+    *
+    *    // Member function used as callback
+    *    // This function must match PdbCallbackFunction
+    *    void callback() {
+    *       ...;
+    *    }
+    * };
+    * ...
+    * // Instance of class containing callback member function
+    * static AClass aClass;
+    * ...
+    * // Wrap member function
+    * auto fn = Pdb0::wrapCallback<AClass, &AClass::callback, aClass>();
+    * // Use as callback
+    * Pdb0::setCallback(fn);
+    * @endcode
+    */
+   template<class T, void(T::*callback)(), T &object>
+   static PdbCallbackFunction wrapCallback() {
+      static PdbCallbackFunction fn = []() {
+         (object.*callback)();
+      };
+      return fn;
+   }
+
+   /**
+    * Wrapper to allow the use of a class member as a callback function
+    * @note There is a considerable space and time overhead to using this method
+    *
+    * @tparam T         Type of the object containing the callback member function
+    * @tparam callback  Member function pointer
+    * @tparam object    Object containing the member function
+    *
+    * @return  Pointer to a function suitable for the use as a callback
+    *
+    * @code
+    * class AClass {
+    * public:
+    *    int y;
+    *
+    *    // Member function used as callback
+    *    // This function must match PdbCallbackFunction
+    *    void callback() {
+    *       ...;
+    *    }
+    * };
+    * ...
+    * // Instance of class containing callback member function
+    * AClass aClass;
+    * ...
+    * // Wrap member function
+    * auto fn = Pdb0::wrapCallback<AClass, &AClass::callback>(aClass);
+    * // Use as callback
+    * Pdb0::setCallback(fn);
+    * @endcode
+    */
+   template<class T, void(T::*callback)()>
+   static PdbCallbackFunction wrapCallback(T &object) {
+      static T &obj = object;
+      static PdbCallbackFunction fn = []() {
+         (obj.*callback)();
+      };
+      return fn;
+   }
+
+   /**
     * Set Callback function
     *
     *   @param[in]  callback Callback function to be executed on interrupt\n
     *                        Use nullptr to remove callback.
     */
-   static void setCallback(PDBCallbackFunction callback) {
+   static void setCallback(PdbCallbackFunction callback) {
 
       static_assert(Info::irqHandlerInstalled, "PDB not configure for interrupts");
       if (callback == nullptr) {
@@ -237,7 +316,7 @@ public:
     *   @param[in]  callback Callback function to be executed on error interrupt\n
     *                        Use nullptr to remove callback.
     */
-   static void setErrorCallback(PDBCallbackFunction callback) {
+   static void setErrorCallback(PdbCallbackFunction callback) {
 
       static_assert(Info::irqHandlerInstalled, "PDB not configure for interrupts");
       if (callback == nullptr) {
@@ -414,7 +493,7 @@ public:
     *
     * @param[in]  nvicPriority  Interrupt priority
     */
-   static void enableNvicInterrupts(uint32_t nvicPriority) {
+   static void enableNvicInterrupts(NvicPriority nvicPriority) {
       enableNvicInterrupt(Info::irqNums[0], nvicPriority);
    }
 
@@ -1033,8 +1112,8 @@ public:
 #endif
 };
 
-template<class Info> PDBCallbackFunction PdbBase_T<Info>::sCallback      = PdbBase_T<Info>::unhandledCallback;
-template<class Info> PDBCallbackFunction PdbBase_T<Info>::sErrorCallback = PdbBase_T<Info>::unhandledCallback;
+template<class Info> PdbCallbackFunction PdbBase_T<Info>::sCallback      = PdbBase_T<Info>::unhandledCallback;
+template<class Info> PdbCallbackFunction PdbBase_T<Info>::sErrorCallback = PdbBase_T<Info>::unhandledCallback;
 
 #ifdef USBDM_PDB_IS_DEFINED
 /**

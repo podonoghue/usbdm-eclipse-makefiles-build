@@ -1824,7 +1824,7 @@ public:
        *
        * @note Any pending interrupts are cleared before enabling.
        */
-      static void enablePinNvicInterrupts(uint32_t nvicPriority) {
+      static void enablePinNvicInterrupts(NvicPriority nvicPriority) {
          FtmBase::CheckPinMapping<Info, channel>::check();
          Pcr::enableNvicInterrupt(nvicPriority);
       }

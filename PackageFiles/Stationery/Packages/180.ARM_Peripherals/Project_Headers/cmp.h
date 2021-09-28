@@ -78,6 +78,8 @@ enum CmpEvent : uint8_t {
 struct CmpStatus {
    CmpEvent event;   //!< Event triggering handler
    uint8_t  state;   //!< State of CMPO at event
+
+   constexpr CmpStatus(CmpEvent event, uint8_t  state) : event(event), state(state) {}
 };
 
 /**
@@ -229,7 +231,7 @@ $(/CMP3/InputMapping:   // None Found)
  *
  * @param[in]  status Struct indicating interrupt source and state
  */
-typedef void (*CMPCallbackFunction)(CmpStatus status);
+typedef void (*CmpCallbackFunction)(CmpStatus status);
 
 /**
  * Template class representing a Analogue Comparator
@@ -277,13 +279,52 @@ template<class Info>
 class CmpBase_T {
 
 protected:
-   /** Class to static check inputNum input exists and is mapped to an input pin */
-   template<int cmpInput> class CheckInputPin {
-      static_assert((cmpInput<(Info::numSignals-1)), "Illegal Input Pin");
-      static_assert((cmpInput>=(Info::numSignals-1))||(Info::info[cmpInput].gpioBit != INVALID_PCR),
-            "CMP input pin doesn't exist in this device/package - Check Configure.usbdm for available input pins");
-      static_assert(((cmpInput<(Info::numSignals-1))&&(Info::info[cmpInput].gpioBit == INVALID_PCR))||
-            (Info::info[cmpInput].gpioBit >= 0), "CMP input is not mapped to a pin - Modify Configure.usbdm");
+   /**
+    * Limit index to permitted pin index range
+    * Used to prevent noise from static assertion checks that detect a condition already detected in a more useful fashion.
+    *
+    * @param index   Index to limit
+    *
+    * @return Index limited to permitted range
+    */
+   static inline constexpr int limitIndex(int index) {
+      if (index<0) {
+         return 0;
+      }
+      if (index>(Info::numSignals-1)) {
+         return Info::numSignals-1;
+      }
+      return index;
+   }
+
+   /** Class to static check output is mapped to a pin - Assumes existence */
+   template<int cmpOutput> class CheckOutputIsMapped {
+
+      // Check mapping - no need to check existence
+      static constexpr bool Test1 = (Info::info[cmpOutput].gpioBit != UNMAPPED_PCR);
+
+      static_assert(Test1, "CMP output is not mapped to a pin - Modify Configure.usbdm");
+
+   public:
+      /** Dummy function to allow convenient in-line checking */
+      static constexpr void check() {}
+   };
+
+   /** Class to static check cmpInput exists and is mapped to a pin */
+   template<int cmpInput> class CheckPinExistsAndIsMapped {
+      // Tests are chained so only a single assertion can fail so as to reduce noise
+
+      // Out of bounds value for function index
+      static constexpr bool Test1 = (cmpInput>=0) && (cmpInput<(Info::numSignals));
+      // Function is not currently mapped to a pin
+      static constexpr bool Test2 = !Test1 || (Info::info[cmpInput].gpioBit != UNMAPPED_PCR);
+      // Non-existent function and catch-all. (should be INVALID_PCR)
+      static constexpr bool Test3 = !Test1 || !Test2 || (Info::info[cmpInput].gpioBit >= 0);
+
+      static_assert(Test1, "Illegal CMP Input - Check Configure.usbdm for available inputs");
+      static_assert(Test2, "CMP input is not mapped to a pin - Modify Configure.usbdm");
+      static_assert(Test3, "CMP input doesn't exist in this device/package - Check Configure.usbdm for available input pins");
+
    public:
       /** Dummy function to allow convenient in-line checking */
       static constexpr void check() {}
@@ -300,9 +341,12 @@ protected:
    }
 
    /** Callback function for ISR */
-   static CMPCallbackFunction sCallback;
+   static CmpCallbackFunction sCallback;
 
 public:
+   /// Pin mapped to CMP output
+   using OutputPin = PcrTable_T<Info, Info::outputPin>;
+
    /**
     * Hardware instance pointer
     *
@@ -327,12 +371,91 @@ public:
    }
 
    /**
+    * Wrapper to allow the use of a class member as a callback function
+    * @note Only usable with static objects.
+    *
+    * @tparam T         Type of the object containing the callback member function
+    * @tparam callback  Member function pointer
+    * @tparam object    Object containing the member function
+    *
+    * @return  Pointer to a function suitable for the use as a callback
+    *
+    * @code
+    * class AClass {
+    * public:
+    *    int y;
+    *
+    *    // Member function used as callback
+    *    // This function must match CmpCallbackFunction
+    *    void callback() {
+    *       ...;
+    *    }
+    * };
+    * ...
+    * // Instance of class containing callback member function
+    * static AClass aClass;
+    * ...
+    * // Wrap member function
+    * auto fn = Cmp0::wrapCallback<AClass, &AClass::callback, aClass>();
+    * // Use as callback
+    * Cmp0::setCallback(fn);
+    * @endcode
+    */
+   template<class T, void(T::*callback)(CmpStatus status), T &object>
+   static CmpCallbackFunction wrapCallback() {
+      static CmpCallbackFunction fn = [](CmpStatus status) {
+         (object.*callback)(status);
+      };
+      return fn;
+   }
+
+   /**
+    * Wrapper to allow the use of a class member as a callback function
+    * @note There is a considerable space and time overhead to using this method
+    *
+    * @tparam T         Type of the object containing the callback member function
+    * @tparam callback  Member function pointer
+    * @tparam object    Object containing the member function
+    *
+    * @return  Pointer to a function suitable for the use as a callback
+    *
+    * @code
+    * class AClass {
+    * public:
+    *    int y;
+    *
+    *    // Member function used as callback
+    *    // This function must match CmpCallbackFunction
+    *    void callback() {
+    *       ...;
+    *    }
+    * };
+    * ...
+    * // Instance of class containing callback member function
+    * AClass aClass;
+    * ...
+    * // Wrap member function
+    * auto fn = Cmp0::wrapCallback<AClass, &AClass::callback>(aClass);
+    * // Use as callback
+    * Cmp0::setCallback(fn);
+    * @endcode
+    */
+   template<class T, void(T::*callback)(CmpStatus status)>
+   static CmpCallbackFunction wrapCallback(T &object) {
+      static T &obj = object;
+      static CmpCallbackFunction fn = [](CmpStatus status) {
+         (obj.*callback)(status);
+      };
+      return fn;
+   }
+
+   /**
     * Set callback function
     *
     * @param[in] callback Callback function to execute on interrupt.\n
     *                     Use nullptr to remove callback.
     */
-   static void setCallback(CMPCallbackFunction callback) {
+   static void setCallback(CmpCallbackFunction callback) {
       static_assert(Info::irqHandlerInstalled, "CMP not configured for interrupts");
       if (callback == nullptr) {
          callback = unhandledCallback;
@@ -389,36 +512,27 @@ public:
    }
 
    /**
-    * Enable comparator output pin as output.
-    * Configures all Pin Control Register (PCR) values
-    *
-    * @param[in] pcrValue PCR value to use in configuring port (excluding MUX value). See pcrValue()
-    */
-   static void setOutput(PcrValue pcrValue=GPIO_DEFAULT_PCR) {
-      using Pcr = PcrTable_T<Info, Info::outputPin>;
-
-      // Enable and map pin to CMP_OUT
-      cmp().CR1 |= CMP_CR1_OPE_MASK;
-      Pcr::setPCR((pcrValue&~PORT_PCR_MUX_MASK)|(Info::info[Info::outputPin].pcrValue&PORT_PCR_MUX_MASK));
-   }
-
-   /**
-    * Enable comparator output pin as output.
-    * Configures all Pin Control Register (PCR) values
+    * Enable comparator output pin as output.\n
+    * Pin control parameters default to values usually appropriate for the function being used.\n
+    * The clock to the port will be enabled before changing the PCR.
     *
     * @param[in] pinDriveStrength One of PinDriveStrength_Low, PinDriveStrength_High
     * @param[in] pinDriveMode     One of PinDriveMode_PushPull, PinDriveMode_OpenDrain (defaults to PinPushPull)
     * @param[in] pinSlewRate      One of PinSlewRate_Slow, PinSlewRate_Fast (defaults to PinSlewRate_Fast)
     */
    static void setOutput(
-         PinDriveStrength  pinDriveStrength,
-         PinDriveMode      pinDriveMode      = PinDriveMode_PushPull,
-         PinSlewRate       pinSlewRate       = PinSlewRate_Fast
+         PinDriveStrength  pinDriveStrength  = OutputPin::defaultPcrValue,
+         PinDriveMode      pinDriveMode      = OutputPin::defaultPcrValue,
+         PinSlewRate       pinSlewRate       = OutputPin::defaultPcrValue
          ) {
-      static_assert((Info::info[Info::numSignals-1].gpioBit != UNMAPPED_PCR),
-            "CMP output is not mapped to a pin - Modify Configure.usbdm");
 
-      setOutput(pinDriveStrength|pinDriveMode|pinSlewRate);
+      CheckOutputIsMapped<Info::outputPin>::check();
+
+      // Enable CMP_OUT
+      cmp().CR1 |= CMP_CR1_OPE_MASK;
+
+      // Map CMP_OUT to pin
+      OutputPin::setPCR(pinDriveStrength|pinDriveMode|pinSlewRate);
    }
 
    /*                                                             CmpFilterSamples cmpFilterSamplePeriod
@@ -657,7 +771,7 @@ public:
     *
     * @param[in]  nvicPriority  Interrupt priority
     */
-   static void enableNvicInterrupts(uint32_t nvicPriority) {
+   static void enableNvicInterrupts(NvicPriority nvicPriority) {
       enableNvicInterrupt(Info::irqNums[0], nvicPriority);
    }
 
@@ -787,7 +901,7 @@ protected:
     * @tparam cmpInput Number of comparator input (0-7) for associated pin.
     */
    template<typename T, T cmpInput>
-   class PinBase_T {
+   class PinBase_T : public PcrTable_T<Info, (unsigned)cmpInput> {
 
    public:
       // CmpInput number for use with selectInputs()
@@ -796,24 +910,28 @@ protected:
       // Pin mask for use with Round Robin mode
       static constexpr uint8_t  pinMask = (1<<(unsigned)cmpInput);
 
+      using Pcr = PcrTable_T<Info, (unsigned)cmpInput>;
+
       /**
-       * Configure pin associated with CMP input.
-       * This will map the pin to the CMP function (analogue MUX value) \n
-       * The clock to the port will be enabled before changing the PCR.
+       * Configure pin associated with CMP input.\n
+       * This will map the pin to the CMP function. \n
+       * The pins are set to analogue mode so no PCR settings are used.\n
+       * The clock to the port will be enabled before changing the PCR.\n
+       * This function is of use if mapAllPins and mapAllPinsOnEnable are not selected in USBDM configuration.
        *
        * @note Resets the entire Pin Control Register value (PCR value).
        */
       static void setInput() {
-         using Pcr = PcrTable_T<Info, (unsigned)cmpInput>;
-         CmpBase_T::CheckInputPin<(unsigned)cmpInput>::check();
+
+         CmpBase_T::CheckPinExistsAndIsMapped<(unsigned)cmpInput>::check();
 
          // Map pin
-         Pcr::setPCR(Info::info[(unsigned)cmpInput].pcrValue);
+         Pcr::setPCR();
       }
    };
 };
 
-template<class Info> CMPCallbackFunction CmpBase_T<Info>::sCallback = CmpBase_T<Info>::unhandledCallback;
+template<class Info> CmpCallbackFunction CmpBase_T<Info>::sCallback = CmpBase_T<Info>::unhandledCallback;
 
 #if defined(USBDM_CMP_IS_DEFINED)
 using Cmp = CmpBase_T<CmpInfo>;

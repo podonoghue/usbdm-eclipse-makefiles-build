@@ -154,23 +154,73 @@ typedef void (*FtmChannelCallbackFunction)(uint8_t status);
 class FtmBase {
 
 protected:
-   /** Class to static check channel is mapped to a pin */
-   template<class Info, int channel> class CheckPinMapping {
-      static_assert((channel>=Info::numSignals)||(Info::info[channel].gpioBit != UNMAPPED_PCR),
-            "FTM channel is not mapped to a pin - Modify Configure.usbdm");
+   /**
+    * Limit index to permitted pin index range
+    * Used to prevent noise from static assertion checks that detect a condition already detected in a more useful fashion.
+    *
+    * @tparam Inf    Associated info table
+    * @param index   Index to limit
+    *
+    * @return Index limited to permitted range
+    */
+   template <class Inf>
+   static inline constexpr int limitIndex(int index) {
+      if (index<0) {
+         return 0;
+      }
+      if (index>(Inf::numSignals-1)) {
+         return Inf::numSignals-1;
+      }
+      return index;
+   }
+
+   /** Class to static check channel exists and is mapped to a pin */
+   template<class Info, int channel> class CheckChannelExistsAndMapped {
+      // Tests are chained so only a single assertion can fail so as to reduce noise
+
+      // Out of bounds value for function index
+      static constexpr bool Test1 = (channel>=0) && (channel<(Info::numSignals));
+      // Function is not currently mapped to a pin
+      static constexpr bool Test2 = !Test1 || (Info::info[channel].gpioBit != UNMAPPED_PCR);
+      // Non-existent function and catch-all. (should be INVALID_PCR)
+      static constexpr bool Test3 = !Test1 || !Test2 || (Info::info[channel].gpioBit >= 0);
+
+      static_assert(Test1, "Illegal FTM channel - Check Configure.usbdm for available inputs");
+      static_assert(Test2, "FTM input is not mapped to a pin - Modify Configure.usbdm");
+      static_assert(Test3, "FTM channel doesn't exist in this device/package - Check Configure.usbdm for available input pins");
+
    public:
       /** Dummy function to allow convenient in-line checking */
       static constexpr void check() {}
    };
 
-   /** Class to static check valid channel - it does not check that it is mapped to a pin */
+   /** Class to static check channel is mapped to a pin - Ignores non-existence etc. */
+   template<class Info, int channel> class CheckChannelIsMappedToPinOnly {
+
+      // Out of bounds value for function index
+      static constexpr bool Test1 = (channel>=0) && (channel<(Info::numSignals));
+      // Function is not currently mapped to a pin
+      static constexpr bool Test2 = !Test1 || (Info::info[channel].gpioBit != UNMAPPED_PCR);
+
+      static_assert(Test2, "FTM channel is not mapped to a pin - Modify Configure.usbdm");
+
+   public:
+      /** Dummy function to allow convenient in-line checking */
+      static constexpr void check() {}
+   };
+
+   /** Class to static check channel exists - it does not check that it is mapped to a pin */
    template<class Info, int channel> class CheckChannel {
-      static_assert((channel<Info::numSignals),
-            "Non-existent FTM channel - Check Configure.usbdm for available channels");
-      static_assert((channel>=Info::numSignals)||(Info::info[channel].gpioBit != INVALID_PCR),
-            "FTM channel doesn't exist in this device/package - Check Configure.usbdm for available channels");
-      static_assert((channel>=Info::numSignals)||((Info::info[channel].gpioBit == UNMAPPED_PCR)||(Info::info[channel].gpioBit == INVALID_PCR)||(Info::info[channel].gpioBit >= 0)),
-            "Illegal FTM channel - Check Configure.usbdm for available channels");
+      // Tests are chained so only a single assertion can fail so as to reduce noise
+
+      // Out of bounds value for function index
+      static constexpr bool Test1 = (channel>=0) && (channel<(Info::numSignals));
+      // Non-existent function
+      static constexpr bool Test2 = !Test1 || (Info::info[channel].gpioBit != INVALID_PCR);
+
+      static_assert(Test1, "Illegal FTM channel - Check Configure.usbdm for available channels");
+      static_assert(Test2, "FTM channel doesn't exist in this device/package - Check Configure.usbdm for available channels");
+
    public:
       /** Dummy function to allow convenient in-line checking */
       static constexpr void check() {}
@@ -305,6 +355,85 @@ public:
    }
 
    /**
+    * Wrapper to allow the use of a class member as a callback function
+    * @note Only usable with static objects.
+    *
+    * @tparam T         Type of the object containing the callback member function
+    * @tparam callback  Member function pointer
+    * @tparam object    Object containing the member function
+    *
+    * @return  Pointer to a function suitable for the use as a callback
+    *
+    * @code
+    * class AClass {
+    * public:
+    *    int y;
+    *
+    *    // Member function used as callback
+    *    // This function must match FtmChannelCallbackFunction
+    *    void callback(uint8_t status) {
+    *       ...;
+    *    }
+    * };
+    * ...
+    * // Instance of class containing callback member function
+    * static AClass aClass;
+    * ...
+    * // Wrap member function
+    * auto fn = Ftm0::wrapCallback<AClass, &AClass::callback, aClass>();
+    * // Use as callback
+    * Ftm0::setCallback(fn);
+    * @endcode
+    */
+   template<class T, void(T::*callback)(uint8_t), T &object>
+   static FtmChannelCallbackFunction wrapCallback() {
+      static FtmChannelCallbackFunction fn = [](uint8_t status) {
+         (object.*callback)(status);
+      };
+      return fn;
+   }
+
+   /**
+    * Wrapper to allow the use of a class member as a callback function
+    * @note There is a considerable space and time overhead to using this method
+    *
+    * @tparam T         Type of the object containing the callback member function
+    * @tparam callback  Member function pointer
+    * @tparam object    Object containing the member function
+    *
+    * @return  Pointer to a function suitable for the use as a callback
+    *
+    * @code
+    * class AClass {
+    * public:
+    *    int y;
+    *
+    *    // Member function used as callback
+    *    // This function must match FtmChannelCallbackFunction
+    *    void callback(uint8_t status) {
+    *       ...;
+    *    }
+    * };
+    * ...
+    * // Instance of class containing callback member function
+    * AClass aClass;
+    * ...
+    * // Wrap member function
+    * auto fn = Ftm0::wrapCallback<AClass, &AClass::callback>(aClass);
+    * // Use as callback
+    * Ftm0::setCallback(fn);
+    * @endcode
+    */
+   template<class T, void(T::*callback)(uint8_t)>
+   static FtmChannelCallbackFunction wrapCallback(T &object) {
+      static T &obj = object;
+      static FtmChannelCallbackFunction fn = [](uint8_t status) {
+         (obj.*callback)(status);
+      };
+      return fn;
+   }
+
+   /**
     * Set channel Callback function\n
     * Note that one callback may be shared by multiple channels of the timer
     *
@@ -319,7 +448,7 @@ public:
     *       It is necessary to identify the originating channel in the callback
     */
    static ErrorCode INLINE_RELEASE setChannelCallback(FtmChannelCallbackFunction callback, unsigned channel) {
-      static_assert(Info::irqHandlerInstalled, "FTM not configured for interrupts - Modify Configure.usbdm");
+      static_assert(Info::irqLevel>=0, "FTM not configured for interrupts - Modify Configure.usbdm");
       static_assert(Info::NumChannelVectors > 1, "This function should not be used when all timer channels share a single callback");
       if (callback == nullptr) {
          sChannelCallbacks[channel/ChannelVectorRatio] = unhandledChannelCallback;
@@ -351,7 +480,7 @@ public:
     *       It is necessary to identify the originating channel in the callback
     */
    static ErrorCode INLINE_RELEASE setChannelCallback(FtmChannelCallbackFunction callback) {
-      static_assert(Info::irqHandlerInstalled, "FTM not configured for interrupts - Modify Configure.usbdm");
+      static_assert(Info::irqLevel>=0, "FTM not configured for interrupts - Modify Configure.usbdm");
       static_assert(Info::NumChannelVectors == 1, "This function should only be used when all timer channels share a single callback");
       if (callback == nullptr) {
          sChannelCallbacks[0] = unhandledChannelCallback;
@@ -392,7 +521,7 @@ public:
     *                        nullptr to indicate none
     */
    static INLINE_RELEASE void setTimerOverflowCallback(FtmCallbackFunction theCallback) {
-      static_assert(Info::irqHandlerInstalled, "FTM not configured for interrupts - Modify Configure.usbdmF");
+      static_assert(Info::irqLevel>=0, "FTM not configured for interrupts - Modify Configure.usbdmF");
       if (theCallback == nullptr) {
          sToiCallback = unhandledCallback;
          return;
@@ -567,7 +696,7 @@ public:
     *
     * @note Any pending interrupts are cleared before enabling.
     */
-   static void enableNvicInterrupts(uint32_t nvicPriority) {
+   static void enableNvicInterrupts(NvicPriority nvicPriority) {
       enableNvicInterrupt(Info::irqNums[0], nvicPriority);
    }
 
@@ -1464,28 +1593,18 @@ public:
     * @tparam channel FTM timer channel
     */
    template <int channel>
-   class Channel {
+   class Channel : public PcrTable_T<Info, limitIndex<Info>(channel)> {
 
    private:
       FtmBase::CheckChannel<Info, channel> check;
 
-      /**
-       * Used to suppress error messages that are already checked
-       * by static assertions in a more meaningful manner.
-       *
-       * @return Unchanged validate channel number or 0
-       */
-      static constexpr int limitChannel() {
-         return (channel>=Info::numSignals)?0:channel;
-      }
-
    public:
-      // GPIO Pin associated with this channel
+      // GPIO associated with this channel
       template<Polarity polarity>
-      using Gpio = GpioTable_T<Info, channel, polarity>; // Inactive is high
+      using Gpio = GpioTable_T<Info, limitIndex<Info>(channel), polarity>; // Inactive is high
 
       /** Allow access to PCR of associated pin */
-      using Pcr = PcrTable_T<Info, limitChannel()>;
+      using Pcr = PcrTable_T<Info, limitIndex<Info>(channel)>;
 
       /** Allow access owning FTM */
       using Ftm = FtmBase_T<Info>;
@@ -1776,269 +1895,129 @@ public:
        * @note There is a single callback function for all pins on the related port.
        */
       static __attribute__((always_inline)) void setPinCallback(PinCallbackFunction callback) {
-         FtmBase::CheckPinMapping<Info, channel>::check();
-         Pcr::setCallback(callback);
+         FtmBase::CheckChannelIsMappedToPinOnly<Info, channel>::check();
+         static_assert(Pcr::HANDLER_INSTALLED, "Gpio associated with FTM channel not configured for PIN interrupts - Modify Configure.usbdm");
+         Pcr::setPinCallback(callback);
       }
 
-      /**
-       * Clear interrupt flag on pin associated with channel.
-       * Assumes clock to the port has already been enabled.
-       */
-      static __attribute__((always_inline)) void clearPinInterruptFlag() {
-         FtmBase::CheckPinMapping<Info, channel>::check();
-         Pcr::clearInterruptFlag();
-      }
+#if defined(PORT_PCR_ODE_MASK) and defined (PORT_PCR_SRE_MASK)
+   /**
+    * @brief
+    * Set subset of Pin Control Register Attributes associated with output direction \n
+    * Mux value is set appropriately for the pin function being used. Other attributes are cleared.
+    * Assumes clock to the port has already been enabled
+    *
+    * @param[in] pinDriveStrength One of PinDriveStrength_Low, PinDriveStrength_High
+    * @param[in] pinDriveMode     One of PinDriveMode_PushPull, PinDriveMode_OpenDrain
+    * @param[in] pinSlewRate      One of PinSlewRate_Slow, PinSlewRate_Fast
+    */
+   static void setOutput(
+         PinDriveStrength  pinDriveStrength  = Pcr::defaultPcrValue,
+         PinDriveMode      pinDriveMode      = Pcr::defaultPcrValue,
+         PinSlewRate       pinSlewRate       = Pcr::defaultPcrValue) {
 
-      /**
-       * Sets interrupt/DMA action on pin associated with channel.
-       * Assumes clock to the port has already been enabled.
-       *
-       * @param[in] pinAction Interrupt/DMA mode
-       *
-       * @note This is distinct from the timer event action that may be associated with pin changes.
-       */
-      static __attribute__((always_inline)) void setPinAction(PinAction pinAction) {
-         FtmBase::CheckPinMapping<Info, channel>::check();
-         Pcr::setPinAction(pinAction);
-      }
-
-      /**
-       * Enable Pin interrupts in NVIC
-       */
-      static void enablePinNvicInterrupts() {
-         FtmBase::CheckPinMapping<Info, channel>::check();
-         Pcr::enableNvicInterrupts();
-      }
-
-      /**
-       * Enable and set priority of Pin interrupts in NVIC
-       *
-       * @param[in]  nvicPriority  Interrupt priority
-       *
-       * @note Any pending interrupts are cleared before enabling.
-       */
-      static void enablePinNvicInterrupts(uint32_t nvicPriority) {
-         FtmBase::CheckPinMapping<Info, channel>::check();
-         Pcr::enableNvicInterrupts(nvicPriority);
-      }
-
-      /**
-       * Disable Pin interrupts in NVIC
-       */
-      static void disablePinNvicInterrupts() {
-         FtmBase::CheckPinMapping<Info, channel>::check();
-         Pcr::disableNvicInterrupts();
-      }
-
-      /**
-       * Set Pin Control Register Value.
-       * Pin multiplexor value is forced to Timer channel function. \n
-       * The clock to the port will be enabled before changing the PCR
-       *
-       * @param[in] pcrValue PCR value to set
-       */
-      static INLINE_RELEASE void setPCR(PcrValue pcrValue=Info::info[channel].pcrValue) {
-         CheckPinMapping<Info, channel>::check();
-         Pcr::setPCR((pcrValue&~PORT_PCR_MUX_MASK)|(Info::info[channel].pcrValue&PORT_PCR_MUX_MASK));
-      }
-
-      /**
-       * Set Pin Control Register (PCR) value.
-       * The clock to the port will be enabled before changing the PCR
-       *
-       * @param[in] pinPull          One of PinPull_None, PinPull_Up, PinPull_Down
-       * @param[in] pinDriveStrength One of PinDriveStrength_Low, PinDriveStrength_High (defaults to PinDriveLow)
-       * @param[in] pinDriveMode     One of PinDriveMode_PushPull, PinDriveMode_OpenDrain (defaults to PinPushPull)
-       * @param[in] pinAction        One of PinAction_None, etc (defaults to PinAction_None)
-       * @param[in] pinFilter        One of PinFilter_None, PinFilter_Passive (defaults to PinFilter_None)
-       * @param[in] pinSlewRate      One of PinSlewRate_Slow, PinSlewRate_Fast (defaults to PinSlewRate_Fast)
-       * @param[in] pinMux           One of PinMux_Analogue, PinMux_Gpio etc (defaults to Timer selection value)
-       */
-      static INLINE_RELEASE void setPCR(
-            PinPull           pinPull,
-            PinDriveStrength  pinDriveStrength  = PinDriveStrength_Low,
-            PinDriveMode      pinDriveMode      = PinDriveMode_PushPull,
-            PinAction         pinAction         = PinAction_None,
-            PinFilter         pinFilter         = PinFilter_None,
-            PinSlewRate       pinSlewRate       = PinSlewRate_Fast,
-            PinMux            pinMux            = (PinMux)(Info::info[channel].pcrValue&PORT_PCR_MUX_MASK)
-      ) {
-         CheckPinMapping<Info, channel>::check();
-         Pcr::setPCR(pinPull,pinDriveStrength,pinDriveMode,pinAction,pinFilter,pinSlewRate,pinMux);
-      }
-
-      /**
-       * Configures Pin Control Register (PCR) value for a Timer pin to default values.
-       * This will map the pin to the Timer function (mux value) \n
-       * The clock to the port will be enabled before changing the PCR
-       *
-       * @note Resets the Pin Control Register value (PCR value).
-       */
-      static void setOutput() {
-         FtmBase::CheckPinMapping<Info, channel>::check();
-         Pcr::setPCR(Info::info[channel].pcrValue);
+      FtmBase::CheckChannelIsMappedToPinOnly<Info, channel>::check();
 
 #ifdef FTM_SC_PWMEN0_SHIFT
-         // Enable output pin in FTM
-         ftm().SC |= (1<<(channel+FTM_SC_PWMEN0_SHIFT));
+      // Enable output pin in FTM
+      ftm().SC |= (1<<(channel+FTM_SC_PWMEN0_SHIFT));
 #endif
-      }
+      Pcr::setPCR(pinDriveStrength|pinDriveMode|pinSlewRate);
+   }
+#elif defined(PORT_PCR_ODE_ASK)
+   /**
+    * @brief
+    * Set subset of Pin Control Register Attributes associated with output direction \n
+    * Mux value is set appropriately for the pin function being used. Other attributes are cleared.
+    * Assumes clock to the port has already been enabled
+    *
+    * @param[in] pinDriveStrength One of PinDriveStrength_Low, PinDriveStrength_High
+    * @param[in] pinDriveMode     One of PinDriveMode_PushPull, PinDriveMode_OpenDrain
+    */
+   static void setOutput(
+         PinDriveStrength  pinDriveStrength  = Pcr::defaultPcrValue,
+         PinDriveMode      pinDriveMode      = Pcr::defaultPcrValue) {
 
-      /**
-       * Set Pin Control Register (PCR) value.
-       * This will map the pin to the Timer function (mux value) \n
-       * The clock to the port will be enabled before changing the PCR
-       *
-       * @param[in] pinDriveStrength One of PinDriveStrength_Low, PinDriveStrength_High
-       * @param[in] pinDriveMode     One of PinDriveMode_PushPull, PinDriveMode_OpenDrain (defaults to PinPushPull)
-       * @param[in] pinSlewRate      One of PinSlewRate_Slow, PinSlewRate_Fast (defaults to PinSlewRate_Fast)
-       */
-      static void setOutput(
-            PinDriveStrength  pinDriveStrength,
-            PinDriveMode      pinDriveMode      = PinDriveMode_PushPull,
-            PinSlewRate       pinSlewRate       = PinSlewRate_Fast
-      ) {
-         FtmBase::CheckPinMapping<Info, channel>::check();
-         Pcr::setPCR(pinDriveStrength|pinDriveMode|pinSlewRate|(Info::info[channel].pcrValue&PORT_PCR_MUX_MASK));
+      FtmBase::CheckChannelIsMappedToPinOnly<Info, channel>::check();
 
 #ifdef FTM_SC_PWMEN0_SHIFT
-         // Enable output pin in FTM
-         ftm().SC |= (1<<(channel+FTM_SC_PWMEN0_SHIFT));
+      // Enable output pin in FTM
+      ftm().SC |= (1<<(channel+FTM_SC_PWMEN0_SHIFT));
 #endif
-      }
+      Pcr::setPCR(pinDriveStrength|pinDriveMode);
+   }
+#elif defined(PORT_PCR_SRE_MASK)
+   /**
+    * @brief
+    * Set subset of Pin Control Register Attributes associated with output direction \n
+    * Mux value is set appropriately for the pin function being used. Other attributes are cleared.
+    * Assumes clock to the port has already been enabled
+    *
+    * @param[in] pinDriveStrength One of PinDriveStrength_Low, PinDriveStrength_High
+    * @param[in] pinSlewRate      One of PinSlewRate_Slow, PinSlewRate_Fast
+    */
+   static void setOutput(
+         PinDriveStrength  pinDriveStrength  = Pcr::defaultPcrValue,
+         PinSlewRate       pinSlewRate       = Pcr::defaultPcrValue) {
 
-      /**
-       * Configures Pin Control Register (PCR) value for a Timer pin to default values.
-       * This will map the pin to the Timer function (mux value) \n
-       * The clock to the port will be enabled before changing the PCR.
-       *
-       * @note Resets the Pin Control Register value (PCR value).
-       */
-      static void setInput() {
-         FtmBase::CheckPinMapping<Info, channel>::check();
+      FtmBase::CheckChannelIsMappedToPinOnly<Info, channel>::check();
 
 #ifdef FTM_SC_PWMEN0_SHIFT
-         // Disable output pin in FTM
-         ftm().SC &= ~(1<<(channel+FTM_SC_PWMEN0_SHIFT));
+      // Enable output pin in FTM
+      ftm().SC |= (1<<(channel+FTM_SC_PWMEN0_SHIFT));
+#endif
+      Pcr::setPCR(pinDriveStrength|pinSlewRate);
+   }
+#else
+   /**
+    * @brief
+    * Set subset of Pin Control Register Attributes associated with output direction \n
+    * Mux value is set appropriately for the pin function being used. Other attributes are cleared.
+    * Assumes clock to the port has already been enabled
+    *
+    * @param[in] pinDriveStrength One of PinDriveStrength_Low, PinDriveStrength_High
+    */
+   static void setOutput(
+         PinDriveStrength  pinDriveStrength  = Pcr::defaultPcrValue) {
+
+      FtmBase::CheckChannelIsMappedToPinOnly<Info, channel>::check();
+
+#ifdef FTM_SC_PWMEN0_SHIFT
+      // Enable output pin in FTM
+      ftm().SC |= (1<<(channel+FTM_SC_PWMEN0_SHIFT));
 #endif
 
-         Pcr::setPCR(Info::info[channel].pcrValue);
-      }
+      Pcr::setPCR(pinDriveStrength);
+   }
+#endif
 
       /**
-       * Set Pin Control Register (PCR) value.
-       * This will map the pin to the Timer function (mux value) \n
+       * @brief
+       * Set subset of Pin Control Register Attributes associated with input direction \n
+       * Mux value is set appropriately for the pin function being used. Other attributes are cleared.\n
        * The clock to the port will be enabled before changing the PCR.
        *
        * @param[in] pinPull          One of PinPull_None, PinPull_Up, PinPull_Down
-       * @param[in] pinAction        One of PinAction_None, etc (defaults to PinAction_None)
-       * @param[in] pinFilter        One of PinFilter_None, PinFilter_Passive (defaults to PinFilter_None)
+       * @param[in] pinAction        One of PinAction_None, etc
+       * @param[in] pinFilter        One of PinFilter_None, PinFilter_Passive
+       *
+       *  @note see also configureDigitalFilter(), enableDigitalFilter(), disableDigitalFilter()
        */
       static void setInput(
-            PinPull           pinPull,
-            PinAction         pinAction         = PinAction_None,
-            PinFilter         pinFilter         = PinFilter_None
-      ) {
-         FtmBase::CheckPinMapping<Info, channel>::check();
+            PinPull           pinPull           = Pcr::defaultPcrValue,
+            PinAction         pinAction         = Pcr::defaultPcrValue,
+            PinFilter         pinFilter         = Pcr::defaultPcrValue) {
+
+         FtmBase::CheckChannelIsMappedToPinOnly<Info, channel>::check();
+//         FtmBase::CheckChannelExistsAndMapped<Info, channel>::check(); // More noisy errors
 
 #ifdef FTM_SC_PWMEN0_SHIFT
          // Disable output pin in FTM
          ftm().SC &= ~(1<<(channel+FTM_SC_PWMEN0_SHIFT));
 #endif
 
-         Pcr::setPCR(pinPull|pinAction|pinFilter|(Info::info[channel].pcrValue&PORT_PCR_MUX_MASK));
+         Pcr::setInput(pinPull,pinAction,pinFilter);
       }
-
-      /**
-       * Set pull device on associated pin.
-       * Assumes clock to the port has already been enabled
-       *
-       *  @param[in] pinPull Pull selection mode
-       */
-      static INLINE_RELEASE void setPullDevice(PinPull pinPull) {
-         FtmBase::CheckPinMapping<Info, channel>::check();
-         Pcr::setPullDevice(pinPull);
-      }
-
-      /**
-       * Set drive mode on associated pin.
-       * Assumes clock to the port has already been enabled
-       *
-       *  @param[in] pinDriveMode Drive mode
-       */
-      static INLINE_RELEASE void setDriveMode(PinDriveMode pinDriveMode) {
-         FtmBase::CheckPinMapping<Info, channel>::check();
-         Pcr::setDriveMode(pinDriveMode);
-      }
-
-      /**
-       * Set slew rate on associated pin.
-       * Assumes clock to the port has already been enabled
-       *
-       *  @param[in] pinSlewRate Slew rate. Either PinSlewRate_Slow or PinSlewRate_Fast
-       */
-      static INLINE_RELEASE void setSlewRate(PinSlewRate  pinSlewRate) {
-         FtmBase::CheckPinMapping<Info, channel>::check();
-         Pcr::setSlewRate(pinSlewRate);
-      }
-
-      /**
-       * Set filter on associated pin.
-       * Assumes clock to the port has already been enabled
-       *
-       *  @param[in] pinFilter Pin filter option. Either PinFilter_None or PinFilter_Passive
-       */
-      static INLINE_RELEASE void setFilter(PinFilter pinFilter) {
-         FtmBase::CheckPinMapping<Info, channel>::check();
-         Pcr::setFilter(pinFilter);
-      }
-
-      /**
-       * Set drive strength on associated pin.
-       * Assumes clock to the port has already been enabled
-       *
-       *  @param[in] pinDriveStrength Drive strength to set
-       */
-      static INLINE_RELEASE void setDriveStrength(PinDriveStrength pinDriveStrength) {
-         FtmBase::CheckPinMapping<Info, channel>::check();
-         Pcr::setDriveStrength(pinDriveStrength);
-      }
-
-#ifdef PORT_DFCR_CS_MASK
-   /**
-    * Configures Digital Pin Filter for entire PORT associated with FTM channel pin
-    *
-    * @param pinDigitalFilterClock  Clock source
-    * @param filterLength           Filter length in clock ticks
-    *
-    * @note Not all ports support this feature
-    * @note This affects the digital filter for all pins of the port containing the FTM channel pin
-    */
-   static INLINE_RELEASE void configureDigitalFilter(PinDigitalFilterClock pinDigitalFilterClock, int filterLength) {
-      FtmBase::CheckPinMapping<Info, channel>::check();
-      Pcr::configureDigitalFilter(pinDigitalFilterClock, filterLength);
-   }
-
-   /**
-    * Enable digital filter on the input pin associated with FTM channel
-    *
-    * @note Not all ports support this feature
-    */
-   static INLINE_RELEASE void enableDigitalFilter() {
-      FtmBase::CheckPinMapping<Info, channel>::check();
-      Pcr::enableDigitalFilter();
-   }
-
-   /**
-    * Disable digital filter on the input pin associated with FTM channel
-    *
-    * @note Not all ports support this feature
-    */
-   static INLINE_RELEASE void disableDigitalFilter() {
-      FtmBase::CheckPinMapping<Info, channel>::check();
-      Pcr::disableDigitalFilter();
-   }
-#endif // PORT_DFCR_CS_MASK
 
    };
 
@@ -2143,14 +2122,12 @@ public:
     * @param[in] pinFilter        One of PinFilter_None, PinFilter_Passive (defaults to PinFilter_None)
     */
    static void setInput(
-         PinPull           pinPull,
-         PinAction         pinAction         = PinAction_None,
-         PinFilter         pinFilter         = PinFilter_None
-   ) {
-      FtmBase::CheckPinMapping<typename Info::InfoQUAD, 0>::check();
-      FtmBase::CheckPinMapping<typename Info::InfoQUAD, 1>::check();
-      Pcr0::setPCR(pinPull|pinAction|pinFilter|(Info::InfoQUAD::info[0].pcrValue&PORT_PCR_MUX_MASK));
-      Pcr1::setPCR(pinPull|pinAction|pinFilter|(Info::InfoQUAD::info[1].pcrValue&PORT_PCR_MUX_MASK));
+         PinPull           pinPull           = Pcr0::defaultPcrValue,
+         PinAction         pinAction         = Pcr0::defaultPcrValue,
+         PinFilter         pinFilter         = Pcr0::defaultPcrValue) {
+
+      Pcr0::setPCR(pinPull|pinAction|pinFilter);
+      Pcr1::setPCR(pinPull|pinAction|pinFilter);
    }
 
    /**
@@ -2220,7 +2197,7 @@ public:
     *
     * @note Any pending interrupts are cleared before enabling.
     */
-   static void enableNvicInterrupts(uint32_t nvicPriority) {
+   static void enableNvicInterrupts(NvicPriority nvicPriority) {
       enableNvicInterrupt(Info::irqNums[0], nvicPriority);
    }
 
@@ -2277,8 +2254,8 @@ public:
          FtmQuadratureMode ftmQuadratureMode = FtmQuadratureMode_Phase_AB_Mode
          ) {
       // Assertions placed here so only checked if FtmQuadDecoder actually used
-      static_assert(Info::InfoQUAD::info[0].gpioBit != UNMAPPED_PCR, "QuadDecoder_T: FTM PHA is not mapped to a pin - Modify Configure.usbdm");
-      static_assert(Info::InfoQUAD::info[1].gpioBit != UNMAPPED_PCR, "QuadDecoder_T: FTM PHB is not mapped to a pin - Modify Configure.usbdm");
+      static_assert(Info::InfoQUAD::info[0].gpioBit >= 0, "FtmQuadDecoder PHA is not mapped to a pin - Modify Configure.usbdm");
+      static_assert(Info::InfoQUAD::info[1].gpioBit >= 0, "FtmQuadDecoder PHB is not mapped to a pin - Modify Configure.usbdm");
 
       enable();
 

@@ -440,6 +440,38 @@ The maximum mask size is IMPLEMENTATION DEFINED. A debugger can write 0b11111 to
 This field resets to zero</description>
                         <bitOffset>0</bitOffset>
                         <bitWidth>4</bitWidth>
+                        <enumeratedValues>
+                           <enumeratedValue>
+                              <name>0b0000</name>
+                              <description>Disabled</description>
+                              <value>0b0</value>
+                           </enumeratedValue>
+                           <enumeratedValue>
+                              <name>0b0100</name>
+                              <description>Instruction</description>
+                              <value>0b0</value>
+                           </enumeratedValue>
+                           <enumeratedValue>
+                              <name>0b0101</name>
+                              <description>Data Read</description>
+                              <value>0b1</value>
+                           </enumeratedValue>
+                           <enumeratedValue>
+                              <name>0b0110</name>
+                              <description>Data Write</description>
+                              <value>0b0</value>
+                           </enumeratedValue>
+                           <enumeratedValue>
+                              <name>0b0111</name>
+                              <description>Data Access</description>
+                              <value>0b1</value>
+                           </enumeratedValue>
+                           <enumeratedValue>
+                              <name>0bXXXX</name>
+                              <description>Invalid</description>
+                              <value>0b1</value>
+                           </enumeratedValue>
+                        </enumeratedValues>
                      </field>
                      <field>
                         <name>EMITRANGE</name>

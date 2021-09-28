@@ -17,6 +17,7 @@
  * This file is generated automatically.
  * Any manual changes will be lost.
  */
+
 #include "derivative.h"
 #include "system.h"
 #include "hardware.h"
@@ -123,7 +124,6 @@ protected:
 
    /** Callback functions for ISRs */
    static PitCallbackFunction sCallbacks[Info::NumChannels];
-
    /** Bitmask used to indicate a channel call-back is one-shot */
    static uint8_t clearOnEvent;
 
@@ -206,13 +206,106 @@ public:
       }
    }
 
+   /** 
+    * PIT interrupt handler -  Calls PIT callback 
+    * Used when all channels share a single handler (needs to poll channel flags)
+    */
+   static void irqHandler() {
+      for (unsigned channel=0; channel<Info::NumChannels; channel++) {
+         if (pit().CHANNEL[channel].TFLG & PIT_TFLG_TIF_MASK) {
+            // Clear interrupt flag
+            pit().CHANNEL[channel].TFLG = PIT_TFLG_TIF_MASK;
+            // Do call-back
+            sCallbacks[channel]();
+         }
+      }
+   }
+
+   /**
+    * Wrapper to allow the use of a class member as a callback function
+    * @note Only usable with static objects.
+    *
+    * @tparam T         Type of the object containing the callback member function
+    * @tparam callback  Member function pointer
+    * @tparam object    Object containing the member function
+    *
+    * @return  Pointer to a function suitable for the use as a callback
+    *
+    * @code
+    * class AClass {
+    * public:
+    *    int y;
+    *
+    *    // Member function used as callback
+    *    // This function must match PitCallbackFunction
+    *    void callback() {
+    *       ...;
+    *    }
+    * };
+    * ...
+    * // Instance of class containing callback member function
+    * static AClass aClass;
+    * ...
+    * // Wrap member function
+    * auto fn = Pit::wrapCallback<AClass, &AClass::callback, aClass>();
+    * // Use as callback
+    * Pit::Channel<0>::oneShot(fn, 1.5*USBDM::seconds);
+    * @endcode
+    */
+   template<class T, void(T::*callback)(), T &object>
+   static PitCallbackFunction wrapCallback() {
+      static PitCallbackFunction fn = []() {
+         (object.*callback)();
+      };
+      return fn;
+   }
+
+   /**
+    * Wrapper to allow the use of a class member as a callback function
+    * @note There is a considerable space and time overhead to using this method
+    *
+    * @tparam T         Type of the object containing the callback member function
+    * @tparam callback  Member function pointer
+    * @tparam object    Object containing the member function
+    *
+    * @return  Pointer to a function suitable for the use as a callback
+    *
+    * @code
+    * class AClass {
+    * public:
+    *    int y;
+    *
+    *    // Member function used as callback
+    *    // This function must match PitCallbackFunction
+    *    void callback() {
+    *       ...;
+    *    }
+    * };
+    * ...
+    * // Instance of class containing callback member function
+    * AClass aClass;
+    * ...
+    * // Wrap member function
+    * auto fn = Pit::wrapCallback<AClass, &AClass::callback>(aClass);
+    * // Use as callback
+    * Pit::Channel<0>::oneShot(fn, 1.5*USBDM::seconds);
+    * @endcode
+    */
+   template<class T, void(T::*callback)()>
+   static PitCallbackFunction wrapCallback(T &object) {
+      static T &obj = object;
+      static PitCallbackFunction fn = []() {
+         (obj.*callback)();
+      };
+      return fn;
+   }
 
    /**
     * Set interrupt callback
     *
     *  @param[in]  pitChannelNum   Channel to configure
-    *  @param[in]  callback  Callback function to be executed on interrupt.\n
-    *                        Use nullptr to remove callback.
+    *  @param[in]  callback        Callback function to be executed on interrupt.\n
+    *                              Use nullptr to remove callback.
     */
    static void setCallback(PitChannelNum pitChannelNum, PitCallbackFunction callback) {
       static_assert(Info::irqHandlerInstalled, "PIT not configure for interrupts - Modify Configure.usbdm");
@@ -245,11 +338,12 @@ public:
 
       // Enable timer
       pit().MCR = Info::mcr;
-      for (PitChannelNum channel = PitChannelNum_0;
-           channel < PitInfo::NumChannels;
-           channel = channel+1) {
-         configureChannelInTicks(channel, Info::pit_ldval);
-         disableNvicInterrupts(Info::irqLevel);
+      for (PitChannelNum pitChannelNum = PitChannelNum_0;
+            pitChannelNum < Info::NumChannels;
+            pitChannelNum = pitChannelNum+1) {
+         configureChannelInTicks(pitChannelNum, Info::pit_ldval);
+         sCallbacks[pitChannelNum] = unhandledCallback;
+         enableNvicInterrupts(pitChannelNum, Info::irqLevel);
       }
    }
 
@@ -261,10 +355,11 @@ public:
     */
    static void configure(PitDebugMode pitDebugMode=PitDebugMode_Stop) {
       enable();
-      for (PitChannelNum channel = PitChannelNum_0;
-           channel < PitInfo::NumChannels;
-           channel = channel+1) {
-         disableNvicInterrupts(channel);
+      for (PitChannelNum pitChannelNum = PitChannelNum_0;
+            pitChannelNum < Info::NumChannels;
+            pitChannelNum = pitChannelNum+1) {
+         sCallbacks[pitChannelNum] = unhandledCallback;
+         disableNvicInterrupts(pitChannelNum);
       }
       pit().MCR = pitDebugMode|PIT_MCR_MDIS(0); // MDIS cleared => enabled!
       allocatedChannels = -1;
@@ -356,7 +451,7 @@ public:
    /**
     *  Configure the PIT channel
     *
-    *  @param[in]  pitChannelNum           Channel to configure
+    *  @param[in]  pitChannelNum     Channel to configure
     *  @param[in]  tickInterval      Interval in timer ticks (usually bus clock period)
     *  @param[in]  pitChannelIrq     Whether to enable interrupts
     *
@@ -601,7 +696,7 @@ public:
     *  Use a PIT channel to implement a busy-wait delay
     *
     *  @param[in]  pitChannelNum   Channel to use
-    *  @param[in]  interval  Interval to wait as a float
+    *  @param[in]  interval        Interval to wait as a float
     *
     *  @note Function doesn't return until interval has expired
     */
@@ -619,12 +714,12 @@ public:
     *  @note It is necessary to enable NVIC interrupts beforehand
     *
     *  @param[in]  pitChannelNum     Channel to configure
-    *  @param[in]  callbackFunction  Function to call from stub ISR
+    *  @param[in]  callback          Callback function to be executed on timeout
     *  @param[in]  interval          Interval in seconds until callback is executed
     */
-   static void oneShot(PitChannelNum pitChannelNum, PitCallbackFunction callbackFunction, float interval) {
+   static void oneShot(PitChannelNum pitChannelNum, PitCallbackFunction callback, float interval) {
       clearOnEvent |= (1<<pitChannelNum);
-      setCallback(pitChannelNum, callbackFunction);
+      setCallback(pitChannelNum, callback);
       configureChannel(pitChannelNum, interval, PitChannelIrq_Enabled);
    }
 
@@ -634,12 +729,12 @@ public:
     *  @note It is necessary to enable NVIC interrupts beforehand
     *
     *  @param[in]  pitChannelNum     Channel to configure
-    *  @param[in]  callbackFunction  Function to call from stub ISR
+    *  @param[in]  callback          Callback function to be executed on timeout
     *  @param[in]  microseconds      Interval in milliseconds
     */
-   static void oneShotInMicroseconds(PitChannelNum pitChannelNum, PitCallbackFunction callbackFunction, uint32_t microseconds) {
+   static void oneShotInMicroseconds(PitChannelNum pitChannelNum, PitCallbackFunction callback, uint32_t microseconds) {
       clearOnEvent |= (1<<pitChannelNum);
-      setCallback(pitChannelNum, callbackFunction);
+      setCallback(pitChannelNum, callback);
       configureChannelInMicroseconds(pitChannelNum, microseconds, PitChannelIrq_Enabled);
    }
 
@@ -649,12 +744,12 @@ public:
     *  @note It is necessary to enable NVIC interrupts beforehand
     *
     *  @param[in]  pitChannelNum     Channel to configure
-    *  @param[in]  callbackFunction  Function to call from stub ISR
+    *  @param[in]  callback          Callback function to be executed on timeout
     *  @param[in]  milliseconds      Interval in milliseconds
     */
-   static void oneShotInMilliseconds(PitChannelNum pitChannelNum, PitCallbackFunction callbackFunction, uint32_t milliseconds) {
+   static void oneShotInMilliseconds(PitChannelNum pitChannelNum, PitCallbackFunction callback, uint32_t milliseconds) {
       clearOnEvent |= (1<<pitChannelNum);
-      setCallback(pitChannelNum, callbackFunction);
+      setCallback(pitChannelNum, callback);
       configureChannelInMilliseconds(pitChannelNum, milliseconds, PitChannelIrq_Enabled);
    }
 
@@ -663,13 +758,13 @@ public:
     *
     *  @note It is necessary to enable NVIC interrupts beforehand
     *
-    *  @param[in]  pitChannelNum           Channel to configure
-    *  @param[in]  callbackFunction  Function to call from stub ISR
+    *  @param[in]  pitChannelNum     Channel to configure
+    *  @param[in]  callback          Callback function to be executed on timeout
     *  @param[in]  tickInterval      Interval in timer ticks (usually bus clock period)
     */
-   static void oneShotInTicks(PitChannelNum pitChannelNum, PitCallbackFunction callbackFunction, uint32_t tickInterval) {
+   static void oneShotInTicks(PitChannelNum pitChannelNum, PitCallbackFunction callback, uint32_t tickInterval) {
       clearOnEvent |= (1<<pitChannelNum);
-      setCallback(pitChannelNum, callbackFunction);
+      setCallback(pitChannelNum, callback);
       configureChannelInTicks(pitChannelNum, tickInterval, PitChannelIrq_Enabled);
    }
 
@@ -686,15 +781,18 @@ public:
       static constexpr PitChannelNum CHANNEL = (PitChannelNum)channel;
 
       /**
-       * Set interrupt callback
+       * Set callback on event
        *
-       * @param[in]  callbackFunction  Function to call from stub ISR
+       *  @param[in]  callback          Callback function to be executed on timeout
        */
-      static void setCallback(PitCallbackFunction callbackFunction) {
-         PitBase_T<Info>::setCallback(CHANNEL, callbackFunction);
+      static void setCallback(PitCallbackFunction callback) {
+         PitBase_T<Info>::setCallback(CHANNEL, callback);
       }
 
-      /** PIT interrupt handler - Calls PIT callback */
+      /** 
+       * PIT interrupt handler - Calls PIT callback 
+       * Used when each channel has an individual handler
+       */
       static void irqHandler() {
          // Clear interrupt flag
          PitBase_T<Info>::pit().CHANNEL[channel].TFLG = PIT_TFLG_TIF_MASK;
@@ -771,7 +869,7 @@ public:
        *       To have immediate effect it is necessary to use configure().
        */
       static void __attribute__((always_inline)) setPeriodInMicroseconds(uint32_t microseconds) {
-         unsigned long interval = ((unsigned long)microseconds*PitInfo::getClockFrequency())/1000000;
+         unsigned long interval = ((unsigned long)microseconds*Info::getClockFrequency())/1000000;
          usbdm_assert(interval<0xFFFFFFFFUL,"Interval too long");
          PitBase_T<Info>::setPeriodInTicks(CHANNEL, microseconds);
       }
@@ -824,7 +922,7 @@ public:
        *
        * @param[in]  nvicPriority  Interrupt priority
        */
-      static void enableNvicInterrupts(uint32_t nvicPriority) {
+      static void enableNvicInterrupts(NvicPriority nvicPriority) {
          return PitBase_T<Info>::enableNvicInterrupts(CHANNEL, nvicPriority);
       }
 
@@ -862,11 +960,11 @@ public:
        *
        *  @note It is necessary to enable NVIC interrupts beforehand
        *
-       *  @param[in]  callbackFunction  Function to call from stub ISR
+       *  @param[in]  callback          Callback function to be executed on timeout.
        *  @param[in]  interval          Interval in seconds until callback is executed
        */
-      static void  __attribute__((always_inline)) oneShot(PitCallbackFunction callbackFunction, float interval) {
-         PitBase_T<Info>::oneShot(CHANNEL, callbackFunction, interval);
+      static void  __attribute__((always_inline)) oneShot(PitCallbackFunction callback, float interval) {
+         PitBase_T<Info>::oneShot(CHANNEL, callback, interval);
       }
 
       /**
@@ -874,12 +972,11 @@ public:
        *
        *  @note It is necessary to enable NVIC interrupts beforehand
        *
-       *  @param[in]  pitChannelNum     Channel to configure
-       *  @param[in]  callbackFunction  Function to call from stub ISR
+       *  @param[in]  callback          Callback function to be executed on timeout.
        *  @param[in]  microseconds      Interval in milliseconds
        */
-      static void __attribute__((always_inline)) oneShotInMicroseconds(PitCallbackFunction callbackFunction, uint32_t microseconds) {
-         PitBase_T<Info>::oneShotInMicroseconds(CHANNEL, callbackFunction, microseconds);
+      static void __attribute__((always_inline)) oneShotInMicroseconds(PitCallbackFunction callback, uint32_t microseconds) {
+         PitBase_T<Info>::oneShotInMicroseconds(CHANNEL, callback, microseconds);
       }
 
       /**
@@ -887,12 +984,11 @@ public:
        *
        *  @note It is necessary to enable NVIC interrupts beforehand
        *
-       *  @param[in]  pitChannelNum     Channel to configure
-       *  @param[in]  callbackFunction  Function to call from stub ISR
+       *  @param[in]  callback          Callback function to be executed on timeout.
        *  @param[in]  milliseconds      Interval in milliseconds
        */
-      static void __attribute__((always_inline)) oneShotInMilliseconds(PitCallbackFunction callbackFunction, uint32_t milliseconds) {
-         PitBase_T<Info>::oneShotInMilliseconds(CHANNEL, callbackFunction, milliseconds);
+      static void __attribute__((always_inline)) oneShotInMilliseconds(PitCallbackFunction callback, uint32_t milliseconds) {
+         PitBase_T<Info>::oneShotInMilliseconds(CHANNEL, callback, milliseconds);
       }
 
       /**
@@ -900,19 +996,15 @@ public:
        *
        *  @note It is necessary to enable NVIC interrupts beforehand
        *
-       *  @param[in]  pitChannelNum           Channel to configure
-       *  @param[in]  callbackFunction  Function to call from stub ISR
+       *  @param[in]  callback          Callback function to be executed on timeout.
        *  @param[in]  tickInterval      Interval in timer ticks (usually bus clock period)
        */
-      static void __attribute__((always_inline)) oneShotInTicks(PitCallbackFunction callbackFunction, uint32_t tickInterval) {
-         PitBase_T<Info>::oneShotInTicks(CHANNEL, callbackFunction, tickInterval);
+      static void __attribute__((always_inline)) oneShotInTicks(PitCallbackFunction callback, uint32_t tickInterval) {
+         PitBase_T<Info>::oneShotInTicks(CHANNEL, callback, tickInterval);
       }
+
    };
 };
-
-//template<class Info>
-//   bool PitBase_T<Info>::  template<> Channel<channel>::clearOnEvent = false;
-
 
 /** Bit-mask of allocated channels */
 template<class Info> uint32_t PitBase_T<Info>::allocatedChannels = -1;

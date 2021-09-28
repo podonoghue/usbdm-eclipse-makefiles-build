@@ -10,27 +10,27 @@
       <device name="FRDM_K20D50M" manual="K20P64M50SF0RM" package="FRDM_K20D50M" />
       <device name="MK20DN128VFT5" manual="K20P48M50SF0RM" package="QFN_32" />
       <device name="MK20DN128VLF5" manual="K20P48M50SF0RM" package="LQFP_48" />
-      <device name="MK20DN128VLH5" manual="K20P64M50SF0RM" package="LQFP_64" />
+      <device name="MK20DN128VLH5" manual="K20P64M50SF0RM" package="LQFP_64_MK20D5" />
       <device name="MK20DN128VMP5" manual="K20P64M50SF0RM" package="BGA_64" />
       <device name="MK20DN32VFT5" manual="K20P48M50SF0RM" package="QFN_32" />
       <device name="MK20DN32VLF5" manual="K20P48M50SF0RM" package="LQFP_48" />
-      <device name="MK20DN32VLH5" manual="K20P64M50SF0RM" package="LQFP_64" />
+      <device name="MK20DN32VLH5" manual="K20P64M50SF0RM" package="LQFP_64_MK20D5" />
       <device name="MK20DN32VMP5" manual="K20P64M50SF0RM" package="BGA_64" />
       <device name="MK20DN64VFT5" manual="K20P48M50SF0RM" package="QFN_32" />
       <device name="MK20DN64VLF5" manual="K20P48M50SF0RM" package="LQFP_48" />
-      <device name="MK20DN64VLH5" manual="K20P64M50SF0RM" package="LQFP_64" />
+      <device name="MK20DN64VLH5" manual="K20P64M50SF0RM" package="LQFP_64_MK20D5" />
       <device name="MK20DN64VMP5" manual="K20P64M50SF0RM" package="BGA_64" />
       <device name="MK20DX128VFT5" manual="K20P48M50SF0RM" package="QFN_32" />
       <device name="MK20DX128VLF5" manual="K20P48M50SF0RM" package="LQFP_48" />
-      <device name="MK20DX128VLH5" manual="K20P64M50SF0RM" package="LQFP_64" />
+      <device name="MK20DX128VLH5" manual="K20P64M50SF0RM" package="LQFP_64_MK20D5" />
       <device name="MK20DX128VMP5" manual="K20P64M50SF0RM" package="BGA_64" />
       <device name="MK20DX32VFT5" manual="K20P48M50SF0RM" package="QFN_32" />
       <device name="MK20DX32VLF5" manual="K20P48M50SF0RM" package="LQFP_48" />
-      <device name="MK20DX32VLH5" manual="K20P64M50SF0RM" package="LQFP_64" />
+      <device name="MK20DX32VLH5" manual="K20P64M50SF0RM" package="LQFP_64_MK20D5" />
       <device name="MK20DX32VMP5" manual="K20P64M50SF0RM" package="BGA_64" />
       <device name="MK20DX64VFT5" manual="K20P48M50SF0RM" package="QFN_32" />
       <device name="MK20DX64VLF5" manual="K20P48M50SF0RM" package="LQFP_48" />
-      <device name="MK20DX64VLH5" manual="K20P64M50SF0RM" package="LQFP_64" />
+      <device name="MK20DX64VLH5" manual="K20P64M50SF0RM" package="LQFP_64_MK20D5" />
       <device name="MK20DX64VMP5" manual="K20P64M50SF0RM" package="BGA_64" />
    </family>
    <peripherals>
@@ -908,7 +908,7 @@
          <placement pin="VSSA"          location="p12" />
          <placement pin="XTAL32"        location="p14" />
       </package>
-      <package name="LQFP_64">
+      <package name="LQFP_64_MK20D5">
          <placement pin="ADC0_DM0"      location="p10" />
          <placement pin="ADC0_DM3"      location="p12" />
          <placement pin="ADC0_DP0"      location="p9" />

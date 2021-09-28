@@ -18,7 +18,26 @@ __stack_size = $(linkerStackSize);
    <0x0-$(linkerRamSize):4> 
 */
 __heap_size  = $(linkerHeapSize);
-  
+   
+/*
+ <e1> Enable Bootloader
+ <i>  Enable custom USBDM bootloader
+*/
+FORCE_BOOT_LOADER = DEFINED(bootInformation) ? 1 : 0;
+/*
+    <o>  Bootloader size (usually 0x4000 if used) <constant>
+    <i>  The bootloader is located at the bottom of the flash region
+    <i>  This value is used to automatically adjust the available flash area 
+ */
+BOOT_LOADER_SIZE  = DEFINED(BOOT_LOADER_SIZE)  ? BOOT_LOADER_SIZE : 0x4000 * FORCE_BOOT_LOADER;
+/*
+    <o>  Bootloader information block size (usually 0x10 if used) <constant>
+    <i>  The bootloader information block is located at the top of the flash region
+    <i>  This value is used to automatically adjust the available flash area 
+ */
+BOOT_INFO_SIZE    = DEFINED(BOOT_INFO_SIZE)    ? BOOT_INFO_SIZE   : 0x10 * (BOOT_LOADER_SIZE > 0);
+/* </e> */
+
 $(linkerInformation)
 
 /*

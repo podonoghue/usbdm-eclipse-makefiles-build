@@ -441,6 +441,11 @@ public:
     */
    Uart_T() : Uart(Info::uart()) {
       // Enable clock to UART interface
+      
+      // Check pin assignments
+      static_assert(Info::info[0].gpioBit >= 0, "Uart_Tx has not been assigned to a pin - Modify Configure.usbdm");
+      static_assert(Info::info[1].gpioBit >= 0, "Uart_Rx has not been assigned to a pin - Modify Configure.usbdm");
+      
       Info::enableClock();
 
       if (Info::mapPinsOnEnable) {
@@ -576,7 +581,7 @@ public:
     *
     * @param[in]  nvicPriority  Interrupt priority
     */
-   static void enableNvicInterrupts(uint32_t nvicPriority) {
+   static void enableNvicInterrupts(NvicPriority nvicPriority) {
       enableNvicInterrupt(Info::irqNums[0], nvicPriority);
       if (Info::irqCount>1) {
           enableNvicInterrupt(Info::irqNums[1], nvicPriority);

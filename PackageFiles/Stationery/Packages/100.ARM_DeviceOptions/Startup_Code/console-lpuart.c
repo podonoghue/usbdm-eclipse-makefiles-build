@@ -55,6 +55,28 @@ inline static void initDefaultUart()  {
    PORTC->PCR[14] = PORT_PCR_MUX(3);
    PORTC->PCR[15] = PORT_PCR_MUX(3);
 }
+#elif defined MCU_MK28F15
+//=================================================================================
+// UART to use
+//
+#define LPUART  LPUART0
+
+//=================================================================================
+// UART Port pin setup
+//
+inline static void initDefaultUart()  {
+   // Enable clock to UART
+   SIM->SCGC2 |= SIM_SCGC2_LPUART0_MASK;
+
+   // Enable clock to port pins used by UART
+   SIM->SCGC5 |= SIM_SCGC5_PORTC_MASK;
+
+   // Set Tx & Rx Pin function
+   PORTC->PCR[24] = PORT_PCR_MUX(3);
+   PORTC->PCR[25] = PORT_PCR_MUX(3);
+}
+#else
+#error Provide Console definitions as above for this target
 #endif
 
 #define LPUART_FLAGS                \

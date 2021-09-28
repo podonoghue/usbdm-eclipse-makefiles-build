@@ -59,11 +59,9 @@ SECTIONS
       ASSERT (. != __flash_start, "No reset vector found");
       __VECTOR_TABLE_END = .;
       
-      /* Uncomment to Emit a Bootloader configuration if present */
-      /*
+      /* Emit a Freescale Bootloader configuration if present */
       . = __flash_start + 0x3C0;
       KEEP(*(.bootloader_configuration))
-      */
       
       /* Emit a Security field */
       . = __flash_start + 0x400;
@@ -150,6 +148,14 @@ M_VECTOR_RAM_SIZE = DEFINED(__ram_vector_table__) ? (__VECTOR_TABLE_END - __VECT
    __etext = .;    /* define a global symbol at end of code */
    __DATA_ROM = .; /* Symbol is used by startup for data initialization */
 
+  /* USBDM Bootloader information */
+   .bootloader :
+   {
+     __bootloader = .;
+     KEEP(*(.bootloader))
+     ASSERT ((BOOT_INFO_SIZE == 0) || (. == __bootloader + BOOT_INFO_SIZE), "No bootloader information");
+    } > bootInfo
+    
   /* reserve MTB memory at the beginning of data */
   .mtb : /* MTB buffer no0load */
   {

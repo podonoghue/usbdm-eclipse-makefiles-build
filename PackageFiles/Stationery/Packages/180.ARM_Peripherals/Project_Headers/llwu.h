@@ -165,7 +165,7 @@ enum LlwuResetFilter {
 /**
  * Type definition for LLWU interrupt call back
  */
-typedef void (*LLWUCallbackFunction)();
+typedef void (*LlwuCallbackFunction)();
 
 /**
  * Template class providing interface to Low Leakage Wake-up Unit
@@ -183,19 +183,28 @@ template <class Info>
 class LlwuBase_T {
 
 protected:
-   /** Class to static check channel pin mapping is valid */
-   template<LlwuPin llwuPin> class CheckSignal {
-      static_assert((llwuPin<Info::numSignals), "Non-existent LLWU Input - Modify Configure.usbdm");
-      static_assert((llwuPin>=Info::numSignals)||(Info::info[llwuPin].gpioBit != UNMAPPED_PCR), "LLWU Input is not mapped to a pin - Modify Configure.usbdm");
-      static_assert((llwuPin>=Info::numSignals)||(Info::info[llwuPin].gpioBit != INVALID_PCR),  "LLWU Input doesn't exist in this device/package - Modify Configure.usbdm");
-      static_assert((llwuPin>=Info::numSignals)||((Info::info[llwuPin].gpioBit == UNMAPPED_PCR)||(Info::info[llwuPin].gpioBit == INVALID_PCR)||(Info::info[llwuPin].gpioBit >= 0)), "Illegal LLWU Input - Modify Configure.usbdm");
+   /** Class to static check llwuPin exists and is mapped to a pin */
+   template<int llwuPin> class CheckPinExistsAndIsMapped {
+      // Tests are chained so only a single assertion can fail so as to reduce noise
+
+      // Out of bounds value for function index
+      static constexpr bool Test1 = (llwuPin>=0) && (llwuPin<(Info::numSignals));
+      // Function is not currently mapped to a pin
+      static constexpr bool Test2 = !Test1 || (Info::info[llwuPin].gpioBit != UNMAPPED_PCR);
+      // Non-existent function and catch-all. (should be INVALID_PCR)
+      static constexpr bool Test3 = !Test1 || !Test2 || (Info::info[llwuPin].gpioBit >= 0);
+
+      static_assert(Test1, "Illegal LLWU Input - Check Configure.usbdm for available inputs");
+      static_assert(Test2, "LLWU input is not mapped to a pin - Modify Configure.usbdm");
+      static_assert(Test3, "LLWU input doesn't exist in this device/package - Check Configure.usbdm for available input pins");
+
    public:
       /** Dummy function to allow convenient in-line checking */
       static constexpr void check() {}
    };
 
    /** Callback function for ISR */
-   static LLWUCallbackFunction sCallback;
+   static LlwuCallbackFunction sCallback;
 
    /** Callback to catch unhandled interrupt */
    static void unhandledCallback() {
@@ -211,13 +220,92 @@ public:
    }
 
    /**
+    * Wrapper to allow the use of a class member as a callback function
+    * @note Only usable with static objects.
+    *
+    * @tparam T         Type of the object containing the callback member function
+    * @tparam callback  Member function pointer
+    * @tparam object    Object containing the member function
+    *
+    * @return  Pointer to a function suitable for the use as a callback
+    *
+    * @code
+    * class AClass {
+    * public:
+    *    int y;
+    *
+    *    // Member function used as callback
+    *    // This function must match LlwuCallbackFunction
+    *    void callback(uint32_t status) {
+    *       ...;
+    *    }
+    * };
+    * ...
+    * // Instance of class containing callback member function
+    * static AClass aClass;
+    * ...
+    * // Wrap member function
+    * auto fn = Llwu::wrapCallback<AClass, &AClass::callback, aClass>();
+    * // Use as callback
+    * Llwu::setCallback(fn);
+    * @endcode
+    */
+   template<class T, void(T::*callback)(), T &object>
+   static LlwuCallbackFunction wrapCallback() {
+      static LlwuCallbackFunction fn = []() {
+         (object.*callback)();
+      };
+      return fn;
+   }
+
+   /**
+    * Wrapper to allow the use of a class member as a callback function
+    * @note There is a considerable space and time overhead to using this method
+    *
+    * @tparam T         Type of the object containing the callback member function
+    * @tparam callback  Member function pointer
+    * @tparam object    Object containing the member function
+    *
+    * @return  Pointer to a function suitable for the use as a callback
+    *
+    * @code
+    * class AClass {
+    * public:
+    *    int y;
+    *
+    *    // Member function used as callback
+    *    // This function must match LlwuCallbackFunction
+    *    void callback(uint32_t status) {
+    *       ...;
+    *    }
+    * };
+    * ...
+    * // Instance of class containing callback member function
+    * AClass aClass;
+    * ...
+    * // Wrap member function
+    * auto fn = Llwu::wrapCallback<AClass, &AClass::callback>(aClass);
+    * // Use as callback
+    * Llwu::setCallback(fn);
+    * @endcode
+    */
+   template<class T, void(T::*callback)()>
+   static LlwuCallbackFunction wrapCallback(T &object) {
+      static T &obj = object;
+      static LlwuCallbackFunction fn = []() {
+         (obj.*callback)();
+      };
+      return fn;
+   }
+
+   /**
     * Set Callback function
     *
     *   @param[in]  callback Callback function to be executed on interrupt\n
     *                        Use nullptr to remove callback.
     */
-   static void setCallback(LLWUCallbackFunction callback) {
-      static_assert(Info::irqHandlerInstalled, "LLWU not configured for interrupts");
+   static void setCallback(LlwuCallbackFunction callback) {
+      static_assert(Info::irqLevel>=0, "LLWU not configured for interrupts");
       if (callback == nullptr) {
          callback = unhandledCallback;
       }
@@ -540,46 +628,17 @@ public:
    }
 
    template<LlwuPin llwuPin>
-   class Pin {
+   class Pin : public PcrTable_T<Info, llwuPin> {
 
    private:
       // Checks pin mapping is valid
-      LlwuBase_T::CheckSignal<llwuPin> check;
+      LlwuBase_T::CheckPinExistsAndIsMapped<llwuPin> checkPin;
 
       using Pcr = PcrTable_T<Info, llwuPin>;
+      using Pcr::setOutput;
 
    public:
       static constexpr LlwuPin  pin = llwuPin;
-
-      static constexpr int      PORT_BITNUM  = Pcr::BITNUM;    ///< Bit number for bit within associated port
-      static constexpr uint32_t PORT_BITMASK = Pcr::BITMASK;   ///< Bit mask for bit within associated port
-
-      /**
-       * Set Pin Control Register (PCR) value \n
-       * This will map the pin to the LLWU function (mux value) \n
-       * The clock to the port will be enabled before changing the PCR
-       *
-       * @tparam llwuPin LLWU pin to configure e.g. LlwuPin_Pte1
-       *
-       * @param[in]  pinPull          One of PinPull_None, PinPull_Up, PinPull_Down
-       * @param[in]  pinAction        One of PinAction_None, etc (defaults to PinAction_None)
-       * @param[in]  pinFilter        One of PinFilter_None, PinFilter_Passive (defaults to PinFilter_None)
-       */
-      static void setInput(
-            PinPull           pinPull           = PinPull_None,
-            PinAction         pinAction         = PinAction_None,
-            PinFilter         pinFilter         = PinFilter_None
-            ) {
-         Pcr::setPCR(pinPull|pinAction|pinFilter|(Info::info[llwuPin].pcrValue&PORT_PCR_MUX_MASK));
-      }
-
-      /**
-       * Clear pin interrupt flag.
-       * Assumes clock to the port has already been enabled.
-       */
-      static void clearInterruptFlag() {
-         Pcr::clearInterruptFlag();
-      }
 
       /**
        * Set callback for Pin interrupts
@@ -593,37 +652,14 @@ public:
        * @note There is a single callback function for all pins on the related port.
        *       It is necessary to identify the originating pin in the callback
        */
-      static void setCallback(PinCallbackFunction pinCallback) {
-         Pcr::setCallback(pinCallback);
-      }
-
-      /**
-       * Enable Pin interrupts in NVIC
-       */
-      static void enablePinNvicInterrupts() {
-         Pcr::enableNvicInterrupts();
-      }
-
-      /**
-       * Enable and set priority of Pin interrupts in NVIC
-       * Any pending NVIC interrupts are first cleared.
-       *
-       * @param[in]  nvicPriority  Interrupt priority
-       */
-      static void enablePinNvicInterrupts(uint32_t nvicPriority) {
-         Pcr::enableNvicInterrupts(nvicPriority);
-      }
-
-      /**
-       * Disable Pin interrupts in NVIC
-       */
-      static void disablePinNvicInterrupts() {
-         Pcr::disableNvicInterrupts();
+      static void setPinCallback(PinCallbackFunction pinCallback) {
+         static_assert(Pcr::HANDLER_INSTALLED, "Gpio associated with LLWU pin not configured for PIN interrupts - Modify Configure.usbdm");
+         Pcr::setPinCallback(pinCallback);
       }
    };
 };
 
-template<class Info> LLWUCallbackFunction LlwuBase_T<Info>::sCallback = LlwuBase_T<Info>::unhandledCallback;
+template<class Info> LlwuCallbackFunction LlwuBase_T<Info>::sCallback = LlwuBase_T<Info>::unhandledCallback;
 
 #ifdef USBDM_LLWU_IS_DEFINED
 /**

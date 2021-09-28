@@ -834,7 +834,7 @@ public:
     */
    static void __attribute__((always_inline)) configureAllPins() {
       // Configure pins
-      Info::initPCRs(pcrValue(PinPull_Up, PinDriveStrength_High));
+      Info::initPCRs(PcrValue(PinPull_Up, PinDriveStrength_High,PinDriveMode_PushPull));
    }
 
    virtual void enablePins() override {
