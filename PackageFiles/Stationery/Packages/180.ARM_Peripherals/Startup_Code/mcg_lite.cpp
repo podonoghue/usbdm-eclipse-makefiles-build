@@ -118,14 +118,14 @@ ErrorCode Mcg::clockTransition(const McgInfo::ClockInfo &clockInfo) {
 
 #ifdef MCG_C7_OSCSEL
    // Select OSCCLK Source
-   mcg().C7 = clockInfo.c7; // OSCSEL = 0,1,2 -> XTAL/XTAL32/IRC48M
+   mcg->C7 = clockInfo.c7; // OSCSEL = 0,1,2 -> XTAL/XTAL32/IRC48M
 #endif
 
    // Set Fast Internal Clock divider (FCRDIV)
-   mcg().SC = clockInfo.sc;
+   mcg->SC = clockInfo.sc;
 
    // Set HIRCEN, LIRC_DIV2
-   mcg().MC = clockInfo.mc;
+   mcg->MC = clockInfo.mc;
 
    // Set conservative clock dividers
    setSysDividers(SIM_CLKDIV1_OUTDIV4(5)|SIM_CLKDIV1_OUTDIV3(5)|SIM_CLKDIV1_OUTDIV2(5)|SIM_CLKDIV1_OUTDIV1(5));
@@ -141,64 +141,64 @@ ErrorCode Mcg::clockTransition(const McgInfo::ClockInfo &clockInfo) {
 
       case McgInfo::ClockMode_LIRC_2M: // From HIRC48, EXT or reset(FEI)
 
-         mcg().C2 =
+         mcg->C2 =
                MCG_C2_IRCS(0)   | // IRCS = 0 -> LIRC is in 2 MHz mode
                clockInfo.c2;      // RANGE0, HGO0, EREFS0
 
-         mcg().C1 =
+         mcg->C1 =
                MCG_C1_CLKS(1)   | // CLKS     = 1     -> IRC Selected
                clockInfo.c1;      // IREFSTEN, IRCLKEN
 
          // Wait for S_IREFST to indicate FLL Reference has switched to IRC
          do {
             __asm__("nop");
-         } while ((mcg().S & MCG_S_CLKST_MASK) != (MCG_S_CLKST(1)));
+         } while ((mcg->S & MCG_S_CLKST_MASK) != (MCG_S_CLKST(1)));
          break;
 
       case McgInfo::ClockMode_LIRC_8M: // From HIRC48, EXT or reset(FEI)
 
-         mcg().C2 =
+         mcg->C2 =
                MCG_C2_IRCS(1)   | // IRCS = 1 -> LIRC is in 2 MHz mode
                clockInfo.c2;      // RANGE0, HGO0, EREFS0
 
-         mcg().C1 =
+         mcg->C1 =
                MCG_C1_CLKS(1)   | // CLKS     = 1     -> IRC Selected
                clockInfo.c1;      // IREFSTEN, IRCLKEN
 
          // Wait for S_IREFST to indicate FLL Reference has switched to IRC
          do {
             __asm__("nop");
-         } while ((mcg().S & MCG_S_CLKST_MASK) != (MCG_S_CLKST(1)));
+         } while ((mcg->S & MCG_S_CLKST_MASK) != (MCG_S_CLKST(1)));
          break;
 
       case McgInfo::ClockMode_HIRC_48M: // from LIRC_2M, LIRC_8M, EXT
 
-         mcg().C2 =
+         mcg->C2 =
                clockInfo.c2;      // IRCS, RANGE0, HGO0, EREFS0
 
-         mcg().C1 =
+         mcg->C1 =
                MCG_C1_CLKS(0)   | // CLKS     = 0     -> HIRC selected
                clockInfo.c1;      // IREFSTEN, IRCLKEN
 
          // Wait for S_CLKST to indicating that OUTCLK has switched to IRC
          do {
             __asm__("nop");
-         } while ((mcg().S & MCG_S_CLKST_MASK) != MCG_S_CLKST(0));
+         } while ((mcg->S & MCG_S_CLKST_MASK) != MCG_S_CLKST(0));
          break;
 
       case McgInfo::ClockMode_EXT:  // from LIRC_2M, LIRC_8M, HIRC
 
-         mcg().C2 =
+         mcg->C2 =
                clockInfo.c2;      // IRCS, RANGE0, HGO0, EREFS0
 
-         mcg().C1 =
+         mcg->C1 =
                MCG_C1_CLKS(2)   | // CLKS     = 2     -> EXT selected
                clockInfo.c1;      // IREFSTEN, IRCLKEN
 
          // Wait for S_CLKST to indicating that OUTCLK has switched to IRC
          do {
             __asm__("nop");
-         } while ((mcg().S & MCG_S_CLKST_MASK) != MCG_S_CLKST(2));
+         } while ((mcg->S & MCG_S_CLKST_MASK) != MCG_S_CLKST(2));
 
          externalClockInUse = true;
          break;
@@ -207,7 +207,7 @@ ErrorCode Mcg::clockTransition(const McgInfo::ClockInfo &clockInfo) {
       if (externalClockInUse && (clockInfo.c2&MCG_C2_EREFS0_MASK)) {
          do {
             __asm__("nop");
-         } while ((mcg().S & MCG_S_OSCINIT0_MASK) == 0);
+         } while ((mcg->S & MCG_S_OSCINIT0_MASK) == 0);
       }
       currentClockMode = next;
       if (transitionCount++>5) {

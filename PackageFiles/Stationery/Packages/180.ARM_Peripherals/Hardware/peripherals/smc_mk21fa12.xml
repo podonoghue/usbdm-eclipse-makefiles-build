@@ -99,7 +99,7 @@
    \t      SmcLowLeakageStop       smcLowLeakageStop       = SmcLowLeakageStop_Disabled,
    \t      SmcVeryLowLeakageStop   smcVeryLowLeakageStop   = SmcVeryLowLeakageStop_Disabled) {
    \t
-   \t   smc().PMPROT = smcVeryLowPower|smcLowLeakageStop|smcVeryLowLeakageStop;
+   \t   smc->PMPROT = smcVeryLowPower|smcLowLeakageStop|smcVeryLowLeakageStop;
    \t   return E_NO_ERROR;
    \t}\n\n
    ]]></template>
@@ -116,7 +116,7 @@
    \t      SmcLowLeakageStopMode   smcLowLeakageStopMode,
    \t      SmcPowerOnReset         smcPowerOnReset         = SmcPowerOnReset_Disabled) {
    \t
-   \t   smc().STOPCTRL = smcPowerOnReset|smcLowLeakageStopMode;
+   \t   smc->STOPCTRL = smcPowerOnReset|smcLowLeakageStopMode;
    \t}\n\n
    ]]></template>
    

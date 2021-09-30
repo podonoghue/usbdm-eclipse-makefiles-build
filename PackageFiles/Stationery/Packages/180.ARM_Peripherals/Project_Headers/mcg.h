@@ -68,7 +68,7 @@ private:
    static MCGCallbackFunction callback;
 
    /** Hardware instance */
-   static __attribute__((always_inline)) volatile MCG_Type &mcg() { return McgInfo::mcg(); }
+   static constexpr HardwarePtr<MCG_Type> mcg = McgInfo::baseAddress;
 
 public:
    /**

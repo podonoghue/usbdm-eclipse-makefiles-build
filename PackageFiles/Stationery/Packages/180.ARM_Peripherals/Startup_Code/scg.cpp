@@ -49,7 +49,7 @@ SCGCallbackFunction Scg::callback = {0};
  * @return clock mode
  */
 ScgInfo::ClockMode Scg::getClockMode() {
-   switch (scg().CSR & SCG_CSR_SCS_MASK) {
+   switch (scg->CSR & SCG_CSR_SCS_MASK) {
       case SCG_CSR_SCS(1): // SOSC_CLK
          return ScgInfo::ClockMode_SOSC;
       case SCG_CSR_SCS(2): // SIRC_CLK
@@ -96,18 +96,18 @@ ErrorCode Scg::clockTransition(const ScgInfo::ClockInfo &clockInfo) {
    ScgInfo::ClockMode to = clockInfo.clockMode;
 
    // Configure all clocks and clock dividers
-   scg().FIRCCFG = clockInfo.firccfg;
-   scg().FIRCDIV = clockInfo.fircdiv;
-   scg().FIRCCSR = clockInfo.firccsr;
-   scg().SOSCCFG = clockInfo.sosccfg;
-   scg().SOSCDIV = clockInfo.soscdiv;
-   scg().SOSCCSR = clockInfo.sosccsr;
-   scg().SIRCCFG = clockInfo.sirccfg;
-   scg().SIRCDIV = clockInfo.sircdiv;
-   scg().SIRCCSR = clockInfo.sirccsr;
-   scg().SPLLCFG = clockInfo.spllcfg;
-   scg().SPLLDIV = clockInfo.splldiv;
-   scg().SPLLCSR = clockInfo.spllcsr;
+   scg->FIRCCFG = clockInfo.firccfg;
+   scg->FIRCDIV = clockInfo.fircdiv;
+   scg->FIRCCSR = clockInfo.firccsr;
+   scg->SOSCCFG = clockInfo.sosccfg;
+   scg->SOSCDIV = clockInfo.soscdiv;
+   scg->SOSCCSR = clockInfo.sosccsr;
+   scg->SIRCCFG = clockInfo.sirccfg;
+   scg->SIRCDIV = clockInfo.sircdiv;
+   scg->SIRCCSR = clockInfo.sirccsr;
+   scg->SPLLCFG = clockInfo.spllcfg;
+   scg->SPLLDIV = clockInfo.splldiv;
+   scg->SPLLCSR = clockInfo.spllcsr;
 
    switch(to) {
       case  ScgInfo::ClockMode_None:
@@ -115,51 +115,51 @@ ErrorCode Scg::clockTransition(const ScgInfo::ClockInfo &clockInfo) {
 
       case  ScgInfo::ClockMode_FIRC:
          // Wait until FIRC operating
-         while ((scg().FIRCCSR&SCG_FIRCCSR_FIRCVLD_MASK) == 0) {
+         while ((scg->FIRCCSR&SCG_FIRCCSR_FIRCVLD_MASK) == 0) {
             __asm__("nop");
          }
-         scg().RCCR    = SCG_RCCR_SCS(0b0011)|clockInfo.runccr;
-         scg().HCCR    = SCG_HCCR_SCS(0b0011)|clockInfo.altccr;
+         scg->RCCR    = SCG_RCCR_SCS(0b0011)|clockInfo.runccr;
+         scg->HCCR    = SCG_HCCR_SCS(0b0011)|clockInfo.altccr;
          // Wait until FIRC is system clock
-         while ((scg().FIRCCSR&SCG_FIRCCSR_FIRCSEL_MASK) == 0) {
+         while ((scg->FIRCCSR&SCG_FIRCCSR_FIRCSEL_MASK) == 0) {
             __asm__("nop");
          }
          break;
 
       case  ScgInfo::ClockMode_SIRC:
          // Wait until SIRC operating
-         while ((scg().SIRCCSR&SCG_SIRCCSR_SIRCVLD_MASK) == 0) {
+         while ((scg->SIRCCSR&SCG_SIRCCSR_SIRCVLD_MASK) == 0) {
             __asm__("nop");
          }
-         scg().RCCR    = SCG_RCCR_SCS(0b0010)|clockInfo.runccr;
-         scg().VCCR    = SCG_VCCR_SCS(0b0010)|clockInfo.altccr;
+         scg->RCCR    = SCG_RCCR_SCS(0b0010)|clockInfo.runccr;
+         scg->VCCR    = SCG_VCCR_SCS(0b0010)|clockInfo.altccr;
          // Wait until SIRC is system clock
-         while ((scg().SIRCCSR&SCG_SIRCCSR_SIRCSEL_MASK) == 0) {
+         while ((scg->SIRCCSR&SCG_SIRCCSR_SIRCSEL_MASK) == 0) {
             __asm__("nop");
          }
          break;
 
       case  ScgInfo::ClockMode_SOSC:
          // Wait until SOSC operating
-         while ((scg().SOSCCSR&SCG_SOSCCSR_SOSCVLD_MASK) == 0) {
+         while ((scg->SOSCCSR&SCG_SOSCCSR_SOSCVLD_MASK) == 0) {
             __asm__("nop");
          }
-         scg().RCCR    = SCG_RCCR_SCS(0b0001)|clockInfo.runccr;
+         scg->RCCR    = SCG_RCCR_SCS(0b0001)|clockInfo.runccr;
          // Wait until SOSC is system clock
-         while ((scg().SOSCCSR&SCG_SOSCCSR_SOSCSEL_MASK) == 0) {
+         while ((scg->SOSCCSR&SCG_SOSCCSR_SOSCSEL_MASK) == 0) {
             __asm__("nop");
          }
          break;
 
       case  ScgInfo::ClockMode_SPLL:
          // Wait until SPLL operating
-         while ((scg().SPLLCSR&SCG_SPLLCSR_SPLLVLD_MASK) == 0) {
+         while ((scg->SPLLCSR&SCG_SPLLCSR_SPLLVLD_MASK) == 0) {
             __asm__("nop");
          }
-         scg().RCCR    = SCG_RCCR_SCS(0b0110)|clockInfo.runccr;
-         scg().HCCR    = SCG_HCCR_SCS(0b0110)|clockInfo.altccr;
+         scg->RCCR    = SCG_RCCR_SCS(0b0110)|clockInfo.runccr;
+         scg->HCCR    = SCG_HCCR_SCS(0b0110)|clockInfo.altccr;
          // Wait until SPLL is system clock
-         while ((scg().SPLLCSR&SCG_SPLLCSR_SPLLSEL_MASK) == 0) {
+         while ((scg->SPLLCSR&SCG_SPLLCSR_SPLLSEL_MASK) == 0) {
             __asm__("nop");
          }
          break;
@@ -178,7 +178,7 @@ void Scg::SystemCoreClockUpdate() {
 
    uint32_t clockFrequency = 0;
 
-   switch (scg().CSR & SCG_CSR_SCS_MASK) {
+   switch (scg->CSR & SCG_CSR_SCS_MASK) {
       case SCG_CSR_SCS(0b0001) : // SOSC
          clockFrequency = ScgInfo::getSoscFrequency();
          break;
@@ -192,8 +192,8 @@ void Scg::SystemCoreClockUpdate() {
          clockFrequency = ScgInfo::getSpllFrequency();
          break;
    }
-   ::SystemCoreClock = ScgInfo::getSystemDividedClock(clockFrequency,    (scg().CSR&SCG_RCCR_DIVCORE_MASK)>>SCG_RCCR_DIVCORE_SHIFT);
-   ::SystemBusClock  = ScgInfo::getSystemDividedClock(::SystemCoreClock, (scg().CSR&SCG_RCCR_DIVBUS_MASK)>>SCG_RCCR_DIVBUS_SHIFT);
+   ::SystemCoreClock = ScgInfo::getSystemDividedClock(clockFrequency,    (scg->CSR&SCG_RCCR_DIVCORE_MASK)>>SCG_RCCR_DIVCORE_SHIFT);
+   ::SystemBusClock  = ScgInfo::getSystemDividedClock(::SystemCoreClock, (scg->CSR&SCG_RCCR_DIVBUS_MASK)>>SCG_RCCR_DIVBUS_SHIFT);
 }
 
 /**

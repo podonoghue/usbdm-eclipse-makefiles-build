@@ -470,7 +470,7 @@ class DmaBase_T {
 
 protected:
    /** Hardware instance pointer */
-   static __attribute__((always_inline)) volatile DMA_Type &dmac() { return Info::dma(); }
+   static constexpr HardwarePtr<DMA_Type> dmac = Info::baseAddress;
 
    /** Callback functions for ISRs */
    static DmaCallbackFunction sCallbacks[Info::NumVectors];
@@ -569,9 +569,9 @@ public:
    static void configureTransfer(DmaChannelNum channel, const DmaTcd &tcd) {
 
       // Stop channel
-      dmac().DMA[channel].DCR      = DMA_DCR_START(0)|DMA_DCR_ERQ(0);
+      dmac->DMA[channel].DCR      = DMA_DCR_START(0)|DMA_DCR_ERQ(0);
       // Clear all flags
-      dmac().DMA[channel].DSR_BCR  = DMA_DSR_BCR_DONE_MASK;
+      dmac->DMA[channel].DSR_BCR  = DMA_DSR_BCR_DONE_MASK;
 
       // Copy TCD to DMAC channel
       (*(DmaTcd* const)(&dmac().DMA[channel])) = tcd;
@@ -586,7 +586,7 @@ public:
       while ((dmac().DMA[channel].DSR & DMA_DSR_DONE_MASK) == 0) {
          __asm__ volatile("nop");
       }
-      dmac().DMA[channel].DSR = DMA_DSR_DONE_MASK;
+      dmac->DMA[channel].DSR = DMA_DSR_DONE_MASK;
    }
 
    /**
@@ -595,8 +595,8 @@ public:
     * @param[in]  channel Channel being modified
     */
    static void __attribute__((always_inline)) clearInterruptRequest(DmaChannelNum channel) {
-      dmac().DMA[channel].DSR_BCR = DMA_DSR_BCR_DONE_MASK;
-      dmac().DMA[channel].DCR     = DMA_DCR_START(0)|DMA_DCR_ERQ(0);
+      dmac->DMA[channel].DSR_BCR = DMA_DSR_BCR_DONE_MASK;
+      dmac->DMA[channel].DCR     = DMA_DCR_START(0)|DMA_DCR_ERQ(0);
    }
 
    /**

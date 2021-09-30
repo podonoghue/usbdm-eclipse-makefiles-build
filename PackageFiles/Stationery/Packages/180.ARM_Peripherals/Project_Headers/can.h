@@ -1155,7 +1155,7 @@ public:
 protected:
 
    //! Hardware instance pointer
-   static __attribute__((always_inline)) volatile CAN_Type &can() { return Info::can(); }
+   static constexpr HardwarePtr<CAN_Type> can = Info::baseAddress;
 
    static constexpr unsigned MAILBOX_HANDLER_INDEX       = 0;
    static constexpr unsigned ERROR_HANDLER_INDEX         = 1;
@@ -1327,7 +1327,7 @@ public:
     * @note This is only applicable when FIFO is enabled.
     */
    static CanMessageBuffer8 *getFifoMessageBuffer() {
-      return (CanMessageBuffer8 *) (can().MB);
+      return (CanMessageBuffer8 *) (can->MB);
    };
 
    /**
@@ -1341,7 +1341,7 @@ public:
     * @note This is only applicable when FIFO is enabled.
     */
    static CanFifoIdFilter *getFifoFilterTable() {
-      return (CanFifoIdFilter *) (can().FIFO.FILTER_ID_A);
+      return (CanFifoIdFilter *) (can->FIFO.FILTER_ID_A);
    }
 
    /**
@@ -1352,7 +1352,7 @@ public:
     * @return Pointer to start of filter mask table array
     */
    static CanFifoIdFilterMask *getFifoFilterMaskTable() {
-      return (CanFifoIdFilterMask *) (can().RXIMR);
+      return (CanFifoIdFilterMask *) (can->RXIMR);
    }
 
    /**
@@ -1363,7 +1363,7 @@ public:
     * @return Pointer to start of filter mask table array
     */
    static CanMailboxFilterMask *getMailboxFilterMaskTable() {
-      return (CanMailboxFilterMask *) (can().RXIMR + MESSAGE_BUFFERS_ALLOCATED_TO_FIFO);
+      return (CanMailboxFilterMask *) (can->RXIMR + MESSAGE_BUFFERS_ALLOCATED_TO_FIFO);
    }
 
    /**
@@ -1374,7 +1374,7 @@ public:
     * @return Pointer to start of filter mask table array
     */
    static CanMailboxFilterMask &getMailboxFilterMask(unsigned index) {
-      return ((CanMailboxFilterMask *) (can().RXIMR + MESSAGE_BUFFERS_ALLOCATED_TO_FIFO))[index];
+      return ((CanMailboxFilterMask *) (can->RXIMR + MESSAGE_BUFFERS_ALLOCATED_TO_FIFO))[index];
    }
 
 public:
@@ -1478,7 +1478,7 @@ public:
        * Mask for Receive FIFO ID Filter Table elements not covered by an
        * individual masks or if individual masks are disabled (IRQM=0)
        */
-      can().RXFGMASK = fifoDefaultIdFilterMask.raw;
+      can->RXFGMASK = fifoDefaultIdFilterMask.raw;
    }
 
 protected:
@@ -1514,48 +1514,48 @@ protected:
       canParameters.maxmb = calculateMessageBuffersRequired(Info::NumberOfFifoMessageFilters, Info::NumberOfIndividualMailboxes) - 1;
 
       // Make sure disabled so CLKSRC can be set
-      can().MCR = CAN_MCR_MDIS(1);
+      can->MCR = CAN_MCR_MDIS(1);
 
       // Wait until in LP mode
-      while (!(can().MCR & CAN_MCR_LPMACK_MASK)) {
+      while (!(can->MCR & CAN_MCR_LPMACK_MASK)) {
          __asm__("nop");
       }
 
-      can().CTRL1 = canParameters.ctrl1 & CAN_CTRL1_CLKSRC_MASK;
+      can->CTRL1 = canParameters.ctrl1 & CAN_CTRL1_CLKSRC_MASK;
 
       // Enable
-      can().MCR = CAN_MCR_MDIS(0)|CAN_MCR_FRZ(1);
+      can->MCR = CAN_MCR_MDIS(0)|CAN_MCR_FRZ(1);
 
       // Wait until not in LP mode
-      while (can().MCR & CAN_MCR_LPMACK_MASK) {
+      while (can->MCR & CAN_MCR_LPMACK_MASK) {
          __asm__("nop");
       }
 
       // Apply software reset and wait until complete
-      can().MCR |= CAN_MCR_SOFTRST(1);
-      while (can().MCR & CAN_MCR_SOFTRST_MASK) {
+      can->MCR |= CAN_MCR_SOFTRST(1);
+      while (can->MCR & CAN_MCR_SOFTRST_MASK) {
          __asm__("nop");
       }
       // Wait until in Freeze mode
-      while ((can().MCR & CAN_MCR_FRZACK_MASK)==0) {
+      while ((can->MCR & CAN_MCR_FRZACK_MASK)==0) {
          __asm__("nop");
       }
 
       // Clear message buffers
       // This will also clear the FIFO as it overlaps
-      memset((void*)(can().MB),     0, Info::MaxNumberOfMessageBuffers*sizeof(can().MB[0]));
+      memset((void*)(can->MB),     0, Info::MaxNumberOfMessageBuffers*sizeof(can->MB[0]));
       // Disable message buffer/FIFO ID filter masks
-      memset((void*)(can().RXIMR), -1, Info::MaxNumberOfMessageBuffers*sizeof(can().RXIMR[0]));
+      memset((void*)(can->RXIMR), -1, Info::MaxNumberOfMessageBuffers*sizeof(can->RXIMR[0]));
 
       // Clear any pending flags
-      can().IFLAG1 = ~0;
+      can->IFLAG1 = ~0;
 
-      can().CTRL1 = canParameters.ctrl1;
+      can->CTRL1 = canParameters.ctrl1;
 
-      can().CTRL2 = canParameters.ctrl2;
+      can->CTRL2 = canParameters.ctrl2;
 
       // Configure CAN
-      can().MCR = canParameters.mcr|
+      can->MCR = canParameters.mcr|
             CAN_MCR_HALT(1) |            // Stay in Freeze
             CAN_MCR_FRZ(1);
    }
@@ -1566,7 +1566,7 @@ public:
     */
    static void start() {
       // Negate Freeze mode
-      can().MCR &= ~CAN_MCR_HALT_MASK;
+      can->MCR &= ~CAN_MCR_HALT_MASK;
    }
 
    /**
@@ -1574,10 +1574,10 @@ public:
     */
    static void stop() {
       // Set Freeze mode
-      can().MCR |= CAN_MCR_HALT_MASK;
+      can->MCR |= CAN_MCR_HALT_MASK;
 
       // Wait until ack'ed
-      while (can().MCR & CAN_MCR_FRZACK_MASK) {
+      while (can->MCR & CAN_MCR_FRZACK_MASK) {
          __asm__("nop");
       }
    }
@@ -1610,7 +1610,7 @@ public:
     * @param value
     */
    static void writeTimer(uint16_t value) {
-      can().TIMER = value;
+      can->TIMER = value;
    }
 
    /**
@@ -1619,7 +1619,7 @@ public:
     * @return Timer value
     */
    static uint16_t readTimer() {
-      return can().TIMER;
+      return can->TIMER;
    }
 
    /**
@@ -1631,7 +1631,7 @@ public:
     * @param mask
     */
    static void setFifoMessageBufferMask(uint16_t mask) {
-      can().RXFGMASK = mask;
+      can->RXFGMASK = mask;
    }
 
    /**
@@ -1643,7 +1643,7 @@ public:
     * @param mask
     */
    static void setMailboxGlobalMask(uint16_t mask) {
-      can().RXMGMASK = mask;
+      can->RXMGMASK = mask;
    }
 
    /**
@@ -1654,7 +1654,7 @@ public:
     * @param mask
     */
    static void setMailbox14Mask(uint16_t mask) {
-      can().RX14MASK = mask;
+      can->RX14MASK = mask;
    }
 
    /**
@@ -1665,7 +1665,7 @@ public:
     * @param mask
     */
    static void setMailbox15Mask(uint16_t mask) {
-      can().RX15MASK = mask;
+      can->RX15MASK = mask;
    }
 
    /**
@@ -1674,7 +1674,7 @@ public:
     * @return Error counts
     */
    static CanErrorCounts getErrorCounters() {
-      return (CanErrorCounts)can().ECR;
+      return (CanErrorCounts)can->ECR;
    }
 
    /**
@@ -1683,7 +1683,7 @@ public:
     * @return Mask representing various errors.
     */
    static uint32_t getErrorStatus() {
-      return can().ESR1;
+      return can->ESR1;
    }
 
    /**
@@ -1692,7 +1692,7 @@ public:
     * @param flags Mask representing various errors to clear
     */
    static uint32_t clearErrorStatus(uint32_t flags) {
-      return can().ESR1 = flags;
+      return can->ESR1 = flags;
    }
 
    /**
@@ -1703,7 +1703,7 @@ public:
     * @note The mailboxNumber takes into account the buffers allocated to the FIFO.
     */
    static void enableMailboxInterrupt(unsigned mailboxNumber) {
-      can().IMASK1 |= (1<<(mailboxNumber+MESSAGE_BUFFERS_ALLOCATED_TO_FIFO));
+      can->IMASK1 |= (1<<(mailboxNumber+MESSAGE_BUFFERS_ALLOCATED_TO_FIFO));
    }
 
    /**
@@ -1714,7 +1714,7 @@ public:
     * @note The mailboxNumber takes into account the buffers allocated to the FIFO.
     */
    static void disableMailboxInterrupt(unsigned mailboxNumber) {
-      can().IMASK1 &= ~(1<<(mailboxNumber+MESSAGE_BUFFERS_ALLOCATED_TO_FIFO));
+      can->IMASK1 &= ~(1<<(mailboxNumber+MESSAGE_BUFFERS_ALLOCATED_TO_FIFO));
    }
 
    /**
@@ -1725,7 +1725,7 @@ public:
     * @note The mailboxNumber takes into account the buffers allocated to the FIFO.
     */
    static void clearMailboxFlag(unsigned mailboxNumber) {
-      can().IFLAG1 = (1<<(mailboxNumber+MESSAGE_BUFFERS_ALLOCATED_TO_FIFO));
+      can->IFLAG1 = (1<<(mailboxNumber+MESSAGE_BUFFERS_ALLOCATED_TO_FIFO));
    }
 
    /**
@@ -1736,7 +1736,7 @@ public:
     * @note The mask is realigned to take in to account the buffers allocated to the FIFO.
     */
    static void enableMailboxInterrupts(uint32_t mask) {
-      can().IMASK1 |= (mask<<MESSAGE_BUFFERS_ALLOCATED_TO_FIFO);
+      can->IMASK1 |= (mask<<MESSAGE_BUFFERS_ALLOCATED_TO_FIFO);
    }
 
    /**
@@ -1747,7 +1747,7 @@ public:
     * @note The mask is realigned to take in to account the buffers allocated to the FIFO.
     */
    static void disableMailboxInterrupts(uint32_t mask) {
-      can().IMASK1 &= ~(mask<<MESSAGE_BUFFERS_ALLOCATED_TO_FIFO);
+      can->IMASK1 &= ~(mask<<MESSAGE_BUFFERS_ALLOCATED_TO_FIFO);
    }
 
    /**
@@ -1759,7 +1759,7 @@ public:
     * @note The mask is realigned to take in to account the buffers allocated to the FIFO.
     */
    static uint32_t getMailboxFlags() {
-      return (can().IFLAG1>>MESSAGE_BUFFERS_ALLOCATED_TO_FIFO);
+      return (can->IFLAG1>>MESSAGE_BUFFERS_ALLOCATED_TO_FIFO);
    }
 
    /**
@@ -1771,7 +1771,7 @@ public:
     * @note The mask is realigned to take in to account the buffers allocated to the FIFO.
     */
    static void clearMailboxFlags(uint32_t mask) {
-      can().IFLAG1 = mask<<MESSAGE_BUFFERS_ALLOCATED_TO_FIFO;
+      can->IFLAG1 = mask<<MESSAGE_BUFFERS_ALLOCATED_TO_FIFO;
    }
 
    /**
@@ -1784,7 +1784,7 @@ public:
     *  5 : Receive frame available - At least 1 frame available in Receive FIFO
     */
    static void enableFifoInterrupts(uint32_t mask) {
-      can().IMASK1 |= mask & (CAN_IFLAG1_BUF7I_MASK|CAN_IFLAG1_BUF6I_MASK|CAN_IFLAG1_BUF5I_MASK);
+      can->IMASK1 |= mask & (CAN_IFLAG1_BUF7I_MASK|CAN_IFLAG1_BUF6I_MASK|CAN_IFLAG1_BUF5I_MASK);
    }
 
    /**
@@ -1797,7 +1797,7 @@ public:
     *  5 : Receive frame available - At least 1 frame available in Receive FIFO
     */
    static void disableFifoInterrupts(uint32_t mask) {
-      can().IMASK1 &= ~(mask & (CAN_IFLAG1_BUF7I_MASK|CAN_IFLAG1_BUF6I_MASK|CAN_IFLAG1_BUF5I_MASK));
+      can->IMASK1 &= ~(mask & (CAN_IFLAG1_BUF7I_MASK|CAN_IFLAG1_BUF6I_MASK|CAN_IFLAG1_BUF5I_MASK));
    }
 
    /**
@@ -1810,7 +1810,7 @@ public:
     *  5 : Receive frame available - At least 1 frame available in Receive FIFO
     */
    static uint32_t getFifoFlags() {
-      return can().IFLAG1 & (CAN_IFLAG1_BUF7I_MASK|CAN_IFLAG1_BUF6I_MASK|CAN_IFLAG1_BUF5I_MASK);
+      return can->IFLAG1 & (CAN_IFLAG1_BUF7I_MASK|CAN_IFLAG1_BUF6I_MASK|CAN_IFLAG1_BUF5I_MASK);
    }
 
    /**
@@ -1823,7 +1823,7 @@ public:
     *  5 : Receive frame available - At least 1 frame available in Receive FIFO
     */
    static void clearFifoFlags(uint32_t mask) {
-      can().IFLAG1 = mask&(CAN_IFLAG1_BUF7I_MASK|CAN_IFLAG1_BUF6I_MASK|CAN_IFLAG1_BUF5I_MASK);
+      can->IFLAG1 = mask&(CAN_IFLAG1_BUF7I_MASK|CAN_IFLAG1_BUF6I_MASK|CAN_IFLAG1_BUF5I_MASK);
    }
 
    /**
@@ -1837,7 +1837,7 @@ public:
     * @return The index of the matching acceptance filter
     */
    static uint32_t getFifoAcceptanceFilterHit() {
-      return can().RXFIR & CAN_RXFIR_IDHIT_MASK;
+      return can->RXFIR & CAN_RXFIR_IDHIT_MASK;
    }
 
 #ifdef CAN_CBT_EPSEG1
@@ -1857,7 +1857,7 @@ public:
          unsigned resyncJumpWidth,
          unsigned prescalerDivisionFactor
    ) {
-      can().CBT =
+      can->CBT =
             CAN_CBT_EPSEG1(phaseSegment1-1) |
             CAN_CBT_EPSEG2(phaseSegment2-1) |
             CAN_CBT_EPROPSEG(propagationSegment-1) |
@@ -1872,7 +1872,7 @@ public:
     * @return CRC value and buffer number
     */
    static CanCrc15 getTransmittedCrc() {
-      return (CanCrc15)(can().CRCR);
+      return (CanCrc15)(can->CRCR);
    }
 
    /**

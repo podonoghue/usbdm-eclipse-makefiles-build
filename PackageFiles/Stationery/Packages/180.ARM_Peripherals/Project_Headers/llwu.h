@@ -314,7 +314,7 @@ public:
 
 protected:
    /** Pointer to hardware */
-   static __attribute__((always_inline)) volatile LLWU_Type &llwu() { return Info::llwu(); }
+   static constexpr HardwarePtr<LLWU_Type> llwu = Info::baseAddress;
 
 public:
 
@@ -342,44 +342,44 @@ public:
       // Configure pins
       Info::initPCRs();
 
-      llwu().PE1   = Info::pe1;
+      llwu->PE1   = Info::pe1;
 #ifdef LLWU_PE2_WUPE4_MASK
-      llwu().PE2   = Info::pe2;
+      llwu->PE2   = Info::pe2;
 #endif
 #ifdef LLWU_PE3_WUPE8_MASK
-      llwu().PE3   = Info::pe3;
+      llwu->PE3   = Info::pe3;
 #endif
 #ifdef LLWU_PE4_WUPE12_MASK
-      llwu().PE4   = Info::pe4;
+      llwu->PE4   = Info::pe4;
 #endif
 #ifdef LLWU_PE5_WUPE16_MASK
-      llwu().PE5   = Info::pe5;
+      llwu->PE5   = Info::pe5;
 #endif
 #ifdef LLWU_PE6_WUPE20_MASK
-      llwu().PE6   = Info::pe6;
+      llwu->PE6   = Info::pe6;
 #endif
 #ifdef LLWU_PE7_WUPE24_MASK
-      llwu().PE7   = Info::pe7;
+      llwu->PE7   = Info::pe7;
 #endif
 #ifdef LLWU_PE8_WUPE28_MASK
-      llwu().PE8   = Info::pe8;
+      llwu->PE8   = Info::pe8;
 #endif
 
-      llwu().ME    = Info::me;
+      llwu->ME    = Info::me;
 
-      llwu().FILT1 = Info::filt1|LLWU_FILT_FILTF_MASK;
+      llwu->FILT1 = Info::filt1|LLWU_FILT_FILTF_MASK;
 #ifdef LLWU_FILT2_FILTE_MASK
-      llwu().FILT2 = Info::filt2|LLWU_FILT_FILTF_MASK;
+      llwu->FILT2 = Info::filt2|LLWU_FILT_FILTF_MASK;
 #endif
 #ifdef LLWU_FILT3_FILTE_MASK
-      llwu().FILT3 = Info::filt3|LLWU_FILT_FILTF_MASK;
+      llwu->FILT3 = Info::filt3|LLWU_FILT_FILTF_MASK;
 #endif
 #ifdef LLWU_FILT4_FILTE_MASK
-      llwu().FILT4 = Info::filt4|LLWU_FILT_FILTF_MASK;
+      llwu->FILT4 = Info::filt4|LLWU_FILT_FILTF_MASK;
 #endif
 
 #ifdef LLWU_RST_LLRSTE
-      llwu().RST   = Info::rst;
+      llwu->RST   = Info::rst;
 #endif
 
       enableNvicInterrupts(Info::irqLevel);
@@ -401,7 +401,7 @@ public:
          LlwuPinMode llwuPinMode) {
 
       static const uint8_t masks[] = {(0x3<<0),(0x3<<2),(0x3<<4),(0x3<<6)};
-      volatile uint8_t &llwuPe = llwu().PE[llwuPin>>2];
+      volatile uint8_t &llwuPe = llwu->PE[llwuPin>>2];
       uint8_t mask = masks[llwuPin&3];
       llwuPe = (llwuPe&~mask) | (llwuPinMode&mask);
    }
@@ -419,18 +419,18 @@ public:
     * @return Bit mask
     */
    static uint32_t getPinWakeupSources() {
-      constexpr unsigned PF_SIZE = sizeof(llwu().PF)/sizeof(llwu().PF[0]);
+      constexpr unsigned PF_SIZE = sizeof(llwu->PF)/sizeof(llwu->PF[0]);
       if constexpr(PF_SIZE==4) {
-         return (llwu().PF[1]<<24)|(llwu().PF[1]<<16)|(llwu().PF[1]<<8)|llwu().PF[0];
+         return (llwu->PF[1]<<24)|(llwu->PF[1]<<16)|(llwu->PF[1]<<8)|llwu->PF[0];
       }
       else if constexpr(PF_SIZE==3) {
-         return (llwu().PF[1]<<16)|(llwu().PF[1]<<8)|llwu().PF[0];
+         return (llwu->PF[1]<<16)|(llwu->PF[1]<<8)|llwu->PF[0];
       }
       else if constexpr(PF_SIZE==2) {
-         return (llwu().PF[1]<<8)|llwu().PF[0];
+         return (llwu->PF[1]<<8)|llwu->PF[0];
       }
       else {
-         return llwu().PF[0];
+         return llwu->PF[0];
       }
    }
 
@@ -452,7 +452,7 @@ public:
     *  @param[in] llwuPin Pin indicating which flag to clear
     */
    static void clearPinWakeupFlag(LlwuPin llwuPin) {
-      llwu().PF[llwuPin>>3] = (1<<(llwuPin&0x7));
+      llwu->PF[llwuPin>>3] = (1<<(llwuPin&0x7));
    }
 
    /**
@@ -468,8 +468,8 @@ public:
     * Clear all wake-up pin flags
     */
    static void clearPinWakeupFlags() {
-      for(unsigned index=0; index<(sizeof(llwu().PF)/sizeof(llwu().PF[0])); index++) {
-         llwu().PF[index] = 0xFF;
+      for(unsigned index=0; index<(sizeof(llwu->PF)/sizeof(llwu->PF[0])); index++) {
+         llwu->PF[index] = 0xFF;
       }
    }
 
@@ -492,7 +492,7 @@ public:
          LlwuPin           llwuPin,
          LlwuFilterPinMode llwuFilterPinMode) {
 
-      llwu().FILT[filterNum] = llwuPin|llwuFilterPinMode;
+      llwu->FILT[filterNum] = llwuPin|llwuFilterPinMode;
       return E_NO_ERROR;
    }
 
@@ -505,7 +505,7 @@ public:
     * @return true  Given filtered pin is source of wake-up.
     */
    static bool isFilteredPinWakeupSource(unsigned filterNum) {
-      return (llwu().FILT[filterNum] & LLWU_FILT_FILTF_MASK);
+      return (llwu->FILT[filterNum] & LLWU_FILT_FILTF_MASK);
    }
 
    /**
@@ -514,15 +514,15 @@ public:
     * @param[in] filterNum Pin Filter to clear flag
     */
    static void clearFilteredPinWakeupFlag(LlwuFilterNum filterNum) {
-      llwu().FILT[filterNum] |= LLWU_FILT_FILTF_MASK;
+      llwu->FILT[filterNum] |= LLWU_FILT_FILTF_MASK;
    }
 
    /**
     * Clear all filtered wake-up pin flags
     */
    static void clearFilteredPinWakeupFlags() {
-      for (unsigned index=0; index<(sizeof(llwu().FILT)/sizeof(llwu().FILT[0])); index++) {
-         llwu().FILT[index] |= LLWU_FILT_FILTF_MASK;
+      for (unsigned index=0; index<(sizeof(llwu->FILT)/sizeof(llwu->FILT[0])); index++) {
+         llwu->FILT[index] |= LLWU_FILT_FILTF_MASK;
       }
    }
 
@@ -534,7 +534,7 @@ public:
     * @param llwuResetWakeup  Whether reset is enabled as a wake-up source
     */
    static void configureResetFilter(LlwuResetFilter llwuResetFilter, LlwuResetWakeup llwuResetWakeup=LlwuResetWakeup_Enabled) {
-      llwu().RST = llwuResetFilter|llwuResetWakeup;
+      llwu->RST = llwuResetFilter|llwuResetWakeup;
    }
 #endif
 
@@ -554,10 +554,10 @@ public:
          LlwuPeripheralMode   llwuPeripheralMode=LlwuPeripheralMode_Enabled) {
 
       if (llwuPeripheralMode) {
-         llwu().ME |= llwuPeripheral;
+         llwu->ME |= llwuPeripheral;
       }
       else {
-         llwu().ME &= (uint8_t)~llwuPeripheral;
+         llwu->ME &= (uint8_t)~llwuPeripheral;
       }
    }
 
@@ -565,10 +565,10 @@ public:
     * Disable all wake-up sources (pins and peripherals)
     */
    static void disableAllSources() {
-      for (unsigned index=0; index<(sizeof(llwu().PE)/(sizeof(llwu().PE[0]))); index++) {
-         llwu().PE[index] = 0;
+      for (unsigned index=0; index<(sizeof(llwu->PE)/(sizeof(llwu->PE[0]))); index++) {
+         llwu->PE[index] = 0;
       }
-      llwu().ME  = 0;
+      llwu->ME  = 0;
    }
 
    /**
@@ -587,7 +587,7 @@ public:
     * @return Bit mask
     */
    static uint32_t getPeripheralWakeupSources() {
-      return llwu().MF;
+      return llwu->MF;
    }
 
    /**
@@ -600,7 +600,7 @@ public:
     * @return true  Given peripheral is source of wake-up.
     */
    static bool isPeripheralWakeupSource(LlwuPeripheral llwuPeripheral) {
-      return llwu().MF & llwuPeripheral;
+      return llwu->MF & llwuPeripheral;
    }
 
    /**

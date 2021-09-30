@@ -171,7 +171,7 @@ public:
     *
     * @return Reference to Flash hardware
     */
-   __attribute__((always_inline)) static volatile FTFE_Type &flashController() { return ftfe(); }
+   static constexpr HardwarePtr<FTFE_Type> flashController = baseAddress;
 
    /**
     * Checks if the flexRAM has been configured.
@@ -181,11 +181,11 @@ public:
     */
    static bool isFlexRamConfigured() {
 #if 1
-      return waitForFlashReady() && (flashController().FCNFG&FTFE_FCNFG_EEERDY_MASK);
+      return waitForFlashReady() && (flashController->FCNFG&FTFE_FCNFG_EEERDY_MASK);
 #else
-      console.write("flashController().FCNFG = ").writeln(flashController().FCNFG, Radix_16);
-      console.write("flashController().FCNFG.FTFE_FCNFG_RAMRDY = ").writeln((bool)(flashController().FCNFG&FTFE_FCNFG_RAMRDY_MASK));
-      console.write("flashController().FCNFG.FTFE_FCNFG_EEERDY = ").writeln((bool)(flashController().FCNFG&FTFE_FCNFG_EEERDY_MASK));
+      console.write("flashController->FCNFG = ").writeln(flashController->FCNFG, Radix_16);
+      console.write("flashController->FCNFG.FTFE_FCNFG_RAMRDY = ").writeln((bool)(flashController->FCNFG&FTFE_FCNFG_RAMRDY_MASK));
+      console.write("flashController->FCNFG.FTFE_FCNFG_EEERDY = ").writeln((bool)(flashController->FCNFG&FTFE_FCNFG_EEERDY_MASK));
 
       uint8_t result[4];
       FlashDriverError_t rc = readFlashResource(0, DATA_ADDRESS_FLAG|0xFC, result);
@@ -199,7 +199,7 @@ public:
       console.write("FlexNVM partition code = ").writeln(flexNvmPartitionSize, Radix_16);
       console.write("EEPROM data set size   = ").writeln(eepromDatSetSize, Radix_16);
 
-      return (flashController().FCNFG&FTFE_FCNFG_EEERDY_MASK);
+      return (flashController->FCNFG&FTFE_FCNFG_EEERDY_MASK);
 #endif
    }
 
@@ -211,7 +211,7 @@ public:
     */
    static bool waitForFlashReady() {
       for(int timeout=0; timeout<100000; timeout++) {
-         if ((flashController().FSTAT&FTFE_FSTAT_CCIF_MASK) != 0) {
+         if ((flashController->FSTAT&FTFE_FSTAT_CCIF_MASK) != 0) {
             return true;
          }
       }

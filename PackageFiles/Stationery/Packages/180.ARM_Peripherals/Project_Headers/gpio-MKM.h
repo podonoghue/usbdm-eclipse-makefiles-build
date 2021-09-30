@@ -357,7 +357,7 @@ class GpioBase_T {
 
 public:
 
-   static constexpr volatile GPIO_Type *gpio = reinterpret_cast<volatile GPIO_Type *>(gpioAddress);
+   static constexpr HardwarePtr<GPIO_Type> gpio = gpioAddress;
 
    /**
     * Set pin as digital output
@@ -670,9 +670,9 @@ public:
       Pcr::setPCR(ADC_PORT_FN);
 
       // Configure ADC for software triggered conversion
-      adc().CFG1 = ADC_CFG1_ADIV(1)|mode|ADC_CFG1_ADLSMP_MASK|ADC_CFG1_ADICLK(0);
-      adc().SC2  = 0;
-      adc().CFG2 = ADC_CFG2_ADLSTS(0)|ADC_CFG2_MUXSEL_MASK; // Choose 'b' channels
+      adc->CFG1 = ADC_CFG1_ADIV(1)|mode|ADC_CFG1_ADLSMP_MASK|ADC_CFG1_ADICLK(0);
+      adc->SC2  = 0;
+      adc->CFG2 = ADC_CFG2_ADLSTS(0)|ADC_CFG2_MUXSEL_MASK; // Choose 'b' channels
    }
    /**
     * Initiates a conversion and waits for it to complete
@@ -681,12 +681,12 @@ public:
     */
    static int readAnalogue() {
       // Trigger conversion
-      adc().SC1[0] = ADC_SC1_ADCH(adcChannel);
+      adc->SC1[0] = ADC_SC1_ADCH(adcChannel);
 
-      while ((adc().SC1[0]&ADC_SC1_COCO_MASK) == 0) {
+      while ((adc->SC1[0]&ADC_SC1_COCO_MASK) == 0) {
          __asm__("nop");
       }
-      return (int)adc().R[0];
+      return (int)adc->R[0];
    };
 };
 

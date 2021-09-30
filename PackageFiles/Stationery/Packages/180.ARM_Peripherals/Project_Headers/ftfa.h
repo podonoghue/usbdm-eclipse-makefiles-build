@@ -97,7 +97,8 @@ public:
     *
     * @return Reference to Flash hardware
     */
-   __attribute__((always_inline)) static volatile FTFA_Type &flashController() { return ftfa(); }
+   static constexpr HardwarePtr<FTFA_Type> flashController = baseAddress;
+
    /**
     * Wait until flash is ready.
     * Any flash operations will have completed.
@@ -106,7 +107,7 @@ public:
     */
    static bool waitForFlashReady() {
       for(int timeout=0; timeout<100000; timeout++) {
-         if ((flashController().FSTAT&FTFA_FSTAT_CCIF_MASK) != 0) {
+         if ((flashController->FSTAT&FTFA_FSTAT_CCIF_MASK) != 0) {
             return true;
          }
       }

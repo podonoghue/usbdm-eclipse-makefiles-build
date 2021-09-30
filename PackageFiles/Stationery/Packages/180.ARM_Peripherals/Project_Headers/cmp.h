@@ -352,16 +352,16 @@ public:
     *
     * @return Reference to CMT hardware
     */
-   static __attribute__((always_inline)) volatile CMP_Type &cmp() { return Info::cmp(); }
+   static constexpr HardwarePtr<CMP_Type> cmp = Info::baseAddress;
 
    /**
     * IRQ handler
     */
    static void irqHandler() {
-      unsigned status = cmp().SCR&(CMP_SCR_CFR_MASK|CMP_SCR_CFF_MASK|CMP_SCR_COUT_MASK);
+      unsigned status = cmp->SCR&(CMP_SCR_CFR_MASK|CMP_SCR_CFF_MASK|CMP_SCR_COUT_MASK);
 
       // Clear interrupt flags
-      cmp().SCR |= status;
+      cmp->SCR |= status;
 
       // Create status from snapshot
       CmpStatus cmpStatus{(CmpEvent)(status&(CMP_SCR_CFR_MASK|CMP_SCR_CFF_MASK)),(bool)(status&CMP_SCR_COUT_MASK)};
@@ -492,12 +492,12 @@ public:
       enable();
 
       // Initialise hardware
-      cmp().CR0   = Info::cr0;
-      cmp().CR1   = Info::cr1 | CMP_CR1_EN_MASK;
-      cmp().FPR   = Info::fpr;
-      cmp().SCR   = Info::scr;
-      cmp().DACCR = Info::daccr;
-      cmp().MUXCR = Info::muxcr;
+      cmp->CR0   = Info::cr0;
+      cmp->CR1   = Info::cr1 | CMP_CR1_EN_MASK;
+      cmp->FPR   = Info::fpr;
+      cmp->SCR   = Info::scr;
+      cmp->DACCR = Info::daccr;
+      cmp->MUXCR = Info::muxcr;
 
       enableNvicInterrupts(Info::irqLevel);
    }
@@ -529,7 +529,7 @@ public:
       CheckOutputIsMapped<Info::outputPin>::check();
 
       // Enable CMP_OUT
-      cmp().CR1 |= CMP_CR1_OPE_MASK;
+      cmp->CR1 |= CMP_CR1_OPE_MASK;
 
       // Map CMP_OUT to pin
       OutputPin::setPCR(pinDriveStrength|pinDriveMode|pinSlewRate);
@@ -567,12 +567,12 @@ public:
       enable();
 
       // Initialise hardware
-      cmp().CR1   = CmpMode_Enabled|cmpPower|cmpPolarity;
-      cmp().CR0   = CMP_CR0_FILTER_CNT(0)|cmpHysteresis;
-      cmp().FPR   = 0;
-      cmp().SCR   = CMP_SCR_DMAEN(0)|CMP_SCR_IER(0)|CMP_SCR_IEF(0);
-      cmp().DACCR = (CMP_DACCR_VOSEL_MASK>>1)&CMP_DACCR_VOSEL_MASK;
-      cmp().MUXCR = Info::muxcr;
+      cmp->CR1   = CmpMode_Enabled|cmpPower|cmpPolarity;
+      cmp->CR0   = CMP_CR0_FILTER_CNT(0)|cmpHysteresis;
+      cmp->FPR   = 0;
+      cmp->SCR   = CMP_SCR_DMAEN(0)|CMP_SCR_IER(0)|CMP_SCR_IEF(0);
+      cmp->DACCR = (CMP_DACCR_VOSEL_MASK>>1)&CMP_DACCR_VOSEL_MASK;
+      cmp->MUXCR = Info::muxcr;
    }
 
    /**
@@ -582,9 +582,9 @@ public:
     * 2a/b Continuous                          1      0      0      0              0     COUT == COUTA
     */
    static void setInputContinous() {
-      cmp().CR0 = (cmp().CR0&~CMP_CR0_FILTER_CNT_MASK)|CMP_CR0_FILTER_CNT(0);
-      cmp().CR1 = (cmp().CR1&~(CMP_CR1_SE_MASK|CMP_CR1_WE_MASK))|CmpFilterClockSource_Internal|CmpWindow_Disabled;
-      cmp().FPR = 0;
+      cmp->CR0 = (cmp->CR0&~CMP_CR0_FILTER_CNT_MASK)|CMP_CR0_FILTER_CNT(0);
+      cmp->CR1 = (cmp->CR1&~(CMP_CR1_SE_MASK|CMP_CR1_WE_MASK))|CmpFilterClockSource_Internal|CmpWindow_Disabled;
+      cmp->FPR = 0;
    }
 
    /**
@@ -607,9 +607,9 @@ public:
          int                   cmpFilterSamplePeriod=1
          ) {
       usbdm_assert((cmpFilterClockSource == CmpFilterClockSource_External) || (cmpFilterSamplePeriod>=1), "Illegal parameters");
-      cmp().CR0 = (cmp().CR0&~CMP_CR0_FILTER_CNT_MASK)|CMP_CR0_FILTER_CNT(1);
-      cmp().CR1 = (cmp().CR1&~(CMP_CR1_SE_MASK|CMP_CR1_WE_MASK))|cmpFilterClockSource|CmpWindow_Disabled;
-      cmp().FPR = cmpFilterSamplePeriod;
+      cmp->CR0 = (cmp->CR0&~CMP_CR0_FILTER_CNT_MASK)|CMP_CR0_FILTER_CNT(1);
+      cmp->CR1 = (cmp->CR1&~(CMP_CR1_SE_MASK|CMP_CR1_WE_MASK))|cmpFilterClockSource|CmpWindow_Disabled;
+      cmp->FPR = cmpFilterSamplePeriod;
    }
 
    /**
@@ -635,9 +635,9 @@ public:
          ) {
       usbdm_assert((cmpFilterClockSource == CmpFilterClockSource_External) || (cmpFilterSamplePeriod>=1), "Illegal parameters");
       usbdm_assert((cmpFilterSamples>1) , "Illegal parameter combination");
-      cmp().CR0 = (cmp().CR0&~CMP_CR0_FILTER_CNT_MASK)|cmpFilterSamples;
-      cmp().CR1 = (cmp().CR1&~(CMP_CR1_SE_MASK|CMP_CR1_WE_MASK))|cmpFilterClockSource|CmpWindow_Disabled;
-      cmp().FPR = cmpFilterSamplePeriod;
+      cmp->CR0 = (cmp->CR0&~CMP_CR0_FILTER_CNT_MASK)|cmpFilterSamples;
+      cmp->CR1 = (cmp->CR1&~(CMP_CR1_SE_MASK|CMP_CR1_WE_MASK))|cmpFilterClockSource|CmpWindow_Disabled;
+      cmp->FPR = cmpFilterSamplePeriod;
    }
 
    /**
@@ -651,9 +651,9 @@ public:
     * 5a/b Windowed                            1      1      0      0              0     COUT == COUTA clocked by bus clock when Window=1
     */
    static void setInputWindowed() {
-      cmp().CR0 = (cmp().CR0&~CMP_CR0_FILTER_CNT_MASK)|0;
-      cmp().CR1 = (cmp().CR1&~(CMP_CR1_SE_MASK|CMP_CR1_WE_MASK))|CmpFilterClockSource_Internal|CmpWindow_Enabled;
-      cmp().FPR = 0;
+      cmp->CR0 = (cmp->CR0&~CMP_CR0_FILTER_CNT_MASK)|0;
+      cmp->CR1 = (cmp->CR1&~(CMP_CR1_SE_MASK|CMP_CR1_WE_MASK))|CmpFilterClockSource_Internal|CmpWindow_Enabled;
+      cmp->FPR = 0;
    }
 
    /**
@@ -669,9 +669,9 @@ public:
          int  cmpFilterSamplePeriod=1
          ) {
       usbdm_assert(cmpFilterSamplePeriod>=1, "Illegal parameters");
-      cmp().CR0 = (cmp().CR0&~CMP_CR0_FILTER_CNT_MASK)|CMP_CR0_FILTER_CNT(1);
-      cmp().CR1 = (cmp().CR1&~(CMP_CR1_SE_MASK|CMP_CR1_WE_MASK))|CmpFilterClockSource_Internal|CmpWindow_Enabled;
-      cmp().FPR = cmpFilterSamplePeriod;
+      cmp->CR0 = (cmp->CR0&~CMP_CR0_FILTER_CNT_MASK)|CMP_CR0_FILTER_CNT(1);
+      cmp->CR1 = (cmp->CR1&~(CMP_CR1_SE_MASK|CMP_CR1_WE_MASK))|CmpFilterClockSource_Internal|CmpWindow_Enabled;
+      cmp->FPR = cmpFilterSamplePeriod;
    }
 
    /**
@@ -690,9 +690,9 @@ public:
          int                  cmpFilterSamplePeriod=1
          ) {
       usbdm_assert(cmpFilterSamplePeriod>=1, "Illegal parameters");
-      cmp().CR0 = (cmp().CR0&~CMP_CR0_FILTER_CNT_MASK)|cmpFilterSamples;
-      cmp().CR1 = (cmp().CR1&~(CMP_CR1_SE_MASK|CMP_CR1_WE_MASK))|CmpFilterClockSource_Internal|CmpWindow_Enabled;
-      cmp().FPR = cmpFilterSamplePeriod;
+      cmp->CR0 = (cmp->CR0&~CMP_CR0_FILTER_CNT_MASK)|cmpFilterSamples;
+      cmp->CR1 = (cmp->CR1&~(CMP_CR1_SE_MASK|CMP_CR1_WE_MASK))|CmpFilterClockSource_Internal|CmpWindow_Enabled;
+      cmp->FPR = cmpFilterSamplePeriod;
    }
 
    /**
@@ -702,14 +702,14 @@ public:
     * @note Window mode may not be selected with external filter.
     */
    static void enableWindowMode() {
-      cmp().CR1 |= CMP_CR1_WE_MASK;
+      cmp->CR1 |= CMP_CR1_WE_MASK;
    }
 
    /**
     * Disables Window mode
     */
    static void disableWindowMode() {
-      cmp().CR1 &= ~CMP_CR1_WE_MASK;
+      cmp->CR1 &= ~CMP_CR1_WE_MASK;
    }
 
    /**
@@ -718,14 +718,14 @@ public:
     * @note Window mode may not be selected with external filter.
     */
    static void enableFilterMode() {
-      cmp().CR1 |= CMP_CR1_WE_MASK;
+      cmp->CR1 |= CMP_CR1_WE_MASK;
    }
 
    /**
     * Disables Filter mode
     */
    static void disableFilterMode() {
-      cmp().CR1 &= ~CMP_CR1_WE_MASK;
+      cmp->CR1 &= ~CMP_CR1_WE_MASK;
    }
 
    /**
@@ -735,7 +735,7 @@ public:
     * @return false => Cmp+ < Cmp- (unless inverted)
     */
    static bool getCmpOutput() {
-      return cmp().SCR & CMP_SCR_COUT_MASK;
+      return cmp->SCR & CMP_SCR_COUT_MASK;
    }
 
    /**
@@ -747,14 +747,14 @@ public:
     * @note Window mode may not be selected with external filter.
     */
    static void setInputConditioning(CmpFilterSamples cmpFilterSamples, CmpHysteresis cmpHysteresis) {
-      cmp().CR0 = cmpFilterSamples|cmpHysteresis;
+      cmp->CR0 = cmpFilterSamples|cmpHysteresis;
    }
 
    /**
     * Disable Comparator
     */
    static void disable() {
-      cmp().CR1 = 0;
+      cmp->CR1 = 0;
       Info::disableClock();
    }
 
@@ -788,56 +788,56 @@ public:
     * @param[in]  cmpInterrupt Controls edge selection
     */
    static void enableInterrupts(CmpInterrupt cmpInterrupt) {
-      cmp().SCR = (cmp().SCR&~(CMP_SCR_IER_MASK|CMP_SCR_IEF_MASK))|cmpInterrupt;
+      cmp->SCR = (cmp->SCR&~(CMP_SCR_IER_MASK|CMP_SCR_IEF_MASK))|cmpInterrupt;
    }
 
    /**
     * Enable rising edge interrupts
     */
    static void enableRisingEdgeInterrupts() {
-      cmp().SCR |= CMP_SCR_IER_MASK;
+      cmp->SCR |= CMP_SCR_IER_MASK;
    }
 
    /**
     * Disable rising edge interrupts
     */
    static void disableRisingEdgeInterrupts() {
-      cmp().SCR &= ~CMP_SCR_IER_MASK;
+      cmp->SCR &= ~CMP_SCR_IER_MASK;
    }
 
    /**
     * Enable falling edge interrupts
     */
    static void enableFallingEdgeInterrupts() {
-      cmp().SCR |= CMP_SCR_IEF_MASK;
+      cmp->SCR |= CMP_SCR_IEF_MASK;
    }
 
    /**
     * Disable falling edge interrupts
     */
    static void disableFallingEdgeInterrupts() {
-      cmp().SCR &= ~CMP_SCR_IEF_MASK;
+      cmp->SCR &= ~CMP_SCR_IEF_MASK;
    }
 
    /**
     * Enable DMA requests
     */
    static void enableDmaRequests() {
-      cmp().SCR |= CMP_SCR_DMAEN_MASK;
+      cmp->SCR |= CMP_SCR_DMAEN_MASK;
    }
 
    /**
     * Disable DMA requests
     */
    static void disableDmaRequests() {
-      cmp().SCR &= ~CMP_SCR_DMAEN_MASK;
+      cmp->SCR &= ~CMP_SCR_DMAEN_MASK;
    }
 
    /**
     * Clear edge interrupt flags
     */
    static void clearInterruptFlags() {
-   cmp().SCR |= CMP_SCR_CFR_MASK|CMP_SCR_CFF_MASK;
+   cmp->SCR |= CMP_SCR_CFR_MASK|CMP_SCR_CFF_MASK;
    }
 
    /**
@@ -849,21 +849,21 @@ public:
    static void configureDac(
          uint8_t       level,
          CmpDacSource  cmpDacSource) {
-      cmp().DACCR = CMP_DACCR_DACEN_MASK|cmpDacSource|CMP_DACCR_VOSEL(level);
+      cmp->DACCR = CMP_DACCR_DACEN_MASK|cmpDacSource|CMP_DACCR_VOSEL(level);
    }
 
    /**
     * Enable DAC
     */
    static void enableDAC() {
-         cmp().DACCR |= CMP_DACCR_DACEN_MASK;
+         cmp->DACCR |= CMP_DACCR_DACEN_MASK;
    }
 
    /**
     * Disable DAC
     */
    static void disableDAC() {
-         cmp().DACCR &= ~CMP_DACCR_DACEN_MASK;
+         cmp->DACCR &= ~CMP_DACCR_DACEN_MASK;
    }
 
    /** Maximum DAC value corresponding to Vref) */
@@ -876,7 +876,7 @@ public:
     * @param[in]  level  DAC level to select (0...MAXIMUM_DAC_VALUE) => (Vref/MAXIMUM_DAC_VALUE...Vref)
     */
    static void setDacLevel(uint8_t level) {
-      cmp().DACCR = (cmp().DACCR&~CMP_DACCR_VOSEL_MASK) | CMP_DACCR_VOSEL(level);
+      cmp->DACCR = (cmp->DACCR&~CMP_DACCR_VOSEL_MASK) | CMP_DACCR_VOSEL(level);
    }
 
 protected:
@@ -890,7 +890,7 @@ protected:
       usbdm_assert((positiveInput<=7)&&(negativeInput<=7),"Illegal comparator input");
 
       //! MUX Control Register
-      cmp().MUXCR =
+      cmp->MUXCR =
          CMP_MUXCR_PSEL(positiveInput)| // Plus Input Mux Control
          CMP_MUXCR_MSEL(negativeInput); // Minus Input Mux Control
    }

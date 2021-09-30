@@ -186,7 +186,7 @@ public:
     * @param[in]  channel Channel being modified
     */
    static void enableInterrupts(LpitChannelNum channel) {
-      lpit().MIER |= (1<<channel);
+      lpit->MIER |= (1<<channel);
    }
 
    /**
@@ -195,7 +195,7 @@ public:
     * @param[in]  channel Channel being modified
     */
    static void disableInterrupts(LpitChannelNum channel) {
-      lpit().MIER &= ~(1<<channel);
+      lpit->MIER &= ~(1<<channel);
    }
 
    /**
@@ -215,7 +215,7 @@ public:
 
 protected:
    /** Pointer to hardware */
-   static __attribute__((always_inline)) volatile LPIT_Type &lpit()      { return Info::lpit(); }
+   static constexpr HardwarePtr<LPIT_Type> lpit = Info::baseAddress;
 
 public:
    /**
@@ -235,7 +235,7 @@ public:
       enable();
 
       // Enable timer
-      lpit().MCR = Info::mcr;
+      lpit->MCR = Info::mcr;
       for (unsigned i=0; i<Info::irqCount; i++) {
          configureChannelInTicks(i, Info::lpit_ldval);
          disableNvicInterrupts((LpitChannelNum)i);
@@ -251,7 +251,7 @@ public:
     */
    static void configure(LpitDozeMode lpitDozeMode, LpitDebugMode lpitDebugMode=LpitDebugMode_Stop) {
       enable();
-      lpit().MCR = lpitDebugMode|lpitDozeMode|LPIT_MCR_M_CEN_MASK;
+      lpit->MCR = lpitDebugMode|lpitDozeMode|LPIT_MCR_M_CEN_MASK;
       disableChannels((1<<Lpit0Info::NumChannels)-1);
       allocatedChannels = -1;
    }
@@ -260,7 +260,7 @@ public:
     *   Disable the LPIT (all channels)
     */
    static void disable() {
-      lpit().MCR = 0;
+      lpit->MCR = 0;
       Info::disableClock();
    }
 
@@ -311,7 +311,7 @@ public:
     *  @param[in]  channel   Channel to enable
     */
    static void enableChannel(const LpitChannelNum channel) {
-      lpit().SETTEN = (1<<channel);
+      lpit->SETTEN = (1<<channel);
    }
 
    /**
@@ -320,7 +320,7 @@ public:
     *   @param[in]  channel Channel to disable
     */
    static void disableChannel(LpitChannelNum channel) {
-      lpit().CLRTEN = (1<<channel);
+      lpit->CLRTEN = (1<<channel);
    }
 
    /**
@@ -329,7 +329,7 @@ public:
     *  @param[in]  mask   Mask indicating channels to enable
     */
    static void enableChannels(uint32_t mask) {
-      lpit().SETTEN = mask;
+      lpit->SETTEN = mask;
    }
 
    /**
@@ -338,7 +338,7 @@ public:
     *  @param[in]  mask   Mask indicating channels to disable
     */
    static void disableChannels(uint32_t mask) {
-      lpit().CLRTEN = mask;
+      lpit->CLRTEN = mask;
    }
 
    /**
@@ -358,11 +358,11 @@ public:
 
       usbdm_assert(tickInterval>0, "Interval too short");
 
-      lpit().TMR[channel].TCTRL = 0;
-      lpit().TMR[channel].TVAL  = tickInterval-1;
-      lpit().MSR                = (1<<channel);
-      lpit().MIER              |= (lpitChannelIrq<<channel);
-      lpit().TMR[channel].TCTRL = LPIT_TCTRL_T_EN_MASK;
+      lpit->TMR[channel].TCTRL = 0;
+      lpit->TMR[channel].TVAL  = tickInterval-1;
+      lpit->MSR                = (1<<channel);
+      lpit->MIER              |= (lpitChannelIrq<<channel);
+      lpit->TMR[channel].TCTRL = LPIT_TCTRL_T_EN_MASK;
    }
 
    /**
@@ -426,7 +426,7 @@ public:
     *       To have immediate effect it is necessary to use configureChannel().
     */
    static void setPeriodInTicks(LpitChannelNum channel, uint32_t interval) {
-      lpit().TMR[channel].TVAL = interval-1;
+      lpit->TMR[channel].TVAL = interval-1;
    }
 
    /**
@@ -452,7 +452,7 @@ public:
     */
    static void delayInTicks(LpitChannelNum channel, uint32_t interval) {
       configureChannelInTicks(channel, interval);
-      while ((lpit().MSR&(1<<channel)) == 0) {
+      while ((lpit->MSR&(1<<channel)) == 0) {
          __NOP();
       }
       disableChannel(channel);
@@ -468,7 +468,7 @@ public:
     */
    static void delay(LpitChannelNum channel, float interval) {
       configureChannel(channel, interval);
-      while ((lpit().MSR&(1<<channel)) == 0) {
+      while ((lpit->MSR&(1<<channel)) == 0) {
          __NOP();
       }
       disableChannel(channel);
@@ -499,7 +499,7 @@ public:
       /** LPIT interrupt handler - Calls LPIT callback */
       static void irqHandler() {
          // Clear interrupt flag
-         lpit().MSR = CHANNEL_MASK;
+         lpit->MSR = CHANNEL_MASK;
          sCallbacks[channel]();
       }
 

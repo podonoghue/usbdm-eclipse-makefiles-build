@@ -289,7 +289,7 @@ template<class Info> class Lpuart_T : public Lpuart {
 
 public:
    /** Get reference to LPUART hardware as struct */
-   static volatile LPUART_Type &uartPtr() { return Info::uart(); }
+   static constexpr HardwarePtr<LPUART_Type> uartPtr = Info::baseAddress;
 
    /** Get base address of LPUART hardware as uint32_t */
    static constexpr uint32_t uartBase() { return Info::baseAddress; }
@@ -429,7 +429,7 @@ public:
     * Receive/Transmit/Error IRQ handler
     */
    static void irqHandler() {
-      uint8_t status = Info::lpuart().STAT;
+      uint8_t status = Info::lpuart->STAT;
       rxTxCallback(status);
    }
 
@@ -585,20 +585,20 @@ public:
     * Receive/Transmit/Error IRQ handler
     */
    static void irqHandler()  {
-      auto status = Info::lpuart().STAT;
+      auto status = Info::lpuart->STAT;
       if (status & LPUART_STAT_RDRF_MASK) {
          // Receive data register full - save data
-         rxQueue.enQueueDiscardOnFull(Info::lpuart().DATA);
+         rxQueue.enQueueDiscardOnFull(Info::lpuart->DATA);
       }
       if (status & LPUART_STAT_TDRE_MASK) {
          // Transmitter ready
          if (txQueue.isEmpty()) {
             // No data available - disable further transmit interrupts
-            Info::lpuart().CTRL &= ~LPUART_CTRL_TIE_MASK;
+            Info::lpuart->CTRL &= ~LPUART_CTRL_TIE_MASK;
          }
          else {
             // Transmit next byte
-            Info::lpuart().DATA = txQueue.deQueue();
+            Info::lpuart->DATA = txQueue.deQueue();
          }
       }
    }

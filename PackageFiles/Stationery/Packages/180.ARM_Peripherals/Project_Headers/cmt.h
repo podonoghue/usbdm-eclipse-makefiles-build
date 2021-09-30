@@ -154,7 +154,7 @@ public:
     *
     * @return Reference to CMT hardware
     */
-   static __attribute__((always_inline)) volatile CMT_Type &cmt() { return Info::cmt(); }
+   static constexpr HardwarePtr<CMT_Type> cmt = Info::baseAddress;
 
    /**
     * Get CMT status.
@@ -169,7 +169,7 @@ public:
     * - A DMA cycle.
     */
    static uint32_t getStatus() {
-      return cmt().MSC & CMT_MSC_EOCF_MASK;
+      return cmt->MSC & CMT_MSC_EOCF_MASK;
    }
 
    /**
@@ -264,7 +264,7 @@ public:
     * @param[in] cmtPrescaler
     */
    static void setPrescaler(CmtPrescaler cmtPrescaler) {
-      cmt().PPS = cmtPrescaler;
+      cmt->PPS = cmtPrescaler;
    }
 
    /**
@@ -277,7 +277,7 @@ public:
    static void configure(CmtMode cmtMode, CmtClockDivideBy cmtClockDivideBy=CmtClockDivideBy_1) {
       enable();
       setPrescaler((CmtPrescaler)((SystemBusClock/8000000)-1));
-      cmt().MSC = cmtMode|cmtClockDivideBy;
+      cmt->MSC = cmtMode|cmtClockDivideBy;
    }
 
    /**
@@ -287,7 +287,7 @@ public:
     * @param[in] cmtPolarity   Polarity of output
     */
    static void outputControl(CmtOutput cmtOutput, CmtPolarity cmtPolarity=CmtPolarity_ActiveHigh) {
-      cmt().OC = cmtOutput|cmtPolarity;
+      cmt->OC = cmtOutput|cmtPolarity;
    }
 
    /**
@@ -296,7 +296,7 @@ public:
     * @param[in] cmtMode             Basic mode
     */
    static void setMode(CmtMode cmtMode) {
-      cmt().MSC = (cmt().MSC&~(CMT_MSC_MCGEN(1)|CMT_MSC_BASE(1)|CMT_MSC_FSK(1)))|cmtMode;
+      cmt->MSC = (cmt->MSC&~(CMT_MSC_MCGEN(1)|CMT_MSC_BASE(1)|CMT_MSC_FSK(1)))|cmtMode;
    }
 
    /**
@@ -305,7 +305,7 @@ public:
     * @param[in] cmtExtendedSpace Allows Forcing of subsequent cycles to be spaces
     */
    static void setExtendedSpace(CmtExtendedSpace cmtExtendedSpace=CmtExtendedSpace_Enabled) {
-      cmt().MSC = (cmt().MSC&~CMT_MSC_EXSPC(1))|cmtExtendedSpace;
+      cmt->MSC = (cmt->MSC&~CMT_MSC_EXSPC(1))|cmtExtendedSpace;
    }
 
    /**
@@ -314,7 +314,7 @@ public:
     * @return High time in clock cycles (usually 125ns)
     */
    static uint8_t getPrimaryHigh() {
-      return cmt().CGH1;
+      return cmt->CGH1;
    }
 
    /**
@@ -323,7 +323,7 @@ public:
     * @return Low time in clock cycles (usually 125ns)
     */
    static uint8_t getPrimaryLow() {
-      return cmt().CGL1;
+      return cmt->CGL1;
    }
 
    /**
@@ -334,8 +334,8 @@ public:
     */
    static void setPrimaryTiming(uint8_t high, uint8_t low) {
       usbdm_assert((high>0)&&(low>0), "High/low values must be non-zero");
-      cmt().CGH1 = high;
-      cmt().CGL1 = low;
+      cmt->CGH1 = high;
+      cmt->CGL1 = low;
    }
 
    /**
@@ -344,7 +344,7 @@ public:
     * @return High time in clock cycles (usually 125ns)
     */
    static uint8_t getSecondaryHigh() {
-      return cmt().CGH2;
+      return cmt->CGH2;
    }
 
    /**
@@ -353,7 +353,7 @@ public:
     * @return Low time in clock cycles (usually 125ns)
     */
    static uint8_t getSecondaryLow() {
-      return cmt().CGL2;
+      return cmt->CGL2;
    }
 
    /**
@@ -364,8 +364,8 @@ public:
     */
    static void setSecondaryTiming(uint8_t high, uint8_t low) {
       usbdm_assert((high>0)&&(low>0), "High/low values must be non-zero");
-      cmt().CGH2 = high;
-      cmt().CGL2 = low;
+      cmt->CGH2 = high;
+      cmt->CGL2 = low;
    }
 
    /**
@@ -374,7 +374,7 @@ public:
     * @return Mark time in modulation cycles
     */
    static uint16_t getMarkTime() {
-      return (cmt().CMD1<<8)|cmt().CMD2;
+      return (cmt->CMD1<<8)|cmt->CMD2;
    }
 
    /**
@@ -383,7 +383,7 @@ public:
     * @return Space time in modulation cycles
     */
    static uint16_t getSpaceTime() {
-      return (cmt().CMD3<<8)|cmt().CMD4;
+      return (cmt->CMD3<<8)|cmt->CMD4;
    }
 
    /**
@@ -392,8 +392,8 @@ public:
     * @param[in] mark    Mark time in carrier frequency cycles
     */
    static void setMarkTiming(uint16_t mark) {
-      cmt().CMD1 = (uint8_t)(mark>>8);
-      cmt().CMD2 = (uint8_t)(mark);
+      cmt->CMD1 = (uint8_t)(mark>>8);
+      cmt->CMD2 = (uint8_t)(mark);
     }
 
    /**
@@ -402,8 +402,8 @@ public:
     * @param[in] space   Space time in carrier frequency cycles
     */
    static void setSpaceTiming(uint16_t space) {
-      cmt().CMD3 = (uint8_t)(space>>8);
-      cmt().CMD4 = (uint8_t)(space);
+      cmt->CMD3 = (uint8_t)(space>>8);
+      cmt->CMD4 = (uint8_t)(space);
     }
 
    /**
@@ -413,17 +413,17 @@ public:
     * @param[in] space   Space time in carrier frequency cycles
     */
    static void setMarkSpaceTiming(uint16_t mark, uint16_t space) {
-      cmt().CMD1 = (uint8_t)(mark>>8);
-      cmt().CMD2 = (uint8_t)(mark);
-      cmt().CMD3 = (uint8_t)(space>>8);
-      cmt().CMD4 = (uint8_t)(space);
+      cmt->CMD1 = (uint8_t)(mark>>8);
+      cmt->CMD2 = (uint8_t)(mark);
+      cmt->CMD3 = (uint8_t)(space>>8);
+      cmt->CMD4 = (uint8_t)(space);
     }
 
    /**
     * Disable CMT
     */
    static void disable() {
-      cmt().MSC = 0;
+      cmt->MSC = 0;
       disableNvicInterrupts();
       Info::disableClock();
    }
@@ -460,16 +460,16 @@ public:
    static void enableInterruptDma(CmtInterruptDma cmtInterruptDma) {
       switch (cmtInterruptDma) {
          case CmtInterruptDma_None:
-            cmt().MSC &= ~CMT_MSC_EOCIE_MASK;
-            cmt().DMA &= ~CMT_DMA_DMA_MASK;
+            cmt->MSC &= ~CMT_MSC_EOCIE_MASK;
+            cmt->DMA &= ~CMT_DMA_DMA_MASK;
             break;
          case CmtInterruptDma_Irq:
-            cmt().DMA &= ~CMT_DMA_DMA_MASK;
-            cmt().MSC |= CMT_MSC_EOCIE_MASK;
+            cmt->DMA &= ~CMT_DMA_DMA_MASK;
+            cmt->MSC |= CMT_MSC_EOCIE_MASK;
             break;
          case CmtInterruptDma_Dma:
-            cmt().DMA |= CMT_DMA_DMA_MASK;
-            cmt().MSC |= CMT_MSC_EOCIE_MASK;
+            cmt->DMA |= CMT_DMA_DMA_MASK;
+            cmt->MSC |= CMT_MSC_EOCIE_MASK;
             break;
       }
    }

@@ -52,7 +52,7 @@
    \t      SmcVeryLowPower         smcVeryLowPower,
    \t      SmcHighSpeedRun         smcHighSpeedRun) {
 
-   \t   smc().PMPROT = smcVeryLowPower|smcHighSpeedRun;
+   \t   smc->PMPROT = smcVeryLowPower|smcHighSpeedRun;
    \t   return E_NO_ERROR;
    \t}\n\n
    ]]></template>
@@ -67,7 +67,7 @@
    \tstatic void setStopOptions(
    \t      SmcPartialStopMode      smcPartialStopMode      = SmcPartialStopMode_Normal) {
    \t
-   \t   smc().STOPCTRL = smcPartialStopMode;
+   \t   smc->STOPCTRL = smcPartialStopMode;
    \t}\n\n
    ]]></template>
    

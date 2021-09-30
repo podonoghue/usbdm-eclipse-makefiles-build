@@ -109,7 +109,7 @@
    \t      SmcVeryLowLeakageStop   smcVeryLowLeakageStop   = SmcVeryLowLeakageStop_Disabled,
    \t      SmcHighSpeedRun         smcHighSpeedRun         = SmcHighSpeedRun_Disabled ) {
    \t
-   \t   smc().PMPROT = smcVeryLowPower|smcLowLeakageStop|smcVeryLowLeakageStop|smcHighSpeedRun;
+   \t   smc->PMPROT = smcVeryLowPower|smcLowLeakageStop|smcVeryLowLeakageStop|smcHighSpeedRun;
    \t   return E_NO_ERROR;
    \t}\n\n
    ]]></template>
@@ -130,7 +130,7 @@
    \t      SmcPartialStopMode      smcPartialStopMode      = SmcPartialStopMode_Normal,
    \t      SmcLowLeakageRam2       smcLowLeakageRam2       = SmcLowLeakageRam2_Disabled) {
    \t
-   \t   smc().STOPCTRL = smcPartialStopMode|smcPowerOnReset|smcLowLeakageStopMode|smcLowLeakageRam2;
+   \t   smc->STOPCTRL = smcPartialStopMode|smcPowerOnReset|smcLowLeakageStopMode|smcLowLeakageRam2;
    \t}\n\n
    ]]></template>
    

@@ -221,7 +221,7 @@ class SmcBase_T {
 
 protected:
 	   /** Hardware instance pointer */
-	   static __attribute__((always_inline)) volatile SMC_Type &smc() { return Info::smc(); }
+   static constexpr HardwarePtr<SMC_Type> smc = Info::baseAddress;
 
 public:
 
@@ -267,8 +267,8 @@ public:
     * Configure with settings from <b>Configure.usbdmProject</b>.
     */
    static void defaultConfigure() {
-      smc().PMPROT   = Info::pmprot;
-      smc().STOPCTRL = Info::stopctrl;
+      smc->PMPROT   = Info::pmprot;
+      smc->STOPCTRL = Info::stopctrl;
    }
    
 $(/SMC/enablePowerModes)
@@ -280,7 +280,7 @@ $(/SMC/setStopOptions)
     */
    static SmcStatus getStatus() {
 
-      return (SmcStatus)(smc().PMSTAT);
+      return (SmcStatus)(smc->PMSTAT);
    }
 
    /**
@@ -300,7 +300,7 @@ $(/SMC/setStopOptions)
 #endif
       switch(smcRunMode) {
          case SmcRunMode_Normal:
-            smc().PMCTRL = (smc().PMCTRL&~SMC_PMCTRL_RUNM_MASK)|smcRunMode;
+            smc->PMCTRL = (smc->PMCTRL&~SMC_PMCTRL_RUNM_MASK)|smcRunMode;
             // Wait for power status to change
             while (getStatus() != SmcStatus_RUN) {
                __asm__("nop");
@@ -312,7 +312,7 @@ $(/SMC/setStopOptions)
                // Can only transition from RUN mode
                return setErrorCode(E_ILLEGAL_POWER_TRANSITION);
             }
-            smc().PMCTRL = (smc().PMCTRL&~SMC_PMCTRL_RUNM_MASK)|smcRunMode;
+            smc->PMCTRL = (smc->PMCTRL&~SMC_PMCTRL_RUNM_MASK)|smcRunMode;
             // Wait for power status to change
             while (getStatus() != SmcStatus_hsrun) {
                __asm__("nop");
@@ -326,7 +326,7 @@ $(/SMC/setStopOptions)
                return setErrorCode(E_ILLEGAL_POWER_TRANSITION);
             }
 #endif
-            smc().PMCTRL = (smc().PMCTRL&~SMC_PMCTRL_RUNM_MASK)|smcRunMode;
+            smc->PMCTRL = (smc->PMCTRL&~SMC_PMCTRL_RUNM_MASK)|smcRunMode;
             // Wait for power status to change
             while (getStatus() != SmcStatus_VLPR) {
                __asm__("nop");
@@ -349,7 +349,7 @@ $(/SMC/setStopOptions)
     * @param[in]  smcStopMode Stop mode to set
     */
    static void setStopMode(SmcStopMode smcStopMode) {
-      smc().PMCTRL = (smc().PMCTRL&~SMC_PMCTRL_STOPM_MASK)|smcStopMode;
+      smc->PMCTRL = (smc->PMCTRL&~SMC_PMCTRL_STOPM_MASK)|smcStopMode;
       // Make sure write completes
       __DSB();
    }
@@ -360,8 +360,8 @@ $(/SMC/setStopOptions)
     *
     * The processor will stop execution and enter the currently configured STOP mode.\n
     * Peripherals affected will depend on the stop mode selected.\n
-    * The stop mode to enter may be set by setStopMode().
-    * Other options that affect stop mode may be set by setStopOptions().
+    * The stop mode to enter may be set by setStopMode->
+    * Other options that affect stop mode may be set by setStopOptions->
     */
    static void enterStopMode() {
       SCB->SCR |= SCB_SCR_SLEEPDEEP_Msk;
@@ -411,9 +411,9 @@ $(/SMC/setStopOptions)
          // Can only change in RUN mode
          return setErrorCode(E_ILLEGAL_POWER_TRANSITION);
       }
-      smc().PMCTRL = (smc().PMCTRL&SMC_PMCTRL_STOPM_MASK) | smcExitVeryLowPowerOnInt;
+      smc->PMCTRL = (smc->PMCTRL&SMC_PMCTRL_STOPM_MASK) | smcExitVeryLowPowerOnInt;
       // Make sure write completes
-      (void)smc().PMCTRL;
+      (void)smc->PMCTRL;
       return E_NO_ERROR;
    }
 #endif

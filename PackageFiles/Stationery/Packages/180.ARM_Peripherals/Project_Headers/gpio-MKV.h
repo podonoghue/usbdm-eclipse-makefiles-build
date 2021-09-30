@@ -99,7 +99,7 @@ public:
    using Port = PcrBase_T<portAddress, irqNum>;
 
    /** Get base address of GPIO hardware as pointer to struct */
-   static volatile GPIO_Type &gpio() { return *reinterpret_cast<volatile GPIO_Type *>(gpioAddress); }
+   static constexpr HardwarePtr<GPIO_Type> gpio = gpioAddress;
 
    /** Get base address of GPIO hardware as uint32_t */
    static constexpr uint32_t gpioBase() { return gpioAddress; }
@@ -211,9 +211,9 @@ public:
    static void setOut() {
       // Make pin an output
 #ifdef RELEASE_BUILD
-      bitbandSet(gpio().PDDR, bitNum);
+      bitbandSet(gpio->PDDR, bitNum);
 #else
-      gpio().PDDR |= MASK;
+      gpio->PDDR |= MASK;
 #endif
    }
    /**
@@ -268,9 +268,9 @@ public:
    static void setIn() {
       // Make pin an input
 #ifdef RELEASE_BUILD
-      bitbandClear(gpio().PDDR, bitNum);
+      bitbandClear(gpio->PDDR, bitNum);
 #else
-      gpio().PDDR &= ~MASK;
+      gpio->PDDR &= ~MASK;
 #endif
    }
    /**
@@ -318,7 +318,7 @@ public:
     * @note Don't use this method unless dealing with very low-level I/O
     */
    static void high() {
-      gpio().PSOR = MASK;
+      gpio->PSOR = MASK;
    }
    /**
     * Clear pin. Pin will be low if configured as an output.
@@ -327,7 +327,7 @@ public:
     * @note Don't use this method unless dealing with very low-level I/O
     */
    static void low() {
-      gpio().PCOR = MASK;
+      gpio->PCOR = MASK;
    }
    /**
     * Set pin. Pin will be high if configured as an output.
@@ -336,7 +336,7 @@ public:
     * @note Don't use this method unless dealing with very low-level I/O
     */
    static void set() {
-      gpio().PSOR = MASK;
+      gpio->PSOR = MASK;
    }
    /**
     * Clear pin. Pin will be low if configured as an output.
@@ -345,13 +345,13 @@ public:
     * @note Don't use this method unless dealing with very low-level I/O
     */
    static void clear() {
-      gpio().PCOR = MASK;
+      gpio->PCOR = MASK;
    }
    /**
     * Toggle pin (if output)
     */
    static void toggle() {
-      gpio().PTOR = MASK;
+      gpio->PTOR = MASK;
    }
    /**
     * Set pin to active level (if configured as output)
@@ -407,10 +407,10 @@ public:
    static void write(bool value) {
 #ifdef RELEASE_BUILD
       if constexpr (polarity) {
-         bitbandWrite(gpio().PDOR, bitNum, value);
+         bitbandWrite(gpio->PDOR, bitNum, value);
       }
       else {
-         bitbandWrite(gpio().PDOR, bitNum, !value);
+         bitbandWrite(gpio->PDOR, bitNum, !value);
       }
 #else
       if (value) {
@@ -430,7 +430,7 @@ public:
     * @note Polarity _is_ _not_ significant
     */
    static bool isHigh() {
-      return (gpio().PDIR & MASK) != 0;
+      return (gpio->PDIR & MASK) != 0;
    }
    /**
     * Checks if pin is low
@@ -441,7 +441,7 @@ public:
     * @note Polarity _is_ _not_ significant
     */
    static bool isLow() {
-      return (gpio().PDIR & MASK) == 0;
+      return (gpio->PDIR & MASK) == 0;
    }
    /**
     * Read pin value
@@ -516,7 +516,7 @@ public:
     * @note Polarity _is_ significant
     */
    static bool readState() {
-      uint32_t t = gpio().PDOR & MASK;
+      uint32_t t = gpio->PDOR & MASK;
       if constexpr (polarity) {
          return t;
       }
@@ -914,7 +914,7 @@ public:
       enablePortClocks(Info::pinInfo.clockInfo);
 
       // Default to input
-      gpio().PDDR &= ~MASK;
+      gpio->PDDR &= ~MASK;
 
       // Default to output inactive
       write(0);
@@ -927,7 +927,7 @@ public:
        * Can't use GPCLR/GPCHR as doesn't affect IRQ function
        */
       for (unsigned bitNum=right; bitNum<=left; bitNum++) {
-         port().PCR[bitNum] = pcrValue;
+         port->PCR[bitNum] = pcrValue;
       }
    }
 
@@ -962,7 +962,7 @@ public:
     * @note Does not affect other pin settings
     */
    static void setOut() {
-      gpio().PDDR |= MASK;
+      gpio->PDDR |= MASK;
    }
    /**
     * Sets all pin as digital outputs.
@@ -975,7 +975,7 @@ public:
     */
    static void setOutput(PcrValue pcrValue=GPIO_DEFAULT_PCR) {
       setInOut(pcrValue);
-      gpio().PDDR |= MASK;
+      gpio->PDDR |= MASK;
    }
    /**
     * Sets all pin as digital outputs.
@@ -1001,7 +1001,7 @@ public:
     * @note Does not affect other pin settings
     */
    static void setIn() {
-      gpio().PDDR &= ~MASK;
+      gpio->PDDR &= ~MASK;
    }
    /**
     * Set all pins as digital inputs.
@@ -1041,7 +1041,7 @@ public:
     * @note Does not affect other pin settings
     */
    static void setDirection(uint32_t mask) {
-      gpio().PDDR = (gpio().PDDR&~MASK)|((mask<<right)&MASK);
+      gpio->PDDR = (gpio->PDDR&~MASK)|((mask<<right)&MASK);
    }
    /**
     * Set bits in field
@@ -1051,7 +1051,7 @@ public:
     * @note Polarity _is_ _not_ significant
     */
    static void bitSet(const uint32_t mask) {
-      gpio().PSOR = (mask<<right)&MASK;
+      gpio->PSOR = (mask<<right)&MASK;
    }
    /**
     * Clear bits in field
@@ -1061,7 +1061,7 @@ public:
     * @note Polarity _is_ _not_ significant
     */
    static void bitClear(const uint32_t mask) {
-      gpio().PCOR = (mask<<right)&MASK;
+      gpio->PCOR = (mask<<right)&MASK;
    }
    /**
     * Toggle bits in field
@@ -1069,7 +1069,7 @@ public:
     * @param[in] mask Mask to apply to the field (1 => toggle bit, 0 => unchanged)
     */
    static void bitToggle(const uint32_t mask) {
-      gpio().PTOR = (mask<<right)&MASK;
+      gpio->PTOR = (mask<<right)&MASK;
    }
    /**
     * Read field as unmodified bit field
@@ -1079,7 +1079,7 @@ public:
     * @note Polarity _is_ _not_ significant
     */
    static uint32_t bitRead() {
-      return (gpio().PDIR & MASK)>>right;
+      return (gpio->PDIR & MASK)>>right;
    }
    /**
     * Read field
@@ -1090,10 +1090,10 @@ public:
     */
    static uint32_t read() {
       if constexpr (polarity) {
-         return (gpio().PDIR & MASK)>>right;
+         return (gpio->PDIR & MASK)>>right;
       }
       else {
-         return (~gpio().PDIR & MASK)>>right;
+         return (~gpio->PDIR & MASK)>>right;
       }
    }
    /**
@@ -1109,7 +1109,7 @@ public:
       }
       {
     //     USBDM::CriticalSection cs;
-         gpio().PDOR = ((gpio().PDOR) & ~MASK) | ((value<<right)&MASK);
+         gpio->PDOR = ((gpio->PDOR) & ~MASK) | ((value<<right)&MASK);
       }
    }
 
@@ -1122,7 +1122,7 @@ public:
     */
    static void bitWrite(uint32_t value) {
       //USBDM::CriticalSection cs;
-      gpio().PDOR = ((gpio().PDOR) & ~MASK) | ((value<<right)&MASK);
+      gpio->PDOR = ((gpio->PDOR) & ~MASK) | ((value<<right)&MASK);
    }
 
    /**

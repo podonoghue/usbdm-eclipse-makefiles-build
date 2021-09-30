@@ -197,7 +197,7 @@ enum CmpSampleClocks {
  *
  * @param[in]  status Struct indicating interrupt source and state
  */
-typedef void (*CMPCallbackFunction)(CmpStatus status);
+typedef void (*CmpCallbackFunction)(CmpStatus status);
 
 /**
  * Template class representing a Analogue Comparator
@@ -245,23 +245,52 @@ template<class Info>
 class CmpBase_T {
 
 protected:
-   /** Class to static check inputNum is mapped to a pin */
-   template<int inputNum> class CheckPinMapping {
-      static_assert((inputNum>=Info::numSignals)||(Info::info[inputNum].gpioBit != UNMAPPED_PCR),
-            "CMP input is not mapped to a pin - Modify Configure.usbdm");
+   /**
+    * Limit index to permitted pin index range
+    * Used to prevent noise from static assertion checks that detect a condition already detected in a more useful fashion.
+    *
+    * @param index   Index to limit
+    *
+    * @return Index limited to permitted range
+    */
+   static inline constexpr int limitIndex(int index) {
+      if (index<0) {
+         return 0;
+      }
+      if (index>(Info::numSignals-1)) {
+         return Info::numSignals-1;
+      }
+      return index;
+   }
+
+   /** Class to static check output is mapped to a pin - Assumes existence */
+   template<int cmpOutput> class CheckOutputIsMapped {
+
+      // Check mapping - no need to check existence
+      static constexpr bool Test1 = (Info::info[cmpOutput].gpioBit != UNMAPPED_PCR);
+
+      static_assert(Test1, "CMP output is not mapped to a pin - Modify Configure.usbdm");
+
    public:
       /** Dummy function to allow convenient in-line checking */
       static constexpr void check() {}
    };
 
-   /** Class to static check valid inputNum - it does not check that it is mapped to a pin */
-   template<int inputNum> class CheckChannel {
-      static_assert((inputNum<Info::numSignals),
-            "Non-existent CMP input  - Check Configure.usbdm for available inputs");
-      static_assert((inputNum>=Info::numSignals)||(Info::info[inputNum].gpioBit != INVALID_PCR),
-            "CMP input  doesn't exist in this device/package - Check Configure.usbdm for available inputs");
-      static_assert((inputNum>=Info::numSignals)||((Info::info[inputNum].gpioBit == UNMAPPED_PCR)||(Info::info[inputNum].gpioBit == INVALID_PCR)||(Info::info[inputNum].gpioBit >= 0)),
-            "Illegal CMP input - Check Configure.usbdm for available inputs");
+   /** Class to static check cmpInput exists and is mapped to a pin */
+   template<int cmpInput> class CheckPinExistsAndIsMapped {
+      // Tests are chained so only a single assertion can fail so as to reduce noise
+
+      // Out of bounds value for function index
+      static constexpr bool Test1 = (cmpInput>=0) && (cmpInput<(Info::numSignals));
+      // Function is not currently mapped to a pin
+      static constexpr bool Test2 = !Test1 || (Info::info[cmpInput].gpioBit != UNMAPPED_PCR);
+      // Non-existent function and catch-all. (should be INVALID_PCR)
+      static constexpr bool Test3 = !Test1 || !Test2 || (Info::info[cmpInput].gpioBit >= 0);
+
+      static_assert(Test1, "Illegal CMP Input - Check Configure.usbdm for available inputs");
+      static_assert(Test2, "CMP input is not mapped to a pin - Modify Configure.usbdm");
+      static_assert(Test3, "CMP input doesn't exist in this device/package - Check Configure.usbdm for available input pins");
+
    public:
       /** Dummy function to allow convenient in-line checking */
       static constexpr void check() {}
@@ -278,32 +307,35 @@ protected:
    }
 
    /** Callback function for ISR */
-   static CMPCallbackFunction sCallback;
+   static CmpCallbackFunction sCallback;
 
 public:
+   /// Pin mapped to CMP output
+   using OutputPin = PcrTable_T<Info, Info::outputPin>;
+
    /**
     * Hardware instance pointer
     *
     * @return Reference to CMT hardware
     */
-   static __attribute__((always_inline)) volatile CMP_Type &cmp() { return Info::cmp(); }
+   static constexpr HardwarePtr<CMP_Type> cmp = Info::baseAddress;
 
    /**
     * IRQ handler
     */
    static void irqHandler() {
-      unsigned status = cmp().C0&(CMP_C0_CFR_MASK|CMP_C0_CFF_MASK|CMP_C0_COUT_MASK);
+      unsigned status = cmp->C0&(CMP_C0_CFR_MASK|CMP_C0_CFF_MASK|CMP_C0_COUT_MASK);
 
       // Clear interrupt flags
-      cmp().C0 |= status;
+      cmp->C0 |= status;
 
-      unsigned rrEvents = (cmp().C2 & CMP_C2_CHF_MASK);
+      unsigned rrEvents = (cmp->C2 & CMP_C2_CHF_MASK);
       if (rrEvents != 0) {
          // Clear RR interrupt flags
-         cmp().C2 |= rrEvents;
+         cmp->C2 |= rrEvents;
       }
       rrEvents = rrEvents>>CMP_C2_CHF_SHIFT;
-      uint8_t rrStatus = (uint8_t)((cmp().C2 & CMP_C2_ACOn_MASK)>>CMP_C2_ACOn_SHIFT);
+      uint8_t rrStatus = (uint8_t)((cmp->C2 & CMP_C2_ACOn_MASK)>>CMP_C2_ACOn_SHIFT);
 
       // Create status from snapshot
       CmpStatus cmpStatus{
@@ -317,12 +349,91 @@ public:
    }
 
    /**
+    * Wrapper to allow the use of a class member as a callback function
+    * @note Only usable with static objects.
+    *
+    * @tparam T         Type of the object containing the callback member function
+    * @tparam callback  Member function pointer
+    * @tparam object    Object containing the member function
+    *
+    * @return  Pointer to a function suitable for the use as a callback
+    *
+    * @code
+    * class AClass {
+    * public:
+    *    int y;
+    *
+    *    // Member function used as callback
+    *    // This function must match CmpCallbackFunction
+    *    void callback() {
+    *       ...;
+    *    }
+    * };
+    * ...
+    * // Instance of class containing callback member function
+    * static AClass aClass;
+    * ...
+    * // Wrap member function
+    * auto fn = Cmp0::wrapCallback<AClass, &AClass::callback, aClass>();
+    * // Use as callback
+    * Cmp0::setCallback(fn);
+    * @endcode
+    */
+   template<class T, void(T::*callback)(CmpStatus status), T &object>
+   static CmpCallbackFunction wrapCallback() {
+      static CmpCallbackFunction fn = [](CmpStatus status) {
+         (object.*callback)(status);
+      };
+      return fn;
+   }
+
+   /**
+    * Wrapper to allow the use of a class member as a callback function
+    * @note There is a considerable space and time overhead to using this method
+    *
+    * @tparam T         Type of the object containing the callback member function
+    * @tparam callback  Member function pointer
+    * @tparam object    Object containing the member function
+    *
+    * @return  Pointer to a function suitable for the use as a callback
+    *
+    * @code
+    * class AClass {
+    * public:
+    *    int y;
+    *
+    *    // Member function used as callback
+    *    // This function must match CmpCallbackFunction
+    *    void callback() {
+    *       ...;
+    *    }
+    * };
+    * ...
+    * // Instance of class containing callback member function
+    * AClass aClass;
+    * ...
+    * // Wrap member function
+    * auto fn = Cmp0::wrapCallback<AClass, &AClass::callback>(aClass);
+    * // Use as callback
+    * Cmp0::setCallback(fn);
+    * @endcode
+    */
+   template<class T, void(T::*callback)(CmpStatus status)>
+   static CmpCallbackFunction wrapCallback(T &object) {
+      static T &obj = object;
+      static CmpCallbackFunction fn = [](CmpStatus status) {
+         (obj.*callback)(status);
+      };
+      return fn;
+   }
+
+   /**
     * Set callback function
     *
     * @param[in] callback Callback function to execute on interrupt.\n
     *                     Use nullptr to remove callback.
     */
-   static void setCallback(CMPCallbackFunction callback) {
+   static void setCallback(CmpCallbackFunction callback) {
       static_assert(Info::irqHandlerInstalled, "CMP not configured for interrupts");
       if (callback == nullptr) {
          callback = unhandledCallback;
@@ -359,8 +470,8 @@ public:
       enable();
 
       // Initialise hardware
-      cmp().C0 = Info::cr0 | CMP_C0_EN_MASK;
-      cmp().C1 = Info::daccr;
+      cmp->C0 = Info::cr0 | CMP_C0_EN_MASK;
+      cmp->C1 = Info::daccr;
 
       enableNvicInterrupts(Info::irqLevel);
    }
@@ -375,33 +486,27 @@ public:
    }
 
    /**
-    * Enable comparator output pin as output.
-    * Configures all Pin Control Register (PCR) values
-    *
-    * @param[in] pcrValue PCR value to use in configuring port (excluding MUX value). See pcrValue()
-    */
-   static void setOutput(PcrValue pcrValue=GPIO_DEFAULT_PCR) {
-      using Pcr = PcrTable_T<Info, Info::outputPin>;
-
-      // Enable and map pin to CMP_OUT
-      cmp().C0 |= CMP_C0_OPE_MASK;
-      Pcr::setPCR((pcrValue&~PORT_PCR_MUX_MASK)|(Info::info[Info::outputPin].pcrValue&PORT_PCR_MUX_MASK));
-   }
-
-   /**
-    * Enable comparator output pin as output.
-    * Configures all Pin Control Register (PCR) values
+    * Enable comparator output pin as output.\n
+    * Pin control parameters default to values usually appropriate for the function being used.\n
+    * The clock to the port will be enabled before changing the PCR.
     *
     * @param[in] pinDriveStrength One of PinDriveStrength_Low, PinDriveStrength_High
     * @param[in] pinDriveMode     One of PinDriveMode_PushPull, PinDriveMode_OpenDrain (defaults to PinPushPull)
     * @param[in] pinSlewRate      One of PinSlewRate_Slow, PinSlewRate_Fast (defaults to PinSlewRate_Fast)
     */
    static void setOutput(
-         PinDriveStrength  pinDriveStrength,
-         PinDriveMode      pinDriveMode      = PinDriveMode_PushPull,
-         PinSlewRate       pinSlewRate       = PinSlewRate_Fast
+         PinDriveStrength  pinDriveStrength  = OutputPin::defaultPcrValue,
+         PinDriveMode      pinDriveMode      = OutputPin::defaultPcrValue,
+         PinSlewRate       pinSlewRate       = OutputPin::defaultPcrValue
          ) {
-      setOutput(pinDriveStrength|pinDriveMode|pinSlewRate);
+
+      CheckOutputIsMapped<Info::outputPin>::check();
+
+      // Enable CMP_OUT
+      cmp->C0 |= CMP_C0_OPE_MASK;
+
+      // Map CMP_OUT to pin
+      OutputPin::setPCR(pinDriveStrength|pinDriveMode|pinSlewRate);
    }
 
    /**
@@ -465,10 +570,10 @@ public:
       enable();
 
       // Initialise hardware
-      cmp().C0 = 0;
-      cmp().C1 = 0;
-      cmp().C2 = 0;
-      cmp().C0 = cmpPower|cmpHysteresis|cmpPolarity|CmpMode_Enabled;
+      cmp->C0 = 0;
+      cmp->C1 = 0;
+      cmp->C2 = 0;
+      cmp->C0 = cmpPower|cmpHysteresis|cmpPolarity|CmpMode_Enabled;
    }
 
    /**
@@ -485,7 +590,7 @@ public:
     */
    static void selectInputs(CmpInput cmpInputP, CmpInput cmpInputN) {
 
-      cmp().C1 = (cmp().C1&~(CMP_C1_PSEL_MASK|CMP_C1_MSEL_MASK|CMP_C1_INPSEL_MASK|CMP_C1_INNSEL_MASK))|
+      cmp->C1 = (cmp->C1&~(CMP_C1_PSEL_MASK|CMP_C1_MSEL_MASK|CMP_C1_INPSEL_MASK|CMP_C1_INNSEL_MASK))|
          ((cmpInputP==CmpInput_DacRef)?CMP_C1_INPSEL(0):CMP_C1_INPSEL(1))|CMP_C1_PSEL(cmpInputP)| // Plus Input Control
          ((cmpInputN==CmpInput_DacRef)?CMP_C1_INNSEL(0):CMP_C1_INNSEL(1))|CMP_C1_MSEL(cmpInputN); // Minus Input Control
    }
@@ -497,7 +602,7 @@ public:
     * 2a/b Continuous                          1      0      0      0          0     COUT == COUTA
     */
    static void setInputContinous() {
-      cmp().C0 = (cmp().C0&~(CMP_C0_WE_MASK|CMP_C0_SE_MASK|CMP_C0_FILTER_CNT_MASK|CMP_C0_FPR_MASK))|
+      cmp->C0 = (cmp->C0&~(CMP_C0_WE_MASK|CMP_C0_SE_MASK|CMP_C0_FILTER_CNT_MASK|CMP_C0_FPR_MASK))|
             CMP_C0_FILTER_CNT(0)|CmpFilterClockSource_Internal|CmpWindow_Disabled;
    }
 
@@ -521,7 +626,7 @@ public:
          int                   cmpFilterSamplePeriod=1
          ) {
       usbdm_assert((cmpFilterClockSource == CmpFilterClockSource_External) || (cmpFilterSamplePeriod>=1), "Illegal parameters");
-      cmp().C0 = (cmp().C0&~(CMP_C0_WE_MASK|CMP_C0_SE_MASK|CMP_C0_FILTER_CNT_MASK|CMP_C0_FPR_MASK))|
+      cmp->C0 = (cmp->C0&~(CMP_C0_WE_MASK|CMP_C0_SE_MASK|CMP_C0_FILTER_CNT_MASK|CMP_C0_FPR_MASK))|
             CmpWindow_Disabled|cmpFilterClockSource|CMP_C0_FILTER_CNT(1)|CMP_C0_FPR(cmpFilterSamplePeriod);
    }
 
@@ -548,7 +653,7 @@ public:
          ) {
       usbdm_assert((cmpFilterClockSource == CmpFilterClockSource_External) || (cmpFilterSamplePeriod>=1), "Illegal parameters");
       usbdm_assert((cmpFilterSamples>1) , "Illegal parameter combination");
-      cmp().C0 = (cmp().C0&~(CMP_C0_WE_MASK|CMP_C0_SE_MASK|CMP_C0_FILTER_CNT_MASK|CMP_C0_FPR_MASK))|
+      cmp->C0 = (cmp->C0&~(CMP_C0_WE_MASK|CMP_C0_SE_MASK|CMP_C0_FILTER_CNT_MASK|CMP_C0_FPR_MASK))|
             CmpWindow_Disabled|cmpFilterClockSource|cmpFilterSamples|CMP_C0_FPR(cmpFilterSamplePeriod);
    }
 
@@ -563,7 +668,7 @@ public:
     * 5a/b Windowed                            1      1      0      0              0     COUT == COUTA clocked by bus clock when Window=1
     */
    static void setInputWindowed() {
-      cmp().C0 = (cmp().C0&~(CMP_C0_WE_MASK|CMP_C0_SE_MASK|CMP_C0_FILTER_CNT_MASK|CMP_C0_FPR_MASK))|
+      cmp->C0 = (cmp->C0&~(CMP_C0_WE_MASK|CMP_C0_SE_MASK|CMP_C0_FILTER_CNT_MASK|CMP_C0_FPR_MASK))|
             CmpWindow_Enabled|CmpFilterClockSource_Internal|CMP_C0_FILTER_CNT(0)|CMP_C0_FPR(0);
    }
 
@@ -581,7 +686,7 @@ public:
          int  cmpFilterSamplePeriod=1
          ) {
       usbdm_assert(cmpFilterSamplePeriod>=1, "Illegal parameters");
-      cmp().C0 = (cmp().C0&~(CMP_C0_WE_MASK|CMP_C0_SE_MASK|CMP_C0_FILTER_CNT_MASK|CMP_C0_FPR_MASK))|
+      cmp->C0 = (cmp->C0&~(CMP_C0_WE_MASK|CMP_C0_SE_MASK|CMP_C0_FILTER_CNT_MASK|CMP_C0_FPR_MASK))|
             CmpWindow_Enabled|CmpFilterClockSource_Internal|CMP_C0_FILTER_CNT(1)|CMP_C0_FPR(cmpFilterSamplePeriod);
    }
 
@@ -601,7 +706,7 @@ public:
          int                  cmpFilterSamplePeriod=1
          ) {
       usbdm_assert(cmpFilterSamplePeriod>=1, "Illegal parameters");
-      cmp().C0 = (cmp().C0&~(CMP_C0_WE_MASK|CMP_C0_SE_MASK|CMP_C0_FILTER_CNT_MASK|CMP_C0_FPR_MASK))|
+      cmp->C0 = (cmp->C0&~(CMP_C0_WE_MASK|CMP_C0_SE_MASK|CMP_C0_FILTER_CNT_MASK|CMP_C0_FPR_MASK))|
             CmpWindow_Enabled|CmpFilterClockSource_Internal|cmpFilterSamples|CMP_C0_FPR(cmpFilterSamplePeriod);
    }
 
@@ -612,14 +717,14 @@ public:
     * @note Window mode may not be selected with external filter.
     */
    static void enableWindowMode() {
-      cmp().C0 |= CMP_C0_WE_MASK;
+      cmp->C0 |= CMP_C0_WE_MASK;
    }
 
    /**
     * Disables Window mode
     */
    static void disableWindowMode() {
-      cmp().C0 &= ~CMP_C0_WE_MASK;
+      cmp->C0 &= ~CMP_C0_WE_MASK;
    }
 
    /**
@@ -628,14 +733,14 @@ public:
     * @note Window mode may not be selected with external filter.
     */
    static void enableFilterMode() {
-      cmp().C0 |= CMP_C0_WE_MASK;
+      cmp->C0 |= CMP_C0_WE_MASK;
    }
 
    /**
     * Disables Filter mode
     */
    static void disableFilterMode() {
-      cmp().C0 &= ~CMP_C0_WE_MASK;
+      cmp->C0 &= ~CMP_C0_WE_MASK;
    }
 
    /**
@@ -645,7 +750,7 @@ public:
     * @return false => Cmp+ < Cmp- (unless inverted)
     */
    static bool getCmpOutput() {
-      return cmp().C0 & CMP_C0_COUT_MASK;
+      return cmp->C0 & CMP_C0_COUT_MASK;
    }
 
    /**
@@ -657,14 +762,14 @@ public:
     * @note Window mode may not be selected with external filter.
     */
    static void setInputConditioning(CmpFilterSamples cmpFilterSamples, CmpHysteresis cmpHysteresis) {
-      cmp().C0 = cmpFilterSamples|cmpHysteresis;
+      cmp->C0 = cmpFilterSamples|cmpHysteresis;
    }
 
    /**
     * Disable Comparator
     */
    static void disable() {
-      cmp().C0 = 0;
+      cmp->C0 = 0;
       Info::disableClock();
    }
 
@@ -698,56 +803,56 @@ public:
     * @param[in]  cmpInterrupt Controls edge selection
     */
    static void enableInterrupts(CmpInterrupt cmpInterrupt) {
-      cmp().C0 = (cmp().C0&~(CMP_C0_IER_MASK|CMP_C0_IEF_MASK))|cmpInterrupt;
+      cmp->C0 = (cmp->C0&~(CMP_C0_IER_MASK|CMP_C0_IEF_MASK))|cmpInterrupt;
    }
 
    /**
     * Enable rising edge interrupts
     */
    static void enableRisingEdgeInterrupts() {
-      cmp().C0 |= CMP_C0_IER_MASK;
+      cmp->C0 |= CMP_C0_IER_MASK;
    }
 
    /**
     * Disable rising edge interrupts
     */
    static void disableRisingEdgeInterrupts() {
-      cmp().C0 &= ~CMP_C0_IER_MASK;
+      cmp->C0 &= ~CMP_C0_IER_MASK;
    }
 
    /**
     * Enable falling edge interrupts
     */
    static void enableFallingEdgeInterrupts() {
-      cmp().C0 |= CMP_C0_IEF_MASK;
+      cmp->C0 |= CMP_C0_IEF_MASK;
    }
 
    /**
     * Disable falling edge interrupts
     */
    static void disableFallingEdgeInterrupts() {
-      cmp().C0 &= ~CMP_C0_IEF_MASK;
+      cmp->C0 &= ~CMP_C0_IEF_MASK;
    }
 
    /**
     * Enable DMA requests
     */
    static void enableDmaRequests() {
-      cmp().C0 |= CMP_C0_DMAEN_MASK;
+      cmp->C0 |= CMP_C0_DMAEN_MASK;
    }
 
    /**
     * Disable DMA requests
     */
    static void disableDmaRequests() {
-      cmp().C0 &= ~CMP_C0_DMAEN_MASK;
+      cmp->C0 &= ~CMP_C0_DMAEN_MASK;
    }
 
    /**
     * Clear edge interrupt flags
     */
    static void clearInterruptFlags() {
-      cmp().C0 |= CMP_C0_CFR_MASK|CMP_C0_CFF_MASK;
+      cmp->C0 |= CMP_C0_CFR_MASK|CMP_C0_CFF_MASK;
    }
 
    /**
@@ -776,9 +881,9 @@ public:
          uint8_t           inputEnableMask,
          CmpSampleClocks   cmpSampleClocks,
          uint8_t           initialisationCycle) {
-      cmp().C1 = (cmp().C1 & ~(CMP_C1_CHN_MASK)) | CMP_C1_CHN(inputEnableMask);
-      cmp().C2 =
-            (cmp().C2 & ~(CMP_C2_FXMP_MASK|CMP_C2_FXMXCH_MASK|CMP_C2_NSAM_MASK|CMP_C2_INITMOD_MASK))|
+      cmp->C1 = (cmp->C1 & ~(CMP_C1_CHN_MASK)) | CMP_C1_CHN(inputEnableMask);
+      cmp->C2 =
+            (cmp->C2 & ~(CMP_C2_FXMP_MASK|CMP_C2_FXMXCH_MASK|CMP_C2_NSAM_MASK|CMP_C2_INITMOD_MASK))|
             cmpFixedChannel|                     // Fixed channel and +ve/-ve input select
             cmpSampleClocks|                     // Sample delay
             CMP_C2_INITMOD(initialisationCycle)| // Initialisation delay
@@ -792,7 +897,7 @@ public:
     * @param referenceResults    Reference comparison results for the up to 8 inputs.
     */
    static void setRoundRobinComparisonState(uint8_t referenceResults) {
-      cmp().C2 = (cmp().C2 & ~CMP_C2_ACOn_MASK)|referenceResults;
+      cmp->C2 = (cmp->C2 & ~CMP_C2_ACOn_MASK)|referenceResults;
    }
 
    /**
@@ -800,7 +905,7 @@ public:
     * Only inputs that have been enabled will be checked.
     */
    static uint8_t getRoundRobinComparisonState() {
-      return (cmp().C2 & CMP_C2_ACOn_MASK);
+      return (cmp->C2 & CMP_C2_ACOn_MASK);
    }
 
    /**
@@ -809,14 +914,14 @@ public:
     * @note Rising and Falling edge interrupts should not be enabled with this.
     */
    static void enableRoundRobinInterrupts() {
-      cmp().C2 |= CMP_C2_RRIE_MASK;
+      cmp->C2 |= CMP_C2_RRIE_MASK;
    }
 
    /**
     * Disable interrupts for comparison changes in Round Robin mode.
     */
    static void disableRoundRobinInterrupts() {
-      cmp().C2 &= ~CMP_C2_RRIE_MASK;
+      cmp->C2 &= ~CMP_C2_RRIE_MASK;
    }
 
    /**
@@ -828,21 +933,21 @@ public:
    static void configureDac(
          uint8_t       level,
          CmpDacSource  cmpDacSource) {
-      cmp().C1 = (cmp().C1&~(CMP_C1_VRSEL_MASK|CMP_C1_VOSEL_MASK))|CMP_C1_DACEN_MASK|cmpDacSource|CMP_C1_VOSEL(level);
+      cmp->C1 = (cmp->C1&~(CMP_C1_VRSEL_MASK|CMP_C1_VOSEL_MASK))|CMP_C1_DACEN_MASK|cmpDacSource|CMP_C1_VOSEL(level);
    }
 
    /**
     * Enable DAC
     */
    static void enableDAC() {
-      cmp().C1 |= CMP_C1_DACEN_MASK;
+      cmp->C1 |= CMP_C1_DACEN_MASK;
    }
 
    /**
     * Disable DAC
     */
    static void disableDAC() {
-      cmp().C1 &= ~CMP_C1_DACEN_MASK;
+      cmp->C1 &= ~CMP_C1_DACEN_MASK;
    }
 
    /** Maximum DAC value corresponding to Vref) */
@@ -855,7 +960,7 @@ public:
     * @param[in]  level  DAC level to select (0...MAXIMUM_DAC_VALUE) => (Vref/MAXIMUM_DAC_VALUE...Vref)
     */
    static void setDacLevel(uint8_t level) {
-      cmp().C1 = (cmp().C1&~CMP_C1_VOSEL_MASK) | CMP_C1_VOSEL(level);
+      cmp->C1 = (cmp->C1&~CMP_C1_VOSEL_MASK) | CMP_C1_VOSEL(level);
    }
 
    /**
@@ -881,7 +986,7 @@ public:
        */
       static void setInput() {
          using Pcr = PcrTable_T<Info, cmpInput>;
-         CmpBase_T::CheckPinMapping<cmpInput>::check();
+         CmpBase_T::CheckPinExistsAndIsMapped<cmpInput>::check();
 
          // Map pin
          Pcr::setPCR(Info::info[cmpInput].pcrValue);
@@ -889,7 +994,7 @@ public:
    };
 };
 
-template<class Info> CMPCallbackFunction CmpBase_T<Info>::sCallback = CmpBase_T<Info>::unhandledCallback;
+template<class Info> CmpCallbackFunction CmpBase_T<Info>::sCallback = CmpBase_T<Info>::unhandledCallback;
 
 #if defined(USBDM_CMP_IS_DEFINED)
 using Cmp = CmpBase_T<CmpInfo>;
