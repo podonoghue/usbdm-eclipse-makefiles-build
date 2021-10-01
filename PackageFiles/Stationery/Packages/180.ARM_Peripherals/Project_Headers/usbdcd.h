@@ -120,7 +120,7 @@ public:
          uint32_t       a;
          UsbdcdStatus   b;
       } x;
-      x.a = usbdcd().STATUS;
+      x.a = usbdcd->STATUS;
       return (x.b);
    }
 
@@ -184,7 +184,7 @@ public:
     * @param usbdcdClockUnit
     */
    static void setClock(unsigned freq, UsbdcdClockUnit usbdcdClockUnit) {
-      usbdcd().CLOCK = USBDCD_CLOCK_CLOCK_SPEED(freq)|usbdcdClockUnit;
+      usbdcd->CLOCK = USBDCD_CLOCK_CLOCK_SPEED(freq)|usbdcdClockUnit;
    }
 
    /**
@@ -227,10 +227,10 @@ public:
     */
    static void enableInterrupt(bool enable=true) {
       if (enable) {
-         usbdcd().CONTROL |= USBDCD_CONTROL_IE_MASK;
+         usbdcd->CONTROL |= USBDCD_CONTROL_IE_MASK;
       }
       else {
-         usbdcd().CONTROL &= ~USBDCD_CONTROL_IE_MASK;
+         usbdcd->CONTROL &= ~USBDCD_CONTROL_IE_MASK;
       }
    }
 
@@ -238,21 +238,21 @@ public:
     * Clear interrupt flag
     */
    static void clearInterrupt() {
-      usbdcd().CONTROL |= USBDCD_CONTROL_IACK_MASK;
+      usbdcd->CONTROL |= USBDCD_CONTROL_IACK_MASK;
    }
 
    /**
     * Start detection sequence
     */
    static void startDetection() {
-      usbdcd().CONTROL |= USBDCD_CONTROL_START_MASK;
+      usbdcd->CONTROL |= USBDCD_CONTROL_START_MASK;
    }
 
    /**
     * Software reset
     */
    static void softwareReset() {
-      usbdcd().CONTROL |= USBDCD_CONTROL_SR_MASK;
+      usbdcd->CONTROL |= USBDCD_CONTROL_SR_MASK;
    }
 };
 

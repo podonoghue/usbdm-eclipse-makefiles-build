@@ -11,6 +11,11 @@
    <xi:include href="_mapPinsOption.xml"/>  
    
    <template><![CDATA[
+      \t//! Pin number in Info table for EWM input if mapped to a pin
+      \tstatic constexpr int inputPin  = 0;\n\n
+      \t//! Pin number in Info table for EWM output if mapped to a pin
+      \tstatic constexpr int outputPin  = 1;\n\n
+
       \t//! IRQ numbers for hardware
       \tstatic constexpr IRQn_Type irqNums[]  = $(_name)_IRQS;\n\n
    

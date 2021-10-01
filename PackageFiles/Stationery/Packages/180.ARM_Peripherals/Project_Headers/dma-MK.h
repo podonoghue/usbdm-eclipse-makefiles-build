@@ -779,8 +779,8 @@ public:
       DmaMuxInfo::enableClock();
 
       // Configure channel - must be disabled to change
-      DmaMuxInfo::dmamux().CHCFG[dmaChannelNum] = 0;
-      DmaMuxInfo::dmamux().CHCFG[dmaChannelNum] = dmaMuxEnable|DMAMUX_CHCFG_SOURCE(dmaSlot);
+      DmaMuxInfo::dmamux->CHCFG[dmaChannelNum] = 0;
+      DmaMuxInfo::dmamux->CHCFG[dmaChannelNum] = dmaMuxEnable|DMAMUX_CHCFG_SOURCE(dmaSlot);
    }
 
    /**
@@ -796,7 +796,7 @@ public:
       DmaMuxInfo::enableClock();
 
       // Disable channel
-      DmaMuxInfo::dmamux().CHCFG[dmaChannelNum] = 0;
+      DmaMuxInfo::dmamux->CHCFG[dmaChannelNum] = 0;
    }
 };
 

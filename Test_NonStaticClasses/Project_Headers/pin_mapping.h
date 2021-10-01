@@ -252,9 +252,10 @@ public:
    static constexpr uint32_t baseAddress = OSC0_BasePtr;
 
    //! Hardware base pointer
-   __attribute__((always_inline)) static volatile OSC_Type &osc() {
-      return *reinterpret_cast<OSC_Type *>(baseAddress);
-   }
+   static constexpr HardwarePtr<OSC_Type> osc = baseAddress;
+   //__attribute__((always_inline)) static volatile OSC_Type &osc() {
+   //   return *reinterpret_cast<OSC_Type *>(baseAddress);
+   //}
 
    //! Base value for PCR (excluding MUX value)
    static constexpr uint32_t defaultPcrValue  = 0;
@@ -293,8 +294,8 @@ public:
     * @return Clock frequency as uint32_t in Hz
     */
    static uint32_t getOscerClock() {
-      return (osc().CR&OSC_CR_ERCLKEN_MASK)?
-         (osc_clock/(1<<((osc().DIV&OSC_DIV_ERPS_MASK)>>OSC_DIV_ERPS_SHIFT))):
+      return (osc->CR&OSC_CR_ERCLKEN_MASK)?
+         (osc_clock/(1<<((osc->DIV&OSC_DIV_ERPS_MASK)>>OSC_DIV_ERPS_SHIFT))):
          0;
    }
 
@@ -372,9 +373,10 @@ public:
    static constexpr uint32_t baseAddress = RTC_BasePtr;
 
    //! Hardware base pointer
-   __attribute__((always_inline)) static volatile RTC_Type &rtc() {
-      return *reinterpret_cast<RTC_Type *>(baseAddress);
-   }
+   static constexpr HardwarePtr<RTC_Type> rtc = baseAddress;
+   //__attribute__((always_inline)) static volatile RTC_Type &rtc() {
+   //   return *reinterpret_cast<RTC_Type *>(baseAddress);
+   //}
 
    //! Base value for PCR (excluding MUX value)
    static constexpr uint32_t defaultPcrValue = 
@@ -489,7 +491,7 @@ public:
     */
    static uint32_t getInternalClock() {
       // RTC uses EXTAL32/XTAL32 clock
-      return (rtc().CR&RTC_CR_OSCE_MASK)?osc_input_freq:0;
+      return (rtc->CR&RTC_CR_OSCE_MASK)?osc_input_freq:0;
    }
 
    /**
@@ -498,7 +500,7 @@ public:
     * @return Clock frequency as uint32_t
     */
    static uint32_t getExternalClock() {
-      return (rtc().CR&RTC_CR_CLKO_MASK)?0:getInternalClock();
+      return (rtc->CR&RTC_CR_CLKO_MASK)?0:getInternalClock();
    }
 
    //! Number of signals available in info table
@@ -556,9 +558,10 @@ public:
    static constexpr uint32_t baseAddress = MCG_BasePtr;
 
    //! Hardware base pointer
-   __attribute__((always_inline)) static volatile MCG_Type &mcg() {
-      return *reinterpret_cast<MCG_Type *>(baseAddress);
-   }
+   static constexpr HardwarePtr<MCG_Type> mcg = baseAddress;
+   //__attribute__((always_inline)) static volatile MCG_Type &mcg() {
+   //   return *reinterpret_cast<MCG_Type *>(baseAddress);
+   //}
 
    //! IRQ numbers for hardware
    static constexpr IRQn_Type irqNums[]  = MCG_IRQS;
@@ -642,7 +645,7 @@ public:
     */
    static uint32_t getErcClock() {
    
-      switch((mcg().C7&MCG_C7_OSCSEL_MASK)) {
+      switch((mcg->C7&MCG_C7_OSCSEL_MASK)) {
          default               : return 0;
          case MCG_C7_OSCSEL(0) : return Osc0Info::getOscClock();
          case MCG_C7_OSCSEL(1) : return RtcInfo::getInternalClock();
@@ -656,9 +659,9 @@ public:
     * @return MCGIRCLK as uint32_t
     */
    static uint32_t getInternalIrcClock() {
-         if (mcg().C2&MCG_C2_IRCS_MASK) {
+         if (mcg->C2&MCG_C2_IRCS_MASK) {
    #ifdef MCG_SC_FCRDIV_MASK
-            return (system_fast_irc_clock/(1<<((mcg().SC&MCG_SC_FCRDIV_MASK)>>MCG_SC_FCRDIV_SHIFT)));
+            return (system_fast_irc_clock/(1<<((mcg->SC&MCG_SC_FCRDIV_MASK)>>MCG_SC_FCRDIV_SHIFT)));
    #else
             return system_fast_irc_clock;
    #endif
@@ -674,7 +677,7 @@ public:
     * @return MCGIRCLK as uint32_t
     */
    static uint32_t getMcgIrClock() {
-      if (mcg().C1&MCG_C1_IRCLKEN_MASK) {
+      if (mcg->C1&MCG_C1_IRCLKEN_MASK) {
          return getInternalIrcClock();
       }
       else {
@@ -1041,9 +1044,10 @@ public:
    static constexpr uint32_t baseAddress = SIM_BasePtr;
 
    //! Hardware base pointer
-   __attribute__((always_inline)) static volatile SIM_Type &sim() {
-      return *reinterpret_cast<SIM_Type *>(baseAddress);
-   }
+   static constexpr HardwarePtr<SIM_Type> sim = baseAddress;
+   //__attribute__((always_inline)) static volatile SIM_Type &sim() {
+   //   return *reinterpret_cast<SIM_Type *>(baseAddress);
+   //}
 
    /**
     * Get RAM size
@@ -1052,7 +1056,7 @@ public:
     */
    static SimRamSize getRamSize() {
    
-      return static_cast<SimRamSize>(sim().SOPT1&SIM_SOPT1_RAMSIZE_MASK);
+      return static_cast<SimRamSize>(sim->SOPT1&SIM_SOPT1_RAMSIZE_MASK);
    }
 
    /**
@@ -1062,7 +1066,7 @@ public:
     */
    static uint32_t getErc32kClock() {
    
-      switch(sim().SOPT1&SIM_SOPT1_OSC32KSEL_MASK) {
+      switch(sim->SOPT1&SIM_SOPT1_OSC32KSEL_MASK) {
          default                     : return 0;
          case SimOsc32kSel_Osc32kClk : return Osc0Info::getOsc32kClock();
          case SimOsc32kSel_Rtc32kClk : return RtcInfo::getExternalClock();
@@ -1076,7 +1080,7 @@ public:
     * @param simOsc32kSel Clock source
     */
    static void setErc32kClock(SimOsc32kSel simOsc32kSel) {
-      sim().SOPT1 = (sim().SOPT1&~SIM_SOPT1_OSC32KSEL_MASK) | simOsc32kSel;
+      sim->SOPT1 = (sim->SOPT1&~SIM_SOPT1_OSC32KSEL_MASK) | simOsc32kSel;
    }
 
    //! System Options Register 1
@@ -1092,7 +1096,7 @@ public:
     * @param simClkoutSel
     */
    static void setClkout(SimClkoutSel simClkoutSel) {
-      sim().SOPT2 = (sim().SOPT2&~SIM_SOPT2_CLKOUTSEL_MASK) | simClkoutSel;
+      sim->SOPT2 = (sim->SOPT2&~SIM_SOPT2_CLKOUTSEL_MASK) | simClkoutSel;
    }
 
    /**
@@ -1101,7 +1105,7 @@ public:
     * @param simPeripheralClockSource Clock source for peripheral clock
     */
    static void setPeripheralClock(SimPeripheralClockSource simPeripheralClockSource) {
-      sim().SOPT2 = (sim().SOPT2&~SIM_SOPT2_PLLFLLSEL_MASK) | simPeripheralClockSource;
+      sim->SOPT2 = (sim->SOPT2&~SIM_SOPT2_PLLFLLSEL_MASK) | simPeripheralClockSource;
    }
 
    /**
@@ -1111,7 +1115,7 @@ public:
     */
    static uint32_t getPeripheralClock() {
       
-      switch(sim().SOPT2&SIM_SOPT2_PLLFLLSEL_MASK) {
+      switch(sim->SOPT2&SIM_SOPT2_PLLFLLSEL_MASK) {
          default:                     return 0;
          case SimPeripheralClockSource_McgFll : return SystemMcgFllClock;
          case SimPeripheralClockSource_McgPll : return SystemMcgPllClock;
@@ -1125,7 +1129,7 @@ public:
     * @param simLpuartClockSource Clock source for LPUART
     */
    static void setLpuartClock(SimLpuartClockSource simLpuartClockSource) {
-      sim().SOPT2 = (sim().SOPT2&~SIM_SOPT2_LPUARTSRC_MASK) | simLpuartClockSource;
+      sim->SOPT2 = (sim->SOPT2&~SIM_SOPT2_LPUARTSRC_MASK) | simLpuartClockSource;
    }
 
    /**
@@ -1135,7 +1139,7 @@ public:
     */
    static uint32_t getLpuartClock() {
       
-      switch(sim().SOPT2&SIM_SOPT2_LPUARTSRC_MASK) {
+      switch(sim->SOPT2&SIM_SOPT2_LPUARTSRC_MASK) {
       default:
       case SimLpuartClockSource_Disabled   : return 0;
       case SimLpuartClockSource_Peripheral : return getPeripheralClock();
@@ -1178,7 +1182,7 @@ public:
     * @param simUsbFullSpeedClockSource Clock source for peripheral clock
     */
    static void setUsbFullSpeedClock(SimUsbFullSpeedClockSource simUsbFullSpeedClockSource) {
-      sim().SOPT2 = (sim().SOPT2&~SIM_SOPT2_USBSRC_MASK) | simUsbFullSpeedClockSource;
+      sim->SOPT2 = (sim->SOPT2&~SIM_SOPT2_USBSRC_MASK) | simUsbFullSpeedClockSource;
    }
 
    /**
@@ -1187,12 +1191,12 @@ public:
     * @return Clock frequency as a uint32_t in Hz
     */
    static uint32_t getUsbClock() {
-      switch ((sim().SOPT2&SIM_SOPT2_USBSRC_MASK)) {
+      switch ((sim->SOPT2&SIM_SOPT2_USBSRC_MASK)) {
          default:
          case SimUsbFullSpeedClockSource_External   : return 48000000;
          case SimUsbFullSpeedClockSource_Peripheral : return  (getPeripheralClock()*
-            (((sim().CLKDIV2&SIM_CLKDIV2_USBFRAC_MASK)>>SIM_CLKDIV2_USBFRAC_SHIFT)+1))/
-            (((sim().CLKDIV2&SIM_CLKDIV2_USBDIV_MASK)>>SIM_CLKDIV2_USBDIV_SHIFT)+1);
+            (((sim->CLKDIV2&SIM_CLKDIV2_USBFRAC_MASK)>>SIM_CLKDIV2_USBFRAC_SHIFT)+1))/
+            (((sim->CLKDIV2&SIM_CLKDIV2_USBDIV_MASK)>>SIM_CLKDIV2_USBDIV_SHIFT)+1);
       }
    }
    #endif
@@ -1299,7 +1303,7 @@ public:
     * @param simFtm3Trg1Src Trigger Source
     */
    static void setFtm3Trg1Src(SimFtm3Trg1Src simFtm3Trg1Src) {
-      sim().SOPT4 = (sim().SOPT4&~SIM_SOPT4_FTM3TRG1SRC_MASK)|simFtm3Trg1Src;   
+      sim->SOPT4 = (sim->SOPT4&~SIM_SOPT4_FTM3TRG1SRC_MASK)|simFtm3Trg1Src;   
    }
 
    /**
@@ -1308,7 +1312,7 @@ public:
     * @param simFtm3Trg0Src Trigger Source
     */
    static void setFtm3Trg0Src(SimFtm3Trg0Src simFtm3Trg0Src) {
-      sim().SOPT4 = (sim().SOPT4&~SIM_SOPT4_FTM3TRG0SRC_MASK)|simFtm3Trg0Src;   
+      sim->SOPT4 = (sim->SOPT4&~SIM_SOPT4_FTM3TRG0SRC_MASK)|simFtm3Trg0Src;   
    }
 
    /**
@@ -1317,7 +1321,7 @@ public:
     * @param simFtm0Trg1Src Trigger Source
     */
    static void setFtm0Trg1Src(SimFtm0Trg1Src simFtm0Trg1Src) {
-      sim().SOPT4 = (sim().SOPT4&~SIM_SOPT4_FTM0TRG1SRC_MASK)|simFtm0Trg1Src;   
+      sim->SOPT4 = (sim->SOPT4&~SIM_SOPT4_FTM0TRG1SRC_MASK)|simFtm0Trg1Src;   
    }
 
    /**
@@ -1326,7 +1330,7 @@ public:
     * @param simFtm0Trg0Src Trigger Source
     */
    static void setFtm0Trg0Src(SimFtm0Trg0Src simFtm0Trg0Src) {
-      sim().SOPT4 = (sim().SOPT4&~SIM_SOPT4_FTM0TRG0SRC_MASK)|simFtm0Trg0Src;   
+      sim->SOPT4 = (sim->SOPT4&~SIM_SOPT4_FTM0TRG0SRC_MASK)|simFtm0Trg0Src;   
    }
 
    /**
@@ -1335,7 +1339,7 @@ public:
     * @param simFtm3ClkSel Clock Pin
     */
    static void setFtm3ClkSel(SimFtm3ClkSel simFtm3ClkSel) {
-      sim().SOPT4 = (sim().SOPT4&~SIM_SOPT4_FTM3CLKSEL_MASK)|simFtm3ClkSel;      
+      sim->SOPT4 = (sim->SOPT4&~SIM_SOPT4_FTM3CLKSEL_MASK)|simFtm3ClkSel;      
    }
 
    /**
@@ -1344,7 +1348,7 @@ public:
     * @param simFtm2ClkSel Clock Pin
     */
    static void setFtm2ClkSel(SimFtm2ClkSel simFtm2ClkSel) {
-      sim().SOPT4 = (sim().SOPT4&~SIM_SOPT4_FTM2CLKSEL_MASK)|simFtm2ClkSel;      
+      sim->SOPT4 = (sim->SOPT4&~SIM_SOPT4_FTM2CLKSEL_MASK)|simFtm2ClkSel;      
    }
 
    /**
@@ -1353,7 +1357,7 @@ public:
     * @param simFtm1ClkSel Clock Pin
     */
    static void setFtm1ClkSel(SimFtm1ClkSel simFtm1ClkSel) {
-      sim().SOPT4 = (sim().SOPT4&~SIM_SOPT4_FTM1CLKSEL_MASK)|simFtm1ClkSel;      
+      sim->SOPT4 = (sim->SOPT4&~SIM_SOPT4_FTM1CLKSEL_MASK)|simFtm1ClkSel;      
    }
 
    /**
@@ -1362,7 +1366,7 @@ public:
     * @param simFtm0ClkSel Clock Pin
     */
    static void setFtm0ClkSel(SimFtm0ClkSel simFtm0ClkSel) {
-      sim().SOPT4 = (sim().SOPT4&~SIM_SOPT4_FTM0CLKSEL_MASK)|simFtm0ClkSel;      
+      sim->SOPT4 = (sim->SOPT4&~SIM_SOPT4_FTM0CLKSEL_MASK)|simFtm0ClkSel;      
    }
 
    /**
@@ -1371,7 +1375,7 @@ public:
     * @param simFtm2Ch0Src Capture Source
     */
    static void setFtm2Ch0Src(SimFtm2Ch0Src simFtm2Ch0Src) {
-      sim().SOPT4 = (sim().SOPT4&~SIM_SOPT4_FTM2CH0SRC_MASK)|simFtm2Ch0Src;      
+      sim->SOPT4 = (sim->SOPT4&~SIM_SOPT4_FTM2CH0SRC_MASK)|simFtm2Ch0Src;      
    }
 
    /**
@@ -1380,7 +1384,7 @@ public:
     * @param simFtm1Ch0Src Capture Source
     */
    static void setFtm1Ch0Src(SimFtm1Ch0Src simFtm1Ch0Src) {
-      sim().SOPT4 = (sim().SOPT4&~SIM_SOPT4_FTM1CH0SRC_MASK)|simFtm1Ch0Src;      
+      sim->SOPT4 = (sim->SOPT4&~SIM_SOPT4_FTM1CH0SRC_MASK)|simFtm1Ch0Src;      
    }
 
    /**
@@ -1389,7 +1393,7 @@ public:
     * @param SimFtm3Flt0 Fault Source
     */
    static void setFtm3Flt0(SimFtm3Flt0 simFtm3Flt0) {
-      sim().SOPT4 = (sim().SOPT4&~SIM_SOPT4_FTM3FLT0_MASK)|simFtm3Flt0;      
+      sim->SOPT4 = (sim->SOPT4&~SIM_SOPT4_FTM3FLT0_MASK)|simFtm3Flt0;      
    }
 
    /**
@@ -1398,7 +1402,7 @@ public:
     * @param SimFtm2Flt0 Fault Source
     */
    static void setFtm2Flt0(SimFtm2Flt0 simFtm2Flt0) {
-      sim().SOPT4 = (sim().SOPT4&~SIM_SOPT4_FTM2FLT0_MASK)|simFtm2Flt0;      
+      sim->SOPT4 = (sim->SOPT4&~SIM_SOPT4_FTM2FLT0_MASK)|simFtm2Flt0;      
    }
 
    /**
@@ -1407,7 +1411,7 @@ public:
     * @param simFtm1Flt0 Fault Source
     */
    static void setFtm1Flt0(SimFtm1Flt0 simFtm1Flt0) {
-      sim().SOPT4 = (sim().SOPT4&~SIM_SOPT4_FTM1FLT0_MASK)|simFtm1Flt0;      
+      sim->SOPT4 = (sim->SOPT4&~SIM_SOPT4_FTM1FLT0_MASK)|simFtm1Flt0;      
    }
 
    /**
@@ -1416,7 +1420,7 @@ public:
     * @param simFtm0Flt1 Fault Source
     */
    static void setFtm0Flt1(SimFtm0Flt1 simFtm0Flt1) {
-      sim().SOPT4 = (sim().SOPT4&~SIM_SOPT4_FTM0FLT1_MASK)|simFtm0Flt1;      
+      sim->SOPT4 = (sim->SOPT4&~SIM_SOPT4_FTM0FLT1_MASK)|simFtm0Flt1;      
    }
 
    /**
@@ -1425,7 +1429,7 @@ public:
     * @param simFtm0Flt0 Fault Source
     */
    static void setFtm0Flt0(SimFtm0Flt0 simFtm0Flt0) {
-      sim().SOPT4 = (sim().SOPT4&~SIM_SOPT4_FTM0FLT0_MASK)|simFtm0Flt0;      
+      sim->SOPT4 = (sim->SOPT4&~SIM_SOPT4_FTM0FLT0_MASK)|simFtm0Flt0;      
    }
 
    //! System Options Register 5
@@ -1460,7 +1464,7 @@ public:
     * @param[in] simAdc0Trigger     Select the ADC0 Trigger source in STOP and VLPS modes, or when ADC0 Alternative Trigger is active.
     */
    static void setAdc0Triggers(SimAdc0TriggerMode simAdc0TriggerMode, SimAdc0Trigger simAdc0Trigger=SimAdc0Trigger_PdbExTrig) {
-      sim().SOPT7 = (sim().SOPT7&~(SIM_SOPT7_ADC0TRGSEL_MASK|SIM_SOPT7_ADC0ALTTRGEN_MASK))|simAdc0Trigger|simAdc0TriggerMode;
+      sim->SOPT7 = (sim->SOPT7&~(SIM_SOPT7_ADC0TRGSEL_MASK|SIM_SOPT7_ADC0ALTTRGEN_MASK))|simAdc0Trigger|simAdc0TriggerMode;
    };
 
    /**
@@ -1475,7 +1479,7 @@ public:
     * @param[in] simAdc1Trigger     Select the ADC1 Trigger source in STOP and VLPS modes, or when ADC0 Alternative Trigger is active.
     */
    static void setAdc1Triggers(SimAdc1TriggerMode simAdc1TriggerMode, SimAdc1Trigger simAdc1Trigger=SimAdc1Trigger_PdbExTrig) {
-      sim().SOPT7 = (sim().SOPT7&~(SIM_SOPT7_ADC1TRGSEL_MASK|SIM_SOPT7_ADC1ALTTRGEN_MASK))|simAdc1Trigger|simAdc1TriggerMode;
+      sim->SOPT7 = (sim->SOPT7&~(SIM_SOPT7_ADC1TRGSEL_MASK|SIM_SOPT7_ADC1ALTTRGEN_MASK))|simAdc1Trigger|simAdc1TriggerMode;
    };
 
    //! System Options Register 7
@@ -1521,19 +1525,19 @@ public:
    static void initRegs() {
    #ifdef SIM_SCGC4_USBOTG_MASK
       // The USB interface must be disabled for clock changes to have effect
-      sim().SCGC4 &= ~SIM_SCGC4_USBOTG_MASK;
+      sim->SCGC4 &= ~SIM_SCGC4_USBOTG_MASK;
    #endif
    
-      sim().SOPT1 = sopt1;
+      sim->SOPT1 = sopt1;
       // sim_sopt2_pllfllsel may also be altered by MCG clock code
-      sim().SOPT2 = sopt2;
-      sim().SOPT4 = sopt4;
-      sim().SOPT5 = sopt5;
-      sim().SOPT7 = sopt7;
-      sim().SOPT8 = sopt8;
+      sim->SOPT2 = sopt2;
+      sim->SOPT4 = sopt4;
+      sim->SOPT5 = sopt5;
+      sim->SOPT7 = sopt7;
+      sim->SOPT8 = sopt8;
    
    #ifdef SIM_CLKDIV2_USBDIV_MASK
-      sim().CLKDIV2 = clkdiv2;
+      sim->CLKDIV2 = clkdiv2;
    #endif
    }
 
@@ -1563,9 +1567,10 @@ public:
    static constexpr uint32_t baseAddress = PMC_BasePtr;
 
    //! Hardware base pointer
-   __attribute__((always_inline)) static volatile PMC_Type &pmc() {
-      return *reinterpret_cast<PMC_Type *>(baseAddress);
-   }
+   static constexpr HardwarePtr<PMC_Type> pmc = baseAddress;
+   //__attribute__((always_inline)) static volatile PMC_Type &pmc() {
+   //   return *reinterpret_cast<PMC_Type *>(baseAddress);
+   //}
 
    //! Default value for Low Voltage Detect Status And Control 1 register
    static constexpr uint32_t pmc_lvdsc1  = 
@@ -1653,9 +1658,10 @@ public:
    static constexpr uint32_t baseAddress = ADC0_BasePtr;
 
    //! Hardware base pointer
-   __attribute__((always_inline)) static volatile ADC_Type &adc() {
-      return *reinterpret_cast<ADC_Type *>(baseAddress);
-   }
+   static constexpr HardwarePtr<ADC_Type> adc = baseAddress;
+   //__attribute__((always_inline)) static volatile ADC_Type &adc() {
+   //   return *reinterpret_cast<ADC_Type *>(baseAddress);
+   //}
 
    //! Base value for PCR (excluding MUX value)
    static constexpr uint32_t defaultPcrValue  = 0;
@@ -1704,7 +1710,7 @@ public:
     *  @return Frequency in Hz
     */
    static unsigned getInputClockFrequency() {
-      return getInputClockFrequency(static_cast<AdcClockSource>(adc().CFG1 & ADC_CFG1_ADICLK_MASK));
+      return getInputClockFrequency(static_cast<AdcClockSource>(adc->CFG1 & ADC_CFG1_ADICLK_MASK));
    }
 
    //! Default resolution
@@ -1926,9 +1932,10 @@ public:
    static constexpr uint32_t baseAddress = ADC1_BasePtr;
 
    //! Hardware base pointer
-   __attribute__((always_inline)) static volatile ADC_Type &adc() {
-      return *reinterpret_cast<ADC_Type *>(baseAddress);
-   }
+   static constexpr HardwarePtr<ADC_Type> adc = baseAddress;
+   //__attribute__((always_inline)) static volatile ADC_Type &adc() {
+   //   return *reinterpret_cast<ADC_Type *>(baseAddress);
+   //}
 
    //! Base value for PCR (excluding MUX value)
    static constexpr uint32_t defaultPcrValue  = 0;
@@ -1977,7 +1984,7 @@ public:
     *  @return Frequency in Hz
     */
    static unsigned getInputClockFrequency() {
-      return getInputClockFrequency(static_cast<AdcClockSource>(adc().CFG1 & ADC_CFG1_ADICLK_MASK));
+      return getInputClockFrequency(static_cast<AdcClockSource>(adc->CFG1 & ADC_CFG1_ADICLK_MASK));
    }
 
    //! Default resolution
@@ -2206,9 +2213,10 @@ public:
    static constexpr uint32_t baseAddress = CMP0_BasePtr;
 
    //! Hardware base pointer
-   __attribute__((always_inline)) static volatile CMP_Type &cmp() {
-      return *reinterpret_cast<CMP_Type *>(baseAddress);
-   }
+   static constexpr HardwarePtr<CMP_Type> cmp = baseAddress;
+   //__attribute__((always_inline)) static volatile CMP_Type &cmp() {
+   //   return *reinterpret_cast<CMP_Type *>(baseAddress);
+   //}
 
    //! Base value for PCR (excluding MUX value)
    static constexpr uint32_t defaultPcrValue  = 0;
@@ -2343,9 +2351,10 @@ public:
    static constexpr uint32_t baseAddress = CMP1_BasePtr;
 
    //! Hardware base pointer
-   __attribute__((always_inline)) static volatile CMP_Type &cmp() {
-      return *reinterpret_cast<CMP_Type *>(baseAddress);
-   }
+   static constexpr HardwarePtr<CMP_Type> cmp = baseAddress;
+   //__attribute__((always_inline)) static volatile CMP_Type &cmp() {
+   //   return *reinterpret_cast<CMP_Type *>(baseAddress);
+   //}
 
    //! Base value for PCR (excluding MUX value)
    static constexpr uint32_t defaultPcrValue  = 0;
@@ -2561,9 +2570,10 @@ public:
    static constexpr uint32_t baseAddress = CRC0_BasePtr;
 
    //! Hardware base pointer
-   __attribute__((always_inline)) static volatile CRC_Type &crc() {
-      return *reinterpret_cast<CRC_Type *>(baseAddress);
-   }
+   static constexpr HardwarePtr<CRC_Type> crc = baseAddress;
+   //__attribute__((always_inline)) static volatile CRC_Type &crc() {
+   //   return *reinterpret_cast<CRC_Type *>(baseAddress);
+   //}
 
    static constexpr uint32_t gpoly =  0;
 
@@ -2624,9 +2634,10 @@ public:
    static constexpr uint32_t baseAddress = DAC0_BasePtr;
 
    //! Hardware base pointer
-   __attribute__((always_inline)) static volatile DAC_Type &dac() {
-      return *reinterpret_cast<DAC_Type *>(baseAddress);
-   }
+   static constexpr HardwarePtr<DAC_Type> dac = baseAddress;
+   //__attribute__((always_inline)) static volatile DAC_Type &dac() {
+   //   return *reinterpret_cast<DAC_Type *>(baseAddress);
+   //}
 
    //! Base value for PCR (excluding MUX value)
    static constexpr uint32_t defaultPcrValue  = 0;
@@ -2728,9 +2739,10 @@ public:
    static constexpr uint32_t baseAddress = DAC1_BasePtr;
 
    //! Hardware base pointer
-   __attribute__((always_inline)) static volatile DAC_Type &dac() {
-      return *reinterpret_cast<DAC_Type *>(baseAddress);
-   }
+   static constexpr HardwarePtr<DAC_Type> dac = baseAddress;
+   //__attribute__((always_inline)) static volatile DAC_Type &dac() {
+   //   return *reinterpret_cast<DAC_Type *>(baseAddress);
+   //}
 
    //! Base value for PCR (excluding MUX value)
    static constexpr uint32_t defaultPcrValue  = 0;
@@ -2841,9 +2853,10 @@ public:
    static constexpr uint32_t baseAddress = DMA0_BasePtr;
 
    //! Hardware base pointer
-   __attribute__((always_inline)) static volatile DMA_Type &dma() {
-      return *reinterpret_cast<DMA_Type *>(baseAddress);
-   }
+   static constexpr HardwarePtr<DMA_Type> dma = baseAddress;
+   //__attribute__((always_inline)) static volatile DMA_Type &dma() {
+   //   return *reinterpret_cast<DMA_Type *>(baseAddress);
+   //}
 
    /** 
     *  Enable clock to Dma0
@@ -2911,9 +2924,10 @@ public:
    static constexpr uint32_t baseAddress = DMAMUX0_BasePtr;
 
    //! Hardware base pointer
-   __attribute__((always_inline)) static volatile DMAMUX_Type &dmamux() {
-      return *reinterpret_cast<DMAMUX_Type *>(baseAddress);
-   }
+   static constexpr HardwarePtr<DMAMUX_Type> dmamux = baseAddress;
+   //__attribute__((always_inline)) static volatile DMAMUX_Type &dmamux() {
+   //   return *reinterpret_cast<DMAMUX_Type *>(baseAddress);
+   //}
 
    /** 
     *  Enable clock to Dmamux0
@@ -2982,9 +2996,10 @@ public:
    static constexpr uint32_t baseAddress = EWM_BasePtr;
 
    //! Hardware base pointer
-   __attribute__((always_inline)) static volatile EWM_Type &ewm() {
-      return *reinterpret_cast<EWM_Type *>(baseAddress);
-   }
+   static constexpr HardwarePtr<EWM_Type> ewm = baseAddress;
+   //__attribute__((always_inline)) static volatile EWM_Type &ewm() {
+   //   return *reinterpret_cast<EWM_Type *>(baseAddress);
+   //}
 
    //! Base value for PCR (excluding MUX value)
    static constexpr uint32_t defaultPcrValue = 
@@ -3084,9 +3099,10 @@ public:
    static constexpr uint32_t baseAddress = FB_BasePtr;
 
    //! Hardware base pointer
-   __attribute__((always_inline)) static volatile FB_Type &fb() {
-      return *reinterpret_cast<FB_Type *>(baseAddress);
-   }
+   static constexpr HardwarePtr<FB_Type> fb = baseAddress;
+   //__attribute__((always_inline)) static volatile FB_Type &fb() {
+   //   return *reinterpret_cast<FB_Type *>(baseAddress);
+   //}
 
    //! Base value for PCR (excluding MUX value)
    static constexpr uint32_t defaultPcrValue = 
@@ -3229,9 +3245,10 @@ public:
    static constexpr uint32_t baseAddress = FTFA_BasePtr;
 
    //! Hardware base pointer
-   __attribute__((always_inline)) static volatile FTFA_Type &ftfa() {
-      return *reinterpret_cast<FTFA_Type *>(baseAddress);
-   }
+   static constexpr HardwarePtr<FTFA_Type> ftfa = baseAddress;
+   //__attribute__((always_inline)) static volatile FTFA_Type &ftfa() {
+   //   return *reinterpret_cast<FTFA_Type *>(baseAddress);
+   //}
 
    //! IRQ numbers for hardware
    static constexpr IRQn_Type irqNums[]  = FTFA_IRQS;
@@ -3350,9 +3367,10 @@ public:
    static constexpr uint32_t baseAddress = FTM0_BasePtr;
 
    //! Hardware base pointer
-   __attribute__((always_inline)) static volatile FTM_Type &ftm() {
-      return *reinterpret_cast<FTM_Type *>(baseAddress);
-   }
+   static constexpr HardwarePtr<FTM_Type> ftm = baseAddress;
+   //__attribute__((always_inline)) static volatile FTM_Type &ftm() {
+   //   return *reinterpret_cast<FTM_Type *>(baseAddress);
+   //}
 
    //! Base value for PCR (excluding MUX value)
    static constexpr uint32_t defaultPcrValue = 
@@ -3406,7 +3424,7 @@ public:
     */
    static uint32_t getInputClockFrequency() {
    
-      switch(ftm().SC&FTM_SC_CLKS_MASK) {
+      switch(ftm->SC&FTM_SC_CLKS_MASK) {
       default:
       case FTM_SC_CLKS(0): return 0;
       case FTM_SC_CLKS(1): return SystemBusClock;
@@ -3539,9 +3557,10 @@ public:
    static constexpr uint32_t baseAddress = FTM1_BasePtr;
 
    //! Hardware base pointer
-   __attribute__((always_inline)) static volatile FTM_Type &ftm() {
-      return *reinterpret_cast<FTM_Type *>(baseAddress);
-   }
+   static constexpr HardwarePtr<FTM_Type> ftm = baseAddress;
+   //__attribute__((always_inline)) static volatile FTM_Type &ftm() {
+   //   return *reinterpret_cast<FTM_Type *>(baseAddress);
+   //}
 
    //! Base value for PCR (excluding MUX value)
    static constexpr uint32_t defaultPcrValue = 
@@ -3595,7 +3614,7 @@ public:
     */
    static uint32_t getInputClockFrequency() {
    
-      switch(ftm().SC&FTM_SC_CLKS_MASK) {
+      switch(ftm->SC&FTM_SC_CLKS_MASK) {
       default:
       case FTM_SC_CLKS(0): return 0;
       case FTM_SC_CLKS(1): return SystemBusClock;
@@ -3739,9 +3758,10 @@ public:
    static constexpr uint32_t baseAddress = FTM2_BasePtr;
 
    //! Hardware base pointer
-   __attribute__((always_inline)) static volatile FTM_Type &ftm() {
-      return *reinterpret_cast<FTM_Type *>(baseAddress);
-   }
+   static constexpr HardwarePtr<FTM_Type> ftm = baseAddress;
+   //__attribute__((always_inline)) static volatile FTM_Type &ftm() {
+   //   return *reinterpret_cast<FTM_Type *>(baseAddress);
+   //}
 
    //! Base value for PCR (excluding MUX value)
    static constexpr uint32_t defaultPcrValue = 
@@ -3795,7 +3815,7 @@ public:
     */
    static uint32_t getInputClockFrequency() {
    
-      switch(ftm().SC&FTM_SC_CLKS_MASK) {
+      switch(ftm->SC&FTM_SC_CLKS_MASK) {
       default:
       case FTM_SC_CLKS(0): return 0;
       case FTM_SC_CLKS(1): return SystemBusClock;
@@ -3939,9 +3959,10 @@ public:
    static constexpr uint32_t baseAddress = FTM3_BasePtr;
 
    //! Hardware base pointer
-   __attribute__((always_inline)) static volatile FTM_Type &ftm() {
-      return *reinterpret_cast<FTM_Type *>(baseAddress);
-   }
+   static constexpr HardwarePtr<FTM_Type> ftm = baseAddress;
+   //__attribute__((always_inline)) static volatile FTM_Type &ftm() {
+   //   return *reinterpret_cast<FTM_Type *>(baseAddress);
+   //}
 
    //! Base value for PCR (excluding MUX value)
    static constexpr uint32_t defaultPcrValue = 
@@ -3995,7 +4016,7 @@ public:
     */
    static uint32_t getInputClockFrequency() {
    
-      switch(ftm().SC&FTM_SC_CLKS_MASK) {
+      switch(ftm->SC&FTM_SC_CLKS_MASK) {
       default:
       case FTM_SC_CLKS(0): return 0;
       case FTM_SC_CLKS(1): return SystemBusClock;
@@ -4114,9 +4135,10 @@ public:
    static constexpr uint32_t baseAddress = I2C0_BasePtr;
 
    //! Hardware base pointer
-   __attribute__((always_inline)) static volatile I2C_Type &i2c() {
-      return *reinterpret_cast<I2C_Type *>(baseAddress);
-   }
+   static constexpr HardwarePtr<I2C_Type> i2c = baseAddress;
+   //__attribute__((always_inline)) static volatile I2C_Type &i2c() {
+   //   return *reinterpret_cast<I2C_Type *>(baseAddress);
+   //}
 
    //! Base value for PCR (excluding MUX value)
    static constexpr uint32_t defaultPcrValue  = I2C_DEFAULT_PCR;
@@ -4210,9 +4232,10 @@ public:
    static constexpr uint32_t baseAddress = I2C1_BasePtr;
 
    //! Hardware base pointer
-   __attribute__((always_inline)) static volatile I2C_Type &i2c() {
-      return *reinterpret_cast<I2C_Type *>(baseAddress);
-   }
+   static constexpr HardwarePtr<I2C_Type> i2c = baseAddress;
+   //__attribute__((always_inline)) static volatile I2C_Type &i2c() {
+   //   return *reinterpret_cast<I2C_Type *>(baseAddress);
+   //}
 
    //! Base value for PCR (excluding MUX value)
    static constexpr uint32_t defaultPcrValue  = I2C_DEFAULT_PCR;
@@ -4315,9 +4338,10 @@ public:
    static constexpr uint32_t baseAddress = I2S0_BasePtr;
 
    //! Hardware base pointer
-   __attribute__((always_inline)) static volatile I2S_Type &i2s() {
-      return *reinterpret_cast<I2S_Type *>(baseAddress);
-   }
+   static constexpr HardwarePtr<I2S_Type> i2s = baseAddress;
+   //__attribute__((always_inline)) static volatile I2S_Type &i2s() {
+   //   return *reinterpret_cast<I2S_Type *>(baseAddress);
+   //}
 
    //! Base value for PCR (excluding MUX value)
    static constexpr uint32_t defaultPcrValue  = I2S_DEFAULT_PCR;
@@ -4425,9 +4449,10 @@ public:
    static constexpr uint32_t baseAddress = LLWU_BasePtr;
 
    //! Hardware base pointer
-   __attribute__((always_inline)) static volatile LLWU_Type &llwu() {
-      return *reinterpret_cast<LLWU_Type *>(baseAddress);
-   }
+   static constexpr HardwarePtr<LLWU_Type> llwu = baseAddress;
+   //__attribute__((always_inline)) static volatile LLWU_Type &llwu() {
+   //   return *reinterpret_cast<LLWU_Type *>(baseAddress);
+   //}
 
    //! Base value for PCR (excluding MUX value)
    static constexpr uint32_t defaultPcrValue = 
@@ -4573,9 +4598,10 @@ public:
    static constexpr uint32_t baseAddress = LPTMR0_BasePtr;
 
    //! Hardware base pointer
-   __attribute__((always_inline)) static volatile LPTMR_Type &lptmr() {
-      return *reinterpret_cast<LPTMR_Type *>(baseAddress);
-   }
+   static constexpr HardwarePtr<LPTMR_Type> lptmr = baseAddress;
+   //__attribute__((always_inline)) static volatile LPTMR_Type &lptmr() {
+   //   return *reinterpret_cast<LPTMR_Type *>(baseAddress);
+   //}
 
    //! Base value for PCR (excluding MUX value)
    static constexpr uint32_t defaultPcrValue = 
@@ -4625,7 +4651,7 @@ public:
     */
    static uint32_t getInputClockFrequency() {
    
-      switch(lptmr().PSR&LPTMR_PSR_PCS_MASK) {
+      switch(lptmr->PSR&LPTMR_PSR_PCS_MASK) {
       default:
       case LPTMR_PSR_PCS(0): return McgInfo::getMcgIrClock();
       case LPTMR_PSR_PCS(1): return PmcInfo::getLpoClock();
@@ -4642,10 +4668,10 @@ public:
    static float getClockFrequencyF() {
    
       float freq = getInputClockFrequency();
-      if (lptmr().PSR&LPTMR_PSR_PBYP_MASK) {
+      if (lptmr->PSR&LPTMR_PSR_PBYP_MASK) {
          return freq;
       }
-      return freq/(1<<(((lptmr().PSR&LPTMR_PSR_PRESCALE_MASK)>>LPTMR_PSR_PRESCALE_SHIFT)+1));
+      return freq/(1<<(((lptmr->PSR&LPTMR_PSR_PRESCALE_MASK)>>LPTMR_PSR_PRESCALE_SHIFT)+1));
    }
 
    /**
@@ -4656,10 +4682,10 @@ public:
    static uint32_t getClockFrequency() {
    
       uint32_t freq = getInputClockFrequency();
-      if (lptmr().PSR&LPTMR_PSR_PBYP_MASK) {
+      if (lptmr->PSR&LPTMR_PSR_PBYP_MASK) {
          return freq;
       }
-      return freq/(1<<(((lptmr().PSR&LPTMR_PSR_PRESCALE_MASK)>>LPTMR_PSR_PRESCALE_SHIFT)+1));
+      return freq/(1<<(((lptmr->PSR&LPTMR_PSR_PRESCALE_MASK)>>LPTMR_PSR_PRESCALE_SHIFT)+1));
    }
 
    /** 
@@ -4737,9 +4763,10 @@ public:
    static constexpr uint32_t baseAddress = LPUART0_BasePtr;
 
    //! Hardware base pointer
-   __attribute__((always_inline)) static volatile LPUART_Type &lpuart() {
-      return *reinterpret_cast<LPUART_Type *>(baseAddress);
-   }
+   static constexpr HardwarePtr<LPUART_Type> lpuart = baseAddress;
+   //__attribute__((always_inline)) static volatile LPUART_Type &lpuart() {
+   //   return *reinterpret_cast<LPUART_Type *>(baseAddress);
+   //}
 
    //! Number of samples per bit
    static constexpr uint32_t oversampleRatio = 8;
@@ -4880,9 +4907,10 @@ public:
    static constexpr uint32_t baseAddress = MCM_BasePtr;
 
    //! Hardware base pointer
-   __attribute__((always_inline)) static volatile MCM_Type &mcm() {
-      return *reinterpret_cast<MCM_Type *>(baseAddress);
-   }
+   static constexpr HardwarePtr<MCM_Type> mcm = baseAddress;
+   //__attribute__((always_inline)) static volatile MCM_Type &mcm() {
+   //   return *reinterpret_cast<MCM_Type *>(baseAddress);
+   //}
 
    //! IRQ numbers for hardware
    static constexpr IRQn_Type irqNums[]  = MCM_IRQS;
@@ -4922,9 +4950,10 @@ public:
    static constexpr uint32_t baseAddress = PDB0_BasePtr;
 
    //! Hardware base pointer
-   __attribute__((always_inline)) static volatile PDB_Type &pdb() {
-      return *reinterpret_cast<PDB_Type *>(baseAddress);
-   }
+   static constexpr HardwarePtr<PDB_Type> pdb = baseAddress;
+   //__attribute__((always_inline)) static volatile PDB_Type &pdb() {
+   //   return *reinterpret_cast<PDB_Type *>(baseAddress);
+   //}
 
    //! Base value for PCR (excluding MUX value)
    static constexpr uint32_t defaultPcrValue = 
@@ -5115,9 +5144,10 @@ public:
    static constexpr uint32_t baseAddress = PIT_BasePtr;
 
    //! Hardware base pointer
-   __attribute__((always_inline)) static volatile PIT_Type &pit() {
-      return *reinterpret_cast<PIT_Type *>(baseAddress);
-   }
+   static constexpr HardwarePtr<PIT_Type> pit = baseAddress;
+   //__attribute__((always_inline)) static volatile PIT_Type &pit() {
+   //   return *reinterpret_cast<PIT_Type *>(baseAddress);
+   //}
 
    //! IRQ numbers for hardware
    static constexpr IRQn_Type irqNums[]  = PIT_IRQS;
@@ -5249,9 +5279,10 @@ public:
    static constexpr uint32_t baseAddress = RCM_BasePtr;
 
    //! Hardware base pointer
-   __attribute__((always_inline)) static volatile RCM_Type &rcm() {
-      return *reinterpret_cast<RCM_Type *>(baseAddress);
-   }
+   static constexpr HardwarePtr<RCM_Type> rcm = baseAddress;
+   //__attribute__((always_inline)) static volatile RCM_Type &rcm() {
+   //   return *reinterpret_cast<RCM_Type *>(baseAddress);
+   //}
 
    //! Reset Pin Filter Control Register
    static constexpr uint8_t rcm_rpfc = 
@@ -5288,9 +5319,10 @@ public:
    static constexpr uint32_t baseAddress = RNGA_BasePtr;
 
    //! Hardware base pointer
-   __attribute__((always_inline)) static volatile RNGA_Type &rnga() {
-      return *reinterpret_cast<RNGA_Type *>(baseAddress);
-   }
+   static constexpr HardwarePtr<RNGA_Type> rnga = baseAddress;
+   //__attribute__((always_inline)) static volatile RNGA_Type &rnga() {
+   //   return *reinterpret_cast<RNGA_Type *>(baseAddress);
+   //}
 
    //! IRQ numbers for hardware
    static constexpr IRQn_Type irqNums[]  = RNGA_IRQS;
@@ -5352,9 +5384,10 @@ public:
    static constexpr uint32_t baseAddress = SMC_BasePtr;
 
    //! Hardware base pointer
-   __attribute__((always_inline)) static volatile SMC_Type &smc() {
-      return *reinterpret_cast<SMC_Type *>(baseAddress);
-   }
+   static constexpr HardwarePtr<SMC_Type> smc = baseAddress;
+   //__attribute__((always_inline)) static volatile SMC_Type &smc() {
+   //   return *reinterpret_cast<SMC_Type *>(baseAddress);
+   //}
 
    // Power Mode Protection Register
    static constexpr uint8_t pmprot =  
@@ -5415,9 +5448,10 @@ public:
    static constexpr uint32_t baseAddress = SPI0_BasePtr;
 
    //! Hardware base pointer
-   __attribute__((always_inline)) static volatile SPI_Type &spi() {
-      return *reinterpret_cast<SPI_Type *>(baseAddress);
-   }
+   static constexpr HardwarePtr<SPI_Type> spi = baseAddress;
+   //__attribute__((always_inline)) static volatile SPI_Type &spi() {
+   //   return *reinterpret_cast<SPI_Type *>(baseAddress);
+   //}
 
    //! Base value for PCR (excluding MUX value)
    static constexpr uint32_t defaultPcrValue = 
@@ -5531,9 +5565,10 @@ public:
    static constexpr uint32_t baseAddress = SPI1_BasePtr;
 
    //! Hardware base pointer
-   __attribute__((always_inline)) static volatile SPI_Type &spi() {
-      return *reinterpret_cast<SPI_Type *>(baseAddress);
-   }
+   static constexpr HardwarePtr<SPI_Type> spi = baseAddress;
+   //__attribute__((always_inline)) static volatile SPI_Type &spi() {
+   //   return *reinterpret_cast<SPI_Type *>(baseAddress);
+   //}
 
    //! Base value for PCR (excluding MUX value)
    static constexpr uint32_t defaultPcrValue = 
@@ -5665,9 +5700,10 @@ public:
    static constexpr uint32_t baseAddress = UART0_BasePtr;
 
    //! Hardware base pointer
-   __attribute__((always_inline)) static volatile UART_Type &uart() {
-      return *reinterpret_cast<UART_Type *>(baseAddress);
-   }
+   static constexpr HardwarePtr<UART_Type> uart = baseAddress;
+   //__attribute__((always_inline)) static volatile UART_Type &uart() {
+   //   return *reinterpret_cast<UART_Type *>(baseAddress);
+   //}
 
    //! Base value for PCR (excluding MUX value)
    static constexpr uint32_t defaultPcrValue = 
@@ -5781,9 +5817,10 @@ public:
    static constexpr uint32_t baseAddress = UART1_BasePtr;
 
    //! Hardware base pointer
-   __attribute__((always_inline)) static volatile UART_Type &uart() {
-      return *reinterpret_cast<UART_Type *>(baseAddress);
-   }
+   static constexpr HardwarePtr<UART_Type> uart = baseAddress;
+   //__attribute__((always_inline)) static volatile UART_Type &uart() {
+   //   return *reinterpret_cast<UART_Type *>(baseAddress);
+   //}
 
    //! Base value for PCR (excluding MUX value)
    static constexpr uint32_t defaultPcrValue = 
@@ -5908,9 +5945,10 @@ public:
    static constexpr uint32_t baseAddress = UART2_BasePtr;
 
    //! Hardware base pointer
-   __attribute__((always_inline)) static volatile UART_Type &uart() {
-      return *reinterpret_cast<UART_Type *>(baseAddress);
-   }
+   static constexpr HardwarePtr<UART_Type> uart = baseAddress;
+   //__attribute__((always_inline)) static volatile UART_Type &uart() {
+   //   return *reinterpret_cast<UART_Type *>(baseAddress);
+   //}
 
    //! Base value for PCR (excluding MUX value)
    static constexpr uint32_t defaultPcrValue = 
@@ -6033,9 +6071,10 @@ public:
    static constexpr uint32_t baseAddress = USB0_BasePtr;
 
    //! Hardware base pointer
-   __attribute__((always_inline)) static volatile USB_Type &usb() {
-      return *reinterpret_cast<USB_Type *>(baseAddress);
-   }
+   static constexpr HardwarePtr<USB_Type> usb = baseAddress;
+   //__attribute__((always_inline)) static volatile USB_Type &usb() {
+   //   return *reinterpret_cast<USB_Type *>(baseAddress);
+   //}
 
    //! Base value for PCR (excluding MUX value)
    static constexpr uint32_t defaultPcrValue  = 0;
@@ -6141,9 +6180,10 @@ public:
    static constexpr uint32_t baseAddress = VREF_BasePtr;
 
    //! Hardware base pointer
-   __attribute__((always_inline)) static volatile VREF_Type &vref() {
-      return *reinterpret_cast<VREF_Type *>(baseAddress);
-   }
+   static constexpr HardwarePtr<VREF_Type> vref = baseAddress;
+   //__attribute__((always_inline)) static volatile VREF_Type &vref() {
+   //   return *reinterpret_cast<VREF_Type *>(baseAddress);
+   //}
 
    //! Base value for PCR (excluding MUX value)
    static constexpr uint32_t defaultPcrValue  = 0;
@@ -6234,9 +6274,10 @@ public:
    static constexpr uint32_t baseAddress = WDOG_BasePtr;
 
    //! Hardware base pointer
-   __attribute__((always_inline)) static volatile WDOG_Type &wdog() {
-      return *reinterpret_cast<WDOG_Type *>(baseAddress);
-   }
+   static constexpr HardwarePtr<WDOG_Type> wdog = baseAddress;
+   //__attribute__((always_inline)) static volatile WDOG_Type &wdog() {
+   //   return *reinterpret_cast<WDOG_Type *>(baseAddress);
+   //}
 
    //! IRQ numbers for hardware
    static constexpr IRQn_Type irqNums[]  = WDOG_IRQS;
@@ -6257,7 +6298,7 @@ public:
     */
    static uint32_t getInputClockFrequency() {
    
-      switch(wdog().STCTRLH&WDOG_STCTRLH_CLKSRC_MASK) {
+      switch(wdog->STCTRLH&WDOG_STCTRLH_CLKSRC_MASK) {
       default:
       case WDOG_STCTRLH_CLKSRC(0): return PmcInfo::getLpoClock(); // LPO
       case WDOG_STCTRLH_CLKSRC(1): return SystemBusClock;         // Alt = System Bus Clock

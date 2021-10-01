@@ -213,7 +213,7 @@ public:
     *
     * @return Reference to CMT hardware
     */
-   static __attribute__((always_inline)) volatile DAC_Type &dac() { return Info::dac(); }
+   static constexpr HardwarePtr<DAC_Type> dac = Info::baseAddress;
 
    /** Get base address of DAC hardware as uint32_t */
    static constexpr uint32_t dacBase() { return Info::baseAddress; }
@@ -354,9 +354,9 @@ public:
       enable();
 
       // Initialise hardware
-      dac().C0 = Info::c0|DAC_C0_DACEN_MASK;
-      dac().C1 = Info::c1;
-      dac().C2 = Info::c2;
+      dac->C0 = Info::c0|DAC_C0_DACEN_MASK;
+      dac->C1 = Info::c1;
+      dac->C2 = Info::c2;
    }
 
    /**
@@ -373,7 +373,7 @@ public:
          DacTriggerSelect   dacTriggerSelect   = DacTriggerSelect_Software) {
 
       enable();
-      dac().C0 = DAC_C0_DACEN_MASK|dacReferenceSelect|dacTriggerSelect|dacPower;
+      dac->C0 = DAC_C0_DACEN_MASK|dacReferenceSelect|dacTriggerSelect|dacPower;
    }
 
 #ifdef DAC_C1_DACBFWM
@@ -387,8 +387,8 @@ public:
          DacBufferMode dacBufferMode  = DacBufferMode_Disabled,
          DacWaterMark  dacWaterMark   = DacWaterMark_Normal1
           ) {
-      dac().C1 =
-            (dac().C1&~(DAC_C1_DACBFEN_MASK|DAC_C1_DACBFMD_MASK|DAC_C1_DACBFWM_MASK))|
+      dac->C1 =
+            (dac->C1&~(DAC_C1_DACBFEN_MASK|DAC_C1_DACBFMD_MASK|DAC_C1_DACBFWM_MASK))|
             dacBufferMode|dacWaterMark;
    }
 #else
@@ -400,8 +400,8 @@ public:
    static void configureBuffer(
          DacBufferMode dacBufferMode  = DacBufferMode_Disabled
           ) {
-      dac().C1 =
-            (dac().C1&~(DAC_C1_DACBFEN_MASK|DAC_C1_DACBFMD_MASK))|
+      dac->C1 =
+            (dac->C1&~(DAC_C1_DACBFEN_MASK|DAC_C1_DACBFMD_MASK))|
             dacBufferMode;
    }
 #endif
@@ -421,7 +421,7 @@ public:
     * @return size in entries
     */
    static constexpr unsigned getBufferSize() {
-      return sizeof(dac().DATA)/sizeof(dac().DATA[0]);
+      return sizeof(dac->DATA)/sizeof(dac->DATA[0]);
    }
 
    /**
@@ -433,14 +433,14 @@ public:
    static void setFifoPointers(uint8_t writePtr, uint8_t readPtr) {
       usbdm_assert(readPtr<getBufferSize(), "Illegal read pointer");
       usbdm_assert(writePtr<getBufferSize(),"Illegal write pointer");
-      dac().C2 = DAC_C2_DACBFRP(readPtr)|DAC_C2_DACBFUP(writePtr);
+      dac->C2 = DAC_C2_DACBFRP(readPtr)|DAC_C2_DACBFUP(writePtr);
    }
 
    /**
     * Clear (empty) FIFO.
     */
    static void clearFifo() {
-      dac().C2 = DAC_C2_DACBFRP(0)|DAC_C2_DACBFUP(0);
+      dac->C2 = DAC_C2_DACBFRP(0)|DAC_C2_DACBFUP(0);
    }
 
    /**
@@ -450,7 +450,7 @@ public:
     */
    static void setBufferLimit(uint8_t limit) {
       usbdm_assert(limit<getBufferSize(),"Illegal limit value");
-      dac().C2 = (dac().C2&~DAC_C2_DACBFUP_MASK)|DAC_C2_DACBFUP(limit);
+      dac->C2 = (dac->C2&~DAC_C2_DACBFUP_MASK)|DAC_C2_DACBFUP(limit);
    }
 
    /**
@@ -460,21 +460,21 @@ public:
     */
    static void setBufferWritePointer(uint8_t index) {
       usbdm_assert(index<getBufferSize(),"Illegal write index");
-      dac().C2 = (dac().C2&~DAC_C2_DACBFRP_MASK)|DAC_C2_DACBFRP(index);
+      dac->C2 = (dac->C2&~DAC_C2_DACBFRP_MASK)|DAC_C2_DACBFRP(index);
    }
 
    /**
     * Enable DMA mode
     */
    static void enableDma() {
-      dac().C1 |= DAC_C1_DMAEN_MASK;
+      dac->C1 |= DAC_C1_DMAEN_MASK;
    }
 
    /**
     * Disable DMA mode
     */
    static void disableDma() {
-      dac().C1 &= ~DAC_C1_DMAEN_MASK;
+      dac->C1 &= ~DAC_C1_DMAEN_MASK;
    }
 
    /**
@@ -483,7 +483,7 @@ public:
     * the buffer read pointer will be advanced once.
     */
    static void softwareTrigger() {
-      dac().C0 |= DAC_C0_DACSWTRG_MASK;
+      dac->C0 |= DAC_C0_DACSWTRG_MASK;
    }
 
 #ifdef DAC_C0_DACBWIEN_MASK
@@ -501,10 +501,10 @@ public:
          DacWatermarkIrq    dacWatermarkIrq   = DacWatermarkIrq_Disabled) {
 
       // Clear flags
-      dac().SR = DAC_SR_DACBFRPBF_MASK|DAC_SR_DACBFRPTF_MASK|DAC_SR_DACBFWMF_MASK;
+      dac->SR = DAC_SR_DACBFRPBF_MASK|DAC_SR_DACBFRPTF_MASK|DAC_SR_DACBFWMF_MASK;
 
       // Enable/disable flags
-      dac().C0 = (dac().C0&~(DAC_C0_DACBWIEN_MASK|DAC_C0_DACBTIEN_MASK|DAC_C0_DACBBIEN_MASK)) |
+      dac->C0 = (dac->C0&~(DAC_C0_DACBWIEN_MASK|DAC_C0_DACBTIEN_MASK|DAC_C0_DACBBIEN_MASK)) |
             dacTopFlagIrq|dacBottomFlagIrq|dacWatermarkIrq;
    }
 #else
@@ -520,10 +520,10 @@ public:
          DacBottomFlagIrq   dacBottomFlagIrq) {
 
       // Clear flags
-      dac().SR = 0;
+      dac->SR = 0;
 
       // Enable/disable flags
-      dac().C0 = (dac().C0&~(DAC_C0_DACBTIEN_MASK|DAC_C0_DACBBIEN_MASK)) |
+      dac->C0 = (dac->C0&~(DAC_C0_DACBTIEN_MASK|DAC_C0_DACBBIEN_MASK)) |
             dacTopFlagIrq|dacBottomFlagIrq;
    }
 #endif
@@ -572,7 +572,7 @@ public:
     * @return DAC status value see DacStatus
     */
    static DacStatus getStatus() {
-      return (DacStatus)dac().SR;
+      return (DacStatus)dac->SR;
    }
 
    /**
@@ -582,9 +582,9 @@ public:
     */
    static DacStatus getAndClearStatus() {
       // Get status
-      uint8_t status = dac().SR;
+      uint8_t status = dac->SR;
       // Clear set flags
-      dac().SR = ~status;
+      dac->SR = ~status;
       // return original status
       return (DacStatus)status;
    }
@@ -593,8 +593,8 @@ public:
     */
    static void finalise() {
       // Enable timer
-      dac().C0 = 0;
-      dac().C1 = 0;
+      dac->C0 = 0;
+      dac->C1 = 0;
       Info::disableClock();
    }
    /**
@@ -603,7 +603,7 @@ public:
     * @param value 12-bit value to write to DAC or FIFO
     */
    static void writeValue(uint16_t value) {
-      dac().DATA[0] = DAC_DATA_DATA(value);
+      dac->DATA[0] = DAC_DATA_DATA(value);
    }
 
    /**
@@ -614,7 +614,7 @@ public:
     */
    static void writeValue(unsigned index, uint16_t value) {
       usbdm_assert(index<getBufferSize(), "Buffer index out of range");
-      dac().DATA[index] = DAC_DATA_DATA(value);
+      dac->DATA[index] = DAC_DATA_DATA(value);
    }
 
 };

@@ -130,7 +130,7 @@
       \t */
       \tstatic uint32_t getInputClockFrequency() {
       \t
-      \t   switch(tpm().SC&TPM_SC_CMOD_MASK) {
+      \t   switch(tpm->SC&TPM_SC_CMOD_MASK) {
       \t   default:
       \t   case TPM_SC_CMOD(0): return 0;
       \t   case TPM_SC_CMOD(1): return SimInfo::getTpmClock();

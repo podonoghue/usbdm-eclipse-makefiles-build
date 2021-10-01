@@ -138,12 +138,12 @@ protected:
 //      write("residual flash=").write(partitionInformation[partition].eeepromSize>>10).writeln("K)");
 
       if (isFlexRamConfigured()) {
-//         console.write("flashController().FCNFG.FTFL_FCNFG_EEERDY = ").writeln((bool)(flashController().FCNFG&FTFL_FCNFG_EEERDY_MASK));
+//         console.write("flashController->FCNFG.FTFL_FCNFG_EEERDY = ").writeln((bool)(flashController->FCNFG&FTFL_FCNFG_EEERDY_MASK));
 //         console.writeln("Flex RAM is already configured");
          // Note: This means, even when using the debug build, if the FlexRAM has been previously configured then real FlexRAM will be used.
          return FLASH_ERR_OK;
       }
-//      console.write("flashController().FCNFG.FTFL_FCNFG_EEERDY = ").writeln((bool)(flashController().FCNFG&FTFL_FCNFG_EEERDY_MASK));
+//      console.write("flashController->FCNFG.FTFL_FCNFG_EEERDY = ").writeln((bool)(flashController->FCNFG&FTFL_FCNFG_EEERDY_MASK));
       if ((eepromSizes[eeprom].size*MINIMUM_BACKING_RATIO)>(partitionInformation[partition].eeepromSize)) {
 //         console.writeln("Backing ratio (Flash/EEPROM) is too small\n");
          USBDM::setErrorCode(E_FLASH_INIT_FAILED);

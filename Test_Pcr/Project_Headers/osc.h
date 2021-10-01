@@ -55,7 +55,7 @@ class OscBase_T {
 
 protected:
    /** Hardware instance */
-   static __attribute__((always_inline)) volatile OSC_Type &osc() { return Info::osc(); }
+   static constexpr HardwarePtr<OSC_Type> osc = Info::baseAddress;
 
 public:
    /**
@@ -79,7 +79,7 @@ public:
          configureAllPins();
       }
       // Configure OSC
-      Info::osc().CR  = Info::cr;
+      Info::osc->CR  = Info::cr;
    }
 
    /**

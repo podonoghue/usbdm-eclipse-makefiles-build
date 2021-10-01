@@ -204,7 +204,7 @@
       \t */
       \tstatic uint32_t getInputClockFrequency() {
       \t
-      \t   switch(lptmr().PSR&LPTMR_PSR_PCS_MASK) {
+      \t   switch(lptmr->PSR&LPTMR_PSR_PCS_MASK) {
       \t   default:
       \t   case LPTMR_PSR_PCS(0): return McgInfo::getMcgIrClock();
       \t   case LPTMR_PSR_PCS(1): return PmcInfo::getLpoClock();
@@ -221,10 +221,10 @@
       \tstatic float getClockFrequencyF() {
       \t
       \t   float freq = getInputClockFrequency();
-      \t   if (lptmr().PSR&LPTMR_PSR_PBYP_MASK) {
+      \t   if (lptmr->PSR&LPTMR_PSR_PBYP_MASK) {
       \t      return freq;
       \t   }
-      \t   return freq/(1<<(((lptmr().PSR&LPTMR_PSR_PRESCALE_MASK)>>LPTMR_PSR_PRESCALE_SHIFT)+1));
+      \t   return freq/(1<<(((lptmr->PSR&LPTMR_PSR_PRESCALE_MASK)>>LPTMR_PSR_PRESCALE_SHIFT)+1));
       \t}\n\n
       
       \t/**
@@ -235,10 +235,10 @@
       \tstatic uint32_t getClockFrequency() {
       \t
       \t   uint32_t freq = getInputClockFrequency();
-      \t   if (lptmr().PSR&LPTMR_PSR_PBYP_MASK) {
+      \t   if (lptmr->PSR&LPTMR_PSR_PBYP_MASK) {
       \t      return freq;
       \t   }
-      \t   return freq/(1<<(((lptmr().PSR&LPTMR_PSR_PRESCALE_MASK)>>LPTMR_PSR_PRESCALE_SHIFT)+1));
+      \t   return freq/(1<<(((lptmr->PSR&LPTMR_PSR_PRESCALE_MASK)>>LPTMR_PSR_PRESCALE_SHIFT)+1));
       \t}\n\n
    ]]></template>
    

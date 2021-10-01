@@ -48,7 +48,7 @@ class VrefBase_T {
 
 private:
    /** Hardware instance pointer */
-   static __attribute__((always_inline)) volatile VREF_Type &vref() { return Info::vref(); }
+   static constexpr HardwarePtr<VREF_Type> vref = Info::baseAddress;
 
 public:
    /**
@@ -77,10 +77,10 @@ public:
       enable();
 
       // Initialise hardware
-      vref().TRM  = Info::vref_trm;
-      vref().SC   = Info::vref_sc|VREF_SC_VREFEN_MASK;
+      vref->TRM  = Info::vref_trm;
+      vref->SC   = Info::vref_sc|VREF_SC_VREFEN_MASK;
 
-      while ((vref().SC & VREF_SC_VREFST_MASK) == 0) {
+      while ((vref->SC & VREF_SC_VREFST_MASK) == 0) {
          // Wait until stable
       }
    }
@@ -98,14 +98,14 @@ public:
     * @param scValue Value for SC register e.g. VREF_SC_VREFEN_MASK|VREF_SC_REGEN_MASK|VREF_SC_ICOMPEN_MASK|VREF_SC_MO`DE_LV(2)
     */
    static void setMode(uint32_t scValue=Info::vref_sc|VREF_SC_VREFEN_MASK) {
-      vref().SC   = scValue;
+      vref->SC   = scValue;
    }
 
    /**
     * Disable Vref
     */
    static void disable() {
-      vref().SC = 0;
+      vref->SC = 0;
       Info::disableClock();
    }
 };

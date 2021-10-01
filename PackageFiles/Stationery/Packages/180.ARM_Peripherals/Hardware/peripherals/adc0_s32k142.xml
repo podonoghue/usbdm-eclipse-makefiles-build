@@ -157,7 +157,7 @@
      \t *  @return Frequency in Hz
      \t */
      \tstatic unsigned getInputClockFrequency() {
-     \t   return getInputClockFrequency(static_cast<AdcClockSource>(adc().CFG1 & ADC_CFG1_ADICLK_MASK));
+     \t   return getInputClockFrequency(static_cast<AdcClockSource>(adc->CFG1 & ADC_CFG1_ADICLK_MASK));
      \t}\n\n
    ]]></template>
    

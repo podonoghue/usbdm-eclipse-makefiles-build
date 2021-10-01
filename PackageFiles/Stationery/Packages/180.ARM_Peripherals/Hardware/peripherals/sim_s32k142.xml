@@ -205,7 +205,7 @@
          \t * @param simAdc$(instance)TriggerSelect
          \t */
          \tstatic void setAdc$(instance)Trigger(SimAdc$(instance)TriggerSelect simAdc$(instance)TriggerSelect) {
-         \t   sim().ADCOPT = (sim().ADCOPT & SIM_ADCOPT_ADC$(instance)TRGSEL_MASK) | simAdc$(instance)TriggerSelect;
+         \t   sim->ADCOPT = (sim->ADCOPT & SIM_ADCOPT_ADC$(instance)TRGSEL_MASK) | simAdc$(instance)TriggerSelect;
          \t}\n\n
          
          \t/**
@@ -214,7 +214,7 @@
          \t * @param simAdc$(instance)PretriggerSelect
          \t */
          \tstatic void setAdc$(instance)PreTrigger(SimAdc$(instance)PretriggerSelect simAdc$(instance)PretriggerSelect) {
-         \t   sim().ADCOPT = (sim().ADCOPT & (SIM_ADCOPT_ADC$(instance)PRETRGSEL_MASK|SIM_ADCOPT_ADC$(instance)SWPRETRG_MASK)) | simAdc$(instance)PretriggerSelect;
+         \t   sim->ADCOPT = (sim->ADCOPT & (SIM_ADCOPT_ADC$(instance)PRETRGSEL_MASK|SIM_ADCOPT_ADC$(instance)SWPRETRG_MASK)) | simAdc$(instance)PretriggerSelect;
          \t}\n\n
          ]]>
       </for>
@@ -316,8 +316,8 @@
       \t * @param simPdbBackToBack Selects independent or linked operation
       \t */
       \tstatic void setPdbBackToBack(SimPdbBackToBack simPdbBackToBack) {
-      \t   sim().CHIPCTL =
-      \t         (sim().CHIPCTL&~SIM_CHIPCTL_PDB_BB_SEL_MASK) |
+      \t   sim->CHIPCTL =
+      \t         (sim->CHIPCTL&~SIM_CHIPCTL_PDB_BB_SEL_MASK) |
       \t         simPdbBackToBack;
       \t}\n\n
 
@@ -327,8 +327,8 @@
       \t * @param simRamRetention Selects which RAM regions to preserve
       \t */
       \tstatic void setRamRetention(SimRamRetention simRamRetention) {
-      \t   sim().CHIPCTL =
-      \t         (sim().CHIPCTL&~(SIM_CHIPCTL_SRAMU_RETEN_MASK|SIM_CHIPCTL_SRAML_RETEN_MASK)) |
+      \t   sim->CHIPCTL =
+      \t         (sim->CHIPCTL&~(SIM_CHIPCTL_SRAMU_RETEN_MASK|SIM_CHIPCTL_SRAML_RETEN_MASK)) |
       \t         simRamRetention;
       \t}\n\n
 
@@ -353,11 +353,11 @@
       \t */
       \tstatic void setClkout(SimClkOutSelect simClkOutSelect, SimClkOutDiv simClkOutDiv=SimClkOutDiv_Div1) {
       \t   // Disable first
-      \t   sim().CHIPCTL &= ~(SIM_CHIPCTL_CLKOUTEN_MASK|SIM_CHIPCTL_CLKOUTDIV_MASK|SIM_CHIPCTL_CLKOUTSEL_MASK);
+      \t   sim->CHIPCTL &= ~(SIM_CHIPCTL_CLKOUTEN_MASK|SIM_CHIPCTL_CLKOUTDIV_MASK|SIM_CHIPCTL_CLKOUTSEL_MASK);
       \t   // Set divider
-      \t   sim().CHIPCTL |= simClkOutDiv;
+      \t   sim->CHIPCTL |= simClkOutDiv;
       \t   // Enable clock 
-      \t   sim().CHIPCTL |= simClkOutSelect;
+      \t   sim->CHIPCTL |= simClkOutSelect;
       \t}\n\n
 
       \t/**
@@ -367,7 +367,7 @@
       \t * @param simAdcSupplyMonitor
       \t */
       \tstatic void setAdcSupplyMonitoring(SimAdcSupplyMonitor simAdcSupplyMonitor) {
-      \t   sim().CHIPCTL = (sim().CHIPCTL&~(SIM_CHIPCTL_ADC_SUPPLYEN_MASK|SIM_CHIPCTL_ADC_SUPPLY_MASK)) |
+      \t   sim->CHIPCTL = (sim->CHIPCTL&~(SIM_CHIPCTL_ADC_SUPPLYEN_MASK|SIM_CHIPCTL_ADC_SUPPLY_MASK)) |
       \t                    simAdcSupplyMonitor;
       \t}\n\n
       
@@ -375,7 +375,7 @@
       \t * Clear all ADC channel interleaving
       \t */
       \tstatic void clearAdcChannelInterleave() {
-      \t   sim().CHIPCTL &= ~SIM_CHIPCTL_ADC_INTERLEAVE_EN_MASK;
+      \t   sim->CHIPCTL &= ~SIM_CHIPCTL_ADC_INTERLEAVE_EN_MASK;
       \t}\n\n
          
       \t/**
@@ -384,7 +384,7 @@
       \t * @param simAdcChannelInterleave Channel pair to interleave
       \t */
       \tstatic void enableAdcChannelInterleave(SimAdcChannelInterleave simAdcChannelInterleave) {
-      \t   sim().CHIPCTL |= simAdcChannelInterleave;
+      \t   sim->CHIPCTL |= simAdcChannelInterleave;
       \t}\n\n
          
       \t/**
@@ -393,7 +393,7 @@
       \t * @param simAdcChannelInterleave Channel pair to not interleave
       \t */
       \tstatic void disableAdcChannelInterleave(SimAdcChannelInterleave simAdcChannelInterleave) {
-      \t   sim().CHIPCTL &= ~simAdcChannelInterleave;
+      \t   sim->CHIPCTL &= ~simAdcChannelInterleave;
       \t}\n\n   
 
       \t/**
@@ -402,7 +402,7 @@
       \t * This function generates software trigger to peripherals through the TRGMUX
       \t */
       \tstatic void softwareTrigger() {
-      \t   sim().MISCTRL1 = SIM_MISCTRL1_SW_TRG_MASK;
+      \t   sim->MISCTRL1 = SIM_MISCTRL1_SW_TRG_MASK;
       \t}\n\n
    ]]></template>
    
@@ -445,7 +445,7 @@
       \t * @param simRtcClockSource
       \t */
       \tstatic void setRtcClockSource(SimRtcClockSource simRtcClockSource) {
-      \t   sim().LPOCLKS = (sim().LPOCLKS&~SIM_LPOCLKS_RTCCLKSEL_MASK)|simRtcClockSource;
+      \t   sim->LPOCLKS = (sim->LPOCLKS&~SIM_LPOCLKS_RTCCLKSEL_MASK)|simRtcClockSource;
       \t}\n\n
    
       \t/**
@@ -454,7 +454,7 @@
       \t * @return Clock as uint32_t
       \t */
       \tstatic uint32_t getRtcFrequency() {
-      \t   switch(sim().LPOCLKS&SIM_LPOCLKS_RTCCLKSEL_MASK) {
+      \t   switch(sim->LPOCLKS&SIM_LPOCLKS_RTCCLKSEL_MASK) {
       \t      default:
       \t      case SimRtcClockSource_SoscDiv1:
       \t         return ScgInfo::getSoscDiv1Frequency();
@@ -478,14 +478,14 @@
          \t * Enable $(instance::toupper)_CLK clock
          \t */
          \tstatic void enable$(instance)Clock() {
-         \t   sim().LPOCLKS |= SIM_LPOCLKS_$(instance::toupper)CLKEN_MASK;
+         \t   sim->LPOCLKS |= SIM_LPOCLKS_$(instance::toupper)CLKEN_MASK;
          \t}\n\n
       
          \t/**
          \t * Disable $(instance::toupper)_CLK clock
          \t */
          \tstatic void disable$(instance)Clock() {
-         \t   sim().LPOCLKS &= SIM_LPOCLKS_$(instance::toupper)CLKEN_MASK;
+         \t   sim->LPOCLKS &= SIM_LPOCLKS_$(instance::toupper)CLKEN_MASK;
          \t}\n\n
          ]]>
       </for>
@@ -510,7 +510,7 @@
       \t * @return Clock as uint32_t
       \t */
       \tstatic uint32_t getLpo32kFrequency() {
-      \t   return (sim().LPOCLKS && SIM_LPOCLKS_LPO32KCLKEN_MASK)?(getLpo128Frequency()/4):0;
+      \t   return (sim->LPOCLKS && SIM_LPOCLKS_LPO32KCLKEN_MASK)?(getLpo128Frequency()/4):0;
       \t}\n\n
       
       \t/**
@@ -519,7 +519,7 @@
       \t * @return Clock as uint32_t
       \t */
       \tstatic uint32_t getLpo1kFrequency() {
-      \t   return (sim().LPOCLKS && SIM_LPOCLKS_LPO1KCLKEN_MASK)?(getLpo32kFrequency()/32):0;
+      \t   return (sim->LPOCLKS && SIM_LPOCLKS_LPO1KCLKEN_MASK)?(getLpo32kFrequency()/32):0;
       \t}\n\n
    
       \t/**
@@ -528,7 +528,7 @@
       \t * @param simLpoClockSource
       \t */
       \tstatic void setLpoClockSource(SimLpoClockSource simLpoClockSource) {
-      \t   sim().LPOCLKS = (sim().LPOCLKS&~SIM_LPOCLKS_LPOCLKSEL_MASK)|simLpoClockSource;
+      \t   sim->LPOCLKS = (sim->LPOCLKS&~SIM_LPOCLKS_LPOCLKSEL_MASK)|simLpoClockSource;
       \t}\n\n
    
       \t/**
@@ -537,7 +537,7 @@
       \t * @return Clock as uint32_t
       \t */
       \tstatic uint32_t getLpoFrequency() {
-      \t   switch(sim().LPOCLKS&SIM_LPOCLKS_LPOCLKSEL_MASK) {
+      \t   switch(sim->LPOCLKS&SIM_LPOCLKS_LPOCLKSEL_MASK) {
       \t      case SimLpoClockSource_Lpo128kHz:
       \t         return getLpo128Frequency();
       \t      default:
@@ -581,7 +581,7 @@
          \t * @param simFtm$(instance)ExternalClockSource Selects the external clock source for PccInfo::setFtm$(instance)Source(PccDiv1Clock_FtmExternal)
          \t */
          \tstatic void setFtm$(instance)ExternalClockSource(SimFtm$(instance)ExternalClockSource simFtm$(instance)ExternalClockSource) {
-         \t   sim().FTMOPT0 = (sim().FTMOPT0&~SIM_FTMOPT0_FTM$(instance)CLKSEL_MASK)|simFtm$(instance)ExternalClockSource;
+         \t   sim->FTMOPT0 = (sim->FTMOPT0&~SIM_FTMOPT0_FTM$(instance)CLKSEL_MASK)|simFtm$(instance)ExternalClockSource;
          \t}\n\n
          ]]>
       </for>
@@ -646,7 +646,7 @@
          \t      SimFtm$(instance)Fault0Select simFtm$(instance)Fault0Select,
          \t      SimFtm$(instance)Fault1Select simFtm$(instance)Fault1Select,
          \t      SimFtm$(instance)Fault2Select simFtm$(instance)Fault2Select) {
-         \t   sim().FTMOPT0 = (sim().FTMOPT0&~SIM_FTMOPT0_FTM$(instance)FLTxSEL_MASK)|
+         \t   sim->FTMOPT0 = (sim->FTMOPT0&~SIM_FTMOPT0_FTM$(instance)FLTxSEL_MASK)|
          \t         (simFtm$(instance)Fault0Select|simFtm$(instance)Fault1Select|simFtm$(instance)Fault2Select);
          \t}\n\n
          ]]>

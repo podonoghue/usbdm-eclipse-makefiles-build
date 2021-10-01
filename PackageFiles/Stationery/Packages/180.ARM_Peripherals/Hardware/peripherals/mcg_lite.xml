@@ -298,7 +298,7 @@
       \t * @return frequency in Hz as uint32_t
       \t */
       \tstatic uint32_t getMcgPClk() {
-      \t   if ((mcg().MC&MCG_MC_HIRCEN_MASK) || ((mcg().S&MCG_S_CLKST_MASK) == MCG_S_CLKST(0))) {
+      \t   if ((mcg->MC&MCG_MC_HIRCEN_MASK) || ((mcg->S&MCG_S_CLKST_MASK) == MCG_S_CLKST(0))) {
       \t      return system_hirc_clock;
       \t   }
       \t   else {
@@ -312,8 +312,8 @@
       \t * @return frequency in Hz as uint32_t
       \t */
       \tstatic uint32_t getLircClk() {
-      \t   if ((mcg().C1&MCG_C1_IRCLKEN_MASK) || ((mcg().S&MCG_S_CLKST_MASK) == MCG_S_CLKST(1))) {
-      \t      if (mcg().C2&MCG_C2_IRCS_MASK) {
+      \t   if ((mcg->C1&MCG_C1_IRCLKEN_MASK) || ((mcg->S&MCG_S_CLKST_MASK) == MCG_S_CLKST(1))) {
+      \t      if (mcg->C2&MCG_C2_IRCS_MASK) {
       \t         return system_fast_lirc_clock;
       \t      }
       \t      else {
@@ -331,7 +331,7 @@
       \t * @return frequency in Hz as uint32_t
       \t */
       \tstatic uint32_t getLircDiv1Clk() {
-      \t   return getLircClk()/(1<<((mcg().SC&MCG_SC_FCRDIV_MASK)>>MCG_SC_FCRDIV_SHIFT));
+      \t   return getLircClk()/(1<<((mcg->SC&MCG_SC_FCRDIV_MASK)>>MCG_SC_FCRDIV_SHIFT));
       \t}
       \t
       \t/**
@@ -340,7 +340,7 @@
       \t * @return frequency in Hz as uint32_t
       \t */
       \tstatic uint32_t getMcgIrClock() {
-      \t   return getLircDiv1Clk()/(1<<((mcg().MC&MCG_MC_LIRC_DIV2_MASK)>>MCG_MC_LIRC_DIV2_SHIFT));
+      \t   return getLircDiv1Clk()/(1<<((mcg->MC&MCG_MC_LIRC_DIV2_MASK)>>MCG_MC_LIRC_DIV2_SHIFT));
       \t}\n\n
 
       \t/**
@@ -349,7 +349,7 @@
       \t * @return frequency in Hz as uint32_t
       \t */
       \tstatic uint32_t getMcgOutClock() {
-      \t   switch (mcg().S&MCG_S_CLKST_MASK) {
+      \t   switch (mcg->S&MCG_S_CLKST_MASK) {
       \t   case MCG_S_CLKST(0): // HIRC
       \t      return getMcgPClk();
       \t   case MCG_S_CLKST(1): // LIRC (IRC2Mz/IRC8Mz)/DIV1

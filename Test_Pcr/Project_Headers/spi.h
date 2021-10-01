@@ -936,9 +936,9 @@ public:
     */
    static uint32_t __attribute__((always_inline)) getStatus() {
       // Capture interrupt status
-      uint32_t status = Info::spi().SR;
+      uint32_t status = Info::spi->SR;
       // Clear captured flags
-      Info::spi().SR = status;
+      Info::spi->SR = status;
       // Return status
       return status;
    }

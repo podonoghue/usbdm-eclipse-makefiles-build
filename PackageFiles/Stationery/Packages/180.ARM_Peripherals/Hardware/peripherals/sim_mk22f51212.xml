@@ -52,7 +52,7 @@
          \t */
          \tstatic SimRamSize getRamSize() {
          \t
-         \t   return static_cast<SimRamSize>(sim().SOPT1&SIM_SOPT1_RAMSIZE_MASK);
+         \t   return static_cast<SimRamSize>(sim->SOPT1&SIM_SOPT1_RAMSIZE_MASK);
          \t}\n\n
     
          \t/**
@@ -62,7 +62,7 @@
          \t */
          \tstatic uint32_t getErc32kClock() {
          \t
-         \t   switch(sim().SOPT1&SIM_SOPT1_OSC32KSEL_MASK) {
+         \t   switch(sim->SOPT1&SIM_SOPT1_OSC32KSEL_MASK) {
          \t      default                     : return 0;
          \t      case SimOsc32kSel_Osc32kClk : return Osc0Info::getOsc32kClock();
          \t      case SimOsc32kSel_Rtc32kClk : return RtcInfo::getExternalClock();
@@ -76,7 +76,7 @@
          \t * @param simOsc32kSel Clock source
          \t */
          \tstatic void setErc32kClock(SimOsc32kSel simOsc32kSel) {
-         \t   sim().SOPT1 = (sim().SOPT1&~SIM_SOPT1_OSC32KSEL_MASK) | simOsc32kSel;
+         \t   sim->SOPT1 = (sim->SOPT1&~SIM_SOPT1_OSC32KSEL_MASK) | simOsc32kSel;
          \t}\n\n
       ]]></template>
 
@@ -198,7 +198,7 @@
          \t * @param simClkoutSel
          \t */
          \tstatic void setClkout(SimClkoutSel simClkoutSel) {
-         \t   sim().SOPT2 = (sim().SOPT2&~SIM_SOPT2_CLKOUTSEL_MASK) | simClkoutSel;
+         \t   sim->SOPT2 = (sim->SOPT2&~SIM_SOPT2_CLKOUTSEL_MASK) | simClkoutSel;
          \t}\n\n
 
          \t/**
@@ -207,7 +207,7 @@
          \t * @param simPeripheralClockSource Clock source for peripheral clock
          \t */
          \tstatic void setPeripheralClock(SimPeripheralClockSource simPeripheralClockSource) {
-         \t   sim().SOPT2 = (sim().SOPT2&~SIM_SOPT2_PLLFLLSEL_MASK) | simPeripheralClockSource;
+         \t   sim->SOPT2 = (sim->SOPT2&~SIM_SOPT2_PLLFLLSEL_MASK) | simPeripheralClockSource;
          \t}\n\n
          
          \t/**
@@ -217,7 +217,7 @@
          \t */
          \tstatic uint32_t getPeripheralClock() {
          \t   
-         \t   switch(sim().SOPT2&SIM_SOPT2_PLLFLLSEL_MASK) {
+         \t   switch(sim->SOPT2&SIM_SOPT2_PLLFLLSEL_MASK) {
          \t      default:                     return 0;
          \t      case SimPeripheralClockSource_McgFll : return SystemMcgFllClock;
          \t      case SimPeripheralClockSource_McgPll : return SystemMcgPllClock;
@@ -263,7 +263,7 @@
          \t * @param simLpuartClockSource Clock source for LPUART
          \t */
          \tstatic void setLpuartClock(SimLpuartClockSource simLpuartClockSource) {
-         \t   sim().SOPT2 = (sim().SOPT2&~SIM_SOPT2_LPUARTSRC_MASK) | simLpuartClockSource;
+         \t   sim->SOPT2 = (sim->SOPT2&~SIM_SOPT2_LPUARTSRC_MASK) | simLpuartClockSource;
          \t}\n\n
    
          \t/**
@@ -273,7 +273,7 @@
          \t */
          \tstatic uint32_t getLpuartClock() {
          \t   
-         \t   switch(sim().SOPT2&SIM_SOPT2_LPUARTSRC_MASK) {
+         \t   switch(sim->SOPT2&SIM_SOPT2_LPUARTSRC_MASK) {
          \t   default:
          \t   case SimLpuartClockSource_Disabled   : return 0;
          \t   case SimLpuartClockSource_Peripheral : return getPeripheralClock();
@@ -339,7 +339,7 @@
          \t * @param simUsbFullSpeedClockSource Clock source for peripheral clock
          \t */
          \tstatic void setUsbFullSpeedClock(SimUsbFullSpeedClockSource simUsbFullSpeedClockSource) {
-         \t   sim().SOPT2 = (sim().SOPT2&~SIM_SOPT2_USBSRC_MASK) | simUsbFullSpeedClockSource;
+         \t   sim->SOPT2 = (sim->SOPT2&~SIM_SOPT2_USBSRC_MASK) | simUsbFullSpeedClockSource;
          \t}\n\n
          
          \t/**
@@ -348,12 +348,12 @@
          \t * @return Clock frequency as a uint32_t in Hz
          \t */
          \tstatic uint32_t getUsbClock() {
-         \t   switch ((sim().SOPT2&SIM_SOPT2_USBSRC_MASK)) {
+         \t   switch ((sim->SOPT2&SIM_SOPT2_USBSRC_MASK)) {
          \t      default:
          \t      case SimUsbFullSpeedClockSource_External   : return $(/MCG/system_usb_clkin_clock);
          \t      case SimUsbFullSpeedClockSource_Peripheral : return  (getPeripheralClock()*
-         \t         (((sim().CLKDIV2&SIM_CLKDIV2_USBFRAC_MASK)>>SIM_CLKDIV2_USBFRAC_SHIFT)+1))/
-         \t         (((sim().CLKDIV2&SIM_CLKDIV2_USBDIV_MASK)>>SIM_CLKDIV2_USBDIV_SHIFT)+1);
+         \t         (((sim->CLKDIV2&SIM_CLKDIV2_USBFRAC_MASK)>>SIM_CLKDIV2_USBFRAC_SHIFT)+1))/
+         \t         (((sim->CLKDIV2&SIM_CLKDIV2_USBDIV_MASK)>>SIM_CLKDIV2_USBDIV_SHIFT)+1);
          \t   }
          \t}
          \t#endif\n\n
@@ -796,7 +796,7 @@
          \t * @param simFtm3Trg1Src Trigger Source
          \t */
          \tstatic void setFtm3Trg1Src(SimFtm3Trg1Src simFtm3Trg1Src) {
-         \t   sim().SOPT4 = (sim().SOPT4&~SIM_SOPT4_FTM3TRG1SRC_MASK)|simFtm3Trg1Src;   
+         \t   sim->SOPT4 = (sim->SOPT4&~SIM_SOPT4_FTM3TRG1SRC_MASK)|simFtm3Trg1Src;   
          \t}\n\n
          
          \t/**
@@ -805,7 +805,7 @@
          \t * @param simFtm3Trg0Src Trigger Source
          \t */
          \tstatic void setFtm3Trg0Src(SimFtm3Trg0Src simFtm3Trg0Src) {
-         \t   sim().SOPT4 = (sim().SOPT4&~SIM_SOPT4_FTM3TRG0SRC_MASK)|simFtm3Trg0Src;   
+         \t   sim->SOPT4 = (sim->SOPT4&~SIM_SOPT4_FTM3TRG0SRC_MASK)|simFtm3Trg0Src;   
          \t}\n\n
          
          \t/**
@@ -814,7 +814,7 @@
          \t * @param simFtm0Trg1Src Trigger Source
          \t */
          \tstatic void setFtm0Trg1Src(SimFtm0Trg1Src simFtm0Trg1Src) {
-         \t   sim().SOPT4 = (sim().SOPT4&~SIM_SOPT4_FTM0TRG1SRC_MASK)|simFtm0Trg1Src;   
+         \t   sim->SOPT4 = (sim->SOPT4&~SIM_SOPT4_FTM0TRG1SRC_MASK)|simFtm0Trg1Src;   
          \t}\n\n
          
          \t/**
@@ -823,7 +823,7 @@
          \t * @param simFtm0Trg0Src Trigger Source
          \t */
          \tstatic void setFtm0Trg0Src(SimFtm0Trg0Src simFtm0Trg0Src) {
-         \t   sim().SOPT4 = (sim().SOPT4&~SIM_SOPT4_FTM0TRG0SRC_MASK)|simFtm0Trg0Src;   
+         \t   sim->SOPT4 = (sim->SOPT4&~SIM_SOPT4_FTM0TRG0SRC_MASK)|simFtm0Trg0Src;   
          \t}\n\n
          
          \t/**
@@ -832,7 +832,7 @@
          \t * @param simFtm3ClkSel Clock Pin
          \t */
          \tstatic void setFtm3ClkSel(SimFtm3ClkSel simFtm3ClkSel) {
-         \t   sim().SOPT4 = (sim().SOPT4&~SIM_SOPT4_FTM3CLKSEL_MASK)|simFtm3ClkSel;      
+         \t   sim->SOPT4 = (sim->SOPT4&~SIM_SOPT4_FTM3CLKSEL_MASK)|simFtm3ClkSel;      
          \t}\n\n
          
          \t/**
@@ -841,7 +841,7 @@
          \t * @param simFtm2ClkSel Clock Pin
          \t */
          \tstatic void setFtm2ClkSel(SimFtm2ClkSel simFtm2ClkSel) {
-         \t   sim().SOPT4 = (sim().SOPT4&~SIM_SOPT4_FTM2CLKSEL_MASK)|simFtm2ClkSel;      
+         \t   sim->SOPT4 = (sim->SOPT4&~SIM_SOPT4_FTM2CLKSEL_MASK)|simFtm2ClkSel;      
          \t}\n\n
          
          \t/**
@@ -850,7 +850,7 @@
          \t * @param simFtm1ClkSel Clock Pin
          \t */
          \tstatic void setFtm1ClkSel(SimFtm1ClkSel simFtm1ClkSel) {
-         \t   sim().SOPT4 = (sim().SOPT4&~SIM_SOPT4_FTM1CLKSEL_MASK)|simFtm1ClkSel;      
+         \t   sim->SOPT4 = (sim->SOPT4&~SIM_SOPT4_FTM1CLKSEL_MASK)|simFtm1ClkSel;      
          \t}\n\n
          
          \t/**
@@ -859,7 +859,7 @@
          \t * @param simFtm0ClkSel Clock Pin
          \t */
          \tstatic void setFtm0ClkSel(SimFtm0ClkSel simFtm0ClkSel) {
-         \t   sim().SOPT4 = (sim().SOPT4&~SIM_SOPT4_FTM0CLKSEL_MASK)|simFtm0ClkSel;      
+         \t   sim->SOPT4 = (sim->SOPT4&~SIM_SOPT4_FTM0CLKSEL_MASK)|simFtm0ClkSel;      
          \t}\n\n
          
          \t/**
@@ -868,7 +868,7 @@
          \t * @param simFtm2Ch0Src Capture Source
          \t */
          \tstatic void setFtm2Ch0Src(SimFtm2Ch0Src simFtm2Ch0Src) {
-         \t   sim().SOPT4 = (sim().SOPT4&~SIM_SOPT4_FTM2CH0SRC_MASK)|simFtm2Ch0Src;      
+         \t   sim->SOPT4 = (sim->SOPT4&~SIM_SOPT4_FTM2CH0SRC_MASK)|simFtm2Ch0Src;      
          \t}\n\n
          
          \t/**
@@ -877,7 +877,7 @@
          \t * @param simFtm1Ch0Src Capture Source
          \t */
          \tstatic void setFtm1Ch0Src(SimFtm1Ch0Src simFtm1Ch0Src) {
-         \t   sim().SOPT4 = (sim().SOPT4&~SIM_SOPT4_FTM1CH0SRC_MASK)|simFtm1Ch0Src;      
+         \t   sim->SOPT4 = (sim->SOPT4&~SIM_SOPT4_FTM1CH0SRC_MASK)|simFtm1Ch0Src;      
          \t}\n\n
          
          \t/**
@@ -886,7 +886,7 @@
          \t * @param SimFtm3Flt0 Fault Source
          \t */
          \tstatic void setFtm3Flt0(SimFtm3Flt0 simFtm3Flt0) {
-         \t   sim().SOPT4 = (sim().SOPT4&~SIM_SOPT4_FTM3FLT0_MASK)|simFtm3Flt0;      
+         \t   sim->SOPT4 = (sim->SOPT4&~SIM_SOPT4_FTM3FLT0_MASK)|simFtm3Flt0;      
          \t}\n\n
          
          \t/**
@@ -895,7 +895,7 @@
          \t * @param SimFtm2Flt0 Fault Source
          \t */
          \tstatic void setFtm2Flt0(SimFtm2Flt0 simFtm2Flt0) {
-         \t   sim().SOPT4 = (sim().SOPT4&~SIM_SOPT4_FTM2FLT0_MASK)|simFtm2Flt0;      
+         \t   sim->SOPT4 = (sim->SOPT4&~SIM_SOPT4_FTM2FLT0_MASK)|simFtm2Flt0;      
          \t}\n\n
          
          \t/**
@@ -904,7 +904,7 @@
          \t * @param simFtm1Flt0 Fault Source
          \t */
          \tstatic void setFtm1Flt0(SimFtm1Flt0 simFtm1Flt0) {
-         \t   sim().SOPT4 = (sim().SOPT4&~SIM_SOPT4_FTM1FLT0_MASK)|simFtm1Flt0;      
+         \t   sim->SOPT4 = (sim->SOPT4&~SIM_SOPT4_FTM1FLT0_MASK)|simFtm1Flt0;      
          \t}\n\n
          
          \t/**
@@ -913,7 +913,7 @@
          \t * @param simFtm0Flt1 Fault Source
          \t */
          \tstatic void setFtm0Flt1(SimFtm0Flt1 simFtm0Flt1) {
-         \t   sim().SOPT4 = (sim().SOPT4&~SIM_SOPT4_FTM0FLT1_MASK)|simFtm0Flt1;      
+         \t   sim->SOPT4 = (sim->SOPT4&~SIM_SOPT4_FTM0FLT1_MASK)|simFtm0Flt1;      
          \t}\n\n
          
          \t/**
@@ -922,7 +922,7 @@
          \t * @param simFtm0Flt0 Fault Source
          \t */
          \tstatic void setFtm0Flt0(SimFtm0Flt0 simFtm0Flt0) {
-         \t   sim().SOPT4 = (sim().SOPT4&~SIM_SOPT4_FTM0FLT0_MASK)|simFtm0Flt0;      
+         \t   sim->SOPT4 = (sim->SOPT4&~SIM_SOPT4_FTM0FLT0_MASK)|simFtm0Flt0;      
          \t}\n\n
       ]]></template>
    </category>
@@ -1047,7 +1047,7 @@
          \t * @param[in] simAdc0Trigger     Select the ADC0 Trigger source in STOP and VLPS modes, or when ADC0 Alternative Trigger is active.
          \t */
          \tstatic void setAdc0Triggers(SimAdc0TriggerMode simAdc0TriggerMode, SimAdc0Trigger simAdc0Trigger=SimAdc0Trigger_PdbExTrig) {
-         \t   sim().SOPT7 = (sim().SOPT7&~(SIM_SOPT7_ADC0TRGSEL_MASK|SIM_SOPT7_ADC0ALTTRGEN_MASK))|simAdc0Trigger|simAdc0TriggerMode;
+         \t   sim->SOPT7 = (sim->SOPT7&~(SIM_SOPT7_ADC0TRGSEL_MASK|SIM_SOPT7_ADC0ALTTRGEN_MASK))|simAdc0Trigger|simAdc0TriggerMode;
          \t};\n\n
       ]]></template>
       
@@ -1171,7 +1171,7 @@
          \t * @param[in] simAdc1Trigger     Select the ADC1 Trigger source in STOP and VLPS modes, or when ADC0 Alternative Trigger is active.
          \t */
          \tstatic void setAdc1Triggers(SimAdc1TriggerMode simAdc1TriggerMode, SimAdc1Trigger simAdc1Trigger=SimAdc1Trigger_PdbExTrig) {
-         \t   sim().SOPT7 = (sim().SOPT7&~(SIM_SOPT7_ADC1TRGSEL_MASK|SIM_SOPT7_ADC1ALTTRGEN_MASK))|simAdc1Trigger|simAdc1TriggerMode;
+         \t   sim->SOPT7 = (sim->SOPT7&~(SIM_SOPT7_ADC1TRGSEL_MASK|SIM_SOPT7_ADC1ALTTRGEN_MASK))|simAdc1Trigger|simAdc1TriggerMode;
          \t};\n\n
       ]]></template>
       
@@ -1446,19 +1446,19 @@
       \tstatic void initRegs() {
       \t#ifdef SIM_SCGC4_USBOTG_MASK
       \t   // The USB interface must be disabled for clock changes to have effect
-      \t   sim().SCGC4 &= ~SIM_SCGC4_USBOTG_MASK;
+      \t   sim->SCGC4 &= ~SIM_SCGC4_USBOTG_MASK;
       \t#endif
       \t
-      \t   sim().SOPT1 = sopt1;
+      \t   sim->SOPT1 = sopt1;
       \t   // sim_sopt2_pllfllsel may also be altered by MCG clock code
-      \t   sim().SOPT2 = sopt2;
-      \t   sim().SOPT4 = sopt4;
-      \t   sim().SOPT5 = sopt5;
-      \t   sim().SOPT7 = sopt7;
-      \t   sim().SOPT8 = sopt8;
+      \t   sim->SOPT2 = sopt2;
+      \t   sim->SOPT4 = sopt4;
+      \t   sim->SOPT5 = sopt5;
+      \t   sim->SOPT7 = sopt7;
+      \t   sim->SOPT8 = sopt8;
       \t
       \t#ifdef SIM_CLKDIV2_USBDIV_MASK
-      \t   sim().CLKDIV2 = clkdiv2;
+      \t   sim->CLKDIV2 = clkdiv2;
       \t#endif
       \t}\n\n
    ]]></template>

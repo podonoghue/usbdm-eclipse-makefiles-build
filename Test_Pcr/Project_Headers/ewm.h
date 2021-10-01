@@ -111,7 +111,7 @@ public:
     *
     * @return Reference to EWM hardware
     */
-   static __attribute__((always_inline)) volatile EWM_Type &ewm() { return Info::ewm(); }
+   static constexpr HardwarePtr<EWM_Type> ewm = Info::baseAddress;
 
    /** Allow access to PCR of associated pin */
    using InputPin  = PcrTable_T<Info, 0>;
@@ -252,8 +252,8 @@ public:
    static void setWindow(uint8_t minimum, uint8_t maximum) {
       usbdm_assert(minimum<maximum, "Minimum must be < maximum");
 
-      ewm().CMPL = minimum;
-      ewm().CMPH = maximum;
+      ewm->CMPL = minimum;
+      ewm->CMPH = maximum;
    }
 
    /**
@@ -280,8 +280,8 @@ public:
     * @param ewmKey2 Key2 value to write (EwmKey2)
     */
    static void writeKeys(uint8_t ewmKey1, uint8_t ewmKey2) {
-      ewm().SERV = ewmKey1;
-      ewm().SERV = ewmKey2;
+      ewm->SERV = ewmKey1;
+      ewm->SERV = ewmKey2;
    }
 
    /**
@@ -329,7 +329,7 @@ public:
     */
    static void configure(EwmInput  ewmInput) {
       enable();
-      ewm().CTRL = EWM_CTRL_EWMEN(1)|ewmInput;
+      ewm->CTRL = EWM_CTRL_EWMEN(1)|ewmInput;
    }
 
    /**
@@ -370,10 +370,10 @@ public:
     */
    static void enableInterrupt(bool enable=true) {
       if (enable) {
-         ewm().CTRL |= EWM_CTRL_INTEN_MASK;
+         ewm->CTRL |= EWM_CTRL_INTEN_MASK;
       }
       else {
-         ewm().CTRL &= ~EWM_CTRL_INTEN_MASK;
+         ewm->CTRL &= ~EWM_CTRL_INTEN_MASK;
       }
    }
 };

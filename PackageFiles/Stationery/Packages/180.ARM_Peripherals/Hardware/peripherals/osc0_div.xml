@@ -154,8 +154,8 @@
       \t * @return Clock frequency as uint32_t in Hz
       \t */
       \tstatic uint32_t getOscerClock() {
-      \t   return (osc().CR&OSC_CR_ERCLKEN_MASK)?
-      \t      (osc_clock/(1<<((osc().DIV&OSC_DIV_ERPS_MASK)>>OSC_DIV_ERPS_SHIFT))):
+      \t   return (osc->CR&OSC_CR_ERCLKEN_MASK)?
+      \t      (osc_clock/(1<<((osc->DIV&OSC_DIV_ERPS_MASK)>>OSC_DIV_ERPS_SHIFT))):
       \t      0;
       \t}\n\n
       

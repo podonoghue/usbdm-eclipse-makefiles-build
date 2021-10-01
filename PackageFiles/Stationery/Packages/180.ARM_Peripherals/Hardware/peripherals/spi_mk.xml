@@ -8,6 +8,15 @@
 
    <xi:include href="_default_pcr.xml"/>
    
+   <template><![CDATA[
+      \t//! Pin number in Info table for SCK if mapped to a pin
+      \tstatic constexpr int sckPin  = 0;\n\n
+      \t//! Pin number in Info table for SIN if mapped to a pin
+      \tstatic constexpr int sinPin  = 1;\n\n
+      \t//! Pin number in Info table for SOUT if mapped to a pin
+      \tstatic constexpr int soutPin  = 2;\n\n
+   ]]></template>
+
    <xi:include href="_mapPinsOption_on.xml"/>
    
    <intOption name="speed" 

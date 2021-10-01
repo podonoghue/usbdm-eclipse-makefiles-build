@@ -1927,7 +1927,7 @@ public:
 
 #ifdef FTM_SC_PWMEN0_SHIFT
       // Enable output pin in FTM
-      ftm().SC |= (1<<(channel+FTM_SC_PWMEN0_SHIFT));
+      ftm->SC |= (1<<(channel+FTM_SC_PWMEN0_SHIFT));
 #endif
       Pcr::setPCR(pinDriveStrength|pinDriveMode|pinSlewRate);
    }
@@ -1949,7 +1949,7 @@ public:
 
 #ifdef FTM_SC_PWMEN0_SHIFT
       // Enable output pin in FTM
-      ftm().SC |= (1<<(channel+FTM_SC_PWMEN0_SHIFT));
+      ftm->SC |= (1<<(channel+FTM_SC_PWMEN0_SHIFT));
 #endif
       Pcr::setPCR(pinDriveStrength|pinDriveMode);
    }
@@ -1971,7 +1971,7 @@ public:
 
 #ifdef FTM_SC_PWMEN0_SHIFT
       // Enable output pin in FTM
-      ftm().SC |= (1<<(channel+FTM_SC_PWMEN0_SHIFT));
+      ftm->SC |= (1<<(channel+FTM_SC_PWMEN0_SHIFT));
 #endif
       Pcr::setPCR(pinDriveStrength|pinSlewRate);
    }
@@ -1991,7 +1991,7 @@ public:
 
 #ifdef FTM_SC_PWMEN0_SHIFT
       // Enable output pin in FTM
-      ftm().SC |= (1<<(channel+FTM_SC_PWMEN0_SHIFT));
+      ftm->SC |= (1<<(channel+FTM_SC_PWMEN0_SHIFT));
 #endif
 
       Pcr::setPCR(pinDriveStrength);
@@ -2020,7 +2020,7 @@ public:
 
 #ifdef FTM_SC_PWMEN0_SHIFT
          // Disable output pin in FTM
-         ftm().SC &= ~(1<<(channel+FTM_SC_PWMEN0_SHIFT));
+         ftm->SC &= ~(1<<(channel+FTM_SC_PWMEN0_SHIFT));
 #endif
 
          Pcr::setInput(pinPull,pinAction,pinFilter);

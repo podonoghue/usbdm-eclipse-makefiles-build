@@ -11,6 +11,9 @@ Devices using this peripheral:
    <template><![CDATA[
       \t//! Base value for PCR (excluding MUX value)
       \tstatic constexpr uint32_t defaultPcrValue  = 0;\n\n
+
+      \t//! Pin number in Info table for VREF output if mapped to a pin
+      \tstatic constexpr int outputPin  = 0;\n\n
    ]]></template>
    
    <xi:include href="_mapPinsOption.xml"/>   
@@ -22,19 +25,14 @@ Devices using this peripheral:
       <choice value="1" name="Enabled" isDefault="true" />
    </binaryOption>
 
-   <intOption name="vref_trm_trim" 
-      description="Trim bits" 
-      toolTip="These bits change the resulting VREF by approximately ± 0.5 mV for each step"
-      value="32" min="0" max="63" />
-      
    <projectActionList id = "vref_files">
       <copy source="Project_Headers/vref.h"  target="Project_Headers/vref.h"  overwrite="true"  derived="true" />
    </projectActionList>
          
    <template><![CDATA[
    \tstatic constexpr uint8_t vref_trm = 
-   \t    VREF_TRM_CHOPEN($(vref_trm_chopen)) | // Chop oscillator enable
-   \t    VREF_TRM_TRIM($(vref_trm_trim));   // Trim bits \n\n
+   \t    VREF_TRM_CHOPEN($(vref_trm_chopen)); // Chop oscillator enable
+   \t    //                  // Trim bits are preserved\n\n
    ]]></template>
 
    <binaryOption name="vref_sc_vrefen" 

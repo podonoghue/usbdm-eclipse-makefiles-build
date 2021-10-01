@@ -79,7 +79,7 @@ public:
          configureAllPins();
       }
       // Configure OSC
-      Info::osc().CR  = Info::cr;
+      Info::osc->CR  = Info::cr;
    }
 
    /**

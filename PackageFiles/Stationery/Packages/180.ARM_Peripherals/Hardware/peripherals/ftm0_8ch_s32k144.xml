@@ -236,7 +236,7 @@
       \t */
       \tstatic uint32_t getInputClockFrequency() {
       \t
-      \t   switch(ftm().SC&FTM_SC_CLKS_MASK) {
+      \t   switch(ftm->SC&FTM_SC_CLKS_MASK) {
       \t   default:
       \t   case FTM_SC_CLKS(0): return 0;
       \t   case FTM_SC_CLKS(1): return SystemBusClock;
