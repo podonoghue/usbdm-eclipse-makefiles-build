@@ -173,7 +173,7 @@
       \t * @return CAN input clock frequency as a uint32_t in Hz
       \t */
       \tstatic uint32_t getPeClockFrequency() {
-      \t    return getPeClockFrequency((CanClockSource)(can().CTRL1 & CAN_CTRL1_CLKSRC_MASK));
+      \t    return getPeClockFrequency((CanClockSource)(can->CTRL1 & CAN_CTRL1_CLKSRC_MASK));
       \t}\n\n
    ]]></template>
 

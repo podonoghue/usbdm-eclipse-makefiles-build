@@ -40,17 +40,18 @@ namespace USBDM {
 template <class Info>
 class OscBase_T {
 
+private:
    /** Class to static check OSC signal is mapped to a pin - Assumes existence */
    template<int xtalPin> class CheckPinMapped {
-
+   private:
       // Check mapping - no need to check existence
       static constexpr bool Test1 = (Info::info[xtalPin].gpioBit >= 0);
 
       static_assert(Test1, "OSC XTAL/EXTAL signal is not mapped to a pin - Modify Configure.usbdm");
 
    public:
-      /** Dummy function to allow convenient in-line checking */
-      static constexpr void check() {}
+      /// Dummy for inline checking
+      static constexpr bool checker = false;
    };
 
 protected:
@@ -72,8 +73,8 @@ public:
     */
    static void defaultConfigure() {
 
-      CheckPinMapped<0>::check();
-      CheckPinMapped<1>::check();
+      (void)CheckPinMapped<0>::checker;
+      (void)CheckPinMapped<1>::checker;
 
       if (Info::mapPinsOnEnable) {
          configureAllPins();

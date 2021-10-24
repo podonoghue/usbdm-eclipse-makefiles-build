@@ -75,15 +75,17 @@ public:
     *  Flush output data
     *  Resets buffer to empty
     */
-   virtual void flushOutput() override {
+   virtual StringFormatter &flushOutput() override {
       ptr = buff;
+      return *this;
    };
 
    /**
     *  Flush input data - not applicable
     */
-   virtual void flushInput() override {
+   virtual StringFormatter &flushInput() override {
       lookAhead = -1;
+      return *this;
    };
 
    /**

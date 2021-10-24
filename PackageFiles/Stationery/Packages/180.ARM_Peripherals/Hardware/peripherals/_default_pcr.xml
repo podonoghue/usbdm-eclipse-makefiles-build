@@ -7,7 +7,8 @@
    <category name="Default Pin Configuration" description="Options for PCR" >
    <binaryOption name="port_pcr_lk" 
       description="Lock Register"
-      toolTip="Locks Pin Control Register bits [15:0]">
+      toolTip="Locks Pin Control Register bits [15:0]\n
+         This will apply until reset.">
       <choice value="0" name="Not locked" />
       <choice value="1" name="Locked" />
    </binaryOption>
@@ -40,7 +41,8 @@
    <binaryOption name="port_pcr_sre" 
       description="Slew Rate Enable"
       toolTip="Slew rate configuration when in digital pin muxing modes\n
-         with the pin configured as an output">
+         with the pin configured as an output.\n
+         Slow slew rate reduces EMI.">
       <choice value="0" name="Fast slew" />
       <choice value="1" name="Slow slew" />
    </binaryOption>

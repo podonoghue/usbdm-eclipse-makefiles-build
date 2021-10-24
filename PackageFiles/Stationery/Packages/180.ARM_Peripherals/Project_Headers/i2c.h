@@ -62,14 +62,14 @@ protected:
       // Not considered an error as may be using polling
    }
 
-   volatile I2C_Type  *i2c;                 //!< I2C hardware instance
-   const I2cMode       i2cMode;             //!< Mode of operation (I2cMode_Interrupt/I2cMode_Polled)
-   uint16_t            rxBytesRemaining;    //!< Number of receive bytes remaining in current transaction
-   uint16_t            txBytesRemaining;    //!< Number of transmit bytes remaining in current transaction
-   uint8_t            *rxDataPtr;           //!< Pointer to receive data for current transaction
-   const uint8_t      *txDataPtr;           //!< Pointer to transmit data for current transaction
-   uint8_t             addressedDevice;     //!< Address of device being communicated with
-   ErrorCode           errorCode;           //!< Error code from last transaction
+   const HardwarePtr<I2C_Type> i2c;                 //!< I2C hardware instance
+   const I2cMode               i2cMode;             //!< Mode of operation (I2cMode_Interrupt/I2cMode_Polled)
+   uint16_t                    rxBytesRemaining;    //!< Number of receive bytes remaining in current transaction
+   uint16_t                    txBytesRemaining;    //!< Number of transmit bytes remaining in current transaction
+   uint8_t                    *rxDataPtr;           //!< Pointer to receive data for current transaction
+   const uint8_t              *txDataPtr;           //!< Pointer to transmit data for current transaction
+   uint8_t                     addressedDevice;     //!< Address of device being communicated with
+   ErrorCode                   errorCode;           //!< Error code from last transaction
 
    /** I2C baud rate divisor table */
    static const uint16_t I2C_DIVISORS[4*16];
@@ -80,7 +80,7 @@ protected:
     * @param[in]  i2c     Base address of I2C hardware
     * @param[in]  i2cMode Mode of operation (I2cMode_Interrupt or I2cMode_Polled)
     */
-   I2c(volatile I2C_Type *i2c, I2cMode i2cMode) :
+   I2c(uint32_t i2c, I2cMode i2cMode) :
       state(i2c_idle), i2c(i2c), i2cMode(i2cMode), rxBytesRemaining(0),
       txBytesRemaining(0), rxDataPtr(0), txDataPtr(0), addressedDevice(0),
       errorCode(E_NO_ERROR) {
@@ -286,12 +286,6 @@ public:
    // Handle on I2C hardware
    static constexpr volatile I2C_Type *I2C = Info::i2c;
 
-   // I2C SCL (clock) Pin
-   using sclGpio = GpioTable_T<Info, 0, USBDM::ActiveLow>; // Inactive is high
-
-   // I2C SDA (data) Pin
-   using sdaGpio = GpioTable_T<Info, 1, USBDM::ActiveHigh>;
-
    /** Used by ISR to obtain handle of object */
    static I2c *thisPtr;
 
@@ -379,7 +373,7 @@ public:
     * @param[in]  i2cMode    Mode of operation
     * @param[in]  myAddress  Address of this device on bus (not currently used)
     */
-   I2cBase_T(unsigned bps=400000, I2cMode i2cMode=I2cMode_Polled, uint8_t myAddress=0) : I2c(&Info::i2c(), i2cMode) {
+   I2cBase_T(unsigned bps=400000, I2cMode i2cMode=I2cMode_Polled, uint8_t myAddress=0) : I2c(Info::baseAddress, i2cMode) {
 
       // Check pin assignments
       static_assert(Info::info[Info::sclPin].gpioBit >= 0, "I2Cx_SCL has not been assigned to a pin - Modify Configure.usbdm");
@@ -452,33 +446,52 @@ public:
    /**
     * Clear bus hang
     *
-    * Generates I2C_SCL clock until I2C_SDA goes high\n
+    * Generates I2C_SCL clock until I2C_SDA goes high followed by I2C STOP. \n
     * This is useful if a slave is part-way through a transaction when the master goes away!
     */
    virtual void busHangReset() {
 
-      sclGpio::setOutput(Info::defaultPcrValue);
-      sdaGpio::setInput(Info::defaultPcrValue);
-      /*
-       * Set SCL initially high before enabling to minimise disturbance to bus
-       */
-      for (int i=0; i<9; i++) {
-         // Set clock high (ideally 3-state)
-         sclGpio::high();
+      static auto delay = [] {
          for(int j=0; j<20; j++) {
             __asm__("nop");
          }
+      };
+      // I2C SCL (clock) Pin
+      using sclGpio = GpioTable_T<Info, Info::sclPin, USBDM::ActiveHigh>;
+
+      // I2C SDA (data) Pin
+      using sdaGpio = GpioTable_T<Info, Info::sdaPin, USBDM::ActiveHigh>;
+
+      // Re-map pins to GPIOs initially 3-state
+      sclGpio::setInput(PinPull_Up);
+      sdaGpio::setInput(PinPull_Up);
+
+      // SCL & SDA data values are low but direction is manipulated to achieve open-drain operation
+      sclGpio::low();
+      sdaGpio::low();
+
+      for (int i=0; i<9; i++) {
+         // Set clock 3-state
+         sclGpio::setIn();    // SCL=T, SDA=?
+         delay();
+         bool sda = sdaGpio::isHigh();
+         // Set clock low
+         sclGpio::setOut();   // SCL=0, SDA=?
+         delay();
          // If data is high bus is OK
-         if (sdaGpio::isHigh()) {
+         if (sda) {
             break;
          }
-         // Set clock low
-         sclGpio::low();
-         for(int j=0; j<20; j++) {
-            __asm__("nop");
-         }
       }
-      // Restore pins
+      // Generate stop on I2C bus
+      sdaGpio::setOut(); // SCL=0, SDA=0
+      delay();
+      sclGpio::setIn();  // SCL=T, SDA=0
+      delay();
+      sdaGpio::setIn();  // SCL=T, SDA=T
+      delay();
+
+      // Restore pin mapping
       configureAllPins();
    }
 

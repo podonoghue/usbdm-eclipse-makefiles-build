@@ -81,7 +81,7 @@ enum Width : uint8_t {
    Width_auto = 0,//!< Width_auto
 };
 
-enum EchoMode : uint8_t {
+enum EchoMode : bool {
    /*
     * For use with operator<< and operator>>
     */
@@ -150,21 +150,20 @@ struct FormattingSettings {
 class FormattedIO {
 
 protected:
-
    /**
     * Current settings
     */
    FormattingSettings fFormat;
 
    /**
-    * Indicate in error state
-    */
-   bool inErrorState = false;
-
-   /**
     * One character look-ahead
     */
    int16_t lookAhead = -1;
+
+   /**
+    * Indicate in error state
+    */
+   bool inErrorState = false;
 
 #if defined (__FREE_RTOS) && ( configSUPPORT_DYNAMIC_ALLOCATION == 1 ) && ( configUSE_RECURSIVE_MUTEXES == 1 )
    SemaphoreHandle_t mutex;
@@ -280,12 +279,12 @@ public:
    /**
     *  Flush output data
     */
-   virtual void flushOutput() = 0;
+   virtual FormattedIO &flushOutput() = 0;
 
    /**
     *  Flush input data
     */
-   virtual void flushInput() = 0;
+   virtual FormattedIO &flushInput() = 0;
 
    /**
     * Lock the object
@@ -914,16 +913,21 @@ public:
     */
    FormattedIO __attribute__((noinline)) &write(double value) {
       char buff[20];
+      if (isnan(value)) {
+         return write("Nan");
+      }
       bool isNegative = value<0;
       if (isNegative) {
          value = -value;
       }
       long scaledValue = static_cast<long>(round(value*fFormat.fFloatPrecisionMultiplier));
       ultoa(buff, scaledValue/fFormat.fFloatPrecisionMultiplier, Radix_10, fFormat.fFloatPadding, fFormat.fFloatWidth, isNegative);
-      write(buff).write('.');
-      ultoa(buff, 
-           (scaledValue)%fFormat.fFloatPrecisionMultiplier,
-           Radix_10, Padding_LeadingZeroes, fFormat.fFloatPrecision);
+      if (fFormat.fFloatPrecision>0) {
+         write(buff).write('.');
+         ultoa(buff,
+               (scaledValue)%fFormat.fFloatPrecisionMultiplier,
+               Radix_10, Padding_LeadingZeroes, fFormat.fFloatPrecision);
+      }
       write(buff);
       return *this;
    }

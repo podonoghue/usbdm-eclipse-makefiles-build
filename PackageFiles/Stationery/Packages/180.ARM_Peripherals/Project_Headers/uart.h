@@ -63,6 +63,11 @@ enum UartDma {
  */
 class Uart : public FormattedIO {
 
+private:
+   Uart() = delete;
+   Uart(const Uart&) = delete;
+   Uart(Uart&&) = delete;
+
 protected:
 #ifdef __CMSIS_RTOS
    /**
@@ -165,13 +170,13 @@ public:
     * UART hardware instance
     */
    const HardwarePtr<UART_Type> uart;
-
+   
    /**
     * Construct UART interface
     *
     * @param[in]  uart Reference to UART hardware
     */
-   Uart(uint32_t uartBaseAddress) : uart(uartBaseAddress) {
+   Uart(uint32_t uartBaseAddress) : uart((uartBaseAddress)) {
    }
 
    /**
@@ -314,18 +319,20 @@ public:
    /**
     *  Flush output data
     */
-   virtual void flushOutput() override {
+   virtual Uart &flushOutput() override {
       while ((uart->S1 & UART_S1_TC_MASK) == 0) {
       // Wait until transmission of last character is complete
       }
+      return *this;
    };
 
    /**
     *  Flush input data
     */
-   virtual void flushInput() override {
+   virtual Uart &flushInput() override {
       (void)uart->D;
       lookAhead = -1;
+      return *this;
    };
 };
 
@@ -352,6 +359,10 @@ typedef void (*UARTCallbackFunction)(uint8_t status);
  * @tparam Info   Class describing UART hardware
  */
 template<class Info> class Uart_T : public Uart {
+
+private:
+   Uart_T(const Uart_T&) = delete;
+   Uart_T(Uart_T&&) = delete;
 
 public:
    /** Get reference to UART hardware as struct */
@@ -452,12 +463,10 @@ public:
       // Enable clock to UART interface
       Info::enableClock();
 
-      if (Info::mapPinsOnEnable) {
+      if constexpr (Info::mapPinsOnEnable) {
          configureAllPins();
       }
-
       uart->C2 = UART_C2_TE(1)|UART_C2_RE(1);
-      setNvicInterruptPriority(Info::irqLevel);
    }
 
    /**
@@ -554,27 +563,14 @@ public:
    }
 
    /**
-    * Set interrupt priority in NVIC
-    */
-   static void setNvicInterruptPriority(uint32_t nvicPriority) {
-      NVIC_SetPriority(Info::irqNums[0], nvicPriority);
-      if (Info::irqCount>1) {
-         NVIC_SetPriority(Info::irqNums[1], nvicPriority);
-      }
-      if (Info::irqCount>2) {
-         NVIC_SetPriority(Info::irqNums[2], nvicPriority);
-      }
-   }
-
-   /**
     * Enable interrupts in NVIC
     */
    static void enableNvicInterrupts() {
       NVIC_EnableIRQ(Info::irqNums[0]);
-      if (Info::irqCount>1) {
+      if constexpr (Info::irqCount>1) {
          NVIC_EnableIRQ(Info::irqNums[1]);
       }
-      if (Info::irqCount>2) {
+      if constexpr (Info::irqCount>2) {
          NVIC_EnableIRQ(Info::irqNums[2]);
       }
    }
@@ -587,10 +583,10 @@ public:
     */
    static void enableNvicInterrupts(NvicPriority nvicPriority) {
       enableNvicInterrupt(Info::irqNums[0], nvicPriority);
-      if (Info::irqCount>1) {
+      if constexpr (Info::irqCount>1) {
           enableNvicInterrupt(Info::irqNums[1], nvicPriority);
       }
-      if (Info::irqCount>2) {
+      if constexpr (Info::irqCount>2) {
           enableNvicInterrupt(Info::irqNums[2], nvicPriority);
       }
    }
@@ -600,10 +596,10 @@ public:
     */
    static void disableNvicInterrupts() {
       NVIC_DisableIRQ(Info::irqNums[0]);
-      if (Info::irqCount>1) {
+      if constexpr (Info::irqCount>1) {
          NVIC_DisableIRQ(Info::irqNums[1]);
       }
-      if (Info::irqCount>2) {
+      if constexpr (Info::irqCount>2) {
          NVIC_DisableIRQ(Info::irqNums[2]);
       }
    }
@@ -615,6 +611,11 @@ template<class Info> UARTCallbackFunction Uart_T<Info>::lonCallback   = unhandle
 
 #ifdef UART_C4_BRFA_MASK
 template<class Info> class Uart_brfa_T : public Uart_T<Info> {
+
+private:
+   Uart_brfa_T(const Uart_brfa_T&) = delete;
+   Uart_brfa_T(Uart_brfa_T&&) = delete;
+
 public:
    /**
     * Construct UART interface
@@ -644,6 +645,10 @@ public:
 
 #ifdef UART_C4_OSR_MASK
 template<class Info> class Uart_osr_T : public Uart_T<Info> {
+
+private:
+   Uart_osr_T(const Uart_osr_T&) = delete;
+   Uart_osr_T(Uart_osr_T&&) = delete;
 
 public:
    using Uart_T<Info>::uart;
@@ -695,6 +700,11 @@ public:
 #endif
 
 template<class Info> class Uart_basic_T : public Uart_T<Info> {
+
+private:
+   Uart_basic_T(const Uart_basic_T&) = delete;
+   Uart_basic_T(Uart_basic_T&&) = delete;
+
 public:
    /**
     * Construct UART interface
@@ -742,12 +752,16 @@ public:
 template<class Info, int rxSize=Info::receiveBufferSize, int txSize=Info::transmitBufferSize>
 class UartBuffered_T : public Uart_T<Info> {
 
+private:
+   UartBuffered_T(const UartBuffered_T&) = delete;
+   UartBuffered_T(UartBuffered_T&&) = delete;
+
 public:
    using Uart_T<Info>::uart;
 
    UartBuffered_T() : Uart_T<Info>() {
       Uart::enableInterrupt(UartInterrupt_RxFull);
-      Uart_T<Info>::enableNvicInterrupts();
+      Uart_T<Info>::enableNvicInterrupts(Info::irqLevel);
    }
 
    virtual ~UartBuffered_T() {
@@ -893,6 +907,11 @@ public:
 #ifdef UART_C4_BRFA_MASK
 template<class Info, int rxSize=Info::receiveBufferSize, int txSize=Info::transmitBufferSize>
 class UartBuffered_brfa_T : public UartBuffered_T<Info, rxSize, txSize> {
+
+private:
+   UartBuffered_brfa_T(const UartBuffered_brfa_T&) = delete;
+   UartBuffered_brfa_T(UartBuffered_brfa_T&&) = delete;
+
 public:
    /**
     * Construct UART interface
@@ -923,6 +942,10 @@ public:
 #ifdef UART_C4_OSR_MASK
 template<class Info, int rxSize=Info::receiveBufferSize, int txSize=Info::transmitBufferSize>
 class UartBuffered_osr_T : public UartBuffered_T<Info, rxSize, txSize> {
+
+private:
+   UartBuffered_osr_T(const UartBuffered_osr_T&) = delete;
+   UartBuffered_osr_T(UartBuffered_osr_T&&) = delete;
 
    using UartBuffered_T<Info, rxSize, txSize>::uart;
 
@@ -960,6 +983,11 @@ public:
 
 template<class Info, int rxSize=Info::receiveBufferSize, int txSize=Info::transmitBufferSize>
 class UartBuffered_basic_T : public UartBuffered_T<Info, rxSize, txSize> {
+
+private:
+   UartBuffered_basic_T(const UartBuffered_basic_T&) = delete;
+   UartBuffered_basic_T(UartBuffered_basic_T&&) = delete;
+
 public:
    /**
     * Construct UART interface

@@ -8,7 +8,7 @@
 
    <template><![CDATA[
       \t//! Base value for PCR (excluding MUX value)
-      \tstatic constexpr uint32_t defaultPcrValue  = I2C_DEFAULT_PCR;\n\n
+      \tstatic constexpr uint32_t defaultPcrValue  = I2C_DEFAULT_PCR.value;\n\n
       
       \t//! Pin number in Info table for SCL if mapped to a pin
       \tstatic constexpr int sclPin  = 0;\n\n

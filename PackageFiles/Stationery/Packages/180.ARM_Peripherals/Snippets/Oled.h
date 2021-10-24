@@ -105,15 +105,17 @@ private:
    /**
     *  Flush input data
     */
-   virtual void flushInput() override {
+   virtual Oled &flushInput() override {
+      return *this;
    }
 
 public:
    /**
     *  Flush output data
     */
-   virtual void flushOutput() override {
+   virtual Oled &flushOutput() override {
       refreshImage();
+      return *this;
    }
 
    // Address (LSB = R/W bit = 0)
@@ -201,6 +203,11 @@ public:
      * The OLED is not affected until refreshImage() is called.
      */
     Oled &clearDisplay();
+
+    /**
+     * Turn display on or off
+     */
+    void enable(bool enable);
 
     /**
      * Control display contrast/brightness

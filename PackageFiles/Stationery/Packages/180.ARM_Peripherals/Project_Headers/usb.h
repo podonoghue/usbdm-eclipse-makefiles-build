@@ -280,7 +280,7 @@ public:
 template <class Info, int EP0_SIZE>
 class UsbBase_T : public UsbBase {
 
-public:
+private:
    /** Hardware instance pointer */
    static constexpr HardwarePtr<USB_Type> fUsb = Info::baseAddress;
 

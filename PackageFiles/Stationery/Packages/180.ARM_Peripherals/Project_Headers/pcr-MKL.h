@@ -1,5 +1,5 @@
 /**
- * @file     pcr.h (180.ARM_Peripherals/Project_Headers/pcr-MKL.h)
+ * @file     pcr.h (180.ARM_Peripherals/Project_Headers/pcr-MK.h)
  * @brief    Port Control Register interface
  *
  * @version  V4.12.1.80
@@ -32,6 +32,10 @@ template<typename T>
 class HardwarePtr {
 
 private:
+   HardwarePtr() = delete;
+   HardwarePtr(const HardwarePtr&) = delete;
+   HardwarePtr(HardwarePtr&&) = delete;
+
    // Address of hardware
    const uint32_t ptr;
 
@@ -372,6 +376,7 @@ public:
    constexpr operator uint32_t()                    { return value; }
 
    // These operators do not have a return value mainly to suppress warnings about volatile assignment not occurring
+   void operator= (         uint32_t other)           { value = other; }
    void operator= (         PcrValue &other)          { value = other.value; }
    void operator= (const    PcrValue &other)          { value = other.value; }
    void operator= (volatile PcrValue &other)          { value = other.value; }
@@ -502,20 +507,18 @@ inline void operator+=(volatile PcrValue &pcrValue, PinMux            mask) { pc
  * Information required to configure the PCR for a particular function
  */
 class PortInfo {
+
+private:
+   PortInfo() = delete;
+   PortInfo(const PortInfo&) = delete;
+   PortInfo(PortInfo&&) = delete;
+
 public:
    const uint32_t      portAddress;  //!< Port hardware base pointer
    const uint32_t      clockInfo;    //!< Either clock mask or port clock control register address
-   const IRQn_Type     irqNum;       //!< Port interrupt number
    const uint32_t      gpioAddress;  //!< Associated GPIO Hardware base pointer
+   const IRQn_Type     irqNum;       //!< Port interrupt number
    const NvicPriority  irqLevel;     //!< Interrupt priority level or NvicPriority_NotInstalled if handler not installed
-
-   constexpr PortInfo(const PortInfo &portInfo) :
-      portAddress(portInfo.portAddress),
-      clockInfo(portInfo.clockInfo),
-      irqNum(portInfo.irqNum),
-      gpioAddress(portInfo.gpioAddress),
-      irqLevel(portInfo.irqLevel) {
-   }
 
    constexpr PortInfo(const uint32_t      portAddress,
                       const uint32_t      clockInfo,
@@ -524,8 +527,8 @@ public:
                       const NvicPriority  nvicPriority) :
                portAddress(portAddress),
                clockInfo(clockInfo),
-               irqNum(irqNum),
                gpioAddress(gpioAddress),
+               irqNum(irqNum),
                irqLevel(nvicPriority) {
    }
 };
@@ -534,14 +537,20 @@ public:
  * Pin information
  */
 class PinInfo {
+
+private:
+   PinInfo() = delete;
+   PinInfo(const PinInfo&) = delete;
+   PinInfo(PinInfo&&) = delete;
+
 public:
    const uint32_t      portAddress;  //!< Port hardware base pointer
    const uint32_t      clockInfo;    //!< Either clock mask or port clock control register address
-   const IRQn_Type     irqNum;       //!< Port interrupt number
    const uint32_t      gpioAddress;  //!< GPIO Hardware base pointer
-   const NvicPriority  irqLevel;     //!< Interrupt priority level or NvicPriority_NotInstalled if handler not installed
-   const int32_t       gpioBit;      //!< Bit number for pin - must be signed for special values used for error checks
    const PcrValue      pcrValue;     //!< Default PCR value for pin - Includes PinMux value which determines pin use in most cases
+   const int8_t        gpioBit;      //!< Bit number for pin - must be signed for special values used for error checks
+   const IRQn_Type     irqNum;       //!< Port interrupt number
+   const NvicPriority  irqLevel;     //!< Interrupt priority level or NvicPriority_NotInstalled if handler not installed
 
    /**
     * Constructor from portInfo etc.
@@ -554,8 +563,8 @@ public:
          const PortInfo &portInfo,
          int             gpioBit,
          PcrValue        pcrValue) :
-                     portAddress(portInfo.portAddress), clockInfo(portInfo.clockInfo), irqNum(portInfo.irqNum),
-                     gpioAddress(portInfo.gpioAddress), irqLevel(portInfo.irqLevel), gpioBit(gpioBit), pcrValue(pcrValue) {}
+                     portAddress(portInfo.portAddress), clockInfo(portInfo.clockInfo), gpioAddress(portInfo.gpioAddress),
+                     pcrValue(pcrValue), gpioBit(gpioBit), irqNum(portInfo.irqNum), irqLevel(portInfo.irqLevel) {}
 
    /**
     * Constructor from pinInfo with override for bit number and PCR value.
@@ -569,8 +578,8 @@ public:
          const PinInfo &pinInfo,
          int             gpioBit,
          PcrValue        pcrValue) :
-                     portAddress(pinInfo.portAddress), clockInfo(pinInfo.clockInfo), irqNum(pinInfo.irqNum),
-                     gpioAddress(pinInfo.gpioAddress), irqLevel(pinInfo.irqLevel), gpioBit(gpioBit), pcrValue(pcrValue) {}
+                     portAddress(pinInfo.portAddress), clockInfo(pinInfo.clockInfo), gpioAddress(pinInfo.gpioAddress),
+                     pcrValue(pcrValue), gpioBit(gpioBit), irqNum(pinInfo.irqNum), irqLevel(pinInfo.irqLevel) {}
 };
 
 #ifdef PORT_DFCR_CS_MASK
@@ -919,10 +928,14 @@ private:
    Pcr_T(Pcr_T&&) = delete;
 
 #ifdef PORT_DFCR_CS_MASK
-   static constexpr HardwarePtr<PcrValue>       pcrReg = portAddress+offsetof(PORT_DFER_Type,PCR[bitNum]);
+//   static constexpr HardwarePtr<PcrValue>       pcrReg = portAddress+offsetof(PORT_DFER_Type,PCR[bitNum]);
+   static constexpr HardwarePtr<uint32_t>       PCR    = portAddress+offsetof(PORT_DFER_Type,PCR[bitNum]);
 #else
-   static constexpr HardwarePtr<PcrValue>       pcrReg = portAddress+offsetof(PORT_Type,PCR[bitNum]);
+//   static constexpr HardwarePtr<PcrValue>       pcrReg = portAddress+offsetof(PORT_Type,PCR[bitNum]);
+   static constexpr HardwarePtr<uint32_t>       PCR    = portAddress+offsetof(PORT_Type,PCR[bitNum]);
 #endif
+
+   using PcrBase = PcrBase_T<portAddress, irqNum, defaultNvicPriority>;
 
 public:
    /**
@@ -967,7 +980,8 @@ public:
          PinMux pinMux = defaultPcrValue;
 
          // Update PCR register for pin
-         *pcrReg = pcrValue + pinMux;
+         *PCR = (uint32_t)(pcrValue + pinMux);
+//         *pcrReg = (pcrValue + pinMux);
       }
    }
    /**
@@ -976,12 +990,12 @@ public:
     *
     * @return pcrValue PCR value.
     */
-   static PcrValue getPCR() {
+   static uint32_t getPCR() {
       if constexpr (portAddress == 0) {
          return PcrValue(0);
       }
       enablePortClocks(clockInfo);
-      return *pcrReg;
+      return *PCR;
    }
    /**
     * Set Pin Control Register Attributes\n
@@ -1018,7 +1032,7 @@ public:
          }
 #endif
          // Set PCR register for pin
-         *pcrReg = pinPull|pinDriveStrength|pinDriveMode|pinAction|pinFilter|pinSlewRate|pinMux;
+         *PCR = pinPull|pinDriveStrength|pinDriveMode|pinAction|pinFilter|pinSlewRate|pinMux;
       }
    }
 
@@ -1116,7 +1130,8 @@ public:
     */
    static void setPinMux(PinMux pinMux) {
       if constexpr (portAddress != 0) {
-         *pcrReg += pinMux;
+//         *pcrReg += pinMux;
+         *PCR = (*PCR & ~PORT_PCR_MUX_MASK)|pinMux;
       }
    }
 
@@ -1140,7 +1155,8 @@ public:
     */
    static void clearPinInterruptFlag() {
       if constexpr (portAddress != 0) {
-         *pcrReg |= PORT_PCR_ISF_MASK;
+//         *pcrReg |= PORT_PCR_ISF_MASK;
+         *PCR |= PORT_PCR_ISF_MASK;
       }
    }
 
@@ -1152,7 +1168,8 @@ public:
     */
    static void setPinAction(PinAction pinAction = defaultPcrValue) {
       if constexpr (portAddress != 0) {
-         *pcrReg += pinAction;
+//         *pcrReg += pinAction;
+         *PCR = (*PCR & ~PORT_PCR_IRQC_MASK)|pinAction;
       }
    }
 
@@ -1165,7 +1182,8 @@ public:
     */
    static void setPinPullDevice(PinPull pinPull = defaultPcrValue) {
       if constexpr (portAddress != 0) {
-         *pcrReg += pinPull;
+//         *pcrReg += pinPull;
+         *PCR = (*PCR & ~PORT_PCR_PD_MASK)|pinPull;
       }
    }
 #else
@@ -1185,7 +1203,8 @@ public:
     */
    static void setPinDriveMode(PinDriveMode pinDriveMode = defaultPcrValue) {
       if constexpr (portAddress != 0) {
-         *pcrReg += pinDriveMode;
+//         *pcrReg += pinDriveMode;
+         *PCR = (*PCR & ~PORT_PCR_ODE_MASK)|pinDriveMode;
       }
    }
 #else
@@ -1205,7 +1224,8 @@ public:
     */
    static void setPinSlewRate(PinSlewRate  pinSlewRate = defaultPcrValue) {
       if constexpr (portAddress != 0) {
-         *pcrReg += pinSlewRate;
+//         *pcrReg += pinSlewRate;
+         *PCR = (*PCR & ~PORT_PCR_SRE_MASK)|pinSlewRate;
       }
    }
 #else
@@ -1236,7 +1256,8 @@ public:
             disableDigitalPinFilter();
          }
 #endif
-         *pcrReg += pinFilter;
+//         *pcrReg += pinFilter;
+         *PCR = (*PCR & ~PORT_PCR_PFE_MASK)|pinFilter;
       }
    }
 #endif
@@ -1250,7 +1271,8 @@ public:
     */
    static void setPinDriveStrength(PinDriveStrength pinDriveStrength = defaultPcrValue) {
       if constexpr (portAddress != 0) {
-         *pcrReg += pinDriveStrength;
+//         *pcrReg += pinDriveStrength;
+         *PCR = (*PCR & ~PORT_PCR_DSE_MASK)|pinDriveStrength;
       }
    }
 #else
@@ -1270,7 +1292,8 @@ public:
     */
    static void lockPinAttributes() {
       if constexpr (portAddress != 0) {
-         *pcrReg |= PORT_PCR_LK_MASK;
+//         *pcrReg |= PORT_PCR_LK_MASK;
+         *PCR |= PORT_PCR_LK_MASK;
       }
    }
 #else

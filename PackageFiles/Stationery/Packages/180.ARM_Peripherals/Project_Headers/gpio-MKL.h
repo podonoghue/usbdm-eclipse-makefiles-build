@@ -410,7 +410,7 @@ public:
    static void setOut() {
       // Make pin an output
 #ifdef RELEASE_BUILD
-      bmeOr(gpio->PDDR, MASK);
+      bmeOr(gpio->PDDR, Pcr::BITMASK);
 #else
       gpio->PDDR |= Pcr::BITMASK;
 #endif
@@ -466,7 +466,7 @@ public:
    static void setIn() {
       // Make pin an input
 #ifdef RELEASE_BUILD
-      bmeAnd(gpio->PDDR, ~(Pcr::MASK));
+      bmeAnd(gpio->PDDR, ~(Pcr::BITMASK));
 #else
       gpio->PDDR &= ~Pcr::BITMASK;
 #endif

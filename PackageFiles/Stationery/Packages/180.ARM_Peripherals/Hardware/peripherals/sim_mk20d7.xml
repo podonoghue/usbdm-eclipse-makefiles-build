@@ -617,7 +617,7 @@
          \t * NOTE: The pin source for fault 0 must be configured for the FTM module fault function through the
          \t * appropriate pin control register in the port control module.
          \t */
-         \tenum SimFtm1Flt0 {
+         \tenum SimFtm2Flt0 {
          \t   SimFtm2Flt0_Ftm2Flt0 = SIM_SOPT4_FTM2FLT0(0),//!< FTM2 Fault 0 pin
          \t   SimFtm2Flt0_Cmp0     = SIM_SOPT4_FTM2FLT0(1),//!< Cmp0 output
          \t};\n\n
@@ -641,7 +641,7 @@
          \t * NOTE: The pin source for fault 2 must be configured for the FTM module fault function through the
          \t * appropriate pin control register in the port control module.
          \t */
-         \tenum SimFtm0Flt1 {
+         \tenum SimFtm0Flt2 {
          \t   SimFtm0Flt2_Ftm0Flt2 = SIM_SOPT4_FTM0FLT2(0),//!< FTM0 Fault 2 pin
          \t   SimFtm0Flt2_Cmp2     = SIM_SOPT4_FTM0FLT2(1),//!< Cmp2 output
          \t};\n\n

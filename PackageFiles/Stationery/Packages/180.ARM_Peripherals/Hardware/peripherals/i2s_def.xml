@@ -8,7 +8,7 @@
 
    <template><![CDATA[
       \t//! Base value for PCR (excluding MUX value)
-      \tstatic constexpr uint32_t defaultPcrValue  = I2S_DEFAULT_PCR;\n\n
+      \tstatic constexpr uint32_t defaultPcrValue  = I2S_DEFAULT_PCR.value;\n\n
    ]]></template>
    
    <xi:include href="_mapPinsOption_on.xml"/>
