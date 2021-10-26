@@ -5,7 +5,7 @@
  *           Equivalent: 
  *
  * @version  V1.6
- * @date     2021/08
+ * @date     2021/10
  *
  *******************************************************************************************************/
 
@@ -117,6 +117,7 @@ typedef enum {
   DAC0_IRQn                     =  81,   /**<  97 Digital to Analogue Converter                                                    */
   DAC1_IRQn                     =  82,   /**<  98 Digital to Analogue Converter                                                    */
   TSI0_IRQn                     =  83,   /**<  99 Touch Sense Interface                                                            */
+  MCG_IRQn                      =  84,   /**< 100 Multipurpose Clock Generator                                                     */
   LPTMR0_IRQn                   =  85,   /**< 101 Low Power Timer                                                                  */
   PORTA_IRQn                    =  87,   /**< 103 General Purpose Input/Output                                                     */
   PORTB_IRQn                    =  88,   /**< 104 General Purpose Input/Output                                                     */
@@ -124,6 +125,7 @@ typedef enum {
   PORTD_IRQn                    =  90,   /**< 106 General Purpose Input/Output                                                     */
   PORTE_IRQn                    =  91,   /**< 107 General Purpose Input/Output                                                     */
   PORTF_IRQn                    =  92,   /**< 108 General Purpose Input/Output                                                     */
+  SWI_IRQn                      =  94,   /**< 110 Software interrupt                                                               */
   NFC_IRQn                      =  95,   /**< 111 NAND flash controller                                                            */
   USBHS_IRQn                    =  96,   /**< 112 USB High Speed Interrupt                                                         */
   CMP3_IRQn                     =  98,   /**< 114 High-Speed Comparator                                                            */
@@ -229,6 +231,7 @@ extern void SDHC0_IRQHandler(void);                  /**< Secured Digital Host C
 extern void DAC0_IRQHandler(void);                   /**< Digital to Analogue Converter                                                    */
 extern void DAC1_IRQHandler(void);                   /**< Digital to Analogue Converter                                                    */
 extern void TSI0_IRQHandler(void);                   /**< Touch Sense Interface                                                            */
+extern void MCG_IRQHandler(void);                    /**< Multipurpose Clock Generator                                                     */
 extern void LPTMR0_IRQHandler(void);                 /**< Low Power Timer                                                                  */
 extern void PORTA_IRQHandler(void);                  /**< General Purpose Input/Output                                                     */
 extern void PORTB_IRQHandler(void);                  /**< General Purpose Input/Output                                                     */
@@ -236,6 +239,7 @@ extern void PORTC_IRQHandler(void);                  /**< General Purpose Input/
 extern void PORTD_IRQHandler(void);                  /**< General Purpose Input/Output                                                     */
 extern void PORTE_IRQHandler(void);                  /**< General Purpose Input/Output                                                     */
 extern void PORTF_IRQHandler(void);                  /**< General Purpose Input/Output                                                     */
+extern void SWI_IRQHandler(void);                    /**< Software interrupt                                                               */
 extern void NFC_IRQHandler(void);                    /**< NAND flash controller                                                            */
 extern void USBHS_IRQHandler(void);                  /**< USB High Speed Interrupt                                                         */
 extern void CMP3_IRQHandler(void);                   /**< High-Speed Comparator                                                            */
@@ -7514,6 +7518,8 @@ typedef struct MCG_Type {
 #define MCG_BasePtr                    0x40064000UL //!< Peripheral base address
 #define MCG                            ((MCG_Type *) MCG_BasePtr) //!< Freescale base pointer
 #define MCG_BASE_PTR                   (MCG) //!< Freescale style base pointer
+#define MCG_IRQS { MCG_IRQn,  }
+
 /**
  * @} */ /* End group MCG_Peripheral_access_layer_GROUP 
  */

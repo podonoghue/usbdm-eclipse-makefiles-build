@@ -5,7 +5,7 @@
    Generated from MKL25Z4.csv
 -->
 
-<root version="1.2.0">
+<root version="1.3.0">
    <family name="MKL25Z4">
       <device name="FRDM_KL25Z"   manual="KL25P80M48SF0RM" package="FRDM_KL25Z" />
       <device name="MKL25Z128VFM4" manual="KL25P80M48SF0RM" package="QFN_32" />

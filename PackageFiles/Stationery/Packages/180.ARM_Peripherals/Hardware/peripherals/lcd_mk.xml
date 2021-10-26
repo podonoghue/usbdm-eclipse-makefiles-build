@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE peripheralPage SYSTEM "_menu.dtd" >
+<!-- lcd_mk.xml -->
+
+<peripheralPage xmlns:xi="http://www.w3.org/2001/XInclude" name="_instance" description="FlexCAN">
+
+   <xi:include href="_default_instance.xml"/>
+ 
+   <xi:include href="_default_pcr.xml"/>
+   
+   <xi:include href="_mapPinsOption.xml"/>
+   
+   <signals/>
+   
+   <xi:include href="_clockOption.xml"/>
+      
+   <template><![CDATA[
+      \t//! IRQ numbers for hardware
+      \tstatic constexpr IRQn_Type irqNums[]  = $(_name)_IRQS;\n\n
+   
+      \t//! Number of IRQs for hardware
+      \tstatic constexpr uint32_t irqCount  = sizeof(irqNums)/sizeof(irqNums[0]);\n\n
+   ]]></template>
+
+   <projectActionList id = "can_files" >
+      <copy source="Project_Headers/can.h"                    target="Project_Headers/can.h"                    overwrite="true"  derived="true" />
+   </projectActionList>
+   
+</peripheralPage>

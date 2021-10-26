@@ -82,12 +82,12 @@ Enables the internal reference clock for use as MCGIRCLK</description>
                      <enumeratedValues>
                         <enumeratedValue>
                            <name>0b0</name>
-                           <description>MCGIRCLK disabled</description>
+                           <description>MCGIRCLK inactive</description>
                            <value>0b0</value>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>0b1</name>
-                           <description>MCGIRCLK enabled</description>
+                           <description>MCGIRCLK active</description>
                            <value>0b1</value>
                         </enumeratedValue>
                      </enumeratedValues>

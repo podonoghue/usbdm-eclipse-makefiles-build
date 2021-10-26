@@ -197,6 +197,41 @@ enum AdcCompare {
    AdcCompare_InsideRangeInclusive  = (0<<8)|ADC_SC2_ACFE(1)|ADC_SC2_ACFGT(1)|ADC_SC2_ACREN(1), //!<  low <= ADC_value <= high
 };
 
+#if defined(ADC_PGA_PGAEN_MASK)
+
+/**
+ * PGA Enable and mode
+ */
+enum AdcPgaMode {
+   AdcPgaMode_Disabled    = ADC_PGA_PGAEN(0),                    // PGA Disabled
+   AdcPgaMode_LowPower    = ADC_PGA_PGAEN(0)|ADC_PGA_PGALPb(0),  // PGA Low power mode
+   AdcPgaMode_NormalPower = ADC_PGA_PGAEN(0)|ADC_PGA_PGALPb(1),  // PGA Normal power mode
+};
+
+/**
+ * PGA Gain Setting
+ */
+enum AdcPgaGain {
+   AdcPgaGain_1  = ADC_PGA_PGAG(0),     // PGA gain = x1
+   AdcPgaGain_2  = ADC_PGA_PGAG(1),     // PGA gain = x2
+   AdcPgaGain_4  = ADC_PGA_PGAG(2),     // PGA gain = x4
+   AdcPgaGain_8  = ADC_PGA_PGAG(3),     // PGA gain = x8
+   AdcPgaGain_16 = ADC_PGA_PGAG(4),     // PGA gain = x16
+   AdcPgaGain_32 = ADC_PGA_PGAG(5),     // PGA gain = x32
+   AdcPgaGain_64 = ADC_PGA_PGAG(6),     // PGA gain = x64
+};
+#endif
+
+#if defined(ADC_PGA_PGACHPb_MASK)
+/**
+ * Controls PGA chopping to remove/reduce offset
+ */
+   enum AdcPgaChop {
+      AdcPgaChop_Disabled = ADC_PGA_PGACHPb(1), // PGA chopping disabled
+      AdcPgaChop_Enabled  = ADC_PGA_PGACHPb(0), // PGA chopping enabled
+   };
+#endif
+
 /**
  * Type definition for ADC interrupt call back.
  *
@@ -378,7 +413,7 @@ public:
  * Example
  * @code
  *  // Access to ADC0
- *  using Adc0 = AdcBase_T<adc0Info>;
+ *  using Adc0 = AdcBase_T<Adc0Info>;
  *
  *  // Initialise ADC
  *  Adc0::setMode(AdcResolution_16bit_se);
@@ -1010,7 +1045,7 @@ public:
       AdcBase::CheckInputPin<Info, channel> check;
 
    public:
-      constexpr Channel() : AdcChannel(Adc0Info::baseAddress, channel) {}
+      constexpr Channel() : AdcChannel(AdcInfo::baseAddress, channel) {}
 
       using Pcr = PcrTable_T<Info, AdcBase::limitIndex<Info>(channel)>;
 
@@ -1026,7 +1061,7 @@ public:
       /** GPIO pin associated with this channel (Not all channels have an associated GPIO!) */
       template<Polarity polarity=ActiveHigh>
       class GpioPin : public GpioTable_T<Info, channel, polarity> {
-         static_assert((Adc0Info::info[channel].portAddress != 0),
+         static_assert((AdcInfo::info[channel].portAddress != 0),
                "ADC channel does not have corresponding GPIO pin");
       };
 
@@ -1106,6 +1141,73 @@ public:
       };
    };
 
+#if defined(ADC_PGA_PGAEN_MASK)
+   /**
+    * Template class representing an ADC channel with programmable gain amplifier.
+    *
+    * Example
+    * @code
+    * // Instantiate the ADC and the channel (for ADC0 channel 6)
+    * using Adc0    = AdcBase_T<Adc0Info>;
+    * using Adc0Ch6 = Adc0::PgaChannel;
+    *
+    * // Set ADC resolution
+    * Adc0::setMode(AdcResolution_16bit_se);
+    *
+    * // Read ADC value
+    * uint32_t value = Adc0Ch6::readAnalogue();
+    * @endcode
+    */
+   class PgaChannel : public Channel<2> {
+   private:
+      /**
+       * This class is not intended to be instantiated
+       */
+      PgaChannel(const PgaChannel&) = delete;
+      PgaChannel(PgaChannel&&) = delete;
+
+   public:
+      constexpr PgaChannel(){}
+
+#if defined(ADC_PGA_PGACHPb_MASK)
+      /**
+       * Configure Programmable Gain Amplifier
+       *
+       * @param adcPgaMode Mode to operate in (or disabled)
+       * @param adcPgaGain Gain
+       * @param adcPgaChop PGA chopping control
+       */
+      void configurePga(AdcPgaMode adcPgaMode, AdcPgaGain adcPgaGain=AdcPgaGain_1, AdcPgaChop adcPgaChop=AdcPgaChop_Enabled) {
+         adc->PGA = adcPgaMode|adcPgaGain|adcPgaChop;
+      }
+      
+      /**
+       * Measure PGA offset
+       * The PGA should be configured before doing this.
+       *
+       * @note To apply offset correction subtract subtract [(pga_offset_measurement*(G+1))/(64+1)] from
+       *       the ADC result, where G is the PGA gain during ADC operation
+       *
+       * @return Offset measurement. (pga_offset * (64+1))
+       */
+      int measurePgaOffset() {
+         // ToDo
+         return 0;
+      }
+#else
+      /**
+       * Configure Programmable Gain Amplifier
+       *
+       * @param adcPgaMode Mode to operate in (or disabled)
+       * @param adcPgaGain Gain
+       */
+      void configurePga(AdcPgaMode adcPgaMode, AdcPgaGain adcPgaGain=AdcPgaGain_1) {
+         adc->PGA = adcPgaMode|adcPgaGain;
+      }
+#endif
+   };
+#endif
+
 #ifdef ADC_SC1_DIFF_MASK
    /**
     * Template class representing an ADC differential channel
@@ -1138,7 +1240,7 @@ public:
       AdcBase::CheckInputPin<typename Info::InfoDM, channel> checkNeg;
 
    public:
-      constexpr DiffChannel() : AdcDiffChannel(Adc0Info::baseAddress, channel) {}
+      constexpr DiffChannel() : AdcDiffChannel(AdcInfo::baseAddress, channel) {}
 
       /** PCR associated with plus channel */
       using PcrP = PcrTable_T<typename Info::InfoDP, AdcBase::limitIndex<typename Info::InfoDP>(channel)>;
@@ -1175,7 +1277,7 @@ public:
        */
       static void disablePin() {
          // Map pin to ADC
-         if constexpr (Adc0Info::InfoDP::info[channel].portAddress != 0) {
+         if constexpr (AdcInfo::InfoDP::info[channel].portAddress != 0) {
             PcrP::disablePin();
             PcrM::disablePin();
          }
@@ -1219,6 +1321,49 @@ public:
          return static_cast<int16_t>(Adc::readAnalogue(channel|ADC_SC1_DIFF_MASK));
       };
    };
+
+#if defined(ADC_PGA_PGAEN_MASK)
+   /**
+    * Template class representing an ADC channel with programmable gain amplifier.
+    *
+    * Example
+    * @code
+    * // Instantiate the ADC and the channel (for ADC0 channel 6)
+    * using Adc0    = AdcBase_T<Adc0Info>;
+    * using Adc0Ch6 = Adc0::PgaChannel;
+    *
+    * // Set ADC resolution
+    * Adc0::setMode(AdcResolution_16bit_se);
+    *
+    * // Read ADC value
+    * uint32_t value = Adc0Ch6::readAnalogue();
+    * @endcode
+    */
+   class PgaDiffChannel : public DiffChannel<2> {
+
+   private:
+      /**
+       * This class is not intended to be instantiated
+       */
+      PgaDiffChannel(const PgaDiffChannel&) = delete;
+      PgaDiffChannel(PgaDiffChannel&&) = delete;
+
+   public:
+      constexpr PgaDiffChannel(){}
+
+   /**
+    * Configure Programmable Gain Amplifier
+    *
+    * @param adcPgaMode Mode to operate in (or disabled)
+    * @param adcPgaGain Gain
+    */
+   void configurePga(AdcPgaMode adcPgaMode, AdcPgaGain adcPgaGain=AdcPgaGain_1) {
+      adc->PGA = adcPgaMode|adcPgaGain;
+   }
+
+   };
+#endif
+
 #endif
 
 };

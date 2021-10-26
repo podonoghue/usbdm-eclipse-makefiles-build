@@ -5,7 +5,7 @@
    Generated from S32K144.csv
 -->
 
-<root version="1.2.0">
+<root version="1.3.0">
    <family name="S32K144">
       <device name="EVB_S32K144"  manual="S32K1XXRM"  package="EVB_S32K144" />
       <device name="FS32K144HAT0MLHT" manual="S32K1XXRM"  package="LQFP_64" />

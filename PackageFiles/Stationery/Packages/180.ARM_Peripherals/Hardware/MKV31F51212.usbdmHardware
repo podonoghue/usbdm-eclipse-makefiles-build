@@ -5,7 +5,7 @@
    Generated from MKV31F51212.csv
 -->
 
-<root version="1.2.0">
+<root version="1.3.0">
    <family name="MKV31F51212">
       <device name="FRDM_KV31F"   manual="KV31P100M120SF7RM" package="FRDM_KV31F" />
       <device name="MKV31F512VLH12" manual="KV31P100M120SF7RM" package="LQFP_64" />

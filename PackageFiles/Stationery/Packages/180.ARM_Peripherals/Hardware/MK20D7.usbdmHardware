@@ -5,11 +5,11 @@
    Generated from MK20D7.csv
 -->
 
-<root version="1.2.0">
+<root version="1.3.0">
    <family name="MK20D7">
-      <device name="MK20DX128VLH7" manual="K20P64M72SF1RM" package="LQFP_64" />
-      <device name="MK20DX256VLH7" manual="K20P64M72SF1RM" package="LQFP_64" />
-      <device name="MK20DX64VLH7" manual="K20P64M72SF1RM" package="LQFP_64" />
+      <device name="MK20DX128VLH7" manual="K20P64M72SF1RM" package="LQFP_64_MK20D7" />
+      <device name="MK20DX256VLH7" manual="K20P64M72SF1RM" package="LQFP_64_MK20D7" />
+      <device name="MK20DX64VLH7" manual="K20P64M72SF1RM" package="LQFP_64_MK20D7" />
    </family>
    <peripherals>
       <peripheral baseName="ADC"      instance="0"        version="adc0_diff_pga_a">
@@ -263,6 +263,9 @@
       <peripheral baseName="POWER"    instance="">
          <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForPower" />
       </peripheral>
+      <peripheral baseName="RCM"      instance=""         version="rcm_mk10d5">
+         <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForRcm" />
+      </peripheral>
       <peripheral baseName="RTC"      instance=""         version="rtc_war_rar_tsie">
          <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForRtc" />
          <clock clockEnable="SIM->SCGC6 |= SIM_SCGC6_RTC_MASK;" clockDisable="SIM->SCGC6 &amp;= ~SIM_SCGC6_RTC_MASK;" />
@@ -332,21 +335,33 @@
       <pin name="ADC0_DM0"     isFixed="true">
          <mux sel="fixed"         signal="ADC0_DM0" />
          <mux sel="fixed"         signal="ADC1_DM3" />
+         <mux sel="fixed"         signal="ADC0_SE19" />
+         <mux sel="fixed"         signal="ADC1_SE21" />
+         <mux sel="fixed"         signal="PGA0_DM" />
          <reset sel="fixed" />
       </pin>
       <pin name="ADC0_DM3"     isFixed="true">
          <mux sel="fixed"         signal="ADC1_DM0" />
          <mux sel="fixed"         signal="ADC0_DM3" />
+         <mux sel="fixed"         signal="ADC0_SE21" />
+         <mux sel="fixed"         signal="ADC1_SE19" />
+         <mux sel="fixed"         signal="PGA1_DM" />
          <reset sel="fixed" />
       </pin>
       <pin name="ADC0_DP0"     isFixed="true">
          <mux sel="fixed"         signal="ADC0_DP0" />
          <mux sel="fixed"         signal="ADC1_DP3" />
+         <mux sel="fixed"         signal="ADC0_SE0" />
+         <mux sel="fixed"         signal="ADC1_SE3" />
+         <mux sel="fixed"         signal="PGA0_DP" />
          <reset sel="fixed" />
       </pin>
       <pin name="ADC0_DP3"     isFixed="true">
          <mux sel="fixed"         signal="ADC1_DP0" />
          <mux sel="fixed"         signal="ADC0_DP3" />
+         <mux sel="fixed"         signal="ADC0_SE3" />
+         <mux sel="fixed"         signal="ADC1_SE0" />
+         <mux sel="fixed"         signal="PGA1_DP" />
          <reset sel="fixed" />
       </pin>
       <pin name="ADC0_SE23"    isFixed="true">
@@ -355,8 +370,18 @@
          <mux sel="fixed"         signal="ADC0_SE23" />
          <reset sel="fixed" />
       </pin>
-      <pin name="BandGap"      isFixed="true">
+      <pin name="BANDGAP"      isFixed="true">
          <mux sel="fixed"         signal="ADC0_SE27" />
+         <mux sel="fixed"         signal="ADC1_SE27" />
+         <mux sel="fixed"         signal="CMP0_IN6" />
+         <mux sel="fixed"         signal="CMP1_IN6" />
+         <mux sel="fixed"         signal="CMP2_IN6" />
+         <reset sel="fixed" />
+      </pin>
+      <pin name="CMP_DAC"      isFixed="true">
+         <mux sel="fixed"         signal="CMP0_IN7" />
+         <mux sel="fixed"         signal="CMP1_IN7" />
+         <mux sel="fixed"         signal="CMP2_IN7" />
          <reset sel="fixed" />
       </pin>
       <pin name="EXTAL32"      isFixed="true">
@@ -367,8 +392,9 @@
          <mux sel="fixed"         signal="RESET_b" />
          <reset sel="fixed" />
       </pin>
-      <pin name="TempSensor"   isFixed="true">
+      <pin name="TEMP_SENSOR"  isFixed="true">
          <mux sel="fixed"         signal="ADC0_SE26" />
+         <mux sel="fixed"         signal="ADC1_SE26" />
          <reset sel="fixed" />
       </pin>
       <pin name="USB0_DM"      isFixed="true">
@@ -820,13 +846,14 @@
       </pin>
    </pins>
    <packages>
-      <package name="LQFP_64">
+      <package name="LQFP_64_MK20D7">
          <placement pin="ADC0_DM0"      location="p10" />
          <placement pin="ADC0_DM3"      location="p12" />
          <placement pin="ADC0_DP0"      location="p9" />
          <placement pin="ADC0_DP3"      location="p11" />
          <placement pin="ADC0_SE23"     location="p18" />
-         <placement pin="BandGap"       location="Internal" />
+         <placement pin="BANDGAP"       location="Internal" />
+         <placement pin="CMP_DAC"       location="Internal" />
          <placement pin="EXTAL32"       location="p20" />
          <placement pin="PTA0"          location="p22" />
          <placement pin="PTA1"          location="p23" />
@@ -869,7 +896,7 @@
          <placement pin="PTE0"          location="p1" />
          <placement pin="PTE1"          location="p2" />
          <placement pin="RESET_b"       location="p34" />
-         <placement pin="TempSensor"    location="Internal" />
+         <placement pin="TEMP_SENSOR"   location="Internal" />
          <placement pin="USB0_DM"       location="p6" />
          <placement pin="USB0_DP"       location="p5" />
          <placement pin="VBAT"          location="p21" />

@@ -5,7 +5,7 @@
    Generated from MK22FA12.csv
 -->
 
-<root version="1.2.0">
+<root version="1.3.0">
    <family name="MK22FA12">
       <device name="FRDM_K22FA1M0" manual="K22P64M120SF5V2RM" package="FRDM_K20D50M" />
       <device name="MK22FN1M0AVLH12" manual="K22P64M120SF5V2RM" package="LQFP_64" />
@@ -364,8 +364,18 @@
          <mux sel="fixed"         signal="ADC0_SE3" />
          <reset sel="fixed" />
       </pin>
-      <pin name="BandGap"      isFixed="true">
+      <pin name="BANDGAP"      isFixed="true">
          <mux sel="fixed"         signal="ADC0_SE27" />
+         <mux sel="fixed"         signal="ADC1_SE27" />
+         <mux sel="fixed"         signal="CMP0_IN6" />
+         <mux sel="fixed"         signal="CMP1_IN6" />
+         <mux sel="fixed"         signal="CMP2_IN6" />
+         <reset sel="fixed" />
+      </pin>
+      <pin name="CMP_DAC"      isFixed="true">
+         <mux sel="fixed"         signal="CMP0_IN7" />
+         <mux sel="fixed"         signal="CMP1_IN7" />
+         <mux sel="fixed"         signal="CMP2_IN7" />
          <reset sel="fixed" />
       </pin>
       <pin name="DAC0_OUT"     isFixed="true">
@@ -382,8 +392,9 @@
          <mux sel="fixed"         signal="RESET_b" />
          <reset sel="fixed" />
       </pin>
-      <pin name="TempSensor"   isFixed="true">
+      <pin name="TEMP_SENSOR"  isFixed="true">
          <mux sel="fixed"         signal="ADC0_SE26" />
+         <mux sel="fixed"         signal="ADC1_SE26" />
          <reset sel="fixed" />
       </pin>
       <pin name="USB0_DM"      isFixed="true">
@@ -840,7 +851,8 @@
          <placement pin="ADC0_DP0"      location="A10" />
          <placement pin="ADC1_DM0"      location="A9" />
          <placement pin="ADC1_DP0"      location="A8" />
-         <placement pin="BandGap"       location="Internal" />
+         <placement pin="BANDGAP"       location="Internal" />
+         <placement pin="CMP_DAC"       location="Internal" />
          <placement pin="DAC0_OUT"      location="A7" />
          <placement pin="EXTAL32"       location="EXTAL32" />
          <placement pin="PTA0"          location="JTAG_TCLK/SWD_CLK/EZP_CLK" />
@@ -884,7 +896,7 @@
          <placement pin="PTE0"          location="D1" />
          <placement pin="PTE1"          location="D0" />
          <placement pin="RESET_b"       location="RESET_b" />
-         <placement pin="TempSensor"    location="Internal" />
+         <placement pin="TEMP_SENSOR"   location="Internal" />
          <placement pin="USB0_DM"       location="USB0_DM" />
          <placement pin="USB0_DP"       location="USB0_DP" />
          <placement pin="VBAT"          location="VBAT" />
@@ -908,7 +920,8 @@
          <placement pin="ADC0_DP0"      location="p9" />
          <placement pin="ADC1_DM0"      location="p12" />
          <placement pin="ADC1_DP0"      location="p11" />
-         <placement pin="BandGap"       location="Internal" />
+         <placement pin="BANDGAP"       location="Internal" />
+         <placement pin="CMP_DAC"       location="Internal" />
          <placement pin="DAC0_OUT"      location="p18" />
          <placement pin="EXTAL32"       location="p20" />
          <placement pin="PTA0"          location="p22" />
@@ -952,7 +965,7 @@
          <placement pin="PTE0"          location="p1" />
          <placement pin="PTE1"          location="p2" />
          <placement pin="RESET_b"       location="p34" />
-         <placement pin="TempSensor"    location="Internal" />
+         <placement pin="TEMP_SENSOR"   location="Internal" />
          <placement pin="USB0_DM"       location="p6" />
          <placement pin="USB0_DP"       location="p5" />
          <placement pin="VBAT"          location="p21" />

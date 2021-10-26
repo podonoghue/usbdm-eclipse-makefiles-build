@@ -142,90 +142,6 @@ enum CmpDacSource {
    CmpDacSource_Vref = CmpDacSource_Vin1,  //!< Select Vrin1 = Vref_out
 };
 
-#if defined(USBDM_CMP0_IS_DEFINED)
-/**
- * Select CMP0 inputs
- */
-enum Cmp0Input {
-   Cmp0Input_0          = 0, //!< CMP0 input 0
-   Cmp0Input_1          = 1, //!< CMP0 input 1
-   Cmp0Input_2          = 2, //!< CMP0 input 2
-   Cmp0Input_3          = 3, //!< CMP0 input 3
-   Cmp0Input_4          = 4, //!< CMP0 input 4
-   Cmp0Input_5          = 5, //!< CMP0 input 5
-   Cmp0Input_6          = 6, //!< CMP0 input 6
-   Cmp0Input_7          = 7, //!< CMP0 input 7
-   
-   // Internal mappings
-$(/CMP0/InternalInputMapping:   // None Found)
-   // Mapped inputs
-$(/CMP0/InputMapping:   // None Found)
-};
-#endif
-
-#if defined(USBDM_CMP1_IS_DEFINED)
-/**
- * Select CMP1 inputs
- */
-enum Cmp1Input {
-   Cmp1Input_0          = 0, //!< CMP1 input 0
-   Cmp1Input_1          = 1, //!< CMP1 input 1
-   Cmp1Input_2          = 2, //!< CMP1 input 2
-   Cmp1Input_3          = 3, //!< CMP1 input 3
-   Cmp1Input_4          = 4, //!< CMP1 input 4
-   Cmp1Input_5          = 5, //!< CMP1 input 5
-   Cmp1Input_6          = 6, //!< CMP1 input 6
-   Cmp1Input_7          = 7, //!< CMP1 input 7
-   
-   // Internal mappings
-$(/CMP1/InternalInputMapping:   // None Found)
-   // Mapped inputs
-$(/CMP1/InputMapping:   // None Found)
-};
-#endif
-
-#if defined(USBDM_CMP2_IS_DEFINED)
-/**
- * Select CMP2 inputs
- */
-enum Cmp2Input {
-   Cmp2Input_0          = 0, //!< CMP2 input 0
-   Cmp2Input_1          = 1, //!< CMP2 input 1
-   Cmp2Input_2          = 2, //!< CMP2 input 2
-   Cmp2Input_3          = 3, //!< CMP2 input 3
-   Cmp2Input_4          = 4, //!< CMP2 input 4
-   Cmp2Input_5          = 5, //!< CMP2 input 5
-   Cmp2Input_6          = 6, //!< CMP2 input 6
-   Cmp2Input_7          = 7, //!< CMP2 input 7
-
-   // Internal mappings
-$(/CMP2/InternalInputMapping:   // None Found)
-   // Mapped inputs
-$(/CMP3/InputMapping:   // None Found)
-};
-#endif
-
-#if defined(USBDM_CMP3_IS_DEFINED)
-/**
- * Select CMP3 inputs
- */
-enum Cmp3Input {
-   Cmp3Input_0          = 0, //!< CMP3 input 0
-   Cmp3Input_1          = 1, //!< CMP3 input 1
-   Cmp3Input_2          = 2, //!< CMP3 input 2
-   Cmp3Input_3          = 3, //!< CMP3 input 3
-   Cmp3Input_4          = 4, //!< CMP3 input 4
-   Cmp3Input_5          = 5, //!< CMP3 input 5
-   Cmp3Input_6          = 6, //!< CMP3 input 6
-   Cmp3Input_7          = 7, //!< CMP3 input 7
-   
-   // Internal mappings
-$(/CMP3/InternalInputMapping:   // None Found)
-   // Mapped inputs
-$(/CMP3/InputMapping:   // None Found)
-};
-#endif
-
 /**
  * Type definition for CMP interrupt call back
  *
@@ -939,14 +855,32 @@ using Cmp = CmpBase_T<CmpInfo>;
 
 #if defined(USBDM_CMP0_IS_DEFINED)
 class Cmp0 : public CmpBase_T<Cmp0Info> {
+
 public:
+   /**
+    * Select CMP0 inputs
+    */
+   enum Input {
+      // Mapped inputs
+$(/CMP0/InputMapping:   // None Found)
+      Input_0          = 0, //!< CMP0 input 0
+      Input_1          = 1, //!< CMP0 input 1
+      Input_2          = 2, //!< CMP0 input 2
+      Input_3          = 3, //!< CMP0 input 3
+      Input_4          = 4, //!< CMP0 input 4
+      Input_5          = 5, //!< CMP0 input 5
+      Input_6          = 6, //!< CMP0 input 6
+      Input_7          = 7, //!< CMP0 input 7
+
+   };
+
    /**
     * Configure Comparator input sources
     *
     * @param[in]  positiveInput (0..7) (7 => DAC)
     * @param[in]  negativeInput (0..7) (7 => DAC)
     */
-   static __attribute__((always_inline)) void selectInputs(Cmp0Input positiveInput, Cmp0Input negativeInput) {
+   static __attribute__((always_inline)) void selectInputs(Input positiveInput, Input negativeInput) {
       CmpBase_T::selectInputs((unsigned)positiveInput, (unsigned)negativeInput);
    }
 
@@ -956,81 +890,132 @@ public:
    }
 
    /**
-    * Class representing a Comparator 0 pin
+    * Class representing a Comparator pin
     *
     * @tparam cmpInput Number of comparator input (0-7) for associated pin.
     */
-   template<Cmp0Input cmpInput>
-   using Pin = CmpBase_T<Cmp0Info>::PinBase_T<Cmp0Input, cmpInput>;
+   template<Input cmpInput>
+   using Pin = CmpBase_T<Cmp0Info>::PinBase_T<Input, cmpInput>;
 };
 #endif
 
 #if defined(USBDM_CMP1_IS_DEFINED)
 class Cmp1 : public CmpBase_T<Cmp1Info> {
+
 public:
+   /**
+    * Select CMP1 inputs
+    */
+   enum Input {
+      // Mapped inputs
+$(/CMP1/InputMapping:   // None Found)
+      Input_0          = 0, //!< CMP1 input 0
+      Input_1          = 1, //!< CMP1 input 1
+      Input_2          = 2, //!< CMP1 input 2
+      Input_3          = 3, //!< CMP1 input 3
+      Input_4          = 4, //!< CMP1 input 4
+      Input_5          = 5, //!< CMP1 input 5
+      Input_6          = 6, //!< CMP1 input 6
+      Input_7          = 7, //!< CMP1 input 7
+   };
+
    /**
     * Configure Comparator input sources
     *
     * @param[in]  positiveInput (0..7) (7 => DAC)
     * @param[in]  negativeInput (0..7) (7 => DAC)
     */
-   static __attribute__((always_inline)) void selectInputs(Cmp1Input positiveInput, Cmp1Input negativeInput) {
+   static __attribute__((always_inline)) void selectInputs(Input positiveInput, Input negativeInput) {
       CmpBase_T::selectInputs((unsigned)positiveInput, (unsigned)negativeInput);
    }
 
    /**
-    * Class representing a Comparator 1 pin
+    * Class representing a Comparator pin
     *
     * @tparam cmpInput Number of comparator input (0-7) for associated pin.
     */
-   template<Cmp1Input cmpInput>
-   using Pin = CmpBase_T<Cmp1Info>::PinBase_T<Cmp1Input, cmpInput>;
+   template<Input cmpInput>
+   using Pin = CmpBase_T<Cmp1Info>::PinBase_T<Input, cmpInput>;
 };
 #endif
 
 #if defined(USBDM_CMP2_IS_DEFINED)
 class Cmp2 : public CmpBase_T<Cmp2Info> {
+
 public:
+   /**
+    * Select CMP2 inputs
+    */
+   enum Input {
+      // Mapped inputs
+$(/CMP2/InputMapping:   // None Found)
+      Input_0          = 0, //!< CMP2 input 0
+      Input_1          = 1, //!< CMP2 input 1
+      Input_2          = 2, //!< CMP2 input 2
+      Input_3          = 3, //!< CMP2 input 3
+      Input_4          = 4, //!< CMP2 input 4
+      Input_5          = 5, //!< CMP2 input 5
+      Input_6          = 6, //!< CMP2 input 6
+      Input_7          = 7, //!< CMP2 input 7
+   };
+
    /**
     * Configure Comparator input sources
     *
     * @param[in]  positiveInput (0..7) (7 => DAC)
     * @param[in]  negativeInput (0..7) (7 => DAC)
     */
-   static __attribute__((always_inline)) void selectInputs(Cmp2Input positiveInput, Cmp2Input negativeInput) {
+   static __attribute__((always_inline)) void selectInputs(Input positiveInput, Input negativeInput) {
       CmpBase_T::selectInputs((unsigned)positiveInput, (unsigned)negativeInput);
    }
 
    /**
-    * Class representing a Comparator 2 pin
+    * Class representing a Comparator pin
     *
     * @tparam cmpInput Number of comparator input (0-7) for associated pin.
     */
-   template<Cmp2Input cmpInput>
-   using Pin = CmpBase_T<Cmp2Info>::PinBase_T<Cmp2Input, cmpInput>;
+   template<Input cmpInput>
+   using Pin = CmpBase_T<Cmp2Info>::PinBase_T<Input, cmpInput>;
 };
 #endif
 
 #if defined(USBDM_CMP3_IS_DEFINED)
-class Cmp2 : public CmpBase_T<Cmp3Info> {
+class Cmp3 : public CmpBase_T<Cmp3Info> {
+
 public:
+   /**
+    * Select CMP3 inputs
+    */
+   enum Input {
+      // Mapped inputs
+$(/CMP3/InputMapping:   // None Found)
+      Input_0          = 0, //!< CMP3 input 0
+      Input_1          = 1, //!< CMP3 input 1
+      Input_2          = 2, //!< CMP3 input 2
+      Input_3          = 3, //!< CMP3 input 3
+      Input_4          = 4, //!< CMP3 input 4
+      Input_5          = 5, //!< CMP3 input 5
+      Input_6          = 6, //!< CMP3 input 6
+      Input_7          = 7, //!< CMP3 input 7
+   };
+
    /**
     * Configure Comparator input sources
     *
     * @param[in]  positiveInput (0..7) (7 => DAC)
     * @param[in]  negativeInput (0..7) (7 => DAC)
     */
-   static __attribute__((always_inline)) void selectInputs(Cmp3Input positiveInput, Cmp3Input negativeInput) {
+   static __attribute__((always_inline)) void selectInputs(Input positiveInput, Input negativeInput) {
       CmpBase_T::selectInputs((unsigned)positiveInput, (unsigned)negativeInput);
    }
 
    /**
-    * Class representing a Comparator 3 pin
+    * Class representing a Comparator pin
     *
     * @tparam cmpInput Number of comparator input (0-7) for associated pin.
     */
-   template<Cmp3Input cmpInput>
-   using Pin = CmpBase_T<Cmp3Info>::PinBase_T<Cmp3Input, cmpInput>;
+   template<Input cmpInput>
+   using Pin = CmpBase_T<Cmp3Info>::PinBase_T<Input, cmpInput>;
 };
 #endif
 /**

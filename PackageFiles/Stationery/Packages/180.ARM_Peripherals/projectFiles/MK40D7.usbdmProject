@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- MK40D7.usbdmProject -->
+<!-- 
+   Settings
+-->
+
+<section name="USBDM">
+   <item key="$$DeviceInfo_Device_Variant"                 value="MK40DX128VLH7" />
+   <item key="$$DeviceInfo_SubFamily"                      value="MK40D7" />
+   <item key="$$Hardware_Source_Filename"                  value="MK40D7.usbdmHardware" />
+   <item key="/FTFL/peripheral_file"                       value="ftfl_32k_flexrom" />
+   <item key="/MCG/ClockConfig[0]"                         value="ClockConfig_PEE_60MHz" />
+   <item key="/MCG/ClockConfig[1]"                         value="ClockConfig_BLPE_4MHz" />
+   <item key="/MCG/ClockConfig[2]"                         value="ClockConfig_PEE_72MHz" />
+   <item key="/MCG/clock_mode[0]"                          value="ClockMode_PEE" />
+   <item key="/MCG/clock_mode[1]"                          value="ClockMode_BLPE" />
+   <item key="/MCG/clock_mode[2]"                          value="ClockMode_PEE" />
+   <item key="/MCG/pll0OutputFrequency[2]"                 value="72000000" />
+   <item key="/SIM/sim_clkdiv2_usb"                        value="9" />
+   <item key="/SIM/sim_sopt2_pllfllsel[0]"                 value="1" />
+   <item key="/SIM/sim_sopt2_pllfllsel[2]"                 value="1" />
+   <item key="/SIM/system_bus_clock[0]"                    value="30000000" />
+   <item key="/SIM/system_bus_clock[1]"                    value="4000000" />
+   <item key="/SIM/system_core_clock[0]"                   value="60000000" />
+   <item key="/SIM/system_core_clock[1]"                   value="4000000" />
+   <item key="/SIM/system_flash_clock[0]"                  value="20000000" />
+   <item key="/SIM/system_flash_clock[1]"                  value="800000" />
+   <item key="/SIM/system_usbfs_clock"                     value="48000000" />
+</section>

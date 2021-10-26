@@ -5,7 +5,7 @@
    Generated from MK22D5.csv
 -->
 
-<root version="1.2.0">
+<root version="1.3.0">
    <family name="MK22D5">
       <device name="MK22DX128VLF5" manual="K22P48M50SF4RM" package="LQFP_48" />
       <device name="MK22DX256VLF5" manual="K22P48M50SF4RM" package="LQFP_48" />
@@ -286,8 +286,15 @@
          <mux sel="fixed"         signal="ADC0_SE0" />
          <reset sel="fixed" />
       </pin>
-      <pin name="BandGap"      isFixed="true">
+      <pin name="BANDGAP"      isFixed="true">
          <mux sel="fixed"         signal="ADC0_SE27" />
+         <mux sel="fixed"         signal="CMP0_IN6" />
+         <mux sel="fixed"         signal="CMP1_IN6" />
+         <reset sel="fixed" />
+      </pin>
+      <pin name="CMP_DAC"      isFixed="true">
+         <mux sel="fixed"         signal="CMP0_IN7" />
+         <mux sel="fixed"         signal="CMP1_IN7" />
          <reset sel="fixed" />
       </pin>
       <pin name="EXTAL32"      isFixed="true">
@@ -298,7 +305,7 @@
          <mux sel="fixed"         signal="RESET_b" />
          <reset sel="fixed" />
       </pin>
-      <pin name="TempSensor"   isFixed="true">
+      <pin name="TEMP_SENSOR"  isFixed="true">
          <mux sel="fixed"         signal="ADC0_SE26" />
          <reset sel="fixed" />
       </pin>
@@ -614,7 +621,8 @@
       <package name="LQFP_48">
          <placement pin="ADC0_DM0"      location="p8" />
          <placement pin="ADC0_DP0"      location="p7" />
-         <placement pin="BandGap"       location="Internal" />
+         <placement pin="BANDGAP"       location="Internal" />
+         <placement pin="CMP_DAC"       location="Internal" />
          <placement pin="EXTAL32"       location="p15" />
          <placement pin="PTA0"          location="p17" />
          <placement pin="PTA1"          location="p18" />
@@ -646,7 +654,7 @@
          <placement pin="PTD6"          location="p47" />
          <placement pin="PTD7"          location="p48" />
          <placement pin="RESET_b"       location="p26" />
-         <placement pin="TempSensor"    location="Internal" />
+         <placement pin="TEMP_SENSOR"   location="Internal" />
          <placement pin="USB0_DM"       location="p4" />
          <placement pin="USB0_DP"       location="p3" />
          <placement pin="VBAT"          location="p16" />

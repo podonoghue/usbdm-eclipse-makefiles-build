@@ -4,19 +4,6 @@
 
 <peripheralPage xmlns:xi="http://www.w3.org/2001/XInclude" name="_instance" description="Comparitor">
  
-   <template name="/CMP0/InternalInputMapping" namespace="all"><![CDATA[
-   \t// cmp0_mk22f.xml
-   \tCmp0Input_Dac1       = Cmp0Input_4, //!< 12-bit DAC1 Output
-   \tCmp0Input_Bandgap    = Cmp0Input_6, //!< Internal Band-gap
-   \tCmp0Input_Cmp0Dac    = Cmp0Input_7, //!< CMP0 6-bit internal DAC reference
-   ]]></template>
-   
-   <template name="/CMP1/InternalInputMapping" namespace="all"><![CDATA[
-   \t// cmp0_mk22f.xml
-   \tCmp1Input_Bandgap    = Cmp1Input_6, //!< Internal Band-gap
-   \tCmp1Input_Cmp1Dac    = Cmp1Input_7, //!< CMP1 6-bit internal DAC reference
-   ]]></template>
- 
    <xi:include href="cmp_base.xml"/>
  
    <choiceOption name="cmp_muxcr_psel" 

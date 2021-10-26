@@ -5,7 +5,7 @@
    Generated from MKL03Z4.csv
 -->
 
-<root version="1.2.0">
+<root version="1.3.0">
    <family name="MKL03Z4">
       <device name="FRDM_KL03Z"   manual="KL03P24M48SF0RM" package="FRDM_KL03Z" />
       <device name="MKL03Z16VFG4" manual="KL03P24M48SF0RM" package="QFN_16" />

@@ -5,7 +5,7 @@
    Generated from MKL27Z4.csv
 -->
 
-<root version="1.2.0">
+<root version="1.3.0">
    <family name="MKL27Z4">
       <device name="MKL27Z128VFM4" manual="KL27P64M48SF6RM" package="QFN_32" />
       <device name="MKL27Z128VFT4" manual="KL27P64M48SF6RM" package="QFN_48" />

@@ -469,6 +469,12 @@ Devices using this vector table:
       <peripheral>TSI0</peripheral>
    </interrupt>
    <interrupt>
+      <name>MCG</name>
+      <description>Multipurpose Clock Generator</description>
+      <value>84</value>
+      <peripheral>MCG</peripheral>
+   </interrupt>
+   <interrupt>
       <name>LPTMR0</name>
       <description>Low Power Timer</description>
       <value>85</value>
@@ -509,6 +515,11 @@ Devices using this vector table:
       <description>General Purpose Input/Output</description>
       <value>92</value>
       <peripheral>PORTF</peripheral>
+   </interrupt>
+   <interrupt>
+      <name>SWI</name>
+      <description>Software interrupt</description>
+      <value>94</value>
    </interrupt>
    <interrupt>
       <name>NFC</name>

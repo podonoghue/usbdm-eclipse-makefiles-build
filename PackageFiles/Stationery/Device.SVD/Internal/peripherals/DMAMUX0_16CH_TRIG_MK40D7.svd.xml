@@ -1,0 +1,403 @@
+<!--
+Devices using this peripheral: 
+      MK40D7
+-->
+      <peripheral>
+         <?sourceFile "DMAMUX0_16CH_TRIG_MK40D7" ?>
+         <name>DMAMUX0</name>
+         <description>DMA channel multiplexor</description>
+         <groupName>DMAMUX</groupName>
+         <headerStructName>DMAMUX</headerStructName>
+         <baseAddress>0x40021000</baseAddress>
+         <size>32</size>
+         <access>read-write</access>
+         <resetValue>0x0</resetValue>
+         <resetMask>0xFFFFFFFF</resetMask>
+         <addressBlock>
+            <?width "8" ?>
+            <offset>0x0</offset>
+            <size>0x10</size>
+            <usage>registers</usage>
+         </addressBlock>
+         <registers>
+            <register>
+               <dim>16</dim>
+               <dimIncrement>1</dimIncrement>
+               <dimIndex>0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15</dimIndex>
+               <name>CHCFG%s</name>
+               <description>Channel Configuration Register</description>
+               <addressOffset>0x0</addressOffset>
+               <size>8</size>
+               <resetMask>0x0</resetMask>
+               <fields>
+                  <field>
+                     <name>SOURCE</name>
+                     <description>DMA Channel Source (slot)\n
+Specifies which DMA source, if any, is routed to a particular DMA channel</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>6</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>Disabled</name>
+                           <description>Disabled</description>
+                           <value>0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>Reserved1</name>
+                           <description>Reserved</description>
+                           <value>1</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>UART0_Rx</name>
+                           <description>UART0 Receive</description>
+                           <value>2</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>UART0_Tx</name>
+                           <description>UART0 Transmit</description>
+                           <value>3</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>UART1_Rx</name>
+                           <description>UART1 Receive</description>
+                           <value>4</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>UART1_Tx</name>
+                           <description>UART1 Transmit</description>
+                           <value>5</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>UART2_Rx</name>
+                           <description>UART2 Receive</description>
+                           <value>6</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>UART2_Tx</name>
+                           <description>UART2 Transmit</description>
+                           <value>7</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>Reserved8</name>
+                           <description>UART3 Receive</description>
+                           <value>8</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>Reserved9</name>
+                           <description>UART3 Transmit</description>
+                           <value>9</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>Reserved10</name>
+                           <description>UART4 Receive</description>
+                           <value>10</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>Reserved11</name>
+                           <description>UART4 Transmit</description>
+                           <value>11</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>Reserved12</name>
+                           <description>Reserved</description>
+                           <value>12</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>Reserved13</name>
+                           <description>Reserved</description>
+                           <value>13</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>I2S0_Rx</name>
+                           <description>I2S0 Receive</description>
+                           <value>14</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>I2S0_Tx</name>
+                           <description>I2S0 Transmit</description>
+                           <value>15</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>SPI0_Rx</name>
+                           <description>SPI0 Receive</description>
+                           <value>16</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>SPI0_Tx</name>
+                           <description>SPI0 Transmit</description>
+                           <value>17</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>SPI1_Rx</name>
+                           <description>SPI0 Receive</description>
+                           <value>18</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>SPI1_Tx</name>
+                           <description>SPI1 Transmit</description>
+                           <value>19</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>Reserved20</name>
+                           <description>Reserved</description>
+                           <value>20</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>Reserved21</name>
+                           <description>Reserved</description>
+                           <value>21</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>I2C0</name>
+                           <description>I2C0</description>
+                           <value>22</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>I2C1</name>
+                           <description>I2C1</description>
+                           <value>23</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>FTM0_Ch0</name>
+                           <description>FTM0 Channel 0</description>
+                           <value>24</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>FTM0_Ch1</name>
+                           <description>FTM0 Channel 1</description>
+                           <value>25</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>FTM0_Ch2</name>
+                           <description>FTM0 Channel 2</description>
+                           <value>26</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>FTM0_Ch3</name>
+                           <description>FTM0 Channel 3</description>
+                           <value>27</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>FTM0_Ch4</name>
+                           <description>FTM0 Channel 4</description>
+                           <value>28</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>FTM0_Ch5</name>
+                           <description>FTM0 Channel 5</description>
+                           <value>29</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>FTM0_Ch6</name>
+                           <description>FTM0 Channel 6</description>
+                           <value>30</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>FTM0_Ch7</name>
+                           <description>FTM0 Channel 7</description>
+                           <value>31</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>FTM1_Ch0</name>
+                           <description>FTM1 Channel 0</description>
+                           <value>32</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>FTM1_Ch2</name>
+                           <description>FTM1 Channel 1</description>
+                           <value>33</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>FTM2_Ch0</name>
+                           <description>FTM2 Channel 0</description>
+                           <value>34</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>FTM2_Ch1</name>
+                           <description>FTM2 Channel 1</description>
+                           <value>35</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>Reserved36</name>
+                           <description>Reserved</description>
+                           <value>36</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>Reserved37</name>
+                           <description>Reserved</description>
+                           <value>37</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>Reserved38</name>
+                           <description>Reserved</description>
+                           <value>38</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>Reserved39</name>
+                           <description>Reserved</description>
+                           <value>39</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>ADC0</name>
+                           <description>ADC0</description>
+                           <value>40</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>ADC1</name>
+                           <description>ADC1</description>
+                           <value>41</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>CMP0</name>
+                           <description>CMP0</description>
+                           <value>42</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>CMP1</name>
+                           <description>CMP1</description>
+                           <value>43</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>CMP2</name>
+                           <description>CMP2</description>
+                           <value>44</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>DAC0</name>
+                           <description>DAC0</description>
+                           <value>45</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>Reserved46</name>
+                           <description>Reserved</description>
+                           <value>46</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>CMT</name>
+                           <description>CMT</description>
+                           <value>47</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>PDB</name>
+                           <description>PDB</description>
+                           <value>48</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>PortA</name>
+                           <description>Port A</description>
+                           <value>49</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>PortB</name>
+                           <description>Port B</description>
+                           <value>50</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>PortC</name>
+                           <description>Port C</description>
+                           <value>51</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>PortD</name>
+                           <description>Port D</description>
+                           <value>52</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>PortE</name>
+                           <description>Port E</description>
+                           <value>53</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>AlwaysEnabled54</name>
+                           <description>AlwaysEnabled54</description>
+                           <value>54</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>AlwaysEnabled55</name>
+                           <description>AlwaysEnabled55</description>
+                           <value>55</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>AlwaysEnabled56</name>
+                           <description>AlwaysEnabled56</description>
+                           <value>56</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>AlwaysEnabled57</name>
+                           <description>AlwaysEnabled57</description>
+                           <value>57</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>AlwaysEnabled58</name>
+                           <description>AlwaysEnabled58</description>
+                           <value>58</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>AlwaysEnabled59</name>
+                           <description>AlwaysEnabled59</description>
+                           <value>59</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>AlwaysEnabled60</name>
+                           <description>AlwaysEnabled60</description>
+                           <value>60</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>AlwaysEnabled61</name>
+                           <description>AlwaysEnabled61</description>
+                           <value>61</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>AlwaysEnabled62</name>
+                           <description>AlwaysEnabled62</description>
+                           <value>62</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>AlwaysEnabled63</name>
+                           <description>AlwaysEnabled63</description>
+                           <value>63</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>TRIG</name>
+                     <description>DMA Channel Trigger Enable\n
+Enables the periodic trigger capability for the triggered DMA channel</description>
+                     <bitOffset>6</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>Request directly routed</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>Periodic triggering enabled</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>ENBL</name>
+                     <description>DMA Channel Enable\n
+Usually the Channel enable in the DMA is used in preference to this</description>
+                     <bitOffset>7</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>Channel disabled</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>Channel enabled</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+               </fields>
+            </register>
+         </registers>
+      </peripheral>

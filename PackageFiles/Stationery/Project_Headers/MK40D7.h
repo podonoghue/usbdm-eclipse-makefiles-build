@@ -5,7 +5,7 @@
  *           Equivalent: 
  *
  * @version  V1.6
- * @date     2021/08
+ * @date     2021/10
  *
  *******************************************************************************************************/
 
@@ -2609,7 +2609,7 @@ typedef struct DMA_Type {
 */
 
 /* ================================================================================ */
-/* ================           DMAMUX0 (file:DMAMUX0_16CH_TRIG)       ================ */
+/* ================           DMAMUX0 (file:DMAMUX0_16CH_TRIG_MK40D7)       ================ */
 /* ================================================================================ */
 
 /**
@@ -2661,65 +2661,51 @@ typedef struct DMAMUX_Type {
  */
 typedef enum DmaSlot {
    Dma0Slot_Disabled                   =        0, //!<  Disabled
-   Dma0Slot_Slot1                      =        1, //!<  Slot1
-   Dma0Slot_Slot2                      =        2, //!<  Slot2
-   Dma0Slot_Slot3                      =        3, //!<  Slot3
-   Dma0Slot_Slot4                      =        4, //!<  Slot4
-   Dma0Slot_Slot5                      =        5, //!<  Slot5
-   Dma0Slot_Slot6                      =        6, //!<  Slot6
-   Dma0Slot_Slot7                      =        7, //!<  Slot7
-   Dma0Slot_Slot8                      =        8, //!<  Slot8
-   Dma0Slot_Slot9                      =        9, //!<  Slot9
-   Dma0Slot_Slot10                     =       10, //!<  Slot10
-   Dma0Slot_Slot11                     =       11, //!<  Slot11
-   Dma0Slot_Slot12                     =       12, //!<  Slot12
-   Dma0Slot_Slot13                     =       13, //!<  Slot13
-   Dma0Slot_Slot14                     =       14, //!<  Slot14
-   Dma0Slot_Slot15                     =       15, //!<  Slot15
-   Dma0Slot_Slot16                     =       16, //!<  Slot16
-   Dma0Slot_Slot17                     =       17, //!<  Slot17
-   Dma0Slot_Slot18                     =       18, //!<  Slot18
-   Dma0Slot_Slot19                     =       19, //!<  Slot19
-   Dma0Slot_Slot20                     =       20, //!<  Slot20
-   Dma0Slot_Slot21                     =       21, //!<  Slot21
-   Dma0Slot_Slot22                     =       22, //!<  Slot22
-   Dma0Slot_Slot23                     =       23, //!<  Slot23
-   Dma0Slot_Slot24                     =       24, //!<  Slot24
-   Dma0Slot_Slot25                     =       25, //!<  Slot25
-   Dma0Slot_Slot26                     =       26, //!<  Slot26
-   Dma0Slot_Slot27                     =       27, //!<  Slot27
-   Dma0Slot_Slot28                     =       28, //!<  Slot28
-   Dma0Slot_Slot29                     =       29, //!<  Slot29
-   Dma0Slot_Slot30                     =       30, //!<  Slot30
-   Dma0Slot_Slot31                     =       31, //!<  Slot31
-   Dma0Slot_Slot32                     =       32, //!<  Slot32
-   Dma0Slot_Slot33                     =       33, //!<  Slot33
-   Dma0Slot_Slot34                     =       34, //!<  Slot34
-   Dma0Slot_Slot35                     =       35, //!<  Slot35
-   Dma0Slot_Slot36                     =       36, //!<  Slot36
-   Dma0Slot_Slot37                     =       37, //!<  Slot37
-   Dma0Slot_Slot38                     =       38, //!<  Slot38
-   Dma0Slot_Slot39                     =       39, //!<  Slot39
-   Dma0Slot_Slot40                     =       40, //!<  Slot40
-   Dma0Slot_Slot41                     =       41, //!<  Slot41
-   Dma0Slot_Slot42                     =       42, //!<  Slot42
-   Dma0Slot_Slot43                     =       43, //!<  Slot43
-   Dma0Slot_Slot44                     =       44, //!<  Slot44
-   Dma0Slot_Slot45                     =       45, //!<  Slot45
-   Dma0Slot_Slot46                     =       46, //!<  Slot46
-   Dma0Slot_Slot47                     =       47, //!<  Slot47
-   Dma0Slot_Slot48                     =       48, //!<  Slot48
-   Dma0Slot_Slot49                     =       49, //!<  Slot49
-   Dma0Slot_Slot50                     =       50, //!<  Slot50
-   Dma0Slot_Slot51                     =       51, //!<  Slot51
-   Dma0Slot_Slot52                     =       52, //!<  Slot52
-   Dma0Slot_Slot53                     =       53, //!<  Slot53
-   Dma0Slot_Slot54                     =       54, //!<  Slot54
-   Dma0Slot_Slot55                     =       55, //!<  Slot55
-   Dma0Slot_Slot56                     =       56, //!<  Slot56
-   Dma0Slot_Slot57                     =       57, //!<  Slot57
-   Dma0Slot_Slot58                     =       58, //!<  Slot58
-   Dma0Slot_Slot59                     =       59, //!<  Slot59
+   Dma0Slot_UART0_Rx                   =        2, //!<  UART0 Receive
+   Dma0Slot_UART0_Tx                   =        3, //!<  UART0 Transmit
+   Dma0Slot_UART1_Rx                   =        4, //!<  UART1 Receive
+   Dma0Slot_UART1_Tx                   =        5, //!<  UART1 Transmit
+   Dma0Slot_UART2_Rx                   =        6, //!<  UART2 Receive
+   Dma0Slot_UART2_Tx                   =        7, //!<  UART2 Transmit
+   Dma0Slot_I2S0_Rx                    =       14, //!<  I2S0 Receive
+   Dma0Slot_I2S0_Tx                    =       15, //!<  I2S0 Transmit
+   Dma0Slot_SPI0_Rx                    =       16, //!<  SPI0 Receive
+   Dma0Slot_SPI0_Tx                    =       17, //!<  SPI0 Transmit
+   Dma0Slot_SPI1_Rx                    =       18, //!<  SPI0 Receive
+   Dma0Slot_SPI1_Tx                    =       19, //!<  SPI1 Transmit
+   Dma0Slot_I2C0                       =       22, //!<  I2C0
+   Dma0Slot_I2C1                       =       23, //!<  I2C1
+   Dma0Slot_FTM0_Ch0                   =       24, //!<  FTM0 Channel 0
+   Dma0Slot_FTM0_Ch1                   =       25, //!<  FTM0 Channel 1
+   Dma0Slot_FTM0_Ch2                   =       26, //!<  FTM0 Channel 2
+   Dma0Slot_FTM0_Ch3                   =       27, //!<  FTM0 Channel 3
+   Dma0Slot_FTM0_Ch4                   =       28, //!<  FTM0 Channel 4
+   Dma0Slot_FTM0_Ch5                   =       29, //!<  FTM0 Channel 5
+   Dma0Slot_FTM0_Ch6                   =       30, //!<  FTM0 Channel 6
+   Dma0Slot_FTM0_Ch7                   =       31, //!<  FTM0 Channel 7
+   Dma0Slot_FTM1_Ch0                   =       32, //!<  FTM1 Channel 0
+   Dma0Slot_FTM1_Ch2                   =       33, //!<  FTM1 Channel 1
+   Dma0Slot_FTM2_Ch0                   =       34, //!<  FTM2 Channel 0
+   Dma0Slot_FTM2_Ch1                   =       35, //!<  FTM2 Channel 1
+   Dma0Slot_ADC0                       =       40, //!<  ADC0
+   Dma0Slot_ADC1                       =       41, //!<  ADC1
+   Dma0Slot_CMP0                       =       42, //!<  CMP0
+   Dma0Slot_CMP1                       =       43, //!<  CMP1
+   Dma0Slot_CMP2                       =       44, //!<  CMP2
+   Dma0Slot_DAC0                       =       45, //!<  DAC0
+   Dma0Slot_CMT                        =       47, //!<  CMT
+   Dma0Slot_PDB                        =       48, //!<  PDB
+   Dma0Slot_PortA                      =       49, //!<  Port A
+   Dma0Slot_PortB                      =       50, //!<  Port B
+   Dma0Slot_PortC                      =       51, //!<  Port C
+   Dma0Slot_PortD                      =       52, //!<  Port D
+   Dma0Slot_PortE                      =       53, //!<  Port E
+   Dma0Slot_AlwaysEnabled54            =       54, //!<  AlwaysEnabled54
+   Dma0Slot_AlwaysEnabled55            =       55, //!<  AlwaysEnabled55
+   Dma0Slot_AlwaysEnabled56            =       56, //!<  AlwaysEnabled56
+   Dma0Slot_AlwaysEnabled57            =       57, //!<  AlwaysEnabled57
+   Dma0Slot_AlwaysEnabled58            =       58, //!<  AlwaysEnabled58
+   Dma0Slot_AlwaysEnabled59            =       59, //!<  AlwaysEnabled59
    Dma0Slot_AlwaysEnabled60            =       60, //!<  AlwaysEnabled60
    Dma0Slot_AlwaysEnabled61            =       61, //!<  AlwaysEnabled61
    Dma0Slot_AlwaysEnabled62            =       62, //!<  AlwaysEnabled62
@@ -7585,9 +7571,9 @@ typedef struct SIM_Type {
 #define SIM_SCGC4_VREF_SHIFT                     (20U)                                               /*!< SIM_SCGC4.VREF Position                 */
 #define SIM_SCGC4_VREF(x)                        (((uint32_t)(((uint32_t)(x))<<20U))&0x100000UL)     /*!< SIM_SCGC4.VREF Field                    */
 /* ------- SCGC5 Bit Fields                         ------ */
-#define SIM_SCGC5_LPTIMER_MASK                   (0x1U)                                              /*!< SIM_SCGC5.LPTIMER Mask                  */
-#define SIM_SCGC5_LPTIMER_SHIFT                  (0U)                                                /*!< SIM_SCGC5.LPTIMER Position              */
-#define SIM_SCGC5_LPTIMER(x)                     (((uint32_t)(((uint32_t)(x))<<0U))&0x1UL)           /*!< SIM_SCGC5.LPTIMER Field                 */
+#define SIM_SCGC5_LPTMR_MASK                     (0x1U)                                              /*!< SIM_SCGC5.LPTMR Mask                    */
+#define SIM_SCGC5_LPTMR_SHIFT                    (0U)                                                /*!< SIM_SCGC5.LPTMR Position                */
+#define SIM_SCGC5_LPTMR(x)                       (((uint32_t)(((uint32_t)(x))<<0U))&0x1UL)           /*!< SIM_SCGC5.LPTMR Field                   */
 #define SIM_SCGC5_TSI0_MASK                      (0x20U)                                             /*!< SIM_SCGC5.TSI0 Mask                     */
 #define SIM_SCGC5_TSI0_SHIFT                     (5U)                                                /*!< SIM_SCGC5.TSI0 Position                 */
 #define SIM_SCGC5_TSI0(x)                        (((uint32_t)(((uint32_t)(x))<<5U))&0x20UL)          /*!< SIM_SCGC5.TSI0 Field                    */
@@ -7657,6 +7643,9 @@ typedef struct SIM_Type {
 #define SIM_CLKDIV1_OUTDIV4_MASK                 (0xF0000U)                                          /*!< SIM_CLKDIV1.OUTDIV4 Mask                */
 #define SIM_CLKDIV1_OUTDIV4_SHIFT                (16U)                                               /*!< SIM_CLKDIV1.OUTDIV4 Position            */
 #define SIM_CLKDIV1_OUTDIV4(x)                   (((uint32_t)(((uint32_t)(x))<<16U))&0xF0000UL)      /*!< SIM_CLKDIV1.OUTDIV4 Field               */
+#define SIM_CLKDIV1_OUTDIV3_MASK                 (0xF00000U)                                         /*!< SIM_CLKDIV1.OUTDIV3 Mask                */
+#define SIM_CLKDIV1_OUTDIV3_SHIFT                (20U)                                               /*!< SIM_CLKDIV1.OUTDIV3 Position            */
+#define SIM_CLKDIV1_OUTDIV3(x)                   (((uint32_t)(((uint32_t)(x))<<20U))&0xF00000UL)     /*!< SIM_CLKDIV1.OUTDIV3 Field               */
 #define SIM_CLKDIV1_OUTDIV2_MASK                 (0xF000000U)                                        /*!< SIM_CLKDIV1.OUTDIV2 Mask                */
 #define SIM_CLKDIV1_OUTDIV2_SHIFT                (24U)                                               /*!< SIM_CLKDIV1.OUTDIV2 Position            */
 #define SIM_CLKDIV1_OUTDIV2(x)                   (((uint32_t)(((uint32_t)(x))<<24U))&0xF000000UL)    /*!< SIM_CLKDIV1.OUTDIV2 Field               */

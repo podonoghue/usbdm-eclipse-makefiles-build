@@ -164,7 +164,7 @@ Devices using this peripheral:
                   </field>
                   <field>
                      <name>USBVSTBY</name>
-                     <description>USB Regulator standby in run/wait modes\n
+                     <description>USB Regulator standby in low-power run/wait modes\n
 This bit controls whether the USB VREG enters standby in VLPW and VLPR modes</description>
                      <bitOffset>29</bitOffset>
                      <bitWidth>1</bitWidth>
