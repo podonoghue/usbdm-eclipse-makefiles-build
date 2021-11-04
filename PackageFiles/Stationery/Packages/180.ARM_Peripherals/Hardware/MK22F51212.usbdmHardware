@@ -217,6 +217,7 @@
       <peripheral baseName="LLWU"     instance=""         version="llwu_pe4_filt2_mk22f51212">
          <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForLlwu" />
          <irq num="LLWU_IRQn" />
+         <param key="device_list"   value="LPTMR0;CMP0;CMP1;;;RTC_Alarm;;RTC_Seconds" />
       </peripheral>
       <peripheral baseName="LPTMR"    instance="0"        version="lptmr0">
          <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForLptmr" />
@@ -406,6 +407,22 @@
       </pin>
       <pin name="EXTAL32"      isFixed="true">
          <mux sel="fixed"         signal="EXTAL32" />
+         <reset sel="fixed" />
+      </pin>
+      <pin name="PIT_CH0"      isFixed="true">
+         <mux sel="fixed"         signal="PIT_CH0" />
+         <reset sel="fixed" />
+      </pin>
+      <pin name="PIT_CH1"      isFixed="true">
+         <mux sel="fixed"         signal="PIT_CH1" />
+         <reset sel="fixed" />
+      </pin>
+      <pin name="PIT_CH2"      isFixed="true">
+         <mux sel="fixed"         signal="PIT_CH2" />
+         <reset sel="fixed" />
+      </pin>
+      <pin name="PIT_CH3"      isFixed="true">
+         <mux sel="fixed"         signal="PIT_CH3" />
          <reset sel="fixed" />
       </pin>
       <pin name="RESET_b"      isFixed="true">
@@ -1192,6 +1209,10 @@
          <placement pin="DAC0_OUT"      location="K5" />
          <placement pin="DAC1_OUT"      location="K4" />
          <placement pin="EXTAL32"       location="L5" />
+         <placement pin="PIT_CH0"       location="Internal" />
+         <placement pin="PIT_CH1"       location="Internal" />
+         <placement pin="PIT_CH2"       location="Internal" />
+         <placement pin="PIT_CH3"       location="Internal" />
          <placement pin="PTA0"          location="J6" />
          <placement pin="PTA1"          location="H8" />
          <placement pin="PTA10"         location="J9" />
@@ -1306,6 +1327,10 @@
          <placement pin="CMP_DAC"       location="Internal" />
          <placement pin="DAC0_OUT"      location="H2" />
          <placement pin="EXTAL32"       location="H4" />
+         <placement pin="PIT_CH0"       location="Internal" />
+         <placement pin="PIT_CH1"       location="Internal" />
+         <placement pin="PIT_CH2"       location="Internal" />
+         <placement pin="PIT_CH3"       location="Internal" />
          <placement pin="PTA0"          location="D3" />
          <placement pin="PTA1"          location="D4" />
          <placement pin="PTA12"         location="H6" />
@@ -1375,6 +1400,10 @@
          <placement pin="CMP_DAC"       location="Internal" />
          <placement pin="DAC0_OUT"      location="A11/J24_11" />
          <placement pin="EXTAL32"       location="EXTAL32" />
+         <placement pin="PIT_CH0"       location="Internal" />
+         <placement pin="PIT_CH1"       location="Internal" />
+         <placement pin="PIT_CH2"       location="Internal" />
+         <placement pin="PIT_CH3"       location="Internal" />
          <placement pin="PTA0"          location="SWD_CLK" />
          <placement pin="PTA1"          location="D9/J2_4/LED_RED" />
          <placement pin="PTA12"         location="D18/J1_5" />
@@ -1447,6 +1476,10 @@
          <placement pin="CMP_DAC"       location="Internal" />
          <placement pin="DAC0_OUT"      location="p27" />
          <placement pin="EXTAL32"       location="p29" />
+         <placement pin="PIT_CH0"       location="Internal" />
+         <placement pin="PIT_CH1"       location="Internal" />
+         <placement pin="PIT_CH2"       location="Internal" />
+         <placement pin="PIT_CH3"       location="Internal" />
          <placement pin="PTA0"          location="p34" />
          <placement pin="PTA1"          location="p35" />
          <placement pin="PTA12"         location="p42" />
@@ -1548,6 +1581,10 @@
          <placement pin="CMP_DAC"       location="Internal" />
          <placement pin="DAC0_OUT"      location="p18" />
          <placement pin="EXTAL32"       location="p20" />
+         <placement pin="PIT_CH0"       location="Internal" />
+         <placement pin="PIT_CH1"       location="Internal" />
+         <placement pin="PIT_CH2"       location="Internal" />
+         <placement pin="PIT_CH3"       location="Internal" />
          <placement pin="PTA0"          location="p22" />
          <placement pin="PTA1"          location="p23" />
          <placement pin="PTA12"         location="p28" />
@@ -1617,6 +1654,10 @@
          <placement pin="CMP_DAC"       location="Internal" />
          <placement pin="DAC0_OUT"      location="p14_Vo" />
          <placement pin="EXTAL32"       location="extal_32kHz" />
+         <placement pin="PIT_CH0"       location="Internal" />
+         <placement pin="PIT_CH1"       location="Internal" />
+         <placement pin="PIT_CH2"       location="Internal" />
+         <placement pin="PIT_CH3"       location="Internal" />
          <placement pin="PTA0"          location="SWD_CLK" />
          <placement pin="PTA1"          location="SWD_RX" />
          <placement pin="PTA12"         location="p16_A12" />

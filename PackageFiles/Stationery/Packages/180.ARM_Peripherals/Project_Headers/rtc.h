@@ -388,7 +388,7 @@ template<class Info> RtcCallbackFunction RtcBase_T<Info>::sSecondsCallback = unh
  * Class representing RTC
  */
 class Rtc : public RtcBase_T<RtcInfo>{};
-
+$(/RTC/Declarations:   // No declarations Found)
 #endif
 
 /**

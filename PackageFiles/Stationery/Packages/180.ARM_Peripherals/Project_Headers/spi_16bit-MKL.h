@@ -663,6 +663,7 @@ template<class Info> CMSIS::Mutex     SpiBase_T<Info>::mutex;
  *
  */
 using Spi0 = SpiBase_T<Spi0Info>;
+$(/SPI0/Declarations:   // No declarations Found)
 #endif
 
 #if defined(USBDM_SPI1_IS_DEFINED)
@@ -680,7 +681,7 @@ using Spi0 = SpiBase_T<Spi0Info>;
  *
  */
 using Spi1 = SpiBase_T<Spi1Info>;
-
+$(/SPI1/Declarations:   // No declarations Found)
 #endif
 /**
  * End SPI_Group

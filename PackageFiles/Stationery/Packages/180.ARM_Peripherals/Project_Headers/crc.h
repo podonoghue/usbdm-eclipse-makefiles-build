@@ -379,10 +379,12 @@ public:
 
 #if defined(USBDM_CRC_IS_DEFINED)
 class Crc : public CrcBase_T<CrcInfo> {};
+$(/CRC/Declarations:   // No declarations Found)
 #endif
 
 #if defined(USBDM_CRC0_IS_DEFINED)
 class Crc0 : public CrcBase_T<Crc0Info> {};
+$(/CRC0/Declarations:   // No declarations Found)
 #endif
 
 /**

@@ -382,6 +382,7 @@ template<class Info> EwmCallbackFunction EwmBase_T<Info>::sCallback = EwmBase_T<
 
 #if defined(USBDM_EWM_IS_DEFINED)
 class Ewm : public EwmBase_T<EwmInfo> {};
+$(/EWM/Declarations:   // No declarations Found)
 #endif
 
 /**

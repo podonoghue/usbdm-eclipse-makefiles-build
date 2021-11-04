@@ -200,9 +200,10 @@ class Vref : public VrefBase_T<VrefInfo> {};
 
 #if defined(USBDM_VREF0_IS_DEFINED)
 class Vref0 : public Vref<Vref0Info> {};
+$(/VREF0/Declarations:   // No declarations Found)
 #endif
 /**
- * End TSI_Group
+ * End VREF_Group
  * @}
  */
 

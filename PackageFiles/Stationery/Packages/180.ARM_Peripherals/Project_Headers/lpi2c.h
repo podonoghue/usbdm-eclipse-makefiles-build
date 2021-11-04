@@ -167,6 +167,7 @@ template<class Info> Lpi2c *Lpi2cBase_T<Info>::thisPtr = 0;
  * Refer @ref Lpi2cBase_T
  */
 using Lpi2c0 = Lpi2cBase_T<Lpi2c0Info>;
+$(/LPI2CO/Declarations:   // No declarations Found)
 #endif
 
 #if defined(USBDM_LPI2C1_IS_DEFINED)
@@ -177,6 +178,7 @@ using Lpi2c0 = Lpi2cBase_T<Lpi2c0Info>;
  * Refer @ref Lpi2cBase_T
  */
 using Lpi2c1 = Lpi2cBase_T<Lpi2c1Info>;
+$(/LPI2C1/Declarations:   // No declarations Found)
 #endif
 
 #if defined(USBDM_LPI2C2_IS_DEFINED)
@@ -187,6 +189,7 @@ using Lpi2c1 = Lpi2cBase_T<Lpi2c1Info>;
  * Refer @ref Lpi2cBase_T
  */
 using Lpi2c2 = Lpi2cBase_T<Lpi2c2Info>;
+$(/LPI2C2/Declarations:   // No declarations Found)
 #endif
 
 /**

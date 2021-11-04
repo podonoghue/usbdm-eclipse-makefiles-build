@@ -176,6 +176,7 @@ class Trng : public TrngBase_T<TrngInfo> {};
 
 #if defined(USBDM_TRNG0_IS_DEFINED)
 class Trng0 : public TrngBase_T<Trng0Info> {};
+$(/TRNG0/Declarations:   // No declarations Found)
 #endif
 
 /**

@@ -103,4 +103,6 @@ constexpr IRQn_Type inline operator+(IRQn_Type vector, int offset) {
    return vector + static_cast<unsigned>(offset);
 }
 
+$(/HARDWARE_CPP/IncludeFiles:   // No definitions Found)
+
 #endif /* INCLUDE_USBDM_HARDWARE_H_ */

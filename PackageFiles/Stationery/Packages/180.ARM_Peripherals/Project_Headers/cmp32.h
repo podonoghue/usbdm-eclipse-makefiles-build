@@ -1013,6 +1013,7 @@ public:
       CmpBase_T::selectInputs(cmpInputP, cmpInputN);
    }
 };
+$(/CMP0/Declarations:   // No declarations Found)
 #endif
 
 #if defined(USBDM_CMP1_IS_DEFINED)
@@ -1028,6 +1029,7 @@ public:
       CmpBase_T::selectInputs((unsigned)positiveInput, (unsigned)negativeInput);
    }
 };
+$(/CMP1/Declarations:   // No declarations Found)
 #endif
 
 #if defined(USBDM_CMP2_IS_DEFINED)
@@ -1043,6 +1045,7 @@ public:
       CmpBase_T::selectInputs((unsigned)positiveInput, (unsigned)negativeInput);
    }
 };
+$(/CMP2/Declarations:   // No declarations Found)
 #endif
 
 #if defined(USBDM_CMP3_IS_DEFINED)
@@ -1058,6 +1061,7 @@ public:
       CmpBase_T::selectInputs((unsigned)positiveInput, (unsigned)negativeInput);
    }
 };
+$(/CMP3/Declarations:   // No declarations Found)
 #endif
 /**
  * End CMP_Group

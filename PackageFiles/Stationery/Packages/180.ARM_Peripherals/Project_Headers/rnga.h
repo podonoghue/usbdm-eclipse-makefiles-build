@@ -279,10 +279,12 @@ template<class Info> RNGACallbackFunction RngaBase_T<Info>::callback = RngaBase_
 
 #if defined(USBDM_RNGA_IS_DEFINED)
 class Rnga : public RngaBase_T<RngaInfo> {};
+$(/RNGA/Declarations:   // No declarations Found)
 #endif
 
 #if defined(USBDM_RNGA0_IS_DEFINED)
 class Rnga0 : public RngaBase_T<Rnga0Info> {};
+$(/RNGA0/Declarations:   // No declarations Found)
 #endif
 
 /**

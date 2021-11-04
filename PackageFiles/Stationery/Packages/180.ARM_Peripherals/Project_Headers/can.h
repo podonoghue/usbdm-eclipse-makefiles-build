@@ -2280,14 +2280,17 @@ typename CanHandler_T<Info>::CanMailboxInfo CanHandler_T<Info>::MailboxNone;
 
 #if defined(USBDM_CAN0_IS_DEFINED)
 using Can0 = CanHandler_T<Can0Info>;
+$(/CAN0/Declarations:   // No declarations Found)
 #endif
 
 #if defined(USBDM_CAN1_IS_DEFINED)
 using Can1 = CanHandler_T<Can1Info>;
+$(/CAN1/Declarations:   // No declarations Found)
 #endif
 
 #if defined(USBDM_CAN2_IS_DEFINED)
 using Can2 = CanHandler_T<Can2Info>;
+$(/CAN2/Declarations:   // No declarations Found)
 #endif
 /**
  * @}

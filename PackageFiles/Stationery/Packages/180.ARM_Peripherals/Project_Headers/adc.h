@@ -425,7 +425,6 @@ template<class Info>
 class AdcBase_T {
 
 private:
-   AdcBase_T() = delete;
    AdcBase_T(const AdcBase_T&) = delete;
    AdcBase_T(AdcBase_T&&) = delete;
 
@@ -437,7 +436,6 @@ public:
    /** Hardware instance pointer */
    static constexpr HardwarePtr<ADC_Type> adc = Info::baseAddress;
 
-public:
    /** Default ADC resolution */
    static constexpr AdcResolution defaultAdcResolution = static_cast<AdcResolution>(Info::defaultAdcResolution);
 
@@ -452,6 +450,8 @@ public:
    static constexpr uint32_t adcR(unsigned index) { return adcBase() + offsetof(ADC_Type, R[index]); }
 
 public:
+
+   AdcBase_T() {};
 
    /** Allow convenient access to associate AdcInfo */
    using AdcInfo = Info;
@@ -1375,7 +1375,7 @@ template<class Info> AdcCallbackFunction AdcBase_T<Info>::sCallback = AdcBase::u
  * Class representing ADC0
  */
 using Adc0 = AdcBase_T<Adc0Info>;
-
+$(/ADC0/Declarations:   // No declarations Found)
 #endif
 
 #ifdef USBDM_ADC1_IS_DEFINED
@@ -1383,7 +1383,23 @@ using Adc0 = AdcBase_T<Adc0Info>;
  * Class representing ADC1
  */
 using Adc1 = AdcBase_T<Adc1Info>;
+$(/ADC1/Declarations:   // No declarations Found)
+#endif
 
+#ifdef USBDM_ADC1_IS_DEFINED
+/**
+ * Class representing ADC1
+ */
+using Adc1 = AdcBase_T<Adc1Info>;
+$(/ADC1/Declarations:   // No declarations Found)
+#endif
+
+#ifdef USBDM_ADC2_IS_DEFINED
+/**
+ * Class representing ADC1
+ */
+using Adc2 = AdcBase_T<Adc2Info>;
+$(/ADC2/Declarations:   // No declarations Found)
 #endif
 
 /**

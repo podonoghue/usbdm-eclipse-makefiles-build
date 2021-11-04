@@ -885,21 +885,23 @@ public:
     *  Flush output data.
     *  This blocks until all pending data has been sent
     */
-   virtual void flushOutput() override {
+   virtual UartBuffered_T &flushOutput() override {
       while (!txQueue.isEmpty()) {
          // Wait until queue empty
       }
       while ((uart->S1 & UART_S1_TC_MASK) == 0) {
          // Wait until transmission of last character is complete
       }
+      return *this;
    }
 
    /**
     *  Flush input data
     */
-   virtual void flushInput() override {
+   virtual UartBuffered_T &flushInput() override {
       Uart_T<Info>::flushInput();
       rxQueue.clear();
+      return *this;
    }
 
 };
@@ -1037,6 +1039,7 @@ template<class Info, int rxSize, int txSize> volatile uint32_t   UartBuffered_T<
  *  @endcode
  */
 typedef  $(/UART0/uartClass)<Uart0Info> Uart0;
+$(/UART0/Declarations:   // No declarations Found)
 #endif
 
 #ifdef USBDM_UART1_IS_DEFINED
@@ -1054,6 +1057,7 @@ typedef  $(/UART0/uartClass)<Uart0Info> Uart0;
  *  @endcode
  */
 typedef  $(/UART1/uartClass)<Uart1Info> Uart1;
+$(/UART1/Declarations:   // No declarations Found)
 #endif
 
 #ifdef USBDM_UART2_IS_DEFINED
@@ -1071,6 +1075,7 @@ typedef  $(/UART1/uartClass)<Uart1Info> Uart1;
  *  @endcode
  */
 typedef  $(/UART2/uartClass)<Uart2Info> Uart2;
+$(/UART2/Declarations:   // No declarations Found)
 #endif
 
 #ifdef USBDM_UART3_IS_DEFINED
@@ -1088,6 +1093,7 @@ typedef  $(/UART2/uartClass)<Uart2Info> Uart2;
  *  @endcode
  */
 typedef  $(/UART3/uartClass)<Uart3Info> Uart3;
+$(/UART3/Declarations:   // No declarations Found)
 #endif
 
 #ifdef USBDM_UART4_IS_DEFINED
@@ -1105,6 +1111,7 @@ typedef  $(/UART3/uartClass)<Uart3Info> Uart3;
  *  @endcode
  */
 typedef  $(/UART4/uartClass)<Uart4Info> Uart4;
+$(/UART4/Declarations:   // No declarations Found)
 #endif
 
 #ifdef USBDM_UART5_IS_DEFINED
@@ -1122,6 +1129,7 @@ typedef  $(/UART4/uartClass)<Uart4Info> Uart4;
  *  @endcode
  */
 typedef  $(/UART5/uartClass)<Uart5Info> Uart5;
+$(/UART5/Declarations:   // No declarations Found)
 #endif
 
 /**

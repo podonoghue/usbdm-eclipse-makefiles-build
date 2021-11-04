@@ -46,14 +46,14 @@ protected:
       // Not considered an error as may be using polling
    }
 
-   volatile I2S_Type  *i2s;                 //!< I2S hardware instance
+   const HardwarePtr<I2S_Type> i2s;                 //!< I2S hardware instance
    
    /**
     * Construct I2S interface
     *
     * @param[in]  i2s     Base address of I2S hardware
     */
-   I2s(volatile I2S_Type *i2s) : i2s(i2s) {
+   I2s(uint32_t i2s) : i2s(i2s) {
    }
 
    /**
@@ -131,12 +131,13 @@ public:
     * @param[in]  bps        Tx/Rx rate
     * @param[in]  myAddress  Address of this device on bus (not currently used)
     */
-   I2sBase_T(unsigned bps=400000, uint8_t myAddress=0) : I2s(&Info::i2s()) {
-
+   I2sBase_T(unsigned bps=400000, uint8_t myAddress=0) : I2s(Info::baseAddress) {
+   (void)bps; (void)myAddress;
+   
 #ifdef DEBUG_BUILD
       // Check pin assignments
-      static_assert(Info::info[0].gpioBit != UNMAPPED_PCR, "I2Sx_SCL has not been assigned to a pin - Modify Configure.usbdm");
-      static_assert(Info::info[1].gpioBit != UNMAPPED_PCR, "I2Sx_SDA has not been assigned to a pin - Modify Configure.usbdm");
+//      static_assert(Info::info[0].gpioBit != UNMAPPED_PCR, "I2Sx_SCL has not been assigned to a pin - Modify Configure.usbdm");
+//      static_assert(Info::info[1].gpioBit != UNMAPPED_PCR, "I2Sx_SDA has not been assigned to a pin - Modify Configure.usbdm");
 #endif
 
    }
@@ -179,6 +180,7 @@ template<class Info> I2S_Type *I2sBase_T<Info>::thisPtr = 0;
  * Refer @ref I2sBase_T
  */
 using I2s0 = I2sBase_T<I2s0Info>;
+$(/I2S0/Declarations:   // No declarations Found)
 #endif
 
 #if defined(USBDM_I2S1_IS_DEFINED)
@@ -189,6 +191,7 @@ using I2s0 = I2sBase_T<I2s0Info>;
  * Refer @ref I2sBase_T
  */
 using I2s1 = I2sBase_T<I2s1Info>;
+$(/I2S1/Declarations:   // No declarations Found)
 #endif
 
 #if defined(USBDM_I2S2_IS_DEFINED)
@@ -199,6 +202,7 @@ using I2s1 = I2sBase_T<I2s1Info>;
  * Refer @ref I2SBase_T
  */
 using I2s2 = I2sBase_T<I2s2Info>;
+$(/I2S2/Declarations:   // No declarations Found)
 #endif
 
 /**

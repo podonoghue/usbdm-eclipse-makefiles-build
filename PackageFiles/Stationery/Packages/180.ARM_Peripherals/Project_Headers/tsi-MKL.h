@@ -579,7 +579,6 @@ template<class Info> TSICallbackFunction TsiIrq_T<Info>::callback = 0;
  */
 using Tsi = TsiIrq_T<TsiInfo>;
 
-
 /**
  * Class representing TSI button
  *
@@ -588,7 +587,7 @@ using Tsi = TsiIrq_T<TsiInfo>;
  */
 template<int channel, int threshold>
 using Tsi0Button = TsiButton_T<TsiInfo, channel, threshold>;
-
+$(/TSI/Declarations:   // No declarations Found)
 #endif
 
 #ifdef USBDM_TSI0_IS_DEFINED
@@ -605,7 +604,7 @@ using Tsi0 = TsiIrq_T<Tsi0Info>;
  */
 template<int channel, int threshold>
 using Tsi0Button = TsiButton_T<Tsi0Info, channel, threshold>;
-
+$(/TSI0/Declarations:   // No declarations Found)
 #endif
 
 } // End namespace USBDM

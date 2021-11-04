@@ -97,6 +97,7 @@ public:
  * Class providing interface to Oscillator
  */
 class Osc0 : public OscBase_T<Osc0Info> {};
+$(/OSC0/Declarations:   // No declarations Found)
 #endif
 
 #ifdef USBDM_OSC1_IS_DEFINED
@@ -104,6 +105,7 @@ class Osc0 : public OscBase_T<Osc0Info> {};
  * Class providing interface to Oscillator 1
  */
 class Osc1 : public OscBase_T<Osc1Info> {};
+$(/OSC1/Declarations:   // No declarations Found)
 #endif
 
 /**

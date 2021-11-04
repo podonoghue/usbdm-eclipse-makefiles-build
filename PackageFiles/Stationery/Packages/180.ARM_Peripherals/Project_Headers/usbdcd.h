@@ -108,7 +108,7 @@ public:
     *
     * @return Reference to USBDCD hardware
     */
-   static __attribute__((always_inline)) volatile USBDCD_Type &usbdcd() { return Info::usbdcd(); }
+   static constexpr HardwarePtr<USBDCD_Type> usbdcd = Info::baseAddress;
 
    /**
     * Get USBDCD status.
@@ -260,6 +260,7 @@ template<class Info> USBDCDCallbackFunction UsbdcdBase_T<Info>::callback = Usbdc
 
 #if defined(USBDM_USBDCD0_IS_DEFINED)
 class Usbdcd0 : public UsbdcdBase_T<Usbdcd0Info> {};
+$(/USBDCD0/Declarations:   // No declarations Found)
 #endif
 
 /**

@@ -114,7 +114,7 @@ enum LlwuPin : uint32_t {
 #endif
 
    // Mapped pins
-$(/LLWU/InputMapping:// None found)
+$(/LLWU/InputPinMapping:// No user pin mappings found)
 };
 
 /**
@@ -131,7 +131,7 @@ enum LlwuPeripheral : uint32_t {
    LlwuPeripheral_7               = (1<<7), //!< Wake-up peripheral LLWU_M7IF
 
    // Connected peripherals
-$(/LLWU/InputPeripherals:// None found)
+$(/LLWU/InputModuleMapping:// None found)
 };
 
 /**
@@ -666,7 +666,7 @@ template<class Info> LlwuCallbackFunction LlwuBase_T<Info>::sCallback = LlwuBase
  * Class representing LLWU
  */
 class Llwu : public LlwuBase_T<LlwuInfo> {};
-
+$(/LLWU/Declarations:   // No declarations Found)
 #endif
 
 /**

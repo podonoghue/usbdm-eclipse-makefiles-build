@@ -115,4 +115,6 @@
    
    <xi:include href="_clockOption.xml"/>
 
+   <signals/>
+
 </fragment>

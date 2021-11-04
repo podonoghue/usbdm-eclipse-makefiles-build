@@ -155,10 +155,12 @@ template<class Info> FLEXIOCallbackFunction FlexioBase_T<Info>::callback = Flexi
 
 #if defined(USBDM_FLEXIO_IS_DEFINED)
 class Flexio : public FlexioBase_T<FlexioInfo> {};
+$(/FLEXIO/Declarations:   // No declarations Found)
 #endif
 
 #if defined(USBDM_FLEXIO0_IS_DEFINED)
 class Flexio0 : public FlexioBase_T<Flexio0Info> {};
+$(/FLEXIO/Declarations:   // No declarations Found)
 #endif
 
 /**

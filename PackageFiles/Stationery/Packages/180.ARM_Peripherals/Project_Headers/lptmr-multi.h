@@ -248,6 +248,7 @@ public:
  * @brief struct representing LPTMR_0
  */
 extern const LPTMR LPTMR_0;
+$(/LPTMR0/Declarations:   // No declarations Found)
 #endif
 
 /**

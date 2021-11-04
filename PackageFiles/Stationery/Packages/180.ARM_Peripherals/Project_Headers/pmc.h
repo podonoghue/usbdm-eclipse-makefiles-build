@@ -510,7 +510,7 @@ class Pmc : public PmcBase_T<PmcInfo> {};
  * Class representing PMC
  */
 class Pmc : public PmcBase_T<PmcInfo> {};
-
+$(/PMC/Declarations:   // No declarations Found)
 #endif
 
 /**

@@ -2060,16 +2060,7 @@ template<class Info> FtmChannelCallbackFunction  FtmBase_T<Info>::sChannelCallba
  * Class representing FTM0.
  */
 class Ftm0 : public FtmBase_T<Ftm0Info> {};
-
-/**
- * Template class representing a FTM0 Timer channel.
- *
- * @tparam channel Timer channel
- *
- * @deprecated
- */
-template <int channel>
-class Ftm0Channel : public Ftm0::Channel<channel> {};
+$(/FTM0/Declarations:   // No declarations Found)
 #endif
 
 #ifdef USBDM_FTM1_IS_DEFINED
@@ -2077,16 +2068,7 @@ class Ftm0Channel : public Ftm0::Channel<channel> {};
  * Class representing FTM0.
  */
 class Ftm1 : public FtmBase_T<Ftm1Info> {};
-
-/**
- * Template class representing a FTM0 Timer channel.
- *
- * @tparam channel Timer channel
- *
- * @deprecated
- */
-template <int channel>
-class Ftm1Channel : public Ftm1::Channel<channel> {};
+$(/FTM1/Declarations:   // No declarations Found)
 #endif
 
 #ifdef USBDM_FTM2_IS_DEFINED
@@ -2094,16 +2076,7 @@ class Ftm1Channel : public Ftm1::Channel<channel> {};
  * Class representing FTM0.
  */
 class Ftm2 : public FtmBase_T<Ftm2Info> {};
-
-/**
- * Template class representing a FTM0 Timer channel.
- *
- * @tparam channel Timer channel
- *
- * @deprecated
- */
-template <int channel>
-class Ftm2Channel : public Ftm2::Channel<channel> {};
+$(/FTM2/Declarations:   // No declarations Found)
 #endif
 
 #ifdef USBDM_FTM3_IS_DEFINED
@@ -2111,16 +2084,7 @@ class Ftm2Channel : public Ftm2::Channel<channel> {};
  * Class representing FTM0.
  */
 class Ftm3 : public FtmBase_T<Ftm3Info> {};
-
-/**
- * Template class representing a FTM0 Timer channel.
- *
- * @tparam channel Timer channel
- *
- * @deprecated
- */
-template <int channel>
-class Ftm3Channel : public Ftm3::Channel<channel> {};
+$(/FTM3/Declarations:   // No declarations Found)
 #endif
 
 #ifdef FTM_QDCTRL_QUADEN_MASK

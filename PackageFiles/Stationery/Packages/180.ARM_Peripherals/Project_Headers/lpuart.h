@@ -248,18 +248,20 @@ public:
    /**
     *  Flush output data
     */
-   virtual void flushOutput() override {
+   virtual Lpuart &flushOutput() override {
       while ((lpuart.STAT & LPUART_STAT_TC_MASK) == 0) {
       // Wait until transmission of last character is complete
       }
+      return *this;
    };
 
    /**
     *  Flush input data
     */
-   virtual void flushInput() override {
+   virtual Lpuart &flushInput() override {
       (void)lpuart.DATA;
       lookAhead = -1;
+      return *this;
    };
 };
 
@@ -646,6 +648,7 @@ template<class Info, int rxSize, int txSize> volatile uint32_t   LpuartBuffered_
  *  @endcode
  */
 typedef  $(/LPUART0/lpuartClass:Lpuart_T)<Lpuart0Info> Lpuart0;
+$(/LPUART0/Declarations:   // No declarations Found)
 #endif
 
 #ifdef USBDM_LPUART1_IS_DEFINED
@@ -663,6 +666,7 @@ typedef  $(/LPUART0/lpuartClass:Lpuart_T)<Lpuart0Info> Lpuart0;
  *  @endcode
  */
 typedef  $(/LPUART1/lpuartClass:Lpuart_T)<Lpuart1Info> Lpuart1;
+$(/LPUART1/Declarations:   // No declarations Found)
 #endif
 
 #ifdef USBDM_LPUART2_IS_DEFINED
@@ -680,6 +684,7 @@ typedef  $(/LPUART1/lpuartClass:Lpuart_T)<Lpuart1Info> Lpuart1;
  *  @endcode
  */
 typedef  $(/LPUART2/lpuartClass:Lpuart_T)<Lpuart2Info> Lpuart2;
+$(/LPUART2/Declarations:   // No declarations Found)
 #endif
 
 #ifdef USBDM_LPUART3_IS_DEFINED
@@ -697,6 +702,7 @@ typedef  $(/LPUART2/lpuartClass:Lpuart_T)<Lpuart2Info> Lpuart2;
  *  @endcode
  */
 typedef  $(/LPUART3/lpuartClass:Lpuart_T)<Lpuart3Info> Lpuart3;
+$(/LPUART3/Declarations:   // No declarations Found)
 #endif
 
 #ifdef USBDM_LPUART4_IS_DEFINED
@@ -714,6 +720,7 @@ typedef  $(/LPUART3/lpuartClass:Lpuart_T)<Lpuart3Info> Lpuart3;
  *  @endcode
  */
 typedef  $(/LPUART4/lpuartClass:Lpuart_T)<Lpuart4Info> Lpuart4;
+$(/LPUART4/Declarations:   // No declarations Found)
 #endif
 
 #ifdef USBDM_LPUART5_IS_DEFINED
@@ -731,6 +738,7 @@ typedef  $(/LPUART4/lpuartClass:Lpuart_T)<Lpuart4Info> Lpuart4;
  *  @endcode
  */
 typedef  $(/LPUART5/lpuartClass:Lpuart_T)<Lpuart5Info> Lpuart5;
+$(/LPUART5/Declarations:   // No declarations Found)
 #endif
 
 /**

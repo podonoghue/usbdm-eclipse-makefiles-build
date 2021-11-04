@@ -1488,7 +1488,7 @@ template<class Info> TpmChannelCallbackFunction  TpmBase_T<Info>::sChannelCallba
  * Class representing TPM0.
  */
 using Tpm0 = TpmBase_T<Tpm0Info>;
-
+$(/TPM0/Declarations:   // No declarations Found)
 #endif
 
 #ifdef USBDM_TPM1_IS_DEFINED
@@ -1496,7 +1496,7 @@ using Tpm0 = TpmBase_T<Tpm0Info>;
  * Class representing TPM1.
  */
 using Tpm1 = TpmBase_T<Tpm1Info>;
-
+$(/TPM1/Declarations:   // No declarations Found)
 #endif
 
 #ifdef USBDM_TPM2_IS_DEFINED
@@ -1504,7 +1504,7 @@ using Tpm1 = TpmBase_T<Tpm1Info>;
  * Class representing TPM2
  */
 using Tpm2 = TpmBase_T<Tpm2Info>;
-
+$(/TPM2/Declarations:   // No declarations Found)
 #endif
 
 #ifdef USBDM_TPM3_IS_DEFINED
@@ -1512,7 +1512,7 @@ using Tpm2 = TpmBase_T<Tpm2Info>;
  * Class representing TPM3
  */
 using Tpm3 = TpmBase_T<Tpm3Info>;
-
+$(/TPM3/Declarations:   // No declarations Found)
 #endif
 
 #ifdef TPM_QDCTRL_QUADEN_MASK

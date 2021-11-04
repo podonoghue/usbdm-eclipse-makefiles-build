@@ -472,6 +472,7 @@ template<class Info> WdogCallbackFunction WdogBase_T<Info>::callback = WdogBase_
 
 #if defined(USBDM_WDOG_IS_DEFINED)
 class Wdog : public WdogBase_T<WdogInfo> {};
+$(/WDOG/Declarations:   // No declarations Found)
 #endif
 
 /**

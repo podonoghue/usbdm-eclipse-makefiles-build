@@ -200,8 +200,8 @@ public:
    }
 
 public:
-   /** Hardware instance pointer */
-   static __attribute__((always_inline)) volatile TSI_Type &tsi() { return Info::tsi(); }
+   /** Pointer to hardware */
+   static constexpr HardwarePtr<TSI_Type> tsi = Info::baseAddress;
 
    /**
     * Handler for unexpected interrupts i.e. handler not installed.
@@ -486,7 +486,7 @@ template<class Info> TSICallbackFunction TsiBase_T<Info>::sCallback = TsiBase_T<
  * Class representing TSI
  */
 class Tsi : public TsiBase_T<TsiInfo> {};
-
+$(/TSI/Declarations:   // No declarations Found)
 #endif
 
 #ifdef USBDM_TSI0_IS_DEFINED
@@ -494,7 +494,7 @@ class Tsi : public TsiBase_T<TsiInfo> {};
  * Class representing TSI
  */
 class Tsi0 : public TsiBase_T<Tsi0Info> {};
-
+$(/TSI0/Declarations:   // No declarations Found)
 #endif
 /**
  * End TSI_Group

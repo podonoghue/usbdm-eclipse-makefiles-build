@@ -897,6 +897,7 @@ $(/CMP0/InputMapping:   // None Found)
    template<Input cmpInput>
    using Pin = CmpBase_T<Cmp0Info>::PinBase_T<Input, cmpInput>;
 };
+$(/CMP0/Declarations:   // No declarations Found)
 #endif
 
 #if defined(USBDM_CMP1_IS_DEFINED)
@@ -937,6 +938,7 @@ $(/CMP1/InputMapping:   // None Found)
    template<Input cmpInput>
    using Pin = CmpBase_T<Cmp1Info>::PinBase_T<Input, cmpInput>;
 };
+$(/CMP1/Declarations:   // No declarations Found)
 #endif
 
 #if defined(USBDM_CMP2_IS_DEFINED)
@@ -977,6 +979,7 @@ $(/CMP2/InputMapping:   // None Found)
    template<Input cmpInput>
    using Pin = CmpBase_T<Cmp2Info>::PinBase_T<Input, cmpInput>;
 };
+$(/CMP2/Declarations:   // No declarations Found)
 #endif
 
 #if defined(USBDM_CMP3_IS_DEFINED)
@@ -1017,6 +1020,7 @@ $(/CMP3/InputMapping:   // None Found)
    template<Input cmpInput>
    using Pin = CmpBase_T<Cmp3Info>::PinBase_T<Input, cmpInput>;
 };
+$(/CMP3/Declarations:   // No declarations Found)
 #endif
 /**
  * End CMP_Group

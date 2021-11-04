@@ -302,7 +302,7 @@ public:
  * Class providing interface to Reset Control Module
  */
 using Rcm = RcmBase_T<RcmInfo>;
-
+$(/RCM/Declarations:   // No declarations Found)
 #endif
 
 /**

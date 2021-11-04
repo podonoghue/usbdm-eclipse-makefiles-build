@@ -227,6 +227,7 @@
       <peripheral baseName="LLWU"     instance=""         version="llwu_pe4_filt2_rst">
          <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForLlwu" />
          <irq num="LLWU_IRQn" />
+         <param key="device_list"   value="LPTMR0;CMP0;CMP1;CMP2;TSI;RTC_Alarm;;RTC_Seconds" />
       </peripheral>
       <peripheral baseName="LPTMR"    instance="0"        version="lptmr0">
          <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForLptmr" />
@@ -332,38 +333,6 @@
       </peripheral>
    </peripherals>
    <pins>
-      <pin name="ADC0_DM0"     isFixed="true">
-         <mux sel="fixed"         signal="ADC0_DM0" />
-         <mux sel="fixed"         signal="ADC1_DM3" />
-         <mux sel="fixed"         signal="ADC0_SE19" />
-         <mux sel="fixed"         signal="ADC1_SE21" />
-         <mux sel="fixed"         signal="PGA0_DM" />
-         <reset sel="fixed" />
-      </pin>
-      <pin name="ADC0_DM3"     isFixed="true">
-         <mux sel="fixed"         signal="ADC1_DM0" />
-         <mux sel="fixed"         signal="ADC0_DM3" />
-         <mux sel="fixed"         signal="ADC0_SE21" />
-         <mux sel="fixed"         signal="ADC1_SE19" />
-         <mux sel="fixed"         signal="PGA1_DM" />
-         <reset sel="fixed" />
-      </pin>
-      <pin name="ADC0_DP0"     isFixed="true">
-         <mux sel="fixed"         signal="ADC0_DP0" />
-         <mux sel="fixed"         signal="ADC1_DP3" />
-         <mux sel="fixed"         signal="ADC0_SE0" />
-         <mux sel="fixed"         signal="ADC1_SE3" />
-         <mux sel="fixed"         signal="PGA0_DP" />
-         <reset sel="fixed" />
-      </pin>
-      <pin name="ADC0_DP3"     isFixed="true">
-         <mux sel="fixed"         signal="ADC1_DP0" />
-         <mux sel="fixed"         signal="ADC0_DP3" />
-         <mux sel="fixed"         signal="ADC0_SE3" />
-         <mux sel="fixed"         signal="ADC1_SE0" />
-         <mux sel="fixed"         signal="PGA1_DP" />
-         <reset sel="fixed" />
-      </pin>
       <pin name="ADC0_SE23"    isFixed="true">
          <mux sel="fixed"         signal="DAC0_OUT" />
          <mux sel="fixed"         signal="CMP1_IN3" />
@@ -386,6 +355,54 @@
       </pin>
       <pin name="EXTAL32"      isFixed="true">
          <mux sel="fixed"         signal="EXTAL32" />
+         <reset sel="fixed" />
+      </pin>
+      <pin name="PGA0_DM"      isFixed="true">
+         <mux sel="fixed"         signal="PGA0_DM" />
+         <mux sel="fixed"         signal="ADC0_DM0" />
+         <mux sel="fixed"         signal="ADC1_DM3" />
+         <mux sel="fixed"         signal="ADC0_SE19" />
+         <mux sel="fixed"         signal="ADC1_SE21" />
+         <reset sel="fixed" />
+      </pin>
+      <pin name="PGA0_DP"      isFixed="true">
+         <mux sel="fixed"         signal="PGA0_DP" />
+         <mux sel="fixed"         signal="ADC0_DP0" />
+         <mux sel="fixed"         signal="ADC1_DP3" />
+         <mux sel="fixed"         signal="ADC0_SE0" />
+         <mux sel="fixed"         signal="ADC1_SE3" />
+         <reset sel="fixed" />
+      </pin>
+      <pin name="PGA1_DM"      isFixed="true">
+         <mux sel="fixed"         signal="PGA1_DM" />
+         <mux sel="fixed"         signal="ADC0_DM3" />
+         <mux sel="fixed"         signal="ADC1_DM0" />
+         <mux sel="fixed"         signal="ADC0_SE21" />
+         <mux sel="fixed"         signal="ADC1_SE19" />
+         <reset sel="fixed" />
+      </pin>
+      <pin name="PGA1_DP"      isFixed="true">
+         <mux sel="fixed"         signal="PGA1_DP" />
+         <mux sel="fixed"         signal="ADC0_DP3" />
+         <mux sel="fixed"         signal="ADC1_DP0" />
+         <mux sel="fixed"         signal="ADC0_SE3" />
+         <mux sel="fixed"         signal="ADC1_SE0" />
+         <reset sel="fixed" />
+      </pin>
+      <pin name="PIT_CH0"      isFixed="true">
+         <mux sel="fixed"         signal="PIT_CH0" />
+         <reset sel="fixed" />
+      </pin>
+      <pin name="PIT_CH1"      isFixed="true">
+         <mux sel="fixed"         signal="PIT_CH1" />
+         <reset sel="fixed" />
+      </pin>
+      <pin name="PIT_CH2"      isFixed="true">
+         <mux sel="fixed"         signal="PIT_CH2" />
+         <reset sel="fixed" />
+      </pin>
+      <pin name="PIT_CH3"      isFixed="true">
+         <mux sel="fixed"         signal="PIT_CH3" />
          <reset sel="fixed" />
       </pin>
       <pin name="RESET_b"      isFixed="true">
@@ -847,14 +864,18 @@
    </pins>
    <packages>
       <package name="LQFP_64_MK20D7">
-         <placement pin="ADC0_DM0"      location="p10" />
-         <placement pin="ADC0_DM3"      location="p12" />
-         <placement pin="ADC0_DP0"      location="p9" />
-         <placement pin="ADC0_DP3"      location="p11" />
          <placement pin="ADC0_SE23"     location="p18" />
          <placement pin="BANDGAP"       location="Internal" />
          <placement pin="CMP_DAC"       location="Internal" />
          <placement pin="EXTAL32"       location="p20" />
+         <placement pin="PGA0_DM"       location="p10" />
+         <placement pin="PGA0_DP"       location="p9" />
+         <placement pin="PGA1_DM"       location="p12" />
+         <placement pin="PGA1_DP"       location="p11" />
+         <placement pin="PIT_CH0"       location="Internal" />
+         <placement pin="PIT_CH1"       location="Internal" />
+         <placement pin="PIT_CH2"       location="Internal" />
+         <placement pin="PIT_CH3"       location="Internal" />
          <placement pin="PTA0"          location="p22" />
          <placement pin="PTA1"          location="p23" />
          <placement pin="PTA12"         location="p28" />

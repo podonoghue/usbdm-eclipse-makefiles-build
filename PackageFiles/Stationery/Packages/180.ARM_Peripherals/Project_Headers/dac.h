@@ -626,10 +626,12 @@ template<class Info> DacCallbackFunction Dac_T<Info>::sCallback =  Dac_T<Info>::
 
 #if defined(USBDM_DAC0_IS_DEFINED)
 using Dac0 = Dac_T<Dac0Info>;
+$(/DAC0/Declarations:   // No declarations Found)
 #endif
 
 #if defined(USBDM_DAC1_IS_DEFINED)
 using Dac1 = Dac_T<Dac1Info>;
+$(/DAC1/Declarations:   // No declarations Found)
 #endif
 /**
  * @}

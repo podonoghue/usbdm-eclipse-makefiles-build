@@ -18,7 +18,7 @@
  */
 
 // LED connection - change as required
-using Led   = $(demo.cpp.led:USBDM::GpioB<3>);
+using Led   = $(demo.cpp.led:USBDM\:\:GpioB<3>);
 
 int main() {
 

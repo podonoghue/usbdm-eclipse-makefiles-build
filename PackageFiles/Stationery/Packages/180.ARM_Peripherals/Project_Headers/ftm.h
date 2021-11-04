@@ -156,11 +156,13 @@ class FtmBase {
 private:
 
 private:
-   FtmBase() = delete;
    FtmBase(const FtmBase&) = delete;
    FtmBase(FtmBase&&) = delete;
 
 protected:
+   // Empty constructor
+   constexpr FtmBase() = default;
+
    /**
     * Limit index to permitted pin index range
     * Used to prevent noise from static assertion checks that detect a condition already detected in a more useful fashion.
@@ -263,11 +265,14 @@ private:
    /**
     * This class is not intended to be instantiated
     */
-   FtmBase_T() = delete;
    FtmBase_T(const FtmBase_T&) = delete;
    FtmBase_T(FtmBase_T&&) = delete;
 
 public:
+
+   // Empty constructor
+   constexpr FtmBase_T() = default;
+
    /**
     * Hardware instance pointer
     *
@@ -2039,7 +2044,7 @@ template<class Info> FtmChannelCallbackFunction  FtmBase_T<Info>::sChannelCallba
  * Class representing FTM0.
  */
 using Ftm0 = FtmBase_T<Ftm0Info>;
-
+$(/FTM0/Declarations:   // No declarations Found)
 #endif
 
 #ifdef USBDM_FTM1_IS_DEFINED
@@ -2047,7 +2052,7 @@ using Ftm0 = FtmBase_T<Ftm0Info>;
  * Class representing FTM0.
  */
 using Ftm1 = FtmBase_T<Ftm1Info>;
-
+$(/FTM1/Declarations:   // No declarations Found)
 #endif
 
 #ifdef USBDM_FTM2_IS_DEFINED
@@ -2055,7 +2060,7 @@ using Ftm1 = FtmBase_T<Ftm1Info>;
  * Class representing FTM0.
  */
 using Ftm2 = FtmBase_T<Ftm2Info>;
-
+$(/FTM2/Declarations:   // No declarations Found)
 #endif
 
 #ifdef USBDM_FTM3_IS_DEFINED
@@ -2063,7 +2068,7 @@ using Ftm2 = FtmBase_T<Ftm2Info>;
  * Class representing FTM0.
  */
 using Ftm3 = FtmBase_T<Ftm3Info>;
-
+$(/FTM3/Declarations:   // No declarations Found)
 #endif
 
 #ifdef FTM_QDCTRL_QUADEN_MASK

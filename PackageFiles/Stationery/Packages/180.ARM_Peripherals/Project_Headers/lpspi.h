@@ -163,6 +163,7 @@ template<class Info> Lpspi *LpspiBase_T<Info>::thisPtr = 0;
  * Refer @ref LpspiBase_T
  */
 using Lpspi0 = LpspiBase_T<Lpspi0Info>;
+$(/LPSPI0/Declarations:   // No declarations Found)
 #endif
 
 #if defined(USBDM_LPSPI1_IS_DEFINED)
@@ -173,6 +174,7 @@ using Lpspi0 = LpspiBase_T<Lpspi0Info>;
  * Refer @ref LpspiBase_T
  */
 using Lpspi1 = LpspiBase_T<Lpspi1Info>;
+$(/LPSPI1/Declarations:   // No declarations Found)
 #endif
 
 #if defined(USBDM_LPSPI2_IS_DEFINED)
@@ -183,6 +185,7 @@ using Lpspi1 = LpspiBase_T<Lpspi1Info>;
  * Refer @ref LpspiBase_T
  */
 using Lpspi2 = LpspiBase_T<Lpspi2Info>;
+$(/LPSPI2/Declarations:   // No declarations Found)
 #endif
 
 /**

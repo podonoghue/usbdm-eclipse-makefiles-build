@@ -646,7 +646,7 @@ LpitCallbackFunction LpitBase_T<Info>::sCallbacks[] = {
       LpitBase_T<Info>::unhandledCallback,
 };
 
-#ifdef LPIT0
+#if defined(USBDM_LPIT0_IS_DEFINED)
 /**
  * @brief class representing the LPIT
  */
@@ -659,7 +659,7 @@ using Lpit0 = LpitBase_T<Lpit0Info>;
  */
 template <int channel>
 using LpitChannel = Lpit0::Channel<channel>;
-
+$(/LPITO/Declarations:   // No declarations Found)
 #endif
 
 /**

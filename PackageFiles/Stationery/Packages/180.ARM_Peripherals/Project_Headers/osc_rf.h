@@ -96,6 +96,7 @@ public:
  * Class providing interface to OscRfillator
  */
 class Osc0 : public OscRfBase_T<Osc0Info> {};
+$(/OSC0/Declarations:   // No declarations Found)
 #endif
 
 /**

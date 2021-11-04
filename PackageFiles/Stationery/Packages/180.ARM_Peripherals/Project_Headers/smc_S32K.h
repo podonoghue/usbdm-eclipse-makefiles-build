@@ -445,7 +445,7 @@ $(/SMC/setStopOptions)
  * Class representing SMC
  */
 class Smc : public SmcBase_T<SmcInfo> {};
-
+$(/SMC/Declarations:   // No declarations Found)
 #endif
 
 /**

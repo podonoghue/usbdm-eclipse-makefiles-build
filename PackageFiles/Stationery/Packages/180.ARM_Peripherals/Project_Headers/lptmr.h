@@ -15,10 +15,11 @@
  * This file is generated automatically.
  * Any manual changes will be lost.
  */
+#include <climits>
+#include <cmath>
 #include "derivative.h"
 #include "system.h"
 #include "hardware.h"
-#include "cmath"
 
 namespace USBDM {
 
@@ -692,6 +693,7 @@ template<class Info> LptmrCallbackFunction LptmrBase_T<Info>::sCallback = LptmrB
  * @endcode
  */
 using Lptmr0 = LptmrBase_T<Lptmr0Info>;
+$(/LPTMR0/Declarations:   // No declarations Found)
 #endif
 
 #ifdef USBDM_LPTMR1_IS_DEFINED
@@ -722,6 +724,7 @@ using Lptmr0 = LptmrBase_T<Lptmr0Info>;
  * @endcode
  */
 using Lptmr1 = LptmrBase_T<Lptmr1Info>;
+$(/LPTMR1/Declarations:   // No declarations Found)
 #endif
 
 /**

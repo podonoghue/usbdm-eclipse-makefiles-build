@@ -1006,6 +1006,7 @@ template<class Info> SpiCallbackFunction SpiBase_T<Info>::sCallback = Spi::unhan
  *
  */
 class Spi0 : public SpiBase_T<Spi0Info> {};
+$(/SPI0/Declarations:   // No declarations Found)
 #endif
 
 #if defined(USBDM_SPI1_IS_DEFINED)
@@ -1023,7 +1024,7 @@ class Spi0 : public SpiBase_T<Spi0Info> {};
  *
  */
 class Spi1 : public SpiBase_T<Spi1Info> {};
-
+$(/SPI1/Declarations:   // No declarations Found)
 #endif
 /**
  * End SPI_Group
@@ -1045,7 +1046,7 @@ class Spi1 : public SpiBase_T<Spi1Info> {};
  *
  */
 class Spi2 : public SpiBase_T<Spi2Info> {};
-
+$(/SPI2/Declarations:   // No declarations Found)
 #endif
 /**
  * End SPI_Group
@@ -1067,7 +1068,7 @@ class Spi2 : public SpiBase_T<Spi2Info> {};
  *
  */
 class Spi3 : public SpiBase_T<Spi3Info> {};
-
+$(/SPI3/Declarations:   // No declarations Found)
 #endif
 /**
  * End SPI_Group

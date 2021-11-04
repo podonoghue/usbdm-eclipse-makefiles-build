@@ -1,7 +1,7 @@
 /**
  * @file      scg.h (180.ARM_Peripherals/Project_Headers/mgc.h)
  *
- * @brief    Abstraction layer for MCG interface
+ * @brief    Abstraction layer for SCG interface
  *
  * @version  V4.12.1.80
  * @date     13 April 2016
