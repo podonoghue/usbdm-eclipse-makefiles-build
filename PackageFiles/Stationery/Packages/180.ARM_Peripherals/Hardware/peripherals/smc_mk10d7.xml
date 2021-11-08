@@ -77,7 +77,6 @@
    \t * @param[in] smcVeryLowPower        Allows VLPR, VLPW, and VLPS modes
    \t * @param[in] smcLowLeakageStop      Allows LLSx modes
    \t * @param[in] smcVeryLowLeakageStop  Allows VLLSx modes
-   \t * @param[in] smcHighSpeedRun        Allows HSRUN mode (if supported)
    \t *
    \t * @note This is a write-once-after-reset operation
    \t */
@@ -97,9 +96,6 @@
    \t * Allows the detailed operation in STOP mode to be controlled.
    \t *
    \t * @param[in] smcLowLeakageStopMode  Controls which LLS/VLLS sub-mode to enter if STOPM=LLS/VLLS
-   \t * @param[in] smcPowerOnReset        Controls whether the POR detect circuit is enabled in VLLS0 mode
-   \t * @param[in] smcPartialStopMode     Controls whether a Partial Stop mode is entered when STOPM=STOP
-   \t * @param[in] smcLpoInLowLeakage     Controls whether the 1 kHz LPO clock is enabled in LLS/VLLSx modes (if supported).
    \t */
    \tstatic void setStopOptions(
    \t      SmcLowLeakageStopMode   smcLowLeakageStopMode) {

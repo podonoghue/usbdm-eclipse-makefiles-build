@@ -16,13 +16,27 @@
  * Any manual changes will be lost.
  */
 #include <stddef.h>
-#include <cstdint>
 #include "derivative.h"
+#include "error.h"
 
 /*
  * Default port information
  */
 namespace USBDM {
+
+/**
+ * Convenience names for common priority levels
+ */
+enum NvicPriority {
+   NvicPriority_VeryHigh     = 0,  //!< NvicPriority_VeryHigh
+   NvicPriority_High         = 2,  //!< NvicPriority_High
+   NvicPriority_MidHigh      = 5,  //!< NvicPriority_MidHigh
+   NvicPriority_Normal       = 8,  //!< NvicPriority_Normal
+   NvicPriority_Midlow       = 11, //!< NvicPriority_Midlow
+   NvicPriority_Low          = 13, //!< NvicPriority_Low
+   NvicPriority_VeryLow      = 15, //!< NvicPriority_VeryLow
+   NvicPriority_NotInstalled = -1, //!< Indicates handler is not installed
+};
 
 /**
  * This is to allow use of hardware pointers in classes with a constexpr constructor !
@@ -38,7 +52,7 @@ private:
    HardwarePtr(HardwarePtr&&) = delete;
 
    // Address of hardware
-   const std::uintptr_t ptr;
+   const uintptr_t ptr;
 
 public:
    /**
@@ -46,7 +60,7 @@ public:
     *
     * @param ptr  Address of hardware to be wrapped.
     */
-   constexpr __attribute__((always_inline))  HardwarePtr(std::uintptr_t ptr) : ptr(ptr){};
+   constexpr __attribute__((always_inline))  HardwarePtr(uintptr_t ptr) : ptr(ptr){};
    /**
     * Convert to pointer to the hardware
     *
@@ -346,8 +360,6 @@ public:
     * @param[in] pinFilter        One of PinFilter_None, PinFilter_Passive (defaults to PinFilter_None)
     * @param[in] pinSlewRate      One of PinSlewRate_Slow, PinSlewRate_Fast (defaults to PinSlewRate_Fast)
     * @param[in] pinMux           Multiplexor setting (defaults to 0)
-    *
-    * @return PCR value constructed from individual flags
     */
    constexpr PcrValue(
          PinPull           pinPull           ,
@@ -583,7 +595,7 @@ public:
     * Limit index to permitted bit index range
     * Used to prevent noise from static assertion checks that detect a condition already detected in a more useful fashion.
     *
-    * @param index   Index to limit
+    * @param bitNum   Index to limit
     *
     * @return Index limited to permitted range
     */

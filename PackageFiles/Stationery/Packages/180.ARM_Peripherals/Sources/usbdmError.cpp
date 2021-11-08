@@ -5,7 +5,7 @@
  * @version  V4.12.1.80
  * @date     13 April 2016
  */
-#include "hardware.h"
+#include "pin_mapping.h"
 #include "utilities.h"
 
 namespace USBDM {

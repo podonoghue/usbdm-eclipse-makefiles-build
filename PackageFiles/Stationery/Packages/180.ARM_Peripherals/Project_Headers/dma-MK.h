@@ -10,7 +10,7 @@
 #define INCLUDE_USBDM_DMA_H_
 
 #include "derivative.h"
-#include "hardware.h"
+#include "pin_mapping.h"
 
 /*
  * *****************************

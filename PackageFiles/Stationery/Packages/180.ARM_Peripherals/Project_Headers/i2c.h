@@ -15,7 +15,7 @@
  * This file is generated automatically.
  * Any manual changes will be lost.
  */
-#include "hardware.h"
+#include "pin_mapping.h"
 
 #ifdef __CMSIS_RTOS
 #include "cmsis.h"
@@ -516,7 +516,6 @@ template<class Info> I2c *I2cBase_T<Info>::thisPtr = 0;
  * Refer @ref I2cBase_T
  */
 using I2c0 = I2cBase_T<I2c0Info>;
-$(/I2C0/Declarations:   // No declarations Found)
 #endif
 
 #if defined(USBDM_I2C1_IS_DEFINED)
@@ -527,7 +526,6 @@ $(/I2C0/Declarations:   // No declarations Found)
  * Refer @ref I2cBase_T
  */
 using I2c1 = I2cBase_T<I2c1Info>;
-$(/I2C1/Declarations:   // No declarations Found)
 #endif
 
 #if defined(USBDM_I2C2_IS_DEFINED)
@@ -538,7 +536,6 @@ $(/I2C1/Declarations:   // No declarations Found)
  * Refer @ref I2cBase_T
  */
 using I2c2 = I2cBase_T<I2c2Info>;
-$(/I2C2/Declarations:   // No declarations Found)
 #endif
 
 #if defined(USBDM_I2C3_IS_DEFINED)
@@ -549,7 +546,6 @@ $(/I2C2/Declarations:   // No declarations Found)
  * Refer @ref I2cBase_T
  */
 using I2c3 = I2cBase_T<I2c3Info>;
-$(/I2C3/Declarations:   // No declarations Found)
 #endif
 
 #if defined(USBDM_I2C4_IS_DEFINED)
@@ -560,7 +556,6 @@ $(/I2C3/Declarations:   // No declarations Found)
  * Refer @ref I2cBase_T
  */
 using I2c4 = I2cBase_T<I2c4Info>;
-$(/I2C4/Declarations:   // No declarations Found)
 #endif
 /**
  * End I2C_Group

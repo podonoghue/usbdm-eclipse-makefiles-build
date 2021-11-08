@@ -17,7 +17,7 @@
  * Any manual changes will be lost.
  */
 #include "derivative.h"
-#include "hardware.h"
+#include "pin_mapping.h"
 
 namespace USBDM {
 
@@ -479,22 +479,18 @@ template<class Info> CMTCallbackFunction CmtBase_T<Info>::sCallback = CmtBase_T<
 
 #if defined(USBDM_CMT_IS_DEFINED)
 class Cmt : public CmtBase_T<CmtInfo> {};
-$(/CMT/Declarations:   // No declarations Found)
 #endif
 
 #if defined(USBDM_CMT0_IS_DEFINED)
 class Cmt0 : public CmtBase_T<CmtInfo> {};
-$(/CMT0/Declarations:   // No declarations Found)
 #endif
 
 #if defined(USBDM_CMT1_IS_DEFINED)
 class Cmt1 : public CmtBase_T<Cmt1Info> {};
-$(/CMT1/Declarations:   // No declarations Found)
 #endif
 
 #if defined(USBDM_CMT2_IS_DEFINED)
 class Cmt2 : public CmtBase_T<Cmt2Info> {};
-$(/CMT2/Declarations:   // No declarations Found)
 #endif
 
 /**

@@ -14,7 +14,7 @@
 
 #include <string.h>
 #include "derivative.h"
-#include "hardware.h"
+#include "pin_mapping.h"
 #include "segment_lcd.h"
 /*
  * *****************************

@@ -82,7 +82,7 @@
  * Any manual changes will be lost.
  */
 #include <cstring>
-#include "hardware.h"
+#include "pin_mapping.h"
 #include "usb_defs.h"
 #include "utilities.h"
 #include "usb_endpoint.h"
@@ -414,7 +414,9 @@ protected:
     * Callback used for EP0 data phase OR transfer complete
     *
     * @param[in]  state State active immediately before call-back\n
-    * (End-point state is currently EPIdle)
+    * (End-point state is currently EPIdle (defaulted))
+    *
+    * @return The endpoint state to set after call-back (EPIdle)
     */
    static EndpointState ep0DummyTransactionCallback(EndpointState state);
 
@@ -1083,7 +1085,8 @@ void UsbBase_T<Info, EP0_SIZE>::handleUSBResume() {
  * @return The endpoint state to set after call-back (EPIdle)
  */
 template<class Info, int EP0_SIZE>
-EndpointState UsbBase_T<Info, EP0_SIZE>::ep0DummyTransactionCallback(EndpointState) {
+EndpointState UsbBase_T<Info, EP0_SIZE>::ep0DummyTransactionCallback(EndpointState state) {
+   (void) state;
    return EPIdle;
 }
 

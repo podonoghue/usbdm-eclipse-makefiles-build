@@ -6,7 +6,6 @@
  */
 
 #include <stddef.h>
-#include "derivative.h"
 #include "lptmr.h"
  /*
  * *****************************

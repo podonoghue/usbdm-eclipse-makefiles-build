@@ -19,7 +19,7 @@
  */
 #include <stdint.h>
 #include "derivative.h"
-#include "hardware.h"
+#include "pin_mapping.h"
 #ifdef __CMSIS_RTOS
 #include "cmsis.h"
 #endif

@@ -4,7 +4,7 @@
  *  Created on: 6Dec.,2018
  *      Author: podonoghue
  */
-#include "hardware.h"
+#include "pin_mapping.h"
 #include "can.h"
 
 using namespace USBDM;

@@ -16,7 +16,7 @@
  * This file is generated automatically.
  * Any manual changes will be lost.
  */
-#include "hardware.h"
+#include "pin_mapping.h"
 #include "stringFormatter.h"
 
 namespace USBDM {
@@ -302,7 +302,6 @@ public:
  * Class providing interface to Reset Control Module
  */
 using Rcm = RcmBase_T<RcmInfo>;
-$(/RCM/Declarations:   // No declarations Found)
 #endif
 
 /**

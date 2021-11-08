@@ -19,7 +19,6 @@
  */
 #include <stdint.h>
 #include "derivative.h"
-#include "hardware.h"
 #include "formatted_io.h"
 #include "uart_queue.h"
 #ifdef __CMSIS_RTOS
@@ -174,7 +173,7 @@ public:
    /**
     * Construct UART interface
     *
-    * @param[in]  uart Reference to UART hardware
+    * @param[in]  uartBaseAddress BAse address of UART hardware
     */
    Uart(uint32_t uartBaseAddress) : uart((uartBaseAddress)) {
    }
@@ -1039,7 +1038,6 @@ template<class Info, int rxSize, int txSize> volatile uint32_t   UartBuffered_T<
  *  @endcode
  */
 typedef  $(/UART0/uartClass)<Uart0Info> Uart0;
-$(/UART0/Declarations:   // No declarations Found)
 #endif
 
 #ifdef USBDM_UART1_IS_DEFINED
@@ -1057,7 +1055,6 @@ $(/UART0/Declarations:   // No declarations Found)
  *  @endcode
  */
 typedef  $(/UART1/uartClass)<Uart1Info> Uart1;
-$(/UART1/Declarations:   // No declarations Found)
 #endif
 
 #ifdef USBDM_UART2_IS_DEFINED
@@ -1075,7 +1072,6 @@ $(/UART1/Declarations:   // No declarations Found)
  *  @endcode
  */
 typedef  $(/UART2/uartClass)<Uart2Info> Uart2;
-$(/UART2/Declarations:   // No declarations Found)
 #endif
 
 #ifdef USBDM_UART3_IS_DEFINED
@@ -1093,7 +1089,6 @@ $(/UART2/Declarations:   // No declarations Found)
  *  @endcode
  */
 typedef  $(/UART3/uartClass)<Uart3Info> Uart3;
-$(/UART3/Declarations:   // No declarations Found)
 #endif
 
 #ifdef USBDM_UART4_IS_DEFINED
@@ -1111,7 +1106,6 @@ $(/UART3/Declarations:   // No declarations Found)
  *  @endcode
  */
 typedef  $(/UART4/uartClass)<Uart4Info> Uart4;
-$(/UART4/Declarations:   // No declarations Found)
 #endif
 
 #ifdef USBDM_UART5_IS_DEFINED
@@ -1129,7 +1123,6 @@ $(/UART4/Declarations:   // No declarations Found)
  *  @endcode
  */
 typedef  $(/UART5/uartClass)<Uart5Info> Uart5;
-$(/UART5/Declarations:   // No declarations Found)
 #endif
 
 /**

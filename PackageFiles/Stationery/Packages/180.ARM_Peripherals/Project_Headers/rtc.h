@@ -16,7 +16,7 @@
  * This file is generated automatically.
  * Any manual changes will be lost.
  */
-#include "hardware.h"
+#include "pin_mapping.h"
 
 namespace USBDM {
 
@@ -388,7 +388,6 @@ template<class Info> RtcCallbackFunction RtcBase_T<Info>::sSecondsCallback = unh
  * Class representing RTC
  */
 class Rtc : public RtcBase_T<RtcInfo>{};
-$(/RTC/Declarations:   // No declarations Found)
 #endif
 
 /**

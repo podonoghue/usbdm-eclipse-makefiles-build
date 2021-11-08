@@ -13,7 +13,7 @@
 #include <stdint.h>
 #include <string.h>
 #include "derivative.h"
-#include "hardware.h"
+#include "pin_mapping.h"
 
 /*********** $start(VectorsIncludeFiles) *** Do not edit after this comment ****************/
 /*********** $end(VectorsIncludeFiles)   *** Do not edit above this comment ***************/

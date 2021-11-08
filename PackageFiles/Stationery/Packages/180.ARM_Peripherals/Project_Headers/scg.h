@@ -19,7 +19,7 @@
  */
 #include "derivative.h"
 #include "system.h"
-#include "hardware.h"
+#include "pin_mapping.h"
 
 namespace USBDM {
 

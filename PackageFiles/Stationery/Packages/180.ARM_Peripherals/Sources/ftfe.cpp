@@ -9,10 +9,7 @@
 
 #include "system.h"
 #include "derivative.h"
-#include "hardware.h"
-#include "delay.h"
 #include "ftfe.h"
-#include "smc.h"
 
 namespace USBDM {
 

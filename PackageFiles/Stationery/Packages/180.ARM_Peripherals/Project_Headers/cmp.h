@@ -17,7 +17,7 @@
  * Any manual changes will be lost.
  */
 #include "derivative.h"
-#include "hardware.h"
+#include "pin_mapping.h"
 
 namespace USBDM {
 
@@ -884,8 +884,18 @@ $(/CMP0/InputMapping:   // None Found)
       CmpBase_T::selectInputs((unsigned)positiveInput, (unsigned)negativeInput);
    }
 
+   template <class T>
+   static __attribute__((always_inline)) void selectInputs(Input input, T &) {
+      CmpBase_T::selectInputs((unsigned)input, (unsigned)T::pinNum);
+   }
+
+   template <class T>
+   static __attribute__((always_inline)) void selectInputs(T &, Input input) {
+      CmpBase_T::selectInputs((unsigned)T::pinNum, (unsigned)input);
+   }
+
    template <class T1, class T2>
-   static __attribute__((always_inline)) void selectInputs() {
+   static __attribute__((always_inline)) void selectInputs(T1 &, T2&) {
       CmpBase_T::selectInputs((unsigned)T1::pinNum, (unsigned)T2::pinNum);
    }
 
@@ -894,10 +904,18 @@ $(/CMP0/InputMapping:   // None Found)
     *
     * @tparam cmpInput Number of comparator input (0-7) for associated pin.
     */
-   template<Input cmpInput>
-   using Pin = CmpBase_T<Cmp0Info>::PinBase_T<Input, cmpInput>;
+   template<int cmpInput>
+   class Pin {
+      using Pcr = PcrTable_T<Cmp0Info, (Input)cmpInput>;
+   public:
+      static constexpr Input pinNum = (Input)cmpInput;
+
+      constexpr Pin() {}
+      static void setInput() {
+         Pcr::setPCR();
+      }
+   };
 };
-$(/CMP0/Declarations:   // No declarations Found)
 #endif
 
 #if defined(USBDM_CMP1_IS_DEFINED)
@@ -920,6 +938,7 @@ $(/CMP1/InputMapping:   // None Found)
       Input_7          = 7, //!< CMP1 input 7
    };
 
+
    /**
     * Configure Comparator input sources
     *
@@ -930,15 +949,38 @@ $(/CMP1/InputMapping:   // None Found)
       CmpBase_T::selectInputs((unsigned)positiveInput, (unsigned)negativeInput);
    }
 
+   template <class T>
+   static __attribute__((always_inline)) void selectInputs(Input input, T &) {
+      CmpBase_T::selectInputs((unsigned)input, (unsigned)T::pinNum);
+   }
+
+   template <class T>
+   static __attribute__((always_inline)) void selectInputs(T &, Input input) {
+      CmpBase_T::selectInputs((unsigned)T::pinNum, (unsigned)input);
+   }
+
+   template <class T1, class T2>
+   static __attribute__((always_inline)) void selectInputs(T1 &, T2&) {
+      CmpBase_T::selectInputs((unsigned)T1::pinNum, (unsigned)T2::pinNum);
+   }
+
    /**
     * Class representing a Comparator pin
     *
     * @tparam cmpInput Number of comparator input (0-7) for associated pin.
     */
-   template<Input cmpInput>
-   using Pin = CmpBase_T<Cmp1Info>::PinBase_T<Input, cmpInput>;
+   template<int cmpInput>
+   class Pin {
+      using Pcr = PcrTable_T<Cmp1Info, (Input)cmpInput>;
+   public:
+      static constexpr Input pinNum = (Input)cmpInput;
+
+      constexpr Pin() {}
+      static void setInput() {
+         Pcr::setPCR();
+      }
+   };
 };
-$(/CMP1/Declarations:   // No declarations Found)
 #endif
 
 #if defined(USBDM_CMP2_IS_DEFINED)
@@ -971,15 +1013,38 @@ $(/CMP2/InputMapping:   // None Found)
       CmpBase_T::selectInputs((unsigned)positiveInput, (unsigned)negativeInput);
    }
 
+   template <class T>
+   static __attribute__((always_inline)) void selectInputs(Input input, T &) {
+      CmpBase_T::selectInputs((unsigned)input, (unsigned)T::pinNum);
+   }
+
+   template <class T>
+   static __attribute__((always_inline)) void selectInputs(T &, Input input) {
+      CmpBase_T::selectInputs((unsigned)T::pinNum, (unsigned)input);
+   }
+
+   template <class T1, class T2>
+   static __attribute__((always_inline)) void selectInputs(T1 &, T2&) {
+      CmpBase_T::selectInputs((unsigned)T1::pinNum, (unsigned)T2::pinNum);
+   }
+
    /**
     * Class representing a Comparator pin
     *
     * @tparam cmpInput Number of comparator input (0-7) for associated pin.
     */
-   template<Input cmpInput>
-   using Pin = CmpBase_T<Cmp2Info>::PinBase_T<Input, cmpInput>;
+   template<int cmpInput>
+   class Pin {
+      using Pcr = PcrTable_T<Cmp2Info, (Input)cmpInput>;
+   public:
+      static constexpr Input pinNum = (Input)cmpInput;
+
+      constexpr Pin() {}
+      static void setInput() {
+         Pcr::setPCR();
+      }
+   };
 };
-$(/CMP2/Declarations:   // No declarations Found)
 #endif
 
 #if defined(USBDM_CMP3_IS_DEFINED)
@@ -1012,15 +1077,38 @@ $(/CMP3/InputMapping:   // None Found)
       CmpBase_T::selectInputs((unsigned)positiveInput, (unsigned)negativeInput);
    }
 
+   template <class T>
+   static __attribute__((always_inline)) void selectInputs(Input input, T &) {
+      CmpBase_T::selectInputs((unsigned)input, (unsigned)T::pinNum);
+   }
+
+   template <class T>
+   static __attribute__((always_inline)) void selectInputs(T &, Input input) {
+      CmpBase_T::selectInputs((unsigned)T::pinNum, (unsigned)input);
+   }
+
+   template <class T1, class T2>
+   static __attribute__((always_inline)) void selectInputs(T1 &, T2&) {
+      CmpBase_T::selectInputs((unsigned)T1::pinNum, (unsigned)T2::pinNum);
+   }
+
    /**
     * Class representing a Comparator pin
     *
     * @tparam cmpInput Number of comparator input (0-7) for associated pin.
     */
-   template<Input cmpInput>
-   using Pin = CmpBase_T<Cmp3Info>::PinBase_T<Input, cmpInput>;
+   template<int cmpInput>
+   class Pin {
+      using Pcr = PcrTable_T<Cmp3Info, (Input)cmpInput>;
+   public:
+      static constexpr Input pinNum = (Input)cmpInput;
+
+      constexpr Pin() {}
+      static void setInput() {
+         Pcr::setPCR();
+      }
+   };
 };
-$(/CMP3/Declarations:   // No declarations Found)
 #endif
 /**
  * End CMP_Group

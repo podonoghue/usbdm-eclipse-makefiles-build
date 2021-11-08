@@ -17,7 +17,7 @@
  * This file is generated automatically.
  * Any manual changes will be lost.
  */
-#include "hardware.h"
+#include "pin_mapping.h"
 
 namespace USBDM {
 
@@ -486,7 +486,6 @@ template<class Info> TSICallbackFunction TsiBase_T<Info>::sCallback = TsiBase_T<
  * Class representing TSI
  */
 class Tsi : public TsiBase_T<TsiInfo> {};
-$(/TSI/Declarations:   // No declarations Found)
 #endif
 
 #ifdef USBDM_TSI0_IS_DEFINED
@@ -494,7 +493,6 @@ $(/TSI/Declarations:   // No declarations Found)
  * Class representing TSI
  */
 class Tsi0 : public TsiBase_T<Tsi0Info> {};
-$(/TSI0/Declarations:   // No declarations Found)
 #endif
 /**
  * End TSI_Group

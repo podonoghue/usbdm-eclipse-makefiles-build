@@ -16,7 +16,7 @@
  * This file is generated automatically.
  * Any manual changes will be lost.
  */
-#include "hardware.h"
+#include "pin_mapping.h"
 
 namespace USBDM {
 
@@ -666,7 +666,6 @@ template<class Info> LlwuCallbackFunction LlwuBase_T<Info>::sCallback = LlwuBase
  * Class representing LLWU
  */
 class Llwu : public LlwuBase_T<LlwuInfo> {};
-$(/LLWU/Declarations:   // No declarations Found)
 #endif
 
 /**

@@ -12,7 +12,7 @@
 #include "derivative.h" /* include peripheral declarations */
 #include "system.h"
 #include "stdbool.h"
-#include "hardware.h"
+#include "pin_mapping.h"
 #include "scg.h"
 /*
  * *****************************

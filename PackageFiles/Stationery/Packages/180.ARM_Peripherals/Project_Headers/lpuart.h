@@ -19,7 +19,7 @@
  */
 #include <stdint.h>
 #include "derivative.h"
-#include "hardware.h"
+#include "pin_mapping.h"
 #include "formatted_io.h"
 #include "uart_queue.h"
 #ifdef __CMSIS_RTOS

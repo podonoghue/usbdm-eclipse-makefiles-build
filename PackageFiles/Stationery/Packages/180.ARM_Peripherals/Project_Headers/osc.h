@@ -16,7 +16,7 @@
  * This file is generated automatically.
  * Any manual changes will be lost.
  */
-#include "hardware.h"
+#include "pin_mapping.h"
 
 namespace USBDM {
 /**
@@ -97,7 +97,6 @@ public:
  * Class providing interface to Oscillator
  */
 class Osc0 : public OscBase_T<Osc0Info> {};
-$(/OSC0/Declarations:   // No declarations Found)
 #endif
 
 #ifdef USBDM_OSC1_IS_DEFINED
@@ -105,7 +104,6 @@ $(/OSC0/Declarations:   // No declarations Found)
  * Class providing interface to Oscillator 1
  */
 class Osc1 : public OscBase_T<Osc1Info> {};
-$(/OSC1/Declarations:   // No declarations Found)
 #endif
 
 /**

@@ -16,8 +16,8 @@
  * This file is generated automatically.
  * Any manual changes will be lost.
  */
-#include "hardware.h"
-#include <string.h>
+#include "string.h"
+#include "pin_mapping.h"
 
 namespace USBDM {
 
@@ -522,7 +522,6 @@ $(/SMC/setStopOptions)
  * Class representing SMC
  */
 class Smc : public SmcBase_T<SmcInfo> {};
-$(/SMC/Declarations:   // No declarations Found)
 #endif
 
 /**

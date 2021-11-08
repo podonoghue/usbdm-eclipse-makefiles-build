@@ -9,10 +9,7 @@
 
 #include "system.h"
 #include "derivative.h"
-#include "hardware.h"
-#include "delay.h"
 #include "ftfl.h"
-#include "smc.h"
 
 namespace USBDM {
 
@@ -109,7 +106,7 @@ FlashDriverError_t Flash::executeFlashCommand() {
 }
 
 /**
- * Read Flash Resource (IFR etc)
+ * Read Flash Resource (IFR etc).
  * This command reads 4 bytes from the selected flash resource
  *
  * @param[in]  resourceSelectCode 00 => IFR, 01 => Version ID

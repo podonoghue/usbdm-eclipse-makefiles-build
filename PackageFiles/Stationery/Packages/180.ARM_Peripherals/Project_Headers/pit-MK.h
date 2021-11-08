@@ -17,10 +17,10 @@
  * This file is generated automatically.
  * Any manual changes will be lost.
  */
-
+#include "math.h"
 #include "derivative.h"
 #include "system.h"
-#include "hardware.h"
+#include "pin_mapping.h"
 
 namespace USBDM {
 
@@ -1253,7 +1253,6 @@ uint8_t PitBase_T<Info>::clearOnEvent = 0;
  * @brief class representing the PIT
  */
 using Pit = PitBase_T<PitInfo>;
-$(/PIT/Declarations:   // No declarations Found)
 #endif
 
 /**

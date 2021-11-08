@@ -73,7 +73,7 @@ public:
    /**
     * Get name of endpoint state
     *
-    * @param[in]  state Endpoint state
+    * @param [in]  state Endpoint state
     *
     * @return Pointer to static string
     */
@@ -156,7 +156,7 @@ protected:
     *  - After an IN transaction with endpointState = EPDataIn.\n
     *  - After an OUT transaction with endpointState = EPDataOut.
     *
-    * @param[in] endpointState State of endpoint before completion of transaction
+    * @param [in] endpointState State of endpoint before completion of transaction
     *
     * @return The endpoint state to set after call-back
     */
@@ -165,7 +165,7 @@ protected:
    /**
     *  Dummy callback used to catch use of unset callback
     *
-    * @param[in]  endpointState State of endpoint before completion
+    * @param [in]  endpointState State of endpoint before completion
     *
     * @return The endpoint state to set after call-back (EPIdle)
     */
@@ -187,11 +187,13 @@ protected:
    /**
     * Constructor
     *
-    * @param[in]  endpointNumber End-point number
-    * @param[in]  endpointSize   Size of endpoint buffer
-    * @param[in]  endPointType   Endpoint type (Control, Bulk, Interrupt)
-    * @param[in]  dataBuffer     Endpoint buffer
-    * @param[in]  usb            Reference to USB hardware
+    * @param [in] endpointNumber End-point number
+    * @param [in] endpointSize   Size of endpoint buffer
+    * @param [in] endPointType   Endpoint type (Control, Bulk, Interrupt)
+    * @param [in] bdtValue       BDT to use
+    * @param [in] txDataBuffer   Transmit endpoint buffer
+    * @param [in] rxDataBuffer   Receive endpoint buffer
+    * @param [in] usb            Reference to USB hardware
     */
    constexpr Endpoint(
          int               endpointNumber,
@@ -258,7 +260,7 @@ public:
    /**
     * Set endpoint state
     *
-    * @param[in] state
+    * @param [in] state
     */
    void setState(EndpointState state) {
       fState = state;
@@ -287,7 +289,7 @@ public:
    /**
     * Set Data toggle
     *
-    * @param[in] dataToggle
+    * @param [in] dataToggle
     */
    void setDataToggle(DataToggle dataToggle) {
       fDataToggle = dataToggle;
@@ -308,7 +310,7 @@ public:
    /**
     * Flip active odd/even buffer state
     *
-    * @param[in]  usbStat Value from USB_STAT
+    * @param [in]  usbStat Value from USB_STAT
     */
    void flipOddEven(const UsbStat usbStat) {
       usbdm_assert(fEndpointNumber == usbStat.endp, "Wrong end point!");
@@ -332,7 +334,7 @@ public:
     *  - After an OUT transaction with endpointState = EPDataOut, EPStatusOut.
     *  The endpoint state will be set to EPIdle <b>before</b> calling this routine.
     *
-    * @param[in]  callback The call-back function to execute\n
+    * @param [in]  callback The call-back function to execute\n
     *                      May be nullptr to remove callback
     */
    void setCallback(EndpointState (*callback)(EndpointState)) {
@@ -346,7 +348,7 @@ public:
     *  Indicates that the next IN transaction needs to be terminated
     *  with a ZLP if transfer size is multiple of endpoint size
     *
-    *  @param[in]  needZLP True to indicate need for ZLPs.
+    *  @param [in]  needZLP True to indicate need for ZLPs.
     *
     *  @note This flag is cleared during the transaction
     */
@@ -411,9 +413,9 @@ public:
    /**
     * Start IN transaction stage [Transmit, device -> host, DATA0/1 sequence]
     *
-    * @param[in]  state   State to adopt for this phase e.g. EPDataIn, EPStatusIn
-    * @param[in]  bufSize Size of buffer to send (may be zero)
-    * @param[in]  bufPtr  Pointer to external buffer (may be NULL to indicate fDatabuffer is being used directly)
+    * @param [in]  state   State to adopt for this phase e.g. EPDataIn, EPStatusIn
+    * @param [in]  bufSize Size of buffer to send (may be zero)
+    * @param [in]  bufPtr  Pointer to external buffer (may be NULL to indicate fDatabuffer is being used directly)
     */
    void startTxStage(EndpointState state, uint16_t bufSize=0, volatile const uint8_t *bufPtr=nullptr) {
       // Pointer to data
@@ -480,9 +482,9 @@ public:
    /**
     * Start an OUT transaction stage [Receive, device <- host, DATA0/1 sequence]
     *
-    *   @param[in]  state   - State to adopt for phase e.g. EPIdle, EPDataOut, EPStatusOut
-    *   @param[in]  bufSize - Size of data to transfer (may be zero)
-    *   @param[in]  bufPtr  - Buffer for data (may be nullptr)
+    *   @param [in]  state   - State to adopt for phase e.g. EPIdle, EPDataOut, EPStatusOut
+    *   @param [in]  bufSize - Size of data to transfer (may be zero)
+    *   @param [in]  bufPtr  - Buffer for data (may be nullptr)
     */
    void startRxStage(EndpointState state, uint16_t bufSize=0, uint8_t *bufPtr=nullptr) {
       // Count of bytes transferred

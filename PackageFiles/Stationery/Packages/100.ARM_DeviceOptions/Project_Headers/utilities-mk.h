@@ -1,5 +1,5 @@
 /**
- * @file     utilities.h (derived from utilities-mk.h)
+ * @file     utilities.h (derived from 100.ARM_DeviceOptions/Project_Headers/utilities-mk.h)
  * @brief    Utility Routines
  * @version  V4.12.1.160
  * @date     13 May 2013

@@ -5,9 +5,9 @@
  *      Author: pgo
  */
 
-#include <derivative.h>
+#include "derivative.h"
 #include "system.h"
-#include "hardware.h"
+#include "pin_mapping.h"
 #include "console.h"
 
  /*

@@ -16,7 +16,7 @@
  * This file is generated automatically.
  * Any manual changes will be lost.
  */
-#include "hardware.h"
+#include "pin_mapping.h"
 
 namespace USBDM {
 
@@ -1120,7 +1120,6 @@ template<class Info> PdbCallbackFunction PdbBase_T<Info>::sErrorCallback = PdbBa
  * Class representing PDB
  */
 class Pdb : public PdbBase_T<PdbInfo> {};
-$(/PDB/Declarations:   // No declarations Found)
 #endif
 
 #ifdef USBDM_PDB0_IS_DEFINED
@@ -1128,7 +1127,6 @@ $(/PDB/Declarations:   // No declarations Found)
  * Class representing PDB
  */
 class Pdb0 : public PdbBase_T<Pdb0Info> {};
-$(/PDB0/Declarations:   // No declarations Found)
 #endif
 
 #ifdef USBDM_PDB1_IS_DEFINED
@@ -1136,7 +1134,6 @@ $(/PDB0/Declarations:   // No declarations Found)
  * Class representing PDB
  */
 class Pdb1 : public PdbBase_T<Pdb1Info> {};
-$(/PDB1/Declarations:   // No declarations Found)
 #endif
 
 /**

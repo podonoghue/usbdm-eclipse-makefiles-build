@@ -253,10 +253,10 @@ private:
 
 public:
    /**
-    * Limit index to permitted pin index range
+    * Limit channel to permitted range
     * Used to prevent noise from static assertion checks that detect a condition already detected in a more useful fashion.
     *
-    * @param index   Index to limit
+    * @param channel   Channel number to limit
     *
     * @return Index limited to permitted range
     */
@@ -691,7 +691,10 @@ public:
     * Calculate ADC clock divider (ADC_CFG1_ADIV) and confirm clock source (ADC_CFG1_ADICLK)
     * @note adcClockSource may be modified in return value
     *
-    * @param adcClockSource
+    * @param adcClockSource   ADC clock source
+    * @param adcClockRange    ADC clock range (high/normal)
+    * @param adcPower         ADC power level (normal/low)
+    *
     *
     * @return ADC_CFG1_ADIV|ADC_CFG1_ADICLK value
     */
@@ -1375,7 +1378,6 @@ template<class Info> AdcCallbackFunction AdcBase_T<Info>::sCallback = AdcBase::u
  * Class representing ADC0
  */
 using Adc0 = AdcBase_T<Adc0Info>;
-$(/ADC0/Declarations:   // No declarations Found)
 #endif
 
 #ifdef USBDM_ADC1_IS_DEFINED
@@ -1383,15 +1385,6 @@ $(/ADC0/Declarations:   // No declarations Found)
  * Class representing ADC1
  */
 using Adc1 = AdcBase_T<Adc1Info>;
-$(/ADC1/Declarations:   // No declarations Found)
-#endif
-
-#ifdef USBDM_ADC1_IS_DEFINED
-/**
- * Class representing ADC1
- */
-using Adc1 = AdcBase_T<Adc1Info>;
-$(/ADC1/Declarations:   // No declarations Found)
 #endif
 
 #ifdef USBDM_ADC2_IS_DEFINED
@@ -1399,7 +1392,6 @@ $(/ADC1/Declarations:   // No declarations Found)
  * Class representing ADC1
  */
 using Adc2 = AdcBase_T<Adc2Info>;
-$(/ADC2/Declarations:   // No declarations Found)
 #endif
 
 /**

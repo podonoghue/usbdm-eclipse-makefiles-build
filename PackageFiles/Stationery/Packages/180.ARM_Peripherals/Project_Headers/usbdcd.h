@@ -17,7 +17,7 @@
  * Any manual changes will be lost.
  */
 #include "derivative.h"
-#include "hardware.h"
+#include "pin_mapping.h"
 
 namespace USBDM {
 
@@ -260,7 +260,6 @@ template<class Info> USBDCDCallbackFunction UsbdcdBase_T<Info>::callback = Usbdc
 
 #if defined(USBDM_USBDCD0_IS_DEFINED)
 class Usbdcd0 : public UsbdcdBase_T<Usbdcd0Info> {};
-$(/USBDCD0/Declarations:   // No declarations Found)
 #endif
 
 /**

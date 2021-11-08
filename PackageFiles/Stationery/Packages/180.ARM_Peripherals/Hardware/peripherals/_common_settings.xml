@@ -14,6 +14,66 @@
 <template namespace="usbdm"><![CDATA[
    /* Template:_common_settings.xml */\n\n
    
+// Use when in-lining makes the release build smaller
+#ifdef DEBUG_BUILD
+#define INLINE_RELEASE __attribute__((noinline))
+#else
+#define INLINE_RELEASE __attribute__((always_inline))
+#endif\n
+
+#ifdef DEBUG_BUILD
+#define NOINLINE_DEBUG __attribute__((noinline))
+#else
+#define NOINLINE_DEBUG
+#endif\n\n
+
+\tstatic constexpr float ns      = 1E-9f; //!< Scale factor for nanoseconds
+\tstatic constexpr float us      = 1E-6f; //!< Scale factor for microseconds
+\tstatic constexpr float ms      = 1E-3f; //!< Scale factor for milliseconds
+\tstatic constexpr float seconds = 1.0f;  //!< Scale factor for seconds
+\tstatic constexpr float percent = 1.0f;  //!< Scale factor for percentage as float
+\tstatic constexpr float MHz     = 1E6f;  //!< Scale factor for MHz as float
+\tstatic constexpr float kHz     = 1E3f;  //!< Scale factor for kHz as float
+\tstatic constexpr float Hz      = 1.0f;  //!< Scale factor for Hz as float\n\n
+
+\t/** MCGFFCLK - Fixed frequency clock (input to FLL) */
+\textern volatile uint32_t SystemMcgffClock;\n\n
+
+\t/** MCGOUTCLK - Primary output from MCG, various sources */
+\textern volatile uint32_t SystemMcgOutClock;\n\n
+
+\t/** MCGFLLCLK - Output of FLL */
+\textern volatile uint32_t SystemMcgFllClock;\n\n
+
+\t/** MCGPLLCLK - Output of PLL */
+\textern volatile uint32_t SystemMcgPllClock;\n\n
+
+\t/**
+\t * Calculate a Vector number using an offset from an existing number.
+\t * This is only useful if related vectors are consecutive e.g. DMA0_IRQn, DMA1_IRQn ...
+\t *
+\t * @param vector  Base vector to use
+\t * @param offset  Offset from base vector
+\t *
+\t * @return  Vector number calculated from vector+offset
+\t */
+\tconstexpr IRQn_Type inline operator+(IRQn_Type vector, unsigned offset) {
+\t   return static_cast<IRQn_Type>(static_cast<unsigned>(vector) + offset);
+\t}\n\n
+
+\t/**
+\t * Calculate a Vector number using an offset from an existing number.
+\t * This is only useful if related vectors are consecutive e.g. DMA0_IRQn, DMA1_IRQn ...
+\t *
+\t * @param vector  Base vector to use
+\t * @param offset  Offset from base vector
+\t *
+\t * @return  Vector number calculated from vector+offset
+\t */
+\tconstexpr IRQn_Type inline operator+(IRQn_Type vector, int offset) {
+\t   return vector + static_cast<unsigned>(offset);
+\t}\n\n
+
 \t/**
 \t * @tparam  T  Type of comparison object (inferred)
 \t * @param   a  Left-hand object for comparison
@@ -38,26 +98,26 @@
 \t   return (b > a) ? b : a;
 \t}\n\n
 
-   constexpr IRQn_Type IRQn_None = static_cast<IRQn_Type>(-20);\n\n
+\tconstexpr IRQn_Type IRQn_None = static_cast<IRQn_Type>(-20);\n\n
    
-   /** Dummy port information for pins without an associated PCR */
-   constexpr PortInfo  __attribute__((unused)) NoPortInfo {0, 0, IRQn_None, 0, NvicPriority_NotInstalled};\n\n
+\t/** Dummy port information for pins without an associated PCR */
+\tconstexpr PortInfo  __attribute__((unused)) NoPortInfo {0, 0, IRQn_None, 0, NvicPriority_NotInstalled};\n\n
 
-   /** Class to static check signal mapping is valid */
-   template<class Info, int signalNum> class CheckSignal {
-   \tstatic_assert((signalNum<Info::numSignals), "Non-existent signal - Modify Configure.usbdm");
-   \tstatic_assert((signalNum>=Info::numSignals)||(Info::info[signalNum].gpioBit != UNMAPPED_PCR), "Signal is not mapped to a pin - Modify Configure.usbdm");
-   \tstatic_assert((signalNum>=Info::numSignals)||(Info::info[signalNum].gpioBit != INVALID_PCR),  "Signal doesn't exist in this device/package");
-   \tstatic_assert((signalNum>=Info::numSignals)||((Info::info[signalNum].gpioBit == UNMAPPED_PCR)||(Info::info[signalNum].gpioBit == INVALID_PCR)||(Info::info[signalNum].gpioBit >= 0)), "Illegal signal");
-   };\n\n
-   
-   /** Enables mapping of all allocated pins during startup using mapAllPins() */
-   static constexpr bool MAP_ALL_PINS = $(mapAllPins);\n\n
-   
-   /** Used to configure pin-mapping before 1st use of peripherals */
-   extern void mapAllPins();\n\n
+\t/** Class to static check signal mapping is valid */
+\ttemplate<class Info, int signalNum> class CheckSignal {
+\t\tstatic_assert((signalNum<Info::numSignals), "Non-existent signal - Modify Configure.usbdm");
+\t\tstatic_assert((signalNum>=Info::numSignals)||(Info::info[signalNum].gpioBit != UNMAPPED_PCR), "Signal is not mapped to a pin - Modify Configure.usbdm");
+\t\tstatic_assert((signalNum>=Info::numSignals)||(Info::info[signalNum].gpioBit != INVALID_PCR),  "Signal doesn't exist in this device/package");
+\t\tstatic_assert((signalNum>=Info::numSignals)||((Info::info[signalNum].gpioBit == UNMAPPED_PCR)||(Info::info[signalNum].gpioBit == INVALID_PCR)||(Info::info[signalNum].gpioBit >= 0)), "Illegal signal");
+\t};\n\n
 
-   /* END Template:_common_settings.xml */\n\n
+\t/** Enables mapping of all allocated pins during startup using mapAllPins() */
+\tstatic constexpr bool MAP_ALL_PINS = $(mapAllPins);\n\n
+
+\t/** Used to configure pin-mapping before 1st use of peripherals */
+\textern void mapAllPins();\n\n
+
+\t/* END Template:_common_settings.xml */\n\n
    
 ]]></template>
 

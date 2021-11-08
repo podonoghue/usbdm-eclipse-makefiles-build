@@ -16,7 +16,7 @@
  * This file is generated automatically.
  * Any manual changes will be lost.
  */
-#include "hardware.h"
+#include "pin_mapping.h"
 
 namespace USBDM {
 
@@ -510,7 +510,6 @@ class Pmc : public PmcBase_T<PmcInfo> {};
  * Class representing PMC
  */
 class Pmc : public PmcBase_T<PmcInfo> {};
-$(/PMC/Declarations:   // No declarations Found)
 #endif
 
 /**

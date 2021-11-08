@@ -912,8 +912,8 @@ public:
     */
    static ErrorCode setPeriod(float period) {
 
-      unsigned prescalerValue;
-      unsigned periodInTicks;
+      unsigned prescalerValue = 0;
+      unsigned periodInTicks = 0;
       ErrorCode rc = calculateTimingParameters(period, prescalerValue, periodInTicks);
 
       if (rc != E_NO_ERROR) {
@@ -2044,7 +2044,6 @@ template<class Info> FtmChannelCallbackFunction  FtmBase_T<Info>::sChannelCallba
  * Class representing FTM0.
  */
 using Ftm0 = FtmBase_T<Ftm0Info>;
-$(/FTM0/Declarations:   // No declarations Found)
 #endif
 
 #ifdef USBDM_FTM1_IS_DEFINED
@@ -2052,7 +2051,6 @@ $(/FTM0/Declarations:   // No declarations Found)
  * Class representing FTM0.
  */
 using Ftm1 = FtmBase_T<Ftm1Info>;
-$(/FTM1/Declarations:   // No declarations Found)
 #endif
 
 #ifdef USBDM_FTM2_IS_DEFINED
@@ -2060,7 +2058,6 @@ $(/FTM1/Declarations:   // No declarations Found)
  * Class representing FTM0.
  */
 using Ftm2 = FtmBase_T<Ftm2Info>;
-$(/FTM2/Declarations:   // No declarations Found)
 #endif
 
 #ifdef USBDM_FTM3_IS_DEFINED
@@ -2068,7 +2065,6 @@ $(/FTM2/Declarations:   // No declarations Found)
  * Class representing FTM0.
  */
 using Ftm3 = FtmBase_T<Ftm3Info>;
-$(/FTM3/Declarations:   // No declarations Found)
 #endif
 
 #ifdef FTM_QDCTRL_QUADEN_MASK

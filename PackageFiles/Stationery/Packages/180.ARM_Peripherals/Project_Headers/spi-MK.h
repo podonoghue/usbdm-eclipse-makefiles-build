@@ -19,7 +19,7 @@
  */
 #include <stdint.h>
 #include "derivative.h"
-#include "hardware.h"
+#include "pin_mapping.h"
 #ifdef __CMSIS_RTOS
 #include "cmsis.h"
 #endif
@@ -189,7 +189,7 @@ public:
     * @param[in]  clockFrequency => Clock frequency of SPI in Hz
     * @param[in]  frequency      => Communication frequency in Hz
     *
-    * @return CTAR register value including SPI_CTAR_BR, SPI_CTAR_PBR fields
+    * @return CTAR register value only including SPI_CTAR_BR, SPI_CTAR_PBR fields
     *
     * Note: Chooses the highest speed that is not greater than frequency.
     */
@@ -198,8 +198,8 @@ public:
    /**
     * Calculate communication speed from SPI clock frequency and speed factors
     *
-    * @param[in]  clockFrequency => Clock frequency of SPI in Hz
-    * @param[in]  clockFactors   => CTAR register value providing SPI_CTAR_BR, SPI_CTAR_PBR fields
+    * @param[in]  clockFrequency  Clock frequency of SPI in Hz
+    * @param[in]  clockFactors    CTAR register value providing SPI_CTAR_BR, SPI_CTAR_PBR fields
     *
     * @return Clock frequency of SPI in Hz for these factors
     */
@@ -243,10 +243,8 @@ protected:
     *
     * @param[in]  clockFrequency => Clock frequency of SPI in Hz
     * @param[in]  delay          => Desired delay in seconds
-    * @param[in]  bestPrescale   => Best prescaler value (0=>/1, 1=>/3, 2=/5, 3=>/7)
-    * @param[in]  bestDivider    => Best divider value (N=>/(2**(N+1)))
-    *
-    * @return true
+    * @param[out] bestPrescale   => Best prescaler value (0=>/1, 1=>/3, 2=/5, 3=>/7)
+    * @param[out] bestDivider    => Best divider value (N=>/(2**(N+1)))
     *
     * Note: Determines bestPrescaler and bestDivider for the smallest delay that is not less than delay.
     */
@@ -556,9 +554,10 @@ public:
    void txRx(uint32_t dataSize, const T *txData, T *rxData=nullptr);
 
    /**
-    * Transmit and receive a value over SPI using current settings
+    * Transmit and receive a value over SPI
     *
-    * @param[in] data Data to send (4-16 bits)
+    * @param[in] data - Data to send (4-16 bits) <br>
+    *                   May include other control bits as for PUSHR
     *
     * @return Data received
     */
@@ -572,7 +571,7 @@ public:
     *
     * @return Data received
     */
-   uint32_t txRxRaw(uint32_t value);
+   uint32_t txRxRaw(uint32_t data);
 
    /**
     *  Set Configuration\n
@@ -1006,7 +1005,6 @@ template<class Info> SpiCallbackFunction SpiBase_T<Info>::sCallback = Spi::unhan
  *
  */
 class Spi0 : public SpiBase_T<Spi0Info> {};
-$(/SPI0/Declarations:   // No declarations Found)
 #endif
 
 #if defined(USBDM_SPI1_IS_DEFINED)
@@ -1024,12 +1022,7 @@ $(/SPI0/Declarations:   // No declarations Found)
  *
  */
 class Spi1 : public SpiBase_T<Spi1Info> {};
-$(/SPI1/Declarations:   // No declarations Found)
 #endif
-/**
- * End SPI_Group
- * @}
- */
 
 #if defined(USBDM_SPI2_IS_DEFINED)
 /**
@@ -1046,12 +1039,7 @@ $(/SPI1/Declarations:   // No declarations Found)
  *
  */
 class Spi2 : public SpiBase_T<Spi2Info> {};
-$(/SPI2/Declarations:   // No declarations Found)
 #endif
-/**
- * End SPI_Group
- * @}
- */
 
 #if defined(USBDM_SPI3_IS_DEFINED)
 /**
@@ -1068,7 +1056,6 @@ $(/SPI2/Declarations:   // No declarations Found)
  *
  */
 class Spi3 : public SpiBase_T<Spi3Info> {};
-$(/SPI3/Declarations:   // No declarations Found)
 #endif
 /**
  * End SPI_Group

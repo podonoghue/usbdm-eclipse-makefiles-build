@@ -5,10 +5,8 @@
  * @date     13 April 2016
  */
 #include <stddef.h>
-#include <stdint.h>
+#include <math.h>
 #include "system.h"
-#include "derivative.h"
-#include "hardware.h"
 #include "spi.h"
 /*
  * *****************************
@@ -68,12 +66,12 @@ uint32_t Spi::calculateDividers(uint32_t clockFrequency, uint32_t frequency) {
 }
 
 /**
- * Calculates speed from SPI clock frequency and SPI clock factors
+ * Calculate communication speed from SPI clock frequency and speed factors
  *
- * @param[in] clockFrequency   SPI input clock frequency
- * @param[in] clockFactors     SPI clock factors
+ * @param[in]  clockFrequency  Clock frequency of SPI in Hz
+ * @param[in]  clockFactors    CTAR register value providing SPI_CTAR_BR, SPI_CTAR_PBR fields
  *
- * @return SPI frequency
+ * @return Clock frequency of SPI in Hz for these factors
  */
 uint32_t Spi::calculateSpeed(uint32_t clockFrequency, uint32_t clockFactors) {
    int pbr = (clockFactors&SPI_CTAR_PBR_MASK)>>SPI_CTAR_PBR_SHIFT;
@@ -89,8 +87,8 @@ uint32_t Spi::calculateSpeed(uint32_t clockFrequency, uint32_t clockFactors) {
  * Calculate Delay factors
  * Used for ASC, DT and CSSCK
  *
- * @param[in]  delay          => Desired delay in seconds
  * @param[in]  clockFrequency => Clock frequency of SPI in Hz
+ * @param[in]  delay          => Desired delay in seconds
  * @param[out] bestPrescale   => Best prescaler value (0=>/1, 1=>/3, 2=/5, 3=>/7)
  * @param[out] bestDivider    => Best divider value (N=>/(2**(N+1)))
  *
@@ -121,9 +119,10 @@ void Spi::calculateDelay(float clockFrequency, float delay, int &bestPrescale, i
 }
 
 /**
- * Transmit and receive a value over SPI using current settings
+ * Transmit and receive a value over SPI
  *
- * @param[in] data Data to send (4-16 bits)
+ * @param[in] data - Data to send (4-16 bits) <br>
+ *                   May include other control bits as for PUSHR
  *
  * @return Data received
  */
@@ -143,8 +142,8 @@ uint16_t Spi::txRx(uint16_t data) {
  *
  * @return Data received
  */
-uint32_t Spi::txRxRaw(uint32_t value) {
-   spi->PUSHR = value;
+uint32_t Spi::txRxRaw(uint32_t data) {
+   spi->PUSHR = data;
    while ((spi->SR & SPI_SR_TCF_MASK)==0) {
    }
    spi->SR = SPI_SR_TCF_MASK|SPI_SR_EOQF_MASK;

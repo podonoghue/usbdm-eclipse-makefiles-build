@@ -14,10 +14,7 @@
 #ifndef SOURCES_FLASH_H_
 #define SOURCES_FLASH_H_
 
-#include <string.h>
-#include "derivative.h"
-#include "hardware.h"
-#include "delay.h"
+#include "pin_mapping.h"
 #include "smc.h"
 
 extern uint8_t __FlexRamStart[];

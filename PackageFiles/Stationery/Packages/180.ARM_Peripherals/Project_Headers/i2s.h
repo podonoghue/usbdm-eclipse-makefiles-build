@@ -17,7 +17,7 @@
  */
 #include <stdint.h>
 #include "derivative.h"
-#include "hardware.h"
+#include "pin_mapping.h"
 #ifdef __CMSIS_RTOS
 #include "cmsis.h"
 #endif
@@ -180,7 +180,6 @@ template<class Info> I2S_Type *I2sBase_T<Info>::thisPtr = 0;
  * Refer @ref I2sBase_T
  */
 using I2s0 = I2sBase_T<I2s0Info>;
-$(/I2S0/Declarations:   // No declarations Found)
 #endif
 
 #if defined(USBDM_I2S1_IS_DEFINED)
@@ -191,7 +190,6 @@ $(/I2S0/Declarations:   // No declarations Found)
  * Refer @ref I2sBase_T
  */
 using I2s1 = I2sBase_T<I2s1Info>;
-$(/I2S1/Declarations:   // No declarations Found)
 #endif
 
 #if defined(USBDM_I2S2_IS_DEFINED)
@@ -202,7 +200,6 @@ $(/I2S1/Declarations:   // No declarations Found)
  * Refer @ref I2SBase_T
  */
 using I2s2 = I2sBase_T<I2s2Info>;
-$(/I2S2/Declarations:   // No declarations Found)
 #endif
 
 /**

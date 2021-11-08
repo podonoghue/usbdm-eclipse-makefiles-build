@@ -135,8 +135,6 @@ This is a template class with static methods.\n
  - @ref dma-uart-example-mk22f.cpp
  - @ref dma-uart-example-mk28f.cpp
 
- @page GPIOExamples  General Purpose Input Output
-
 @page LPTMRExamples  Low Power Timer
 
 Convenience template for LPTMR. Uses the following classes:\n

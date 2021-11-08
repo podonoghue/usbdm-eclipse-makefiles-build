@@ -753,9 +753,9 @@ protected:
     * @param gpio       GPIO hardware address
     * @param bitMask    Bitmask for bits affected in port
     * @param right      Rightmost bit number in port
-    * @param flipMask   Mask to flip bits in field (or use ActiveHigh/ActiveLow)
+    * @param flipMask   Mask to flip bits in port (or use ActiveHigh/ActiveLow)
     */
-   constexpr GpioField(uint32_t gpio, unsigned bitMask, unsigned right, uint32_t flipMask) :
+   constexpr GpioField(uint32_t gpio, uint32_t bitMask, unsigned right, uint32_t flipMask) :
       gpio(gpio), bitMask(bitMask), flipMask(flipMask), right(right) {
    }
 
@@ -915,11 +915,13 @@ class GpioTable_T : public Gpio_T<Info::info[index].clockInfo, Info::info[index]
  * @tparam Info           Class describing the associated GPIO and PORT
  * @tparam left           Bit number of leftmost bit in GPIO (inclusive)
  * @tparam right          Bit number of rightmost bit in GPIO (inclusive)
- * @tparam polarity       Polarity of all pins. Either ActiveHigh, ActiveLow or a bitmask (0=>bit active-high, 1=>bit active-low)
+ * @tparam polarity       Polarity of all bits in field. Either ActiveHigh, ActiveLow or a bitmask (0=>bit active-high, 1=>bit active-low)
  */
 template<uint32_t portAddress, uint32_t clockInfo, IRQn_Type irqNum, uint32_t gpioAddress, NvicPriority  irqLevel, 
          unsigned Left, unsigned Right, uint32_t FlipMask=ActiveHigh>
 class GpioField_T : public GpioField, public PcrBase_T<portAddress, irqNum, irqLevel>{
+
+   static_assert(((Left<=31)&&(Left>=Right)), "Illegal bit number for left or right in GpioField");
 
 private:
    /**
@@ -1227,7 +1229,7 @@ public:
          value = ~value;
       }
       else if constexpr (FLIP_MASK != 0) {
-         value = value^FLIP_MASK;
+         value = value^(FLIP_MASK>>Right);
       }
       {
          USBDM::CriticalSection cs;
@@ -1280,7 +1282,7 @@ public:
     *
     * @endcode
     *
-    * @tparam bitNum        Bit number within the <em>field<em>
+    * @tparam bitNum        Bit number within the <em>field</em>
     * @tparam polarity      Polarity of pin. Either ActiveHigh or ActiveLow
     */
    template<unsigned bitNum> class Bit :
@@ -1373,7 +1375,6 @@ using PortA = PcrBase_T<PortAInfo.portAddress, PortAInfo.irqNum, PortAInfo.irqLe
  */
 template<unsigned left, unsigned right, uint32_t polarity=ActiveHigh>
 using GpioAField = GpioField_T<PortAInfo.portAddress, PortAInfo.clockInfo, PortAInfo.irqNum, PortAInfo.gpioAddress, PortAInfo.irqLevel, left, right, polarity>;
-$(/GPIOA/Declarations:   // No declarations Found)
 #endif
 
 #ifdef USBDM_GPIOB_IS_DEFINED
@@ -1453,11 +1454,10 @@ using PortB = PcrBase_T<PortBInfo.portAddress, PortBInfo.irqNum, PortBInfo.irqLe
  *
  * @tparam left          Bit number of leftmost bit in port (inclusive)
  * @tparam right         Bit number of rightmost bit in port (inclusive)
- * @tparam polarity       Polarity of all pins. Either ActiveHigh, ActiveLow or a bitmask (0=>bit active-high, 1=>bit active-low)
+ * @tparam polarity      Polarity of all pins. Either ActiveHigh, ActiveLow or a bitmask (0=>bit active-high, 1=>bit active-low)
  */
 template<unsigned left, unsigned right, uint32_t polarity=ActiveHigh>
 using GpioBField = GpioField_T<PortBInfo.portAddress, PortBInfo.clockInfo, PortBInfo.irqNum, PortBInfo.gpioAddress, PortBInfo.irqLevel, left, right, polarity>;
-$(/GPIOB/Declarations:   // No declarations Found)
 #endif
 
 #ifdef USBDM_GPIOC_IS_DEFINED
@@ -1537,11 +1537,10 @@ using PortC = PcrBase_T<PortCInfo.portAddress, PortCInfo.irqNum, PortCInfo.irqLe
  *
  * @tparam left          Bit number of leftmost bit in port (inclusive)
  * @tparam right         Bit number of rightmost bit in port (inclusive)
- * @tparam polarity       Polarity of all pins. Either ActiveHigh, ActiveLow or a bitmask (0=>bit active-high, 1=>bit active-low)
+ * @tparam polarity      Polarity of all pins. Either ActiveHigh, ActiveLow or a bitmask (0=>bit active-high, 1=>bit active-low)
  */
 template<unsigned left, unsigned right, uint32_t polarity=ActiveHigh>
 using GpioCField = GpioField_T<PortCInfo.portAddress, PortCInfo.clockInfo, PortCInfo.irqNum, PortCInfo.gpioAddress, PortCInfo.irqLevel, left, right, polarity>;
-$(/GPIOC/Declarations:   // No declarations Found)
 #endif
 
 #ifdef USBDM_GPIOD_IS_DEFINED
@@ -1621,11 +1620,10 @@ using PortD = PcrBase_T<PortDInfo.portAddress, PortDInfo.irqNum, PortDInfo.irqLe
  *
  * @tparam left          Bit number of leftmost bit in port (inclusive)
  * @tparam right         Bit number of rightmost bit in port (inclusive)
- * @tparam polarity       Polarity of all pins. Either ActiveHigh, ActiveLow or a bitmask (0=>bit active-high, 1=>bit active-low)
+ * @tparam polarity      Polarity of all pins. Either ActiveHigh, ActiveLow or a bitmask (0=>bit active-high, 1=>bit active-low)
  */
 template<unsigned left, unsigned right, uint32_t polarity=ActiveHigh>
 using GpioDField = GpioField_T<PortDInfo.portAddress, PortDInfo.clockInfo, PortDInfo.irqNum, PortDInfo.gpioAddress, PortDInfo.irqLevel, left, right, polarity>;
-$(/GPIOD/Declarations:   // No declarations Found)
 #endif
 
 #ifdef USBDM_GPIOE_IS_DEFINED
@@ -1705,11 +1703,10 @@ using PortE = PcrBase_T<PortEInfo.portAddress, PortEInfo.irqNum, PortEInfo.irqLe
  *
  * @tparam left          Bit number of leftmost bit in port (inclusive)
  * @tparam right         Bit number of rightmost bit in port (inclusive)
- * @tparam polarity       Polarity of all pins. Either ActiveHigh, ActiveLow or a bitmask (0=>bit active-high, 1=>bit active-low)
+ * @tparam polarity      Polarity of all pins. Either ActiveHigh, ActiveLow or a bitmask (0=>bit active-high, 1=>bit active-low)
  */
 template<unsigned left, unsigned right, uint32_t polarity=ActiveHigh>
 using GpioEField = GpioField_T<PortEInfo.portAddress, PortEInfo.clockInfo, PortEInfo.irqNum, PortEInfo.gpioAddress, PortEInfo.irqLevel, left, right, polarity>;
-$(/GPIOE/Declarations:   // No declarations Found)
 #endif
 
 /**

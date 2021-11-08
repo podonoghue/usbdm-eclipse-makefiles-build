@@ -30,6 +30,65 @@ namespace USBDM {
  */
 /* Template:_common_settings.xml */
 
+// Use when in-lining makes the release build smaller
+#ifdef DEBUG_BUILD
+#define INLINE_RELEASE __attribute__((noinline))
+#else
+#define INLINE_RELEASE __attribute__((always_inline))
+#endif
+#ifdef DEBUG_BUILD
+#define NOINLINE_DEBUG __attribute__((noinline))
+#else
+#define NOINLINE_DEBUG
+#endif
+
+   static constexpr float ns      = 1E-9f; //!< Scale factor for nanoseconds
+   static constexpr float us      = 1E-6f; //!< Scale factor for microseconds
+   static constexpr float ms      = 1E-3f; //!< Scale factor for milliseconds
+   static constexpr float seconds = 1.0f;  //!< Scale factor for seconds
+   static constexpr float percent = 1.0f;  //!< Scale factor for percentage as float
+   static constexpr float MHz     = 1E6f;  //!< Scale factor for MHz as float
+   static constexpr float kHz     = 1E3f;  //!< Scale factor for kHz as float
+   static constexpr float Hz      = 1.0f;  //!< Scale factor for Hz as float
+
+   /** MCGFFCLK - Fixed frequency clock (input to FLL) */
+   extern volatile uint32_t SystemMcgffClock;
+
+   /** MCGOUTCLK - Primary output from MCG, various sources */
+   extern volatile uint32_t SystemMcgOutClock;
+
+   /** MCGFLLCLK - Output of FLL */
+   extern volatile uint32_t SystemMcgFllClock;
+
+   /** MCGPLLCLK - Output of PLL */
+   extern volatile uint32_t SystemMcgPllClock;
+
+   /**
+    * Calculate a Vector number using an offset from an existing number.
+    * This is only useful if related vectors are consecutive e.g. DMA0_IRQn, DMA1_IRQn ...
+    *
+    * @param vector  Base vector to use
+    * @param offset  Offset from base vector
+    *
+    * @return  Vector number calculated from vector+offset
+    */
+   constexpr IRQn_Type inline operator+(IRQn_Type vector, unsigned offset) {
+      return static_cast<IRQn_Type>(static_cast<unsigned>(vector) + offset);
+   }
+
+   /**
+    * Calculate a Vector number using an offset from an existing number.
+    * This is only useful if related vectors are consecutive e.g. DMA0_IRQn, DMA1_IRQn ...
+    *
+    * @param vector  Base vector to use
+    * @param offset  Offset from base vector
+    *
+    * @return  Vector number calculated from vector+offset
+    */
+   constexpr IRQn_Type inline operator+(IRQn_Type vector, int offset) {
+      return vector + static_cast<unsigned>(offset);
+   }
+
    /**
     * @tparam  T  Type of comparison object (inferred)
     * @param   a  Left-hand object for comparison
@@ -54,26 +113,26 @@ namespace USBDM {
       return (b > a) ? b : a;
    }
 
-constexpr IRQn_Type IRQn_None = static_cast<IRQn_Type>(-20);
+   constexpr IRQn_Type IRQn_None = static_cast<IRQn_Type>(-20);
 
-/** Dummy port information for pins without an associated PCR */
-constexpr PortInfo  __attribute__((unused)) NoPortInfo {0, 0, IRQn_None, 0, NvicPriority_NotInstalled};
+   /** Dummy port information for pins without an associated PCR */
+   constexpr PortInfo  __attribute__((unused)) NoPortInfo {0, 0, IRQn_None, 0, NvicPriority_NotInstalled};
 
-/** Class to static check signal mapping is valid */
-template<class Info, int signalNum> class CheckSignal {
-   static_assert((signalNum<Info::numSignals), "Non-existent signal - Modify Configure.usbdm");
-   static_assert((signalNum>=Info::numSignals)||(Info::info[signalNum].gpioBit != UNMAPPED_PCR), "Signal is not mapped to a pin - Modify Configure.usbdm");
-   static_assert((signalNum>=Info::numSignals)||(Info::info[signalNum].gpioBit != INVALID_PCR),  "Signal doesn't exist in this device/package");
-   static_assert((signalNum>=Info::numSignals)||((Info::info[signalNum].gpioBit == UNMAPPED_PCR)||(Info::info[signalNum].gpioBit == INVALID_PCR)||(Info::info[signalNum].gpioBit >= 0)), "Illegal signal");
-};
+   /** Class to static check signal mapping is valid */
+   template<class Info, int signalNum> class CheckSignal {
+      static_assert((signalNum<Info::numSignals), "Non-existent signal - Modify Configure.usbdm");
+      static_assert((signalNum>=Info::numSignals)||(Info::info[signalNum].gpioBit != UNMAPPED_PCR), "Signal is not mapped to a pin - Modify Configure.usbdm");
+      static_assert((signalNum>=Info::numSignals)||(Info::info[signalNum].gpioBit != INVALID_PCR),  "Signal doesn't exist in this device/package");
+      static_assert((signalNum>=Info::numSignals)||((Info::info[signalNum].gpioBit == UNMAPPED_PCR)||(Info::info[signalNum].gpioBit == INVALID_PCR)||(Info::info[signalNum].gpioBit >= 0)), "Illegal signal");
+   };
 
-/** Enables mapping of all allocated pins during startup using mapAllPins() */
-static constexpr bool MAP_ALL_PINS = false;
+   /** Enables mapping of all allocated pins during startup using mapAllPins() */
+   static constexpr bool MAP_ALL_PINS = false;
 
-/** Used to configure pin-mapping before 1st use of peripherals */
-extern void mapAllPins();
+   /** Used to configure pin-mapping before 1st use of peripherals */
+   extern void mapAllPins();
 
-/* END Template:_common_settings.xml */
+   /* END Template:_common_settings.xml */
 
 /*
  * Peripheral Information Classes
@@ -181,15 +240,15 @@ public:
 
 #if defined(PCC_PCC_PORTD_CGC_MASK)
    /** Port information for PORTD */
-   constexpr PortInfo  __attribute__((unused)) PortDInfo {PORTD_BasePtr, static_cast<uint32_t>(PCC_BasePtr+offsetof(PCC_Type, PCC_PORTD)), PORTD_IRQn, GPIOD_BasePtr, NvicPriority_Normal};
+   constexpr PortInfo  __attribute__((unused)) PortDInfo {PORTD_BasePtr, static_cast<uint32_t>(PCC_BasePtr+offsetof(PCC_Type, PCC_PORTD)), PORTD_IRQn, GPIOD_BasePtr, NvicPriority_NotInstalled};
 #elif defined(SIM_SCGC5_PORTD_MASK)
 #ifndef PORTD_IRQS
    /** Port information for PORTD */
-   constexpr PortInfo  __attribute__((unused)) PortDInfo {PORTD_BasePtr, SIM_SCGC5_PORTD_MASK, IRQn_None, GPIOD_BasePtr, NvicPriority_Normal};
+   constexpr PortInfo  __attribute__((unused)) PortDInfo {PORTD_BasePtr, SIM_SCGC5_PORTD_MASK, IRQn_None, GPIOD_BasePtr, NvicPriority_NotInstalled};
 #else
    constexpr IRQn_Type PORTD_IRQS_AR[] = PORTD_IRQS;
    /** Port information for PORTD */
-   constexpr PortInfo  __attribute__((unused)) PortDInfo {PORTD_BasePtr, SIM_SCGC5_PORTD_MASK, PORTD_IRQS_AR[0], GPIOD_BasePtr, NvicPriority_Normal};
+   constexpr PortInfo  __attribute__((unused)) PortDInfo {PORTD_BasePtr, SIM_SCGC5_PORTD_MASK, PORTD_IRQS_AR[0], GPIOD_BasePtr, NvicPriority_NotInstalled};
 #endif
 #endif
 
@@ -252,9 +311,7 @@ public:
    static constexpr uint32_t baseAddress = OSC0_BasePtr;
 
    //! Hardware base pointer
-   __attribute__((always_inline)) static volatile OSC_Type &osc() {
-      return *reinterpret_cast<OSC_Type *>(baseAddress);
-   }
+   static constexpr HardwarePtr<OSC_Type> osc = baseAddress;
 
    //! Base value for PCR (excluding MUX value)
    static constexpr uint32_t defaultPcrValue  = 0;
@@ -366,9 +423,7 @@ public:
    static constexpr uint32_t baseAddress = RTC_BasePtr;
 
    //! Hardware base pointer
-   __attribute__((always_inline)) static volatile RTC_Type &rtc() {
-      return *reinterpret_cast<RTC_Type *>(baseAddress);
-   }
+   static constexpr HardwarePtr<RTC_Type> rtc = baseAddress;
 
    //! Base value for PCR (excluding MUX value)
    static constexpr uint32_t defaultPcrValue = 
@@ -548,9 +603,7 @@ public:
    static constexpr uint32_t baseAddress = MCG_BasePtr;
 
    //! Hardware base pointer
-   __attribute__((always_inline)) static volatile MCG_Type &mcg() {
-      return *reinterpret_cast<MCG_Type *>(baseAddress);
-   }
+   static constexpr HardwarePtr<MCG_Type> mcg = baseAddress;
 
    //! IRQ numbers for hardware
    static constexpr IRQn_Type irqNums[]  = MCG_IRQS;
@@ -932,9 +985,7 @@ public:
    static constexpr uint32_t baseAddress = SIM_BasePtr;
 
    //! Hardware base pointer
-   __attribute__((always_inline)) static volatile SIM_Type &sim() {
-      return *reinterpret_cast<SIM_Type *>(baseAddress);
-   }
+   static constexpr HardwarePtr<SIM_Type> sim = baseAddress;
 
    /**
     * Get RAM size
@@ -1351,9 +1402,7 @@ public:
    static constexpr uint32_t baseAddress = PMC_BasePtr;
 
    //! Hardware base pointer
-   __attribute__((always_inline)) static volatile PMC_Type &pmc() {
-      return *reinterpret_cast<PMC_Type *>(baseAddress);
-   }
+   static constexpr HardwarePtr<PMC_Type> pmc = baseAddress;
 
    //! Default value for Low Voltage Detect Status And Control 1 register
    static constexpr uint32_t pmc_lvdsc1  = 
@@ -1441,9 +1490,7 @@ public:
    static constexpr uint32_t baseAddress = ADC0_BasePtr;
 
    //! Hardware base pointer
-   __attribute__((always_inline)) static volatile ADC_Type &adc() {
-      return *reinterpret_cast<ADC_Type *>(baseAddress);
-   }
+   static constexpr HardwarePtr<ADC_Type> adc = baseAddress;
 
    //! Base value for PCR (excluding MUX value)
    static constexpr uint32_t defaultPcrValue  = 0;
@@ -1458,10 +1505,10 @@ public:
    static constexpr uint32_t irqCount  = sizeof(irqNums)/sizeof(irqNums[0]);
 
    //! Class based callback handler has been installed in vector table
-   static constexpr bool irqHandlerInstalled = 0;
+   static constexpr bool irqHandlerInstalled = 1;
 
    //! Default IRQ level
-   static constexpr NvicPriority irqLevel =  NvicPriority_NotInstalled;
+   static constexpr NvicPriority irqLevel =  NvicPriority_Normal;
 
    /**
     *  Get input clock frequency for ADC
@@ -1563,7 +1610,7 @@ public:
          /*   3: ADC0_SE3             = --                             */  { NoPortInfo, UNMAPPED_PCR, 0                           },
          /*   4: ADC0_SE4b            = --                             */  { NoPortInfo, UNMAPPED_PCR, 0                           },
          /*   5: ADC0_SE5b            = --                             */  { NoPortInfo, UNMAPPED_PCR, 0                           },
-         /*   6: ADC0_SE6b            = PTD5 (p46)                     */  { PortDInfo,  5,       PORT_PCR_MUX(0)|defaultPcrValue  },
+         /*   6: ADC0_SE6b            = --                             */  { NoPortInfo, UNMAPPED_PCR, 0                           },
          /*   7: ADC0_SE7b            = PTD6 (p47)                     */  { PortDInfo,  6,       PORT_PCR_MUX(0)|defaultPcrValue  },
          /*   8: ADC0_SE8             = --                             */  { NoPortInfo, UNMAPPED_PCR, 0                           },
          /*   9: ADC0_SE9             = --                             */  { NoPortInfo, UNMAPPED_PCR, 0                           },
@@ -1571,8 +1618,8 @@ public:
          /*  11: --                   = --                             */  { NoPortInfo, INVALID_PCR,  0                           },
          /*  12: ADC0_SE12            = --                             */  { NoPortInfo, UNMAPPED_PCR, 0                           },
          /*  13: ADC0_SE13            = --                             */  { NoPortInfo, UNMAPPED_PCR, 0                           },
-         /*  14: ADC0_SE14            = PTC0 (p33)                     */  { PortCInfo,  0,       PORT_PCR_MUX(0)|defaultPcrValue  },
-         /*  15: ADC0_SE15            = PTC1 (p34)                     */  { PortCInfo,  1,       PORT_PCR_MUX(0)|defaultPcrValue  },
+         /*  14: ADC0_SE14            = --                             */  { NoPortInfo, UNMAPPED_PCR, 0                           },
+         /*  15: ADC0_SE15            = --                             */  { NoPortInfo, UNMAPPED_PCR, 0                           },
          /*  16: --                   = --                             */  { NoPortInfo, INVALID_PCR,  0                           },
          /*  17: --                   = --                             */  { NoPortInfo, INVALID_PCR,  0                           },
          /*  18: --                   = --                             */  { NoPortInfo, INVALID_PCR,  0                           },
@@ -1583,8 +1630,8 @@ public:
          /*  23: ADC0_SE23            = --                             */  { NoPortInfo, UNMAPPED_PCR, 0                           },
          /*  24: --                   = --                             */  { NoPortInfo, INVALID_PCR,  0                           },
          /*  25: --                   = --                             */  { NoPortInfo, INVALID_PCR,  0                           },
-         /*  26: ADC0_SE26            = TempSensor (Internal)          */  { NoPortInfo, FIXED_NO_PCR, 0                           },
-         /*  27: ADC0_SE27            = BandGap (Internal)             */  { NoPortInfo, FIXED_NO_PCR, 0                           },
+         /*  26: ADC0_SE26            = TEMP_SENSOR (Internal)         */  { NoPortInfo, FIXED_NO_PCR, 0                           },
+         /*  27: ADC0_SE27            = BANDGAP (Internal)             */  { NoPortInfo, FIXED_NO_PCR, 0                           },
    };
 
    /**
@@ -1594,13 +1641,11 @@ public:
     */
    static void initPCRs(uint32_t pcrValue=defaultPcrValue) {
 #ifdef PCC_PCCn_CGC_MASK
-      PCC->PCC_PORTC = PCC_PCCn_CGC_MASK;
       PCC->PCC_PORTD = PCC_PCCn_CGC_MASK;
 #else
-      enablePortClocks(PORTC_CLOCK_MASK|PORTD_CLOCK_MASK);
+      enablePortClocks(PORTD_CLOCK_MASK);
 #endif
-      PORTC->GPCLR = pcrValue|PORT_PCR_MUX(0)|PORT_GPCLR_GPWE(0x0003UL);
-      PORTD->GPCLR = pcrValue|PORT_PCR_MUX(0)|PORT_GPCLR_GPWE(0x0060UL);
+      PORTD->GPCLR = pcrValue|PORT_PCR_MUX(0)|PORT_GPCLR_GPWE(0x0040UL);
    }
 
    /**
@@ -1608,13 +1653,11 @@ public:
     */
    static void clearPCRs() {
 #ifdef PCC_PCCn_CGC_MASK
-      PCC->PCC_PORTC = PCC_PCCn_CGC_MASK;
       PCC->PCC_PORTD = PCC_PCCn_CGC_MASK;
 #else
-      enablePortClocks(PORTC_CLOCK_MASK|PORTD_CLOCK_MASK);
+      enablePortClocks(PORTD_CLOCK_MASK);
 #endif
-      PORTC->GPCLR = PORT_PCR_MUX(0)|PORT_GPCLR_GPWE(0x3U);
-      PORTD->GPCLR = PORT_PCR_MUX(0)|PORT_GPCLR_GPWE(0x60U);
+      PORTD->GPCLR = PORT_PCR_MUX(0)|PORT_GPCLR_GPWE(0x40U);
    }
 
 #define USBDM_ADC0_INFODP_IS_DEFINED
@@ -1709,14 +1752,12 @@ public:
    static constexpr uint32_t baseAddress = CMP0_BasePtr;
 
    //! Hardware base pointer
-   __attribute__((always_inline)) static volatile CMP_Type &cmp() {
-      return *reinterpret_cast<CMP_Type *>(baseAddress);
-   }
+   static constexpr HardwarePtr<CMP_Type> cmp = baseAddress;
 
    //! Base value for PCR (excluding MUX value)
    static constexpr uint32_t defaultPcrValue  = 0;
 
-   //! Pin number in Info table for comparator output
+   //! Pin number in Info table for comparator output if mapped to a pin
    static constexpr int outputPin  = 8;
 
    //! Map all allocated pins on a peripheral when enabled
@@ -1809,8 +1850,8 @@ public:
          /*   3: CMP0_IN3             = --                             */  { NoPortInfo, UNMAPPED_PCR, 0                           },
          /*   4: --                   = --                             */  { NoPortInfo, INVALID_PCR,  0                           },
          /*   5: CMP0_IN5             = VREF_OUT (p13)                 */  { NoPortInfo, FIXED_NO_PCR, 0                           },
-         /*   6: --                   = --                             */  { NoPortInfo, INVALID_PCR,  0                           },
-         /*   7: --                   = --                             */  { NoPortInfo, INVALID_PCR,  0                           },
+         /*   6: CMP0_IN6             = BANDGAP (Internal)             */  { NoPortInfo, FIXED_NO_PCR, 0                           },
+         /*   7: CMP0_IN7             = CMP_DAC (Internal)             */  { NoPortInfo, FIXED_NO_PCR, 0                           },
          /*   8: CMP0_OUT             = --                             */  { NoPortInfo, UNMAPPED_PCR, 0                           },
    };
 
@@ -1846,14 +1887,12 @@ public:
    static constexpr uint32_t baseAddress = CMP1_BasePtr;
 
    //! Hardware base pointer
-   __attribute__((always_inline)) static volatile CMP_Type &cmp() {
-      return *reinterpret_cast<CMP_Type *>(baseAddress);
-   }
+   static constexpr HardwarePtr<CMP_Type> cmp = baseAddress;
 
    //! Base value for PCR (excluding MUX value)
    static constexpr uint32_t defaultPcrValue  = 0;
 
-   //! Pin number in Info table for comparator output
+   //! Pin number in Info table for comparator output if mapped to a pin
    static constexpr int outputPin  = 8;
 
    //! Map all allocated pins on a peripheral when enabled
@@ -1946,8 +1985,8 @@ public:
          /*   3: CMP1_IN3             = --                             */  { NoPortInfo, UNMAPPED_PCR, 0                           },
          /*   4: --                   = --                             */  { NoPortInfo, INVALID_PCR,  0                           },
          /*   5: CMP1_IN5             = VREF_OUT (p13)                 */  { NoPortInfo, FIXED_NO_PCR, 0                           },
-         /*   6: --                   = --                             */  { NoPortInfo, INVALID_PCR,  0                           },
-         /*   7: --                   = --                             */  { NoPortInfo, INVALID_PCR,  0                           },
+         /*   6: CMP1_IN6             = BANDGAP (Internal)             */  { NoPortInfo, FIXED_NO_PCR, 0                           },
+         /*   7: CMP1_IN7             = CMP_DAC (Internal)             */  { NoPortInfo, FIXED_NO_PCR, 0                           },
          /*   8: CMP1_OUT             = --                             */  { NoPortInfo, UNMAPPED_PCR, 0                           },
    };
 
@@ -1992,9 +2031,7 @@ public:
    static constexpr uint32_t baseAddress = CMT_BasePtr;
 
    //! Hardware base pointer
-   __attribute__((always_inline)) static volatile CMT_Type &cmt() {
-      return *reinterpret_cast<CMT_Type *>(baseAddress);
-   }
+   static constexpr HardwarePtr<CMT_Type> cmt = baseAddress;
 
    //! Base value for PCR (excluding MUX value)
    static constexpr uint32_t defaultPcrValue = 
@@ -2163,9 +2200,7 @@ public:
    static constexpr uint32_t baseAddress = CRC0_BasePtr;
 
    //! Hardware base pointer
-   __attribute__((always_inline)) static volatile CRC_Type &crc() {
-      return *reinterpret_cast<CRC_Type *>(baseAddress);
-   }
+   static constexpr HardwarePtr<CRC_Type> crc = baseAddress;
 
    static constexpr uint32_t gpoly =  0;
 
@@ -2226,9 +2261,7 @@ public:
    static constexpr uint32_t baseAddress = DMA0_BasePtr;
 
    //! Hardware base pointer
-   __attribute__((always_inline)) static volatile DMA_Type &dma() {
-      return *reinterpret_cast<DMA_Type *>(baseAddress);
-   }
+   static constexpr HardwarePtr<DMA_Type> dma = baseAddress;
 
    /** 
     *  Enable clock to Dma0
@@ -2296,9 +2329,7 @@ public:
    static constexpr uint32_t baseAddress = DMAMUX0_BasePtr;
 
    //! Hardware base pointer
-   __attribute__((always_inline)) static volatile DMAMUX_Type &dmamux() {
-      return *reinterpret_cast<DMAMUX_Type *>(baseAddress);
-   }
+   static constexpr HardwarePtr<DMAMUX_Type> dmamux = baseAddress;
 
    /** 
     *  Enable clock to Dmamux0
@@ -2355,9 +2386,7 @@ public:
    static constexpr uint32_t baseAddress = EWM_BasePtr;
 
    //! Hardware base pointer
-   __attribute__((always_inline)) static volatile EWM_Type &ewm() {
-      return *reinterpret_cast<EWM_Type *>(baseAddress);
-   }
+   static constexpr HardwarePtr<EWM_Type> ewm = baseAddress;
 
    //! Base value for PCR (excluding MUX value)
    static constexpr uint32_t defaultPcrValue = 
@@ -2370,6 +2399,12 @@ public:
 
    //! Map all allocated pins on a peripheral when enabled
    static constexpr bool mapPinsOnEnable = false;
+
+   //! Pin number in Info table for EWM input if mapped to a pin
+   static constexpr int inputPin  = 0;
+
+   //! Pin number in Info table for EWM output if mapped to a pin
+   static constexpr int outputPin  = 1;
 
    //! IRQ numbers for hardware
    static constexpr IRQn_Type irqNums[]  = EWM_IRQS;
@@ -2457,9 +2492,7 @@ public:
    static constexpr uint32_t baseAddress = FTFL_BasePtr;
 
    //! Hardware base pointer
-   __attribute__((always_inline)) static volatile FTFL_Type &ftfl() {
-      return *reinterpret_cast<FTFL_Type *>(baseAddress);
-   }
+   static constexpr HardwarePtr<FTFL_Type> ftfl = baseAddress;
 
    struct EepromSizes {
       const uint16_t size;    // EEPROM size
@@ -2652,9 +2685,7 @@ public:
    static constexpr uint32_t baseAddress = FTM0_BasePtr;
 
    //! Hardware base pointer
-   __attribute__((always_inline)) static volatile FTM_Type &ftm() {
-      return *reinterpret_cast<FTM_Type *>(baseAddress);
-   }
+   static constexpr HardwarePtr<FTM_Type> ftm = baseAddress;
 
    //! Base value for PCR (excluding MUX value)
    static constexpr uint32_t defaultPcrValue = 
@@ -2690,16 +2721,16 @@ public:
    static constexpr uint32_t irqCount  = sizeof(irqNums)/sizeof(irqNums[0]);
 
    //! Class based callback handler has been installed in vector table
-   static constexpr bool irqHandlerInstalled = 0;
+   static constexpr bool irqHandlerInstalled = 1;
 
    //! Default IRQ level
-   static constexpr NvicPriority irqLevel =  NvicPriority_NotInstalled;
+   static constexpr NvicPriority irqLevel =  NvicPriority_Normal;
 
    /** Minimum resolution for PWM interval */
-   static constexpr uint32_t minimumResolution=100;
+   static constexpr uint32_t minimumResolution=0;
 
    /** Minimum usable interval in ticks */      
-   static constexpr uint32_t minimumInterval=20;
+   static constexpr uint32_t minimumInterval=0;
 
    /**
     * Get input clock frequency
@@ -2747,11 +2778,11 @@ public:
 
          //      Signal                 Pin                                  portInfo    gpioBit       PCR value
          /*   0: FTM0_CH0             = --                             */  { NoPortInfo, UNMAPPED_PCR, 0                           },
-         /*   1: FTM0_CH1             = PTA4 (p21)                     */  { PortAInfo,  4,       PORT_PCR_MUX(3)|defaultPcrValue  },
-         /*   2: FTM0_CH2             = PTC3 (p36)                     */  { PortCInfo,  3,       PORT_PCR_MUX(4)|defaultPcrValue  },
-         /*   3: FTM0_CH3             = PTC4 (p37)                     */  { PortCInfo,  4,       PORT_PCR_MUX(4)|defaultPcrValue  },
+         /*   1: FTM0_CH1             = --                             */  { NoPortInfo, UNMAPPED_PCR, 0                           },
+         /*   2: FTM0_CH2             = --                             */  { NoPortInfo, UNMAPPED_PCR, 0                           },
+         /*   3: FTM0_CH3             = --                             */  { NoPortInfo, UNMAPPED_PCR, 0                           },
          /*   4: FTM0_CH4             = --                             */  { NoPortInfo, UNMAPPED_PCR, 0                           },
-         /*   5: FTM0_CH5             = --                             */  { NoPortInfo, UNMAPPED_PCR, 0                           },
+         /*   5: FTM0_CH5             = PTD5 (p46)                     */  { PortDInfo,  5,       PORT_PCR_MUX(4)|defaultPcrValue  },
          /*   6: FTM0_CH6             = --                             */  { NoPortInfo, UNMAPPED_PCR, 0                           },
          /*   7: FTM0_CH7             = --                             */  { NoPortInfo, UNMAPPED_PCR, 0                           },
    };
@@ -2763,13 +2794,11 @@ public:
     */
    static void initPCRs(uint32_t pcrValue=defaultPcrValue) {
 #ifdef PCC_PCCn_CGC_MASK
-      PCC->PCC_PORTA = PCC_PCCn_CGC_MASK;
-      PCC->PCC_PORTC = PCC_PCCn_CGC_MASK;
+      PCC->PCC_PORTD = PCC_PCCn_CGC_MASK;
 #else
-      enablePortClocks(PORTA_CLOCK_MASK|PORTC_CLOCK_MASK);
+      enablePortClocks(PORTD_CLOCK_MASK);
 #endif
-      PORTA->GPCLR = pcrValue|PORT_PCR_MUX(3)|PORT_GPCLR_GPWE(0x0010UL);
-      PORTC->GPCLR = pcrValue|PORT_PCR_MUX(4)|PORT_GPCLR_GPWE(0x0018UL);
+      PORTD->GPCLR = pcrValue|PORT_PCR_MUX(4)|PORT_GPCLR_GPWE(0x0020UL);
    }
 
    /**
@@ -2777,13 +2806,11 @@ public:
     */
    static void clearPCRs() {
 #ifdef PCC_PCCn_CGC_MASK
-      PCC->PCC_PORTA = PCC_PCCn_CGC_MASK;
-      PCC->PCC_PORTC = PCC_PCCn_CGC_MASK;
+      PCC->PCC_PORTD = PCC_PCCn_CGC_MASK;
 #else
-      enablePortClocks(PORTA_CLOCK_MASK|PORTC_CLOCK_MASK);
+      enablePortClocks(PORTD_CLOCK_MASK);
 #endif
-      PORTA->GPCLR = PORT_PCR_MUX(0)|PORT_GPCLR_GPWE(0x10U);
-      PORTC->GPCLR = PORT_PCR_MUX(0)|PORT_GPCLR_GPWE(0x18U);
+      PORTD->GPCLR = PORT_PCR_MUX(0)|PORT_GPCLR_GPWE(0x20U);
    }
 
 #define USBDM_FTM0_INFOFAULT_IS_DEFINED
@@ -2845,9 +2872,7 @@ public:
    static constexpr uint32_t baseAddress = FTM1_BasePtr;
 
    //! Hardware base pointer
-   __attribute__((always_inline)) static volatile FTM_Type &ftm() {
-      return *reinterpret_cast<FTM_Type *>(baseAddress);
-   }
+   static constexpr HardwarePtr<FTM_Type> ftm = baseAddress;
 
    //! Base value for PCR (excluding MUX value)
    static constexpr uint32_t defaultPcrValue = 
@@ -3045,12 +3070,16 @@ public:
    static constexpr uint32_t baseAddress = I2C0_BasePtr;
 
    //! Hardware base pointer
-   __attribute__((always_inline)) static volatile I2C_Type &i2c() {
-      return *reinterpret_cast<I2C_Type *>(baseAddress);
-   }
+   static constexpr HardwarePtr<I2C_Type> i2c = baseAddress;
 
    //! Base value for PCR (excluding MUX value)
-   static constexpr uint32_t defaultPcrValue  = I2C_DEFAULT_PCR;
+   static constexpr uint32_t defaultPcrValue  = I2C_DEFAULT_PCR.value;
+
+   //! Pin number in Info table for SCL if mapped to a pin
+   static constexpr int sclPin  = 0;
+
+   //! Pin number in Info table for SDA if mapped to a pin
+   static constexpr int sdaPin  = 1;
 
    //! Map all allocated pins on a peripheral when enabled
    static constexpr bool mapPinsOnEnable = true;
@@ -3161,12 +3190,10 @@ public:
    static constexpr uint32_t baseAddress = I2S0_BasePtr;
 
    //! Hardware base pointer
-   __attribute__((always_inline)) static volatile I2S_Type &i2s() {
-      return *reinterpret_cast<I2S_Type *>(baseAddress);
-   }
+   static constexpr HardwarePtr<I2S_Type> i2s = baseAddress;
 
    //! Base value for PCR (excluding MUX value)
-   static constexpr uint32_t defaultPcrValue  = I2S_DEFAULT_PCR;
+   static constexpr uint32_t defaultPcrValue  = I2S_DEFAULT_PCR.value;
 
    //! Map all allocated pins on a peripheral when enabled
    static constexpr bool mapPinsOnEnable = true;
@@ -3271,9 +3298,7 @@ public:
    static constexpr uint32_t baseAddress = LLWU_BasePtr;
 
    //! Hardware base pointer
-   __attribute__((always_inline)) static volatile LLWU_Type &llwu() {
-      return *reinterpret_cast<LLWU_Type *>(baseAddress);
-   }
+   static constexpr HardwarePtr<LLWU_Type> llwu = baseAddress;
 
    //! Base value for PCR (excluding MUX value)
    static constexpr uint32_t defaultPcrValue = 
@@ -3349,18 +3374,18 @@ public:
          /*   0: LLWU_P0              = --                             */  { NoPortInfo, UNMAPPED_PCR, 0                           },
          /*   1: --                   = --                             */  { NoPortInfo, INVALID_PCR,  0                           },
          /*   2: --                   = --                             */  { NoPortInfo, INVALID_PCR,  0                           },
-         /*   3: LLWU_P3              = --                             */  { NoPortInfo, UNMAPPED_PCR, 0                           },
+         /*   3: LLWU_P3              = PTA4 (p21)                     */  { PortAInfo,  4,       PORT_PCR_MUX(1)|defaultPcrValue  },
          /*   4: LLWU_P4              = --                             */  { NoPortInfo, UNMAPPED_PCR, 0                           },
          /*   5: LLWU_P5              = --                             */  { NoPortInfo, UNMAPPED_PCR, 0                           },
-         /*   6: LLWU_P6              = --                             */  { NoPortInfo, UNMAPPED_PCR, 0                           },
-         /*   7: LLWU_P7              = --                             */  { NoPortInfo, UNMAPPED_PCR, 0                           },
-         /*   8: LLWU_P8              = --                             */  { NoPortInfo, UNMAPPED_PCR, 0                           },
-         /*   9: LLWU_P9              = --                             */  { NoPortInfo, UNMAPPED_PCR, 0                           },
-         /*  10: LLWU_P10             = --                             */  { NoPortInfo, UNMAPPED_PCR, 0                           },
+         /*   6: LLWU_P6              = PTC1 (p34)                     */  { PortCInfo,  1,       PORT_PCR_MUX(1)|defaultPcrValue  },
+         /*   7: LLWU_P7              = PTC3 (p36)                     */  { PortCInfo,  3,       PORT_PCR_MUX(1)|defaultPcrValue  },
+         /*   8: LLWU_P8              = PTC4 (p37)                     */  { PortCInfo,  4,       PORT_PCR_MUX(1)|defaultPcrValue  },
+         /*   9: LLWU_P9              = PTC5 (p38)                     */  { PortCInfo,  5,       PORT_PCR_MUX(1)|defaultPcrValue  },
+         /*  10: LLWU_P10             = PTC6 (p39)                     */  { PortCInfo,  6,       PORT_PCR_MUX(1)|defaultPcrValue  },
          /*  11: LLWU_P11             = --                             */  { NoPortInfo, UNMAPPED_PCR, 0                           },
-         /*  12: LLWU_P12             = --                             */  { NoPortInfo, UNMAPPED_PCR, 0                           },
+         /*  12: LLWU_P12             = PTD0 (p41)                     */  { PortDInfo,  0,       PORT_PCR_MUX(1)|defaultPcrValue  },
          /*  13: LLWU_P13             = PTD2 (p43)                     */  { PortDInfo,  2,       PORT_PCR_MUX(1)|defaultPcrValue  },
-         /*  14: LLWU_P14             = --                             */  { NoPortInfo, UNMAPPED_PCR, 0                           },
+         /*  14: LLWU_P14             = PTD4 (p45)                     */  { PortDInfo,  4,       PORT_PCR_MUX(1)|defaultPcrValue  },
          /*  15: LLWU_P15             = --                             */  { NoPortInfo, UNMAPPED_PCR, 0                           },
    };
 
@@ -3371,11 +3396,15 @@ public:
     */
    static void initPCRs(uint32_t pcrValue=defaultPcrValue) {
 #ifdef PCC_PCCn_CGC_MASK
+      PCC->PCC_PORTA = PCC_PCCn_CGC_MASK;
+      PCC->PCC_PORTC = PCC_PCCn_CGC_MASK;
       PCC->PCC_PORTD = PCC_PCCn_CGC_MASK;
 #else
-      enablePortClocks(PORTD_CLOCK_MASK);
+      enablePortClocks(PORTA_CLOCK_MASK|PORTC_CLOCK_MASK|PORTD_CLOCK_MASK);
 #endif
-      PORTD->GPCLR = pcrValue|PORT_PCR_MUX(1)|PORT_GPCLR_GPWE(0x0004UL);
+      PORTA->GPCLR = pcrValue|PORT_PCR_MUX(1)|PORT_GPCLR_GPWE(0x0010UL);
+      PORTC->GPCLR = pcrValue|PORT_PCR_MUX(1)|PORT_GPCLR_GPWE(0x007AUL);
+      PORTD->GPCLR = pcrValue|PORT_PCR_MUX(1)|PORT_GPCLR_GPWE(0x0015UL);
    }
 
    /**
@@ -3383,11 +3412,15 @@ public:
     */
    static void clearPCRs() {
 #ifdef PCC_PCCn_CGC_MASK
+      PCC->PCC_PORTA = PCC_PCCn_CGC_MASK;
+      PCC->PCC_PORTC = PCC_PCCn_CGC_MASK;
       PCC->PCC_PORTD = PCC_PCCn_CGC_MASK;
 #else
-      enablePortClocks(PORTD_CLOCK_MASK);
+      enablePortClocks(PORTA_CLOCK_MASK|PORTC_CLOCK_MASK|PORTD_CLOCK_MASK);
 #endif
-      PORTD->GPCLR = PORT_PCR_MUX(0)|PORT_GPCLR_GPWE(0x4U);
+      PORTA->GPCLR = PORT_PCR_MUX(0)|PORT_GPCLR_GPWE(0x10U);
+      PORTC->GPCLR = PORT_PCR_MUX(0)|PORT_GPCLR_GPWE(0x7AU);
+      PORTD->GPCLR = PORT_PCR_MUX(0)|PORT_GPCLR_GPWE(0x15U);
    }
 
 };
@@ -3416,9 +3449,7 @@ public:
    static constexpr uint32_t baseAddress = LPTMR0_BasePtr;
 
    //! Hardware base pointer
-   __attribute__((always_inline)) static volatile LPTMR_Type &lptmr() {
-      return *reinterpret_cast<LPTMR_Type *>(baseAddress);
-   }
+   static constexpr HardwarePtr<LPTMR_Type> lptmr = baseAddress;
 
    //! Base value for PCR (excluding MUX value)
    static constexpr uint32_t defaultPcrValue = 
@@ -3456,10 +3487,10 @@ public:
    static constexpr uint32_t irqCount  = sizeof(irqNums)/sizeof(irqNums[0]);
 
    //! Class based callback handler has been installed in vector table
-   static constexpr bool irqHandlerInstalled = 1;
+   static constexpr bool irqHandlerInstalled = 0;
 
    //! Default IRQ level
-   static constexpr NvicPriority irqLevel =  NvicPriority_Normal;
+   static constexpr NvicPriority irqLevel =  NvicPriority_NotInstalled;
 
    /**
     * Get input clock frequency
@@ -3580,9 +3611,7 @@ public:
    static constexpr uint32_t baseAddress = MCM_BasePtr;
 
    //! Hardware base pointer
-   __attribute__((always_inline)) static volatile MCM_Type &mcm() {
-      return *reinterpret_cast<MCM_Type *>(baseAddress);
-   }
+   static constexpr HardwarePtr<MCM_Type> mcm = baseAddress;
 
 };
 
@@ -3610,9 +3639,7 @@ public:
    static constexpr uint32_t baseAddress = PDB0_BasePtr;
 
    //! Hardware base pointer
-   __attribute__((always_inline)) static volatile PDB_Type &pdb() {
-      return *reinterpret_cast<PDB_Type *>(baseAddress);
-   }
+   static constexpr HardwarePtr<PDB_Type> pdb = baseAddress;
 
    //! Base value for PCR (excluding MUX value)
    static constexpr uint32_t defaultPcrValue = 
@@ -3778,9 +3805,7 @@ public:
    static constexpr uint32_t baseAddress = PIT_BasePtr;
 
    //! Hardware base pointer
-   __attribute__((always_inline)) static volatile PIT_Type &pit() {
-      return *reinterpret_cast<PIT_Type *>(baseAddress);
-   }
+   static constexpr HardwarePtr<PIT_Type> pit = baseAddress;
 
    //! IRQ numbers for hardware
    static constexpr IRQn_Type irqNums[]  = PIT_IRQS;
@@ -3789,10 +3814,10 @@ public:
    static constexpr uint32_t irqCount  = sizeof(irqNums)/sizeof(irqNums[0]);
 
    //! Class based callback handler has been installed in vector table
-   static constexpr bool irqHandlerInstalled = 0;
+   static constexpr bool irqHandlerInstalled = 1;
 
    //! Default IRQ level
-   static constexpr NvicPriority irqLevel =  NvicPriority_NotInstalled;
+   static constexpr NvicPriority irqLevel =  NvicPriority_Normal;
 
    //! Default value for PIT load value register
    static constexpr uint32_t pit_ldval  = 4799;
@@ -3903,9 +3928,7 @@ public:
    static constexpr uint32_t baseAddress = RCM_BasePtr;
 
    //! Hardware base pointer
-   __attribute__((always_inline)) static volatile RCM_Type &rcm() {
-      return *reinterpret_cast<RCM_Type *>(baseAddress);
-   }
+   static constexpr HardwarePtr<RCM_Type> rcm = baseAddress;
 
    //! Reset Pin Filter Control Register
    static constexpr uint8_t rcm_rpfc = 
@@ -3942,9 +3965,7 @@ public:
    static constexpr uint32_t baseAddress = SMC_BasePtr;
 
    //! Hardware base pointer
-   __attribute__((always_inline)) static volatile SMC_Type &smc() {
-      return *reinterpret_cast<SMC_Type *>(baseAddress);
-   }
+   static constexpr HardwarePtr<SMC_Type> smc = baseAddress;
 
    // Power Mode Protection Register
    static constexpr uint8_t pmprot =  
@@ -4001,9 +4022,7 @@ public:
    static constexpr uint32_t baseAddress = SPI0_BasePtr;
 
    //! Hardware base pointer
-   __attribute__((always_inline)) static volatile SPI_Type &spi() {
-      return *reinterpret_cast<SPI_Type *>(baseAddress);
-   }
+   static constexpr HardwarePtr<SPI_Type> spi = baseAddress;
 
    //! Base value for PCR (excluding MUX value)
    static constexpr uint32_t defaultPcrValue = 
@@ -4013,6 +4032,15 @@ public:
       PORT_PCR_PFE(0) |   // Passive Filter Enable
       PORT_PCR_SRE(0) |   // Slew Rate Enable
       PORT_PCR_PS(0);     // Pull device
+
+   //! Pin number in Info table for SCK if mapped to a pin
+   static constexpr int sckPin  = 0;
+
+   //! Pin number in Info table for SIN if mapped to a pin
+   static constexpr int sinPin  = 1;
+
+   //! Pin number in Info table for SOUT if mapped to a pin
+   static constexpr int soutPin  = 2;
 
    //! Map all allocated pins on a peripheral when enabled
    static constexpr bool mapPinsOnEnable = true;
@@ -4074,8 +4102,8 @@ public:
    static constexpr PinInfo  info[] = {
 
          //      Signal                 Pin                                  portInfo    gpioBit       PCR value
-         /*   0: SPI0_SCK             = PTD1 (p42)                     */  { PortDInfo,  1,       PORT_PCR_MUX(2)|defaultPcrValue  },
-         /*   1: SPI0_SIN             = PTD3 (p44)                     */  { PortDInfo,  3,       PORT_PCR_MUX(2)|defaultPcrValue  },
+         /*   0: SPI0_SCK             = --                             */  { NoPortInfo, UNMAPPED_PCR, 0                           },
+         /*   1: SPI0_SIN             = --                             */  { NoPortInfo, UNMAPPED_PCR, 0                           },
          /*   2: SPI0_SOUT            = --                             */  { NoPortInfo, UNMAPPED_PCR, 0                           },
          /*   3: SPI0_PCS0            = --                             */  { NoPortInfo, UNMAPPED_PCR, 0                           },
          /*   4: SPI0_PCS1            = --                             */  { NoPortInfo, UNMAPPED_PCR, 0                           },
@@ -4090,24 +4118,13 @@ public:
     * @param pcrValue PCR value controlling pin options
     */
    static void initPCRs(uint32_t pcrValue=defaultPcrValue) {
-#ifdef PCC_PCCn_CGC_MASK
-      PCC->PCC_PORTD = PCC_PCCn_CGC_MASK;
-#else
-      enablePortClocks(PORTD_CLOCK_MASK);
-#endif
-      PORTD->GPCLR = pcrValue|PORT_PCR_MUX(2)|PORT_GPCLR_GPWE(0x000AUL);
+      (void)pcrValue;
    }
 
    /**
     * Resets pins used by peripheral
     */
    static void clearPCRs() {
-#ifdef PCC_PCCn_CGC_MASK
-      PCC->PCC_PORTD = PCC_PCCn_CGC_MASK;
-#else
-      enablePortClocks(PORTD_CLOCK_MASK);
-#endif
-      PORTD->GPCLR = PORT_PCR_MUX(0)|PORT_GPCLR_GPWE(0xAU);
    }
 
 };
@@ -4136,9 +4153,7 @@ public:
    static constexpr uint32_t baseAddress = TSI0_BasePtr;
 
    //! Hardware base pointer
-   __attribute__((always_inline)) static volatile TSI_Type &tsi() {
-      return *reinterpret_cast<TSI_Type *>(baseAddress);
-   }
+   static constexpr HardwarePtr<TSI_Type> tsi = baseAddress;
 
    //! Base value for PCR (excluding MUX value)
    static constexpr uint32_t defaultPcrValue  = 0;
@@ -4253,8 +4268,8 @@ public:
          /*  10: TSI0_CH10            = --                             */  { NoPortInfo, UNMAPPED_PCR, 0                           },
          /*  11: TSI0_CH11            = --                             */  { NoPortInfo, UNMAPPED_PCR, 0                           },
          /*  12: TSI0_CH12            = --                             */  { NoPortInfo, UNMAPPED_PCR, 0                           },
-         /*  13: TSI0_CH13            = PTC0 (p33)                     */  { PortCInfo,  0,       PORT_PCR_MUX(0)|defaultPcrValue  },
-         /*  14: TSI0_CH14            = PTC1 (p34)                     */  { PortCInfo,  1,       PORT_PCR_MUX(0)|defaultPcrValue  },
+         /*  13: TSI0_CH13            = --                             */  { NoPortInfo, UNMAPPED_PCR, 0                           },
+         /*  14: TSI0_CH14            = --                             */  { NoPortInfo, UNMAPPED_PCR, 0                           },
          /*  15: TSI0_CH15            = --                             */  { NoPortInfo, UNMAPPED_PCR, 0                           },
    };
 
@@ -4264,24 +4279,13 @@ public:
     * @param pcrValue PCR value controlling pin options
     */
    static void initPCRs(uint32_t pcrValue=defaultPcrValue) {
-#ifdef PCC_PCCn_CGC_MASK
-      PCC->PCC_PORTC = PCC_PCCn_CGC_MASK;
-#else
-      enablePortClocks(PORTC_CLOCK_MASK);
-#endif
-      PORTC->GPCLR = pcrValue|PORT_PCR_MUX(0)|PORT_GPCLR_GPWE(0x0003UL);
+      (void)pcrValue;
    }
 
    /**
     * Resets pins used by peripheral
     */
    static void clearPCRs() {
-#ifdef PCC_PCCn_CGC_MASK
-      PCC->PCC_PORTC = PCC_PCCn_CGC_MASK;
-#else
-      enablePortClocks(PORTC_CLOCK_MASK);
-#endif
-      PORTC->GPCLR = PORT_PCR_MUX(0)|PORT_GPCLR_GPWE(0x3U);
    }
 
 };
@@ -4310,9 +4314,7 @@ public:
    static constexpr uint32_t baseAddress = UART0_BasePtr;
 
    //! Hardware base pointer
-   __attribute__((always_inline)) static volatile UART_Type &uart() {
-      return *reinterpret_cast<UART_Type *>(baseAddress);
-   }
+   static constexpr HardwarePtr<UART_Type> uart = baseAddress;
 
    //! Base value for PCR (excluding MUX value)
    static constexpr uint32_t defaultPcrValue = 
@@ -4438,9 +4440,7 @@ public:
    static constexpr uint32_t baseAddress = UART1_BasePtr;
 
    //! Hardware base pointer
-   __attribute__((always_inline)) static volatile UART_Type &uart() {
-      return *reinterpret_cast<UART_Type *>(baseAddress);
-   }
+   static constexpr HardwarePtr<UART_Type> uart = baseAddress;
 
    //! Base value for PCR (excluding MUX value)
    static constexpr uint32_t defaultPcrValue = 
@@ -4554,9 +4554,7 @@ public:
    static constexpr uint32_t baseAddress = UART2_BasePtr;
 
    //! Hardware base pointer
-   __attribute__((always_inline)) static volatile UART_Type &uart() {
-      return *reinterpret_cast<UART_Type *>(baseAddress);
-   }
+   static constexpr HardwarePtr<UART_Type> uart = baseAddress;
 
    //! Base value for PCR (excluding MUX value)
    static constexpr uint32_t defaultPcrValue = 
@@ -4679,9 +4677,7 @@ public:
    static constexpr uint32_t baseAddress = USB0_BasePtr;
 
    //! Hardware base pointer
-   __attribute__((always_inline)) static volatile USB_Type &usb() {
-      return *reinterpret_cast<USB_Type *>(baseAddress);
-   }
+   static constexpr HardwarePtr<USB_Type> usb = baseAddress;
 
    //! Base value for PCR (excluding MUX value)
    static constexpr uint32_t defaultPcrValue  = 0;
@@ -4693,10 +4689,10 @@ public:
    static constexpr uint32_t irqCount  = sizeof(irqNums)/sizeof(irqNums[0]);
 
    //! Class based callback handler has been installed in vector table
-   static constexpr bool irqHandlerInstalled = 0;
+   static constexpr bool irqHandlerInstalled = 1;
 
    //! Default IRQ level
-   static constexpr NvicPriority irqLevel =  NvicPriority_NotInstalled;
+   static constexpr NvicPriority irqLevel =  NvicPriority_Normal;
 
    /** 
     *  Enable clock to Usb0
@@ -4776,9 +4772,7 @@ public:
    static constexpr uint32_t baseAddress = USBDCD0_BasePtr;
 
    //! Hardware base pointer
-   __attribute__((always_inline)) static volatile USBDCD_Type &usbdcd() {
-      return *reinterpret_cast<USBDCD_Type *>(baseAddress);
-   }
+   static constexpr HardwarePtr<USBDCD_Type> usbdcd = baseAddress;
 
    //! IRQ numbers for hardware
    static constexpr IRQn_Type irqNums[]  = USBDCD0_IRQS;
@@ -4840,19 +4834,20 @@ public:
    static constexpr uint32_t baseAddress = VREF_BasePtr;
 
    //! Hardware base pointer
-   __attribute__((always_inline)) static volatile VREF_Type &vref() {
-      return *reinterpret_cast<VREF_Type *>(baseAddress);
-   }
+   static constexpr HardwarePtr<VREF_Type> vref = baseAddress;
 
    //! Base value for PCR (excluding MUX value)
    static constexpr uint32_t defaultPcrValue  = 0;
+
+   //! Pin number in Info table for VREF output if mapped to a pin
+   static constexpr int outputPin  = 0;
 
    //! Map all allocated pins on a peripheral when enabled
    static constexpr bool mapPinsOnEnable = false;
 
    static constexpr uint8_t vref_trm = 
-       VREF_TRM_CHOPEN(1) | // Chop oscillator enable
-       VREF_TRM_TRIM(32);   // Trim bits 
+       VREF_TRM_CHOPEN(1); // Chop oscillator enable
+       //                  // Trim bits are preserved
 
    static constexpr uint8_t vref_sc = 
        VREF_SC_VREFEN(1) |   // Internal Voltage Reference enable
@@ -4933,9 +4928,7 @@ public:
    static constexpr uint32_t baseAddress = WDOG_BasePtr;
 
    //! Hardware base pointer
-   __attribute__((always_inline)) static volatile WDOG_Type &wdog() {
-      return *reinterpret_cast<WDOG_Type *>(baseAddress);
-   }
+   static constexpr HardwarePtr<WDOG_Type> wdog = baseAddress;
 
    //! IRQ numbers for hardware
    static constexpr IRQn_Type irqNums[]  = WDOG_IRQS;
@@ -4977,65 +4970,8 @@ public:
 } // End namespace USBDM
 
 
+// GPIO definitions are needed generally
 #include "gpio.h"
-#include "adc.h"
-#include "ftm.h"
-
-/**
- * Namespace enclosing USBDM classes
- */
-namespace USBDM {
-
-/**
- * @addtogroup USBDM_Group USBDM Peripheral Interface
- * @brief Hardware Peripheral Interface and library
- * @{
- */
-/**
- * @addtogroup ADC_Group ADC, Analogue Input
- * @brief Abstraction for Analogue Input
- * @{
- */
-using Adc_p8               = const USBDM::Adc0::Channel<19>;
-using Adc_p7               = const USBDM::Adc0::Channel<0>;
-using Adc_Internal         = const USBDM::Adc0::Channel<27>;
-using Adc_p33              = const USBDM::Adc0::Channel<14>;
-using Adc_p34              = const USBDM::Adc0::Channel<15>;
-using Adc_p46              = const USBDM::Adc0::Channel<6>;
-using Adc_p47              = const USBDM::Adc0::Channel<7>;
-//using Adc_Internal         = const USBDM::Adc0::Channel<26>;
-/** 
- * End group ADC_Group
- * @}
- */
-/**
- * @addtogroup FTM_Group FTM, PWM, Input capture and Output compare
- * @brief Abstraction for PWM, Input capture and Output compare
- * @{
- */
-using Ftm_p21              = const USBDM::Ftm0::Channel<1>;
-using Ftm_p36              = const USBDM::Ftm0::Channel<2>;
-using Ftm_p37              = const USBDM::Ftm0::Channel<3>;
-/** 
- * End group FTM_Group
- * @}
- */
-/**
- * @addtogroup GPIO_Group GPIO, Digital Input/Output
- * @brief Abstraction for Digital Input/Output
- * @{
- */
-using Gpio_p43             = const USBDM::GpioD<2>;
-/** 
- * End group GPIO_Group
- * @}
- */
-/** 
- * End group USBDM_Group
- * @}
- */
-
-} // End namespace USBDM
 
 /**
  *
@@ -5043,159 +4979,179 @@ using Gpio_p43             = const USBDM::GpioD<2>;
  *
  * @section PinsByPinName Pins by Pin Name
  *
- *    Pin Name               |   Functions                                 |  Location                 |  Description  
- *  ------------------------ | --------------------------------------------|---------------------------| ------------- 
- *  ADC0_DM0                 | ADC0_DM0/ADC0_SE19                          | p8                        | Photo-transistor       
- *  ADC0_DP0                 | ADC0_DP0/ADC0_SE0                           | p7                        | -       
- *  BandGap                  | ADC0_SE27                                   | Internal                  | -       
- *  EXTAL32                  | EXTAL32                                     | p15                       | Reserved(EXTAL32)       
- *  PTA0                     | JTAG_TCLK/SWD_CLK                           | p17                       | Reserved (SWD)       
- *  PTA1                     | UART0_RX                                    | p18                       | -       
- *  PTA2                     | UART0_TX                                    | p19                       | Blue LED, LCD_cs*       
- *  PTA3                     | JTAG_TMS/SWD_DIO                            | p20                       | Reserved (SWD)       
- *  PTA4                     | FTM0_CH1                                    | p21                       | -       
- *  PTA18                    | EXTAL0                                      | p24                       | Reserved (EXTAL0)       
- *  PTA19                    | XTAL0                                       | p25                       | Reserved (XTAL0)       
- *  PTB0                     | I2C0_SCL                                    | p27                       | Accelerometer SCL       
- *  PTB1                     | I2C0_SDA                                    | p28                       | Accelerometer SDA       
- *  PTB2                     | -                                           | p29                       | -       
- *  PTB3                     | -                                           | p30                       | -       
- *  PTB16                    | -                                           | p31                       | USB Serial Rx       
- *  PTB17                    | -                                           | p32                       | USB Serial Tx       
- *  PTC0                     | ADC0_SE14/TSI0_CH13                         | p33                       | -       
- *  PTC1                     | ADC0_SE15/TSI0_CH14                         | p34                       | -       
- *  PTC2                     | -                                           | p35                       | LCD_backlight       
- *  PTC3                     | FTM0_CH2                                    | p36                       | Red LED       
- *  PTC4                     | FTM0_CH3                                    | p37                       | -       
- *  PTC5                     | -                                           | p38                       | -       
- *  PTC6                     | -                                           | p39                       | -       
- *  PTC7                     | -                                           | p40                       | -       
- *  PTD0                     | -                                           | p41                       | -       
- *  PTD1                     | SPI0_SCK                                    | p42                       | LCD_sck       
- *  PTD2                     | GPIOD_2/LLWU_P13                            | p43                       | LCD_sin       
- *  PTD3                     | SPI0_SIN                                    | p44                       | -       
- *  PTD4                     | -                                           | p45                       | Green LED       
- *  PTD5                     | ADC0_SE6b                                   | p46                       | -       
- *  PTD6                     | ADC0_SE7b                                   | p47                       | -       
- *  PTD7                     | -                                           | p48                       | -       
- *  RESET_b                  | RESET_b                                     | p26                       | Reserved(Reset button)       
- *  TempSensor               | ADC0_SE26                                   | Internal                  | -       
- *  USB0_DM                  | USB0_DM                                     | p4                        | Reserved(USB_DM)       
- *  USB0_DP                  | USB0_DP                                     | p3                        | Reserved(USB_DP)       
- *  VBAT                     | VBAT                                        | p16                       | -       
- *  VDD1                     | VDD1                                        | p1                        | -       
- *  VDD2                     | VDD2                                        | p22                       | -       
- *  VDDA                     | VDDA                                        | p9                        | -       
- *  VOUT33                   | VOUT33                                      | p5                        | -       
- *  VREFH                    | VREFH                                       | p10                       | -       
- *  VREFL                    | VREFL                                       | p11                       | -       
- *  VREF_OUT                 | VREF_OUT/CMP1_IN5/CMP0_IN5                  | p13                       | Vref output       
- *  VREGIN                   | VREGIN                                      | p6                        | -       
- *  VSS1                     | VSS1                                        | p2                        | -       
- *  VSS2                     | VSS2                                        | p23                       | -       
- *  VSSA                     | VSSA                                        | p12                       | -       
- *  XTAL32                   | XTAL32                                      | p14                       | Reserved(XTAL32)       
+ *    Pin Name               |   Functions                                                     |  Location                 |  Description  
+ *  ------------------------ | --------------------------------------------------------------- | ------------------------- | ------------- 
+ *  ADC0_DM0                 | ADC0_DM0/ADC0_SE19                                              | p8                        | Unused       
+ *  ADC0_DP0                 | ADC0_DP0/ADC0_SE0                                               | p7                        | Vref_JTAG       
+ *  BANDGAP                  | ADC0_SE27/CMP0_IN6/CMP1_IN6                                     | Internal                  | -       
+ *  CMP_DAC                  | CMP0_IN7/CMP1_IN7                                               | Internal                  | -       
+ *  EXTAL32                  | EXTAL32                                                         | p15                       | Unused       
+ *  PIT_CH0                  | PIT_CH0                                                         | Internal                  | Motor simulator - PIT channel       
+ *  PIT_CH1                  | PIT_CH1                                                         | Internal                  | Used to poll directly connected buttons - power, clock and traffic       
+ *  PIT_CH2                  | PIT_CH2                                                         | Internal                  | -       
+ *  PIT_CH3                  | PIT_CH3                                                         | Internal                  | -       
+ *  PTA0                     | JTAG_TCLK/SWD_CLK                                               | p17                       | SWD_CLK       
+ *  PTA1                     | UART0_RX                                                        | p18                       | SWD_Rx       
+ *  PTA2                     | UART0_TX                                                        | p19                       | SWD_Tx       
+ *  PTA3                     | JTAG_TMS/SWD_DIO                                                | p20                       | SWD_DIO       
+ *  PTA4                     | GPIOA_4/LLWU_P3                                                 | p21                       | Power - Enable button       
+ *  PTA18                    | EXTAL0                                                          | p24                       | 16 MHz Crystal       
+ *  PTA19                    | XTAL0                                                           | p25                       | 16 MHz Crystal       
+ *  PTB0                     | I2C0_SCL                                                        | p27                       | I2C_SCL       
+ *  PTB1                     | I2C0_SDA                                                        | p28                       | I2C_SDA       
+ *  PTB2                     | -                                                               | p29                       | Spare1       
+ *  PTB3                     | GPIOB_3                                                         | p30                       | Power - Enable to voltage regulator       
+ *  PTB16                    | GPIOB_16                                                        | p31                       | Frequency generator - Up/Down buttons       
+ *  PTB17                    | GPIOB_17                                                        | p32                       | Frequency generator - Up/Down buttons       
+ *  PTC0                     | GPIOC_0                                                         | p33                       | Motor simulator - Charlieplexed LEDs       
+ *  PTC1                     | GPIOC_1/LLWU_P6                                                 | p34                       | Motor simulator - Charlieplexed LEDs       
+ *  PTC2                     | GPIOC_2                                                         | p35                       | Motor simulator - Charlieplexed LEDs       
+ *  PTC3                     | GPIOC_3/LLWU_P7                                                 | p36                       | Motor simulator - Charlieplexed LEDs       
+ *  PTC4                     | GPIOC_4/LLWU_P8                                                 | p37                       | Motor simulator - Phase inputs from user       
+ *  PTC5                     | GPIOC_5/LLWU_P9                                                 | p38                       | Motor simulator - Phase inputs from user       
+ *  PTC6                     | GPIOC_6/LLWU_P10                                                | p39                       | Motor simulator - Phase inputs from user       
+ *  PTC7                     | GPIOC_7                                                         | p40                       | Motor simulator - Phase inputs from user       
+ *  PTD0                     | GPIOD_0/LLWU_P12                                                | p41                       | Traffic Intersection/JTAG interface/JTAG - TCK/CAR_NS       
+ *  PTD1                     | GPIOD_1                                                         | p42                       | //JTAG - TDO/CAR_EW       
+ *  PTD2                     | GPIOD_2/LLWU_P13                                                | p43                       | //JTAG - TDI/PED_NS       
+ *  PTD3                     | GPIOD_3                                                         | p44                       | //JTAG - TMS/PED_EW       
+ *  PTD4                     | GPIOD_4/LLWU_P14                                                | p45                       | Programmer Pass LED (Green)       
+ *  PTD5                     | FTM0_CH5                                                        | p46                       | Frequency generator channel       
+ *  PTD6                     | ADC0_SE7b                                                       | p47                       | VddSample/Discharge       
+ *  PTD7                     | GPIOD_7                                                         | p48                       | Programmer Fail LED (Red)       
+ *  RESET_b                  | RESET_b                                                         | p26                       | Reset       
+ *  TEMP_SENSOR              | ADC0_SE26                                                       | Internal                  | -       
+ *  USB0_DM                  | USB0_DM                                                         | p4                        | USBDM       
+ *  USB0_DP                  | USB0_DP                                                         | p3                        | USBDP       
+ *  VBAT                     | VBAT                                                            | p16                       | Vdd       
+ *  VDD1                     | VDD1                                                            | p1                        | Vdd       
+ *  VDD2                     | VDD2                                                            | p22                       | Vdd       
+ *  VDDA                     | VDDA                                                            | p9                        | Vdd       
+ *  VOUT33                   | VOUT33                                                          | p5                        | Vdd       
+ *  VREFH                    | VREFH                                                           | p10                       | Vdd       
+ *  VREFL                    | VREFL                                                           | p11                       | Vss       
+ *  VREF_OUT                 | VREF_OUT/CMP1_IN5/CMP0_IN5                                      | p13                       | Unused       
+ *  VREGIN                   | VREGIN                                                          | p6                        | 5V_Fused       
+ *  VSS1                     | VSS1                                                            | p2                        | Vss       
+ *  VSS2                     | VSS2                                                            | p23                       | Vss       
+ *  VSSA                     | VSSA                                                            | p12                       | Vss       
+ *  XTAL32                   | XTAL32                                                          | p14                       | Unused       
  *
  *
  * @section PinsByLocation Pins by Location
  *
- *    Pin Name               |   Functions                                 |  Location                 |  Description  
- *  ------------------------ | --------------------------------------------|---------------------------| ------------- 
- *  TempSensor               | ADC0_SE26                                   | Internal                  | -       
- *  VDD1                     | VDD1                                        | p1                        | -       
- *  VSS1                     | VSS1                                        | p2                        | -       
- *  USB0_DP                  | USB0_DP                                     | p3                        | Reserved(USB_DP)       
- *  USB0_DM                  | USB0_DM                                     | p4                        | Reserved(USB_DM)       
- *  VOUT33                   | VOUT33                                      | p5                        | -       
- *  VREGIN                   | VREGIN                                      | p6                        | -       
- *  ADC0_DP0                 | ADC0_DP0/ADC0_SE0                           | p7                        | -       
- *  ADC0_DM0                 | ADC0_DM0/ADC0_SE19                          | p8                        | Photo-transistor       
- *  VDDA                     | VDDA                                        | p9                        | -       
- *  VREFH                    | VREFH                                       | p10                       | -       
- *  VREFL                    | VREFL                                       | p11                       | -       
- *  VSSA                     | VSSA                                        | p12                       | -       
- *  VREF_OUT                 | VREF_OUT/CMP1_IN5/CMP0_IN5                  | p13                       | Vref output       
- *  XTAL32                   | XTAL32                                      | p14                       | Reserved(XTAL32)       
- *  EXTAL32                  | EXTAL32                                     | p15                       | Reserved(EXTAL32)       
- *  VBAT                     | VBAT                                        | p16                       | -       
- *  PTA0                     | JTAG_TCLK/SWD_CLK                           | p17                       | Reserved (SWD)       
- *  PTA1                     | UART0_RX                                    | p18                       | -       
- *  PTA2                     | UART0_TX                                    | p19                       | Blue LED, LCD_cs*       
- *  PTA3                     | JTAG_TMS/SWD_DIO                            | p20                       | Reserved (SWD)       
- *  PTA4                     | FTM0_CH1                                    | p21                       | -       
- *  VDD2                     | VDD2                                        | p22                       | -       
- *  VSS2                     | VSS2                                        | p23                       | -       
- *  PTA18                    | EXTAL0                                      | p24                       | Reserved (EXTAL0)       
- *  PTA19                    | XTAL0                                       | p25                       | Reserved (XTAL0)       
- *  RESET_b                  | RESET_b                                     | p26                       | Reserved(Reset button)       
- *  PTB0                     | I2C0_SCL                                    | p27                       | Accelerometer SCL       
- *  PTB1                     | I2C0_SDA                                    | p28                       | Accelerometer SDA       
- *  PTB2                     | -                                           | p29                       | -       
- *  PTB3                     | -                                           | p30                       | -       
- *  PTB16                    | -                                           | p31                       | USB Serial Rx       
- *  PTB17                    | -                                           | p32                       | USB Serial Tx       
- *  PTC0                     | ADC0_SE14/TSI0_CH13                         | p33                       | -       
- *  PTC1                     | ADC0_SE15/TSI0_CH14                         | p34                       | -       
- *  PTC2                     | -                                           | p35                       | LCD_backlight       
- *  PTC3                     | FTM0_CH2                                    | p36                       | Red LED       
- *  PTC4                     | FTM0_CH3                                    | p37                       | -       
- *  PTC5                     | -                                           | p38                       | -       
- *  PTC6                     | -                                           | p39                       | -       
- *  PTC7                     | -                                           | p40                       | -       
- *  PTD0                     | -                                           | p41                       | -       
- *  PTD1                     | SPI0_SCK                                    | p42                       | LCD_sck       
- *  PTD2                     | GPIOD_2/LLWU_P13                            | p43                       | LCD_sin       
- *  PTD3                     | SPI0_SIN                                    | p44                       | -       
- *  PTD4                     | -                                           | p45                       | Green LED       
- *  PTD5                     | ADC0_SE6b                                   | p46                       | -       
- *  PTD6                     | ADC0_SE7b                                   | p47                       | -       
- *  PTD7                     | -                                           | p48                       | -       
+ *    Pin Name               |   Functions                                                     |  Location                 |  Description  
+ *  ------------------------ | --------------------------------------------------------------- | ------------------------- | ------------- 
+ *  TEMP_SENSOR              | ADC0_SE26                                                       | Internal                  | -       
+ *  VDD1                     | VDD1                                                            | p1                        | Vdd       
+ *  VSS1                     | VSS1                                                            | p2                        | Vss       
+ *  USB0_DP                  | USB0_DP                                                         | p3                        | USBDP       
+ *  USB0_DM                  | USB0_DM                                                         | p4                        | USBDM       
+ *  VOUT33                   | VOUT33                                                          | p5                        | Vdd       
+ *  VREGIN                   | VREGIN                                                          | p6                        | 5V_Fused       
+ *  ADC0_DP0                 | ADC0_DP0/ADC0_SE0                                               | p7                        | Vref_JTAG       
+ *  ADC0_DM0                 | ADC0_DM0/ADC0_SE19                                              | p8                        | Unused       
+ *  VDDA                     | VDDA                                                            | p9                        | Vdd       
+ *  VREFH                    | VREFH                                                           | p10                       | Vdd       
+ *  VREFL                    | VREFL                                                           | p11                       | Vss       
+ *  VSSA                     | VSSA                                                            | p12                       | Vss       
+ *  VREF_OUT                 | VREF_OUT/CMP1_IN5/CMP0_IN5                                      | p13                       | Unused       
+ *  XTAL32                   | XTAL32                                                          | p14                       | Unused       
+ *  EXTAL32                  | EXTAL32                                                         | p15                       | Unused       
+ *  VBAT                     | VBAT                                                            | p16                       | Vdd       
+ *  PTA0                     | JTAG_TCLK/SWD_CLK                                               | p17                       | SWD_CLK       
+ *  PTA1                     | UART0_RX                                                        | p18                       | SWD_Rx       
+ *  PTA2                     | UART0_TX                                                        | p19                       | SWD_Tx       
+ *  PTA3                     | JTAG_TMS/SWD_DIO                                                | p20                       | SWD_DIO       
+ *  PTA4                     | GPIOA_4/LLWU_P3                                                 | p21                       | Power - Enable button       
+ *  VDD2                     | VDD2                                                            | p22                       | Vdd       
+ *  VSS2                     | VSS2                                                            | p23                       | Vss       
+ *  PTA18                    | EXTAL0                                                          | p24                       | 16 MHz Crystal       
+ *  PTA19                    | XTAL0                                                           | p25                       | 16 MHz Crystal       
+ *  RESET_b                  | RESET_b                                                         | p26                       | Reset       
+ *  PTB0                     | I2C0_SCL                                                        | p27                       | I2C_SCL       
+ *  PTB1                     | I2C0_SDA                                                        | p28                       | I2C_SDA       
+ *  PTB2                     | -                                                               | p29                       | Spare1       
+ *  PTB3                     | GPIOB_3                                                         | p30                       | Power - Enable to voltage regulator       
+ *  PTB16                    | GPIOB_16                                                        | p31                       | Frequency generator - Up/Down buttons       
+ *  PTB17                    | GPIOB_17                                                        | p32                       | Frequency generator - Up/Down buttons       
+ *  PTC0                     | GPIOC_0                                                         | p33                       | Motor simulator - Charlieplexed LEDs       
+ *  PTC1                     | GPIOC_1/LLWU_P6                                                 | p34                       | Motor simulator - Charlieplexed LEDs       
+ *  PTC2                     | GPIOC_2                                                         | p35                       | Motor simulator - Charlieplexed LEDs       
+ *  PTC3                     | GPIOC_3/LLWU_P7                                                 | p36                       | Motor simulator - Charlieplexed LEDs       
+ *  PTC4                     | GPIOC_4/LLWU_P8                                                 | p37                       | Motor simulator - Phase inputs from user       
+ *  PTC5                     | GPIOC_5/LLWU_P9                                                 | p38                       | Motor simulator - Phase inputs from user       
+ *  PTC6                     | GPIOC_6/LLWU_P10                                                | p39                       | Motor simulator - Phase inputs from user       
+ *  PTC7                     | GPIOC_7                                                         | p40                       | Motor simulator - Phase inputs from user       
+ *  PTD0                     | GPIOD_0/LLWU_P12                                                | p41                       | Traffic Intersection/JTAG interface/JTAG - TCK/CAR_NS       
+ *  PTD1                     | GPIOD_1                                                         | p42                       | //JTAG - TDO/CAR_EW       
+ *  PTD2                     | GPIOD_2/LLWU_P13                                                | p43                       | //JTAG - TDI/PED_NS       
+ *  PTD3                     | GPIOD_3                                                         | p44                       | //JTAG - TMS/PED_EW       
+ *  PTD4                     | GPIOD_4/LLWU_P14                                                | p45                       | Programmer Pass LED (Green)       
+ *  PTD5                     | FTM0_CH5                                                        | p46                       | Frequency generator channel       
+ *  PTD6                     | ADC0_SE7b                                                       | p47                       | VddSample/Discharge       
+ *  PTD7                     | GPIOD_7                                                         | p48                       | Programmer Fail LED (Red)       
  *
  *
  * @section PinsByFunction Pins by Function
  *
- *    Pin Name               |   Functions                                 |  Location                 |  Description  
- *  ------------------------ | --------------------------------------------|---------------------------| ------------- 
- *  PTD7                     | -                                           | p48                       | -       
- *  ADC0_DM0                 | ADC0_DM0/ADC0_SE19                          | p8                        | Photo-transistor       
- *  ADC0_DP0                 | ADC0_DP0/ADC0_SE0                           | p7                        | -       
- *  PTD5                     | ADC0_SE6b                                   | p46                       | -       
- *  PTD6                     | ADC0_SE7b                                   | p47                       | -       
- *  PTC0                     | ADC0_SE14/TSI0_CH13                         | p33                       | -       
- *  PTC1                     | ADC0_SE15/TSI0_CH14                         | p34                       | -       
- *  TempSensor               | ADC0_SE26                                   | Internal                  | -       
- *  BandGap                  | ADC0_SE27                                   | Internal                  | -       
- *  PTA18                    | EXTAL0                                      | p24                       | Reserved (EXTAL0)       
- *  EXTAL32                  | EXTAL32                                     | p15                       | Reserved(EXTAL32)       
- *  PTA4                     | FTM0_CH1                                    | p21                       | -       
- *  PTC3                     | FTM0_CH2                                    | p36                       | Red LED       
- *  PTC4                     | FTM0_CH3                                    | p37                       | -       
- *  PTD2                     | GPIOD_2/LLWU_P13                            | p43                       | LCD_sin       
- *  PTB0                     | I2C0_SCL                                    | p27                       | Accelerometer SCL       
- *  PTB1                     | I2C0_SDA                                    | p28                       | Accelerometer SDA       
- *  PTA0                     | JTAG_TCLK/SWD_CLK                           | p17                       | Reserved (SWD)       
- *  PTA3                     | JTAG_TMS/SWD_DIO                            | p20                       | Reserved (SWD)       
- *  RESET_b                  | RESET_b                                     | p26                       | Reserved(Reset button)       
- *  PTD1                     | SPI0_SCK                                    | p42                       | LCD_sck       
- *  PTD3                     | SPI0_SIN                                    | p44                       | -       
- *  PTA1                     | UART0_RX                                    | p18                       | -       
- *  PTA2                     | UART0_TX                                    | p19                       | Blue LED, LCD_cs*       
- *  USB0_DM                  | USB0_DM                                     | p4                        | Reserved(USB_DM)       
- *  USB0_DP                  | USB0_DP                                     | p3                        | Reserved(USB_DP)       
- *  VBAT                     | VBAT                                        | p16                       | -       
- *  VDD1                     | VDD1                                        | p1                        | -       
- *  VDD2                     | VDD2                                        | p22                       | -       
- *  VDDA                     | VDDA                                        | p9                        | -       
- *  VOUT33                   | VOUT33                                      | p5                        | -       
- *  VREFH                    | VREFH                                       | p10                       | -       
- *  VREFL                    | VREFL                                       | p11                       | -       
- *  VREF_OUT                 | VREF_OUT/CMP1_IN5/CMP0_IN5                  | p13                       | Vref output       
- *  VREGIN                   | VREGIN                                      | p6                        | -       
- *  VSS1                     | VSS1                                        | p2                        | -       
- *  VSS2                     | VSS2                                        | p23                       | -       
- *  VSSA                     | VSSA                                        | p12                       | -       
- *  PTA19                    | XTAL0                                       | p25                       | Reserved (XTAL0)       
- *  XTAL32                   | XTAL32                                      | p14                       | Reserved(XTAL32)       
+ *    Pin Name               |   Functions                                                     |  Location                 |  Description  
+ *  ------------------------ | --------------------------------------------------------------- | ------------------------- | ------------- 
+ *  PTB2                     | -                                                               | p29                       | Spare1       
+ *  ADC0_DM0                 | ADC0_DM0/ADC0_SE19                                              | p8                        | Unused       
+ *  ADC0_DP0                 | ADC0_DP0/ADC0_SE0                                               | p7                        | Vref_JTAG       
+ *  PTD6                     | ADC0_SE7b                                                       | p47                       | VddSample/Discharge       
+ *  TEMP_SENSOR              | ADC0_SE26                                                       | Internal                  | -       
+ *  BANDGAP                  | ADC0_SE27/CMP0_IN6/CMP1_IN6                                     | Internal                  | -       
+ *  CMP_DAC                  | CMP0_IN7/CMP1_IN7                                               | Internal                  | -       
+ *  PTA18                    | EXTAL0                                                          | p24                       | 16 MHz Crystal       
+ *  EXTAL32                  | EXTAL32                                                         | p15                       | Unused       
+ *  PTD5                     | FTM0_CH5                                                        | p46                       | Frequency generator channel       
+ *  PTA4                     | GPIOA_4/LLWU_P3                                                 | p21                       | Power - Enable button       
+ *  PTB3                     | GPIOB_3                                                         | p30                       | Power - Enable to voltage regulator       
+ *  PTB16                    | GPIOB_16                                                        | p31                       | Frequency generator - Up/Down buttons       
+ *  PTB17                    | GPIOB_17                                                        | p32                       | Frequency generator - Up/Down buttons       
+ *  PTC0                     | GPIOC_0                                                         | p33                       | Motor simulator - Charlieplexed LEDs       
+ *  PTC1                     | GPIOC_1/LLWU_P6                                                 | p34                       | Motor simulator - Charlieplexed LEDs       
+ *  PTC2                     | GPIOC_2                                                         | p35                       | Motor simulator - Charlieplexed LEDs       
+ *  PTC3                     | GPIOC_3/LLWU_P7                                                 | p36                       | Motor simulator - Charlieplexed LEDs       
+ *  PTC4                     | GPIOC_4/LLWU_P8                                                 | p37                       | Motor simulator - Phase inputs from user       
+ *  PTC5                     | GPIOC_5/LLWU_P9                                                 | p38                       | Motor simulator - Phase inputs from user       
+ *  PTC6                     | GPIOC_6/LLWU_P10                                                | p39                       | Motor simulator - Phase inputs from user       
+ *  PTC7                     | GPIOC_7                                                         | p40                       | Motor simulator - Phase inputs from user       
+ *  PTD0                     | GPIOD_0/LLWU_P12                                                | p41                       | Traffic Intersection/JTAG interface/JTAG - TCK/CAR_NS       
+ *  PTD1                     | GPIOD_1                                                         | p42                       | //JTAG - TDO/CAR_EW       
+ *  PTD2                     | GPIOD_2/LLWU_P13                                                | p43                       | //JTAG - TDI/PED_NS       
+ *  PTD3                     | GPIOD_3                                                         | p44                       | //JTAG - TMS/PED_EW       
+ *  PTD4                     | GPIOD_4/LLWU_P14                                                | p45                       | Programmer Pass LED (Green)       
+ *  PTD7                     | GPIOD_7                                                         | p48                       | Programmer Fail LED (Red)       
+ *  PTB0                     | I2C0_SCL                                                        | p27                       | I2C_SCL       
+ *  PTB1                     | I2C0_SDA                                                        | p28                       | I2C_SDA       
+ *  PTA0                     | JTAG_TCLK/SWD_CLK                                               | p17                       | SWD_CLK       
+ *  PTA3                     | JTAG_TMS/SWD_DIO                                                | p20                       | SWD_DIO       
+ *  PIT_CH0                  | PIT_CH0                                                         | Internal                  | Motor simulator - PIT channel       
+ *  PIT_CH1                  | PIT_CH1                                                         | Internal                  | Used to poll directly connected buttons - power, clock and traffic       
+ *  PIT_CH2                  | PIT_CH2                                                         | Internal                  | -       
+ *  PIT_CH3                  | PIT_CH3                                                         | Internal                  | -       
+ *  RESET_b                  | RESET_b                                                         | p26                       | Reset       
+ *  PTA1                     | UART0_RX                                                        | p18                       | SWD_Rx       
+ *  PTA2                     | UART0_TX                                                        | p19                       | SWD_Tx       
+ *  USB0_DM                  | USB0_DM                                                         | p4                        | USBDM       
+ *  USB0_DP                  | USB0_DP                                                         | p3                        | USBDP       
+ *  VBAT                     | VBAT                                                            | p16                       | Vdd       
+ *  VDD1                     | VDD1                                                            | p1                        | Vdd       
+ *  VDD2                     | VDD2                                                            | p22                       | Vdd       
+ *  VDDA                     | VDDA                                                            | p9                        | Vdd       
+ *  VOUT33                   | VOUT33                                                          | p5                        | Vdd       
+ *  VREFH                    | VREFH                                                           | p10                       | Vdd       
+ *  VREFL                    | VREFL                                                           | p11                       | Vss       
+ *  VREF_OUT                 | VREF_OUT/CMP1_IN5/CMP0_IN5                                      | p13                       | Unused       
+ *  VREGIN                   | VREGIN                                                          | p6                        | 5V_Fused       
+ *  VSS1                     | VSS1                                                            | p2                        | Vss       
+ *  VSS2                     | VSS2                                                            | p23                       | Vss       
+ *  VSSA                     | VSSA                                                            | p12                       | Vss       
+ *  PTA19                    | XTAL0                                                           | p25                       | 16 MHz Crystal       
+ *  XTAL32                   | XTAL32                                                          | p14                       | Unused       
  *
  */
 

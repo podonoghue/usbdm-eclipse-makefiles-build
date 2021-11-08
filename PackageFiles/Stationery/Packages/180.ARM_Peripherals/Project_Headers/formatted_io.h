@@ -19,9 +19,8 @@
  */
 #include <stdint.h>
 #include <math.h>
-//#include <cstdio>       // snprintf()
 #include <ctype.h>      // isspace() etc
-#include "hardware.h"
+#include "pin_mapping.h"
 
 #if defined(__FREE_RTOS)
 #include "FreeRTOS.h"
@@ -396,16 +395,11 @@ public:
    /**
     * Set precision for floating point numbers
     *
-    * @param precision Precision to use
-    *
-    * @return Reference to self
-    */
-   /**
-    *
     * @param precision Number of digits to the right of decimal point
     * @param padding   How to pad on the left of the number (Padding_LeadingSpaces, Padding_None, Padding_LeadingZeroes)
     * @param width     Number of characters to the left of decimal point (ignored for padding_None)
-    * @return
+    *
+    * @return Reference to self
     */
    FormattedIO &setFloatFormat( unsigned  precision,
                                 Padding   padding  = Padding_None,
