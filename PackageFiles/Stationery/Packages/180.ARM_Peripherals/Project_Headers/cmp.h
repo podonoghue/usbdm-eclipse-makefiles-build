@@ -486,7 +486,7 @@ public:
       cmp->CR1   = CmpMode_Enabled|cmpPower|cmpPolarity;
       cmp->CR0   = CMP_CR0_FILTER_CNT(0)|cmpHysteresis;
       cmp->FPR   = 0;
-      cmp->SCR   = CMP_SCR_DMAEN(0)|CMP_SCR_IER(0)|CMP_SCR_IEF(0);
+      cmp->SCR   = CMP_SCR_IER(0)|CMP_SCR_IEF(0);
       cmp->DACCR = (CMP_DACCR_VOSEL_MASK>>1)&CMP_DACCR_VOSEL_MASK;
       cmp->MUXCR = Info::muxcr;
    }
@@ -735,6 +735,7 @@ public:
       cmp->SCR &= ~CMP_SCR_IEF_MASK;
    }
 
+#ifdef CMP_SCR_DMAEN_MASK
    /**
     * Enable DMA requests
     */
@@ -748,6 +749,7 @@ public:
    static void disableDmaRequests() {
       cmp->SCR &= ~CMP_SCR_DMAEN_MASK;
    }
+#endif
 
    /**
     * Clear edge interrupt flags

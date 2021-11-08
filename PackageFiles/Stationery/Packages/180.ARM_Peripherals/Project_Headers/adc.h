@@ -65,18 +65,20 @@ static constexpr PcrValue ADC_DEFAULT_PCR(
  * Note the equivalence between modes e.g. 8-bit-se = 9-bit-diff
  */
 enum AdcResolution {
+#ifdef ADC_SC1_DIFF_MASK
    AdcResolution_8bit_se_9bit_diff   = ADC_CFG1_MODE(0),  //!<  8-bit unsigned/9-bit signed
    AdcResolution_10bit_se_11bit_diff = ADC_CFG1_MODE(2),  //!< 10-bit unsigned/11-bit signed
    AdcResolution_12bit_se_13bit_diff = ADC_CFG1_MODE(1),  //!< 12-bit unsigned/13-bit signed
+   AdcResolution_9bit_diff           = ADC_CFG1_MODE(0),  //!<  9-bit signed for use with differential mode
+   AdcResolution_11bit_diff          = ADC_CFG1_MODE(2),  //!< 11-bit signed for use with differential mode
+   AdcResolution_13bit_diff          = ADC_CFG1_MODE(1),  //!< 12-bit signed for use with differential mode
+   AdcResolution_16bit_diff          = ADC_CFG1_MODE(3),  //!< 16-bit signed for use with differential mode
+#endif
    AdcResolution_16bit               = ADC_CFG1_MODE(3),  //!< 16-bit unsigned/unsigned
    AdcResolution_8bit_se             = ADC_CFG1_MODE(0),  //!<  8-bit unsigned for use with single-ended mode
    AdcResolution_10bit_se            = ADC_CFG1_MODE(2),  //!< 10-bit unsigned for use with single-ended mode
    AdcResolution_12bit_se            = ADC_CFG1_MODE(1),  //!< 12-bit unsigned for use with single-ended mode
    AdcResolution_16bit_se            = ADC_CFG1_MODE(3),  //!< 16-bit unsigned for use with single-ended mode
-   AdcResolution_9bit_diff           = ADC_CFG1_MODE(0),  //!<  9-bit signed for use with differential mode
-   AdcResolution_11bit_diff          = ADC_CFG1_MODE(2),  //!< 11-bit signed for use with differential mode
-   AdcResolution_13bit_diff          = ADC_CFG1_MODE(1),  //!< 12-bit signed for use with differential mode
-   AdcResolution_16bit_diff          = ADC_CFG1_MODE(3),  //!< 16-bit signed for use with differential mode
 };
 
 /**
@@ -378,6 +380,7 @@ public:
    };
 };
 
+#ifdef ADC_SC1_DIFF_MASK
 class AdcDiffChannel : public AdcChannel {
 
 private:
@@ -405,6 +408,7 @@ public:
       return static_cast<int16_t>(AdcChannel::readAnalogue(ADC_SC1_DIFF_MASK));
    };
 };
+#endif
 
 /**
  * Template class representing an ADC.
@@ -671,6 +675,7 @@ public:
       }
    }
 
+#ifdef ADC_SC1_DIFF_MASK
    /**
     * Get ADC maximum conversion value for an differential range
     *
@@ -687,6 +692,8 @@ public:
          default:                     return 0;
       }
    }
+#endif
+
    /**
     * Calculate ADC clock divider (ADC_CFG1_ADIV) and confirm clock source (ADC_CFG1_ADICLK)
     * @note adcClockSource may be modified in return value
@@ -1139,7 +1146,6 @@ public:
        * @note Result is always positive
        */
       static uint16_t readAnalogue() {
-         // Zero extended to 32 bits
          return static_cast<uint16_t>(Adc::readAnalogue(channel));
       };
    };
@@ -1320,7 +1326,7 @@ public:
        * @note Result may be negative
        */
       static int16_t readAnalogue() {
-         // Sign-extended to 32 bits
+         // Sign-extended to 16 bits
          return static_cast<int16_t>(Adc::readAnalogue(channel|ADC_SC1_DIFF_MASK));
       };
    };

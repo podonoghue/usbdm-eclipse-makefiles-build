@@ -407,7 +407,7 @@ public:
     * @param[in]  pitChannelNum       Channel being modified
     * @param[in]  nvicPriority  Interrupt priority
     */
-   static void enableNvicInterrupts(PitChannelNum pitChannelNum, uint32_t nvicPriority) {
+   static void enableNvicInterrupts(PitChannelNum pitChannelNum, NvicPriority nvicPriority) {
       static const IRQn_Type irqNums[] = {
             Info::irqNums[0], Info::irqNums[1], Info::irqNums[2], Info::irqNums[3],
       };

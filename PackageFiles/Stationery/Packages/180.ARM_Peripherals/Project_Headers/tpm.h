@@ -147,11 +147,13 @@ class TpmBase {
 private:
 
 private:
-   TpmBase() = delete;
    TpmBase(const TpmBase&) = delete;
    TpmBase(TpmBase&&) = delete;
 
 protected:
+   // Empty constructor
+   constexpr TpmBase() = default;
+
    /**
     * Limit index to permitted pin index range
     * Used to prevent noise from static assertion checks that detect a condition already detected in a more useful fashion.
@@ -254,11 +256,14 @@ private:
    /**
     * This class is not intended to be instantiated
     */
-   TpmBase_T() = delete;
    TpmBase_T(const TpmBase_T&) = delete;
    TpmBase_T(TpmBase_T&&) = delete;
 
 public:
+
+   // Empty constructor
+   constexpr TpmBase_T() = default;
+
    /**
     * Hardware instance pointer
     *
@@ -1475,6 +1480,143 @@ public:
       }
 
 
+
+
+      /*******************************
+       *  PIN Functions
+       *******************************/
+      /**
+       * Set callback for Pin IRQ.
+       *
+       * @param[in] callback The function to call on Pin interrupt.\n
+       *                     nullptr to indicate none
+       *
+       * @note There is a single callback function for all pins on the related port.
+       */
+      static __attribute__((always_inline)) void setPinCallback(PinCallbackFunction callback) {
+         TpmBase::CheckChannelIsMappedToPinOnly<Info, channel>::check();
+         static_assert(Pcr::HANDLER_INSTALLED, "Gpio associated with FTM channel not configured for PIN interrupts - Modify Configure.usbdm");
+         Pcr::setPinCallback(callback);
+      }
+
+#if defined(PORT_PCR_ODE_MASK) and defined (PORT_PCR_SRE_MASK)
+   /**
+    * @brief
+    * Set subset of Pin Control Register Attributes associated with output direction \n
+    * Mux value is set appropriately for the pin function being used. Other attributes are cleared.
+    * Assumes clock to the port has already been enabled
+    *
+    * @param[in] pinDriveStrength One of PinDriveStrength_Low, PinDriveStrength_High
+    * @param[in] pinDriveMode     One of PinDriveMode_PushPull, PinDriveMode_OpenDrain
+    * @param[in] pinSlewRate      One of PinSlewRate_Slow, PinSlewRate_Fast
+    */
+   static void setOutput(
+         PinDriveStrength  pinDriveStrength  = Pcr::defaultPcrValue,
+         PinDriveMode      pinDriveMode      = Pcr::defaultPcrValue,
+         PinSlewRate       pinSlewRate       = Pcr::defaultPcrValue) {
+
+      TpmBase::CheckChannelIsMappedToPinOnly<Info, channel>::check();
+
+#ifdef FTM_SC_PWMEN0_SHIFT
+      // Enable output pin in FTM
+      ftm->SC |= (1<<(channel+FTM_SC_PWMEN0_SHIFT));
+#endif
+      Pcr::setPCR(pinDriveStrength|pinDriveMode|pinSlewRate);
+   }
+#elif defined(PORT_PCR_ODE_ASK)
+   /**
+    * @brief
+    * Set subset of Pin Control Register Attributes associated with output direction \n
+    * Mux value is set appropriately for the pin function being used. Other attributes are cleared.
+    * Assumes clock to the port has already been enabled
+    *
+    * @param[in] pinDriveStrength One of PinDriveStrength_Low, PinDriveStrength_High
+    * @param[in] pinDriveMode     One of PinDriveMode_PushPull, PinDriveMode_OpenDrain
+    */
+   static void setOutput(
+         PinDriveStrength  pinDriveStrength  = Pcr::defaultPcrValue,
+         PinDriveMode      pinDriveMode      = Pcr::defaultPcrValue) {
+
+      TpmBase::CheckChannelIsMappedToPinOnly<Info, channel>::check();
+
+#ifdef FTM_SC_PWMEN0_SHIFT
+      // Enable output pin in FTM
+      ftm->SC |= (1<<(channel+FTM_SC_PWMEN0_SHIFT));
+#endif
+      Pcr::setPCR(pinDriveStrength|pinDriveMode);
+   }
+#elif defined(PORT_PCR_SRE_MASK)
+   /**
+    * @brief
+    * Set subset of Pin Control Register Attributes associated with output direction \n
+    * Mux value is set appropriately for the pin function being used. Other attributes are cleared.
+    * Assumes clock to the port has already been enabled
+    *
+    * @param[in] pinDriveStrength One of PinDriveStrength_Low, PinDriveStrength_High
+    * @param[in] pinSlewRate      One of PinSlewRate_Slow, PinSlewRate_Fast
+    */
+   static void setOutput(
+         PinDriveStrength  pinDriveStrength  = Pcr::defaultPcrValue,
+         PinSlewRate       pinSlewRate       = Pcr::defaultPcrValue) {
+
+      TpmBase::CheckChannelIsMappedToPinOnly<Info, channel>::check();
+
+#ifdef FTM_SC_PWMEN0_SHIFT
+      // Enable output pin in FTM
+      ftm->SC |= (1<<(channel+FTM_SC_PWMEN0_SHIFT));
+#endif
+      Pcr::setPCR(pinDriveStrength|pinSlewRate);
+   }
+#else
+   /**
+    * @brief
+    * Set subset of Pin Control Register Attributes associated with output direction \n
+    * Mux value is set appropriately for the pin function being used. Other attributes are cleared.
+    * Assumes clock to the port has already been enabled
+    *
+    * @param[in] pinDriveStrength One of PinDriveStrength_Low, PinDriveStrength_High
+    */
+   static void setOutput(
+         PinDriveStrength  pinDriveStrength  = Pcr::defaultPcrValue) {
+
+      TpmBase::CheckChannelIsMappedToPinOnly<Info, channel>::check();
+
+#ifdef FTM_SC_PWMEN0_SHIFT
+      // Enable output pin in FTM
+      ftm->SC |= (1<<(channel+FTM_SC_PWMEN0_SHIFT));
+#endif
+
+      Pcr::setPCR(pinDriveStrength);
+   }
+#endif
+
+      /**
+       * @brief
+       * Set subset of Pin Control Register Attributes associated with input direction \n
+       * Mux value is set appropriately for the pin function being used. Other attributes are cleared.\n
+       * The clock to the port will be enabled before changing the PCR.
+       *
+       * @param[in] pinPull          One of PinPull_None, PinPull_Up, PinPull_Down
+       * @param[in] pinAction        One of PinAction_None, etc
+       * @param[in] pinFilter        One of PinFilter_None, PinFilter_Passive
+       *
+       *  @note see also configureDigitalFilter(), enableDigitalFilter(), disableDigitalFilter()
+       */
+      static void setInput(
+            PinPull           pinPull           = Pcr::defaultPcrValue,
+            PinAction         pinAction         = Pcr::defaultPcrValue,
+            PinFilter         pinFilter         = Pcr::defaultPcrValue) {
+
+         TpmBase::CheckChannelIsMappedToPinOnly<Info, channel>::check();
+//         TpmBase::CheckChannelExistsAndMapped<Info, channel>::check(); // More noisy errors
+
+#ifdef FTM_SC_PWMEN0_SHIFT
+         // Disable output pin in FTM
+         ftm->SC &= ~(1<<(channel+FTM_SC_PWMEN0_SHIFT));
+#endif
+
+         Pcr::setInput(pinPull,pinAction,pinFilter);
+      }
 
    };
 
