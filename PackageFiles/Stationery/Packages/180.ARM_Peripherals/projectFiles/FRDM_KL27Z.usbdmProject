@@ -8,41 +8,46 @@
    <item key="$$DeviceInfo_Device_Variant"                 value="FRDM_KL27Z" />
    <item key="$$DeviceInfo_SubFamily"                      value="MKL27Z644" />
    <item key="$$Hardware_Source_Filename"                  value="MKL27Z644.usbdmHardware" />
-   <item key="$signal$PTA0_descriptionSetting"             value="SWD" />
-   <item key="$signal$PTA12_muxSetting"                    value="mux1" />
-   <item key="$signal$PTA13_descriptionSetting"            value="Blue LED" />
-   <item key="$signal$PTA13_muxSetting"                    value="mux1" />
-   <item key="$signal$PTA18_descriptionSetting"            value="Crystal" />
-   <item key="$signal$PTA19_descriptionSetting"            value="Crystal" />
-   <item key="$signal$PTA1_descriptionSetting"             value="Console" />
-   <item key="$signal$PTA1_muxSetting"                     value="mux2" />
-   <item key="$signal$PTA20_descriptionSetting"            value="Reset button" />
-   <item key="$signal$PTA2_descriptionSetting"             value="Console" />
-   <item key="$signal$PTA2_muxSetting"                     value="mux2" />
-   <item key="$signal$PTA3_descriptionSetting"             value="SWD" />
-   <item key="$signal$PTA5_muxSetting"                     value="mux1" />
-   <item key="$signal$PTB0_muxSetting"                     value="mux0" />
-   <item key="$signal$PTB18_descriptionSetting"            value="Red LED" />
-   <item key="$signal$PTB18_muxSetting"                    value="mux1" />
-   <item key="$signal$PTB19_descriptionSetting"            value="Green LED" />
-   <item key="$signal$PTB19_muxSetting"                    value="mux1" />
-   <item key="$signal$PTB1_muxSetting"                     value="mux0" />
-   <item key="$signal$PTC0_muxSetting"                     value="mux0" />
-   <item key="$signal$PTC3_muxSetting"                     value="mux5" />
-   <item key="$signal$PTC4_muxSetting"                     value="mux2" />
-   <item key="$signal$PTC5_muxSetting"                     value="mux2" />
-   <item key="$signal$PTC6_muxSetting"                     value="mux2" />
-   <item key="$signal$PTC7_muxSetting"                     value="mux2" />
-   <item key="$signal$PTC8_muxSetting"                     value="mux1" />
-   <item key="$signal$PTC9_muxSetting"                     value="mux1" />
-   <item key="$signal$PTD6_muxSetting"                     value="mux4" />
-   <item key="$signal$PTD7_muxSetting"                     value="mux4" />
-   <item key="$signal$PTE16_muxSetting"                    value="mux0" />
-   <item key="$signal$PTE20_muxSetting"                    value="mux0" />
-   <item key="$signal$PTE21_muxSetting"                    value="mux0" />
-   <item key="$signal$PTE24_muxSetting"                    value="mux1" />
-   <item key="$signal$PTE25_muxSetting"                    value="mux1" />
-   <item key="$signal$PTE31_muxSetting"                    value="mux1" />
+   <item key="$pin$PTA0_muxSetting_mux7(7)"                value="mux7" />
+   <item key="$pin$PTA12_muxSetting_mux1(1)"               value="mux1" />
+   <item key="$pin$PTA13_muxSetting_mux1(1)"               value="mux1" />
+   <item key="$pin$PTA18_muxSetting_mux0(0)"               value="mux0" />
+   <item key="$pin$PTA19_muxSetting_mux0(0)"               value="mux0" />
+   <item key="$pin$PTA1_muxSetting_mux2(2)"                value="mux2" />
+   <item key="$pin$PTA20_muxSetting_mux7(7)"               value="mux7" />
+   <item key="$pin$PTA2_muxSetting_mux2(2)"                value="mux2" />
+   <item key="$pin$PTA3_muxSetting_mux7(7)"                value="mux7" />
+   <item key="$pin$PTA5_muxSetting_mux1(1)"                value="mux1" />
+   <item key="$pin$PTB0_muxSetting_mux0(0)"                value="mux0" />
+   <item key="$pin$PTB18_muxSetting_mux1(1)"               value="mux1" />
+   <item key="$pin$PTB19_muxSetting_mux1(1)"               value="mux1" />
+   <item key="$pin$PTB1_muxSetting_mux0(0)"                value="mux0" />
+   <item key="$pin$PTC0_muxSetting_mux0(0)"                value="mux0" />
+   <item key="$pin$PTC3_muxSetting_mux5(5)"                value="mux5" />
+   <item key="$pin$PTC4_muxSetting_mux2(2)"                value="mux2" />
+   <item key="$pin$PTC5_muxSetting_mux2(2)"                value="mux2" />
+   <item key="$pin$PTC6_muxSetting_mux2(2)"                value="mux2" />
+   <item key="$pin$PTC7_muxSetting_mux2(2)"                value="mux2" />
+   <item key="$pin$PTC8_muxSetting_mux1(1)"                value="mux1" />
+   <item key="$pin$PTC9_muxSetting_mux1(1)"                value="mux1" />
+   <item key="$pin$PTD6_muxSetting_mux4(4)"                value="mux4" />
+   <item key="$pin$PTD7_muxSetting_mux4(4)"                value="mux4" />
+   <item key="$pin$PTE16_muxSetting_mux0(0)"               value="mux0" />
+   <item key="$pin$PTE20_muxSetting_mux0(0)"               value="mux0" />
+   <item key="$pin$PTE21_muxSetting_mux0(0)"               value="mux0" />
+   <item key="$pin$PTE24_muxSetting_mux1(1)"               value="mux1" />
+   <item key="$pin$PTE25_muxSetting_mux1(1)"               value="mux1" />
+   <item key="$pin$PTE31_muxSetting_mux1(1)"               value="mux1" />
+   <item key="$signal$EXTAL0_descriptionSetting"           value="Crystal" />
+   <item key="$signal$GPIOA_13_descriptionSetting"         value="Blue LED" />
+   <item key="$signal$GPIOB_18_descriptionSetting"         value="Red LED" />
+   <item key="$signal$GPIOB_19_descriptionSetting"         value="Green LED" />
+   <item key="$signal$LPUART0_RX_descriptionSetting"       value="Console" />
+   <item key="$signal$LPUART0_TX_descriptionSetting"       value="Console" />
+   <item key="$signal$RESET_b_descriptionSetting"          value="Reset button" />
+   <item key="$signal$SWD_CLK_descriptionSetting"          value="SWD_CLK" />
+   <item key="$signal$SWD_DIO_descriptionSetting"          value="SWD_DIO" />
+   <item key="$signal$XTAL0_descriptionSetting"            value="Crystal" />
    <item key="/Console/consoleDevice"                      value="USBDM::Lpuart0" />
    <item key="/FTFA/peripheral_file"                       value="ftfa" />
    <item key="/LPTMR0/lptmr_cmr"                           value="0" />
@@ -51,7 +56,6 @@
    <item key="/MCG/ClockConfig[2]"                         value="ClockConfig_LIRC_8MHz" />
    <item key="/MCG/clock_mode[0]"                          value="ClockMode_HIRC_48M" />
    <item key="/MCG/clock_mode[1]"                          value="ClockMode_LIRC_2M" />
-   <item key="/MCG/clock_mode[2]"                          value="ClockMode_LIRC_8M" />
    <item key="/MCG/mcg_c2_ircs[0]"                         value="true" />
    <item key="/MCG/mcg_c2_ircs[2]"                         value="true" />
    <item key="/MCG/system_lirc_clock[0]"                   value="8000000" />
@@ -62,6 +66,9 @@
    <item key="/OSC0/osc_input_freq"                        value="32768" />
    <item key="/PIT/pit_ldval"                              value="10000" />
    <item key="/RTC/rtc_cr_osce"                            value="true" />
+   <item key="/SIM/ClockConfig[0]"                         value="" />
+   <item key="/SIM/ClockConfig[1]"                         value="" />
+   <item key="/SIM/ClockConfig[2]"                         value="" />
    <item key="/SIM/sim_sopt1_osc32ksel"                    value="0" />
    <item key="/SIM/sim_sopt2_lpuart0src"                   value="1" />
    <item key="/SIM/sim_sopt2_lpuart1src"                   value="1" />
@@ -71,8 +78,4 @@
    <item key="/SIM/system_core_clock[1]"                   value="2000000" />
    <item key="/SIM/system_core_clock[2]"                   value="8000000" />
    <item key="/SIM/system_flexio_clock"                    value="8000000" />
-   <item key="/SIM/system_lpuart0_clock"                   value="48000000" />
-   <item key="/SIM/system_lpuart1_clock"                   value="48000000" />
-   <item key="/SIM/system_tpm_clock"                       value="48000000" />
-   <item key="/SIM/system_usbfs_clock"                     value="48000000" />
 </section>

@@ -19,6 +19,7 @@
  *  - SPI0_PCS2
  */
 #include <string.h>
+#include "hardware.h"
 #include "spi.h"
 
 using namespace USBDM;
@@ -59,10 +60,10 @@ int main() {
          uint8_t rxData4 = 0;
 
          spi.startTransaction(configurationOdd);
-         spi.txRx(sizeof(txDataA)/sizeof(txDataA[0]), txDataA, rxData1); // 5 bytes
-         spi.txRx(sizeof(txDataA)/sizeof(txDataA[0]), txDataA, rxData2); // 5 bytes
-         rxData3 = spi.txRx(txDataA[0]); // 1 byte
-         rxData4 = spi.txRx(txDataA[1]); // 1 byte
+         spi.txRx(txDataA, rxData1); // 5 bytes tx-rx
+         spi.txRx(txDataA, rxData2); // 5 bytes tx-rx
+         rxData3 = spi.txRx(txDataA[0]); // 1 byte tx-rx
+         rxData4 = spi.txRx(txDataA[1]); // 1 byte tx-rx
          spi.endTransaction();
 
          if ((memcmp(txDataA, rxData1, sizeof(txDataA)/sizeof(txDataA[0])) != 0) ||
@@ -87,10 +88,10 @@ int main() {
          uint16_t rxData4 = 0;
 
          spi.startTransaction(configurationEven);
-         spi.txRx(sizeof(txDataB)/sizeof(txDataB[0]), txDataB, rxData1); // 5 bytes
-         spi.txRx(sizeof(txDataB)/sizeof(txDataB[0]), txDataB, rxData2); // 5 bytes
-         rxData3 = spi.txRx(txDataB[0]); // 1 byte
-         rxData4 = spi.txRx(txDataB[1]); // 1 byte
+         spi.txRx(txDataB, rxData1); // 5 bytes tx-rx
+         spi.txRx(txDataB, rxData2); // 5 bytes tx-rx
+         rxData3 = spi.txRx(txDataB[0]); // 1 byte tx-rx
+         rxData4 = spi.txRx(txDataB[1]); // 1 byte tx-rx
          spi.endTransaction();
 
          if ((memcmp(txDataB, rxData1, sizeof(txDataB)/sizeof(txDataB[0])) != 0) ||

@@ -172,12 +172,12 @@ public:
    /**
     *  Flush output data
     */
-   virtual void flushOutput() override {};
+   virtual HT16k33_14_SegmentDisplay &flushOutput() override { return *this; };
 
    /**
     *  Flush input data
     */
-   virtual void flushInput() override {};
+   virtual HT16k33_14_SegmentDisplay &flushInput() override { return *this; };
 };
 
 }  // namespace USBDM

@@ -37,12 +37,11 @@ extern volatile uint32_t SystemMcgOutClock;
 extern volatile uint32_t SystemMcgFllClock;
 /** MCGPLLCLK - Output of PLL */
 extern volatile uint32_t SystemMcgPllClock;
-/** Core/System clock (from MCGOUTCLK/CLKDIV) */
 
 extern void setSysDividersStub(uint32_t simClkDiv1);
 
 /**
- * Clock configuration names
+ * Clock configurations
  */
 enum ClockConfig : uint8_t {
 $(/MCG/ClockConfig:// XXXX !!!!!!!ClockConfig - Not found!!!!!!!)
@@ -69,7 +68,7 @@ private:
    static MCGCallbackFunction callback;
 
    /** Hardware instance */
-   static __attribute__((always_inline)) volatile MCG_Type &mcg() { return McgInfo::mcg(); }
+   static constexpr HardwarePtr<MCG_Type> mcg = McgInfo::baseAddress;
 
 public:
    /**

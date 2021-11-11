@@ -554,6 +554,45 @@ public:
    void txRx(uint32_t dataSize, const T *txData, T *rxData=nullptr);
 
    /**
+    *  Transmit and receive a series of values
+    *
+    *  @tparam T Type for data transfer (may be inferred from parameters)
+    *
+    *  @param[in]  txData    Transmit bytes (tx-rx size is inferred from this array)
+    *  @param[out] rxData    Receive byte buffer
+    *
+    *  @note: rxData may use same buffer as txData
+    */
+   template<typename T, unsigned N>
+   void txRx(const T (&txData)[N], T rxData[]) {
+      txRx(N, txData, rxData);
+   }
+
+   /**
+    *  Transmit a series of values
+    *
+    *  @tparam T Type for data transfer (may be inferred from parameters)
+    *
+    *  @param[in]  txData    Transmit bytes (tx size is inferred from this array)
+    */
+   template<typename T, unsigned N>
+   void tx(const T (&txData)[N]) {
+      txRx(N, txData, (T*)nullptr);
+   }
+
+   /**
+    *  Transmit and receive a series of values
+    *
+    *  @tparam T Type for data transfer (may be inferred from parameters)
+    *
+    *  @param[out] rxData    Receive byte buffer (rx size is inferred from this array)
+    */
+   template<typename T, unsigned N>
+   void rx(T (&rxData)[N]) {
+      txRx(N, (T*)nullptr, rxData );
+   }
+
+   /**
     * Transmit and receive a value over SPI
     *
     * @param[in] data - Data to send (4-16 bits) <br>

@@ -2,7 +2,7 @@
 <!DOCTYPE root SYSTEM "../package.dtd">
 
 <root version="1.0" >
-   <projectActionList id="CPP-abstraction-PCA9685" >
+   <projectActionList id="CPP-abstraction-SSD1306_OLED" >
       <applyWhen>
          <and>
             <or>
@@ -19,9 +19,9 @@
          <applyWhen>
             <variableRef idRef="projectOptionValue.CPP-abstraction" condition="isTrue"/>
          </applyWhen>
-         <variable id="projectOptionValue.CPP-abstraction-PCA9685" 
-            name="PCA9685 PWM C++ interface" 
-            description="Adds a CPP abstraction layer for a PCA9685 PWM driver IC" 
+         <variable id="projectOptionValue.CPP-abstraction-SSD1306_OLED" 
+            name="SSD1306_OLED C++ interface" 
+            description="Adds a CPP abstraction layer for a SSD1306 based OLED" 
             checkGroup="group-i2c-peripheral-options" >
          </variable>
    
@@ -29,11 +29,13 @@
          <projectActionList>
             <projectActionList>
                <applyWhen >
-                  <variableRef idRef="projectOptionValue.CPP-abstraction-PCA9685" />
+                  <variableRef idRef="projectOptionValue.CPP-abstraction-SSD1306_OLED" />
                </applyWhen>
-               <copy source="Snippets/pca9685-example.cpp"     target="Snippets/pca9685-example.cpp"  overwrite="true" />
-               <copy source="Snippets/pca9685.h"               target="Sources/pca9685.h"             overwrite="true" />
-               <copy source="Snippets/pca9685.cpp"             target="Sources/pca9685.cpp"           overwrite="true" />
+               <copy source="Snippets/oled-example.cpp"     target="Snippets/oled-example.cpp"  overwrite="true" />
+               <copy source="Snippets/fonts.h"              target="Sources/fonts.h"            overwrite="true" />
+               <copy source="Snippets/fonts.cpp"            target="Sources/fonts.cpp"          overwrite="true" />
+               <copy source="Snippets/oled.h"               target="Sources/oled.h"             overwrite="true" />
+               <copy source="Snippets/oled.cpp"             target="Sources/oled.cpp"           overwrite="true" />
             </projectActionList>
          </projectActionList>
       </projectActionList>

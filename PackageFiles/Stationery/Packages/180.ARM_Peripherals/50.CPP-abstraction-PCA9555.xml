@@ -2,7 +2,7 @@
 <!DOCTYPE root SYSTEM "../package.dtd">
 
 <root version="1.0" >
-   <projectActionList id="CPP-abstraction-PCA9685" >
+   <projectActionList id="CPP-abstraction-PCA9555" >
       <applyWhen>
          <and>
             <or>
@@ -19,9 +19,9 @@
          <applyWhen>
             <variableRef idRef="projectOptionValue.CPP-abstraction" condition="isTrue"/>
          </applyWhen>
-         <variable id="projectOptionValue.CPP-abstraction-PCA9685" 
-            name="PCA9685 PWM C++ interface" 
-            description="Adds a CPP abstraction layer for a PCA9685 PWM driver IC" 
+         <variable id="projectOptionValue.CPP-abstraction-PCA9555" 
+            name="PCA9555 GPIO C++ interface" 
+            description="Adds a CPP abstraction layer for a PCA9555 GPIO Expander IC" 
             checkGroup="group-i2c-peripheral-options" >
          </variable>
    
@@ -29,11 +29,10 @@
          <projectActionList>
             <projectActionList>
                <applyWhen >
-                  <variableRef idRef="projectOptionValue.CPP-abstraction-PCA9685" />
+                  <variableRef idRef="projectOptionValue.CPP-abstraction-PCA9555" />
                </applyWhen>
-               <copy source="Snippets/pca9685-example.cpp"     target="Snippets/pca9685-example.cpp"  overwrite="true" />
-               <copy source="Snippets/pca9685.h"               target="Sources/pca9685.h"             overwrite="true" />
-               <copy source="Snippets/pca9685.cpp"             target="Sources/pca9685.cpp"           overwrite="true" />
+               <copy source="Snippets/pca9555-example.cpp"     target="Snippets/pca9555-example.cpp"  overwrite="true" />
+               <copy source="Snippets/pca9555.h"               target="Sources/pca9555.h"             overwrite="true" />
             </projectActionList>
          </projectActionList>
       </projectActionList>

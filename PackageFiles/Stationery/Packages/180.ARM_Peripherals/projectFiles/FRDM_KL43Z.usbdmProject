@@ -8,70 +8,72 @@
    <item key="$$DeviceInfo_Device_Variant"                 value="FRDM_KL43Z4" />
    <item key="$$DeviceInfo_SubFamily"                      value="MKL43Z4" />
    <item key="$$Hardware_Source_Filename"                  value="MKL43Z4.usbdmHardware" />
-   <item key="$signal$PTA0_descriptionSetting"             value="SWD" />
-   <item key="$signal$PTA12_muxSetting"                    value="mux3" />
-   <item key="$signal$PTA13_muxSetting"                    value="mux3" />
-   <item key="$signal$PTA18_descriptionSetting"            value="32K Crystal" />
-   <item key="$signal$PTA18_muxSetting"                    value="mux0" />
-   <item key="$signal$PTA19_descriptionSetting"            value="32K Crystal" />
-   <item key="$signal$PTA19_muxSetting"                    value="mux0" />
-   <item key="$signal$PTA1_descriptionSetting"             value="Console Rx" />
-   <item key="$signal$PTA1_muxSetting"                     value="mux2" />
-   <item key="$signal$PTA20_descriptionSetting"            value="Reset button" />
-   <item key="$signal$PTA20_muxSetting"                    value="mux0" />
-   <item key="$signal$PTA2_descriptionSetting"             value="Console Tx" />
-   <item key="$signal$PTA2_muxSetting"                     value="mux2" />
-   <item key="$signal$PTA3_descriptionSetting"             value="SWD" />
-   <item key="$signal$PTA4_descriptionSetting"             value="Button 2" />
-   <item key="$signal$PTA4_muxSetting"                     value="mux3" />
-   <item key="$signal$PTA5_muxSetting"                     value="mux1" />
-   <item key="$signal$PTB0_muxSetting"                     value="mux0" />
-   <item key="$signal$PTB18_descriptionSetting"            value="LCD(COM2)" />
-   <item key="$signal$PTB18_muxSetting"                    value="mux0" />
-   <item key="$signal$PTB19_descriptionSetting"            value="LCD(COM3)" />
-   <item key="$signal$PTB19_muxSetting"                    value="mux0" />
-   <item key="$signal$PTB1_muxSetting"                     value="mux0" />
-   <item key="$signal$PTB2_muxSetting"                     value="mux0" />
-   <item key="$signal$PTB3_muxSetting"                     value="mux0" />
-   <item key="$signal$PTC0_descriptionSetting"             value="LCD(1D/1E/1G/1F)" />
-   <item key="$signal$PTC0_muxSetting"                     value="mux0" />
-   <item key="$signal$PTC1_muxSetting"                     value="mux0" />
-   <item key="$signal$PTC2_muxSetting"                     value="mux0" />
-   <item key="$signal$PTC3_descriptionSetting"             value="Button 1" />
-   <item key="$signal$PTC4_descriptionSetting"             value="LCD(DP1/1C/1B/1A)" />
-   <item key="$signal$PTC4_muxSetting"                     value="mux0" />
-   <item key="$signal$PTC6_descriptionSetting"             value="LCD(2D/2E/2G/2F)" />
-   <item key="$signal$PTC6_muxSetting"                     value="mux0" />
-   <item key="$signal$PTC7_descriptionSetting"             value="LCD(DP2/2C/2B/2A)" />
-   <item key="$signal$PTC7_muxSetting"                     value="mux0" />
-   <item key="$signal$PTD0_descriptionSetting"             value="LCD(3D/3E/3G/3F)" />
-   <item key="$signal$PTD0_muxSetting"                     value="mux0" />
-   <item key="$signal$PTD2_descriptionSetting"             value="LCD(DP3/3C/3B/3A)" />
-   <item key="$signal$PTD2_muxSetting"                     value="mux0" />
-   <item key="$signal$PTD3_descriptionSetting"             value="LCD(4D/4E/4G/4F)" />
-   <item key="$signal$PTD3_muxSetting"                     value="mux0" />
-   <item key="$signal$PTD4_descriptionSetting"             value="LCD(COL/4C/4B/4A)" />
-   <item key="$signal$PTD4_muxSetting"                     value="mux0" />
-   <item key="$signal$PTD5_descriptionSetting"             value="Green LED" />
-   <item key="$signal$PTD5_muxSetting"                     value="mux4" />
-   <item key="$signal$PTE0_muxSetting"                     value="mux6" />
-   <item key="$signal$PTE1_muxSetting"                     value="mux6" />
-   <item key="$signal$PTE20_descriptionSetting"            value="LCD(COM0)" />
-   <item key="$signal$PTE20_muxSetting"                    value="mux0" />
-   <item key="$signal$PTE21_descriptionSetting"            value="LCD(COM1)" />
-   <item key="$signal$PTE21_muxSetting"                    value="mux0" />
-   <item key="$signal$PTE22_descriptionSetting"            value="Light Sensor" />
-   <item key="$signal$PTE22_muxSetting"                    value="mux0" />
-   <item key="$signal$PTE24_descriptionSetting"            value="Onboard I2C" />
-   <item key="$signal$PTE24_muxSetting"                    value="mux5" />
-   <item key="$signal$PTE25_descriptionSetting"            value="Onboard I2C" />
-   <item key="$signal$PTE25_muxSetting"                    value="mux5" />
-   <item key="$signal$PTE29_muxSetting"                    value="mux3" />
-   <item key="$signal$PTE30_muxSetting"                    value="mux1" />
-   <item key="$signal$PTE31_descriptionSetting"            value="Red LED" />
-   <item key="$signal$PTE31_muxSetting"                    value="mux1" />
+   <item key="$pin$PTA0_muxSetting_mux7(7)"                value="mux7" />
+   <item key="$pin$PTA12_muxSetting_mux3(3)"               value="mux3" />
+   <item key="$pin$PTA13_muxSetting_mux3(3)"               value="mux3" />
+   <item key="$pin$PTA18_muxSetting_mux0(0)"               value="mux0" />
+   <item key="$pin$PTA19_muxSetting_mux0(0)"               value="mux0" />
+   <item key="$pin$PTA1_muxSetting_mux2(2)"                value="mux2" />
+   <item key="$pin$PTA20_muxSetting_mux0(0)"               value="mux0" />
+   <item key="$pin$PTA2_muxSetting_mux2(2)"                value="mux2" />
+   <item key="$pin$PTA3_muxSetting_mux7(7)"                value="mux7" />
+   <item key="$pin$PTA4_muxSetting_mux1(1)"                value="mux1" />
+   <item key="$pin$PTA5_muxSetting_mux1(1)"                value="mux1" />
+   <item key="$pin$PTB0_muxSetting_mux0(0)"                value="mux0" />
+   <item key="$pin$PTB18_muxSetting_mux0(0)"               value="mux0" />
+   <item key="$pin$PTB19_muxSetting_mux0(0)"               value="mux0" />
+   <item key="$pin$PTB1_muxSetting_mux0(0)"                value="mux0" />
+   <item key="$pin$PTB2_muxSetting_mux0(0)"                value="mux0" />
+   <item key="$pin$PTB3_muxSetting_mux0(0)"                value="mux0" />
+   <item key="$pin$PTC0_muxSetting_mux0(0)"                value="mux0" />
+   <item key="$pin$PTC1_muxSetting_mux0(0)"                value="mux0" />
+   <item key="$pin$PTC2_muxSetting_mux0(0)"                value="mux0" />
+   <item key="$pin$PTC4_muxSetting_mux0(0)"                value="mux0" />
+   <item key="$pin$PTC6_muxSetting_mux0(0)"                value="mux0" />
+   <item key="$pin$PTC7_muxSetting_mux0(0)"                value="mux0" />
+   <item key="$pin$PTD0_muxSetting_mux0(0)"                value="mux0" />
+   <item key="$pin$PTD2_muxSetting_mux0(0)"                value="mux0" />
+   <item key="$pin$PTD3_muxSetting_mux0(0)"                value="mux0" />
+   <item key="$pin$PTD4_muxSetting_mux0(0)"                value="mux0" />
+   <item key="$pin$PTD5_muxSetting_mux4(4)"                value="mux4" />
+   <item key="$pin$PTE0_muxSetting_mux6(6)"                value="mux6" />
+   <item key="$pin$PTE1_muxSetting_mux6(6)"                value="mux6" />
+   <item key="$pin$PTE20_muxSetting_mux0(0)"               value="mux0" />
+   <item key="$pin$PTE21_muxSetting_mux0(0)"               value="mux0" />
+   <item key="$pin$PTE22_muxSetting_mux0(0)"               value="mux0" />
+   <item key="$pin$PTE24_muxSetting_mux5(5)"               value="mux5" />
+   <item key="$pin$PTE25_muxSetting_mux5(5)"               value="mux5" />
+   <item key="$pin$PTE29_muxSetting_mux3(3)"               value="mux3" />
+   <item key="$pin$PTE30_muxSetting_mux1(1)"               value="mux1" />
+   <item key="$pin$PTE31_muxSetting_mux1(1)"               value="mux1" />
+   <item key="$signal$ADC0_SE3_descriptionSetting"         value="Light Sensor" />
+   <item key="$signal$EXTAL0_descriptionSetting"           value="32K Crystal" />
+   <item key="$signal$GPIOA_4_descriptionSetting"          value="Button2" />
+   <item key="$signal$GPIOE_31_descriptionSetting"         value="Red LED" />
+   <item key="$signal$I2C0_SCL_descriptionSetting"         value="Onboard I2C" />
+   <item key="$signal$I2C0_SDA_descriptionSetting"         value="Onboard I2C" />
+   <item key="$signal$LCD_P14_descriptionSetting"          value="LCD(COM2)" />
+   <item key="$signal$LCD_P15_descriptionSetting"          value="LCD(COM3)" />
+   <item key="$signal$LCD_P20_descriptionSetting"          value="LCD(1D/1E/1G/1F)" />
+   <item key="$signal$LCD_P24_descriptionSetting"          value="LCD(DP1/1C/1B/1A)" />
+   <item key="$signal$LCD_P26_descriptionSetting"          value="LCD(2D/2E/2G/2F)" />
+   <item key="$signal$LCD_P27_descriptionSetting"          value="LCD(DP2/2C/2B/2A)" />
+   <item key="$signal$LCD_P40_descriptionSetting"          value="LCD(3D/3E/3G/3F)" />
+   <item key="$signal$LCD_P42_descriptionSetting"          value="LCD(DP3/3C/3B/3A)" />
+   <item key="$signal$LCD_P43_descriptionSetting"          value="LCD(4D/4E/4G/4F)" />
+   <item key="$signal$LCD_P44_descriptionSetting"          value="LCD(COL/4C/4B/4A)" />
+   <item key="$signal$LCD_P59_descriptionSetting"          value="LCD(COM0)" />
+   <item key="$signal$LCD_P60_descriptionSetting"          value="LCD(COM1)" />
+   <item key="$signal$LPUART0_RX_descriptionSetting"       value="Console Rx" />
+   <item key="$signal$LPUART0_TX_descriptionSetting"       value="Console Tx" />
+   <item key="$signal$RESET_b_descriptionSetting"          value="Reset button" />
+   <item key="$signal$SWD_CLK_descriptionSetting"          value="SWD CLK" />
+   <item key="$signal$SWD_DIO_descriptionSetting"          value="SWD DIO" />
+   <item key="$signal$TPM0_CH1_descriptionSetting"         value="Button 2" />
+   <item key="$signal$TPM0_CH5_descriptionSetting"         value="Green LED" />
    <item key="$signal$USB0_DM_descriptionSetting"          value="USB" />
    <item key="$signal$USB0_DP_descriptionSetting"          value="USB" />
+   <item key="$signal$XTAL0_descriptionSetting"            value="32K Crystal" />
    <item key="/Console/consoleDevice"                      value="USBDM::Lpuart0" />
    <item key="/FTFA/peripheral_file"                       value="ftfa" />
    <item key="/LCD/backplanes"                             value="59,60,14,15" />
@@ -83,7 +85,6 @@
    <item key="/MCG/ClockConfig[2]"                         value="ClockConfig_LIRC_8MHz" />
    <item key="/MCG/clock_mode[0]"                          value="ClockMode_HIRC_48M" />
    <item key="/MCG/clock_mode[1]"                          value="ClockMode_LIRC_2M" />
-   <item key="/MCG/clock_mode[2]"                          value="ClockMode_LIRC_8M" />
    <item key="/MCG/mcg_c2_ircs[0]"                         value="true" />
    <item key="/MCG/mcg_c2_ircs[2]"                         value="true" />
    <item key="/MCG/system_lirc_clock[0]"                   value="8000000" />
@@ -94,6 +95,9 @@
    <item key="/OSC0/osc_input_freq"                        value="32768" />
    <item key="/PIT/pit_ldval"                              value="10000" />
    <item key="/RTC/rtc_cr_osce"                            value="true" />
+   <item key="/SIM/ClockConfig[0]"                         value="" />
+   <item key="/SIM/ClockConfig[1]"                         value="" />
+   <item key="/SIM/ClockConfig[2]"                         value="" />
    <item key="/SIM/sim_sopt2_lpuart0src"                   value="1" />
    <item key="/SIM/sim_sopt2_lpuart1src"                   value="1" />
    <item key="/SIM/sim_sopt2_rtcclkoutsel"                 value="false" />

@@ -33,7 +33,7 @@ int main() {
          uint8_t rxData[2] = {};
 
          i2c.startTransaction();
-         i2c.txRx(I2C_ADDRESS, sizeof(txData), txData, sizeof(rxData), rxData);
+         i2c.txRx(I2C_ADDRESS, txData, rxData);
          i2c.endTransaction();
       }
 #elif SELECT == 1
@@ -56,7 +56,7 @@ int main() {
          static const uint8_t data[] = { 0xA1,0xB2,0xC3,0xD4,};
 
          i2c.startTransaction();
-         i2c.transmit(I2C_ADDRESS, sizeof(data), data);
+         i2c.transmit(I2C_ADDRESS, data);
          i2c.endTransaction();
       }
 #else
@@ -67,7 +67,7 @@ int main() {
          static uint8_t data[4] = {};
 
          i2c.startTransaction();
-         i2c.receive(I2C_ADDRESS, sizeof(data), data);
+         i2c.receive(I2C_ADDRESS, data);
          i2c.endTransaction();
       }
 #endif

@@ -1,5 +1,5 @@
 /*
- * Oled.h
+ * @file oled.h
  *
  *  Created on: 31 Oct 2019
  *      Author: podonoghue
@@ -10,8 +10,8 @@
 #ifndef SOURCES_OLED_H_
 #define SOURCES_OLED_H_
 
-#include "fonts.h"
 #include "i2c.h"
+#include "fonts.h"
 #include "formatted_io.h"
 
 namespace USBDM {
@@ -71,6 +71,15 @@ enum SSD1306_Commands : uint8_t {
 };
 
 class Oled : public USBDM::FormattedIO {
+public:
+
+   // Change as needed for actual display
+   static constexpr int            WIDTH         = 128;
+   static constexpr int            HEIGHT        =  64;
+   static constexpr OledVccControl VCC_CONTROL   = OledVccControl_Internal;
+
+   enum Orientation {Orientation_Normal, Orientation_Rotated_180};
+   static constexpr Orientation orientation = Orientation_Rotated_180;
 
 private:
 
@@ -122,21 +131,18 @@ public:
    static constexpr unsigned   I2C_ADDRESS   = 0b01111000;
    static constexpr unsigned   I2C_SPEED     = 400*kHz;
 
-   static constexpr int            WIDTH         = 128;
-   static constexpr int            HEIGHT        =  64;
-   static constexpr OledVccControl VCC_CONTROL   = OledVccControl_Internal;
-
-   enum Orientation {Orientation_Normal, Orientation_Rotated_180};
-   static constexpr Orientation orientation = Orientation_Rotated_180;
-
 #pragma pack(push,1)
    /// Buffer type for display data
    /// This is prefixed by a command byte for transmission to OLED
-   struct Buffer {
+   union Buffer {
+      struct {
       /// Command byte
       uint8_t  controlByte;
       /// Data values
-      uint8_t  buffer[WIDTH * ((HEIGHT + 7) / 8)];
+      uint8_t  data[WIDTH * ((HEIGHT + 7) / 8)];
+      };
+      /// All data for transmission
+      uint8_t rawData[1+(WIDTH * ((HEIGHT + 7) / 8))];
    };
 #pragma pack(pop)
 

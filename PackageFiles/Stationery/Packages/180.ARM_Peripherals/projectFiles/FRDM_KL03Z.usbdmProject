@@ -8,33 +8,33 @@
    <item key="$$DeviceInfo_Device_Variant"                 value="FRDM_KL03Z" />
    <item key="$$DeviceInfo_SubFamily"                      value="MKL03Z4" />
    <item key="$$Hardware_Source_Filename"                  value="MKL03Z4.usbdmHardware" />
-   <item key="$signal$PTA0_descriptionSetting"             value="SWDCLK" />
-   <item key="$signal$PTA0_muxSetting"                     value="mux3" />
-   <item key="$signal$PTA12_muxSetting"                    value="mux0" />
-   <item key="$signal$PTA1_descriptionSetting"             value="RESET_b" />
-   <item key="$signal$PTA1_muxSetting"                     value="mux3" />
-   <item key="$signal$PTA2_descriptionSetting"             value="SWDIO" />
-   <item key="$signal$PTA2_muxSetting"                     value="mux3" />
-   <item key="$signal$PTA3_descriptionSetting"             value="EXTAL0" />
-   <item key="$signal$PTA3_muxSetting"                     value="mux0" />
-   <item key="$signal$PTA4_descriptionSetting"             value="EXTAL1" />
-   <item key="$signal$PTA4_muxSetting"                     value="mux0" />
-   <item key="$signal$PTA8_muxSetting"                     value="mux0" />
-   <item key="$signal$PTA9_muxSetting"                     value="mux0" />
-   <item key="$signal$PTB10_descriptionSetting"            value="RGB_Red" />
-   <item key="$signal$PTB10_muxSetting"                    value="mux2" />
-   <item key="$signal$PTB11_descriptionSetting"            value="RGB_Green" />
-   <item key="$signal$PTB11_muxSetting"                    value="mux2" />
-   <item key="$signal$PTB13_descriptionSetting"            value="RGB_Blue" />
-   <item key="$signal$PTB13_muxSetting"                    value="mux2" />
-   <item key="$signal$PTB1_descriptionSetting"             value="ConsoleTx" />
-   <item key="$signal$PTB1_muxSetting"                     value="mux2" />
-   <item key="$signal$PTB2_descriptionSetting"             value="ConsoleRx" />
-   <item key="$signal$PTB2_muxSetting"                     value="mux2" />
-   <item key="$signal$PTB3_descriptionSetting"             value="Accel_SCL" />
-   <item key="$signal$PTB3_muxSetting"                     value="mux2" />
-   <item key="$signal$PTB4_descriptionSetting"             value="Accel_SDA" />
-   <item key="$signal$PTB4_muxSetting"                     value="mux2" />
+   <item key="$pin$PTA0_muxSetting_mux3(3)"                value="mux3" />
+   <item key="$pin$PTA12_muxSetting_mux0(0)"               value="mux0" />
+   <item key="$pin$PTA1_muxSetting_mux3(3)"                value="mux3" />
+   <item key="$pin$PTA2_muxSetting_mux3(3)"                value="mux3" />
+   <item key="$pin$PTA3_muxSetting_mux0(0)"                value="mux0" />
+   <item key="$pin$PTA4_muxSetting_mux0(0)"                value="mux0" />
+   <item key="$pin$PTA8_muxSetting_mux0(0)"                value="mux0" />
+   <item key="$pin$PTA9_muxSetting_mux0(0)"                value="mux0" />
+   <item key="$pin$PTB10_muxSetting_mux2(2)"               value="mux2" />
+   <item key="$pin$PTB11_muxSetting_mux2(2)"               value="mux2" />
+   <item key="$pin$PTB13_muxSetting_mux2(2)"               value="mux2" />
+   <item key="$pin$PTB1_muxSetting_mux2(2)"                value="mux2" />
+   <item key="$pin$PTB2_muxSetting_mux2(2)"                value="mux2" />
+   <item key="$pin$PTB3_muxSetting_mux2(2)"                value="mux2" />
+   <item key="$pin$PTB4_muxSetting_mux2(2)"                value="mux2" />
+   <item key="$signal$EXTAL0_descriptionSetting"           value="EXTAL0" />
+   <item key="$signal$I2C0_SCL_descriptionSetting"         value="Accel_SCL" />
+   <item key="$signal$I2C0_SDA_descriptionSetting"         value="Accel_SDA" />
+   <item key="$signal$LPUART0_RX_descriptionSetting"       value="ConsoleRx" />
+   <item key="$signal$LPUART0_TX_descriptionSetting"       value="ConsoleTx" />
+   <item key="$signal$RESET_b_descriptionSetting"          value="RESET_b" />
+   <item key="$signal$SWD_CLK_descriptionSetting"          value="SWDCLK" />
+   <item key="$signal$SWD_DIO_descriptionSetting"          value="SWDIO" />
+   <item key="$signal$TPM0_CH0_descriptionSetting"         value="RGB_Green" />
+   <item key="$signal$TPM0_CH1_descriptionSetting"         value="RGB_Red" />
+   <item key="$signal$TPM1_CH1_descriptionSetting"         value="RGB_Blue" />
+   <item key="$signal$XTAL0_descriptionSetting"            value="EXTAL1" />
    <item key="/Console/consoleDevice"                      value="USBDM::Lpuart0" />
    <item key="/FTFA/peripheral_file"                       value="ftfa" />
    <item key="/MCG/ClockConfig[0]"                         value="ClockConfig_HIRC_48MHz" />
@@ -42,7 +42,6 @@
    <item key="/MCG/ClockConfig[2]"                         value="ClockConfig_LIRC_8MHz" />
    <item key="/MCG/clock_mode[0]"                          value="ClockMode_HIRC_48M" />
    <item key="/MCG/clock_mode[1]"                          value="ClockMode_LIRC_2M" />
-   <item key="/MCG/clock_mode[2]"                          value="ClockMode_LIRC_8M" />
    <item key="/MCG/mcg_c2_ircs[0]"                         value="true" />
    <item key="/MCG/mcg_c2_ircs[2]"                         value="true" />
    <item key="/MCG/mcg_mc_hircen[0]"                       value="true" />

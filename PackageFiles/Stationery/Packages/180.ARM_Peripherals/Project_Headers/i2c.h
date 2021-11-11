@@ -199,14 +199,29 @@ public:
 
    /**
     * Transmit message
+    * Note: 0th byte of Tx is often register address.
     *
     * @param[in]  address  Address of slave to communicate with (should include LSB = R/W bit = 0)
     * @param[in]  size     Size of transmission data
-    * @param[in]  data     Data to transmit, 0th byte is often register address
+    * @param[in]  data     Data to transmit
     *
     * @return E_NO_ERROR on success
     */
    ErrorCode transmit(uint8_t address, uint16_t size, const uint8_t data[]);
+
+   /**
+    * Transmit message.
+    * Note: 0th byte of Tx is often register address.
+    *
+    * @param[in]  address  Address of slave to communicate with (should include LSB = R/W bit = 0)
+    * @param[in]  data     Data to transmit (size of transmission is inferred from array size).
+    *
+    * @return E_NO_ERROR on success
+    */
+   template<unsigned txSize>
+   ErrorCode transmit(uint8_t address, const uint8_t (&data)[txSize]) {
+      return transmit(address, txSize, data);
+   }
 
    /**
     * Receive message
@@ -220,7 +235,21 @@ public:
    ErrorCode receive(uint8_t address, uint16_t size,  uint8_t data[]);
 
    /**
+    * Receive message
+    *
+    * @param[in]  address  Address of slave to communicate with (should include LSB = R/W bit = 0)
+    * @param[out] data     Data buffer for reception (size of reception is inferred from array size)
+    *
+    * @return E_NO_ERROR on success
+    */
+   template<unsigned rxSize>
+   ErrorCode receive(uint8_t address, uint8_t (&data)[rxSize]) {
+      return receive(address, rxSize, data);
+   }
+
+   /**
     * Transmit message followed by receive message.
+    * Note: 0th byte of Tx is often register address.
     *
     * Uses repeated-start.
     *
@@ -233,6 +262,59 @@ public:
     * @return E_NO_ERROR on success
     */
    ErrorCode txRx(uint8_t address, uint16_t txSize, const uint8_t txData[], uint16_t rxSize, uint8_t rxData[] );
+
+   /**
+    * Transmit message followed by receive message.
+    * Note: 0th byte of Tx is often register address.
+    *
+    * Uses repeated-start.
+    *
+    * @param[in]  address  Address of slave to communicate with (should include LSB = R/W bit = 0)
+    * @param[in]  txData   Data for transmission (Tx size inferred from array size)
+    * @param[out] rxData   Date buffer for reception (Rx size inferred from array size)
+    *
+    * @return E_NO_ERROR on success
+    */
+   template<unsigned TxSize, unsigned RxSize>
+   ErrorCode txRx(uint8_t address, const uint8_t (&txData)[TxSize], uint8_t (&rxData)[RxSize] ) {
+      return txRx(address, TxSize, txData, RxSize, rxData);
+   }
+
+   /**
+    * Transmit message followed by receive message.
+    * Note: 0th byte of Tx is often register address.
+    *
+    * Uses repeated-start.
+    *
+    * @param[in]  address  Address of slave to communicate with (should include LSB = R/W bit = 0)
+    * @param[in]  txSize   Size of transmission data
+    * @param[in]  txData   Data for transmission
+    * @param[out] rxData   Date buffer for reception (Rx size inferred from array size)
+    *
+    * @return E_NO_ERROR on success
+    */
+   template<unsigned RxSize>
+   ErrorCode txRx(uint8_t address, uint16_t txSize, const uint8_t txData[], uint8_t (&rxData)[RxSize] ) {
+      return txRx(address, txSize, txData, RxSize, rxData);
+   }
+
+   /**
+    * Transmit message followed by receive message.
+    * Note: 0th byte of Tx is often register address.
+    *
+    * Uses repeated-start.
+    *
+    * @param[in]  address  Address of slave to communicate with (should include LSB = R/W bit = 0)
+    * @param[in]  txData   Data for transmission (Tx size inferred from array size)
+    * @param[in]  rxSize   Size of reception data
+    * @param[out] rxData   Date buffer for reception
+    *
+    * @return E_NO_ERROR on success
+    */
+   template<unsigned TxSize>
+   ErrorCode txRx(uint8_t address, const uint8_t (&txData)[TxSize], uint16_t rxSize, uint8_t rxData[] ) {
+      return txRx(address, TxSize, txData, rxSize, rxData);
+   }
 
    /**
     * Transmit message followed by receive message.

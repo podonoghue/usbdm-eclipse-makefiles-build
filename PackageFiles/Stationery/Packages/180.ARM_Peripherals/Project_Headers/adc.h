@@ -1210,7 +1210,7 @@ public:
        * @param adcPgaMode Mode to operate in (or disabled)
        * @param adcPgaGain Gain
        */
-      void configurePga(AdcPgaMode adcPgaMode, AdcPgaGain adcPgaGain=AdcPgaGain_1) {
+      static void configurePga(AdcPgaMode adcPgaMode, AdcPgaGain adcPgaGain=AdcPgaGain_1) {
          adc->PGA = adcPgaMode|adcPgaGain;
       }
 #endif
@@ -1366,7 +1366,7 @@ public:
     * @param adcPgaMode Mode to operate in (or disabled)
     * @param adcPgaGain Gain
     */
-   void configurePga(AdcPgaMode adcPgaMode, AdcPgaGain adcPgaGain=AdcPgaGain_1) {
+   static void configurePga(AdcPgaMode adcPgaMode, AdcPgaGain adcPgaGain=AdcPgaGain_1) {
       adc->PGA = adcPgaMode|adcPgaGain;
    }
 

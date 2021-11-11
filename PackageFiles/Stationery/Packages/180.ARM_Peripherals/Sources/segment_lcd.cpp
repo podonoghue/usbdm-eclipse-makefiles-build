@@ -67,7 +67,7 @@ static constexpr uint8_t  LCD_CLEAR        = 0x00;
  */
 void SegmentLcd::pen(const int8_t pinMap[], uint32_t pinNum) {
    const int lcdPin = pinMap[pinNum];
-   lcd().PEN[lcdPin>>5] |= 1UL<<((uint32_t)(lcdPin&0x1F));
+   lcd->PEN[lcdPin>>5] |= 1UL<<((uint32_t)(lcdPin&0x1F));
 };
 
 /*
@@ -81,7 +81,7 @@ void SegmentLcd::pen(const int8_t pinMap[], uint32_t pinNum) {
  */
 void SegmentLcd::bpen(const int8_t pinMap[], uint32_t pinNum) {
    const int lcdPin = pinMap[pinNum];
-   lcd().BPEN[lcdPin>>5] |= 1UL<<((uint32_t)(lcdPin&0x1F));
+   lcd->BPEN[lcdPin>>5] |= 1UL<<((uint32_t)(lcdPin&0x1F));
 };
 
 /**
@@ -95,10 +95,10 @@ void SegmentLcd::defaultConfigure(void) {
    SIM->SCGC5 |=  SIM_SCGC5_SLCD_MASK;
 
    // Set PADSAFE to disable LCD while configuring
-   lcd().GCR   |=  LCD_GCR_PADSAFE_MASK;
+   lcd->GCR   |=  LCD_GCR_PADSAFE_MASK;
 
    // Clear LCDEN (LCD Enable) while configuring
-   lcd().GCR   &= ~LCD_GCR_LCDEN_MASK;
+   lcd->GCR   &= ~LCD_GCR_LCDEN_MASK;
 
    /*
     * Configure pins.
@@ -111,12 +111,12 @@ void SegmentLcd::defaultConfigure(void) {
     *
     * Use safe value while being configured
     */
-   lcd().GCR = (LcdInfo::gcr | LCD_GCR_PADSAFE_MASK) & ~LCD_GCR_LCDEN_MASK;
+   lcd->GCR = (LcdInfo::gcr | LCD_GCR_PADSAFE_MASK) & ~LCD_GCR_LCDEN_MASK;
 
    /*
     * Configure LCD_SEG_AR  - Auxiliary Register, controls blinking of LCD
     */
-   lcd().AR =
+   lcd->AR =
          LCD_AR_BLINK(0)   | // Disable SLCD blinking.  Enable to make LCD Blink.
          LCD_AR_ALT(0)     | // If enabled LCD back plane sequencer changes to an alternate display.
          //                  // Only functional if DUTY[2:0] is less than 100(binary).
@@ -130,7 +130,7 @@ void SegmentLcd::defaultConfigure(void) {
     *
     * Clear all bits. Fault detection not used.
     */
-   lcd().FDCR = 0x00000000;
+   lcd->FDCR = 0x00000000;
 
    // Enable front-pane pins
    for (unsigned int index=0; index<sizeof(frontplanePins)/sizeof(frontplanePins[0]); index++) {
@@ -146,18 +146,18 @@ void SegmentLcd::defaultConfigure(void) {
    }
 
    // This applies for both disabled & off segments
-   memset((uint8_t*)(lcd().WF), 0x00, sizeof(lcd().WF));
+   memset((uint8_t*)(lcd->WF), 0x00, sizeof(lcd->WF));
 
-   lcd().WF[backplanePins[3]] = 0x88; // (COM3) is enabled on Phases D and H
-   lcd().WF[backplanePins[2]] = 0x44; // (COM2) is enabled on Phases C and G
-   lcd().WF[backplanePins[1]] = 0x22; // (COM1) is enabled on Phases B and F
-   lcd().WF[backplanePins[0]] = 0x11; // (COM0) is enabled on Phases A and E
+   lcd->WF[backplanePins[3]] = 0x88; // (COM3) is enabled on Phases D and H
+   lcd->WF[backplanePins[2]] = 0x44; // (COM2) is enabled on Phases C and G
+   lcd->WF[backplanePins[1]] = 0x22; // (COM1) is enabled on Phases B and F
+   lcd->WF[backplanePins[0]] = 0x11; // (COM0) is enabled on Phases A and E
 
    // Clear PADSAFE to unlock LCD pins
-   lcd().GCR &= ~LCD_GCR_PADSAFE_MASK;
+   lcd->GCR &= ~LCD_GCR_PADSAFE_MASK;
 
    // Set LCDEN to enable operation of LCD
-   lcd().GCR |= LCD_GCR_LCDEN_MASK;
+   lcd->GCR |= LCD_GCR_LCDEN_MASK;
 }
 
 /**
@@ -169,10 +169,10 @@ void SegmentLcd::defaultConfigure(void) {
  */
 void SegmentLcd::setDPs(int digit, int value) {
    if (value) {
-      lcd().WF[frontplanePins[2*digit+1]]  |=  LCD_SEG_DECIMAL;
+      lcd->WF[frontplanePins[2*digit+1]]  |=  LCD_SEG_DECIMAL;
    }
    else {
-      lcd().WF[frontplanePins[2*digit+1]]  &=  ~LCD_SEG_DECIMAL;
+      lcd->WF[frontplanePins[2*digit+1]]  &=  ~LCD_SEG_DECIMAL;
    }
 }
 
@@ -214,12 +214,12 @@ void SegmentLcd::set(int value, int position) {
       SegmentLcd::displayError(0x01);
    }
    else if (value<0) {
-      lcd().WF[frontplanePins[((2*position)-2)]] = 0;
-      lcd().WF[frontplanePins[((2*position)-1)]] = 0;
+      lcd->WF[frontplanePins[((2*position)-2)]] = 0;
+      lcd->WF[frontplanePins[((2*position)-1)]] = 0;
    }
    else {
-      lcd().WF[frontplanePins[((2*position)-2)]] = segmentData[value].m1;
-      lcd().WF[frontplanePins[((2*position)-1)]] = segmentData[value].m2;
+      lcd->WF[frontplanePins[((2*position)-2)]] = segmentData[value].m1;
+      lcd->WF[frontplanePins[((2*position)-1)]] = segmentData[value].m2;
    }
 }
 
@@ -314,20 +314,20 @@ void SegmentLcd::displayTime(uint8_t hour, uint8_t minutes) {
  */
 void SegmentLcd::displayError(uint8_t ErrorNum){
 
-   lcd().WF[frontplanePins[0]] = (LCD_SEG_D | LCD_SEG_E | LCD_SEG_F | LCD_SEG_G);
-   lcd().WF[frontplanePins[1]] = (LCD_SEG_A);
-   lcd().WF[frontplanePins[2]] = (LCD_SEG_E | LCD_SEG_G);
-   lcd().WF[frontplanePins[3]] = (LCD_CLEAR);
-   lcd().WF[frontplanePins[4]] = (LCD_SEG_E | LCD_SEG_G);
-   lcd().WF[frontplanePins[5]] = (LCD_CLEAR);
+   lcd->WF[frontplanePins[0]] = (LCD_SEG_D | LCD_SEG_E | LCD_SEG_F | LCD_SEG_G);
+   lcd->WF[frontplanePins[1]] = (LCD_SEG_A);
+   lcd->WF[frontplanePins[2]] = (LCD_SEG_E | LCD_SEG_G);
+   lcd->WF[frontplanePins[3]] = (LCD_CLEAR);
+   lcd->WF[frontplanePins[4]] = (LCD_SEG_E | LCD_SEG_G);
+   lcd->WF[frontplanePins[5]] = (LCD_CLEAR);
    if (ErrorNum <= 0xF) {
       // Display ErrorNum if within valid range.
       set(ErrorNum,4);
    }
    else{
       // If not, leave blank.
-      lcd().WF[frontplanePins[6]] = (LCD_CLEAR);
-      lcd().WF[frontplanePins[7]] = (LCD_CLEAR);
+      lcd->WF[frontplanePins[6]] = (LCD_CLEAR);
+      lcd->WF[frontplanePins[7]] = (LCD_CLEAR);
    }
 }
 

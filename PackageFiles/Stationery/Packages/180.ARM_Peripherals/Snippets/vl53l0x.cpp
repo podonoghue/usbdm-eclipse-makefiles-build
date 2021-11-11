@@ -307,7 +307,7 @@ ErrorCode VL53L0X::init(bool io_2v8) {
  */
 void VL53L0X::writeReg(uint8_t regNum, uint8_t value) {
    uint8_t command[] = {regNum, value};
-   last_status = i2c.transmit(address, sizeof(command), command);
+   last_status = i2c.transmit(address, command);
 }
 
 /**
@@ -318,7 +318,7 @@ void VL53L0X::writeReg(uint8_t regNum, uint8_t value) {
  */
 void VL53L0X::writeReg16Bit(uint8_t regNum, uint16_t value) {
    uint8_t command[] = {regNum, (uint8_t)(value>>8), (uint8_t)value};
-   last_status = i2c.transmit(address, sizeof(command), command);
+   last_status = i2c.transmit(address, command);
 }
 
 /**
@@ -329,7 +329,7 @@ void VL53L0X::writeReg16Bit(uint8_t regNum, uint16_t value) {
  */
 void VL53L0X::writeReg32Bit(uint8_t regNum, uint32_t value) {
    uint8_t command[] = {regNum, (uint8_t)(value>>24), (uint8_t)(value>>16), (uint8_t)(value>>8), (uint8_t)value};
-   last_status = i2c.transmit(address, sizeof(command), command);
+   last_status = i2c.transmit(address, command);
 }
 
 /**
@@ -340,9 +340,9 @@ void VL53L0X::writeReg32Bit(uint8_t regNum, uint32_t value) {
  * @return Value read
  */
 uint8_t VL53L0X::readReg(uint8_t regNum) {
-   uint8_t command[1];
-   last_status = i2c.txRx(address, 1, &regNum, sizeof(command), command);
-   return command[0];
+   uint8_t response[1];
+   last_status = i2c.txRx(address, 1, &regNum, response);
+   return response[0];
 }
 
 /**
@@ -353,9 +353,9 @@ uint8_t VL53L0X::readReg(uint8_t regNum) {
  * @return Value read
  */
 uint16_t VL53L0X::readReg16Bit(uint8_t regNum) {
-   uint8_t command[2];
-   last_status = i2c.txRx(address, 1, &regNum, sizeof(command), command);
-   return (command[0]<<8)|command[1];
+   uint8_t response[2];
+   last_status = i2c.txRx(address, 1, &regNum, response);
+   return (response[0]<<8)|response[1];
 }
 
 /**
@@ -366,9 +366,9 @@ uint16_t VL53L0X::readReg16Bit(uint8_t regNum) {
  * @return Value read
  */
 uint32_t VL53L0X::readReg32Bit(uint8_t regNum) {
-   uint8_t command[4];
-   last_status = i2c.txRx(address, 1, &regNum, sizeof(command), command);
-   return (command[0]<<24)|(command[1]<<16)|(command[2]<<8)|command[3];
+   uint8_t response[4];
+   last_status = i2c.txRx(address, 1, &regNum, response);
+   return (response[0]<<24)|(response[1]<<16)|(response[2]<<8)|response[3];
 }
 
 /**

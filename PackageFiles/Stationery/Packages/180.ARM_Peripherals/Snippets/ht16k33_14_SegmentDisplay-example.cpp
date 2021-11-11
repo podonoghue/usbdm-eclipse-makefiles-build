@@ -9,7 +9,7 @@
  */
 #include "string.h"
 #include "hardware.h"
-#include "HT16k33_14_SegmentDisplay.h"
+#include "ht16k33_14_SegmentDisplay.h"
 
 // Allow access to USBDM methods without USBDM:: prefix
 using namespace USBDM;

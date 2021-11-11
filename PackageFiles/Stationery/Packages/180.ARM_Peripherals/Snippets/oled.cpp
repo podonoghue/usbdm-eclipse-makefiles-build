@@ -6,9 +6,9 @@
  *
  *  Based loosely on Adafruit library (initialisation sequences and constants)
  */
-#include "malloc.h"
-#include "Oled.h"
-#include "memory.h"
+#include <malloc.h>
+#include <memory.h>
+#include "oled.h"
 
 using namespace USBDM;
 
@@ -67,7 +67,7 @@ void Oled::initialise() {
          0,                                    // first page
          (((HEIGHT+7)/8)-1),                   // last page
    };
-   i2c.transmit(I2C_ADDRESS, sizeof(init1), init1);
+   i2c.transmit(I2C_ADDRESS, init1);
 
    if constexpr ((WIDTH == 128) && (HEIGHT == 32)) {
 
@@ -78,7 +78,7 @@ void Oled::initialise() {
             SSD1306_SETCONTRAST,                  // 0x81
             0x10,
       };
-      i2c.transmit(I2C_ADDRESS, sizeof(init4a), init4a);
+      i2c.transmit(I2C_ADDRESS, init4a);
 
    } else if constexpr ((WIDTH == 128) && (HEIGHT == 64)) {
 
@@ -89,7 +89,7 @@ void Oled::initialise() {
             SSD1306_SETCONTRAST,                  // 0x81
             ((VCC_CONTROL == OledVccControl_External) ? 0x9F : 0xCF),
       };
-      i2c.transmit(I2C_ADDRESS, sizeof(init4b), init4b);
+      i2c.transmit(I2C_ADDRESS, init4b);
 
    } else if constexpr ((WIDTH == 96) && (HEIGHT == 16)) {
 
@@ -100,7 +100,7 @@ void Oled::initialise() {
             SSD1306_SETCONTRAST,                  // 0x81
             ((VCC_CONTROL == OledVccControl_External) ? 0x10 : 0xAF),
       };
-      i2c.transmit(I2C_ADDRESS, sizeof(init4c), init4c);
+      i2c.transmit(I2C_ADDRESS, init4c);
    } else {
       // Other screen varieties -- TBD
    }
@@ -116,7 +116,7 @@ void Oled::initialise() {
          SSD1306_DEACTIVATE_SCROLL,
          SSD1306_DISPLAYON,                    // Main screen turn on
    };
-   i2c.transmit(I2C_ADDRESS, sizeof(init5), init5);
+   i2c.transmit(I2C_ADDRESS, init5);
 }
 
 /**
@@ -131,7 +131,7 @@ void Oled::enable(bool enable) {
          MULTIPLE_COMMANDS,                    // Co = 0, D/C = 0
          SSD1306_DISPLAYOFF,                   // 0xAE
    };
-   i2c.transmit(I2C_ADDRESS, sizeof(onCommand), enable?onCommand:offCommand);
+   i2c.transmit(I2C_ADDRESS, enable?onCommand:offCommand);
 }
 
 /**
@@ -147,7 +147,7 @@ void Oled::setContrast(uint8_t level) {
          SSD1306_SETCONTRAST,                  // 0x81
          level,
    };
-   i2c.transmit(I2C_ADDRESS, sizeof(contrastCommand), contrastCommand);
+   i2c.transmit(I2C_ADDRESS, contrastCommand);
 }
 
 /**
@@ -155,7 +155,7 @@ void Oled::setContrast(uint8_t level) {
  */
 void Oled::refreshImage() {
    buffer.controlByte = MULTIPLE_GDRAM;
-   i2c.transmit(I2C_ADDRESS, sizeof(buffer), (uint8_t *)&buffer);
+   i2c.transmit(I2C_ADDRESS, buffer.rawData);
 }
 
 /**
@@ -255,37 +255,37 @@ Oled &Oled::putSpace(int width) {
  * @param writeMode  Mode of modification
  */
 void Oled::putPixel(unsigned index, uint8_t mask, bool pixel, WriteMode writeMode) {
-   usbdm_assert(index < (sizeof(buffer.buffer)/sizeof(buffer.buffer[0])), "Illegal index");
+   usbdm_assert(index < (sizeof(buffer.data)/sizeof(buffer.data[0])), "Illegal index");
    switch(writeMode) {
       case WriteMode_Write:
          if (pixel) {
-            buffer.buffer[index] |= mask;
+            buffer.data[index] |= mask;
          }
          else {
-            buffer.buffer[index] &= ~mask;
+            buffer.data[index] &= ~mask;
          }
          break;
       case WriteMode_InverseWrite:
          if (pixel) {
-            buffer.buffer[index] &= ~mask;
+            buffer.data[index] &= ~mask;
          }
          else {
-            buffer.buffer[index] |= mask;
+            buffer.data[index] |= mask;
          }
          break;
       case WriteMode_Or:
          if (pixel) {
-            buffer.buffer[index] |= mask;
+            buffer.data[index] |= mask;
          }
          break;
       case WriteMode_InverseAnd:
          if (!pixel) {
-            buffer.buffer[index] &= ~mask;
+            buffer.data[index] &= ~mask;
          }
          break;
       case WriteMode_Xor:
          if (pixel) {
-            buffer.buffer[index] ^= mask;
+            buffer.data[index] ^= mask;
          }
          break;
       default:

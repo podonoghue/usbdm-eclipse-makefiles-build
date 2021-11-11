@@ -2,7 +2,7 @@
 <!DOCTYPE root SYSTEM "../package.dtd">
 
 <root version="1.0" >
-   <projectActionList id="CPP-abstraction-PCA9685" >
+   <projectActionList id="CPP-abstraction-VL53L0X" >
       <applyWhen>
          <and>
             <or>
@@ -19,9 +19,9 @@
          <applyWhen>
             <variableRef idRef="projectOptionValue.CPP-abstraction" condition="isTrue"/>
          </applyWhen>
-         <variable id="projectOptionValue.CPP-abstraction-PCA9685" 
-            name="PCA9685 PWM C++ interface" 
-            description="Adds a CPP abstraction layer for a PCA9685 PWM driver IC" 
+         <variable id="projectOptionValue.CPP-abstraction-VL53L0X" 
+            name="VL53L0X Time-of-flight interface" 
+            description="Adds a CPP abstraction layer for a VL53L0X Optical time-of-flight range sensor IC" 
             checkGroup="group-i2c-peripheral-options" >
          </variable>
    
@@ -29,11 +29,11 @@
          <projectActionList>
             <projectActionList>
                <applyWhen >
-                  <variableRef idRef="projectOptionValue.CPP-abstraction-PCA9685" />
+                  <variableRef idRef="projectOptionValue.CPP-abstraction-VL53L0X" />
                </applyWhen>
-               <copy source="Snippets/pca9685-example.cpp"     target="Snippets/pca9685-example.cpp"  overwrite="true" />
-               <copy source="Snippets/pca9685.h"               target="Sources/pca9685.h"             overwrite="true" />
-               <copy source="Snippets/pca9685.cpp"             target="Sources/pca9685.cpp"           overwrite="true" />
+               <copy source="Snippets/vl53l0x-example.cpp"     target="Snippets/vl53l0x-example.cpp"  overwrite="true" />
+               <copy source="Snippets/vl53l0x.h"               target="Sources/vl53l0x.h"             overwrite="true" />
+               <copy source="Snippets/vl53l0x.cpp"             target="Sources/vl53l0x.cpp"           overwrite="true" />
             </projectActionList>
          </projectActionList>
       </projectActionList>

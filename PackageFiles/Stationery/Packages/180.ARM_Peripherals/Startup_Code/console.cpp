@@ -24,6 +24,16 @@ namespace USBDM {
 #if USE_CONSOLE
 
 /**
+ * Print simple log message to console
+ *
+ * @param msg Message to print
+ */
+void log_error(const char *msg) {
+   (void)msg;
+   console.WRITELN(msg);
+}
+
+/**
  * @addtogroup CONSOLE_Group Console
  * @brief Console serial interface
  * @{

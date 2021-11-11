@@ -19,6 +19,7 @@
  */
 #include <stdint.h>
 #include "derivative.h"
+#include "pin_mapping.h"
 #include "formatted_io.h"
 #include "uart_queue.h"
 #ifdef __CMSIS_RTOS
@@ -173,9 +174,9 @@ public:
    /**
     * Construct UART interface
     *
-    * @param[in]  uartBaseAddress BAse address of UART hardware
+    * @param[in]  baseAddress Base address of UART hardware
     */
-   Uart(uint32_t uartBaseAddress) : uart((uartBaseAddress)) {
+   Uart(uint32_t baseAddress) : uart((baseAddress)) {
    }
 
    /**
@@ -768,6 +769,7 @@ public:
       Uart::enableInterrupt(UartInterrupt_TxHoldingEmpty, false);
    }
 
+protected:
    /**
     * Queue for Buffered reception (if used)
     */
@@ -776,8 +778,6 @@ public:
     * Queue for Buffered transmission (if used)
     */
    static UartQueue<char, txSize> txQueue;
-
-protected:
 
    /** Lock variable for writes */
    static volatile uint32_t fWriteLock;

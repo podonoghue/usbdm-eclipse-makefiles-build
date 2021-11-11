@@ -8,24 +8,24 @@
    <item key="$$DeviceInfo_Device_Variant"                 value="FRDM_KL02Z" />
    <item key="$$DeviceInfo_SubFamily"                      value="MKL02Z4" />
    <item key="$$Hardware_Source_Filename"                  value="MKL02Z4.usbdmHardware" />
-   <item key="$signal$PTA0_muxSetting"                     value="mux3" />
-   <item key="$signal$PTA1_muxSetting"                     value="mux3" />
-   <item key="$signal$PTA2_muxSetting"                     value="mux3" />
-   <item key="$signal$PTA3_muxSetting"                     value="mux0" />
-   <item key="$signal$PTA4_muxSetting"                     value="mux0" />
-   <item key="$signal$PTA6_muxSetting"                     value="mux3" />
-   <item key="$signal$PTA7_muxSetting"                     value="mux3" />
-   <item key="$signal$PTA8_muxSetting"                     value="mux0" />
-   <item key="$signal$PTA9_muxSetting"                     value="mux0" />
-   <item key="$signal$PTB0_muxSetting"                     value="mux3" />
-   <item key="$signal$PTB10_muxSetting"                    value="mux2" />
-   <item key="$signal$PTB13_muxSetting"                    value="mux0" />
-   <item key="$signal$PTB1_muxSetting"                     value="mux2" />
-   <item key="$signal$PTB2_muxSetting"                     value="mux2" />
-   <item key="$signal$PTB3_muxSetting"                     value="mux2" />
-   <item key="$signal$PTB4_muxSetting"                     value="mux2" />
-   <item key="$signal$PTB8_muxSetting"                     value="mux0" />
-   <item key="$signal$PTB9_muxSetting"                     value="mux0" />
+   <item key="$pin$PTA0_muxSetting_mux3(3)"                value="mux3" />
+   <item key="$pin$PTA1_muxSetting_mux3(3)"                value="mux3" />
+   <item key="$pin$PTA2_muxSetting_mux3(3)"                value="mux3" />
+   <item key="$pin$PTA3_muxSetting_mux0(0)"                value="mux0" />
+   <item key="$pin$PTA4_muxSetting_mux0(0)"                value="mux0" />
+   <item key="$pin$PTA6_muxSetting_mux3(3)"                value="mux3" />
+   <item key="$pin$PTA7_muxSetting_mux3(3)"                value="mux3" />
+   <item key="$pin$PTA8_muxSetting_mux0(0)"                value="mux0" />
+   <item key="$pin$PTA9_muxSetting_mux0(0)"                value="mux0" />
+   <item key="$pin$PTB0_muxSetting_mux3(3)"                value="mux3" />
+   <item key="$pin$PTB10_muxSetting_mux2(2)"               value="mux2" />
+   <item key="$pin$PTB13_muxSetting_mux0(0)"               value="mux0" />
+   <item key="$pin$PTB1_muxSetting_mux2(2)"                value="mux2" />
+   <item key="$pin$PTB2_muxSetting_mux2(2)"                value="mux2" />
+   <item key="$pin$PTB3_muxSetting_mux2(2)"                value="mux2" />
+   <item key="$pin$PTB4_muxSetting_mux2(2)"                value="mux2" />
+   <item key="$pin$PTB8_muxSetting_mux0(0)"                value="mux0" />
+   <item key="$pin$PTB9_muxSetting_mux0(0)"                value="mux0" />
    <item key="/FTFA/peripheral_file"                       value="ftfa" />
    <item key="/MCG/ClockConfig[0]"                         value="ClockConfig_FEE_48MHz" />
    <item key="/MCG/ClockConfig[1]"                         value="ClockConfig_BLPI_4MHz" />

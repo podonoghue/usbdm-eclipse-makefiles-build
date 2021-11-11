@@ -2104,7 +2104,6 @@ template <class Info>
 class FtmQuadDecoder_T {
 
 private:
-   FtmQuadDecoder_T() = delete;
    FtmQuadDecoder_T(const FtmQuadDecoder_T&) = delete;
    FtmQuadDecoder_T(FtmQuadDecoder_T&&) = delete;
 
@@ -2112,6 +2111,9 @@ private:
    FtmBase::CheckChannel<typename Info::InfoQUAD, 1> checkQ1;
 
 public:
+   // Default constructor
+   FtmQuadDecoder_T() = default;
+
    /** Hardware instance pointer */
    static constexpr HardwarePtr<FTM_Type> tmr = Info::baseAddress;
 

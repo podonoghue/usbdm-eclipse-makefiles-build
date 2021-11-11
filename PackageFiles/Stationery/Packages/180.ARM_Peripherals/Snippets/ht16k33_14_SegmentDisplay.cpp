@@ -8,7 +8,7 @@
  ============================================================================
  */
 #include "string.h"
-#include "HT16k33_14_SegmentDisplay.h"
+#include "ht16k33_14_SegmentDisplay.h"
 
 namespace USBDM {
 

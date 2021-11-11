@@ -883,7 +883,7 @@
          \t/**
          \t * Select FTM3 Fault 0 Select
          \t *
-         \t * @param SimFtm3Flt0 Fault Source
+         \t * @param simFtm3Flt0 Fault Source
          \t */
          \tstatic void setFtm3Flt0(SimFtm3Flt0 simFtm3Flt0) {
          \t   sim->SOPT4 = (sim->SOPT4&~SIM_SOPT4_FTM3FLT0_MASK)|simFtm3Flt0;      
@@ -892,7 +892,7 @@
          \t/**
          \t * Select FTM2 Fault 0 Select
          \t *
-         \t * @param SimFtm2Flt0 Fault Source
+         \t * @param simFtm2Flt0 Fault Source
          \t */
          \tstatic void setFtm2Flt0(SimFtm2Flt0 simFtm2Flt0) {
          \t   sim->SOPT4 = (sim->SOPT4&~SIM_SOPT4_FTM2FLT0_MASK)|simFtm2Flt0;      

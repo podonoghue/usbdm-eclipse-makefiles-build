@@ -82,10 +82,7 @@ extern Console console;
  *
  * @param msg Message to print
  */
-inline void log_error(const char *msg) {
-   (void)msg;
-   console.WRITELN(msg);
-}
+extern void log_error(const char *msg);
 
 /**
  * @}

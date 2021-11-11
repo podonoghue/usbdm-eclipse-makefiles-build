@@ -8,12 +8,12 @@
    <item key="$$DeviceInfo_Device_Variant"                 value="FRDM_KL05Z" />
    <item key="$$DeviceInfo_SubFamily"                      value="MKL05Z4" />
    <item key="$$Hardware_Source_Filename"                  value="MKL05Z4.usbdmHardware" />
-   <item key="$signal$PTA3_muxSetting"                     value="mux0" />
-   <item key="$signal$PTA4_muxSetting"                     value="mux0" />
-   <item key="$signal$PTB1_muxSetting"                     value="mux2" />
-   <item key="$signal$PTB2_muxSetting"                     value="mux2" />
-   <item key="$signal$PTB3_muxSetting"                     value="mux2" />
-   <item key="$signal$PTB4_muxSetting"                     value="mux2" />
+   <item key="$pin$PTA3_muxSetting_mux0(0)"                value="mux0" />
+   <item key="$pin$PTA4_muxSetting_mux0(0)"                value="mux0" />
+   <item key="$pin$PTB1_muxSetting_mux2(2)"                value="mux2" />
+   <item key="$pin$PTB2_muxSetting_mux2(2)"                value="mux2" />
+   <item key="$pin$PTB3_muxSetting_mux2(2)"                value="mux2" />
+   <item key="$pin$PTB4_muxSetting_mux2(2)"                value="mux2" />
    <item key="/FTFA/peripheral_file"                       value="ftfa" />
    <item key="/LPTMR0/lptmr_cmr"                           value="0" />
    <item key="/MCG/ClockConfig[0]"                         value="ClockConfig_FEE_42MHz" />
