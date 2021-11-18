@@ -46,7 +46,7 @@
       <xi:include href="peripherals/DRY_8IN.svd.xml"/>
       <xi:include href="peripherals/ENET_B.svd.xml"/>
       <xi:include href="peripherals/EWM_INT.svd.xml"/>
-      <xi:include href="peripherals/FB.svd.xml"/>
+      <xi:include href="peripherals/FLEXBUS.svd.xml"/>
       <xi:include href="peripherals/FMC_MK10F12.svd.xml"/>
       <xi:include href="peripherals/FTFE_FEPROT_FDPROT.svd.xml"/>
       <xi:include href="peripherals/FTM0_8CH.svd.xml"/>

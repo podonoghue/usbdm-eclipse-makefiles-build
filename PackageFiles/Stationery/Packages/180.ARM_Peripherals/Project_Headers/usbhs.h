@@ -127,12 +127,8 @@ public:
 
    /**
     * Construct USBHS interface
-    *
-    * @param[in]  bps        Tx/Rx rate
-    * @param[in]  usbhsMode    Mode of operation
-    * @param[in]  myAddress  Address of this device on bus (not currently used)
     */
-   UsbhsBase_T(unsigned bps=400000, uint8_t myAddress=0) : Usbhs(&Info::usbhs()) {
+   UsbhsBase_T() : Usbhs(&Info::usbhs()) {
 
 #ifdef DEBUG_BUILD
       // Check pin assignments

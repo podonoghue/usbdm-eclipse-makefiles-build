@@ -39,6 +39,31 @@ enum NvicPriority {
 };
 
 /**
+ * Class to wrap a memory pointer as an array
+ *
+ * @tparam T         Type of array element
+ * @tparam address   Memory address of start of array
+ * @tparam size      Size of array (in elements)
+ */
+template<typename T, uint32_t address, size_t Size>
+class MemoryAddressWrapper {
+
+public:
+
+   static constexpr size_t size = Size;
+
+   /**
+    * Convert to reference to the external memory location
+    *
+    * @return Reference to element
+    */
+   constexpr T & __attribute__((always_inline)) operator[](size_t index) const {
+      usbdm_assert(index<size, "Index out of range");
+      return (reinterpret_cast<T *>(address))[index];
+   }
+};
+
+/**
  * This is to allow use of hardware pointers in classes with a constexpr constructor !
  *
  * @tparam T  The type of the hardware to create a pointer for

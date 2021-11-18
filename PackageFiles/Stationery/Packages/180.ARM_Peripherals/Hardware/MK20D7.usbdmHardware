@@ -151,7 +151,7 @@
          <clock clockEnable="SIM->SCGC4 |= SIM_SCGC4_EWM_MASK;" clockDisable="SIM->SCGC4 &amp;= ~SIM_SCGC4_EWM_MASK;" />
          <irq num="WDOG_IRQn" />
       </peripheral>
-      <peripheral baseName="FB"       instance=""         version="fb">
+      <peripheral baseName="FLEXBUS"  instance=""         version="flexbus">
          <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForFlexBus" />
       </peripheral>
       <peripheral baseName="FTFL"     instance=""         version="ftfl">

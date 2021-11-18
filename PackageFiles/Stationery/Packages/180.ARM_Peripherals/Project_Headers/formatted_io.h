@@ -224,21 +224,27 @@ protected:
     * @return true  Character available i.e. _readChar() will not block
     * @return false No character available
     */
-   virtual bool _isCharAvailable() = 0;
+   virtual bool _isCharAvailable() {
+      return false;
+   }
 
    /**
     * Receives a character (blocking)
     *
     * @return Character received
     */
-   virtual int _readChar() = 0;
+   virtual int _readChar() {
+      return -1;
+   }
 
    /**
     * Writes a character (blocking)
     *
     * @param[in]  ch - character to send
     */
-   virtual void _writeChar(char ch) = 0;
+   virtual void _writeChar(char ch) {
+      (void)ch;
+   }
 
 public:
    /**
@@ -278,12 +284,17 @@ public:
    /**
     *  Flush output data
     */
-   virtual FormattedIO &flushOutput() = 0;
+   virtual FormattedIO &flushOutput() {
+      return *this;
+   }
 
    /**
     *  Flush input data
     */
-   virtual FormattedIO &flushInput() = 0;
+   virtual FormattedIO &flushInput() {
+      lookAhead = -1;
+      return *this;
+   }
 
    /**
     * Lock the object
@@ -316,7 +327,7 @@ public:
     * Peek at lookahead (non-blocking).
     *
     * @return <0   No character available
-    * @return >=0  Character available
+    * @return >=0  The available character
     */
    int __attribute__((noinline)) peek() {
       if (lookAhead>0) {
@@ -629,6 +640,27 @@ public:
    }
 
    /**
+    * Receive string until terminator character or buffer full.\n
+    * The terminating character is discarded and the string always '\0' terminated
+    *
+    * @param[out] data       Data buffer for reception (size is inferred from this parameter)
+    * @param[in]  terminator Terminating character
+    *
+    * @return number of characters read (excluding terminator)
+    *
+    * @note Excess characters are discarded once the buffer is full.
+    *
+    * Usage
+    * @code
+    *    char buff[100];
+    *    int numChars = gets(buff);
+    * @endcode
+    */
+   template<size_t N>
+   int __attribute__((noinline)) gets(char (&data)[N], char terminator='\n') {
+      return gets(data, N, terminator);
+   }
+    /**
     * Write a character
     *
     * @param[in]  ch - character to send

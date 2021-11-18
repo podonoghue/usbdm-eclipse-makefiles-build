@@ -8,6 +8,12 @@
    <item key="$$DeviceInfo_Device_Variant"                 value="FRDM_K22F" />
    <item key="$$DeviceInfo_SubFamily"                      value="MK22F51212" />
    <item key="$$Hardware_Source_Filename"                  value="MK22F51212.usbdmHardware" />
+   <item key="$peripheral$I2C0_codeIdentifier"             value="OnboardI2C" />
+   <item key="$peripheral$I2C0_userDescription"            value="On-board I2C (Accelerometer, Magnetometer_scl)" />
+   <item key="$peripheral$I2C1_codeIdentifier"             value="UserI2C" />
+   <item key="$peripheral$I2C1_userDescription"            value="User I2C" />
+   <item key="$peripheral$SPI1_codeIdentifier"             value="UserSpi" />
+   <item key="$peripheral$UART1_codeIdentifier"            value="DebugUart" />
    <item key="$pin$PTA0_muxSetting_mux7(7)"                value="mux7" />
    <item key="$pin$PTA12_muxSetting_mux1(1)"               value="mux1" />
    <item key="$pin$PTA13_muxSetting_mux1(1)"               value="mux1" />
@@ -30,6 +36,7 @@
    <item key="$pin$PTC10_muxSetting_mux1(1)"               value="mux1" />
    <item key="$pin$PTC11_muxSetting_mux0(0)"               value="mux0" />
    <item key="$pin$PTC1_muxSetting_mux0(0)"                value="mux0" />
+   <item key="$pin$PTC1_muxSetting_mux1(1)"                value="mux0" />
    <item key="$pin$PTC2_muxSetting_mux0(0)"                value="mux0" />
    <item key="$pin$PTC2_muxSetting_mux4(4)"                value="mux0" />
    <item key="$pin$PTC3_muxSetting_mux1(1)"                value="mux1" />
@@ -41,39 +48,54 @@
    <item key="$pin$PTD2_muxSetting_mux1(1)"                value="mux1" />
    <item key="$pin$PTD3_muxSetting_mux1(1)"                value="mux1" />
    <item key="$pin$PTD4_muxSetting_mux1(1)"                value="mux1" />
-   <item key="$pin$PTD5_muxSetting_mux7(7)"                value="mux7" />
+   <item key="$pin$PTD5_muxSetting_mux1(1)"                value="mux1" />
+   <item key="$pin$PTD5_muxSetting_mux7(7)"                value="mux1" />
    <item key="$pin$PTD6_muxSetting_mux7(7)"                value="mux7" />
    <item key="$pin$PTD7_muxSetting_mux7(7)"                value="mux7" />
    <item key="$pin$PTE0_muxSetting_mux3(3)"                value="mux3" />
+   <item key="$pin$PTE0_muxSetting_mux6(6)"                value="mux3" />
    <item key="$pin$PTE1_muxSetting_mux3(3)"                value="mux3" />
-   <item key="$signal$ADC0_SE12_codeIdentifier"            value="Analogue_A5" />
-   <item key="$signal$ADC0_SE12_descriptionSetting"        value="Accelerometer, Magnetometer_scl" />
-   <item key="$signal$ADC0_SE13_codeIdentifier"            value="Analogue_A4" />
-   <item key="$signal$ADC0_SE13_descriptionSetting"        value="Accelerometer, Magnetometer_sda" />
-   <item key="$signal$ADC0_SE15_codeIdentifier"            value="Analogue_A2" />
-   <item key="$signal$ADC0_SE15_descriptionSetting"        value="Switch 2" />
-   <item key="$signal$ADC0_SE4b_codeIdentifier"            value="Analogue_A3" />
-   <item key="$signal$ADC0_SE8_codeIdentifier"             value="Analogue_A0" />
-   <item key="$signal$ADC0_SE9_codeIdentifier"             value="Analogue_A1" />
+   <item key="$pin$PTE1_muxSetting_mux6(6)"                value="mux3" />
+   <item key="$signal$ADC0_DM0_codeIdentifier"             value="analogueDiff_a6_a7" />
+   <item key="$signal$ADC0_DM3_codeIdentifier"             value="analogueDiff_a8_a9" />
+   <item key="$signal$ADC0_DP0_codeIdentifier"             value="analogueDiff_a6_a7" />
+   <item key="$signal$ADC0_DP3_codeIdentifier"             value="analogueDiff_a8_a9" />
+   <item key="$signal$ADC0_SE0_codeIdentifier"             value="analogue_A6" />
+   <item key="$signal$ADC0_SE12_codeIdentifier"            value="analogue_A5" />
+   <item key="$signal$ADC0_SE13_codeIdentifier"            value="analogue_A4" />
+   <item key="$signal$ADC0_SE15_codeIdentifier"            value="analogue_A2" />
+   <item key="$signal$ADC0_SE19_codeIdentifier"            value="analogue_A7" />
+   <item key="$signal$ADC0_SE23_codeIdentifier"            value="analogue_A11" />
+   <item key="$signal$ADC0_SE3_codeIdentifier"             value="analogue_A8" />
+   <item key="$signal$ADC0_SE4b_codeIdentifier"            value="analogue_A3" />
+   <item key="$signal$ADC0_SE8_codeIdentifier"             value="analogue_A0" />
+   <item key="$signal$ADC0_SE9_codeIdentifier"             value="analogue_A1" />
    <item key="$signal$ADC1_SE7b_descriptionSetting"        value="RF_ce" />
    <item key="$signal$EXTAL0_descriptionSetting"           value="8MHz Crystal" />
    <item key="$signal$EXTAL32_descriptionSetting"          value="32kHz Crystal" />
+   <item key="$signal$GPIOA_1_codeIdentifier"              value="redLED" />
    <item key="$signal$GPIOA_1_descriptionSetting"          value="Red LED" />
+   <item key="$signal$GPIOA_1_polarity"                    value="true" />
+   <item key="$signal$GPIOA_2_codeIdentifier"              value="greenLED" />
    <item key="$signal$GPIOA_2_descriptionSetting"          value="Green LED" />
+   <item key="$signal$GPIOA_2_polarity"                    value="true" />
+   <item key="$signal$GPIOB_17_codeIdentifier"             value="switch3" />
    <item key="$signal$GPIOB_17_descriptionSetting"         value="Switch 3" />
-   <item key="$signal$GPIOD_2_descriptionSetting"          value="RF_mosi, Bluetooth_tx" />
-   <item key="$signal$GPIOD_3_descriptionSetting"          value="RF_miso, Bluetooth_rx" />
-   <item key="$signal$GPIOD_4_descriptionSetting"          value="RF_cs" />
-   <item key="$signal$JTAG_TCLK_descriptionSetting"        value="SWD CLK" />
-   <item key="$signal$JTAG_TMS_descriptionSetting"         value="SWD DIO" />
-   <item key="$signal$LLWU_P13_descriptionSetting"         value="RF_mosi, Bluetooth_tx" />
-   <item key="$signal$LLWU_P14_descriptionSetting"         value="RF_cs" />
+   <item key="$signal$GPIOB_17_polarity"                   value="true" />
+   <item key="$signal$GPIOC_1_codeIdentifier"              value="switch2" />
+   <item key="$signal$GPIOC_1_descriptionSetting"          value="Switch 2" />
+   <item key="$signal$GPIOC_1_polarity"                    value="true" />
+   <item key="$signal$GPIOD_5_codeIdentifier"              value="blueLED" />
+   <item key="$signal$GPIOD_5_descriptionSetting"          value="Blue LED" />
+   <item key="$signal$GPIOD_5_polarity"                    value="true" />
+   <item key="$signal$I2C1_SCL_descriptionSetting"         value="I2C_SCL (D15)" />
+   <item key="$signal$I2C1_SDA_descriptionSetting"         value="I2C_SDA (D14)" />
    <item key="$signal$RESET_b_descriptionSetting"          value="Reset" />
    <item key="$signal$SPI1_SCK_descriptionSetting"         value="Blue LED" />
    <item key="$signal$SWD_CLK_descriptionSetting"          value="SWD CLK" />
    <item key="$signal$SWD_DIO_descriptionSetting"          value="SWD DIO" />
-   <item key="$signal$UART1_RX_descriptionSetting"         value="USB Serial Rx" />
-   <item key="$signal$UART1_TX_descriptionSetting"         value="USB Serial Tx" />
+   <item key="$signal$UART1_RX_descriptionSetting"         value="Debug Serial Rx (USB)" />
+   <item key="$signal$UART1_TX_descriptionSetting"         value="Debug Serial Tx (USB)" />
    <item key="$signal$USB0_DM_descriptionSetting"          value="USB_DM" />
    <item key="$signal$USB0_DP_descriptionSetting"          value="USB_DP" />
    <item key="$signal$XTAL0_descriptionSetting"            value="8MHz Crystal" />

@@ -22,8 +22,8 @@
 namespace USBDM {
 
 /**
- * @addtogroup TRNG_Group TRNG, True Random Number Generator
- * @brief Abstraction for True Random Number Generator
+ * @addtogroup TRNG_Group TRNG, Random Number Generator Accelerator
+ * @brief Abstraction for Random Number Generator Accelerator
  * @{
  */
  
@@ -176,7 +176,6 @@ class Trng : public TrngBase_T<TrngInfo> {};
 
 #if defined(USBDM_TRNG0_IS_DEFINED)
 class Trng0 : public TrngBase_T<Trng0Info> {};
-$(/TRNG0/Declarations:   // No declarations Found)
 #endif
 
 /**

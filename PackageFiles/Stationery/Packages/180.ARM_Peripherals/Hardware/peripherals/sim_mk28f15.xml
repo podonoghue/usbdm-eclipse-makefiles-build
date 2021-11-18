@@ -157,6 +157,8 @@ Devices using this peripheral:
          \t * Get Peripheral clock frequency
          \t *
          \t * @return Frequency as a uint32_t in Hz
+         \t *
+         \t * @note This is the frequency of the undivided peripheral clock
          \t */
          \tstatic uint32_t getPeripheralClock() {
          \t   
@@ -334,6 +336,7 @@ Devices using this peripheral:
          value="0" />
       
       <template namespace="usbdm"><![CDATA[
+         \t#ifdef SIM_SOPT2_SDHCSRC
          \t/**
          \t * SDHC Clock sources
          \t */
@@ -342,10 +345,12 @@ Devices using this peripheral:
          \t   SimSdhcClockSource_Peripheral = SIM_SOPT2_SDHCSRC(1), //!< Peripheral clock selected by SIM.SOPT2[PLLFLLSEL]
          \t   SimSdhcClockSource_OscerClk   = SIM_SOPT2_SDHCSRC(2), //!< OSCERCLK clock
          \t   SimSdhcClockSource_External   = SIM_SOPT2_SDHCSRC(3), //!< External bypass clock (SDHC0_CLKIN)
-         \t};\n\n
+         \t};
+         \t#endif\n\n
       ]]></template>
       
       <template><![CDATA[
+         \t#ifdef SIM_SOPT2_SDHCSRC
          \t/**
          \t * Set SDHC input clock source
          \t *
@@ -369,7 +374,80 @@ Devices using this peripheral:
          \t   case SIM_SOPT2_SDHCSRC(2): return Osc0Info::getOscerClock();
          \t   case SIM_SOPT2_SDHCSRC(3): return 0; // TODO SDHC0_CLKIN
          \t   }
-         \t}\n\n
+         \t}
+         \t#endif\n\n
+      ]]></template>
+      
+      <template namespace="usbdm"><![CDATA[
+         \t#ifdef SIM_SOPT2_FBSL
+         \t/**
+         \t * External Bus security level (FlexBus or SDRAM accesses).
+         \t */
+         \tenum SimExternalBusSecurity {
+         \t   SimExternalBusSecurity_AllDisallowed = SIM_SOPT2_FBSL(0b00), /**< All off-chip accesses are disallowed. */
+         \t   SimExternalBusSecurity_DataOnly      = SIM_SOPT2_FBSL(0b10), /**< Only off-chip data accesses are allowed. */
+         \t   SimExternalBusSecurity_AllAllowed    = SIM_SOPT2_FBSL(0b11), /**< Off-chip instruction and data accesses are allowed. */
+         \t};
+         \t#endif\n\n
+      ]]></template>
+      
+      <template><![CDATA[
+         \t#ifdef SIM_SOPT2_FBSL
+         \t/**
+         \t * Set External Bus security level.
+         \t *
+         \t * If flash security is enabled, then this sets what CPU operations can access off-chip via the
+         \t * FlexBus or SDRAMinterface.
+         \t *
+         \t * @param simExternalBusSecurity Security level
+         \t */
+         \tstatic void setExternalBusSecurity(SimExternalBusSecurity simExternalBusSecurity) {
+         \t   sim->SOPT2 = (sim->SOPT2&~SIM_SOPT2_FBSL_MASK) | simExternalBusSecurity;
+         \t}
+         \t#endif\n\n
+      ]]></template>\n\n
+
+      <template namespace="usbdm"><![CDATA[
+         \t#ifdef SIM_SOPT2_FLEXIOSRC
+         \t/**
+         \t* FLEXIO Clock sources
+         \t*/
+         \tenum SimFlexioClockSource {
+         \t   SimFlexioClockSource_System     = SIM_SOPT2_FLEXIOSRC(0), //!< Core/system clock
+         \t   SimFlexioClockSource_Peripheral = SIM_SOPT2_FLEXIOSRC(1), //!< Peripheral clock selected by SIM.SOPT2[PLLFLLSEL]
+         \t   SimFlexioClockSource_OscerClk   = SIM_SOPT2_FLEXIOSRC(2), //!< OSCERCLK clock
+         \t   SimFlexioClockSource_McgIrClk   = SIM_SOPT2_FLEXIOSRC(3), //!< MCG Internal Reference clock
+         \t};
+         \t#endif\n\n
+      ]]></template>\n\n
+
+      <template><![CDATA[
+         \t#ifdef SIM_SOPT2_FLEXIOSRC
+         \t   /**
+         \t    * Set FLEXIO input clock source
+         \t    *
+         \t    * @param simFlexioClockSource Clock source for FLEXIO
+         \t    */
+         \t   static void setFlexioClock(SimFlexioClockSource simFlexioClockSource) {
+         \t      sim->SOPT2 = (sim->SOPT2&~SIM_SOPT2_FLEXIOSRC_MASK) | simFlexioClockSource;
+         \t   }
+         \t
+         \t   /**
+         \t    * Get FLEXIO input clock frequency
+         \t    *
+         \t    * @return Frequency as a uint32_t in Hz
+         \t    */
+         \t   static uint32_t getFlexioClock() {
+         \t
+         \t      switch(sim->SOPT2&SIM_SOPT2_FLEXIOSRC_MASK) {
+         \t      default:
+         \t      case SIM_SOPT2_FLEXIOSRC(0): return SystemCoreClock;
+         \t      case SIM_SOPT2_FLEXIOSRC(1): return getDividedPeripheralClock();
+         \t      case SIM_SOPT2_FLEXIOSRC(2): return Osc0Info::getOscerClock();
+         \t      case SIM_SOPT2_FLEXIOSRC(3): return McgInfo::getMcgIrClock();
+         \t      }
+         \t   }
+         \t#endif\n\n
       ]]></template>
       
       <choiceOption name="sim_sopt2_clkoutsel" 
@@ -461,7 +539,7 @@ Devices using this peripheral:
       <template><![CDATA[
          
          \t/**
-         \t * Set clock divider for some peripherals (TPM,LPUART)
+         \t * Set clock divider for some peripherals (TPM,LPUART,FLEXIO)
          \t *
          \t * @param simPeripheralClockDivider Clock divider
          \t */
@@ -474,7 +552,7 @@ Devices using this peripheral:
          \t}\n\n
          
          \t/**
-         \t * Get Peripheral clock frequency after clock divider (TPM,LPUART)
+         \t * Get Peripheral clock frequency after clock divider (TPM,LPUART,FLEXIO)
          \t *
          \t * @return Frequency as a uint32_t in Hz
          \t */

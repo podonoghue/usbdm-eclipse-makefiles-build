@@ -331,8 +331,7 @@ public:
     */
    virtual Uart &flushInput() override {
       (void)uart->D;
-      lookAhead = -1;
-      return *this;
+      return (Uart &)FormattedIO::flushInput();
    };
 };
 
@@ -898,9 +897,8 @@ public:
     *  Flush input data
     */
    virtual UartBuffered_T &flushInput() override {
-      Uart_T<Info>::flushInput();
       rxQueue.clear();
-      return *this;
+      return (UartBuffered_T &)Uart_T<Info>::flushInput();
    }
 
 };

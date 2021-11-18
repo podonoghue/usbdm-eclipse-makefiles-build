@@ -513,7 +513,7 @@ public:
    /**
     * Assign from NonvolatileArray array.
     *
-    * @param[in]other NonvolatileArray to assign from
+    * @param [in] other NonvolatileArray to assign from
     *
     * This adds a wait for the Flash to be updated after each element is assigned
     *

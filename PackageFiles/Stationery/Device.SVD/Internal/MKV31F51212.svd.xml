@@ -31,7 +31,7 @@
       <xi:include href="peripherals/DMA0_16CH_EARS16.svd.xml"/>
       <xi:include href="peripherals/DMAMUX0_16CH_TRIG_MKV31F51212.svd.xml"/>
       <xi:include href="peripherals/EWM_INT_PR.svd.xml"/>
-      <xi:include href="peripherals/FB.svd.xml"/>
+      <xi:include href="peripherals/FLEXBUS.svd.xml"/>
       <xi:include href="peripherals/FMC_MK02F12810.svd.xml"/>
       <xi:include href="peripherals/FTFA_XACCH.svd.xml"/>
       <xi:include href="peripherals/FTM0_8CH_ICRST.svd.xml"/>

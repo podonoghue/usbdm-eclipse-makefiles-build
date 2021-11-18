@@ -18,8 +18,10 @@ Devices using this peripheral:
          <resetValue>0x0</resetValue>
          <resetMask>0xFFFFFFFF</resetMask>
          <parameters>
-            <parameter> <value>4</value> <name>SHIFT_COUNT</name> <description>Number of shifters</description></parameter>
-            <parameter> <value>4</value> <name>TIMER_COUNT</name> <description>Number of shifters</description></parameter>
+            <parameter> <value>8</value> <name>PIN_COUNT</name> <description>Number of Pins implemented</description></parameter>
+            <parameter> <value>4</value> <name>SHIFTER_COUNT</name> <description>Number of Shifters implemented</description></parameter>
+            <parameter> <value>4</value> <name>TIMER_COUNT</name> <description>Number of Timers implemented</description></parameter>
+            <parameter> <value>16</value> <name>TRIGGER_COUNT</name> <description>Number of external triggers implemented</description></parameter>
          </parameters>
          <addressBlock>
             <offset>0x0</offset>
@@ -264,7 +266,7 @@ Devices using this peripheral:
                      <name>SSF</name>
                      <description>Shifter Status Flag</description>
                      <bitOffset>0</bitOffset>
-                     <bitWidth>4</bitWidth>
+                     <bitWidth>$(SHIFTER_COUNT)</bitWidth>
                      <enumeratedValues>
                         <enumeratedValue>
                            <name>0b0</name>
@@ -289,7 +291,7 @@ Devices using this peripheral:
                      <name>SEF</name>
                      <description>Shifter Error Flags</description>
                      <bitOffset>0</bitOffset>
-                     <bitWidth>4</bitWidth>
+                     <bitWidth>$(SHIFTER_COUNT)</bitWidth>
                      <enumeratedValues>
                         <enumeratedValue>
                            <name>0b0</name>
@@ -314,7 +316,7 @@ Devices using this peripheral:
                      <name>TSF</name>
                      <description>Timer Status Flags</description>
                      <bitOffset>0</bitOffset>
-                     <bitWidth>4</bitWidth>
+                     <bitWidth>$(SHIFTER_COUNT)</bitWidth>
                      <enumeratedValues>
                         <enumeratedValue>
                            <name>0b0</name>
@@ -339,7 +341,7 @@ Devices using this peripheral:
                      <name>SSIE</name>
                      <description>Shifter Status Interrupt Enable</description>
                      <bitOffset>0</bitOffset>
-                     <bitWidth>4</bitWidth>
+                     <bitWidth>$(SHIFTER_COUNT)</bitWidth>
                      <enumeratedValues>
                         <enumeratedValue>
                            <name>0b0</name>
@@ -364,7 +366,7 @@ Devices using this peripheral:
                      <name>SEIE</name>
                      <description>Shifter Error Interrupt Enable</description>
                      <bitOffset>0</bitOffset>
-                     <bitWidth>4</bitWidth>
+                     <bitWidth>$(SHIFTER_COUNT)</bitWidth>
                      <enumeratedValues>
                         <enumeratedValue>
                            <name>0b0</name>
@@ -389,7 +391,7 @@ Devices using this peripheral:
                      <name>TEIE</name>
                      <description>Timer Status Interrupt Enable</description>
                      <bitOffset>0</bitOffset>
-                     <bitWidth>4</bitWidth>
+                     <bitWidth>$(SHIFTER_COUNT)</bitWidth>
                      <enumeratedValues>
                         <enumeratedValue>
                            <name>0b0</name>
@@ -414,7 +416,7 @@ Devices using this peripheral:
                      <name>SSDE</name>
                      <description>Shifter Status DMA Enable</description>
                      <bitOffset>0</bitOffset>
-                     <bitWidth>4</bitWidth>
+                     <bitWidth>$(SHIFTER_COUNT)</bitWidth>
                      <enumeratedValues>
                         <enumeratedValue>
                            <name>0b0</name>
@@ -431,7 +433,7 @@ Devices using this peripheral:
                </fields>
             </register>
             <register>
-               <dim>$(SHIFT_COUNT)</dim>
+               <dim>$(SHIFTER_COUNT)</dim>
                <dimIncrement>4</dimIncrement>
                <name>SHIFTCTL%s</name>
                <description>Shifter Control N Register</description>
@@ -550,7 +552,7 @@ Devices using this peripheral:
                </fields>
             </register>
             <register>
-               <dim>$(SHIFT_COUNT)</dim>
+               <dim>$(SHIFTER_COUNT)</dim>
                <dimIncrement>4</dimIncrement>
                <name>SHIFTCFG%s</name>
                <description>Shifter Configuration N Register</description>
@@ -634,7 +636,7 @@ Devices using this peripheral:
                </fields>
             </register>
             <register>
-               <dim>$(SHIFT_COUNT)</dim>
+               <dim>$(SHIFTER_COUNT)</dim>
                <dimIncrement>4</dimIncrement>
                <name>SHIFTBUF%s</name>
                <description>Shifter Buffer N Register</description>
@@ -649,7 +651,7 @@ Devices using this peripheral:
                </fields>
             </register>
             <register>
-               <dim>$(SHIFT_COUNT)</dim>
+               <dim>$(SHIFTER_COUNT)</dim>
                <dimIncrement>4</dimIncrement>
                <name>SHIFTBUFBIS%s</name>
                <description>Shifter Buffer N Bit Swapped Register</description>
@@ -664,7 +666,7 @@ Devices using this peripheral:
                </fields>
             </register>
             <register>
-               <dim>$(SHIFT_COUNT)</dim>
+               <dim>$(SHIFTER_COUNT)</dim>
                <dimIncrement>4</dimIncrement>
                <name>SHIFTBUFBYS%s</name>
                <description>Shifter Buffer N Byte Swapped Register</description>
@@ -679,7 +681,7 @@ Devices using this peripheral:
                </fields>
             </register>
             <register>
-               <dim>$(SHIFT_COUNT)</dim>
+               <dim>$(SHIFTER_COUNT)</dim>
                <dimIncrement>4</dimIncrement>
                <name>SHIFTBUFBBS%s</name>
                <description>Shifter Buffer N Bit Byte Swapped Register</description>

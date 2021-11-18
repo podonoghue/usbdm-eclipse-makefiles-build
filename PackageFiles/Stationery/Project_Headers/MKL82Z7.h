@@ -5,7 +5,7 @@
  *           Equivalent: 
  *
  * @version  V1.6
- * @date     2021/08
+ * @date     2021/11
  *
  *******************************************************************************************************/
 
@@ -2341,8 +2341,10 @@ typedef struct GPIO_Type {
 /**
  * @brief Flexible I/O
  */
-#define FLEXIO_SHIFT_COUNT   8          /**< Number of shifters                                 */
-#define FLEXIO_TIMER_COUNT   8          /**< Number of shifters                                 */
+#define FLEXIO_PIN_COUNT     32         /**< Number of Pins implemented                         */
+#define FLEXIO_SHIFTER_COUNT 8          /**< Number of Shifters implemented                     */
+#define FLEXIO_TIMER_COUNT   8          /**< Number of Timers implemented                       */
+#define FLEXIO_TRIGGER_COUNT 16         /**< Number of external triggers implemented            */
 /**
 * @addtogroup FLEXIO_structs_GROUP FLEXIO struct
 * @brief Struct for FLEXIO
@@ -2365,17 +2367,17 @@ typedef struct FLEXIO_Type {
         uint8_t   RESERVED_2[12];               /**< 0034: 0xC bytes                                                    */
    __IO uint32_t  SHIFTSTATE;                   /**< 0040: Shifter State Register                                       */
         uint8_t   RESERVED_3[60];               /**< 0044: 0x3C bytes                                                   */
-   __IO uint32_t  SHIFTCTL[FLEXIO_SHIFT_COUNT]; /**< 0080: Shifter Control N Register                                   */
+   __IO uint32_t  SHIFTCTL[FLEXIO_SHIFTER_COUNT]; /**< 0080: Shifter Control N Register                                   */
         uint8_t   RESERVED_4[96];               /**< 00A0: 0x60 bytes                                                   */
-   __IO uint32_t  SHIFTCFG[FLEXIO_SHIFT_COUNT]; /**< 0100: Shifter Configuration N Register                             */
+   __IO uint32_t  SHIFTCFG[FLEXIO_SHIFTER_COUNT]; /**< 0100: Shifter Configuration N Register                             */
         uint8_t   RESERVED_5[224];              /**< 0120: 0xE0 bytes                                                   */
-   __IO uint32_t  SHIFTBUF[FLEXIO_SHIFT_COUNT]; /**< 0200: Shifter Buffer N Register                                    */
+   __IO uint32_t  SHIFTBUF[FLEXIO_SHIFTER_COUNT]; /**< 0200: Shifter Buffer N Register                                    */
         uint8_t   RESERVED_6[96];               /**< 0220: 0x60 bytes                                                   */
-   __IO uint32_t  SHIFTBUFBIS[FLEXIO_SHIFT_COUNT]; /**< 0280: Shifter Buffer N Bit Swapped Register                        */
+   __IO uint32_t  SHIFTBUFBIS[FLEXIO_SHIFTER_COUNT]; /**< 0280: Shifter Buffer N Bit Swapped Register                        */
         uint8_t   RESERVED_7[96];               /**< 02A0: 0x60 bytes                                                   */
-   __IO uint32_t  SHIFTBUFBYS[FLEXIO_SHIFT_COUNT]; /**< 0300: Shifter Buffer N Byte Swapped Register                       */
+   __IO uint32_t  SHIFTBUFBYS[FLEXIO_SHIFTER_COUNT]; /**< 0300: Shifter Buffer N Byte Swapped Register                       */
         uint8_t   RESERVED_8[96];               /**< 0320: 0x60 bytes                                                   */
-   __IO uint32_t  SHIFTBUFBBS[FLEXIO_SHIFT_COUNT]; /**< 0380: Shifter Buffer N Bit Byte Swapped Register                   */
+   __IO uint32_t  SHIFTBUFBBS[FLEXIO_SHIFTER_COUNT]; /**< 0380: Shifter Buffer N Bit Byte Swapped Register                   */
         uint8_t   RESERVED_9[96];               /**< 03A0: 0x60 bytes                                                   */
    __IO uint32_t  TIMCTL[FLEXIO_TIMER_COUNT];   /**< 0400: Timer Control N Register                                     */
         uint8_t   RESERVED_10[96];              /**< 0420: 0x60 bytes                                                   */
@@ -2383,11 +2385,11 @@ typedef struct FLEXIO_Type {
         uint8_t   RESERVED_11[96];              /**< 04A0: 0x60 bytes                                                   */
    __IO uint32_t  TIMCMP[FLEXIO_TIMER_COUNT];   /**< 0500: Timer Compare N Register                                     */
         uint8_t   RESERVED_12[352];             /**< 0520: 0x160 bytes                                                  */
-   __IO uint32_t  SHIFTBUFNBS[FLEXIO_SHIFT_COUNT]; /**< 0680: Shifter Buffer N Nibble Byte Swapped Register                */
+   __IO uint32_t  SHIFTBUFNBS[FLEXIO_SHIFTER_COUNT]; /**< 0680: Shifter Buffer N Nibble Byte Swapped Register                */
         uint8_t   RESERVED_13[96];              /**< 06A0: 0x60 bytes                                                   */
-   __IO uint32_t  SHIFTBUFHWS[FLEXIO_SHIFT_COUNT]; /**< 0700: Shifter Buffer N Half Word Swapped Register                  */
+   __IO uint32_t  SHIFTBUFHWS[FLEXIO_SHIFTER_COUNT]; /**< 0700: Shifter Buffer N Half Word Swapped Register                  */
         uint8_t   RESERVED_14[96];              /**< 0720: 0x60 bytes                                                   */
-   __IO uint32_t  SHIFTBUFNIS[FLEXIO_SHIFT_COUNT]; /**< 0780: Shifter Buffer N Nibble Swapped Register                     */
+   __IO uint32_t  SHIFTBUFNIS[FLEXIO_SHIFTER_COUNT]; /**< 0780: Shifter Buffer N Nibble Swapped Register                     */
 } FLEXIO_Type;
 
 /**
@@ -2443,9 +2445,9 @@ typedef struct FLEXIO_Type {
 #define FLEXIO_CTRL_DOZEN_SHIFT                  (31U)                                               /*!< FLEXIO_CTRL.DOZEN Position              */
 #define FLEXIO_CTRL_DOZEN(x)                     (((uint32_t)(((uint32_t)(x))<<31U))&0x80000000UL)   /*!< FLEXIO_CTRL.DOZEN Field                 */
 /* ------- PIN Bit Fields                           ------ */
-#define FLEXIO_PIN_PDI_MASK                      (0xFFU)                                             /*!< FLEXIO_PIN.PDI Mask                     */
+#define FLEXIO_PIN_PDI_MASK                      (0xFFFFFFFFU)                                       /*!< FLEXIO_PIN.PDI Mask                     */
 #define FLEXIO_PIN_PDI_SHIFT                     (0U)                                                /*!< FLEXIO_PIN.PDI Position                 */
-#define FLEXIO_PIN_PDI(x)                        (((uint32_t)(((uint32_t)(x))<<0U))&0xFFUL)          /*!< FLEXIO_PIN.PDI Field                    */
+#define FLEXIO_PIN_PDI(x)                        (((uint32_t)(((uint32_t)(x))<<0U))&0xFFFFFFFFUL)    /*!< FLEXIO_PIN.PDI Field                    */
 /* ------- SHIFTSTAT Bit Fields                     ------ */
 #define FLEXIO_SHIFTSTAT_SSF_MASK                (0xFFU)                                             /*!< FLEXIO_SHIFTSTAT.SSF Mask               */
 #define FLEXIO_SHIFTSTAT_SSF_SHIFT               (0U)                                                /*!< FLEXIO_SHIFTSTAT.SSF Position           */

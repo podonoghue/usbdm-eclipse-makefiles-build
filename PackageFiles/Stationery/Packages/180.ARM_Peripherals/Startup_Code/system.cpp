@@ -21,6 +21,8 @@ __attribute__((__weak__))
 uint32_t SystemCoreClock = 20000000;
 __attribute__((__weak__))
 uint32_t SystemBusClock  = 20000000;
+__attribute__((__weak__))
+uint32_t SystemFlexbusClock = 20000000;
 
 #ifdef __cplusplus
 extern "C" {

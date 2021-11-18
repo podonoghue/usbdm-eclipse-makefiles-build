@@ -28,6 +28,7 @@
  */
 extern "C" uint32_t SystemCoreClock;
 extern "C" uint32_t SystemBusClock;
+extern "C" uint32_t SystemFlexbusClock;
 
 namespace USBDM {
 
@@ -419,8 +420,9 @@ void Mcg::SystemCoreClockUpdate(void) {
    if (mcg->C5&MCG_C5_PLLCLKEN0_MASK) {
       SystemMcgPllClock = systemPllClock;
    }
-   ::SystemCoreClock   = SystemMcgOutClock/(((SIM->CLKDIV1&SIM_CLKDIV1_OUTDIV1_MASK)>>SIM_CLKDIV1_OUTDIV1_SHIFT)+1);
-   ::SystemBusClock    = SystemMcgOutClock/(((SIM->CLKDIV1&SIM_CLKDIV1_OUTDIV2_MASK)>>SIM_CLKDIV1_OUTDIV2_SHIFT)+1);
+   ::SystemCoreClock    = SystemMcgOutClock/(((SIM->CLKDIV1&SIM_CLKDIV1_OUTDIV1_MASK)>>SIM_CLKDIV1_OUTDIV1_SHIFT)+1);
+   ::SystemBusClock     = SystemMcgOutClock/(((SIM->CLKDIV1&SIM_CLKDIV1_OUTDIV2_MASK)>>SIM_CLKDIV1_OUTDIV2_SHIFT)+1);
+   ::SystemFlexbusClock = SystemMcgOutClock/(((SIM->CLKDIV1&SIM_CLKDIV1_OUTDIV3_MASK)>>SIM_CLKDIV1_OUTDIV3_SHIFT)+1);
 }
 
 /**

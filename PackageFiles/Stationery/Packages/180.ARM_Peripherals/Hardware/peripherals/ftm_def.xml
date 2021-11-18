@@ -179,6 +179,5 @@
    <xi:include href="_clockOption.xml"/>
 
    <signals/>
-   <signals name="FTM" />
 
 </fragment>

@@ -260,8 +260,7 @@ public:
     */
    virtual Lpuart &flushInput() override {
       (void)lpuart->DATA;
-      lookAhead = -1;
-      return *this;
+      return (Lpuart &)FormattedIO::flushInput();
    };
 };
 
@@ -633,9 +632,8 @@ public:
     *  Flush input data
     */
    virtual LpuartBuffered_T &flushInput() override {
-      Lpuart_T<Info>::flushInput();
       rxQueue.clear();
-      return *this;
+      return (LpuartBuffered_T &)Lpuart_T<Info>::flushInput();
    }
 
 };

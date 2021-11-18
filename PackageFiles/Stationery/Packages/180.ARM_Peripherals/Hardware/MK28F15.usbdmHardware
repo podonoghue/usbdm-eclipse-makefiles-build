@@ -162,7 +162,7 @@
          <clock clockEnable="SIM->SCGC4 |= SIM_SCGC4_EWM_MASK;" clockDisable="SIM->SCGC4 &amp;= ~SIM_SCGC4_EWM_MASK;" />
          <irq num="WDOG_IRQn" />
       </peripheral>
-      <peripheral baseName="FB"       instance=""         version="fb">
+      <peripheral baseName="FLEXBUS"  instance=""         version="flexbus">
          <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForFlexBus" />
          <clock clockEnable="SIM->SCGC7 |= SIM_SCGC7_FLEXBUS_MASK;" clockDisable="SIM->SCGC7 &amp;= ~SIM_SCGC7_FLEXBUS_MASK;" />
       </peripheral>
@@ -170,6 +170,7 @@
          <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForFlexio" />
          <clock clockEnable="SIM->SCGC2 |= SIM_SCGC2_FLEXIO_MASK;" clockDisable="SIM->SCGC2 &amp;= ~SIM_SCGC2_FLEXIO_MASK;" />
          <irq num="FLEXIO_IRQn" />
+         <param key="trigger_list"  value="External;CMP0;CMP1;;PIT0;PIT1;PIT2;PIT3;FTM0;FTM1;FTM2;FTM3;RTC_Alarm;RTC_Seconds;LPTMR0;" />
       </peripheral>
       <peripheral baseName="FTFE"     instance=""         version="ftfe_xacch">
          <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForFlash" />
@@ -2166,22 +2167,22 @@
          <placement pin="PIT_CH2"       location="Internal" />
          <placement pin="PIT_CH3"       location="Internal" />
          <placement pin="PTA0"          location="SWD_CLK" />
-         <placement pin="PTA1"          location="" />
-         <placement pin="PTA10"         location="" />
-         <placement pin="PTA11"         location="" />
-         <placement pin="PTA12"         location="" />
-         <placement pin="PTA13"         location="" />
-         <placement pin="PTA14"         location="" />
-         <placement pin="PTA15"         location="" />
-         <placement pin="PTA16"         location="" />
-         <placement pin="PTA17"         location="" />
+         <placement pin="PTA1"          location="J27-6" />
+         <placement pin="PTA10"         location="J27-13" />
+         <placement pin="PTA11"         location="J27-14" />
+         <placement pin="PTA12"         location="J27-15" />
+         <placement pin="PTA13"         location="J27-16" />
+         <placement pin="PTA14"         location="J27-17" />
+         <placement pin="PTA15"         location="J27-18" />
+         <placement pin="PTA16"         location="J27-19" />
+         <placement pin="PTA17"         location="J27-20" />
          <placement pin="PTA18"         location="EXTAL_12MHz" />
          <placement pin="PTA19"         location="XTAL_12MHz" />
-         <placement pin="PTA2"          location="" />
-         <placement pin="PTA20"         location="" />
-         <placement pin="PTA21"         location="" />
-         <placement pin="PTA22"         location="" />
-         <placement pin="PTA23"         location="" />
+         <placement pin="PTA2"          location="J27-5" />
+         <placement pin="PTA20"         location="J27-11" />
+         <placement pin="PTA21"         location="J27-12" />
+         <placement pin="PTA22"         location="J27-9" />
+         <placement pin="PTA23"         location="J27-10" />
          <placement pin="PTA24"         location="D1" />
          <placement pin="PTA25"         location="D0" />
          <placement pin="PTA26"         location="" />
@@ -2192,11 +2193,11 @@
          <placement pin="PTA30"         location="D16" />
          <placement pin="PTA31"         location="D17" />
          <placement pin="PTA4"          location="SW2" />
-         <placement pin="PTA5"          location="" />
-         <placement pin="PTA6"          location="" />
+         <placement pin="PTA5"          location="J27-7" />
+         <placement pin="PTA6"          location="J27-8" />
          <placement pin="PTA7"          location="A0" />
-         <placement pin="PTA8"          location="A1" />
-         <placement pin="PTA9"          location="" />
+         <placement pin="PTA8"          location="A1/J27-3" />
+         <placement pin="PTA9"          location="J27-4" />
          <placement pin="PTB0"          location="" />
          <placement pin="PTB1"          location="" />
          <placement pin="PTB10"         location="" />
@@ -2249,20 +2250,20 @@
          <placement pin="PTC9"          location="" />
          <placement pin="PTD0"          location="SW3" />
          <placement pin="PTD1"          location="A2" />
-         <placement pin="PTD10"         location="" />
-         <placement pin="PTD11"         location="" />
-         <placement pin="PTD12"         location="D13" />
-         <placement pin="PTD13"         location="D11" />
-         <placement pin="PTD14"         location="D12" />
-         <placement pin="PTD15"         location="D10" />
+         <placement pin="PTD10"         location="J27-23" />
+         <placement pin="PTD11"         location="J27-24" />
+         <placement pin="PTD12"         location="D13/J27-25" />
+         <placement pin="PTD13"         location="D11/J27-26" />
+         <placement pin="PTD14"         location="D12/J27-27" />
+         <placement pin="PTD15"         location="D10/J27-28" />
          <placement pin="PTD2"          location="" />
          <placement pin="PTD3"          location="" />
          <placement pin="PTD4"          location="" />
          <placement pin="PTD5"          location="" />
          <placement pin="PTD6"          location="A3" />
          <placement pin="PTD7"          location="" />
-         <placement pin="PTD8"          location="" />
-         <placement pin="PTD9"          location="" />
+         <placement pin="PTD8"          location="J27-21" />
+         <placement pin="PTD9"          location="J27-22" />
          <placement pin="PTE0"          location="" />
          <placement pin="PTE1"          location="" />
          <placement pin="PTE10"         location="D18" />

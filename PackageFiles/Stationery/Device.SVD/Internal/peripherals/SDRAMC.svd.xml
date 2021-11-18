@@ -16,6 +16,9 @@ Devices using this peripheral:
          <access>read-write</access>
          <resetValue>0x0</resetValue>
          <resetMask>0xFFFFFFFF</resetMask>
+         <parameters>
+            <parameter> <value>2</value> <name>MEMORY_REGIONS_COUNT</name> <description>Number of SDRAM Regions</description></parameter>
+         </parameters>
          <addressBlock>
             <?width "16" ?>
             <offset>0x42</offset>
@@ -37,13 +40,19 @@ Devices using this peripheral:
                <fields>
                   <field>
                      <name>RC</name>
-                     <description>Refresh count</description>
+                     <description>Refresh count\n
+Controls refresh frequency. The number of bus clocks between refresh cycles is (RC + 1) x 16.</description>
                      <bitOffset>0</bitOffset>
                      <bitWidth>9</bitWidth>
                   </field>
                   <field>
                      <name>RTIM</name>
-                     <description>Refresh timing</description>
+                     <description>Refresh timing\n
+Determines the timing operation of auto-refresh in the SDRAM controller.
+Specifically, it determines the number of bus clocks inserted between a ref command
+and the next possible actv command. 
+This same timing is used for both memory blocks controlled by the SDRAM controller. 
+This corresponds to t(RC) in the SDRAM specifications</description>
                      <bitOffset>9</bitOffset>
                      <bitWidth>2</bitWidth>
                      <enumeratedValues>
@@ -71,195 +80,351 @@ Devices using this peripheral:
                   </field>
                   <field>
                      <name>IS</name>
-                     <description>Initiate self-refresh command</description>
+                     <description>Initiate self-refresh command\n
+When enabled the SDRAMC sends a self command to the SDRAM to enter low-power, self-refresh mode.\n
+When disabled the SDRAMC send a selfx command to the SDRAM to exit low-power self-refresh mode.</description>
                      <bitOffset>11</bitOffset>
                      <bitWidth>1</bitWidth>
                      <enumeratedValues>
                         <enumeratedValue>
                            <name>0b0</name>
-                           <description>Take no action or issue a selfx command to exit self refresh</description>
+                           <description>Disable self-refresh in SDRAM.</description>
                            <value>0b0</value>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>0b1</name>
-                           <description>SDRAM controller sends a self command to both SDRAM blocks to put them in low-power, self-refresh state where they remain until IS is cleared. When IS is cleared, the controller sends a selfx command for the SDRAMs to exit self-refresh. The refresh counter is suspended while the SDRAMs are in self-refresh; the SDRAM controls the refresh period</description>
+                           <description>Enable self-refresh in SDRAM.</description>
                            <value>0b1</value>
                         </enumeratedValue>
                      </enumeratedValues>
                   </field>
                </fields>
             </register>
-            <register>
-               <name>AC0</name>
-               <description>Address and Control Register</description>
+            <cluster>
+               <dim>$(MEMORY_REGIONS_COUNT)</dim>
+               <dimIncrement>8</dimIncrement>
+               <name>BLOCK,@pC@i@f</name>
                <addressOffset>0x48</addressOffset>
-               <resetMask>0x8040</resetMask>
-               <fields>
-                  <field>
-                     <name>IP</name>
-                     <description>Initiate precharge all (pall) command</description>
-                     <bitOffset>3</bitOffset>
-                     <bitWidth>1</bitWidth>
-                     <enumeratedValues>
-                        <enumeratedValue>
-                           <name>0b0</name>
-                           <description>Take no action</description>
-                           <value>0b0</value>
-                        </enumeratedValue>
-                        <enumeratedValue>
-                           <name>0b1</name>
-                           <description>A pall command is sent to the associated SDRAM block. During initialization, this command is executed after all DRAM controller registers are programmed. After IP is set, the next write to an appropriate SDRAM address generates the pall command to the SDRAM block</description>
-                           <value>0b1</value>
-                        </enumeratedValue>
-                     </enumeratedValues>
-                  </field>
-                  <field>
-                     <name>PS</name>
-                     <description>Port size</description>
-                     <bitOffset>4</bitOffset>
-                     <bitWidth>2</bitWidth>
-                     <enumeratedValues>
-                        <enumeratedValue>
-                           <name>0b00</name>
-                           <description>32-bit port</description>
-                           <value>0b00</value>
-                        </enumeratedValue>
-                        <enumeratedValue>
-                           <name>0b01</name>
-                           <description>8-bit port</description>
-                           <value>0b01</value>
-                        </enumeratedValue>
-                        <enumeratedValue>
-                           <name>0b10</name>
-                           <description>16-bit port</description>
-                           <value>0b10</value>
-                        </enumeratedValue>
-                        <enumeratedValue>
-                           <name>0b11</name>
-                           <description>16-bit port</description>
-                           <value>0b11</value>
-                        </enumeratedValue>
-                     </enumeratedValues>
-                  </field>
-                  <field>
-                     <name>IMRS</name>
-                     <description>Initiate mode register set (mrs) command</description>
-                     <bitOffset>6</bitOffset>
-                     <bitWidth>1</bitWidth>
-                     <enumeratedValues>
-                        <enumeratedValue>
-                           <name>0b0</name>
-                           <description>Take no action</description>
-                           <value>0b0</value>
-                        </enumeratedValue>
-                        <enumeratedValue>
-                           <name>0b1</name>
-                           <description>Initiate mrs command</description>
-                           <value>0b1</value>
-                        </enumeratedValue>
-                     </enumeratedValues>
-                  </field>
-                  <field>
-                     <name>CBM</name>
-                     <description>Command bit location</description>
-                     <bitOffset>8</bitOffset>
-                     <bitWidth>3</bitWidth>
-                  </field>
-                  <field>
-                     <name>CASL</name>
-                     <description>CAS Latency</description>
-                     <bitOffset>12</bitOffset>
-                     <bitWidth>2</bitWidth>
-                  </field>
-                  <field>
-                     <name>RE</name>
-                     <description>Refresh enable</description>
-                     <bitOffset>15</bitOffset>
-                     <bitWidth>1</bitWidth>
-                     <enumeratedValues>
-                        <enumeratedValue>
-                           <name>0b0</name>
-                           <description>Do not refresh associated DRAM block</description>
-                           <value>0b0</value>
-                        </enumeratedValue>
-                        <enumeratedValue>
-                           <name>0b1</name>
-                           <description>Refresh associated DRAM block</description>
-                           <value>0b1</value>
-                        </enumeratedValue>
-                     </enumeratedValues>
-                  </field>
-                  <field>
-                     <name>BA</name>
-                     <description>Base address register</description>
-                     <bitOffset>18</bitOffset>
-                     <bitWidth>14</bitWidth>
-                  </field>
-               </fields>
-            </register>
-            <register>
-               <name>CM0</name>
-               <description>Control Mask</description>
-               <addressOffset>0x4C</addressOffset>
-               <resetMask>0x1</resetMask>
-               <fields>
-                  <field>
-                     <name>V</name>
-                     <description>Valid</description>
-                     <bitOffset>0</bitOffset>
-                     <bitWidth>1</bitWidth>
-                     <enumeratedValues>
-                        <enumeratedValue>
-                           <name>0b0</name>
-                           <description>Do not decode DRAM accesses</description>
-                           <value>0b0</value>
-                        </enumeratedValue>
-                        <enumeratedValue>
-                           <name>0b1</name>
-                           <description>Registers controlling the DRAM block are initialized; DRAM accesses can be decoded</description>
-                           <value>0b1</value>
-                        </enumeratedValue>
-                     </enumeratedValues>
-                  </field>
-                  <field>
-                     <name>WP</name>
-                     <description>Write protect</description>
-                     <bitOffset>8</bitOffset>
-                     <bitWidth>1</bitWidth>
-                     <enumeratedValues>
-                        <enumeratedValue>
-                           <name>0b0</name>
-                           <description>Allow write accesses</description>
-                           <value>0b0</value>
-                        </enumeratedValue>
-                        <enumeratedValue>
-                           <name>0b1</name>
-                           <description>Ignore write accesses. The DRAM controller ignores write accesses to the memory block and an address exception occurs. Write accesses to a write-protected DRAM region are compared in the chip select module for a hit. If no hit occurs, an external bus cycle is generated. If this external bus cycle is not acknowledged, an access exception occurs</description>
-                           <value>0b1</value>
-                        </enumeratedValue>
-                     </enumeratedValues>
-                  </field>
-                  <field>
-                     <name>BAM</name>
-                     <description>Base address mask</description>
-                     <bitOffset>18</bitOffset>
-                     <bitWidth>14</bitWidth>
-                     <enumeratedValues>
-                        <enumeratedValue>
-                           <name>0b0</name>
-                           <description>The associated address bit is used in decoding the DRAM hit to a memory block</description>
-                           <value>0b0</value>
-                        </enumeratedValue>
-                        <enumeratedValue>
-                           <name>0b1</name>
-                           <description>The associated address bit is not used in the DRAM hit decode</description>
-                           <value>0b1</value>
-                        </enumeratedValue>
-                     </enumeratedValues>
-                  </field>
-               </fields>
-            </register>
-            <register derivedFrom="AC0"> <name>AC1</name> <addressOffset>0x50</addressOffset> </register>
-            <register derivedFrom="CM0"> <name>CM1</name> <addressOffset>0x54</addressOffset> </register>
+               <register>
+                  <name>AC</name>
+                  <description>Address and Control Register</description>
+                  <addressOffset>0x0</addressOffset>
+                  <resetMask>0x8040</resetMask>
+                  <fields>
+                     <field>
+                        <name>IP</name>
+                        <description>Initiate precharge all (pall) command.\n
+During initialization, this command is executed after all DRAM controller registers are programmed. 
+After IP is set, the next write to an appropriate SDRAM address generates the pall command to the SDRAM block</description>
+                        <bitOffset>3</bitOffset>
+                        <bitWidth>1</bitWidth>
+                        <enumeratedValues>
+                           <enumeratedValue>
+                              <name>0b0</name>
+                              <description>Take no action</description>
+                              <value>0b0</value>
+                           </enumeratedValue>
+                           <enumeratedValue>
+                              <name>0b1</name>
+                              <description>A pall command is sent to the associated SDRAM block.</description>
+                              <value>0b1</value>
+                           </enumeratedValue>
+                        </enumeratedValues>
+                     </field>
+                     <field>
+                        <name>PS</name>
+                        <description>Port size.\n
+Indicates the port size of the associated block of SDRAM, which allows for dynamic sizing of associated SDRAM accesses.</description>
+                        <bitOffset>4</bitOffset>
+                        <bitWidth>2</bitWidth>
+                        <enumeratedValues>
+                           <enumeratedValue>
+                              <name>0b00</name>
+                              <description>32-bit port</description>
+                              <value>0b00</value>
+                           </enumeratedValue>
+                           <enumeratedValue>
+                              <name>0b01</name>
+                              <description>8-bit port</description>
+                              <value>0b01</value>
+                           </enumeratedValue>
+                           <enumeratedValue>
+                              <name>0b10</name>
+                              <description>16-bit port</description>
+                              <value>0b10</value>
+                           </enumeratedValue>
+                           <enumeratedValue>
+                              <name>0b11</name>
+                              <description>16-bit port</description>
+                              <value>0b11</value>
+                           </enumeratedValue>
+                        </enumeratedValues>
+                     </field>
+                     <field>
+                        <name>IMRS</name>
+                        <description>Initiate mode register set (mrs) command\n
+Setting IMRS generates a MRS command to the associated SDRAMs. 
+In initialization, IMRS should be set only after all DRAM controller registers are
+initialized and pall and refresh commands have been issued.
+After IMRS is set, the next access to an SDRAM block programs the SDRAM’s mode register.
+The DRAM controller clears IMRS after the MRS command finishes.</description>
+                        <bitOffset>6</bitOffset>
+                        <bitWidth>1</bitWidth>
+                        <enumeratedValues>
+                           <enumeratedValue>
+                              <name>0b0</name>
+                              <description>Take no action</description>
+                              <value>0b0</value>
+                           </enumeratedValue>
+                           <enumeratedValue>
+                              <name>0b1</name>
+                              <description>Initiate mrs command</description>
+                              <value>0b1</value>
+                           </enumeratedValue>
+                        </enumeratedValues>
+                     </field>
+                     <field>
+                        <name>CBM</name>
+                        <description>Command bit location\n
+Because different SDRAM configurations cause the command lines on the memory to correspond to a
+different address, the location of command bit is programmable.
+CB determines the address onto which the command bit are multiplexed.</description>
+                        <bitOffset>8</bitOffset>
+                        <bitWidth>3</bitWidth>
+                        <enumeratedValues>
+                           <enumeratedValue>
+                              <name>0b000</name>
+                              <description>SDRAM_A17 - Not possible for an 8-bit port</description>
+                              <value>0b000</value>
+                           </enumeratedValue>
+                           <enumeratedValue>
+                              <name>0b001</name>
+                              <description>SDRAM_A18</description>
+                              <value>0b001</value>
+                           </enumeratedValue>
+                           <enumeratedValue>
+                              <name>0b010</name>
+                              <description>SDRAM_A19</description>
+                              <value>0b010</value>
+                           </enumeratedValue>
+                           <enumeratedValue>
+                              <name>0b011</name>
+                              <description>SDRAM_A20</description>
+                              <value>0b011</value>
+                           </enumeratedValue>
+                           <enumeratedValue>
+                              <name>0b100</name>
+                              <description>SDRAM_A21</description>
+                              <value>0b100</value>
+                           </enumeratedValue>
+                           <enumeratedValue>
+                              <name>0b101</name>
+                              <description>SDRAM_A22</description>
+                              <value>0b101</value>
+                           </enumeratedValue>
+                           <enumeratedValue>
+                              <name>0b110</name>
+                              <description>SDRAM_A23</description>
+                              <value>0b110</value>
+                           </enumeratedValue>
+                           <enumeratedValue>
+                              <name>0b111</name>
+                              <description>SDRAM_A24 - Not supported</description>
+                              <value>0b111</value>
+                           </enumeratedValue>
+                        </enumeratedValues>
+                     </field>
+                     <field>
+                        <name>CASL</name>
+                        <description>CAS Latency\n
+Trcd, Tcasl, Tras, Trp, Trwm-Trdl,Tep </description>
+                        <bitOffset>12</bitOffset>
+                        <bitWidth>2</bitWidth>
+                        <enumeratedValues>
+                           <enumeratedValue>
+                              <name>0b00</name>
+                              <description>CASL-112111</description>
+                              <value>0b00</value>
+                           </enumeratedValue>
+                           <enumeratedValue>
+                              <name>0b01</name>
+                              <description>CASL-224211</description>
+                              <value>0b01</value>
+                           </enumeratedValue>
+                           <enumeratedValue>
+                              <name>0b10</name>
+                              <description>CASL-336311</description>
+                              <value>0b10</value>
+                           </enumeratedValue>
+                           <enumeratedValue>
+                              <name>0b11</name>
+                              <description>CASL-336311</description>
+                              <value>0b11</value>
+                           </enumeratedValue>
+                        </enumeratedValues>
+                     </field>
+                     <field>
+                        <name>RE</name>
+                        <description>Refresh enable</description>
+                        <bitOffset>15</bitOffset>
+                        <bitWidth>1</bitWidth>
+                        <enumeratedValues>
+                           <enumeratedValue>
+                              <name>0b0</name>
+                              <description>Do not refresh associated DRAM block</description>
+                              <value>0b0</value>
+                           </enumeratedValue>
+                           <enumeratedValue>
+                              <name>0b1</name>
+                              <description>Refresh associated DRAM block</description>
+                              <value>0b1</value>
+                           </enumeratedValue>
+                        </enumeratedValues>
+                     </field>
+                     <field>
+                        <name>BA</name>
+                        <description>Base address register
+Base address for accesses to this block</description>
+                        <bitOffset>18</bitOffset>
+                        <bitWidth>14</bitWidth>
+                     </field>
+                  </fields>
+               </register>
+               <register>
+                  <name>CM</name>
+                  <description>Control Mask</description>
+                  <addressOffset>0x4</addressOffset>
+                  <resetMask>0x1</resetMask>
+                  <fields>
+                     <field>
+                        <name>V</name>
+                        <description>Valid\n
+Cleared at reset to ensure that the DRAM block is not erroneously decoded.
+Set after registers controlling the DRAM block are initialized</description>
+                        <bitOffset>0</bitOffset>
+                        <bitWidth>1</bitWidth>
+                        <enumeratedValues>
+                           <enumeratedValue>
+                              <name>0b0</name>
+                              <description>Do not decode DRAM accesses</description>
+                              <value>0b0</value>
+                           </enumeratedValue>
+                           <enumeratedValue>
+                              <name>0b1</name>
+                              <description>DRAM accesses can be decoded</description>
+                              <value>0b1</value>
+                           </enumeratedValue>
+                        </enumeratedValues>
+                     </field>
+                     <field>
+                        <name>WP</name>
+                        <description>Write protect\n
+Determines whether the associated block of DRAM is write protected.
+An address exception is generated on writes to write-protected regions.</description>
+                        <bitOffset>8</bitOffset>
+                        <bitWidth>1</bitWidth>
+                        <enumeratedValues>
+                           <enumeratedValue>
+                              <name>0b0</name>
+                              <description>Allow write accesses</description>
+                              <value>0b0</value>
+                           </enumeratedValue>
+                           <enumeratedValue>
+                              <name>0b1</name>
+                              <description>Ignore write accesses.</description>
+                              <value>0b1</value>
+                           </enumeratedValue>
+                        </enumeratedValues>
+                     </field>
+                     <field>
+                        <name>BAM</name>
+                        <description>Base Address Mask\n
+Defines the associated chip-select&apos;s block size by masking address bits\n
+1's in this register mask address bits.
+If masked, the corresponding address bit in CSAR is a don&apos;t care in the chip-select decode
+Other bit patterns are possible but unlikely</description>
+                        <bitOffset>18</bitOffset>
+                        <bitWidth>14</bitWidth>
+                        <enumeratedValues>
+                           <enumeratedValue>
+                              <name>0b00000000000000</name>
+                              <description>256kiB</description>
+                              <value>0b00000000000000</value>
+                           </enumeratedValue>
+                           <enumeratedValue>
+                              <name>0b00000000000001</name>
+                              <description>512kiB</description>
+                              <value>0b00000000000001</value>
+                           </enumeratedValue>
+                           <enumeratedValue>
+                              <name>0b00000000000011</name>
+                              <description>1MiB</description>
+                              <value>0b00000000000011</value>
+                           </enumeratedValue>
+                           <enumeratedValue>
+                              <name>0b00000000000111</name>
+                              <description>2MiB</description>
+                              <value>0b00000000000111</value>
+                           </enumeratedValue>
+                           <enumeratedValue>
+                              <name>0b00000000001111</name>
+                              <description>4MiB</description>
+                              <value>0b00000000001111</value>
+                           </enumeratedValue>
+                           <enumeratedValue>
+                              <name>0b00000000011111</name>
+                              <description>8MiB</description>
+                              <value>0b00000000011111</value>
+                           </enumeratedValue>
+                           <enumeratedValue>
+                              <name>0b00000000111111</name>
+                              <description>16MiB</description>
+                              <value>0b00000000111111</value>
+                           </enumeratedValue>
+                           <enumeratedValue>
+                              <name>0b00000001111111</name>
+                              <description>32MiB</description>
+                              <value>0b00000001111111</value>
+                           </enumeratedValue>
+                           <enumeratedValue>
+                              <name>0b00000011111111</name>
+                              <description>64MiB</description>
+                              <value>0b00000011111111</value>
+                           </enumeratedValue>
+                           <enumeratedValue>
+                              <name>0b00000111111111</name>
+                              <description>128MiB</description>
+                              <value>0b00000111111111</value>
+                           </enumeratedValue>
+                           <enumeratedValue>
+                              <name>0b00001111111111</name>
+                              <description>256MiB</description>
+                              <value>0b00001111111111</value>
+                           </enumeratedValue>
+                           <enumeratedValue>
+                              <name>0b00011111111111</name>
+                              <description>512MiB</description>
+                              <value>0b00011111111111</value>
+                           </enumeratedValue>
+                           <enumeratedValue>
+                              <name>0b00111111111111</name>
+                              <description>1GiB</description>
+                              <value>0b00111111111111</value>
+                           </enumeratedValue>
+                           <enumeratedValue>
+                              <name>0b01111111111111</name>
+                              <description>2GiB</description>
+                              <value>0b01111111111111</value>
+                           </enumeratedValue>
+                           <enumeratedValue>
+                              <name>0b11111111111111</name>
+                              <description>4GiB</description>
+                              <value>0b11111111111111</value>
+                           </enumeratedValue>
+                        </enumeratedValues>
+                     </field>
+                  </fields>
+               </register>
+            </cluster>
          </registers>
       </peripheral>

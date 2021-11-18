@@ -2,12 +2,16 @@
 <!DOCTYPE peripheralPage SYSTEM "_menu.dtd" >
 <!-- sdramc.xml -->
 
-<peripheralPage xmlns:xi="http://www.w3.org/2001/XInclude" name="_instance" description="Inter-Integrated-Circuit">
-   
-   <xi:include href="_default_instance.xml"/>
+<peripheralPage xmlns:xi="http://www.w3.org/2001/XInclude" name="_instance" description="SDRAM Controller">
 
+   <xi:include href="_mapPinsOption_on.xml"/>
+   <xi:include href="_default_instance.xml"/>
    <xi:include href="_default_pcr.xml"/>
    
+   <projectActionList id = "sdramc_files" >
+      <copy source="Project_Headers/sdramc.h"     target="Project_Headers/sdramc.h"     overwrite="true" derived="true" />
+      <copy source="Snippets/sdramc-example.cpp"  target="Snippets/sdramc-example.cpp"  overwrite="true" derived="true" />
+   </projectActionList>
    
    <xi:include href="_clockOption.xml"/>
    

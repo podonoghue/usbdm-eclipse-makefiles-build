@@ -111,7 +111,6 @@ private:
    /**
     * This class is not intended to be instantiated
     */
-   PitBase_T() = delete;
    PitBase_T(const PitBase_T&) = delete;
    PitBase_T(PitBase_T&&) = delete;
 
@@ -133,6 +132,9 @@ protected:
    }
 
 public:
+   /// Defaulted constructor
+   PitBase_T() = default;
+
    /**
     * Allocate PIT channel.
     *

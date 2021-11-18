@@ -37,6 +37,12 @@ namespace USBDM {
  */
 class Gpio {
 
+   /**
+    * This class is not intended to be instantiated by copy
+    */
+   Gpio(const Gpio&) = delete;
+   Gpio(Gpio&&) = delete;
+
 public:
    /// Underlying GPIO hardware
    const    HardwarePtr<GPIO_Type>     gpio;
@@ -55,7 +61,8 @@ protected:
     * @param bitNo      Bit number within GPIO
     * @param polarity   Polarity of bit (ActiveHigh or ActiveLow)
     */
-   constexpr Gpio(uint32_t gpio, uint8_t bitNo, Polarity polarity) : gpio(gpio), bitMask(1<<bitNo), flipMask(isActiveLow(polarity)?bitMask:0) {
+   constexpr Gpio(uint32_t gpio, uint8_t bitNo, Polarity polarity) :
+      gpio(gpio), bitMask(1<<bitNo), flipMask(isActiveLow(polarity)?bitMask:0) {
    }
 
    /**

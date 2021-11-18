@@ -45,16 +45,19 @@ Devices using this peripheral:
       MKV31F51212
 -->
       <peripheral>
-         <?sourceFile "FB" ?>
-         <name>FB</name>
+         <?sourceFile "FLEXBUS" ?>
+         <name>FLEXBUS</name>
          <description>FlexBus external bus interface</description>
-         <groupName>FB</groupName>
-         <headerStructName>FB</headerStructName>
+         <groupName>FLEXBUS</groupName>
+         <headerStructName>FLEXBUS</headerStructName>
          <baseAddress>0x4000C000</baseAddress>
          <size>32</size>
          <access>read-write</access>
          <resetValue>0x0</resetValue>
          <resetMask>0xFFFFFFFF</resetMask>
+         <parameters>
+            <parameter> <value>6</value> <name>MEMORY_REGIONS_COUNT</name> <description>Number of Select Regions</description></parameter>
+         </parameters>
          <addressBlock>
             <offset>0x0</offset>
             <size>0x48</size>
@@ -67,9 +70,8 @@ Devices using this peripheral:
          </addressBlock>
          <registers>
             <cluster>
-               <dim>6</dim>
+               <dim>$(MEMORY_REGIONS_COUNT)</dim>
                <dimIncrement>12</dimIncrement>
-               <dimIndex>0,1,2,3,4,5</dimIndex>
                <name>CS,@p@f@i</name>
                <addressOffset>0x0</addressOffset>
                <register>
@@ -137,19 +139,96 @@ Attempting writes to a protected range results in a bus error termination of the
                         <name>BAM</name>
                         <description>Base Address Mask\n
 Defines the associated chip-select&apos;s block size by masking address bits\n
-If masked, the corresponding address bit in CSAR is a don&apos;t care in the chip-select decode</description>
+1's in this register mask address bits.
+If masked, the corresponding address bit in CSAR is a don&apos;t care in the chip-select decode
+Other bit patterns are possible but unlikely</description>
                         <bitOffset>16</bitOffset>
                         <bitWidth>16</bitWidth>
                         <enumeratedValues>
                            <enumeratedValue>
-                              <name>0b0</name>
-                              <description>Bit is used</description>
-                              <value>0b0</value>
+                              <name>0b0000000000000000</name>
+                              <description>64kiB</description>
+                              <value>0b0000000000000000</value>
                            </enumeratedValue>
                            <enumeratedValue>
-                              <name>0b1</name>
-                              <description>Bit is masked</description>
-                              <value>0b1</value>
+                              <name>0b0000000000000001</name>
+                              <description>128kiB</description>
+                              <value>0b0000000000000001</value>
+                           </enumeratedValue>
+                           <enumeratedValue>
+                              <name>0b0000000000000011</name>
+                              <description>256kiB</description>
+                              <value>0b0000000000000011</value>
+                           </enumeratedValue>
+                           <enumeratedValue>
+                              <name>0b0000000000000111</name>
+                              <description>512kiB</description>
+                              <value>0b0000000000000111</value>
+                           </enumeratedValue>
+                           <enumeratedValue>
+                              <name>0b0000000000001111</name>
+                              <description>1MiB</description>
+                              <value>0b0000000000001111</value>
+                           </enumeratedValue>
+                           <enumeratedValue>
+                              <name>0b0000000000011111</name>
+                              <description>2MiB</description>
+                              <value>0b0000000000011111</value>
+                           </enumeratedValue>
+                           <enumeratedValue>
+                              <name>0b0000000000111111</name>
+                              <description>4MiB</description>
+                              <value>0b0000000000111111</value>
+                           </enumeratedValue>
+                           <enumeratedValue>
+                              <name>0b0000000001111111</name>
+                              <description>8MiB</description>
+                              <value>0b0000000001111111</value>
+                           </enumeratedValue>
+                           <enumeratedValue>
+                              <name>0b0000000011111111</name>
+                              <description>16MiB</description>
+                              <value>0b0000000011111111</value>
+                           </enumeratedValue>
+                           <enumeratedValue>
+                              <name>0b0000000111111111</name>
+                              <description>32MiB</description>
+                              <value>0b0000000111111111</value>
+                           </enumeratedValue>
+                           <enumeratedValue>
+                              <name>0b0000001111111111</name>
+                              <description>64MiB</description>
+                              <value>0b0000001111111111</value>
+                           </enumeratedValue>
+                           <enumeratedValue>
+                              <name>0b0000011111111111</name>
+                              <description>128MiB</description>
+                              <value>0b0000011111111111</value>
+                           </enumeratedValue>
+                           <enumeratedValue>
+                              <name>0b0000111111111111</name>
+                              <description>256MiB</description>
+                              <value>0b0000111111111111</value>
+                           </enumeratedValue>
+                           <enumeratedValue>
+                              <name>0b0001111111111111</name>
+                              <description>512MiB</description>
+                              <value>0b0001111111111111</value>
+                           </enumeratedValue>
+                           <enumeratedValue>
+                              <name>0b0011111111111111</name>
+                              <description>1GiB</description>
+                              <value>0b0011111111111111</value>
+                           </enumeratedValue>
+                           <enumeratedValue>
+                              <name>0b0111111111111111</name>
+                              <description>2GiB</description>
+                              <value>0b0111111111111111</value>
+                           </enumeratedValue>
+                           <enumeratedValue>
+                              <name>0b1111111111111111</name>
+                              <description>4GiB</description>
+                              <value>0b1111111111111111</value>
                            </enumeratedValue>
                         </enumeratedValues>
                      </field>

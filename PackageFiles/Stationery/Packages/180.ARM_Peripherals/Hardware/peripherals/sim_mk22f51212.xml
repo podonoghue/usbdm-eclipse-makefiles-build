@@ -200,7 +200,9 @@
          \tstatic void setClkout(SimClkoutSel simClkoutSel) {
          \t   sim->SOPT2 = (sim->SOPT2&~SIM_SOPT2_CLKOUTSEL_MASK) | simClkoutSel;
          \t}\n\n
-
+      ]]></template>
+      
+      <template><![CDATA[
          \t/**
          \t * Set Peripheral clock source
          \t *

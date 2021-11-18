@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE peripheralPage SYSTEM "_menu.dtd" >
+<!-- flexbus_def.xml -->
+
+<peripheralPage xmlns:xi="http://www.w3.org/2001/XInclude" name="_instance" description="External Bus Interface">
+
+   <xi:include href="_mapPinsOption_on.xml"/>
+   <xi:include href="_default_instance.xml"/>
+   <xi:include href="_default_pcr.xml"/>
+
+   <aliasOption key="/SIM/system_bus_clock" />
+   
+   <projectActionList id = "flexbus_files" >
+      <copy source="Project_Headers/flexbus.h"            target="Project_Headers/flexbus.h"            overwrite="true"  derived="true" />
+      <copy source="Snippets/flexbus-example.cpp"         target="Snippets/flexbus-example.cpp"         overwrite="true"  derived="true" />
+   </projectActionList>
+   
+   <xi:include href="_clockOption.xml"/>
+   
+   <signals/>
+
+</peripheralPage>

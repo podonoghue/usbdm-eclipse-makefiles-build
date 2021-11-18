@@ -17,11 +17,51 @@
  */
 #include <stddef.h>
 #include "derivative.h"
+#include "error.h"
 
 /*
  * Default port information
  */
 namespace USBDM {
+
+/**
+ * Convenience names for common priority levels
+ */
+enum NvicPriority {
+   NvicPriority_VeryHigh     = 0,  //!< NvicPriority_VeryHigh
+   NvicPriority_High         = 2,  //!< NvicPriority_High
+   NvicPriority_MidHigh      = 5,  //!< NvicPriority_MidHigh
+   NvicPriority_Normal       = 8,  //!< NvicPriority_Normal
+   NvicPriority_Midlow       = 11, //!< NvicPriority_Midlow
+   NvicPriority_Low          = 13, //!< NvicPriority_Low
+   NvicPriority_VeryLow      = 15, //!< NvicPriority_VeryLow
+   NvicPriority_NotInstalled = -1, //!< Indicates handler is not installed
+};
+
+/**
+ * Class to wrap a memory pointer as an array
+ *
+ * @tparam T         Type of array element
+ * @tparam address   Memory address of start of array
+ * @tparam size      Size of array (in elements)
+ */
+template<typename T, uint32_t address, size_t Size>
+class MemoryAddressWrapper {
+
+public:
+
+   static constexpr size_t size = Size;
+
+   /**
+    * Convert to reference to the external memory location
+    *
+    * @return Reference to element
+    */
+   constexpr T & __attribute__((always_inline)) operator[](size_t index) const {
+      usbdm_assert(index<size, "Index out of range");
+      return (reinterpret_cast<T *>(address))[index];
+   }
+};
 
 /**
  * This is to allow use of hardware pointers in classes with a constexpr constructor !
@@ -37,7 +77,7 @@ private:
    HardwarePtr(HardwarePtr&&) = delete;
 
    // Address of hardware
-   const uint32_t ptr;
+   const uintptr_t ptr;
 
 public:
    /**
@@ -45,25 +85,25 @@ public:
     *
     * @param ptr  Address of hardware to be wrapped.
     */
-   constexpr HardwarePtr(uint32_t ptr) : ptr(ptr){};
+   constexpr __attribute__((always_inline))  HardwarePtr(uintptr_t ptr) : ptr(ptr){};
    /**
     * Convert to pointer to the hardware
     *
     * @return Hardware pointer
     */
-   auto __attribute__((always_inline))  operator->() const { return reinterpret_cast<volatile T *>(ptr);}
+   constexpr auto __attribute__((always_inline))  operator->() const { return reinterpret_cast<volatile T *>(ptr);}
    /**
     * Convert to reference to the hardware
     *
     * @return Hardware pointer
     */
-   auto & __attribute__((always_inline))  operator*() const { return *reinterpret_cast<volatile T *>(ptr);}
+   constexpr auto & __attribute__((always_inline))  operator*() const { return *reinterpret_cast<volatile T *>(ptr);}
    /**
     * Convert to uint32_t
     *
-    * @return Hardware pointer
+    * @return uint32
     */
-   __attribute__((always_inline))  operator uint32_t() const { return ptr; }
+   constexpr __attribute__((always_inline))  operator uint32_t() const { return ptr; }
 };
 
 /**
@@ -85,9 +125,9 @@ void enableNvicInterrupt(IRQn_Type irqNum, uint32_t nvicPriority);
 /**
  * Used to indicate or control the polarity of an I/O with selectable polarity
  */
-enum Polarity : bool {
-   ActiveLow  = false,  //!< Signal is active low i.e. Active => Low level, Inactive => High level
-   ActiveHigh = true    //!< Signal is active high i.e. Active => High level, Inactive => Low level
+enum Polarity : uint32_t {
+   ActiveLow  = 0xFFFFFFFFU,  //!< Signal is active low i.e. Active => Low level, Inactive => High level
+   ActiveHigh = 0x00000000U,  //!< Signal is active high i.e. Active => High level, Inactive => Low level
 };
 
 /** Pin number indicating the function has a fixed mapping to a pin */

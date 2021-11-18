@@ -20,7 +20,6 @@
 #ifndef INCLUDE_USBDM_HARDWARE_H_
 #define INCLUDE_USBDM_HARDWARE_H_
 
-#include <stdint.h>
 #include "error.h"
 #include "pin_mapping.h"
 #include "delay.h"
@@ -53,6 +52,8 @@ $(/GPIOE/Declarations:   // No GPIOE declarations found)
 $(/DAC0/Declarations:    // No DAC0 declarations Found)
 $(/DAC1/Declarations:    // No DAC1 declarations Found)
 $(/EWM/Declarations:     // No EWM declarations found)
+$(/FLEXBUS/Declarations: // No EWM declarations found)
+$(/FLEXIO/Declarations:  // No declarations Found)
 $(/FTM0/Declarations:    // No FTM0 declarations found)
 $(/FTM1/Declarations:    // No FTM1 declarations found)
 $(/FTM2/Declarations:    // No FTM2 declarations found)
@@ -77,11 +78,14 @@ $(/PDB1/Declarations:    // No PDB1 declarations found)
 $(/PMC/Declarations:     // No PMC declarations found)
 $(/RCM/Declarations:     // No RCM declarations found)
 $(/RTC/Declarations:     // No RTC declarations found)
+$(/SDHC0/Declarations:   // No SDHC0 declarations Found)
+$(/SDRAMC/Declarations:  // No SDRAMC declarations Found)
 $(/SMC/Declarations:     // No SMC declarations found)
 $(/SPI0/Declarations:    // No SPI0 declarations found)
 $(/SPI1/Declarations:    // No SPI1 declarations found)
 $(/SPI2/Declarations:    // No SPI2 declarations found)
 $(/SPI3/Declarations:    // No SPI3 declarations found)
+$(/TRNG0/Declarations:   // No TRNG0 declarations Found)
 $(/TSI/Declarations:     // No TSI declarations found)
 $(/TSI0/Declarations:    // No TSI0 declarations found)
 $(/UART0/Declarations:   // No UART0 declarations found)

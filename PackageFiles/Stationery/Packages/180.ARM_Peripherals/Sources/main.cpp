@@ -1,4 +1,4 @@
-/*
+/**
  ============================================================================
  * @file    main.cpp (180.ARM_Peripherals/Sources/main.cpp)
  * @brief   Basic C++ demo

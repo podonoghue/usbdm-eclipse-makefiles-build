@@ -98,7 +98,7 @@
          <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForEwm" />
          <clock clockEnable="SIM->SCGC4 |= SIM_SCGC4_EWM_MASK;" clockDisable="SIM->SCGC4 &amp;= ~SIM_SCGC4_EWM_MASK;" />
       </peripheral>
-      <peripheral baseName="FB"       instance=""         version="fb">
+      <peripheral baseName="FLEXBUS"  instance=""         version="flexbus">
          <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForFlexBus" />
          <clock clockEnable="SIM->SCGC7 |= SIM_SCGC7_FLEXBUS_MASK;" clockDisable="SIM->SCGC7 &amp;= ~SIM_SCGC7_FLEXBUS_MASK;" />
       </peripheral>

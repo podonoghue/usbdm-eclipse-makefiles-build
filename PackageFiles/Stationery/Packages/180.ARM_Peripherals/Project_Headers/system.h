@@ -13,8 +13,9 @@
 extern "C" {
 #endif
 
-extern uint32_t SystemCoreClock; //!< System core clock frequency in Hz
-extern uint32_t SystemBusClock;  //!< System bus clock frequency in Hz
+extern uint32_t SystemCoreClock;    //!< System core clock frequency in Hz
+extern uint32_t SystemBusClock;     //!< System bus clock frequency in Hz
+extern uint32_t SystemFlexbusClock; //!< System Flexbus clock frequency in Hz
 
 /**
  *  @brief Low-level initialize the system

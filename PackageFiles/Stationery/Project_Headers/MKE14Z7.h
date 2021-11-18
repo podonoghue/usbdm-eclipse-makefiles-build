@@ -5,7 +5,7 @@
  *           Equivalent: 
  *
  * @version  V1.6
- * @date     2021/08
+ * @date     2021/11
  *
  *******************************************************************************************************/
 
@@ -1560,8 +1560,10 @@ typedef struct EWM_Type {
 /**
  * @brief Flexible I/O
  */
-#define FLEXIO_SHIFT_COUNT   4          /**< Number of shifters                                 */
-#define FLEXIO_TIMER_COUNT   4          /**< Number of shifters                                 */
+#define FLEXIO_PIN_COUNT     8          /**< Number of Pins implemented                         */
+#define FLEXIO_SHIFTER_COUNT 4          /**< Number of Shifters implemented                     */
+#define FLEXIO_TIMER_COUNT   4          /**< Number of Timers implemented                       */
+#define FLEXIO_TRIGGER_COUNT 4          /**< Number of external triggers implemented            */
 /**
 * @addtogroup FLEXIO_structs_GROUP FLEXIO struct
 * @brief Struct for FLEXIO
@@ -1582,17 +1584,17 @@ typedef struct FLEXIO_Type {
         uint8_t   RESERVED_1[4];                /**< 002C: 0x4 bytes                                                    */
    __IO uint32_t  SHIFTSDEN;                    /**< 0030: Shifter Status DMA Enable                                    */
         uint8_t   RESERVED_2[76];               /**< 0034: 0x4C bytes                                                   */
-   __IO uint32_t  SHIFTCTL[FLEXIO_SHIFT_COUNT]; /**< 0080: Shifter Control N Register                                   */
+   __IO uint32_t  SHIFTCTL[FLEXIO_SHIFTER_COUNT]; /**< 0080: Shifter Control N Register                                   */
         uint8_t   RESERVED_3[112];              /**< 0090: 0x70 bytes                                                   */
-   __IO uint32_t  SHIFTCFG[FLEXIO_SHIFT_COUNT]; /**< 0100: Shifter Configuration N Register                             */
+   __IO uint32_t  SHIFTCFG[FLEXIO_SHIFTER_COUNT]; /**< 0100: Shifter Configuration N Register                             */
         uint8_t   RESERVED_4[240];              /**< 0110: 0xF0 bytes                                                   */
-   __IO uint32_t  SHIFTBUF[FLEXIO_SHIFT_COUNT]; /**< 0200: Shifter Buffer N Register                                    */
+   __IO uint32_t  SHIFTBUF[FLEXIO_SHIFTER_COUNT]; /**< 0200: Shifter Buffer N Register                                    */
         uint8_t   RESERVED_5[112];              /**< 0210: 0x70 bytes                                                   */
-   __IO uint32_t  SHIFTBUFBIS[FLEXIO_SHIFT_COUNT]; /**< 0280: Shifter Buffer N Bit Swapped Register                        */
+   __IO uint32_t  SHIFTBUFBIS[FLEXIO_SHIFTER_COUNT]; /**< 0280: Shifter Buffer N Bit Swapped Register                        */
         uint8_t   RESERVED_6[112];              /**< 0290: 0x70 bytes                                                   */
-   __IO uint32_t  SHIFTBUFBYS[FLEXIO_SHIFT_COUNT]; /**< 0300: Shifter Buffer N Byte Swapped Register                       */
+   __IO uint32_t  SHIFTBUFBYS[FLEXIO_SHIFTER_COUNT]; /**< 0300: Shifter Buffer N Byte Swapped Register                       */
         uint8_t   RESERVED_7[112];              /**< 0310: 0x70 bytes                                                   */
-   __IO uint32_t  SHIFTBUFBBS[FLEXIO_SHIFT_COUNT]; /**< 0380: Shifter Buffer N Bit Byte Swapped Register                   */
+   __IO uint32_t  SHIFTBUFBBS[FLEXIO_SHIFTER_COUNT]; /**< 0380: Shifter Buffer N Bit Byte Swapped Register                   */
         uint8_t   RESERVED_8[112];              /**< 0390: 0x70 bytes                                                   */
    __IO uint32_t  TIMCTL[FLEXIO_TIMER_COUNT];   /**< 0400: Timer Control N Register                                     */
         uint8_t   RESERVED_9[112];              /**< 0410: 0x70 bytes                                                   */

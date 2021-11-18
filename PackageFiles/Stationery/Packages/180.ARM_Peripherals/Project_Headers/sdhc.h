@@ -20,10 +20,9 @@
 #include "pin_mapping.h"
 
 namespace USBDM {
-
 /**
- * @addtogroup SDHC_Group SDHC, Secured digital host controller
- * @brief Abstraction for USB Secured digital host controller
+ * @addtogroup SDHC_Group SDHC, Secure Digital High Capacity Interface
+ * @brief Abstraction for Secure Digital High Capacity Interface
  * @{
  */
 
@@ -137,7 +136,6 @@ template<class Info> SDHCCallbackFunction SdhcBase_T<Info>::callback = SdhcBase_
 
 #if defined(USBDM_SDHC0_IS_DEFINED)
 class Sdhc0 : public SdhcBase_T<Sdhc0Info> {};
-$(/SDHC0/Declarations:   // No declarations Found)
 #endif
 
 /**
