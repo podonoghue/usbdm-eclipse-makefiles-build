@@ -17,6 +17,76 @@
    
    <xi:include href="_clockOption.xml"/>
    
+   <template namespace="usbdm"><![CDATA[
+      \t/**
+      \t * FlexBus Signal Group 1 Multiplex control.
+      \t * Controls the multiplexing of the FB_ALE, FB_CS1 , and FB_TS signals.
+      \t */
+      \tenum FlexbusGroup1 {
+      \t   FlexbusGroup1_FB_ALE       = FLEXBUS_CSPMCR_GROUP1(0b0000), /**< FB_ALE */
+      \t   FlexbusGroup1_FB_CS1       = FLEXBUS_CSPMCR_GROUP1(0b0001), /**< FB_CS1 */
+      \t   FlexbusGroup1_FB_TS        = FLEXBUS_CSPMCR_GROUP1(0b0010), /**< FB_TS */
+      \t};
+      \t/**
+      \t * FlexBus Signal Group 2 Multiplex control.
+      \t * Controls the multiplexing of the FB_CS4 , FB_TSIZ0, and FB_BE_31_24 signals.
+      \t */
+      \tenum FlexbusGroup2 {
+      \t   FlexbusGroup2_FB_CS4       = FLEXBUS_CSPMCR_GROUP2(0b0000), /**< FB_CS4 */
+      \t   FlexbusGroup2_FB_TSIZ0     = FLEXBUS_CSPMCR_GROUP2(0b0001), /**< FB_TSIZ0 */
+      \t   FlexbusGroup2_FB_BE_31_24  = FLEXBUS_CSPMCR_GROUP2(0b0010), /**< FB_BE_31_24 */
+      \t};
+      \t/**
+      \t * FlexBus Signal Group 3 Multiplex control.
+      \t * Controls the multiplexing of the FB_CS5 , FB_TSIZ1, and FB_BE_23_16 signals.
+      \t */
+      \tenum FlexbusGroup3 {
+      \t   FlexbusGroup3_FB_CS5       = FLEXBUS_CSPMCR_GROUP3(0b0000), /**< FB_CS5 */
+      \t   FlexbusGroup3_FB_TSIZ1     = FLEXBUS_CSPMCR_GROUP3(0b0001), /**< FB_TSIZ1 */
+      \t   FlexbusGroup3_FB_BE_23_16  = FLEXBUS_CSPMCR_GROUP3(0b0010), /**< FB_BE_23_16 */
+      \t};
+      \t/**
+      \t * FlexBus Signal Group 4 Multiplex control.
+      \t * Controls the multiplexing of the FB_TBST , FB_CS2 , and FB_BE_15_8 signals.
+      \t */
+      \tenum FlexbusGroup4 {
+      \t   FlexbusGroup4_FB_TBST      = FLEXBUS_CSPMCR_GROUP4(0b0000), /**< FB_TBST */
+      \t   FlexbusGroup4_FB_CS2       = FLEXBUS_CSPMCR_GROUP4(0b0001), /**< FB_CS2 */
+      \t   FlexbusGroup4_FB_BE_15_8   = FLEXBUS_CSPMCR_GROUP4(0b0010), /**< FB_BE_15_8 */
+      \t};
+      \t/**
+      \t * FlexBus Signal Group 5 Multiplex control.
+      \t * Controls the multiplexing of the FB_TA , FB_CS3 , and FB_BE_7_0 signals.
+      \t */
+      \tenum FlexbusGroup5 {
+      \t   FlexbusGroup5_FB_TA        = FLEXBUS_CSPMCR_GROUP5(0b0000), /**< FB_TA */
+      \t   FlexbusGroup5_FB_CS3       = FLEXBUS_CSPMCR_GROUP5(0b0001), /**< FB_CS3 - You must also write 1b to CSCR[AA].*/
+      \t   FlexbusGroup5_FB_BE_7_0    = FLEXBUS_CSPMCR_GROUP5(0b0010), /**< FB_BE_7_0 - You must also write 1b to CSCR[AA].*/
+      \t};\n\n
+   ]]></template>
+
+   <template><![CDATA[
+      \t/**
+      \t * Configure the multiplexing of <b>shared</b> FlexBus/Sdramc signals.
+      \t *
+      \t * Shared pins are configures as follows:
+      \t * - Group2 = FB_BE_31_24 signals.
+      \t * - Group3 = FB_BE_23_16 signals.
+      \t * - Group4 = FB_BE_15_8 signals.
+      \t * - Group5 = FB_BE_7_0 signals.
+      \t *
+      \t * @note Group1 settings are unchanged as they are not shared.
+      \t * @note The clock to the Flexbus controller will be enabled.
+      \t */
+      \tstatic void configureSharedMultiplexing() {
+      \t   enableClock();
+      \t   CriticalSection cs;
+      \t   flexbus->CSPMCR =
+      \t      (flexbus->CSPMCR&~(FLEXBUS_CSPMCR_GROUP2_MASK|FLEXBUS_CSPMCR_GROUP3_MASK|FLEXBUS_CSPMCR_GROUP4_MASK|FLEXBUS_CSPMCR_GROUP5_MASK))|
+      \t      (FlexbusGroup2_FB_BE_31_24|FlexbusGroup3_FB_BE_23_16|FlexbusGroup4_FB_BE_15_8|FlexbusGroup5_FB_BE_7_0);
+      \t}\n\n   
+   ]]></template>
+
    <signals/>
 
 </peripheralPage>

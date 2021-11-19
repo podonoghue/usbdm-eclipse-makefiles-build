@@ -194,5 +194,4 @@
    ]]></template>
 
    <signals/>
-   <signals name="TPM"/>
 </peripheralPage>

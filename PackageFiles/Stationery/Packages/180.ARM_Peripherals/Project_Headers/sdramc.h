@@ -186,7 +186,7 @@ public:
          SdramRefreshTiming   sdramRefreshTiming,
          unsigned             rows=4096,
          unsigned             refreshPeriod = 64) :
-                     ctrl (sdramRefreshTiming|SDRAMC_CTRL_RC(((refreshPeriod*(clockFrequency/(16*1000)))/rows)-1)) {
+            ctrl (sdramRefreshTiming|SDRAMC_CTRL_RC(((refreshPeriod*(clockFrequency/(16*1000)))/rows)-1)) {
       /*
        * refreshCount (RC)
        *
@@ -205,14 +205,14 @@ public:
    };
 
    /**
+    * Get SDRAMC CTRL register value
     *
-    * @return
+    * @return CTRL value
     */
    uint32_t getCtrl() const {
       return ctrl;
    }
 };
-
 
 /**
  * Structure describing how to initialise SDRAMC block
@@ -237,10 +237,7 @@ public:
    * @param sdramSize                   SDRAM size
    * @param sdramcMode                  SDRAM access modes
    * @param modeRegisterValue           Value to write to SDRAM mode register
-   * @param extendedModeRegisterValue   Value to write to SDRAM extended mode register
-   *
-   *   # of bus clocks = 1031 = (RC field + 1) x 16; RC = (1031 bus clocks/16) -1 = 63.44,
-   *   which rounds to 63; therefore, RC = 0x3F.
+   * @param extendedModeRegisterValue   Value to write to SDRAM extended mode register (omit to disabled)
    *
    * @note May be used to create tables in ROM.
    */
@@ -331,7 +328,7 @@ private:
 
 protected:
    const HardwarePtr<SDRAMC_Type> sdramc;                 //!< SDRAMC hardware instance
-   
+
    /**
     * Construct SDRAMC interface
     *
@@ -429,7 +426,7 @@ public:
  *
  * @tparam Info            Class describing SDRAMC hardware
  */
-template<class Info> 
+template<class Info>
 class SdramcBase_T : public SdramcBase {
 
 private:
@@ -489,6 +486,10 @@ public:
       if (Info::mapPinsOnEnable) {
          configureAllPins();
       }
+
+      // The multiplexing of shared FLEXBUS/SDRAMC ports is controlled by the FLEXBUS controller
+      FlexbusInfo::configureSharedMultiplexing();
+
       // Requires CLKOUT = FLEXBUS Clock
       SimInfo::setClkout(SimClkoutSel_FlexBus);
 
@@ -497,11 +498,30 @@ public:
    }
 
    /**
-    * Basic configuration of module
+    * Basic configuration of SDRAMC module
     *
+    *  - Enables clock
+    *  - Optionally configures pin mapping (PCSRs)
+    *  - Configures shared pin mapping control (via Flexbus controller)
+    *  - Set shared refresh parameters.
+    *
+    * @param sdramRefreshTiming
+    *   Determines the timing operation of auto-refresh in the SDRAM controller.
+    *   Specifically, it determines the number of bus clocks inserted between a
+    *   ref command and the next possible actv command.
+    *   This same timing is used for both memory blocks controlled by the SDRAM controller.
+    *   This corresponds to t(RC) in the SDRAM specifications
+    *
+    * @param rows                Number of rows to refresh in refresh period
+    *
+    * @param refreshPeriod       Refresh period (milliseconds)
     */
-   static void configure() {
+   static void configure(
+         SdramRefreshTiming   sdramRefreshTiming,
+         unsigned             rows=4096,
+         unsigned             refreshPeriod = 64) {
       enable();
+      setRefreshParameters(sdramRefreshTiming, rows, refreshPeriod);
    }
 
    /**

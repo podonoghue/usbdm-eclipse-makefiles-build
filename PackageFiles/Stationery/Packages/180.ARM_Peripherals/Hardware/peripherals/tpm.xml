@@ -6,4 +6,6 @@
 
    <xi:include href="_default_pcr.xml"/>
    
+   <signals/>
+   
 </peripheralPage>

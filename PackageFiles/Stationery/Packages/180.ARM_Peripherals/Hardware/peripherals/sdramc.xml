@@ -11,6 +11,7 @@
    <projectActionList id = "sdramc_files" >
       <copy source="Project_Headers/sdramc.h"     target="Project_Headers/sdramc.h"     overwrite="true" derived="true" />
       <copy source="Snippets/sdramc-example.cpp"  target="Snippets/sdramc-example.cpp"  overwrite="true" derived="true" />
+      <copy source="Snippets/is42sm16800h.h"      target="Snippets/is42sm16800h.h"  overwrite="true" derived="true" />
    </projectActionList>
    
    <xi:include href="_clockOption.xml"/>

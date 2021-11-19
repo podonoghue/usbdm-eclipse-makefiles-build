@@ -19,4 +19,6 @@
       <copy source="Project_Headers/usbhs.h"                   target="Project_Headers/usbhs.h"                     overwrite="true"  derived="true" />
    </projectActionList>
 
+   <signals/>
+   
 </peripheralPage>

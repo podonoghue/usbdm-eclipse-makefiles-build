@@ -247,53 +247,6 @@ enum FlexbusBurst {
    FlexbusBurst_Write      = FLEXBUS_CSCR_BSTR(0)|FLEXBUS_CSCR_BSTW(1),  /**< Burst accesses on writes */
    FlexbusBurst_ReadWrite  = FLEXBUS_CSCR_BSTR(1)|FLEXBUS_CSCR_BSTW(1),  /**< Burst accesses on reads and writes */
 };
-
-/**
- * FlexBus Signal Group 1 Multiplex control.
- * Controls the multiplexing of the FB_ALE, FB_CS1 , and FB_TS signals.
- */
-enum FlexbusGroup1 {
-   FlexbusGroup1_FB_ALE       = FLEXBUS_CSPMCR_GROUP1(0b0000), /**< FB_ALE */
-   FlexbusGroup1_FB_CS1       = FLEXBUS_CSPMCR_GROUP1(0b0001), /**< FB_CS1 */
-   FlexbusGroup1_FB_TS        = FLEXBUS_CSPMCR_GROUP1(0b0010), /**< FB_TS */
-};
-/**
- * FlexBus Signal Group 2 Multiplex control.
- * Controls the multiplexing of the FB_CS4 , FB_TSIZ0, and FB_BE_31_24 signals.
- */
-enum FlexbusGroup2 {
-   FlexbusGroup2_FB_CS4       = FLEXBUS_CSPMCR_GROUP2(0b0000), /**< FB_CS4 */
-   FlexbusGroup2_FB_TSIZ0     = FLEXBUS_CSPMCR_GROUP2(0b0001), /**< FB_TSIZ0 */
-   FlexbusGroup2_FB_BE_31_24  = FLEXBUS_CSPMCR_GROUP2(0b0010), /**< FB_BE_31_24 */
-};
-/**
- * FlexBus Signal Group 3 Multiplex control.
- * Controls the multiplexing of the FB_CS5 , FB_TSIZ1, and FB_BE_23_16 signals.
- */
-enum FlexbusGroup3 {
-   FlexbusGroup3_FB_CS5       = FLEXBUS_CSPMCR_GROUP3(0b0000), /**< FB_CS5 */
-   FlexbusGroup3_FB_TSIZ1     = FLEXBUS_CSPMCR_GROUP3(0b0001), /**< FB_TSIZ1 */
-   FlexbusGroup3_FB_BE_23_16  = FLEXBUS_CSPMCR_GROUP3(0b0010), /**< FB_BE_23_16 */
-};
-/**
- * FlexBus Signal Group 4 Multiplex control.
- * Controls the multiplexing of the FB_TBST , FB_CS2 , and FB_BE_15_8 signals.
- */
-enum FlexbusGroup4 {
-   FlexbusGroup4_FB_TBST      = FLEXBUS_CSPMCR_GROUP4(0b0000), /**< FB_TBST */
-   FlexbusGroup4_FB_CS2       = FLEXBUS_CSPMCR_GROUP4(0b0001), /**< FB_CS2 */
-   FlexbusGroup4_FB_BE_15_8   = FLEXBUS_CSPMCR_GROUP4(0b0010), /**< FB_BE_15_8 */
-};
-/**
- * FlexBus Signal Group 5 Multiplex control.
- * Controls the multiplexing of the FB_TA , FB_CS3 , and FB_BE_7_0 signals.
- */
-enum FlexbusGroup5 {
-   FlexbusGroup5_FB_TA        = FLEXBUS_CSPMCR_GROUP5(0b0000), /**< FB_TA */
-   FlexbusGroup5_FB_CS3       = FLEXBUS_CSPMCR_GROUP5(0b0001), /**< FB_CS3 - You must also write 1b to CSCR[AA].*/
-   FlexbusGroup5_FB_BE_7_0    = FLEXBUS_CSPMCR_GROUP5(0b0010), /**< FB_BE_7_0 - You must also write 1b to CSCR[AA].*/
-};
-
 /**
  * Structure describing a flexbus selection region
  */
@@ -376,7 +329,7 @@ class FlexbusBase {
 
 protected:
    const HardwarePtr<FLEXBUS_Type> flexbus;                 //!< FLEXBUS hardware instance
-   
+
    /**
     * Construct FLEXBUS interface
     *
@@ -396,7 +349,7 @@ protected:
  *
  * @tparam Info            Class describing FLEXBUS hardware
  */
-template<class Info> 
+template<class Info>
 class FlexbusBase_T : public FlexbusBase {
 
 public:
@@ -431,7 +384,7 @@ public:
       }
       // Requires CLKOUT = FLEXBUS Clock
       SimInfo::setClkout(SimClkoutSel_FlexBus);
-      
+
       // Enable clock to hardware
       Info::enableClock();
    }
