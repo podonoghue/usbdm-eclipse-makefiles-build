@@ -139,7 +139,7 @@ Attempting writes to a protected range results in a bus error termination of the
                         <name>BAM</name>
                         <description>Base Address Mask\n
 Defines the associated chip-select&apos;s block size by masking address bits\n
-1's in this register mask address bits.
+1&apos;s in this register mask address bits.
 If masked, the corresponding address bit in CSAR is a don&apos;t care in the chip-select decode
 Other bit patterns are possible but unlikely</description>
                         <bitOffset>16</bitOffset>

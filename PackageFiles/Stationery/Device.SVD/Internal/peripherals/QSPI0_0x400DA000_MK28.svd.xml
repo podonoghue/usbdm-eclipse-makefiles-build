@@ -4,7 +4,7 @@ Devices using this peripheral:
       MK82F25615
 -->
       <peripheral>
-         <?sourceFile "QSPI0_0x400DA000" ?>
+         <?sourceFile "QSPI0_0x400DA000_MK28" ?>
          <name>QSPI0</name>
          <description>QSPI</description>
          <groupName>QSPI</groupName>
@@ -222,6 +222,82 @@ This field is valid for both SDR and DDR mode</description>
                         <enumeratedValue>
                            <name>1</name>
                            <description>Allow external logic to disable QSPI clocks</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>ISD2FA</name>
+                     <description>Idle Signal Drive IOFA[2] Flash A\n
+This bit determines the logic level the IOFA[2] output of the QuadSPI module is driven to in the inactive state</description>
+                     <bitOffset>16</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0</name>
+                           <description>IOFA[2] is driven to logic L</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>1</name>
+                           <description>IOFA[2] is driven to logic H</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>ISD3FA</name>
+                     <description>Idle Signal Drive IOFA[3] Flash A. This bit determines the logic level the IOFA[3] output of the QuadSPI
+module is driven to in the inactive state</description>
+                     <bitOffset>17</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0</name>
+                           <description>IOFA[3] is driven to logic L</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>1</name>
+                           <description>IOFA[3] is driven to logic H</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>ISD2FB</name>
+                     <description>Idle Signal Drive IOFB[2] Flash B. This bit determines the logic level the IOFB[2] output of the QuadSPI
+module is driven to in the inactive state</description>
+                     <bitOffset>18</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0</name>
+                           <description>IOFB[2] is driven to logic L</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>1</name>
+                           <description>IOFB[2] is driven to logic H</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>ISD3FB</name>
+                     <description>Idle Signal Drive IOFB[3] Flash B. This bit determines the logic level the IOFB[3] output of the QuadSPI
+module is driven to in the inactive state</description>
+                     <bitOffset>19</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0</name>
+                           <description>IOFB[3] is driven to logic L</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>1</name>
+                           <description>IOFB[3] is driven to logic H</description>
                            <value>0b1</value>
                         </enumeratedValue>
                      </enumeratedValues>

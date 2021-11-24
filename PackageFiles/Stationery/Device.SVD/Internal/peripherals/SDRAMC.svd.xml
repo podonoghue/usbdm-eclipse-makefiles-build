@@ -41,7 +41,7 @@ Devices using this peripheral:
                   <field>
                      <name>RC</name>
                      <description>Refresh count\n
-Controls refresh frequency. The number of bus clocks between refresh cycles is (RC + 1) x 16.</description>
+Controls refresh frequency. The number of bus clocks between refresh cycles is (RC + 1) x 16</description>
                      <bitOffset>0</bitOffset>
                      <bitWidth>9</bitWidth>
                   </field>
@@ -82,18 +82,18 @@ This corresponds to t(RC) in the SDRAM specifications</description>
                      <name>IS</name>
                      <description>Initiate self-refresh command\n
 When enabled the SDRAMC sends a self command to the SDRAM to enter low-power, self-refresh mode.\n
-When disabled the SDRAMC send a selfx command to the SDRAM to exit low-power self-refresh mode.</description>
+When disabled the SDRAMC send a selfx command to the SDRAM to exit low-power self-refresh mode</description>
                      <bitOffset>11</bitOffset>
                      <bitWidth>1</bitWidth>
                      <enumeratedValues>
                         <enumeratedValue>
                            <name>0b0</name>
-                           <description>Disable self-refresh in SDRAM.</description>
+                           <description>Disable self-refresh in SDRAM</description>
                            <value>0b0</value>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>0b1</name>
-                           <description>Enable self-refresh in SDRAM.</description>
+                           <description>Enable self-refresh in SDRAM</description>
                            <value>0b1</value>
                         </enumeratedValue>
                      </enumeratedValues>
@@ -126,7 +126,7 @@ After IP is set, the next write to an appropriate SDRAM address generates the pa
                            </enumeratedValue>
                            <enumeratedValue>
                               <name>0b1</name>
-                              <description>A pall command is sent to the associated SDRAM block.</description>
+                              <description>A pall command is sent to the associated SDRAM block</description>
                               <value>0b1</value>
                            </enumeratedValue>
                         </enumeratedValues>
@@ -134,7 +134,7 @@ After IP is set, the next write to an appropriate SDRAM address generates the pa
                      <field>
                         <name>PS</name>
                         <description>Port size.\n
-Indicates the port size of the associated block of SDRAM, which allows for dynamic sizing of associated SDRAM accesses.</description>
+Indicates the port size of the associated block of SDRAM, which allows for dynamic sizing of associated SDRAM accesses</description>
                         <bitOffset>4</bitOffset>
                         <bitWidth>2</bitWidth>
                         <enumeratedValues>
@@ -166,8 +166,8 @@ Indicates the port size of the associated block of SDRAM, which allows for dynam
 Setting IMRS generates a MRS command to the associated SDRAMs. 
 In initialization, IMRS should be set only after all DRAM controller registers are
 initialized and pall and refresh commands have been issued.
-After IMRS is set, the next access to an SDRAM block programs the SDRAM’s mode register.
-The DRAM controller clears IMRS after the MRS command finishes.</description>
+After IMRS is set, the next access to an SDRAM block programs the SDRAM&apos;s mode register.
+The DRAM controller clears IMRS after the MRS command finishes</description>
                         <bitOffset>6</bitOffset>
                         <bitWidth>1</bitWidth>
                         <enumeratedValues>
@@ -188,7 +188,7 @@ The DRAM controller clears IMRS after the MRS command finishes.</description>
                         <description>Command bit location\n
 Because different SDRAM configurations cause the command lines on the memory to correspond to a
 different address, the location of command bit is programmable.
-CB determines the address onto which the command bit are multiplexed.</description>
+CB determines the address onto which the command bit are multiplexed</description>
                         <bitOffset>8</bitOffset>
                         <bitWidth>3</bitWidth>
                         <enumeratedValues>
@@ -237,7 +237,7 @@ CB determines the address onto which the command bit are multiplexed.</descripti
                      <field>
                         <name>CASL</name>
                         <description>CAS Latency\n
-Trcd, Tcasl, Tras, Trp, Trwm-Trdl,Tep </description>
+Trcd, Tcasl, Tras, Trp, Trwm-Trdl,Tep</description>
                         <bitOffset>12</bitOffset>
                         <bitWidth>2</bitWidth>
                         <enumeratedValues>
@@ -320,7 +320,7 @@ Set after registers controlling the DRAM block are initialized</description>
                         <name>WP</name>
                         <description>Write protect\n
 Determines whether the associated block of DRAM is write protected.
-An address exception is generated on writes to write-protected regions.</description>
+An address exception is generated on writes to write-protected regions</description>
                         <bitOffset>8</bitOffset>
                         <bitWidth>1</bitWidth>
                         <enumeratedValues>
@@ -331,7 +331,7 @@ An address exception is generated on writes to write-protected regions.</descrip
                            </enumeratedValue>
                            <enumeratedValue>
                               <name>0b1</name>
-                              <description>Ignore write accesses.</description>
+                              <description>Ignore write accesses</description>
                               <value>0b1</value>
                            </enumeratedValue>
                         </enumeratedValues>
@@ -340,7 +340,7 @@ An address exception is generated on writes to write-protected regions.</descrip
                         <name>BAM</name>
                         <description>Base Address Mask\n
 Defines the associated chip-select&apos;s block size by masking address bits\n
-1's in this register mask address bits.
+1&apos;s in this register mask address bits.
 If masked, the corresponding address bit in CSAR is a don&apos;t care in the chip-select decode
 Other bit patterns are possible but unlikely</description>
                         <bitOffset>18</bitOffset>
