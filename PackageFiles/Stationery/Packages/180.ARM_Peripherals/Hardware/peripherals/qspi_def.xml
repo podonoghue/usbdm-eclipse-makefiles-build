@@ -2,15 +2,21 @@
 <!DOCTYPE peripheralPage SYSTEM "_menu.dtd" >
 <!-- qspi_def.xml -->
 
-<peripheralPage xmlns:xi="http://www.w3.org/2001/XInclude" name="_instance" description="Inter-Integrated-Circuit">
+<peripheralPage xmlns:xi="http://www.w3.org/2001/XInclude" name="_instance" description="Quad Serial Peripheral Interface">
 
+   <xi:include href="_mapPinsOption_on.xml"/>
    <xi:include href="_default_instance.xml"/>
-
-   <template><![CDATA[
-      \t//! Base value for PCR (excluding MUX value)
-      \tstatic constexpr uint32_t defaultPcrValue  = 0;\n\n
-   ]]></template>
+   <xi:include href="_default_pcr.xml"/>
+   <xi:include href="_irqOption.xml"/>
+   
+   <projectActionList id = "qspi_files" >
+      <copy source="Project_Headers/qspi.h"     target="Project_Headers/qspi.h"     overwrite="true" derived="true" />
+      <copy source="Snippets/qspi-example.cpp"  target="Snippets/qspi-example.cpp"  overwrite="true" derived="true" />
+      <copy source="Snippets/mt25qu256aba.h"    target="Snippets/mt25qu256aba.h"    overwrite="true" derived="true" />
+   </projectActionList>
    
    <xi:include href="_clockOption.xml"/>
    
+   <signals/>
+
 </peripheralPage>

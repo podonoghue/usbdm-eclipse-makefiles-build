@@ -1,7 +1,6 @@
 <!--
 Devices using this peripheral: 
       MK28F15
-      MK82F25615
 -->
       <peripheral>
          <?sourceFile "QSPI0_0x400DA000_MK28" ?>
