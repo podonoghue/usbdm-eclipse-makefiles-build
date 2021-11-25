@@ -1,5 +1,5 @@
 /*
- * is42sm16800h.h
+ * @file is42sm16800h.h (180.ARM_Peripherals/Snippets/is42sm16800h.h)
  *
  *  Created on: 19 Nov. 2021
  *      Author: peter
@@ -16,7 +16,7 @@ namespace USBDM {
  * Class representing a IS42SM16800H SDRAM connected to the SDRAM controller
  *
  * @tparam baseAddress  Base address of SDRAM in MCU memory space
- * @tparam sdramcBlock  Which SDRAMC block is to access to map the SDRAM
+ * @tparam sdramcBlock  Which SDRAMC block is to be used to access the SDRAM
  */
 template<uint32_t baseAddress, SdramcBlock sdramcBlock>
 class Is42sm16800h {
@@ -84,17 +84,17 @@ class Is42sm16800h {
     *  | M13 | M12 | M11 | M10 |  M9 |  M8 |  M7 |  M6 |  M5 |  M4 |  M3 |  M2 |  M1 |  M0 | <= Mode Register
     *  |  1  |  0  |  -  |  -  |  0  |  -  |  -  |  0  |  1  |  0  |  0  |  0  |  0  |  0  | <= MR Value
     *                                               |     |                 |     |     |
-                                   +++-----------+-----+          +++----+-----+-----+
-    *                                 |||                            |||
-    *                                 M65                           M210 Self Refresh Coverage
-    *                                 *00 Full Strength             *000 All Banks
-    *                                  01 1/2 Strength               001 Two Banks (BA1=0)
-    *                                  10 1/4 Strength               010 One Bank (BA1=BA0=0)
-    *                                  11 -                          011 -
-    *                                                                100 -
-    *                                                                101 Half of One Bank (BA1=BA0=0, Row Address MSB=0)
-    *                                                                110 Quarter of One Bank (BA1=BA0=0, Row Address 2 MSB=0)
-    *                                                                111 -
+    *                                 +++-----------+-----+   +++-----------+-----+-----+
+    *                                 |||                     |||
+    *                                 M65                    M210 Self Refresh Coverage
+    *                                 *00 Full Strength      *000 All Banks
+    *                                  01 1/2 Strength        001 Two Banks (BA1=0)
+    *                                  10 1/4 Strength        010 One Bank (BA1=BA0=0)
+    *                                  11 -                   011 -
+    *                                                         100 -
+    *                                                         101 Half of One Bank (BA1=BA0=0, Row Address MSB=0)
+    *                                                         110 Quarter of One Bank (BA1=BA0=0, Row Address 2 MSB=0)
+    *                                                         111 -
     * @endcode
     */
    static constexpr uint32_t IS42SM16800H_makeModeRegister2Value(
@@ -108,7 +108,9 @@ class Is42sm16800h {
    }
 
    /**
-    * IS42SM16800H-6BLI \n
+    * IS42SM16800H-6BLI
+    * Information about IS42SM16800H
+    *
     * @code
     * -------------------------------------------------------------
     * Row Address       : RA0~RA11 (12 bits => 2^12 = 4096 rows)
@@ -123,11 +125,11 @@ class Is42sm16800h {
     */
    static constexpr SdramMapping IS42SM16800H_mapping = sdramMapping_16B_9C;
 
-   // Entry describing IS42SM16800H connection to SDRAMC
+   /// Entry describing IS42SM16800H connection to SDRAMC
    static constexpr SdramEntry is42sm16800h_Config = {
          /* Block #                 */ sdramcBlock,
          /* Memory address          */ baseAddress,
-         /* CAS Latency             */ SdramcCasl_224211,
+         /* CAS Latency             */ SdramcCasl_2,
          /* CMD address line        */ Sdramc::getCommandAdddress(IS42SM16800H_mapping),
          /* Data port size          */ SdramcPortSize_16,
          /* SDRAM size              */ SdramSize_16MiB,
@@ -137,6 +139,9 @@ class Is42sm16800h {
    };
 
 public:
+   /**
+    * Configure the SDRAM controller interface for the IS42SM16800H SDRAM
+    */
    static void configure() {
       Sdramc::configureBlock(is42sm16800h_Config);
    }

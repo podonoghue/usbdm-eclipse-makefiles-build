@@ -6060,7 +6060,7 @@ typedef struct QSPI_Type {
    __IO uint32_t  LUTKEY;                       /**< 0300: LUT Key Register                                             */
    __IO uint32_t  LCKCR;                        /**< 0304: LUT Lock Configuration Register                              */
         uint8_t   RESERVED_7[8];                /**< 0308: 0x8 bytes                                                    */
-   __IO uint32_t  LUT[64];                      /**< 0310: Look-up Table register                                       */
+   __IO uint16_t  LUT[128];                     /**< 0310: Look-up Table register                                       */
 } QSPI_Type;
 
 /**
@@ -6128,36 +6128,18 @@ typedef struct QSPI_Type {
 #define QSPI_FLSHCR_TDH_SHIFT                    (16U)                                               /*!< QSPI0_FLSHCR.TDH Position               */
 #define QSPI_FLSHCR_TDH(x)                       (((uint32_t)(((uint32_t)(x))<<16U))&0x30000UL)      /*!< QSPI0_FLSHCR.TDH Field                  */
 /* ------- BUF0CR Bit Fields                        ------ */
-#define QSPI_BUF0CR_MSTRID_MASK                  (0xFU)                                              /*!< QSPI0_BUF0CR.MSTRID Mask                */
-#define QSPI_BUF0CR_MSTRID_SHIFT                 (0U)                                                /*!< QSPI0_BUF0CR.MSTRID Position            */
-#define QSPI_BUF0CR_MSTRID(x)                    (((uint32_t)(((uint32_t)(x))<<0U))&0xFUL)           /*!< QSPI0_BUF0CR.MSTRID Field               */
-#define QSPI_BUF0CR_ADATSZ_MASK                  (0x7F00U)                                           /*!< QSPI0_BUF0CR.ADATSZ Mask                */
-#define QSPI_BUF0CR_ADATSZ_SHIFT                 (8U)                                                /*!< QSPI0_BUF0CR.ADATSZ Position            */
-#define QSPI_BUF0CR_ADATSZ(x)                    (((uint32_t)(((uint32_t)(x))<<8U))&0x7F00UL)        /*!< QSPI0_BUF0CR.ADATSZ Field               */
+#define QSPI_BUFCR_MSTRID_MASK                   (0xFU)                                              /*!< QSPI0_BUF0CR.MSTRID Mask                */
+#define QSPI_BUFCR_MSTRID_SHIFT                  (0U)                                                /*!< QSPI0_BUF0CR.MSTRID Position            */
+#define QSPI_BUFCR_MSTRID(x)                     (((uint32_t)(((uint32_t)(x))<<0U))&0xFUL)           /*!< QSPI0_BUF0CR.MSTRID Field               */
+#define QSPI_BUFCR_ADATSZ_MASK                   (0x7F00U)                                           /*!< QSPI0_BUF0CR.ADATSZ Mask                */
+#define QSPI_BUFCR_ADATSZ_SHIFT                  (8U)                                                /*!< QSPI0_BUF0CR.ADATSZ Position            */
+#define QSPI_BUFCR_ADATSZ(x)                     (((uint32_t)(((uint32_t)(x))<<8U))&0x7F00UL)        /*!< QSPI0_BUF0CR.ADATSZ Field               */
 #define QSPI_BUF0CR_HP_EN_MASK                   (0x80000000U)                                       /*!< QSPI0_BUF0CR.HP_EN Mask                 */
 #define QSPI_BUF0CR_HP_EN_SHIFT                  (31U)                                               /*!< QSPI0_BUF0CR.HP_EN Position             */
 #define QSPI_BUF0CR_HP_EN(x)                     (((uint32_t)(((uint32_t)(x))<<31U))&0x80000000UL)   /*!< QSPI0_BUF0CR.HP_EN Field                */
 /* ------- BUF1CR Bit Fields                        ------ */
-#define QSPI_BUF1CR_MSTRID_MASK                  (0xFU)                                              /*!< QSPI0_BUF1CR.MSTRID Mask                */
-#define QSPI_BUF1CR_MSTRID_SHIFT                 (0U)                                                /*!< QSPI0_BUF1CR.MSTRID Position            */
-#define QSPI_BUF1CR_MSTRID(x)                    (((uint32_t)(((uint32_t)(x))<<0U))&0xFUL)           /*!< QSPI0_BUF1CR.MSTRID Field               */
-#define QSPI_BUF1CR_ADATSZ_MASK                  (0x7F00U)                                           /*!< QSPI0_BUF1CR.ADATSZ Mask                */
-#define QSPI_BUF1CR_ADATSZ_SHIFT                 (8U)                                                /*!< QSPI0_BUF1CR.ADATSZ Position            */
-#define QSPI_BUF1CR_ADATSZ(x)                    (((uint32_t)(((uint32_t)(x))<<8U))&0x7F00UL)        /*!< QSPI0_BUF1CR.ADATSZ Field               */
 /* ------- BUF2CR Bit Fields                        ------ */
-#define QSPI_BUF2CR_MSTRID_MASK                  (0xFU)                                              /*!< QSPI0_BUF2CR.MSTRID Mask                */
-#define QSPI_BUF2CR_MSTRID_SHIFT                 (0U)                                                /*!< QSPI0_BUF2CR.MSTRID Position            */
-#define QSPI_BUF2CR_MSTRID(x)                    (((uint32_t)(((uint32_t)(x))<<0U))&0xFUL)           /*!< QSPI0_BUF2CR.MSTRID Field               */
-#define QSPI_BUF2CR_ADATSZ_MASK                  (0x7F00U)                                           /*!< QSPI0_BUF2CR.ADATSZ Mask                */
-#define QSPI_BUF2CR_ADATSZ_SHIFT                 (8U)                                                /*!< QSPI0_BUF2CR.ADATSZ Position            */
-#define QSPI_BUF2CR_ADATSZ(x)                    (((uint32_t)(((uint32_t)(x))<<8U))&0x7F00UL)        /*!< QSPI0_BUF2CR.ADATSZ Field               */
 /* ------- BUF3CR Bit Fields                        ------ */
-#define QSPI_BUF3CR_MSTRID_MASK                  (0xFU)                                              /*!< QSPI0_BUF3CR.MSTRID Mask                */
-#define QSPI_BUF3CR_MSTRID_SHIFT                 (0U)                                                /*!< QSPI0_BUF3CR.MSTRID Position            */
-#define QSPI_BUF3CR_MSTRID(x)                    (((uint32_t)(((uint32_t)(x))<<0U))&0xFUL)           /*!< QSPI0_BUF3CR.MSTRID Field               */
-#define QSPI_BUF3CR_ADATSZ_MASK                  (0x7F00U)                                           /*!< QSPI0_BUF3CR.ADATSZ Mask                */
-#define QSPI_BUF3CR_ADATSZ_SHIFT                 (8U)                                                /*!< QSPI0_BUF3CR.ADATSZ Position            */
-#define QSPI_BUF3CR_ADATSZ(x)                    (((uint32_t)(((uint32_t)(x))<<8U))&0x7F00UL)        /*!< QSPI0_BUF3CR.ADATSZ Field               */
 #define QSPI_BUF3CR_ALLMST_MASK                  (0x80000000U)                                       /*!< QSPI0_BUF3CR.ALLMST Mask                */
 #define QSPI_BUF3CR_ALLMST_SHIFT                 (31U)                                               /*!< QSPI0_BUF3CR.ALLMST Position            */
 #define QSPI_BUF3CR_ALLMST(x)                    (((uint32_t)(((uint32_t)(x))<<31U))&0x80000000UL)   /*!< QSPI0_BUF3CR.ALLMST Field               */
@@ -6200,17 +6182,11 @@ typedef struct QSPI_Type {
 #define QSPI_SOCCR_DLYTAPSELB_SHIFT              (24U)                                               /*!< QSPI0_SOCCR.DLYTAPSELB Position         */
 #define QSPI_SOCCR_DLYTAPSELB(x)                 (((uint32_t)(((uint32_t)(x))<<24U))&0x3F000000UL)   /*!< QSPI0_SOCCR.DLYTAPSELB Field            */
 /* ------- BUF0IND Bit Fields                       ------ */
-#define QSPI_BUF0IND_TPINDX0_MASK                (0xFFFFFFF8U)                                       /*!< QSPI0_BUF0IND.TPINDX0 Mask              */
-#define QSPI_BUF0IND_TPINDX0_SHIFT               (3U)                                                /*!< QSPI0_BUF0IND.TPINDX0 Position          */
-#define QSPI_BUF0IND_TPINDX0(x)                  (((uint32_t)(((uint32_t)(x))<<3U))&0xFFFFFFF8UL)    /*!< QSPI0_BUF0IND.TPINDX0 Field             */
+#define QSPI_BUFIND_TPINDX_MASK                  (0xFFFFFFF8U)                                       /*!< QSPI0_BUF0IND.TPINDX0 Mask              */
+#define QSPI_BUFIND_TPINDX_SHIFT                 (3U)                                                /*!< QSPI0_BUF0IND.TPINDX0 Position          */
+#define QSPI_BUFIND_TPINDX(x)                    (((uint32_t)(((uint32_t)(x))<<3U))&0xFFFFFFF8UL)    /*!< QSPI0_BUF0IND.TPINDX0 Field             */
 /* ------- BUF1IND Bit Fields                       ------ */
-#define QSPI_BUF1IND_TPINDX1_MASK                (0xFFFFFFF8U)                                       /*!< QSPI0_BUF1IND.TPINDX1 Mask              */
-#define QSPI_BUF1IND_TPINDX1_SHIFT               (3U)                                                /*!< QSPI0_BUF1IND.TPINDX1 Position          */
-#define QSPI_BUF1IND_TPINDX1(x)                  (((uint32_t)(((uint32_t)(x))<<3U))&0xFFFFFFF8UL)    /*!< QSPI0_BUF1IND.TPINDX1 Field             */
 /* ------- BUF2IND Bit Fields                       ------ */
-#define QSPI_BUF2IND_TPINDX2_MASK                (0xFFFFFFF8U)                                       /*!< QSPI0_BUF2IND.TPINDX2 Mask              */
-#define QSPI_BUF2IND_TPINDX2_SHIFT               (3U)                                                /*!< QSPI0_BUF2IND.TPINDX2 Position          */
-#define QSPI_BUF2IND_TPINDX2(x)                  (((uint32_t)(((uint32_t)(x))<<3U))&0xFFFFFFF8UL)    /*!< QSPI0_BUF2IND.TPINDX2 Field             */
 /* ------- SFAR Bit Fields                          ------ */
 #define QSPI_SFAR_SFADR_MASK                     (0xFFFFFFFFU)                                       /*!< QSPI0_SFAR.SFADR Mask                   */
 #define QSPI_SFAR_SFADR_SHIFT                    (0U)                                                /*!< QSPI0_SFAR.SFADR Position               */
@@ -6450,21 +6426,12 @@ typedef struct QSPI_Type {
 #define QSPI_SPTRCLR_IPPTRC_SHIFT                (8U)                                                /*!< QSPI0_SPTRCLR.IPPTRC Position           */
 #define QSPI_SPTRCLR_IPPTRC(x)                   (((uint32_t)(((uint32_t)(x))<<8U))&0x100UL)         /*!< QSPI0_SPTRCLR.IPPTRC Field              */
 /* ------- SFA1AD Bit Fields                        ------ */
-#define QSPI_SFA1AD_TPADA1_MASK                  (0xFFFFFC00U)                                       /*!< QSPI0_SFA1AD.TPADA1 Mask                */
-#define QSPI_SFA1AD_TPADA1_SHIFT                 (10U)                                               /*!< QSPI0_SFA1AD.TPADA1 Position            */
-#define QSPI_SFA1AD_TPADA1(x)                    (((uint32_t)(((uint32_t)(x))<<10U))&0xFFFFFC00UL)   /*!< QSPI0_SFA1AD.TPADA1 Field               */
+#define QSPI_SFAD_TPAD_MASK                      (0xFFFFFC00U)                                       /*!< QSPI0_SFA1AD.TPADA1 Mask                */
+#define QSPI_SFAD_TPAD_SHIFT                     (10U)                                               /*!< QSPI0_SFA1AD.TPADA1 Position            */
+#define QSPI_SFAD_TPAD(x)                        (((uint32_t)(((uint32_t)(x))<<10U))&0xFFFFFC00UL)   /*!< QSPI0_SFA1AD.TPADA1 Field               */
 /* ------- SFA2AD Bit Fields                        ------ */
-#define QSPI_SFA2AD_TPADA2_MASK                  (0xFFFFFC00U)                                       /*!< QSPI0_SFA2AD.TPADA2 Mask                */
-#define QSPI_SFA2AD_TPADA2_SHIFT                 (10U)                                               /*!< QSPI0_SFA2AD.TPADA2 Position            */
-#define QSPI_SFA2AD_TPADA2(x)                    (((uint32_t)(((uint32_t)(x))<<10U))&0xFFFFFC00UL)   /*!< QSPI0_SFA2AD.TPADA2 Field               */
 /* ------- SFB1AD Bit Fields                        ------ */
-#define QSPI_SFB1AD_TPADB1_MASK                  (0xFFFFFC00U)                                       /*!< QSPI0_SFB1AD.TPADB1 Mask                */
-#define QSPI_SFB1AD_TPADB1_SHIFT                 (10U)                                               /*!< QSPI0_SFB1AD.TPADB1 Position            */
-#define QSPI_SFB1AD_TPADB1(x)                    (((uint32_t)(((uint32_t)(x))<<10U))&0xFFFFFC00UL)   /*!< QSPI0_SFB1AD.TPADB1 Field               */
 /* ------- SFB2AD Bit Fields                        ------ */
-#define QSPI_SFB2AD_TPADB2_MASK                  (0xFFFFFC00U)                                       /*!< QSPI0_SFB2AD.TPADB2 Mask                */
-#define QSPI_SFB2AD_TPADB2_SHIFT                 (10U)                                               /*!< QSPI0_SFB2AD.TPADB2 Position            */
-#define QSPI_SFB2AD_TPADB2(x)                    (((uint32_t)(((uint32_t)(x))<<10U))&0xFFFFFC00UL)   /*!< QSPI0_SFB2AD.TPADB2 Field               */
 /* ------- DLPR Bit Fields                          ------ */
 #define QSPI_DLPR_DLPV_MASK                      (0xFFFFFFFFU)                                       /*!< QSPI0_DLPR.DLPV Mask                    */
 #define QSPI_DLPR_DLPV_SHIFT                     (0U)                                                /*!< QSPI0_DLPR.DLPV Position                */
@@ -6485,24 +6452,15 @@ typedef struct QSPI_Type {
 #define QSPI_LCKCR_UNLOCK_SHIFT                  (1U)                                                /*!< QSPI0_LCKCR.UNLOCK Position             */
 #define QSPI_LCKCR_UNLOCK(x)                     (((uint32_t)(((uint32_t)(x))<<1U))&0x2UL)           /*!< QSPI0_LCKCR.UNLOCK Field                */
 /* ------- LUT Bit Fields                           ------ */
-#define QSPI_LUT_OPRND0_MASK                     (0xFFU)                                             /*!< QSPI0_LUT.OPRND0 Mask                   */
-#define QSPI_LUT_OPRND0_SHIFT                    (0U)                                                /*!< QSPI0_LUT.OPRND0 Position               */
-#define QSPI_LUT_OPRND0(x)                       (((uint32_t)(((uint32_t)(x))<<0U))&0xFFUL)          /*!< QSPI0_LUT.OPRND0 Field                  */
-#define QSPI_LUT_PAD0_MASK                       (0x300U)                                            /*!< QSPI0_LUT.PAD0 Mask                     */
-#define QSPI_LUT_PAD0_SHIFT                      (8U)                                                /*!< QSPI0_LUT.PAD0 Position                 */
-#define QSPI_LUT_PAD0(x)                         (((uint32_t)(((uint32_t)(x))<<8U))&0x300UL)         /*!< QSPI0_LUT.PAD0 Field                    */
-#define QSPI_LUT_INSTR0_MASK                     (0xFC00U)                                           /*!< QSPI0_LUT.INSTR0 Mask                   */
-#define QSPI_LUT_INSTR0_SHIFT                    (10U)                                               /*!< QSPI0_LUT.INSTR0 Position               */
-#define QSPI_LUT_INSTR0(x)                       (((uint32_t)(((uint32_t)(x))<<10U))&0xFC00UL)       /*!< QSPI0_LUT.INSTR0 Field                  */
-#define QSPI_LUT_OPRND1_MASK                     (0xFF0000U)                                         /*!< QSPI0_LUT.OPRND1 Mask                   */
-#define QSPI_LUT_OPRND1_SHIFT                    (16U)                                               /*!< QSPI0_LUT.OPRND1 Position               */
-#define QSPI_LUT_OPRND1(x)                       (((uint32_t)(((uint32_t)(x))<<16U))&0xFF0000UL)     /*!< QSPI0_LUT.OPRND1 Field                  */
-#define QSPI_LUT_PAD1_MASK                       (0x3000000U)                                        /*!< QSPI0_LUT.PAD1 Mask                     */
-#define QSPI_LUT_PAD1_SHIFT                      (24U)                                               /*!< QSPI0_LUT.PAD1 Position                 */
-#define QSPI_LUT_PAD1(x)                         (((uint32_t)(((uint32_t)(x))<<24U))&0x3000000UL)    /*!< QSPI0_LUT.PAD1 Field                    */
-#define QSPI_LUT_INSTR1_MASK                     (0xFC000000U)                                       /*!< QSPI0_LUT.INSTR1 Mask                   */
-#define QSPI_LUT_INSTR1_SHIFT                    (26U)                                               /*!< QSPI0_LUT.INSTR1 Position               */
-#define QSPI_LUT_INSTR1(x)                       (((uint32_t)(((uint32_t)(x))<<26U))&0xFC000000UL)   /*!< QSPI0_LUT.INSTR1 Field                  */
+#define QSPI_LUT_OPRND_MASK                      (0xFFU)                                             /*!< QSPI0_LUT.OPRND Mask                    */
+#define QSPI_LUT_OPRND_SHIFT                     (0U)                                                /*!< QSPI0_LUT.OPRND Position                */
+#define QSPI_LUT_OPRND(x)                        (((uint16_t)(((uint16_t)(x))<<0U))&0xFFUL)          /*!< QSPI0_LUT.OPRND Field                   */
+#define QSPI_LUT_PAD_MASK                        (0x300U)                                            /*!< QSPI0_LUT.PAD Mask                      */
+#define QSPI_LUT_PAD_SHIFT                       (8U)                                                /*!< QSPI0_LUT.PAD Position                  */
+#define QSPI_LUT_PAD(x)                          (((uint16_t)(((uint16_t)(x))<<8U))&0x300UL)         /*!< QSPI0_LUT.PAD Field                     */
+#define QSPI_LUT_INSTR_MASK                      (0xFC00U)                                           /*!< QSPI0_LUT.INSTR Mask                    */
+#define QSPI_LUT_INSTR_SHIFT                     (10U)                                               /*!< QSPI0_LUT.INSTR Position                */
+#define QSPI_LUT_INSTR(x)                        (((uint16_t)(((uint16_t)(x))<<10U))&0xFC00UL)       /*!< QSPI0_LUT.INSTR Field                   */
 /**
  * @} */ /* End group QSPI_Register_Masks_GROUP 
  */

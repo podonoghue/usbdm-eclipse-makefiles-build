@@ -21,8 +21,11 @@ __attribute__((__weak__))
 uint32_t SystemCoreClock = 20000000;
 __attribute__((__weak__))
 uint32_t SystemBusClock  = 20000000;
+
+#ifdef SIM_CLKDIV1_OUTDIV3_MASK
 __attribute__((__weak__))
 uint32_t SystemFlexbusClock = 20000000;
+#endif
 
 #ifdef __cplusplus
 extern "C" {

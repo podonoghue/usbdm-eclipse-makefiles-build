@@ -48,7 +48,7 @@ enum SdramcBlock {
  * Refer to the SDRAM specification for the appropriate timing nomenclature:
  *
  *     |                                                  |   Number of Bus Clocks    |
- *     | Parameter                                CASL => |  00  |  01  |  10  |  11  |
+ *     | Parameter                          SdramcCasl => |   1  |   2  |   3  |   -  |
  *     |--------------------------------------------------|------|------|------|------|
  *     | trcd      - SRAS assertion to SCAS assertion     |   1  |   2  |   3  |   3  |
  *     | tcasl     - SCAS assertion to data out           |   1  |   2  |   3  |   3  |
@@ -59,10 +59,10 @@ enum SdramcBlock {
  *     |--------------------------------------------------|------|------|------|------|
  */
 enum SdramcCasl : uint16_t {
-   SdramcCasl_112111 = SDRAMC_AC_CASL(0b00),
-   SdramcCasl_224211 = SDRAMC_AC_CASL(0b01),
-   SdramcCasl_336311 = SDRAMC_AC_CASL(0b10),
-//      SdramcCasl_336311 = SDRAMC_AC_CASL(0b11),
+   SdramcCasl_1 = SDRAMC_AC_CASL(0b00), /**< CAS Latency 1 */
+   SdramcCasl_2 = SDRAMC_AC_CASL(0b01), /**< CAS Latency 2 */
+   SdramcCasl_3 = SDRAMC_AC_CASL(0b10), /**< CAS Latency 3 */
+//   SdramcCasl_? = SDRAMC_AC_CASL(0b11),
 };
 
 /**
@@ -106,9 +106,9 @@ enum SdramcPortSize : uint8_t {
  *  SDRAM specifications
  */
 enum SdramRefreshTiming : uint16_t {
-   SdramRefreshTiming_3Clocks = SDRAMC_CTRL_RTIM(0b00),/**< SdramRefreshTiming_3Clocks */
-   SdramRefreshTiming_6Clocks = SDRAMC_CTRL_RTIM(0b01),/**< SdramRefreshTiming_6Clocks */
-   SdramRefreshTiming_9Clocks = SDRAMC_CTRL_RTIM(0b10),/**< SdramRefreshTiming_9Clocks */
+   SdramRefreshTiming_3Clocks = SDRAMC_CTRL_RTIM(0b00), /**< 3 Clocks */
+   SdramRefreshTiming_6Clocks = SDRAMC_CTRL_RTIM(0b01), /**< 6 Clocks */
+   SdramRefreshTiming_9Clocks = SDRAMC_CTRL_RTIM(0b10), /**< 9 Clocks */
 //      SdramRefreshTiming_9Clocks = SDRAMC_CTRL_RTIM(0b11),
 };
 
@@ -117,18 +117,18 @@ enum SdramRefreshTiming : uint16_t {
  * Other patterns are possible but unlikely.
  */
 enum SdramSize : uint32_t {
-   SdramSize_256kiB = SDRAMC_CM_BAM(0b0000'0000'0000'00), /**< Memory size 256kiB */
-   SdramSize_512kiB = SDRAMC_CM_BAM(0b0000'0000'0000'01), /**< Memory size 512kiB */
-   SdramSize_1MiB   = SDRAMC_CM_BAM(0b0000'0000'0000'11), /**< Memory size 1MiB */
-   SdramSize_2MiB   = SDRAMC_CM_BAM(0b0000'0000'0001'11), /**< Memory size 2MiB */
-   SdramSize_4MiB   = SDRAMC_CM_BAM(0b0000'0000'0011'11), /**< Memory size 4MiB */
-   SdramSize_8MiB   = SDRAMC_CM_BAM(0b0000'0000'0111'11), /**< Memory size 8MiB */
-   SdramSize_16MiB  = SDRAMC_CM_BAM(0b0000'0000'1111'11), /**< Memory size 16MiB */
-   SdramSize_32MiB  = SDRAMC_CM_BAM(0b0000'0001'1111'11), /**< Memory size 32MiB */
-   SdramSize_64MiB  = SDRAMC_CM_BAM(0b0000'0011'1111'11), /**< Memory size 64MiB */
-   SdramSize_128MiB = SDRAMC_CM_BAM(0b0000'0111'1111'11), /**< Memory size 128MiB */
-   SdramSize_256MiB = SDRAMC_CM_BAM(0b0000'1111'1111'11), /**< Memory size 256MiB */
-   SdramSize_512MiB = SDRAMC_CM_BAM(0b0001'1111'1111'11), /**< Memory size 512MiB */
+   SdramSize_256kiB = SDRAMC_CM_BAM((1U<< 0)-1U), /**< Memory size 256kiB */
+   SdramSize_512kiB = SDRAMC_CM_BAM((1U<< 1)-1U), /**< Memory size 512kiB */
+   SdramSize_1MiB   = SDRAMC_CM_BAM((1U<< 2)-1U), /**< Memory size 1MiB   */
+   SdramSize_2MiB   = SDRAMC_CM_BAM((1U<< 3)-1U), /**< Memory size 2MiB   */
+   SdramSize_4MiB   = SDRAMC_CM_BAM((1U<< 4)-1U), /**< Memory size 4MiB   */
+   SdramSize_8MiB   = SDRAMC_CM_BAM((1U<< 5)-1U), /**< Memory size 8MiB   */
+   SdramSize_16MiB  = SDRAMC_CM_BAM((1U<< 6)-1U), /**< Memory size 16MiB  */
+   SdramSize_32MiB  = SDRAMC_CM_BAM((1U<< 7)-1U), /**< Memory size 32MiB  */
+   SdramSize_64MiB  = SDRAMC_CM_BAM((1U<< 8)-1U), /**< Memory size 64MiB  */
+   SdramSize_128MiB = SDRAMC_CM_BAM((1U<< 9)-1U), /**< Memory size 128MiB */
+   SdramSize_256MiB = SDRAMC_CM_BAM((1U<<10)-1U), /**< Memory size 256MiB */
+   SdramSize_512MiB = SDRAMC_CM_BAM((1U<<11)-1U), /**< Memory size 512MiB */
 };
 
 /**
@@ -218,19 +218,19 @@ public:
  * Structure describing how to initialise SDRAMC block
  */
 struct SdramEntry {
+
 private:
    const uint32_t ac;                         ///< Address and Control Register (SDRAM_ACn)
    const uint32_t cm;                         ///< Control Mask (SDRAM_CMn)
-
-public:
    const uint32_t modeRegisterValue;          ///< Value for SDRAM Mode register
    const uint32_t extendedModeRegisterValue;  ///< Value for SDRAM Extended Mode register
 
+public:
   /**
    * Constructor.
    *
-   * @param sdramcBlock                 SDRAM region being configured
-   * @param baseAddress                 Base address of region
+   * @param sdramcBlock                 SDRAM block being configured
+   * @param baseAddress                 Base address of block
    * @param sdramcCasl                  CASL timing
    * @param sdramcCommandBitLocation    Command bit location
    * @param sdramcPortSize              SDRAM Data Port size
@@ -312,10 +312,28 @@ public:
    bool isExtendedModeRegisterNeeded() const {
       return extendedModeRegisterValue != (uint32_t)-1;
    }
+
+   /**
+    * Get SRAM Mode register value
+    *
+    * @return register value
+    */
+   uint32_t getModeRegisterValue() const {
+      return modeRegisterValue;
+   }
+
+   /**
+    * Get SRAM Extended Mode register value
+    *
+    * @return register value
+    */
+   uint32_t getExtendedModeRegisterValue() const {
+      return extendedModeRegisterValue;
+   }
 };
 
 /**
- * Virtual Base class for SDRAMC interface
+ * Base class for SDRAMC interface
  */
 class SdramcBase {
 
@@ -483,7 +501,7 @@ public:
     * Includes enabling clock and configuring all pins if mapPinsOnEnable is selected on configuration
     */
    static void enable() {
-      if (Info::mapPinsOnEnable) {
+      if constexpr (Info::mapPinsOnEnable) {
          configureAllPins();
       }
 
@@ -498,12 +516,12 @@ public:
    }
 
    /**
-    * Basic configuration of SDRAMC module
+    * Base configuration of SDRAMC module
     *
     *  - Enables clock
-    *  - Optionally configures pin mapping (PCSRs)
+    *  - Optionally configures pin mapping (See @ref SdramcInfo::mapPinsOnEnable)
     *  - Configures shared pin mapping control (via Flexbus controller)
-    *  - Set shared refresh parameters.
+    *  - Set refresh parameters which are shared across blocks.
     *
     * @param sdramRefreshTiming
     *   Determines the timing operation of auto-refresh in the SDRAM controller.
@@ -550,7 +568,7 @@ public:
     *  Because the SDRAM does not register this information, it doesn’t matter if the
     *  IMRS access is a read or a write or what, if any, data is put onto the data bus.
     *
-    * @param sdramcBlock  The SDRAMC region being modified
+    * @param sdramcBlock  The SDRAMC block being modified
     */
    static void initiateModeRegisterSet(SdramcBlock sdramcBlock) {
 
@@ -568,7 +586,7 @@ public:
     * All Banks</b> command to the SDRAM block.
     * Accesses via IP should be no wider than the port size programmed in PS.
     *
-    * @param sdramcBlock  The SDRAMC region being modified
+    * @param sdramcBlock  The SDRAMC block being modified
     */
    static void initiatePrecharge(SdramcBlock sdramcBlock) {
 
@@ -615,7 +633,7 @@ private:
     * Write dummy value to SDRAM
     *
     * @param entry   Information about SDRAM block being accessed
-    * @param offset  Address offset to write to (may be mode register value)
+    * @param offset  Address offset from block base address to write to (usually mode register value)
     */
    static void writeDummyValueToSdram(const SdramEntry &entry, uint32_t offset) {
 
@@ -640,9 +658,9 @@ private:
 
 public:
    /**
-    * Configure a SDRAM region.
+    * Configure a SDRAM block.
     *
-    * Access to the region is configured and the SDRAM is initialised.
+    * Access to the block is configured and the SDRAM is initialised.
     * Auto-refresh is enabled for the block.
     *
     * @param entry Information to configure block
@@ -673,12 +691,12 @@ public:
 
       // Write mode register value
       initiateModeRegisterSet(block);
-      writeDummyValueToSdram(entry, entry.modeRegisterValue);
+      writeDummyValueToSdram(entry, entry.getModeRegisterValue());
 
       if (entry.isExtendedModeRegisterNeeded()) {
          // Write extended mode register value
          initiateModeRegisterSet(block);
-         writeDummyValueToSdram(entry, entry.extendedModeRegisterValue);
+         writeDummyValueToSdram(entry, entry.getExtendedModeRegisterValue());
       }
 
       // Configure memory size and access.
@@ -693,7 +711,7 @@ public:
    template<unsigned N>
    static void configureBlocks(const SdramEntry (&entries)[N]) {
       for (unsigned index=0; index<N; index++) {
-         configureRegion(entries[index]);
+         configureBlock(entries[index]);
       }
    }
 
@@ -722,7 +740,7 @@ public:
    /**
     * Enables automatically refresh of the SDRAM by the SDRAMC
     *
-    * @param sdramcBlock  The SDRAMC region being modified
+    * @param sdramcBlock  The SDRAMC block being modified
     */
    static void enableAutoRefresh(SdramcBlock sdramcBlock) {
       sdramc->BLOCK[sdramcBlock].AC |= SDRAMC_AC_RE_MASK;
@@ -731,7 +749,7 @@ public:
    /**
     * Disables automatically refresh of the SDRAM by the SDRAMC
     *
-    * @param sdramcBlock  The SDRAMC region being modified
+    * @param sdramcBlock  The SDRAMC block being modified
     */
    static void disableAutoRefresh(SdramcBlock sdramcBlock) {
       sdramc->BLOCK[sdramcBlock].AC &= ~SDRAMC_AC_RE_MASK;
