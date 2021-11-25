@@ -17,8 +17,7 @@
  */
 #include <climits>
 #include <cstddef>
-#include "derivative.h"
-
+#include "pin_mapping.h"
 /*
  * Default port information
  */
@@ -1383,21 +1382,21 @@ template<class Info> AdcCallbackFunction AdcBase_T<Info>::sCallback = AdcBase::u
 /**
  * Class representing ADC0
  */
-using Adc0 = AdcBase_T<Adc0Info>;
+typedef AdcBase_T<Adc0Info> Adc0;
 #endif
 
 #ifdef USBDM_ADC1_IS_DEFINED
 /**
  * Class representing ADC1
  */
-using Adc1 = AdcBase_T<Adc1Info>;
+typedef AdcBase_T<Adc1Info> Adc1;
 #endif
 
 #ifdef USBDM_ADC2_IS_DEFINED
 /**
  * Class representing ADC1
  */
-using Adc2 = AdcBase_T<Adc2Info>;
+typedef AdcBase_T<Adc2Info> Adc2;
 #endif
 
 /**

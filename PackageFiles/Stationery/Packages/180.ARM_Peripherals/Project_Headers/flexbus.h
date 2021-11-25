@@ -51,20 +51,20 @@ enum FlexbusRegion {
  * Other patterns are possible but unlikely.
  */
 enum FlexbusSize {
-   FlexbusSize_64kiB  = FLEXBUS_CSMR_BAM(0b0000'0000'0000'0000), /**< Memory size 64kiB */
-   FlexbusSize_128kiB = FLEXBUS_CSMR_BAM(0b0000'0000'0000'0001), /**< Memory size 128kiB */
-   FlexbusSize_256kiB = FLEXBUS_CSMR_BAM(0b0000'0000'0000'0011), /**< Memory size 256kiB */
-   FlexbusSize_512kiB = FLEXBUS_CSMR_BAM(0b0000'0000'0000'0111), /**< Memory size 512kiB */
-   FlexbusSize_1MiB   = FLEXBUS_CSMR_BAM(0b0000'0000'0000'1111), /**< Memory size 1MiB */
-   FlexbusSize_2MiB   = FLEXBUS_CSMR_BAM(0b0000'0000'0001'1111), /**< Memory size 2MiB */
-   FlexbusSize_4MiB   = FLEXBUS_CSMR_BAM(0b0000'0000'0011'1111), /**< Memory size 4MiB */
-   FlexbusSize_8MiB   = FLEXBUS_CSMR_BAM(0b0000'0000'0111'1111), /**< Memory size 8MiB */
-   FlexbusSize_16MiB  = FLEXBUS_CSMR_BAM(0b0000'0000'1111'1111), /**< Memory size 16MiB */
-   FlexbusSize_32MiB  = FLEXBUS_CSMR_BAM(0b0000'0001'1111'1111), /**< Memory size 32MiB */
-   FlexbusSize_64MiB  = FLEXBUS_CSMR_BAM(0b0000'0011'1111'1111), /**< Memory size 64MiB */
-   FlexbusSize_128MiB = FLEXBUS_CSMR_BAM(0b0000'0111'1111'1111), /**< Memory size 128MiB */
-   FlexbusSize_256MiB = FLEXBUS_CSMR_BAM(0b0000'1111'1111'1111), /**< Memory size 256MiB */
-   FlexbusSize_512MiB = FLEXBUS_CSMR_BAM(0b0001'1111'1111'1111), /**< Memory size 512MiB */
+   FlexbusSize_64kiB  = FLEXBUS_CSMR_BAM((1U<< 0)-1), /**< Memory size 64kiB  */
+   FlexbusSize_128kiB = FLEXBUS_CSMR_BAM((1U<< 1)-1), /**< Memory size 128kiB */
+   FlexbusSize_256kiB = FLEXBUS_CSMR_BAM((1U<< 2)-1), /**< Memory size 256kiB */
+   FlexbusSize_512kiB = FLEXBUS_CSMR_BAM((1U<< 3)-1), /**< Memory size 512kiB */
+   FlexbusSize_1MiB   = FLEXBUS_CSMR_BAM((1U<< 4)-1), /**< Memory size 1MiB   */
+   FlexbusSize_2MiB   = FLEXBUS_CSMR_BAM((1U<< 5)-1), /**< Memory size 2MiB   */
+   FlexbusSize_4MiB   = FLEXBUS_CSMR_BAM((1U<< 6)-1), /**< Memory size 4MiB   */
+   FlexbusSize_8MiB   = FLEXBUS_CSMR_BAM((1U<< 7)-1), /**< Memory size 8MiB   */
+   FlexbusSize_16MiB  = FLEXBUS_CSMR_BAM((1U<< 8)-1), /**< Memory size 16MiB  */
+   FlexbusSize_32MiB  = FLEXBUS_CSMR_BAM((1U<<19)-1), /**< Memory size 32MiB  */
+   FlexbusSize_64MiB  = FLEXBUS_CSMR_BAM((1U<<10)-1), /**< Memory size 64MiB  */
+   FlexbusSize_128MiB = FLEXBUS_CSMR_BAM((1U<<11)-1), /**< Memory size 128MiB */
+   FlexbusSize_256MiB = FLEXBUS_CSMR_BAM((1U<<12)-1), /**< Memory size 256MiB */
+   FlexbusSize_512MiB = FLEXBUS_CSMR_BAM((1U<<13)-1), /**< Memory size 512MiB */
 };
 
 /**
@@ -250,9 +250,9 @@ enum FlexbusBurst {
 /**
  * Structure describing a flexbus selection region
  */
-struct FlexbusEntry {
-   union {
-      struct {
+struct __attribute__((packed)) FlexbusEntry {
+   union __attribute__((packed)) {
+      struct __attribute__((packed)) {
          FlexbusRegion flexbusRegion; ///< Chip select number (unused portion of FB_CSARn)
          uint16_t      baseAddress;   ///< Base address
       };
@@ -464,6 +464,9 @@ public:
     * @param flexbusGroup3 Controls the multiplexing of the FB_CS5*, FB_TSIZ1, and FB_BE_23_16 signals.
     * @param flexbusGroup4 Controls the multiplexing of the FB_TBST*, FB_CS2, and FB_BE_15_8 signals.
     * @param flexbusGroup5 Controls the multiplexing of the FB_TA*, FB_CS3, and FB_BE_7_0 signals.
+    *
+    * @note Changing multiplexing may affect SDRAM controller function
+    *       See FlexbusInfo::configureSharedMultiplexing()
     */
    static void configureMultiplexing(
          FlexbusGroup1 flexbusGroup1,

@@ -1342,7 +1342,7 @@ public:
  */
 template<unsigned bitNum, Polarity polarity=ActiveHigh> class GpioA :
       public Gpio_T<PortAInfo.clockInfo, PortAInfo.portAddress, PortAInfo.irqNum, PortAInfo.gpioAddress, GPIO_DEFAULT_PCR.value, PortAInfo.irqLevel, bitNum, polarity> {};
-using PortA = PcrBase_T<PortAInfo.portAddress, PortAInfo.irqNum, PortAInfo.irqLevel>;
+typedef PcrBase_T<PortAInfo.portAddress, PortAInfo.irqNum, PortAInfo.irqLevel> PortA;
 
 /**
  * @brief Convenience template for GpioA fields. See @ref GpioField_T
@@ -1381,7 +1381,7 @@ using PortA = PcrBase_T<PortAInfo.portAddress, PortAInfo.irqNum, PortAInfo.irqLe
  * @tparam polarity       Polarity of all pins. Either ActiveHigh, ActiveLow or a bitmask (0=>bit active-high, 1=>bit active-low)
  */
 template<unsigned left, unsigned right, uint32_t polarity=ActiveHigh>
-using GpioAField = GpioField_T<PortAInfo.portAddress, PortAInfo.clockInfo, PortAInfo.irqNum, PortAInfo.gpioAddress, PortAInfo.irqLevel, left, right, polarity>;
+class GpioAField : public GpioField_T<PortAInfo.portAddress, PortAInfo.clockInfo, PortAInfo.irqNum, PortAInfo.gpioAddress, PortAInfo.irqLevel, left, right, polarity> {};
 #endif
 
 #ifdef USBDM_GPIOB_IS_DEFINED
@@ -1425,7 +1425,7 @@ using GpioAField = GpioField_T<PortAInfo.portAddress, PortAInfo.clockInfo, PortA
  */
 template<unsigned bitNum, Polarity polarity=ActiveHigh> class GpioB :
       public Gpio_T<PortBInfo.clockInfo, PortBInfo.portAddress, PortBInfo.irqNum, PortBInfo.gpioAddress, GPIO_DEFAULT_PCR.value, PortBInfo.irqLevel, bitNum, polarity> {};
-using PortB = PcrBase_T<PortBInfo.portAddress, PortBInfo.irqNum, PortBInfo.irqLevel>;
+typedef PcrBase_T<PortBInfo.portAddress, PortBInfo.irqNum, PortBInfo.irqLevel> PortB;
 
 /**
  * @brief Convenience template for GpioB fields. See @ref GpioField_T
@@ -1464,7 +1464,7 @@ using PortB = PcrBase_T<PortBInfo.portAddress, PortBInfo.irqNum, PortBInfo.irqLe
  * @tparam polarity      Polarity of all pins. Either ActiveHigh, ActiveLow or a bitmask (0=>bit active-high, 1=>bit active-low)
  */
 template<unsigned left, unsigned right, uint32_t polarity=ActiveHigh>
-using GpioBField = GpioField_T<PortBInfo.portAddress, PortBInfo.clockInfo, PortBInfo.irqNum, PortBInfo.gpioAddress, PortBInfo.irqLevel, left, right, polarity>;
+class GpioBField : public GpioField_T<PortBInfo.portAddress, PortBInfo.clockInfo, PortBInfo.irqNum, PortBInfo.gpioAddress, PortBInfo.irqLevel, left, right, polarity> {};
 #endif
 
 #ifdef USBDM_GPIOC_IS_DEFINED
@@ -1508,7 +1508,7 @@ using GpioBField = GpioField_T<PortBInfo.portAddress, PortBInfo.clockInfo, PortB
  */
 template<unsigned bitNum, Polarity polarity=ActiveHigh> class GpioC :
       public Gpio_T<PortCInfo.clockInfo, PortCInfo.portAddress, PortCInfo.irqNum, PortCInfo.gpioAddress, GPIO_DEFAULT_PCR.value, PortCInfo.irqLevel, bitNum, polarity> {};
-using PortC = PcrBase_T<PortCInfo.portAddress, PortCInfo.irqNum, PortCInfo.irqLevel>;
+typedef PcrBase_T<PortCInfo.portAddress, PortCInfo.irqNum, PortCInfo.irqLevel> PortC;
 
 /**
  * @brief Convenience template for GpioC fields. See @ref GpioField_T
@@ -1547,7 +1547,7 @@ using PortC = PcrBase_T<PortCInfo.portAddress, PortCInfo.irqNum, PortCInfo.irqLe
  * @tparam polarity      Polarity of all pins. Either ActiveHigh, ActiveLow or a bitmask (0=>bit active-high, 1=>bit active-low)
  */
 template<unsigned left, unsigned right, uint32_t polarity=ActiveHigh>
-using GpioCField = GpioField_T<PortCInfo.portAddress, PortCInfo.clockInfo, PortCInfo.irqNum, PortCInfo.gpioAddress, PortCInfo.irqLevel, left, right, polarity>;
+class GpioCField : public GpioField_T<PortCInfo.portAddress, PortCInfo.clockInfo, PortCInfo.irqNum, PortCInfo.gpioAddress, PortCInfo.irqLevel, left, right, polarity> {};
 #endif
 
 #ifdef USBDM_GPIOD_IS_DEFINED
@@ -1591,7 +1591,7 @@ using GpioCField = GpioField_T<PortCInfo.portAddress, PortCInfo.clockInfo, PortC
  */
 template<unsigned bitNum, Polarity polarity=ActiveHigh> class GpioD :
       public Gpio_T<PortDInfo.clockInfo, PortDInfo.portAddress, PortDInfo.irqNum, PortDInfo.gpioAddress, GPIO_DEFAULT_PCR.value, PortDInfo.irqLevel, bitNum, polarity> {};
-using PortD = PcrBase_T<PortDInfo.portAddress, PortDInfo.irqNum, PortDInfo.irqLevel>;
+typedef PcrBase_T<PortDInfo.portAddress, PortDInfo.irqNum, PortDInfo.irqLevel> PortD;
 
 /**
  * @brief Convenience template for GpioD fields. See @ref GpioField_T
@@ -1630,7 +1630,7 @@ using PortD = PcrBase_T<PortDInfo.portAddress, PortDInfo.irqNum, PortDInfo.irqLe
  * @tparam polarity      Polarity of all pins. Either ActiveHigh, ActiveLow or a bitmask (0=>bit active-high, 1=>bit active-low)
  */
 template<unsigned left, unsigned right, uint32_t polarity=ActiveHigh>
-using GpioDField = GpioField_T<PortDInfo.portAddress, PortDInfo.clockInfo, PortDInfo.irqNum, PortDInfo.gpioAddress, PortDInfo.irqLevel, left, right, polarity>;
+class GpioDField : public  GpioField_T<PortDInfo.portAddress, PortDInfo.clockInfo, PortDInfo.irqNum, PortDInfo.gpioAddress, PortDInfo.irqLevel, left, right, polarity> {};
 #endif
 
 #ifdef USBDM_GPIOE_IS_DEFINED
@@ -1674,7 +1674,7 @@ using GpioDField = GpioField_T<PortDInfo.portAddress, PortDInfo.clockInfo, PortD
  */
 template<unsigned bitNum, Polarity polarity=ActiveHigh> class GpioE :
       public Gpio_T<PortEInfo.clockInfo, PortEInfo.portAddress, PortEInfo.irqNum, PortEInfo.gpioAddress, GPIO_DEFAULT_PCR.value, PortEInfo.irqLevel, bitNum, polarity> {};
-using PortE = PcrBase_T<PortEInfo.portAddress, PortEInfo.irqNum, PortEInfo.irqLevel>;
+typedef PcrBase_T<PortEInfo.portAddress, PortEInfo.irqNum, PortEInfo.irqLevel> PortE;
 
 /**
  * @brief Convenience template for GpioE fields. See @ref GpioField_T
@@ -1713,7 +1713,7 @@ using PortE = PcrBase_T<PortEInfo.portAddress, PortEInfo.irqNum, PortEInfo.irqLe
  * @tparam polarity      Polarity of all pins. Either ActiveHigh, ActiveLow or a bitmask (0=>bit active-high, 1=>bit active-low)
  */
 template<unsigned left, unsigned right, uint32_t polarity=ActiveHigh>
-using GpioEField = GpioField_T<PortEInfo.portAddress, PortEInfo.clockInfo, PortEInfo.irqNum, PortEInfo.gpioAddress, PortEInfo.irqLevel, left, right, polarity>;
+class GpioEField : public GpioField_T<PortEInfo.portAddress, PortEInfo.clockInfo, PortEInfo.irqNum, PortEInfo.gpioAddress, PortEInfo.irqLevel, left, right, polarity> {};
 #endif
 
 /**

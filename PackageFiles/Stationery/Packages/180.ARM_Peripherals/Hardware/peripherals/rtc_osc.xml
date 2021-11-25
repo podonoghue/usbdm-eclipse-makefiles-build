@@ -387,22 +387,39 @@
       toolTip="Used for coldstart" >
       <choice value="2017"  name="2017" />
       <choice value="2018"  name="2018" />
-      <choice value="2019"  name="2019" isDefault="true" />
+      <choice value="2019"  name="2019" />
       <choice value="2020"  name="2020" />
-      <choice value="2021"  name="2021" />
+      <choice value="2021"  name="2021" isDefault="true" />
       <choice value="2022"  name="2022" />
+      <choice value="2023"  name="2023" />
+      <choice value="2024"  name="2024" />
+      <choice value="2025"  name="2025" />
+      <choice value="2026"  name="2026" />
+      <choice value="2027"  name="2027" />
+      <choice value="2028"  name="2028" />
+      <choice value="2029"  name="2029" />
+      <choice value="2030"  name="2030" />
+      <choice value="2031"  name="2031" />
+      <choice value="2032"  name="2032" />
+      <choice value="2033"  name="2033" />
+      <choice value="2034"  name="2034" />
+      <choice value="2035"  name="2035" />
+      <choice value="2036"  name="2036" />
+      <choice value="2037"  name="2037" />
+      <choice value="2038"  name="2038" />
+      <choice value="2039"  name="2039" />
    </choiceOption>
 
    <choiceOption name="rtc_month"
       description="Initial Month" 
       toolTip="Used for coldstart" >
-      <choice value="0"    name="Jan" />
+      <choice value="0"    name="Jan"  isDefault="true" />
       <choice value="31"   name="Feb" />
       <choice value="59"   name="March" />
       <choice value="90"   name="April" />
       <choice value="120"  name="May" />
       <choice value="151"  name="June" />
-      <choice value="181"  name="July" isDefault="true" />
+      <choice value="181"  name="July"/>
       <choice value="212"  name="August" />
       <choice value="243"  name="September" />
       <choice value="273"  name="October" />

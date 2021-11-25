@@ -84,12 +84,20 @@
    <item key="$pin$PTD7_muxSetting_5"                      value="selected" />
    <item key="$pin$PTD8_muxSetting_7"                      value="selected" />
    <item key="$pin$PTD9_muxSetting_7"                      value="selected" />
+   <item key="$pin$PTE0_muxSetting_5"                      value="selected" />
+   <item key="$pin$PTE1_muxSetting_5"                      value="selected" />
+   <item key="$pin$PTE2_muxSetting_5"                      value="selected" />
+   <item key="$pin$PTE3_muxSetting_5"                      value="selected" />
+   <item key="$pin$PTE4_muxSetting_5"                      value="selected" />
+   <item key="$pin$PTE5_muxSetting_5"                      value="selected" />
    <item key="$pin$PTE6_muxSetting_1"                      value="selected" />
    <item key="$pin$PTE7_muxSetting_1"                      value="selected" />
    <item key="$pin$PTE8_muxSetting_1"                      value="selected" />
    <item key="$signal$ADC0_SE16_descriptionSetting"        value="Light Sensor" />
    <item key="$signal$CLKOUT_descriptionSetting"           value="Clkout" />
    <item key="$signal$EXTAL32_descriptionSetting"          value="Reserved(Crystal)" />
+   <item key="$signal$FB_BE23_16_BLS15_8_b_descriptionSetting" value="SDRAM_LDQM" />
+   <item key="$signal$FB_BE31_24_BLS7_0_b_descriptionSetting" value="SDRAM_UDQM" />
    <item key="$signal$FXIO0_D11_descriptionSetting"        value="FlexioD11" />
    <item key="$signal$FXIO0_D12_descriptionSetting"        value="FlexioD12" />
    <item key="$signal$FXIO0_D15_descriptionSetting"        value="FlexioD15" />
@@ -120,6 +128,12 @@
    <item key="$signal$GPIOE_6_codeIdentifier"              value="RedLED" />
    <item key="$signal$GPIOE_7_codeIdentifier"              value="GreenLED" />
    <item key="$signal$GPIOE_8_codeIdentifier"              value="BlueLED" />
+   <item key="$signal$QSPI0A_DATA0_descriptionSetting"     value="QSPIA0_DATA0" />
+   <item key="$signal$QSPI0A_DATA1_descriptionSetting"     value="QSPIA0_DATA1" />
+   <item key="$signal$QSPI0A_DATA2_descriptionSetting"     value="QSPIA0_DATA2" />
+   <item key="$signal$QSPI0A_DATA3_descriptionSetting"     value="QSPIA0_DATA3" />
+   <item key="$signal$QSPI0A_SCLK_descriptionSetting"      value="QSPIA0_SCLK" />
+   <item key="$signal$QSPI0A_SS0_b_descriptionSetting"     value="QSPIA0_SS0" />
    <item key="$signal$RESET_b_descriptionSetting"          value="Resetn" />
    <item key="$signal$SDRAM_A10_descriptionSetting"        value="SDRAM_A6" />
    <item key="$signal$SDRAM_A11_descriptionSetting"        value="SDRAM_A5" />

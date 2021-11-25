@@ -625,11 +625,11 @@ public:
 template<class Info> DacCallbackFunction Dac_T<Info>::sCallback =  Dac_T<Info>::unhandledCallback;
 
 #if defined(USBDM_DAC0_IS_DEFINED)
-using Dac0 = Dac_T<Dac0Info>;
+typedef Dac_T<Dac0Info> Dac0;
 #endif
 
 #if defined(USBDM_DAC1_IS_DEFINED)
-using Dac1 = Dac_T<Dac1Info>;
+typedef Dac_T<Dac1Info> Dac1;
 #endif
 /**
  * @}
