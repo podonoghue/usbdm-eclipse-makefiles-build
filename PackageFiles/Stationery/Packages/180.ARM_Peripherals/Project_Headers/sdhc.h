@@ -3,7 +3,7 @@
  * @brief    Secured digital host controller
  *
  * @version  V4.12.1.230
- * @date     13 April 2016
+ * @date     29 November 2021
  */
 
 #ifndef HEADER_SDHC_H_
@@ -32,6 +32,73 @@ namespace USBDM {
 typedef void (*SDHCCallbackFunction)();
 
 /**
+ *  Interrupt status masks
+ *
+ *  For use with\n
+ *     - @ref Sdhc0::getInterruptStatus() @ref Sdhc0::getAndClearInterruptStatus() @ref Sdhc0::clearInterruptStatus() \n
+ *     - @ref Sdhc0::enableInterruptStatus() @ref Sdhc0::disableInterruptStatus() \n
+ *     - @ref Sdhc0::enableInterruptRequests() @ref Sdhc0::disableInterruptRequests()
+ */
+enum SdhcStatus {
+   SdhcStatus_DmaError            = SDHC_IRQSTAT_DMAE_MASK, /**< DMA Error             */
+   SdhcStatus_AutoCommand12Error  = SDHC_IRQSTAT_AC12E_MASK,/**< Auto Command 12 Error */
+   SdhcStatus_DataEndBitError     = SDHC_IRQSTAT_DEBE_MASK, /**< Data End Bit Error    */
+   SdhcStatus_DataCrcError        = SDHC_IRQSTAT_DCE_MASK,  /**< Data CRC Error        */
+   SdhcStatus_DataTimeoutError    = SDHC_IRQSTAT_DTOE_MASK, /**< Data Timeout Error    */
+   SdhcStatus_CommandIndexError   = SDHC_IRQSTAT_CIE_MASK,  /**< Command Index Error   */
+   SdhcStatus_CommandEndBitError  = SDHC_IRQSTAT_CEBE_MASK, /**< Command End Bit Error */
+   SdhcStatus_CommandCrcError     = SDHC_IRQSTAT_CCE_MASK,  /**< Command CRC Error     */
+   SdhcStatus_CommandTimeoutError = SDHC_IRQSTAT_CTOE_MASK, /**< Command Timeout Error */
+   SdhcStatus_CardInterrupt       = SDHC_IRQSTAT_CINT_MASK, /**< Card Interrupt        */
+   SdhcStatus_CardRemoval         = SDHC_IRQSTAT_CRM_MASK,  /**< Card Removal          */
+   SdhcStatus_CardInsertion       = SDHC_IRQSTAT_CINS_MASK, /**< Card Insertion        */
+   SdhcStatus_BufferReadReady     = SDHC_IRQSTAT_BRR_MASK,  /**< Buffer Read Ready     */
+   SdhcStatus_BufferWriteReady    = SDHC_IRQSTAT_BWR_MASK,  /**< Buffer Write Ready    */
+   SdhcStatus_DmaInterrupt        = SDHC_IRQSTAT_DINT_MASK, /**< DMA Interrupt         */
+   SdhcStatus_BlockGapEvent       = SDHC_IRQSTAT_BGE_MASK,  /**< Block Gap Event       */
+   SdhcStatus_TransferComplete    = SDHC_IRQSTAT_TC_MASK,   /**< Transfer Complete     */
+   SdhcStatus_CommandComplete     = SDHC_IRQSTAT_CC_MASK,   /**< Command Complete      */
+};
+
+/**
+ * Force event masks
+ *
+ * For use with @ref Sdhc0::forceEvent()
+ */
+enum SdhcForceEvent {
+   SdhcForceEvent_CardEventError        = SDHC_FEVT_CINT_MASK,       /**< Force Card Event Interrupt     */
+   SdhcForceEvent_DmaError              = SDHC_FEVT_DMAE_MASK,       /**< Force DMA Error                */
+   SdhcForceEvent_AutoCommand12Error    = SDHC_FEVT_AC12E_MASK,      /**< Force Auto Command 12 Error    */
+   SdhcForceEvent_DataEndBitError       = SDHC_FEVT_DEBE_MASK,       /**< Force Data End Bit Error       */
+   SdhcForceEvent_DataCrcError          = SDHC_FEVT_DCE_MASK,        /**< Force Data CRC Error           */
+   SdhcForceEvent_DataTimeoutError      = SDHC_FEVT_DTOE_MASK,       /**< Force Data Timeout Error       */
+   SdhcForceEvent_CommandIndexError     = SDHC_FEVT_CIE_MASK,        /**< Force Command Index Error      */
+   SdhcForceEvent_CommandEndBitError    = SDHC_FEVT_CEBE_MASK,       /**< Force Command End Bit Error    */
+   SdhcForceEvent_CommandCrcError       = SDHC_FEVT_CCE_MASK,        /**< Force Command CRC Error        */
+   SdhcForceEvent_CommandTimeoutError   = SDHC_FEVT_CTOE_MASK,       /**< Force Command Timeout Error    */
+   SdhcForceEvent_CommandNotIssued      = SDHC_FEVT_CNIBAC12E_MASK,  /**< Force Command Not Issued       */
+   SdhcForceEvent_AutoCmd12IndexError   = SDHC_FEVT_AC12IE_MASK,     /**< Force CMD12 Index Error        */
+   SdhcForceEvent_AutoCmd12CrcError     = SDHC_FEVT_AC12CE_MASK,     /**< Force CMD12 CRC Error          */
+   SdhcForceEvent_AutoCmd12EndBitError  = SDHC_FEVT_AC12EBE_MASK,    /**< Force CMD12 End Bit Error      */
+   SdhcForceEvent_AutoCmd12TimeoutError = SDHC_FEVT_AC12TOE_MASK,    /**< Force CMD12 Timeout Error      */
+   SdhcForceEvent_AutoCmd12NotExecuted  = SDHC_FEVT_AC12NE_MASK,     /**< Force CMD12 Not Executed       */
+};
+
+/**
+ *  Auto command 12 event masks
+ *
+ *  For use with @ref Sdhc0::getAutoCommand12ErrorStatus()
+ */
+enum SdhcAutoCommand12Status {
+   SdhcAutoCommand12Status_CommandNotIssued = SDHC_AC12ERR_CNIBAC12E_MASK,  /**< Command Not Issued */
+   SdhcAutoCommand12Status_IndexError       = SDHC_AC12ERR_AC12IE_MASK,     /**< Index Error        */
+   SdhcAutoCommand12Status_CrcError         = SDHC_AC12ERR_AC12CE_MASK,     /**< CRC Error          */
+   SdhcAutoCommand12Status_EndBitError      = SDHC_AC12ERR_AC12EBE_MASK,    /**< End Bit Error      */
+   SdhcAutoCommand12Status_TimeoutError     = SDHC_AC12ERR_AC12TOE_MASK,    /**< Timeout Error      */
+   SdhcAutoCommand12Status_NotExecuted      = SDHC_AC12ERR_AC12NE_MASK,     /**< Not Executed       */
+};
+
+/**
  * Template class representing the Secured digital host controller
  *
  * @tparam info      Information class for SDHC
@@ -51,12 +118,8 @@ protected:
    static SDHCCallbackFunction callback;
 
 public:
-   /**
-    * Hardware instance pointer.
-    *
-    * @return Reference to SDHC hardware
-    */
-   static __attribute__((always_inline)) volatile SDHC_Type &sdhc() { return Info::sdhc(); }
+   /** Hardware instance pointer */
+   static constexpr HardwarePtr<SDHC_Type> sdhc = Info::baseAddress;
 
    /**
     * IRQ handler
@@ -100,6 +163,122 @@ public:
    }
 
    /**
+    * Get command response
+    *
+    * @param num Index of response
+    *
+    * @return Response
+    */
+   uint32_t getCommandResponse(unsigned num) {
+      usbdm_assert(num<4, "Illegal response number");
+      return sdhc->CMDRSP[num];
+   }
+
+   /**
+    * Get interrupt status flags
+    *
+    * @return Mask indicating pending interrupt requests, see @ref SdhcStatus
+    */
+   uint32_t getInterruptStatus() {
+      return sdhc->IRQSTAT;
+   }
+
+   /**
+    * Get and clear interrupt status flags
+    *
+    * @return Mask indicating cleared interrupt requests, see @ref SdhcStatus
+    */
+   uint32_t getAndClearInterruptStatus() {
+      uint32_t t = sdhc->IRQSTAT;
+      sdhc->IRQSTAT = t;
+      return  t;
+   }
+
+   /**
+    * Clear interrupt status flags
+    *
+    * @param sdhcStatus Mask indicating interrupt requests to clear, see @ref SdhcStatus
+    */
+   void clearInterruptStatus(uint32_t sdhcStatus) {
+      sdhc->IRQSTAT = sdhcStatus;
+   }
+
+   /**
+    * Enable interrupt status flags
+    *
+    * A disabled flag will be forced to 0 (inactive).\n
+    * An enabled flag is able to be set by the associated event.
+    *
+    * @param sdhcStatus Mask indicating interrupt status flags to enable, see @ref SdhcStatus
+    */
+   void enableInterruptStatus(uint32_t sdhcStatus) {
+      sdhc->IRQSTATEN |= sdhcStatus;
+    }
+
+   /**
+    * Disable interrupt status flags
+    *
+    * A disabled flag will be forced to 0 (inactive).\n
+    * An enabled flag is able to be set by the associated event.
+    *
+    * @param sdhcStatus Mask indicating interrupt status flags to disable, see @ref SdhcStatus
+    */
+   void disableInterruptStatus(uint32_t sdhcStatus) {
+      sdhc->IRQSTATEN &= ~sdhcStatus;
+   }
+
+   /**
+    * Enable interrupt requests from status flags
+    *
+    * A disabled flag will be ignored (even if set).\n
+    * An enabled flag is able to generate an interrupt request.
+    *
+    * @param sdhcStatus Mask indicating interrupt requests to enable, see @ref SdhcStatus
+    */
+   void enableInterruptRequests(uint32_t sdhcStatus) {
+      sdhc->IRQSIGEN |= sdhcStatus;
+    }
+
+   /**
+    * Disable interrupt requests from status flags
+    *
+    * A disabled flag will be ignored (even if set)\n
+    * An enabled flag is able to generate an interrupt request
+    *
+    * @param sdhcStatus Mask indicating interrupt requests to disable, see @ref SdhcStatus
+    */
+   void disableInterruptRequests(uint32_t sdhcStatus) {
+      sdhc->IRQSIGEN &= ~sdhcStatus;
+   }
+
+   /**
+    *  Get Auto Command 12 Error Status
+    *
+    *  When the AC12ESEN bit in the Status register is set, the host driver can check this
+    *  value to identify what kind of error the Auto CMD12 indicated.\n
+    *  This value is only valid when the Auto CMD12 Error status bit is set.
+    *
+    * @return Mask indicating Auto Command 12 status, see @ref SdhcAutoCommand12Status
+    */
+   uint32_t getAutoCommand12ErrorStatus() {
+      return sdhc->AC12ERR;
+   }
+
+   /**
+    * Force event
+    *
+    * This sets the corresponding flag in the Interrupt Status register if the
+    * corresponding bit of the Interrupt Status Enable register is set.
+    *
+    * This requires SYSCTL[IPGEN] to be set so that the bus clock is always active.
+    *
+    * @param sdhcForceEvent  Mask indicating events to force, see @ref SdhcForceEvent
+    */
+   void forceEvent(uint32_t sdhcForceEvent) {
+      sdhc->FEVT = sdhcForceEvent;
+   }
+
+   /**
     * Disable interface to SDHC
     */
    static void disable() {
@@ -114,7 +293,7 @@ public:
    }
 
    /**
-    * Enable and set priority of interrupts in NVIC
+    * Enable and set priority of interrupts in NVIC\n
     * Any pending NVIC interrupts are first cleared.
     *
     * @param[in]  nvicPriority  Interrupt priority
@@ -129,7 +308,6 @@ public:
    static void disableNvicInterrupts() {
       NVIC_DisableIRQ(Info::irqNums[0]);
    }
-
 };
 
 template<class Info> SDHCCallbackFunction SdhcBase_T<Info>::callback = SdhcBase_T<Info>::unhandledCallback;

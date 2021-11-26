@@ -19,9 +19,6 @@ using flash = Mt25qu256aba;
 
 void testQspi() {
 
-   console.writeln("Configuring QSPI Controller\n");
-   flash::qspiInit();
-
    // How much of the flash to test
    static constexpr unsigned FLASH_SIZE_TO_TEST = flash::FLASH_SIZE;
 
@@ -35,8 +32,8 @@ void testQspi() {
    static constexpr unsigned FLASH_TEST_END   = FLASH_TEST_START + FLASH_SIZE_TO_TEST-1;
 
    console.setWidth(8).setPadding(Padding_LeadingZeroes);
-   console.write("Testing Flash[").write(FLASH_TEST_START, Radix_16).
-         write("..").write(FLASH_TEST_END, Radix_16).writeln("]");
+   console.write("Testing Flash[0x").write(FLASH_TEST_START, Radix_16).
+         write("..0x").write(FLASH_TEST_END, Radix_16).writeln("]");
    console.resetFormat();
 
    // rand() is expected to generate the same pseudo-random sequence from the same seed
@@ -50,7 +47,7 @@ void testQspi() {
    // For each sector
    for (unsigned sector = 0; sector<(FLASH_SIZE_TO_TEST/flash::FLASH_SECTOR_SIZE); sector++) {
 
-      console.write(flashAddress, Radix_16).write('\r');
+      console.write("0x").write(flashAddress, Radix_16).write('\r');
 
       // Erase the sector
       flash::eraseSector(flashAddress);

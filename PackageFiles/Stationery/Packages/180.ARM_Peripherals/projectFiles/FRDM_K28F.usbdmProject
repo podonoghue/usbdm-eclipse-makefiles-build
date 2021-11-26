@@ -9,6 +9,7 @@
    <item key="$$DeviceInfo_SubFamily"                      value="MK28F15" />
    <item key="$$Hardware_Source_Filename"                  value="MK28F15.usbdmHardware" />
    <item key="$peripheral$FLEXBUS_codeIdentifier"          value="myFlexbusController" />
+   <item key="$peripheral$SDHC0_codeIdentifier"            value="Sdhc" />
    <item key="$peripheral$SDRAMC_codeIdentifier"           value="mySDRamController" />
    <item key="$pin$PTA0_muxSetting_7"                      value="selected" />
    <item key="$pin$PTA10_muxSetting_5"                     value="selected" />
@@ -26,6 +27,12 @@
    <item key="$pin$PTA21_muxSetting_5"                     value="selected" />
    <item key="$pin$PTA22_muxSetting_5"                     value="selected" />
    <item key="$pin$PTA23_muxSetting_5"                     value="selected" />
+   <item key="$pin$PTA24_muxSetting_4"                     value="selected" />
+   <item key="$pin$PTA25_muxSetting_4"                     value="selected" />
+   <item key="$pin$PTA26_muxSetting_4"                     value="selected" />
+   <item key="$pin$PTA27_muxSetting_4"                     value="selected" />
+   <item key="$pin$PTA28_muxSetting_4"                     value="selected" />
+   <item key="$pin$PTA29_muxSetting_4"                     value="selected" />
    <item key="$pin$PTA2_muxSetting_5"                      value="selected" />
    <item key="$pin$PTA3_muxSetting_7"                      value="selected" />
    <item key="$pin$PTA4_muxSetting_1"                      value="selected" />
@@ -46,6 +53,7 @@
    <item key="$pin$PTB23_muxSetting_5"                     value="selected" />
    <item key="$pin$PTB2_muxSetting_5"                      value="selected" />
    <item key="$pin$PTB3_muxSetting_5"                      value="selected" />
+   <item key="$pin$PTB5_muxSetting_1"                      value="selected" />
    <item key="$pin$PTB6_muxSetting_5"                      value="selected" />
    <item key="$pin$PTB7_muxSetting_5"                      value="selected" />
    <item key="$pin$PTB8_muxSetting_5"                      value="selected" />
@@ -123,6 +131,8 @@
    <item key="$signal$FXIO0_D9_descriptionSetting"         value="FlexioD9" />
    <item key="$signal$GPIOA_4_codeIdentifier"              value="Switch2" />
    <item key="$signal$GPIOA_4_polarity"                    value="true" />
+   <item key="$signal$GPIOB_5_codeIdentifier"              value="sdhcCardDetect" />
+   <item key="$signal$GPIOB_5_descriptionSetting"          value="SDHC0_CARD_DETECT" />
    <item key="$signal$GPIOD_0_codeIdentifier"              value="Switch3" />
    <item key="$signal$GPIOD_0_polarity"                    value="true" />
    <item key="$signal$GPIOE_6_codeIdentifier"              value="RedLED" />
@@ -135,6 +145,12 @@
    <item key="$signal$QSPI0A_SCLK_descriptionSetting"      value="QSPIA0_SCLK" />
    <item key="$signal$QSPI0A_SS0_b_descriptionSetting"     value="QSPIA0_SS0" />
    <item key="$signal$RESET_b_descriptionSetting"          value="Resetn" />
+   <item key="$signal$SDHC0_CMD_descriptionSetting"        value="SDHC0_CMD" />
+   <item key="$signal$SDHC0_D0_descriptionSetting"         value="SDHC0_D0" />
+   <item key="$signal$SDHC0_D1_descriptionSetting"         value="SDHC0_D1" />
+   <item key="$signal$SDHC0_D2_descriptionSetting"         value="SDHC0_D2" />
+   <item key="$signal$SDHC0_D3_descriptionSetting"         value="SDHC0_D3" />
+   <item key="$signal$SDHC0_DCLK_descriptionSetting"       value="SDHC0_DCLK" />
    <item key="$signal$SDRAM_A10_descriptionSetting"        value="SDRAM_A6" />
    <item key="$signal$SDRAM_A11_descriptionSetting"        value="SDRAM_A5" />
    <item key="$signal$SDRAM_A12_descriptionSetting"        value="SDRAM_A4" />

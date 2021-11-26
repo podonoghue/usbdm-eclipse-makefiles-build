@@ -20,6 +20,8 @@
 #include "pin_mapping.h"
 #include "cstdlib"
 #include "memory"
+#include "formatted_io.h"
+#include "delay.h"
 
 namespace USBDM {
 
@@ -125,7 +127,7 @@ enum QspiIdleSignalDrive3B {
 /**
  * DDR mode enable
  */
-enum QspiDDR {
+enum QspiDdr {
    QspiDDR_Disable = QSPI_MCR_DDR_EN(0), /**< 2x and 4x clocks are disabled for SDR instructions only */
    QspiDDR_Enable  = QSPI_MCR_DDR_EN(1), /**< 2x and 4x clocks are enabled supports both SDR and DDR instruction. */
 };
@@ -137,9 +139,9 @@ enum QspiDDR {
  * QSPI_MCR[DDR_EN] is set, else, on only one edge when QSPI_MCR[DDR_EN] is 0.
  * The QSPI_SMPR[DDR_SMP] values are ignored.
  */
-enum QspiDQS {
-   QspiDQS_Disable  = QSPI_MCR_DQS_EN(0), /**< DQS disabled */
-   QspiDQS_Enable   = QSPI_MCR_DQS_EN(1), /**< DQS enabled  */
+enum QspiDqs {
+   QspiDqs_Disable  = QSPI_MCR_DQS_EN(0), /**< DQS disabled */
+   QspiDqs_Enable   = QSPI_MCR_DQS_EN(1), /**< DQS enabled  */
 };
 
 /**
@@ -148,9 +150,9 @@ enum QspiDQS {
  * This field is valid when latency is included in between read access from
  * flash memory in cases when QSPI_MCR[DQS_EN] is 1.
  */
-enum QspiDQSLatency {
-   QspiDQSLatency_Disable = QSPI_MCR_DQS_EN(0),/**< QspiDQSLatency_Disable */
-   QspiDQSLatency_Enable  = QSPI_MCR_DQS_EN(0),/**< QspiDQSLatency_Enable */
+enum QspiDqsLatency {
+   QspiDqsLatency_Disable = QSPI_MCR_DQS_LAT_EN(0),/**< QspiDqsLatency_Disable */
+   QspiDqsLatency_Enable  = QSPI_MCR_DQS_LAT_EN(0),/**< QspiDqsLatency_Enable */
 };
 
 /**
@@ -286,11 +288,11 @@ enum QspiClockSource {
 /**
  * Octal data pins enable
  *
- * Selects which QSPI port the QSPI0B_DATAx pins are switched to for composite eight bit data bus
+ * Allows the QSPI0B_DATAx pins to be used as an additional 4 QSPI0B data pins for a composite eight bit data bus
  */
 enum QspiOctalDataPins {
-   QspiOctalDataPins_PortB = QSPI_SOCCR_OCTEN(0),  /**< QSPI0B_DATAx pins are assigned to QSPI Port B */
-   QspiOctalDataPins_PortA = QSPI_SOCCR_OCTEN(1),  /**< QSPI0B_DATAx pins are assigned to QSPI Port A */
+   QspiOctalDataPins_Disabled = QSPI_SOCCR_OCTEN(0),  /**< QSPI0B_DATAx pins have normal use */
+   QspiOctalDataPins_Enabled  = QSPI_SOCCR_OCTEN(1),  /**< QSPI0B_DATAx pins are assigned to QSPI Port A */
 };
 
 /**
@@ -318,11 +320,11 @@ enum QspiFlashClock2Pin {
 
 
 /**
- * Select clock source for internal DQS generation
+ * Select inverted clock source for internal DQS generation
  */
-enum QspiClockSourceDQS {
-   QspiClockSourceDQS_x1         = QSPI_SOCCR_DQSINVSEL(0),/**< 1x internal reference clock */
-   QspiClockSourceDQS_Invertedx1 = QSPI_SOCCR_DQSINVSEL(1),/**< Inverted 1x internal reference clock */
+enum QspiDqsClockPolarity {
+   QspiDqsClockPolarity_NonInverted = QSPI_SOCCR_DQSINVSEL(0),/**< 1x internal reference clock */
+   QspiDqsClockPolarity_Inverted    = QSPI_SOCCR_DQSINVSEL(1),/**< Inverted 1x internal reference clock */
 };
 
 /**
@@ -330,11 +332,11 @@ enum QspiClockSourceDQS {
  *
  * These bits are always zero in SDR mode.
  */
-enum QspiPhaseSelectDQS {
-   QspiPhaseSelectDQS_None       = QSPI_SOCCR_DQSPHASEL(0b00),/**< No phase shift */
-   QspiPhaseSelectDQS_45_Degree  = QSPI_SOCCR_DQSPHASEL(0b00),/**< 45 degree phase shift */
-   QspiPhaseSelectDQS_90_Degree  = QSPI_SOCCR_DQSPHASEL(0b00),/**< 90 degree phase shift */
-   QspiPhaseSelectDQS_135_Degree = QSPI_SOCCR_DQSPHASEL(0b00),/**< 135 degree phase shift */
+enum QspiPhaseSelectDqs {
+   QspiPhaseSelectDqs_None       = QSPI_SOCCR_DQSPHASEL(0b00),/**< No phase shift */
+   QspiPhaseSelectDqs_45_Degree  = QSPI_SOCCR_DQSPHASEL(0b00),/**< 45 degree phase shift */
+   QspiPhaseSelectDqs_90_Degree  = QSPI_SOCCR_DQSPHASEL(0b00),/**< 90 degree phase shift */
+   QspiPhaseSelectDqs_135_Degree = QSPI_SOCCR_DQSPHASEL(0b00),/**< 135 degree phase shift */
 };
 
 /**
@@ -342,10 +344,10 @@ enum QspiPhaseSelectDQS {
  * - DQS will be sent to the DQS pad first and then looped back to QuadSPI.
  * - DQS is selected and looped back to QuadSPI, without going to DQS pad
  */
-enum QspiLoopDQS {
-   QspiLoopDQS_Unclear     = QSPI_SOCCR_DQSPADLPEN(0)|QSPI_SOCCR_DQSLPEN(0), /**< DQS ??? */
-   QspiLoopDQS_ViaPad      = QSPI_SOCCR_DQSPADLPEN(1)|QSPI_SOCCR_DQSLPEN(0), /**< Internally generated DQS looped via pad to QSPISpi */
-   QspiLoopDQS_Internally  = QSPI_SOCCR_DQSPADLPEN(0)|QSPI_SOCCR_DQSLPEN(1), /**< Internally generated DQS looped directly to QSPISpi */
+enum QspiLoopDqs {
+   QspiLoopDqs_External    = QSPI_SOCCR_DQSPADLPEN(0)|QSPI_SOCCR_DQSLPEN(0), /**< Externally provided DQS ? */
+   QspiLoopDqs_ViaPad      = QSPI_SOCCR_DQSPADLPEN(1)|QSPI_SOCCR_DQSLPEN(0), /**< Internally generated DQS looped via pad to QSPISpi */
+   QspiLoopDqs_Internally  = QSPI_SOCCR_DQSPADLPEN(0)|QSPI_SOCCR_DQSLPEN(1), /**< Internally generated DQS looped directly to QSPISpi */
 };
 
 /**
@@ -370,8 +372,8 @@ enum QspiDdrSamplePoint {
  * Select the delay with respect to the reference edge for the sample point valid for full speed commands.
  */
 enum QspiSdrFullSpeedDelay {
-   QspiSdrFullSpeedDelay_1ClockCycles = QSPI_SMPR_FSDLY(0), /**< One clock cycle delay */
-   QspiSdrFullSpeedDelay_2ClockCycles = QSPI_SMPR_FSDLY(1), /**< Two clock cycle delay */
+   QspiSdrFullSpeedDelay_1_ClockCycle  = QSPI_SMPR_FSDLY(0), /**< One clock cycle delay */
+   QspiSdrFullSpeedDelay_2_ClockCycles = QSPI_SMPR_FSDLY(1), /**< Two clock cycle delay */
 };
 
 /**
@@ -391,8 +393,8 @@ enum QspiSdrFullSpeedPhase {
  * Select the delay with respect to the reference edge for the sample point valid for half speed commands.
  */
 enum QspiHalfSpeedDelay {
-   QspiHalfSpeedDelay_NonInvertedClock = QSPI_SMPR_HSDLY(0), /**< QspiHalfSpeedDelay_NonInvertedClock */
-   QspiHalfSpeedDelay_InvertedClock    = QSPI_SMPR_HSDLY(1), /**< QspiHalfSpeedDelay_InvertedClock */
+   QspiHalfSpeedDelay_1_ClockCycle  = QSPI_SMPR_HSDLY(0), /**< One clock cycle delay */
+   QspiHalfSpeedDelay_2_ClockCycles = QSPI_SMPR_HSDLY(1), /**< Two clock cycle delay */
 };
 
 /**
@@ -779,7 +781,7 @@ enum QspiFlag {
 };
 
 /**
- * BIt masks for Interrupt or DMA requests.
+ * Bit masks for Interrupt or DMA requests.
  * See @ref QspiBase_T<Qspi0Info>::enableInterruptOrDmaRequests() and @ref QspiBase_T<Qspi0Info>::disableInterruptOrDmaRequests()
  */
 enum QspiRequest {
@@ -924,7 +926,6 @@ enum QspiFifoClear {
    QspiFifoClear_BothTxAndRx     = QSPI_MCR_CLR_TXF_MASK|QSPI_MCR_CLR_RXF_MASK, /**< Both Transmit and Receive FIFOs */
 
 };
-
 union __attribute__((packed)) QspiLutInstruction {
    struct __attribute__((packed)) {
       uint8_t         operand;
@@ -988,7 +989,7 @@ using QspiDelayTabSelectB = uint32_t;
  *
  * @return Tap selection suitable for use with QSPI_SOCCR
  */
-static constexpr QspiDelayTabSelectA qqspiDelayTabSelectA(unsigned tapSelect) {
+static constexpr QspiDelayTabSelectA qspiDelayTabSelectA(unsigned tapSelect) {
    return QSPI_SOCCR_DLYTAPSELA(tapSelect);
 }
 
@@ -999,7 +1000,7 @@ static constexpr QspiDelayTabSelectA qqspiDelayTabSelectA(unsigned tapSelect) {
  *
  * @return Tap selection suitable for use with QSPI_SOCCR
  */
-static constexpr QspiDelayTabSelectA qqspiDelayTabSelectB(unsigned tapSelect) {
+static constexpr QspiDelayTabSelectA qspiDelayTabSelectB(unsigned tapSelect) {
    return QSPI_SOCCR_DLYTAPSELB(tapSelect);
 }
 
@@ -1193,7 +1194,12 @@ public:
    }
 };
 
+/**
+ * Configuration settings for use with @ref QspiBase_T<Qspi0Info>::configure()
+ */
 struct QspiSettings {
+   QspiClockSource                clockSource;
+   uint32_t                       baudRate;
    QspiBufferConfiguration        bufferConfiguration[4];
    QspiGenericBufferConfiguration genericBufferConfiguration;
    QspiTxBufferConfiguration      qspiTxBufferConfiguration;
@@ -1201,6 +1207,49 @@ struct QspiSettings {
    uint32_t                       flashSizes[4];
 };
 
+/**
+ * Configuration settings for use with @ref QspiBase_T<Qspi0Info>::configureAdvanced()
+ */
+struct QspiAdvancedSettings {
+   const uint32_t mcr;
+   const uint32_t soccr;
+
+   constexpr QspiAdvancedSettings(
+         QspiDdr                 qspiDdr                = QspiDDR_Disable,
+         QspiEndian              qspiEndian             = QspiEndian_64bit_LE,
+
+         QspiFlashClock2Pin      qspiFlashClock2Pin     = QspiFlashClock2Pin_Disabled,
+         QspiDiffClockEnable     qspiDiffClockEnable    = QspiDiffClockEnable_Disabled,
+         QspiOctalDataPins       qspiOctalDataPins      = QspiOctalDataPins_Disabled,
+
+         QspiIdleSignalDrive2A   qspiIdleSignalDrive2A  = QspiIdleSignalDrive2A_H,
+         QspiIdleSignalDrive2B   qspiIdleSignalDrive2B  = QspiIdleSignalDrive2B_H,
+         QspiIdleSignalDrive3A   qspiIdleSignalDrive3A  = QspiIdleSignalDrive3A_H,
+         QspiIdleSignalDrive3B   qspiIdleSignalDrive3B  = QspiIdleSignalDrive3B_H ) :
+      mcr(qspiDdr|qspiEndian|qspiIdleSignalDrive2A|qspiIdleSignalDrive2B|qspiIdleSignalDrive3A|qspiIdleSignalDrive3B),
+      soccr(qspiFlashClock2Pin|qspiDiffClockEnable|qspiOctalDataPins) {
+   }
+};
+
+/**
+ * Configuration settings for use with @ref QspiBase_T<Qspi0Info>::configureDqs()
+ */
+struct QspiDqsSettings {
+   const uint32_t mcr;
+   const uint32_t soccr;
+
+   constexpr QspiDqsSettings(
+         QspiDqsLatency          qspiDQSLatency         = QspiDqsLatency_Disable,
+         QspiLoopDqs             qspiLoopDqs            = QspiLoopDqs_External,
+         QspiPhaseSelectDqs      qspiPhaseSelectDqs     = QspiPhaseSelectDqs_None,
+         QspiDqsClockPolarity    qspiDqsClockPolarity   = QspiDqsClockPolarity_NonInverted,
+         QspiDelayTabSelectA     qspiDelayTabSelectA    = qspiDelayTabSelectA(0),
+         QspiDelayTabSelectB     qspiDelayTabSelectB    = qspiDelayTabSelectB(0)
+      ) :
+      mcr(QspiDqs_Enable|qspiDQSLatency),
+      soccr(qspiLoopDqs|qspiPhaseSelectDqs|qspiDqsClockPolarity|qspiDelayTabSelectA|qspiDelayTabSelectB) {
+      };
+};
 
 /**
  * @brief Template class representing an QSPI interface
@@ -1366,40 +1415,19 @@ public:
    }
 
    /**
-    *
-    * @param qspiDDR                   DDR mode enable
-    * @param qspiDQS                   DQS enable
-    * @param qspiDQSLatency            DQS Latency Enable
-    * @param qspiEndian                Endianness
-    * @param qspiIdleSignalDrive2A     Idle Signal Drive IOFA[2] Flash A.
-    * @param qspiIdleSignalDrive2B     Idle Signal Drive IOFB[2] Flash B.
-    * @param qspiIdleSignalDrive3A     Idle Signal Drive IOFB[3] Flash A.
-    * @param qspiIdleSignalDrive3B     Idle Signal Drive IOFB[3] Flash B.
-    */
-   static void configureQspi (
-         QspiDDR                qspiDDR               = QspiDDR_Disable,
-         QspiDQS                qspiDQS               = QspiDQS_Disable,
-         QspiDQSLatency         qspiDQSLatency        = QspiDQSLatency_Disable,
-         QspiEndian             qspiEndian            = QspiEndian_64bit_LE,
-         QspiIdleSignalDrive2A  qspiIdleSignalDrive2A = QspiIdleSignalDrive2A_H,
-         QspiIdleSignalDrive2B  qspiIdleSignalDrive2B = QspiIdleSignalDrive2B_H,
-         QspiIdleSignalDrive3A  qspiIdleSignalDrive3A = QspiIdleSignalDrive3A_H,
-         QspiIdleSignalDrive3B  qspiIdleSignalDrive3B = QspiIdleSignalDrive3B_H ) {
-      qspi->MCR |= qspiDDR|qspiDQS|qspiDQSLatency|qspiEndian|
-            qspiIdleSignalDrive2A|qspiIdleSignalDrive2B|qspiIdleSignalDrive3A|qspiIdleSignalDrive3B;
-   }
-
-   /**
     * Base configuration of QSPI module
     *
-    * @note the module is left disabled
+    * This should be done before @ref configureDqs() or @ref configureAdvanced() \n
+    * Other main settings are set to default values.
+    *
+    * @param baudRate         Baud rate for communication
+    * @param qspiClockSource  Clock source to use
+    *
+    * @note The module is left disabled
     */
    static void configure(
-         uint32_t             baudRate             = 24000000U,
-         QspiClockSource      qspiClockSource      = QspiClockSource_MCGPLL,
-         QspiDiffClockEnable  qspiDiffClockEnable  = QspiDiffClockEnable_Disabled,
-         QspiFlashClock2Pin   qspiFlashClock2Pin   = QspiFlashClock2Pin_Disabled,
-         QspiOctalDataPins    qspiOctalDataPins    = QspiOctalDataPins_PortB
+         uint32_t             baudRate,
+         QspiClockSource      qspiClockSource
          ) {
 
       unsigned frequency = getClockFrequency(qspiClockSource);
@@ -1407,12 +1435,164 @@ public:
       QspiClockDivide qspiClockDivide = (QspiClockDivide)QSPI_MCR_SCLKCFG(divider);
       usbdm_assert(qspiClockDivide == (divider<<QSPI_MCR_SCLKCFG_SHIFT), "Invalid divider calculated");
 
-      // Base enable
+      // Enable clock and map pins if selected
       enable();
 
-      // Configure clock (with module disabled)
-      qspi->MCR   = qspiClockDivide|QspiModule_Disable;
-      qspi->SOCCR = qspiClockSource|qspiDiffClockEnable|qspiFlashClock2Pin|qspiOctalDataPins;
+      // Configure clock and default settings - Module is left disabled internally
+      qspi->SOCCR = qspiClockSource;
+      qspi->MCR   = qspiClockDivide|QspiModule_Disable|QspiEndian_64bit_LE|
+            QspiIdleSignalDrive2A_H|QspiIdleSignalDrive2B_H|QspiIdleSignalDrive3A_H|QspiIdleSignalDrive3B_H;
+
+      softwareReset();
+   }
+
+   /**
+    * Enable and configure DQS (Data Strobe) settings
+    *
+    * This should be done after @ref configure()
+    *
+    * @param settings   Configuration settings to use
+    */
+   static void configureDqs(const QspiDqsSettings &settings) {
+
+      uint32_t value;
+
+      value = qspi->MCR & ~(QSPI_MCR_DQS_EN_MASK|QSPI_MCR_DQS_LAT_EN_MASK);
+
+      qspi->MCR = value | settings.mcr;
+
+      value = qspi->SOCCR & (QSPI_SOCCR_DQSPADLPEN_MASK|QSPI_SOCCR_DQSLPEN_MASK|QSPI_SOCCR_DQSPHASEL_MASK|
+            QSPI_SOCCR_DQSINVSEL_MASK|QSPI_SOCCR_DLYTAPSELA_MASK|QSPI_SOCCR_DLYTAPSELB_MASK);
+
+      qspi->SOCCR = value | settings.soccr;
+   }
+
+   /**
+    * Enable and configure DQS (Data Strobe) settings
+    *
+    * This should be done after @ref configure()
+    *
+    * @param qspiDQSLatency           DQS latency enable
+    * @param qspiLoopDqs              DQS pin path
+    * @param qspiPhaseSelectDqs       Select phase shift for internal DQS generation
+    * @param qspiDqsClockPolarity     Select clock source for internal DQS generation
+    * @param qspiDelayTabSelectA      Delay chain tap number selection for QSPI Port A DQS
+    * @param qspiDelayTabSelectB      Delay chain tap number selection for QSPI Port B DQS
+    */
+   static void configureDqs(
+      QspiDqsLatency          qspiDQSLatency         = QspiDqsLatency_Disable,
+      QspiLoopDqs             qspiLoopDqs            = QspiLoopDqs_External,
+      QspiPhaseSelectDqs      qspiPhaseSelectDqs     = QspiPhaseSelectDqs_None,
+      QspiDqsClockPolarity    qspiDqsClockPolarity   = QspiDqsClockPolarity_NonInverted,
+      QspiDelayTabSelectA     qspiDelayTabSelectA    = qspiDelayTabSelectA(0),
+      QspiDelayTabSelectB     qspiDelayTabSelectB    = qspiDelayTabSelectB(0)
+   ) {
+
+      uint32_t value;
+
+      value = qspi->MCR & ~(QSPI_MCR_DQS_EN_MASK|QSPI_MCR_DQS_LAT_EN_MASK);
+
+      qspi->MCR = value | (QspiDqs_Enable|qspiDQSLatency);
+
+      value = qspi->SOCCR & (QSPI_SOCCR_DQSPADLPEN_MASK|QSPI_SOCCR_DQSLPEN_MASK|QSPI_SOCCR_DQSPHASEL_MASK|
+            QSPI_SOCCR_DQSINVSEL_MASK|QSPI_SOCCR_DLYTAPSELA_MASK|QSPI_SOCCR_DLYTAPSELB_MASK);
+
+      qspi->SOCCR = value | (qspiLoopDqs|qspiPhaseSelectDqs|qspiDqsClockPolarity|qspiDelayTabSelectA|qspiDelayTabSelectB);
+   }
+
+   /**
+    * Advanced configuration of QSPI module
+    *
+    * This should be done after @ref configure()
+    *
+    * @param settings   Configuration settings to use
+    */
+   static void configureAdvanced(const QspiAdvancedSettings &settings) {
+
+      uint32_t value;
+
+      value = qspi->MCR & ~(QSPI_MCR_DQS_EN_MASK|QSPI_MCR_DQS_LAT_EN_MASK);
+
+      qspi->MCR = value | (QspiDqs_Enable|settings.mcr);
+
+      value = qspi->SOCCR & (QSPI_SOCCR_DQSPADLPEN_MASK|QSPI_SOCCR_DQSLPEN_MASK|QSPI_SOCCR_DQSPHASEL_MASK|
+            QSPI_SOCCR_DQSINVSEL_MASK|QSPI_SOCCR_DLYTAPSELA_MASK|QSPI_SOCCR_DLYTAPSELB_MASK);
+
+      qspi->SOCCR = value | settings.soccr;
+   }
+
+   /**
+    * Advanced configuration of QSPI module
+    *
+    * This should be done after @ref configure()
+    *
+    * @param qspiDdr                  DDR mode enable
+    * @param qspiEndian               Endianness
+    * @param qspiFlashClock2Pin       Flash CK2 clock pin enable
+    * @param qspiDiffClockEnable      Differential flash clock pins enable
+    * @param qspiOctalDataPins        Octal data pins enable
+    * @param qspiIdleSignalDrive2A    Idle Signal Drive IOFA[2] Flash A.
+    * @param qspiIdleSignalDrive2B    Idle Signal Drive IOFB[2] Flash B.
+    * @param qspiIdleSignalDrive3A    Idle Signal Drive IOFB[3] Flash A.
+    * @param qspiIdleSignalDrive3B    Idle Signal Drive IOFB[3] Flash B.
+    */
+   static void configureAdvanced (
+         QspiDdr                 qspiDdr                = QspiDDR_Disable,
+         QspiEndian              qspiEndian             = QspiEndian_64bit_LE,
+
+         QspiFlashClock2Pin      qspiFlashClock2Pin     = QspiFlashClock2Pin_Disabled,
+         QspiDiffClockEnable     qspiDiffClockEnable    = QspiDiffClockEnable_Disabled,
+         QspiOctalDataPins       qspiOctalDataPins      = QspiOctalDataPins_Disabled,
+
+         QspiIdleSignalDrive2A   qspiIdleSignalDrive2A  = QspiIdleSignalDrive2A_H,
+         QspiIdleSignalDrive2B   qspiIdleSignalDrive2B  = QspiIdleSignalDrive2B_H,
+         QspiIdleSignalDrive3A   qspiIdleSignalDrive3A  = QspiIdleSignalDrive3A_H,
+         QspiIdleSignalDrive3B   qspiIdleSignalDrive3B  = QspiIdleSignalDrive3B_H ) {
+
+      uint32_t value;
+
+      value = qspi->MCR & ~(QSPI_MCR_DDR_EN_MASK|QSPI_MCR_END_CFG_MASK|
+            QSPI_MCR_ISD2FA_MASK|QSPI_MCR_ISD2FB_MASK|QSPI_MCR_ISD3FA_MASK|QSPI_MCR_ISD3FB_MASK);
+
+      qspi->MCR = value | (qspiDdr|qspiEndian|
+            qspiIdleSignalDrive2A|qspiIdleSignalDrive2B|qspiIdleSignalDrive3A|qspiIdleSignalDrive3B);
+
+      value = qspi->SOCCR & (~QSPI_SOCCR_CK2EN_MASK|QSPI_SOCCR_DIFFCKEN_MASK|QSPI_SOCCR_OCTEN_MASK);
+
+      qspi->SOCCR = value | (qspiFlashClock2Pin|qspiDiffClockEnable|qspiOctalDataPins);
+   }
+
+   /**
+    * Configure QSPI from settings object.
+    *
+    * This is a more capable alternative to @ref configure() \n
+    * This may be all that is needed for simple configurations.
+    *
+    * @param qspiSettings  Configuration parameters
+    */
+   static void configure(const QspiSettings &qspiSettings) {
+
+      // Base configuration
+      configure(qspiSettings.baudRate, qspiSettings.clockSource);
+
+      // Configure AHB buffers
+      qspi->BUF0CR      = qspiSettings.bufferConfiguration[0].value;
+      qspi->BUF1CR      = qspiSettings.bufferConfiguration[1].value;
+      qspi->BUF2CR      = qspiSettings.bufferConfiguration[2].value;
+      qspi->BUF3CR      = qspiSettings.bufferConfiguration[3].value;
+      qspi->BFGENCR     = qspiSettings.genericBufferConfiguration.value;
+      qspi->TBCT        = qspiSettings.qspiTxBufferConfiguration.value;
+      qspi->RBCT        = qspiSettings.qspiRxBufferConfiguration.value;
+
+      uint32_t flashTopAddress = QSPI0_AMBA_BASE_ADDRESS;
+      flashTopAddress += qspiSettings.flashSizes[0];
+      setSerialFlashA1TopAddress(flashTopAddress);
+      flashTopAddress += qspiSettings.flashSizes[1];
+      setSerialFlashA2TopAddress(flashTopAddress);
+      flashTopAddress += qspiSettings.flashSizes[2];
+      setSerialFlashB1TopAddress(flashTopAddress);
+      flashTopAddress += qspiSettings.flashSizes[3];
+      setSerialFlashB2TopAddress(flashTopAddress);
    }
 
    /**
@@ -1618,59 +1798,6 @@ public:
    }
 
    /**
-    * Configure QSPI from settings object
-    *
-    * @param qspiSettings
-    */
-   static void configure(const QspiSettings &qspiSettings) {
-      // Configure AHB buffers
-      qspi->BUF0CR      = qspiSettings.bufferConfiguration[0].value;
-      qspi->BUF1CR      = qspiSettings.bufferConfiguration[1].value;
-      qspi->BUF2CR      = qspiSettings.bufferConfiguration[2].value;
-      qspi->BUF3CR      = qspiSettings.bufferConfiguration[3].value;
-      qspi->BFGENCR     = qspiSettings.genericBufferConfiguration.value;
-      qspi->TBCT        = qspiSettings.qspiTxBufferConfiguration.value;
-      qspi->RBCT        = qspiSettings.qspiRxBufferConfiguration.value;
-
-      uint32_t flashTopAddress = QSPI0_AMBA_BASE_ADDRESS;
-      flashTopAddress += qspiSettings.flashSizes[0];
-      setSerialFlashA1TopAddress(flashTopAddress);
-      flashTopAddress += qspiSettings.flashSizes[1];
-      setSerialFlashA2TopAddress(flashTopAddress);
-      flashTopAddress += qspiSettings.flashSizes[2];
-      setSerialFlashB1TopAddress(flashTopAddress);
-      flashTopAddress += qspiSettings.flashSizes[3];
-      setSerialFlashB2TopAddress(flashTopAddress);
-   }
-
-   /**
-    *
-    * @param qspiClockSource        Clock source selection for the clock divider
-    * @param qspiLoopDQS            Selects how the internally generated DQS is routed
-    * @param qspiPhaseSelectDQS     Select phase shift for internal DQS generation
-    * @param qspiClockSourceDQS     Select clock source for internal DQS generation
-    * @param qspiFlashClock2Pin     Flash CK2 clock pin enable
-    * @param qspiDiffClockEnable    Differential flash clock pins enable
-    * @param qspiOctalDataPins      Octal data pins enable
-    * @param qspiDelayTabSelectA    Delay chain tap number selection for QSPI Port A DQS
-    * @param qspiDelayTabSelectB    Delay chain tap number selection for QSPI Port B DQS
-    */
-   static void configureClocks(
-         QspiClockSource      qspiClockSource,
-         QspiLoopDQS          qspiLoopDQS,
-         QspiPhaseSelectDQS   qspiPhaseSelectDQS,
-         QspiClockSourceDQS   qspiClockSourceDQS,
-         QspiFlashClock2Pin   qspiFlashClock2Pin,
-         QspiDiffClockEnable  qspiDiffClockEnable,
-         QspiOctalDataPins    qspiOctalDataPins,
-         QspiDelayTabSelectA  qspiDelayTabSelectA,
-         QspiDelayTabSelectB  qspiDelayTabSelectB ) {
-      qspi->SOCCR =
-            qspiClockSource|qspiLoopDQS|qspiPhaseSelectDQS|qspiClockSourceDQS|qspiFlashClock2Pin|
-            qspiDiffClockEnable|qspiOctalDataPins|qspiDelayTabSelectA|qspiDelayTabSelectB;
-   }
-
-   /**
     * This sets the top index of buffer 0, which defines its size.
     *
     * @note The 3 LSBs of this value must be zero.
@@ -1711,7 +1838,7 @@ public:
 
    /**
     * Set Serial Flash Address
-    * TODO rewrite
+    *
     * The module automatically translates this address on the memory map to the address on
     * the flash itself.
     * - In 24-bit mode, only bits 23-0 are sent to the flash.
@@ -1726,9 +1853,9 @@ public:
     * The software should ensure that the serial flash address provided in the QSPI_SFAR
     * register lies in the valid flash address range as defined in Table 35-14.
     *
-    * @param address  The address to set (defaults to QSPI0_AMBA_BASE_ADDRESS)
+    * @param address  The address to set
     */
-   static void setSerialFlashAddress(uint32_t address = QSPI0_AMBA_BASE_ADDRESS) {
+   static void setSerialFlashAddress(uint32_t address) {
       qspi->SFAR = address;
    }
 
@@ -1762,13 +1889,23 @@ public:
       qspi->SFACR = QSPI_SFACR_CAS(columnAddressSpace)|(isFLashWordAddressable?QSPI_SFACR_WA_MASK:0);
    }
 
+   /**
+    * Configure sampling points
+    *
+    * @param qspiSdrFullSpeedDelay     Full Speed Delay selection for SDR instructions
+    * @param qspiSdrFullSpeedPhase     Full Speed Phase selection for SDR instructions
+    * @param qspiDdrSamplePoint        DDR Sampling point
+    * @param qspiHalfSpeedSerialClock  Half Speed serial flash clock Enable
+    * @param qspiHalfSpeedDelay        Half Speed Delay selection for SDR instructions
+    * @param qspiHalfSpeedPhase        Half Speed Phase selection for SDR instructions.
+    */
    static void configureSampling(
-         QspiDdrSamplePoint         qspiDdrSamplePoint,
          QspiSdrFullSpeedDelay      qspiSdrFullSpeedDelay,
          QspiSdrFullSpeedPhase      qspiSdrFullSpeedPhase,
-         QspiHalfSpeedDelay         qspiHalfSpeedDelay,
-         QspiHalfSpeedPhase         qspiHalfSpeedPhase,
-         QspiHalfSpeedSerialClock   qspiHalfSpeedSerialClock
+         QspiDdrSamplePoint         qspiDdrSamplePoint       = QspiDdrSamplePoint_0,
+         QspiHalfSpeedSerialClock   qspiHalfSpeedSerialClock = QspiHalfSpeedSerialClock_Disable,
+         QspiHalfSpeedDelay         qspiHalfSpeedDelay       = QspiHalfSpeedDelay_1_ClockCycle,
+         QspiHalfSpeedPhase         qspiHalfSpeedPhase       = QspiHalfSpeedPhase_NonInvertedClock
    ) {
       qspi->SMPR =
             qspiDdrSamplePoint|qspiSdrFullSpeedDelay|qspiSdrFullSpeedPhase|

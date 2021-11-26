@@ -417,7 +417,7 @@ private:
       // Data to send - must be >= 16 bytes
       uint32_t buff[] = {0, 0, 0, 0};
 
-      Qspi0::setSerialFlashAddress();
+      Qspi0::setSerialFlashAddress(FLASH_START);
       Qspi0::initiateIpCommand(QspiSequenceIdentity_WriteEnable);
       waitForFlashWriteComplete();
 
@@ -436,13 +436,13 @@ public:
    /**
     * Erase sector in flash
     *
-    * @param addr Address of sector to erase
+    * @param flashAddress  Flash sector address (in MCU memory space)
     */
-   static void eraseSector(uint32_t addr) {
+   static void eraseSector(uint32_t flashAddress) {
 
       while (Qspi0::readStatusRegister() & QspiStatusMask_ModuleBusy) {
       }
-      Qspi0::setSerialFlashAddress(addr);
+      Qspi0::setSerialFlashAddress(flashAddress);
       Qspi0::initiateIpCommand(QspiSequenceIdentity_WriteEnable);
       Qspi0::initiateIpCommand(QspiSequenceIdentity_EraseSector);
       waitForFlashWriteComplete();
@@ -450,14 +450,12 @@ public:
 
    /**
     * Erase all of flash
-    *
-    * @param addr Address of sector to erase
     */
    static void eraseAll()
    {
       while (Qspi0::readStatusRegister() & QspiStatusMask_ModuleBusy) {
       }
-      Qspi0::setSerialFlashAddress();
+      Qspi0::setSerialFlashAddress(FLASH_START);
       Qspi0::initiateIpCommand(QspiSequenceIdentity_WriteEnable);
       Qspi0::initiateIpCommand(QspiSequenceIdentity_EraseAll);
       waitForFlashWriteComplete();
@@ -527,7 +525,12 @@ public:
       waitForFlashWriteComplete();
    }
 
-   static constexpr QspiSettings qspiSettings = {
+   /**
+    * Main settings
+    */
+   static constexpr QspiSettings settings = {
+         /* Clock source                          */ QspiClockSource_MCGPLL,
+         /* Baud rate                             */ 24000000U,
          /* AHB request buffers           BUFxIND */ {{},{},{},{FLASH_PAGE_SIZE},}, // Using single buffer
          /* Buffer Generic Configuration  BFGENCR */ QspiSequenceIdentity_Read,     // Sequence for AHB reads
          /* Tx buffer configuration       TBCT    */ QspiBufferWaterMark_32_Bytes,
@@ -535,12 +538,37 @@ public:
          /* Flash sizes                   SFxxAD  */ {FLASH_SIZE, 0, 0, 0,}, // Single flash
    };
 
+   /**
+    * Advanced settings example - unused
+    */
+   static constexpr QspiAdvancedSettings advancedSettings {
+      QspiDDR_Disable,
+      QspiEndian_64bit_LE,
+      QspiFlashClock2Pin_Disabled,
+      QspiDiffClockEnable_Disabled,
+      QspiOctalDataPins_Disabled,
+   };
+
+   /**
+    * DQS settings example - unused
+    */
+   static constexpr QspiDqsSettings dqsSettings {
+      QspiDqsLatency_Disable,
+      QspiLoopDqs_External,
+      QspiPhaseSelectDqs_None,
+      QspiDqsClockPolarity_NonInverted,
+      qspiDelayTabSelectA(0),
+      qspiDelayTabSelectB(0)
+   };
+
+   /**
+    * Initialise the QSPI interface for the flash chip
+    */
    static void qspiInit() {
-      Qspi0::configure();
-      Qspi0::configureQspi();
-      Qspi0::softwareReset();
+      Qspi0::configure(settings);
+//      Qspi0::configureAdvanced(advancedSettings);
+//      Qspi0::configureDqs(dqsSettings);
       Qspi0::setFlashTiming(QspiDataInHoldTime_InternalPosEdge, QspiChipSelectHoldTime_1_sck, QspiChipSelectSetupTime_0_5sck);
-      Qspi0::configure(qspiSettings);
       Qspi0::writeLookUpTable(FLASH_SIZE>(1<<24)?luts_4byteAddress:luts_3ByteAddress);
       Qspi0::enableModule();
       clearWriteProtect();
