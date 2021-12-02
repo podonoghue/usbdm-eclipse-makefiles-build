@@ -194,7 +194,7 @@ public:
     *                        Use nullptr to remove callback.
     */
    static void setAlarmCallback(RtcCallbackFunction callback) {
-      static_assert(Info::irqAlarmHandlerInstalled, "RTC not configure for alarm interrupts");
+      static_assert(Info::irqHandlerInstalled, "RTC not configure for alarm interrupts");
       if (callback == nullptr) {
          callback = unhandledCallback;
       }
@@ -208,7 +208,7 @@ public:
     *                        Use nullptr to remove callback.
     */
    static void setSecondsCallback(RtcCallbackFunction callback) {
-      static_assert(Info::irqSecondsHandlerInstalled, "RTC not configure for seconds interrupts");
+      static_assert(Info::irqHandlerInstalled, "RTC not configure for seconds interrupts");
       if (callback == nullptr) {
          callback = unhandledCallback;
       }

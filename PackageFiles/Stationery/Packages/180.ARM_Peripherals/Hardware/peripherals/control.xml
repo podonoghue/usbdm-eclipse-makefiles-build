@@ -9,4 +9,7 @@
    
    <signals/>
 
+   <projectActionList id = "control_files" >
+      <copy source="Project_Headers/control.h"          target="Project_Headers/control.h"          overwrite="true" derived="true" />
+   </projectActionList>
 </peripheralPage>

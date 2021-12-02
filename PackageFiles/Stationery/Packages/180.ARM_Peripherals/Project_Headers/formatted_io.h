@@ -96,50 +96,98 @@ enum FlushType {
    Flush
 };
 
-struct FormattingSettings {
+struct IoFormat {
    /**
     * Precision multiplier used for floating point numbers (10^fFloatPrecision)
     */
    unsigned fFloatPrecisionMultiplier;
 
-   /**
-    * Current radix for << and >> operators
-    */
+   /** Current radix */
    Radix fRadix;
 
-   /**
-    * Control echo of input characters
-    */
+   /** Control echo of input characters */
    EchoMode fEcho;
 
-   /**
-    * Padding for integers
-    */
+   /** Padding for integers  */
    Padding fPadding;
 
-   /**
-    * Width used for integers numbers
-    */
+   /** Width used for integers numbers  */
    uint8_t fWidth;
 
-   /**
-    * How to pad the digits on left of floating point number
-    */
+   /** How to pad the digits on left of floating point number */
    Padding fFloatPadding;
 
-   /**
-    * Precision used for floating point numbers
-    */
+   /** Precision used for floating point numbers */
    uint8_t fFloatWidth;
 
-   /**
-    * Precision used for floating point numbers
-    */
+   /** Precision used for floating point numbers */
    uint8_t fFloatPrecision;
 
-   constexpr FormattingSettings() :
-      fFloatPrecisionMultiplier(1000), fRadix(Radix_10), fEcho(EchoMode_On), fPadding(Padding_None),
-      fWidth(0), fFloatPadding(Padding_None), fFloatWidth(0), fFloatPrecision(3) {
+   /**
+    * Constructor.
+    *
+    * This also determines the default settings
+    */
+   constexpr IoFormat() :
+      fFloatPrecisionMultiplier(1000),    // 3 decimal places
+      fRadix(Radix_10),                   // Base 10
+      fEcho(EchoMode_On),                 // Echo on
+      fPadding(Padding_None),             // No padding in integers
+      fWidth(0),                          // Minimum width on integers
+      fFloatPadding(Padding_None),        // No padding on floats
+      fFloatWidth(0),                     // Minimum width on floats
+      fFloatPrecision(3) {                // 3 decimal places on floats
+   }
+
+   /**
+    * Set format for floating point numbers
+    *
+    * @param precision Number of digits to the right of decimal point
+    * @param padding   How to pad on the left of the number (Padding_LeadingSpaces, Padding_None, Padding_LeadingZeroes)
+    * @param width     Number of characters to the left of decimal point (ignored for padding_None)
+    *
+    * @return Reference to self
+    */
+   IoFormat &setFloatFormat(
+         unsigned  precision,
+         Padding   padding  = Padding_None,
+         unsigned  width    = 0) {
+
+      usbdm_assert(padding != Padding_TrailingSpaces, "Not supported format");
+
+      fFloatPrecision           = precision;
+      fFloatPrecisionMultiplier = 1;
+      while (precision-->0) {
+         fFloatPrecisionMultiplier *= 10;
+      }
+      fFloatPadding = padding;
+      fFloatWidth   = width;
+      return *this;
+   }
+
+   /**
+    * Set format for integers
+    *
+    * @param width      Width of number
+    * @param padding    How to pad on the left of the number (Padding_LeadingSpaces, Padding_None, Padding_LeadingZeroes)
+    * @param radix      Radix for number
+    *
+    * @return Reference to self
+    */
+   IoFormat &setIntegerFormat(
+         unsigned width,
+         Padding padding   = Padding_LeadingSpaces,
+         Radix radix       = Radix_10) {
+
+      fWidth   = width;
+      fPadding = padding;
+      fRadix   = radix;
+      return *this;
+   }
+
+   IoFormat &setEcho(EchoMode echo) {
+      fEcho = echo;
+      return *this;
    }
 };
 
@@ -152,7 +200,7 @@ protected:
    /**
     * Current settings
     */
-   FormattingSettings fFormat;
+   IoFormat fFormat;
 
    /**
     * One character look-ahead
@@ -252,7 +300,7 @@ public:
     *
     * @param[out] settings Setting object
     */
-   FormattedIO &getFormat(FormattingSettings &settings) {
+   FormattedIO &getFormat(IoFormat &settings) {
       settings = fFormat;
       return *this;
    }
@@ -262,7 +310,7 @@ public:
     *
     * @param[in] settings Setting object
     */
-   FormattedIO &setFormat(FormattingSettings &settings) {
+   FormattedIO &setFormat(IoFormat &settings) {
       fFormat = settings;
       return *this;
    }
@@ -275,7 +323,7 @@ public:
     */
    FormattedIO &resetFormat() {
       // Default settings
-      static const FormattingSettings defaultSettings;
+      static const IoFormat defaultSettings;
 
       fFormat = defaultSettings;
       return *this;
@@ -1495,7 +1543,12 @@ public:
    }
 
    /**
-    * Get field width
+    * Create field width object
+    *
+    * @code
+    * Uart0 myUart;
+    * myUart<<Uart0::width(10)<<123;
+    * @endcode
     *
     * @param[in]  width Integer to convert to width
     *
@@ -1503,6 +1556,17 @@ public:
     */
    static constexpr Width NOINLINE_DEBUG width(int width) {
       return static_cast<Width>(width);
+   }
+
+   /**
+    *
+    * @param[in] width
+    *
+    * @return
+    */
+   FormattedIO &operator<<(const IoFormat &ioSettings) {
+      fFormat = ioSettings;
+      return *this;
    }
 
    /**

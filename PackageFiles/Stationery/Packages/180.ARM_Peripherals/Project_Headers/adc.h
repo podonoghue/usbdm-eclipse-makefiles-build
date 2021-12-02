@@ -227,10 +227,10 @@ enum AdcPgaGain {
 /**
  * Controls PGA chopping to remove/reduce offset
  */
-   enum AdcPgaChop {
-      AdcPgaChop_Disabled = ADC_PGA_PGACHPb(1), // PGA chopping disabled
-      AdcPgaChop_Enabled  = ADC_PGA_PGACHPb(0), // PGA chopping enabled
-   };
+enum AdcPgaChop {
+   AdcPgaChop_Disabled = ADC_PGA_PGACHPb(1), // PGA chopping disabled
+   AdcPgaChop_Enabled  = ADC_PGA_PGACHPb(0), // PGA chopping enabled
+};
 #endif
 
 /**
@@ -245,16 +245,19 @@ typedef void (*AdcCallbackFunction)(uint32_t result, int channel);
  * Provides common unhandledCallback for all ADCs.
  * This class is not intended to be instantiated.
  */
-class AdcBase {
+class Adc {
 
 private:
-   AdcBase() = delete;
-   AdcBase(const AdcBase&) = delete;
-   AdcBase(AdcBase&&) = delete;
+   Adc(const Adc&) = delete;
+   Adc(Adc&&) = delete;
 
-public:
+protected:
+
+   // Channel number used for PGA
+   static constexpr uint32_t PGA_CHANNEL = 2;
+
    /**
-    * Limit channel to permitted range
+    * Limit channel to permitted range.
     * Used to prevent noise from static assertion checks that detect a condition already detected in a more useful fashion.
     *
     * @param channel   Channel number to limit
@@ -290,52 +293,313 @@ public:
       static constexpr void check() {}
    };
 
-public:
    /** Callback to catch unhandled interrupt */
    static void unhandledCallback(uint32_t, int) {
       setAndCheckErrorCode(E_NO_HANDLER);
    }
+
+public:
+
+   /// Pointer to hardware instance
+   const HardwarePtr<ADC_Type> adc;
+
+   /**
+    * Constructor
+    *
+    * @param adcBaseAddress Base address of ADC hardware
+    */
+   constexpr  Adc(uint32_t adcBaseAddress) : adc(adcBaseAddress) {
+   }
+
+   /**
+    * Get ADC maximum conversion value for an single-ended range
+    *
+    * @param adcResolution
+    *
+    * @return range e.g. AdcResolution_8bit_se => (2^8)-1
+    */
+   static constexpr int getSingleEndedMaximum(AdcResolution adcResolution) {
+      switch(adcResolution) {
+         case AdcResolution_8bit_se:  return (1<<8)-1;
+         case AdcResolution_10bit_se: return (1<<10)-1;
+         case AdcResolution_12bit_se: return (1<<12)-1;
+         case AdcResolution_16bit_se: return (1<<16)-1;
+         default:                     return 0;
+      }
+   }
+
+#if defined(ADC_SC1_DIFF_MASK)
+   /**
+    * Get ADC maximum conversion value for an differential range
+    *
+    * @param adcResolution
+    *
+    * @return range e.g. AdcResolution_9bit_diff => (2^8)-1
+    */
+   static constexpr int getDifferentialMaximum(AdcResolution adcResolution) {
+      switch(adcResolution) {
+         case AdcResolution_9bit_diff:   return (1<<8)-1;
+         case AdcResolution_11bit_diff:  return (1<<10)-1;
+         case AdcResolution_13bit_diff:  return (1<<12)-1;
+         case AdcResolution_16bit_diff:  return (1<<15)-1;
+         default:                     return 0;
+      }
+   }
+#endif
+
+   /**
+    * Set resolution
+    *
+    * @param[in] adcResolution Resolution for converter e.g. AdcResolution_16bit_se
+    *
+    * @note This affects all channels on the ADC
+    */
+   void setResolution(AdcResolution adcResolution) const {
+      adc->CFG1 = (adc->CFG1&~ADC_CFG1_MODE_MASK)|adcResolution;
+   }
+
+   /**
+    * Set averaging mode
+    *
+    * @param[in] adcAveraging Mode for averaging e.g. AdcAveraging_4 etc
+    *
+    * @note This affects all channels on the ADC
+    */
+   void setAveraging(AdcAveraging adcAveraging) const {
+      adc->SC3 = (adc->SC3&~(ADC_SC3_AVGE_MASK|ADC_SC3_AVGS_MASK))|adcAveraging;
+   }
+
+   /**
+    * Configure comparison mode.
+    *
+    * @param[in] adcCompare   Comparison operation to enable
+    * @param[in] low          Lower threshold
+    * @param[in] high         Higher threshold (if needed)
+    */
+   void enableComparison(AdcCompare adcCompare, int low=INT_MIN, int high=INT_MAX) const {
+
+      usbdm_assert (low<=high, "ADC Low level > high level");
+
+      // Juggle CV1, CV2 values to satisfy comparison rules
+      switch (adcCompare) {
+         case AdcCompare_Disabled:
+            break;
+         case AdcCompare_LessThan:
+         case AdcCompare_GreaterThanOrEqual:
+            adc->CV1 = low;
+            break;
+         case AdcCompare_OutsideRangeExclusive:
+         case AdcCompare_InsideRangeInclusive:
+            adc->CV1 = low;
+            adc->CV2 = high;
+            break;
+         case AdcCompare_InsideRangeExclusive:
+         case AdcCompare_OutsideRangeInclusive:
+            adc->CV1 = high;
+            adc->CV2 = low;
+            break;
+      }
+      // Set comparison fields
+      adc->SC2 |= (adc->SC2&~(ADC_SC2_ACFE(1)|ADC_SC2_ACFGT(1)|ADC_SC2_ACREN(1)))|
+            (adcCompare&(ADC_SC2_ACFE(1)|ADC_SC2_ACFGT(1)|ADC_SC2_ACREN(1)));
+   }
+
+   /**
+    * Enable/disable continuous conversion mode.
+    *
+    * @param[in] adcContinuous  Controls continuous conversion mode.
+    */
+   void enableContinuousConversions(AdcContinuous adcContinuous = AdcContinuous_Enabled) const {
+      if (adcContinuous) {
+         adc->SC3 |= ADC_SC3_ADCO_MASK;
+      }
+      else {
+         adc->SC3 &= ~ADC_SC3_ADCO_MASK;
+      }
+   }
+
+#if defined(ADC_SC2_DMAEN_MASK)
+   /**
+    * Enable/disable DMA.
+    *
+    * @param[in] adcDma  Controls DMA operation.
+    */
+   void enableDma(AdcDma adcDma = AdcDma_Enabled) const {
+      // Set up DMA
+      if (adcDma) {
+         adc->SC2 |= ADC_SC2_DMAEN_MASK;
+      }
+      else {
+         adc->SC2 &= ~ADC_SC2_DMAEN_MASK;
+      }
+   }
+#endif
+
+   /**
+    * Enables hardware trigger mode of operation and configures the channel.
+    *
+    * @param[in] sc1Value        SC1 register value including the ADC channel, Differential mode and interrupt enable
+    * @param[in] adcPretrigger   Hardware pre-trigger to use for this channel\n
+    *                            This corresponds to pre-triggers in the PDB channels and SC1[n] register setups
+    */
+   void enableHardwareConversion(int sc1Value, AdcPretrigger adcPretrigger) const {
+      // Set hardware triggers
+      adc->SC2 = (adc->SC2)|ADC_SC2_ADTRG(1);
+      // Configure channel for hardware trigger input
+      adc->SC1[adcPretrigger] = sc1Value;
+   }
+
+#if defined(ADC_SC2_DMAEN)
+   /**
+    * Enables hardware trigger mode of operation and configures the channel.
+    *
+    * @param[in] sc1Value        SC1 register value including the ADC channel, Differential mode and interrupt enable
+    * @param[in] adcPretrigger   Hardware pre-trigger to use for this channel.\n
+    *                            This corresponds to pre-triggers in the PDB channels and SC1[n] register setups
+    * @param[in] adcDma          Whether to generate a DMA request when each conversion completes
+    */
+   void enableHardwareConversion(int sc1Value, AdcPretrigger adcPretrigger, AdcDma adcDma) const {
+      // Set hardware triggers
+      adc->SC2 = (adc->SC2)|ADC_SC2_ADTRG(1)|adcDma;
+      // Configure channel for hardware trigger input
+      adc->SC1[adcPretrigger] = sc1Value;
+   }
+#endif
+
+   /**
+    * Gets result of last software initiated conversion
+    *
+    * @return COnversion result
+    *
+    * @note This will also clear the conversion flag if set
+    */
+   uint16_t getConversionResult() const {
+      return static_cast<uint16_t>(adc->R[0]);
+   };
+
+   /**
+    * Initiates a conversion but does not wait for it to complete.
+    * Intended for use with interrupts or DMA.
+    *
+    * @param[in] sc1Value       SC1 register value. This includes channel, differential mode and interrupts enable.
+    */
+   void startConversion(const int sc1Value) const {
+      // Trigger conversion
+      adc->SC1[0] = sc1Value;
+   };
+
+   /**
+    * Initiates a conversion and waits for it to complete.
+    *
+    * @param[in] sc1Value SC1 register value including the ADC channel to use and differential mode
+    *
+    * @return - The result of the conversion as an integer converted from 16-bit ADC value
+    *           For single-ended channels this will be zero extended
+    *           For differential channels this will be sign-extended
+    *
+    * @note Result is signed but will always be positive for single-ended channels.
+    */
+   int readAnalogue(uint32_t sc1Value) const {
+
+      // Trigger conversion
+      adc->SC1[0] = sc1Value;
+      (void)adc->SC1[0];
+
+      while ((adc->SC1[0]&ADC_SC1_COCO_MASK) == 0) {
+         __asm__("nop");
+      }
+
+      int value = static_cast<uint16_t>(adc->R[0]);
+      if (sc1Value&ADC_SC1_DIFF_MASK) {
+         value = static_cast<int16_t>(value);
+      }
+      return value;
+   };
+
+   /**
+    * Check if ADC is current doing a conversion
+    *
+    * @return true   => ADC is busy doing a conversion
+    * @return false  => ADC is idle
+    */
+   bool isBusy() const {
+      return adc->SC2&ADC_SC2_ADACT_MASK;
+   }
+
+#if defined(ADC_PGA_PGAEN_MASK)
+#if defined(ADC_PGA_PGACHPb_MASK)
+      /**
+       * Configure Programmable Gain Amplifier.
+       * Only affects the single channel associated with the PGA.
+       *
+       * @param adcPgaMode Mode to operate in (or disabled)
+       * @param adcPgaGain Gain
+       * @param adcPgaChop PGA chopping control
+       */
+      void configurePga(AdcPgaMode adcPgaMode, AdcPgaGain adcPgaGain=AdcPgaGain_1, AdcPgaChop adcPgaChop=AdcPgaChop_Enabled) const {
+         adc->PGA = adcPgaMode|adcPgaGain|adcPgaChop;
+      }
+
+      /**
+       * Measure PGA offset
+       * The PGA should be configured before doing this.
+       *
+       * @note To apply offset correction subtract subtract [(pga_offset_measurement*(G+1))/(64+1)] from
+       *       the ADC result, where G is the PGA gain during ADC operation
+       *
+       * @return Offset measurement. (pga_offset * (64+1))
+       */
+      int measurePgaOffset() const {
+         // ToDo
+         return 0;
+      }
+#else
+      /**
+       * Configure Programmable Gain Amplifier.
+       * Only affects the single channel associated with the PGA.
+       *
+       * @param adcPgaMode Mode to operate in (or disabled)
+       * @param adcPgaGain Gain
+       */
+      void configurePga(AdcPgaMode adcPgaMode, AdcPgaGain adcPgaGain=AdcPgaGain_1) const {
+         adc->PGA = adcPgaMode|adcPgaGain;
+      }
+#endif
+#endif
+
 };
 
-class AdcChannel {
+class AdcChannel : public Adc {
 
 private:
    AdcChannel() = delete;
    AdcChannel(const AdcChannel&) = delete;
    AdcChannel(AdcChannel&&) = delete;
 
-   const HardwarePtr<ADC_Type> adc;
-   const uint8_t ch;
-
 protected:
-   constexpr AdcChannel(uint32_t adcAddress, uint8_t channel) : adc(adcAddress), ch(channel) {}
+   /// ADC channel (including ADC_SC1_DIFF_MASK mask)
+   const uint32_t sc1Value;
 
    /**
-    * Initiates a conversion and waits for it to complete.
+    * Constructor
     *
-    * @return - The 16-bit result of the conversion
-    *
-    * @note Result is always positive
+    * @param adcAddress  ADC address
+    * @param channel     ADC channel to use
     */
-   uint16_t readAnalogue(uint32_t sc1Value) const {
-      // Trigger conversion
-      adc->SC1[0] = ch|sc1Value;
-      (void)adc->SC1[0];
-      while ((adc->SC1[0]&ADC_SC1_COCO_MASK) == 0) {
-         __asm__("nop");
-      }
-      return static_cast<uint16_t>(adc->R[0]);
-   };
+   constexpr AdcChannel(uint32_t adcAddress, uint8_t channel) : Adc(adcAddress), sc1Value(channel) {}
+
 public:
    /**
     * Initiates a conversion and waits for it to complete.
     *
-    * @return - The 16-bit result of the conversion
+    * @return The result of the conversion as an integer converted from 16-bit ADC value.
+    *           For single-ended channels this will be zero extended.
+    *           For differential channels this will be sign-extended.
     *
-    * @note Result is always positive
+    * @note Result is signed but will always be positive for single-ended channels.
     */
-   uint16_t readAnalogue() const {
-      return static_cast<uint16_t>(readAnalogue(0));
+   int readAnalogue() const {
+      return Adc::readAnalogue(sc1Value);
    };
 
    /**
@@ -346,12 +610,10 @@ public:
     * @param[in] adcInterrupt    Whether to generate an interrupt when each conversion completes
     */
    void enableHardwareConversion(AdcPretrigger adcPretrigger, AdcInterrupt adcInterrupt=AdcInterrupt_Disabled) const {
-      adc->SC2 = (adc->SC2)|ADC_SC2_ADTRG(1);
-      // Configure channel for hardware trigger input
-      adc->SC1[adcPretrigger] = adcInterrupt|ch;
+      Adc::enableHardwareConversion(adcInterrupt|sc1Value, adcPretrigger);
    }
 
-#ifdef ADC_SC2_DMAEN
+#if defined(ADC_SC2_DMAEN)
    /**
     * Enables hardware trigger mode of operation and configures a channel.
     *
@@ -361,9 +623,7 @@ public:
     * @param[in] adcDma          Whether to generate a DMA request when each conversion completes
     */
    void enableHardwareConversion(AdcPretrigger adcPretrigger, AdcInterrupt adcInterrupt, AdcDma adcDma) const {
-      adc->SC2 = (adc->SC2)|ADC_SC2_ADTRG(1)|adcDma;
-      // Configure channel for hardware trigger input
-      adc->SC1[adcPretrigger] = adcInterrupt|ch;
+      Adc::enableHardwareConversion(adcInterrupt|sc1Value, adcPretrigger, adcDma);
    }
 #endif
 
@@ -374,40 +634,10 @@ public:
     * @param[in] adcInterrupt   Determines if an interrupt is generated when conversions are complete
     */
    void startConversion(AdcInterrupt adcInterrupt=AdcInterrupt_Disabled) const {
-      // Trigger conversion
-      adc->SC1[0] = ch|adcInterrupt;
+      Adc::startConversion(sc1Value|adcInterrupt);
    };
+
 };
-
-#ifdef ADC_SC1_DIFF_MASK
-class AdcDiffChannel : public AdcChannel {
-
-private:
-   /**
-    * This class is not intended to be instantiated
-    */
-   AdcDiffChannel() = delete;
-   AdcDiffChannel(const AdcDiffChannel&) = delete;
-   AdcDiffChannel(AdcDiffChannel&&) = delete;
-
-protected:
-   constexpr AdcDiffChannel(uint32_t adcAddress, uint8_t channel) :
-      AdcChannel(adcAddress, channel) {}
-
-public:
-   /**
-    * Initiates a conversion and waits for it to complete.
-    *
-    * @return - The 16-bit result of the conversion
-    *
-    * @note Result may be negative
-    */
-   int16_t readAnalogue() const {
-      // Sign-extended to 32 bits
-      return static_cast<int16_t>(AdcChannel::readAnalogue(ADC_SC1_DIFF_MASK));
-   };
-};
-#endif
 
 /**
  * Template class representing an ADC.
@@ -425,7 +655,7 @@ public:
  * @tparam info Table of information describing ADC
  */
 template<class Info>
-class AdcBase_T {
+class AdcBase_T : public Adc {
 
 private:
    AdcBase_T(const AdcBase_T&) = delete;
@@ -454,7 +684,7 @@ public:
 
 public:
 
-   AdcBase_T() {};
+   constexpr AdcBase_T() : Adc(Info::baseAddress) {};
 
    /** Allow convenient access to associate AdcInfo */
    using AdcInfo = Info;
@@ -562,11 +792,11 @@ public:
    static void setCallback(AdcCallbackFunction callback) {
       static_assert(Info::irqHandlerInstalled, "ADC not configured for interrupts. Modify Configure.usbdmProject");
       if (callback == nullptr) {
-         sCallback = AdcBase::unhandledCallback;
+         sCallback = unhandledCallback;
          return;
       }
       usbdm_assert(
-            (sCallback == AdcBase::unhandledCallback) || (sCallback == callback),
+            (sCallback == unhandledCallback) || (sCallback == callback),
             "Handler already set");
       sCallback = callback;
    }
@@ -623,7 +853,7 @@ public:
       adc->SC2  = Info::sc2;
       adc->CV1  = Info::cv1;
       adc->CV1  = Info::cv2;
-	  
+
       enableNvicInterrupts(Info::irqLevel);
    }
 
@@ -651,47 +881,11 @@ public:
          AdcMuxsel       adcMuxsel       = AdcMuxsel_B,
          AdcClockRange   adcClockRange   = AdcClockRange_High,
          AdcAsyncClock   adcAsyncClock   = AdcAsyncClock_Disabled
-         ) {
+   ) {
       enable();
       adc->CFG1 = adcResolution|calculateClockDivider(adcClockSource, adcClockRange, adcPower)|adcPower|(adcSample&ADC_CFG1_ADLSMP_MASK);
       adc->CFG2 = adcMuxsel|adcClockRange|adcAsyncClock|(adcSample&ADC_CFG2_ADLSTS_MASK);
    }
-
-   /**
-    * Get ADC maximum conversion value for an single-ended range
-    *
-    * @param adcResolution
-    *
-    * @return range e.g. AdcResolution_8bit_se => (2^8)-1
-    */
-   static constexpr int getSingleEndedMaximum(AdcResolution adcResolution) {
-      switch(adcResolution) {
-         case AdcResolution_8bit_se:  return (1<<8)-1;
-         case AdcResolution_10bit_se: return (1<<10)-1;
-         case AdcResolution_12bit_se: return (1<<12)-1;
-         case AdcResolution_16bit_se: return (1<<16)-1;
-         default:                     return 0;
-      }
-   }
-
-#ifdef ADC_SC1_DIFF_MASK
-   /**
-    * Get ADC maximum conversion value for an differential range
-    *
-    * @param adcResolution
-    *
-    * @return range e.g. AdcResolution_9bit_diff => (2^8)-1
-    */
-   static constexpr int getDifferentialMaximum(AdcResolution adcResolution) {
-      switch(adcResolution) {
-         case AdcResolution_9bit_diff:   return (1<<8)-1;
-         case AdcResolution_11bit_diff:  return (1<<10)-1;
-         case AdcResolution_13bit_diff:  return (1<<12)-1;
-         case AdcResolution_16bit_diff:  return (1<<15)-1;
-         default:                     return 0;
-      }
-   }
-#endif
 
    /**
     * Calculate ADC clock divider (ADC_CFG1_ADIV) and confirm clock source (ADC_CFG1_ADICLK)
@@ -709,17 +903,17 @@ public:
       unsigned maxClock = 0;
       switch(adcPower|adcClockRange) {
          case AdcPower_Low|AdcClockRange_Normal :
-            maxClock =  4000000;
-            break;
+         maxClock =  4000000;
+         break;
          case AdcPower_Low|AdcClockRange_High :
-            maxClock =  6000000; // Guess
-            break;
+         maxClock =  6000000; // Guess
+         break;
          case AdcPower_Normal|AdcClockRange_Normal :
-            maxClock =  8000000;
-            break;
+         maxClock =  8000000;
+         break;
          case AdcPower_Normal|AdcClockRange_High :
-            maxClock = 12000000;
-            break;
+         maxClock = 12000000;
+         break;
       }
       unsigned adiv;
       for(;;) {
@@ -731,9 +925,9 @@ public:
             clockFrequency /= 2;
          }
          if ((adiv>3) && (adcClockSource == AdcClockSource_Bus)) {
-               // Automatically switch from  AdcClockSource_Bus -> AdcClockSource_Busdiv2
-               adcClockSource = AdcClockSource_Busdiv2;
-               continue;
+            // Automatically switch from  AdcClockSource_Bus -> AdcClockSource_Busdiv2
+            adcClockSource = AdcClockSource_Busdiv2;
+            continue;
          }
          break;
       }
@@ -774,7 +968,7 @@ public:
    static bool isBusy() {
       return adc->SC2&ADC_SC2_ADACT_MASK;
    }
-   
+
    /**
     * Set conversion mode
     *
@@ -996,12 +1190,13 @@ protected:
    /**
     * Initiates a conversion and waits for it to complete.
     *
-    * @param[in] sc1Value SC1 register value including the ADC channel to use
+    * @return - The result of the conversion as an integer converted from 16-bit ADC value
+    *           For single-ended channels this will be zero extended
+    *           For differential channels this will be sign-extended
     *
-    * @return The result of the conversion. This should be treated as a signed value if in differential mode
+    * @note Result is signed but will always be positive for single-ended channels.
     */
    static uint16_t readAnalogue(const int sc1Value) {
-
       // Trigger conversion
       adc->SC1[0] = sc1Value;
       (void)adc->SC1[0];
@@ -1009,7 +1204,12 @@ protected:
       while ((adc->SC1[0]&ADC_SC1_COCO_MASK) == 0) {
          __asm__("nop");
       }
-      return static_cast<uint16_t>(adc->R[0]);
+
+      int value = static_cast<uint16_t>(adc->R[0]);
+      if (sc1Value&ADC_SC1_DIFF_MASK) {
+         value = static_cast<int16_t>(value);
+      }
+      return value;
    };
 
 public:
@@ -1023,6 +1223,47 @@ public:
       // Trigger conversion
       adc->SC1[0] = sc1Value;
    };
+
+#if defined(ADC_PGA_PGAEN_MASK)
+#if defined(ADC_PGA_PGACHPb_MASK)
+      /**
+       * Configure Programmable Gain Amplifier.
+       * Only affects the single channel associated with the PGA.
+       *
+       * @param adcPgaMode Mode to operate in (or disabled)
+       * @param adcPgaGain Gain
+       * @param adcPgaChop PGA chopping control
+       */
+      static void configurePga(AdcPgaMode adcPgaMode, AdcPgaGain adcPgaGain=AdcPgaGain_1, AdcPgaChop adcPgaChop=AdcPgaChop_Enabled) {
+         adc->PGA = adcPgaMode|adcPgaGain|adcPgaChop;
+      }
+
+      /**
+       * Measure PGA offset
+       * The PGA should be configured before doing this.
+       *
+       * @note To apply offset correction subtract subtract [(pga_offset_measurement*(G+1))/(64+1)] from
+       *       the ADC result, where G is the PGA gain during ADC operation
+       *
+       * @return Offset measurement. (pga_offset * (64+1))
+       */
+      static int measurePgaOffset() {
+         // ToDo
+         return 0;
+      }
+#else
+      /**
+       * Configure Programmable Gain Amplifier.
+       * Only affects the single channel associated with the PGA.
+       *
+       * @param adcPgaMode Mode to operate in (or disabled)
+       * @param adcPgaGain Gain
+       */
+      static void configurePga(AdcPgaMode adcPgaMode, AdcPgaGain adcPgaGain=AdcPgaGain_1) {
+         adc->PGA = adcPgaMode|adcPgaGain;
+      }
+#endif
+#endif
 
    /**
     * Template class representing an ADC channel.
@@ -1051,15 +1292,12 @@ public:
       Channel(const Channel&) = delete;
       Channel(Channel&&) = delete;
 
-      AdcBase::CheckInputPin<Info, channel> check;
+      CheckInputPin<Info, channel&ADC_SC1_ADCH_MASK> check;
 
    public:
       constexpr Channel() : AdcChannel(AdcInfo::baseAddress, channel) {}
 
-      using Pcr = PcrTable_T<Info, AdcBase::limitIndex<Info>(channel)>;
-
-      /** Allow convenient access to owning ADC */
-      using Adc =  AdcBase_T<Info>;
+      using Pcr = PcrTable_T<Info, limitIndex<Info>(channel)>;
 
       /** Information about this ADC */
       using AdcInfo = Info;
@@ -1099,6 +1337,33 @@ public:
       }
 
       /**
+       * Initiates a conversion but does not wait for it to complete.
+       * Intended for use with interrupts or DMA.
+       *
+       * @param[in] adcInterrupt   Determines if an interrupt is generated when conversions are complete
+       */
+      static void startConversion(AdcInterrupt adcInterrupt=AdcInterrupt_Disabled) {
+         if constexpr(!Info::irqHandlerInstalled) {
+            usbdm_assert((adcInterrupt == AdcInterrupt_Disabled),
+                  "ADC not configured for interrupts. Modify Configure.usbdmProject");
+         }
+         AdcBase_T::startConversion(channel|adcInterrupt);
+      };
+
+      /**
+       * Initiates a conversion and waits for it to complete.
+       *
+       * @return - The result of the conversion as an integer converted from 16-bit ADC value
+       *           For single-ended channels this will be zero extended
+       *           For differential channels this will be sign-extended
+       *
+       * @note Result is signed but will always be positive for single-ended channels.
+       */
+      static uint16_t readAnalogue() {
+         return static_cast<uint16_t>(AdcBase_T::readAnalogue(channel));
+      };
+
+      /**
        * Enables hardware trigger mode of operation and configures a channel.
        *
        * @param[in] adcPretrigger   Hardware pre-trigger to use for this channel.\n
@@ -1106,7 +1371,7 @@ public:
        * @param[in] adcInterrupt    Whether to generate an interrupt when each conversion completes
        */
       static void enableHardwareConversion(AdcPretrigger adcPretrigger, AdcInterrupt adcInterrupt=AdcInterrupt_Disabled) {
-         AdcBase_T<Info>::enableHardwareConversion(channel|adcInterrupt, adcPretrigger);
+         AdcBase_T::enableHardwareConversion(channel|adcInterrupt, adcPretrigger);
       }
 
 #ifdef ADC_SC2_DMAEN
@@ -1119,34 +1384,48 @@ public:
        * @param[in] adcDma          Whether to generate a DMA request when each conversion completes
        */
       static void enableHardwareConversion(AdcPretrigger adcPretrigger, AdcInterrupt adcInterrupt, AdcDma adcDma) {
-         AdcBase_T<Info>::enableHardwareConversion(channel|adcInterrupt, adcPretrigger, adcDma);
+         AdcBase_T::enableHardwareConversion(channel|adcInterrupt, adcPretrigger, adcDma);
       }
 #endif
+#if defined(ADC_PGA_PGAEN_MASK)
+#if defined(ADC_PGA_PGACHPb_MASK)
+      /**
+       * Configure Programmable Gain Amplifier.
+       * Only affects the single channel associated with the PGA.
+       *
+       * @param adcPgaMode Mode to operate in (or disabled)
+       * @param adcPgaGain Gain
+       * @param adcPgaChop PGA chopping control
+       */
+      static void configurePga(AdcPgaMode adcPgaMode, AdcPgaGain adcPgaGain=AdcPgaGain, AdcPgaChop adcPgaChop=AdcPgaChop_Enabled) {
+         AdcBase_T::configurePga(adcPgaMode, adcPgaGain, AdcPgaChop_Enabled);
+      }
 
       /**
-       * Initiates a conversion but does not wait for it to complete.
-       * Intended for use with interrupts or DMA.
+       * Measure PGA offset
+       * The PGA should be configured before doing this.
        *
-       * @param[in] adcInterrupt   Determines if an interrupt is generated when conversions are complete
+       * @note To apply offset correction subtract subtract [(pga_offset_measurement*(G+1))/(64+1)] from
+       *       the ADC result, where G is the PGA gain during ADC operation
+       *
+       * @return Offset measurement. (pga_offset * (64+1))
        */
-      static void startConversion(AdcInterrupt adcInterrupt=AdcInterrupt_Disabled) {
-         if constexpr(!Info::irqHandlerInstalled) {
-            usbdm_assert((adcInterrupt == AdcInterrupt_Disabled),
-                  "ADC not configured for interrupts. Modify Configure.usbdmProject");
-         }
-         AdcBase_T<Info>::startConversion(channel|adcInterrupt);
-      };
-
+      static int measurePgaOffset() {
+         retrun AdcBase_T::measurePgaOffset();
+      }
+#else
       /**
-       * Initiates a conversion and waits for it to complete.
+       * Configure Programmable Gain Amplifier.
+       * Only affects the single channel associated with the PGA.
        *
-       * @return - The 16-bit result of the conversion
-       *
-       * @note Result is always positive
+       * @param adcPgaMode Mode to operate in (or disabled)
+       * @param adcPgaGain Gain
        */
-      static uint16_t readAnalogue() {
-         return static_cast<uint16_t>(Adc::readAnalogue(channel));
-      };
+      static void configurePga(AdcPgaMode adcPgaMode, AdcPgaGain adcPgaGain=AdcPgaGain_1) {
+         AdcBase_T::configurePga(adcPgaMode, adcPgaGain);
+      }
+#endif
+#endif
    };
 
 #if defined(ADC_PGA_PGAEN_MASK)
@@ -1176,43 +1455,6 @@ public:
 
    public:
       constexpr PgaChannel(){}
-
-#if defined(ADC_PGA_PGACHPb_MASK)
-      /**
-       * Configure Programmable Gain Amplifier
-       *
-       * @param adcPgaMode Mode to operate in (or disabled)
-       * @param adcPgaGain Gain
-       * @param adcPgaChop PGA chopping control
-       */
-      void configurePga(AdcPgaMode adcPgaMode, AdcPgaGain adcPgaGain=AdcPgaGain_1, AdcPgaChop adcPgaChop=AdcPgaChop_Enabled) {
-         adc->PGA = adcPgaMode|adcPgaGain|adcPgaChop;
-      }
-      
-      /**
-       * Measure PGA offset
-       * The PGA should be configured before doing this.
-       *
-       * @note To apply offset correction subtract subtract [(pga_offset_measurement*(G+1))/(64+1)] from
-       *       the ADC result, where G is the PGA gain during ADC operation
-       *
-       * @return Offset measurement. (pga_offset * (64+1))
-       */
-      int measurePgaOffset() {
-         // ToDo
-         return 0;
-      }
-#else
-      /**
-       * Configure Programmable Gain Amplifier
-       *
-       * @param adcPgaMode Mode to operate in (or disabled)
-       * @param adcPgaGain Gain
-       */
-      static void configurePga(AdcPgaMode adcPgaMode, AdcPgaGain adcPgaGain=AdcPgaGain_1) {
-         adc->PGA = adcPgaMode|adcPgaGain;
-      }
-#endif
    };
 #endif
 
@@ -1236,7 +1478,7 @@ public:
     * @tparam channel ADC channel
     */
    template<int channel>
-   class DiffChannel : public AdcDiffChannel {
+   class DiffChannel : public Channel<channel|ADC_SC1_DIFF_MASK> {
    private:
       /**
        * This class is not intended to be instantiated
@@ -1244,20 +1486,17 @@ public:
       DiffChannel(const DiffChannel&) = delete;
       DiffChannel(DiffChannel&&) = delete;
 
-      AdcBase::CheckInputPin<typename Info::InfoDP, channel> checkPos;
-      AdcBase::CheckInputPin<typename Info::InfoDM, channel> checkNeg;
+      CheckInputPin<typename Info::InfoDP, channel&ADC_SC1_ADCH_MASK> checkPos;
+      CheckInputPin<typename Info::InfoDM, channel&ADC_SC1_ADCH_MASK> checkNeg;
 
    public:
-      constexpr DiffChannel() : AdcDiffChannel(AdcInfo::baseAddress, channel) {}
+      constexpr DiffChannel() : Channel<channel|ADC_SC1_DIFF_MASK>() {}
 
       /** PCR associated with plus channel */
-      using PcrP = PcrTable_T<typename Info::InfoDP, AdcBase::limitIndex<typename Info::InfoDP>(channel)>;
+      using PcrP = PcrTable_T<typename Info::InfoDP, limitIndex<typename Info::InfoDP>(channel)>;
 
       /** PCR associated with minus channel */
-      using PcrM = PcrTable_T<typename Info::InfoDM, AdcBase::limitIndex<typename Info::InfoDM>(channel)>;
-
-      /** Allow convenient access to owning ADC */
-      using Adc =  AdcBase_T<Info>;
+      using PcrM = PcrTable_T<typename Info::InfoDM, limitIndex<typename Info::InfoDM>(channel)>;
 
       /** Information about this ADC */
       using AdcInfo = Info;
@@ -1292,18 +1531,6 @@ public:
       }
 
       /**
-       * Enables hardware trigger mode of operation and configures a channel.
-       *
-       * @param[in] adcPretrigger   Hardware pre-trigger to use for this channel\n
-       *                            This corresponds to pre-triggers in the PDB channels and SC1[n] register setups
-       * @param[in] adcInterrupt    Whether to generate interrupt when complete
-       * @param[in] adcDma          Whether to generate a DMA request when each conversion completes
-       */
-      static void enableHardwareConversion(AdcPretrigger adcPretrigger, AdcInterrupt adcInterrupt=AdcInterrupt_Disabled, AdcDma adcDma=AdcDma_Disabled) {
-         AdcBase_T<Info>::enableHardwareConversion(channel|ADC_SC1_DIFF_MASK|adcInterrupt, adcPretrigger, adcDma);
-      }
-
-      /**
        * Initiates a conversion but does not wait for it to complete.
        * Intended for use with interrupts or DMA.
        *
@@ -1314,20 +1541,33 @@ public:
             usbdm_assert((adcInterrupt == AdcInterrupt_Disabled),
                   "ADC not configured for interrupts. Modify Configure.usbdmProject");
          }
-         AdcBase_T<Info>::startConversion(channel|ADC_SC1_DIFF_MASK|adcInterrupt);
+         AdcBase_T::startConversion(channel|ADC_SC1_DIFF_MASK|adcInterrupt);
       };
 
       /**
-       * Initiates a conversion and waits for it to complete.
+       * Enables hardware trigger mode of operation and configures a channel.
        *
-       * @return - The 16-bit result of the conversion
-       *
-       * @note Result may be negative
+       * @param[in] adcPretrigger   Hardware pre-trigger to use for this channel\n
+       *                            This corresponds to pre-triggers in the PDB channels and SC1[n] register setups
+       * @param[in] adcInterrupt    Whether to generate interrupt when complete
        */
-      static int16_t readAnalogue() {
-         // Sign-extended to 16 bits
-         return static_cast<int16_t>(Adc::readAnalogue(channel|ADC_SC1_DIFF_MASK));
-      };
+      static void enableHardwareConversion(AdcPretrigger adcPretrigger, AdcInterrupt adcInterrupt=AdcInterrupt_Disabled) {
+         AdcBase_T::enableHardwareConversion(channel|ADC_SC1_DIFF_MASK|adcInterrupt, adcPretrigger);
+      }
+
+#ifdef ADC_SC2_DMAEN
+      /**
+       * Enables hardware trigger mode of operation and configures a channel.
+       *
+       * @param[in] adcPretrigger   Hardware pre-trigger to use for this channel\n
+       *                            This corresponds to pre-triggers in the PDB channels and SC1[n]/R[n] register selection
+       * @param[in] adcInterrupt    Whether to generate an interrupt when each conversion completes
+       * @param[in] adcDma          Whether to generate a DMA request when each conversion completes
+       */
+      static void enableHardwareConversion(AdcPretrigger adcPretrigger, AdcInterrupt adcInterrupt, AdcDma adcDma) {
+         AdcBase_T::enableHardwareConversion(channel|ADC_SC1_DIFF_MASK|adcInterrupt, adcPretrigger, adcDma);
+      }
+#endif
    };
 
 #if defined(ADC_PGA_PGAEN_MASK)
@@ -1358,17 +1598,6 @@ public:
 
    public:
       constexpr PgaDiffChannel(){}
-
-   /**
-    * Configure Programmable Gain Amplifier
-    *
-    * @param adcPgaMode Mode to operate in (or disabled)
-    * @param adcPgaGain Gain
-    */
-   static void configurePga(AdcPgaMode adcPgaMode, AdcPgaGain adcPgaGain=AdcPgaGain_1) {
-      adc->PGA = adcPgaMode|adcPgaGain;
-   }
-
    };
 #endif
 
@@ -1376,7 +1605,7 @@ public:
 
 };
 
-template<class Info> AdcCallbackFunction AdcBase_T<Info>::sCallback = AdcBase::unhandledCallback;
+template<class Info> AdcCallbackFunction AdcBase_T<Info>::sCallback = Adc::unhandledCallback;
 
 #ifdef USBDM_ADC0_IS_DEFINED
 /**

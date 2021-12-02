@@ -153,6 +153,7 @@
       </peripheral>
       <peripheral baseName="FLEXBUS"  instance=""         version="flexbus">
          <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForFlexBus" />
+         <clock clockEnable="SIM->SCGC7 |= SIM_SCGC7_FLEXBUS_MASK;" clockDisable="SIM->SCGC7 &amp;= ~SIM_SCGC7_FLEXBUS_MASK;" />
       </peripheral>
       <peripheral baseName="FTFL"     instance=""         version="ftfl">
          <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForFlash" />
@@ -366,6 +367,7 @@
          <reset sel="fixed" />
       </pin>
       <pin name="PGA0_DP"      isFixed="true">
+         <mux sel="fixed"         signal="PGA0" />
          <mux sel="fixed"         signal="PGA0_DP" />
          <mux sel="fixed"         signal="ADC0_DP0" />
          <mux sel="fixed"         signal="ADC1_DP3" />
@@ -382,6 +384,7 @@
          <reset sel="fixed" />
       </pin>
       <pin name="PGA1_DP"      isFixed="true">
+         <mux sel="fixed"         signal="PGA1" />
          <mux sel="fixed"         signal="PGA1_DP" />
          <mux sel="fixed"         signal="ADC0_DP3" />
          <mux sel="fixed"         signal="ADC1_DP0" />

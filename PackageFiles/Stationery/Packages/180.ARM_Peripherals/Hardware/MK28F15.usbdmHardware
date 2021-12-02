@@ -338,7 +338,7 @@
       <peripheral baseName="POWER"    instance="">
          <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForPower" />
       </peripheral>
-      <peripheral baseName="QSPI"     instance="0"        version="qspi0_0x400da000">
+      <peripheral baseName="QSPI"     instance="0"        version="qspi0_0x400da000_mk28">
          <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForQspi" />
          <clock clockEnable="SIM->SCGC2 |= SIM_SCGC2_QSPI_MASK;" clockDisable="SIM->SCGC2 &amp;= ~SIM_SCGC2_QSPI_MASK;" />
          <irq num="QSPI0_IRQn" />
@@ -432,6 +432,10 @@
       <peripheral baseName="VREF"     instance=""         version="vref_c">
          <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForVref" />
          <clock clockEnable="SIM->SCGC4 |= SIM_SCGC4_VREF_MASK;" clockDisable="SIM->SCGC4 &amp;= ~SIM_SCGC4_VREF_MASK;" />
+      </peripheral>
+      <peripheral baseName="WDOG"     instance=""         version="wdog_mk">
+         <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForWdog" />
+         <irq num="WDOG_IRQn" />
       </peripheral>
    </peripherals>
    <pins>

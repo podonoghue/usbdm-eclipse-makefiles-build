@@ -17,7 +17,7 @@
    
    <projectActionList id = "sdhc_files">
       <copy source="Project_Headers/sdhc.h"                   target="Project_Headers/sdhc.h"                     overwrite="true"  derived="true" />
-      <copy source="Snippets/sdhc-example.h"                  target="Snippets/sdhc-example.h"                    overwrite="true"  derived="true" />
+      <copy source="Snippets/sdhc-example.cpp"                target="Snippets/sdhc-example.cpp"                  overwrite="true"  derived="true" />
    </projectActionList>
 
    <signals/>

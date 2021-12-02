@@ -2267,15 +2267,16 @@ public:
    }
 
    /**
-    * Stop execution; deassert CS
+    * Create an entry for the LUT : Stop execution; deassert CS
     *
     * @return  Encoded instruction
     */
-   static constexpr QspiLutInstruction instruction_Stop() {
+   static constexpr QspiLutInstruction lutEntry_Stop() {
       return QspiLutInstruction(QspiInstruction_Stop);
    }
 
    /**
+    * Create an entry for the LUT :
     * Instruction to provide the serial flash with operand on the number of pads specified
     *
     * @param qspiLutPadInfo   Number of pads (1,2,4,8 pads)
@@ -2283,11 +2284,12 @@ public:
     *
     * @return  Encoded instruction
     */
-   static constexpr QspiLutInstruction instruction_Command(QspiLutPadInfo qspiLutPadInfo, unsigned operand) {
+   static constexpr QspiLutInstruction lutEntry_Command(QspiLutPadInfo qspiLutPadInfo, unsigned operand) {
       return QspiLutInstruction(QspiInstruction_Command, qspiLutPadInfo, operand);
    }
 
    /**
+    * Create an entry for the LUT :
     * Provide the serial flash with address cycles according to the operand on the number of pads specified.
     *
     * The actual address to be provided will be derived from:
@@ -2300,11 +2302,12 @@ public:
     *
     * @return  Encoded instruction
     */
-   static constexpr QspiLutInstruction instruction_Addr(QspiLutPadInfo qspiLutPadInfo, unsigned operand) {
+   static constexpr QspiLutInstruction lutEntry_Addr(QspiLutPadInfo qspiLutPadInfo, unsigned operand) {
       return QspiLutInstruction(QspiInstruction_Address, qspiLutPadInfo, operand);
    }
 
    /**
+    * Create an entry for the LUT :
     * Provide the serial flash with dummy cycles as per the operand.
     *
     * The PAD information defines the number of pads in input mode
@@ -2315,11 +2318,12 @@ public:
     *
     * @return  Encoded instruction
     */
-   static constexpr QspiLutInstruction instruction_Dummy(QspiLutPadInfo qspiLutPadInfo, unsigned operand) {
+   static constexpr QspiLutInstruction lutEntry_Dummy(QspiLutPadInfo qspiLutPadInfo, unsigned operand) {
       return QspiLutInstruction(QspiInstruction_Dummy, qspiLutPadInfo, operand);
    }
 
    /**
+    * Create an entry for the LUT :
     * Provide the serial flash with 8-bit operand on the number of pads specified.
     *
     * @param qspiLutPadInfo   Number of pads (1,2,4,8 pads)
@@ -2327,11 +2331,12 @@ public:
     *
     * @return  Encoded instruction
     */
-   static constexpr QspiLutInstruction instruction_Mode8(QspiLutPadInfo qspiLutPadInfo, unsigned operand) {
+   static constexpr QspiLutInstruction lutEntry_Mode8(QspiLutPadInfo qspiLutPadInfo, unsigned operand) {
       return QspiLutInstruction(QspiInstruction_Mode8, qspiLutPadInfo, operand);
    }
 
    /**
+    * Create an entry for the LUT :
     * Provide the serial flash with 2-bit operand on the number of pads specified.
     *
     * @param qspiLutPadInfo   Number of pads (1,2 pads)
@@ -2341,11 +2346,12 @@ public:
     *
     * @return  Encoded instruction
     */
-   static constexpr QspiLutInstruction instruction_Mode2(QspiLutPadInfo qspiLutPadInfo, unsigned operand) {
+   static constexpr QspiLutInstruction lutEntry_Mode2(QspiLutPadInfo qspiLutPadInfo, unsigned operand) {
       return QspiLutInstruction(QspiInstruction_Mode2, qspiLutPadInfo, operand);
    }
 
    /**
+    * Create an entry for the LUT :
     * Provide the serial flash with 4-bit operand on the number of pads specified.
     *
     * @param qspiLutPadInfo   Number of pads (1,2,4 pads)
@@ -2356,11 +2362,12 @@ public:
     *
     * @return  Encoded instruction
     */
-   static constexpr QspiLutInstruction instruction_Mode4(QspiLutPadInfo qspiLutPadInfo, unsigned operand) {
+   static constexpr QspiLutInstruction lutEntry_Mode4(QspiLutPadInfo qspiLutPadInfo, unsigned operand) {
       return QspiLutInstruction(QspiInstruction_Mode4, qspiLutPadInfo, operand);
    }
 
    /**
+    * Create an entry for the LUT :
     * Read data from flash on the number of pads specified.
     *
     * The data size may be overwritten by writing to:
@@ -2372,11 +2379,12 @@ public:
     *
     * @return  Encoded instruction
     */
-   static constexpr QspiLutInstruction instruction_Read(QspiLutPadInfo qspiLutPadInfo, unsigned operand) {
+   static constexpr QspiLutInstruction lutEntry_Read(QspiLutPadInfo qspiLutPadInfo, unsigned operand) {
       return QspiLutInstruction(QspiInstruction_Read, qspiLutPadInfo, operand);
    }
 
    /**
+    * Create an entry for the LUT :
     * Write data on number of pads specified.
     *
     * The data size may be overwritten by writing to:
@@ -2387,11 +2395,12 @@ public:
     *
     * @return  Encoded instruction
     */
-   static constexpr QspiLutInstruction instruction_Write(QspiLutPadInfo qspiLutPadInfo, unsigned operand) {
+   static constexpr QspiLutInstruction lutEntry_Write(QspiLutPadInfo qspiLutPadInfo, unsigned operand) {
       return QspiLutInstruction(QspiInstruction_Write, qspiLutPadInfo, operand);
    }
 
    /**
+    * Create an entry for the LUT :
     * Every time the chip select (CS) is deasserted, jump to the instruction pointed to by the operand.
     *
     * This instruction allows the programmer to specify the behaviour of the controller when a new read
@@ -2401,13 +2410,12 @@ public:
     *
     * @return  Encoded instruction
     */
-   static constexpr QspiLutInstruction instruction_JumpOnCs(uint8_t operand) {
+   static constexpr QspiLutInstruction lutEntry_JumpOnCs(uint8_t operand) {
       return QspiLutInstruction(QspiInstruction_JumpOnChipSelect, operand);
    }
 
    /**
-    * Provide the serial flash with address cycles according to the
-    *
+    * Create an entry for the LUT :
     * Provide the serial flash with address cycles according to the address bits operand
     * on the number of pads specified at each clock edge of serial flash clock.
     * The actual address to be provided will be derived from the incoming address
@@ -2420,11 +2428,12 @@ public:
     *
     * @return  Encoded instruction
     */
-   static constexpr QspiLutInstruction instruction_Addr_DDR(QspiLutPadInfo qspiLutPadInfo, unsigned operand) {
+   static constexpr QspiLutInstruction lutEntry_Addr_DDR(QspiLutPadInfo qspiLutPadInfo, unsigned operand) {
       return QspiLutInstruction(QspiInstruction_Addr_DDR, qspiLutPadInfo, operand);
    }
 
    /**
+    * Create an entry for the LUT :
     * Provide the serial flash with 8-bit operand on the number of
     * pads specified at each clock edge of serial flash.
     *
@@ -2433,11 +2442,12 @@ public:
     *
     * @return  Encoded instruction
     */
-   static constexpr QspiLutInstruction instruction_Mode_DDR(QspiLutPadInfo qspiLutPadInfo, unsigned operand) {
+   static constexpr QspiLutInstruction lutEntry_Mode_DDR(QspiLutPadInfo qspiLutPadInfo, unsigned operand) {
       return QspiLutInstruction(QspiInstruction_Mode8_DDR, qspiLutPadInfo, operand);
    }
 
    /**
+    * Create an entry for the LUT :
     * Provide the serial flash with 2-bit operand on the number of
     * pads specified at each clock edge of serial flash.
     *
@@ -2448,11 +2458,12 @@ public:
     *
     * @return  Encoded instruction
     */
-   static constexpr QspiLutInstruction instruction_Mode2_DDR(QspiLutPadInfo qspiLutPadInfo, unsigned operand) {
+   static constexpr QspiLutInstruction lutEntry_Mode2_DDR(QspiLutPadInfo qspiLutPadInfo, unsigned operand) {
       return QspiLutInstruction(QspiInstruction_Mode2_DDR, qspiLutPadInfo, operand);
    }
 
    /**
+    * Create an entry for the LUT :
     * Provide the serial flash with 4-bit operand on the number of
     * pads specified at each clock edge of serial flash.
     *
@@ -2464,11 +2475,12 @@ public:
     *
     * @return  Encoded instruction
     */
-   static constexpr QspiLutInstruction instruction_Mode4_DDR(QspiLutPadInfo qspiLutPadInfo, unsigned operand) {
+   static constexpr QspiLutInstruction lutEntry_Mode4_DDR(QspiLutPadInfo qspiLutPadInfo, unsigned operand) {
       return QspiLutInstruction(QspiInstruction_Mode4_DDR, qspiLutPadInfo, operand);
    }
 
    /**
+    * Create an entry for the LUT :
     * Read data from flash on the number of pads specified at each clock edge of serial flash.
     *
     * The data size may be overwritten by writing to:
@@ -2480,11 +2492,12 @@ public:
     *
     * @return  Encoded instruction
     */
-   static constexpr QspiLutInstruction instruction_Read_DDR(QspiLutPadInfo qspiLutPadInfo, unsigned operand) {
+   static constexpr QspiLutInstruction lutEntry_Read_DDR(QspiLutPadInfo qspiLutPadInfo, unsigned operand) {
       return QspiLutInstruction(QspiInstruction_Read_DDR, qspiLutPadInfo, operand);
    }
 
    /**
+    * Create an entry for the LUT :
     * Write data on number of pads specified at each clock edge of serial flash.
     *
     * The data size may be overwritten by writing to:
@@ -2495,11 +2508,12 @@ public:
     *
     * @return  Encoded instruction
     */
-   static constexpr QspiLutInstruction instruction_Write_DDR(QspiLutPadInfo qspiLutPadInfo, unsigned operand) {
+   static constexpr QspiLutInstruction lutEntry_Write_DDR(QspiLutPadInfo qspiLutPadInfo, unsigned operand) {
       return QspiLutInstruction(QspiInstruction_Write_DDR, qspiLutPadInfo, operand);
    }
 
    /**
+    * Create an entry for the LUT :
     * Finds the correct sampling point in case of only DDR operations.
     *
     * When this instruction is encountered, the
@@ -2515,11 +2529,12 @@ public:
     *
     * @return  Encoded instruction
     */
-   static constexpr QspiLutInstruction instruction_DataLearn(QspiLutPadInfo qspiLutPadInfo, unsigned operand) {
+   static constexpr QspiLutInstruction lutEntry_DataLearn(QspiLutPadInfo qspiLutPadInfo, unsigned operand) {
       return QspiLutInstruction(QspiInstruction_DataLearn, qspiLutPadInfo, operand);
    }
 
    /**
+    * Create an entry for the LUT :
     * Provide the serial flash with the operand with number of pads specified at each clock edge of the serial flash
     *
     * @param qspiLutPadInfo   Number of pads (1,2,4,8 pads)
@@ -2527,11 +2542,12 @@ public:
     *
     * @return  Encoded instruction
     */
-   static constexpr QspiLutInstruction instruction_Command_DDR(QspiLutPadInfo qspiLutPadInfo, unsigned operand) {
+   static constexpr QspiLutInstruction lutEntry_Command_DDR(QspiLutPadInfo qspiLutPadInfo, unsigned operand) {
       return QspiLutInstruction(QspiInstruction_Command_DDR, qspiLutPadInfo, operand);
    }
 
    /**
+    * Create an entry for the LUT :
     * Provide the serial flash with column address cycles according to the operand on the number of pads specified.
     *
     * The actual address to be provided to flash will depend on value of QSPI_SFACR[CAS].
@@ -2544,11 +2560,12 @@ public:
     *
     * @return  Encoded instruction
     */
-   static constexpr QspiLutInstruction instruction_ColumnAddr(QspiLutPadInfo qspiLutPadInfo, unsigned operand) {
+   static constexpr QspiLutInstruction lutEntry_ColumnAddr(QspiLutPadInfo qspiLutPadInfo, unsigned operand) {
       return QspiLutInstruction(QspiInstruction_ColumnAddress, qspiLutPadInfo, operand);
    }
 
    /**
+    * Create an entry for the LUT :
     * Provide the serial flash with column address cycles according to the operand on the number of pads specified
     * on each edge of the flash clock.
     *
@@ -2562,7 +2579,7 @@ public:
     *
     * @return  Encoded instruction
     */
-   static constexpr QspiLutInstruction instruction_ColumnAddr_DDR(QspiLutPadInfo qspiLutPadInfo, unsigned operand) {
+   static constexpr QspiLutInstruction lutEntry_ColumnAddr_DDR(QspiLutPadInfo qspiLutPadInfo, unsigned operand) {
       return QspiLutInstruction(QspiInstruction_ColumnAddress_DDR, qspiLutPadInfo, operand);
    }
 

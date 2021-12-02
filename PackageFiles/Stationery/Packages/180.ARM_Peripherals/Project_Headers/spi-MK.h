@@ -494,7 +494,7 @@ public:
       spi->CTAR[spiCtarSelect] = (spi->CTAR[spiCtarSelect]&~(SPI_CTAR_FMSZ_MASK)) |
             SPI_CTAR_FMSZ(numBits-1);
    }
-   
+
    /**
     * Sets up hardware peripheral select (SPI_PCSx) for transfer.
     * Also controls which CTAR is used for the transaction.
@@ -724,8 +724,8 @@ template<class Info>
 class SpiBase_T : public Spi {
 
 public:
-   /** Get reference to SPI hardware as struct */
-   static volatile SPI_Type &spiPtr() { return Info::spi(); }
+   /** Pointer to SPI hardware as struct */
+   static constexpr HardwarePtr<SPI_Type>spi = Info::baseAddress;
 
    /** Get base address of SPI hardware as uint32_t */
    static constexpr uint32_t spiBase() { return Info::baseAddress; }
@@ -914,7 +914,7 @@ public:
 
    /**
     * Calculates the timing aspects of a CTAR value based on frequency
-    
+
     * @param[in]  frequency      => Communication frequency in Hz
     *
     * @return Combined masks for CTAR.BR, CTAR.PBR, CTAR.PCSSCK, CTAR.CSSCK, CTAR.PDT, CTAR.DT, CTAR.PCSSCK and CTAR.CSSCK

@@ -133,7 +133,7 @@ protected:
 
 public:
    /// Defaulted constructor
-   PitBase_T() = default;
+   constexpr PitBase_T() = default;
 
    /**
     * Allocate PIT channel.
@@ -208,8 +208,8 @@ public:
       }
    }
 
-   /** 
-    * PIT interrupt handler -  Calls PIT callback 
+   /**
+    * PIT interrupt handler -  Calls PIT callback
     * Used when all channels share a single handler (needs to poll channel flags)
     */
    static void irqHandler() {
@@ -429,7 +429,7 @@ public:
       usbdm_assert(pitChannelNum<Info::irqCount,"Illegal PIT channel");
       NVIC_DisableIRQ(irqNums[pitChannelNum]);
    }
-   
+
    /**
     *  Enable the PIT channel
     *
@@ -987,7 +987,7 @@ public:
       }
 
    };
-   
+
    /**
     * Class representing a PIT channel
     *
@@ -1002,7 +1002,7 @@ public:
 
    public:
 
-      Channel() : PitChannel(CHANNEL) {};
+      constexpr Channel() : PitChannel(CHANNEL) {};
 
       /** Timer channel number */
       static constexpr PitChannelNum CHANNEL = (PitChannelNum)channel;
@@ -1016,8 +1016,8 @@ public:
          PitBase_T<Info>::setCallback(CHANNEL, callback);
       }
 
-      /** 
-       * PIT interrupt handler - Calls PIT callback 
+      /**
+       * PIT interrupt handler - Calls PIT callback
        * Used when each channel has an individual handler
        */
       static void irqHandler() {
@@ -1255,6 +1255,12 @@ uint8_t PitBase_T<Info>::clearOnEvent = 0;
  * @brief class representing the PIT
  */
 using Pit = PitBase_T<PitInfo>;
+
+/**
+ * @brief class representing a PIT channel
+ */
+using PitChannel = Pit::PitChannel;
+
 #endif
 
 /**

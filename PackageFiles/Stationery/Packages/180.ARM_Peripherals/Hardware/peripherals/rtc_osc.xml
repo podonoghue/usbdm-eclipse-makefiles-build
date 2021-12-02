@@ -355,7 +355,7 @@
      -  _IRQHandler is appended to the pattern (only)
    -->
    <irqOption name="irqHandlingMethod"  
-      description="RTC Alarmand Seconds interrupt handlers"
+      description="RTC Alarm and Seconds interrupt handlers"
       toolTip="This selection allow the interrupt handler for this peripheral to be installed using several different methods"
       pattern="^RTC_(Alarm|Seconds)$" 
       classHandler="%c%i::irq$1Handler" />

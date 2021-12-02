@@ -138,6 +138,19 @@ template<class Info>
 class CmtBase_T {
 
 protected:
+   /** Class to static check output is mapped to a pin - Assumes existence */
+   template<unsigned index> class CheckOutputIsMapped {
+
+      // Check mapping - no need to check existence
+      static constexpr bool Test1 = (Info::info[index].gpioBit != UNMAPPED_PCR);
+
+      static_assert(Test1, "CMT output is not mapped to a pin - Modify Configure.usbdm");
+
+   public:
+      /** Dummy function to allow convenient in-line checking */
+      static constexpr void check() {}
+   };
+
    /**
     * Callback to catch unhandled interrupt
     */
@@ -235,10 +248,11 @@ public:
     * @param[in] pcrValue PCR value to use in configuring port (excluding MUX value). See pcrValue()
     */
    static void setOutput(PcrValue pcrValue=Info::defaultPcrValue) {
+      CheckOutputIsMapped<0>::check();
       using Pcr = PcrTable_T<Info, 0>;
 
       // Enable and map pin to CMP_OUT
-      Pcr::setPCR((pcrValue&~PORT_PCR_MUX_MASK)|(Info::info[0].pcrValue&PORT_PCR_MUX_MASK));
+      Pcr::setPCR(pcrValue);
    }
 
    /**

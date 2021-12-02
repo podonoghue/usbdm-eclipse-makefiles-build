@@ -17,6 +17,7 @@
  * This file is generated automatically.
  * Any manual changes will be lost.
  */
+#include <math.h>
 #include "pin_mapping.h"
 
 namespace USBDM {
@@ -116,6 +117,32 @@ enum TsiErrorInterrupt {
    TsiErrorInterrupt_Disabled  = TSI_GENCS_ERIE(0),   //!< Error interrupts disabled
    TsiErrorInterrupt_Enabled   = TSI_GENCS_ERIE(1),   //!< Error interrupts enabled (overrun or illegal measurement result)
 };
+
+/**
+ * Select CMP0 inputs
+ */
+enum TsiInput {
+   // Mapped inputs
+$(/TSI/InputMapping:   // None Found)
+   TsiInput_0          =  0, //!< TSI input 0
+   TsiInput_1          =  1, //!< TSI input 1
+   TsiInput_2          =  2, //!< TSI input 2
+   TsiInput_3          =  3, //!< TSI input 3
+   TsiInput_4          =  4, //!< TSI input 4
+   TsiInput_5          =  5, //!< TSI input 5
+   TsiInput_6          =  6, //!< TSI input 6
+   TsiInput_7          =  7, //!< TSI input 7
+   TsiInput_8          =  9, //!< TSI input 8
+   TsiInput_9          =  8, //!< TSI input 9
+   TsiInput_10         = 10, //!< TSI input 10
+   TsiInput_11         = 11, //!< TSI input 11
+   TsiInput_12         = 12, //!< TSI input 12
+   TsiInput_13         = 13, //!< TSI input 13
+   TsiInput_14         = 14, //!< TSI input 14
+   TsiInput_15         = 15, //!< TSI input 15
+};
+
+
 /**
  * Type definition for TSI interrupt call back
  *
@@ -145,12 +172,25 @@ protected:
       return (electrode>=Info::numSignals)?0:electrode;
    }
 
-   /** Class to static check channel pin mapping is valid */
-   template<int electrodeNum> class CheckSignal {
-      static_assert((electrodeNum<Info::numSignals), "Non-existent TSI Input - Modify Configure.usbdm");
-      static_assert((electrodeNum>=Info::numSignals)||(Info::info[electrodeNum].gpioBit != UNMAPPED_PCR), "TSI Input is not mapped to a pin - Modify Configure.usbdm");
-      static_assert((electrodeNum>=Info::numSignals)||(Info::info[electrodeNum].gpioBit != INVALID_PCR),  "TSI Input doesn't exist in this device/package - Modify Configure.usbdm");
-      static_assert((electrodeNum>=Info::numSignals)||((Info::info[electrodeNum].gpioBit == UNMAPPED_PCR)||(Info::info[electrodeNum].gpioBit == INVALID_PCR)||(Info::info[electrodeNum].gpioBit >= 0)), "Illegal TSI Input - Modify Configure.usbdm");
+   /**
+    * Class to static check electrodeNum exists and is mapped to a pin
+    *
+    * @tparam electrodeNum Electrode number to check
+    */
+   template<int electrodeNum> class CheckPinExistsAndIsMapped {
+      // Tests are chained so only a single assertion can fail so as to reduce noise
+
+      // Out of bounds value for function index
+      static constexpr bool Test1 = (electrodeNum>=0) && (electrodeNum<(Info::numSignals));
+      // Function is not currently mapped to a pin
+      static constexpr bool Test2 = !Test1 || (Info::info[electrodeNum].gpioBit != UNMAPPED_PCR);
+      // Non-existent function and catch-all. (should be INVALID_PCR)
+      static constexpr bool Test3 = !Test1 || !Test2 || (Info::info[electrodeNum].gpioBit >= 0);
+
+      static_assert(Test1, "Illegal TSI Input - Check Configure.usbdm for available inputs");
+      static_assert(Test2, "TSI input is not mapped to a pin - Modify Configure.usbdm");
+      static_assert(Test3, "TSI input doesn't exist in this device/package - Check Configure.usbdm for available input pins");
+
    public:
       /** Dummy function to allow convenient in-line checking */
       static constexpr void check() {}
@@ -444,20 +484,21 @@ public:
    /**
     * Class representing a TSI input pin
     *
-    * @tparam electrodeNum Number of TSI electrode (input) to configure
+    * @tparam tsiInput Number of TSI electrode (input) to configure
     */
-   template<int tsiElectrodeNum>
+   template<TsiInput tsiInput>
    class Pin {
 
    private:
       // Check if electrode mapped to pin
-      static CheckSignal<tsiElectrodeNum> check;
+      static CheckPinExistsAndIsMapped<tsiInput> check;
 
       // PCR for pin associated with electrode
-      using Pcr = PcrTable_T<Info, limitElectrode(tsiElectrodeNum)>;
+      using Pcr = PcrTable_T<Info, limitElectrode(tsiInput)>;
 
    public:
-      static constexpr int electrodeNum = tsiElectrodeNum;
+      static constexpr TsiInput TSI_INPUT      = tsiInput;
+      static constexpr uint16_t TSI_INPUT_MASK = 1<<tsiInput;
 
       /**
        * Configure the pin associated with a TSI input electrode.
@@ -473,7 +514,7 @@ public:
        * @return 16-bit count value
        */
       static uint16_t getCount() {
-         return Info::tsi->CNTR[tsiElectrodeNum];
+         return Info::tsi->CNTR[tsiInput];
       }
    };
 

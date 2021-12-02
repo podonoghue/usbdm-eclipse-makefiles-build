@@ -16,6 +16,7 @@
  * This file is generated automatically.
  * Any manual changes will be lost.
  */
+#include <math.h>
 #include "pin_mapping.h"
 
 namespace USBDM {
