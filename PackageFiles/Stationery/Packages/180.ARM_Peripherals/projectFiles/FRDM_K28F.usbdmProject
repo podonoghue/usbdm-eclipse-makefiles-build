@@ -8,7 +8,9 @@
    <item key="$$DeviceInfo_Device_Variant"                 value="FRDM_K28F" />
    <item key="$$DeviceInfo_SubFamily"                      value="MK28F15" />
    <item key="$$Hardware_Source_Filename"                  value="MK28F15.usbdmHardware" />
+   <item key="$peripheral$ADC0_codeIdentifier"             value="myAdc" />
    <item key="$peripheral$FLEXBUS_codeIdentifier"          value="myFlexbusController" />
+   <item key="$peripheral$FTM3_codeIdentifier"             value="myPwm" />
    <item key="$peripheral$SDHC0_codeIdentifier"            value="Sdhc" />
    <item key="$peripheral$SDRAMC_codeIdentifier"           value="mySDRamController" />
    <item key="$pin$PTA0_muxSetting_7"                      value="selected" />
@@ -99,13 +101,24 @@
    <item key="$pin$PTE4_muxSetting_5"                      value="selected" />
    <item key="$pin$PTE5_muxSetting_5"                      value="selected" />
    <item key="$pin$PTE6_muxSetting_1"                      value="selected" />
+   <item key="$pin$PTE6_muxSetting_6"                      value="selected" />
    <item key="$pin$PTE7_muxSetting_1"                      value="selected" />
+   <item key="$pin$PTE7_muxSetting_6"                      value="selected" />
    <item key="$pin$PTE8_muxSetting_1"                      value="selected" />
+   <item key="$pin$PTE8_muxSetting_6"                      value="selected" />
+   <item key="$signal$ADC0_SE16_codeIdentifier"            value="lightSensor" />
    <item key="$signal$ADC0_SE16_descriptionSetting"        value="Light Sensor" />
+   <item key="$signal$ADC0_SE22_codeIdentifier"            value="vrefOut" />
+   <item key="$signal$ADC0_SE23_codeIdentifier"            value="dacOut" />
+   <item key="$signal$ADC0_SE26_codeIdentifier"            value="tempSensor" />
+   <item key="$signal$ADC0_SE27_codeIdentifier"            value="bandgap" />
    <item key="$signal$CLKOUT_descriptionSetting"           value="Clkout" />
    <item key="$signal$EXTAL32_descriptionSetting"          value="Reserved(Crystal)" />
    <item key="$signal$FB_BE23_16_BLS15_8_b_descriptionSetting" value="SDRAM_LDQM" />
    <item key="$signal$FB_BE31_24_BLS7_0_b_descriptionSetting" value="SDRAM_UDQM" />
+   <item key="$signal$FTM3_CH1_codeIdentifier"             value="redLedPwm" />
+   <item key="$signal$FTM3_CH2_codeIdentifier"             value="greenLedPwm" />
+   <item key="$signal$FTM3_CH3_codeIdentifier"             value="blueLedPwm" />
    <item key="$signal$FXIO0_D11_descriptionSetting"        value="FlexioD11" />
    <item key="$signal$FXIO0_D12_descriptionSetting"        value="FlexioD12" />
    <item key="$signal$FXIO0_D15_descriptionSetting"        value="FlexioD15" />
@@ -130,14 +143,21 @@
    <item key="$signal$FXIO0_D8_descriptionSetting"         value="FlexioD8" />
    <item key="$signal$FXIO0_D9_descriptionSetting"         value="FlexioD9" />
    <item key="$signal$GPIOA_4_codeIdentifier"              value="Switch2" />
+   <item key="$signal$GPIOA_4_createInstance"              value="true" />
    <item key="$signal$GPIOA_4_polarity"                    value="true" />
    <item key="$signal$GPIOB_5_codeIdentifier"              value="sdhcCardDetect" />
+   <item key="$signal$GPIOB_5_createInstance"              value="true" />
    <item key="$signal$GPIOB_5_descriptionSetting"          value="SDHC0_CARD_DETECT" />
    <item key="$signal$GPIOD_0_codeIdentifier"              value="Switch3" />
+   <item key="$signal$GPIOD_0_createInstance"              value="true" />
    <item key="$signal$GPIOD_0_polarity"                    value="true" />
    <item key="$signal$GPIOE_6_codeIdentifier"              value="RedLED" />
+   <item key="$signal$GPIOE_6_createInstance"              value="true" />
    <item key="$signal$GPIOE_7_codeIdentifier"              value="GreenLED" />
+   <item key="$signal$GPIOE_7_createInstance"              value="true" />
    <item key="$signal$GPIOE_8_codeIdentifier"              value="BlueLED" />
+   <item key="$signal$LLWU_P12_codeIdentifier"             value="switch3" />
+   <item key="$signal$LLWU_P3_codeIdentifier"              value="switch2" />
    <item key="$signal$QSPI0A_DATA0_descriptionSetting"     value="QSPIA0_DATA0" />
    <item key="$signal$QSPI0A_DATA1_descriptionSetting"     value="QSPIA0_DATA1" />
    <item key="$signal$QSPI0A_DATA2_descriptionSetting"     value="QSPIA0_DATA2" />
@@ -198,7 +218,6 @@
    <item key="/FTFE/peripheral_file"                       value="ftfa" />
    <item key="/LLWU/device_list"                           value="LPTMR0/LPTMR1;CMP0;CMP1;;;RTC_Alarm;;RTC_Seconds" />
    <item key="/LPTMR0/lptmr_cmr"                           value="0" />
-   <item key="/LPUART0/oversampleRatio"                    value="4" />
    <item key="/MCG/ClockConfig[0]"                         value="ClockConfig_PEE_120MHz" />
    <item key="/MCG/ClockConfig[1]"                         value="ClockConfig_BLPE_4MHz" />
    <item key="/MCG/ClockConfig[2]"                         value="ClockConfig_PEE_150MHz" />
