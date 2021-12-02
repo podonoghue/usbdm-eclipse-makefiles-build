@@ -8,6 +8,7 @@
  ============================================================================
  */
 #include "hardware.h"
+#include "adc.h"
 
 using namespace USBDM;
 
@@ -19,19 +20,19 @@ using namespace USBDM;
  */
 
 // Connection mapping - change as required
-using Adc = USBDM::Adc0;
+using MyAdc = USBDM::Adc0;
 
-using JOYSTICK_X = Adc::$(demo.cpp.joystick.x:Channel<0>);
-using JOYSTICK_Y = Adc::$(demo.cpp.joystick.y:Channel<3>);
+using JOYSTICK_X = MyAdc::$(demo.cpp.joystick.x:Channel<0>);
+using JOYSTICK_Y = MyAdc::$(demo.cpp.joystick.y:Channel<3>);
 using JOYSTICK_K = $(demo.cpp.joystick.k:GpioC<3,ActiveLow>);
 
 int main(void) {
 
    // Enable and configure ADC
-   Adc::configure(AdcResolution_8bit_se);
+   MyAdc::configure(AdcResolution_8bit_se);
 
    // Calibrate before use
-   Adc::calibrate();
+   MyAdc::calibrate();
 
    // Connect ADC channels to pins
    JOYSTICK_X::setInput();

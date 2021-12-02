@@ -50,7 +50,7 @@ using WakeupTimer = Lptmr0;
 static constexpr LlwuFilterNum FILTER_NUM = LlwuFilterNum_0;
 
 // LLWU Pin to use for wake-up
-using WakeupPin = Llwu::Pin<LlwuPin_Ptc5>;
+using WakeupPin = Llwu::Pin<LlwuPin_switch2>;
 
 /** Possible tests - must be in this order */
 enum Test {
@@ -123,7 +123,7 @@ static void pinCallback(uint32_t status __attribute__((unused))) {
  */
 static void llwuCallback() {
    preservedData.llwuHandlerRan = true;
-   if (Llwu::isPeripheralWakeupSource(LlwuPeripheral_Lptmr)) {
+   if (Llwu::isPeripheralWakeupSource(LlwuPeripheral_Lptmr0)) {
       // Wake-up from LPTMR
       WakeupTimer::clearInterruptFlag();
       WakeupTimer::enableInterrupts(false);
@@ -319,7 +319,7 @@ static void enableTimer(const PreservedData preservedData) {
          Llwu::clearAllFlags();
 
          console.writeln("Configuring timer LLWU wake-up").flushOutput();
-         Llwu::configurePeripheralSource(LlwuPeripheral_Lptmr);
+         Llwu::configurePeripheralSource(LlwuPeripheral_Lptmr0);
       }
    }
    else {
@@ -482,7 +482,7 @@ int main() {
       console.writeln("========================================");
       console.writeln("Reset due to LLWU");
 
-      bool llwuDeviceFlag  = Llwu::getPeripheralWakeupSources()&LlwuPeripheral_Lptmr;
+      bool llwuDeviceFlag  = Llwu::getPeripheralWakeupSources()&LlwuPeripheral_Lptmr0;
       bool llwuPinFlags    = Llwu::isPinWakeupSource(WakeupPin::pin);
       bool llwuFilterFlag  = Llwu::isFilteredPinWakeupSource(FILTER_NUM);
 
@@ -646,7 +646,7 @@ int main() {
             break;
          case 'V':
             if (smcStatus!=SmcStatus_HSRUN) {
-               preservedData.test = 
+               preservedData.test =
                  ((preservedData.test != VLLS0)&&
                   (preservedData.test != VLLS1)&&
                   (preservedData.test != VLLS2))?VLLS0:(Test)(preservedData.test+1);

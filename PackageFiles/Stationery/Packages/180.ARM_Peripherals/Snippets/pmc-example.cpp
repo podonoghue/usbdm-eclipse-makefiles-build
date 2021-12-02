@@ -56,8 +56,8 @@ int main() {
    Pmc::setCallback(callback);
 
    Pmc::enable();
-   Pmc::setLowVoltageReset(PmcLowVoltageDetectAction_Interrupt, PmcLowVoltageDetectLevel_High);
-   Pmc::setLowVoltageWarning(PmcLowVoltageWarningAction_Interrupt, PmcLowVoltageWarningLevel_High);
+   Pmc::configureLowVoltageReset(PmcLowVoltageDetectAction_Interrupt, PmcLowVoltageDetectLevel_High);
+   Pmc::configureLowVoltageWarning(PmcLowVoltageWarningAction_Interrupt, PmcLowVoltageWarningLevel_High);
 
    Pmc::enableNvicInterrupts(NvicPriority_Normal);
 

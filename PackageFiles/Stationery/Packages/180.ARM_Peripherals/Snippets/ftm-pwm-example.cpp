@@ -18,8 +18,8 @@ using namespace USBDM;
  */
 
 // Connection mapping - change as required
-using Timer  = $(demo.cpp.ftm:Ftm0);
-using PwmLed = Timer::$(demo.cpp.pwm.led1:Channel<7>);
+using Timer  = Ftm0;
+using PwmLed = Timer::Channel<7>;
 
 int main() {
 
@@ -46,7 +46,7 @@ int main() {
    for(;;) {
       // Using percentage duty-cycle
       for (unsigned i=1; i<=99; i++) {
-         PwmLed::setDutyCycle(i);
+         PwmLed::setDutyCycle((int)i);
          waitMS(10);
          console.write("Duty = ").write(i).writeln(" %");
       }

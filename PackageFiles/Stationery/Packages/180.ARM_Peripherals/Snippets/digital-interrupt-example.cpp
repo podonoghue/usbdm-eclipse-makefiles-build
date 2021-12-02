@@ -32,7 +32,7 @@ using Switch   = USBDM::GpioD<5,USBDM::ActiveLow>;
  */
 static void callBack(uint32_t status) {
    static int count = 0;
-   if (status & Switch::MASK) {
+   if (status & Switch::BITMASK) {
       console.write(count++).write(": Status = 0x").writeln(status, Radix_2);
    }
    else {
@@ -66,7 +66,7 @@ int main() {
    Led::setOutput();
 
    // Install interrupt call-back
-   Switch::setCallback(callBack);
+   Switch::setPinCallback(callBack);
 
    // PUP + IRQ on falling edge
    Switch::setInput(

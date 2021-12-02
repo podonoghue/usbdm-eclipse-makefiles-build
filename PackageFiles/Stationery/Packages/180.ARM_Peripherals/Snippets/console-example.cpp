@@ -8,7 +8,7 @@
  ============================================================================
  */
 #include <limits.h>
-#include "console.h"
+#include "hardware.h"
 #include "stringFormatter.h"
 
 // Allow access to USBDM methods without USBDM:: prefix
@@ -95,14 +95,14 @@ int main() {
    console<<"UINT_MAX,Radix_2   = "<<Radix_2<<UINT_MAX<<EndOfLine;
    console<<"3,Radix_2          = "<<Radix_2<<Padding_LeadingZeroes<<3<<EndOfLine;
    console<<"3,Radix_2,w=10,p=0 = "<<console.width(10)<<Radix_2<<Padding_LeadingZeroes<<3<<EndOfLine;
-   console.reset();
+   console.resetFormat();
    console<<"UINT_MAX,Radix_8   = "<<Radix_8<<UINT_MAX<<EndOfLine;
    console<<"UINT_MAX,Radix_10  = "<<Radix_10<<UINT_MAX<<EndOfLine;
    console<<"UINT_MAX,Radix_16  = "<<Radix_16<<UINT_MAX<<EndOfLine;
-   console<<"UINT_MAX,radix(16) = "<<Uart::radix(16)<<UINT_MAX<<EndOfLine;
-   console<<"UINT_MAX,radix(10) = "<<Uart::radix(10)<<UINT_MAX<<EndOfLine;
-   console<<"UINT_MAX,radix(8)  = "<<Uart::radix(8)<<UINT_MAX<<EndOfLine;
-   console<<"UINT_MAX,radix(2)  = "<<Uart::radix(2)<<UINT_MAX<<EndOfLine;
+   console<<"UINT_MAX,radix(16) = "<<console.radix(16)<<UINT_MAX<<EndOfLine;
+   console<<"UINT_MAX,radix(10) = "<<console.radix(10)<<UINT_MAX<<EndOfLine;
+   console<<"UINT_MAX,radix(8)  = "<<console.radix(8)<<UINT_MAX<<EndOfLine;
+   console<<"UINT_MAX,radix(2)  = "<<console.radix(2)<<UINT_MAX<<EndOfLine;
    console<<Radix_10;
 
    //  Basic integer formatting to strings

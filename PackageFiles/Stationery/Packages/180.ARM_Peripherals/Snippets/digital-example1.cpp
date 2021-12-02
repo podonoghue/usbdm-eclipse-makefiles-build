@@ -16,9 +16,9 @@ using namespace USBDM;
  */
 
 // Connection mapping - change as required
-using BlueLed  = $(demo.cpp.blue.led:GpioA<2,ActiveLow>);
 using RedLed   = $(demo.cpp.red.led:GpioB<0,ActiveLow>);
 using GreenLed = $(demo.cpp.green.led:GpioB<1,ActiveLow>);
+using BlueLed  = $(demo.cpp.blue.led:GpioA<2,ActiveLow>);
 
 int main() {
    RedLed::setOutput(

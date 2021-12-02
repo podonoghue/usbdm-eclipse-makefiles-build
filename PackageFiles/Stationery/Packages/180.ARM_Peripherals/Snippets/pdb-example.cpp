@@ -19,10 +19,10 @@
 using namespace USBDM;
 
 // LED connection - change as required
-using Led         = GpioA<2, ActiveLow>;
-using Pdb         = Pdb0;
-using Adc         = Adc0;
-using AdcChannel  = Adc0Channel<19>;
+using Led           = GpioA<2, ActiveLow>;  // Change as needed
+using Pdb           = Pdb0;
+using MyAdc         = Adc0;
+using MyAdcChannel  = MyAdc::Channel<10>;  // Change as needed
 
 // Length of PDB sequence
 static constexpr float SEQ_LENGTH    = 10*ms;
@@ -83,13 +83,13 @@ static void configureAdc() {
 
    SimInfo::setAdc0Triggers(SimAdc0TriggerMode_Pdb);
 
-   Adc::enable();
-   Adc::setResolution(AdcResolution_8bit_se);
-   Adc::calibrate();
-   Adc::setCallback(adcCallback);
-   Adc::enableNvicInterrupts(NvicPriority_Normal);
+   MyAdc::enable();
+   MyAdc::setResolution(AdcResolution_8bit_se);
+   MyAdc::calibrate();
+   MyAdc::setCallback(adcCallback);
+   MyAdc::enableNvicInterrupts(NvicPriority_Normal);
 
-   AdcChannel::enableHardwareConversion(AdcPretrigger_0, AdcInterrupt_Enabled);
+   MyAdcChannel::enableHardwareConversion(AdcPretrigger_0, AdcInterrupt_Enabled);
 }
 
 int main() {

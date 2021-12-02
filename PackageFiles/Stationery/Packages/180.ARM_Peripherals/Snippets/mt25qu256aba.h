@@ -142,31 +142,31 @@ private:
          /* JUMP_ON_CS: 0 */
          // {04EB, 0A18, 0E0A, 1E80, 2400}
          {
-               Qspi0::instruction_Command(QspiLutPadInfo_1Pad, QUAD_INPUT_OUTPUT_FAST_READ),
-               Qspi0::instruction_Addr(QspiLutPadInfo_4Pads, 24),
-               Qspi0::instruction_Dummy(QspiLutPadInfo_4Pads, 10),
-               Qspi0::instruction_Read(QspiLutPadInfo_4Pads, 128),
-               Qspi0::instruction_JumpOnCs(0),
+               Qspi0::lutEntry_Command(QspiLutPadInfo_1Pad, QUAD_INPUT_OUTPUT_FAST_READ),
+               Qspi0::lutEntry_Addr(QspiLutPadInfo_4Pads, 24),
+               Qspi0::lutEntry_Dummy(QspiLutPadInfo_4Pads, 10),
+               Qspi0::lutEntry_Read(QspiLutPadInfo_4Pads, 128),
+               Qspi0::lutEntry_JumpOnCs(0),
          },
          /* Seq1: Write Enable */
          /* CMD:      0x06 - Write Enable, Single pad */
          // {0406}
          {
-               Qspi0::instruction_Command(QspiLutPadInfo_1Pad, WRITE_ENABLE),
+               Qspi0::lutEntry_Command(QspiLutPadInfo_1Pad, WRITE_ENABLE),
          },
          /* Seq2: Erase All */
          /* CMD:    0x60 - Erase All chip, Single pad */
          //  {0406}
          {
-               Qspi0::instruction_Command(QspiLutPadInfo_1Pad, ERASE_ALL),
+               Qspi0::lutEntry_Command(QspiLutPadInfo_1Pad, ERASE_ALL),
          },
          /* Seq3: Read Status */
          /* CMD:    0x05 - Read Status, single pad */
          /* READ:   0x01 - Read 1 byte, single pad */
          // {0405, 1C01}
          {
-               Qspi0::instruction_Command(QspiLutPadInfo_1Pad, READ_STATUS_REGISTER),
-               Qspi0::instruction_Read(QspiLutPadInfo_1Pad, 1),
+               Qspi0::lutEntry_Command(QspiLutPadInfo_1Pad, READ_STATUS_REGISTER),
+               Qspi0::lutEntry_Read(QspiLutPadInfo_1Pad, 1),
          },
          /* Seq4: Page Program */
          /* CMD:    0x02 - Page Program, Single pad */
@@ -174,25 +174,25 @@ private:
          /* WRITE:  0x80 - Write 128 bytes at one pass, Single pad */
          // {0402, 0818, 2080}
          {
-               Qspi0::instruction_Command(QspiLutPadInfo_1Pad, PAGE_PROGRAM),
-               Qspi0::instruction_Addr(QspiLutPadInfo_1Pad, 24),
-               Qspi0::instruction_Write(QspiLutPadInfo_1Pad, 128),
+               Qspi0::lutEntry_Command(QspiLutPadInfo_1Pad, PAGE_PROGRAM),
+               Qspi0::lutEntry_Addr(QspiLutPadInfo_1Pad, 24),
+               Qspi0::lutEntry_Write(QspiLutPadInfo_1Pad, 128),
          },
          /* Seq5: Erase 4KiB Sector */
          /* CMD:  0x20 - Sector Erase, single pad */
          /* ADDR: 0x18 - 24 bit address, single pad */
          // {0420, 0818}
          {
-               Qspi0::instruction_Command(QspiLutPadInfo_1Pad, SUBSECTOR_ERASE_4KB),
-               Qspi0::instruction_Addr(QspiLutPadInfo_1Pad, 24),
+               Qspi0::lutEntry_Command(QspiLutPadInfo_1Pad, SUBSECTOR_ERASE_4KB),
+               Qspi0::lutEntry_Addr(QspiLutPadInfo_1Pad, 24),
          },
          /* Seq6: Write Status Register */
          /* CMD:    0x01 - Write Status Register, single pad */
          /* WRITE:  0x01 - Write 1 byte of data, single pad */
          // {0401, 2001}
          {
-               Qspi0::instruction_Command(QspiLutPadInfo_1Pad, WRITE_STATUS_REGISTER),
-               Qspi0::instruction_Write(QspiLutPadInfo_1Pad, 1),
+               Qspi0::lutEntry_Command(QspiLutPadInfo_1Pad, WRITE_STATUS_REGISTER),
+               Qspi0::lutEntry_Write(QspiLutPadInfo_1Pad, 1),
          },
 #if 0
          // Following unused
@@ -202,14 +202,14 @@ private:
          /* READ: 0x01 - Read 2 bytes */
          // {04B5, 1C01}
          {
-               Qspi0::instruction_Command(QspiLutPadInfo_1Pad, READ_CONFIG_REGISTER),
-               Qspi0::instruction_Read(QspiLutPadInfo_1Pad, 2),
+               Qspi0::lutEntry_Command(QspiLutPadInfo_1Pad, READ_CONFIG_REGISTER),
+               Qspi0::lutEntry_Read(QspiLutPadInfo_1Pad, 2),
          },
          /* Seq8: Dummy */
          /* CMD:    0xFF - Dummy command, used to force SPI flash to exit continuous read mode */
          // {04FF}
          {
-               Qspi0::instruction_Command(QspiLutPadInfo_1Pad, 0xFF),
+               Qspi0::lutEntry_Command(QspiLutPadInfo_1Pad, 0xFF),
          },
          /* Seq9: Fast Single read */
          /* CMD:        0x0B - Fast Read, Single Pad */
@@ -219,11 +219,11 @@ private:
          /* JUMP_ON_CS: 0 */
          // {040B, 0818, 0C08, 1C80, 2400}
          {
-               Qspi0::instruction_Command(QspiLutPadInfo_1Pad, FAST_READ),
-               Qspi0::instruction_Addr(QspiLutPadInfo_1Pad, 24),
-               Qspi0::instruction_Dummy(QspiLutPadInfo_1Pad, 8),
-               Qspi0::instruction_Read(QspiLutPadInfo_1Pad, 128),
-               Qspi0::instruction_JumpOnCs(0),
+               Qspi0::lutEntry_Command(QspiLutPadInfo_1Pad, FAST_READ),
+               Qspi0::lutEntry_Addr(QspiLutPadInfo_1Pad, 24),
+               Qspi0::lutEntry_Dummy(QspiLutPadInfo_1Pad, 8),
+               Qspi0::lutEntry_Read(QspiLutPadInfo_1Pad, 128),
+               Qspi0::lutEntry_JumpOnCs(0),
          },
          /* Seq10: Fast Dual read */
          /* CMD:        0x3B - Dual Read, Single Pad */
@@ -233,11 +233,11 @@ private:
          /* JUMP_ON_CS: 0 */
          // {043B, 0818, 0C08, 1D80, 2400}
          {
-               Qspi0::instruction_Command(QspiLutPadInfo_1Pad, DUAL_OUTPUT_FAST_READ),
-               Qspi0::instruction_Addr(QspiLutPadInfo_1Pad, 24),
-               Qspi0::instruction_Dummy(QspiLutPadInfo_1Pad, 8),
-               Qspi0::instruction_Read(QspiLutPadInfo_2Pads, 128),
-               Qspi0::instruction_JumpOnCs(0),
+               Qspi0::lutEntry_Command(QspiLutPadInfo_1Pad, DUAL_OUTPUT_FAST_READ),
+               Qspi0::lutEntry_Addr(QspiLutPadInfo_1Pad, 24),
+               Qspi0::lutEntry_Dummy(QspiLutPadInfo_1Pad, 8),
+               Qspi0::lutEntry_Read(QspiLutPadInfo_2Pads, 128),
+               Qspi0::lutEntry_JumpOnCs(0),
          },
 #endif
    };
@@ -260,31 +260,31 @@ private:
          /* JUMP_ON_CS: 0 */
          // {04EC, 0A20, 0E0A, 1E80, 2400}
          {
-               Qspi0::instruction_Command(QspiLutPadInfo_1Pad, QUAD_INPUT_OUTPUT_FAST_READ_4BYTE),
-               Qspi0::instruction_Addr(QspiLutPadInfo_4Pads, 32),
-               Qspi0::instruction_Dummy(QspiLutPadInfo_4Pads, 10),
-               Qspi0::instruction_Read(QspiLutPadInfo_4Pads, 128),
-               Qspi0::instruction_JumpOnCs(0),
+               Qspi0::lutEntry_Command(QspiLutPadInfo_1Pad, QUAD_INPUT_OUTPUT_FAST_READ_4BYTE),
+               Qspi0::lutEntry_Addr(QspiLutPadInfo_4Pads, 32),
+               Qspi0::lutEntry_Dummy(QspiLutPadInfo_4Pads, 10),
+               Qspi0::lutEntry_Read(QspiLutPadInfo_4Pads, 128),
+               Qspi0::lutEntry_JumpOnCs(0),
          },
          /* Seq1: Write Enable */
          /* CMD:      0x06 - Write Enable, Single pad */
          // {0406}
          {
-               Qspi0::instruction_Command(QspiLutPadInfo_1Pad, WRITE_ENABLE),
+               Qspi0::lutEntry_Command(QspiLutPadInfo_1Pad, WRITE_ENABLE),
          },
          /* Seq2: Erase All */
          /* CMD:    0x60 - Erase All chip, Single pad */
          //  {0406}
          {
-               Qspi0::instruction_Command(QspiLutPadInfo_1Pad, ERASE_ALL),
+               Qspi0::lutEntry_Command(QspiLutPadInfo_1Pad, ERASE_ALL),
          },
          /* Seq3: Read Status */
          /* CMD:    0x05 - Read Status, single pad */
          /* READ:   0x01 - Read 1 byte, single pad */
          // {0405, 1C01}
          {
-               Qspi0::instruction_Command(QspiLutPadInfo_1Pad, READ_STATUS_REGISTER),
-               Qspi0::instruction_Read(QspiLutPadInfo_1Pad, 1),
+               Qspi0::lutEntry_Command(QspiLutPadInfo_1Pad, READ_STATUS_REGISTER),
+               Qspi0::lutEntry_Read(QspiLutPadInfo_1Pad, 1),
          },
          /* Seq4: Page Program */
          /* CMD:    0x12 - Page Program, Single pad */
@@ -292,25 +292,25 @@ private:
          /* WRITE:  0x80 - Write 128 bytes at one pass, Single pad */
          // {0412, 0820, 2080}
          {
-               Qspi0::instruction_Command(QspiLutPadInfo_1Pad, PAGE_PROGRAM_4BYTE),
-               Qspi0::instruction_Addr(QspiLutPadInfo_1Pad, 32),
-               Qspi0::instruction_Write(QspiLutPadInfo_1Pad, 128),
+               Qspi0::lutEntry_Command(QspiLutPadInfo_1Pad, PAGE_PROGRAM_4BYTE),
+               Qspi0::lutEntry_Addr(QspiLutPadInfo_1Pad, 32),
+               Qspi0::lutEntry_Write(QspiLutPadInfo_1Pad, 128),
          },
          /* Seq5: Erase 4KiB Sector */
          /* CMD:  0x21 - Sector Erase, single pad */
          /* ADDR: 0x20 - 24 bit address, single pad */
          // {0421, 0820}
          {
-               Qspi0::instruction_Command(QspiLutPadInfo_1Pad, SUBSECTOR_ERASE_4KB_4BYTE),
-               Qspi0::instruction_Addr(QspiLutPadInfo_1Pad, 32),
+               Qspi0::lutEntry_Command(QspiLutPadInfo_1Pad, SUBSECTOR_ERASE_4KB_4BYTE),
+               Qspi0::lutEntry_Addr(QspiLutPadInfo_1Pad, 32),
          },
          /* Seq6: Write Status Register */
          /* CMD:    0x01 - Write Status Register, single pad */
          /* WRITE:  0x01 - Write 1 byte of data, single pad */
          // {0401, 2001}
          {
-               Qspi0::instruction_Command(QspiLutPadInfo_1Pad, WRITE_STATUS_REGISTER),
-               Qspi0::instruction_Write(QspiLutPadInfo_1Pad, 1),
+               Qspi0::lutEntry_Command(QspiLutPadInfo_1Pad, WRITE_STATUS_REGISTER),
+               Qspi0::lutEntry_Write(QspiLutPadInfo_1Pad, 1),
          },
 #if 0
          // Following unused
@@ -320,14 +320,14 @@ private:
          /* READ: 0x01 - Read 2 bytes */
          // {04B5, 1C01}
          {
-               Qspi0::instruction_Command(QspiLutPadInfo_1Pad, READ_CONFIG_REGISTER),
-               Qspi0::instruction_Read(QspiLutPadInfo_1Pad, 2),
+               Qspi0::lutEntry_Command(QspiLutPadInfo_1Pad, READ_CONFIG_REGISTER),
+               Qspi0::lutEntry_Read(QspiLutPadInfo_1Pad, 2),
          },
          /* Seq8: Dummy */
          /* CMD:    0xFF - Dummy command, used to force SPI flash to exit continuous read mode */
          // {04FF}
          {
-               Qspi0::instruction_Command(QspiLutPadInfo_1Pad, 0xFF),
+               Qspi0::lutEntry_Command(QspiLutPadInfo_1Pad, 0xFF),
          },
          /* Seq9: Fast Single read */
          /* CMD:        0x0B - Fast Read, Single Pad */
@@ -337,11 +337,11 @@ private:
          /* JUMP_ON_CS: 0 */
          // {040B, 0818, 0C08, 1C80, 2400}
          {
-               Qspi0::instruction_Command(QspiLutPadInfo_1Pad, FAST_READ),
-               Qspi0::instruction_Addr(QspiLutPadInfo_1Pad, 24),
-               Qspi0::instruction_Dummy(QspiLutPadInfo_1Pad, 8),
-               Qspi0::instruction_Read(QspiLutPadInfo_1Pad, 128),
-               Qspi0::instruction_JumpOnCs(0),
+               Qspi0::lutEntry_Command(QspiLutPadInfo_1Pad, FAST_READ),
+               Qspi0::lutEntry_Addr(QspiLutPadInfo_1Pad, 24),
+               Qspi0::lutEntry_Dummy(QspiLutPadInfo_1Pad, 8),
+               Qspi0::lutEntry_Read(QspiLutPadInfo_1Pad, 128),
+               Qspi0::lutEntry_JumpOnCs(0),
          },
          /* Seq10: Fast Dual read */
          /* CMD:        0x3B - Dual Read, Single Pad */
@@ -351,11 +351,11 @@ private:
          /* JUMP_ON_CS: 0 */
          // {043B, 0818, 0C08, 1D80, 2400}
          {
-               Qspi0::instruction_Command(QspiLutPadInfo_1Pad, DUAL_OUTPUT_FAST_READ),
-               Qspi0::instruction_Addr(QspiLutPadInfo_1Pad, 24),
-               Qspi0::instruction_Dummy(QspiLutPadInfo_1Pad, 8),
-               Qspi0::instruction_Read(QspiLutPadInfo_2Pads, 128),
-               Qspi0::instruction_JumpOnCs(0),
+               Qspi0::lutEntry_Command(QspiLutPadInfo_1Pad, DUAL_OUTPUT_FAST_READ),
+               Qspi0::lutEntry_Addr(QspiLutPadInfo_1Pad, 24),
+               Qspi0::lutEntry_Dummy(QspiLutPadInfo_1Pad, 8),
+               Qspi0::lutEntry_Read(QspiLutPadInfo_2Pads, 128),
+               Qspi0::lutEntry_JumpOnCs(0),
          },
 #endif
    };

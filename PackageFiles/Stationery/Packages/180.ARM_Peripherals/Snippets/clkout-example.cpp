@@ -16,10 +16,13 @@ int main() {
    console.write("SystemCoreClock = ").writeln(SystemCoreClock);
    console.write("SystemBusClock  = ").writeln(SystemBusClock);
 
-   ControlInfo::initPCRs(pcrValue());
+   // Need to check Info table index in ControlInfo or use configuration editor (much easier)
+   using ClkOut = PcrTable_T<ControlInfo, 10>;
+   ClkOut::setOutput();
 
    console.setEcho(EchoMode_Off);
 
+   console.writeln("press 1 - 7");
    for(;;) {
       // Get value [0-7]
       int ch = console.readChar();
@@ -31,14 +34,17 @@ int main() {
       SimInfo::setClkout(simClkoutSel);
       console.write((char)ch).write(" : clkout = ");
       switch(simClkoutSel) {
-         case SimClkoutSel_FlexBus   : console.writeln("FlexBus  "); break;
-         case SimClkoutSel_Reserved1 : console.writeln("Reserved1"); break;
-         case SimClkoutSel_Flash     : console.writeln("Flash    "); break;
-         case SimClkoutSel_Lpo       : console.writeln("Lpo 1kHz "); break;
-         case SimClkoutSel_McgirClk  : console.writeln("McgirClk "); break;
-         case SimClkoutSel_RTC       : console.writeln("RTC      "); break;
-         case SimClkoutSel_OscerClk0 : console.writeln("OscerClk0"); break;
-         case SimClkoutSel_Irc48Mhz  : console.writeln("IRC 48MHz"); break;
+         case SimClkoutSel_FlexBus   : console.write("FlexBus  \r"); break;
+         case SimClkoutSel_Reserved1 : console.write("Reserved1\r"); break;
+         case SimClkoutSel_Flash     : console.write("Flash    \r"); break;
+         case SimClkoutSel_Lpo       : console.write("Lpo 1kHz \r"); break;
+         case SimClkoutSel_McgirClk  : console.write("McgirClk \r"); break;
+         case SimClkoutSel_RTC       : console.write("RTC      \r"); break;
+         case SimClkoutSel_OscerClk0 : console.write("OscerClk0\r"); break;
+#ifdef USB_CLK_RECOVER_IRC_EN_REG_EN_MASK
+         case SimClkoutSel_Irc48MHz  : console.write("IRC 48MHz\r"); break;
+#endif
+         default: break;
       }
    }
    return 0;

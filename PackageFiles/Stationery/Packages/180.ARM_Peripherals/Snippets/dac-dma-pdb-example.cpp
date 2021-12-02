@@ -18,7 +18,7 @@
  * under the "Peripheral Parameters"->DMA tab.
  * Select irqHandlers option (Class Method - Software ...)
  */
-#include "math.h"
+#include <math.h>
 #include "hardware.h"
 #include "dma.h"
 #include "pdb.h"
@@ -133,7 +133,7 @@ static void configureDma(DmaChannelNum dmaChannel) {
    Dma0::enableNvicErrorInterrupt();
 
    // Connect DMA channel to PDB
-   DmaMux0::configure(dmaChannel, Dma0Slot_PDB, DmaMuxEnable_Continuous);
+   DmaMux0::configure(dmaChannel, Dma0SlotLow_PDB, DmaMuxEnable_Continuous);
 
    // Configure the transfer
    Dma0::configureTransfer(dmaChannel, tcd);
@@ -167,7 +167,7 @@ static void configurePdb() {
    Pdb0::setInterruptDelay(0);
 
    // Registers load on next event
-   Pdb0::confirmRegisterLoad(PdbLoadMode_Event);
+   Pdb0::configureRegisterLoad(PdbLoadMode_Event);
 
    // Start timer and load values
    Pdb0::softwareTrigger();

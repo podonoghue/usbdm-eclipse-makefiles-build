@@ -8,6 +8,7 @@
  ============================================================================
  */
 #include "hardware.h"
+#include "ftm.h"
 
 using namespace USBDM;
 
@@ -35,7 +36,7 @@ public:
     */
    static void enable() {
       Timer::configure(FtmMode_LeftAlign, FtmClockSource_System);
-      Timer::setPeriod(SERVO_PERIOD, true);
+      Timer::setPeriod(SERVO_PERIOD);
       FtmChannel::configure(FtmChMode_PwmHighTruePulses);
       FtmChannel::setOutput(PinDriveStrength_High);
       FtmChannel::setHighTime((SERVO_MIN+SERVO_MAX)/2);
@@ -57,7 +58,7 @@ public:
 // Instantiate servo on pin
 // It will be necessary to map the pin to a FTM channel in Configure.usbdmProject
 //using servo = Servo<ftm_D2>;
-using servo = Servo<Ftm0Channel<7>>;
+using servo = Servo<Ftm0::Channel<7>>;
 
 int main() {
    console.writeln("Starting\n");

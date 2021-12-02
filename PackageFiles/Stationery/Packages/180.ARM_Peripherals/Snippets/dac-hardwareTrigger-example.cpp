@@ -32,7 +32,7 @@ static void configurePdb() {
    Pdb0::configureDacTrigger(0, PdbDacTriggerMode_Delayed, 20*us);
 
    // Registers load on next event
-   Pdb0::confirmRegisterLoad(PdbLoadMode_Event);
+   Pdb0::configureRegisterLoad(PdbLoadMode_Event);
 
    // Start timer and load values
    Pdb0::softwareTrigger();

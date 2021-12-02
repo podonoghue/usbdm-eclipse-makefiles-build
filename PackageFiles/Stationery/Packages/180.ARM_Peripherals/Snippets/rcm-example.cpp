@@ -19,7 +19,7 @@ int main() {
    Rcm::configure(
          RcmResetPinRunWaitFilter_BusCLock,
          RcmResetPinStopFilter_LowPowerOscillator,
-         20);
+         RcmResetFilterBusClockCount_20);
 
    for(;;) {
       __asm__("nop");

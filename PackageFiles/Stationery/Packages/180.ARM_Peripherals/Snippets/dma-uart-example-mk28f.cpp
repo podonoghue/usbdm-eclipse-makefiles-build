@@ -21,7 +21,7 @@
  *
  * It may also be necessary to adjust DMA_SLOT for the console UART.
  *    DmaSlot_UART0_Transmit => DmaSlot_UART?_Transmit
- * 
+ *
  * If the console uses a LPUART then other changes are necessary:
  *    DmaSlot_UART0_Transmit => DmaSlot_LPUART?_Transmit
  *    UartDma_TxHoldingEmpty => LpuartDma_TxHoldingEmpty
@@ -97,7 +97,7 @@ static constexpr DmaTcd tcd = DmaTcd (
    /* Source modulo                  */ DmaModulo_Disabled,            // Disabled
    /* Last source adjustment         */ -(int)sizeof(message),         // Reset source address to start of array on completion
 
-   /* Destination address            */ console.uartD(),               // Destination is UART data register
+   /* Destination address            */ console.uartDATA(),            // Destination is UART data register
    /* Destination offset             */ 0,                             // Destination address doesn't change
    /* Destination size               */ dmaSize(message[0]),           // 8-bit write to destination address
    /* Destination modulo             */ DmaModulo_Disabled,            // Disabled
@@ -204,13 +204,13 @@ void changeRunMode(SmcRunMode smcRunMode) {
    SmcStatus smcStatus = Smc::getStatus();
 
    // Check if transition needed
-   if (((smcStatus == SmcStatus_hsrun) && (smcRunMode == SmcRunMode_HighSpeed)) ||
+   if (((smcStatus == SmcStatus_HSRUN) && (smcRunMode == SmcRunMode_HighSpeed)) ||
        ((smcStatus == SmcStatus_RUN) && (smcRunMode == SmcRunMode_Normal)) ||
        ((smcStatus == SmcStatus_VLPR) && (smcRunMode == SmcRunMode_VeryLowPower))) {
       return;
    }
    // If changing go via RUN
-   if (smcStatus == SmcStatus_hsrun) {
+   if (smcStatus == SmcStatus_HSRUN) {
       // Do HSRUN->RUN
       Mcg::configure(RUN_MODE);
       Smc::enterRunMode(SmcRunMode_Normal);

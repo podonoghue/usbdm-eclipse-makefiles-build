@@ -17,6 +17,7 @@
  */
 #include <stdlib.h>
 #include <time.h>       /* time */
+#include "hardware.h"
 #include "flash.h"
 
 using namespace USBDM;
@@ -86,7 +87,7 @@ void printDump(uint8_t *address, uint32_t size) {
          console.writeln();
       }
    }
-   console.writeln().reset();
+   console.writeln().resetFormat();
 }
 
 /**

@@ -8,6 +8,7 @@
  ============================================================================
  */
 #include "hardware.h"
+#include "tpm.h"
 
 using namespace USBDM;
 
@@ -26,8 +27,8 @@ using namespace USBDM;
  *
  */
 // Connection mapping - change as required
-using Timer = $(demo.cpp.tpm:Tpm2);
-using Led   = $(demo.cpp.pwm.led1:Tpm2Channel<0>);
+using Timer = Tpm2;
+using Led   = Tpm2::Channel<1>;
 
 int main() {
 
@@ -46,8 +47,7 @@ int main() {
    Led::configure(TpmChMode_PwmHighTruePulses);
 
    // Configure pin associated with channel
-   Led::setDriveStrength(PinDriveStrength_High);
-   Led::setDriveMode(PinDriveMode_PushPull);
+   Led::setOutput(PinDriveStrength_High, PinDriveMode_PushPull, PinSlewRate_Slow);
 
    // Check if configuration failed
    checkError();
