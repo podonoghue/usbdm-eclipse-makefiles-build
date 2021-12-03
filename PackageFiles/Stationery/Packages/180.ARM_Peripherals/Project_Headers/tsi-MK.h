@@ -119,11 +119,10 @@ enum TsiErrorInterrupt {
 };
 
 /**
- * Select CMP0 inputs
+ * Select TSI inputs
  */
 enum TsiInput {
    // Mapped inputs
-$(/TSI/InputMapping:   // None Found)
    TsiInput_0          =  0, //!< TSI input 0
    TsiInput_1          =  1, //!< TSI input 1
    TsiInput_2          =  2, //!< TSI input 2
@@ -140,6 +139,8 @@ $(/TSI/InputMapping:   // None Found)
    TsiInput_13         = 13, //!< TSI input 13
    TsiInput_14         = 14, //!< TSI input 14
    TsiInput_15         = 15, //!< TSI input 15
+$(/TSI/InputMapping:   // No user defined TSI inputs found)
+$(/TSI0/InputMapping:   // No user defined TSI0 inputs found)
 };
 
 

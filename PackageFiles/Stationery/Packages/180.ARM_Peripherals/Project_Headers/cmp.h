@@ -864,7 +864,6 @@ public:
     */
    enum Input {
       // Mapped inputs
-$(/CMP0/InputMapping:   // None Found)
       Input_0          = 0, //!< CMP0 input 0
       Input_1          = 1, //!< CMP0 input 1
       Input_2          = 2, //!< CMP0 input 2
@@ -873,7 +872,8 @@ $(/CMP0/InputMapping:   // None Found)
       Input_5          = 5, //!< CMP0 input 5
       Input_6          = 6, //!< CMP0 input 6
       Input_7          = 7, //!< CMP0 input 7
-
+      
+$(/CMP0/InputMapping:   // None Found)
    };
 
    /**
@@ -929,7 +929,6 @@ public:
     */
    enum Input {
       // Mapped inputs
-$(/CMP1/InputMapping:   // None Found)
       Input_0          = 0, //!< CMP1 input 0
       Input_1          = 1, //!< CMP1 input 1
       Input_2          = 2, //!< CMP1 input 2
@@ -938,6 +937,8 @@ $(/CMP1/InputMapping:   // None Found)
       Input_5          = 5, //!< CMP1 input 5
       Input_6          = 6, //!< CMP1 input 6
       Input_7          = 7, //!< CMP1 input 7
+      
+$(/CMP1/InputMapping:   // None Found)
    };
 
 
@@ -994,7 +995,6 @@ public:
     */
    enum Input {
       // Mapped inputs
-$(/CMP2/InputMapping:   // None Found)
       Input_0          = 0, //!< CMP2 input 0
       Input_1          = 1, //!< CMP2 input 1
       Input_2          = 2, //!< CMP2 input 2
@@ -1003,6 +1003,8 @@ $(/CMP2/InputMapping:   // None Found)
       Input_5          = 5, //!< CMP2 input 5
       Input_6          = 6, //!< CMP2 input 6
       Input_7          = 7, //!< CMP2 input 7
+      
+$(/CMP2/InputMapping:   // None Found)
    };
 
    /**
@@ -1058,7 +1060,6 @@ public:
     */
    enum Input {
       // Mapped inputs
-$(/CMP3/InputMapping:   // None Found)
       Input_0          = 0, //!< CMP3 input 0
       Input_1          = 1, //!< CMP3 input 1
       Input_2          = 2, //!< CMP3 input 2
@@ -1067,6 +1068,8 @@ $(/CMP3/InputMapping:   // None Found)
       Input_5          = 5, //!< CMP3 input 5
       Input_6          = 6, //!< CMP3 input 6
       Input_7          = 7, //!< CMP3 input 7
+      
+$(/CMP3/InputMapping:   // None Found)
    };
 
    /**

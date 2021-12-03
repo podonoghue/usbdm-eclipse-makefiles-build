@@ -24,8 +24,8 @@ using LedB = GpioC<3,ActiveLow>;
 using MeasurementPin = USBDM::GpioE<1>;
 
 // TSI electrodes to use
-using ElectrodeA = Tsi0::Pin<11>;
-using ElectrodeB = Tsi0::Pin<12>;
+using ElectrodeA = Tsi0::Pin<TsiInput_Electrode1>;
+using ElectrodeB = Tsi0::Pin<TsiInput_Electrode2>;
 
 /*
  * Flag used to communicate between ISR and foreground task.
@@ -65,8 +65,8 @@ void initTsi(bool periodic) {
    Tsi0::setLowPowerClock(TsiStopMode_Disabled);
    // Enable these two inputs
    Tsi0::selectInputs(
-         (1<<ElectrodeA::electrodeNum)|(1<<ElectrodeB::electrodeNum),
-         ElectrodeA::electrodeNum);
+         ElectrodeA::TSI_INPUT_MASK|ElectrodeB::TSI_INPUT_MASK,
+         ElectrodeA::TSI_INPUT);
    // Set charge currents
    Tsi0::setCurrents(16,16);
    // This affects the electrode sample interval and needs to be a compromise
