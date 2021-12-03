@@ -1559,10 +1559,11 @@ public:
    }
 
    /**
+    * Set printing format
     *
-    * @param[in] width
+    * @param ioSettings    Setting to apply
     *
-    * @return
+    * @return Reference to self
     */
    FormattedIO &operator<<(const IoFormat &ioSettings) {
       fFormat = ioSettings;
@@ -1570,10 +1571,11 @@ public:
    }
 
    /**
+    * Set width for integers
     *
     * @param[in] width
     *
-    * @return
+    * @return Reference to self
     */
    FormattedIO &operator<<(Width width) {
       setWidth(width);
@@ -1581,10 +1583,11 @@ public:
    }
 
    /**
+    * Set padding for integers
     *
     * @param[in] padding
     *
-    * @return
+    * @return Reference to self
     */
    FormattedIO &operator<<(Padding padding) {
       setPadding(padding);

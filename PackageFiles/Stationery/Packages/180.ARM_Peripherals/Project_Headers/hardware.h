@@ -1,11 +1,11 @@
 /**
  * @file      hardware.h (180.ARM_Peripherals/Project_Headers/hardware.h)
  *
- * This file is a convenient location for shared USBDM namespace information and
- * brings together header files for basic USBDM features
+ * Main header file for USBDM library.
+ * Generated code is included via this file.
  *
- * @version  V4.12.1.80
- * @date     13 April 2016
+ * @version  V4.12.1.270
+ * @date     1 December 2021
  */
 
 /*
@@ -25,10 +25,10 @@
 #include "delay.h"
 #include "console.h"
 
-$(/HARDWARE_H/IncludeFiles:   // No header file inclusions Found)
+$(/HARDWARE_H/IncludeFiles:   // No header file inclusions found)
 
 namespace USBDM {
-$(/HARDWARE_H/Declarations:   // No user declarations Found)
+$(/HARDWARE_H/Declarations:   // No user declarations found)
 } // End namespace USBDM
 
 #endif /* INCLUDE_USBDM_HARDWARE_H_ */
