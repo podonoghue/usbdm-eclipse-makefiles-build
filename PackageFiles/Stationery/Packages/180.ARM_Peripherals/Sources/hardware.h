@@ -1,5 +1,5 @@
 /**
- * @file      hardware.h (180.ARM_Peripherals/Project_Headers/hardware.h)
+ * @file      hardware.h (180.ARM_Peripherals/Sources/hardware.h)
  *
  * Main header file for USBDM library.
  * Generated code is included via this file.

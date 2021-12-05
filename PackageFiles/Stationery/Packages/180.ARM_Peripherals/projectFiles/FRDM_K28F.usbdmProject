@@ -143,21 +143,16 @@
    <item key="$signal$FXIO0_D8_descriptionSetting"         value="FlexioD8" />
    <item key="$signal$FXIO0_D9_descriptionSetting"         value="FlexioD9" />
    <item key="$signal$GPIOA_4_codeIdentifier"              value="Switch2" />
-   <item key="$signal$GPIOA_4_createInstance"              value="true" />
    <item key="$signal$GPIOA_4_polarity"                    value="true" />
    <item key="$signal$GPIOB_5_codeIdentifier"              value="sdhcCardDetect" />
-   <item key="$signal$GPIOB_5_createInstance"              value="true" />
    <item key="$signal$GPIOB_5_descriptionSetting"          value="SDHC0_CARD_DETECT" />
    <item key="$signal$GPIOD_0_codeIdentifier"              value="Switch3" />
-   <item key="$signal$GPIOD_0_createInstance"              value="true" />
    <item key="$signal$GPIOD_0_polarity"                    value="true" />
    <item key="$signal$GPIOE_6_codeIdentifier"              value="RedLED" />
-   <item key="$signal$GPIOE_6_createInstance"              value="true" />
    <item key="$signal$GPIOE_7_codeIdentifier"              value="GreenLED" />
-   <item key="$signal$GPIOE_7_createInstance"              value="true" />
    <item key="$signal$GPIOE_8_codeIdentifier"              value="BlueLED" />
-   <item key="$signal$LLWU_P12_codeIdentifier"             value="switch3" />
-   <item key="$signal$LLWU_P3_codeIdentifier"              value="switch2" />
+   <item key="$signal$LLWU_P12_codeIdentifier"             value="Switch3Wakeup" />
+   <item key="$signal$LLWU_P3_codeIdentifier"              value="Switch2Wakeup" />
    <item key="$signal$QSPI0A_DATA0_descriptionSetting"     value="QSPIA0_DATA0" />
    <item key="$signal$QSPI0A_DATA1_descriptionSetting"     value="QSPIA0_DATA1" />
    <item key="$signal$QSPI0A_DATA2_descriptionSetting"     value="QSPIA0_DATA2" />

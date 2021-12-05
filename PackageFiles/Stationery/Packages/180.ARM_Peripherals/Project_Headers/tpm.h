@@ -155,9 +155,9 @@ protected:
       // Non-existent function and catch-all. (should be INVALID_PCR)
       static constexpr bool Test3 = !Test1 || !Test2 || (Info::info[channel].gpioBit >= 0);
 
-      static_assert(Test1, "Illegal FTM channel - Check Configure.usbdm for available inputs");
-      static_assert(Test2, "FTM input is not mapped to a pin - Modify Configure.usbdm");
-      static_assert(Test3, "FTM channel doesn't exist in this device/package - Check Configure.usbdm for available input pins");
+      static_assert(Test1, "Illegal TPM channel - Check Configure.usbdm for available inputs");
+      static_assert(Test2, "TPM input is not mapped to a pin - Modify Configure.usbdm");
+      static_assert(Test3, "TPM channel doesn't exist in this device/package - Check Configure.usbdm for available input pins");
 
    public:
       /** Dummy function to allow convenient in-line checking */
@@ -172,7 +172,7 @@ protected:
       // Function is not currently mapped to a pin
       static constexpr bool Test2 = !Test1 || (Info::info[channel].gpioBit != UNMAPPED_PCR);
 
-      static_assert(Test2, "FTM channel is not mapped to a pin - Modify Configure.usbdm");
+      static_assert(Test2, "TPM channel is not mapped to a pin - Modify Configure.usbdm");
 
    public:
       /** Dummy function to allow convenient in-line checking */
@@ -188,8 +188,8 @@ protected:
       // Non-existent function
       static constexpr bool Test2 = !Test1 || (Info::info[channel].gpioBit != INVALID_PCR);
 
-      static_assert(Test1, "Illegal FTM channel - Check Configure.usbdm for available channels");
-      static_assert(Test2, "FTM channel doesn't exist in this device/package - Check Configure.usbdm for available channels");
+      static_assert(Test1, "Illegal TPM channel - Check Configure.usbdm for available channels");
+      static_assert(Test2, "TPM channel doesn't exist in this device/package - Check Configure.usbdm for available channels");
 
    public:
       /** Dummy function to allow convenient in-line checking */
@@ -221,7 +221,7 @@ protected:
 
 public:
    /**
-    * Structure for FTM channel.
+    * Structure for TPM channel.
     */
    struct TpmChannelRegs {
       __IO uint32_t  CnSC; /**< 000C: Channel  Status and Control */
@@ -388,7 +388,7 @@ public:
    }
 
    /**
-    * Calculate FTM timing parameters to achieve a given period
+    * Calculate TPM timing parameters to achieve a given period
     *
     * @param period           Period in seconds
     * @param pPrescalerValue  Calculated prescaler value (for SC register)
@@ -485,7 +485,7 @@ public:
     *
     * @note This function will affect all channels of the timer.
     * @note Adjusts Timer pre-scaler to appropriate value.
-    * @note FTM counter is configured for free-running mode i.e. 0-65535
+    * @note TPM counter is configured for free-running mode i.e. 0-65535
     * @note The Timer is stopped while being modified.
     * @note The Timer counter is restarted from zero
     */
@@ -844,7 +844,7 @@ protected:
    ~TpmChannel() = default;
 
 public:
-   /** Allow access to FTM channel registers */
+   /** Allow access to TPM channel registers */
    const HardwarePtr<TpmBase::TpmChannelRegs> channelRegs;
 
    /** Timer channel number */
@@ -884,7 +884,7 @@ public:
     */
    TpmChMode getMode() const {
       return (TpmChMode)(tmr->CONTROLS[CHANNEL].CnSC &
-            (FTM_CnSC_MS_MASK|FTM_CnSC_ELS_MASK));
+            (TPM_CnSC_MSA_MASK|TPM_CnSC_ELS_MASK));
    }
 
    /**
@@ -897,7 +897,7 @@ public:
     */
    void setMode(TpmChMode tpmChMode) const {
       tmr->CONTROLS[CHANNEL].CnSC =
-            (tmr->CONTROLS[CHANNEL].CnSC & ~(FTM_CnSC_MS_MASK|FTM_CnSC_ELS_MASK))|
+            (tmr->CONTROLS[CHANNEL].CnSC & ~(TPM_CnSC_MSA_MASK|TPM_CnSC_ELS_MASK))|
             tpmChMode;
    }
 
@@ -910,8 +910,11 @@ public:
     *       pending CnV register updates are discarded.
     */
    void setAction(TpmChannelAction tpmChannelAction) const {
+#if !defined(TPM_CnSC_DMA_MASK)
+      static constexpr uint32_t TPM_CnSC_DMA_MASK = 0;
+#endif
       tmr->CONTROLS[CHANNEL].CnSC =
-            (tmr->CONTROLS[CHANNEL].CnSC & ~(FTM_CnSC_CHIE_MASK|FTM_CnSC_DMA_MASK))|
+            (tmr->CONTROLS[CHANNEL].CnSC & ~(TPM_CnSC_CHIE_MASK|TPM_CnSC_DMA_MASK))|
             tpmChannelAction;
    }
 
@@ -1037,7 +1040,7 @@ public:
     */
    void clearInterruptFlag() const {
       // Note - requires read and write zero to clear flag
-      tmr->CONTROLS[CHANNEL].CnSC &= ~FTM_CnSC_CHF_MASK;
+      tmr->CONTROLS[CHANNEL].CnSC &= ~TPM_CnSC_CHF_MASK;
    }
 
 };
@@ -1485,7 +1488,7 @@ public:
    }
 
    /**
-    * Calculate FTM timing parameters to achieve a given period
+    * Calculate TPM timing parameters to achieve a given period
     *
     * @param period           Period in seconds
     * @param pPrescalerValue  Calculated prescaler value (for SC register)
@@ -1582,7 +1585,7 @@ public:
     *
     * @note This function will affect all channels of the timer.
     * @note Adjusts Timer pre-scaler to appropriate value.
-    * @note FTM counter is configured for free-running mode i.e. 0-65535
+    * @note TPM counter is configured for free-running mode i.e. 0-65535
     * @note The Timer is stopped while being modified.
     * @note The Timer counter is restarted from zero
     */
@@ -2303,7 +2306,7 @@ public:
        */
       static __attribute__((always_inline)) void setPinCallback(PinCallbackFunction callback) {
          TpmBase::CheckChannelIsMappedToPinOnly<Info, channel>::check();
-         static_assert(Pcr::HANDLER_INSTALLED, "Gpio associated with FTM channel not configured for PIN interrupts - Modify Configure.usbdm");
+         static_assert(Pcr::HANDLER_INSTALLED, "Gpio associated with TPM channel not configured for PIN interrupts - Modify Configure.usbdm");
          Pcr::setPinCallback(callback);
       }
 
@@ -2680,7 +2683,7 @@ public:
     * @note Overflow occurs at MOD -> CNTIN, Underflow occurs at CNTIN -> MOD.
     */
    static bool getOverflowDirection() {
-      return (bool)(tmr->QDCTRL & FTM_QDCTRL_TOFDIR_MASK);
+      return (bool)(tmr->QDCTRL & TPM_QDCTRL_TOFDIR_MASK);
    }
 };
 #endif // defined(TPM_QDCTRL_QUADEN_MASK)

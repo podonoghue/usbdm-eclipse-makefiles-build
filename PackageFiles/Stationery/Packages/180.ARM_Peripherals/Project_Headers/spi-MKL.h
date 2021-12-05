@@ -663,8 +663,7 @@ template<class Info> CMSIS::Mutex     SpiBase_T<Info>::mutex;
  * @endcode
  *
  */
-using Spi0 = SpiBase_T<Spi0Info>;
-$(/SPI0/Declarations:   // No declarations Found)
+class Spi0 : public SpiBase_T<Spi0Info> {};
 #endif
 
 #if defined(USBDM_SPI1_IS_DEFINED)
@@ -681,8 +680,41 @@ $(/SPI0/Declarations:   // No declarations Found)
  * @endcode
  *
  */
-using Spi1 = SpiBase_T<Spi1Info>;
-$(/SPI1/Declarations:   // No declarations Found)
+class Spi1 : public SpiBase_T<Spi1Info> {};
+#endif
+
+#if defined(USBDM_SPI2_IS_DEFINED)
+/**
+ * @brief Template class representing a SPI2 interface
+ *
+ * <b>Example</b>
+ * @code
+ * USBDM::Spi *spi = new USBDM::Spi2();
+ *
+ * uint8_t txData[] = {1,2,3};
+ * uint8_t rxData[10];
+ * spi->txRxBytes(sizeof(txData), txData, rxData);
+ * @endcode
+ *
+ */
+class Spi2 : public SpiBase_T<Spi2Info> {};
+#endif
+
+#if defined(USBDM_SPI3_IS_DEFINED)
+/**
+ * @brief Template class representing a SPI3 interface
+ *
+ * <b>Example</b>
+ * @code
+ * USBDM::Spi *spi = new USBDM::Spi3();
+ *
+ * uint8_t txData[] = {1,2,3};
+ * uint8_t rxData[10];
+ * spi->txRxBytes(sizeof(txData), txData, rxData);
+ * @endcode
+ *
+ */
+class Spi3 : public SpiBase_T<Spi3Info> {};
 #endif
 /**
  * End SPI_Group

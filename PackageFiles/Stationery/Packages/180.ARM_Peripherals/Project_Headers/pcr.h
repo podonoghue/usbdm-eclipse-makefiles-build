@@ -1,5 +1,5 @@
 /**
- * @file     pcr.h (180.ARM_Peripherals/Project_Headers/pcr-MK.h)
+ * @file     pcr.h (180.ARM_Peripherals/Project_Headers/pcr.h)
  * @brief    Port Control Register interface
  *
  * @version  V4.12.1.80
@@ -39,7 +39,7 @@ enum NvicPriority {
 };
 
 /**
- * Class to wrap a memory pointer as an array
+ * Class to wrap a memory address as an array
  *
  * @tparam T         Type of array element
  * @tparam address   Memory address of start of array
@@ -53,14 +53,17 @@ public:
    static constexpr size_t size = Size;
 
    /**
-    * Convert to reference to the external memory location
+    * Array access
     *
-    * @return Reference to element
+    * @return Reference to element of type T
+    *
+    * @note The const below refers to the MemoryAddressWrapper being const not the implied array
     */
    constexpr T & __attribute__((always_inline)) operator[](size_t index) const {
       usbdm_assert(index<size, "Index out of range");
       return (reinterpret_cast<T *>(address))[index];
    }
+
 };
 
 /**
@@ -86,18 +89,21 @@ public:
     * @param ptr  Address of hardware to be wrapped.
     */
    constexpr __attribute__((always_inline))  HardwarePtr(uintptr_t ptr) : ptr(ptr){};
+
    /**
     * Convert to pointer to the hardware
     *
     * @return Hardware pointer
     */
    constexpr auto __attribute__((always_inline))  operator->() const { return reinterpret_cast<volatile T *>(ptr);}
+
    /**
     * Convert to reference to the hardware
     *
     * @return Hardware pointer
     */
    constexpr auto & __attribute__((always_inline))  operator*() const { return *reinterpret_cast<volatile T *>(ptr);}
+
    /**
     * Convert to uint32_t
     *

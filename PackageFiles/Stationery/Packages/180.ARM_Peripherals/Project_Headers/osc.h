@@ -73,8 +73,10 @@ public:
     */
    static void defaultConfigure() {
 
-      (void)CheckPinMapped<0>::checker;
-      (void)CheckPinMapped<1>::checker;
+      if constexpr (Osc0Info::cr & OSC_CR_ERCLKEN_MASK) {
+         (void)CheckPinMapped<0>::checker;
+         (void)CheckPinMapped<1>::checker;
+      }
 
       if (Info::mapPinsOnEnable) {
          configureAllPins();

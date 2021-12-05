@@ -510,9 +510,11 @@ public:
       }
 
       int value = static_cast<uint16_t>(adc->R[0]);
+#if defined(ADC_SC1_DIFF_MASK)
       if (sc1Value&ADC_SC1_DIFF_MASK) {
          value = static_cast<int16_t>(value);
       }
+#endif
       return value;
    };
 
@@ -1206,9 +1208,11 @@ protected:
       }
 
       int value = static_cast<uint16_t>(adc->R[0]);
+#if defined(ADC_SC1_DIFF_MASK)
       if (sc1Value&ADC_SC1_DIFF_MASK) {
          value = static_cast<int16_t>(value);
       }
+#endif
       return value;
    };
 

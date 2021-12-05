@@ -5,9 +5,19 @@
 -->
 
 <section name="USBDM">
-   <item key="$$DeviceInfo_Device_Variant"                 value="FRDM_KL03Z" />
+   <item key="$$DeviceInfo_Device_Variant"                 value="MKL03Z8VFG4" />
    <item key="$$DeviceInfo_SubFamily"                      value="MKL03Z4" />
    <item key="$$Hardware_Source_Filename"                  value="MKL03Z4.usbdmHardware" />
+   <item key="$signal$PTA0_descriptionSetting"             value="SWD_CLK" />
+   <item key="$signal$PTA0_muxSetting"                     value="mux3" />
+   <item key="$signal$PTA1_descriptionSetting"             value="RESET_b" />
+   <item key="$signal$PTA1_muxSetting"                     value="mux3" />
+   <item key="$signal$PTA2_descriptionSetting"             value="SWD_DIO" />
+   <item key="$signal$PTA2_muxSetting"                     value="mux3" />
+   <item key="$signal$PTA3_descriptionSetting"             value="Debug_Tx" />
+   <item key="$signal$PTA3_muxSetting"                     value="mux4" />
+   <item key="$signal$PTA4_descriptionSetting"             value="Debug_Rx" />
+   <item key="$signal$PTA4_muxSetting"                     value="mux4" />
    <item key="/Console/consoleDevice"                      value="USBDM::Lpuart0" />
    <item key="/FTFA/peripheral_file"                       value="ftfa" />
    <item key="/MCG/ClockConfig[0]"                         value="ClockConfig_HIRC_48MHz" />
