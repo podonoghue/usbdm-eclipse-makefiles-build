@@ -10,7 +10,7 @@ Devices using this peripheral:
 
    <xi:include href="_default_pcr.xml"/>
    
-   <xi:include href="_mapPinsOption.xml"/>   
+   <xi:include href="_mapPinsOption.xml"/>
 
    <aliasOption key="/SIM/sim_sopt2_uart$(_instance)src" optional="true" constant="false" />
    <aliasOption key="/SIM/Uart$(_instance)Clock"         optional="true" />
@@ -62,7 +62,7 @@ Devices using this peripheral:
    
    <template><![CDATA[
       \t//! IRQ numbers for hardware
-      \tstatic constexpr IRQn_Type irqNums[]  = $(_name)_IRQS;\n\n
+      \tstatic constexpr IRQn_Type irqNums[]  = $(_name)_IRQS;
    
       \t//! Number of IRQs for hardware
       \tstatic constexpr uint32_t irqCount  = sizeof(irqNums)/sizeof(irqNums[0]);\n\n
@@ -82,7 +82,7 @@ Devices using this peripheral:
       classHandler="%c%i::irq$2Handler" />
         
    <template><![CDATA[
-       \t//! Class based callback handler has been installed in vector table\n
+       \t//! Class based callback handler has been installed in vector table
        \tstatic constexpr bool irqHandlerInstalled = $(irqHandlingMethod);\n\n
    ]]></template>
        
@@ -99,7 +99,7 @@ Devices using this peripheral:
    </choiceOption>
 
    <template><![CDATA[
-       \t//! Default IRQ level\n
+       \t//! Default IRQ level
        \tstatic constexpr NvicPriority irqLevel =  $(?irqHandlingMethod:$(irqLevel):NvicPriority_NotInstalled);\n\n
    ]]></template>
    
@@ -117,16 +117,16 @@ Devices using this peripheral:
          
    <template><![CDATA[
    \t//! Indicates whether the UART needs a write to clear status errors
-   \tstatic constexpr bool statusNeedsWrite = false;\n\n
+   \tstatic constexpr bool statusNeedsWrite = false;
 
    \t//! Default Baud rate used if not explicitly given
-   \tstatic constexpr uint32_t defaultBaudRate = $(defaultBaudRate);\n\n
+   \tstatic constexpr uint32_t defaultBaudRate = $(defaultBaudRate);
    
    \t//! Default buffer size for receive queue when interrupt driven
-   \tstatic constexpr unsigned receiveBufferSize = $(receiveBufferSize);\n\n
+   \tstatic constexpr unsigned receiveBufferSize = $(receiveBufferSize);
 
    \t//! Default buffer size for transmit queue when interrupt driven
-   \tstatic constexpr unsigned transmitBufferSize = $(transmitBufferSize);\n\n
+   \tstatic constexpr unsigned transmitBufferSize = $(transmitBufferSize);
 
    \t/**
    \t * Get input clock frequency

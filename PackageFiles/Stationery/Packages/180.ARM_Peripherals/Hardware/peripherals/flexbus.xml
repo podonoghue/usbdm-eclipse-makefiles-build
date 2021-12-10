@@ -84,7 +84,7 @@
       \t   flexbus->CSPMCR =
       \t      (flexbus->CSPMCR&~(FLEXBUS_CSPMCR_GROUP2_MASK|FLEXBUS_CSPMCR_GROUP3_MASK|FLEXBUS_CSPMCR_GROUP4_MASK|FLEXBUS_CSPMCR_GROUP5_MASK))|
       \t      (FlexbusGroup2_FB_BE_31_24|FlexbusGroup3_FB_BE_23_16|FlexbusGroup4_FB_BE_15_8|FlexbusGroup5_FB_BE_7_0);
-      \t}\n\n   
+      \t}\n\n
    ]]></template>
 
    <signals/>

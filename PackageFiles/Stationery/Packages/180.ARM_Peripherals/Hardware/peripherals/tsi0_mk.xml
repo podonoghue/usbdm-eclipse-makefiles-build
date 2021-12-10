@@ -95,7 +95,7 @@
    </choiceOption>
 
    <template><![CDATA[
-      \tstatic constexpr uint32_t tsi_gencs = \
+      \tstatic constexpr uint32_t tsi_gencs = 
       \t   TSI_GENCS_STPE($(tsi_gencs_stpe))       |  // TSI STOP Enable
       \t   TSI_GENCS_STM($(tsi_gencs_stm))        |  // Scan Trigger Mode
       \t   TSI_GENCS_ESOR($(tsi_gencs_esor))       |  // EOS or OOR Interrupt select
@@ -146,7 +146,7 @@
       min="2" max="32" step="2" />
 
    <template><![CDATA[
-      \tstatic constexpr uint32_t tsi_scanc = \
+      \tstatic constexpr uint32_t tsi_scanc = 
       \t   TSI_SCANC_AMPSC($(tsi_scanc_ampsc))           |  // Active Mode Prescaler
       \t   TSI_SCANC_AMCLKS($(tsi_scanc_amclks))          |  // Active Mode Clock Source
       \t   TSI_SCANC_SMOD($(tsi_scanc_smod))            |  // Scan Period Modulus
@@ -166,7 +166,7 @@
       min="0" max="15" value="0" />
 
    <template><![CDATA[
-      \tstatic constexpr uint32_t tsi_pen = \
+      \tstatic constexpr uint32_t tsi_pen = 
       \t   ($(tsi_pen_pen)) |    // Pins enable channel as TSI inputs
       \t   TSI_PEN_LPSP($(tsi_pen_lpsp));    // Low Power Scan channel\n\n
    ]]></template>
@@ -182,7 +182,7 @@
       min="0" max="15625" value="0" />
 
    <template><![CDATA[
-      \tstatic constexpr uint32_t tsi_threshold = \
+      \tstatic constexpr uint32_t tsi_threshold = 
       \t   TSI_THRESHOLD_LTHH($(tsi_threshold_lthh)) |   // Low Power Channel Low Threshold value
       \t   TSI_THRESHOLD_HTHH($(tsi_threshold_hthh));    // Low Power Channel High Threshold value\n\n
    ]]></template>
@@ -200,7 +200,7 @@
       \t      case TSI_SCANC_AMCLKS(2):  return Osc0Info::getOscerClock();
       \t   }
       \t   return 0;
-      \t}\n\n
+      \t}
       
       \t/**
       \t * Get input clock when configured in low power mode

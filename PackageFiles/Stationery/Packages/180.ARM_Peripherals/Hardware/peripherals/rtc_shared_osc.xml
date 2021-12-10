@@ -113,15 +113,15 @@
    <aliasOption key="/SIM/rtc_clkout" constant="true" optional="true" />
 
    <template><![CDATA[
-      \t//! Whether to configure RTC\n
+      \t//! Whether to configure RTC
       \t//! If disabled then no RTC registers are touched.
       \t//! This is useful if RTC is not powered as register access will trap.
-      \tstatic constexpr bool configure_rtc = $(configure_rtc);\n\n
+      \tstatic constexpr bool configure_rtc = $(configure_rtc);
    
       \t//! Frequency of RTC External Clock or Crystal
-      \tstatic constexpr uint32_t rtcclk_clock = $(/OSC0/osc_input_freq)UL;\n\n
+      \tstatic constexpr uint32_t rtcclk_clock = $(/OSC0/osc_input_freq)UL;
       
-      \t//! Oscillator control register\n
+      \t//! Oscillator control register
       \tstatic constexpr uint32_t cr =
       \t   RTC_CR_OSCE($(rtc_cr_osce)) | // Enables 32kHz oscillator [RTC_32K]
       \t   RTC_CR_CLKO($(rtc_cr_clko)) | // Disables RTC 32kHz Clock Output
@@ -146,7 +146,7 @@
       value="0" />
 
    <template><![CDATA[
-      \t//! RTC Time Compensation Register\n
+      \t//! RTC Time Compensation Register
       \tstatic constexpr uint32_t tcr =
       \t   RTC_TCR_CIR($(rtc_tcr_cir)) | // Compensation Interval Register
       \t   RTC_TCR_TCR($(rtc_tcr_tcr));  // Time Compensation Register\n\n
@@ -183,14 +183,13 @@
    </category>
    
    <template><![CDATA[
-      \t//! RTC Lock Register\n
+      \t//! RTC Lock Register
       \tstatic constexpr uint32_t lr =
       \t   RTC_LR_LRL($(rtc_lr_lrl)) | // Lock Register Lock
       \t   RTC_LR_SRL($(rtc_lr_srl)) | // Status Register Lock 
       \t   RTC_LR_CRL($(rtc_lr_crl)) | // Control Register Lock
       \t   RTC_LR_TCL($(rtc_lr_tcl));  // Time Compensation Lock\n\n
     ]]></template>     
-
 
    <!--
    Patterns for pattern and classHandler 
@@ -200,13 +199,13 @@
      -  _IRQHandler is appended to the pattern (only)
    -->
    <irqOption name="irqHandlingMethod"  
-      description="RTC Alarmand Seconds interrupt handlers"
+      description="RTC Alarm and Seconds interrupt handlers"
       toolTip="This selection allow the interrupt handler for this peripheral to be installed using several different methods"
       pattern="^RTC_(Alarm|Seconds)$" 
       classHandler="%c%i::irq$1Handler" />
       
    <template><![CDATA[
-       \t//! Class based callback handler has been installed in vector table\n
+       \t//! Class based callback handler has been installed in vector table
        \tstatic constexpr bool irqHandlerInstalled = $(irqHandlingMethod);\n\n
    ]]></template>
        
@@ -223,29 +222,48 @@
    </choiceOption>
 
    <template><![CDATA[
-       \t//! Default IRQ level\n
+       \t//! Default IRQ level
        \tstatic constexpr NvicPriority irqLevel =  $(?irqHandlingMethod:$(irqLevel):NvicPriority_NotInstalled);\n\n
    ]]></template>
 
    <choiceOption name="rtc_year"
       description="Initial Year" 
       toolTip="Used for coldstart" >
-      <choice value="2017"  name="2017" isDefault="true" />
+      <choice value="2017"  name="2017" />
       <choice value="2018"  name="2018" />
       <choice value="2019"  name="2019" />
       <choice value="2020"  name="2020" />
+      <choice value="2021"  name="2021" isDefault="true" />
+      <choice value="2022"  name="2022" />
+      <choice value="2023"  name="2023" />
+      <choice value="2024"  name="2024" />
+      <choice value="2025"  name="2025" />
+      <choice value="2026"  name="2026" />
+      <choice value="2027"  name="2027" />
+      <choice value="2028"  name="2028" />
+      <choice value="2029"  name="2029" />
+      <choice value="2030"  name="2030" />
+      <choice value="2031"  name="2031" />
+      <choice value="2032"  name="2032" />
+      <choice value="2033"  name="2033" />
+      <choice value="2034"  name="2034" />
+      <choice value="2035"  name="2035" />
+      <choice value="2036"  name="2036" />
+      <choice value="2037"  name="2037" />
+      <choice value="2038"  name="2038" />
+      <choice value="2039"  name="2039" />
    </choiceOption>
 
    <choiceOption name="rtc_month"
       description="Initial Month" 
       toolTip="Used for coldstart" >
-      <choice value="0"    name="Jan" />
+      <choice value="0"    name="Jan"  isDefault="true" />
       <choice value="31"   name="Feb" />
       <choice value="59"   name="March" />
       <choice value="90"   name="April" />
       <choice value="120"  name="May" />
       <choice value="151"  name="June" />
-      <choice value="181"  name="July" isDefault="true" />
+      <choice value="181"  name="July"/>
       <choice value="212"  name="August" />
       <choice value="243"  name="September" />
       <choice value="273"  name="October" />
@@ -272,7 +290,7 @@
       \t            ($(rtc_month)) +
       \t            ($(rtc_day)+12-1))*24 +
       \t           ($(rtc_hour)))*60 +
-      \t          ($(rtc_minute)))*60;
+      \t          ($(rtc_minute)))*60;\n\n
     ]]></template>     
 
    <category name="Device Registers (view only)" description="RTC Register values">
@@ -320,7 +338,7 @@
       \tstatic uint32_t getInternalClock() {
       \t   // RTC uses OSC0 EXTAL/XTAL clock
       \t   return (rtc->CR&RTC_CR_OSCE_MASK)?Osc0Info::osc_clock:0;
-      \t}\n\n
+      \t}
       
       \t/**
       \t * Get RTC clock frequency (external, masked by RTC_CR_CLKO)

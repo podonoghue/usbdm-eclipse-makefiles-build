@@ -23,11 +23,10 @@
 
    <template name="FlashConfig" namespace="all"> <![CDATA[
       \t// Sector size for program flash (minimum erase element)
-      \tstatic constexpr unsigned programFlashSectorSize = $(pflash_sector_size);\n\n
+      \tstatic constexpr unsigned programFlashSectorSize = $(pflash_sector_size);
    
       \t// Phrase size for program flash (minimum programming element)
       \tstatic constexpr unsigned programFlashPhraseSize = $(pflash_phrase_size);\n\n
-         
    ]]></template>
    
    

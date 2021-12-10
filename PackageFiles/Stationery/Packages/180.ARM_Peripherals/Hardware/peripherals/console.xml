@@ -53,9 +53,9 @@
     
    <template><![CDATA[
       \t/** Console device*/
-      \tUsing Console = $(console_device);\n\n
+      \tUsing Console = $(console_device);
       
-      \tstatic const uint32_t defaultBaudRate = $(defaultBaudRate)UL;
+      \tstatic const uint32_t defaultBaudRate = $(defaultBaudRate)UL;\n\n
    ]]></template>
 
    <signals name="LPUART0" optional="true" />

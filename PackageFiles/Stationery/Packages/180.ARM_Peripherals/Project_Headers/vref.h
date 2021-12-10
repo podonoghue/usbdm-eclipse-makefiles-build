@@ -53,9 +53,16 @@ enum VrefBuffer {
    VrefBuffer_LowPower  = VREF_SC_MODE_LV(2), /**< Low power buffer mode enabled */
 };
 
+/**
+ * Chop oscillator enable.
+ *
+ * Controls the internal chopping operation to minimise the internal analogue offset.
+ * This option is enabled during factory trimming of the VREF voltage.
+ * This should be enabled to achieve the performance stated in the data sheet.
+ */
 enum VrefChop {
-   VrefChop_Disable = VREF_TRM_CHOPEN(0), /**< Chop Disabled */
-   VrefChop_Enable  = VREF_TRM_CHOPEN(1), /**< Chop Enabled */
+   VrefChop_Disable = VREF_TRM_CHOPEN(0), /**< Chop Disabled *//**< VrefChop_Disable */
+   VrefChop_Enable  = VREF_TRM_CHOPEN(1), /**< Chop Enabled */ /**< VrefChop_Enable */
 };
 
 /**
@@ -160,6 +167,11 @@ public:
 
    /**
     * Configures the voltage reference
+    *
+    * @param vrefBuffer    Buffer Mode selection
+    * @param vrefReg       Regulator enable
+    * @param VrefIcomp     Second order curvature compensation enable
+    * @param vrefChop      Chop oscillator enable
     */
    static void configure(
          VrefBuffer  vrefBuffer =  VrefBuffer_HighPower,

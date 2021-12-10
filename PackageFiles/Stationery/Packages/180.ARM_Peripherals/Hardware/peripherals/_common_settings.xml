@@ -12,113 +12,220 @@
 
 <!-- Template is added to pin_mapping.h -->
 <template namespace="usbdm"><![CDATA[
-   /* Template:_common_settings.xml */\n\n
+   /* Template:_common_settings.xml */
    
-// Use when in-lining makes the release build smaller
-#ifdef DEBUG_BUILD
-#define INLINE_RELEASE __attribute__((noinline))
-#else
-#define INLINE_RELEASE __attribute__((always_inline))
-#endif\n
+   // Use when in-lining makes the release build smaller
+   #ifdef DEBUG_BUILD
+   #define INLINE_RELEASE __attribute__((noinline))
+   #else
+   #define INLINE_RELEASE __attribute__((always_inline))
+   #endif
 
-#ifdef DEBUG_BUILD
-#define NOINLINE_DEBUG __attribute__((noinline))
-#else
-#define NOINLINE_DEBUG
-#endif\n\n
+   #ifdef DEBUG_BUILD
+   #define NOINLINE_DEBUG __attribute__((noinline))
+   #else
+   #define NOINLINE_DEBUG
+   #endif
 
-\tstatic constexpr float ns      = 1E-9f; //!< Scale factor for nanoseconds
-\tstatic constexpr float us      = 1E-6f; //!< Scale factor for microseconds
-\tstatic constexpr float ms      = 1E-3f; //!< Scale factor for milliseconds
-\tstatic constexpr float seconds = 1.0f;  //!< Scale factor for seconds
-\tstatic constexpr float percent = 1.0f;  //!< Scale factor for percentage as float
-\tstatic constexpr float MHz     = 1E6f;  //!< Scale factor for MHz as float
-\tstatic constexpr float kHz     = 1E3f;  //!< Scale factor for kHz as float
-\tstatic constexpr float Hz      = 1.0f;  //!< Scale factor for Hz as float\n\n
+   \tstatic constexpr float ns      = 1E-9f; //!< Scale factor for nanoseconds
+   \tstatic constexpr float us      = 1E-6f; //!< Scale factor for microseconds
+   \tstatic constexpr float ms      = 1E-3f; //!< Scale factor for milliseconds
+   \tstatic constexpr float seconds = 1.0f;  //!< Scale factor for seconds
+   \tstatic constexpr float percent = 1.0f;  //!< Scale factor for percentage as float
+   \tstatic constexpr float MHz     = 1E6f;  //!< Scale factor for MHz as float
+   \tstatic constexpr float kHz     = 1E3f;  //!< Scale factor for kHz as float
+   \tstatic constexpr float Hz      = 1.0f;  //!< Scale factor for Hz as float
 
-\t/** MCGFFCLK - Fixed frequency clock (input to FLL) */
-\textern volatile uint32_t SystemMcgffClock;\n\n
+   \t/** MCGFFCLK - Fixed frequency clock (input to FLL) */
+   \textern volatile uint32_t SystemMcgffClock;
 
-\t/** MCGOUTCLK - Primary output from MCG, various sources */
-\textern volatile uint32_t SystemMcgOutClock;\n\n
+   \t/** MCGOUTCLK - Primary output from MCG, various sources */
+   \textern volatile uint32_t SystemMcgOutClock;
 
-\t/** MCGFLLCLK - Output of FLL */
-\textern volatile uint32_t SystemMcgFllClock;\n\n
+   \t/** MCGFLLCLK - Output of FLL */
+   \textern volatile uint32_t SystemMcgFllClock;
 
-\t/** MCGPLLCLK - Output of PLL */
-\textern volatile uint32_t SystemMcgPllClock;\n\n
+   \t/** MCGPLLCLK - Output of PLL */
+   \textern volatile uint32_t SystemMcgPllClock;
 
-\t/**
-\t * Calculate a Vector number using an offset from an existing number.
-\t * This is only useful if related vectors are consecutive e.g. DMA0_IRQn, DMA1_IRQn ...
-\t *
-\t * @param vector  Base vector to use
-\t * @param offset  Offset from base vector
-\t *
-\t * @return  Vector number calculated from vector+offset
-\t */
-\tconstexpr IRQn_Type inline operator+(IRQn_Type vector, unsigned offset) {
-\t   return static_cast<IRQn_Type>(static_cast<unsigned>(vector) + offset);
-\t}\n\n
+   \t/**
+   \t * Calculate a Vector number using an offset from an existing number.
+   \t * This is only useful if related vectors are consecutive e.g. DMA0_IRQn, DMA1_IRQn ...
+   \t *
+   \t * @param vector  Base vector to use
+   \t * @param offset  Offset from base vector
+   \t *
+   \t * @return  Vector number calculated from vector+offset
+   \t */
+   \tconstexpr IRQn_Type inline operator+(IRQn_Type vector, unsigned offset) {
+   \t   return static_cast<IRQn_Type>(static_cast<unsigned>(vector) + offset);
+   \t}
 
-\t/**
-\t * Calculate a Vector number using an offset from an existing number.
-\t * This is only useful if related vectors are consecutive e.g. DMA0_IRQn, DMA1_IRQn ...
-\t *
-\t * @param vector  Base vector to use
-\t * @param offset  Offset from base vector
-\t *
-\t * @return  Vector number calculated from vector+offset
-\t */
-\tconstexpr IRQn_Type inline operator+(IRQn_Type vector, int offset) {
-\t   return vector + static_cast<unsigned>(offset);
-\t}\n\n
+   \t/**
+   \t * Calculate a Vector number using an offset from an existing number.
+   \t * This is only useful if related vectors are consecutive e.g. DMA0_IRQn, DMA1_IRQn ...
+   \t *
+   \t * @param vector  Base vector to use
+   \t * @param offset  Offset from base vector
+   \t *
+   \t * @return  Vector number calculated from vector+offset
+   \t */
+   \tconstexpr IRQn_Type inline operator+(IRQn_Type vector, int offset) {
+   \t   return vector + static_cast<unsigned>(offset);
+   \t}
 
-\t/**
-\t * @tparam  T  Type of comparison object (inferred)
-\t * @param   a  Left-hand object for comparison
-\t * @param   b  Right-hand object for comparison
-\t *
-\t * @return Smaller of a or b
-\t */
-\ttemplate<class T> 
-\tconstexpr T min(const T a, const T b) {
-\t   return (b < a) ? b : a;
-\t}\n\n
+   \t/**
+   \t * @tparam  T  Type of comparison object (inferred)
+   \t * @param   a  Left-hand object for comparison
+   \t * @param   b  Right-hand object for comparison
+   \t *
+   \t * @return Smaller of a or b
+   \t */
+   \ttemplate<class T> 
+   \tconstexpr T min(const T a, const T b) {
+   \t   return (b < a) ? b : a;
+   \t}
 
-\t/**
-\t * @tparam  T  Type of comparison object (inferred)
-\t * @param   a  Left-hand object for comparison
-\t * @param   b  Right-hand object for comparison
-\t *
-\t * @return Larger of a or b
-\t */
-\ttemplate<class T> 
-\tconstexpr T max(const T a, const T b) {
-\t   return (b > a) ? b : a;
-\t}\n\n
+   \t/**
+   \t * @tparam  T  Type of comparison object (inferred)
+   \t * @param   a  Left-hand object for comparison
+   \t * @param   b  Right-hand object for comparison
+   \t *
+   \t * @return Larger of a or b
+   \t */
+   \ttemplate<class T> 
+   \tconstexpr T max(const T a, const T b) {
+   \t   return (b > a) ? b : a;
+   \t}
 
-\tconstexpr IRQn_Type IRQn_None = static_cast<IRQn_Type>(-20);\n\n
+   \tconstexpr IRQn_Type IRQn_None = static_cast<IRQn_Type>(-20);
    
-\t/** Dummy port information for pins without an associated PCR */
-\tconstexpr PortInfo  __attribute__((unused)) NoPortInfo {0, 0, IRQn_None, 0, NvicPriority_NotInstalled};\n\n
+   \t/** Dummy port information for pins without an associated PCR */
+   \tconstexpr PortInfo  __attribute__((unused)) NoPortInfo {0, 0, IRQn_None, 0, NvicPriority_NotInstalled};
 
-\t/** Class to static check signal mapping is valid */
-\ttemplate<class Info, int signalNum> class CheckSignal {
-\t\tstatic_assert((signalNum<Info::numSignals), "Non-existent signal - Modify Configure.usbdm");
-\t\tstatic_assert((signalNum>=Info::numSignals)||(Info::info[signalNum].gpioBit != UNMAPPED_PCR), "Signal is not mapped to a pin - Modify Configure.usbdm");
-\t\tstatic_assert((signalNum>=Info::numSignals)||(Info::info[signalNum].gpioBit != INVALID_PCR),  "Signal doesn't exist in this device/package");
-\t\tstatic_assert((signalNum>=Info::numSignals)||((Info::info[signalNum].gpioBit == UNMAPPED_PCR)||(Info::info[signalNum].gpioBit == INVALID_PCR)||(Info::info[signalNum].gpioBit >= 0)), "Illegal signal");
-\t};\n\n
+   \t/** Class to static check signal mapping is valid */
+   \ttemplate<class Info, int signalNum> class CheckSignal {
+   \t\tstatic_assert((signalNum<Info::numSignals), "Non-existent signal - Modify Configure.usbdm");
+   \t\tstatic_assert((signalNum>=Info::numSignals)||(Info::info[signalNum].gpioBit != UNMAPPED_PCR), "Signal is not mapped to a pin - Modify Configure.usbdm");
+   \t\tstatic_assert((signalNum>=Info::numSignals)||(Info::info[signalNum].gpioBit != INVALID_PCR),  "Signal doesn't exist in this device/package");
+   \t\tstatic_assert((signalNum>=Info::numSignals)||((Info::info[signalNum].gpioBit == UNMAPPED_PCR)||(Info::info[signalNum].gpioBit == INVALID_PCR)||(Info::info[signalNum].gpioBit >= 0)), "Illegal signal");
+   \t};
 
-\t/** Enables mapping of all allocated pins during startup using mapAllPins() */
-\tstatic constexpr bool MAP_ALL_PINS = $(mapAllPins);\n\n
+   \t/** Enables mapping of all allocated pins during startup using mapAllPins() */
+   \tstatic constexpr bool MAP_ALL_PINS = $(mapAllPins);
 
-\t/** Used to configure pin-mapping before 1st use of peripherals */
-\textern void mapAllPins();\n\n
+   \t/** Used to configure pin-mapping before 1st use of peripherals */
+   \textern void mapAllPins();
 
-\t/* END Template:_common_settings.xml */\n\n
-   
+   \t/**
+   \t * Determine the number of elements in an array
+   \t *
+   \t * @tparam T      Deduced array type
+   \t * @tparam N      Deduced array size
+   \t *
+   \t * @param  Ar      Array to examine
+   \t *
+   \t * @return  Size of array in elements
+   \t */
+   \ttemplate<typename T, size_t N>
+   \t   constexpr size_t sizeofArray(T (&)[N]) {
+   \t      return N;
+   \t   }
+
+   \t/**
+   \t * Enter critical section
+   \t *
+   \t * Disables interrupts for a critical section
+   \t *
+   \t * @param cpuSR Variable to hold interrupt state so it can be restored
+   \t *
+   \t * @code
+   \t * uint8_t cpuSR;
+   \t * ...
+   \t * enterCriticalSection(cpuSR);
+   \t *  // Critical section
+   \t * exitCriticalSection(cpuSR);
+   \t * @endcode
+   \t */
+   \tstatic inline void enterCriticalSection(uint8_t &cpuSR) {
+   \t   __asm__ volatile (
+   \t         "  MRS   r0, PRIMASK       \n"   // Copy flags
+   \t         // It may be possible for a ISR to run here but it
+   \t         // would save/restore PRIMASK so this code is OK
+   \t         "  CPSID I                 \n"   // Disable interrupts
+   \t         "  STRB  r0, %[output]     \n"   // Save flags
+   \t         : [output] "=m" (cpuSR) : : "r0");
+   \t}
+
+   \t/**
+   \t * Exit critical section
+   \t *
+   \t * Restores interrupt state saved by enterCriticalSection()
+   \t *
+   \t * @param cpuSR Variable to holding interrupt state to be restored
+   \t */
+   \tstatic inline void exitCriticalSection(uint8_t &cpuSR) {
+   \t   __asm__ volatile (
+   \t         "  LDRB r0, %[input]    \n"  // Retrieve original flags
+   \t         "  MSR  PRIMASK,r0;     \n"  // Restore
+   \t         : :[input] "m" (cpuSR) : "r0");
+   \t}
+
+   \t/**
+   \t * Class to implement simple critical sections by disabling interrupts.
+   \t *
+   \t * Disables interrupts for a critical section.
+   \t * This would be from the declaration of the object until the end of
+   \t * enclosing block. An object of this class should be declared at the
+   \t * start of a block. e.g.
+   \t * @code
+   \t *    {
+   \t *       CriticalSection cs;
+   \t *       ...
+   \t *       Protected code
+   \t *       ...
+   \t *    }
+   \t * @endcode
+   \t *
+   \t * @note uses PRIMASK
+   \t */
+   \tclass CriticalSection {
+   \t
+   \tprivate:
+   \t   /** Used to record interrupt state on entry */
+   \t   volatile uint32_t cpuSR;
+   \t
+   \tpublic:
+   \t   /**
+   \t    * Constructor - Enter critical section
+   \t    *
+   \t    * Disables interrupts for a critical section
+   \t    * This would be from the declaration of the object until end of enclosing block.
+   \t    */
+   \t   CriticalSection() __attribute__((always_inline)) {
+   \t      __asm__ volatile (
+   \t            "  MRS   r0, PRIMASK       \n"   // Copy flags
+   \t            // It may be possible for a ISR to run here but it
+   \t            // would save/restore PRIMASK so this code is OK
+   \t            "  CPSID I                 \n"   // Disable interrupts
+   \t            "  STR  r0, %[output]      \n"   // Save flags
+   \t            : [output] "=m" (cpuSR) : : "r0");
+   \t   }
+   \t
+   \t   /**
+   \t    * Destructor - Exit critical section
+   \t    *
+   \t    * Enables interrupts IFF previously disabled by this object
+   \t    * This would be done implicitly by exiting the enclosing block.
+   \t    */
+   \t   inline ~CriticalSection() __attribute__((always_inline)) {
+   \t      __asm__ volatile (
+   \t            "  LDR r0, %[input]     \n"  // Retrieve original flags
+   \t            "  MSR  PRIMASK,r0;     \n"  // Restore
+   \t            : :[input] "m" (cpuSR) : "r0");
+   \t   }
+   \t};
+   /* END Template:_common_settings.xml */\n\n
 ]]></template>
 
 </list>

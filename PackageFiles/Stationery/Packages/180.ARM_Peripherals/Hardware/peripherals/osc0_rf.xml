@@ -56,11 +56,11 @@
    </projectActionList>
          
    <template><![CDATA[
-      \t//! RF Reference Oscillator Enable Select\n
-      \tstatic constexpr uint32_t rf_osc_en = $(rf_osc_en)UL;\n\n
+      \t//! RF Reference Oscillator Enable Select
+      \tstatic constexpr uint32_t rf_osc_en = $(rf_osc_en)UL;
       
-      \t//! Frequency of OSC Clock or Crystal\n
-      \tstatic constexpr uint32_t osc_clock = $(osc_clock)UL;\n\n
+      \t//! Frequency of OSC Clock or Crystal
+      \tstatic constexpr uint32_t osc_clock = $(osc_clock)UL;
       
       \t/**
       \t * Get OSC clock (internal, assumed available)
@@ -69,7 +69,7 @@
       \t */
       \tstatic constexpr uint32_t getOscClock() {
       \t   return osc_clock;
-      \t}\n\n
+      \t}
       
       \t/**
       \t * Get OSC clock (external)

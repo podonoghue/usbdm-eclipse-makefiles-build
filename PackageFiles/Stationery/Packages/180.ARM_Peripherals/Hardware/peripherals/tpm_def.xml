@@ -80,13 +80,13 @@
       <choice value="1" name="Enabled" />
    </binaryOption>
    <template><![CDATA[
-      \t//! Timer external input frequency \n
-      \tstatic constexpr uint32_t tpmExternalClock =  $(tpmExternalClock);\n\n
+      \t//! Timer external input frequency 
+      \tstatic constexpr uint32_t tpmExternalClock =  $(tpmExternalClock);
       
-      \t//! Default Timer Modulo\n
-      \tstatic constexpr uint32_t modulo =TPM_MOD_MOD($(tpm_mod));\n\n
+      \t//! Default Timer Modulo
+      \tstatic constexpr uint32_t modulo =TPM_MOD_MOD($(tpm_mod));
 
-      \t//! Default value for SC register\n
+      \t//! Default value for SC register
       \tstatic constexpr uint32_t sc  = 
       \t    TPM_SC_CPWMS($(tpm_sc_cpwms))|  // Centre-Aligned PWM Select
       \t    TPM_SC_CMOD($(tpm_sc_cmod)) |  // Clock Mode Selection
@@ -118,10 +118,10 @@
          
    <template><![CDATA[
       \t/** Minimum resolution for PWM interval */
-      \tstatic constexpr uint32_t minimumResolution=$(minimumResolution);\n\n
+      \tstatic constexpr uint32_t minimumResolution=$(minimumResolution);
       
       \t/** Minimum usable interval in ticks */      
-      \tstatic constexpr uint32_t minimumInterval=$(minimumInterval);\n\n
+      \tstatic constexpr uint32_t minimumInterval=$(minimumInterval);
       
       \t/**
       \t * Get input clock frequency

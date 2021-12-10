@@ -184,6 +184,7 @@ public:
    /**
     * Constructor
     *
+    * @param llwuPin     Pin being used for wakeup
     * @param llwuPinMode LLWU pin wake-up mode
     */
    constexpr LlwuPinInfo(LlwuPin llwuPin, LlwuPinMode llwuPinMode) : fLlwuPin(llwuPin), fLwuPinMode(llwuPinMode) {}
@@ -431,8 +432,7 @@ public:
    /**
     * Configure pin as wake-up source
     *
-    * @param[in] llwuPin       Pin to configure
-    * @param[in] llwuPinMode   Mode for pin as wake-up input
+    * @param[in] llwuPinInfo   Pin information used to configure source
     */
    static void configurePinSource(const LlwuPinInfo &llwuPinInfo) {
 

@@ -22,7 +22,7 @@
    #else
    \t   $(clockEnable)
    #endif
-   \t}\n\n
+   \t}
 
    \t/** 
    \t *  Disable clock to $(_class)

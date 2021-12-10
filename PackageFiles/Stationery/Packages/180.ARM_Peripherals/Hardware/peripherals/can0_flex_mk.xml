@@ -46,21 +46,25 @@
       value="8" min="0" max="16" />
 
    <template><![CDATA[
-       \t//! Whether FIFO is enable\n
-       \tstatic constexpr bool EnableFifo     =  $(EnableFifo);\n\n
-       \t//! Maximum number of Message Buffers\n
-       \tstatic constexpr unsigned MaxNumberOfMessageBuffers     =  $(MaxNumberOfMessageBuffers);\n\n
-       \t//! Maximum number of Message Filters\n
-       \tstatic constexpr unsigned MaxNumberOfFifoMessageFilters =  $(EnableFifo)?$(MaxNumberOfFifoMessageFilters):0;\n\n
-       \t//! Number of Mailbox Buffers\n
-       \tstatic constexpr unsigned NumberOfIndividualMailboxes   =  $(NumberOfIndividualMailboxes);\n\n
-       \t//! Number of FIFO Message Filters\n
+       \t//! Whether FIFO is enable
+       \tstatic constexpr bool EnableFifo     =  $(EnableFifo);
+       
+       \t//! Maximum number of Message Buffers
+       \tstatic constexpr unsigned MaxNumberOfMessageBuffers     =  $(MaxNumberOfMessageBuffers);
+       
+       \t//! Maximum number of Message Filters
+       \tstatic constexpr unsigned MaxNumberOfFifoMessageFilters =  $(EnableFifo)?$(MaxNumberOfFifoMessageFilters):0;
+       
+       \t//! Number of Mailbox Buffers
+       \tstatic constexpr unsigned NumberOfIndividualMailboxes   =  $(NumberOfIndividualMailboxes);
+       
+       \t//! Number of FIFO Message Filters
        \tstatic constexpr unsigned NumberOfFifoMessageFilters    =  $(EnableFifo)?$(NumberOfFifoMessageFilters):0;\n\n
    ]]></template>
 
    <template><![CDATA[
       \t//! IRQ numbers for hardware
-      \tstatic constexpr IRQn_Type irqNums[]  = $(_name)_IRQS;\n\n
+      \tstatic constexpr IRQn_Type irqNums[]  = $(_name)_IRQS;
    
       \t//! Number of IRQs for hardware
       \tstatic constexpr uint32_t irqCount  = sizeof(irqNums)/sizeof(irqNums[0]);\n\n
@@ -106,15 +110,15 @@
    
    <!-- Template is added to class within pin_mapping.h -->
    <template><![CDATA[
-       \t//! Class based callback handler has been installed in vector table\n
-       \tstatic constexpr bool irqHandlerInstalled = $(messagebufferIrqHandlingMethod);\n\n
+       \t//! Class based callback handler has been installed in vector table
+       \tstatic constexpr bool irqHandlerInstalled = $(messagebufferIrqHandlingMethod);
        
        \tstatic constexpr int MessageBuffer_IrqNumIndex       = 0;
        \tstatic constexpr int BusOff_IrqNumIndex              = 1;
        \tstatic constexpr int Error_IrqNumIndex               = 2;
        \tstatic constexpr int TransmitWarning_IrqNumIndex     = 3;
        \tstatic constexpr int ReceiveWarning_IrqNumIndex      = 4;
-       \tstatic constexpr int Wakeup_IrqNumIndex              = 5;
+       \tstatic constexpr int Wakeup_IrqNumIndex              = 5;\n\n
    ]]></template>
        
    <intOption name="irqLevel" 
@@ -165,7 +169,7 @@
       \t   else {
       \t      return Osc0Info::getOscerClock();
       \t   }
-      \t}\n\n
+      \t}
       
       \t/**
       \t * Get Protocol Engine input clock frequency
@@ -178,7 +182,7 @@
    ]]></template>
 
    <template><![CDATA[
-       \t//! Default IRQ level\n
+       \t//! Default IRQ level
        \tstatic constexpr uint32_t irqLevel =  $(irqLevel);\n\n
    ]]></template>
 
@@ -190,7 +194,7 @@
       \t   NVIC_EnableIRQ(Info::irqNums[Info::BusOff_IrqNumIndex]);
       \t   NVIC_EnableIRQ(Info::irqNums[Info::TransmitWarning_IrqNumIndex]);
       \t   NVIC_EnableIRQ(Info::irqNums[Info::ReceiveWarning_IrqNumIndex]);
-      \t}\n\n
+      \t}
       
       \t/**
       \t * Enable and set priority of Miscellaneous interrupts in NVIC
@@ -202,7 +206,7 @@
       \t   enableNvicInterrupt(Info::irqNums[Info::BusOff_IrqNumIndex], nvicPriority);
       \t   enableNvicInterrupt(Info::irqNums[Info::TransmitWarning_IrqNumIndex], nvicPriority);
       \t   enableNvicInterrupt(Info::irqNums[Info::ReceiveWarning_IrqNumIndex], nvicPriority);
-      \t}\n\n
+      \t}
       
       \t/**
       \t * Disable Miscellaneous interrupts in NVIC
@@ -211,14 +215,14 @@
       \t   NVIC_DisableIRQ(Info::irqNums[Info::BusOff_IrqNumIndex]);
       \t   NVIC_DisableIRQ(Info::irqNums[Info::TransmitWarning_IrqNumIndex]);
       \t   NVIC_DisableIRQ(Info::irqNums[Info::ReceiveWarning_IrqNumIndex]);
-      \t}\n\n
+      \t}
       
       \t/**
       \t * Enable Message Buffer interrupts in NVIC
       \t */
       \tstatic void enableMessageBufferNvicInterrupts() {
       \t   NVIC_EnableIRQ(Info::irqNums[Info::MessageBuffer_IrqNumIndex]);
-      \t}\n\n
+      \t}
       
       \t/**
       \t * Enable and set priority of Message Buffer interrupts in NVIC
@@ -228,7 +232,7 @@
       \t */
       \tstatic void enableMessageBufferNvicInterrupts(uint32_t nvicPriority) {
       \t   enableNvicInterrupt(Info::irqNums[Info::MessageBuffer_IrqNumIndex], nvicPriority);
-      \t}\n\n
+      \t}
       
       \t/**
       \t * Disable Message Buffer interrupts in NVIC

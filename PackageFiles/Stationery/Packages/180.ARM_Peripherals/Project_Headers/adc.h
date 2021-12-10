@@ -198,6 +198,17 @@ enum AdcCompare {
    AdcCompare_InsideRangeInclusive  = (0<<8)|ADC_SC2_ACFE(1)|ADC_SC2_ACFGT(1)|ADC_SC2_ACREN(1), //!<  low <= ADC_value <= high
 };
 
+/**
+ * Voltage reference for ADC and PGA if present
+ */
+enum AdcRefSel {
+   AdcRefSel_0 = ADC_SC2_REFSEL(0b00),  /**< AdcRefSel_0                */
+   AdcRefSel_1 = ADC_SC2_REFSEL(0b01),  /**< AdcRefSel_1                */
+   AdcRefSel_Default = AdcRefSel_0,     /**< Default = VrefH/VrefL pins */
+   AdcRefSel_VrefHL  = AdcRefSel_0,     /**< VrefH/VrefL pins           */
+   AdcRefSel_VrefOut = AdcRefSel_1,     /**< VrefOut pin (internally generated ~1.2V or externally applied) */
+};
+
 #if defined(ADC_PGA_PGAEN_MASK)
 
 /**
@@ -205,8 +216,8 @@ enum AdcCompare {
  */
 enum AdcPgaMode {
    AdcPgaMode_Disabled    = ADC_PGA_PGAEN(0),                    // PGA Disabled
-   AdcPgaMode_LowPower    = ADC_PGA_PGAEN(0)|ADC_PGA_PGALPb(0),  // PGA Low power mode
-   AdcPgaMode_NormalPower = ADC_PGA_PGAEN(0)|ADC_PGA_PGALPb(1),  // PGA Normal power mode
+   AdcPgaMode_LowPower    = ADC_PGA_PGAEN(1)|ADC_PGA_PGALPb(0),  // PGA Low power mode
+   AdcPgaMode_NormalPower = ADC_PGA_PGAEN(1)|ADC_PGA_PGALPb(1),  // PGA Normal power mode
 };
 
 /**
@@ -367,6 +378,17 @@ public:
     */
    void setAveraging(AdcAveraging adcAveraging) const {
       adc->SC3 = (adc->SC3&~(ADC_SC3_AVGE_MASK|ADC_SC3_AVGS_MASK))|adcAveraging;
+   }
+
+   /**
+    * Set ADC  (and PGA if present) voltage reference
+    *
+    * @param adcRefSel Reference to select
+    *
+    * @note The PGA requires use of AdcRefSel_VrefOut (~1.2V)
+    */
+   void setReference(AdcRefSel adcRefSel=AdcRefSel_Default) {
+      adc->SC2 = (adc->SC2&~ADC_SC2_REFSEL_MASK)|adcRefSel;
    }
 
    /**
@@ -537,6 +559,9 @@ public:
        * @param adcPgaMode Mode to operate in (or disabled)
        * @param adcPgaGain Gain
        * @param adcPgaChop PGA chopping control
+       *
+       * @note Chopping should only be used in conjunction with even-numbered averaging
+       *       since the chopping is applied between consecutive conversions.
        */
       void configurePga(AdcPgaMode adcPgaMode, AdcPgaGain adcPgaGain=AdcPgaGain_1, AdcPgaChop adcPgaChop=AdcPgaChop_Enabled) const {
          adc->PGA = adcPgaMode|adcPgaGain|adcPgaChop;
@@ -544,16 +569,23 @@ public:
 
       /**
        * Measure PGA offset
-       * The PGA should be configured before doing this.
+       * The PGA should be configured for intended use before doing this.
        *
-       * @note To apply offset correction subtract subtract [(pga_offset_measurement*(G+1))/(64+1)] from
-       *       the ADC result, where G is the PGA gain during ADC operation
+       * @note  If chopping is enabled, then the returned value represents the residual offset after
+       *        chopping and can be applied to correct later conversions done with chopping enabled.
+       *        If chopping is disabled, then the return value is the entire offset and may be
+       *        applied to correct conversions with chopping disabled.
+       *
+       * @note To apply offset correction subtract <b>[(pga_offset_measurement*(Gain+1))/(64+1)]</b> from
+       *       the ADC result, where Gain is the PGA gain during actual ADC operation.
        *
        * @return Offset measurement. (pga_offset * (64+1))
        */
       int measurePgaOffset() const {
-         // ToDo
-         return 0;
+         adc->PGA |= ADC_PGA_PGAOFSM_MASK;
+         int offset = readAnalogue(PGA_CHANNEL);
+         adc->PGA &= ~ADC_PGA_PGAOFSM_MASK;
+         return offset;
       }
 #else
       /**
@@ -1027,6 +1059,15 @@ public:
    }
 
    /**
+    * Set ADC  (and PGA if present) voltage reference
+    *
+    * @param adcRefSel Reference to select
+    */
+   static void setReference(AdcRefSel adcRefSel=AdcRefSel_Default) {
+      adc->SC2 = (adc->SC2&~ADC_SC2_REFSEL_MASK)|adcRefSel;
+   }
+
+   /**
     * ADC calibrate.
     * Calibrates the ADC before first use.
     *
@@ -1244,16 +1285,23 @@ public:
 
       /**
        * Measure PGA offset
-       * The PGA should be configured before doing this.
+       * The PGA should be configured for intended use before doing this.
        *
-       * @note To apply offset correction subtract subtract [(pga_offset_measurement*(G+1))/(64+1)] from
-       *       the ADC result, where G is the PGA gain during ADC operation
+       * @note  If chopping is enabled, then the returned value represents the residual offset after
+       *        chopping and can be applied to correct later conversions done with chopping enabled.
+       *        If chopping is disabled, then the return value is the entire offset and may be
+       *        applied to correct conversions with chopping disabled.
+       *
+       * @note To apply offset correction subtract <b>[(pga_offset_measurement*(Gain+1))/(64+1)]</b> from
+       *       the ADC result, where Gain is the PGA gain during actual ADC operation.
        *
        * @return Offset measurement. (pga_offset * (64+1))
        */
       static int measurePgaOffset() {
-         // ToDo
-         return 0;
+         adc->PGA |= ADC_PGA_PGAOFSM_MASK;
+         int offset = readAnalogue(PGA_CHANNEL);
+         adc->PGA &= ~ADC_PGA_PGAOFSM_MASK;
+         return offset;
       }
 #else
       /**
@@ -1390,45 +1438,6 @@ public:
       static void enableHardwareConversion(AdcPretrigger adcPretrigger, AdcInterrupt adcInterrupt, AdcDma adcDma) {
          AdcBase_T::enableHardwareConversion(channel|adcInterrupt, adcPretrigger, adcDma);
       }
-#endif
-#if defined(ADC_PGA_PGAEN_MASK)
-#if defined(ADC_PGA_PGACHPb_MASK)
-      /**
-       * Configure Programmable Gain Amplifier.
-       * Only affects the single channel associated with the PGA.
-       *
-       * @param adcPgaMode Mode to operate in (or disabled)
-       * @param adcPgaGain Gain
-       * @param adcPgaChop PGA chopping control
-       */
-      static void configurePga(AdcPgaMode adcPgaMode, AdcPgaGain adcPgaGain=AdcPgaGain, AdcPgaChop adcPgaChop=AdcPgaChop_Enabled) {
-         AdcBase_T::configurePga(adcPgaMode, adcPgaGain, AdcPgaChop_Enabled);
-      }
-
-      /**
-       * Measure PGA offset
-       * The PGA should be configured before doing this.
-       *
-       * @note To apply offset correction subtract subtract [(pga_offset_measurement*(G+1))/(64+1)] from
-       *       the ADC result, where G is the PGA gain during ADC operation
-       *
-       * @return Offset measurement. (pga_offset * (64+1))
-       */
-      static int measurePgaOffset() {
-         retrun AdcBase_T::measurePgaOffset();
-      }
-#else
-      /**
-       * Configure Programmable Gain Amplifier.
-       * Only affects the single channel associated with the PGA.
-       *
-       * @param adcPgaMode Mode to operate in (or disabled)
-       * @param adcPgaGain Gain
-       */
-      static void configurePga(AdcPgaMode adcPgaMode, AdcPgaGain adcPgaGain=AdcPgaGain_1) {
-         AdcBase_T::configurePga(adcPgaMode, adcPgaGain);
-      }
-#endif
 #endif
    };
 

@@ -10,9 +10,11 @@
    
    <template><![CDATA[
       \t//! Pin number in Info table for SCK if mapped to a pin
-      \tstatic constexpr int sckPin  = 0;\n\n
+      \tstatic constexpr int sckPin  = 0;
+      
       \t//! Pin number in Info table for SIN if mapped to a pin
-      \tstatic constexpr int sinPin  = 1;\n\n
+      \tstatic constexpr int sinPin  = 1;
+      
       \t//! Pin number in Info table for SOUT if mapped to a pin
       \tstatic constexpr int soutPin  = 2;\n\n
    ]]></template>
@@ -58,17 +60,17 @@
    <template><![CDATA[
       \t//! Default communication clock phase and clock polarity (CPHA+CPOL)
       \tstatic constexpr uint32_t mode = 
-      \t   SPI_CTAR_MODE($(spi_mode));\n\n
+      \t   SPI_CTAR_MODE($(spi_mode));
       
       \t//! Default communication order (MSB/LSB first)
       \tstatic constexpr uint32_t lsbfe = 
-      \t   SPI_CTAR_LSBFE($(spi_lsbfe));\n\n
+      \t   SPI_CTAR_LSBFE($(spi_lsbfe));
       
       \tstatic uint32_t getClockFrequency() {
       \t   return SystemBusClock;
-      \t}\n\n
+      \t}
 
-      \t//! Default speed (Hz)\n
+      \t//! Default speed (Hz)
       \tstatic constexpr uint32_t speed = 
       \t   $(speed);\n\n
    ]]></template>

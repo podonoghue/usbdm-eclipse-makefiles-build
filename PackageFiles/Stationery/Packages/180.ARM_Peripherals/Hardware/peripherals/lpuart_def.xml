@@ -1,12 +1,16 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE peripheralPage SYSTEM "_menu.dtd" >
-<!-- uart_def.xml -->
+<!-- lpuart_def.xml -->
 <!--
 Devices using this peripheral: 
 -->
 <peripheralPage xmlns:xi="http://www.w3.org/2001/XInclude" name="_instance" description="UART">
 
    <xi:include href="_default_instance.xml"/>
+
+   <xi:include href="_default_pcr.xml"/>
+   
+   <xi:include href="_mapPinsOption.xml"/>
 
    <aliasOption key="/PCC/pcc_lpuart$(_instance)"          optional="true" constant="false"/> 
 
@@ -73,10 +77,10 @@ Devices using this peripheral:
       <aliasOption key="/SIM/sim_sopt5_lpuart$(_instance)txsrc"  constant="false" optional="true" />
       <aliasOption key="/SIM/sim_sopt5_lpuart$(_instance)rxsrc"  constant="false" optional="true" />
    </category>
-  
+   
    <template><![CDATA[
       \t//! IRQ numbers for hardware
-      \tstatic constexpr IRQn_Type irqNums[]  = $(_name)_IRQS;\n\n
+      \tstatic constexpr IRQn_Type irqNums[]  = $(_name)_IRQS;
    
       \t//! Number of IRQs for hardware
       \tstatic constexpr uint32_t irqCount  = sizeof(irqNums)/sizeof(irqNums[0]);\n\n
@@ -90,13 +94,13 @@ Devices using this peripheral:
      -  _IRQHandler is appended to the pattern (only)
    -->
    <irqOption name="irqHandlingMethod"  
-      description="LPUART Tx/Rx interrupt handler"
+      description="Interrupt handlers"
       toolTip="This selection allow the interrupt handlers for this peripheral to be installed using several different methods"
       pattern="^LPUART%i_?(RxTx)?$"
       classHandler="%c%i::irqHandler" />
-      
+        
    <template><![CDATA[
-       \t//! Class based callback handler has been installed in vector table\n
+       \t//! Class based callback handler has been installed in vector table
        \tstatic constexpr bool irqHandlerInstalled = $(irqHandlingMethod);\n\n
    ]]></template>
        
@@ -113,9 +117,11 @@ Devices using this peripheral:
    </choiceOption>
 
    <template><![CDATA[
-       \t//! Default IRQ level\n
+       \t//! Default IRQ level
        \tstatic constexpr NvicPriority irqLevel =  $(?irqHandlingMethod:$(irqLevel):NvicPriority_NotInstalled);\n\n
    ]]></template>
+   
+   <xi:include href="_clockOption.xml"/>
       
    <validate
       class="net.sourceforge.usbdm.deviceEditor.validators.LpuartValidate">
@@ -128,17 +134,18 @@ Devices using this peripheral:
          
    <template><![CDATA[
    \t//! Default Baud rate used if not explicitly given
-   \tstatic constexpr uint32_t defaultBaudRate = $(defaultBaudRate);\n\n
+   \tstatic constexpr uint32_t defaultBaudRate = $(defaultBaudRate);
    
    \t//! Default buffer size for receive queue when interrupt driven
-   \tstatic constexpr unsigned receiveBufferSize = $(receiveBufferSize);\n\n
+   \tstatic constexpr unsigned receiveBufferSize = $(receiveBufferSize);
 
    \t//! Default buffer size for transmit queue when interrupt driven
-   \tstatic constexpr unsigned transmitBufferSize = $(transmitBufferSize);\n\n
+   \tstatic constexpr unsigned transmitBufferSize = $(transmitBufferSize);
 
    #if defined(PCC_PCC_LPUART$(_instance)_CGC_MASK)
    \t//! Default clock source
-   \tstatic constexpr PccDiv2Clock defaultClockSource = PccDiv2Clock_Firc;\n\n
+   \tstatic constexpr PccDiv2Clock defaultClockSource = PccDiv2Clock_Firc;
+   
    \t/**
    \t * Set LPUART$(_instance) input clock source.
    \t *
@@ -151,7 +158,7 @@ Devices using this peripheral:
    \tstatic void setClockSource(PccDiv2Clock pccDiv2Clock) {
    \t   PccInfo::setLpuart$(_instance)ClockSource(pccDiv2Clock);
    \t}
-   #endif\n\n
+   #endif
    
    \t/**
    \t * Get input clock frequency
@@ -167,18 +174,7 @@ Devices using this peripheral:
    \t   return SimInfo::getLpuartClock();
    #endif
    \t}\n\n
-
    ]]></template>
-   
-   <template><![CDATA[
-      \t//! Base value for PCR (excluding MUX value)
-      \tstatic constexpr uint32_t defaultPcrValue  = 0;\n\n
-   ]]></template>
-   
-   <xi:include href="_mapPinsOption.xml"/>
-   
-   <xi:include href="_clockOption.xml"/>
 
    <signals/>
-   
 </peripheralPage>

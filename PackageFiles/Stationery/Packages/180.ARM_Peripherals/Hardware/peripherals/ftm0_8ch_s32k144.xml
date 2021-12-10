@@ -21,7 +21,7 @@
 
    <template><![CDATA[
       \t//! Number of channels implemented
-      \tstatic constexpr unsigned NumChannels = $(NumChannels);\n\n
+      \tstatic constexpr unsigned NumChannels = $(NumChannels);
 
       \t//! Number of channel event vectors implemented
       \tstatic constexpr unsigned NumChannelVectors = $(NumChannelVectors);\n\n
@@ -93,13 +93,13 @@
       <choice value="1" name="Enabled" />
    </binaryOption>
    <template><![CDATA[
-      \t//! Timer external input frequency \n
-      \tstatic constexpr uint32_t ftmExternalClock =  $(ftmExternalClock);\n\n
+      \t//! Timer external input frequency
+      \tstatic constexpr uint32_t ftmExternalClock =  $(ftmExternalClock);
       
-      \t//! Default Timer Modulo\n
-      \tstatic constexpr uint32_t modulo = FTM_MOD_MOD($(ftm_mod));\n\n
+      \t//! Default Timer Modulo
+      \tstatic constexpr uint32_t modulo = FTM_MOD_MOD($(ftm_mod));
 
-      \t//! Default value for SC register\n
+      \t//! Default value for SC register
       \tstatic constexpr uint32_t sc  = 
       \t    FTM_SC_CPWMS($(ftm_sc_cpwms))| // Centre-Aligned PWM Select
       \t    FTM_SC_CLKS($(ftm_sc_clks))|  // Clock Mode Selection
@@ -115,7 +115,7 @@
          bitmask="0x3F" 
          bitList="CH2TRIG,CH3TRIG,CH4TRIG,CH5TRIG,CH0TRIG,CH1TRIG," 
          />
-      <binaryOption name="ftm_exttrig_inittrigen" description="Initialization Trigger Enable"
+      <binaryOption name="ftm_exttrig_inittrigen" description="Initialisation Trigger Enable"
          toolTip="Enables the generation of the trigger when the FTM counter \n
           is equal to the CNTIN register.">
          <choice value="0" name="Disabled" />
@@ -123,10 +123,10 @@
       </binaryOption>
    </category>   
    <template><![CDATA[
-      \t//! Default value for EXTTRIG) register\n
+      \t//! Default value for EXTTRIG) register
       \tstatic constexpr uint32_t exttrig  = 
       \t    $(ftm_exttrig_trig)|                              // External Trigger Enable
-      \t    FTM_EXTTRIG_INITTRIGEN($(ftm_exttrig_inittrigen));    // Initialization Trigger Enable \n\n
+      \t    FTM_EXTTRIG_INITTRIGEN($(ftm_exttrig_inittrigen));    // Initialisation Trigger Enable \n\n
    ]]></template>
 
    <category name="Advanced" description="Advanced options">

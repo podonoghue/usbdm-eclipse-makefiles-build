@@ -256,26 +256,26 @@ Devices using this peripheral:
    \t   uint32_t c1;
    \t   uint32_t dly0;
    \t   uint32_t dly1;
-   \t};\n\n
+   \t};
    
    \t// Number of PDB channels
-   \tstatic constexpr size_t numChannels = 2;\n\n
+   \tstatic constexpr size_t numChannels = 2;
    
    \t// Default values for channel registers
    \tstatic constexpr PdbChannel pdb_ch[numChannels] = {
    \t{                   // Channel[0] Control Register 1
    \t   PDB_C1_BB($(pdb_ch0_c1_bb)) |   // Pre-Trigger Back-to-Back Operation Enable
    \t   PDB_C1_TOS($(pdb_ch0_c1_tos)) |  // Pre-Trigger Output Select
-   \t   PDB_C1_EN($(pdb_ch0_c1_en)),    // Pre-Trigger Enable\n
-   \t   PDB_DLY_DLY($(pdb_ch0_dly0)),  // Channel[0] pre-trigger delay 0\n
-   \t   PDB_DLY_DLY($(pdb_ch0_dly1)),  // Channel[0] pre-trigger delay 1\n
+   \t   PDB_C1_EN($(pdb_ch0_c1_en)),    // Pre-Trigger Enable
+   \t   PDB_DLY_DLY($(pdb_ch0_dly0)),  // Channel[0] pre-trigger delay 0
+   \t   PDB_DLY_DLY($(pdb_ch0_dly1)),  // Channel[0] pre-trigger delay 1
    \t},
    \t{                   // Channel[1] Control Register 1
    \t   PDB_C1_BB($(pdb_ch1_c1_bb)) |   // Channel Pre-Trigger Back-to-Back Operation Enable
    \t   PDB_C1_TOS($(pdb_ch1_c1_tos)) |  // Channel Pre-Trigger Output Select
-   \t   PDB_C1_EN($(pdb_ch1_c1_en)),    // Channel Pre-Trigger Enable\n
-   \t   PDB_DLY_DLY($(pdb_ch1_dly0)),  // Channel[1] pre-trigger delay 0\n
-   \t   PDB_DLY_DLY($(pdb_ch1_dly1)),  // Channel[1] pre-trigger delay 1\n
+   \t   PDB_C1_EN($(pdb_ch1_c1_en)),    // Channel Pre-Trigger Enable
+   \t   PDB_DLY_DLY($(pdb_ch1_dly0)),  // Channel[1] pre-trigger delay 0
+   \t   PDB_DLY_DLY($(pdb_ch1_dly1)),  // Channel[1] pre-trigger delay 1
    \t},
    \t};\n\n
    ]]></template>
@@ -338,22 +338,22 @@ Devices using this peripheral:
    \tstruct PdbDac {
    \t   uint32_t dacintc;
    \t   uint32_t dacint;
-   \t};\n\n
+   \t};
    
    \t// Number of DACs
-   \tstatic constexpr size_t numDacs = 2;\n\n
+   \tstatic constexpr size_t numDacs = 2;
    
    \t// Default values for DAC registers
    \tstatic constexpr PdbDac pdb_dac[numDacs] = {
    \t{                    // DAC[0] Interval register
-   \t   PDB_INTC_EXT($(pdb_int0c_ext)) | // DAC External Trigger Input Enable\n
-   \t   PDB_INTC_TOE($(pdb_int0c_toe)),  // DAC Interval Trigger Enable\n
-   \t   PDB_INT_INT($(pdb_int0_int)),   // DAC Interval\n
+   \t   PDB_INTC_EXT($(pdb_int0c_ext)) | // DAC External Trigger Input Enable
+   \t   PDB_INTC_TOE($(pdb_int0c_toe)),  // DAC Interval Trigger Enable
+   \t   PDB_INT_INT($(pdb_int0_int)),   // DAC Interval
    \t},
    \t{                    // DAC[1] Interval register
-   \t   PDB_INTC_EXT($(pdb_int1c_ext)) | // DAC External Trigger Input Enable\n
-   \t   PDB_INTC_TOE($(pdb_int1c_toe)),  // DAC Interval Trigger Enable\n
-   \t   PDB_INT_INT($(pdb_int1_int)),   // DAC Interval\n
+   \t   PDB_INTC_EXT($(pdb_int1c_ext)) | // DAC External Trigger Input Enable
+   \t   PDB_INTC_TOE($(pdb_int1c_toe)),  // DAC Interval Trigger Enable
+   \t   PDB_INT_INT($(pdb_int1_int)),   // DAC Interval
    \t},
    \t};\n\n
    ]]></template>
@@ -423,13 +423,12 @@ Devices using this peripheral:
    <template><![CDATA[
    
    \t// Number of PDB pulse outputs
-   \tstatic constexpr size_t numPulseOutputs = 2;\n\n
+   \tstatic constexpr size_t numPulseOutputs = 2;
    
    \tstatic constexpr uint32_t pdb_podly[numPulseOutputs] = {
-   
    \t   // Pulse Output[0] Delays {
    \t   PDB_PODLY_DLY1($(pdb_po0_dly_dly1)) |  // Delay 1
-   \t   PDB_PODLY_DLY2($(pdb_po0_dly_dly2)),   // Delay 2\n\n
+   \t   PDB_PODLY_DLY2($(pdb_po0_dly_dly2)),   // Delay 2
    
    \t   // Pulse Output[1] Delays
    \t   PDB_PODLY_DLY1($(pdb_po1_dly_dly1)) |  // Delay 1

@@ -240,7 +240,7 @@ public:
     * This is used to wait until a FlexRAM write has completed.
     *
     * @return true  => Operation complete and FlexRAM idle
-    * @return false => timeout or flash not available
+    * @return false => Timeout or flash not available
     */
    static bool waitUntilFlexIdle() {
       usbdm_assert(isFlashAvailable(), "Flash use in unsuitable run mode");

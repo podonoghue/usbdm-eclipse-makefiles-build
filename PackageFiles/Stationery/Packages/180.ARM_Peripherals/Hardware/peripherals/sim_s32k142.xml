@@ -173,7 +173,7 @@
          \tenum SimAdc$(instance)TriggerSelect {
          \t   SimAdc$(instance)TriggerSelect_Pdb    = SIM_ADCOPT_ADC$(instance)TRGSEL(0b0), //!< PDB output
          \t   SimAdc$(instance)TriggerSelect_Trgmux = SIM_ADCOPT_ADC$(instance)TRGSEL(0b1), //!< TRGMUX output
-         \t};\n\n
+         \t};
          
          \t/**
          \t * ADC$(instance) pre-trigger source selection
@@ -206,7 +206,7 @@
          \t */
          \tstatic void setAdc$(instance)Trigger(SimAdc$(instance)TriggerSelect simAdc$(instance)TriggerSelect) {
          \t   sim->ADCOPT = (sim->ADCOPT & SIM_ADCOPT_ADC$(instance)TRGSEL_MASK) | simAdc$(instance)TriggerSelect;
-         \t}\n\n
+         \t}
          
          \t/**
          \t * Selects ADC$(instance) pre-trigger source
@@ -229,7 +229,7 @@
       \t   SimAdcChannelInterleave_ADC0_SE5_ADC1_SE15 = SIM_CHIPCTL_ADC_INTERLEAVE_EN(0b0010),
       \t   SimAdcChannelInterleave_ADC0_SE8_ADC1_SE8  = SIM_CHIPCTL_ADC_INTERLEAVE_EN(0b0100),
       \t   SimAdcChannelInterleave_ADC0_SE9_ADC1_SE9  = SIM_CHIPCTL_ADC_INTERLEAVE_EN(0b1000),
-      \t};\n\n
+      \t};
       
       \t/**
       \t * Selects supply voltage to monitor 
@@ -244,7 +244,7 @@
       \t   SimAdcSupplyMonitor_Vdd_lv       = SIM_CHIPCTL_ADC_SUPPLYEN(1)|SIM_CHIPCTL_ADC_SUPPLY(5),
       \t   SimAdcSupplyMonitor_Reserved6    = SIM_CHIPCTL_ADC_SUPPLYEN(1)|SIM_CHIPCTL_ADC_SUPPLY(6),
       \t   SimAdcSupplyMonitor_Reserved7    = SIM_CHIPCTL_ADC_SUPPLYEN(1)|SIM_CHIPCTL_ADC_SUPPLY(7),
-      \t};\n\n
+      \t};
       
       \t/**
       \t * Select Clock to output on CLKOUT pin
@@ -267,7 +267,7 @@
       \t   SimClkOutSelect_QSPI_SFIF_CLK     = SIM_CHIPCTL_CLKOUTEN(1)|SIM_CHIPCTL_CLKOUTSEL(13), //!< QSPI
       \t   SimClkOutSelect_RTC_CLK           = SIM_CHIPCTL_CLKOUTEN(1)|SIM_CHIPCTL_CLKOUTSEL(14), //!< RTC_CLK 
       \t   SimClkOutSelect_QSPI_2xSFIF_CLK   = SIM_CHIPCTL_CLKOUTEN(1)|SIM_CHIPCTL_CLKOUTSEL(15), //!< QSPI
-      \t};\n\n
+      \t};
       
       \t/**
       \t *  Selects division for external clock
@@ -281,7 +281,7 @@
       \t   SimClkOutDiv_Div6     = SIM_CHIPCTL_CLKOUTDIV(5), //!< Divide by 6
       \t   SimClkOutDiv_Div7     = SIM_CHIPCTL_CLKOUTDIV(6), //!< Divide by 7
       \t   SimClkOutDiv_Div8     = SIM_CHIPCTL_CLKOUTDIV(7), //!< Divide by 8
-      \t};\n\n
+      \t};
       
       \t/**
       \t *  Controls PDB back-to-back operation
@@ -292,7 +292,7 @@
       \tenum SimPdbBackToBack {
       \t   SimPdbBackToBack_Independent = SIM_CHIPCTL_PDB_BB_SEL(0), //!< PDB0 & PDB1 2 independent rings
       \t   SimPdbBackToBack_Linked      = SIM_CHIPCTL_PDB_BB_SEL(1), //!< PDB0 & PDB1 1 linked ring
-      \t};\n\n
+      \t};
 
       \t/**
       \t *  Selects which RAM regions are retained
@@ -319,7 +319,7 @@
       \t   sim->CHIPCTL =
       \t         (sim->CHIPCTL&~SIM_CHIPCTL_PDB_BB_SEL_MASK) |
       \t         simPdbBackToBack;
-      \t}\n\n
+      \t}
 
       \t/**
       \t * Control which SRAM contents are retained across resets
@@ -330,7 +330,7 @@
       \t   sim->CHIPCTL =
       \t         (sim->CHIPCTL&~(SIM_CHIPCTL_SRAMU_RETEN_MASK|SIM_CHIPCTL_SRAML_RETEN_MASK)) |
       \t         simRamRetention;
-      \t}\n\n
+      \t}
 
       \t// Chip Control register (CHIPCTL)
       \tstatic constexpr uint32_t chipctl = 
@@ -343,7 +343,7 @@
       \t   SIM_CHIPCTL_CLKOUTEN($(chipctl_clkouten))|        // CLKOUT pin enable
       \t   SIM_CHIPCTL_CLKOUTDIV($(chipctl_clkoutdiv))|       // CLKOUT pin divider
       \t   SIM_CHIPCTL_CLKOUTSEL($(chipctl_clkoutsel))|       // CLKOUT pin clock source select
-      \t   SIM_CHIPCTL_ADC_INTERLEAVE_EN($(chipctl_adc_interleave_en_3)|$(chipctl_adc_interleave_en_2)|$(chipctl_adc_interleave_en_1)|$(chipctl_adc_interleave_en_0)); // ADC interleave channel enable\n\n
+      \t   SIM_CHIPCTL_ADC_INTERLEAVE_EN($(chipctl_adc_interleave_en_3)|$(chipctl_adc_interleave_en_2)|$(chipctl_adc_interleave_en_1)|$(chipctl_adc_interleave_en_0)); // ADC interleave channel enable
       
       \t/**
       \t * Selects the clock and divider for output on the CLKOUT pin
@@ -358,7 +358,7 @@
       \t   sim->CHIPCTL |= simClkOutDiv;
       \t   // Enable clock 
       \t   sim->CHIPCTL |= simClkOutSelect;
-      \t}\n\n
+      \t}
 
       \t/**
       \t * Selects the internal supply monitored on ADC0 internal channel 0.
@@ -369,14 +369,14 @@
       \tstatic void setAdcSupplyMonitoring(SimAdcSupplyMonitor simAdcSupplyMonitor) {
       \t   sim->CHIPCTL = (sim->CHIPCTL&~(SIM_CHIPCTL_ADC_SUPPLYEN_MASK|SIM_CHIPCTL_ADC_SUPPLY_MASK)) |
       \t                    simAdcSupplyMonitor;
-      \t}\n\n
+      \t}
       
       \t/**
       \t * Clear all ADC channel interleaving
       \t */
       \tstatic void clearAdcChannelInterleave() {
       \t   sim->CHIPCTL &= ~SIM_CHIPCTL_ADC_INTERLEAVE_EN_MASK;
-      \t}\n\n
+      \t}
          
       \t/**
       \t * Enable ADC channel interleave
@@ -385,7 +385,7 @@
       \t */
       \tstatic void enableAdcChannelInterleave(SimAdcChannelInterleave simAdcChannelInterleave) {
       \t   sim->CHIPCTL |= simAdcChannelInterleave;
-      \t}\n\n
+      \t}
          
       \t/**
       \t * Disable ADC channel interleave
@@ -394,7 +394,7 @@
       \t */
       \tstatic void disableAdcChannelInterleave(SimAdcChannelInterleave simAdcChannelInterleave) {
       \t   sim->CHIPCTL &= ~simAdcChannelInterleave;
-      \t}\n\n   
+      \t}   
 
       \t/**
       \t * Software trigger to TRGMUX.
@@ -414,7 +414,7 @@
       \t */
       \tstatic constexpr uint32_t getLpo128Frequency() {
       \t   return $(system_lpo_frequency);
-      \t}\n\n
+      \t}
       
       \t/**
       \t * Get External RTC clock input Frequency RTC_CLKIN
@@ -446,7 +446,7 @@
       \t */
       \tstatic void setRtcClockSource(SimRtcClockSource simRtcClockSource) {
       \t   sim->LPOCLKS = (sim->LPOCLKS&~SIM_LPOCLKS_RTCCLKSEL_MASK)|simRtcClockSource;
-      \t}\n\n
+      \t}
    
       \t/**
       \t * Get RTC_CLK Clock
@@ -479,7 +479,7 @@
          \t */
          \tstatic void enable$(instance)Clock() {
          \t   sim->LPOCLKS |= SIM_LPOCLKS_$(instance::toupper)CLKEN_MASK;
-         \t}\n\n
+         \t}
       
          \t/**
          \t * Disable $(instance::toupper)_CLK clock
@@ -511,7 +511,7 @@
       \t */
       \tstatic uint32_t getLpo32kFrequency() {
       \t   return (sim->LPOCLKS && SIM_LPOCLKS_LPO32KCLKEN_MASK)?(getLpo128Frequency()/4):0;
-      \t}\n\n
+      \t}
       
       \t/**
       \t * Get LPO1K_CLK Clock
@@ -520,7 +520,7 @@
       \t */
       \tstatic uint32_t getLpo1kFrequency() {
       \t   return (sim->LPOCLKS && SIM_LPOCLKS_LPO1KCLKEN_MASK)?(getLpo32kFrequency()/32):0;
-      \t}\n\n
+      \t}
    
       \t/**
       \t * Set Source for LPO clock
@@ -529,7 +529,7 @@
       \t */
       \tstatic void setLpoClockSource(SimLpoClockSource simLpoClockSource) {
       \t   sim->LPOCLKS = (sim->LPOCLKS&~SIM_LPOCLKS_LPOCLKSEL_MASK)|simLpoClockSource;
-      \t}\n\n
+      \t}
    
       \t/**
       \t * Get LPO_CLK Clock
@@ -601,7 +601,7 @@
          \tenum SimFtm$(instance)Fault0Select {
          \t   SimFtm$(instance)Fault0Select_Flt0   = SIM_FTMOPT0_FTM$(instance)FLTxSEL(0b000), //!< FTM$(instance)_FLT0 pin
          \t   SimFtm$(instance)Fault0Select_TrgMux = SIM_FTMOPT0_FTM$(instance)FLTxSEL(0b001), //!< FTM$(instance) Trigger Multiplexor
-         \t};\n\n
+         \t};
          
          \t/**
          \t * FTM$(instance) Fault 1 input selection
@@ -611,7 +611,7 @@
          \tenum SimFtm$(instance)Fault1Select {
          \t   SimFtm$(instance)Fault1Select_Flt1   = SIM_FTMOPT0_FTM$(instance)FLTxSEL(0b000), //!< FTM$(instance)_FLT1 pin
          \t   SimFtm$(instance)Fault1Select_TrgMux = SIM_FTMOPT0_FTM$(instance)FLTxSEL(0b010), //!< FTM$(instance) Trigger Multiplexor
-         \t};\n\n
+         \t};
          
          \t/**
          \t * FTM$(instance) Fault 2 input selection

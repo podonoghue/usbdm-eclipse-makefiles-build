@@ -129,9 +129,12 @@ protected:
 //      write("residual flash=").write(partitionInformation[partition].eeepromSize>>10).writeln("K)");
 
       if (isFlexRamConfigured()) {
+//         console.write("flashController->FCNFG.FTFL_FCNFG_EEERDY = ").writeln((bool)(flashController->FCNFG&FTFL_FCNFG_EEERDY_MASK));
 //         console.writeln("Flex RAM is already configured");
+         // Note: This means, even when using the debug build, if the FlexRAM has been previously configured then real FlexRAM will be used.
          return FLASH_ERR_OK;
       }
+//      console.write("flashController->FCNFG.FTFL_FCNFG_EEERDY = ").writeln((bool)(flashController->FCNFG&FTFL_FCNFG_EEERDY_MASK));
       if ((eepromSizes[eeprom].size*MINIMUM_BACKING_RATIO)>(partitionInformation[partition].eeepromSize)) {
 //         console.writeln("Backing ratio (Flash/EEPROM) is too small\n");
          USBDM::setErrorCode(E_FLASH_INIT_FAILED);
@@ -231,7 +234,7 @@ public:
     * This is used to wait until a FlexRAM write has completed.
     *
     * @return true  => Operation complete and FlexRAM idle
-    * @return false => timeout or flash not available
+    * @return false => Timeout or flash not available
     */
    static bool waitUntilFlexIdle() {
       usbdm_assert(isFlashAvailable(), "Flash use in unsuitable run mode");
@@ -513,7 +516,7 @@ public:
    /**
     * Assign from NonvolatileArray array.
     *
-    * @param [in] other NonvolatileArray to assign from
+    * @param[in] other NonvolatileArray to assign from
     *
     * This adds a wait for the Flash to be updated after each element is assigned
     *

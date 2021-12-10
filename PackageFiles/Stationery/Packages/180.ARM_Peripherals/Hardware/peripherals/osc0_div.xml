@@ -1,5 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE peripheralPage SYSTEM "_menu.dtd" >
+
+<!-- 
+      Predefined symbols generated for current peripheral
+      _base_class FTM0 => Ftm
+      _instance   FTM0 => 0
+      _class      FTM0 => Ftm0
+      _name       FTM0 => FTM0
+ -->
+
 <!-- osc0_div.xml -->
 <peripheralPage xmlns:xi="http://www.w3.org/2001/XInclude" name="_instance" description="Oscillator" >
 
@@ -123,21 +132,21 @@
    </projectActionList>
          
    <template><![CDATA[
-      \t//! Frequency of OSC Clock or Crystal\n
-      \tstatic constexpr uint32_t osc_clock = $(osc_clock)UL;\n\n
+      \t//! Frequency of OSC Clock or Crystal
+      \tstatic constexpr uint32_t osc_clock = $(osc_clock)UL;
       
       \t//! Frequency of 32K OSC Clock or Crystal (if applicable)
-      \tstatic constexpr uint32_t osc32k_clock = $(osc32k_clock)UL;\n\n
+      \tstatic constexpr uint32_t osc32k_clock = $(osc32k_clock)UL;
       
-      \t//! Oscillator control register\n
+      \t//! Oscillator control register
       \tstatic constexpr uint32_t cr =
       \t   OSC_CR_ERCLKEN($(osc_cr_erclken))  | // External Reference Enable
       \t   OSC_CR_EREFSTEN($(osc_cr_erefsten)) | // External Reference Stop Enable
-      \t   OSC_CR_SCP($(osc_cr_scp));       // Oscillator load capacitance\n\n 
+      \t   OSC_CR_SCP($(osc_cr_scp));       // Oscillator load capacitance
 
-      \t//! OSC Clock divider register\n
+      \t//! OSC Clock divider register
       \tstatic constexpr uint32_t div =
-      \t   OSC_DIV_ERPS($(osc_div_erps));   // ERCLK prescaler\n\n
+      \t   OSC_DIV_ERPS($(osc_div_erps));   // ERCLK prescaler
       
       \t/**
       \t * Get OSC clock (internal, assumed available)
@@ -146,7 +155,7 @@
       \t */
       \tstatic constexpr uint32_t getOscClock() {
       \t   return osc_clock;
-      \t}\n\n
+      \t}
       
       \t/**
       \t * Get OSC clock (external, gated by OSC_CR_ERCLKEN)
@@ -157,7 +166,7 @@
       \t   return (osc->CR&OSC_CR_ERCLKEN_MASK)?
       \t      (osc_clock/(1<<((osc->DIV&OSC_DIV_ERPS_MASK)>>OSC_DIV_ERPS_SHIFT))):
       \t      0;
-      \t}\n\n
+      \t}
       
       \t/**
       \t * Get OSC32KCLK clock

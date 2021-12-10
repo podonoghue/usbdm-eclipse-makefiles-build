@@ -264,10 +264,10 @@ Devices using this peripheral:
    \t   uint32_t c1;
    \t   uint32_t dly0;
    \t   uint32_t dly1;
-   \t};\n\n
+   \t};
    
    \t// Number of PDB channels
-   \tstatic constexpr size_t numChannels = 2;\n\n
+   \tstatic constexpr size_t numChannels = 2;
    
    \t// Default values for channel registers
    \tstatic constexpr PdbChannel pdb_ch[numChannels] = {
@@ -291,7 +291,6 @@ Devices using this peripheral:
    <template><![CDATA[
    \t// Number of DACs
    \tstatic constexpr size_t numDacs = 0;\n\n
-   
    ]]></template>
 
    <bitmaskOption name="pdb_poen" 
@@ -359,13 +358,12 @@ Devices using this peripheral:
    <template><![CDATA[
    
    \t// Number of PDB pulse outputs
-   \tstatic constexpr size_t numPulseOutputs = 2;\n\n
+   \tstatic constexpr size_t numPulseOutputs = 2;
    
    \tstatic constexpr uint32_t pdb_podly[numPulseOutputs] = {
-   
    \t   // Pulse Output[0] Delays {
    \t   PDB_PODLY_DLY1($(pdb_po0_dly_dly1)) |  // Delay 1
-   \t   PDB_PODLY_DLY2($(pdb_po0_dly_dly2)),   // Delay 2\n\n
+   \t   PDB_PODLY_DLY2($(pdb_po0_dly_dly2)),   // Delay 2
    
    \t   // Pulse Output[1] Delays
    \t   PDB_PODLY_DLY1($(pdb_po1_dly_dly1)) |  // Delay 1

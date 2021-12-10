@@ -149,7 +149,7 @@
      \t      default:
      \t         return 0;
      \t   }
-     \t}\n\n
+     \t}
      
      \t/**
      \t *  Get input clock frequency for ADC
@@ -163,17 +163,17 @@
    
    <template><![CDATA[
      \t//! Default resolution
-     \tstatic constexpr uint32_t defaultAdcResolution = ADC_CFG1_MODE($(adc_cfg1_mode));\n\n
+     \tstatic constexpr uint32_t defaultAdcResolution = ADC_CFG1_MODE($(adc_cfg1_mode));
 
      \t//! Default value for ADCx_CFG1 register
      \tstatic constexpr uint32_t cfg1  = 
      \t    ADC_CFG1_ADICLK(0)|
      \t    ADC_CFG1_MODE($(adc_cfg1_mode))|
-     \t    ADC_CFG1_ADIV($(adc_cfg1_adiv));\n\n
+     \t    ADC_CFG1_ADIV($(adc_cfg1_adiv));
      
      \t//! Default value for ADCx_CFG2 register
      \t static constexpr uint32_t cfg2  = 
-     \t    ADC_CFG2_SMPLTS($(adc_cfg2_smplts));\n\n
+     \t    ADC_CFG2_SMPLTS($(adc_cfg2_smplts));
 
      
      \t//! Default value for ADCx_SC2 register
@@ -183,14 +183,13 @@
      \t    ADC_SC2_ACREN($(adc_sc2_acren))|
      \t    ADC_SC2_REFSEL($(adc_sc2_refsel))|
      \t    ADC_SC2_DMAEN($(adc_sc2_dmaen))|
-     \t    ADC_SC2_ADTRG($(adc_sc2_adtrg));\n\n
+     \t    ADC_SC2_ADTRG($(adc_sc2_adtrg));
      
      \t//! Default value for ADCx_CV1 register
-     \tstatic constexpr uint32_t cv1  = $(adc_cv1);\n\n
+     \tstatic constexpr uint32_t cv1  = $(adc_cv1);
      
      \t//! Default value for ADCx_CV2 register
      \tstatic constexpr uint32_t cv2  = $(adc_cv2);\n\n
-     
    ]]></template>
    
    <signals/>

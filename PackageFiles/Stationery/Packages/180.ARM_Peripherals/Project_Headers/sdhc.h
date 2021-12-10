@@ -144,12 +144,22 @@ public:
    }
 
 public:
+   /**
+    * Configures all mapped pins associated with this peripheral
+    */
+   static void __attribute__((always_inline)) configureAllPins() {
+      // Configure pins
+      Info::initPCRs();
+   }
 
    /**
-    * Basic enable SDHC.
+    * Basic enable SDHC
+    * Includes enabling clock and configuring all pins if mapPinsOnEnable is selected on configuration
     */
    static void enable() {
-
+      if (Info::mapPinsOnEnable) {
+         configureAllPins();
+      }
       // Enable clock to CMP interface
       Info::enableClock();
    }
@@ -170,7 +180,7 @@ public:
     * @return Response
     */
    uint32_t getCommandResponse(unsigned num) {
-      usbdm_assert(num<4, "Illegal response number");
+      usbdm_assert(num<(sizeofArray(sdhc->CMDRSP)), "Illegal response number");
       return sdhc->CMDRSP[num];
    }
 

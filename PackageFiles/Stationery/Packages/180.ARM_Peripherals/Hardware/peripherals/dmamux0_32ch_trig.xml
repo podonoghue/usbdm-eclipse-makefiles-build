@@ -99,7 +99,7 @@
    
    <template><![CDATA[
       \t// Number of DMA channels implemented
-      \tstatic constexpr unsigned NumChannels = $(/DMA0/NumChannels);\n\n
+      \tstatic constexpr unsigned NumChannels = $(/DMA0/NumChannels);
       
       \tstatic constexpr uint8_t chcfg0_source  = DMAMUX_CHCFG_SOURCE($(dma_chcfg0));
       \tstatic constexpr uint8_t chcfg1_source  = DMAMUX_CHCFG_SOURCE($(dma_chcfg1));
@@ -132,7 +132,7 @@
       \tstatic constexpr uint8_t chcfg28_source = DMAMUX_CHCFG_SOURCE($(dma_chcfg28));
       \tstatic constexpr uint8_t chcfg29_source = DMAMUX_CHCFG_SOURCE($(dma_chcfg29));
       \tstatic constexpr uint8_t chcfg30_source = DMAMUX_CHCFG_SOURCE($(dma_chcfg30));
-      \tstatic constexpr uint8_t chcfg31_source = DMAMUX_CHCFG_SOURCE($(dma_chcfg31));
+      \tstatic constexpr uint8_t chcfg31_source = DMAMUX_CHCFG_SOURCE($(dma_chcfg31));\n
    ]]></template>
 
 </peripheralPage>

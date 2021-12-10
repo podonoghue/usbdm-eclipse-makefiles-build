@@ -382,7 +382,7 @@
          
    <template><![CDATA[
       \t//! Not present on these devices
-      \tstatic constexpr int ERRATA_E2448 = 0;\n\n
+      \tstatic constexpr int ERRATA_E2448 = 0;
       
       \tenum ClockMode : uint8_t {
       \t   ClockMode_FEI      = 0,
@@ -391,21 +391,21 @@
       \t   ClockMode_BLPI,
       \t   ClockMode_FBE,
       \t   ClockMode_BLPE,
-      \t};\n\n
+      \t};
       
       \t//! Frequency of Slow Internal Reference Clock [~32kHz]
-      \tstatic constexpr uint32_t system_slow_irc_clock = $(system_slow_irc_clock)UL;\n\n
+      \tstatic constexpr uint32_t system_slow_irc_clock = $(system_slow_irc_clock)UL;
       
       \t//! Frequency of Fast Internal Reference Clock [~4MHz]
-      \tstatic constexpr uint32_t system_fast_irc_clock = $(system_fast_irc_clock)UL;\n\n
+      \tstatic constexpr uint32_t system_fast_irc_clock = $(system_fast_irc_clock)UL;
 
       \t//! Structure for clock configurations
       \tstruct ClockInfo {
       \t   //! System Clock Divider Register 1
-      \t   const uint32_t clkdiv1;\n\n
+      \t   const uint32_t clkdiv1;
       
       \t   //! Clock Mode
-      \t   const ClockMode clockMode:8;\n\n
+      \t   const ClockMode clockMode:8;
       
       \t   //! Control Register 1 - FRDIV, IRCLKEN, IREFSTEN, (-CLKS, -IREFS)
       \t   const uint8_t c1;
@@ -421,7 +421,7 @@
       \t   const uint8_t c7;
       \t   //! Control Register 8 - LOCRE1, CME1
       \t   const uint8_t c8;
-      \t};\n\n
+      \t};
       
       \t/**
       \t * Get MCGERCLK
@@ -435,7 +435,7 @@
       \t      case MCG_C7_OSCSEL(0) : return Osc0Info::getOscClock();
       \t      case MCG_C7_OSCSEL(1) : return RtcInfo::getInternalClock();
       \t   }
-      \t}\n\n
+      \t}
       
       \t/**
       \t * Get Internal MCGIRCLK (ungated by MCG_C1_IRCLKEN_MASK)
@@ -453,7 +453,7 @@
       \t      else {
       \t         return system_slow_irc_clock;
       \t      }
-      \t}\n\n
+      \t}
       
       \t/**
       \t * Get MCGIRCLK (gated by MCG_C1_IRCLKEN_MASK)
@@ -471,47 +471,47 @@
    ]]></template>
    
    <template name="ClockConfig" dim="/SIM/numberOfClockSettings" namespace="all" ><![CDATA[
-      \t$(ClockConfig.://-- missing name for configuration --),
+      \t$(ClockConfig.://-- missing name for configuration --),\n
    ]]></template>
    
    <template name="McgClockInfoEntries" dim="/SIM/numberOfClockSettings" namespace="all" ><![CDATA[
-      \t   {  // $(ClockConfig.) ($(clock_mode.))\n
+      \t   {  // $(ClockConfig.) ($(clock_mode.))
       \t      
       \t      //! SIM CLKDIV1 System Clock Divider Register 1
       \t      SIM_CLKDIV1_OUTDIV4($(/SIM/sim_clkdiv1_outdiv4.:0))|  // Flash clock
       \t      SIM_CLKDIV1_OUTDIV3($(/SIM/sim_clkdiv1_outdiv3.:0))|  // FlexBus clock
       \t      SIM_CLKDIV1_OUTDIV2($(/SIM/sim_clkdiv1_outdiv2.:0))|  // Bus clock
-      \t      SIM_CLKDIV1_OUTDIV1($(/SIM/sim_clkdiv1_outdiv1.:0)),  // Core/system clock\n\n
+      \t      SIM_CLKDIV1_OUTDIV1($(/SIM/sim_clkdiv1_outdiv1.:0)),  // Core/system clock
               
       \t      //! Clock Mode
-      \t      McgInfo::$(clock_mode.),\n\n
+      \t      McgInfo::$(clock_mode.),
               
       \t      //! Control Register 1 - Excluding CLKS, IREFS
       \t      MCG_C1_FRDIV($(mcg_c1_frdiv.))   | // FRDIV    FLL External Reference Divider
       \t      MCG_C1_IRCLKEN($(mcg_c1_irclken.)) | // IRCLEN   Internal Reference Clock Enable
-      \t      MCG_C1_IREFSTEN($(mcg_c1_irefsten.)), // IREFSTEN Internal Reference Stop Enable\n\n
+      \t      MCG_C1_IREFSTEN($(mcg_c1_irefsten.)), // IREFSTEN Internal Reference Stop Enable
               
       \t      //! Control Register 2 - Excluding LP
       \t      MCG_C2_LOCRE0($(mcg_c2_locre0.)) | // LOCRE0  Loss of Clock Reset Enable
       \t      MCG_C2_RANGE0($(mcg_c2_range.)) | // RANGE   Frequency Range Select
-      \t      MCG_C2_IRCS($(mcg_c2_ircs.)),    // IRCS    Internal Reference Clock Select\n\n
+      \t      MCG_C2_IRCS($(mcg_c2_ircs.)),    // IRCS    Internal Reference Clock Select
               
       \t      //! Control Register 4
       \t      MCG_C4_DMX32($(mcg_c4_dmx32.))     | // DMX32    DCO lock range
-      \t      MCG_C4_DRST_DRS($(mcg_c4_drst_drs.)),   // DRST_DRS DCO Range Select\n\n
+      \t      MCG_C4_DRST_DRS($(mcg_c4_drst_drs.)),   // DRST_DRS DCO Range Select
               
       \t      //! Control Register 6
       \t      MCG_C6_CME0($(mcg_c6_cme0.)), // CME0   Clock Monitor Enable
               
       \t      //! Status and Control Register
-      \t      MCG_SC_FCRDIV($(mcg_sc_fcrdiv.)), // FCRDIV Internal Clock Reference Divider\n\n
+      \t      MCG_SC_FCRDIV($(mcg_sc_fcrdiv.)), // FCRDIV Internal Clock Reference Divider
               
       \t      //! Control Register 7
-      \t      MCG_C7_OSCSEL($(mcg_c7_oscsel.)), // OSCSEL MCG OSC Clock Select\n\n
+      \t      MCG_C7_OSCSEL($(mcg_c7_oscsel.)), // OSCSEL MCG OSC Clock Select
               
       \t      //! Control Register 8
       \t      MCG_C8_LOCRE1($(mcg_c8_locre1.)) | // LOCRE1 RTC Loss of Clock Reset Enable
-      \t      MCG_C8_CME1($(mcg_c8_cme1.)),    // CME1   Clock Monitor Enable 1\n
-      \t   },
+      \t      MCG_C8_CME1($(mcg_c8_cme1.)),    // CME1   Clock Monitor Enable 1
+      \t   },\n
    ]]></template>
 </peripheralPage>

@@ -42,7 +42,7 @@
    </choiceOption>
 
    <template><![CDATA[
-      \t//! Default value for Low Voltage Detect Status And Control 1 register\n
+      \t//! Default value for Low Voltage Detect Status And Control 1 register
       \tstatic constexpr uint32_t pmc_lvdsc1  = 
       \t#ifdef PMC_LVDSC1_LVDV
       \t   PMC_LVDSC1_LVDV($(pmc_lvdsc1_lvdv))   | // Low-Voltage Detect Voltage Select
@@ -70,14 +70,14 @@
 
    <template><![CDATA[
       \t//! Frequency of Low Power Oscillator (LPO) Clock [~1kHz]
-      \tstatic constexpr uint32_t system_low_power_clock = $(system_low_power_clock)UL;\n\n
+      \tstatic constexpr uint32_t system_low_power_clock = $(system_low_power_clock)UL;
       
-      \t//! Default value for Low Voltage Detect Status And Control 2 register\n
+      \t//! Default value for Low Voltage Detect Status And Control 2 register
       \tstatic constexpr uint32_t pmc_lvdsc2  = 
       \t#ifdef PMC_LVDSC2_LVWV
       \t   PMC_LVDSC2_LVWV($(pmc_lvdsc2_lvwv))   | // Low-Voltage Warning Voltage Select
       \t#endif
-      \t   PMC_LVDSC2_LVWIE($(pmc_lvdsc2_lvwie));  // Low-Voltage Warning Interrupt Enable\n\n
+      \t   PMC_LVDSC2_LVWIE($(pmc_lvdsc2_lvwie));  // Low-Voltage Warning Interrupt Enable
 
       \t/**
       \t * Get LPO clock
@@ -106,11 +106,11 @@
 
    <template><![CDATA[
       \t#ifdef PMC_REGSC_BGEN
-      \t//! Default value for Regulator Status And Control register\n
+      \t//! Default value for Regulator Status And Control register
       \tstatic constexpr uint32_t pmc_regsc  = 
       \t   PMC_REGSC_BGEN($(pmc_regsc_bgen)) | // Bandgap Enable In VLPx Operation
-      \t   PMC_REGSC_BGBE($(pmc_regsc_bgbe));  // Bandgap Buffer Enable   \n\n
-      \t#endif
+      \t   PMC_REGSC_BGBE($(pmc_regsc_bgbe));  // Bandgap Buffer Enable  
+      \t#endif\n\n
    ]]></template>
 
    <xi:include href="_irqOption.xml"/>

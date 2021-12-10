@@ -5,10 +5,8 @@
 <peripheralPage xmlns:xi="http://www.w3.org/2001/XInclude" name="_instance" description="Programmable Interrupt Timer">
 
    <template><![CDATA[
-   
-      \t//! Number of PIT channels\n
+      \t//! Number of PIT channels
       \tstatic constexpr uint32_t NumChannels  = 2;\n\n
-      
    ]]></template>
 
    <xi:include href="pit_shared_irq_def.xml"/>

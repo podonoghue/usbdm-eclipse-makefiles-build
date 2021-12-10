@@ -47,7 +47,7 @@
    \t#ifdef USB_CLK_RECOVER_IRC_EN_REG_EN
    \t      USB_CLK_RECOVER_IRC_EN_REG_EN($(usb_clk_recovery_irc_en_en))|  // Enable power regulator
    \t#endif
-   \t      USB_CLK_RECOVER_IRC_EN_IRC_EN($(usb_clk_recovery_irc_en_en));  // Enable\n\n
+   \t      USB_CLK_RECOVER_IRC_EN_IRC_EN($(usb_clk_recovery_irc_en_en));  // Enable
 
    \t// Clock recovery options
    \tstatic constexpr uint32_t clk_recovery_ctrl =

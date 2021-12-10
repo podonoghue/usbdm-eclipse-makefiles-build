@@ -59,7 +59,7 @@
       #ifdef SMC_PMCTRL_LPWUI
       \t// Power Mode Control Register
       \tstatic constexpr uint8_t pmctrl =  
-      \t   SMC_PMCTRL_LPWUI($(smc_pmctrl_lpwui:0));   // Low Power Wake Up on Interrupt\n\n
+      \t   SMC_PMCTRL_LPWUI($(smc_pmctrl_lpwui:0));   // Low Power Wake Up on Interrupt
       #endif\n\n
    ]]></template>
       
@@ -135,22 +135,20 @@
    ]]></template>
    
    <template><![CDATA[
-      #ifndef SMC_STOPCTRL_RAM2PO
-      #define SMC_STOPCTRL_RAM2PO(x) 0
-      #endif
-
       \t// VLLS Control Register
       \tstatic constexpr uint8_t stopctrl =  
       #ifdef SMC_STOPCTRL_PSTOPO
       \t   SMC_STOPCTRL_PSTOPO($(smc_stopctrl_pstopo:0)) |  // Partial Stop Option (if present)
-      #endif\n\n
+      #endif
+      #ifdef SMC_STOPCTRL_PORPO
       \t   SMC_STOPCTRL_PORPO($(smc_stopctrl_porpo:0)) |  // POR Power Option
+      #endif
       #ifdef SMC_STOPCTRL_LPOPO
       \t   SMC_STOPCTRL_LPOPO($(smc_stopctrl_lpopo:0)) |  // POR Power Option (if present)
-      #endif\n\n
+      #endif
       #ifdef SMC_STOPCTRL_RAM2PO
       \t   SMC_STOPCTRL_RAM2PO($(smc_stopctrl_ram2po:0)) |  // RAM2 Power Option (if present)
-      #endif\n\n
+      #endif
       \t   SMC_STOPCTRL_LLSM($(smc_stopctrl_llsm:0));   // LLS or VLLS Mode Control\n\n
    ]]></template>
 

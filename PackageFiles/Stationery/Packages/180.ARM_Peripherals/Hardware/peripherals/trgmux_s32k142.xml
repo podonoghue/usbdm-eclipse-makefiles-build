@@ -147,7 +147,7 @@
       \tTrgmuxSelection_Res7D             = 0b1111101,
       \tTrgmuxSelection_Res7E             = 0b1111110,
       \tTrgmuxSelection_Res7F             = 0b1111111,
-   };\n\n
+   };
 
    /**
     * Controls locking of trigger multiplexor
@@ -258,7 +258,7 @@
          \tstatic void setFtm$(instance)HardwareTrigger(TrgmuxSelection trgmuxSelection, TrgmuxLock trgmuxLock=TrgmuxLock_Off) {
          \t   trgmux().TRGMUX_FTM$(instance) = (trgmux().TRGMUX_FTM$(instance) & ~TRGMUX_TRGMUXn_SEL0_MASK ) | 
          \t         TRGMUX_TRGMUXn_SEL0(trgmuxSelection) | trgmuxLock;
-         \t}\n\n
+         \t}
          
          \t/** 
          \t * Select trigger source for FTM$(instance) Fault0 trigger
@@ -269,7 +269,7 @@
          \tstatic void setFtm$(instance)Fault0Trigger(TrgmuxSelection trgmuxSelection, TrgmuxLock trgmuxLock=TrgmuxLock_Off) {
          \t   trgmux().TRGMUX_FTM$(instance) = (trgmux().TRGMUX_FTM$(instance) & ~TRGMUX_TRGMUXn_SEL1_MASK ) | 
          \t         TRGMUX_TRGMUXn_SEL1(trgmuxSelection) | trgmuxLock;
-         \t}\n\n
+         \t}
          
          \t/** 
          \t * Select trigger source for FTM$(instance) Fault1 trigger
@@ -280,7 +280,7 @@
          \tstatic void setFtm$(instance)Fault1Trigger(TrgmuxSelection trgmuxSelection, TrgmuxLock trgmuxLock=TrgmuxLock_Off) {
          \t   trgmux().TRGMUX_FTM$(instance) = (trgmux().TRGMUX_FTM$(instance) & ~TRGMUX_TRGMUXn_SEL2_MASK ) | 
          \t         TRGMUX_TRGMUXn_SEL2(trgmuxSelection) | trgmuxLock;
-         \t}\n\n
+         \t}
          
          \t/** 
          \t * Select trigger source for FTM$(instance) Fault2 trigger

@@ -49,7 +49,9 @@
       \t   DAC_C0_DACRFS($(dac_c0_dacrfs))        | // Reference Select
       \t   DAC_C0_DACTRGSEL($(dac_c0_dactrgsel))     | // Trigger Select
       \t   DAC_C0_LPEN($(dac_c0_lpen))          | // Low Power Control
+      \t#if defined(DAC_C0_DACBWIEN)
       \t   DAC_C0_DACBWIEN($(dac_c0_dacbwien))      | // Buffer Watermark Interrupt Enable
+      \t#endif
       \t   DAC_C0_DACBTIEN($(dac_c0_dacbtien))      | // Buffer Read Pointer Top Flag Interrupt Enable
       \t   DAC_C0_DACBBIEN($(dac_c0_dacbbien));       // Buffer Read Pointer Bottom Flag Interrupt Enable\n\n
    ]]></template>

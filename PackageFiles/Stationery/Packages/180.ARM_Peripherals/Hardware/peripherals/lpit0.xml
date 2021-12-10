@@ -55,7 +55,7 @@
 
    <template><![CDATA[
        \t//! Number of LPIT channels\n
-       \tstatic constexpr uint32_t NumChannels = 4;\n\n
+       \tstatic constexpr uint32_t NumChannels = 4;
        \t//! Default IRQ level\n
        \tstatic constexpr uint32_t irqLevel =  $(irqLevel);\n\n
    ]]></template>
@@ -74,11 +74,11 @@
    <template><![CDATA[
    
       \t//! Default value for LPIT load value register\n
-      \tstatic constexpr uint32_t lpit_ldval  = $(lpit_ldval);\n\n
+      \tstatic constexpr uint32_t lpit_ldval  = $(lpit_ldval);
       
       \t//! LPIT operation in debug mode\n
       \tstatic constexpr uint32_t mcr = 
-      \t   LPIT_MCR_DBG_EN($(lpit_mcr_dbg_en));  // Debug Enable Bit\n\n
+      \t   LPIT_MCR_DBG_EN($(lpit_mcr_dbg_en));  // Debug Enable Bit
       
       \t/**
       \t * Get clock frequency

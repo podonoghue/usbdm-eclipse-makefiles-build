@@ -6,7 +6,6 @@
  * @date     13 April 2016
  */
 #include "pin_mapping.h"
-#include "utilities.h"
 
 namespace USBDM {
 

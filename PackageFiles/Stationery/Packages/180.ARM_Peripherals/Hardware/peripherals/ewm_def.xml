@@ -12,12 +12,13 @@
    
    <template><![CDATA[
       \t//! Pin number in Info table for EWM input if mapped to a pin
-      \tstatic constexpr int inputPin  = 0;\n\n
+      \tstatic constexpr int inputPin  = 0;
+      
       \t//! Pin number in Info table for EWM output if mapped to a pin
-      \tstatic constexpr int outputPin  = 1;\n\n
+      \tstatic constexpr int outputPin  = 1;
 
       \t//! IRQ numbers for hardware
-      \tstatic constexpr IRQn_Type irqNums[]  = $(_name)_IRQS;\n\n
+      \tstatic constexpr IRQn_Type irqNums[]  = $(_name)_IRQS;
    
       \t//! Number of IRQs for hardware
       \tstatic constexpr uint32_t irqCount  = sizeof(irqNums)/sizeof(irqNums[0]);\n\n
@@ -31,7 +32,7 @@
 
    <!-- Template is added to class within pin_mapping.h -->
    <template><![CDATA[
-       \t//! Class based callback handler has been installed in vector table\n
+       \t//! Class based callback handler has been installed in vector table
        \tstatic constexpr bool irqHandlerInstalled = $(irqHandlingMethod);\n\n
    ]]></template>
        
@@ -48,7 +49,7 @@
    </choiceOption>
 
    <template><![CDATA[
-       \t//! Default IRQ level\n
+       \t//! Default IRQ level
        \tstatic constexpr NvicPriority irqLevel =  $(?irqHandlingMethod:$(irqLevel):NvicPriority_NotInstalled);\n\n
    ]]></template>
    

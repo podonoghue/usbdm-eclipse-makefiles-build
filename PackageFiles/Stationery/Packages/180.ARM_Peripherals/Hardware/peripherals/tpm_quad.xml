@@ -80,13 +80,13 @@
       <choice value="1" name="Enabled" />
    </binaryOption>
    <template><![CDATA[
-      \t//! Timer external input frequency \n
-      \tstatic constexpr uint32_t tpmExternalClock =  $(tpmExternalClock);\n\n
+      \t//! Timer external input frequency 
+      \tstatic constexpr uint32_t tpmExternalClock =  $(tpmExternalClock);
       
-      \t//! Default Timer Modulo\n
-      \tstatic constexpr uint32_t modulo =TPM_MOD_MOD($(tpm_mod));\n\n
+      \t//! Default Timer Modulo
+      \tstatic constexpr uint32_t modulo =TPM_MOD_MOD($(tpm_mod));
 
-      \t//! Default value for SC register\n
+      \t//! Default value for SC register
       \tstatic constexpr uint32_t sc  = 
       \t    TPM_SC_CPWMS($(tpm_sc_cpwms))|  // Centre-Aligned PWM Select
       \t    TPM_SC_CMOD($(tpm_sc_cmod)) |  // Clock Mode Selection
@@ -113,7 +113,7 @@
       <choice value="1" name="Channels 0 and 1 are combined" />
    </binaryOption>
    <template><![CDATA[
-      \t//! Default value for COMBINE register\n
+      \t//! Default value for COMBINE register
       \tstatic constexpr uint32_t combine  = 
       \t    TPM_COMBINE_COMSWAP0($(tpm_combine_comswap0)) | // Combine Channel 0 and 1 Swap
       \t    TPM_COMBINE_COMBINE0($(tpm_combine_combine0));  // Combine Channels 0 and 1\n\n
@@ -130,7 +130,7 @@
       <choice value="1" name="The channel polarity is active low" />
    </binaryOption>
    <template><![CDATA[
-      \t//! Default value for POL register\n
+      \t//! Default value for POL register
       \tstatic constexpr uint32_t polarity  = 
       \t    TPM_POL_POL1($(tpm_pol_pol1)) | // Channel 1 Polarity
       \t    TPM_POL_POL0($(tpm_pol_pol0));  // Channel 0 Polarity\n\n
@@ -143,7 +143,7 @@
       toolTip="Filter/delay is (4 * CHxFVAL) clock cycles, 0 disables"
       min="0" max="15" value="0" />
    <template><![CDATA[
-      \t//! Default value for FILTER register\n
+      \t//! Default value for FILTER register
       \tstatic constexpr uint32_t filter  = 
       \t    TPM_FILTER_CH1FVAL($(tpm_filter_ch1val)) | // Channel 1 Filter Value
       \t    TPM_FILTER_CH0FVAL($(tpm_filter_ch0val));  // Channel 0 Filter Value\n\n
@@ -167,14 +167,16 @@
    <projectActionList id = "tpm_files" >
       <copy source="Project_Headers/tpm.h"         target="Project_Headers/tpm.h"          overwrite="true" derived="true" />
       <copy source="Snippets/tpm-pwm-example.cpp"  target="Snippets/tpm-pwm-example.cpp"   overwrite="true" derived="true"/>
+      <copy source="Snippets/tpm-ic-example.cpp"   target="Snippets/tpm-ic-example.cpp"    overwrite="true" derived="true"/>
+      <copy source="Snippets/tpm-oc-example.cpp"   target="Snippets/tpm-oc-example.cpp"    overwrite="true" derived="true"/>
    </projectActionList>
          
    <template><![CDATA[
       \t/** Minimum resolution for PWM interval */
-      \tstatic constexpr uint32_t minimumResolution=$(minimumResolution);\n\n
+      \tstatic constexpr uint32_t minimumResolution=$(minimumResolution);
       
       \t/** Minimum usable interval in ticks */      
-      \tstatic constexpr uint32_t minimumInterval=$(minimumInterval);\n\n
+      \tstatic constexpr uint32_t minimumInterval=$(minimumInterval);
       
       \t/**
       \t * Get input clock frequency

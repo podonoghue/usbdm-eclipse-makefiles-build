@@ -265,26 +265,26 @@ Devices using this peripheral:
    \t   uint32_t c1;
    \t   uint32_t dly0;
    \t   uint32_t dly1;
-   \t};\n\n
+   \t};
    
    \t// Number of PDB channels
-   \tstatic constexpr size_t numChannels = 2;\n\n
+   \tstatic constexpr size_t numChannels = 2;
    
    \t// Default values for channel registers
    \tstatic constexpr PdbChannel pdb_ch[numChannels] = {
    \t{                   // Channel[0] Control Register 1
    \t   PDB_C1_BB($(pdb_ch0_c1_bb)) |   // Pre-Trigger Back-to-Back Operation Enable
    \t   PDB_C1_TOS($(pdb_ch0_c1_tos)) |  // Pre-Trigger Output Select
-   \t   PDB_C1_EN($(pdb_ch0_c1_en)),    // Pre-Trigger Enable\n
-   \t   PDB_DLY_DLY($(pdb_ch0_dly0)),  // Channel[0] pre-trigger delay 0\n
-   \t   PDB_DLY_DLY($(pdb_ch0_dly1)),  // Channel[0] pre-trigger delay 1\n
+   \t   PDB_C1_EN($(pdb_ch0_c1_en)),    // Pre-Trigger Enable
+   \t   PDB_DLY_DLY($(pdb_ch0_dly0)),  // Channel[0] pre-trigger delay 0
+   \t   PDB_DLY_DLY($(pdb_ch0_dly1)),  // Channel[0] pre-trigger delay 1
    \t},
    \t{                   // Channel[1] Control Register 1
    \t   PDB_C1_BB($(pdb_ch1_c1_bb)) |   // Channel Pre-Trigger Back-to-Back Operation Enable
    \t   PDB_C1_TOS($(pdb_ch1_c1_tos)) |  // Channel Pre-Trigger Output Select
-   \t   PDB_C1_EN($(pdb_ch1_c1_en)),    // Channel Pre-Trigger Enable\n
-   \t   PDB_DLY_DLY($(pdb_ch1_dly0)),  // Channel[1] pre-trigger delay 0\n
-   \t   PDB_DLY_DLY($(pdb_ch1_dly1)),  // Channel[1] pre-trigger delay 1\n
+   \t   PDB_C1_EN($(pdb_ch1_c1_en)),    // Channel Pre-Trigger Enable
+   \t   PDB_DLY_DLY($(pdb_ch1_dly0)),  // Channel[1] pre-trigger delay 0
+   \t   PDB_DLY_DLY($(pdb_ch1_dly1)),  // Channel[1] pre-trigger delay 1
    \t},
    \t};\n\n
    ]]></template>
@@ -346,7 +346,6 @@ Devices using this peripheral:
    <template><![CDATA[
    \t// Number of DACs
    \tstatic constexpr size_t numDacs = 0;\n\n
-   
    ]]></template>
 
    <bitmaskOption name="pdb_poen" 
@@ -462,21 +461,21 @@ Devices using this peripheral:
    <template><![CDATA[
    
    \t// Number of PDB pulse outputs
-   \tstatic constexpr size_t numPulseOutputs = 4;\n\n
+   \tstatic constexpr size_t numPulseOutputs = 4;
    
    \tstatic constexpr uint32_t pdb_podly[numPulseOutputs] = {
    
    \t   // Pulse Output[0] Delays {
    \t   PDB_PODLY_DLY1($(pdb_po0_dly_dly1)) |  // Delay 1
-   \t   PDB_PODLY_DLY2($(pdb_po0_dly_dly2)),   // Delay 2\n\n
+   \t   PDB_PODLY_DLY2($(pdb_po0_dly_dly2)),   // Delay 2
    
    \t   // Pulse Output[1] Delays
    \t   PDB_PODLY_DLY1($(pdb_po1_dly_dly1)) |  // Delay 1
-   \t   PDB_PODLY_DLY2($(pdb_po1_dly_dly2)),   // Delay 2\n\n
+   \t   PDB_PODLY_DLY2($(pdb_po1_dly_dly2)),   // Delay 2
    
    \t   // PDB Pulse Output[2] Delays
    \t   PDB_PODLY_DLY1($(pdb_po2_dly_dly1)) |  // Delay 1
-   \t   PDB_PODLY_DLY2($(pdb_po2_dly_dly2)),   // Delay 2\n\n
+   \t   PDB_PODLY_DLY2($(pdb_po2_dly_dly2)),   // Delay 2
    
    \t   // PDB Pulse Output[3] Delays
    \t   PDB_PODLY_DLY1($(pdb_po3_dly_dly1)) |  // Delay 1

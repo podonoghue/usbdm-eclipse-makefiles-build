@@ -22,7 +22,6 @@
    <template><![CDATA[
       \t//! Minimum resolution for time interval setting
       \tstatic constexpr uint32_t minimumResolution = $(minimumResolution);\n\n
-      
    ]]></template>
    
    <choiceOption name="lptmr_psr_pcs" description="Clock Source"
@@ -87,7 +86,7 @@
     
    <template><![CDATA[
       \t//! Default Timer Compare value\n
-      \tstatic constexpr uint32_t cmr = $(lptmr_cmr);\n\n
+      \tstatic constexpr uint32_t cmr = $(lptmr_cmr);
       
       \t//! Default PSR value\n
       \tstatic constexpr uint32_t psr = 
@@ -161,7 +160,7 @@
   
    <template><![CDATA[
       \t//! IRQ numbers for hardware
-      \tstatic constexpr IRQn_Type irqNums[]  = $(_name)_IRQS;\n\n
+      \tstatic constexpr IRQn_Type irqNums[]  = $(_name)_IRQS;
    
       \t//! Number of IRQs for hardware
       \tstatic constexpr uint32_t irqCount  = sizeof(irqNums)/sizeof(irqNums[0]);\n\n
@@ -227,7 +226,7 @@
       \t   case LPTMR_PSR_PCS(2): return SimInfo::getRtcFrequency();
       \t   case LPTMR_PSR_PCS(3): return PccInfo::getLptmr0Frequency();
       \t   }
-      \t}\n\n
+      \t}
       
       \t/**
       \t * Get clock frequency
@@ -241,7 +240,7 @@
       \t      return freq;
       \t   }
       \t   return freq/(1<<(((lptmr->PSR&LPTMR_PSR_PRESCALE_MASK)>>LPTMR_PSR_PRESCALE_SHIFT)+1));
-      \t}\n\n
+      \t}
       
       \t/**
       \t * Get clock frequency

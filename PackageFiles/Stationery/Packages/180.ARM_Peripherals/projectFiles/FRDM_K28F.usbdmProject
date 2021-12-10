@@ -11,6 +11,8 @@
    <item key="$peripheral$ADC0_codeIdentifier"             value="myAdc" />
    <item key="$peripheral$FLEXBUS_codeIdentifier"          value="myFlexbusController" />
    <item key="$peripheral$FTM3_codeIdentifier"             value="myPwm" />
+   <item key="$peripheral$GPIOA_polarity"                  value="16" />
+   <item key="$peripheral$GPIOD_polarity"                  value="1" />
    <item key="$peripheral$SDHC0_codeIdentifier"            value="Sdhc" />
    <item key="$peripheral$SDRAMC_codeIdentifier"           value="mySDRamController" />
    <item key="$pin$PTA0_muxSetting_7"                      value="selected" />
@@ -143,11 +145,9 @@
    <item key="$signal$FXIO0_D8_descriptionSetting"         value="FlexioD8" />
    <item key="$signal$FXIO0_D9_descriptionSetting"         value="FlexioD9" />
    <item key="$signal$GPIOA_4_codeIdentifier"              value="Switch2" />
-   <item key="$signal$GPIOA_4_polarity"                    value="true" />
    <item key="$signal$GPIOB_5_codeIdentifier"              value="sdhcCardDetect" />
    <item key="$signal$GPIOB_5_descriptionSetting"          value="SDHC0_CARD_DETECT" />
    <item key="$signal$GPIOD_0_codeIdentifier"              value="Switch3" />
-   <item key="$signal$GPIOD_0_polarity"                    value="true" />
    <item key="$signal$GPIOE_6_codeIdentifier"              value="RedLED" />
    <item key="$signal$GPIOE_7_codeIdentifier"              value="GreenLED" />
    <item key="$signal$GPIOE_8_codeIdentifier"              value="BlueLED" />

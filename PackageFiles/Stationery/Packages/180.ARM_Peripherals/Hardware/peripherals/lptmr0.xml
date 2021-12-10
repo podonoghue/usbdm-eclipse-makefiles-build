@@ -71,10 +71,10 @@
       units="s"/>
     
    <template><![CDATA[
-      \t//! Default Timer Compare value\n
-      \tstatic constexpr uint32_t cmr = $(lptmr_cmr);\n\n
+      \t//! Default Timer Compare value
+      \tstatic constexpr uint32_t cmr = $(lptmr_cmr);
       
-      \t//! Default PSR value\n
+      \t//! Default PSR value
       \tstatic constexpr uint32_t psr = 
       \t   LPTMR_PSR_PRESCALE($(lptmr_psr_prescaler))|
       \t   LPTMR_PSR_PBYP($(lptmr_psr_pbyp))|
@@ -115,7 +115,7 @@
    </binaryOption>
    
    <template><![CDATA[
-      \t//! Default CSR value\n
+      \t//! Default CSR value
       \tstatic constexpr uint32_t csr = 
       \t   LPTMR_CSR_TIE($(lptmr_csr_tie))|
       \t   LPTMR_CSR_TMS($(lptmr_csr_tms))|
@@ -145,7 +145,7 @@
   
    <template><![CDATA[
       \t//! IRQ numbers for hardware
-      \tstatic constexpr IRQn_Type irqNums[]  = $(_name)_IRQS;\n\n
+      \tstatic constexpr IRQn_Type irqNums[]  = $(_name)_IRQS;
    
       \t//! Number of IRQs for hardware
       \tstatic constexpr uint32_t irqCount  = sizeof(irqNums)/sizeof(irqNums[0]);\n\n
@@ -165,7 +165,7 @@
       classHandler="%c%i::irqHandler" />
       
    <template><![CDATA[
-       \t//! Class based callback handler has been installed in vector table\n
+       \t//! Class based callback handler has been installed in vector table
        \tstatic constexpr bool irqHandlerInstalled = $(irqHandlingMethod);\n\n
    ]]></template>
        
@@ -182,7 +182,7 @@
    </choiceOption>
 
    <template><![CDATA[
-       \t//! Default IRQ level\n
+       \t//! Default IRQ level
        \tstatic constexpr NvicPriority irqLevel =  $(?irqHandlingMethod:$(irqLevel):NvicPriority_NotInstalled);\n\n
    ]]></template>
       
@@ -211,7 +211,7 @@
       \t   case LPTMR_PSR_PCS(2): return SimInfo::getErc32kClock();
       \t   case LPTMR_PSR_PCS(3): return Osc0Info::getOscerClock();
       \t   }
-      \t}\n\n
+      \t}
       
       \t/**
       \t * Get clock frequency
@@ -225,7 +225,7 @@
       \t      return freq;
       \t   }
       \t   return freq/(1<<(((lptmr->PSR&LPTMR_PSR_PRESCALE_MASK)>>LPTMR_PSR_PRESCALE_SHIFT)+1));
-      \t}\n\n
+      \t}
       
       \t/**
       \t * Get clock frequency

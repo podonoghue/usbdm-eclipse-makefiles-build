@@ -53,7 +53,7 @@ Devices using this peripheral:
          \t#ifdef SIM_SOPT1_OSC32KOUT
          \t   SIM_SOPT1_OSC32KOUT($(sim_sopt1_osc32kout:-1)) |    // 32K oscillator clock out pin select
          \t#endif
-         \t   SIM_SOPT1_OSC32KSEL($(sim_sopt1_osc32ksel));     // 32K oscillator clock select\n\n
+         \t   SIM_SOPT1_OSC32KSEL($(sim_sopt1_osc32ksel));     // 32K oscillator clock select
    
          \t/**
          \t * Get ERCLK32K clock frequency
@@ -96,7 +96,7 @@ Devices using this peripheral:
          \t */
          \tstatic void setPeripheralClock(SimPeripheralClockSource simPeripheralClockSource) {
          \t   sim->SOPT2 = (sim->SOPT2&~SIM_SOPT2_PLLFLLSEL_MASK) | simPeripheralClockSource;
-         \t}\n\n
+         \t}
          
          \t/**
          \t * Get Peripheral clock frequency
@@ -161,7 +161,7 @@ Devices using this peripheral:
          \t */
          \tstatic void setLpuartClock(SimLpuartClockSource simLpuartClockSource) {
          \t   sim->SOPT2 = (sim->SOPT2&~SIM_SOPT2_LPUARTSRC_MASK) | simLpuartClockSource;
-         \t}\n\n
+         \t}
    
          \t/**
          \t * Get LPUART input clock frequency
@@ -549,7 +549,7 @@ Devices using this peripheral:
          \t   SimAdc0Trigger_RtcSeconds   = SIM_SOPT7_ADC0TRGSEL(13),  //!< RTC Seconds
          \t   SimAdc0Trigger_Lptrm        = SIM_SOPT7_ADC0TRGSEL(14),  //!< LPTMR
          \t   SimAdc0Trigger_15           = SIM_SOPT7_ADC0TRGSEL(15),  //!< Reserved
-         \t};\n\n
+         \t};
          
          \t/**
          \t * Select the ADC0 trigger mode
@@ -636,7 +636,7 @@ Devices using this peripheral:
          \t   SimAdc1Trigger_RtcSeconds   = SIM_SOPT7_ADC1TRGSEL(13),  //!< RTC Seconds
          \t   SimAdc1Trigger_Lptrm        = SIM_SOPT7_ADC1TRGSEL(14),  //!< LPTMR
          \t   SimAdc1Trigger_15           = SIM_SOPT7_ADC1TRGSEL(15),  //!< Reserved
-         \t};\n\n
+         \t};
          
          \t/**
          \t * Select the ADC1 trigger mode
@@ -673,11 +673,11 @@ Devices using this peripheral:
          \t#ifdef SIM_SOPT7_ADC1ALTTRGEN
          \t   SIM_SOPT7_ADC1ALTTRGEN($(sim_sopt7_adc1alttrgen:-1)) |    // ADC1 alternate trigger enable
          \t   SIM_SOPT7_ADC1PRETRGSEL($(sim_sopt7_adc1pretrgsel:-1)) |   // ADC1 pretrigger select
-         \t   SIM_SOPT7_ADC1TRGSEL($(sim_sopt7_adc1trgsel:-1)) |      // ADC1 trigger select\n\n
+         \t   SIM_SOPT7_ADC1TRGSEL($(sim_sopt7_adc1trgsel:-1)) |      // ADC1 trigger select
          \t#endif
          \t   SIM_SOPT7_ADC0ALTTRGEN($(sim_sopt7_adc0alttrgen)) |    // ADC0 alternate trigger enable
          \t   SIM_SOPT7_ADC0PRETRGSEL($(sim_sopt7_adc0pretrgsel)) |   // ADC0 pretrigger select
-         \t   SIM_SOPT7_ADC0TRGSEL($(sim_sopt7_adc0trgsel));       // ADC0 trigger select\n\n
+         \t   SIM_SOPT7_ADC0TRGSEL($(sim_sopt7_adc0trgsel));       // ADC0 trigger select
       ]]></template>
    </category>
    

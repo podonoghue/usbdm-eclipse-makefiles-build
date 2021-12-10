@@ -508,25 +508,25 @@
       \t   ClockMode_SOSC,
       \t   ClockMode_SIRC,
       \t   ClockMode_SPLL,
-      \t};\n\n
+      \t};
       
       \t//! Frequency of Crystal or External Clock (XTAL/EXTAL)
-      \tstatic constexpr uint32_t system_sosc_frequency = $(system_sosc_frequency)UL;\n\n
+      \tstatic constexpr uint32_t system_sosc_frequency = $(system_sosc_frequency)UL;
       
       \t//! Frequency of Slow Internal Reference Clock [~32kHz]
-      \tstatic constexpr uint32_t system_sirc_frequency = $(system_sirc_frequency)UL;\n\n
+      \tstatic constexpr uint32_t system_sirc_frequency = $(system_sirc_frequency)UL;
       
       \t//! Frequency of Fast Internal Reference Clock [~4MHz]
-      \tstatic constexpr uint32_t system_firc_frequency = $(system_firc_frequency)UL;\n\n
+      \tstatic constexpr uint32_t system_firc_frequency = $(system_firc_frequency)UL;
 
       \t//! PLL Multiply factor starts at this value
-      \tstatic constexpr uint32_t pll_mult_offset = $(pll_mult_min);\n\n
+      \tstatic constexpr uint32_t pll_mult_offset = $(pll_mult_min);
 
       \t//! PLL post divider
-      \tstatic constexpr uint32_t pll_post_divider = $(pll_post_divider);\n\n
+      \tstatic constexpr uint32_t pll_post_divider = $(pll_post_divider);
 
       \t//! SCG_CLKOUT source
-      \tstatic constexpr uint32_t scg_clkoutcnfg = SCG_CLKOUTCNFG_CLKOUTSEL($(scg_clkoutcnfg_clkoutsel));\n\n
+      \tstatic constexpr uint32_t scg_clkoutcnfg = SCG_CLKOUTCNFG_CLKOUTSEL($(scg_clkoutcnfg_clkoutsel));
 
       \t//! Structure for a clock configuration
       \tstruct ClockSetting {
@@ -536,7 +536,7 @@
       \t   uint32_t div;
       \t   //! Configuration Register
       \t   uint32_t cfg;
-      \t};\n\n
+      \t};
 
       \t//! Structure for clock configuration for all clocks
       \tstruct ClockInfo {
@@ -575,7 +575,7 @@
       \t   uint32_t splldiv;
       \t   //! System PLL Configuration Register (MULT, PREDIV)
       \t   uint32_t spllcfg;
-      \t};\n\n
+      \t};
 
       \t/**
       \t * Get divided clock frequency as calculated by SCG_xCCR[DIVCORE, DIVBUS, DIVSLOW] dividers
@@ -587,7 +587,7 @@
       \t */
       \tstatic constexpr uint32_t getSystemDividedClock(uint32_t frequency, uint32_t divider) {
       \t   return (frequency/(divider + 1));
-      \t}\n\n
+      \t}
 
       \t/**
       \t * Get divided clock frequency as calculated by SCG_xDIV[xDIV2, xDIV2] dividers
@@ -609,7 +609,7 @@
       \tenum ScgFircRegulator {
       \t   ScgFircRegulator_Enabled  = SCG_FIRCCSR_FIRCREGOFF(0), //!< Fast IRC Regulator is enabled.
       \t   ScgFircRegulator_Disabled = SCG_FIRCCSR_FIRCREGOFF(1), //!< Fast IRC Regulator is disabled.
-      \t};\n\n
+      \t};
       
       \t/**
       \t * FIRC enable
@@ -617,7 +617,7 @@
       \tenum ScgFircControl {
       \t   ScgFircControl_Disabled = SCG_FIRCCSR_FIRCEN(0), //!< FIRC Disabled
       \t   ScgFircControl_Enabled  = SCG_FIRCCSR_FIRCEN(1), //!< FIRC Enabled
-      \t};\n\n
+      \t};
       
       \t/**
       \t * SIRC Enable in Low Power modes
@@ -625,7 +625,7 @@
       \tenum ScgSircLowPower {
       \t   ScgSircLowPower_Disabled = SCG_SIRCCSR_SIRCLPEN(0), //!< SIRC Disabled in low power
       \t   ScgSircLowPower_Enabled  = SCG_SIRCCSR_SIRCLPEN(1), //!< SIRC Enabled in low power
-      \t};\n\n
+      \t};
       
       \t/**
       \t * SIRC Enable in Stop modes
@@ -633,7 +633,7 @@
       \tenum ScgSircStop {
       \t   ScgSircStop_Disabled = SCG_SIRCCSR_SIRCSTEN(0), //!< SIRC Disabled in STOP
       \t   ScgSircStop_Enabled  = SCG_SIRCCSR_SIRCSTEN(1), //!< SIRC Enabled in STOP
-      \t};\n\n
+      \t};
       
       \t/**
       \t * SIRC enable
@@ -641,7 +641,7 @@
       \tenum ScgSircControl {
       \t   ScgSircControl_Disabled = SCG_SIRCCSR_SIRCEN(0), //!< SIRC Disabled
       \t   ScgSircControl_Enabled  = SCG_SIRCCSR_SIRCEN(1), //!< SIRC Enabled
-      \t};\n\n
+      \t};
       
       \t/**
       \t * SOSC clock monitor
@@ -650,7 +650,7 @@
       \t   ScgSoscMonitor_Disabled   = SCG_SOSCCSR_SOSCCM(0)|SCG_SOSCCSR_SOSCCMRE(0), //!< Monitor Disabled
       \t   ScgSoscMonitor_Interrrupt = SCG_SOSCCSR_SOSCCM(1)|SCG_SOSCCSR_SOSCCMRE(0), //!< Monitor Enabled, generates interrupt
       \t   ScgSoscMonitor_Reset      = SCG_SOSCCSR_SOSCCM(1)|SCG_SOSCCSR_SOSCCMRE(1), //!< Monitor Enabled, generates reset 
-      \t};\n\n
+      \t};
       
       \t/**
       \t * SOSC enable
@@ -658,7 +658,7 @@
       \tenum ScgSoscControl {
       \t   ScgSoscControl_Disabled = SCG_SOSCCSR_SOSCEN(0), //!< SOSC Disabled
       \t   ScgSoscControl_Enabled  = SCG_SOSCCSR_SOSCEN(1), //!< SOSC Enabled
-      \t};\n\n
+      \t};
       
       \t/**
       \t * SPLL clock monitor
@@ -667,7 +667,7 @@
       \t   ScgSpllMonitor_Disabled   = SCG_SPLLCSR_SPLLCM(0)|SCG_SPLLCSR_SPLLCMRE(0), //!< Monitor Disabled
       \t   ScgSpllMonitor_Interrrupt = SCG_SPLLCSR_SPLLCM(1)|SCG_SPLLCSR_SPLLCMRE(0), //!< Monitor Enabled, generates interrupt
       \t   ScgSpllMonitor_Reset      = SCG_SPLLCSR_SPLLCM(1)|SCG_SPLLCSR_SPLLCMRE(1), //!< Monitor Enabled, generates reset 
-      \t};\n\n
+      \t};
       
       \t/**
       \t * SPLL enable
@@ -675,7 +675,7 @@
       \tenum ScgSpllControl {
       \t   ScgSpllControl_Disabled = SCG_SPLLCSR_SPLLEN(0), //!< SPLL Disabled
       \t   ScgSpllControl_Enabled  = SCG_SPLLCSR_SPLLEN(1), //!< SPLL Enabled
-      \t};\n\n
+      \t};
       
       \t/**
       \t *  Divisors for FIRC/SIRC/SOSC/SPLLDIV1_CLK clocks
@@ -689,7 +689,7 @@
       \t   ScgDivisor1_Div16    = SCG_SOSCDIV_SOSCDIV1(5),
       \t   ScgDivisor1_Div32    = SCG_SOSCDIV_SOSCDIV1(6),
       \t   ScgDivisor1_Div64    = SCG_SOSCDIV_SOSCDIV1(7),
-      \t};\n\n
+      \t};
       
       \t/**
       \t *  Divisors for FIRC/SIRC/SOSC/SPLLDIV2_CLK clocks
@@ -703,7 +703,7 @@
       \t   ScgDivisor2_Div16    = SCG_SOSCDIV_SOSCDIV2(5),
       \t   ScgDivisor2_Div32    = SCG_SOSCDIV_SOSCDIV2(6),
       \t   ScgDivisor2_Div64    = SCG_SOSCDIV_SOSCDIV2(7),
-      \t};\n\n
+      \t};
       
       \t/**
       \t *  Selections for output clock CLKOUT
@@ -741,7 +741,7 @@
       \t      ScgFircControl   scgFircControl,
       \t      ScgFircRegulator scgFircRegulator) {
       \t   scg().FIRCCSR = SCG_FIRCCSR_FIRCERR_MASK|scgFircRegulator|scgFircControl;
-      \t}\n\n
+      \t}
       
       \t/**
       \t * Configure SIRC_CLK
@@ -755,7 +755,7 @@
       \t      ScgSircLowPower scgSircLowPower,
       \t      ScgSircStop     scgSircStop) {
       \t   scg().SIRCCSR = scgSircControl|scgSircLowPower|scgSircStop;
-      \t}\n\n
+      \t}
       
       \t/**
       \t * Configure SOSC_CLK
@@ -767,7 +767,7 @@
       \t      ScgSoscControl  scgSoscControl,
       \t      ScgSoscMonitor  scgSoscMonitor) {
       \t   scg().SOSCCSR = scgSoscMonitor|scgSoscControl;
-      \t}\n\n
+      \t}
       
       \t/**
       \t * Configure SPLL_CLK
@@ -881,26 +881,26 @@
    
    <template name="ScgClockInfoEntries" dim="3" namespace="all" ><![CDATA[
       \t{
-      \t   /* clockMode - Clock Mode                          */  ScgInfo::$(clock_transition_mode.),\n\n                                            
+      \t   /* clockMode - Clock Mode                          */  ScgInfo::$(clock_transition_mode.),                                            
          
       \t   /* runccr    - RUN Clock Control Register          */  SCG_RCCR_SCS(0b$(scg_runccr_scs.))|SCG_RCCR_DIVCORE($(scg_runccr_divcore.))|SCG_RCCR_DIVBUS($(scg_runccr_divbus.))|SCG_RCCR_DIVSLOW($(scg_runccr_divslow.)),             
       \t   /* altccr    - VLPR/HSRUN Clock Control Register   */  SCG_RCCR_SCS(0b$(scg_altccr_scs.))|SCG_RCCR_DIVCORE($(scg_altccr_divcore.))|SCG_RCCR_DIVBUS($(scg_altccr_divbus.))|SCG_RCCR_DIVSLOW($(scg_altccr_divslow.)),             
                                     
       \t   /* firccsr   - Fast IRC Control Status Register    */  SCG_FIRCCSR_FIRCREGOFF($(scg_firccsr_fircregoff.))|SCG_FIRCCSR_FIRCEN($(scg_firccsr_fircen.)),                        
       \t   /* fircdiv   - Fast IRC Divide Register            */  SCG_FIRCDIV_FIRCDIV2($(scg_fircdiv_fircdiv2.))|SCG_FIRCDIV_FIRCDIV1($(scg_fircdiv_fircdiv1.)),                        
-      \t   /* firccfg   - Fast IRC Configuration Register     */  SCG_FIRCCFG_RANGE($(scg_firccfg_range.)),  \n\n                                                  
+      \t   /* firccfg   - Fast IRC Configuration Register     */  SCG_FIRCCFG_RANGE($(scg_firccfg_range.)),                                                    
                                               
       \t   /* sirccsr   - Slow IRC Control Status Register    */  SCG_SIRCCSR_SIRCLPEN($(scg_sirccsr_sirclpen.))|SCG_SIRCCSR_SIRCSTEN($(scg_sirccsr_sircsten.))|SCG_SIRCCSR_SIRCEN($(scg_sirccsr_sircen.)),  
       \t   /* sircdiv   - Slow IRC Divide Register            */  SCG_SIRCDIV_SIRCDIV2($(scg_sircdiv_sircdiv2.))|SCG_SIRCDIV_SIRCDIV1($(scg_sircdiv_sircdiv1.)),                        
-      \t   /* sirccfg   - Slow IRC Configuration Register     */  SCG_SIRCCFG_RANGE($(scg_sirccfg_range.)),   \n\n                                                 
+      \t   /* sirccfg   - Slow IRC Configuration Register     */  SCG_SIRCCFG_RANGE($(scg_sirccfg_range.)),                                                    
                       
       \t   /* sosccsr   - System OSC Control Status Register  */  SCG_SOSCCSR_SOSCCMRE($(scg_sosccsr_sosccmre.))|SCG_SOSCCSR_SOSCCM($(scg_sosccsr_sosccm.))|SCG_SOSCCSR_SOSCEN($(scg_sosccsr_soscen.)),    
       \t   /* soscdiv   - System OSC Divide Register          */  SCG_SOSCDIV_SOSCDIV2($(scg_soscdiv_soscdiv2.))|SCG_SOSCDIV_SOSCDIV1($(scg_soscdiv_soscdiv1.)),                        
-      \t   /* sosccfg   - System OSC Configuration Register   */  SCG_SOSCCFG_RANGE($(scg_sosccfg_range))|SCG_SOSCCFG_HGO($(scg_sosccfg_hgo))|SCG_SOSCCFG_EREFS($(scg_sosccfg_erefs)),  \n\n          
+      \t   /* sosccfg   - System OSC Configuration Register   */  SCG_SOSCCFG_RANGE($(scg_sosccfg_range))|SCG_SOSCCFG_HGO($(scg_sosccfg_hgo))|SCG_SOSCCFG_EREFS($(scg_sosccfg_erefs)),            
                       
       \t   /* spllcsr   - System PLL Control Status Register  */  SCG_SPLLCSR_SPLLCMRE($(scg_spllcsr_spllcmre.))|SCG_SPLLCSR_SPLLCM($(scg_spllcsr_spllcm.))|SCG_SPLLCSR_SPLLEN($(scg_spllcsr_spllen.)),    
       \t   /* splldiv   - System PLL Divide Register          */  SCG_SPLLDIV_SPLLDIV2($(scg_splldiv_splldiv2.))|SCG_SPLLDIV_SPLLDIV1($(scg_splldiv_splldiv1.)),                        
-      \t   /* spllcfg   - System PLL Configuration Register   */  SCG_SPLLCFG_MULT($(scg_spllcfg_mult.))|SCG_SPLLCFG_PREDIV($(scg_spllcfg_prediv.)),  \n\n                             
+      \t   /* spllcfg   - System PLL Configuration Register   */  SCG_SPLLCFG_MULT($(scg_spllcfg_mult.))|SCG_SPLLCFG_PREDIV($(scg_spllcfg_prediv.)),                               
       \t},\n\n
    ]]></template>
    

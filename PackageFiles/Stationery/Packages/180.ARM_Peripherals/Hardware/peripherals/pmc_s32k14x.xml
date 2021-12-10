@@ -32,7 +32,7 @@
    </binaryOption>
 
    <template><![CDATA[
-      \t//! Default value for Low Voltage Detect Status And Control 1 register\n
+      \t//! Default value for Low Voltage Detect Status And Control 1 register
       \tstatic constexpr uint32_t pmc_lvdsc1  = 
       \t   PMC_LVDSC1_LVDIE($(pmc_lvdsc1_lvdie)) | // Low-Voltage Detect Interrupt Enable
       \t   PMC_LVDSC1_LVDRE($(pmc_lvdsc1_lvdre));  // Low-Voltage Detect Reset Enable\n\n
@@ -46,7 +46,7 @@
    </binaryOption>
 
    <template><![CDATA[
-      \t//! Default value for Low Voltage Detect Status And Control 2 register\n
+      \t//! Default value for Low Voltage Detect Status And Control 2 register
       \tstatic constexpr uint32_t pmc_lvdsc2  = 
       \t   PMC_LVDSC2_LVWIE($(pmc_lvdsc2_lvwie));  // Low-Voltage Warning Interrupt Enable\n\n
    ]]></template>
@@ -79,7 +79,7 @@
    </binaryOption>
 
    <template><![CDATA[
-      \t//! Default value for Regulator Status And Control register\n
+      \t//! Default value for Regulator Status And Control register
       \tstatic constexpr uint32_t pmc_regsc  = 
       \t   PMC_REGSC_LPODIS($(pmc_regsc_lpodis)) |     // Low power oscillator disable
       \t   PMC_REGSC_CLKBIASDIS($(pmc_regsc_clkbiasdis)) | // Clock bias disable
@@ -93,7 +93,8 @@
    </validate>
 
    <projectActionList id = "pmc_files" >
-      <copy source="Project_Headers/pmc.h"       target="Project_Headers/pmc.h"     overwrite="true" derived="true" />
+      <copy source="Project_Headers/pmc.h"     target="Project_Headers/pmc.h"     overwrite="true" derived="true" />
+      <copy source="Snippets/pmc-example.cpp"  target="Snippets/pmc-example.cpp"       overwrite="true" derived="true" />
    </projectActionList>
          
 </peripheralPage>

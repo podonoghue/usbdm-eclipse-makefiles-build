@@ -54,7 +54,7 @@ Devices using this peripheral:
          \t#ifdef SIM_SOPT1_OSC32KOUT
          \t   SIM_SOPT1_OSC32KOUT($(sim_sopt1_osc32kout:-1)) |    // 32K oscillator clock out pin select
          \t#endif
-         \t   SIM_SOPT1_OSC32KSEL($(sim_sopt1_osc32ksel));     // 32K oscillator clock select\n\n
+         \t   SIM_SOPT1_OSC32KSEL($(sim_sopt1_osc32ksel));     // 32K oscillator clock select
    
          \t/**
          \t * Get ERCLK32K clock frequency
@@ -136,7 +136,7 @@ Devices using this peripheral:
          \t */
          \tstatic void setLpuart0Clock(SimLpuart0ClockSource simLpuart0ClockSource) {
          \t   sim->SOPT2 = (sim->SOPT2&~SIM_SOPT2_LPUART0SRC_MASK) | simLpuart0ClockSource;
-         \t}\n\n
+         \t}
          
          \t/**
          \t * Get LPUART0 input clock frequency
@@ -192,7 +192,7 @@ Devices using this peripheral:
          \t */
          \tstatic void setTpmClock(SimTpmClockSource simTpmClockSource) {
          \t   sim->SOPT2 = (sim->SOPT2&~SIM_SOPT2_TPMSRC_MASK) | simTpmClockSource;
-         \t}\n\n
+         \t}
    
          \t/**
          \t * Get TPM input clock frequency
@@ -389,7 +389,7 @@ Devices using this peripheral:
          \t   SimAdc0Trigger_RtcSeconds   = SIM_SOPT7_ADC0TRGSEL(13),  //!< RTC Seconds
          \t   SimAdc0Trigger_Lptrm        = SIM_SOPT7_ADC0TRGSEL(14),  //!< LPTMR
          \t   SimAdc0Trigger_15           = SIM_SOPT7_ADC0TRGSEL(15),  //!< Reserved
-         \t};\n\n
+         \t};
          
          \t/**
          \t * Selects the ADC0 trigger mode.\n
@@ -483,6 +483,29 @@ Devices using this peripheral:
    <xi:include href="_simFiles-MKL.xml"/>
    
    <template><![CDATA[
+      \t#ifdef SIM_CLKDIV2_USBDIV_MASK
+      \t/**
+      \t * Set USB clock divisors to suitable value
+      \t */
+      \tstatic void setUsbClock() {
+      \t   if ((sim->SOPT2&SIM_SOPT2_USBSRC_MASK) != SimUsbFullSpeedClockSource_Peripheral) {
+      \t      // Assume supplied value is suitable
+      \t      sim->CLKDIV2 = clkdiv2;
+      \t      return;
+      \t   }
+      \t   // Try to calculate value
+      \t   unsigned inputFreq = getPeripheralClock();
+      \t   for (unsigned frac = 0; frac < 2; frac++) {
+      \t      for (unsigned div = 0; div < 8; div++) {
+      \t         unsigned usbClock = (inputFreq * (frac+1))/(div+1);
+      \t         if (usbClock == 48000000) {
+      \t            sim->CLKDIV2 = SIM_CLKDIV2_USBFRAC(frac)|SIM_CLKDIV2_USBDIV(div);
+      \t         }
+      \t      }
+      \t   }
+      \t}
+      \t#endif
+
       \t/**
       \t * Initialise SIM registers
       \t */
@@ -500,7 +523,7 @@ Devices using this peripheral:
       \t   sim->SOPT7 = sopt7;
       \t
       \t#ifdef SIM_CLKDIV2_USBDIV_MASK
-      \t   sim->CLKDIV2 = clkdiv2;
+      \t   setUsbClock();
       \t#endif
       \t}\n\n
    ]]></template>

@@ -3,7 +3,7 @@
 <!DOCTYPE peripheralPage SYSTEM "_menu.dtd" >
 <!-- dma0_4ch.xml -->
 
-<peripheralPage xmlns:xi="http://www.w3.org/2001/XInclude" name="_instance" description="Flash Memory Module">
+<peripheralPage xmlns:xi="http://www.w3.org/2001/XInclude" name="_instance" description="DMA Module">
 
    <xi:include href="_default_instance.xml"/>
 
@@ -28,7 +28,7 @@
    #else
    \t   $(clockEnable)
    #endif
-   \t}\n\n
+   \t}
 
    \t/** 
    \t *  Disable clock to $(_class)
@@ -45,7 +45,7 @@
 
    <template><![CDATA[
       \t//! IRQ numbers for hardware
-      \tstatic constexpr IRQn_Type irqNums[]  = $(_name)_IRQS;\n\n
+      \tstatic constexpr IRQn_Type irqNums[]  = $(_name)_IRQS;
    
       \t//! Number of IRQs for hardware
       \tstatic constexpr uint32_t irqCount  = sizeof(irqNums)/sizeof(irqNums[0]);\n\n
@@ -66,7 +66,7 @@
       classHandler="%c%i::irqHandler&lt;$1&gt;;%c%i::errorIrqHandler" />
       
    <template><![CDATA[
-       \t//! Class based callback handler has been installed in vector table\n
+       \t//! Class based callback handler has been installed in vector table
        \tstatic constexpr bool irqHandlerInstalled = $(irqHandlingMethod);\n\n
    ]]></template>
        
@@ -83,7 +83,7 @@
    </choiceOption>
 
    <template><![CDATA[
-       \t//! Default IRQ level\n
+       \t//! Default IRQ level
        \tstatic constexpr NvicPriority irqLevel =  $(?irqHandlingMethod:$(irqLevel):NvicPriority_NotInstalled);\n\n
    ]]></template>
  
@@ -93,7 +93,7 @@
 
    <template><![CDATA[
       \t//! Number of DMA channels implemented
-      \tstatic constexpr unsigned NumChannels = $(NumChannels);\n\n
+      \tstatic constexpr unsigned NumChannels = $(NumChannels);
 
       \t//! Number of DMA vectors implemented
       \tstatic constexpr unsigned NumVectors = $(NumVectors);\n\n

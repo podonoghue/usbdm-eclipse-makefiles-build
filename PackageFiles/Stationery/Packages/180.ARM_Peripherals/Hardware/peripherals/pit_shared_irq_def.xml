@@ -55,12 +55,12 @@
    <template><![CDATA[
    
       \t//! Default value for PIT load value register\n
-      \tstatic constexpr uint32_t pit_ldval  = $(pit_ldval);\n\n
+      \tstatic constexpr uint32_t pit_ldval  = $(pit_ldval);
       
       \t//! PIT operation in debug mode\n
       \tstatic constexpr uint32_t mcr = 
       \t   PIT_MCR_FRZ($(pit_mcr_frz)) |  // Freeze in debug mode
-      \t   PIT_MCR_MDIS(0);  // Disable\n\n
+      \t   PIT_MCR_MDIS(0);  // Disable
       
       \t/**
       \t * Get clock frequency
@@ -73,7 +73,7 @@
    ]]></template>
    
    <xi:include href="_clockOption.xml"/>
-   
+
    <signals/>
 
 </fragment>

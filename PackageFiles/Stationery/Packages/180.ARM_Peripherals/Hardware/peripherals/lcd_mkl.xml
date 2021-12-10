@@ -155,7 +155,7 @@
    
    <template name="lcdPins" namespace="all" ><![CDATA[
    /** Pins used for back planes */
-   static const int8_t backplanePins[]  = { $(backplanes) };\n\n
+   static const int8_t backplanePins[]  = { $(backplanes) };
 
    /** Pins used for front planes */
    static const int8_t frontplanePins[] = { $(frontplanes) };\n\n

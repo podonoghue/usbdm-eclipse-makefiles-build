@@ -115,15 +115,15 @@
    <aliasOption key="/SIM/rtc_clkout" constant="true" optional="true" />
 
    <template><![CDATA[
-      \t//! Whether to configure RTC\n
+      \t//! Whether to configure RTC
       \t//! If disabled then no RTC registers are touched.
       \t//! This is useful if RTC is not powered as register access will trap.
-      \tstatic constexpr bool configure_rtc = $(configure_rtc);\n\n
+      \tstatic constexpr bool configure_rtc = $(configure_rtc);
    
       \t//! Frequency of RTC External Clock or Crystal
-      \tstatic constexpr uint32_t osc_input_freq = $(osc_input_freq)UL;\n\n
+      \tstatic constexpr uint32_t osc_input_freq = $(osc_input_freq)UL;
       
-      \t//! Oscillator control register\n
+      \t//! Oscillator control register
       \tstatic constexpr uint32_t cr =
       \t   RTC_CR_OSCE($(rtc_cr_osce)) | // Enables 32kHz oscillator [RTC_32K]
       \t   RTC_CR_CLKO($(rtc_cr_clko)) | // Disables RTC 32kHz Clock Output
@@ -148,7 +148,7 @@
       value="0" />
 
    <template><![CDATA[
-      \t//! RTC Time Compensation Register\n
+      \t//! RTC Time Compensation Register
       \tstatic constexpr uint32_t tcr =
       \t   RTC_TCR_CIR($(rtc_tcr_cir)) | // Compensation Interval Register
       \t   RTC_TCR_TCR($(rtc_tcr_tcr));  // Time Compensation Register\n\n
@@ -185,7 +185,7 @@
    </category>
    
    <template><![CDATA[
-      \t//! RTC Lock Register\n
+      \t//! RTC Lock Register
       \tstatic constexpr uint32_t lr =
       \t   RTC_LR_LRL($(rtc_lr_lrl)) | // Lock Register Lock
       \t   RTC_LR_SRL($(rtc_lr_srl)) | // Status Register Lock 
@@ -253,7 +253,7 @@
    
    <template><![CDATA[
       \t#if defined(RTC_WAR_TSRW)
-      \t//! RTC Write Access Register\n
+      \t//! RTC Write Access Register
       \tstatic constexpr uint32_t war =
       \t   RTC_WAR_IERW($(rtc_war_ierw)) | // Interrupt Enable Register Write
       \t   RTC_WAR_LRW($(rtc_war_lrw))  | // Lock Register Write
@@ -326,7 +326,7 @@
    
    <template><![CDATA[
       \t#if defined(RTC_RAR_TSRR)
-      \t//! RTC Read Access Register\n
+      \t//! RTC Read Access Register
       \tstatic constexpr uint32_t rar =
       \t   RTC_RAR_IERR($(rtc_rar_ierr)) | // Interrupt Enable Register Read  
       \t   RTC_RAR_LRR($(rtc_rar_lrr))  | // Lock Register Read              
@@ -341,7 +341,7 @@
 
    <template><![CDATA[
       \t//! IRQ numbers for hardware
-      \tstatic constexpr IRQn_Type irqNums[]  = $(_name)_IRQS;\n\n
+      \tstatic constexpr IRQn_Type irqNums[]  = $(_name)_IRQS;
    
       \t//! Number of IRQs for hardware
       \tstatic constexpr uint32_t irqCount  = sizeof(irqNums)/sizeof(irqNums[0]);\n\n
@@ -361,7 +361,7 @@
       classHandler="%c%i::irq$1Handler" />
       
    <template><![CDATA[
-       \t//! Class based callback handler has been installed in vector table\n
+       \t//! Class based callback handler has been installed in vector table
        \tstatic constexpr bool irqHandlerInstalled = $(irqHandlingMethod);\n\n
    ]]></template>
        
@@ -378,7 +378,7 @@
    </choiceOption>
 
    <template><![CDATA[
-       \t//! Default IRQ level\n
+       \t//! Default IRQ level
        \tstatic constexpr NvicPriority irqLevel =  $(?irqHandlingMethod:$(irqLevel):NvicPriority_NotInstalled);\n\n
    ]]></template>
 
@@ -513,7 +513,7 @@
       \tstatic uint32_t getInternalClock() {
       \t   // RTC uses EXTAL32/XTAL32 clock
       \t   return (rtc->CR&RTC_CR_OSCE_MASK)?osc_input_freq:0;
-      \t}\n\n
+      \t}
       
       \t/**
       \t * Get RTC clock frequency (external, masked by RTC_CR_CLKO)

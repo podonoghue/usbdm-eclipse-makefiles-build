@@ -18,7 +18,7 @@
 
    <template><![CDATA[
       \t//! Number of channels implemented
-      \tstatic constexpr unsigned NumChannels = $(NumChannels);\n\n
+      \tstatic constexpr unsigned NumChannels = $(NumChannels);
 
       \t//! Number of channel event vectors implemented
       \tstatic constexpr unsigned NumChannelVectors = $(NumChannelVectors);\n\n

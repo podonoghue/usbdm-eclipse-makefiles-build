@@ -23,7 +23,8 @@
    </choiceOption>
 
    <template namespace="usbdm"><![CDATA[
-      /* gpio_def.xml */\n\n
+      /* gpio_def.xml */
+      
       #if defined(PCC_PCC_PORT$(_instance)_CGC_MASK)
       \t/** Port information for PORT$(_instance) */
       \tconstexpr PortInfo  __attribute__((unused)) Port$(_instance)Info {PORT$(_instance)_BasePtr, static_cast<uint32_t>(PCC_BasePtr+offsetof(PCC_Type, PCC_PORT$(_instance))), PORT$(_instance)_IRQn, GPIO$(_instance)_BasePtr, $(?irqHandlingMethod:$(irqLevel):NvicPriority_NotInstalled)};

@@ -68,10 +68,4 @@
       \t   PORT_PCR_SRE($(port_pcr_sre)) |   // Slew Rate Enable
       \t   PORT_PCR_PS($(port_pcr_pull_mode));     // Pull device\n\n
    ]]></template>
-
-   <!-- template><![CDATA[
-      \t//! Base value for PCR (excluding MUX value)
-      \tstatic constexpr uint32_t defaultPcrValue  = DEFAULT_PCR;\n\n
-   ]]></template -->
-    
 </fragment>

@@ -8,6 +8,17 @@
 
    <xi:include href="_default_pcr.xml"/>
    
+   <template><![CDATA[
+      \t//! Pin number in Info table for SCK if mapped to a pin
+      \tstatic constexpr int sckPin  = 0;
+      
+      \t//! Pin number in Info table for SIN if mapped to a pin
+      \tstatic constexpr int sinPin  = 1;
+      
+      \t//! Pin number in Info table for SOUT if mapped to a pin
+      \tstatic constexpr int soutPin  = 2;\n\n
+   ]]></template>
+
    <xi:include href="_mapPinsOption_on.xml"/>
    
    <intOption name="speed" 
@@ -51,13 +62,13 @@
       \t//! Default communication mode: order, clock phase and clock polarity
       \tstatic constexpr uint8_t modeValue = 
       \t   SPI_C1_LSBFE($(spi_lsbfe))| // LSB or MSB first
-      \t   SPI_C1_MODE($(spi_mode));  // Mode (CPOL+CPHA)\n\n
+      \t   SPI_C1_MODE($(spi_mode));  // Mode (CPOL+CPHA)
       
       \tstatic uint32_t getClockFrequency() {
       \t   return SystemBusClock;
-      \t}\n\n
+      \t}
 
-      \t//! Default speed (Hz)\n
+      \t//! Default speed (Hz)
       \tstatic constexpr uint32_t speed = 
       \t   $(speed);\n\n
    ]]></template>

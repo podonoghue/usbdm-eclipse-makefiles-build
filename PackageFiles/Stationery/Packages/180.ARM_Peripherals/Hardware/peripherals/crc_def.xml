@@ -14,8 +14,7 @@
       constant="false" />
 
    <template><![CDATA[
-      \tstatic constexpr uint32_t gpoly =  $(crc_gpoly);\n
-      \n
+      \tstatic constexpr uint32_t gpoly =  $(crc_gpoly);\n\n
    ]]></template>
    
    <xi:include href="_clockOption.xml"/>
