@@ -8,9 +8,7 @@ Devices using this peripheral:
 
    <xi:include href="_default_instance.xml"/>
 
-   <xi:include href="_default_pcr.xml"/>
-   
-   <xi:include href="_mapPinsOption.xml"/>
+   <xi:include href="_mapPinsOption_on.xml"/>
 
    <aliasOption key="/SIM/sim_sopt2_uart$(_instance)src" optional="true" constant="false" />
    <aliasOption key="/SIM/Uart$(_instance)Clock"         optional="true" />

@@ -6,11 +6,6 @@
 
    <xi:include href="_default_instance.xml"/>
 
-   <template><![CDATA[
-      \t//! Base value for PCR (excluding MUX value)
-      \tstatic constexpr uint32_t defaultPcrValue  = 0;\n\n
-   ]]></template>
-
    <category name="Clock Recovery" description="USB clock recovery options">
       <binaryOption 
          name="usb_clk_recovery_irc_en_en" 

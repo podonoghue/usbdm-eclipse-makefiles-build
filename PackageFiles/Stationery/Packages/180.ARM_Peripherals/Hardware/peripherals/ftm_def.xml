@@ -5,8 +5,6 @@
 <fragment xmlns:xi="http://www.w3.org/2001/XInclude">
 
    <xi:include href="_default_instance.xml"/>
-
-   <xi:include href="_default_pcr.xml"/>
    
    <binaryOption name="check_minimums" description="Check minimumInterval and minimumResolution"
          toolTip="Enables boundary checks of minimum interval and minimum resolution when setting FTM values." >

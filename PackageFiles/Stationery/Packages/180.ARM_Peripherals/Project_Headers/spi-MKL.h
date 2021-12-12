@@ -539,13 +539,13 @@ protected:
    }
 
 public:
-   // SPI SCK (clock) Pin
+   /** SPI SCK (clock) Pin */
    using sckGpio  = GpioTable_T<Info, 0, ActiveHigh>;
 
-   // SPI SIN (data in = usually MISO) Pin
+   /** SPI SIN (data in = usually MISO) Pin */
    using sinGpio  = GpioTable_T<Info, 1, ActiveHigh>;
 
-   // SPI SOUT (data out = usually MOSI) Pin
+   /** SPI SOUT (data out = usually MOSI) Pin */
    using soutGpio = GpioTable_T<Info, 2, ActiveHigh>;
 
    /**

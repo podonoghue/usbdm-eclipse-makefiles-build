@@ -3,8 +3,6 @@
 <!-- ftm.xml -->
 
 <peripheralPage xmlns:xi="http://www.w3.org/2001/XInclude" name="_instance" description="Flex timer shared clock inputs">
-
-   <xi:include href="_default_pcr.xml"/>
    
    <signals/>
 </peripheralPage>

@@ -6,8 +6,6 @@
 
    <xi:include href="_default_instance.xml"/>
    
-   <xi:include href="_default_pcr.xml"/>
-   
    <aliasOption key="/PCC/pcc_lptmr$(_instance)" constant="false" optional="false" />
 
    <xi:include href="_mapPinsOption.xml"/>

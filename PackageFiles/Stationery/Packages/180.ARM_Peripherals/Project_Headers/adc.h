@@ -53,12 +53,6 @@ namespace USBDM {
  */
 
 /**
- * Default PCR value for pins used as GPIO (including multiplexor value)
- */
-static constexpr PcrValue ADC_DEFAULT_PCR(
-      PinPull_None, PinDriveStrength_Low, PinDriveMode_PushPull, PinAction_None, PinFilter_None, PinSlewRate_Fast, PinMux_Analogue);
-
-/**
  * ADC Resolutions.
  * The resolutions available vary with single-ended/differential modes\n
  * Note the equivalence between modes e.g. 8-bit-se = 9-bit-diff

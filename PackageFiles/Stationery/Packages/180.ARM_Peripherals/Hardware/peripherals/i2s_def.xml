@@ -6,11 +6,6 @@
 
    <xi:include href="_default_instance.xml"/>
 
-   <template><![CDATA[
-      \t//! Base value for PCR (excluding MUX value)
-      \tstatic constexpr uint32_t defaultPcrValue  = I2S_DEFAULT_PCR.value;\n\n
-   ]]></template>
-   
    <xi:include href="_mapPinsOption_on.xml"/>
    
    <aliasOption key="/SIM/system_bus_clock" />

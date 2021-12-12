@@ -4,9 +4,6 @@
 
 <peripheralPage xmlns:xi="http://www.w3.org/2001/XInclude" name="_instance" description="Control">
 
-   <!-- No instance -->
-   <xi:include href="_default_pcr.xml"/>
-   
    <signals/>
 
    <projectActionList id = "control_files" >

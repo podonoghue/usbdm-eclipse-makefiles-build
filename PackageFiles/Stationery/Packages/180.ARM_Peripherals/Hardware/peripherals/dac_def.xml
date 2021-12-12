@@ -7,9 +7,6 @@
    <xi:include href="_default_instance.xml"/>
 
    <template><![CDATA[
-      \t//! Base value for PCR (excluding MUX value)
-      \tstatic constexpr uint32_t defaultPcrValue  = 0;
-      
       \t//! Pin number in Info table for DAC output if mapped to a pin
       \tstatic constexpr int outputPin  = 0;\n\n
    ]]></template>

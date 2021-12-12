@@ -9,11 +9,6 @@ Devices using this peripheral:
 
    <xi:include href="_default_instance.xml"/>
 
-   <template><![CDATA[
-      \t//! Base value for PCR (excluding MUX value)
-      \tstatic constexpr uint32_t defaultPcrValue  = 0;\n\n
-   ]]></template>
-
    <aliasOption key="/MCG/system_usb_clkin_clock" constant="false" optional="true"/>
    <aliasOption key="/SIM/system_peripheral_clock" constant="true" optional="true"/>
    <aliasOption key="/SIM/sim_sopt2_usbsrc" constant="false" optional="true"/>

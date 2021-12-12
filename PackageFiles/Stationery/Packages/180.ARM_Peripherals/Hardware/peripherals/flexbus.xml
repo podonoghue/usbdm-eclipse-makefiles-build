@@ -6,7 +6,6 @@
 
    <xi:include href="_mapPinsOption_on.xml"/>
    <xi:include href="_default_instance.xml"/>
-   <xi:include href="_default_pcr.xml"/>
 
    <aliasOption key="/SIM/system_bus_clock" />
    

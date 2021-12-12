@@ -6,8 +6,6 @@
 
    <xi:include href="_default_instance.xml"/>
 
-   <xi:include href="_default_pcr.xml"/>
-   
    <template><![CDATA[
       \t//! Pin number in Info table for SCK if mapped to a pin
       \tstatic constexpr int sckPin  = 0;
