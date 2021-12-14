@@ -144,26 +144,7 @@ public:
    }
 
 public:
-   /**
-    * Configures all mapped pins associated with this peripheral
-    */
-   static void __attribute__((always_inline)) configureAllPins() {
-      // Configure pins
-      Info::initPCRs();
-   }
-
-   /**
-    * Basic enable SDHC
-    * Includes enabling clock and configuring all pins if mapPinsOnEnable is selected on configuration
-    */
-   static void enable() {
-      if (Info::mapPinsOnEnable) {
-         configureAllPins();
-      }
-      // Enable clock to CMP interface
-      Info::enableClock();
-   }
-
+   $(/SDHC/classInfo: // No class Info found)
    /**
     * Enable with default settings.
     * Includes configuring all pins
@@ -286,13 +267,6 @@ public:
     */
    void forceEvent(uint32_t sdhcForceEvent) {
       sdhc->FEVT = sdhcForceEvent;
-   }
-
-   /**
-    * Disable interface to SDHC
-    */
-   static void disable() {
-      Info::disableClock();
    }
 
    /**

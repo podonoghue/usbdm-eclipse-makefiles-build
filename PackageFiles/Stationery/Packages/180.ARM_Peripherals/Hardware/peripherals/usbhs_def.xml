@@ -5,6 +5,7 @@
 <peripheralPage xmlns:xi="http://www.w3.org/2001/XInclude" name="_instance" description="Inter-Integrated-Circuit">
 
    <xi:include href="_default_instance.xml"/>
+   <xi:include href="_mapPinsOption.xml"/>
 
    <xi:include href="_irqOption.xml"/>         
 

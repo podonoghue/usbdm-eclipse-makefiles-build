@@ -1254,40 +1254,7 @@ public:
    }
 
 public:
-   /**
-    * Configures all mapped pins associated with this peripheral
-    */
-   static void configureAllPins() {
-      // Configure pins
-      Info::initPCRs();
-   }
-
-   /**
-    * Enables clock to peripheral and configures all pins if
-    * mapPinsOnEnable setting is true
-    */
-   static void enable() {
-      if (Info::mapPinsOnEnable) {
-         configureAllPins();
-      }
-
-      // Enable clock to peripheral interface
-      Info::enableClock();
-      __DMB();
-   }
-
-   /**
-    * Disables peripheral including clocks
-    */
-   static void disable() {
-      // Disable (clock source disabled)
-      tmr->SC = 0;
-
-      // Disable clock to peripheral interface
-      Info::disableClock();
-      __DMB();
-   }
-
+   $(/QSPI/classInfo: // No class Info found)
    /**
     * Configure with settings from Configure.usbdmProject.
     * Includes configuring all pins

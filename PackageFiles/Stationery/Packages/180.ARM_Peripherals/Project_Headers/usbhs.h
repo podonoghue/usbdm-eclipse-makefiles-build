@@ -117,13 +117,7 @@ public:
    }
 
 public:
-   /**
-    * Configures all mapped pins associated with this peripheral
-    */
-   static void __attribute__((always_inline)) configureAllPins() {
-      // Configure pins
-      Info::initPCRs();
-   }
+   $(/USBHS/classInfo: // No class Info found)
 
    /**
     * Construct USBHS interface

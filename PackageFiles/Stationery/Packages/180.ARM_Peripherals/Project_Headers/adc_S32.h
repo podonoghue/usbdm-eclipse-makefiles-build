@@ -17,8 +17,7 @@
  */
 #include <climits>
 #include <cstddef>
-#include "derivative.h"
-
+#include "pin_mapping.h"
 /*
  * Default port information
  */
@@ -170,10 +169,10 @@ private:
 
 public:
    /**
-    * Limit index to permitted pin index range
+    * Limit channel to permitted range.
     * Used to prevent noise from static assertion checks that detect a condition already detected in a more useful fashion.
     *
-    * @param index   Index to limit
+    * @param channel   Channel number to limit
     *
     * @return Index limited to permitted range
     */
@@ -206,7 +205,6 @@ public:
       static constexpr void check() {}
    };
 
-public:
    /** Callback to catch unhandled interrupt */
    static void unhandledCallback(uint32_t, int) {
       setAndCheckErrorCode(E_NO_HANDLER);
@@ -354,7 +352,6 @@ public:
    /** Hardware instance pointer */
    static constexpr HardwarePtr<ADC_Type> adc = Info::baseAddress;
 
-public:
    /** Default ADC resolution */
    static constexpr AdcResolution defaultAdcResolution = static_cast<AdcResolution>(Info::defaultAdcResolution);
 
@@ -368,6 +365,7 @@ public:
    /** @return Base address of ADC.R[index] registers as uint32_t */
    static constexpr uint32_t adcR(unsigned index) { return adcBase() + offsetof(ADC_Type, R[index]); }
 
+$(/ADC/classInfo: // No class Info found)
 public:
 
    /** Allow convenient access to associate AdcInfo */

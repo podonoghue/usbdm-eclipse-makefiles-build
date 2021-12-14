@@ -219,27 +219,7 @@ public:
    }
 
 public:
-   /**
-    * Configures all mapped pins associated with this peripheral
-    */
-   static void __attribute__((always_inline)) configureAllPins() {
-      // Configure pins
-      Info::initPCRs();
-   }
-
-   /**
-    * Basic enable EWM.
-    *
-    * Includes enabling clock and configuring all pins of mapPinsOnEnable is selected on configuration
-    */
-   static void enable() {
-      if (Info::mapPinsOnEnable) {
-         configureAllPins();
-      }
-
-      // Enable clock to CMP interface
-      Info::enableClock();
-   }
+$(/EWM/classInfo: // No class Info found)
 
    /**
     * Select watchdog window in LPO cycles.

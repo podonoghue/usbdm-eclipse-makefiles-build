@@ -352,22 +352,19 @@ protected:
 template<class Info>
 class FlexbusBase_T : public FlexbusBase {
 
+private:
+   // Dummy routine as no IRQ
+   void disableNvicInterrupts() {}
+
 public:
+$(/FLEXBUS/classInfo: // No class Info found)
+
    /**
     * Hardware instance pointer
     *
     * @return Reference to FLEXBUS hardware
     */
    static constexpr HardwarePtr<FLEXBUS_Type> flexbus = Info::baseAddress;
-
-   /**
-    * Configures all mapped pins associated with this peripheral
-    */
-   static void __attribute__((always_inline)) configureAllPins() {
-      // Configure pins
-      Info::initPCRs();
-   }
-
    /**
     * Construct FLEXBUS interface
     */
@@ -375,32 +372,13 @@ public:
    }
 
    /**
-    * Basic enable of module.
-    * Includes enabling clock and configuring all pins if mapPinsOnEnable is selected on configuration
-    */
-   static void enable() {
-      if (Info::mapPinsOnEnable) {
-         configureAllPins();
-      }
-      // Requires CLKOUT = FLEXBUS Clock
-      SimInfo::setClkout(SimClkoutSel_FlexBus);
-
-      // Enable clock to hardware
-      Info::enableClock();
-   }
-
-   /**
     * Enable with default settings.
     */
    static void defaultConfigure() {
-      enable();
-   }
+      // Requires CLKOUT = FLEXBUS Clock
+      SimInfo::setClkout(SimClkoutSel_FlexBus);
 
-   /**
-    * Disable interface to FLEXIO.
-    */
-   static void disable() {
-      Info::disableClock();
+      enable();
    }
 
    /**
@@ -414,7 +392,7 @@ public:
     *    static const FlexbusEntry flexbusEntry1{1, 0x08FC0000, FlexbusSize_128k, FlexbusMode_Read,      FlexbusWait_2, FlexbusPortSize_8bit,  FlexbusAutoAck_Enabled};
     *    static const FlexbusEntry flexbusEntry2{2, 0x08FE0000, FlexbusSize_128k, FlexbusMode_ReadWrite, FlexbusWait_4, FlexbusPortSize_16bit, FlexbusAutoAck_Enabled};
     *
-    *    myFlexbus.enable();
+    *    myFlexbus.defaultConfigure();
     *    myFlexbus.configureAllPins();
     *    myFlexbus.setSelectRange(flexbusEntry1);
     *    myFlexbus.setSelectRange(flexbusEntry2);

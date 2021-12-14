@@ -1305,14 +1305,7 @@ public:
    constexpr QspiBase_T() : QspiBase(Info::baseAddress) {
    }
 
-   /**
-    * Configures all mapped pins associated with this peripheral
-    */
-   static void __attribute__((always_inline)) configureAllPins() {
-      // Configure pins
-      Info::initPCRs();
-   }
-
+   $(/QSPI/classInfo: // No class Info found)
    /**
     * Basic enable of module.
     * Includes enabling clock and configuring all pins if mapPinsOnEnable is selected on configuration

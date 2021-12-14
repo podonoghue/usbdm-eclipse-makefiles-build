@@ -144,25 +144,7 @@ protected:
    }
 
 public:
-   /**
-    * Configures all mapped pins associated with this peripheral
-    */
-   static void __attribute__((always_inline)) configureAllPins() {
-      // Configure pins
-      Info::initPCRs();
-   }
-
-   /**
-    * Enables the LPTMR clock and configures the pins
-    */
-   static void enable() {
-      configureAllPins();
-
-      // Enable clock
-      Info::enableClock();
-      __DMB();
-   }
-   
+   $(/LPTMR/classInfo: // No class Info found)
    /**
     * Set LPTMR to pulse counting mode.
     * Provides selection of input pin, edge selection and reset mode.\n

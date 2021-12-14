@@ -438,13 +438,7 @@ protected:
    static UARTCallbackFunction lonCallback;
 
 public:
-   /**
-    * Configures all mapped pins associated with this peripheral
-    */
-   static void __attribute__((always_inline)) configureAllPins() {
-      // Configure pins
-      Info::initPCRs();
-   }
+   $(/UART/classInfo: // No class Info found)
 
    /**
     * Construct UART interface

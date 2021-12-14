@@ -232,6 +232,7 @@ public:
       sCallback(getAndClearStatus());
    }
 
+$(/DAC/classInfo: // No class Info found)
    /**
     * Wrapper to allow the use of a class member as a callback function
     * @note Only usable with static objects.
@@ -323,14 +324,6 @@ public:
          callback = unhandledCallback;
       }
       sCallback = callback;
-   }
-
-   /**
-    * Configures all mapped pins associated with this peripheral
-    */
-   static void __attribute__((always_inline)) configureAllPins() {
-      // Configure pins
-      Info::initPCRs();
    }
 
    /**

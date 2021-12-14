@@ -15,6 +15,8 @@
  * This file is generated automatically.
  * Any manual changes will be lost.
  */
+#include <climits>
+#include <cmath>
 #include "derivative.h"
 #include "system.h"
 #include "pin_mapping.h"

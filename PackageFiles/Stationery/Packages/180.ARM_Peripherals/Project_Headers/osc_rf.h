@@ -51,17 +51,29 @@ enum OscRunMode {
 template <class Info>
 class OscRfBase_T {
 
+private:
+   /** Class to static check OSC signal is mapped to a pin - Assumes existence */
+   template<int xtalPin> class CheckPinMapped {
+   private:
+      // Check mapping - no need to check existence
+      static constexpr bool Test1 = (Info::info[xtalPin].gpioBit >= 0);
+
+      static_assert(Test1, "OSC XTAL/EXTAL signal is not mapped to a pin - Modify Configure.usbdm");
+
+   public:
+      /// Dummy for inline checking
+      static constexpr bool checker = false;
+   };
+
+   // Dummy function as no IRQ
+   void disableNvicInterrupts() {}
+
 protected:
-   static constexpr volatile OSC_Type *osc = Info::osc;
+   /** Hardware instance */
+   static constexpr HardwarePtr<OSC_Type> osc = Info::baseAddress;
 
 public:
-   /**
-    * Configures all mapped pins associated with this peripheral
-    */
-   static void __attribute__((always_inline)) configureAllPins() {
-      // Configure pins
-      Info::initPCRs();
-   }
+   $(/OSC/classInfo: // No class Info found)
 
    /**
     * Initialise OSC to default settings.
@@ -96,7 +108,6 @@ public:
  * Class providing interface to OscRfillator
  */
 class Osc0 : public OscRfBase_T<Osc0Info> {};
-$(/OSC0/Declarations:   // No declarations Found)
 #endif
 
 /**

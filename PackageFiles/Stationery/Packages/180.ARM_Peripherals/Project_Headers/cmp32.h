@@ -442,26 +442,7 @@ public:
    }
 
 public:
-   /**
-    * Configures all mapped pins associated with this peripheral
-    */
-   static void __attribute__((always_inline)) configureAllPins() {
-      // Configure pins
-      Info::initPCRs();
-   }
-
-   /**
-    * Basic enable CMP.
-    * Includes enabling clock and configuring all pins if mapPinsOnEnable is selected on configuration
-    */
-   static void enable() {
-      if (Info::mapPinsOnEnable) {
-         configureAllPins();
-      }
-      // Enable clock to CMP interface
-      Info::enableClock();
-   }
-
+$(/CMP/classInfo: // No class Info found)
    /**
     * Enable with default settings\n
     * Includes configuring all pins

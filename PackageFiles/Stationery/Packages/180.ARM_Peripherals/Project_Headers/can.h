@@ -1374,26 +1374,7 @@ public:
    }
 
 public:
-   /**
-    * Configures all mapped pins associated with this peripheral
-    */
-   static void configureAllPins() {
-      // Configure pins
-      Info::initPCRs();
-   }
-
-   /**
-    *  Configure the CAN with default settings
-    */
-   static void enable() {
-      if (Info::mapPinsOnEnable) {
-         configureAllPins();
-      }
-
-      // Enable clock to peripheral
-      Info::enableClock();
-      __DMB();
-   }
+$(/CAN/classInfo: // No class Info found)
 
    /**
     * Configure for individual mailbox use only (no FIFO)

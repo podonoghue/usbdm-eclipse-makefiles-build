@@ -338,15 +338,7 @@ public:
       Info::initPCRs();
    }
 
-   /**
-    * Initialise USB to default settings\n
-    * Configures all USB pins
-    */
-   static void enable() {
-      Info::enableClock();
-
-      configureAllPins();
-   }
+    $(/USBHS/classInfo: // No class Info found)
 
    /**
     * Enable interrupts in NVIC

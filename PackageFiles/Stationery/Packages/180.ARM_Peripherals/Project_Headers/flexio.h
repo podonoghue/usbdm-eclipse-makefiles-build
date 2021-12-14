@@ -580,27 +580,7 @@ public:
    constexpr FlexioBase_T() : FlexioBase(Info::baseAddress) {
    }
 
-   /**
-    * Configures all mapped pins associated with this peripheral
-    */
-   static void __attribute__((always_inline)) configureAllPins() {
-      // Configure pins
-      Info::initPCRs();
-   }
-
-   /**
-    * Basic enable of module.
-    * Includes enabling clock and configuring all pins if mapPinsOnEnable is selected on configuration
-    */
-   static void enable() {
-      if (Info::mapPinsOnEnable) {
-         configureAllPins();
-      }
-
-      // Enable clock to hardware
-      Info::enableClock();
-   }
-
+$(/FLEXIO/classInfo: // No class Info found)
    /**
       * Get FLEXIO input clock frequency
       *

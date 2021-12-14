@@ -440,14 +440,7 @@ public:
 #endif
 
 public:
-   /**
-    * Configures all mapped pins associated with this peripheral
-    */
-   static void __attribute__((always_inline)) configureAllPins() {
-      // Configure pins
-      Info::initPCRs();
-   }
-
+   $(/I2C/classInfo: // No class Info found)
    /**
     * Construct I2C interface
     *
@@ -545,8 +538,8 @@ public:
       using sdaGpio = GpioTable_T<Info, Info::sdaPin, USBDM::ActiveHigh>;
 
       // Re-map pins to GPIOs initially 3-state
-      sclGpio::setInput(PinPull_Up);
-      sdaGpio::setInput(PinPull_Up);
+      sclGpio::setInput();
+      sdaGpio::setInput();
 
       // SCL & SDA data values are low but direction is manipulated to achieve open-drain operation
       sclGpio::low();

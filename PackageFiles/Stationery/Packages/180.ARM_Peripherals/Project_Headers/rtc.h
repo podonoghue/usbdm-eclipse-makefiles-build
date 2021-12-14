@@ -221,13 +221,7 @@ protected:
    static constexpr HardwarePtr<RTC_Type> rtc = Info::baseAddress;
 
 public:
-   /**
-    * Configures all mapped pins associated with this peripheral
-    */
-   static void __attribute__((always_inline)) configureAllPins() {
-      // Configure pins
-      Info::initPCRs();
-   }
+   $(/RTC/classInfo: // No class Info found)
 
    /**
     * Initialise RTC to default settings.
@@ -237,7 +231,7 @@ public:
 
       // Enable clock to RTC interface
       // (RTC used its own clock internally)
-      Info::enableClock();
+      enable();
 
 #ifdef RTC_CR_OSCE_MASK
       if ((Info::cr&RTC_CR_OSCE_MASK) == 0) {

@@ -343,6 +343,14 @@ enum PinFilter {
 };
 
 /**
+ * Pin Control Register (PCR) lock
+ */
+enum PinLock {
+   PinLock_Unlocked  = PORT_PCR_LK(0),  //!< PCR not locked after 1st write
+   PinLock_Locked    = PORT_PCR_LK(1),  //!< PCR locked after 1st write
+};
+
+/**
  * Pin interrupt/DMA actions
  *
  * @note Not all pins support this function
@@ -442,6 +450,28 @@ constexpr PcrValue operator|(PinAction        op1, PinMux op2)           { retur
 constexpr PcrValue operator|(PinMux           op1, PinMux op2)           { return (PcrValue)((uint32_t)op1|(uint32_t)op2); }
 
 /**
+ * Force a PcrValue to refer to the GPIO function i.e. MUX field = PinMux_Gpio
+ *
+ * @param op   PCR value to base result on
+ *
+ * @return  Modified PCR value
+ */
+constexpr PcrValue gpioPcrValue(PcrValue op) {
+   return (PcrValue)((op&~PORT_PCR_MUX_MASK)|PinMux_Gpio);
+}
+
+/**
+ * Force a PcrValue to refer to the Analogue function i.e. MUX field = PinMux_Analogue
+ *
+ * @param op   PCR value to base result on
+ *
+ * @return  Modified PCR value
+ */
+constexpr PcrValue analoguePcrValue(PcrValue op) {
+   return (PcrValue)((op&~PORT_PCR_MUX_MASK)|PinMux_Analogue);
+}
+
+/**
  * Type for PCR constants - allows automatic conversion to various PCR bit masks
  */
 class PcrValueClass {
@@ -472,45 +502,41 @@ public:
    constexpr PcrValue         pcrValue()       const { return static_cast<PcrValue>(value); }
    constexpr PcrValue         pcrValue()             { return static_cast<PcrValue>(value); }
 
-#ifdef PORT_PCR_ODE_MASK
-   constexpr operator         PinDriveMode()       const { return static_cast<PinDriveMode>(value&PORT_PCR_ODE_MASK); }
-   constexpr operator         PinDriveMode()             { return static_cast<PinDriveMode>(value&PORT_PCR_ODE_MASK); }
-   constexpr PinDriveMode     pinDriveMode()       const { return static_cast<PinDriveMode>(value&PORT_PCR_ODE_MASK); }
-   constexpr PinDriveMode     pinDriveMode()             { return static_cast<PinDriveMode>(value&PORT_PCR_ODE_MASK); }
-#endif
+   constexpr operator         PinDriveMode()       const { return static_cast<PinDriveMode>(value&PORT_PCR_ODE(1)); }
+   constexpr operator         PinDriveMode()             { return static_cast<PinDriveMode>(value&PORT_PCR_ODE(1)); }
+   constexpr PinDriveMode     pinDriveMode()       const { return static_cast<PinDriveMode>(value&PORT_PCR_ODE(1)); }
+   constexpr PinDriveMode     pinDriveMode()             { return static_cast<PinDriveMode>(value&PORT_PCR_ODE(1)); }
 
-#if defined(PORT_PCR_SRE_MASK)
-   constexpr operator         PinSlewRate()        const { return static_cast<PinSlewRate>(value&PORT_PCR_SRE_MASK); }
-   constexpr operator         PinSlewRate()              { return static_cast<PinSlewRate>(value&PORT_PCR_SRE_MASK); }
-   constexpr PinSlewRate      pinSlewRate()        const { return static_cast<PinSlewRate>(value&PORT_PCR_SRE_MASK); }
-   constexpr PinSlewRate      pinSlewRate()              { return static_cast<PinSlewRate>(value&PORT_PCR_SRE_MASK); }
-#endif
+   constexpr operator         PinSlewRate()        const { return static_cast<PinSlewRate>(value&PORT_PCR_SRE(1)); }
+   constexpr operator         PinSlewRate()              { return static_cast<PinSlewRate>(value&PORT_PCR_SRE(1)); }
+   constexpr PinSlewRate      pinSlewRate()        const { return static_cast<PinSlewRate>(value&PORT_PCR_SRE(1)); }
+   constexpr PinSlewRate      pinSlewRate()              { return static_cast<PinSlewRate>(value&PORT_PCR_SRE(1)); }
 
    // The following extract bit fields from PCR as conversions
-   constexpr operator         PinPull()            const { return static_cast<PinPull>(value&PORT_PCR_PD_MASK); }
-   constexpr operator         PinPull()                  { return static_cast<PinPull>(value&PORT_PCR_PD_MASK); }
-   constexpr PinPull          pinPull()            const { return static_cast<PinPull>(value&PORT_PCR_PD_MASK); }
-   constexpr PinPull          pinPull()                  { return static_cast<PinPull>(value&PORT_PCR_PD_MASK); }
+   constexpr operator         PinPull()            const { return static_cast<PinPull>(value&PORT_PCR_PD(1)); }
+   constexpr operator         PinPull()                  { return static_cast<PinPull>(value&PORT_PCR_PD(1)); }
+   constexpr PinPull          pinPull()            const { return static_cast<PinPull>(value&PORT_PCR_PD(1)); }
+   constexpr PinPull          pinPull()                  { return static_cast<PinPull>(value&PORT_PCR_PD(1)); }
 
-   constexpr operator         PinDriveStrength()   const { return static_cast<PinDriveStrength>(value&PORT_PCR_DSE_MASK); }
-   constexpr operator         PinDriveStrength()         { return static_cast<PinDriveStrength>(value&PORT_PCR_DSE_MASK); }
-   constexpr PinDriveStrength pinDriveStrength()   const { return static_cast<PinDriveStrength>(value&PORT_PCR_DSE_MASK); }
-   constexpr PinDriveStrength pinDriveStrength()         { return static_cast<PinDriveStrength>(value&PORT_PCR_DSE_MASK); }
+   constexpr operator         PinDriveStrength()   const { return static_cast<PinDriveStrength>(value&PORT_PCR_DSE(1)); }
+   constexpr operator         PinDriveStrength()         { return static_cast<PinDriveStrength>(value&PORT_PCR_DSE(1)); }
+   constexpr PinDriveStrength pinDriveStrength()   const { return static_cast<PinDriveStrength>(value&PORT_PCR_DSE(1)); }
+   constexpr PinDriveStrength pinDriveStrength()         { return static_cast<PinDriveStrength>(value&PORT_PCR_DSE(1)); }
 
-   constexpr operator         PinAction()          const { return static_cast<PinAction>(value&PORT_PCR_IRQC_MASK); }
-   constexpr operator         PinAction()                { return static_cast<PinAction>(value&PORT_PCR_IRQC_MASK); }
-   constexpr PinAction        pinAction()          const { return static_cast<PinAction>(value&PORT_PCR_IRQC_MASK); }
-   constexpr PinAction        pinAction()                { return static_cast<PinAction>(value&PORT_PCR_IRQC_MASK); }
+   constexpr operator         PinAction()          const { return static_cast<PinAction>(value&PORT_PCR_IRQC(1)); }
+   constexpr operator         PinAction()                { return static_cast<PinAction>(value&PORT_PCR_IRQC(1)); }
+   constexpr PinAction        pinAction()          const { return static_cast<PinAction>(value&PORT_PCR_IRQC(1)); }
+   constexpr PinAction        pinAction()                { return static_cast<PinAction>(value&PORT_PCR_IRQC(1)); }
 
-   constexpr operator         PinFilter()          const { return static_cast<PinFilter>(value&PORT_PCR_PFE_MASK); }
-   constexpr operator         PinFilter()                { return static_cast<PinFilter>(value&PORT_PCR_PFE_MASK); }
-   constexpr PinFilter        pinFilter()          const { return static_cast<PinFilter>(value&PORT_PCR_PFE_MASK); }
-   constexpr PinFilter        pinFilter()                { return static_cast<PinFilter>(value&PORT_PCR_PFE_MASK); }
+   constexpr operator         PinFilter()          const { return static_cast<PinFilter>(value&PORT_PCR_PFE(1)); }
+   constexpr operator         PinFilter()                { return static_cast<PinFilter>(value&PORT_PCR_PFE(1)); }
+   constexpr PinFilter        pinFilter()          const { return static_cast<PinFilter>(value&PORT_PCR_PFE(1)); }
+   constexpr PinFilter        pinFilter()                { return static_cast<PinFilter>(value&PORT_PCR_PFE(1)); }
 
-   constexpr operator         PinMux()             const { return static_cast<PinMux>(value&PORT_PCR_MUX_MASK); }
-   constexpr operator         PinMux()                   { return static_cast<PinMux>(value&PORT_PCR_MUX_MASK); }
-   constexpr PinMux           pinMux()             const { return static_cast<PinMux>(value&PORT_PCR_MUX_MASK); }
-   constexpr PinMux           pinMux()                   { return static_cast<PinMux>(value&PORT_PCR_MUX_MASK); }
+   constexpr operator         PinMux()             const { return static_cast<PinMux>(value&PORT_PCR_MUX(1)); }
+   constexpr operator         PinMux()                   { return static_cast<PinMux>(value&PORT_PCR_MUX(1)); }
+   constexpr PinMux           pinMux()             const { return static_cast<PinMux>(value&PORT_PCR_MUX(1)); }
+   constexpr PinMux           pinMux()                   { return static_cast<PinMux>(value&PORT_PCR_MUX(1)); }
 };
 
 
@@ -964,10 +990,10 @@ public:
             Pcr_T::port->DFER &= ~BITMASK;
          }
          // Make sure MUX value is correct and clear PinFilter_Digital
-         pcr = (pcr & ~(PORT_PCR_MUX_MASK|PORT_DFCR_CS_MASK)) | ((PinMux)defaultPcrValue);
+         pcr = (pcr & ~(PORT_PCR_MUX_MASK|PinFilter_Digital)) | defaultPcrValue.pinMux();
 #else
-         // Make sure MUX value is correct and clear PinFilter_Digital
-         pcr = (pcr & ~(PORT_PCR_MUX_MASK)) | ((PinMux)defaultPcrValue.value);
+         // Make sure MUX value is correct
+         pcr = (pcr & ~(PORT_PCR_MUX_MASK)) | defaultPcrValue.pinMux();
 #endif
          // Update PCR register for pin
          *PCR = pcr;
@@ -1407,7 +1433,7 @@ void processPcrs(uint32_t pcrValue) {
  * @tparam index         Index of pin in configuration table within class
  */
 template<class Info, uint8_t index>
-class PcrTable_T : public Pcr_T<Info::info[index].clockInfo, Info::info[index].portAddress, Info::info[index].irqNum, Info::info[index].pcrValue.value, Info::info[index].irqLevel, Info::info[index].gpioBit> {
+class PcrTable_T : public Pcr_T<Info::info[index].clockInfo, Info::info[index].portAddress, Info::info[index].irqNum, Info::info[index].pcrValue, Info::info[index].irqLevel, Info::info[index].gpioBit> {
 };
 /**
  * @}

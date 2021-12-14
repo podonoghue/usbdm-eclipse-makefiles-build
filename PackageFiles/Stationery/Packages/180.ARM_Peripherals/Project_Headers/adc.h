@@ -710,6 +710,7 @@ public:
    /** @return Base address of ADC.R[index] registers as uint32_t */
    static constexpr uint32_t adcR(unsigned index) { return adcBase() + offsetof(ADC_Type, R[index]); }
 
+$(/ADC/classInfo: // No class Info found)
 public:
 
    constexpr AdcBase_T() : Adc(Info::baseAddress) {};
@@ -827,45 +828,6 @@ public:
             (sCallback == unhandledCallback) || (sCallback == callback),
             "Handler already set");
       sCallback = callback;
-   }
-
-   /**
-    * Configures all mapped pins associated with this peripheral
-    */
-   static void configureAllPins() {
-      // Configure pins
-      Info::initPCRs();
-#ifdef ADC_SC1_DIFF_MASK
-      Info::InfoDP::initPCRs();
-      Info::InfoDM::initPCRs();
-#endif
-   }
-
-   /**
-    * Basic enable of ADC.
-    * Includes enabling clock and configuring all pins of mapPinsOnEnable is selected on configuration
-    */
-   static void enable() {
-      if (Info::mapPinsOnEnable) {
-         configureAllPins();
-      }
-
-      // Enable clock to ADC
-      Info::enableClock();
-      __DMB();
-   }
-
-   /**
-    * Disables the ADC.
-    * Does not change ADC pin mapping
-    */
-   static void disable() {
-      adc->CFG1 = 0;
-      adc->CFG2 = 0;
-      adc->SC2  = 0;
-
-      // Disable clock to ADC
-      Info::disableClock();
    }
 
    /**
@@ -1365,7 +1327,7 @@ public:
        */
       static void setInput() {
          // Map pin to ADC
-         Pcr::setPCR(Info::info[channel].pcrValue);
+         Pcr::setPCR();
       }
 
       /**

@@ -114,15 +114,7 @@ public:
    };
 
 public:
-   /**
-    * Configures all mapped pins associated with this peripheral
-    */
-   static void __attribute__((always_inline)) configureAllPins() {
-      CheckOutputIsMapped<Info::outputPin>::check();
-
-      // Configure pins
-      Info::initPCRs();
-   }
+   $(/VREF/classInfo: // No class Info found)
 
    /**
     * Enable Vref output pin as Vref output.

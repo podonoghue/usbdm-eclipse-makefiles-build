@@ -18,8 +18,8 @@
  * Any manual changes will be lost.
  */
 #include <stddef.h>
-#include "derivative.h"
 #include <cmath>
+#include "pin_mapping.h"
 
 /*
  * Default port information

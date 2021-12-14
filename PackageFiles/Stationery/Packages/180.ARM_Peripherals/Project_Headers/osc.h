@@ -54,18 +54,15 @@ private:
       static constexpr bool checker = false;
    };
 
+   // Dummy function as no IRQ
+   void disableNvicInterrupts() {}
+
 protected:
    /** Hardware instance */
    static constexpr HardwarePtr<OSC_Type> osc = Info::baseAddress;
 
 public:
-   /**
-    * Configures all mapped pins associated with this peripheral
-    */
-   static void __attribute__((always_inline)) configureAllPins() {
-      // Configure pins
-      Info::initPCRs();
-   }
+   $(/OSC/classInfo: // No class Info found)
 
    /**
     * Initialise OSC to default settings.

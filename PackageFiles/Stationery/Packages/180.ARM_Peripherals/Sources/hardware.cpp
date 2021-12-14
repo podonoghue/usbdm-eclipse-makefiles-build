@@ -24,14 +24,28 @@ namespace USBDM {
  * @{
  */
 
-$(/HARDWARE_CPP/Definitions:   // No definitions Found)
 /**
- * Used to configure pin-mapping before 1st use of peripherals
+ * Startup code for C++ classes
+ */
+extern "C" void __attribute__((constructor)) cpp_initialise() {
+   if constexpr (MapAllPinsOnStartup) {
+      mapAllPins();
+   }
+}
+
+$(/HARDWARE_CPP/Definitions:   // No user object definitions found)
+
+/**
+ * Map all configured pins to peripheral signals.
+ *
+ * PCRs of allocated pins are set according to settings in Configure.usbdmProject
+ *
+ * @note Only the lower 16-bits of the PCR registers are initialised
  */
 void mapAllPins() {
 $(/HARDWARE_CPP/PortInitialisations:   // No initialisation Found)
 }
-/** 
+/**
  * End group USBDM_Group
  * @}
  */

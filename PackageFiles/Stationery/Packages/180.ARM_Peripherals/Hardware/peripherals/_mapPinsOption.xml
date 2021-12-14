@@ -2,16 +2,36 @@
 <!DOCTYPE fragment SYSTEM "_menu.dtd" >
 <!-- _mapPinsOption.xml -->
 
+<fragment xmlns:xi="http://www.w3.org/2001/XInclude">
+         
 <!-- 
       Predefined symbols generated for current peripheral
-      _base_class FTM0 => Ftm
-      _instance   FTM0 => 0
-      _class      FTM0 => Ftm0
-      _name       FTM0 => FTM0
+      $(_instance)   FTM0 => 0
+      $(_base_class) FTM0 => Ftm
+      $(_class)      FTM0 => Ftm0
+      $(_base_name)  FTM0 => FTM
+      $(_name)       FTM0 => FTM0
+
+      Template Rules based on attributes  info|usbdm|class|all)  "info"
+      
+      - namespace=info (default if blank)
+        Placed in Info class in pin_mapping.h
+
+      - namespace="usbdm"
+        Placed before Info class in pin_mapping.h 
+
+      - namespace="class"
+        Really useless, just get converted to a Class variable e.g. /FTM/infoClass
+        
+      - namespace="all" name="key"
+        Substituted anywhere for $(key)
+        key is 
+
+      - dim="expr"
+        Allow subscripted template
+
  -->
  
-<fragment xmlns:xi="http://www.w3.org/2001/XInclude">
-
    <binaryOption name="mapPinsOnEnable" 
       description="Map pins when peripheral is configured"
       toolTip="Map all allocated pins on a peripheral when the\n
@@ -26,4 +46,59 @@
       \tstatic constexpr bool mapPinsOnEnable = $(mapPinsOnEnable);\n\n
    ]]></template>
 
+   <!-- Template is added to peripheral classes -->
+   <template namespace="class"><![CDATA[
+      // Template _mapPinsOption.xml
+
+      \t/**
+      \t * Configures all mapped pins associated with $(_base_name)
+      \t */
+      \tstatic void configureAllPins() {
+      \t
+      \t   // Configure pins if selected and not already locked
+      \t   if constexpr (Info::mapPinsOnEnable && !(MapAllPinsOnStartup && (ForceLockedPins == PinLock_Locked))) {
+      \t      Info::initPCRs();
+      \t   }
+      \t}
+
+      \t/**
+      \t * Disabled all mapped pins associated with $(_base_name)
+      \t *
+      \t * @note Only the lower 16-bits of the PCR registers are modified
+      \t */
+      \tstatic void disableAllPins() {
+      \t
+      \t   // Disable pins if selected and not already locked
+      \t   if constexpr (Info::mapPinsOnEnable && !(MapAllPinsOnStartup && (ForceLockedPins == PinLock_Locked))) {
+      \t   Info::clearPCRs();
+      \t   }
+      \t}
+
+      \t/**
+      \t * Basic enable of $(_base_name)
+      \t * Includes enabling clock and configuring all pins if mapPinsOnEnable is selected in configuration
+      \t */
+      \tstatic void enable() {
+      \t
+      \t   // Enable clock to peripheral
+      \t   Info::enableClock();
+      \t
+      \t   configureAllPins();
+      \t}
+
+      \t/**
+      \t * Disables the clock to $(_base_name) and all mappable pins
+      \t */
+      \tstatic void disable() {
+      \t
+      \t   disableNvicInterrupts();
+      \t   
+      \t   disableAllPins();
+      \t
+      \t   // Disable clock to peripheral
+      \t   Info::disableClock();
+      \t}
+      // End Template _mapPinsOption.xml\n
+   ]]></template>
+      
 </fragment>

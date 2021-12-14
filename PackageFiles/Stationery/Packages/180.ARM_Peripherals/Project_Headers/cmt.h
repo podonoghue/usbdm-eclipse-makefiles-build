@@ -161,6 +161,9 @@ protected:
    /** Callback function for ISR */
    static CMTCallbackFunction sCallback;
 
+   // Output pin
+   using OutputPin = PcrTable_T<Info, 0>;
+
 public:
    /**
     * Hardware instance pointer.
@@ -210,26 +213,7 @@ public:
    }
 
 public:
-   /**
-    * Configures all mapped pins associated with this peripheral
-    */
-   static void __attribute__((always_inline)) configureAllPins() {
-      // Configure pins
-      Info::initPCRs();
-   }
-
-   /**
-    * Basic enable CMT.
-    * Includes enabling clock and configuring all pins of mapPinsOnEnable is selected on configuration
-    */
-   static void enable() {
-      if (Info::mapPinsOnEnable) {
-         configureAllPins();
-      }
-
-      // Enable clock to CMP interface
-      Info::enableClock();
-   }
+$(/CMT/classInfo: // No class Info found)
 
    /**
     * Enable with default settings.
@@ -247,7 +231,7 @@ public:
     *
     * @param[in] pcrValue PCR value to use in configuring port (excluding MUX value). See pcrValue()
     */
-   static void setOutput(PcrValue pcrValue=Info::defaultPcrValue) {
+   static void setOutput(PcrValue pcrValue=OutputPin::defaultPcrValue) {
       CheckOutputIsMapped<0>::check();
       using Pcr = PcrTable_T<Info, 0>;
 
@@ -432,15 +416,6 @@ public:
       cmt->CMD3 = (uint8_t)(space>>8);
       cmt->CMD4 = (uint8_t)(space);
     }
-
-   /**
-    * Disable CMT
-    */
-   static void disable() {
-      cmt->MSC = 0;
-      disableNvicInterrupts();
-      Info::disableClock();
-   }
 
    /**
     * Enable interrupts in NVIC

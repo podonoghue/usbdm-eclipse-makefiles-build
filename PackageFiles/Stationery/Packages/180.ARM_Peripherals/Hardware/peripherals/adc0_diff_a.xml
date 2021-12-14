@@ -5,7 +5,6 @@
 <peripheralPage xmlns:xi="http://www.w3.org/2001/XInclude" name="_instance" description="Analogue to Digital Converter">
 
    <xi:include href="_default_instance.xml"/>
-
    <xi:include href="_mapPinsOption.xml"/>
    
    <choiceOption name="adc_cfg1_adiclk" description="Clock Source"
@@ -184,7 +183,6 @@
      \t *  @return Frequency in Hz
      \t */
      \tstatic unsigned getInputClockFrequency(AdcClockSource adcClockSource) {
-     \t
      \t   switch (adcClockSource) {
      \t      case AdcClockSource_Bus:
      \t         return SystemBusClock;

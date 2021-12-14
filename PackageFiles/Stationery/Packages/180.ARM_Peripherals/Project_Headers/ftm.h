@@ -1551,39 +1551,7 @@ public:
    }
 
 public:
-   /**
-    * Configures all mapped pins associated with this peripheral
-    */
-   static void configureAllPins() {
-      // Configure pins
-      Info::initPCRs();
-   }
-
-   /**
-    * Enables clock to peripheral and configures all pins if
-    * mapPinsOnEnable setting is true
-    */
-   static void enable() {
-      if (Info::mapPinsOnEnable) {
-         configureAllPins();
-      }
-
-      // Enable clock to peripheral interface
-      Info::enableClock();
-      __DMB();
-   }
-
-   /**
-    * Disables peripheral including clocks
-    */
-   static void disable() {
-      // Disable (clock source disabled)
-      tmr->SC = 0;
-
-      // Disable clock to peripheral interface
-      Info::disableClock();
-      __DMB();
-   }
+   $(/FTM/classInfo: // No class Info found)
 
    /**
     * Configure with settings from Configure.usbdmProject.
@@ -3268,28 +3236,41 @@ public:
    }
 
    /**
-    * Enables clock to peripheral and configures all pins if
-    * mapPinsOnEnable setting is true
+    * Disabled all mapped pins associated with FTM
+    *
+    * @note Only the lower 16-bits of the PCR registers are modified
     */
-   static void enable() {
-      if (Info::mapPinsOnEnable) {
-         configureAllPins();
-      }
-      // Enable clock to peripheral interface
-      Info::enableClock();
-      __DMB();
+   static void disableAllPins() {
+      // Configure pins
+      Info::InfoQUAD::clearPCRs();
    }
 
    /**
-    * Disables peripheral including clocks
+    * Basic enable of FTM
+    * Includes enabling clock and configuring all pins if mapPinsOnEnable is selected in configuration
+    */
+   static void enable() {
+      // Enable clock to peripheral
+      Info::enableClock();
+
+      if constexpr (Info::mapPinsOnEnable) {
+         configureAllPins();
+      }
+   }
+
+   /**
+    * Disables the clock to FTM and all mappable pins
     */
    static void disable() {
-      // Disable FTM (clock source disabled)
-      tmr->QDCTRL = 0;
 
-      // Disable clock to peripheral interface
+      disableNvicInterrupts();
+
+      if constexpr (Info::mapPinsOnEnable) {
+         disableAllPins();
+      }
+
+      // Disable clock to peripheral
       Info::disableClock();
-      __DMB();
    }
 
    /**

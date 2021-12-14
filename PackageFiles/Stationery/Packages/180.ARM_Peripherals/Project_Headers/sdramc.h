@@ -454,6 +454,9 @@ private:
    SdramcBase_T(const SdramcBase_T&) = delete;
    SdramcBase_T(SdramcBase_T&&) = delete;
 
+   // Dummy routine as no IRQ
+   void disableNvicInterrupts() {}
+
 public:
    /** Class to static check channel exists and is mapped to a pin */
    template<int pin> class CheckPinExistsAndIsMapped {
@@ -488,31 +491,20 @@ public:
    constexpr SdramcBase_T() : SdramcBase(Info::baseAddress) {
    }
 
-   /**
-    * Configures all mapped pins associated with this peripheral
-    */
-   static void __attribute__((always_inline)) configureAllPins() {
-      // Configure pins
-      Info::initPCRs();
-   }
+   $(/SDRAMC/classInfo: // No class Info found)
 
    /**
     * Basic enable of module.
     * Includes enabling clock and configuring all pins if mapPinsOnEnable is selected on configuration
     */
-   static void enable() {
-      if constexpr (Info::mapPinsOnEnable) {
-         configureAllPins();
-      }
+   static void defaultConfigure() {
+      enable();
 
       // The multiplexing of shared FLEXBUS/SDRAMC ports is controlled by the FLEXBUS controller
       FlexbusInfo::configureSharedMultiplexing();
 
       // Requires CLKOUT = FLEXBUS Clock
       SimInfo::setClkout(SimClkoutSel_FlexBus);
-
-      // Enable clock to hardware
-      Info::enableClock();
    }
 
    /**
@@ -538,22 +530,8 @@ public:
          SdramRefreshTiming   sdramRefreshTiming,
          unsigned             rows=4096,
          unsigned             refreshPeriod = 64) {
-      enable();
+      defaultConfigure();
       setRefreshParameters(sdramRefreshTiming, rows, refreshPeriod);
-   }
-
-   /**
-    * Enable with default settings.
-    */
-   static void defaultConfigure() {
-      enable();
-   }
-
-   /**
-    * Disable interface to SDRAMC.
-    */
-   static void disable() {
-      Info::disableClock();
    }
 
    /**

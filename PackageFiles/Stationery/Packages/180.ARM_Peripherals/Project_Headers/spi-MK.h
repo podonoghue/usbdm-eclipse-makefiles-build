@@ -768,6 +768,30 @@ public:
       sCallback = callback;
    }
 
+   /**
+    * Enable interrupts in NVIC
+    */
+   static void enableNvicInterrupts() {
+      NVIC_EnableIRQ(Info::irqNums[0]);
+   }
+
+   /**
+    * Enable and set priority of interrupts in NVIC
+    * Any pending NVIC interrupts are first cleared.
+    *
+    * @param[in]  nvicPriority  Interrupt priority
+    */
+   static void enableNvicInterrupts(NvicPriority nvicPriority) {
+      enableNvicInterrupt(Info::irqNums[0], nvicPriority);
+   }
+
+   /**
+    * Disable interrupts in NVIC
+    */
+   static void disableNvicInterrupts() {
+      NVIC_DisableIRQ(Info::irqNums[0]);
+   }
+
 #ifdef __CMSIS_RTOS
 protected:
    /**
@@ -866,14 +890,7 @@ public:
    /** SPI SOUT (data out = usually MOSI) Pin */
    using soutGpio = GpioTable_T<Info, 2, ActiveHigh>;
 
-   /**
-    * Configures all mapped pins associated with this peripheral
-    */
-   static void __attribute__((always_inline)) configureAllPins() {
-      // Configure pins
-      Info::initPCRs();
-   }
-
+   $(/SPI/classInfo: // No class Info found)
    virtual void enablePins() override {
       configureAllPins();
    }

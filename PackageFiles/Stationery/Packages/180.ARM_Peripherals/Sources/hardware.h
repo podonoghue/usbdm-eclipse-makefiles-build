@@ -28,6 +28,15 @@
 $(/HARDWARE_H/IncludeFiles:   // No header file inclusions found)
 
 namespace USBDM {
+
+/**
+ * Map all configured pins to peripheral signals.
+ *
+ * PCRs of allocated pins are set according to settings in Configure.usbdmProject
+ *
+ * @note Only the lower 16-bits of the PCR registers are initialised
+ */
+extern void mapAllPins();
 $(/HARDWARE_H/Declarations:   // No user declarations found)
 } // End namespace USBDM
 

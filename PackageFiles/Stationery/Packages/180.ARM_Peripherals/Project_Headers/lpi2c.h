@@ -108,13 +108,7 @@ public:
    }
 
 public:
-   /**
-    * Configures all mapped pins associated with this peripheral
-    */
-   static void __attribute__((always_inline)) configureAllPins() {
-      // Configure pins
-      Info::initPCRs();
-   }
+   $(/LPI2C/classInfo: // No class Info found)
 
    /**
     * Construct LPI2C interface

@@ -332,37 +332,7 @@ protected:
    static constexpr HardwarePtr<PDB_Type> pdb = Info::baseAddress;
 
 public:
-   /**
-    * Configures all mapped pins associated with this peripheral
-    */
-   static void configureAllPins() {
-      // Configure pins
-      Info::initPCRs();
-   }
-
-   /**
-    * Basic enable of PDB.
-    * Includes enabling clock and configuring all pins of mapPinsOnEnable is selected on configuration
-    */
-   static void  enable() {
-
-      if (Info::mapPinsOnEnable) {
-         configureAllPins();
-      }
-      Info::enableClock();
-      __DMB();
-   }
-
-   /**
-    * Disable PDB
-    */
-   static void  disable() {
-
-      pdb->SC  = 0;
-      Info::disableClock();
-      __DMB();
-   }
-
+   $(/PDB/classInfo: // No class Info found)
    /**
     * Enables PDB and sets to default configuration.
     *

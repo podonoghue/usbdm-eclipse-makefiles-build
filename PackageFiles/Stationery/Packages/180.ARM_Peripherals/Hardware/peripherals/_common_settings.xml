@@ -3,11 +3,27 @@
 <!-- _common_settings.xml -->
 
 <list name="CommonSettings" >
-<binaryOption name="mapAllPins" 
-   description="Map all allocated pins"
-   toolTip="Map all allocated pins during startup using mapAllPins()">
-   <choice value="false" name="Don't map - Use manual mapping or enable peripheral individually" />
-   <choice value="true"  name="Map during startup" />
+<binaryOption name="/HARDWARE/mapAllPins" 
+   description="Map allocated pins"
+   toolTip="Enables mapping of all allocated pins during startup using mapAllPins()">
+   <choice value="false" name="Don't map - Use manual mapping or enable mapping for peripherals individually"  isDefault="true" />
+   <choice value="true"  name="Map pins during startup using mapAllPins()" />
+</binaryOption>
+
+<binaryOption name="/HARDWARE/lockMappedPins" 
+   description="Lock allocated pins"
+   toolTip="Lock PCRs during mapAllPins()">
+   <choice value="PinLock_Unlocked" name="Don't force locked - Pins may still be individually locked" />
+   <choice value="PinLock_Locked"  name="Force all pins to be locked in mapAllPins()" isDefault="true" />
+</binaryOption>
+
+<binaryOption name="/HARDWARE/lockoutUnbondedPins" 
+   description="Lock out pins that are not bonded to physical pins on package"
+   toolTip="In some smaller packages there are die pins that are not bonded to package pins\n
+            For those pins the PCR can be set to 0 (analogue) to minimize power consumption\n
+            This is the reset state.">
+   <choice value="false" name="Leave unbonded pins unchanged" />
+   <choice value="true"  name="Force unbonded pins to analogue function" isDefault="true" />
 </binaryOption>
 
 <!-- Template is added to pin_mapping.h -->
@@ -26,6 +42,21 @@
    #else
    #define NOINLINE_DEBUG
    #endif
+
+   \t/**
+   \t *  Enables mapping of all allocated pins during startup using mapAllPins() 
+   \t */
+   \tstatic constexpr bool MapAllPinsOnStartup = $(/HARDWARE/mapAllPins);
+
+   \t/**
+   \t * Controls forcing all pins to be locked in mapAllPins() 
+   \t */
+   \tstatic constexpr PinLock ForceLockedPins = $(/HARDWARE/lockMappedPins);
+   
+   \t/**
+   \t *  Enables forcing unbonded pins to analogue function in mapAllPins() 
+   \t */
+   \tstatic constexpr bool MapAllPinsOnStartup = $(/HARDWARE/lockoutUnbondedPins);
 
    \tstatic constexpr float ns      = 1E-9f; //!< Scale factor for nanoseconds
    \tstatic constexpr float us      = 1E-6f; //!< Scale factor for microseconds
@@ -110,12 +141,6 @@
    \t\tstatic_assert((signalNum>=Info::numSignals)||(Info::info[signalNum].gpioBit != INVALID_PCR),  "Signal doesn't exist in this device/package");
    \t\tstatic_assert((signalNum>=Info::numSignals)||((Info::info[signalNum].gpioBit == UNMAPPED_PCR)||(Info::info[signalNum].gpioBit == INVALID_PCR)||(Info::info[signalNum].gpioBit >= 0)), "Illegal signal");
    \t};
-
-   \t/** Enables mapping of all allocated pins during startup using mapAllPins() */
-   \tstatic constexpr bool MAP_ALL_PINS = $(mapAllPins);
-
-   \t/** Used to configure pin-mapping before 1st use of peripherals */
-   \textern void mapAllPins();
 
    \t/**
    \t * Determine the number of elements in an array

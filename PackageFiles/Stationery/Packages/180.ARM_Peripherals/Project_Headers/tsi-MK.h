@@ -251,27 +251,7 @@ public:
       setAndCheckErrorCode(E_NO_HANDLER);
    }
 
-   /**
-    * Configures all mapped pins associated with this peripheral
-    */
-   static void __attribute__((always_inline)) configureAllPins() {
-      // Configure pins
-      Info::initPCRs();
-   }
-
-   /**
-    * Enables TSI bus interface clock and configures all pins
-    */
-   static void enable() {
-
-      if (Info::mapPinsOnEnable) {
-         configureAllPins();
-      }
-
-      Info::enableClock();
-      __DMB();
-   }
-
+   $(/TSI/classInfo: // No class Info found)
    /**
     * Initialise TSI to default settings determined by Configure.usbdmProject\n
     * Configures all TSI pins.
@@ -506,7 +486,7 @@ public:
        */
       static void setInput() {
          // Configure associated pin as analogue input
-         Pcr::setPCR(PinMux_Analog);
+         Pcr::setPCR();
       }
 
       /**

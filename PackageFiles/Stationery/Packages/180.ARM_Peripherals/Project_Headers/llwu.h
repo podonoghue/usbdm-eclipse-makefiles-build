@@ -340,23 +340,7 @@ protected:
    static constexpr HardwarePtr<LLWU_Type> llwu = Info::baseAddress;
 
 public:
-
-   /**
-    * Configures all mapped pins associated with this peripheral
-    */
-   static void configureAllPins() {
-      // Configure pins
-      Info::initPCRs();
-   }
-
-   /**
-    * Basic enable of LLWU\n
-    * Includes configuring all pins
-    */
-   static void enable() {
-      configureAllPins();
-   }
-
+   $(/LLWU/classInfo: // No class Info found)
    /**
     * Configure with settings from Configure.usbdmProject.
     */
