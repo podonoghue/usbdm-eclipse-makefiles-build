@@ -12,16 +12,10 @@
    
    <xi:include href="_clockOption.xml"/>
       
-   <template><![CDATA[
-      \t//! IRQ numbers for hardware
-      \tstatic constexpr IRQn_Type irqNums[]  = $(_name)_IRQS;
+   <xi:include href="_irqOption.xml"/>
    
-      \t//! Number of IRQs for hardware
-      \tstatic constexpr uint32_t irqCount  = sizeof(irqNums)/sizeof(irqNums[0]);\n\n
-   ]]></template>
-
-   <projectActionList id = "can_files" >
-      <copy source="Project_Headers/can.h"                    target="Project_Headers/can.h"                    overwrite="true"  derived="true" />
+   <projectActionList id = "lcd_files" >
+      <copy source="Project_Headers/lcd.h"                    target="Project_Headers/lcd.h"                    overwrite="true"  derived="true" />
    </projectActionList>
    
 </peripheralPage>

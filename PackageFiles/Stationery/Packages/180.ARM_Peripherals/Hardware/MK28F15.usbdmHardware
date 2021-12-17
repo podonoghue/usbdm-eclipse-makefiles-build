@@ -2207,19 +2207,19 @@
          <placement pin="PTB10"         location="" />
          <placement pin="PTB11"         location="" />
          <placement pin="PTB12"         location="D5" />
-         <placement pin="PTB13"         location="" />
+         <placement pin="PTB13"         location="D6" />
          <placement pin="PTB14"         location="" />
          <placement pin="PTB15"         location="" />
          <placement pin="PTB16"         location="" />
          <placement pin="PTB17"         location="" />
          <placement pin="PTB18"         location="" />
          <placement pin="PTB19"         location="D9" />
-         <placement pin="PTB2"          location="A4_D15" />
-         <placement pin="PTB20"         location="A5_D14" />
+         <placement pin="PTB2"          location="A5_D15" />
+         <placement pin="PTB20"         location="" />
          <placement pin="PTB21"         location="" />
          <placement pin="PTB22"         location="" />
          <placement pin="PTB23"         location="" />
-         <placement pin="PTB3"          location="D14" />
+         <placement pin="PTB3"          location="A4_D14" />
          <placement pin="PTB4"          location="D2" />
          <placement pin="PTB5"          location="" />
          <placement pin="PTB6"          location="" />
@@ -2231,7 +2231,7 @@
          <placement pin="PTC10"         location="" />
          <placement pin="PTC11"         location="D3" />
          <placement pin="PTC12"         location="" />
-         <placement pin="PTC13"         location="D6" />
+         <placement pin="PTC13"         location="" />
          <placement pin="PTC14"         location="" />
          <placement pin="PTC15"         location="" />
          <placement pin="PTC16"         location="" />

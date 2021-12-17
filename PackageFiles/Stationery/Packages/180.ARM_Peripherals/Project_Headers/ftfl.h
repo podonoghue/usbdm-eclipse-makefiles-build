@@ -101,7 +101,7 @@ protected:
    static FlashDriverError_t readFlashResource(uint8_t resourceSelectCode, uint32_t address, uint8_t *data);
 
    /**
-    * Program EEPROM Data Size Code and FlexNVM Partition Code.
+    * Program EEPROM Data Size Code and FlexNVM Partition Code
     *
     * See device reference manual for the meaning of the following parameters
     *
@@ -300,7 +300,7 @@ public:
 
 private:
    /**
-    * Program a phrase to Flash memory.
+    * Program phrase to Flash memory
     *
     * @param[in]  data       Location of data to program
     * @param[out] address    Memory address to program - must be phrase boundary
@@ -320,7 +320,7 @@ private:
 
 public:
    /**
-    * Program a range of bytes to Flash memory.
+    * Program a range of bytes to Flash memory
     *
     * @param[in]  data       Location of data to program
     * @param[out] address    Memory address to program - must be phrase boundary

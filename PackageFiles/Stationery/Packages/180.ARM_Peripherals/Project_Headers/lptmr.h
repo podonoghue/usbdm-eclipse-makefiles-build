@@ -395,16 +395,6 @@ public:
          NVIC_SetPriority(Info::irqNums[0], Info::irqLevel);
       }
    }
-   /**
-    *   Disable the LPTMR
-    */
-   static void disable(void) {
-      // Disable timer
-      Info::enableClock();
-      lptmr->CSR = 0;
-      NVIC_DisableIRQ(Info::irqNums[0]);
-      Info::disableClock();
-   }
 
    /**
     * Converts a number in ticks to time in microseconds.

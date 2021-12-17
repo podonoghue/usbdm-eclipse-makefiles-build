@@ -13,43 +13,12 @@
       \tstatic constexpr int inputPin  = 0;
       
       \t//! Pin number in Info table for EWM output if mapped to a pin
-      \tstatic constexpr int outputPin  = 1;
-
-      \t//! IRQ numbers for hardware
-      \tstatic constexpr IRQn_Type irqNums[]  = $(_name)_IRQS;
-   
-      \t//! Number of IRQs for hardware
-      \tstatic constexpr uint32_t irqCount  = sizeof(irqNums)/sizeof(irqNums[0]);\n\n
+      \tstatic constexpr int outputPin  = 1;\n\n
    ]]></template>
 
-   <irqOption name="irqHandlingMethod"  
-      description="Peripheral interrupt handler"
-      toolTip="This selection allow the interrupt handler for this peripheral to be installed using several different methods"
-      pattern="^WDOG%i_?$"
-      classHandler="%c%i::irqHandler" />
-
-   <!-- Template is added to class within pin_mapping.h -->
-   <template><![CDATA[
-       \t//! Class based callback handler has been installed in vector table
-       \tstatic constexpr bool irqHandlerInstalled = $(irqHandlingMethod);\n\n
-   ]]></template>
-       
-   <choiceOption name="irqLevel"
-      description="Default IRQ level for this peripheral"
-      toolTip="Sets the default priority level used to configure the NVIC">
-      <choice name="VeryHigh"      value="NvicPriority_VeryHigh" />
-      <choice name="High"          value="NvicPriority_High" />
-      <choice name="MidHigh"       value="NvicPriority_MidHigh" />
-      <choice name="Normal"        value="NvicPriority_Normal" isDefault="true"/>
-      <choice name="Midlow"        value="NvicPriority_Midlow" />
-      <choice name="Low"           value="NvicPriority_Low" />
-      <choice name="VeryLow"       value="NvicPriority_VeryLow" />
-   </choiceOption>
-
-   <template><![CDATA[
-       \t//! Default IRQ level
-       \tstatic constexpr NvicPriority irqLevel =  $(?irqHandlingMethod:$(irqLevel):NvicPriority_NotInstalled);\n\n
-   ]]></template>
+   <stringOption name="irq_pattern"        constant="true" value="^WDOG%i_?$" hidden="true" />
+   <stringOption name="irq_classHandler"   constant="true" value="%c%i::irqHandler" hidden="true" />
+   <xi:include href="_irqOptionSubstituted.xml"/>
    
    <xi:include href="_clockOption.xml"/>
 

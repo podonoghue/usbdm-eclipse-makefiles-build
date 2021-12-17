@@ -1271,6 +1271,9 @@ private:
    QspiBase_T(const QspiBase_T&) = delete;
    QspiBase_T(QspiBase_T&&) = delete;
 
+   // Dummy routine as no IRQs
+   void disableNvicInterrupts();
+
 public:
    /** Class to static check channel exists and is mapped to a pin */
    template<int pin> class CheckPinExistsAndIsMapped {
@@ -1306,18 +1309,6 @@ public:
    }
 
    $(/QSPI/classInfo: // No class Info found)
-   /**
-    * Basic enable of module.
-    * Includes enabling clock and configuring all pins if mapPinsOnEnable is selected on configuration
-    */
-   static void enable() {
-      if constexpr (Info::mapPinsOnEnable) {
-         configureAllPins();
-      }
-
-      // Enable clock to hardware
-      Info::enableClock();
-   }
 
    static uint32_t getClockFrequency(QspiClockSource qspiClockSource) {
       switch(qspiClockSource) {
@@ -1357,12 +1348,6 @@ public:
       enable();
    }
 
-   /**
-    * Disable interface to QSPI.
-    */
-   static void disable() {
-      Info::disableClock();
-   }
    /**
     * Software reset for serial flash domain and AHB domain
     *

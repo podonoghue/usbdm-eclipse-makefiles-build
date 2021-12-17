@@ -313,13 +313,6 @@ $(/EWM/classInfo: // No class Info found)
    }
 
    /**
-    * Disable interface to EWM
-    */
-   static void disable() {
-      Info::disableClock();
-   }
-
-   /**
     * Enable interrupts in NVIC
     */
    static void enableNvicInterrupts() {

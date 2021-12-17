@@ -1,5 +1,5 @@
 /**
- * @file     I2S.h (180.ARM_Peripherals/Project_Headers/I2S.h)
+ * @file     i2s.h (180.ARM_Peripherals/Project_Headers/i2s.h)
  * @brief    I2S interface
  *
  * @version  V4.12.1.80
@@ -47,7 +47,7 @@ protected:
    }
 
    const HardwarePtr<I2S_Type> i2s;                 //!< I2S hardware instance
-   
+
    /**
     * Construct I2S interface
     *
@@ -127,7 +127,7 @@ public:
     */
    I2sBase_T(unsigned bps=400000, uint8_t myAddress=0) : I2s(Info::baseAddress) {
    (void)bps; (void)myAddress;
-   
+
 #ifdef DEBUG_BUILD
       // Check pin assignments
 //      static_assert(Info::info[0].gpioBit != UNMAPPED_PCR, "I2Sx_SCL has not been assigned to a pin - Modify Configure.usbdm");

@@ -10,39 +10,9 @@
    
    <aliasOption key="/SIM/system_bus_clock" />
    
-   <template><![CDATA[
-      \t//! IRQ numbers for hardware
-      \tstatic constexpr IRQn_Type irqNums[]  = $(_name)_IRQS;
-   
-      \t//! Number of IRQs for hardware
-      \tstatic constexpr uint32_t irqCount  = sizeof(irqNums)/sizeof(irqNums[0]);\n\n
-   ]]></template>
-
-   <!--
-   Patterns for pattern and classHandler 
-     -  %i replaced with peripheral instance e.g. FTM1 => 1, PTA => A
-     -  %b replaced with peripheral base name e.g. FTM1 => = FTM
-     -  %c replaced with peripheral C++ base class name e.g. FTM1 => = Ftm
-     -  _IRQHandler is appended to the pattern (only)
-   -->
-   <irqOption name="irqHandlingMethod"  
-      description="I2S Tx/Rx interrupt handler"
-      toolTip="This selection allow the interrupt handlers for this peripheral to be installed using several different methods"
-      pattern="^I2S%i_?(Rx|Tx)?$"
-      classHandler="%c%i::irqHandler" />
-        
-   <template><![CDATA[
-       \t//! Class based callback handler has been installed in vector table
-       \tstatic constexpr bool irqHandlerInstalled = $(irqHandlingMethod);\n\n
-   ]]></template>
-       
-   <intOption name="irqLevel" 
-      description="IRQ Level in NVIC [0-15]"
-      toolTip="Sets the priority level used to configure the NVIC\n
-               Lower numbers represent higher priorities"
-      value="8" min="0" max="15" 
-   />
-   
+   <stringOption name="irq_pattern"        constant="true" value="^I2S%i_?(Rx|Tx)?$" hidden="true" />
+   <stringOption name="irq_classHandler"   constant="true" value="%c%i::irqHandler" hidden="true" />
+   <xi:include href="_irqOptionSubstituted.xml"/>
    <projectActionList id = "i2s_files" >
       <copy source="Project_Headers/i2s.h"            target="Project_Headers/i2s.h"            overwrite="true"  derived="true" />
    </projectActionList>

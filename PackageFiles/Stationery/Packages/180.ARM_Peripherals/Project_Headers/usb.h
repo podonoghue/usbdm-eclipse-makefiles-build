@@ -197,9 +197,9 @@ public:
    static const char *getTokenName(unsigned token);
 
    /**
-    * Get name of USB state
+    * Get name of USB end-point state
     *
-    * @param[in]   state USB state
+    * @param[in]  state End-point state
     *
     * @return Pointer to static string
     */
@@ -330,16 +330,8 @@ protected:
    static SOFCallbackFunction fSofCallbackFunction;
 
 public:
-   /**
-    * Configures all mapped pins associated with this peripheral
-    */
-   static void __attribute__((always_inline)) configureAllPins() {
-      // Configure pins
-      Info::initPCRs();
-   }
 
-    $(/USBHS/classInfo: // No class Info found)
-
+$(/USB/classInfo: // No class Info found)
    /**
     * Enable interrupts in NVIC
     */
@@ -1455,7 +1447,7 @@ void UsbBase_T<Info, EP0_SIZE>::handleSetConfiguration() {
       return;
    }
    setUSBconfiguredState(fEp0SetupBuffer.wValue.lo());
-   
+
    // Initialise non-control end-points
 //   console.WRITE("RxOdd").WRITELN((bool)UsbImplementation::epBulkOut.fRxOdd);
    UsbImplementation::initialiseEndpoints();

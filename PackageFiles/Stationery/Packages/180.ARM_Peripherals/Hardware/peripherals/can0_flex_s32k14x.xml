@@ -65,7 +65,7 @@
       \tstatic constexpr IRQn_Type irqNums[]  = $(_name)_IRQS;
    
       \t//! Number of IRQs for hardware
-      \tstatic constexpr uint32_t irqCount  = sizeof(irqNums)/sizeof(irqNums[0]);\n\n
+      \tstatic constexpr uint32_t irqCount  = sizeofArray(irqNums);\n\n
    ]]></template>
 
    <!--
@@ -74,6 +74,7 @@
      -  %b replaced with peripheral base name e.g. FTM1 => = FTM
      -  %c replaced with peripheral C++ base class name e.g. FTM1 => = Ftm
      -  _IRQHandler is appended to the pattern (only)
+   Multiple patterns and classsHandlers may be used separated by ';'
    -->
    <irqOption name="miscellaneousIrqHandlingMethod"  
       description="Miscellaneous Interrupt handlers"

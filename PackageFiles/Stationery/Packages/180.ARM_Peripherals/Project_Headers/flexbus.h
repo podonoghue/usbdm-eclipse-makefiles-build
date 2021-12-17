@@ -29,7 +29,7 @@ namespace USBDM {
 /**
  * Indices for FLEXBUS select regions
  */
-enum FlexbusRegion {
+enum FlexbusRegion : uint16_t {
    FlexbusRegion0 = 0,
    FlexbusRegion1 = 1,
 #if FLEXBUS_MEMORY_REGIONS_COUNT > 2
@@ -253,8 +253,8 @@ enum FlexbusBurst {
 struct __attribute__((packed)) FlexbusEntry {
    union __attribute__((packed)) {
       struct __attribute__((packed)) {
-         FlexbusRegion flexbusRegion; ///< Chip select number (unused portion of FB_CSARn)
-         uint16_t      baseAddress;   ///< Base address
+         FlexbusRegion flexbusRegion:16; ///< Chip select number (unused portion of FB_CSARn)
+         uint16_t      baseAddress:16;   ///< Base address
       };
       uint32_t csar; ///< Chip Select Address Register (FB_CSARn)
    };
@@ -315,7 +315,7 @@ struct __attribute__((packed)) FlexbusEntry {
          FlexbusByteEnable       flexbusByteEnable       = FlexbusByteEnable_WriteOnly,
          FlexbusBurst            flexbusBurst            = FlexbusBurst_None
          ) :
-      flexbusRegion(flexbusRegion), baseAddress(baseAddress>>FLEXBUS_CSAR_BA_SHIFT),
+      csar(baseAddress|flexbusRegion),
       csmr(flexbusSize|flexbusMode),
       cscr(flexbusWait|flexbusPortSize|flexbusAutoAck|flexbusSecondaryWait|flexbusStartLatch|flexbusAddresSetup|flexbusReadHoldTime|flexbusWriteHoldTime|flexbusDataAlignment|flexbusByteEnable|flexbusBurst) {
       usbdm_assert(baseAddress == (baseAddress&FLEXBUS_CSAR_BA_MASK), "FLEXBUS start address is not on suitable boundary") ;

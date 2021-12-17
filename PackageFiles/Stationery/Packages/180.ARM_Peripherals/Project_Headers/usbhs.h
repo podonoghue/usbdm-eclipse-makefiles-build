@@ -1,5 +1,5 @@
 /**
- * @file     USBHS.h (180.ARM_Peripherals/Project_Headers/USBHS.h)
+ * @file     usbhs.h (180.ARM_Peripherals/Project_Headers/USBHS.h)
  * @brief    USB High Speed OTG Controller
  *
  * @version  V4.12.1.80
@@ -47,7 +47,7 @@ protected:
    }
 
    volatile USBHS_Type  *usbhs;                 //!< USBHS hardware instance
-   
+
    /**
     * Construct USBHS interface
     *

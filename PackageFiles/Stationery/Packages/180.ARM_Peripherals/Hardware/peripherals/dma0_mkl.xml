@@ -3,7 +3,7 @@
 <!DOCTYPE peripheralPage SYSTEM "_menu.dtd" >
 <!-- dma0_mkl.xml -->
 
-<peripheralPage xmlns:xi="http://www.w3.org/2001/XInclude" name="_instance" description="Flash Memory Module">
+<peripheralPage xmlns:xi="http://www.w3.org/2001/XInclude" name="_instance" description="DMA Module">
 
    <xi:include href="_default_instance.xml"/>
 
@@ -20,49 +20,10 @@
       
    <xi:include href="_clockOption.xml"/>
 
-   <template><![CDATA[
-      \t//! IRQ numbers for hardware
-      \tstatic constexpr IRQn_Type irqNums[]  = $(_name)_IRQS;
-   
-      \t//! Number of IRQs for hardware
-      \tstatic constexpr uint32_t irqCount  = sizeof(irqNums)/sizeof(irqNums[0]);\n\n
-   ]]></template>
-
-   <!--
-   Patterns for pattern and classHandler 
-     -  %i replaced with peripheral instance e.g. FTM1 => 1, PTA => A
-     -  %b replaced with peripheral base name e.g. FTM1 => = FTM
-     -  %c replaced with peripheral C++ base class name e.g. FTM1 => = Ftm
-     -  _IRQHandler is appended to the pattern (only)
-   Multiple patterns and classsHandlers may be used separated by ';'
-   -->
-   <irqOption name="irqHandlingMethod"  
-      description="Interrupt handlers"
-      toolTip="This selection allow the interrupt handlers for this peripheral to be installed using several different methods"
-      pattern="^%b_?(\d+)(_DMA.*)?$" 
-      classHandler="%c%i::irqHandler&lt;$1&gt;" />
       
-   <template><![CDATA[
-       \t//! Class based callback handler has been installed in vector table\n
-       \tstatic constexpr bool irqHandlerInstalled = $(irqHandlingMethod);\n\n
-   ]]></template>
-       
-   <choiceOption name="irqLevel"
-      description="Default IRQ level for this peripheral"
-      toolTip="Sets the default priority level used to configure the NVIC">
-      <choice name="VeryHigh"      value="NvicPriority_VeryHigh" />
-      <choice name="High"          value="NvicPriority_High" />
-      <choice name="MidHigh"       value="NvicPriority_MidHigh" />
-      <choice name="Normal"        value="NvicPriority_Normal" isDefault="true"/>
-      <choice name="Midlow"        value="NvicPriority_Midlow" />
-      <choice name="Low"           value="NvicPriority_Low" />
-      <choice name="VeryLow"       value="NvicPriority_VeryLow" />
-   </choiceOption>
-
-   <template><![CDATA[
-       \t//! Default IRQ level\n
-       \tstatic constexpr NvicPriority irqLevel =  $(?irqHandlingMethod:$(irqLevel):NvicPriority_NotInstalled);\n\n
-   ]]></template>
+   <stringOption name="irq_pattern"        constant="true" value="^%b_?(\d+)(_DMA.*)?$" hidden="true" />
+   <stringOption name="irq_classHandler"   constant="true" value="%c%i::irqHandler&lt;$1&gt;" hidden="true" />
+   <xi:include href="_irqOptionSubstituted.xml"/>
  
    <validate
       class="net.sourceforge.usbdm.deviceEditor.validators.PeripheralValidator">
