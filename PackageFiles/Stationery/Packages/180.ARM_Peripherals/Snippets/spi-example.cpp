@@ -3,6 +3,8 @@
  * @file    spi-example.cpp (180.ARM_Peripherals/Snippets)
  * @brief   Basic C++ demo of using SPI interface
  *
+ * This example uses a single configuration.
+ *
  *  Created on: 10/6/2017
  *      Author: podonoghue
  ============================================================================
@@ -16,7 +18,6 @@
  *  - SPI0_SIN
  *  - SPI0_SOUT
  *  - SPI0_PCS0
- *  - SPI0_PCS2
  */
 #include <string.h>
 #include "hardware.h"
@@ -24,34 +25,29 @@
 
 using namespace USBDM;
 
+// Single configuration
+static const SpiConfigurations configurations {
+   //                              Speed      Mode        Bit Order           Frame Size
+   /* Configuration 0 (CTAR0) */ { 1'000'000, SpiMode_0, SpiOrder_MsbFirst, SpiFrameSize_8},
+   /* PCS idle levels         */ 0b000000, // All PCSs idle low
+};
+
 int main() {
    Spi0 spi{};
 
-   // Configure SPI parameters for odd transmissions
-   spi.setSpeed(1*MHz);
-   spi.setMode(SpiMode_0);
-   spi.setPeripheralSelect(SpiPeripheralSelect_0, ActiveLow, SpiSelectMode_Idle);
-   spi.setFrameSize(8);
+   // Configure SPI
+   spi.setConfigurations(configurations);
 
-   // Save configuration
-   SpiConfig configurationOdd = spi.getConfiguration();
-
-   // Configure SPI parameters for even transmissions
-   spi.setSpeed(10*MHz);
-   spi.setMode(SpiMode_0);
-   spi.setPeripheralSelect(SpiPeripheralSelect_2, ActiveLow, SpiSelectMode_Idle);
-   spi.setFrameSize(12);
-
-   // Save configuration
-   SpiConfig configurationEven = spi.getConfiguration();
+   // Set configuration to use
+   spi.setActiveConfiguration(SpiPeripheralSelect_0, SpiCtarSelect_0);
 
    for(;;) {
       {
          /*
-          * Odd transmission
+          * Transmission
           *
-          * Transmit with configuration 1
-          * 8-bit transfers @ 1 MHz using CS0
+          * Transmit with configuration 0
+          * 8-bit transfers @ 1 MHz using PCS0
           */
          static const uint8_t txDataA[] = { 0xA1,0xB2,0xC3,0xD4,0x55, };
          uint8_t rxData1[sizeof(txDataA)/sizeof(txDataA[0])] = {0};
@@ -59,7 +55,7 @@ int main() {
          uint8_t rxData3 = 0;
          uint8_t rxData4 = 0;
 
-         spi.startTransaction(configurationOdd);
+         spi.startTransaction();
          spi.txRx(txDataA, rxData1); // 5 bytes tx-rx
          spi.txRx(txDataA, rxData2); // 5 bytes tx-rx
          rxData3 = spi.txRx(txDataA[0]); // 1 byte tx-rx
@@ -70,34 +66,6 @@ int main() {
              (memcmp(txDataA, rxData2, sizeof(txDataA)/sizeof(txDataA[0])) != 0) ||
              (rxData3 != txDataA[0]) ||
              (rxData4 != txDataA[1])) {
-            console.writeln("Failed read-back");
-            __asm__("bkpt");
-         }
-      }
-      {
-         /*
-          * Even transmission
-          *
-          * Transmit with configuration 2
-          * 12-bit transfers @ 10 MHz using CS2
-          */
-         static const uint16_t txDataB[] = { 0xA01,0xB02,0xC03,0xD04,0x555, };
-         uint16_t rxData1[sizeof(txDataB)/sizeof(txDataB[0])] = {0};
-         uint16_t rxData2[sizeof(txDataB)/sizeof(txDataB[0])] = {0};
-         uint16_t rxData3 = 0;;
-         uint16_t rxData4 = 0;
-
-         spi.startTransaction(configurationEven);
-         spi.txRx(txDataB, rxData1); // 5 bytes tx-rx
-         spi.txRx(txDataB, rxData2); // 5 bytes tx-rx
-         rxData3 = spi.txRx(txDataB[0]); // 1 byte tx-rx
-         rxData4 = spi.txRx(txDataB[1]); // 1 byte tx-rx
-         spi.endTransaction();
-
-         if ((memcmp(txDataB, rxData1, sizeof(txDataB)/sizeof(txDataB[0])) != 0) ||
-             (memcmp(txDataB, rxData2, sizeof(txDataB)/sizeof(txDataB[0])) != 0) ||
-             (rxData3 != txDataB[0]) ||
-             (rxData4 != txDataB[1])) {
             console.writeln("Failed read-back");
             __asm__("bkpt");
          }

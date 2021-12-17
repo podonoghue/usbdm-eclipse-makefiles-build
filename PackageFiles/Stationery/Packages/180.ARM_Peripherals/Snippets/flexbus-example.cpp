@@ -13,17 +13,31 @@
 using namespace USBDM;
 
 int main() {
-
-   // Address where external memory is to be mapped to internal memory space
-   // See MCU description for suitable ranges
-   constexpr uint32_t BASE_ADDRESS1 = 0x08FC0000;
-   constexpr uint32_t BASE_ADDRESS2 = 0x60FC0000;
+   /*
+    *  Address where external memory is to be mapped to internal memory space
+    *  See MCU description for suitable ranges
+    *
+    *  MK28F
+    *       Address Range            Type of memory                                  Access
+    * |-------------------------|------------------------------------------------|----------------
+    * | 0x1800_0000-0x1BFF_FFFF | FlexBus (Aliased Area) Mapped to the same      | Cortex-M4 core
+    * |                         |    access space of 0x9800_0000-0x9BFF_FFFF     |
+    * |-------------------------|------------------------------------------------|----------------
+    * | 0x6000_0000-0x66FF_FFFF | FlexBus (External Memory - Write-back)         | All masters
+    * |-------------------------|------------------------------------------------|----------------
+    * | 0x9800_0000-0x9FFF_FFFF | FlexBus (External Memory - Write-through)      | All masters
+    * |-------------------------|------------------------------------------------|----------------
+    * | 0xA000_0000-0xDFFF_FFFF | FlexBus (External Peripheral - Not executable) | All masters
+    * |-------------------------|------------------------------------------------|----------------
+    */
+   static constexpr uint32_t BASE_ADDRESS1 = 0x6000'0000;
+   static constexpr uint32_t BASE_ADDRESS2 = 0x9800'0000;
 
    Flexbus::enable();
-   Flexbus::configureAllPins();
+
    static const FlexbusEntry flexbusEntries[] = {
-         {0, BASE_ADDRESS1, FlexbusSize_128k, FlexbusMode_ReadWrite, FlexbusWait_0, FlexbusPortSize_8bit, FlexbusAutoAck_Enabled},
-         {1, BASE_ADDRESS2, FlexbusSize_256k, FlexbusMode_ReadWrite, FlexbusWait_0, FlexbusPortSize_8bit, FlexbusAutoAck_Enabled},
+         {FlexbusRegion0, BASE_ADDRESS1, FlexbusSize_128kiB, FlexbusMode_ReadWrite, FlexbusWait_0, FlexbusPortSize_8bit, FlexbusAutoAck_Enabled},
+         {FlexbusRegion1, BASE_ADDRESS2, FlexbusSize_256kiB, FlexbusMode_ReadWrite, FlexbusWait_0, FlexbusPortSize_8bit, FlexbusAutoAck_Enabled},
    };
    Flexbus::configureSelectRanges(flexbusEntries);
    Flexbus::configureMultiplexing(FlexbusGroup1_FB_ALE);
@@ -31,7 +45,7 @@ int main() {
    static const MemoryAddressWrapper<uint8_t, BASE_ADDRESS1, 100> externalRam1;
    static const MemoryAddressWrapper<uint8_t, BASE_ADDRESS2, 100> externalRam2;
 
-   constexpr uint8_t value = 0x34;
+   static constexpr uint8_t value = 0x34;
 
    externalRam1[3] = value;
    console.write("Wrote ").write(value).write(", Read back ").writeln(externalRam1[3]);

@@ -42,7 +42,7 @@ void testQspi() {
 
    uint32_t flashAddress = FLASH_TEST_START;
 
-   console.writeln("Programming");
+   console.writeln("Programming Location");
 
    // For each sector
    for (unsigned sector = 0; sector<(FLASH_SIZE_TO_TEST/flash::FLASH_SECTOR_SIZE); sector++) {

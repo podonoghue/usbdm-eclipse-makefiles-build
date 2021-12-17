@@ -13,8 +13,8 @@
 namespace USBDM {
 
 /**
- * Micron MT25QU256ABA
- * ========================
+ * Micron MT25QU256ABA Serial NOR Flash Memory
+ * ================================================
  * 256 Mib (32 MiB)
  * 1-die
  * Dual/quad I/O commands for increased through-put up to 90 MB/s
