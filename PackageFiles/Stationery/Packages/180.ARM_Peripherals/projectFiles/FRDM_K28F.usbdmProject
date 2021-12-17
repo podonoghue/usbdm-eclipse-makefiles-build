@@ -9,118 +9,154 @@
    <item key="$$DeviceInfo_SubFamily"                      value="MK28F15" />
    <item key="$$Hardware_Source_Filename"                  value="MK28F15.usbdmHardware" />
    <item key="$peripheral$ADC0_codeIdentifier"             value="myAdc" />
-   <item key="$peripheral$FLEXBUS_codeIdentifier"          value="myFlexbusController" />
-   <item key="$peripheral$FTM3_codeIdentifier"             value="myPwm" />
-   <item key="$peripheral$GPIOA_polarity"                  value="16" />
+   <item key="$peripheral$FTM3_codeIdentifier"             value="myLedPwm" />
    <item key="$peripheral$GPIOD_polarity"                  value="1" />
+   <item key="$peripheral$QSPI0_codeIdentifier"            value="MyQSPI" />
+   <item key="$peripheral$QSPI0_userDescription"           value="MT25QU256ABA1EW7-0SIT QSPI Flash" />
    <item key="$peripheral$SDHC0_codeIdentifier"            value="Sdhc" />
-   <item key="$peripheral$SDRAMC_codeIdentifier"           value="mySDRamController" />
-   <item key="$pin$PTA0_muxSetting_7"                      value="selected" />
-   <item key="$pin$PTA10_muxSetting_5"                     value="selected" />
-   <item key="$pin$PTA11_muxSetting_5"                     value="selected" />
-   <item key="$pin$PTA12_muxSetting_5"                     value="selected" />
-   <item key="$pin$PTA13_muxSetting_5"                     value="selected" />
-   <item key="$pin$PTA14_muxSetting_5"                     value="selected" />
-   <item key="$pin$PTA15_muxSetting_5"                     value="selected" />
-   <item key="$pin$PTA16_muxSetting_5"                     value="selected" />
-   <item key="$pin$PTA17_muxSetting_5"                     value="selected" />
-   <item key="$pin$PTA18_muxSetting_0"                     value="selected" />
-   <item key="$pin$PTA19_muxSetting_0"                     value="selected" />
-   <item key="$pin$PTA1_muxSetting_5"                      value="selected" />
-   <item key="$pin$PTA20_muxSetting_5"                     value="selected" />
-   <item key="$pin$PTA21_muxSetting_5"                     value="selected" />
-   <item key="$pin$PTA22_muxSetting_5"                     value="selected" />
-   <item key="$pin$PTA23_muxSetting_5"                     value="selected" />
-   <item key="$pin$PTA24_muxSetting_4"                     value="selected" />
-   <item key="$pin$PTA25_muxSetting_4"                     value="selected" />
-   <item key="$pin$PTA26_muxSetting_4"                     value="selected" />
-   <item key="$pin$PTA27_muxSetting_4"                     value="selected" />
-   <item key="$pin$PTA28_muxSetting_4"                     value="selected" />
-   <item key="$pin$PTA29_muxSetting_4"                     value="selected" />
-   <item key="$pin$PTA2_muxSetting_5"                      value="selected" />
-   <item key="$pin$PTA3_muxSetting_7"                      value="selected" />
-   <item key="$pin$PTA4_muxSetting_1"                      value="selected" />
-   <item key="$pin$PTA5_muxSetting_5"                      value="selected" />
-   <item key="$pin$PTA7_muxSetting_3"                      value="selected" />
-   <item key="$pin$PTA8_muxSetting_6"                      value="selected" />
-   <item key="$pin$PTB0_muxSetting_5"                      value="selected" />
-   <item key="$pin$PTB10_muxSetting_5"                     value="selected" />
-   <item key="$pin$PTB11_muxSetting_5"                     value="selected" />
-   <item key="$pin$PTB16_muxSetting_5"                     value="selected" />
-   <item key="$pin$PTB17_muxSetting_5"                     value="selected" />
-   <item key="$pin$PTB18_muxSetting_5"                     value="selected" />
-   <item key="$pin$PTB19_muxSetting_1"                     value="selected" />
-   <item key="$pin$PTB1_muxSetting_5"                      value="selected" />
-   <item key="$pin$PTB20_muxSetting_5"                     value="selected" />
-   <item key="$pin$PTB21_muxSetting_5"                     value="selected" />
-   <item key="$pin$PTB22_muxSetting_5"                     value="selected" />
-   <item key="$pin$PTB23_muxSetting_5"                     value="selected" />
-   <item key="$pin$PTB2_muxSetting_5"                      value="selected" />
-   <item key="$pin$PTB3_muxSetting_5"                      value="selected" />
-   <item key="$pin$PTB5_muxSetting_1"                      value="selected" />
-   <item key="$pin$PTB6_muxSetting_5"                      value="selected" />
-   <item key="$pin$PTB7_muxSetting_5"                      value="selected" />
-   <item key="$pin$PTB8_muxSetting_5"                      value="selected" />
-   <item key="$pin$PTB9_muxSetting_5"                      value="selected" />
-   <item key="$pin$PTC0_muxSetting_5"                      value="selected" />
-   <item key="$pin$PTC10_muxSetting_5"                     value="selected" />
-   <item key="$pin$PTC12_muxSetting_5"                     value="selected" />
-   <item key="$pin$PTC13_muxSetting_5"                     value="selected" />
-   <item key="$pin$PTC14_muxSetting_5"                     value="selected" />
-   <item key="$pin$PTC15_muxSetting_5"                     value="selected" />
-   <item key="$pin$PTC16_muxSetting_5"                     value="selected" />
-   <item key="$pin$PTC17_muxSetting_5"                     value="selected" />
-   <item key="$pin$PTC1_muxSetting_5"                      value="selected" />
-   <item key="$pin$PTC24_muxSetting_3"                     value="selected" />
-   <item key="$pin$PTC25_muxSetting_3"                     value="selected" />
-   <item key="$pin$PTC28_muxSetting_2"                     value="selected" />
-   <item key="$pin$PTC29_muxSetting_2"                     value="selected" />
-   <item key="$pin$PTC2_muxSetting_5"                      value="selected" />
-   <item key="$pin$PTC3_muxSetting_5"                      value="selected" />
-   <item key="$pin$PTC4_muxSetting_5"                      value="selected" />
-   <item key="$pin$PTC5_muxSetting_5"                      value="selected" />
-   <item key="$pin$PTC7_muxSetting_5"                      value="selected" />
-   <item key="$pin$PTC8_muxSetting_5"                      value="selected" />
-   <item key="$pin$PTC9_muxSetting_5"                      value="selected" />
-   <item key="$pin$PTD0_muxSetting_1"                      value="selected" />
-   <item key="$pin$PTD10_muxSetting_7"                     value="selected" />
-   <item key="$pin$PTD11_muxSetting_7"                     value="selected" />
-   <item key="$pin$PTD12_muxSetting_7"                     value="selected" />
-   <item key="$pin$PTD13_muxSetting_7"                     value="selected" />
-   <item key="$pin$PTD14_muxSetting_7"                     value="selected" />
-   <item key="$pin$PTD15_muxSetting_7"                     value="selected" />
-   <item key="$pin$PTD2_muxSetting_5"                      value="selected" />
-   <item key="$pin$PTD3_muxSetting_5"                      value="selected" />
-   <item key="$pin$PTD4_muxSetting_5"                      value="selected" />
-   <item key="$pin$PTD5_muxSetting_5"                      value="selected" />
-   <item key="$pin$PTD7_muxSetting_5"                      value="selected" />
-   <item key="$pin$PTD8_muxSetting_7"                      value="selected" />
-   <item key="$pin$PTD9_muxSetting_7"                      value="selected" />
-   <item key="$pin$PTE0_muxSetting_5"                      value="selected" />
-   <item key="$pin$PTE1_muxSetting_5"                      value="selected" />
-   <item key="$pin$PTE2_muxSetting_5"                      value="selected" />
-   <item key="$pin$PTE3_muxSetting_5"                      value="selected" />
-   <item key="$pin$PTE4_muxSetting_5"                      value="selected" />
-   <item key="$pin$PTE5_muxSetting_5"                      value="selected" />
-   <item key="$pin$PTE6_muxSetting_1"                      value="selected" />
-   <item key="$pin$PTE6_muxSetting_6"                      value="selected" />
-   <item key="$pin$PTE7_muxSetting_1"                      value="selected" />
-   <item key="$pin$PTE7_muxSetting_6"                      value="selected" />
-   <item key="$pin$PTE8_muxSetting_1"                      value="selected" />
-   <item key="$pin$PTE8_muxSetting_6"                      value="selected" />
-   <item key="$signal$ADC0_SE16_codeIdentifier"            value="lightSensor" />
+   <item key="$peripheral$SDRAMC_codeIdentifier"           value="MySDRamController" />
+   <item key="$peripheral$SDRAMC_userDescription"          value="IS42SM16800H-6BLI SDRAM" />
+   <item key="$pin$PTA10_pcrSetting_5"                     value="500" />
+   <item key="$pin$PTA11_pcrSetting_5"                     value="500" />
+   <item key="$pin$PTA12_pcrSetting_5"                     value="500" />
+   <item key="$pin$PTA13_pcrSetting_5"                     value="500" />
+   <item key="$pin$PTA14_pcrSetting_5"                     value="500" />
+   <item key="$pin$PTA15_pcrSetting_5"                     value="500" />
+   <item key="$pin$PTA16_pcrSetting_5"                     value="500" />
+   <item key="$pin$PTA17_pcrSetting_5"                     value="500" />
+   <item key="$pin$PTA18_pcrSetting_0"                     value="0" />
+   <item key="$pin$PTA19_pcrSetting_0"                     value="0" />
+   <item key="$pin$PTA1_pcrSetting_5"                      value="500" />
+   <item key="$pin$PTA20_pcrSetting_5"                     value="500" />
+   <item key="$pin$PTA21_pcrSetting_5"                     value="500" />
+   <item key="$pin$PTA22_pcrSetting_5"                     value="500" />
+   <item key="$pin$PTA23_pcrSetting_5"                     value="500" />
+   <item key="$pin$PTA24_pcrSetting_1"                     value="100" />
+   <item key="$pin$PTA24_pcrSetting_4"                     value="400" />
+   <item key="$pin$PTA25_pcrSetting_1"                     value="100" />
+   <item key="$pin$PTA25_pcrSetting_4"                     value="400" />
+   <item key="$pin$PTA26_pcrSetting_4"                     value="400" />
+   <item key="$pin$PTA27_pcrSetting_4"                     value="400" />
+   <item key="$pin$PTA28_pcrSetting_4"                     value="400" />
+   <item key="$pin$PTA29_pcrSetting_4"                     value="400" />
+   <item key="$pin$PTA2_pcrSetting_5"                      value="500" />
+   <item key="$pin$PTA31_pcrSetting_1"                     value="100" />
+   <item key="$pin$PTA3_pcrSetting_7"                      value="700" />
+   <item key="$pin$PTA4_pcrSetting_1"                      value="103" />
+   <item key="$pin$PTA5_pcrSetting_5"                      value="500" />
+   <item key="$pin$PTA7_pcrSetting_0"                      value="0" />
+   <item key="$pin$PTA7_pcrSetting_1"                      value="100" />
+   <item key="$pin$PTA8_pcrSetting_0"                      value="0" />
+   <item key="$pin$PTA8_pcrSetting_1"                      value="100" />
+   <item key="$pin$PTB0_pcrSetting_5"                      value="500" />
+   <item key="$pin$PTB10_pcrSetting_5"                     value="500" />
+   <item key="$pin$PTB11_pcrSetting_5"                     value="500" />
+   <item key="$pin$PTB12_pcrSetting_1"                     value="100" />
+   <item key="$pin$PTB13_pcrSetting_1"                     value="100" />
+   <item key="$pin$PTB16_pcrSetting_5"                     value="500" />
+   <item key="$pin$PTB17_pcrSetting_5"                     value="500" />
+   <item key="$pin$PTB18_pcrSetting_5"                     value="500" />
+   <item key="$pin$PTB19_pcrSetting_1"                     value="100" />
+   <item key="$pin$PTB1_pcrSetting_5"                      value="500" />
+   <item key="$pin$PTB20_pcrSetting_5"                     value="500" />
+   <item key="$pin$PTB21_pcrSetting_5"                     value="500" />
+   <item key="$pin$PTB22_pcrSetting_5"                     value="500" />
+   <item key="$pin$PTB23_pcrSetting_5"                     value="500" />
+   <item key="$pin$PTB2_pcrSetting_0"                      value="0" />
+   <item key="$pin$PTB2_pcrSetting_1"                      value="100" />
+   <item key="$pin$PTB2_pcrSetting_5"                      value="500" />
+   <item key="$pin$PTB3_pcrSetting_0"                      value="0" />
+   <item key="$pin$PTB3_pcrSetting_1"                      value="100" />
+   <item key="$pin$PTB3_pcrSetting_5"                      value="500" />
+   <item key="$pin$PTB4_pcrSetting_1"                      value="100" />
+   <item key="$pin$PTB5_pcrSetting_1"                      value="100" />
+   <item key="$pin$PTB6_pcrSetting_5"                      value="500" />
+   <item key="$pin$PTB7_pcrSetting_5"                      value="500" />
+   <item key="$pin$PTB8_pcrSetting_5"                      value="500" />
+   <item key="$pin$PTB9_pcrSetting_5"                      value="500" />
+   <item key="$pin$PTC0_pcrSetting_5"                      value="500" />
+   <item key="$pin$PTC10_pcrSetting_5"                     value="500" />
+   <item key="$pin$PTC11_pcrSetting_1"                     value="100" />
+   <item key="$pin$PTC12_pcrSetting_5"                     value="500" />
+   <item key="$pin$PTC13_pcrSetting_5"                     value="500" />
+   <item key="$pin$PTC14_pcrSetting_5"                     value="500" />
+   <item key="$pin$PTC15_pcrSetting_5"                     value="500" />
+   <item key="$pin$PTC16_pcrSetting_5"                     value="500" />
+   <item key="$pin$PTC17_pcrSetting_5"                     value="500" />
+   <item key="$pin$PTC18_pcrSetting_1"                     value="100" />
+   <item key="$pin$PTC19_pcrSetting_1"                     value="100" />
+   <item key="$pin$PTC1_pcrSetting_5"                      value="500" />
+   <item key="$pin$PTC24_pcrSetting_3"                     value="300" />
+   <item key="$pin$PTC25_pcrSetting_3"                     value="300" />
+   <item key="$pin$PTC27_pcrSetting_1"                     value="100" />
+   <item key="$pin$PTC28_pcrSetting_2"                     value="220" />
+   <item key="$pin$PTC29_pcrSetting_2"                     value="220" />
+   <item key="$pin$PTC2_pcrSetting_5"                      value="500" />
+   <item key="$pin$PTC3_pcrSetting_5"                      value="500" />
+   <item key="$pin$PTC4_pcrSetting_5"                      value="500" />
+   <item key="$pin$PTC5_pcrSetting_5"                      value="500" />
+   <item key="$pin$PTC6_pcrSetting_1"                      value="100" />
+   <item key="$pin$PTC7_pcrSetting_5"                      value="500" />
+   <item key="$pin$PTC8_pcrSetting_5"                      value="500" />
+   <item key="$pin$PTC9_pcrSetting_5"                      value="500" />
+   <item key="$pin$PTD0_pcrSetting_1"                      value="103" />
+   <item key="$pin$PTD10_pcrSetting_7"                     value="700" />
+   <item key="$pin$PTD11_pcrSetting_7"                     value="700" />
+   <item key="$pin$PTD12_pcrSetting_1"                     value="100" />
+   <item key="$pin$PTD12_pcrSetting_7"                     value="700" />
+   <item key="$pin$PTD13_pcrSetting_1"                     value="100" />
+   <item key="$pin$PTD13_pcrSetting_7"                     value="700" />
+   <item key="$pin$PTD14_pcrSetting_1"                     value="100" />
+   <item key="$pin$PTD14_pcrSetting_7"                     value="700" />
+   <item key="$pin$PTD15_pcrSetting_1"                     value="100" />
+   <item key="$pin$PTD15_pcrSetting_7"                     value="700" />
+   <item key="$pin$PTD1_pcrSetting_0"                      value="0" />
+   <item key="$pin$PTD1_pcrSetting_1"                      value="100" />
+   <item key="$pin$PTD2_pcrSetting_5"                      value="500" />
+   <item key="$pin$PTD3_pcrSetting_5"                      value="500" />
+   <item key="$pin$PTD4_pcrSetting_5"                      value="500" />
+   <item key="$pin$PTD5_pcrSetting_5"                      value="500" />
+   <item key="$pin$PTD6_pcrSetting_0"                      value="0" />
+   <item key="$pin$PTD6_pcrSetting_1"                      value="100" />
+   <item key="$pin$PTD7_pcrSetting_5"                      value="500" />
+   <item key="$pin$PTD8_pcrSetting_7"                      value="700" />
+   <item key="$pin$PTD9_pcrSetting_7"                      value="700" />
+   <item key="$pin$PTE0_pcrSetting_5"                      value="500" />
+   <item key="$pin$PTE1_pcrSetting_5"                      value="500" />
+   <item key="$pin$PTE2_pcrSetting_5"                      value="500" />
+   <item key="$pin$PTE3_pcrSetting_5"                      value="500" />
+   <item key="$pin$PTE4_pcrSetting_5"                      value="500" />
+   <item key="$pin$PTE5_pcrSetting_5"                      value="500" />
+   <item key="$pin$PTE6_pcrSetting_1"                      value="100" />
+   <item key="$pin$PTE7_pcrSetting_1"                      value="100" />
+   <item key="$pin$PTE8_pcrSetting_1"                      value="100" />
+   <item key="$signal$ADC0_SE10_codeIdentifier"            value="Adc_A0" />
+   <item key="$signal$ADC0_SE11_codeIdentifier"            value="Adc_A1" />
+   <item key="$signal$ADC0_SE12_codeIdentifier"            value="Adc_A5_D15" />
+   <item key="$signal$ADC0_SE13_codeIdentifier"            value="Adc_A4_D14" />
+   <item key="$signal$ADC0_SE16_codeIdentifier"            value="LightSensor" />
    <item key="$signal$ADC0_SE16_descriptionSetting"        value="Light Sensor" />
-   <item key="$signal$ADC0_SE22_codeIdentifier"            value="vrefOut" />
-   <item key="$signal$ADC0_SE23_codeIdentifier"            value="dacOut" />
-   <item key="$signal$ADC0_SE26_codeIdentifier"            value="tempSensor" />
-   <item key="$signal$ADC0_SE27_codeIdentifier"            value="bandgap" />
+   <item key="$signal$ADC0_SE22_codeIdentifier"            value="VrefOut" />
+   <item key="$signal$ADC0_SE22_descriptionSetting"        value="Vref out" />
+   <item key="$signal$ADC0_SE23_codeIdentifier"            value="DacOut" />
+   <item key="$signal$ADC0_SE23_descriptionSetting"        value="DAC output" />
+   <item key="$signal$ADC0_SE26_codeIdentifier"            value="TempSensor" />
+   <item key="$signal$ADC0_SE26_descriptionSetting"        value="Internal temperature sensor" />
+   <item key="$signal$ADC0_SE27_codeIdentifier"            value="Bandgap" />
+   <item key="$signal$ADC0_SE27_descriptionSetting"        value="Internal band-gap reference" />
+   <item key="$signal$ADC0_SE5b_codeIdentifier"            value="Adc_A2" />
+   <item key="$signal$ADC0_SE7b_codeIdentifier"            value="Adc_A3" />
+   <item key="$signal$CLKOUT_codeIdentifier"               value="ClkOut" />
    <item key="$signal$CLKOUT_descriptionSetting"           value="Clkout" />
    <item key="$signal$EXTAL32_descriptionSetting"          value="Reserved(Crystal)" />
    <item key="$signal$FB_BE23_16_BLS15_8_b_descriptionSetting" value="SDRAM_LDQM" />
    <item key="$signal$FB_BE31_24_BLS7_0_b_descriptionSetting" value="SDRAM_UDQM" />
    <item key="$signal$FTM3_CH1_codeIdentifier"             value="redLedPwm" />
+   <item key="$signal$FTM3_CH1_descriptionSetting"         value="Red LED PWM" />
    <item key="$signal$FTM3_CH2_codeIdentifier"             value="greenLedPwm" />
+   <item key="$signal$FTM3_CH2_descriptionSetting"         value="Green LED PWM" />
    <item key="$signal$FTM3_CH3_codeIdentifier"             value="blueLedPwm" />
+   <item key="$signal$FTM3_CH3_descriptionSetting"         value="Blue LED PWM" />
    <item key="$signal$FXIO0_D11_descriptionSetting"        value="FlexioD11" />
    <item key="$signal$FXIO0_D12_descriptionSetting"        value="FlexioD12" />
    <item key="$signal$FXIO0_D15_descriptionSetting"        value="FlexioD15" />
@@ -144,21 +180,52 @@
    <item key="$signal$FXIO0_D7_descriptionSetting"         value="FlexioD7" />
    <item key="$signal$FXIO0_D8_descriptionSetting"         value="FlexioD8" />
    <item key="$signal$FXIO0_D9_descriptionSetting"         value="FlexioD9" />
+   <item key="$signal$GPIOA_24_codeIdentifier"             value="Gpio_D1" />
+   <item key="$signal$GPIOA_25_codeIdentifier"             value="Gpio_D0" />
    <item key="$signal$GPIOA_4_codeIdentifier"              value="Switch2" />
+   <item key="$signal$GPIOA_4_descriptionSetting"          value="Switch 2" />
+   <item key="$signal$GPIOA_7_codeIdentifier"              value="Gpio_A0" />
+   <item key="$signal$GPIOA_8_codeIdentifier"              value="Gpio_A1" />
+   <item key="$signal$GPIOB_12_codeIdentifier"             value="Gpio_D5" />
+   <item key="$signal$GPIOB_13_codeIdentifier"             value="Gpio_D6" />
+   <item key="$signal$GPIOB_19_codeIdentifier"             value="Gpio_D9" />
+   <item key="$signal$GPIOB_2_codeIdentifier"              value="Gpio_A5_D15" />
+   <item key="$signal$GPIOB_3_codeIdentifier"              value="Gpio_A4_D14" />
+   <item key="$signal$GPIOB_4_codeIdentifier"              value="Gpio_D2" />
    <item key="$signal$GPIOB_5_codeIdentifier"              value="sdhcCardDetect" />
    <item key="$signal$GPIOB_5_descriptionSetting"          value="SDHC0_CARD_DETECT" />
+   <item key="$signal$GPIOC_11_codeIdentifier"             value="Gpio_D3" />
+   <item key="$signal$GPIOC_18_codeIdentifier"             value="Gpio_D7" />
+   <item key="$signal$GPIOC_19_codeIdentifier"             value="Gpio_D8" />
+   <item key="$signal$GPIOC_26_descriptionSetting"         value="Accelerometer Interrupt" />
+   <item key="$signal$GPIOC_27_descriptionSetting"         value="Accelerometer Reset" />
+   <item key="$signal$GPIOC_6_codeIdentifier"              value="Gpio_D4" />
    <item key="$signal$GPIOD_0_codeIdentifier"              value="Switch3" />
-   <item key="$signal$GPIOE_6_codeIdentifier"              value="RedLED" />
-   <item key="$signal$GPIOE_7_codeIdentifier"              value="GreenLED" />
-   <item key="$signal$GPIOE_8_codeIdentifier"              value="BlueLED" />
+   <item key="$signal$GPIOD_0_descriptionSetting"          value="Switch 3" />
+   <item key="$signal$GPIOD_12_codeIdentifier"             value="Gpio_D13" />
+   <item key="$signal$GPIOD_13_codeIdentifier"             value="Gpio_D11" />
+   <item key="$signal$GPIOD_14_codeIdentifier"             value="Gpio_D12" />
+   <item key="$signal$GPIOD_15_codeIdentifier"             value="Gpio_D10" />
+   <item key="$signal$GPIOD_1_codeIdentifier"              value="Gpio_A2" />
+   <item key="$signal$GPIOD_6_codeIdentifier"              value="Gpio_A3" />
+   <item key="$signal$GPIOE_6_codeIdentifier"              value="RedLed/Leds" />
+   <item key="$signal$GPIOE_6_descriptionSetting"          value="Red LED on-off/LEDs on-off" />
+   <item key="$signal$GPIOE_7_codeIdentifier"              value="GreenLed/Leds" />
+   <item key="$signal$GPIOE_7_descriptionSetting"          value="Green LED on-off" />
+   <item key="$signal$GPIOE_8_codeIdentifier"              value="BlueLed/Leds" />
+   <item key="$signal$GPIOE_8_descriptionSetting"          value="Green LED on-off" />
+   <item key="$signal$I2C3_SCL_descriptionSetting"         value="Accelerometer SCL" />
+   <item key="$signal$I2C3_SDA_descriptionSetting"         value="Accelerometer SDA" />
    <item key="$signal$LLWU_P12_codeIdentifier"             value="Switch3Wakeup" />
    <item key="$signal$LLWU_P3_codeIdentifier"              value="Switch2Wakeup" />
-   <item key="$signal$QSPI0A_DATA0_descriptionSetting"     value="QSPIA0_DATA0" />
-   <item key="$signal$QSPI0A_DATA1_descriptionSetting"     value="QSPIA0_DATA1" />
-   <item key="$signal$QSPI0A_DATA2_descriptionSetting"     value="QSPIA0_DATA2" />
-   <item key="$signal$QSPI0A_DATA3_descriptionSetting"     value="QSPIA0_DATA3" />
-   <item key="$signal$QSPI0A_SCLK_descriptionSetting"      value="QSPIA0_SCLK" />
-   <item key="$signal$QSPI0A_SS0_b_descriptionSetting"     value="QSPIA0_SS0" />
+   <item key="$signal$LPUART0_RX_descriptionSetting"       value="Console Rx" />
+   <item key="$signal$LPUART0_TX_descriptionSetting"       value="Console Tx" />
+   <item key="$signal$QSPI0A_DATA0_descriptionSetting"     value="QSPIA0 Flash DATA0" />
+   <item key="$signal$QSPI0A_DATA1_descriptionSetting"     value="QSPIA0 Flash DATA1" />
+   <item key="$signal$QSPI0A_DATA2_descriptionSetting"     value="QSPIA0 Flash DATA2" />
+   <item key="$signal$QSPI0A_DATA3_descriptionSetting"     value="QSPIA0 Flash DATA3" />
+   <item key="$signal$QSPI0A_SCLK_descriptionSetting"      value="QSPIA0 Flash SCLK" />
+   <item key="$signal$QSPI0A_SS0_b_descriptionSetting"     value="QSPIA0 Flash SS0" />
    <item key="$signal$RESET_b_descriptionSetting"          value="Resetn" />
    <item key="$signal$SDHC0_CMD_descriptionSetting"        value="SDHC0_CMD" />
    <item key="$signal$SDHC0_D0_descriptionSetting"         value="SDHC0_D0" />
@@ -211,6 +278,8 @@
    <item key="/Console/consoleDevice"                      value="USBDM::Lpuart0" />
    <item key="/FLEXIO/trigger_list"                        value="External;CMP0;CMP1;;PIT0;PIT1;PIT2;PIT3;FTM0;FTM1;FTM2;FTM3;RTC_Alarm;RTC_Seconds;LPTMR0;" />
    <item key="/FTFE/peripheral_file"                       value="ftfa" />
+   <item key="/HARDWARE/mapAllPins"                        value="true" />
+   <item key="/HARDWARE/warnMultipleSignalsOnPin"          value="false" />
    <item key="/LLWU/device_list"                           value="LPTMR0/LPTMR1;CMP0;CMP1;;;RTC_Alarm;;RTC_Seconds" />
    <item key="/LPTMR0/lptmr_cmr"                           value="0" />
    <item key="/MCG/ClockConfig[0]"                         value="ClockConfig_PEE_120MHz" />
@@ -223,7 +292,6 @@
    <item key="/OSC0/osc_cr_scp"                            value="4" />
    <item key="/OSC0/osc_input_freq"                        value="12000000" />
    <item key="/OSC0/oscer_undiv_clock"                     value="12000000" />
-   <item key="/SDRAMC/port_pcr_dse"                        value="true" />
    <item key="/SIM/ClockConfig[0]"                         value="" />
    <item key="/SIM/ClockConfig[1]"                         value="" />
    <item key="/SIM/ClockConfig[2]"                         value="" />
