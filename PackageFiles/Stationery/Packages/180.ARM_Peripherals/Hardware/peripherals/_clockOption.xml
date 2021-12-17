@@ -12,28 +12,28 @@
       _name       FTM0 => FTM0
  -->
  
-<template><![CDATA[
-   \t/** 
-   \t *  Enable clock to $(_class)
-   \t */
-   \tstatic void enableClock() {
-   #ifdef PCC
-   \t   PccInfo::enable$(_class)Clock();
-   #else
-   \t   $(clockEnable)
-   #endif
-   \t}
+   <template><![CDATA[
+      \t/** 
+      \t *  Enable clock to $(_class)
+      \t */
+      \tstatic void enableClock() {
+      #ifdef PCC
+      \t   PccInfo::enable$(_class)Clock();
+      #else
+      \t   $(clockEnable)
+      #endif
+      \t}
 
-   \t/** 
-   \t *  Disable clock to $(_class)
-   \t */
-   \tstatic void disableClock() {
-   #ifdef PCC
-   \t   PccInfo::disable$(_class)Clock();
-   #else
-   \t   $(clockDisable)
-   #endif
-   \t}\n\n
-]]></template>
+      \t/** 
+      \t *  Disable clock to $(_class)
+      \t */
+      \tstatic void disableClock() {
+      #ifdef PCC
+      \t   PccInfo::disable$(_class)Clock();
+      #else
+      \t   $(clockDisable)
+      #endif
+      \t}\n\n
+   ]]></template>
       
 </fragment>

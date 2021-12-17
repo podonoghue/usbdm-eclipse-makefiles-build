@@ -26,6 +26,14 @@
    <choice value="true"  name="Force unbonded pins to analogue function" isDefault="true" />
 </binaryOption>
 
+<binaryOption name="/HARDWARE/warnMultipleSignalsOnPin" 
+   description="Whether to generate warnings about conflicting signal mappings"
+   toolTip="It is allowable to have multiple signals mapped to a single pin on the\n 
+            understanding that they will be dynamically mapped during execution">
+   <choice value="false" name="Don't produce warning during compilation" isDefault="true" />
+   <choice value="true"  name="Produce warning during compilation" isDefault="true" />
+</binaryOption>
+
 <!-- Template is added to pin_mapping.h -->
 <template namespace="usbdm"><![CDATA[
    /* Template:_common_settings.xml */
@@ -56,7 +64,7 @@
    \t/**
    \t *  Enables forcing unbonded pins to analogue function in mapAllPins() 
    \t */
-   \tstatic constexpr bool MapAllPinsOnStartup = $(/HARDWARE/lockoutUnbondedPins);
+   \tstatic constexpr bool ForceLockoutUnbondedPins = $(/HARDWARE/lockoutUnbondedPins);
 
    \tstatic constexpr float ns      = 1E-9f; //!< Scale factor for nanoseconds
    \tstatic constexpr float us      = 1E-6f; //!< Scale factor for microseconds
@@ -67,16 +75,16 @@
    \tstatic constexpr float kHz     = 1E3f;  //!< Scale factor for kHz as float
    \tstatic constexpr float Hz      = 1.0f;  //!< Scale factor for Hz as float
 
-   \t/** MCGFFCLK - Fixed frequency clock (input to FLL) */
+   \t/* MCGFFCLK - Fixed frequency clock (input to FLL) */
    \textern volatile uint32_t SystemMcgffClock;
 
-   \t/** MCGOUTCLK - Primary output from MCG, various sources */
+   \t/* MCGOUTCLK - Primary output from MCG, various sources */
    \textern volatile uint32_t SystemMcgOutClock;
 
-   \t/** MCGFLLCLK - Output of FLL */
+   \t/* MCGFLLCLK - Output of FLL */
    \textern volatile uint32_t SystemMcgFllClock;
 
-   \t/** MCGPLLCLK - Output of PLL */
+   \t/* MCGPLLCLK - Output of PLL */
    \textern volatile uint32_t SystemMcgPllClock;
 
    \t/**
@@ -147,8 +155,6 @@
    \t *
    \t * @tparam T      Deduced array type
    \t * @tparam N      Deduced array size
-   \t *
-   \t * @param  Ar      Array to examine
    \t *
    \t * @return  Size of array in elements
    \t */

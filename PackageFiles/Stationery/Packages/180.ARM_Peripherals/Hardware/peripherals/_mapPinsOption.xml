@@ -70,7 +70,7 @@
       \t
       \t   // Disable pins if selected and not already locked
       \t   if constexpr (Info::mapPinsOnEnable && !(MapAllPinsOnStartup && (ForceLockedPins == PinLock_Locked))) {
-      \t   Info::clearPCRs();
+      \t      Info::clearPCRs();
       \t   }
       \t}
 

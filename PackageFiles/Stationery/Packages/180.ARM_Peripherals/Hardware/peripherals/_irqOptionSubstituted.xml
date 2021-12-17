@@ -15,8 +15,8 @@
    <irqOption name="irqHandlingMethod"  
       description="Peripheral interrupt handler"
       toolTip="This selection allow the interrupt handler for this peripheral to be installed using several different methods"
-      pattern="^%b%i$" 
-      classHandler="%c%i::irqHandler" />
+      pattern="$(irq_pattern)" 
+      classHandler="$(irq_classHandler)" />
       
    <choiceOption name="irqLevel"
       description="Default IRQ level for this peripheral"
@@ -31,7 +31,7 @@
    </choiceOption>
 
    <template><![CDATA[
-      \t/* Template_irqOption.xml */
+      \t/* Template_irqOptionSubstituted.xml */
       
       \t//! IRQ numbers for hardware
       \tstatic constexpr IRQn_Type irqNums[]  = $(_name)_IRQS;

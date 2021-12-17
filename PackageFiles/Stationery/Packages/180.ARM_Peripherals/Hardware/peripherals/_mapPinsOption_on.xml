@@ -55,8 +55,10 @@
       \t */
       \tstatic void configureAllPins() {
       \t
-      \t   // Configure pins
-      \t   Info::initPCRs();
+      \t   // Configure pins if selected and not already locked
+      \t   if constexpr (Info::mapPinsOnEnable && !(MapAllPinsOnStartup && (ForceLockedPins == PinLock_Locked))) {
+      \t      Info::initPCRs();
+      \t   }
       \t}
 
       \t/**
@@ -66,8 +68,10 @@
       \t */
       \tstatic void disableAllPins() {
       \t
-      \t   // Configure pins
+      \t   // Disable pins if selected and not already locked
+      \t   if constexpr (Info::mapPinsOnEnable && !(MapAllPinsOnStartup && (ForceLockedPins == PinLock_Locked))) {
       \t   Info::clearPCRs();
+      \t   }
       \t}
 
       \t/**
@@ -79,9 +83,7 @@
       \t   // Enable clock to peripheral
       \t   Info::enableClock();
       \t
-      \t   if constexpr (Info::mapPinsOnEnable) {
-      \t      configureAllPins();
-      \t   }
+      \t   configureAllPins();
       \t}
 
       \t/**
@@ -91,9 +93,7 @@
       \t
       \t   disableNvicInterrupts();
       \t   
-      \t   if constexpr (Info::mapPinsOnEnable) {
-      \t      disableAllPins();
-      \t   }
+      \t   disableAllPins();
       \t
       \t   // Disable clock to peripheral
       \t   Info::disableClock();
