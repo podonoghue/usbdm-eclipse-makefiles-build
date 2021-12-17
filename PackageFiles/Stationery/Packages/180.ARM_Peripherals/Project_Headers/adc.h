@@ -303,8 +303,6 @@ protected:
       setAndCheckErrorCode(E_NO_HANDLER);
    }
 
-public:
-
    /// Pointer to hardware instance
    const HardwarePtr<ADC_Type> adc;
 
@@ -315,6 +313,74 @@ public:
     */
    constexpr  Adc(uint32_t adcBaseAddress) : adc(adcBaseAddress) {
    }
+
+   /**
+    * Enables hardware trigger mode of operation and configures the channel.
+    *
+    * @param[in] sc1Value        SC1 register value including the ADC channel, Differential mode and interrupt enable
+    * @param[in] adcPretrigger   Hardware pre-trigger to use for this channel\n
+    *                            This corresponds to pre-triggers in the PDB channels and SC1[n] register setups
+    */
+   void enableHardwareConversion(int sc1Value, AdcPretrigger adcPretrigger) const {
+      // Set hardware triggers
+      adc->SC2 = (adc->SC2)|ADC_SC2_ADTRG(1);
+      // Configure channel for hardware trigger input
+      adc->SC1[adcPretrigger] = sc1Value;
+   }
+
+#if defined(ADC_SC2_DMAEN)
+   /**
+    * Enables hardware trigger mode of operation and configures the channel.
+    *
+    * @param[in] sc1Value        SC1 register value including the ADC channel, Differential mode and interrupt enable
+    * @param[in] adcPretrigger   Hardware pre-trigger to use for this channel.\n
+    *                            This corresponds to pre-triggers in the PDB channels and SC1[n] register setups
+    * @param[in] adcDma          Whether to generate a DMA request when each conversion completes
+    */
+   void enableHardwareConversion(int sc1Value, AdcPretrigger adcPretrigger, AdcDma adcDma) const {
+      // Set hardware triggers
+      adc->SC2 = (adc->SC2)|ADC_SC2_ADTRG(1)|adcDma;
+      // Configure channel for hardware trigger input
+      adc->SC1[adcPretrigger] = sc1Value;
+   }
+#endif
+
+   /**
+    * Initiates a conversion but does not wait for it to complete.
+    * Intended for use with interrupts or DMA.
+    *
+    * @param[in] sc1Value SC1 register value. This includes channel, differential mode and interrupts enable.
+    */
+   void startConversion(const int sc1Value) const {
+      // Trigger conversion
+      adc->SC1[0] = sc1Value;
+   };
+
+   /**
+    * Initiates a conversion and waits for it to complete.
+    *
+    * @param[in] sc1Value SC1 register value including the ADC channel to use and differential mode
+    *
+    * @return - The result of the conversion as an integer converted from 16-bit ADC value
+    *           For single-ended conversions this will be zero extended
+    *           For differential conversions this will be sign-extended
+    *
+    * @note Result is signed but will always be positive for single-ended conversions.
+    */
+   int readAnalogue(uint32_t sc1Value) const {
+
+      // Trigger conversion
+      adc->SC1[0] = sc1Value;
+      (void)adc->SC1[0];
+
+      while ((adc->SC1[0]&ADC_SC1_COCO_MASK) == 0) {
+         __asm__("nop");
+      }
+
+      return getConversionResult();
+   };
+
+public:
 
    /**
     * Get ADC maximum conversion value for an single-ended range
@@ -452,85 +518,27 @@ public:
 #endif
 
    /**
-    * Enables hardware trigger mode of operation and configures the channel.
-    *
-    * @param[in] sc1Value        SC1 register value including the ADC channel, Differential mode and interrupt enable
-    * @param[in] adcPretrigger   Hardware pre-trigger to use for this channel\n
-    *                            This corresponds to pre-triggers in the PDB channels and SC1[n] register setups
-    */
-   void enableHardwareConversion(int sc1Value, AdcPretrigger adcPretrigger) const {
-      // Set hardware triggers
-      adc->SC2 = (adc->SC2)|ADC_SC2_ADTRG(1);
-      // Configure channel for hardware trigger input
-      adc->SC1[adcPretrigger] = sc1Value;
-   }
-
-#if defined(ADC_SC2_DMAEN)
-   /**
-    * Enables hardware trigger mode of operation and configures the channel.
-    *
-    * @param[in] sc1Value        SC1 register value including the ADC channel, Differential mode and interrupt enable
-    * @param[in] adcPretrigger   Hardware pre-trigger to use for this channel.\n
-    *                            This corresponds to pre-triggers in the PDB channels and SC1[n] register setups
-    * @param[in] adcDma          Whether to generate a DMA request when each conversion completes
-    */
-   void enableHardwareConversion(int sc1Value, AdcPretrigger adcPretrigger, AdcDma adcDma) const {
-      // Set hardware triggers
-      adc->SC2 = (adc->SC2)|ADC_SC2_ADTRG(1)|adcDma;
-      // Configure channel for hardware trigger input
-      adc->SC1[adcPretrigger] = sc1Value;
-   }
-#endif
-
-   /**
     * Gets result of last software initiated conversion
     *
-    * @return COnversion result
+    * @return The result of the conversion as an integer converted from 16-bit ADC value\n
+    *         For single-ended conversions this will be zero extended\n
+    *         For differential conversions this will be sign-extended
     *
+    * @note Result is signed but will always be positive for single-ended conversions.
     * @note This will also clear the conversion flag if set
     */
-   uint16_t getConversionResult() const {
-      return static_cast<uint16_t>(adc->R[0]);
-   };
+   int getConversionResult() const {
 
-   /**
-    * Initiates a conversion but does not wait for it to complete.
-    * Intended for use with interrupts or DMA.
-    *
-    * @param[in] sc1Value       SC1 register value. This includes channel, differential mode and interrupts enable.
-    */
-   void startConversion(const int sc1Value) const {
-      // Trigger conversion
-      adc->SC1[0] = sc1Value;
-   };
+      // This is a 32-bit value with leading zeroes i.e unsigned
+      int value = ADC_R_D_MASK & (adc->R[0]);
 
-   /**
-    * Initiates a conversion and waits for it to complete.
-    *
-    * @param[in] sc1Value SC1 register value including the ADC channel to use and differential mode
-    *
-    * @return - The result of the conversion as an integer converted from 16-bit ADC value
-    *           For single-ended channels this will be zero extended
-    *           For differential channels this will be sign-extended
-    *
-    * @note Result is signed but will always be positive for single-ended channels.
-    */
-   int readAnalogue(uint32_t sc1Value) const {
-
-      // Trigger conversion
-      adc->SC1[0] = sc1Value;
-      (void)adc->SC1[0];
-
-      while ((adc->SC1[0]&ADC_SC1_COCO_MASK) == 0) {
-         __asm__("nop");
-      }
-
-      int value = static_cast<uint16_t>(adc->R[0]);
 #if defined(ADC_SC1_DIFF_MASK)
-      if (sc1Value&ADC_SC1_DIFF_MASK) {
-         value = static_cast<int16_t>(value);
+      if (adc->SC1[0] & ADC_SC1_DIFF_MASK) {
+         // Differential conversion - convert to signed
+         return static_cast<int16_t>(value);
       }
 #endif
+
       return value;
    };
 
@@ -620,11 +628,11 @@ public:
    /**
     * Initiates a conversion and waits for it to complete.
     *
-    * @return The result of the conversion as an integer converted from 16-bit ADC value.
-    *           For single-ended channels this will be zero extended.
-    *           For differential channels this will be sign-extended.
+    * @return The result of the conversion as an integer converted from 16-bit ADC value\n
+    *         For single-ended conversions this will be zero extended\n
+    *         For differential conversions this will be sign-extended
     *
-    * @note Result is signed but will always be positive for single-ended channels.
+    * @note Result is signed but will always be positive for single-ended conversions.
     */
    int readAnalogue() const {
       return Adc::readAnalogue(sc1Value);
@@ -1176,26 +1184,54 @@ protected:
 #endif
 
    /**
+    * Initiates a conversion but does not wait for it to complete.
+    * Intended for use with interrupts or DMA.
+    *
+    * @param[in] sc1Value SC1 register value.
+    *                     This includes channel, differential mode and interrupts enable.
+    */
+   static void startConversion(const int sc1Value) {
+      // Trigger conversion
+      adc->SC1[0] = sc1Value;
+   };
+
+   /**
     * Gets result of last software initiated conversion
     *
-    * @return COnversion result
+    * @return - The result of the conversion as an integer converted from 16-bit ADC value\n
+    *           For single-ended conversions this will be zero extended\n
+    *           For differential conversions this will be sign-extended
     *
+    * @note Result is signed but will always be positive for single-ended channels.
     * @note This will also clear the conversion flag if set
     */
    static uint16_t getConversionResult() {
-      return static_cast<uint16_t>(adc->R[0]);
+
+      // This is a 32-bit value with leading zeroes i.e unsigned
+      int value = ADC_R_D_MASK & (adc->R[0]);
+
+#if defined(ADC_SC1_DIFF_MASK)
+      if (adc->SC1[0] & ADC_SC1_DIFF_MASK) {
+         // Differential conversion - convert to signed
+         return static_cast<int16_t>(value);
+      }
+#endif
+
+      return value;
    };
 
    /**
     * Initiates a conversion and waits for it to complete.
     *
-    * @return - The result of the conversion as an integer converted from 16-bit ADC value
-    *           For single-ended channels this will be zero extended
-    *           For differential channels this will be sign-extended
+    * @param[in] sc1Value SC1 register value including the ADC channel to use and whether differential mode
     *
-    * @note Result is signed but will always be positive for single-ended channels.
+    * @return - The result of the conversion as an integer converted from 16-bit ADC value\n
+    *           For single-ended conversions this will be zero extended\n
+    *           For differential conversions this will be sign-extended
+    *
+    * @note Result is signed but will always be positive for single-ended conversions.
     */
-   static uint16_t readAnalogue(const int sc1Value) {
+   static int readAnalogue(const int sc1Value) {
       // Trigger conversion
       adc->SC1[0] = sc1Value;
       (void)adc->SC1[0];
@@ -1204,27 +1240,10 @@ protected:
          __asm__("nop");
       }
 
-      int value = static_cast<uint16_t>(adc->R[0]);
-#if defined(ADC_SC1_DIFF_MASK)
-      if (sc1Value&ADC_SC1_DIFF_MASK) {
-         value = static_cast<int16_t>(value);
-      }
-#endif
-      return value;
+      return getConversionResult();
    };
 
 public:
-   /**
-    * Initiates a conversion but does not wait for it to complete.
-    * Intended for use with interrupts or DMA.
-    *
-    * @param[in] sc1Value       SC1 register value. This includes channel, differential mode and interrupts enable.
-    */
-   static void startConversion(const int sc1Value) {
-      // Trigger conversion
-      adc->SC1[0] = sc1Value;
-   };
-
 #if defined(ADC_PGA_PGAEN_MASK)
 #if defined(ADC_PGA_PGACHPb_MASK)
       /**
@@ -1305,7 +1324,11 @@ public:
    public:
       constexpr Channel() : AdcChannel(AdcInfo::baseAddress, channel) {}
 
+      /** The PCR associated with this channel (Not all channels have an associated PCR!) */
       using Pcr = PcrTable_T<Info, limitIndex<Info>(channel)>;
+
+      /** The ADC that owns this channel */
+      using OwningAdc = AdcBase_T;
 
       /** Information about this ADC */
       using AdcInfo = Info;
@@ -1361,14 +1384,14 @@ public:
       /**
        * Initiates a conversion and waits for it to complete.
        *
-       * @return - The result of the conversion as an integer converted from 16-bit ADC value
-       *           For single-ended channels this will be zero extended
-       *           For differential channels this will be sign-extended
+       * @return - The result of the conversion as an integer converted from 16-bit ADC value\n
+       *           For single-ended conversions this will be zero extended\n
+       *           For differential conversions this will be sign-extended
        *
-       * @note Result is signed but will always be positive for single-ended channels.
+       * @note Result is signed but will always be positive for single-ended conversions.
        */
-      static uint16_t readAnalogue() {
-         return static_cast<uint16_t>(AdcBase_T::readAnalogue(channel));
+      static int readAnalogue() {
+         return AdcBase_T::readAnalogue(channel);
       };
 
       /**
@@ -1467,6 +1490,9 @@ public:
       /** PCR associated with minus channel */
       using PcrM = PcrTable_T<typename Info::InfoDM, limitIndex<typename Info::InfoDM>(channel)>;
 
+      /** The ADC that owns this channel */
+      using OwningAdc = AdcBase_T;
+
       /** Information about this ADC */
       using AdcInfo = Info;
 
@@ -1498,45 +1524,6 @@ public:
             PcrM::disablePin();
          }
       }
-
-      /**
-       * Initiates a conversion but does not wait for it to complete.
-       * Intended for use with interrupts or DMA.
-       *
-       * @param[in] adcInterrupt   Determines if an interrupt is generated when conversions are complete
-       */
-      static void startConversion(AdcInterrupt adcInterrupt=AdcInterrupt_Disabled) {
-         if constexpr(!Info::irqHandlerInstalled) {
-            usbdm_assert((adcInterrupt == AdcInterrupt_Disabled),
-                  "ADC not configured for interrupts. Modify Configure.usbdmProject");
-         }
-         AdcBase_T::startConversion(channel|ADC_SC1_DIFF_MASK|adcInterrupt);
-      };
-
-      /**
-       * Enables hardware trigger mode of operation and configures a channel.
-       *
-       * @param[in] adcPretrigger   Hardware pre-trigger to use for this channel\n
-       *                            This corresponds to pre-triggers in the PDB channels and SC1[n] register setups
-       * @param[in] adcInterrupt    Whether to generate interrupt when complete
-       */
-      static void enableHardwareConversion(AdcPretrigger adcPretrigger, AdcInterrupt adcInterrupt=AdcInterrupt_Disabled) {
-         AdcBase_T::enableHardwareConversion(channel|ADC_SC1_DIFF_MASK|adcInterrupt, adcPretrigger);
-      }
-
-#ifdef ADC_SC2_DMAEN
-      /**
-       * Enables hardware trigger mode of operation and configures a channel.
-       *
-       * @param[in] adcPretrigger   Hardware pre-trigger to use for this channel\n
-       *                            This corresponds to pre-triggers in the PDB channels and SC1[n]/R[n] register selection
-       * @param[in] adcInterrupt    Whether to generate an interrupt when each conversion completes
-       * @param[in] adcDma          Whether to generate a DMA request when each conversion completes
-       */
-      static void enableHardwareConversion(AdcPretrigger adcPretrigger, AdcInterrupt adcInterrupt, AdcDma adcDma) {
-         AdcBase_T::enableHardwareConversion(channel|ADC_SC1_DIFF_MASK|adcInterrupt, adcPretrigger, adcDma);
-      }
-#endif
    };
 
 #if defined(ADC_PGA_PGAEN_MASK)
