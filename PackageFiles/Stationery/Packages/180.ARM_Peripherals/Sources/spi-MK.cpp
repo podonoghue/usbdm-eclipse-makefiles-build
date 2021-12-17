@@ -4,9 +4,7 @@
  * @version  V4.12.1.210
  * @date     13 April 2016
  */
-#include <stddef.h>
 #include <math.h>
-#include "system.h"
 #include "spi.h"
 /*
  * *****************************
@@ -18,62 +16,20 @@
  */
 namespace USBDM {
 
+
 static const uint16_t pbrFactors[] {2,3,5,7};
 static const uint16_t brFactors[] {2,4,6,8,16,32,64,128,256,512,1024,2048,4096,8192,16384,32768};
-
-/**
- * Calculate communication speed factors for SPI
- *
- * @param[in]  clockFrequency => Clock frequency of SPI in Hz
- * @param[in]  frequency      => Communication frequency in Hz
- *
- * @return CTAR register value only including SPI_CTAR_BR, SPI_CTAR_PBR fields
- *
- * Note: Chooses the highest speed that is not greater than frequency.
- */
-uint32_t Spi::calculateDividers(uint32_t clockFrequency, uint32_t frequency) {
-
-   if (clockFrequency <= (2*frequency)) {
-      // Use highest possible rate
-      return SPI_CTAR_DBR_MASK;
-   }
-   int bestPBR = 3;
-   int bestBR  = 7;
-   int32_t bestDifference = 0x7FFFFFFF;
-   for (int pbr = 3; pbr >= 0; pbr--) {
-      for (int br = 15; br >= 0; br--) {
-         uint32_t calculatedFrequency = clockFrequency/(pbrFactors[pbr]*brFactors[br]);
-         int32_t difference = frequency-calculatedFrequency;
-         if (difference < 0) {
-            // Too high stop looking here
-            break;
-         }
-         if (difference < bestDifference) {
-            // New "best value"
-            bestDifference = difference;
-            bestBR  = br;
-            bestPBR = pbr;
-         }
-      }
-   }
-   uint32_t clockFactors = SPI_CTAR_BR(bestBR)|SPI_CTAR_PBR(bestPBR);
-   if ((clockFactors == 0) && (clockFrequency<=(2*frequency))) {
-      // Use highest possible rate - but only when prescalers are zero.
-      // This still results in 50% duty cycle
-      clockFactors = SPI_CTAR_DBR_MASK;
-   }
-   return clockFactors;
-}
 
 /**
  * Calculate communication speed from SPI clock frequency and speed factors
  *
  * @param[in]  clockFrequency  Clock frequency of SPI in Hz
- * @param[in]  clockFactors    CTAR register value providing SPI_CTAR_BR, SPI_CTAR_PBR fields
+ * @param[in]  spiCtarSelect   CTAR register providing SPI_CTAR_BR, SPI_CTAR_PBR fields
  *
  * @return Clock frequency of SPI in Hz for these factors
  */
-uint32_t Spi::calculateSpeed(uint32_t clockFrequency, uint32_t clockFactors) {
+uint32_t Spi::calculateSpeed(uint32_t clockFrequency, SpiCtarSelect spiCtarSelect) {
+   uint32_t clockFactors = spi->CTAR[spiCtarSelect];
    int pbr = (clockFactors&SPI_CTAR_PBR_MASK)>>SPI_CTAR_PBR_SHIFT;
    int br  = (clockFactors&SPI_CTAR_BR_MASK)>>SPI_CTAR_BR_SHIFT;
    uint32_t frequency = clockFrequency/(pbrFactors[pbr]*brFactors[br]);
@@ -116,6 +72,50 @@ void Spi::calculateDelay(float clockFrequency, float delay, int &bestPrescale, i
          }
       }
    }
+}
+
+/**
+ * Calculate communication speed factors for SPI
+ *
+ * @param[in]  clockFrequency Clock frequency of SPI in Hz
+ * @param[in]  frequency      Communication frequency in Hz
+ *
+ * @return CTAR register value only including (BR and PBR)
+ *
+ * Note: Chooses the highest speed that is not greater than frequency.
+ */
+uint32_t Spi::calculateDividers(uint32_t clockFrequency, uint32_t frequency) {
+
+   if (clockFrequency <= (2*frequency)) {
+      // Use highest possible rate
+      return SPI_CTAR_DBR_MASK;
+   }
+   int bestPBR = 3;
+   int bestBR  = 7;
+   int32_t bestDifference = 0x7FFFFFFF;
+   for (int pbr = 3; pbr >= 0; pbr--) {
+      for (int br = 15; br >= 0; br--) {
+         uint32_t calculatedFrequency = clockFrequency/(pbrFactors[pbr]*brFactors[br]);
+         int32_t difference = frequency-calculatedFrequency;
+         if (difference < 0) {
+            // Too high stop looking here
+            break;
+         }
+         if (difference < bestDifference) {
+            // New "best value"
+            bestDifference = difference;
+            bestBR  = br;
+            bestPBR = pbr;
+         }
+      }
+   }
+   uint32_t clockFactors = SPI_CTAR_BR(bestBR)|SPI_CTAR_PBR(bestPBR);
+   if ((clockFactors == 0) && (clockFrequency<=(2*frequency))) {
+      // Use highest possible rate - but only when prescalers are zero.
+      // This still results in 50% duty cycle
+      clockFactors = SPI_CTAR_DBR_MASK;
+   }
+   return clockFactors;
 }
 
 /**
