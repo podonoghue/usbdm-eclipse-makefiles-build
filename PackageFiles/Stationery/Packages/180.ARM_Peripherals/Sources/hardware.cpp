@@ -43,7 +43,12 @@ $(/HARDWARE_CPP/Definitions:   // No user object definitions found)
  * @note Only the lower 16-bits of the PCR registers are initialised
  */
 void mapAllPins() {
-$(/HARDWARE_CPP/PortInitialisations:   // No initialisation Found)
+#if $(/HARDWARE/warnMultipleSignalsOnPin)
+
+$(/HARDWARE_CPP/PortInitialisationsErrors:   // No initialisation errors or warnings found)
+#endif
+
+$(/HARDWARE_CPP/PortInitialisations:   // No initialisation found)
 }
 /**
  * End group USBDM_Group

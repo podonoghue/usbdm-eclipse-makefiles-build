@@ -169,7 +169,7 @@ const char *Mcg::getClockModeName(McgInfo::ClockMode clockMode) {
 /**
  * Transition from current clock mode to mode given
  *
- * @param clockInfo Clock mode to transition to
+ * @param[in]  clockInfo Clock mode to transition to
  *
  * @return E_NO_ERROR on success
  */
