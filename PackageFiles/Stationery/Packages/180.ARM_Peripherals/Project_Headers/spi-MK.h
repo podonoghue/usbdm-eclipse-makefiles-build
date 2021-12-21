@@ -132,7 +132,7 @@ enum SpiEndOfQueueInterrupt {
    SpiEndOfQueueInterrupt_Enabled    = SPI_RSER_EOQF_RE(1),   // DSPI Finished Request Enable (EOQF flag)
 };
 /**
- * Select which Peripheral Select Line to assert during transaction
+ * Mask to select which Peripheral Chip Select Line (PCS) to assert during transaction
  */
 enum SpiPeripheralSelect {
    SpiPeripheralSelect_None = SPI_PUSHR_PCS(0),   //!< Select peripheral using programmatic GPIO
@@ -141,7 +141,22 @@ enum SpiPeripheralSelect {
    SpiPeripheralSelect_2    = SPI_PUSHR_PCS(1<<2),//!< Select peripheral using SPI_PCS2 signal
    SpiPeripheralSelect_3    = SPI_PUSHR_PCS(1<<3),//!< Select peripheral using SPI_PCS3 signal
    SpiPeripheralSelect_4    = SPI_PUSHR_PCS(1<<4),//!< Select peripheral using SPI_PCS4 signal
+   SpiPeripheralSelect_5    = SPI_PUSHR_PCS(1<<5),//!< Select peripheral using SPI_PCS4 signal
+   SpiPeripheralSelect_6    = SPI_PUSHR_PCS(1<<6),//!< Select peripheral using SPI_PCS4 signal
+   SpiPeripheralSelect_7    = SPI_PUSHR_PCS(1<<7),//!< Select peripheral using SPI_PCS4 signal
 };
+
+/**
+ * Or operation on SpiPeripheralSelect masks
+ *
+ * @param left    Left operand
+ * @param right   Right operand
+ *
+ * @return  left|right
+ */
+static constexpr SpiPeripheralSelect operator| (SpiPeripheralSelect left, SpiPeripheralSelect right) {
+   return (SpiPeripheralSelect)(left|right);
+}
 
 /**
  * Select which CTAR to use for transaction
@@ -259,10 +274,9 @@ struct SpiConfiguration {
  *    };
  */
 struct SpiConfigurations {
-   SpiConfiguration ctar0;
-   SpiConfiguration ctar1;
-   uint32_t        pushr;
-   uint8_t         pcsPolarity;
+   SpiConfiguration     ctar0;
+   SpiConfiguration     ctar1;
+   SpiPeripheralSelect  pcsPolarity;
 
    /**
     * Constructor
@@ -272,10 +286,10 @@ struct SpiConfigurations {
     * @param pcsIdleLevel  PCS signals idle level (bit-mask)
     */
    constexpr SpiConfigurations (
-         SpiConfiguration ctar0,
-         SpiConfiguration ctar1,
-         uint8_t pcsPolarity) :
-               ctar0(ctar0), ctar1(ctar1), pushr(0), pcsPolarity(pcsPolarity) {
+         SpiConfiguration     ctar0,
+         SpiConfiguration     ctar1,
+         SpiPeripheralSelect  pcsPolarity) :
+               ctar0(ctar0), ctar1(ctar1), pcsPolarity(pcsPolarity) {
    }
 
    /**
@@ -285,9 +299,9 @@ struct SpiConfigurations {
     * @param pcsIdleLevel  PCS signals idle level (bit-mask)
     */
    constexpr SpiConfigurations (
-         SpiConfiguration ctar0,
-         uint8_t pcsPolarity) :
-               ctar0(ctar0), ctar1(), pushr(0), pcsPolarity(pcsPolarity) {
+         SpiConfiguration     ctar0,
+         SpiPeripheralSelect  pcsPolarity) :
+               ctar0(ctar0), ctar1(), pcsPolarity(pcsPolarity) {
    }
 };
 
@@ -1102,7 +1116,7 @@ public:
    static constexpr SpiConfigurations defaultSettings {
       /* CTAR 0         */ {Info::speed, (SpiMode)Info::mode, (SpiOrder)Info::lsbfe, SpiFrameSize_8},
       /* CTAR 1         */ {Info::speed, (SpiMode)Info::mode, (SpiOrder)Info::lsbfe, SpiFrameSize_8},
-      /* PCS idle level */ 0b00000,
+      /* PCS idle level */ SpiPeripheralSelect_None,
    };
 
    /**
@@ -1201,7 +1215,10 @@ template<class Info> SpiCallbackFunction SpiBase_T<Info>::sCallback = Spi::unhan
  * @endcode
  *
  */
-class Spi0 : public SpiBase_T<Spi0Info> {};
+class Spi0 : public SpiBase_T<Spi0Info> {
+public:
+$(/SPI0/InputMapping:   // No user mappings found)
+};
 #endif
 
 #if defined(USBDM_SPI1_IS_DEFINED)
@@ -1218,7 +1235,10 @@ class Spi0 : public SpiBase_T<Spi0Info> {};
  * @endcode
  *
  */
-class Spi1 : public SpiBase_T<Spi1Info> {};
+class Spi1 : public SpiBase_T<Spi1Info> {
+public:
+$(/SPI1/InputMapping:   // No user mappings found)
+};
 #endif
 
 #if defined(USBDM_SPI2_IS_DEFINED)
@@ -1235,7 +1255,10 @@ class Spi1 : public SpiBase_T<Spi1Info> {};
  * @endcode
  *
  */
-class Spi2 : public SpiBase_T<Spi2Info> {};
+class Spi2 : public SpiBase_T<Spi2Info> {
+public:
+$(/SPI2/InputMapping:   // No user mappings found)
+};
 #endif
 
 #if defined(USBDM_SPI3_IS_DEFINED)
@@ -1252,7 +1275,10 @@ class Spi2 : public SpiBase_T<Spi2Info> {};
  * @endcode
  *
  */
-class Spi3 : public SpiBase_T<Spi3Info> {};
+class Spi3 : public SpiBase_T<Spi3Info> {
+public:
+$(/SPI3/InputMapping:   // No user mappings found)
+};
 #endif
 /**
  * End SPI_Group
