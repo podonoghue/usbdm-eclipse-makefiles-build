@@ -214,7 +214,7 @@ This field is cleared by hardware on any exit to normal RUN mode</description>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>0b11</name>
-                           <description>High Speed Run mode (HSRUN)(if available)</description>
+                           <description>High Speed Run mode (HSRUN)</description>
                            <value>0b11</value>
                         </enumeratedValue>
                      </enumeratedValues>

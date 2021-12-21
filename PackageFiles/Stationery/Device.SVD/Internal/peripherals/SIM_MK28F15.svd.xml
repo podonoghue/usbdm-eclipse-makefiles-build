@@ -1097,7 +1097,7 @@ Devices using this peripheral:
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>1110</name>
-                           <description>Low-power timer (LPTMR0) trigger</description>
+                           <description>Low-power timer (LPTMR) trigger</description>
                            <value>0b1110</value>
                         </enumeratedValue>
                         <enumeratedValue>

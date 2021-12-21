@@ -338,6 +338,7 @@ Devices using this vector table:
       <name>LPTMR0_LPTMR1</name>
       <description>Low Power Timer</description>
       <value>58</value>
+      <peripheral>LPTMR0</peripheral>
       <peripheral>LPTMR1</peripheral>
    </interrupt>
    <interrupt>

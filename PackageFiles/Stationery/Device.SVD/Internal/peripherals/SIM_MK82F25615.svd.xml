@@ -93,6 +93,16 @@ Devices using this peripheral:
                            <description>256 KB</description>
                            <value>0b1011</value>
                         </enumeratedValue>
+                        <enumeratedValue>
+                           <name>1101</name>
+                           <description>512 KB</description>
+                           <value>0b1101</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>1111</name>
+                           <description>1024 KB</description>
+                           <value>0b1111</value>
+                        </enumeratedValue>
                      </enumeratedValues>
                   </field>
                   <field>
@@ -1614,6 +1624,16 @@ Devices using this peripheral:
                            <description>Kx6 Subfamily</description>
                            <value>0b0110</value>
                         </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0111</name>
+                           <description>Kx7 Subfamily</description>
+                           <value>0b0111</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>1000</name>
+                           <description>Kx8 Subfamily</description>
+                           <value>0b1000</value>
+                        </enumeratedValue>
                      </enumeratedValues>
                   </field>
                   <field>
@@ -1797,8 +1817,8 @@ Devices using this peripheral:
                <resetValue>0x40182</resetValue>
                <fields>
                   <field>
-                     <name>LPTMR</name>
-                     <description>Low Power Timer Access Control</description>
+                     <name>LPTMR0</name>
+                     <description>LPTMR0 Clock Gate Control</description>
                      <bitOffset>0</bitOffset>
                      <bitWidth>1</bitWidth>
                      <enumeratedValues>
@@ -1814,7 +1834,7 @@ Devices using this peripheral:
                         </enumeratedValue>
                      </enumeratedValues>
                   </field>
-                  <field derivedFrom="LPTMR" > <name>LPTMR1</name> <description>LPTMR1 Clock Gate Control</description> <bitOffset>4</bitOffset> </field>
+                  <field derivedFrom="LPTMR0" > <name>LPTMR1</name> <description>LPTMR1 Clock Gate Control</description> <bitOffset>4</bitOffset> </field>
                   <field>
                      <name>TSI</name>
                      <description>TSI Clock Gate Control</description>
@@ -1867,7 +1887,7 @@ Devices using this peripheral:
                   <field derivedFrom="FTF" > <name>DMAMUX0</name> <description>DMA Mux Clock Gate Control</description> <bitOffset>1</bitOffset> </field>
                   <field derivedFrom="FTF" > <name>SPI0</name> <description>SPI0 Clock Gate Control</description> <bitOffset>12</bitOffset> </field>
                   <field derivedFrom="FTF" > <name>SPI1</name> <description>SPI1 Clock Gate Control</description> <bitOffset>13</bitOffset> </field>
-                  <field derivedFrom="FTF" > <name>I2S</name> <description>I2S Clock Gate Control</description> <bitOffset>15</bitOffset> </field>
+                  <field derivedFrom="FTF" > <name>I2S0</name> <description>I2S0 Clock Gate Control</description> <bitOffset>15</bitOffset> </field>
                   <field derivedFrom="FTF" > <name>CRC</name> <description>CRC Clock Gate Control</description> <bitOffset>18</bitOffset> </field>
                   <field derivedFrom="FTF" > <name>USBDCD</name> <description>USB DCD Clock Gate Control</description> <bitOffset>21</bitOffset> </field>
                   <field derivedFrom="FTF" > <name>PDB</name> <description>PDB Clock Gate Control</description> <bitOffset>22</bitOffset> </field>
@@ -2087,6 +2107,77 @@ Devices using this peripheral:
                      </enumeratedValues>
                   </field>
                   <field>
+                     <name>DEPART</name>
+                     <description>FlexNVM partition</description>
+                     <bitOffset>8</bitOffset>
+                     <bitWidth>4</bitWidth>
+                     <access>read-only</access>
+                  </field>
+                  <field>
+                     <name>EESIZE</name>
+                     <description>EEPROM size</description>
+                     <bitOffset>16</bitOffset>
+                     <bitWidth>4</bitWidth>
+                     <access>read-only</access>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0000</name>
+                           <description>16 KB</description>
+                           <value>0b0000</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0001</name>
+                           <description>8 KB</description>
+                           <value>0b0001</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0010</name>
+                           <description>4 KB</description>
+                           <value>0b0010</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0011</name>
+                           <description>2 KB</description>
+                           <value>0b0011</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0100</name>
+                           <description>1 KB</description>
+                           <value>0b0100</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0101</name>
+                           <description>512 Bytes</description>
+                           <value>0b0101</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0110</name>
+                           <description>256 Bytes</description>
+                           <value>0b0110</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0111</name>
+                           <description>128 Bytes</description>
+                           <value>0b0111</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>1000</name>
+                           <description>64 Bytes</description>
+                           <value>0b1000</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>1001</name>
+                           <description>32 Bytes</description>
+                           <value>0b1001</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>1111</name>
+                           <description>0 Bytes</description>
+                           <value>0b1111</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
                      <name>PFSIZE</name>
                      <description>Program flash size</description>
                      <bitOffset>24</bitOffset>
@@ -2125,8 +2216,47 @@ Devices using this peripheral:
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>1111</name>
-                           <description>256 KB of program flash memory</description>
+                           <description>2048 KB of program flash memory</description>
                            <value>0b1111</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>NVMSIZE</name>
+                     <description>FlexNVM size</description>
+                     <bitOffset>28</bitOffset>
+                     <bitWidth>4</bitWidth>
+                     <access>read-only</access>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0000</name>
+                           <description>0 KB of FlexNVM</description>
+                           <value>0b0000</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0011</name>
+                           <description>32 KB of FlexNVM</description>
+                           <value>0b0011</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0101</name>
+                           <description>64 KB of FlexNVM</description>
+                           <value>0b0101</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0111</name>
+                           <description>128 KB of FlexNVM</description>
+                           <value>0b0111</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>1001</name>
+                           <description>256 KB of FlexNVM</description>
+                           <value>0b1001</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>1011</name>
+                           <description>512 KB of FlexNVM</description>
+                           <value>0b1011</value>
                         </enumeratedValue>
                      </enumeratedValues>
                   </field>
@@ -2146,10 +2276,46 @@ Devices using this peripheral:
                      <bitWidth>7</bitWidth>
                   </field>
                   <field>
+                     <name>PFLSH</name>
+                     <description>Program flash only</description>
+                     <bitOffset>23</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0</name>
+                           <description>Device supports FlexNVM</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>1</name>
+                           <description>Program Flash only, device does not support FlexNVM</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
                      <name>MAXADDR0</name>
                      <description>Max address block 0</description>
                      <bitOffset>24</bitOffset>
                      <bitWidth>7</bitWidth>
+                  </field>
+                  <field>
+                     <name>SWAPPFLSH</name>
+                     <description>Swap program flash</description>
+                     <bitOffset>31</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0</name>
+                           <description>Swap is not active</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>1</name>
+                           <description>Swap is active</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
                   </field>
                </fields>
             </register>
