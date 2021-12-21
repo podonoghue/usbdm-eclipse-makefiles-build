@@ -476,33 +476,33 @@
          <mux sel="mux1"          signal="GPIOB_20" />
          <reset sel="mux0" />
       </pin>
-      <pin name="VDD">
-         <mux sel="mux0"          signal="VDD" />
-         <reset sel="mux0" />
+      <pin name="VDD"          isFixed="true">
+         <mux sel="fixed"         signal="VDD" />
+         <reset sel="fixed" />
       </pin>
-      <pin name="VDD1">
-         <mux sel="mux0"          signal="VDD" />
-         <reset sel="mux0" />
+      <pin name="VDD1"         isFixed="true">
+         <mux sel="fixed"         signal="VDD" />
+         <reset sel="fixed" />
       </pin>
-      <pin name="VREFH">
-         <mux sel="mux0"          signal="VREFH" />
-         <reset sel="mux0" />
+      <pin name="VREFH"        isFixed="true">
+         <mux sel="fixed"         signal="VREFH" />
+         <reset sel="fixed" />
       </pin>
-      <pin name="VREFL">
-         <mux sel="mux0"          signal="VREFL" />
-         <reset sel="mux0" />
+      <pin name="VREFL"        isFixed="true">
+         <mux sel="fixed"         signal="VREFL" />
+         <reset sel="fixed" />
       </pin>
-      <pin name="VSS">
-         <mux sel="mux0"          signal="VSS" />
-         <reset sel="mux0" />
+      <pin name="VSS"          isFixed="true">
+         <mux sel="fixed"         signal="VSS" />
+         <reset sel="fixed" />
       </pin>
-      <pin name="VSS1">
-         <mux sel="mux0"          signal="VSS" />
-         <reset sel="mux0" />
+      <pin name="VSS1"         isFixed="true">
+         <mux sel="fixed"         signal="VSS" />
+         <reset sel="fixed" />
       </pin>
-      <pin name="VSS2">
-         <mux sel="mux0"          signal="VSS" />
-         <reset sel="mux0" />
+      <pin name="VSS2"         isFixed="true">
+         <mux sel="fixed"         signal="VSS" />
+         <reset sel="fixed" />
       </pin>
    </pins>
    <packages>

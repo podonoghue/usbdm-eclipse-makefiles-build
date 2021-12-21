@@ -985,7 +985,7 @@
          <placement pin="PIT_CH0"       location="Internal" />
          <placement pin="PIT_CH1"       location="Internal" />
          <placement pin="PIT_CH2"       location="Internal" />
-         <placement pin="PIT_CH3"       location="" />
+         <placement pin="PIT_CH3"       location="Internal" />
          <placement pin="PTA0"          location="D3" />
          <placement pin="PTA1"          location="D4" />
          <placement pin="PTA12"         location="H6" />
@@ -1047,7 +1047,7 @@
          <placement pin="PIT_CH0"       location="Internal" />
          <placement pin="PIT_CH1"       location="Internal" />
          <placement pin="PIT_CH2"       location="Internal" />
-         <placement pin="PIT_CH3"       location="" />
+         <placement pin="PIT_CH3"       location="Internal" />
          <placement pin="PTA0"          location="p34" />
          <placement pin="PTA1"          location="p35" />
          <placement pin="PTA12"         location="p42" />
@@ -1131,7 +1131,7 @@
          <placement pin="PIT_CH0"       location="Internal" />
          <placement pin="PIT_CH1"       location="Internal" />
          <placement pin="PIT_CH2"       location="Internal" />
-         <placement pin="PIT_CH3"       location="" />
+         <placement pin="PIT_CH3"       location="Internal" />
          <placement pin="PTA0"          location="p22" />
          <placement pin="PTA1"          location="p23" />
          <placement pin="PTA12"         location="p28" />

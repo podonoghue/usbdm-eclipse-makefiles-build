@@ -150,10 +150,6 @@
          <dma source="AlwaysEnabled62"      num="62" />
          <dma source="AlwaysEnabled63"      num="63" />
       </peripheral>
-      <peripheral baseName="ENET"     instance="">
-         <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForNull" />
-         <clock clockEnable="PCC->PCC_ENET |= PCC_PCCn_CGC_MASK" clockDisable="PCC->PCC_ENET &amp;= ~PCC_PCCn_CGC_MASK" />
-      </peripheral>
       <peripheral baseName="EWM"      instance=""         version="ewm_int_pr">
          <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForEwm" />
          <clock clockEnable="PCC->PCC_EWM |= PCC_PCCn_CGC_MASK" clockDisable="PCC->PCC_EWM &amp;= ~PCC_PCCn_CGC_MASK" />
@@ -307,10 +303,6 @@
       </peripheral>
       <peripheral baseName="POWER"    instance="">
          <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForPower" />
-      </peripheral>
-      <peripheral baseName="QSPI"     instance="">
-         <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForNull" />
-         <clock clockEnable="PCC->PCC_QSPI |= PCC_PCCn_CGC_MASK" clockDisable="PCC->PCC_QSPI &amp;= ~PCC_PCCn_CGC_MASK" />
       </peripheral>
       <peripheral baseName="RTC"      instance=""         version="rtc_s32k14x">
          <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForRtc" />

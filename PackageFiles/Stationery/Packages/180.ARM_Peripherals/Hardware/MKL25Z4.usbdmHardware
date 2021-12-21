@@ -775,27 +775,18 @@
    </pins>
    <packages>
       <package name="FRDM_KL25Z">
-         <placement pin="PTA0"          location="" />
          <placement pin="PTA1"          location="D0/ConRx" />
          <placement pin="PTA12"         location="D3" />
          <placement pin="PTA13"         location="D8" />
-         <placement pin="PTA14"         location="" />
-         <placement pin="PTA15"         location="" />
          <placement pin="PTA16"         location="D28" />
          <placement pin="PTA17"         location="D29" />
-         <placement pin="PTA18"         location="" />
-         <placement pin="PTA19"         location="" />
          <placement pin="PTA2"          location="D1/ConTx" />
-         <placement pin="PTA20"         location="" />
-         <placement pin="PTA3"          location="" />
          <placement pin="PTA4"          location="D4" />
          <placement pin="PTA5"          location="D5" />
          <placement pin="PTB0"          location="A0" />
          <placement pin="PTB1"          location="A1" />
          <placement pin="PTB10"         location="A18" />
          <placement pin="PTB11"         location="A17" />
-         <placement pin="PTB16"         location="" />
-         <placement pin="PTB17"         location="" />
          <placement pin="PTB18"         location="LED_RED" />
          <placement pin="PTB19"         location="LED_GREEN" />
          <placement pin="PTB2"          location="A2" />
@@ -841,20 +832,6 @@
          <placement pin="PTE31"         location="D30" />
          <placement pin="PTE4"          location="A14" />
          <placement pin="PTE5"          location="A13" />
-         <placement pin="USB0_DM"       location="" />
-         <placement pin="USB0_DP"       location="" />
-         <placement pin="VDD1"          location="" />
-         <placement pin="VDD2"          location="" />
-         <placement pin="VDD3"          location="" />
-         <placement pin="VDDA"          location="" />
-         <placement pin="VOUT33"        location="" />
-         <placement pin="VREFH"         location="" />
-         <placement pin="VREFL"         location="" />
-         <placement pin="VREGIN"        location="" />
-         <placement pin="VSS1"          location="" />
-         <placement pin="VSS2"          location="" />
-         <placement pin="VSS3"          location="" />
-         <placement pin="VSSA"          location="" />
       </package>
       <package name="LQFP_64">
          <placement pin="PTA0"          location="p22" />

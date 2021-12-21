@@ -1784,27 +1784,25 @@
          <placement pin="BANDGAP"       location="Internal" />
          <placement pin="CMP_DAC"       location="Internal" />
          <placement pin="DAC0_OUT"      location="A11" />
-         <placement pin="EXTAL32"       location="" />
+         <placement pin="EXTAL32"       location="EXTAL_32" />
          <placement pin="PIT_CH0"       location="Internal" />
          <placement pin="PIT_CH1"       location="Internal" />
          <placement pin="PIT_CH2"       location="Internal" />
          <placement pin="PIT_CH3"       location="Internal" />
          <placement pin="PTA0"          location="D8" />
          <placement pin="PTA1"          location="D3" />
-         <placement pin="PTA12"         location="" />
-         <placement pin="PTA13"         location="" />
-         <placement pin="PTA14"         location="" />
-         <placement pin="PTA15"         location="" />
-         <placement pin="PTA16"         location="" />
-         <placement pin="PTA17"         location="" />
-         <placement pin="PTA18"         location="" />
-         <placement pin="PTA19"         location="" />
+         <placement pin="PTA12"         location="RMII0_RXD_1" />
+         <placement pin="PTA13"         location="RMII0_RXD_0" />
+         <placement pin="PTA14"         location="RMII0_CRS_DV" />
+         <placement pin="PTA15"         location="RMII0_TXEN" />
+         <placement pin="PTA16"         location="RMII0_TXD_0" />
+         <placement pin="PTA17"         location="RMII0_TXD_1" />
+         <placement pin="PTA18"         location="RMII_RXCLK" />
          <placement pin="PTA2"          location="D5" />
-         <placement pin="PTA3"          location="" />
          <placement pin="PTA4"          location="SW3" />
-         <placement pin="PTA5"          location="" />
-         <placement pin="PTB0"          location="" />
-         <placement pin="PTB1"          location="" />
+         <placement pin="PTA5"          location="RMII0_RXER" />
+         <placement pin="PTB0"          location="RMII0_MDIO" />
+         <placement pin="PTB1"          location="RMII0_MDC" />
          <placement pin="PTB10"         location="A2" />
          <placement pin="PTB11"         location="A3" />
          <placement pin="PTB16"         location="ConRx" />
@@ -1855,31 +1853,31 @@
          <placement pin="PTE4"          location="SD_d3" />
          <placement pin="PTE5"          location="SD_d2" />
          <placement pin="PTE6"          location="SD_switch" />
-         <placement pin="RESET_n"       location="" />
+         <placement pin="RESET_n"       location="RESET" />
          <placement pin="TEMP_SENSOR"   location="Internal" />
-         <placement pin="USB0_DM"       location="" />
-         <placement pin="USB0_DP"       location="" />
-         <placement pin="VBAT"          location="" />
-         <placement pin="VDD2"          location="" />
-         <placement pin="VDD4"          location="" />
-         <placement pin="VDD5"          location="" />
-         <placement pin="VDD6"          location="" />
-         <placement pin="VDD7"          location="" />
-         <placement pin="VDD8"          location="" />
-         <placement pin="VDDA"          location="" />
-         <placement pin="VOUT33"        location="" />
-         <placement pin="VREFH"         location="" />
-         <placement pin="VREFL"         location="" />
+         <placement pin="USB0_DM"       location="USB_DM" />
+         <placement pin="USB0_DP"       location="USB_DP" />
+         <placement pin="VBAT"          location="VBAT" />
+         <placement pin="VDD2"          location="VDD" />
+         <placement pin="VDD4"          location="VDD" />
+         <placement pin="VDD5"          location="VDD" />
+         <placement pin="VDD6"          location="VDD" />
+         <placement pin="VDD7"          location="VDD" />
+         <placement pin="VDD8"          location="VDD" />
+         <placement pin="VDDA"          location="VDD" />
+         <placement pin="VOUT33"        location="VOUT33" />
+         <placement pin="VREFH"         location="VDD" />
+         <placement pin="VREFL"         location="VSS" />
          <placement pin="VREF_OUT"      location="D32" />
-         <placement pin="VREGIN"        location="" />
-         <placement pin="VSS2"          location="" />
-         <placement pin="VSS4"          location="" />
-         <placement pin="VSS5"          location="" />
-         <placement pin="VSS6"          location="" />
-         <placement pin="VSS7"          location="" />
-         <placement pin="VSS8"          location="" />
-         <placement pin="VSSA"          location="" />
-         <placement pin="XTAL32"        location="" />
+         <placement pin="VREGIN"        location="VREGIN" />
+         <placement pin="VSS2"          location="VSS" />
+         <placement pin="VSS4"          location="VSS" />
+         <placement pin="VSS5"          location="VSS" />
+         <placement pin="VSS6"          location="VSS" />
+         <placement pin="VSS7"          location="VSS" />
+         <placement pin="VSS8"          location="VSS" />
+         <placement pin="VSSA"          location="VSS" />
+         <placement pin="XTAL32"        location="XTAL_32" />
       </package>
       <package name="LQFP_100">
          <placement pin="ADC0_DM0"      location="p19" />

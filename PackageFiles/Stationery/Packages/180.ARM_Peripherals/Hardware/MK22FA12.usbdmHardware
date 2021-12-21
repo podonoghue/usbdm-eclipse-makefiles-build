@@ -890,8 +890,8 @@
          <placement pin="PTB1"          location="A4/ACC_SDA" />
          <placement pin="PTB16"         location="ConRx" />
          <placement pin="PTB17"         location="ConTx" />
-         <placement pin="PTB18"         location="" />
-         <placement pin="PTB19"         location="" />
+         <placement pin="PTB18"         location="TSI0" />
+         <placement pin="PTB19"         location="TSI1" />
          <placement pin="PTB2"          location="D15" />
          <placement pin="PTB3"          location="D14" />
          <placement pin="PTC0"          location="A0" />

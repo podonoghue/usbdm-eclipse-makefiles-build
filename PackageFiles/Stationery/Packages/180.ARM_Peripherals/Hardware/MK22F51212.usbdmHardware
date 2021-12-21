@@ -329,22 +329,25 @@
    <pins>
       <pin name="ADC0_DM0"     isFixed="true">
          <mux sel="fixed"         signal="ADC0_DM0" />
-         <mux sel="fixed"         signal="ADC1_DM3" />
          <mux sel="fixed"         signal="ADC0_SE19" />
+         <mux sel="fixed"         signal="ADC1_DM3" />
          <reset sel="fixed" />
       </pin>
       <pin name="ADC0_DM1"     isFixed="true">
          <mux sel="fixed"         signal="ADC0_DM1" />
+         <mux sel="fixed"         signal="ADC0_SE20" />
          <reset sel="fixed" />
       </pin>
       <pin name="ADC0_DP0"     isFixed="true">
          <mux sel="fixed"         signal="ADC0_DP0" />
-         <mux sel="fixed"         signal="ADC1_DP3" />
          <mux sel="fixed"         signal="ADC0_SE0" />
+         <mux sel="fixed"         signal="ADC1_DP3" />
+         <mux sel="fixed"         signal="ADC1_SE3" />
          <reset sel="fixed" />
       </pin>
       <pin name="ADC0_DP1"     isFixed="true">
          <mux sel="fixed"         signal="ADC0_DP1" />
+         <mux sel="fixed"         signal="ADC0_SE1" />
          <reset sel="fixed" />
       </pin>
       <pin name="ADC0_SE16"    isFixed="true">
@@ -354,26 +357,29 @@
          <reset sel="fixed" />
       </pin>
       <pin name="ADC1_DM0"     isFixed="true">
-         <mux sel="fixed"         signal="ADC1_DM0" />
          <mux sel="fixed"         signal="ADC0_DM3" />
+         <mux sel="fixed"         signal="ADC1_DM0" />
          <mux sel="fixed"         signal="ADC1_SE19" />
          <reset sel="fixed" />
       </pin>
       <pin name="ADC1_DM1"     isFixed="true">
-         <mux sel="fixed"         signal="ADC1_DM1" />
          <mux sel="fixed"         signal="ADC0_DM2" />
+         <mux sel="fixed"         signal="ADC1_DM1" />
+         <mux sel="fixed"         signal="ADC1_SE20" />
          <reset sel="fixed" />
       </pin>
       <pin name="ADC1_DP0"     isFixed="true">
-         <mux sel="fixed"         signal="ADC1_DP0" />
          <mux sel="fixed"         signal="ADC0_DP3" />
-         <mux sel="fixed"         signal="ADC1_SE0" />
          <mux sel="fixed"         signal="ADC0_SE3" />
+         <mux sel="fixed"         signal="ADC1_DP0" />
+         <mux sel="fixed"         signal="ADC1_SE0" />
          <reset sel="fixed" />
       </pin>
       <pin name="ADC1_DP1"     isFixed="true">
-         <mux sel="fixed"         signal="ADC1_DP1" />
          <mux sel="fixed"         signal="ADC0_DP2" />
+         <mux sel="fixed"         signal="ADC0_SE2" />
+         <mux sel="fixed"         signal="ADC1_DP1" />
+         <mux sel="fixed"         signal="ADC1_SE1" />
          <reset sel="fixed" />
       </pin>
       <pin name="ADC1_SE16"    isFixed="true">
@@ -1433,8 +1439,8 @@
          <placement pin="PTC7"          location="D21/J1_11" />
          <placement pin="PTC8"          location="D19/J1_7" />
          <placement pin="PTC9"          location="D20/J1_9" />
-         <placement pin="PTD0"          location="" />
-         <placement pin="PTD1"          location="SD_CLK" />
+         <placement pin="PTD0"          location="ACCEL_INT1" />
+         <placement pin="PTD1"          location="SD_CLK/ACCEL_INT2" />
          <placement pin="PTD2"          location="D0/J1_2/SD_MOSI/BT_RX" />
          <placement pin="PTD3"          location="D1/J1_4/SD_MISO/BT_TX" />
          <placement pin="PTD4"          location="D10/J2_6" />
@@ -1648,8 +1654,6 @@
       <package name="MK22F_DIPModule">
          <placement pin="ADC0_DM0"      location="p10b_An_minus" />
          <placement pin="ADC0_DP0"      location="p11b_An_plus" />
-         <placement pin="ADC1_DM0"      location="" />
-         <placement pin="ADC1_DP0"      location="" />
          <placement pin="BANDGAP"       location="Internal" />
          <placement pin="CMP_DAC"       location="Internal" />
          <placement pin="DAC0_OUT"      location="p14_Vo" />
@@ -1667,7 +1671,6 @@
          <placement pin="PTA2"          location="SWD_TX" />
          <placement pin="PTA3"          location="SWD_DIO" />
          <placement pin="PTA4"          location="p15b_A4" />
-         <placement pin="PTA5"          location="" />
          <placement pin="PTB0"          location="p17_B0" />
          <placement pin="PTB1"          location="p18_B1" />
          <placement pin="PTB16"         location="p12_B16" />
@@ -1678,15 +1681,12 @@
          <placement pin="PTB3"          location="p18_B1_alt" />
          <placement pin="PTC0"          location="p19_C0" />
          <placement pin="PTC1"          location="p20_C1" />
-         <placement pin="PTC10"         location="" />
          <placement pin="PTC2"          location="p21_C2" />
          <placement pin="PTC3"          location="p22_C3" />
          <placement pin="PTC4"          location="p23_C4" />
          <placement pin="PTC5"          location="p24_C5" />
          <placement pin="PTC6"          location="p25_C6" />
          <placement pin="PTC7"          location="p26_C7" />
-         <placement pin="PTC8"          location="" />
-         <placement pin="PTC9"          location="" />
          <placement pin="PTD0"          location="p2_D0" />
          <placement pin="PTD1"          location="p3_D1" />
          <placement pin="PTD2"          location="p4_D2" />
@@ -1705,11 +1705,10 @@
          <placement pin="VDD1"          location="Vdd" />
          <placement pin="VDD3"          location="Vdd" />
          <placement pin="VDDA"          location="Vdd" />
-         <placement pin="VOUT33"        location="" />
+         <placement pin="VOUT33"        location="VOUT33" />
          <placement pin="VREFH"         location="p13b_Vr" />
          <placement pin="VREFL"         location="p12b_Agnd" />
-         <placement pin="VREF_OUT"      location="" />
-         <placement pin="VREGIN"        location="" />
+         <placement pin="VREGIN"        location="VREGIN" />
          <placement pin="VSS1"          location="Gnd" />
          <placement pin="VSS3"          location="Gnd" />
          <placement pin="VSSA"          location="p12b_Agnd" />

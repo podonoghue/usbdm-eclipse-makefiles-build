@@ -771,71 +771,31 @@
          <placement pin="VSSA"          location="F3" />
       </package>
       <package name="FRDM_KL27Z">
-         <placement pin="PTA0"          location="" />
          <placement pin="PTA1"          location="D0" />
          <placement pin="PTA12"         location="D2" />
          <placement pin="PTA13"         location="D4/LED_BLUE" />
-         <placement pin="PTA18"         location="" />
-         <placement pin="PTA19"         location="" />
          <placement pin="PTA2"          location="D1" />
-         <placement pin="PTA20"         location="" />
-         <placement pin="PTA3"          location="" />
-         <placement pin="PTA4"          location="" />
          <placement pin="PTA5"          location="D9" />
          <placement pin="PTB0"          location="A5" />
          <placement pin="PTB1"          location="A4" />
-         <placement pin="PTB16"         location="" />
-         <placement pin="PTB17"         location="" />
          <placement pin="PTB18"         location="LED_RED" />
          <placement pin="PTB19"         location="LED_GREEN" />
-         <placement pin="PTB2"          location="" />
-         <placement pin="PTB3"          location="" />
          <placement pin="PTC0"          location="A1" />
-         <placement pin="PTC1"          location="" />
-         <placement pin="PTC10"         location="" />
-         <placement pin="PTC11"         location="" />
          <placement pin="PTC2"          location="MAG_INT" />
-         <placement pin="PTC3"          location="" />
          <placement pin="PTC4"          location="D10" />
          <placement pin="PTC5"          location="D13" />
          <placement pin="PTC6"          location="D11" />
          <placement pin="PTC7"          location="D12" />
          <placement pin="PTC8"          location="D7" />
          <placement pin="PTC9"          location="D6" />
-         <placement pin="PTD0"          location="" />
-         <placement pin="PTD1"          location="" />
-         <placement pin="PTD2"          location="" />
-         <placement pin="PTD3"          location="" />
-         <placement pin="PTD4"          location="" />
-         <placement pin="PTD5"          location="" />
          <placement pin="PTD6"          location="D14/ONBOARD_SDA" />
          <placement pin="PTD7"          location="D15/ONBOARD_SCL" />
-         <placement pin="PTE0"          location="" />
-         <placement pin="PTE1"          location="" />
          <placement pin="PTE16"         location="A0" />
          <placement pin="PTE20"         location="A2" />
          <placement pin="PTE21"         location="A3" />
-         <placement pin="PTE22"         location="" />
-         <placement pin="PTE23"         location="" />
          <placement pin="PTE24"         location="D5" />
          <placement pin="PTE25"         location="D3" />
-         <placement pin="PTE29"         location="" />
-         <placement pin="PTE30"         location="" />
          <placement pin="PTE31"         location="D8" />
-         <placement pin="USB0_DM"       location="" />
-         <placement pin="USB0_DP"       location="" />
-         <placement pin="USB_VDD"       location="" />
-         <placement pin="VDD1"          location="" />
-         <placement pin="VDD2"          location="" />
-         <placement pin="VDD4"          location="" />
-         <placement pin="VDDA"          location="" />
-         <placement pin="VREFH"         location="" />
-         <placement pin="VREFL"         location="" />
-         <placement pin="VREF_OUT"      location="" />
-         <placement pin="VSS1"          location="" />
-         <placement pin="VSS2"          location="" />
-         <placement pin="VSS3"          location="" />
-         <placement pin="VSSA"          location="" />
       </package>
       <package name="LQFP_64">
          <placement pin="PTA0"          location="p22" />

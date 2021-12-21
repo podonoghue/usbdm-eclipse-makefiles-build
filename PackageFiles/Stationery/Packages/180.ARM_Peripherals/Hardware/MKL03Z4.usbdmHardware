@@ -284,13 +284,13 @@
          <mux sel="mux3"          signal="RTC_CLKOUT" />
          <reset sel="unassigned" />
       </pin>
-      <pin name="VDD">
-         <mux sel="mux0"          signal="VDD" />
-         <reset sel="mux0" />
+      <pin name="VDD"          isFixed="true">
+         <mux sel="fixed"         signal="VDD" />
+         <reset sel="fixed" />
       </pin>
-      <pin name="VSS">
-         <mux sel="mux0"          signal="VSS" />
-         <reset sel="mux0" />
+      <pin name="VSS"          isFixed="true">
+         <mux sel="fixed"         signal="VSS" />
+         <reset sel="fixed" />
       </pin>
    </pins>
    <packages>
