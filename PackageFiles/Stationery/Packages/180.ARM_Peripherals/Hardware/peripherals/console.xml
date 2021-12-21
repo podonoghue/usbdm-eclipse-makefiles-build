@@ -18,6 +18,9 @@
       <choice name="Lpuart 0" value="USBDM::Lpuart0" />
       <choice name="Lpuart 1" value="USBDM::Lpuart1" />
       <choice name="Lpuart 2" value="USBDM::Lpuart2" />
+      <choice name="Lpuart 3" value="USBDM::Lpuart3" />
+      <choice name="Lpuart 4" value="USBDM::Lpuart4" />
+      <choice name="Lpuart 5" value="USBDM::Lpuart5" />
       <choice name="Uart 0" value="USBDM::Uart0" isDefault="true" />
       <choice name="Uart 1" value="USBDM::Uart1" />
       <choice name="Uart 2" value="USBDM::Uart2" />
@@ -61,6 +64,9 @@
    <signals name="LPUART0" optional="true" />
    <signals name="LPUART1" optional="true" />
    <signals name="LPUART2" optional="true" />
+   <signals name="LPUART3" optional="true" />
+   <signals name="LPUART4" optional="true" />
+   <signals name="LPUART5" optional="true" />
    <signals name="UART0"   optional="true" />
    <signals name="UART1"   optional="true" />
    <signals name="UART2"   optional="true" />
