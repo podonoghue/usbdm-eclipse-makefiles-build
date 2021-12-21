@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE section>
-<!-- MK64F12_symbols.xml -->
+<!-- FRDM_K64F.xml -->
 
 <section name="DeviceSettings" >
          <!-- Definitions used by example programs -->
