@@ -85,6 +85,7 @@ enum QspiClockDivide {
    QspiClockDivide_By16 = QSPI_MCR_SCLKCFG(15),
 };
 
+#ifdef QSPI_MCR_ISD2FA
 /**
  * Idle Signal Drive IOFA[2] Flash A.
  *
@@ -123,6 +124,7 @@ enum QspiIdleSignalDrive3B {
    QspiIdleSignalDrive3B_L = QSPI_MCR_ISD3FB(0), /**< IOFB[3] is driven to logic L */
    QspiIdleSignalDrive3B_H = QSPI_MCR_ISD3FB(1), /**< IOFB[3] is driven to logic H */
 };
+#endif
 
 /**
  * DDR mode enable
@@ -1031,7 +1033,7 @@ protected:
    }
 
 public:
-#if defined(MCU_MK28F15) || defined (MCU_MK82F15)
+#if defined(MCU_MK28F15) || defined (MCU_MK82F25615)
    /**
     * MK28F/MK82F
     *
@@ -1207,6 +1209,7 @@ struct QspiSettings {
    uint32_t                       flashSizes[4];
 };
 
+#ifdef QSPI_MCR_ISD2FA
 /**
  * Configuration settings for use with @ref QspiBase_T<Qspi0Info>::configureAdvanced()
  */
@@ -1230,6 +1233,26 @@ struct QspiAdvancedSettings {
       soccr(qspiFlashClock2Pin|qspiDiffClockEnable|qspiOctalDataPins) {
    }
 };
+#else // !QSPI_MCR_ISD2FA
+/**
+ * Configuration settings for use with @ref QspiBase_T<Qspi0Info>::configureAdvanced()
+ */
+struct QspiAdvancedSettings {
+   const uint32_t mcr;
+   const uint32_t soccr;
+
+   constexpr QspiAdvancedSettings(
+         QspiDdr                 qspiDdr                = QspiDDR_Disable,
+         QspiEndian              qspiEndian             = QspiEndian_64bit_LE,
+
+         QspiFlashClock2Pin      qspiFlashClock2Pin     = QspiFlashClock2Pin_Disabled,
+         QspiDiffClockEnable     qspiDiffClockEnable    = QspiDiffClockEnable_Disabled,
+         QspiOctalDataPins       qspiOctalDataPins      = QspiOctalDataPins_Disabled) :
+      mcr(qspiDdr|qspiEndian),
+      soccr(qspiFlashClock2Pin|qspiDiffClockEnable|qspiOctalDataPins) {
+   }
+};
+#endif
 
 /**
  * Configuration settings for use with @ref QspiBase_T<Qspi0Info>::configureDqs()
@@ -1418,8 +1441,12 @@ public:
 
       // Configure clock and default settings - Module is left disabled internally
       qspi->SOCCR = qspiClockSource;
+#ifdef QSPI_MCR_ISD2FA
       qspi->MCR   = qspiClockDivide|QspiModule_Disable|QspiEndian_64bit_LE|
             QspiIdleSignalDrive2A_H|QspiIdleSignalDrive2B_H|QspiIdleSignalDrive3A_H|QspiIdleSignalDrive3B_H;
+#else
+      qspi->MCR   = qspiClockDivide|QspiModule_Disable|QspiEndian_64bit_LE;
+#endif
 
       softwareReset();
    }
@@ -1499,6 +1526,7 @@ public:
       qspi->SOCCR = value | settings.soccr;
    }
 
+#ifdef QSPI_MCR_ISD2FA
    /**
     * Advanced configuration of QSPI module
     *
@@ -1539,6 +1567,37 @@ public:
 
       qspi->SOCCR = value | (qspiFlashClock2Pin|qspiDiffClockEnable|qspiOctalDataPins);
    }
+#else
+   /**
+    * Advanced configuration of QSPI module
+    *
+    * This should be done after @ref configure()
+    *
+    * @param qspiDdr                  DDR mode enable
+    * @param qspiEndian               Endianness
+    * @param qspiFlashClock2Pin       Flash CK2 clock pin enable
+    * @param qspiDiffClockEnable      Differential flash clock pins enable
+    * @param qspiOctalDataPins        Octal data pins enable
+    */
+   static void configureAdvanced (
+         QspiDdr                 qspiDdr                = QspiDDR_Disable,
+         QspiEndian              qspiEndian             = QspiEndian_64bit_LE,
+
+         QspiFlashClock2Pin      qspiFlashClock2Pin     = QspiFlashClock2Pin_Disabled,
+         QspiDiffClockEnable     qspiDiffClockEnable    = QspiDiffClockEnable_Disabled,
+         QspiOctalDataPins       qspiOctalDataPins      = QspiOctalDataPins_Disabled) {
+
+      uint32_t value;
+
+      value = qspi->MCR & ~(QSPI_MCR_DDR_EN_MASK|QSPI_MCR_END_CFG_MASK);
+
+      qspi->MCR = value | (qspiDdr|qspiEndian);
+
+      value = qspi->SOCCR & (~QSPI_SOCCR_CK2EN_MASK|QSPI_SOCCR_DIFFCKEN_MASK|QSPI_SOCCR_OCTEN_MASK);
+
+      qspi->SOCCR = value | (qspiFlashClock2Pin|qspiDiffClockEnable|qspiOctalDataPins);
+   }
+#endif
 
    /**
     * Configure QSPI from settings object.
@@ -1993,6 +2052,14 @@ public:
     */
    static uint32_t readStatusRegister() {
       return qspi->SR;
+   }
+
+   /**
+    * Waits until QSPI is idle (StatusReqister.ModuleBusy = 0)
+    */
+   static void waitForIdle() {
+      while (readStatusRegister() & QspiStatusMask_ModuleBusy) {
+      }
    }
 
    /**

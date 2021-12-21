@@ -1051,11 +1051,21 @@ public:
       }
    }
 
+   /**
+    * @brief
+    * Set the Pin Control Register Attributes to the default values determined by Configure.usbdmProject. \n
+    * Mux value is set appropriately for the pin function being used.\n
+    * Assumes clock to the port has already been enabled
+    */
+   static void setOutput() {
+      setPCR(defaultPcrValue.pcrValue());
+   }
+
 #if defined(PORT_PCR_ODE_MASK) and defined (PORT_PCR_SRE_MASK)
    /**
     * @brief
     * Set subset of Pin Control Register Attributes associated with output direction \n
-    * Mux value is set appropriately for the pin function being used. Other attributes are cleared.
+    * Mux value is set appropriately for the pin function being used. Other attributes are cleared. \n
     * Assumes clock to the port has already been enabled
     *
     * @param[in] pinDriveStrength One of PinDriveStrength_Low, PinDriveStrength_High
@@ -1063,7 +1073,7 @@ public:
     * @param[in] pinSlewRate      One of PinSlewRate_Slow, PinSlewRate_Fast
     */
    static void setOutput(
-         PinDriveStrength  pinDriveStrength  = defaultPcrValue,
+         PinDriveStrength  pinDriveStrength,
          PinDriveMode      pinDriveMode      = defaultPcrValue,
          PinSlewRate       pinSlewRate       = defaultPcrValue) {
 
@@ -1080,7 +1090,7 @@ public:
     * @param[in] pinDriveMode     One of PinDriveMode_PushPull, PinDriveMode_OpenDrain
     */
    static void setOutput(
-         PinDriveStrength  pinDriveStrength  = defaultPcrValue,
+         PinDriveStrength  pinDriveStrength,
          PinDriveMode      pinDriveMode      = defaultPcrValue) {
 
       setPCR(pinDriveStrength|pinDriveMode);
@@ -1096,7 +1106,7 @@ public:
     * @param[in] pinSlewRate      One of PinSlewRate_Slow, PinSlewRate_Fast
     */
    static void setOutput(
-         PinDriveStrength  pinDriveStrength  = defaultPcrValue,
+         PinDriveStrength  pinDriveStrength,
          PinSlewRate       pinSlewRate       = defaultPcrValue) {
 
       setPCR(pinDriveStrength|pinSlewRate);
@@ -1111,11 +1121,22 @@ public:
     * @param[in] pinDriveStrength One of PinDriveStrength_Low, PinDriveStrength_High
     */
    static void setOutput(
-         PinDriveStrength  pinDriveStrength  = defaultPcrValue)) {
+         PinDriveStrength  pinDriveStrength)) {
 
       setPCR(pinDriveStrength);
    }
 #endif
+
+   /**
+    * @brief
+    * Set the Pin Control Register Attributes to the default values determined by Configure.usbdmProject. \n
+    * Mux value is set appropriately for the pin function being used.\n
+    * Assumes clock to the port has already been enabled
+    */
+   static void setInput() {
+
+      setPCR(defaultPcrValue.pcrValue());
+   }
 
    /**
     * @brief
@@ -1130,7 +1151,7 @@ public:
     *  @note see also configureDigitalFilter(), enableDigitalPinFilter(), disableDigitalPinFilter()
     */
    static void setInput(
-         PinPull           pinPull           = defaultPcrValue,
+         PinPull           pinPull,
          PinAction         pinAction         = defaultPcrValue,
          PinFilter         pinFilter         = defaultPcrValue) {
 

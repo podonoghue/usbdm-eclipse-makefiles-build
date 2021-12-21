@@ -437,10 +437,27 @@ public:
     * @note Resets the Pin Control Register value (PCR value).
     * @note Resets the pin value to the inactive state
     * @note Use setOut() for a lightweight change of direction without affecting other pin settings.
+    * @note PCR value is taken from the value set in Configure.usbdmProject
+    */
+   static void setOutput() {
+      // Set initial level before enabling pin drive
+      setInactive();
+      // Make pin an output
+      setOut();
+      // Configure pin
+      Pcr::setPCR(defaultPcrValue.pcrValue());
+   }
+   /**
+    * Enable pin as digital output with initial inactive level.\n
+    * Configures all Pin Control Register (PCR) values
+    *
+    * @note Resets the Pin Control Register value (PCR value).
+    * @note Resets the pin value to the inactive state
+    * @note Use setOut() for a lightweight change of direction without affecting other pin settings.
     *
     * @param[in] pcrValue PCR value to use in configuring port (excluding MUX value). See pcrValue()
     */
-   static void setOutput(PcrValue pcrValue = defaultPcrValue) {
+   static void setOutput(PcrValue pcrValue) {
       // Set initial level before enabling pin drive
       setInactive();
       // Make pin an output
@@ -494,10 +511,24 @@ public:
     *
     * @note Resets the Pin Control Register value (PCR value).
     * @note Use setIn() for a lightweight change of direction without affecting other pin settings.
+    * @note PCR value is taken from the value set in Configure.usbdmProject
+    */
+   static void setInput() {
+      // Make pin an input
+      setIn();
+      Pcr::setPCR(defaultPcrValue.pcrValue());
+   }
+   /**
+    * @brief
+    * Enable pin as digital input.\n
+    * Configures all Pin Control Register (PCR) values
+    *
+    * @note Resets the Pin Control Register value (PCR value).
+    * @note Use setIn() for a lightweight change of direction without affecting other pin settings.
     *
     * @param[in] pcrValue PCR value to use in configuring port (excluding MUX value)
     */
-   static void setInput(PcrValue pcrValue    = defaultPcrValue) {
+   static void setInput(PcrValue pcrValue) {
       // Make pin an input
       setIn();
       Pcr::setPCR(pcrValue);
@@ -1090,11 +1121,23 @@ public:
     * Configures all Pin Control Register (PCR) values
     *
     * @note This will also reset the Pin Control Register value (PCR value).
-    * @note Use setOut() or setDirection() for a lightweight change of direction without affecting other pin settings.
+    * @note Use setOut(), setIn() or setDirection() for a lightweight change of direction without affecting other pin settings.
+    * @note PCR value is taken from the value set in Configure.usbdmProject
+    */
+   static void setOutput() {
+      setInOut(defaultPcrValue.pcrValue());
+      gpio->PDDR |= BITMASK;
+   }
+   /**
+    * Sets all pin as digital outputs.
+    * Configures all Pin Control Register (PCR) values
+    *
+    * @note This will also reset the Pin Control Register value (PCR value).
+    * @note Use setOut(), setIn() or setDirection() for a lightweight change of direction without affecting other pin settings.
     *
     * @param[in] pcrValue PCR value to use in configuring port (excluding mux fn)
     */
-   static void setOutput(PcrValue pcrValue=defaultPcrValue) {
+   static void setOutput(PcrValue pcrValue) {
       setInOut(pcrValue);
       gpio->PDDR |= BITMASK;
    }
@@ -1103,7 +1146,7 @@ public:
     * Configures all Pin Control Register (PCR) values
     *
     * @note This will also reset the Pin Control Register value (PCR value).
-    * @note Use setOut() or setDirection() for a lightweight change of direction without affecting other pin settings.
+    * @note Use setOut(), setIn() or setDirection() for a lightweight change of direction without affecting other pin settings.
     *
     * @param[in] pinDriveStrength One of PinDriveStrength_Low, PinDriveStrength_High (defaults to PinDriveLow)
     * @param[in] pinDriveMode     One of PinDriveMode_PushPull, PinDriveMode_OpenDrain (defaults to PinPushPull)
@@ -1129,11 +1172,23 @@ public:
     * Configures all Pin Control Register (PCR) values
     *
     * @note This will also reset the Pin Control Register value (PCR value).
-    * @note Use setIn() or setDirection() for a lightweight change of direction without affecting other pin settings.
+    * @note Use setOut(), setIn() or setDirection() for a lightweight change of direction without affecting other pin settings.
+    *
+    * @note PCR value is taken from the value set in Configure.usbdmProject
+    */
+   static void setInput() {
+      setInOut(defaultPcrValue.pcrValue());
+   }
+   /**
+    * Set all pins as digital inputs.
+    * Configures all Pin Control Register (PCR) values
+    *
+    * @note This will also reset the Pin Control Register value (PCR value).
+    * @note Use setOut(), setIn() or setDirection() for a lightweight change of direction without affecting other pin settings.
     *
     * @param[in] pcrValue PCR value to use in configuring port (excluding mux and irq functions)
     */
-   static void setInput(PcrValue pcrValue=defaultPcrValue) {
+   static void setInput(PcrValue pcrValue) {
       setInOut(pcrValue);
    }
    /**
@@ -1141,7 +1196,7 @@ public:
     * Configures all Pin Control Register (PCR) values
     *
     * @note This will also reset the Pin Control Register value (PCR value).
-    * @note Use setIn() or setDirection() for a lightweight change of direction without affecting other pin settings.
+    * @note Use setOut(), setIn() or setDirection() for a lightweight change of direction without affecting other pin settings.
     *
     * @param[in] pinPull          One of PinPull_None, PinPull_Up, PinPull_Down (defaults to PinPull_None)
     * @param[in] pinAction        One of PinAction_None, etc (defaults to PinAction_None)
