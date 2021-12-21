@@ -922,11 +922,13 @@ public:
             }
             clockFrequency /= 2;
          }
+#if !defined(USB_CLK_RECOVER_IRC_EN_REG_EN_MASK)
          if ((adiv>3) && (adcClockSource == AdcClockSource_Bus)) {
             // Automatically switch from  AdcClockSource_Bus -> AdcClockSource_Busdiv2
             adcClockSource = AdcClockSource_Busdiv2;
             continue;
          }
+#endif
          break;
       }
       usbdm_assert(adiv<4, "Unable to find suitable ADC clock");
