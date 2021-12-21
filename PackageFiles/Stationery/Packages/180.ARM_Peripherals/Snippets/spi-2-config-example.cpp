@@ -21,7 +21,7 @@
  *  - SPI0_SIN
  *  - SPI0_SOUT
  *  - SPI0_PCS0
- *  - SPI0_PCS2
+ *  - SPI0_PCS1
  */
 #include <string.h>
 #include "hardware.h"
@@ -33,7 +33,7 @@ static const SpiConfigurations configurations {
    //                              Speed      Mode        Bit Order           Frame Size
    /* Configuration 0 (CTAR0) */ { 1'000'000, SpiMode_0, SpiOrder_MsbFirst, SpiFrameSize_8},
    /* Configuration 1 (CTAR1) */ {10'000'000, SpiMode_0, SpiOrder_MsbFirst, SpiFrameSize_12},
-   /* PCS idle levels         */ 0b000000, // All PCSs idle low
+   /* PCS idle levels         */ SpiPeripheralSelect_None, // All PCSs idle low
 };
 
 int main() {
@@ -84,7 +84,7 @@ int main() {
          uint16_t rxData3 = 0;;
          uint16_t rxData4 = 0;
 
-         spi.startTransaction(SpiPeripheralSelect_2, SpiCtarSelect_1);
+         spi.startTransaction(SpiPeripheralSelect_1, SpiCtarSelect_1);
          spi.txRx(txDataB, rxData1); // 5 bytes tx-rx
          spi.txRx(txDataB, rxData2); // 5 bytes tx-rx
          rxData3 = spi.txRx(txDataB[0]); // 1 byte tx-rx

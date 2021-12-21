@@ -20,7 +20,7 @@
  *  - SPI0_SIN
  *  - SPI0_SOUT
  *  - SPI0_PCS0
- *  - SPI0_PCS2
+ *  - SPI0_PCS1
  */
 #include <string.h>
 #include "hardware.h"
@@ -31,7 +31,7 @@ using namespace USBDM;
 // Configurations to use
 // These are converted to calculated configurations to reduce overhead
 static const SpiConfiguration configuration1{ 1'000'000, SpiMode_0, SpiOrder_MsbFirst, SpiFrameSize_8};
-static const SpiConfiguration configuration2{ 1'000'000, SpiMode_0, SpiOrder_MsbFirst, SpiFrameSize_8};
+static const SpiConfiguration configuration2{ 1'000'000, SpiMode_0, SpiOrder_MsbFirst, SpiFrameSize_12};
 
 int main() {
    Spi0 spi{};
@@ -53,7 +53,7 @@ int main() {
    spi.setConfiguration(configuration2);
 
    // Peripheral settings to use with above configuration
-   spi.setPeripheralSelect(SpiPeripheralSelect_0, ActiveLow, SpiSelectMode_Idle, SpiCtarSelect_0);
+   spi.setPeripheralSelect(SpiPeripheralSelect_1, ActiveLow, SpiSelectMode_Idle, SpiCtarSelect_0);
 
    // Save the derived configuration
    SpiCalculatedConfiguration configurationEven = spi.getConfiguration();
