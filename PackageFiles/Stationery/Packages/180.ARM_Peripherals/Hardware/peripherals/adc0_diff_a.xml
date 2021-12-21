@@ -166,7 +166,11 @@
       \t */
       \tenum AdcClockSource {
       \t   AdcClockSource_Bus      = ADC_CFG1_ADICLK(0), //!< Bus Clock
+      \t#if defined(USB_CLK_RECOVER_IRC_EN_REG_EN_MASK)
+      \t   AdcClockSource_Irc48m   = ADC_CFG1_ADICLK(1), //!< IRC 48MHz clock
+      \t#else
       \t   AdcClockSource_Busdiv2  = ADC_CFG1_ADICLK(1), //!< Bus Clock / 2
+      \t#endif
       \t   AdcClockSource_Alt      = ADC_CFG1_ADICLK(2), //!< Alternate clock (ALTCLK)
       \t   AdcClockSource_Asynch   = ADC_CFG1_ADICLK(3), //!< Asynchronous clock (ADACK Internal ADC clock source)
       \t   AdcClockSource_Default  = AdcClockSource_Asynch
@@ -175,36 +179,41 @@
    ]]></template>
    
    <template><![CDATA[
-     \t/**
-     \t *  Get input clock frequency for ADC
-     \t *  
-     \t *  @param adcClockSource Clock source chosen for ADC
-     \t *
-     \t *  @return Frequency in Hz
-     \t */
-     \tstatic unsigned getInputClockFrequency(AdcClockSource adcClockSource) {
-     \t   switch (adcClockSource) {
-     \t      case AdcClockSource_Bus:
-     \t         return SystemBusClock;
-     \t      case AdcClockSource_Busdiv2:
-     \t         return SystemBusClock/2;
-     \t      case AdcClockSource_Alt:
-     \t         return  Osc0Info::getOscerClock();;
-     \t      case AdcClockSource_Asynch:
-     \t         return 2000000; // Actually varies with ADLPC/ADHSC
-     \t      default:
-     \t         return 0;
-     \t   }
-     \t}
+      \t/**
+      \t *  Get input clock frequency for ADC
+      \t *  
+      \t *  @param adcClockSource Clock source chosen for ADC
+      \t *
+      \t *  @return Frequency in Hz
+      \t */
+      \tstatic unsigned getInputClockFrequency(AdcClockSource adcClockSource) {
+      \t   switch (adcClockSource) {
+      \t      case AdcClockSource_Bus:
+      \t         return SystemBusClock;
+      \t#if defined(USB_CLK_RECOVER_IRC_EN_REG_EN_MASK)
+      \t      case AdcClockSource_Irc48m:
+      \t         return McgInfo::irc48m_clock;
+      \t#else
+      \t      case AdcClockSource_Busdiv2:
+      \t         return SystemBusClock/2;
+      \t#endif
+      \t      case AdcClockSource_Alt:
+      \t         return  Osc0Info::getOscerClock();;
+      \t      case AdcClockSource_Asynch:
+      \t         return 2000000; // Actually varies with ADLPC/ADHSC
+      \t      default:
+      \t         return 0;
+      \t   }
+      \t}
      
-     \t/**
-     \t *  Get input clock frequency for ADC
-     \t *
-     \t *  @return Frequency in Hz
-     \t */
-     \tstatic unsigned getInputClockFrequency() {
-     \t   return getInputClockFrequency(static_cast<AdcClockSource>(adc->CFG1 & ADC_CFG1_ADICLK_MASK));
-     \t}\n\n
+      \t/**
+      \t *  Get input clock frequency for ADC
+      \t *
+      \t *  @return Frequency in Hz
+      \t */
+      \tstatic unsigned getInputClockFrequency() {
+      \t   return getInputClockFrequency(static_cast<AdcClockSource>(adc->CFG1 & ADC_CFG1_ADICLK_MASK));
+      \t}\n\n
    ]]></template>
    
    <template><![CDATA[
