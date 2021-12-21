@@ -97,6 +97,8 @@
       \tenum SimUsbFullSpeedClockSource {
       \t   SimUsbFullSpeedClockSource_External   = SIM_SOPT2_USBSRC(0), //!< External bypass clock (USB_CLKIN)
       \t   SimUsbFullSpeedClockSource_Peripheral = SIM_SOPT2_USBSRC(1), //!< Peripheral clock selected by SIM.SOPT2[PLLFLLSEL] divided by SIM.CLKDIV2
+      \t//   SimUsbFullSpeedClockSource_McgFll = SIM_SOPT2_USBSRC(0), //!< External bypass clock (USB_CLKIN)
+      \t//   SimUsbFullSpeedClockSource_McgPll = SIM_SOPT2_USBSRC(1), //!< Peripheral clock selected by SIM.SOPT2[PLLFLLSEL] divided by SIM.CLKDIV2
       \t};
       \t#endif
          
@@ -384,6 +386,20 @@
 	]]></template>
 	
 	<template namespace="usbdm"><![CDATA[
+	   \t#if defined(SIM_SOPT2_EMVSIMSRC)
+	   \t/**
+	   \t * EMVSIMSRC Clock sources
+	   \t */
+	   \tenum SimEmvsimClockSource {
+	   \t   SimEmvsimClockSource_Disabled   = SIM_SOPT2_EMVSIMSRC(0), //!< Disabled
+	   \t   SimEmvsimClockSource_Peripheral = SIM_SOPT2_EMVSIMSRC(1), //!< Peripheral clock selected by SIM.SOPT2[PLLFLLSEL] divided by SIM.CLKDIV3
+	   \t   SimEmvsimClockSource_OscerClk   = SIM_SOPT2_EMVSIMSRC(2), //!< OSCERCLK clock
+	   \t   SimEmvsimClockSource_McgIrClk   = SIM_SOPT2_EMVSIMSRC(3), //!< MCG Internal Reference clock
+	   \t};
+	   \t#endif\n\n
+	]]></template>
+	
+	<template namespace="usbdm"><![CDATA[
 	   \t#ifdef SIM_SOPT2_SDHCSRC
 	   \t/**
 	   \t * SDHC Clock sources
@@ -548,6 +564,9 @@
 	   \t#ifdef SIM_SOPT2_TPMSRC
 	   \t      SIM_SOPT2_TPMSRC($(/SIM/sim_sopt2_tpmsrc:-1)) |        // TPM clock source select
 	   \t#endif
+	   \t#ifdef SIM_SOPT2_EMVSIMSRC
+	   \t      SIM_SOPT2_EMVSIMSRC($(/SIM/sim_sopt2_emvsimsrc:-1)) | // EMVSIMSRC clock source select
+	   \t#endif
 	   \t#ifdef SIM_SOPT2_USBSRC
 	   \t      SIM_SOPT2_USBSRC($(/SIM/sim_sopt2_usbsrc:-1)) |        // USB clock source select
 	   \t#endif
@@ -621,7 +640,7 @@
 	   \tstatic void setTpmClock(SimTpmClockSource simTpmClockSource) {
 	   \t   sim->SOPT2 = (sim->SOPT2&~SIM_SOPT2_TPMSRC_MASK) | simTpmClockSource;
 	   \t}
-	   
+      
 	   \t/**
 	   \t * Get TPM input clock frequency
 	   \t *
@@ -635,6 +654,33 @@
 	   \t   case SIM_SOPT2_TPMSRC(1): return getDividedPeripheralClock();
 	   \t   case SIM_SOPT2_TPMSRC(2): return Osc0Info::getOscerClock();
 	   \t   case SIM_SOPT2_TPMSRC(3): return McgInfo::getMcgIrClock();
+	   \t   }
+	   \t}
+	   \t#endif
+
+	   \t#if defined(SIM_SOPT2_EMVSIMSRC)
+	   \t/**
+	   \t * Set EMVSIMSRC input clock source
+	   \t *
+	   \t * @param simEmvsimClockSource Clock source for EMVSIMSRC
+	   \t */
+	   \tstatic void setEmvsimClock(SimEmvsimClockSource simEmvsimClockSource) {
+	   \t   sim->SOPT2 = (sim->SOPT2&~SIM_SOPT2_EMVSIMSRC_MASK) | simEmvsimClockSource;
+	   \t}
+      
+	   \t/**
+	   \t * Get EMVSIMSRC input clock frequency
+	   \t *
+	   \t * @return EMVSIMSRC input clock frequency as a uint32_t in Hz
+	   \t */
+	   \tstatic uint32_t getEmvsimClock() {
+	   \t   
+	   \t   switch(sim->SOPT2&SIM_SOPT2_EMVSIMSRC_MASK) {
+	   \t   default:
+	   \t   case SIM_SOPT2_EMVSIMSRC(0): return 0;
+	   \t   case SIM_SOPT2_EMVSIMSRC(1): return getDividedPeripheralClock();
+	   \t   case SIM_SOPT2_EMVSIMSRC(2): return Osc0Info::getOscerClock();
+	   \t   case SIM_SOPT2_EMVSIMSRC(3): return McgInfo::getMcgIrClock();
 	   \t   }
 	   \t}
 	   \t#endif\n\n

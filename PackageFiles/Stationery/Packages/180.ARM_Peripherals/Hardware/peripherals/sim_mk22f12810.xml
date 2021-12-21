@@ -67,7 +67,6 @@
       
       <aliasOption key="/SIM/system_peripheral_clock." />
       
-      
       <choiceOption name="sim_sopt2_lpuartsrc" 
          description="LPUART Clock select"
          toolTip="Selects the clock source for the transmit and receive clock\n
