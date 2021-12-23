@@ -70,9 +70,6 @@
       <stringOption name="Uart0Clock" description="Uart 0 clock" value="SystemCoreClock" constant="true" derived="true" />
       <stringOption name="Uart1Clock" description="Uart 1 clock" value="SystemCoreClock" constant="true" derived="true" />
       <stringOption name="Uart2Clock" description="Uart 2 clock" value="SystemBusClock"  constant="true" derived="true" />
-      <stringOption name="Uart3Clock" description="Uart 3 clock" value="SystemBusClock"  constant="true" derived="true" />
-      <stringOption name="Uart4Clock" description="Uart 4 clock" value="SystemBusClock"  constant="true" derived="true" />
-      <stringOption name="Uart5Clock" description="Uart 5 clock" value="SystemBusClock"  constant="true" derived="true" />
       
       <choiceOption name="sim_sopt2_usbsrc" 
          description="USB clock source select"
@@ -88,15 +85,6 @@
          description="USB Full Speed Clock"
          toolTip="Frequency of clock to USB full speed controller"
          value="0" />
-      
-      <choiceOption name="sim_sopt2_fbsl" 
-         description="FlexBus security level"
-         toolTip="This field affects what CPU operations can access off-chip via the FlexBus interface" >
-         <choice value="0"  name="All off-chip accesses (instruction and data) are disallowed" />
-         <choice value="1"  name="All off-chip accesses (instruction and data) are disallowed" />
-         <choice value="2"  name="Off-chip instruction accesses are disallowed. Data accesses are allowed" />
-         <choice value="3"  name="Off-chip instruction and data accesses are allowed" />
-      </choiceOption>
       
       <choiceOption name="sim_sopt2_clkoutsel" 
          description="CLKOUT select"

@@ -74,7 +74,7 @@ Devices using this peripheral:
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>0b0100</name>
-                           <description>Undefined</description>
+                           <description>24 KBytes</description>
                            <value>0b0100</value>
                         </enumeratedValue>
                         <enumeratedValue>
@@ -84,7 +84,7 @@ Devices using this peripheral:
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>0b0110</name>
-                           <description>Undefined</description>
+                           <description>48 KBytes</description>
                            <value>0b0110</value>
                         </enumeratedValue>
                         <enumeratedValue>
@@ -94,7 +94,7 @@ Devices using this peripheral:
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>0b1000</name>
-                           <description>Undefined</description>
+                           <description>96 KBytes</description>
                            <value>0b1000</value>
                         </enumeratedValue>
                         <enumeratedValue>
@@ -314,7 +314,7 @@ Select which clock is output on the RTC_CLKOUT pin</description>
                      <enumeratedValues>
                         <enumeratedValue>
                            <name>0b000</name>
-                           <description>Flexbus clock</description>
+                           <description>Reserved</description>
                            <value>0b000</value>
                         </enumeratedValue>
                         <enumeratedValue>
@@ -351,34 +351,6 @@ Select which clock is output on the RTC_CLKOUT pin</description>
                            <name>0b111</name>
                            <description>Reserved</description>
                            <value>0b111</value>
-                        </enumeratedValue>
-                     </enumeratedValues>
-                  </field>
-                  <field>
-                     <name>FBSL</name>
-                     <description>Flexbus security level</description>
-                     <bitOffset>8</bitOffset>
-                     <bitWidth>2</bitWidth>
-                     <enumeratedValues>
-                        <enumeratedValue>
-                           <name>0b00</name>
-                           <description>All off-chip accesses (instruction and data) via the Flexbus are disallowed</description>
-                           <value>0b00</value>
-                        </enumeratedValue>
-                        <enumeratedValue>
-                           <name>0b01</name>
-                           <description>All off-chip accesses (instruction and data) via the Flexbus are disallowed</description>
-                           <value>0b01</value>
-                        </enumeratedValue>
-                        <enumeratedValue>
-                           <name>0b10</name>
-                           <description>Off-chip instruction accesses are disallowed. Data accesses are allowed</description>
-                           <value>0b10</value>
-                        </enumeratedValue>
-                        <enumeratedValue>
-                           <name>0b11</name>
-                           <description>Off-chip instruction accesses and data accesses are allowed</description>
-                           <value>0b11</value>
                         </enumeratedValue>
                      </enumeratedValues>
                   </field>
@@ -853,7 +825,7 @@ Allows extra drive-strength for PTD7</description>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>0b1011</name>
-                           <description>Unused</description>
+                           <description>Reserved</description>
                            <value>0b1011</value>
                         </enumeratedValue>
                         <enumeratedValue>
@@ -873,7 +845,7 @@ Allows extra drive-strength for PTD7</description>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>0b1111</name>
-                           <description>Unused</description>
+                           <description>Reserved</description>
                            <value>0b1111</value>
                         </enumeratedValue>
                      </enumeratedValues>
@@ -924,7 +896,6 @@ Allows extra drive-strength for PTD7</description>
                <description>System Device Identification Register</description>
                <addressOffset>0x1024</addressOffset>
                <access>read-only</access>
-               <resetMask>0x0</resetMask>
                <fields>
                   <field>
                      <name>PINID</name>
@@ -994,7 +965,7 @@ Allows extra drive-strength for PTD7</description>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>0b1100</name>
-                           <description>Reserved</description>
+                           <description>196-pin</description>
                            <value>0b1100</value>
                         </enumeratedValue>
                         <enumeratedValue>
@@ -1004,7 +975,7 @@ Allows extra drive-strength for PTD7</description>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>0b1110</name>
-                           <description>Reserved</description>
+                           <description>256-pin</description>
                            <value>0b1110</value>
                         </enumeratedValue>
                         <enumeratedValue>
@@ -1074,26 +1045,6 @@ Allows extra drive-strength for PTD7</description>
                <name>SCGC1</name>
                <description>System Clock Gating Control Register 1</description>
                <addressOffset>0x1028</addressOffset>
-               <fields>
-                  <field>
-                     <name>UART4</name>
-                     <description>UART4 Clock Gate Control</description>
-                     <bitOffset>10</bitOffset>
-                     <bitWidth>1</bitWidth>
-                     <enumeratedValues>
-                        <enumeratedValue>
-                           <name>0b0</name>
-                           <description>Clock disabled</description>
-                           <value>0b0</value>
-                        </enumeratedValue>
-                        <enumeratedValue>
-                           <name>0b1</name>
-                           <description>Clock enabled</description>
-                           <value>0b1</value>
-                        </enumeratedValue>
-                     </enumeratedValues>
-                  </field>
-               </fields>
             </register>
             <register>
                <name>SCGC2</name>
@@ -1176,7 +1127,6 @@ Allows extra drive-strength for PTD7</description>
                   <field derivedFrom="EWM" > <name>UART0</name> <description>UART0 Clock Gate Control</description> <bitOffset>10</bitOffset> </field>
                   <field derivedFrom="EWM" > <name>UART1</name> <description>UART1 Clock Gate Control</description> <bitOffset>11</bitOffset> </field>
                   <field derivedFrom="EWM" > <name>UART2</name> <description>UART2 Clock Gate Control</description> <bitOffset>12</bitOffset> </field>
-                  <field derivedFrom="EWM" > <name>UART3</name> <description>UART3 Clock Gate Control</description> <bitOffset>13</bitOffset> </field>
                   <field derivedFrom="EWM" > <name>USBOTG</name> <description>USB Clock Gate Control</description> <bitOffset>18</bitOffset> </field>
                   <field derivedFrom="EWM" > <name>CMP</name> <description>Comparator Clock Gate Control</description> <bitOffset>19</bitOffset> </field>
                   <field derivedFrom="EWM" > <name>VREF</name> <description>VREF Clock Gate Control</description> <bitOffset>20</bitOffset> </field>
@@ -1294,9 +1244,9 @@ Allows extra drive-strength for PTD7</description>
                <resetValue>0x7</resetValue>
                <fields>
                   <field>
-                     <name>FLEXBUS</name>
-                     <description>Flexbus Clock Gate Control</description>
-                     <bitOffset>0</bitOffset>
+                     <name>DMA</name>
+                     <description>DMA Clock Gate Control</description>
+                     <bitOffset>1</bitOffset>
                      <bitWidth>1</bitWidth>
                      <enumeratedValues>
                         <enumeratedValue>
@@ -1311,7 +1261,6 @@ Allows extra drive-strength for PTD7</description>
                         </enumeratedValue>
                      </enumeratedValues>
                   </field>
-                  <field derivedFrom="FLEXBUS" > <name>DMA</name> <description>DMA Clock Gate Control</description> <bitOffset>1</bitOffset> </field>
                </fields>
             </register>
             <register>
@@ -1410,9 +1359,6 @@ At the end of reset, it is loaded with either 0001 or 1111 depending on FTFL_FOP
                         </enumeratedValue>
                      </enumeratedValues>
                   </field>
-                  <field derivedFrom="OUTDIV4" > <name>OUTDIV3</name> <description>Clock 3 Output Divider value\n
-This field sets the divide value for the Flexbus clock driven to the external pin (FB_CLK).\n
-At the end of reset, it is loaded with either 0001 or 1111 depending on FTFL_FOPT[LPBOOT]</description> <bitOffset>20</bitOffset> </field>
                   <field derivedFrom="OUTDIV4" > <name>OUTDIV2</name> <description>Clock 2 Output Divider value\n
 This field sets the divide value for the peripheral clock.\n
 At the end of reset, it is loaded with either 0000 or 0111 depending on FTFL_FOPT[LPBOOT]</description> <bitOffset>24</bitOffset> </field>

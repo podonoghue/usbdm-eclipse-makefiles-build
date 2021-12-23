@@ -253,30 +253,6 @@ Devices using this vector table:
       <peripheral>UART2</peripheral>
    </interrupt>
    <interrupt>
-      <name>UART3_RxTx</name>
-      <description>Serial Communication Interface</description>
-      <value>51</value>
-      <peripheral>UART3</peripheral>
-   </interrupt>
-   <interrupt>
-      <name>UART3_Error</name>
-      <description>Serial Communication Interface</description>
-      <value>52</value>
-      <peripheral>UART3</peripheral>
-   </interrupt>
-   <interrupt>
-      <name>UART4_RxTx</name>
-      <description>Serial Communication Interface</description>
-      <value>53</value>
-      <peripheral>UART4</peripheral>
-   </interrupt>
-   <interrupt>
-      <name>UART4_Error</name>
-      <description>Serial Communication Interface</description>
-      <value>54</value>
-      <peripheral>UART4</peripheral>
-   </interrupt>
-   <interrupt>
       <name>ADC0</name>
       <description>Analogue to Digital Converter</description>
       <value>57</value>

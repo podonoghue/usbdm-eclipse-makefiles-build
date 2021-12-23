@@ -151,10 +151,6 @@
          <clock clockEnable="SIM->SCGC4 |= SIM_SCGC4_EWM_MASK;" clockDisable="SIM->SCGC4 &amp;= ~SIM_SCGC4_EWM_MASK;" />
          <irq num="WDOG_IRQn" />
       </peripheral>
-      <peripheral baseName="FLEXBUS"  instance=""         version="flexbus">
-         <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForFlexBus" />
-         <clock clockEnable="SIM->SCGC7 |= SIM_SCGC7_FLEXBUS_MASK;" clockDisable="SIM->SCGC7 &amp;= ~SIM_SCGC7_FLEXBUS_MASK;" />
-      </peripheral>
       <peripheral baseName="FTFL"     instance=""         version="ftfl">
          <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForFlash" />
          <clock clockEnable="SIM->SCGC6 |= SIM_SCGC6_FTFL_MASK;" clockDisable="SIM->SCGC6 &amp;= ~SIM_SCGC6_FTFL_MASK;" />
@@ -620,7 +616,6 @@
          <mux sel="mux1"          signal="GPIOB_16" />
          <mux sel="mux2"          signal="SPI1_SOUT" />
          <mux sel="mux3"          signal="UART0_RX" />
-         <mux sel="mux5"          signal="FB_AD17" />
          <mux sel="mux6"          signal="EWM_IN" />
          <reset sel="mux0" />
       </pin>
@@ -629,7 +624,6 @@
          <mux sel="mux1"          signal="GPIOB_17" />
          <mux sel="mux2"          signal="SPI1_SIN" />
          <mux sel="mux3"          signal="UART0_TX" />
-         <mux sel="mux5"          signal="FB_AD16" />
          <mux sel="mux6"          signal="EWM_OUT_b" />
          <reset sel="mux0" />
       </pin>
@@ -639,7 +633,6 @@
          <mux sel="mux2"          signal="CAN0_TX" />
          <mux sel="mux3"          signal="FTM2_CH0" />
          <mux sel="mux4"          signal="I2S0_TX_BCLK" />
-         <mux sel="mux5"          signal="FB_AD15" />
          <mux sel="mux6"          signal="FTM2_QD_PHA" />
          <reset sel="mux0" />
       </pin>
@@ -649,7 +642,6 @@
          <mux sel="mux2"          signal="CAN0_RX" />
          <mux sel="mux3"          signal="FTM2_CH1" />
          <mux sel="mux4"          signal="I2S0_TX_FS" />
-         <mux sel="mux5"          signal="FB_OE_b" />
          <mux sel="mux6"          signal="FTM2_QD_PHB" />
          <reset sel="mux0" />
       </pin>
@@ -659,7 +651,6 @@
          <mux sel="mux1"          signal="GPIOC_0" />
          <mux sel="mux2"          signal="SPI0_PCS4" />
          <mux sel="mux3"          signal="PDB0_EXTRG" />
-         <mux sel="mux5"          signal="FB_AD14" />
          <mux sel="mux6"          signal="I2S0_TXD1" />
          <reset sel="mux0" />
       </pin>
@@ -671,7 +662,6 @@
          <mux sel="mux2"          signal="SPI0_PCS3" />
          <mux sel="mux3"          signal="UART1_RTS_b" />
          <mux sel="mux4"          signal="FTM0_CH0" />
-         <mux sel="mux5"          signal="FB_AD13" />
          <mux sel="mux6"          signal="I2S0_TXD0" />
          <reset sel="mux0" />
       </pin>
@@ -683,7 +673,6 @@
          <mux sel="mux2"          signal="SPI0_PCS2" />
          <mux sel="mux3"          signal="UART1_CTS_b" />
          <mux sel="mux4"          signal="FTM0_CH1" />
-         <mux sel="mux5"          signal="FB_AD12" />
          <mux sel="mux6"          signal="I2S0_TX_FS" />
          <reset sel="mux0" />
       </pin>
@@ -704,7 +693,6 @@
          <mux sel="mux2"          signal="SPI0_PCS0" />
          <mux sel="mux3"          signal="UART1_TX" />
          <mux sel="mux4"          signal="FTM0_CH3" />
-         <mux sel="mux5"          signal="FB_AD11" />
          <mux sel="mux6"          signal="CMP1_OUT" />
          <reset sel="unassigned" />
       </pin>
@@ -714,7 +702,6 @@
          <mux sel="mux2"          signal="SPI0_SCK" />
          <mux sel="mux3"          signal="LPTMR0_ALT2" />
          <mux sel="mux4"          signal="I2S0_RXD0" />
-         <mux sel="mux5"          signal="FB_AD10" />
          <mux sel="mux6"          signal="CMP0_OUT" />
          <reset sel="unassigned" />
       </pin>
@@ -725,7 +712,6 @@
          <mux sel="mux2"          signal="SPI0_SOUT" />
          <mux sel="mux3"          signal="PDB0_EXTRG" />
          <mux sel="mux4"          signal="I2S0_RX_BCLK" />
-         <mux sel="mux5"          signal="FB_AD9" />
          <mux sel="mux6"          signal="I2S0_MCLK" />
          <reset sel="mux0" />
       </pin>
@@ -735,7 +721,6 @@
          <mux sel="mux2"          signal="SPI0_SIN" />
          <mux sel="mux3"          signal="USB_SOF_OUT" />
          <mux sel="mux4"          signal="I2S0_RX_FS" />
-         <mux sel="mux5"          signal="FB_AD8" />
          <reset sel="mux0" />
       </pin>
       <pin name="PTC8">
@@ -743,7 +728,6 @@
          <mux sel="mux0"          signal="CMP0_IN2" />
          <mux sel="mux1"          signal="GPIOC_8" />
          <mux sel="mux4"          signal="I2S0_MCLK" />
-         <mux sel="mux5"          signal="FB_AD7" />
          <reset sel="mux0" />
       </pin>
       <pin name="PTC9">
@@ -751,7 +735,6 @@
          <mux sel="mux0"          signal="CMP0_IN3" />
          <mux sel="mux1"          signal="GPIOC_9" />
          <mux sel="mux4"          signal="I2S0_RX_BCLK" />
-         <mux sel="mux5"          signal="FB_AD6" />
          <mux sel="mux6"          signal="FTM2_FLT0" />
          <reset sel="mux0" />
       </pin>
@@ -760,7 +743,6 @@
          <mux sel="mux1"          signal="GPIOC_10" />
          <mux sel="mux2"          signal="I2C1_SCL" />
          <mux sel="mux4"          signal="I2S0_RX_FS" />
-         <mux sel="mux5"          signal="FB_AD5" />
          <reset sel="mux0" />
       </pin>
       <pin name="PTC11">
@@ -769,7 +751,6 @@
          <mux sel="mux1"          signal="LLWU_P11" />
          <mux sel="mux2"          signal="I2C1_SDA" />
          <mux sel="mux4"          signal="I2S0_RXD1" />
-         <mux sel="mux5"          signal="FB_RW_b" />
          <reset sel="mux0" />
       </pin>
       <pin name="PTD0">
@@ -777,9 +758,6 @@
          <mux sel="mux1"          signal="LLWU_P12" />
          <mux sel="mux2"          signal="SPI0_PCS0" />
          <mux sel="mux3"          signal="UART2_RTS_b" />
-         <mux sel="mux5"          signal="FB_ALE" />
-         <mux sel="mux5"          signal="FB_CS1_b" />
-         <mux sel="mux5"          signal="FB_TS_b" />
          <reset sel="unassigned" />
       </pin>
       <pin name="PTD1">
@@ -787,7 +765,6 @@
          <mux sel="mux1"          signal="GPIOD_1" />
          <mux sel="mux2"          signal="SPI0_SCK" />
          <mux sel="mux3"          signal="UART2_CTS_b" />
-         <mux sel="mux5"          signal="FB_CS0_b" />
          <reset sel="mux0" />
       </pin>
       <pin name="PTD2">
@@ -795,14 +772,12 @@
          <mux sel="mux1"          signal="LLWU_P13" />
          <mux sel="mux2"          signal="SPI0_SOUT" />
          <mux sel="mux3"          signal="UART2_RX" />
-         <mux sel="mux5"          signal="FB_AD4" />
          <reset sel="unassigned" />
       </pin>
       <pin name="PTD3">
          <mux sel="mux1"          signal="GPIOD_3" />
          <mux sel="mux2"          signal="SPI0_SIN" />
          <mux sel="mux3"          signal="UART2_TX" />
-         <mux sel="mux5"          signal="FB_AD3" />
          <reset sel="unassigned" />
       </pin>
       <pin name="PTD4">
@@ -811,7 +786,6 @@
          <mux sel="mux2"          signal="SPI0_PCS1" />
          <mux sel="mux3"          signal="UART0_RTS_b" />
          <mux sel="mux4"          signal="FTM0_CH4" />
-         <mux sel="mux5"          signal="FB_AD2" />
          <mux sel="mux6"          signal="EWM_IN" />
          <reset sel="unassigned" />
       </pin>
@@ -822,7 +796,6 @@
          <mux sel="mux3"          signal="UART0_CTS_b" />
          <mux sel="mux3"          signal="UART0_COL_b" />
          <mux sel="mux4"          signal="FTM0_CH5" />
-         <mux sel="mux5"          signal="FB_AD1" />
          <mux sel="mux6"          signal="EWM_OUT_b" />
          <reset sel="mux0" />
       </pin>
@@ -833,7 +806,6 @@
          <mux sel="mux2"          signal="SPI0_PCS3" />
          <mux sel="mux3"          signal="UART0_RX" />
          <mux sel="mux4"          signal="FTM0_CH6" />
-         <mux sel="mux5"          signal="FB_AD0" />
          <mux sel="mux6"          signal="FTM0_FLT0" />
          <reset sel="mux0" />
       </pin>
