@@ -283,9 +283,21 @@ static constexpr uint32_t PORTG_CLOCK_MASK = SIM_SCGC5_PORTG_MASK;
 /**
  * PCR value
  */
-enum PcrValue : uint32_t {
+enum class PcrValue : uint32_t {
    // Using an ENUM prevents automatic conversions from uint32_t to PcrValue
 };
+
+constexpr uint32_t operator ~(PcrValue pcrValue) {
+   return ~static_cast<uint32_t>(pcrValue);
+}
+
+constexpr uint32_t operator &(PcrValue pcrValue, uint32_t mask) {
+   return static_cast<uint32_t>(pcrValue) & mask;
+}
+
+constexpr uint32_t operator &(uint32_t mask, PcrValue pcrValue) {
+   return static_cast<uint32_t>(pcrValue) & mask;
+}
 
 /**
  * Pull device modes
@@ -488,7 +500,7 @@ public:
     *
     * @param value
     */
-   constexpr PcrValueClass(PcrValue value) : value(value) {}
+   constexpr PcrValueClass(PcrValue value) : value(static_cast<uint32_t>(value)) {}
 
    /**
     * Construct from PcrValueClass
@@ -496,6 +508,57 @@ public:
     * @param other
     */
    constexpr PcrValueClass(const USBDM::PcrValueClass &other) : value(other.value) {}
+
+   /**
+    * Constructor\n
+    * This version is appropriate for a pin used as an output
+    *
+    * @param pinDriveStrength
+    * @param pinDriveMode
+    * @param pinSlewRate
+    */
+   constexpr PcrValueClass(
+         PinDriveStrength  pinDriveStrength,
+         PinDriveMode      pinDriveMode,
+         PinSlewRate       pinSlewRate
+   ) : value (static_cast<uint32_t>(pinDriveStrength|pinDriveMode|pinSlewRate)) {
+   }
+
+   /**
+    * Constructor\n
+    * This version is appropriate for a pin used as an input
+    *
+    * @param pinPull
+    * @param pinAction
+    * @param pinFilter
+    */
+   constexpr PcrValueClass(
+         PinPull           pinPull,
+         PinAction         pinAction,
+         PinFilter         pinFilter
+   ) : value (static_cast<uint32_t>(pinPull|pinAction|pinFilter)) {
+   }
+
+   /**
+    * Constructor\n
+    * This version is appropriate for a pin used as both input and output
+    *
+    * @param pinPull
+    * @param pinDriveStrength
+    * @param pinDriveMode
+    * @param pinAction
+    * @param pinFilter
+    * @param pinSlewRate
+    */
+   constexpr PcrValueClass(
+         PinPull           pinPull,
+         PinDriveStrength  pinDriveStrength,
+         PinDriveMode      pinDriveMode,
+         PinAction         pinAction,
+         PinFilter         pinFilter,
+         PinSlewRate       pinSlewRate
+   ) : value (static_cast<uint32_t>(pinPull|pinDriveStrength|pinDriveMode|pinAction|pinFilter|pinSlewRate)) {
+   }
 
    constexpr operator         PcrValue()       const { return static_cast<PcrValue>(value); }
    constexpr operator         PcrValue()             { return static_cast<PcrValue>(value); }
@@ -980,7 +1043,7 @@ public:
       if constexpr (portAddress != 0) {
          enablePortClocks(clockInfo);
 
-         uint32_t pcr  = pcrValue;
+         uint32_t pcr  = static_cast<uint32_t>(pcrValue);
 
 #ifdef PORT_DFCR_CS_MASK
          if (pcr&PinFilter_Digital) {
@@ -1007,7 +1070,7 @@ public:
     */
    static uint32_t getPCR() {
       if constexpr (portAddress == 0) {
-         return PcrValue(0);
+         return 0;
       }
       enablePortClocks(clockInfo);
       return *PCR;

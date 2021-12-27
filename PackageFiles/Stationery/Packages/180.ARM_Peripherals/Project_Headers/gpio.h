@@ -374,17 +374,50 @@ public:
     * Pin is initially set as an input.
     * Use SetIn() and SetOut() to change direction.
     *
+    * @note Resets the pin output value to the inactive state
+    *
+    * @param[in] pcrValue PCR value to use in configuring pin (excluding MUX value). See pcrValue()
+    */
+   static void setInOut() {
+      // Make input initially
+      setIn();
+      // Set inactive pin state (if later made output)
+      setInactive();
+      Pcr::setPCR(defaultPcrValue);
+   }
+   /**
+    * Set pin as digital I/O.
+    * Pin is initially set as an input.
+    * Use SetIn() and SetOut() to change direction.
+    *
     * @note Resets the Pin Control Register value (PCR value).
     * @note Resets the pin output value to the inactive state
     *
     * @param[in] pcrValue PCR value to use in configuring pin (excluding MUX value). See pcrValue()
     */
-   static void setInOut(PcrValue pcrValue = defaultPcrValue) {
+   static void setInOut(PcrValue pcrValue) {
       // Make input initially
       setIn();
       // Set inactive pin state (if later made output)
       setInactive();
       Pcr::setPCR(pcrValue);
+   }
+   /**
+    * Set pin as digital I/O.
+    * Pin is initially set as an input.
+    * Use SetIn() and SetOut() to change direction.
+    *
+    * @note Resets the Pin Control Register value (PCR value).
+    * @note Resets the pin output value to the inactive state
+    *
+    * @param[in] pcrValue PCR value to use in configuring pin (excluding MUX value). See pcrValue()
+    */
+   static void setInOut(PcrValueClass pcrValue) {
+      // Make input initially
+      setIn();
+      // Set inactive pin state (if later made output)
+      setInactive();
+      Pcr::setPCR(pcrValue.pcrValue());
    }
    /**
     * Set pin as digital I/O.
@@ -466,6 +499,24 @@ public:
       Pcr::setPCR(pcrValue);
    }
    /**
+    * Enable pin as digital output with initial inactive level.\n
+    * Configures all Pin Control Register (PCR) values
+    *
+    * @note Resets the Pin Control Register value (PCR value).
+    * @note Resets the pin value to the inactive state
+    * @note Use setOut() for a lightweight change of direction without affecting other pin settings.
+    *
+    * @param[in] pcrValue PCR value to use in configuring port (excluding MUX value). See pcrValue()
+    */
+   static void setOutput(PcrValueClass pcrValue) {
+      // Set initial level before enabling pin drive
+      setInactive();
+      // Make pin an output
+      setOut();
+      // Configure pin
+      Pcr::setPCR(pcrValue.pcrValue());
+   }
+   /**
     * @brief
     * Enable pin as digital output with initial inactive level.\n
     * Configures <b>all</b> Pin Control Register (PCR) values\n
@@ -532,6 +583,21 @@ public:
       // Make pin an input
       setIn();
       Pcr::setPCR(pcrValue);
+   }
+   /**
+    * @brief
+    * Enable pin as digital input.\n
+    * Configures all Pin Control Register (PCR) values
+    *
+    * @note Resets the Pin Control Register value (PCR value).
+    * @note Use setIn() for a lightweight change of direction without affecting other pin settings.
+    *
+    * @param[in] pcrValue PCR value to use in configuring port (excluding MUX value)
+    */
+   static void setInput(PcrValueClass pcrValue) {
+      // Make pin an input
+      setIn();
+      Pcr::setPCR(pcrValue.pcrValue());
    }
    /**
     * @brief
@@ -1059,7 +1125,7 @@ public:
       // Default to output inactive
       write(0);
 
-      uint32_t pcr  = pcrValue;
+      uint32_t pcr  = static_cast<uint32_t>(pcrValue);
 
 #ifdef PORT_DFCR_CS_MASK
       if (pcr&PinFilter_Digital) {
