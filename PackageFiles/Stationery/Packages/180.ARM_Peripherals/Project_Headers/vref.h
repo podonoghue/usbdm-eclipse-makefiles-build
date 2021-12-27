@@ -115,7 +115,6 @@ public:
 
 public:
    $(/VREF/classInfo: // No class Info found)
-
    /**
     * Enable Vref output pin as Vref output.
     * Configures all Pin Control Register (PCR) values
@@ -126,20 +125,8 @@ public:
 
       using Pcr = PcrTable_T<Info, Info::outputPin>;
 
-      // Enable and map pin to CMP_OUT
+      // Enable and map pin to Vref_out is needed
       Pcr::setPCR();
-   }
-
-   /**
-    * Basic enable of VREF\n
-    * Includes configuring all pins if mapAllPins option is selected
-    */
-   static void enable() {
-      if (VrefInfo::mapPinsOnEnable) {
-         configureAllPins();
-      }
-      // Enable clock to VREF interface
-      Info::enableClock();
    }
 
    /**
@@ -189,13 +176,6 @@ public:
       vref->SC   = scValue;
    }
 
-   /**
-    * Disable Vref
-    */
-   static void disable() {
-      vref->SC = 0;
-      Info::disableClock();
-   }
 };
 
 #if defined(USBDM_VREF_IS_DEFINED)

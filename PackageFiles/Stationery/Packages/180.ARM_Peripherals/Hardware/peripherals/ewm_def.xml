@@ -6,6 +6,7 @@
 
    <xi:include href="_default_instance.xml"/>
    
+   <constant name = "disable_peripheral"      derived = "true" value = "ewm->CTRL = EWM_CTRL_EWMEN(0);"  />
    <xi:include href="_mapPinsOption.xml"/>  
    
    <template><![CDATA[

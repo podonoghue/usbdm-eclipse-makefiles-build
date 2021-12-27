@@ -376,6 +376,9 @@ private:
    T data;
 
 public:
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wmaybe-uninitialized"
+#pragma GCC diagnostic ignored "-Wuninitialized"
    /**
     * Assignment
     * This adds a wait for the Flash to be updated.
@@ -406,6 +409,7 @@ public:
       }
       return *this;
    }
+#pragma GCC diagnostic pop
    /**
     * Increment underlying type.
     * This adds a wait for the Flash to be updated

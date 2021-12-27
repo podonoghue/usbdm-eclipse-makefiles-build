@@ -327,19 +327,6 @@ $(/DAC/classInfo: // No class Info found)
    }
 
    /**
-    * Basic enable DAC.
-    * Includes enabling clock and configuring all pins of mapPinsOnEnable is selected on configuration
-    */
-   static void enable() {
-      if (Info::mapPinsOnEnable) {
-         configureAllPins();
-      }
-
-      // Enable clock to DAC interface
-      Info::enableClock();
-   }
-
-   /**
     * Enable with default settings\n
     * Includes configuring all pins
     */

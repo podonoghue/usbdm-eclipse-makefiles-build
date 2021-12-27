@@ -238,7 +238,7 @@ public:
             "15",
       };
       static char buff[20];
-      USBDM::StringFormatter stringFormatter(buff, sizeof(buff));
+      USBDM::StringFormatter stringFormatter(buff);
       bool commaFlag = false;
       for (unsigned index=0; index<(sizeof(names)/sizeof(names[0])); index++) {
          if (source&(1<<index)) {

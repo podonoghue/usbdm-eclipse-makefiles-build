@@ -53,11 +53,6 @@ int main(){
 
    BlueLed::setOutput(PinDriveStrength_High);
 
-   // Set up interrupt handling
-   Wdog::setCallback(callback);
-   Wdog::enableNvicInterrupts(NvicPriority_Normal);
-   Wdog::enableInterrupt();
-
    // Configure
    Wdog::configure(
          WdogEnable_Enabled,           // Watchdog enabled
@@ -71,12 +66,13 @@ int main(){
    // Time-out ~5s (LPO ~1kHz)
    Wdog::setTimeout(5*seconds);
 
-   // No window (not used)
-   Wdog::setWindow(0);
-
    // Lock registers
    // Now no watchdog changes are possible unless reset
    Wdog::lockRegisters();
+
+   // Set up interrupt handling
+   Wdog::setCallback(callback);
+   Wdog::enableNvicInterrupts(NvicPriority_Normal);
 
    // Check for error so far
    checkError();

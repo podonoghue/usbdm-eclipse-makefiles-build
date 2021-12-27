@@ -352,10 +352,6 @@ protected:
 template<class Info>
 class FlexbusBase_T : public FlexbusBase {
 
-private:
-   // Dummy routine as no IRQ
-   void disableNvicInterrupts() {}
-
 public:
 $(/FLEXBUS/classInfo: // No class Info found)
 

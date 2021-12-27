@@ -11,6 +11,7 @@
       \tstatic constexpr int outputPin  = 8;\n\n
    ]]></template>
    
+   <constant name = "disable_peripheral" derived = "true" value = "cmp->CR1 = CMP_CR1_EN(0);"  />
    <xi:include href="_mapPinsOption.xml"/>
    
    <choiceOption name="cmp_cr0_filter_cnt" 

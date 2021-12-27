@@ -40,8 +40,8 @@
       <choice value="1" name="Timers are chained" />
    </binaryOption>
 
-   <stringOption name="irq_pattern"        constant="true" value="^%b(\d+)$" hidden="true" />
-   <stringOption name="irq_classHandler"   constant="true" value="%c%i::Channel&lt;$1&gt;::irqHandler" hidden="true" />
+   <constant name = "irq_pattern"      derived = "true" value = "^%b(\d+)$"  />
+   <constant name = "irq_classHandler" derived = "true" value = "%c%i::Channel&lt;$1&gt;::irqHandler"  />
    <xi:include href="_irqOptionSubstituted.xml"/>
  
    <validate

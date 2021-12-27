@@ -5,6 +5,8 @@
 <peripheralPage xmlns:xi="http://www.w3.org/2001/XInclude" name="_instance" description="FlexCAN">
 
    <xi:include href="_default_instance.xml"/>
+   
+   <constant name = "disable_peripheral" derived = "true" value = "can->MCR = CAN_MCR_MDIS(1);"  />
    <xi:include href="_mapPinsOption.xml"/>
    
    <!-- Note: second entry gets the tick irrespective of true/false value -->

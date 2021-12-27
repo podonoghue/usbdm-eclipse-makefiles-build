@@ -54,9 +54,6 @@ private:
       static constexpr bool checker = false;
    };
 
-   // Dummy function as no IRQ
-   void disableNvicInterrupts() {}
-
 protected:
    /** Hardware instance */
    static constexpr HardwarePtr<OSC_Type> osc = Info::baseAddress;

@@ -4,6 +4,7 @@
 
 <peripheralPage xmlns:xi="http://www.w3.org/2001/XInclude" name="_instance" description="Flex timer">
    
+   <constant name = "disable_peripheral"      derived = "true" value = "ftm->SC = FTM_SC_CLKS(0);"  />
    <xi:include href="_mapPinsOption.xml"/>   
 
    <intOption name="NumChannels" constant="true" derived="true"
@@ -189,13 +190,13 @@
 
    <!-- Template is added to class within pin_mapping.h -->
    <template><![CDATA[
-       \t//! Class based callback handler has been installed in vector table\n
+       \t//! Class based callback handler has been installed in vector table
        \tstatic constexpr bool irqHandlerInstalled = ($(irqHandlingMethod) == 1);\n\n
    ]]></template>
        
    <intOption name="irqLevel" 
       description="IRQ Level in NVIC [0-15]"
-      toolTip="Sets the priority level used to configure the NVIC\n
+      toolTip="Sets the priority level used to configure the NVIC
                Lower numbers represent higher priorities"
       value="8" min="0" max="15" 
    />
@@ -222,10 +223,10 @@
          
    <template><![CDATA[
       \t/** Minimum resolution for PWM interval */
-      \tstatic constexpr uint32_t minimumResolution=$(minimumResolution);\n\n
+      \tstatic constexpr uint32_t minimumResolution=$(minimumResolution);
       
       \t/** Minimum usable interval in ticks */      
-      \tstatic constexpr uint32_t minimumInterval=$(minimumInterval);\n\n
+      \tstatic constexpr uint32_t minimumInterval=$(minimumInterval);
       
       \t/**
       \t * Get input clock frequency

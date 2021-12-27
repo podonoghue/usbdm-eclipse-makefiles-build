@@ -1,5 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE peripheralPage SYSTEM "_menu.dtd" >
+
+<!-- 
+      Predefined symbols generated for current peripheral
+      _base_class FTM0 => Ftm
+      _instance   FTM0 => 0
+      _class      FTM0 => Ftm0
+      _name       FTM0 => FTM0
+ -->
+
 <!-- osc0_rf.xml -->
 <peripheralPage xmlns:xi="http://www.w3.org/2001/XInclude" name="_instance" description="Oscillator" >
 

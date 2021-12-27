@@ -5,6 +5,8 @@
 <peripheralPage xmlns:xi="http://www.w3.org/2001/XInclude" name="_instance" description="Analogue to Digital Converter">
 
    <xi:include href="_default_instance.xml"/>
+   
+   <constant name = "disable_peripheral" derived = "true" value = "adc->SC1[0] = ADC_SC1_ADCH(-1);"  />
    <xi:include href="_mapPinsOption.xml"/>
    
    <choiceOption name="adc_cfg1_adiclk" description="Clock Source"

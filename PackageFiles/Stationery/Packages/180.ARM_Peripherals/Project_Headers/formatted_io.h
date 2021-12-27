@@ -40,13 +40,25 @@ namespace USBDM {
 /**
  * Enumeration selecting radix for integer types with << or >> operators
  */
-enum Radix : uint8_t {
+enum class Radix : uint8_t {
    Radix_2       = 2,         //!< Convert as binary number
    Radix_8       = 8,         //!< Convert as octal number
    Radix_10      = 10,        //!< Convert as decimal number
    Radix_16      = 16,        //!< Convert as hexadecimal number
    Radix_Default = Radix_10,  //!< Default radix (10)
 };
+
+// Radix 2 format
+constexpr Radix Radix_2  = Radix::Radix_2;
+
+// Radix 8 format
+constexpr Radix Radix_8  = Radix::Radix_8;
+
+// Radix 10 format
+constexpr Radix Radix_10 = Radix::Radix_10;
+
+// Radix 16 format
+constexpr Radix Radix_16 = Radix::Radix_16;
 
 enum WhiteSpaceType {
    /**
@@ -252,14 +264,14 @@ protected:
    static int convertDigit(int ch, Radix radix) {
       unsigned digit = ch - '0';
       if (digit<10) {
-         return (digit<radix)?digit:-1;
+         return (digit<static_cast<unsigned>(radix))?digit:-1;
       }
       digit = ch-'a'+10;
-      if (digit<radix) {
+      if (digit<static_cast<unsigned>(radix)) {
          return digit;
       }
       digit = ch-'A'+10;
-      if (digit<radix) {
+      if (digit<static_cast<unsigned>(radix)) {
          return digit;
       }
       return -1;
@@ -502,7 +514,7 @@ public:
       if (ptr == nullptr) {
          __BKPT();
       }
-      if ((radix<2)||(radix>16)) {
+      if ((static_cast<unsigned>(radix)<2)||(static_cast<unsigned>(radix)>16)) {
          __BKPT();
       }
 #endif
@@ -510,8 +522,8 @@ public:
       char *beginPtr = ptr;
       // Convert backwards
       do {
-         *ptr++ = "0123456789ABCDEF"[value % radix];
-         value /= radix;
+         *ptr++ = "0123456789ABCDEF"[value % static_cast<unsigned>(radix)];
+         value /= static_cast<unsigned>(radix);
       } while (value != 0);
 
       // Add leading padding
@@ -895,8 +907,9 @@ public:
     *
     * @return Reference to self
     */
-   FormattedIO NOINLINE_DEBUG &writeln(const void *value, Radix radix=Radix_16) {
-      return writeln(reinterpret_cast<unsigned long>(value), radix);
+   FormattedIO __attribute__((noinline)) &writeln(const void *value, Radix radix=Radix_16) {
+      write(reinterpret_cast<unsigned long>(value), radix);
+      return writeln();
    }
 
    /**
@@ -1006,6 +1019,7 @@ public:
       return *this;
    }
 #endif
+
    /**
     * Write a double with newline
     *
@@ -1040,6 +1054,166 @@ public:
       return writeln(static_cast<double>(value));
    }
 
+   /**
+    * Write an integral array
+    *
+    * @param[in]  array Pointer to array to print
+    * @param[in]  size  Number of elements in array
+    * @param[in]  radix Radix for conversion
+    *
+    * @return Reference to self
+    */
+   template <typename T>
+   FormattedIO NOINLINE_DEBUG &write(const T array[], size_t size, Radix radix) {
+      unsigned itemCount = 0;
+      const char *prefix="";
+      switch(radix) {
+         case Radix_2:  prefix = "0b"; break;
+         case Radix_8:  prefix = "0";  break;
+         case Radix_16: prefix = "0x"; break;
+         case Radix_10:                break;
+         default:                      break; // ToDo add other prefixes?
+      }
+      write("{ ");
+      for(unsigned index=0; index<size; index++) {
+         if (itemCount>=10) {
+            itemCount = 0;
+            write("\n  ");
+         }
+         itemCount++;
+         write(prefix);
+         write(array[index], radix);
+         write(", ");
+      }
+      write('}');
+      return *this;
+   }
+
+   /**
+    * Write an integral array with newline
+    *
+    * @param[in]  array Pointer to array to print
+    * @param[in]  size  Number of elements in array
+    * @param[in]  radix Radix for conversion
+    *
+    * @return Reference to self
+    */
+   template <typename T>
+   FormattedIO NOINLINE_DEBUG &writeln(const T array[], size_t size, Radix radix) {
+      write(array, size, radix);
+      return writeln();
+   }
+
+   /**
+    * Write an integral array
+    *
+    * @param[in]  array Reference to array to print
+    * @param[in]  radix Radix for conversion
+    *
+    * @return Reference to self
+    */
+   template <typename T, size_t N>
+   FormattedIO NOINLINE_DEBUG &write(const T (&array)[N], Radix radix) {
+      return write(array, N, radix);
+   }
+
+   /**
+    * Write an integral array with newline
+    *
+    * @param[in]  array Reference to array to print
+    * @param[in]  radix Radix for conversion
+    *
+    * @return Reference to self
+    */
+   template <typename T, size_t N>
+   FormattedIO NOINLINE_DEBUG &writeln(const T (&array)[N], Radix radix) {
+      return writeln(array, N, radix);
+   }
+
+   /**
+    * Write an array
+    *
+    * @param[in]  array Pointer to array to print
+    * @param[in]  size  Number of elements in array
+    *
+    * @return Reference to self
+    */
+   template <typename T>
+   FormattedIO NOINLINE_DEBUG &write(const T array[], size_t size) {
+      unsigned itemCount = 0;
+      write("{ ");
+      for(unsigned index=0; index<size; index++) {
+         if (itemCount>=10) {
+            itemCount = 0;
+            write("\n  ");
+         }
+         itemCount++;
+         write(array[index]);
+         write(", ");
+      }
+      write('}');
+      return *this;
+   }
+
+   /**
+    * Write an array with newline
+    *
+    * @param[in]  array Pointer to array to print
+    * @param[in]  size  Number of elements in array
+    *
+    * @return Reference to self
+    */
+   template <typename T>
+   FormattedIO NOINLINE_DEBUG &writeln(const T array[], size_t size) {
+      write(array, size);
+      return writeln();
+   }
+
+   /**
+    * Write an array
+    *
+    * @param[in]  array Reference to array to print
+    *
+    * @return Reference to self
+    */
+   template <typename T, size_t N>
+   FormattedIO NOINLINE_DEBUG &write(const T (&array)[N]) {
+      return write(array, N);
+   }
+
+   /**
+    * Write an array with newline
+    *
+    * @param[in]  array Reference to array to print
+    *
+    * @return Reference to self
+    */
+   template <typename T, size_t N>
+   FormattedIO NOINLINE_DEBUG &writeln(const T (&array)[N]) {
+      return writeln(array, N);
+   }
+
+   /**
+    * Write a C string
+    *
+    * @param array
+    * @return
+    */
+   template <size_t N>
+   FormattedIO NOINLINE_DEBUG &write(const char (&array)[N]) {
+      return write((const char*)array);
+   }
+
+   /**
+    * Write a C string with newline
+    *
+    * @param array
+    * @return
+    */
+   template <size_t N>
+   FormattedIO NOINLINE_DEBUG &writeln(const char (&array)[N]) {
+      return writeln((const char*)array);
+   }
    /**
     * Write a character
     *
@@ -1284,7 +1458,7 @@ public:
             break;
          }
          digitCount++;
-         value *= radix;
+         value *= static_cast<unsigned>(radix);
          value += digit;
          ch = readChar();
       } while (true);

@@ -82,6 +82,62 @@ int main() {
    console.write("UINT_MAX,Radix_10  = ").writeln(UINT_MAX,Radix_10);
    console.write("UINT_MAX,Radix_16  = ").writeln(UINT_MAX,Radix_16);
 
+   /*
+    * Arrays
+    */
+   static const int dataArray[] = {1,2,3,4,5,6,};
+   const int * const dataPointer = dataArray;
+   console.writeln(dataArray, Radix_16);               // print array of integers
+   console.writeln(dataPointer, 6, Radix_16);          // print array of integers
+   console.writeln(dataArray, 6, Radix_16);            // print array of integers
+   console.writeln(dataPointer);                       // print pointer value
+   console.writeln(dataPointer, Radix_16);             // print pointer value
+
+   static const float fDataArray[] = {1,2,3,4,5,6,};
+   const float *fDataPointer = fDataArray;
+
+   console.writeln(fDataArray);                         // print array of floats
+   console.writeln(fDataPointer, 6);                    // print array of floats
+   console.writeln(fDataArray, 6);                      // print array of floats
+   console.writeln(fDataPointer);                       // print pointer value
+   console.writeln(fDataPointer, Radix_10);             // print pointer value
+
+   static const double dDataArray[] = {1,2,3,4,5,6,};
+   const double *dDataPointer = dDataArray;
+
+   console.writeln(dDataArray);               // print array of doubles
+   console.writeln(dDataPointer, 6);          // print array of doubles
+   console.writeln(dDataArray, 6);            // print array of doubles
+   console.writeln(dDataPointer);             // print pointer value
+   console.writeln(dDataPointer, Radix_10);   // print pointer value
+
+   console.writeln("hello"); // print a string
+
+   char aString[] = "hello";
+
+   console.writeln(aString);           // print  string
+   console.writeln(aString, Radix_16); // print  array of char as integers
+
+   unsigned char uString[] = "hello";
+
+   console.writeln(uString);            // print array of char as integers
+   console.writeln(uString, Radix_16);  // print array of char as integers
+
+   signed char sString[] = "hello";
+
+   console.writeln(sString);            // print array of signed char as integers
+   console.writeln(sString, Radix_16);  // print array of signed char as integers
+
+   uint8_t uiString[] = "hello this is a long string to split over multiple lines xx";
+
+   console.writeln(uiString);           // print array of uint8_t as integers
+   console.writeln(uiString, Radix_16); // print array of uint8_t as integers
+
+   const char *pString[] = {"one", "two", "three"};
+
+   console.writeln(pString);            // print array of strings
+   console.writeln(pString, Radix_10);  // print array of pointers as integers
+
    console<<"true               = "<<true<<EndOfLine;
    console<<"false              = "<<false<<EndOfLine;
    console<<"peek()             = "<<console.peek()<<EndOfLine;

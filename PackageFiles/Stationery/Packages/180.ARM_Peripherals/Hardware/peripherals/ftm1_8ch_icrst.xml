@@ -3,6 +3,8 @@
 <!-- ftm1_8ch_icrst.xml -->
 
 <peripheralPage xmlns:xi="http://www.w3.org/2001/XInclude" name="_instance" description="Flex timer">
+
+   <constant name = "disable_peripheral"      derived = "true" value = "ftm->SC = FTM_SC_CLKS(0);"  />
    <xi:include href="_mapPinsOption.xml"/>   
 
    <intOption name="NumChannels" constant="true" derived="true"

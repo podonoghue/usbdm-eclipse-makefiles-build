@@ -30,6 +30,25 @@
       - dim="expr"
         Allow subscripted template
 
+      Constants that affect this inclusion
+      
+      - Code to disable interrupts (has default of 'disableNvicInterrupts();')
+           <constant name = "disable_interrupts_code" derived = "true" value = "XXXXXX"  />
+      
+      - Code to disable peripheral (has default of ' ')
+           <constant name = "disable_peripheral"      derived = "true" value = "YYYYYY"  />
+           
+      - Code to enable clock (has default of 'Info::enableClock();')
+           <constant name = "enable_clock"            derived = "true" value = "YYYYYY"  />
+           
+      - Code to disable clock (has default of 'Info::disableClock();')
+           <constant name = "disable_clock"           derived = "true" value = "YYYYYY"  />
+           
+   <constant name = "disable_interrupts_code" derived = "true" value = "XXXXXX"  />
+   <constant name = "disable_peripheral"      derived = "true" value = "YYYYYY"  />
+   <constant name = "enable_clock"            derived = "true" value = "YYYYYY"  />
+   <constant name = "disable_clock"           derived = "true" value = "YYYYYY"  />
+           
  -->
  
    <binaryOption name="mapPinsOnEnable" 
@@ -52,6 +71,8 @@
 
       \t/**
       \t * Configures all mapped pins associated with $(_base_name)
+      \t *
+      \t * @note Locked pins will be unaffected
       \t */
       \tstatic void configureAllPins() {
       \t
@@ -65,38 +86,34 @@
       \t * Disabled all mapped pins associated with $(_base_name)
       \t *
       \t * @note Only the lower 16-bits of the PCR registers are modified
+      \t *
+      \t * @note Locked pins will be unaffected
       \t */
       \tstatic void disableAllPins() {
       \t
       \t   // Disable pins if selected and not already locked
       \t   if constexpr (Info::mapPinsOnEnable && !(MapAllPinsOnStartup && (ForceLockedPins == PinLock_Locked))) {
-      \t   Info::clearPCRs();
+      \t      Info::clearPCRs();
       \t   }
       \t}
 
       \t/**
       \t * Basic enable of $(_base_name)
-      \t * Includes enabling clock and configuring all pins if mapPinsOnEnable is selected in configuration
+      \t * Includes enabling clock and configuring all mapped pins if mapPinsOnEnable is selected in configuration
       \t */
       \tstatic void enable() {
-      \t
-      \t   // Enable clock to peripheral
-      \t   Info::enableClock();
-      \t
+      \t   $(enable_clock: )
       \t   configureAllPins();
       \t}
 
       \t/**
-      \t * Disables the clock to $(_base_name) and all mappable pins
+      \t * Disables the clock to $(_base_name) and all mapped pins
       \t */
       \tstatic void disable() {
-      \t
-      \t   disableNvicInterrupts();
-      \t   
+      \t   $(disable_interrupts_code: )
+      \t   $(disable_peripheral: )
       \t   disableAllPins();
-      \t
-      \t   // Disable clock to peripheral
-      \t   Info::disableClock();
+      \t   $(disable_clock: )
       \t}
       // End Template _mapPinsOption_on.xml\n
    ]]></template>

@@ -13,6 +13,7 @@ Devices using this peripheral:
       \tstatic constexpr int outputPin  = 0;\n\n
    ]]></template>
    
+   <constant name = "disable_peripheral"      derived = "true" value = "vref->SC = 0;"  />
    <xi:include href="_mapPinsOption.xml"/>   
 
    <binaryOption name="vref_trm_chopen" 
