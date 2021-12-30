@@ -25,7 +25,7 @@
 
          <!-- Definitions used by main.cpp see hardware/peripherals/symbols for definitions used by snippets -->
          <constant id="demo.cpp.console"    value="USBDM::Uart##1" />           <!-- Console for I/O -->
-         <constant id="demo.cpp.led"        value="GpioA&lt;1,ActiveLow&gt;" /> <!-- Digital I/O generic LED -->
+         <constant id="demo.cpp.led"        value="GpioA&lt;2,ActiveLow&gt;" /> <!-- Digital I/O generic LED -->
 	 
          <!-- Custom settings file -->
          <copy source="projectFiles/&DEVICE_NAME;.usbdmProject"  target="Configure.usbdmProject"  overwrite="true" />
