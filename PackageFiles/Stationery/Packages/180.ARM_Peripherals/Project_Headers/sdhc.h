@@ -203,7 +203,7 @@ public:
     * @param sdhcStatus Mask indicating interrupt status flags to enable, see @ref SdhcStatus
     */
    void enableInterruptStatus(uint32_t sdhcStatus) {
-      sdhc->IRQSTATEN |= sdhcStatus;
+      sdhc->IRQSTATEN = sdhc->IRQSTATEN | sdhcStatus;
     }
 
    /**
@@ -215,7 +215,7 @@ public:
     * @param sdhcStatus Mask indicating interrupt status flags to disable, see @ref SdhcStatus
     */
    void disableInterruptStatus(uint32_t sdhcStatus) {
-      sdhc->IRQSTATEN &= ~sdhcStatus;
+      sdhc->IRQSTATEN = sdhc->IRQSTATEN & ~sdhcStatus;
    }
 
    /**
@@ -227,7 +227,7 @@ public:
     * @param sdhcStatus Mask indicating interrupt requests to enable, see @ref SdhcStatus
     */
    void enableInterruptRequests(uint32_t sdhcStatus) {
-      sdhc->IRQSIGEN |= sdhcStatus;
+      sdhc->IRQSIGEN = sdhc->IRQSIGEN | sdhcStatus;
     }
 
    /**
@@ -239,7 +239,7 @@ public:
     * @param sdhcStatus Mask indicating interrupt requests to disable, see @ref SdhcStatus
     */
    void disableInterruptRequests(uint32_t sdhcStatus) {
-      sdhc->IRQSIGEN &= ~sdhcStatus;
+      sdhc->IRQSIGEN = sdhc->IRQSIGEN & ~sdhcStatus;
    }
 
    /**

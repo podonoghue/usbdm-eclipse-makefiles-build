@@ -1007,7 +1007,26 @@ public:
       if (isNegative) {
          value = -value;
       }
-      long scaledValue = static_cast<long>(round(value*fFormat.fFloatPrecisionMultiplier));
+      int exponent=0;
+      auto x = value*fFormat.fFloatPrecisionMultiplier;
+      if (x>4294967295) {
+         while (x>=fFormat.fFloatPrecisionMultiplier*10) {
+            exponent++;
+            x /= 10;
+         }
+      }
+      if ((x!=0) && (x<1)) {
+         while (x<=(fFormat.fFloatPrecisionMultiplier/10.0)) {
+            exponent--;
+            x *= 10;
+         }
+      }
+      auto y = round(x);
+      unsigned long scaledValue = static_cast<unsigned long>(y);
+      if (exponent != 0) {
+
+      }
+
       ultoa(buff, scaledValue/fFormat.fFloatPrecisionMultiplier, Radix_10, fFormat.fFloatPadding, fFormat.fFloatWidth, isNegative);
       if (fFormat.fFloatPrecision>0) {
          write(buff).write('.');
@@ -1016,6 +1035,9 @@ public:
                Radix_10, Padding_LeadingZeroes, fFormat.fFloatPrecision);
       }
       write(buff);
+      if (exponent != 0) {
+         write("E").write(exponent);
+      }
       return *this;
    }
 #endif
@@ -1323,6 +1345,107 @@ public:
    FormattedIO NOINLINE_DEBUG &operator <<(double value) {
       return write(value);
    }
+
+#if (USE_DIMENSION_CHECK)
+   /**
+    * Write a Seconds variable
+    *
+    * @param[in]  value Seconds to print
+    *
+    * @return Reference to self
+    */
+   FormattedIO NOINLINE_DEBUG &write(Seconds value) {
+      return write((float)value).write(" seconds");
+   }
+
+   /**
+    * Write a Seconds variable
+    *
+    * @param[in]  value Seconds to print
+    *
+    * @return Reference to self
+    */
+   FormattedIO NOINLINE_DEBUG &writeln(Seconds value) {
+      return write(value).writeln();
+   }
+
+   /**
+    * Write a Ticks variable
+    *
+    * @param[in]  value Ticks to print
+    *
+    * @return Reference to self
+    */
+   FormattedIO NOINLINE_DEBUG &write(const Ticks &value) {
+      return write((unsigned)value).write(" ticks");
+   }
+
+   /**
+    * Write a Ticks variable
+    *
+    * @param[in]  value Ticks to print
+    *
+    * @return Reference to self
+    */
+   FormattedIO NOINLINE_DEBUG &writeln(const Ticks &value) {
+      return write(value).writeln();
+   }
+
+   /**
+    * Write a Hertz variable
+    *
+    * @param[in]  value Hertz to print
+    *
+    * @return Reference to self
+    */
+   FormattedIO NOINLINE_DEBUG &write(const Hertz &value) {
+      return write((float)value).write(" Hz");
+   }
+
+   /**
+    * Write a Hertz variable
+    *
+    * @param[in]  value Hertz to print
+    *
+    * @return Reference to self
+    */
+   FormattedIO NOINLINE_DEBUG &writeln(const Hertz &value) {
+      return write(value).writeln();
+   }
+
+   /**
+    * Write a Seconds variable
+    *
+    * @param[in]  value Seconds to print
+    *
+    * @return Reference to self
+    */
+   FormattedIO NOINLINE_DEBUG &operator <<(const Seconds &value) {
+      return write(value);
+   }
+
+   /**
+    * Write a Ticks variable
+    *
+    * @param[in]  value Ticks to print
+    *
+    * @return Reference to self
+    */
+   FormattedIO NOINLINE_DEBUG &operator <<(const Ticks &value) {
+      return write(value);
+   }
+
+   /**
+    * Write a Hertz variable
+    *
+    * @param[in]  value Hertz to print
+    *
+    * @return Reference to self
+    */
+   FormattedIO NOINLINE_DEBUG &operator <<(const Hertz &value) {
+      return write(value);
+   }
+#endif
 
    /**
     * Sets the conversion radix for integer types

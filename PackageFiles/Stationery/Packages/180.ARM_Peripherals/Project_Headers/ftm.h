@@ -347,7 +347,7 @@ public:
     * @note This value is write-buffered and updated by MOD synchronisation
     *       unless suspend is true.
     */
-   void setCounterMaximumValue(uint16_t endValue, bool suspend=false) const {
+   void setCounterMaximumValue(Ticks endValue, bool suspend=false) const {
       uint32_t sc;
       if (suspend) {
          // Disable timer so register changes are immediate
@@ -355,7 +355,7 @@ public:
          tmr->SC = 0;
          (void)tmr->SC;
       }
-      tmr->MOD = endValue;
+      tmr->MOD = (unsigned)endValue;
       if (suspend) {
          tmr->SC = sc;
       }
@@ -366,8 +366,8 @@ public:
     *
     * @return Counter modulo value in ticks (<65535), 0 = 65536.
     */
-   uint16_t getCounterMaximumValue() const {
-      return tmr->MOD;
+   Ticks getCounterMaximumValue() const {
+      return Ticks((unsigned)(tmr->MOD));
    }
 
    /**
@@ -380,13 +380,13 @@ public:
     *
     * @note This function will affect all channels of the timer.
     */
-   void setCounterStartValue(uint32_t startValue, bool suspend=false) const {
+   void setCounterStartValue(Ticks startValue, bool suspend=false) const {
       uint32_t sc;
       if (suspend) {
          sc = tmr->SC;
          tmr->SC = 0;
       }
-      tmr->CNTIN = startValue;
+      tmr->CNTIN = (unsigned)startValue;
       if (suspend) {
          tmr->SC = sc;
       }
@@ -397,8 +397,8 @@ public:
     *
     * @return Counter start value in ticks
     */
-   uint16_t getCounterStartValue() {
-      return tmr->CNTIN;
+   Ticks getCounterStartValue() {
+      return Ticks((unsigned)(tmr->CNTIN));
    }
 
    /**
@@ -418,7 +418,7 @@ public:
     *       unless suspend is true.
     * @note The counter load value (CNTIN) is cleared
     */
-   ErrorCode setPeriodInTicks(uint32_t period, bool suspend=false) const {
+   ErrorCode setPeriod(Ticks period, bool suspend=false) const {
 
       // Check if CPWMS is set (affects period)
       bool centreAlign = (tmr->SC&FTM_SC_CPWMS_MASK);
@@ -428,8 +428,8 @@ public:
          // limited to 0x7FFF for sensible PWM operation
 
          // Halve with rounding
-         period = (period+1)/2;
-         if (period > 0x7FFFUL) {
+         period = (period+1_ticks)/2U;
+         if ((unsigned)period > 0x7FFFUL) {
             // Attempt to set too long a period
             usbdm_assert(false, "Interval is too long");
             return setErrorCode(E_TOO_LARGE);
@@ -437,8 +437,8 @@ public:
       }
       else {
          // Left-aligned period is MOD+1 value
-         period = period-1;
-         if (period > 0xFFFF) {
+         period = period-1_ticks;
+         if ((unsigned)period > 0xFFFF) {
             // Attempt to set too long a period
             usbdm_assert(false, "Interval is too long");
             return setErrorCode(E_TOO_LARGE);
@@ -453,7 +453,7 @@ public:
       tmr->CNTIN = 0;
 
       // Change modulo
-      tmr->MOD = period;
+      tmr->MOD = (unsigned)period;
 
       if (suspend) {
          // Restart timer
@@ -474,7 +474,7 @@ public:
     * @return E_TOO_SMALL  Requested period is too small for resolution (required resolution check to be enabled).
     * @return E_TOO_LARGE  Requested period is too large.
     */
-   ErrorCode calculateTimingParameters(float period, unsigned &pPrescalerValue, unsigned &pPeriodInTicks) const {
+   ErrorCode calculateTimingParameters(Seconds period, unsigned &pPrescalerValue, Ticks &pPeriodInTicks) const {
       float inputClock = getInputClockFrequencyVirtual();
       unsigned prescaleFactor=1;
       unsigned prescalerValue=0;
@@ -491,7 +491,7 @@ public:
       }
       while (prescalerValue<=7) {
          float    clock = inputClock/prescaleFactor;
-         uint32_t periodInTicks   = round(period*clock);
+         uint32_t periodInTicks   = round((float)period*clock);
          if (periodInTicks <= 10) {
             usbdm_assert(false, "Interval is too short");
             // Too short a period for minimum resolution
@@ -526,10 +526,10 @@ public:
     * @note The Timer is stopped while being modified.
     * @note The Timer counter is restarted from zero
     */
-   ErrorCode setPeriod(float period) const {
+   ErrorCode setPeriod(Seconds period) const {
 
       unsigned prescalerValue = 0;
-      unsigned periodInTicks = 0;
+      Ticks    periodInTicks;
       ErrorCode rc = calculateTimingParameters(period, prescalerValue, periodInTicks);
 
       if (rc != E_NO_ERROR) {
@@ -539,7 +539,7 @@ public:
       uint32_t sc = tmr->SC;
       tmr->SC = 0;
       (void)tmr->SC;
-      setPeriodInTicks(periodInTicks, false);
+      setPeriod(periodInTicks, false);
 
       // Restart counter
       tmr->CNT   = 0;
@@ -566,10 +566,10 @@ public:
     * @note The Timer is stopped while being modified.
     * @note The Timer counter is restarted from zero
     */
-   ErrorCode setMaximumInterval(float interval) const {
+   ErrorCode setMaximumInterval(Seconds interval) const {
 
       unsigned prescalerValue;
-      unsigned periodInTicks;
+      Ticks    periodInTicks;
       ErrorCode rc = calculateTimingParameters(interval, prescalerValue, periodInTicks);
 
       if (rc != E_NO_ERROR) {
@@ -664,7 +664,7 @@ public:
     * @note Assumes prescale has been chosen as a appropriate value. Rudimentary range checking.
     * @note Will set error code if calculated value is less the Timer minimum resolution
     */
-   uint32_t convertMicrosecondsToTicks(int time) const {
+   Ticks convertMicrosecondsToTicks(int time) const {
 
       // Calculate period
       uint32_t tickRate = getTickFrequencyAsInt();
@@ -678,7 +678,7 @@ public:
          // Attempt to set too short a period
          setErrorCode(E_TOO_SMALL);
       }
-      return rv;
+      return Ticks((unsigned)rv);
    }
 
    /**
@@ -691,11 +691,11 @@ public:
     * @note Assumes prescale has been chosen as a appropriate value (see setMaximumInterval()). \n
     * @note Will set error code if calculated value is less the minimum resolution
     */
-   uint32_t convertSecondsToTicks(float seconds) const {
+   Ticks convertSecondsToTicks(Seconds seconds) const {
 
       // Calculate period
       float    tickRate = getTickFrequencyAsFloat();
-      uint64_t rv       = rintf(seconds*tickRate);
+      uint64_t rv       = rintf((float)seconds*tickRate);
       usbdm_assert(rv <= 0xFFFFUL, "Interval is too long");
       if (rv > 0xFFFFUL) {
          // Attempt to set too long a period
@@ -705,9 +705,8 @@ public:
          // Attempt to set too short a period
          setErrorCode(E_TOO_SMALL);
       }
-      return rv;
+      return Ticks((unsigned)rv);
    }
-
 
    /**
     * Convert time in ticks to time in microseconds
@@ -718,10 +717,10 @@ public:
     *
     * @note Assumes prescale has been chosen as a appropriate value. Rudimentary range checking.
     */
-   uint32_t convertTicksToMicroseconds(int timeInTicks) const {
+   uint32_t convertTicksToMicroseconds(Ticks timeInTicks) const {
 
       // Calculate period
-      uint64_t rv = (static_cast<uint64_t>(timeInTicks)*1000000)/getTickFrequencyAsInt();
+      uint64_t rv = (static_cast<uint64_t>((unsigned)timeInTicks)*1000000)/getTickFrequencyAsInt();
 #ifdef DEBUG_BUILD
       if (rv > 0xFFFFUL) {
          // Attempt to set too long a period
@@ -744,10 +743,10 @@ public:
     *
     * @note Assumes prescale has been chosen as a appropriate value. Rudimentary range checking.
     */
-   uint32_t convertTicksToMilliseconds(int timeInTicks) const {
+   uint32_t convertTicksToMilliseconds(Ticks timeInTicks) const {
 
       // Calculate period
-      uint64_t rv = (static_cast<uint64_t>(timeInTicks)*1000)/getTickFrequencyAsInt();
+      uint64_t rv = (static_cast<uint64_t>((unsigned)timeInTicks)*1000)/getTickFrequencyAsInt();
 #ifdef DEBUG_BUILD
       if (rv > 0xFFFFUL) {
          // Attempt to set too long a period
@@ -768,8 +767,8 @@ public:
     *
     * @return Time in seconds
     */
-   float convertTicksToSeconds(int timeInTicks) {
-      return static_cast<float>(timeInTicks)/getTickFrequencyAsFloat();
+   Seconds convertTicksToSeconds(Ticks timeInTicks) {
+      return (unsigned)timeInTicks/getTickFrequencyAsFloat();
    }
 
    /**
@@ -777,8 +776,8 @@ public:
     *
     * @return Timer count value
     */
-   uint16_t getTime() {
-      return tmr->CNT;
+   Ticks getTime() {
+      return Ticks((unsigned)(tmr->CNT));
    }
 
    /**
@@ -849,11 +848,11 @@ public:
 
       if (polarity) {
          // Set active high
-         tmr->FLTPOL &= ~(1<<inputNum);
+         tmr->FLTPOL = tmr->FLTPOL &  ~(1<<inputNum);
       }
       else {
          // Set active low
-         tmr->FLTPOL |= (1<<inputNum);
+         tmr->FLTPOL = tmr->FLTPOL | (1<<inputNum);
       }
       if (filterEnable) {
          // Enable filter & set filter delay
@@ -861,12 +860,12 @@ public:
       }
       else {
          // Disable filter
-         tmr->FLTCTRL &= ~(1<<(inputNum+FTM_FLTCTRL_FFLTR0EN_SHIFT));
+         tmr->FLTCTRL = tmr->FLTCTRL & ~(1<<(inputNum+FTM_FLTCTRL_FFLTR0EN_SHIFT));
       }
       // Enable fault input
-      tmr->FLTCTRL |= (1<<inputNum);
+      tmr->FLTCTRL = tmr->FLTCTRL | (1<<inputNum);
       // Enable fault mode (All channels, manual)
-      tmr->MODE    |= FTM_MODE_FAULTM(2);
+      tmr->MODE    = tmr->MODE | FTM_MODE_FAULTM(2);
    }
 
    /**
@@ -877,10 +876,10 @@ public:
     */
    void enableExternalTrigger(FtmExternalTrigger ftmExternalTrigger, bool enable=true) const {
       if (enable) {
-         tmr->EXTTRIG |= ftmExternalTrigger;
+         tmr->EXTTRIG = tmr->EXTTRIG | ftmExternalTrigger;
       }
       else {
-         tmr->EXTTRIG &= ~ftmExternalTrigger;
+         tmr->EXTTRIG = tmr->EXTTRIG & ~ftmExternalTrigger;
       }
    }
 
@@ -899,28 +898,28 @@ public:
     * Enable/disable Timer Overflow interrupts
     */
    void enableTimerOverflowInterrupts() {
-      tmr->SC |= FTM_SC_TOIE_MASK;
+      tmr->SC = tmr->SC | FTM_SC_TOIE_MASK;
    }
 
    /**
     * Disable Timer Overflow interrupts
     */
    void disableTimerOverflowInterrupts() {
-      tmr->SC &= ~FTM_SC_TOIE_MASK;
+      tmr->SC = tmr->SC & ~FTM_SC_TOIE_MASK;
    }
 
    /**
     * Enable fault interrupts
     */
    void enableFaultInterrupt() {
-      tmr->MODE |= FTM_MODE_FAULTIE_MASK;
+      tmr->MODE = tmr->MODE | FTM_MODE_FAULTIE_MASK;
    }
 
    /**
     * Disable fault interrupts
     */
    void disableFaultInterrupt() {
-      tmr->MODE &= ~FTM_MODE_FAULTIE_MASK;
+      tmr->MODE = tmr->MODE & ~FTM_MODE_FAULTIE_MASK;
    }
 
    /**
@@ -933,7 +932,7 @@ public:
       static_assert(inputNum<=4, "Illegal fault channel");
 
       // Enable fault on channel
-      tmr->FLTCTRL &= ~(1<<inputNum);
+      tmr->FLTCTRL = tmr->FLTCTRL & ~(1<<inputNum);
    }
 
 
@@ -945,10 +944,10 @@ public:
     */
    void setPolarity(Polarity polarity, uint32_t channelMask) const {
       if (polarity) {
-         tmr->POL &= ~channelMask;
+         tmr->POL = tmr->POL & ~channelMask;
       }
       else {
-         tmr->POL |= channelMask;
+         tmr->POL = tmr->POL | channelMask;
       }
    }
    /**
@@ -998,18 +997,18 @@ public:
     *
     * @note The actual CnV register update may be delayed by the register synchronisation mechanism
     */
-   ErrorCode setHighTimeInTicks(uint32_t highTime, int channel) const {
+   ErrorCode setHighTime(Ticks highTime, int channel) const {
 
       if (tmr->SC&FTM_SC_CPWMS_MASK) {
          // In CPWM the pulse width is doubled
-         highTime = (highTime+1)/2;
+         highTime = (highTime+1_ticks)/2U;
       }
 #ifdef DEBUG_BUILD
-      if (highTime > tmr->MOD) {
+      if ((unsigned)highTime > tmr->MOD) {
          return setErrorCode(E_TOO_LARGE);
       }
 #endif
-      tmr->CONTROLS[channel].CnV  = highTime;
+      tmr->CONTROLS[channel].CnV  = (unsigned)highTime;
       return E_NO_ERROR;
    }
 };
@@ -1112,8 +1111,8 @@ public:
     *
     * @note The actual CnV register update will be delayed by the register synchronisation mechanism
     */
-   ErrorCode setHighTimeInTicks(uint32_t highTime) const {
-      return FtmBase::setHighTimeInTicks(highTime, CHANNEL);
+   ErrorCode setHighTime(Ticks highTime) const {
+      return FtmBase::setHighTime(highTime, CHANNEL);
    }
 
    /**
@@ -1126,8 +1125,8 @@ public:
     *
     * @note The actual CnV register update will be delayed by the register synchronisation mechanism
     */
-   ErrorCode setHighTime(float highTime) const {
-      return FtmBase::setHighTimeInTicks(convertSecondsToTicks(highTime), CHANNEL);
+   ErrorCode setHighTime(Seconds highTime) const {
+      return FtmBase::setHighTime(convertSecondsToTicks(highTime), CHANNEL);
    }
    /**
     * Set PWM duty cycle.
@@ -1158,8 +1157,8 @@ public:
     *
     * @note The actual CnV register update will be delayed by the register synchronisation mechanism
     */
-   void setDeltaEventTime(uint16_t offset) {
-      tmr->CONTROLS[CHANNEL].CnV += offset;
+   void setDeltaEventTime(Ticks offset) {
+      tmr->CONTROLS[CHANNEL].CnV = tmr->CONTROLS[CHANNEL].CnV + (unsigned)offset;
    }
 
    /**
@@ -1169,8 +1168,8 @@ public:
     *
     * @note The actual CnV register update will be delayed by the register synchronisation mechanism
     */
-   void setRelativeEventTime(uint16_t offset) const {
-      tmr->CONTROLS[CHANNEL].CnV = tmr->CNT + offset;
+   void setRelativeEventTime(Ticks offset) const {
+      tmr->CONTROLS[CHANNEL].CnV = tmr->CNT + (unsigned)offset;
    }
 
    /**
@@ -1180,8 +1179,8 @@ public:
     *
     * @note The actual CnV register update will be delayed by the register synchronisation mechanism
     */
-   void setEventTime(uint16_t eventTime) const {
-      tmr->CONTROLS[CHANNEL].CnV = eventTime;
+   void setEventTime(Ticks eventTime) const {
+      tmr->CONTROLS[CHANNEL].CnV = (unsigned)eventTime;
    }
 
    /**
@@ -1189,8 +1188,8 @@ public:
     *
     * @return Absolute time of last event in ticks i.e. value from timer event register
     */
-   uint16_t getEventTime() const {
-      return tmr->CONTROLS[CHANNEL].CnV;
+   Ticks getEventTime() const {
+      return (unsigned)(tmr->CONTROLS[CHANNEL].CnV);
    }
 
    /**
@@ -1224,7 +1223,7 @@ public:
     */
    void clearInterruptFlag() const {
       // Note - requires read and write zero to clear flag
-      tmr->CONTROLS[CHANNEL].CnSC &= ~FTM_CnSC_CHF_MASK;
+      tmr->CONTROLS[CHANNEL].CnSC = tmr->CONTROLS[CHANNEL].CnSC &  ~FTM_CnSC_CHF_MASK;
    }
 
 
@@ -1274,6 +1273,9 @@ public:
    // Empty constructor
    constexpr FtmBase_T() : FtmBase(Info::baseAddress) {}
    virtual ~FtmBase_T() = default;
+
+   /** Maximum counter value in ticks */
+   static constexpr Ticks MaximumPeriodInTicks = 65535_ticks;
 
    /** Hardware instance pointer */
    static constexpr HardwarePtr<FTM_Type> tmr = Info::baseAddress;
@@ -1340,7 +1342,7 @@ public:
     * Fault IRQ handler
     */
    static void faultIrqHandler() {
-      tmr->FMS &= ~FTM_FMS_FAULTF_MASK;
+      tmr->FMS = tmr->FMS & ~FTM_FMS_FAULTF_MASK;
       sFaultCallback();
    }
 
@@ -1349,7 +1351,7 @@ public:
     */
    static void overflowIrqHandler() {
       // Clear TOI flag
-      tmr->SC &= ~FTM_SC_TOF_MASK;
+      tmr->SC = tmr->SC & ~FTM_SC_TOF_MASK;
       sToiCallback();
    }
 
@@ -1358,12 +1360,12 @@ public:
     */
    static void irqHandler() {
       if ((tmr->MODE&FTM_MODE_FAULTIE_MASK) && (tmr->FMS&FTM_FMS_FAULTF_MASK)) {
-         tmr->FMS &= ~FTM_FMS_FAULTF_MASK;
+         tmr->FMS = tmr->FMS & ~FTM_FMS_FAULTF_MASK;
          sFaultCallback();
       }
       if ((tmr->SC&(FTM_SC_TOF_MASK|FTM_SC_TOIE_MASK)) == (FTM_SC_TOF_MASK|FTM_SC_TOIE_MASK)) {
          // Clear TOI flag
-         tmr->SC &= ~FTM_SC_TOF_MASK;
+         tmr->SC = tmr->SC & ~FTM_SC_TOF_MASK;
          sToiCallback();
       }
       // Get status for channels
@@ -1551,7 +1553,56 @@ public:
    }
 
 public:
-   $(/FTM/classInfo: // No class Info found)
+   // Template _mapPinsOption.xml
+
+   /**
+    * Configures all mapped pins associated with FTM
+    *
+    * @note Locked pins will be unaffected
+    */
+   static void configureAllPins() {
+   
+      // Configure pins if selected and not already locked
+      if constexpr (Info::mapPinsOnEnable && !(MapAllPinsOnStartup && (ForceLockedPins == PinLock_Locked))) {
+         Info::initPCRs();
+      }
+   }
+
+   /**
+    * Disabled all mapped pins associated with FTM
+    *
+    * @note Only the lower 16-bits of the PCR registers are modified
+    *
+    * @note Locked pins will be unaffected
+    */
+   static void disableAllPins() {
+   
+      // Disable pins if selected and not already locked
+      if constexpr (Info::mapPinsOnEnable && !(MapAllPinsOnStartup && (ForceLockedPins == PinLock_Locked))) {
+         Info::clearPCRs();
+      }
+   }
+
+   /**
+    * Basic enable of FTM
+    * Includes enabling clock and configuring all mapped pins if mapPinsOnEnable is selected in configuration
+    */
+   static void enable() {
+      Info::enableClock();
+      configureAllPins();
+   }
+
+   /**
+    * Disables the clock to FTM and all mapped pins
+    */
+   static void disable() {
+      disableNvicInterrupts();
+      ftm->SC = FTM_SC_CLKS(0);
+      disableAllPins();
+      Info::disableClock();
+   }
+// End Template _mapPinsOption.xml
+
 
    /**
     * Configure with settings from Configure.usbdmProject.
@@ -1682,7 +1733,7 @@ public:
     * @note This value is write-buffered and updated by MOD synchronisation
     *       unless suspend is true.
     */
-   static void setCounterMaximumValue(uint16_t endValue, bool suspend=false) {
+   static void setCounterMaximumValue(Ticks endValue, bool suspend=false) {
       uint32_t sc;
       if (suspend) {
          // Disable timer so register changes are immediate
@@ -1690,7 +1741,7 @@ public:
          tmr->SC = 0;
          (void)tmr->SC;
       }
-      tmr->MOD = endValue;
+      tmr->MOD = (unsigned)endValue;
       if (suspend) {
          tmr->SC = sc;
       }
@@ -1701,8 +1752,8 @@ public:
     *
     * @return Counter modulo value in ticks (<65535), 0 = 65536.
     */
-   static uint16_t getCounterMaximumValue() {
-      return tmr->MOD;
+   static Ticks getCounterMaximumValue() {
+      return (unsigned)(tmr->MOD);
    }
 
    /**
@@ -1715,13 +1766,13 @@ public:
     *
     * @note This function will affect all channels of the timer.
     */
-   static void setCounterStartValue(uint32_t startValue, bool suspend=false) {
+   static void setCounterStartValue(Ticks startValue, bool suspend=false) {
       uint32_t sc;
       if (suspend) {
          sc = tmr->SC;
          tmr->SC = 0;
       }
-      tmr->CNTIN = startValue;
+      tmr->CNTIN = (unsigned)startValue;
       if (suspend) {
          tmr->SC = sc;
       }
@@ -1732,8 +1783,8 @@ public:
     *
     * @return Counter start value in ticks
     */
-   static uint16_t getCounterStartValue() {
-      return tmr->CNTIN;
+   static Ticks getCounterStartValue() {
+      return (unsigned)(tmr->CNTIN);
    }
 
    /**
@@ -1753,7 +1804,7 @@ public:
     *       unless suspend is true.
     * @note The counter load value (CNTIN) is cleared
     */
-   static ErrorCode setPeriodInTicks(uint32_t period, bool suspend=false) {
+   static ErrorCode setPeriod(Ticks period, bool suspend=false) {
 
       // Check if CPWMS is set (affects period)
       bool centreAlign = (tmr->SC&FTM_SC_CPWMS_MASK);
@@ -1763,8 +1814,8 @@ public:
          // limited to 0x7FFF for sensible PWM operation
 
          // Halve with rounding
-         period = (period+1)/2;
-         if (period > 0x7FFFUL) {
+         period = (period+1_ticks)/2U;
+         if ((unsigned)period > 0x7FFFUL) {
             // Attempt to set too long a period
             usbdm_assert(false, "Interval is too long");
             return setErrorCode(E_TOO_LARGE);
@@ -1772,8 +1823,8 @@ public:
       }
       else {
          // Left-aligned period is MOD+1 value
-         period = period-1;
-         if (period > 0xFFFF) {
+         period = period-1_ticks;
+         if ((unsigned)period > 0xFFFF) {
             // Attempt to set too long a period
             usbdm_assert(false, "Interval is too long");
             return setErrorCode(E_TOO_LARGE);
@@ -1788,7 +1839,7 @@ public:
       tmr->CNTIN = 0;
 
       // Change modulo
-      tmr->MOD = period;
+      tmr->MOD = (unsigned)period;
 
       if (suspend) {
          // Restart timer
@@ -1809,13 +1860,13 @@ public:
     * @return E_TOO_SMALL  Requested period is too small for resolution (required resolution check to be enabled).
     * @return E_TOO_LARGE  Requested period is too large.
     */
-   static ErrorCode calculateTimingParameters(float period, unsigned &pPrescalerValue, unsigned &pPeriodInTicks) {
+   static ErrorCode calculateTimingParameters(Seconds period, unsigned &pPrescalerValue, Ticks &pPeriodInTicks) {
       float inputClock = Info::getInputClockFrequency();
       unsigned prescaleFactor=1;
       unsigned prescalerValue=0;
 
       // Maximum period value in ticks
-      uint32_t maxPeriodInTicks = 65536;
+      uint32_t maxPeriodInTicks = (unsigned)FtmBase_T::MaximumPeriodInTicks;
 
       // Check if CPWMS is set (affects period calculation)
       if (tmr->SC&FTM_SC_CPWMS_MASK) {
@@ -1826,7 +1877,7 @@ public:
       }
       while (prescalerValue<=7) {
          float    clock = inputClock/prescaleFactor;
-         uint32_t periodInTicks   = round(period*clock);
+         unsigned periodInTicks   = round((float)period*clock);
          if (periodInTicks < Info::minimumResolution) {
             usbdm_assert(false, "Interval is too short");
             // Too short a period for minimum resolution
@@ -1861,10 +1912,11 @@ public:
     * @note The Timer is stopped while being modified.
     * @note The Timer counter is restarted from zero
     */
-   static ErrorCode setPeriod(float period) {
+   static ErrorCode setPeriod(Seconds period) {
 
       unsigned prescalerValue = 0;
-      unsigned periodInTicks = 0;
+      Ticks    periodInTicks  = 0U;
+
       ErrorCode rc = calculateTimingParameters(period, prescalerValue, periodInTicks);
 
       if (rc != E_NO_ERROR) {
@@ -1874,7 +1926,7 @@ public:
       uint32_t sc = tmr->SC;
       tmr->SC = 0;
       (void)tmr->SC;
-      setPeriodInTicks(periodInTicks, false);
+      setPeriod(periodInTicks, false);
 
       // Restart counter
       tmr->CNT   = 0;
@@ -1901,10 +1953,11 @@ public:
     * @note The Timer is stopped while being modified.
     * @note The Timer counter is restarted from zero
     */
-   static ErrorCode setMaximumInterval(float interval) {
+   static ErrorCode setMaximumInterval(Seconds interval) {
 
-      unsigned prescalerValue;
-      unsigned periodInTicks;
+      unsigned prescalerValue = 0;
+      Ticks    periodInTicks;
+
       ErrorCode rc = calculateTimingParameters(interval, prescalerValue, periodInTicks);
 
       if (rc != E_NO_ERROR) {
@@ -1966,7 +2019,7 @@ public:
     * @note Adjusts Timer pre-scaler to appropriate value.
     * @note This function will affect all channels of the timer.
     */
-   static ErrorCode setTickFrequency(float frequency, float tolerance) {
+   static ErrorCode setTickFrequency(Hertz frequency, float tolerance) {
       float inputClockFrequency = Info::getInputClockFrequency();
 
       int prescaleFactor=1;
@@ -1974,7 +2027,7 @@ public:
       while (prescalerValue<=7) {
          float tickFrequency = inputClockFrequency/prescaleFactor;
 
-         if ((100*std::abs((tickFrequency/frequency)-1)) < tolerance) {
+         if ((100*std::abs((tickFrequency/(float)frequency)-1)) < tolerance) {
             // Clear SC so immediate effect on prescale change
             uint32_t sc = tmr->SC&~FTM_SC_PS_MASK;
             tmr->SC = 0;
@@ -1999,7 +2052,7 @@ public:
     * @note Assumes prescale has been chosen as a appropriate value. Rudimentary range checking.
     * @note Will set error code if calculated value is less the Timer minimum resolution
     */
-   static uint32_t convertMicrosecondsToTicks(int time) {
+   static Ticks convertMicrosecondsToTicks(int time) {
 
       // Calculate period
       uint32_t tickRate = getTickFrequencyAsInt();
@@ -2013,7 +2066,7 @@ public:
          // Attempt to set too short a period
          setErrorCode(E_TOO_SMALL);
       }
-      return rv;
+      return (unsigned)rv;
    }
 
    /**
@@ -2026,11 +2079,11 @@ public:
     * @note Assumes prescale has been chosen as a appropriate value (see setMaximumInterval()). \n
     * @note Will set error code if calculated value is less the minimum resolution
     */
-   static uint32_t convertSecondsToTicks(float seconds) {
+   static Ticks convertSecondsToTicks(Seconds seconds) {
 
       // Calculate period
       float    tickRate = getTickFrequencyAsFloat();
-      uint64_t rv       = rintf(seconds*tickRate);
+      uint64_t rv       = rintf((float)seconds*tickRate);
       usbdm_assert(rv <= 0xFFFFUL, "Interval is too long");
       if (rv > 0xFFFFUL) {
          // Attempt to set too long a period
@@ -2040,7 +2093,7 @@ public:
          // Attempt to set too short a period
          setErrorCode(E_TOO_SMALL);
       }
-      return rv;
+      return (unsigned)rv;
    }
 
    /**
@@ -2052,10 +2105,10 @@ public:
     *
     * @note Assumes prescale has been chosen as a appropriate value. Rudimentary range checking.
     */
-   static uint32_t convertTicksToMicroseconds(int timeInTicks) {
+   static uint32_t convertTicksToMicroseconds(Ticks timeInTicks) {
 
       // Calculate period
-      uint64_t rv = (static_cast<uint64_t>(timeInTicks)*1000000)/getTickFrequencyAsInt();
+      uint64_t rv = (static_cast<uint64_t>((unsigned)timeInTicks)*1000000)/getTickFrequencyAsInt();
 #ifdef DEBUG_BUILD
       if (rv > 0xFFFFUL) {
          // Attempt to set too long a period
@@ -2078,10 +2131,10 @@ public:
     *
     * @note Assumes prescale has been chosen as a appropriate value. Rudimentary range checking.
     */
-   static uint32_t convertTicksToMilliseconds(int timeInTicks) {
+   static uint32_t convertTicksToMilliseconds(Ticks timeInTicks) {
 
       // Calculate period
-      uint64_t rv = (static_cast<uint64_t>(timeInTicks)*1000)/getTickFrequencyAsInt();
+      uint64_t rv = (static_cast<uint64_t>((unsigned)timeInTicks)*1000)/getTickFrequencyAsInt();
 #ifdef DEBUG_BUILD
       if (rv > 0xFFFFUL) {
          // Attempt to set too long a period
@@ -2102,8 +2155,8 @@ public:
     *
     * @return Time in seconds
     */
-   static float convertTicksToSeconds(int timeInTicks) {
-      return static_cast<float>(timeInTicks)/getTickFrequencyAsFloat();
+   static Seconds convertTicksToSeconds(Ticks timeInTicks) {
+      return static_cast<float>((unsigned)timeInTicks)/getTickFrequencyAsFloat();
    }
 
    /**
@@ -2192,11 +2245,11 @@ public:
 
       if (polarity) {
          // Set active high
-         tmr->FLTPOL &= ~(1<<inputNum);
+         tmr->FLTPOL = tmr->FLTPOL & ~(1<<inputNum);
       }
       else {
          // Set active low
-         tmr->FLTPOL |= (1<<inputNum);
+         tmr->FLTPOL = tmr->FLTPOL | (1<<inputNum);
       }
       if (filterEnable) {
          // Enable filter & set filter delay
@@ -2204,12 +2257,12 @@ public:
       }
       else {
          // Disable filter
-         tmr->FLTCTRL &= ~(1<<(inputNum+FTM_FLTCTRL_FFLTR0EN_SHIFT));
+         tmr->FLTCTRL = tmr->FLTCTRL & ~(1<<(inputNum+FTM_FLTCTRL_FFLTR0EN_SHIFT));
       }
       // Enable fault input
-      tmr->FLTCTRL |= (1<<inputNum);
+      tmr->FLTCTRL = tmr->FLTCTRL | (1<<inputNum);
       // Enable fault mode (All channels, manual)
-      tmr->MODE    |= FTM_MODE_FAULTM(2);
+      tmr->MODE    = tmr->MODE | FTM_MODE_FAULTM(2);
    }
 
    /**
@@ -2220,10 +2273,10 @@ public:
     */
    static void enableExternalTrigger(FtmExternalTrigger ftmExternalTrigger, bool enable=true) {
       if (enable) {
-         tmr->EXTTRIG |= ftmExternalTrigger;
+         tmr->EXTTRIG = tmr->EXTTRIG | ftmExternalTrigger;
       }
       else {
-         tmr->EXTTRIG &= ~ftmExternalTrigger;
+         tmr->EXTTRIG = tmr->EXTTRIG & ~ftmExternalTrigger;
       }
    }
 
@@ -2242,28 +2295,28 @@ public:
     * Enable/disable Timer Overflow interrupts
     */
    static void enableTimerOverflowInterrupts() {
-      tmr->SC |= FTM_SC_TOIE_MASK;
+      tmr->SC = tmr->SC | FTM_SC_TOIE_MASK;
    }
 
    /**
     * Disable Timer Overflow interrupts
     */
    static void disableTimerOverflowInterrupts() {
-      tmr->SC &= ~FTM_SC_TOIE_MASK;
+      tmr->SC = tmr->SC & ~FTM_SC_TOIE_MASK;
    }
 
    /**
     * Enable fault interrupts
     */
    static void enableFaultInterrupt() {
-      tmr->MODE |= FTM_MODE_FAULTIE_MASK;
+      tmr->MODE = tmr->MODE | FTM_MODE_FAULTIE_MASK;
    }
 
    /**
     * Disable fault interrupts
     */
    static void disableFaultInterrupt() {
-      tmr->MODE &= ~FTM_MODE_FAULTIE_MASK;
+      tmr->MODE = tmr->MODE & ~FTM_MODE_FAULTIE_MASK;
    }
 
    /**
@@ -2276,7 +2329,7 @@ public:
       static_assert(inputNum<=4, "Illegal fault channel");
 
       // Enable fault on channel
-      tmr->FLTCTRL &= ~(1<<inputNum);
+      tmr->FLTCTRL = tmr->FLTCTRL & ~(1<<inputNum);
    }
 
    /*
@@ -2291,8 +2344,8 @@ public:
     *
     * @return Absolute time of last event in ticks i.e. value from timer event register
     */
-   static uint16_t getEventTime(int channel) {
-      return tmr->CONTROLS[channel].CnV;
+   static Ticks getEventTime(int channel) {
+      return (unsigned)(tmr->CONTROLS[channel].CnV);
    }
 
    /**
@@ -2303,8 +2356,8 @@ public:
     * @param[in] eventTime  Absolute event time in ticks i.e. value to use as timer comparison value
     * @param[in] channel    Timer channel
     */
-   static void setEventTime(uint16_t eventTime, int channel) {
-      tmr->CONTROLS[channel].CnV = eventTime;
+   static void setEventTime(Ticks eventTime, int channel) {
+      tmr->CONTROLS[channel].CnV = (unsigned)eventTime;
    }
 
    /**
@@ -2315,8 +2368,8 @@ public:
     *
     * @note This value is write-buffered and updated by CnV synchronisation.
     */
-   static void setDeltaEventTime(uint16_t offset, int channel) {
-      tmr->CONTROLS[channel].CnV += offset;
+   static void setDeltaEventTime(Ticks offset, int channel) {
+      tmr->CONTROLS[channel].CnV = tmr->CONTROLS[channel].CnV + (unsigned)offset;
    }
 
    /**
@@ -2327,8 +2380,8 @@ public:
     *
     * @note This value is write-buffered and updated by CnV synchronisation.
     */
-   static void setRelativeEventTime(uint16_t offset, int channel) {
-      tmr->CONTROLS[channel].CnV = tmr->CNT + offset;
+   static void setRelativeEventTime(Ticks offset, int channel) {
+      tmr->CONTROLS[channel].CnV = tmr->CNT + (unsigned)offset;
    }
 
    /**
@@ -2378,17 +2431,17 @@ public:
     *
     * @note The actual CnV register update may be delayed by the register synchronisation mechanism
     */
-   static ErrorCode setHighTimeInTicks(uint32_t highTime, int channel) {
+   static ErrorCode setHighTimeInTicks(Ticks highTime, int channel) {
       if (tmr->SC&FTM_SC_CPWMS_MASK) {
          // In CPWM the pulse width is doubled
-         highTime = (highTime+1)/2;
+         highTime = (highTime+1_ticks)/2U;
       }
 #ifdef DEBUG_BUILD
-      if (highTime > tmr->MOD) {
+      if ((unsigned)highTime > tmr->MOD) {
          return setErrorCode(E_TOO_LARGE);
       }
 #endif
-      tmr->CONTROLS[channel].CnV  = highTime;
+      tmr->CONTROLS[channel].CnV  = (unsigned)highTime;
       return E_NO_ERROR;
    }
 
@@ -2402,7 +2455,7 @@ public:
     *
     * @note The actual CnV register update may be delayed by the TPM register synchronisation mechanism
     */
-   static ErrorCode setHighTime(float highTime, int channel) {
+   static ErrorCode setHighTime(Seconds highTime, int channel) {
       return setHighTimeInTicks(convertSecondsToTicks(highTime), channel);
    }
 
@@ -2423,10 +2476,10 @@ public:
     */
    static void setPolarity(Polarity polarity, uint32_t channelMask) {
       if (polarity) {
-         tmr->POL &= ~channelMask;
+         tmr->POL = tmr->POL & ~channelMask;
       }
       else {
-         tmr->POL |= channelMask;
+         tmr->POL = tmr->POL | channelMask;
       }
    }
 
@@ -2515,7 +2568,7 @@ public:
       uint32_t channelMask = 1<<(channel+FTM_SWOCTRL_CHxOC_SHIFT);
 
       // Release control bit
-      tmr->SWOCTRL &= ~channelMask;
+      tmr->SWOCTRL = tmr->SWOCTRL & ~channelMask;
    }
 
    /**
@@ -2526,7 +2579,7 @@ public:
     */
    static void setChanelOutputs(uint32_t channelValueMask) {
       tmr->OUTINIT = channelValueMask;
-      tmr->MODE    |= FTM_MODE_INIT_MASK;
+      tmr->MODE    = tmr->MODE | FTM_MODE_INIT_MASK;
    }
 
    /**
@@ -2733,7 +2786,7 @@ public:
        *
        * @note The actual CnV register update will be delayed by the register synchronisation mechanism
        */
-      static ErrorCode setHighTimeInTicks(uint32_t highTime) {
+      static ErrorCode setHighTimeInTicks(Ticks highTime) {
          return Ftm::setHighTimeInTicks(highTime, channel);
       }
 
@@ -2747,7 +2800,7 @@ public:
        *
        * @note The actual CnV register update will be delayed by the register synchronisation mechanism
        */
-      static ErrorCode setHighTime(float highTime) {
+      static ErrorCode setHighTime(Seconds highTime) {
          return Ftm::setHighTime(highTime, channel);
       }
       /**
@@ -2779,7 +2832,7 @@ public:
        *
        * @note The actual CnV register update will be delayed by the register synchronisation mechanism
        */
-      static void setDeltaEventTime(uint16_t offset) {
+      static void setDeltaEventTime(Ticks offset) {
          Ftm::setDeltaEventTime(offset, channel);
       }
 
@@ -2790,7 +2843,7 @@ public:
        *
        * @note The actual CnV register update will be delayed by the register synchronisation mechanism
        */
-      static void setRelativeEventTime(uint16_t offset) {
+      static void setRelativeEventTime(Ticks offset) {
          Ftm::setRelativeEventTime(offset, channel);
       }
 
@@ -2801,7 +2854,7 @@ public:
        *
        * @note The actual CnV register update will be delayed by the register synchronisation mechanism
        */
-      static void setEventTime(uint16_t eventTime) {
+      static void setEventTime(Ticks eventTime) {
          Ftm::setEventTime(eventTime, channel);
       }
 
@@ -2810,7 +2863,7 @@ public:
        *
        * @return Absolute time of last event in ticks i.e. value from timer event register
        */
-      static uint16_t getEventTime() {
+      static Ticks getEventTime() {
          return Ftm::getEventTime(channel);
       }
 
@@ -2845,7 +2898,7 @@ public:
        */
       static void clearInterruptFlag() {
          // Note - requires read and write zero to clear flag
-         Ftm::tmr->CONTROLS[channel].CnSC &= ~FTM_CnSC_CHF_MASK;
+         Ftm::tmr->CONTROLS[CHANNEL].CnSC = Ftm::tmr->CONTROLS[CHANNEL].CnSC & ~FTM_CnSC_CHF_MASK;
       }
 
 
@@ -2930,7 +2983,7 @@ public:
 
 #ifdef FTM_SC_PWMEN0_SHIFT
       // Enable output pin in FTM
-      tmr->SC |= (1<<(channel+FTM_SC_PWMEN0_SHIFT));
+      tmr->SC = tmr->SC | (1<<(channel+FTM_SC_PWMEN0_SHIFT));
 #endif
       Pcr::setPCR(pinDriveStrength|pinDriveMode|pinSlewRate);
    }
@@ -2952,7 +3005,7 @@ public:
 
 #ifdef FTM_SC_PWMEN0_SHIFT
       // Enable output pin in FTM
-      tmr->SC |= (1<<(channel+FTM_SC_PWMEN0_SHIFT));
+      tmr->SC = tmr->SC | (1<<(channel+FTM_SC_PWMEN0_SHIFT));
 #endif
       Pcr::setPCR(pinDriveStrength|pinDriveMode);
    }
@@ -2974,7 +3027,7 @@ public:
 
 #ifdef FTM_SC_PWMEN0_SHIFT
       // Enable output pin in FTM
-      tmr->SC |= (1<<(channel+FTM_SC_PWMEN0_SHIFT));
+      tmr->SC = tmr->SC | (1<<(channel+FTM_SC_PWMEN0_SHIFT));
 #endif
       Pcr::setPCR(pinDriveStrength|pinSlewRate);
    }
@@ -2994,7 +3047,7 @@ public:
 
 #ifdef FTM_SC_PWMEN0_SHIFT
       // Enable output pin in FTM
-      tmr->SC |= (1<<(channel+FTM_SC_PWMEN0_SHIFT));
+      tmr->SC = tmr->SC | (1<<(channel+FTM_SC_PWMEN0_SHIFT));
 #endif
 
       Pcr::setPCR(pinDriveStrength);
@@ -3023,7 +3076,7 @@ public:
 
 #ifdef FTM_SC_PWMEN0_SHIFT
          // Disable output pin in FTM
-         tmr->SC &= ~(1<<(channel+FTM_SC_PWMEN0_SHIFT));
+         tmr->SC = tmr->SC & ~(1<<(channel+FTM_SC_PWMEN0_SHIFT));
 #endif
 
          Pcr::setInput(pinPull,pinAction,pinFilter);
@@ -3156,10 +3209,10 @@ public:
     */
    static void setPolarity(Polarity polarity) {
       if (polarity == ActiveHigh) {
-         tmr->QDCTRL &= ~(FTM_QDCTRL_PHAPOL_MASK|FTM_QDCTRL_PHBPOL_MASK);
+         tmr->QDCTRL = tmr->QDCTRL & ~(FTM_QDCTRL_PHAPOL_MASK|FTM_QDCTRL_PHBPOL_MASK);
       }
       else {
-         tmr->QDCTRL |= FTM_QDCTRL_PHAPOL_MASK|FTM_QDCTRL_PHBPOL_MASK;
+         tmr->QDCTRL = tmr->QDCTRL | (FTM_QDCTRL_PHAPOL_MASK|FTM_QDCTRL_PHBPOL_MASK);
       }
    }
 
@@ -3170,10 +3223,10 @@ public:
     */
    static void setMode(FtmQuadratureMode quadratureMode = FtmQuadratureMode_Phase_AB_Mode) {
       if (quadratureMode) {
-         tmr->QDCTRL |= FTM_QDCTRL_QUADMODE_MASK;
+         tmr->QDCTRL = tmr->QDCTRL | FTM_QDCTRL_QUADMODE_MASK;
       }
       else {
-         tmr->QDCTRL &= ~FTM_QDCTRL_QUADMODE_MASK;
+         tmr->QDCTRL = tmr->QDCTRL & ~FTM_QDCTRL_QUADMODE_MASK;
       }
    }
 
@@ -3309,11 +3362,11 @@ public:
     */
    static void enableFilter(int filterValue=7) {
       if (filterValue>0) {
-         tmr->FILTER |= FTM_FILTER_CH0FVAL(filterValue)| FTM_FILTER_CH1FVAL(filterValue);
-         tmr->QDCTRL |= FTM_QDCTRL_PHAFLTREN_MASK|FTM_QDCTRL_PHBFLTREN_MASK;
+         tmr->FILTER = tmr->FILTER | FTM_FILTER_CH0FVAL(filterValue)| FTM_FILTER_CH1FVAL(filterValue);
+         tmr->QDCTRL = tmr->QDCTRL | FTM_QDCTRL_PHAFLTREN_MASK|FTM_QDCTRL_PHBFLTREN_MASK;
       }
       else {
-         tmr->QDCTRL &= ~(FTM_QDCTRL_PHAFLTREN_MASK|FTM_QDCTRL_PHBFLTREN_MASK);
+         tmr->QDCTRL = tmr->QDCTRL & ~(FTM_QDCTRL_PHAFLTREN_MASK|FTM_QDCTRL_PHBFLTREN_MASK);
       }
    }
 

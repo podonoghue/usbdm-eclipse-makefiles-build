@@ -16,8 +16,150 @@
  * Any manual changes will be lost.
  */
 #include <stddef.h>
+#include <math.h>
 #include "derivative.h"
 #include "error.h"
+
+#if __cplusplus <= 201703L
+#define consteval constexpr
+#endif
+
+#define USE_DIMENSION_CHECK $(/HARDWARE/useTypeSystemForTimers)
+#if (USE_DIMENSION_CHECK)
+
+class Ticks {
+
+private:
+   unsigned value;
+
+public:
+   constexpr Ticks()                   : value(0) {}
+   constexpr Ticks(unsigned value)     : value(value) {}
+   constexpr Ticks(float    value)     : value(round(value)) {}
+   constexpr Ticks(const Ticks& other) : value(other.value) {}
+   Ticks(const volatile Ticks& other)  : value(other.value) {}
+
+   Ticks &operator =(float other)                  {value = other;       return *this; }
+   Ticks &operator =(const Ticks &other)           {value = other.value; return *this; }
+   Ticks &operator =(const volatile Ticks &other)  {value = other.value; return *this; }
+
+   void operator =(const Ticks &other) volatile    {value = other.value; }
+
+   auto getValue() const { return value; }
+   auto getValue() const volatile { return value; }
+
+   constexpr auto operator *(unsigned other) const { return Ticks(value*other); }
+   constexpr auto operator *(float    other) const { return Ticks(value*other); }
+
+   constexpr auto operator /(unsigned other) const { return Ticks(value/other); }
+   constexpr auto operator /(float    other) const { return Ticks(value/other); }
+
+   constexpr auto operator +(const Ticks &other) const { return Ticks(value+other.value); }
+   constexpr auto operator -(const Ticks &other) const { return Ticks(value+other.value); }
+
+   constexpr explicit operator unsigned() const { return value; }
+   explicit operator unsigned() const volatile { return value; }
+};
+
+class Seconds {
+
+private:
+   float value;
+
+public:
+   constexpr Seconds()                       : value(0.0) {}
+   constexpr Seconds(float value)            : value(value) {}
+   constexpr Seconds(const Seconds& other)   : value(other.value) {}
+   Seconds(const volatile Seconds& other)    : value(other.value) {}
+
+   Seconds &operator =(float other)                   {value = other;       return *this; }
+   Seconds &operator =(const Seconds &other)          {value = other.value; return *this; }
+   Seconds &operator =(const volatile Seconds &other) {value = other.value; return *this; }
+
+   void operator =(const Seconds &other) volatile {value = other.value; }
+
+   constexpr auto getValue() const { return value; }
+
+   constexpr auto operator *(float other) const { return Seconds(value*other); }
+
+   constexpr auto operator /(float other) const { return Seconds(value/other); }
+
+   constexpr auto operator +(Seconds other) const { return Seconds(value+other.value); }
+   constexpr auto operator -(Seconds other) const { return Seconds(value+other.value); }
+
+   explicit operator float() const { return value; }
+   operator float() const volatile { return value; }
+};
+
+class Hertz {
+private:
+   float value;
+
+public:
+   constexpr Hertz()                      : value(0.0) {}
+   constexpr Hertz(float value)           : value(value) {}
+   constexpr Hertz(const Hertz& other)    : value(other.value) {}
+   Hertz(const volatile Hertz& other)     : value(other.value) {}
+
+   Hertz &operator =(float other)                 {value = other;       return *this; }
+   Hertz &operator =(const Hertz &other)          {value = other.value; return *this; }
+   Hertz &operator =(const volatile Hertz &other) {value = other.value; return *this; }
+
+   void operator =(const Hertz &other) volatile {value = other.value; }
+
+   constexpr auto getValue() const { return value; }
+
+   constexpr auto operator *(float other) const { return Hertz(value*other); }
+
+   constexpr auto operator /(float other) const { return Hertz(value/other); }
+
+   constexpr auto operator +(Hertz other) const { return Hertz(value+other.value); }
+   constexpr auto operator -(Hertz other) const { return Hertz(value+other.value); }
+
+   explicit operator float() const { return value; }
+};
+
+constexpr auto operator *(float left, Seconds right) { return Seconds(left*right.getValue()); }
+constexpr auto operator *(float left, Hertz right)   { return Hertz(left*right.getValue()); }
+
+constexpr auto operator /(float left, Seconds right) { return Hertz(left/right.getValue()); }
+constexpr auto operator /(float left, Hertz right)   { return Seconds(left/right.getValue()); }
+
+#else
+   using Ticks    = unsigned;
+   using Seconds  = float;
+   using Hertz    = float;
+#endif
+
+   /*
+    * Allows writing numbers with units e.g. 100_ms
+    */
+   consteval auto operator"" _ticks(unsigned long long int num) { return static_cast<Ticks>((unsigned)num); };
+   consteval auto operator"" _ticks(long double num)            { return static_cast<Ticks>((float)num); };
+
+   consteval auto operator"" _s(unsigned long long int num)     { return static_cast<Seconds>(num); };
+   consteval auto operator"" _s(long double num)                { return static_cast<Seconds>(num); };
+
+   consteval auto operator"" _ms(unsigned long long int num)    { return static_cast<Seconds>(num*0.001); };
+   consteval auto operator"" _ms(long double num)               { return static_cast<Seconds>(num*0.001); };
+
+   consteval auto operator"" _us(unsigned long long int num)    { return static_cast<Seconds>(num*0.000001); };
+   consteval auto operator"" _us(long double num)               { return static_cast<Seconds>(num*0.000001); };
+
+   consteval auto operator"" _ns(unsigned long long int num)    { return static_cast<Seconds>(num*0.000000001); };
+   consteval auto operator"" _ns(long double num)               { return static_cast<Seconds>(num*0.000000001); };
+
+   consteval auto operator"" _Hz(unsigned long long int num)    { return static_cast<Hertz>(num); };
+   consteval auto operator"" _Hz(long double num)               { return static_cast<Hertz>(num); };
+
+   consteval auto operator"" _kHz(unsigned long long int num)   { return static_cast<Hertz>(num*1000); };
+   consteval auto operator"" _kHz(long double num)              { return static_cast<Hertz>(num*1000); };
+
+   consteval auto operator"" _MHz(unsigned long long int num)   { return static_cast<Hertz>(num*1000000); };
+   consteval auto operator"" _MHz(long double num)              { return static_cast<Hertz>(num*1000000); };
+
+//   consteval auto operator"" _percent(unsigned long long int num)  { return static_cast<double>(num)*0.01; };
+//   consteval auto operator"" _percent(long double num)             { return static_cast<double>(num)*0.01; };
 
 /*
  * Default port information
@@ -152,7 +294,7 @@ constexpr   int8_t UNMAPPED_PCR         = static_cast<int8_t>(0xA4);
  * @param[in] pccAddress Address of PCC register for port to enable
  */
 static inline void enablePortClocks(uint32_t pccAddress) {
-   *(uint32_t *)pccAddress |= PCC_PCCn_CGC_MASK;
+   *(volatile uint32_t *)pccAddress = *(volatile uint32_t *)pccAddress | PCC_PCCn_CGC_MASK;
    __DMB();
 };
 
@@ -162,7 +304,7 @@ static inline void enablePortClocks(uint32_t pccAddress) {
  * @param[in] pccAddress Address of PCC register for port to disable
  */
 static inline void disablePortClocks(uint32_t pccAddress) {
-   *(uint32_t *)pccAddress &= ~PCC_PCCn_CGC_MASK;
+   *(volatile uint32_t *)pccAddress = *(volatile uint32_t *)pccAddress & ~PCC_PCCn_CGC_MASK;
    __DMB();
 };
 
@@ -173,7 +315,7 @@ static inline void disablePortClocks(uint32_t pccAddress) {
  * @param[in] clockMask Mask for PORTs to enable
  */
 static inline void enablePortClocks(uint32_t clockMask) {
-   SIM->SCGC5 |= clockMask;
+   SIM->SCGC5 = SIM->SCGC5 | clockMask;
    __DMB();
 }
 
@@ -183,7 +325,7 @@ static inline void enablePortClocks(uint32_t clockMask) {
  * @param[in] clockMask Mask for PORTs to disable
  */
 static inline void disablePortClocks(uint32_t clockMask) {
-   SIM->SCGC5 &= ~clockMask;
+   SIM->SCGC5 = SIM->SCGC5 & ~clockMask;
    __DMB();
 }
 
@@ -1047,10 +1189,10 @@ public:
 
 #ifdef PORT_DFCR_CS_MASK
          if (pcr&PinFilter_Digital) {
-            Pcr_T::port->DFER |= BITMASK;
+            Pcr_T::port->DFER = Pcr_T::port->DFER | BITMASK;
          }
          else {
-            Pcr_T::port->DFER &= ~BITMASK;
+            Pcr_T::port->DFER = Pcr_T::port->DFER & ~BITMASK;
          }
          // Make sure MUX value is correct and clear PinFilter_Digital
          pcr = (pcr & ~(PORT_PCR_MUX_MASK|PinFilter_Digital)) | defaultPcrValue.pinMux();
@@ -1102,11 +1244,11 @@ public:
 
 #ifdef PORT_DFCR_CS_MASK
          if (pinFilter == PinFilter_Digital) {
-            Pcr_T::port->DFER |= BITMASK;
+            Pcr_T::port->DFER = Pcr_T::port->DFER | BITMASK;
             pinFilter = PinFilter_None;
          }
          else {
-            Pcr_T::port->DFER &= ~BITMASK;
+            Pcr_T::port->DFER = Pcr_T::port->DFER & ~BITMASK;
          }
 #endif
          // Set PCR register for pin
@@ -1253,7 +1395,7 @@ public:
     */
    static void clearPinInterruptFlag() {
       if constexpr (portAddress != 0) {
-         *PCR |= PORT_PCR_ISF_MASK;
+         *PCR = *PCR | PORT_PCR_ISF_MASK;
       }
    }
 
@@ -1342,11 +1484,11 @@ public:
       if constexpr (portAddress != 0) {
 #ifdef PORT_DFCR_CS_MASK
          if (pinFilter == PinFilter_Digital) {
-            Pcr_T::port->DFER |= BITMASK;
+            Pcr_T::port->DFER = Pcr_T::port->DFER | BITMASK;
             pinFilter = PinFilter_None;
          }
          else {
-            Pcr_T::port->DFER &= ~BITMASK;
+            Pcr_T::port->DFER = Pcr_T::port->DFER & ~BITMASK;
          }
 #endif
          *PCR = (*PCR & ~PORT_PCR_PFE_MASK)|pinFilter;
@@ -1383,7 +1525,7 @@ public:
     */
    static void lockPinAttributes() {
       if constexpr (portAddress != 0) {
-         *PCR |= PORT_PCR_LK_MASK;
+         *PCR = *PCR | PORT_PCR_LK_MASK;
       }
    }
 #else
@@ -1425,7 +1567,7 @@ public:
     */
    static void enableDigitalPinFilter() {
       if constexpr (portAddress != 0) {
-         Pcr_T::port->DFER |= BITMASK;
+         Pcr_T::port->DFER = Pcr_T::port->DFER | BITMASK;
       }
    }
 
@@ -1436,7 +1578,7 @@ public:
     */
    static void disableDigitalPinFilter() {
       if constexpr (portAddress != 0) {
-         Pcr_T::port->DFER &= ~BITMASK;
+         Pcr_T::port->DFER = Pcr_T::port->DFER & ~BITMASK;
       }
    }
 #endif

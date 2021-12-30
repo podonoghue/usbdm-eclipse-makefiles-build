@@ -208,7 +208,7 @@ public:
 
       if (PdbBase_T<Info>::pdb->SC & PDB_SC_PDBIF_MASK) {
          // Clear interrupt flag
-         PdbBase_T<Info>::pdb->SC  &= ~PDB_SC_PDBIF_MASK;
+         PdbBase_T<Info>::pdb->SC = PdbBase_T<Info>::pdb->SC & ~PDB_SC_PDBIF_MASK;
          // Handle expected interrupt
          sCallback();
          return;
@@ -440,7 +440,7 @@ public:
     * Enable sequence error interrupts (pdb_sc_pdbeie)
     */
    static void enableErrorInterrupts() {
-      pdb->SC |= PDB_SC_PDBEIE_MASK;
+      pdb->SC = pdb->SC | PDB_SC_PDBEIE_MASK;
    }
 
    /**
@@ -448,7 +448,7 @@ public:
     */
    static void disableErrorInterrupts() {
 
-      pdb->SC &= ~PDB_SC_PDBEIE_MASK;
+      pdb->SC = pdb->SC & ~PDB_SC_PDBEIE_MASK;
    }
 
    /**
@@ -484,7 +484,7 @@ public:
     *
     * @note This uses the current PDB clock settings (pdb_sc_mult, pdb_sc_prescaler)
     */
-   static uint32_t convertSecondsToTicks(float seconds) {
+   static Ticks convertSecondsToTicks(Seconds seconds) {
 
       float clockFrequency = Info::getInputClockFrequency();
       int multValue        = (pdb->SC&PDB_SC_MULT_MASK)>>PDB_SC_MULT_SHIFT;
@@ -493,7 +493,7 @@ public:
       // Multiplier factors for prescale divider
       static const int multFactors[] = {1,10,20,40};
       float clock = clockFrequency/(multFactors[multValue]*(1<<prescaleValue));
-      return round(seconds*clock);
+      return ((float)seconds*clock);
    }
 
    /**
@@ -574,7 +574,7 @@ public:
     *
     * @note This affects pdb_sc_mult, pdb_sc_prescaler, pdb_mod
     */
-   static ErrorCode setPeriod(float period) {
+   static ErrorCode setPeriod(Seconds period) {
 
       uint32_t mult     = 0;
       int      prescale = 0;
@@ -608,9 +608,9 @@ public:
     *
     * @param[in] modulo Modulo value for the counter (pdb_mod)
     */
-   static void setModuloInTicks(uint16_t modulo) {
+   static void setModulo(Ticks modulo) {
 
-      pdb->MOD = modulo;
+      pdb->MOD = (unsigned)modulo;
    }
 
    /**
@@ -618,9 +618,9 @@ public:
     *
     * @param[in] delay Delay value (pdb_idly)
     */
-   static void setInterruptDelayInTicks(uint16_t delay) {
+   static void setInterruptDelay(Ticks delay) {
 
-      pdb->IDLY = delay;
+      pdb->IDLY = (unsigned)delay-1;
    }
 
    /**
@@ -628,9 +628,8 @@ public:
     *
     * @param[in] delay Delay value for the interrupt (pdb_idly)
     */
-   static void setInterruptDelay(float delay) {
-
-      pdb->IDLY = convertSecondsToTicks(delay) - 1;
+   static void setInterruptDelay(Seconds delay) {
+      setInterruptDelay(convertSecondsToTicks(delay));
    }
 
    /**
@@ -659,7 +658,7 @@ public:
    static void softwareTrigger() {
 
       // Set software trigger + do trigger + without clearing interrupt flag
-      pdb->SC |= PDB_SC_TRGSEL_MASK|PDB_SC_SWTRIG_MASK|PDB_SC_PDBIF_MASK;
+      pdb->SC = pdb->SC | PDB_SC_TRGSEL_MASK|PDB_SC_SWTRIG_MASK|PDB_SC_PDBIF_MASK;
    }
 
    /**
@@ -702,18 +701,18 @@ public:
     * @param pdbPretrigger    Pretrigger settings
     * @param delay            Delay in ticks - only needed for PdbPretrigger_Delayed
     */
-   static void configureAdcPretriggerInTicks (
+   static void configureAdcPretrigger (
          unsigned       adcNum,
          unsigned       pretriggerNum,
          PdbPretrigger  pdbPretrigger,
-         uint16_t       delay          = 0) {
+         Ticks          delay) {
 
       usbdm_assert(adcNum<(sizeof(pdb->CH)/sizeof(pdb->CH[0])),                      "Illegal ADC number");
       usbdm_assert(pretriggerNum<(sizeof(pdb->CH[0].DLY)/sizeof(pdb->CH[0].DLY[0])), "Illegal Pretrigger number");
 
       uint32_t mask      = (PDB_C1_EN(1)|PDB_C1_BB(1)|PDB_C1_TOS(1))<<pretriggerNum;
       pdb->CH[adcNum].C1                 = (pdb->CH[adcNum].C1&~mask)|(pdbPretrigger<<pretriggerNum);
-      pdb->CH[adcNum].DLY[pretriggerNum] = delay - 1;
+      pdb->CH[adcNum].DLY[pretriggerNum] = (unsigned)delay - 1;
    }
 
    /**
@@ -736,9 +735,33 @@ public:
          unsigned       adcNum,
          unsigned       pretriggerNum,
          PdbPretrigger  pdbPretrigger,
-         float          delay          = 0.0) {
+         Seconds        delay) {
 
-      configureAdcPretriggerInTicks(adcNum, pretriggerNum, pdbPretrigger, convertSecondsToTicks(delay));
+      configureAdcPretrigger(adcNum, pretriggerNum, pdbPretrigger, convertSecondsToTicks(delay));
+   }
+
+   /**
+    * Configures the pretriggers associated with an ADC.
+    *
+    * Each pretrigger corresponds to an ADC SC1[n] R[n] register pair used in hardware triggered mode i.e.
+    * Channel X, Pretrigger Y => adcX_sc1[Y], adc0_r[Y].
+    * For example:
+    *   Channel 0, Pretrigger 0 => adc0_sc1[0], adc0_r[0]
+    *   Channel 0, Pretrigger 1 => adc0_sc1[1], adc0_r[1] etc.
+    *
+    * This allows multiple different ADC channels to be converted in a sequence.
+    *
+    * @param adcNum           ADC associated with the pre-trigger (channel)
+    * @param pretriggerNum    Pretrigger being modified
+    * @param pdbPretrigger    Pretrigger settings
+    * @param delay            Delay - only needed for PdbPretrigger_Delayed
+    */
+   static void configureAdcPretrigger (
+         unsigned       adcNum,
+         unsigned       pretriggerNum,
+         PdbPretrigger  pdbPretrigger) {
+
+      configureAdcPretrigger(adcNum, pretriggerNum, pdbPretrigger, 0_ticks);
    }
 
    /**
@@ -766,7 +789,7 @@ public:
       usbdm_assert(adcNum<(sizeof(pdb->CH)/sizeof(pdb->CH[0])), "Illegal ADC number");
 
       uint32_t mask      = (PDB_C1_EN(1)|PDB_C1_BB(1)|PDB_C1_TOS(1))<<pretriggerNum;
-      pdb->CH[adcNum].C1 &= mask;
+      pdb->CH[adcNum].C1 = pdb->CH[adcNum].C1 & mask;
    }
 
    /**
@@ -816,12 +839,12 @@ public:
        * @param pdbPretrigger    Pretrigger settings
        * @param delay            Delay in ticks - only needed for PdbPretrigger_Delayed
        */
-      static void configureInTicks (
+      static void configure (
             unsigned       pretriggerNum,
             PdbPretrigger  pdbPretrigger,
-            uint16_t       delay          = 0) {
+            Ticks          delay          = 0_ticks) {
 
-         PdbBase_T::configureAdcPretriggerInTicks(adcNum, pretriggerNum, pdbPretrigger, delay);
+         PdbBase_T::configureAdcPretrigger(adcNum, pretriggerNum, pdbPretrigger, delay);
       }
 
       /**
@@ -842,9 +865,9 @@ public:
       static void configure (
             unsigned       pretriggerNum,
             PdbPretrigger  pdbPretrigger,
-            float          delay          = 0.0) {
+            Seconds        delay          = 0.0_s) {
 
-         PdbBase_T::configureAdcPretriggerInTicks(adcNum, pretriggerNum, pdbPretrigger, convertSecondsToTicks(delay));
+         PdbBase_T::configureAdcPretrigger(adcNum, pretriggerNum, pdbPretrigger, convertSecondsToTicks(delay));
       }
 
       /**
@@ -885,19 +908,19 @@ public:
     * @param pdbDacTriggerMode Control how the DAC trigger is generated
     * @param period            DAC period in ticks
     */
-   static void configureDacTriggerInTicks (
+   static void configureDacTrigger (
          unsigned          dacNum,
          PdbDacTriggerMode pdbDacTriggerMode,
-         uint16_t          period = 0) {
+         Ticks             period) {
 
       usbdm_assert(dacNum<(sizeof(pdb->DAC)/sizeof(pdb->DAC[0])), "Illegal DAC number");
 
       usbdm_assert(
-            (pdbDacTriggerMode != PdbDacTriggerMode_External) || (period == 0),
+            (pdbDacTriggerMode != PdbDacTriggerMode_External) || ((unsigned)period == 0),
             "DAC period may not be used with external trigger");
 
       pdb->DAC[dacNum].INTC = pdbDacTriggerMode;
-      pdb->DAC[dacNum].INT  = period - 1;
+      pdb->DAC[dacNum].INT  = (unsigned)period - 1;
    }
 
    /**
@@ -913,9 +936,26 @@ public:
    static void configureDacTrigger(
          unsigned          dacNum,
          PdbDacTriggerMode pdbDacTriggerMode,
-         float             period) {
+         Seconds           period) {
 
-      configureDacTriggerInTicks(dacNum, pdbDacTriggerMode, convertSecondsToTicks(period));
+      configureDacTrigger(dacNum, pdbDacTriggerMode, convertSecondsToTicks(period));
+   }
+
+   /**
+    * DAC Trigger Control.
+    *
+    * There may be multiple DAC triggers generated if the period is smaller that the main counter period.\n
+    * The trigger may be bypassed when using an external trigger.
+    *
+    * @param dacNum            DAC number
+    * @param pdbDacTriggerMode Controls how the DAC trigger is generated
+    * @param period            Interval used to calculate the reload value for DAC interval counter
+    */
+   static void configureDacTrigger(
+         unsigned          dacNum,
+         PdbDacTriggerMode pdbDacTriggerMode) {
+
+      configureDacTrigger(dacNum, pdbDacTriggerMode, 0_ticks);
    }
 
    /**
@@ -950,11 +990,11 @@ public:
        * @param pdbDacTriggerMode Control how the DAC trigger is generated
        * @param period            Reload value for DAC interval counter
        */
-      static void configureInTicks (
+      static void configure (
             PdbDacTriggerMode pdbDacTriggerMode,
-            uint16_t          period = 0) {
+            Ticks             period = 0) {
 
-         PdbBase_T::configureDacTriggerInTicks(dacNum, pdbDacTriggerMode, period);
+         PdbBase_T::configureDacTrigger(dacNum, pdbDacTriggerMode, period);
       }
 
       /**
@@ -968,7 +1008,7 @@ public:
        */
       static void configure(
             PdbDacTriggerMode pdbDacTriggerMode,
-            float             period) {
+            Seconds           period) {
 
          PdbBase_T::configureDacTrigger(dacNum, pdbDacTriggerMode, period);
       }
@@ -993,16 +1033,16 @@ public:
     * @param pulseHighDelay   Delay in ticks to start of pulse output
     * @param pulseLowDelay    Delay in ticks to end of pulse output
     */
-   static void configurePulseOutputInTicks(
+   static void configurePulseOutput(
          unsigned outputNum,
-         uint16_t pulseHighDelay,
-         uint16_t pulseLowDelay) {
+         Ticks    pulseHighDelay,
+         Ticks    pulseLowDelay) {
 
       usbdm_assert(outputNum < (sizeof(pdb->POnDLY)/sizeof(pdb->POnDLY[0])), "Illegal pulse output");
 
-      pdb->POEN |= (1<<outputNum);
-      pdb->POnDLY[outputNum].DLY1 = pulseHighDelay;
-      pdb->POnDLY[outputNum].DLY2 = pulseLowDelay;
+      pdb->POEN = pdb->POEN | (1<<outputNum);
+      pdb->POnDLY[outputNum].DLY1 = (unsigned)pulseHighDelay;
+      pdb->POnDLY[outputNum].DLY2 = (unsigned)pulseLowDelay;
    }
 
    /**
@@ -1014,11 +1054,11 @@ public:
     * @param pulseLowDelay    Delay in ticks to end of pulse output
     */
    static void configurePulseOutput(
-         unsigned outputNum,
-         float    pulseHighDelay,
-         float    pulseLowDelay) {
+         unsigned  outputNum,
+         Seconds   pulseHighDelay,
+         Seconds   pulseLowDelay) {
 
-      configurePulseOutputInTicks(outputNum,
+      configurePulseOutput(outputNum,
             convertSecondsToTicks(pulseHighDelay),
             convertSecondsToTicks(pulseLowDelay));
    }
@@ -1031,7 +1071,7 @@ public:
    static void disablePulseOutput(unsigned outputNum) {
 
       usbdm_assert((1<<outputNum) <= PDB_POEN_POEN_MASK, "Illegal pulse output");
-      pdb->POEN &= ~(1<<outputNum);
+      pdb->POEN = pdb->POEN & ~(1<<outputNum);
    }
 
    /**
@@ -1052,11 +1092,11 @@ public:
        * @param pulseHighDelay   Delay in ticks to start of pulse output
        * @param pulseLowDelay    Delay in ticks to end of pulse output
        */
-      static void configureInTicks(
-            uint16_t pulseHighDelay,
-            uint16_t pulseLowDelay) {
+      static void configure(
+            Ticks  pulseHighDelay,
+            Ticks  pulseLowDelay) {
 
-         PdbBase_T::configurePulseOutputInTicks(outputNum, pulseHighDelay, pulseLowDelay);
+         PdbBase_T::configurePulseOutput(outputNum, pulseHighDelay, pulseLowDelay);
       }
 
       /**
@@ -1067,8 +1107,8 @@ public:
        * @param pulseLowDelay    Delay in ticks to end of pulse output
        */
       static void configure(
-            float    pulseHighDelay,
-            float    pulseLowDelay) {
+            Seconds    pulseHighDelay,
+            Seconds    pulseLowDelay) {
 
          PdbBase_T::configurePulseOutput(outputNum, pulseHighDelay, pulseLowDelay);
       }
@@ -1077,7 +1117,7 @@ public:
        * Disable pulse output
        */
       static void disable() {
-         pdb->POEN &= ~(1<<outputNum);
+         pdb->POEN = pdb->POEN & ~(1<<outputNum);
       }
    };
 #endif

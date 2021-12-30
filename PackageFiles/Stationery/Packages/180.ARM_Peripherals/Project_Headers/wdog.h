@@ -281,7 +281,7 @@ public:
     *
     * @return current timer value
     */
-   static uint32_t getTimer() {
+   static Ticks getTimer() {
       return (wdog->TMROUTH<<16)|wdog->TMROUTL;
    }
 
@@ -294,13 +294,13 @@ public:
     *
     * @note This is a protected operation which uses unlock
     */
-   static void setTimeout(uint8_t prescaler, unsigned ticks) {
+   static void setTimeout(uint8_t prescaler, Ticks ticks) {
       // Disable interrupts while accessing watchdog
       CriticalSection cs;
       writeUnlock(WdogUnlock1, WdogUnlock2);
       wdog->PRESC = WDOG_PRESC_PRESCVAL(prescaler-1);
-      wdog->TOVALH = ticks>>16;
-      wdog->TOVALL = ticks;
+      wdog->TOVALH = (unsigned)ticks>>16;
+      wdog->TOVALL = (unsigned)ticks;
    }
 
    /**
@@ -311,7 +311,7 @@ public:
     * @note This is a protected operation which uses unlock
     * @note This adjusts both the prescaler and the timeout value.
     */
-   static ErrorCode setTimeout(float seconds) {
+   static ErrorCode setTimeout(Seconds seconds) {
       unsigned prescaler;
       uint64_t timerValue;
       uint32_t inputClockFreq = WdogInfo::getInputClockFrequency();
@@ -320,7 +320,7 @@ public:
          if (prescaler>8) {
             return setErrorCode(E_TOO_LARGE);
          }
-         timerValue = (uint64_t)((seconds*inputClockFreq)/prescaler);
+         timerValue = (uint64_t)(((float)seconds*inputClockFreq)/prescaler);
          if (timerValue <= 0xFFFF) {
             break;
          }
@@ -414,7 +414,7 @@ public:
 
       // Unlock before changing settings
       writeUnlock(WdogUnlock1, WdogUnlock2);
-      wdog->STCTRLH &= ~WDOG_STCTRLH_ALLOWUPDATE_MASK;
+      wdog->STCTRLH = wdog->STCTRLH & ~WDOG_STCTRLH_ALLOWUPDATE_MASK;
    }
 
    /**
@@ -460,10 +460,10 @@ public:
       // Protect sequence from interrupts
       CriticalSection cs;
       if (enable) {
-         wdog->STCTRLH |= WDOG_STCTRLH_IRQRSTEN_MASK;
+         wdog->STCTRLH = wdog->STCTRLH | WDOG_STCTRLH_IRQRSTEN_MASK;
       }
       else {
-         wdog->STCTRLH &= ~WDOG_STCTRLH_IRQRSTEN_MASK;
+         wdog->STCTRLH = wdog->STCTRLH & ~WDOG_STCTRLH_IRQRSTEN_MASK;
       }
    }
 };

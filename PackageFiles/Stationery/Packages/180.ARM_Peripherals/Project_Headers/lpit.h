@@ -186,7 +186,7 @@ public:
     * @param[in]  channel Channel being modified
     */
    static void enableInterrupts(LpitChannelNum channel) {
-      lpit->MIER |= (1<<channel);
+      lpit->MIER =lpit->MIER | (1<<channel);
    }
 
    /**
@@ -195,7 +195,7 @@ public:
     * @param[in]  channel Channel being modified
     */
    static void disableInterrupts(LpitChannelNum channel) {
-      lpit->MIER &= ~(1<<channel);
+      lpit->MIER =lpit->MIER & ~(1<<channel);
    }
 
    /**
@@ -361,7 +361,7 @@ public:
       lpit->TMR[channel].TCTRL = 0;
       lpit->TMR[channel].TVAL  = tickInterval-1;
       lpit->MSR                = (1<<channel);
-      lpit->MIER              |= (lpitChannelIrq<<channel);
+      lpit->MIER               = lpit->MIER | (lpitChannelIrq<<channel);
       lpit->TMR[channel].TCTRL = LPIT_TCTRL_T_EN_MASK;
    }
 

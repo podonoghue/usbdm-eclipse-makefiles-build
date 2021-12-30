@@ -642,9 +642,9 @@ $(/FLEXIO/classInfo: // No class Info found)
     * is affected by the software reset.
     */
    static void softwareReset() {
-      flexio->CTRL |= FLEXIO_CTRL_SWRST_MASK;
+      flexio->CTRL = flexio->CTRL | FLEXIO_CTRL_SWRST_MASK;
       while ((flexio->CTRL & FLEXIO_CTRL_SWRST_MASK) == 0) {};
-      flexio->CTRL &= ~FLEXIO_CTRL_SWRST_MASK;
+      flexio->CTRL = flexio->CTRL & ~FLEXIO_CTRL_SWRST_MASK;
       while ((flexio->CTRL & FLEXIO_CTRL_SWRST_MASK) != 0) {};
    }
 
@@ -824,7 +824,7 @@ $(/FLEXIO/classInfo: // No class Info found)
     * @param enableMask Bitmask for each shifter status interrupt to enable
     */
    static void enableShiftStatusInterrupts(uint32_t enableMask) {
-      flexio->SHIFTSIEN |= enableMask;
+      flexio->SHIFTSIEN = flexio->SHIFTSIEN | enableMask;
    }
 
    /**
@@ -834,7 +834,7 @@ $(/FLEXIO/classInfo: // No class Info found)
     * @param disableMask Bitmask for each shifter status interrupt to disable
     */
    static void disableShiftStatusInterrupts(uint32_t disableMask) {
-      flexio->SHIFTSIEN &= ~disableMask;
+      flexio->SHIFTSIEN = flexio->SHIFTSIEN & ~disableMask;
    }
 
    /**
@@ -844,7 +844,7 @@ $(/FLEXIO/classInfo: // No class Info found)
     * @param enableMask Bitmask for each shifter error interrupt to enable
     */
    static void enableShiftErrorInterrupts(uint32_t enableMask) {
-      flexio->SHIFTEIEN |= enableMask;
+      flexio->SHIFTEIEN = flexio->SHIFTEIEN | enableMask;
    }
 
    /**
@@ -854,7 +854,7 @@ $(/FLEXIO/classInfo: // No class Info found)
     * @param disableMask Bitmask for each shifter error interrupt to disable
     */
    static void disableShiftErrorInterrupts(uint32_t disableMask) {
-      flexio->SHIFTEIEN &= ~disableMask;
+      flexio->SHIFTEIEN = flexio->SHIFTEIEN & ~disableMask;
    }
 
    /**
@@ -864,7 +864,7 @@ $(/FLEXIO/classInfo: // No class Info found)
     * @param enableMask Bitmask for each shifter status interrupt to enable
     */
    static void enableTimerStatusInterrupts(uint32_t enableMask) {
-      flexio->TIMIEN |= enableMask;
+      flexio->TIMIEN = flexio->TIMIEN | enableMask;
    }
 
    /**
@@ -874,7 +874,7 @@ $(/FLEXIO/classInfo: // No class Info found)
     * @param disableMask Bitmask for each shifter status interrupt to disable
     */
    static void disableTimerStatusInterrupts(uint32_t disableMask) {
-      flexio->TIMIEN &= ~disableMask;
+      flexio->TIMIEN = flexio->TIMIEN & ~disableMask;
    }
 
    /**
@@ -884,7 +884,7 @@ $(/FLEXIO/classInfo: // No class Info found)
     * @param enableMask Bitmask for each shifter DMA request to enable
     */
    static void enableShifterStatusDmaReq(uint32_t enableMask) {
-      flexio->SHIFTSDEN |= enableMask;
+      flexio->SHIFTSDEN = flexio->SHIFTSDEN | enableMask;
    }
 
    /**
@@ -894,7 +894,7 @@ $(/FLEXIO/classInfo: // No class Info found)
     * @param disableMask Bitmask for each shifter DMA request to disable
     */
    static void disableShifterStatusDmaReq(uint32_t disableMask) {
-      flexio->SHIFTSDEN &= ~disableMask;
+      flexio->SHIFTSDEN = flexio->SHIFTSDEN & ~disableMask;
    }
 
    /**

@@ -87,7 +87,7 @@ public:
     */
    void setIn() const {
       // Make pin an input
-      gpio->PDDR &= ~bitMask;
+      gpio->PDDR = gpio->PDDR & ~bitMask;
    }
    /**
     * Set pin as digital output
@@ -96,7 +96,7 @@ public:
     */
    void setOut() const {
       // Make pin an output
-      gpio->PDDR |= bitMask;
+      gpio->PDDR = gpio->PDDR | bitMask;
    }
    /**
     * Set pin. Pin will be high if configured as an output.
@@ -366,6 +366,21 @@ public:
    /** Get base address of GPIO hardware as pointer to struct */
    static constexpr HardwarePtr<GPIO_Type> gpio = gpioAddress;
 
+   /// Base address of GPIO hardware
+   static constexpr uint32_t gpioBase = gpioAddress;
+   /// Address of PDOR register in GPIO
+   static constexpr uint32_t gpioPDOR = gpioAddress+offsetof(GPIO_Type, PDOR);
+   /// Address of PSOR register in GPIO
+   static constexpr uint32_t gpioPSOR = gpioAddress+offsetof(GPIO_Type, PSOR);
+   /// Address of PCOR register in GPIO
+   static constexpr uint32_t gpioPCOR = gpioAddress+offsetof(GPIO_Type, PCOR);
+   /// Address of PTOR register in GPIO
+   static constexpr uint32_t gpioPTOR = gpioAddress+offsetof(GPIO_Type, PTOR);
+   /// Address of PDDR register in GPIO
+   static constexpr uint32_t gpioPDDR = gpioAddress+offsetof(GPIO_Type, PDDR);
+   /// Address of PDIR register in GPIO
+   static constexpr uint32_t gpioPDIR = gpioAddress+offsetof(GPIO_Type, PDIR);
+
    /** Polarity of pin */
    static constexpr Polarity POLARITY = polarity;
 
@@ -460,7 +475,7 @@ public:
 #ifdef RELEASE_BUILD
       bitbandSet(gpio->PDDR, bitNum);
 #else
-      gpio->PDDR |= Pcr::BITMASK;
+      gpio->PDDR = gpio->PDDR | Pcr::BITMASK;
 #endif
    }
    /**
@@ -552,7 +567,7 @@ public:
 #ifdef RELEASE_BUILD
       bitbandClear(gpio->PDDR, bitNum);
 #else
-      gpio->PDDR &= ~Pcr::BITMASK;
+      gpio->PDDR = gpio->PDDR & ~Pcr::BITMASK;
 #endif
    }
    /**
@@ -874,7 +889,7 @@ public:
     * @note Does not affect other pin settings.
     */
    void setIn() const {
-      gpio->PDDR &= ~bitMask;
+      gpio->PDDR = gpio->PDDR & ~bitMask;
    }
    /**
     * Set all pins in field as outputs.
@@ -882,7 +897,7 @@ public:
     * @note Does not affect other pin settings.
     */
    void setOut() const {
-      gpio->PDDR |= bitMask;
+      gpio->PDDR = gpio->PDDR | bitMask;
    }
    /**
     * Set individual pin directions
@@ -1051,6 +1066,21 @@ public:
    /** Get base address of GPIO hardware as pointer to struct */
    static constexpr HardwarePtr<GPIO_Type> gpio = gpioAddress;
 
+   /// Base address of GPIO hardware
+   static constexpr uint32_t gpioBase = gpioAddress;
+   /// Address of PDOR register in GPIO
+   static constexpr uint32_t gpioPDOR = gpioAddress+offsetof(GPIO_Type, PDOR);
+   /// Address of PSOR register in GPIO
+   static constexpr uint32_t gpioPSOR = gpioAddress+offsetof(GPIO_Type, PSOR);
+   /// Address of PCOR register in GPIO
+   static constexpr uint32_t gpioPCOR = gpioAddress+offsetof(GPIO_Type, PCOR);
+   /// Address of PTOR register in GPIO
+   static constexpr uint32_t gpioPTOR = gpioAddress+offsetof(GPIO_Type, PTOR);
+   /// Address of PDDR register in GPIO
+   static constexpr uint32_t gpioPDDR = gpioAddress+offsetof(GPIO_Type, PDDR);
+   /// Address of PDIR register in GPIO
+   static constexpr uint32_t gpioPDIR = gpioAddress+offsetof(GPIO_Type, PDIR);
+
 public:
    /** Port associated with this GPIO Field */
    using Port = PcrBase_T<portAddress, irqNum, irqLevel>;
@@ -1120,7 +1150,7 @@ public:
       enablePortClocks(clockInfo);
 
       // Default to input
-      gpio->PDDR &= ~BITMASK;
+      gpio->PDDR = gpio->PDDR & ~BITMASK;
 
       // Default to output inactive
       write(0);
@@ -1180,7 +1210,7 @@ public:
     * @note Does not affect other pin settings
     */
    static void setOut() {
-      gpio->PDDR |= BITMASK;
+      gpio->PDDR = gpio->PDDR | BITMASK;
    }
    /**
     * Sets all pin as digital outputs.
@@ -1192,7 +1222,7 @@ public:
     */
    static void setOutput() {
       setInOut(defaultPcrValue.pcrValue());
-      gpio->PDDR |= BITMASK;
+      gpio->PDDR = gpio->PDDR | BITMASK;
    }
    /**
     * Sets all pin as digital outputs.
@@ -1205,7 +1235,7 @@ public:
     */
    static void setOutput(PcrValue pcrValue) {
       setInOut(pcrValue);
-      gpio->PDDR |= BITMASK;
+      gpio->PDDR = gpio->PDDR | BITMASK;
    }
    /**
     * Sets all pin as digital outputs.
@@ -1231,7 +1261,7 @@ public:
     * @note Does not affect other pin settings
     */
    static void setIn() {
-      gpio->PDDR &= ~BITMASK;
+      gpio->PDDR = gpio->PDDR & ~BITMASK;
    }
    /**
     * Set all pins as digital inputs.

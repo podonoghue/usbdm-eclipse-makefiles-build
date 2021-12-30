@@ -551,7 +551,7 @@ public:
    static void initiateModeRegisterSet(SdramcBlock sdramcBlock) {
 
       //  The DRAM controller clears IMRS after the mrs command finishes.
-      sdramc->BLOCK[sdramcBlock].AC |= SDRAMC_AC_IMRS_MASK;
+      sdramc->BLOCK[sdramcBlock].AC = sdramc->BLOCK[sdramcBlock].AC | SDRAMC_AC_IMRS_MASK;
    }
 
    /**
@@ -569,7 +569,7 @@ public:
    static void initiatePrecharge(SdramcBlock sdramcBlock) {
 
       // The DRAM controller clears IP after the pall command is finished.
-      sdramc->BLOCK[sdramcBlock].AC |= SDRAMC_AC_IP_MASK;
+      sdramc->BLOCK[sdramcBlock].AC = sdramc->BLOCK[sdramcBlock].AC | SDRAMC_AC_IP_MASK;
    }
 
    /**
@@ -656,7 +656,7 @@ public:
 
       // Initiate precharge
       // The DRAM controller clears IP after the pall command is finished.
-      blockRef.AC |= SDRAMC_AC_IP_MASK;
+      blockRef.AC = blockRef.AC | SDRAMC_AC_IP_MASK;
 
       // Dummy write
       writeDummyValueToSdram(entry, 0);
@@ -703,7 +703,7 @@ public:
     *  The SDRAM controls the internal refresh period.
     */
    static void enterSelfRefresh () {
-      sdramc->CTRL |= SDRAMC_CTRL_IS_MASK;
+      sdramc->CTRL = sdramc->CTRL | SDRAMC_CTRL_IS_MASK;
    }
 
    /**
@@ -712,7 +712,7 @@ public:
     * The controller sends a <b>Self Refresh Exit</b> command for the SDRAMs (if needed) to exit self-refresh.
     */
    static void exitSelfRefresh () {
-      sdramc->CTRL &= ~SDRAMC_CTRL_IS_MASK;
+      sdramc->CTRL = sdramc->CTRL & ~SDRAMC_CTRL_IS_MASK;
    }
 
    /**
@@ -721,7 +721,7 @@ public:
     * @param sdramcBlock  The SDRAMC block being modified
     */
    static void enableAutoRefresh(SdramcBlock sdramcBlock) {
-      sdramc->BLOCK[sdramcBlock].AC |= SDRAMC_AC_RE_MASK;
+      sdramc->BLOCK[sdramcBlock].AC = sdramc->BLOCK[sdramcBlock].AC | SDRAMC_AC_RE_MASK;
    }
 
    /**
@@ -730,7 +730,7 @@ public:
     * @param sdramcBlock  The SDRAMC block being modified
     */
    static void disableAutoRefresh(SdramcBlock sdramcBlock) {
-      sdramc->BLOCK[sdramcBlock].AC &= ~SDRAMC_AC_RE_MASK;
+      sdramc->BLOCK[sdramcBlock].AC = sdramc->BLOCK[sdramcBlock].AC & ~SDRAMC_AC_RE_MASK;
    }
 };
 

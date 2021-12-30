@@ -1509,7 +1509,7 @@ protected:
       }
 
       // Apply software reset and wait until complete
-      can->MCR |= CAN_MCR_SOFTRST(1);
+      can->MCR = can->MCR | CAN_MCR_SOFTRST(1);
       while (can->MCR & CAN_MCR_SOFTRST_MASK) {
          __asm__("nop");
       }
@@ -1543,7 +1543,7 @@ public:
     */
    static void start() {
       // Negate Freeze mode
-      can->MCR &= ~CAN_MCR_HALT_MASK;
+      can->MCR =  can->MCR & ~CAN_MCR_HALT_MASK;
    }
 
    /**
@@ -1551,7 +1551,7 @@ public:
     */
    static void stop() {
       // Set Freeze mode
-      can->MCR |= CAN_MCR_HALT_MASK;
+      can->MCR = can->MCR | CAN_MCR_HALT_MASK;
 
       // Wait until ack'ed
       while (can->MCR & CAN_MCR_FRZACK_MASK) {
@@ -1680,7 +1680,7 @@ public:
     * @note The mailboxNumber takes into account the buffers allocated to the FIFO.
     */
    static void enableMailboxInterrupt(unsigned mailboxNumber) {
-      can->IMASK1 |= (1<<(mailboxNumber+MESSAGE_BUFFERS_ALLOCATED_TO_FIFO));
+      can->IMASK1 = can->IMASK1 | (1<<(mailboxNumber+MESSAGE_BUFFERS_ALLOCATED_TO_FIFO));
    }
 
    /**
@@ -1691,7 +1691,7 @@ public:
     * @note The mailboxNumber takes into account the buffers allocated to the FIFO.
     */
    static void disableMailboxInterrupt(unsigned mailboxNumber) {
-      can->IMASK1 &= ~(1<<(mailboxNumber+MESSAGE_BUFFERS_ALLOCATED_TO_FIFO));
+      can->IMASK1 = can->IMASK1 & ~(1<<(mailboxNumber+MESSAGE_BUFFERS_ALLOCATED_TO_FIFO));
    }
 
    /**
@@ -1713,7 +1713,7 @@ public:
     * @note The mask is realigned to take in to account the buffers allocated to the FIFO.
     */
    static void enableMailboxInterrupts(uint32_t mask) {
-      can->IMASK1 |= (mask<<MESSAGE_BUFFERS_ALLOCATED_TO_FIFO);
+      can->IMASK1 = can->IMASK1 | (mask<<MESSAGE_BUFFERS_ALLOCATED_TO_FIFO);
    }
 
    /**
@@ -1724,7 +1724,7 @@ public:
     * @note The mask is realigned to take in to account the buffers allocated to the FIFO.
     */
    static void disableMailboxInterrupts(uint32_t mask) {
-      can->IMASK1 &= ~(mask<<MESSAGE_BUFFERS_ALLOCATED_TO_FIFO);
+      can->IMASK1 = can->IMASK1 & ~(mask<<MESSAGE_BUFFERS_ALLOCATED_TO_FIFO);
    }
 
    /**
@@ -1761,7 +1761,7 @@ public:
     *  5 : Receive frame available - At least 1 frame available in Receive FIFO
     */
    static void enableFifoInterrupts(uint32_t mask) {
-      can->IMASK1 |= mask & (CAN_IFLAG1_BUF7I_MASK|CAN_IFLAG1_BUF6I_MASK|CAN_IFLAG1_BUF5I_MASK);
+      can->IMASK1 = can->IMASK1 | mask & (CAN_IFLAG1_BUF7I_MASK|CAN_IFLAG1_BUF6I_MASK|CAN_IFLAG1_BUF5I_MASK);
    }
 
    /**
@@ -1774,7 +1774,7 @@ public:
     *  5 : Receive frame available - At least 1 frame available in Receive FIFO
     */
    static void disableFifoInterrupts(uint32_t mask) {
-      can->IMASK1 &= ~(mask & (CAN_IFLAG1_BUF7I_MASK|CAN_IFLAG1_BUF6I_MASK|CAN_IFLAG1_BUF5I_MASK));
+      can->IMASK1 = can->IMASK1 & ~(mask & (CAN_IFLAG1_BUF7I_MASK|CAN_IFLAG1_BUF6I_MASK|CAN_IFLAG1_BUF5I_MASK));
    }
 
    /**

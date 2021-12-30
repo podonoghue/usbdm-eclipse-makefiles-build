@@ -227,10 +227,10 @@ public:
     */
    static void enableInterrupt(bool enable=true) {
       if (enable) {
-         usbdcd->CONTROL |= USBDCD_CONTROL_IE_MASK;
+         usbdcd->CONTROL = usbdcd->CONTROL | USBDCD_CONTROL_IE_MASK;
       }
       else {
-         usbdcd->CONTROL &= ~USBDCD_CONTROL_IE_MASK;
+         usbdcd->CONTROL = usbdcd->CONTROL & ~USBDCD_CONTROL_IE_MASK;
       }
    }
 
@@ -238,21 +238,21 @@ public:
     * Clear interrupt flag
     */
    static void clearInterrupt() {
-      usbdcd->CONTROL |= USBDCD_CONTROL_IACK_MASK;
+      usbdcd->CONTROL = usbdcd->CONTROL | USBDCD_CONTROL_IACK_MASK;
    }
 
    /**
     * Start detection sequence
     */
    static void startDetection() {
-      usbdcd->CONTROL |= USBDCD_CONTROL_START_MASK;
+      usbdcd->CONTROL = usbdcd->CONTROL | USBDCD_CONTROL_START_MASK;
    }
 
    /**
     * Software reset
     */
    static void softwareReset() {
-      usbdcd->CONTROL |= USBDCD_CONTROL_SR_MASK;
+      usbdcd->CONTROL = usbdcd->CONTROL | USBDCD_CONTROL_SR_MASK;
    }
 };
 

@@ -534,7 +534,7 @@ public:
     * @param[in] filterNum Pin Filter to clear flag
     */
    static void clearFilteredPinWakeupFlag(LlwuFilterNum filterNum) {
-      llwu->FILT[filterNum] |= LLWU_FILT_FILTF_MASK;
+      llwu->FILT[filterNum] = llwu->FILT[filterNum] | LLWU_FILT_FILTF_MASK;
    }
 
    /**
@@ -542,7 +542,7 @@ public:
     */
    static void clearFilteredPinWakeupFlags() {
       for (unsigned index=0; index<(sizeof(llwu->FILT)/sizeof(llwu->FILT[0])); index++) {
-         llwu->FILT[index] |= LLWU_FILT_FILTF_MASK;
+         llwu->FILT[index] = llwu->FILT[index] | LLWU_FILT_FILTF_MASK;
       }
    }
 
@@ -574,10 +574,10 @@ public:
          LlwuPeripheralMode   llwuPeripheralMode=LlwuPeripheralMode_Enabled) {
 
       if (llwuPeripheralMode) {
-         llwu->ME |= llwuPeripheral;
+         llwu->ME = llwu->ME | llwuPeripheral;
       }
       else {
-         llwu->ME &= (uint8_t)~llwuPeripheral;
+         llwu->ME = llwu->ME & (uint8_t)~llwuPeripheral;
       }
    }
 

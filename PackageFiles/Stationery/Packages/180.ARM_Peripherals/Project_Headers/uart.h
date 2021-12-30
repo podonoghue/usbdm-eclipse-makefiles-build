@@ -283,12 +283,12 @@ public:
    void enableInterrupt(UartInterrupt uartInterrupt, bool enable=true) {
       if (enable) {
 #ifdef UART_C5_TDMAS
-         uart->C5 &= ~uartInterrupt; // DMA must be off to enable interrupts
+         uart->C5 = uart->C5 & ~uartInterrupt; // DMA must be off to enable interrupts
 #endif
-         uart->C2 |= uartInterrupt;
+         uart->C2 = uart->C2 | uartInterrupt;
       }
       else {
-         uart->C2 &= ~uartInterrupt; // May also disable DMA
+         uart->C2 = uart->C2 & ~uartInterrupt; // May also disable DMA
       }
    }
 
@@ -303,16 +303,16 @@ public:
    void enableDma(UartDma uartDma, bool enable=true) {
       // Flags are in same positions in the C2 and C5
       if (enable) {
-         uart->C5 |= uartDma;
+         uart->C5 = uart->C5 | uartDma;
 #ifdef UART_C5_TDMAS
-         uart->C2 |= uartDma; // Interrupts must be enable for DMA
+         uart->C2 = uart->C2 | uartDma; // Interrupts must be enable for DMA
 #endif
       }
       else {
 #ifdef UART_C5_TDMAS
-         uart->C2 &= ~uartDma; // Switching DMA off shouldn't enable interrupts!
+         uart->C2 = uart->C2 & ~uartDma; // Switching DMA off shouldn't enable interrupts!
 #endif
-         uart->C5 &= ~uartDma;
+         uart->C5 = uart->C5 & ~uartDma;
       }
    }
 
@@ -367,11 +367,11 @@ public:
    /** Get reference to UART hardware as struct */
    static volatile UART_Type &uartPtr() { return Info::uart(); }
 
-   /** Get base address of LPUART hardware as uint32_t */
-   static constexpr uint32_t uartBase() { return Info::baseAddress; }
+   /** Base address of LPUART hardware as uint32_t */
+   static constexpr uint32_t uartBase = Info::baseAddress;
 
-   /** Get base address of UART.D register as uint32_t */
-   static constexpr uint32_t uartD() { return uartBase() + offsetof(UART_Type, D); }
+   /** Address of UART.D register as uint32_t */
+   static constexpr uint32_t uartD = Info::baseAddress + offsetof(UART_Type, D);
 
 #ifdef __CMSIS_RTOS
 protected:
@@ -834,7 +834,7 @@ public:
          // Transmitter ready
          if (txQueue.isEmpty()) {
             // No data available - disable further transmit interrupts
-            Info::uart->C2 &= ~UART_C2_TIE_MASK;
+            Info::uart->C2 = Info::uart->C2 & ~UART_C2_TIE_MASK;
          }
          else {
             // Transmit next byte
@@ -856,7 +856,7 @@ public:
          // Transmitter ready
          if (txQueue.isEmpty()) {
             // No data available - disable further transmit interrupts
-            Info::uart->C2 &= ~UART_C2_TIE_MASK;
+            Info::uart->C2 = Info::uart->C2 & ~UART_C2_TIE_MASK;
          }
          else {
             // Transmit next byte

@@ -168,9 +168,9 @@ public:
     * @param seedValue  Seed value to initialise CRC calculation
     */
    static void writeSeed(uint32_t seedValue) {
-      crc->CTRL |= CRC_CTRL_WAS_MASK;
+      crc->CTRL = crc->CTRL | CRC_CTRL_WAS_MASK;
       crc->DATA = seedValue;
-      crc->CTRL &= ~CRC_CTRL_WAS_MASK;
+      crc->CTRL = crc->CTRL & ~CRC_CTRL_WAS_MASK;
    }
 
    /**

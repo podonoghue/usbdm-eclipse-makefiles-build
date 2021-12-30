@@ -1137,10 +1137,10 @@ public:
       usbdm_assert((dmaChannelMask&~((1<<Info::NumChannels)-1)) != 0, "Illegal DMA channel");
 
       if (enable) {
-         dmac->ERQ |= dmaChannelMask;
+         dmac->ERQ = dmac->ERQ | dmaChannelMask;
       }
       else {
-         dmac->ERQ &= ~dmaChannelMask;
+         dmac->ERQ = dmac->ERQ & ~dmaChannelMask;
       }
    }
 
@@ -1178,10 +1178,10 @@ public:
       usbdm_assert(dmaChannelNum<Info::NumChannels, "Illegal DMA channel");
 
       if (enable) {
-         dmac->EARS |= (1<<dmaChannelNum);
+         dmac->EARS = dmac->EARS | (1<<dmaChannelNum);
       }
       else {
-         dmac->EARS &= ~(1<<dmaChannelNum);
+         dmac->EARS = dmac->EARS & ~(1<<dmaChannelNum);
       }
    }
 #endif
@@ -1197,10 +1197,10 @@ public:
       usbdm_assert((dmaChannelMask&~((1<<Info::NumChannels)-1)) != 0, "Illegal DMA channel");
 
       if (enable) {
-         dmac->EEI |= dmaChannelMask;
+         dmac->EEI = dmac->EEI | dmaChannelMask;
       }
       else {
-         dmac->EEI &= ~dmaChannelMask;
+         dmac->EEI = dmac->EEI & ~dmaChannelMask;
       }
    }
 
@@ -1249,10 +1249,10 @@ public:
       usbdm_assert((dmaChannelMask&~((1<<Info::NumChannels)-1)) != 0, "Illegal DMA channel");
 
       if (enable) {
-         dmac->INT |= dmaChannelMask;
+         dmac->INT = dmac->INT | dmaChannelMask;
       }
       else {
-         dmac->INT &= ~dmaChannelMask;
+         dmac->INT = dmac->INT & ~dmaChannelMask;
       }
    }
 

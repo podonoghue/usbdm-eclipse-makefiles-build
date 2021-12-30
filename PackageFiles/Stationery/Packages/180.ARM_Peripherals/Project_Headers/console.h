@@ -69,10 +69,10 @@ namespace USBDM {
  */
 
 //! Default baud rate for console
-constexpr int defaultBaudRate = $(/Console/defaultBaudRate:115200);
+constexpr int defaultBaudRate = $(/Console/defaultBaudRate);
 
 //! Maps console to UART used
-using  Console = $(/Console/consoleDevice:USBDM\:\:Uart0);
+using  Console = $(/Console/consoleDevice);
 
 //! Console instance
 extern Console console;

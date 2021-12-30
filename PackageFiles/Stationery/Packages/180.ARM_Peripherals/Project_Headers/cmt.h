@@ -449,16 +449,16 @@ $(/CMT/classInfo: // No class Info found)
    static void enableInterruptDma(CmtInterruptDma cmtInterruptDma) {
       switch (cmtInterruptDma) {
          case CmtInterruptDma_None:
-            cmt->MSC &= ~CMT_MSC_EOCIE_MASK;
-            cmt->DMA &= ~CMT_DMA_DMA_MASK;
+            cmt->MSC = cmt->MSC & ~CMT_MSC_EOCIE_MASK;
+            cmt->DMA = cmt->DMA & ~CMT_DMA_DMA_MASK;
             break;
          case CmtInterruptDma_Irq:
-            cmt->DMA &= ~CMT_DMA_DMA_MASK;
-            cmt->MSC |= CMT_MSC_EOCIE_MASK;
+            cmt->DMA = cmt->DMA & ~CMT_DMA_DMA_MASK;
+            cmt->MSC = cmt->MSC | CMT_MSC_EOCIE_MASK;
             break;
          case CmtInterruptDma_Dma:
-            cmt->DMA |= CMT_DMA_DMA_MASK;
-            cmt->MSC |= CMT_MSC_EOCIE_MASK;
+            cmt->DMA = cmt->DMA | CMT_DMA_DMA_MASK;
+            cmt->MSC = cmt->MSC | CMT_MSC_EOCIE_MASK;
             break;
       }
    }

@@ -228,10 +228,10 @@ public:
     */
    static void enableInterrupts(bool enable=true) {
       if (enable) {
-         lptmr->CSR |= LPTMR_CSR_TIE_MASK;
+         lptmr->CSR = lptmr->CSR | LPTMR_CSR_TIE_MASK;
       }
       else {
-         lptmr->CSR &= ~LPTMR_CSR_TIE_MASK;
+         lptmr->CSR =lptmr->CSR & ~LPTMR_CSR_TIE_MASK;
       }
    }
 
@@ -239,7 +239,7 @@ public:
     * Clear interrupt flag
     */
    static void clearInterruptFlag() {
-      lptmr->CSR |= LPTMR_CSR_TCF_MASK;
+      lptmr->CSR = lptmr->CSR | LPTMR_CSR_TCF_MASK;
    }
 
    /**
@@ -365,7 +365,7 @@ public:
     */
    static void irqHandler() {
       // Clear interrupt flag
-      lptmr->CSR |= LPTMR_CSR_TCF_MASK;
+      lptmr->CSR = lptmr->CSR | LPTMR_CSR_TCF_MASK;
 
       sCallback();
    }
@@ -385,7 +385,7 @@ public:
       // Period/Compare value
       lptmr->CMR  = Info::cmr;
       // Enable timer
-      lptmr->CSR |= LPTMR_CSR_TEN_MASK;
+      lptmr->CSR = lptmr->CSR | LPTMR_CSR_TEN_MASK;
 
       if (Info::csr & LPTMR_CSR_TIE_MASK) {
          // Enable timer interrupts
@@ -406,9 +406,9 @@ public:
     * @note Assumes prescale has been chosen appropriately.
     * @note Rudimentary range checking only. Sets error code.
     */
-   static uint32_t convertTicksToMicroseconds(unsigned ticks) {
+   static uint32_t convertTicksToMicroseconds(Ticks ticks) {
       uint32_t tickRate = Info::getClockFrequency();
-      uint64_t rv       = (((uint64_t)ticks)*1000000)/tickRate;
+      uint64_t rv       = (((uint64_t)ticks)*1000000)/(unsigned)tickRate;
 
 #ifdef DEBUG_BUILD
       if (rv > UINT_MAX) {
@@ -433,9 +433,9 @@ public:
     * @note Assumes prescale has been chosen appropriately.
     * @note Rudimentary range checking only. Sets error code.
     */
-   static unsigned convertTicksToMilliseconds(unsigned ticks) {
+   static unsigned convertTicksToMilliseconds(Ticks ticks) {
       uint32_t tickRate = Info::getClockFrequency();
-      uint64_t rv       = (((uint64_t)ticks)*1000)/tickRate;
+      uint64_t rv       = (((uint64_t)ticks)*1000)/(unsigned)tickRate;
 
 #ifdef DEBUG_BUILD
       if (rv > UINT_MAX) {
@@ -460,9 +460,9 @@ public:
     * @note Assumes prescale has been chosen appropriately.
     * @note Rudimentary range checking only. Sets error code.
     */
-   static float convertTicksToSeconds(unsigned ticks) {
+   static Seconds convertTicksToSeconds(Ticks ticks) {
       uint32_t tickRate = Info::getClockFrequency();
-      return ((float)ticks)/tickRate;
+      return ((float)ticks)/(unsigned)tickRate;
    }
 
    /**
@@ -475,11 +475,11 @@ public:
     * @note Assumes prescale has been chosen appropriately.
     * @note Rudimentary range checking only. Sets error code.
     */
-   static uint32_t convertMicrosecondsToTicks(int time) {
+   static Ticks convertMicrosecondsToTicks(int time) {
 
       // Calculate period
       uint32_t tickRate = Info::getClockFrequency();
-      uint64_t rv       = ((uint64_t)time*tickRate)/1000000;
+      uint64_t rv       = (unsigned)((uint64_t)time*tickRate)/1000000;
 
 #ifdef DEBUG_BUILD
       if (rv > 0xFFFFUL) {
@@ -503,11 +503,11 @@ public:
     * @note Assumes prescale has been chosen appropriately.
     * @note Rudimentary range checking only. Sets error code.
     */
-   static uint32_t convertMillisecondsToTicks(int time) {
+   static Ticks convertMillisecondsToTicks(int time) {
 
       // Calculate period
       uint32_t tickRate = Info::getClockFrequency();
-      uint64_t rv       = ((uint64_t)time*tickRate)/1000;
+      uint64_t rv       = (unsigned)((uint64_t)time*tickRate)/1000;
 
 #ifdef DEBUG_BUILD
       if (rv > 0xFFFFUL) {
@@ -532,11 +532,11 @@ public:
     * @note Uses floating point
     * @note Rudimentary range checking only. Sets error code.
     */
-   static uint32_t convertSecondsToTicks(float time) {
+   static Ticks convertSecondsToTicks(Seconds time) {
 
       // Calculate period
       float    tickRate = Info::getClockFrequencyF();
-      uint64_t rv       = (time*tickRate);
+      uint64_t rv       = (unsigned)((float)time*tickRate);
 
 #ifdef DEBUG_BUILD
       if (rv > 0xFFFFUL) {
@@ -562,7 +562,7 @@ public:
     * @return E_NO_ERROR      => Success
     * @return E_ILLEGAL_PARAM => Failed to find suitable values for PBYP & PRESCALE
     */
-   static ErrorCode setPeriod(float period) {
+   static ErrorCode setPeriod(Seconds period) {
       // Disable LPTMR before prescale change
       uint32_t csr = lptmr->CSR;
       lptmr->CSR = 0;

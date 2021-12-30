@@ -1354,14 +1354,14 @@ public:
     * Assume configuration has been completed.
     */
    static void enableModule() {
-      qspi->MCR &= ~QSPI_MCR_MDIS_MASK;
+      qspi->MCR = qspi->MCR & ~QSPI_MCR_MDIS_MASK;
    }
 
    /**
     * Disable Module
     */
    static void disableModule() {
-      qspi->MCR |= QSPI_MCR_MDIS_MASK;
+      qspi->MCR = qspi->MCR | QSPI_MCR_MDIS_MASK;
    }
 
    /**
@@ -1389,7 +1389,7 @@ public:
    static void softwareReset() {
 
       // Reset AHB and Serial flash domain FFs
-      qspi->MCR |= (QSPI_MCR_SWRSTSD_MASK|QSPI_MCR_SWRSTHD_MASK);
+      qspi->MCR = qspi->MCR | (QSPI_MCR_SWRSTSD_MASK|QSPI_MCR_SWRSTHD_MASK);
 
       // Enable QSPI
       enableModule();
@@ -1401,7 +1401,7 @@ public:
       disableModule();
 
       // Release reset of AHB and Serial flash domain FFs
-      qspi->MCR &= ~(QSPI_MCR_SWRSTSD_MASK|QSPI_MCR_SWRSTHD_MASK);
+      qspi->MCR = qspi->MCR & ~(QSPI_MCR_SWRSTSD_MASK|QSPI_MCR_SWRSTHD_MASK);
    }
 
    /**
@@ -1412,7 +1412,7 @@ public:
    static void clearFifos(QspiFifoClear qspiFifoClear) {
 
       // These are self-clearing bits
-      qspi->MCR |= qspiFifoClear;
+      qspi->MCR = qspi->MCR | qspiFifoClear;
    }
 
    /**
@@ -2091,7 +2091,7 @@ public:
     *        See @ref QspiRequest
     */
    static void enableInterruptOrDmaRequests(uint32_t qspiRequest) {
-      qspi->RSER |= qspiRequest;
+      qspi->RSER = qspi->RSER | qspiRequest;
    }
 
    /**
@@ -2101,7 +2101,7 @@ public:
     *        See @ref QspiRequest
     */
    static void disableInterruptOrDmaRequests(uint32_t qspiRequest) {
-      qspi->RSER &= ~qspiRequest;
+      qspi->RSER = qspi->RSER & ~qspiRequest;
    }
 
    /**
@@ -2141,7 +2141,7 @@ public:
    static void clearSequencePointers(QspiClear qspiClear = QspiClear_IpAndAhbPointers) {
 
       // These bits are self clearing
-      qspi->SPTRCLR |= qspiClear;
+      qspi->SPTRCLR = qspi->SPTRCLR | qspiClear;
    }
 
    /**

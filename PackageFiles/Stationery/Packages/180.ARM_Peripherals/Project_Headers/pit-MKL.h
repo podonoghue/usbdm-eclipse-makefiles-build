@@ -111,7 +111,6 @@ private:
    /**
     * This class is not intended to be instantiated
     */
-   PitBase_T() = delete;
    PitBase_T(const PitBase_T&) = delete;
    PitBase_T(PitBase_T&&) = delete;
 
@@ -133,6 +132,9 @@ protected:
    }
 
 public:
+   /// Defaulted constructor
+   constexpr PitBase_T() = default;
+
    /**
     * Allocate PIT channel.
     *
@@ -199,15 +201,15 @@ public:
     */
    static void enableInterrupts(PitChannelNum pitChannelNum, bool enable=true) {
       if (enable) {
-         pit->CHANNEL[pitChannelNum].TCTRL |= PIT_TCTRL_TIE_MASK;
+         pit->CHANNEL[pitChannelNum].TCTRL = pit->CHANNEL[pitChannelNum].TCTRL | PIT_TCTRL_TIE_MASK;
       }
       else {
-         pit->CHANNEL[pitChannelNum].TCTRL &= ~PIT_TCTRL_TIE_MASK;
+         pit->CHANNEL[pitChannelNum].TCTRL = pit->CHANNEL[pitChannelNum].TCTRL & ~PIT_TCTRL_TIE_MASK;
       }
    }
 
-   /** 
-    * PIT interrupt handler -  Calls PIT callback 
+   /**
+    * PIT interrupt handler -  Calls PIT callback
     * Used when all channels share a single handler (needs to poll channel flags)
     */
    static void irqHandler() {
@@ -410,7 +412,7 @@ public:
     *  @param[in]  pitChannelNum   Channel to enable
     */
    static void enableChannel(const PitChannelNum pitChannelNum) {
-      pit->CHANNEL[pitChannelNum].TCTRL |= PIT_TCTRL_TEN_MASK;
+      pit->CHANNEL[pitChannelNum].TCTRL = pit->CHANNEL[pitChannelNum].TCTRL | PIT_TCTRL_TEN_MASK;
    }
 
    /**
@@ -421,7 +423,7 @@ public:
    static void disableChannel(PitChannelNum pitChannelNum) {
 
       // Disable timer channel
-      pit->CHANNEL[pitChannelNum].TCTRL &= ~PIT_TCTRL_TEN_MASK;
+      pit->CHANNEL[pitChannelNum].TCTRL = pit->CHANNEL[pitChannelNum].TCTRL & ~PIT_TCTRL_TEN_MASK;
    }
 
    /**
@@ -961,7 +963,7 @@ public:
       }
 
    };
-   
+
    /**
     * Class representing a PIT channel
     *
@@ -976,7 +978,7 @@ public:
 
    public:
 
-      Channel() : PitChannel(CHANNEL) {};
+      constexpr Channel() : PitChannel(CHANNEL) {};
 
       /** Timer channel number */
       static constexpr PitChannelNum CHANNEL = (PitChannelNum)channel;
@@ -1236,6 +1238,12 @@ uint8_t PitBase_T<Info>::clearOnEvent = 0;
  * @brief class representing the PIT
  */
 using Pit = PitBase_T<PitInfo>;
+
+/**
+ * @brief class representing a PIT channel
+ */
+using PitChannel = Pit::PitChannel;
+
 #endif
 
 /**

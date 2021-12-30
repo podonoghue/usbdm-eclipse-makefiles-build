@@ -232,7 +232,7 @@ public:
     * Clear interrupt flag.
     */
    static void clearInterruptFlag() {
-      rnga->CR |= RNGA_CR_CLRI_MASK;
+      rnga->CR = rnga->CR | RNGA_CR_CLRI_MASK;
    }
    
    /**
@@ -266,11 +266,11 @@ public:
    static void enableInterrupt(bool enable=true) {
       if (enable) {
          // Unmask
-         rnga->CR &= ~RNGA_CR_INTM_MASK;
+         rnga->CR = rnga->CR & ~RNGA_CR_INTM_MASK;
       }
       else {
          // Mask
-         rnga->CR |= RNGA_CR_INTM_MASK;
+         rnga->CR = rnga->CR | RNGA_CR_INTM_MASK;
       }
    }
 };

@@ -138,7 +138,7 @@ public:
             (PMC_LVDSC1_LVDF_MASK|PMC_LVDSC1_LVDIE_MASK)) {
 
          // LVDF enabled and detected
-         PmcBase_T<Info>::pmc->LVDSC1 |= PMC_LVDSC1_LVDF_MASK;
+         PmcBase_T<Info>::pmc->LVDSC1 = PmcBase_T<Info>::pmc->LVDSC1 | PMC_LVDSC1_LVDF_MASK;
          sCallback(PmcInterruptReason_LowVoltageDetect);
          return;
       }
@@ -146,7 +146,7 @@ public:
             (PMC_LVDSC2_LVWF_MASK|PMC_LVDSC2_LVWIE_MASK)) {
 
          // LVWF enabled and detected
-         PmcBase_T<Info>::pmc->LVDSC2 |= PMC_LVDSC2_LVWF_MASK;
+         PmcBase_T<Info>::pmc->LVDSC2 = PmcBase_T<Info>::pmc->LVDSC2 | PMC_LVDSC2_LVWF_MASK;
          sCallback(PmcInterruptReason_LowVoltageWarning);
          return;
       }
@@ -336,7 +336,7 @@ public:
     * Release pins after VLLSx exit
     */
    static void releasePins () {
-      pmc->REGSC |= PMC_REGSC_ACKISO_MASK;
+      pmc->REGSC = pmc->REGSC | PMC_REGSC_ACKISO_MASK;
    }
 #endif
 

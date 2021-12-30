@@ -689,7 +689,7 @@ public:
     *
     * @return Time in seconds
     */
-   float convertTicksToSeconds(int timeInTicks) const {
+   float convertTicksToSeconds(int timeInTicks) {
       return static_cast<float>(timeInTicks)/getTickFrequencyAsFloat();
    }
 
@@ -698,7 +698,7 @@ public:
     *
     * @return Timer count value
     */
-   uint16_t getTime() const {
+   uint16_t getTime() {
       return tmr->CNT;
    }
 
@@ -725,8 +725,8 @@ public:
     *
     * @param channelMask Mask indicating which channel flags to clear
     *                    There is one bit for each channel
-    *
-    * @note Flags will not be cleared if the channel is configured for DMA
+	*
+	* @note Flags will not be cleared if the channel is configured for DMA
     */
    void clearSelectedInterruptFlags(uint32_t channelMask) const {
       (void)tmr->STATUS;
@@ -740,7 +740,7 @@ public:
     *         There is one bit for each channel
     *
     * @note Only flags captured in the return value are cleared
-    * @note Flags will not be cleared if the channel is configured for DMA
+	* @note Flags will not be cleared if the channel is configured for DMA
     */
    unsigned getAndClearInterruptFlags() const {
       // Note requires read and write zero to clear flags
@@ -754,14 +754,14 @@ public:
     * Enable/disable Timer Overflow interrupts
     */
    void enableTimerOverflowInterrupts() const {
-      tmr->SC |= TPM_SC_TOIE_MASK;
+      tmr->SC = tmr->SC | TPM_SC_TOIE_MASK;
    }
 
    /**
     * Disable Timer Overflow interrupts
     */
    void disableTimerOverflowInterrupts() const {
-      tmr->SC &= ~TPM_SC_TOIE_MASK;
+      tmr->SC = tmr->SC & ~TPM_SC_TOIE_MASK;
    }
 
    /**
@@ -975,7 +975,7 @@ public:
     * @note The actual CnV register update will be delayed by the register synchronisation mechanism
     */
    void setDeltaEventTime(uint16_t offset) {
-      tmr->CONTROLS[CHANNEL].CnV += offset;
+      tmr->CONTROLS[CHANNEL].CnV = tmr->CONTROLS[CHANNEL].CnV + offset;
    }
 
    /**
@@ -1040,7 +1040,7 @@ public:
     */
    void clearInterruptFlag() const {
       // Note - requires read and write zero to clear flag
-      tmr->CONTROLS[CHANNEL].CnSC &= ~TPM_CnSC_CHF_MASK;
+      tmr->CONTROLS[CHANNEL].CnSC = tmr->CONTROLS[CHANNEL].CnSC & ~TPM_CnSC_CHF_MASK;
    }
 
 };
@@ -1116,7 +1116,7 @@ public:
    static void irqHandler() {
       if ((tmr->SC&(TPM_SC_TOF_MASK|TPM_SC_TOIE_MASK)) == (TPM_SC_TOF_MASK|TPM_SC_TOIE_MASK)) {
          // Clear TOI flag (w1c)
-         tmr->SC |= TPM_SC_TOF_MASK;
+         tmr->SC = tmr->SC | TPM_SC_TOF_MASK;
          sToiCallback();
       }
       // Get status for channels
@@ -1821,14 +1821,14 @@ public:
     * Enable/disable Timer Overflow interrupts
     */
    static void enableTimerOverflowInterrupts() {
-      tmr->SC |= TPM_SC_TOIE_MASK;
+      tmr->SC = tmr->SC | TPM_SC_TOIE_MASK;
    }
 
    /**
     * Disable Timer Overflow interrupts
     */
    static void disableTimerOverflowInterrupts() {
-      tmr->SC &= ~TPM_SC_TOIE_MASK;
+      tmr->SC = tmr->SC & ~TPM_SC_TOIE_MASK;
    }
 
 
@@ -1863,25 +1863,25 @@ public:
    /**
     * Set Timer event time relative to current event time
     *
-    * @param[in] eventTime  Event time in ticks relative to current event time (i.e. Timer channel CnV value)
+    * @param[in] offset     Event time in ticks relative to current event time (i.e. Timer channel CnV value)
     * @param[in] channel    Timer channel
     *
     * @note This value is write-buffered and updated by CnV synchronisation.
     */
-   static void setDeltaEventTime(uint16_t eventTime, int channel) {
-      tmr->CONTROLS[channel].CnV += eventTime;
+   static void setDeltaEventTime(uint16_t offset, int channel) {
+      tmr->CONTROLS[channel].CnV = tmr->CONTROLS[channel].CnV + offset;
    }
 
    /**
     * Set Timer event time relative to current timer count value
     *
-    * @param[in] eventTime  Event time in ticks relative to current time (i.e. Timer CNT value)
+    * @param[in] offset     Event time in ticks relative to current time (i.e. Timer CNT value)
     * @param[in] channel    Timer channel
     *
     * @note This value is write-buffered and updated by CnV synchronisation.
     */
-   static void setRelativeEventTime(uint16_t eventTime, int channel) {
-      tmr->CONTROLS[channel].CnV = tmr->CNT + eventTime;
+   static void setRelativeEventTime(uint16_t offset, int channel) {
+      tmr->CONTROLS[channel].CnV = tmr->CNT + offset;
    }
 
    /**
@@ -2297,7 +2297,7 @@ public:
 
 #ifdef TPM_SC_PWMEN0_SHIFT
       // Enable output pin in TPM
-      tpm->SC |= (1<<(channel+TPM_SC_PWMEN0_SHIFT));
+      tpm->SC = tpm->SC | (1<<(channel+TPM_SC_PWMEN0_SHIFT));
 #endif
       Pcr::setPCR(pinDriveStrength|pinDriveMode|pinSlewRate);
    }
@@ -2319,7 +2319,7 @@ public:
 
 #ifdef TPM_SC_PWMEN0_SHIFT
       // Enable output pin in TPM
-      tpm->SC |= (1<<(channel+TPM_SC_PWMEN0_SHIFT));
+      tpm->SC = tpm->SC | (1<<(channel+TPM_SC_PWMEN0_SHIFT));
 #endif
       Pcr::setPCR(pinDriveStrength|pinDriveMode);
    }
@@ -2341,7 +2341,7 @@ public:
 
 #ifdef TPM_SC_PWMEN0_SHIFT
       // Enable output pin in TPM
-      tpm->SC |= (1<<(channel+TPM_SC_PWMEN0_SHIFT));
+      tpm->SC = tpm->SC | (1<<(channel+TPM_SC_PWMEN0_SHIFT));
 #endif
       Pcr::setPCR(pinDriveStrength|pinSlewRate);
    }
@@ -2361,7 +2361,7 @@ public:
 
 #ifdef TPM_SC_PWMEN0_SHIFT
       // Enable output pin in TPM
-      tpm->SC |= (1<<(channel+TPM_SC_PWMEN0_SHIFT));
+      tpm->SC = tpm->SC | (1<<(channel+TPM_SC_PWMEN0_SHIFT));
 #endif
 
       Pcr::setPCR(pinDriveStrength);
@@ -2390,7 +2390,7 @@ public:
 
 #ifdef TPM_SC_PWMEN0_SHIFT
          // Disable output pin in TPM
-         tpm->SC &= ~(1<<(channel+TPM_SC_PWMEN0_SHIFT));
+         tpm->SC = tpm->SC & ~(1<<(channel+TPM_SC_PWMEN0_SHIFT));
 #endif
 
          Pcr::setInput(pinPull,pinAction,pinFilter);

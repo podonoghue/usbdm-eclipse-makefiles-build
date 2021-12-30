@@ -277,7 +277,7 @@ public:
       unsigned status = cmp->SCR&(CMP_SCR_CFR_MASK|CMP_SCR_CFF_MASK|CMP_SCR_COUT_MASK);
 
       // Clear interrupt flags
-      cmp->SCR |= status;
+      cmp->SCR = cmp->SCR | status;
 
       // Create status from snapshot
       CmpStatus cmpStatus{(CmpEvent)(status&(CMP_SCR_CFR_MASK|CMP_SCR_CFF_MASK)),(bool)(status&CMP_SCR_COUT_MASK)};
@@ -426,7 +426,7 @@ $(/CMP/classInfo: // No class Info found)
       CheckOutputIsMapped<Info::outputPin>::check();
 
       // Enable CMP_OUT
-      cmp->CR1 |= CMP_CR1_OPE_MASK;
+      cmp->CR1 = cmp->CR1 | CMP_CR1_OPE_MASK;
 
       // Map CMP_OUT to pin
       OutputPin::setPCR(pinDriveStrength|pinDriveMode|pinSlewRate);
@@ -599,14 +599,14 @@ $(/CMP/classInfo: // No class Info found)
     * @note Window mode may not be selected with external filter.
     */
    static void enableWindowMode() {
-      cmp->CR1 |= CMP_CR1_WE_MASK;
+      cmp->CR1 = cmp->CR1 | CMP_CR1_WE_MASK;
    }
 
    /**
     * Disables Window mode
     */
    static void disableWindowMode() {
-      cmp->CR1 &= ~CMP_CR1_WE_MASK;
+      cmp->CR1 = cmp->CR1 & ~CMP_CR1_WE_MASK;
    }
 
    /**
@@ -615,14 +615,14 @@ $(/CMP/classInfo: // No class Info found)
     * @note Window mode may not be selected with external filter.
     */
    static void enableFilterMode() {
-      cmp->CR1 |= CMP_CR1_WE_MASK;
+      cmp->CR1 = cmp->CR1 | CMP_CR1_WE_MASK;
    }
 
    /**
     * Disables Filter mode
     */
    static void disableFilterMode() {
-      cmp->CR1 &= ~CMP_CR1_WE_MASK;
+      cmp->CR1 = cmp->CR1 & ~CMP_CR1_WE_MASK;
    }
 
    /**
@@ -684,28 +684,28 @@ $(/CMP/classInfo: // No class Info found)
     * Enable rising edge interrupts
     */
    static void enableRisingEdgeInterrupts() {
-      cmp->SCR |= CMP_SCR_IER_MASK;
+      cmp->SCR = cmp->SCR | CMP_SCR_IER_MASK;
    }
 
    /**
     * Disable rising edge interrupts
     */
    static void disableRisingEdgeInterrupts() {
-      cmp->SCR &= ~CMP_SCR_IER_MASK;
+      cmp->SCR = cmp->SCR & ~CMP_SCR_IER_MASK;
    }
 
    /**
     * Enable falling edge interrupts
     */
    static void enableFallingEdgeInterrupts() {
-      cmp->SCR |= CMP_SCR_IEF_MASK;
+      cmp->SCR = cmp->SCR | CMP_SCR_IEF_MASK;
    }
 
    /**
     * Disable falling edge interrupts
     */
    static void disableFallingEdgeInterrupts() {
-      cmp->SCR &= ~CMP_SCR_IEF_MASK;
+      cmp->SCR = cmp->SCR & ~CMP_SCR_IEF_MASK;
    }
 
 #ifdef CMP_SCR_DMAEN_MASK
@@ -713,14 +713,14 @@ $(/CMP/classInfo: // No class Info found)
     * Enable DMA requests
     */
    static void enableDmaRequests() {
-      cmp->SCR |= CMP_SCR_DMAEN_MASK;
+      cmp->SCR = cmp->SCR | CMP_SCR_DMAEN_MASK;
    }
 
    /**
     * Disable DMA requests
     */
    static void disableDmaRequests() {
-      cmp->SCR &= ~CMP_SCR_DMAEN_MASK;
+      cmp->SCR = cmp->SCR & ~CMP_SCR_DMAEN_MASK;
    }
 #endif
 
@@ -728,7 +728,7 @@ $(/CMP/classInfo: // No class Info found)
     * Clear edge interrupt flags
     */
    static void clearInterruptFlags() {
-   cmp->SCR |= CMP_SCR_CFR_MASK|CMP_SCR_CFF_MASK;
+   cmp->SCR = cmp->SCR | CMP_SCR_CFR_MASK|CMP_SCR_CFF_MASK;
    }
 
    /**
@@ -747,14 +747,14 @@ $(/CMP/classInfo: // No class Info found)
     * Enable DAC
     */
    static void enableDAC() {
-         cmp->DACCR |= CMP_DACCR_DACEN_MASK;
+      cmp->DACCR = cmp->DACCR | CMP_DACCR_DACEN_MASK;
    }
 
    /**
     * Disable DAC
     */
    static void disableDAC() {
-         cmp->DACCR &= ~CMP_DACCR_DACEN_MASK;
+      cmp->DACCR = cmp->DACCR & ~CMP_DACCR_DACEN_MASK;
    }
 
    /** Maximum DAC value corresponding to Vref) */

@@ -200,7 +200,7 @@ public:
     */
    void configure(uint16_t interval, uint32_t csr=LPTMR_CSR_DEFAULT_VALUE, uint32_t psr=LPTMR_PSR_DEFAULT_VALUE) const {
       // Enable clock
-      *clockReg |= clockMask;
+      *clockReg = *clockReg | clockMask;
 
 #ifdef LPTMR0_0_GPIO
       LPTMR0_0_GPIO.setPCR(PORT_PCR_MUX(LPTMR0_0_FN)|PORT_PCR_PE_MASK|PORT_PCR_PS_MASK);
@@ -241,7 +241,7 @@ public:
       // Disable timer
       lptmr->CSR = 0;
       NVIC_DisableIRQ(interruptNumber);
-      *clockReg &= ~clockMask;
+      *clockReg = *clockReg & ~clockMask;
    }
 };
 

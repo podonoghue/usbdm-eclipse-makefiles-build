@@ -220,10 +220,10 @@ public:
     */
    void enableInterrupt(LpuartInterrupt lpuartInterrupt, bool enable=true) {
       if (enable) {
-         lpuart->CTRL |= lpuartInterrupt;
+         lpuart->CTRL = lpuart->CTRL | lpuartInterrupt;
       }
       else {
-         lpuart->CTRL &= ~lpuartInterrupt;
+         lpuart->CTRL = lpuart->CTRL & ~lpuartInterrupt;
       }
    }
 
@@ -238,10 +238,10 @@ public:
    void enableDma(LpuartDma lpuartDma, bool enable=true) {
       // Flags are in same positions in the C2 and C5
       if (enable) {
-         lpuart->BAUD |= lpuartDma;
+         lpuart->BAUD = lpuart->BAUD | lpuartDma;
       }
       else {
-         lpuart->BAUD &= ~lpuartDma;
+         lpuart->BAUD = lpuart->BAUD & ~lpuartDma;
       }
    }
 
@@ -553,7 +553,7 @@ protected:
       // Add character to buffer
       while (!txQueue.enQueueDiscardOnFull(ch)) {
       }
-      lpuart->CTRL |= LPUART_CTRL_TIE_MASK;
+      lpuart->CTRL = lpuart->CTRL | LPUART_CTRL_TIE_MASK;
       unlock(&fWriteLock);
       if (ch=='\n') {
         _writeChar('\r');
@@ -599,7 +599,7 @@ public:
          // Transmitter ready
          if (txQueue.isEmpty()) {
             // No data available - disable further transmit interrupts
-            Info::lpuart->CTRL &= ~LPUART_CTRL_TIE_MASK;
+            Info::lpuart->CTRL = Info::lpuart->CTRL & ~LPUART_CTRL_TIE_MASK;
          }
          else {
             // Transmit next byte

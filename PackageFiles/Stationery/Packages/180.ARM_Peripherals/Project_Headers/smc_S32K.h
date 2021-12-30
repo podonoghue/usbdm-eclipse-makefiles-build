@@ -16,8 +16,8 @@
  * This file is generated automatically.
  * Any manual changes will be lost.
  */
+#include "string.h"
 #include "pin_mapping.h"
-#include "scg.h"
 
 namespace USBDM {
 
@@ -110,6 +110,16 @@ enum SmcStopMode {
 #endif
 };
 
+/**
+ * Control power to RAM2 in LLS2/VLLS2 power mode
+ */
+#ifdef SMC_STOPCTRL_RAM2PO_MASK
+enum SmcLowLeakageRam2 {
+   SmcLowLeakageRam2_Disabled = SMC_STOPCTRL_RAM2PO(0),  //! RAM2 not powered in LLS2/VLLS2
+   SmcLowLeakageRam2_Enabled  = SMC_STOPCTRL_RAM2PO(1),  //! RAM2 powered in LLS2/VLLS2
+};
+#endif
+
 #ifdef SMC_STOPCTRL_PSTOPO
 /**
  *  Partial Stop Option\n
@@ -193,7 +203,7 @@ enum SmcLowLeakageStopMode {
 enum SmcStatus {
    // Run modes
 #ifdef SMC_PMPROT_AHSRUN
-   SmcStatus_hsrun  = SMC_PMSTAT_PMSTAT(1<<7),    //!< Processor is in High Speed Run mode
+   SmcStatus_HSRUN  = SMC_PMSTAT_PMSTAT(1<<7),    //!< Processor is in High Speed Run mode
 #endif
    SmcStatus_RUN    = SMC_PMSTAT_PMSTAT(1<<0),    //!< Processor is in Normal Run mode
    SmcStatus_VLPR   = SMC_PMSTAT_PMSTAT(1<<2),    //!< Processor is in Very Low Power Run mode
@@ -208,6 +218,44 @@ enum SmcStatus {
    SmcStatus_VLLS   = SMC_PMSTAT_PMSTAT(1<<6),    //!< Processor is in Very Low Leakage Stop mode
 };
 
+class SmcBase {
+
+public:
+   /**
+    * Enter Stop Mode (STOP, VLPS, LLSx, VLLSx)
+    * (ARM core DEEPSLEEP mode)
+    *
+    * The processor will stop execution and enter the currently configured STOP mode.\n
+    * Peripherals affected will depend on the stop mode selected.\n
+    * The stop mode to enter may be set by setStopMode().
+    * Other options that affect stop mode may be set by setStopOptions().
+    */
+   static void enterStopMode() {
+      // Space for RAM copy of executeRamStopCommand_asm()
+      __attribute__ ((section(".data")))
+      static uint16_t const space[] = {
+               //                // executeRamStopCommand_asm()
+               0x200a,           //        movs  r0, #10
+               //                // loop:
+               0xf110, 0x30ff,   //        adds  r0, r0, #-1
+               0xd1fc,           //        bne   loop
+               0xf3bf, 0x8f4f,   //        dsb
+               0xbf30,           //        wfi
+               0xf3bf, 0x8f6f,   //        isb
+               0x4770,           //        bx lr
+      };
+      // Pointer to function in RAM
+      void (*fp)() = (void (*)())((uint32_t)space|1);
+
+      // Set deep sleep
+      SCB->SCR = SCB->SCR | SCB_SCR_SLEEPDEEP_Msk;
+
+      // Call executeRamStopCommand() on the stack
+      (*fp)();
+   }
+
+};
+
 /**
  * @brief Template class representing the System Mode Controller (SMC)
  *
@@ -217,13 +265,15 @@ enum SmcStatus {
  * @image html KinetisPowerModes.png
  */
 template <class Info>
-class SmcBase_T {
+class SmcBase_T : public SmcBase {
 
 protected:
 	   /** Hardware instance pointer */
-   static constexpr HardwarePtr<SMC_Type> smc = Info::baseAddress;
+	   static constexpr HardwarePtr<SMC_Type> smc = Info::baseAddress;
 
 public:
+
+	   using SmcBase::enterStopMode;
 
    /**
     * Get name from SMC status e.g. RUN, VLPR, HSRUN
@@ -234,7 +284,7 @@ public:
     */
    static const char *getSmcStatusName(SmcStatus status) {
 #ifdef SMC_PMPROT_AHSRUN
-      if (status == SmcStatus_hsrun) {
+      if (status == SmcStatus_HSRUN) {
          return "HSRUN";
       }
 #endif
@@ -280,7 +330,7 @@ $(/SMC/setStopOptions)
     */
    static SmcStatus getStatus() {
 
-      return (SmcStatus)(smc->PMSTAT);
+      return static_cast<SmcStatus>(smc->PMSTAT);
    }
 
    /**
@@ -314,7 +364,7 @@ $(/SMC/setStopOptions)
             }
             smc->PMCTRL = (smc->PMCTRL&~SMC_PMCTRL_RUNM_MASK)|smcRunMode;
             // Wait for power status to change
-            while (getStatus() != SmcStatus_hsrun) {
+            while (getStatus() != SmcStatus_HSRUN) {
                __asm__("nop");
             }
             break;
@@ -358,22 +408,6 @@ $(/SMC/setStopOptions)
     * Enter Stop Mode (STOP, VLPS, LLSx, VLLSx)
     * (ARM core DEEPSLEEP mode)
     *
-    * The processor will stop execution and enter the currently configured STOP mode.\n
-    * Peripherals affected will depend on the stop mode selected.\n
-    * The stop mode to enter may be set by setStopMode->
-    * Other options that affect stop mode may be set by setStopOptions->
-    */
-   static void enterStopMode() {
-      SCB->SCR |= SCB_SCR_SLEEPDEEP_Msk;
-      // Make sure write completes
-      (void)(SCB->SCR);
-      __WFI();
-   }
-
-   /**
-    * Enter Stop Mode (STOP, VLPS, LLSx, VLLSx)
-    * (ARM core DEEPSLEEP mode)
-    *
     * The processor will stop execution and enter the given STOP mode.\n
     * Peripherals affected will depend on the stop mode selected.
     *
@@ -381,7 +415,7 @@ $(/SMC/setStopOptions)
     */
    static void enterStopMode(SmcStopMode smcStopMode) {
       setStopMode(smcStopMode);
-      enterStopMode();
+      SmcBase::enterStopMode();
    }
 
    /**
@@ -390,13 +424,57 @@ $(/SMC/setStopOptions)
     * See enterStopMode();
     */
    static void deepSleep() {
-      enterStopMode();
+      SmcBase::enterStopMode();
    }
 
-   /*
-    * WAIT mode is not supported
+   /**
+    * Enter Wait Mode (WAIT, VLPW)\n
+    * (ARM core SLEEP mode)
+    *
+    * The processor will stop execution and enter WAIT/VLPW mode.\n
+    * This function can be used to enter normal WAIT mode or VLPW mode
+    * depending upon current run mode.\n
+    * In wait mode the core clock is disabled (no code executing),
+    * but bus clocks are enabled (peripheral modules are operational).
+    *
+    * Possible power mode transitions:
+    * - RUN  -> WAIT
+    * - VLPR -> VLPW
+    *
+    * WAIT mode is exited using any enabled interrupt or RESET.
+    *
+    * For Kinetis K:
+    * If in VLPW mode, the statue of the SMC_PMCTRL[LPWUI] bit
+    * determines if the processor exits to VLPR or RUN mode.\n
+    * Use setExitVeryLowPowerOnInterrupt() to modify this action.
+    *
+    * For Kinetis L:
+    * LPWUI does not exist.\n
+    * Exits with an interrupt from VLPW will always be back to VLPR.\n
+    * Exits from an interrupt from WAIT will always be back to RUN.
+    *
+    * @note Some modules include a programmable option to disable them in wait mode.\n
+    * If those modules are programmed to disable in wait mode, they will not be able to
+    * generate interrupts to wake the core.
     */
-	
+   static void enterWaitMode() {
+      SCB->SCR = SCB->SCR & ~SCB_SCR_SLEEPDEEP_Msk;
+      // Make sure write completes
+      (void)(SCB->SCR);
+      __asm volatile( "dsb" ::: "memory" );
+      __asm volatile( "wfi" );
+      __asm volatile( "isb" );
+   }
+
+   /**
+    * Enter SLEEP mode
+    *
+    * See enterWaitMode();
+    */
+   static void sleep() {
+      enterWaitMode();
+   }
+
 #ifdef SMC_PMCTRL_LPWUI_MASK
    /**
     * Select VLP action on interrupt when in VLP modes (VLPR, VLPW or VLPS).
@@ -430,10 +508,10 @@ $(/SMC/setStopOptions)
     */
    static void setSleepOnExit(SmcSleepOnExit smcSleepOnExit=SmcSleepOnExit_Enabled) {
       if (smcSleepOnExit) {
-         SCB->SCR |= SCB_SCR_SLEEPONEXIT_Msk;
+         SCB->SCR = SCB->SCR | SCB_SCR_SLEEPONEXIT_Msk;
       }
       else {
-         SCB->SCR &= ~SCB_SCR_SLEEPONEXIT_Msk;
+         SCB->SCR = SCB->SCR & ~SCB_SCR_SLEEPONEXIT_Msk;
       }
       // Make sure write completes
       (void)(SCB->SCR);
@@ -445,7 +523,6 @@ $(/SMC/setStopOptions)
  * Class representing SMC
  */
 class Smc : public SmcBase_T<SmcInfo> {};
-$(/SMC/Declarations:   // No declarations Found)
 #endif
 
 /**

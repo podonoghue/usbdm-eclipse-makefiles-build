@@ -517,7 +517,7 @@ public:
     * Obtain SPI - dummy routine (non RTOS)
     */
    int startTransaction(int =0) {
-      spi->MCR &= ~SPI_MCR_HALT_MASK;
+      spi->MCR = spi->MCR & ~SPI_MCR_HALT_MASK;
       return 0;
    }
 
@@ -527,7 +527,7 @@ public:
     * @param[in] configuration The configuration values to set for the transaction.
     */
    int startTransaction(SpiCalculatedConfiguration &configuration, int =0) {
-      spi->MCR    &= ~SPI_MCR_HALT_MASK;
+      spi->MCR = spi->MCR & ~SPI_MCR_HALT_MASK;
       setConfiguration(configuration);
       return 0;
    }
@@ -539,7 +539,7 @@ public:
     * @param spiCtarSelect          Which configuration to use
     */
    int startTransaction(SpiPeripheralSelect spiPeripheralSelect, SpiCtarSelect spiCtarSelect=SpiCtarSelect_0) {
-      spi->MCR    &= ~SPI_MCR_HALT_MASK;
+      spi->MCR = spi->MCR & ~SPI_MCR_HALT_MASK;
       setActiveConfiguration(spiPeripheralSelect, spiCtarSelect);
       return 0;
    }
@@ -548,7 +548,7 @@ public:
     * Release SPI - dummy routine (non RTOS)
     */
    int endTransaction() {
-      spi->MCR  |= SPI_MCR_HALT_MASK;
+      spi->MCR = spi->MCR | SPI_MCR_HALT_MASK;
       return 0;
    }
 #endif
@@ -677,11 +677,11 @@ public:
 
       if (polarity) {
          // ActiveHigh
-         spi->MCR &= ~spiPeripheralSelect;
+         spi->MCR = spi->MCR & ~spiPeripheralSelect;
       }
       else {
          // ActiveLow
-         spi->MCR |= spiPeripheralSelect;
+         spi->MCR = spi->MCR | spiPeripheralSelect;
       }
    }
 
@@ -781,7 +781,7 @@ public:
     * @param spiClearFifo  Which FIFOs to clear
     */
    void clearFifos(SpiClearFifo spiClearFifo=SpiClearFifo_Both) {
-      spi->MCR |= spiClearFifo;
+      spi->MCR = spi->MCR | spiClearFifo;
    }
 
    /**
@@ -852,10 +852,10 @@ public:
     */
    void enableTransfer(bool enable=true) {
       if (enable) {
-         spi->MCR &= ~SPI_MCR_HALT_MASK;
+         spi->MCR = spi->MCR & ~SPI_MCR_HALT_MASK;
       }
       else {
-         spi->MCR |= SPI_MCR_HALT_MASK;
+         spi->MCR = spi->MCR | SPI_MCR_HALT_MASK;
       }
    }
    /**
@@ -900,20 +900,20 @@ public:
    /** Pointer to SPI hardware as struct */
    static constexpr HardwarePtr<SPI_Type>spi = Info::baseAddress;
 
-   /** Get base address of SPI hardware as uint32_t */
-   static constexpr uint32_t spiBase() { return Info::baseAddress; }
-   /** Get base address of SPI.MCR register as uint32_t */
-   static constexpr uint32_t spiMCR() { return spiBase() + offsetof(SPI_Type, MCR); }
-   /** Get base address of SPI.CR register as uint32_t */
-   static constexpr uint32_t spiCR() { return spiBase() + offsetof(SPI_Type, TCR); }
-   /** Get base address of SPI.CTAR[n] register as uint32_t */
-   static constexpr uint32_t spiCTAR(unsigned index) { return spiBase() + offsetof(SPI_Type, CTAR[index]); }
-   /** Get base address of SPI.SR register as uint32_t */
-   static constexpr uint32_t spiSR() { return spiBase() + offsetof(SPI_Type, SR); }
-   /** Get base address of SPI.PUSHR register as uint32_t */
-   static constexpr uint32_t spiPUSHR() { return spiBase() + offsetof(SPI_Type, PUSHR); }
-   /** Get base address of SPI.POPR register as uint32_t */
-   static constexpr uint32_t spiPOPR() { return spiBase() + offsetof(SPI_Type, POPR); }
+   /** Base address of SPI hardware as uint32_t */
+   static constexpr uint32_t spiBase   = Info::baseAddress;
+   /** Address of SPI.MCR register as uint32_t */
+   static constexpr uint32_t spiMCR    = Info::baseAddress + offsetof(SPI_Type, MCR);
+   /** Address of SPI.CR register as uint32_t */
+   static constexpr uint32_t spiCR     = Info::baseAddress + offsetof(SPI_Type, TCR);
+   /** Address of SPI.CTAR[n] register as uint32_t */
+   static constexpr uint32_t spiCTAR(unsigned index) {return Info::baseAddress + offsetof(SPI_Type, CTAR[index]); }
+   /** Address of SPI.SR register as uint32_t */
+   static constexpr uint32_t spiSR     = Info::baseAddress + offsetof(SPI_Type, SR);
+   /** Address of SPI.PUSHR register as uint32_t */
+   static constexpr uint32_t spiPUSHR  = Info::baseAddress + offsetof(SPI_Type, PUSHR);
+   /** Address of SPI.POPR register as uint32_t */
+   static constexpr uint32_t spiPOPR   = Info::baseAddress + offsetof(SPI_Type, POPR);
 
 protected:
    /** Callback function for ISR */

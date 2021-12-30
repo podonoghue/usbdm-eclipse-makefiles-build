@@ -248,13 +248,14 @@ public:
       void (*fp)() = (void (*)())((uint32_t)space|1);
 
       // Set deep sleep
-      SCB->SCR |= SCB_SCR_SLEEPDEEP_Msk;
+      SCB->SCR = SCB->SCR | SCB_SCR_SLEEPDEEP_Msk;
 
       // Call executeRamStopCommand() on the stack
       (*fp)();
    }
 
 };
+
 /**
  * @brief Template class representing the System Mode Controller (SMC)
  *
@@ -457,7 +458,7 @@ $(/SMC/setStopOptions)
     * generate interrupts to wake the core.
     */
    static void enterWaitMode() {
-      SCB->SCR &= ~SCB_SCR_SLEEPDEEP_Msk;
+      SCB->SCR = SCB->SCR & ~SCB_SCR_SLEEPDEEP_Msk;
       // Make sure write completes
       (void)(SCB->SCR);
       __asm volatile( "dsb" ::: "memory" );
@@ -507,10 +508,10 @@ $(/SMC/setStopOptions)
     */
    static void setSleepOnExit(SmcSleepOnExit smcSleepOnExit=SmcSleepOnExit_Enabled) {
       if (smcSleepOnExit) {
-         SCB->SCR |= SCB_SCR_SLEEPONEXIT_Msk;
+         SCB->SCR = SCB->SCR | SCB_SCR_SLEEPONEXIT_Msk;
       }
       else {
-         SCB->SCR &= ~SCB_SCR_SLEEPONEXIT_Msk;
+         SCB->SCR = SCB->SCR & ~SCB_SCR_SLEEPONEXIT_Msk;
       }
       // Make sure write completes
       (void)(SCB->SCR);

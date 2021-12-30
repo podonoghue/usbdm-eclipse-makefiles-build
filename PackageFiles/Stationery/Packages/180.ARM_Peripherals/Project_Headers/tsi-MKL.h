@@ -413,7 +413,7 @@ public:
     */
    static void startScan(int channel) {
       // Clear flags
-      Info::tsi->GENCS |= TSI_GENCS_OUTRGF_MASK|TSI_GENCS_EOSF_MASK;
+      Info::tsi->GENCS = Info::tsi->GENCS | TSI_GENCS_OUTRGF_MASK|TSI_GENCS_EOSF_MASK;
       // Start scan
       Info::tsi->DATA = TSI_DATA_SWTS_MASK|TSI_DATA_TSICH(channel);
    }
@@ -425,9 +425,9 @@ public:
     */
    static void startDmaScan(int channel) {
       // Clear flags
-      Info::tsi->GENCS |= TSI_GENCS_OUTRGF_MASK|TSI_GENCS_EOSF_MASK;
+      Info::tsi->GENCS = Info::tsi->GENCS | TSI_GENCS_OUTRGF_MASK|TSI_GENCS_EOSF_MASK;
       // Select event of end of scan
-      Info::tsi->GENCS |= TSI_GENCS_ESOR(1)|TSI_GENCS_TSIIEN(1);
+      Info::tsi->GENCS = Info::tsi->GENCS | TSI_GENCS_ESOR(1)|TSI_GENCS_TSIIEN(1);
       // Start scan
       Info::tsi->DATA = TSI_DATA_SWTS_MASK|TSI_DATA_DMAEN_MASK|TSI_DATA_TSICH(channel);
    }
@@ -441,7 +441,7 @@ public:
     */
    static void startScanAndWait(int channel) {
       // Clear flags
-      Info::tsi->GENCS |= TSI_GENCS_OUTRGF_MASK|TSI_GENCS_EOSF_MASK;
+      Info::tsi->GENCS = Info::tsi->GENCS | TSI_GENCS_OUTRGF_MASK|TSI_GENCS_EOSF_MASK;
       // Start scan
       Info::tsi->DATA = TSI_DATA_SWTS_MASK|TSI_DATA_TSICH(channel);
 
@@ -480,7 +480,7 @@ public:
    static void irqHandler(void) {
       uint8_t status = TsiBase_T<Info>::tsi->GENCS&(TSI_GENCS_OUTRGF_MASK|TSI_GENCS_EOSF_MASK);
       if (callback != 0) {
-         TsiBase_T<Info>::tsi->GENCS |= status;
+         TsiBase_T<Info>::tsi->GENCS = TsiBase_T<Info>::tsi->GENCS | status;
          callback(status);
       }
    }

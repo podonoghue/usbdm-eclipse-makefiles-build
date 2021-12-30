@@ -343,10 +343,10 @@ $(/EWM/classInfo: // No class Info found)
     */
    static void enableInterrupt(bool enable=true) {
       if (enable) {
-         ewm->CTRL |= EWM_CTRL_INTEN_MASK;
+         ewm->CTRL = ewm->CTRL | EWM_CTRL_INTEN_MASK;
       }
       else {
-         ewm->CTRL &= ~EWM_CTRL_INTEN_MASK;
+         ewm->CTRL = ewm->CTRL & ~EWM_CTRL_INTEN_MASK;
       }
    }
 };
