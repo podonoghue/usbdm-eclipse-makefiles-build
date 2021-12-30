@@ -85,12 +85,12 @@ These bits select the buffer modes for the Voltage Reference module</description
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>0b01</name>
-                           <description>Low-power buffer</description>
+                           <description>High power buffer mode enabled</description>
                            <value>0b01</value>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>0b10</name>
-                           <description>High-power buffer</description>
+                           <description>Low-power buffer mode enabled</description>
                            <value>0b10</value>
                         </enumeratedValue>
                         <enumeratedValue>
