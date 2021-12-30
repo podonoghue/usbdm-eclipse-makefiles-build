@@ -160,22 +160,23 @@
    <!ATTLIST pinListOption derivedFrom   IDREF        #IMPLIED>
    
 <!ELEMENT choiceOption (for?, (choice)*) >
-   <!ATTLIST choiceOption constant     (false|true) #IMPLIED>
-   <!ATTLIST choiceOption hidden       (false|true) #IMPLIED>
-   <!ATTLIST choiceOption name         ID           #IMPLIED>
-   <!ATTLIST choiceOption key          CDATA        #IMPLIED>
-   <!ATTLIST choiceOption origin       CDATA        #IMPLIED>
-   <!ATTLIST choiceOption description  CDATA        #IMPLIED>
-   <!ATTLIST choiceOption toolTip      CDATA        #IMPLIED>
-   <!ATTLIST choiceOption units        (None|Hz|s)  #IMPLIED>
-   <!ATTLIST choiceOption indexedBy    CDATA        #IMPLIED>
-   <!ATTLIST choiceOption derived      (false|true) #IMPLIED>
-   <!ATTLIST choiceOption derivedFrom  IDREF        #IMPLIED>
+   <!ATTLIST choiceOption constant            (false|true) #IMPLIED>
+   <!ATTLIST choiceOption hidden              (false|true) #IMPLIED>
+   <!ATTLIST choiceOption name                ID           #IMPLIED>
+   <!ATTLIST choiceOption key                 CDATA        #IMPLIED>
+   <!ATTLIST choiceOption origin              CDATA        #IMPLIED>
+   <!ATTLIST choiceOption description         CDATA        #IMPLIED>
+   <!ATTLIST choiceOption toolTip             CDATA        #IMPLIED>
+   <!ATTLIST choiceOption units               (None|Hz|s)  #IMPLIED>
+   <!ATTLIST choiceOption indexedBy           CDATA        #IMPLIED>
+   <!ATTLIST choiceOption derived             (false|true) #IMPLIED>
+   <!ATTLIST choiceOption derivedFrom         IDREF        #IMPLIED>
   
 <!ELEMENT choice EMPTY >
-   <!ATTLIST choice value         CDATA        #REQUIRED>
-   <!ATTLIST choice name          CDATA        #REQUIRED>
-   <!ATTLIST choice isDefault     (false|true) #IMPLIED>
+   <!ATTLIST choice value                     CDATA        #REQUIRED>
+   <!ATTLIST choice name                      CDATA        #REQUIRED>
+   <!ATTLIST choice requiresPeripheral        CDATA        #IMPLIED>
+   <!ATTLIST choice isDefault                 (false|true) #IMPLIED>
 
 <!ELEMENT binaryOption (for?, choice, choice)? >
    <!ATTLIST binaryOption constant      (false|true) #IMPLIED>

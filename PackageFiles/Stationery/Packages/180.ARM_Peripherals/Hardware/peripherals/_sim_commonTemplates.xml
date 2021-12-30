@@ -1465,7 +1465,7 @@
       \tstatic void initRegs() {
       \t#ifdef SIM_SCGC4_USBOTG_MASK
       \t   // The USB interface must be disabled for clock changes to have effect
-      \t   sim->SCGC4 &= ~SIM_SCGC4_USBOTG_MASK;
+      \t   sim->SCGC4 = sim->SCGC4 & ~SIM_SCGC4_USBOTG_MASK;
       \t#endif
       \t
       \t   sim->SOPT1 = sopt1;

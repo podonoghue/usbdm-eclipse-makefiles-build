@@ -31,8 +31,26 @@
    toolTip="It is allowable to have multiple signals mapped to a single pin on the\n 
             understanding that they will be dynamically mapped during execution">
    <choice value="false" name="Don't produce warning during compilation" isDefault="true" />
-   <choice value="true"  name="Produce warning during compilation" isDefault="true" />
+   <choice value="true"  name="Produce warning during compilation" />
 </binaryOption>
+
+<binaryOption name="/HARDWARE/useTypeSystemForTimers" 
+   description="Enforce use of a dimensioned type system for time and frequency measures"
+   toolTip="Types 'Seconds', 'Hertz' and 'Ticks' are always defined but not enforced">
+   <choice value="false" name="Don't enforce types system" isDefault="true" />
+   <choice value="true"  name="Enforce types system" />
+</binaryOption>
+
+<category name="Examples" description="Pin mapping for examples">
+   <stringOption name="/HARDWARE/Led1"       value="GpioA&lt;1,  ActiveLow&gt;"  description="LED for examples" />
+   <stringOption name="/HARDWARE/Led2"       value="GpioA&lt;2,  ActiveLow&gt;"  description="LED for examples" />
+   <stringOption name="/HARDWARE/Led3"       value="GpioD&lt;5,  ActiveLow&gt;"  description="LED for examples" />
+   <stringOption name="/HARDWARE/Switch1"    value="GpioB&lt;17, ActiveLow&gt;"  description="Switch for examples" />
+   <stringOption name="/HARDWARE/Analogue0"  value="Adc0::Channel&lt;8&gt;"      description="ADC channel for examples" />
+   <stringOption name="/HARDWARE/Analogue1"  value="Adc0::Channel&lt;9&gt;"      description="ADC channel for examples" />
+   <stringOption name="/HARDWARE/Digital0"   value="GpioD&lt;5,  ActiveLow&gt;"  description="Digital I/O for examples" />
+   <stringOption name="/HARDWARE/Digital1"   value="GpioD&lt;6,  ActiveLow&gt;"  description="Digital I/O for examples" />
+</category>
 
 <!-- Template is added to pin_mapping.h -->
 <template namespace="usbdm"><![CDATA[
@@ -50,7 +68,7 @@
    #else
    #define NOINLINE_DEBUG
    #endif
-
+   
    \t/**
    \t *  Enables mapping of all allocated pins during startup using mapAllPins() 
    \t */
@@ -66,14 +84,6 @@
    \t */
    \tstatic constexpr bool ForceLockoutUnbondedPins = $(/HARDWARE/lockoutUnbondedPins);
 
-   \tstatic constexpr float ns      = 1E-9f; //!< Scale factor for nanoseconds
-   \tstatic constexpr float us      = 1E-6f; //!< Scale factor for microseconds
-   \tstatic constexpr float ms      = 1E-3f; //!< Scale factor for milliseconds
-   \tstatic constexpr float seconds = 1.0f;  //!< Scale factor for seconds
-   \tstatic constexpr float percent = 1.0f;  //!< Scale factor for percentage as float
-   \tstatic constexpr float MHz     = 1E6f;  //!< Scale factor for MHz as float
-   \tstatic constexpr float kHz     = 1E3f;  //!< Scale factor for kHz as float
-   \tstatic constexpr float Hz      = 1.0f;  //!< Scale factor for Hz as float
 
    \t/* MCGFFCLK - Fixed frequency clock (input to FLL) */
    \textern volatile uint32_t SystemMcgffClock;
@@ -159,7 +169,7 @@
    \t * @return  Size of array in elements
    \t */
    \ttemplate<typename T, size_t N>
-   \t   constexpr size_t sizeofArray(T (&)[N]) {
+   \t   consteval size_t sizeofArray(T (&)[N]) {
    \t      return N;
    \t   }
 

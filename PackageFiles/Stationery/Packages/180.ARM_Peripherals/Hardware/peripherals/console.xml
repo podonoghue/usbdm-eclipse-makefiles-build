@@ -15,18 +15,18 @@
    <choiceOption name="consoleDevice" 
       description="UART to use for console"
       toolTip="Not all UARTs listed may be available on a particular device" >
-      <choice name="Lpuart 0" value="USBDM::Lpuart0" />
-      <choice name="Lpuart 1" value="USBDM::Lpuart1" />
-      <choice name="Lpuart 2" value="USBDM::Lpuart2" />
-      <choice name="Lpuart 3" value="USBDM::Lpuart3" />
-      <choice name="Lpuart 4" value="USBDM::Lpuart4" />
-      <choice name="Lpuart 5" value="USBDM::Lpuart5" />
-      <choice name="Uart 0" value="USBDM::Uart0" isDefault="true" />
-      <choice name="Uart 1" value="USBDM::Uart1" />
-      <choice name="Uart 2" value="USBDM::Uart2" />
-      <choice name="Uart 3" value="USBDM::Uart3" />
-      <choice name="Uart 4" value="USBDM::Uart4" />
-      <choice name="Uart 5" value="USBDM::Uart5" />
+      <choice name="Uart 0"   value="USBDM::Uart0"    requiresPeripheral="Uart0" />
+      <choice name="Uart 1"   value="USBDM::Uart1"    requiresPeripheral="Uart1" />
+      <choice name="Uart 2"   value="USBDM::Uart2"    requiresPeripheral="Uart2" />
+      <choice name="Uart 3"   value="USBDM::Uart3"    requiresPeripheral="Uart3" />
+      <choice name="Uart 4"   value="USBDM::Uart4"    requiresPeripheral="Uart4" />
+      <choice name="Uart 5"   value="USBDM::Uart5"    requiresPeripheral="Uart5" />
+      <choice name="Lpuart 0" value="USBDM::Lpuart0"  requiresPeripheral="Lpuart0" />
+      <choice name="Lpuart 1" value="USBDM::Lpuart1"  requiresPeripheral="Lpuart1" />
+      <choice name="Lpuart 2" value="USBDM::Lpuart2"  requiresPeripheral="Lpuart2" />
+      <choice name="Lpuart 3" value="USBDM::Lpuart3"  requiresPeripheral="Lpuart3" />
+      <choice name="Lpuart 4" value="USBDM::Lpuart4"  requiresPeripheral="Lpuart4" />
+      <choice name="Lpuart 5" value="USBDM::Lpuart5"  requiresPeripheral="Lpuart5" />
    </choiceOption>
    
    <choiceOption name="defaultBaudRate" 
@@ -54,13 +54,6 @@
       <copy source="Startup_Code/console.cpp"     target="Startup_Code/console.cpp"     overwrite="true"  derived="true" />
    </projectActionList>
     
-   <template><![CDATA[
-      \t/** Console device*/
-      \tUsing Console = $(console_device);
-      
-      \tstatic const uint32_t defaultBaudRate = $(defaultBaudRate)UL;\n\n
-   ]]></template>
-
    <signals name="LPUART0" optional="true" />
    <signals name="LPUART1" optional="true" />
    <signals name="LPUART2" optional="true" />

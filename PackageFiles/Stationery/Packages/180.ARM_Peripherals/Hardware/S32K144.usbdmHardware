@@ -16,17 +16,17 @@
    <peripherals>
       <peripheral baseName="ADC"      instance="0"        version="adc0_s32k142">
          <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForAdc" />
-         <clock clockEnable="PCC->PCC_ADC0 |= PCC_PCCn_CGC_MASK" clockDisable="PCC->PCC_ADC0 &amp;= ~PCC_PCCn_CGC_MASK" />
+         <clock clockEnable="PCC->PCC_ADC0 = PCC->PCC_ADC0 | PCC_PCCn_CGC_MASK;" clockDisable="PCC->PCC_ADC0 = PCC->PCC_ADC0 &amp; ~PCC_PCCn_CGC_MASK;" />
          <irq num="ADC0_IRQn" />
       </peripheral>
       <peripheral baseName="ADC"      instance="1"        version="adc0_s32k142">
          <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForAdc" />
-         <clock clockEnable="PCC->PCC_ADC1 |= PCC_PCCn_CGC_MASK" clockDisable="PCC->PCC_ADC1 &amp;= ~PCC_PCCn_CGC_MASK" />
+         <clock clockEnable="PCC->PCC_ADC1 = PCC->PCC_ADC1 | PCC_PCCn_CGC_MASK;" clockDisable="PCC->PCC_ADC1 = PCC->PCC_ADC1 &amp; ~PCC_PCCn_CGC_MASK;" />
          <irq num="ADC1_IRQn" />
       </peripheral>
       <peripheral baseName="CAN"      instance="0"        version="can0_flex_s32k14x">
          <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForFlexCan" />
-         <clock clockEnable="PCC->PCC_FLEXCAN0 |= PCC_PCCn_CGC_MASK" clockDisable="PCC->PCC_FLEXCAN0 &amp;= ~PCC_PCCn_CGC_MASK" />
+         <clock clockEnable="PCC->PCC_FLEXCAN0 = PCC->PCC_FLEXCAN0 | PCC_PCCn_CGC_MASK;" clockDisable="PCC->PCC_FLEXCAN0 = PCC->PCC_FLEXCAN0 &amp; ~PCC_PCCn_CGC_MASK;" />
          <irq num="CAN0_ORed_IRQn" />
          <irq num="CAN0_Error_IRQn" />
          <irq num="CAN0_WakeUp_IRQn" />
@@ -35,21 +35,21 @@
       </peripheral>
       <peripheral baseName="CAN"      instance="1"        version="can1_flex_s32k14x">
          <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForFlexCan" />
-         <clock clockEnable="PCC->PCC_FLEXCAN1 |= PCC_PCCn_CGC_MASK" clockDisable="PCC->PCC_FLEXCAN1 &amp;= ~PCC_PCCn_CGC_MASK" />
+         <clock clockEnable="PCC->PCC_FLEXCAN1 = PCC->PCC_FLEXCAN1 | PCC_PCCn_CGC_MASK;" clockDisable="PCC->PCC_FLEXCAN1 = PCC->PCC_FLEXCAN1 &amp; ~PCC_PCCn_CGC_MASK;" />
          <irq num="CAN1_ORed_IRQn" />
          <irq num="CAN1_Error_IRQn" />
          <irq num="CAN1_MessageBuffer_0_15_IRQn" />
       </peripheral>
       <peripheral baseName="CAN"      instance="2"        version="can1_flex_s32k14x">
          <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForFlexCan" />
-         <clock clockEnable="PCC->PCC_FLEXCAN2 |= PCC_PCCn_CGC_MASK" clockDisable="PCC->PCC_FLEXCAN2 &amp;= ~PCC_PCCn_CGC_MASK" />
+         <clock clockEnable="PCC->PCC_FLEXCAN2 = PCC->PCC_FLEXCAN2 | PCC_PCCn_CGC_MASK;" clockDisable="PCC->PCC_FLEXCAN2 = PCC->PCC_FLEXCAN2 &amp; ~PCC_PCCn_CGC_MASK;" />
          <irq num="CAN2_ORed_IRQn" />
          <irq num="CAN2_Error_IRQn" />
          <irq num="CAN2_MessageBuffer_0_15_IRQn" />
       </peripheral>
       <peripheral baseName="CMP"      instance="0"        version="cmp0_mke16f16">
          <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForCmp" />
-         <clock clockEnable="PCC->PCC_CMP0 |= PCC_PCCn_CGC_MASK" clockDisable="PCC->PCC_CMP0 &amp;= ~PCC_PCCn_CGC_MASK" />
+         <clock clockEnable="PCC->PCC_CMP0 = PCC->PCC_CMP0 | PCC_PCCn_CGC_MASK;" clockDisable="PCC->PCC_CMP0 = PCC->PCC_CMP0 &amp; ~PCC_PCCn_CGC_MASK;" />
          <irq num="CMP0_IRQn" />
       </peripheral>
       <peripheral baseName="CONTROL"  instance="">
@@ -57,7 +57,7 @@
       </peripheral>
       <peripheral baseName="CRC"      instance="0"        version="crc0_0x40032000">
          <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForCrc" />
-         <clock clockEnable="PCC->PCC_CRC |= PCC_PCCn_CGC_MASK" clockDisable="PCC->PCC_CRC &amp;= ~PCC_PCCn_CGC_MASK" />
+         <clock clockEnable="PCC->PCC_CRC = PCC->PCC_CRC | PCC_PCCn_CGC_MASK;" clockDisable="PCC->PCC_CRC = PCC->PCC_CRC &amp; ~PCC_PCCn_CGC_MASK;" />
       </peripheral>
       <peripheral baseName="Console"  instance="">
          <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForConsole" />
@@ -84,7 +84,7 @@
       </peripheral>
       <peripheral baseName="DMAMUX"   instance="0"        version="dmamux0_16ch_trig_s32k14x">
          <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForDmaMux" />
-         <clock clockEnable="PCC->PCC_DMAMUX |= PCC_PCCn_CGC_MASK" clockDisable="PCC->PCC_DMAMUX &amp;= ~PCC_PCCn_CGC_MASK" />
+         <clock clockEnable="PCC->PCC_DMAMUX = PCC->PCC_DMAMUX | PCC_PCCn_CGC_MASK;" clockDisable="PCC->PCC_DMAMUX = PCC->PCC_DMAMUX &amp; ~PCC_PCCn_CGC_MASK;" />
          <dma source="Disabled"             num="0" />
          <dma source="ENET"                 num="1" />
          <dma source="LPUART0_Rx"           num="2" />
@@ -152,17 +152,17 @@
       </peripheral>
       <peripheral baseName="EWM"      instance=""         version="ewm_int_pr">
          <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForEwm" />
-         <clock clockEnable="PCC->PCC_EWM |= PCC_PCCn_CGC_MASK" clockDisable="PCC->PCC_EWM &amp;= ~PCC_PCCn_CGC_MASK" />
+         <clock clockEnable="PCC->PCC_EWM = PCC->PCC_EWM | PCC_PCCn_CGC_MASK;" clockDisable="PCC->PCC_EWM = PCC->PCC_EWM &amp; ~PCC_PCCn_CGC_MASK;" />
          <irq num="WDOG_EWM_IRQn" />
       </peripheral>
       <peripheral baseName="FLEXIO"   instance=""         version="flexio_4sh_4tmr_mke15z7">
          <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForFlexio" />
-         <clock clockEnable="PCC->PCC_FLEXIO |= PCC_PCCn_CGC_MASK" clockDisable="PCC->PCC_FLEXIO &amp;= ~PCC_PCCn_CGC_MASK" />
+         <clock clockEnable="PCC->PCC_FLEXIO |= PCC_PCCn_CGC_MASK = PCC->PCC_FLEXIO |= PCC_PCCn_CGC_MASK | PCC_PCCn_CGC_MASK;" clockDisable="PCC->PCC_FLEXIO |= PCC_PCCn_CGC_MASK = PCC->PCC_FLEXIO |= PCC_PCCn_CGC_MASK &amp; ~PCC_PCCn_CGC_MASK;" />
          <irq num="FLEXIO_IRQn" />
       </peripheral>
       <peripheral baseName="FTFC"     instance=""         version="ftfc_s32k14x">
          <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForFlash" />
-         <clock clockEnable="PCC->PCC_FTFC |= PCC_PCCn_CGC_MASK" clockDisable="PCC->PCC_FTFC &amp;= ~PCC_PCCn_CGC_MASK" />
+         <clock clockEnable="PCC->PCC_FTFC = PCC->PCC_FTFC | PCC_PCCn_CGC_MASK;" clockDisable="PCC->PCC_FTFC = PCC->PCC_FTFC &amp; ~PCC_PCCn_CGC_MASK;" />
          <irq num="FTFC_IRQn" />
          <irq num="FTFC_Read_Collision_IRQn" />
          <irq num="FTFC_Fault_IRQn" />
@@ -172,7 +172,7 @@
       </peripheral>
       <peripheral baseName="FTM"      instance="0"        version="ftm0_8ch_s32k144">
          <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForFtm" />
-         <clock clockEnable="PCC->PCC_FTM0 |= PCC_PCCn_CGC_MASK" clockDisable="PCC->PCC_FTM0 &amp;= ~PCC_PCCn_CGC_MASK" />
+         <clock clockEnable="PCC->PCC_FTM0 = PCC->PCC_FTM0 | PCC_PCCn_CGC_MASK;" clockDisable="PCC->PCC_FTM0 = PCC->PCC_FTM0 &amp; ~PCC_PCCn_CGC_MASK;" />
          <irq num="FTM0_Ch0_Ch1_IRQn" />
          <irq num="FTM0_Ch2_Ch3_IRQn" />
          <irq num="FTM0_Ch4_Ch5_IRQn" />
@@ -182,7 +182,7 @@
       </peripheral>
       <peripheral baseName="FTM"      instance="1"        version="ftm0_8ch_s32k144">
          <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForFtm" />
-         <clock clockEnable="PCC->PCC_FTM1 |= PCC_PCCn_CGC_MASK" clockDisable="PCC->PCC_FTM1 &amp;= ~PCC_PCCn_CGC_MASK" />
+         <clock clockEnable="PCC->PCC_FTM1 = PCC->PCC_FTM1 | PCC_PCCn_CGC_MASK;" clockDisable="PCC->PCC_FTM1 = PCC->PCC_FTM1 &amp; ~PCC_PCCn_CGC_MASK;" />
          <irq num="FTM1_Ch0_Ch1_IRQn" />
          <irq num="FTM1_Ch2_Ch3_IRQn" />
          <irq num="FTM1_Ch4_Ch5_IRQn" />
@@ -192,7 +192,7 @@
       </peripheral>
       <peripheral baseName="FTM"      instance="2"        version="ftm0_8ch_s32k144">
          <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForFtm" />
-         <clock clockEnable="PCC->PCC_FTM2 |= PCC_PCCn_CGC_MASK" clockDisable="PCC->PCC_FTM2 &amp;= ~PCC_PCCn_CGC_MASK" />
+         <clock clockEnable="PCC->PCC_FTM2 = PCC->PCC_FTM2 | PCC_PCCn_CGC_MASK;" clockDisable="PCC->PCC_FTM2 = PCC->PCC_FTM2 &amp; ~PCC_PCCn_CGC_MASK;" />
          <irq num="FTM2_Ch0_Ch1_IRQn" />
          <irq num="FTM2_Ch2_Ch3_IRQn" />
          <irq num="FTM2_Ch4_Ch5_IRQn" />
@@ -202,7 +202,7 @@
       </peripheral>
       <peripheral baseName="FTM"      instance="3"        version="ftm0_8ch_s32k144">
          <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForFtm" />
-         <clock clockEnable="PCC->PCC_FTM3 |= PCC_PCCn_CGC_MASK" clockDisable="PCC->PCC_FTM3 &amp;= ~PCC_PCCn_CGC_MASK" />
+         <clock clockEnable="PCC->PCC_FTM3 = PCC->PCC_FTM3 | PCC_PCCn_CGC_MASK;" clockDisable="PCC->PCC_FTM3 = PCC->PCC_FTM3 &amp; ~PCC_PCCn_CGC_MASK;" />
          <irq num="FTM3_Ch0_Ch1_IRQn" />
          <irq num="FTM3_Ch2_Ch3_IRQn" />
          <irq num="FTM3_Ch4_Ch5_IRQn" />
@@ -212,38 +212,38 @@
       </peripheral>
       <peripheral baseName="GPIO"     instance="A"        version="gpioa_s32k">
          <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForGpio" />
-         <clock clockEnable="PCC->PCC_GPIOA |= PCC_PCCn_CGC_MASK" clockDisable="PCC->PCC_GPIOA &amp;= ~PCC_PCCn_CGC_MASK" />
+         <clock clockEnable="PCC->PCC_GPIOA = PCC->PCC_GPIOA | PCC_PCCn_CGC_MASK;" clockDisable="PCC->PCC_GPIOA = PCC->PCC_GPIOA &amp; ~PCC_PCCn_CGC_MASK;" />
          <irq num="PORTA_IRQn" />
       </peripheral>
       <peripheral baseName="GPIO"     instance="B"        version="gpioa_s32k">
          <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForGpio" />
-         <clock clockEnable="PCC->PCC_GPIOB |= PCC_PCCn_CGC_MASK" clockDisable="PCC->PCC_GPIOB &amp;= ~PCC_PCCn_CGC_MASK" />
+         <clock clockEnable="PCC->PCC_GPIOB = PCC->PCC_GPIOB | PCC_PCCn_CGC_MASK;" clockDisable="PCC->PCC_GPIOB = PCC->PCC_GPIOB &amp; ~PCC_PCCn_CGC_MASK;" />
          <irq num="PORTB_IRQn" />
       </peripheral>
       <peripheral baseName="GPIO"     instance="C"        version="gpioa_s32k">
          <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForGpio" />
-         <clock clockEnable="PCC->PCC_GPIOC |= PCC_PCCn_CGC_MASK" clockDisable="PCC->PCC_GPIOC &amp;= ~PCC_PCCn_CGC_MASK" />
+         <clock clockEnable="PCC->PCC_GPIOC = PCC->PCC_GPIOC | PCC_PCCn_CGC_MASK;" clockDisable="PCC->PCC_GPIOC = PCC->PCC_GPIOC &amp; ~PCC_PCCn_CGC_MASK;" />
          <irq num="PORTC_IRQn" />
       </peripheral>
       <peripheral baseName="GPIO"     instance="D"        version="gpioa_s32k">
          <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForGpio" />
-         <clock clockEnable="PCC->PCC_GPIOD |= PCC_PCCn_CGC_MASK" clockDisable="PCC->PCC_GPIOD &amp;= ~PCC_PCCn_CGC_MASK" />
+         <clock clockEnable="PCC->PCC_GPIOD = PCC->PCC_GPIOD | PCC_PCCn_CGC_MASK;" clockDisable="PCC->PCC_GPIOD = PCC->PCC_GPIOD &amp; ~PCC_PCCn_CGC_MASK;" />
          <irq num="PORTD_IRQn" />
       </peripheral>
       <peripheral baseName="GPIO"     instance="E"        version="gpioa_s32k">
          <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForGpio" />
-         <clock clockEnable="PCC->PCC_GPIOE |= PCC_PCCn_CGC_MASK" clockDisable="PCC->PCC_GPIOE &amp;= ~PCC_PCCn_CGC_MASK" />
+         <clock clockEnable="PCC->PCC_GPIOE = PCC->PCC_GPIOE | PCC_PCCn_CGC_MASK;" clockDisable="PCC->PCC_GPIOE = PCC->PCC_GPIOE &amp; ~PCC_PCCn_CGC_MASK;" />
          <irq num="PORTE_IRQn" />
       </peripheral>
       <peripheral baseName="LPI2C"    instance="0"        version="lpi2c0_s32k14x">
          <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForI2c" />
-         <clock clockEnable="PCC->PCC_LPI2C0 |= PCC_PCCn_CGC_MASK" clockDisable="PCC->PCC_LPI2C0 &amp;= ~PCC_PCCn_CGC_MASK" />
+         <clock clockEnable="PCC->PCC_LPI2C0 = PCC->PCC_LPI2C0 | PCC_PCCn_CGC_MASK;" clockDisable="PCC->PCC_LPI2C0 = PCC->PCC_LPI2C0 &amp; ~PCC_PCCn_CGC_MASK;" />
          <irq num="LPI2C0_Master_IRQn" />
          <irq num="LPI2C0_Slave_IRQn" />
       </peripheral>
       <peripheral baseName="LPIT"     instance="0"        version="lpit0">
          <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForPit" />
-         <clock clockEnable="PCC->PCC_LPIT |= PCC_PCCn_CGC_MASK" clockDisable="PCC->PCC_LPIT &amp;= ~PCC_PCCn_CGC_MASK" />
+         <clock clockEnable="PCC->PCC_LPIT = PCC->PCC_LPIT | PCC_PCCn_CGC_MASK;" clockDisable="PCC->PCC_LPIT = PCC->PCC_LPIT &amp; ~PCC_PCCn_CGC_MASK;" />
          <irq num="LPIT0_Ch0_IRQn" />
          <irq num="LPIT0_Ch1_IRQn" />
          <irq num="LPIT0_Ch2_IRQn" />
@@ -251,37 +251,37 @@
       </peripheral>
       <peripheral baseName="LPSPI"    instance="0"        version="lpspi0">
          <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForSpi" />
-         <clock clockEnable="PCC->PCC_LPSPI0 |= PCC_PCCn_CGC_MASK" clockDisable="PCC->PCC_LPSPI0 &amp;= ~PCC_PCCn_CGC_MASK" />
+         <clock clockEnable="PCC->PCC_LPSPI0 = PCC->PCC_LPSPI0 | PCC_PCCn_CGC_MASK;" clockDisable="PCC->PCC_LPSPI0 = PCC->PCC_LPSPI0 &amp; ~PCC_PCCn_CGC_MASK;" />
          <irq num="LPSPI0_IRQn" />
       </peripheral>
       <peripheral baseName="LPSPI"    instance="1"        version="lpspi0">
          <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForSpi" />
-         <clock clockEnable="PCC->PCC_LPSPI1 |= PCC_PCCn_CGC_MASK" clockDisable="PCC->PCC_LPSPI1 &amp;= ~PCC_PCCn_CGC_MASK" />
+         <clock clockEnable="PCC->PCC_LPSPI1 = PCC->PCC_LPSPI1 | PCC_PCCn_CGC_MASK;" clockDisable="PCC->PCC_LPSPI1 = PCC->PCC_LPSPI1 &amp; ~PCC_PCCn_CGC_MASK;" />
          <irq num="LPSPI1_IRQn" />
       </peripheral>
       <peripheral baseName="LPSPI"    instance="2"        version="lpspi0">
          <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForSpi" />
-         <clock clockEnable="PCC->PCC_LPSPI2 |= PCC_PCCn_CGC_MASK" clockDisable="PCC->PCC_LPSPI2 &amp;= ~PCC_PCCn_CGC_MASK" />
+         <clock clockEnable="PCC->PCC_LPSPI2 = PCC->PCC_LPSPI2 | PCC_PCCn_CGC_MASK;" clockDisable="PCC->PCC_LPSPI2 = PCC->PCC_LPSPI2 &amp; ~PCC_PCCn_CGC_MASK;" />
          <irq num="LPSPI2_IRQn" />
       </peripheral>
       <peripheral baseName="LPTMR"    instance="0"        version="lptmr0_dma">
          <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForLptmr" />
-         <clock clockEnable="PCC->PCC_LPTMR0 |= PCC_PCCn_CGC_MASK" clockDisable="PCC->PCC_LPTMR0 &amp;= ~PCC_PCCn_CGC_MASK" />
+         <clock clockEnable="PCC->PCC_LPTMR0 = PCC->PCC_LPTMR0 | PCC_PCCn_CGC_MASK;" clockDisable="PCC->PCC_LPTMR0 = PCC->PCC_LPTMR0 &amp; ~PCC_PCCn_CGC_MASK;" />
          <irq num="LPTMR0_IRQn" />
       </peripheral>
       <peripheral baseName="LPUART"   instance="0"        version="lpuart0_mke_fifo">
          <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForLpuart" />
-         <clock clockEnable="PCC->PCC_LPUART0 |= PCC_PCCn_CGC_MASK" clockDisable="PCC->PCC_LPUART0 &amp;= ~PCC_PCCn_CGC_MASK" />
+         <clock clockEnable="PCC->PCC_LPUART0 = PCC->PCC_LPUART0 | PCC_PCCn_CGC_MASK;" clockDisable="PCC->PCC_LPUART0 = PCC->PCC_LPUART0 &amp; ~PCC_PCCn_CGC_MASK;" />
          <irq num="LPUART0_RxTx_IRQn" />
       </peripheral>
       <peripheral baseName="LPUART"   instance="1"        version="lpuart0_mke_fifo">
          <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForLpuart" />
-         <clock clockEnable="PCC->PCC_LPUART1 |= PCC_PCCn_CGC_MASK" clockDisable="PCC->PCC_LPUART1 &amp;= ~PCC_PCCn_CGC_MASK" />
+         <clock clockEnable="PCC->PCC_LPUART1 = PCC->PCC_LPUART1 | PCC_PCCn_CGC_MASK;" clockDisable="PCC->PCC_LPUART1 = PCC->PCC_LPUART1 &amp; ~PCC_PCCn_CGC_MASK;" />
          <irq num="LPUART1_RxTx_IRQn" />
       </peripheral>
       <peripheral baseName="LPUART"   instance="2"        version="lpuart0_mke_fifo">
          <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForLpuart" />
-         <clock clockEnable="PCC->PCC_LPUART2 |= PCC_PCCn_CGC_MASK" clockDisable="PCC->PCC_LPUART2 &amp;= ~PCC_PCCn_CGC_MASK" />
+         <clock clockEnable="PCC->PCC_LPUART2 = PCC->PCC_LPUART2 | PCC_PCCn_CGC_MASK;" clockDisable="PCC->PCC_LPUART2 = PCC->PCC_LPUART2 &amp; ~PCC_PCCn_CGC_MASK;" />
          <irq num="LPUART2_RxTx_IRQn" />
       </peripheral>
       <peripheral baseName="PCC"      instance=""         version="pcc_s32k144">
@@ -289,12 +289,12 @@
       </peripheral>
       <peripheral baseName="PDB"      instance="0"        version="pdb0_2ch_8pt_0dac_1po">
          <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForPdb" />
-         <clock clockEnable="PCC->PCC_PDB0 |= PCC_PCCn_CGC_MASK" clockDisable="PCC->PCC_PDB0 &amp;= ~PCC_PCCn_CGC_MASK" />
+         <clock clockEnable="PCC->PCC_PDB0 = PCC->PCC_PDB0 | PCC_PCCn_CGC_MASK;" clockDisable="PCC->PCC_PDB0 = PCC->PCC_PDB0 &amp; ~PCC_PCCn_CGC_MASK;" />
          <irq num="PDB0_IRQn" />
       </peripheral>
       <peripheral baseName="PDB"      instance="1"        version="pdb0_2ch_8pt_0dac_1po">
          <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForPdb" />
-         <clock clockEnable="PCC->PCC_PDB1 |= PCC_PCCn_CGC_MASK" clockDisable="PCC->PCC_PDB1 &amp;= ~PCC_PCCn_CGC_MASK" />
+         <clock clockEnable="PCC->PCC_PDB1 = PCC->PCC_PDB1 | PCC_PCCn_CGC_MASK;" clockDisable="PCC->PCC_PDB1 = PCC->PCC_PDB1 &amp; ~PCC_PCCn_CGC_MASK;" />
          <irq num="PDB1_IRQn" />
       </peripheral>
       <peripheral baseName="PMC"      instance=""         version="pmc_s32k14x">
@@ -306,7 +306,7 @@
       </peripheral>
       <peripheral baseName="RTC"      instance=""         version="rtc_s32k14x">
          <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForRtc" />
-         <clock clockEnable="PCC->PCC_RTC |= PCC_PCCn_CGC_MASK" clockDisable="PCC->PCC_RTC &amp;= ~PCC_PCCn_CGC_MASK" />
+         <clock clockEnable="PCC->PCC_RTC |= PCC_PCCn_CGC_MASK = PCC->PCC_RTC |= PCC_PCCn_CGC_MASK | PCC_PCCn_CGC_MASK;" clockDisable="PCC->PCC_RTC |= PCC_PCCn_CGC_MASK = PCC->PCC_RTC |= PCC_PCCn_CGC_MASK &amp; ~PCC_PCCn_CGC_MASK;" />
          <irq num="RTC_IRQn" />
          <irq num="RTC_Seconds_IRQn" />
       </peripheral>
@@ -319,7 +319,7 @@
       </peripheral>
       <peripheral baseName="SMC"      instance=""         version="smc_s32k14x">
          <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForSmc" />
-         <clock clockEnable="PCC->PCC_SMC |= PCC_PCCn_CGC_MASK" clockDisable="PCC->PCC_SMC &amp;= ~PCC_PCCn_CGC_MASK" />
+         <clock clockEnable="PCC->PCC_SMC |= PCC_PCCn_CGC_MASK = PCC->PCC_SMC |= PCC_PCCn_CGC_MASK | PCC_PCCn_CGC_MASK;" clockDisable="PCC->PCC_SMC |= PCC_PCCn_CGC_MASK = PCC->PCC_SMC |= PCC_PCCn_CGC_MASK &amp; ~PCC_PCCn_CGC_MASK;" />
       </peripheral>
       <peripheral baseName="TRGMUX"   instance=""         version="trgmux_s32k142">
          <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForTrgmux" />
@@ -1018,49 +1018,49 @@
          <mux sel="mux7"          signal="TRGMUX_OUT7" />
          <reset sel="unassigned" />
       </pin>
-      <pin name="VDD">
-         <mux sel="mux0"          signal="VDD" />
-         <reset sel="mux0" />
+      <pin name="VDD"          isFixed="true">
+         <mux sel="fixed"         signal="VDD" />
+         <reset sel="fixed" />
       </pin>
-      <pin name="VDD1">
-         <mux sel="mux0"          signal="VDD" />
-         <reset sel="mux0" />
+      <pin name="VDD1"         isFixed="true">
+         <mux sel="fixed"         signal="VDD" />
+         <reset sel="fixed" />
       </pin>
-      <pin name="VDD2">
-         <mux sel="mux0"          signal="VDD" />
-         <reset sel="mux0" />
+      <pin name="VDD2"         isFixed="true">
+         <mux sel="fixed"         signal="VDD" />
+         <reset sel="fixed" />
       </pin>
-      <pin name="VDD3">
-         <mux sel="mux0"          signal="VDD" />
-         <reset sel="mux0" />
+      <pin name="VDD3"         isFixed="true">
+         <mux sel="fixed"         signal="VDD" />
+         <reset sel="fixed" />
       </pin>
-      <pin name="VDDA">
-         <mux sel="mux0"          signal="VDDA" />
-         <reset sel="mux0" />
+      <pin name="VDDA"         isFixed="true">
+         <mux sel="fixed"         signal="VDDA" />
+         <reset sel="fixed" />
       </pin>
-      <pin name="VREFH">
-         <mux sel="mux0"          signal="VREFH" />
-         <reset sel="mux0" />
+      <pin name="VREFH"        isFixed="true">
+         <mux sel="fixed"         signal="VREFH" />
+         <reset sel="fixed" />
       </pin>
-      <pin name="VREFL">
-         <mux sel="mux0"          signal="VREFL" />
-         <reset sel="mux0" />
+      <pin name="VREFL"        isFixed="true">
+         <mux sel="fixed"         signal="VREFL" />
+         <reset sel="fixed" />
       </pin>
-      <pin name="VSS">
-         <mux sel="mux0"          signal="VSS" />
-         <reset sel="mux0" />
+      <pin name="VSS"          isFixed="true">
+         <mux sel="fixed"         signal="VSS" />
+         <reset sel="fixed" />
       </pin>
-      <pin name="VSS1">
-         <mux sel="mux0"          signal="VSS" />
-         <reset sel="mux0" />
+      <pin name="VSS1"         isFixed="true">
+         <mux sel="fixed"         signal="VSS" />
+         <reset sel="fixed" />
       </pin>
-      <pin name="VSS2">
-         <mux sel="mux0"          signal="VSS" />
-         <reset sel="mux0" />
+      <pin name="VSS2"         isFixed="true">
+         <mux sel="fixed"         signal="VSS" />
+         <reset sel="fixed" />
       </pin>
-      <pin name="VSS3">
-         <mux sel="mux0"          signal="VSS" />
-         <reset sel="mux0" />
+      <pin name="VSS3"         isFixed="true">
+         <mux sel="fixed"         signal="VSS" />
+         <reset sel="fixed" />
       </pin>
    </pins>
    <packages>
