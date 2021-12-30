@@ -18,13 +18,13 @@ using namespace USBDM;
  */
 
 // Connection - change as required
-using Led         = $(demo.cpp.red.led:GpioB<0,ActiveLow>);
-
-// Shared ADC to use
-using MyAdc        = Adc0;
+using Led         = $(/HARDWARE/Led1:GpioB<0,ActiveLow>);
 
 // ADC channel to use
-using MyAdcChannel = MyAdc::Channel<0>;
+using MyAdcChannel  = $(/HARDWARE/Analogue0:Adc0\:\:Channel<10>);
+
+// Shared ADC to use
+using MyAdc         = MyAdcChannel::OwningAdc;
 
 // Resolution to use for ADC
 constexpr AdcResolution adcResolution = AdcResolution_10bit_se;

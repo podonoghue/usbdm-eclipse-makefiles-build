@@ -96,7 +96,7 @@ static constexpr DmaTcd tcd = DmaTcd (
    /* Source modulo                  */ DmaModulo_Disabled,            // Disabled
    /* Last source adjustment         */ -(int)sizeof(message),         // Reset source address to start of array on completion
 
-   /* Destination address            */ console.uartD(),               // Destination is UART data register
+   /* Destination address            */ console.uartD,                 // Destination is UART data register
    /* Destination offset             */ 0,                             // Destination address doesn't change
    /* Destination size               */ dmaSize(message[0]),           // 8-bit write to destination address
    /* Destination modulo             */ DmaModulo_Disabled,            // Disabled
@@ -190,7 +190,7 @@ static void configurePit(PitChannelNum pitChannel) {
    Pit::configure(PitDebugMode_Stop);
 
    // Configure channel for 100ms + interrupts
-   Pit::configureChannel(pitChannel, 100*ms, PitChannelIrq_Enabled);
+   Pit::configureChannel(pitChannel, 100_ms, PitChannelIrq_Enabled);
 }
 
 /**

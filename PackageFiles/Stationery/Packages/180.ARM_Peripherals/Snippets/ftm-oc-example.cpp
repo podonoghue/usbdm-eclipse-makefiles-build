@@ -11,6 +11,7 @@
  */
 #include "hardware.h"
 #include "smc.h"
+#include "ftm.h"
 
 using namespace USBDM;
 
@@ -29,19 +30,19 @@ using namespace USBDM;
 using Timer = Ftm0;
 
 /// Timer channel for output - change as required
-using TimerChannel = Timer::Channel<7>;
+using TimerChannel = Timer::Channel<0>;
 
 /**
  * Half-period for timer in ticks.
  * This variable is shared with the interrupt routine
  */
-static volatile uint16_t timerHalfPeriodInTicks;
+static volatile Ticks timerHalfPeriodInTicks;
 
 /// Waveform period to generate
-static constexpr float WAVEFORM_PERIOD = 100*ms;
+static constexpr Seconds WAVEFORM_PERIOD = 100_ms;
 
 /// Maximum OC interval - the OC interval should not exceed this value.
-static constexpr float MAX_OC_INTERVAL = (1.1 * WAVEFORM_PERIOD)/2;
+static constexpr Seconds MAX_OC_INTERVAL = (1.1f * WAVEFORM_PERIOD)/2.0f;
 
 /**
  * Interrupt handler for Timer interrupts
@@ -79,7 +80,7 @@ int main() {
 
    // Calculate half-period in timer ticks
    // Must be done after timer clock configuration (above)
-   timerHalfPeriodInTicks = Timer::convertSecondsToTicks(WAVEFORM_PERIOD/2.0);
+   timerHalfPeriodInTicks = Timer::convertSecondsToTicks(WAVEFORM_PERIOD/2.0f);
 
    // Enable interrupts for entire timer
    Timer::enableNvicInterrupts(NvicPriority_Normal);
@@ -91,7 +92,7 @@ int main() {
          PinSlewRate_Slow);
 
    // Trigger 1st interrupt at now+100
-   TimerChannel::setRelativeEventTime(100);
+   TimerChannel::setRelativeEventTime(100_ticks);
 
    // Set callback function (may be shared by multiple channels)
    TimerChannel::setChannelCallback(ftmCallback);

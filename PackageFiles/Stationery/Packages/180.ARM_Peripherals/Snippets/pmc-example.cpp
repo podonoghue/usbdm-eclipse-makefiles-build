@@ -51,7 +51,9 @@ int main() {
    // Need to manually set this variable as located in a non-initialised section
    pmcHandlerRan = false;
 
-   console.write("Reset source = 0x").write(Rcm::getResetSource(), Radix_16).write(" = ").writeln(Rcm::getResetSourceDescription());
+   console.write("Reset source = 0x").
+         write(Rcm::getResetSource(), Radix_16).write(" = ").
+         writeln(Rcm::getResetSourceDescription());
 
    Pmc::setCallback(callback);
 

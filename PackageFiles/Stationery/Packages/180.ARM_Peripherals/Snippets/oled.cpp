@@ -34,8 +34,6 @@ Oled &Oled::clearDisplay(void) {
 /**
  * Initialise OLED peripheral
  *
- * @return true on success
- *
  * @note   This function must be called before any drawing or updates!
  * @note   Based loosely on Adafruit library initialisation sequence
  */
@@ -161,11 +159,12 @@ void Oled::refreshImage() {
 /**
  * Write image to frame buffer
  *
- * @param[in] dataPtr Pointer to start of image
- * @param[in] x       X position of top-left corner
- * @param[in] y       Y position of top-left corner
- * @param[in] width   Width of image
- * @param[in] height  Height of image
+ * @param [in] dataPtr    Pointer to start of image
+ * @param [in] x          X position of top-left corner
+ * @param [in] y          Y position of top-left corner
+ * @param [in] width      Width of image
+ * @param [in] height     Height of image
+ * @param [in] writeMode  Write mode (inverse, xor etc)
  */
 Oled &Oled::writeImage(const uint8_t *dataPtr, int x, int y, int width, int height, WriteMode writeMode) {
    // Doesn't support negative clipping of images
@@ -204,9 +203,9 @@ Oled &Oled::writeImage(const uint8_t *dataPtr, int x, int y, int width, int heig
 }
 
 /**
- * Write a character to the frame buffer at the current x,y location
+ * Write a character to the LCD in graphics mode at the current x,y location
  *
- * @param[in] ch The character to write
+ * @param[in]  ch - character to send
  */
 void Oled::_writeChar(char ch) {
    int width  = font->width;
@@ -249,13 +248,13 @@ Oled &Oled::putSpace(int width) {
 
 /**
  *
- * @param index      Index into frame buffer in bytes
- * @param mask       Mask for pixel being manipulated in byte
- * @param pixel      Pixel value
- * @param writeMode  Mode of modification
+ * @param [in] index      Index into frame buffer in bytes
+ * @param [in] mask       Mask for pixel being manipulated in byte
+ * @param [in] pixel      Pixel value
+ * @param [in] writeMode  Mode of modification
  */
 void Oled::putPixel(unsigned index, uint8_t mask, bool pixel, WriteMode writeMode) {
-   usbdm_assert(index < (sizeof(buffer.data)/sizeof(buffer.data[0])), "Illegal index");
+   usbdm_assert(index < IMAGE_DATA_SIZE, "Illegal index");
    switch(writeMode) {
       case WriteMode_Write:
          if (pixel) {
@@ -293,12 +292,14 @@ void Oled::putPixel(unsigned index, uint8_t mask, bool pixel, WriteMode writeMod
    }
 
 }
+
 /**
  * Draw vertical line to frame buffer
  *
- * @param[in] x  Horizontal position in pixels
- * @param[in] y1 Vertical start position in pixels
- * @param[in] y2 Vertical end position in pixels
+ * @param [in] x  Horizontal position in pixel
+ * @param [in] y1 Top Y position
+ * @param [in] y2 Top Y position
+ * @param [in] writeMode  Mode of modification
  */
 void Oled::drawVerticalLine(int x, int y1, int y2, WriteMode writeMode) {
    if ((x<0)||(x>=WIDTH)) {
@@ -341,9 +342,10 @@ void Oled::drawVerticalLine(int x, int y1, int y2, WriteMode writeMode) {
 /**
  * Draw horizontal line to frame buffer
  *
- * @param[in] x1 Horizontal start position in pixels
- * @param[in] x2 Horizontal end position in pixels
- * @param[in] y  Vertical position in pixels
+ * @param [in] x1          Left horizontal position in pixel
+ * @param [in] x2          Right horizontal position in pixel
+ * @param [in] y           Y position
+ * @param [in] writeMode   Mode of modification
  */
 void Oled::drawHorizontalLine(int x1, int x2, int y, WriteMode writeMode) {
    if ((y<0)||(y>=HEIGHT)) {
@@ -377,8 +379,10 @@ void Oled::drawHorizontalLine(int x1, int x2, int y, WriteMode writeMode) {
 /**
  * Draw pixel to frame buffer
  *
- * @param[in] x Horizontal position in pixel
- * @param[in] y Vertical position in pixel
+ * @param [in] x          Horizontal position in pixel
+ * @param [in] y          Vertical position in pixel
+ * @param [in] pixel      Pixel value
+ * @param [in] writeMode  Mode of modification
  */
 void Oled::drawPixel(int x, int y, bool pixel, WriteMode writeMode) {
    if ((x<0)||(x>=WIDTH)) {
@@ -401,11 +405,11 @@ void Oled::drawPixel(int x, int y, bool pixel, WriteMode writeMode) {
 /**
  *   Draw filled rectangle
  *
- * @param x1
- * @param y1
- * @param x2
- * @param y2
- * @param invert
+ * @param x1         Top-left X
+ * @param y1         Top-left Y
+ * @param x2         Bottom-right X
+ * @param y2         Bottom-right Y
+ * @param writeMode  Write mode (inverse, xor etc)
  */
 void Oled::drawRect(int x1, int y1, int x2, int y2, WriteMode writeMode) {
    if (y1>y2) {

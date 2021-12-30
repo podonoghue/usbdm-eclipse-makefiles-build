@@ -19,16 +19,21 @@
 using namespace USBDM;
 
 // LED connection - change as required
-using Led           = GpioA<2, ActiveLow>;  // Change as needed
+using Led   = $(/HARDWARE/Led1:GpioB<0,ActiveLow>);
+
 using Pdb           = Pdb0;
-using MyAdc         = Adc0;
-using MyAdcChannel  = MyAdc::Channel<10>;  // Change as needed
+
+// ADC channel to use
+using MyAdcChannel  = $(/HARDWARE/Analogue0:Adc0\:\:Channel<10>);
+
+// Shared ADC to use
+using MyAdc         = MyAdcChannel::OwningAdc;
 
 // Length of PDB sequence
-static constexpr float SEQ_LENGTH    = 10*ms;
+static constexpr Seconds SEQ_LENGTH    = 10_ms;
 
 // When to take ADC sample
-static constexpr float TRIGGER_TIME  =  9*ms;
+static constexpr Seconds TRIGGER_TIME  =  9_ms;
 
 static uint32_t result;
 static bool     complete=false;
@@ -48,24 +53,30 @@ static void configurePdb() {
    // Note: Can work in timer ticks and avoid floating point if desired
    //   Pdb::setClock(PdbPrescale_128, PdbMultiplier_10);
    //   Pdb::setModulo(1000);
-   //   Pdb::setInterruptDelayInTicks(900);
-   //   Pdb::setPretriggersInTicks(0, PdbPretrigger0_Delayed, 800);
+   //   Pdb::setInterruptDelayInTicks(900_ticks);
+   //   Pdb::setPretriggersInTicks(0, PdbPretrigger0_Delayed, 800_ticks);
 
    Pdb::enable();
+
    // Software Trigger
    Pdb::setTriggerSource(PdbTrigger_Software);
+
    // Set call-backs
    Pdb::setErrorCallback(pdbErrorCallback);
    Pdb::setCallback(pdbCallback);
+
    // Interrupts during sequence or error
    Pdb::setActions(PdbAction_Interrupt, PdbErrorInterrupt_Enabled);
 
    // Set period of sequence
    Pdb::setPeriod(SEQ_LENGTH);
+
    // Generate interrupt at end of sequence
    Pdb::setInterruptDelay(SEQ_LENGTH);
+
    // Take single ADC sample at TRIGGER_TIME
    Pdb::configureAdcPretrigger(0, 0, PdbPretrigger_Delayed, TRIGGER_TIME);
+
    // Update registers
    Pdb::configureRegisterLoad(PdbLoadMode_Immediate);
    while (!Pdb::isRegisterLoadComplete()) {

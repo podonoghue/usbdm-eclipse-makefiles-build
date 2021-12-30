@@ -82,6 +82,44 @@ int main() {
    console.write("UINT_MAX,Radix_10  = ").writeln(UINT_MAX,Radix_10);
    console.write("UINT_MAX,Radix_16  = ").writeln(UINT_MAX,Radix_16);
 
+   console.write("1_us      = ").writeln(1_us);
+   console.write("1.0_us    = ").writeln(1.0_us);
+   console.write("10_us     = ").writeln(10_us);
+   console.write("10.0_us   = ").writeln(10.0_us);
+   console.write("100_us    = ").writeln(100_us);
+   console.write("100.0_us  = ").writeln(100.0_us);
+   console.write("1_ms      = ").writeln(1_ms);
+   console.write("1.0_ms    = ").writeln(1.0_ms);
+   console.write("10_ms     = ").writeln(10_ms);
+   console.write("10.0_ms   = ").writeln(10.0_ms);
+   console.write("100_ms    = ").writeln(100_ms);
+   console.write("100.0_ms  = ").writeln(100.0_ms);
+   console.write("1_s       = ").writeln(1_s);
+   console.write("1.0_s     = ").writeln(1.0_s);
+   console.write("10_s      = ").writeln(10_s);
+   console.write("10.0_s    = ").writeln(10.0_s);
+   console.write("100_s     = ").writeln(100_s);
+   console.write("100.0_s   = ").writeln(100.0_s);
+
+   console.write("1_Hz      = ").writeln(1_Hz);
+   console.write("1.0_Hz    = ").writeln(1.0_Hz);
+   console.write("10_Hz     = ").writeln(10_Hz);
+   console.write("10.0_Hz   = ").writeln(10.0_Hz);
+   console.write("100_Hz    = ").writeln(100_Hz);
+   console.write("100.0_Hz  = ").writeln(100.0_Hz);
+   console.write("1_kHz     = ").writeln(10_kHz);
+   console.write("1.0_kHz   = ").writeln(10.0_kHz);
+   console.write("10_kHz    = ").writeln(10_kHz);
+   console.write("10.0_kHz  = ").writeln(10.0_kHz);
+   console.write("100_kHz   = ").writeln(100_kHz);
+   console.write("100.0_kHz = ").writeln(100.0_kHz);
+   console.write("1_MHz     = ").writeln(1_MHz);
+   console.write("1.0_MHz   = ").writeln(1.0_MHz);
+   console.write("10_MHz    = ").writeln(10_MHz);
+   console.write("10.0_MHz  = ").writeln(10.0_MHz);
+   console.write("100_MHz   = ").writeln(100_MHz);
+   console.write("100.0_MHz = ").writeln(100.0_MHz);
+
    /*
     * Arrays
     */

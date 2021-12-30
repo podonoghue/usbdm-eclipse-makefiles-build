@@ -17,15 +17,16 @@
 #include "dma.h"
 #include "i2c.h"
 #include "spi.h"
+#include "ftm.h"
 
 using namespace USBDM;
 
 // Connection - change as required
-using Led         = GpioA<2, ActiveLow>;  // PTA2 = D9 = Blue LED
-using Pwm         = Ftm0Channel<2>;       // PTC3 = D6 = FTM0.2
-using Adc         = Adc0;
-using AdcChannel  = Adc0Channel<0>;
-using Tmr_Channel = PitChannel<0>;
+using Led          = $(/HARDWARE/Led2:GpioB<1,ActiveLow>);
+using Pwm          = Ftm0::Channel<0>;
+using MyAdcChannel = $(/HARDWARE/Analogue0:MyAdc\:\:Channel<19>);
+using MyAdc        = MyAdcChannel::OwningAdc;
+using MyTmrChannel = Pit::Channel<0>;
 
 /**
  * This example used the PIT to trigger 100 ADC conversions @1ms interval.
@@ -52,16 +53,18 @@ using Tmr_Channel = PitChannel<0>;
 static void configureAdc() {
 
    // Enable and configure ADC with mostly default settings
-   Adc::configure(AdcResolution_16bit_se);
+   MyAdc::configure(AdcResolution_16bit_se);
 
    // Calibrate before use
-   Adc::calibrate();
+   MyAdc::calibrate();
+
+   MyAdc::setAveraging(AdcAveraging_16);
 
    // Configure the ADC to use hardware with trigger 0 + interrupts + DMA
-   AdcChannel::enableHardwareConversion(AdcPretrigger_0, AdcInterrupt_Disabled, AdcDma_Enabled);
+   MyAdcChannel::enableHardwareConversion(AdcPretrigger_0, AdcInterrupt_Disabled, AdcDma_Enabled);
 
    // Connect ADC trigger 0 to PIT
-   SimInfo::setAdc0Triggers(SimAdc0AltTrigger_PreTrigger_0, SimAdc0Trigger_PitCh0);
+   SimInfo::setAdc0Triggers(SimAdc0TriggerMode_Alt_PreTrigger_0, SimAdc0Trigger_PitCh0);
 
    // Check for errors so far
    checkError();
@@ -76,10 +79,18 @@ bool complete;
  * Sets flag to indicate sequence complete.
  * Stops PIT generating events
  */
-void dmaCallback() {
+void dmaCallback(DmaChannelNum channel) {
+
+   // Clear status
+   Dma0::clearInterruptRequest(channel);
+
    // Clear LED for debug
    Led::off();
-   Tmr_Channel::disable();
+
+   // Disable PIT->ADC requests
+   MyTmrChannel::disable();
+
+   // Flag complete to main-line
    complete = true;
 }
 
@@ -116,21 +127,34 @@ static void configureDma() {
     *  - DLAST Adjustment applied to DADDR after each major loop - can be used to reset the DADDR for next major loop
     *  - CITER Major loop counter - counts major loops
     */
-   static const DmaTcd tcd {
-      /* uint32_t  SADDR  Source address        */ (uint32_t)(Adc::adc().R),          // ADC result register
-      /* uint16_t  SOFF   SADDR offset          */ 0,                                // SADDR does not change
-      /* uint16_t  ATTR   Transfer attributes   */ DMA_ATTR_SSIZE(DmaSize_16bit)|    // 16-bit read from ADR->R (ignores MSBs)
-      /*                                        */ DMA_ATTR_DSIZE(DmaSize_16bit),    // 16-bit write to array
-      /* uint32_t  NBYTES Minor loop byte count */ sizeof(buffer[0]),                // 2-bytes for each ADC DMA request
-      /* uint32_t  SLAST  Last SADDR adjustment */ 0,                                // No adjustment as SADDR was unchanged
-      /* uint32_t  DADDR  Destination address   */ (uint32_t)(&buffer),              // Start of array for result
-      /* uint16_t  DOFF   DADDR offset          */ sizeof(buffer[0]),                // DADDR advances 2 bytes for each request
-      /* uint16_t  CITER  Major loop count      */ DMA_CITER_ELINKNO_ELINK(0)|       // No ELINK
-      /*                                        */ sizeof(buffer)/sizeof(buffer[0]), // Number of requests to do
-      /* uint32_t  DLAST  Last DADDR adjustment */ -sizeof(buffer),                  // Reset DADDR to start of array on completion
-      /* uint16_t  CSR    Control and Status    */ DMA_CSR_INTMAJOR(1)|              // Generate interrupt on completion of Major-loop
-      /*                                        */ DMA_CSR_DREQ(1),                  // Stop transfer on completion of Major-loop
-   };
+   /**
+    * Structure to define the Transmit DMA transfer
+    *
+    * Note: This uses a 32-bit transfer even though the transmit data is only 8-bit
+    */
+   static constexpr DmaTcd tcd = DmaTcd (
+      /* Source address                 */ MyAdc::adcR(0),                 // ADC result register
+      /* Source offset                  */ 0,                              // SADDR does not change
+      /* Source size                    */ DmaSize_16bit,                  // 16-bit read from ADR->R (ignores MSBs)
+      /* Source modulo                  */ DmaModulo_Disabled,             // Disabled
+      /* Last source adjustment         */ 0,                              // No adjustment as SADDR was unchanged
+
+      /* Destination address            */ (uint32_t)(buffer),             // Start of array for result
+      /* Destination offset             */ sizeof(buffer[0]),              // DADDR advances 2 bytes for each request
+      /* Destination size               */ DmaSize_16bit,                  // 16-bit write to array
+      /* Destination modulo             */ DmaModulo_Disabled,             // Disabled
+      /* Last destination adjustment    */ -sizeof(buffer[0]),             // Reset DADDR to start of array on completion
+
+      /* Minor loop byte count          */ dmaNBytes(sizeof(buffer[0])),   // 2-bytes for each ADC DMA request
+      /* Major loop count               */ dmaCiter((sizeof(buffer))/      // Number of requests to do (entire buffer)
+      /*                                */           sizeof(buffer[0])),
+
+      /* Start channel                  */ false,                          // Don't start (triggered by hardware)
+      /* Disable Req. on major complete */ true,                           // Clear hardware request when major loop completed
+      /* Interrupt on major complete    */ true,                           // Interrupt
+      /* Interrupt on half complete     */ false,                          // No interrupt
+      /* Bandwidth (speed) Control      */ DmaSpeed_NoStalls               // Full speed
+   );
 
    // Sequence not complete yet
    complete = false;
@@ -150,7 +174,7 @@ static void configureDma() {
    // Enable requests from the channel
    Dma0::enableRequests(DMA_CHANNEL);
 
-   // DMA triggered by ADC requests
+   // DMA triggered by ADC requests (continuous = whenever ADC wants)
    DmaMux0::configure(DMA_CHANNEL, Dma0Slot_ADC0, DmaMuxEnable_Continuous);
 
    // Check for errors so far
@@ -169,17 +193,17 @@ void pitCallback() {
 
 /*
  * Configure the PIT
- * - Generates regular events at 1ms interval. Each event is used to initiate an ADC conversions.
+ * - Generates regular events at 10ms interval. Each event is used to initiate an ADC conversions.
  */
 void configurePit() {
    // Configure base PIT
    Pit::configure(PitDebugMode_Stop);
 
-   Tmr_Channel::setCallback(pitCallback);
+   MyTmrChannel::setCallback(pitCallback);
 
    // Configure channel
-   Tmr_Channel::configure(1*ms, PitChannelIrq_Enabled);
-   Tmr_Channel::enableNvicInterrupts(NvicPriority_Normal);
+   MyTmrChannel::configure(10_ms, PitChannelIrq_Enabled);
+   MyTmrChannel::enableNvicInterrupts(NvicPriority_Normal);
 
    // Check for errors so far
    checkError();
@@ -193,8 +217,8 @@ void createWaveform() {
    Pwm::Ftm::enable();
    Pwm::Ftm::configure(FtmMode_LeftAlign);
    Pwm::configure(FtmChMode_PwmHighTruePulses);
-   Pwm::setPeriod(10*ms);
-   Pwm::setDutyCycle(50*percent);
+   Pwm::Ftm::setPeriod(10.0_ms);
+   Pwm::setDutyCycle(5_ms);
 }
 
 /**
@@ -221,7 +245,7 @@ void testHardwareConversions() {
       }
       console.writeln();
    }
-   console.reset();
+   console.resetFormat();
 }
 
 int main() {

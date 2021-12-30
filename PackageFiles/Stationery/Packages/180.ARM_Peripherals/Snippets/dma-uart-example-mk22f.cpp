@@ -17,10 +17,11 @@
  * This example requires interrupts to be enabled in the USBDM configuration for the following:
  * - DMA
  *
+ * The LED should be assigned to a suitable GPIO
  *
  * It may also be necessary to adjust DMA_SLOT for the console UART.
  *    DmaSlot_UART0_Transmit => DmaSlot_UART?_Transmit
- * 
+ *
  * If the console uses a LPUART then other changes are necessary:
  *    DmaSlot_UART0_Transmit => DmaSlot_LPUART?_Transmit
  *    UartDma_TxHoldingEmpty => LpuartDma_TxHoldingEmpty
@@ -96,7 +97,7 @@ static constexpr DmaTcd tcd = DmaTcd (
    /* Source modulo                  */ DmaModulo_Disabled,            // Disabled
    /* Last source adjustment         */ -(int)sizeof(message),         // Reset source address to start of array on completion
 
-   /* Destination address            */ console.uartD(),               // Destination is UART data register
+   /* Destination address            */ console.uartD,                 // Destination is UART data register
    /* Destination offset             */ 0,                             // Destination address doesn't change
    /* Destination size               */ DmaSize_8bit,                  // 8-bit write to destination address
    /* Destination modulo             */ DmaModulo_Disabled,            // Disabled
@@ -159,7 +160,7 @@ static void configureDma(DmaChannelNum dmaChannel) {
    Dma0::setCallback(dmaChannel, dmaCallback);
    Dma0::setErrorCallback(dmaErrorCallbackFunction);
    Dma0::enableNvicInterrupts(dmaChannel, NvicPriority_Normal);
-   Dma0::enableNvicErrorInterrupt();
+   Dma0::enableNvicErrorInterrupt(NvicPriority_Normal);
 
    // Connect DMA channel to UART but throttle by PIT Channel N (matches DMA channel N)
    DmaMux0::configure(dmaChannel, DMA_SLOT, DmaMuxEnable_Triggered);
@@ -183,14 +184,14 @@ static void configureDma(DmaChannelNum dmaChannel) {
  * Configure the PIT
  * - Generates regular events which throttles the DMA -> UART Tx.
  *
- * @param dmaChannel  PIT channel being used.  Must be associated with DMA channel.
+ * @param pitChannel  PIT channel being used.  Must be associated with DMA channel.
  */
 static void configurePit(PitChannelNum pitChannel) {
    // Configure base PIT
    Pit::configure(PitDebugMode_Stop);
 
    // Configure channel for 100ms + interrupts
-   Pit::configureChannel(pitChannel, 100*ms, PitChannelIrq_Enabled);
+   Pit::configureChannel(pitChannel, 100_ms, PitChannelIrq_Enabled);
 }
 
 /**
@@ -203,13 +204,13 @@ void changeRunMode(SmcRunMode smcRunMode) {
    SmcStatus smcStatus = Smc::getStatus();
 
    // Check if transition needed
-   if (((smcStatus == SmcStatus_hsrun) && (smcRunMode == SmcRunMode_HighSpeed)) ||
+   if (((smcStatus == SmcStatus_HSRUN) && (smcRunMode == SmcRunMode_HighSpeed)) ||
        ((smcStatus == SmcStatus_RUN) && (smcRunMode == SmcRunMode_Normal)) ||
        ((smcStatus == SmcStatus_VLPR) && (smcRunMode == SmcRunMode_VeryLowPower))) {
       return;
    }
    // If changing go via RUN
-   if (smcStatus == SmcStatus_hsrun) {
+   if (smcStatus == SmcStatus_HSRUN) {
       // Do HSRUN->RUN
       Mcg::configure(RUN_MODE);
       Smc::enterRunMode(SmcRunMode_Normal);
@@ -316,8 +317,7 @@ int main() {
    Smc::setStopOptions(
          SmcLowLeakageStopMode_LLS3,   // Retains RAM
          SmcPowerOnReset_Enabled,       // Brown-out detection
-         SmcPartialStopMode_Partial2,  // Bus clock active (for DMAC)
-         SmcLpoInLowLeakage_Disabled);  // LPO stops in LLS/VLLS
+         SmcPartialStopMode_Partial2);  // Bus clock active (for DMAC)
 
    console.writeln("\nDoing DMA while sleeping....").flushOutput();
 

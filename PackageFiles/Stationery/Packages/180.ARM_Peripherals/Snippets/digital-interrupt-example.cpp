@@ -20,8 +20,8 @@
 using namespace USBDM;
 
 // Connections - change as required
-using Led      = USBDM::GpioA<2,USBDM::ActiveLow>;
-using Switch   = USBDM::GpioD<5,USBDM::ActiveLow>;
+using Switch =   $(/HARDWARE/Switch1:GpioD<5,ActiveLow>);
+using Led    =   $(/HARDWARE/Led1:GpioA<2,ActiveLow>);
 
 #if 1
 /**

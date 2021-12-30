@@ -137,7 +137,7 @@ static void initDma(DmaChannelNum dmaTransmitChannel, DmaChannelNum dmaReceiveCh
       /* Source modulo                  */ DmaModulo_Disabled,             // Disabled
       /* Last source adjustment         */ -(int)sizeof(txBuffer),         // Reset Source address to start of array on completion
 
-      /* Destination address            */ spi.spiPUSHR(),                 // Destination is SPI.PUSHR data register
+      /* Destination address            */ spi.spiPUSHR,                   // Destination is SPI.PUSHR data register
       /* Destination offset             */ 0,                              // Destination address doesn't change
       /* Destination size               */ DmaSize_32bit,                  // 32-bit write to destination address
       /* Destination modulo             */ DmaModulo_Disabled,             // Disabled
@@ -160,7 +160,7 @@ static void initDma(DmaChannelNum dmaTransmitChannel, DmaChannelNum dmaReceiveCh
     * Note: The transfer size used here is 8-bits only
     */
    static constexpr DmaTcd rxTcd (
-      /* Source address                 */ spi.spiPOPR(),                  // Source is SPI.POPR data register
+      /* Source address                 */ spi.spiPOPR,                    // Source is SPI.POPR data register
       /* Source offset                  */ 0,                              // Source address doesn't change
       /* Source size                    */ DmaSize_8bit,                   // 8-bit read from source address
       /* Source modulo                  */ DmaModulo_Disabled,             // No modulo
@@ -256,14 +256,14 @@ static void startTransfer(DmaChannelNum dmaTransmitChannel, DmaChannelNum dmaRec
 
 int main() {
    console.writeln("Starting");
-   console.write("spiPtr      = ").writeln((unsigned)&spi.spiPtr(), Radix_16);
-   console.write("spiBase     = ").writeln(spi.spiBase(), Radix_16);
-   console.write("spiCR       = ").writeln(spi.spiCR(), Radix_16);
-   console.write("spiCTAR[1]  = ").writeln(spi.spiCTAR(1), Radix_16);
-   console.write("spiMCR      = ").writeln(spi.spiMCR(), Radix_16);
-   console.write("spiPOPR     = ").writeln(spi.spiPOPR(), Radix_16);
-   console.write("spiPUSHR    = ").writeln(spi.spiPUSHR(), Radix_16);
-   console.write("spiSR       = ").writeln(spi.spiSR(), Radix_16);
+   console.write("spiPtr      = ").writeln(spi.spi,            Radix_16);
+   console.write("spiBase     = ").writeln(spi.spiBase,        Radix_16);
+   console.write("spiCR       = ").writeln(spi.spiCR,          Radix_16);
+   console.write("spiCTAR[1]  = ").writeln(spi.spiCTAR(1),     Radix_16);
+   console.write("spiMCR      = ").writeln(spi.spiMCR,         Radix_16);
+   console.write("spiPOPR     = ").writeln(spi.spiPOPR,        Radix_16);
+   console.write("spiPUSHR    = ").writeln(spi.spiPUSHR,       Radix_16);
+   console.write("spiSR       = ").writeln(spi.spiSR,          Radix_16);
 
    Led::setOutput();
 

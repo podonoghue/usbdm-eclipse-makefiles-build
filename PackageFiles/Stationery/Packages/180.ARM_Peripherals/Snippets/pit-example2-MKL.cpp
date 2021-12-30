@@ -26,8 +26,8 @@ using namespace USBDM;
 #define SET_HANDLERS_PROGRAMMATICALLY
 
 // Connection mapping - change as required
-using Led1  = $(demo.cpp.red.led:USBDM::GpioB<18, ActiveLow>);
-using Led2  = $(demo.cpp.green.led:USBDM::GpioB<19, ActiveLow>);
+using Led1 = $(/HARDWARE/Led1:GpioB<18, ActiveLow>);
+using Led2 = $(/HARDWARE/Led2:GpioB<19, ActiveLow>);
 
 using Timer         = Pit;
 using TimerChannelA = Timer::Channel<0>;

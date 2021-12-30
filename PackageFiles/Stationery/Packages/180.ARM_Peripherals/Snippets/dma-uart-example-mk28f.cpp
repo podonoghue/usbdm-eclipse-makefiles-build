@@ -97,7 +97,7 @@ static constexpr DmaTcd tcd = DmaTcd (
    /* Source modulo                  */ DmaModulo_Disabled,            // Disabled
    /* Last source adjustment         */ -(int)sizeof(message),         // Reset source address to start of array on completion
 
-   /* Destination address            */ console.uartDATA(),            // Destination is UART data register
+   /* Destination address            */ console.uartDATA,              // Destination is UART data register
    /* Destination offset             */ 0,                             // Destination address doesn't change
    /* Destination size               */ dmaSize(message[0]),           // 8-bit write to destination address
    /* Destination modulo             */ DmaModulo_Disabled,            // Disabled
@@ -160,7 +160,7 @@ static void configureDma(DmaChannelNum dmaChannel) {
    Dma0::setCallback(dmaChannel, dmaCallback);
    Dma0::setErrorCallback(dmaErrorCallbackFunction);
    Dma0::enableNvicInterrupts(dmaChannel, NvicPriority_Normal);
-   Dma0::enableNvicErrorInterrupt();
+   Dma0::enableNvicErrorInterrupt(NvicPriority_Normal);
 
    // Connect DMA channel to UART but throttle by PIT Channel N (matches DMA channel N)
    DmaMux0::configure(dmaChannel, DMA_SLOT, DmaMuxEnable_Triggered);
@@ -184,14 +184,14 @@ static void configureDma(DmaChannelNum dmaChannel) {
  * Configure the PIT
  * - Generates regular events which throttles the DMA -> UART Tx.
  *
- * @param dmaChannel  PIT channel being used.  Must be associated with DMA channel.
+ * @param pitChannel  PIT channel being used.  Must be associated with DMA channel.
  */
 static void configurePit(PitChannelNum pitChannel) {
    // Configure base PIT
    Pit::configure(PitDebugMode_Stop);
 
    // Configure channel for 100ms + interrupts
-   Pit::configureChannel(pitChannel, 100*ms, PitChannelIrq_Enabled);
+   Pit::configureChannel(pitChannel, 100_ms, PitChannelIrq_Enabled);
 }
 
 /**

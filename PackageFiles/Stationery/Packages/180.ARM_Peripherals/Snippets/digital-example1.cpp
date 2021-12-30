@@ -16,20 +16,20 @@ using namespace USBDM;
  */
 
 // Connection mapping - change as required
-using RedLed   = $(demo.cpp.red.led:GpioB<0,ActiveLow>);
-using GreenLed = $(demo.cpp.green.led:GpioB<1,ActiveLow>);
-using BlueLed  = $(demo.cpp.blue.led:GpioA<2,ActiveLow>);
+using RedLED   = $(/HARDWARE/Led1:GpioB<0,ActiveLow>);
+using GreenLED = $(/HARDWARE/Led2:GpioB<1,ActiveLow>);
+using BlueLED  = $(/HARDWARE/Led3:GpioA<2,ActiveLow>);
 
 int main() {
-   RedLed::setOutput(
+   RedLED::setOutput(
          PinDriveStrength_High,
          PinDriveMode_PushPull,
          PinSlewRate_Slow);
-   GreenLed::setOutput(
+   GreenLED::setOutput(
          PinDriveStrength_High,
          PinDriveMode_PushPull,
          PinSlewRate_Slow);
-   BlueLed::setOutput(
+   BlueLED::setOutput(
          PinDriveStrength_High,
          PinDriveMode_PushPull,
          PinSlewRate_Slow);
@@ -39,9 +39,9 @@ int main() {
    for(;;) {
       console.write("\rPress (R)ed or (G)reen or (B)lue :");
       switch(console.readChar()) {
-         case 'r': case 'R' : RedLed::toggle();   break;
-         case 'g': case 'G' : GreenLed::toggle(); break;
-         case 'b': case 'B' : BlueLed::toggle();   break;
+         case 'r': case 'R' : RedLED::toggle();   break;
+         case 'g': case 'G' : GreenLED::toggle(); break;
+         case 'b': case 'B' : BlueLED::toggle();   break;
          default: break;
       }
    }

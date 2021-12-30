@@ -25,8 +25,8 @@ using namespace USBDM;
 #define SET_HANDLERS_PROGRAMMATICALLY
 
 // Connection mapping - change as required
-using RED_LED   = $(demo.cpp.red.led:USBDM::GpioB<0>);
-using GREEN_LED = $(demo.cpp.green.led:USBDM::GpioB<1>);
+using Led1 = $(/HARDWARE/Led1:GpioB<0, ActiveLow>);
+using Led2 = $(/HARDWARE/Led2:GpioB<1, ActiveLow>);
 
 #ifndef SET_HANDLERS_PROGRAMMATICALLY
 /**
@@ -43,12 +43,12 @@ template<> void Pit_T<PitInfo>::irqHandler() {
    if (PIT->CHANNEL[0].TFLG & PIT_TFLG_TIF_MASK) {
       // Clear interrupt flag
       PIT0->CHANNEL[0].TFLG = PIT_TFLG_TIF_MASK;
-      RED_LED::toggle();
+      Led1::toggle();
    }
    if (PIT0->CHANNEL[1].TFLG & PIT_TFLG_TIF_MASK) {
       // Clear interrupt flag
       PIT0->CHANNEL[1].TFLG = PIT_TFLG_TIF_MASK;
-      GREEN_LED::toggle();
+      Led2::toggle();
    }
 }
 
@@ -59,20 +59,20 @@ template<> void Pit_T<PitInfo>::irqHandler() {
  * These handlers are set programmatically
  */
 void flashRed(void) {
-   RED_LED::toggle();
+   Led1::toggle();
 }
 
 void flashGreen(void) {
-   GREEN_LED::toggle();
+   Led2::toggle();
 }
 
 int main() {
-   RED_LED::setOutput();
-   GREEN_LED::setOutput();
+   Led1::setOutput();
+   Led2::setOutput();
 
    // Turn off LED initially
-   RED_LED::set();
-   GREEN_LED::set();
+   Led1::set();
+   Led2::set();
 
    Pit::configure();
 

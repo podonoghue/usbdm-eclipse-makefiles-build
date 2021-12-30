@@ -18,8 +18,8 @@ using namespace USBDM;
 
 // Connection mapping - change as required
 // (ADC Ch(19) = light sensor on FRDM-K20
-using MyAdc        = Adc0;
-using MyAdcChannel = MyAdc::Channel<19>;
+using MyAdcChannel = $(/HARDWARE/Analogue0:MyAdc\:\:Channel<19>);
+using MyAdc        = MyAdcChannel::OwningAdc;
 
 /**
  * NOTE:  This is not a sensible approach

@@ -129,7 +129,10 @@ public:
 
    // Address (LSB = R/W bit = 0)
    static constexpr unsigned   I2C_ADDRESS   = 0b01111000;
-   static constexpr unsigned   I2C_SPEED     = 400*kHz;
+   static constexpr unsigned   I2C_SPEED     = 400_kHz;
+
+   // Size of image array in memory
+   static constexpr size_t IMAGE_DATA_SIZE = WIDTH * ((HEIGHT + 7) / 8);
 
 #pragma pack(push,1)
    /// Buffer type for display data
@@ -139,10 +142,10 @@ public:
       /// Command byte
       uint8_t  controlByte;
       /// Data values
-      uint8_t  data[WIDTH * ((HEIGHT + 7) / 8)];
+      uint8_t  data[IMAGE_DATA_SIZE];
       };
       /// All data for transmission
-      uint8_t rawData[1+(WIDTH * ((HEIGHT + 7) / 8))];
+      uint8_t rawData[IMAGE_DATA_SIZE+1];
    };
 #pragma pack(pop)
 
@@ -198,8 +201,6 @@ public:
    /**
     * Initialise OLED peripheral
     *
-    * @return true on success
-    *
     * @note   This function must be called before any drawing or updates!
     * @note   Based loosely on Adafruit library initialisation sequence
     */   void initialise();
@@ -232,25 +233,70 @@ public:
     /**
      * Write image to frame buffer
      *
-     * @param[in] dataPtr Pointer to start of image
-     * @param[in] x       X position of top-left corner
-     * @param[in] y       Y position of top-left corner
-     * @param[in] width   Width of image
-     * @param[in] height  Height of image
+     * @param [in] dataPtr    Pointer to start of image
+     * @param [in] x          X position of top-left corner
+     * @param [in] y          Y position of top-left corner
+     * @param [in] width      Width of image
+     * @param [in] height     Height of image
+     * @param [in] writeMode  Write mode (inverse, xor etc)
      */
     Oled &writeImage(const uint8_t *dataPtr, int x, int y, int width, int height, WriteMode writeMode=WriteMode_Write);
 
     /**
      * Writes whitespace to the frame buffer at the current x,y location
      *
-     * @param[in] width Width of white space in pixels
+     * @param [in] width Width of white space in pixels
      */
     Oled &putSpace(int width);
 
+    /**
+     *
+     * @param [in] index      Index into frame buffer in bytes
+     * @param [in] mask       Mask for pixel being manipulated in byte
+     * @param [in] pixel      Pixel value
+     * @param [in] writeMode  Mode of modification
+     */
     void putPixel(unsigned index, uint8_t mask, bool pixel, WriteMode writeMode);
+
+    /**
+     * Draw pixel to frame buffer
+     *
+     * @param [in] x          Horizontal position in pixel
+     * @param [in] y          Vertical position in pixel
+     * @param [in] pixel      Pixel value
+     * @param [in] writeMode  Mode of modification
+     */
     void drawPixel(int x, int y, bool pixel, WriteMode writeMode=WriteMode_Write);
+
+    /**
+     * Draw vertical line to frame buffer
+     *
+     * @param [in] x  Horizontal position in pixel
+     * @param [in] y1 Top Y position
+     * @param [in] y2 Top Y position
+     * @param [in] writeMode  Mode of modification
+     */
     void drawVerticalLine(int x, int y1, int y2, WriteMode writeMode=WriteMode_Write);
+
+    /**
+     * Draw horizontal line to frame buffer
+     *
+     * @param [in] x1          Left horizontal position in pixel
+     * @param [in] x2          Right horizontal position in pixel
+     * @param [in] y           Y position
+     * @param [in] writeMode   Mode of modification
+     */
     void drawHorizontalLine(int x1, int x2, int y, WriteMode writeMode=WriteMode_Write);
+
+    /**
+     *   Draw filled rectangle
+     *
+     * @param x1         Top-left X
+     * @param y1         Top-left Y
+     * @param x2         Bottom-right X
+     * @param y2         Bottom-right Y
+     * @param writeMode  Write mode (inverse, xor etc)
+     */
     void drawRect(int x1, int y1, int x2, int y2, WriteMode writeMode=WriteMode_Write);
 
     /**
@@ -288,8 +334,8 @@ public:
     /**
      * Get current X,Y location
      *
-     * @param[out] x X location in pixels
-     * @param[out] y Y location in pixels
+     * @param [out] x X location in pixels
+     * @param [out] y Y location in pixels
      *
      * @return Reference to self
      */

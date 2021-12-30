@@ -24,8 +24,8 @@ using namespace USBDM;
 using MyAdc        = Adc0;
 
 // ADC channel to use
-using BandgapAdcChannel     = Adc0::Channel<0b11011>;  // Internal bandgap
-using MyAdcChannel    = Adc0::Channel<21>;  // FRDM_K20 temp sensor
+using BandgapAdcChannel  = Adc0::Channel<27>;  // Internal bandgap
+using MyAdcChannel       = Adc0::Channel<26>;  // Internal chip temperature
 
 // Resolution to use for ADC
 constexpr AdcResolution adcResolution = AdcResolution_16bit_se;

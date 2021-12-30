@@ -8,6 +8,7 @@
  ============================================================================
  */
 #include "hardware.h"
+#include "ftm.h"
 
 using namespace USBDM;
 
@@ -19,7 +20,7 @@ using namespace USBDM;
 
 // Connection mapping - change as required
 using Timer  = Ftm0;
-using PwmLed = Timer::Channel<7>;
+using PwmLed = Timer::Channel<0>;
 
 int main() {
 
@@ -32,7 +33,7 @@ int main() {
     * Change PWM period
     * Note - Setting the period affects all channels of the FTM
     */
-   Timer::setPeriod(5*us);
+   Timer::setPeriod(5_us);
 
    // Configure channel as PWM high-pulses
    PwmLed::configure(FtmChMode_PwmHighTruePulses);
@@ -52,7 +53,7 @@ int main() {
       }
       // Using high-time
       for (int i=99; i>0; i--) {
-         PwmLed::setHighTime((i*5*us)/100.0);
+         PwmLed::setHighTime(i*(5_us/100.0));
          waitMS(10);
          console.write("High time = ").write(5*i).writeln(" us");
       }

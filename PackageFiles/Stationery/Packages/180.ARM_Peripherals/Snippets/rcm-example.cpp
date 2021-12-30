@@ -14,7 +14,9 @@ using namespace USBDM;
 int main() {
    console.writeln("Starting");
 
-   console.write("Reset source = 0x").write(Rcm::getResetSource(), Radix_16).write(" = ").writeln(Rcm::getResetSourceDescription());
+   console.write("Reset source = 0x").
+         write(Rcm::getResetSource(), Radix_16).write(" = ").
+         writeln(Rcm::getResetSourceDescription());
 
    Rcm::configure(
          RcmResetPinRunWaitFilter_BusCLock,

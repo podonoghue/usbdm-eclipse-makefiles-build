@@ -22,9 +22,9 @@ using namespace USBDM;
 // Connection mapping - change as required
 using MyAdc = USBDM::Adc0;
 
-using JOYSTICK_X = MyAdc::$(demo.cpp.joystick.x:Channel<0>);
-using JOYSTICK_Y = MyAdc::$(demo.cpp.joystick.y:Channel<3>);
-using JOYSTICK_K = $(demo.cpp.joystick.k:GpioC<3,ActiveLow>);
+using JOYSTICK_X = $(/HARDWARE/Analogue0:MyAdc\:\:Channel<0>);
+using JOYSTICK_Y = $(/HARDWARE/Analogue1:MyAdc\:\:Channel<3>);
+using JOYSTICK_K = $(/HARDWARE/Digital0:GpioC<3,ActiveLow>);
 
 int main(void) {
 
