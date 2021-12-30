@@ -180,7 +180,7 @@ ErrorCode Mcg::clockTransition(const McgInfo::ClockInfo &clockInfo) {
 #ifdef USB_CLK_RECOVER_IRC_EN_IRC_EN_MASK
    if (clockInfo.c7&&MCG_C7_OSCSEL_MASK) {
       // Note IRC48M Internal Oscillator automatically enable if MCG_C7_OSCSEL = 2
-      SIM->SCGC4 |= SIM_SCGC4_USBOTG_MASK;
+      SIM->SCGC4 = SIM->SCGC4 | SIM_SCGC4_USBOTG_MASK;
       USB0->CLK_RECOVER_IRC_EN = USB_CLK_RECOVER_IRC_EN_IRC_EN_MASK|USB_CLK_RECOVER_IRC_EN_REG_EN_MASK;
    }
 #endif
@@ -377,13 +377,13 @@ void Mcg::SystemCoreClockUpdate(void) {
             ((mcg->C7&MCG_C7_OSCSEL_MASK) !=  1)) {
          // High divisors - extra division
          if ((mcg->C1&MCG_C1_FRDIV_MASK) == MCG_C1_FRDIV(6)) {
-            SystemMcgffClock /= 20;
+            SystemMcgffClock = SystemMcgffClock / 20;
          }
          else if ((mcg->C1&MCG_C1_FRDIV_MASK) == MCG_C1_FRDIV(7)) {
-            SystemMcgffClock /= 12;
+            SystemMcgffClock = SystemMcgffClock / 12;
          }
          else {
-            SystemMcgffClock /= 32;
+            SystemMcgffClock = SystemMcgffClock / 32;
          }
       }
    }

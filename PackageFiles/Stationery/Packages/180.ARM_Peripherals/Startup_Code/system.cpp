@@ -83,7 +83,7 @@ void SystemInitLowLevel(void) {
 
 #ifdef SCB_CCR_DIV_0_TRP_Msk
    /* Enable trapping of divide by zero */
-   SCB->CCR |= SCB_CCR_DIV_0_TRP_Msk;
+   SCB->CCR = SCB->CCR | SCB_CCR_DIV_0_TRP_Msk;
 #endif
 
 #ifdef RCM_MR_BOOTROM

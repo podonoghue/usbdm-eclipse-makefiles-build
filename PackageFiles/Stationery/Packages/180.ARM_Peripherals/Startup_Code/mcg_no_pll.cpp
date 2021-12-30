@@ -9,10 +9,10 @@
  *      Author: podonoghue
  */
 #include "string.h"
-#include "derivative.h" /* include peripheral declarations */
+#include "derivative.h"
 #include "system.h"
 #include "stdbool.h"
-#include "hardware.h"
+#include "pin_mapping.h"
 #ifdef USBDM_RTC_IS_DEFINED
 #include "rtc.h"
 #endif
@@ -108,7 +108,7 @@ const char *Mcg::getClockModeName(McgInfo::ClockMode clockMode) {
 /**
  * Transition from current clock mode to mode given
  *
- * @param clockInfo Clock mode to transition to
+ * @param[in]  clockInfo Clock mode to transition to
  *
  * @return E_NO_ERROR on success
  */
@@ -119,7 +119,7 @@ ErrorCode Mcg::clockTransition(const McgInfo::ClockInfo &clockInfo) {
 #ifdef USB_CLK_RECOVER_IRC_EN_IRC_EN_MASK
    if (clockInfo.c7&&MCG_C7_OSCSEL_MASK) {
       // Note IRC48M Internal Oscillator automatically enable if MCG_C7_OSCSEL = 2
-      SIM->SCGC4 |= SIM_SCGC4_USBOTG_MASK;
+      SIM->SCGC4 = SIM->SCGC4 | SIM_SCGC4_USBOTG_MASK;
       USB0->CLK_RECOVER_IRC_EN = USB_CLK_RECOVER_IRC_EN_IRC_EN_MASK|USB_CLK_RECOVER_IRC_EN_REG_EN_MASK;
    }
 #endif
@@ -274,13 +274,13 @@ void Mcg::SystemCoreClockUpdate(void) {
       if ((mcg->C2&MCG_C2_RANGE0_MASK) != 0) {
          // High divisors - extra division
          if ((mcg->C1&MCG_C1_FRDIV_MASK) == MCG_C1_FRDIV(6)) {
-            SystemMcgffClock /= 20;
+            SystemMcgffClock = SystemMcgffClock / 20;
          }
          else if ((mcg->C1&MCG_C1_FRDIV_MASK) == MCG_C1_FRDIV(7)) {
-            SystemMcgffClock /= 12;
+            SystemMcgffClock = SystemMcgffClock / 12;
          }
          else {
-            SystemMcgffClock /= 32;
+            SystemMcgffClock = SystemMcgffClock / 32;
          }
       }
    }
@@ -309,8 +309,11 @@ void Mcg::SystemCoreClockUpdate(void) {
          break;
    }
    SystemMcgPllClock = 0; // PLL - not available
-   SystemCoreClock   = SystemMcgOutClock/(((SIM->CLKDIV1&SIM_CLKDIV1_OUTDIV1_MASK)>>SIM_CLKDIV1_OUTDIV1_SHIFT)+1);
-   SystemBusClock    = SystemMcgOutClock/(((SIM->CLKDIV1&SIM_CLKDIV1_OUTDIV4_MASK)>>SIM_CLKDIV1_OUTDIV4_SHIFT)+1);
+   ::SystemCoreClock    = SystemMcgOutClock/(((SIM->CLKDIV1&SIM_CLKDIV1_OUTDIV1_MASK)>>SIM_CLKDIV1_OUTDIV1_SHIFT)+1);
+   ::SystemBusClock     = SystemMcgOutClock/(((SIM->CLKDIV1&SIM_CLKDIV1_OUTDIV2_MASK)>>SIM_CLKDIV1_OUTDIV2_SHIFT)+1);
+#ifdef SIM_CLKDIV1_OUTDIV3_MASK
+   ::SystemFlexbusClock = SystemMcgOutClock/(((SIM->CLKDIV1&SIM_CLKDIV1_OUTDIV3_MASK)>>SIM_CLKDIV1_OUTDIV3_SHIFT)+1);
+#endif
 }
 
 /**
