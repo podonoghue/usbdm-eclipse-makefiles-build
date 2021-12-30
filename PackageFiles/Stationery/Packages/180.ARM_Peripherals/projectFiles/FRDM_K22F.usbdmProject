@@ -66,6 +66,8 @@
    <item key="$signal$ADC0_SE15_codeIdentifier"            value="analogue_A2" />
    <item key="$signal$ADC0_SE19_codeIdentifier"            value="analogue_A7" />
    <item key="$signal$ADC0_SE23_codeIdentifier"            value="analogue_A11" />
+   <item key="$signal$ADC0_SE26_codeIdentifier"            value="TempSensor" />
+   <item key="$signal$ADC0_SE27_codeIdentifier"            value="Bandgap" />
    <item key="$signal$ADC0_SE3_codeIdentifier"             value="analogue_A8" />
    <item key="$signal$ADC0_SE4b_codeIdentifier"            value="analogue_A3" />
    <item key="$signal$ADC0_SE8_codeIdentifier"             value="analogue_A0" />
@@ -73,15 +75,17 @@
    <item key="$signal$ADC1_SE7b_descriptionSetting"        value="RF_ce" />
    <item key="$signal$EXTAL0_descriptionSetting"           value="8MHz Crystal" />
    <item key="$signal$EXTAL32_descriptionSetting"          value="32kHz Crystal" />
-   <item key="$signal$GPIOA_1_codeIdentifier"              value="redLED" />
+   <item key="$signal$GPIOA_1_codeIdentifier"              value="RedLed" />
    <item key="$signal$GPIOA_1_descriptionSetting"          value="Red LED" />
-   <item key="$signal$GPIOA_2_codeIdentifier"              value="greenLED" />
+   <item key="$signal$GPIOA_2_codeIdentifier"              value="GreenLed" />
    <item key="$signal$GPIOA_2_descriptionSetting"          value="Green LED" />
-   <item key="$signal$GPIOB_17_codeIdentifier"             value="switch3" />
+   <item key="$signal$GPIOB_17_codeIdentifier"             value="Switch3" />
    <item key="$signal$GPIOB_17_descriptionSetting"         value="Switch 3" />
-   <item key="$signal$GPIOC_1_codeIdentifier"              value="switch2" />
+   <item key="$signal$GPIOC_1_codeIdentifier"              value="Switch2" />
    <item key="$signal$GPIOC_1_descriptionSetting"          value="Switch 2" />
-   <item key="$signal$GPIOD_5_codeIdentifier"              value="blueLED" />
+   <item key="$signal$GPIOD_2_codeIdentifier"              value="Gpio_D0" />
+   <item key="$signal$GPIOD_3_codeIdentifier"              value="Gpio_D1" />
+   <item key="$signal$GPIOD_5_codeIdentifier"              value="BlueLed" />
    <item key="$signal$GPIOD_5_descriptionSetting"          value="Blue LED" />
    <item key="$signal$I2C1_SCL_descriptionSetting"         value="I2C_SCL (D15)" />
    <item key="$signal$I2C1_SDA_descriptionSetting"         value="I2C_SDA (D14)" />
@@ -99,6 +103,14 @@
    <item key="$signal$XTAL32_descriptionSetting"           value="32kHz Crystal" />
    <item key="/Console/consoleDevice"                      value="USBDM::Uart1" />
    <item key="/FTFA/peripheral_file"                       value="ftfa" />
+   <item key="/HARDWARE/Analogue0"                         value="Analogue_A0" />
+   <item key="/HARDWARE/Analogue1"                         value="Analogue_A1" />
+   <item key="/HARDWARE/Digital0"                          value="Gpio_D0" />
+   <item key="/HARDWARE/Digital1"                          value="Gpio_D1" />
+   <item key="/HARDWARE/Led1"                              value="RedLed" />
+   <item key="/HARDWARE/Led2"                              value="GreenLed" />
+   <item key="/HARDWARE/Led3"                              value="BlueLed" />
+   <item key="/HARDWARE/Switch1"                           value="Switch3" />
    <item key="/HARDWARE/warnMultipleSignalsOnPin"          value="false" />
    <item key="/LLWU/device_list"                           value="LPTMR0;CMP0;CMP1;;;RTC_Alarm;;RTC_Seconds" />
    <item key="/LPTMR0/lptmr_cmr"                           value="0" />
