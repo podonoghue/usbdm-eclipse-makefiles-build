@@ -3,21 +3,21 @@
 <!-- _common_settings.xml -->
 
 <list name="CommonSettings" >
-<binaryOption name="/HARDWARE/mapAllPins" 
+<binaryOption name="mapAllPins" key="/HARDWARE/mapAllPins" 
    description="Map allocated pins"
    toolTip="Enables mapping of all allocated pins during startup using mapAllPins()">
    <choice value="false" name="Don't map - Use manual mapping or enable mapping for peripherals individually"  isDefault="true" />
    <choice value="true"  name="Map pins during startup using mapAllPins()" />
 </binaryOption>
 
-<binaryOption name="/HARDWARE/lockMappedPins" 
+<binaryOption name="lockMappedPins" key="/HARDWARE/lockMappedPins" 
    description="Lock allocated pins"
    toolTip="Lock PCRs during mapAllPins()">
    <choice value="PinLock_Unlocked" name="Don't force locked - Pins may still be individually locked" />
    <choice value="PinLock_Locked"  name="Force all pins to be locked in mapAllPins()" isDefault="true" />
 </binaryOption>
 
-<binaryOption name="/HARDWARE/lockoutUnbondedPins" 
+<binaryOption name="lockoutUnbondedPins" key="/HARDWARE/lockoutUnbondedPins" 
    description="Lock out pins that are not bonded to physical pins on package"
    toolTip="In some smaller packages there are die pins that are not bonded to package pins\n
             For those pins the PCR can be set to 0 (analogue) to minimize power consumption\n
@@ -26,7 +26,7 @@
    <choice value="true"  name="Force unbonded pins to analogue function" isDefault="true" />
 </binaryOption>
 
-<binaryOption name="/HARDWARE/warnMultipleSignalsOnPin" 
+<binaryOption name="warnMultipleSignalsOnPin" key="/HARDWARE/warnMultipleSignalsOnPin" 
    description="Whether to generate warnings about conflicting signal mappings"
    toolTip="It is allowable to have multiple signals mapped to a single pin on the\n 
             understanding that they will be dynamically mapped during execution">
@@ -34,7 +34,7 @@
    <choice value="true"  name="Produce warning during compilation" />
 </binaryOption>
 
-<binaryOption name="/HARDWARE/useTypeSystemForTimers" 
+<binaryOption name="useTypeSystemForTimers" key="/HARDWARE/useTypeSystemForTimers" 
    description="Enforce use of a dimensioned type system for time and frequency measures"
    toolTip="Types 'Seconds', 'Hertz' and 'Ticks' are always defined but not enforced">
    <choice value="false" name="Don't enforce types system" isDefault="true" />
@@ -42,14 +42,106 @@
 </binaryOption>
 
 <category name="Examples" description="Pin mapping for examples">
-   <stringOption name="/HARDWARE/Led1"       value="GpioA&lt;1,  ActiveLow&gt;"  description="LED for examples" />
-   <stringOption name="/HARDWARE/Led2"       value="GpioA&lt;2,  ActiveLow&gt;"  description="LED for examples" />
-   <stringOption name="/HARDWARE/Led3"       value="GpioD&lt;5,  ActiveLow&gt;"  description="LED for examples" />
-   <stringOption name="/HARDWARE/Switch1"    value="GpioB&lt;17, ActiveLow&gt;"  description="Switch for examples" />
-   <stringOption name="/HARDWARE/Analogue0"  value="Adc0::Channel&lt;8&gt;"      description="ADC channel for examples" />
-   <stringOption name="/HARDWARE/Analogue1"  value="Adc0::Channel&lt;9&gt;"      description="ADC channel for examples" />
-   <stringOption name="/HARDWARE/Digital0"   value="GpioD&lt;5,  ActiveLow&gt;"  description="Digital I/O for examples" />
-   <stringOption name="/HARDWARE/Digital1"   value="GpioD&lt;6,  ActiveLow&gt;"  description="Digital I/O for examples" />
+   <stringOption name="Led1"        key="/HARDWARE/Led1"       value="GpioA&lt;1,  ActiveLow&gt;"  description="LED for examples" />
+   <stringOption name="Led2"        key="/HARDWARE/Led2"       value="GpioA&lt;2,  ActiveLow&gt;"  description="LED for examples" />
+   <stringOption name="Led3"        key="/HARDWARE/Led3"       value="GpioD&lt;5,  ActiveLow&gt;"  description="LED for examples" />
+   <stringOption name="Switch1"     key="/HARDWARE/Switch1"    value="GpioB&lt;17, ActiveLow&gt;"  description="Switch for examples" />
+   <stringOption name="Analogue0"   key="/HARDWARE/Analogue0"  value="Adc0::Channel&lt;8&gt;"      description="ADC channel for examples" />
+   <stringOption name="Analogue1"   key="/HARDWARE/Analogue1"  value="Adc0::Channel&lt;9&gt;"      description="ADC channel for examples" />
+   <stringOption name="Digital0"    key="/HARDWARE/Digital0"   value="GpioD&lt;5,  ActiveLow&gt;"  description="Digital I/O for examples" />
+   <stringOption name="Digital1"    key="/HARDWARE/Digital1"   value="GpioD&lt;6,  ActiveLow&gt;"  description="Digital I/O for examples" />
+   <stringOption name="Ftm1"        key="/HARDWARE/Ftm1"       value="Ftm0::Channel&lt;0&gt;"      description="FTM channel for examples" />
+   <stringOption name="Ftm2"        key="/HARDWARE/Ftm2"       value="Ftm0::Channel&lt;1&gt;"      description="FTM channel for examples" />
+</category>
+
+<category name="Linker" description="Device Linker information">
+   <intOption name="Stack size"    key="/LINKER/stackSize"  value="0" description="RAM allocated to stack (bytes)"  step="4" min="0" />
+   <intOption name="Heap size"     key="/LINKER/heapSize"   value="0" description="RAM allocated to heap (bytes)"   step="4" min="0" />
+
+   <intOption name="Bitband size"  key="/LINKER/bitbandSize"
+      description="RAM allocated to bit-band/bit-manipulation-engine (bytes)" step="4" min="0" max="0x1000"
+      toolTip="Space is allocated in .bitband_ram memory region\n
+               Each byte is also mapped to 8 words in .bitband memory region\n
+               C Example:\n
+               \t    // Variable allocated in bitband/bme accessible region (.bitband_ram)\n
+               \t    // May be uint8_t, uint16_t or uint32_t\n
+               \t    __attribute__ ((section(&quote;.bitband_ram&quote;)))\n
+               \t    uint32_t variable;\n
+               \t    // Each word of array maps to an individual bit in bit-band region (.bitband)\n
+               \t    __attribute__ ((section(&quote;.bitband&quote;)))\n
+               \t    uint32_t variable_bits[8*sizeof(variable)];\n
+               See bme.h and bitband.h for more information"
+      value="0x0" />
+      
+   <binaryOption name="Enable USBDM Bootloader" key="/LINKER/enableBootloader"   value="false"    
+      description="Enable custom USBDM bootloader"  
+      toolTip="This relocates the program image to allow space for a bootloader at the beginning of the flash region" >
+      <choice value="0" name="Disabled" isDefault="true" />
+      <choice value="1" name="Enabled" />
+   </binaryOption>
+
+   <intOption name="Bootloader size"               key="/LINKER/bootloaderSize"      constant="true" value = "0x4000" radix="16" description="Amount of flash reserved for bootloader"   />
+   <intOption name="Bootloader Information size"   key="/LINKER/bootloaderInfoSize"  constant="true" value = "0x10"   radix="16" description="Size of bootloader information block"       />
+
+   <intOption name="Program Flash size" key="/LINKER/flashSize"       constant="true" description="Program Flash available in target"   />
+   <intOption name="Upper SRAM size"    key="/LINKER/ramUpperSize"    constant="true" description="Upper RAM available in target"    />
+   <intOption name="Lower SRAM size"    key="/LINKER/ramLowerSize"    constant="true" description="Lower RAM available in target"    />
+   <intOption name="Flex RAM size"      key="/LINKER/flexRamSize"     constant="true" description="Flex RAM available in target"     />
+   <intOption name="Flex NVM size"      key="/LINKER/flexNvmSize"     constant="true" description="Flex Flash available in target"   />
+   
+   <stringOption name="linkerExtraRegions" key="/LINKER/linkerExtraRegions" constant="true" hidden="true" />
+   <stringOption name="linkerInformation"  key="/LINKER/linkerInformation"  constant="true" hidden="true" />
+   
+   <stringOption name="Linker script"        key="/LINKER/scriptFilename"   constant="true" description="File used as linker script"       />
+   <stringOption name="Linker memory map"    key="/LINKER/mapFilename"      constant="true" description="File used for target memory map"  />
+   <stringOption name="Linker vector table"  key="/LINKER/vectorsFilename"  constant="true" description="File used for target vector table"  />
+   
+   <category name="Section placement in Flash" description="How regions are mapped to available Flash regions"
+     toolTip=
+      "Cortex-M4 Kinetis devices may have additional Flash that can be used as backing storage \n
+       for non-volatile memory (FlexRAM -> FlexNVM.)\n
+       If not used for this purpose, FlexNVM may be used to hold code or constant data.\n
+       These settings control which region (regular flash or FlexNVM) is used for various linker sections."
+   >
+
+      <choiceOption name="Code (apart from startup)" key="/LINKER/text_rom" description="Segment allocation"
+         toolTip="This selects placement for the segment" >
+         <choice value="flash"       name="Main Flash"  isDefault="true"/>
+         <choice value="flexNVM"     name="Flex NVM Flash" />
+      </choiceOption>
+      
+      <choiceOption name="Read-only data"  key="/LINKER/rodata_rom"      derivedFrom="/LINKER/text_rom"/>
+   </category>
+
+   <category name="Section placement in RAM" description="How regions are mapped to available RAM regions"
+     toolTip=
+       "The RAM on Cortex-M4 Kinetis devices is divided into upper and lower memory regions.\n
+        These settings control which region is used for various linker sections.\n
+        These sections cannot cross regions as unaligned half-word and long-word accesses are not supported."
+   >
+      <choiceOption name="" key="/LINKER/ramu_default" description="Segment allocation" hidden="true"
+         toolTip="This selects placement for the segment" >
+         <choice value="ram_low"  name="Low RAM"  />
+         <choice value="ram_high" name="High RAM"  isDefault="true" />
+         <choice value="flexRAM"  name="Flex RAM" />
+      </choiceOption>
+
+      <choiceOption name="" key="/LINKER/raml_default" description="Segment allocation" hidden="true"
+         toolTip="This selects placement for the segment" >
+         <choice value="ram_low"  name="Low RAM" isDefault="true" />
+         <choice value="ram_high" name="High RAM" />
+         <choice value="flexRAM"  name="Flex RAM" />
+      </choiceOption>
+
+      <choiceOption name="Stack"                         key="/LINKER/stack_ram"      derivedFrom="/LINKER/ramu_default"/>
+      <choiceOption name="Heap"                          key="/LINKER/heap_ram"       derivedFrom="/LINKER/raml_default"/>
+      <choiceOption name="Vector table relocated to RAM" key="/LINKER/interrupts_ram" derivedFrom="/LINKER/raml_default"/>
+      <choiceOption name="Initialised DATA"              key="/LINKER/data_ram"       derivedFrom="/LINKER/raml_default"/>
+      <choiceOption name="Zeroed Data (BSS)"             key="/LINKER/bss_ram"        derivedFrom="/LINKER/raml_default"/>
+      <choiceOption name="Non-initialised DATA"          key="/LINKER/noinit_ram"     derivedFrom="/LINKER/raml_default"/>
+      <choiceOption name="Micro Trace Buffer"            key="/LINKER/mtb_ram"        derivedFrom="/LINKER/raml_default"/>
+      <choiceOption name="USB Endpoint buffers"          key="/LINKER/bdts_ram"       derivedFrom="/LINKER/raml_default"/>
+   </category>
 </category>
 
 <!-- Template is added to pin_mapping.h -->
@@ -268,5 +360,12 @@
    \t};
    /* END Template:_common_settings.xml */\n\n
 ]]></template>
+
+<projectActionList id = "common_files" >
+<copy source="Snippets/bitband-example.cpp"                             target="Snippets/bitband-example.cpp"                 overwrite="true"    derived="true" />
+<copy source="Startup_Code/$(/LINKER/vectorsFilename)"                  target="Startup_Code/vectors.cpp"                     overwrite="true"    derived="true" />
+<copy source="Project_Settings/Linker_Files/$(/LINKER/scriptFilename)"  target="Project_Settings/Linker_Files/Linker-rom.ld"  overwrite="true"  derived="true" />
+<copy source="Project_Settings/Linker_Files/$(/LINKER/mapFilename)"     target="Project_Settings/Linker_Files/MemoryMap.ld"   overwrite="true"  derived="true" />
+</projectActionList>
 
 </list>
