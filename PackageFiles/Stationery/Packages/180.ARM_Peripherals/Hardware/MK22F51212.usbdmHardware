@@ -12,7 +12,7 @@
       <device name="MK22FN512VLH12" manual="K22P121M120SF7RM" package="LQFP_64" />
       <device name="MK22FN512VLL12" manual="K22P121M120SF7RM" package="LQFP_100" />
       <device name="MK22FN512VMP12" manual="K22P121M120SF7RM" package="BGA_64" />
-      <device name="MK22F_Module" manual="K22P121M120SF7RM" package="MK22F_DIPModule" />
+      <device name="MK22F_MODULE" manual="K22P121M120SF7RM" package="MK22F_DIPModule" />
    </family>
    <peripherals>
       <peripheral baseName="ADC"      instance="0"        version="adc0_diff_a">
