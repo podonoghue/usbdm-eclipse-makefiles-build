@@ -5,7 +5,6 @@
 -->
 
 <section name="USBDM">
-   <item key="$$DeviceInfo_Device_Variant"                 value="FRDM_K22FA1M0" />
    <item key="$$DeviceInfo_SubFamily"                      value="MK22FA12" />
    <item key="$$Hardware_Source_Filename"                  value="MK22FA12.usbdmHardware" />
    <item key="/FTFE/peripheral_file"                       value="ftfe_128k_flexrom" />

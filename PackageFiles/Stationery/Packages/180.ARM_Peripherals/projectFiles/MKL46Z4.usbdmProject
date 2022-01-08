@@ -5,7 +5,6 @@
 -->
 
 <section name="USBDM">
-   <item key="$$DeviceInfo_Device_Variant"                 value="FRDM_KL46Z4" />
    <item key="$$DeviceInfo_SubFamily"                      value="MKL46Z4" />
    <item key="$$Hardware_Source_Filename"                  value="MKL46Z4.usbdmHardware" />
    <item key="/FTFA/peripheral_file"                       value="ftfa" />
