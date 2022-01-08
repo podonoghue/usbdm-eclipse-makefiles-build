@@ -11,10 +11,9 @@
 #include <stdint.h>
 #include <string.h>
 #include "derivative.h"
-#include "pin_mapping.h"
+#include "hardware.h"
 
-/*********** $start(VectorsIncludeFiles) *** Do not edit after this comment ****************/
-/*********** $end(VectorsIncludeFiles)   *** Do not edit above this comment ***************/
+$(VectorsIncludeFiles)
 
 /*
  * Vector table related
@@ -22,7 +21,6 @@
 typedef void( *const intfunc )( void );
 
 #define WEAK_DEFAULT_HANDLER __attribute__ ((__nothrow__, __weak__, alias("Default_Handler")))
-
 /**
  * Default handler for interrupts
  *
@@ -32,7 +30,7 @@ typedef void( *const intfunc )( void );
  *   - Failed to enable the interrupt handler in the USBDM configuration (Configure.usbdmProject)
  *   - You have accidently enabled an interrupt source in a peripheral
  *   - Enabled the wrong interrupt source
- *   - Failed to install or create a handler for an interrupt you intended using e.g. misspelled the name.
+ *   - Failed to install or create a handler for an interrupt you intended using e.g. mis-spelled the name.
  *     Compare your handler (C function) name to that used in the vector table.
  *
  * You can check 'vectorNum' below to determine the interrupt source.  Look this up in the vector table below.
@@ -148,7 +146,6 @@ extern uint32_t __StackTop;
  * To install a handler, create a C linkage function with the name shown and it will override
  * the weak default.
  */
-/*********** $start(cVectorTable) *** Do not edit after this comment ****************/
-/*********** $end(cVectorTable)   *** Do not edit above this comment ***************/
+ $(cVectorTable)
 
 

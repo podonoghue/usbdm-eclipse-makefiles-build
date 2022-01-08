@@ -13,10 +13,9 @@
 #include <stdint.h>
 #include <string.h>
 #include "derivative.h"
-#include "pin_mapping.h"
+#include "hardware.h"
 
-/*********** $start(VectorsIncludeFiles) *** Do not edit after this comment ****************/
-/*********** $end(VectorsIncludeFiles)   *** Do not edit above this comment ***************/
+$(VectorsIncludeFiles)
 
 /*
  * Vector table related
@@ -30,7 +29,7 @@ typedef void( *const intfunc )( void );
  * Most of the vector table is initialised to point at this handler.
  *
  * If you end up here it probably means:
- *   - Failed to enable the interrupt handler in the USBDM device configuration
+ *   - Failed to enable the interrupt handler in the USBDM configuration (Configure.usbdmProject)
  *   - You have accidently enabled an interrupt source in a peripheral
  *   - Enabled the wrong interrupt source
  *   - Failed to install or create a handler for an interrupt you intended using e.g. mis-spelled the name.
@@ -149,7 +148,6 @@ extern uint32_t __StackTop;
  * To install a handler, create a C linkage function with the name shown and it will override
  * the weak default.
  */
-/*********** $start(cVectorTable) *** Do not edit after this comment ****************/
-/*********** $end(cVectorTable)   *** Do not edit above this comment ***************/
+ $(cVectorTable)
 
 
