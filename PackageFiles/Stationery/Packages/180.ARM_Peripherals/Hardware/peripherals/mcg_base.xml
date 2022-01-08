@@ -567,7 +567,7 @@
       \t   const uint32_t sopt2;
 
       \t   //! Clock Mode
-      \t   const ClockMode clockMode:8;
+      \t   const ClockMode clockMode;
       
       \t   //! Control Register 1 - FRDIV, IRCLKEN, IREFSTEN, (-CLKS, -IREFS)
       \t   const uint8_t c1;
