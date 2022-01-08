@@ -197,21 +197,23 @@ const char *UsbBase::getRequestName(uint8_t reqType){
 void UsbBase::reportBdt(const char *name, BdtEntry *bdt) {
    (void)name;
    (void)bdt;
+#if defined(DEBUG_BUILD) && USE_CONSOLE
    if (bdt->own) {
-      console.WRITE(name)
-            .WRITE(" addr=0x").WRITE(bdt->addr,Radix_16)
-            .WRITE(", bc=").WRITE(bdt->bc)
-            .WRITE(", ").WRITE(bdt->data0_1?"DATA1":"DATA0")
-            .WRITE(", ").WRITE(bdt->setup.bdt_stall?"STALL":"OK")
-            .WRITELN("USB");
+      console.write(name).
+            write(" addr=0x").write(bdt->addr,Radix_16).
+            write(", bc=").write(bdt->bc).
+            write(", ").write(bdt->data0_1?"DATA1":"DATA0").
+            write(", ").write(bdt->setup.bdt_stall?"STALL":"OK").
+            writeln("USB");
    }
    else {
-      console.WRITE(name)
-            .WRITE(" addr=0x").WRITE(bdt->addr,Radix_16)
-            .WRITE(", bc=").WRITE(bdt->bc)
-            .WRITE(", ").WRITE(getTokenName(bdt->result.tok_pid))
-            .WRITELN("PROC");
+      console.write(name).
+            write(" addr=0x").write(bdt->addr,Radix_16).
+            write(", bc=").write(bdt->bc).
+            write(", ").write(getTokenName(bdt->result.tok_pid)).
+            writeln("PROC");
    }
+#endif
 }
 
 /**
@@ -221,10 +223,12 @@ void UsbBase::reportBdt(const char *name, BdtEntry *bdt) {
  */
 void reportLineCoding(const LineCodingStructure *lineCodingStructure) {
    (void)lineCodingStructure;
-   console.WRITE("rate   = ").WRITELN(lineCodingStructure->dwDTERate);
-   console.WRITE("format = ").WRITELN(lineCodingStructure->bCharFormat);
-   console.WRITE("parity = ").WRITELN(lineCodingStructure->bParityType);
-   console.WRITE("bits   = ").WRITELN(lineCodingStructure->bDataBits);
+#if defined(DEBUG_BUILD) && USE_CONSOLE
+   console.write("rate   = ").writeln(lineCodingStructure->dwDTERate);
+   console.write("format = ").writeln(lineCodingStructure->bCharFormat);
+   console.write("parity = ").writeln(lineCodingStructure->bParityType);
+   console.write("bits   = ").writeln(lineCodingStructure->bDataBits);
+#endif
 }
 
 /**
@@ -235,18 +239,18 @@ void reportLineCoding(const LineCodingStructure *lineCodingStructure) {
  * @return Pointer to static buffer
  */
 const char *UsbBase::getSetupPacketDescription(SetupPacket *p) {
-   (void)p;
 #ifdef DEBUG_BUILD
    static StringFormatter_T<100> sf;
-   sf.clear()
-         .write("[")
-         .write(p->bmRequestType, Radix_2).write(",")
-         .write(getRequestName(p->bRequest)).write(",")
-         .write(p->wValue, Radix_16).write(",")
-         .write(p->wIndex).write(",")
-         .write(p->wLength).write("]");
+   sf.clear().
+         write("[").
+         write(p->bmRequestType, Radix_2).write(",").
+         write(getRequestName(p->bRequest)).write(",").
+         write(p->wValue, Radix_16).write(",").
+         write(p->wIndex).write(",").
+         write(p->wLength).write("]");
    return sf.toString();
 #else
+   (void)p;
    return "";
 #endif
 }
@@ -258,9 +262,11 @@ const char *UsbBase::getSetupPacketDescription(SetupPacket *p) {
  */
 void reportLineState(uint8_t value) {
    (void)value;
-   console
-      .WRITE("Line state: RTS=").WRITE((value&(1<<1))?1:0)
-      .WRITE("DTR=").WRITELN((value&(1<<0))?1:0);
+#if defined(DEBUG_BUILD) && USE_CONSOLE
+   console.
+      writeln("Line state: RTS=").write((value&(1<<1))?1:0).
+      write("DTR=").writeln((value&(1<<0))?1:0);
+#endif
 }
 
 /**
@@ -283,7 +289,7 @@ void UsbBase::utf8ToStringDescriptor(volatile uint8_t *to, volatile const uint8_
       uint16_t utf16Char=0;
 
       // Update size
-      *size  += 2;
+      *size = *size + 2;
       if (*from < 0x80) {
          // 1-byte UTF-8
          utf16Char = *from++;

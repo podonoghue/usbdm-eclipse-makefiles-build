@@ -23,20 +23,17 @@ using namespace USBDM;
  * Select irqHandlingMethod option (Software (Use setCallback() or override class method)
  */
 
-/**
- * Timer being used - change as required
- * Could also access as TimerChannel::Ftm
- */
-using Timer = Ftm0;
-
 /// Timer channel for output - change as required
-using TimerChannel = Timer::Channel<0>;
+using TimerChannel = $(/HARDWARE/Ftm1:Ftm0\:\:Channel<0>);
+
+/// Timer being used (from channel)
+using Timer = TimerChannel::Ftm;
 
 /**
  * Half-period for timer in ticks.
  * This variable is shared with the interrupt routine
  */
-static volatile Ticks timerHalfPeriodInTicks;
+static volatile unsigned timerHalfPeriodInTicks;
 
 /// Waveform period to generate
 static constexpr Seconds WAVEFORM_PERIOD = 100_ms;
@@ -80,7 +77,7 @@ int main() {
 
    // Calculate half-period in timer ticks
    // Must be done after timer clock configuration (above)
-   timerHalfPeriodInTicks = Timer::convertSecondsToTicks(WAVEFORM_PERIOD/2.0f);
+   timerHalfPeriodInTicks = (unsigned) Timer::convertSecondsToTicks(WAVEFORM_PERIOD/2.0f);
 
    // Enable interrupts for entire timer
    Timer::enableNvicInterrupts(NvicPriority_Normal);
@@ -91,7 +88,7 @@ int main() {
          PinDriveMode_PushPull,
          PinSlewRate_Slow);
 
-   // Trigger 1st interrupt at now+100
+   // Trigger 1st interrupt at now+100 ticks
    TimerChannel::setRelativeEventTime(100_ticks);
 
    // Set callback function (may be shared by multiple channels)

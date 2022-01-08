@@ -36,7 +36,7 @@ using TimerChannel = Timer::Channel<0>;
  * Period between input edges in ticks.
  * This variable is shared with the interrupt routine
  */
-static volatile Ticks periodInTicks;
+static volatile unsigned periodInTicks;
 
 // Maximum measurement time
 static constexpr Seconds MEASUREMENT_TIME = 100_ms;
@@ -53,12 +53,12 @@ using Debug = GpioA<12>;
  * @param[in] status Flags indicating interrupt source channel(s)
  */
 static void ftmCallback(uint8_t status) {
-   static Ticks risingEdgeEventTime;
+   static unsigned risingEdgeEventTime;
 
    Debug::set();
    // Check channel
    if (status & TimerChannel::CHANNEL_MASK) {
-      Ticks currentEventTime = TimerChannel::getEventTime();
+      unsigned currentEventTime = (unsigned)TimerChannel::getEventTime();
       periodInTicks = currentEventTime-risingEdgeEventTime;
       risingEdgeEventTime = currentEventTime;
    }
@@ -120,8 +120,7 @@ int main() {
          CriticalSection cs;
          tPeriodInTicks = periodInTicks;
       }
-      float intervalInMilliseconds = (1000.0*(float)Timer::convertTicksToSeconds(tPeriodInTicks));
-      console.write("Period = ").write(intervalInMilliseconds).writeln(" ms");
+      console.write("Period = ").writeln(Timer::convertTicksToSeconds(tPeriodInTicks));
    }
    return 0;
 }

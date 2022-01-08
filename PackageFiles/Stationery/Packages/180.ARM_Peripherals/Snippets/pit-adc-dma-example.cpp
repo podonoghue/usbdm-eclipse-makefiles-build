@@ -8,22 +8,16 @@
  ============================================================================
  */
 #include <string.h> // memset()
-#include "system.h"
-#include "derivative.h"
 #include "hardware.h"
 #include "pit.h"
-#include "pdb.h"
-#include "lptmr.h"
 #include "dma.h"
-#include "i2c.h"
-#include "spi.h"
-#include "ftm.h"
+#include "adc.h"
 
 using namespace USBDM;
 
 // Connection - change as required
 using Led          = $(/HARDWARE/Led2:GpioB<1,ActiveLow>);
-using Pwm          = Ftm0::Channel<0>;
+using Pwm          = $(/HARDWARE/Ftm1:Ftm0\:\:Channel<0>);
 using MyAdcChannel = $(/HARDWARE/Analogue0:MyAdc\:\:Channel<19>);
 using MyAdc        = MyAdcChannel::OwningAdc;
 using MyTmrChannel = Pit::Channel<0>;
@@ -42,7 +36,7 @@ using MyTmrChannel = Pit::Channel<0>;
  *  DMAx_IRQHandler
  *  PITx_IRQHandler
  *
- *  Use loop-back from (PTC3 = D6 = FTM0.2) to (ADC0 = A10)
+ *  Use loop-back from PWM (FTM output) to ADC channel
  */
 
 /**
@@ -58,10 +52,14 @@ static void configureAdc() {
    // Calibrate before use
    MyAdc::calibrate();
 
+   // Set averaging to reduce noise
    MyAdc::setAveraging(AdcAveraging_16);
 
-   // Configure the ADC to use hardware with trigger 0 + interrupts + DMA
+   // Configure the ADC to use hardware with trigger 0 + DMA
    MyAdcChannel::enableHardwareConversion(AdcPretrigger_0, AdcInterrupt_Disabled, AdcDma_Enabled);
+
+   // Connect channel to pin
+   MyAdcChannel::setInput();
 
    // Connect ADC trigger 0 to PIT
    SimInfo::setAdc0Triggers(SimAdc0TriggerMode_Alt_PreTrigger_0, SimAdc0Trigger_PitCh0);
@@ -78,8 +76,11 @@ bool complete;
  *
  * Sets flag to indicate sequence complete.
  * Stops PIT generating events
+ * Clears DMA IRQ
  */
 void dmaCallback(DmaChannelNum channel) {
+
+   // Only one channel operating - don't bother checking which channel.
 
    // Clear status
    Dma0::clearInterruptRequest(channel);
@@ -120,7 +121,7 @@ static void configureDma() {
     *  - NBYTES Number of bytes to transfer
     *  - Attributes
     *    - ATTR_SSIZE, ATTR_DSIZE Source and destination transfer sizes
-    *    - ATTR_SMOD, ATTR_DMOD Modulo --TODO
+    *    - ATTR_SMOD, ATTR_DMOD Modulo
     *
     * The following are used by the major loop
     *  - SLAST Adjustment applied to SADDR after each major loop - can be used to reset the SADDR for next major loop
@@ -146,14 +147,13 @@ static void configureDma() {
       /* Last destination adjustment    */ -sizeof(buffer[0]),             // Reset DADDR to start of array on completion
 
       /* Minor loop byte count          */ dmaNBytes(sizeof(buffer[0])),   // 2-bytes for each ADC DMA request
-      /* Major loop count               */ dmaCiter((sizeof(buffer))/      // Number of requests to do (entire buffer)
-      /*                                */           sizeof(buffer[0])),
+      /* Major loop count               */ dmaCiter(sizeofArray(buffer)),  // Number of requests to do for entire buffer
 
       /* Start channel                  */ false,                          // Don't start (triggered by hardware)
       /* Disable Req. on major complete */ true,                           // Clear hardware request when major loop completed
-      /* Interrupt on major complete    */ true,                           // Interrupt
+      /* Interrupt on major complete    */ true,                           // Interrupt on completion
       /* Interrupt on half complete     */ false,                          // No interrupt
-      /* Bandwidth (speed) Control      */ DmaSpeed_NoStalls               // Full speed
+      /* Bandwidth (speed) Control      */ DmaSpeed_NoStalls               // Full speed (throttled by PIT->ADC)
    );
 
    // Sequence not complete yet
@@ -193,7 +193,7 @@ void pitCallback() {
 
 /*
  * Configure the PIT
- * - Generates regular events at 10ms interval. Each event is used to initiate an ADC conversions.
+ * - Generates regular events at 1ms interval. Each event is used to initiate an ADC conversions.
  */
 void configurePit() {
    // Configure base PIT
@@ -202,7 +202,7 @@ void configurePit() {
    MyTmrChannel::setCallback(pitCallback);
 
    // Configure channel
-   MyTmrChannel::configure(10_ms, PitChannelIrq_Enabled);
+   MyTmrChannel::configure(1_ms, PitChannelIrq_Enabled);
    MyTmrChannel::enableNvicInterrupts(NvicPriority_Normal);
 
    // Check for errors so far
@@ -216,9 +216,11 @@ void configurePit() {
 void createWaveform() {
    Pwm::Ftm::enable();
    Pwm::Ftm::configure(FtmMode_LeftAlign);
-   Pwm::configure(FtmChMode_PwmHighTruePulses);
    Pwm::Ftm::setPeriod(10.0_ms);
-   Pwm::setDutyCycle(5_ms);
+
+   Pwm::configure(FtmChMode_PwmHighTruePulses);
+   Pwm::setDutyCycle(50);
+   Pwm::setOutput();
 }
 
 /**

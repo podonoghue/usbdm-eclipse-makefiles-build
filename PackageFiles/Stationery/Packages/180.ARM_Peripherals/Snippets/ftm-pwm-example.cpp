@@ -18,9 +18,11 @@ using namespace USBDM;
  * Uses PWM to change the brightness of an LED
  */
 
-// Connection mapping - change as required
-using Timer  = Ftm0;
-using PwmLed = Timer::Channel<0>;
+/// Timer channel for output - change as required
+using PwmLed = $(/HARDWARE/Ftm1:Ftm0\:\:Channel<0>);
+
+/// Timer being used (from channel)
+using Timer = PwmLed::Ftm;
 
 int main() {
 
