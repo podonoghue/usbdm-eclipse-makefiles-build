@@ -24,8 +24,6 @@
 #include "lpuart.h"
 #endif
 
-#define USE_CONSOLE $(/Console/consoleEnable:0)
-
 // The following macros allow the selective use of the console routines
 // In release versions of the code the macros are null.
 
@@ -136,7 +134,6 @@ public:
 
 extern Console console;
 
-inline void log_error(const char *) {}
 } // End namespace USBDM
 
 #endif /* USE_CONSOLE */
