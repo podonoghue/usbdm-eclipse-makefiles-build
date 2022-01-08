@@ -463,10 +463,10 @@ public:
          fDataPtr += size;
       }
       // Count of transferred bytes
-      fDataTransferred += size;
+      fDataTransferred = fDataTransferred + size;
 
       // Count of remaining bytes
-      fDataRemaining   -= size;
+      fDataRemaining = fDataRemaining - size;
 
       // Set up to Transmit transaction
       bdt.setByteCount((uint8_t)size);
@@ -549,9 +549,9 @@ public:
             fDataPtr    += size;
          }
          // Count of transferred bytes
-         fDataTransferred += size;
+         fDataTransferred = fDataTransferred + size;
          // Count down bytes to go
-         fDataRemaining   -= size;
+         fDataRemaining = fDataRemaining - size;
       }
 //      else {
 //         console.WRITELN("RxSize = 0\n");

@@ -39,11 +39,11 @@ public:
    constexpr Ticks(const Ticks& other) : value(other.value) {}
    Ticks(const volatile Ticks& other)  : value(other.value) {}
 
-   Ticks &operator =(float other)                  {value = other;       return *this; }
-   Ticks &operator =(const Ticks &other)           {value = other.value; return *this; }
-   Ticks &operator =(const volatile Ticks &other)  {value = other.value; return *this; }
+   auto &operator =(float other)                  {value = other;       return *this; }
+   auto &operator =(const Ticks &other)           {value = other.value; return *this; }
+   auto &operator =(const volatile Ticks &other)  {value = other.value; return *this; }
 
-   void operator =(const Ticks &other) volatile    {value = other.value; }
+   auto &operator =(const Ticks &other) volatile  {value = other.value;  return *this; }
 
    auto getValue() const { return value; }
    auto getValue() const volatile { return value; }
@@ -72,11 +72,11 @@ public:
    constexpr Seconds(const Seconds& other)   : value(other.value) {}
    Seconds(const volatile Seconds& other)    : value(other.value) {}
 
-   Seconds &operator =(float other)                   {value = other;       return *this; }
-   Seconds &operator =(const Seconds &other)          {value = other.value; return *this; }
-   Seconds &operator =(const volatile Seconds &other) {value = other.value; return *this; }
+   auto &operator =(float other)                   {value = other;       return *this; }
+   auto &operator =(const Seconds &other)          {value = other.value; return *this; }
+   auto &operator =(const volatile Seconds &other) {value = other.value; return *this; }
 
-   void operator =(const Seconds &other) volatile {value = other.value; }
+   auto &operator =(const Seconds &other) volatile {value = other.value; return *this; }
 
    constexpr auto getValue() const { return value; }
 
@@ -101,11 +101,11 @@ public:
    constexpr Hertz(const Hertz& other)    : value(other.value) {}
    Hertz(const volatile Hertz& other)     : value(other.value) {}
 
-   Hertz &operator =(float other)                 {value = other;       return *this; }
-   Hertz &operator =(const Hertz &other)          {value = other.value; return *this; }
-   Hertz &operator =(const volatile Hertz &other) {value = other.value; return *this; }
+   auto &operator =(float other)                 {value = other;       return *this; }
+   auto &operator =(const Hertz &other)          {value = other.value; return *this; }
+   auto &operator =(const volatile Hertz &other) {value = other.value; return *this; }
 
-   void operator =(const Hertz &other) volatile {value = other.value; }
+   auto &operator =(const Hertz &other) volatile {value = other.value; return *this; }
 
    constexpr auto getValue() const { return value; }
 
@@ -707,41 +707,41 @@ public:
    constexpr PcrValue         pcrValue()       const { return static_cast<PcrValue>(value); }
    constexpr PcrValue         pcrValue()             { return static_cast<PcrValue>(value); }
 
-   constexpr operator         PinDriveMode()       const { return static_cast<PinDriveMode>(value&PORT_PCR_ODE(1)); }
-   constexpr operator         PinDriveMode()             { return static_cast<PinDriveMode>(value&PORT_PCR_ODE(1)); }
-   constexpr PinDriveMode     pinDriveMode()       const { return static_cast<PinDriveMode>(value&PORT_PCR_ODE(1)); }
-   constexpr PinDriveMode     pinDriveMode()             { return static_cast<PinDriveMode>(value&PORT_PCR_ODE(1)); }
+   constexpr operator         PinDriveMode()       const { return static_cast<PinDriveMode>(value&PORT_PCR_ODE(-1)); }
+   constexpr operator         PinDriveMode()             { return static_cast<PinDriveMode>(value&PORT_PCR_ODE(-1)); }
+   constexpr PinDriveMode     pinDriveMode()       const { return static_cast<PinDriveMode>(value&PORT_PCR_ODE(-1)); }
+   constexpr PinDriveMode     pinDriveMode()             { return static_cast<PinDriveMode>(value&PORT_PCR_ODE(-1)); }
 
-   constexpr operator         PinSlewRate()        const { return static_cast<PinSlewRate>(value&PORT_PCR_SRE(1)); }
-   constexpr operator         PinSlewRate()              { return static_cast<PinSlewRate>(value&PORT_PCR_SRE(1)); }
-   constexpr PinSlewRate      pinSlewRate()        const { return static_cast<PinSlewRate>(value&PORT_PCR_SRE(1)); }
-   constexpr PinSlewRate      pinSlewRate()              { return static_cast<PinSlewRate>(value&PORT_PCR_SRE(1)); }
+   constexpr operator         PinSlewRate()        const { return static_cast<PinSlewRate>(value&PORT_PCR_SRE(-1)); }
+   constexpr operator         PinSlewRate()              { return static_cast<PinSlewRate>(value&PORT_PCR_SRE(-1)); }
+   constexpr PinSlewRate      pinSlewRate()        const { return static_cast<PinSlewRate>(value&PORT_PCR_SRE(-1)); }
+   constexpr PinSlewRate      pinSlewRate()              { return static_cast<PinSlewRate>(value&PORT_PCR_SRE(-1)); }
 
    // The following extract bit fields from PCR as conversions
-   constexpr operator         PinPull()            const { return static_cast<PinPull>(value&PORT_PCR_PD(1)); }
-   constexpr operator         PinPull()                  { return static_cast<PinPull>(value&PORT_PCR_PD(1)); }
-   constexpr PinPull          pinPull()            const { return static_cast<PinPull>(value&PORT_PCR_PD(1)); }
-   constexpr PinPull          pinPull()                  { return static_cast<PinPull>(value&PORT_PCR_PD(1)); }
+   constexpr operator         PinPull()            const { return static_cast<PinPull>(value&PORT_PCR_PD(-1)); }
+   constexpr operator         PinPull()                  { return static_cast<PinPull>(value&PORT_PCR_PD(-1)); }
+   constexpr PinPull          pinPull()            const { return static_cast<PinPull>(value&PORT_PCR_PD(-1)); }
+   constexpr PinPull          pinPull()                  { return static_cast<PinPull>(value&PORT_PCR_PD(-1)); }
 
-   constexpr operator         PinDriveStrength()   const { return static_cast<PinDriveStrength>(value&PORT_PCR_DSE(1)); }
-   constexpr operator         PinDriveStrength()         { return static_cast<PinDriveStrength>(value&PORT_PCR_DSE(1)); }
-   constexpr PinDriveStrength pinDriveStrength()   const { return static_cast<PinDriveStrength>(value&PORT_PCR_DSE(1)); }
-   constexpr PinDriveStrength pinDriveStrength()         { return static_cast<PinDriveStrength>(value&PORT_PCR_DSE(1)); }
+   constexpr operator         PinDriveStrength()   const { return static_cast<PinDriveStrength>(value&PORT_PCR_DSE(-1)); }
+   constexpr operator         PinDriveStrength()         { return static_cast<PinDriveStrength>(value&PORT_PCR_DSE(-1)); }
+   constexpr PinDriveStrength pinDriveStrength()   const { return static_cast<PinDriveStrength>(value&PORT_PCR_DSE(-1)); }
+   constexpr PinDriveStrength pinDriveStrength()         { return static_cast<PinDriveStrength>(value&PORT_PCR_DSE(-1)); }
 
-   constexpr operator         PinAction()          const { return static_cast<PinAction>(value&PORT_PCR_IRQC(1)); }
-   constexpr operator         PinAction()                { return static_cast<PinAction>(value&PORT_PCR_IRQC(1)); }
-   constexpr PinAction        pinAction()          const { return static_cast<PinAction>(value&PORT_PCR_IRQC(1)); }
-   constexpr PinAction        pinAction()                { return static_cast<PinAction>(value&PORT_PCR_IRQC(1)); }
+   constexpr operator         PinAction()          const { return static_cast<PinAction>(value&PORT_PCR_IRQC(-1)); }
+   constexpr operator         PinAction()                { return static_cast<PinAction>(value&PORT_PCR_IRQC(-1)); }
+   constexpr PinAction        pinAction()          const { return static_cast<PinAction>(value&PORT_PCR_IRQC(-1)); }
+   constexpr PinAction        pinAction()                { return static_cast<PinAction>(value&PORT_PCR_IRQC(-1)); }
 
-   constexpr operator         PinFilter()          const { return static_cast<PinFilter>(value&PORT_PCR_PFE(1)); }
-   constexpr operator         PinFilter()                { return static_cast<PinFilter>(value&PORT_PCR_PFE(1)); }
-   constexpr PinFilter        pinFilter()          const { return static_cast<PinFilter>(value&PORT_PCR_PFE(1)); }
-   constexpr PinFilter        pinFilter()                { return static_cast<PinFilter>(value&PORT_PCR_PFE(1)); }
+   constexpr operator         PinFilter()          const { return static_cast<PinFilter>(value&PORT_PCR_PFE(-1)); }
+   constexpr operator         PinFilter()                { return static_cast<PinFilter>(value&PORT_PCR_PFE(-1)); }
+   constexpr PinFilter        pinFilter()          const { return static_cast<PinFilter>(value&PORT_PCR_PFE(-1)); }
+   constexpr PinFilter        pinFilter()                { return static_cast<PinFilter>(value&PORT_PCR_PFE(-1)); }
 
-   constexpr operator         PinMux()             const { return static_cast<PinMux>(value&PORT_PCR_MUX(1)); }
-   constexpr operator         PinMux()                   { return static_cast<PinMux>(value&PORT_PCR_MUX(1)); }
-   constexpr PinMux           pinMux()             const { return static_cast<PinMux>(value&PORT_PCR_MUX(1)); }
-   constexpr PinMux           pinMux()                   { return static_cast<PinMux>(value&PORT_PCR_MUX(1)); }
+   constexpr operator         PinMux()             const { return static_cast<PinMux>(value&PORT_PCR_MUX(-1)); }
+   constexpr operator         PinMux()                   { return static_cast<PinMux>(value&PORT_PCR_MUX(-1)); }
+   constexpr PinMux           pinMux()             const { return static_cast<PinMux>(value&PORT_PCR_MUX(-1)); }
+   constexpr PinMux           pinMux()                   { return static_cast<PinMux>(value&PORT_PCR_MUX(-1)); }
 };
 
 
