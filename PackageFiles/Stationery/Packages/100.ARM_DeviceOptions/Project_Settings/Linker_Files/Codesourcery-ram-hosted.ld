@@ -25,7 +25,7 @@ SEARCH_DIR(.)
 GROUP(-lgcc -lc -lcs3 -lcs3hosted -lcs3arm)
 
 /* Include external memory map defining RAM and Flash memory etc */
-INCLUDE "MemoryMap-$(targetDeviceName).ld"
+INCLUDE "MemoryMap.ld"
 
 /* These force the linker to search for particular symbols from
  * the start of the link process and thus ensure the user's

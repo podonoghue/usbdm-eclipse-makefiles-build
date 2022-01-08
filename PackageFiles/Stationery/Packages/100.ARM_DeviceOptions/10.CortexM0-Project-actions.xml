@@ -36,7 +36,7 @@ Cortex-M0
 
       <copy source="Project_Settings/Debug_USBDM.launch"                      target="Project_Settings/$(projectName)_Debug_USBDM.launch" />
 
-      <copy source="Project_Settings/Linker_Files/MemoryMap.ld"               target="Project_Settings/Linker_Files/MemoryMap-$(targetDeviceName).ld" />
+      <copy source="Project_Settings/Linker_Files/MemoryMap.ld"               target="Project_Settings/Linker_Files/MemoryMap.ld" />
 
       <copy source="Project_Headers/derivative.h"                             target="Project_Headers/derivative.h"    derived="true" />
       <copy source="Project_Headers/TargetDevice.h"                           target="Project_Headers/$(externalHeaderFilename)"  derived="true" />

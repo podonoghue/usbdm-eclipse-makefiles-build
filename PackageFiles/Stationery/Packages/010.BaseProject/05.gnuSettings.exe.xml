@@ -12,7 +12,7 @@
 
       <!-- C Linker file and path -->
       <projectOption id="net.sourceforge.usbdm.cdt.toolchain.c.linker.linkerFile">
-         <value>MemoryMap-$(targetDeviceName).ld</value>
+         <value>MemoryMap.ld</value>
       </projectOption>
       <projectOption id="gnu.c.link.option.paths">
          <value>&quot;${ProjDirPath}/Project_Settings/Linker_Files&quot;</value>
@@ -61,7 +61,7 @@
       
       <!-- C++ Linker file and path -->
       <projectOption id="net.sourceforge.usbdm.cdt.toolchain.cpp.linker.linkerFile">
-         <value>MemoryMap-$(targetDeviceName).ld</value>
+         <value>MemoryMap.ld</value>
       </projectOption>
       <projectOption id="gnu.cpp.link.option.paths">
          <value>&quot;${ProjDirPath}/Project_Settings/Linker_Files&quot;</value>

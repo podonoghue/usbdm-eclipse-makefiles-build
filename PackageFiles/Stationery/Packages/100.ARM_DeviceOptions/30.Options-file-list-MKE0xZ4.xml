@@ -38,7 +38,7 @@
       <copy source="Project_Headers/console.h"  target="Project_Headers/console.h" overwrite="true" />
 
       <!-- MKE04 & MKE06 have a BME that can manipulate SRAM_U and a bit-band for SRAM_U as well -->
-      <copy source="Project_Settings/Linker_Files/MemoryMap-sramu.ld" target="Project_Settings/Linker_Files/MemoryMap-$(targetDeviceName).ld"  overwrite="true" />
+      <copy source="Project_Settings/Linker_Files/MemoryMap-sramu.ld" target="Project_Settings/Linker_Files/MemoryMap.ld"  overwrite="true" />
 
       <projectActionList>
          <applyWhen>

@@ -54,7 +54,7 @@ GROUP(libstm32_MD.a)
 */
 
 /* Include external memory map defining ram and Flash memory etc */
-INCLUDE "MemoryMap-$(targetDeviceName).ld"
+INCLUDE "MemoryMap.ld"
 
 ENTRY(Reset_Handler)
 
