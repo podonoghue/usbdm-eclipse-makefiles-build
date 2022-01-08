@@ -63,6 +63,10 @@ void software_init_hook () {
 void* __dso_handle;
 #endif
 
+#if defined(KINETIS_BOOTLOADER_CHECK)
+void checkICP();
+#endif
+
 /**
  *  @brief Low-level initialise the system
  *
@@ -138,6 +142,14 @@ void SystemInitLowLevel(void) {
          WDOG_STCTRLH_WDOGEN(0)|          // Disable WDOG
          WDOG_STCTRLH_ALLOWUPDATE(1)|     // Allow future updates
          WDOG_STCTRLH_CLKSRC(0);          // WDOG clk=LPO
+#endif
+
+#if defined(KINETIS_BOOTLOADER_CHECK)
+   /**
+    * Hook for ICP code
+    * Needed to be done before too much uC configuration
+    */
+   checkICP();
 #endif
 }
 
