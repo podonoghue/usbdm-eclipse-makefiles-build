@@ -1354,8 +1354,22 @@ public:
     *
     * @return Reference to self
     */
-   FormattedIO NOINLINE_DEBUG &write(Seconds value) {
-      return write((float)value).write(" seconds");
+   FormattedIO NOINLINE_DEBUG &write(const Seconds value) {
+      float num = value.getValue();
+      const char *units = " s";
+      if (value<0.000'001) {
+         num *= 1'000'000'000.0;
+         units =  " ns";
+      }
+      else if (value<0.001) {
+         num *= 1'000'000.0;
+         units =  " us";
+      }
+      else if (value<1.0) {
+         num *= 1000.0;
+         units =  " ms";
+      }
+      return write(num).write(units);
    }
 
    /**
@@ -1365,63 +1379,19 @@ public:
     *
     * @return Reference to self
     */
-   FormattedIO NOINLINE_DEBUG &writeln(Seconds value) {
-      return write(value).writeln();
+   FormattedIO NOINLINE_DEBUG &operator <<(const Seconds value) {
+      return write(value);
    }
 
    /**
-    * Write a Ticks variable
-    *
-    * @param[in]  value Ticks to print
-    *
-    * @return Reference to self
-    */
-   FormattedIO NOINLINE_DEBUG &write(const Ticks &value) {
-      return write((unsigned)value).write(" ticks");
-   }
-
-   /**
-    * Write a Ticks variable
-    *
-    * @param[in]  value Ticks to print
-    *
-    * @return Reference to self
-    */
-   FormattedIO NOINLINE_DEBUG &writeln(const Ticks &value) {
-      return write(value).writeln();
-   }
-
-   /**
-    * Write a Hertz variable
-    *
-    * @param[in]  value Hertz to print
-    *
-    * @return Reference to self
-    */
-   FormattedIO NOINLINE_DEBUG &write(const Hertz &value) {
-      return write((float)value).write(" Hz");
-   }
-
-   /**
-    * Write a Hertz variable
-    *
-    * @param[in]  value Hertz to print
-    *
-    * @return Reference to self
-    */
-   FormattedIO NOINLINE_DEBUG &writeln(const Hertz &value) {
-      return write(value).writeln();
-   }
-
-   /**
-    * Write a Seconds variable
+    * Write a Seconds variable with newline
     *
     * @param[in]  value Seconds to print
     *
     * @return Reference to self
     */
-   FormattedIO NOINLINE_DEBUG &operator <<(const Seconds &value) {
-      return write(value);
+   FormattedIO NOINLINE_DEBUG &writeln(const Seconds value) {
+      return write(value).writeln();
    }
 
    /**
@@ -1431,8 +1401,30 @@ public:
     *
     * @return Reference to self
     */
-   FormattedIO NOINLINE_DEBUG &operator <<(const Ticks &value) {
+   FormattedIO NOINLINE_DEBUG &write(const Ticks value) {
+      return write(value.getValue()).write(" ticks");
+   }
+
+   /**
+    * Write a Ticks variable
+    *
+    * @param[in]  value Ticks to print
+    *
+    * @return Reference to self
+    */
+   FormattedIO NOINLINE_DEBUG &operator <<(const Ticks value) {
       return write(value);
+   }
+
+   /**
+    * Write a Ticks variable with newline
+    *
+    * @param[in]  value Ticks to print
+    *
+    * @return Reference to self
+    */
+   FormattedIO NOINLINE_DEBUG &writeln(const Ticks value) {
+      return write(value).writeln();
    }
 
    /**
@@ -1442,7 +1434,39 @@ public:
     *
     * @return Reference to self
     */
-   FormattedIO NOINLINE_DEBUG &operator <<(const Hertz &value) {
+   FormattedIO NOINLINE_DEBUG &write(const Hertz value) {
+      float num = value.getValue();
+      const char *units = " Hz";
+      if (num>=1'000'000.0) {
+         num /= 1'000'000.0;
+         units =  " MHz";
+      }
+      else if (num>=1'000.0) {
+         num /= 1'000.0;
+         units =  " kHz";
+      }
+      return write(num).write(units);
+   }
+
+   /**
+    * Write a Hertz variable with newline
+    *
+    * @param[in]  value Hertz to print
+    *
+    * @return Reference to self
+    */
+   FormattedIO NOINLINE_DEBUG &writeln(const Hertz value) {
+      return write(value).writeln();
+   }
+
+   /**
+    * Write a Hertz variable
+    *
+    * @param[in]  value Hertz to print
+    *
+    * @return Reference to self
+    */
+   FormattedIO NOINLINE_DEBUG &operator <<(const Hertz value) {
       return write(value);
    }
 #endif
