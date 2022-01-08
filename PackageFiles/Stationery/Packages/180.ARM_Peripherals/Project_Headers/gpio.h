@@ -141,6 +141,34 @@ public:
       gpio->PTOR = bitMask;
    }
    /**
+    * Read pin value
+    *
+    * @return true/false reflecting pin value.
+    *
+    * @note This reads the PDIR
+    * @note Polarity _is_ _not_ significant
+    * @note Don't use this method unless dealing with very low-level I/O
+    */
+   bool readBit() const {
+      return isHigh();
+   }
+   /**
+    * Write boolean value to pin (if configured as output)
+    *
+    * @param[in] value true/false value
+    *
+    * @note Polarity _is_ _not_ significant
+    * @note Don't use this method unless dealing with very low-level I/O
+    */
+   void  __attribute__((always_inline)) writeBit(bool value) const {
+      if (value) {
+         set();
+      }
+      else {
+         clear();
+      }
+   }
+   /**
     * Set pin to active level (if configured as output)
     *
     * @note Polarity _is_ significant
@@ -677,6 +705,34 @@ public:
     */
    static void toggle() {
       gpio->PTOR = Pcr::BITMASK;
+   }
+   /**
+    * Write boolean value to pin (if configured as output)
+    *
+    * @param[in] value true/false value
+    *
+    * @note Polarity _is_ _not_ significant
+    * @note Don't use this method unless dealing with very low-level I/O
+    */
+   static void  __attribute__((always_inline)) writeBit(bool value) {
+      if (value) {
+         set();
+      }
+      else {
+         clear();
+      }
+   }
+   /**
+    * Read pin value
+    *
+    * @return true/false reflecting pin value.
+    *
+    * @note This reads the PDIR
+    * @note Polarity _is_ _not_ significant
+    * @note Don't use this method unless dealing with very low-level I/O
+    */
+   static bool readBit() {
+      return isHigh();
    }
    /**
     * Set pin to active level (if configured as output)
