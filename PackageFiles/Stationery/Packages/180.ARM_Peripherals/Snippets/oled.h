@@ -83,7 +83,7 @@ public:
 
 private:
 
-   USBDM::Font *font = &USBDM::fontSmall;
+   const USBDM::Font *font = &USBDM::fontSmall;
 
    /**
     * Check if character is available
@@ -193,7 +193,7 @@ public:
     * @param font
     * @return
     */
-   Oled &setFont(USBDM::Font &font) {
+   Oled &setFont(const USBDM::Font &font) {
       this->font = &font;
       return *this;
    }

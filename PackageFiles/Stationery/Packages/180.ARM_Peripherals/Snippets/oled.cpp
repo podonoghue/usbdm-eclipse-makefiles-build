@@ -221,7 +221,7 @@ void Oled::_writeChar(char ch) {
          // Don't display partial characters
          return;
       }
-      writeImage((uint8_t*)(&font->data[(ch-USBDM::Font::BASE_CHAR)*font->bytesPerChar]), x, y, width, height);
+      writeImage((*font)[ch], x, y, width, height);
       x += width;
       fontHeight = max(fontHeight, height);
    }
@@ -234,7 +234,7 @@ void Oled::_writeChar(char ch) {
  * @param[in] width Width of white space in pixels
  */
 Oled &Oled::putSpace(int width) {
-   static const uint8_t space[] = {0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00};
+   static const uint8_t space[] = {0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00};
    while (width>0) {
       int t = 8;
       if (t>width) {
@@ -296,10 +296,10 @@ void Oled::putPixel(unsigned index, uint8_t mask, bool pixel, WriteMode writeMod
 /**
  * Draw vertical line to frame buffer
  *
- * @param [in] x  Horizontal position in pixel
- * @param [in] y1 Top Y position
- * @param [in] y2 Top Y position
- * @param [in] writeMode  Mode of modification
+ * @param [in] x           X position in pixels
+ * @param [in] y1          Top Y position
+ * @param [in] y2          Bottom Y position
+ * @param [in] writeMode   Mode of modification
  */
 void Oled::drawVerticalLine(int x, int y1, int y2, WriteMode writeMode) {
    if ((x<0)||(x>=WIDTH)) {
@@ -342,8 +342,8 @@ void Oled::drawVerticalLine(int x, int y1, int y2, WriteMode writeMode) {
 /**
  * Draw horizontal line to frame buffer
  *
- * @param [in] x1          Left horizontal position in pixel
- * @param [in] x2          Right horizontal position in pixel
+ * @param [in] x1          Left X position in pixel
+ * @param [in] x2          Right X position in pixel
  * @param [in] y           Y position
  * @param [in] writeMode   Mode of modification
  */

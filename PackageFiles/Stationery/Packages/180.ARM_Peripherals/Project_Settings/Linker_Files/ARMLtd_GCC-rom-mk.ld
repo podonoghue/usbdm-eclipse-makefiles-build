@@ -1,6 +1,6 @@
 /* ARMLtd_GCC-rom-mk.ld (180.ARM_Peripherals/Project_Settings/Linker_Files/)
  *
- * Kinetis version without optional SRAM_U allocation and bitband
+ * Kinetis version with bitband
  *
  * Linker script based on example scripts provided with ARM Ltd GCC
  *

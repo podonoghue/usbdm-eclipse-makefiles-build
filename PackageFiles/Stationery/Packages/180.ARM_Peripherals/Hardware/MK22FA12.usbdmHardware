@@ -162,11 +162,11 @@
          <clock clockEnable="SIM->SCGC6 = SIM->SCGC6 | SIM_SCGC6_FTF_MASK;" clockDisable="SIM->SCGC6 = SIM->SCGC6 &amp; ~SIM_SCGC6_FTF_MASK;" />
          <irq num="FTF_Command_IRQn" />
          <irq num="FTF_ReadCollision_IRQn" />
-         <param key="dflash_phrase_size" value="8" />
-         <param key="pflash_sector_size" value="4096" />
-         <param key="dflash_sector_size" value="4096" />
-         <param key="pflash_phrase_size" value="8" />
-         <param key="peripheral_file" value="ftfe_128k_flexrom" />
+         <param name="dflash_phrase_size" key="/FTFE/dflash_phrase_size" value="8" />
+         <param name="dflash_sector_size" key="/FTFE/dflash_sector_size" value="4096" />
+         <param name="peripheral_file" key="/FTFE/peripheral_file" value="ftfe_128k_flexrom" />
+         <param name="pflash_phrase_size" key="/FTFE/pflash_phrase_size" value="8" />
+         <param name="pflash_sector_size" key="/FTFE/pflash_sector_size" value="4096" />
       </peripheral>
       <peripheral baseName="FTM"      instance="">
          <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForFtmShared" />
@@ -240,7 +240,7 @@
       <peripheral baseName="LLWU"     instance=""         version="llwu_pe4_filt2_rst">
          <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForLlwu" />
          <irq num="LLWU_IRQn" />
-         <param key="device_list"   value="LPTMR0;CMP0;CMP1;CMP2;;RTC_Alarm;;RTC_Seconds" />
+         <param name="device_list"  key="/LLWU/device_list" value="LPTMR0;CMP0;CMP1;CMP2;;RTC_Alarm;;RTC_Seconds" />
       </peripheral>
       <peripheral baseName="LPTMR"    instance="0"        version="lptmr0">
          <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForLptmr" />

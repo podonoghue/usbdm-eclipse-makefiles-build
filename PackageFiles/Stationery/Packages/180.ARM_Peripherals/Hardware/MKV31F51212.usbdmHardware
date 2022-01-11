@@ -105,9 +105,9 @@
       <peripheral baseName="FTFA"     instance=""         version="ftfa_xacch">
          <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForFlash" />
          <clock clockEnable="SIM->SCGC6 = SIM->SCGC6 | SIM_SCGC6_FTF_MASK;" clockDisable="SIM->SCGC6 = SIM->SCGC6 &amp; ~SIM_SCGC6_FTF_MASK;" />
-         <param key="pflash_sector_size" value="2048" />
-         <param key="pflash_phrase_size" value="4" />
-         <param key="peripheral_file" value="ftfa" />
+         <param name="Flash peripheral file" key="/FTFA/peripheral_file" value="ftfa" />
+         <param name="Program flash phrase size" key="/FTFA/pflash_phrase_size" value="4" />
+         <param name="Program flash sector size" key="/FTFA/pflash_sector_size" value="2048" />
       </peripheral>
       <peripheral baseName="FTM"      instance="">
          <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForFtmShared" />
@@ -186,10 +186,10 @@
       </peripheral>
       <peripheral baseName="SIM"      instance=""         version="sim_mkv31f51212">
          <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForSim" />
-         <param key="flashFreq"     value="27MHz" />
-         <param key="coreFreq"      value="120MHz" />
-         <param key="busFreq"       value="60MHz" />
-         <param key="flexFreq"      value="27MHz" />
+         <param name="busFreq"      key="/SIM/busFreq"  value="60MHz" />
+         <param name="coreFreq"     key="/SIM/coreFreq" value="120MHz" />
+         <param name="flashFreq"    key="/SIM/flashFreq" value="27MHz" />
+         <param name="flexFreq"     key="/SIM/flexFreq" value="27MHz" />
       </peripheral>
       <peripheral baseName="SMC"      instance=""         version="smc_mk22f51212">
          <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForSmc" />
@@ -205,17 +205,17 @@
       <peripheral baseName="UART"     instance="0"        version="uart0_mk21fa12_c7816">
          <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForUart" />
          <clock clockEnable="SIM->SCGC4 = SIM->SCGC4 | SIM_SCGC4_UART0_MASK;" clockDisable="SIM->SCGC4 = SIM->SCGC4 &amp; ~SIM_SCGC4_UART0_MASK;" />
-         <param key="clockSource"   value="SystemCoreClock" />
+         <param name="clockSource"  key="/UART0/clockSource" value="SystemCoreClock" />
       </peripheral>
       <peripheral baseName="UART"     instance="1"        version="uart1_mk10d10">
          <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForUart" />
          <clock clockEnable="SIM->SCGC4 = SIM->SCGC4 | SIM_SCGC4_UART1_MASK;" clockDisable="SIM->SCGC4 = SIM->SCGC4 &amp; ~SIM_SCGC4_UART1_MASK;" />
-         <param key="clockSource"   value="SystemCoreClock" />
+         <param name="clockSource"  key="/UART1/clockSource" value="SystemCoreClock" />
       </peripheral>
       <peripheral baseName="UART"     instance="2"        version="uart1_mk10d10">
          <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForUart" />
          <clock clockEnable="SIM->SCGC4 = SIM->SCGC4 | SIM_SCGC4_UART2_MASK;" clockDisable="SIM->SCGC4 = SIM->SCGC4 &amp; ~SIM_SCGC4_UART2_MASK;" />
-         <param key="clockSource"   value="SystemBusClock" />
+         <param name="clockSource"  key="/UART2/clockSource" value="SystemBusClock" />
       </peripheral>
       <peripheral baseName="VREF"     instance=""         version="vref_c">
          <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForVref" />

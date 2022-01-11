@@ -199,11 +199,11 @@
          <clock clockEnable="SIM->SCGC6 = SIM->SCGC6 | SIM_SCGC6_FTF_MASK;" clockDisable="SIM->SCGC6 = SIM->SCGC6 &amp; ~SIM_SCGC6_FTF_MASK;" />
          <irq num="FTF_Command_IRQn" />
          <irq num="FTF_ReadCollision_IRQn" />
-         <param key="dflash_phrase_size" value="8" />
-         <param key="pflash_sector_size" value="4096" />
-         <param key="dflash_sector_size" value="4096" />
-         <param key="pflash_phrase_size" value="8" />
-         <param key="peripheral_file" value="ftfe_128k_flexrom" />
+         <param name="dflash_phrase_size" key="/FTFE/dflash_phrase_size" value="8" />
+         <param name="dflash_sector_size" key="/FTFE/dflash_sector_size" value="4096" />
+         <param name="peripheral_file" key="/FTFE/peripheral_file" value="ftfe_128k_flexrom" />
+         <param name="pflash_phrase_size" key="/FTFE/pflash_phrase_size" value="8" />
+         <param name="pflash_sector_size" key="/FTFE/pflash_sector_size" value="4096" />
       </peripheral>
       <peripheral baseName="FTM"      instance="">
          <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForFtmShared" />
@@ -282,7 +282,7 @@
       <peripheral baseName="LLWU"     instance=""         version="llwu_pe8_filt4">
          <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForLlwu" />
          <irq num="LLWU_IRQn" />
-         <param key="device_list"   value="LPTMR0;CMP0;CMP1;CMP2/CMP3;TSI0;RTC_Alarm;;RTC_Seconds" />
+         <param name="device_list"  key="/LLWU/device_list" value="LPTMR0;CMP0;CMP1;CMP2/CMP3;TSI0;RTC_Alarm;;RTC_Seconds" />
       </peripheral>
       <peripheral baseName="LPTMR"    instance="0"        version="lptmr0">
          <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForLptmr" />
@@ -350,10 +350,10 @@
       </peripheral>
       <peripheral baseName="SIM"      instance=""         version="sim_mk65f18">
          <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForSim" />
-         <param key="flashFreq"     value="28MHz" />
-         <param key="coreFreq"      value="180MHz" />
-         <param key="busFreq"       value="60MHz" />
-         <param key="flexFreq"      value="60MHz" />
+         <param name="busFreq"      key="/SIM/busFreq"  value="60MHz" />
+         <param name="coreFreq"     key="/SIM/coreFreq" value="180MHz" />
+         <param name="flashFreq"    key="/SIM/flashFreq" value="28MHz" />
+         <param name="flexFreq"     key="/SIM/flexFreq" value="60MHz" />
       </peripheral>
       <peripheral baseName="SMC"      instance=""         version="smc_mk65f18">
          <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForSmc" />

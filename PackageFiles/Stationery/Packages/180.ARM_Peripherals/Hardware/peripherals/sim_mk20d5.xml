@@ -259,12 +259,15 @@
 
    <indexedCategory name="ClockConfig." dim="/SIM/numberOfClockSettings" 
         description="Clock configurations" 
-        toolTip="Clock configurations for different run modes" >
+        toolTip="Clock configurations for different run modes" 
+        derived="true" 
+        constant="true">
       
       <aliasOption key="/MCG/ClockConfig."
         constant="true"/>
       
       <choiceOption name="sim_sopt2_pllfllsel."
+         constant="true"
          description="Peripheral Clock select"
          toolTip="Selects the clock for various peripherals (LPUART, TPM etc.)">
          <choice value="0"  name="MCGFLLCLK clock" isDefault="true" />
@@ -279,12 +282,14 @@
          toolTip="Frequency of Peripheral Clock available to various peripherals"  />
     
       <intOption name="system_core_clock." 
+         constant="true"
          units="Hz"
          description="System Core Clock"
          toolTip="Clocks the ARM Cortex-M4 core and bus masters"
          value="48000000" />
       
       <intOption name="system_bus_clock." 
+         constant="true"
          units="Hz"
          description="System Bus Clock"
          toolTip="Clocks the bus slaves and peripherals\n
@@ -292,6 +297,7 @@
          value="48000000" />
       
       <intOption name="system_flash_clock." 
+         constant="true"
          units="Hz"
          description="System Flash Clock"
          toolTip="Clocks the flash memory\n

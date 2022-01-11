@@ -89,8 +89,8 @@
    <intOption name="Flex RAM size"      key="/LINKER/flexRamSize"     constant="true" description="Flex RAM available in target"     />
    <intOption name="Flex NVM size"      key="/LINKER/flexNvmSize"     constant="true" description="Flex Flash available in target"   />
    
-   <stringOption name="linkerExtraRegions" key="/LINKER/linkerExtraRegions" constant="true" hidden="true" />
-   <stringOption name="linkerInformation"  key="/LINKER/linkerInformation"  constant="true" hidden="true" />
+   <stringOption name="linkerExtraRegions" key="/LINKER/linkerExtraRegions" constant="true" hidden="true" derived="true" />
+   <stringOption name="linkerInformation"  key="/LINKER/linkerInformation"  constant="true" hidden="true" derived="true" />
    
    <stringOption name="Linker script"        key="/LINKER/scriptFilename"   constant="true" description="File used as linker script"       />
    <stringOption name="Linker memory map"    key="/LINKER/mapFilename"      constant="true" description="File used for target memory map"  />
@@ -142,6 +142,12 @@
       <choiceOption name="Micro Trace Buffer"            key="/LINKER/mtb_ram"        derivedFrom="/LINKER/raml_default"/>
       <choiceOption name="USB Endpoint buffers"          key="/LINKER/bdts_ram"       derivedFrom="/LINKER/raml_default"/>
    </category>
+</category>
+
+<category name="Device Information" description="Information about this device"
+  toolTip=""
+>
+
 </category>
 
 <!-- Template is added to pin_mapping.h -->

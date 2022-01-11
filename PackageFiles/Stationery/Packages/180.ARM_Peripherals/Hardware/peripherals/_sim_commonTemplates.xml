@@ -1428,22 +1428,22 @@
 	   \t#if defined(SIM_SOPT8_FTM0OCH0SRC)
 	   \t//! System Options Register 8
 	   \tstatic constexpr uint32_t sopt8 = 
-	   \t   SIM_SOPT8_FTM3OCH7SRC($(sim_sopt8_ftm3och7src)) |   // FTM3 channel 7 output source
-	   \t   SIM_SOPT8_FTM3OCH6SRC($(sim_sopt8_ftm3och6src)) |   // FTM3 channel 6 output source
-	   \t   SIM_SOPT8_FTM3OCH5SRC($(sim_sopt8_ftm3och5src)) |   // FTM3 channel 5 output source
-	   \t   SIM_SOPT8_FTM3OCH4SRC($(sim_sopt8_ftm3och4src)) |   // FTM3 channel 4 output source
-	   \t   SIM_SOPT8_FTM3OCH3SRC($(sim_sopt8_ftm3och3src)) |   // FTM3 channel 3 output source
-	   \t   SIM_SOPT8_FTM3OCH2SRC($(sim_sopt8_ftm3och2src)) |   // FTM3 channel 2 output source
-	   \t   SIM_SOPT8_FTM3OCH1SRC($(sim_sopt8_ftm3och1src)) |   // FTM3 channel 1 output source
-	   \t   SIM_SOPT8_FTM3OCH0SRC($(sim_sopt8_ftm3och0src)) |   // FTM3 channel 0 output source
-	   \t   SIM_SOPT8_FTM0OCH7SRC($(sim_sopt8_ftm0och7src)) |   // FTM0 channel 7 output source
-	   \t   SIM_SOPT8_FTM0OCH6SRC($(sim_sopt8_ftm0och6src)) |   // FTM0 channel 6 output source
-	   \t   SIM_SOPT8_FTM0OCH5SRC($(sim_sopt8_ftm0och5src)) |   // FTM0 channel 5 output source
-	   \t   SIM_SOPT8_FTM0OCH4SRC($(sim_sopt8_ftm0och4src)) |   // FTM0 channel 4 output source
-	   \t   SIM_SOPT8_FTM0OCH3SRC($(sim_sopt8_ftm0och3src)) |   // FTM0 channel 3 output source
-	   \t   SIM_SOPT8_FTM0OCH2SRC($(sim_sopt8_ftm0och2src)) |   // FTM0 channel 2 output source
-	   \t   SIM_SOPT8_FTM0OCH1SRC($(sim_sopt8_ftm0och1src)) |   // FTM0 channel 1 output source
-	   \t   SIM_SOPT8_FTM0OCH0SRC($(sim_sopt8_ftm0och0src));    // FTM0 channel 0 output source
+	   \t   SIM_SOPT8_FTM3OCH7SRC($(sim_sopt8_ftm3och7src:-1)) |   // FTM3 channel 7 output source
+	   \t   SIM_SOPT8_FTM3OCH6SRC($(sim_sopt8_ftm3och6src:-1)) |   // FTM3 channel 6 output source
+	   \t   SIM_SOPT8_FTM3OCH5SRC($(sim_sopt8_ftm3och5src:-1)) |   // FTM3 channel 5 output source
+	   \t   SIM_SOPT8_FTM3OCH4SRC($(sim_sopt8_ftm3och4src:-1)) |   // FTM3 channel 4 output source
+	   \t   SIM_SOPT8_FTM3OCH3SRC($(sim_sopt8_ftm3och3src:-1)) |   // FTM3 channel 3 output source
+	   \t   SIM_SOPT8_FTM3OCH2SRC($(sim_sopt8_ftm3och2src:-1)) |   // FTM3 channel 2 output source
+	   \t   SIM_SOPT8_FTM3OCH1SRC($(sim_sopt8_ftm3och1src:-1)) |   // FTM3 channel 1 output source
+	   \t   SIM_SOPT8_FTM3OCH0SRC($(sim_sopt8_ftm3och0src:-1)) |   // FTM3 channel 0 output source
+	   \t   SIM_SOPT8_FTM0OCH7SRC($(sim_sopt8_ftm0och7src:-1)) |   // FTM0 channel 7 output source
+	   \t   SIM_SOPT8_FTM0OCH6SRC($(sim_sopt8_ftm0och6src:-1)) |   // FTM0 channel 6 output source
+	   \t   SIM_SOPT8_FTM0OCH5SRC($(sim_sopt8_ftm0och5src:-1)) |   // FTM0 channel 5 output source
+	   \t   SIM_SOPT8_FTM0OCH4SRC($(sim_sopt8_ftm0och4src:-1)) |   // FTM0 channel 4 output source
+	   \t   SIM_SOPT8_FTM0OCH3SRC($(sim_sopt8_ftm0och3src:-1)) |   // FTM0 channel 3 output source
+	   \t   SIM_SOPT8_FTM0OCH2SRC($(sim_sopt8_ftm0och2src:-1)) |   // FTM0 channel 2 output source
+	   \t   SIM_SOPT8_FTM0OCH1SRC($(sim_sopt8_ftm0och1src:-1)) |   // FTM0 channel 1 output source
+	   \t   SIM_SOPT8_FTM0OCH0SRC($(sim_sopt8_ftm0och0src:-1));    // FTM0 channel 0 output source
 	   \t#endif\n\n
 	]]></template>
    
@@ -1451,10 +1451,10 @@
 	   \t#if defined(SIM_SOPT9_TPM1CH0SRC)
 	   \t//! System Options Register 9
 	   \tstatic constexpr uint32_t sopt9 = 
-	   \t   SIM_SOPT9_TPM2CLKSEL($(sim_sopt9_tpm2clksel))  |   // TPM2 External Clock Pin Select
-	   \t   SIM_SOPT9_TPM1CLKSEL($(sim_sopt9_tpm1clksel))  |   // TPM1 External Clock Pin Select
-	   \t   SIM_SOPT9_TPM2CH0SRC($(sim_sopt9_tpm2ch0src))  |   // TPM2 channel 0 input capture source select
-	   \t   SIM_SOPT9_TPM1CH0SRC($(sim_sopt9_tpm1ch0src));     // TPM1 channel 0 input capture source select
+	   \t   SIM_SOPT9_TPM2CLKSEL($(sim_sopt9_tpm2clksel:-1))  |   // TPM2 External Clock Pin Select
+	   \t   SIM_SOPT9_TPM1CLKSEL($(sim_sopt9_tpm1clksel:-1))  |   // TPM1 External Clock Pin Select
+	   \t   SIM_SOPT9_TPM2CH0SRC($(sim_sopt9_tpm2ch0src:-1))  |   // TPM2 channel 0 input capture source select
+	   \t   SIM_SOPT9_TPM1CH0SRC($(sim_sopt9_tpm1ch0src:-1));     // TPM1 channel 0 input capture source select
 	   \t#endif\n\n
 	]]></template>
 

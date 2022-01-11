@@ -45,19 +45,20 @@ public:
 
    auto &operator =(const Ticks &other) volatile  {value = other.value;  return *this; }
 
-   auto getValue() const { return value; }
-   auto getValue() const volatile { return value; }
+   constexpr auto getValue() const { return value; }
+   unsigned getValue() const volatile { return value; }
 
    constexpr auto operator *(unsigned other) const { return Ticks(value*other); }
    constexpr auto operator *(float    other) const { return Ticks(value*other); }
 
    constexpr auto operator /(unsigned other) const { return Ticks(value/other); }
    constexpr auto operator /(float    other) const { return Ticks(value/other); }
+   constexpr auto operator /(Ticks    other) const { return (value/other.getValue()); }
 
    constexpr auto operator +(const Ticks &other) const { return Ticks(value+other.value); }
    constexpr auto operator -(const Ticks &other) const { return Ticks(value+other.value); }
 
-   constexpr explicit operator unsigned() const { return value; }
+   constexpr operator unsigned() const { return value; }
    explicit operator unsigned() const volatile { return value; }
 };
 
@@ -70,7 +71,7 @@ public:
    constexpr Seconds()                       : value(0.0) {}
    constexpr Seconds(float value)            : value(value) {}
    constexpr Seconds(const Seconds& other)   : value(other.value) {}
-   Seconds(const volatile Seconds& other)    : value(other.value) {}
+   Seconds(const volatile Seconds& other)    : value(other.getValue()) {}
 
    auto &operator =(float other)                   {value = other;       return *this; }
    auto &operator =(const Seconds &other)          {value = other.value; return *this; }
@@ -79,16 +80,19 @@ public:
    auto &operator =(const Seconds &other) volatile {value = other.value; return *this; }
 
    constexpr auto getValue() const { return value; }
+   float getValue() const volatile { return value; }
 
    constexpr auto operator *(float other) const { return Seconds(value*other); }
 
    constexpr auto operator /(float other) const { return Seconds(value/other); }
 
+   constexpr auto operator /(Seconds other) const { return float(value/other.getValue()); }
+
    constexpr auto operator +(Seconds other) const { return Seconds(value+other.value); }
    constexpr auto operator -(Seconds other) const { return Seconds(value+other.value); }
 
-   explicit operator float() const { return value; }
-   operator float() const volatile { return value; }
+   constexpr operator float() const { return value; }
+   explicit operator float() const volatile { return value; }
 };
 
 class Hertz {
@@ -108,15 +112,18 @@ public:
    auto &operator =(const Hertz &other) volatile {value = other.value; return *this; }
 
    constexpr auto getValue() const { return value; }
+   float getValue() const volatile { return value; }
 
    constexpr auto operator *(float other) const { return Hertz(value*other); }
 
    constexpr auto operator /(float other) const { return Hertz(value/other); }
+   constexpr auto operator /(Hertz other) const { return (float)(value/other.getValue()); }
 
    constexpr auto operator +(Hertz other) const { return Hertz(value+other.value); }
    constexpr auto operator -(Hertz other) const { return Hertz(value+other.value); }
 
-   explicit operator float() const { return value; }
+   constexpr operator float()    const { return value; }
+   constexpr operator unsigned() const { return (int)round(value); }
 };
 
 constexpr auto operator *(float left, Seconds right) { return Seconds(left*right.getValue()); }

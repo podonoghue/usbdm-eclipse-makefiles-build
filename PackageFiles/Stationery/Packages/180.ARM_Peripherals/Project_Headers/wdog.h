@@ -325,7 +325,7 @@ public:
             break;
          }
       }
-      setTimeout(prescaler, timerValue);
+      setTimeout(prescaler, (unsigned)timerValue);
       return E_NO_ERROR;
    }
 

@@ -1357,7 +1357,7 @@ public:
    FormattedIO NOINLINE_DEBUG &write(const Seconds value) {
       float num = value.getValue();
       const char *units = " s";
-      if (value<0.000'001) {
+      if (num<0.000'001) {
          num *= 1'000'000'000.0;
          units =  " ns";
       }
@@ -1365,7 +1365,7 @@ public:
          num *= 1'000'000.0;
          units =  " us";
       }
-      else if (value<1.0) {
+      else if (num<1.0) {
          num *= 1000.0;
          units =  " ms";
       }
