@@ -4,8 +4,6 @@
 <!-- usb_clkrcv_base.xml -->
 <fragment xmlns:xi="http://www.w3.org/2001/XInclude">
 
-   <xi:include href="_default_instance.xml"/>
-
    <category name="Clock Recovery" description="USB clock recovery options">
       <binaryOption 
          name="usb_clk_recovery_irc_en_en" 
