@@ -25,16 +25,15 @@ static const uint16_t brFactors[] {2,4,6,8,16,32,64,128,256,512,1024,2048,4096,8
  * Calculate communication speed from SPI clock frequency and speed factors
  *
  * @param[in]  clockFrequency  Clock frequency of SPI in Hz
- * @param[in]  spiCtarSelect   CTAR register providing SPI_CTAR_BR, SPI_CTAR_PBR fields
+ * @param[in]  spiCtarValue    Configuration providing SPI_CTAR_BR, SPI_CTAR_PBR fields
  *
  * @return Clock frequency of SPI in Hz for these factors
  */
-uint32_t Spi::calculateSpeed(uint32_t clockFrequency, SpiCtarSelect spiCtarSelect) {
-   uint32_t clockFactors = spi->CTAR[spiCtarSelect];
-   int pbr = (clockFactors&SPI_CTAR_PBR_MASK)>>SPI_CTAR_PBR_SHIFT;
-   int br  = (clockFactors&SPI_CTAR_BR_MASK)>>SPI_CTAR_BR_SHIFT;
+uint32_t Spi::calculateSpeed(uint32_t clockFrequency, uint32_t spiCtarValue) {
+   int pbr = (spiCtarValue&SPI_CTAR_PBR_MASK)>>SPI_CTAR_PBR_SHIFT;
+   int br  = (spiCtarValue&SPI_CTAR_BR_MASK)>>SPI_CTAR_BR_SHIFT;
    uint32_t frequency = clockFrequency/(pbrFactors[pbr]*brFactors[br]);
-   if (clockFactors&SPI_CTAR_DBR_MASK) {
+   if (spiCtarValue&SPI_CTAR_DBR_MASK) {
       frequency *= 2;
    }
    return frequency;
@@ -44,10 +43,10 @@ uint32_t Spi::calculateSpeed(uint32_t clockFrequency, SpiCtarSelect spiCtarSelec
  * Calculate Delay factors
  * Used for ASC, DT and CSSCK
  *
- * @param[in]  clockFrequency => Clock frequency of SPI in Hz
- * @param[in]  delay          => Desired delay in seconds
- * @param[out] bestPrescale   => Best prescaler value (0=>/1, 1=>/3, 2=/5, 3=>/7)
- * @param[out] bestDivider    => Best divider value (N=>/(2**(N+1)))
+ * @param[in]  clockFrequency Clock frequency of SPI in Hz
+ * @param[in]  delay          Desired delay in seconds
+ * @param[out] bestPrescale   Best prescaler value (0=>/1, 1=>/3, 2=/5, 3=>/7)
+ * @param[out] bestDivider    Best divider value (N=>/(2**(N+1)))
  *
  * Note: Determines bestPrescaler and bestDivider for the smallest delay that is not less than delay.
  */
@@ -117,22 +116,6 @@ uint32_t Spi::calculateDividers(uint32_t clockFrequency, uint32_t frequency) {
       clockFactors = SPI_CTAR_DBR_MASK;
    }
    return clockFactors;
-}
-
-/**
- * Transmit and receive a value over SPI
- *
- * @param[in] data - Data to send (4-16 bits) <br>
- *                   May include other control bits as for PUSHR
- *
- * @return Data received
- */
-uint16_t Spi::txRx(uint16_t data) {
-   spi->PUSHR = data|pushrMask;
-   while ((spi->SR & SPI_SR_TCF_MASK)==0) {
-   }
-   spi->SR = SPI_SR_TCF_MASK|SPI_SR_EOQF_MASK;
-   return spi->POPR;  // Return read data
 }
 
 /**

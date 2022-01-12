@@ -55,8 +55,9 @@ public:
    constexpr auto operator /(float    other) const { return Ticks(value/other); }
    constexpr auto operator /(Ticks    other) const { return (value/other.getValue()); }
 
-   constexpr auto operator +(const Ticks &other) const { return Ticks(value+other.value); }
-   constexpr auto operator -(const Ticks &other) const { return Ticks(value+other.value); }
+   constexpr auto operator +(const Ticks &other)   const { return Ticks(value+other.value); }
+   constexpr auto operator -(const Ticks &other)   const { return Ticks(value+other.value); }
+   constexpr auto operator -(const unsigned other) const { return Ticks(value-other); }
 
    constexpr operator unsigned() const { return value; }
    explicit operator unsigned() const volatile { return value; }

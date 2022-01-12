@@ -18,6 +18,7 @@
  * Any manual changes will be lost.
  */
 #include "pin_mapping.h"
+
 #ifdef __CMSIS_RTOS
 #include "cmsis.h"
 #endif
@@ -272,6 +273,7 @@ struct SpiConfiguration {
  *       {10'000'000, SpiMode_0, SpiOrder_MsbFirst, SpiFrameSize_12}, // Configuration 1 (CTAR1)
  *       0b000000, // All PCSs idle low                               // PCS idle levels
  *    };
+ * @endcode
  */
 struct SpiConfigurations {
    SpiConfiguration     ctar0;
@@ -283,7 +285,7 @@ struct SpiConfigurations {
     *
     * @param ctar0         CTAR 0 value
     * @param ctar1         CTAR 1 value
-    * @param pcsIdleLevel  PCS signals idle level (bit-mask)
+    * @param pcsPolarity   Polarity of PCS signals (bit-mask made up of SpiPeripheralSelect values)
     */
    constexpr SpiConfigurations (
          SpiConfiguration     ctar0,
@@ -296,7 +298,7 @@ struct SpiConfigurations {
     * Constructor for a single configuration
     *
     * @param ctar0         CTAR 0 value
-    * @param pcsIdleLevel  PCS signals idle level (bit-mask)
+    * @param pcsPolarity   Polarity of PCS signals (bit-mask made up of SpiPeripheralSelect values)
     */
    constexpr SpiConfigurations (
          SpiConfiguration     ctar0,
@@ -345,11 +347,23 @@ protected:
     * Calculate communication speed from SPI clock frequency and speed factors
     *
     * @param[in]  clockFrequency  Clock frequency of SPI in Hz
-    * @param[in]  spiCtarSelect   Configuration providing SPI_CTAR_BR, SPI_CTAR_PBR fields
+    * @param[in]  spiCtarValue    Configuration providing SPI_CTAR_BR, SPI_CTAR_PBR fields
     *
     * @return Clock frequency of SPI in Hz for these factors
     */
-   uint32_t calculateSpeed(uint32_t clockFrequency, SpiCtarSelect spiCtarSelect);
+   static uint32_t calculateSpeed(uint32_t clockFrequency, uint32_t spiCtarValue);
+
+   /**
+    * Calculate communication speed from SPI clock frequency and speed factors
+    *
+    * @param[in]  clockFrequency  Clock frequency of SPI in Hz
+    * @param[in]  spiCtarSelect   CTAR selection providing SPI_CTAR_BR, SPI_CTAR_PBR fields
+    *
+    * @return Clock frequency of SPI in Hz for these factors
+    */
+   uint32_t calculateSpeed(uint32_t clockFrequency, SpiCtarSelect spiCtarSelect) {
+      return calculateSpeed(clockFrequency, spi->CTAR[spiCtarSelect]);
+   }
 
    /**
     * Calculate Delay factors
@@ -763,17 +777,18 @@ public:
     *
     * @return Data received
     */
-   uint16_t txRx(uint16_t data);
+   uint32_t txRxRaw(uint32_t data);
 
    /**
     * Transmit and receive a value over SPI
     *
-    * @param[in] data - Data to send (4-16 bits) <br>
-    *                   May include other control bits as for PUSHR
+    * @param[in] data - Data to send (4-16 bits)
     *
     * @return Data received
     */
-   uint32_t txRxRaw(uint32_t data);
+   uint16_t txRx(uint16_t data) {
+      return txRxRaw(data|pushrMask);
+   }
 
    /**
     * Clear Transmit and/or Receive FIFOs

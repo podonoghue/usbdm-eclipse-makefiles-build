@@ -587,7 +587,7 @@ public:
             PDB_SC_MULT(mult)|PDB_SC_PRESCALER(prescale)|PDB_SC_PDBIF_MASK;
 
       // Calculate MOD using new MULT and PRESCALER convertSecondsToTicks()
-      pdb->MOD = convertSecondsToTicks(period) - 1;
+      pdb->MOD = convertSecondsToTicks(period) - 1U;
 
       return E_NO_ERROR;
    }
@@ -754,7 +754,6 @@ public:
     * @param adcNum           ADC associated with the pre-trigger (channel)
     * @param pretriggerNum    Pretrigger being modified
     * @param pdbPretrigger    Pretrigger settings
-    * @param delay            Delay - only needed for PdbPretrigger_Delayed
     */
    static void configureAdcPretrigger (
          unsigned       adcNum,
@@ -949,7 +948,6 @@ public:
     *
     * @param dacNum            DAC number
     * @param pdbDacTriggerMode Controls how the DAC trigger is generated
-    * @param period            Interval used to calculate the reload value for DAC interval counter
     */
    static void configureDacTrigger(
          unsigned          dacNum,
