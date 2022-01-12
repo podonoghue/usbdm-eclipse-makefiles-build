@@ -3,42 +3,45 @@
 <!-- _common_settings.xml -->
 
 <list name="CommonSettings" >
-<binaryOption name="mapAllPins" key="/HARDWARE/mapAllPins" 
-   description="Map allocated pins"
-   toolTip="Enables mapping of all allocated pins during startup using mapAllPins()">
+<binaryOption name="Map all pins on startup" key="/HARDWARE/mapAllPins" 
+   description="Execute mapAllPins() during startup"
+   toolTip="Enables mapping of allocated pins during startup using mapAllPins()\n
+   Multiply mapped pins cannot be assigned by mapAllPins().">
    <choice value="false" name="Don't map - Use manual mapping or enable mapping for peripherals individually"  isDefault="true" />
    <choice value="true"  name="Map pins during startup using mapAllPins()" />
 </binaryOption>
 
-<binaryOption name="lockMappedPins" key="/HARDWARE/lockMappedPins" 
-   description="Lock allocated pins"
-   toolTip="Lock PCRs during mapAllPins()">
+<binaryOption name="Lock mapped pins" key="/HARDWARE/lockMappedPins" 
+   description="Lock mapped pins during startup"
+   toolTip="Lock pin control registers (PCRs) during mapAllPins()">
    <choice value="PinLock_Unlocked" name="Don't force locked - Pins may still be individually locked" />
-   <choice value="PinLock_Locked"  name="Force all pins to be locked in mapAllPins()" isDefault="true" />
+   <choice value="PinLock_Locked"   name="Force all pins to be locked in mapAllPins()" isDefault="true" />
 </binaryOption>
 
-<binaryOption name="lockoutUnbondedPins" key="/HARDWARE/lockoutUnbondedPins" 
+<binaryOption name="Disable unbonded pins" key="/HARDWARE/lockoutUnbondedPins" 
    description="Lock out pins that are not bonded to physical pins on package"
-   toolTip="In some smaller packages there are die pins that are not bonded to package pins\n
-            For those pins the PCR can be set to 0 (analogue) to minimize power consumption\n
+   toolTip="In some smaller packages there are die pads that are not bonded to package pins\n
+            For those pins the PCR can be set to 0 (analogue/disabled) to minimize power consumption\n
             This is the reset state.">
    <choice value="false" name="Leave unbonded pins unchanged" />
    <choice value="true"  name="Force unbonded pins to analogue function" isDefault="true" />
 </binaryOption>
 
-<binaryOption name="warnMultipleSignalsOnPin" key="/HARDWARE/warnMultipleSignalsOnPin" 
-   description="Whether to generate warnings about conflicting signal mappings"
-   toolTip="It is allowable to have multiple signals mapped to a single pin on the\n 
-            understanding that they will be dynamically mapped during execution">
+<binaryOption name="Warn if multiple signals mapped to pin" key="/HARDWARE/warnMultipleSignalsOnPin" 
+   description="Generate warnings about conflicting signal mappings"
+   toolTip="It is allowable to have multiple signals mapped to a single pin on the understanding\n 
+            that they will be dynamically mapped during execution to avoid conflict.\n
+            Multiply mapped pins cannot be assigned by mapAllPins().">
    <choice value="false" name="Don't produce warning during compilation" isDefault="true" />
    <choice value="true"  name="Produce warning during compilation" />
 </binaryOption>
 
-<binaryOption name="useTypeSystemForTimers" key="/HARDWARE/useTypeSystemForTimers" 
-   description="Enforce use of a dimensioned type system for time and frequency measures"
-   toolTip="Types 'Seconds', 'Hertz' and 'Ticks' are always defined but not enforced">
-   <choice value="false" name="Don't enforce types system" isDefault="true" />
-   <choice value="true"  name="Enforce types system" />
+<binaryOption name="Use extended type system for timers" key="/HARDWARE/useTypeSystemForTimers" 
+   description="Use a dimensioned type system for time and frequency"
+   toolTip="Types 'Seconds', 'Hertz' and 'Ticks' are always defined but are simple aliases\n
+   rather than a enforced type system using classes.">
+   <choice value="false" name="Don't use extended type system" isDefault="true" />
+   <choice value="true"  name="Use extended type system" />
 </binaryOption>
 
 <category name="Examples" description="Pin mapping for examples">
@@ -96,7 +99,7 @@
    <stringOption name="Linker memory map"    key="/LINKER/mapFilename"      constant="true" description="File used for target memory map"  />
    <stringOption name="Linker vector table"  key="/LINKER/vectorsFilename"  constant="true" description="File used for target vector table"  />
    
-   <category name="Section placement in Flash" description="How regions are mapped to available Flash regions"
+   <category name="Section placement in Flash" description="How regions are mapped to available Flash"
      toolTip=
       "Cortex-M4 Kinetis devices may have additional Flash that can be used as backing storage \n
        for non-volatile memory (FlexRAM -> FlexNVM.)\n
@@ -104,16 +107,17 @@
        These settings control which region (regular flash or FlexNVM) is used for various linker sections."
    >
 
-      <choiceOption name="Code (apart from startup)" key="/LINKER/text_rom" description="Segment allocation"
-         toolTip="This selects placement for the segment" >
+      <choiceOption name="Startup code" key="/LINKER/startup_rom" description="Segment allocation" 
+         toolTip="Fixed placement for vector table and reset code" constant="true"  >
          <choice value="flash"       name="Main Flash"  isDefault="true"/>
          <choice value="flexNVM"     name="Flex NVM Flash" />
       </choiceOption>
       
-      <choiceOption name="Read-only data"  key="/LINKER/rodata_rom"      derivedFrom="/LINKER/text_rom"/>
+      <choiceOption name="Code (apart from startup)"  key="/LINKER/text_rom"   derivedFrom="/LINKER/startup_rom" toolTip="Text (code), vtables etc" />
+      <choiceOption name="Read-only data"             key="/LINKER/rodata_rom" derivedFrom="/LINKER/startup_rom" toolTip="const data" />
    </category>
 
-   <category name="Section placement in RAM" description="How regions are mapped to available RAM regions"
+   <category name="Section placement in RAM" description="How regions are mapped to available RAM"
      toolTip=
        "The RAM on Cortex-M4 Kinetis devices is divided into upper and lower memory regions.\n
         These settings control which region is used for various linker sections.\n
