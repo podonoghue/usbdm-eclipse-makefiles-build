@@ -51,13 +51,13 @@ int main() {
       for (unsigned i=1; i<=99; i++) {
          PwmLed::setDutyCycle((int)i);
          waitMS(10);
-         console.write("Duty = ").write(i).writeln(" %");
+         console.writeln("Duty = ", i, " %");
       }
       // Using high-time
       for (int i=99; i>0; i--) {
          PwmLed::setHighTime(i*(5_us/100.0));
          waitMS(10);
-         console.write("High time = ").write(5*i).writeln(" us");
+         console.writeln("High time = ", 5*i, " us");
       }
    }
 }

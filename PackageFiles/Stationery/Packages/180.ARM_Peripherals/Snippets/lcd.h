@@ -234,7 +234,7 @@ protected:
    Spi      &spi;
 
    /** SPI communication configuration */
-   SpiConfig  spiConfig;
+   SpiCalculatedConfiguration  spiConfig;
 
 #ifdef __CMSIS_RTOS
    /** Mutex to protect access to LCD */
@@ -566,8 +566,8 @@ public:
 
    int  _readChar() override { return -1;}
    bool _isCharAvailable() override { return false; }
-   void flushInput() override {}
-   void flushOutput() override {}
+   LcdBase &flushInput() override { return *this; }
+   LcdBase &flushOutput() override { return *this; }
 
 private:
    int     fX;
@@ -697,11 +697,11 @@ public:
     */
    Lcd_T(Spi &spi) : LcdBase(spi) {
       // Chip select pin
-      SpiCS_n::setOutput(pcrValue(PinPull_None, PinDriveStrength_High));
+      SpiCS_n::setOutput();
       SpiCS_n::high();         // Set idle high
 
       // LCD Reset pin
-      Reset_n::setOutput(pcrValue(PinPull_None, PinDriveStrength_High));
+      Reset_n::setOutput();
       Reset_n::high();
 
       init();
@@ -807,7 +807,7 @@ public:
       }
       BackLight::setDutyCycle(level);
 #else
-      BackLight::setOutput(pcrValue(PinPull_None, PinDriveStrength_High));
+      BackLight::setOutput();
       BackLight::write(level>0);
 #endif
    }

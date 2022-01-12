@@ -120,7 +120,7 @@ int main() {
          CriticalSection cs;
          tPeriodInTicks = periodInTicks;
       }
-      console.write("Period = ").writeln(Timer::convertTicksToSeconds(tPeriodInTicks));
+      console.write("Period = ", Timer::convertTicksToSeconds(tPeriodInTicks));
    }
    return 0;
 }

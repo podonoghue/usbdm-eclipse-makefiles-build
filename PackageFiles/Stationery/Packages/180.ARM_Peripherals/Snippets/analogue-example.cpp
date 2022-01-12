@@ -40,7 +40,7 @@ void reportChipTemperature() {
    float    chipTemperature = 25 - (tVoltage-0.719)/.001715;
 
    console.setFloatFormat(1, Padding_LeadingSpaces, 2);
-   console.write("Temp = ").write(chipTemperature).writeln(" degrees");
+   console.writeln("Temp = ", chipTemperature, " degrees");
    console.resetFormat();
 }
 
@@ -69,7 +69,7 @@ int main(void) {
       float voltage = value*3.3/MyAdc::getSingleEndedMaximum(adcResolution);
 
       // Report
-      console.write("Value = ").write(voltage).writeln(" volts");
+      console.writeln("Value = ", voltage, " volts");
       waitMS(200);
    }
 }

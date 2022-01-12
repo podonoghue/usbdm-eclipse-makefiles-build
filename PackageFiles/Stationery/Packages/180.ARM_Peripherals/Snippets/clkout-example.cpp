@@ -13,8 +13,8 @@ using namespace USBDM;
 
 int main() {
    console.writeln("Starting\n");
-   console.write("SystemCoreClock = ").writeln(SystemCoreClock);
-   console.write("SystemBusClock  = ").writeln(SystemBusClock);
+   console.writeln("SystemCoreClock = ", SystemCoreClock);
+   console.writeln("SystemBusClock  = ", SystemBusClock);
 
    // Need to check Info table index in ControlInfo or use configuration editor (much easier)
    using ClkOut = PcrTable_T<ControlInfo, 10>;

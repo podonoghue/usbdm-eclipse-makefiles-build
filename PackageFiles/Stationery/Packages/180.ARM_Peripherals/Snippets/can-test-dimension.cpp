@@ -28,17 +28,17 @@ void testCanPins() {
 }
 
 void testSizes() {
-   console.write("CanControlStatus     sz = ").writeln(sizeof(CanControlStatus));
-   console.write("CanId                sz = ").writeln(sizeof(CanId));
-   console.write("CanMessageBuffer8    sz = ").writeln(sizeof(CanMessageBuffer8));
-   console.write("CanFifoIdFilter      sz = ").writeln(sizeof(CanFifoIdFilter));
-   console.write("CanFifoIdFilterMask  sz = ").writeln(sizeof(CanFifoIdFilterMask));
-   console.write("CanMailboxFilterMask sz = ").writeln(sizeof(CanMailboxFilterMask));
+   console.writeln("CanControlStatus     sz = ", sizeof(CanControlStatus));
+   console.writeln("CanId                sz = ", sizeof(CanId));
+   console.writeln("CanMessageBuffer8    sz = ", sizeof(CanMessageBuffer8));
+   console.writeln("CanFifoIdFilter      sz = ", sizeof(CanFifoIdFilter));
+   console.writeln("CanFifoIdFilterMask  sz = ", sizeof(CanFifoIdFilterMask));
+   console.writeln("CanMailboxFilterMask sz = ", sizeof(CanMailboxFilterMask));
 }
 
 void printSizeTable(const char *title, unsigned maxMessageBuffers) {
    console.setWidth(3).setPadding(Padding_LeadingSpaces);
-   console.write("\n\n  Table of FIFO filters and raw mailbox numbers for ").writeln(title);
+   console.writeln("\n\n  Table of FIFO filters and raw mailbox numbers for ", title);
    console.write(" FF  FM MB->");
    for (unsigned mailboxes=0; mailboxes<=maxMessageBuffers; mailboxes++) {
       console.write(mailboxes);
@@ -47,7 +47,7 @@ void printSizeTable(const char *title, unsigned maxMessageBuffers) {
    unsigned maxFifoFilters = CanParameters::calculateMaximumFifoFilterEntries(maxMessageBuffers);
    for (unsigned fifoIdFilters=0; fifoIdFilters<=maxFifoFilters; fifoIdFilters += 8) {
       console.write(fifoIdFilters).write(" ");
-      console.write(CanParameters::calculateAvailableFifoIdFilterMasks(fifoIdFilters)).write("     ");
+      console.write(CanParameters::calculateAvailableFifoIdFilterMasks(fifoIdFilters), "     ");
       for (unsigned mailboxes=0; mailboxes<=maxMessageBuffers; mailboxes++) {
          unsigned mbs = CanParameters::calculateMessageBuffersRequired(fifoIdFilters, mailboxes);
          if (mbs<=maxMessageBuffers) {
@@ -67,7 +67,7 @@ int main() {
 
    CanLimp::setInput();
    console.writeln("\n\nStarting");
-   console.write("Can Limp = ").writeln(CanLimp::read());
+   console.write("Can Limp = ", CanLimp::read());
 
    for(;;) {
    }

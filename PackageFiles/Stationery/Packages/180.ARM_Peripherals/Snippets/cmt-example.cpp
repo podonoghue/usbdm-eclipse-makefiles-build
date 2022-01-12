@@ -78,8 +78,8 @@ void configureCmtTime() {
 
 int main() {
    console.writeln("Starting\n");
-   console.write("SystemCoreClock = ").writeln(::SystemCoreClock);
-   console.write("SystemBusClock  = ").writeln(::SystemBusClock);
+   console.writeln("SystemCoreClock = ", ::SystemCoreClock);
+   console.writeln("SystemBusClock  = ", ::SystemBusClock);
 
 //   configureCmtFrequencyShiftKeying();
    configureCmtTime();
@@ -95,7 +95,7 @@ int main() {
    for(int count = 0;;count++) {
       waitMS(500);
       bitNum = 15;
-      console.write(count).writeln(": Tick...");
+      console.writeln(count, ": Tick...");
    }
    return 0;
 }

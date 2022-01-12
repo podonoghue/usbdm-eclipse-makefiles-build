@@ -48,10 +48,10 @@ int main() {
    static constexpr uint8_t value = 0x34;
 
    externalRam1[3] = value;
-   console.write("Wrote ").write(value).write(", Read back ").writeln(externalRam1[3]);
+   console.writeln("Wrote ", value, ", Read back ", externalRam1[3]);
 
    externalRam2[3] = value;
-   console.write("Wrote ").write(value).write(", Read back ").writeln(externalRam2[3]);
+   console.writeln("Wrote ", value, ", Read back ", externalRam2[3]);
 
    for(;;) {
    }

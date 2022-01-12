@@ -40,6 +40,8 @@ Lcd lcd(spi);
 // LCD derived dimensions
 static constexpr unsigned LCD_WIDTH  = (LCD_X_MAX-LCD_X_MIN);
 static constexpr unsigned LCD_HEIGHT = (LCD_Y_MAX-LCD_Y_MIN);
+static constexpr unsigned CENTRE_X   = (LCD_Y_MAX+LCD_Y_MIN)/2;
+static constexpr unsigned CENTRE_Y   = (LCD_Y_MAX+LCD_Y_MIN)/2;
 
 // Colour for LCD background
 static constexpr Colour BACKGROUND_COLOUR = (RED);

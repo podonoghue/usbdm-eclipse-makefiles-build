@@ -45,6 +45,6 @@ int main(void) {
    for(;;) {
       // Do next conversion
       int32_t value = MyAdcChannel::readAnalogue();
-      console.write("Difference  = ").write(value*3.3/MyAdc::getDifferentialMaximum(adcResolution)).writeln(" volts");
+      console.writeln("Difference  = ", value*3.3/MyAdc::getDifferentialMaximum(adcResolution), " volts");
    }
 }

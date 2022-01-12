@@ -165,7 +165,7 @@ int main() {
       lastMeasurement    = currentMeasurement;
       currentMeasurement = getPosition();
       if (currentMeasurement != lastMeasurement) {
-         console.write("Position = ").writeln(currentMeasurement);
+         console.writeln("Position = ", currentMeasurement);
       }
    }
 }

@@ -111,7 +111,7 @@ void LcdBase::init() {
    spi.setMode(SpiMode_0, SpiOrder_MsbFirst);
 
    // Use 9-bit transfers
-   spi.setFrameSize(9);
+   spi.setFrameSize(SpiFrameSize_9);
 
    // Use software selection of peripheral
    spi.setPeripheralSelect(SpiPeripheralSelect_None, ActiveLow, SpiSelectMode_Idle);
@@ -655,10 +655,11 @@ void LcdBase::putChar(char c, unsigned x, unsigned y, const Font &font, Colour f
    // Get the nColumns, nRows and nBytes
    nCols  = font.width;
    nRows  = font.height;
-   nBytes = font.bytesPerChar;
+   nBytes = ((font.width+7)/8);
 
    // Get pointer to the last byte of the desired character
-   pChar = &font.data[nBytes*(c-0x20+1)]-1;
+   pChar = &font[c][nBytes-1];
+//   pChar = &font.data[nBytes*(c-0x20+1)]-1;
 
    // Row address set
 #ifdef PHILIPS

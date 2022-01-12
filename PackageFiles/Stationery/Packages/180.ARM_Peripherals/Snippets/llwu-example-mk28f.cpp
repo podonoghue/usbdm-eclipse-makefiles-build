@@ -39,9 +39,9 @@ static ClockConfig VLPR_CLOCK_CONFIG   = ClockConfig_BLPE_4MHz;
 static constexpr int BAUD_RATE = 115200;
 
 // Using LEDs rather defeats VLLSx mode!
-using RedLed    = GpioE<6,ActiveLow>;
-using GreenLed  = GpioE<7,ActiveLow>;
-using BlueLed   = GpioE<8,ActiveLow>;
+using RedLED    = GpioE<6,ActiveLow>;
+using GreenLED  = GpioE<7,ActiveLow>;
+using BlueLED   = GpioE<8,ActiveLow>;
 
 // Timer to use for timed wake-up
 using WakeupTimer = Lptmr0;
@@ -309,7 +309,7 @@ static void enableTimer(const PreservedData preservedData) {
             LptmrResetOn_Compare,
             LptmrInterrupt_Enabled,
             LptmrClockSel_Lpoclk);
-      WakeupTimer::setPeriod(preservedData.timerDelay*seconds);
+      WakeupTimer::setPeriod(preservedData.timerDelay*1_s);
       WakeupTimer::setCallback(wakeupTimerCallback);
       WakeupTimer::enableNvicInterrupts(NvicPriority_Normal);
 
@@ -332,9 +332,9 @@ static void enableTimer(const PreservedData preservedData) {
  * Report which handlers ran
  */
 static void reportHandlersRun() {
-   console.write("Timer callback() ").writeln(preservedData.timerHandlerRan?"Ran":"Didn't run");
-   console.write("Pin callback()   ").writeln(preservedData.pinHandlerRan?"Ran":"Didn't run");
-   console.write("LLWU callback()  ").writeln(preservedData.llwuHandlerRan?"Ran":"Didn't run");
+   console.writeln("Timer callback() ", preservedData.timerHandlerRan?"Ran":"Didn't run");
+   console.writeln("Pin callback()   ", preservedData.pinHandlerRan?"Ran":"Didn't run");
+   console.writeln("LLWU callback()  ", preservedData.llwuHandlerRan?"Ran":"Didn't run");
    console.writeln("**************************************").flushOutput();
 }
 
@@ -349,7 +349,7 @@ static void runSingleTest(PreservedData &preservedData) {
    preservedData.enableTimer =  preservedData.enableTimer && (preservedData.test!=VLLS0);
 
    console.writeln("\n**************************************").flushOutput();
-   console.write("Running Test: ").write(TestNames[preservedData.test]).write(", #").writeln(preservedData.testCount);
+   console.writeln("Running Test: ", TestNames[preservedData.test], ", #", preservedData.testCount);
 
    if (preservedData.test == NONE) {
       // Not a test
@@ -369,7 +369,7 @@ static void runSingleTest(PreservedData &preservedData) {
    enableTimer(preservedData);
    enablePin(preservedData);
 
-   console.write("Wake-up using ").write(preservedData.enablePin?"Pin, ":"").writeln(preservedData.enableTimer?"Timer":"");
+   console.writeln("Wake-up using ", preservedData.enablePin?"Pin, ":"", preservedData.enableTimer?"Timer":"");
 
    switch(preservedData.test) {
       case WAIT:  testWaitMode(SmcRunMode_Normal);             break;
@@ -476,7 +476,7 @@ int main() {
    console.setBaudRate(BAUD_RATE);
 
    console.writeln("\n**************************************");
-   console.write("Executing from RESET, SRS=").writeln(Rcm::getResetSourceDescription());
+   console.writeln("Executing from RESET, SRS=", Rcm::getResetSourceDescription());
 
    if ((Rcm::getResetSource() & RcmSource_Wakeup) != 0) {
       console.writeln("========================================");
@@ -510,9 +510,9 @@ int main() {
    }
 
    // Configure LEDs as off to reduce power
-   RedLed::disablePin();
-   GreenLed::disablePin();
-   BlueLed::disablePin();
+   RedLED::disablePin();
+   GreenLED::disablePin();
+   BlueLED::disablePin();
 
    // Enable all power modes
    Smc::enablePowerModes(
@@ -545,8 +545,8 @@ int main() {
    for(;;) {
       SmcStatus smcStatus = Smc::getStatus();
       if (refresh) {
-         console.write("SystemCoreClock  = ").write(::SystemCoreClock/1000000.0).writeln(" MHz");
-         console.write("SystemBusClock   = ").write(::SystemBusClock/1000000.0).writeln(" MHz");
+         console.writeln("SystemCoreClock  = ", ::SystemCoreClock/1000000.0).writeln(" MHz");
+         console.writeln("SystemBusClock   = ", ::SystemBusClock/1000000.0).writeln(" MHz");
 
          switch(smcStatus) {
             case SmcStatus_HSRUN:
@@ -598,28 +598,20 @@ int main() {
          }
          refresh = false;
       }
-      console.write("\rE - Run Test (");
-      console.write(Smc::getSmcStatusName());
-      console.write(":");
-      console.write(Mcg::getClockModeName());
-      console.write("@");
-      console.write(::SystemCoreClock);
+      console.write("\rE - Run Test (", Smc::getSmcStatusName(), ":", Mcg::getClockModeName(), "@", ::SystemCoreClock);
 #ifdef SMC_PMCTRL_LPWUI_MASK
       console.write(lpwui?", LPWUI":"       ");
 #endif
       console.write(preservedData.continuousTest?", Cont":"      ");
       console.write(preservedData.enablePin?", Pin":"     ");
       if (preservedData.enableTimer&&(preservedData.test!=VLLS0)) {
-         console.write(", Timer(").setWidth(2).setPadding(Padding_LeadingSpaces).write(preservedData.timerDelay).write("s)");
+         console.write(", Timer(").setWidth(2).setPadding(Padding_LeadingSpaces).write(preservedData.timerDelay, "s)");
       }
       else {
          console.write("           ");
       }
       console.resetFormat();
-      console.write(", Test=");
-      console.write(TestNames[preservedData.test]);
-      console.write(") :   ");
-      console.flushOutput();
+      console.write(", Test=", TestNames[preservedData.test], ") :   ").flushOutput();
       console.setEcho(EchoMode_Off);
       int command = toupper(console.readChar());
       switch(command) {
@@ -646,7 +638,7 @@ int main() {
             break;
          case 'V':
             if (smcStatus!=SmcStatus_HSRUN) {
-               preservedData.test =
+               preservedData.test = 
                  ((preservedData.test != VLLS0)&&
                   (preservedData.test != VLLS1)&&
                   (preservedData.test != VLLS2))?VLLS0:(Test)(preservedData.test+1);

@@ -39,10 +39,7 @@ static constexpr CanMode  CAN_MODE = CanMode_Standard;
  * @param messageBuffer
  */
 void printMessageBuffer(volatile CanMessageBuffer8 * messageBuffer) {
-   console
-      .write("ID(")
-      .write((CAN_MODE==CanMode_Standard)?messageBuffer->ID.idStd:messageBuffer->ID.idExt)
-      .write(") - ");
+   console.write("ID(", (CAN_MODE==CanMode_Standard)?messageBuffer->ID.idStd:messageBuffer->ID.idExt, ") - ");
    for (unsigned index=0; index<CanDataSizeToUnsigned(messageBuffer->CS.dlc); index++) {
       if (index != 0) {
          console.write(", ");
@@ -61,9 +58,9 @@ void canMessageBufferCallback() {
    console.setWidth(32);
    console.setPadding(Padding_LeadingZeroes);
    console.writeln("                                                            OWF");
-   console.write(  "canOredCallback(), fifoFlags    = 0b").writeln(fifoFlags,    Radix_2);
+   console.writeln(  "canOredCallback(), fifoFlags    = 0b", fifoFlags,    Radix_2);
    console.writeln("                                    10987654321098765432109876543210");
-   console.write(  "canOredCallback(), mailboxFlags = 0b").writeln(mailboxFlags, Radix_2);
+   console.writeln(  "canOredCallback(), mailboxFlags = 0b", mailboxFlags, Radix_2);
    console.reset();
 }
 
@@ -76,7 +73,7 @@ void canErrorCallback() {
    console.writeln("                                         O BSTR10ACFSTRITFFRBE");
    console.writeln("                                         V OYxxEECRRTxxDxLLxOR");
    console.writeln("                                         R FNWWRRKCMFEEL TT FR");
-   console.write(  "canErrorCallback(), status = 0b").writeln(status, Radix_2).writeln();
+   console.writeln("canErrorCallback(), status = 0b", status, Radix_2).writeln();
    console.reset();
 }
 
@@ -102,7 +99,7 @@ public:
 
 private:
    void callback() override {
-      console.write("Mailbox ").writeln(mailboxNumber);
+      console.writeln("Mailbox ", mailboxNumber);
       clearMailboxFlag();
    }
 };
@@ -125,7 +122,7 @@ public:
 
 private:
    void callback() override {
-      console.write("Mailbox ").writeln(mailboxNumber);
+      console.writeln("Mailbox ", mailboxNumber);
       clearMailboxFlag();
    }
 };
@@ -142,7 +139,7 @@ public:
 
 private:
    void callback() override {
-      console.write("Mailbox ").writeln(mailboxNumber);
+      console.writeln("Mailbox ", mailboxNumber);
       clearMailboxFlag();
    }
 };
@@ -159,7 +156,7 @@ public:
 
 private:
    void callback() override {
-      console.write("Mailbox ").writeln(mailboxNumber);
+      console.writeln("Mailbox ", mailboxNumber);
       clearMailboxFlag();
    }
 };
@@ -171,7 +168,7 @@ int main() {
 
    CanLimp::setInput();
    console.writeln("\n\nStarting");
-   console.write("Can Limp = ").writeln(CanLimp::read());
+   console.writeln("Can Limp = ", CanLimp::read());
 
    Can::CanParameters canParameters(125000);
    canParameters.idam      = CanAcceptanceMode_FormatA;
@@ -201,8 +198,7 @@ int main() {
    Can::configureAllPins();
 
    CanMessageBuffer8 fifoMb = *Can::getFifoMessageBuffer();
-   console.write("FIFO CS=").write(fifoMb.CS.raw,Radix_16).
-         write(", ID=").writeln(fifoMb.ID.raw,Radix_16);
+   console.writeln("FIFO CS=", fifoMb.CS.raw, Radix_16, ", ID=", fifoMb.ID.raw,Radix_16);
 
    // Enable interrupts from Mailboxes in use
    rxMailbox1.enableInterrupt();
@@ -218,16 +214,16 @@ int main() {
    Can::enableMessageBufferNvicInterrupts(NvicPriority_Normal);
    Can::enableMiscellaneousNvicInterrupts(NvicPriority_Normal);
 
-   console.write("Can::MailboxNone.isValid() => ").writeln(Can::MailboxNone.isValid());
-   console.write("Can::txMailbox1.isValid() => ").writeln(txMailbox1.isValid());
+   console.writeln("Can::MailboxNone.isValid() => ", Can::MailboxNone.isValid());
+   console.writeln("Can::txMailbox1.isValid() => ", txMailbox1.isValid());
 
    txMailbox1.dispose();
-   console.write("Can::txMailbox1.isValid() => ").writeln(txMailbox1.isValid());
+   console.writeln("Can::txMailbox1.isValid() => ", txMailbox1.isValid());
 
    Can::readTimer();
 
    for(;;) {
-//      console.write("CAN0->MCR =0b").writeln(CAN0->MCR, Radix_2);
+//      console.writeln("CAN0->MCR =0b", CAN0->MCR, Radix_2);
       __asm__("nop");
       waitMS(100);
       if (txMailbox1.isTxFree()) {

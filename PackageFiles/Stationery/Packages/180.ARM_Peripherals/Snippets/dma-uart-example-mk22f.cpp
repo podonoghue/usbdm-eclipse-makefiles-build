@@ -21,7 +21,7 @@
  *
  * It may also be necessary to adjust DMA_SLOT for the console UART.
  *    DmaSlot_UART0_Transmit => DmaSlot_UART?_Transmit
- *
+ * 
  * If the console uses a LPUART then other changes are necessary:
  *    DmaSlot_UART0_Transmit => DmaSlot_LPUART?_Transmit
  *    UartDma_TxHoldingEmpty => LpuartDma_TxHoldingEmpty
@@ -120,7 +120,7 @@ static constexpr DmaTcd tcd = DmaTcd (
  * @param errorFlags Channel error information (DMA_ES)
  */
 void dmaErrorCallbackFunction(uint32_t errorFlags) {
-   console.write("DMA error DMA_ES = 0x").writeln(errorFlags, Radix_2);
+   console.writeln("DMA error DMA_ES = 0b", errorFlags, Radix_2);
    __BKPT();
 }
 
@@ -248,10 +248,7 @@ void changeRunMode(SmcRunMode smcRunMode) {
          break;
    }
 
-   console.write(Smc::getSmcStatusName()).
-         write(":").
-         write(Mcg::getClockModeName()).
-         write("@").writeln(::SystemCoreClock);
+   console.writeln(Smc::getSmcStatusName(), ":", Mcg::getClockModeName(), "@", ::SystemCoreClock);
 }
 
 int main() {
@@ -268,10 +265,10 @@ int main() {
    // DMA channel number to use (determines which PIT channel used)
    static const DmaChannelNum dmaChannel = Dma0::allocatePeriodicChannel();
    if (dmaChannel == DmaChannelNum_None) {
-      console.write("Failed to allocate DMA channel, rc= ").writeln(E_NO_RESOURCE);
+      console.writeln("Failed to allocate DMA channel, rc= ", E_NO_RESOURCE);
       __asm__("bkpt");
    }
-   console.write("Allocated DMA channel  #").writeln(dmaChannel);
+   console.writeln("Allocated DMA channel  #", dmaChannel);
 
    // Set up throttled DMA transfer from memory -> UART
    configureDma(dmaChannel);
@@ -279,10 +276,10 @@ int main() {
    // Get Pit channel associated with DMA channel
    PitChannelNum pitChannel = Pit::allocateDmaAssociatedChannel(dmaChannel);
    if (pitChannel == PitChannelNum_None) {
-      console.write("Failed to allocate PIT channel, rc= ").writeln(E_NO_RESOURCE);
+      console.writeln("Failed to allocate PIT channel, rc= ", E_NO_RESOURCE);
       __asm__("bkpt");
    }
-   console.write("Allocated PIT channel  #").writeln(pitChannel);
+   console.writeln("Allocated PIT channel  #", pitChannel);
    configurePit(pitChannel);
 
    // Start the UART DMA requests

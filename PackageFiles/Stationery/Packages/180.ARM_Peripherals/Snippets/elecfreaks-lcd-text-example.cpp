@@ -50,15 +50,15 @@ int main() {
    };
    for(;;) {
       lcd.setTextSettings(textFont1);
-      lcd.moveXY(0,LCD_Y_MAX-textFont1.font->height).write(text).write(text).write(text);
+      lcd.moveXY(0, LCD_Y_MAX-textFont1.font->height).write(text, text, text);
       waitMS(2000);
 
       lcd.setTextSettings(textFont2);
-      lcd.moveXY(0,LCD_Y_MAX-textFont2.font->height).write(text).write(text);
+      lcd.moveXY(0, LCD_Y_MAX-textFont2.font->height).write(text, text);
       waitMS(2000);
 
       lcd.setTextSettings(textFont3);
-      lcd.moveXY(0,LCD_Y_MAX-textFont3.font->height).write(text);
+      lcd.moveXY(0, LCD_Y_MAX-textFont3.font->height).write(text);
       waitMS(2000);
    }
 }

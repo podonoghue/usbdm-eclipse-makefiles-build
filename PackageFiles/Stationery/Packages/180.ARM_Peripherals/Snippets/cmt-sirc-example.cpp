@@ -300,8 +300,8 @@ int main() {
 //         PinSlewRate_Fast);
 
    console.writeln("Starting\n");
-   console.write("SystemCoreClock = ").writeln(::SystemCoreClock);
-   console.write("SystemBusClock  = ").writeln(::SystemBusClock);
+   console.writeln("SystemCoreClock = ", ::SystemCoreClock);
+   console.writeln("SystemBusClock  = ", ::SystemBusClock);
 
    // Configure CMT output and connect to pin
    Cmt::setOutput(

@@ -65,7 +65,7 @@ int main() {
       int16_t position = QuadDecoder::getPosition();
       if (position != lastPosition) {
          // Report position
-         console.write("Shaft position = ").writeln(position);
+         console.write("Shaft position = ", position);
          lastPosition = position;
       }
    }

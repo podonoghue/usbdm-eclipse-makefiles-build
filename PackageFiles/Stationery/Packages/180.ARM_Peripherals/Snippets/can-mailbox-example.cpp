@@ -39,10 +39,7 @@ static constexpr CanMode  CAN_MODE = CanMode_Standard;
  * @param messageBuffer
  */
 void printMessageBuffer(volatile CanMessageBuffer8 * messageBuffer) {
-   console
-      .write("ID(")
-      .write((CAN_MODE==CanMode_Standard)?messageBuffer->ID.idStd:messageBuffer->ID.idExt)
-      .write(") - ");
+   console.write("ID(", (CAN_MODE==CanMode_Standard)?messageBuffer->ID.idStd:messageBuffer->ID.idExt, ") - ");
    for (unsigned index=0; index<CanDataSizeToUnsigned(messageBuffer->CS.dlc); index++) {
       if (index != 0) {
          console.write(", ");
@@ -61,7 +58,7 @@ void canErrorCallback() {
    console.writeln("                                         O BSTR10ACFSTRITFFRBE");
    console.writeln("                                         V OYxxEECRRTxxDxLLxOR");
    console.writeln("                                         R FNWWRRKCMFEEL TT FR");
-   console.write(  "canErrorCallback(), status = 0b").writeln(status, Radix_2).writeln();
+   console.writeln(  "canErrorCallback(), status = 0b", status, Radix_2);
    console.reset();
 }
 
@@ -87,9 +84,9 @@ void canTxMailboxCallback(unsigned mailboxNum) {
    //   console.setWidth(32);
    //   console.setPadding(Padding_LeadingZeroes);
    //   console.writeln("                                                            OWF");
-   //   console.write(  "canOredCallback(), fifoFlags    = 0b").writeln(fifoFlags,    Radix_2);
+   //   console.write(  "canOredCallback(), fifoFlags    = 0b", fifoFlags,    Radix_2);
    //   console.writeln("                                    10987654321098765432109876543210");
-   //   console.write(  "canOredCallback(), mailboxFlags = 0b").writeln(mailboxFlags, Radix_2);
+   //   console.write(  "canOredCallback(), mailboxFlags = 0b", mailboxFlags, Radix_2);
    //   console.reset();
 
 }
@@ -214,8 +211,8 @@ void mailboxOnlyExample() {
       }
       CanErrorCounts canErrorCounts = Can::getErrorCounters();
       if ((canErrorCounts.receiveErrorCount > 0) || (canErrorCounts.transmitFastErrorCount > 0)) {
-         console.write("receiveErrorCount  = ").write(canErrorCounts.receiveErrorCount);
-         console.write(", transmitErrorCount = ").writeln(canErrorCounts.transmitErrorCount);
+         console.write("receiveErrorCount  = ", canErrorCounts.receiveErrorCount);
+         console.writeln(", transmitErrorCount = ", canErrorCounts.transmitErrorCount);
       }
    }
 
@@ -229,10 +226,10 @@ void mailboxOnlyExample() {
 int main() {
    console.writeln("\n\nStarting");
 
-   console.write("NUM_MAILBOXES                 = ").writeln(Can::NUM_MAILBOXES);
-   console.write("NUM_FIFO_MESSAGE_FILTERS      = ").writeln(Can::NUM_FIFO_MESSAGE_FILTERS);
-   console.write("MAX_NUM_MESSAGE_BUFFERS       = ").writeln(Can::MAX_NUM_MESSAGE_BUFFERS);
-   console.write("MAX_NUM_FIFO_MESSAGE_FILTERS  = ").writeln(Can::MAX_NUM_FIFO_MESSAGE_FILTERS);
+   console.writeln("NUM_MAILBOXES                 = ", Can::NUM_MAILBOXES);
+   console.writeln("NUM_FIFO_MESSAGE_FILTERS      = ", Can::NUM_FIFO_MESSAGE_FILTERS);
+   console.writeln("MAX_NUM_MESSAGE_BUFFERS       = ", Can::MAX_NUM_MESSAGE_BUFFERS);
+   console.writeln("MAX_NUM_FIFO_MESSAGE_FILTERS  = ", Can::MAX_NUM_FIFO_MESSAGE_FILTERS);
 
    // S32K
    //   CanLimp::setInput();

@@ -71,7 +71,7 @@ int main() {
       for(unsigned i=0; i<=180; i++) {
          Servo1::setPosition(i);
          waitMS(50);
-         console.write("Position = ").writeln(i);
+         console.write("Position = ", i);
       }
    }
    return 0;

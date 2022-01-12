@@ -37,14 +37,14 @@ int main() {
    console.writeln("\nSetting each bit");
    for (unsigned bitNum=0; bitNum<sizeofArray(variable_bits); bitNum++) {
       variable_bits[bitNum] = 1;
-      console.write("variable = 0b").writeln(variable, Radix_2);
+      console.writeln("variable = 0b", variable, Radix_2);
    }
 
    // Clear each bit in variable from LSB to MSB by writing '0' to variable_bits
    console.writeln("\nClearing each bit");
    for (unsigned bitNum=0; bitNum<sizeofArray(variable_bits); bitNum++) {
       variable_bits[bitNum] = 0;
-      console.write("variable = 0b").writeln(variable, Radix_2);
+      console.writeln("variable = 0b", variable, Radix_2);
    }
    for(int count = 0;;count++) {
       __asm__("bkpt");

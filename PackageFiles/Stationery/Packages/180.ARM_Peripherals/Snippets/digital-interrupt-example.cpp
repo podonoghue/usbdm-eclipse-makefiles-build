@@ -33,10 +33,10 @@ using Led    =   $(/HARDWARE/Led1:GpioA<2,ActiveLow>);
 static void callBack(uint32_t status) {
    static int count = 0;
    if (status & Switch::BITMASK) {
-      console.write(count++).write(": Status = 0x").writeln(status, Radix_2);
+      console.writeln(count++, ": Status = 0x", status, Radix_2);
    }
    else {
-      console.write("Unexpected Pin interrupt");
+      console.writeln("Unexpected Pin interrupt");
    }
 }
 #else
@@ -54,10 +54,10 @@ void Switch::Port::irqHandler() {
    uint32_t status = port().ISFR;
    port().ISFR = status;
    if (status & Switch::MASK) {
-      console.write(count++).write(": Status = 0x").writeln(status, Radix_2);
+      console.writeln(count++, ": Status = 0x", status, Radix_2);
    }
    else {
-      console.write("Unexpected Pin interrupt");
+      console.writeln("Unexpected Pin interrupt");
    }
 }
 #endif

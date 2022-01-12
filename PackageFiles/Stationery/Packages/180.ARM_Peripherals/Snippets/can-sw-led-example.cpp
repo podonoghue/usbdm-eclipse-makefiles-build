@@ -364,8 +364,8 @@ void mailboxOnlyExample() {
       }
       CanErrorCounts canErrorCounts = Can::getErrorCounters();
       if ((canErrorCounts.receiveErrorCount > 0) || (canErrorCounts.transmitFastErrorCount > 0)) {
-         console.write("receiveErrorCount  = ").write(canErrorCounts.receiveErrorCount);
-         console.write(", transmitErrorCount = ").writeln(canErrorCounts.transmitErrorCount);
+         console.writeln("receiveErrorCount  = ", canErrorCounts.receiveErrorCount);
+         console.writeln(", transmitErrorCount = ", canErrorCounts.transmitErrorCount);
       }
    }
 }
@@ -374,7 +374,7 @@ int main() {
    console.writeln("\n\nStarting");
 
    CanLimp::setInput();
-   console.write("CAN Limp mode is ").writeln(CanLimp::read()?"Active":"Inactive");
+   console.write("CAN Limp mode is ", CanLimp::read()?"Active":"Inactive");
 
    mailboxOnlyExample();
 
