@@ -116,17 +116,17 @@ void _HardFault_Handler(
 
    console.setPadding(Padding_LeadingZeroes);
    console.setWidth(8);
-   console.write("\n[Hardfault]\n - Stack frame:\n");
-   console.write("R0  = 0x").writeln(exceptionFrame->r0,  Radix_16);
-   console.write("R1  = 0x").writeln(exceptionFrame->r1,  Radix_16);
-   console.write("R2  = 0x").writeln(exceptionFrame->r2,  Radix_16);
-   console.write("R3  = 0x").writeln(exceptionFrame->r3,  Radix_16);
-   console.write("R12 = 0x").writeln(exceptionFrame->r12, Radix_16);
-   console.write("LR  = 0x").writeln((void*)(exceptionFrame->lr),  Radix_16);
-   console.write("PC  = 0x").writeln((void*)(exceptionFrame->pc),  Radix_16);
-   console.write("PSR = 0x").writeln(exceptionFrame->psr, Radix_16);
+   console.writeln("\n[Hardfault]\n - Stack frame:\n");
+   console.writeln("R0  = 0x", exceptionFrame->r0,  Radix_16);
+   console.writeln("R1  = 0x", exceptionFrame->r1,  Radix_16);
+   console.writeln("R2  = 0x", exceptionFrame->r2,  Radix_16);
+   console.writeln("R3  = 0x", exceptionFrame->r3,  Radix_16);
+   console.writeln("R12 = 0x", exceptionFrame->r12, Radix_16);
+   console.writeln("LR  = 0x", (void*)(exceptionFrame->lr),  Radix_16);
+   console.writeln("PC  = 0x", (void*)(exceptionFrame->pc),  Radix_16);
+   console.writeln("PSR = 0x", exceptionFrame->psr, Radix_16);
    console.writeln("- Misc");
-   console.write("LR/EXC_RETURN= 0x").writeln(execReturn,  Radix_16);
+   console.write("LR/EXC_RETURN= 0x", execReturn,  Radix_16);
 #endif
 
    while (1) {

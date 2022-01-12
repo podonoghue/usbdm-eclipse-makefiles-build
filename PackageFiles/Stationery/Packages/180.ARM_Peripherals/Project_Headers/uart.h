@@ -153,7 +153,7 @@ protected:
       }
       uart->D = ch;
       if (ch=='\n') {
-         write('\r');
+         _writeChar('\r');
       }
    }
 

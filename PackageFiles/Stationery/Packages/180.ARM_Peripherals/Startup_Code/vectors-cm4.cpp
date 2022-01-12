@@ -110,25 +110,25 @@ void _HardFault_Handler(
 
    console.setPadding(Padding_LeadingZeroes);
    console.setWidth(8);
-   console.write("\n[Hardfault]\n - Stack frame:\n");
-   console.write("R0  = 0x").writeln(exceptionFrame->r0,  Radix_16);
-   console.write("R1  = 0x").writeln(exceptionFrame->r1,  Radix_16);
-   console.write("R2  = 0x").writeln(exceptionFrame->r2,  Radix_16);
-   console.write("R3  = 0x").writeln(exceptionFrame->r3,  Radix_16);
-   console.write("R12 = 0x").writeln(exceptionFrame->r12, Radix_16);
-   console.write("LR  = 0x").writeln((void*)(exceptionFrame->lr),  Radix_16);
-   console.write("PC  = 0x").writeln((void*)(exceptionFrame->pc),  Radix_16);
-   console.write("PSR = 0x").writeln(exceptionFrame->psr, Radix_16);
-   console.write ("- FSR/FAR:\n");
+   console.writeln("\n[Hardfault]\n - Stack frame:\n");
+   console.writeln("R0  = 0x", exceptionFrame->r0,  Radix_16);
+   console.writeln("R1  = 0x", exceptionFrame->r1,  Radix_16);
+   console.writeln("R2  = 0x", exceptionFrame->r2,  Radix_16);
+   console.writeln("R3  = 0x", exceptionFrame->r3,  Radix_16);
+   console.writeln("R12 = 0x", exceptionFrame->r12, Radix_16);
+   console.writeln("LR  = 0x", (void*)(exceptionFrame->lr),  Radix_16);
+   console.writeln("PC  = 0x", (void*)(exceptionFrame->pc),  Radix_16);
+   console.writeln("PSR = 0x", exceptionFrame->psr, Radix_16);
+   console.writeln("- FSR/FAR:");
    uint32_t cfsr = SCB->CFSR;
-   console.write("CFSR = 0x").writeln(cfsr);
-   console.write("HFSR = 0x").writeln(SCB->HFSR, Radix_16);
-   console.write("DFSR = 0x").writeln(SCB->DFSR, Radix_16);
-   console.write("AFSR = 0x").writeln(SCB->AFSR, Radix_16);
-   if (cfsr & 0x0080) console.write("MMFAR = 0").writeln(SCB->MMFAR, Radix_16);
-   if (cfsr & 0x8000) console.write("BFAR = 0x").writeln(SCB->BFAR,  Radix_16);
+   console.writeln("CFSR = 0x", cfsr);
+   console.writeln("HFSR = 0x", SCB->HFSR, Radix_16);
+   console.writeln("DFSR = 0x", SCB->DFSR, Radix_16);
+   console.writeln("AFSR = 0x", SCB->AFSR, Radix_16);
+   if (cfsr & 0x0080) console.writeln("MMFAR = 0", SCB->MMFAR, Radix_16);
+   if (cfsr & 0x8000) console.writeln("BFAR = 0x", SCB->BFAR,  Radix_16);
    console.writeln("- Misc");
-   console.write("LR/EXC_RETURN= 0x").writeln(execReturn,  Radix_16);
+   console.write("LR/EXC_RETURN= 0x", execReturn,  Radix_16);
 #endif
 
    while (1) {

@@ -59,6 +59,14 @@ public:
    constexpr FontArraySubset() : Font(WIDTH, HEIGHT, doit) {
    }
 
+   /**
+    * Get index of ch for character pixel array
+    *
+    * @param ch
+    *
+    * @return Index or 0 if character is not supported.
+    *         It is convenient to have space mapped to location 0 in the pixel array.
+    */
    static uint8_t getIndex(uint8_t ch) {
       static constexpr uint8_t lookupIndex[sizeof...(elements)] = {elements...};
 
@@ -75,7 +83,7 @@ public:
     *
     * @param ch   Character
     *
-    * @return  Pixel data for ch.  This is a C array of size
+    * @return  Pixel data for ch.  This is a C array of size ((width+7)/8)*height.
     */
    static const uint8_t *doit(uint8_t ch) {
       static constexpr typename FontData::FontCharacterType font[sizeof...(elements)] = {

@@ -142,7 +142,7 @@ protected:
       }
       lpuart->DATA = ch;
       if (ch=='\n') {
-         write('\r');
+         _writeChar('\r');
       }
    }
 

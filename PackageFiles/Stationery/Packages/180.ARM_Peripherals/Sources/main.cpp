@@ -20,16 +20,16 @@ using namespace USBDM;
 using Led   = $(/HARDWARE/Led1:GpioB<3,ActiveLow>);
 
 int main() {
-   console.writeln("Starting\n");
-   console.write("SystemCoreClock = ").writeln(SystemCoreClock);
-   console.write("SystemBusClock  = ").writeln(SystemBusClock);
+   console.writeln("\nStarting");
+   console.writeln("SystemCoreClock = ", SystemCoreClock);
+   console.writeln("SystemBusClock  = ", SystemBusClock);
 
    Led::setOutput();
 
    for(int count = 0;;count++) {
       Led::toggle();
       waitMS(100);
-      console.write(count).writeln(": Tick...");
+      console.writeln(count, ": Tick...");
    }
    return 0;
 }
