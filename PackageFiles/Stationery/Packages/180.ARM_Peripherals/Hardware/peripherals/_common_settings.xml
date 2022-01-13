@@ -254,12 +254,20 @@
    \t/** Dummy port information for pins without an associated PCR */
    \tconstexpr PortInfo  __attribute__((unused)) NoPortInfo {0, 0, IRQn_None, 0, NvicPriority_NotInstalled};
 
-   \t/** Class to static check signal mapping is valid */
-   \ttemplate<class Info, int signalNum> class CheckSignal {
-   \t\tstatic_assert((signalNum<Info::numSignals), "Non-existent signal - Modify Configure.usbdm");
-   \t\tstatic_assert((signalNum>=Info::numSignals)||(Info::info[signalNum].gpioBit != UNMAPPED_PCR), "Signal is not mapped to a pin - Modify Configure.usbdm");
-   \t\tstatic_assert((signalNum>=Info::numSignals)||(Info::info[signalNum].gpioBit != INVALID_PCR),  "Signal doesn't exist in this device/package");
-   \t\tstatic_assert((signalNum>=Info::numSignals)||((Info::info[signalNum].gpioBit == UNMAPPED_PCR)||(Info::info[signalNum].gpioBit == INVALID_PCR)||(Info::info[signalNum].gpioBit >= 0)), "Illegal signal");
+   \t/**
+   \t * Class to static check signal mapping is valid
+   \t * Conditions are chained so only a single assert is reported
+   \t */
+   \ttemplate<class Info, int signalNum> class CheckSignalMapping {
+   \t   static constexpr bool check1 = signalNum<Info::numSignals;
+   \t   static constexpr bool check2 = !check1 || (Info::info[signalNum].gpioBit != UNMAPPED_PCR);
+   \t   static constexpr bool check3 = !check2 || (Info::info[signalNum].gpioBit != INVALID_PCR);
+   \t   static constexpr bool check4 = !check3 || (Info::info[signalNum].gpioBit >= 0);
+   \t
+   \t   static_assert(check1, "Non-existent signal - Modify Configure.usbdm");
+   \t   static_assert(check2, "Signal is not mapped to a pin - Modify Configure.usbdm");
+   \t   static_assert(check3, "Signal doesn't exist in this device/package");
+   \t   static_assert(check4, "Illegal signal");
    \t};
 
    \t/**

@@ -32,6 +32,9 @@
 
 namespace USBDM {
 
+#pragma GCC push_options
+#pragma GCC optimize ("Os")
+
 /**
  * Class representing GPIO functionality
  */
@@ -541,6 +544,7 @@ public:
       // Configure pin
       Pcr::setPCR(pcrValue);
    }
+
    /**
     * Enable pin as digital output with initial inactive level.\n
     * Configures all Pin Control Register (PCR) values
@@ -559,6 +563,27 @@ public:
       // Configure pin
       Pcr::setPCR(pcrValue.pcrValue());
    }
+
+   /**
+    * Enable pin as digital output with initial inactive level.\n
+    * Configures all Pin Control Register (PCR) values
+    *
+    * @note Resets the Pin Control Register value (PCR value).
+    * @note Resets the pin value to the inactive state
+    * @note Use setOut() for a lightweight change of direction without affecting other pin settings.
+    *
+    * @param[in] args list of pin control values such as pinDriveStrength, pinDriveMode, pinSlewRate
+    */
+   template<typename... Args>
+   static void setOutput(Args... args) {
+      // Set initial level before enabling pin drive
+      setInactive();
+      // Make pin an output
+      setOut();
+      // Configure pin
+      Pcr::setPCR(pcrOr(args...));
+   }
+
    /**
     * @brief
     * Enable pin as digital output with initial inactive level.\n
@@ -642,6 +667,26 @@ public:
       setIn();
       Pcr::setPCR(pcrValue.pcrValue());
    }
+
+   /**
+    * Enable pin as digital output with initial inactive level.\n
+    * Configures all Pin Control Register (PCR) values
+    *
+    * @note Resets the Pin Control Register value (PCR value).
+    * @note Resets the pin value to the inactive state
+    * @note Use setOut() for a lightweight change of direction without affecting other pin settings.
+    *
+    * @param[in] args list of pin control values such as pinPull, pinAction, pinFilter
+    */
+   template<typename... Args>
+   static void setInput(Args... args) {
+      // Make pin an input
+      setIn();
+
+      // Configure pin
+      Pcr::setPCR(pcrOr(args...));
+   }
+
    /**
     * @brief
     * Enable pin as digital input.\n
@@ -1966,6 +2011,9 @@ class GpioEField : public GpioField_T<PortEInfo.portAddress, PortEInfo.clockInfo
  * End GPIO_Group
  * @}
  */
+
+#pragma GCC pop_options
+
 } // End namespace USBDM
 
 #endif /* HEADER_GPIO_H */
