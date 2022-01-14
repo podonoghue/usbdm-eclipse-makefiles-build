@@ -8,27 +8,33 @@
 <root version="1.3.0">
    <family name="MK20D5">
       <device name="FRDM_K20D50M" manual="K20P64M50SF0RM" package="FRDM_K20D50M" />
-      <device name="MK20DN128VFT5" manual="K20P48M50SF0RM" package="QFN_32" />
+      <device name="MK20DN128VFM5" manual="K20P32M50SF0RM" package="QFN_32" />
+      <device name="MK20DN128VFT5" manual="K20P48M50SF0RM" package="QFN_48" />
       <device name="MK20DN128VLF5" manual="K20P48M50SF0RM" package="LQFP_48" />
       <device name="MK20DN128VLH5" manual="K20P64M50SF0RM" package="LQFP_64_MK20D5" />
       <device name="MK20DN128VMP5" manual="K20P64M50SF0RM" package="BGA_64" />
-      <device name="MK20DN32VFT5" manual="K20P48M50SF0RM" package="QFN_32" />
+      <device name="MK20DN32VFM5" manual="K20P32M50SF0RM" package="QFN_32" />
+      <device name="MK20DN32VFT5" manual="K20P48M50SF0RM" package="QFN_48" />
       <device name="MK20DN32VLF5" manual="K20P48M50SF0RM" package="LQFP_48" />
       <device name="MK20DN32VLH5" manual="K20P64M50SF0RM" package="LQFP_64_MK20D5" />
       <device name="MK20DN32VMP5" manual="K20P64M50SF0RM" package="BGA_64" />
-      <device name="MK20DN64VFT5" manual="K20P48M50SF0RM" package="QFN_32" />
+      <device name="MK20DN64VFM5" manual="K20P32M50SF0RM" package="QFN_32" />
+      <device name="MK20DN64VFT5" manual="K20P48M50SF0RM" package="QFN_48" />
       <device name="MK20DN64VLF5" manual="K20P48M50SF0RM" package="LQFP_48" />
       <device name="MK20DN64VLH5" manual="K20P64M50SF0RM" package="LQFP_64_MK20D5" />
       <device name="MK20DN64VMP5" manual="K20P64M50SF0RM" package="BGA_64" />
-      <device name="MK20DX128VFT5" manual="K20P48M50SF0RM" package="QFN_32" />
+      <device name="MK20DX128VFM5" manual="K20P32M50SF0RM" package="QFN_32" />
+      <device name="MK20DX128VFT5" manual="K20P48M50SF0RM" package="QFN_48" />
       <device name="MK20DX128VLF5" manual="K20P48M50SF0RM" package="LQFP_48" />
       <device name="MK20DX128VLH5" manual="K20P64M50SF0RM" package="LQFP_64_MK20D5" />
       <device name="MK20DX128VMP5" manual="K20P64M50SF0RM" package="BGA_64" />
-      <device name="MK20DX32VFT5" manual="K20P48M50SF0RM" package="QFN_32" />
+      <device name="MK20DX32VFM5" manual="K20P32M50SF0RM" package="QFN_32" />
+      <device name="MK20DX32VFT5" manual="K20P48M50SF0RM" package="QFN_48" />
       <device name="MK20DX32VLF5" manual="K20P48M50SF0RM" package="LQFP_48" />
       <device name="MK20DX32VLH5" manual="K20P64M50SF0RM" package="LQFP_64_MK20D5" />
       <device name="MK20DX32VMP5" manual="K20P64M50SF0RM" package="BGA_64" />
-      <device name="MK20DX64VFT5" manual="K20P48M50SF0RM" package="QFN_32" />
+      <device name="MK20DX64VFM5" manual="K20P32M50SF0RM" package="QFN_32" />
+      <device name="MK20DX64VFT5" manual="K20P48M50SF0RM" package="QFN_48" />
       <device name="MK20DX64VLF5" manual="K20P48M50SF0RM" package="LQFP_48" />
       <device name="MK20DX64VLH5" manual="K20P64M50SF0RM" package="LQFP_64_MK20D5" />
       <device name="MK20DX64VMP5" manual="K20P64M50SF0RM" package="BGA_64" />
@@ -1060,6 +1066,63 @@
          <placement pin="VSS1"          location="p2" />
          <placement pin="VSSA"          location="p8" />
          <placement pin="XTAL32"        location="p9" />
+      </package>
+      <package name="QFN_48">
+         <placement pin="ADC0_DM0"      location="p8" />
+         <placement pin="ADC0_DP0"      location="p7" />
+         <placement pin="BANDGAP"       location="Internal" />
+         <placement pin="CMP_DAC"       location="Internal" />
+         <placement pin="EXTAL32"       location="p15" />
+         <placement pin="PIT_CH0"       location="Internal" />
+         <placement pin="PIT_CH1"       location="Internal" />
+         <placement pin="PIT_CH2"       location="Internal" />
+         <placement pin="PIT_CH3"       location="Internal" />
+         <placement pin="PTA0"          location="p17" />
+         <placement pin="PTA1"          location="p18" />
+         <placement pin="PTA18"         location="p24" />
+         <placement pin="PTA19"         location="p25" />
+         <placement pin="PTA2"          location="p19" />
+         <placement pin="PTA3"          location="p20" />
+         <placement pin="PTA4"          location="p21" />
+         <placement pin="PTB0"          location="p27" />
+         <placement pin="PTB1"          location="p28" />
+         <placement pin="PTB16"         location="p31" />
+         <placement pin="PTB17"         location="p32" />
+         <placement pin="PTB2"          location="p29" />
+         <placement pin="PTB3"          location="p30" />
+         <placement pin="PTC0"          location="p33" />
+         <placement pin="PTC1"          location="p34" />
+         <placement pin="PTC2"          location="p35" />
+         <placement pin="PTC3"          location="p36" />
+         <placement pin="PTC4"          location="p37" />
+         <placement pin="PTC5"          location="p38" />
+         <placement pin="PTC6"          location="p39" />
+         <placement pin="PTC7"          location="p40" />
+         <placement pin="PTD0"          location="p41" />
+         <placement pin="PTD1"          location="p42" />
+         <placement pin="PTD2"          location="p43" />
+         <placement pin="PTD3"          location="p44" />
+         <placement pin="PTD4"          location="p45" />
+         <placement pin="PTD5"          location="p46" />
+         <placement pin="PTD6"          location="p47" />
+         <placement pin="PTD7"          location="p48" />
+         <placement pin="RESET_b"       location="p26" />
+         <placement pin="TEMP_SENSOR"   location="Internal" />
+         <placement pin="USB0_DM"       location="p4" />
+         <placement pin="USB0_DP"       location="p3" />
+         <placement pin="VBAT"          location="p16" />
+         <placement pin="VDD1"          location="p1" />
+         <placement pin="VDD2"          location="p22" />
+         <placement pin="VDDA"          location="p9" />
+         <placement pin="VOUT33"        location="p5" />
+         <placement pin="VREFH"         location="p10" />
+         <placement pin="VREFL"         location="p11" />
+         <placement pin="VREF_OUT"      location="p13" />
+         <placement pin="VREGIN"        location="p6" />
+         <placement pin="VSS1"          location="p2" />
+         <placement pin="VSS2"          location="p23" />
+         <placement pin="VSSA"          location="p12" />
+         <placement pin="XTAL32"        location="p14" />
       </package>
    </packages>
 </root>
