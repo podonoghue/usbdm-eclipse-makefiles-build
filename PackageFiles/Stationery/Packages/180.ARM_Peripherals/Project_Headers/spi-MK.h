@@ -347,16 +347,6 @@ protected:
     * Calculate communication speed from SPI clock frequency and speed factors
     *
     * @param[in]  clockFrequency  Clock frequency of SPI in Hz
-    * @param[in]  spiCtarValue    Configuration providing SPI_CTAR_BR, SPI_CTAR_PBR fields
-    *
-    * @return Clock frequency of SPI in Hz for these factors
-    */
-   static uint32_t calculateSpeed(uint32_t clockFrequency, uint32_t spiCtarValue);
-
-   /**
-    * Calculate communication speed from SPI clock frequency and speed factors
-    *
-    * @param[in]  clockFrequency  Clock frequency of SPI in Hz
     * @param[in]  spiCtarSelect   CTAR selection providing SPI_CTAR_BR, SPI_CTAR_PBR fields
     *
     * @return Clock frequency of SPI in Hz for these factors
@@ -421,6 +411,25 @@ protected:
    }
 
    /**
+    * Get the frequency of the input clock to the SPI
+    *
+    * @return Frequency on Hz
+    */
+   virtual uint32_t getSpiInputClockFrequency() = 0;
+
+public:
+
+   /**
+    * Calculate communication speed from SPI clock frequency and speed factors
+    *
+    * @param[in]  clockFrequency  Clock frequency of SPI in Hz
+    * @param[in]  spiCtarValue    Configuration providing SPI_CTAR_BR, SPI_CTAR_PBR fields
+    *
+    * @return Clock frequency of SPI in Hz for these factors
+    */
+   static uint32_t calculateSpeed(uint32_t clockFrequency, uint32_t spiCtarValue);
+
+   /**
     * Calculate CTAR timing related values \n
     * Uses default delays
     *
@@ -449,15 +458,6 @@ protected:
 
       return ctarValue;
    }
-
-   /**
-    * Get the frequency of the input clock to the SPI
-    *
-    * @return Frequency on Hz
-    */
-   virtual uint32_t getSpiInputClockFrequency() = 0;
-
-public:
 
    /**
     * Sets communication speed for SPI
