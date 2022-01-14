@@ -346,7 +346,7 @@ LIB_DIR="/usr/lib"
 BIN_DIR="/usr/bin"
 RULES_DIR="/etc/udev/rules.d"
 
-installUSBHardware
+#installUSBHardware #moved to image
 installEclipse
 installKDS
 installCodewarrior

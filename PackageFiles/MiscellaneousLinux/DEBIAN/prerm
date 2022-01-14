@@ -302,7 +302,7 @@ LIB_DIR="/usr/lib"
 BIN_DIR="/usr/bin"
 RULES_DIR="/etc/udev/rules.d"
 
-removeUSBHardware
+#removeUSBHardware # Moved to image
 removeEclipse
 removeKDS
 removeCodewarrior

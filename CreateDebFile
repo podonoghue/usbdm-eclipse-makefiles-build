@@ -83,6 +83,9 @@ makeDebFile() {
    # Where to put Man page files
    USBDM_MANUAL_DIR="${DUMMY_ROOT}/usr/share/man/man1"
 
+   # Binary files
+   USBDM_RULESDIR="${DUMMY_ROOT}/etc/udev/rules.d"
+
    if [[ ! -d ${SOURCE_DIRECTORY} ]]; then
       echo Unable to locate Source directory "${SOURCE_DIRECTORY}"
    fi
@@ -99,6 +102,10 @@ makeDebFile() {
    ${CP} "${SOURCE_DIRECTORY}/PackageFiles"/MiscellaneousLinux/*.desktop       ${LINUX_APPLICATIONS_DIR}
    chmod  644 ${LINUX_APPLICATIONS_DIR}/*.desktop
 
+   ${MKDIR} ${USBDM_RULESDIR}
+   ${CP} "${SOURCE_DIRECTORY}/PackageFiles"/MiscellaneousLinux/usbdm.rules      ${USBDM_RULESDIR}/46-usbdm.rules
+   chmod  644 ${USBDM_RULESDIR}/46-usbdm.rules
+   
    ${MKDIR} ${USBDM_SHARED_DOC_DIR}
    ${CP} "${SOURCE_DIRECTORY}/PackageFiles"/MiscellaneousLinux/changelog.Debian.gz   ${USBDM_SHARED_DOC_DIR}
    ${CP} "${SOURCE_DIRECTORY}/PackageFiles"/MiscellaneousLinux/copyright             ${USBDM_SHARED_DOC_DIR}
