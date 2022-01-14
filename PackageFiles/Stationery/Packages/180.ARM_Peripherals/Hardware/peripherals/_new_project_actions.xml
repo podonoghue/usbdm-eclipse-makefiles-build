@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE list SYSTEM "_menu.dtd" >
+<!-- _new_project_actions.xml -->
+
+<list name="NewProjectActions" >
+
+<projectActionList id = "_new_project_files" >
+<copy source="Sources/main.cpp"  target="Sources/main.cpp"  overwrite="true" />
+</projectActionList>
+
+</list>
