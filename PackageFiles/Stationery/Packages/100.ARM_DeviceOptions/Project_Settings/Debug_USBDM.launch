@@ -10,6 +10,7 @@
 <stringAttribute key="net.sourceforge.usbdm.gdb.nvmClockTrimLocation" value="$(nvmClockTrimLocation:0)"/>
 <stringAttribute key="net.sourceforge.usbdm.gdb.targetVdd" value="$(bdmTargetVdd:0)"/>
 <booleanAttribute key="net.sourceforge.usbdm.gdb.useSemiHosting" value="$(semiHosting:false)"/>
+<booleanAttribute key="net.sourceforge.usbdm.gdb.useDebugVersion" value="false"/>
 <stringAttribute key="org.eclipse.cdt.dsf.gdb.DEBUG_NAME" value="$(buildToolsBinPath)/$(gdbCommand)"/>
 <stringAttribute key="org.eclipse.cdt.launch.PROGRAM_NAME" value="Debug/$(projectName).elf"/>
 <stringAttribute key="org.eclipse.cdt.launch.PROJECT_ATTR" value="$(projectName)"/>
