@@ -92,9 +92,13 @@ public:
    constexpr auto getValue() const { return value; }
    float getValue() const volatile { return value; }
 
-   constexpr auto operator *(float other) const { return Seconds(value*other); }
+   constexpr auto operator *(float other)    const { return Seconds(value*other); }
+   constexpr auto operator *(unsigned other) const { return Seconds(value*other); }
+   constexpr auto operator *(int other)      const { return Seconds(value*other); }
 
-   constexpr auto operator /(float other) const { return Seconds(value/other); }
+   constexpr auto operator /(float other)    const { return Seconds(value/other); }
+   constexpr auto operator /(unsigned other) const { return Seconds(value/other); }
+   constexpr auto operator /(int other)      const { return Seconds(value/other); }
 
    constexpr auto operator /(Seconds other) const { return float(value/other.getValue()); }
 
@@ -124,9 +128,14 @@ public:
    constexpr auto getValue() const { return value; }
    float getValue() const volatile { return value; }
 
-   constexpr auto operator *(float other) const { return Hertz(value*other); }
+   constexpr auto operator *(float other)    const { return Hertz(value*other); }
+   constexpr auto operator *(unsigned other) const { return Hertz(value*other); }
+   constexpr auto operator *(int other)      const { return Hertz(value*other); }
 
-   constexpr auto operator /(float other) const { return Hertz(value/other); }
+   constexpr auto operator /(float other)    const { return Hertz(value/other); }
+   constexpr auto operator /(unsigned other) const { return Hertz(value/other); }
+   constexpr auto operator /(int other)      const { return Hertz(value/other); }
+
    constexpr auto operator /(Hertz other) const { return (float)(value/other.getValue()); }
 
    constexpr auto operator +(Hertz other) const { return Hertz(value+other.value); }
@@ -136,11 +145,21 @@ public:
    constexpr operator unsigned() const { return (int)round(value); }
 };
 
-constexpr auto operator *(float left, Seconds right) { return Seconds(left*right.getValue()); }
-constexpr auto operator *(float left, Hertz right)   { return Hertz(left*right.getValue()); }
+constexpr auto operator *(float left,     Seconds right)  { return Seconds(left*right.getValue()); }
+constexpr auto operator *(unsigned left,  Seconds right)  { return Seconds(left*right.getValue()); }
+constexpr auto operator *(int left,       Seconds right)  { return Seconds(left*right.getValue()); }
 
-constexpr auto operator /(float left, Seconds right) { return Hertz(left/right.getValue()); }
-constexpr auto operator /(float left, Hertz right)   { return Seconds(left/right.getValue()); }
+constexpr auto operator *(float left,     Hertz right)    { return Hertz(left*right.getValue()); }
+constexpr auto operator *(unsigned left,  Hertz right)    { return Hertz(left*right.getValue()); }
+constexpr auto operator *(int left,       Hertz right)    { return Hertz(left*right.getValue()); }
+
+constexpr auto operator /(float left,     Seconds right) { return Hertz(left/right.getValue()); }
+constexpr auto operator /(unsigned left,  Seconds right) { return Hertz(left/right.getValue()); }
+constexpr auto operator /(int left,       Seconds right) { return Hertz(left/right.getValue()); }
+
+constexpr auto operator /(float left,     Hertz right)   { return Seconds(left/right.getValue()); }
+constexpr auto operator /(unsigned left,  Hertz right)   { return Seconds(left/right.getValue()); }
+constexpr auto operator /(int left,       Hertz right)   { return Seconds(left/right.getValue()); }
 
 #else
    using Ticks    = unsigned;
