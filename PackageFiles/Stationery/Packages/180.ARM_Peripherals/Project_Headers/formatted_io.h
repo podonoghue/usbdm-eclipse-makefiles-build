@@ -2101,7 +2101,7 @@ public:
     * @param visibleIndex The starting index to print for the array. Should be multiple of sizeof(data[]).
     */
    template <typename T>
-   void writeArray(T *data, uint32_t size, uint32_t visibleIndex=0) {
+   void writeArray(T *data, uint32_t size, uint32_t visibleIndex) {
       usbdm_assert((visibleIndex%sizeof(T))==0, "visibleIndex should be multiple of sizeof(data[])");
       unsigned rowMask;
       unsigned offset;
