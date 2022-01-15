@@ -261,8 +261,8 @@
    \ttemplate<class Info, int signalNum> class CheckSignalMapping {
    \t   static constexpr bool check1 = signalNum<Info::numSignals;
    \t   static constexpr bool check2 = !check1 || (Info::info[signalNum].gpioBit != UNMAPPED_PCR);
-   \t   static constexpr bool check3 = !check2 || (Info::info[signalNum].gpioBit != INVALID_PCR);
-   \t   static constexpr bool check4 = !check3 || (Info::info[signalNum].gpioBit >= 0);
+   \t   static constexpr bool check3 = !check1 || !check2 || (Info::info[signalNum].gpioBit != INVALID_PCR);
+   \t   static constexpr bool check4 = !check1 || !check2 || !check3 || (Info::info[signalNum].gpioBit >= 0);
    \t
    \t   static_assert(check1, "Non-existent signal - Modify Configure.usbdm");
    \t   static_assert(check2, "Signal is not mapped to a pin - Modify Configure.usbdm");
