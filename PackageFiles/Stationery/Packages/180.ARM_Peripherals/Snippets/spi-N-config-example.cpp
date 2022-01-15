@@ -115,7 +115,7 @@ int main() {
             __asm__("bkpt");
          }
       }
-      wait(10*ms);
+      wait(10_ms);
    }
 
 }

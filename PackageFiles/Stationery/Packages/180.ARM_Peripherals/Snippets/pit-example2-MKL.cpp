@@ -98,7 +98,7 @@ int main() {
    // Flash 1st LED @ 2Hz
    TimerChannelA::configureInTicks(::SystemBusClock/2, PitChannelIrq_Enabled);
    // or
-//   TimerChannelA::configure(500*ms, PitChannelIrq_Enabled);
+//   TimerChannelA::configure(500_ms, PitChannelIrq_Enabled);
 
    // Flash 2nd LED @ 1Hz
    TimerChannelB::configureInTicks(::SystemBusClock, PitChannelIrq_Enabled);

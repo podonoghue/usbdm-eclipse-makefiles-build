@@ -78,7 +78,7 @@ void initTsi(bool periodic) {
    if (periodic) {
       // This overrides the clock divider and modulus set earlier
       // It must be large enough to allow for the worse case sampling of all electrodes
-      Tsi0::setSamplePeriod(10*ms);
+      Tsi0::setSamplePeriod(10_ms);
 
       // Start periodic scans
       Tsi0::startScan(TsiScanMode_Periodic);

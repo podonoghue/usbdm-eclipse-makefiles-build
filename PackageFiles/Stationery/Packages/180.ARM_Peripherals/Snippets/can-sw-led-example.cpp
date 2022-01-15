@@ -45,7 +45,7 @@ private:
 public:
    Leds() : redOn(false), greenOn(false), blueOn(false), intensity(255) {
       Pwm::configure(FtmMode_LeftAlign, FtmClockSource_Default);
-      Pwm::setPeriod(1*ms);
+      Pwm::setPeriod(1_ms);
       RGB_Red::configure(FtmChMode_PwmLowTruePulses, FtmChannelAction_None);
       RGB_Red::setOutput(PinDriveStrength_High, PinDriveMode_PushPull, PinSlewRate_Slow);
       RGB_Green::configure(FtmChMode_PwmLowTruePulses, FtmChannelAction_None);
@@ -132,7 +132,7 @@ public:
 
       LpitChannelNum tmrChannel = Tmr::allocateChannel();
       Tmr::setCallback(tmrChannel, callback);
-      Tmr::configureChannel(tmrChannel, 5*ms, LpitChannelIrq_Enabled);
+      Tmr::configureChannel(tmrChannel, 5_ms, LpitChannelIrq_Enabled);
       Tmr::enableNvicInterrupts(tmrChannel, NvicPriority_Normal);
       Tmr::enableInterrupts(tmrChannel);
    }

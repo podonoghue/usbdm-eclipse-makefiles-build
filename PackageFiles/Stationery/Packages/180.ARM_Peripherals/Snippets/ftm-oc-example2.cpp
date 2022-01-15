@@ -36,8 +36,8 @@ static volatile uint16_t waveformHighTime;
 static volatile uint16_t waveformLowTime;
 
 // Waveform to generate
-static const float WAVEFORM_HIGH_TIME = 100*ms;
-static const float WAVEFORM_LOW_TIME  = 50*ms;
+static const float WAVEFORM_HIGH_TIME = 100_ms;
+static const float WAVEFORM_LOW_TIME  = 50_ms;
 
 #define max(a,b) ((a>b)?a:b)
 

@@ -58,9 +58,9 @@ static void ftmCallback(uint8_t) {
    Led::clear();
 }
 
-static constexpr float PERIOD        = 10*ms;
-static constexpr float HIGH_TIME     =  5*ms;
-static constexpr float SAMPLE_DELAY  = 10*us;
+static constexpr float PERIOD        = 10_ms;
+static constexpr float HIGH_TIME     =  5_ms;
+static constexpr float SAMPLE_DELAY  = 10_us;
 
 static void configureFtm() {
 
@@ -124,7 +124,7 @@ static void configurePdb() {
    Pdb::setActions(PdbAction_Interrupt, PdbErrorInterrupt_Enabled);
 
    // Set period a bit longer than FTM period
-   Pdb::setPeriod(PERIOD+1*ms);
+   Pdb::setPeriod(PERIOD+1_ms);
    // Generate interrupt at end of sequence
    Pdb::setInterruptDelay(PERIOD);
    // Take ADC samples before and after FTM edge

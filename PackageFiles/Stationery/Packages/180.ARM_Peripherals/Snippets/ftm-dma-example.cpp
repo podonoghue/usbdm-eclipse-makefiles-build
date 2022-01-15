@@ -171,13 +171,13 @@ void configureTimer() {
          FtmMode_LeftAlign,      // Left-aligned is required for OC/IC
          FtmClockSource_System); // Bus clock usually
 
-   Timer::setPeriod(500*us);
+   Timer::setPeriod(500_us);
 
    // Calculate waveform times in timer ticks
-   data[0] = Timer::convertSecondsToTicks(100*us);
-   data[1] = Timer::convertSecondsToTicks(101*us);
-   data[2] = Timer::convertSecondsToTicks(250*us);
-   data[3] = Timer::convertSecondsToTicks(300*us);
+   data[0] = Timer::convertSecondsToTicks(100_us);
+   data[1] = Timer::convertSecondsToTicks(101_us);
+   data[2] = Timer::convertSecondsToTicks(250_us);
+   data[3] = Timer::convertSecondsToTicks(300_us);
 
    // Enable interrupts for entire timer
    Timer::enableNvicInterrupts(NvicPriority_Normal);

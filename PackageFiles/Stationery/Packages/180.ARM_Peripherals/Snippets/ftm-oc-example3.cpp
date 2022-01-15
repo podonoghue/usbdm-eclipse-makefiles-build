@@ -32,7 +32,7 @@ using TimerChannel = Ftm0Channel<7>;
 static volatile uint16_t timerHalfPeriod;
 
 // Waveform period to generate
-static const float WAVEFORM_PERIOD = 100*ms;
+static const float WAVEFORM_PERIOD = 100_ms;
 
 #define max(a,b) ((a>b)?a:b)
 

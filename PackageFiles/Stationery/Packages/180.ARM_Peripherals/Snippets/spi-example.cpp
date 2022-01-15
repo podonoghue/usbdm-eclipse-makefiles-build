@@ -79,7 +79,7 @@ int main() {
          console.writeln("Failed read-back");
          __asm__("bkpt");
       }
-      wait(10*ms);
+      wait(10_ms);
    }
 
 }

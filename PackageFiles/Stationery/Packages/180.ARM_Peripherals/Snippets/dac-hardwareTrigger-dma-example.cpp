@@ -28,7 +28,7 @@ using namespace USBDM;
 
 // 100 samples => Sine period = 100 * PIT period
 static constexpr unsigned NUM_SAMPLES = 100;
-static constexpr float    PDB_PERIOD  = 10 * us;
+static constexpr float    PDB_PERIOD  = 10_us;
 
 // Table of values for a sine wave
 static uint16_t sineTable[NUM_SAMPLES];

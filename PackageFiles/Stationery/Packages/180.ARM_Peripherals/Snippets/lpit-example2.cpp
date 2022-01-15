@@ -98,7 +98,7 @@ int main() {
 #endif
 
    // Flash 1st LED @ 2Hz
-   TimerChannelA::configure(500*ms, LpitChannelIrq_Enabled);
+   TimerChannelA::configure(500_ms, LpitChannelIrq_Enabled);
 
    // Flash 2nd LED @ 1Hz
    TimerChannelB::configure(1*seconds, LpitChannelIrq_Enabled);

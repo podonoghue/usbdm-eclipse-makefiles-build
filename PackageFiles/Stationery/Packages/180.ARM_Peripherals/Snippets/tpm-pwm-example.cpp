@@ -41,7 +41,7 @@ int main() {
     * Change PWM period
     * Note - Setting the period affects all channels of the Timer
     */
-   Timer::setPeriod(5*us);
+   Timer::setPeriod(5_us);
 
    // Configure channel as high-pulses
    Led::configure(TpmChMode_PwmHighTruePulses);
@@ -60,7 +60,7 @@ int main() {
       }
       // Using high-time
       for (int i=99; i>0; i--) {
-         Led::setHighTime((i*5*us)/100.0);
+         Led::setHighTime((i*5_us)/100.0);
          waitMS(10);
       }
    }

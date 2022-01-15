@@ -138,7 +138,7 @@ static void configurePit(DmaChannelNum dmaChannel) {
    Pit::configure(PitDebugMode_Stop);
 
    // Configure channel for 100ms + interrupts
-   Pit::configureChannel(dmaChannel, 100*ms, PitChannelIrq_Enabled);
+   Pit::configureChannel(dmaChannel, 100_ms, PitChannelIrq_Enabled);
 }
 
 /**

@@ -22,7 +22,7 @@ using AdcChannel  = Adc0Channel<14>; // = PTC0 = Arduino A0
 using PITChannel  = PitChannel<0>;
 
 // Sample rate for ADC
-constexpr float SAMPLE_RATE = 1*ms;
+constexpr float SAMPLE_RATE = 1_ms;
 
 /**
  * This example uses the PIT to trigger 100 ADC conversions @1ms interval.

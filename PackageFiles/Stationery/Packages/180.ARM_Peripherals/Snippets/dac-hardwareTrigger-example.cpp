@@ -28,8 +28,8 @@ static void configurePdb() {
    Pdb0::configure(
          PdbMode_Continuous,
          PdbTrigger_Software);
-//   Pdb0::setPeriod(1*ms);
-   Pdb0::configureDacTrigger(0, PdbDacTriggerMode_Delayed, 20*us);
+//   Pdb0::setPeriod(1_ms);
+   Pdb0::configureDacTrigger(0, PdbDacTriggerMode_Delayed, 20_us);
 
    // Registers load on next event
    Pdb0::configureRegisterLoad(PdbLoadMode_Event);
