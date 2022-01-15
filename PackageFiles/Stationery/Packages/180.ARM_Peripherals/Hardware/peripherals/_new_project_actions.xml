@@ -5,6 +5,8 @@
 <list name="NewProjectActions" >
 
 <projectActionList id = "_new_project_files" >
+<createFolder   target="Snippets" derived="true"/>
+
 <copy source="Sources/main.cpp"  target="Sources/main.cpp"  overwrite="true" />
 </projectActionList>
 
