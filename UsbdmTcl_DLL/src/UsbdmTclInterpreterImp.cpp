@@ -1145,7 +1145,7 @@ static int getPinControlValue(const char *ch) {
 }
 
 /**
- * pinSet <pin=level>           - Control pins, pin=RST|BKGD|TRST|BKPT|TA|SWD,\n
+ * pinSet <pin=level>           - Control pins, pin=RST|BKGD|TRST|BKPT|TA|SWD|SWC,\n
  *
  * @param
  * @param interp
@@ -1187,6 +1187,9 @@ static int cmd_pinSet(ClientData, Tcl_Interp *interp, int argc, Tcl_Obj *const *
       }
       else if (strncasecmp(arg, "SWD=", 4) == 0) {
          value |= getPinControlValue(arg+4)<<PIN_SWD_OFFS;
+      }
+      else if (strncasecmp(arg, "SWC=", 4) == 0) {
+         value |= getPinControlValue(arg+4)<<PIN_SWCLK_OFFS;
       }
       else {
          Tcl_SetResult(interp, (char*)"Unrecognised parameter", TCL_STATIC);
@@ -3970,7 +3973,7 @@ static const char usageText[] =
       "memorySpace [<N|X|P>]        - set memory space (DSC)\n"
       "massErase                    - S12Z Mass erase\n"
       "openbdm [<bdmNumber>]        - Open given BDM\n"
-      "pinSet <pin=level>           - Control pins, pin=RST|BKGD|TRST|BKPT|TA|SWD,\n"
+      "pinSet <pin=level>           - Control pins, pin=RST|BKGD|TRST|BKPT|TA|SWD|SWC,\n"
       "                                level=H|L|3|-\n"
       "program                      - Program image to target\n"
       "regs                         - Print out registers\n"
