@@ -1090,7 +1090,7 @@ static const char *capabilityTable[] = {
 }
 
 char const *getPinLevelName(PinLevelMasks_t level) {
-static char buff[100];
+static char buff[200];
 
    buff[0] = '\0';
 
@@ -1130,6 +1130,11 @@ static char buff[100];
       case PIN_SWD_3STATE    : strcat(buff, "PIN_SWD_3STATE|");   break;
       case PIN_SWD_HIGH      : strcat(buff, "PIN_SWD_HIGH|");     break;
       case PIN_SWD_LOW       : strcat(buff, "PIN_SWD_LOW|");      break;
+   }
+   switch (level & PIN_SWCLK) {
+      case PIN_SWCLK_3STATE    : strcat(buff, "PIN_SWCLK_3STATE|");   break;
+      case PIN_SWCLK_HIGH      : strcat(buff, "PIN_SWCLK_HIGH|");     break;
+      case PIN_SWCLK_LOW       : strcat(buff, "PIN_SWCLK_LOW|");      break;
    }
    return buff;
 }

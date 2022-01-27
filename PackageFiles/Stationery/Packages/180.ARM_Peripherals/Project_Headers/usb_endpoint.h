@@ -35,7 +35,7 @@ namespace USBDM {
 extern volatile EndpointBdtEntry endPointBdts[];
 
 /** BDTs as simple array */
-static BdtEntry *bdts() { return (BdtEntry *)endPointBdts; }
+static volatile BdtEntry *bdts() { return endPointBdts[0].bdts; }
 
 /** Endpoint state values */
 enum EndpointState {
@@ -59,74 +59,40 @@ enum EndPointType {
  */
 class Endpoint {
 
-protected:
-   /// Endpoint type
+public:
+   /** End point number */
+   const uint16_t fEndpointNumber;
+
+   /**  Size of endpoint (size of maximum transfer)  */
+   const uint16_t fEndpointSize;
+
+   /** Endpoint type */
    const EndPointType fEndPointType;
 
-   /// Value used to initialise an Endpoint Control Register
+protected:
+   /** Value used to initialise an Endpoint Control Register */
    const uint8_t fEpControlValue;
 
-   /// Associated BDTs (2*Tx, 2*Rx)
+   /** Associated BDTs (2*Tx, 2*Rx) */
    volatile EndpointBdtEntry &fBdt;
 
-public:
-   /**
-    * Get name of endpoint state
-    *
-    * @param [in]  state Endpoint state
-    *
-    * @return Pointer to static string
-    */
-   static const char *getStateName(EndpointState state) {
-      static const char *names[] = {
-         "EPIdle",
-         "EPDataIn",
-         "EPDataOut,",
-         "EPStatusIn",
-         "EPStatusOut",
-         "EPStall",
-         "EPComplete",
-      };
-      const char *rc = "Unknown";
-      if (state<(sizeof(names)/sizeof(names[0]))) {
-         rc = names[state];
-      }
-      return rc;
-   }
+   /** Hardware instance pointer */
+   const HardwarePtr<USB_Type>fUsb;
 
-   /**
-    * Get name of endpoint state
-    *
-    * @return Pointer to static string
-    */
-   const char *getStateName() {
-      return getStateName(fState);
-   }
+   /** Buffer Transmit data */
+   uint8_t * const fTxDataBuffer;
 
-   /**
-    * Simple copy routine for volatile buffer
-    *
-    * @param to      Where to copy to
-    * @param from    Where to copy from
-    * @param size    Number of bytes to copy
-    */
-   static void safeCopy(volatile void *to, volatile const void *from, unsigned size) {
-      volatile uint8_t       *_to   = reinterpret_cast<volatile uint8_t *>(to);
-      volatile const uint8_t *_from = reinterpret_cast<volatile const uint8_t *>(from);
-      while(size-->0) {
-         *_to++ = *_from++;
-      }
-   }
+   /** Buffer Receive data */
+   uint8_t * const fRxDataBuffer;
 
-protected:
    /** Data 0/1 flag */
-   volatile DataToggle fDataToggle = DataToggle_0;
+   DataToggle fDataToggle = DataToggle_0;
 
    /** Odd/Even Transmit buffer flag */
-   volatile BufferToggle fTxOdd = BufferToggle_Even;
+   BufferToggle fTxOdd = BufferToggle_Even;
 
    /** Odd/Even Receive buffer flag */
-   volatile BufferToggle fRxOdd = BufferToggle_Even;
+   BufferToggle fRxOdd = BufferToggle_Even;
 
    /** End-point state */
    volatile EndpointState fState = EPIdle;
@@ -135,16 +101,16 @@ protected:
     *  Indicates that the IN transaction needs to be
     *  terminated with ZLP if size is a multiple of fEndpointSize
     */
-   volatile bool fNeedZLP = false;
+   bool fNeedZLP = false;
 
    /** Pointer to external data buffer for transmit/receive */
-   volatile uint8_t* fDataPtr = nullptr;
+   uint8_t* fDataPtr = nullptr;
 
    /** Count of remaining bytes in external data buffer to transmit/receive */
-   volatile uint16_t fDataRemaining = 0;
+   uint16_t fDataRemaining = 0;
 
    /** Count of data bytes transferred to/from data buffer */
-   volatile uint16_t fDataTransferred = 0;
+   uint16_t fDataTransferred = 0;
 
    /**
     *  Callback used on completion of data and handshake phases of transaction.
@@ -175,14 +141,161 @@ protected:
       return EPIdle;
    }
 
-   /** Hardware instance pointer */
-   HardwarePtr<USB_Type>fUsb;
+   /**
+    * Configure the BDT for next IN transaction [Transmit, device -> host]
+    */
+   void startTxTransaction() {
 
-   /** Buffer Transmit data */
-   volatile uint8_t * const fTxDataBuffer;
+      // Get BDT to use
+      volatile BdtEntry &bdt = getFreeBdtTransmitEntry();
+      if (bdt.own != BdtOwner_MCU) {
+         __asm__("bkpt");
+      }
+//      usbdm_assert(bdt.own == BdtOwner_MCU, "MCU doesn't own BDT!");
 
-   /** Buffer Receive data */
-   volatile uint8_t * const fRxDataBuffer;
+      uint16_t size = fDataRemaining;
+      if (size > fEndpointSize) {
+         size = fEndpointSize;
+      }
+      // No ZLP needed if sending undersize transaction
+      if (size<fEndpointSize) {
+         setNeedZLP(false);
+      }
+      // fDataBuffer may be nullptr to indicate using fDataBuffer directly
+      if (fDataPtr != nullptr) {
+         // Copy the Transmit data to EP buffer
+         safeCopy(fTxDataBuffer, fDataPtr, size);
+
+         // Advance pointer to next data
+         fDataPtr += size;
+      }
+      // Count of transferred bytes
+      fDataTransferred = fDataTransferred + size;
+
+      // Count of remaining bytes
+      fDataRemaining = fDataRemaining - size;
+
+      // Set up Transmit transaction in hardware BDT
+      bdt.setByteCount((uint8_t)size);
+      __asm volatile( "dsb" ::: "memory" );
+      if (fDataToggle == DataToggle_1) {
+         bdt.setControl(BDTEntry_OWN_MASK|BDTEntry_DATA1_MASK|BDTEntry_DTS_MASK);
+      }
+      else {
+         bdt.setControl(BDTEntry_OWN_MASK|BDTEntry_DATA0_MASK|BDTEntry_DTS_MASK);
+      }
+      // console.WRITE("BdtTx(s=").WRITE(size).WRITE(",").WRITE(fDataToggle?"D1,":"D0,").WRITE(fTxOdd?"Odd),":"Even),");;
+   }
+
+   /**
+    * Configure the BDT for OUT transaction [Receive, device <- host, DATA0/1]
+    *
+    * @note Always uses EP_MAXSIZE for transaction size accepted irrespective of remaining transfer size.\n
+    *       This is necessary to ensure the endpoint can accept a SETUP transaction.
+    */
+   void startRxTransaction() {
+
+      // Get BDT to use
+      volatile BdtEntry &bdt = getFreeBdtReceiveEntry();
+
+      usbdm_assert(bdt.own == BdtOwner_MCU, "MCU doesn't own BDT!");
+
+      // Set up Receive transaction in hardware BDT
+      // Always used maximum size even if expecting less data
+      bdt.setByteCount(fEndpointSize);
+      __asm volatile( "dsb" ::: "memory" );
+      if (fDataToggle) {
+         bdt.setControl(BDTEntry_OWN_MASK|BDTEntry_DATA1_MASK|BDTEntry_DTS_MASK);
+      }
+      else {
+         bdt.setControl(BDTEntry_OWN_MASK|BDTEntry_DATA0_MASK|BDTEntry_DTS_MASK);
+      }
+      // console.WRITE("BdtRx(s=").WRITE(EP_MAXSIZE).WRITE(fDataToggle?",D1:":",D0:").WRITE(fRxOdd?"Odd),":"Even),");
+   }
+
+   /**
+    *  Save the data from an OUT transaction and advance pointers etc.
+    *
+    *  @return Number of bytes saved
+    */
+   uint8_t saveRxData() {
+
+      // Get BDT to use
+      volatile BdtEntry &bdt = getCompleteBdtReceiveEntry();
+
+      uint8_t size = bdt.bc;
+
+      if (size > 0) {
+         // Check if more data than requested - discard excess
+         if (size > fDataRemaining) {
+            size = fDataRemaining;
+         }
+         // Check if external buffer in use
+         if (fDataPtr != nullptr) {
+            // Copy the data from the Receive buffer to external buffer
+            ( void )memcpy((void*)fDataPtr, (void*)fRxDataBuffer, size);
+            // Advance buffer ptr
+            fDataPtr    += size;
+         }
+         // Count of transferred bytes
+         fDataTransferred = fDataTransferred + size;
+         // Count down bytes to go
+         fDataRemaining = fDataRemaining - size;
+      }
+//      else {
+//         console.WRITELN("RxSize = 0\n");
+//      }
+      return size;
+   }
+
+public:
+   /**
+    * Get name of endpoint state
+    *
+    * @param [in]  state Endpoint state
+    *
+    * @return Pointer to static string
+    */
+   static const char *getStateName(EndpointState state) {
+      static const char *names[] = {
+         "EPIdle",
+         "EPDataIn",
+         "EPDataOut,",
+         "EPStatusIn",
+         "EPStatusOut",
+         "EPStall",
+         "EPComplete",
+      };
+      const char *rc = "Unknown";
+      if (state<std::size(names)) {
+         rc = names[state];
+      }
+      return rc;
+   }
+
+   /**
+    * Get name of endpoint state
+    *
+    * @return Pointer to static string
+    */
+   const char *getStateName() {
+      return getStateName(fState);
+   }
+
+   /**
+    * Simple copy routine for volatile buffer
+    *
+    * @param to      Where to copy to
+    * @param from    Where to copy from
+    * @param size    Number of bytes to copy
+    */
+   static void safeCopy(volatile void *to, volatile const void *from, unsigned size) {
+      volatile uint8_t       *_to   = reinterpret_cast<volatile uint8_t *>(to);
+      volatile const uint8_t *_from = reinterpret_cast<volatile const uint8_t *>(from);
+      while(size-->0) {
+         *_to++ = *_from++;
+      }
+   }
 
    /**
     * Constructor
@@ -195,7 +308,7 @@ protected:
     * @param [in] rxDataBuffer   Receive endpoint buffer
     * @param [in] usb            Reference to USB hardware
     */
-   constexpr Endpoint(
+   constexpr Endpoint (
          int               endpointNumber,
          unsigned          endpointSize,
          EndPointType      endPointType,
@@ -203,36 +316,19 @@ protected:
          uint8_t           txDataBuffer[],
          uint8_t           rxDataBuffer[],
          uint32_t          usb) :
+            fEndpointNumber(endpointNumber),
+            fEndpointSize(endpointSize),
             fEndPointType(endPointType),
             fEpControlValue(bdtValue),
             fBdt(endPointBdts[endpointNumber]),
             fUsb(usb),
             fTxDataBuffer(txDataBuffer),
-            fRxDataBuffer(rxDataBuffer),
-            fEndpointNumber(endpointNumber),
-            fEndpointSize(endpointSize) {
+            fRxDataBuffer(rxDataBuffer) {
    }
 
    virtual ~Endpoint() {}
 
 public:
-
-   /** End point number */
-   const uint16_t fEndpointNumber;
-
-   /**  Size of endpoint (size of maximum transfer)  */
-   const uint16_t fEndpointSize;
-
-   /**
-    * Clear value reflecting selected hardware based ping-pong buffer.
-    * This would normally only be called when resetting the USB hardware or using
-    * USBx_CTL_ODDRST.
-    */
-   void clearPinPongToggle() {
-      fTxOdd            = BufferToggle_Even;
-      fRxOdd            = BufferToggle_Even;
-   }
-
    /**
     * Initialise endpoint
     *  - Internal state
@@ -255,6 +351,16 @@ public:
       fBdt.rxOdd.initialise(  0, 0, nativeToLe32((uint32_t)fRxDataBuffer));
       fBdt.txEven.initialise( 0, 0, nativeToLe32((uint32_t)fTxDataBuffer));
       fBdt.txOdd.initialise(  0, 0, nativeToLe32((uint32_t)fTxDataBuffer));
+   }
+
+   /**
+    * Clear value reflecting selected hardware based ping-pong buffer.
+    * This would normally only be called when resetting the USB hardware or using
+    * USBx_CTL_ODDRST.
+    */
+   void clearPinPongToggle() {
+      fTxOdd            = BufferToggle_Even;
+      fRxOdd            = BufferToggle_Even;
    }
 
    /**
@@ -417,7 +523,8 @@ public:
     * @param [in]  bufSize Size of buffer to send (may be zero)
     * @param [in]  bufPtr  Pointer to external buffer (may be NULL to indicate fDatabuffer is being used directly)
     */
-   void startTxStage(EndpointState state, uint16_t bufSize=0, volatile const uint8_t *bufPtr=nullptr) {
+   void startTxStage(EndpointState state, uint16_t bufSize=0, const uint8_t *bufPtr=nullptr) {
+
       // Pointer to data
       fDataPtr = (uint8_t*)bufPtr;
 
@@ -432,51 +539,6 @@ public:
 
       // Configure the BDT for transfer
       startTxTransaction();
-   }
-
-   /**
-    * Configure the BDT for next IN transaction [Transmit, device -> host]
-    */
-   void startTxTransaction() {
-
-      // Get BDT to use
-      volatile BdtEntry &bdt = getFreeBdtTransmitEntry();
-      if (bdt.own != BdtOwner_MCU) {
-         __asm__("bkpt");
-      }
-//      usbdm_assert(bdt.own == BdtOwner_MCU, "MCU doesn't own BDT!");
-
-      uint16_t size = fDataRemaining;
-      if (size > fEndpointSize) {
-         size = fEndpointSize;
-      }
-      // No ZLP needed if sending undersize transaction
-      if (size<fEndpointSize) {
-         setNeedZLP(false);
-      }
-      // fDataBuffer may be nullptr to indicate using fDataBuffer directly
-      if (fDataPtr != nullptr) {
-         // Copy the Transmit data to EP buffer
-         safeCopy(fTxDataBuffer, fDataPtr, size);
-
-         // Advance pointer to next data
-         fDataPtr += size;
-      }
-      // Count of transferred bytes
-      fDataTransferred = fDataTransferred + size;
-
-      // Count of remaining bytes
-      fDataRemaining = fDataRemaining - size;
-
-      // Set up to Transmit transaction
-      bdt.setByteCount((uint8_t)size);
-      if (fDataToggle == DataToggle_1) {
-         bdt.setControl(BDTEntry_OWN_MASK|BDTEntry_DATA1_MASK|BDTEntry_DTS_MASK);
-      }
-      else {
-         bdt.setControl(BDTEntry_OWN_MASK|BDTEntry_DATA0_MASK|BDTEntry_DTS_MASK);
-      }
-      // console.WRITE("BdtTx(s=").WRITE(size).WRITE(",").WRITE(fDataToggle?"D1,":"D0,").WRITE(fTxOdd?"Odd),":"Even),");;
    }
 
    /**
@@ -497,66 +559,6 @@ public:
       fState               = state;
       // Configure the BDT for transfer
       startRxTransaction();
-   }
-
-   /**
-    * Configure the BDT for OUT transaction [Receive, device <- host, DATA0/1]
-    *
-    * @note Always uses EP_MAXSIZE for transaction size accepted irrespective of remaining transfer size.\n
-    *       This is necessary to ensure the endpoint can accept a SETUP transaction.
-    */
-   void startRxTransaction() {
-
-      // Get BDT to use
-      volatile BdtEntry &bdt = getFreeBdtReceiveEntry();
-
-      usbdm_assert(bdt.own == BdtOwner_MCU, "MCU doesn't own BDT!");
-
-      // Set up to Receive transaction
-      // Always used maximum size even if expecting less data
-      bdt.setByteCount(fEndpointSize);
-      if (fDataToggle) {
-         bdt.setControl(BDTEntry_OWN_MASK|BDTEntry_DATA1_MASK|BDTEntry_DTS_MASK);
-      }
-      else {
-         bdt.setControl(BDTEntry_OWN_MASK|BDTEntry_DATA0_MASK|BDTEntry_DTS_MASK);
-      }
-      // console.WRITE("BdtRx(s=").WRITE(EP_MAXSIZE).WRITE(fDataToggle?",D1:":",D0:").WRITE(fRxOdd?"Odd),":"Even),");
-   }
-
-   /**
-    *  Save the data from an OUT transaction and advance pointers etc.
-    *
-    *  @return Number of bytes saved
-    */
-   uint8_t saveRxData() {
-
-      // Get BDT to use
-      volatile BdtEntry &bdt = getCompleteBdtReceiveEntry();
-
-      uint8_t size = bdt.bc;
-
-      if (size > 0) {
-         // Check if more data than requested - discard excess
-         if (size > fDataRemaining) {
-            size = fDataRemaining;
-         }
-         // Check if external buffer in use
-         if (fDataPtr != nullptr) {
-            // Copy the data from the Receive buffer to external buffer
-            ( void )memcpy((void*)fDataPtr, (void*)fRxDataBuffer, size);
-            // Advance buffer ptr
-            fDataPtr    += size;
-         }
-         // Count of transferred bytes
-         fDataTransferred = fDataTransferred + size;
-         // Count down bytes to go
-         fDataRemaining = fDataRemaining - size;
-      }
-//      else {
-//         console.WRITELN("RxSize = 0\n");
-//      }
-      return size;
    }
 
    /**
@@ -601,7 +603,7 @@ public:
 
          case EPStatusOut:       // Done OUT transaction as a status handshake from host (IN CONTROL transfer)
             // Make ready for SETUP stage
-            Endpoint::setDataToggle(DataToggle_0);
+            setDataToggle(DataToggle_0);
             startRxStage(EPIdle);
 
             // Execute callback function after STATUS IN transaction
@@ -676,7 +678,7 @@ public:
     *
     * @return Pointer to buffer
     */
-   volatile uint8_t *getTxBuffer() {
+   uint8_t *getTxBuffer() {
       return fTxDataBuffer;
    }
 
@@ -685,7 +687,7 @@ public:
     *
     * @return Pointer to buffer
     */
-   volatile const uint8_t *getRxBuffer() {
+   const uint8_t *getRxBuffer() {
       return fRxDataBuffer;
    }
 
@@ -728,7 +730,7 @@ uint8_t Endpoint_T<Info, ENDPOINT_NUM, EP_MAXSIZE>::fAllocatedDataBuffer[EP_MAXS
  * @tparam EP_MAXSIZE   Maximum size of DATA transaction
  */
 template<class Info, unsigned ENDPOINT_NUM, unsigned EP_MAXSIZE>
-class Endpoint2_T : public Endpoint {
+class Endpoint2Buffer_T : public Endpoint {
 
 private:
    /** Buffer for Transmit & Receive data */
@@ -744,16 +746,16 @@ public:
    /**
     * Constructor
     */
-   Endpoint2_T(EndPointType endPointType, uint8_t bdtValue) :
+   Endpoint2Buffer_T(EndPointType endPointType, uint8_t bdtValue) :
       Endpoint(ENDPOINT_NUM, EP_MAXSIZE, endPointType, bdtValue, fAllocatedTxDataBuffer, fAllocatedRxDataBuffer, Info::usb()) {
    }
 };
 
 template<class Info, unsigned ENDPOINT_NUM, unsigned EP_MAXSIZE>
-uint8_t Endpoint2_T<Info, ENDPOINT_NUM, EP_MAXSIZE>::fAllocatedTxDataBuffer[EP_MAXSIZE];
+uint8_t Endpoint2Buffer_T<Info, ENDPOINT_NUM, EP_MAXSIZE>::fAllocatedTxDataBuffer[EP_MAXSIZE];
 
 template<class Info, unsigned ENDPOINT_NUM, unsigned EP_MAXSIZE>
-uint8_t Endpoint2_T<Info, ENDPOINT_NUM, EP_MAXSIZE>::fAllocatedRxDataBuffer[EP_MAXSIZE];
+uint8_t Endpoint2Buffer_T<Info, ENDPOINT_NUM, EP_MAXSIZE>::fAllocatedRxDataBuffer[EP_MAXSIZE];
 
 /**
  * Class for CONTROL endpoint
@@ -765,16 +767,17 @@ template<class Info, unsigned EP0_SIZE>
 class ControlEndpoint : public Endpoint_T<Info, 0, EP0_SIZE> {
 
 public:
-   using Endpoint::fState;
-   using Endpoint::startRxTransaction;
-   using Endpoint::getFreeBdtReceiveEntry;
-   using Endpoint::startTxStage;
-   using Endpoint::startRxStage;
+   using Endpoint_T<Info, 0, EP0_SIZE>::fState;
+   using Endpoint_T<Info, 0, EP0_SIZE>::startRxTransaction;
+   using Endpoint_T<Info, 0, EP0_SIZE>::getFreeBdtReceiveEntry;
+   using Endpoint_T<Info, 0, EP0_SIZE>::startTxStage;
+   using Endpoint_T<Info, 0, EP0_SIZE>::startRxStage;
+   using Endpoint_T<Info, 0, EP0_SIZE>::setDataToggle;
 
    /** End point number */
    static constexpr unsigned fEndpointNumber = 0;
 
-   // Value used to initialise an Endpoint Control Register - Tx and Rx
+   /// Value used to initialise an Endpoint Control Register - Tx and Rx
    static constexpr uint8_t fEpControlValue = USB_ENDPT_EPRXEN_MASK|USB_ENDPT_EPTXEN_MASK|USB_ENDPT_EPHSHK_MASK;
 
    /**
@@ -797,7 +800,7 @@ public:
     * Data Toggle = DATA1
     */
    void startTxStatus() {
-      Endpoint::setDataToggle(DataToggle_1);
+      setDataToggle(DataToggle_1);
       startTxStage(EPStatusIn);
    }
 
@@ -808,7 +811,7 @@ public:
     * Data Toggle = DATA0
     */
    void startSetupTransaction() {
-      Endpoint::setDataToggle(DataToggle_0);
+      setDataToggle(DataToggle_0);
       startRxStage(EPIdle);
    }
 
@@ -822,6 +825,7 @@ public:
     * Data Toggle = unchanged
     */
    void checkSetupReady() {
+
       // Get BDT to use
       volatile BdtEntry &bdt = getFreeBdtReceiveEntry();
 
@@ -840,7 +844,7 @@ public:
     */
    void setupReceived() {
       fState      = EPIdle;
-      Endpoint::setDataToggle(DataToggle_1);
+      setDataToggle(DataToggle_1);
    }
 };
 

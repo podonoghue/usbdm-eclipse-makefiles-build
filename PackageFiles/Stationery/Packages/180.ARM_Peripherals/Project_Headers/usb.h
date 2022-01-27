@@ -42,7 +42,7 @@
  * based on the transaction type.
  *
  * Transfer
- * - One or more bus transactions to move information between a software client
+ * - One or more transactions to move information between a software client
  *   and its function.
  *
  * Bulk Reads and Writes
@@ -159,6 +159,7 @@ public:
     */
    typedef ErrorCode (*SetupCallbackFunction)(const SetupPacket &setup);
 
+protected:
    /**
     * Dummy callback used to catch use of unset required callback
     */
@@ -227,7 +228,7 @@ public:
     *
     * @param[in] lineCodingStructure
     */
-   void reportLineCoding(const LineCodingStructure *lineCodingStructure);
+   static void reportLineCoding(const LineCodingStructure *lineCodingStructure);
 
    /**
     * Format SETUP packet as string
@@ -239,11 +240,11 @@ public:
    static const char *getSetupPacketDescription(SetupPacket *p);
 
    /**
-    * Report line state value
+    * Report line state value to stdout
     *
     * @param[in] value
     */
-   void reportLineState(uint8_t value);
+   static void reportLineState(uint8_t value);
 
    /**
     *  Creates a valid string descriptor in UTF-16-LE from a limited UTF-8 string
@@ -292,16 +293,16 @@ protected:
    static volatile DeviceConnectionStates fConnectionState;
 
    /** Active USB configuration */
-   static volatile uint8_t fDeviceConfiguration;
+   static uint8_t fDeviceConfiguration;
 
    /** USB Device status */
-   static volatile DeviceStatus fDeviceStatus;
+   static DeviceStatus fDeviceStatus;
 
    /** Buffer for EP0 data from Setup transaction (copied from USB RAM) */
    static SetupPacket fEp0SetupBuffer;
 
    /** USB activity indicator */
-   static volatile bool fActivityFlag;
+   static bool fActivityFlag;
 
    /**
     * Unhandled SETUP callback \n
@@ -329,7 +330,7 @@ protected:
     */
    static SOFCallbackFunction fSofCallbackFunction;
 
-public:
+protected:
 
 $(/USB/classInfo: // No class Info found)
    /**
@@ -382,15 +383,6 @@ $(/USB/classInfo: // No class Info found)
     */
    static void setOtgInterrupts(uint8_t mask=0xFF) {
       fUsb->OTGICR = mask;
-   }
-
-   /**
-    * Checks if the USB device is configured i.e. connected and enumerated etc.
-    *
-    * @return true if configured
-    */
-   static bool isConfigured() {
-      return fConnectionState == USBconfigured;
    }
 
 protected:
@@ -473,7 +465,7 @@ protected:
     * @param[in]  bufSize Size of buffer to send
     * @param[in]  bufPtr  Pointer to buffer (may be NULL to indicate fControlEndpoint.fDatabuffer is being used directly)
     */
-   static void ep0StartTxStage(uint16_t bufSize, volatile const uint8_t *bufPtr) {
+   static void ep0StartTxStage(uint16_t bufSize, const uint8_t *bufPtr) {
       if (bufSize > fEp0SetupBuffer.wLength) {
          // More data than requested in SETUP request - truncate
          bufSize = (uint8_t)fEp0SetupBuffer.wLength;
@@ -498,7 +490,7 @@ protected:
     */
    static void setUSBdefaultState() {
       fConnectionState      = USBdefault;
-      fUsb->ADDR           = 0;
+      fUsb->ADDR            = 0;
       fDeviceConfiguration  = 0;
    }
 
@@ -514,7 +506,7 @@ protected:
       }
       else {
          fConnectionState       = USBaddressed;
-         fUsb->ADDR            = address;
+         fUsb->ADDR             = address;
          fDeviceConfiguration   = 0;
       }
    }
@@ -709,6 +701,15 @@ protected:
    }
 
 public:
+   /**
+    * Checks if the USB device is configured i.e. connected and enumerated etc.
+    *
+    * @return true if configured
+    */
+   static bool isConfigured() {
+      return fConnectionState == USBconfigured;
+   }
+
    static void irqHandler();
 
 };
@@ -748,11 +749,11 @@ volatile DeviceConnectionStates UsbBase_T<Info, EP0_SIZE>::fConnectionState;
 
 /** Active USB configuration */
 template<class Info, int EP0_SIZE>
-volatile uint8_t UsbBase_T<Info, EP0_SIZE>::fDeviceConfiguration;
+uint8_t UsbBase_T<Info, EP0_SIZE>::fDeviceConfiguration;
 
 /** USB Device status */
 template<class Info, int EP0_SIZE>
-volatile UsbBase::DeviceStatus UsbBase_T<Info, EP0_SIZE>::fDeviceStatus;
+UsbBase::DeviceStatus UsbBase_T<Info, EP0_SIZE>::fDeviceStatus;
 
 /** Buffer for EP0 Setup transaction (copied from USB RAM) */
 template<class Info, int EP0_SIZE>
@@ -760,7 +761,7 @@ SetupPacket UsbBase_T<Info, EP0_SIZE>::fEp0SetupBuffer;
 
 /** USB activity indicator */
 template<class Info, int EP0_SIZE>
-volatile bool UsbBase_T<Info, EP0_SIZE>::fActivityFlag = false;
+bool UsbBase_T<Info, EP0_SIZE>::fActivityFlag = false;
 
 /** USB Control endpoint - always EP0 */
 template <class Info, int EP0_SIZE>
@@ -922,7 +923,7 @@ bool UsbBase_T<Info, EP0_SIZE>::handleTokenComplete(UsbStat usbStat) {
    // console.WRITE("Stat(").WRITE(usbStat>>4,Radix_16).WRITE(usbStat&(1<<3)?",Tx,":",Rx,").WRITE(usbStat&(1<<2)?"Odd,":"Even,").WRITE("),");
 
    // Relevant BDT
-   BdtEntry *bdt = &bdts()[usbStat.raw>>2];
+   volatile BdtEntry *bdt = &bdts()[usbStat.raw>>2];
 
    // Control - Accept SETUP, IN or OUT token
 #if 0
@@ -1347,9 +1348,9 @@ void UsbBase_T<Info, EP0_SIZE>::handleSetFeature() {
  */
 template<class Info, int EP0_SIZE>
 void UsbBase_T<Info, EP0_SIZE>::handleGetDescriptor() {
-   unsigned                 descriptorIndex = fEp0SetupBuffer.wValue.lo();
-   uint16_t                 dataSize = 0;
-   volatile const uint8_t  *dataPtr = nullptr;
+   unsigned        descriptorIndex = fEp0SetupBuffer.wValue.lo();
+   uint16_t        dataSize = 0;
+   const uint8_t  *dataPtr = nullptr;
 
    // console.WRITE("(").WRITE(fEp0SetupBuffer.wValue.hi()).WRITE(")");
 

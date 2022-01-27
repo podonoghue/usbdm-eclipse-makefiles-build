@@ -257,11 +257,12 @@
    
    <xi:include href="_simCommon.xml"/>
 
-   <indexedCategory name="ClockConfig." dim="/SIM/numberOfClockSettings" 
+   <indexedCategory name="ClockConfig." dim="/SIM/numberOfClockSettings"
+        derived="true"
+        constant="true"
+        value=""
         description="Clock configurations" 
-        toolTip="Clock configurations for different run modes" 
-        derived="true" 
-        constant="true">
+        toolTip="Clock configurations for different run modes" >
       
       <aliasOption key="/MCG/ClockConfig."
         constant="true"/>
