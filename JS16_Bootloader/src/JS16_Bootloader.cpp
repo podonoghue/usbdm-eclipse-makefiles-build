@@ -136,7 +136,7 @@ USBDM_ErrorCode ProgramDevice(
                           flashImage->getFirstAllocatedAddress(), 0xFF);
 
    do {
-	  progressCallback->setRange(flashImage->getByteCount());
+      progressCallback->setRange(flashImage->getByteCount());
       progressCallback->update(0, "Initialising...");
       log.print("Initialising\n");
       rc = ICP_Init();

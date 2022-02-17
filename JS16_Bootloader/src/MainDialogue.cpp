@@ -22,34 +22,36 @@ struct BdmInfo {
    const char *description;
 };
 
-const std::string firmwareSelection[] = {"Custom",
-		                              "HCS08/HCS12/CFV1",
-		                              "HCS08/HCS12/CFV1 + Serial",
-									  "CFVx/DSC/ARM-JTAG",
-									  "CFVx/DSC/ARM-JTAG + Serial",
-									  "HCS08/HCS12/CFV1/ARM-SWD",
-									  "HCS08/HCS12/CFV1/ARM-SWD + Serial"};
+const std::string firmwareSelection[] = {
+      "Custom",
+      "HCS08/HCS12/CFV1",
+      "HCS08/HCS12/CFV1 + Serial",
+      "CFVx/DSC/ARM-JTAG",
+      "CFVx/DSC/ARM-JTAG + Serial",
+      "HCS08/HCS12/CFV1/ARM-SWD",
+      "HCS08/HCS12/CFV1/ARM-SWD + Serial"
+};
 
 BdmInfo bdmInfo[] = {
   {_(firmwareSelection[0]), "", ""},
   {_(firmwareSelection[1]),
         "FlashImages/JS16/USBDM_JS16CWJ_V4.sx",
-        "Basic HCS08/HCS12/CFV1 BDM \n e.g. Witztronics, Wytec or TechnologicalArts."},
+        "Basic HCS08/HCS12/CFV1 BDM e.g. Witztronics, Wytec or TechnologicalArts.\n"},
   {_(firmwareSelection[2]),
         "FlashImages/JS16/USBDM_SER_JS16CWJ_V4.sx",
-        "HCS08/HCS12/CFV1 BDM with  \n USB serial function."},
+        "HCS08/HCS12/CFV1 BDM with USB serial function.\n"},
   {_(firmwareSelection[3]),
         "FlashImages/JS16/USBDM_CF_JS16CWJ_V4.sx",
-        "Basic CFVx/DSC/Kinetis-JTAG BDM."},
+        "Basic CFVx/DSC/Kinetis-JTAG BDM.\n"},
   {_(firmwareSelection[4]),
         "FlashImages/JS16/USBDM_CF_SER_JS16CWJ_V4.sx",
-        "CFVx/DSC/Kinetis-JTAG BDM with  \n USB serial function."},
+        "CFVx/DSC/Kinetis-JTAG BDM with USB serial function.\n"},
   {_(firmwareSelection[5]),
         "FlashImages/JS16/USBDM_SWD_JS16CWJ_V4.sx",
-        "Basic HCS08/HCS12/CFV1/Kinetis-SWD BDM."},
+        "Basic HCS08/HCS12/CFV1/Kinetis-SWD BDM.\n"},
   {_(firmwareSelection[6]),
         "FlashImages/JS16/USBDM_SWD_SER_JS16CWJ_V4.sx",
-        "HCS08/HCS12/CFV1/Kinetis-SWD BDM with  \n USB serial function."},
+        "HCS08/HCS12/CFV1/Kinetis-SWD BDM with USB serial function.\n"},
 };
 
 MainDialogue::MainDialogue( wxWindow* parent ) :
@@ -101,6 +103,9 @@ void MainDialogue::OnRadioBox( wxCommandEvent& event ) {
    std::string description = bdmInfo[bdmType].description;
    if (bdmType == 0) {
       description.append(customFilename.ToAscii());
+   }
+   else {
+      description.append(UsbdmSystem::getResourcePath(bdmInfo[bdmType].filename));
    }
    loadSourceButton->Enable(bdmType==0);
    log.print("MainDialogue::OnRadioBox() - bdmType = %s\n", description.c_str());

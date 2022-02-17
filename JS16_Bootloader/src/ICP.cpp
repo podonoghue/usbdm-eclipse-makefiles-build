@@ -128,7 +128,6 @@ USBDM_ErrorCode ICP_Program(
          log.print("Programming icp-block %4.4X-%4.4X\n", addr, addr+dataSize-1);
          log.printDump(data, dataSize, addr);
 
-         // Programming a row should take less than 1 ms.
          rc =  (USBDM_ErrorCode)bdm_usb_raw_send_ep0(
                ICP_PROGRAM,     // bRequest
                addr,            // wValue  = Start address
@@ -140,11 +139,13 @@ USBDM_ErrorCode ICP_Program(
             log.print("Failed bdm_usb_raw_send_ep0()\n");
             return rc;
          }
-         // Wait 2ms before we try to get the result to ensure that the
+         // Wait 5ms before we try to get the result to ensure that the
          // operation won't still be in progress the first time getResult()
          // polls the device. This avoids an extra 100ms retry timeout that
          // getResult() would otherwise add.
-         UsbdmSystem::milliSleep(2);
+         // The delay was increased to 5 ms as there seems to be some timing problem
+         // on fast machines.
+         UsbdmSystem::milliSleep(5);
          rc = getResult();
          if (rc != BDM_RC_OK) {
             log.print("Failed icp_get_result() rc = %d\n", rc);
