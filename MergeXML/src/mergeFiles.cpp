@@ -148,8 +148,8 @@ int modifyFiles(const char *directoryPath, const char *filename, MyTraverser &co
    char buff[100];
    strncpy(buff, filename, sizeof(buff)-1);
    char *filePattern = strtok(buff, "|\n");
-   if (filePattern == 0){
-      fprintf(stderr, "Missing pattern p=%s\n", filePattern);
+   if (filePattern == nullptr){
+      fprintf(stderr, "Missing pattern\n");
       exit(-1);
    }
    fprintf(stdout, "modifyFiles(): \n"
