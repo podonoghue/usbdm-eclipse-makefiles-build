@@ -37,8 +37,7 @@ static void messageQueueSender(const void *) {
       ar[i].a = i;
       ar[i].b = i*i;
       console.
-         write(i).write(": Sending ").write(&ar[i]).
-         write(", (").write(ar[i].a).write(",").write(ar[i].b).writeln(")");
+         writeln(i, ": Sending ", &ar[i]).write(", (", ar[i].a, ",", ar[i].b, ")");
       osStatus rc = messageQueue.put(&ar[i], 0);
       osDelay(100);
       if (rc == osErrorResource) {
@@ -59,8 +58,7 @@ static void messageQueueReceiver(const void *) {
       }
       MessageData *data = messageQueue.getValueFromEvent(event);
       console.
-         write(i).write(": Received ").write(data).
-         write(", (").write(data->a).write(",").write(data->b).writeln(")");
+         writeln(i, ": Received ", data).write(", (", data->a, ",", data->b, ")");
    }
    messageQueueTestComplete = true;
    console.writeln("=== Receiver complete ====");
@@ -70,7 +68,7 @@ static void messageQueueReceiver(const void *) {
  * Message Queue example
  */
 static void messageQueueExample() {
-   console.write(" message messageQueue.getId() = ").writeln(messageQueue.getId());
+   console.writeln(" message messageQueue.getId() = ", messageQueue.getId());
 
    messageQueue.create();
    CMSIS::Thread sender(messageQueueSender);

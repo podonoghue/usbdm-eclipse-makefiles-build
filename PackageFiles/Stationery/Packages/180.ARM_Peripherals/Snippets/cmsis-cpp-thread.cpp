@@ -25,7 +25,7 @@ private:
             for(;;) {
                console
                   .lock()
-                  .write("Hello from ").write(fName).write(", ").writeln(count++)
+                  .writeln("Hello from ", fName, ", ", count++)
                   .unlock();
                delay(fDelayTime);
             }

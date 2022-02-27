@@ -38,10 +38,10 @@ static void mailQueueSender(const void *) {
          console.writeln("Error: Sender failed to allocate mail buffer!");
          break;
       }
-      console.write(i).write(": Allocated ").writeln(data);
+      console.writeln(i, ": Allocated ", data);
       data->a = i;
       data->b = i*i;
-      console.write(i).write(": Sending   ").write(data).write(", (").write(data->a).write(", ").write(data->a).writeln(")");
+      console.writeln(i, ": Sending   ", data, ", (", data->a, ", ", data->a, ")");
       mailQueue.put(data);
       osDelay(100);
    }
@@ -64,10 +64,8 @@ static void mailQueueReceiver(const void *) {
          break;
       }
       MailData *data = mailQueue.getValueFromEvent(event);
-      console.
-         write(i).write(": Received  ").write(data).
-         write("(").write(data->a).write(",").write(data->b).writeln(")");
-      console.write(i).write(": Freeing ").writeln(data);
+      console.writeln(i, ": Received  ", data, "(", data->a, ",", data->b, ")");
+      console.writeln(i, ": Freeing ", data);
       mailQueue.free(data);
    }
    mailQueueTestComplete = true;
@@ -79,7 +77,7 @@ static void mailQueueReceiver(const void *) {
  */
 void mailQueueExample() {
 
-   console.write(" mail mailQueue.getId() = ").writeln(mailQueue.getId());
+   console.writeln(" mail mailQueue.getId() = ", mailQueue.getId());
 
    mailQueue.create();
 

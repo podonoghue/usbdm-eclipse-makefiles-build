@@ -25,7 +25,7 @@ static void memoryPoolExample() {
 
    static CMSIS::Pool<Data, 10> pool;
 
-   console.write(" memory pool::getId() = ").writeln(pool.getId());
+   console.writeln(" memory pool::getId() = ", pool.getId());
 
    Data *ar[30] = {0};
    for (unsigned i=0; i<(sizeof(ar)/sizeof(ar[0])); i++) {
@@ -34,15 +34,14 @@ static void memoryPoolExample() {
          break;
       }
       else {
-         console.write(i).write(": Allocated ").write(ar[i]);
+         console.writeln(i, ": Allocated ", ar[i]);
       }
       ar[i]->a = i;
       ar[i]->b = i*i;
    }
    for (unsigned i=0; i<(sizeof(ar)/sizeof(ar[0])); i++) {
       if (ar[i] != nullptr) {
-         console.write(i).write(": free ").
-               write(ar[i]).write(" (").write(ar[i]->a).write(",").write(ar[i]->b).writeln(")");
+         console.writeln(i, ": free ").write(ar[i], " (", ar[i]->a, ",", ar[i]->b, ")");
          pool.free(ar[i]);
       }
    }
