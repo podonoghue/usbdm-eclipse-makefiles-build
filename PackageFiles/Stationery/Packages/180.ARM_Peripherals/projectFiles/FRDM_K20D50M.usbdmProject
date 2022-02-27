@@ -83,7 +83,7 @@
    <item key="$signal$ADC0_SE9_codeIdentifier"             value="Analogue_A4" />
    <item key="$signal$ADC0_SE9_descriptionSetting"         value="A4" />
    <item key="$signal$EXTAL32_descriptionSetting"          value="Reserved(EXTAL32)" />
-   <item key="$signal$GPIOA_12_codeIdentifier"             value="Gpio_D8" />
+   <item key="$signal$GPIOA_12_codeIdentifier"             value="Gpio_D8/Lcd_Reset" />
    <item key="$signal$GPIOA_12_descriptionSetting"         value="D8/LCD Reset" />
    <item key="$signal$GPIOA_13_codeIdentifier"             value="Gpio_D24" />
    <item key="$signal$GPIOA_13_descriptionSetting"         value="D24" />
@@ -99,7 +99,7 @@
    <item key="$signal$GPIOB_0_descriptionSetting"          value="D5" />
    <item key="$signal$GPIOB_1_codeIdentifier"              value="Gpio_A4" />
    <item key="$signal$GPIOB_1_descriptionSetting"          value="D4" />
-   <item key="$signal$GPIOB_2_codeIdentifier"              value="Gpio_D15" />
+   <item key="$signal$GPIOB_2_codeIdentifier"              value="Gpio_D15/Lcd_CS" />
    <item key="$signal$GPIOB_2_descriptionSetting"          value="D15" />
    <item key="$signal$GPIOB_3_codeIdentifier"              value="Gpio_D14" />
    <item key="$signal$GPIOB_3_descriptionSetting"          value="D14" />
@@ -111,7 +111,7 @@
    <item key="$signal$GPIOC_11_descriptionSetting"         value="D17" />
    <item key="$signal$GPIOC_1_codeIdentifier"              value="Gpio_A1" />
    <item key="$signal$GPIOC_1_descriptionSetting"          value="A1" />
-   <item key="$signal$GPIOC_2_codeIdentifier"              value="Gpio_D10" />
+   <item key="$signal$GPIOC_2_codeIdentifier"              value="Gpio_D10/Lcd_BackLight" />
    <item key="$signal$GPIOC_2_descriptionSetting"          value="D10/LCD Light" />
    <item key="$signal$GPIOC_3_codeIdentifier"              value="Gpio_D6/RedLed" />
    <item key="$signal$GPIOC_3_descriptionSetting"          value="D6/RedLed" />
@@ -158,8 +158,14 @@
    <item key="$signal$USB0_DP_descriptionSetting"          value="Reserved(USB_DP)" />
    <item key="$signal$VREF_OUT_descriptionSetting"         value="Vref output" />
    <item key="$signal$XTAL32_descriptionSetting"           value="Reserved(XTAL32)" />
-   <item key="/FTFL/peripheral_file"                       value="ftfl_32k_flexrom" />
-   <item key="/HARDWARE/warnMultipleSignalsOnPin"          value="false" />
+   <item key="/HARDWARE/Analogue0"                         value="Analogue_A0" />
+   <item key="/HARDWARE/Analogue1"                         value="Analogue_A1" />
+   <item key="/HARDWARE/Digital0"                          value="Gpio_D0" />
+   <item key="/HARDWARE/Digital1"                          value="Gpio_D1" />
+   <item key="/HARDWARE/Led1"                              value="RedLed" />
+   <item key="/HARDWARE/Led2"                              value="GreenLed" />
+   <item key="/HARDWARE/Led3"                              value="BlueLed" />
+   <item key="/HARDWARE/Switch1"                           value="Gpio_D0" />
    <item key="/LLWU/device_list"                           value="LPTMR0;CMP0;CMP1;;TSI;RTC_Alarm;;RTC_Seconds" />
    <item key="/MCG/ClockConfig[0]"                         value="ClockConfig_PEE_48MHz" />
    <item key="/MCG/ClockConfig[1]"                         value="ClockConfig_BLPE_4MHz" />
@@ -170,9 +176,6 @@
    <item key="/MCG/pll0OutputFrequency[0]"                 value="96000000" />
    <item key="/MCG/system_mcgfllclk_clock[1]"              value="80000000" />
    <item key="/MCG/system_mcgfllclk_clock[2]"              value="80000000" />
-   <item key="/SIM/ClockConfig[0]"                         value="" />
-   <item key="/SIM/ClockConfig[1]"                         value="" />
-   <item key="/SIM/ClockConfig[2]"                         value="" />
    <item key="/SIM/sim_clkdiv2_usb"                        value="2" />
    <item key="/SIM/sim_sopt2_pllfllsel[0]"                 value="1" />
    <item key="/SIM/system_bus_clock[1]"                    value="4000000" />
