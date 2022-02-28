@@ -734,6 +734,7 @@ public:
     *  Transmit and receive a series of values
     *
     *  @tparam T Type for data transfer (may be inferred from parameters)
+    *  @tparam N Size of arrays (may be inferred from parameters)
     *
     *  @param[in]  txData    Transmit bytes (tx-rx size is inferred from this array)
     *  @param[out] rxData    Receive byte buffer
@@ -746,9 +747,68 @@ public:
    }
 
    /**
+    *  Transmit and receive a series of values
+    *
+    *  @tparam T Type for data transfer (may be inferred from parameters)
+    *  @tparam N Size of arrays (may be inferred from parameters)
+    *
+    *  @param[in]  txData    Transmit bytes (tx-rx size is inferred from this array)
+    *  @param[out] rxData    Receive byte buffer
+    *
+    *  @note: rxData may use same buffer as txData
+    */
+   template<typename T, unsigned N>
+   void txRx(const std::array<const T, N> &txData, std::array<T, N> &rxData) {
+      txRx(N, txData.data(), rxData.data());
+   }
+
+   /**
+    *  Transmit and receive a series of values
+    *
+    *  @tparam T Type for data transfer (may be inferred from parameters)
+    *  @tparam N Size of arrays (may be inferred from parameters)
+    *
+    *  @param[in]  txData    Transmit bytes (tx-rx size is inferred from this array)
+    *  @param[out] rxData    Receive byte buffer
+    *
+    *  @note: rxData may use same buffer as txData
+    */
+   template<typename T, unsigned N>
+   void txRx(const std::array<T, N> &txData, std::array<T, N> &rxData) {
+      txRx(N, txData.data(), rxData.data());
+   }
+
+   /**
     *  Transmit a series of values
     *
     *  @tparam T Type for data transfer (may be inferred from parameters)
+    *  @tparam N Size of arrays (may be inferred from parameters)
+    *
+    *  @param[in]  txData    Transmit bytes (tx size is inferred from this array)
+    */
+   template<typename T, unsigned N>
+   void tx(const std::array<const T, N> &txData) {
+      txRx(N, txData.data(), (T*)nullptr);
+   }
+
+   /**
+    *  Transmit a series of values
+    *
+    *  @tparam T Type for data transfer (may be inferred from parameters)
+    *  @tparam N Size of arrays (may be inferred from parameters)
+    *
+    *  @param[in]  txData    Transmit bytes (tx size is inferred from this array)
+    */
+   template<typename T, unsigned N>
+   void tx(const std::array<T, N> &txData) {
+      txRx(N, txData.data(), (T*)nullptr);
+   }
+
+   /**
+    *  Transmit a series of values
+    *
+    *  @tparam T Type for data transfer (may be inferred from parameters)
+    *  @tparam N Size of arrays (may be inferred from parameters)
     *
     *  @param[in]  txData    Transmit bytes (tx size is inferred from this array)
     */
@@ -761,6 +821,7 @@ public:
     *  Transmit and receive a series of values
     *
     *  @tparam T Type for data transfer (may be inferred from parameters)
+    *  @tparam N Size of arrays (may be inferred from parameters)
     *
     *  @param[out] rxData    Receive byte buffer (rx size is inferred from this array)
     */

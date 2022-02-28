@@ -194,74 +194,67 @@ void LcdBase::init() {
 #endif
 }
 
-/** Writes the entire LCD screen from a bmp file
- *  Uses Olimex BmpToArray.exe utility
+/**
+ * Sets the Row and Column addresses
  *
- * @param bmp - bitmap to display
- *
- * @author Olimex, James P Lynch July 7, 2007
+ * @param x Row address (0 .. 131)
+ * @param y Column address (0 .. 131)
  */
-void LcdBase::drawBitmap(uint8_t bmp[131*131]) {
-   unsigned j; // loop counter
+void LcdBase::setXY(unsigned x, unsigned y) {
+   lock();
+
+   // Row address set (command 0x2B)
+#ifdef PHILIPS
+   txCommand(P_PASET);
+   txData(y);
+   txData(y);
+   // Column address set (command 0x2A)
+   txCommand(P_CASET);
+   txData(x);
+   txData(x);
+#endif
+
+#ifdef EPSON
+   txCommand(PASET);
+   txData(y);
+   txData(y);
+   // Column address set (command 0x2A)
+   txCommand(CASET);
+   txData(x);
+   txData(x);
+#endif
+
+   unlock();
+}
+
+/**
+ * Set LCD contrast - range varies with device
+ *
+ *  @param setting - Contrast level (0..127) ?
+ */
+void LcdBase::setContrast(uint8_t setting) {
 
    lock();
 
-#ifdef PHILIPS
-   // Memory access controller
-   txCommand(P_MADCTL);
-   txData(0x48); // no mirror Y (temporary to satisfy Olimex bmptoarray utility)
-   // Display OFF
-   txCommand(P_DISPOFF);
-   // Column address set (command 0x2A)
-   txCommand(P_CASET);
-   txData(0);
-   txData(131);
-   // Page address set (command 0x2B)
-   txCommand(P_PASET);
-   txData(0);
-   txData(131);
-   // WRITE MEMORY
-   txCommand(P_RAMWR);
-   for (j = 0; j < sizeof(uint8_t[131*131]); j++) {
-      txData(bmp[j]);
-   }
-   // Memory access controller (command 0x36)
-   txCommand(P_MADCTL);
-   txData(0xC8); // restore to (mirror x and y, reverse rgb)
-   // Display On
-   txCommand(P_DISPON);
-#endif
 #ifdef EPSON
-   // Memory access controller (command 0x36)
-   txCommand(DATCTL);
-   txData(0x48); // no mirror Y (temporary to satisfy Olimex bmptoarray utility)
-   // Display OFF
-   txCommand(DISOFF);
-   // Column address set (command 0x2A)
-   txCommand(CASET);
-   txData(0);
-   txData(131);
-   // Page address set (command 0x2B)
-   txCommand(PASET);
-   txData(0);
-   txData(131);
-   // WRITE MEMORY
-   txCommand(RAMWR);
-   for (j = 0; j < sizeof(uint8_t[131*131]); j++) {
-      txData(bmp[j]);
-   }
-   // Memory access controller (command 0x36)
-   txCommand(DATCTL);
-   txData(0xC8); // restore to (mirror x and y, reverse rgb)
-   // Display On
-   txCommand(DISON);
+   txCommand(VOLCTR);       // electronic volume, this is the contrast/brightness(EPSON)
+   txData(setting);         // volume (contrast) setting - course adjustment,  -- original was 24
+   //     LCDData(0x03);     // internal resistor ratio - coarse adjustment
+   //     LCDData(0x30);
+   txCommand(NOP);          // nop(EPSON)
 #endif
-  unlock();
+#ifdef PHILIPS
+   txCommand(P_SETCON);     // Contrast/brightness
+   txData(setting);
+#endif
+
+   unlock();
 }
 
-/** This function will clear the screen to the given colour.
+/**
+ * This function will clear the screen to the given colour.
  *
- * @param colour - 12-bit colour value rrrrggggbbbb
+ * @param colour - 12-bit colour value RRRRGGGGBBBB
  *
  * @author James P Lynch July 7, 2007
  */
@@ -307,45 +300,12 @@ void LcdBase::clear(Colour colour) {
    unlock();
 }
 
-/** Sets the Row and Column addresses
- *
- * @param x = row address (0 .. 131)
- * @param y = column address (0 .. 131)
- *
- * @author James P Lynch July 7, 2007
- */
-void LcdBase::setXY(unsigned x, unsigned y) {
-   lock();
-
-   // Row address set (command 0x2B)
-#ifdef PHILIPS
-   txCommand(P_PASET);
-   txData(y);
-   txData(y);
-   // Column address set (command 0x2A)
-   txCommand(P_CASET);
-   txData(x);
-   txData(x);
-#endif
-
-#ifdef EPSON
-   txCommand(PASET);
-   txData(y);
-   txData(y);
-   // Column address set (command 0x2A)
-   txCommand(CASET);
-   txData(x);
-   txData(x);
-#endif
-
-   unlock();
-}
-
-/** Lights a single pixel in the specified colour at the specified x and y addresses
+/**
+ * Draws a single pixel in the specified colour at the specified x and y addresses
  *
  * @param  x     - row address (0 .. 131)
  * @param  y     - column address (0 .. 131)
- * @param  colour - 12-bit colour value rrrrggggbbbb
+ * @param  colour - 12-bit colour value RRRRGGGGBBBB
  *
  * @note See lcd.h for some sample colour settings
  *
@@ -385,13 +345,14 @@ void LcdBase::drawPixel(unsigned x, unsigned y, Colour colour) {
    unlock();
 }
 
-/** Draws a line in the specified colour from (x0,y0) to (x1,y1)
+/**
+ * Draws a line in the specified colour from (x0,y0) to (x1,y1)
  *
  * @param x0       Top-left-X
  * @param y0       Top-left-Y
  * @param x1       Bottom-right-X
  * @param y1       Bottom-right-Y
- * @param colour    Colour
+ * @param colour   Colour
  *
  * @author James P Lynch July 7, 2007
  *
@@ -452,15 +413,16 @@ void LcdBase::drawLine(unsigned x0, unsigned y0, unsigned x1, unsigned y1, Colou
    unlock();
 }
 
-/** Draws a rectangle in the specified colour from (x1,y1) to (x2,y2)\n
+/**
+ *  Draws a rectangle in the specified colour from (x1,y1) to (x2,y2)\n
  *  Rectangle can be filled with a colour if desired
  *
  * @param  x0     Row address (0 .. 131)
  * @param  y0     Column address (0 .. 131)
  * @param  x1     Row address (0 .. 131)
  * @param  y1     Column address (0 .. 131)
- * @param  fill   Indicates if the
- * @param  colour 12-bit colour value rrrrggggbbbb
+ * @param  fill   Indicates if the rectangle will be filled
+ * @param  colour 12-bit colour value RRRRGGGGBBBB
  *
  * note See lcd.h for some sample colour settings
  *
@@ -566,14 +528,198 @@ void LcdBase::drawRect(unsigned x0, unsigned y0, unsigned x1, unsigned y1, bool 
    unlock();
 }
 
-/** Draws an ASCII character at the specified (x,y) address and colour
+/**
+ * Draws a line circle in the specified colour at center (x0,y0) with radius
  *
- * @param c                    Character to be displayed
- * @param x                    Row address (0 .. 131)
- * @param y                    Column address (0 .. 131)
- * @param font                 Font to use
- * @param foregroundColour     12-bit foreground colour value
- * @param backgroundColour     12-bit background colour value
+ * @param centreX      Row address (0 .. 131)
+ * @param centreY      Column address (0 .. 131)
+ * @param radius       Radius in pixels
+ * @param colour       12-bit colour value RRRRGGGGBBBB
+ * @param circleType   Controls which segments of the circle are drawn
+ *
+ * @author Jack Bresenham IBM, Winthrop University (Father of this algorithm, 1962)
+ *
+ * @note Taken verbatim Wikipedia article on Bresenham's line algorithm \n
+ *        http://www.wikipedia.org
+ */
+void LcdBase::drawCircle(unsigned centreX, unsigned centreY, unsigned radius, Colour colour, unsigned circleType) {
+
+   lock();
+
+   int f = 1 - radius;
+   unsigned ddF_x = 0;
+   unsigned ddF_y = -2 * radius;
+   unsigned x = 0;
+   unsigned y = radius;
+
+   if (circleType&(SECTOR_315_360|SECTOR_0_45)) {
+      drawPixel(centreX + radius, centreY, colour);  // 0,360
+   }
+   if (circleType&(SECTOR_45_90|SECTOR_90_135)) {
+      drawPixel(centreX, centreY + radius, colour);  // 90
+   }
+   if (circleType&(SECTOR_135_180|SECTOR_180_225)) {
+      drawPixel(centreX - radius, centreY, colour);  // 180
+   }
+   if (circleType&(SECTOR_225_270|SECTOR_270_315)) {
+      drawPixel(centreX, centreY - radius, colour);  // 270
+   }
+   while (x < y) {
+      if (f >= 0) {
+         y--;
+         ddF_y += 2;
+         f += ddF_y;
+      }
+      x++;
+      ddF_x += 2;
+      f += ddF_x + 1;
+      if (circleType&SECTOR_0_45) {
+         drawPixel(centreX + y, centreY + x, colour);   // 0-45
+      }
+      if (circleType&SECTOR_45_90) {
+         drawPixel(centreX + x, centreY + y, colour);   // 45-90
+      }
+      if (circleType&SECTOR_90_135) {
+         drawPixel(centreX - x, centreY + y, colour);   // 90-135
+      }
+      if (circleType&SECTOR_135_180) {
+         drawPixel(centreX - y, centreY + x, colour);   // 135-180
+      }
+      if (circleType&SECTOR_180_225) {
+         drawPixel(centreX - y, centreY - x, colour);   // 180-225
+      }
+      if (circleType&SECTOR_225_270) {
+         drawPixel(centreX - x, centreY - y, colour);   // 225-270
+      }
+      if (circleType&SECTOR_270_315) {
+         drawPixel(centreX + x, centreY - y, colour);   // 270-315
+      }
+      if (circleType&SECTOR_315_360) {
+         drawPixel(centreX + y, centreY - x, colour);   // 315-360
+      }
+   }
+
+   unlock();
+}
+
+/**
+ * Draws a filled circle
+ *
+ * @param centreX      Circle centre-X in pixels
+ * @param centreY      Circle centre-Y in pixels
+ * @param radius       Radius in pixels
+ * @param colour       12-bit colour value RRRRGGGGBBBB
+ */
+void LcdBase::drawFilledCircle(unsigned centreX, unsigned centreY, unsigned radius, Colour colour) {
+   int xMin, yMin, xMax, yMax;
+   xMin = centreX-radius;
+   if (xMin <= LCD_X_MIN) {
+      xMin = LCD_X_MIN;
+   }
+   yMin = centreY-radius;
+   if (yMin <= LCD_Y_MIN) {
+      yMin = LCD_Y_MIN;
+   }
+   xMax = centreX + radius;
+   if (xMax>LCD_X_MAX) {
+      xMax = LCD_X_MAX;
+   }
+   yMax = centreY + radius;
+   if (yMax>LCD_Y_MAX) {
+      yMax = LCD_Y_MAX;
+   }
+   const int radiusSq = radius * radius;
+
+   lock();
+
+   for (int px = xMin; px <= xMax; px++) {
+      for (int py = yMin; py <= yMax; py++) {
+         int x_off = px - centreX;
+         int y_off = py - centreY;
+         if ((x_off*x_off + y_off*y_off) < radiusSq) {
+            drawPixel(px, py, colour);
+         }
+      }
+   }
+   unlock();
+}
+
+/**
+ * Writes the entire LCD screen from a bmp file
+ *
+ * @param bmp - bitmap to display
+ *
+ * @author Olimex, James P Lynch July 7, 2007
+ *
+ * @note Use Olimex BmpToArray.exe utility to create bitmap
+ */
+void LcdBase::drawBitmap(uint8_t bmp[131*131]) {
+   unsigned j; // loop counter
+
+   lock();
+
+#ifdef PHILIPS
+   // Memory access controller
+   txCommand(P_MADCTL);
+   txData(0x48); // no mirror Y (temporary to satisfy Olimex bmptoarray utility)
+   // Display OFF
+   txCommand(P_DISPOFF);
+   // Column address set (command 0x2A)
+   txCommand(P_CASET);
+   txData(0);
+   txData(131);
+   // Page address set (command 0x2B)
+   txCommand(P_PASET);
+   txData(0);
+   txData(131);
+   // WRITE MEMORY
+   txCommand(P_RAMWR);
+   for (j = 0; j < sizeof(uint8_t[131*131]); j++) {
+      txData(bmp[j]);
+   }
+   // Memory access controller (command 0x36)
+   txCommand(P_MADCTL);
+   txData(0xC8); // restore to (mirror x and y, reverse rgb)
+   // Display On
+   txCommand(P_DISPON);
+#endif
+#ifdef EPSON
+   // Memory access controller (command 0x36)
+   txCommand(DATCTL);
+   txData(0x48); // no mirror Y (temporary to satisfy Olimex bmptoarray utility)
+   // Display OFF
+   txCommand(DISOFF);
+   // Column address set (command 0x2A)
+   txCommand(CASET);
+   txData(0);
+   txData(131);
+   // Page address set (command 0x2B)
+   txCommand(PASET);
+   txData(0);
+   txData(131);
+   // WRITE MEMORY
+   txCommand(RAMWR);
+   for (j = 0; j < sizeof(uint8_t[131*131]); j++) {
+      txData(bmp[j]);
+   }
+   // Memory access controller (command 0x36)
+   txCommand(DATCTL);
+   txData(0xC8); // restore to (mirror x and y, reverse rgb)
+   // Display On
+   txCommand(DISON);
+#endif
+   unlock();
+}
+
+/**
+ * Draws an ASCII character at the specified (x,y) address, font and foreground colour and current background
+ *
+ * @param c                 Character to be displayed
+ * @param x                 Row address (0 .. 131)
+ * @param y                 Column address (0 .. 131)
+ * @param font              Font to use (Lcd::fontSmall, Lcd::fontMedium, Lcd::fontLarge)
+ * @param foregroundColour  12-bit foreground colour value RRRRGGGGBBBB
+ * @param backgroundColour  12-bit background colour value RRRRGGGGBBBB
  *
  * @verbatim
  * Notes: Here's an example to display "E" at address (20,20)
@@ -643,23 +789,16 @@ void LcdBase::putChar(char c, unsigned x, unsigned y, const Font &font, Colour f
 
    lock();
 
-   unsigned nCols;
-   unsigned nRows;
-   unsigned nBytes;
-   unsigned char pixelRow;
-   unsigned char mask;
-   unsigned word0;
-   unsigned word1;
    const uint8_t *pChar;
 
    // Get the nColumns, nRows and nBytes
-   nCols  = font.width;
-   nRows  = font.height;
-   nBytes = ((font.width+7)/8);
+   const unsigned nCols  = font.width;
+   const unsigned nRows  = font.height;
+   const unsigned nBytes = ((font.width+7)/8);
 
-   // Get pointer to the last byte of the desired character
-   pChar = &font[c][nBytes-1];
-//   pChar = &font.data[nBytes*(c-0x20+1)]-1;
+   // Get pointer to just past the last byte of the desired character
+   pChar =  font[c];
+   pChar += (nBytes*nRows);
 
    // Row address set
 #ifdef PHILIPS
@@ -692,12 +831,24 @@ void LcdBase::putChar(char c, unsigned x, unsigned y, const Font &font, Colour f
    // Loop on each row, working backwards from the bottom to the top
    for (int i = nRows - 1; i >= 0; i--) {
       unsigned j;
-      // Copy pixel row from font table and then decrement row
-      pixelRow = *pChar--;
+
+      // Decrement by  a row row and copy 1st pixel row from font table
+      pChar -= nBytes;
+      uint16_t pixelRow = pChar[0];
+      uint16_t mask = 0x80;
+
+      if (nBytes>0) {
+         // 2nd byte needed
+         pixelRow <<= 8;
+         mask     <<= 8;
+         pixelRow |= pChar[1];
+      }
       // Loop on each pixel in the row (left to right)
       // Note: we do two pixels each loop
-      mask = 0x80;
       for (j = 0; j < nCols; j += 2) {
+         unsigned word0;
+         unsigned word1;
+
          // If pixel bit set, use foreground colour; else use the background colour
          // Now get the pixel colour for two successive pixels
          if ((pixelRow & mask) == 0) {
@@ -732,17 +883,21 @@ void LcdBase::putChar(char c, unsigned x, unsigned y, const Font &font, Colour f
    unlock();
 }
 
-/** Draws a nul-terminated character string at the specified (x,y) address and colour
+/**
+ * Draws a nul-terminated character string at the specified (x,y) address and colour
  *
  * @param str                Character string to be displayed
  * @param x                  Row address (0 .. 131)
  * @param y                  Column address (0 .. 131)
- * @param font               Font to use
- * @param foregroundColour   12-bit foreground colour value rrrrggggbbbb
- * @param backgroundColour   12-bit background colour value rrrrggggbbbb
+ * @param font              Font to use (Lcd::fontSmall, Lcd::fontMedium, Lcd::fontLarge)
+ * @param foregroundColour   12-bit foreground colour value RRRRGGGGBBBB
+ * @param backgroundColour   12-bit background colour value RRRRGGGGBBBB
  *
- * @note Here's an example to display "Hello World!" at address (20,20) \n
+ * @code{.c}
+ *       // Here's an example to display "Hello World!" at address (20,20)
+ *
  *       lcd_putStr("Hello World!", 20, 20, WHITE, BLACK);
+ * @endcode
  *
  * @author James P Lynch, August 30, 2007 \n
  *         Edited by Peter Davenport on August 23, 2010
@@ -762,142 +917,5 @@ void LcdBase::putStr(const char *str, unsigned x, unsigned y, const Font &font, 
       // Clip at right
       if (x > 131) break;
    }
-}
-
-/** Set LCD contrast - varies with device
- *
- *  @param setting - contrast level (0..127) ?
- */
-void LcdBase::setContrast(uint8_t setting) {
-
-   lock();
-
-#ifdef EPSON
-   txCommand(VOLCTR);       // electronic volume, this is the contrast/brightness(EPSON)
-   txData(setting);         // volume (contrast) setting - course adjustment,  -- original was 24
-   //     LCDData(0x03);     // internal resistor ratio - coarse adjustment
-   //     LCDData(0x30);
-   txCommand(NOP);          // nop(EPSON)
-#endif
-#ifdef PHILIPS
-   txCommand(P_SETCON);     // Contrast/brightness
-   txData(setting);
-#endif
-
-   unlock();
-}
-
-/** Draws a filled circle
- *
- * @param centreX      Circle centre-X in pixels
- * @param centreY      Circle centre-Y in pixels
- * @param radius       Radius in pixels
- * @param colour       12-bit colour value rrrrggggbbbb
- */
-void LcdBase::drawFilledCircle(unsigned centreX, unsigned centreY, unsigned radius, Colour colour) {
-   int xMin, yMin, xMax, yMax;
-   xMin = centreX-radius;
-   if (xMin <= LCD_X_MIN) {
-      xMin = LCD_X_MIN;
-   }
-   yMin = centreY-radius;
-   if (yMin <= LCD_Y_MIN) {
-      yMin = LCD_Y_MIN;
-   }
-   xMax = centreX + radius;
-   if (xMax>LCD_X_MAX) {
-      xMax = LCD_X_MAX;
-   }
-   yMax = centreY + radius;
-   if (yMax>LCD_Y_MAX) {
-      yMax = LCD_Y_MAX;
-   }
-   const int radiusSq = radius * radius;
-
-   lock();
-
-   for (int px = xMin; px <= xMax; px++) {
-      for (int py = yMin; py <= yMax; py++) {
-         int x_off = px - centreX;
-         int y_off = py - centreY;
-         if ((x_off*x_off + y_off*y_off) < radiusSq) {
-            drawPixel(px, py, colour);
-         }
-      }
-   }
-   unlock();
-}
-
-/** Draws a line circle
- *
- * @param centreX      Row address (0 .. 131)
- * @param centreY      Column address (0 .. 131)
- * @param radius       Radius in pixels
- * @param colour       12-bit colour value rrrrggggbbbb
- * @param circleType   Controls which segments of the circle are drawn
- *
- * @author Jack Bresenham IBM, Winthrop University (Father of this algorithm, 1962)
- *
- * @note Taken verbatim Wikipedia article on Bresenham's line algorithm \n
- *        http://www.wikipedia.org
- */
-void LcdBase::drawCircle(unsigned centreX, unsigned centreY, unsigned radius, Colour colour, unsigned circleType) {
-
-   lock();
-
-   int f = 1 - radius;
-   unsigned ddF_x = 0;
-   unsigned ddF_y = -2 * radius;
-   unsigned x = 0;
-   unsigned y = radius;
-
-   if (circleType&(SECTOR_315_360|SECTOR_0_45)) {
-      drawPixel(centreX + radius, centreY, colour);  // 0,360
-   }
-   if (circleType&(SECTOR_45_90|SECTOR_90_135)) {
-      drawPixel(centreX, centreY + radius, colour);  // 90
-   }
-   if (circleType&(SECTOR_135_180|SECTOR_180_225)) {
-      drawPixel(centreX - radius, centreY, colour);  // 180
-   }
-   if (circleType&(SECTOR_225_270|SECTOR_270_315)) {
-      drawPixel(centreX, centreY - radius, colour);  // 270
-   }
-   while (x < y) {
-      if (f >= 0) {
-         y--;
-         ddF_y += 2;
-         f += ddF_y;
-      }
-      x++;
-      ddF_x += 2;
-      f += ddF_x + 1;
-      if (circleType&SECTOR_0_45) {
-         drawPixel(centreX + y, centreY + x, colour);   // 0-45
-      }
-      if (circleType&SECTOR_45_90) {
-         drawPixel(centreX + x, centreY + y, colour);   // 45-90
-      }
-      if (circleType&SECTOR_90_135) {
-         drawPixel(centreX - x, centreY + y, colour);   // 90-135
-      }
-      if (circleType&SECTOR_135_180) {
-         drawPixel(centreX - y, centreY + x, colour);   // 135-180
-      }
-      if (circleType&SECTOR_180_225) {
-         drawPixel(centreX - y, centreY - x, colour);   // 180-225
-      }
-      if (circleType&SECTOR_225_270) {
-         drawPixel(centreX - x, centreY - y, colour);   // 225-270
-      }
-      if (circleType&SECTOR_270_315) {
-         drawPixel(centreX + x, centreY - y, colour);   // 270-315
-      }
-      if (circleType&SECTOR_315_360) {
-         drawPixel(centreX + y, centreY - x, colour);   // 315-360
-      }
-   }
-
-   unlock();
 }
 

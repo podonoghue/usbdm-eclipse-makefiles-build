@@ -64,7 +64,7 @@ int main() {
          /*
           * Receive 4 bytes
           */
-         static uint8_t data[4] = {};
+         uint8_t data[4] = {};
 
          i2c.startTransaction();
          i2c.receive(I2C_ADDRESS, data);
