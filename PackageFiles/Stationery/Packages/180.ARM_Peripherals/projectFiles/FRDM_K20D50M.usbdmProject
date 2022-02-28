@@ -8,9 +8,11 @@
    <item key="$$DeviceInfo_Device_Variant"                 value="FRDM_K20D50M" />
    <item key="$$DeviceInfo_SubFamily"                      value="MK20D5" />
    <item key="$$Hardware_Source_Filename"                  value="MK20D5.usbdmHardware" />
-   <item key="$peripheral$ADC0_codeIdentifier"             value="MyAdc" />
-   <item key="$peripheral$I2C0_codeIdentifier"             value="MyI2c" />
-   <item key="$peripheral$SPI0_codeIdentifier"             value="MySpi" />
+   <item key="$peripheral$ADC0_codeIdentifier"             value="UserAdc" />
+   <item key="$peripheral$I2C0_codeIdentifier"             value="UserI2c" />
+   <item key="$peripheral$I2C0_userDescription"            value="User I2C" />
+   <item key="$peripheral$SPI0_codeIdentifier"             value="UserSpi" />
+   <item key="$peripheral$SPI0_userDescription"            value="User SPI" />
    <item key="$pin$PTA0_pcrSetting_7"                      value="700" />
    <item key="$pin$PTA12_pcrSetting_1"                     value="100" />
    <item key="$pin$PTA13_pcrSetting_1"                     value="100" />

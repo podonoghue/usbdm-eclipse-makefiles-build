@@ -312,8 +312,8 @@ int main() {
    //   console.setRxTxCallback(nullptr);
 
 //   Above functions may be applied directly to any Uart as well.
-   Uart1 uart1;
-   uart1<<"Hello World\n";
+   Uart0 uart;
+   uart<<"Hello World\n";
 
    for(;;) {
       __asm__("nop");

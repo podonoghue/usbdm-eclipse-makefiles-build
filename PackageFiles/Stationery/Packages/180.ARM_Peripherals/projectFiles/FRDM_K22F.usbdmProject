@@ -17,6 +17,7 @@
    <item key="$peripheral$I2C1_codeIdentifier"             value="UserI2C" />
    <item key="$peripheral$I2C1_userDescription"            value="User I2C" />
    <item key="$peripheral$SPI1_codeIdentifier"             value="UserSpi" />
+   <item key="$peripheral$SPI1_userDescription"            value="User SPI" />
    <item key="$peripheral$UART1_codeIdentifier"            value="DebugUart" />
    <item key="$pin$PTA0_pcrSetting_7"                      value="700" />
    <item key="$pin$PTA12_pcrSetting_1"                     value="100" />
@@ -75,16 +76,18 @@
    <item key="$signal$ADC1_SE7b_descriptionSetting"        value="RF_ce" />
    <item key="$signal$EXTAL0_descriptionSetting"           value="8MHz Crystal" />
    <item key="$signal$EXTAL32_descriptionSetting"          value="32kHz Crystal" />
-   <item key="$signal$GPIOA_1_codeIdentifier"              value="RedLed" />
+   <item key="$signal$GPIOA_1_codeIdentifier"              value="RedLed/Gpio_D9/Lcd_CS" />
    <item key="$signal$GPIOA_1_descriptionSetting"          value="Red LED" />
    <item key="$signal$GPIOA_2_codeIdentifier"              value="GreenLed" />
    <item key="$signal$GPIOA_2_descriptionSetting"          value="Green LED" />
    <item key="$signal$GPIOB_17_codeIdentifier"             value="Switch3" />
    <item key="$signal$GPIOB_17_descriptionSetting"         value="Switch 3" />
+   <item key="$signal$GPIOB_19_codeIdentifier"             value="Gpio_D8/Lcd_Reset" />
    <item key="$signal$GPIOC_1_codeIdentifier"              value="Switch2" />
    <item key="$signal$GPIOC_1_descriptionSetting"          value="Switch 2" />
    <item key="$signal$GPIOD_2_codeIdentifier"              value="Gpio_D0" />
    <item key="$signal$GPIOD_3_codeIdentifier"              value="Gpio_D1" />
+   <item key="$signal$GPIOD_4_codeIdentifier"              value="Gpio_D10/Lcd_BackLight" />
    <item key="$signal$GPIOD_5_codeIdentifier"              value="BlueLed" />
    <item key="$signal$GPIOD_5_descriptionSetting"          value="Blue LED" />
    <item key="$signal$I2C1_SCL_descriptionSetting"         value="I2C_SCL (D15)" />

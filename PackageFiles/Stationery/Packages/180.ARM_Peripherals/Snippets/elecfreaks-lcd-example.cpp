@@ -18,6 +18,7 @@
  ============================================================================
  */
 #include <stdlib.h>
+#include "hardware.h"
 #include "lcd.h"
 #include "spi.h"
 #include "delay.h"
@@ -30,7 +31,7 @@ using namespace USBDM;
  * ************************************************ */
 
 // SPI interface
-Spi0 spi;
+UserSpi spi;
 
 // LCD interface using SPI
 Lcd lcd(spi);
@@ -79,14 +80,28 @@ int main() {
    lcd.setFont(fontSmall).setForeground(FOREGROUND_COLOUR).setBackground(BACKGROUND_COLOUR);
 
    // Simple text with position and default font and colours
-   lcd.putStr("Some Circles", 30, 10);
+   lcd.putStr("Some Circles", 0, 10);
 
    // Change LCD defaults
    lcd.setFont(fontLarge).setForeground(BLUE).setBackground(WHITE);
 
+   // Move to top of screen
+   lcd.moveXY(0, LCD_Y_MAX);
+
    // Formatted write to LCD using current defaults
-   lcd.moveXY(10, LCD_Y_MAX-fontLarge.height-1)
-      .write("max-X=").write(LCD_X_MAX).write(" ");
+   lcd.moveXY(0, lcd.getY()-fontLarge.height);
+   lcd.write("max-X=", LCD_X_MAX, " ");
+   lcd.moveXY(0, lcd.getY()-fontLarge.height);
+   lcd.write("max-Y=", LCD_Y_MAX, " ");
+
+   // Change LCD defaults
+   lcd.setFont(fontMedium).setForeground(BLACK).setBackground(GRAY);
+
+   // Formatted write to LCD using current defaults
+   lcd.moveXY(0, lcd.getY()-fontMedium.height);
+   lcd.write("max-X=", LCD_X_MAX, " ");
+   lcd.moveXY(0, lcd.getY()-fontMedium.height);
+   lcd.write("max-Y=", LCD_Y_MAX, " ");
 
    // Cursor position on screen
    unsigned x=0, y=0;
