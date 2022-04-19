@@ -14,7 +14,7 @@
    -->
    <irqOption name="irqHandlingMethod"  
       description="Peripheral interrupt handler"
-      toolTip="This selection allow the interrupt handler for this peripheral to be installed using several different methods"
+      toolTip="This selection allows the interrupt handler for this peripheral to be installed using several different methods"
       pattern="$(irq_pattern)" 
       classHandler="$(irq_classHandler)" />
       

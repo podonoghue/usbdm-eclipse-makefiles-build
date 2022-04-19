@@ -110,7 +110,7 @@
    </binaryOption>
    
    <template><![CDATA[
-      \tstatic constexpr uint32_t tsi_gencs = \
+      \tstatic constexpr uint32_t tsi_gencs =
       \t   TSI_GENCS_CURSW($(tsi_gencs_cursw))      |  // Electrode/Reference OSC swap
       \t   TSI_GENCS_STM($(tsi_gencs_stm))        |  // Scan Trigger Mode
       \t   TSI_GENCS_STPE($(tsi_gencs_stpe))       |  // TSI STOP Enable
@@ -118,7 +118,7 @@
       \t   TSI_GENCS_NSCN($(tsi_gencs_nscn)-1)     |  // Consecutive Scan number
       \t   TSI_GENCS_PS($(tsi_gencs_ps))         |  // Electrode Oscillator Prescaler
       \t   TSI_GENCS_EXTCHRG($(tsi_gencs_extchrg))    |  // External Oscillator Charge Current select
-      \t   TSI_GENCS_DVOLT($(tsi_gencs_dvolt))      |  // Oscillator's voltage rails
+      \t   TSI_GENCS_DVOLT($(tsi_gencs_dvolt))      |  // Oscillator voltage rails
       \t   TSI_GENCS_REFCHRG($(tsi_gencs_refchrg))    |  // Reference Oscillator Charge Current select
       \t   TSI_GENCS_MODE($(tsi_gencs_mode))  |  // TSI analogue modes setup and status bits
       \t   TSI_GENCS_ESOR($(tsi_gencs_esor));         // EOS or OOR Interrupt select\n\n
@@ -135,7 +135,7 @@
       min="0" max="65535" value="65535" />
 
    <template><![CDATA[
-      \tstatic constexpr uint32_t tsi_tshd = \
+      \tstatic constexpr uint32_t tsi_tshd =
       \t   TSI_TSHD_THRESH($(tsi_tshd_thresh)) |   // Low Power Channel Low Threshold value
       \t   TSI_TSHD_THRESL($(tsi_tshd_thresl));    // Low Power Channel High Threshold value\n\n
    ]]></template>

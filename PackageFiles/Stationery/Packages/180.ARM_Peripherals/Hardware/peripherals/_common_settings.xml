@@ -380,8 +380,8 @@
 ]]></template>
 
 <projectActionList id = "common_files" >
-<copy source="Snippets/bitband-example.cpp"                             target="Snippets/bitband-example.cpp"                 overwrite="true"    derived="true" />
-<copy source="Startup_Code/$(/LINKER/vectorsFilename)"                  target="Startup_Code/vectors.cpp"                     overwrite="true"    derived="true" />
+<copy source="Snippets/bitband-example.cpp"                             target="Snippets/bitband-example.cpp"                 overwrite="true"  derived="true" />
+<copy source="Startup_Code/$(/LINKER/vectorsFilename)"                  target="Startup_Code/vectors.cpp"                     overwrite="true"  derived="true" />
 <copy source="Project_Settings/Linker_Files/$(/LINKER/scriptFilename)"  target="Project_Settings/Linker_Files/Linker-rom.ld"  overwrite="true"  derived="true" />
 <copy source="Project_Settings/Linker_Files/$(/LINKER/mapFilename)"     target="Project_Settings/Linker_Files/MemoryMap.ld"   overwrite="true"  derived="true" />
 </projectActionList>

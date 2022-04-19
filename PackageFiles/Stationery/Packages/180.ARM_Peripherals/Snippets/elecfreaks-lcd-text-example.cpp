@@ -18,6 +18,7 @@
  ============================================================================
  */
 #include <stdlib.h>
+#include "hardware.h"
 #include "lcd.h"
 #include "spi.h"
 #include "delay.h"
@@ -30,7 +31,7 @@ using namespace USBDM;
  * ************************************************ */
 
 // SPI interface
-Spi0 spi;
+UserSpi spi;
 
 // LCD interface using SPI
 Lcd lcd(spi);
