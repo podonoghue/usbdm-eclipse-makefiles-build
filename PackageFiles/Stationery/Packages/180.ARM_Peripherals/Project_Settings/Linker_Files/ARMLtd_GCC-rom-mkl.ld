@@ -1,6 +1,6 @@
 /* ARMLtd_GCC-rom-mkl.ld (180.ARM_Peripherals/Project_Settings/Linker_Files/)
  *
- * Kinetis version without optional SRAM_U allocation and bitband
+ * Kinetis version without bitband
  *
  * Linker script based on example scripts provided with ARM Ltd GCC
  *
@@ -247,35 +247,10 @@ M_VECTOR_RAM_SIZE = DEFINED(__ram_vector_table__) ? (__VECTOR_TABLE_END - __VECT
       __StackTop = .;
    } > stack_ram
 
-$(/LINKER/extraRegions:)
-   /* 
-    * SRAM_U region
-    *
-    * This area is partitioned from the top of SRAM
-    *
-    * Each bit in this region maps to a word in the .bitband region (if present)
-    * This region is also accessible to BME (if present and supports RAM access) 
-    */
-   .sram_u (NOLOAD) :
-   {
-      *(.sram_u)
-   } > sram_u_ram
-
-   /*
-    * Bitband region
-    *
-    * Each word in this region maps to a bit in the .bitband_byte region 
-    */
-   .bitband (NOLOAD) :
-   {
-      /* Allocate variables from top of region */
-      . = ORIGIN(bitband) + ((ORIGIN(sram_u_ram) + LENGTH(sram_u_ram) - __sram_u_size) & 0xFFFFFF) * 32;
-      *(.bitband)
-   } > bitband_ram
-    
   PROVIDE(__stack = __StackTop);
   PROVIDE(__cs3_stack = __StackTop);
   
+  $(/LINKER/extraRegions:)
   /*
    * These are very 'weak' to ensure semi-hosting version 
    * will be used for rdimon.specs option

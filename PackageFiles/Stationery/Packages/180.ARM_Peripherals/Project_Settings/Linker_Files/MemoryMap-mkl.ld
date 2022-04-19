@@ -25,7 +25,7 @@ __heap_size  = $(/LINKER/heapSize);
    <i>  C Example:
    <i>    // Variable allocated in bitband/bme accessible region (SRAM_U)
    <i>    // May be uint8_t, uint16_t or uint32_t
-   <i>    __attribute__ ((section(".sram_u"))) uint32_t variable;
+   <i>    __attribute__ ((section(".bitband_ram"))) uint32_t variable;
    <i>
    <i>    // Each word of array maps to an individual bit in bit-band
    <i>    __attribute__ ((section(".bitband"))) uint32_t variable_bits[8*sizeof(variable)];
@@ -60,7 +60,7 @@ $(/LINKER/information)
 REGION_ALIAS("text_rom",         "$(/LINKER/text_rom)");
 /*  <s1>  Read-only data  <constant> data_rom      */
 REGION_ALIAS("rodata_rom",       "$(/LINKER/rodata_rom)");
-
+/* </h> */
 /*
   <h> Section placement in RAM
   <i> The RAM on Cortex-M4 Kinetis devices is divided into upper and lower memory regions.
@@ -85,9 +85,6 @@ REGION_ALIAS("mtb_ram",        "$(/LINKER/mtb_ram)");
 REGION_ALIAS("bdts_ram",       "$(/LINKER/bdts_ram)");
 /* </h> */
 
-/* These must be in upper RAM */
-REGION_ALIAS("sram_u_ram",     "ram_high");
-REGION_ALIAS("bitband_ram",    "ram_high");
 
 INCLUDE Linker-rom.ld
 

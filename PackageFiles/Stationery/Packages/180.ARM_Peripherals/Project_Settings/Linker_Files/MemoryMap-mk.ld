@@ -83,7 +83,7 @@ REGION_ALIAS("noinit_ram",     "$(/LINKER/noinit_ram)");
 REGION_ALIAS("mtb_ram",        "$(/LINKER/mtb_ram)");
 /*  <s1>  USB Endpoint buffers               <constant> bdts_ram       */
 REGION_ALIAS("bdts_ram",       "$(/LINKER/bdts_ram)");
-/*  <s1>  Bitband RAM - must be in ram_high  <constant> bdts_ram       */
+/*  <s1>  Bitband RAM - must be in ram_high  <constant> bitband_ram       */
 REGION_ALIAS("bitband_ram",    "ram_high");
 /* </h> */
 
