@@ -38,6 +38,8 @@ typedef void( *const intfunc )( void );
  * You can check 'vectorNum' below to determine the interrupt source.  Look this up in the vector table below.
  */
 extern "C" {
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wattributes"
 __attribute__((__interrupt__))
 void Default_Handler(void) {
 
@@ -50,6 +52,7 @@ void Default_Handler(void) {
       __asm__("bkpt");
    }
 }
+#pragma GCC diagnostic pop
 }
 
 typedef struct {
@@ -63,6 +66,8 @@ typedef struct {
    unsigned int psr;
 } ExceptionFrame;
 
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wattributes"
 /*  Low-level exception handler
  *
  *  Interface from asm to C.
@@ -85,6 +90,7 @@ void HardFault_Handler(void) {
      __asm__ volatile ( "  mov   r1, lr              \n");  // Get LR=EXC_RETURN in r1
      __asm__ volatile ( "  b     _HardFault_Handler  \n");  // Go to C handler
 }
+#pragma GCC diagnostic pop
 
 /******************************************************************************/
 /* Hard fault handler in C with stack frame location as input parameter
@@ -137,7 +143,10 @@ void _HardFault_Handler(
    }
 }
 
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wattributes"
 void Reset_Handler(void) __attribute__((__interrupt__));
+#pragma GCC diagnostic pop
 
 extern uint32_t __StackTop;
 }

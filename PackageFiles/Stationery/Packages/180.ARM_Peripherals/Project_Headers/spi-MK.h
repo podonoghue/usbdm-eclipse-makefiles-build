@@ -983,7 +983,7 @@ public:
    /** Address of SPI.CR register as uint32_t */
    static constexpr uint32_t spiCR     = Info::baseAddress + offsetof(SPI_Type, TCR);
    /** Address of SPI.CTAR[n] register as uint32_t */
-   static constexpr uint32_t spiCTAR(unsigned index) {return Info::baseAddress + offsetof(SPI_Type, CTAR[index]); }
+   static constexpr uint32_t spiCTAR(unsigned index) {return Info::baseAddress + offsetof(SPI_Type, CTAR) + index * sizeof(SPI_Type::CTAR[0]) ; }
    /** Address of SPI.SR register as uint32_t */
    static constexpr uint32_t spiSR     = Info::baseAddress + offsetof(SPI_Type, SR);
    /** Address of SPI.PUSHR register as uint32_t */
