@@ -31,19 +31,17 @@ protected:
   wxString                    bdmIdentification;   //!< ID of current BDM
   HardwareCapabilities_t      bdmCapabilities;     //!< Capabilities of the connected BDM
 
-  virtual void OnTargetTypeRadioBoxSelect( wxCommandEvent& event );
-  virtual void OnBdmSelectComboSelected( wxCommandEvent& event );
-  virtual void OnRefreshBDMClick( wxCommandEvent& event );
-  virtual void OnTargetVddControlClick( wxCommandEvent& event );
-  virtual void OnSaveToFileButton( wxCommandEvent& event );
-  virtual void OnReadMemoryButtonClick( wxCommandEvent& event );
-  virtual void OnKeepEmptySRECsCheckboxClick( wxCommandEvent& event );
-  virtual void OnInterfaceSpeedSelectComboSelected( wxCommandEvent& event );
-  virtual void OnInitializationCheckboxChange( wxCommandEvent& event );
-  virtual void OnFlatAddressSelect( wxCommandEvent& event );
-  virtual void OnPagedFlashAddressSelect( wxCommandEvent& event );
-  virtual void OnPagedEepromAddressSelect( wxCommandEvent& event );
-  virtual void OnPageAddressChange( wxCommandEvent& event );
+  virtual void OnTargetTypeRadioBoxSelect( wxCommandEvent& event ) override;
+  virtual void OnBdmSelectComboSelected( wxCommandEvent& event ) override;
+  virtual void OnRefreshBDMClick( wxCommandEvent& event ) override;
+  virtual void OnTargetVddControlClick( wxCommandEvent& event ) override;
+  virtual void OnSaveToFileButton( wxCommandEvent& event ) override;
+  virtual void OnReadMemoryButtonClick( wxCommandEvent& event ) override;
+  virtual void OnKeepEmptySRECsCheckboxClick( wxCommandEvent& event ) override;
+  virtual void OnInterfaceSpeedSelectComboSelected( wxCommandEvent& event ) override;
+  virtual void OnInitializationCheckboxChange( wxCommandEvent& event ) override;
+  virtual void OnPagedCheckBoxEvent( wxCommandEvent& event ) override;
+  virtual void OnPageAddressChange( wxCommandEvent& event ) override;
   virtual void populateBDMChoices();
   virtual void populateInterfaceSpeeds();
   virtual void update();

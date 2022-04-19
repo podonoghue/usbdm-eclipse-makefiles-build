@@ -295,6 +295,7 @@
       </pin>
       <pin name="PTA18">
          <mux sel="mux0"          signal="EXTAL0" />
+         <mux sel="mux0"          signal="EXTAL32" />
          <mux sel="mux1"          signal="GPIOA_18" />
          <mux sel="mux3"          signal="LPUART1_RX" />
          <mux sel="mux4"          signal="TPM_CLKIN0" />
@@ -302,6 +303,7 @@
       </pin>
       <pin name="PTA19">
          <mux sel="mux0"          signal="XTAL0" />
+         <mux sel="mux0"          signal="XTAL32" />
          <mux sel="mux1"          signal="GPIOA_19" />
          <mux sel="mux3"          signal="LPUART1_TX" />
          <mux sel="mux4"          signal="TPM_CLKIN1" />

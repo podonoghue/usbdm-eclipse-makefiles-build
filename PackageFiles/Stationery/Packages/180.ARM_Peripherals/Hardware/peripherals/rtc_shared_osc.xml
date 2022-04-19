@@ -3,7 +3,9 @@
 <!-- rtc_shared_osc.xml -->
 
 <peripheralPage xmlns:xi="http://www.w3.org/2001/XInclude" name="_instance" description="Real-time Clock">
-   
+
+   <xi:include href="_mapPinsOption_on.xml"/>
+
    <binaryOption name="configure_rtc"
       description="Configure RTC"
       toolTip="Enables configuration of RTC\n If disabled no RTC registers are accessed.">
@@ -191,40 +193,10 @@
       \t   RTC_LR_TCL($(rtc_lr_tcl));  // Time Compensation Lock\n\n
     ]]></template>     
 
-   <!--
-   Patterns for pattern and classHandler 
-     -  %i replaced with peripheral instance e.g. FTM1 => 1, PTA => A
-     -  %b replaced with peripheral base name e.g. FTM1 => = FTM
-     -  %c replaced with peripheral C++ base class name e.g. FTM1 => = Ftm
-     -  _IRQHandler is appended to the pattern (only)
-   -->
-   <irqOption name="irqHandlingMethod"  
-      description="RTC Alarm and Seconds interrupt handlers"
-      toolTip="This selection allow the interrupt handler for this peripheral to be installed using several different methods"
-      pattern="^RTC_(Alarm|Seconds)$" 
-      classHandler="%c%i::irq$1Handler" />
-      
-   <template><![CDATA[
-       \t//! Class based callback handler has been installed in vector table
-       \tstatic constexpr bool irqHandlerInstalled = $(irqHandlingMethod);\n\n
-   ]]></template>
-       
-   <choiceOption name="irqLevel"
-      description="Default IRQ level for this peripheral"
-      toolTip="Sets the default priority level used to configure the NVIC">
-      <choice name="VeryHigh"      value="NvicPriority_VeryHigh" />
-      <choice name="High"          value="NvicPriority_High" />
-      <choice name="MidHigh"       value="NvicPriority_MidHigh" />
-      <choice name="Normal"        value="NvicPriority_Normal" isDefault="true"/>
-      <choice name="Midlow"        value="NvicPriority_Midlow" />
-      <choice name="Low"           value="NvicPriority_Low" />
-      <choice name="VeryLow"       value="NvicPriority_VeryLow" />
-   </choiceOption>
 
-   <template><![CDATA[
-       \t//! Default IRQ level
-       \tstatic constexpr NvicPriority irqLevel =  $(?irqHandlingMethod:$(irqLevel):NvicPriority_NotInstalled);\n\n
-   ]]></template>
+   <stringOption name="irq_pattern"        constant="true" value="^RTC_(Alarm|Seconds)$" hidden="true" />
+   <stringOption name="irq_classHandler"   constant="true" value="%c%i::irq$1Handler" hidden="true" />
+   <xi:include href="_irqOptionSubstituted.xml"/>
 
    <choiceOption name="rtc_year"
       description="Initial Year" 
@@ -317,7 +289,6 @@
    <xi:include href="_clockOption.xml"/>
 
    <signals/>
-   <signals name="OSC0"/>
 
    <validate
       class="net.sourceforge.usbdm.deviceEditor.validators.RtcValidate">

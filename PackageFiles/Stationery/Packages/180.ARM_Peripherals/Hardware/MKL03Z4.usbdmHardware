@@ -149,6 +149,7 @@
       </pin>
       <pin name="PTA3">
          <mux sel="mux0"          signal="EXTAL0" />
+         <mux sel="mux0"          signal="EXTAL32" />
          <mux sel="mux1"          signal="GPIOA_3" />
          <mux sel="mux2"          signal="I2C0_SCL" />
          <mux sel="mux3"          signal="I2C0_SDA" />
@@ -157,6 +158,7 @@
       </pin>
       <pin name="PTA4">
          <mux sel="mux0"          signal="XTAL0" />
+         <mux sel="mux0"          signal="XTAL32" />
          <mux sel="mux1"          signal="GPIOA_4" />
          <mux sel="mux2"          signal="I2C0_SDA" />
          <mux sel="mux3"          signal="I2C0_SCL" />

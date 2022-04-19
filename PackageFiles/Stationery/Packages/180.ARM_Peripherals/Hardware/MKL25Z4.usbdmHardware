@@ -318,6 +318,7 @@
       </pin>
       <pin name="PTA18">
          <mux sel="mux0"          signal="EXTAL0" />
+         <mux sel="mux0"          signal="EXTAL32" />
          <mux sel="mux1"          signal="GPIOA_18" />
          <mux sel="mux3"          signal="UART1_RX" />
          <mux sel="mux4"          signal="TPM_CLKIN0" />
@@ -325,6 +326,7 @@
       </pin>
       <pin name="PTA19">
          <mux sel="mux0"          signal="XTAL0" />
+         <mux sel="mux0"          signal="XTAL32" />
          <mux sel="mux1"          signal="GPIOA_19" />
          <mux sel="mux3"          signal="UART1_TX" />
          <mux sel="mux4"          signal="TPM_CLKIN1" />
@@ -780,6 +782,8 @@
          <placement pin="PTA13"         location="D8" />
          <placement pin="PTA16"         location="D28" />
          <placement pin="PTA17"         location="D29" />
+         <placement pin="PTA18"         location="EXTAL0" />
+         <placement pin="PTA19"         location="XTAL0" />
          <placement pin="PTA2"          location="D1/ConTx" />
          <placement pin="PTA4"          location="D4" />
          <placement pin="PTA5"          location="D5" />

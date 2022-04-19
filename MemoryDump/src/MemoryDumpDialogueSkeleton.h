@@ -24,9 +24,8 @@
 #include <wx/stattext.h>
 #include <wx/statbox.h>
 #include <wx/choice.h>
-#include <wx/radiobut.h>
-#include <wx/textctrl.h>
 #include <wx/checkbox.h>
+#include <wx/textctrl.h>
 #include <wx/grid.h>
 #include <wx/panel.h>
 #include <wx/dialog.h>
@@ -48,11 +47,10 @@ class MemoryDumpDialogueSkeleton : public wxDialog
 		wxStaticText* bdmDescriptionStaticControl;
 		wxRadioBox* targetVddControl;
 		wxChoice* interfaceSpeedControl;
-		wxRadioButton* flatAddressRadioButton;
-		wxRadioButton* pagedFlashAddressRadioButton;
+		wxCheckBox* pagedFlashAddressCheckBox;
 		wxStaticText* flashPageRegisterStaticText;
 		wxTextCtrl* flashPageTextCntrl;
-		wxRadioButton* pagedEepromAddressRadioButton;
+		wxCheckBox* pagedEepromAddressCheckBox;
 		wxStaticText* eepromPageRegisterStaticText;
 		wxTextCtrl* eepromPageTextCntrl;
 		wxCheckBox* initializationCheckbox;
@@ -72,10 +70,8 @@ class MemoryDumpDialogueSkeleton : public wxDialog
 		virtual void OnBdmSelectComboSelected( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnTargetVddControlClick( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnInterfaceSpeedSelectComboSelected( wxCommandEvent& event ) { event.Skip(); }
-		virtual void OnFlatAddressSelect( wxCommandEvent& event ) { event.Skip(); }
-		virtual void OnPagedFlashAddressSelect( wxCommandEvent& event ) { event.Skip(); }
+		virtual void OnPagedCheckBoxEvent( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnPageAddressChange( wxCommandEvent& event ) { event.Skip(); }
-		virtual void OnPagedEepromAddressSelect( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnInitializationCheckboxChange( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnReadMemoryButtonClick( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnSaveToFileButton( wxCommandEvent& event ) { event.Skip(); }
