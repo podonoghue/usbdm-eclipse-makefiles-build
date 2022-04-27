@@ -558,9 +558,9 @@ public:
     */
    static void setOutput() {
 
-      CheckOutputIsMapped<0>::check();
+      CheckOutputIsMapped<Info::outputPin>::check();
 
-      using Pcr = PcrTable_T<Info, 0>;
+      using Pcr = PcrTable_T<Info, Info::outputPin>;
 
       // Enable and map pin to CMP_OUT
       Pcr::setPCR();

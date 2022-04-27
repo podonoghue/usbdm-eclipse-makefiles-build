@@ -63,6 +63,11 @@ enum UartDma {
  */
 class Uart : public FormattedIO {
 
+private:
+   Uart() = delete;
+   Uart(const Uart&) = delete;
+   Uart(Uart&&) = delete;
+
 protected:
 #ifdef __CMSIS_RTOS
    /**
@@ -164,14 +169,15 @@ public:
    /**
     * UART hardware instance
     */
-   const HardwarePtr<UART_Type> uart;
+//   const HardwarePtr<UART_Type> uart; // Large code - Why?
+   volatile UART_Type * const uart;
 
    /**
     * Construct UART interface
     *
     * @param[in]  uart Reference to UART hardware
     */
-   Uart(uint32_t uartBaseAddress) : uart(uartBaseAddress) {
+   Uart(uint32_t uartBaseAddress) : uart(reinterpret_cast<volatile UART_Type *>(uartBaseAddress)) {
    }
 
    /**
@@ -353,6 +359,10 @@ typedef void (*UARTCallbackFunction)(uint8_t status);
  */
 template<class Info> class Uart_T : public Uart {
 
+private:
+   Uart_T(const Uart_T&) = delete;
+   Uart_T(Uart_T&&) = delete;
+
 public:
    /** Get reference to UART hardware as struct */
    static volatile UART_Type &uartPtr() { return Info::uart(); }
@@ -452,10 +462,9 @@ public:
       // Enable clock to UART interface
       Info::enableClock();
 
-      if (Info::mapPinsOnEnable) {
+      if constexpr (Info::mapPinsOnEnable) {
          configureAllPins();
       }
-
       uart->C2 = UART_C2_TE(1)|UART_C2_RE(1);
       setNvicInterruptPriority(Info::irqLevel);
    }
@@ -615,6 +624,11 @@ template<class Info> UARTCallbackFunction Uart_T<Info>::lonCallback   = unhandle
 
 #ifdef UART_C4_BRFA_MASK
 template<class Info> class Uart_brfa_T : public Uart_T<Info> {
+
+private:
+   Uart_brfa_T(const Uart_brfa_T&) = delete;
+   Uart_brfa_T(Uart_brfa_T&&) = delete;
+
 public:
    /**
     * Construct UART interface
@@ -644,6 +658,10 @@ public:
 
 #ifdef UART_C4_OSR_MASK
 template<class Info> class Uart_osr_T : public Uart_T<Info> {
+
+private:
+   Uart_osr_T(const Uart_osr_T&) = delete;
+   Uart_osr_T(Uart_osr_T&&) = delete;
 
 public:
    using Uart_T<Info>::uart;
@@ -695,6 +713,11 @@ public:
 #endif
 
 template<class Info> class Uart_basic_T : public Uart_T<Info> {
+
+private:
+   Uart_basic_T(const Uart_basic_T&) = delete;
+   Uart_basic_T(Uart_basic_T&&) = delete;
+
 public:
    /**
     * Construct UART interface
@@ -741,6 +764,10 @@ public:
  */
 template<class Info, int rxSize=Info::receiveBufferSize, int txSize=Info::transmitBufferSize>
 class UartBuffered_T : public Uart_T<Info> {
+
+private:
+   UartBuffered_T(const UartBuffered_T&) = delete;
+   UartBuffered_T(UartBuffered_T&&) = delete;
 
 public:
    using Uart_T<Info>::uart;
@@ -893,6 +920,11 @@ public:
 #ifdef UART_C4_BRFA_MASK
 template<class Info, int rxSize=Info::receiveBufferSize, int txSize=Info::transmitBufferSize>
 class UartBuffered_brfa_T : public UartBuffered_T<Info, rxSize, txSize> {
+
+private:
+   UartBuffered_brfa_T(const UartBuffered_brfa_T&) = delete;
+   UartBuffered_brfa_T(UartBuffered_brfa_T&&) = delete;
+
 public:
    /**
     * Construct UART interface
@@ -923,6 +955,10 @@ public:
 #ifdef UART_C4_OSR_MASK
 template<class Info, int rxSize=Info::receiveBufferSize, int txSize=Info::transmitBufferSize>
 class UartBuffered_osr_T : public UartBuffered_T<Info, rxSize, txSize> {
+
+private:
+   UartBuffered_osr_T(const UartBuffered_osr_T&) = delete;
+   UartBuffered_osr_T(UartBuffered_osr_T&&) = delete;
 
    using UartBuffered_T<Info, rxSize, txSize>::uart;
 
@@ -960,6 +996,11 @@ public:
 
 template<class Info, int rxSize=Info::receiveBufferSize, int txSize=Info::transmitBufferSize>
 class UartBuffered_basic_T : public UartBuffered_T<Info, rxSize, txSize> {
+
+private:
+   UartBuffered_basic_T(const UartBuffered_basic_T&) = delete;
+   UartBuffered_basic_T(UartBuffered_basic_T&&) = delete;
+
 public:
    /**
     * Construct UART interface

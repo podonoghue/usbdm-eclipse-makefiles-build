@@ -11,14 +11,11 @@ PKG_NAME = usbdm
 # Used as prefix with the above when in build directory $(DUMMY_CHILD)/$(SHARED_SRC) = PackageFiles/src
 DUMMY_CHILD    := PackageFiles
 
-ifeq ('$(OS)','')
-   OS=Windows_NT
-endif
-
-BITNESS ?= 64
-
-ifeq ($(OS),Windows_NT)
-   UNAME_S := Windows
+ifneq (,$(findstring MINGW, $(shell uname)))
+#   $(info MINGW found)
+   UNAME_S   := Windows
+   UNAME_M   := $(shell uname -m)
+   BITNESS   := $(shell getconf LONG_BIT)
    ifeq ($(BITNESS),32)
       UNAME_M   := i386
       MULTIARCH := i386-win-gnu
@@ -26,14 +23,24 @@ ifeq ($(OS),Windows_NT)
       UNAME_M   := x86_64
       MULTIARCH := x86_64-win-gnu
    endif
-   export TMP  ?= C:\Users\PETERO~1\AppData\Local\Temp
-   export TEMP ?= C:\Users\PETERO~1\AppData\Local\Temp
-else
+endif
+
+ifneq (,$(findstring Linux, $(shell uname)))
+#   $(info Linux found)
    UNAME_S   := $(shell uname -s)
    UNAME_M   := $(shell uname -m)
+   BITNESS   := $(shell getconf LONG_BIT)
    MULTIARCH := $(shell gcc --print-multiarch)
-   BITNESS   ?= $(shell getconf LONG_BIT)
 endif
+
+ifeq (,$(UNAME_S))
+   $(error ERROR - Unknown OS)
+endif
+
+#$(info UNAME_S   = $(UNAME_S))
+#$(info UNAME_M   = $(UNAME_M))
+#$(info MULTIARCH = $(MULTIARCH))
+#$(info BITNESS   = $(BITNESS))
 
 #===========================================================
 # Shared directories - Relative to child directory
@@ -44,9 +51,6 @@ SHARED_LIBDIR := ../Shared/$(MULTIARCH)
 # Where to find private libraries on linux
 PKG_LIBDIR="/usr/lib/$(MULTIARCH)/${PKG_NAME}"
 
-BUILDDIR_SUFFIXx32 ?= .i386-win-gnu
-BUILDDIR_SUFFIXx64 ?= .x86_64-win-gnu
-
 #===========================================================
 # Where to build
 # These may be forced on the command line
@@ -55,6 +59,10 @@ ifeq ($(UNAME_S),Windows)
    TARGET_BINDIR   ?= ../PackageFiles/bin/$(MULTIARCH)
    TARGET_LIBDIR   ?= ../PackageFiles/bin/$(MULTIARCH)
    BUILDDIR_SUFFIX ?= .$(MULTIARCH)
+   # Windows still builds some 32-bit DLLs
+   BUILDDIR_SUFFIXx32 ?= .i386-win-gnu
+   BUILDDIR_SUFFIXx64 ?= .x86_64-win-gnu
+
    VSUFFIX         ?= .$(MAJOR_VERSION)
 else
    # Assume Linux
@@ -62,7 +70,9 @@ else
    TARGET_BINDIR   ?= ../PackageFiles/bin/$(MULTIARCH)
    TARGET_LIBDIR   ?= ../PackageFiles/lib/$(MULTIARCH)
    BUILDDIR_SUFFIX ?= .$(MULTIARCH)
-   include /usr/share/java/java_defaults.mk
+   #Linux only builds 64-bit
+   BUILDDIR_SUFFIXx32 ?= .$(MULTIARCH)
+   BUILDDIR_SUFFIXx64 ?= .$(MULTIARCH)
 endif
 
 ifeq ($(UNAME_S),Windows)
@@ -115,7 +125,7 @@ else
    MAKE     := make
    AR       := ar
    GCC      := gcc
-   GPP      := g++
+   GPP      := g++ -std=c++0x
    STRIP    := strip
    STRIPFLAGS := --strip-unneeded
    WINDRES  := 
@@ -203,7 +213,7 @@ else
    USBDM_PROGRAMMERS_LIBS   += -lusbdm-programmer-rs08$(VSUFFIX)
    USBDM_PROGRAMMERS_LIBS   += -lusbdm-programmer-s12z$(VSUFFIX)
 endif
-
+ 
 #===========================================================
 # WXWIDGETS
 ifeq ($(UNAME_S),Windows)
@@ -243,13 +253,12 @@ WIN_XML_INSTALLER_LIBS    := -lMsi
 
 #===========================================================
 # Java for JNI
-#JAVA_DIR = 'C:/Program Files/Java/jdk1.8.0_201/'
-JAVA_DIR = C:/Apps/jdk-14.0.2
 ifeq ($(UNAME_S),Windows)
+   JAVA_DIR = /C/PROGRA~1/Java/jdk-18.0.1
    JAVA_INC := -I$(JAVA_DIR)/include
    JAVA_INC += -I$(JAVA_DIR)/include/win32
 else
-   JAVA_INC := -I/usr/lib/jvm/default-java/include $(jvm_includes)
+   JAVA_INC := -I/usr/lib/jvm/default-java/include -I/usr/lib/jvm/default-java/include/linux $(jvm_includes)
 endif
 
 #=============================================================
@@ -311,7 +320,7 @@ else
    LDFLAGS = -O3 -g3 
 endif
 
-ifneq ($(OS),Windows_NT)
+ifneq ($(UNAME_S),Windows)
    # Executable will look here for libraries
    LDFLAGS += -Wl,-rpath,${PKG_LIBDIR}
    

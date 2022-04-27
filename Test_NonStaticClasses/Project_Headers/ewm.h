@@ -114,8 +114,8 @@ public:
    static constexpr HardwarePtr<EWM_Type> ewm = Info::baseAddress;
 
    /** Allow access to PCR of associated pin */
-   using InputPin  = PcrTable_T<Info, 0>;
-   using OutputPin = PcrTable_T<Info, 1>;
+   using InputPin  = PcrTable_T<Info, Info::inputPin>;
+   using OutputPin = PcrTable_T<Info, Info::outputPin>;
 
    /**
     * IRQ handler
@@ -297,7 +297,7 @@ public:
          PinAction         pinAction         = InputPin::defaultPcrValue,
          PinFilter         pinFilter         = InputPin::defaultPcrValue
          ) {
-      CheckInputPinIsMapped<0>::check();
+      CheckInputPinIsMapped<Info::inputPin>::check();
 
       InputPin::setInput(pinPull, pinAction, pinFilter);
    }
@@ -315,7 +315,7 @@ public:
          PinDriveMode      pinDriveMode      = OutputPin::defaultPcrValue,
          PinSlewRate       pinSlewRate       = OutputPin::defaultPcrValue
          ) {
-      CheckOutputPinIsMapped<0>::check();
+      CheckOutputPinIsMapped<Info::outputPin>::check();
 
       OutputPin::setOutput(pinDriveStrength, pinDriveMode, pinSlewRate);
    }

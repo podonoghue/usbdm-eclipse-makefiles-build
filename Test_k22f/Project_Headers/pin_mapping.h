@@ -4087,7 +4087,7 @@ public:
    static constexpr HardwarePtr<I2C_Type> i2c = baseAddress;
 
    //! Base value for PCR (excluding MUX value)
-   static constexpr uint32_t defaultPcrValue  = I2C_DEFAULT_PCR;
+   static constexpr uint32_t defaultPcrValue  = I2C_DEFAULT_PCR.value;
 
    //! Pin number in Info table for SCL if mapped to a pin
    static constexpr int sclPin  = 0;
@@ -4187,7 +4187,7 @@ public:
    static constexpr HardwarePtr<I2C_Type> i2c = baseAddress;
 
    //! Base value for PCR (excluding MUX value)
-   static constexpr uint32_t defaultPcrValue  = I2C_DEFAULT_PCR;
+   static constexpr uint32_t defaultPcrValue  = I2C_DEFAULT_PCR.value;
 
    //! Pin number in Info table for SCL if mapped to a pin
    static constexpr int sclPin  = 0;
@@ -4296,7 +4296,7 @@ public:
    static constexpr HardwarePtr<I2S_Type> i2s = baseAddress;
 
    //! Base value for PCR (excluding MUX value)
-   static constexpr uint32_t defaultPcrValue  = I2S_DEFAULT_PCR;
+   static constexpr uint32_t defaultPcrValue  = I2S_DEFAULT_PCR.value;
 
    //! Map all allocated pins on a peripheral when enabled
    static constexpr bool mapPinsOnEnable = true;

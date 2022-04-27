@@ -62,14 +62,14 @@ protected:
       // Not considered an error as may be using polling
    }
 
-   volatile I2C_Type  *i2c;                 //!< I2C hardware instance
-   const I2cMode       i2cMode;             //!< Mode of operation (I2cMode_Interrupt/I2cMode_Polled)
-   uint16_t            rxBytesRemaining;    //!< Number of receive bytes remaining in current transaction
-   uint16_t            txBytesRemaining;    //!< Number of transmit bytes remaining in current transaction
-   uint8_t            *rxDataPtr;           //!< Pointer to receive data for current transaction
-   const uint8_t      *txDataPtr;           //!< Pointer to transmit data for current transaction
-   uint8_t             addressedDevice;     //!< Address of device being communicated with
-   ErrorCode           errorCode;           //!< Error code from last transaction
+   const HardwarePtr<I2C_Type> i2c;                 //!< I2C hardware instance
+   const I2cMode               i2cMode;             //!< Mode of operation (I2cMode_Interrupt/I2cMode_Polled)
+   uint16_t                    rxBytesRemaining;    //!< Number of receive bytes remaining in current transaction
+   uint16_t                    txBytesRemaining;    //!< Number of transmit bytes remaining in current transaction
+   uint8_t                    *rxDataPtr;           //!< Pointer to receive data for current transaction
+   const uint8_t              *txDataPtr;           //!< Pointer to transmit data for current transaction
+   uint8_t                     addressedDevice;     //!< Address of device being communicated with
+   ErrorCode                   errorCode;           //!< Error code from last transaction
 
    /** I2C baud rate divisor table */
    static const uint16_t I2C_DIVISORS[4*16];
@@ -80,7 +80,7 @@ protected:
     * @param[in]  i2c     Base address of I2C hardware
     * @param[in]  i2cMode Mode of operation (I2cMode_Interrupt or I2cMode_Polled)
     */
-   I2c(volatile I2C_Type *i2c, I2cMode i2cMode) :
+   I2c(uint32_t i2c, I2cMode i2cMode) :
       state(i2c_idle), i2c(i2c), i2cMode(i2cMode), rxBytesRemaining(0),
       txBytesRemaining(0), rxDataPtr(0), txDataPtr(0), addressedDevice(0),
       errorCode(E_NO_ERROR) {
@@ -379,7 +379,7 @@ public:
     * @param[in]  i2cMode    Mode of operation
     * @param[in]  myAddress  Address of this device on bus (not currently used)
     */
-   I2cBase_T(unsigned bps=400000, I2cMode i2cMode=I2cMode_Polled, uint8_t myAddress=0) : I2c(&Info::i2c(), i2cMode) {
+   I2cBase_T(unsigned bps=400000, I2cMode i2cMode=I2cMode_Polled, uint8_t myAddress=0) : I2c(Info::baseAddress, i2cMode) {
 
       // Check pin assignments
       static_assert(Info::info[Info::sclPin].gpioBit >= 0, "I2Cx_SCL has not been assigned to a pin - Modify Configure.usbdm");

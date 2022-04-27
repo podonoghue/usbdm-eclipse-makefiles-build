@@ -8,10 +8,7 @@ NANO=270
 DEBIAN_VERSION=1
 VERSION=${MAJOR}.${MINOR}.${MICRO}.${NANO}
 
-MULTIARCH=`gcc --print-multiarch`
 ARCH=`uname -m`
-
-BITNESS=`getconf LONG_BIT`
 
 SOURCE_DIRECTORY="$(dirname $(readlink -f $0))"
 echo "Updating from file in ${SOURCE_DIRECTORY}"

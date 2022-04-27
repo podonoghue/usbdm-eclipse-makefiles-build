@@ -46,10 +46,10 @@
 #endif
 #endif
 
-//#ifdef _WIN32
-//#include "PluginFactory_WIN32.h"
-//#else
+#ifdef _WIN32
+#include "PluginFactory_WIN32.h"
+#else
 #include "PluginFactory_Linux.h"
-//#endif
+#endif
 
 #endif /* SOURCE_PLUGINFACTORY_H_ */

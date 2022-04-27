@@ -1,15 +1,10 @@
 #!/bin/bash
 
-# Build with native BITNESS
-
 clear
 
 HOME_DIR="$(dirname $(readlink -f $0))"
-echo "Building in ${HOME_DIR}"
+echo "Building in "${HOME_DIR}""
 pushd ${HOME_DIR}
-
-OS=linux
-export OS
 
 pausing() {
    x=5
@@ -26,13 +21,32 @@ pausing() {
 echo make -f Makefile-x64.mk all BITNESS=64
 make -f Makefile-x64.mk all BITNESS=64
 
-if [ $? -eq 0 ]
-then
-  echo "Make successfully completed"
-  pausing
-  exit 0
+if [ $? -eq 0 ]; then
+  echo "64-bit Make successfully completed"
+  echo
 else
-  echo "Make failed" >&2
+  echo "64-bit Make failed" >&2
   read -p "Press any key to continue... " -n1 -s  exit 1
   exit 1
 fi
+
+OS=`uname -s`
+if [ ${OS} == Linux ]; then
+  exit 0
+fi
+ 
+# Do 32-bit builds
+echo make -f Makefile-x32.mk all BITNESS=32
+make -f Makefile-x32.mk all BITNESS=32
+
+if [ $? -eq 0 ]
+then
+  echo "32-bit Make successfully completed"
+  pausing
+  exit 0
+else
+  echo "32-bit Make failed" >&2
+  read -p "Press any key to continue... " -n1 -s  exit 1
+  exit 1
+fi
+

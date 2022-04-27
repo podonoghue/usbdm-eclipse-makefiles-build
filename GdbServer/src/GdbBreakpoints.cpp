@@ -303,7 +303,7 @@ int GdbBreakpoints::insertBreakpoint(BreakType type, uint32_t address, unsigned 
    case BreakType_writeWatch:
    case BreakType_readWatch:
    case BreakType_accessWatch: {
-      int first1 = ffs(size);
+      int first1 = __builtin_ffs(size);
       if ((first1 == 0) || ((size & ~(1<<(first1-1))) != 0)) {
          // Must be a power of 2 in size
          return false;

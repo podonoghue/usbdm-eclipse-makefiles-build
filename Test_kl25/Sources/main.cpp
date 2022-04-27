@@ -42,6 +42,7 @@ int main() {
 
    Led::setOutput();
 
+
    for(int count = 0;;count++) {
       Led::toggle();
       waitMS(100);

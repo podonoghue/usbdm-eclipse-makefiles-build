@@ -148,12 +148,12 @@ std::string USBDM_SYSTEM_DECLSPEC UsbdmSystem::getResourcePath(const std::string
    HKEY hKey;
    if ((RegOpenKeyExA(HKEY_LOCAL_MACHINE, "SOFTWARE\\pgo\\USBDM", 0, KEY_READ|KEY_WOW64_64KEY, &hKey) != ERROR_SUCCESS) ||
          (GetStringRegKey(hKey, "InstallationDirectory", applicationDirectory, "") != ERROR_SUCCESS)) {
-      log.print("Failed to get USBDM path from registry\n");
+      log.print("Failed to get USBDM path from KEY_WOW64_64KEY registry\n");
+      if ((RegOpenKeyExA(HKEY_LOCAL_MACHINE, "SOFTWARE\\pgo\\USBDM", 0, KEY_READ|KEY_WOW64_32KEY, &hKey) != ERROR_SUCCESS) ||
+            (GetStringRegKey(hKey, "InstallationDirectory", applicationDirectory, "") != ERROR_SUCCESS)) {
+         log.print("Failed to get USBDM path from KEY_WOW64_32KEY registry\n");
+      }
    }
-//      if ((RegOpenKeyExA(HKEY_LOCAL_MACHINE, "SOFTWARE\\pgo\\USBDM", 0, KEY_READ|KEY_WOW64_32KEY, &hKey) != ERROR_SUCCESS) ||
-//            (GetStringRegKey(hKey, "InstallationDirectory", applicationDirectory, "") != ERROR_SUCCESS)) {
-//         log.print("Failed to get USBDM path from registry\n");
-//      }
    return applicationDirectory.append(path);
 }
 

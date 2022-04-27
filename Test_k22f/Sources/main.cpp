@@ -55,8 +55,12 @@ int main() {
    vref.configure();
    vref.setOutput();
 
+   doStuff(led, leds);
+//
 //   leds.port->DFCR = 0;
 //   led.port->DFER = 0;
+//
+//   leds.gpio->PCOR = 0;
 
    // Must configure here
    led.setOutput();

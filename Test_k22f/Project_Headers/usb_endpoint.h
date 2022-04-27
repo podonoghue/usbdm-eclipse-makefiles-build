@@ -175,11 +175,8 @@ protected:
       return EPIdle;
    }
 
-   /** Reference to hardware instance */
-   volatile USB_Type &fUsb;
-
    /** Hardware instance pointer */
-   __attribute__((always_inline)) volatile USB_Type &usb() { return fUsb; }
+   HardwarePtr<USB_Type>fUsb;
 
    /** Buffer Transmit data */
    volatile uint8_t * const fTxDataBuffer;
@@ -203,7 +200,7 @@ protected:
          uint8_t           bdtValue,
          uint8_t           txDataBuffer[],
          uint8_t           rxDataBuffer[],
-         volatile USB_Type &usb) :
+         uint32_t          usb) :
             fEndPointType(endPointType),
             fEpControlValue(bdtValue),
             fBdt(endPointBdts[endpointNumber]),
@@ -249,7 +246,7 @@ public:
       fCallback         = unsetHandlerCallback;
 
       // Value used to initialise an Endpoint Control Register
-      fUsb.ENDPOINT[fEndpointNumber].ENDPT = fEpControlValue;
+      fUsb->ENDPOINT[fEndpointNumber].ENDPT = fEpControlValue;
 
       // Assumes single shared buffer
       fBdt.rxEven.initialise( 0, 0, nativeToLe32((uint32_t)fRxDataBuffer));
@@ -281,7 +278,7 @@ public:
     */
    void stall() {
 //      console.WRITELN("EpX.stall");
-      fUsb.ENDPOINT[fEndpointNumber].ENDPT = fEpControlValue|USB_ENDPT_EPSTALL_MASK;
+      fUsb->ENDPOINT[fEndpointNumber].ENDPT = fEpControlValue|USB_ENDPT_EPSTALL_MASK;
 //      fBdt.txEven.setControl(BDTEntry_OWN_MASK|BDTEntry_STALL_MASK|BDTEntry_DTS_MASK);
 //      fBdt.txOdd.setControl(BDTEntry_OWN_MASK|BDTEntry_STALL_MASK|BDTEntry_DTS_MASK);
       setState(EPStall);
@@ -301,7 +298,7 @@ public:
     */
    void clearStall() {
 //      console.WRITELN("EpX.clearStall");
-      fUsb.ENDPOINT[fEndpointNumber].ENDPT = fEpControlValue;
+      fUsb->ENDPOINT[fEndpointNumber].ENDPT = fEpControlValue;
 //      fBdt.txEven.setControl(BDTEntry_DTS_MASK);
 //      fBdt.txOdd.setControl(BDTEntry_DTS_MASK);
       setState(EPIdle);
@@ -714,7 +711,7 @@ public:
     * Constructor
     */
    Endpoint_T(EndPointType endPointType, uint8_t bdtValue) :
-      Endpoint(ENDPOINT_NUM, EP_MAXSIZE, endPointType, bdtValue, fAllocatedDataBuffer, fAllocatedDataBuffer, Info::usb()) {
+      Endpoint(ENDPOINT_NUM, EP_MAXSIZE, endPointType, bdtValue, fAllocatedDataBuffer, fAllocatedDataBuffer, Usb0Info::baseAddress) {
    }
 };
 

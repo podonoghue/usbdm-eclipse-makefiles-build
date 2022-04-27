@@ -46,10 +46,10 @@
 #endif
 #endif
 
-//#ifdef _WIN32
-//#include "SingletonPluginFactory_WIN32.h"
-//#else
+#ifdef _WIN32
+#include "SingletonPluginFactory_WIN32.h"
+#else
 #include "SingletonPluginFactory_Linux.h"
-//#endif
+#endif
 
 #endif /* SOURCE_SINGLETONPLUGINFACTORY_H_ */

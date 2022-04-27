@@ -32,13 +32,14 @@ template<typename T>
 class HardwarePtr {
 
 private:
-   uint32_t            ptr;
+   // Address of hardware
+   const uint32_t ptr;
 
 public:
    /**
     * Constructor for hardware pointer
     *
-    * @param ptr  Naked pointer to hardware to be wrapped.
+    * @param ptr  Address of hardware to be wrapped.
     */
    constexpr HardwarePtr(uint32_t ptr) : ptr(ptr){};
    /**

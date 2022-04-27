@@ -253,9 +253,6 @@ public:
 
    //! Hardware base pointer
    static constexpr HardwarePtr<OSC_Type> osc = baseAddress;
-   //__attribute__((always_inline)) static volatile OSC_Type &osc() {
-   //   return *reinterpret_cast<OSC_Type *>(baseAddress);
-   //}
 
    //! Base value for PCR (excluding MUX value)
    static constexpr uint32_t defaultPcrValue  = 0;
@@ -374,9 +371,6 @@ public:
 
    //! Hardware base pointer
    static constexpr HardwarePtr<RTC_Type> rtc = baseAddress;
-   //__attribute__((always_inline)) static volatile RTC_Type &rtc() {
-   //   return *reinterpret_cast<RTC_Type *>(baseAddress);
-   //}
 
    //! Base value for PCR (excluding MUX value)
    static constexpr uint32_t defaultPcrValue = 
@@ -559,9 +553,6 @@ public:
 
    //! Hardware base pointer
    static constexpr HardwarePtr<MCG_Type> mcg = baseAddress;
-   //__attribute__((always_inline)) static volatile MCG_Type &mcg() {
-   //   return *reinterpret_cast<MCG_Type *>(baseAddress);
-   //}
 
    //! IRQ numbers for hardware
    static constexpr IRQn_Type irqNums[]  = MCG_IRQS;
@@ -1045,9 +1036,6 @@ public:
 
    //! Hardware base pointer
    static constexpr HardwarePtr<SIM_Type> sim = baseAddress;
-   //__attribute__((always_inline)) static volatile SIM_Type &sim() {
-   //   return *reinterpret_cast<SIM_Type *>(baseAddress);
-   //}
 
    /**
     * Get RAM size
@@ -1568,9 +1556,6 @@ public:
 
    //! Hardware base pointer
    static constexpr HardwarePtr<PMC_Type> pmc = baseAddress;
-   //__attribute__((always_inline)) static volatile PMC_Type &pmc() {
-   //   return *reinterpret_cast<PMC_Type *>(baseAddress);
-   //}
 
    //! Default value for Low Voltage Detect Status And Control 1 register
    static constexpr uint32_t pmc_lvdsc1  = 
@@ -1659,9 +1644,6 @@ public:
 
    //! Hardware base pointer
    static constexpr HardwarePtr<ADC_Type> adc = baseAddress;
-   //__attribute__((always_inline)) static volatile ADC_Type &adc() {
-   //   return *reinterpret_cast<ADC_Type *>(baseAddress);
-   //}
 
    //! Base value for PCR (excluding MUX value)
    static constexpr uint32_t defaultPcrValue  = 0;
@@ -1933,9 +1915,6 @@ public:
 
    //! Hardware base pointer
    static constexpr HardwarePtr<ADC_Type> adc = baseAddress;
-   //__attribute__((always_inline)) static volatile ADC_Type &adc() {
-   //   return *reinterpret_cast<ADC_Type *>(baseAddress);
-   //}
 
    //! Base value for PCR (excluding MUX value)
    static constexpr uint32_t defaultPcrValue  = 0;
@@ -2199,14 +2178,11 @@ public:
 
    //! Hardware base pointer
    static constexpr HardwarePtr<CMP_Type> cmp = baseAddress;
-   //__attribute__((always_inline)) static volatile CMP_Type &cmp() {
-   //   return *reinterpret_cast<CMP_Type *>(baseAddress);
-   //}
 
    //! Base value for PCR (excluding MUX value)
    static constexpr uint32_t defaultPcrValue  = 0;
 
-   //! Pin number in Info table for comparator output
+   //! Pin number in Info table for comparator output if mapped to a pin
    static constexpr int outputPin  = 8;
 
    //! Map all allocated pins on a peripheral when enabled
@@ -2349,14 +2325,11 @@ public:
 
    //! Hardware base pointer
    static constexpr HardwarePtr<CMP_Type> cmp = baseAddress;
-   //__attribute__((always_inline)) static volatile CMP_Type &cmp() {
-   //   return *reinterpret_cast<CMP_Type *>(baseAddress);
-   //}
 
    //! Base value for PCR (excluding MUX value)
    static constexpr uint32_t defaultPcrValue  = 0;
 
-   //! Pin number in Info table for comparator output
+   //! Pin number in Info table for comparator output if mapped to a pin
    static constexpr int outputPin  = 8;
 
    //! Map all allocated pins on a peripheral when enabled
@@ -2568,9 +2541,6 @@ public:
 
    //! Hardware base pointer
    static constexpr HardwarePtr<CRC_Type> crc = baseAddress;
-   //__attribute__((always_inline)) static volatile CRC_Type &crc() {
-   //   return *reinterpret_cast<CRC_Type *>(baseAddress);
-   //}
 
    static constexpr uint32_t gpoly =  0;
 
@@ -2632,12 +2602,12 @@ public:
 
    //! Hardware base pointer
    static constexpr HardwarePtr<DAC_Type> dac = baseAddress;
-   //__attribute__((always_inline)) static volatile DAC_Type &dac() {
-   //   return *reinterpret_cast<DAC_Type *>(baseAddress);
-   //}
 
    //! Base value for PCR (excluding MUX value)
    static constexpr uint32_t defaultPcrValue  = 0;
+
+   //! Pin number in Info table for DAC output if mapped to a pin
+   static constexpr int outputPin  = 0;
 
    //! Map all allocated pins on a peripheral when enabled
    static constexpr bool mapPinsOnEnable = false;
@@ -2737,12 +2707,12 @@ public:
 
    //! Hardware base pointer
    static constexpr HardwarePtr<DAC_Type> dac = baseAddress;
-   //__attribute__((always_inline)) static volatile DAC_Type &dac() {
-   //   return *reinterpret_cast<DAC_Type *>(baseAddress);
-   //}
 
    //! Base value for PCR (excluding MUX value)
    static constexpr uint32_t defaultPcrValue  = 0;
+
+   //! Pin number in Info table for DAC output if mapped to a pin
+   static constexpr int outputPin  = 0;
 
    //! Map all allocated pins on a peripheral when enabled
    static constexpr bool mapPinsOnEnable = false;
@@ -2851,9 +2821,6 @@ public:
 
    //! Hardware base pointer
    static constexpr HardwarePtr<DMA_Type> dma = baseAddress;
-   //__attribute__((always_inline)) static volatile DMA_Type &dma() {
-   //   return *reinterpret_cast<DMA_Type *>(baseAddress);
-   //}
 
    /** 
     *  Enable clock to Dma0
@@ -2922,9 +2889,6 @@ public:
 
    //! Hardware base pointer
    static constexpr HardwarePtr<DMAMUX_Type> dmamux = baseAddress;
-   //__attribute__((always_inline)) static volatile DMAMUX_Type &dmamux() {
-   //   return *reinterpret_cast<DMAMUX_Type *>(baseAddress);
-   //}
 
    /** 
     *  Enable clock to Dmamux0
@@ -2994,9 +2958,6 @@ public:
 
    //! Hardware base pointer
    static constexpr HardwarePtr<EWM_Type> ewm = baseAddress;
-   //__attribute__((always_inline)) static volatile EWM_Type &ewm() {
-   //   return *reinterpret_cast<EWM_Type *>(baseAddress);
-   //}
 
    //! Base value for PCR (excluding MUX value)
    static constexpr uint32_t defaultPcrValue = 
@@ -3009,6 +2970,12 @@ public:
 
    //! Map all allocated pins on a peripheral when enabled
    static constexpr bool mapPinsOnEnable = false;
+
+   //! Pin number in Info table for EWM input if mapped to a pin
+   static constexpr int inputPin  = 0;
+
+   //! Pin number in Info table for EWM output if mapped to a pin
+   static constexpr int outputPin  = 1;
 
    //! IRQ numbers for hardware
    static constexpr IRQn_Type irqNums[]  = EWM_IRQS;
@@ -3108,9 +3075,6 @@ public:
 
    //! Hardware base pointer
    static constexpr HardwarePtr<FB_Type> fb = baseAddress;
-   //__attribute__((always_inline)) static volatile FB_Type &fb() {
-   //   return *reinterpret_cast<FB_Type *>(baseAddress);
-   //}
 
    //! Base value for PCR (excluding MUX value)
    static constexpr uint32_t defaultPcrValue = 
@@ -3254,9 +3218,6 @@ public:
 
    //! Hardware base pointer
    static constexpr HardwarePtr<FTFA_Type> ftfa = baseAddress;
-   //__attribute__((always_inline)) static volatile FTFA_Type &ftfa() {
-   //   return *reinterpret_cast<FTFA_Type *>(baseAddress);
-   //}
 
    //! IRQ numbers for hardware
    static constexpr IRQn_Type irqNums[]  = FTFA_IRQS;
@@ -3376,9 +3337,6 @@ public:
 
    //! Hardware base pointer
    static constexpr HardwarePtr<FTM_Type> ftm = baseAddress;
-   //__attribute__((always_inline)) static volatile FTM_Type &ftm() {
-   //   return *reinterpret_cast<FTM_Type *>(baseAddress);
-   //}
 
    //! Base value for PCR (excluding MUX value)
    static constexpr uint32_t defaultPcrValue = 
@@ -3566,9 +3524,6 @@ public:
 
    //! Hardware base pointer
    static constexpr HardwarePtr<FTM_Type> ftm = baseAddress;
-   //__attribute__((always_inline)) static volatile FTM_Type &ftm() {
-   //   return *reinterpret_cast<FTM_Type *>(baseAddress);
-   //}
 
    //! Base value for PCR (excluding MUX value)
    static constexpr uint32_t defaultPcrValue = 
@@ -3778,9 +3733,6 @@ public:
 
    //! Hardware base pointer
    static constexpr HardwarePtr<FTM_Type> ftm = baseAddress;
-   //__attribute__((always_inline)) static volatile FTM_Type &ftm() {
-   //   return *reinterpret_cast<FTM_Type *>(baseAddress);
-   //}
 
    //! Base value for PCR (excluding MUX value)
    static constexpr uint32_t defaultPcrValue = 
@@ -3979,9 +3931,6 @@ public:
 
    //! Hardware base pointer
    static constexpr HardwarePtr<FTM_Type> ftm = baseAddress;
-   //__attribute__((always_inline)) static volatile FTM_Type &ftm() {
-   //   return *reinterpret_cast<FTM_Type *>(baseAddress);
-   //}
 
    //! Base value for PCR (excluding MUX value)
    static constexpr uint32_t defaultPcrValue = 
@@ -4155,12 +4104,15 @@ public:
 
    //! Hardware base pointer
    static constexpr HardwarePtr<I2C_Type> i2c = baseAddress;
-   //__attribute__((always_inline)) static volatile I2C_Type &i2c() {
-   //   return *reinterpret_cast<I2C_Type *>(baseAddress);
-   //}
 
    //! Base value for PCR (excluding MUX value)
    static constexpr uint32_t defaultPcrValue  = I2C_DEFAULT_PCR;
+
+   //! Pin number in Info table for SCL if mapped to a pin
+   static constexpr int sclPin  = 0;
+
+   //! Pin number in Info table for SDA if mapped to a pin
+   static constexpr int sdaPin  = 1;
 
    //! Map all allocated pins on a peripheral when enabled
    static constexpr bool mapPinsOnEnable = true;
@@ -4263,12 +4215,15 @@ public:
 
    //! Hardware base pointer
    static constexpr HardwarePtr<I2C_Type> i2c = baseAddress;
-   //__attribute__((always_inline)) static volatile I2C_Type &i2c() {
-   //   return *reinterpret_cast<I2C_Type *>(baseAddress);
-   //}
 
    //! Base value for PCR (excluding MUX value)
    static constexpr uint32_t defaultPcrValue  = I2C_DEFAULT_PCR;
+
+   //! Pin number in Info table for SCL if mapped to a pin
+   static constexpr int sclPin  = 0;
+
+   //! Pin number in Info table for SDA if mapped to a pin
+   static constexpr int sdaPin  = 1;
 
    //! Map all allocated pins on a peripheral when enabled
    static constexpr bool mapPinsOnEnable = true;
@@ -4369,9 +4324,6 @@ public:
 
    //! Hardware base pointer
    static constexpr HardwarePtr<I2S_Type> i2s = baseAddress;
-   //__attribute__((always_inline)) static volatile I2S_Type &i2s() {
-   //   return *reinterpret_cast<I2S_Type *>(baseAddress);
-   //}
 
    //! Base value for PCR (excluding MUX value)
    static constexpr uint32_t defaultPcrValue  = I2S_DEFAULT_PCR;
@@ -4480,9 +4432,6 @@ public:
 
    //! Hardware base pointer
    static constexpr HardwarePtr<LLWU_Type> llwu = baseAddress;
-   //__attribute__((always_inline)) static volatile LLWU_Type &llwu() {
-   //   return *reinterpret_cast<LLWU_Type *>(baseAddress);
-   //}
 
    //! Base value for PCR (excluding MUX value)
    static constexpr uint32_t defaultPcrValue = 
@@ -4625,9 +4574,6 @@ public:
 
    //! Hardware base pointer
    static constexpr HardwarePtr<LPTMR_Type> lptmr = baseAddress;
-   //__attribute__((always_inline)) static volatile LPTMR_Type &lptmr() {
-   //   return *reinterpret_cast<LPTMR_Type *>(baseAddress);
-   //}
 
    //! Base value for PCR (excluding MUX value)
    static constexpr uint32_t defaultPcrValue = 
@@ -4790,9 +4736,6 @@ public:
 
    //! Hardware base pointer
    static constexpr HardwarePtr<LPUART_Type> lpuart = baseAddress;
-   //__attribute__((always_inline)) static volatile LPUART_Type &lpuart() {
-   //   return *reinterpret_cast<LPUART_Type *>(baseAddress);
-   //}
 
    //! Number of samples per bit
    static constexpr uint32_t oversampleRatio = 8;
@@ -4945,9 +4888,6 @@ public:
 
    //! Hardware base pointer
    static constexpr HardwarePtr<MCM_Type> mcm = baseAddress;
-   //__attribute__((always_inline)) static volatile MCM_Type &mcm() {
-   //   return *reinterpret_cast<MCM_Type *>(baseAddress);
-   //}
 
    //! IRQ numbers for hardware
    static constexpr IRQn_Type irqNums[]  = MCM_IRQS;
@@ -4988,9 +4928,6 @@ public:
 
    //! Hardware base pointer
    static constexpr HardwarePtr<PDB_Type> pdb = baseAddress;
-   //__attribute__((always_inline)) static volatile PDB_Type &pdb() {
-   //   return *reinterpret_cast<PDB_Type *>(baseAddress);
-   //}
 
    //! Base value for PCR (excluding MUX value)
    static constexpr uint32_t defaultPcrValue = 
@@ -5182,9 +5119,6 @@ public:
 
    //! Hardware base pointer
    static constexpr HardwarePtr<PIT_Type> pit = baseAddress;
-   //__attribute__((always_inline)) static volatile PIT_Type &pit() {
-   //   return *reinterpret_cast<PIT_Type *>(baseAddress);
-   //}
 
    //! IRQ numbers for hardware
    static constexpr IRQn_Type irqNums[]  = PIT_IRQS;
@@ -5317,9 +5251,6 @@ public:
 
    //! Hardware base pointer
    static constexpr HardwarePtr<RCM_Type> rcm = baseAddress;
-   //__attribute__((always_inline)) static volatile RCM_Type &rcm() {
-   //   return *reinterpret_cast<RCM_Type *>(baseAddress);
-   //}
 
    //! Reset Pin Filter Control Register
    static constexpr uint8_t rcm_rpfc = 
@@ -5357,9 +5288,6 @@ public:
 
    //! Hardware base pointer
    static constexpr HardwarePtr<RNGA_Type> rnga = baseAddress;
-   //__attribute__((always_inline)) static volatile RNGA_Type &rnga() {
-   //   return *reinterpret_cast<RNGA_Type *>(baseAddress);
-   //}
 
    //! IRQ numbers for hardware
    static constexpr IRQn_Type irqNums[]  = RNGA_IRQS;
@@ -5422,9 +5350,6 @@ public:
 
    //! Hardware base pointer
    static constexpr HardwarePtr<SMC_Type> smc = baseAddress;
-   //__attribute__((always_inline)) static volatile SMC_Type &smc() {
-   //   return *reinterpret_cast<SMC_Type *>(baseAddress);
-   //}
 
    // Power Mode Protection Register
    static constexpr uint8_t pmprot =  
@@ -5486,9 +5411,6 @@ public:
 
    //! Hardware base pointer
    static constexpr HardwarePtr<SPI_Type> spi = baseAddress;
-   //__attribute__((always_inline)) static volatile SPI_Type &spi() {
-   //   return *reinterpret_cast<SPI_Type *>(baseAddress);
-   //}
 
    //! Base value for PCR (excluding MUX value)
    static constexpr uint32_t defaultPcrValue = 
@@ -5498,6 +5420,15 @@ public:
       PORT_PCR_PFE(0) |   // Passive Filter Enable
       PORT_PCR_SRE(0) |   // Slew Rate Enable
       PORT_PCR_PS(0);     // Pull device
+
+   //! Pin number in Info table for SCK if mapped to a pin
+   static constexpr int sckPin  = 0;
+
+   //! Pin number in Info table for SIN if mapped to a pin
+   static constexpr int sinPin  = 1;
+
+   //! Pin number in Info table for SOUT if mapped to a pin
+   static constexpr int soutPin  = 2;
 
    //! Map all allocated pins on a peripheral when enabled
    static constexpr bool mapPinsOnEnable = true;
@@ -5603,9 +5534,6 @@ public:
 
    //! Hardware base pointer
    static constexpr HardwarePtr<SPI_Type> spi = baseAddress;
-   //__attribute__((always_inline)) static volatile SPI_Type &spi() {
-   //   return *reinterpret_cast<SPI_Type *>(baseAddress);
-   //}
 
    //! Base value for PCR (excluding MUX value)
    static constexpr uint32_t defaultPcrValue = 
@@ -5615,6 +5543,15 @@ public:
       PORT_PCR_PFE(0) |   // Passive Filter Enable
       PORT_PCR_SRE(0) |   // Slew Rate Enable
       PORT_PCR_PS(0);     // Pull device
+
+   //! Pin number in Info table for SCK if mapped to a pin
+   static constexpr int sckPin  = 0;
+
+   //! Pin number in Info table for SIN if mapped to a pin
+   static constexpr int sinPin  = 1;
+
+   //! Pin number in Info table for SOUT if mapped to a pin
+   static constexpr int soutPin  = 2;
 
    //! Map all allocated pins on a peripheral when enabled
    static constexpr bool mapPinsOnEnable = true;
@@ -5742,9 +5679,6 @@ public:
 
    //! Hardware base pointer
    static constexpr HardwarePtr<UART_Type> uart = baseAddress;
-   //__attribute__((always_inline)) static volatile UART_Type &uart() {
-   //   return *reinterpret_cast<UART_Type *>(baseAddress);
-   //}
 
    //! Base value for PCR (excluding MUX value)
    static constexpr uint32_t defaultPcrValue = 
@@ -5859,9 +5793,6 @@ public:
 
    //! Hardware base pointer
    static constexpr HardwarePtr<UART_Type> uart = baseAddress;
-   //__attribute__((always_inline)) static volatile UART_Type &uart() {
-   //   return *reinterpret_cast<UART_Type *>(baseAddress);
-   //}
 
    //! Base value for PCR (excluding MUX value)
    static constexpr uint32_t defaultPcrValue = 
@@ -5987,9 +5918,6 @@ public:
 
    //! Hardware base pointer
    static constexpr HardwarePtr<UART_Type> uart = baseAddress;
-   //__attribute__((always_inline)) static volatile UART_Type &uart() {
-   //   return *reinterpret_cast<UART_Type *>(baseAddress);
-   //}
 
    //! Base value for PCR (excluding MUX value)
    static constexpr uint32_t defaultPcrValue = 
@@ -6113,9 +6041,6 @@ public:
 
    //! Hardware base pointer
    static constexpr HardwarePtr<USB_Type> usb = baseAddress;
-   //__attribute__((always_inline)) static volatile USB_Type &usb() {
-   //   return *reinterpret_cast<USB_Type *>(baseAddress);
-   //}
 
    //! Base value for PCR (excluding MUX value)
    static constexpr uint32_t defaultPcrValue  = 0;
@@ -6222,19 +6147,19 @@ public:
 
    //! Hardware base pointer
    static constexpr HardwarePtr<VREF_Type> vref = baseAddress;
-   //__attribute__((always_inline)) static volatile VREF_Type &vref() {
-   //   return *reinterpret_cast<VREF_Type *>(baseAddress);
-   //}
 
    //! Base value for PCR (excluding MUX value)
    static constexpr uint32_t defaultPcrValue  = 0;
+
+   //! Pin number in Info table for VREF output if mapped to a pin
+   static constexpr int outputPin  = 0;
 
    //! Map all allocated pins on a peripheral when enabled
    static constexpr bool mapPinsOnEnable = false;
 
    static constexpr uint8_t vref_trm = 
-       VREF_TRM_CHOPEN(1) | // Chop oscillator enable
-       VREF_TRM_TRIM(32);   // Trim bits 
+       VREF_TRM_CHOPEN(1); // Chop oscillator enable
+       //                  // Trim bits are preserved
 
    static constexpr uint8_t vref_sc = 
        VREF_SC_VREFEN(1) |   // Internal Voltage Reference enable
@@ -6316,9 +6241,6 @@ public:
 
    //! Hardware base pointer
    static constexpr HardwarePtr<WDOG_Type> wdog = baseAddress;
-   //__attribute__((always_inline)) static volatile WDOG_Type &wdog() {
-   //   return *reinterpret_cast<WDOG_Type *>(baseAddress);
-   //}
 
    //! IRQ numbers for hardware
    static constexpr IRQn_Type irqNums[]  = WDOG_IRQS;

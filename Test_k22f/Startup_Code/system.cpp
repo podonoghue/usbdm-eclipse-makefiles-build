@@ -59,7 +59,7 @@ void* __dso_handle;
 #endif
 
 /**
- *  @brief Low-level initialize the system
+ *  @brief Low-level initialise the system
  *
  *  Low level setup of the microcontroller system. \n
  *  Called very early in the initialisation. \n

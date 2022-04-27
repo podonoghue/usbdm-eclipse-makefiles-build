@@ -182,8 +182,7 @@ protected:
 
 public:
 
-   volatile  SPI_Type * const spi; //!< SPI hardware
-
+   const HardwarePtr<SPI_Type> spi;  //!< SPI hardware
    /**
     * Calculate communication speed factors for SPI
     *
@@ -228,7 +227,7 @@ protected:
     *
     * @param[in]  baseAddress    Base address of SPI
     */
-   Spi(volatile SPI_Type *baseAddress) :
+   Spi(uint32_t baseAddress) :
       spi(baseAddress), pushrMask(0) {
    }
 
@@ -891,12 +890,12 @@ public:
    /**
     * Constructor
     */
-   SpiBase_T() : Spi(reinterpret_cast<volatile SPI_Type*>(&Info::spi())) {
+   SpiBase_T() : Spi(Info::baseAddress) {
 
       // Check pin assignments
-      static_assert(Info::info[0].gpioBit != UNMAPPED_PCR, "SPIx_SCK has not been assigned to a pin - Modify Configure.usbdm");
-      static_assert(Info::info[1].gpioBit != UNMAPPED_PCR, "SPIx_SIN has not been assigned to a pin - Modify Configure.usbdm");
-      static_assert(Info::info[2].gpioBit != UNMAPPED_PCR, "SPIx_SOUT has not been assigned to a pin - Modify Configure.usbdm");
+      static_assert(Info::info[Info::sckPin].gpioBit != UNMAPPED_PCR, "SPIx_SCK has not been assigned to a pin - Modify Configure.usbdm");
+      static_assert(Info::info[Info::sinPin].gpioBit != UNMAPPED_PCR, "SPIx_SIN has not been assigned to a pin - Modify Configure.usbdm");
+      static_assert(Info::info[Info::soutPin].gpioBit != UNMAPPED_PCR, "SPIx_SOUT has not been assigned to a pin - Modify Configure.usbdm");
 
       if (Info::mapPinsOnEnable) {
          configureAllPins();

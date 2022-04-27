@@ -175,6 +175,9 @@ protected:
    /**
     * Construct formatter interface
     */
+#if !defined(__FREE_RTOS) && !defined(__CMSIS_RTOS)
+   __attribute__((naked))
+#endif
    FormattedIO() {
 #if defined (__FREE_RTOS) && ( configSUPPORT_DYNAMIC_ALLOCATION == 1 ) && ( configUSE_RECURSIVE_MUTEXES == 1 )
       mutex = xSemaphoreCreateRecursiveMutex();
@@ -186,6 +189,9 @@ protected:
    /**
     * Destructor
     */
+#if !defined(__FREE_RTOS) && !defined(__CMSIS_RTOS)
+   __attribute__((naked))
+#endif
    virtual ~FormattedIO() {
 #if defined (__FREE_RTOS) && ( configSUPPORT_DYNAMIC_ALLOCATION == 1 ) && ( configUSE_RECURSIVE_MUTEXES == 1 )
       vSemaphoreDelete(mutex);
