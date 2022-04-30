@@ -82,7 +82,7 @@ protected:
     * @return Smart pointer to object implementing the plug-in interface
     */
    static std::shared_ptr<T> createPlugin(std::string dllName, std::string entryPoint="createPluginInstance") {
-      LOGGING_Q;
+      LOGGING;
       if (newInstance == 0) {
          loadClass(dllName.c_str(), entryPoint.c_str());
       }
@@ -90,7 +90,7 @@ protected:
       size_t classSize = (*newInstance)(0);
       //      log.print("Calling new\n");
       T* p = static_cast<T*>(::operator new(classSize));
-      //      log.print("Allocated storage @%p, size = %d\n", p, classSize);
+      log.print("Allocated storage @%p, size = %lu\n", p, (long unsigned)classSize);
       //      log.print("Calling placement constructor\n");
       (*newInstance)(p);
       std::shared_ptr<T> pp(p, deleter);

@@ -5,17 +5,19 @@
  *      Author: podonoghue
  */
 
-#include <stdio.h>
+#include "MemoryDumpDialogue.h"
 
 #include <wx/filedlg.h>
 #include <wx/msgdlg.h>
 #include <wx/tokenzr.h>
 
+#include "ProgressDialogueFactory.h"
+
+#include <stdio.h>
+
 #include "UsbdmSystem.h"
 #include "Names.h"
 #include "HexNumberGridEditor.h"
-#include "MemoryDumpDialogue.h"
-#include "ProgressDialogueFactory.h"
 #include "FlashProgrammer.h"
 
 //! Maximum size of a S-record, should be power of 2
@@ -42,7 +44,7 @@ static const DropDownType CFVx_Speeds[] = {
       {  0,   wxEmptyString },
 };
 
-MemoryDumpDialogue::MemoryDumpDialogue(wxWindow* parent, AppSettingsPtr appSettings) :
+MemoryDumpDialogue::MemoryDumpDialogue(wxWindow* parent, AppSettings &appSettings) :
          MemoryDumpDialogueSkeleton(parent),
          targetType(T_NONE),
          appSettings(appSettings),
@@ -52,6 +54,8 @@ MemoryDumpDialogue::MemoryDumpDialogue(wxWindow* parent, AppSettingsPtr appSetti
          hcs12PPageAddress(0x30),
          hcs12EPageAddress(0x17)
 {
+   LOGGING;
+
    memoryRangesGrid->SetColFormatNumber(2);
    saveToFileButton->Enable(false);
 
@@ -403,53 +407,51 @@ void MemoryDumpDialogue::writeStatus(const char *format, ...) {
 }
 
 void MemoryDumpDialogue::loadSettings() {
-   LOGGING_E;
+   LOGGING;
+   hcs08PPageAddress = appSettings.getValue("hcs08PPageAddress", 0x08);
+   hcs12PPageAddress = appSettings.getValue("hcs12PPageAddress", 0x30);
+   hcs12EPageAddress = appSettings.getValue("hcs12EPageAddress", 0x17);
 
-   hcs08PPageAddress = appSettings->getValue("hcs08PPageAddress", 0x08);
-   hcs12PPageAddress = appSettings->getValue("hcs12PPageAddress", 0x30);
-   hcs12EPageAddress = appSettings->getValue("hcs12EPageAddress", 0x17);
+   currentDirectory = appSettings.getValue("directory", "");
+   currentFilename  = appSettings.getValue("filename", "");
 
-   currentDirectory = appSettings->getValue("directory", "");
-   currentFilename  = appSettings->getValue("filename", "");
+   keepEmptySRECsCheckbox->SetValue(         appSettings.getValue("keepEmptySRECs", false));
+   pagedFlashAddressCheckBox->SetValue(      appSettings.getValue("pagedFlash", false));
+   pagedEepromAddressCheckBox->SetValue(     appSettings.getValue("pagedEeprom", false));
 
-   keepEmptySRECsCheckbox->SetValue(         appSettings->getValue("keepEmptySRECs", false));
-   pagedFlashAddressCheckBox->SetValue(      appSettings->getValue("pagedFlash", false));
-   pagedEepromAddressCheckBox->SetValue(     appSettings->getValue("pagedEeprom", false));
-
-   initializationCheckbox->SetValue(         appSettings->getValue("initializeTarget", false));
-   initialializeTextCntrl->SetValue(wxString(appSettings->getValue("initializationString", "")));
+   initializationCheckbox->SetValue(         appSettings.getValue("initializeTarget", false));
+   initialializeTextCntrl->SetValue(wxString(appSettings.getValue("initializationString", "")));
 
    for (int row = 0; row < memoryRangesGrid->GetNumberRows(); row++) {
       long int start, end, width;
 
       char key[100];
       snprintf(key, sizeof(key), "dataWidth%d", row);
-      width = appSettings->getValue(key, 0);
+      width = appSettings.getValue(key, 0);
       wxString widthValue = wxString::Format("%ld", width);
       memoryRangesGrid->SetCellValue(row, 2, widthValue);
       wxString startValue;
       wxString endValue;
       if (width>0) {
          snprintf(key, sizeof(key), "dataStart%d", row);
-         start = appSettings->getValue(key, 0);
+         start = appSettings.getValue(key, 0);
          startValue = wxString::Format("%lX", start);
 
          snprintf(key, sizeof(key), "dataEnd%d", row);
-         end = appSettings->getValue(key, 0);
+         end = appSettings.getValue(key, 0);
          endValue = wxString::Format("%lX", end);
       }
       memoryRangesGrid->SetCellValue(row, 0, startValue);
       memoryRangesGrid->SetCellValue(row, 1, endValue);
    }
 
-   setTargetType((TargetType_t)appSettings->getValue("targetType", (int)T_ARM));
+   setTargetType((TargetType_t)appSettings.getValue("targetType", (int)T_ARM));
 
-   bdmInterface = BdmInterfaceFactory::createInterface(targetType);
    populateBDMChoices();
    populateInterfaceSpeeds();
 
-   setInterfaceSpeed(appSettings->getValue("interfaceSpeed", 250));
-   setVdd((TargetVddSelect_t)appSettings->getValue("targetVdd", (int)BDM_TARGET_VDD_OFF));
+   setInterfaceSpeed(appSettings.getValue("interfaceSpeed", 250));
+   setVdd((TargetVddSelect_t)appSettings.getValue("targetVdd", (int)BDM_TARGET_VDD_OFF));
 
    update();
 }
@@ -457,16 +459,16 @@ void MemoryDumpDialogue::loadSettings() {
 void MemoryDumpDialogue::saveSettings() {
    LOGGING_E;
 
-   appSettings->addValue("pageAddress", flashPageTextCntrl->GetValue());
-   appSettings->addValue("directory", currentDirectory);
-   appSettings->addValue("filename", currentFilename);
-   appSettings->addValue("keepEmptySRECs", keepEmptySRECsCheckbox->IsChecked());
+   appSettings.addValue("pageAddress", flashPageTextCntrl->GetValue());
+   appSettings.addValue("directory", currentDirectory);
+   appSettings.addValue("filename", currentFilename);
+   appSettings.addValue("keepEmptySRECs", keepEmptySRECsCheckbox->IsChecked());
 
-   appSettings->addValue("targetType",       getTargetType());
-   appSettings->addValue("targetVdd",        getVdd());
-   appSettings->addValue("interfaceSpeed",   getInterfaceSpeed());
-   appSettings->addValue("pagedFlash",       pagedFlashAddressCheckBox->GetValue());
-   appSettings->addValue("pagedEeprom",      pagedEepromAddressCheckBox->GetValue());
+   appSettings.addValue("targetType",       getTargetType());
+   appSettings.addValue("targetVdd",        getVdd());
+   appSettings.addValue("interfaceSpeed",   getInterfaceSpeed());
+   appSettings.addValue("pagedFlash",       pagedFlashAddressCheckBox->GetValue());
+   appSettings.addValue("pagedEeprom",      pagedEepromAddressCheckBox->GetValue());
 
    for (int row = 0; row < memoryRangesGrid->GetNumberRows(); row++) {
       long int start, end, width;
@@ -495,15 +497,15 @@ void MemoryDumpDialogue::saveSettings() {
       char key[100];
       if (valid) {
          snprintf(key, sizeof(key), "dataStart%d", row);
-         appSettings->addValue(key, start);
+         appSettings.addValue(key, start);
          snprintf(key, sizeof(key), "dataEnd%d", row);
-         appSettings->addValue(key, end);
+         appSettings.addValue(key, end);
          snprintf(key, sizeof(key), "dataWidth%d", row);
-         appSettings->addValue(key, width);
+         appSettings.addValue(key, width);
       }
       else {
          snprintf(key, sizeof(key), "dataWidth%d", row);
-         appSettings->addValue(key, 0);
+         appSettings.addValue(key, 0);
       }
    }
    // Save current page value
@@ -523,11 +525,11 @@ void MemoryDumpDialogue::saveSettings() {
          && (this->targetType == T_HCS12)) {
       hcs12EPageAddress = currentValue;
    }
-   appSettings->addValue("hcs08PPageAddress", hcs08PPageAddress);
-   appSettings->addValue("hcs12PPageAddress", hcs12PPageAddress);
-   appSettings->addValue("hcs12EPageAddress", hcs12EPageAddress);
-   appSettings->addValue("initializeTarget", initializationCheckbox->GetValue());
-   appSettings->addValue("initializationString", initialializeTextCntrl->GetValue());
+   appSettings.addValue("hcs08PPageAddress", hcs08PPageAddress);
+   appSettings.addValue("hcs12PPageAddress", hcs12PPageAddress);
+   appSettings.addValue("hcs12EPageAddress", hcs12EPageAddress);
+   appSettings.addValue("initializeTarget", initializationCheckbox->GetValue());
+   appSettings.addValue("initializationString", initialializeTextCntrl->GetValue());
 }
 
 /*
@@ -598,7 +600,7 @@ void MemoryDumpDialogue::update() {
 }
 
 void MemoryDumpDialogue::populateInterfaceSpeeds() {
-
+   LOGGING;
    if (interfaceSpeedControl->IsEnabled()) {
       int maxSpeed;
       switch(bdmInterface->getBdmOptions().targetType) {
@@ -633,11 +635,6 @@ void MemoryDumpDialogue::populateBDMChoices(void) {
 
    // Enumerate all attached BDMs
    bdmInterface->findBDMs(connectedBDMs);
-   if (connectedBDMs.empty()) {
-      bdmDeviceNum = -1;
-      bdmIdentification = wxEmptyString;
-      log.print(" - no BDMs found\n");
-   }
    int deviceCount = connectedBDMs.size();
    bdmSelectChoiceControl->Clear();
 
@@ -650,7 +647,7 @@ void MemoryDumpDialogue::populateBDMChoices(void) {
       bdmSelectChoiceControl->Enable(false);
       bdmDeviceNum = -1;
       bdmIdentification = wxEmptyString;
-      log.print(" - no devices\n");
+      log.print(" - no BDMs found\n");
       return;
    }
    if (bdmDeviceNum >= deviceCount) {
@@ -780,7 +777,6 @@ void MemoryDumpDialogue::setTargetType(TargetType_t targetType) {
    eepromPageTextCntrl->SetValue(wxString::Format("%lX", currentEPageAddress));
 
    bool enableSpeedControl = (targetType == T_ARM) || (targetType == T_CFVx);
-   bdmInterface.reset();
    bdmInterface = BdmInterfaceFactory::createInterface(targetType);
    targetTypeRadioBox->SetSelection(selection);
    pagedFlashAddressCheckBox->Enable(isPagedDevice());

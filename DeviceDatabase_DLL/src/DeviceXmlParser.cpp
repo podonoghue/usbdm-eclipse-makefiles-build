@@ -962,13 +962,11 @@ EraseMethodsPtr DeviceXmlParser::parseEraseMethods(DOMElement *element) {
 ResetMethodsPtr DeviceXmlParser::parseResetMethods(DOMElement *element) {
    LOGGING;
 
-   ResetMethods methods();
-
    // Iterator for <resetMethod method=... /> children
    DOMChildIterator sequenceElementIt(element);
    DOMElement *sequenceElement = sequenceElementIt.getCurrentElement();
 
-   ResetMethods *options = new ResetMethods;
+   ResetMethodsPtr options(new ResetMethods);
 
    if (sequenceElement == NULL) {
       // No <resetMethod> children
@@ -1011,7 +1009,7 @@ ResetMethodsPtr DeviceXmlParser::parseResetMethods(DOMElement *element) {
          }
       }
    }
-   return ResetMethodsPtr(options);
+   return options;
 }
 
 TclScriptConstPtr DeviceXmlParser::parseSequence(DOMElement *sequence) {

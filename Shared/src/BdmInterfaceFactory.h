@@ -43,6 +43,7 @@ public:
     * callback   - Callback to use on error conditions.  May be null to use internal wxWidgets Dialogue
     */
    static BdmInterfacePtr createInterface(TargetType_t targetType, BdmInterface::Callback callback=0) {
+      LOGGING;
       BdmInterfacePtr p;
       switch(targetType) {
          case T_OFF       : p = createPlugin(DLL_NAME("usbdm-interface-arm"), "createDefaultPluginInstance");   break;

@@ -8,5 +8,5 @@ cd usbdm-eclipse-makefiles-build
 sudo ./linuxPackages
 ./MakeAll
 ./CreateDebFile
-sudo ./Update
+sudo ./Install
 

@@ -141,6 +141,16 @@ static void checkRC(USBDM_ErrorCode rc) {
 int UsbdmTclInterpreterImp::main(int argc, char *argv[]) {
    LOGGING;
    try {
+//      Tcl_Obj *initPath = Tcl_NewStringObj("./init.tcl", -1);
+//      Tcl_SetStartupScript(initPath, NULL);
+
+//      Tcl_Obj *initPath = Tcl_GetStartupScript(NULL);
+//      if (initPath == NULL) {
+//         log.print("initPath is NULL\n");
+//      }
+//      else {
+//         log.print("initPath = %s\n", Tcl_GetString(initPath));
+//      }
       Tcl_Main(argc, argv, appInitProc);
       return EXIT_SUCCESS;
    } catch (std::exception &e) {
@@ -482,9 +492,7 @@ int UsbdmTclInterpreterImp::appInitProc(Tcl_Interp *interp) {
    LOGGING;
    MyLock lock;
 
-   if ((Tcl_Init)(interp) == TCL_ERROR) {
-      return TCL_ERROR;
-   }
+   Tcl_Init(interp);
 
    if (Tcl_InitStubs(interp, "8.1", 0) == NULL) {
       return TCL_ERROR;

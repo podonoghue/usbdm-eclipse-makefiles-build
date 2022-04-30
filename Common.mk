@@ -35,9 +35,13 @@ endif
 
 ifeq (,$(UNAME_S))
    $(error ERROR - Unknown OS)
+   UNAME_S   := Windows
+   UNAME_M   := x86_64
+   BITNESS   := 64
+   MULTIARCH := x86_64-win-gnu
 endif
 
-#$(info UNAME_S   = $(UNAME_S))
+#$(info Platform (UNAME_S)   = $(UNAME_S))
 #$(info UNAME_M   = $(UNAME_M))
 #$(info MULTIARCH = $(MULTIARCH))
 #$(info BITNESS   = $(BITNESS))
@@ -83,8 +87,6 @@ ifeq ($(UNAME_S),Windows)
    
    MSYS_HOME_64  := 
    MINGW_HOME    := /mingw$(BITNESS)
-#   MSYS_HOME_64  := C:/Apps/msys64/
-#   MINGW_HOME    := C:/Apps/msys64/mingw$(BITNESS)/
    MSYS_BIN      := $(MSYS_HOME_64)/usr/bin/
    MINGW_BIN     := $(MINGW_HOME)/bin/
    RM            := $(MSYS_BIN)rm -fy
@@ -96,7 +98,7 @@ ifeq ($(UNAME_S),Windows)
    MAKE          := make
    AR            := $(MINGW_BIN)ar
    GCC           := $(MINGW_BIN)gcc
-   GPP           := $(MINGW_BIN)g++ -std=c++0x
+   GPP           := $(MINGW_BIN)g++
    WINDRES       := $(MINGW_BIN)windres  --use-temp-file
 #   WINDRES       := $(MINGW_BIN)windres   --use-temp-file 
    STRIP         := $(MINGW_BIN)strip
@@ -125,7 +127,7 @@ else
    MAKE     := make
    AR       := ar
    GCC      := gcc
-   GPP      := g++ -std=c++0x
+   GPP      := g++
    STRIP    := strip
    STRIPFLAGS := --strip-unneeded
    WINDRES  := 
@@ -188,9 +190,7 @@ endif
 
 #===========================================================
 # Dynamic Library loading
-ifeq ($(UNAME_S),Windows)
-   USBDM_DYNAMIC_LIBS    := -ldl
-else
+ifeq ($(UNAME_S),Linux)
    USBDM_DYNAMIC_LIBS    := -ldl
 endif
 
@@ -217,16 +217,15 @@ endif
 #===========================================================
 # WXWIDGETS
 ifeq ($(UNAME_S),Windows)
-   WXWIDGETS_INC            := $(shell $(MINGW_BIN)/wx-config --cppflags)
-   WXWIDGETS_SHARED_LIBS    := $(shell $(MINGW_BIN)/wx-config --libs)
-#   WXWIDGETS_INC            := '$(shell wx-config --cppflags)'
-#   WXWIDGETS_INC            := `wx-config --cppflags` #$(shell wx-config --cppflags)
-#   WXWIDGETS_SHARED_LIBS    := `wx-config --libs`     #$(shell wx-config --libs)
-   WXWIDGETS_DEFS           := -DuseWxWidgets -D__WXMSW__ -D__GNUWIN32__ -D_UNICODE -DUNICODE
+   WXWIDGETS_INC            := $(shell wx-config --cppflags)
+   WXWIDGETS_SHARED_LIBS    := $(shell wx-config --libs)
+   WXWIDGETS_DEFS           := -DuseWxWidgets -DUNICODE
+
+#  WXWIDGETS_DEFS           := -DuseWxWidgets -D__WXMSW__ -D__GNUWIN32__ -D_UNICODE -DUNICODE
 else
    WXWIDGETS_INC            := $(shell wx-config --cppflags)
-   WXWIDGETS_DEFS           := -DuseWxWidgets
    WXWIDGETS_SHARED_LIBS    := $(shell wx-config --libs)
+   WXWIDGETS_DEFS           := -DuseWxWidgets
    WXWIDGETS_STATIC_LIBDIRS := 
    WXWIDGETS_STATIC_LIBS    := 
 endif
