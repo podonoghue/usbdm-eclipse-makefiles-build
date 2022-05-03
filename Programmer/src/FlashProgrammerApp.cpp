@@ -249,10 +249,9 @@ int FlashProgrammerApp::OnRun(void) {
 
 //      SetTopWindow((wxWindow*)dialogue);
       USBDM_ErrorCode rc =  dialogue->execute(hexFileName);
-      if (rc == BDM_RC_OK) {
+      log.print("dialogue->execute() rc = %d\n", rc);
          // Save changed settings
-         appSettings.save();
-      }
+      appSettings.save();
 //         wxApp::OnRun();
    }
    else {

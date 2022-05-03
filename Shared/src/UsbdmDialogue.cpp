@@ -318,8 +318,8 @@ USBDM_ErrorCode UsbdmDialogue::execute() {
    hideUnusedControls();
    Fit();
    Init();
-
-   return (USBDM_ErrorCode)ShowModal();
+   ShowModal();
+   return (USBDM_ErrorCode)GetReturnCode();
 }
 
 /**
@@ -3204,6 +3204,7 @@ void UsbdmDialogue::OnClose( wxCloseEvent& event ) {
       log.print("done TransferDataFromWindow() - OK\n");
       saveSettings();
    }
+   SetReturnCode(modalReturnValue);
 
    EndModal(modalReturnValue);
 
