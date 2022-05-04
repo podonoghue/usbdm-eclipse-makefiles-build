@@ -115,7 +115,7 @@ typedef enum {
  */
 typedef enum {
   AddrLinear, //<! Linear addresses
-  AddrPaged,  //<! Pages addresses
+  AddrPaged,  //<! Paged addresses
 } AddressType;
 
 /**

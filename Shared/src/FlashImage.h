@@ -150,12 +150,13 @@ public:
    /**
     *  Load a S19 or ELF file into the buffer. \n
     *
-    *  @param filePath      : Path of file to load
-    *  @param clearBuffer   : Clear buffer before loading
+    *  @param filePath           Path of file to load
+    *  @param clearBuffer        Clear buffer before loading
+    *  @param forceLinearToPaged Force conversion  of linear addresses to paged (SREC only)
     *
     *  @return error code see \ref USBDM_ErrorCode
     */
-   virtual USBDM_ErrorCode      loadFile(const std::string &filePath, bool clearBuffer=true) = 0;
+   virtual USBDM_ErrorCode      loadFile(const std::string &filePath, bool clearBuffer, bool forceLinearToPaged ) = 0;
    /**
     *  Save image buffer as a S19 file. \n
     *

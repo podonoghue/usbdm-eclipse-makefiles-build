@@ -2810,7 +2810,7 @@ static int cmd_loadFile(ClientData, Tcl_Interp *interp, int argc, Tcl_Obj *const
    try {
       PRINT("Loading file\n");
       flashImage = FlashImageFactory::createFlashImage(bdmInterface->getBdmOptions().targetType);
-      checkRC(flashImage->loadFile(Tcl_GetString(argv[1])));
+      checkRC(flashImage->loadFile(Tcl_GetString(argv[1]), true, false));
 
    } catch(MyException &e) {
       PRINT("Failed, rc = %s\n", e.what());

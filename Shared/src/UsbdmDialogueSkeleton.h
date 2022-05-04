@@ -78,6 +78,7 @@ class UsbdmDialogueSkeleton : public wxDialog
 		wxStaticText* dllVersionstaticControl;
 		wxPanel* fTargetPanel;
 		wxButton* loadFileButtonControl;
+		wxCheckBox* LinearImageCheckBoxControl;
 		wxCheckBox* incrementalFileLoadCheckBoxControl;
 		wxCheckBox* autoFileReloadCheckBoxControl;
 		wxStaticText* loadedFilenameStaticControl;
@@ -159,6 +160,7 @@ class UsbdmDialogueSkeleton : public wxDialog
 		virtual void OnInterfaceSpeedSelectComboSelected( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnBdmClockSelectRadioboxSelected( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnLoadFileButtonClick( wxCommandEvent& event ) { event.Skip(); }
+		virtual void OnLinearImageCheckboxClick( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnIncrementalFileLoadCheckboxClick( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnAutoFileReloadCheckboxClick( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnDeviceTypeChoiceSelected( wxCommandEvent& event ) { event.Skip(); }

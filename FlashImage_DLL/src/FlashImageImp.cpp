@@ -489,12 +489,13 @@ MemoryPagePtr FlashImageImp::allocatePage(uint32_t pageNum) {
 /**
  *    Load a S19 or ELF file into the buffer. \n
  *
- *  @param filePath     Path of file to load
- *  @param clearBuffer  Clear buffer before loading
+ *  @param filePath           Path of file to load
+ *  @param clearBuffer        Clear buffer before loading
+ *  @param forceLinearToPaged Force conversion  of linear addresses to paged (SREC only)
  *
  *  @return Error code
  */
-USBDM_ErrorCode  FlashImageImp::loadFile(const string &filePath, bool clearBuffer) {
+USBDM_ErrorCode  FlashImageImp::loadFile(const string &filePath, bool clearBuffer, bool forceLinearToPaged) {
    LOGGING_Q;
 
    sourceFilename = "";
@@ -509,7 +510,7 @@ USBDM_ErrorCode  FlashImageImp::loadFile(const string &filePath, bool clearBuffe
    USBDM_ErrorCode rc = loadElfFile(filePath);
    if (rc == SFILE_RC_UNKNOWN_FILE_FORMAT) {
       // Try SREC Format if not recognized
-      rc = loadS1S9File(filePath);
+      rc = loadS1S9File(filePath,forceLinearToPaged);
    }
    if (rc != SFILE_RC_OK) {
       // Try absolute binary image format if not recognized as ELF
@@ -979,7 +980,7 @@ inline bool ends_with(std::string const & value, std::string const & ending) {
    return std::equal(ending.rbegin(), ending.rend(), value.rbegin());
 }
 
-/*
+/**
  *  Load a Absolute binary image file into the buffer. \n
  *
  *  The buffer is cleared to 0xFFFF before loading.  Modified locations will
@@ -1023,17 +1024,28 @@ USBDM_ErrorCode FlashImageImp::loadAbsoluteFile(const string &fileName) {
    return SFILE_RC_OK;
 }
 
-/*
+static uint32_t convertLinearAddressToPaged( uint32_t linearAddress) {
+   uint32_t pagedAddress;
+
+   pagedAddress  = linearAddress&0x3FFF;          // Offset within page
+   pagedAddress |= 0x8000;                        // Start of paged address window
+   pagedAddress |= (linearAddress << 2)&0xFF0000;  // page number
+
+   return pagedAddress;
+}
+
+/**
  *  Load a Freescale S-record file into the buffer. \n
  *
  *  The buffer is cleared to 0xFFFF before loading.  Modified locations will
  *  have a non-0xFF upper byte so used locations can be differentiated. \n
  *
  *  @param fileName Path of file to load
+ *  @param forceLinearToPaged Force conversion  of linear addresses to paged
  *
  *  @return Error code
  */
-USBDM_ErrorCode FlashImageImp::loadS1S9File(const string &fileName) {
+USBDM_ErrorCode FlashImageImp::loadS1S9File(const string &fileName, bool forceLinearToPaged) {
    LOGGING_Q;
    char        *ptr;
    char         buffer[1024];
@@ -1059,9 +1071,14 @@ USBDM_ErrorCode FlashImageImp::loadS1S9File(const string &fileName) {
       // Find first non-blank
       while ((*ptr == ' ') || (*ptr == '\t') || (*ptr == '\n') || (*ptr == '\r'))
          ptr++;
+      if (*ptr == '\0') {
+         // Ignore empty lines
+         continue;
+      }
       // Check if S-record
       if ((*ptr != 'S') && (*ptr != 's')) {
          log.print("- illegal line #%5d-%s", lineNum, buffer);
+         log.print("- Invalid character '%c' (0x%2.2X)", *(ptr), *(ptr));
          if (fileRecognized) {
             return SFILE_RC_ILLEGAL_LINE;
          }
@@ -1107,6 +1124,7 @@ USBDM_ErrorCode FlashImageImp::loadS1S9File(const string &fileName) {
             break;
          default:
             log.print("- illegal line #%5d-%s", lineNum, buffer);
+            log.print("- Invalid SREC type '%c' (0x%2.2X)", *(ptr+1), *(ptr+1));
             if (fileRecognized) {
                return SFILE_RC_ILLEGAL_LINE;
             }
@@ -1116,6 +1134,9 @@ USBDM_ErrorCode FlashImageImp::loadS1S9File(const string &fileName) {
       }
       if (wordAddresses) {
          addr *= 2;
+      }
+      if (forceLinearToPaged) {
+         addr = convertLinearAddressToPaged(addr);
       }
       if (sizeof(uint8_t) == 1) {
          while (srecSize>0) {

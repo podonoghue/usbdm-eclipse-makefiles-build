@@ -201,6 +201,11 @@ UsbdmDialogueSkeleton::UsbdmDialogueSkeleton( wxWindow* parent, wxWindowID id, c
 
 	bSizer16->Add( loadFileButtonControl, 0, wxLEFT|wxRIGHT, 5 );
 
+	LinearImageCheckBoxControl = new wxCheckBox( sbSizer7->GetStaticBox(), wxID_ANY, wxT("Linear Image"), wxDefaultPosition, wxDefaultSize, 0 );
+	LinearImageCheckBoxControl->SetToolTip( wxT("Assumes hex file uses linear flash addresses. \nThis will cause linear addresses to be mapped\n to paged addresses when loading SREC files.") );
+
+	bSizer16->Add( LinearImageCheckBoxControl, 0, wxALL, 5 );
+
 	incrementalFileLoadCheckBoxControl = new wxCheckBox( sbSizer7->GetStaticBox(), wxID_ANY, wxT("Incremental Load"), wxDefaultPosition, wxDefaultSize, 0 );
 	incrementalFileLoadCheckBoxControl->SetToolTip( wxT("Load new files without clearing flash image buffer") );
 
@@ -677,6 +682,7 @@ UsbdmDialogueSkeleton::UsbdmDialogueSkeleton( wxWindow* parent, wxWindowID id, c
 	interfaceSpeedControl->Connect( wxEVT_COMMAND_CHOICE_SELECTED, wxCommandEventHandler( UsbdmDialogueSkeleton::OnInterfaceSpeedSelectComboSelected ), NULL, this );
 	bdmClockSelectControl->Connect( wxEVT_COMMAND_RADIOBOX_SELECTED, wxCommandEventHandler( UsbdmDialogueSkeleton::OnBdmClockSelectRadioboxSelected ), NULL, this );
 	loadFileButtonControl->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( UsbdmDialogueSkeleton::OnLoadFileButtonClick ), NULL, this );
+	LinearImageCheckBoxControl->Connect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( UsbdmDialogueSkeleton::OnLinearImageCheckboxClick ), NULL, this );
 	incrementalFileLoadCheckBoxControl->Connect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( UsbdmDialogueSkeleton::OnIncrementalFileLoadCheckboxClick ), NULL, this );
 	autoFileReloadCheckBoxControl->Connect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( UsbdmDialogueSkeleton::OnAutoFileReloadCheckboxClick ), NULL, this );
 	deviceTypeChoiceControl->Connect( wxEVT_COMMAND_CHOICE_SELECTED, wxCommandEventHandler( UsbdmDialogueSkeleton::OnDeviceTypeChoiceSelected ), NULL, this );
@@ -733,6 +739,7 @@ UsbdmDialogueSkeleton::~UsbdmDialogueSkeleton()
 	interfaceSpeedControl->Disconnect( wxEVT_COMMAND_CHOICE_SELECTED, wxCommandEventHandler( UsbdmDialogueSkeleton::OnInterfaceSpeedSelectComboSelected ), NULL, this );
 	bdmClockSelectControl->Disconnect( wxEVT_COMMAND_RADIOBOX_SELECTED, wxCommandEventHandler( UsbdmDialogueSkeleton::OnBdmClockSelectRadioboxSelected ), NULL, this );
 	loadFileButtonControl->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( UsbdmDialogueSkeleton::OnLoadFileButtonClick ), NULL, this );
+	LinearImageCheckBoxControl->Disconnect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( UsbdmDialogueSkeleton::OnLinearImageCheckboxClick ), NULL, this );
 	incrementalFileLoadCheckBoxControl->Disconnect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( UsbdmDialogueSkeleton::OnIncrementalFileLoadCheckboxClick ), NULL, this );
 	autoFileReloadCheckBoxControl->Disconnect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( UsbdmDialogueSkeleton::OnAutoFileReloadCheckboxClick ), NULL, this );
 	deviceTypeChoiceControl->Disconnect( wxEVT_COMMAND_CHOICE_SELECTED, wxCommandEventHandler( UsbdmDialogueSkeleton::OnDeviceTypeChoiceSelected ), NULL, this );

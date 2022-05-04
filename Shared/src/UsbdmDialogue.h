@@ -64,6 +64,7 @@ protected:
       HAS_SECURITY_FILE       = 1<<15, // Security options
       HAS_RESET_CHOICES       = 1<<16, // Reset has multiple methods (e.g. kinetis)
       HAS_SOUNDS              = 1<<17, // Sounds option
+      HAS_LINEAR_IMAGE        = 1<<18, // Force image to be linear even though only paged address programming supported
 
       // Mode of dialogue
       IS_GDB_SERVER           = 1<<29, // GDB Server dialogue (GDB Port options)
@@ -95,6 +96,7 @@ protected:
 
    // Handlers for Target page
    virtual void OnLoadFileButtonClick( wxCommandEvent&  event ) override;
+   virtual void OnLinearImageCheckboxClick( wxCommandEvent&  event ) override;
    virtual void OnIncrementalFileLoadCheckboxClick( wxCommandEvent&  event ) override;
    virtual void OnAutoFileReloadCheckboxClick( wxCommandEvent&  event ) override;
    virtual void OnDeviceTypeChoiceSelected( wxCommandEvent&  event ) override;
@@ -174,7 +176,7 @@ protected:
 
    void                    setDeviceIndex(int newDeviceIndex);
    USBDM_ErrorCode         autoDetectTargetDevice(void);
-   USBDM_ErrorCode         loadHexFile( wxString hexFilename, bool clearBuffer );
+   USBDM_ErrorCode         loadHexFile( wxString hexFilename, bool clearBuffer, bool forceLinearToPaged );
    USBDM_ErrorCode         checkFileChange(void);
    USBDM_ErrorCode         programFlash(bool loadAndGo = false);
    USBDM_ErrorCode         verifyFlash(void);
@@ -204,6 +206,7 @@ protected:
    bool                          doFilterByChipId;                   //!< For dialogue handling - Filter by SDID
    std::map<uint32_t,uint32_t>   filterChipIds;                      //!< The SDIDs being filtered by
    bool                          incrementalLoad;                    //!< Don't clear buffer when loading a file
+   bool                          forcelinearToPagedImage = 0;        //!< Force conversion  of linear addresses to paged on file load
    bool                          autoFileLoad;                       //!< Auto load changed files before programming
    DeviceData::EraseMethod       initialEraseMethod;                 //!< Initial erase setting loaded
    DeviceData::ResetMethod       initialResetMethod;                 //!< Initial reset setting loaded

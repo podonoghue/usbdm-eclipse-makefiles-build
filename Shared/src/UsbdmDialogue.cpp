@@ -58,7 +58,7 @@ wxProgressDialog *UsbdmDialogue::progressDialogue = NULL;
 
 //! Used to control features in dialogue according to target type
 const uint32_t UsbdmDialogue::targetPropertyFlags[] = {
-/*  0 HCS12     */  HAS_MASS_ERASE|HAS_SELECTIVE_ERASE|HAS_PROBE_SECURED|HAS_CLK_SW|HAS_GUESS_SPEED,
+/*  0 HCS12     */  HAS_MASS_ERASE|HAS_SELECTIVE_ERASE|HAS_PROBE_SECURED|HAS_CLK_SW|HAS_GUESS_SPEED|HAS_LINEAR_IMAGE,
 /*  1 HCS08     */  HAS_MASS_ERASE|HAS_SELECTIVE_ERASE|HAS_PROBE_SECURED|HAS_CLK_SW|HAS_OPTIONAL_RESET|HAS_TRIM|HAS_MASK_INTERRUPTS,
 /*  2 RS08      */  HAS_MASS_ERASE|                    HAS_PROBE_SECURED|HAS_CLK_SW|HAS_OPTIONAL_RESET|HAS_TRIM,
 /*  3 CFV1      */  HAS_MASS_ERASE|HAS_SELECTIVE_ERASE|                  HAS_CLK_SW|HAS_OPTIONAL_RESET|HAS_TRIM|HAS_NVM_EEEPROM,
@@ -204,6 +204,7 @@ UsbdmDialogue::UsbdmDialogue(
 
    deviceChanged           = true;
    incrementalLoad         = false;
+   forcelinearToPagedImage = false;
    sound                   = false;
    flashprogrammer         = FlashProgrammerPtr();
    fileLoadTime            = 0;
@@ -262,6 +263,7 @@ void UsbdmDialogue::Init() {
    doFilterByChipId           = false;
    filterChipIds.clear();
    incrementalLoad            = false;
+   forcelinearToPagedImage    = false;
    autoFileLoad               = false;
    fileLoaded                 = false;
    doTrim                     = false;
@@ -337,7 +339,7 @@ USBDM_ErrorCode UsbdmDialogue::execute(wxString const &hexFilename) {
    hideUnusedControls();
    Fit();
    Init();
-   if (!hexFilename.IsEmpty() && (loadHexFile(hexFilename, true) != PROGRAMMING_RC_OK)) {
+   if (!hexFilename.IsEmpty() && (loadHexFile(hexFilename, true, false) != PROGRAMMING_RC_OK)) {
       log.print(" - Failed to load Hex file\n");
    }
 
@@ -495,6 +497,9 @@ std::string UsbdmDialogue::update() {
       // PST feature not utilised
       bdmInterface->getBdmOptions().usePSTSignals = false;
    }
+   LinearImageCheckBoxControl->SetValue((targetProperties & HAS_LINEAR_IMAGE) && forcelinearToPagedImage);
+   LinearImageCheckBoxControl->Show(targetProperties & HAS_LINEAR_IMAGE);
+   LinearImageCheckBoxControl->Enable(targetProperties & HAS_LINEAR_IMAGE);
    if (targetProperties & HAS_GUESS_SPEED) {
       // Guess speed control is present
       guessTargetSpeedControl->SetValue(bdmInterface->getBdmOptions().guessSpeed);
@@ -1547,13 +1552,13 @@ LOGGING;
    return BDM_RC_OK;
 }
 
-USBDM_ErrorCode UsbdmDialogue::loadHexFile( wxString hexFilename, bool clearBuffer ) {
+USBDM_ErrorCode UsbdmDialogue::loadHexFile( wxString hexFilename, bool clearBuffer, bool forceLinearToPaged ) {
    LOGGING_Q;
    USBDM_ErrorCode rc;
 
    log.print("(%s)\n", (const char *)hexFilename.ToAscii());
    loadedFilenameStaticControl->SetLabel(_("Loading File"));
-   rc = flashImage->loadFile((const char*)hexFilename.mb_str(wxConvUTF8), clearBuffer);
+   rc = flashImage->loadFile((const char*)hexFilename.mb_str(wxConvUTF8), clearBuffer, forceLinearToPaged);
    if (rc != BDM_RC_OK) {
       wxMessageBox(_("Failed to read S-File.\n") +
                      hexFilename +
@@ -1622,7 +1627,7 @@ USBDM_ErrorCode UsbdmDialogue::checkFileChange(void) {
       }
       // Auto-reload changed file
       log.print("Auto-reloading file\n");
-      return loadHexFile(lastFileLoaded, !incrementalLoad);
+      return loadHexFile(lastFileLoaded, !incrementalLoad, forcelinearToPagedImage);
    }
    else { // !autoFileLoad
       if (currentFileTime == -1) {
@@ -1643,7 +1648,7 @@ USBDM_ErrorCode UsbdmDialogue::checkFileChange(void) {
        }
        // Reload file non user OK
        log.print("Reloading file after user confirmation\n");
-       return loadHexFile(lastFileLoaded, !incrementalLoad);
+       return loadHexFile(lastFileLoaded, !incrementalLoad, forcelinearToPagedImage);
    }
 }
 
@@ -2686,8 +2691,16 @@ void UsbdmDialogue::OnLoadFileButtonClick( wxCommandEvent& event ) {
       return;
    }
    currentDirectory = dialog.GetDirectory();
-   loadHexFile(dialog.GetPath(), !incrementalLoad || !fileLoaded);
+   loadHexFile(dialog.GetPath(), !incrementalLoad || !fileLoaded, forcelinearToPagedImage);
    update();
+}
+
+/** Handler for OnLinearImageCheckboxClick
+ *
+ *  @param event The event to handle
+ */
+void UsbdmDialogue::OnLinearImageCheckboxClick( wxCommandEvent& event ) {
+   forcelinearToPagedImage = event.IsChecked();
 }
 
 /** Handler for OnIncrementalFileLoadCheckbox
