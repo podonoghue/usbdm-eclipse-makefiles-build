@@ -2,14 +2,14 @@
 #  Note: HEX numbers must be lower case - yes really!!!!
 #
 # Allow unrestricted access to various BDMs (including USBDM & JS16 bootloader)
-ATTR{idVendor}=="0425", ATTR{idProduct}=="1000", SYMLINK+="usbdm-tbdml%n",     MODE:="0666"
-ATTR{idVendor}=="0425", ATTR{idProduct}=="1001", SYMLINK+="usbdm-tblcf%n",     MODE:="0666"
-ATTR{idVendor}=="0425", ATTR{idProduct}=="ff02", SYMLINK+="JB16_Bootloader%n", MODE:="0666"
-ATTR{idVendor}=="15a2", ATTR{idProduct}=="0021", SYMLINK+="usbdm-osbdm%n",     MODE:="0666"
-ATTR{idVendor}=="15a2", ATTR{idProduct}=="0038", SYMLINK+="JS16_Bootloader%n", MODE:="0666"
-ATTR{idVendor}=="16d0", ATTR{idProduct}=="0567", SYMLINK+="usbdm%n",           MODE:="0666"
-ATTR{idVendor}=="16d0", ATTR{idProduct}=="06a5", SYMLINK+="usbdm%n",           MODE:="0666"
+SUBSYSTEM=="usb", ATTR{idVendor}=="0425", ATTR{idProduct}=="1000", SYMLINK+="usbdm-tbdml%n",     TAG+="uaccess"
+SUBSYSTEM=="usb", ATTR{idVendor}=="0425", ATTR{idProduct}=="1001", SYMLINK+="usbdm-tblcf%n",     TAG+="uaccess"
+SUBSYSTEM=="usb", ATTR{idVendor}=="0425", ATTR{idProduct}=="ff02", SYMLINK+="JB16_Bootloader%n", TAG+="uaccess"
+SUBSYSTEM=="usb", ATTR{idVendor}=="15a2", ATTR{idProduct}=="0021", SYMLINK+="usbdm-osbdm%n",     TAG+="uaccess"
+SUBSYSTEM=="usb", ATTR{idVendor}=="15a2", ATTR{idProduct}=="0038", SYMLINK+="JS16_Bootloader%n", TAG+="uaccess"
+SUBSYSTEM=="usb", ATTR{idVendor}=="16d0", ATTR{idProduct}=="0567", SYMLINK+="usbdm%n",           TAG+="uaccess"
+SUBSYSTEM=="usb", ATTR{idVendor}=="16d0", ATTR{idProduct}=="06a5", SYMLINK+="usbdm%n",           TAG+="uaccess"
 #
 # Allow unrestricted access to USBDM CDC serial port (named ttyUsbdm0 ...)
-SUBSYSTEM=="tty", ATTRS{idVendor}=="16d0", MODE="0666", SYMLINK+="ttyUsbdm%n"
+SUBSYSTEM=="tty", ATTRS{idVendor}=="16d0", TAG+="uaccess", SYMLINK+="ttyUsbdm%n"
 #
