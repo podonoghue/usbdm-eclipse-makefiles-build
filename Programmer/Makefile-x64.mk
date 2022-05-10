@@ -1,4 +1,3 @@
-
 include ../Common.mk
 
 TARGET = UsbdmFlashProgrammer

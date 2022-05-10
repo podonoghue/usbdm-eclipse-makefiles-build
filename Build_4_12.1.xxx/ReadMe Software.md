@@ -8,6 +8,19 @@ See instructions on this page [GitHub](https://github.com/podonoghue/usbdm-eclip
 *******
 # History
 
+*******  
+USBDM V4_12_1_275 (May 2022) 
+
+- Added linear flash image to HCS12 programmer 
+
+Note that this installer is not signed as I cannot justify paying money for the required signing certificate.
+
+*******  
+USBDM V4_12_1_270 (May 2022) 
+
+- Fixes for HCS12 programmer 
+
+Note that this installer is not signed as I cannot justify paying money for the required signing certificate.
 
 *******  
 USBDM V4_12_1_262 (July 2018) 

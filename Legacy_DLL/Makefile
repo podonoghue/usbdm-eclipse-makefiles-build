@@ -1,40 +1,40 @@
 include ../Common.mk
 
 tbdml:
-	@echo ''
-	@echo  Building $@ 32-bit
-	@echo "================================================================"
-	$(MAKE) dll -f Target.mk BUILDDIR=$@ TARGET=$@ MODULE=tbdml CDEFS='-DLEGACY_DLL_EXPORTS -DTBDML -DGDI' BITNESS=32
+	$(info )
+	$(info Building $@ 32-bit)
+	$(info ================================================================)
+	$(MAKE) dll -f Target.mk BUILDDIR=$@ TARGET=$@ MODULE=tbdml CDEFS="-DLEGACY_DLL_EXPORTS -DTBDML -DGDI" BITNESS=32
 
 tbdml-debug:
-	@echo ''
-	@echo  Building $@ 32-bit
-	@echo "================================================================"
-	$(MAKE) dll -f Target.mk BUILDDIR=$@ TARGET=$@ MODULE=tbdml CDEFS='-DLEGACY_DLL_EXPORTS -DTBDML -DGDI' DEBUG='Y' BITNESS=32
+	$(info )
+	$(info Building $@ 32-bit)
+	$(info ================================================================)
+	$(MAKE) dll -f Target.mk BUILDDIR=$@ TARGET=$@ MODULE=tbdml CDEFS="-DLEGACY_DLL_EXPORTS -DTBDML -DGDI" DEBUG='Y' BITNESS=32
 
 TestTbdml-debug:
-	@echo ''
-	@echo  Building $@ 32-bit
-	@echo "================================================================"
-	$(MAKE) exe -f Target.mk BUILDDIR=$@ TARGET=$@ MODULE=tbdml-exe CDEFS='-DLEGACY_DLL_EXPORTS -DTBDML -DGDI -DTEST_APP' DEBUG='Y' BITNESS=32
+	$(info )
+	$(info Building $@ 32-bit)
+	$(info ================================================================)
+	$(MAKE) exe -f Target.mk BUILDDIR=$@ TARGET=$@ MODULE=tbdml-exe CDEFS="-DLEGACY_DLL_EXPORTS -DTBDML -DGDI -DTEST_APP" DEBUG='Y' BITNESS=32
 
 opensourcebdm:
-	@echo ''
-	@echo  Building $@ 32-bit
-	@echo "================================================================"
-	$(MAKE) dll -f Target.mk BUILDDIR=$@ TARGET=$@ MODULE=osbdm CDEFS='-DLEGACY_DLL_EXPORTS -DOSBDM -DGDI' BITNESS=32
+	$(info )
+	$(info Building $@ 32-bit)
+	$(info ================================================================)
+	$(MAKE) dll -f Target.mk BUILDDIR=$@ TARGET=$@ MODULE=osbdm CDEFS="-DLEGACY_DLL_EXPORTS -DOSBDM -DGDI" BITNESS=32
 
 opensourcebdm-debug:
-	@echo ''
-	@echo  Building $@ 32-bit
-	@echo "================================================================"
-	$(MAKE) dll -f Target.mk BUILDDIR=$@ TARGET=$@ MODULE=osbdm CDEFS='-DLEGACY_DLL_EXPORTS -DOSBDM -DGDI' DEBUG='Y' BITNESS=32
+	$(info )
+	$(info Building $@ 32-bit)
+	$(info ================================================================)
+	$(MAKE) dll -f Target.mk BUILDDIR=$@ TARGET=$@ MODULE=osbdm CDEFS="-DLEGACY_DLL_EXPORTS -DOSBDM -DGDI" DEBUG='Y' BITNESS=32
 
 TestOpensourcebdm-debug:
-	@echo ''
-	@echo  Building $@ 32-bit
-	@echo "================================================================"
-	$(MAKE) exe -f Target.mk BUILDDIR=$@ TARGET=$@ MODULE=osbdm-exe CDEFS='-DLEGACY_DLL_EXPORTS -DOSBDM -DGDI -DTEST_APP' DEBUG='Y' BITNESS=32
+	$(info )
+	$(info Building $@ 32-bit)
+	$(info ================================================================)
+	$(MAKE) exe -f Target.mk BUILDDIR=$@ TARGET=$@ MODULE=osbdm-exe CDEFS="-DLEGACY_DLL_EXPORTS -DOSBDM -DGDI -DTEST_APP" DEBUG='Y' BITNESS=32
 
 all: tbdml tbdml-debug TestTbdml-debug
 all: opensourcebdm opensourcebdm-debug TestOpensourcebdm-debug
