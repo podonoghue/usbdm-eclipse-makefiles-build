@@ -25,7 +25,7 @@ protected:
   TargetType_t                targetType;
   FlashImagePtr               flashImage;
   BdmInterfacePtr             bdmInterface;
-  AppSettings                 &appSettings;
+  AppSettings                 &fAppSettings;
   std::vector<BdmInformation> connectedBDMs;       //!< Table of connected BDMs
   int                         bdmDeviceNum;        //!< Index of current BDM in BDM table and drop-down
   wxString                    bdmIdentification;   //!< ID of current BDM
@@ -42,6 +42,9 @@ protected:
   virtual void OnInitializationCheckboxChange( wxCommandEvent& event ) override;
   virtual void OnPagedCheckBoxEvent( wxCommandEvent& event ) override;
   virtual void OnPageAddressChange( wxCommandEvent& event ) override;
+  virtual void OnLoadSettingsClick(wxCommandEvent &event) override;
+  virtual void OnSaveSettingsClick(wxCommandEvent &event) override;
+
   virtual void populateBDMChoices();
   virtual void populateInterfaceSpeeds();
   virtual void update();
@@ -61,11 +64,13 @@ protected:
   void clearStatus();
   void writeStatus(const char *format, ...) __attribute__ ((format (printf, 2, 3)));
 
-  void loadSettings();
-  void saveSettings();
+  void loadSettings(AppSettings &appSettings);
+  void saveSettings(AppSettings &appSettings);
 
   wxString      currentDirectory;
   wxString      currentFilename;
+  wxString      currentSettingsDirectory;
+  wxString      currentSettingsFilename;
 
   uint8_t  hcs08PPageAddress;
   uint8_t  hcs12PPageAddress;

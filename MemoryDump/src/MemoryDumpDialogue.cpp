@@ -47,7 +47,7 @@ static const DropDownType CFVx_Speeds[] = {
 MemoryDumpDialogue::MemoryDumpDialogue(wxWindow* parent, AppSettings &appSettings) :
          MemoryDumpDialogueSkeleton(parent),
          targetType(T_NONE),
-         appSettings(appSettings),
+         fAppSettings(appSettings),
          bdmDeviceNum(-1),
          bdmCapabilities(BDM_CAP_NONE),
          hcs08PPageAddress(0x08),
@@ -77,13 +77,13 @@ MemoryDumpDialogue::MemoryDumpDialogue(wxWindow* parent, AppSettings &appSetting
 
 MemoryDumpDialogue::~MemoryDumpDialogue() {
    LOGGING;
-   saveSettings();
+   saveSettings(fAppSettings);
 }
 
 int  MemoryDumpDialogue::ShowModal() {
-   loadSettings();
+   loadSettings(fAppSettings);
    int rc = MemoryDumpDialogueSkeleton::ShowModal();
-   saveSettings();
+   saveSettings(fAppSettings);
    return rc;
 }
 /**
@@ -125,13 +125,17 @@ void MemoryDumpDialogue::OnReadMemoryButtonClick( wxCommandEvent& event ) {
    writeStatus("Creating Empty flash image...\n");
    flashImage = FlashImageFactory::createFlashImage(targetType);
 
-   writeStatus("Changing interface options...\n");
    bdmInterface->getBdmOptions().targetVdd = getVdd();
    bdmInterface->getBdmOptions().interfaceFrequency = getInterfaceSpeed();
 
    if (targetType == T_ARM) {
       bdmInterface->getBdmOptions().interfaceFrequency = 12000;
    }
+   writeStatus("Interface options: %s, %s, speed = %d\n",
+         getTargetTypeName(bdmInterface->getBdmOptions().targetType),
+         getVoltageSelectName(bdmInterface->getBdmOptions().targetVdd),
+         bdmInterface->getBdmOptions().interfaceFrequency);
+
    USBDM_ErrorCode rc = BDM_RC_OK;
    do {
       rc = bdmInterface->initBdm();
@@ -406,7 +410,7 @@ void MemoryDumpDialogue::writeStatus(const char *format, ...) {
    va_end(list);
 }
 
-void MemoryDumpDialogue::loadSettings() {
+void MemoryDumpDialogue::loadSettings(AppSettings &appSettings) {
    LOGGING;
    hcs08PPageAddress = appSettings.getValue("hcs08PPageAddress", 0x08);
    hcs12PPageAddress = appSettings.getValue("hcs12PPageAddress", 0x30);
@@ -414,6 +418,9 @@ void MemoryDumpDialogue::loadSettings() {
 
    currentDirectory = appSettings.getValue("directory", "");
    currentFilename  = appSettings.getValue("filename", "");
+
+   currentSettingsDirectory = appSettings.getValue("settingsDirectory", "");
+   currentSettingsFilename  = appSettings.getValue("settingsFilename", "");
 
    keepEmptySRECsCheckbox->SetValue(         appSettings.getValue("keepEmptySRECs", false));
    pagedFlashAddressCheckBox->SetValue(      appSettings.getValue("pagedFlash", false));
@@ -456,12 +463,17 @@ void MemoryDumpDialogue::loadSettings() {
    update();
 }
 
-void MemoryDumpDialogue::saveSettings() {
+void MemoryDumpDialogue::saveSettings(AppSettings &appSettings) {
    LOGGING_E;
 
    appSettings.addValue("pageAddress", flashPageTextCntrl->GetValue());
+
    appSettings.addValue("directory", currentDirectory);
    appSettings.addValue("filename", currentFilename);
+
+   appSettings.addValue("settingsDirectory", currentSettingsDirectory);
+   appSettings.addValue("settingsFilename", currentSettingsFilename);
+
    appSettings.addValue("keepEmptySRECs", keepEmptySRECsCheckbox->IsChecked());
 
    appSettings.addValue("targetType",       getTargetType());
@@ -834,6 +846,46 @@ void MemoryDumpDialogue::OnPagedCheckBoxEvent( wxCommandEvent& event ) {
  *  @param event The event to handle
  */
 void MemoryDumpDialogue::OnPageAddressChange( wxCommandEvent& event ) {
-
 }
 
+void MemoryDumpDialogue::OnLoadSettingsClick(wxCommandEvent &event) {
+   LOGGING;
+
+   wxString caption  = _("Select location for range settings");
+   wxString wildcard = _("Settings|*.cfg");
+   wxFileDialog dialog(this, caption, currentSettingsDirectory, currentSettingsFilename, wildcard, wxFD_OPEN);
+   int getCancelOK = dialog.ShowModal();
+   if (getCancelOK != wxID_OK) {
+      return;
+   }
+   string filePath(dialog.GetPath());
+   log.print("Custom range settings path     = \'%s\'\n", (const char *)filePath.c_str());
+
+   AppSettings appSettings(filePath, "Range Settings");
+   appSettings.load();
+   loadSettings(appSettings);
+
+   // Done here in case settings include these values
+   currentSettingsDirectory = dialog.GetDirectory();
+   currentSettingsFilename  = dialog.GetFilename();
+}
+
+void MemoryDumpDialogue::OnSaveSettingsClick(wxCommandEvent &event) {
+   LOGGING;
+
+   wxString caption  = _("Select save location for range settings");
+   wxString wildcard = _("Settings|*.cfg");
+   wxFileDialog dialog(this, caption, currentSettingsDirectory, currentSettingsFilename, wildcard, wxFD_SAVE);
+   int getCancelOK = dialog.ShowModal();
+   if (getCancelOK != wxID_OK) {
+      return;
+   }
+   currentSettingsDirectory = dialog.GetDirectory();
+   currentSettingsFilename  = dialog.GetFilename();
+   string filePath(dialog.GetPath());
+   log.print("Custom settings path     = \'%s\'\n", (const char *)filePath.c_str());
+
+   AppSettings appSettings(filePath, "Range Settings");
+   saveSettings(appSettings);
+   appSettings.save();
+}
