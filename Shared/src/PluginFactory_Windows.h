@@ -1,4 +1,4 @@
-/*! \file
+/*! \file PluginFactory_Windows.h
     \brief Base PluginFactory for Windows
 
     \verbatim
@@ -51,12 +51,13 @@ class PluginFactory {
 protected:
    static std::string   dllName;
    static MODULE_HANDLE moduleHandle;
-   static size_t        (* STD__LINKAGE newInstance)(T*, ...);
    static int           instanceCount;
+   static size_t        (* STD__LINKAGE newInstance)(T*, ...);
 
    PluginFactory() {};
    ~PluginFactory() {};
 
+protected:
    /**
     * Destructor to delete plug-in interface object
     *
@@ -81,10 +82,15 @@ protected:
     *
     * @return Smart pointer to object implementing the plug-in interface
     */
-   static std::shared_ptr<T> createPlugin(std::string dllName, std::string entryPoint="createPluginInstance") {
+   static std::shared_ptr<T> createPlugin(std::string newDllName, std::string entryPoint="createPluginInstance") {
       LOGGING;
+      if ((newInstance != 0) && (newDllName != dllName)) {
+         // Different BDM interface type
+         unloadClass();
+      }
       if (newInstance == 0) {
-         loadClass(dllName.c_str(), entryPoint.c_str());
+         loadClass(newDllName.c_str(), entryPoint.c_str());
+         dllName = newDllName;
       }
       //      log.print("Getting size\n");
       size_t classSize = (*newInstance)(0);
@@ -118,9 +124,9 @@ protected:
       }
       UsbdmSystem::Log::print("System Error: %s", buffer);
    }
-
 };
 
+template <class T> std::string   PluginFactory<T>::dllName;
 template <class T> MODULE_HANDLE PluginFactory<T>::moduleHandle = 0;
 template <class T> size_t (*STD__LINKAGE PluginFactory<T>::newInstance)(T*, ...) = 0;
 template <class T> int  PluginFactory<T>::instanceCount = 0;
@@ -144,23 +150,29 @@ void PluginFactory<T>::loadClass(const char *moduleName, const char *createInsta
       throw MyException("Module already loaded\n");
    }
 
+   // Load using default library path (executable directory)
    moduleHandle = LoadLibraryA(moduleName);
 
    if (moduleHandle == NULL) {
-      log.print("Module \'%s\' failed to load! Retrying...\n", moduleName);
+      log.error("Module \'%s\' failed to load using default path! Retrying...\n", moduleName);
       printSystemErrorMessage();
 
-      string extendedPath = UsbdmSystem::getApplicationPath("");
-      log.print("Trying extended search path \'%s\'\n", extendedPath.c_str());
-      SetDllDirectoryA((const char *)extendedPath.c_str());
+      // Try to find module in application directory
+      string extendedPath = UsbdmSystem::getApplicationPath(moduleName);
 
+      size_t pos = extendedPath.rfind("\\");
+      if (pos != string::npos) {
+         extendedPath = extendedPath.substr(0, pos);
+      }
+      log.error("Trying in application directory \'%s\'\n", extendedPath.c_str());
+      SetDllDirectoryA(extendedPath.c_str());
       moduleHandle = LoadLibraryA(moduleName);
       SetDllDirectoryA((const char *)0);
 
       if (moduleHandle == NULL) {
          log.error("Module \'%s\' failed to load\n", moduleName);
          printSystemErrorMessage();
-         throw MyException(std::string("Module \'").append(moduleName).append("\' failed to load\n"));
+         throw MyException(std::string("Module \'").append(moduleName).append("\' failed to load (Windows)\n"));
       }
    }
    log.print("Module \'%s\' loaded @0x%p, handle cached @%p\n", moduleName, moduleHandle, &moduleHandle);

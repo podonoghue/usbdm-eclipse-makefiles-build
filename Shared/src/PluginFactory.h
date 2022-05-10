@@ -47,7 +47,7 @@
 #endif
 
 #ifdef _WIN32
-#include "PluginFactory_WIN32.h"
+#include "PluginFactory_Windows.h"
 #else
 #include "PluginFactory_Linux.h"
 #endif

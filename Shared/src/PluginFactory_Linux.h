@@ -1,4 +1,4 @@
-/*! \file
+/*! \file PluginFactory_Linux
     \brief Base PluginFactory for Linux
 
     \verbatim
@@ -59,7 +59,7 @@ protected:
     * @param p object to delete
     */
    static void deleter(T *p) {
-      LOGGING;
+      LOGGING_Q;
       log.print("Calling destructor\n");
       p->~T();
       log.print("Deallocating storage @%p\n", p);
@@ -77,10 +77,15 @@ protected:
     *
     * @return Smart pointer to object implementing the plug-in interface
     */
-   static std::shared_ptr<T> createPlugin(std::string dllName, std::string entryPoint="createPluginInstance") {
+   static std::shared_ptr<T> createPlugin(std::string newDllName, std::string entryPoint="createPluginInstance") {
       LOGGING;
+      if ((newInstance != 0) && (newDllName != dllName)) {
+         // Different BDM interface type
+         unloadClass();
+      }
       if (newInstance == 0) {
-         loadClass(dllName.c_str(), entryPoint.c_str());
+         loadClass(newDllName.c_str(), entryPoint.c_str());
+         dllName = newDllName;
       }
       //      log.print("Getting size\n");
       size_t classSize = (*newInstance)(0);
@@ -94,6 +99,7 @@ protected:
       return pp;
    }
 
+protected:
    /**
     * Load plugin class
     */
@@ -103,12 +109,12 @@ protected:
     */
    static void unloadClass();
 
-public:
    static void printSystemErrorMessage() {
       UsbdmSystem::Log::print("System Error: %s\n", dlerror());
    }
 };
 
+template <class T> std::string   PluginFactory<T>::dllName;
 template <class T> MODULE_HANDLE PluginFactory<T>::moduleHandle = 0;
 template <class T> size_t (*STD__LINKAGE PluginFactory<T>::newInstance)(T*, ...) = 0;
 template <class T> int  PluginFactory<T>::instanceCount = 0;
@@ -132,15 +138,17 @@ void PluginFactory<T>::loadClass(const char *moduleName, const char *createInsta
       throw MyException("Module already loaded\n");
    }
 
+   // Load using default library path (executable directory)
    moduleHandle = dlopen(moduleName, RTLD_LAZY);
 
    if (moduleHandle == NULL) {
-      log.print("Module \'%s\' failed to load! Retrying...\n", moduleName);
+      log.error("Module \'%s\' failed to load! Retrying...\n", moduleName);
       printSystemErrorMessage();
 
+      // Try to find module in application directory
       string extendedPath = UsbdmSystem::getApplicationPath(moduleName);
       if (extendedPath.size() != 0) {
-         log.print("Trying extended search path \'%s\'\n", extendedPath.c_str());
+         log.error("Trying extended search path \'%s\'\n", extendedPath.c_str());
 
          moduleHandle = dlopen(extendedPath.c_str(), RTLD_LAZY);
 
@@ -149,7 +157,7 @@ void PluginFactory<T>::loadClass(const char *moduleName, const char *createInsta
    if (moduleHandle == NULL) {
       log.error("Module \'%s\' failed to load!!!\n", moduleName);
       printSystemErrorMessage();
-      throw MyException(std::string("Module \'").append(moduleName).append("\' failed to load\n"));
+      throw MyException(std::string("Module \'").append(moduleName).append("\' failed to load (Linux)\n"));
    }
    log.print("Module \'%s\' loaded @0x%p, handle cached @%p\n", moduleName, moduleHandle, &moduleHandle);
 
@@ -167,7 +175,7 @@ void PluginFactory<T>::loadClass(const char *moduleName, const char *createInsta
  */
 template <class T>
 void PluginFactory<T>::unloadClass() {
-   LOGGING;
+   LOGGING_Q;
    log.print("Unloading module @0x%p, cached @%p\n", moduleHandle, &moduleHandle);
    if (dlclose(moduleHandle) != 0) {
       log.print("Unloading module at @0x%p failed\n", moduleHandle);
