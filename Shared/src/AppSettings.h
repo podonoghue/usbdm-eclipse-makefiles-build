@@ -30,6 +30,7 @@
 #ifndef APPSETTINGS_HPP_
 #define APPSETTINGS_HPP_
 
+#include <filesystem>
 #include <memory>
 #include <map>
 #include "USBDM_API.h"
@@ -50,6 +51,7 @@ private:
          ValueType   type;
          int         intValue;
          std::string stringValue;
+
       public:
          /**
           * Create a integer attribute
@@ -106,11 +108,12 @@ private:
    };
 
    std::map<std::string,Value *>  fMap;            //!< Container for key/attribute pairs
-   std::string                    fFileName;       //!< Path to load/save settings from
+   std::string                    fFilePath;       //!< Path to load/save settings from
    std::string                    fDescription;    //!< Description of settings
 
    void loadFromFile(FILE *fp);
    void writeToFile(FILE *fp, const std::string &comment) const;
+   FILE *openFile(std::string filePath, const char *attributes) const;
 
    static std::string getSettingsFilename(const std::string &rootFilename, TargetType_t targetType);
 
@@ -182,38 +185,40 @@ public:
     * Print contents to log file
     */
    void printToLog() const;
+
    /**
-    * @param baseFilename Name to use a base for settings file
+    * @param basename     Base name for settings file in settings directory.
     * @param targetType   Target type used in creating file name
     * @param description  Description added to settings file
     */
-   AppSettings(std::string baseFilename, TargetType_t targetType, std::string description) :
-      fFileName(getSettingsFilename(baseFilename, targetType)),
+   AppSettings(std::string basename, TargetType_t targetType, std::string description) :
+      fFilePath(getSettingsFilename(basename, targetType)),
       fDescription(description)  {
       LOGGING_Q;
-      log.print("baseFilename = %s\n", (const char *)getSettingsFilename(baseFilename, targetType).c_str());
+      log.print("filepath = %s\n", (const char *)getSettingsFilename(basename, targetType).c_str());
    }
+
    /**
-    * @param filename     Name to use for settings file
+    * @param filepath     Path for settings file. If not absolute then settings directory is used.
     * @param description  Description added to settings file
     */
-   AppSettings(std::string filename, std::string description) :
-      fFileName(filename),
+   AppSettings(std::string filepath, std::string description) :
+      fFilePath(filepath),
       fDescription(description)  {
       LOGGING_Q;
-      log.print("baseFilename = %s\n", (const char *)filename.c_str());
+      log.print("filepath = %s\n", (const char *)filepath.c_str());
    }
 
    AppSettings(const AppSettings &other) :
       fMap(other.fMap),
-      fFileName(other.fFileName),
+      fFilePath(other.fFilePath),
       fDescription(other.fDescription)
    {
    }
 
    AppSettings & operator=(const AppSettings &other) {
       fMap           = other.fMap;
-      fFileName      = other.fFileName;
+      fFilePath      = other.fFilePath;
       fDescription   = other.fDescription;
 
       return *this;

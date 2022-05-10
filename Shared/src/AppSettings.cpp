@@ -107,14 +107,25 @@ void AppSettings::writeToFile(FILE *fp, const string &comment) const {
 /*!
  *  Open file from Application configuration directory
  */
-FILE *openConfigurationFile(string fileName, const char *attributes) {
+FILE *AppSettings::openFile(string filePath, const char *attributes) const {
    LOGGING_Q;
-   std::string filePath = UsbdmSystem::getConfigurationPath(fileName);
-   if (filePath.length() == 0) {
+
+   std::string resolvedFilePath;
+
+   std::filesystem::path path(filePath);
+   if (path.is_relative()) {
+      // Assume configuration directory
+      resolvedFilePath = UsbdmSystem::getConfigurationPath(filePath);
+   }
+   else {
+      // Use as-is
+      resolvedFilePath = filePath;
+   }
+   if (resolvedFilePath.length() == 0) {
       return NULL;
    }
-   log.print("- Path = %s\n", (const char *)filePath.c_str());
-   return fopen(filePath.c_str(), attributes);
+   log.print("- Path = %s\n", (const char *)resolvedFilePath.c_str());
+   return fopen(resolvedFilePath.c_str(), attributes);
 }
 
 /*!
@@ -122,9 +133,9 @@ FILE *openConfigurationFile(string fileName, const char *attributes) {
  */
 bool AppSettings::save() const {
    LOGGING;
-   FILE *fp = openConfigurationFile(fFileName, "wt");
+   FILE *fp = openFile(fFilePath, "wt");
    if (fp== NULL) {
-      log.error("- Failed to open Settings File for writing: File = \'%s\'\n", fFileName.c_str());
+      log.error("- Failed to open Settings File for writing: File = \'%s\'\n", fFilePath.c_str());
       return false;
    }
    writeToFile(fp, fDescription.c_str());
@@ -137,7 +148,7 @@ bool AppSettings::save() const {
  */
 void AppSettings::printToLog() const {
    UsbdmSystem::Log::print("=============================================================\n");
-   UsbdmSystem::Log::print("filename = \'%s\'\n", fFileName.c_str());
+   UsbdmSystem::Log::print("filename = \'%s\'\n", fFilePath.c_str());
    map<string,Value*>::const_iterator it;
    for (it=fMap.begin(); it != fMap.end(); it++) {
       switch (it->second->getType()) {
@@ -214,10 +225,10 @@ void AppSettings::loadFromFile(FILE *fp) {
  */
 bool AppSettings::load() {
    LOGGING_Q;
-   FILE *fp = openConfigurationFile(fFileName, "rt");
+   FILE *fp = openFile(fFilePath, "rt");
    if (fp== NULL) {
       log.error("AppSettings::loadFromAppDirFile() - Failed to open Settings File for reading: File = \'%s\'\n",
-            fFileName.c_str());
+            fFilePath.c_str());
       return false;
    }
    loadFromFile(fp);
