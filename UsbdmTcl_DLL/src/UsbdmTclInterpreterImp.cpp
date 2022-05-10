@@ -59,7 +59,7 @@ static void printChannel(int ch, const char *format, ...) __attribute__ ((format
 
 static UsbdmTclInterperPtr     sharedPtrCache;
 static UsbdmTclInterpreterImp *ppCache = nullptr;
-static size_t size;
+static size_t fSize;
 static DeviceInterfacePtr      deviceInterface;
 static FlashImagePtr           flashImage;
 
@@ -90,11 +90,11 @@ size_t CPP_DLL_EXPORT createPluginInstance(UsbdmTclInterpreterImp *pp) {
       if (pp != 0) {
          pp = ppCache;
       }
-      return size;
+      return fSize;
    }
-   size = TcreatePluginInstance<UsbdmTclInterpreterImp>(pp, true);
+   fSize = TcreatePluginInstance<UsbdmTclInterpreterImp>(pp, true);
    ppCache = pp;
-   return size;
+   return fSize;
 }
 
 /**
@@ -108,11 +108,11 @@ size_t CPP_DLL_EXPORT createInteractivePluginInstance(UsbdmTclInterpreterImp *pp
       if (pp != 0) {
          pp = ppCache;
       }
-      return size;
+      return fSize;
    }
-   size = TcreatePluginInstance<UsbdmTclInterpreterImp>(pp, false);
+   fSize = TcreatePluginInstance<UsbdmTclInterpreterImp>(pp, false);
    ppCache = pp;
-   return size;
+   return fSize;
 }
 
 UsbdmTclInterperPtr UsbdmTclInterpreterImp::interactiveInterpreter;
@@ -2438,7 +2438,7 @@ static int cmd_testCReg(ClientData, Tcl_Interp *interp, int argc, Tcl_Obj *const
 #endif
 
 /**
- * wblock <addr> <size> <data>  - Write block
+ * wblock <addr> <number> <start_data>  - Write block
  *
  * @param
  * @param interp
@@ -2449,43 +2449,44 @@ static int cmd_testCReg(ClientData, Tcl_Interp *interp, int argc, Tcl_Obj *const
 static int cmd_writeBlock(ClientData, Tcl_Interp *interp, int argc, Tcl_Obj *const *argv) {
    // wblock <addr> <number> <start_data>
    unsigned  address;
-   int       count;
+   int       num_bytes;
    int       data;
    int       startData;
    unsigned  char dataBlock[1024];
    int memSpace = MS_Byte;
+   const char prompt[] = "<addr> <num_bytes> <start_data>";
 
    if (argc != 4) {
-      Tcl_WrongNumArgs(interp, 1, argv, "<addr> <number> <start_data>");
+      Tcl_WrongNumArgs(interp, 1, argv, prompt);
       return TCL_ERROR;
    }
    // # address
    if (getAddress(argv[1], &address, &memSpace) != TCL_OK) {
-      Tcl_WrongNumArgs(interp, 1, argv, "<address> <value> <start_data>");
+      Tcl_WrongNumArgs(interp, 1, argv, prompt);
       return TCL_ERROR;
    }
    // Number of bytes to write
-   if (Tcl_GetIntFromObj(interp, argv[2], &count) != TCL_OK) {
-      Tcl_WrongNumArgs(interp, 1, argv, "<addr> <number> <start_data>");
+   if (Tcl_GetIntFromObj(interp, argv[2], &num_bytes) != TCL_OK) {
+      Tcl_WrongNumArgs(interp, 1, argv, prompt);
       return TCL_ERROR;
    }
-   // Data value
+   // Starting data value
    if (Tcl_GetIntFromObj(interp, argv[3], &data) != TCL_OK) {
-      Tcl_WrongNumArgs(interp, 1, argv, "<addr> <number> <start_data>");
+      Tcl_WrongNumArgs(interp, 1, argv, prompt);
       return TCL_ERROR;
    }
-   if (((unsigned)count) > sizeof(dataBlock))
-      count = sizeof(dataBlock);
+   if (((unsigned)num_bytes) > sizeof(dataBlock))
+      num_bytes = sizeof(dataBlock);
    startData = data;
-   for (int sub = 0; sub <count; sub++) {
+   for (int sub = 0; sub <num_bytes; sub++) {
       dataBlock[sub]  = data;
       data++;
    }
-   if (checkUsbdmRC(interp,  bdmInterface->writeMemory(memSpace, count, address, dataBlock)) != 0) {
+   if (checkUsbdmRC(interp,  bdmInterface->writeMemory(memSpace, num_bytes, address, dataBlock)) != 0) {
       PRINT(":wblock Failed\n");
       return TCL_ERROR;
    }
-   PRINT(":wblock [%4.4X-%4.4X]=%2.2X\n", address, address+count-1, startData);
+   PRINT(":wblock [%4.4X-%4.4X]=%2.2X\n", address, address+num_bytes-1, startData);
    return TCL_OK;
 }
 
@@ -2501,17 +2502,17 @@ static int cmd_writeBlock(ClientData, Tcl_Interp *interp, int argc, Tcl_Obj *con
 /**
  * Formatted print of block of data
  *
- * @param address
- * @param size
- * @param buff
- * @param attributes
+ * @param address       Starting address
+ * @param numBytes          Number of bytes
+ * @param buff          Buffer to print
+ * @param attributes    Attributes such as size of data elements
  * @return
  */
-static uint32_t printRange(uint32_t address, unsigned size, uint8_t *buff, int attributes) {
+static uint32_t printRange(uint32_t address, unsigned numBytes, uint8_t *buff, int attributes) {
 
    unsigned sub;
    uint32_t data = 0;
-   for(sub=0; sub<size;) {
+   for(sub=0; sub<numBytes;) {
       if ((sub % 16)==0) {
          PRINT("  0x%08X :", address);
       }
@@ -2927,44 +2928,45 @@ static int cmd_verify(ClientData, Tcl_Interp *interp, int argc, Tcl_Obj *const *
  * @return
  */
 static int cmd_testBlock(ClientData, Tcl_Interp *interp, int argc, Tcl_Obj *const *argv) {
-   // tBlock <addr> <size> <repeatcount>
+   // tBlock <start-addr> <end-addr> <repeat_count>
 
    int       address;
    int       repeatCount;
    int       maxRepeat = 1;
    int       count;
+   int       endAddress;
    int       errorCount = 0;
    uint8_t   dataWriteBlock[40000];
    uint8_t   dataReadBlock[40000];
    time_t    time_start;
    time_t    time_end;
+   const char *prompt = "<start-addr> <end-addr> <repeat_count>";
 
    if (argc < 3) {
-      Tcl_WrongNumArgs(interp, 1, argv, "<start-addr> <end-addr> <count>");
+      Tcl_WrongNumArgs(interp, 1, argv, prompt);
       return TCL_ERROR;
    }
    // Start address
    if (Tcl_GetIntFromObj(interp, argv[1], &address) != TCL_OK) {
-      Tcl_WrongNumArgs(interp, 1, argv, "<start-addr> <end-addr> <count>");
+      Tcl_WrongNumArgs(interp, 1, argv, prompt);
       return TCL_ERROR;
    }
    // Read end address
-   if (Tcl_GetIntFromObj(interp, argv[2], &count) != TCL_OK) {
-      Tcl_WrongNumArgs(interp, 1, argv, "<start-addr> <end-addr> <count>");
+   if (Tcl_GetIntFromObj(interp, argv[2], &endAddress) != TCL_OK) {
+      Tcl_WrongNumArgs(interp, 1, argv, prompt);
       return TCL_ERROR;
    }
    if (argc > 3) {
       // Repeat Count
       if (Tcl_GetIntFromObj(interp, argv[3], &maxRepeat) != TCL_OK) {
-         Tcl_WrongNumArgs(interp, 1, argv, "<start-addr> <end-addr> <count>");
+         Tcl_WrongNumArgs(interp, 1, argv, prompt);
          return TCL_ERROR;
       }
    }
-   if (count < address)
+   if (endAddress < address)
       return TCL_ERROR;
 
-   count -= address;
-   count++;
+   count = endAddress - address + 1;
 
    if (count > (int)sizeof(dataWriteBlock))
       count = sizeof(dataWriteBlock);
@@ -2999,7 +3001,7 @@ static int cmd_testBlock(ClientData, Tcl_Interp *interp, int argc, Tcl_Obj *cons
             errorCount++;
          }
 #if 0
-      PRINT(":tblock [%4.4X-%4.4X]\n", address, address+size-1);
+      PRINT(":tblock [%4.4X-%4.4X]\n", address, address+count-1);
       for (sub=0; sub<count; sub++){
          if ((sub&0x0F) == 0)
             PRINT("\n%4.4X:", address+sub);
