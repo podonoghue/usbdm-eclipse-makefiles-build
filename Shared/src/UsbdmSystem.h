@@ -362,7 +362,7 @@ public:
        *  @note logging is enabled and timestamp disabled
        */
       static void openLogFile(const char *logFileName, const char *description="") {(void)logFileName; (void)description; }
-      /**  \brief Close the log file
+      /**  \brief Open the log file
        *
        */
       static void closeLogFile() {}

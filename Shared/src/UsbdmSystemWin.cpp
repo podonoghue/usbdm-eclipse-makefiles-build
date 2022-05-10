@@ -75,6 +75,16 @@
 //    return nError;
 //}
 
+/**
+ * Obtain value from Registry
+ *
+ * @param hKey             HKey to use.  This should be obtained from RegOpenKeyExA()
+ * @param strValueName     Name of value to retrieve
+ * @param strValue         Value retrieved (or default)
+ * @param strDefaultValue  Default value if not found in registry
+ *
+ * @return Windows error code (ERROR_SUCCESS on success)
+ */
 static LONG GetStringRegKey(HKEY hKey, const std::string &strValueName, std::string &strValue, const std::string &strDefaultValue)
 {
     strValue = strDefaultValue;
@@ -88,17 +98,21 @@ static LONG GetStringRegKey(HKEY hKey, const std::string &strValueName, std::str
     return nError;
 }
 
-/* Obtain the path of a file within the same directory as the module
+/**
+ * Obtain the path of a file/directory within the same directory as the executable.
+ * It does not check that the file/directory exists.
  *
- * @param path to append to directory
+ * @param path to append to executable directory
  *
- * @return directory or NULL if failed
+ * @return full path to file or empty string if cannot obtain executable directory
  */
 std::string UsbdmSystem::getModulePath(const std::string &path) {
    static char buff[MAX_PATH];
    if (GetModuleFileNameA(NULL, buff, sizeof(buff)) == 0) {
+      // Couldn't obtain path to executable - Should not happen!
       return std::string();
    }
+   // Discard exeutable name and append extra path
    char *p = strrchr(buff, '\\');
    if (p != 0) {
       *(p+1) = '\0';
@@ -106,31 +120,33 @@ std::string UsbdmSystem::getModulePath(const std::string &path) {
    return std::string(buff).append(path);
 }
 
-/* Obtain the path of a application file
+/* Obtain the path of an application file
+ *
  * Looks within:
- *   - the same directory as the current module
+ *   - the same directory as the current executable
  *   - the USBDM application directory
  *
  * @param path to append to directory
  *
- * @return directory or empty string if failed
+ * @return directory or empty string if failed or file does not exist at path found
  */
 std::string USBDM_SYSTEM_DECLSPEC UsbdmSystem::getApplicationPath(const std::string &path) {
    LOGGING_Q;
 
-   // Try relative to module
+   // Try relative to executable
    std::string fullPath = getModulePath(path);
    if (!fileExists(fullPath)) {
-      std::string resourcePath =  getResourcePath("");
+      // Try relative to USBDM directory
+      log.error("Failed to locate file \'%s\'\n", fullPath.c_str());
 #if __x86_64__
-      fullPath = resourcePath.append("x86_64-win-gnu\\").append(path);
+      fullPath = getResourcePath(path);
 #else
-      fullPath = resourcePath.append("i386-win-gnu\\").append(path);
+      fullPath =  getResourcePath("i386-win-gnu\\" + path);
 #endif
-   }
-   if (!fileExists(fullPath)) {
-      fullPath = std::string("");
-      log.print("Failed to get path for \'%s\'\n", path.c_str());
+      if (!fileExists(fullPath)) {
+         log.error("Failed to locate file \'%s\'\n", fullPath.c_str());
+         fullPath = "";
+      }
    }
    return fullPath;
 }
@@ -139,7 +155,7 @@ std::string USBDM_SYSTEM_DECLSPEC UsbdmSystem::getApplicationPath(const std::str
  *
  * @param path to append to directory
  *
- * @return directory or NULL if failed
+ * @return directory path or empty string if failed
  */
 std::string USBDM_SYSTEM_DECLSPEC UsbdmSystem::getResourcePath(const std::string &path) {
    LOGGING_Q;
@@ -148,10 +164,10 @@ std::string USBDM_SYSTEM_DECLSPEC UsbdmSystem::getResourcePath(const std::string
    HKEY hKey;
    if ((RegOpenKeyExA(HKEY_LOCAL_MACHINE, "SOFTWARE\\pgo\\USBDM", 0, KEY_READ|KEY_WOW64_64KEY, &hKey) != ERROR_SUCCESS) ||
          (GetStringRegKey(hKey, "InstallationDirectory", applicationDirectory, "") != ERROR_SUCCESS)) {
-      log.print("Failed to get USBDM path from KEY_WOW64_64KEY registry\n");
+      log.error("Failed to get USBDM path from KEY_WOW64_64KEY registry\n");
       if ((RegOpenKeyExA(HKEY_LOCAL_MACHINE, "SOFTWARE\\pgo\\USBDM", 0, KEY_READ|KEY_WOW64_32KEY, &hKey) != ERROR_SUCCESS) ||
             (GetStringRegKey(hKey, "InstallationDirectory", applicationDirectory, "") != ERROR_SUCCESS)) {
-         log.print("Failed to get USBDM path from KEY_WOW64_32KEY registry\n");
+         log.error("Failed to get USBDM path from KEY_WOW64_32KEY registry\n");
       }
    }
    return applicationDirectory.append(path);

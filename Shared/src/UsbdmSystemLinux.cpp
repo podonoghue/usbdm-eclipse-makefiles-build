@@ -28,6 +28,7 @@
 
 
 #ifndef WIN32
+#include <string>
 #include <sys/stat.h>
 #include <stdio.h>
 #include <stdlib.h>

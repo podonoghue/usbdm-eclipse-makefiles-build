@@ -34,11 +34,16 @@ ifneq (,$(findstring Linux, $(shell uname)))
 endif
 
 ifeq (,$(UNAME_S))
-   $(error ERROR - Unknown OS)
+#   $(error ERROR - Unknown OS)
    UNAME_S   := Windows
-   UNAME_M   := x86_64
    BITNESS   := 64
-   MULTIARCH := x86_64-win-gnu
+   ifeq ($(BITNESS),32)
+      UNAME_M   := i386
+      MULTIARCH := i386-win-gnu
+   else
+      UNAME_M   := x86_64
+      MULTIARCH := x86_64-win-gnu
+   endif
 endif
 
 #$(info Platform (UNAME_S)   = $(UNAME_S))
@@ -48,8 +53,9 @@ endif
 
 #===========================================================
 # Shared directories - Relative to child directory
-SHARED_SRC     := ../Shared/src
+SHARED_SRC    := ../Shared/src
 SHARED_LIBDIR := ../Shared/$(MULTIARCH)
+UTILS_DIR     := ../Shared/CoreUtils
 
 #===========================================================
 # Where to find private libraries on linux
@@ -94,8 +100,8 @@ ifeq ($(UNAME_S),Windows)
    TOUCH         := $(MSYS_BIN)touch
    MKDIR         := $(MSYS_BIN)mkdir -p
    CP            := $(MSYS_BIN)cp
-#   MAKE          := $(MSYS_BIN)make
-   MAKE          := make
+   MAKE          := $(MSYS_BIN)make
+#   MAKE          := make
    AR            := $(MINGW_BIN)ar
    GCC           := $(MINGW_BIN)gcc
    GPP           := $(MINGW_BIN)g++
@@ -217,6 +223,8 @@ endif
 #===========================================================
 # WXWIDGETS
 ifeq ($(UNAME_S),Windows)
+#   WXWIDGETS_INC            := -IC:/Apps/msys64/mingw32/lib/wx/include/msw-unicode-3.0 -IC:/Apps/msys64/mingw32/include/wx-3.0 -D_FILE_OFFSET_BITS=64 -DWXUSINGDLL -D__WXMSW__
+#   WXWIDGETS_SHARED_LIBS    := -LC:/Apps/msys64/mingw32/lib   -pipe -Wl,--no-seh -Wl,--subsystem,windows -mwindows -lwx_mswu_xrc-3.0 -lwx_mswu_webview-3.0 -lwx_mswu_html-3.0 -lwx_mswu_qa-3.0 -lwx_mswu_adv-3.0 -lwx_mswu_core-3.0 -lwx_baseu_xml-3.0 -lwx_baseu_net-3.0 -lwx_baseu-3.0
    WXWIDGETS_INC            := $(shell wx-config --cppflags)
    WXWIDGETS_SHARED_LIBS    := $(shell wx-config --libs)
    WXWIDGETS_DEFS           := -DuseWxWidgets -DUNICODE
@@ -336,7 +344,7 @@ ifneq ($(UNAME_S),Windows)
    endif
 endif
 
-CFLAGS  += -std=gnu++14 ${THREADS} -Wall -shared ${GCC_VISIBILITY_DEFS}
+CFLAGS  += -std=gnu++17 ${THREADS} -Wall -shared ${GCC_VISIBILITY_DEFS}
 LDFLAGS += ${THREADS}
 
 #===========================================================
@@ -351,11 +359,20 @@ endif
 # Look in build and shared library directories first
 LIBDIRS := -L$(TARGET_LIBDIR) -L$(SHARED_LIBDIR)
 
-#===========================================================
-# Look in build and shared library directories first
-LIBDIRS := -L$(TARGET_LIBDIR) -L$(SHARED_LIBDIR)
+PACKAGED_FILES := $(patsubst $(SHARED_LIBDIR)/%, $(TARGET_BINDIR)/%, $(wildcard $(SHARED_LIBDIR)/*))
+PACKAGED_FILES += $(patsubst $(UTILS_DIR)/%,     $(TARGET_BINDIR)/%, $(wildcard $(UTILS_DIR)/*))
 
-PACKAGED_FILES := $(patsubst $(SHARED_LIBDIR)/%, $(TARGET_LIBDIR)/%, $(wildcard $(SHARED_LIBDIR)/*))
+ifeq ($(UNAME_S),Windows)
+ifeq ($(BITNESS),32)
+$(TARGET_BINDIR)/%.dll: $(UTILS_DIR)/%.dll
+	@echo -- Copying $(@F) to package directory
+	$(CP) $< $@
+
+$(TARGET_BINDIR)/%.exe: $(UTILS_DIR)/%.exe
+	@echo -- Copying $(@F) to package directory
+	$(CP) $< $@
+endif
+endif
 
 $(TARGET_LIBDIR)/%.dll: $(SHARED_LIBDIR)/%.dll
 	@echo -- Copying $(@F) to package directory
