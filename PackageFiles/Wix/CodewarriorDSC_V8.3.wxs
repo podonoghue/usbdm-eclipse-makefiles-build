@@ -80,7 +80,7 @@
             <File Id='CODEWARRIOR_DSC_V8_3_MinGW_1'         DiskId='1' Source='$(var.SrcDir)\bin\i386-win-gnu\libgcc_s_dw2-1.dll' />
             <File Id='CODEWARRIOR_DSC_V8_3_MinGW_2'         DiskId='1' Source='$(var.SrcDir)\bin\i386-win-gnu\libstdc++-6.dll' />
             <File Id='CODEWARRIOR_DSC_V8_3_MinGW_3'         DiskId='1' Source='$(var.SrcDir)\bin\i386-win-gnu\libwinpthread-1.dll' />
-            <File Id='CODEWARRIOR_DSC_V8_3_MinGW_4'         DiskId='1' Source='$(var.SrcDir)\bin\i386-win-gnu\libdl.dll' />
+            <File Id='CODEWARRIOR_DSC_V8_3_MinGW_4'         DiskId='1' Source='$(var.SrcDir)\bin\i386-win-gnu\libusb-1.0.dll' />
 	    
          </Component>
       </DirectoryRef>

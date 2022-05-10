@@ -136,7 +136,7 @@
             <File Id='CWS12_X_V5_$(var.CW_Ver)MinGW_1'         DiskId='1' Source='$(var.SrcDir)\bin\i386-win-gnu\libgcc_s_dw2-1.dll' />
             <File Id='CWS12_X_V5_$(var.CW_Ver)MinGW_2'         DiskId='1' Source='$(var.SrcDir)\bin\i386-win-gnu\libstdc++-6.dll' />
             <File Id='CWS12_X_V5_$(var.CW_Ver)MinGW_3'         DiskId='1' Source='$(var.SrcDir)\bin\i386-win-gnu\libwinpthread-1.dll' />
-            <File Id='CWS12_X_V5_$(var.CW_Ver)MinGW_4'         DiskId='1' Source='$(var.SrcDir)\bin\i386-win-gnu\libdl.dll' />
+            <File Id='CWS12_X_V5_$(var.CW_Ver)MinGW_4'         DiskId='1' Source='$(var.SrcDir)\bin\i386-win-gnu\crtdll.dll' />
             <File Id='CWS12_X_V5_$(var.CW_Ver)MinGW_5'         DiskId='1' Source='$(var.SrcDir)\bin\i386-win-gnu\libusb-1.0.dll' />
 
 	    

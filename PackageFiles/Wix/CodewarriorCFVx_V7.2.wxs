@@ -129,7 +129,7 @@
             <File Id='CODEWARRIOR_COLDFIRE_V7_2_MinGW_00'        DiskId='1' Source='$(var.SrcDir)\bin\i386-win-gnu\libgcc_s_dw2-1.dll' />
             <File Id='CODEWARRIOR_COLDFIRE_V7_2_MinGW_01'        DiskId='1' Source='$(var.SrcDir)\bin\i386-win-gnu\libstdc++-6.dll' />
             <File Id='CODEWARRIOR_COLDFIRE_V7_2_MinGW_02'        DiskId='1' Source='$(var.SrcDir)\bin\i386-win-gnu\libwinpthread-1.dll' />
-            <File Id='CODEWARRIOR_COLDFIRE_V7_2_MinGW_03'        DiskId='1' Source='$(var.SrcDir)\bin\i386-win-gnu\libdl.dll' />
+            <File Id='CODEWARRIOR_COLDFIRE_V7_2_MinGW_03'        DiskId='1' Source='$(var.SrcDir)\bin\i386-win-gnu\libusb-1.0.dll' />
          </Component>
       </DirectoryRef>
 

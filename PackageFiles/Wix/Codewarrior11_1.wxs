@@ -208,33 +208,25 @@
             <File Id='EclipseHCSFiles_$(var.CW_VER_UC)_06'  DiskId='1' Source='$(var.SrcDir)\bin\i386-win-gnu\usbdm-wx-plugin.4.dll' />
             <File Id='EclipseHCSFiles_$(var.CW_VER_UC)_06d' DiskId='1' Source='$(var.SrcDir)\bin\i386-win-gnu\usbdm-wx-plugin-debug.4.dll' />
 
-            <File Id='EclipseHCSFiles_$(var.CW_VER_UC)_mingw00'  DiskId='1' Source='$(var.SrcDir)\bin\i386-win-gnu\libbrotlicommon.dll' />
-            <File Id='EclipseHCSFiles_$(var.CW_VER_UC)_mingw01'  DiskId='1' Source='$(var.SrcDir)\bin\i386-win-gnu\libbrotlidec.dll' />
-            <File Id='EclipseHCSFiles_$(var.CW_VER_UC)_mingw02'  DiskId='1' Source='$(var.SrcDir)\bin\i386-win-gnu\libcrypto-1_1.dll' />
-            <File Id='EclipseHCSFiles_$(var.CW_VER_UC)_mingw03'  DiskId='1' Source='$(var.SrcDir)\bin\i386-win-gnu\libcurl-4.dll' />
-            <File Id='EclipseHCSFiles_$(var.CW_VER_UC)_mingw04'  DiskId='1' Source='$(var.SrcDir)\bin\i386-win-gnu\libdl.dll' />
-            <File Id='EclipseHCSFiles_$(var.CW_VER_UC)_mingw05'  DiskId='1' Source='$(var.SrcDir)\bin\i386-win-gnu\libgcc_s_dw2-1.dll' />
-            <File Id='EclipseHCSFiles_$(var.CW_VER_UC)_mingw06'  DiskId='1' Source='$(var.SrcDir)\bin\i386-win-gnu\libiconv-2.dll' />
-            <File Id='EclipseHCSFiles_$(var.CW_VER_UC)_mingw07'  DiskId='1' Source='$(var.SrcDir)\bin\i386-win-gnu\libicudt67.dll' />
-            <File Id='EclipseHCSFiles_$(var.CW_VER_UC)_mingw08'  DiskId='1' Source='$(var.SrcDir)\bin\i386-win-gnu\libicuuc67.dll' />
-            <File Id='EclipseHCSFiles_$(var.CW_VER_UC)_mingw09'  DiskId='1' Source='$(var.SrcDir)\bin\i386-win-gnu\libidn2-0.dll' />
-            <File Id='EclipseHCSFiles_$(var.CW_VER_UC)_mingw10'  DiskId='1' Source='$(var.SrcDir)\bin\i386-win-gnu\libintl-8.dll' />
-            <File Id='EclipseHCSFiles_$(var.CW_VER_UC)_mingw11'  DiskId='1' Source='$(var.SrcDir)\bin\i386-win-gnu\libnghttp2-14.dll' />
-            <File Id='EclipseHCSFiles_$(var.CW_VER_UC)_mingw12'  DiskId='1' Source='$(var.SrcDir)\bin\i386-win-gnu\libpsl-5.dll' />
-            <File Id='EclipseHCSFiles_$(var.CW_VER_UC)_mingw13'  DiskId='1' Source='$(var.SrcDir)\bin\i386-win-gnu\libssh2-1.dll' />
-            <File Id='EclipseHCSFiles_$(var.CW_VER_UC)_mingw14'  DiskId='1' Source='$(var.SrcDir)\bin\i386-win-gnu\libssl-1_1.dll' />
-            <File Id='EclipseHCSFiles_$(var.CW_VER_UC)_mingw15'  DiskId='1' Source='$(var.SrcDir)\bin\i386-win-gnu\libstdc++-6.dll' />
-            <File Id='EclipseHCSFiles_$(var.CW_VER_UC)_mingw16'  DiskId='1' Source='$(var.SrcDir)\bin\i386-win-gnu\libunistring-2.dll' />
-            <File Id='EclipseHCSFiles_$(var.CW_VER_UC)_mingw17'  DiskId='1' Source='$(var.SrcDir)\bin\i386-win-gnu\libwinpthread-1.dll' />
-            <File Id='EclipseHCSFiles_$(var.CW_VER_UC)_mingw18'  DiskId='1' Source='$(var.SrcDir)\bin\i386-win-gnu\libxerces-c-3-2.dll' />
-            <File Id='EclipseHCSFiles_$(var.CW_VER_UC)_mingw19'  DiskId='1' Source='$(var.SrcDir)\bin\i386-win-gnu\libzstd.dll' />
-            <File Id='EclipseHCSFiles_$(var.CW_VER_UC)_mingw20'  DiskId='1' Source='$(var.SrcDir)\bin\i386-win-gnu\zlib1.dll' />
-            <File Id='EclipseHCSFiles_$(var.CW_VER_UC)_mingw21'  DiskId='1' Source='$(var.SrcDir)\bin\i386-win-gnu\libusb-1.0.dll' />
-            <File Id='EclipseHCSFiles_$(var.CW_VER_UC)_mingw22'  DiskId='1' Source='$(var.SrcDir)\bin\i386-win-gnu\libjpeg-8.dll' />
-            <File Id='EclipseHCSFiles_$(var.CW_VER_UC)_mingw23'  DiskId='1' Source='$(var.SrcDir)\bin\i386-win-gnu\libpng16-16.dll' />
-            <File Id='EclipseHCSFiles_$(var.CW_VER_UC)_mingw24'  DiskId='1' Source='$(var.SrcDir)\bin\i386-win-gnu\libtiff-5.dll' />
-            <File Id='EclipseHCSFiles_$(var.CW_VER_UC)_mingw25'  DiskId='1' Source='$(var.SrcDir)\bin\i386-win-gnu\wxbase30u_gcc_custom.dll' />
-            <File Id='EclipseHCSFiles_$(var.CW_VER_UC)_mingw26'  DiskId='1' Source='$(var.SrcDir)\bin\i386-win-gnu\wxmsw30u_core_gcc_custom.dll' />
+            <File Id='EclipseHCSFiles_$(var.CW_VER_UC)_mingw01'  DiskId='1' Source='$(var.SrcDir)\bin\i386-win-gnu\libdeflate.dll' />
+            <File Id='EclipseHCSFiles_$(var.CW_VER_UC)_mingw02'  DiskId='1' Source='$(var.SrcDir)\bin\i386-win-gnu\libgcc_s_dw2-1.dll' />
+            <File Id='EclipseHCSFiles_$(var.CW_VER_UC)_mingw03'  DiskId='1' Source='$(var.SrcDir)\bin\i386-win-gnu\libicuuc69.dll' />
+            <File Id='EclipseHCSFiles_$(var.CW_VER_UC)_mingw04'  DiskId='1' Source='$(var.SrcDir)\bin\i386-win-gnu\libicudt69.dll' />
+            <File Id='EclipseHCSFiles_$(var.CW_VER_UC)_mingw05'  DiskId='1' Source='$(var.SrcDir)\bin\i386-win-gnu\libjbig-0.dll' />
+            <File Id='EclipseHCSFiles_$(var.CW_VER_UC)_mingw06'  DiskId='1' Source='$(var.SrcDir)\bin\i386-win-gnu\libjpeg-8.dll' />
+            <File Id='EclipseHCSFiles_$(var.CW_VER_UC)_mingw07'  DiskId='1' Source='$(var.SrcDir)\bin\i386-win-gnu\libLerc.dll' />
+            <File Id='EclipseHCSFiles_$(var.CW_VER_UC)_mingw08'  DiskId='1' Source='$(var.SrcDir)\bin\i386-win-gnu\liblzma-5.dll' />
+            <File Id='EclipseHCSFiles_$(var.CW_VER_UC)_mingw09'  DiskId='1' Source='$(var.SrcDir)\bin\i386-win-gnu\libpng16-16.dll' />
+            <File Id='EclipseHCSFiles_$(var.CW_VER_UC)_mingw10'  DiskId='1' Source='$(var.SrcDir)\bin\i386-win-gnu\libstdc++-6.dll' />
+            <File Id='EclipseHCSFiles_$(var.CW_VER_UC)_mingw11'  DiskId='1' Source='$(var.SrcDir)\bin\i386-win-gnu\libtiff-5.dll' />
+            <File Id='EclipseHCSFiles_$(var.CW_VER_UC)_mingw12'  DiskId='1' Source='$(var.SrcDir)\bin\i386-win-gnu\libwebp-7.dll' />
+            <File Id='EclipseHCSFiles_$(var.CW_VER_UC)_mingw13'  DiskId='1' Source='$(var.SrcDir)\bin\i386-win-gnu\libwinpthread-1.dll' />
+            <File Id='EclipseHCSFiles_$(var.CW_VER_UC)_mingw14'  DiskId='1' Source='$(var.SrcDir)\bin\i386-win-gnu\libxerces-c-3-2.dll' />
+            <File Id='EclipseHCSFiles_$(var.CW_VER_UC)_mingw15'  DiskId='1' Source='$(var.SrcDir)\bin\i386-win-gnu\libzstd.dll' />
+            <File Id='EclipseHCSFiles_$(var.CW_VER_UC)_mingw16'  DiskId='1' Source='$(var.SrcDir)\bin\i386-win-gnu\zlib1.dll' />
+            <File Id='EclipseHCSFiles_$(var.CW_VER_UC)_mingw17'  DiskId='1' Source='$(var.SrcDir)\bin\i386-win-gnu\wxbase30u_gcc_custom.dll' />
+            <File Id='EclipseHCSFiles_$(var.CW_VER_UC)_mingw18'  DiskId='1' Source='$(var.SrcDir)\bin\i386-win-gnu\wxmsw30u_core_gcc_custom.dll' />
+            <File Id='EclipseHCSFiles_$(var.CW_VER_UC)_mingw19'  DiskId='1' Source='$(var.SrcDir)\bin\i386-win-gnu\libusb-1.0.dll' />
          </Component>
       </DirectoryRef>
 
@@ -255,33 +247,26 @@
             <File Id='EclipseCFFiles_$(var.CW_VER_UC)_06'  DiskId='1' Source='$(var.SrcDir)\bin\i386-win-gnu\usbdm-wx-plugin.4.dll' />
             <File Id='EclipseCFFiles_$(var.CW_VER_UC)_06d' DiskId='1' Source='$(var.SrcDir)\bin\i386-win-gnu\usbdm-wx-plugin-debug.4.dll' />
 
-            <File Id='EclipseCFFiles_$(var.CW_VER_UC)_mingw00'  DiskId='1' Source='$(var.SrcDir)\bin\i386-win-gnu\libbrotlicommon.dll' />
-            <File Id='EclipseCFFiles_$(var.CW_VER_UC)_mingw01'  DiskId='1' Source='$(var.SrcDir)\bin\i386-win-gnu\libbrotlidec.dll' />
-            <File Id='EclipseCFFiles_$(var.CW_VER_UC)_mingw02'  DiskId='1' Source='$(var.SrcDir)\bin\i386-win-gnu\libcrypto-1_1.dll' />
-            <File Id='EclipseCFFiles_$(var.CW_VER_UC)_mingw03'  DiskId='1' Source='$(var.SrcDir)\bin\i386-win-gnu\libcurl-4.dll' />
-            <File Id='EclipseCFFiles_$(var.CW_VER_UC)_mingw04'  DiskId='1' Source='$(var.SrcDir)\bin\i386-win-gnu\libdl.dll' />
-            <File Id='EclipseCFFiles_$(var.CW_VER_UC)_mingw05'  DiskId='1' Source='$(var.SrcDir)\bin\i386-win-gnu\libgcc_s_dw2-1.dll' />
-            <File Id='EclipseCFFiles_$(var.CW_VER_UC)_mingw06'  DiskId='1' Source='$(var.SrcDir)\bin\i386-win-gnu\libiconv-2.dll' />
-            <File Id='EclipseCFFiles_$(var.CW_VER_UC)_mingw07'  DiskId='1' Source='$(var.SrcDir)\bin\i386-win-gnu\libicudt67.dll' />
-            <File Id='EclipseCFFiles_$(var.CW_VER_UC)_mingw08'  DiskId='1' Source='$(var.SrcDir)\bin\i386-win-gnu\libicuuc67.dll' />
-            <File Id='EclipseCFFiles_$(var.CW_VER_UC)_mingw09'  DiskId='1' Source='$(var.SrcDir)\bin\i386-win-gnu\libidn2-0.dll' />
-            <File Id='EclipseCFFiles_$(var.CW_VER_UC)_mingw10'  DiskId='1' Source='$(var.SrcDir)\bin\i386-win-gnu\libintl-8.dll' />
-            <File Id='EclipseCFFiles_$(var.CW_VER_UC)_mingw11'  DiskId='1' Source='$(var.SrcDir)\bin\i386-win-gnu\libnghttp2-14.dll' />
-            <File Id='EclipseCFFiles_$(var.CW_VER_UC)_mingw12'  DiskId='1' Source='$(var.SrcDir)\bin\i386-win-gnu\libpsl-5.dll' />
-            <File Id='EclipseCFFiles_$(var.CW_VER_UC)_mingw13'  DiskId='1' Source='$(var.SrcDir)\bin\i386-win-gnu\libssh2-1.dll' />
-            <File Id='EclipseCFFiles_$(var.CW_VER_UC)_mingw14'  DiskId='1' Source='$(var.SrcDir)\bin\i386-win-gnu\libssl-1_1.dll' />
-            <File Id='EclipseCFFiles_$(var.CW_VER_UC)_mingw15'  DiskId='1' Source='$(var.SrcDir)\bin\i386-win-gnu\libstdc++-6.dll' />
-            <File Id='EclipseCFFiles_$(var.CW_VER_UC)_mingw16'  DiskId='1' Source='$(var.SrcDir)\bin\i386-win-gnu\libunistring-2.dll' />
-            <File Id='EclipseCFFiles_$(var.CW_VER_UC)_mingw17'  DiskId='1' Source='$(var.SrcDir)\bin\i386-win-gnu\libwinpthread-1.dll' />
-            <File Id='EclipseCFFiles_$(var.CW_VER_UC)_mingw18'  DiskId='1' Source='$(var.SrcDir)\bin\i386-win-gnu\libxerces-c-3-2.dll' />
-            <File Id='EclipseCFFiles_$(var.CW_VER_UC)_mingw19'  DiskId='1' Source='$(var.SrcDir)\bin\i386-win-gnu\libzstd.dll' />
-            <File Id='EclipseCFFiles_$(var.CW_VER_UC)_mingw20'  DiskId='1' Source='$(var.SrcDir)\bin\i386-win-gnu\zlib1.dll' />
-            <File Id='EclipseCFFiles_$(var.CW_VER_UC)_mingw21'  DiskId='1' Source='$(var.SrcDir)\bin\i386-win-gnu\libusb-1.0.dll' />
-            <File Id='EclipseCFFiles_$(var.CW_VER_UC)_mingw22'  DiskId='1' Source='$(var.SrcDir)\bin\i386-win-gnu\libjpeg-8.dll' />
-            <File Id='EclipseCFFiles_$(var.CW_VER_UC)_mingw23'  DiskId='1' Source='$(var.SrcDir)\bin\i386-win-gnu\libpng16-16.dll' />
-            <File Id='EclipseCFFiles_$(var.CW_VER_UC)_mingw24'  DiskId='1' Source='$(var.SrcDir)\bin\i386-win-gnu\libtiff-5.dll' />
-            <File Id='EclipseCFFiles_$(var.CW_VER_UC)_mingw25'  DiskId='1' Source='$(var.SrcDir)\bin\i386-win-gnu\wxbase30u_gcc_custom.dll' />
-            <File Id='EclipseCFFiles_$(var.CW_VER_UC)_mingw26'  DiskId='1' Source='$(var.SrcDir)\bin\i386-win-gnu\wxmsw30u_core_gcc_custom.dll' />
+
+            <File Id='EclipseCFFiles_$(var.CW_VER_UC)_mingw01'  DiskId='1' Source='$(var.SrcDir)\bin\i386-win-gnu\libdeflate.dll' />
+            <File Id='EclipseCFFiles_$(var.CW_VER_UC)_mingw02'  DiskId='1' Source='$(var.SrcDir)\bin\i386-win-gnu\libgcc_s_dw2-1.dll' />
+            <File Id='EclipseCFFiles_$(var.CW_VER_UC)_mingw03'  DiskId='1' Source='$(var.SrcDir)\bin\i386-win-gnu\libicuuc69.dll' />
+            <File Id='EclipseCFFiles_$(var.CW_VER_UC)_mingw04'  DiskId='1' Source='$(var.SrcDir)\bin\i386-win-gnu\libicudt69.dll' />
+            <File Id='EclipseCFFiles_$(var.CW_VER_UC)_mingw05'  DiskId='1' Source='$(var.SrcDir)\bin\i386-win-gnu\libjbig-0.dll' />
+            <File Id='EclipseCFFiles_$(var.CW_VER_UC)_mingw06'  DiskId='1' Source='$(var.SrcDir)\bin\i386-win-gnu\libjpeg-8.dll' />
+            <File Id='EclipseCFFiles_$(var.CW_VER_UC)_mingw07'  DiskId='1' Source='$(var.SrcDir)\bin\i386-win-gnu\libLerc.dll' />
+            <File Id='EclipseCFFiles_$(var.CW_VER_UC)_mingw08'  DiskId='1' Source='$(var.SrcDir)\bin\i386-win-gnu\liblzma-5.dll' />
+            <File Id='EclipseCFFiles_$(var.CW_VER_UC)_mingw09'  DiskId='1' Source='$(var.SrcDir)\bin\i386-win-gnu\libpng16-16.dll' />
+            <File Id='EclipseCFFiles_$(var.CW_VER_UC)_mingw10'  DiskId='1' Source='$(var.SrcDir)\bin\i386-win-gnu\libstdc++-6.dll' />
+            <File Id='EclipseCFFiles_$(var.CW_VER_UC)_mingw11'  DiskId='1' Source='$(var.SrcDir)\bin\i386-win-gnu\libtiff-5.dll' />
+            <File Id='EclipseCFFiles_$(var.CW_VER_UC)_mingw12'  DiskId='1' Source='$(var.SrcDir)\bin\i386-win-gnu\libwebp-7.dll' />
+            <File Id='EclipseCFFiles_$(var.CW_VER_UC)_mingw13'  DiskId='1' Source='$(var.SrcDir)\bin\i386-win-gnu\libwinpthread-1.dll' />
+            <File Id='EclipseCFFiles_$(var.CW_VER_UC)_mingw14'  DiskId='1' Source='$(var.SrcDir)\bin\i386-win-gnu\libxerces-c-3-2.dll' />
+            <File Id='EclipseCFFiles_$(var.CW_VER_UC)_mingw15'  DiskId='1' Source='$(var.SrcDir)\bin\i386-win-gnu\libzstd.dll' />
+            <File Id='EclipseCFFiles_$(var.CW_VER_UC)_mingw16'  DiskId='1' Source='$(var.SrcDir)\bin\i386-win-gnu\zlib1.dll' />
+            <File Id='EclipseCFFiles_$(var.CW_VER_UC)_mingw17'  DiskId='1' Source='$(var.SrcDir)\bin\i386-win-gnu\wxbase30u_gcc_custom.dll' />
+            <File Id='EclipseCFFiles_$(var.CW_VER_UC)_mingw18'  DiskId='1' Source='$(var.SrcDir)\bin\i386-win-gnu\wxmsw30u_core_gcc_custom.dll' />
+            <File Id='EclipseCFFiles_$(var.CW_VER_UC)_mingw19'  DiskId='1' Source='$(var.SrcDir)\bin\i386-win-gnu\libusb-1.0.dll' />
         </Component>
       </DirectoryRef>
 
@@ -300,33 +285,25 @@
             <File Id='EclipseARMFiles_$(var.CW_VER_UC)_06'  DiskId='1' Source='$(var.SrcDir)\bin\i386-win-gnu\usbdm-wx-plugin.4.dll' />
             <File Id='EclipseARMFiles_$(var.CW_VER_UC)_06d' DiskId='1' Source='$(var.SrcDir)\bin\i386-win-gnu\usbdm-wx-plugin-debug.4.dll' />
          
-            <File Id='EclipseARMFiles_$(var.CW_VER_UC)_mingw00'  DiskId='1' Source='$(var.SrcDir)\bin\i386-win-gnu\libbrotlicommon.dll' />
-            <File Id='EclipseARMFiles_$(var.CW_VER_UC)_mingw01'  DiskId='1' Source='$(var.SrcDir)\bin\i386-win-gnu\libbrotlidec.dll' />
-            <File Id='EclipseARMFiles_$(var.CW_VER_UC)_mingw02'  DiskId='1' Source='$(var.SrcDir)\bin\i386-win-gnu\libcrypto-1_1.dll' />
-            <File Id='EclipseARMFiles_$(var.CW_VER_UC)_mingw03'  DiskId='1' Source='$(var.SrcDir)\bin\i386-win-gnu\libcurl-4.dll' />
-            <File Id='EclipseARMFiles_$(var.CW_VER_UC)_mingw04'  DiskId='1' Source='$(var.SrcDir)\bin\i386-win-gnu\libdl.dll' />
-            <File Id='EclipseARMFiles_$(var.CW_VER_UC)_mingw05'  DiskId='1' Source='$(var.SrcDir)\bin\i386-win-gnu\libgcc_s_dw2-1.dll' />
-            <File Id='EclipseARMFiles_$(var.CW_VER_UC)_mingw06'  DiskId='1' Source='$(var.SrcDir)\bin\i386-win-gnu\libiconv-2.dll' />
-            <File Id='EclipseARMFiles_$(var.CW_VER_UC)_mingw07'  DiskId='1' Source='$(var.SrcDir)\bin\i386-win-gnu\libicudt67.dll' />
-            <File Id='EclipseARMFiles_$(var.CW_VER_UC)_mingw08'  DiskId='1' Source='$(var.SrcDir)\bin\i386-win-gnu\libicuuc67.dll' />
-            <File Id='EclipseARMFiles_$(var.CW_VER_UC)_mingw09'  DiskId='1' Source='$(var.SrcDir)\bin\i386-win-gnu\libidn2-0.dll' />
-            <File Id='EclipseARMFiles_$(var.CW_VER_UC)_mingw10'  DiskId='1' Source='$(var.SrcDir)\bin\i386-win-gnu\libintl-8.dll' />
-            <File Id='EclipseARMFiles_$(var.CW_VER_UC)_mingw11'  DiskId='1' Source='$(var.SrcDir)\bin\i386-win-gnu\libnghttp2-14.dll' />
-            <File Id='EclipseARMFiles_$(var.CW_VER_UC)_mingw12'  DiskId='1' Source='$(var.SrcDir)\bin\i386-win-gnu\libpsl-5.dll' />
-            <File Id='EclipseARMFiles_$(var.CW_VER_UC)_mingw13'  DiskId='1' Source='$(var.SrcDir)\bin\i386-win-gnu\libssh2-1.dll' />
-            <File Id='EclipseARMFiles_$(var.CW_VER_UC)_mingw14'  DiskId='1' Source='$(var.SrcDir)\bin\i386-win-gnu\libssl-1_1.dll' />
-            <File Id='EclipseARMFiles_$(var.CW_VER_UC)_mingw15'  DiskId='1' Source='$(var.SrcDir)\bin\i386-win-gnu\libstdc++-6.dll' />
-            <File Id='EclipseARMFiles_$(var.CW_VER_UC)_mingw16'  DiskId='1' Source='$(var.SrcDir)\bin\i386-win-gnu\libunistring-2.dll' />
-            <File Id='EclipseARMFiles_$(var.CW_VER_UC)_mingw17'  DiskId='1' Source='$(var.SrcDir)\bin\i386-win-gnu\libwinpthread-1.dll' />
-            <File Id='EclipseARMFiles_$(var.CW_VER_UC)_mingw18'  DiskId='1' Source='$(var.SrcDir)\bin\i386-win-gnu\libxerces-c-3-2.dll' />
-            <File Id='EclipseARMFiles_$(var.CW_VER_UC)_mingw19'  DiskId='1' Source='$(var.SrcDir)\bin\i386-win-gnu\libzstd.dll' />
-            <File Id='EclipseARMFiles_$(var.CW_VER_UC)_mingw20'  DiskId='1' Source='$(var.SrcDir)\bin\i386-win-gnu\zlib1.dll' />
-            <File Id='EclipseARMFiles_$(var.CW_VER_UC)_mingw21'  DiskId='1' Source='$(var.SrcDir)\bin\i386-win-gnu\libusb-1.0.dll' />
-            <File Id='EclipseARMFiles_$(var.CW_VER_UC)_mingw22'  DiskId='1' Source='$(var.SrcDir)\bin\i386-win-gnu\libjpeg-8.dll' />
-            <File Id='EclipseARMFiles_$(var.CW_VER_UC)_mingw23'  DiskId='1' Source='$(var.SrcDir)\bin\i386-win-gnu\libpng16-16.dll' />
-            <File Id='EclipseARMFiles_$(var.CW_VER_UC)_mingw24'  DiskId='1' Source='$(var.SrcDir)\bin\i386-win-gnu\libtiff-5.dll' />
-            <File Id='EclipseARMFiles_$(var.CW_VER_UC)_mingw25'  DiskId='1' Source='$(var.SrcDir)\bin\i386-win-gnu\wxbase30u_gcc_custom.dll' />
-            <File Id='EclipseARMFiles_$(var.CW_VER_UC)_mingw26'  DiskId='1' Source='$(var.SrcDir)\bin\i386-win-gnu\wxmsw30u_core_gcc_custom.dll' />
+            <File Id='EclipseARMFiles_$(var.CW_VER_UC)_mingw01'  DiskId='1' Source='$(var.SrcDir)\bin\i386-win-gnu\libdeflate.dll' />
+            <File Id='EclipseARMFiles_$(var.CW_VER_UC)_mingw02'  DiskId='1' Source='$(var.SrcDir)\bin\i386-win-gnu\libgcc_s_dw2-1.dll' />
+            <File Id='EclipseARMFiles_$(var.CW_VER_UC)_mingw03'  DiskId='1' Source='$(var.SrcDir)\bin\i386-win-gnu\libicuuc69.dll' />
+            <File Id='EclipseARMFiles_$(var.CW_VER_UC)_mingw04'  DiskId='1' Source='$(var.SrcDir)\bin\i386-win-gnu\libicudt69.dll' />
+            <File Id='EclipseARMFiles_$(var.CW_VER_UC)_mingw05'  DiskId='1' Source='$(var.SrcDir)\bin\i386-win-gnu\libjbig-0.dll' />
+            <File Id='EclipseARMFiles_$(var.CW_VER_UC)_mingw06'  DiskId='1' Source='$(var.SrcDir)\bin\i386-win-gnu\libjpeg-8.dll' />
+            <File Id='EclipseARMFiles_$(var.CW_VER_UC)_mingw07'  DiskId='1' Source='$(var.SrcDir)\bin\i386-win-gnu\libLerc.dll' />
+            <File Id='EclipseARMFiles_$(var.CW_VER_UC)_mingw08'  DiskId='1' Source='$(var.SrcDir)\bin\i386-win-gnu\liblzma-5.dll' />
+            <File Id='EclipseARMFiles_$(var.CW_VER_UC)_mingw09'  DiskId='1' Source='$(var.SrcDir)\bin\i386-win-gnu\libpng16-16.dll' />
+            <File Id='EclipseARMFiles_$(var.CW_VER_UC)_mingw10'  DiskId='1' Source='$(var.SrcDir)\bin\i386-win-gnu\libstdc++-6.dll' />
+            <File Id='EclipseARMFiles_$(var.CW_VER_UC)_mingw11'  DiskId='1' Source='$(var.SrcDir)\bin\i386-win-gnu\libtiff-5.dll' />
+            <File Id='EclipseARMFiles_$(var.CW_VER_UC)_mingw12'  DiskId='1' Source='$(var.SrcDir)\bin\i386-win-gnu\libwebp-7.dll' />
+            <File Id='EclipseARMFiles_$(var.CW_VER_UC)_mingw13'  DiskId='1' Source='$(var.SrcDir)\bin\i386-win-gnu\libwinpthread-1.dll' />
+            <File Id='EclipseARMFiles_$(var.CW_VER_UC)_mingw14'  DiskId='1' Source='$(var.SrcDir)\bin\i386-win-gnu\libxerces-c-3-2.dll' />
+            <File Id='EclipseARMFiles_$(var.CW_VER_UC)_mingw15'  DiskId='1' Source='$(var.SrcDir)\bin\i386-win-gnu\libzstd.dll' />
+            <File Id='EclipseARMFiles_$(var.CW_VER_UC)_mingw16'  DiskId='1' Source='$(var.SrcDir)\bin\i386-win-gnu\zlib1.dll' />
+            <File Id='EclipseARMFiles_$(var.CW_VER_UC)_mingw17'  DiskId='1' Source='$(var.SrcDir)\bin\i386-win-gnu\wxbase30u_gcc_custom.dll' />
+            <File Id='EclipseARMFiles_$(var.CW_VER_UC)_mingw18'  DiskId='1' Source='$(var.SrcDir)\bin\i386-win-gnu\wxmsw30u_core_gcc_custom.dll' />
+            <File Id='EclipseARMFiles_$(var.CW_VER_UC)_mingw19'  DiskId='1' Source='$(var.SrcDir)\bin\i386-win-gnu\libusb-1.0.dll' />
          </Component>
       </DirectoryRef>
 
@@ -345,33 +322,25 @@
             <File Id='EclipseDSCFiles_$(var.CW_VER_UC)_06'  DiskId='1' Source='$(var.SrcDir)\bin\i386-win-gnu\usbdm-wx-plugin.4.dll' />
             <File Id='EclipseDSCFiles_$(var.CW_VER_UC)_06d' DiskId='1' Source='$(var.SrcDir)\bin\i386-win-gnu\usbdm-wx-plugin-debug.4.dll' />
          
-            <File Id='EclipseDSCFiles_$(var.CW_VER_UC)_mingw00'  DiskId='1' Source='$(var.SrcDir)\bin\i386-win-gnu\libbrotlicommon.dll' />
-            <File Id='EclipseDSCFiles_$(var.CW_VER_UC)_mingw01'  DiskId='1' Source='$(var.SrcDir)\bin\i386-win-gnu\libbrotlidec.dll' />
-            <File Id='EclipseDSCFiles_$(var.CW_VER_UC)_mingw02'  DiskId='1' Source='$(var.SrcDir)\bin\i386-win-gnu\libcrypto-1_1.dll' />
-            <File Id='EclipseDSCFiles_$(var.CW_VER_UC)_mingw03'  DiskId='1' Source='$(var.SrcDir)\bin\i386-win-gnu\libcurl-4.dll' />
-            <File Id='EclipseDSCFiles_$(var.CW_VER_UC)_mingw04'  DiskId='1' Source='$(var.SrcDir)\bin\i386-win-gnu\libdl.dll' />
-            <File Id='EclipseDSCFiles_$(var.CW_VER_UC)_mingw05'  DiskId='1' Source='$(var.SrcDir)\bin\i386-win-gnu\libgcc_s_dw2-1.dll' />
-            <File Id='EclipseDSCFiles_$(var.CW_VER_UC)_mingw06'  DiskId='1' Source='$(var.SrcDir)\bin\i386-win-gnu\libiconv-2.dll' />
-            <File Id='EclipseDSCFiles_$(var.CW_VER_UC)_mingw07'  DiskId='1' Source='$(var.SrcDir)\bin\i386-win-gnu\libicudt67.dll' />
-            <File Id='EclipseDSCFiles_$(var.CW_VER_UC)_mingw08'  DiskId='1' Source='$(var.SrcDir)\bin\i386-win-gnu\libicuuc67.dll' />
-            <File Id='EclipseDSCFiles_$(var.CW_VER_UC)_mingw09'  DiskId='1' Source='$(var.SrcDir)\bin\i386-win-gnu\libidn2-0.dll' />
-            <File Id='EclipseDSCFiles_$(var.CW_VER_UC)_mingw10'  DiskId='1' Source='$(var.SrcDir)\bin\i386-win-gnu\libintl-8.dll' />
-            <File Id='EclipseDSCFiles_$(var.CW_VER_UC)_mingw11'  DiskId='1' Source='$(var.SrcDir)\bin\i386-win-gnu\libnghttp2-14.dll' />
-            <File Id='EclipseDSCFiles_$(var.CW_VER_UC)_mingw12'  DiskId='1' Source='$(var.SrcDir)\bin\i386-win-gnu\libpsl-5.dll' />
-            <File Id='EclipseDSCFiles_$(var.CW_VER_UC)_mingw13'  DiskId='1' Source='$(var.SrcDir)\bin\i386-win-gnu\libssh2-1.dll' />
-            <File Id='EclipseDSCFiles_$(var.CW_VER_UC)_mingw14'  DiskId='1' Source='$(var.SrcDir)\bin\i386-win-gnu\libssl-1_1.dll' />
-            <File Id='EclipseDSCFiles_$(var.CW_VER_UC)_mingw15'  DiskId='1' Source='$(var.SrcDir)\bin\i386-win-gnu\libstdc++-6.dll' />
-            <File Id='EclipseDSCFiles_$(var.CW_VER_UC)_mingw16'  DiskId='1' Source='$(var.SrcDir)\bin\i386-win-gnu\libunistring-2.dll' />
-            <File Id='EclipseDSCFiles_$(var.CW_VER_UC)_mingw17'  DiskId='1' Source='$(var.SrcDir)\bin\i386-win-gnu\libwinpthread-1.dll' />
-            <File Id='EclipseDSCFiles_$(var.CW_VER_UC)_mingw18'  DiskId='1' Source='$(var.SrcDir)\bin\i386-win-gnu\libxerces-c-3-2.dll' />
-            <File Id='EclipseDSCFiles_$(var.CW_VER_UC)_mingw19'  DiskId='1' Source='$(var.SrcDir)\bin\i386-win-gnu\libzstd.dll' />
-            <File Id='EclipseDSCFiles_$(var.CW_VER_UC)_mingw20'  DiskId='1' Source='$(var.SrcDir)\bin\i386-win-gnu\zlib1.dll' />
-            <File Id='EclipseDSCFiles_$(var.CW_VER_UC)_mingw21'  DiskId='1' Source='$(var.SrcDir)\bin\i386-win-gnu\libusb-1.0.dll' />
-            <File Id='EclipseDSCFiles_$(var.CW_VER_UC)_mingw22'  DiskId='1' Source='$(var.SrcDir)\bin\i386-win-gnu\libjpeg-8.dll' />
-            <File Id='EclipseDSCFiles_$(var.CW_VER_UC)_mingw23'  DiskId='1' Source='$(var.SrcDir)\bin\i386-win-gnu\libpng16-16.dll' />
-            <File Id='EclipseDSCFiles_$(var.CW_VER_UC)_mingw24'  DiskId='1' Source='$(var.SrcDir)\bin\i386-win-gnu\libtiff-5.dll' />
-            <File Id='EclipseDSCFiles_$(var.CW_VER_UC)_mingw25'  DiskId='1' Source='$(var.SrcDir)\bin\i386-win-gnu\wxbase30u_gcc_custom.dll' />
-            <File Id='EclipseDSCFiles_$(var.CW_VER_UC)_mingw26'  DiskId='1' Source='$(var.SrcDir)\bin\i386-win-gnu\wxmsw30u_core_gcc_custom.dll' />
+            <File Id='EclipseDSCFiles_$(var.CW_VER_UC)_mingw01'  DiskId='1' Source='$(var.SrcDir)\bin\i386-win-gnu\libdeflate.dll' />
+            <File Id='EclipseDSCFiles_$(var.CW_VER_UC)_mingw02'  DiskId='1' Source='$(var.SrcDir)\bin\i386-win-gnu\libgcc_s_dw2-1.dll' />
+            <File Id='EclipseDSCFiles_$(var.CW_VER_UC)_mingw03'  DiskId='1' Source='$(var.SrcDir)\bin\i386-win-gnu\libicuuc69.dll' />
+            <File Id='EclipseDSCFiles_$(var.CW_VER_UC)_mingw04'  DiskId='1' Source='$(var.SrcDir)\bin\i386-win-gnu\libicudt69.dll' />
+            <File Id='EclipseDSCFiles_$(var.CW_VER_UC)_mingw05'  DiskId='1' Source='$(var.SrcDir)\bin\i386-win-gnu\libjbig-0.dll' />
+            <File Id='EclipseDSCFiles_$(var.CW_VER_UC)_mingw06'  DiskId='1' Source='$(var.SrcDir)\bin\i386-win-gnu\libjpeg-8.dll' />
+            <File Id='EclipseDSCFiles_$(var.CW_VER_UC)_mingw07'  DiskId='1' Source='$(var.SrcDir)\bin\i386-win-gnu\libLerc.dll' />
+            <File Id='EclipseDSCFiles_$(var.CW_VER_UC)_mingw08'  DiskId='1' Source='$(var.SrcDir)\bin\i386-win-gnu\liblzma-5.dll' />
+            <File Id='EclipseDSCFiles_$(var.CW_VER_UC)_mingw09'  DiskId='1' Source='$(var.SrcDir)\bin\i386-win-gnu\libpng16-16.dll' />
+            <File Id='EclipseDSCFiles_$(var.CW_VER_UC)_mingw10'  DiskId='1' Source='$(var.SrcDir)\bin\i386-win-gnu\libstdc++-6.dll' />
+            <File Id='EclipseDSCFiles_$(var.CW_VER_UC)_mingw11'  DiskId='1' Source='$(var.SrcDir)\bin\i386-win-gnu\libtiff-5.dll' />
+            <File Id='EclipseDSCFiles_$(var.CW_VER_UC)_mingw12'  DiskId='1' Source='$(var.SrcDir)\bin\i386-win-gnu\libwebp-7.dll' />
+            <File Id='EclipseDSCFiles_$(var.CW_VER_UC)_mingw13'  DiskId='1' Source='$(var.SrcDir)\bin\i386-win-gnu\libwinpthread-1.dll' />
+            <File Id='EclipseDSCFiles_$(var.CW_VER_UC)_mingw14'  DiskId='1' Source='$(var.SrcDir)\bin\i386-win-gnu\libxerces-c-3-2.dll' />
+            <File Id='EclipseDSCFiles_$(var.CW_VER_UC)_mingw15'  DiskId='1' Source='$(var.SrcDir)\bin\i386-win-gnu\libzstd.dll' />
+            <File Id='EclipseDSCFiles_$(var.CW_VER_UC)_mingw16'  DiskId='1' Source='$(var.SrcDir)\bin\i386-win-gnu\zlib1.dll' />
+            <File Id='EclipseDSCFiles_$(var.CW_VER_UC)_mingw17'  DiskId='1' Source='$(var.SrcDir)\bin\i386-win-gnu\wxbase30u_gcc_custom.dll' />
+            <File Id='EclipseDSCFiles_$(var.CW_VER_UC)_mingw18'  DiskId='1' Source='$(var.SrcDir)\bin\i386-win-gnu\wxmsw30u_core_gcc_custom.dll' />
+            <File Id='EclipseDSCFiles_$(var.CW_VER_UC)_mingw19'  DiskId='1' Source='$(var.SrcDir)\bin\i386-win-gnu\libusb-1.0.dll' />
          </Component>
       </DirectoryRef>
 
@@ -390,33 +359,25 @@
             <File Id='EclipseS12ZFiles_$(var.CW_VER_UC)_06'  DiskId='1' Source='$(var.SrcDir)\bin\i386-win-gnu\usbdm-wx-plugin.4.dll' />
             <File Id='EclipseS12ZFiles_$(var.CW_VER_UC)_06d' DiskId='1' Source='$(var.SrcDir)\bin\i386-win-gnu\usbdm-wx-plugin-debug.4.dll' />
          
-            <File Id='EclipseS12ZFiles_$(var.CW_VER_UC)_mingw00'  DiskId='1' Source='$(var.SrcDir)\bin\i386-win-gnu\libbrotlicommon.dll' />
-            <File Id='EclipseS12ZFiles_$(var.CW_VER_UC)_mingw01'  DiskId='1' Source='$(var.SrcDir)\bin\i386-win-gnu\libbrotlidec.dll' />
-            <File Id='EclipseS12ZFiles_$(var.CW_VER_UC)_mingw02'  DiskId='1' Source='$(var.SrcDir)\bin\i386-win-gnu\libcrypto-1_1.dll' />
-            <File Id='EclipseS12ZFiles_$(var.CW_VER_UC)_mingw03'  DiskId='1' Source='$(var.SrcDir)\bin\i386-win-gnu\libcurl-4.dll' />
-            <File Id='EclipseS12ZFiles_$(var.CW_VER_UC)_mingw04'  DiskId='1' Source='$(var.SrcDir)\bin\i386-win-gnu\libdl.dll' />
-            <File Id='EclipseS12ZFiles_$(var.CW_VER_UC)_mingw05'  DiskId='1' Source='$(var.SrcDir)\bin\i386-win-gnu\libgcc_s_dw2-1.dll' />
-            <File Id='EclipseS12ZFiles_$(var.CW_VER_UC)_mingw06'  DiskId='1' Source='$(var.SrcDir)\bin\i386-win-gnu\libiconv-2.dll' />
-            <File Id='EclipseS12ZFiles_$(var.CW_VER_UC)_mingw07'  DiskId='1' Source='$(var.SrcDir)\bin\i386-win-gnu\libicudt67.dll' />
-            <File Id='EclipseS12ZFiles_$(var.CW_VER_UC)_mingw08'  DiskId='1' Source='$(var.SrcDir)\bin\i386-win-gnu\libicuuc67.dll' />
-            <File Id='EclipseS12ZFiles_$(var.CW_VER_UC)_mingw09'  DiskId='1' Source='$(var.SrcDir)\bin\i386-win-gnu\libidn2-0.dll' />
-            <File Id='EclipseS12ZFiles_$(var.CW_VER_UC)_mingw10'  DiskId='1' Source='$(var.SrcDir)\bin\i386-win-gnu\libintl-8.dll' />
-            <File Id='EclipseS12ZFiles_$(var.CW_VER_UC)_mingw11'  DiskId='1' Source='$(var.SrcDir)\bin\i386-win-gnu\libnghttp2-14.dll' />
-            <File Id='EclipseS12ZFiles_$(var.CW_VER_UC)_mingw12'  DiskId='1' Source='$(var.SrcDir)\bin\i386-win-gnu\libpsl-5.dll' />
-            <File Id='EclipseS12ZFiles_$(var.CW_VER_UC)_mingw13'  DiskId='1' Source='$(var.SrcDir)\bin\i386-win-gnu\libssh2-1.dll' />
-            <File Id='EclipseS12ZFiles_$(var.CW_VER_UC)_mingw14'  DiskId='1' Source='$(var.SrcDir)\bin\i386-win-gnu\libssl-1_1.dll' />
-            <File Id='EclipseS12ZFiles_$(var.CW_VER_UC)_mingw15'  DiskId='1' Source='$(var.SrcDir)\bin\i386-win-gnu\libstdc++-6.dll' />
-            <File Id='EclipseS12ZFiles_$(var.CW_VER_UC)_mingw16'  DiskId='1' Source='$(var.SrcDir)\bin\i386-win-gnu\libunistring-2.dll' />
-            <File Id='EclipseS12ZFiles_$(var.CW_VER_UC)_mingw17'  DiskId='1' Source='$(var.SrcDir)\bin\i386-win-gnu\libwinpthread-1.dll' />
-            <File Id='EclipseS12ZFiles_$(var.CW_VER_UC)_mingw18'  DiskId='1' Source='$(var.SrcDir)\bin\i386-win-gnu\libxerces-c-3-2.dll' />
-            <File Id='EclipseS12ZFiles_$(var.CW_VER_UC)_mingw19'  DiskId='1' Source='$(var.SrcDir)\bin\i386-win-gnu\libzstd.dll' />
-            <File Id='EclipseS12ZFiles_$(var.CW_VER_UC)_mingw20'  DiskId='1' Source='$(var.SrcDir)\bin\i386-win-gnu\zlib1.dll' />
-            <File Id='EclipseS12ZFiles_$(var.CW_VER_UC)_mingw21'  DiskId='1' Source='$(var.SrcDir)\bin\i386-win-gnu\libusb-1.0.dll' />
-            <File Id='EclipseS12ZFiles_$(var.CW_VER_UC)_mingw22'  DiskId='1' Source='$(var.SrcDir)\bin\i386-win-gnu\libjpeg-8.dll' />
-            <File Id='EclipseS12ZFiles_$(var.CW_VER_UC)_mingw23'  DiskId='1' Source='$(var.SrcDir)\bin\i386-win-gnu\libpng16-16.dll' />
-            <File Id='EclipseS12ZFiles_$(var.CW_VER_UC)_mingw24'  DiskId='1' Source='$(var.SrcDir)\bin\i386-win-gnu\libtiff-5.dll' />
-            <File Id='EclipseS12ZFiles_$(var.CW_VER_UC)_mingw25'  DiskId='1' Source='$(var.SrcDir)\bin\i386-win-gnu\wxbase30u_gcc_custom.dll' />
-            <File Id='EclipseS12ZFiles_$(var.CW_VER_UC)_mingw26'  DiskId='1' Source='$(var.SrcDir)\bin\i386-win-gnu\wxmsw30u_core_gcc_custom.dll' />
+            <File Id='EclipseS12ZFiles_$(var.CW_VER_UC)_mingw01'  DiskId='1' Source='$(var.SrcDir)\bin\i386-win-gnu\libdeflate.dll' />
+            <File Id='EclipseS12ZFiles_$(var.CW_VER_UC)_mingw02'  DiskId='1' Source='$(var.SrcDir)\bin\i386-win-gnu\libgcc_s_dw2-1.dll' />
+            <File Id='EclipseS12ZFiles_$(var.CW_VER_UC)_mingw03'  DiskId='1' Source='$(var.SrcDir)\bin\i386-win-gnu\libicuuc69.dll' />
+            <File Id='EclipseS12ZFiles_$(var.CW_VER_UC)_mingw04'  DiskId='1' Source='$(var.SrcDir)\bin\i386-win-gnu\libicudt69.dll' />
+            <File Id='EclipseS12ZFiles_$(var.CW_VER_UC)_mingw05'  DiskId='1' Source='$(var.SrcDir)\bin\i386-win-gnu\libjbig-0.dll' />
+            <File Id='EclipseS12ZFiles_$(var.CW_VER_UC)_mingw06'  DiskId='1' Source='$(var.SrcDir)\bin\i386-win-gnu\libjpeg-8.dll' />
+            <File Id='EclipseS12ZFiles_$(var.CW_VER_UC)_mingw07'  DiskId='1' Source='$(var.SrcDir)\bin\i386-win-gnu\libLerc.dll' />
+            <File Id='EclipseS12ZFiles_$(var.CW_VER_UC)_mingw08'  DiskId='1' Source='$(var.SrcDir)\bin\i386-win-gnu\liblzma-5.dll' />
+            <File Id='EclipseS12ZFiles_$(var.CW_VER_UC)_mingw09'  DiskId='1' Source='$(var.SrcDir)\bin\i386-win-gnu\libpng16-16.dll' />
+            <File Id='EclipseS12ZFiles_$(var.CW_VER_UC)_mingw10'  DiskId='1' Source='$(var.SrcDir)\bin\i386-win-gnu\libstdc++-6.dll' />
+            <File Id='EclipseS12ZFiles_$(var.CW_VER_UC)_mingw11'  DiskId='1' Source='$(var.SrcDir)\bin\i386-win-gnu\libtiff-5.dll' />
+            <File Id='EclipseS12ZFiles_$(var.CW_VER_UC)_mingw12'  DiskId='1' Source='$(var.SrcDir)\bin\i386-win-gnu\libwebp-7.dll' />
+            <File Id='EclipseS12ZFiles_$(var.CW_VER_UC)_mingw13'  DiskId='1' Source='$(var.SrcDir)\bin\i386-win-gnu\libwinpthread-1.dll' />
+            <File Id='EclipseS12ZFiles_$(var.CW_VER_UC)_mingw14'  DiskId='1' Source='$(var.SrcDir)\bin\i386-win-gnu\libxerces-c-3-2.dll' />
+            <File Id='EclipseS12ZFiles_$(var.CW_VER_UC)_mingw15'  DiskId='1' Source='$(var.SrcDir)\bin\i386-win-gnu\libzstd.dll' />
+            <File Id='EclipseS12ZFiles_$(var.CW_VER_UC)_mingw16'  DiskId='1' Source='$(var.SrcDir)\bin\i386-win-gnu\zlib1.dll' />
+            <File Id='EclipseS12ZFiles_$(var.CW_VER_UC)_mingw17'  DiskId='1' Source='$(var.SrcDir)\bin\i386-win-gnu\wxbase30u_gcc_custom.dll' />
+            <File Id='EclipseS12ZFiles_$(var.CW_VER_UC)_mingw18'  DiskId='1' Source='$(var.SrcDir)\bin\i386-win-gnu\wxmsw30u_core_gcc_custom.dll' />
+            <File Id='EclipseS12ZFiles_$(var.CW_VER_UC)_mingw19'  DiskId='1' Source='$(var.SrcDir)\bin\i386-win-gnu\libusb-1.0.dll' />
          </Component>
       </DirectoryRef>
 

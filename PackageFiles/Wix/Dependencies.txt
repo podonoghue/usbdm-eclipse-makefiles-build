@@ -1,126 +1,93 @@
+============================================
+32-bit
+
 usbdm-rm.exe, usbdm-make.exe, echo.exe
    libiconv2.dll
    libintl3.dll
 
 opensourcebdm.dll
-   libdl.dll
    libgcc_s_dw2-1.dll
+      libwinpthread-1.dll
    libstdc++-6.dll
-   libusb-1.0.dll
-   libwinpthread-1.dll
-   usbdm-system.4.dll
    usbdm.4.dll
+      libusb-1.0.dll
+   usbdm-system.4.dll
 
 osbdm-jm60.dll
    libgcc_s_dw2-1.dll
+      libwinpthread-1.dll
    libstdc++-6.dll
-   libusb-1.0.dll
-   libwinpthread-1.dll
+   usbdm.4.dll
+      libusb-1.0.dll
+   usbdm-system.4.dll
 
 tbdml.dll, usbdm.dll (renamed file?)
-   libdl.dll
    libgcc_s_dw2-1.dll
+      libwinpthread-1.dll
    libstdc++-6.dll
-   libusb-1.0.dll
-   libwinpthread-1.dll
-   usbdm-system.4.dll
    usbdm.4.dll
+      libusb-1.0.dll
+   usbdm-system.4.dll
 
 usbdm.4.dll
    libgcc_s_dw2-1.dll
+      libwinpthread-1.dll
    libstdc++-6.dll
    libusb-1.0.dll
-   libwinpthread-1.dll
 
 usbdm_gdi12.dll
-   libdl.dll
-   libgcc_s_dw2-1.dll
-   libstdc++-6.dll
-   libusb-1.0.dll
-   libwinpthread-1.dll
-   usbdm-system.4.dll
-   usbdm.4.dll
    usbdm.dll
+      libgcc_s_dw2-1.dll
+         libwinpthread-1.dll
+      libstdc++-6.dll
+      usbdm.4.dll
+         libusb-1.0.dll
+      usbdm-system.4.dll
 
 usbdm-arm.4.dll
    libgcc_s_dw2-1.dll
-   libstdc++-6.dll
-   libusb-1.0.dll
-   libwinpthread-1.dll
-   usbdm-arm.4.dll
+      libwinpthread-1.dll
    usbdm.4.dll
+      libstdc++-6.dll
+      libusb-1.0.dll
 
 usbdm-cff.dll
    libgcc_s_dw2-1.dll
+      libwinpthread-1.dll
    libstdc++-6.dll
    libusb-1.0.dll
-   libwinpthread-1.dll
-   usbdm-cff.dll
 
 usbdm-device-database.4.dll
-   libbrotlicommon.dll
-   libbrotlidec.dll
-   libcrypto-1_1.dll
-   libcurl-4.dll
    libgcc_s_dw2-1.dll
-   libiconv-2.dll
-   libicudt67.dll
-   libicuuc67.dll
-   libidn2-0.dll
-   libintl-8.dll
-   libnghttp2-14.dll
-   libpsl-5.dll
-   libssh2-1.dll
-   libssl-1_1.dll
+      libwinpthread-1.dll
    libstdc++-6.dll
-   libunistring-2.dll
-   libwinpthread-1.dll
    libxerces-c-3-2.dll
-   libzstd.dll
-   zlib1.dll
+      libicuuc69.dll
+         libicudt69.dll
    usbdm-system.4.dll
-   
+ 
 usbdm-dsc.4.dll
    libgcc_s_dw2-1.dll
+      libwinpthread-1.dll
    libstdc++-6.dll
-   libusb-1.0.dll
-   libwinpthread-1.dll
-   usbdm-dsc.4.dll
    usbdm.4.dll
+      libusb-1.0.dll
 
-usbdm-gdi-XXXX.4.dll             
-   libbrotlicommon.dll          
-   libbrotlidec.dll             
-   libcrypto-1_1.dll            
-   libcurl-4.dll                
-   libdl.dll                    
-   libgcc_s_dw2-1.dll           
-   libiconv-2.dll               
-   libicudt67.dll               
-   libicuuc67.dll               
-   libidn2-0.dll                
-   libintl-8.dll                
-   libnghttp2-14.dll            
-   libpsl-5.dll                 
-   libssh2-1.dll                
-   libssl-1_1.dll               
-   libstdc++-6.dll              
-   libunistring-2.dll           
-   libwinpthread-1.dll          
-   libxerces-c-3-2.dll          
-   libzstd.dll                  
-   usbdm-device-database.4.dll  
-   usbdm-system.4.dll           
-   zlib1.dll                    
-                                
-usbdm-gdi-XXXX-legacy.4.dll
-   libdl.dll
+usbdm-gdi-XXXX.4.dll      
    libgcc_s_dw2-1.dll
+      libwinpthread-1.dll
    libstdc++-6.dll
-   libwinpthread-1.dll
-   usbdm-gdi-cfvx-legacy.4.dll
+   usbdm-device-database.4.dll
+      libxerces-c-3-2.dll
+         libicuuc69.dll
+            libicudt69.dll
    usbdm-system.4.dll
 
+usbdm-gdi-XXXX-legacy.4.dll
+   libgcc_s_dw2-1.dll
+      libwinpthread-1.dll
+   libstdc++-6.dll
+   usbdm-system.4.dll
 
 ============================================
 64-bit
