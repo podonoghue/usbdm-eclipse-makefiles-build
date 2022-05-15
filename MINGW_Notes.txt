@@ -1,7 +1,0 @@
-pacman -S mingw-w64-i686-libusb
-pacman -S mingw-w64-i686-wxWidgets
-pacman -S mingw-w64-i686-xerces-c
-
-pacman -S mingw-w64-x86_64-libusb
-pacman -S mingw-w64-x86_64-wxWidgets
-pacman -S mingw-w64-x86_64-xerces-c

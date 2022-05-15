@@ -1,0 +1,46 @@
+Install MSYS2 (64-bit) - https://www.msys2.org/
+
+pacman -Syu
+pacman -Su
+pacman -S base-devel
+
+# gcc gdb
+pacman -S mingw-w64-x86_64-toolchain
+pacman -S mingw-w64-x86_64-wxWidgets
+pacman -S mingw-w64-x86_64-libusb
+pacman -S mingw-w64-x86_64-xerces-c
+pacman -S mingw-w64-x86_64-curl
+pacman -S mingw-w64-x86_64-dlfcn
+
+
+
+# gcc gdb
+pacman -S mingw-w64-i686-toolchain # 3 9
+pacman -S mingw-w64-i686-wxWidgets
+pacman -S mingw-w64-i686-libusb
+pacman -S mingw-w64-i686-xerces-c
+pacman -S mingw-w64-i686-curl
+pacman -S mingw-w64-i686-dlfcn
+
+==============================================
+pacman -S --needed base-devel mingw-w64-x86_64-toolchain
+pacman mingw-w64-wxWidgets
+
+pacman -S java
+pacman -S libusb
+pacman -S xerces
+pacman -S mingw-w64-xerces-c
+pacman -S mingw-w32-gcc
+pacman -S mingw-64-gcc
+
+pacman -S mingw-w64-x86_64-tcl
+pacman -S mingw-w64-x86_64-libusb
+pacman -S mingw-w64-x86_64-xerces-c
+pacman -S mingw-w64-x86_64-wxWidgets
+
+pacman -S mingw-w64-i686-tcl
+pacman -S mingw-w64-i686-libusb
+pacman -S mingw-w64-i686-xerces-c
+pacman -S mingw-w64-i686-wxWidgets
+pacman -S mingw-w64-i686-gcc
+pacman -S mingw-w64-i686-libusb-win32
