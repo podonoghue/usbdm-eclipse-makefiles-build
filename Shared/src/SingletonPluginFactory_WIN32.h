@@ -168,4 +168,6 @@ void SingletonPluginFactory<T>::unloadClass() {
    getSingletonInstance = 0;
 }
 
+#undef MODULE_HANDLE
+
 #endif /* SRC_SINGLETONPLUGINFACTORY_WIN32_H_ */

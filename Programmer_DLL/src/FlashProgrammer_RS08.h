@@ -19,7 +19,12 @@ public:
    FlashProgrammer_RS08();
    virtual ~FlashProgrammer_RS08();
 
+   virtual ModuleInfo      &getModuleInfo() const override { return moduleInfo; }
+
 protected:
+
+   static ModuleInfo moduleInfo;
+   
    // Error codes return from the flash driver
    enum FlashDriverError_t {
         FLASH_ERR_OK                = (0),  //!< No error

@@ -19,7 +19,12 @@ public:
    FlashProgrammer_CFVx();
    virtual ~FlashProgrammer_CFVx();
 
+   virtual ModuleInfo      &getModuleInfo() const override { return moduleInfo; }
+
 protected:
+
+   static ModuleInfo moduleInfo;
+
    //! Describes the flash programming code (created from loaded flash routines)
    struct TargetProgramInfo {
       uint32_t         entry;                   //!< Address of entry routine (for currently loaded routine)

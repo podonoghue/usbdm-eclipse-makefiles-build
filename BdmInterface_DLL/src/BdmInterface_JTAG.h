@@ -12,9 +12,14 @@
 
 class BdmInterface_JTAG : public BdmInterfaceCommon {
 
+private:
+   static ModuleInfo moduleInfo;
+
 public:
    BdmInterface_JTAG();
    virtual ~BdmInterface_JTAG();
+   
+   virtual ModuleInfo      &getModuleInfo() const override { return moduleInfo; }
 };
 
 #endif /* SRC_BDMINTERFACE_ARM_H_ */

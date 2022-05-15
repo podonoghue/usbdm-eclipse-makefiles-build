@@ -51,11 +51,17 @@
 #include "USBDM_API.h"
 #include "AppSettings.h"
 #include "BdmInterface.h"
+#include "ModuleInfo.h"
 
 class GdiDialoguePlugin;
 
 class GdiDialoguePlugin {
 public:
+   /**
+    * Get reference to module specific information
+    */
+   virtual ModuleInfo                &getModuleInfo() const = 0;
+
    /**
     *  Creates and displays the Dialogue to obtain settings from the user.
     *  - Accepts and updates settings object

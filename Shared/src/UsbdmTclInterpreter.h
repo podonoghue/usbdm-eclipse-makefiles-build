@@ -32,6 +32,7 @@
 #include "USBDM_API.h"
 #include "BdmInterface.h"
 #include "DeviceData.h"
+#include "ModuleInfo.h"
 
 /**
  * Class representing the USBDM TCL interpreter
@@ -51,6 +52,11 @@ public:
       TclSetVar_global       = 1, // TCL_GLOBAL_ONLY,
       TclSetVar_namespace    = 2, // TCL_NAMESPACE_ONLY,
    };
+
+   /**
+    * Get reference to module specific information
+    */
+   virtual ModuleInfo      &getModuleInfo() const = 0;
 
    /**
     * Destructor

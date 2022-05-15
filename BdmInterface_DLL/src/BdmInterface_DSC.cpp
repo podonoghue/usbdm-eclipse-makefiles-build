@@ -14,6 +14,8 @@
 
 using namespace UsbdmWxConstants;
 
+ModuleInfo BdmInterface_DSC::moduleInfo;
+
 BdmInterface_DSC::BdmInterface_DSC() : BdmInterfaceCommon(T_MC56F80xx) {
    DSC_SetLogFile(UsbdmSystem::Log::getLogFileHandle());
 }
@@ -116,7 +118,7 @@ USBDM_ErrorCode BdmInterface_DSC::targetConnectWithRetry(USBDMStatus_t *usbdmSta
       // Connection failure - retry
       int getYesNo;
       do {
-         string message;
+         std::string message;
          long style = (long)(YES_NO|YES_DEFAULT|ICON_QUESTION);
          log.error("Retry, reason = %s\n", USBDM_GetErrorString(rc));
          if (bdmOptions.targetType == T_CFVx) {

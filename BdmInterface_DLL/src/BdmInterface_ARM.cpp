@@ -8,6 +8,8 @@
 #include "BdmInterface_ARM.h"
 #include "PluginHelper.h"
 
+ModuleInfo BdmInterface_ARM::moduleInfo;
+
 BdmInterface_ARM::BdmInterface_ARM() : BdmInterfaceCommon(T_ARM) {
 }
 

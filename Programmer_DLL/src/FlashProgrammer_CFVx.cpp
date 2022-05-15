@@ -102,6 +102,8 @@
 
 static const TargetType_t targetType = T_CFVx;
 
+ModuleInfo FlashProgrammer_CFVx::moduleInfo;
+
 #pragma pack(1)
 //! Header at the start of flash programming code (describes flash code)
 struct LargeTargetImageHeader {

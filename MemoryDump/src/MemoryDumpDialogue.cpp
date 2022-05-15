@@ -20,6 +20,8 @@
 #include "HexNumberGridEditor.h"
 #include "FlashProgrammer.h"
 
+using namespace std;
+
 //! Maximum size of a S-record, should be power of 2
 const int maxSrecSize = (1<<4);
 

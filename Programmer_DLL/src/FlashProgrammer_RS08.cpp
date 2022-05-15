@@ -99,6 +99,8 @@
 
 static const TargetType_t targetType = T_HCS12;
 
+ModuleInfo FlashProgrammer_RS08::moduleInfo;
+
 
 /* ======================================================================
  * Notes on BDM clock source (for default CLKSW):

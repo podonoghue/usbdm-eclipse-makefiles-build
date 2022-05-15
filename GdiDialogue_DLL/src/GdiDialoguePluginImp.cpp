@@ -11,6 +11,8 @@
 
 using namespace std;
 
+ModuleInfo GdiDialoguePluginImp::moduleInfo;
+
 GdiDialoguePluginImp::GdiDialoguePluginImp() {
    LOGGING_E;
 }

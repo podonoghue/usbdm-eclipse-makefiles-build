@@ -109,6 +109,8 @@
 
 static const TargetType_t targetType = T_S12Z;
 
+ModuleInfo FlashProgrammer_S12Z::moduleInfo;
+
 #pragma pack(1)
 //! Header at the start of flash programming code (describes flash code)
 struct LargeTargetImageHeader {

@@ -19,6 +19,10 @@
 
 class UsbdmTclInterpreterImp: public UsbdmTclInterpreter {
 
+private:
+
+   static ModuleInfo moduleInfo;
+
 public:
    /**
     * Create instance of the TCL interpreter
@@ -27,10 +31,14 @@ public:
     *                 UsbdmTclInterpreterImp::main() for shell as it does its own initialisation
     */
    UsbdmTclInterpreterImp(bool doInit=true);
+
    /**
     * Destructor
     */
    virtual ~UsbdmTclInterpreterImp();
+
+   ModuleInfo &getModuleInfo() const override { return moduleInfo; }
+
    /**
     * Main function used for interactive TCL interpreter
     */

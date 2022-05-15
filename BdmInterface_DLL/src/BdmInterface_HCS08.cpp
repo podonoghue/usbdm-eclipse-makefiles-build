@@ -8,6 +8,8 @@
 #include "BdmInterface_HCS08.h"
 #include "PluginHelper.h"
 
+ModuleInfo BdmInterface_HCS08::moduleInfo;
+
 BdmInterface_HCS08::BdmInterface_HCS08() : BdmInterfaceCommon(T_HCS08) {
 }
 

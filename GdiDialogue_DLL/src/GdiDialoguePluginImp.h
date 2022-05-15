@@ -11,9 +11,16 @@
 #include "GdiDialoguePlugin.h"
 
 class GdiDialoguePluginImp: public GdiDialoguePlugin {
+
+private:
+   static ModuleInfo moduleInfo;
+
 public:
    GdiDialoguePluginImp();
    virtual ~GdiDialoguePluginImp();
+   
+   virtual ModuleInfo      &getModuleInfo() const override { return moduleInfo; }
+
 
    /*!
     *  Creates and displays the Dialogue to obtain settings from the user.

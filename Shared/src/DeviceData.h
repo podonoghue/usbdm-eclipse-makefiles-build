@@ -71,10 +71,10 @@
 #include "UsbdmSystem.h"
 
 #include "Common.h"
+#include "FlashImage.h"
 #include "MyException.h"
 #include "USBDM_API.h"
 #include "TargetDefines.h"
-#include "FlashImage.h"
 
 /**
  * RS08/HCS08/CFV1 clock types

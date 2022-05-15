@@ -36,6 +36,7 @@
 #include <memory>
 #include <stdio.h>
 
+#include "ModuleInfo.h"
 #include "UsbdmSystem.h"
 #include "MyException.h"
 
@@ -45,15 +46,7 @@
 template <class T>
 class PluginFactory {
 
-#define MODULE_HANDLE HINSTANCE
-#define STD__LINKAGE  __attribute__((__stdcall__))
-
 protected:
-   static std::string   dllName;
-   static MODULE_HANDLE moduleHandle;
-   static int           instanceCount;
-   static size_t        (* STD__LINKAGE newInstance)(T*, ...);
-
    PluginFactory() {};
    ~PluginFactory() {};
 
@@ -65,12 +58,16 @@ protected:
     */
    static void deleter(T *p) {
       LOGGING_Q;
+      ModuleInfo moduleInfo = p->getModuleInfo();
+
       log.print("Calling destructor\n");
       p->~T();
+
       log.print("Deallocating storage @%p\n", p);
       ::operator delete(p);
-      if (--instanceCount == 0) {
-         unloadClass();
+
+      if (--moduleInfo.instanceCount == 0) {
+         unloadClass(moduleInfo.moduleHandle);
       }
    }
 
@@ -84,35 +81,92 @@ protected:
     */
    static std::shared_ptr<T> createPlugin(std::string newDllName, std::string entryPoint="createPluginInstance") {
       LOGGING;
-      if ((newInstance != 0) && (newDllName != dllName)) {
-         // Different BDM interface type
-         unloadClass();
-      }
+
+      auto moduleHandle = loadClass(newDllName.c_str());
+
+      auto *newInstance = (size_t (STD__LINKAGE *)(T*, ...))GetProcAddress(moduleHandle, entryPoint.c_str());
       if (newInstance == 0) {
-         loadClass(newDllName.c_str(), entryPoint.c_str());
-         dllName = newDllName;
+         char buff[1000];
+         snprintf(buff, sizeof(buff), "Entry point \'%s\' not found in module \'%s\'\n", entryPoint.c_str(), newDllName.c_str());
+         throw MyException(std::string(buff));
       }
+
       //      log.print("Getting size\n");
       size_t classSize = (*newInstance)(0);
+
       //      log.print("Calling new\n");
       T* p = static_cast<T*>(::operator new(classSize));
       log.print("Allocated storage @%p, size = %lu\n", p, (long unsigned)classSize);
+
       //      log.print("Calling placement constructor\n");
       (*newInstance)(p);
+
+      ModuleInfo &moduleInfo = p->getModuleInfo();
+      moduleInfo.instanceCount++;
+      moduleInfo.moduleHandle = moduleHandle;
+
       std::shared_ptr<T> pp(p, deleter);
-      instanceCount++;
       return pp;
    }
 
 protected:
    /**
-    * Load plugin class
+    * Load an instance of a class from a Library
+    *
+    * @param moduleName  Name of module (Library) to load
+    *
+    * Note: Searches USBDM Application directory if necessary
     */
-   static void loadClass(const char *moduleName, const char *createInstanceFunctioName);
+   static auto loadClass(const char *moduleName) {
+      LOGGING;
+
+      // Load using default library path (executable directory)
+      auto moduleHandle = LoadLibraryA(moduleName);
+
+      if (moduleHandle == NULL) {
+         log.error("Module \'%s\' failed to load! Retrying...\n", moduleName);
+         printSystemErrorMessage();
+
+         // Try to find module in application directory
+         std::string extendedPath = UsbdmSystem::getApplicationPath(moduleName);
+
+         size_t pos = extendedPath.rfind("\\");
+         if (pos != std::string::npos) {
+            extendedPath = extendedPath.substr(0, pos);
+         }
+         log.error("Trying in application directory \'%s\'\n", extendedPath.c_str());
+         SetDllDirectoryA(extendedPath.c_str());
+         moduleHandle = LoadLibraryA(moduleName);
+         SetDllDirectoryA((const char *)0);
+
+         if (moduleHandle == NULL) {
+            log.error("Module \'%s\' failed to load!!!\n", moduleName);
+            printSystemErrorMessage();
+            throw MyException(std::string("Module \'").append(moduleName).append("\' failed to load (Windows)\n"));
+         }
+      }
+      log.print("Module \'%s\' loaded @0x%p, handle cached @%p\n", moduleName, moduleHandle, &moduleHandle);
+      char executableName[MAX_PATH];
+      if (GetModuleFileNameA(moduleHandle, executableName, sizeof(executableName)) > 0) {
+         log.print("Module path = %s\n", executableName);
+      }
+      return moduleHandle;
+   }
+
    /**
     * Unload plug-in class
     */
-   static void unloadClass();
+   static void unloadClass(MODULE_HANDLE moduleHandle) {
+      LOGGING_Q;
+      log.print("Unloading module @0x%p, cached @%p\n", moduleHandle, &moduleHandle);
+      if (FreeLibrary(moduleHandle) == 0) {
+         log.print("Unloading module at @0x%p failed\n", moduleHandle);
+         printSystemErrorMessage();
+         // Ignore error as can't throw in destructor
+      }
+      log.print("Unloading module @0x%p done\n", moduleHandle);
+      moduleHandle = 0;
+   }
 
    static void printSystemErrorMessage() {
       char buffer[200];
@@ -125,84 +179,5 @@ protected:
       UsbdmSystem::Log::print("System Error: %s", buffer);
    }
 };
-
-template <class T> std::string   PluginFactory<T>::dllName;
-template <class T> MODULE_HANDLE PluginFactory<T>::moduleHandle = 0;
-template <class T> size_t (*STD__LINKAGE PluginFactory<T>::newInstance)(T*, ...) = 0;
-template <class T> int  PluginFactory<T>::instanceCount = 0;
-
-using namespace std;
-
-/**
- * Load an instance of a class from a Library
- *
- * @param moduleName                Name of module (Library) to load
- * @param createInstanceFunctioName Name of function to call to create instance
- *
- * Note: Searches USBDM Application directory if necessary
- */
-template <class T>
-void PluginFactory<T>::loadClass(const char *moduleName, const char *createInstanceFunctioName) {
-   LOGGING;
-
-   if (moduleHandle != NULL) {
-      log.print("Module \'%s\' already loaded\n", moduleName);
-      throw MyException("Module already loaded\n");
-   }
-
-   // Load using default library path (executable directory)
-   moduleHandle = LoadLibraryA(moduleName);
-
-   if (moduleHandle == NULL) {
-      log.error("Module \'%s\' failed to load using default path! Retrying...\n", moduleName);
-      printSystemErrorMessage();
-
-      // Try to find module in application directory
-      string extendedPath = UsbdmSystem::getApplicationPath(moduleName);
-
-      size_t pos = extendedPath.rfind("\\");
-      if (pos != string::npos) {
-         extendedPath = extendedPath.substr(0, pos);
-      }
-      log.error("Trying in application directory \'%s\'\n", extendedPath.c_str());
-      SetDllDirectoryA(extendedPath.c_str());
-      moduleHandle = LoadLibraryA(moduleName);
-      SetDllDirectoryA((const char *)0);
-
-      if (moduleHandle == NULL) {
-         log.error("Module \'%s\' failed to load\n", moduleName);
-         printSystemErrorMessage();
-         throw MyException(std::string("Module \'").append(moduleName).append("\' failed to load (Windows)\n"));
-      }
-   }
-   log.print("Module \'%s\' loaded @0x%p, handle cached @%p\n", moduleName, moduleHandle, &moduleHandle);
-   char executableName[MAX_PATH];
-   if (GetModuleFileNameA(moduleHandle, executableName, sizeof(executableName)) > 0) {
-      log.print("Module path = %s\n", executableName);
-   }
-   newInstance = (size_t (STD__LINKAGE *)(T*, ...))GetProcAddress(moduleHandle, createInstanceFunctioName);
-   if (newInstance == 0) {
-      log.print("Entry point \'%s\' not found in module \'%s\'\n", createInstanceFunctioName, moduleName);
-      throw MyException("Entry point not found in module");
-   }
-   //   log.print("Entry point \'%s\' found @0x%p\n", createInstanceFunctioName, newInstance);
-}
-
-/**
- * Unload an instance of a class from a Library
- */
-template <class T>
-void PluginFactory<T>::unloadClass() {
-   LOGGING_Q;
-   //   log.print("Unloading module @0x%p, cached @%p\n", moduleHandle, &moduleHandle);
-   if (FreeLibrary(moduleHandle) == 0) {
-      log.print("Unloading module at @0x%p failed\n", moduleHandle);
-      printSystemErrorMessage();
-      // Ignore error as can't throw in destructor
-   }
-   log.print("Unloading module @0x%p done\n", moduleHandle);
-   moduleHandle = 0;
-   newInstance = 0;
-}
 
 #endif /* SRC_PLUGINFACTORY_WIN32_H_ */

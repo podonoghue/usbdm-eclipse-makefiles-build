@@ -8,6 +8,8 @@
 #include "MyException.h"
 #include "FlashImageFactory.h"
 
+using namespace std;
+
 /*! Check error code from USBDM API function
  *
  *  @param rc - error code to access

@@ -63,6 +63,7 @@
 #include <string>
 
 #include "USBDM_API.h"
+#include "ModuleInfo.h"
 
 /**
  * Represents a memory image containing loaded file(s)
@@ -132,6 +133,11 @@ protected:
 
 public:
    virtual ~FlashImage() {};
+
+   /**
+    * Get reference to class specific instance count
+    */
+   virtual ModuleInfo &getModuleInfo() const = 0;
 
    /**
     *   Set target type of image

@@ -36,6 +36,7 @@
 #include "USBDM_API.h"
 #include "AppSettings.h"
 #include "BdmInformation.h"
+#include "ModuleInfo.h"
 
 /**
  * Class representing an interface to the BDM for a particular device type
@@ -86,6 +87,11 @@ protected:
 
 public:
    virtual ~BdmInterface() {};
+
+   /**
+    * Get reference to module specific information
+    */
+   virtual ModuleInfo                &getModuleInfo() const = 0;
 
   /**
    * Gets string describing a USBDM error code

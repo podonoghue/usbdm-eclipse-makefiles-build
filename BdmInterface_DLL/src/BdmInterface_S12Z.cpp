@@ -8,6 +8,8 @@
 #include "BdmInterface_S12Z.h"
 #include "PluginHelper.h"
 
+ModuleInfo BdmInterface_S12Z::moduleInfo;
+
 BdmInterface_S12Z::BdmInterface_S12Z() : BdmInterfaceCommon(T_S12Z) {
 }
 

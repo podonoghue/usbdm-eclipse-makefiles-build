@@ -66,7 +66,6 @@ XERCES_CPP_NAMESPACE_USE
 
 #include "Common.h"
 #include "DeviceXmlParser.h"
-#include "DeviceData.h"
 #include "Names.h"
 
 #include "UsbdmSystem.h"

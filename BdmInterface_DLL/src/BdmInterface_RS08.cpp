@@ -8,6 +8,8 @@
 #include "BdmInterface_RS08.h"
 #include "PluginHelper.h"
 
+ModuleInfo BdmInterface_RS08::moduleInfo;
+
 BdmInterface_RS08::BdmInterface_RS08() : BdmInterfaceCommon(T_RS08) {
 }
 

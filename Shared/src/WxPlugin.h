@@ -50,12 +50,14 @@
 #include <string>
 
 #include "UsbdmWxConstants.h"
+#include "ModuleInfo.h"
 
 class WxPlugin {
 
 public:
    virtual long display(std::string message, std::string caption, long style) = 0;
    virtual ~WxPlugin() {};
+   virtual ModuleInfo &getModuleInfo() const = 0;
 
 protected:
    WxPlugin() {};

@@ -43,6 +43,9 @@ protected:
       uint16_t data[MaxSecurityAreaSize]; //!< Security area data (BLANK indicates empty/invalid location)
    };
 
+   /**
+    * Class used to set/unset programming mode based on construction/destruction
+    */
    class SetProgrammingMode {
    private:
       BdmInterfacePtr bdmInterface;

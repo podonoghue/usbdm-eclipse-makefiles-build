@@ -34,9 +34,7 @@
 class BdmInterfaceFactory : PluginFactory<BdmInterface> {
 
 public:
-   // ToDo : This class assumes that the interfaces are loaded sequentially as it confuses different interface DLLs
-
-   /**!
+   /**
     * Create an instance of a BDM interface
     *
     * targetType - Type of target

@@ -8,6 +8,8 @@
 #include "BdmInterface_CFVx.h"
 #include "PluginHelper.h"
 
+ModuleInfo BdmInterface_CFVx::moduleInfo;
+
 BdmInterface_CFVx::BdmInterface_CFVx() : BdmInterfaceCommon(T_CFVx) {
 }
 

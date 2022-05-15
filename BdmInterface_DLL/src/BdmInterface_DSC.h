@@ -12,6 +12,9 @@
 
 class BdmInterface_DSC : public BdmInterfaceCommon {
 
+private:
+   static ModuleInfo moduleInfo;
+
 public:
    BdmInterface_DSC();
    virtual ~BdmInterface_DSC();
@@ -33,6 +36,8 @@ public:
 
    virtual USBDM_ErrorCode getIdcode(unsigned int *regValue);
    virtual USBDM_ErrorCode getStatus(unsigned int *status);
+   
+   virtual ModuleInfo      &getModuleInfo() const override { return moduleInfo; }
 };
 
 #endif /* SRC_BDMINTERFACE_DSC_H_ */

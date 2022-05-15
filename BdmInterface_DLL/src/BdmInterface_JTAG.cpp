@@ -8,6 +8,8 @@
 #include "BdmInterface_JTAG.h"
 #include "PluginHelper.h"
 
+ModuleInfo BdmInterface_JTAG::moduleInfo;
+
 BdmInterface_JTAG::BdmInterface_JTAG() : BdmInterfaceCommon(T_JTAG) {
 }
 

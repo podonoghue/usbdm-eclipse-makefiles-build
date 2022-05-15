@@ -50,6 +50,8 @@ size_t CPP_DLL_EXPORT createDefaultPluginInstance(BdmInterfaceCommon *pp) {
    return TcreatePluginInstance<BdmInterfaceCommon>(pp, T_OFF);
 }
 
+ModuleInfo BdmInterfaceCommon::moduleInfo;
+
 string BdmInterfaceCommon::getDllVersionString() {
    LOGGING_Q;
    const char *bdmVersion = USBDM_DLLVersionString();

@@ -14,9 +14,17 @@
 
 class BdmInterfaceCommon: public BdmInterface {
 
+private:
+   static ModuleInfo moduleInfo;
+
 public:
    BdmInterfaceCommon(TargetType_t targetType);
    virtual ~BdmInterfaceCommon();
+
+   /**
+    * Get reference to module specific information
+    */
+   virtual ModuleInfo                &getModuleInfo() const override { return moduleInfo; }
 
    virtual char const                *getErrorString(USBDM_ErrorCode rc) override;
    virtual char const                *getConnectionRetryName(RetryMode mode) override;

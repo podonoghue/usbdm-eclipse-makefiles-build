@@ -320,6 +320,8 @@ FlashImageImp::FlashImageImp() :
    LOGGING;
 }
 
+ModuleInfo FlashImageImp::moduleInfo;
+
 /**
  *  Set target type of image
  *

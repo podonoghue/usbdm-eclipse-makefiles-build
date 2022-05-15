@@ -101,6 +101,8 @@
 
 static const TargetType_t targetType = T_MC56F80xx;
 
+ModuleInfo FlashProgrammer_DSC::moduleInfo;
+
 #pragma pack(1)
 //! Header at the start of flash programming code (describes flash code)
 struct LargeTargetImageHeader {

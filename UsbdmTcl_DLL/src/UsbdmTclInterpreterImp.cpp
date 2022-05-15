@@ -79,6 +79,8 @@ UsbdmTclInterperPtr CPP_DLL_EXPORT createSingletonPluginInstance() {
    return sharedPtrCache;
 }
 
+ModuleInfo UsbdmTclInterpreterImp::moduleInfo;
+
 /**
  * Create the plug-in instance
  */
@@ -2706,7 +2708,7 @@ static int listDevices() {
    DeviceInterfacePtr deviceInterface(new DeviceInterface(bdmInterface->getBdmOptions().targetType));
 
    int deviceIndex;
-   vector<DeviceDataPtr>::const_iterator it;
+   std::vector<DeviceDataPtr>::const_iterator it;
    int col = 0;
    const int nameWidth = 14;
    for ( it=deviceInterface->getDeviceDatabase()->begin(), deviceIndex=0;

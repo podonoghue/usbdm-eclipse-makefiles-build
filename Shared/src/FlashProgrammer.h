@@ -34,6 +34,7 @@
 #include "FlashImage.h"
 #include "BdmInterface.h"
 #include "UsbdmTclInterpreter.h"
+#include "ModuleInfo.h"
 
 #if !defined(CPP_DLL_LOCAL)
    //! Functions exported from a library
@@ -94,6 +95,11 @@ public:
    typedef USBDM_ErrorCode (*CallBackT)(USBDM_ErrorCode status, int percent, const char *message);
 
    virtual ~FlashProgrammer() {}
+
+   /**
+    * Get reference to class specific instance count
+    */
+   virtual ModuleInfo &getModuleInfo() const = 0;
 
    /**
     * Release device data

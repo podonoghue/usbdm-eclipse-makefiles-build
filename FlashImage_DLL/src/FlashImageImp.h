@@ -40,6 +40,7 @@ class FlashImageImp : public FlashImage {
    template <typename T> class MallocWrapper {
    private:
       T *&ptr;
+      
    public:
       MallocWrapper(T *&ptr) : ptr(ptr) {
       }
@@ -85,12 +86,14 @@ class FlashImageImp : public FlashImage {
    friend EnumeratorImp;
 
 protected:
-   static const int                  PAGE_BIT_OFFSET =  (15-sizeof(uint8_t));  // 2**14 = 16K pages
-   static const unsigned             PAGE_SIZE       =  (1U<<PAGE_BIT_OFFSET);
-   static const int                  PAGE_MASK       =  (PAGE_SIZE-1U);
-   static const int                  MAX_SREC_SIZE   =  (1<<4);//! Maximum size of a S-record (2^N)
+   static constexpr int              PAGE_BIT_OFFSET =  (15-sizeof(uint8_t));  // 2**14 = 16K pages
+   static constexpr unsigned         PAGE_SIZE       =  (1U<<PAGE_BIT_OFFSET);
+   static constexpr int              PAGE_MASK       =  (PAGE_SIZE-1U);
+   static constexpr int              MAX_SREC_SIZE   =  (1<<4);//! Maximum size of a S-record (2^N)
 
 protected:
+   static ModuleInfo                 moduleInfo;
+
    TargetType_t                      targetType;
    bool                              wordAddresses;
    std::map<uint32_t,MemoryPagePtr>  memoryPages;            //!< Pointers to occupied memory pages
@@ -136,6 +139,7 @@ public:
    virtual unsigned              getLastAllocatedAddress()  { return lastAllocatedAddress; }
    virtual void                  fill(uint32_t size, uint32_t address, uint8_t fillValue = 0xFF);
    virtual void                  fillUnused(uint32_t size, uint32_t address, uint8_t fillValue = 0xFF);
+   virtual ModuleInfo           &getModuleInfo() const override { return moduleInfo; }
 
 protected:
    virtual MemoryPagePtr   getmemoryPage(uint32_t pageNum);

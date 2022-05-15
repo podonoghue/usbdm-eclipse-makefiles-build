@@ -109,6 +109,8 @@
 
 static const TargetType_t targetType = T_HCS12;
 
+ModuleInfo FlashProgrammer_HCS12::moduleInfo;
+
 #pragma pack(1)
 //! Header at the start of flash programming code (describes flash code)
 struct LargeTargetImageHeader {

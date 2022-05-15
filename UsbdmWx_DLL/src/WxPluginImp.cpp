@@ -74,6 +74,8 @@ long WxPluginImp::display(std::string message, std::string caption, long style) 
    return rc;
 }
 
+ModuleInfo WxPluginImp::moduleInfo;
+
 /*
  * Create the plug-in instance
  */
