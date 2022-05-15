@@ -77,7 +77,7 @@ void doSequence(void) {
       // Print list of connected devices (for infomation only)
       std::vector<BdmInformation> bdmInformation;
       bdmInterface->findBDMs(bdmInformation);
-      vector<BdmInformation>::iterator it;
+      std::vector<BdmInformation>::iterator it;
       for ( it=bdmInformation.begin(); it<bdmInformation.end(); it++ ) {
          printf("Found %s\n", (const char *)(it->getSerialNumber().c_str()));
       }
