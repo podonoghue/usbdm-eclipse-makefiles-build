@@ -310,7 +310,7 @@ void Mcg::SystemCoreClockUpdate(void) {
    }
    SystemMcgPllClock = 0; // PLL - not available
    ::SystemCoreClock    = SystemMcgOutClock/(((SIM->CLKDIV1&SIM_CLKDIV1_OUTDIV1_MASK)>>SIM_CLKDIV1_OUTDIV1_SHIFT)+1);
-   ::SystemBusClock     = SystemMcgOutClock/(((SIM->CLKDIV1&SIM_CLKDIV1_OUTDIV2_MASK)>>SIM_CLKDIV1_OUTDIV2_SHIFT)+1);
+   ::SystemBusClock     = SystemCoreClock/(((SIM->CLKDIV1&SIM_CLKDIV1_OUTDIV4_MASK)>>SIM_CLKDIV1_OUTDIV4_SHIFT)+1);
 #ifdef SIM_CLKDIV1_OUTDIV3_MASK
    ::SystemFlexbusClock = SystemMcgOutClock/(((SIM->CLKDIV1&SIM_CLKDIV1_OUTDIV3_MASK)>>SIM_CLKDIV1_OUTDIV3_SHIFT)+1);
 #endif
