@@ -20,9 +20,10 @@
 ;#####################################################################################
 ;#  History
 ;#
+;#  V4.12.1.280 - Minor tweaks to messages
 ;#  V4.11.1.50  - initFlash{} now queries target for speed
 ;#  V4.10.4.240 - Added return error codes
-;#  V4.10.4 - Changed return code handling
+;#  V4.10.4     - Changed return code handling
 ;# 
 
 ;######################################################################################
@@ -82,11 +83,12 @@ proc loadSymbols {} {
    set ::HCS08_BDMSTS_ENBDM         0x80
    set ::HCS08_BDMSTS_BDMACT        0x40
    set ::HCS08_BDMSTS_CLKSW         0x04
-   set ::HCS08_BDMSTS_UNSEC         0x02
+   
+   set ::CAP_VDDCONTROL          (1<<2)      ;# Control over target Vdd
 
-   set ::HCS08_PRDIV8               0x40
+   set ::HCS08_PRDIV8            0x40
 
-   set ::FLASH_REGIONS              "" ;# List of addresses within each unique flash region (incl. eeprom)
+   set ::FLASH_REGIONS         "" ;# List of addresses within each unique flash region (incl. eeprom)
    
    set ::PROGRAMMING_RC_ERROR_SECURED              114
    set ::PROGRAMMING_RC_ERROR_FAILED_FLASH_COMMAND 115
@@ -97,29 +99,53 @@ proc loadSymbols {} {
 
 ;######################################################################################
 ;#
-;# @param flashAddresses - list of flash array addresses
+;# Disable watchdog
 ;#
-proc initTarget { flashRegions } {
-   puts "initTarget {}"
+;# A reset is required to prevent a possible timeout before the COPCTL write completes
+;#
+proc disableWatchdog { } {
+
+   ;# puts "disableWatchdog {}"
+   ;# halt   ;# in case sleeping
+   ;# wb $::HCS08_SOPT $::HCS08_SOPT_INIT ;# Disable COP
+   ;# rb $::HCS08_SOPT
    
-   set ::FLASH_REGIONS  $flashRegions 
-
-;#   set ::ramAddress 0x1000
-;#   set wdogH [expr $::WDOG>>8]
-;#   set wdogL [expr $::WDOG&0xFF]
-
    ;# Disable watchdog
+   ;#   set ::ramAddress 0x1000
+   ;#   set wdogH [expr $::WDOG>>8]
+   ;#   set wdogL [expr $::WDOG&0xFF]
+
    ;#                ldhx #WDOG;        lda #0x10; sta 4,X;  clra; sta 5,X;  sta 1,X;  sta ,X;   
-;#   wb  $::ramAddress 0x45 $wdogH $wdogL 0xA6 0x10  0xE7 0x04 0x4F  0xE7 0x05 0xE7 0x01 0xF7 0x82
-;#   wpc $::ramAddress
-;#   go 
-   
-   return
+   ;#   wb  $::ramAddress 0x45 $wdogH $wdogL 0xA6 0x10  0xE7 0x04 0x4F  0xE7 0x05 0xE7 0x01 0xF7 0x82
+   ;#   wpc $::ramAddress
+   ;#   go 
 }
 
 ;######################################################################################
 ;#
-;#  busFrequency - Target bus busFrequency in kHz
+;# @param flashRegions - list of flash array addresses
+;#
+proc initTarget { flashRegions } {
+   puts "Target script = HCS08-PTxx-flash-scripts.tcl"
+   puts "initTarget { $flashRegions }"
+   
+   set ::FLASH_REGIONS  $flashRegions 
+
+;#    set capabilities [getcap]
+;#    if { [expr ( $capabilities & $::CAP_VDDCONTROL )  != 0] } {
+;#       puts "Doing Power reset"
+;#       catch { reset s p }
+;#    }
+;#    else {
+;#       puts "Doing Hardware reset"
+;#       catch { reset s p }
+;#    }
+   disableWatchdog
+}
+
+;######################################################################################
+;#
+;#  busSpeedkHz - Target bus frequency in kHz
 ;#
 proc initFlash { {busSpeedkHz 0} } {
    puts "initFlash {}"
@@ -132,7 +158,7 @@ proc initFlash { {busSpeedkHz 0} } {
    puts "initFlash {} busSpeedkHz = $busSpeedkHz"
    set cfmclkd [calculateFlashDivider  $busSpeedkHz]
 
-   ;# Set up Flash divider
+   ;# Set Flash clock divider
    wb $::NVM_FCLKDIV $cfmclkd             ;# Flash divider
    rb $::NVM_FCLKDIV
    
@@ -176,7 +202,8 @@ proc calculateFlashDivider { busFrequency } {
 ;#  value   - data value to use
 ;#
 proc executeFlashCommand { cmd {address "none"} {data0 "none"} {data1 "none"} {data2 "none"} {data3 "none"} } {
-   ;# puts "executeFlashCommand {}"
+
+   puts "executeFlashCommand { $cmd $address $data0 $data1 $data2 $data3 }"
    
    wb $::NVM_FSTAT   $::NVM_FSTAT_CLEAR             ;# clear any error flags
    wb $::NVM_FCCOBIX   0                            ;# index = 0
@@ -230,10 +257,9 @@ proc massEraseTarget { } {
    
    ;# No initial connect as may fail.  Assumed done by caller.
 
-   ;# Mass erase flash
    initFlash [expr [speed]/1000]  ;# Flash speed calculated from BDM connection speed
 
-;#   executeFlashCommand $::NVM_FCMD_UNSECURE
+   ;# Mass erase flash
    executeFlashCommand $::NVM_FCMD_ERASE_ALL_BLKS
    
    ;# Should be temporarily unsecure

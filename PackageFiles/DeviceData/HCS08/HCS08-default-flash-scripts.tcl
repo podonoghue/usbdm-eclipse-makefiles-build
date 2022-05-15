@@ -20,6 +20,7 @@
 ;#####################################################################################
 ;#  History
 ;#
+;#  V4.12.1.280 - Fixes for incompatibility between C code and TCL parameters
 ;#  V4.11.1.50  - initFlash{} now queries target for speed
 ;#  V4.11.1.50  - Changed security checking routine (now does blank check first)
 ;#  V4.10.4.240 - Added return error codes
@@ -67,10 +68,12 @@ proc loadSymbols {} {
    set ::HCS08_FCMD_BURST_PROG   0x25
    set ::HCS08_FCMD_PAGE_ERASE   0x40
    set ::HCS08_FCMD_MASS_ERASE   0x41
+   
+   set ::CAP_VDDCONTROL          (1<<2)      ;# Control over target Vdd
 
    set ::HCS08_PRDIV8            0x40
 
-   set ::FLASH_ADDRESSES         "" ;# List of addresses within each unique flash region (incl. eeprom)
+   set ::FLASH_REGIONS         "" ;# List of addresses within each unique flash region (incl. eeprom)
    
    set ::PROGRAMMING_RC_ERROR_SECURED              114
    set ::PROGRAMMING_RC_ERROR_FAILED_FLASH_COMMAND 115
@@ -81,18 +84,44 @@ proc loadSymbols {} {
 
 ;######################################################################################
 ;#
-;# @param flashAddresses - list of flash array addresses
+;# Disable watchdog
 ;#
-proc initTarget { flashAddresses } {
-   puts "initTarget {}"
-   
-   set ::FLASH_ADDRESSES  $flashAddresses 
+;# A reset is required to prevent a possible timeout before the COPCTL write completes
+;#
+proc disableWatchdog { } {
 
-   halt   ;# in case sleeping
-   wb $::HCS08_SOPT $::HCS08_SOPT_INIT ;# Disable COP
-   rb $::HCS08_SOPT
-   
+   puts "disableWatchdog {}"
+   catch {
+      connect
+      halt   ;# in case sleeping
+   }
+   catch {
+      wb $::HCS08_SOPT $::HCS08_SOPT_INIT ;# Disable COP
+      rb $::HCS08_SOPT
+   }
    return
+}
+
+;######################################################################################
+;#
+;# @param flashRegions - list of flash array addresses
+;#
+proc initTarget { flashRegions } {
+   puts "Target script = HCS08-default-flash-scripts.tcl"
+   puts "initTarget { $flashRegions }"
+   
+   set ::FLASH_REGIONS  $flashRegions 
+
+;#    set capabilities [getcap]
+;#    if { [expr ( $capabilities & $::CAP_VDDCONTROL )  != 0] } {
+;#       puts "Doing Power reset"
+;#       catch { reset s p }
+;#    }
+;#    else {
+;#       puts "Doing Hardware reset"
+;#       catch { reset s p }
+;#    }
+   disableWatchdog
 }
 
 ;######################################################################################
@@ -143,6 +172,7 @@ proc calculateFlashDivider { busFrequency } {
       puts "Not possible to find suitable flash clock divider"
       error $::PROGRAMMING_RC_ERROR_NO_VALID_FCDIV_VALUE
    }      
+   
    return $cfmclkd
 }
 
@@ -153,7 +183,8 @@ proc calculateFlashDivider { busFrequency } {
 ;#  value   - data value to use
 ;#
 proc executeFlashCommand { cmd address value } {
-   ;# puts "executeFlashCommand {}"
+
+   puts "executeFlashCommand { $cmd $address $value}"
    
    ;# Clear FPVIOL and FACCERR
    wb $::HCS08_FSTAT    [expr ($::HCS08_FSTAT_FPVIOL|$::HCS08_FSTAT_FACCERR)]
@@ -194,10 +225,12 @@ proc massEraseTarget { } {
    initFlash
 
    ;# Mass erase flash (& EEPROM)
-   ;# puts "Mass erasing device"
-   foreach flashAddress $::FLASH_ADDRESSES {
-      ;# puts "executeFlashCommand $::HCS08_FCMD_MASS_ERASE $flashAddress 0xFF"
-      executeFlashCommand $::HCS08_FCMD_MASS_ERASE $flashAddress 0xFF
+   foreach flashRegion $::FLASH_REGIONS {
+      ;# puts "flashRegion = $flashRegion"
+      lassign  $flashRegion type address
+      puts "Processing memory type='$type', dummy address='$address'"
+      ;# puts "executeFlashCommand $::HCS08_FCMD_MASS_ERASE $address 0xFF"
+      executeFlashCommand $::HCS08_FCMD_MASS_ERASE $address 0xFF
    }
    
    ;# Should be temporarily unsecure
@@ -221,9 +254,13 @@ proc isUnsecure { } {
    initFlash
 
    ;# Blankcheck flash (to temporarily unsecure flash if entirely blank)
-   foreach flashAddress $::FLASH_ADDRESSES {
-      ;# puts "executeFlashCommand $::HCS08_FCMD_BLANK_CHK $flashAddress 0xFF"
-      executeFlashCommand $::HCS08_FCMD_BLANK_CHK $flashAddress 0xFF
+   foreach flashRegion $::FLASH_REGIONS {
+      ;# puts "flashRegion = $flashRegion"
+      lassign  $flashRegion type address
+      puts "Processing memory type='$type', dummy address='$address'"
+  
+      ;# puts "executeFlashCommand $::HCS08_FCMD_BLANK_CHK $address 0xFF"
+      executeFlashCommand $::HCS08_FCMD_BLANK_CHK $address 0xFF
       set status  [rb $::HCS08_FSTAT]
       if [ expr (($status & $::HCS08_FSTAT_FBLANK) == 0) ] {
          ;# puts [ format "Flash blank check failed HCS08_FSTAT=0x%02X" $status ]
