@@ -1543,7 +1543,7 @@ static int cmd_readStatus(ClientData, Tcl_Interp *interp, int argc, Tcl_Obj *con
  * @return
  */
 static int cmd_registers(ClientData, Tcl_Interp *interp, int argc, Tcl_Obj *const *argv) {
-   static const int HCS12regList[] = {HCS12_RegPC, HCS12_RegD, HCS12_RegX, HCS12_RegY, HCS12_RegSP};
+   static const int HCS12regList[] = {HCS12_RegPC, HCS12_RegD, HCS12_RegX, HCS12_RegY, HCS12_RegSP, HCS12_RegCCR, };
    static const int HCS12ZregList[] = {
          S12Z_RegD0, S12Z_RegD1, S12Z_RegD2, S12Z_RegD3, S12Z_RegD4, S12Z_RegD5, S12Z_RegD6, S12Z_RegD7,
          S12Z_RegX, S12Z_RegY, S12Z_RegSP, S12Z_RegPC, S12Z_RegCCR
@@ -1551,7 +1551,7 @@ static int cmd_registers(ClientData, Tcl_Interp *interp, int argc, Tcl_Obj *cons
    static const int HCS12ZregListWidth[] = {
          1, 1, 2, 2, 2, 2, 4, 4, 3, 3, 3, 3, 2
    };
-   static const int HCS08regList[] = {HCS08_RegPC, HCS08_RegA, HCS08_RegHX, HCS08_RegSP};
+   static const int HCS08regList[] = {HCS08_RegPC, HCS08_RegA, HCS08_RegHX, HCS08_RegSP, HCS08_RegCCR};
    static const int RS08regList[]  = {RS08_RegCCR_PC, RS08_RegSPC, RS08_RegA};
    static const int DSCregList[]   = {
          DSC_RegA2,   DSC_RegA1,   DSC_RegA0,  -1,

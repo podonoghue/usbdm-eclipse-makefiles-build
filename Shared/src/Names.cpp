@@ -654,6 +654,10 @@ char const *getHCS12RegName( unsigned int regAddr ) {
    if (regAddr < sizeof(names)/sizeof(names[0])) {
        regName = names[regAddr];
    }
+   else if (regAddr == HCS12_RegCCR) {
+      // Special value mapped to CCR
+      regName = "CCR";
+   }
    if (regName == NULL) {
       regName = getUnknownReg(regAddr);
    }
