@@ -16,9 +16,9 @@ Alternatively, the projects can be imported into Eclipse CDT and built using Min
 
 To Build under Windows  
 =====================
-Pretty difficult - It needs lots of software installed.  
-Please read through the Common.mk file and look at all the paths defined  
-Packages required MinGW, Xerces-3-1-1, TCL, Java JDK, Wix, Windows Installer SDK and wxWidgets  
+Build using MINGW
+See Installing MSYS2.txt for packages required.
+Build using ./MakeAll using MINGW shell.
 
 To Build under Linux
 =====================
