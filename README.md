@@ -16,9 +16,9 @@ Alternatively, the projects can be imported into Eclipse CDT and built using Min
 
 To Build under Windows  
 =====================
-Build using MINGW
-See Installing MSYS2.txt for packages required.
-Build using ./MakeAll using MINGW shell.
+Build using MINGW  
+See Installing MSYS2.txt for packages required.  
+Build using ./MakeAll using MINGW shell.  
 
 To Build under Linux
 =====================
