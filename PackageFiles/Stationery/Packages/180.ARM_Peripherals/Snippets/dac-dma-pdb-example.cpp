@@ -27,9 +27,9 @@
 
 using namespace USBDM;
 
-// 100 samples => Sine period = 100 * PIT period
+// Sine period = NUM_SAMPLES * PDB_PERIOD = 100 * 500_ns = 50_us, f=20_kHz
 static constexpr unsigned NUM_SAMPLES = 100;
-static constexpr float    PDB_PERIOD  = 10_us;
+static constexpr float    PDB_PERIOD  = 500_ns;
 
 // Table of values for a sine wave
 static uint16_t sineTable[NUM_SAMPLES];
@@ -85,12 +85,12 @@ static constexpr DmaTcd tcd (
    /* Last source adjustment         */ -(int)sizeof(sineTable),          // Reset Source address to start of array on completion
 
    /* Destination address            */ Dac::dacData(),                   // Destination
-   /* Destination offset             */ 0,                                // No adjustment
+   /* Destination offset             */ 0,                                // No destination adjustment
    /* Destination size               */ DmaSize_16bit,                    // 16-bit write to destination address
    /* Destination modulo             */ DmaModulo_Disabled,               // Disabled
    /* Last destination adjustment    */ 0,                                // No adjustment
 
-   /* Minor loop byte count          */ dmaNBytes(sizeof(sineTable[0])),  // 1 value transfered each minor-loop (triggered request)
+   /* Minor loop byte count          */ dmaNBytes(sizeof(sineTable[0])),  // 1 value (2 bytes) transfered each minor-loop (triggered request)
    /* Major loop count               */ dmaCiter(sizeof(sineTable)/       // Transfer entire buffer in major loop
    /*                                */           sizeof(sineTable[0])),
 
@@ -145,7 +145,6 @@ static void configureDma(DmaChannelNum dmaChannel) {
    // Enable asynchronous requests (if available)
    Dma0::enableAsynchronousRequests(dmaChannel);
 #endif
-
 }
 
 /**
@@ -160,14 +159,19 @@ static void configurePdb() {
          PdbTrigger_Software, // Start when triggered by software
          PdbAction_Dma);      // Generate DMA requests instead of interrupts
 
-   // Period of timer (interrupts)
+   /*
+    * Period of main timer
+    * The main PDB timer is not actually used in this example so the modulo value is irrelevant.
+    * However, this method has the side-effect of setting the prescaler and multiplier which are also
+    * used for the DAC counters.
+    */
    Pdb0::setPeriod(PDB_PERIOD);
 
    // Any phase will do (<PDB_PERIOD)
    Pdb0::setInterruptDelay(0_ticks);
 
    // Registers load on next event
-   Pdb0::configureRegisterLoad(PdbLoadMode_Event);
+   Pdb0::configureRegisterLoad(PdbLoadMode_Both);
 
    // Start timer and load values
    Pdb0::softwareTrigger();
@@ -214,6 +218,8 @@ int main() {
    // Set up DMA transfer from memory -> UART
    configurePdb();
    configureDma(dmaChannel);
+
+   checkError();
 
    for(;;) {
       Smc::enterWaitMode();

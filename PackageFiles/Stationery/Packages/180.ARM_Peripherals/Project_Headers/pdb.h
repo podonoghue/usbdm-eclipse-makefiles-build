@@ -538,8 +538,8 @@ public:
 //               write(", mod = ").write(trialMod).
 //               write(", period = ").writeln(period);
             if (trialMod <= 0) {
-               // Too short a period
-               return E_TOO_SMALL;
+               // Too short a period stop looking at this prescaler
+               break;
             }
             if (trialMod <= 65535) {
                if (trialMod>mod) {
@@ -620,7 +620,7 @@ public:
     */
    static void setInterruptDelay(Ticks delay) {
 
-      pdb->IDLY = (unsigned)delay-1;
+      pdb->IDLY = (unsigned)delay;
    }
 
    /**

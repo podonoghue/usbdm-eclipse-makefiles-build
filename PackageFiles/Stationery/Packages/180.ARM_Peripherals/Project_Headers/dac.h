@@ -222,7 +222,7 @@ public:
    static constexpr uint32_t dacData() { return dacBase() + offsetof(DAC_Type, DATA[0]); }
 
    /** Get base address of DAC.DATA[index] register as uint32_t */
-   static constexpr uint32_t dacData(unsigned index) { return dacBase() + offsetof(DAC_Type, DATA[index]); }
+   static constexpr uint32_t dacData(unsigned index) { return dacBase() + offsetof(DAC_Type, DATA) + index*sizeof(DAC_Type::DATA[0]); }
 
    /**
     * IRQ handler

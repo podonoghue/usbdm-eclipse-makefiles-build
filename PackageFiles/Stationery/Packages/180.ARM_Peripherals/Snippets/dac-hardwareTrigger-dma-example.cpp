@@ -1,9 +1,12 @@
 /**
+ ============================================================================
  * @file    dac-hardwareTrigger-dma-example.cpp (180.ARM_Peripherals/Snippets)
  * @brief   DMA example using DAC and PIT
  *
  * @version  V4.12.1.240
  * @date     28/10/2018
+ *      Author: podonoghue
+ ============================================================================
  */
 /**
  * This example uses DMA to transfer values from an array to the DAC for conversion.
@@ -17,7 +20,7 @@
  * under the "Peripheral Parameters"->DMA tab.
  * Select irqHandlers option (Class Method - Software ...)
  */
-#include "math.h"
+#include <math.h>
 #include "hardware.h"
 #include "dma.h"
 #include "pdb.h"
@@ -26,7 +29,7 @@
 
 using namespace USBDM;
 
-// 100 samples => Sine period = 100 * PIT period
+// Sine period = NUM_SAMPLES * PDB_PERIOD = 100 * 10_us = 1_ms, f=1_kHz
 static constexpr unsigned NUM_SAMPLES = 100;
 static constexpr float    PDB_PERIOD  = 10_us;
 
@@ -219,13 +222,15 @@ int main() {
       console.writeln("Failed to allocate DMA channel, rc= ", E_NO_RESOURCE);
       __BKPT();
    }
-   console.write("Allocated DMA channel  #", dmaChannel);
+   console.writeln("Allocated DMA channel  #", dmaChannel);
 
    configureDac();
 
    // Set up DMA transfer from memory -> UART
    configurePdb();
    configureDma(dmaChannel);
+
+   checkError();
 
    for(;;) {
       Smc::enterWaitMode();
