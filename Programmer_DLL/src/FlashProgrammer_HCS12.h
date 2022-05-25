@@ -111,6 +111,8 @@ protected:
    USBDM_ErrorCode getPageAddress(MemoryRegionConstPtr memoryRegionPtr, uint32_t address, uint8_t *pageNo);
    USBDM_ErrorCode setPageRegisters(uint32_t physicalAddress);
    USBDM_ErrorCode partitionFlexNVM(void);
+   USBDM_ErrorCode massEraseTargetPrivate(bool resetTarget);
+   USBDM_ErrorCode checkUnsupportedTarget(SecurityOptions_t security=SEC_SECURED);
 
 public:
    static const char *getProgramActionNames(unsigned int actions);
@@ -124,7 +126,6 @@ public:
    virtual USBDM_ErrorCode confirmSDID(void);
    virtual USBDM_ErrorCode resetAndConnectTarget(void);
    virtual USBDM_ErrorCode getTargetBusSpeed(unsigned long *busFrequency);
-   virtual USBDM_ErrorCode checkUnsupportedTarget();
 };
 
 #endif // SOURCE_FLASHPROGRAMMER_HCS12_H_

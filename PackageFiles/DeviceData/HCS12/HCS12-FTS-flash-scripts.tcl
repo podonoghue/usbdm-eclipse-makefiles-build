@@ -103,14 +103,10 @@ proc loadSymbols {} {
 ;######################################################################################
 ;#
 ;# Disable watchdog
-;#
-;# A reset is required to prevent a possible timeout before the COPCTL write completes
+;# 
+;# 
 ;#
 proc disableWatchdog { } {
-
-   ;# Disable watchdog immediately after a reset
-   ;# dialogue "Before reset - FTS" Waiting... ok
-   ;# reset s h
 
    puts "disableWatchdog {}"
    catch {connect}                 ;# Ignore possible BDM enable fault
@@ -324,7 +320,7 @@ proc massEraseTarget { } {
    set securityValue [rb $::NVM_FSEC]
    if [ expr ( $securityValue & $::NVM_FSEC_SEC_MASK ) == $::NVM_FSEC_SEC_UNSEC ] {
       ;# Target was originally unsecured - just return now
-      puts "Target was originally unsecured"
+      puts "Target was originally unsecured - no need to modify security area"
       return
    }
    ;# Reset & re-connect for changes to be effected.  Device is partially unsecured
@@ -335,25 +331,46 @@ proc massEraseTarget { } {
    ;# Program security location to unsecured value
    initTarget $::FLASH_REGIONS
    initFlash [expr [speed]/1000]   ;# Flash speed calculated from BDM connection speed
-   executeFlashCommand  $::NVM_FCMD_WORD_PROG $::NVM_NVSEC $::NVM_FSEC_UNSEC_VALUE
-   
+   set flashBusy 1
+   set retry 0
+   while { $flashBusy } {
+      incr retry
+
+      puts "Program security location to unsecured value (attempt $retry)"
+      executeFlashCommand  $::NVM_FCMD_WORD_PROG $::NVM_NVSEC $::NVM_FSEC_UNSEC_VALUE
+
+      set readback [rw $::NVM_NVSEC]
+      set flashError [expr $readback != $::NVM_FSEC_UNSEC_VALUE]
+      if [expr ! $flashError] {
+         break;
+      }
+      if [expr $retry == 20] {
+         break;
+      }
+   }
+   if [ expr ($flashError || ($retry>=20)) ] {
+      puts [ format "Writing unsecure value failed NVM_FSEC_UNSEC_VALUE=0x%02X, retry=%d" $readback $retry ]
+      error $::PROGRAMMING_RC_ERROR_FAILED_FLASH_COMMAND
+   }
+
    ;# Reset to have unsecured (finally) but not blank device
    reset s h
    connect   ;# shouldn't fail
 
    ;# Confirm unsecured
-   ;#  puts "Checking if target is unsecured"
-   set securityValue [rb $::NVM_FSEC]
-   if [ expr ( $securityValue & $::NVM_FSEC_SEC_MASK ) != $::NVM_FSEC_SEC_UNSEC ] {
+   puts "Checking if target is unsecured"
+   set rc [isUnsecure]
+   if [expr $rc != 0 ] {
       puts "Flash mass erase failed - still secured"
-      error $::PROGRAMMING_RC_ERROR_SECURED
-   }   
+      error $rc
+   }
+   
    ;# Erase security location so device is unsecured and blank!
    initTarget $::FLASH_REGIONS
    initFlash [expr [speed]/1000]   ;# Flash speed calculated from BDM connection speed
    executeFlashCommand  $::NVM_FCMD_SECTOR_ERASE $::NVM_NVSEC 0xFFFF
 
-   ;# Flash is now Blank and unsecured
+   ;# Flash is now Blank and temporarily unsecured
    return [ isUnsecure ]
 }
 

@@ -477,7 +477,7 @@ USBDM_ErrorCode FlashProgrammer_HCS12::readTargetChipId(uint32_t *targetSDID, bo
    }
    if (doInit) {
       USBDM_ErrorCode rc = resetAndConnectTarget();
-      if (rc != PROGRAMMING_RC_OK) {
+      if ((rc != PROGRAMMING_RC_OK) && (rc != PROGRAMMING_RC_ERROR_SECURED)) {
          log.error("Failed resetAndConnectTarget()\n");
          return rc;
       }
@@ -676,12 +676,38 @@ USBDM_ErrorCode FlashProgrammer_HCS12::initialiseTargetFlash() {
    return PROGRAMMING_RC_OK;
 }
 
-//=======================================================================
-//! \brief Does Mass Erase of Target memory using TCL script.
-//!
-//! @return error code, see \ref USBDM_ErrorCode
-//!
+/**
+ * Does Mass Erase of Target memory using TCL script.
+ * Checks for unsupported targets first.
+ *
+ *  @param resetTarget Whether to reset target before action
+ *
+ *  @return error code, see \ref USBDM_ErrorCode
+ *
+ *  @note Mass-erase on HCS12 does not program the security bits.
+ *        The device is left blank but unsecured due to blank check.
+ */
 USBDM_ErrorCode FlashProgrammer_HCS12::massEraseTarget(bool resetTarget) {
+   // Check if safe to mass erase.
+   USBDM_ErrorCode rc = checkUnsupportedTarget(SEC_SECURED);
+   if (rc != BDM_RC_OK) {
+      return rc;
+   }
+   return massEraseTargetPrivate(resetTarget);
+}
+
+/**
+ * Does Mass Erase of Target memory using TCL script.
+ * Does not checks for unsupported targets first.
+ *
+ *  @param resetTarget Whether to reset target before action
+ *
+ *  @return error code, see \ref USBDM_ErrorCode
+ *
+ *  @note Mass-erase on HCS12 does not program the security bits.
+ *        The device is left blank but unsecured due to blank check.
+ */
+USBDM_ErrorCode FlashProgrammer_HCS12::massEraseTargetPrivate(bool resetTarget) {
    LOGGING;
 
    if (resetTarget) {
@@ -1777,25 +1803,33 @@ USBDM_ErrorCode FlashProgrammer_HCS12::partitionFlexNVM() {
 
 #if (TARGET == HCS12)
 //=======================================================================
-//! Checks for unsupported device
-//!
-USBDM_ErrorCode FlashProgrammer_HCS12::checkUnsupportedTarget() {
+/**
+ * Checks for unsupported device
+ *
+ * @param security Intended security mode after programming
+ *        This should be SEC_SECURED for general check
+ *
+ * @return Success : BDM_RC_OK
+ * @return Error   : PROGRAMMING_RC_ERROR_CHIP_UNSUPPORTED
+ */
+USBDM_ErrorCode FlashProgrammer_HCS12::checkUnsupportedTarget(SecurityOptions_t security) {
    LOGGING;
    USBDM_ErrorCode rc;
    uint32_t targetSDID;
-#define brokenUF32_SDID (0x6311)
-//#define brokenUF32_SDID (0x3102) // for testing using C128
+   constexpr uint32_t brokenUF32_SDID1 = 0x6310;
+   constexpr uint32_t brokenUF32_SDID2 = 0x6311;
+//   constexpr uint32_t brokenUF32_SDID2 = 0x3102; // for testing using C128
 
    // Get SDID from target
    rc = readTargetChipId(&targetSDID);
-   if (rc != PROGRAMMING_RC_OK)
+   if (rc != PROGRAMMING_RC_OK) {
       return rc;
-
+   }
    // It's fatal to try unsecuring this chip using the BDM or
    // unsafe to program it to the secure state.
    // See errata MUCts01498
-   if ((targetSDID == brokenUF32_SDID) &&
-       ((device->getSecurity() != SEC_UNSECURED) ||
+   if (((targetSDID == brokenUF32_SDID1)||(targetSDID == brokenUF32_SDID2)) &&
+       ((security != SEC_UNSECURED) ||
         (checkTargetUnSecured() != PROGRAMMING_RC_OK))) {
       log.error("Can't unsecure/secure UF32 due to hardware bug - See errata MUCts01498\n");
       return PROGRAMMING_RC_ERROR_CHIP_UNSUPPORTED;
@@ -2850,7 +2884,7 @@ USBDM_ErrorCode FlashProgrammer_HCS12::programFlash(FlashImagePtr flashImage,
    }
 #if (TARGET == HCS12)
    // Check for nasty chip of death
-   rc = checkUnsupportedTarget();
+   rc = checkUnsupportedTarget(device->getSecurity());
    if (rc != PROGRAMMING_RC_OK) {
       return rc;
    }
@@ -2864,7 +2898,7 @@ USBDM_ErrorCode FlashProgrammer_HCS12::programFlash(FlashImagePtr flashImage,
 #endif
    // Mass erase if selected
    if (getEraseMethod() == DeviceData::eraseMass) {
-      rc = massEraseTarget(true);
+      rc = massEraseTargetPrivate(true);
       if (rc != PROGRAMMING_RC_OK) {
          return rc;
       }
