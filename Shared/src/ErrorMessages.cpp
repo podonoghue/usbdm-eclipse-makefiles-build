@@ -127,7 +127,7 @@ static const char *programmingErrorMessages[] = {
    /** 121 */ "Access to PPAGE register failed",
    /** 122 */ "Access to EPAGE register failed",
    /** 123 */ "Target does not support SYNC and bus speed cannot be determined accurately",
-   /** 124 */ "Unsupported operation or options for this chip",
+   /** 124 */ "Operation not supported on this device due to chip errata",
    /** 125 */ "Execution of TCL script returned an error",
    /** 126 */ "Execution of TCL un-secure script returned an error",
    /** 127 */ "Execution of TCL pre-program script returned an error",
