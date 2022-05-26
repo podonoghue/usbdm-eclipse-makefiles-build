@@ -702,18 +702,9 @@ USBDM_ErrorCode FlashProgrammer_HCS12::massEraseTarget(bool resetTarget) {
  * Does not checks for unsupported targets first.
  *
  *  @param resetTarget        Whether to reset target before action
- *  @param programUnsecured   Whether to change the security field in flash to unsecured or only temporarily unsecure (until reset)
+ *  @param programUnsecured   Whether to change the security field in flash to unsecured or only temporarily unsecure (until next reset)
  *
  *  @return error code, see \ref USBDM_ErrorCode
- *
- *  @note Mass-erase on HCS12 does not program the security bits.
- *        The device is left blank but unsecured due to blank check.
- */
-/**
- *
- * @param resetTarget
- * @param programUnsecured
- * @return
  */
 USBDM_ErrorCode FlashProgrammer_HCS12::massEraseTargetPrivate(bool resetTarget, bool programUnsecured) {
    LOGGING;
@@ -2813,7 +2804,7 @@ USBDM_ErrorCode FlashProgrammer_HCS12::programFlash(FlashImagePtr flashImage,
 
    SetProgrammingMode pmode(bdmInterface);
 
-   if ((this == NULL) || (device->getTargetName().empty())) {
+   if ((device == nullptr) || (device->getTargetName().empty())) {
       log.error("Error: device parameters not set\n");
       return PROGRAMMING_RC_ERROR_INTERNAL_CHECK_FAILED;
    }
