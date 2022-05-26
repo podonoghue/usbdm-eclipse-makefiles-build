@@ -689,25 +689,33 @@ USBDM_ErrorCode FlashProgrammer_HCS12::initialiseTargetFlash() {
  */
 USBDM_ErrorCode FlashProgrammer_HCS12::massEraseTarget(bool resetTarget) {
    // Check if safe to mass erase.
-   USBDM_ErrorCode rc = checkUnsupportedTarget(SEC_SECURED);
+   USBDM_ErrorCode rc = checkUnsupportedTarget(SEC_UNSECURED);
    if (rc != BDM_RC_OK) {
       return rc;
    }
-   return massEraseTargetPrivate(resetTarget);
+   // Mass erase and program as unsecured device
+   return massEraseTargetPrivate(resetTarget, true);
 }
 
 /**
  * Does Mass Erase of Target memory using TCL script.
  * Does not checks for unsupported targets first.
  *
- *  @param resetTarget Whether to reset target before action
+ *  @param resetTarget        Whether to reset target before action
+ *  @param programUnsecured   Whether to change the security field in flash to unsecured or only temporarily unsecure (until reset)
  *
  *  @return error code, see \ref USBDM_ErrorCode
  *
  *  @note Mass-erase on HCS12 does not program the security bits.
  *        The device is left blank but unsecured due to blank check.
  */
-USBDM_ErrorCode FlashProgrammer_HCS12::massEraseTargetPrivate(bool resetTarget) {
+/**
+ *
+ * @param resetTarget
+ * @param programUnsecured
+ * @return
+ */
+USBDM_ErrorCode FlashProgrammer_HCS12::massEraseTargetPrivate(bool resetTarget, bool programUnsecured) {
    LOGGING;
 
    if (resetTarget) {
@@ -722,8 +730,12 @@ USBDM_ErrorCode FlashProgrammer_HCS12::massEraseTargetPrivate(bool resetTarget) 
    if (rc != PROGRAMMING_RC_OK) {
       return rc;
    }
+   // Create TCL command
+   char tclArgs[100] = "massEraseTarget ";
+   strcat(tclArgs, programUnsecured?"programUnsecured":"temporaryUnsecured");
+
    // Do Mass erase using TCL script
-   rc = runTCLCommand("massEraseTarget");
+   rc = runTCLCommand(tclArgs);
    if (rc != PROGRAMMING_RC_OK) {
       return rc;
    }
@@ -2889,27 +2901,32 @@ USBDM_ErrorCode FlashProgrammer_HCS12::programFlash(FlashImagePtr flashImage,
       return rc;
    }
 #endif
+
+   bool targetChecked = false;
 #if (TARGET == RS08) || (TARGET == HCS08) || (TARGET == HCS12) || (TARGET == MC56F80xx)
-   // Check target SDID (RS08/HCS08/HCS12 allows SDID to be read on secured device)
+   // Check target SDID before mass erasing (RS08/HCS08/HCS12 allows SDID to be read on secured device)
    rc = confirmSDID();
    if (rc != PROGRAMMING_RC_OK) {
       return rc;
    }
+   targetChecked = true;
 #endif
+
    // Mass erase if selected
    if (getEraseMethod() == DeviceData::eraseMass) {
-      rc = massEraseTargetPrivate(true);
+      // Mass erase and temporarily unsecure device
+      rc = massEraseTargetPrivate(true, false);
       if (rc != PROGRAMMING_RC_OK) {
          return rc;
       }
    }
-#if (TARGET == CFV1) || (TARGET == ARM) || (TARGET == CFVx) || (TARGET == MC56F80xx) || (TARGET == S12Z)
-   // Check target SDID
-   rc = confirmSDID();
-   if (rc != PROGRAMMING_RC_OK) {
-      return rc;
+   if (!targetChecked) {
+      // Check target SDID
+      rc = confirmSDID();
+      if (rc != PROGRAMMING_RC_OK) {
+         return rc;
+      }
    }
-#endif
    double eraseTime = 0;
    do {
       // Modify flash image according to security options

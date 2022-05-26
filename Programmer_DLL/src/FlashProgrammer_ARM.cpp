@@ -718,7 +718,7 @@ USBDM_ErrorCode FlashProgrammer_ARM::massEraseTarget(bool resetTarget) {
    if (rc != PROGRAMMING_RC_OK) {
       return rc;
    }
-// Don't reset device as it may only be temporarily unsecured!
+   // Don't reset device as it may only be temporarily unsecured!
    return PROGRAMMING_RC_OK;
 }
 
@@ -2071,7 +2071,7 @@ USBDM_ErrorCode FlashProgrammer_ARM::setFlashSecurity(FlashImagePtr flashImage, 
 }
 
 //===============================================================================================
-//! Modifies the Security locations in the flash image according to required security options
+//! Modifies the Checksum locations in the flash image as required
 //!
 //! @param flashImage  -  Flash image to be modified
 //!
@@ -2081,7 +2081,6 @@ USBDM_ErrorCode FlashProgrammer_ARM::setFlashChecksum(FlashImagePtr flashImage) 
    LOGGING;
    // Process each flash region
    USBDM_ErrorCode rc = BDM_RC_OK;
-   securityNeedsSelectiveErase = false; // Assume security areas are valid
    for (int index=0; ; index++) {
       MemoryRegionConstPtr memoryRegionPtr = device->getMemoryRegion(index);
       if (memoryRegionPtr == NULL) {
@@ -2964,24 +2963,28 @@ USBDM_ErrorCode FlashProgrammer_ARM::programFlash(FlashImagePtr flashImage,
    bool secured = checkTargetUnSecured() != PROGRAMMING_RC_OK;
 
    // Check target security
-   if (secured && (getEraseMethod() != DeviceData::eraseMass)) {
+   if (secured && (device->getEraseMethod() != DeviceData::eraseMass)) {
       // Can't program if secured
       return PROGRAMMING_RC_ERROR_SECURED;
    }
 #if (TARGET == HCS12)
    // Check for nasty chip of death
-   rc = checkUnsupportedTarget();
+   rc = checkUnsupportedTarget(device->getSecurity());
    if (rc != PROGRAMMING_RC_OK) {
       return rc;
    }
 #endif
+
+   bool targetChecked = false;
 #if (TARGET == RS08) || (TARGET == HCS08) || (TARGET == HCS12) || (TARGET == MC56F80xx)
-   // Check target SDID (RS08/HCS08/HCS12 allows SDID to be read on secured device)
+   // Check target SDID before mass erasing (RS08/HCS08/HCS12 allows SDID to be read on secured device)
    rc = confirmSDID();
    if (rc != PROGRAMMING_RC_OK) {
       return rc;
    }
+   targetChecked = true;
 #endif
+
    // Mass erase if selected
    if (getEraseMethod() == DeviceData::eraseMass) {
       rc = massEraseTarget(true);
@@ -2989,13 +2992,13 @@ USBDM_ErrorCode FlashProgrammer_ARM::programFlash(FlashImagePtr flashImage,
          return rc;
       }
    }
-#if (TARGET == CFV1) || (TARGET == ARM) || (TARGET == CFVx) || (TARGET == MC56F80xx) || (TARGET == S12Z)
-   // Check target SDID
-   rc = confirmSDID();
-   if (rc != PROGRAMMING_RC_OK) {
-      return rc;
+   if (!targetChecked) {
+      // Check target SDID
+      rc = confirmSDID();
+      if (rc != PROGRAMMING_RC_OK) {
+         return rc;
+      }
    }
-#endif
    double eraseTime = 0;
    do {
       rc = setFlashChecksum(flashImage);

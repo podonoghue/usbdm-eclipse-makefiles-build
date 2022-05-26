@@ -20,7 +20,8 @@
 ;#####################################################################################
 ;#  History
 ;#
-;#  V4.19.4.240 - Added return error codes
+;#  V4.12.1.285 - Minor changes to massErase
+;#  V4.10.4.240 - Added return error codes
 ;#  V4.10.4 	- Changed return code handling
 ;#  V4.10.4 	- Added disableWatchdog { }
 ;#  V4.10.4 	- Renamed NVM_...
@@ -35,7 +36,7 @@ proc loadSymbols {} {
    setbytesex bigEndian
 
    set ::NAME  "HCS12-FTMRCK-flash-scripts"
-   puts "$::NAME.loadSymbols{}"
+   puts "*** $::NAME.loadSymbols{}"
    
    set ::BDMGPR                     0xFF08
    set ::BDMGPR_BGAE                0x80
@@ -99,15 +100,9 @@ proc loadSymbols {} {
 ;#
 ;# Disable watchdog
 ;#
-;# A reset is required to prevent a possible timeout before the COPCTL write completes
-;#
 proc disableWatchdog { } {
 
-   ;# Disable watchdog immediately after a reset
-   ;# dialogue "Before reset - FTMRK" Waiting... ok
-   ;# reset s h
-
-   puts "disableWatchdog {}"
+   puts "*** disableWatchdog {}"
    catch {connect}                 ;# Ignore possible BDM enable fault
    wb $::COPCTL $::COPCTL_DISABLE  ;# Disable WDOG
    rb $::COPCTL 
@@ -120,7 +115,7 @@ proc disableWatchdog { } {
 ;# @param flashRegions - list of flash array addresses
 ;#
 proc initTarget { flashRegions } {
-   puts "initTarget {}"
+   puts "*** initTarget { $flashRegions }"
    
    set ::FLASH_REGIONS  $flashRegions 
 
@@ -132,7 +127,7 @@ proc initTarget { flashRegions } {
 ;#  busFrequency - Target bus busFrequency in kHz
 ;#
 proc initFlash { busFrequency } {
-   puts "initFlash {}"
+   puts "*** initFlash { busFrequency=$busFrequency kHz}"
    
    set cfmclkd [calculateFlashDivider $busFrequency]
 
@@ -152,16 +147,16 @@ proc calculateFlashDivider { busFrequency } {
 ;# NOTES:
 ;#   According to data sheets the Flash uses the BUS clock for timing
 ;#
-   puts "calculateFlashDivider {}"
+   puts "*** calculateFlashDivider {}"
    set clockFreq $busFrequency
    
    if { [expr $clockFreq < 1000] } {
-      puts "Clock too low for flash programming"
+      puts "*** Clock too low for flash programming"
       error $::PROGRAMMING_RC_ERROR_NO_VALID_FCDIV_VALUE
    }
    set cfmclkd  [expr round(($clockFreq-1101.0)/1000)]
    set flashClk [expr round($clockFreq/($cfmclkd+1))]
-   puts "cfmclkd = $cfmclkd, flashClk = $flashClk"
+   puts "*** cfmclkd = $cfmclkd, flashClk = $flashClk"
    
    return $cfmclkd
 }
@@ -174,7 +169,7 @@ proc calculateFlashDivider { busFrequency } {
 ;#
 proc executeFlashCommand { cmd {address "none"} {data0 "none"} {data1 "none"} {data2 "none"} {data3 "none"} } {
 
-   ;#  puts "executeFlashCommand {}"
+   ;#  puts "*** executeFlashCommand {}"
    
    wb $::NVM_FSTAT     $::NVM_FSTAT_CLEAR           ;# clear any error flags
    wb $::NVM_FCCOBIX   0                            ;# index = 0
@@ -222,20 +217,24 @@ proc executeFlashCommand { cmd {address "none"} {data0 "none"} {data1 "none"} {d
 ;######################################################################################
 ;#  Target is erased & unsecured
 ;#
-proc massEraseTarget { } {
+;# programUnsecured : not used
+;# The device is left entirely blank which is treted as unsecured by these HCS devices.
+;#
+proc massEraseTarget { programUnsecured } {
 
-   puts "massEraseTarget{}"
+   puts "*** massEraseTarget{ $programUnsecured }"
    
    ;# Mass erase flash
+   ;# This is possibly even if the device is secure.
    initFlash [expr [speed]/1000]  ;# Flash speed calculated from BDM connection speed
 
    if [ expr [isUnsecure] != 0 ] {
-      ;# Need an extra mass erase and reset if the device is secure !!!
-      puts "Doing pre-erase"   
+      ;# Need an unsecure command and reset if the device is secure !!!
+      puts "*** Doing flash unsecure command"   
       executeFlashCommand $::NVM_FCMD_UNSECURE
       
       ;# Device is now blank & temporarily unsecured
-      puts "Resetting"
+      puts "*** Resetting"
       reset s h 
       connect
    }
@@ -255,21 +254,17 @@ proc massEraseTarget { } {
 ;######################################################################################
 ;#
 proc isUnsecure { } {
-;#   puts "isUnsecure{} - Checking if unsecured"
    set securityValue [rb $::NVM_FSEC]
-
    if [ expr ( $securityValue & $::NVM_FSEC_SEC_MASK ) != $::NVM_FSEC_SEC_UNSEC ] {
-      puts "isUnsecure{} - Target is secured!"
+      puts "*** isUnsecure{} - Target is secured!"
       return $::PROGRAMMING_RC_ERROR_SECURED
    }
-   puts "isUnsecure{} - Target is unsecured"
+   puts "*** isUnsecure{} - Target is unsecured"
    return 0
 }
-
 
 ;######################################################################################
 ;# Actions on initial load
 ;#
 loadSymbols
-
 

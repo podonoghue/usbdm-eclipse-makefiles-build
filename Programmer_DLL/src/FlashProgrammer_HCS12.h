@@ -111,7 +111,7 @@ protected:
    USBDM_ErrorCode getPageAddress(MemoryRegionConstPtr memoryRegionPtr, uint32_t address, uint8_t *pageNo);
    USBDM_ErrorCode setPageRegisters(uint32_t physicalAddress);
    USBDM_ErrorCode partitionFlexNVM(void);
-   USBDM_ErrorCode massEraseTargetPrivate(bool resetTarget);
+   USBDM_ErrorCode massEraseTargetPrivate(bool resetTarget, bool programUnsecured);
    USBDM_ErrorCode checkUnsupportedTarget(SecurityOptions_t security=SEC_SECURED);
 
 public:
