@@ -296,7 +296,7 @@ USBDM_ErrorCode FlashProgrammerCommon::configureICS_Clock(unsigned long         
            clockParameters->icsSC
            );
 
-   flashReady = FALSE; // Not configured for Flash access
+   flashReady = false; // Not configured for Flash access
 
    // ToDo - Review order of writes & need for re-connect()
    if (writeClockRegister(ICSTRIM, clockParameters->icsTrim) != BDM_RC_OK) {
@@ -362,7 +362,7 @@ USBDM_ErrorCode FlashProgrammerCommon::configureICG_Clock(unsigned long         
            clockParameters->icgC1,
            clockParameters->icgC2
            );
-   flashReady = FALSE; // Not configured for Flash access
+   flashReady = false; // Not configured for Flash access
 
    // ToDo - Review order of writes & need for re-connect()
    if (writeClockRegister(ICGTRIM, clockParameters->icgTrim) != BDM_RC_OK) {
@@ -425,7 +425,7 @@ USBDM_ErrorCode FlashProgrammerCommon::configureMCG_Clock(unsigned long         
            clockParameters->mcgCT
            );
 
-   flashReady = FALSE; // Not configured for Flash access
+   flashReady = false; // Not configured for Flash access
 
    // ToDo - Review order of writes & need for re-connect()
    if (writeClockRegister(MCGTRIM, clockParameters->mcgTrim) != BDM_RC_OK) {
@@ -477,7 +477,7 @@ USBDM_ErrorCode FlashProgrammerCommon::configureExternal_Clock(unsigned long  *b
    LOGGING_E;
    unsigned long bdmFrequency;
 
-   flashReady = FALSE; // Not configured for Flash access
+   flashReady = false; // Not configured for Flash access
 
    // Just connect at whatever speed
    if (USBDM_Connect() != BDM_RC_OK) {
@@ -655,7 +655,7 @@ USBDM_ErrorCode FlashProgrammerCommon::trimTargetClock(uint32_t       trimAddres
 
    log.print("targetBusFrequency=%ld, targetBDMFrequency=%ld)\n", targetBusFrequency, targetBDMFrequency);
 
-   flashReady = FALSE; // Not configured for Flash access
+   flashReady = false; // Not configured for Flash access
 
    // Set safe defaults
    *returnTrimValue      = 256;
@@ -1049,7 +1049,7 @@ USBDM_ErrorCode FlashProgrammerCommon::trimICG_Clock(ICG_ClockParameters_t *cloc
    log.print("TrimF = %.2f kHz, clock Multiplier=%d => Trim bus Freq=%.2f kHz\n",
          device->getClockTrimFreq()/1000.0, 4, targetBusFrequency/1000.0);
 
-   rc = FlashProgrammerCommon::trimTargetClock(ICGTRIM, targetBusFrequency, &trimValue, &measuredBusFrequency, FALSE);
+   rc = FlashProgrammerCommon::trimTargetClock(ICGTRIM, targetBusFrequency, &trimValue, &measuredBusFrequency, false);
 
    log.print("Desired Freq = %.1f kHz, Meas. Freq=%.1f kHz, Trim=%02X\n",
          device->getClockTrimFreq()/1000.0,
@@ -1317,7 +1317,7 @@ USBDM_ErrorCode FlashProgrammerCommon::checkNoSecurityAreas(void) {
 /**
  * Record the original contents of a security area for later restoration
  *
- * @param flashImage Flash image meing manipulated
+ * @param flashImage Flash image being manipulated
  * @param address    Start address of security area
  * @param size       Size of area
  *
@@ -1325,13 +1325,13 @@ USBDM_ErrorCode FlashProgrammerCommon::checkNoSecurityAreas(void) {
  */
 USBDM_ErrorCode FlashProgrammerCommon::recordSecurityArea(FlashImagePtr flashImage, const uint32_t startAddress, const uint32_t size) {
    LOGGING_Q;
-   log.print("[0x%08X...0x%08X\n", startAddress, startAddress+size-1);
+   log.print("[0x%08X...0x%08X] : ", startAddress, startAddress+size-1);
    if (securityAreaCount >= sizeof(securityData)/sizeof(securityData[0])) {
       log.error("Invalid securityAreaCount size");
       return PROGRAMMING_RC_ERROR_INTERNAL_CHECK_FAILED;
    }
    if (size > MaxSecurityAreaSize) {
-      log.error("Invalid security size");
+      log.error("Invalid security size\n");
       return PROGRAMMING_RC_ERROR_INTERNAL_CHECK_FAILED;
    }
   securityData[securityAreaCount].address = startAddress;
@@ -1339,13 +1339,14 @@ USBDM_ErrorCode FlashProgrammerCommon::recordSecurityArea(FlashImagePtr flashIma
   for (uint32_t count=0; count<size; count++) {
      if (!flashImage->isValid(startAddress+count)) {
         securityData[securityAreaCount].data[count] = SecurityDataCache::BLANK;
-        log.print("Blank\n");
+        log.printq("Blank, ");
      }
      else {
         securityData[securityAreaCount].data[count] = flashImage->getValue(startAddress+count);
-        log.print("Read 0x%02X\n", flashImage->getValue(startAddress+count));
+        log.printq("%02X ", flashImage->getValue(startAddress+count));
      }
   }
+  log.printq("\n");
   flashImage->dumpRange(startAddress, startAddress+size-1);
   securityAreaCount++;
   return PROGRAMMING_RC_OK;
@@ -1359,20 +1360,21 @@ USBDM_ErrorCode FlashProgrammerCommon::recordSecurityArea(FlashImagePtr flashIma
 void FlashProgrammerCommon::restoreSecurityAreas(FlashImagePtr flashImage) {
    LOGGING_Q;
    for (unsigned index=0; index<securityAreaCount; index++) {
-      log.print("Restoring security area in image [0x%06X...0x%06X]\n",
+      log.print("Restoring security area in image [0x%06X...0x%06X] : ",
             securityData[index].address, securityData[index].address+securityData[index].size-1);
       for (uint32_t count=0; count<securityData[index].size; count++) {
          if (securityData[index].data[count] == SecurityDataCache::BLANK) {
             flashImage->remove(securityData[index].address+count);
-            log.print("%2d: Blank 0x%02X\n", count, (uint8_t)securityData[index].data[count]);
+            log.printq("Blank ");
          }
          else {
             flashImage->setValue(securityData[index].address+count, (uint8_t)securityData[index].data[count]);
-            log.print("%2d: Write 0x%02X\n", count, (uint8_t)securityData[index].data[count]);
+            log.printq("0x%02X ", (uint8_t)securityData[index].data[count]);
          }
       }
       flashImage->dumpRange(securityData[index].address, securityData[index].address+securityData[index].size-1);
    }
+   log.printq("\n");
    securityAreaCount = 0;
 }
 

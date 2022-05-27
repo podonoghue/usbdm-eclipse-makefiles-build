@@ -91,7 +91,7 @@ protected:
       MK_MCG_ClockParameters_t mcg;
    } ;
 
-   bool                    flashReady;                   //!< Safety check - only TRUE when flash is ready for programming
+//   bool                    flashReady;                   //!< Safety check - only TRUE when flash is ready for programming
    bool                    initTargetDone;               //!< Indicates initTarget() has been done.
    TargetProgramInfo       targetProgramInfo;            //!< Describes loaded flash code
    FlashOperationInfo      flashOperationInfo;           //!< Describes flash operation
@@ -133,6 +133,7 @@ protected:
    USBDM_ErrorCode selectiveEraseFlashSecurity(void);
    USBDM_ErrorCode doTargetVerify(FlashImagePtr flashImage);
    USBDM_ErrorCode doReadbackVerify(FlashImagePtr flashImage);
+   USBDM_ErrorCode doImageCheck(FlashImagePtr flashImage);
    USBDM_ErrorCode applyFlashOperation(FlashImagePtr flashImage, FlashOperation flashOperation);
    USBDM_ErrorCode doVerify(FlashImagePtr flashImage);
    USBDM_ErrorCode doSelectiveErase(FlashImagePtr flashImage);

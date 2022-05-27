@@ -364,6 +364,22 @@
          <sdid value="0x3103" />
          <flashProgramRef ref="HCS12-MMCV4-FTS-flash-program" />
       </device>
+      <device family="HCS12" name="MC9S12C128_PAGED_SECURITY">
+         <clock type="External" />
+         <memory type="ram">
+            <memoryRange start="0x0400" end="0x0FFF" />
+         </memory>
+         <memory pageAddress="0x0030" registerAddress="0x0100" type="flash" securityAddress="0x3FBF00" sectorSize="1024">
+            <securityEntryRef ref="HCS12-fprot-fsec-security" />
+            <memoryRange start="0x1000" end="0x3FFF" />                <!--  Fixed 0x3D partial -->
+            <memoryRange start="0x4000" end="0x7FFF" />                <!--  Fixed 0x3E -->
+            <memoryRange start="0x8000" end="0xBFFF" pageReset="0x38" pages="128K"  pageEnd="0x3F" />
+            <memoryRange start="0xC000" end="0xFFFF" />                <!--  Fixed 0x3F -->
+         </memory>
+         <sdid value="0x3102" />
+         <sdid value="0x3103" />
+         <flashProgramRef ref="HCS12-MMCV4-FTS-flash-program" />
+      </device>
 <!-- 
 ===================================================================================
  -->      
@@ -1593,10 +1609,11 @@
          <memory type="ram">
             <memoryRange start="0x1BC4" end="0x1FFF" />
          </memory>
-         <memory registerAddress="0x0100" type="flash" securityAddress="0xFF00">
+         <memory pageAddress="0x0030" registerAddress="0x0100" type="flash" securityAddress="0xFF00">
             <securityEntryRef ref="HCS12-fprot-fsec-security" />
-            <memoryRange start="0x8000" end="0xBFFF" />
-            <memoryRange start="0xC000" end="0xFFFF" />
+            <memoryRange start="0x4000" end="0x7FFF" />                <!--  Fixed 0x3E -->
+            <memoryRange start="0x8000" end="0xBFFF" pageReset="0x3E" pages="32K"  pageEnd="0x3F" />
+            <memoryRange start="0xC000" end="0xFFFF" />                <!--  Fixed 0x3F -->
          </memory>
          <sdid value="0x6300" />
          <sdid value="0x6310" />
@@ -1604,7 +1621,6 @@
          <flashProgramRef ref="HCS12-MMCV4-FTS-flash-program" />
          <note>Untested</note>
       </device>
-      
 <!-- 
 ===================================================================================
  -->      

@@ -104,6 +104,7 @@ protected:
    USBDM_ErrorCode selectiveEraseFlashSecurity(void);
    USBDM_ErrorCode doTargetVerify(FlashImagePtr flashImage);
    USBDM_ErrorCode doReadbackVerify(FlashImagePtr flashImage);
+   USBDM_ErrorCode doImageCheck(FlashImagePtr flashImage);
    USBDM_ErrorCode applyFlashOperation(FlashImagePtr flashImage, FlashOperation flashOperation);
    USBDM_ErrorCode doVerify(FlashImagePtr flashImage);
    USBDM_ErrorCode doSelectiveErase(FlashImagePtr flashImage);
