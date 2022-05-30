@@ -123,8 +123,8 @@
          to be changed.  There are severe limitations on the actual speed of the BDM for the JTAG based devices since 
          a software method is used to generate the waveform.
 
-   <td> \image html "FlashProgrammer\USBDMTab(CFV1).png" 
-        \image html "FlashProgrammer\USBDMTab(CFVx)Truncated.png"</td>
+   <td> \image html "USBDMTab(CFV1).png" 
+        \image html "USBDMTab(CFVx)Truncated.png"</td>
    </tr>
    </table>
          
@@ -143,6 +143,9 @@
       Displays a dialogue to load a Freescale S-format hex file to be programmed to the device. 
       The image buffer is usually cleared before loading the file.\n
       The name of the last/currently loaded file is displayed.  
+   - Linear Image (HCS12 only)
+      This will convert a motorola file from linear address to paged addresses when loading.  The programmer uses
+      paged addresses internally.  Most motorola files also use paged addresses.
    - Incremental file load\n
       Selecting this option prevents the programmer from clearing the buffer before the load of a hex file. This
       option may be used to \e assemble a number of hex files into a single image to program to the device.  If 
@@ -356,7 +359,7 @@
    \verbatim
 
    USBDM Flash programmer & Utilties
-   Copyright (C) 2009-13  Peter O'Donoghue
+   Copyright (C) 2009-2022  Peter O'Donoghue
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
