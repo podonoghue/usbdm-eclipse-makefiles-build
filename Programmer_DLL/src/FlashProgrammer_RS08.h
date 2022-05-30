@@ -68,6 +68,7 @@ protected:
    USBDM_ErrorCode writeFlashBlock( unsigned int byteCount, unsigned int address, unsigned const char *data, uint8_t delayValue);
    USBDM_ErrorCode programBlock(FlashImagePtr flashImageDescription, unsigned int blockSize, uint32_t flashAddress);
    USBDM_ErrorCode doReadbackVerify(FlashImagePtr flashImage);
+   USBDM_ErrorCode doImageCheck(FlashImagePtr flashImage);
    USBDM_ErrorCode doVerify(FlashImagePtr flashImage);
    USBDM_ErrorCode blankCheckBlock(FlashImagePtr flashImageDescription, unsigned int blockSize, unsigned int flashAddress);
    void 		       RS08_doFixups(uint8_t buffer[]);
@@ -77,14 +78,14 @@ protected:
    USBDM_ErrorCode bulkEraseMemoryRegion(MemoryRegionPtr memoryRegion);
 
 public:
-   virtual USBDM_ErrorCode checkTargetUnSecured();
-   virtual USBDM_ErrorCode massEraseTarget(bool resetTarget);
-   virtual USBDM_ErrorCode programFlash(FlashImagePtr flashImage, CallBackT progressCallBack=0, bool doRamWrites=false);
-   virtual USBDM_ErrorCode verifyFlash(FlashImagePtr flashImage, CallBackT progressCallBack=0);
-   virtual USBDM_ErrorCode readTargetChipId(uint32_t *targetSDID, bool doinit=false);
-   virtual USBDM_ErrorCode confirmSDID(void);
-   virtual USBDM_ErrorCode resetAndConnectTarget(void);
-   virtual USBDM_ErrorCode setDeviceData(const DeviceDataConstPtr device);
+   virtual USBDM_ErrorCode setDeviceData(const DeviceDataConstPtr device) override;
+   virtual USBDM_ErrorCode checkTargetUnSecured() override;
+   virtual USBDM_ErrorCode massEraseTarget(bool resetTarget) override;
+   virtual USBDM_ErrorCode programFlash(FlashImagePtr flashImage, CallBackT progressCallBack=0, bool doRamWrites=false) override;
+   virtual USBDM_ErrorCode verifyFlash(FlashImagePtr flashImage, CallBackT progressCallBack=0) override;
+   virtual USBDM_ErrorCode readTargetChipId(uint32_t *targetSDID, bool doinit=false) override;
+   virtual USBDM_ErrorCode confirmSDID(void) override;
+   virtual USBDM_ErrorCode resetAndConnectTarget(void) override;
 };
 
 #endif // SRC_FLASHPROGRAMMER_RS08_H_

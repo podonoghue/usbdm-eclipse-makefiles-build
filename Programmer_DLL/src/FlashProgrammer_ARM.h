@@ -91,7 +91,6 @@ protected:
       MK_MCG_ClockParameters_t mcg;
    } ;
 
-//   bool                    flashReady;                   //!< Safety check - only TRUE when flash is ready for programming
    bool                    initTargetDone;               //!< Indicates initTarget() has been done.
    TargetProgramInfo       targetProgramInfo;            //!< Describes loaded flash code
    FlashOperationInfo      flashOperationInfo;           //!< Describes flash operation
@@ -100,7 +99,6 @@ protected:
    uint32_t                currentFlashAlignment;        //!< Alignment applicable to flash operation
    bool                    doRamWrites;                  //!< Write RAM region of image to target (after programming)
    bool                    securityNeedsSelectiveErase;  //!< Indicates security area needs to be selectively erased
-   MemoryRegionConstPtr    flashMemoryRegionPtr;
 
    USBDM_ErrorCode initialiseTargetFlash();
    USBDM_ErrorCode initialiseTarget();
@@ -123,6 +121,10 @@ protected:
       UsbdmSystem::Log::error("Clock configuration not supported\n");
       return  PROGRAMMING_RC_ERROR_INTERNAL_CHECK_FAILED;
    }
+   USBDM_ErrorCode dummyTrimLocations(FlashImagePtr flashImage)  {
+      UsbdmSystem::Log::error("Clock trimming not supported\n");
+      return  PROGRAMMING_RC_ERROR_INTERNAL_CHECK_FAILED;
+   };
    USBDM_ErrorCode eraseFlash(void);
    USBDM_ErrorCode convertTargetErrorCode(FlashDriverError_t rc);
    USBDM_ErrorCode initSmallTargetBuffer(uint8_t *buffer);
@@ -147,23 +149,19 @@ protected:
          FlashProgramConstPtr flashProgram, FlashOperation flashOperation);
    USBDM_ErrorCode loadLargeTargetProgram(uint8_t *buffer, uint32_t loadAddress, uint32_t size,
          FlashProgramConstPtr flashProgram, FlashOperation flashOperation);
-   USBDM_ErrorCode dummyTrimLocations(FlashImagePtr flashImage)  {
-      UsbdmSystem::Log::error("Clock trimming not supported\n");
-      return  PROGRAMMING_RC_ERROR_INTERNAL_CHECK_FAILED;
-   };
    USBDM_ErrorCode partitionFlexNVM(void);
 
 public:
    static const char *getProgramActionNames(unsigned int actions);
    static const char *getProgramCapabilityNames(unsigned int actions);
 
-   virtual USBDM_ErrorCode checkTargetUnSecured();
-   virtual USBDM_ErrorCode massEraseTarget(bool resetTarget);
-   virtual USBDM_ErrorCode programFlash(FlashImagePtr flashImage, CallBackT progressCallBack=0, bool doRamWrites=false);
-   virtual USBDM_ErrorCode verifyFlash(FlashImagePtr flashImage, CallBackT progressCallBack=0);
-   virtual USBDM_ErrorCode readTargetChipId(uint32_t *targetSDID, bool doinit=false);
-   virtual USBDM_ErrorCode confirmSDID(void);
-   virtual USBDM_ErrorCode resetAndConnectTarget(void);
+   virtual USBDM_ErrorCode checkTargetUnSecured() override;
+   virtual USBDM_ErrorCode massEraseTarget(bool resetTarget) override;
+   virtual USBDM_ErrorCode programFlash(FlashImagePtr flashImage, CallBackT progressCallBack=0, bool doRamWrites=false) override;
+   virtual USBDM_ErrorCode verifyFlash(FlashImagePtr flashImage, CallBackT progressCallBack=0) override;
+   virtual USBDM_ErrorCode readTargetChipId(uint32_t *targetSDID, bool doinit=false) override;
+   virtual USBDM_ErrorCode confirmSDID(void) override;
+   virtual USBDM_ErrorCode resetAndConnectTarget(void) override;
 };
 
 #endif /* SOURCE_FLASHPROGRAMMER_ARM_H_ */

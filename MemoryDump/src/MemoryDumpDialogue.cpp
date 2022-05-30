@@ -228,7 +228,6 @@ USBDM_ErrorCode MemoryDumpDialogue::doTargetInitializationString() {
  */
 USBDM_ErrorCode MemoryDumpDialogue::readMemoryBlocks(ProgressDialoguePtr progress) {
    LOGGING;
-   USBDM_ErrorCode rc;
 
    // HCS12 paging
    constexpr long flashStart       = 0x8000;
@@ -268,6 +267,8 @@ USBDM_ErrorCode MemoryDumpDialogue::readMemoryBlocks(ProgressDialoguePtr progres
          writeStatus("Using paged eeprom addresses (EPAGE address=0x%02lx)\n", epageRegAddress);
       }
    }
+
+   USBDM_ErrorCode final_rc = BDM_RC_OK;
 
    // Process each row of table [start, end, width]
    for (int row = 0; row < memoryRangesGrid->GetNumberRows(); row++) {
@@ -312,6 +313,7 @@ USBDM_ErrorCode MemoryDumpDialogue::readMemoryBlocks(ProgressDialoguePtr progres
       bool rangeIsPagedFlash  = false;
       bool rangeIsPagedEeprom = false;
 
+      USBDM_ErrorCode rc = BDM_RC_OK;
       if (isFlashPaged && (pageOffset(start)<=flashEnd) && (pageOffset(end)>=flashStart)) {
          // Range crosses flash paging window
 
@@ -345,12 +347,15 @@ USBDM_ErrorCode MemoryDumpDialogue::readMemoryBlocks(ProgressDialoguePtr progres
          rangeIsPagedEeprom = true;
       }
       else if (isFlashPaged || isEepromPaged) {
-            // Make sure it is not a paged address
-            if (pageNum(start) != 0) {
-               writeStatus("Illegal paged range (entry #%d), [0x%06lX, 0x%06lX]\n"
-                     "Paging must be selected and paged ranges must lie within a paging window\n", row+1, start, end);
-               return BDM_RC_ILLEGAL_PARAMS;
-            }
+         // Make sure it is not a paged address
+         if (pageNum(start) != 0) {
+            writeStatus("Illegal paged range (entry #%d), [0x%06lX, 0x%06lX]\n"
+                  "Paging must be selected and paged ranges must lie within a paging window\n", row+1, start, end);
+            return BDM_RC_ILLEGAL_PARAMS;
+         }
+      }
+      if (rc != BDM_RC_OK) {
+         return rc;
       }
 
       // Process range as series of blocks [start..end]
@@ -383,14 +388,18 @@ USBDM_ErrorCode MemoryDumpDialogue::readMemoryBlocks(ProgressDialoguePtr progres
          if (rc != BDM_RC_OK) {
             return rc;
          }
-         rc = flashImage->loadData(size, start, data);
-         if (rc != BDM_RC_OK) {
+         rc = flashImage->loadDataBytes(size, start, data, FlashImage::OverwriteAndReport);
+         if ((rc != BDM_RC_OK) && (rc != SFILE_RC_IMAGE_OVERLAPS)) {
             return rc;
+         }
+         if (rc != BDM_RC_OK) {
+            // Record soft error
+            final_rc = rc;
          }
          start += size;
       }
    }
-   return BDM_RC_OK;
+   return final_rc;
 }
 
 void MemoryDumpDialogue::clearStatus() {

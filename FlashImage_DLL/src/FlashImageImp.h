@@ -105,7 +105,6 @@ protected:
    bool                              littleEndian;           //!< Target is little-endian
    std::string                       sourceFilename;         //!< Name of last file loaded
    std::string                       sourcePath;             //!< Path of last file loaded
-   bool                              allowOverwrite;
    FILE                             *fp;
    bool                              discardFF;
    bool                              printHeader;
@@ -133,8 +132,7 @@ public:
    virtual void                  setValue(uint32_t address, uint8_t value);
    virtual void                  remove(uint32_t address);
    virtual void                  dumpRange(uint32_t startAddress, uint32_t endAddress);
-   virtual USBDM_ErrorCode       loadData(uint32_t bufferSize, uint32_t address, const uint8_t  data[], bool dontOverwrite = false);
-   virtual USBDM_ErrorCode       loadDataBytes(uint32_t bufferSize, uint32_t address, const uint8_t data[], bool dontOverwrite = false);
+   virtual USBDM_ErrorCode       loadDataBytes(uint32_t bufferSize, uint32_t address, const uint8_t data[], OverWriteMode protectContents);
    virtual unsigned              getFirstAllocatedAddress() { return firstAllocatedAddress; }
    virtual unsigned              getLastAllocatedAddress()  { return lastAllocatedAddress; }
    virtual void                  fill(uint32_t size, uint32_t address, uint8_t fillValue = 0xFF);

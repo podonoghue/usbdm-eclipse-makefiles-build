@@ -193,9 +193,23 @@ inline uint32_t getData16Target(uint16_t *data) {
 #define nativeToTarget16(x) swap16(x)
 #define nativeToTarget32(x) swap32(x)
 
+/**
+ * Get 32-bit target value from buffer i.e. converts from target to native format
+ *
+ * @param data Pointer to 1st byte of data in target format
+ *
+ * @return Data value in native format
+ */
 inline uint32_t getData32Target(uint8_t *data) {
    return getData32Be(data);
 }
+/**
+ * Get 16-bit target value from buffer i.e. converts from target to native format
+ *
+ * @param data Pointer to 1st byte of data in target format
+ *
+ * @return Data value in native format
+ */
 inline uint32_t getData16Target(uint8_t *data) {
    return getData16Be(data);
 }
@@ -270,6 +284,9 @@ USBDM_ErrorCode FlashProgrammer_RS08::resetAndConnectTarget(void) {
    LOGGING;
    USBDM_ErrorCode rc;
 
+   if (device == nullptr) {
+      return PROGRAMMING_RC_ERROR_ILLEGAL_PARAMS;
+   }
    if (device->getTargetName().empty()) {
       return PROGRAMMING_RC_ERROR_ILLEGAL_PARAMS;
    }
@@ -280,6 +297,8 @@ USBDM_ErrorCode FlashProgrammer_RS08::resetAndConnectTarget(void) {
    bdmInterface->connect();
    rc = bdmInterface->reset((TargetMode_t)(RESET_SPECIAL|RESET_DEFAULT));
    if (rc != BDM_RC_OK) {
+      // Try again with hardware reset
+      log.print("failed reset with default method, retry with hardware\n");
       bdmInterface->connect();
       rc = bdmInterface->reset((TargetMode_t)(RESET_SPECIAL|RESET_HARDWARE));
    }
@@ -490,7 +509,6 @@ USBDM_ErrorCode FlashProgrammer_RS08::initialiseTargetFlash() {
    }
    // Convert to kHz
    uint32_t targetBusFrequency = (uint32_t)round(busFrequency/1000.0);
-//   this->flashData.frequency = targetBusFrequency;
 
    log.print("Target Bus Frequency = %ld kHz\n", (unsigned long)targetBusFrequency);
 #endif
@@ -503,15 +521,17 @@ USBDM_ErrorCode FlashProgrammer_RS08::initialiseTargetFlash() {
       return rc;
    }
    // Flash is now ready for programming
-   flashReady = TRUE;
+   flashReady = true;
    return PROGRAMMING_RC_OK;
 }
 
-//=======================================================================
-//! \brief Does Mass Erase of Target memory using TCL script.
-//!
-//! @return error code, see \ref USBDM_ErrorCode
-//!
+/**
+ * Does Mass Erase of Target memory using TCL script.
+ *
+ *  @param resetTarget Whether to reset target before action
+ *
+ *  @return error code, see \ref USBDM_ErrorCode
+ */
 USBDM_ErrorCode FlashProgrammer_RS08::massEraseTarget(bool resetTarget) {
    LOGGING;
 
@@ -532,7 +552,7 @@ USBDM_ErrorCode FlashProgrammer_RS08::massEraseTarget(bool resetTarget) {
    if (rc != PROGRAMMING_RC_OK) {
       return rc;
    }
-// Don't reset device as it may only be temporarily unsecured!
+   // Don't reset device as it may only be temporarily unsecured!
    return PROGRAMMING_RC_OK;
 }
 
@@ -1019,102 +1039,124 @@ USBDM_ErrorCode FlashProgrammer_RS08::checkTargetUnSecured() {
 //!
 USBDM_ErrorCode FlashProgrammer_RS08::setFlashSecurity(FlashImagePtr flashImage, MemoryRegionConstPtr flashRegion) {
    LOGGING;
-   uint32_t securityAddress = flashRegion->getSecurityAddress();
-
-   if (securityAddress == 0) {
+   uint32_t securityRegionAddress = flashRegion->getSecurityAddress();
+   if (securityRegionAddress == 0) {
       log.print("No security area, not modifying flash image\n");
       return PROGRAMMING_RC_OK;
    }
+   auto memoryRange       = flashRegion->getMemoryRangeFor(securityRegionAddress);
+
+   // Get security information and size
    SecurityInfoConstPtr securityInfo;
-   bool dontOverwrite =  false;
-   switch (device->getSecurity()) {
+   SecurityOptions_t securityOption = device->getSecurity();
+   switch (securityOption) {
       case SEC_SECURED:
-         log.print("Setting image as secured\n");
+         log.print("Setting image as secured for [0x%08X..0x%08X]\n", memoryRange->start, memoryRange->end);
          securityInfo = flashRegion->getSecureInfo();
          break;
       case SEC_UNSECURED:
-         log.print("Setting image as unsecured\n");
+         log.print("Setting image as unsecured for [0x%08X..0x%08X]\n", memoryRange->start, memoryRange->end);
          securityInfo = flashRegion->getUnsecureInfo();
          break;
       case SEC_CUSTOM:
-         log.print("Setting image security to custom value\n");
+         log.print("Setting image security to custom value for [0x%08X..0x%08X]\n", memoryRange->start, memoryRange->end);
          securityInfo = flashRegion->getCustomSecureInfo();
          break;
       case SEC_INTELLIGENT:
-         log.print("Setting image as intelligently unsecured\n");
+         log.print("Setting image as intelligently unsecured for [0x%08X..0x%08X]\n", memoryRange->start, memoryRange->end);
          securityInfo = flashRegion->getUnsecureInfo();
-         dontOverwrite = true;
          break;
       case SEC_DEFAULT:
-         log.print("Leaving flash image unchanged\n");
+         log.print("Setting image as security unchanged for [0x%08X..0x%08X]\n", memoryRange->start, memoryRange->end);
          securityInfo = flashRegion->getUnsecureInfo();
          break;
       default:
+         log.error("Unexpected securityInfo value");
          return PROGRAMMING_RC_ERROR_INTERNAL_CHECK_FAILED;
    }
    if (securityInfo == NULL) {
       log.error("Error - No settings for security area!\n");
       return PROGRAMMING_RC_ERROR_INTERNAL_CHECK_FAILED;
    }
-   int size = securityInfo->getSize();
-   if (device->getSecurity() == SEC_DEFAULT) {
-      // Check if security area exists in image
-      // If so - selective erase if needed
-      for(int index=0; index<size; index++) {
-         if (flashImage->isValid(securityAddress+index)) {
-            log.print("Security area may need erasing\n");
-            securityNeedsSelectiveErase = true;
+
+   int securityRegionSize = securityInfo->getSize();
+
+   // SEC_INTELLIGENT becomes SEC_UNSECURED or SEC_DEFAULT
+   if (securityOption == SEC_INTELLIGENT) {
+      // Default to unsecured info
+      securityOption = SEC_UNSECURED;
+
+      // Check for security information within flash image
+      for(int index=0; index<securityRegionSize; index++) {
+         if (flashImage->isValid(securityRegionAddress+index)) {
+            // Use flash info instead
+            securityOption = SEC_DEFAULT;
             break;
-         }
-      }
-      return BDM_RC_OK;
-   }
-   /*
-    * Create expected security area contents
-    *
-    * This will based on the security info for the present security option.
-    * For SEC_INTELLIGENT information will be overwritten by the flash image information (if present).
-    */
-   uint8_t securityData[size];
-   memcpy(securityData, securityInfo->getData(), size);
-   if (dontOverwrite) {
-      // Copy any existing data from flash image
-      for(int index=0; index<size; index++) {
-         if (flashImage->isValid(securityAddress+index)) {
-            securityData[index] = flashImage->getValue(securityAddress+index);
          }
       }
    }
 
-   uint8_t memory[size];
-   bdmInterface->readMemory(MS_Byte, size, securityAddress, memory);
-   // Save contents of current security area in Flash image
-   recordSecurityArea(flashImage, securityAddress, size);
-   if (memcmp(securityData, memory, size) == 0) {
-      if ((device->getEraseMethod() == DeviceData::eraseMass) ||
-          (device->getEraseMethod() == DeviceData::eraseNone)) {
-         // Clear security area in image to prevent re-programming
-         log.print("Removing security area from image as already valid and not being erased\n");
-         for(int index=0; index<size; index++) {
-            flashImage->remove(securityAddress+index);
+   // Create security area contents
+   uint8_t securityData[securityRegionSize];
+   switch (securityOption) {
+      case SEC_SECURED:
+      case SEC_UNSECURED:
+      case SEC_CUSTOM:
+         memcpy(securityData, securityInfo->getData(), securityRegionSize);
+         break;
+      case SEC_DEFAULT:
+      default:
+         // Copy security information from flash
+         for(int index=0; index<securityRegionSize; index++) {
+            securityData[index] = flashImage->getValue(securityRegionAddress+index);
+         }
+         break;
+   }
+
+   // Save contents of current security area within Flash image
+   recordSecurityArea(flashImage, securityRegionAddress, securityRegionSize);
+
+   // Update flash with new security info
+   flashImage->loadDataBytes(securityRegionSize, securityRegionAddress, securityData, FlashImage::Overwrite);
+
+#ifdef LOG
+   log.print("Flash security region: "
+         "              mem[0x%06lX-0x%06lX] = \n", (unsigned long)securityRegionAddress, (unsigned long)(securityRegionAddress+securityRegionSize/sizeof(uint8_t)-1));
+   flashImage->dumpRange(securityRegionAddress, securityRegionAddress+securityRegionSize-1);
+#endif
+
+   if ((getEraseMethod() == DeviceData::eraseMass) || (getEraseMethod() == DeviceData::eraseNone)) {
+      // No more erasing of target memory expected
+      // Try to preserve existing security are if suitable
+
+      // Read current security area from target (after mass-erase or unchanged)
+      uint8_t memory[securityRegionSize];
+      bdmInterface->readMemory(MS_Byte, securityRegionSize, securityRegionAddress, memory);
+
+      // Check if security area in target is blank
+      bool securityAreaInTargetIsNonBlank = false;
+      for(int index=0; index<securityRegionSize; index++) {
+         if (memory[index] != 0xFF) {
+            securityAreaInTargetIsNonBlank = true;
+            break;
          }
       }
-      else {
-         // eraseAll & eraseSelective will erase areas anyway so we have to re-program
-         log.print("Security area is already valid but will be erased anyway (eraseAll or eraseSelective)\n");
-         flashImage->loadDataBytes(size, securityAddress, securityData, dontOverwrite);
+      log.print("Security area in target is %s\n", securityAreaInTargetIsNonBlank?"non-blank":"blank");
+
+      if (memcmp(securityData, memory, securityRegionSize) == 0) {
+         // Security area in target memory agrees with desired security
+         // Clear security area in image to prevent attempted re-programming of already valid data
+         log.print("Removing security area from programming image as equal to current target memory contents and not being erased\n");
+         for(int index=0; index<securityRegionSize; index++) {
+            flashImage->remove(securityRegionAddress+index);
+         }
       }
-   }
-   else {
-      log.print("Security area may need erasing\n");
-      // Force erase of security area when mass erased (if necessary)
-      securityNeedsSelectiveErase = true;
-      flashImage->loadDataBytes(size, securityAddress, securityData, dontOverwrite);
-#ifdef LOG
-      log.print("Setting security region, \n"
-            "              mem[0x%06lX-0x%06lX] = \n", (unsigned long)securityAddress, (unsigned long)(securityAddress+size/sizeof(uint8_t)-1));
-      flashImage->dumpRange(securityAddress, securityAddress+size-1);
-#endif
+      else if (securityAreaInTargetIsNonBlank) {
+         // Force erase of security area in target before programming as it is non-blank and needs modification
+         log.print("Security area in target needs erasing\n");
+         securityNeedsSelectiveErase = true;
+      }
+      // else it is blank and doesn't need erasing
    }
    return PROGRAMMING_RC_OK;
 }
@@ -1126,15 +1168,23 @@ USBDM_ErrorCode FlashProgrammer_RS08::setFlashSecurity(FlashImagePtr flashImage,
 //!
 //! @return error code see \ref USBDM_ErrorCode.
 //!
+//! @note: This MUST be done after mass erase (if used) as target memory is checked!
+//!
 USBDM_ErrorCode FlashProgrammer_RS08::setFlashSecurity(FlashImagePtr flashImage) {
    LOGGING;
+
    // Process each flash region
    USBDM_ErrorCode rc = BDM_RC_OK;
-   securityNeedsSelectiveErase = false; // Assume security areas are valid
+
+   // Assume security areas not present, or already erased, or will be erased in any case (e.g. eraseSelective)
+   securityNeedsSelectiveErase = false;
+
+   // All security areas in image should have been restored before this!
    rc = checkNoSecurityAreas();
    if (rc != BDM_RC_OK) {
       return rc;
    }
+
    for (int index=0; ; index++) {
       MemoryRegionConstPtr memoryRegionPtr = device->getMemoryRegion(index);
       if (memoryRegionPtr == NULL) {
@@ -1191,45 +1241,33 @@ USBDM_ErrorCode FlashProgrammer_RS08::blankCheckBlock(FlashImagePtr flashImage,
 }
 
 //==================================================================================
-//! doReadbackVerify - Verifies the Target memory against memory image
+//! doImageCheck - Checks the memory image against the target memory range
 //!
-//! @param flashImage Description of flash contents to be verified.
+//! @param flashImage Description of flash contents to be checked.
 //!
 //! @return error code see \ref USBDM_ErrorCode
 //!
 //! @note Assumes the target device has already been opened & USBDM options set.
 //! @note Assumes target connection has been established
 //! @note Assumes call-back has been set up if used.
-//! @note If target clock trimming is enabled then the Non-volatile clock trim
-//!       locations are ignored.
-//!
-USBDM_ErrorCode FlashProgrammer_RS08::doReadbackVerify(FlashImagePtr flashImage) {
+USBDM_ErrorCode FlashProgrammer_RS08::doImageCheck(FlashImagePtr flashImage) {
    LOGGING;
-   const unsigned MAX_BUFFER=0x800;
-   uint8_t buffer[MAX_BUFFER];
-   int checkResult = TRUE;
-   int blockResult;
 
    flashImage->printMemoryMap();
 
-   FlashImage::EnumeratorPtr enumerator = flashImage->getEnumerator();
-   //ToDo - handle linear addressing on HCS12
-   if (!enumerator->isValid()) {
+   FlashImage::EnumeratorPtr imageEnumerator = flashImage->getEnumerator();
+   if (!imageEnumerator->isValid()) {
       log.print("Empty Memory region\n");
       flashImage->printMemoryMap();
    }
-   while (enumerator->isValid()) {
-      uint32_t imageAddress    = enumerator->getAddress();
-      uint32_t memoryAddress;
 
-#if (TARGET==HCS08)||(TARGET==HC12)
-      USBDM_ErrorCode rc = setPageRegisters(imageAddress);
-      if (rc != PROGRAMMING_RC_OK) {
-         return rc;
-      }
-#endif
+   USBDM_ErrorCode checkResult = BDM_RC_OK;
 
-      uint32_t      offset      = 0;
+   while (imageEnumerator->isValid()) {
+      // Process region in flash image
+
+      uint32_t imageAddress  = imageEnumerator->getAddress();
+
       MemorySpace_t memorySpace = MS_None;
 
 #if (TARGET==RS08)
@@ -1253,22 +1291,123 @@ USBDM_ErrorCode FlashProgrammer_RS08::doReadbackVerify(FlashImagePtr flashImage)
       memorySpace = MS_Word;
 #endif
 
+      // Find end of image block to check
+      imageEnumerator->lastValid();
+      unsigned regionSize = imageEnumerator->getAddress() - imageAddress + 1;
+
+      while (regionSize>0) {
+         // Get memory block containing address
+         MemoryRegionConstPtr memRegion = device->getMemoryRegionFor(imageAddress, memorySpace);
+         if (memRegion == nullptr) {
+            // Start not in range
+            checkResult = PROGRAMMING_RC_ERROR_OUTSIDE_TARGET_FLASH;
+            log.error("Checked Block %s[0x%8.8X..0x%8.8X] => %s\n", getMemSpaceName(memorySpace), imageAddress, imageAddress+regionSize-1, bdmInterface->getErrorString(checkResult));
+            break;
+         }
+         // Get size of continuous block containing address
+         uint32_t lastContinuous=0;
+         memRegion->findLastContiguous(imageAddress, &lastContinuous);
+         uint32_t continousBlockSize = lastContinuous+1-(imageAddress);
+
+         // Calculate region checked
+         unsigned blockSize = regionSize;
+         if (blockSize > continousBlockSize) {
+            blockSize = continousBlockSize;
+         }
+         log.error("Checked Block %s[0x%8.8X..0x%8.8X] => %s\n", getMemSpaceName(memorySpace), imageAddress, imageAddress+regionSize-1, bdmInterface->getErrorString(BDM_RC_OK));
+
+         // Advance to next block in region
+         regionSize    -= blockSize;
+         imageAddress  += blockSize;
+      }
+#ifndef LOG
+      if (checkResult != BDM_RC_OK) {
+         break;
+      }
+#endif
+      // Advance to start of next occupied region
+      imageEnumerator->nextValid();
+   }
+   return checkResult;
+}
+
+//==================================================================================
+//! doReadbackVerify - Verifies the Target memory against memory image
+//!
+//! @param flashImage Description of flash contents to be verified.
+//!
+//! @return error code see \ref USBDM_ErrorCode
+//!
+//! @note Assumes the target device has already been opened & USBDM options set.
+//! @note Assumes target connection has been established
+//! @note Assumes call-back has been set up if used.
+//! @note If target clock trimming is enabled then the Non-volatile clock trim
+//!       locations are ignored.
+//!
+USBDM_ErrorCode FlashProgrammer_RS08::doReadbackVerify(FlashImagePtr flashImage) {
+   LOGGING;
+   const unsigned MAX_BUFFER=0x800;
+   uint8_t buffer[MAX_BUFFER];
+   USBDM_ErrorCode checkResult = BDM_RC_OK;
+
+#ifdef LOG
+   // Used to suppress multiple error messages
+   bool            reportedError = false;
+#endif
+
+   flashImage->printMemoryMap();
+
+   FlashImage::EnumeratorPtr enumerator = flashImage->getEnumerator();
+   if (!enumerator->isValid()) {
+      log.print("Empty Memory region\n");
+      flashImage->printMemoryMap();
+   }
+
+   while (enumerator->isValid()) {
+      // Check each memory region in image
+
+      uint32_t imageAddress = enumerator->getAddress();
+
+#if (TARGET==HCS08)||(TARGET==HC12)
+      USBDM_ErrorCode rc = setPageRegisters(imageAddress);
+      if (rc != PROGRAMMING_RC_OK) {
+         return rc;
+      }
+#endif
+
+      MemorySpace_t memorySpace = MS_None;
+
+#if (TARGET==RS08)
+      memorySpace = MS_Byte;
+#elif (TARGET == MC56F80xx)
+      if (imageAddress >= FlashImage::DataOffset) {
+         memorySpace = MS_XWord;
+         offset      = FlashImage::DataOffset;
+      }
+      else {
+         memorySpace = MS_PWord;
+      }
+#elif (TARGET == ARM)
+      memorySpace = MS_Long;
+#elif (TARGET == HCS08) || (TARGET == HCS12)
+      memorySpace = (MemorySpace_t)(MS_Fast|MS_Byte);
+#elif (TARGET == S12Z)
+      memorySpace = MS_Word;
+#else
+      memorySpace = MS_Word;
+#endif
+
       // Find end of block to verify
       enumerator->lastValid();
       unsigned regionSize = enumerator->getAddress() - imageAddress + 1;
 
-      memoryAddress = imageAddress-offset;
-      log.print("Verifying Block %s[0x%8.8X..0x%8.8X]\n", getMemSpaceName(memorySpace), memoryAddress, memoryAddress+regionSize-1);
-
-      __attribute__((unused))
-      bool  reportedError = false;
-
       while (regionSize>0) {
          // Get memory block containing address
-         MemoryRegionConstPtr memRegion = device->getMemoryRegionFor(memoryAddress, memorySpace);
+         MemoryRegionConstPtr memRegion = device->getMemoryRegionFor(imageAddress, memorySpace);
          if (memRegion == NULL) {
-            log.error("Verifying Block %s[0x%8.8X..0x%8.8X] - Not in valid memory region\n", getMemSpaceName(memorySpace), memoryAddress, memoryAddress+regionSize-1);
-            return PROGRAMMING_RC_ERROR_OUTSIDE_TARGET_FLASH;
+            checkResult = PROGRAMMING_RC_ERROR_OUTSIDE_TARGET_FLASH;
+            log.error("Verifying Block %s[0x%8.8X..0x%8.8X] => %s\n", getMemSpaceName(memorySpace), imageAddress, imageAddress+regionSize-1, bdmInterface->getErrorString(checkResult));
+            break;
          }
 #if (TARGET == ARM)
          if (memRegion->getAlignment()<memorySpace) {
@@ -1277,8 +1416,8 @@ USBDM_ErrorCode FlashProgrammer_RS08::doReadbackVerify(FlashImagePtr flashImage)
 #endif
          // Get size of continuous block containing address
          uint32_t lastContinuous=0;
-         memRegion->findLastContiguous(memoryAddress, &lastContinuous);
-         uint32_t continousBlockSize = lastContinuous+1-(memoryAddress);
+         memRegion->findLastContiguous(imageAddress, &lastContinuous);
+         uint32_t continousBlockSize = lastContinuous+1-(imageAddress);
 
          unsigned blockSize = regionSize;
          if (blockSize > continousBlockSize) {
@@ -1299,14 +1438,14 @@ USBDM_ErrorCode FlashProgrammer_RS08::doReadbackVerify(FlashImagePtr flashImage)
             memorySpace = (MemorySpace_t)((memorySpace&~MS_SIZE)|MS_Byte);
          }
 #endif
-         if (bdmInterface->readMemory(memorySpace, blockSize*sizeof(uint8_t), memoryAddress, (uint8_t *)buffer) != BDM_RC_OK) {
+         if (bdmInterface->readMemory(memorySpace, blockSize*sizeof(uint8_t), imageAddress, (uint8_t *)buffer) != BDM_RC_OK) {
             return PROGRAMMING_RC_ERROR_BDM_READ;
          }
-         blockResult = TRUE;
+         USBDM_ErrorCode blockResult = BDM_RC_OK;
          uint32_t testIndex;
          for (testIndex=0; testIndex<blockSize; testIndex++) {
             if (flashImage->getValue(imageAddress+testIndex) != buffer[testIndex]) {
-               blockResult = FALSE;
+               blockResult = PROGRAMMING_RC_ERROR_FAILED_VERIFY;
 #ifndef LOG
                break;
 #else
@@ -1316,33 +1455,50 @@ USBDM_ErrorCode FlashProgrammer_RS08::doReadbackVerify(FlashImagePtr flashImage)
                      (uint8_t)(flashImage->getValue(imageAddress+testIndex)),
                      buffer[testIndex]);
                   // Dump region around error
-                  flashImage->dumpRange((imageAddress+testIndex-31)&~0xFUL, (imageAddress+testIndex+31)|0xF);
+                  uint32_t start = 0;
+                  if ((imageAddress+testIndex)>31) {
+                     start = (imageAddress+testIndex-31);
+                  }
+                  uint32_t end = 0xFFFFFFFF;
+                  if ((imageAddress+testIndex)<(end-31)) {
+                     end = imageAddress+testIndex;
+                  }
+                  start &= ~0xFUL;
+                  end   |= 0xFUL;
+                  log.print("Image[0x%08X..0x%08X]\n", start, end);
+                  flashImage->dumpRange(start, end);
                   reportedError = true;
+                  uint8_t tBuff[end-start+1];
+                  if (bdmInterface->readMemory(memorySpace, (end-start+1), start, (uint8_t *)tBuff) == BDM_RC_OK) {
+                     log.printDump(tBuff, (end-start+1), start);
+                  }
                }
 #endif
             }
          }
-         log.print("Verified Sub-block %s[0x%8.8X..0x%8.8X] => %s\n", getMemSpaceName(memorySpace), memoryAddress, memoryAddress+blockSize-1, blockResult?"OK":"FAIL");
-         checkResult    = checkResult && blockResult;
+         log.print("Verified Sub-block %s[0x%8.8X..0x%8.8X] => %s\n", getMemSpaceName(memorySpace), imageAddress, imageAddress+blockSize-1, bdmInterface->getErrorString(blockResult));
+         if (checkResult == BDM_RC_OK) {
+            // Only record first error
+            checkResult = blockResult;
+         }
          regionSize    -= blockSize;
          imageAddress  += blockSize;
-         memoryAddress  = imageAddress-offset;
          progressTimer->progress(blockSize, NULL);
 #ifndef LOG
-         if (!checkResult) {
+         if (checkResult != BDM_RC_OK) {
             break;
          }
 #endif
       }
 #ifndef LOG
-      if (!checkResult) {
+      if (checkResult != BDM_RC_OK) {
          break;
       }
 #endif
       // Advance to start of next occupied region
       enumerator->nextValid();
    }
-   return checkResult?PROGRAMMING_RC_OK:PROGRAMMING_RC_ERROR_FAILED_VERIFY;
+   return checkResult;
 }
 
 //==============================================================================
@@ -1354,14 +1510,23 @@ USBDM_ErrorCode FlashProgrammer_RS08::doReadbackVerify(FlashImagePtr flashImage)
 //!
 USBDM_ErrorCode FlashProgrammer_RS08::doVerify(FlashImagePtr flashImage) {
    LOGGING;
-   USBDM_ErrorCode rc = PROGRAMMING_RC_ERROR_ILLEGAL_PARAMS;
    progressTimer->restart("Verifying...");
 
+   //TODO - Review handling of linear addresses
+
    // Try target verify then read-back verify
+   // This is a bit of a hack to cope with linear addressing failing doReadbackVerify()
 //   rc = doTargetVerify(flashImage);
-   if (rc == PROGRAMMING_RC_ERROR_ILLEGAL_PARAMS) {
-     rc = doReadbackVerify(flashImage);
+//   if (rc == PROGRAMMING_RC_ERROR_ILLEGAL_PARAMS) {
+//     rc = doReadbackVerify(flashImage);
+//   }
+   // Check target SDID to make sure correct memory map is in use
+   USBDM_ErrorCode rc = confirmSDID();
+   if (rc != PROGRAMMING_RC_OK) {
+      return rc;
    }
+
+   rc = doReadbackVerify(flashImage);
    if (rc != PROGRAMMING_RC_OK) {
       log.error("Verifying failed, Reason= %s\n", bdmInterface->getErrorString(rc));
    }
@@ -1385,7 +1550,7 @@ USBDM_ErrorCode FlashProgrammer_RS08::verifyFlash(FlashImagePtr flashImage,
    LOGGING;
    USBDM_ErrorCode rc;
    if ((this == NULL) || (device->getTargetName().empty())) {
-      log.print("Error: device parameters not set\n");
+      log.error("Error: device parameters not set\n");
       return PROGRAMMING_RC_ERROR_INTERNAL_CHECK_FAILED;
    }
    log.print("===========================================================\n");
@@ -1403,7 +1568,7 @@ USBDM_ErrorCode FlashProgrammer_RS08::verifyFlash(FlashImagePtr flashImage,
    progressTimer.reset(new ProgressTimer(progressCallBack, flashImage->getByteCount()));
    progressTimer->restart("Initialising...");
 
-   flashReady = FALSE;
+   flashReady = false;
    currentFlashProgram.reset();
 
    rc = initTCL();
@@ -1420,11 +1585,11 @@ USBDM_ErrorCode FlashProgrammer_RS08::verifyFlash(FlashImagePtr flashImage,
    // Delay checking some errors until after security check so
    // error message is more meaningful
    if ((rcReset != BDM_RC_OK) &&
-       (rcReset != PROGRAMMING_RC_ERROR_SECURED) &&      // Secured device
-       (rcReset != BDM_RC_SECURED) &&                    // Secured device
-       (rcReset != BDM_RC_BDM_EN_FAILED) &&              // BDM enable failed (on HCS devices)
-       (rcReset != BDM_RC_RESET_TIMEOUT_RISE)            // Reset pulsing on Kinetis etc.
-       ) {
+         (rcReset != PROGRAMMING_RC_ERROR_SECURED) &&      // Secured device
+         (rcReset != BDM_RC_SECURED) &&                    // Secured device
+         (rcReset != BDM_RC_BDM_EN_FAILED) &&              // BDM enable failed (on HCS devices)
+         (rcReset != BDM_RC_RESET_TIMEOUT_RISE)            // Reset pulsing on Kinetis etc.
+   ) {
       return rcReset;
    }
    rc = checkTargetUnSecured();
@@ -1436,30 +1601,25 @@ USBDM_ErrorCode FlashProgrammer_RS08::verifyFlash(FlashImagePtr flashImage,
       return rcReset;
    }
    // Modify flash image according to security options - to be consistent with what is programmed
-   rc = setFlashSecurity(flashImage);
-   if (rc != PROGRAMMING_RC_OK) {
-      return rc;
-   }
+   do {
+      rc = setFlashSecurity(flashImage);
+      if (rc != PROGRAMMING_RC_OK) {
+         break;
+      }
 #if (TARGET == CFV1) || (TARGET == HCS08)
-   // Modify flash image according to trim options - to be consistent with what is programmed
-   rc = dummyTrimLocations(flashImage);
-   if (rc != PROGRAMMING_RC_OK) {
-      return rc;
-   }
+      // Modify flash image according to trim options - to be consistent with what is programmed
+      rc = dummyTrimLocations(flashImage);
+      if (rc != PROGRAMMING_RC_OK) {
+         break;
+      }
 #endif
-//#if (TARGET == CFVx) || (TARGET == MC56F80xx)
-//   rc = determineTargetSpeed();
-//   if (rc != PROGRAMMING_RC_OK) {
-//      return rc;
-//   }
-//#endif
-   // Set up for Flash operations (clock etc)
-   rc = initialiseTargetFlash();
-   if (rc != PROGRAMMING_RC_OK) {
-      return rc;
-   }
-   rc = doVerify(flashImage);
-
+      // Set up for Flash operations (clock etc)
+      rc = initialiseTargetFlash();
+      if (rc != PROGRAMMING_RC_OK) {
+         break;
+      }
+      rc = doVerify(flashImage);
+   } while (false);
    restoreSecurityAreas(flashImage);
 
    log.print("Verifying Time = %3.2f s, rc = %d\n", progressTimer->elapsedTime(), rc);
@@ -1488,7 +1648,7 @@ USBDM_ErrorCode FlashProgrammer_RS08::programFlash(FlashImagePtr flashImage,
    SetProgrammingMode pmode(bdmInterface);
 
    bool targetBlank = false;
-   if ((this == NULL) || (device->getTargetName().empty())) {
+   if ((device == nullptr) || (device->getTargetName().empty())) {
       log.error("Error: device parameters not set\n");
       return PROGRAMMING_RC_ERROR_INTERNAL_CHECK_FAILED;
    }
@@ -1532,7 +1692,7 @@ USBDM_ErrorCode FlashProgrammer_RS08::programFlash(FlashImagePtr flashImage,
    progressTimer.reset(new ProgressTimer(progressCallBack, flashImage->getByteCount()));
    progressTimer->restart("Initialising...");
 
-   flashReady = FALSE;
+   flashReady = false;
    currentFlashProgram.reset();
 
    USBDM_ErrorCode rc;
@@ -1551,7 +1711,7 @@ USBDM_ErrorCode FlashProgrammer_RS08::programFlash(FlashImagePtr flashImage,
    // Ignore some errors if mass erasing target as it is possible to mass
    // erase some targets without a complete debug connection
    if ((rc != BDM_RC_OK) &&
-       ((device->getEraseMethod() != DeviceData::eraseMass) ||
+       ((getEraseMethod() != DeviceData::eraseMass) ||
         ((rc != PROGRAMMING_RC_ERROR_SECURED) &&      // Secured device
          (rc != BDM_RC_SECURED) &&                    // Secured device
          (rc != BDM_RC_BDM_EN_FAILED) &&              // BDM enable failed (on HCS devices)
@@ -1562,26 +1722,37 @@ USBDM_ErrorCode FlashProgrammer_RS08::programFlash(FlashImagePtr flashImage,
    bool secured = checkTargetUnSecured() != PROGRAMMING_RC_OK;
 
    // Check target security
-   if (secured && (device->getEraseMethod() != DeviceData::eraseMass)) {
+   if (secured && (getEraseMethod() != DeviceData::eraseMass)) {
       // Can't program if secured
       return PROGRAMMING_RC_ERROR_SECURED;
    }
 #if (TARGET == HCS12)
    // Check for nasty chip of death
-   rc = checkUnsupportedTarget();
+   rc = checkUnsupportedTarget(device->getSecurity());
    if (rc != PROGRAMMING_RC_OK) {
       return rc;
    }
 #endif
+
+   bool targetChecked = false;
 #if (TARGET == RS08) || (TARGET == HCS08) || (TARGET == HCS12) || (TARGET == MC56F80xx)
-   // Check target SDID (RS08/HCS08/HCS12 allows SDID to be read on secured device)
+   // Check target SDID before mass erasing (RS08/HCS08/HCS12 allows SDID to be read on secured device)
    rc = confirmSDID();
    if (rc != PROGRAMMING_RC_OK) {
       return rc;
    }
+   targetChecked = true;
 #endif
+
+   // Check if image matches device before modifying device!
+   rc = doImageCheck(flashImage);
+   if (rc != PROGRAMMING_RC_OK) {
+      return rc;
+   }
+
    // Mass erase if selected
-   if (device->getEraseMethod() == DeviceData::eraseMass) {
+   if (getEraseMethod() == DeviceData::eraseMass) {
+      // Mass erase and (temporarily) unsecure device
       rc = massEraseTarget(false);
       if (rc != PROGRAMMING_RC_OK) {
          return rc;
@@ -1591,14 +1762,15 @@ USBDM_ErrorCode FlashProgrammer_RS08::programFlash(FlashImagePtr flashImage,
       targetBlank = true;
 #endif
    }
-#if (TARGET == CFV1) || (TARGET == ARM) || (TARGET == CFVx) || (TARGET == MC56F80xx) || (TARGET == S12Z)
-   // Check target SDID
-   rc = confirmSDID();
-   if (rc != PROGRAMMING_RC_OK) {
-      return rc;
+   if (!targetChecked) {
+      // Check target SDID
+      rc = confirmSDID();
+      if (rc != PROGRAMMING_RC_OK) {
+         return rc;
+      }
    }
-#endif
    // Modify flash image according to security options
+   // Note: This MUST be done after mass erase if used!
    rc = setFlashSecurity(flashImage);
    if (rc != PROGRAMMING_RC_OK) {
       return rc;
@@ -1609,7 +1781,7 @@ USBDM_ErrorCode FlashProgrammer_RS08::programFlash(FlashImagePtr flashImage,
       return rc;
    }
 #endif
-#if (TARGET == RS08) || (TARGET == CFV1) || (TARGET == HCS08) || (TARGET == ARM)
+#if (TARGET == RS08) || (TARGET == CFV1) || (TARGET == HCS08)
    // Calculate clock trim values & update memory image
    // log.print("setFlashTrimValues() - trimming\n");
    progressTimer->restart("Calculating Clock Trim");
@@ -1628,18 +1800,20 @@ USBDM_ErrorCode FlashProgrammer_RS08::programFlash(FlashImagePtr flashImage,
    // The above leaves the Flash ready for programming
    //
 #if (TARGET==ARM) || (TARGET == CFV1) || (TARGET == S12Z) || (TARGET == MC56F80xx)
-   if (device->getEraseMethod() == DeviceData::eraseMass) {
+   if (getEraseMethod() == DeviceData::eraseMass) {
       // Erase the security area as Mass erase programs it to a non-blank value
       rc = selectiveEraseFlashSecurity();
       if (rc != PROGRAMMING_RC_OK) {
          return rc;
       }
    }
+#if (TARGET==ARM) || (TARGET == CFV1)
    // Program EEPROM/DFLASH Split
    rc = partitionFlexNVM();
    if (rc != PROGRAMMING_RC_OK) {
       return rc;
    }
+#endif
 #endif
    // Load default flash programming code to target
    rc = loadAndStartExecutingTargetProgram();

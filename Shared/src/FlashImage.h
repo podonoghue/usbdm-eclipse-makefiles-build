@@ -74,6 +74,14 @@ public:
    static const uint32_t DataOffset    =  (0x02000000UL);  // Offset used for DSC Data region
 
    /**
+    * How to handle conflicts when writing to image
+    */
+   enum OverWriteMode {
+      Protect,             /**< Protect existing data - quietly discard new data  */
+      Overwrite,           /**< Overwrite quietly                                 */
+      OverwriteAndReport}; /**< Overwrite and return SFILE_RC_IMAGE_OVERLAPS      */
+
+   /**
     *  Class to enumerate the occupied locations within the memory image
     *
     *  @note may be invalidated by changes to the referenced image
@@ -160,7 +168,9 @@ public:
     *  @param clearBuffer        Clear buffer before loading
     *  @param forceLinearToPaged Force conversion  of linear addresses to paged (SREC only)
     *
-    *  @return error code see \ref USBDM_ErrorCode
+    *  @return SFILE_RC_OK                 Successful load
+    *  @return SFILE_RC_IMAGE_OVERLAPS     Successful load but loaded image overwrites existing contents
+    *  @return Other (fatal) error code
     */
    virtual USBDM_ErrorCode      loadFile(const std::string &filePath, bool clearBuffer, bool forceLinearToPaged ) = 0;
    /**
@@ -244,25 +254,17 @@ public:
     */
    virtual void                 dumpRange(uint32_t startAddress, uint32_t endAddress) = 0;
    /**
-    * Load data into Flash image
-    *
-    * @param bufferSize    - size of data to load (in uint8_t)
-    * @param address       - address to load at
-    * @param data          - data to load
-    * @param dontOverwrite - produce error if overwriting existing data
-    */
-   virtual USBDM_ErrorCode      loadData(uint32_t bufferSize, uint32_t address, const uint8_t  data[], bool dontOverwrite = false) = 0;
-   /**
     * Load data into Flash image from byte array
     *
-    * @param bufferSize    - size of data to load (in bytes)
-    * @param address       - address to load at (byte/word address)
-    * @param data          - data to load
-    * @param dontOverwrite - true to prevent overwriting data
+    * @param bufferSize      - size of data to load (in bytes)
+    * @param address         - address to load at (byte/word address)
+    * @param data            - data to load
+    * @param protectContents - how to handle conflicts with existing data
     *
-    * @note This is only of use if uint8_t is not a byte
+    *  @return SFILE_RC_OK                 Successful load
+    *  @return SFILE_RC_IMAGE_OVERLAPS     Successful load but loaded image overwrites existing contents
     */
-   virtual USBDM_ErrorCode      loadDataBytes(uint32_t bufferSize, uint32_t address, const uint8_t data[], bool dontOverwrite = false) = 0;
+   virtual USBDM_ErrorCode      loadDataBytes(uint32_t bufferSize, uint32_t address, const uint8_t data[], OverWriteMode protectContents) = 0;
 
    /**
     * Get first allocated address

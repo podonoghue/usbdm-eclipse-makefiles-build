@@ -280,7 +280,6 @@ FlashProgrammer_HCS12::~FlashProgrammer_HCS12() {
    LOGGING_E;
 }
 
-#if (TARGET == HCS08) || (TARGET == HCS12)
 //=======================================================================
 //! Gets the page number portion of a physical address (Flash)
 //!
@@ -366,7 +365,6 @@ USBDM_ErrorCode FlashProgrammer_HCS12::setPageRegisters(uint32_t physicalAddress
    }
    return rc;
 }
-#endif
 
 //=============================================================================
 //! Connects to the target. \n
@@ -584,6 +582,7 @@ USBDM_ErrorCode FlashProgrammer_HCS12::initialiseTarget() {
       rc = bdmInterface->connect();
    }
 #endif
+#if (TARGET == HCS08) || (TARGET == HCS12) || (TARGET == S12Z)
    char args[200] = "initTarget \"";
    char *argPtr = args+strlen(args);
 
@@ -603,6 +602,19 @@ USBDM_ErrorCode FlashProgrammer_HCS12::initialiseTarget() {
    }
    *argPtr++ = '\"';
    *argPtr++ = '\0';
+#elif (TARGET == RS08)
+   char args[200] = "initTarget ";
+   char *argPtr = args+strlen(args);
+   sprintf(argPtr, "0x%04X 0x%04X 0x%04X",
+         device->getWatchdogAddress(),
+         flashMemoryRegionPtr->getFOPTAddress(),
+         flashMemoryRegionPtr->getFLCRAddress()
+         );
+   argPtr += strlen(argPtr);
+   *argPtr++ = '\0';
+#else
+   char args[] = "initTarget \"\"";
+#endif
 
    rc = runTCLCommand(args);
    if (rc != PROGRAMMING_RC_OK) {
@@ -978,7 +990,6 @@ USBDM_ErrorCode FlashProgrammer_HCS12::loadLargeTargetProgram(
          codeEntry += codeLoadAddress - imageAddress;
       }
    }
-#if TARGET != MC56F80xx
    if ((codeLoadAddress < ramStart) || (codeLoadAddress > ramEnd)) {
       log.error("Image load address (0x%8X) is invalid: range [0x%8X, 0x%8X].\n", codeLoadAddress, ramStart, ramEnd);
       return PROGRAMMING_RC_ERROR_INTERNAL_CHECK_FAILED;
@@ -987,24 +998,11 @@ USBDM_ErrorCode FlashProgrammer_HCS12::loadLargeTargetProgram(
       log.error("Image Entry point (0x%8X) is invalid: range [0x%8X, 0x%8X].\n", codeEntry, ramStart, ramEnd);
       return PROGRAMMING_RC_ERROR_INTERNAL_CHECK_FAILED;
    }
-#endif
-#if TARGET == MC56F80xx
-   // Update location of where programming info will be located
-   if ((capabilities&CAP_DSC_OVERLAY)!=0) {
-      // Loading code into shared RAM - load data offset by code size
-      log.print(" - loading data into overlayed RAM @ 0x%06X\n", dataHeaderAddress);
-   }
-   else {
-      // Loading code into separate program RAM - load data RAM separately
-      log.print(" - loading data into separate RAM @ 0x%06X\n", dataHeaderAddress);
-   }
-#else
    if ((capabilities&CAP_DATA_FIXED)==0) {
       // Relocate Data Entry to immediately after code
       dataHeaderAddress = codeLoadAddress + imageSize;
       log.print("Relocating flashData @ 0x%06X\n", dataHeaderAddress);
    }
-#endif
 
    // Required flash flashAlignmentMask
    uint32_t flashAlignmentMask = flashOperationInfo.alignment-1;
@@ -1052,17 +1050,10 @@ USBDM_ErrorCode FlashProgrammer_HCS12::loadLargeTargetProgram(
       log.error("FlashProgramHeader.dataOffset is not aligned\n");
       return PROGRAMMING_RC_ERROR_INTERNAL_CHECK_FAILED;
    }
-#if (TARGET != ARM)
-   if ((targetProgramInfo.entry & procAlignmentMask) != 0){
+   if ((targetProgramInfo.entry & procAlignmentMask) != (targetType == T_ARM)?1:0){
       log.error("FlashProgramHeader.entry is not aligned\n");
       return PROGRAMMING_RC_ERROR_INTERNAL_CHECK_FAILED;
    }
-#else
-   if ((targetProgramInfo.entry & procAlignmentMask) != 1){
-      log.error("FlashProgramHeader.entry is not aligned\n");
-      return PROGRAMMING_RC_ERROR_INTERNAL_CHECK_FAILED;
-   }
-#endif
    // Sanity check buffer
    if (((uint32_t)(targetProgramInfo.headerAddress+targetProgramInfo.dataOffset)<ramStart) ||
        ((uint32_t)(targetProgramInfo.headerAddress+targetProgramInfo.dataOffset+targetProgramInfo.maxDataSize-1)>ramEnd)) {
@@ -1667,7 +1658,7 @@ USBDM_ErrorCode FlashProgrammer_HCS12::eraseFlash(void) {
    return rc;
 }
 
-#if (TARGET == CFV1) || (TARGET == ARM) || (TARGET == HCS08) || (TARGET == S12) || (TARGET == S12Z) || (TARGET == MC56F80xx)
+#if (TARGET == CFV1) || (TARGET == ARM) || (TARGET == HCS08) || (TARGET == HCS12) || (TARGET == S12Z) || (TARGET == MC56F80xx)
 //=======================================================================
 //! Selective erases the target memory security areas.
 //! This is only of use when the target is unsecured but the security
@@ -1692,8 +1683,8 @@ USBDM_ErrorCode FlashProgrammer_HCS12::selectiveEraseFlashSecurity(void) {
       if (!memoryRegionPtr->isProgrammableMemory()) {
          continue;
       }
-      uint32_t securityAddress = memoryRegionPtr->getSecurityAddress();
-      if (securityAddress == 0) {
+      uint32_t securityRegionAddress = memoryRegionPtr->getSecurityAddress();
+      if (securityRegionAddress == 0) {
          continue;
       }
       SecurityInfoConstPtr securityInfo = memoryRegionPtr->getSecureInfo();
@@ -1702,7 +1693,7 @@ USBDM_ErrorCode FlashProgrammer_HCS12::selectiveEraseFlashSecurity(void) {
          continue;
       }
       log.print("Erasing security area %s[0x%06X..0x%06X]\n",
-            memoryRegionPtr->getMemoryTypeName(), securityAddress, securityAddress+securitySize-1);
+            memoryRegionPtr->getMemoryTypeName(), securityRegionAddress, securityRegionAddress+securitySize-1);
 
       flashOperationInfo.controller        = memoryRegionPtr->getRegisterAddress();
       flashOperationInfo.sectorSize        = memoryRegionPtr->getSectorSize();
@@ -1725,14 +1716,6 @@ USBDM_ErrorCode FlashProgrammer_HCS12::selectiveEraseFlashSecurity(void) {
          addressFlag |= ADDRESS_EEPROM;
       }
 #endif
-#if (TARGET == MC56F80xx)
-      MemType_t memoryType = memoryRegionPtr->getMemoryType();
-      if (memoryType == MemXROM) {
-         // Flag used to indicate data (X:) address
-         log.print("Setting MemXROM address\n");
-         addressFlag |= ADDRESS_DATA;
-      }
-#endif
 #if (TARGET == CFV1) || (TARGET == ARM)
       MemType_t memoryType = memoryRegionPtr->getMemoryType();
       if ((memoryType == MemFlexNVM) || (memoryType == MemDFlash)) {
@@ -1740,7 +1723,7 @@ USBDM_ErrorCode FlashProgrammer_HCS12::selectiveEraseFlashSecurity(void) {
          addressFlag |= ADDRESS_A23;
       }
 #endif
-      flashOperationInfo.flashAddress = securityAddress|addressFlag;
+      flashOperationInfo.flashAddress = securityRegionAddress|addressFlag;
       if (flashOperationInfo.sectorSize == 0) {
          log.error("sectorSize must not be zero\n");
          return PROGRAMMING_RC_ERROR_INTERNAL_CHECK_FAILED;
@@ -1749,56 +1732,6 @@ USBDM_ErrorCode FlashProgrammer_HCS12::selectiveEraseFlashSecurity(void) {
       if (rc != PROGRAMMING_RC_OK) {
          return rc;
       }
-   }
-   return rc;
-}
-#endif
-
-#if (TARGET == CFV1) || (TARGET == ARM)
-//=======================================================================
-//! Program FlashNVM partion (DFlash/EEPROM backing store)
-//!
-//! @return error code see \ref USBDM_ErrorCode.
-//!
-//! @note - Assumes flash programming code has already been loaded to target.
-//!
-USBDM_ErrorCode FlashProgrammer_HCS12::partitionFlexNVM() {
-   LOGGING;
-   uint8_t eeepromSize  = device->getFlexNVMParameters().eeepromSize;
-   uint8_t partionValue = device->getFlexNVMParameters().partionValue;
-   USBDM_ErrorCode rc = BDM_RC_OK;
-   if ((eeepromSize==0xFF)&&(partionValue==0xFF)) {
-      log.print("Skipping FlexNVM parameter programming as unprogrammed values\n");
-      return BDM_RC_OK;
-   }
-   log.print("eeepromSize=0x%02X, partionValue=0x%02X\n", eeepromSize, partionValue);
-   progressTimer->restart("Partitioning DFlash...");
-
-   // Find flexNVM region
-   MemoryRegionConstPtr memoryRegionPtr;
-   for (int index=0; ; index++) {
-      memoryRegionPtr = device->getMemoryRegion(index);
-      if ((memoryRegionPtr == NULL) ||
-          (memoryRegionPtr->getMemoryType() == MemFlexNVM)) {
-         break;
-      }
-   }
-   if (memoryRegionPtr == NULL) {
-      log.print("No FlexNVM Region found\n");
-      return PROGRAMMING_RC_ERROR_ILLEGAL_PARAMS;
-   }
-   MemType_t memoryType = memoryRegionPtr->getMemoryType();
-   log.print("Partitioning %s\n", MemoryRegion::getMemoryTypeName(memoryType));
-   rc = loadTargetProgram(memoryRegionPtr, OpPartitionFlexNVM);
-   if (rc != PROGRAMMING_RC_OK) {
-      return rc;
-   }
-   flashOperationInfo.flexNVMPartition  = (eeepromSize<<24UL)|(partionValue<<16UL);
-   flashOperationInfo.controller = memoryRegionPtr->getRegisterAddress();
-   rc = executeTargetProgram();
-   if (rc == PROGRAMMING_RC_ERROR_FAILED_FLASH_COMMAND) {
-      // This usually means this error - more useful message
-      rc = PROGRAMMING_RC_FLEXNVM_CONFIGURATION_FAILED;
    }
    return rc;
 }
@@ -2023,7 +1956,7 @@ USBDM_ErrorCode FlashProgrammer_HCS12::setFlashSecurity(FlashImagePtr flashImage
    recordSecurityArea(flashImage, securityRegionAddress, securityRegionSize);
 
    // Update flash with new security info
-   flashImage->loadDataBytes(securityRegionSize, securityRegionAddress, securityData, false);
+   flashImage->loadDataBytes(securityRegionSize, securityRegionAddress, securityData, FlashImage::Overwrite);
 
 #ifdef LOG
    log.print("Flash security region: "
@@ -2032,8 +1965,8 @@ USBDM_ErrorCode FlashProgrammer_HCS12::setFlashSecurity(FlashImagePtr flashImage
 #endif
 
    if ((getEraseMethod() == DeviceData::eraseMass) || (getEraseMethod() == DeviceData::eraseNone)) {
-      // No more erasing of target memory expected
-      // Try to preserve existing security are if suitable
+      // No further erasing of target memory expected
+      // Try to preserve existing security area if suitable
 
       // Read current security area from target (after mass-erase or unchanged)
       uint8_t memory[securityRegionSize];
@@ -2058,11 +1991,19 @@ USBDM_ErrorCode FlashProgrammer_HCS12::setFlashSecurity(FlashImagePtr flashImage
          }
       }
       else if (securityAreaInTargetIsNonBlank) {
-         // Force erase of security area in target before programming as it is non-blank and needs modification
-         log.print("Security area in target needs erasing\n");
-         securityNeedsSelectiveErase = true;
+         // Security area conflicts with image
+         if (getEraseMethod() == DeviceData::eraseNone) {
+            // Can't change security without erase
+            return PROGRAMMING_RC_ERROR_NOT_BLANK;
+         }
+         else {
+            // Mass erase left security area non-blank and conflicting
+            // Force erase of security area in target before programming
+            log.print("Security area in target needs erasing\n");
+            securityNeedsSelectiveErase = true;
+         }
       }
-      // else it is blank and doesn't need erasing
+      // else it is blank and doesn't need erasing in any case
    }
    return PROGRAMMING_RC_OK;
 }
@@ -2098,7 +2039,8 @@ USBDM_ErrorCode FlashProgrammer_HCS12::setFlashSecurity(FlashImagePtr flashImage
       }
       rc = setFlashSecurity(flashImage, memoryRegionPtr);
       if (rc != BDM_RC_OK) {
-         log.print("Failed to set security for %s\n", memoryRegionPtr->getMemoryTypeName());
+         log.print("Failed to set security @0x%08X for %s, rc = %s\n",
+               memoryRegionPtr->getSecurityAddress(), memoryRegionPtr->getMemoryTypeName(), bdmInterface->getErrorString(rc));
          break;
       }
    }
@@ -2140,16 +2082,6 @@ USBDM_ErrorCode FlashProgrammer_HCS12::doFlashBlock(
    MemorySpace_t memorySpace       = MS_None;     // Memory space for target access
    uint32_t      memoryAddressMask = 0xFFFFFFFF;  // Mask to apply to flash address to get memory address
 
-#if (TARGET == MC56F80xx)
-   // MC56F80xx map DATA addresses as high addresses in flashImage
-   if (flashAddress >= FlashImage::DataOffset) {
-      memorySpace       = MS_XWord;
-      memoryAddressMask = 0x00FFFFFF;
-   }
-   else {
-      memorySpace       = MS_PWord;
-   }
-#endif
    // Locate containing Memory region (Programmable or RAM)
    MemoryRegionConstPtr memoryRegionPtr = device->getMemoryRegionFor(flashAddress&memoryAddressMask, memorySpace);
    if (memoryRegionPtr == NULL) {
@@ -2285,6 +2217,11 @@ USBDM_ErrorCode FlashProgrammer_HCS12::doFlashBlock(
       // Set Linear address
       log.print("Setting Linear address\n");
       addressFlag |= ADDRESS_LINEAR;
+   }
+#elif (TARGET == CFV1)
+   if ((memoryType == MemFlexNVM) || (memoryType == MemDFlash)) {
+      // Flag needed for DFLASH/FlexNVM access on CFV1
+      addressFlag |= ADDRESS_A23;
    }
 #endif
    // Round start address off to alignment requirements
@@ -2568,7 +2505,7 @@ USBDM_ErrorCode FlashProgrammer_HCS12::doImageCheck(FlashImagePtr flashImage) {
          imageAddress  += blockSize;
       }
 #ifndef LOG
-      if (!checkResult) {
+      if (checkResult != BDM_RC_OK) {
          break;
       }
 #endif
@@ -3100,13 +3037,10 @@ USBDM_ErrorCode FlashProgrammer_HCS12::programFlash(FlashImagePtr flashImage,
       //
       // The above leaves the Flash ready for programming
       //
-#if (TARGET==ARM) || (TARGET == CFV1) || (TARGET == S12) || (TARGET == S12Z) || (TARGET == MC56F80xx)
-      if (getEraseMethod() == DeviceData::eraseMass) {
-         // Erase the security area as Mass erase programs it to a non-blank value
-         rc = selectiveEraseFlashSecurity();
-         if (rc != PROGRAMMING_RC_OK) {
-            break;
-         }
+      // Erase the security area as necessary
+      rc = selectiveEraseFlashSecurity();
+      if (rc != PROGRAMMING_RC_OK) {
+         break;
       }
 #if (TARGET==ARM) || (TARGET == CFV1)
       // Program EEPROM/DFLASH Split
@@ -3114,7 +3048,6 @@ USBDM_ErrorCode FlashProgrammer_HCS12::programFlash(FlashImagePtr flashImage,
       if (rc != PROGRAMMING_RC_OK) {
          break;
       }
-#endif
 #endif
       if (getEraseMethod() == DeviceData::eraseAll) {
          // Erase all flash arrays

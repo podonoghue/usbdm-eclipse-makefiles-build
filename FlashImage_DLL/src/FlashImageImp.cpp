@@ -311,7 +311,6 @@ FlashImageImp::FlashImageImp() :
                   lastPageNumAccessed((uint16_t )(-1)),
                   elementCount(0),
                   littleEndian(false),
-                  allowOverwrite(false),
                   fp(0),
                   discardFF(true),
                   printHeader(true),
@@ -495,14 +494,15 @@ MemoryPagePtr FlashImageImp::allocatePage(uint32_t pageNum) {
  *  @param clearBuffer        Clear buffer before loading
  *  @param forceLinearToPaged Force conversion  of linear addresses to paged (SREC only)
  *
- *  @return Error code
+ *  @return SFILE_RC_OK                 Successful load
+ *  @return SFILE_RC_IMAGE_OVERLAPS     Successful load but loaded image overwrites existing contents
+ *  @return Other (fatal) error code
  */
 USBDM_ErrorCode  FlashImageImp::loadFile(const string &filePath, bool clearBuffer, bool forceLinearToPaged) {
    LOGGING_Q;
 
    sourceFilename = "";
    sourcePath     = "";
-   allowOverwrite = !clearBuffer;
    if (clearBuffer) {
       clear();
    }
@@ -510,16 +510,19 @@ USBDM_ErrorCode  FlashImageImp::loadFile(const string &filePath, bool clearBuffe
 
    // Try ELF Format
    USBDM_ErrorCode rc = loadElfFile(filePath);
+
    if (rc == SFILE_RC_UNKNOWN_FILE_FORMAT) {
+
       // Try SREC Format if not recognized
       rc = loadS1S9File(filePath,forceLinearToPaged);
    }
-   if (rc != SFILE_RC_OK) {
+   if ((rc != SFILE_RC_OK) && (rc != SFILE_RC_IMAGE_OVERLAPS)) {
+
       // Try absolute binary image format if not recognized as ELF
       rc = loadAbsoluteFile(filePath);
    }
 
-   if (rc == SFILE_RC_OK) {
+   if ((rc == SFILE_RC_OK) || (rc == SFILE_RC_IMAGE_OVERLAPS)) {
 
       log.print(" Spans [0x%4.4X..0x%4.4X]\n",
             firstAllocatedAddress,  // first non-0xFF address
@@ -797,64 +800,53 @@ void FlashImageImp::dumpRange(uint32_t startAddress, uint32_t endAddress) {
 }
 
 /**
- *  Load data into Flash image
+ * Load data into Flash image from byte array
  *
- *  @param bufferSize    Size of data to load (in uint8_t)
- *  @param address       Address to load at
- *  @param data          Data to load
- *  @param dontOverwrite Produce error if overwriting existing data
+ * @param bufferSize      - size of data to load (in bytes)
+ * @param address         - address to load at (byte/word address)
+ * @param data            - data to load
+ * @param protectContents - how to handle conflicts with existing data
+ *
+ * @return SFILE_RC_OK                 Successful load
+ * @return SFILE_RC_IMAGE_OVERLAPS     Successful load but loaded image overwrites existing contents
  */
-USBDM_ErrorCode FlashImageImp::loadData(uint32_t       bufferSize,
-      uint32_t       address,
-      const uint8_t data[],
-      bool           dontOverwrite) {
-   uint32_t bufferAddress;
-
-   //   log.print("FlashImageImp::loadData(0x%04X...0x%04X)\n", address, address+bufferSize-1);
-   bufferAddress = 0;
-   while (bufferAddress < bufferSize){
-      //      if (!allocatePage(address)) {
-      //         log.print("loadData() - Address is too large = 0x%08X > 0x%08lX\n",
-      //               address, MAX_SFILE_ADDRESS);
-      //
-      //         return SFILE_RC_ADDRESS_TOO_LARGE;
-      //      }
-      if (!this->isValid(address) || !dontOverwrite) {
-         this->setValue(address, data[bufferAddress]);
-      }
-      address++;
-      bufferAddress++;
-   }
-   //   printMemoryMap();
-   return SFILE_RC_OK;
-}
-
-/**
- *  Load data into Flash image from byte array
- *
- *  @param bufferSize     Size of data to load (in bytes)
- *  @param address        Address to load at (byte/word address)
- *  @param data           Data to load
- *  @param dontOverwrite  True to prevent overwriting data
- *
- *  @note This is only of use if uint8_t is not a byte
- */
-USBDM_ErrorCode FlashImageImp::loadDataBytes(uint32_t        bufferSize,
+USBDM_ErrorCode FlashImageImp::loadDataBytes(
+      uint32_t        bufferSize,
       uint32_t        address,
       const uint8_t   data[],
-      bool            dontOverwrite) {
+      OverWriteMode   protectContents) {
    LOGGING_Q;
+   USBDM_ErrorCode rc = BDM_RC_OK;
+
    log.print("load[0x%04X...0x%04X]\n", address, address+bufferSize-1);
    uint32_t bufferAddress = 0;
    while (bufferAddress < bufferSize) {
       //      log.print("image[0x%08X] <= 0x%04X\n", address, data[bufferAddress]);
-      if (!this->isValid(address) || !dontOverwrite) {
+      if (this->isValid(address)) {
+
+         // Handle existing contents
+         switch (protectContents) {
+            case Protect:
+               // Discard new data
+               break;
+            case OverwriteAndReport:
+               // Update anyway
+               this->setValue(address, data[bufferAddress]);
+               rc = SFILE_RC_IMAGE_OVERLAPS;
+               break;
+            case Overwrite:
+               // Update anyway
+               this->setValue(address, data[bufferAddress]);
+               break;
+         }
+      }
+      else {
          this->setValue(address, data[bufferAddress]);
       }
       address++;
       bufferAddress++;
    }
-   return BDM_RC_OK;
+   return rc;
 }
 
 void FlashImageImp::fill(uint32_t size, uint32_t address, uint8_t fillValue) {
@@ -990,13 +982,16 @@ inline bool ends_with(std::string const & value, std::string const & ending) {
  *
  *  @param fileName Path of file to load
  *
- *  @return Error code
+ *  @return SFILE_RC_OK                 Successful load
+ *  @return SFILE_RC_IMAGE_OVERLAPS     Successful load but loaded image overwrites existing contents
+ *  @return Other (fatal) error code
  */
 USBDM_ErrorCode FlashImageImp::loadAbsoluteFile(const string &fileName) {
    LOGGING_Q;
    char         buffer[1024];
    uint32_t     addr = 0;
    uint32_t     size;
+   bool         imageOverlaps = false;
 
    // Bit dopey but check if it is likely to be a binary file and reject otherwise -
    if (!ends_with(fileName, ".abs") && !ends_with(fileName, ".bin")) {
@@ -1014,7 +1009,8 @@ USBDM_ErrorCode FlashImageImp::loadAbsoluteFile(const string &fileName) {
 
    while ((size = fread(buffer, 1, sizeof(buffer), fp)) != 0) {
       for (unsigned index=0; index<size; index++) {
-         if (this->isValid(addr) && !allowOverwrite) {
+         if (this->isValid(addr)) {
+            imageOverlaps = true;
             // Occupied address
             log.print("Memory image overlaps @0x%X\n", addr);
          }
@@ -1023,7 +1019,7 @@ USBDM_ErrorCode FlashImageImp::loadAbsoluteFile(const string &fileName) {
    }
    log.print("FlashImageImp::MemorySpace::loadS1S9File()\n");
    printMemoryMap();
-   return SFILE_RC_OK;
+   return imageOverlaps?SFILE_RC_IMAGE_OVERLAPS:SFILE_RC_OK;
 }
 
 static uint32_t convertLinearAddressToPaged( uint32_t linearAddress) {
@@ -1039,13 +1035,14 @@ static uint32_t convertLinearAddressToPaged( uint32_t linearAddress) {
 /**
  *  Load a Freescale S-record file into the buffer. \n
  *
- *  The buffer is cleared to 0xFFFF before loading.  Modified locations will
- *  have a non-0xFF upper byte so used locations can be differentiated. \n
+ *  Modified locations will have a non-0xFF upper byte so used locations can be differentiated. \n
  *
  *  @param fileName Path of file to load
  *  @param forceLinearToPaged Force conversion  of linear addresses to paged
  *
- *  @return Error code
+ *  @return SFILE_RC_OK                 Successful load
+ *  @return SFILE_RC_IMAGE_OVERLAPS     Successful load but loaded image overwrites existing contents
+ *  @return Other (fatal) error code
  */
 USBDM_ErrorCode FlashImageImp::loadS1S9File(const string &fileName, bool forceLinearToPaged) {
    LOGGING_Q;
@@ -1055,6 +1052,7 @@ USBDM_ErrorCode FlashImageImp::loadS1S9File(const string &fileName, bool forceLi
    uint32_t     srecSize;
    uint8_t      checkSum;
    bool         fileRecognized = false;
+   bool         imageOverlaps  = false;
 
    Openfile file(fileName.c_str(), "rt");
    fp = file.getfp();
@@ -1140,19 +1138,19 @@ USBDM_ErrorCode FlashImageImp::loadS1S9File(const string &fileName, bool forceLi
       if (forceLinearToPaged) {
          addr = convertLinearAddressToPaged(addr);
       }
-      if (sizeof(uint8_t) == 1) {
-         while (srecSize>0) {
-            uint8_t data;
-            data = hex2ToDecimal( ptr );
-            checkSum += (uint8_t)data;
-            if (this->isValid(addr) && !allowOverwrite) {
-               // Occupied address
-               log.print("Memory image overlaps @0x%X\n", addr);
-            }
-            this->setValue(addr++, (uint8_t)data);
-            srecSize--;
-            //         log.print("%02X",data);
+      while (srecSize>0) {
+         uint8_t data;
+         data = hex2ToDecimal( ptr );
+         checkSum += (uint8_t)data;
+         if (this->isValid(addr) &&
+             (this->getValue(addr) != (uint8_t)data)) {
+            imageOverlaps = true;
+            // Occupied address
+            log.print("Memory image overlaps @0x%X\n", addr);
          }
+         this->setValue(addr++, (uint8_t)data);
+         srecSize--;
+         //         log.print("%02X",data);
       }
       // Get checksum from record
       uint8_t data = hex2ToDecimal( ptr );
@@ -1168,7 +1166,7 @@ USBDM_ErrorCode FlashImageImp::loadS1S9File(const string &fileName, bool forceLi
    }
    //   log.print("FlashImageImp::MemorySpace::loadS1S9File()\n");
    //   printMemoryMap();
-   return SFILE_RC_OK;
+   return imageOverlaps?SFILE_RC_IMAGE_OVERLAPS:SFILE_RC_OK;
 }
 
 /*=============================================================================
@@ -1337,12 +1335,18 @@ USBDM_ErrorCode FlashImageImp::checkTargetType(Elf32_Half e_machine, TargetType_
  *  @param fOffset  Offset to block in file
  *  @param size     Size of block in bytes
  *  @param addr     Bytes address to load block
+ *
+ *  @return SFILE_RC_OK                 Successful load
+ *  @return SFILE_RC_IMAGE_OVERLAPS     Successful load but loaded image overwrites existing contents
+ *  @return Other (fatal) error code
  */
 USBDM_ErrorCode FlashImageImp::loadElfBlock(
       FILE       *fp,
       long        fOffset,
       Elf32_Word  size,
       Elf32_Addr  addr) {
+
+   bool imageOverlaps = false;
 
    LOGGING_Q;
 #if defined(TARGET) && (TARGET == MC56F80xx)
@@ -1383,11 +1387,19 @@ USBDM_ErrorCode FlashImageImp::loadElfBlock(
 #else
          value = buff[index++];
 #endif
+         if (this->isValid(addr) &&
+               (this->getValue(addr) != value)) {
+            if (!imageOverlaps) {
+               // Report first occupied address
+               log.print("Memory image overlaps @0x%X\n", addr);
+            }
+            imageOverlaps = true;
+         }
          this->setValue(addr++, value);
       }
       size -= blockSize;
    }
-   return SFILE_RC_OK;
+   return imageOverlaps?SFILE_RC_IMAGE_OVERLAPS:SFILE_RC_OK;
 }
 
 /**
@@ -1596,10 +1608,13 @@ const char * FlashImageImp::getElfString(unsigned index) {
  *
  *  @param filePath Path of file to load
  *
- *  @return Error code
+ *  @return SFILE_RC_OK                 Successful load
+ *  @return SFILE_RC_IMAGE_OVERLAPS     Successful load but loaded image overwrites existing contents
+ *  @return Other (fatal) error code
  */
 USBDM_ErrorCode FlashImageImp::loadElfFile(const string &filePath) {
    LOGGING_Q;
+
    Openfile file(filePath.c_str(), "rb");
    MallocWrapper<Elf32_Phdr> phWrapper(programHeaders);
    MallocWrapper<char>       stWrapper(symTable);
@@ -1687,6 +1702,9 @@ USBDM_ErrorCode FlashImageImp::loadElfFile(const string &filePath) {
       }
    }
 #endif
+   // Assume success
+   USBDM_ErrorCode rc = SFILE_RC_OK;
+
    if ((targetType == T_HCS12) || (targetType == T_HC12)) {
       // Load image based on suitable segments
       log.print("Loading by Program Headers\n");
@@ -1694,9 +1712,19 @@ USBDM_ErrorCode FlashImageImp::loadElfFile(const string &filePath) {
       for(Elf32_Phdr *programHeader=programHeaders;
             programHeader<(programHeaders+elfHeader.e_phnum);
             programHeader++) {
-         USBDM_ErrorCode rc = loadElfBlockByProgramHeader(programHeader);
-         if (rc != BDM_RC_OK) {
-            return rc;
+         USBDM_ErrorCode t_rc = loadElfBlockByProgramHeader(programHeader);
+         if (t_rc == SFILE_RC_OK) {
+            continue;
+         }
+         if (t_rc != SFILE_RC_IMAGE_OVERLAPS) {
+            // Immediate fail
+            rc = t_rc;
+            break;
+         }
+         // Must be SFILE_RC_IMAGE_OVERLAPS or similar soft error
+         if (rc == SFILE_RC_OK) {
+            // Update rc if first error
+            rc = t_rc;
          }
       }
    }
@@ -1716,10 +1744,23 @@ USBDM_ErrorCode FlashImageImp::loadElfFile(const string &filePath) {
             return SFILE_RC_ELF_FORMAT_ERROR;
          }
          fixElfSectionHeaderSex(&sectionHeader);
-         loadElfBlockBySectionHeader(&sectionHeader);
+         USBDM_ErrorCode t_rc = loadElfBlockBySectionHeader(&sectionHeader);
+         if (t_rc == SFILE_RC_OK) {
+            continue;
+         }
+         if (t_rc != SFILE_RC_IMAGE_OVERLAPS) {
+            // Immediate fail
+            rc = t_rc;
+            break;
+         }
+         // Must be SFILE_RC_IMAGE_OVERLAPS or similar soft error
+         if (rc == SFILE_RC_OK) {
+            // Update rc if first error
+            rc = t_rc;
+         }
       }
    }
-   return SFILE_RC_OK;
+   return rc;
 }
 
 /**
@@ -1765,10 +1806,13 @@ Elf32_Addr FlashImageImp::getLoadAddress(Elf32_Shdr *sectionHeader) {
  *
  *  @param sectionHeader Section header describing section to load into image
  *
- *  @return Error code
+ *  @return SFILE_RC_OK                 Successful load
+ *  @return SFILE_RC_IMAGE_OVERLAPS     Successful load but loaded image overwrites existing contents
+ *  @return Other (fatal) error code
  */
 USBDM_ErrorCode FlashImageImp::loadElfBlockBySectionHeader(Elf32_Shdr *sectionHeader) {
    LOGGING_Q;
+   bool imageOverlaps = false;
 
    if ((sectionHeader->sh_flags&SHF_ALLOC) == 0) {
       return BDM_RC_OK;
@@ -1813,11 +1857,20 @@ USBDM_ErrorCode FlashImageImp::loadElfBlockBySectionHeader(Elf32_Shdr *sectionHe
 #else
          value = buff[index++];
 #endif
+         if (this->isValid(loadAddress) &&
+             (this->getValue(loadAddress) != value)) {
+            // Occupied address
+            if (!imageOverlaps) {
+               // Report first overlapped address
+               log.print("Memory image overlaps @0x%X\n", loadAddress);
+            }
+            imageOverlaps = true;
+         }
          this->setValue(loadAddress++, value);
       }
       size -= blockSize;
    }
-   return SFILE_RC_OK;
+   return imageOverlaps?SFILE_RC_IMAGE_OVERLAPS:SFILE_RC_OK;
 }
 
 /**
@@ -1825,7 +1878,9 @@ USBDM_ErrorCode FlashImageImp::loadElfBlockBySectionHeader(Elf32_Shdr *sectionHe
  *
  *  @param sectionHeader Program header describing program segment to load into image
  *
- *  @return Error code
+ *  @return SFILE_RC_OK                 Successful load
+ *  @return SFILE_RC_IMAGE_OVERLAPS     Successful load but loaded image overwrites existing contents
+ *  @return Other (fatal) error code
  */
 USBDM_ErrorCode FlashImageImp::loadElfBlockByProgramHeader(Elf32_Phdr *programHeader) {
    LOGGING_Q;

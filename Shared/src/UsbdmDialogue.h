@@ -216,6 +216,7 @@ protected:
    bool                          sound;                              //!< Sound on/off
    time_t                        fileLoadTime;                       //!< Time last file was loaded
    wxString                      lastFileLoaded;                     //!< Path to last file loaded
+   wxString                      cumulativeFilesLoaded;              //!< Names of files loaded
    HardwareCapabilities_t        bdmCapabilities;                    //!< Capabilities of the connected BDM
    FlashProgrammerPtr            flashprogrammer;                    //!< Flash programmer
    FlashImagePtr                 flashImage;                         //!< Memory Image loaded from S1S9 files.

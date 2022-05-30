@@ -270,6 +270,7 @@ void UsbdmDialogue::Init() {
    needManualFrequencySet     = false;
    sound                      = false;
    lastFileLoaded             = wxEmptyString;
+   cumulativeFilesLoaded      = wxEmptyString;
    bdmCapabilities            = BDM_CAP_NONE;
 
    flashprogrammer            = FlashProgrammerFactory::createFlashProgrammer(bdmInterface);
@@ -1552,32 +1553,70 @@ LOGGING;
    return BDM_RC_OK;
 }
 
-USBDM_ErrorCode UsbdmDialogue::loadHexFile( wxString hexFilename, bool clearBuffer, bool forceLinearToPaged ) {
+/**
+ * LOad a file from given path
+ *
+ * @param hexFilepath         Path to file
+ * @param clearBuffer         Clear image buffer before load
+ * @param forceLinearToPaged  Convert Lineart to Paged addresses in motorola format files (SRC)
+ * @return
+ */
+USBDM_ErrorCode UsbdmDialogue::loadHexFile( wxString hexFilepath, bool clearBuffer, bool forceLinearToPaged ) {
    LOGGING_Q;
    USBDM_ErrorCode rc;
 
-   log.print("(%s)\n", (const char *)hexFilename.ToAscii());
+   wxString filename = wxFileNameFromPath(hexFilepath);
+
+   log.print("(%s)\n", (const char *)hexFilepath.ToAscii());
    loadedFilenameStaticControl->SetLabel(_("Loading File"));
-   rc = flashImage->loadFile((const char*)hexFilename.mb_str(wxConvUTF8), clearBuffer, forceLinearToPaged);
+   rc = flashImage->loadFile((const char*)hexFilepath.mb_str(wxConvUTF8), clearBuffer, forceLinearToPaged);
+   if (rc == SFILE_RC_IMAGE_OVERLAPS) {
+      wxMessageBox(_("File loaded overlaps previously loaded file contents\n"
+                   "Contents of '") + filename + _("' have replaced earlier file data.\n"),
+                   _("Warning!"),
+                   wxOK|wxSTAY_ON_TOP|wxCENTER|wxICON_WARNING,
+                   this);
+      // Treat as OK after reporting
+      rc = BDM_RC_OK;
+   }
    if (rc != BDM_RC_OK) {
       wxMessageBox(_("Failed to read S-File.\n") +
-                     hexFilename +
+                     hexFilepath +
                    _("\nReason: ") +
                      wxString(bdmInterface->getErrorString(rc), wxConvUTF8),
                    _("S-File load error - buffer cleared!"),
-                   wxOK|wxSTAY_ON_TOP|wxCENTER,
+                   wxOK|wxSTAY_ON_TOP|wxCENTER|wxICON_ERROR,
                    this);
       // Buffer image may be corrupted
       fileLoaded = FALSE;
       flashImage->clear();
+      cumulativeFilesLoaded = wxEmptyString;
       loadedFilenameStaticControl->SetLabel(_("No file loaded"));
+
+      autoFileReloadCheckBoxControl->Enable(true);
+      autoFileLoad = autoFileReloadCheckBoxControl->GetValue();
+
       return PROGRAMMING_RC_ERROR_FILE_OPEN_FAIL;
    }
    else {
-      fileLoaded = TRUE;
-      lastFileLoaded = hexFilename;
-      fileLoadTime = wxFileModificationTime(hexFilename);
-      loadedFilenameStaticControl->SetLabel(wxFileNameFromPath(hexFilename));
+      if (!incrementalLoad) {
+         // Image was cleared on this file load
+         autoFileReloadCheckBoxControl->Enable(true);
+         autoFileLoad = autoFileReloadCheckBoxControl->GetValue();
+         loadedFilenameStaticControl->SetLabel(_("File loaded :" )+filename);
+         cumulativeFilesLoaded = filename;
+      }
+      else if (fileLoaded) {
+         // Previous file loaded
+         // Can only auto-reload a single file
+         autoFileReloadCheckBoxControl->Enable(false);
+         autoFileLoad = false;
+         cumulativeFilesLoaded.append(_("+")+filename);
+      }
+      fileLoaded = true;
+      lastFileLoaded = hexFilepath;
+      fileLoadTime = wxFileModificationTime(hexFilepath);
+      loadedFilenameStaticControl->SetLabel(cumulativeFilesLoaded);
    }
    flashImage->printMemoryMap();
    return PROGRAMMING_RC_OK;

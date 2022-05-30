@@ -164,7 +164,7 @@ void FirmwareChangerDialogue::setSerialNumber(const wxString &serialNumber) {
    // Patch image with serial #
    uint8_t buff[sizeof(ICP_data.serialNumber)+1];
    strncpy((char*)buff, serialNumber.ToUTF8(), sizeof(ICP_data.serialNumber));
-   flashImage->loadData(sizeof(ICP_data.serialNumber), SN_Address, buff);
+   flashImage->loadDataBytes(sizeof(ICP_data.serialNumber), SN_Address, buff, FlashImage::Overwrite);
 
    // Fix checksum
    uint8_t checkSum = 0;

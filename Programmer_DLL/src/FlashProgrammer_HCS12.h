@@ -112,6 +112,7 @@ protected:
    USBDM_ErrorCode getPageAddress(MemoryRegionConstPtr memoryRegionPtr, uint32_t address, uint8_t *pageNo);
    USBDM_ErrorCode setPageRegisters(uint32_t physicalAddress);
    USBDM_ErrorCode partitionFlexNVM(void);
+   USBDM_ErrorCode getTargetBusSpeed(unsigned long *busFrequency);
    USBDM_ErrorCode massEraseTargetPrivate(bool resetTarget, bool programUnsecured);
    USBDM_ErrorCode checkUnsupportedTarget(SecurityOptions_t security=SEC_SECURED);
 
@@ -119,14 +120,13 @@ public:
    static const char *getProgramActionNames(unsigned int actions);
    static const char *getProgramCapabilityNames(unsigned int actions);
 
-   virtual USBDM_ErrorCode checkTargetUnSecured();
-   virtual USBDM_ErrorCode massEraseTarget(bool resetTarget);
-   virtual USBDM_ErrorCode programFlash(FlashImagePtr flashImage, CallBackT progressCallBack=0, bool doRamWrites=false);
-   virtual USBDM_ErrorCode verifyFlash(FlashImagePtr flashImage, CallBackT progressCallBack=0);
-   virtual USBDM_ErrorCode readTargetChipId(uint32_t *targetSDID, bool doinit=false);
-   virtual USBDM_ErrorCode confirmSDID(void);
-   virtual USBDM_ErrorCode resetAndConnectTarget(void);
-   virtual USBDM_ErrorCode getTargetBusSpeed(unsigned long *busFrequency);
+   virtual USBDM_ErrorCode checkTargetUnSecured() override;
+   virtual USBDM_ErrorCode massEraseTarget(bool resetTarget) override;
+   virtual USBDM_ErrorCode programFlash(FlashImagePtr flashImage, CallBackT progressCallBack=0, bool doRamWrites=false) override;
+   virtual USBDM_ErrorCode verifyFlash(FlashImagePtr flashImage, CallBackT progressCallBack=0) override;
+   virtual USBDM_ErrorCode readTargetChipId(uint32_t *targetSDID, bool doinit=false) override;
+   virtual USBDM_ErrorCode confirmSDID(void) override;
+   virtual USBDM_ErrorCode resetAndConnectTarget(void) override;
 };
 
 #endif // SOURCE_FLASHPROGRAMMER_HCS12_H_

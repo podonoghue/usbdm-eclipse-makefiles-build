@@ -78,7 +78,7 @@ protected:
       ADDRESS_A23    = 1UL<<23,  //!< A23 bit for Flex/DataFlash on ARM/CFV1+
    };
 
-   typedef USBDM_ErrorCode (*CallBackT)(USBDM_ErrorCode status, int percent, const char *message);
+//   typedef USBDM_ErrorCode (*CallBackT)(USBDM_ErrorCode status, int percent, const char *message);
 
    bool                    initTargetDone;               //!< Indicates initTarget() has been done.
    TargetProgramInfo       targetProgramInfo;            //!< Describes loaded flash code
@@ -95,6 +95,7 @@ protected:
    USBDM_ErrorCode setFlashSecurity(FlashImagePtr flashImage);
    USBDM_ErrorCode trimTargetClock(uint32_t trimAddress,unsigned long targetBusFrequency, uint16_t *returnTrimValue, unsigned long *measuredBusFrequency, int do9BitTrim);
    USBDM_ErrorCode configureExternal_Clock(unsigned long  *busFrequency);
+   USBDM_ErrorCode dummyTrimLocations(FlashImagePtr flashImage);
    USBDM_ErrorCode eraseFlash(void);
    USBDM_ErrorCode convertTargetErrorCode(FlashDriverError_t rc);
    USBDM_ErrorCode initSmallTargetBuffer(uint8_t *buffer);
@@ -105,6 +106,7 @@ protected:
    USBDM_ErrorCode selectiveEraseFlashSecurity(void);
    USBDM_ErrorCode doTargetVerify(FlashImagePtr flashImage);
    USBDM_ErrorCode doReadbackVerify(FlashImagePtr flashImage);
+   USBDM_ErrorCode doImageCheck(FlashImagePtr flashImage);
    USBDM_ErrorCode applyFlashOperation(FlashImagePtr flashImage, FlashOperation flashOperation);
    USBDM_ErrorCode doVerify(FlashImagePtr flashImage);
    USBDM_ErrorCode doSelectiveErase(FlashImagePtr flashImage);
@@ -118,7 +120,6 @@ protected:
          FlashProgramConstPtr flashProgram, FlashOperation flashOperation);
    USBDM_ErrorCode loadLargeTargetProgram(uint8_t *buffer, uint32_t loadAddress, uint32_t size,
          FlashProgramConstPtr flashProgram, FlashOperation flashOperation);
-   USBDM_ErrorCode dummyTrimLocations(FlashImagePtr flashImage);
    USBDM_ErrorCode partitionFlexNVM(void);
    USBDM_ErrorCode getRunStatus(void);
 
@@ -126,13 +127,13 @@ public:
    static const char *getProgramActionNames(unsigned int actions);
    static const char *getProgramCapabilityNames(unsigned int actions);
 
-   virtual USBDM_ErrorCode checkTargetUnSecured();
-   virtual USBDM_ErrorCode massEraseTarget(bool resetTarget);
-   virtual USBDM_ErrorCode programFlash(FlashImagePtr flashImage, CallBackT progressCallBack=0, bool doRamWrites=false);
-   virtual USBDM_ErrorCode verifyFlash(FlashImagePtr flashImage, CallBackT progressCallBack=0);
-   virtual USBDM_ErrorCode readTargetChipId(uint32_t *targetSDID, bool doinit=false);
-   virtual USBDM_ErrorCode confirmSDID(void);
-   virtual USBDM_ErrorCode resetAndConnectTarget(void);
+   virtual USBDM_ErrorCode checkTargetUnSecured() override;
+   virtual USBDM_ErrorCode massEraseTarget(bool resetTarget) override;
+   virtual USBDM_ErrorCode programFlash(FlashImagePtr flashImage, CallBackT progressCallBack=0, bool doRamWrites=false) override;
+   virtual USBDM_ErrorCode verifyFlash(FlashImagePtr flashImage, CallBackT progressCallBack=0) override;
+   virtual USBDM_ErrorCode readTargetChipId(uint32_t *targetSDID, bool doinit=false) override;
+   virtual USBDM_ErrorCode confirmSDID(void) override;
+   virtual USBDM_ErrorCode resetAndConnectTarget(void) override;
 };
 
 #endif // SOURCE_FLASHPROGRAMMER_CFVX_H_
