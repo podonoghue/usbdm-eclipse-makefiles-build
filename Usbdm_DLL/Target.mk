@@ -5,6 +5,9 @@
 #TARGET    = BUILDDIR
 #LFLAGS    = 
 
+$(info BITNESS  = $(BITNESS))
+$(info BUILDDIR = $(BUILDDIR))
+
 include ../Common.mk
 
 # Makefiles in subdirs used to collect targets (default 'module.mk')

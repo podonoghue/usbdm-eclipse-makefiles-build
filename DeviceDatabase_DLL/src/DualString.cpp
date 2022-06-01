@@ -74,14 +74,14 @@ DualString::~DualString() throw() {
 	return;
 }
 
-const char* DualString::asCString() const throw() {
+const char* DualString::asCString() const {
    if (!valid) {
       throw new MyException("DualString Constructor failed");
    }
 	return( cString_ );
 }
 
-const XMLCh* DualString::asXMLString() const throw() {
+const XMLCh* DualString::asXMLString() const {
    if (!valid) {
       throw new MyException("DualString Constructor failed");
    }

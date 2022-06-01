@@ -1,31 +1,14 @@
-include ../Common.mk
+BITNESS   ?= $(shell getconf LONG_BIT)
 
-TARGET = MergeXML
+makefile = Makefile-x$(BITNESS).mk
 
-EXE_DEFS = -DUSE_ICON
-
-ifeq ($(UNAME_S),Windows)
-Version.o : src/Version.rc src/uacManifest.xml
-	@echo -- Building $@ from $<
-	$(WINDRES) $< $(DEFS) $(INCS) -o $@
+ifneq (,$(wildcard ./$(makefile)))
+$(info ========================)
+$(info   $(BITNESS)-bit version)
+$(info ========================)
+include $(makefile)
+else
+$(info ==================================)
+$(info   $(BITNESS)-bit version not found)
+$(info ==================================)
 endif
-
-$(TARGET):
-	@echo ''
-	@echo  Building $@ 64-bit
-	@echo "================================================================"
-	$(MAKE) exe -f Target.mk BUILDDIR=$@ TARGET=$@ CDEFS='$(EXE_DEFS)' BITNESS=64
-
-$(TARGET)-debug:
-	@echo ''
-	@echo  Building $@ 64-bit
-	@echo "================================================================"
-	$(MAKE) exe -f Target.mk BUILDDIR=$@ TARGET=$@ CDEFS='$(EXE_DEFS)' DEBUG='Y' BITNESS=64
-
-all: $(TARGET) $(TARGET)-debug
-
-clean:
-	${RMDIR} $(TARGET)$(BUILDDIR_SUFFIXx64) $(TARGET)-debug$(BUILDDIR_SUFFIXx64)
-
-.PHONY: all clean 
-.PHONY: $(TARGET) $(TARGET)-debug

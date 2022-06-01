@@ -1561,7 +1561,7 @@ USBDM_ErrorCode FlashProgrammer_CFVx::eraseFlash(void) {
    return rc;
 }
 
-#if (TARGET == CFV1) || (TARGET == ARM) || (TARGET == HCS08) || (TARGET == S12) || (TARGET == S12Z) || (TARGET == MC56F80xx)
+//#if (TARGET == CFV1) || (TARGET == ARM) || (TARGET == HCS08) || (TARGET == HCS12) || (TARGET == S12Z) || (TARGET == MC56F80xx)
 //=======================================================================
 //! Selective erases the target memory security areas.
 //! This is only of use when the target is unsecured but the security
@@ -1638,7 +1638,7 @@ USBDM_ErrorCode FlashProgrammer_CFVx::selectiveEraseFlashSecurity(void) {
    }
    return rc;
 }
-#endif
+//#endif
 
 
 //=======================================================================

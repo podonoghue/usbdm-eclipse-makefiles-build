@@ -1,25 +1,14 @@
-include ../Common.mk
+BITNESS   ?= $(shell getconf LONG_BIT)
 
-TARGET = UsbdmGdbServer
+makefile = Makefile-x$(BITNESS).mk
 
-EXE_DEFS = -DGDB_SERVER -DUSE_ICON -DGDB
-
-$(TARGET):
-	@echo ''
-	@echo  Building $@ 64-bit
-	@echo "================================================================"
-	$(MAKE) exe -f Target.mk BUILDDIR=$@ TARGET=$@ CDEFS='$(EXE_DEFS)' BITNESS=64
-
-$(TARGET)-debug:
-	@echo ''
-	@echo  Building $@ $@ 64-bit
-	@echo "================================================================"
-	$(MAKE) exe -f Target.mk BUILDDIR=$@ TARGET=$@ CDEFS='$(EXE_DEFS)' DEBUG='Y' BITNESS=64
-
-all: $(TARGET) $(TARGET)-debug
-
-clean:
-	${RMDIR} $(TARGET)$(BUILDDIR_SUFFIXx64) $(TARGET)-debug$(BUILDDIR_SUFFIXx64)
-
-.PHONY: all clean 
-.PHONY: $(TARGET) $(TARGET)-debug
+ifneq (,$(wildcard ./$(makefile)))
+$(info ========================)
+$(info   $(BITNESS)-bit version)
+$(info ========================)
+include $(makefile)
+else
+$(info ==================================)
+$(info   $(BITNESS)-bit version not found)
+$(info ==================================)
+endif

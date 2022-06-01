@@ -9,25 +9,7 @@ These files are copied to PackageFiles\bin\x86_64-win-gnu during the build proce
 usbdm_gdi12.dll - patched gdi file for Codewarrior HCS12
 usbdm-arm.4.dll - old version of file for compatibility with FreeMaster_V2
 
-The following are from GNU core utilities.  
-==
-echo.exe  
-usbdm-make.exe (renamed from make.exe)  
-usbdm-rm.exe (renamed from rm.exe)   
-Source: From http://gnuwin32.sourceforge.net/packages/make.htm  
-License: http://www.gnu.org/licenses/gpl.html  
-
-The following are from wxwidgets (via MSYS2)
-==
-wxbase30u_gcc_custom
-wxbase30u_net_gcc_custom
-wxmsw30u_adv_gcc_custom
-wxmsw30u_core_gcc_custom
-
-Source: http://www.wxwidgets.org/  
-License: http://www.wxwidgets.org/about/licence/  
-
-The remainder are from MSys2
+The remainder are from MSYS2-x86
 
 Source: https://www.msys2.org/
 

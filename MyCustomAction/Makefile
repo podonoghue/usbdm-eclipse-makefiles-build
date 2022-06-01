@@ -1,34 +1,14 @@
-include ../Common.mk
+BITNESS   ?= $(shell getconf LONG_BIT)
 
-TARGET = MyCustomAction
+makefile = Makefile-x$(BITNESS).mk
 
-DLL_DEFS = 
-
-$(TARGET):
-	@echo ''
-	@echo  Building $@ 32-bit
-	@echo "================================================================"
-	$(MAKE) dll -f Target.mk BUILDDIR=$@ TARGET=$@ CDEFS='$(DLL_DEFS)' BITNESS=32
-	@echo ''
-	@echo  Building $@ 64-bit
-	@echo "================================================================"
-	$(MAKE) dll -f Target.mk BUILDDIR=$@ TARGET=$@ CDEFS='$(DLL_DEFS)' BITNESS=64
-
-$(TARGET)-debug:
-	@echo ''
-	@echo  Building $@ 32-bit
-	@echo "================================================================"
-	$(MAKE) dll -f Target.mk BUILDDIR=$@ TARGET=$@ CDEFS='$(DLL_DEFS)' DEBUG='Y' BITNESS=32
-	@echo ''
-	@echo  Building $@ 64-bit
-	@echo "================================================================"
-	$(MAKE) dll -f Target.mk BUILDDIR=$@ TARGET=$@ CDEFS='$(DLL_DEFS)' DEBUG='Y' BITNESS=64
-
-all: $(TARGET) $(TARGET)-debug
-
-clean:
-	${RMDIR} $(TARGET)$(BUILDDIR_SUFFIXx32) $(TARGET)-debug$(BUILDDIR_SUFFIXx32)
-	${RMDIR} $(TARGET)$(BUILDDIR_SUFFIXx64) $(TARGET)-debug$(BUILDDIR_SUFFIXx64)
-
-.PHONY: all clean 
-.PHONY: $(TARGET) $(TARGET)-debug
+ifneq (,$(wildcard ./$(makefile)))
+$(info ========================)
+$(info   $(BITNESS)-bit version)
+$(info ========================)
+include $(makefile)
+else
+$(info ==================================)
+$(info   $(BITNESS)-bit version not found)
+$(info ==================================)
+endif

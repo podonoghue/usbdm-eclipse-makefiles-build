@@ -9,11 +9,31 @@ See instructions on this page [GitHub](https://github.com/podonoghue/usbdm-eclip
 # History
 
 *******  
+USBDM V4_12_1_290, usbdm_4.12.1.290-1-x86_64.deb (May 2022)
+
+- More modifications to prevent bricking 9S12UF32 when mass erasing (due to hardware errata)
+- HCS12 programmer programs unsecure state earlier in the programming sequence when unsecure option is selected
+- Correction to UF32 memory map
+- HCS12, HCS08 and ARM programmers check compatibility of memory image with target memory map before programming
+
+*******  
+USBDM V4_12_1_285, usbdm_4.12.1.285-1-x86_64.deb (May 2022)
+
+- Modifications to prevent bricking 9S12UF32 when mass erasing (due to hardware errata)
+
+*******  
+USBDM V4_12_1_280b, usbdm_4.12.1.280-3-x86_64.deb (May 2022) (Replaces earlier version with same build number)
+
+- Added features to memory dump
+- (a) Fixes for Windows Installer (Codewarrior 5.x)
+- (a) Fixes for Windows Installer (Codewarrior 6.x)
+- (a) Fixes for HCS08 programming (corrected TCL scripts)
+- (b) Added CCR tp regs command for HCS12 & HCS08
+
+*******  
 USBDM V4_12_1_275 (May 2022) 
 
 - Added linear flash image to HCS12 programmer 
-
-Note that this installer is not signed as I cannot justify paying money for the required signing certificate.
 
 *******  
 USBDM V4_12_1_270 (May 2022) 

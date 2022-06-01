@@ -1,0 +1,15 @@
+#!/bin/bash
+
+clear
+
+HOME_DIR="$(dirname $(readlink -f $0))"
+echo "Building in ${HOME_DIR}"
+pushd ${HOME_DIR}
+
+INSTALLATION_DIR=${HOME_DIR}/Installation
+
+cp `find ${INSTALLATION_DIR} -name "*.msi"` ${HOME_DIR}
+
+echo "Complete"
+exit
+

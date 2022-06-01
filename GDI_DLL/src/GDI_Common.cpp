@@ -1275,7 +1275,7 @@ DiReturnT DiMemoryWrite ( DiAddrT       daTarget,
          // Write data to programming buffer
          log.print("(address=0x%06X, size=0x%04X)\n", writeAddress, sub);
          log.printDump(memoryReadWriteBuffer,sub,writeAddress,memorySpace&MS_SIZE);
-         USBDM_ErrorCode rc = flashImage->loadDataBytes(sub, writeAddress, memoryReadWriteBuffer, true);
+         USBDM_ErrorCode rc = flashImage->loadDataBytes(sub, writeAddress, memoryReadWriteBuffer, FlashImage::Overwrite);
          writeDone = true;
          if (rc != BDM_RC_OK) {
             return setErrorState(DI_ERR_FATAL, rc);

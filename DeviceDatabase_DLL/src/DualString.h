@@ -62,6 +62,7 @@ Perhaps in a future version.
 
 #include <string>
 #include <xercesc/util/XMLString.hpp>
+#include "MyException.h"
 
 class DualString {
 
@@ -74,9 +75,9 @@ class DualString {
 
 	~DualString() throw() ;
 
-	const char* asCString() const throw() ;
+	const char* asCString() const;
 
-	const XMLCh* asXMLString() const throw() ;
+	const XMLCh* asXMLString() const;
 
 	std::ostream& print( std::ostream& s ) const ;
 

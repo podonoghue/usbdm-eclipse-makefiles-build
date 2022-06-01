@@ -15,7 +15,7 @@ ifneq (,$(findstring MINGW, $(shell uname)))
 #   $(info MINGW found)
    UNAME_S   := Windows
    UNAME_M   := $(shell uname -m)
-   BITNESS   := $(shell getconf LONG_BIT)
+   BITNESS   ?= $(shell getconf LONG_BIT)
    ifeq ($(BITNESS),32)
       UNAME_M   := i386
       MULTIARCH := i386-win-gnu
@@ -29,7 +29,7 @@ ifneq (,$(findstring Linux, $(shell uname)))
 #   $(info Linux found)
    UNAME_S   := $(shell uname -s)
    UNAME_M   := $(shell uname -m)
-   BITNESS   := $(shell getconf LONG_BIT)
+   BITNESS   ?= $(shell getconf LONG_BIT)
    MULTIARCH := $(shell gcc --print-multiarch)
 endif
 
@@ -81,8 +81,8 @@ else
    TARGET_LIBDIR   ?= ../PackageFiles/lib/$(MULTIARCH)
    BUILDDIR_SUFFIX ?= .$(MULTIARCH)
    #Linux only builds 64-bit
-   BUILDDIR_SUFFIXx32 ?= .$(MULTIARCH)
-   BUILDDIR_SUFFIXx64 ?= .$(MULTIARCH)
+   BUILDDIR_SUFFIXx32 ?= .i386-linux-gnu
+   BUILDDIR_SUFFIXx64 ?= .x86_64-linux-gnu
 endif
 
 ifeq ($(UNAME_S),Windows)
@@ -363,12 +363,8 @@ PACKAGED_FILES := $(patsubst $(SHARED_LIBDIR)/%, $(TARGET_BINDIR)/%, $(wildcard 
 PACKAGED_FILES += $(patsubst $(UTILS_DIR)/%,     $(TARGET_BINDIR)/%, $(wildcard $(UTILS_DIR)/*))
 
 ifeq ($(UNAME_S),Windows)
-ifeq ($(BITNESS),32)
-$(TARGET_BINDIR)/%.dll: $(UTILS_DIR)/%.dll
-	@echo -- Copying $(@F) to package directory
-	$(CP) $< $@
-
-$(TARGET_BINDIR)/%.exe: $(UTILS_DIR)/%.exe
+ifeq ($(BITNESS),64)
+$(TARGET_BINDIR)/%: $(UTILS_DIR)/%
 	@echo -- Copying $(@F) to package directory
 	$(CP) $< $@
 endif
@@ -398,12 +394,12 @@ $(TARGET_LIBDIR)/%.exe: $(SHARED_LIBDIR)/%.exe
 	@echo -- Copying $(@F) to package directory
 	$(CP) $< $@
 
-$(TARGET_LIBDIR) :
+$(TARGET_LIBDIR) ::
 	@echo -- Making directory $(TARGET_LIBDIR)
 	-$(MKDIR) $(TARGET_LIBDIR)
 
 ifneq ($(TARGET_LIBDIR),$(TARGET_BINDIR))
-$(TARGET_BINDIR) :
+$(TARGET_BINDIR) ::
 	@echo -- Making directory $(TARGET_BINDIR)
 	-$(MKDIR) $(TARGET_BINDIR)
 endif

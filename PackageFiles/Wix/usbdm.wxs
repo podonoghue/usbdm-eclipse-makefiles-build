@@ -270,20 +270,23 @@
       <!-- Bintils use with eclipse make -->
       <DirectoryRef Id='INSTALLDIR'>
          <Component Id='C.BinUtils' Guid='d4b987d1-9cb0-45b7-aba5-619ad6b74442' Win64="yes">
-            <File Id='Echo' DiskId='1'
-               Source='$(var.SrcDir)\bin\i386-win-gnu\echo.exe' >
+            <File Id='Util_cp' DiskId='1'
+               Source='$(var.SrcDir)\bin\x86_64-win-gnu\cp.exe'>
             </File>
-            <File Id='Usmdm_rm' DiskId='1'
-               Source='$(var.SrcDir)\bin\i386-win-gnu\usbdm-rm.exe' >
+            <File Id='Util_echo' DiskId='1'
+               Source='$(var.SrcDir)\bin\x86_64-win-gnu\echo.exe' >
             </File>
-            <File Id='Usmdm_make' DiskId='1'
-               Source='$(var.SrcDir)\bin\i386-win-gnu\usbdm-make.exe'>
+            <File Id='Util_make' DiskId='1'
+               Source='$(var.SrcDir)\bin\x86_64-win-gnu\make.exe'>
             </File>
-            <File Id='libiconv2' DiskId='1'
-               Source='$(var.SrcDir)\bin\i386-win-gnu\libiconv2.dll'>
+            <File Id='Util_mkdir' DiskId='1'
+               Source='$(var.SrcDir)\bin\x86_64-win-gnu\mkdir.exe'>
             </File>
-            <File Id='libintl3' DiskId='1'
-               Source='$(var.SrcDir)\bin\i386-win-gnu\libintl3.dll'>
+            <File Id='Util_rm' DiskId='1'
+               Source='$(var.SrcDir)\bin\x86_64-win-gnu\rm.exe' >
+            </File>
+            <File Id='Util_sh' DiskId='1'
+               Source='$(var.SrcDir)\bin\x86_64-win-gnu\sh.exe' >
             </File>
          </Component>
 
