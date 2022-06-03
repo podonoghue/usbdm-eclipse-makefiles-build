@@ -30,7 +30,6 @@
 #ifndef APPSETTINGS_HPP_
 #define APPSETTINGS_HPP_
 
-#include <filesystem>
 #include <memory>
 #include <map>
 #include "USBDM_API.h"

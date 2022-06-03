@@ -39,6 +39,21 @@
 
 using namespace std;
 
+// Quick hack until std::filesystem::path is more readily available??
+static bool isRelativePath(string path) {
+
+   bool isRelative = false;
+//   std::filesystem::path path(filePath);
+//   if (path.is_relative()) {
+
+#ifdef __linux__
+   isRelative = path.at(0) == '/';
+#else
+   isRelative = PathIsRelativeA(path.c_str());
+#endif
+   return isRelative;
+}
+
 /*!
  *  Get settings filename
  *
@@ -111,9 +126,7 @@ FILE *AppSettings::openFile(string filePath, const char *attributes) const {
    LOGGING_Q;
 
    std::string resolvedFilePath;
-
-   std::filesystem::path path(filePath);
-   if (path.is_relative()) {
+   if (isRelativePath(filePath)) {
       // Assume configuration directory
       resolvedFilePath = UsbdmSystem::getConfigurationPath(filePath);
    }
