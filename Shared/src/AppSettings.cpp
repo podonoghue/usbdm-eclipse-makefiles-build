@@ -39,17 +39,16 @@
 
 using namespace std;
 
-// Quick hack until std::filesystem::path is more readily available??
+// Quick hack until std::filesystem::path is more readily available in  Linux??
 static bool isRelativePath(string path) {
 
    bool isRelative = false;
-//   std::filesystem::path path(filePath);
-//   if (path.is_relative()) {
 
 #ifdef __linux__
    isRelative = path.at(0) != '/';
 #else
-   isRelative = PathIsRelativeA(path.c_str());
+   std::filesystem::path fspath(filePath);
+   isRelative = fspath.is_relative();
 #endif
    return isRelative;
 }
