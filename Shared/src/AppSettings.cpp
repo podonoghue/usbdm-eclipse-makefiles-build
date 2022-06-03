@@ -47,7 +47,7 @@ static bool isRelativePath(string path) {
 //   if (path.is_relative()) {
 
 #ifdef __linux__
-   isRelative = path.at(0) == '/';
+   isRelative = path.at(0) != '/';
 #else
    isRelative = PathIsRelativeA(path.c_str());
 #endif
