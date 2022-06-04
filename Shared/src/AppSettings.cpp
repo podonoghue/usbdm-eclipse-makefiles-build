@@ -37,6 +37,10 @@
 #include "UsbdmSystem.h"
 #include "AppSettings.h"
 
+#if !defined(__linux__)
+#include <filesystem>
+#endif
+
 using namespace std;
 
 // Quick hack until std::filesystem::path is more readily available in  Linux??
@@ -44,10 +48,10 @@ static bool isRelativePath(string path) {
 
    bool isRelative = false;
 
-#ifdef __linux__
+#if defined(__linux__)
    isRelative = path.at(0) != '/';
 #else
-   std::filesystem::path fspath(filePath);
+   filesystem::path fspath(path);
    isRelative = fspath.is_relative();
 #endif
    return isRelative;
