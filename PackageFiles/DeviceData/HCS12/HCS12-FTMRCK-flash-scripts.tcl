@@ -100,7 +100,13 @@ proc loadSymbols {} {
 ;#
 ;# Disable watchdog
 ;#
+;# A reset is required? to prevent a possible timeout before the COPCTL write completes
+;#
 proc disableWatchdog { } {
+
+   ;# Disable watchdog immediately after a reset
+   ;# dialogue "Before reset - XFTMRK" Waiting... ok
+   ;# reset s h
 
    puts "*** disableWatchdog {}"
    catch {connect}                 ;# Ignore possible BDM enable fault

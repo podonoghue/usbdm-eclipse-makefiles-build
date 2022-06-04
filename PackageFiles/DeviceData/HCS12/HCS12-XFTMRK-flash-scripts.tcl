@@ -20,6 +20,7 @@
 ;#####################################################################################
 ;#  History
 ;#
+;#  V4.12.1.285 - Minor changes to massErase
 ;#  V4.19.4.240 - Added return error codes
 ;#  V4.10.4 	- Changed return code handling
 ;#  V4.10.4 	- Added disableWatchdog { }
@@ -33,8 +34,8 @@ proc loadSymbols {} {
    setbytesex bigEndian
 
    set ::NAME  "HCS12-XFTMRCK-flash-scripts"
-   puts "$::NAME.loadSymbols{}"
-
+   puts "*** $::NAME.loadSymbols{}"
+   
    set ::BDMGPR                     0xFF08
    set ::BDMGPR_BGAE                0x80
 
@@ -98,7 +99,7 @@ proc loadSymbols {} {
 ;#
 ;# Disable watchdog
 ;#
-;# A reset is required to prevent a possible timeout before the COPCTL write completes
+;# A reset is required? to prevent a possible timeout before the COPCTL write completes
 ;#
 proc disableWatchdog { } {
 
@@ -106,7 +107,7 @@ proc disableWatchdog { } {
    ;# dialogue "Before reset - XFTMRK" Waiting... ok
    ;# reset s h
 
-   puts "disableWatchdog {}"
+   puts "*** disableWatchdog {}"
    catch {connect}                 ;# Ignore possible BDM enable fault
    wb $::COPCTL $::COPCTL_DISABLE  ;# Disable WDOG
    rb $::COPCTL 
@@ -119,7 +120,7 @@ proc disableWatchdog { } {
 ;# @param flashRegions - list of flash array addresses
 ;#
 proc initTarget { flashRegions } {
-   puts "initTarget {}"
+   puts "*** initTarget { $flashRegions }"
    
    set ::FLASH_REGIONS  $flashRegions 
 
@@ -131,7 +132,7 @@ proc initTarget { flashRegions } {
 ;#  busFrequency - Target bus busFrequency in kHz
 ;#
 proc initFlash { busFrequency } {
-   puts "initFlash {}"
+   puts "*** initFlash { busFrequency=$busFrequency kHz}"
    
    set cfmclkd [calculateFlashDivider $busFrequency]
 
@@ -153,18 +154,18 @@ proc calculateFlashDivider { busFrequency } {
 ;#   This code assumes busFrequency = Fosc/2
 ;#   Minimum BUS clock of 1MHz
 ;#
-   puts "calculateFlashDivider {}"
+   puts "*** calculateFlashDivider {}"
    ;# minimum BUS frequency is 1MHz
    if { [expr $busFrequency < 1000] } {
-      puts "Clock too low for flash programming"
+      puts "*** Clock too low for flash programming"
       error $::PROGRAMMING_RC_ERROR_NO_VALID_FCDIV_VALUE
    }
    set fmclkFrequency [expr 2.0*$busFrequency]
    set cfmclkd  [expr round(floor(($fmclkFrequency/1050.0)-0.0001))]
    set flashClk [expr $fmclkFrequency/($cfmclkd+1)]
-   puts "cfmclkd = $cfmclkd, flashClk = $flashClk"
+   puts "*** cfmclkd = $cfmclkd, flashClk = $flashClk"
    if { [expr ($flashClk<800)||($flashClk>1050)] } {
-      puts "Not possible to find suitable flash clock divider"
+      puts "*** Not possible to find suitable flash clock divider"
       error $::PROGRAMMING_RC_ERROR_NO_VALID_FCDIV_VALUE
    }      
    return $cfmclkd
@@ -178,7 +179,7 @@ proc calculateFlashDivider { busFrequency } {
 ;#
 proc executeFlashCommand { cmd {address "none"} {data0 "none"} {data1 "none"} {data2 "none"} {data3 "none"} } {
 
-   ;#  puts "executeFlashCommand {}"
+   ;#  puts "*** executeFlashCommand {}"
    
    wb $::NVM_FSTAT     $::NVM_FSTAT_CLEAR           ;# clear any error flags
    wb $::NVM_FCCOBIX   0                            ;# index = 0
@@ -226,20 +227,24 @@ proc executeFlashCommand { cmd {address "none"} {data0 "none"} {data1 "none"} {d
 ;######################################################################################
 ;#  Target is erased & unsecured
 ;#
-proc massEraseTarget { } {
+;# programUnsecured : not used
+;# The device is left entirely blank which is treted as unsecured by these HCS devices.
+;#
+proc massEraseTarget { programUnsecured } {
 
-   puts "massEraseTarget{}"
+   puts "*** massEraseTarget{ $programUnsecured }"
    
    ;# Mass erase flash
+   ;# This is possibly even if the device is secure.
    initFlash [expr [speed]/1000]  ;# Flash speed calculated from BDM connection speed
 
    if [ expr [isUnsecure] != 0 ] {
-      ;# Need an extra mass erase and reset if the device is secure !!!
-      puts "Doing pre-erase"   
+      ;# Need an unsecure command and reset if the device is secure !!!
+      puts "*** Doing flash unsecure command"   
       executeFlashCommand $::NVM_FCMD_UNSECURE
       
       ;# Device is now blank & temporarily unsecured
-      puts "Resetting"
+      puts "*** Resetting"
       reset s h 
       connect
    }
@@ -261,10 +266,10 @@ proc massEraseTarget { } {
 proc isUnsecure { } {
    set securityValue [rb $::NVM_FSEC]
    if [ expr ( $securityValue & $::NVM_FSEC_SEC_MASK ) != $::NVM_FSEC_SEC_UNSEC ] {
-      puts "isUnsecure{} - Target is secured!"
+      puts "*** isUnsecure{} - Target is secured!"
       return $::PROGRAMMING_RC_ERROR_SECURED
    }
-   puts "isUnsecure{} - Target is unsecured"
+   puts "*** isUnsecure{} - Target is unsecured"
    return 0
 }
 
@@ -272,7 +277,7 @@ proc isUnsecure { } {
 ;#
 ;#
 proc rbx { address } {
-   ;# puts "rbx {}"
+   ;# puts "*** rbx {}"
    
    wdreg $::BDMGPR [expr ($address>>16)|$::BDMGPR_BGAE]
    return [rb [expr $address&0xFFFF]]
