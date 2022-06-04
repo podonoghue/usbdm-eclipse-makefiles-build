@@ -146,6 +146,7 @@ static const char *fileLoaderErrorMessages[] = {
    /** 204 */ "ELF file format error",
    /** 205 */ "Unknown file type (not ELF or SREC)",
    /** 206 */ "ELF file for wrong target",
+   /** 207 */ "File image write overlaps",
 };
 
 /**
