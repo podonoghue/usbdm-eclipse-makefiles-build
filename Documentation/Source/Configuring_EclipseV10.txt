@@ -365,7 +365,6 @@ To view the USBDM Debug Options select the Debug Configuration at the left and t
 <tr>
 <td>
 -  After the initial connection with the target, you may be prompted to supply power to the target.  
-   This means that the BDM has detected that the target has no supply.  
 </td>
 <td> \image html USBDM_ConnectionError_RestorePower.png</td>
 </tr>

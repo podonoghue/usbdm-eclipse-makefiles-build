@@ -15,7 +15,7 @@
    - @htmlonly <a href="http://sourceforge.net/projects/usbdm/"><b>Release versions of the software for the various BDMs are available on Sourceforge.</b></a> @endhtmlonly
    - @htmlonly <a href="/../../../programmer.html"><b>Various stand-alone programmers are provided to support the USBDM hardware.</b></a> @endhtmlonly 
    - @htmlonly <a href="https://github.com/podonoghue"><b>Source code available on GitHub</b></a>@endhtmlonly 
-   - @htmlonly <a href="https://community.freescale.com/community/bdm"><b>Post queries on OSBDM and TBDML Discussion Board</b></a>@endhtmlonly 
+   - @htmlonly <a href="https://community.nxp.com/t5/OSBDM-and-TBDML/bd-p/bdm"><b>Post queries on OSBDM and TBDML Discussion Board</b></a>@endhtmlonly 
      
    <hr>
  \subsection featureSection Features
