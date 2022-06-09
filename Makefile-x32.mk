@@ -16,6 +16,9 @@ DIRS += \
   UsbdmDsc_DLL         \
   BdmInterface_DLL     \
   DeviceDatabase_DLL   \
+  FlashImage_DLL       \
+  UsbdmTcl_DLL         \
+  Programmer_DLL       \
   GdiDialogue_DLL      \
   Legacy_DLL           \
   GDI_DLL              \
