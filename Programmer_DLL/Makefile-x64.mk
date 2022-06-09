@@ -113,18 +113,18 @@ clean:
 	${RMDIR} $(TARGET)-arm$(BUILDDIR_SUFFIXx64)     $(TARGET)-arm-debug$(BUILDDIR_SUFFIXx64)
 	${RMDIR} $(TARGET)-cfv1$(BUILDDIR_SUFFIXx64)    $(TARGET)-cfv1-debug$(BUILDDIR_SUFFIXx64)
 	${RMDIR} $(TARGET)-cfvx$(BUILDDIR_SUFFIXx64)    $(TARGET)-cfvx-debug$(BUILDDIR_SUFFIXx64)
-	${RMDIR} $(TARGET)-dsc$(BUILDDIR_SUFFIXx64)     $(TARGET)-dsc-debug$(BUILDDIR_SUFFIXx64)
 	${RMDIR} $(TARGET)-hcs08$(BUILDDIR_SUFFIXx64)   $(TARGET)-hcs08-debug$(BUILDDIR_SUFFIXx64)
 	${RMDIR} $(TARGET)-hcs12$(BUILDDIR_SUFFIXx64)   $(TARGET)-hcs12-debug$(BUILDDIR_SUFFIXx64)
 	${RMDIR} $(TARGET)-rs08$(BUILDDIR_SUFFIXx64)    $(TARGET)-rs08-debug$(BUILDDIR_SUFFIXx64)
 	${RMDIR} $(TARGET)-s12z$(BUILDDIR_SUFFIXx64)    $(TARGET)-s12z-debug$(BUILDDIR_SUFFIXx64)
+	${RMDIR} $(TARGET)-dsc$(BUILDDIR_SUFFIXx64)     $(TARGET)-dsc-debug$(BUILDDIR_SUFFIXx64)
 
 .PHONY: all clean
 .PHONY: $(TARGET)-arm   $(TARGET)-arm-debug
 .PHONY: $(TARGET)-cfv1  $(TARGET)-cfv1-debug
 .PHONY: $(TARGET)-cfvx  $(TARGET)-cfvx-debug
-.PHONY: $(TARGET)-dsc   $(TARGET)-dsc-debug
 .PHONY: $(TARGET)-hcs08 $(TARGET)-hcs08-debug
 .PHONY: $(TARGET)-hcs12 $(TARGET)-hcs12-debug
 .PHONY: $(TARGET)-rs08  $(TARGET)-rs08-debug
 .PHONY: $(TARGET)-s12z  $(TARGET)-s12z-debug
+.PHONY: $(TARGET)-dsc   $(TARGET)-dsc-debug

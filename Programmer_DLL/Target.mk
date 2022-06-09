@@ -47,9 +47,9 @@ ifneq ($(UNAME_S),Windows)
 LIBS += -ldl
 LIBS += -lm
 endif
-LIBS += $(USBDM_LIBS) 
 LIBS += $(USBDM_DEVICE_LIBS)
 LIBS += $(USBDM_SYSTEM_LIBS)
+LIBS += $(USBDM_LIBS)
 LIBS += $(USBDM_DYNAMIC_LIBS)
 
 # Extra libraries for EXE only
@@ -117,7 +117,7 @@ $(BUILDDIR)/$(TARGET_DLL): $(OBJ) $(RESOURCE_OBJ)
 	@echo --
 	@echo -- Linking Target $@
 	$(CC) -shared -o $@ -Wl,-soname,$(basename $(notdir $@)) $(LDFLAGS) $(OBJ) $(RESOURCE_OBJ) $(LIBDIRS) $(LIBS) ${EXELIBS}
-	
+
 # How to copy LIBRARY to target directory
 #==============================================
 $(TARGET_LIBDIR)/$(TARGET_DLL): $(BUILDDIR)/$(TARGET_DLL)
