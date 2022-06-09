@@ -12,7 +12,7 @@ VERSION_MINOR_NUMBER=12
 VERSION_SUFFIX=_V${VERSION_NUMBER}
 VERSION_MINOR_SUFFIX=_V${VERSION_NUMBER}_${VERSION_MINOR_NUMBER}
 
-USBDM_ROOT=${HOME_DIR}/..
+USBDM_ROOT=${HOME_DIR}/../..
 
 #*** where to find applications (Eclipse folder)
 APP_ROOT=${USBDM_ROOT}/usbdm-eclipse-makefiles-build

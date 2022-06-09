@@ -61,30 +61,35 @@
       <!--======================================================
             Actions
       =======================================================-->
-      <!-- Patch Wizard XLM-->
+      <!-- Patch Device XLM-->
+      <!-- Create command string -->
       <CustomAction
          Id="Ca.CreateMergeCommand_CWMCU_V6_$(var.CW_Ver)"
          Property="Ca.MergeCommand_CWMCU_V6_$(var.CW_Ver)"
-         Value="&quot;[INSTALLDIR]mergeXml.exe&quot; &quot;[D.CW_FOR_MICROCONTROLLERS_V6_$(var.CW_Ver)_XML]\&quot; &quot;HCS908*.xml|MCF51*.xml&quot; &quot;[D.WizardPatchData]OSBDM_Wizard_V6_$(var.CW_Ver).xml&quot; "
+         Value="&quot;[INSTALLDIR]mergeXml.exe&quot; &quot;[D.CW_FOR_MICROCONTROLLERS_V6_$(var.CW_Ver)_XML]\&quot; &quot;HCS908*.xml|MCF51*.xml&quot; &quot;[D.WizardPatchData]OSBDM_Wizard_V6_$(var.CW_Ver).xml&quot;"
          Execute="immediate"/>
+      <!-- Execute command string -->
       <CustomAction Id="Ca.MergeCommand_CWMCU_V6_$(var.CW_Ver)"   BinaryKey="WixCA" DllEntry="CAQuietExec" Execute="deferred" Return="ignore" Impersonate="no"/>
 
-      <!-- Unpatch Wizard XLM-->
+      <!-- Unpatch Device XLM-->
+      <!-- Create command string -->
       <CustomAction
          Id="Ca.CreateUnMergeCommand_CWMCU_V6_$(var.CW_Ver)"
          Property="Ca.UnMergeCommand_CWMCU_V6_$(var.CW_Ver)"
          Value="&quot;[INSTALLDIR]mergeXml.exe&quot; &quot;[D.CW_FOR_MICROCONTROLLERS_V6_$(var.CW_Ver)_XML]\&quot; &quot;HCS908*.xml.original|MCF51*.xml.original&quot;"
          Execute="immediate"/>
+      <!-- Execute command string -->
       <CustomAction Id="Ca.UnMergeCommand_CWMCU_V6_$(var.CW_Ver)" BinaryKey="WixCA" DllEntry="CAQuietExec" Execute="deferred" Return="ignore" Impersonate="no"/>
 
       <InstallExecuteSequence>
-          <!-- These actions set Properties used by later actions -->
-          <Custom Action="Ca.CreateMergeCommand_CWMCU_V6_$(var.CW_Ver)"     After="CostFinalize"><![CDATA[$C.CW_FOR_MICROCONTROLLERS_V6_$(var.CW_Ver).Files>2]]></Custom>
-          <Custom Action="Ca.CreateUnMergeCommand_CWMCU_V6_$(var.CW_Ver)"   After="CostFinalize"><![CDATA[$C.CW_FOR_MICROCONTROLLERS_V6_$(var.CW_Ver).Files=2]]></Custom>
+          <!-- These actions set Properties contining the command string used by later actions -->
+          <Custom Action="Ca.CreateMergeCommand_CWMCU_V6_$(var.CW_Ver)"     After="CostFinalize"></Custom>
+          <Custom Action="Ca.CreateUnMergeCommand_CWMCU_V6_$(var.CW_Ver)"   After="CostFinalize"></Custom>
           
-          <!-- These actions patch or restore the various Codewarrior XML files -->
-          <Custom Action="Ca.MergeCommand_CWMCU_V6_$(var.CW_Ver)"           After="PublishProduct"><![CDATA[$C.CW_FOR_MICROCONTROLLERS_V6_$(var.CW_Ver).Files>2]]></Custom>
-          <Custom Action="Ca.UnMergeCommand_CWMCU_V6_$(var.CW_Ver)"         Before="RemoveFiles">  <![CDATA[$C.CW_FOR_MICROCONTROLLERS_V6_$(var.CW_Ver).Files=2]]></Custom>
+          <!-- This action patches the various Codewarrior XML files -->
+          <Custom Action="Ca.MergeCommand_CWMCU_V6_$(var.CW_Ver)"           After="PublishProduct"> $C.CW_FOR_MICROCONTROLLERS_V6_$(var.CW_Ver).Files=3 </Custom>
+          <!-- This action restores the various Codewarrior XML files -->
+          <Custom Action="Ca.UnMergeCommand_CWMCU_V6_$(var.CW_Ver)"         Before="RemoveFiles">   $C.CW_FOR_MICROCONTROLLERS_V6_$(var.CW_Ver).Files=2 </Custom>
       </InstallExecuteSequence>
 
       <!--======================================================
@@ -94,14 +99,14 @@
            USBDM Installed Marker
      -->
       <DirectoryRef Id="D.CW_FOR_MICROCONTROLLERS_V6_$(var.CW_Ver)">
-         <Component Id='C.CW_FOR_MICROCONTROLLERS_V6_$(var.CW_Ver).Marker' Guid='c40bb000-c07b-45d7-9a92-1eeae9a1405f' >
+         <Component Id='C.CW_FOR_MICROCONTROLLERS_V6_$(var.CW_Ver).Marker' Guid='F7271D46-B2FD-493E-9023-32BFF1145905' >
             <File Id='CW_FOR_MICROCONTROLLERS_V6_$(var.CW_Ver)_Marker' DiskId='1' Source='USBDM_Installed.txt' KeyPath='yes' />
          </Component>
       </DirectoryRef>
       
       <!-- CW for Microcontrollers support -->
       <DirectoryRef Id="D.CW_FOR_MICROCONTROLLERS_V6_$(var.CW_Ver)_prog_gdi">
-         <Component Id='C.CW_FOR_MICROCONTROLLERS_V6_$(var.CW_Ver).Files' Guid='aee1836b-cdec-4c17-9ad6-41af6affb99a' >
+         <Component Id='C.CW_FOR_MICROCONTROLLERS_V6_$(var.CW_Ver).Files' Guid='{DBE60B11-0D0C-4024-9D75-DDE5254A724D}' >
             <File Id='CW_FOR_MICROCONTROLLERS_V6_$(var.CW_Ver)CommonFiles_1'   DiskId='1' Source='$(var.SrcDir)\bin\i386-win-gnu\usbdm.4.dll'/>
             <File Id='CW_FOR_MICROCONTROLLERS_V6_$(var.CW_Ver)CommonFiles_1d'  DiskId='1' Source='$(var.SrcDir)\bin\i386-win-gnu\usbdm-debug.4.dll'/>
             <File Id='CW_FOR_MICROCONTROLLERS_V6_$(var.CW_Ver)CommonFiles_2'   DiskId='1' Source='$(var.SrcDir)\bin\i386-win-gnu\usbdm-system.4.dll'/>
@@ -119,14 +124,21 @@
       <!-- Patch Codewarrior Wizard shortcut -->
       <DirectoryRef Id="D.ProgramMenuPatchDir">
          <Component Id='C.PatchCodewarriorWizardsMenu_CWMCU_$(var.CW_Ver)' Guid='*'>
+            <RegistryValue Root='HKCR' Key="Software\$(var.Manufacturer)\$(var.ProductName)"
+                           Type='string' Name='PatchCodewarriorWizardsMenu_CWMCU_V6_$(var.CW_Ver)' Value="" KeyPath='yes' />
             <Shortcut Id="Sc.PatchCW_HCS08_$(var.CW_Ver)" 
-               Name = "Modify Codewarrior for Microcontroller V6.$(var.CW_Ver) New Project Wizard"
+               Name = "Codewarrior for Microcontroller V6.$(var.CW_Ver) - Add USBDM Targets"
                Target="[INSTALLDIR]mergeXml.exe"
                Description="Adds Open Source BDM targets to Codewarrior for Microcontroller New Project Wizard"
-               WorkingDirectory='INSTALLDIR' Icon="ChipIcon.exe" IconIndex="0" Advertise="no" 
-               Arguments="-p &quot;[D.CW_FOR_MICROCONTROLLERS_V6_$(var.CW_Ver)_XML]\&quot; &quot;HCS908*.xml|MCF51*.xml&quot; &quot;[D.WizardPatchData]OSBDM_Wizard_V6_$(var.CW_Ver).xml&quot;"/>                            
-            <RegistryValue Root='HKCU' Key="Software\$(var.Manufacturer)\$(var.ProductName)"
-                           Type='string' Name='PatchCodewarriorWizardsMenu_CWMCU_V6_$(var.CW_Ver)' Value="" KeyPath='yes' />
+               WorkingDirectory='D.WizardPatchData' Icon="ChipIcon.exe" IconIndex="0" Advertise="no" 
+               Arguments="-p &quot;[D.CW_FOR_MICROCONTROLLERS_V6_$(var.CW_Ver)_XML]\&quot; &quot;HCS908*.xml|MCF51*.xml&quot; &quot;OSBDM_Wizard_V6_$(var.CW_Ver).xml&quot;"/>                            
+
+            <Shortcut Id="Sc.UnPatchCW_HCS08_$(var.CW_Ver)" 
+               Name = "Codewarrior for Microcontroller V6.$(var.CW_Ver) - Remove USBDM Targets"
+               Target="[INSTALLDIR]mergeXml.exe"
+               Description="Removes Open Source BDM targets from Codewarrior for Microcontroller New Project Wizard"
+               WorkingDirectory='D.WizardPatchData' Icon="ChipIcon.exe" IconIndex="0" Advertise="no" 
+               Arguments="-p &quot;[D.CW_FOR_MICROCONTROLLERS_V6_$(var.CW_Ver)_XML]\&quot; &quot;HCS908*.xml|MCF51*.xml&quot;"/>                            
          </Component>
       </DirectoryRef>
            

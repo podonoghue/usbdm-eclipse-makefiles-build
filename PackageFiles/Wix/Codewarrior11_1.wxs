@@ -399,7 +399,7 @@
       <!-- Patch Codewarrior Menu folder and shortcuts -->
       <DirectoryRef Id="D.ProgramMenuPatchDir">
          <Component Id='C.PatchCodewarriorWizardsMenu_$(var.CW_VER_UC)' Guid='*'>
-            <RegistryValue Root='HKCU' Key="Software\$(var.Manufacturer)\$(var.ProductName)"
+            <RegistryValue Root='HKCR' Key="Software\$(var.Manufacturer)\$(var.ProductName)"
                            Type='string' Name='PatchCodewarriorWizardsMenu_MCU_10.$(var.CW_VER_UC)' Value="" KeyPath='yes' />
             <Shortcut Id="Sc.PatchCW_V10_NewWizard_$(var.CW_VER_UC)"
                Name="Modify CW for MCU $(var.CW_VER_UC) New Project Wizard"

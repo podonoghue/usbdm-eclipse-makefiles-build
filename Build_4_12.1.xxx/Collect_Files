@@ -63,7 +63,7 @@ echo "--- ====================================="
 echo "    Complete Folders "
 echo "--- ====================================="
 
-directories="DeviceData Examples FlashImages Stationery LaunchConfig Licenses WinDrivers Wix WizardPatches"
+directories="DeviceData FlashImages Stationery LaunchConfig Licenses WinDrivers Wix WizardPatches"
 for dir in ${directories}; do
 echo  "--- Filling ${INSTALLATION_DIR}/${dir}"
 cp -r  "${PACKAGE_FILEs}/${dir}"                  "${INSTALLATION_DIR}"

@@ -54,7 +54,7 @@
       =======================================================-->
      <!-- USBDM Installed Marker -->
       <DirectoryRef Id="D.CFFLASHER_V3_1">
-         <Component Id='C.CFFLASHER_V3_1.Marker' Guid='f3f075b4-845a-4bd7-946a-003c0fa85708' >
+         <Component Id='C.CFFLASHER_V3_1.Marker' Guid='876FD9FB-8147-4122-8D67-F489DF101A34' >
             <File Id='CFFLASHER_V3_1_Marker'  DiskId='1' Source='USBDM_Installed.txt' KeyPath='yes' />
             <File Id='CFFLASHER_V3_1_Files11'  DiskId='1' Source='$(var.SrcDir)\bin\USBDM-CFFlasher-Readme.txt'/>
             <File Id='CFFLASHER_V3_1_Files12'  DiskId='1' Source='$(var.SrcDir)\bin\i386-win-gnu\libgcc_s_dw2-1.dll' />
@@ -66,7 +66,7 @@
       
       <!-- CF Flasher V3.1 support -->
       <DirectoryRef Id="D.CFFLASHER_V3_1_protocol">
-         <Component Id='C.CFFLASHER_V3_1.Files' Guid='38ff37f1-c783-4c2e-952e-3eb158ef8345' >
+         <Component Id='C.CFFLASHER_V3_1.Files' Guid='3C7B94F8-062C-419C-AB7E-082C8F0E6366' >
             <File Id='CFFLASHER_V3_1_Files1'  DiskId='1' Source='$(var.SrcDir)\bin\i386-win-gnu\usbdm-cff.dll'/>
             <File Id='CFFLASHER_V3_1_Files2'  DiskId='1' Source='$(var.SrcDir)\bin\i386-win-gnu\usbdm-cff-debug.dll'/>
          </Component>

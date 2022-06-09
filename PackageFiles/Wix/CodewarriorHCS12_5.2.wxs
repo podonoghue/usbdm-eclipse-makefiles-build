@@ -64,19 +64,23 @@
             Actions
       =======================================================-->
       <!-- Patch HCS12 Device XLM-->
+      <!-- Create command string -->
       <CustomAction
          Id="Ca.CreateHCS12MergeDeviceCommand_V5_$(var.CW_Ver)"
          Property="Ca.HCS12MergeDeviceCommand_V5_$(var.CW_Ver)"
          Value="&quot;[INSTALLDIR]mergeXml.exe&quot; &quot;[D.CWS12_X_V5_$(var.CW_Ver)_XML]\&quot; &quot;MC9S12*.xml|MM912*.xml&quot; &quot;[D.WizardPatchData]CWHCS12_Device_5_$(var.CW_Ver).xml&quot; "
          Execute="immediate"/>
+      <!-- Execute command string -->
       <CustomAction Id="Ca.HCS12MergeDeviceCommand_V5_$(var.CW_Ver)"     BinaryKey="WixCA" DllEntry="CAQuietExec" Execute="deferred" Return="ignore" Impersonate="no"/>
 
       <!-- Unpatch HCS12 Device XLM-->
+      <!-- Create command string -->
       <CustomAction
          Id="Ca.CreateHCS12UnMergeDeviceCommand_V5_$(var.CW_Ver)"
          Property="Ca.HCS12UnMergeDeviceCommand_V5_$(var.CW_Ver)"
          Value="&quot;[INSTALLDIR]mergeXml.exe&quot; &quot;[D.CWS12_X_V5_$(var.CW_Ver)_XML]\&quot; &quot;MC9S12*.xml|MM912*.xml&quot;"
          Execute="immediate"/>
+      <!-- Execute command string -->
       <CustomAction Id="Ca.HCS12UnMergeDeviceCommand_V5_$(var.CW_Ver)"   BinaryKey="WixCA" DllEntry="CAQuietExec" Execute="deferred" Return="ignore" Impersonate="no"/>
 
       <!-- Patch HCS12 Wizard XLM-->
@@ -96,17 +100,21 @@
       <CustomAction Id="Ca.HCS12UnMergeWizardCommand_V5$(var.CW_Ver)" BinaryKey="WixCA" DllEntry="CAQuietExec" Execute="deferred" Return="ignore" Impersonate="no"/>
 
       <InstallExecuteSequence>
-          <!-- These actions set Properties used by later actions -->
-          <Custom Action="Ca.CreateHCS12MergeDeviceCommand_V5_$(var.CW_Ver)"     After="CostFinalize"><![CDATA[$C.CWS12_X_V5_$(var.CW_Ver).Files>2]]></Custom>
-          <Custom Action="Ca.CreateHCS12UnMergeDeviceCommand_V5_$(var.CW_Ver)"   After="CostFinalize"><![CDATA[$C.CWS12_X_V5_$(var.CW_Ver).Files=2]]></Custom>
-          <Custom Action="Ca.CreateHCS12MergeWizardCommand_V5_$(var.CW_Ver)"     After="CostFinalize"><![CDATA[$C.CWS12_X_V5_$(var.CW_Ver).Files>2]]></Custom>
-          <Custom Action="Ca.CreateHCS12UnMergeWizardCommand_V5_$(var.CW_Ver)"   After="CostFinalize"><![CDATA[$C.CWS12_X_V5_$(var.CW_Ver).Files=2]]></Custom>
-
-          <!-- These actions patch or restore the various Codewarrior XML files -->
-          <Custom Action="Ca.HCS12MergeDeviceCommand_V5_$(var.CW_Ver)"           After="PublishProduct"><![CDATA[$C.CWS12_X_V5_$(var.CW_Ver).Files>2]]></Custom>
-          <Custom Action="Ca.HCS12UnMergeDeviceCommand_V5_$(var.CW_Ver)"         Before="RemoveFiles">  <![CDATA[$C.CWS12_X_V5_$(var.CW_Ver).Files=2]]></Custom>
-          <Custom Action="Ca.HCS12MergeWizardCommand_V5_$(var.CW_Ver)"            After="PublishProduct"><![CDATA[$C.CWS12_X_V5_$(var.CW_Ver).Files>2]]></Custom>
-          <Custom Action="Ca.HCS12UnMergeWizardCommand_V5$(var.CW_Ver)"          Before="RemoveFiles">  <![CDATA[$C.CWS12_X_V5_$(var.CW_Ver).Files=2]]></Custom>
+          <!-- These actions set Properties containing the command string used by later actions - Installation -->
+          <Custom Action="Ca.CreateHCS12MergeDeviceCommand_V5_$(var.CW_Ver)"     After="CostFinalize">   <![CDATA[$C.CWS12_X_V5_$(var.CW_Ver).Files>2]]></Custom>
+          <Custom Action="Ca.CreateHCS12MergeWizardCommand_V5_$(var.CW_Ver)"     After="CostFinalize">   <![CDATA[$C.CWS12_X_V5_$(var.CW_Ver).Files>2]]></Custom>
+	  
+          <!-- These actions set Properties containing the command string used by later actions - Removal -->
+          <Custom Action="Ca.CreateHCS12UnMergeDeviceCommand_V5_$(var.CW_Ver)"   After="CostFinalize">   <![CDATA[$C.CWS12_X_V5_$(var.CW_Ver).Files=2]]></Custom>
+          <Custom Action="Ca.CreateHCS12UnMergeWizardCommand_V5_$(var.CW_Ver)"   After="CostFinalize">   <![CDATA[$C.CWS12_X_V5_$(var.CW_Ver).Files=2]]></Custom>
+	  
+          <!-- These actions patch or restore the various Codewarrior XML files - Installation -->
+          <Custom Action="Ca.HCS12MergeDeviceCommand_V5_$(var.CW_Ver)"           After="PublishProduct"> <![CDATA[$C.CWS12_X_V5_$(var.CW_Ver).Files>2]]></Custom>
+          <Custom Action="Ca.HCS12MergeWizardCommand_V5_$(var.CW_Ver)"           After="PublishProduct"> <![CDATA[$C.CWS12_X_V5_$(var.CW_Ver).Files>2]]></Custom>
+	  
+          <!-- These actions patch or restore the various Codewarrior XML files - Removal -->
+          <Custom Action="Ca.HCS12UnMergeDeviceCommand_V5_$(var.CW_Ver)"         Before="RemoveFiles">   <![CDATA[$C.CWS12_X_V5_$(var.CW_Ver).Files=2]]></Custom>
+          <Custom Action="Ca.HCS12UnMergeWizardCommand_V5$(var.CW_Ver)"          Before="RemoveFiles">   <![CDATA[$C.CWS12_X_V5_$(var.CW_Ver).Files=2]]></Custom>
       </InstallExecuteSequence>
 
       <!--======================================================
@@ -158,17 +166,38 @@
       <!-- Patch HCS12 Codewarrior shortcut -->
       <DirectoryRef Id="D.ProgramMenuPatchDir">
          <Component Id='C.PatchCodewarriorDeviceMenu_HCS12_V5_$(var.CW_Ver)' Guid='*'>
+            <RegistryValue Root='HKCR' Key="Software\$(var.Manufacturer)\$(var.ProductName)"
+                           Type='string' Name='PatchCodewarriorDeviceMenu_HCS12_V5_$(var.CW_Ver)' Value="" KeyPath='yes' />
             <Shortcut Id="Sc.PatchCW_HCS12_V5_$(var.CW_Ver)" 
-               Name = "Add USBDM target to CodeWarrior for S12(X) V5.$(var.CW_Ver)"
+               Name = "CodeWarrior for S12(X) V5.$(var.CW_Ver) - Add USBDM targets"
                Target="[INSTALLDIR]mergeXml.exe"
                Description="Add USBDM target to CodeWarrior for S12(X) V5.$(var.CW_Ver) device files"
-               WorkingDirectory='INSTALLDIR' Icon="ChipIcon.exe" IconIndex="0" Advertise="no" 
-               Arguments="-p &quot;[D.CWS12_X_V5_$(var.CW_Ver)_XML]\&quot; &quot;MC9S12|MM912*.xml*.xml&quot; &quot;[D.WizardPatchData]CWHCS12_Device_5_$(var.CW_Ver).xml&quot; "/>
-            <RegistryValue Root='HKCU' Key="Software\$(var.Manufacturer)\$(var.ProductName)"
-                           Type='string' Name='PatchCodewarriorDeviceMenu_HCS12_V5_$(var.CW_Ver)' Value="" KeyPath='yes' />
+               WorkingDirectory='D.WizardPatchData' Icon="ChipIcon.exe" IconIndex="0" Advertise="no" 
+               Arguments="-p &quot;[D.CWS12_X_V5_$(var.CW_Ver)_XML]\&quot; &quot;MC9S12*.xml|MM912*.xml&quot; &quot;CWHCS12_Device_5_$(var.CW_Ver).xml&quot; "/>
+
+            <Shortcut Id="Sc.UnPatchCW_HCS12_V5_$(var.CW_Ver)" 
+               Name = "CodeWarrior for S12(X) V5.$(var.CW_Ver) - Remove USBDM targets"
+               Target="[INSTALLDIR]mergeXml.exe"
+               Description="Remove USBDM target from CodeWarrior for S12(X) V5.$(var.CW_Ver) device files"
+               WorkingDirectory='D.WizardPatchData' Icon="ChipIcon.exe" IconIndex="0" Advertise="no" 
+               Arguments="-p &quot;[D.CWS12_X_V5_$(var.CW_Ver)_XML]\&quot; &quot;MC9S12*.xml|MM912*.xml&quot;"/>
+
+            <Shortcut Id="Sc.PatchWizardCW_HCS12_V5_$(var.CW_Ver)" 
+               Name = "CodeWarrior for S12(X) V5.$(var.CW_Ver) - Modify Project Wizard"
+               Target="[INSTALLDIR]mergeXml.exe"
+               Description="Add USBDM target to Wizard for CodeWarrior for S12(X) V5.$(var.CW_Ver) device files"
+               WorkingDirectory='D.WizardPatchData' Icon="ChipIcon.exe" IconIndex="0" Advertise="no" 
+               Arguments="-p &quot;[D.CWS12_X_V5_$(var.CW_Ver)_HC12Wizard]\&quot; &quot;wizard.xml&quot; &quot;CWHCS12_Wizard_5_$(var.CW_Ver).xml&quot; "/>
+
+            <Shortcut Id="Sc.UnPatchWizardCW_HCS12_V5_$(var.CW_Ver)" 
+               Name = "CodeWarrior for S12(X) V5.$(var.CW_Ver) - Restore Project Wizard"
+               Target="[INSTALLDIR]mergeXml.exe"
+               Description="Remove USBDM target Wizard from Wizard from CodeWarrior for S12(X) V5.$(var.CW_Ver) device files"
+               WorkingDirectory='D.WizardPatchData' Icon="ChipIcon.exe" IconIndex="0" Advertise="no" 
+               Arguments="-p &quot;[D.CWS12_X_V5_$(var.CW_Ver)_HC12Wizard]\&quot; &quot;wizard.xml&quot; "/>
          </Component>
       </DirectoryRef>
-           
+
       <!--======================================================
             Features
       =======================================================-->
