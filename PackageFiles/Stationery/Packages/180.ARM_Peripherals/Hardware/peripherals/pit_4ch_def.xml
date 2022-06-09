@@ -53,6 +53,7 @@
       <copy source="Snippets/pit-example2-MK.cpp"    target="Snippets/pit-example2.cpp" overwrite="true" derived="true" />
       <copy source="Snippets/pit-example3-MK.cpp"    target="Snippets/pit-example3.cpp" overwrite="true" derived="true" />
       <copy source="Project_Headers/pit-MK.h"        target="Project_Headers/pit.h"     overwrite="true" derived="true" />
+      <copy source="Snippets/timer-inline-handler-example.cpp" target="Snippets/timer-inline-handler-example.cpp"   overwrite="true" derived="true" />
    </projectActionList>
          
    <template><![CDATA[
