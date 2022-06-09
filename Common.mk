@@ -99,7 +99,7 @@ ifeq ($(UNAME_S),Windows)
    RMDIR         := $(MSYS_BIN)rm -R -f
    TOUCH         := $(MSYS_BIN)touch
    MKDIR         := $(MSYS_BIN)mkdir -p
-   CP            := $(MSYS_BIN)cp
+   CP            := $(MSYS_BIN)cp -p
    MAKE          := $(MSYS_BIN)make
 #   MAKE          := make
    AR            := $(MINGW_BIN)ar
