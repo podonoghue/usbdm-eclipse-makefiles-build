@@ -59,8 +59,8 @@ static void runGuiEventLoop(void) {
 long WxPluginImp::display(std::string message, std::string caption, long style) {
    LOGGING;
    log.print("wxTheApp  = %p\n", wxTheApp);
-   log.print("Message   = %s\n", message.c_str());
    log.print("Caption   = %s\n", caption.c_str());
+   log.print("Message  = \n%s\n", message.c_str());
    log.print("Style     = %ld\n", style);
    long rc = 0;
       try {
