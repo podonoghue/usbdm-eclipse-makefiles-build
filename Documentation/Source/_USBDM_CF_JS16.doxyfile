@@ -528,7 +528,7 @@ WARN_LOGFILE =
 # directories like "/usr/src/myproject". Separate the files or directories 
 # with spaces.
 
-INPUT = USBDM_CF_JS16_Documentation.txt Software_Installation.txt Driver_Installation.txt Construction.txt Configuring_EclipseV10.txt Configuring_CFVx.txt Configuring_DSC.txt Eclipse_Install.txt Eclipse_NewProject.txt Eclipse_CFVx_Flash_Programming.txt  OtherPrograms.txt Connector_Coldfire.txt Connector_Kinetis.txt Connector_DSC.txt Building_Software.txt API_Example.txt Tips.txt History.txt What_Is_Provided.txt ..\..\Shared_V4\src\USBDM_ErrorMessages.h ..\..\Shared_V4\src\USBDM_API.h
+INPUT = USBDM_CF_JS16_Documentation.txt Software_Installation.txt Driver_Installation.txt Construction.txt Configuring_EclipseV10.txt Configuring_CFVx.txt Configuring_DSC.txt Eclipse_Install.txt Eclipse_NewProject.txt Eclipse_CFVx_Flash_Programming.txt OtherPrograms.txt Connector_Coldfire.txt Connector_Kinetis.txt Connector_DSC.txt Building_Software.txt API_Example.txt Tips.txt History.txt What_Is_Provided.txt ../../Shared/src/USBDM_ErrorMessages.h ../../Shared/src/USBDM_API.h 
 
 # This tag can be used to specify the character encoding of the source files 
 # that doxygen parses. Internally doxygen uses the UTF-8 encoding, which is 

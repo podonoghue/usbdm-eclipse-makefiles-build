@@ -527,7 +527,7 @@ WARN_LOGFILE =
 # directories like "/usr/src/myproject". Separate the files or directories 
 # with spaces.
 
-INPUT = ../../Shared/src/AppSettings.h ../../Shared/src/BdmInformation.h ../../Shared/src/BdmInterface.h ../../Shared/src/BdmInterfaceFactory.h ../../Shared/src/DeviceData.h ../../Shared/src/DeviceInterface.h ../../Shared/src/FlashImage.h ../../Shared/src/FlashImageFactory.h ../../Shared/src/FlashProgrammer.h ../../Shared/src/FlashProgrammerFactory.h ../../Shared/src/PluginFactory.h ../../Shared/src/PluginFactory_WIN32.h ../../Shared/src/PluginHelper.h ../../Shared/src/UsbdmSystem.h ../../Shared/src/UsbdmTclInterpreter.h ../../Shared/src/UsbdmTclInterpreterFactory.h ../../Shared/src/USBDM_API.h ../../Shared/src/USBDM_ErrorMessages.h
+INPUT = ../../Shared/src/AppSettings.h ../../Shared/src/BdmInformation.h ../../Shared/src/BdmInterface.h ../../Shared/src/BdmInterfaceFactory.h ../../Shared/src/DeviceData.h ../../Shared/src/DeviceInterface.h ../../Shared/src/FlashImage.h ../../Shared/src/FlashImageFactory.h ../../Shared/src/FlashProgrammer.h ../../Shared/src/FlashProgrammerFactory.h ../../Shared/src/PluginFactory.h ../../Shared/src/PluginFactory_Windows.h ../../Shared/src/PluginHelper.h ../../Shared/src/UsbdmSystem.h ../../Shared/src/UsbdmTclInterpreter.h ../../Shared/src/UsbdmTclInterpreterFactory.h ../../Shared/src/USBDM_API.h ../../Shared/src/USBDM_ErrorMessages.h 
 
 # This tag can be used to specify the character encoding of the source files 
 # that doxygen parses. Internally doxygen uses the UTF-8 encoding, which is 

@@ -5,7 +5,7 @@
 
 Under Windows, installation is done with a standard Windows MSI file <b>USBDM_X_X_X_X_Win.msi. </b>\n
 Download from: <A HREF="http://sourceforge.net/projects/usbdm/files/Version 4.10.6/Software/">USBDM Sourceforge</A>\n
-Note that there is a separate installation for the device drivers and you must select the version appropriate to your operating system see \ref driverPage.\n \n
+Note that there is a separate installation for the device drivers and you must select the version appropriate to your operating system see \ref driverPage. \n \n
 \image html MSI_Installer.png
 
 The USBDM installation will do the following:

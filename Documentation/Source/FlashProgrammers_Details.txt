@@ -35,11 +35,14 @@ The mass erase details vary from chip to chip and are summarised below:
      this flash and is erased as well.  A security value of 0xFF corresponds to a <b>secured state</b> so the device is left 
      blank but in an <b>partially secured</b> state.  To entirely unsecure the device to allow unfettered reprogramming it is
      necessary to re-program the security area to a non-0xFF value and reset the device.
-     The programmer carries out the above operations when needed (for a secured device) and then uses a sector erase to restore
-     the security area to a blank (secured) state but without a further reset.  This leaves the device blank but temporarily 
-     unsecured.  \n
+     When mass-erase is selected the programmer carries out the above operations.  <b>If needed</b>, it then uses a sector
+     erase to restore the security area to a blank (secured) state but without a further reset.  This leaves the device blank
+     but temporarily unsecured (until the next reset).  \n
      NOTE: Programming a memory image that does not contain values for the security region to a blank device will leave the 
-     device <b>secured</b>.    
+     device <b>secured</b>.\n
+     NOTE: UF32 devices have a hardware errata that make programming them very error prone.  Only use mass-erase and unsecured
+     with these devices unless you really, really know what you are doing.  It is very easy to permanenltly secure them - 
+     effectively bricking the device.     
 
    - <b>Coldfire V1+, Kinetis, MC56F8xxx(newer devices only)</b> \n
      The device provides an unsecure operation.  This erases the flash to 0xFF and then re-programs the security region to an

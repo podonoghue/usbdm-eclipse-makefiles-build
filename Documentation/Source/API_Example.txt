@@ -4,7 +4,7 @@
 \section USBDM API Example
 
    Programming with the USBDM API is pretty straightforward.  The documentation for the public API
-   is documented in \ref USBDM_API.h.
+   is available in \ref USBDM_API.h.
    
    Below is a simple example of using the API to dump the entire flash from a MC9S08JM60 chip. You can click on 
    the various functions and definitions used in the example to obtain more information.

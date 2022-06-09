@@ -9,8 +9,8 @@
    <th>Target Debugger</th>
    </tr>
    <tr>
-   <td>CW for HC12</td>
-   <td>TBDML (Not all targets support this option)</td>
+   <td>CW for HC12 5.1/5.2</td>
+   <td>USBDM</td>
    </tr>
    <tr>
    <td rowspan="2">CW for Microcontrollers V6.x</td>

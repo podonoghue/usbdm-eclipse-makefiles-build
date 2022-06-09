@@ -49,7 +49,7 @@ The above steps are described in the following:
    These are OpenSDA applications and installation uses the usual OpenSDA bootloader process: \n
    - Unplug the Freedom board.
    - Whilst holding the reset switch depressed, plug in the Freedom board.  The green LED should start blinking at a rate of about 1Hz.  
-      <td>\image html Bootloader.png</td>
+      <td>\image html FrdmBootloader.png</td>
    - Open a file explorer and locate the USB drive that has now appeared.  It will have the drive name "BOOTLOADER".
    - Drag the file <b>USBDM_OpenSDAxxxxx.sx</b> to the USB drive and wait a short while.  The OpenSDA bootloader on the Freedom board will 
      program the USBDM firmware into the MK20 debugger chip on the board.
