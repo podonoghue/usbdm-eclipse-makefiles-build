@@ -628,12 +628,12 @@ int rc = 0;
             cerr << "Making backup : '" << sourcePath << "' => '" << backupFilepath << "'\n";
          }
          if (wxFileExists(backupFilepath)) {
-            cerr << "Warning: Backup already exists\n";
+            cerr << "Warning: Backup already exists of " << sourcePath << "\n";
             cerr << "Info: Removing source file\n";
             wxRemoveFile(sourcePath);
          }
          else if (wxRenameFile(sourcePath, backupFilepath, false)) {
-            cerr << "Info: Made backup\n";
+            cerr << "Info: Made backup of " << sourcePath << "\n";
          }
          else {
             cerr << "Error: Failed to make backup of " << sourcePath << " - no conversion done\n";

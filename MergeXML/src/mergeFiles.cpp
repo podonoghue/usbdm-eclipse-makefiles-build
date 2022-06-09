@@ -21,7 +21,7 @@
 #include <wx/textfile.h>
 #include <wx/app.h>
 #include <wx/cmdline.h>
-
+#include <wx/filefn.h>
 #include <iostream>
 using namespace std;
 
@@ -44,6 +44,9 @@ private:
     const wxString mergePath;
 
 public:
+    /**
+     * @param mergePath  Path to file containing info on how to modify XML files
+     */
    ConvertTraverser(const char *mergePath) : mergePath(strdup(mergePath), wxConvUTF8) {
    }
 
@@ -242,12 +245,19 @@ int main(int  argc, char *argv[]){
    // Strip trailing \ (unless root e.g. "c:\")
    fixPath(argv[fileArg]);
    if (argc == (fileArg+3)) {
+      string mergeFile = argv[fileArg+2];
+      if(!wxFileExists(mergeFile.c_str())) {
+         // Prepend default directory
+         mergeFile = "CW_Patches\\Data\\" + mergeFile;
+      }
+      wxGetCwd();
       fprintf(stdout, "==================================================================\n");
       fprintf(stdout, "directoryPathMask = \'%s\'\n", argv[fileArg]);
-      fprintf(stdout, "filenameMask = \'%s\'\n",      argv[fileArg+1]);
-      fprintf(stdout, "mergeFile = \'%s\'\n",         argv[fileArg+2]);
+      fprintf(stdout, "filenameMask      = \'%s\'\n", argv[fileArg+1]);
+      fprintf(stdout, "mergeFile         = \'%s\'\n", mergeFile.c_str());
+      fprintf(stdout, "cwd               = \'%s\'\n", (const char*)(wxGetCwd().ToAscii()));
       fprintf(stdout, "==================================================================\n");
-      ConvertTraverser traverser(argv[fileArg+2]);
+      ConvertTraverser traverser(mergeFile.c_str());
       int rc = modifyFiles(argv[fileArg], argv[fileArg+1], traverser);
       waitForKeypress();
       return rc;
@@ -255,7 +265,8 @@ int main(int  argc, char *argv[]){
    else {
       fprintf(stdout, "==================================================================\n");
       fprintf(stdout, "directoryPathMask = \'%s\'\n", argv[fileArg]);
-      fprintf(stdout, "filenameMask = \'%s\'\n",      argv[fileArg+1]);
+      fprintf(stdout, "filenameMask      = \'%s\'\n", argv[fileArg+1]);
+      fprintf(stdout, "cwd               = \'%s\'\n", (const char*)(wxGetCwd().ToAscii()));
       fprintf(stdout, "==================================================================\n");
       RestoreTraverser traverser;
       int rc = modifyFiles(argv[fileArg], argv[fileArg+1], traverser);
