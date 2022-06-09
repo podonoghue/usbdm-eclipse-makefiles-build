@@ -194,6 +194,9 @@ public:
          unsigned       level;
          bool           forced;
          bool           enabled;
+
+         LogState(unsigned level = 100) : name("NoName"), indent(0), level(level), forced(false), enabled(true) {
+         }
       };
 
    private:

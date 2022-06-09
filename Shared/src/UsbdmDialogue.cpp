@@ -1571,7 +1571,7 @@ USBDM_ErrorCode UsbdmDialogue::loadHexFile( wxString hexFilepath, bool clearBuff
    loadedFilenameStaticControl->SetLabel(_("Loading File"));
    rc = flashImage->loadFile((const char*)hexFilepath.mb_str(wxConvUTF8), clearBuffer, forceLinearToPaged);
    if (rc == SFILE_RC_IMAGE_OVERLAPS) {
-      wxMessageBox(_("File loaded overlaps previously loaded file contents\n"
+      wxMessageBox(_("File loaded overlaps and differs from previously loaded file contents\n"
                    "Contents of '") + filename + _("' have replaced earlier file data.\n"),
                    _("Warning!"),
                    wxOK|wxSTAY_ON_TOP|wxCENTER|wxICON_WARNING,
@@ -1580,7 +1580,7 @@ USBDM_ErrorCode UsbdmDialogue::loadHexFile( wxString hexFilepath, bool clearBuff
       rc = BDM_RC_OK;
    }
    if (rc != BDM_RC_OK) {
-      wxMessageBox(_("Failed to read S-File.\n") +
+      wxMessageBox(_("Failed to read Image File.") +
                      hexFilepath +
                    _("\nReason: ") +
                      wxString(bdmInterface->getErrorString(rc), wxConvUTF8),

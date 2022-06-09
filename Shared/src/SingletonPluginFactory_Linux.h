@@ -30,10 +30,11 @@
 
 #include <dlfcn.h>
 #include <memory>
+#include <stdio.h>
 
+#include "ModuleInfo.h"
 #include "UsbdmSystem.h"
 #include "MyException.h"
-#include "ModuleInfo.h"
 
 /**
  * Factory base class
@@ -41,55 +42,10 @@
 template <class T>
 class SingletonPluginFactory {
 
-protected:
+private:
    static std::shared_ptr<T> (*STD__LINKAGE getSingletonInstance)();
-   static std::string dllName;
    static MODULE_HANDLE     moduleHandle;
-   static int instanceCount;
 
-   SingletonPluginFactory() {};
-   ~SingletonPluginFactory() {};
-
-protected:
-   /**
-    * Destructor to delete plug-in interface object
-    *
-    * @param p object to delete
-    */
-   static void deleter(T *p) {
-      LOGGING_Q;
-      ModuleInfo moduleInfo = p->getModuleInfo();
-
-      log.print("Calling destructor\n");
-      p->~T();
-
-      log.print("Deallocating storage @%p\n", p);
-      ::operator delete(p);
-
-      if (--moduleInfo.instanceCount == 0) {
-         unloadClass(moduleInfo.moduleHandle);
-      }
-   }
-
-   /**
-    * Create plug-in from library
-    *
-    * @param dllName    String identifying the library to load
-    * @param entryPoint String describing the entry point of the loaded library
-    *
-    * @return Smart pointer to object implementing the plug-in interface
-    */
-   static std::shared_ptr<T> createPlugin(std::string newDllName, std::string entryPoint="createSingletonPluginInstance") {
-      LOGGING;
-      if (getSingletonInstance == 0) {
-         loadClass(newDllName.c_str(), entryPoint.c_str());
-      }
-      std::shared_ptr<T> ptr = getSingletonInstance();
-      log.print("Use count = %ld\n", ptr.use_count());
-      return ptr;
-   }
-
-protected:
    /**
     * Load an instance of a class from a Library
     *
@@ -97,27 +53,22 @@ protected:
     *
     * Note: Searches USBDM Application directory if necessary
     */
-   static void loadClass(const char *moduleName, const char *createInstanceFunctioName) {
+   static auto loadClass(const char *moduleName) {
       LOGGING;
-
-      if (moduleHandle != NULL) {
-         log.print("Module \'%s\' already loaded\n", moduleName);
-         throw MyException("Module already loaded\n");
-      }
 
 #ifdef HACK_PATH_FOR_TESTING
       string extendedPath = "./";
       extendedPath.append(moduleName);
 
-      moduleHandle = dlopen(extendedPath.c_str(), RTLD_LAZY);
+      auto moduleHandle = dlopen(extendedPath.c_str(), RTLD_LAZY);
+#else      
+      // Load using default library path (executable directory)
+      auto moduleHandle = dlopen(moduleName, RTLD_LAZY);
 #endif
 
       if (moduleHandle == nullptr) {
-         moduleHandle = dlopen(moduleName, RTLD_LAZY);
-      }
-      if (moduleHandle == nullptr) {
-         log.print("Module \'%s\' failed to load! Retrying...\n", moduleName);
-         SingletonPluginFactory::printSystemErrorMessage();
+         log.error("Module \'%s\' failed to load! Retrying...\n", moduleName);
+         printSystemErrorMessage();
 
          // Try to find module in application directory
          std::string extendedPath = UsbdmSystem::getApplicationPath(moduleName);
@@ -127,25 +78,20 @@ protected:
 
             moduleHandle = dlopen(extendedPath.c_str(), RTLD_LAZY);
          }
-      }
-      if (moduleHandle == NULL) {
-         log.error("Module \'%s\' failed to load!!!\n", moduleName);
-         printSystemErrorMessage();
-         throw MyException(std::string("Module \'").append(moduleName).append("\' failed to load (Linux)\n"));
+         if (moduleHandle == nullptr) {
+            log.error("Module \'%s\' failed to load!!!\n", moduleName);
+            printSystemErrorMessage();
+            throw MyException(std::string("Module \'").append(moduleName).append("\' failed to load (Linux)\n"));
+         }
+         log.error("Module \'%s\' loaded from application directory\n", moduleName);
       }
       log.print("Module \'%s\' loaded @0x%p, handle cached @%p\n", moduleName, moduleHandle, &moduleHandle);
 
-      getSingletonInstance  = (std::shared_ptr<T> (*STD__LINKAGE)())dlsym(moduleHandle, createInstanceFunctioName);
-      if (getSingletonInstance == 0) {
-         char buff[1000];
-         snprintf(buff, sizeof(buff), "Entry point \'%s\' not found in module \'%s\'\n", createInstanceFunctioName, moduleName);
-         throw MyException(std::string(buff));
-      }
-      //   log.print("Entry point \'%s\' found @0x%p\n", createInstanceFunctioName, getSingletonInstance);
+      return moduleHandle;
    }
 
    /**
-    * Unload an instance of a class from a Library
+    * Unload plug-in class
     */
    static void unloadClass(MODULE_HANDLE moduleHandle) {
       LOGGING_Q;
@@ -156,14 +102,49 @@ protected:
          // Ignore error as can't throw in destructor
       }
       log.print("Unloading module @0x%p done\n", moduleHandle);
-      moduleHandle = 0;
-      getSingletonInstance = 0;
    }
 
-public:
    static void printSystemErrorMessage() {
       UsbdmSystem::Log::print("System Error: %s\n", dlerror());
    }
+
+protected:
+
+   SingletonPluginFactory() {};
+   ~SingletonPluginFactory() {
+      if (moduleHandle != nullptr) {
+         unloadClass(moduleHandle);
+      }
+   };
+
+   /**
+    * Create plug-in from library
+    *
+    * @param newDllName  String identifying the library to load
+    * @param entryPoint  String describing the entry point of the loaded library
+    *
+    * @return Smart pointer to object implementing the plug-in interface
+    */
+   static std::shared_ptr<T> createPlugin(std::string newDllName, std::string entryPoint="createSingletonPluginInstance") {
+      LOGGING;
+
+      if (getSingletonInstance == 0) {
+         moduleHandle          = loadClass(newDllName.c_str());
+         getSingletonInstance  = (std::shared_ptr<T> (*STD__LINKAGE)())dlsym(moduleHandle, entryPoint.c_str());
+         if (getSingletonInstance == 0) {
+            unloadClass(moduleHandle);
+            moduleHandle = nullptr;
+
+            char buff[1000];
+            snprintf(buff, sizeof(buff), "Entry point \'%s\' not found in module \'%s\'\n", entryPoint.c_str(), newDllName.c_str());
+            throw MyException(std::string(buff));
+         }
+//         log.print("Entry point \'%s\' found @0x%p\n", entryPoint.c_str(), getSingletonInstance);
+      }
+      log.print("Use count = %ld\n", getSingletonInstance().use_count());
+      return getSingletonInstance();
+   }
+
 };
 
 template <class T> MODULE_HANDLE SingletonPluginFactory<T>::moduleHandle = 0;

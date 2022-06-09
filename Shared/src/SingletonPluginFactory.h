@@ -47,7 +47,7 @@
 #endif
 
 #ifdef _WIN32
-#include "SingletonPluginFactory_WIN32.h"
+#include "SingletonPluginFactory_Windows.h"
 #else
 #include "SingletonPluginFactory_Linux.h"
 #endif

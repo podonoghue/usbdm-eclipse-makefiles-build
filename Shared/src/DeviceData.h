@@ -423,10 +423,10 @@ public:
    /**
     *  Create checksum information
     *
-    *  @param startAddress Address of start of checksum range
-    *  @param endAddress   Address of end of checksum range
-    *  @param valueAddress Address of location to store checksum value
-    *  @param type         Type of checksum
+    *  @param startAddress    Address of start of checksum range
+    *  @param endAddress      Address of end of checksum range
+    *  @param locationAddress Address of location to store checksum value
+    *  @param type            Type of checksum
     */
    ChecksumInfo(uint32_t startAddress, uint32_t endAddress, uint32_t locationAddress, ChecksumType type);
    /**
@@ -608,8 +608,7 @@ public:
     *  Create security entry
     *
     *  @param securityDesc  Description of entry
-    *  @param unsecureInfo  Unsecure information
-    *  @param secureInfo    Secure information
+    *  @param lpcChecksum
     */
    SecurityEntry(SecurityDescriptionPtr securityDesc,
                  SecurityInfoPtr        lpcChecksum)

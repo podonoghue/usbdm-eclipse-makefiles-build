@@ -67,12 +67,12 @@ UsbdmSystem::Log::LogState UsbdmSystem::Log::logState;
  *
  * @param path to append to directory
  *
- * @return directory or NULL if failed
+ * @return directory or nullptr if failed
  */
 FILE *UsbdmSystem::openApplicationFile(const std::string &path) {
    std::string fullPath = getApplicationPath(path);
    FILE *fp = fopen(fullPath.c_str(), "rt");
-   if (fp == NULL) {
+   if (fp == nullptr) {
       // Try module directory
       fullPath = getModulePath(path);
       fp = fopen(fullPath.c_str(), "rt");
@@ -84,12 +84,12 @@ FILE *UsbdmSystem::openApplicationFile(const std::string &path) {
  *
  * @param path to append to directory
  *
- * @return directory or NULL if failed
+ * @return directory or nullptr if failed
  */
 FILE *UsbdmSystem::openResourceFile(const std::string &path) {
    std::string fullPath = getResourcePath(path);
    FILE *fp = fopen(fullPath.c_str(), "rt");
-   if (fp == NULL) {
+   if (fp == nullptr) {
       // Try module directory
       fullPath = getModulePath(path);
       fp = fopen(fullPath.c_str(), "rt");
@@ -102,7 +102,7 @@ FILE *UsbdmSystem::openResourceFile(const std::string &path) {
  *
  * @param path to append to directory
  *
- * @return directory or NULL if failed
+ * @return directory or nullptr if failed
  */
 FILE *UsbdmSystem::openConfigurationFile(const std::string &path, const std::string &mode) {
    std::string fullPath = getConfigurationPath(path);
@@ -227,11 +227,11 @@ UsbdmSystem::Log::~Log(){
  */
 void UsbdmSystem::Log::openLogFile(const char *logFileName, const char *description){
 
-   if (logFile != NULL) {
+   if (logFile != nullptr) {
       fclose(logFile);
    }
 
-   logFile = NULL;
+   logFile = nullptr;
    std::string logName(logFileName);
    std::string dataPath = UsbdmSystem::getConfigurationPath(logName);
 
@@ -240,21 +240,24 @@ void UsbdmSystem::Log::openLogFile(const char *logFileName, const char *descript
    }
 
 #ifdef _WIN32
-   if (logFile == NULL) {
+   if (logFile == nullptr) {
       logFile = fopen("C:\\usbdm.log", "wt");
    }
 #endif
 
-   logState.indent = 0;
-   logState.name = NULL;
-   if (logFile == NULL) {
+   logState.indent   = 0;
+   logState.name     = nullptr;
+   logState.level    = 20;
+
+   if (logFile == nullptr) {
+      logState.enabled   = false;
       return;
    }
-   logState.enabled     = true;
+   logState.enabled   = true;
    timestampMode      = incremental;
    getTimeStamp();
 
-   fprintf(logFile, "%s - %s, Compiled on %s, %s.\n",
+   fprintf(logFile, "/* %s - %s, Compiled on %s, %s. */\n",
          description, USBDM_VERSION_STRING, __DATE__,__TIME__);
 
    time_t time_now;
@@ -320,7 +323,7 @@ void UsbdmSystem::Log::enableTimestamp(UsbdmSystem::Log::Timestamp mode) {
  *
  */
 void UsbdmSystem::Log::closeLogFile() {
-   if (logFile == NULL) {
+   if (logFile == nullptr) {
       return;
    }
    time_t time_now;
@@ -333,7 +336,7 @@ void UsbdmSystem::Log::closeLogFile() {
    logState.enabled = false;
 
    fclose(logFile);
-   logFile = NULL;
+   logFile = nullptr;
 }
 /** \brief Provides a print function which prints data into a log file.
  *
@@ -348,7 +351,7 @@ void UsbdmSystem::Log::doPrint(bool doPrefix, const char *format, va_list list) 
    if (doPrefix) {
       fprintf(logFile, "%s", getTimeStamp());
       fprintf(logFile, "%*s", 3*logState.indent, "");
-      if (logState.name!=NULL) {
+      if (logState.name!=nullptr) {
          fprintf(logFile, "%s: ", (const char *)logState.name);
       }
       else {

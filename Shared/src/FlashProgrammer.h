@@ -120,8 +120,8 @@ public:
    /**
     * Set device data for flash operations
     *
-    * @param theParameters   -  data describing the device
-    * @param tclInterpreter  -  TCL interpreter to use
+    * @param device          Data describing the device
+    * @param tclInterpreter  TCL interpreter to use
     *
     * @return error code see \ref USBDM_ErrorCode
     */

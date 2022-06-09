@@ -46,11 +46,7 @@
 template <class T>
 class PluginFactory {
 
-protected:
-   PluginFactory() {};
-   ~PluginFactory() {};
-
-protected:
+private:
    /**
     * Destructor to delete plug-in interface object
     *
@@ -72,10 +68,85 @@ protected:
    }
 
    /**
+    * Load an instance of a class from a Library
+    *
+    * @param moduleName  Name of module (Library) to load
+    *
+    * Note: Searches USBDM Application directory if necessary
+    */
+   static auto loadClass(const char *moduleName) {
+      LOGGING;
+
+      // Load using default library path (executable directory)
+      auto moduleHandle = LoadLibraryA(moduleName);
+
+      if (moduleHandle == nullptr) {
+         log.error("Module \'%s\' failed to load! Retrying...\n", moduleName);
+         printSystemErrorMessage();
+
+         // Try to find module in application directory
+         std::string extendedPath = UsbdmSystem::getApplicationPath(moduleName);
+
+         if (extendedPath.size() != 0) {
+            size_t pos = extendedPath.rfind("\\");
+            if (pos != std::string::npos) {
+               extendedPath = extendedPath.substr(0, pos);
+            }
+            log.error("Trying in application directory \'%s\'\n", extendedPath.c_str());
+            SetDllDirectoryA(extendedPath.c_str());
+            moduleHandle = LoadLibraryA(moduleName);
+            SetDllDirectoryA((const char *)0);
+         }
+         if (moduleHandle == nullptr) {
+            log.error("Module \'%s\' failed to load!!!\n", moduleName);
+            printSystemErrorMessage();
+            throw MyException(std::string("Module \'").append(moduleName).append("\' failed to load (Windows)\n"));
+         }
+         log.error("Module \'%s\' loaded from application directory\n", moduleName);
+      }
+      log.print("Module \'%s\' loaded @0x%p, handle cached @%p\n", moduleName, moduleHandle, &moduleHandle);
+
+      char executableName[MAX_PATH];
+      if (GetModuleFileNameA(moduleHandle, executableName, sizeof(executableName)) > 0) {
+         log.print("Module path = %s\n", executableName);
+      }
+      return moduleHandle;
+   }
+
+   /**
+    * Unload plug-in class
+    */
+   static void unloadClass(MODULE_HANDLE moduleHandle) {
+      LOGGING_Q;
+      log.print("Unloading module @0x%p, cached @%p\n", moduleHandle, &moduleHandle);
+      if (FreeLibrary(moduleHandle) == 0) {
+         log.print("Unloading module at @0x%p failed\n", moduleHandle);
+         printSystemErrorMessage();
+         // Ignore error as can't throw in destructor
+      }
+      log.print("Unloading module @0x%p done\n", moduleHandle);
+   }
+
+   static void printSystemErrorMessage() {
+      char buffer[200];
+      long dw = (long)GetLastError();
+
+      if (!FormatMessageA(FORMAT_MESSAGE_FROM_SYSTEM, 0, dw, 0, buffer, sizeof(buffer)-1, 0 )) {
+         UsbdmSystem::Log::print("Failed to convert system error code %ld\n", dw);
+         return;
+      }
+      UsbdmSystem::Log::print("System Error: %s", buffer);
+   }
+
+protected:
+   PluginFactory() {};
+   ~PluginFactory() {};
+
+   /**
     * Create plug-in from library
     *
-    * @param dllName    String identifying the library to load
-    * @param entryPoint String describing the entry point of the loaded library
+    * @param newDllName  String identifying the library to load
+    * @param entryPoint  String describing the entry point of the loaded library
     *
     * @return Smart pointer to object implementing the plug-in interface
     */
@@ -109,75 +180,6 @@ protected:
       return pp;
    }
 
-protected:
-   /**
-    * Load an instance of a class from a Library
-    *
-    * @param moduleName  Name of module (Library) to load
-    *
-    * Note: Searches USBDM Application directory if necessary
-    */
-   static auto loadClass(const char *moduleName) {
-      LOGGING;
-
-      // Load using default library path (executable directory)
-      auto moduleHandle = LoadLibraryA(moduleName);
-
-      if (moduleHandle == NULL) {
-         log.error("Module \'%s\' failed to load! Retrying...\n", moduleName);
-         printSystemErrorMessage();
-
-         // Try to find module in application directory
-         std::string extendedPath = UsbdmSystem::getApplicationPath(moduleName);
-
-         size_t pos = extendedPath.rfind("\\");
-         if (pos != std::string::npos) {
-            extendedPath = extendedPath.substr(0, pos);
-         }
-         log.error("Trying in application directory \'%s\'\n", extendedPath.c_str());
-         SetDllDirectoryA(extendedPath.c_str());
-         moduleHandle = LoadLibraryA(moduleName);
-         SetDllDirectoryA((const char *)0);
-
-         if (moduleHandle == NULL) {
-            log.error("Module \'%s\' failed to load!!!\n", moduleName);
-            printSystemErrorMessage();
-            throw MyException(std::string("Module \'").append(moduleName).append("\' failed to load (Windows)\n"));
-         }
-      }
-      log.print("Module \'%s\' loaded @0x%p, handle cached @%p\n", moduleName, moduleHandle, &moduleHandle);
-      char executableName[MAX_PATH];
-      if (GetModuleFileNameA(moduleHandle, executableName, sizeof(executableName)) > 0) {
-         log.print("Module path = %s\n", executableName);
-      }
-      return moduleHandle;
-   }
-
-   /**
-    * Unload plug-in class
-    */
-   static void unloadClass(MODULE_HANDLE moduleHandle) {
-      LOGGING_Q;
-      log.print("Unloading module @0x%p, cached @%p\n", moduleHandle, &moduleHandle);
-      if (FreeLibrary(moduleHandle) == 0) {
-         log.print("Unloading module at @0x%p failed\n", moduleHandle);
-         printSystemErrorMessage();
-         // Ignore error as can't throw in destructor
-      }
-      log.print("Unloading module @0x%p done\n", moduleHandle);
-      moduleHandle = 0;
-   }
-
-   static void printSystemErrorMessage() {
-      char buffer[200];
-      long dw = (long)GetLastError();
-
-      if (!FormatMessageA(FORMAT_MESSAGE_FROM_SYSTEM, 0, dw, 0, buffer, sizeof(buffer)-1, 0 )) {
-         UsbdmSystem::Log::print("Failed to convert system error code %ld\n", dw);
-         return;
-      }
-      UsbdmSystem::Log::print("System Error: %s", buffer);
-   }
 };
 
 #endif /* SRC_PLUGINFACTORY_WIN32_H_ */

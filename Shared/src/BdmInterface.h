@@ -459,7 +459,7 @@ public:
   /**
    * Resets the target to normal or special mode
    *
-   *  @param target_mode see
+   *  @param mode see
    *
    *  @return
    *      BDM_RC_OK   => OK \n
@@ -613,10 +613,10 @@ public:
    * Write Target Control register
    *
    *  @param regNo    Register #
-   *     - HCS12     = not used \n
-   *     - HCS08     = not used \n
-   *     - RS08      = not used \n
-   *     - CFV1      = Control register space, see \ref CFV1_CRegisters_t\n
+   *     - HCS12     = not used
+   *     - HCS08     = not used
+   *     - RS08      = not used
+   *     - CFV1      = Control register space, see \ref CFV1_CRegisters_t
    *     - CFVx      = Control register space, see \ref CFVx_CRegisters_t
    *     - JTAG_SWD  = AP memory space see \ref ARM_CRegisters_t
    *     - JTAG_ARM  = AP memory space see \ref ARM_CRegisters_t
@@ -633,10 +633,10 @@ public:
    * Write Target Debug register
    *
    *  @param regNo    Register #
-   *    - HCS12     = BD memory space, see \ref HCS12_DRegisters_t   \n
-   *    - HCS08     = BKPT register, see \ref HCS08_DRegisters_t   \n
-   *    - RS08      = BKPT register, see \ref RS08_DRegisters_t   \n
-   *    - CFV1      = Debug register space, see \ref CFV1_DRegisters_t\n
+   *    - HCS12     = BD memory space, see \ref HCS12_DRegisters_t
+   *    - HCS08     = BKPT register, see \ref HCS08_DRegisters_t
+   *    - RS08      = BKPT register, see \ref RS08_DRegisters_t
+   *    - CFV1      = Debug register space, see \ref CFV1_DRegisters_t
    *    - CFVx      = Debug register space, see \ref CFVx_DRegisters_t
    *    - JTAG_SWD  = DP/AP Registers see \ref ARM_DRegisters_t
    *    - JTAG_ARM  = DP/AP Registers see \ref ARM_DRegisters_t
@@ -673,11 +673,11 @@ public:
    * Read Target Control register
    *
    *  @param regNo    Register # or address
-   *     - HCS12     = not used \n
-   *     - HCS08     = not used \n
-   *     - RS08      = not used \n
-   *     - CFV1      = Control register space, see \ref CFV1_CRegisters_t\n
-   *     - CFVx      = Control register space, see \ref CFVx_CRegisters_t \n
+   *     - HCS12     = not used
+   *     - HCS08     = not used
+   *     - RS08      = not used
+   *     - CFV1      = Control register space, see \ref CFV1_CRegisters_t
+   *     - CFVx      = Control register space, see \ref CFVx_CRegisters_t
    *     - JTAG_SWD  = AP memory space see \ref ARM_CRegisters_t
    *     - JTAG_ARM  = AP memory space see \ref ARM_CRegisters_t
    *
@@ -693,10 +693,10 @@ public:
    * Read Target Debug register
    *
    *  @param regNo    Register #
-   *    - HCS12     = BD memory space, see \ref HCS12_DRegisters_t   \n
-   *    - HCS08     = BKPT register, see \ref HCS08_DRegisters_t   \n
-   *    - RS08      = BKPT register, see \ref RS08_DRegisters_t   \n
-   *    - CFV1      = Debug register space, see \ref CFV1_DRegisters_t\n
+   *    - HCS12     = BD memory space, see \ref HCS12_DRegisters_t
+   *    - HCS08     = BKPT register, see \ref HCS08_DRegisters_t
+   *    - RS08      = BKPT register, see \ref RS08_DRegisters_t
+   *    - CFV1      = Debug register space, see \ref CFV1_DRegisters_t
    *    - CFVx      = Debug register space, see \ref CFVx_DRegisters_t
    *    - JTAG_SWD  = DP/AP Registers see \ref ARM_DRegisters_t
    *    - JTAG_ARM  = DP/AP Registers see \ref ARM_DRegisters_t

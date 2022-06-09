@@ -1145,22 +1145,6 @@ USBDM_ErrorCode  USBDM_SetTargetVpp(TargetVppSelect_t targetVpp);
 
 //! Directly manipulate interface levels
 //!
-//! @param control       => mask indicating interface levels see \ref InterfaceLevelMasks_t
-//! @param duration_10us => time (in 10us ticks) to assert level
-//!                         (0 = indefinite)
-//!
-//! @return \n
-//!     BDM_RC_OK    => OK \n
-//!     other        => Error code - see \ref USBDM_ErrorCode
-//!
-//! @note - Only partially implemented in BDM firmware
-//! @deprecated - use \ref USBDM_ControlPins()
-//!
-//USBDM_API
-//USBDM_ErrorCode USBDM_ControlInterface(unsigned char duration_10us, unsigned int  control);
-
-//! Directly manipulate interface levels
-//!
 //! @param control       => mask indicating interface levels see \ref PinLevelMasks_t
 //! @param status        => values on pins after action (not yet implemented). May be NULL.
 //!
@@ -1453,7 +1437,7 @@ USBDM_ErrorCode USBDM_ReadMultipleRegs(unsigned char regValueBuffer[], unsigned 
 //!    - HCS12     = not used \n
 //!    - HCS08     = not used \n
 //!    - RS08      = not used \n
-//!    - CFV1      = Control register space, see \ref CFV1_CRegisters_t\n
+//!    - CFV1      = Control register space, see \ref CFV1_CRegisters_t \n
 //!    - CFVx      = Control register space, see \ref CFVx_CRegisters_t
 //!    - JTAG_SWD  = AP memory space see \ref ARM_CRegisters_t
 //!    - JTAG_ARM  = AP memory space see \ref ARM_CRegisters_t
@@ -1473,7 +1457,7 @@ USBDM_ErrorCode USBDM_WriteCReg(unsigned int regNo, unsigned long regValue);
 //!    - HCS12     = not used \n
 //!    - HCS08     = not used \n
 //!    - RS08      = not used \n
-//!    - CFV1      = Control register space, see \ref CFV1_CRegisters_t\n
+//!    - CFV1      = Control register space, see \ref CFV1_CRegisters_t \n
 //!    - CFVx      = Control register space, see \ref CFVx_CRegisters_t \n
 //!    - JTAG_SWD  = AP memory space see \ref ARM_CRegisters_t
 //!    - JTAG_ARM  = AP memory space see \ref ARM_CRegisters_t
@@ -1490,10 +1474,10 @@ USBDM_ErrorCode USBDM_ReadCReg(unsigned int regNo, unsigned long *regValue);
 //! Write Target Debug register
 //!
 //! @param regNo    Register #
-//!   - HCS12     = BD memory space, see \ref HCS12_DRegisters_t   \n
-//!   - HCS08     = BKPT register, see \ref HCS08_DRegisters_t   \n
-//!   - RS08      = BKPT register, see \ref RS08_DRegisters_t   \n
-//!   - CFV1      = Debug register space, see \ref CFV1_DRegisters_t\n
+//!   - HCS12     = BD memory space, see \ref HCS12_DRegisters_t
+//!   - HCS08     = BKPT register, see \ref HCS08_DRegisters_t
+//!   - RS08      = BKPT register, see \ref RS08_DRegisters_t
+//!   - CFV1      = Debug register space, see \ref CFV1_DRegisters_t
 //!   - CFVx      = Debug register space, see \ref CFVx_DRegisters_t
 //!   - JTAG_SWD  = DP/AP Registers see \ref ARM_DRegisters_t
 //!   - JTAG_ARM  = DP/AP Registers see \ref ARM_DRegisters_t
@@ -1509,10 +1493,10 @@ USBDM_ErrorCode USBDM_WriteDReg(unsigned int regNo, unsigned long regValue);
 //! Read Target Debug register
 //!
 //! @param regNo    Register #
-//!   - HCS12     = BD memory space, see \ref HCS12_DRegisters_t   \n
-//!   - HCS08     = BKPT register, see \ref HCS08_DRegisters_t   \n
-//!   - RS08      = BKPT register, see \ref RS08_DRegisters_t   \n
-//!   - CFV1      = Debug register space, see \ref CFV1_DRegisters_t\n
+//!   - HCS12     = BD memory space, see \ref HCS12_DRegisters_t
+//!   - HCS08     = BKPT register, see \ref HCS08_DRegisters_t
+//!   - RS08      = BKPT register, see \ref RS08_DRegisters_t
+//!   - CFV1      = Debug register space, see \ref CFV1_DRegisters_t
 //!   - CFVx      = Debug register space, see \ref CFVx_DRegisters_t
 //!   - JTAG_SWD  = DP/AP Registers see \ref ARM_DRegisters_t
 //!   - JTAG_ARM  = DP/AP Registers see \ref ARM_DRegisters_t
