@@ -508,7 +508,7 @@ USBDM_ErrorCode  FlashImageImp::loadFile(const string &filePath, bool clearBuffe
    }
    log.print("File: \"%s\"\n", filePath.c_str());
 
-   // Try ELF Format
+   // Try ELF Format as it is most certain to identify
    USBDM_ErrorCode rc = loadElfFile(filePath);
 
    if (rc == SFILE_RC_UNKNOWN_FILE_FORMAT) {
@@ -987,7 +987,7 @@ inline bool ends_with(std::string const & value, std::string const & ending) {
  *  @return Other (fatal) error code
  */
 USBDM_ErrorCode FlashImageImp::loadAbsoluteFile(const string &fileName) {
-   LOGGING_Q;
+   LOGGING;
    char         buffer[1024];
    uint32_t     addr = 0;
    uint32_t     size;
@@ -1009,10 +1009,13 @@ USBDM_ErrorCode FlashImageImp::loadAbsoluteFile(const string &fileName) {
 
    while ((size = fread(buffer, 1, sizeof(buffer), fp)) != 0) {
       for (unsigned index=0; index<size; index++) {
-         if (this->isValid(addr)) {
+         if (this->isValid(addr) &&
+             (this->getValue(addr) != (uint8_t)buffer[index])) {
+            if (!imageOverlaps) {
+               // Occupied address - Only report first overlap
+               log.print("Memory image overlaps @0x%X\n", addr);
+            }
             imageOverlaps = true;
-            // Occupied address
-            log.print("Memory image overlaps @0x%X\n", addr);
          }
          this->setValue(addr++, (uint8_t)buffer[index]);
       }
@@ -1069,16 +1072,17 @@ USBDM_ErrorCode FlashImageImp::loadS1S9File(const string &fileName, bool forceLi
       //      log.print("Input: %s",buffer);
       ptr = buffer;
       // Find first non-blank
-      while ((*ptr == ' ') || (*ptr == '\t') || (*ptr == '\n') || (*ptr == '\r'))
+      while ((*ptr == ' ') || (*ptr == '\t') || (*ptr == '\n') || (*ptr == '\r')) {
          ptr++;
+      }
       if (*ptr == '\0') {
          // Ignore empty lines
          continue;
       }
       // Check if S-record
       if ((*ptr != 'S') && (*ptr != 's')) {
-         log.print("- illegal line #%5d-%s", lineNum, buffer);
-         log.print("- Invalid character '%c' (0x%2.2X)", *(ptr), *(ptr));
+         log.print("- illegal line #%5d =>\n\'%s\'\n", lineNum, buffer);
+         log.print("- Invalid character '%c' (0x%2.2X)\n", *(ptr), *(ptr));
          if (fileRecognized) {
             return SFILE_RC_ILLEGAL_LINE;
          }
@@ -1123,7 +1127,7 @@ USBDM_ErrorCode FlashImageImp::loadS1S9File(const string &fileName, bool forceLi
             //         log.print("S3: srecSize=0x%02X, addr=0x%08X, initial chk=0x%02X\n", srecSize, addr, checkSum);
             break;
          default:
-            log.print("- illegal line #%5d-%s", lineNum, buffer);
+            log.print("- illegal line #%5d =>\n\'%s\'\n", lineNum, buffer);
             log.print("- Invalid SREC type '%c' (0x%2.2X)", *(ptr+1), *(ptr+1));
             if (fileRecognized) {
                return SFILE_RC_ILLEGAL_LINE;
@@ -1144,9 +1148,11 @@ USBDM_ErrorCode FlashImageImp::loadS1S9File(const string &fileName, bool forceLi
          checkSum += (uint8_t)data;
          if (this->isValid(addr) &&
              (this->getValue(addr) != (uint8_t)data)) {
+            if (!imageOverlaps) {
+               // Occupied address - Only report first overlap
+               log.print("Memory image overlaps @0x%X\n", addr);
+            }
             imageOverlaps = true;
-            // Occupied address
-            log.print("Memory image overlaps @0x%X\n", addr);
          }
          this->setValue(addr++, (uint8_t)data);
          srecSize--;
@@ -1390,7 +1396,7 @@ USBDM_ErrorCode FlashImageImp::loadElfBlock(
          if (this->isValid(addr) &&
                (this->getValue(addr) != value)) {
             if (!imageOverlaps) {
-               // Report first occupied address
+               // Occupied address - Only report first overlap
                log.print("Memory image overlaps @0x%X\n", addr);
             }
             imageOverlaps = true;
@@ -1705,7 +1711,7 @@ USBDM_ErrorCode FlashImageImp::loadElfFile(const string &filePath) {
    // Assume success
    USBDM_ErrorCode rc = SFILE_RC_OK;
 
-   if ((targetType == T_HCS12) || (targetType == T_HC12)) {
+   if ((targetType == T_HCS08) || (targetType == T_HCS12) || (targetType == T_HC12)) {
       // Load image based on suitable segments
       log.print("Loading by Program Headers\n");
       printHeader = true;
