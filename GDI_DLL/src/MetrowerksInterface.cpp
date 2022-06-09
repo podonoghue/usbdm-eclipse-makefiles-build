@@ -156,7 +156,7 @@ DiReturnT mtwksSetMEE(DiUInt32T dnExecId) {
    DiReturnT rc;
    DiUInt32T meeValue = dnExecId;
    if (metrowerksCallbackFunction == NULL) {
-      log.print("- callback not set\n");
+      log.warning("- callback not set\n");
       //TODO
 //      return setErrorState(DI_ERR_NONFATAL, ("Callback function not set"));
       return DI_ERR_NONFATAL;
@@ -177,18 +177,6 @@ DiReturnT mtwksDisplayLine(const char *format, ...) {
 
    va_list list;
 
-   CallbackF callbackFunction = metrowerksFeedbackFunction;
-
-   if (callbackFunction == NULL) {
-      callbackFunction = metrowerksCallbackFunction;
-   }
-
-   if (callbackFunction == NULL) {
-      log.print("- callback not set\n");
-      // Ignore
-      return DI_OK;
-   }
-
    if (format == NULL) {
       strcpy(mtwksDisplayLineBuffer, "Empty\n");
    }
@@ -197,6 +185,20 @@ DiReturnT mtwksDisplayLine(const char *format, ...) {
       vsnprintf(mtwksDisplayLineBuffer, MAX_MTWKS_DISPLAY_STRING_LENGTH, format, list);
       va_end(list);
    }
+
+   CallbackF callbackFunction = metrowerksFeedbackFunction;
+
+   if (callbackFunction == NULL) {
+      callbackFunction = metrowerksCallbackFunction;
+   }
+
+   if (callbackFunction == NULL) {
+      log.warning("- callback not set\n");
+      log.warning("Lost message \'%s\'\n", mtwksDisplayLineBuffer);
+      // Ignore
+      return DI_OK;
+   }
+
    log.print("(%s)\n", mtwksDisplayLineBuffer);
    callbackFunction(DI_CB_MTWKS_EXTENSION, MTWKS_CB_DISPLAYLINE, mtwksDisplayLineBuffer, &rc);
    return DI_OK;
@@ -231,7 +233,7 @@ DiReturnT rc;
    value = string("");
 
    if (metrowerksCallbackFunction == NULL) {
-      log.print("- callback not set\n");
+      log.error("- callback not set\n");
       return setErrorState(DI_ERR_NONFATAL, ("Callback function not set"));
    }
 
@@ -268,7 +270,7 @@ static USBDM_ErrorCode getAttribute(const string &key, int &value, int defaultVa
 
    value = defaultValue;
 	if (mtwksGetStringValue(keyBuffer.c_str(), sValue) != DI_OK) {
-	   log.print("(%s) => Failed\n", (const char *)keyBuffer.c_str());
+	   log.error("(%s) => Failed\n", (const char *)keyBuffer.c_str());
 	   value = defaultValue;
 		return BDM_RC_ILLEGAL_PARAMS;
 	}
@@ -353,7 +355,7 @@ static USBDM_ErrorCode getAttribute(const string &key, string &value, const stri
 
 	value = defaultValue;
 	if (mtwksGetStringValue(keyBuffer, sValue) != DI_OK) {
-	   log.print("(%s) => Failed\n", (const char *)keyBuffer.c_str());
+	   log.error("(%s) => Failed\n", (const char *)keyBuffer.c_str());
 		return BDM_RC_ILLEGAL_PARAMS;
 	}
 	if (sValue != emptyString)
@@ -378,16 +380,16 @@ USBDM_ErrorCode getDeviceData(TargetType_t targetType, DeviceDataPtr &deviceData
    string deviceName;
    DiReturnT diRC = mtwksGetStringValue(processorKey, deviceName);
    if ((diRC != DI_OK) || (deviceName == emptyString)) {
-      log.print("Device name not set\n");
-      log.print("key = %s\n", processorKey.c_str());
+      log.error("Device name not set\n");
+      log.error("key = %s\n", processorKey.c_str());
       deviceData = deviceDataBase.getDefaultDevice()->shallowCopy();
-      return  BDM_RC_UNKNOWN_DEVICE;
+      return BDM_RC_ILLEGAL_PARAMS;
    }
    log.print("Device name = \'%s\'\n", (const char *)deviceName.c_str());
 
    DeviceDataConstPtr dev = deviceDataBase.findDeviceFromName(deviceName);
    if (dev == NULL) {
-      log.print("Unknown device\n");
+      log.error("Unknown device\n");
       mtwksDisplayLine("Unrecognised device - using default settings");
       deviceData = deviceDataBase.getDefaultDevice()->shallowCopy();
       return  BDM_RC_UNKNOWN_DEVICE;

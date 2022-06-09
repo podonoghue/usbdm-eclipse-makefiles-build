@@ -107,6 +107,12 @@ $(TARGET)-s12z-debug:
 	@echo "================================================================"
 	$(MAKE) dll -f Target.mk MODULE=$(TARGET)-s12z BUILDDIR=$@ CDEFS='$(GDI_DEFS) -DTARGET=S12Z' DEBUG='Y' BITNESS=32
 
+TestHCS08_GDI-debug:
+	@echo ''
+	@echo  Building $@ 32-bit
+	@echo "================================================================"
+	$(MAKE) exe -f Target.mk MODULE=TestHCS08_GDI    BUILDDIR=$@ TARGET=$@ CDEFS='$(GDI_DEFS) -DTARGET=HCS08 -DTEST_APP=1' DEBUG='Y' BITNESS=32
+
 # Legacy GDI DLLs
 #------------------------------------------------------------
 GDI_LEGACY_DEFS := -DGDI
@@ -136,11 +142,11 @@ $(TARGET)-dsc-legacy-debug:
 	@echo "================================================================"
 	$(MAKE) dll -f LegacyTarget.mk MODULE=$(TARGET)-dsc-legacy BUILDDIR=$@ CDEFS='$(GDI_LEGACY_DEFS) -DTARGET=MC56F80xx' DEBUG='Y' BITNESS=32
 
-TestCFVxGDI-debug:
+TestCFVx_GDI-debug:
 	@echo ''
 	@echo  Building $@ 32-bit
 	@echo "================================================================"
-	$(MAKE) exe -f LegacyTarget.mk MODULE=TestCFVxGDI BUILDDIR=$@ TARGET=$@ CDEFS='$(GDI_LEGACY_DEFS) -DTARGET=CFVx -DTEST_APP=1' DEBUG='Y' BITNESS=32
+	$(MAKE) exe -f LegacyTarget.mk MODULE=TestCFVx_GDI BUILDDIR=$@ TARGET=$@ CDEFS='$(GDI_LEGACY_DEFS) -DTARGET=CFVx -DTEST_APP=1' DEBUG='Y' BITNESS=32
 
 #------------------------------------------------------------
 
@@ -148,11 +154,11 @@ all: $(TARGET)-arm          $(TARGET)-arm-debug
 all: $(TARGET)-cfv1         $(TARGET)-cfv1-debug 
 all: $(TARGET)-cfvx         $(TARGET)-cfvx-debug 
 all: $(TARGET)-dsc          $(TARGET)-dsc-debug 
-all: $(TARGET)-hcs08        $(TARGET)-hcs08-debug 
+all: $(TARGET)-hcs08        $(TARGET)-hcs08-debug TestHCS08_GDI-debug
 all: $(TARGET)-hcs12        $(TARGET)-hcs12-debug 
 all: $(TARGET)-rs08         $(TARGET)-rs08-debug 
 all: $(TARGET)-s12z         $(TARGET)-s12z-debug 
-all: $(TARGET)-cfvx-legacy  $(TARGET)-cfvx-legacy-debug TestCFVxGDI-debug
+all: $(TARGET)-cfvx-legacy  $(TARGET)-cfvx-legacy-debug TestCFVx_GDI-debug
 all: $(TARGET)-dsc-legacy   $(TARGET)-dsc-legacy-debug
 
 clean:
@@ -160,13 +166,13 @@ clean:
 	${RMDIR} $(TARGET)-cfv1$(BUILDDIR_SUFFIXx32)         $(TARGET)-cfv1-debug$(BUILDDIR_SUFFIXx32)
 	${RMDIR} $(TARGET)-cfvx$(BUILDDIR_SUFFIXx32)         $(TARGET)-cfvx-debug$(BUILDDIR_SUFFIXx32)
 	${RMDIR} $(TARGET)-dsc$(BUILDDIR_SUFFIXx32)          $(TARGET)-dsc-debug$(BUILDDIR_SUFFIXx32)
-	${RMDIR} $(TARGET)-hcs08$(BUILDDIR_SUFFIXx32)        $(TARGET)-hcs08-debug$(BUILDDIR_SUFFIXx32)
+	${RMDIR} $(TARGET)-hcs08$(BUILDDIR_SUFFIXx32)        $(TARGET)-hcs08-debug$(BUILDDIR_SUFFIXx32) TestHCS08_GDI-debug
 	${RMDIR} $(TARGET)-hcs12$(BUILDDIR_SUFFIXx32)        $(TARGET)-hcs12-debug$(BUILDDIR_SUFFIXx32)
 	${RMDIR} $(TARGET)-rs08$(BUILDDIR_SUFFIXx32)         $(TARGET)-rs08-debug$(BUILDDIR_SUFFIXx32)
 	${RMDIR} $(TARGET)-s12z$(BUILDDIR_SUFFIXx32)         $(TARGET)-s12z-debug$(BUILDDIR_SUFFIXx32)
-	${RMDIR} $(TARGET)-cfvx-legacy$(BUILDDIR_SUFFIXx32)  $(TARGET)-cfvx-legacy-debug$(BUILDDIR_SUFFIXx32) 
+	${RMDIR} $(TARGET)-cfvx-legacy$(BUILDDIR_SUFFIXx32)  $(TARGET)-cfvx-legacy-debug$(BUILDDIR_SUFFIXx32) TestCFVx_GDI-debug
 	${RMDIR} $(TARGET)-dsc-legacy$(BUILDDIR_SUFFIXx32)   $(TARGET)-dsc-legacy-debug$(BUILDDIR_SUFFIXx32)
-	${RMDIR} TestCFVxGDI-debug$(BUILDDIR_SUFFIXx32)
+	${RMDIR} TestCFVx_GDI-debug$(BUILDDIR_SUFFIXx32)
 	
 .PHONY: all clean
 .PHONY: $(TARGET)-arm          $(TARGET)-arm-debug
@@ -177,5 +183,5 @@ clean:
 .PHONY: $(TARGET)-hcs12        $(TARGET)-hcs12-debug
 .PHONY: $(TARGET)-rs08         $(TARGET)-rs08-debug
 .PHONY: $(TARGET)-s12z         $(TARGET)-s12z-debug
-.PHONY: $(TARGET)-cfvx-legacy  $(TARGET)-cfvx-legacy-debug TestCFVxGDI-debug
+.PHONY: $(TARGET)-cfvx-legacy  $(TARGET)-cfvx-legacy-debug TestCFVx_GDI-debug
 .PHONY: $(TARGET)-dsc-legacy   $(TARGET)-dsc-legacy-debug

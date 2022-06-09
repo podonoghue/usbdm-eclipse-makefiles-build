@@ -7,7 +7,7 @@
 
 #include "UsbdmSystem.h"
 #include "GDI.h"
-
+#include <stdio.h>
 using namespace std;
 
 class OpenLog {
@@ -22,11 +22,15 @@ public:
 };
 
 int main(void) {
+   printf("Opening log file\n");
    OpenLog openLog;
    LOGGING;
 
+   printf("Opening GDI\n");
    DiGdiOpen(0, 0, 0, 0, 0);
+   printf("Initialising GDI\n");
    DiGdiInitIO(0);
+   printf("Closing GDI\n");
    DiGdiClose(true);
 
    return 0;

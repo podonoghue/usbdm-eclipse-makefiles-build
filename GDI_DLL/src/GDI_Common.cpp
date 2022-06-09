@@ -361,6 +361,7 @@ static USBDM_ErrorCode initialiseBDMInterface(void) {
    // Load description of device
    rc = getDeviceData(targetType, deviceData);
    if (rc != BDM_RC_OK) {
+      log.error("Failed to get device data, error = %s\n", bdmInterface->getErrorString(rc));
       return rc;
    }
    if (targetType == T_RS08) {
@@ -407,7 +408,7 @@ DiReturnT DiGdiOpen ( DiUInt32T      dnGdiVersionH,
 
    LOGGING;
 
-   log.print("DiGdiOpen(\n"
+   log.printq("DiGdiOpen(\n"
          "   dnGdiVersionH=0x%X, dnGdiVersionL=0x%X, \n"
          "   dnArgc=%d, szArgv=0x%p, \n"
          "   UdProcessEvents=0x%p"
@@ -536,19 +537,21 @@ USBDM_ErrorCode initialConnect(void) {
    LOGGING;
    USBDM_ErrorCode rc;
 
-   log.print("initialConnect()\n");
-
    forceMassErase = false;
    pcWritten      = false;
 
    // Initial connect using all strategies
    rc = bdmInterface->targetConnectWithRetry(initialConnectOptions);
 
+   log.print("After initial connect, rc = %s\n", bdmInterface->getErrorString(rc));
+
 #if (TARGET != ARM) && (TARGET != MC56F80xx)
    // Trying to halt a secured device causes havoc
    bdmInterface->halt();
    bdmInterface->halt();
 #endif
+
+   log.print("After halting target, rc = %s\n", bdmInterface->getErrorString(rc));
 
 #if (TARGET == MC56F80xx)
    log.print("Doing bdmInterface->halt()\n");
@@ -562,9 +565,11 @@ USBDM_ErrorCode initialConnect(void) {
 #endif
 
 #ifdef FLASH_PROGRAMMING
+   log.print("Flash programming checks\n");
 
 #if (TARGET == HCS08) || (TARGET == CFV1) || (TARGET == RS08)
    if (rc == BDM_RC_OK) {
+      log.print("Doing unsecured check\n");
       if (flashProgrammer->checkTargetUnSecured() == PROGRAMMING_RC_ERROR_SECURED) {
          rc = BDM_RC_SECURED;
       }
@@ -572,13 +577,16 @@ USBDM_ErrorCode initialConnect(void) {
 #endif
 
    if (rc == BDM_RC_SECURED) {
+      log.print("Target is secured\n");
       if (flashProgrammer->getDeviceData()->getEraseMethod() == DeviceData::eraseMass) {
+         log.print("Mass erase already selected\n");
          // Mass erase already selected so security isn't a problem
          forceMassErase = true; // So ignore error before mass erase
          // Ignore secured error
          rc = BDM_RC_OK;
       }
       else {
+         log.print("Prompting user\n");
          // Prompt user to change erase option to 'mass erase'
          mtwksDisplayLine("targetConnect(): Target is secured\n");
          int getYesNo = displayDialogue(
@@ -596,6 +604,7 @@ USBDM_ErrorCode initialConnect(void) {
    }
 #endif
 
+   log.print("Complete");
    return rc;
 }
 
@@ -639,9 +648,9 @@ DiReturnT DiGdiInitIO( pDiCommSetupT pdcCommSetup ) {
 
    // Open & Configure BDM
    USBDM_ErrorCode bdmRc = initialiseBDMInterface();
-   if ((bdmRc != BDM_RC_OK) && (bdmRc != BDM_RC_UNKNOWN_DEVICE)) {
+   if (bdmRc != BDM_RC_OK) {
       DiReturnT rc = setErrorState(DI_ERR_COMMUNICATION, bdmRc);
-      log.print("Failed - %s\n", currentErrorString);
+      log.error("Failed - %s\n", currentErrorString);
       return rc;
    }
 
@@ -650,7 +659,7 @@ DiReturnT DiGdiInitIO( pDiCommSetupT pdcCommSetup ) {
    bdmRc = initialConnect();
    if (bdmRc != BDM_RC_OK) {
       DiReturnT rc = setErrorState(DI_ERR_COMMUNICATION, bdmRc);
-      log.print("Failed - %s\n", currentErrorString);
+      log.error("Failed - %s\n", currentErrorString);
       return rc;
    }
 #else

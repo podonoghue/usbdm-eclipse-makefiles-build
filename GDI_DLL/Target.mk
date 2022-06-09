@@ -95,7 +95,7 @@ $(BUILDDIR)/%.o : %.cpp
 $(BUILDDIR)/$(TARGET_EXE): $(OBJ) $(RESOURCE_OBJ)
 	@echo --
 	@echo -- Linking Target $@
-	$(CC) -o $@ $(GUI_OPTS) $(LDFLAGS) $(OBJ) $(RESOURCE_OBJ) $(LIBDIRS) $(LIBS) $(EXELIBS)
+	$(CC) -o $@ $(LDFLAGS) $(OBJ) $(RESOURCE_OBJ) $(LIBDIRS) $(LIBS) $(EXELIBS)
 
 # How to copy EXE to target directory
 #==============================================
