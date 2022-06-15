@@ -41,6 +41,8 @@
 #include "Utils.h"
 #include "Names.h"
 
+bool FlashProgrammerCommon::SetProgrammingMode::currentMode = false;
+
 /**
  * Constructor
  */

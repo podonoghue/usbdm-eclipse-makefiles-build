@@ -937,6 +937,29 @@ public:
     *      other        => Error code - see \ref USBDM_ErrorCode
     */
    virtual USBDM_ErrorCode            setProgrammingMode(bool mode) = 0;
+
+   /**
+    * Send miscellaneous commands to BDM interface.
+    *
+    *  @param size     Size of Tx/Rx data buffer. Must be <= 20.
+    *  @param [in/out] usb_data - Command for BDM \n
+    *                   Send Format    [command, data...]
+    *                   Receive Format [result...]
+    *
+    *  @return
+    *      BDM_RC_OK    => OK \n
+    *      other        => Error code - see \ref USBDM_ErrorCode
+    */
+   virtual USBDM_ErrorCode  miscellaneousCommand(unsigned size, uint8_t usb_data[]) = 0;
+
+   /**
+    * Enable or disable serial interface on BDM
+    *
+    * @param enable true to enable
+    *
+    * @return Previous state off serial interface
+    */
+   virtual bool enableSerialInterface(bool enable) = 0;
 };
 
 typedef std::shared_ptr<BdmInterface> BdmInterfacePtr;

@@ -1159,6 +1159,36 @@ USBDM_ErrorCode USBDM_ControlPins(unsigned int control, unsigned int *status=0);
 USBDM_API
 USBDM_ErrorCode USBDM_ControlPins(unsigned int control, unsigned int *status);
 #endif
+
+//! Debugging sub commands (used with CMD_USBDM_DEBUG )
+//! @note Not for general use! (Dangerous - don't try turning on VPP with the wrong chip!)
+typedef enum {
+  BDM_DBG_ACKN             = 0,  //!< - Test ACKN
+  BDM_DBG_SYNC             = 1,  //!< - Test SYNC
+  BDM_DBG_TESTPORT         = 2,  //!< - Test BDM port timing
+  BDM_DBG_USBDISCONNECT    = 3,  //!< - Test USB disconnect (don't use!)
+  BDM_DBG_STACKSIZE        = 4,  //!< - Determine stack size
+  BDM_DBG_VPP_OFF          = 5,  //!< - Remove Flash programming voltage from target
+  BDM_DBG_VPP_ON           = 6,  //!< - Apply Flash programming voltage to target
+  BDM_DBG_FLASH12V_OFF     = 7,  //!< - Turn 12V flash programming voltage source off
+  BDM_DBG_FLASH12V_ON      = 8,  //!< - Turn 12V flash programming voltage source on
+  BDM_DBG_VDD_OFF          = 9,  //!< - Turn Target Vdd supply off
+  BDM_DBG_VDD3_ON          = 10, //!< - Set  Target Vdd supply to 3V3
+  BDM_DBG_VDD5_ON          = 11, //!< - Set Target Vdd supply to 5V
+  BDM_DBG_CYCLE_POWER      = 12, //!< - Cycle Target Vdd supply off and on
+  BDM_DBG_MEASURE_VDD      = 13, //!< - Measure Target Vdd supply
+  BDM_DBG_RS08TRIM         = 14, //!< - Calculate RS08 clock trim value
+  BDM_DBG_TESTWAITS        = 15, //!< - Tests the software counting delays used for BDM communication. (locks up BDM!)
+  BDM_DBG_TESTALTSPEED     = 16, //!< - Test bdmHC12_alt_speed_detect{}
+  BDM_DBG_TESTBDMTX        = 17, //!< - Test various BDM tx routines with dummy data
+  BDM_DBG_SWD              = 18, //!< - Test SWD
+  BDM_DBG_ARM              = 19, //!< - Test ARM
+  BDM_DBG_SWD_ERASE_LOOP   = 20, //!< - Power on polling to capture difficult chips
+
+  BDM_DBG_SERIAL_ON        = 21, //!< - Enable CDC Uart
+  BDM_DBG_SERIAL_OFF       = 22, //!< - Disable CDC Uart
+} DebugSubCommands;
+
 //=============================================================================
 //=============================================================================
 //=============================================================================
@@ -1182,16 +1212,18 @@ USBDM_ErrorCode USBDM_ControlPins(unsigned int control, unsigned int *status);
 USBDM_API
 USBDM_ErrorCode USBDM_SetTargetType(TargetType_t targetType);
 
-//! Execute debug command (various, see DebugSubCommands)
-//!
-//! @param usb_data - Command for BDM
-//!
-//! @return \n
-//!     BDM_RC_OK => OK \n
-//!     other     => Error code - see \ref USBDM_ErrorCode
-//!
+/**
+ *  Execute debug command (various, see DebugSubCommands)
+ *
+ *  @param [in/out] usb_data - Command for BDM \n
+ *                   Send Format    [x,x, command, data...]
+ *                   Receive Format [result...]
+ *  @return \n
+ *      BDM_RC_OK => OK \n
+ *      other     => Error code - see \ref USBDM_ErrorCode
+ */
 USBDM_API
-USBDM_ErrorCode  USBDM_Debug(unsigned char *usb_data);
+USBDM_ErrorCode  USBDM_Debug(unsigned char usb_data[20]);
 
 /*!
  * Send Custom BDM command

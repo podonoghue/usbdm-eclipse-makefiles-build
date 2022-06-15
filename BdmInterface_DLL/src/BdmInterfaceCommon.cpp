@@ -281,16 +281,18 @@ BdmInterfaceCommon::BdmInterfaceCommon(TargetType_t targetType) {
    log.print("Target Type = %s\n", getTargetTypeName(targetType));
 
    // Set options to default
-   connectionTimeout          = 10;
-   bdmOptions.maskInterrupts  = true;
-   extendedRetry              = false;
-   gdbServerPort              = 1234;
-   ttyServerPort              = 4321;
-   bdmSerialNumber            = "";
-   bdmMatchRequired           = false;
-   catchVLLSx                 = false;
-   exitOnClose                = false;
-   callbackPtr                = 0;
+   connectionTimeout           = 10;
+   bdmOptions.maskInterrupts   = true;
+   extendedRetry               = false;
+   gdbServerPort               = 1234;
+   ttyServerPort               = 4321;
+   bdmSerialNumber             = "";
+   bdmMatchRequired            = false;
+   catchVLLSx                  = false;
+   exitOnClose                 = false;
+   callbackPtr                 = 0;
+   serialInterfaceEnabled      = true;
+
    wxPlugin.reset();
 
    bdmOptions.size            = sizeof(USBDM_ExtendedOptions_t);
@@ -1302,12 +1304,66 @@ USBDM_ErrorCode BdmInterfaceCommon::restoreBdmOptions() {
 }
 
 USBDM_ErrorCode BdmInterfaceCommon::setProgrammingMode(bool programmingMode) {
+   LOGGING;
+   log.error("Programming mode = %s\n", programmingMode?"on":"off");
    if (programmingMode) {
       return setProgrammingBdmOptions();
    }
    else {
       return restoreBdmOptions();
    }
+}
+
+/**
+ * Send miscellaneous commands to BDM interface.
+ *
+ *  @param size     Size of Tx/Rx data buffer. Must be <= 18.
+ *  @param [in/out] usb_data - Command for BDM \n
+ *                   Send Format    [command, data...]
+ *                   Receive Format [result...]
+ *
+ *  @return
+ *      BDM_RC_OK    => OK \n
+ *      other        => Error code - see \ref USBDM_ErrorCode
+ */
+USBDM_ErrorCode BdmInterfaceCommon::miscellaneousCommand(unsigned size, uint8_t usb_data[]) {
+   LOGGING;
+   log.error(" %s, 0x%08X\n", getDebugCommandName(usb_data[0]), (size>1)?usb_data[1]:0);
+
+   if (size>18) {
+      size = 18;
+   }
+   uint8_t buffer[20] = {0};
+   memcpy(buffer+2, usb_data, size);
+
+   return USBDM_Debug(buffer);
+}
+
+/**
+ * Enable or disable serial interface on BDM
+ *
+ * @param enable true to enable
+ *
+ * @return Previous state off serial interface
+ */
+bool BdmInterfaceCommon::enableSerialInterface(bool enable) {
+   LOGGING;
+
+   log.error("Serial interface mode = %s\n", enable?"on":"off");
+
+   bool old = serialInterfaceEnabled;
+
+   serialInterfaceEnabled = enable;
+
+   if (enable) {
+      uint8_t cmd[] = {BDM_DBG_SERIAL_ON};
+      miscellaneousCommand(sizeof(cmd), cmd);
+   }
+   else {
+      uint8_t cmd[] = {BDM_DBG_SERIAL_OFF};
+      miscellaneousCommand(sizeof(cmd), cmd);
+   }
+   return old;
 }
 
 /*

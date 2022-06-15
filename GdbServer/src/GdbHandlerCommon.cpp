@@ -84,6 +84,8 @@ USBDM_ErrorCode GdbHandlerCommon::initialise() {
    initBreakpointsDone = false;
    programmingDone     = false;
 
+   bdmInterface->enableSerialInterface(false);
+
    USBDM_ErrorCode rc = bdmInterface->connect();
    if (rc != BDM_RC_OK) {
       // Silent retry
@@ -813,6 +815,7 @@ USBDM_ErrorCode GdbHandlerCommon::doVCommands(const GdbPacket *pkt) {
          log.error("vFlashDone: Memory image empty, programming skipped\n");
       }
       log.enableLogging(true);
+      bdmInterface->enableSerialInterface(true);
       gdbInOut->sendGdbString("OK");
    }
    else if (strStartsWith("vCont", cmd)) {
@@ -868,27 +871,32 @@ USBDM_ErrorCode GdbHandlerCommon::programImage(FlashImagePtr flashImage) {
    LOGGING_F;
 //   log.enableLogging(false);
    // Suppress detailed reporting of the programming operation
-   log.setLoggingLevel(0);
+//   log.setLoggingLevel(0);
 
-   if (deviceData->getEraseMethod() == DeviceData::eraseNone) {
-      return BDM_RC_ILLEGAL_PARAMS;
-   }
-   if (deviceData->getSecurity() == SEC_SECURED) {
-      return BDM_RC_ILLEGAL_PARAMS;
-   }
+   USBDM_ErrorCode rc = BDM_RC_OK;
+   do {
+      if (deviceData->getEraseMethod() == DeviceData::eraseNone) {
+         rc = BDM_RC_ILLEGAL_PARAMS;
+         break;
+      }
+      if (deviceData->getSecurity() == SEC_SECURED) {
+         rc = BDM_RC_ILLEGAL_PARAMS;
+         break;
+      }
 
-   FlashProgrammerPtr flashProgrammer = FlashProgrammerFactory::createFlashProgrammer(bdmInterface);
-   flashProgrammer->setDeviceData(deviceData, getTclInterface());
-   USBDM_ErrorCode rc = flashProgrammer->setDeviceData(deviceData);
-   if (rc == BDM_RC_OK) {
-      rc = flashProgrammer->programFlash(flashImage, 0, true);
-   }
-   if (rc != PROGRAMMING_RC_OK) {
-      log.print("programImage() - failed, rc = %s\n", bdmInterface->getErrorString(rc));
-      return rc;
-   }
-   programmingDone = true;
-   return BDM_RC_OK;
+      FlashProgrammerPtr flashProgrammer = FlashProgrammerFactory::createFlashProgrammer(bdmInterface);
+      flashProgrammer->setDeviceData(deviceData, getTclInterface());
+      USBDM_ErrorCode rc = flashProgrammer->setDeviceData(deviceData);
+      if (rc == BDM_RC_OK) {
+         rc = flashProgrammer->programFlash(flashImage, 0, true);
+      }
+      if (rc != PROGRAMMING_RC_OK) {
+         log.print("programImage() - failed, rc = %s\n", bdmInterface->getErrorString(rc));
+         break;
+      }
+      programmingDone = true;
+   } while (0);
+   return rc;
 }
 
 /**

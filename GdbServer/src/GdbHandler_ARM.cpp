@@ -130,7 +130,10 @@ USBDM_ErrorCode GdbHandler_ARM::configureMDM_AP() {
 }
 
 USBDM_ErrorCode GdbHandler_ARM::initialise() {
-   LOGGING;
+   LOGGING_F;
+
+   log.print("Disabling serial interface\n");
+   bdmInterface->enableSerialInterface(false);
 
    USBDM_ErrorCode rc = GdbHandlerCommon::initialise();
 

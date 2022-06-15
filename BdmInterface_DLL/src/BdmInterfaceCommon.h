@@ -107,6 +107,8 @@ public:
    virtual USBDM_ErrorCode            getStatus(unsigned int *status) override;
 
    virtual USBDM_ErrorCode            setProgrammingMode(bool) override;
+   virtual USBDM_ErrorCode            miscellaneousCommand(unsigned size, uint8_t usb_data[]) override;
+   virtual bool                       enableSerialInterface(bool enable) override;
 
 protected:
    USBDM_ExtendedOptions_t    bdmOptions;              //!< Current BDM options
@@ -124,6 +126,7 @@ protected:
 
    RetryMode                  initialConnectRetryMode;
    RetryMode                  softConnectRetryMode;
+   bool                       serialInterfaceEnabled;
 
 protected:
    long                       callback(std::string message, std::string  caption, long style);

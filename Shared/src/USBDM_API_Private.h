@@ -101,30 +101,6 @@ enum BDMCommands {
    CMD_USBDM_JTAG_EXECUTE_SEQUENCE = 44,  //!< Execute sequence of JTAG commands
 };
 
-//! Debugging sub commands (used with \ref CMD_USBDM_DEBUG )
-//! @note Not for general use! (Dangerous - don't try turning on VPP with the wrong chip!)
-enum DebugSubCommands {
-  BDM_DBG_ACKN             = 0,  //!< - Test ACKN
-  BDM_DBG_SYNC             = 1,  //!< - Test SYNC
-  BDM_DBG_TESTPORT         = 2,  //!< - Test BDM port timing
-  BDM_DBG_USBDISCONNECT    = 3,  //!< - Test USB disconnect (don't use!)
-  BDM_DBG_STACKSIZE        = 4,  //!< - Determine stack size
-  BDM_DBG_VPP_OFF          = 5,  //!< - Remove Flash programming voltage from target
-  BDM_DBG_VPP_ON           = 6,  //!< - Apply Flash programming voltage to target
-  BDM_DBG_FLASH12V_OFF     = 7,  //!< - Turn 12V flash programming voltage source off
-  BDM_DBG_FLASH12V_ON      = 8,  //!< - Turn 12V flash programming voltage source on
-  BDM_DBG_VDD_OFF          = 9,  //!< - Turn Target Vdd supply off
-  BDM_DBG_VDD3_ON          = 10, //!< - Set Target Vdd supply to 3V3
-  BDM_DBG_VDD5_ON          = 11, //!< - Set Target Vdd supply to 5V
-  BDM_DBG_CYCLE_POWER      = 12, //!< - Cycle Target Vdd supply off and on
-  BDM_DBG_MEASURE_VDD      = 13, //!< - Measure Target Vdd supply
-  BDM_DBG_RS08TRIM         = 14, //!< - Calculate RS08 clock trim value
-  BDM_DBG_TESTWAITS        = 15, //!< - Tests the software counting delays used for BDM communication. (locks up BDM!)
-  BDM_DBG_TESTALTSPEED     = 16, //!< - Test bdmHC12_alt_speed_detect()
-  BDM_DBG_TESTBDMTX        = 17, //!< - Test various BDM tx routines with dummy data
-  BDM_DBG_SWD              = 18, //!< - SWD tests
-} ;
-
 //! Commands for BDM when in ICP mode
 //!
 enum ICPCommandCodes {

@@ -48,16 +48,24 @@ protected:
     */
    class SetProgrammingMode {
    private:
+      static bool currentMode;
+
       BdmInterfacePtr bdmInterface;
+      bool            lastmode;
+
    public:
       SetProgrammingMode(BdmInterfacePtr bdmInterface) :
-      bdmInterface(bdmInterface) {
+         bdmInterface(bdmInterface),
+         lastmode(currentMode) {
+
          LOGGING_E;
          bdmInterface->setProgrammingMode(true);
+         currentMode = true;
       }
       ~SetProgrammingMode() {
          LOGGING_E;
-         bdmInterface->setProgrammingMode(false);
+         bdmInterface->setProgrammingMode(lastmode);
+         currentMode = lastmode;
       }
    };
 

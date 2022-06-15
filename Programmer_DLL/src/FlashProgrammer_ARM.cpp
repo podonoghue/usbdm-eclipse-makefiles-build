@@ -613,11 +613,11 @@ USBDM_ErrorCode FlashProgrammer_ARM::initialiseTargetFlash() {
 USBDM_ErrorCode FlashProgrammer_ARM::massEraseTarget(bool resetTarget) {
    LOGGING;
 
+   SetProgrammingMode pmode(bdmInterface);
+
    if (resetTarget) {
       resetAndConnectTarget();
    }
-   SetProgrammingMode pmode(bdmInterface);
-
    if (progressTimer != NULL) {
       progressTimer->restart("Mass Erasing Target");
    }
