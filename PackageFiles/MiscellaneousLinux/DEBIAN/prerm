@@ -69,7 +69,7 @@ removeEclipse() {
 }
 
 #======================================================
-#  KDS Instance Removal
+#  KDS Instance Removal - no longer supported
 #======================================================
 removeKDSInstance() {
 
@@ -304,5 +304,5 @@ RULES_DIR="/etc/udev/rules.d"
 
 #removeUSBHardware # Moved to image
 removeEclipse
-removeKDS
+#removeKDS
 removeCodewarrior

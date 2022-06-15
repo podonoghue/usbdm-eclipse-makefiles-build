@@ -139,7 +139,7 @@ installKDSInstance() {
 }
 
 #======================================================
-#  KDS Installation
+#  KDS Installation - no longer supported
 #======================================================
 installKDS() {
 
@@ -348,6 +348,6 @@ RULES_DIR="/etc/udev/rules.d"
 
 #installUSBHardware #moved to image
 installEclipse
-installKDS
+#installKDS
 installCodewarrior
 #libraryUpdate $1
