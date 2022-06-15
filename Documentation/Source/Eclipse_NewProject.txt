@@ -51,8 +51,6 @@ The following example is for an Kinetis target but a similar process is followed
 	- Click <i>Next</i> 
 	
 \image html 4.USBDMProjectOptions-Basic.png
-\image html 4.USBDMProjectOptions-CPP.png
-\image html 4.USBDMProjectOptions-KSDK.png
 
 <b>Select USBDM Additional Options</b>
    - This page selects different options that depend on the previous page.      
@@ -73,24 +71,17 @@ The following example is for an Kinetis target but a similar process is followed
 			Expanding the project will display the project contents as shown:
 			- Project_Headers
 			   - derivative.h - for convenience. Just includes the target-specific header file.
-			   - MK20DX128M5.h - Target specific header file. This may be a place holder if USBDM doesn't
-			     include the required header file.
-			     Freescale provide various header files for their devices.  However it would not
-			     be legal to distribute these with USBDM.
-			     It is possible to add header files to the USBDM installation.  Refer to the skeleton header
-			     file provided for instructions.
-			   - Various other files will be present dependent on the device type and project options chosen.
-			     For example <b>clock_private.h</b> and <b>uart.h</b> may be present.
+			   - MKL25Z4.h (example) - Target specific header file. This may be a place holder if USBDM doesn't
+			     include the required header file.			     
+			   - Various other files will be present dependent on the device type and project options chosen. In
+			     particular there may be library files for peripherals if the CPP Abstraction is selected.
 			- Source
-			   - This the main source folder.  In this case it contains an example main.cpp and CMSIS_RTX 
-			     configuration file (see below for more details).\n
+			   - This the main source folder. Most user files will be added here.\n
 			- Startup_Code
 			   - The C compiler assumes certain startup actions to support the C library.  The target
 			     processor also may require some low-level initialization.  These files provide generic examples
 			     that may be modified for a particular target.  They have been tested with a few devices but are
 			     unlikely to be suitable for every target.\n
-			     It also contain a file describing a generic vector table for the device with default handler. \n
-			     These are based on the Codesourcery documentation or provided examples.
 			- cmsis
 			   - The source code for CMSIS-RTX library is included in this folder.  While it is possible to use
 			     libraries to achieve the same thing this arrangement allows more convenient source debugging and
@@ -100,7 +91,12 @@ The following example is for an Kinetis target but a similar process is followed
 			     Build operation.
 			- Project_Settings
 			   - The folder contains the target linker files either generated or copied into the project.  It also
-			     contains a default launch configuration for the <b>Debug</b> target for use with the USBDM debugger. 
+			     contains a default launch configuration for the <b>Debug</b> target for use with the USBDM debugger.
+			- Documentation.doxyfile
+			   - This contains a configuration that may be used to produce documentation for the project using Doxygen.
+			     Documentation.html is a link to the documentation produced.
+			- Configure.usbdmProject
+			   - This is a configuration file that may be used to change project settings if CPP Abstraction is selected. 
       </td>
    </tr>
 </table>
