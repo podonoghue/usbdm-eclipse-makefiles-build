@@ -48,7 +48,7 @@
             <property name="name">UsbdmDialogueSkeleton</property>
             <property name="pos"></property>
             <property name="size">529,1017</property>
-            <property name="style">wxCLOSE_BOX|wxDEFAULT_DIALOG_STYLE|wxMINIMIZE_BOX|wxRESIZE_BORDER</property>
+            <property name="style">wxCLOSE_BOX|wxDEFAULT_DIALOG_STYLE|wxDIALOG_NO_PARENT|wxMAXIMIZE_BOX|wxMINIMIZE_BOX|wxRESIZE_BORDER</property>
             <property name="subclass"></property>
             <property name="title">USBDM</property>
             <property name="tooltip"></property>

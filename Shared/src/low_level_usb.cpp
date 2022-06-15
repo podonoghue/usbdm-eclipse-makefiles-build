@@ -400,7 +400,11 @@ USBDM_ErrorCode bdm_usb_open( unsigned int device_no ) {
    if (rc != LIBUSB_SUCCESS) {
       log.error("libusb_open() failed, rc = (%d):%s\n", rc, libusb_error_name(rc));
       usbDeviceHandle = NULL;
-      if (rc == LIBUSB_ERROR_ACCESS) {
+      if (rc == LIBUSB_ERROR_BUSY) {
+         // Probably device is busy (open in another app)
+         return BDM_RC_USB_DEVICE_BUSY;
+      }
+      else if (rc == LIBUSB_ERROR_ACCESS) {
          // Probably device is busy (open in another app)
          return BDM_RC_USB_DEVICE_BUSY;
       }
@@ -537,7 +541,7 @@ USBDM_ErrorCode bdm_usb_getStringDescriptor(int index, char *descriptorBuffer, u
 
    if ((rc < 0) || (descriptorBuffer[1] != DT_STRING)) {
       memset(descriptorBuffer, '\0', maxLength);
-      log.error("libusb_control_transfer() failed\n");
+      log.error("libusb_control_transfer() failed, rc = (%d):%s\n", rc, libusb_error_name(rc));
       return BDM_RC_USB_ERROR;
    }
 //   else {

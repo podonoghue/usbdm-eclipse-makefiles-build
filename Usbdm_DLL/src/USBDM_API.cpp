@@ -342,6 +342,9 @@ USBDM_ErrorCode USBDM_GetBDMSerialNumber(const char **deviceSerialNumber) {
 
    //ToDo - assumes serial number is string descr. #3 - should check device descriptor.
    USBDM_ErrorCode rc = bdm_usb_getStringDescriptor(3, buffer, sizeof(buffer));
+   if (rc != BDM_RC_OK) {
+      log.error("Failed to get string descriptor (serial number)\n");
+   }
 //   if (rc == BDM_RC_OK) {
 //      log.print("=> s=%ls\n", *deviceSerialNumber);
 //   }
@@ -528,10 +531,12 @@ USBDM_ErrorCode USBDM_GetCapabilities(HardwareCapabilities_t *capabilities) {
    LOGGING_Q;
 
    if (!bdmState.initialised) {
+      log.error("BDM not initialised");
       return BDM_RC_NOT_INITIALISED;
    }
 
    if (!bdmInfoValid) {
+      log.error("BDM not opened yet");
       return BDM_RC_DEVICE_NOT_OPEN;
    }
    // This library is incompatible with BDM versions < 4.9.5
@@ -553,9 +558,9 @@ USBDM_ErrorCode USBDM_GetCapabilities(HardwareCapabilities_t *capabilities) {
  *      other     => Error code - see \ref USBDM_ErrorCode
  */
 static USBDM_ErrorCode updateBdmInfo(void) {
+   LOGGING;
    USBDM_ErrorCode rc;
    USBDM_Version_t USBDMVersion;
-   LOGGING_Q;
 
    // Set safe defaults
    bdmInfo             = defaultBdmInfo;
@@ -634,6 +639,26 @@ USBDM_API
 USBDM_ErrorCode USBDM_GetBdmInformation(USBDM_bdmInformation_t *info) {
    LOGGING_Q;
 
+   if (!bdmInfoValid) {
+      log.error("BDM info not available ~ not opened yet?");
+      return BDM_RC_DEVICE_NOT_OPEN;
+   }
+
+   unsigned requestedSize = info->size;
+   if (requestedSize <=4) {
+      log.error("Requested size is invalid!");
+      return BDM_RC_ILLEGAL_PARAMS;
+   }
+
+   if (requestedSize > sizeof(USBDM_bdmInformation_t)) {
+      log.warning("Unexpectedly large response - truncated");
+      requestedSize = sizeof(USBDM_bdmInformation_t); // Must be a later version!
+   }
+
+   // Copy subset of structure that is common.
+   memcpy(info, &bdmInfo, requestedSize);
+   info->size = requestedSize; // Actual size returned
+
    log.print("\n"
          "         bdmInfo.capabilities       = %s\n"
          "         bdmInfo.commandBufferSize  = %d\n"
@@ -650,21 +675,6 @@ USBDM_ErrorCode USBDM_GetBdmInformation(USBDM_bdmInformation_t *info) {
          (bdmInfo.ICPhardwareVersion>>6),(bdmInfo.ICPhardwareVersion&0x3F),
          (bdmInfo.ICPsoftwareVersion>>4),(bdmInfo.ICPsoftwareVersion&0x0F)
         );
-
-   unsigned size = info->size;
-
-   if (size > sizeof(USBDM_bdmInformation_t)) {
-      size = sizeof(USBDM_bdmInformation_t); // Must be a later version!
-   }
-   if (size == 0) {
-      return BDM_RC_ILLEGAL_PARAMS;
-   }
-   if (!bdmInfoValid) {
-      return BDM_RC_DEVICE_NOT_OPEN;
-   }
-   // Copy subset of structure that is common.
-   memcpy(info, &bdmInfo, size);
-   info->size = size; // Actual size returned
 
    return BDM_RC_OK;
 }
@@ -1436,24 +1446,33 @@ USBDM_ErrorCode USBDM_SetTargetType(TargetType_t targetType) {
 /**
  *  Execute debug command (various, see DebugSubCommands)
  *
- *  @param usb_data - Command for BDM
- *
+ *  @param [in/out] usb_data - Command for BDM \n
+ *                   Send Format    [x,x, command, data...]
+ *                   Receive Format [result...]
  *  @return \n
  *      BDM_RC_OK => OK \n
  *      other     => Error code - see \ref USBDM_ErrorCode
  */
 USBDM_API
-USBDM_ErrorCode USBDM_Debug(unsigned char *usb_data) {
+USBDM_ErrorCode USBDM_Debug(unsigned char usb_data[20]) {
    unsigned int actualRxSize;
    LOGGING_Q;
 
    usb_data[0] = 0;
    usb_data[1] = CMD_USBDM_DEBUG;
+
+   log.print("Data = ");
+   for (int index=0; index<20; index++) {
+      log.printq("0x%2.2X, ", usb_data[index]);
+   }
+   log.printq("\n");
+
    uint8_t command = usb_data[2];
-   log.print("%s => 0x%2.2X, 0x%2.2X\n", getDebugCommandName(command), usb_data[3], usb_data[4]);
+   log.print(" ==> %s(%d), 0x%2.2X, 0x%2.2X \n", getDebugCommandName(command), command, usb_data[3], usb_data[4]);
+
    USBDM_ErrorCode rc = bdm_usb_transaction(20, 20, usb_data, 1000, &actualRxSize);
-   log.print("%s <= rc=%s, 0x%2.2X, 0x%2.2X, 0x%2.2X, 0x%2.2X\n",
-                  getDebugCommandName(command), USBDM_GetErrorString(rc), usb_data[1], usb_data[2], usb_data[3], usb_data[4]);
+   log.print("<== rc=%s, 0x%2.2X, 0x%2.2X, 0x%2.2X, 0x%2.2X\n",
+                  USBDM_GetErrorString(rc), usb_data[1], usb_data[2], usb_data[3], usb_data[4]);
    return rc;
 }
 

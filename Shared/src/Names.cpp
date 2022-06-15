@@ -342,26 +342,32 @@ const char *getCommandName(unsigned char command) {
 
 //! Debug command string from code
 static const char *const debugCommands[] = {
-   "ACKN",                        // 0
-   "SYNC",                        // 1
-   "Test Port",                   // 2
-   "USB Disconnect",              // 3
-   "Find Stack size",             // 4
-   "Vpp Off",                     // 5
-   "Vpp On",                      // 6
-   "Flash 12V Off",               // 7
-   "Flash 12V On",                // 8
-   "Vdd Off",                     // 9
-   "Vdd 3.3V On",                 // 10
-   "Vdd 5V On",                   // 11
-   "Cycle Vdd",                   // 12
-   "Measure Vdd",                 // 13
-   "Measure RS08 Trim - deleted", // 14
-   "Test WAITS",                  // 15 //!< - Tests the software counting delays used for BDM communication. (locks up BDM!)
-   "Test ALT Speed",              // 16
-   "Test BDM Tx Routine",         // 17
-   "SWD test",                    // 18
+   "ACKN",                                         // 0
+   "SYNC",                                         // 1
+   "Test Port",                                    // 2
+   "USB Disconnect",                               // 3
+   "Find Stack size",                              // 4
+   "Vpp Off",                                      // 5
+   "Vpp On",                                       // 6
+   "Flash 12V Off",                                // 7
+   "Flash 12V On",                                 // 8
+   "Vdd Off",                                      // 9
+   "Vdd 3.3V On",                                  // 10
+   "Vdd 5V On",                                    // 11
+   "Cycle Vdd",                                    // 12
+   "Measure Vdd",                                  // 13
+   "Measure RS08 Trim - deleted",                  // 14
+   "Test WAITS",                                   // 15 //!< - Tests the software counting delays used for BDM communication. (locks up BDM!)
+   "Test ALT Speed",                               // 16
+   "Test BDM Tx Routine",                          // 17
+   "SWD test",                                     // 18
+   "Test ARM",                                     // 19
+   "Power on polling to capture difficult chips",  // 20
+
+   "Enable CDC Uart",                              // 21
+   "Disable CDC Uart",                             // 22
 };
+
 /**
  * \brief Maps a Debug Command # to a string
  *

@@ -76,7 +76,7 @@ typedef enum  {
  // Used by USBDM DLL
  BDM_RC_WRONG_BDM_REVISION                     = 34,    //!< BDM Hardware is incompatible with driver/program
  BDM_RC_WRONG_DLL_REVISION                     = 35,    //!< Program is incompatible with DLL
- BDM_RC_NO_USBDM_DEVICE                        = 36,    //!< No usbdm device was located
+ BDM_RC_NO_USBDM_DEVICE                        = 36,    //!< No USBDM device was located
 
  BDM_RC_JTAG_UNMATCHED_REPEAT                  = 37,    //!< Unmatched REPEAT-END_REPEAT
  BDM_RC_JTAG_UNMATCHED_RETURN                  = 38,    //!< Unmatched CALL-RETURN
@@ -102,6 +102,11 @@ typedef enum  {
  BDM_RC_SELECTED_BDM_NOT_FOUND                 = 55,    //!< Selected BDM not found (removed)
  BDM_RC_NOT_INITIALISED                        = 56,    //!< Interface not initialised before use e.g. failed to call USBDM_Init()
  BDM_RC_OPERATION_NOT_SUPPORTED                = 57,    //!< Operation not supported for target
+ BDM_RC_CF_DATA_INVALID                        = 58,    //!< CF target returned data invalid response (whatever that means!)
+ BDM_RC_CF_OVERRUN                             = 59,    //!< CF target returned overrun response
+ BDM_RC_MASS_ERASE_DISABLED                    = 60,    //!< ARM Device has mass erase disabled
+ BDM_RC_FLASH_NOT_READY                        = 61,    //!< ARM - Flash failed to become ready
+ BDM_RC_VDD_INCORRECT_LEVEL                    = 62,    //!< Target Vdd not at expected level (only applicable when internally controlled)
 
  // Used by programmer
  PROGRAMMING_RC_OK                             = 0,     //!<  0 Success

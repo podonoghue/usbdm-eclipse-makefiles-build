@@ -100,6 +100,11 @@ static const char *const errorMessages[] = {
    /** 55 */ "Selected BDM not found (removed?)",
    /** 56 */ "Interface not initialised before use",
    /** 57 */ "Operation not supported for this target",
+   /** 58 */ "CF target returned data invalid response (whatever that means!)",
+   /** 59 */ "CF target returned overrun response",
+   /** 60 */ "ARM Device has mass erase disabled",
+   /** 61 */ "ARM Flash failed to become ready",
+   /** 62 */ "Target Vdd not at expected level",
 };
 
 //! Error code returned by the various routines
