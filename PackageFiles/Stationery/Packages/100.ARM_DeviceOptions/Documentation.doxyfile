@@ -257,9 +257,9 @@ TAB_SIZE               = 4
 # newlines (in the resulting output). You can put ^^ in the value part of an
 # alias to insert a newline as if a physical newline was in the original file.
 # When you need a literal { or } or , in the value part of an alias you have to
-# escape them by means of a backslash (\), this can lead to conflicts with the
-# commands \{ and \} for these it is advised to use the version @{ and @} or use
-# a double escape (\\{ and \\})
+# escape them by means of a backslash (\\), this can lead to conflicts with the
+# commands \\{ and \\} for these it is advised to use the version @{ and @} or use
+# a double escape (\\\\{ and \\\\})
 
 ALIASES                =
 
@@ -396,7 +396,7 @@ DISTRIBUTE_GROUP_DOC   = NO
 
 # If one adds a struct or class to a group and this option is enabled, then also
 # any nested class or struct is added to the same group. By default this option
-# is disabled and one has to add nested compounds explicitly via \ingroup.
+# is disabled and one has to add nested compounds explicitly via \\ingroup.
 # The default value is: NO.
 
 GROUP_NESTED_COMPOUNDS = NO
@@ -404,14 +404,13 @@ GROUP_NESTED_COMPOUNDS = NO
 # Set the SUBGROUPING tag to YES to allow class member groups of the same type
 # (for instance a group of public functions) to be put as a subgroup of that
 # type (e.g. under the Public Functions section). Set it to NO to prevent
-# subgrouping. Alternatively, this can be done per class using the
-# \nosubgrouping command.
+# subgrouping. Alternatively, this can be done per class using the osubgrouping command.
 # The default value is: YES.
 
 SUBGROUPING = YES
 
 # When the INLINE_GROUPED_CLASSES tag is set to YES, classes, structs and unions
-# are shown inside the group in which they are included (e.g. using \ingroup)
+# are shown inside the group in which they are included (e.g. using \\ingroup)
 # instead of on a separate page (for HTML and Man pages) or section (for LaTeX
 # and RTF).
 #
@@ -549,7 +548,7 @@ HIDE_FRIEND_COMPOUNDS  = NO
 HIDE_IN_BODY_DOCS      = NO
 
 # The INTERNAL_DOCS tag determines if documentation that is typed after a
-# \internal command is included. If the tag is set to NO then the documentation
+# internal command is included. If the tag is set to NO then the documentation
 # will be excluded. Set it to YES to include the internal documentation.
 # The default value is: NO.
 
@@ -749,7 +748,7 @@ LAYOUT_FILE            =
 # to be installed. See also https://en.wikipedia.org/wiki/BibTeX for more info.
 # For LaTeX the style of the bibliography can be controlled using
 # LATEX_BIB_STYLE. To use this feature you need bibtex and perl available in the
-# search path. See also \cite for info how to create references.
+# search path. See also \\cite for info how to create references.
 
 CITE_BIB_FILES         =
 
@@ -1063,7 +1062,7 @@ USE_HTAGS              = NO
 # If the VERBATIM_HEADERS tag is set the YES then doxygen will generate a
 # verbatim copy of the header file for each class for which an include is
 # specified. Set to NO to disable this.
-# See also: Section \class.
+# See also: Section \\class.
 # The default value is: YES.
 
 VERBATIM_HEADERS       = YES
@@ -1543,7 +1542,7 @@ FORMULA_FONTSIZE       = 10
 
 FORMULA_TRANSPARENT    = YES
 
-# The FORMULA_MACROFILE can contain LaTeX \newcommand and \renewcommand commands
+# The FORMULA_MACROFILE can contain LaTeX ewcommand and enewcommand commands
 # to create new LaTeX commands to be used in formulas as building blocks. See
 # the section "Including formulas" for details.
 
