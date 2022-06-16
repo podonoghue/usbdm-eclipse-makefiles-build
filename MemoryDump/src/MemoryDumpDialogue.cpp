@@ -144,6 +144,9 @@ void MemoryDumpDialogue::OnReadMemoryButtonClick( wxCommandEvent& event ) {
       if (rc != BDM_RC_OK) {
          break;
       }
+      // Disable to read on-chip memory rather than target
+      // Requires modified programmer firmware.
+#if 1
       rc = bdmInterface->targetConnectWithRetry();
       if (rc != BDM_RC_OK) {
          break;
@@ -160,6 +163,7 @@ void MemoryDumpDialogue::OnReadMemoryButtonClick( wxCommandEvent& event ) {
       if (rc != BDM_RC_OK) {
          break;
       }
+#endif
       rc = readMemoryBlocks(ProgressDialogueFactory::create("Accessing Target", 100, this));
       if (rc != BDM_RC_OK) {
          break;
