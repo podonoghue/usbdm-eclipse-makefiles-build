@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<site>
+   <feature url="features/net.sourceforge.usbdm.cw.feature_5.1.0.201904201415.jar" id="net.sourceforge.usbdm.cw.feature" version="5.1.0.201904201415" os="linux,win32" arch="x86,x86_64">
+      <category name="usbdm.cw.plugin"/>
+   </feature>
+   <category-def name="usbdm.cw.plugin" label="USBDM Codewarrior Plugin">
+      <description>
+         USBDM Plugins for Codewarrior
+      </description>
+   </category-def>
+</site>
