@@ -1140,6 +1140,21 @@ void DeviceData::setHidden(bool value) {
    hidden = value;
 }
 
+void DeviceData::setVoltageRange(float min, float max) {
+   vddMin = min;
+   vddMax = max;
+}
+
+/*
+ * Check if voltage is an acceptable Vdd for device
+ */
+bool DeviceData::isOKVdd(float vdd) {
+   if ((vddMin == 0) || (vdd == 0)) {
+      return true;
+   }
+   return (vdd>=vddMin)&&(vdd<=vddMax);
+}
+
 void DeviceData::setClockType(ClockTypes_t type) {
    clockType = type;
 }

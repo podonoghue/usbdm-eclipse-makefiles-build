@@ -1149,6 +1149,7 @@ public:
    }
 
 private:
+   float                         vddMin=0, vddMax=0;     //!< Vdd range
    TargetType_t                  targetType;             //!< Type of target
    std::string                   targetName;             //!< Name of target
    bool                          hidden;                 //!< Device is hidden in programmer
@@ -1275,6 +1276,8 @@ public:
    void                           addMemoryRegion(MemoryRegionPtr pMemoryRegion);
    void                           setTargetName(const std::string &name);
    void                           setHidden(bool value = true);
+   void                           setVoltageRange(float min, float max);
+   bool                           isOKVdd(float vdd);
    void                           setClockType(ClockTypes_t type);
    void                           setClockAddress(uint32_t addr);
    void                           setClockTrimNVAddress(uint32_t addr);

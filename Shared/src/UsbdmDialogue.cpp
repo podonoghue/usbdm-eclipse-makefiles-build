@@ -1690,6 +1690,15 @@ USBDM_ErrorCode UsbdmDialogue::checkFileChange(void) {
        return loadHexFile(lastFileLoaded, !incrementalLoad, forcelinearToPagedImage);
    }
 }
+USBDM_ErrorCode UsbdmDialogue::vddCheck(DeviceDataPtr device) {
+   float vdd = 0;
+   switch(bdmInterface->getBdmOptions().targetVdd) {
+      case BDM_TARGET_VDD_3V3: vdd = 3.3; break;
+      case BDM_TARGET_VDD_5V:  vdd = 5.0; break;
+      default:break;
+   }
+   return device->isOKVdd(vdd)?BDM_RC_OK:BDM_RC_VDD_WRONG_FOR_TARGET;
+}
 
 USBDM_ErrorCode UsbdmDialogue::programFlash(bool loadAndGo) {
    LOGGING;
@@ -1697,6 +1706,13 @@ USBDM_ErrorCode UsbdmDialogue::programFlash(bool loadAndGo) {
    USBDM_ErrorCode rc = PROGRAMMING_RC_OK;
 
    TransferDataFromWindow();
+
+   DeviceDataPtr device = deviceInterface->getCurrentDevice();
+
+   rc = vddCheck(device);
+   if (rc != BDM_RC_OK) {
+      return rc;
+   }
 
    wxProgressDialog pd(_("Accessing Target"),
                        _("Initialising..."),
@@ -1713,8 +1729,6 @@ USBDM_ErrorCode UsbdmDialogue::programFlash(bool loadAndGo) {
    do {
       log.print("Starting sequence\n");
 
-      DeviceDataPtr device = deviceInterface->getCurrentDevice();
-
       // Update device from current erase method selection
       DeviceData::EraseMethod currentEraseMethod = getCurrentEraseSelection();
       log.print("Setting erase method to %s\n", DeviceData::getEraseMethodName(currentEraseMethod));
@@ -1728,6 +1742,7 @@ USBDM_ErrorCode UsbdmDialogue::programFlash(bool loadAndGo) {
       // Temporarily change power options for "load & Go"
       bool leaveTargetPowered = bdmInterface->getBdmOptions().leaveTargetPowered;
       bdmInterface->getBdmOptions().leaveTargetPowered = loadAndGo||leaveTargetPowered;
+
       rc = bdmInterface->initBdm();
       bdmInterface->getBdmOptions().leaveTargetPowered = leaveTargetPowered;
       if (rc != BDM_RC_OK) {
@@ -1847,6 +1862,13 @@ USBDM_ErrorCode UsbdmDialogue::verifyFlash(void) {
 
    TransferDataFromWindow();
 
+   DeviceDataPtr device = deviceInterface->getCurrentDevice();
+
+   rc = vddCheck(device);
+   if (rc != BDM_RC_OK) {
+      return rc;
+   }
+
    wxProgressDialog pd(_("Accessing Target"),
                        _("Initialising..."),
                        100,
@@ -1875,7 +1897,7 @@ USBDM_ErrorCode UsbdmDialogue::verifyFlash(void) {
             continue;
          }
       }
-      rc = flashprogrammer->setDeviceData(deviceInterface->getCurrentDevice());
+      rc = flashprogrammer->setDeviceData(device);
       if (rc != BDM_RC_OK) {
          continue;
       }
@@ -2510,6 +2532,13 @@ USBDM_ErrorCode UsbdmDialogue::massEraseTarget() {
 
    TransferDataFromWindow();
 
+   DeviceDataPtr device = deviceInterface->getCurrentDevice();
+
+   USBDM_ErrorCode rc = vddCheck(device);
+   if (rc != BDM_RC_OK) {
+      return rc;
+   }
+
    if (flashprogrammer == NULL) {
       flashprogrammer = FlashProgrammerFactory::createFlashProgrammer(bdmInterface);
    }
@@ -2556,7 +2585,7 @@ USBDM_ErrorCode UsbdmDialogue::massEraseTarget() {
       log.print("Connected...\n");
    }
    // Set default device
-   flashRc = flashprogrammer->setDeviceData(deviceInterface->getCurrentDevice());
+   flashRc = flashprogrammer->setDeviceData(device);
    if (flashRc != PROGRAMMING_RC_OK) {
       bdmInterface->closeBdm();
       log.print("setDeviceData() failed\n");

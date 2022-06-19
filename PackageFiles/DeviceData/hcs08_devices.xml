@@ -112,7 +112,7 @@
          <flashProgramRef ref="HCS08-default-flash-program" />
          <note>Default HCS08 Device</note>
       </device>
-      <device family="HCS08" name="MC9S08AC8">
+      <device family="HCS08" name="MC9S08AC8" vddMin="2.7" vddMax="5.5" >
          <clock registerAddress="0x0048" type="S08ICGV4" />
          <memory type="ram">
             <memoryRange start="0x000070"  end="0x00036F"/>
@@ -124,7 +124,7 @@
          <sdid value="0x012" />
          <flashProgramRef ref="HCS08-small-flash-program" />
       </device>
-      <device family="HCS08" name="MC9S08AC16">
+      <device family="HCS08" name="MC9S08AC16" vddMin="2.7" vddMax="5.5" >
          <clock registerAddress="0x0048" type="S08ICGV4" />
          <memory type="ram">
             <memoryRange start="0x000070"  end="0x00046F"/>
@@ -137,7 +137,7 @@
          <sdid value="0x004" />
          <sdid value="0x008" />
       </device>
-      <device family="HCS08" name="MC9S08AC32">
+      <device family="HCS08" name="MC9S08AC32" vddMin="2.7" vddMax="5.5">
          <clock registerAddress="0x0048" type="S08ICGV4" />
          <memory type="ram">
             <memoryRange start="0x000070"  end="0x00086F"/>
@@ -150,7 +150,7 @@
          <sdid value="0x008" />
          <sdid value="0x018" />
       </device>
-      <device family="HCS08" name="MC9S08AC48">
+      <device family="HCS08" name="MC9S08AC48" vddMin="2.7" vddMax="5.5">
          <clock registerAddress="0x0048" type="S08ICGV4" />
          <memory type="ram">
             <memoryRange start="0x000070"  end="0x00086F"/>
@@ -163,7 +163,7 @@
          <sdid value="0x008" />
          <sdid value="0x018" />
       </device>
-      <device family="HCS08" name="MC9S08AC60">
+      <device family="HCS08" name="MC9S08AC60" vddMin="2.7" vddMax="5.5">
          <clock registerAddress="0x0048" type="S08ICGV4" />
          <memory type="ram">
             <memoryRange start="0x000070"  end="0x00086F"/>
@@ -177,7 +177,7 @@
          <sdid value="0x008" />
          <sdid value="0x018" />
       </device>
-      <device family="HCS08" name="MC9S08AC96">
+      <device family="HCS08" name="MC9S08AC96" vddMin="2.7" vddMax="5.5">
          <clock registerAddress="0x0048" type="S08ICGV4" />
          <memory type="ram">
             <memoryRange start="0x000080" end="0x0017FF" />
@@ -190,7 +190,7 @@
          </memory>
          <sdid value="0x01B" />
       </device>
-      <device family="HCS08" name="MC9S08AC128">
+      <device family="HCS08" name="MC9S08AC128" vddMin="2.7" vddMax="5.5">
          <clock registerAddress="0x0048" type="S08ICGV4" />
          <memory type="ram">
             <memoryRange start="0x000080" end="0x0017FF" />
@@ -203,7 +203,7 @@
          </memory>
          <sdid value="0x01B" />
       </device>
-      <device family="HCS08" name="S9S08AW8A">
+      <device family="HCS08" name="S9S08AW8A" vddMin="2.7" vddMax="5.5" >
          <clock registerAddress="0x0048" type="S08ICGV4" />
          <memory type="ram">
             <memoryRange start="0x000070"  end="0x00036F"/>
@@ -217,7 +217,7 @@
          <sdid value="0x008" />
 
       </device>
-      <device family="HCS08" name="S9S08AW16A">
+      <device family="HCS08" name="S9S08AW16A" vddMin="2.7" vddMax="5.5" >
          <clock registerAddress="0x0048" type="S08ICGV4" />
          <memory type="ram">
             <memoryRange start="0x000070"  end="0x00046F"/>
@@ -230,7 +230,7 @@
          <sdid value="0x004" />
          <sdid value="0x008" />
       </device>
-      <device family="HCS08" name="MC9S08AW16">
+      <device family="HCS08" name="MC9S08AW16" vddMin="2.7" vddMax="5.5" >
          <clock registerAddress="0x0048" type="S08ICGV4" />
          <memory type="ram">
             <memoryRange start="0x000070"  end="0x00046F"/>
@@ -241,7 +241,7 @@
          </memory>
          <sdid value="0x008" />
       </device>
-      <device family="HCS08" name="MC9S08AW32">
+      <device family="HCS08" name="MC9S08AW32" vddMin="2.7" vddMax="5.5" >
          <clock registerAddress="0x0048" type="S08ICGV4" />
          <memory type="ram">
             <memoryRange start="0x000070"  end="0x00086F"/>
@@ -252,7 +252,7 @@
          </memory>
          <sdid value="0x008" />
       </device>
-      <device family="HCS08" name="MC9S08AW48">
+      <device family="HCS08" name="MC9S08AW48" vddMin="2.7" vddMax="5.5" >
          <clock registerAddress="0x0048" type="S08ICGV4" />
          <memory type="ram">
             <memoryRange start="0x000070"  end="0x00086F"/>
@@ -263,7 +263,7 @@
          </memory>
          <sdid value="0x008" />
       </device>
-      <device family="HCS08" name="MC9S08AW60">
+      <device family="HCS08" name="MC9S08AW60" vddMin="2.7" vddMax="5.5" >
          <clock registerAddress="0x0048" type="S08ICGV4" />
          <memory type="ram">
             <memoryRange start="0x000070"  end="0x00086F"/>
@@ -275,7 +275,7 @@
          </memory>
          <sdid value="0x008" />
       </device>
-      <device family="HCS08" name="MC9S08DE32">
+      <device family="HCS08" name="MC9S08DE32" vddMin="2.7" vddMax="5.5" >
          <clock registerAddress="0x0048" type="S08MCGV1" />
          <memory type="ram">
             <memoryRange start="0x000080" end="0x00087F" />
@@ -292,7 +292,7 @@
          <note>EEPROM programming uses Page 0x00 and 0x01</note>
          <note>Flash ECC not supported</note>
       </device>
-      <device family="HCS08" name="MC9S08DE60">
+      <device family="HCS08" name="MC9S08DE60" vddMin="2.7" vddMax="5.5" >
          <clock registerAddress="0x0048" type="S08MCGV1" />
          <memory type="ram">
             <memoryRange start="0x000080" end="0x00107F" />
@@ -310,7 +310,7 @@
          <note>EEPROM programming uses Page 0x00 and 0x01</note>
          <note>Flash ECC not supported</note>
       </device>
-      <device family="HCS08" name="MC9S08DN16">
+      <device family="HCS08" name="MC9S08DN16" vddMin="2.7" vddMax="5.5" >
          <clock registerAddress="0x0048" type="S08MCGV1" />
          <memory type="ram">
             <memoryRange start="0x000080" end="0x00047F" />
@@ -329,7 +329,7 @@
          </flashScripts>
          <note>EEPROM programming uses Page 0x00 and 0x01</note>
       </device>
-      <device family="HCS08" name="MC9S08DN32">
+      <device family="HCS08" name="MC9S08DN32" vddMin="2.7" vddMax="5.5" >
          <clock registerAddress="0x0048" type="S08MCGV1" />
          <memory type="ram">
             <memoryRange start="0x000080"  end="0x00067F"/>
@@ -348,7 +348,7 @@
          </flashScripts>
          <note>EEPROM programming uses Page 0x00 and 0x01</note>
       </device>
-      <device family="HCS08" name="MC9S08DN48">
+      <device family="HCS08" name="MC9S08DN48" vddMin="2.7" vddMax="5.5" >
          <clock registerAddress="0x0048" type="S08MCGV1" />
          <memory type="ram">
             <memoryRange start="0x000080" end="0x00087F" />
@@ -367,7 +367,7 @@
          </flashScripts>
          <note>EEPROM programming uses Page 0x00 and 0x01</note>
       </device>
-      <device family="HCS08" name="MC9S08DN60">
+      <device family="HCS08" name="MC9S08DN60" vddMin="2.7" vddMax="5.5" >
          <clock registerAddress="0x0048" type="S08MCGV1" />
          <memory type="ram">
             <memoryRange start="0x000080" end="0x00087F" />
@@ -387,7 +387,7 @@
          </flashScripts>
          <note>EEPROM programming uses Page 0x00 and 0x01</note>
       </device>
-      <device family="HCS08" name="MC9S08DV16">
+      <device family="HCS08" name="MC9S08DV16" vddMin="2.7" vddMax="5.5" >
          <clock registerAddress="0x0048" type="S08MCGV1" />
          <memory type="ram">
             <memoryRange start="0x000080" end="0x00047F" />
@@ -398,7 +398,7 @@
          </memory>
          <sdid value="0x00E" />
       </device>
-      <device family="HCS08" name="MC9S08DV32">
+      <device family="HCS08" name="MC9S08DV32" vddMin="2.7" vddMax="5.5" >
          <clock registerAddress="0x0048" type="S08MCGV1" />
          <memory type="ram">
             <memoryRange start="0x000080" end="0x00087F" />
@@ -409,7 +409,7 @@
          </memory>
          <sdid value="0x00E" />
       </device>
-      <device family="HCS08" name="MC9S08DV48">
+      <device family="HCS08" name="MC9S08DV48" vddMin="2.7" vddMax="5.5" >
          <clock registerAddress="0x0048" type="S08MCGV1" />
          <memory type="ram">
             <memoryRange start="0x000080" end="0x00087F" />
@@ -420,7 +420,7 @@
          </memory>
          <sdid value="0x00E" />
       </device>
-      <device family="HCS08" name="MC9S08DV60">
+      <device family="HCS08" name="MC9S08DV60" vddMin="2.7" vddMax="5.5" >
          <clock registerAddress="0x0048" type="S08MCGV1" />
          <memory type="ram">
             <memoryRange start="0x000080" end="0x000C7F" />
@@ -432,7 +432,7 @@
          </memory>
          <sdid value="0x00E" />
       </device>
-      <device family="HCS08" name="MC9S08DV96">
+      <device family="HCS08" name="MC9S08DV96" vddMin="2.7" vddMax="5.5" >
          <clock registerAddress="0x0048" type="S08MCGV2" />
          <memory type="ram">
             <memoryRange start="0x000080" end="0x00107F" />
@@ -451,7 +451,7 @@
          </memory>
          <sdid value="0x019" />
       </device>
-      <device family="HCS08" name="MC9S08DV128">
+      <device family="HCS08" name="MC9S08DV128" vddMin="2.7" vddMax="5.5" >
          <clock registerAddress="0x0048" type="S08MCGV2" />
          <memory type="ram">
             <memoryRange start="0x000080" end="0x0017FF" />
@@ -472,7 +472,7 @@
          </memory>
          <sdid value="0x019" />
       </device>
-      <device family="HCS08" name="MC9S08DZ16">
+      <device family="HCS08" name="MC9S08DZ16" vddMin="2.7" vddMax="5.5" >
          <clock registerAddress="0x0048" type="S08MCGV1" />
          <memory type="ram">
             <memoryRange start="0x000080" end="0x00047F" />
@@ -491,7 +491,7 @@
          </flashScripts>
          <note>EEPROM programming uses Page 0x00 and 0x01</note>
       </device>
-      <device family="HCS08" name="MC9S08DZ32">
+      <device family="HCS08" name="MC9S08DZ32" vddMin="2.7" vddMax="5.5" >
          <clock registerAddress="0x0048" type="S08MCGV1" />
          <memory type="ram">
             <memoryRange start="0x000080" end="0x00087F" />
@@ -510,7 +510,7 @@
          </flashScripts>
          <note>EEPROM programming uses Page 0x00 and 0x01</note>
       </device>
-      <device family="HCS08" name="MC9S08DZ48">
+      <device family="HCS08" name="MC9S08DZ48" vddMin="2.7" vddMax="5.5" >
          <clock registerAddress="0x0048" type="S08MCGV1" />
          <memory type="ram">
             <memoryRange start="0x000080" end="0x000C7F" />
@@ -529,7 +529,7 @@
          </flashScripts>
          <note>EEPROM programming uses Page 0x00 and 0x01</note>
       </device>
-      <device family="HCS08" name="MC9S08DZ60">
+      <device family="HCS08" name="MC9S08DZ60" vddMin="2.7" vddMax="5.5" >
          <clock registerAddress="0x0048" type="S08MCGV1" />
          <memory type="ram">
             <memoryRange start="0x000080" end="0x00107F" />
@@ -549,7 +549,7 @@
          </flashScripts>
          <note>EEPROM programming uses Page 0x00 and 0x01</note>
       </device>
-      <device family="HCS08" name="MC9S08DZ96">
+      <device family="HCS08" name="MC9S08DZ96" vddMin="2.7" vddMax="5.5" >
          <clock registerAddress="0x0048" type="S08MCGV2" />
          <memory type="ram">
             <memoryRange start="0x000080" end="0x0017FF" />
@@ -576,7 +576,7 @@
          </flashScripts>
          <note>EEPROM programming uses Page 0x00 and 0x01</note>
       </device>
-      <device family="HCS08" name="MC9S08DZ128">
+      <device family="HCS08" name="MC9S08DZ128" vddMin="2.7" vddMax="5.5" >
          <clock registerAddress="0x0048" type="S08MCGV2" />
          <memory type="ram">
             <memoryRange start="0x000080" end="0x0017FF" />
@@ -605,7 +605,7 @@
          </flashScripts>
          <note>EEPROM programming uses Page 0x00 and 0x01</note>
       </device>
-      <device family="HCS08" name="MC9S08EL16">
+      <device family="HCS08" name="MC9S08EL16" vddMin="2.7" vddMax="5.5" >
          <clock registerAddress="0x0048" type="S08ICSV2" />
          <memory type="ram">
             <memoryRange start="0x000080" end="0x00047F" />
@@ -624,7 +624,7 @@
          </flashScripts>
          <note>EEPROM programming uses Page 0x00 and 0x01</note>
       </device>
-      <device family="HCS08" name="MC9S08EL32">
+      <device family="HCS08" name="MC9S08EL32" vddMin="2.7" vddMax="5.5" >
          <clock registerAddress="0x0048" type="S08ICSV2" />
          <memory type="ram">
             <memoryRange start="0x000080" end="0x00047F" />
@@ -644,7 +644,7 @@
          </flashScripts>
          <note>EEPROM programming uses Page 0x00 and 0x01</note>
       </device>
-      <device family="HCS08" name="MC9S08EN16">
+      <device family="HCS08" name="MC9S08EN16" vddMin="2.7" vddMax="5.5" >
          <clock registerAddress="0x0048" type="S08MCGV1" />
          <memory type="ram">
             <memoryRange start="0x000080" end="0x00027F" />
@@ -655,7 +655,7 @@
          </memory>
          <sdid value="0x00E" />
       </device>
-      <device family="HCS08" name="MC9S08EN32">
+      <device family="HCS08" name="MC9S08EN32" vddMin="2.7" vddMax="5.5" >
          <clock registerAddress="0x0048" type="S08MCGV1" />
          <memory type="ram">
             <memoryRange start="0x000080" end="0x00047F" />
@@ -677,7 +677,7 @@
          </memory>
          <sdid value="0x029" />
       </device>
-      <device family="HCS08" name="MC9S08FL16">
+      <device family="HCS08" name="MC9S08FL16" vddMin="4.5" vddMax="5.5" >
          <clock registerAddress="0x1858" type="S08ICSV3" />
          <memory type="ram">
             <memoryRange start="0x000040" end="0x00043F" />
@@ -688,7 +688,7 @@
          </memory>
          <sdid value="0x029" />
       </device>
-      <device family="HCS08" name="MC9S08GB32">
+      <device family="HCS08" name="MC9S08GB32" vddMin="2.08" vddMax="3.6" >
          <clock registerAddress="0x0048" type="S08ICGV1" />
          <memory type="ram">
             <memoryRange start="0x000080" end="0x00087F" />
@@ -699,7 +699,7 @@
          </memory>
          <sdid value="0x002" />
       </device>
-      <device family="HCS08" name="MC9S08GB32A">
+      <device family="HCS08" name="MC9S08GB32A" vddMin="2.08" vddMax="3.6" >
          <clock registerAddress="0x0048" type="S08ICGV2" />
          <memory type="ram">
             <memoryRange start="0x000080" end="0x00087F" />
@@ -710,7 +710,7 @@
          </memory>
          <sdid value="0x002" />
       </device>
-      <device family="HCS08" name="MC9S08GB60">
+      <device family="HCS08" name="MC9S08GB60" vddMin="2.08" vddMax="3.6" >
          <clock registerAddress="0x0048" type="S08ICGV1" />
          <memory type="ram">
             <memoryRange start="0x000080" end="0x00107F" />
@@ -722,7 +722,7 @@
          </memory>
          <sdid value="0x002" />
       </device>
-      <device family="HCS08" name="MC9S08GB60A">
+      <device family="HCS08" name="MC9S08GB60A" vddMin="2.08" vddMax="3.6" >
          <clock registerAddress="0x0048" type="S08ICGV2" />
          <memory type="ram">
             <memoryRange start="0x000080" end="0x00107F" />
@@ -734,7 +734,7 @@
          </memory>
          <sdid value="0x002" />
       </device>
-      <device family="HCS08" name="MC9S08GT8A">
+      <device family="HCS08" name="MC9S08GT8A" vddMin="2.08" vddMax="3.6" >
          <clock registerAddress="0x0048" type="S08ICGV4" />
          <memory type="ram">
             <memoryRange start="0x000080" end="0x00047F" />
@@ -745,7 +745,7 @@
          </memory>
          <sdid value="0x00D" />
       </device>
-      <device family="HCS08" name="MC9S08GT16">
+      <device family="HCS08" name="MC9S08GT16" vddMin="2.08" vddMax="3.6" >
          <clock registerAddress="0x0048" type="S08ICGV1" />
          <memory type="ram">
             <memoryRange start="0x000080" end="0x00047F" />
@@ -756,7 +756,7 @@
          </memory>
          <sdid value="0x002" />
       </device>
-      <device family="HCS08" name="MC9S08GT16A">
+      <device family="HCS08" name="MC9S08GT16A" vddMin="2.08" vddMax="3.6" >
          <clock registerAddress="0x0048" type="S08ICGV4" />
          <memory type="ram">
             <memoryRange start="0x000080" end="0x00087F" />
@@ -767,7 +767,7 @@
          </memory>
          <sdid value="0x00D" />
       </device>
-      <device family="HCS08" name="MC9S08GT32">
+      <device family="HCS08" name="MC9S08GT32" vddMin="2.08" vddMax="3.6" >
          <clock registerAddress="0x0048" type="S08ICGV1" />
          <memory type="ram">
             <memoryRange start="0x000080" end="0x00087F" />
@@ -778,7 +778,7 @@
          </memory>
          <sdid value="0x002" />
       </device>
-      <device family="HCS08" name="MC9S08GT32A">
+      <device family="HCS08" name="MC9S08GT32A" vddMin="2.08" vddMax="3.6" >
          <clock registerAddress="0x0048" type="S08ICGV2" />
          <memory type="ram">
             <memoryRange start="0x000080" end="0x00087F" />
@@ -789,7 +789,7 @@
          </memory>
          <sdid value="0x002" />
       </device>
-      <device family="HCS08" name="MC9S08GT60">
+      <device family="HCS08" name="MC9S08GT60" vddMin="2.08" vddMax="3.6" >
          <clock registerAddress="0x0048" type="S08ICGV1" />
          <memory type="ram">
             <memoryRange start="0x000080" end="0x00107F" />
@@ -801,7 +801,7 @@
          </memory>
          <sdid value="0x002" />
       </device>
-      <device family="HCS08" name="MC9S08GT60A">
+      <device family="HCS08" name="MC9S08GT60A" vddMin="2.08" vddMax="3.6" >
          <clock registerAddress="0x0048" type="S08ICGV2" />
          <memory type="ram">
             <memoryRange start="0x000080" end="0x00107F" />
@@ -813,7 +813,7 @@
          </memory>
          <sdid value="0x002" />
       </device>
-      <device family="HCS08" name="MC9S08GW32">
+      <device family="HCS08" name="MC9S08GW32" vddMin="1.8" vddMax="3.6" >
          <clock registerAddress="0x183C" type="S08ICSV3" />
          <memory type="ram">
             <memoryRange start="0x0000C0"  end="0x0008BF"/>
@@ -828,7 +828,7 @@
          <sdid value="0x02E" />
          <note>S08ICSV4 Clock module appears to be the same as S08ICSV3</note>
       </device>
-      <device family="HCS08" name="MC9S08GW64">
+      <device family="HCS08" name="MC9S08GW64" vddMin="1.8" vddMax="3.6" >
          <clock registerAddress="0x183C" type="S08ICSV3" />
          <memory type="ram">
             <memoryRange start="0x0000C0"  end="0x00107F"/>
@@ -847,7 +847,7 @@
          <sdid value="0x02E" />
          <note>S08ICSV4 Clock module appears to be the same as S08ICSV3</note>
       </device>
-      <device family="HCS08" name="MC9S08JE64">
+      <device family="HCS08" name="MC9S08JE64" vddMin="1.8" vddMax="3.6" >
          <clock registerAddress="0x0038" type="S08MCGV3" />
          <memory type="ram">
             <memoryRange start="0x0000B0" end="0x0017FF" />
@@ -866,7 +866,7 @@
          <flashProgramRef ref="HCS08-alt-load-flash-program" />
          <note>Some Flash hidden by RAM and registers</note>
       </device>
-      <device family="HCS08" name="MC9S08JE128">
+      <device family="HCS08" name="MC9S08JE128" vddMin="1.8" vddMax="3.6" >
          <clock registerAddress="0x0038" type="S08MCGV3" />
          <memory type="ram">
             <memoryRange start="0x0000B0" end="0x0017FF" />
@@ -888,7 +888,7 @@
          <flashProgramRef ref="HCS08-alt-load-flash-program" />
          <note>Some Flash hidden by RAM and registers</note>
       </device>
-      <device family="HCS08" name="MC9S08JM8">
+      <device family="HCS08" name="MC9S08JM8" vddMin="2.7" vddMax="5.5" >
          <clock registerAddress="0x0048" type="S08MCGV1" />
          <memory type="ram">
             <memoryRange start="0x0000B0" end="0x0004AF" />
@@ -900,7 +900,7 @@
          <sdid value="0x01E" />
           <flashProgramRef ref="HCS08-alt-load-flash-program" />
      </device>
-      <device family="HCS08" name="MC9S08JM16">
+      <device family="HCS08" name="MC9S08JM16" vddMin="2.7" vddMax="5.5" >
          <clock registerAddress="0x0048" type="S08MCGV1" />
          <memory type="ram">
             <memoryRange start="0x0000B0" end="0x0004AF" />
@@ -912,7 +912,7 @@
          <sdid value="0x01E" />
          <flashProgramRef ref="HCS08-alt-load-flash-program" />
       </device>
-      <device family="HCS08" name="MC9S08JM32">
+      <device family="HCS08" name="MC9S08JM32" vddMin="2.7" vddMax="5.5" >
          <clock registerAddress="0x0048" type="S08MCGV1" />
          <memory type="ram">
             <memoryRange start="0x0000B0" end="0x0008AF" />
@@ -924,7 +924,7 @@
          <sdid value="0x016" />
          <flashProgramRef ref="HCS08-alt-load-flash-program" />
       </device>
-      <device family="HCS08" name="MC9S08JM60">
+      <device family="HCS08" name="MC9S08JM60" vddMin="2.7" vddMax="5.5" >
          <clock registerAddress="0x0048" type="S08MCGV1" />
          <memory type="ram">
             <memoryRange start="0x0000B0" end="0x0010AF" />
@@ -937,7 +937,7 @@
          <sdid value="0x016" />
          <flashProgramRef ref="HCS08-alt-load-flash-program" />
       </device>
-      <device family="HCS08" name="MC9S08JS8">
+      <device family="HCS08" name="MC9S08JS8" vddMin="2.7" vddMax="5.5" >
          <clock registerAddress="0x0040" type="S08MCGV1" />
          <memory type="ram">
             <memoryRange start="0x000080" end="0x00027F" />
@@ -948,10 +948,10 @@
          </memory>
          <sdid value="0x024" />
       </device>
-      <device family="HCS08" name="MC9S08JS8L" alias="MC9S08JS8">
+      <device family="HCS08" name="MC9S08JS8L" alias="MC9S08JS8" vddMin="2.7" vddMax="5.5" >
          <sdid value="0x024"  mask="0x0FFF"/>
       </device>
-      <device family="HCS08" name="MC9S08JS16">
+      <device family="HCS08" name="MC9S08JS16" vddMin="2.7" vddMax="5.5" >
          <clock registerAddress="0x0040" type="S08MCGV1" />
          <memory type="ram">
             <memoryRange start="0x000080" end="0x00027F" />
@@ -962,10 +962,10 @@
          </memory>
          <sdid value="0x024" />
       </device>
-      <device family="HCS08" name="MC9S08JS16L" alias="MC9S08JS16">
+      <device family="HCS08" name="MC9S08JS16L" alias="MC9S08JS16" vddMin="2.7" vddMax="5.5" >
          <sdid value="0x024"  mask="0x0FFF"/>
       </device>
-      <device family="HCS08" name="MC9S08LC36">
+      <device family="HCS08" name="MC9S08LC36" vddMin="1.8" vddMax="3.6" >
          <clock registerAddress="0x0038" type="S08ICGV4" />
          <memory type="ram">
             <memoryRange start="0x000060" end="0x000A5F" />
@@ -978,7 +978,7 @@
          <sdid value="0x00C" />
          <note>Flash is treated as a single array</note>
       </device>
-      <device family="HCS08" name="MC9S08LC60">
+      <device family="HCS08" name="MC9S08LC60" vddMin="1.8" vddMax="3.6" >
          <clock registerAddress="0x0038" type="S08ICGV4" />
          <memory type="ram">
             <memoryRange start="0x000060" end="0x00105F" />
@@ -991,7 +991,7 @@
          <sdid value="0x00C" />
          <note>Flash is treated as a single array</note>
       </device>
-      <device family="HCS08" name="MC9S08LG16">
+      <device family="HCS08" name="MC9S08LG16" vddMin="2.7" vddMax="5.5" >
          <clock registerAddress="0x1860" type="S08ICSV3" />
          <memory type="ram">
             <memoryRange start="0x000060" end="0x00081F" />
@@ -1003,7 +1003,7 @@
          <sdid value="0x02A" />
          <note>Flash is treated as a single array</note>
       </device>
-      <device family="HCS08" name="MC9S08LG32">
+      <device family="HCS08" name="MC9S08LG32" vddMin="2.7" vddMax="5.5" >
          <clock registerAddress="0x1860" type="S08ICSV3" />
          <memory type="ram">
             <memoryRange start="0x000060" end="0x00081F" />
@@ -1015,7 +1015,7 @@
          <sdid value="0x02A" />
          <note>Flash is treated as a single array</note>
       </device>
-      <device family="HCS08" name="MC9S08LH36">
+      <device family="HCS08" name="MC9S08LH36" vddMin="1.8" vddMax="3.6" >
          <clock registerAddress="0x0038" type="S08ICSV3" />
          <memory type="ram">
             <memoryRange start="0x0060" end="0x0FFF" />
@@ -1030,7 +1030,7 @@
          </memory>
          <sdid value="0x026" />
       </device>
-      <device family="HCS08" name="MC9S08LH64">
+      <device family="HCS08" name="MC9S08LH64" vddMin="1.8" vddMax="3.6" >
          <clock registerAddress="0x0038" type="S08ICSV3" />
          <memory type="ram">
             <memoryRange start="0x0060" end="0x0FFF" />
@@ -1048,7 +1048,7 @@
          </memory>
          <sdid value="0x026" />
       </device>
-      <device family="HCS08" name="MC9S08LL8">
+      <device family="HCS08" name="MC9S08LL8" vddMin="1.8" vddMax="3.6" >
          <clock registerAddress="0x0038" type="S08ICSV3" />
          <memory type="ram">
             <memoryRange start="0x000060" end="0x00087F" />
@@ -1059,7 +1059,7 @@
          </memory>
          <sdid value="0x021" />
       </device>
-      <device family="HCS08" name="MC9S08LL16">
+      <device family="HCS08" name="MC9S08LL16" vddMin="1.8" vddMax="3.6" >
          <clock registerAddress="0x0038" type="S08ICSV3" />
          <memory type="ram">
             <memoryRange start="0x000060" end="0x00087F" />
@@ -1070,7 +1070,7 @@
          </memory>
          <sdid value="0x021" />
       </device>
-      <device family="HCS08" name="MC9S08LL36">
+      <device family="HCS08" name="MC9S08LL36" vddMin="1.8" vddMax="3.6" >
          <clock registerAddress="0x0038" type="S08ICSV3" />
          <memory type="ram">
             <memoryRange start="0x0060" end="0x0FFF" />
@@ -1085,7 +1085,7 @@
          </memory>
          <sdid value="0x026" />
       </device>
-      <device family="HCS08" name="MC9S08LL64">
+      <device family="HCS08" name="MC9S08LL64" vddMin="1.8" vddMax="3.6" >
          <clock registerAddress="0x0038" type="S08ICSV3" />
          <memory type="ram">
             <memoryRange start="0x0060" end="0x0FFF" />
@@ -1103,7 +1103,7 @@
          </memory>
          <sdid value="0x026" />
       </device>
-      <device family="HCS08" name="MC9S08MM32">
+      <device family="HCS08" name="MC9S08MM32" vddMin="1.8" vddMax="3.6" >
          <clock registerAddress="0x0038" type="S08MCGV3" />
          <memory type="ram">
             <memoryRange start="0x0000B0" end="0x0010AF" />
@@ -1118,7 +1118,7 @@
          <sdid value="0x02E" />
          <flashProgramRef ref="HCS08-alt-load-flash-program" />
       </device>
-      <device family="HCS08" name="MC9S08MM32A">
+      <device family="HCS08" name="MC9S08MM32A" vddMin="1.8" vddMax="3.6" >
          <clock registerAddress="0x0038" type="S08MCGV3" />
          <memory type="ram">
             <memoryRange start="0x0000B0" end="0x0008AF" />
@@ -1133,7 +1133,7 @@
          <sdid value="0x02E" />
          <flashProgramRef ref="HCS08-alt-load-flash-program" />
       </device>
-      <device family="HCS08" name="MC9S08MM64">
+      <device family="HCS08" name="MC9S08MM64" vddMin="1.8" vddMax="3.6" >
          <clock registerAddress="0x0038" type="S08MCGV3" />
          <memory type="ram">
             <memoryRange start="0x0000B0" end="0x0017FF" />
@@ -1151,7 +1151,7 @@
          <sdid value="0x02E" />
          <flashProgramRef ref="HCS08-alt-load-flash-program" />
       </device>
-      <device family="HCS08" name="MC9S08MM128">
+      <device family="HCS08" name="MC9S08MM128" vddMin="1.8" vddMax="3.6" >
          <clock registerAddress="0x0038" type="S08MCGV3" />
          <memory type="ram">
             <memoryRange start="0x0000B0" end="0x0017FF" />
@@ -1172,7 +1172,7 @@
          <sdid value="0x02E" />
          <flashProgramRef ref="HCS08-alt-load-flash-program" />
       </device>
-      <device family="HCS08" name="MC9S08MP12">
+      <device family="HCS08" name="MC9S08MP12" vddMin="2.7" vddMax="5.5" >
          <clock registerAddress="0x003C" type="S08ICSV3" />
          <memory type="ram">
             <memoryRange start="0x000090" end="0x00028F" />
@@ -1184,7 +1184,7 @@
          <sdid value="0x027" />
          <flashProgramRef ref="HCS08-alt-load-flash-program" />
       </device>
-      <device family="HCS08" name="MC9S08MP16">
+      <device family="HCS08" name="MC9S08MP16" vddMin="2.7" vddMax="5.5" >
          <clock registerAddress="0x003C" type="S08ICSV3" />
          <memory type="ram">
             <memoryRange start="0x000090"  end="0x00048F"/>
@@ -1196,7 +1196,7 @@
          <sdid value="0x027" />
          <flashProgramRef ref="HCS08-alt-load-flash-program" />
       </device>
-      <device family="HCS08Plus" name="MC9S08PA2">
+      <device family="HCS08Plus" name="MC9S08PA2" vddMin="2.7" vddMax="5.5" >
          <clock registerAddress="0x3038" type="S08ICSV4" />
          <memory type="ram">
             <memoryRange start="0x0040" end="0x023F" />
@@ -1218,7 +1218,7 @@
             <tclScriptRef ref="HCS08-PTxx-flash-scripts" />
          </flashScripts>
       </device>
-      <device family="HCS08Plus" name="MC9S08PA4">
+      <device family="HCS08Plus" name="MC9S08PA4" vddMin="2.7" vddMax="5.5" >
          <clock registerAddress="0x3038" type="S08ICSV4" />
          <memory type="ram">
             <memoryRange start="0x0040" end="0x023F" />
@@ -1240,7 +1240,7 @@
             <tclScriptRef ref="HCS08-PTxx-flash-scripts" />
          </flashScripts>
       </device>
-      <device family="HCS08Plus" name="MC9S08PA8">
+      <device family="HCS08Plus" name="MC9S08PA8" vddMin="2.7" vddMax="5.5" >
          <clock registerAddress="0x3038" type="S08ICSV4" />
          <memory type="ram">
             <memoryRange start="0x0040" end="0x083F" />
@@ -1261,7 +1261,7 @@
          </flashScripts>
          <flashProgramRef ref="HCS08-PTxx-flash-program" />
       </device>
-      <device family="HCS08Plus" name="MC9S08PA16">
+      <device family="HCS08Plus" name="MC9S08PA16" vddMin="2.7" vddMax="5.5" >
          <clock registerAddress="0x3038" type="S08ICSV4" />
          <memory type="ram">
             <memoryRange start="0x0040" end="0x083F" />
@@ -1282,7 +1282,7 @@
          </flashScripts>
          <flashProgramRef ref="HCS08-PTxx-flash-program" />
       </device>
-      <device family="HCS08Plus" name="MC9S08PA32">
+      <device family="HCS08Plus" name="MC9S08PA32" vddMin="2.7" vddMax="5.5" >
          <clock registerAddress="0x3038" type="S08ICSV4" />
          <memory type="ram">
             <memoryRange start="0x0040" end="0x103F" />
@@ -1303,7 +1303,7 @@
          </flashScripts>
          <flashProgramRef ref="HCS08-PTxx-flash-program" />
       </device>
-      <device family="HCS08Plus" name="MC9S08PA60">
+      <device family="HCS08Plus" name="MC9S08PA60" vddMin="2.7" vddMax="5.5" >
          <clock registerAddress="0x3038" type="S08ICSV4" />
          <memory type="ram">
             <memoryRange start="0x0040" end="0x103F" />
@@ -1349,7 +1349,7 @@
       <device family="HCS08Plus" name="MC9S08PL60" alias="MC9S08PA60">
          <sdid value="0x0040"  mask="0x0FFF"/>
       </device>
-      <device family="HCS08" name="MC9S08QA2">
+      <device family="HCS08" name="MC9S08QA2" vddMin="1.8" vddMax="3.6" >
          <clock registerAddress="0x0048" type="S08ICSV1" />
          <memory type="ram">
             <memoryRange start="0x000060" end="0x0000FF" />
@@ -1361,7 +1361,7 @@
          <sdid value="0x009" />
          <flashProgramRef ref="HCS08-small-flash-program" />
       </device>
-      <device family="HCS08" name="MC9S08QA4">
+      <device family="HCS08" name="MC9S08QA4" vddMin="1.8" vddMax="3.6" >
          <clock registerAddress="0x0038" type="S08ICSV1" />
          <memory type="ram">
             <memoryRange start="0x000060" end="0x00015F" />
@@ -1372,7 +1372,7 @@
          </memory>
          <sdid value="0x009" />
       </device>
-      <device family="HCS08" name="MC9S08QB4">
+      <device family="HCS08" name="MC9S08QB4" vddMin="1.8" vddMax="3.6" >
          <clock registerAddress="0x0038" type="S08ICSV3" />
          <memory type="ram">
             <memoryRange start="0x000060" end="0x00015F" />
@@ -1383,7 +1383,7 @@
          </memory>
          <sdid value="0x023" />
       </device>
-      <device family="HCS08" name="MC9S08QB8">
+      <device family="HCS08" name="MC9S08QB8" vddMin="1.8" vddMax="3.6" >
          <clock registerAddress="0x0038" type="S08ICSV3" />
          <memory type="ram">
             <memoryRange start="0x000060" end="0x00025F" />
@@ -1394,7 +1394,7 @@
          </memory>
          <sdid value="0x023" />
       </device>
-      <device family="HCS08" name="MC9S08QD2">
+      <device family="HCS08" name="MC9S08QD2" vddMin="2.7" vddMax="5.5" >
          <clock registerAddress="0x0038" type="S08ICSV1" />
          <memory type="ram">
             <memoryRange start="0x000080" end="0x0000FF" />
@@ -1406,7 +1406,7 @@
          <sdid value="0x011" />
          <flashProgramRef ref="HCS08-small-flash-program" />
       </device>
-      <device family="HCS08" name="S9S08QD2" alias="MC9S08QD2">
+      <device family="HCS08" name="S9S08QD2" alias="MC9S08QD2" vddMin="2.7" vddMax="5.5" >
          <sdid value="0x011"  mask="0x0FFF"/>
       </device>
       <device family="HCS08" name="MC9S08QD4">
@@ -1420,7 +1420,7 @@
          </memory>
          <sdid value="0x011" />
       </device>
-      <device family="HCS08" name="S9S08QD4" alias="MC9S08QD4">
+      <device family="HCS08" name="S9S08QD4" alias="MC9S08QD4" vddMin="2.7" vddMax="5.5" >
          <sdid value="0x011"  mask="0x0FFF"/>
       </device>
       <device family="HCS08" name="MC9S08QE4">
@@ -1434,7 +1434,7 @@
          </memory>
          <sdid value="0x01C" />
       </device>
-      <device family="HCS08" name="MC9S08QE8">
+      <device family="HCS08" name="MC9S08QE8" vddMin="2.0" vddMax="3.6" >
          <clock registerAddress="0x0038" type="S08ICSV3" />
          <memory type="ram">
             <memoryRange start="0x000060" end="0x00025F" />
@@ -1445,7 +1445,7 @@
          </memory>
          <sdid value="0x01C" />
       </device>
-      <device family="HCS08" name="MC9S08QE16">
+      <device family="HCS08" name="MC9S08QE16" vddMin="2.0" vddMax="3.6" >
          <clock registerAddress="0x0038" type="S08ICSV3" />
          <memory type="ram">
             <memoryRange start="0x000080" end="0x00047F" />
@@ -1456,7 +1456,7 @@
          </memory>
          <sdid value="0x01F" />
       </device>
-      <device family="HCS08" name="MC9S08QE32">
+      <device family="HCS08" name="MC9S08QE32" vddMin="2.0" vddMax="3.6" >
          <clock registerAddress="0x0038" type="S08ICSV3" />
          <memory type="ram">
             <memoryRange start="0x000080" end="0x00087F" />
@@ -1467,7 +1467,7 @@
          </memory>
          <sdid value="0x01F" />
       </device>
-      <device family="HCS08" name="MC9S08QE64">
+      <device family="HCS08" name="MC9S08QE64" vddMin="2.0" vddMax="3.6" >
          <clock registerAddress="0x0038" type="S08ICSV3" />
          <memory type="ram">
             <memoryRange start="0x000080" end="0x00107F" />
@@ -1484,7 +1484,7 @@
          </memory>
          <sdid value="0x015" />
       </device>
-      <device family="HCS08" name="MC9S08QE96">
+      <device family="HCS08" name="MC9S08QE96" vddMin="2.0" vddMax="3.6" >
          <clock registerAddress="0x0038" type="S08ICSV3" />
          <memory type="ram">
             <memoryRange start="0x000080" end="0x0017FF" />
@@ -1503,7 +1503,7 @@
          </memory>
          <sdid value="0x015" />
       </device>
-      <device family="HCS08" name="MC9S08QE128">
+      <device family="HCS08" name="MC9S08QE128" vddMin="2.0" vddMax="3.6" >
          <clock registerAddress="0x0038" type="S08ICSV3" />
          <memory type="ram">
             <memoryRange start="0x000080" end="0x0017FF" />
@@ -1524,7 +1524,7 @@
          </memory>
          <sdid value="0x015" />
       </device>
-      <device family="HCS08" name="MC9S08QG4">
+      <device family="HCS08" name="MC9S08QG4" vddMin="1.8" vddMax="3.6" >
          <clock registerAddress="0x0038" type="S08ICSV1" />
          <memory type="ram">
             <memoryRange start="0x000060" end="0x00015F" />
@@ -1535,7 +1535,7 @@
          </memory>
          <sdid value="0x009" />
       </device>
-      <device family="HCS08" name="MC9S08QG8">
+      <device family="HCS08" name="MC9S08QG8" vddMin="1.8" vddMax="3.6" >
          <clock registerAddress="0x0038" type="S08ICSV1" />
          <memory type="ram">
             <memoryRange start="0x000060" end="0x00025F" />
@@ -1546,7 +1546,7 @@
          </memory>
          <sdid value="0x009" />
       </device>
-      <device family="HCS08" name="MC9S08RC8">
+      <device family="HCS08" name="MC9S08RC8" vddMin="1.8" vddMax="3.6" >
          <clock type="External" />
          <memory type="ram">
             <memoryRange start="0x000040" end="0x00043F" />
@@ -1557,7 +1557,7 @@
          </memory>
          <sdid value="0x003" />
       </device>
-      <device family="HCS08" name="MC9S08RC16">
+      <device family="HCS08" name="MC9S08RC16" vddMin="1.8" vddMax="3.6" >
          <clock type="External" />
          <memory type="ram">
             <memoryRange start="0x000040" end="0x00043F" />
@@ -1568,7 +1568,7 @@
          </memory>
          <sdid value="0x003" />
       </device>
-      <device family="HCS08" name="MC9S08RC32">
+      <device family="HCS08" name="MC9S08RC32" vddMin="1.8" vddMax="3.6" >
          <clock type="External" />
          <memory type="ram">
             <memoryRange start="0x000046" end="0x000845" />
@@ -1579,7 +1579,7 @@
          </memory>
          <sdid value="0x004" />
       </device>
-      <device family="HCS08" name="MC9S08RC60">
+      <device family="HCS08" name="MC9S08RC60" vddMin="1.8" vddMax="3.6" >
          <clock type="External" />
          <memory type="ram">
             <memoryRange start="0x000046" end="0x000845" />
@@ -1591,7 +1591,7 @@
          </memory>
          <sdid value="0x004" />
       </device>
-      <device family="HCS08" name="MC9S08RD8">
+      <device family="HCS08" name="MC9S08RD8" vddMin="1.8" vddMax="3.6" >
          <clock type="External" />
          <memory type="ram">
             <memoryRange start="0x000040" end="0x00043F" />
@@ -1602,7 +1602,7 @@
          </memory>
          <sdid value="0x003" />
       </device>
-      <device family="HCS08" name="MC9S08RD16">
+      <device family="HCS08" name="MC9S08RD16" vddMin="1.8" vddMax="3.6" >
          <clock type="External" />
          <memory type="ram">
             <memoryRange start="0x000040" end="0x00043F" />
@@ -1613,7 +1613,7 @@
          </memory>
          <sdid value="0x003" />
       </device>
-      <device family="HCS08" name="MC9S08RD32">
+      <device family="HCS08" name="MC9S08RD32" vddMin="1.8" vddMax="3.6" >
          <clock type="External" />
          <memory type="ram">
             <memoryRange start="0x000046" end="0x000845" />
@@ -1624,7 +1624,7 @@
          </memory>
          <sdid value="0x004" />
       </device>
-      <device family="HCS08" name="MC9S08RD60">
+      <device family="HCS08" name="MC9S08RD60" vddMin="1.8" vddMax="3.6" >
          <clock type="External" />
          <memory type="ram">
             <memoryRange start="0x000046" end="0x000845" />
@@ -1636,7 +1636,7 @@
          </memory>
          <sdid value="0x004" />
       </device>
-      <device family="HCS08" name="MC9S08RE8">
+      <device family="HCS08" name="MC9S08RE8" vddMin="1.8" vddMax="3.6" >
          <clock type="External" />
          <memory type="ram">
             <memoryRange start="0x000040" end="0x00043F" />
@@ -1647,7 +1647,7 @@
          </memory>
          <sdid value="0x003" />
       </device>
-      <device family="HCS08" name="MC9S08RE16">
+      <device family="HCS08" name="MC9S08RE16" vddMin="1.8" vddMax="3.6" >
          <clock type="External" />
          <memory type="ram">
             <memoryRange start="0x000040" end="0x00043F" />
@@ -1658,7 +1658,7 @@
          </memory>
          <sdid value="0x003" />
       </device>
-      <device family="HCS08" name="MC9S08RE32">
+      <device family="HCS08" name="MC9S08RE32" vddMin="1.8" vddMax="3.6" >
          <clock type="External" />
          <memory type="ram">
             <memoryRange start="0x000046" end="0x000845" />
@@ -1669,7 +1669,7 @@
          </memory>
          <sdid value="0x004" />
       </device>
-      <device family="HCS08" name="MC9S08RE60">
+      <device family="HCS08" name="MC9S08RE60" vddMin="1.8" vddMax="3.6" >
          <clock type="External" />
          <memory type="ram">
             <memoryRange start="0x000046" end="0x000845" />
@@ -1681,7 +1681,7 @@
          </memory>
          <sdid value="0x004" />
       </device>
-      <device family="HCS08" name="MC9S08RG32">
+      <device family="HCS08" name="MC9S08RG32" vddMin="1.8" vddMax="3.6" >
          <clock type="External" />
          <memory type="ram">
             <memoryRange start="0x000046" end="0x000845" />
@@ -1692,7 +1692,7 @@
          </memory>
          <sdid value="0x004" />
       </device>
-      <device family="HCS08" name="MC9S08RG60">
+      <device family="HCS08" name="MC9S08RG60" vddMin="1.8" vddMax="3.6" >
          <clock type="External" />
          <memory type="ram">
             <memoryRange start="0x000046" end="0x000845" />
@@ -1704,7 +1704,7 @@
          </memory>
          <sdid value="0x004" />
       </device>
-      <device family="HCS08" name="MC9S08SC4">
+      <device family="HCS08" name="MC9S08SC4" vddMin="4.5" vddMax="5.5" >
          <clock registerAddress="0x0048" type="S08ICSV3" />
          <memory type="ram">
             <memoryRange start="0x000080" end="0x00017F" />
@@ -1715,7 +1715,7 @@
          </memory>
          <sdid value="0x02B" />
       </device>
-      <device family="HCS08" name="MC9S08SE4">
+      <device family="HCS08" name="MC9S08SE4" vddMin="2.7" vddMax="5.5" >
          <clock registerAddress="0x0048" type="S08ICSV3" />
          <memory type="ram">
             <memoryRange start="0x000080" end="0x00017F" />
@@ -1726,7 +1726,7 @@
          </memory>
          <sdid value="0x025" />
       </device>
-      <device family="HCS08" name="MC9S08SE8">
+      <device family="HCS08" name="MC9S08SE8" vddMin="2.7" vddMax="5.5" >
          <clock registerAddress="0x0048" type="S08ICSV3" />
          <memory type="ram">
             <memoryRange start="0x000080" end="0x00027F" />
@@ -1737,7 +1737,7 @@
          </memory>
          <sdid value="0x025" />
       </device>
-      <device family="HCS08" name="MC9S08SF4">
+      <device family="HCS08" name="MC9S08SF4" vddMin="2.7" vddMax="5.5" >
          <clock registerAddress="0x0018" type="S08ICSV3" />
          <memory type="ram">
             <memoryRange start="0x000080" end="0x0000FF" />
@@ -1749,7 +1749,7 @@
          <sdid value="0x020" />
          <flashProgramRef ref="HCS08-small-flash-program" />
       </device>
-      <device family="HCS08" name="MC9S08SG4">
+      <device family="HCS08" name="MC9S08SG4" vddMin="2.7" vddMax="5.5" >
          <clock registerAddress="0x0048" type="S08ICSV2" />
          <memory type="ram">
             <memoryRange start="0x000080" end="0x00017F" />
@@ -1760,7 +1760,7 @@
          </memory>
          <sdid value="0x014" />
       </device>
-      <device family="HCS08" name="MC9S08SG8">
+      <device family="HCS08" name="MC9S08SG8" vddMin="2.7" vddMax="5.5" >
          <clock registerAddress="0x0048" type="S08ICSV2" />
          <memory type="ram">
             <memoryRange start="0x000080" end="0x00027F" />
@@ -1771,7 +1771,7 @@
          </memory>
          <sdid value="0x014" />
       </device>
-      <device family="HCS08" name="MC9S08SG16">
+      <device family="HCS08" name="MC9S08SG16" vddMin="2.7" vddMax="5.5" >
          <clock registerAddress="0x0048" type="S08ICSV2" />
          <memory type="ram">
             <memoryRange start="0x000080" end="0x00047F" />
@@ -1782,7 +1782,7 @@
          </memory>
          <sdid value="0x01A" />
       </device>
-      <device family="HCS08" name="MC9S08SG32">
+      <device family="HCS08" name="MC9S08SG32" vddMin="2.7" vddMax="5.5" >
          <clock registerAddress="0x0048" type="S08ICSV2" />
          <memory type="ram">
             <memoryRange start="0x000080" end="0x00047F" />
@@ -1793,7 +1793,7 @@
          </memory>
          <sdid value="0x01A" />
       </device>
-      <device family="HCS08" name="MC9S08SH4">
+      <device family="HCS08" name="MC9S08SH4" vddMin="2.7" vddMax="5.5" >
          <clock registerAddress="0x0048" type="S08ICSV2" />
          <memory type="ram">
             <memoryRange start="0x000080" end="0x00017F" />
@@ -1804,7 +1804,7 @@
          </memory>
          <sdid value="0x014" />
       </device>
-      <device family="HCS08" name="MC9S08SH8">
+      <device family="HCS08" name="MC9S08SH8" vddMin="2.7" vddMax="5.5" >
          <clock registerAddress="0x0048" type="S08ICSV2" />
          <memory type="ram">
             <memoryRange start="0x000080" end="0x00027F" />
@@ -1815,7 +1815,7 @@
          </memory>
          <sdid value="0x014" />
       </device>
-      <device family="HCS08" name="MC9S08SH16">
+      <device family="HCS08" name="MC9S08SH16" vddMin="2.7" vddMax="5.5" >
          <clock registerAddress="0x0048" type="S08ICSV2" />
          <memory type="ram">
             <memoryRange start="0x000080" end="0x00047F" />
@@ -1826,7 +1826,7 @@
          </memory>
          <sdid value="0x01A" />
       </device>
-      <device family="HCS08" name="MC9S08SH32">
+      <device family="HCS08" name="MC9S08SH32" vddMin="2.7" vddMax="5.5" >
          <clock registerAddress="0x0048" type="S08ICSV2" />
          <memory type="ram">
             <memoryRange start="0x000080" end="0x00047F" />
@@ -1837,7 +1837,7 @@
          </memory>
          <sdid value="0x01A" />
       </device>
-      <device family="HCS08" name="MC9S08SL8">
+      <device family="HCS08" name="MC9S08SL8" vddMin="2.7" vddMax="5.5" >
          <clock registerAddress="0x0048" type="S08ICSV2" />
          <memory type="ram">
             <memoryRange start="0x000080" end="0x00027F" />
@@ -1853,7 +1853,7 @@
          <sdid value="0x013" />
          <note>EEPROM programming uses Page 0x00 and 0x01</note>
       </device>
-      <device family="HCS08" name="MC9S08SL16">
+      <device family="HCS08" name="MC9S08SL16" vddMin="2.7" vddMax="5.5" >
          <clock registerAddress="0x0048" type="S08ICSV2" />
          <memory type="ram">
             <memoryRange start="0x000080" end="0x00027F" />
@@ -1869,7 +1869,7 @@
          <sdid value="0x013" />
          <note>EEPROM programming uses Page 0x00 and 0x01</note>
       </device>
-      <device family="HCS08" name="MC9S08SV8">
+      <device family="HCS08" name="MC9S08SV8" vddMin="2.7" vddMax="5.5" >
          <clock registerAddress="0x1858" type="S08ICSV3" />
          <memory type="ram">
             <memoryRange start="0x000040" end="0x00033F" />
@@ -1880,7 +1880,7 @@
          </memory>
          <sdid value="0x029" />
       </device>
-      <device family="HCS08" name="MC9S08SV16">
+      <device family="HCS08" name="MC9S08SV16" vddMin="2.7" vddMax="5.5" >
          <clock registerAddress="0x1858" type="S08ICSV3" />
          <memory type="ram">
             <memoryRange start="0x000040" end="0x00043F" />
@@ -1891,7 +1891,7 @@
          </memory>
          <sdid value="0x029" />
       </device>
-      <device family="HCS08" name="MPXY8300">
+      <device family="HCS08" name="MPXY8300" vddMin="2.3" vddMax="3.6" >
          <clock type="External" />
          <memory type="ram">
             <memoryRange start="0x000060" end="0x00025F" />
@@ -1902,7 +1902,7 @@
          </memory>
          <sdid value="0x010" />
       </device>
-      <device family="HCS08" name="MC13211">
+      <device family="HCS08" name="MC13211" vddMin="1.8" vddMax="3.6" >
          <clock registerAddress="0x0048" type="S08ICGV1" />
          <memory type="ram">
             <memoryRange start="0x000080" end="0x00047F" />
@@ -1913,7 +1913,7 @@
          </memory>
          <sdid value="0x002" />
       </device>
-      <device family="HCS08" name="MC13212">
+      <device family="HCS08" name="MC13212" vddMin="1.8" vddMax="3.6" >
          <clock registerAddress="0x0048" type="S08ICGV1" />
          <memory type="ram">
             <memoryRange start="0x000080" end="0x00087F" />
@@ -1925,7 +1925,7 @@
          <sdid value="0x002" />
 
       </device>
-      <device family="HCS08" name="MC13213">
+      <device family="HCS08" name="MC13213" vddMin="1.8" vddMax="3.6" >
          <clock registerAddress="0x0048" type="S08ICGV1" />
          <memory type="ram">
             <memoryRange start="0x000080" end="0x00107F" />
@@ -1937,7 +1937,7 @@
          </memory>
          <sdid value="0x002" />
       </device>
-      <device family="HCS08" name="MC13233C">
+      <device family="HCS08" name="MC13233C" vddMin="1.8" vddMax="3.6" >
          <memory type="ram">
             <memoryRange start="0x000080" end="0x00147F" />
          </memory>

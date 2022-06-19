@@ -66,6 +66,8 @@ private:
    DualString   tag_resetMethods;
    DualString   tag_resetMethodsRef;
 
+   DualString   attr_targetVddMin;
+   DualString   attr_targetVddMax;
    DualString   attr_name;
    DualString   attr_isDefault;
    DualString   attr_alias;

@@ -60,7 +60,7 @@ UsbdmDialogueSkeleton::UsbdmDialogueSkeleton( wxWindow* parent, wxWindowID id, c
 	wxString targetVddControlChoices[] = { wxT("Off"), wxT("3.3V   "), wxT("5V") };
 	int targetVddControlNChoices = sizeof( targetVddControlChoices ) / sizeof( wxString );
 	targetVddControl = new wxRadioBox( sbSizer5->GetStaticBox(), wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, targetVddControlNChoices, targetVddControlChoices, 1, wxRA_SPECIFY_ROWS );
-	targetVddControl->SetSelection( 0 );
+	targetVddControl->SetSelection( 1 );
 	targetVddControl->SetToolTip( wxT("Off\t- Target Vdd is externally supplied\n3.3V\t- BDM supplies target Vdd @3.3V\n5V\t- BDM supplies target Vdd @5V") );
 
 	sbSizer5->Add( targetVddControl, 0, wxEXPAND|wxBOTTOM|wxRIGHT|wxLEFT, 5 );
@@ -185,7 +185,7 @@ UsbdmDialogueSkeleton::UsbdmDialogueSkeleton( wxWindow* parent, wxWindowID id, c
 	fInterfacePanel->SetSizer( bSizer3 );
 	fInterfacePanel->Layout();
 	bSizer3->Fit( fInterfacePanel );
-	fNotebook->AddPage( fInterfacePanel, wxT("Interface"), false );
+	fNotebook->AddPage( fInterfacePanel, wxT("Interface"), true );
 	fTargetPanel = new wxPanel( fNotebook, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL );
 	wxBoxSizer* bSizer4;
 	bSizer4 = new wxBoxSizer( wxVERTICAL );
@@ -451,7 +451,7 @@ UsbdmDialogueSkeleton::UsbdmDialogueSkeleton( wxWindow* parent, wxWindowID id, c
 	fTargetPanel->SetSizer( bSizer4 );
 	fTargetPanel->Layout();
 	bSizer4->Fit( fTargetPanel );
-	fNotebook->AddPage( fTargetPanel, wxT("Target"), true );
+	fNotebook->AddPage( fTargetPanel, wxT("Target"), false );
 	fAdvancedPanel = new wxPanel( fNotebook, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL );
 	wxBoxSizer* bSizer1;
 	bSizer1 = new wxBoxSizer( wxVERTICAL );

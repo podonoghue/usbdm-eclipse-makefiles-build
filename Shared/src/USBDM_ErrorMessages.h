@@ -107,6 +107,7 @@ typedef enum  {
  BDM_RC_MASS_ERASE_DISABLED                    = 60,    //!< ARM Device has mass erase disabled
  BDM_RC_FLASH_NOT_READY                        = 61,    //!< ARM - Flash failed to become ready
  BDM_RC_VDD_INCORRECT_LEVEL                    = 62,    //!< Target Vdd not at expected level (only applicable when internally controlled)
+ BDM_RC_VDD_WRONG_FOR_TARGET                   = 63,    //!< Target Vdd not at acceptable level for target device
 
  // Used by programmer
  PROGRAMMING_RC_OK                             = 0,     //!<  0 Success

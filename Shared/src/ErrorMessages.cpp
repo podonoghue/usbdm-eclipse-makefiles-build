@@ -105,6 +105,7 @@ static const char *const errorMessages[] = {
    /** 60 */ "ARM Device has mass erase disabled",
    /** 61 */ "ARM Flash failed to become ready",
    /** 62 */ "Target Vdd not at expected level",
+   /** 63 */ "Target Vdd not correct for target device",
 };
 
 //! Error code returned by the various routines

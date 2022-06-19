@@ -430,6 +430,8 @@ DeviceXmlParser::DeviceXmlParser(TargetType_t targetType, DeviceDataBase *device
    tag_resetMethods("resetMethods"),
    tag_resetMethodsRef("resetMethodsRef"),
 
+   attr_targetVddMin("vddMin"),
+   attr_targetVddMax("vddMax"),
    attr_name("name"),
    attr_isDefault("isDefault"),
    attr_alias("alias"),
@@ -1996,6 +1998,11 @@ void DeviceXmlParser::parseDeviceXML(void) {
          device->setTargetName(currentDeviceName);
          if (deviceEl->hasAttribute(attr_hidden.asXMLString())) {
             device->setHidden();
+         }
+         if (deviceEl->hasAttribute(attr_targetVddMin.asXMLString())) {
+            DualString vddMin = deviceEl->getAttribute(attr_targetVddMin.asXMLString());
+            DualString vddMax = deviceEl->getAttribute(attr_targetVddMax.asXMLString());
+            device->setVoltageRange(std::stof(vddMin.asCString()), std::stof(vddMax.asCString()));
          }
          // Allow default devices without name - they are discarded
          if (isDefault) {

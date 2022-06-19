@@ -182,6 +182,8 @@ protected:
    USBDM_ErrorCode         verifyFlash(void);
    USBDM_ErrorCode         hcs12Check(void);
 
+   USBDM_ErrorCode         vddCheck(DeviceDataPtr device);
+
    // Advanced
    void                    populateEeepromControl();
    void                    populatePartitionControl();
