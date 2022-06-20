@@ -132,9 +132,6 @@ USBDM_ErrorCode GdbHandler_ARM::configureMDM_AP() {
 USBDM_ErrorCode GdbHandler_ARM::initialise() {
    LOGGING_F;
 
-   log.print("Disabling serial interface\n");
-   bdmInterface->enableSerialInterface(false);
-
    USBDM_ErrorCode rc = GdbHandlerCommon::initialise();
 
    // Ignore secured as may still be able to program device after mass-erase

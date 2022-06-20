@@ -336,8 +336,8 @@ private:
       QspiLoopDqs_External,
       QspiPhaseSelectDqs_None,
       QspiDqsClockPolarity_NonInverted,
-      qspiDelayTabSelectA(0),
-      qspiDelayTabSelectB(0)
+      qspiDelayTabSelect_A(0),
+      qspiDelayTabSelect_B(0)
    };
 
 public:

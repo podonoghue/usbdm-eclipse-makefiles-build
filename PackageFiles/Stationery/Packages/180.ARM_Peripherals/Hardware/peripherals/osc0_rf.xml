@@ -48,7 +48,6 @@
          units="Hz"
          description="Oscillator clock [OSCERCLK]"
          toolTip="Generated from osc_clock, available for peripherals"
-         value="8000000"  
          constant="true" />
 
    <validate

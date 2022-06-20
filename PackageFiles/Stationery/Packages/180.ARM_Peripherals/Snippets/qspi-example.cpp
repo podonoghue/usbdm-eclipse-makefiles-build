@@ -78,7 +78,7 @@ void testQspi() {
       }
    }
 
-   // Start again
+   // Start again with same seed
    srand(seed);
 
    console.writeln("\nVerifying");

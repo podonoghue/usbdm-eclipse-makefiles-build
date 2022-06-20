@@ -7,7 +7,7 @@
    <xi:include href="_default_instance.xml"/>
 
    <category name="OSC0 (Main Oscillator)" description="OSC External Reference Clock/Oscillator [OSCCLK]" >
-      <aliasOption key="/OSC_RF0/osc_input_freq" optional="true" constant="false" />
+      <aliasOption key="/OSC0/oscer_clock" />
    </category>
    
    <category name="Real Time Clock" description="RTC External Reference Clock/Oscillator 32k mode [ERCLK32K]">

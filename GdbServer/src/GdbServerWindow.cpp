@@ -567,6 +567,7 @@ GdbHandler::GdbMessageLevel GdbServerWindow::getLoggingLevel() {
              clientSocket->SetNotify(wxSOCKET_LOST_FLAG);
           }
           if (deferredOpen) {
+
              log.print("wxSOCKET_INPUT - Deferred Open\n");
              statusTextControl->AppendText(_("Deferred Open\n"));
 
@@ -581,6 +582,9 @@ GdbHandler::GdbMessageLevel GdbServerWindow::getLoggingLevel() {
                 dropConnection();
                 return;
              }
+             statusTextControl->AppendText(_("Disabling serial interface\n"));
+             log.print("Disabling serial interface\n");
+             bdmInterface->enableSerialInterface(false);
 
              gdbInOut = new GdbInOutWx(clientSocket, statusTextControl);
 

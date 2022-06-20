@@ -215,7 +215,7 @@
       </peripheral>
       <peripheral baseName="TRNG"     instance="0"        version="trng0_0x40029000">
          <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForRnga" />
-         <clock clockEnable="SIM->SCGC6 = SIM->SCGC6 | SIM_SCGC6_TRNG0_MASK;" clockDisable="SIM->SCGC6 = SIM->SCGC6 &amp; ~SIM_SCGC6_TRNG0_MASK;" />
+         <clock clockEnable="SIM->SCGC6 = SIM->SCGC6 | SIM_SCGC6_TRNG_MASK;" clockDisable="SIM->SCGC6 = SIM->SCGC6 &amp; ~SIM_SCGC6_TRNG_MASK;" />
          <irq num="TRNG0_IRQn" />
       </peripheral>
       <peripheral baseName="TSI"      instance="0"        version="tsi0_mkw41z4">

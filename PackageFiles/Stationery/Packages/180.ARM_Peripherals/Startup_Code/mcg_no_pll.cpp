@@ -135,6 +135,10 @@ ErrorCode Mcg::clockTransition(const McgInfo::ClockInfo &clockInfo) {
    // Set Fast Internal Clock divider (FCRDIV)
    mcg->SC = clockInfo.sc;
 
+   // Disable clock monitors while clocks change
+   mcg->C6 = mcg->C6&~MCG_C6_CME0_MASK;
+   mcg->C8 = 0;
+
    int transitionCount = 0;
    do {
       // Used to indicate that clock stabilisation wait is needed
@@ -209,7 +213,10 @@ ErrorCode Mcg::clockTransition(const McgInfo::ClockInfo &clockInfo) {
             mcg->C2 = clockInfo.c2|MCG_C2_LP(0);
 
             // Select FLL as MCG clock source
-            mcg->C6  = clockInfo.c6;
+            mcg->C6 = clockInfo.c6&~MCG_C6_CME0_MASK;
+
+            // Set FLL Parameters
+            mcg->C4 = (mcg->C4&(MCG_C4_FCTRIM_MASK|MCG_C4_SCFTRIM_MASK))|clockInfo.c4;
 
             // Wait for S_CLKST to indicating that MCGOUTCLK has switched to ERC
             // Wait for S_IREFST to indicate FLL Reference has switched to ERC
@@ -254,6 +261,10 @@ ErrorCode Mcg::clockTransition(const McgInfo::ClockInfo &clockInfo) {
 #endif
 
    SystemCoreClockUpdate();
+
+   // Enable clock monitors
+   mcg->C8 = clockInfo.c8;
+   mcg->C6 = clockInfo.c2;
 
    return E_NO_ERROR;
 }

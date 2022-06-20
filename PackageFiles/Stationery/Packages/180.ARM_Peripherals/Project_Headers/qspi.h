@@ -991,7 +991,7 @@ using QspiDelayTabSelectB = uint32_t;
  *
  * @return Tap selection suitable for use with QSPI_SOCCR
  */
-static constexpr QspiDelayTabSelectA qspiDelayTabSelectA(unsigned tapSelect) {
+static constexpr QspiDelayTabSelectA qspiDelayTabSelect_A(unsigned tapSelect) {
    return QSPI_SOCCR_DLYTAPSELA(tapSelect);
 }
 
@@ -1002,7 +1002,7 @@ static constexpr QspiDelayTabSelectA qspiDelayTabSelectA(unsigned tapSelect) {
  *
  * @return Tap selection suitable for use with QSPI_SOCCR
  */
-static constexpr QspiDelayTabSelectA qspiDelayTabSelectB(unsigned tapSelect) {
+static constexpr QspiDelayTabSelectA qspiDelayTabSelect_B(unsigned tapSelect) {
    return QSPI_SOCCR_DLYTAPSELB(tapSelect);
 }
 
@@ -1266,8 +1266,8 @@ struct QspiDqsSettings {
          QspiLoopDqs             qspiLoopDqs            = QspiLoopDqs_External,
          QspiPhaseSelectDqs      qspiPhaseSelectDqs     = QspiPhaseSelectDqs_None,
          QspiDqsClockPolarity    qspiDqsClockPolarity   = QspiDqsClockPolarity_NonInverted,
-         QspiDelayTabSelectA     qspiDelayTabSelectA    = qspiDelayTabSelectA(0),
-         QspiDelayTabSelectB     qspiDelayTabSelectB    = qspiDelayTabSelectB(0)
+         QspiDelayTabSelectA     qspiDelayTabSelectA    = qspiDelayTabSelect_A(0),
+         QspiDelayTabSelectB     qspiDelayTabSelectB    = qspiDelayTabSelect_B(0)
       ) :
       mcr(QspiDqs_Enable|qspiDQSLatency),
       soccr(qspiLoopDqs|qspiPhaseSelectDqs|qspiDqsClockPolarity|qspiDelayTabSelectA|qspiDelayTabSelectB) {
@@ -1489,8 +1489,8 @@ public:
       QspiLoopDqs             qspiLoopDqs            = QspiLoopDqs_External,
       QspiPhaseSelectDqs      qspiPhaseSelectDqs     = QspiPhaseSelectDqs_None,
       QspiDqsClockPolarity    qspiDqsClockPolarity   = QspiDqsClockPolarity_NonInverted,
-      QspiDelayTabSelectA     qspiDelayTabSelectA    = qspiDelayTabSelectA(0),
-      QspiDelayTabSelectB     qspiDelayTabSelectB    = qspiDelayTabSelectB(0)
+      QspiDelayTabSelectA     qspiDelayTabSelectA    = qspiDelayTabSelect_A(0),
+      QspiDelayTabSelectB     qspiDelayTabSelectB    = qspiDelayTabSelect_B(0)
    ) {
 
       uint32_t value;

@@ -99,17 +99,15 @@
    \t * @param[in] smcVeryLowPower        Allows VLPR, VLPW, and VLPS modes
    \t * @param[in] smcLowLeakageStop      Allows LLSx modes
    \t * @param[in] smcVeryLowLeakageStop  Allows VLLSx modes
-   \t * @param[in] smcHighSpeedRun        Allows HSRUN mode (if supported)
    \t *
    \t * @note This is a write-once-after-reset operation
    \t */
    \tstatic ErrorCode enablePowerModes(
    \t      SmcVeryLowPower         smcVeryLowPower,
    \t      SmcLowLeakageStop       smcLowLeakageStop       = SmcLowLeakageStop_Disabled,
-   \t      SmcVeryLowLeakageStop   smcVeryLowLeakageStop   = SmcVeryLowLeakageStop_Disabled,
-   \t      SmcHighSpeedRun         smcHighSpeedRun         = SmcHighSpeedRun_Disabled ) {
+   \t      SmcVeryLowLeakageStop   smcVeryLowLeakageStop   = SmcVeryLowLeakageStop_Disabled) {
    \t
-   \t   smc->PMPROT = smcVeryLowPower|smcLowLeakageStop|smcVeryLowLeakageStop|smcHighSpeedRun;
+   \t   smc->PMPROT = smcVeryLowPower|smcLowLeakageStop|smcVeryLowLeakageStop;
    \t   return E_NO_ERROR;
    \t}\n\n
    ]]></template>
@@ -122,15 +120,15 @@
    \t * @param[in] smcLowLeakageStopMode  Controls which LLS/VLLS sub-mode to enter if STOPM=LLS/VLLS
    \t * @param[in] smcPowerOnReset        Controls whether the POR detect circuit is enabled in VLLS0 mode
    \t * @param[in] smcPartialStopMode     Controls whether a Partial Stop mode is entered when STOPM=STOP
-   \t * @param[in] smcLpoInLowLeakage     Controls whether the 1 kHz LPO clock is enabled in LLS/VLLSx modes (if supported).
+   \t * @param[in] smcLowLeakageRam2      Control power to RAM partition 2 in LLS2/VLLS2 power mode
    \t */
    \tstatic void setStopOptions(
    \t      SmcLowLeakageStopMode   smcLowLeakageStopMode,
    \t      SmcPowerOnReset         smcPowerOnReset         = SmcPowerOnReset_Disabled,
    \t      SmcPartialStopMode      smcPartialStopMode      = SmcPartialStopMode_Normal,
-   \t      SmcLpoInLowLeakage      smcLpoInLowLeakage      = SmcLpoInLowLeakage_Disabled) {
+   \t      SmcLowLeakageRam2       smcLowLeakageRam2       = SmcLowLeakageRam2_Disabled) {
    \t
-   \t   smc->STOPCTRL = smcPartialStopMode|smcPowerOnReset|smcLowLeakageStopMode|smcLpoInLowLeakage;
+   \t   smc->STOPCTRL = smcPartialStopMode|smcPowerOnReset|smcLowLeakageStopMode|smcLowLeakageRam2;
    \t}\n\n
    ]]></template>
    
@@ -144,12 +142,14 @@
       #ifdef SMC_STOPCTRL_PSTOPO
       \t   SMC_STOPCTRL_PSTOPO($(smc_stopctrl_pstopo:0)) |  // Partial Stop Option (if present)
       #endif
+      #ifdef SMC_STOPCTRL_PORPO
       \t   SMC_STOPCTRL_PORPO($(smc_stopctrl_porpo:0)) |  // POR Power Option
+      #endif
       #ifdef SMC_STOPCTRL_LPOPO
-      \t   SMC_STOPCTRL_LPOPO($(smc_stopctrl_lpopo:0)) |  // POR Power Option (if present)
+      \t   SMC_STOPCTRL_LPOPO($(smc_stopctrl_lpopo:0)) |  // POR Power Option
       #endif
       #ifdef SMC_STOPCTRL_RAM2PO
-      \t   SMC_STOPCTRL_RAM2PO($(smc_stopctrl_ram2po:0)) |  // RAM2 Power Option (if present)
+      \t   SMC_STOPCTRL_RAM2PO($(smc_stopctrl_ram2po:0)) |  // RAM2 Power Option
       #endif
       \t   SMC_STOPCTRL_LLSM($(smc_stopctrl_llsm:0));   // LLS or VLLS Mode Control\n\n
    ]]></template>

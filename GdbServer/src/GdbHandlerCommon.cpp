@@ -84,8 +84,6 @@ USBDM_ErrorCode GdbHandlerCommon::initialise() {
    initBreakpointsDone = false;
    programmingDone     = false;
 
-   bdmInterface->enableSerialInterface(false);
-
    USBDM_ErrorCode rc = bdmInterface->connect();
    if (rc != BDM_RC_OK) {
       // Silent retry

@@ -11,10 +11,10 @@
  *      Author: podonoghue
  */
 #include "string.h"
-#include "derivative.h" /* include peripheral declarations */
+#include "derivative.h"
 #include "system.h"
 #include "stdbool.h"
-#include "hardware.h"
+#include "pin_mapping.h"
 #ifdef USBDM_RTC_IS_DEFINED
 #include "rtc.h"
 #endif
