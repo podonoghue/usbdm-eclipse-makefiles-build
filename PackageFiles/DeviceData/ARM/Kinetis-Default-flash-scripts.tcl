@@ -351,17 +351,17 @@ proc massEraseTargetKE { } {
       puts stderr "massEraseTarget{} - Waiting for Flash ready"
       set mdmApStatus [rcreg $::MDM_AP_Status]
       if [expr (($mdmApStatus & $::MDM_AP_ST_MASS_FLASH_RDY) != 0)] {
-         puts stderr "massEraseTarget{} - MDM_AP_ST_MASS_FLASH_RDY success"
+         puts stderr "massEraseTarget{} - MDM_AP_ST_MASS_FLASH_RDY asserted OK"
          break;
       }
       after 50
    }
    
-   puts stderr "massEraseTarget{} - Applying MDM_AP_C_DEBUG_REQUEST"
+   puts stderr "massEraseTarget{} - Asserting MDM_AP_C_DEBUG_REQUEST"
    wcreg $::MDM_AP_Control $::MDM_AP_C_DEBUG_REQUEST
    rcreg $::MDM_AP_Control
    
-   puts stderr "massEraseTarget{} - Applying MDM_AP_C_DEBUG_REQUEST|MDM_AP_C_MASS_ERASE"
+   puts stderr "massEraseTarget{} - Asserting MDM_AP_C_DEBUG_REQUEST|MDM_AP_C_MASS_ERASE"
    wcreg $::MDM_AP_Control [expr $::MDM_AP_C_DEBUG_REQUEST | $::MDM_AP_C_MASS_ERASE]
    rcreg $::MDM_AP_Control
    
