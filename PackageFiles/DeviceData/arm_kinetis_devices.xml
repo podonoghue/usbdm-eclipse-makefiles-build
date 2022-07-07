@@ -1294,6 +1294,15 @@ Test Devices:
 
 <!-- ===================================================================================== -->
 <!-- MKW41Z4 -->
+      <device name="MKW21Z256M4" family="CortexM0plus" subfamily="MKW41Z4">
+         <memoryRef ref="kinetis_M0_16K_48K_Ram" />
+         <memoryRef ref="FTFA_PFlash0_SEC_256K_2KS" />
+         <memoryRef ref="kinetisIO_MKL" />
+         <sdid value="0x21570000" mask="0xFFFF0000"/>
+         <tclScriptRef ref="Kinetis-MKLxx-Scripts" />
+         <flashProgramRef ref="Kinetis-FTFA-MKL-flash-program" />
+         <registerDescriptionRef ref="CortexM0-register-description" />
+      </device>
       <device name="MKW21Z512M4" family="CortexM0plus" subfamily="MKW41Z4">
          <memoryRef ref="kinetis_M0_32K_96K_Ram" />
          <memoryRef ref="FTFA_PFlash0_SEC_256K_2KS" />
@@ -1304,16 +1313,16 @@ Test Devices:
          <flashProgramRef ref="Kinetis-FTFA-MKL-flash-program" />
          <registerDescriptionRef ref="CortexM0-register-description" />
       </device>
-      <device name="MKW21Z256M4" family="CortexM0plus" subfamily="MKW41Z4">
+
+      <device name="MKW31Z256M4" family="CortexM0plus" subfamily="MKW41Z4">
          <memoryRef ref="kinetis_M0_16K_48K_Ram" />
          <memoryRef ref="FTFA_PFlash0_SEC_256K_2KS" />
          <memoryRef ref="kinetisIO_MKL" />
-         <sdid value="0x21570000" mask="0xFFFF0000"/>
+         <sdid value="0x31570000" mask="0xFFFF0000"/>
          <tclScriptRef ref="Kinetis-MKLxx-Scripts" />
          <flashProgramRef ref="Kinetis-FTFA-MKL-flash-program" />
          <registerDescriptionRef ref="CortexM0-register-description" />
       </device>
-
       <device name="MKW31Z512M4" family="CortexM0plus" subfamily="MKW41Z4">
          <memoryRef ref="kinetis_M0_32K_96K_Ram" />
          <memoryRef ref="FTFA_PFlash0_SEC_256K_2KS" />
@@ -1324,31 +1333,22 @@ Test Devices:
          <flashProgramRef ref="Kinetis-FTFA-MKL-flash-program" />
          <registerDescriptionRef ref="CortexM0-register-description" />
       </device>
-      <device name="MKW31Z256M4" family="CortexM0plus" subfamily="MKW41Z4">
+      
+      <device name="MKW41Z256M4" family="CortexM0plus" subfamily="MKW41Z4">
          <memoryRef ref="kinetis_M0_16K_48K_Ram" />
          <memoryRef ref="FTFA_PFlash0_SEC_256K_2KS" />
          <memoryRef ref="kinetisIO_MKL" />
-         <sdid value="0x31570000" mask="0xFFFF0000"/>
+         <sdid value="0x41570000" mask="0xFFFF0000"/>
          <tclScriptRef ref="Kinetis-MKLxx-Scripts" />
          <flashProgramRef ref="Kinetis-FTFA-MKL-flash-program" />
          <registerDescriptionRef ref="CortexM0-register-description" />
       </device>
-      
       <device name="MKW41Z512M4" family="CortexM0plus" subfamily="MKW41Z4">
          <memoryRef ref="kinetis_M0_32K_96K_Ram" />
          <memoryRef ref="FTFA_PFlash0_SEC_256K_2KS" />
          <memoryRef ref="FTFA_PFlash1_256K_2KS" />
          <memoryRef ref="kinetisIO_MKL" />
          <sdid value="0x41590000" mask="0xFFFF0000"/>
-         <tclScriptRef ref="Kinetis-MKLxx-Scripts" />
-         <flashProgramRef ref="Kinetis-FTFA-MKL-flash-program" />
-         <registerDescriptionRef ref="CortexM0-register-description" />
-      </device>
-      <device name="MKW41Z256M4" family="CortexM0plus" subfamily="MKW41Z4">
-         <memoryRef ref="kinetis_M0_16K_48K_Ram" />
-         <memoryRef ref="FTFA_PFlash0_SEC_256K_2KS" />
-         <memoryRef ref="kinetisIO_MKL" />
-         <sdid value="0x41570000" mask="0xFFFF0000"/>
          <tclScriptRef ref="Kinetis-MKLxx-Scripts" />
          <flashProgramRef ref="Kinetis-FTFA-MKL-flash-program" />
          <registerDescriptionRef ref="CortexM0-register-description" />
