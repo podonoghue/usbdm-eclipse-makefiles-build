@@ -71,8 +71,9 @@ SECTIONS
       /* Emit a Security field */
       . = __flash_start + 0x400;
       KEEP(*(.security_information))
-      KEEP(*(.FlashConfig))    /* KDS Flash Configuration Field (FCF) */
       ASSERT (. == __flash_start + 0x410, "No Freescale security information");
+      KEEP(*(.FlashConfig))    /* KDS Flash Configuration Field (FCF) */
+      KEEP(*(.freertos_information))
    } > flash
 
 /* Size of RAM vector table (if needed) */
@@ -192,6 +193,8 @@ M_VECTOR_RAM_SIZE = DEFINED(__ram_vector_table__) ? (__VECTOR_TABLE_END - __VECT
       *(vtable)
       *(.data*)
 
+      . = ALIGN(4);
+      KEEP(*(.ram_functions))
       . = ALIGN(4);
       /* All data end */
       __data_end__ = .;
