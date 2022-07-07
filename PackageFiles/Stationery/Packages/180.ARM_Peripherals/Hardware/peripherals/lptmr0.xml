@@ -214,6 +214,49 @@
       \t}\n\n
    ]]></template>
    
+   <template name="/LPTMR/declarations" namespace="all"  ><![CDATA[
+      \t/**
+      \t * Class representing LPTMR1
+      \t *
+      \t * <b>Example</b>
+      \t * @code
+      \t *
+      \t * // LPTMR callback
+      \t * void flash(void) {
+      \t *    RED_LED::toggle();
+      \t * }
+      \t *
+      \t * ...
+      \t *
+      \t * // Configure LPTMR in time counting mode
+      \t * $(_class)::configureTimeCountingMode(
+      \t *      LptmrResetOn_Compare,
+      \t *      LptmrInterrupt_Enabled,
+      \t *      LptmrClockSel_Lpoclk);
+      \t *
+      \t * // Set period of timer event
+      \t * $(_class)::setPeriod(5*seconds);
+      \t *
+      \t * // Set call-back
+      \t * $(_class)::setCallback(flash);
+      \t * @endcode
+      \t */
+      \tusing $(_class) = $(_base_class)Base_T<$(_class)Info>;
+      
+      \t/**
+      \t * MACRO defining the start of a interrupt handler for a LPTMR
+      \t * This will override the handler incorporated within the LPTMR class.
+      \t *
+      \t * @example
+      \t * LPTMR$(_instance)_HANDLER() {
+      \t *    console.writeln("PIT Channel $(_instance) Handler");
+      \t *    // Clear interrupt flag
+      \t *    lptmr->CSR = lptmr->CSR | LPTMR_CSR_TCF_MASK;
+      \t * }
+      \t */
+      \t#define LPTMR$(_instance)_HANDLER() template<> void $(_class)::irqHandler()\n\n
+   ]]></template>
+      
    <xi:include href="_clockOption.xml"/>
 
    <signals/>

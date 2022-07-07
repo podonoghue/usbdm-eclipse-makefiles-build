@@ -215,6 +215,13 @@
       \t   return 0;
       \t}\n\n
    ]]></template>
+   
+   <template name="/TSI/declarations" namespace="all"  ><![CDATA[
+   \t/**
+   \t * Class representing $(_name)
+   \t */
+   \ttypedef $(_base_class)Base_T<$(_class)Info> $(_class);\n
+   ]]></template>
 
    <projectActionList id="tsi_files">
       <copy source="Project_Headers/tsi-MK.h"     target="Project_Headers/tsi.h"        overwrite="true" derived="true" />

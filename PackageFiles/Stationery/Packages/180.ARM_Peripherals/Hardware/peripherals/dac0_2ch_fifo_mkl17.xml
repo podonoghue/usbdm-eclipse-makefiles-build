@@ -98,6 +98,13 @@
       \t   DAC_C2_DACBFUP($(dac_c2_dacbfup));   // DAC Buffer Upper Limit\n\n
    ]]></template>
    
+   <template name="/DAC/declarations" namespace="all"  ><![CDATA[
+   \t/**
+   \t * Class representing $(_name)
+   \t */
+   \tclass $(_class) : public $(_base_class)Base_T<$(_class)Info> {};\n
+   ]]></template>
+      
    <xi:include href="_clockOption.xml"/>
       
    <xi:include href="_irqOption.xml"/>         

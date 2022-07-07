@@ -96,6 +96,27 @@ Devices using this peripheral:
    \t   return SimInfo::getUart$(_instance)Clock();
    \t}\n\n
    ]]></template>
+   
+   <template name="/CONSOLE/Includes" namespace="all"  ><![CDATA[
+   #include "uart.h"\n
+   ]]></template>
+
+   <template name="/UART/declarations" namespace="all"  ><![CDATA[
+      \t/**
+      \t * Class representing $(_name) interface
+      \t *
+      \t * <b>Example</b>
+      \t * @code
+      \t *  // Instantiate interface
+      \t *  USBDM::$(_class) uart;
+      \t *
+      \t *  for(int i=0; i++;) {
+      \t *     uart.writeln("Hello world ", i);
+      \t *  }
+      \t *  @endcode
+      \t */
+      \ttypedef  $(/$(_name)/uartClass:$(_base_class)_T)<$(_class)Info> $(_class);\n\n
+   ]]></template>
 
    <signals/>
 </peripheralPage>

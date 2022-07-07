@@ -26,7 +26,6 @@
       toolTip="IRCLK48MCLK, USB_CLKIN, LPO" >
 
       <intOption name="system_usb_clkin_clock"  
-         constant="true" 
          origin="USB Clock In pin"
          units="Hz"
          description="Frequency of External USB Clock"
@@ -34,6 +33,7 @@
          value="48000000" />
 
       <intOption name="system_irc48m_clock" 
+         constant="true" 
          units="Hz"
          description="Frequency of Internal 48MHz Clock"
          toolTip="48 MHz Internal Oscillator [Trimmed against USB bus]"
@@ -81,8 +81,16 @@
    <indexedCategory name="ClockConfig."  dim="/SIM/numberOfClockSettings"
          description="Clock configuration" 
          toolTip="Clock configurations for different run modes"
-         value="ClockConfig_."  >
+         value="ClockConfig_." 
+         disabledValue="Disabled"  >
          
+         <binaryOption name="enableClockConfiguration."
+            description="Enable this clock settings"
+            toolTip="If disabled this clock setting will be removed from the generated code" >
+            <choice value="0" name="Disabled" />
+            <choice value="1" name="Enabled"  isDefault="true" />
+         </binaryOption>
+
       <choiceOption name="clock_mode." 
          description="Clock Mode"
          toolTip="Clock Modes\n
@@ -364,10 +372,13 @@
    ]]></template>
    
    <template name="ClockConfig" dim="/SIM/numberOfClockSettings" namespace="all" ><![CDATA[
-      \t$(ClockConfig.://-- missing name for configuration --),\n
+      #if $(enableClockConfiguration.)
+      \t$(ClockConfig.://-- missing name for configuration --),
+      #endif\n
    ]]></template>
    
    <template name="McgClockInfoEntries" dim="/SIM/numberOfClockSettings" namespace="all" ><![CDATA[
+      \t#if $(enableClockConfiguration.)
       \t   {  // $(ClockConfig.) ($(clock_mode.))
       \t      
       \t      //! SIM CLKDIV1 System Clock Divider Register 1
@@ -376,7 +387,7 @@
       \t      SIM_CLKDIV1_OUTDIV2($(/SIM/sim_clkdiv1_outdiv2.:0))|  // Bus clock
       \t      SIM_CLKDIV1_OUTDIV1($(/SIM/sim_clkdiv1_outdiv1.:0)),  // Core/system clock
               
-      \t#ifdef SIM_CLKDIV3_PLLFLLDIV
+      \t#if defined(SIM_CLKDIV3_PLLFLLDIV)
       \t      //! SIM CLKDIV3 System Clock Divider Register 3
       \t      $(/SIM/sim_clkdiv3_pllfll.:0),
       \t#endif
@@ -443,6 +454,7 @@
       \t      //! Miscellaneous Control Register - Excluding HIRCLPEN
       \t      MCG_MC_HIRCEN($(mcg_mc_hircen.)) |    // HIRCEN   Internal Reference Clock Enable
       \t      MCG_MC_LIRC_DIV2($(mcg_mc_lirc_div2.)), // LIRC_DIV2 Internal Reference Divider 2
-      \t   },\n
+      \t   },
+      \t#endif\n
    ]]></template>
 </peripheralPage>

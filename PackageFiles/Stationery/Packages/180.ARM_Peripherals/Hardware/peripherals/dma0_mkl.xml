@@ -29,6 +29,17 @@
       class="net.sourceforge.usbdm.deviceEditor.validators.PeripheralValidator">
    </validate>
 
+   <template name="/DMA/declarations" namespace="all"  ><![CDATA[
+   \t/**
+   \t * Class representing DMAMUX$(_instance)
+   \t */
+   \ttypedef $(_base_class)Mux_T<Dmamux$(_instance)Info, Dma$(_instance)Info::NumChannels> DmaMux$(_instance);
+   \t/**
+   \t * Class representing $(_name)
+   \t */
+   \ttypedef $(_base_class)Base_T<$(_class)Info> $(_class);\n
+   ]]></template>
+      
    <template><![CDATA[
       \t//! Number of DMA channels implemented
       \tstatic constexpr unsigned NumChannels = $(NumChannels);

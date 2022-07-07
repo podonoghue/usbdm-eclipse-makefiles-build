@@ -132,6 +132,90 @@
    ]]></template>
    -->
    
+   <template name="/GPIO/declarations" namespace="all"  ><![CDATA[
+   \t/**
+   \t * @brief Convenience template for $(_class). See @ref Gpio_T
+   \t *
+   \t * <b>Usage</b>
+   \t * @code
+   \t * using namespace USBDM;
+   \t *
+   \t * // Instantiate for bit 3 of $(_class)
+   \t * using $(_class)3 = $(_class)<3, ActiveHigh>;
+   \t *
+   \t * // Set as digital output
+   \t * $(_class)3::setOutput();
+   \t *
+   \t * // Set pin high
+   \t * $(_class)3::set();
+   \t *
+   \t * // Set pin low
+   \t * $(_class)3::clear();
+   \t *
+   \t * // Toggle pin
+   \t * $(_class)3::toggle();
+   \t *
+   \t * // Set pin to boolean value
+   \t * $(_class)3::write(true);
+   \t *
+   \t * // Set pin to boolean value
+   \t * $(_class)3::write(false);
+   \t *
+   \t * // Set as digital input
+   \t * $(_class)3::setInput();
+   \t *
+   \t * // Read pin as boolean value
+   \t * bool x = $(_class)3::read();
+   \t * @endcode
+   \t *
+   \t * @tparam bitNum        Bit number in the port
+   \t * @tparam polarity      Polarity of pin. Either ActiveHigh or ActiveLow
+   \t */
+   \ttemplate<unsigned bitNum, Polarity polarity=ActiveHigh> class $(_class) :
+   \t      public Gpio_T<Port$(_instance)Info.clockInfo, Port$(_instance)Info.portAddress, Port$(_instance)Info.irqNum, Port$(_instance)Info.gpioAddress, GPIO_DEFAULT_PCR, Port$(_instance)Info.irqLevel, bitNum, polarity> {};
+   \ttypedef PcrBase_T<Port$(_instance)Info.portAddress, Port$(_instance)Info.irqNum, Port$(_instance)Info.irqLevel> Port$(_instance);
+
+   \t/**
+   \t * @brief Convenience template for $(_class) fields. See @ref GpioField_T
+   \t *
+   \t * <b>Usage</b>
+   \t * @code
+   \t * using namespace USBDM;
+   \t *
+   \t * // Instantiate for bit 6 down to 3 of $(_class)
+   \t * using $(_class)6_3 = $(_class)Field<6,3>;
+   \t *
+   \t * // Set as digital output
+   \t * $(_class)6_3::setOutput();
+   \t *
+   \t * // Write value to field
+   \t * $(_class)6_3::write(0x53);
+   \t *
+   \t * // Clear all of field
+   \t * $(_class)6_3::bitClear();
+   \t *
+   \t * // Clear lower two bits of field
+   \t * $(_class)6_3::bitClear(0x3);
+   \t *
+   \t * // Set lower two bits of field
+   \t * $(_class)6_3::bitSet(0x3);
+   \t *
+   \t * // Set as digital input
+   \t * $(_class)6_3::setInput();
+   \t *
+   \t * // Read pin as int value
+   \t * int x = $(_class)6_3::read();
+   \t * @endcode
+   \t *
+   \t * @tparam left          Bit number of leftmost bit in port (inclusive)
+   \t * @tparam right         Bit number of rightmost bit in port (inclusive)
+   \t * @tparam polarity      Polarity of all pins. Either ActiveHigh, ActiveLow or a bitmask (0=>bit active-high, 1=>bit active-low)
+   \t */
+   \ttemplate<unsigned left, unsigned right, uint32_t polarity=ActiveHigh>
+   \tclass $(_class)Field : public GpioField_T<Port$(_instance)Info.portAddress, Port$(_instance)Info.clockInfo, Port$(_instance)Info.irqNum, Port$(_instance)Info.gpioAddress, GPIO_DEFAULT_PCR, Port$(_instance)Info.irqLevel, left, right, polarity> {};\n\n
+   ]]></template>
+      
+   
    <signals/>
    
 </peripheralPage>

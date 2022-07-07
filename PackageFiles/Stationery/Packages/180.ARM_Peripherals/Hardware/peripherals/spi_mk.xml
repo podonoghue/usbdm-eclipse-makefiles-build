@@ -49,6 +49,24 @@
       <copy source="Snippets/spi-2-config-example.cpp"   target="Snippets/spi-2-config-example.cpp" overwrite="true"  derived="true" />
    </projectActionList>
    
+   <template name="/SPI/declarations" namespace="all"  ><![CDATA[
+   \t/**
+   \t * Class representing $(_name) interface
+   \t * <b>Example</b>
+   \t * @code
+   \t * USBDM::Spi *spi = new USBDM::$(_class);
+   \t *
+   \t * uint8_t txData[] = {1,2,3};
+   \t * uint8_t rxData[10];
+   \t * spi->txRxBytes(sizeof(txData), txData, rxData);
+   \t * @endcode
+   \t */
+   \tclass $(_class) : public $(_base_class)Base_T<$(_class)Info> {
+   \tpublic:
+   \t$(/$(_name)/InputMapping:   // No user mappings found)
+   \t};\n
+   ]]></template>
+      
    <xi:include href="_irqOption.xml"/>
    
    <xi:include href="_clockOption.xml"/>

@@ -1,0 +1,164 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE peripheralPage SYSTEM "_menu.dtd" >
+<!-- tsi0_mkl.xml -->
+<fragment xmlns:xi="http://www.w3.org/2001/XInclude">
+
+   <xi:include href="_default_instance.xml"/>
+
+   <template><![CDATA[
+      \t//! Base value for PCR (excluding MUX value)
+      \tstatic constexpr uint32_t defaultPcrValue  = 0;\n\n
+   ]]></template>
+   
+   <xi:include href="_mapPinsOption.xml"/>
+   
+   <binaryOption
+      name="tsi_gencs_cursw"
+      description="Electrode/Reference OSC swap"
+      toolTip="This bit specifies if the current sources of electrode oscillator and reference oscillator are swapped" >
+      <choice value="0" name="Not swapped" isDefault="true" />
+      <choice value="1" name="Swapped" />
+   </binaryOption>
+   <binaryOption
+      name="tsi_gencs_stm"
+      description="Scan Trigger Mode"
+      toolTip="Selects between software and hardware triggers" >
+      <choice value="0" name="Software trigger scan" isDefault="true" />
+      <choice value="1" name="Hardware trigger scan" />
+   </binaryOption>
+   <binaryOption
+      name="tsi_gencs_stpe"
+      description="TSI STOP Enable"
+      toolTip="Controls operation while in Low Power Modes (STOP, VLPS, LLS and VLLS{3,2,1})" >
+      <choice value="0" name="Disabled in low power" isDefault="true" />
+      <choice value="1" name="Enabled in low power" />
+   </binaryOption>
+   <binaryOption name="tsi_gencs_tsiien"
+      description="Touch Sensing Input Interrupt Module Enable" >
+      <choice value="0" name="Interrupt disabled" isDefault="true" />
+      <choice value="1" name="Interrupt enabled" />
+   </binaryOption>
+   <intOption name="tsi_gencs_nscn" 
+      description="Consecutive Scan number" 
+      toolTip="Number of Consecutive Scans Per Electrode"
+      value="8" 
+      min="1" max="32" />
+   <choiceOption name="tsi_gencs_ps"
+      description="Electrode Oscillator Prescaler" >
+      <choice value="0" name="Divide by 1" />
+      <choice value="1" name="Divide by 2" />
+      <choice value="2" name="Divide by 4" />
+      <choice value="3" name="Divide by 8" isDefault="true" />
+      <choice value="4" name="Divide by 16" />
+      <choice value="5" name="Divide by 32" />
+      <choice value="6" name="Divide by 64" />
+      <choice value="7" name="Divide by 128" />
+   </choiceOption>
+
+   <choiceOption name="tsi_gencs_extchrg" 
+      description="External Oscillator Charge Current select" 
+      toolTip="These bits indicate the electrode oscillator charge and discharge current value" >
+      <choice value="0" name="500 nA" />
+      <choice value="1" name="1 uA" />
+      <choice value="2" name="2 uA" />
+      <choice value="3" name="4 uA" />
+      <choice value="4" name="8 uA" isDefault="true" />
+      <choice value="5" name="16 uA" />
+      <choice value="6" name="32 uA" />
+      <choice value="7" name="64 uA" />
+   </choiceOption>
+   <aliasOption name="tsi_gencs_dvolt" constant="false" />
+   <choiceOption name="tsi_gencs_refchrg" 
+      description="Reference Oscillator Charge Current select" 
+      toolTip="These bits indicate the reference oscillator charge and discharge current value" >
+      <choice value="0" name="500 nA" />
+      <choice value="1" name="1 uA" />
+      <choice value="2" name="2 uA" />
+      <choice value="3" name="4 uA" />
+      <choice value="4" name="8 uA" isDefault="true" />
+      <choice value="5" name="16 uA" />
+      <choice value="6" name="32 uA" />
+      <choice value="7" name="64 uA" />
+   </choiceOption>
+
+   <choiceOption name="tsi_gencs_mode" 
+      description="TSI analog modes setup and status bits"
+      toolTip="Set up TSI analog modes\n
+      Mode[3..2] == 00 => Capacitive sensing mode\n
+      Mode[3..2] != 00 => Noise detection mode\n
+      When reading this field will return the analog status.">
+      <choice value="0b0000" name="Capacitive sensing (non-noise detection)" />
+      <choice value="0b0100" name="Single threshold noise detection without frequency limitation" />
+      <choice value="0b1000" name="Single threshold noise detection with frequency limitation" />
+      <choice value="0b1100" name="Automatic noise detection" />
+   </choiceOption>
+   <binaryOption
+      name="tsi_gencs_esor"
+      description="EOS or OOR Interrupt select"
+      toolTip="Selects between End-of-Scan or Out-of-Range Interrupt" >
+      <choice value="0" name="Out-of-Range" />
+      <choice value="1" name="End-of-Scan" isDefault="true"  />
+   </binaryOption>
+   
+   <template><![CDATA[
+      \tstatic constexpr uint32_t tsi_gencs =
+      \t   TSI_GENCS_CURSW($(tsi_gencs_cursw))      |  // Electrode/Reference OSC swap
+      \t   TSI_GENCS_STM($(tsi_gencs_stm))        |  // Scan Trigger Mode
+      \t   TSI_GENCS_STPE($(tsi_gencs_stpe))       |  // TSI STOP Enable
+      \t   TSI_GENCS_TSIIEN($(tsi_gencs_tsiien))     |  // Touch Sensing Input Interrupt Module Enable
+      \t   TSI_GENCS_NSCN($(tsi_gencs_nscn)-1)     |  // Consecutive Scan number
+      \t   TSI_GENCS_PS($(tsi_gencs_ps))         |  // Electrode Oscillator Prescaler
+      \t   TSI_GENCS_EXTCHRG($(tsi_gencs_extchrg))    |  // External Oscillator Charge Current select
+      \t   TSI_GENCS_DVOLT($(tsi_gencs_dvolt))      |  // Oscillator voltage rails
+      \t   TSI_GENCS_REFCHRG($(tsi_gencs_refchrg))    |  // Reference Oscillator Charge Current select
+      \t   TSI_GENCS_MODE($(tsi_gencs_mode))  |  // TSI analogue modes setup and status bits
+      \t   TSI_GENCS_ESOR($(tsi_gencs_esor));         // EOS or OOR Interrupt select\n\n
+   ]]></template>
+
+   <intOption name="tsi_tshd_thresl" 
+      description="Wakeup Channel Low Threshold value" 
+      toolTip="Determines the low threshold for the wakeup channel active in low power mode"
+      min="0" max="65535" value="0" />
+
+   <intOption name="tsi_tshd_thresh" 
+      description="Wakeup Channel High Threshold value" 
+      toolTip="Determines the high threshold for the wakeup channel active in low power mode"
+      min="0" max="65535" value="65535" />
+
+   <intOption name="defaultPinThreshold" 
+      description="Default input threshold" 
+      toolTip="Threshold to use as default when creating single inputs (buttons)"
+      min="0" max="65535" value="4000" />
+
+   <template><![CDATA[
+      \tstatic constexpr uint32_t tsi_tshd =
+      \t   TSI_TSHD_THRESH($(tsi_tshd_thresh)) |   // Low Power Channel Low Threshold value
+      \t   TSI_TSHD_THRESL($(tsi_tshd_thresl));    // Low Power Channel High Threshold value\n\n
+
+      \tstatic constexpr uint32_t defaultThreshold = $(defaultPinThreshold);
+
+   ]]></template>
+   
+   <template name="/TSI/declarations" namespace="all"  ><![CDATA[
+   \t/**
+   \t * Class representing $(_name)
+   \t */
+   \ttypedef $(_base_class)Base_T<$(_class)Info> $(_class);\n
+   ]]></template>
+
+   <projectActionList id="tsi_files">
+      <copy source="Project_Headers/tsi-MKL.h"     target="Project_Headers/tsi.h"         overwrite="true"  derived="true" />
+      <copy source="Snippets/tsi-mkl-example.cpp"  target="Snippets/tsi-mkl-example.cpp"  overwrite="true"  derived="true" />
+   </projectActionList>
+
+   <xi:include href="_irqOption.xml"/>
+   
+   <xi:include href="_clockOption.xml"/>
+
+   <validate
+      class="net.sourceforge.usbdm.deviceEditor.validators.PeripheralValidator">
+   </validate>
+
+   <signals />
+
+</fragment>

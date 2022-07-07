@@ -904,6 +904,13 @@
       \t},\n\n
    ]]></template>
    
+   <template name="/SCG/declarations" namespace="all"  ><![CDATA[
+   \t/**
+   \t * Class representing $(_name)
+   \t */
+   \tclass $(_class) : public $(_base_class)Base_T<$(_class)Info> {};
+   ]]></template>
+      
    <validate
       class="net.sourceforge.usbdm.deviceEditor.validators.ClockValidator_SCG" dim="3" >
    </validate>

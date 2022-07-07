@@ -8,6 +8,13 @@
    <xi:include href="_default_instance.xml"/>
    <xi:include href="_irqOption.xml"/>
 
+   <template name="/MCM/declarations" namespace="all"  ><![CDATA[
+   \t/**
+   \t * Class representing $(_name)
+   \t */
+   \tclass $(_class) : public $(_base_class)Base_T<$(_class)Info> {};\n
+   ]]></template>
+      
    <projectActionList id = "mcm_files" >
       <copy source="Project_Headers/mcm.h"         target="Project_Headers/mcm.h"          overwrite="true" derived="true" />
    </projectActionList>

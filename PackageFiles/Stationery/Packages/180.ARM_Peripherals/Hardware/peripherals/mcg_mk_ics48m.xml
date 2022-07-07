@@ -12,6 +12,12 @@
          toolTip="Clock configurations for different run modes"
          value="ClockConfig_."  >
 
+      <choiceOption name="mcg_c7_oscsel." 
+         description="MCG External Reference Clock source [OSCSEL]"
+         toolTip="Selects the MCG FLL/PLL external reference clock source">
+         <choice value="0" name="Dummy" />
+      </choiceOption>
+
       <binaryOption name="mcg_c8_cme1." 
          description="OSC1 (RTC) Clock Monitor Enable"
          toolTip="Determines if the clock monitor is enabled for the RTC external clock.\n
@@ -35,6 +41,7 @@
          <choice value="0" name="Interrupt request" />
          <choice value="1" name="Reset request" />
       </binaryOption>
+      
    </indexedCategory>
 
    <intOption name="system_irc48m_clock" 
@@ -45,9 +52,9 @@
       toolTip="48 MHz Internal Oscillator [May be trimmed against USB bus]"
       origin="48MHz clock from IRC48MCLK"
       value="48000000"/>
-      
+   
    <validate
-      class="net.sourceforge.usbdm.deviceEditor.validators.ClockValidator_MK_ICS48M" dim="/SIM/numberOfClockSettings" >
+      class="net.sourceforge.usbdm.deviceEditor.validators.ClockValidator_MCG" dim="/SIM/numberOfClockSettings" >
       <param type="long" value="3" />              <!-- mcg_c4_drst_drs   -->
       <param type="long" value="2000000" />        <!-- pllInMin     -->
       <param type="long" value="4000000" />        <!-- pllInMax     -->
@@ -55,11 +62,28 @@
       <param type="long" value="120000000" />      <!-- pllOutMax    -->
       <param type="long" value="1" />              <!-- prDivMin     -->
       <param type="long" value="25" />             <!-- prDivMax     -->
-      <param type="long" value="24" />             <!-- vDivMin      -->
+      <param type="long" value="24" />             <!-- vDivMin      available as pll_vdiv_min -->
       <param type="long" value="55" />             <!-- vDivMax      -->
-      <param type="long" value="1" />              <!-- pllPostDiv   -->
+      <param type="long" value="1" />              <!-- pllPostDiv   available as pll_post_divider -->
    </validate>
    
    <xi:include href="mcg_base.xml"/>
+
+   <category name="Hardware bugs" description="">
+      <binaryOption name="ERRATA_E2448" 
+         description="Flash prefetch could result in incorrect read data"
+         toolTip="Issue: Flash prefetch could result in incorrect read data when CLKDIV1 changed\n
+         Workaround: Use code in RAM that disables/restores prefetch around changing CLKDIV1" >
+         <choice value="0" name="No special handling" />
+         <choice value="1" name="Special handing" isdefault="true" />
+      </binaryOption>
+      <binaryOption name="ERRATA_E7993" 
+         description="FLL frequency may be incorrect"
+         toolTip="Issue: FLL frequency may be incorrect after changing the FLL reference clock\n
+         Workaround: Invert MCG_C4[DMX32] before clock source changes and restore afterwards">
+         <choice value="0" name="No special handling" />
+         <choice value="1" name="Special handing" isdefault="true" />
+      </binaryOption>
+   </category>
 
 </peripheralPage>

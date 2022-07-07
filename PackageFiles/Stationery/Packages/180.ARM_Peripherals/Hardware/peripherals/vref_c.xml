@@ -72,7 +72,13 @@ Devices using this peripheral:
    \t    VREF_SC_MODE_LV($(vref_sc_mode_lv));   // Buffer Mode selection \n\n
    ]]></template>
 
-   
+   <template name="/VREF/declarations" namespace="all"  ><![CDATA[
+   \t/**
+   \t * Class representing $(_name)
+   \t */
+   \tclass $(_class) : public $(_base_class)Base_T<$(_class)Info> {};\n
+   ]]></template>
+         
    <xi:include href="_clockOption.xml"/>
 
    <signals/>

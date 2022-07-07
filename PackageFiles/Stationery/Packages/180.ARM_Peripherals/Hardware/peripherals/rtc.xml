@@ -5,43 +5,35 @@
 <peripheralPage xmlns:xi="http://www.w3.org/2001/XInclude" name="_instance" description="Real-time Clock">
 
    <xi:include href="_mapPinsOption_on.xml"/>
+   <xi:include href="_default_instance.xml"/>
 
    <binaryOption name="configure_rtc"
       description="Configure RTC"
-      toolTip="Enables configuration of RTC\n If disabled no RTC registers are accessed.">
+      toolTip="Enables configuration of RTC during startup\n If disabled no RTC registers are accessed.">
       <choice value="0" name="Disabled" />
       <choice value="1" name="Enabled" isDefault="true" />
    </binaryOption>
 
-   <xi:include href="_default_instance.xml"/>
-
-   <aliasOption key="/PMC/system_low_power_clock"  constant="true" optional="true" />
-   <aliasOption key="/SIM/sim_sopt1_osc32ksel"     optional="true" constant="false" />
-   <aliasOption key="/SIM/system_erclk32k_clock"   optional="true"/>
+   <category name="ERCLK32K Selection" description="Control source of ERCLK32K clock (nominally 32kHz)">
+      <aliasOption key="/PMC/system_low_power_clock"  constant="true" optional="true" />
+      <aliasOption key="/SIM/rtc_clkin_clock"         optional="true" constant="false" />
+      <aliasOption key="/SIM/sim_sopt1_osc32ksel"     optional="true" constant="false" />
+      <aliasOption key="/SIM/system_erclk32k_clock"   optional="true" />
+   </category>
    
-   <!-- Uses OSC0 EXTAL32/XTAL32 pins -->
-   <intOption name="osc_input_freq"
-      units="Hz"
-      description="External RTC Crystal or clock"
-      toolTip="Frequency of external clock or crystal XTAL32/EXTAL32 [Typically 32768 Hz]"
-      value="32768"
-      min="0" max="33000" />
-         
+   <intOption name="osc_input_freq" units="Hz" min="32000" max="40000" derived="true" />
+
    <binaryOption name="rtc_cr_osce"
       description="Enable RTC oscillator"
       toolTip="Enable 32kHz RTC oscillator">
-      <choice value="0" name="Disabled" />
-      <choice value="1" name="Enabled" isDefault="true" />
+      <choice value="0" name="Disabled" isDefault="true" />
+      <choice value="1" name="Enabled" />
    </binaryOption>
    
-   <!-- Uses OSC0 EXTAL32/XTAL32 pins -->
    <intOption name="osc_clock"
       derived="true"
       constant="true"
       units="Hz"
-      description="Frequency of RTC Clock"
-      toolTip="RTC Clock - Only available if enabled"
-      value="32768"
       disabledValue="0" />
 
    <binaryOption name="rtc_cr_clko"
@@ -193,151 +185,6 @@
       \t   RTC_LR_TCL($(rtc_lr_tcl));  // Time Compensation Lock\n\n
     ]]></template>     
 
-   <category name="Write Access" description="Controls write access to RTC Registers">
-	   <binaryOption name="rtc_war_ierw" 
-	      description="Interrupt Enable Register Write"
-	      toolTip="Once cleared, this bit is only set by system reset. It is not affected by VBAT POR or software reset." >
-	      <choice value="0" name="Writes are ignored" />
-	      <choice value="1" name="Writes allowed"  isDefault="true" />
-	   </binaryOption>
-	   
-	   <binaryOption name="rtc_war_lrw" 
-	      description="Lock Register Write"
-	      toolTip="Once cleared, this bit is only set by system reset. It is not affected by VBAT POR or software reset." >
-	      <choice value="0" name="Writes are ignored" />
-	      <choice value="1" name="Writes allowed"  isDefault="true" />
-	   </binaryOption>
-	   
-	   <binaryOption name="rtc_war_srw" 
-	      description="Status Register Write"
-	      toolTip="Once cleared, this bit is only set by system reset. It is not affected by VBAT POR or software reset." >
-	      <choice value="0" name="Writes are ignored" />
-	      <choice value="1" name="Writes allowed"  isDefault="true" />
-	   </binaryOption>
-	   
-	   <binaryOption name="rtc_war_crw" 
-	      description="Control Register Write"
-	      toolTip="Once cleared, this bit is only set by system reset. It is not affected by VBAT POR or software reset." >
-	      <choice value="0" name="Writes are ignored" />
-	      <choice value="1" name="Writes allowed"  isDefault="true" />
-	   </binaryOption>
-	   
-	   <binaryOption name="rtc_war_tcrw" 
-	      description="Time Compensation Register Write"
-	      toolTip="Once cleared, this bit is only set by system reset. It is not affected by VBAT POR or software reset." >
-	      <choice value="0" name="Writes are ignored" />
-	      <choice value="1" name="Writes allowed"  isDefault="true" />
-	   </binaryOption>
-	   
-	   <binaryOption name="rtc_war_tarw" 
-	      description="Time Alarm Register Write"
-	      toolTip="Once cleared, this bit is only set by system reset. It is not affected by VBAT POR or software reset." >
-	      <choice value="0" name="Writes are ignored" />
-	      <choice value="1" name="Writes allowed"  isDefault="true" />
-	   </binaryOption>
-	   
-	   <binaryOption name="rtc_war_tprw" 
-	      description="Time Prescaler Register Write"
-	      toolTip="Once cleared, this bit is only set by system reset. It is not affected by VBAT POR or software reset." >
-	      <choice value="0" name="Writes are ignored" />
-	      <choice value="1" name="Writes allowed"  isDefault="true" />
-	   </binaryOption>
-	   
-	   <binaryOption name="rtc_war_tsrw" 
-	      description="Time Seconds Register Write"
-	      toolTip="Once cleared, this bit is only set by system reset. It is not affected by VBAT POR or software reset." >
-	      <choice value="0" name="Writes are ignored" />
-	      <choice value="1" name="Writes allowed"  isDefault="true" />
-	   </binaryOption>
-   </category>   
-   
-   <template><![CDATA[
-      \t#if defined(RTC_WAR_TSRW)
-      \t//! RTC Write Access Register
-      \tstatic constexpr uint32_t war =
-      \t   RTC_WAR_IERW($(rtc_war_ierw)) | // Interrupt Enable Register Write
-      \t   RTC_WAR_LRW($(rtc_war_lrw))  | // Lock Register Write
-      \t   RTC_WAR_SRW($(rtc_war_srw))  | // Status Register Write
-      \t   RTC_WAR_CRW($(rtc_war_crw))  | // Control Register Write
-      \t   RTC_WAR_TCRW($(rtc_war_tcrw)) | // Time Compensation Register Write
-      \t   RTC_WAR_TARW($(rtc_war_tarw)) | // Time Alarm Register Write
-      \t   RTC_WAR_TPRW($(rtc_war_tprw)) | // Time Prescaler Register Write
-      \t   RTC_WAR_TSRW($(rtc_war_tsrw));  // Time Seconds Register Write
-      \t#endif\n\n
-    ]]></template>     
-
-   <category name="Read Access" description="Controls read access to RTC Registers">
-	   <binaryOption name="rtc_rar_ierr" 
-	      description="Interrupt Enable Register Read"
-	      toolTip="Once cleared, this bit is only set by system reset. It is not affected by VBAT POR or software reset." >
-	      <choice value="0" name="Reads are ignored" />
-	      <choice value="1" name="Reads allowed"  isDefault="true" />
-	   </binaryOption>
-	   
-	   <binaryOption name="rtc_rar_lrr" 
-	      description="Lock Register Read"
-	      toolTip="Once cleared, this bit is only set by system reset. It is not affected by VBAT POR or software reset." >
-	      <choice value="0" name="Reads are ignored" />
-	      <choice value="1" name="Reads allowed"  isDefault="true" />
-	   </binaryOption>
-	   
-	   <binaryOption name="rtc_rar_srr" 
-	      description="Status Register Read"
-	      toolTip="Once cleared, this bit is only set by system reset. It is not affected by VBAT POR or software reset." >
-	      <choice value="0" name="Reads are ignored" />
-	      <choice value="1" name="Reads allowed"  isDefault="true" />
-	   </binaryOption>
-	   
-	   <binaryOption name="rtc_rar_crr" 
-	      description="Control Register Read"
-	      toolTip="Once cleared, this bit is only set by system reset. It is not affected by VBAT POR or software reset." >
-	      <choice value="0" name="Reads are ignored" />
-	      <choice value="1" name="Reads allowed"  isDefault="true" />
-	   </binaryOption>
-	   
-	   <binaryOption name="rtc_rar_tcrr" 
-	      description="Time Compensation Register Read"
-	      toolTip="Once cleared, this bit is only set by system reset. It is not affected by VBAT POR or software reset." >
-	      <choice value="0" name="Reads are ignored" />
-	      <choice value="1" name="Reads allowed"  isDefault="true" />
-	   </binaryOption>
-	   
-	   <binaryOption name="rtc_rar_tarr" 
-	      description="Time Alarm Register Read"
-	      toolTip="Once cleared, this bit is only set by system reset. It is not affected by VBAT POR or software reset." >
-	      <choice value="0" name="Reads are ignored" />
-	      <choice value="1" name="Reads allowed"  isDefault="true" />
-	   </binaryOption>
-	   
-	   <binaryOption name="rtc_rar_tprr" 
-	      description="Time Prescaler Register Read"
-	      toolTip="Once cleared, this bit is only set by system reset. It is not affected by VBAT POR or software reset." >
-	      <choice value="0" name="Reads are ignored" />
-	      <choice value="1" name="Reads allowed"  isDefault="true" />
-	   </binaryOption>
-	   
-	   <binaryOption name="rtc_rar_tsrr" 
-	      description="Time Seconds Register Read"
-	      toolTip="Once cleared, this bit is only set by system reset. It is not affected by VBAT POR or software reset." >
-	      <choice value="0" name="Reads are ignored" />
-	      <choice value="1" name="Reads allowed"  isDefault="true" />
-	   </binaryOption>
-   </category>
-   
-   <template><![CDATA[
-      \t#if defined(RTC_RAR_TSRR)
-      \t//! RTC Read Access Register
-      \tstatic constexpr uint32_t rar =
-      \t   RTC_RAR_IERR($(rtc_rar_ierr)) | // Interrupt Enable Register Read  
-      \t   RTC_RAR_LRR($(rtc_rar_lrr))  | // Lock Register Read              
-      \t   RTC_RAR_SRR($(rtc_rar_srr))  | // Status Register Read            
-      \t   RTC_RAR_CRR($(rtc_rar_crr))  | // Control Register Read           
-      \t   RTC_RAR_TCRR($(rtc_rar_tcrr)) | // Time Compensation Register Read 
-      \t   RTC_RAR_TARR($(rtc_rar_tarr)) | // Time Alarm Register Read        
-      \t   RTC_RAR_TPRR($(rtc_rar_tprr)) | // Time Prescaler Register Read    
-      \t   RTC_RAR_TSRR($(rtc_rar_tsrr));  // Time Seconds Register Read
-      \t#endif\n\n
-    ]]></template>     
 
    <stringOption name="irq_pattern"        constant="true" value="^RTC_(Alarm|Seconds)$" hidden="true" />
    <stringOption name="irq_classHandler"   constant="true" value="%c%i::irq$1Handler" hidden="true" />
@@ -429,28 +276,15 @@
          <aliasOption name="rtc_tcr_cir" />
          <aliasOption name="rtc_tcr_tcr" />
       </category>   
-      <category name="RTC WAR" description="RTC Write Access Register">
-         <aliasOption name="rtc_war_ierw" />
-         <aliasOption name="rtc_war_lrw" />
-         <aliasOption name="rtc_war_srw" />
-         <aliasOption name="rtc_war_crw" />
-         <aliasOption name="rtc_war_tcrw" />
-         <aliasOption name="rtc_war_tarw" />
-         <aliasOption name="rtc_war_tprw" />
-         <aliasOption name="rtc_war_tsrw" />
-      </category>   
-      <category name="RTC RAR" description="RTC Read Access Register">
-         <aliasOption name="rtc_rar_ierr" />
-         <aliasOption name="rtc_rar_lrr" />
-         <aliasOption name="rtc_rar_srr" />
-         <aliasOption name="rtc_rar_crr" />
-         <aliasOption name="rtc_rar_tcrr" />
-         <aliasOption name="rtc_rar_tarr" />
-         <aliasOption name="rtc_rar_tprr" />
-         <aliasOption name="rtc_rar_tsrr" />
-      </category>   
    </category>
    
+   <template name="/RTC/declarations" namespace="all"  ><![CDATA[
+   \t/**
+   \t * Class representing $(_name)
+   \t */
+   \tclass $(_class) : public $(_base_class)Base_T<$(_class)Info> {};
+   ]]></template>
+      
    <xi:include href="_clockOption.xml"/>
 
    <signals/>
@@ -472,7 +306,6 @@
       \t * @return Clock frequency as uint32_t
       \t */
       \tstatic uint32_t getInternalClock() {
-      \t   // RTC uses EXTAL32/XTAL32 clock
       \t   return (rtc->CR&RTC_CR_OSCE_MASK)?osc_input_freq:0;
       \t}
       

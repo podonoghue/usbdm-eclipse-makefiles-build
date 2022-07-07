@@ -253,6 +253,13 @@
      \tstatic constexpr uint32_t cv2  = $(adc_cv2);\n\n
    ]]></template>
    
+   <template name="/ADC/declarations" namespace="all"  ><![CDATA[
+   \t/**
+   \t * Class representing $(_name)
+   \t */
+   \ttypedef AdcBase_T<$(_class)Info> $(_class);\n
+   ]]></template>
+      
    <signals/>
    
    <xi:include href="_clockOption.xml"/>

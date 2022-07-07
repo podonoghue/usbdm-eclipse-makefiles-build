@@ -77,6 +77,13 @@
       \t}\n\n
    ]]></template>
    
+   <template name="/I2C/declarations" namespace="all"  ><![CDATA[
+   \t/**
+   \t * Class representing $(_name)
+   \t */
+   \tusing $(_class) = $(_base_class)Base_T<$(_class)Info>;\n
+   ]]></template>
+      
    <xi:include href="_clockOption.xml"/>
    
    <signals/>

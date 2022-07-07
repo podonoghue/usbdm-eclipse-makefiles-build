@@ -1,7 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE peripheralPage SYSTEM "_menu.dtd" >
-<!-- rtc_mkl04z4.xml -->
+<!-- ftfl.xml -->
 
 <fragment xmlns:xi="http://www.w3.org/2001/XInclude">
-<xi:include href="rtc.xml"/>
+
+<xi:include href="ftfe_64k_flexrom.xml"/>
+
 </fragment>

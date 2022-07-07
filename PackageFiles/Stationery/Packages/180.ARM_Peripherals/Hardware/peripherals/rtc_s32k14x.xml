@@ -258,7 +258,16 @@
       </category>   
    </category>
    
+   <template name="/RTC/declarations" namespace="all"  ><![CDATA[
+   \t/**
+   \t * Class representing $(_name)
+   \t */
+   \tclass $(_class) : public $(_base_class)Base_T<$(_class)Info> {};
+   ]]></template>
+      
    <xi:include href="_clockOption.xml"/>
+
+   <signals/>
 
    <validate
       class="net.sourceforge.usbdm.deviceEditor.validators.RtcValidate">

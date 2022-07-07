@@ -86,6 +86,13 @@
       \t   PMC_REGSC_BIASEN($(pmc_regsc_biasen));      // Core bias enable   \n\n
    ]]></template>
 
+   <template name="/PMC/declarations" namespace="all"  ><![CDATA[
+   \t/**
+   \t * Class representing $(_name)
+   \t */
+   \tclass $(_class) : public $(_base_class)Base_T<$(_class)Info> {};\n
+   ]]></template>
+      
    <xi:include href="_irqOption.xml"/>
    
    <validate

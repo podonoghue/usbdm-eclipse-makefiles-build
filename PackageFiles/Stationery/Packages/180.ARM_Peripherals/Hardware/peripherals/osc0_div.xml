@@ -53,7 +53,7 @@
       <choice value="0" name="Unconstrained by Oscillator" />
    </choiceOption>
 
-   <aliasOption key="/MCG/mcg_c2_hgo0" />
+   <aliasOption key="/MCG/mcg_c2_hgo0" constant="false" />
    
    <choiceOption name="osc_cr_scp"
       description="Oscillator load capacitance"
@@ -104,7 +104,8 @@
          derived="true"
          units="Hz"
          description="Oscillator clock [OSCERCLK]"
-         toolTip="Generated from OSCCLK"
+         toolTip="Clock available to some peripherals"
+         origin="OSC0 gated by ERCLKEN"
          value="8000000"
          disabledValue="0"  
          constant="true" />
@@ -114,6 +115,7 @@
          units="Hz"
          description="Oscillator low range 32K clock [OSC32KCLK]"
          toolTip="Generated from OSCCLK in low frequency mode only."
+         origin="OSC0 in low frequency mode"
          value="8000000"
          disabledValue="0"  
          constant="true" />
@@ -175,5 +177,12 @@
       \t}\n\n
    ]]></template>
 
+   <template name="/OSC/declarations" namespace="all"  ><![CDATA[
+   \t/**
+   \t * Class representing $(_name)
+   \t */
+   \tclass $(_class) : public $(_base_class)Base_T<$(_class)Info> {};\n
+   ]]></template>
+      
    <signals />
 </peripheralPage>

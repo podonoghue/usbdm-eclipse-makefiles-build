@@ -247,6 +247,21 @@
    
    <xi:include href="_clockOption.xml"/>
 
+   
+   <template name="/FTM/declarations" namespace="all"  ><![CDATA[
+   \t/**
+   \t * Class representing $(_name)
+   \t */
+   \ttypedef FtmBase_T<$(_class)Info> $(_class);\n
+   ]]></template>
+
+   <template name="/FTM/quadDeclarations" namespace="all"  ><![CDATA[
+   \t/**
+   \t * Class representing $(_class) as Quadrature decoder
+   \t */
+   \ttypedef FtmQuadDecoder_T<$(_class)Info> FtmQuadDecoder$(_instance);\n
+   ]]></template>
+
    <signals/>
 
 </peripheralPage>

@@ -2,7 +2,7 @@
 <!DOCTYPE peripheralPage SYSTEM "_menu.dtd" >
 <!-- i2c0_def.xml -->
 
-<peripheralPage xmlns:xi="http://www.w3.org/2001/XInclude" name="_instance" description="Inter-Integrated-Circuit">
+<peripheralPage xmlns:xi="http://www.w3.org/2001/XInclude" name="_instance" description="Console routines">
 
    <binaryOption name="consoleEnable" 
       description="Enable Console I/O"

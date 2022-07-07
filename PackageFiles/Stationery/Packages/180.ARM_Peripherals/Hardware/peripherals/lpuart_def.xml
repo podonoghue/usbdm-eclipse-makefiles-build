@@ -92,47 +92,68 @@ Devices using this peripheral:
    </projectActionList>
          
    <template><![CDATA[
-   \t//! Default Baud rate used if not explicitly given
-   \tstatic constexpr uint32_t defaultBaudRate = $(defaultBaudRate);
+      \t//! Default Baud rate used if not explicitly given
+      \tstatic constexpr uint32_t defaultBaudRate = $(defaultBaudRate);
    
-   \t//! Default buffer size for receive queue when interrupt driven
-   \tstatic constexpr unsigned receiveBufferSize = $(receiveBufferSize);
+      \t//! Default buffer size for receive queue when interrupt driven
+      \tstatic constexpr unsigned receiveBufferSize = $(receiveBufferSize);
 
-   \t//! Default buffer size for transmit queue when interrupt driven
-   \tstatic constexpr unsigned transmitBufferSize = $(transmitBufferSize);
+      \t//! Default buffer size for transmit queue when interrupt driven
+      \tstatic constexpr unsigned transmitBufferSize = $(transmitBufferSize);
 
-   #if defined(PCC_PCC_LPUART$(_instance)_CGC_MASK)
-   \t//! Default clock source
-   \tstatic constexpr PccDiv2Clock defaultClockSource = PccDiv2Clock_Firc;
+      #if defined(PCC_PCC_LPUART$(_instance)_CGC_MASK)
+      \t//! Default clock source
+      \tstatic constexpr PccDiv2Clock defaultClockSource = PccDiv2Clock_Firc;
    
-   \t/**
-   \t * Set LPUART$(_instance) input clock source.
-   \t *
-   \t * @param pccDiv2Clock Clock source selection
-   \t *
-   \t * @note This peripheral uses the DIV2 peripheral clocks e.g. SOSCDIV2_CLK 
-   \t * @note The peripheral bus clock will be disabled before changing the 
-   \t         clock and is left disabled.
-   \t */
-   \tstatic void setClockSource(PccDiv2Clock pccDiv2Clock) {
-   \t   PccInfo::setLpuart$(_instance)ClockSource(pccDiv2Clock);
-   \t}
-   #endif
+      \t/**
+      \t * Set LPUART$(_instance) input clock source.
+      \t *
+      \t * @param pccDiv2Clock Clock source selection
+      \t *
+      \t * @note This peripheral uses the DIV2 peripheral clocks e.g. SOSCDIV2_CLK 
+      \t * @note The peripheral bus clock will be disabled before changing the 
+      \t         clock and is left disabled.
+      \t */
+      \tstatic void setClockSource(PccDiv2Clock pccDiv2Clock) {
+      \t   PccInfo::setLpuart$(_instance)ClockSource(pccDiv2Clock);
+      \t}
+      #endif
    
-   \t/**
-   \t * Get input clock frequency
-   \t *
-   \t * @return Input clock frequency as a uint32_t in Hz
-   \t */
-   \tstatic uint32_t getClockFrequency() {
-   #if defined(PCC_PCC_LPUART$(_instance)_CGC_MASK)
-   \t   return PccInfo::getLpuart$(_instance)Frequency();
-   \t#elif defined(SIM_SOPT2_LPUART$(_instance)SRC_MASK)
-   \t   return SimInfo::getLpuart$(_instance)Clock();
-   \t#else
-   \t   return SimInfo::getLpuartClock();
-   #endif
-   \t}\n\n
+      \t/**
+      \t * Get input clock frequency
+      \t *
+      \t * @return Input clock frequency as a uint32_t in Hz
+      \t */
+      \tstatic uint32_t getClockFrequency() {
+      #if defined(PCC_PCC_LPUART$(_instance)_CGC_MASK)
+      \t   return PccInfo::getLpuart$(_instance)Frequency();
+      \t#elif defined(SIM_SOPT2_LPUART$(_instance)SRC_MASK)
+      \t   return SimInfo::getLpuart$(_instance)Clock();
+      \t#else
+      \t   return SimInfo::getLpuartClock();
+      #endif
+      \t}\n\n
+   ]]></template>
+   
+   <template name="/CONSOLE/Includes" namespace="all"  ><![CDATA[
+   #include "lpuart.h"\n
+   ]]></template>
+
+   <template name="/LPUART/declarations" namespace="all"  ><![CDATA[
+      \t/**
+      \t * Class representing $(_name) interface
+      \t *
+      \t * <b>Example</b>
+      \t * @code
+      \t *  // Instantiate interface
+      \t *  USBDM::$(_class) lpuart;
+      \t *
+      \t *  for(int i=0; i++;) {
+      \t *     lpuart.write("Hello world ", i);
+      \t *  }
+      \t *  @endcode
+      \t */
+      \ttypedef  $(/$(_name)/lpuartClass:$(_base_class)_T)<$(_class)Info> $(_class);\n\n
    ]]></template>
 
    <signals/>

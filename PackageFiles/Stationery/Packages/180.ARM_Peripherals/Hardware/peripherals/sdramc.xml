@@ -7,6 +7,13 @@
    <xi:include href="_mapPinsOption_on.xml"/>
    <xi:include href="_default_instance.xml"/>
    
+   <template name="/SDRAMC/declarations" namespace="all"  ><![CDATA[
+   \t/**
+   \t * Class representing $(_name)
+   \t */
+   \tclass $(_class) : public $(_base_class)Base_T<$(_class)Info> {};\n
+   ]]></template>
+      
    <projectActionList id = "sdramc_files" >
       <copy source="Project_Headers/sdramc.h"     target="Project_Headers/sdramc.h"     overwrite="true" derived="true" />
       <copy source="Snippets/sdramc-example.cpp"  target="Snippets/sdramc-example.cpp"  overwrite="true" derived="true" />

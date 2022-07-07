@@ -3,5 +3,5 @@
 <!-- rtc_mk22f12810.xml -->
 
 <fragment xmlns:xi="http://www.w3.org/2001/XInclude">
-<xi:include href="rtc_osc.xml"/>
+<xi:include href="rtc_war_rar.xml"/>
 </fragment>

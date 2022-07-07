@@ -17,6 +17,13 @@
       <copy source="Project_Headers/i2s.h"            target="Project_Headers/i2s.h"            overwrite="true"  derived="true" />
    </projectActionList>
    
+   <template name="/I2S/declarations" namespace="all"  ><![CDATA[
+   \t/**
+   \t * Class representing $(_name)
+   \t */
+   \tusing $(_class) = $(_base_class)Base_T<$(_class)Info>;\n
+   ]]></template>
+      
    <xi:include href="_clockOption.xml"/>
    
    <signals/>

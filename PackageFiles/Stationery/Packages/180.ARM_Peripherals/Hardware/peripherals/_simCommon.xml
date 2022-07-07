@@ -9,7 +9,7 @@
    <intOption name="numberOfClockSettings" 
       description="Number of clock settings"
       toolTip="This determines the number of clock settings provided"
-      value="3"
+      value="4"
       derived = "true"
       constant = "true" />
             

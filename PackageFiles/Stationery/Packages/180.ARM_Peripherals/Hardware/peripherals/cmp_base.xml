@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE peripheralPage SYSTEM "_menu.dtd" >
+<!DOCTYPE fragment SYSTEM "_menu.dtd" >
 <!-- cmp_base.xml -->
 
 <fragment xmlns:xi="http://www.w3.org/2001/XInclude">
@@ -95,15 +95,13 @@
    </binaryOption>
 
    <template><![CDATA[
-      \t#ifndef CMP_CR1_TRIGM
-      \t#define CMP_CR1_TRIGM(x) 0
-      \t#endif
-      
       \t//! CMP Control Register 1
       \tstatic constexpr uint32_t cr1 =
       \t   CMP_CR1_SE($(cmp_cr1_se))    | // Sample Enable
       \t   CMP_CR1_WE($(cmp_cr1_we))    | // Windowing Enable
+      \t#if defined(CMP_CR1_TRIGM)
       \t   CMP_CR1_TRIGM($(cmp_cr1_trigm)) | // Trigger Mode Enable
+      \t#endif
       \t   CMP_CR1_PMODE($(cmp_cr1_pmode)) | // Power mode Select
       \t   CMP_CR1_INV($(cmp_cr1_inv))   | // Comparator Invert
       \t   CMP_CR1_COS($(cmp_cr1_cos))   | // Comparator Output Select
@@ -166,6 +164,75 @@
       \t//! DAC Control Register
       \tstatic constexpr uint32_t daccr =
       \t   CMP_DACCR_VRSEL($(cmp_daccr_vrsel)); // Supply Voltage Reference Source Select\n\n
+   ]]></template>
+
+   <template name="/CMP/declarations" namespace="all"  ><![CDATA[
+   \t/**
+   \t * Class representing $(_name)
+   \t */
+   \tclass Cmp$(_instance) : public CmpBase_T<Cmp$(_instance)Info> {
+   \t
+   \tpublic:
+   \t   /**
+   \t    * Select CMP$(_instance) inputs
+   \t    */
+   \t   enum Input {
+   \t      // Mapped inputs
+   \t      Input_0          = 0, //!< CMP$(_instance) input 0
+   \t      Input_1          = 1, //!< CMP$(_instance) input 1
+   \t      Input_2          = 2, //!< CMP$(_instance) input 2
+   \t      Input_3          = 3, //!< CMP$(_instance) input 3
+   \t      Input_4          = 4, //!< CMP$(_instance) input 4
+   \t      Input_5          = 5, //!< CMP$(_instance) input 5
+   \t      Input_6          = 6, //!< CMP$(_instance) input 6
+   \t      Input_7          = 7, //!< CMP$(_instance) input 7
+   \t   
+           $(/CMP$(_instance)/InputMapping:   // None Found)
+   \t   };
+   \t
+   \t   /**
+   \t    * Configure Comparator input sources
+   \t    *
+   \t    * @param[in]  positiveInput (0..7) (7 => DAC)
+   \t    * @param[in]  negativeInput (0..7) (7 => DAC)
+   \t    */
+   \t   static __attribute__((always_inline)) void selectInputs(Input positiveInput, Input negativeInput) {
+   \t      CmpBase_T::selectInputs((unsigned)positiveInput, (unsigned)negativeInput);
+   \t   }
+   \t
+   \t   template <class T>
+   \t   static __attribute__((always_inline)) void selectInputs(Input input, T &) {
+   \t      CmpBase_T::selectInputs((unsigned)input, (unsigned)T::pinNum);
+   \t   }
+   \t
+   \t   template <class T>
+   \t   static __attribute__((always_inline)) void selectInputs(T &, Input input) {
+   \t      CmpBase_T::selectInputs((unsigned)T::pinNum, (unsigned)input);
+   \t   }
+   \t
+   \t   template <class T1, class T2>
+   \t   static __attribute__((always_inline)) void selectInputs(T1 &, T2&) {
+   \t      CmpBase_T::selectInputs((unsigned)T1::pinNum, (unsigned)T2::pinNum);
+   \t   }
+   \t
+   \t   /**
+   \t    * Class representing a Comparator pin
+   \t    *
+   \t    * @tparam cmpInput Number of comparator input (0-7) for associated pin.
+   \t    */
+   \t   template<int cmpInput>
+   \t   class Pin {
+   \t      using Pcr = PcrTable_T<Cmp$(_instance)Info, (Input)cmpInput>;
+   \t   public:
+   \t      static constexpr Input pinNum = (Input)cmpInput;
+   \t
+   \t      constexpr Pin() {}
+   \t      static void setInput() {
+   \t         Pcr::setPCR();
+   \t      }
+   \t   };
+   \t};
+   \t
    ]]></template>
 
    <projectActionList id = "cmp_files" >

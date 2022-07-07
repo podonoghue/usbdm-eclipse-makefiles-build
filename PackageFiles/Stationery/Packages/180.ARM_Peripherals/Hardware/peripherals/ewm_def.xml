@@ -17,6 +17,13 @@
       \tstatic constexpr int outputPin  = 1;\n\n
    ]]></template>
 
+   <template name="/EWM/declarations" namespace="all"  ><![CDATA[
+   \t/**
+   \t * Class representing $(_name)
+   \t */
+   \tclass $(_class) : public $(_base_class)Base_T<$(_class)Info> {};\n
+   ]]></template>
+      
    <stringOption name="irq_pattern"        constant="true" value="^WDOG%i_?$" hidden="true" />
    <stringOption name="irq_classHandler"   constant="true" value="%c%i::irqHandler" hidden="true" />
    <xi:include href="_irqOptionSubstituted.xml"/>

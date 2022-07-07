@@ -8,6 +8,13 @@
    <xi:include href="_default_instance.xml"/>
    <xi:include href="_irqOption.xml"/>
    
+   <template name="/SDHC/declarations" namespace="all"  ><![CDATA[
+   \t/**
+   \t * Class representing $(_name)
+   \t */
+   \tclass $(_class) : public $(_base_class)Base_T<$(_class)Info> {};\n
+   ]]></template>
+      
    <projectActionList id = "sdhc_files">
       <copy source="Project_Headers/sdhc.h"                   target="Project_Headers/sdhc.h"                     overwrite="true"  derived="true" />
       <copy source="Snippets/sdhc-example.cpp"                target="Snippets/sdhc-example.cpp"                  overwrite="true"  derived="true" />

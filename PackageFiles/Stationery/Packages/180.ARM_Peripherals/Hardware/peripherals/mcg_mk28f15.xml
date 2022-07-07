@@ -12,6 +12,12 @@
          toolTip="Clock configurations for different run modes"
          value="ClockConfig_."  >
 
+      <choiceOption name="mcg_c7_oscsel." 
+         description="MCG External Reference Clock source [OSCSEL]"
+         toolTip="Selects the MCG FLL/PLL external reference clock source">
+         <choice value="0" name="Dummy" />
+      </choiceOption>
+
       <binaryOption name="mcg_c8_cme1." 
          description="OSC1 (RTC) Clock Monitor Enable"
          toolTip="Determines if the clock monitor is enabled for the RTC external clock.\n
@@ -100,7 +106,7 @@
          toolTip="Used as input to high speed USB and available as general clock source"
          value="180000000" max="180000000" />
    </indexedCategory>
-   
+
    <intOption name="system_irc48m_clock" 
       constant="true"  
       hidden="true"
@@ -110,11 +116,8 @@
       origin="48MHz clock from IRC48MCLK"
       value="48000000"/>
    
-   <intOption name="pll_vdiv_min"     constant="true" derived="true" value="16" />
-   <intOption name="pll_post_divider" constant="true" derived="true" value="2" />
-
    <validate
-      class="net.sourceforge.usbdm.deviceEditor.validators.ClockValidator_MK_ICS48M" dim="/SIM/numberOfClockSettings" >
+      class="net.sourceforge.usbdm.deviceEditor.validators.ClockValidator_MCG" dim="/SIM/numberOfClockSettings" >
       <param type="long" value="3" />              <!-- mcg_c4_drst_drs   -->
       <param type="long" value="8000000" />        <!-- pllInMin     -->
       <param type="long" value="16000000" />       <!-- pllInMax     -->
@@ -122,9 +125,9 @@
       <param type="long" value="180000000" />      <!-- pllOutMax    -->
       <param type="long" value="1" />              <!-- prDivMin     -->
       <param type="long" value="8" />              <!-- prDivMax     -->
-      <param type="long" value="16" />             <!-- vDivMin      -->
+      <param type="long" value="16" />             <!-- vDivMin    - available as pll_vdiv_min -->
       <param type="long" value="47" />             <!-- vDivMax      -->
-      <param type="long" value="2" />              <!-- pllPostDiv   -->
+      <param type="long" value="2" />              <!-- pllPostDiv - available as pll_post_divider -->
    </validate>
    
    <xi:include href="mcg_base.xml"/>

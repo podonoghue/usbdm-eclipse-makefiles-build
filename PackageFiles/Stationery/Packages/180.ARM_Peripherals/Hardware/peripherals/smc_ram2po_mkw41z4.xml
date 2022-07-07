@@ -154,6 +154,13 @@
       \t   SMC_STOPCTRL_LLSM($(smc_stopctrl_llsm:0));   // LLS or VLLS Mode Control\n\n
    ]]></template>
 
+   <template name="/SMC/declarations" namespace="all"  ><![CDATA[
+   \t/**
+   \t * Class representing $(_name)
+   \t */
+   \tclass $(_class) : public $(_base_class)Base_T<$(_class)Info> {};\n
+   ]]></template>
+      
    <projectActionList id = "smc_files" >
       <copy source="Project_Headers/smc.h"                  target="Project_Headers/smc.h"                  overwrite="true" derived="true" />
       <copy source="Project_Headers/KinetisPowerModes.png"  target="Project_Headers/KinetisPowerModes.png"  overwrite="true" derived="true" macroReplace="false" />

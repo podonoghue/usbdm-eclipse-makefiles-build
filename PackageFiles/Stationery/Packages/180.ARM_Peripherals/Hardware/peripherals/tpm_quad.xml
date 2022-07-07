@@ -192,6 +192,20 @@
       \t   }
       \t}\n\n
    ]]></template>
+   
+   <template name="/TPM/declarations" namespace="all"  ><![CDATA[
+   \t/**
+   \t * Class representing $(_name)
+   \t */
+   \ttypedef $(_base_class)Base_T<$(_class)Info> $(_class);\n
+   ]]></template>
+
+   <template name="/TPM/quadDeclarations" namespace="all"  ><![CDATA[
+   \t/**
+   \t * Class representing $(_class) as Quadrature decoder
+   \t */
+   \ttypedef $(_base_class)QuadDecoder_T<$(_class)Info> $(_base_class)QuadDecoder$(_instance);\n
+   ]]></template>
 
    <signals/>
 </peripheralPage>

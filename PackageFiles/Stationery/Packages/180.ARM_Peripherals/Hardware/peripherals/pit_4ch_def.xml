@@ -76,6 +76,36 @@
       \t}\n\n
    ]]></template>
    
+   <template name="/PIT/declarations" namespace="all"  ><![CDATA[
+   \t/**
+   \t * Class representing $(_name)
+   \t */
+   \tusing $(_class) = $(_base_class)Base_T<$(_class)Info>;
+
+   \t/**
+   \t * MACRO defining the start of a interrupt handler for a PIT channel
+   \t * This will override the handler incorporated within the PIT class.
+   \t *
+   \t * @param channel Channel being used.
+   \t *
+   \t * @example
+   \t * PIT$(_instance)_CHANNEL0_HANDLER() {
+   \t *    console.writeln("PIT$(_instance) Channel 0 Handler");
+   \t *    // Clear interrupt flag
+   \t *    pit->CHANNEL[0].TFLG = PIT_TFLG_TIF_MASK;
+   \t * }
+   \t */
+   #define PIT$(_instance)_CHANNEL0_HANDLER() template<>template<> void Pit$(_instance)::Channel<0>::irqHandler()
+   #define PIT$(_instance)_CHANNEL1_HANDLER() template<>template<> void Pit$(_instance)::Channel<1>::irqHandler()
+   #define PIT$(_instance)_CHANNEL2_HANDLER() template<>template<> void Pit$(_instance)::Channel<2>::irqHandler()
+   #define PIT$(_instance)_CHANNEL3_HANDLER() template<>template<> void Pit$(_instance)::Channel<3>::irqHandler()
+
+   \t/**
+   \t * @brief class representing a PIT channel
+   \t */
+   \tusing $(_class)Channel = $(_class)::PitChannel;
+   ]]></template>
+      
    <xi:include href="_clockOption.xml"/>
 
    <signals/>

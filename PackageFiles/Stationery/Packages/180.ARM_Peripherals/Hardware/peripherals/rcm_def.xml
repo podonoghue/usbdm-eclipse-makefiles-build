@@ -40,6 +40,13 @@
       \t   RCM_RPFW_RSTFLTSEL($(rcm_rpfw_rstfltsel)); \n\n
    ]]></template>
    
+   <template name="/RCM/declarations" namespace="all"  ><![CDATA[
+   \t/**
+   \t * Class representing $(_name)
+   \t */
+   \tusing $(_class) = $(_base_class)Base_T<$(_class)Info>;
+   ]]></template>
+      
    <projectActionList id = "rcm_files" >
       <copy source="Project_Headers/rcm.h"     target="Project_Headers/rcm.h"     overwrite="true"  derived="true" />
       <copy source="Snippets/rcm-example.cpp"  target="Snippets/rcm-example.cpp"       overwrite="true" derived="true" />

@@ -80,7 +80,7 @@
       <choice value="1" name="Buffer read pointer enabled." />
    </binaryOption>
    <template><![CDATA[
-      \t//! DAC Control Register 1\n
+      \t//! DAC Control Register 1
       \tstatic constexpr uint32_t c1 =
       \t   DAC_C1_DMAEN($(dac_c1_dmaen))       | // DMA Enable Select
       \t   DAC_C1_DACBFMD($(dac_c1_dacbfmd))     | // Buffer Work Mode Select
@@ -93,11 +93,18 @@
       min="0" />
       
    <template><![CDATA[
-      \t//! DAC Control Register 2\n
+      \t//! DAC Control Register 2
       \tstatic constexpr uint32_t c2 =
       \t   DAC_C2_DACBFUP($(dac_c2_dacbfup));   // DAC Buffer Upper Limit\n\n
    ]]></template>
    
+   <template name="/DAC/declarations" namespace="all"  ><![CDATA[
+   \t/**
+   \t * Class representing $(_name)
+   \t */
+   \tclass $(_class) : public $(_base_class)Base_T<$(_class)Info> {};\n
+   ]]></template>
+      
    <xi:include href="_clockOption.xml"/>
       
    <xi:include href="_irqOption.xml"/>         

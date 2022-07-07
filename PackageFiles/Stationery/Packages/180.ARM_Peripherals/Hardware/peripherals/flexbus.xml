@@ -86,6 +86,13 @@
       \t}\n\n
    ]]></template>
 
+   <template name="/FLEXBUS/declarations" namespace="all"  ><![CDATA[
+   \t/**
+   \t * Class representing $(_name)
+   \t */
+   \tusing $(_class) = $(_base_class)Base_T<$(_class)Info>;\n
+   ]]></template>
+      
    <signals/>
 
 </peripheralPage>
