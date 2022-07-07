@@ -22,7 +22,8 @@
 							<tool id="cdt.managedbuild.tool.gnu.archiver.base.2006984402" name="GCC Archiver" superClass="cdt.managedbuild.tool.gnu.archiver.base"/>
 							<tool id="cdt.managedbuild.tool.gnu.cpp.compiler.base.1753150746" name="GCC C++ Compiler" superClass="cdt.managedbuild.tool.gnu.cpp.compiler.base">
 								<option IS_BUILTIN_EMPTY="false" IS_VALUE_EMPTY="false" id="gnu.cpp.compiler.option.include.paths.1334636709" name="Include paths (-I)" superClass="gnu.cpp.compiler.option.include.paths" useByScannerDiscovery="false" valueType="includePath">
-									<listOptionValue builtIn="false" value="&quot;${WXWIN}/lib/gcc_dll/mswu&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${WX_LIBPATH1}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${WX_LIBPATH2}&quot;"/>
 								</option>
 								<option IS_BUILTIN_EMPTY="false" IS_VALUE_EMPTY="false" id="gnu.cpp.compiler.option.preprocessor.def.264607312" name="Defined symbols (-D)" superClass="gnu.cpp.compiler.option.preprocessor.def" useByScannerDiscovery="false" valueType="definedSymbols">
 									<listOptionValue builtIn="false" value="TARGET=ARM"/>
@@ -33,7 +34,8 @@
 							</tool>
 							<tool id="cdt.managedbuild.tool.gnu.c.compiler.base.122539305" name="GCC C Compiler" superClass="cdt.managedbuild.tool.gnu.c.compiler.base">
 								<option IS_BUILTIN_EMPTY="false" IS_VALUE_EMPTY="false" id="gnu.c.compiler.option.include.paths.913594518" name="Include paths (-I)" superClass="gnu.c.compiler.option.include.paths" useByScannerDiscovery="false" valueType="includePath">
-									<listOptionValue builtIn="false" value="&quot;${WXWIN}/lib/gcc_dll/mswu&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${WX_LIBPATH1}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${WX_LIBPATH2}&quot;"/>
 								</option>
 								<option IS_BUILTIN_EMPTY="false" IS_VALUE_EMPTY="false" id="gnu.c.compiler.option.preprocessor.def.symbols.1340286552" name="Defined symbols (-D)" superClass="gnu.c.compiler.option.preprocessor.def.symbols" useByScannerDiscovery="false" valueType="definedSymbols">
 									<listOptionValue builtIn="false" value="TARGET=ARM"/>
@@ -51,7 +53,8 @@
 							</tool>
 							<tool id="cdt.managedbuild.tool.gnu.assembler.base.442287748" name="GCC Assembler" superClass="cdt.managedbuild.tool.gnu.assembler.base">
 								<option IS_BUILTIN_EMPTY="false" IS_VALUE_EMPTY="false" id="gnu.both.asm.option.include.paths.1638397964" name="Include paths (-I)" superClass="gnu.both.asm.option.include.paths" valueType="includePath">
-									<listOptionValue builtIn="false" value="&quot;${WXWIN}/lib/gcc_dll/mswu&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${WX_LIBPATH1}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${WX_LIBPATH2}&quot;"/>
 								</option>
 								<inputType id="cdt.managedbuild.tool.gnu.assembler.input.2111609674" superClass="cdt.managedbuild.tool.gnu.assembler.input"/>
 							</tool>

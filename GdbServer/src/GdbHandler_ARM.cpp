@@ -582,12 +582,53 @@ USBDM_ErrorCode GdbHandler_ARM::haltTarget() {
  */
 GdbHandler::GdbTargetStatus GdbHandler_ARM::getTargetStatus() {
    LOGGING;
+   struct mdm_ap_control_t {
+      union {
+         uint32_t value;
+         struct {
+            /*  0 */ unsigned flash_erase:1;
+            /*  1 */ unsigned debug_disable:1;
+            /*  2 */ unsigned debug_req:1;
+            /*  3 */ unsigned reset_req:1;
+            /*  4 */ unsigned core_hold_reset:1;
+            /*  5 */ unsigned vlls_debug_req:1;
+            /*  6 */ unsigned vlls_debug_ack:1;
+            /*  7 */ unsigned lls_vlls_stat_ack:1;
+         };
+      };
+   };
+
+   struct  mdm_ap_status_t {
+      union {
+         uint32_t value;
+         struct {
+            /*  0 */ unsigned mass_erase_ack:1;
+            /*  1 */ unsigned flash_ready:1;
+            /*  2 */ unsigned sys_security:1;
+            /*  3 */ unsigned sys_reset_n:1;
+            /*  4 */ unsigned :1;
+            /*  5 */ unsigned mass_erase_en:1;
+            /*  6 */ unsigned backdoor_en:1;
+            /*  7 */ unsigned lp_enable:1;
+            /*  8 */ unsigned very_low_power_mode:1;
+            /*  9 */ unsigned lls_exit:1;
+            /* 10 */ unsigned vllsx_exit:1;
+            /* 11 */ unsigned :1;
+            /* 12 */ unsigned :1;
+            /* 13 */ unsigned :1;
+            /* 14 */ unsigned :1;
+            /* 15 */ unsigned :1;
+            /* 16 */ unsigned halted:1;
+            /* 17 */ unsigned sleepdeep:1;
+            /* 18 */ unsigned sleep:1;
+         };
+      };
+   };
 
    static GdbTargetStatus  lastStatus = GdbTargetStatus_NOCONNECTION;
    GdbTargetStatus         status     = GdbTargetStatus_NOCONNECTION;
 
    USBDM_ErrorCode         rc = BDM_RC_OK;
-
    do {
       if (isKinetisDevice) {
          /**
@@ -595,8 +636,15 @@ GdbHandler::GdbTargetStatus GdbHandler_ARM::getTargetStatus() {
           */
          unsigned long mdm_ap_status;
          rc = bdmInterface->readCReg(ARM_CRegMDM_AP_Status, &mdm_ap_status);
+         if (rc != BDM_RC_OK) {
+            log.error("Failed MDM_AP_Status read - No connection\n");
+            status = GdbTargetStatus_NOCONNECTION;
+            break;
+         }
+
          unsigned long mdm_ap_control;
          rc = bdmInterface->readCReg(ARM_CRegMDM_AP_Control, &mdm_ap_control);
+
 //         if (rc != BDM_RC_OK) {
 //            log.print("Failed MDM_AP_Status read - Doing autoReconnect\n");
 //            if (bdmInterface->connect() != BDM_RC_OK) {
@@ -609,7 +657,7 @@ GdbHandler::GdbTargetStatus GdbHandler_ARM::getTargetStatus() {
 //            }
 //         }
          if (rc != BDM_RC_OK) {
-            log.error("Failed MDM_AP_Status read - No connection\n");
+            log.error("Failed ARM_CRegMDM_AP_Control read - No connection\n");
             status = GdbTargetStatus_NOCONNECTION;
             break;
          }
@@ -624,6 +672,13 @@ GdbHandler::GdbTargetStatus GdbHandler_ARM::getTargetStatus() {
          }
          log.print("mdm_ap_status  - %s(0x%08lX)\n", getMDM_APStatusName(mdm_ap_status),   mdm_ap_status);
          log.print("mdm_ap_control - %s(0x%08lX)\n", getMDM_APControlName(mdm_ap_control), mdm_ap_control);
+
+         // For debugger
+//         volatile mdm_ap_status_t  mdm_ap_status_x;
+//         volatile mdm_ap_control_t mdm_ap_control_x;
+//         mdm_ap_status_x.value  = mdm_ap_status;
+//         mdm_ap_control_x.value = mdm_ap_control;
+
          if (mdm_ap_status&MDM_AP_Status_VLLSx_Mode_Exit) {
             // Target is being held in reset until mdm-ap_control.VLLDBGACK is written
             // Debug hardware loses state!
