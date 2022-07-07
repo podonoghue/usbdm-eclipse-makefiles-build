@@ -42,14 +42,14 @@ enum OscRunMode {
  * @tparam info      Information class for OSC
  *
  * @code
- * using osc = OscRfBase_T<OscRfInfo>;
+ * using osc = OscBase_T<OscRfInfo>;
  *
  *  osc::configure();
  *
  * @endcode
  */
 template <class Info>
-class OscRfBase_T {
+class OscBase_T {
 
 private:
    /** Class to static check OSC signal is mapped to a pin - Assumes existence */

@@ -427,7 +427,7 @@ public:
    static void startScan(TsiScanMode tsiScanMode) {
       // Disable module so changes have effect
       // This also helps with errata e4181
-      tsi->GENCS = tsi->GENCS & ~TSI_GENCS_TSIEN_MASK|TSI_GENCS_SWTS_MASK;
+      tsi->GENCS = tsi->GENCS & ~(TSI_GENCS_TSIEN_MASK|TSI_GENCS_SWTS_MASK);
 
       // Select Hardware/Software mode
       tsi->GENCS = tsi->GENCS | (tsiScanMode&TSI_GENCS_STM_MASK);
