@@ -247,10 +247,18 @@ enum AdcPgaChop {
 typedef void (*AdcCallbackFunction)(uint32_t result, int channel);
 
 /**
- * Provides common unhandledCallback for all ADCs.
- * This class is not intended to be instantiated.
+ * Provides:
+ * - Common unhandledCallback for all ADCs.
+ * - Shared constants
+ *
+ * This class is not intended to be instantiated directly.
  */
 class Adc {
+
+public:
+
+   /// Pointer to hardware instance
+   const HardwarePtr<ADC_Type> adc;
 
 private:
    Adc(const Adc&) = delete;
@@ -302,9 +310,6 @@ protected:
    static void unhandledCallback(uint32_t, int) {
       setAndCheckErrorCode(E_NO_HANDLER);
    }
-
-   /// Pointer to hardware instance
-   const HardwarePtr<ADC_Type> adc;
 
    /**
     * Constructor
@@ -623,6 +628,11 @@ public:
 
 };
 
+/**
+ * Class representing a minimal ADC channel
+ *
+ * This class is not intended to be instantiated directly.
+ */
 class AdcChannel : public Adc {
 
 private:
@@ -708,6 +718,26 @@ public:
    };
 
 };
+
+//#ifdef ADC_SC1_DIFF_MASK
+///**
+// * Class representing a minimal ADC differential channel
+// *
+// * This class is not intended to be instantiated directly.
+// */
+//   class AdcDiffChannel : public AdcChannel {
+//   private:
+//      /**
+//       * This class is not intended to be instantiated
+//       */
+//      AdcDiffChannel() = delete;
+//      AdcDiffChannel(const AdcDiffChannel&) = delete;
+//      AdcDiffChannel(AdcDiffChannel&&) = delete;
+//
+//   public:
+//      constexpr AdcDiffChannel(uint32_t adcAddress, uint8_t channel) : AdcChannel(adcAddress, channel|ADC_SC1_DIFF_MASK) {}
+//   };
+//#endif
 
 /**
  * Template class representing an ADC.
@@ -1632,27 +1662,7 @@ public:
 
 template<class Info> AdcCallbackFunction AdcBase_T<Info>::sCallback = Adc::unhandledCallback;
 
-#ifdef USBDM_ADC0_IS_DEFINED
-/**
- * Class representing ADC0
- */
-typedef AdcBase_T<Adc0Info> Adc0;
-#endif
-
-#ifdef USBDM_ADC1_IS_DEFINED
-/**
- * Class representing ADC1
- */
-typedef AdcBase_T<Adc1Info> Adc1;
-#endif
-
-#ifdef USBDM_ADC2_IS_DEFINED
-/**
- * Class representing ADC1
- */
-typedef AdcBase_T<Adc2Info> Adc2;
-#endif
-
+$(/ADC/declarations:No declarations found)
 /**
  * End ADC_Group
  * @}

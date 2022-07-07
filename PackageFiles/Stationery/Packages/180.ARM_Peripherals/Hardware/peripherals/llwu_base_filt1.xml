@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"
+?>
+<!DOCTYPE fragment SYSTEM "_menu.dtd" >
+<!-- llwu_base_filt1.xml -->
+
+<fragment xmlns:xi="http://www.w3.org/2001/XInclude">
+
+   <template namespace="usbdm" ><![CDATA[
+      \t/**
+      \t * LLWU pin filter wake-up mode
+      \t */
+      \tenum LlwuFilterPinMode {
+      \t   LlwuFilterPinMode_Disabled    = LLWU_FILT_FILTE(0), //!< Wake-up by pin change disabled
+      \t   LlwuFilterPinMode_RisingEdge  = LLWU_FILT_FILTE(1), //!< Wake-up on pin rising edge
+      \t   LlwuFilterPinMode_FallingEdge = LLWU_FILT_FILTE(2), //!< Wake-up on pin falling edge
+      \t   LlwuFilterPinMode_EitherEdge  = LLWU_FILT_FILTE(3), //!< Wake-up on pin rising or falling edge
+      \t};
+      \t\n\n
+   ]]></template>
+
+   <choiceOption 
+      name="llwu_filt_filte_t"  hidden="true"
+      description="Digital Filter On External Pin"  
+      toolTip="Controls the digital filter options for the external pin detect.">
+      <choice name="Filter disabled" value="LlwuFilterPinMode_Disabled" isDefault="true" />
+      <choice name="Filter rising"   value="LlwuFilterPinMode_RisingEdge" />
+      <choice name="Filter falling"  value="LlwuFilterPinMode_FallingEdge" />
+      <choice name="Filter both"     value="LlwuFilterPinMode_EitherEdge" />
+   </choiceOption>   
+
+   <choiceOption 
+      name="llwu_filt_filtsel_t"  hidden="true"
+      description="Filter Pin Select" 
+      toolTip="Selects 1 of the external signals to be muxed into the filter">
+      <choice name="" value="" />
+   </choiceOption>   
+      
+   <choiceOption name="llwu_filt1_filte"   derivedFrom="llwu_filt_filte_t"   />
+   <choiceOption name="llwu_filt1_filtsel" derivedFrom="llwu_filt_filtsel_t" />
+   <template><![CDATA[
+      \t// Pin Filter 1 register (Attached to pin $(llwu_filt1_filtsel))
+      \tstatic constexpr uint8_t filt1 = 
+      \t   $(llwu_filt1_filte) | 
+      \t   LLWU_FILT_FILTSEL($(llwu_filt1_filtsel));\n\n
+   ]]></template>
+      
+   <template name="llwu_base_init" namespace="all"  ><![CDATA[
+      \t   llwu->FILT1 = Info::filt1|LLWU_FILT_FILTF_MASK;\n
+   ]]></template>
+         
+</fragment>

@@ -681,55 +681,7 @@ template<class Info> I2cCallbackFunction I2cBase_T<Info>::sCallback = I2c::unhan
 /** Used by ISR to obtain handle of object */
 template<class Info> I2c *I2cBase_T<Info>::thisPtr = 0;
 
-#if defined(USBDM_I2C0_IS_DEFINED)
-/**
- * @brief Class representing the I2C0 interface
- *
- * <b>Example</b>\n
- * Refer @ref I2cBase_T
- */
-using I2c0 = I2cBase_T<I2c0Info>;
-#endif
-
-#if defined(USBDM_I2C1_IS_DEFINED)
-/**
- * @brief Class representing the I2C1 interface
- *
- * <b>Example</b>
- * Refer @ref I2cBase_T
- */
-using I2c1 = I2cBase_T<I2c1Info>;
-#endif
-
-#if defined(USBDM_I2C2_IS_DEFINED)
-/**
- * @brief Class representing the I2C2 interface
- *
- * <b>Example</b>
- * Refer @ref I2cBase_T
- */
-using I2c2 = I2cBase_T<I2c2Info>;
-#endif
-
-#if defined(USBDM_I2C3_IS_DEFINED)
-/**
- * @brief Class representing the I2C2 interface
- *
- * <b>Example</b>
- * Refer @ref I2cBase_T
- */
-using I2c3 = I2cBase_T<I2c3Info>;
-#endif
-
-#if defined(USBDM_I2C4_IS_DEFINED)
-/**
- * @brief Class representing the I2C4 interface
- *
- * <b>Example</b>
- * Refer @ref I2cBase_T
- */
-using I2c4 = I2cBase_T<I2c4Info>;
-#endif
+$(/I2C/declarations: // No declarations found)
 /**
  * End I2C_Group
  * @}

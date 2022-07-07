@@ -1124,27 +1124,7 @@ public:
 template<class Info> PdbCallbackFunction PdbBase_T<Info>::sCallback      = PdbBase_T<Info>::unhandledCallback;
 template<class Info> PdbCallbackFunction PdbBase_T<Info>::sErrorCallback = PdbBase_T<Info>::unhandledCallback;
 
-#ifdef USBDM_PDB_IS_DEFINED
-/**
- * Class representing PDB
- */
-class Pdb : public PdbBase_T<PdbInfo> {};
-#endif
-
-#ifdef USBDM_PDB0_IS_DEFINED
-/**
- * Class representing PDB
- */
-class Pdb0 : public PdbBase_T<Pdb0Info> {};
-#endif
-
-#ifdef USBDM_PDB1_IS_DEFINED
-/**
- * Class representing PDB
- */
-class Pdb1 : public PdbBase_T<Pdb1Info> {};
-#endif
-
+$(/PDB/declarations: // No declarations found)
 /**
  * End PDB_Group
  * @}

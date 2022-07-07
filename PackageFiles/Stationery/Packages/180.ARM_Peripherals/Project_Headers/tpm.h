@@ -2403,34 +2403,6 @@ public:
 template<class Info> TpmCallbackFunction         TpmBase_T<Info>::sToiCallback     = TpmBase_T<Info>::unhandledCallback;
 template<class Info> TpmChannelCallbackFunction  TpmBase_T<Info>::sChannelCallback = TpmBase_T<Info>::unhandledChannelCallback;
 
-#ifdef USBDM_TPM0_IS_DEFINED
-/**
- * Class representing TPM0.
- */
-using Tpm0 = TpmBase_T<Tpm0Info>;
-#endif
-
-#ifdef USBDM_TPM1_IS_DEFINED
-/**
- * Class representing TPM1.
- */
-using Tpm1 = TpmBase_T<Tpm1Info>;
-#endif
-
-#ifdef USBDM_TPM2_IS_DEFINED
-/**
- * Class representing TPM2
- */
-using Tpm2 = TpmBase_T<Tpm2Info>;
-#endif
-
-#ifdef USBDM_TPM3_IS_DEFINED
-/**
- * Class representing TPM3
- */
-using Tpm3 = TpmBase_T<Tpm3Info>;
-#endif
-
 #ifdef TPM_QDCTRL_QUADEN_MASK
 /**
  *  Quadrature Decoder Mode\n
@@ -2655,43 +2627,8 @@ public:
 };
 #endif // defined(TPM_QDCTRL_QUADEN_MASK)
 
-
-#ifdef USBDM_TPM0_INFOQUAD_IS_DEFINED
-/**
- * Class representing TPM0 as Quadrature decoder
- * Not all TPMs support this mode
- */
-using TpmQuadDecoder0 = TpmQuadDecoder_T<Tpm0Info>;
-#endif
-
-#ifdef USBDM_TPM1_INFOQUAD_IS_DEFINED
-/**
- * Class representing TPM1 as Quadrature decoder
- */
-using TpmQuadDecoder1 = TpmQuadDecoder_T<Tpm1Info>;
-#endif
-
-#ifdef USBDM_TPM2_INFOQUAD_IS_DEFINED
-/**
- * Class representing TPM2 as Quadrature decoder
- */
-using TpmQuadDecoder2 = TpmQuadDecoder_T<Tpm2Info>;
-#endif
-
-#ifdef USBDM_TPM3_INFOQUAD_IS_DEFINED
-/**
- * Class representing TPM3 as Quadrature decoder
- */
-using TpmQuadDecoder3 = TpmQuadDecoder_T<Tpm3Info>;
-#endif
-
-#ifdef USBDM_TPM4_INFOQUAD_IS_DEFINED
-/**
- * Class representing TPM4 as Quadrature decoder
- */
-using TpmQuadDecoder4 = TpmQuadDecoder_T<Tpm4Info>;
-#endif
-
+$(/TPM/declarations: // No declarations found)
+$(/TPM/quadDeclarations: // No declarations found)
 /**
  * End TPM_Group
  * @}

@@ -45,24 +45,6 @@ enum LlwuFilterNum {
 };
 
 /**
- * LLWU pin wake-up mode
- */
-enum LlwuPinMode {
-   LlwuPinMode_Disabled    = LLWU_PE1_WUPE0(0)|LLWU_PE1_WUPE1(0)|LLWU_PE1_WUPE2(0)|LLWU_PE1_WUPE3(0), //!< Wake-up by pin change disabled
-   LlwuPinMode_RisingEdge  = LLWU_PE1_WUPE0(1)|LLWU_PE1_WUPE1(1)|LLWU_PE1_WUPE2(1)|LLWU_PE1_WUPE3(1), //!< Wake-up on pin rising edge
-   LlwuPinMode_FallingEdge = LLWU_PE1_WUPE0(2)|LLWU_PE1_WUPE1(2)|LLWU_PE1_WUPE2(2)|LLWU_PE1_WUPE3(2), //!< Wake-up on pin falling edge
-   LlwuPinMode_EitherEdge  = LLWU_PE1_WUPE0(3)|LLWU_PE1_WUPE1(3)|LLWU_PE1_WUPE2(3)|LLWU_PE1_WUPE3(3), //!< Wake-up on pin rising or falling edge
-};
-
-/**
- * LLWU peripheral wake-up mode
- */
-enum LlwuPeripheralMode {
-   LlwuPeripheralMode_Disabled = false, //!< Wake-up by peripheral disabled
-   LlwuPeripheralMode_Enabled  = true,  //!< Wake-up by peripheral enabled
-};
-
-/**
  * LLWU pin sources
  */
 enum LlwuPin : uint32_t {
@@ -117,6 +99,7 @@ enum LlwuPin : uint32_t {
 $(/LLWU/InputPinMapping:// No user pin mappings found)
 };
 
+#if defined(LLWU_MF_MWUF0_MASK)
 /**
  * LLWU peripheral sources
  */
@@ -133,16 +116,7 @@ enum LlwuPeripheral : uint32_t {
    // Connected peripherals
 $(/LLWU/InputModuleMapping:// None found)
 };
-
-/**
- * LLWU pin wake-up mode
- */
-enum LlwuFilterPinMode {
-   LlwuFilterPinMode_Disabled    = LLWU_FILT_FILTE(0), //!< Wake-up by pin change disabled
-   LlwuFilterPinMode_RisingEdge  = LLWU_FILT_FILTE(1), //!< Wake-up on pin rising edge
-   LlwuFilterPinMode_FallingEdge = LLWU_FILT_FILTE(2), //!< Wake-up on pin falling edge
-   LlwuFilterPinMode_EitherEdge  = LLWU_FILT_FILTE(3), //!< Wake-up on pin rising or falling edge
-};
+#endif
 
 #ifdef LLWU_RST_LLRSTE
 /**
@@ -348,47 +322,7 @@ public:
 
       // Configure pins
       Info::initPCRs();
-
-      llwu->PE1   = Info::pe1;
-#ifdef LLWU_PE2_WUPE4_MASK
-      llwu->PE2   = Info::pe2;
-#endif
-#ifdef LLWU_PE3_WUPE8_MASK
-      llwu->PE3   = Info::pe3;
-#endif
-#ifdef LLWU_PE4_WUPE12_MASK
-      llwu->PE4   = Info::pe4;
-#endif
-#ifdef LLWU_PE5_WUPE16_MASK
-      llwu->PE5   = Info::pe5;
-#endif
-#ifdef LLWU_PE6_WUPE20_MASK
-      llwu->PE6   = Info::pe6;
-#endif
-#ifdef LLWU_PE7_WUPE24_MASK
-      llwu->PE7   = Info::pe7;
-#endif
-#ifdef LLWU_PE8_WUPE28_MASK
-      llwu->PE8   = Info::pe8;
-#endif
-
-      llwu->ME    = Info::me;
-
-      llwu->FILT1 = Info::filt1|LLWU_FILT_FILTF_MASK;
-#ifdef LLWU_FILT2_FILTE_MASK
-      llwu->FILT2 = Info::filt2|LLWU_FILT_FILTF_MASK;
-#endif
-#ifdef LLWU_FILT3_FILTE_MASK
-      llwu->FILT3 = Info::filt3|LLWU_FILT_FILTF_MASK;
-#endif
-#ifdef LLWU_FILT4_FILTE_MASK
-      llwu->FILT4 = Info::filt4|LLWU_FILT_FILTF_MASK;
-#endif
-
-#ifdef LLWU_RST_LLRSTE
-      llwu->RST   = Info::rst;
-#endif
-
+$(/LLWU/llwu_base_init:// No initialisation found - /LLWU/llwu_base_init)
       enableNvicInterrupts(Info::irqLevel);
    }
 
@@ -508,11 +442,11 @@ public:
     * @note Filtering is bypassed in VLLS0
     */
    static ErrorCode configureFilteredPinSource(
-         LlwuFilterNum     filterNum,
+         LlwuFilterNum     llwuFilterNum,
          LlwuPin           llwuPin,
          LlwuFilterPinMode llwuFilterPinMode) {
 
-      llwu->FILT[filterNum] = llwuPin|llwuFilterPinMode;
+      llwu->FILT[llwuFilterNum] = llwuPin|llwuFilterPinMode;
       return E_NO_ERROR;
    }
 
@@ -545,42 +479,7 @@ public:
          llwu->FILT[index] = llwu->FILT[index] | LLWU_FILT_FILTF_MASK;
       }
    }
-
-#ifdef LLWU_RST_LLRSTE
-   /**
-    * Controls Reset wake-up control
-    *
-    * @param llwuResetFilter  Whether filtering is applied to reset pin
-    * @param llwuResetWakeup  Whether reset is enabled as a wake-up source
-    */
-   static void configureResetFilter(LlwuResetFilter llwuResetFilter, LlwuResetWakeup llwuResetWakeup=LlwuResetWakeup_Enabled) {
-      llwu->RST = llwuResetFilter|llwuResetWakeup;
-   }
-#endif
-
-   /*
-    * ***************************************************
-    * Wake-up peripherals
-    * ***************************************************
-    */
-   /**
-    * Configure peripheral as wake-up source
-    *
-    * @param[in] llwuPeripheral     Peripheral to configure
-    * @param[in] llwuPeripheralMode Whether to enable peripheral as wake-up source
-    */
-   static void configurePeripheralSource(
-         LlwuPeripheral       llwuPeripheral,
-         LlwuPeripheralMode   llwuPeripheralMode=LlwuPeripheralMode_Enabled) {
-
-      if (llwuPeripheralMode) {
-         llwu->ME = llwu->ME | llwuPeripheral;
-      }
-      else {
-         llwu->ME = llwu->ME & (uint8_t)~llwuPeripheral;
-      }
-   }
-
+$(/LLWU/llwu_base_methods:// No peripheral devices found - /LLWU/llwu_base_methods)
    /**
     * Disable all wake-up sources (pins and peripherals)
     */
@@ -588,39 +487,10 @@ public:
       for (unsigned index=0; index<(sizeof(llwu->PE)/(sizeof(llwu->PE[0]))); index++) {
          llwu->PE[index] = 0;
       }
+
+#if defined(LLWU_ME_WUME0_MASK)
       llwu->ME  = 0;
-   }
-
-   /**
-    * Get flag bit mask indicating wake-up peripheral sources\n
-    * The mask returned correspond to (multiple) peripheral sources.\n
-    * These flags are cleared through the originating peripheral.
-    *
-    *
-    * Example checking source
-    * @code
-    *    if ((peripheralWakeupSource&LlwuPeripheral_Lptmr) != 0) {
-    *       // Wakeup from LPTMR
-    *    }
-    * @endcode
-    *
-    * @return Bit mask
-    */
-   static uint32_t getPeripheralWakeupSources() {
-      return llwu->MF;
-   }
-
-   /**
-    *  Check if peripheral is source of wake-up\n
-    *  These flags are cleared through the originating peripheral.
-    *
-    * @param[in] llwuPeripheral  Peripheral to check
-    *
-    * @return false Given peripheral is not source of wake-up.
-    * @return true  Given peripheral is source of wake-up.
-    */
-   static bool isPeripheralWakeupSource(LlwuPeripheral llwuPeripheral) {
-      return llwu->MF & llwuPeripheral;
+#endif
    }
 
    /**
@@ -692,12 +562,7 @@ public:
 
 template<class Info> LlwuCallbackFunction LlwuBase_T<Info>::sCallback = LlwuBase_T<Info>::unhandledCallback;
 
-#ifdef USBDM_LLWU_IS_DEFINED
-/**
- * Class representing LLWU
- */
-class Llwu : public LlwuBase_T<LlwuInfo> {};
-#endif
+$(/LLWU/declarations: // No declarations found)
 
 /**
  * End LLWU_Group

@@ -296,10 +296,7 @@ public:
 
 template<class Info> SDHCCallbackFunction SdhcBase_T<Info>::callback = SdhcBase_T<Info>::unhandledCallback;
 
-#if defined(USBDM_SDHC0_IS_DEFINED)
-class Sdhc0 : public SdhcBase_T<Sdhc0Info> {};
-#endif
-
+$(/SDHC/declarations: // No declarations found)
 /**
  * End SDHC_Group
  * @}

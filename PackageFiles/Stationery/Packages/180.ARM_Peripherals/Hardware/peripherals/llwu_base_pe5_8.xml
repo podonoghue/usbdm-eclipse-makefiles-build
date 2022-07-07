@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"
+?>
+<!DOCTYPE fragment SYSTEM "_menu.dtd" >
+<!-- llwu_pe8_filt4_base.xml -->
+
+<fragment xmlns:xi="http://www.w3.org/2001/XInclude">
+   <choiceOption name="llwu_pe5_wupe16" derivedFrom="llwu_pe1_wupe_t"/>
+   <choiceOption name="llwu_pe5_wupe17" derivedFrom="llwu_pe1_wupe_t"/>
+   <choiceOption name="llwu_pe5_wupe18" derivedFrom="llwu_pe1_wupe_t"/>
+   <choiceOption name="llwu_pe5_wupe19" derivedFrom="llwu_pe1_wupe_t"/>
+   <template><![CDATA[
+      \tstatic constexpr uint8_t pe5 = 
+      \t   /* LLWUP 16 */ (LLWU_PE5_WUPE16_MASK&$(llwu_pe5_wupe16))| // $(llwu_pe5_wupe16.description)
+      \t   /* LLWUP 17 */ (LLWU_PE5_WUPE17_MASK&$(llwu_pe5_wupe17))| // $(llwu_pe5_wupe17.description)
+      \t   /* LLWUP 18 */ (LLWU_PE5_WUPE18_MASK&$(llwu_pe5_wupe18))| // $(llwu_pe5_wupe18.description)
+      \t   /* LLWUP 19 */ (LLWU_PE5_WUPE19_MASK&$(llwu_pe5_wupe19)); // $(llwu_pe5_wupe19.description)\n\n
+   ]]></template>
+
+   <choiceOption name="llwu_pe6_wupe20" derivedFrom="llwu_pe1_wupe_t"/>
+   <choiceOption name="llwu_pe6_wupe21" derivedFrom="llwu_pe1_wupe_t"/>
+   <choiceOption name="llwu_pe6_wupe22" derivedFrom="llwu_pe1_wupe_t"/>
+   <choiceOption name="llwu_pe6_wupe23" derivedFrom="llwu_pe1_wupe_t"/>
+   <template><![CDATA[
+      \tstatic constexpr uint8_t pe6 = 
+      \t   /* LLWUP 20 */ (LLWU_PE6_WUPE20_MASK&$(llwu_pe6_wupe20))| // $(llwu_pe6_wupe20.description)
+      \t   /* LLWUP 21 */ (LLWU_PE6_WUPE21_MASK&$(llwu_pe6_wupe21))| // $(llwu_pe6_wupe21.description)
+      \t   /* LLWUP 22 */ (LLWU_PE6_WUPE22_MASK&$(llwu_pe6_wupe22))| // $(llwu_pe6_wupe22.description)
+      \t   /* LLWUP 23 */ (LLWU_PE6_WUPE23_MASK&$(llwu_pe6_wupe23)); // $(llwu_pe6_wupe23.description)\n\n
+   ]]></template>
+
+   <choiceOption name="llwu_pe7_wupe24" derivedFrom="llwu_pe1_wupe_t"/>
+   <choiceOption name="llwu_pe7_wupe25" derivedFrom="llwu_pe1_wupe_t"/>
+   <choiceOption name="llwu_pe7_wupe26" derivedFrom="llwu_pe1_wupe_t"/>
+   <choiceOption name="llwu_pe7_wupe27" derivedFrom="llwu_pe1_wupe_t"/>
+   <template><![CDATA[
+      \tstatic constexpr uint8_t pe7 = 
+      \t   /* LLWUP 24 */ (LLWU_PE7_WUPE24_MASK&$(llwu_pe7_wupe24))| // $(llwu_pe7_wupe24.description)
+      \t   /* LLWUP 25 */ (LLWU_PE7_WUPE25_MASK&$(llwu_pe7_wupe25))| // $(llwu_pe7_wupe25.description)
+      \t   /* LLWUP 26 */ (LLWU_PE7_WUPE26_MASK&$(llwu_pe7_wupe26))| // $(llwu_pe7_wupe26.description)
+      \t   /* LLWUP 27 */ (LLWU_PE7_WUPE27_MASK&$(llwu_pe7_wupe27)); // $(llwu_pe7_wupe27.description)\n\n
+   ]]></template>
+
+   <choiceOption name="llwu_pe8_wupe28" derivedFrom="llwu_pe1_wupe_t"/>
+   <choiceOption name="llwu_pe8_wupe29" derivedFrom="llwu_pe1_wupe_t"/>
+   <choiceOption name="llwu_pe8_wupe30" derivedFrom="llwu_pe1_wupe_t"/>
+   <choiceOption name="llwu_pe8_wupe31" derivedFrom="llwu_pe1_wupe_t"/>
+   <template><![CDATA[
+      \tstatic constexpr uint8_t pe8 = 
+      \t   /* LLWUP 28 */ (LLWU_PE8_WUPE28_MASK&$(llwu_pe8_wupe28))| // $(llwu_pe8_wupe28.description)
+      \t   /* LLWUP 29 */ (LLWU_PE8_WUPE29_MASK&$(llwu_pe8_wupe29))| // $(llwu_pe8_wupe29.description)
+      \t   /* LLWUP 30 */ (LLWU_PE8_WUPE30_MASK&$(llwu_pe8_wupe30))| // $(llwu_pe8_wupe30.description)
+      \t   /* LLWUP 31 */ (LLWU_PE8_WUPE31_MASK&$(llwu_pe8_wupe31)); // $(llwu_pe8_wupe31.description)\n\n
+   ]]></template>
+
+   <template name="llwu_base_init" namespace="all"  ><![CDATA[
+      \t   llwu->PE5   = Info::pe5;
+      \t   llwu->PE6   = Info::pe6;
+      \t   llwu->PE7   = Info::pe7;
+      \t   llwu->PE8   = Info::pe8;\n
+   ]]></template>
+</fragment>

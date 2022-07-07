@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8"
+?>
+<!DOCTYPE fragment SYSTEM "_menu.dtd" >
+<!-- llwu_base_pe1_2.xml -->
+
+<fragment xmlns:xi="http://www.w3.org/2001/XInclude">
+
+   <template namespace="usbdm" ><![CDATA[
+      \t/**
+      \t * LLWU pin wake-up mode
+      \t */
+      \tenum LlwuPinMode {
+      \t   LlwuPinMode_Disabled    = LLWU_PE1_WUPE0(0)|LLWU_PE1_WUPE1(0)|LLWU_PE1_WUPE2(0)|LLWU_PE1_WUPE3(0), //!< Wake-up by pin change disabled
+      \t   LlwuPinMode_RisingEdge  = LLWU_PE1_WUPE0(1)|LLWU_PE1_WUPE1(1)|LLWU_PE1_WUPE2(1)|LLWU_PE1_WUPE3(1), //!< Wake-up on pin rising edge
+      \t   LlwuPinMode_FallingEdge = LLWU_PE1_WUPE0(2)|LLWU_PE1_WUPE1(2)|LLWU_PE1_WUPE2(2)|LLWU_PE1_WUPE3(2), //!< Wake-up on pin falling edge
+      \t   LlwuPinMode_EitherEdge  = LLWU_PE1_WUPE0(3)|LLWU_PE1_WUPE1(3)|LLWU_PE1_WUPE2(3)|LLWU_PE1_WUPE3(3), //!< Wake-up on pin rising or falling edge
+      \t};
+
+      \t/**
+      \t * LLWU peripheral wake-up mode
+      \t */
+      \tenum LlwuPeripheralMode {
+      \t   LlwuPeripheralMode_Disabled = false, //!< Wake-up by peripheral disabled
+      \t   LlwuPeripheralMode_Enabled  = true,  //!< Wake-up by peripheral enabled
+      \t};
+      \t\n\n
+   ]]></template>
+
+   <template name="llwu_base_init" namespace="all"  ><![CDATA[
+      \t   llwu->PE1   = Info::pe1;
+      \t   llwu->PE2   = Info::pe2;\n
+   ]]></template>
+   
+   <choiceOption name="llwu_pe1_wupe_t" hidden="true" 
+      description="" 
+      toolTip="Enables and configures the edge detection for the wakeup pin">
+      <choice name="Disabled" value="LlwuPinMode_Disabled" isDefault="true" /> 
+      <choice name="Rising"   value="LlwuPinMode_RisingEdge" /> 
+      <choice name="Falling"  value="LlwuPinMode_FallingEdge" /> 
+      <choice name="Either"   value="LlwuPinMode_EitherEdge" />
+   </choiceOption>
+      
+   <choiceOption name="llwu_pe1_wupe0" derivedFrom="llwu_pe1_wupe_t"/>
+   <choiceOption name="llwu_pe1_wupe1" derivedFrom="llwu_pe1_wupe_t"/>
+   <choiceOption name="llwu_pe1_wupe2" derivedFrom="llwu_pe1_wupe_t"/>
+   <choiceOption name="llwu_pe1_wupe3" derivedFrom="llwu_pe1_wupe_t"/>
+   <template><![CDATA[
+      \t// LLWU Pin Enable registers
+      \tstatic constexpr uint8_t pe1 = 
+      \t   /* LLWUP 0 */ (LLWU_PE1_WUPE0_MASK&$(llwu_pe1_wupe0))| // $(llwu_pe1_wupe0.description)
+      \t   /* LLWUP 1 */ (LLWU_PE1_WUPE1_MASK&$(llwu_pe1_wupe1))| // $(llwu_pe1_wupe1.description)
+      \t   /* LLWUP 2 */ (LLWU_PE1_WUPE2_MASK&$(llwu_pe1_wupe2))| // $(llwu_pe1_wupe2.description)
+      \t   /* LLWUP 3 */ (LLWU_PE1_WUPE3_MASK&$(llwu_pe1_wupe3)); // $(llwu_pe1_wupe3.description)\n\n
+   ]]></template>
+
+   <choiceOption name="llwu_pe2_wupe4" derivedFrom="llwu_pe1_wupe_t"/>
+   <choiceOption name="llwu_pe2_wupe5" derivedFrom="llwu_pe1_wupe_t"/>
+   <choiceOption name="llwu_pe2_wupe6" derivedFrom="llwu_pe1_wupe_t"/>
+   <choiceOption name="llwu_pe2_wupe7" derivedFrom="llwu_pe1_wupe_t"/>
+   <template><![CDATA[
+      \tstatic constexpr uint8_t pe2 = 
+      \t   /* LLWUP 4 */ (LLWU_PE2_WUPE4_MASK&$(llwu_pe2_wupe4))| // $(llwu_pe2_wupe4.description)
+      \t   /* LLWUP 5 */ (LLWU_PE2_WUPE5_MASK&$(llwu_pe2_wupe5))| // $(llwu_pe2_wupe5.description)
+      \t   /* LLWUP 6 */ (LLWU_PE2_WUPE6_MASK&$(llwu_pe2_wupe6))| // $(llwu_pe2_wupe6.description)
+      \t   /* LLWUP 7 */ (LLWU_PE2_WUPE7_MASK&$(llwu_pe2_wupe7)); // $(llwu_pe2_wupe7.description) \n\n
+   ]]></template>
+         
+   <template name="declarations" namespace="all"  ><![CDATA[
+   \t/**
+   \t * Class representing LLWU
+   \t */
+   \tclass Llwu : public LlwuBase_T<LlwuInfo> {};
+   ]]></template>
+   
+</fragment>

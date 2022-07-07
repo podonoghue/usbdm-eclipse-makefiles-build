@@ -453,16 +453,7 @@ $(/FLEXBUS/classInfo: // No class Info found)
    }
 };
 
-#if defined(USBDM_FLEXBUS_IS_DEFINED)
-/**
- * @brief Class representing the FLEXBUS0 interface
- *
- * <b>Example</b>\n
- * Refer @ref FlexbusBase_T
- */
-using Flexbus = FlexbusBase_T<FlexbusInfo>;
-#endif
-
+$(/FLEXBUS/declarations: // No declarations found)
 /**
  * End FLEXBUS_Group
  * @}

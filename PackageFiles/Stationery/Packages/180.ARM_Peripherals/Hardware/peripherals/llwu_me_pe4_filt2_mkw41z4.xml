@@ -1,15 +1,19 @@
 <?xml version="1.0" encoding="UTF-8"
 ?>
 <!DOCTYPE peripheralPage SYSTEM "_menu.dtd" >
-<!-- llwu_pe2_filt2_mkl05z4..xml -->
+<!-- llwu_pe4_filt2_mkw41z4.xml -->
 
 <peripheralPage xmlns:xi="http://www.w3.org/2001/XInclude" name="_instance" description="Low Leakage Wakeup Unit">
       
    <xi:include href="_default_instance.xml"/>
  
+   <xi:include href="llwu_base_me.xml"/>   
+
    <category name="Pin sources" description="Wakeups from pins">
       <xi:include href="llwu_base_pe1_2.xml"/>   
+      <xi:include href="llwu_base_pe3_4.xml"/>   
       <xi:include href="llwu_base_filt1.xml"/>   
+      <xi:include href="llwu_base_filt2.xml"/>
    </category>
       
    <xi:include href="_mapPinsOption.xml"/>   
@@ -23,7 +27,7 @@
 
    <projectActionList id = "llwu_files" >
       <copy source="Project_Headers/llwu.h"            target="Project_Headers/llwu.h"            overwrite="true" derived="true" />
-      <copy source="Snippets/llwu-example-mkl25z.cpp"  target="Snippets/llwu-example-mkl25z.cpp"  overwrite="true" derived="true" />
+      <copy source="Snippets/llwu-example-mkw41z.cpp"  target="Snippets/llwu-example-mkw41z.cpp"  overwrite="true" derived="true" />
    </projectActionList>
    
 </peripheralPage>

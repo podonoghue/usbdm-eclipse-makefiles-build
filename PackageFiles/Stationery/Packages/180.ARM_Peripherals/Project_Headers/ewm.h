@@ -353,10 +353,7 @@ $(/EWM/classInfo: // No class Info found)
 
 template<class Info> EwmCallbackFunction EwmBase_T<Info>::sCallback = EwmBase_T<Info>::unhandledCallback;
 
-#if defined(USBDM_EWM_IS_DEFINED)
-class Ewm : public EwmBase_T<EwmInfo> {};
-#endif
-
+$(/EWM/declarations: // Declarations not found)
 /**
  * End EWM_Group
  * @}

@@ -4,9 +4,6 @@
 <!-- llwu_pe4_filt2_rst_base.xml -->
 
 <fragment xmlns:xi="http://www.w3.org/2001/XInclude">
-
-   <xi:include href="llwu_pe4_filt2_base.xml"/>
-
    <binaryOption 
       name="llwu_rst_llrste" 
       description="Low-Leakage Mode RESET Enable"
@@ -32,5 +29,20 @@
       \t   LLWU_RST_RSTFILT($(llwu_rst_rstfilt));  // Digital Filter On RESET Pin\n\n
    ]]></template>
 
-         
+   <template name="llwu_base_init" namespace="all"  ><![CDATA[
+      \t   llwu->RST   = Info::rst;\n
+   ]]></template>
+   
+   <template name="llwu_base_methods" namespace="all"  ><![CDATA[
+      \t/**
+      \t * Controls Reset wake-up control
+      \t *
+      \t * @param llwuResetFilter  Whether filtering is applied to reset pin
+      \t * @param llwuResetWakeup  Whether reset is enabled as a wake-up source
+      \t */
+      \tstatic void configureResetFilter(LlwuResetFilter llwuResetFilter, LlwuResetWakeup llwuResetWakeup=LlwuResetWakeup_Enabled) {
+      \t   llwu->RST = llwuResetFilter|llwuResetWakeup;
+      \t}\n
+   ]]></template>
+
 </fragment>

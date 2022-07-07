@@ -7,6 +7,8 @@
       
    <xi:include href="_default_instance.xml"/>
  
+   <xi:include href="llwu_base_me.xml"/>   
+
    <category name="Pin sources" description="Wakeups from pins">
       <xi:include href="llwu_base_pe1_2.xml"/>   
       <xi:include href="llwu_base_filt1.xml"/>   

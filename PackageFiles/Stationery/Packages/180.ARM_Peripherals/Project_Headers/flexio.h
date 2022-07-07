@@ -614,13 +614,6 @@ $(/FLEXIO/classInfo: // No class Info found)
    }
 
    /**
-    * Disable interface to FLEXIO.
-    */
-   static void disable() {
-      Info::disableClock();
-   }
-
-   /**
     * Get Flexio parameters
     *
     * @param triggerNumber    Number of external triggers implemented.
@@ -1481,14 +1474,7 @@ $(/FLEXIO/classInfo: // No class Info found)
 
 template<class Info> FLEXIOCallbackFunction FlexioBase_T<Info>::callback = FlexioBase_T<Info>::unhandledCallback;
 
-#if defined(USBDM_FLEXIO_IS_DEFINED)
-class Flexio : public FlexioBase_T<FlexioInfo> {};
-#endif
-
-#if defined(USBDM_FLEXIO0_IS_DEFINED)
-class Flexio0 : public FlexioBase_T<Flexio0Info> {};
-#endif
-
+$(/FLEXIO/declarations: // No declarations found)
 /**
  * End FLEXIO_Group
  * @}

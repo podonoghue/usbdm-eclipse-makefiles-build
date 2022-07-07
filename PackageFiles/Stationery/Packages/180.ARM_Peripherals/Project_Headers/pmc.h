@@ -340,7 +340,7 @@ public:
    }
 #endif
 
-#ifdef PMC_REGSC_BGEN
+#ifdef PMC_REGSC_BGBE
    /**
     * Determines availability of Band-gap reference
     *
@@ -497,21 +497,7 @@ public:
 
 template<class Info> PmcCallbackFunction PmcBase_T<Info>::sCallback = PmcBase_T<Info>::unhandledCallback;
 
-#ifdef USBDM_PMC_IS_DEFINED
-/**
- * Class representing PMC
- */
-class Pmc : public PmcBase_T<PmcInfo> {};
-
-#endif
-
-#ifdef USBDM_PMC0_IS_DEFINED
-/**
- * Class representing PMC
- */
-class Pmc : public PmcBase_T<PmcInfo> {};
-#endif
-
+$(/PMC/declarations: // No declarations found)
 /**
  * End PMC_Group
  * @}

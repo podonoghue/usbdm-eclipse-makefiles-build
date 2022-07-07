@@ -734,14 +734,7 @@ public:
    }
 };
 
-#if defined(USBDM_SDRAMC_IS_DEFINED)
-class Sdramc : public SdramcBase_T<SdramcInfo> {};
-#endif
-
-#if defined(USBDM_SDRAMC0_IS_DEFINED)
-class Sdramc0 : public SdramcBase_T<Sdramc0Info> {};
-#endif
-
+$(/SDRAMC/declarations: // No declarations found)
 /**
  * End SDRAMC_Group
  * @}

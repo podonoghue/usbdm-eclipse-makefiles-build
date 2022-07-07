@@ -233,12 +233,12 @@ public:
       // (RTC used its own clock internally)
       enable();
 
-#ifdef RTC_CR_OSCE_MASK
-      if ((Info::cr&RTC_CR_OSCE_MASK) == 0) {
-         // RTC disabled
-         return;
-      }
-#endif
+//#ifdef RTC_CR_OSCE_MASK
+//      if ((Info::cr&RTC_CR_OSCE_MASK) == 0) {
+//         // RTC disabled
+//         return;
+//      }
+//#endif
 
       configureAllPins();
 
@@ -377,13 +377,7 @@ public:
 template<class Info> RtcCallbackFunction RtcBase_T<Info>::sAlarmCallback   = unhandledCallback;
 template<class Info> RtcCallbackFunction RtcBase_T<Info>::sSecondsCallback = unhandledCallback;
 
-#ifdef USBDM_RTC_IS_DEFINED
-/**
- * Class representing RTC
- */
-class Rtc : public RtcBase_T<RtcInfo>{};
-#endif
-
+$(/RTC/declarations: // No declarations found)
 /**
  * End RTC_Group
  * @}

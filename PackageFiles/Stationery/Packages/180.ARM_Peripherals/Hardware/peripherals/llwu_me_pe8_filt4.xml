@@ -1,15 +1,21 @@
 <?xml version="1.0" encoding="UTF-8"
 ?>
 <!DOCTYPE peripheralPage SYSTEM "_menu.dtd" >
-<!-- llwu_pe2_filt2_mkl05z4..xml -->
+<!-- llwu_pe8_filt4.xml -->
 
 <peripheralPage xmlns:xi="http://www.w3.org/2001/XInclude" name="_instance" description="Low Leakage Wakeup Unit">
       
    <xi:include href="_default_instance.xml"/>
  
+   <xi:include href="llwu_base_me.xml"/>   
+
    <category name="Pin sources" description="Wakeups from pins">
       <xi:include href="llwu_base_pe1_2.xml"/>   
+      <xi:include href="llwu_base_pe3_4.xml"/>   
+      <xi:include href="llwu_base_pe5_8.xml"/>   
       <xi:include href="llwu_base_filt1.xml"/>   
+      <xi:include href="llwu_base_filt2.xml"/>
+      <xi:include href="llwu_base_filt3_4.xml"/>
    </category>
       
    <xi:include href="_mapPinsOption.xml"/>   
@@ -22,8 +28,11 @@
    <signals/>
 
    <projectActionList id = "llwu_files" >
-      <copy source="Project_Headers/llwu.h"            target="Project_Headers/llwu.h"            overwrite="true" derived="true" />
+      <copy source="Project_Headers/llwu.h"            target="Project_Headers/llwu.h"           overwrite="true" derived="true" />
+      <copy source="Snippets/llwu-example-mk20.cpp"    target="Snippets/llwu-example-mk20.cpp"   overwrite="true" derived="true" />
+      <copy source="Snippets/llwu-example-mk22f.cpp"   target="Snippets/llwu-example-mk22f.cpp"  overwrite="true" derived="true" />
+      <copy source="Snippets/llwu-example-mk28f.cpp"   target="Snippets/llwu-example-mk28f.cpp"  overwrite="true" derived="true" />
       <copy source="Snippets/llwu-example-mkl25z.cpp"  target="Snippets/llwu-example-mkl25z.cpp"  overwrite="true" derived="true" />
    </projectActionList>
-   
+         
 </peripheralPage>

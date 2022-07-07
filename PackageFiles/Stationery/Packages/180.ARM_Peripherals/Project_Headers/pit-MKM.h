@@ -187,6 +187,7 @@ extern const PIT_ PIT_0;
 extern const PIT_ PIT_1;
 #endif
 
+$(/PIT/declarations:  // No declarations found)
 /**
  * @}
  */

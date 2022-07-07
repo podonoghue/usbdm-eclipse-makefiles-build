@@ -88,20 +88,7 @@ public:
 
 };
 
-#ifdef USBDM_OSC0_IS_DEFINED
-/**
- * Class providing interface to Oscillator
- */
-class Osc0 : public OscBase_T<Osc0Info> {};
-#endif
-
-#ifdef USBDM_OSC1_IS_DEFINED
-/**
- * Class providing interface to Oscillator 1
- */
-class Osc1 : public OscBase_T<Osc1Info> {};
-#endif
-
+$(/OSC/declarations: // No declarations found)
 /**
  * End OSC_Group
  * @}

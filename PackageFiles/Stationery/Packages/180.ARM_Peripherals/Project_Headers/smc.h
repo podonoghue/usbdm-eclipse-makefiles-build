@@ -229,31 +229,19 @@ public:
     * Peripherals affected will depend on the stop mode selected.\n
     * The stop mode to enter may be set by setStopMode().
     * Other options that affect stop mode may be set by setStopOptions().
+    *
+    * @note This function is loaded in RAM as stop may power down flash
     */
+   __attribute__((section(".ram_functions")))
+   __attribute__((long_call))
    static void enterStopMode() {
-      // Space for RAM copy of executeRamStopCommand_asm()
-      __attribute__ ((section(".data")))
-      static uint16_t const space[] = {
-               //                // executeRamStopCommand_asm()
-               0x200a,           //        movs  r0, #10
-               //                // loop:
-               0xf110, 0x30ff,   //        adds  r0, r0, #-1
-               0xd1fc,           //        bne   loop
-               0xf3bf, 0x8f4f,   //        dsb
-               0xbf30,           //        wfi
-               0xf3bf, 0x8f6f,   //        isb
-               0x4770,           //        bx lr
-      };
-      // Pointer to function in RAM
-      void (*fp)() = (void (*)())((uint32_t)space|1);
-
       // Set deep sleep
       SCB->SCR = SCB->SCR | SCB_SCR_SLEEPDEEP_Msk;
-
-      // Call executeRamStopCommand() on the stack
-      (*fp)();
+      (void)SCB->SCR;
+      __DSB();
+      __WFI();
+      __ISB();
    }
-
 };
 
 /**
@@ -296,7 +284,7 @@ public:
       }
       return "Impossible while running!";
    }
-   
+
    /**
     * Get name for current SMC status  e.g. RUN, VLPR, HSRUN
     *
@@ -320,7 +308,18 @@ public:
       smc->PMPROT   = Info::pmprot;
       smc->STOPCTRL = Info::stopctrl;
    }
-   
+
+   /**
+    * Enable all power modes.
+    * A power mode must be enabled before it can be entered.
+    *
+    * @note This is a write-once-after-reset operation
+    */
+   static ErrorCode enableAllPowerModes() {
+      smc->PMPROT = 0xFF;
+      return E_NO_ERROR;
+   }
+
 $(/SMC/enablePowerModes)
 $(/SMC/setStopOptions)
    /**
@@ -518,13 +517,7 @@ $(/SMC/setStopOptions)
    }
 };
 
-#ifdef USBDM_SMC_IS_DEFINED
-/**
- * Class representing SMC
- */
-class Smc : public SmcBase_T<SmcInfo> {};
-#endif
-
+$(/SMC/declarations: // No declarations found)
 /**
  * End SMC_Group
  * @}

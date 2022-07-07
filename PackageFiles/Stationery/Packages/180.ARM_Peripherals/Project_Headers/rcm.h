@@ -297,13 +297,7 @@ public:
 
 };
 
-#ifdef USBDM_RCM_IS_DEFINED
-/**
- * Class providing interface to Reset Control Module
- */
-using Rcm = RcmBase_T<RcmInfo>;
-#endif
-
+$(/RCM/declarations: // No declarations found)
 /**
  * End RMC_Group
  * @}

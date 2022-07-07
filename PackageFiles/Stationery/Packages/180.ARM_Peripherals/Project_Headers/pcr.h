@@ -69,9 +69,16 @@ public:
    constexpr auto operator /(float    other) const { return Ticks(value/other); }
    constexpr auto operator /(Ticks    other) const { return (value/other.getValue()); }
 
-   constexpr auto operator +(const Ticks &other)   const { return Ticks(value+other.value); }
-   constexpr auto operator -(const Ticks &other)   const { return Ticks(value+other.value); }
-   constexpr auto operator -(const unsigned other) const { return Ticks(value-other); }
+   constexpr auto operator +(const Ticks &other)    const { return Ticks(value+other.value); }
+   constexpr auto operator +(const unsigned other)  const { return Ticks(value+other); }
+   constexpr auto operator +(const int other)       const { return Ticks(value+(unsigned)other); }
+
+   constexpr auto operator -(const Ticks &other)    const { return Ticks(value-other.value); }
+   constexpr auto operator -(const unsigned other)  const { return Ticks(value-other); }
+   constexpr auto operator -(const int other)       const { return Ticks(value-(unsigned)other); }
+
+   constexpr auto operator ==(const Ticks &other)   const { return value==other.value; }
+   constexpr auto operator ==(const unsigned other) const { return value==other; }
 
    constexpr operator unsigned() const { return value; }
    explicit operator unsigned() const volatile { return value; }
@@ -107,8 +114,40 @@ public:
 
    constexpr auto operator /(Seconds other) const { return float(value/other.getValue()); }
 
-   constexpr auto operator +(Seconds other) const { return Seconds(value+other.value); }
-   constexpr auto operator -(Seconds other) const { return Seconds(value+other.value); }
+   constexpr auto operator +(Seconds other)  const { return Seconds(value+other.value); }
+   constexpr auto operator +(float other)    const { return Seconds(value+other); }
+   constexpr auto operator +(unsigned other) const { return Seconds(value+other); }
+   constexpr auto operator +(int other)      const { return Seconds(value+other); }
+
+   constexpr auto operator -(Seconds other)  const { return Seconds(value-other.value); }
+   constexpr auto operator -(float other)    const { return Seconds(value-other); }
+   constexpr auto operator -(unsigned other) const { return Seconds(value-other); }
+   constexpr auto operator -(int other)      const { return Seconds(value-other); }
+
+   constexpr auto operator ==(const Seconds &other) const { return value==other.value; }
+   constexpr auto operator ==(const float other)    const { return value==other; }
+   constexpr auto operator ==(const unsigned other) const { return value==other; }
+   constexpr auto operator ==(int other)            const { return value==other; }
+
+   constexpr auto operator <(const Seconds &other) const { return value<other.value; }
+   constexpr auto operator <(const float other)    const { return value<other; }
+   constexpr auto operator <(const unsigned other) const { return value<other; }
+   constexpr auto operator <(int other)            const { return value<other; }
+
+   constexpr auto operator <=(const Seconds &other) const { return value<=other.value; }
+   constexpr auto operator <=(const float other)    const { return value<=other; }
+   constexpr auto operator <=(const unsigned other) const { return value<=other; }
+   constexpr auto operator <=(int other)            const { return value<=other; }
+
+   constexpr auto operator >(const Seconds &other) const { return value>other.value; }
+   constexpr auto operator >(const float other)    const { return value>other; }
+   constexpr auto operator >(const unsigned other) const { return value>other; }
+   constexpr auto operator >(int other)            const { return value>other; }
+
+   constexpr auto operator >=(const Seconds &other) const { return value>=other.value; }
+   constexpr auto operator >=(const float other)    const { return value>=other; }
+   constexpr auto operator >=(const unsigned other) const { return value>=other; }
+   constexpr auto operator >=(int other)            const { return value>=other; }
 
    constexpr operator float() const { return value; }
    explicit operator float() const volatile { return value; }
@@ -145,6 +184,31 @@ public:
 
    constexpr auto operator +(Hertz other) const { return Hertz(value+other.value); }
    constexpr auto operator -(Hertz other) const { return Hertz(value+other.value); }
+
+   constexpr auto operator ==(const Hertz &other)   const { return value==other.value; }
+   constexpr auto operator ==(const float other)    const { return value==other; }
+   constexpr auto operator ==(const unsigned other) const { return value==other; }
+   constexpr auto operator ==(int other)            const { return value==other; }
+
+   constexpr auto operator <(const Hertz &other)   const { return value<other.value; }
+   constexpr auto operator <(const float other)    const { return value<other; }
+   constexpr auto operator <(const unsigned other) const { return value<other; }
+   constexpr auto operator <(int other)            const { return value<other; }
+
+   constexpr auto operator <=(const Hertz &other)   const { return value<=other.value; }
+   constexpr auto operator <=(const float other)    const { return value<=other; }
+   constexpr auto operator <=(const unsigned other) const { return value<=other; }
+   constexpr auto operator <=(int other)            const { return value<=other; }
+
+   constexpr auto operator >(const Hertz &other)   const { return value>other.value; }
+   constexpr auto operator >(const float other)    const { return value>other; }
+   constexpr auto operator >(const unsigned other) const { return value>other; }
+   constexpr auto operator >(int other)            const { return value>other; }
+
+   constexpr auto operator >=(const Hertz &other)   const { return value>=other.value; }
+   constexpr auto operator >=(const float other)    const { return value>=other; }
+   constexpr auto operator >=(const unsigned other) const { return value>=other; }
+   constexpr auto operator >=(int other)            const { return value>=other; }
 
    constexpr operator float()    const { return value; }
    constexpr operator unsigned() const { return (int)round(value); }
@@ -1320,7 +1384,7 @@ public:
     * @brief
     * Set the Pin Control Register Attributes to the default values determined by Configure.usbdmProject. \n
     * Mux value is set appropriately for the pin function being used.\n
-    * Assumes clock to the port has already been enabled
+    * The clock to the port will be enabled before changing the PCR.
     */
    static void setOutput() {
       setPCR(defaultPcrValue.pcrValue());
@@ -1331,7 +1395,7 @@ public:
     * @brief
     * Set subset of Pin Control Register Attributes associated with output direction \n
     * Mux value is set appropriately for the pin function being used. Other attributes are cleared. \n
-    * Assumes clock to the port has already been enabled
+    * The clock to the port will be enabled before changing the PCR.
     *
     * @param[in] pinDriveStrength One of PinDriveStrength_Low, PinDriveStrength_High
     * @param[in] pinDriveMode     One of PinDriveMode_PushPull, PinDriveMode_OpenDrain
@@ -1349,7 +1413,7 @@ public:
     * @brief
     * Set subset of Pin Control Register Attributes associated with output direction \n
     * Mux value is set appropriately for the pin function being used. Other attributes are cleared.
-    * Assumes clock to the port has already been enabled
+    * The clock to the port will be enabled before changing the PCR.
     *
     * @param[in] pinDriveStrength One of PinDriveStrength_Low, PinDriveStrength_High
     * @param[in] pinDriveMode     One of PinDriveMode_PushPull, PinDriveMode_OpenDrain
@@ -1365,7 +1429,7 @@ public:
     * @brief
     * Set subset of Pin Control Register Attributes associated with output direction \n
     * Mux value is set appropriately for the pin function being used. Other attributes are cleared.
-    * Assumes clock to the port has already been enabled
+    * The clock to the port will be enabled before changing the PCR.
     *
     * @param[in] pinDriveStrength One of PinDriveStrength_Low, PinDriveStrength_High
     * @param[in] pinSlewRate      One of PinSlewRate_Slow, PinSlewRate_Fast
@@ -1381,7 +1445,7 @@ public:
     * @brief
     * Set subset of Pin Control Register Attributes associated with output direction \n
     * Mux value is set appropriately for the pin function being used. Other attributes are cleared.
-    * Assumes clock to the port has already been enabled
+    * The clock to the port will be enabled before changing the PCR.
     *
     * @param[in] pinDriveStrength One of PinDriveStrength_Low, PinDriveStrength_High
     */
@@ -1396,7 +1460,7 @@ public:
     * @brief
     * Set the Pin Control Register Attributes to the default values determined by Configure.usbdmProject. \n
     * Mux value is set appropriately for the pin function being used.\n
-    * Assumes clock to the port has already been enabled
+    * The clock to the port will be enabled before changing the PCR.
     */
    static void setInput() {
 

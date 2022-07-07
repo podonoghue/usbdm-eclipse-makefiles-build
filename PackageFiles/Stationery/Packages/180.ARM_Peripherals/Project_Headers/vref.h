@@ -211,13 +211,7 @@ public:
 
 };
 
-#if defined(USBDM_VREF_IS_DEFINED)
-class Vref : public VrefBase_T<VrefInfo> {};
-#endif
-
-#if defined(USBDM_VREF0_IS_DEFINED)
-class Vref0 : public Vref<Vref0Info> {};
-#endif
+$(/VREF/declarations: // No declarations found)
 /**
  * End VREF_Group
  * @}

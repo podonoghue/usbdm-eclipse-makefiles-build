@@ -1056,22 +1056,7 @@ public:
 
 template<class Info> AdcCallbackFunction AdcBase_T<Info>::sCallback = AdcBase::unhandledCallback;
 
-#ifdef USBDM_ADC0_IS_DEFINED
-/**
- * Class representing ADC0
- */
-using Adc0 = AdcBase_T<Adc0Info>;
-
-#endif
-
-#ifdef USBDM_ADC1_IS_DEFINED
-/**
- * Class representing ADC1
- */
-using Adc1 = AdcBase_T<Adc1Info>;
-
-#endif
-
+$(/ADC/declarations:No declarations found)
 /**
  * End ADC_Group
  * @}

@@ -156,33 +156,24 @@ private:
    FtmBase(const FtmBase&) = delete;
    FtmBase(FtmBase&&) = delete;
 
-protected:
-   // Empty constructor
-   constexpr FtmBase(uint32_t baseAddress) : tmr(baseAddress) {};
-   ~FtmBase() = default;
+public:
 
-   /** Allow access owning FTM */
-   const HardwarePtr<FTM_Type> tmr;
+   /** Class to static check channel exists - it does not check that it is mapped to a pin */
+   template<class Info, int channel> class CheckChannel {
+      // Tests are chained so only a single assertion can fail so as to reduce noise
 
-   /**
-    * Limit index to permitted pin index range
-    * Used to prevent noise from static assertion checks that detect a condition already detected in a more useful fashion.
-    *
-    * @tparam Inf    Associated info table
-    * @param index   Index to limit
-    *
-    * @return Index limited to permitted range
-    */
-   template <class Inf>
-   static inline constexpr int limitIndex(int index) {
-      if (index<0) {
-         return 0;
-      }
-      if (index>(Inf::numSignals-1)) {
-         return Inf::numSignals-1;
-      }
-      return index;
-   }
+      // Out of bounds value for function index
+      static constexpr bool Test1 = (channel>=0) && (channel<(Info::numSignals));
+      // Non-existent function
+      static constexpr bool Test2 = !Test1 || (Info::info[channel].gpioBit != INVALID_PCR);
+
+      static_assert(Test1, "Illegal FTM channel - Check Configure.usbdm for available channels");
+      static_assert(Test2, "FTM channel doesn't exist in this device/package - Check Configure.usbdm for available channels");
+
+   public:
+      /** Dummy function to allow convenient in-line checking */
+      static constexpr void check() {}
+   };
 
    /** Class to static check channel exists and is mapped to a pin */
    template<class Info, int channel> class CheckChannelExistsAndMapped {
@@ -219,22 +210,33 @@ protected:
       static constexpr void check() {}
    };
 
-   /** Class to static check channel exists - it does not check that it is mapped to a pin */
-   template<class Info, int channel> class CheckChannel {
-      // Tests are chained so only a single assertion can fail so as to reduce noise
+protected:
+   // Empty constructor
+   constexpr FtmBase(uint32_t baseAddress) : tmr(baseAddress) {};
+   ~FtmBase() = default;
 
-      // Out of bounds value for function index
-      static constexpr bool Test1 = (channel>=0) && (channel<(Info::numSignals));
-      // Non-existent function
-      static constexpr bool Test2 = !Test1 || (Info::info[channel].gpioBit != INVALID_PCR);
+   /** Allow access owning FTM */
+   const HardwarePtr<FTM_Type> tmr;
 
-      static_assert(Test1, "Illegal FTM channel - Check Configure.usbdm for available channels");
-      static_assert(Test2, "FTM channel doesn't exist in this device/package - Check Configure.usbdm for available channels");
-
-   public:
-      /** Dummy function to allow convenient in-line checking */
-      static constexpr void check() {}
-   };
+   /**
+    * Limit index to permitted pin index range
+    * Used to prevent noise from static assertion checks that detect a condition already detected in a more useful fashion.
+    *
+    * @tparam Inf    Associated info table
+    * @param index   Index to limit
+    *
+    * @return Index limited to permitted range
+    */
+   template <class Inf>
+   static inline constexpr int limitIndex(int index) {
+      if (index<0) {
+         return 0;
+      }
+      if (index>(Inf::numSignals-1)) {
+         return Inf::numSignals-1;
+      }
+      return index;
+   }
 
    /**
     * Callback to catch unhandled interrupt
@@ -1553,56 +1555,7 @@ public:
    }
 
 public:
-   // Template _mapPinsOption.xml
-
-   /**
-    * Configures all mapped pins associated with FTM
-    *
-    * @note Locked pins will be unaffected
-    */
-   static void configureAllPins() {
-   
-      // Configure pins if selected and not already locked
-      if constexpr (Info::mapPinsOnEnable && !(MapAllPinsOnStartup && (ForceLockedPins == PinLock_Locked))) {
-         Info::initPCRs();
-      }
-   }
-
-   /**
-    * Disabled all mapped pins associated with FTM
-    *
-    * @note Only the lower 16-bits of the PCR registers are modified
-    *
-    * @note Locked pins will be unaffected
-    */
-   static void disableAllPins() {
-   
-      // Disable pins if selected and not already locked
-      if constexpr (Info::mapPinsOnEnable && !(MapAllPinsOnStartup && (ForceLockedPins == PinLock_Locked))) {
-         Info::clearPCRs();
-      }
-   }
-
-   /**
-    * Basic enable of FTM
-    * Includes enabling clock and configuring all mapped pins if mapPinsOnEnable is selected in configuration
-    */
-   static void enable() {
-      Info::enableClock();
-      configureAllPins();
-   }
-
-   /**
-    * Disables the clock to FTM and all mapped pins
-    */
-   static void disable() {
-      disableNvicInterrupts();
-      ftm->SC = FTM_SC_CLKS(0);
-      disableAllPins();
-      Info::disableClock();
-   }
-// End Template _mapPinsOption.xml
-
+ $(/FTM/classInfo: // No class Info found)
 
    /**
     * Configure with settings from Configure.usbdmProject.
@@ -3090,41 +3043,6 @@ template<class Info> FtmCallbackFunction         FtmBase_T<Info>::sToiCallback  
 template<class Info> FtmCallbackFunction         FtmBase_T<Info>::sFaultCallback      = FtmBase_T<Info>::unhandledCallback;
 template<class Info> FtmChannelCallbackFunction  FtmBase_T<Info>::sChannelCallbacks[] = {nullptr};
 
-#ifdef USBDM_FTM0_IS_DEFINED
-/**
- * Class representing FTM0.
- */
-typedef FtmBase_T<Ftm0Info> Ftm0;
-#endif
-
-#ifdef USBDM_FTM1_IS_DEFINED
-/**
- * Class representing FTM1.
- */
-typedef FtmBase_T<Ftm1Info> Ftm1;
-#endif
-
-#ifdef USBDM_FTM2_IS_DEFINED
-/**
- * Class representing FTM2.
- */
-typedef FtmBase_T<Ftm2Info> Ftm2;
-#endif
-
-#ifdef USBDM_FTM3_IS_DEFINED
-/**
- * Class representing FTM3.
- */
-typedef FtmBase_T<Ftm3Info> Ftm3;
-#endif
-
-#ifdef USBDM_FTM4_IS_DEFINED
-/**
- * Class representing FTM3.
- */
-typedef FtmBase_T<Ftm4Info> Ftm4;
-#endif
-
 #ifdef FTM_QDCTRL_QUADEN_MASK
 /**
  *  Quadrature Decoder Mode\n
@@ -3405,43 +3323,8 @@ public:
 };
 #endif // defined(FTM_QDCTRL_QUADEN_MASK)
 
-
-#ifdef USBDM_FTM0_INFOQUAD_IS_DEFINED
-/**
- * Class representing FTM0 as Quadrature decoder
- * Not all FTMs support this mode
- */
-typedef FtmQuadDecoder_T<Ftm0Info> FtmQuadDecoder0;
-#endif
-
-#ifdef USBDM_FTM1_INFOQUAD_IS_DEFINED
-/**
- * Class representing FTM1 as Quadrature decoder
- */
-typedef FtmQuadDecoder_T<Ftm1Info> FtmQuadDecoder1;
-#endif
-
-#ifdef USBDM_FTM2_INFOQUAD_IS_DEFINED
-/**
- * Class representing FTM2 as Quadrature decoder
- */
-typedef FtmQuadDecoder_T<Ftm2Info> FtmQuadDecoder2;
-#endif
-
-#ifdef USBDM_FTM3_INFOQUAD_IS_DEFINED
-/**
- * Class representing FTM3 as Quadrature decoder
- */
-typedef FtmQuadDecoder_T<Ftm3Info> FtmQuadDecoder3;
-#endif
-
-#ifdef USBDM_FTM4_INFOQUAD_IS_DEFINED
-/**
- * Class representing FTM4 as Quadrature decoder
- */
-typedef FtmQuadDecoder_T<Ftm4Info> FtmQuadDecoder4;
-#endif
-
+$(/FTM/declarations: // No declarations found)
+$(/FTM/quadDeclarations: // No declarations found)
 /**
  * End FTM_Group
  * @}

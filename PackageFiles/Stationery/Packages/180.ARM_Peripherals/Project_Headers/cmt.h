@@ -466,21 +466,7 @@ $(/CMT/classInfo: // No class Info found)
 
 template<class Info> CMTCallbackFunction CmtBase_T<Info>::sCallback = CmtBase_T<Info>::unhandledCallback;
 
-#if defined(USBDM_CMT_IS_DEFINED)
-class Cmt : public CmtBase_T<CmtInfo> {};
-#endif
-
-#if defined(USBDM_CMT0_IS_DEFINED)
-class Cmt0 : public CmtBase_T<CmtInfo> {};
-#endif
-
-#if defined(USBDM_CMT1_IS_DEFINED)
-class Cmt1 : public CmtBase_T<Cmt1Info> {};
-#endif
-
-#if defined(USBDM_CMT2_IS_DEFINED)
-class Cmt2 : public CmtBase_T<Cmt2Info> {};
-#endif
+$(/CMT/declarations: // No declaration found)
 
 /**
  * End CMT_Group

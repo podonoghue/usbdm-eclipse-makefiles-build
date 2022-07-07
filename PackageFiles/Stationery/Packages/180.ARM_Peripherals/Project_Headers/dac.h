@@ -604,13 +604,7 @@ $(/DAC/classInfo: // No class Info found)
  */
 template<class Info> DacCallbackFunction Dac_T<Info>::sCallback =  Dac_T<Info>::unhandledCallback;
 
-#if defined(USBDM_DAC0_IS_DEFINED)
-typedef Dac_T<Dac0Info> Dac0;
-#endif
-
-#if defined(USBDM_DAC1_IS_DEFINED)
-typedef Dac_T<Dac1Info> Dac1;
-#endif
+$(/DAC/declarations: // No declarations found)
 /**
  * @}
  */

@@ -170,14 +170,7 @@ public:
 
 template<class Info> TRNGCallbackFunction TrngBase_T<Info>::callback = TrngBase_T<Info>::unhandledCallback;
 
-#if defined(USBDM_TRNG_IS_DEFINED)
-class Trng : public TrngBase_T<TrngInfo> {};
-#endif
-
-#if defined(USBDM_TRNG0_IS_DEFINED)
-class Trng0 : public TrngBase_T<Trng0Info> {};
-#endif
-
+$(/TRNG/declarations: // No declarations found)
 /**
  * End TRNG_Group
  * @}

@@ -103,13 +103,7 @@ public:
    }
 };
 
-#ifdef USBDM_OSC0_IS_DEFINED
-/**
- * Class providing interface to OscRfillator
- */
-class Osc0 : public OscRfBase_T<Osc0Info> {};
-#endif
-
+$(/OSC_RF/declarations: // No declarations found)
 /**
  * End OSC_Group
  * @}

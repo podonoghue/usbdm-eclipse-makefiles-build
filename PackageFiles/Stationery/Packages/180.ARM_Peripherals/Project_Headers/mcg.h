@@ -38,8 +38,6 @@ extern volatile uint32_t SystemMcgFllClock;
 /** MCGPLLCLK - Output of PLL */
 extern volatile uint32_t SystemMcgPllClock;
 
-extern void setSysDividersStub(uint32_t simClkDiv1);
-
 /**
  * Clock configurations
  */
@@ -86,20 +84,24 @@ public:
    static ErrorCode clockTransition(const McgInfo::ClockInfo &clockInfo);
 
    /**
+    * Write main MCG registers from clockInfo
+    * - Clock monitors are masked out
+    * - PLL is not selected (C6.PLLS=0)
+    * - Not low power (C2.LP = 0 since clockInfo.C2 does not include LP)
+    * - TRIM bits are preserved (C2.FCFTRIM, C4.FCTRIM, C4.SCFTRIM)
+    * - Bugfix version: Errata e7993
+    *
+    * @param clockInfo  Clock settings information
+    * @param bugFix     Mask to flip MCG.C4 value
+    */
+   static void writeMainRegs(const McgInfo::ClockInfo &clockInfo, uint8_t bugFix);
+
+   /**
     * Update SystemCoreClock variable
     *
     * Updates the SystemCoreClock variable with current core Clock retrieved from CPU registers.
     */
    static void SystemCoreClockUpdate(void);
-
-   /**
-    *  Change SIM->CLKDIV1 value
-    *
-    * @param[in]  simClkDiv1 - Value to write to SIM->CLKDIV1 register
-    */
-   static void setSysDividers(uint32_t simClkDiv1) {
-      SIM->CLKDIV1 = simClkDiv1;
-   }
 
    /**
     * Enable interrupts in NVIC

@@ -1377,22 +1377,7 @@ template<class Info> DmaErrorCallbackFunction DmaBase_T<Info>::errorCallback = n
 /** Bit-mask of allocated channels */
 template<class Info> uint32_t DmaBase_T<Info>::allocatedChannels = -1;
 
-#ifdef USBDM_DMAMUX0_IS_DEFINED
-typedef DmaMux_T<Dmamux0Info, Dma0Info::NumChannels> DmaMux0;
-#endif
-
-#ifdef USBDM_DMAMUX1_IS_DEFINED
-typedef DmaMux_T<Dmamux1Info, Dma1Info::NumChannels> DmaMux1;
-#endif
-
-#ifdef USBDM_DMA0_IS_DEFINED
-typedef DmaBase_T<Dma0Info> Dma0;
-#endif
-
-#ifdef USBDM_DMA1_IS_DEFINED
-typedef DmaBase_T<Dma1Info> Dma1;
-#endif
-
+$(/DMA/declarations: // No declaractions found)
 /**
  * End DMA_Group
  * @}

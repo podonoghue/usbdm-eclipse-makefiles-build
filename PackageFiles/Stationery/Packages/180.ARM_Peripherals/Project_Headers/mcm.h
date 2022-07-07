@@ -204,14 +204,7 @@ public:
 
 template<class Info> McmCallbackFunction McmBase_T<Info>::sCallback = McmBase_T<Info>::unhandledCallback;
 
-#ifdef USBDM_MCM_IS_DEFINED
-/**
- * Class representing MCM
- */
-class Mcm : public McmBase_T<McmInfo> {};
-
-#endif
-
+$(/MCM/declarations: // No declarations found)
 /**
  * End MCM_Group
  * @}

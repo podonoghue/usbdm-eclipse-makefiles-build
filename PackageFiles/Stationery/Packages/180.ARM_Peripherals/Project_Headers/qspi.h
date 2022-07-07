@@ -2630,14 +2630,7 @@ public:
 
 };
 
-#if defined(USBDM_QSPI_IS_DEFINED)
-class Qspi : public QspiBase_T<QspiInfo> {};
-#endif
-
-#if defined(USBDM_QSPI0_IS_DEFINED)
-class Qspi0 : public QspiBase_T<Qspi0Info> {};
-#endif
-
+$(/QSPI/declarations: // No declarations found)
 /**
  * End QSPI_Group
  * @}

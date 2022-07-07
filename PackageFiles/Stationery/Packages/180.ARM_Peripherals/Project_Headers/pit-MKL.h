@@ -336,7 +336,7 @@ public:
       for (PitChannelNum pitChannelNum = PitChannelNum_0;
             pitChannelNum < Info::NumChannels;
             pitChannelNum = pitChannelNum+1) {
-         configureChannelInTicks(pitChannelNum, Info::pit_ldval);
+         configureChannel(pitChannelNum, Info::pit_ldval);
          sCallbacks[pitChannelNum] = unhandledCallback;
       }
       enableNvicInterrupts(Info::irqLevel);
@@ -405,7 +405,7 @@ public:
    static void disableNvicInterrupts() {
       NVIC_DisableIRQ(Info::irqNums[0]);
    }
-   
+
    /**
     *  Enable the PIT channel
     *
@@ -436,15 +436,15 @@ public:
     *  @note The timer channel is disabled before configuring so that period changes have
     *        immediate effect.
     */
-   static void configureChannelInTicks(
+   static void configureChannel(
          PitChannelNum     pitChannelNum,
-         uint32_t          tickInterval,
+         Ticks             tickInterval,
          PitChannelIrq     pitChannelIrq=PitChannelIrq_Disabled) {
 
-      usbdm_assert(tickInterval>0, "Interval too short");
+      usbdm_assert((unsigned)tickInterval>0, "Interval too short");
 
       pit->CHANNEL[pitChannelNum].TCTRL = 0;
-      pit->CHANNEL[pitChannelNum].LDVAL = tickInterval-1;
+      pit->CHANNEL[pitChannelNum].LDVAL = (unsigned)tickInterval-1;
       pit->CHANNEL[pitChannelNum].TFLG  = PIT_TFLG_TIF_MASK;
       pit->CHANNEL[pitChannelNum].TCTRL = pitChannelIrq|PIT_TCTRL_TEN(1);
    }
@@ -461,10 +461,10 @@ public:
     */
    static void configureChannel(
          PitChannelNum     pitChannelNum,
-         float             intervalInSeconds,
+         Seconds           intervalInSeconds,
          PitChannelIrq     pitChannelIrq=PitChannelIrq_Disabled) {
 
-      configureChannelInTicks(pitChannelNum, convertSecondsToTicks(intervalInSeconds), pitChannelIrq);
+      configureChannel(pitChannelNum, convertSecondsToTicks(intervalInSeconds), pitChannelIrq);
    }
 
    /**
@@ -482,7 +482,7 @@ public:
          unsigned          milliseconds,
          PitChannelIrq     pitChannelIrq=PitChannelIrq_Disabled) {
 
-      configureChannelInTicks(pitChannelNum, convertMillisecondsToTicks(milliseconds), pitChannelIrq);
+      configureChannel(pitChannelNum, convertMillisecondsToTicks(milliseconds), pitChannelIrq);
    }
 
    /**
@@ -500,7 +500,7 @@ public:
          unsigned          microseconds,
          PitChannelIrq     pitChannelIrq=PitChannelIrq_Disabled) {
 
-      configureChannelInTicks(pitChannelNum, convertMicrosecondsToTicks(microseconds), pitChannelIrq);
+      configureChannel(pitChannelNum, convertMicrosecondsToTicks(microseconds), pitChannelIrq);
    }
 
    /**
@@ -510,8 +510,8 @@ public:
     *
     * @return Time interval in seconds
     */
-   static float convertTicksToSeconds(uint32_t ticks) {
-      return ((float)ticks)/Info::getClockFrequency();
+   static Seconds convertTicksToSeconds(Ticks ticks) {
+      return Seconds(((float)(unsigned)ticks)/Info::getClockFrequency());
    }
 
    /**
@@ -521,8 +521,8 @@ public:
     *
     * @return Time interval in microseconds
     */
-   static unsigned convertTicksToMilliseconds(uint32_t ticks) {
-      return (unsigned)((1000UL * ticks)/Info::getClockFrequency());
+   static unsigned convertTicksToMilliseconds(Ticks ticks) {
+      return (unsigned)((1000UL * (unsigned)ticks)/Info::getClockFrequency());
    }
 
    /**
@@ -532,8 +532,8 @@ public:
     *
     * @return Time interval in milliseconds
     */
-   static unsigned convertTicksToMicroseconds(uint32_t ticks) {
-      return (unsigned)((1000000UL * ticks)/Info::getClockFrequency());
+   static unsigned convertTicksToMicroseconds(Ticks ticks) {
+      return (unsigned)((1000000UL * (unsigned)ticks)/Info::getClockFrequency());
    }
 
    /**
@@ -545,8 +545,8 @@ public:
     *
     * @note Will set error code if calculated value is unsuitable
     */
-   static int convertSecondsToTicks(float seconds) {
-      float intervalInTicks = rintf(seconds*Info::getClockFrequency());
+   static Ticks convertSecondsToTicks(Seconds seconds) {
+      float intervalInTicks = rintf((float)seconds*Info::getClockFrequency());
       usbdm_assert(intervalInTicks <= 0xFFFFFFFFUL, "Interval is too long");
       usbdm_assert(intervalInTicks > 0, "Interval is too short");
       if (intervalInTicks > 0xFFFFFFFFUL) {
@@ -555,7 +555,7 @@ public:
       if (intervalInTicks <= 0) {
          setErrorCode(E_TOO_SMALL);
       }
-      return rintf((uint32_t)intervalInTicks);
+      return Ticks(intervalInTicks);
    }
 
    /**
@@ -567,7 +567,7 @@ public:
     *
     * @note Will set error code if calculated value is unsuitable
     */
-   static int convertMillisecondsToTicks(unsigned milliseconds) {
+   static Ticks convertMillisecondsToTicks(unsigned milliseconds) {
       unsigned long intervalInTicks = milliseconds*(Info::getClockFrequency()/1000);
       usbdm_assert(intervalInTicks <= 0xFFFFFFFFUL, "Interval is too long");
       usbdm_assert(intervalInTicks > 0, "Interval is too short");
@@ -577,7 +577,7 @@ public:
       if (intervalInTicks <= 0) {
          setErrorCode(E_TOO_SMALL);
       }
-      return (uint32_t)intervalInTicks;
+      return Ticks((unsigned)intervalInTicks);
    }
 
    /**
@@ -589,7 +589,7 @@ public:
     *
     * @note Will set error code if calculated value is unsuitable
     */
-   static int convertMicrosecondsToTicks(unsigned microseconds) {
+   static Ticks convertMicrosecondsToTicks(unsigned microseconds) {
       unsigned long intervalInTicks = microseconds*(Info::getClockFrequency()/1000000);
       usbdm_assert(intervalInTicks <= 0xFFFFFFFFUL, "Interval is too long");
       usbdm_assert(intervalInTicks > 0, "Interval is too short");
@@ -599,7 +599,7 @@ public:
       if (intervalInTicks <= 0) {
          setErrorCode(E_TOO_SMALL);
       }
-      return (uint32_t)intervalInTicks;
+      return Ticks((unsigned)intervalInTicks);
    }
 
    /**
@@ -611,8 +611,8 @@ public:
     * @note If the timer is currently enabled this value will be loaded on the next expiration.
     *       To have immediate effect it is necessary to use configureChannel().
     */
-   static void setPeriodInTicks(PitChannelNum pitChannelNum, uint32_t ticks) {
-      pit->CHANNEL[pitChannelNum].LDVAL = ticks-1;
+   static void setPeriod(PitChannelNum pitChannelNum, Ticks ticks) {
+      pit->CHANNEL[pitChannelNum].LDVAL = (unsigned)ticks-1;
    }
 
    /**
@@ -625,7 +625,7 @@ public:
     *       To have immediate effect it is necessary to use configureChannel().
     */
    static void setPeriodInMicroseconds(PitChannelNum pitChannelNum, uint32_t microseconds) {
-      setPeriodInTicks(pitChannelNum, convertMicrosecondsToTicks(microseconds));
+      setPeriod(pitChannelNum, convertMicrosecondsToTicks(microseconds));
    }
 
    /**
@@ -638,7 +638,7 @@ public:
     *       To have immediate effect it is necessary to use configureChannel().
     */
    static void setPeriodInMilliseconds(PitChannelNum pitChannelNum, uint32_t milliseconds) {
-      setPeriodInTicks(pitChannelNum, convertMillisecondsToTicks(milliseconds));
+      setPeriod(pitChannelNum, convertMillisecondsToTicks(milliseconds));
    }
 
    /**
@@ -650,20 +650,20 @@ public:
     * @note If the timer is currently enabled this value will be loaded on the next expiration.
     *       To have immediate effect it is necessary to use configureChannel().
     */
-   static void setPeriod(PitChannelNum pitChannelNum, float interval) {
-      setPeriodInTicks(pitChannelNum, rintf(interval*Info::getClockFrequency()));
+   static void setPeriod(PitChannelNum pitChannelNum, Seconds interval) {
+      setPeriod(pitChannelNum, Ticks((float)interval*Info::getClockFrequency()));
    }
 
    /**
     *  Use a PIT channel to implement a busy-wait delay
     *
     *  @param[in]  pitChannelNum   Channel to use
-    *  @param[in]  interval  Interval to wait in timer ticks (usually bus clock period)
+    *  @param[in]  interval        Interval to wait in timer ticks (usually bus clock period)
     *
     *  @note Function doesn't return until interval has expired
     */
-   static void delayInTicks(PitChannelNum pitChannelNum, uint32_t interval) {
-      configureChannelInTicks(pitChannelNum, interval);
+   static void delay(PitChannelNum pitChannelNum, Ticks interval) {
+      configureChannel(pitChannelNum, interval);
       while (pit->CHANNEL[pitChannelNum].TFLG == 0) {
          __NOP();
       }
@@ -674,11 +674,11 @@ public:
     *  Use a PIT channel to implement a busy-wait delay
     *
     *  @param[in]  pitChannelNum   Channel to use
-    *  @param[in]  interval        Interval to wait as a float
+    *  @param[in]  interval        Interval to wait in seconds
     *
     *  @note Function doesn't return until interval has expired
     */
-   static void delay(PitChannelNum pitChannelNum, float interval) {
+   static void delay(PitChannelNum pitChannelNum, Seconds interval) {
       configureChannel(pitChannelNum, interval);
       while (pit->CHANNEL[pitChannelNum].TFLG == 0) {
          __NOP();
@@ -695,7 +695,7 @@ public:
     *  @param[in]  callback          Callback function to be executed on timeout
     *  @param[in]  interval          Interval in seconds until callback is executed
     */
-   static void oneShot(PitChannelNum pitChannelNum, PitCallbackFunction callback, float interval) {
+   static void oneShot(PitChannelNum pitChannelNum, PitCallbackFunction callback, Seconds interval) {
       clearOnEvent |= (1<<pitChannelNum);
       setCallback(pitChannelNum, callback);
       configureChannel(pitChannelNum, interval, PitChannelIrq_Enabled);
@@ -740,15 +740,19 @@ public:
     *  @param[in]  callback          Callback function to be executed on timeout
     *  @param[in]  tickInterval      Interval in timer ticks (usually bus clock period)
     */
-   static void oneShotInTicks(PitChannelNum pitChannelNum, PitCallbackFunction callback, uint32_t tickInterval) {
+   static void oneShot(PitChannelNum pitChannelNum, PitCallbackFunction callback, Ticks tickInterval) {
       clearOnEvent |= (1<<pitChannelNum);
       setCallback(pitChannelNum, callback);
-      configureChannelInTicks(pitChannelNum, tickInterval, PitChannelIrq_Enabled);
+      configureChannel(pitChannelNum, tickInterval, PitChannelIrq_Enabled);
    }
 
    class PitChannel {
 
    public:
+
+      // PIT Owning this channel
+      using Owner = PitBase_T<Info>;
+
       constexpr PitChannel(PitChannelNum channel) : chan(channel) {}
 
       /** Timer channel number */
@@ -772,11 +776,11 @@ public:
        *  @note The timer channel is disabled before configuring so that period changes
        *        have immediate effect.
        */
-      void configureInTicks(
-            uint32_t          interval,
+      void configure(
+            Ticks            interval,
             PitChannelIrq     pitChannelIrq=PitChannelIrq_Disabled) const {
 
-         PitBase_T<Info>::configureChannelInTicks(chan, interval, pitChannelIrq);
+         PitBase_T<Info>::configureChannel(chan, interval, pitChannelIrq);
       }
 
       /**
@@ -789,7 +793,7 @@ public:
        *        have immediate effect.
        */
       void configure(
-            float             interval,
+            Seconds           interval,
             PitChannelIrq     pitChannelIrq=PitChannelIrq_Disabled) const {
 
          PitBase_T<Info>::configureChannel(chan, interval, pitChannelIrq);
@@ -803,7 +807,7 @@ public:
        * @note If the timer is currently enabled this value will be loaded on the next expiration.
        *       To have immediate effect it is necessary to use configure().
        */
-      void setPeriod(float interval) const {
+      void setPeriod(Seconds interval) const {
          PitBase_T<Info>::setPeriod(chan, interval);
       }
 
@@ -815,8 +819,8 @@ public:
        * @note If the timer is currently enabled this value will be loaded on the next expiration.
        *       To have immediate effect it is necessary to use configure().
        */
-      void setPeriodInTicks(uint32_t interval) const {
-         PitBase_T<Info>::setPeriodInTicks(chan, interval);
+      void setPeriod(Ticks interval) const {
+         PitBase_T<Info>::setPeriod(chan, interval);
       }
 
       /**
@@ -830,7 +834,7 @@ public:
       void setPeriodInMicroseconds(uint32_t microseconds) const {
          unsigned long interval = ((unsigned long)microseconds*Info::getClockFrequency())/1000000;
          usbdm_assert(interval<0xFFFFFFFFUL,"Interval too long");
-         PitBase_T<Info>::setPeriodInTicks(chan, microseconds);
+         PitBase_T<Info>::setPeriod(chan, Ticks((unsigned)microseconds));
       }
 
       /**
@@ -899,18 +903,18 @@ public:
        *
        *  @note Function doesn't return until interval has expired
        */
-      void delayInTicks(uint32_t interval) const {
-         PitBase_T<Info>::delayInTicks(chan, interval);
+      void delay(Ticks interval) const {
+         PitBase_T<Info>::delay(chan, interval);
       }
 
       /**
        *  Use a PIT channel to implement a busy-wait delay
        *
-       *  @param[in]  interval  Interval to wait as a float
+       *  @param[in]  interval  Interval to wait in seconds
        *
        *  @note Function doesn't return until interval has expired
        */
-      void delay(float interval) const {
+      void delay(Seconds interval) const {
          PitBase_T<Info>::delay(chan, interval);
       }
 
@@ -922,7 +926,7 @@ public:
        *  @param[in]  callback          Callback function to be executed on timeout.
        *  @param[in]  interval          Interval in seconds until callback is executed
        */
-      void  oneShot(PitCallbackFunction callback, float interval) const {
+      void  oneShot(PitCallbackFunction callback, Seconds interval) const {
          PitBase_T<Info>::oneShot(chan, callback, interval);
       }
 
@@ -958,8 +962,8 @@ public:
        *  @param[in]  callback          Callback function to be executed on timeout.
        *  @param[in]  tickInterval      Interval in timer ticks (usually bus clock period)
        */
-      void oneShotInTicks(PitCallbackFunction callback, uint32_t tickInterval) const {
-         PitBase_T<Info>::oneShotInTicks(chan, callback, tickInterval);
+      void oneShot(PitCallbackFunction callback, Ticks tickInterval) const {
+         PitBase_T<Info>::oneShot(chan, callback, tickInterval);
       }
 
    };
@@ -1025,8 +1029,8 @@ public:
           PitBase_T<Info>::setCallback(CHANNEL, wrapCallback<T, callback, object>());
        }
 
-      /** 
-       * PIT interrupt handler - Calls PIT callback 
+      /**
+       * PIT interrupt handler - Calls PIT callback
        * Used when each channel has an individual handler
        */
       static void irqHandler() {
@@ -1049,11 +1053,11 @@ public:
        *  @note The timer channel is disabled before configuring so that period changes
        *        have immediate effect.
        */
-      static void configureInTicks(
-            uint32_t          interval,
+      static void configure(
+            Ticks             interval,
             PitChannelIrq     pitChannelIrq=PitChannelIrq_Disabled) {
 
-         PitBase_T<Info>::configureChannelInTicks(CHANNEL, interval, pitChannelIrq);
+         PitBase_T<Info>::configureChannel(CHANNEL, interval, pitChannelIrq);
       }
 
       /**
@@ -1066,7 +1070,7 @@ public:
        *        have immediate effect.
        */
       static void configure(
-            float             interval,
+            Seconds           interval,
             PitChannelIrq     pitChannelIrq=PitChannelIrq_Disabled) {
 
          PitBase_T<Info>::configureChannel(CHANNEL, interval, pitChannelIrq);
@@ -1080,7 +1084,7 @@ public:
        * @note If the timer is currently enabled this value will be loaded on the next expiration.
        *       To have immediate effect it is necessary to use configure().
        */
-      static void setPeriod(float interval) {
+      static void setPeriod(Seconds interval) {
          PitBase_T<Info>::setPeriod(CHANNEL, interval);
       }
 
@@ -1092,8 +1096,8 @@ public:
        * @note If the timer is currently enabled this value will be loaded on the next expiration.
        *       To have immediate effect it is necessary to use configure().
        */
-      static void setPeriodInTicks(uint32_t interval) {
-         PitBase_T<Info>::setPeriodInTicks(CHANNEL, interval);
+      static void setPeriod(Ticks interval) {
+         PitBase_T<Info>::setPeriod(CHANNEL, interval);
       }
 
       /**
@@ -1107,7 +1111,7 @@ public:
       static void setPeriodInMicroseconds(uint32_t microseconds) {
          unsigned long interval = ((unsigned long)microseconds*Info::getClockFrequency())/1000000;
          usbdm_assert(interval<0xFFFFFFFFUL,"Interval too long");
-         PitBase_T<Info>::setPeriodInTicks(CHANNEL, microseconds);
+         PitBase_T<Info>::setPeriod(CHANNEL, Ticks((unsigned)interval));
       }
 
       /**
@@ -1152,18 +1156,18 @@ public:
        *
        *  @note Function doesn't return until interval has expired
        */
-      static void delayInTicks(uint32_t interval) {
-         PitBase_T<Info>::delayInTicks(CHANNEL, interval);
+      static void delay(Ticks interval) {
+         PitBase_T<Info>::delay(CHANNEL, interval);
       }
 
       /**
        *  Use a PIT channel to implement a busy-wait delay
        *
-       *  @param[in]  interval  Interval to wait as a float
+       *  @param[in]  interval  Interval to wait in seconds
        *
        *  @note Function doesn't return until interval has expired
        */
-      static void delay(float interval) {
+      static void delay(Seconds interval) {
          PitBase_T<Info>::delay(CHANNEL, interval);
       }
 
@@ -1175,7 +1179,7 @@ public:
        *  @param[in]  callback          Callback function to be executed on timeout.
        *  @param[in]  interval          Interval in seconds until callback is executed
        */
-      static void  oneShot(PitCallbackFunction callback, float interval) {
+      static void  oneShot(PitCallbackFunction callback, Seconds interval) {
          PitBase_T<Info>::oneShot(CHANNEL, callback, interval);
       }
 
@@ -1211,8 +1215,8 @@ public:
        *  @param[in]  callback          Callback function to be executed on timeout.
        *  @param[in]  tickInterval      Interval in timer ticks (usually bus clock period)
        */
-      static void oneShotInTicks(PitCallbackFunction callback, uint32_t tickInterval) {
-         PitBase_T<Info>::oneShotInTicks(CHANNEL, callback, tickInterval);
+      static void oneShot(PitCallbackFunction callback, Ticks tickInterval) {
+         PitBase_T<Info>::oneShot(CHANNEL, callback, tickInterval);
       }
 
    };
@@ -1233,19 +1237,7 @@ PitCallbackFunction PitBase_T<Info>::sCallbacks[] = {
 template<class Info>
 uint8_t PitBase_T<Info>::clearOnEvent = 0;
 
-#ifdef PIT
-/**
- * @brief class representing the PIT
- */
-using Pit = PitBase_T<PitInfo>;
-
-/**
- * @brief class representing a PIT channel
- */
-using PitChannel = Pit::PitChannel;
-
-#endif
-
+$(/PIT/declarations:  // No declarations found)
 /**
  * @}
  */
