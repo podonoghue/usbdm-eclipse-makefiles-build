@@ -12,8 +12,8 @@ using namespace FREERTOS_CPP; // Open namespace for FREERTOS wrapper functions
 using namespace USBDM;        // Open namespace for USBDM wrapper functions
 
 // LEDs to use
-using RedLed   = GpioC<3, ActiveLow>;
-using GreenLed = GpioD<4, ActiveLow>;
+using RedLed   = $(/HARDWARE/Led1:GpioB<3,ActiveLow>);
+using GreenLed = $(/HARDWARE/Led2:GpioB<3,ActiveLow>);
 
 /**
  * Task to flash LED

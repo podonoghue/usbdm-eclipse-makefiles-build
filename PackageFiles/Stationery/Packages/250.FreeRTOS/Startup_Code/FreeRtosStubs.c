@@ -1,5 +1,18 @@
 #include "FreeRTOS.h"
 #include "task.h"
+#include "derivative.h"
+#if defined(__CORTEX_M4F) || defined(__CORTEX_M4)
+#include "core_cm4.h"
+#endif
+#if defined(__CORTEX_M3)
+#include "core_cm3.h"
+#endif
+#if defined(__CORTEX_M0plus)
+#include "core_cm0plus.h"
+#endif
+#if defined(__CORTEX_M0)
+#include "core_cm0.h"
+#endif
 
 /**
  * Called if a call to pvPortMalloc() fails because there is insufficient
@@ -36,16 +49,16 @@ void __attribute__ ((__weak__)) vApplicationStackOverflowHook( TaskHandle_t pxTa
  * remains unallocated.
  */
 void __attribute__ ((__weak__)) vApplicationIdleHook( void ) {
-//   volatile size_t xFreeHeapSpace;
+   //   volatile size_t xFreeHeapSpace;
 
-//   xFreeHeapSpace = xPortGetFreeHeapSize();
+   //   xFreeHeapSpace = xPortGetFreeHeapSize();
 
-//   if( xFreeHeapSpace > 100 ) {
-      /* By now, the kernel has allocated everything it is going to, so
+   //   if( xFreeHeapSpace > 100 ) {
+   /* By now, the kernel has allocated everything it is going to, so
   if there is a lot of heap remaining unallocated then
   the value of configTOTAL_HEAP_SIZE in FreeRTOSConfig.h can be
   reduced accordingly. */
-//   }
+   //   }
 }
 
 /**
@@ -65,7 +78,28 @@ void __attribute__ ((__weak__)) vMainConfigureTimerForRunTimeStats() {
  * It must be defined return the current time base value.
  */
 unsigned long __attribute__ ((__weak__)) ulMainGetRunTimeCounterValue() {
-   return 0UL;
+#if (configUSE_TRACE_FACILITY != 1) || (configGENERATE_RUN_TIME_STATS != 1)
+   return 0;
+#else
+   static uint32_t lastCount = 0;
+   static uint32_t time = 0;
+
+   if (lastCount == 0) {
+      lastCount = SysTick->VAL;
+   }
+   int32_t diff = (int32_t)(SysTick->VAL-lastCount);
+   if (diff<0) {
+      // This should fix a counter roll-over
+      diff += 1 + (int32_t)SysTick->LOAD;
+   }
+   if (diff<0) {
+      // Well - just in case - time should not go backwards too often
+      diff = 0;
+   }
+   lastCount = SysTick->VAL;
+   time += lastCount>>4;
+   return time;
+#endif
 }
 
 /**

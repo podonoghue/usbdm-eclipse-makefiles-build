@@ -26,26 +26,27 @@
          <copy source="Sources/FreeRTOSConfig.cfg"   target="Sources/FreeRTOSConfig.cfg" />
 	 
          <copy source="Startup_Code/FreeRtosStubs.c" target="Startup_Code/FreeRtosStubs.c" overwrite="true"  derived="true" />
-         <copy source="${usbdm_application_path}\Stationery\Packages\FreeRTOS\FreeRTOS_Reference_Manual_V10.0.0.pdf" target="FreeRTOS.pdf" type="link" sourcePathType="absolute"/>
+         <copy source="${usbdm_resource_path}/Stationery/Packages/FreeRTOS/FreeRTOS_Reference_Manual_V10.0.0.pdf" target="FreeRTOS.pdf" type="link" sourcePathType="absolute"/>
 
          <createFolder target="FreeRTOS" />
          <copy source="FreeRTOS/FreeRTOSConfig.h"                               target="FreeRTOS/FreeRTOSConfig.h"  derived="true" />
-         <copy source="../FreeRTOS/license.txt"                                 target="FreeRTOS/license.txt"  derived="true" />
-         <copy source="../FreeRTOS/Source"                                      target="FreeRTOS/Source"  derived="true" />
-         <copy source="../FreeRTOS/Source/Portable/GCC/ARM_CM3/port.c"          target="FreeRTOS/Source/port.c"  derived="true" />
-         <copy source="../FreeRTOS/Source/Portable/GCC/ARM_CM3/portmacro.h"     target="FreeRTOS/Source/portmacro.h"  derived="true" />
+         <copy source="../FreeRTOS/license.txt"                                 target="FreeRTOS/FreeRTOS_license.txt"  derived="true" macroReplace="false" />
+         <copy source="../FreeRTOS/Source"                                      target="FreeRTOS/Source"  derived="true" macroReplace="false" />
+         <copy source="../FreeRTOS/Source/portable/GCC/ARM_CM3/port.c"         target="FreeRTOS/Source/port.c"  derived="true" macroReplace="false" />
+         <copy source="../FreeRTOS/Source/portable/GCC/ARM_CM3/portmacro.h"    target="FreeRTOS/Source/portmacro.h"  derived="true" macroReplace="false" />
 
-         <copy source="Snippets/FreeRTOS-queue-1P1C-example.cpp"           target="Snippets/FreeRTOS-queue-1P1C-example.cpp"   overwrite="true" />
-         <copy source="Snippets/FreeRTOS-semaphore-1P1C-example.cpp"       target="Snippets/FreeRTOS-semaphore-1P1C-example.cpp"   overwrite="true" />
-         <copy source="Snippets/FreeRTOS-queue-pointer-1P1C-example.cpp"   target="Snippets/FreeRTOS-queue-pointer-1P1C-example.cpp"   overwrite="true" />
-         <excludeSourceFolder target="FreeRTOS/Source/Portable" />
+         <copy source="Snippets/FreeRTOS-queue-1P1C-example.cpp"           target="Snippets/FreeRTOS-queue-1P1C-example.cpp"         overwrite="true" />
+         <copy source="Snippets/FreeRTOS-semaphore-1P1C-example.cpp"       target="Snippets/FreeRTOS-semaphore-1P1C-example.cpp"     overwrite="true" />
+         <copy source="Snippets/FreeRTOS-queue-pointer-1P1C-example.cpp"   target="Snippets/FreeRTOS-queue-pointer-1P1C-example.cpp" overwrite="true" />
+         
+         <excludeSourceFolder target="FreeRTOS/Source/portable" />
          <projectOption id="net.sourceforge.usbdm.gnu.c.compiler.option.include.paths">
-            <value>&quot;${ProjDirPath}/FreeRTOS/Source/Include&quot;</value>
+            <value>&quot;${ProjDirPath}/FreeRTOS/Source/include&quot;</value>
             <value>&quot;${ProjDirPath}/FreeRTOS/Source&quot;</value>
             <value>&quot;${ProjDirPath}/FreeRTOS&quot;</value>
          </projectOption>
          <projectOption id="net.sourceforge.usbdm.gnu.cpp.compiler.option.include.paths">
-            <value>&quot;${ProjDirPath}/FreeRTOS/Source/Include&quot;</value>
+            <value>&quot;${ProjDirPath}/FreeRTOS/Source/include&quot;</value>
             <value>&quot;${ProjDirPath}/FreeRTOS/Source&quot;</value>
             <value>&quot;${ProjDirPath}/FreeRTOS&quot;</value>
          </projectOption>
@@ -73,13 +74,6 @@
             </applyWhen>
             <copy source="Sources/main.c" target="Sources/main.c" overwrite="true" />
          </projectActionList>
-         <!-- Default RTOS CPP main -->
-         <projectActionList>
-            <applyWhen>
-               <variableRef idRef="hasCCNature" condition="isTrue" />
-            </applyWhen>
-            <copy source="Sources/main.c" target="Sources/main.cpp" overwrite="true" />
-         </projectActionList>
       </projectActionList>
       
       <!-- CPP-abstraction RTOS files -->
@@ -90,19 +84,21 @@
                <variableRef idRef="projectOptionValue.CPP-abstraction"  defaultValue="false" />
             </and>
          </applyWhen>
-         <copy source="FreeRTOS/FreeRTOS_CPP.h" target="FreeRTOS/FreeRTOS_CPP.h"   overwrite="true"  derived="true" />
-         <copy source="FreeRTOS/Lock.h"         target="FreeRTOS/Lock.h"           overwrite="true"  derived="true" />
-         <copy source="FreeRTOS/Lock.cpp"       target="FreeRTOS/Lock.cpp"         overwrite="true"  derived="true" />
-         <copy source="FreeRTOS/MutexCPP.h"     target="FreeRTOS/MutexCPP.h"       overwrite="true"  derived="true" />
-         <copy source="FreeRTOS/QueueCPP.h"     target="FreeRTOS/QueueCPP.h"       overwrite="true"  derived="true" />
-         <copy source="FreeRTOS/SemaphoreCPP.h" target="FreeRTOS/SemaphoreCPP.h"   overwrite="true"  derived="true" />
-         <copy source="FreeRTOS/TaskCPP.h"      target="FreeRTOS/TaskCPP.h"        overwrite="true"  derived="true" />
-         <copy source="FreeRTOS/TimerCPP.h"     target="FreeRTOS/TimerCPP.h"       overwrite="true"  derived="true" />
+         <copy source="FreeRTOS/FreeRTOS_CPP.h" target="FreeRTOS/FreeRTOS_CPP.h"          overwrite="true"  derived="true" />
+         <copy source="FreeRTOS/Lock.h"         target="FreeRTOS/Lock.h"                  overwrite="true"  derived="true" />
+         <copy source="FreeRTOS/Lock.cpp"       target="FreeRTOS/Lock.cpp"                overwrite="true"  derived="true" />
+         <copy source="FreeRTOS/MutexCPP.h"     target="FreeRTOS/MutexCPP.h"              overwrite="true"  derived="true" />
+         <copy source="FreeRTOS/QueueCPP.h"     target="FreeRTOS/QueueCPP.h"              overwrite="true"  derived="true" />
+         <copy source="FreeRTOS/SemaphoreCPP.h" target="FreeRTOS/SemaphoreCPP.h"          overwrite="true"  derived="true" />
+         <copy source="FreeRTOS/TaskCPP.h"      target="FreeRTOS/TaskCPP.h"               overwrite="true"  derived="true" />
+         <copy source="FreeRTOS/TimerCPP.h"     target="FreeRTOS/TimerCPP.h"              overwrite="true"  derived="true" />
+         <copy source="FreeRTOS/License.txt"    target="FreeRTOS/FreeRTOSCpp_License.txt" overwrite="true"  derived="true" />
 	 
-         <copy source="Sources/main.cpp"        target="Sources/main.cpp"          overwrite="true" />
+         <copy source="Sources/main.cpp"        target="Sources/main.cpp"                 overwrite="true" />
          
-         <copy source="Snippets/FreeRTOS-cpp-flasher-example.cpp"            target="Snippets/FreeRTOS-cpp-flasher-example.cpp"   overwrite="true" />
+         <copy source="Snippets/FreeRTOS-cpp-flasher-example.cpp"            target="Snippets/FreeRTOS-cpp-flasher-example.cpp"           overwrite="true" />
          <copy source="Snippets/FreeRTOS-cpp-producer-consumer-example.cpp"  target="Snippets/FreeRTOS-cpp-producer-consumer-example.cpp" overwrite="true" />         
+         <copy source="Snippets/FreeRTOS-cpp-task-example.cpp"               target="Snippets/FreeRTOS-cpp-task-example.cpp"              overwrite="true" />
       </projectActionList>
       
    </projectActionList>
