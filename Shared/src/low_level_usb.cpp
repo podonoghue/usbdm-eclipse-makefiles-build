@@ -151,7 +151,7 @@ static int outEndpointMaxPacketSize = 32;
 
 #define SEQUENCE_MASK (0xC0)
 
-libusb_context *context;
+static libusb_context *context;
 
 /**
  *  Initialisation of low-level USB interface
@@ -180,7 +180,7 @@ USBDM_ErrorCode bdm_usb_init( void ) {
 #endif
 #endif
    // Initialise LIBUSB
-   context = 0;
+   context = nullptr;
    int rc = libusb_init(&context);
    if (rc != LIBUSB_SUCCESS) {
       log.error("libusb_init() Failed, rc=%d, %s\n", rc, libusb_error_name(rc));
