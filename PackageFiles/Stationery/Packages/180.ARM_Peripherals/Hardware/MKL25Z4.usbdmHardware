@@ -7,19 +7,19 @@
 
 <root version="1.3.0">
    <family name="MKL25Z4">
-      <device name="FRDM_KL25Z"   manual="KL25P80M48SF0RM" package="FRDM_KL25Z" />
-      <device name="MKL25Z128VFM4" manual="KL25P80M48SF0RM" package="QFN_32" />
-      <device name="MKL25Z128VFT4" manual="KL25P80M48SF0RM" package="QFN_48" />
-      <device name="MKL25Z128VLH4" manual="KL25P80M48SF0RM" package="LQFP_64" />
-      <device name="MKL25Z128VLK4" manual="KL25P80M48SF0RM" package="LQFP_80" />
-      <device name="MKL25Z32VFM4" manual="KL25P80M48SF0RM" package="QFN_32" />
-      <device name="MKL25Z32VFT4" manual="KL25P80M48SF0RM" package="QFN_48" />
-      <device name="MKL25Z32VLH4" manual="KL25P80M48SF0RM" package="LQFP_64" />
-      <device name="MKL25Z32VLK4" manual="KL25P80M48SF0RM" package="LQFP_80" />
-      <device name="MKL25Z64VFM4" manual="KL25P80M48SF0RM" package="QFN_32" />
-      <device name="MKL25Z64VFT4" manual="KL25P80M48SF0RM" package="QFN_48" />
-      <device name="MKL25Z64VLH4" manual="KL25P80M48SF0RM" package="LQFP_64" />
-      <device name="MKL25Z64VLK4" manual="KL25P80M48SF0RM" package="LQFP_80" />
+      <device variant="FRDM_KL25Z" manual="KL25P80M48SF0RM" package="FRDM_KL25Z" deviceName="MKL25Z128M4" />
+      <device variant="MKL25Z128VFM4" manual="KL25P80M48SF0RM" package="QFN_32"    deviceName="MKL25Z128M4" />
+      <device variant="MKL25Z128VFT4" manual="KL25P80M48SF0RM" package="QFN_48"    deviceName="MKL25Z128M4" />
+      <device variant="MKL25Z128VLH4" manual="KL25P80M48SF0RM" package="LQFP_64"   deviceName="MKL25Z128M4" />
+      <device variant="MKL25Z128VLK4" manual="KL25P80M48SF0RM" package="LQFP_80"   deviceName="MKL25Z128M4" />
+      <device variant="MKL25Z32VFM4" manual="KL25P80M48SF0RM" package="QFN_32"    deviceName="MKL25Z32M4" />
+      <device variant="MKL25Z32VFT4" manual="KL25P80M48SF0RM" package="QFN_48"    deviceName="MKL25Z32M4" />
+      <device variant="MKL25Z32VLH4" manual="KL25P80M48SF0RM" package="LQFP_64"   deviceName="MKL25Z32M4" />
+      <device variant="MKL25Z32VLK4" manual="KL25P80M48SF0RM" package="LQFP_80"   deviceName="MKL25Z32M4" />
+      <device variant="MKL25Z64VFM4" manual="KL25P80M48SF0RM" package="QFN_32"    deviceName="MKL25Z64M4" />
+      <device variant="MKL25Z64VFT4" manual="KL25P80M48SF0RM" package="QFN_48"    deviceName="MKL25Z64M4" />
+      <device variant="MKL25Z64VLH4" manual="KL25P80M48SF0RM" package="LQFP_64"   deviceName="MKL25Z64M4" />
+      <device variant="MKL25Z64VLK4" manual="KL25P80M48SF0RM" package="LQFP_80"   deviceName="MKL25Z64M4" />
    </family>
    <peripherals>
       <peripheral baseName="ADC"      instance="0"        version="adc0_diff_a">
@@ -98,9 +98,9 @@
          <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForFlash" />
          <clock clockEnable="SIM->SCGC6 = SIM->SCGC6 | SIM_SCGC6_FTF_MASK;" clockDisable="SIM->SCGC6 = SIM->SCGC6 &amp; ~SIM_SCGC6_FTF_MASK;" />
          <irq num="FTF_Command_IRQn" />
-         <param name="peripheral_file" key="/FTFA/peripheral_file" value="ftfa" />
-         <param name="pflash_phrase_size" key="/FTFA/pflash_phrase_size" value="4" />
-         <param name="pflash_sector_size" key="/FTFA/pflash_sector_size" value="1024" />
+         <param name="Flash peripheral file" key="/FTFA/peripheral_file" value="ftfa" />
+         <param name="Program flash phrase size" key="/FTFA/pflash_phrase_size" value="4" />
+         <param name="Program flash sector size" key="/FTFA/pflash_sector_size" value="1024" />
       </peripheral>
       <peripheral baseName="GPIO"     instance="A"        version="fgpioa_0xf80ff000">
          <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForGpio" />
@@ -134,9 +134,10 @@
          <clock clockEnable="SIM->SCGC4 = SIM->SCGC4 | SIM_SCGC4_I2C1_MASK;" clockDisable="SIM->SCGC4 = SIM->SCGC4 &amp; ~SIM_SCGC4_I2C1_MASK;" />
          <irq num="I2C1_IRQn" />
       </peripheral>
-      <peripheral baseName="LLWU"     instance=""         version="llwu_pe4_filt2_mkl25z4">
+      <peripheral baseName="LLWU"     instance=""         version="llwu_me_pe4_filt2_mkl25z4">
          <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForLlwu" />
          <irq num="LLWU_IRQn" />
+         <param name="Wakeup sources" key="/LLWU/device_list" value="LPTMR0;CMP0;;;TSI;RTC_Alarm;;RTC_Seconds" />
       </peripheral>
       <peripheral baseName="LPTMR"    instance="0"        version="lptmr0">
          <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForLptmr" />
@@ -777,6 +778,7 @@
    </pins>
    <packages>
       <package name="FRDM_KL25Z">
+         <placement pin="PTA0"          location="SWD_CLK" />
          <placement pin="PTA1"          location="D0/ConRx" />
          <placement pin="PTA12"         location="D3" />
          <placement pin="PTA13"         location="D8" />
@@ -785,6 +787,8 @@
          <placement pin="PTA18"         location="EXTAL0" />
          <placement pin="PTA19"         location="XTAL0" />
          <placement pin="PTA2"          location="D1/ConTx" />
+         <placement pin="PTA20"         location="RESET_b" />
+         <placement pin="PTA3"          location="SWD_DIO" />
          <placement pin="PTA4"          location="D4" />
          <placement pin="PTA5"          location="D5" />
          <placement pin="PTB0"          location="A0" />
@@ -836,6 +840,20 @@
          <placement pin="PTE31"         location="D30" />
          <placement pin="PTE4"          location="A14" />
          <placement pin="PTE5"          location="A13" />
+         <placement pin="USB0_DM"       location="USB0_DM" />
+         <placement pin="USB0_DP"       location="USB0_DP" />
+         <placement pin="VDD1"          location="VDD1" />
+         <placement pin="VDD2"          location="VDD2" />
+         <placement pin="VDD3"          location="VDD3" />
+         <placement pin="VDDA"          location="VDDA" />
+         <placement pin="VOUT33"        location="VOUT33" />
+         <placement pin="VREFH"         location="VREFH" />
+         <placement pin="VREFL"         location="VREFL" />
+         <placement pin="VREGIN"        location="VREGIN" />
+         <placement pin="VSS1"          location="VSS1" />
+         <placement pin="VSS2"          location="VSS2" />
+         <placement pin="VSS3"          location="VSS3" />
+         <placement pin="VSSA"          location="VSSA" />
       </package>
       <package name="LQFP_64">
          <placement pin="PTA0"          location="p22" />

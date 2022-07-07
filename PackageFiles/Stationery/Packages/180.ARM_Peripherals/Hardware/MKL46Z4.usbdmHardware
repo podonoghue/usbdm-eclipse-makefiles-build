@@ -7,14 +7,14 @@
 
 <root version="1.3.0">
    <family name="MKL46Z4">
-      <device name="FRDM_KL46Z"   manual="KL46P121M48SF4RM" package="FRDM_KL46Z" />
-      <device name="MKL46Z128VLH4" manual="KL46P121M48SF4RM" package="LQFP_64" />
-      <device name="MKL46Z128VLL4" manual="KL46P121M48SF4RM" package="LQFP_100" />
-      <device name="MKL46Z128VMC4" manual="KL46P121M48SF4RM" package="BGA_121" />
-      <device name="MKL46Z256VLH4" manual="KL46P121M48SF4RM" package="LQFP_64" />
-      <device name="MKL46Z256VLL4" manual="KL46P121M48SF4RM" package="LQFP_100" />
-      <device name="MKL46Z256VMC4" manual="KL46P121M48SF4RM" package="BGA_121" />
-      <device name="MKL46Z256VMP4" manual="KL46P121M48SF4RM" package="BGA_64" />
+      <device variant="FRDM_KL46Z" manual="KL46P121M48SF4RM" package="FRDM_KL46Z" deviceName="" />
+      <device variant="MKL46Z128VLH4" manual="KL46P121M48SF4RM" package="LQFP_64"   deviceName="" />
+      <device variant="MKL46Z128VLL4" manual="KL46P121M48SF4RM" package="LQFP_100"  deviceName="" />
+      <device variant="MKL46Z128VMC4" manual="KL46P121M48SF4RM" package="BGA_121"   deviceName="" />
+      <device variant="MKL46Z256VLH4" manual="KL46P121M48SF4RM" package="LQFP_64"   deviceName="" />
+      <device variant="MKL46Z256VLL4" manual="KL46P121M48SF4RM" package="LQFP_100"  deviceName="" />
+      <device variant="MKL46Z256VMC4" manual="KL46P121M48SF4RM" package="BGA_121"   deviceName="" />
+      <device variant="MKL46Z256VMP4" manual="KL46P121M48SF4RM" package="BGA_64"    deviceName="" />
    </family>
    <peripherals>
       <peripheral baseName="ADC"      instance="0"        version="adc0_diff_a">
@@ -96,9 +96,9 @@
          <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForFlash" />
          <clock clockEnable="SIM->SCGC6 = SIM->SCGC6 | SIM_SCGC6_FTF_MASK;" clockDisable="SIM->SCGC6 = SIM->SCGC6 &amp; ~SIM_SCGC6_FTF_MASK;" />
          <irq num="FTF_Command_IRQn" />
-         <param name="peripheral_file" key="/FTFA/peripheral_file" value="ftfa" />
-         <param name="pflash_phrase_size" key="/FTFA/pflash_phrase_size" value="4" />
-         <param name="pflash_sector_size" key="/FTFA/pflash_sector_size" value="1024" />
+         <param name="Flash peripheral file" key="/FTFA/peripheral_file" value="ftfa" />
+         <param name="Program flash phrase size" key="/FTFA/pflash_phrase_size" value="4" />
+         <param name="Program flash sector size" key="/FTFA/pflash_sector_size" value="1024" />
       </peripheral>
       <peripheral baseName="GPIO"     instance="A"        version="fgpioa_0xf8000000">
          <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForGpio" />
@@ -146,9 +146,10 @@
       <peripheral baseName="LCD_POWER" instance="">
          <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForPower" />
       </peripheral>
-      <peripheral baseName="LLWU"     instance=""         version="llwu_pe4_filt2_mkl25z4">
+      <peripheral baseName="LLWU"     instance=""         version="llwu_me_pe4_filt2_mkl25z4">
          <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForLlwu" />
          <irq num="LLWU_IRQn" />
+         <param name="Wakeup sources" key="/LLWU/device_list" value="LPTMR0;CMP0;;;TSI;RTC_Alarm;;RTC_Seconds" />
       </peripheral>
       <peripheral baseName="LPTMR"    instance="0"        version="lptmr0">
          <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForLptmr" />

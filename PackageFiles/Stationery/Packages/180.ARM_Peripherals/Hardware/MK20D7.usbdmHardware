@@ -7,9 +7,9 @@
 
 <root version="1.3.0">
    <family name="MK20D7">
-      <device name="MK20DX128VLH7" manual="K20P64M72SF1RM" package="LQFP_64_MK20D7" />
-      <device name="MK20DX256VLH7" manual="K20P64M72SF1RM" package="LQFP_64_MK20D7" />
-      <device name="MK20DX64VLH7" manual="K20P64M72SF1RM" package="LQFP_64_MK20D7" />
+      <device variant="MK20DX128VLH7" manual="K20P64M72SF1RM" package="LQFP_64_MK20D7" deviceName="" />
+      <device variant="MK20DX256VLH7" manual="K20P64M72SF1RM" package="LQFP_64_MK20D7" deviceName="" />
+      <device variant="MK20DX64VLH7" manual="K20P64M72SF1RM" package="LQFP_64_MK20D7" deviceName="" />
    </family>
    <peripherals>
       <peripheral baseName="ADC"      instance="0"        version="adc0_diff_pga_a">
@@ -221,10 +221,10 @@
          <irq num="I2S0_Tx_IRQn" />
          <irq num="I2S0_Rx_IRQn" />
       </peripheral>
-      <peripheral baseName="LLWU"     instance=""         version="llwu_pe4_filt2_rst">
+      <peripheral baseName="LLWU"     instance=""         version="llwu_me_pe4_filt2_rst">
          <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForLlwu" />
          <irq num="LLWU_IRQn" />
-         <param name="device_list"  key="/LLWU/device_list" value="LPTMR0;CMP0;CMP1;CMP2;TSI;RTC_Alarm;;RTC_Seconds" />
+         <param name="Wakeup sources" key="/LLWU/device_list" value="LPTMR0;CMP0;CMP1;CMP2;TSI;RTC_Alarm;;RTC_Seconds" />
       </peripheral>
       <peripheral baseName="LPTMR"    instance="0"        version="lptmr0">
          <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForLptmr" />

@@ -7,9 +7,9 @@
 
 <root version="1.3.0">
    <family name="MK22FA12">
-      <device name="FRDM_K22FA1M0" manual="K22P64M120SF5V2RM" package="FRDM_K20D50M" />
-      <device name="MK22FN1M0AVLH12" manual="K22P64M120SF5V2RM" package="LQFP_64" />
-      <device name="MK22FX512AVLH12" manual="K22P64M120SF5V2RM" package="LQFP_64" />
+      <device variant="FRDM_K22FA1M0" manual="K22P64M120SF5V2RM" package="FRDM_K20D50M" deviceName="" />
+      <device variant="MK22FN1M0AVLH12" manual="K22P64M120SF5V2RM" package="LQFP_64"   deviceName="" />
+      <device variant="MK22FX512AVLH12" manual="K22P64M120SF5V2RM" package="LQFP_64"   deviceName="" />
    </family>
    <peripherals>
       <peripheral baseName="ADC"      instance="0"        version="adc0_diff_a">
@@ -162,11 +162,11 @@
          <clock clockEnable="SIM->SCGC6 = SIM->SCGC6 | SIM_SCGC6_FTF_MASK;" clockDisable="SIM->SCGC6 = SIM->SCGC6 &amp; ~SIM_SCGC6_FTF_MASK;" />
          <irq num="FTF_Command_IRQn" />
          <irq num="FTF_ReadCollision_IRQn" />
-         <param name="dflash_phrase_size" key="/FTFE/dflash_phrase_size" value="8" />
-         <param name="dflash_sector_size" key="/FTFE/dflash_sector_size" value="4096" />
-         <param name="peripheral_file" key="/FTFE/peripheral_file" value="ftfe_128k_flexrom" />
-         <param name="pflash_phrase_size" key="/FTFE/pflash_phrase_size" value="8" />
-         <param name="pflash_sector_size" key="/FTFE/pflash_sector_size" value="4096" />
+         <param name="Data flash phrase size" key="/FTFE/dflash_phrase_size" value="8" />
+         <param name="Program flash phrase size" key="/FTFE/dflash_sector_size" value="4096" />
+         <param name="Flash peripheral file" key="/FTFE/peripheral_file" value="ftfe_128k_flexrom" />
+         <param name="Data flash sector size" key="/FTFE/pflash_phrase_size" value="8" />
+         <param name="Program flash sector size" key="/FTFE/pflash_sector_size" value="4096" />
       </peripheral>
       <peripheral baseName="FTM"      instance="">
          <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForFtmShared" />
@@ -237,10 +237,10 @@
          <irq num="I2S0_Tx_IRQn" />
          <irq num="I2S0_Rx_IRQn" />
       </peripheral>
-      <peripheral baseName="LLWU"     instance=""         version="llwu_pe4_filt2_rst">
+      <peripheral baseName="LLWU"     instance=""         version="llwu_me_pe4_filt2_rst">
          <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForLlwu" />
          <irq num="LLWU_IRQn" />
-         <param name="device_list"  key="/LLWU/device_list" value="LPTMR0;CMP0;CMP1;CMP2;;RTC_Alarm;;RTC_Seconds" />
+         <param name="Wakeup sources" key="/LLWU/device_list" value="LPTMR0;CMP0;CMP1;CMP2;;RTC_Alarm;;RTC_Seconds" />
       </peripheral>
       <peripheral baseName="LPTMR"    instance="0"        version="lptmr0">
          <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForLptmr" />

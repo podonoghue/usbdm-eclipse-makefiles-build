@@ -7,11 +7,11 @@
 
 <root version="1.3.0">
    <family name="MK66F18">
-      <device name="FRDM_K66F"    manual="K66P144M180SF5RMV2" package="FRDM_K66F" />
-      <device name="MK66FN2M0VLQ18" manual="K66P144M180SF5RMV2" package="LQFP_144" />
-      <device name="MK66FN2M0VMD18" manual="K66P144M180SF5RMV2" package="BGA_144" />
-      <device name="MK66FX1M0VLQ18" manual="K66P144M180SF5RMV2" package="LQFP_144" />
-      <device name="MK66FX1M0VMD18" manual="K66P144M180SF5RMV2" package="BGA_144" />
+      <device variant="FRDM_K66F" manual="K66P144M180SF5RMV2" package="FRDM_K66F" deviceName="" />
+      <device variant="MK66FN2M0VLQ18" manual="K66P144M180SF5RMV2" package="LQFP_144"  deviceName="" />
+      <device variant="MK66FN2M0VMD18" manual="K66P144M180SF5RMV2" package="BGA_144"   deviceName="" />
+      <device variant="MK66FX1M0VLQ18" manual="K66P144M180SF5RMV2" package="LQFP_144"  deviceName="" />
+      <device variant="MK66FX1M0VMD18" manual="K66P144M180SF5RMV2" package="BGA_144"   deviceName="" />
    </family>
    <peripherals>
       <peripheral baseName="ADC"      instance="0"        version="adc0_diff_a">
@@ -199,11 +199,11 @@
          <clock clockEnable="SIM->SCGC6 = SIM->SCGC6 | SIM_SCGC6_FTF_MASK;" clockDisable="SIM->SCGC6 = SIM->SCGC6 &amp; ~SIM_SCGC6_FTF_MASK;" />
          <irq num="FTF_Command_IRQn" />
          <irq num="FTF_ReadCollision_IRQn" />
-         <param name="dflash_phrase_size" key="/FTFE/dflash_phrase_size" value="8" />
-         <param name="dflash_sector_size" key="/FTFE/dflash_sector_size" value="4096" />
-         <param name="peripheral_file" key="/FTFE/peripheral_file" value="ftfe_128k_flexrom" />
-         <param name="pflash_phrase_size" key="/FTFE/pflash_phrase_size" value="8" />
-         <param name="pflash_sector_size" key="/FTFE/pflash_sector_size" value="4096" />
+         <param name="Data flash phrase size" key="/FTFE/dflash_phrase_size" value="8" />
+         <param name="Data flash sector size" key="/FTFE/dflash_sector_size" value="4096" />
+         <param name="Flash peripheral file" key="/FTFE/peripheral_file" value="ftfe_128k_flexrom" />
+         <param name="Program flash phrase size" key="/FTFE/pflash_phrase_size" value="8" />
+         <param name="Program flash sector size" key="/FTFE/pflash_sector_size" value="4096" />
       </peripheral>
       <peripheral baseName="FTM"      instance="">
          <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForFtmShared" />
@@ -279,10 +279,10 @@
          <irq num="I2S0_Tx_IRQn" />
          <irq num="I2S0_Rx_IRQn" />
       </peripheral>
-      <peripheral baseName="LLWU"     instance=""         version="llwu_pe8_filt4">
+      <peripheral baseName="LLWU"     instance=""         version="llwu_me_pe8_filt4">
          <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForLlwu" />
          <irq num="LLWU_IRQn" />
-         <param name="device_list"  key="/LLWU/device_list" value="LPTMR0;CMP0;CMP1;CMP2/CMP3;TSI0;RTC_Alarm;;RTC_Seconds" />
+         <param name="Wakeup sources" key="/LLWU/device_list" value="LPTMR0;CMP0;CMP1;CMP2/CMP3;TSI0;RTC_Alarm;;RTC_Seconds" />
       </peripheral>
       <peripheral baseName="LPTMR"    instance="0"        version="lptmr0">
          <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForLptmr" />

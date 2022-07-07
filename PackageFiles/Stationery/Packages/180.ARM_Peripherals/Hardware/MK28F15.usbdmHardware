@@ -7,9 +7,9 @@
 
 <root version="1.3.0">
    <family name="MK28F15">
-      <device name="FRDM_K28F"    manual="K28P210M150SF5RM" package="FRDM_K28F" />
-      <device name="MK28FN2M0CAU15R" manual="K28P210M150SF5RM" package="WLCSP_210" />
-      <device name="MK28FN2M0VMI15" manual="K28P210M150SF5RM" package="BGA_169" />
+      <device variant="FRDM_K28F" manual="K28P210M150SF5RM" package="FRDM_K28F" deviceName="MK28FN2M0M15" />
+      <device variant="MK28FN2M0CAU15R" manual="K28P210M150SF5RM" package="WLCSP_210_MK28F" deviceName="MK28FN2M0M15" />
+      <device variant="MK28FN2M0VMI15" manual="K28P210M150SF5RM" package="BGA_169_MK28F" deviceName="MK28FN2M0M15" />
    </family>
    <peripherals>
       <peripheral baseName="ADC"      instance="0"        version="adc0_diff_a">
@@ -177,11 +177,11 @@
          <clock clockEnable="SIM->SCGC6 = SIM->SCGC6 | SIM_SCGC6_FTF_MASK;" clockDisable="SIM->SCGC6 = SIM->SCGC6 &amp; ~SIM_SCGC6_FTF_MASK;" />
          <irq num="FTF_Command_IRQn" />
          <irq num="FTF_ReadCollision_IRQn" />
-         <param name="dflash_phrase_size" key="/FTFE/dflash_phrase_size" value="8" />
-         <param name="dflash_sector_size" key="/FTFE/dflash_sector_size" value="4096" />
-         <param name="peripheral_file" key="/FTFE/peripheral_file" value="ftfe_128k_flexrom" />
-         <param name="pflash_phrase_size" key="/FTFE/pflash_phrase_size" value="8" />
-         <param name="pflash_sector_size" key="/FTFE/pflash_sector_size" value="4096" />
+         <param name="Data flash phrase size" key="/FTFE/dflash_phrase_size" value="8" />
+         <param name="Data flash sector size" key="/FTFE/dflash_sector_size" value="4096" />
+         <param name="Flash peripheral file" key="/FTFE/peripheral_file" value="ftfe_128k_flexrom" />
+         <param name="Program flash phrase size" key="/FTFE/pflash_phrase_size" value="8" />
+         <param name="Program flash sector size" key="/FTFE/pflash_sector_size" value="4096" />
       </peripheral>
       <peripheral baseName="FTM"      instance="">
          <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForFtmShared" />
@@ -263,7 +263,7 @@
          <irq num="I2S1_Tx_IRQn" />
          <irq num="I2S1_Rx_IRQn" />
       </peripheral>
-      <peripheral baseName="LLWU"     instance=""         version="llwu_pe8_filt4">
+      <peripheral baseName="LLWU"     instance=""         version="llwu_me_pe8_filt4">
          <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForLlwu" />
          <irq num="LLWU_IRQn" />
          <param name="device_list"  key="/LLWU/device_list" value="LPTMR0/LPTMR1;CMP0;CMP1;;;RTC_Alarm;;RTC_Seconds" />
@@ -1984,7 +1984,7 @@
       </pin>
    </pins>
    <packages>
-      <package name="BGA_169">
+      <package name="BGA_169_MK28F">
          <placement pin="ADC0_DM0"      location="L2" />
          <placement pin="ADC0_DM1"      location="L1" />
          <placement pin="ADC0_DM3"      location="N2" />
@@ -2309,7 +2309,7 @@
          <placement pin="VREG_OUT"      location="VREG_OUT" />
          <placement pin="XTAL32"        location="XTAL_32kHz" />
       </package>
-      <package name="WLCSP_210">
+      <package name="WLCSP_210_MK28F">
          <placement pin="ADC0_DM0"      location="N13" />
          <placement pin="ADC0_DM3"      location="P13" />
          <placement pin="ADC0_DP0"      location="N14" />

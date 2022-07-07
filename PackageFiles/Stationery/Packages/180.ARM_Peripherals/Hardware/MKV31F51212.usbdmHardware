@@ -7,9 +7,9 @@
 
 <root version="1.3.0">
    <family name="MKV31F51212">
-      <device name="FRDM_KV31F"   manual="KV31P100M120SF7RM" package="FRDM_KV31F" />
-      <device name="MKV31F512VLH12" manual="KV31P100M120SF7RM" package="LQFP_64" />
-      <device name="MKV31F512VLL12" manual="KV31P100M120SF7RM" package="LQFP_100" />
+      <device variant="FRDM_KV31F" manual="KV31P100M120SF7RM" package="FRDM_KV31F" deviceName="" />
+      <device variant="MKV31F512VLH12" manual="KV31P100M120SF7RM" package="LQFP_64"   deviceName="" />
+      <device variant="MKV31F512VLL12" manual="KV31P100M120SF7RM" package="LQFP_100"  deviceName="" />
    </family>
    <peripherals>
       <peripheral baseName="ADC"      instance="0"        version="adc0_diff_a">
@@ -156,7 +156,7 @@
          <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForI2c" />
          <clock clockEnable="SIM->SCGC4 = SIM->SCGC4 | SIM_SCGC4_I2C1_MASK;" clockDisable="SIM->SCGC4 = SIM->SCGC4 &amp; ~SIM_SCGC4_I2C1_MASK;" />
       </peripheral>
-      <peripheral baseName="LLWU"     instance=""         version="llwu_pe4_filt2_mkv31f">
+      <peripheral baseName="LLWU"     instance=""         version="llwu_me_pe4_filt2_mkv31f">
          <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForLlwu" />
       </peripheral>
       <peripheral baseName="LPTMR"    instance="0"        version="lptmr0">

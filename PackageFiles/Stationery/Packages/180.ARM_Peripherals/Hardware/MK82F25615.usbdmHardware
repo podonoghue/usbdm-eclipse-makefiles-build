@@ -7,11 +7,11 @@
 
 <root version="1.3.0">
    <family name="MK82F25615">
-      <device name="FRDM_K82F"    manual="K82P121M150SF5RM" package="FRDM_K82F" />
-      <device name="MK82FN256CAx15" manual="K82P121M150SF5RM" package="WLCSP_121" />
-      <device name="MK82FN256VDC15" manual="K82P121M150SF5RM" package="XFBGA_121" />
-      <device name="MK82FN256VLL15" manual="K82P121M150SF5RM" package="LQFP_100" />
-      <device name="MK82FN256VLQ15" manual="K82P121M150SF5RM" package="LQFP_144" />
+      <device variant="FRDM_K82F" manual="K82P121M150SF5RM" package="FRDM_K82F" deviceName="" />
+      <device variant="MK82FN256CAx15" manual="K82P121M150SF5RM" package="WLCSP_121" deviceName="" />
+      <device variant="MK82FN256VDC15" manual="K82P121M150SF5RM" package="XFBGA_121" deviceName="" />
+      <device variant="MK82FN256VLL15" manual="K82P121M150SF5RM" package="LQFP_100"  deviceName="" />
+      <device variant="MK82FN256VLQ15" manual="K82P121M150SF5RM" package="LQFP_144"  deviceName="" />
    </family>
    <peripherals>
       <peripheral baseName="ADC"      instance="0"        version="adc0_diff_a">
@@ -192,9 +192,9 @@
          <clock clockEnable="SIM->SCGC6 = SIM->SCGC6 | SIM_SCGC6_FTF_MASK;" clockDisable="SIM->SCGC6 = SIM->SCGC6 &amp; ~SIM_SCGC6_FTF_MASK;" />
          <irq num="FTF_Command_IRQn" />
          <irq num="FTF_ReadCollision_IRQn" />
-         <param name="peripheral_file" key="/FTFA/peripheral_file" value="ftfa" />
-         <param name="pflash_phrase_size" key="/FTFA/pflash_phrase_size" value="4" />
-         <param name="pflash_sector_size" key="/FTFA/pflash_sector_size" value="4096" />
+         <param name="Flash peripheral file" key="/FTFA/peripheral_file" value="ftfa" />
+         <param name="Program flash phrase size" key="/FTFA/pflash_phrase_size" value="4" />
+         <param name="Program flash sector size" key="/FTFA/pflash_sector_size" value="4096" />
       </peripheral>
       <peripheral baseName="FTM"      instance="">
          <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForFtmShared" />
@@ -270,10 +270,10 @@
          <irq num="I2S0_Tx_IRQn" />
          <irq num="I2S0_Rx_IRQn" />
       </peripheral>
-      <peripheral baseName="LLWU"     instance=""         version="llwu_pe8_filt4">
+      <peripheral baseName="LLWU"     instance=""         version="llwu_me_pe8_filt4">
          <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForLlwu" />
          <irq num="LLWU_IRQn" />
-         <param name="device_list"  key="/LLWU/device_list" value="LPTMR0/LPTMR1;CMP0;CMP1;;TSI0;RTC_Alarm;;RTC_Seconds" />
+         <param name="Wakeup sources" key="/LLWU/device_list" value="LPTMR0/LPTMR1;CMP0;CMP1;;TSI0;RTC_Alarm;;RTC_Seconds" />
       </peripheral>
       <peripheral baseName="LPTMR"    instance="0"        version="lptmr0">
          <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForLptmr" />

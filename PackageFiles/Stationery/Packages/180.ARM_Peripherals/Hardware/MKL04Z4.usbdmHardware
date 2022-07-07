@@ -7,17 +7,17 @@
 
 <root version="1.3.0">
    <family name="MKL04Z4">
-      <device name="MKL04Z16VFK4" manual="KL04P48M48SF1RM" package="QFN_24" />
-      <device name="MKL04Z16VFM4" manual="KL04P48M48SF1RM" package="QFN_32" />
-      <device name="MKL04Z16VLC4" manual="KL04P48M48SF1RM" package="LQFP_32" />
-      <device name="MKL04Z16VLF4" manual="KL04P48M48SF1RM" package="LQFP_48" />
-      <device name="MKL04Z32VFK4" manual="KL04P48M48SF1RM" package="QFN_24" />
-      <device name="MKL04Z32VFM4" manual="KL04P48M48SF1RM" package="QFN_32" />
-      <device name="MKL04Z32VLC4" manual="KL04P48M48SF1RM" package="LQFP_32" />
-      <device name="MKL04Z32VLF4" manual="KL04P48M48SF1RM" package="LQFP_48" />
-      <device name="MKL04Z8VFK4"  manual="KL04P48M48SF1RM" package="QFN_24" />
-      <device name="MKL04Z8VFM4"  manual="KL04P48M48SF1RM" package="QFN_32" />
-      <device name="MKL04Z8VLC4"  manual="KL04P48M48SF1RM" package="LQFP_32" />
+      <device variant="MKL04Z16VFK4" manual="KL04P48M48SF1RM" package="QFN_24"    deviceName="" />
+      <device variant="MKL04Z16VFM4" manual="KL04P48M48SF1RM" package="QFN_32"    deviceName="" />
+      <device variant="MKL04Z16VLC4" manual="KL04P48M48SF1RM" package="LQFP_32"   deviceName="" />
+      <device variant="MKL04Z16VLF4" manual="KL04P48M48SF1RM" package="LQFP_48"   deviceName="" />
+      <device variant="MKL04Z32VFK4" manual="KL04P48M48SF1RM" package="QFN_24"    deviceName="" />
+      <device variant="MKL04Z32VFM4" manual="KL04P48M48SF1RM" package="QFN_32"    deviceName="" />
+      <device variant="MKL04Z32VLC4" manual="KL04P48M48SF1RM" package="LQFP_32"   deviceName="" />
+      <device variant="MKL04Z32VLF4" manual="KL04P48M48SF1RM" package="LQFP_48"   deviceName="" />
+      <device variant="MKL04Z8VFK4" manual="KL04P48M48SF1RM" package="QFN_24"    deviceName="" />
+      <device variant="MKL04Z8VFM4" manual="KL04P48M48SF1RM" package="QFN_32"    deviceName="" />
+      <device variant="MKL04Z8VLC4" manual="KL04P48M48SF1RM" package="LQFP_32"   deviceName="" />
    </family>
    <peripherals>
       <peripheral baseName="ADC"      instance="0"        version="adc0_mkl_dma">
@@ -119,9 +119,9 @@
          <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForFlash" />
          <clock clockEnable="SIM->SCGC6 = SIM->SCGC6 | SIM_SCGC6_FTF_MASK;" clockDisable="SIM->SCGC6 = SIM->SCGC6 &amp; ~SIM_SCGC6_FTF_MASK;" />
          <irq num="FTF_Command_IRQn" />
-         <param name="peripheral_file" key="/FTFA/peripheral_file" value="ftfa" />
-         <param name="pflash_phrase_size" key="/FTFA/pflash_phrase_size" value="4" />
-         <param name="pflash_sector_size" key="/FTFA/pflash_sector_size" value="1024" />
+         <param name="Flash peripheral file" key="/FTFA/peripheral_file" value="ftfa" />
+         <param name="Program flash phrase size" key="/FTFA/pflash_phrase_size" value="4" />
+         <param name="Program flash sector size" key="/FTFA/pflash_sector_size" value="1024" />
       </peripheral>
       <peripheral baseName="GPIO"     instance="A"        version="fgpioa_0xf80ff000">
          <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForGpio" />
@@ -138,7 +138,7 @@
          <clock clockEnable="SIM->SCGC4 = SIM->SCGC4 | SIM_SCGC4_I2C0_MASK;" clockDisable="SIM->SCGC4 = SIM->SCGC4 &amp; ~SIM_SCGC4_I2C0_MASK;" />
          <irq num="I2C0_IRQn" />
       </peripheral>
-      <peripheral baseName="LLWU"     instance=""         version="llwu_pe2_filt2">
+      <peripheral baseName="LLWU"     instance=""         version="llwu_me_pe2_filt2">
          <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForLlwu" />
          <irq num="LLWU_IRQn" />
       </peripheral>

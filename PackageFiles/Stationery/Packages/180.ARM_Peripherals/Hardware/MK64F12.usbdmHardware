@@ -7,15 +7,15 @@
 
 <root version="1.3.0">
    <family name="MK64F12">
-      <device name="FRDM_K64F"    manual="K64P144M120SF5RM" package="FRDM_K64F" />
-      <device name="MK64FN1M0VDC12" manual="K64P144M120SF5RM" package="BGA_121" />
-      <device name="MK64FN1M0VLL12" manual="K64P144M120SF5RM" package="LQFP_100" />
-      <device name="MK64FN1M0VLQ12" manual="K64P144M120SF5RM" package="LQFP_144" />
-      <device name="MK64FN1M0VMD12" manual="K64P144M120SF5RM" package="BGA_144" />
-      <device name="MK64FX512VDC12" manual="K64P144M120SF5RM" package="BGA_121" />
-      <device name="MK64FX512VLL12" manual="K64P144M120SF5RM" package="LQFP_100" />
-      <device name="MK64FX512VLQ12" manual="K64P144M120SF5RM" package="LQFP_144" />
-      <device name="MK64FX512VMD12" manual="K64P144M120SF5RM" package="BGA_144" />
+      <device variant="FRDM_K64F" manual="K64P144M120SF5RM" package="FRDM_K64F" deviceName="" />
+      <device variant="MK64FN1M0VDC12" manual="K64P144M120SF5RM" package="BGA_121"   deviceName="" />
+      <device variant="MK64FN1M0VLL12" manual="K64P144M120SF5RM" package="LQFP_100"  deviceName="" />
+      <device variant="MK64FN1M0VLQ12" manual="K64P144M120SF5RM" package="LQFP_144"  deviceName="" />
+      <device variant="MK64FN1M0VMD12" manual="K64P144M120SF5RM" package="BGA_144"   deviceName="" />
+      <device variant="MK64FX512VDC12" manual="K64P144M120SF5RM" package="BGA_121"   deviceName="" />
+      <device variant="MK64FX512VLL12" manual="K64P144M120SF5RM" package="LQFP_100"  deviceName="" />
+      <device variant="MK64FX512VLQ12" manual="K64P144M120SF5RM" package="LQFP_144"  deviceName="" />
+      <device variant="MK64FX512VMD12" manual="K64P144M120SF5RM" package="BGA_144"   deviceName="" />
    </family>
    <peripherals>
       <peripheral baseName="ADC"      instance="0"        version="adc0_diff_a">
@@ -188,11 +188,11 @@
          <clock clockEnable="SIM->SCGC6 = SIM->SCGC6 | SIM_SCGC6_FTF_MASK;" clockDisable="SIM->SCGC6 = SIM->SCGC6 &amp; ~SIM_SCGC6_FTF_MASK;" />
          <irq num="FTF_Command_IRQn" />
          <irq num="FTF_ReadCollision_IRQn" />
-         <param name="dflash_phrase_size" key="/FTFE/dflash_phrase_size" value="8" />
-         <param name="dflash_sector_size" key="/FTFE/dflash_sector_size" value="4096" />
-         <param name="peripheral_file" key="/FTFE/peripheral_file" value="ftfe_128k_flexrom" />
-         <param name="pflash_phrase_size" key="/FTFE/pflash_phrase_size" value="8" />
-         <param name="pflash_sector_size" key="/FTFE/pflash_sector_size" value="4096" />
+         <param name="Data flash phrase size" key="/FTFE/dflash_phrase_size" value="8" />
+         <param name="Data flash sector size" key="/FTFE/dflash_sector_size" value="4096" />
+         <param name="Flash peripheral file" key="/FTFE/peripheral_file" value="ftfe_128k_flexrom" />
+         <param name="Program flash phrase size" key="/FTFE/pflash_phrase_size" value="8" />
+         <param name="Program flash sector size" key="/FTFE/pflash_sector_size" value="4096" />
       </peripheral>
       <peripheral baseName="FTM"      instance="">
          <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForFtmShared" />
@@ -263,10 +263,10 @@
          <irq num="I2S0_Tx_IRQn" />
          <irq num="I2S0_Rx_IRQn" />
       </peripheral>
-      <peripheral baseName="LLWU"     instance=""         version="llwu_pe4_filt2_rst_mk20d5">
+      <peripheral baseName="LLWU"     instance=""         version="llwu_me_pe4_filt2_rst_mk20d5">
          <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForLlwu" />
          <irq num="LLWU_IRQn" />
-         <param name="device_list"  key="/LLWU/device_list" value="LPTMR0;CMP0;CMP1;CMP2;;RTC_Alarm;;RTC_Seconds" />
+         <param name="Wakeup sources" key="/LLWU/device_list" value="LPTMR0;CMP0;CMP1;CMP2;;RTC_Alarm;;RTC_Seconds" />
       </peripheral>
       <peripheral baseName="LPTMR"    instance="0"        version="lptmr0">
          <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForLptmr" />

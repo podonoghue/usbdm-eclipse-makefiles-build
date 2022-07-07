@@ -7,37 +7,37 @@
 
 <root version="1.3.0">
    <family name="MK20D5">
-      <device name="FRDM_K20D50M" manual="K20P64M50SF0RM" package="FRDM_K20D50M" />
-      <device name="MK20DN128VFM5" manual="K20P32M50SF0RM" package="QFN_32" />
-      <device name="MK20DN128VFT5" manual="K20P48M50SF0RM" package="QFN_48" />
-      <device name="MK20DN128VLF5" manual="K20P48M50SF0RM" package="LQFP_48" />
-      <device name="MK20DN128VLH5" manual="K20P64M50SF0RM" package="LQFP_64_MK20D5" />
-      <device name="MK20DN128VMP5" manual="K20P64M50SF0RM" package="BGA_64" />
-      <device name="MK20DN32VFM5" manual="K20P32M50SF0RM" package="QFN_32" />
-      <device name="MK20DN32VFT5" manual="K20P48M50SF0RM" package="QFN_48" />
-      <device name="MK20DN32VLF5" manual="K20P48M50SF0RM" package="LQFP_48" />
-      <device name="MK20DN32VLH5" manual="K20P64M50SF0RM" package="LQFP_64_MK20D5" />
-      <device name="MK20DN32VMP5" manual="K20P64M50SF0RM" package="BGA_64" />
-      <device name="MK20DN64VFM5" manual="K20P32M50SF0RM" package="QFN_32" />
-      <device name="MK20DN64VFT5" manual="K20P48M50SF0RM" package="QFN_48" />
-      <device name="MK20DN64VLF5" manual="K20P48M50SF0RM" package="LQFP_48" />
-      <device name="MK20DN64VLH5" manual="K20P64M50SF0RM" package="LQFP_64_MK20D5" />
-      <device name="MK20DN64VMP5" manual="K20P64M50SF0RM" package="BGA_64" />
-      <device name="MK20DX128VFM5" manual="K20P32M50SF0RM" package="QFN_32" />
-      <device name="MK20DX128VFT5" manual="K20P48M50SF0RM" package="QFN_48" />
-      <device name="MK20DX128VLF5" manual="K20P48M50SF0RM" package="LQFP_48" />
-      <device name="MK20DX128VLH5" manual="K20P64M50SF0RM" package="LQFP_64_MK20D5" />
-      <device name="MK20DX128VMP5" manual="K20P64M50SF0RM" package="BGA_64" />
-      <device name="MK20DX32VFM5" manual="K20P32M50SF0RM" package="QFN_32" />
-      <device name="MK20DX32VFT5" manual="K20P48M50SF0RM" package="QFN_48" />
-      <device name="MK20DX32VLF5" manual="K20P48M50SF0RM" package="LQFP_48" />
-      <device name="MK20DX32VLH5" manual="K20P64M50SF0RM" package="LQFP_64_MK20D5" />
-      <device name="MK20DX32VMP5" manual="K20P64M50SF0RM" package="BGA_64" />
-      <device name="MK20DX64VFM5" manual="K20P32M50SF0RM" package="QFN_32" />
-      <device name="MK20DX64VFT5" manual="K20P48M50SF0RM" package="QFN_48" />
-      <device name="MK20DX64VLF5" manual="K20P48M50SF0RM" package="LQFP_48" />
-      <device name="MK20DX64VLH5" manual="K20P64M50SF0RM" package="LQFP_64_MK20D5" />
-      <device name="MK20DX64VMP5" manual="K20P64M50SF0RM" package="BGA_64" />
+      <device variant="FRDM_K20D50M" manual="K20P64M50SF0RM" package="FRDM_K20D50M" deviceName="" />
+      <device variant="MK20DN128VFM5" manual="K20P32M50SF0RM" package="QFN_32"    deviceName="" />
+      <device variant="MK20DN128VFT5" manual="K20P48M50SF0RM" package="QFN_48"    deviceName="" />
+      <device variant="MK20DN128VLF5" manual="K20P48M50SF0RM" package="LQFP_48"   deviceName="" />
+      <device variant="MK20DN128VLH5" manual="K20P64M50SF0RM" package="LQFP_64_MK20D5" deviceName="" />
+      <device variant="MK20DN128VMP5" manual="K20P64M50SF0RM" package="BGA_64"    deviceName="" />
+      <device variant="MK20DN32VFM5" manual="K20P32M50SF0RM" package="QFN_32"    deviceName="" />
+      <device variant="MK20DN32VFT5" manual="K20P48M50SF0RM" package="QFN_48"    deviceName="" />
+      <device variant="MK20DN32VLF5" manual="K20P48M50SF0RM" package="LQFP_48"   deviceName="" />
+      <device variant="MK20DN32VLH5" manual="K20P64M50SF0RM" package="LQFP_64_MK20D5" deviceName="" />
+      <device variant="MK20DN32VMP5" manual="K20P64M50SF0RM" package="BGA_64"    deviceName="" />
+      <device variant="MK20DN64VFM5" manual="K20P32M50SF0RM" package="QFN_32"    deviceName="" />
+      <device variant="MK20DN64VFT5" manual="K20P48M50SF0RM" package="QFN_48"    deviceName="" />
+      <device variant="MK20DN64VLF5" manual="K20P48M50SF0RM" package="LQFP_48"   deviceName="" />
+      <device variant="MK20DN64VLH5" manual="K20P64M50SF0RM" package="LQFP_64_MK20D5" deviceName="" />
+      <device variant="MK20DN64VMP5" manual="K20P64M50SF0RM" package="BGA_64"    deviceName="" />
+      <device variant="MK20DX128VFM5" manual="K20P32M50SF0RM" package="QFN_32"    deviceName="" />
+      <device variant="MK20DX128VFT5" manual="K20P48M50SF0RM" package="QFN_48"    deviceName="" />
+      <device variant="MK20DX128VLF5" manual="K20P48M50SF0RM" package="LQFP_48"   deviceName="" />
+      <device variant="MK20DX128VLH5" manual="K20P64M50SF0RM" package="LQFP_64_MK20D5" deviceName="" />
+      <device variant="MK20DX128VMP5" manual="K20P64M50SF0RM" package="BGA_64"    deviceName="" />
+      <device variant="MK20DX32VFM5" manual="K20P32M50SF0RM" package="QFN_32"    deviceName="" />
+      <device variant="MK20DX32VFT5" manual="K20P48M50SF0RM" package="QFN_48"    deviceName="" />
+      <device variant="MK20DX32VLF5" manual="K20P48M50SF0RM" package="LQFP_48"   deviceName="" />
+      <device variant="MK20DX32VLH5" manual="K20P64M50SF0RM" package="LQFP_64_MK20D5" deviceName="" />
+      <device variant="MK20DX32VMP5" manual="K20P64M50SF0RM" package="BGA_64"    deviceName="" />
+      <device variant="MK20DX64VFM5" manual="K20P32M50SF0RM" package="QFN_32"    deviceName="" />
+      <device variant="MK20DX64VFT5" manual="K20P48M50SF0RM" package="QFN_48"    deviceName="" />
+      <device variant="MK20DX64VLF5" manual="K20P48M50SF0RM" package="LQFP_48"   deviceName="" />
+      <device variant="MK20DX64VLH5" manual="K20P64M50SF0RM" package="LQFP_64_MK20D5" deviceName="" />
+      <device variant="MK20DX64VMP5" manual="K20P64M50SF0RM" package="BGA_64"    deviceName="" />
    </family>
    <peripherals>
       <peripheral baseName="ADC"      instance="0"        version="adc0_diff_a">
@@ -190,7 +190,7 @@
          <irq num="I2S0_Tx_IRQn" />
          <irq num="I2S0_Rx_IRQn" />
       </peripheral>
-      <peripheral baseName="LLWU"     instance=""         version="llwu_pe4_filt2_rst_mk20d5">
+      <peripheral baseName="LLWU"     instance=""         version="llwu_me_pe4_filt2_rst_mk20d5">
          <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForLlwu" />
          <irq num="LLWU_IRQn" />
          <param name="Wakeup sources" key="/LLWU/device_list" value="LPTMR0;CMP0;CMP1;;TSI;RTC_Alarm;;RTC_Seconds" />
