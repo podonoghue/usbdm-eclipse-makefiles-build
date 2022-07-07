@@ -1,5 +1,5 @@
 /*
- * @file mcg.cpp  (180.ARM_Peripherals/Startup_Code/mcg_lite.cpp)
+ * @file mcg_lite.cpp  (180.ARM_Peripherals/Startup_Code/mcg_lite.cpp)
  *
  * Based on KL25
  *    1 FLL (FRDIV=/1-/128, /32-/1024, /1280, /1536)
@@ -104,7 +104,7 @@ const char *Mcg::getClockModeName(McgInfo::ClockMode clockMode) {
 /**
  * Transition from current clock mode to mode given
  *
- * @param clockInfo Clock mode to transition to
+ * @param[in]  clockInfo Clock mode to transition to
  *
  * @return E_NO_ERROR on success
  */
@@ -114,7 +114,7 @@ ErrorCode Mcg::clockTransition(const McgInfo::ClockInfo &clockInfo) {
 
 
    // Set conservative clock dividers
-   setSysDividers(SIM_CLKDIV1_OUTDIV4(5)|SIM_CLKDIV1_OUTDIV3(5)|SIM_CLKDIV1_OUTDIV2(5)|SIM_CLKDIV1_OUTDIV1(5));
+   setSysDividers(SIM_CLKDIV1_OUTDIV1(0)|SIM_CLKDIV1_OUTDIV2(1)|SIM_CLKDIV1_OUTDIV3(2)|SIM_CLKDIV1_OUTDIV4(3));
 
 #ifdef MCG_C7_OSCSEL
    // Select OSCCLK Source

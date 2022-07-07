@@ -1,7 +1,7 @@
 /*
  * @file mcg.cpp (180.ARM_Peripherals/Startup_Code/mcg.cpp)
  *
- * Generic MCG
+ * Generic MCG based on MK20, MK28, MKL25
  *    1 FLL (FRDIV=/1-/128, /32-/1024, /1280, /1536)
  *    1 PLL (VCO PRDIV=/1-/24, VDIV=pll_vdiv_min+x) (pll_vdiv_min=x16,x24)
  *
@@ -28,7 +28,6 @@
  */
 extern "C" uint32_t SystemCoreClock;
 extern "C" uint32_t SystemBusClock;
-extern "C" uint32_t SystemFlexbusClock;
 
 namespace USBDM {
 
@@ -59,71 +58,46 @@ volatile uint32_t SystemMcgFllClock;
 /** MCGPLLCLK - Output of PLL */
 volatile uint32_t SystemMcgPllClock;
 
-/** Core/System clock (from MCGOUTCLK/CLKDIV) */
-//volatile uint32_t SystemCoreClock;
-
-/** Bus clock (from MCGOUTCLK/CLKDIV) */
-//volatile uint32_t SystemBusClock;
-
-typedef void (*set_sys_dividers_asm_t)(uint32_t simClkDiv1);
-
+#if USBDM_ERRATA_E2448
 /**
  *  Change SIM->CLKDIV1 value
+ *  Disables flash prefetch
  *
- *  @param simClkDiv1 - new SIM->CLKDIV1 value
+ * @param simClkDiv1 - Value to write to SIM->CLKDIV1 register
  *
- *  @note This routine must be copied to RAM. It is a workaround for errata e2448.
- *  Flash pre-fetch must be disabled when the flash clock divider is changed.
- *  This cannot be performed while executing out of flash.
- *  There must be a short delay after the clock dividers are changed before prefetch
- *  can be re-enabled.
- *
- *  @note This routine must be placed in ROM immediately before setSysDividersStub()
+ * @note This routine must be placed in RAM
  */
-static void setSysDividers_asm(uint32_t simClkDiv1) {
-   (void) simClkDiv1;
-   __asm__ volatile (
-         "    .equ   FMC_PFAPR_VALUE,0xffFF0000   \n"
-         "    .equ   FMC_PFAPR_ADDR,0x4001F000    \n"
-         "    .equ   SIM_CLKDIV1_ADDR,0x40048044  \n"
-         "     movw  r1,#FMC_PFAPR_ADDR&0xFFFF    \n" // Point R1 @FMC_PFAPR
-         "     movt  r1,#FMC_PFAPR_ADDR/65536     \n"
-         "     ldr   r2,[r1,#0]                   \n" // R2 = original FMC_PFAPR
-         "     movw  r3,#FMC_PFAPR_VALUE&0xFFFF   \n" // R3 = mask for new FMC_PFAPR
-         "     movt  r3,#FMC_PFAPR_VALUE>>16      \n"
-         "     orr   r3,r3,r2                     \n" // Merge with existing (Disable Flash pre-fetch)
-         "     str   r3,[r1,#0]                   \n" // Write back to FMC_PFAPR
-
-         "     movw  r0,#SIM_CLKDIV1_ADDR&0xFFFF  \n" // Point R0 @SIM->CLKDIV1
-         "     movt  r0,#SIM_CLKDIV1_ADDR/65536   \n"
-         "     str   %[value],[r0,#0]             \n" // SIM->CLKDIV1 = simClkDiv
-         "     movw  r3,#100                      \n" // Wait a while
-         "loop:                                   \n"
-         "     subs  r3,r3,#1                     \n"
-         "     bhi   loop                         \n"
-         "                                        \n"
-         "     str   r2,[r1,#0]                   \n" // Restore original FMC_PFAPR
-         :: [value] "r" (simClkDiv1) : "r0", "r1", "r2", "r3"
-   );
+__attribute__ ((section(".ram_functions")))
+__attribute__((long_call))
+static void setSysDividers(uint32_t simClkDiv1) {
+#if defined(FMC_PFAPR_M2PFD_MASK)
+   // Save original PFAPR
+   uint32_t temp  = FMC->PFAPR;
+   // Disable prefetch
+   FMC->PFAPR   = FMC->PFAPR | FMC_PFAPR_M0PFD_MASK | FMC_PFAPR_M1PFD_MASK | FMC_PFAPR_M2PFD_MASK | FMC_PFAPR_M3PFD_MASK;
+   // Give any current prefetch time to finish
+   for (int t=0;t<10;t++) {
+      __asm__ volatile("nop");
+   }
+#endif
+   // Change CLKDIV1
+   SIM->CLKDIV1 = simClkDiv1;
+#if defined(FMC_PFAPR_M2PFD_MASK)
+   // Restore original PFAPR
+   FMC->PFAPR   = temp;
+#endif
 }
-
+#else
 /**
  *  Change SIM->CLKDIV1 value
  *
  * @param simClkDiv1 - Value to write to SIM->CLKDIV1 register
- *
- * @note This routine must be placed in ROM immediately following setSysDividers_asm()
  */
-void setSysDividersStub(uint32_t simClkDiv1) {
-   uint8_t space[100]; // Space for RAM copy of setSysDividers_asm()
-   set_sys_dividers_asm_t fp = (set_sys_dividers_asm_t)((uint32_t)space|1);
-
-   // Copy routine to RAM (stack)
-   memcpy(space, (void*)((uint32_t)setSysDividers_asm&~1), ((uint32_t)setSysDividersStub)-((uint32_t)setSysDividers_asm));
-
-   // Call the function on the stack
-   (*fp)(simClkDiv1);
+static void setSysDividers(uint32_t simClkDiv1) {
+   // Change CLKDIV1
+   SIM->CLKDIV1 = simClkDiv1;
 }
+#endif
 
 /** Callback for programmatically set handler */
 MCGCallbackFunction Mcg::callback = {0};
@@ -167,6 +141,47 @@ const char *Mcg::getClockModeName(McgInfo::ClockMode clockMode) {
 }
 
 /**
+ * Write main MCG registers from clockInfo
+ * - Clock monitors are masked out
+ * - PLL is not selected (C6.PLLS=0)
+ * - Not low power (C2.LP = 0 since clockInfo.C2 does not include LP)
+ * - TRIM bits are preserved (C2.FCFTRIM, C4.FCTRIM, C4.SCFTRIM)
+ * - Bugfix version: Errata e7993
+ *
+ * @param clockInfo  Clock settings information
+ * @param bugFix     Mask to flip MCG.C4 value
+ */
+void Mcg::writeMainRegs(const McgInfo::ClockInfo &clockInfo, uint8_t bugFix) {
+
+#if defined(MCG_C7_OSCSEL)
+   // Select OSCCLK Source (input clock to PLL/FLL and possibly MCGOUTCLK)
+   mcg->C7 = clockInfo.c7; // OSCSEL = 0,1,2 -> XTAL/XTAL32/IRC48M
+#endif
+
+#if defined(MCG_C6_VDIV0_MASK)
+   // Select PLL multiplier (VDIV0 - divider in PLL loop) - clear clock monitors and PLLS
+   mcg->C6 = clockInfo.c6&MCG_C6_VDIV0_MASK;
+#endif
+
+#if defined(MCG_C5_PRDIV0_MASK)
+   // Set PLL prescaler (PRDIV), PLL enables (PLLCLKEN0, PLLSTEN0)
+   mcg->C5 = clockInfo.c5;
+#endif
+
+   // Select RANGE0, HGO0, EREFS0, IRCS (LOCRE0 is included but has no affect as CME0=0 )
+   // Not low power as (C2.LP = 0)
+#if defined(MCG_C2_FCFTRIM_MASK)
+   // Preserve FCTRIM
+   mcg->C2 = (mcg->C2 & (MCG_C2_FCFTRIM_MASK))|clockInfo.c2;
+#else
+   mcg->C2 = clockInfo.c2;
+#endif
+   // Set FLL Parameters DMX32, DRST_DRS,
+   // Preserve FCTRIM, SCFTRIM
+   mcg->C4 = (mcg->C4 & (MCG_C4_FCTRIM_MASK|MCG_C4_SCFTRIM_MASK))|(clockInfo.c4^bugFix);
+};
+
+/**
  * Transition from current clock mode to mode given
  *
  * @param[in]  clockInfo Clock mode to transition to
@@ -186,32 +201,16 @@ ErrorCode Mcg::clockTransition(const McgInfo::ClockInfo &clockInfo) {
 #endif
 
    // Set conservative clock dividers
-   setSysDividers(SIM_CLKDIV1_OUTDIV4(5)|SIM_CLKDIV1_OUTDIV3(5)|SIM_CLKDIV1_OUTDIV2(5)|SIM_CLKDIV1_OUTDIV1(5));
+   setSysDividers(SIM_CLKDIV1_OUTDIV1(0)|SIM_CLKDIV1_OUTDIV2(1)|SIM_CLKDIV1_OUTDIV3(2)|SIM_CLKDIV1_OUTDIV4(3));
 
    // Set Fast Internal Clock divider (FCRDIV)
    mcg->SC = clockInfo.sc;
 
    // Disable clock monitors while clocks change
-   mcg->C6 = mcg->C6&~(MCG_C6_LOLIE0_MASK|MCG_C6_PLLS_MASK|MCG_C6_CME0_MASK);
+   mcg->C6 = mcg->C6&~(MCG_C6_LOLIE0_MASK|MCG_C6_CME0_MASK);
+#ifdef MCG_C8_CME1
    mcg->C8 = 0;
-
-   /**
-    * Sets up C2, C4, C6 and C7
-    */
-   auto doMainRegs = [clockInfo]() {
-      // Select OSCCLK Source (for exit to FEE,FBE)
-      mcg->C7 = clockInfo.c7; // OSCSEL = 0,1,2 -> XTAL/XTAL32/IRC48M
-
-      // Clear LP (not low-power), Select RANGE0, HGO0, EREFS0, IRCS
-      mcg->C2 = clockInfo.c2|MCG_C2_LP(0);
-
-      // Set FLL Parameters
-      mcg->C4 = (mcg->C4&(MCG_C4_FCTRIM_MASK|MCG_C4_SCFTRIM_MASK))|clockInfo.c4;
-
-      // Select FLL as MCG clock source
-      mcg->C6 = clockInfo.c6&~MCG_C6_CME0_MASK;
-   };
-
+#endif
    int transitionCount = 0;
    do {
       McgInfo::ClockMode next = clockTransitionTable[currentClockMode][finalMode];
@@ -220,12 +219,12 @@ ErrorCode Mcg::clockTransition(const McgInfo::ClockInfo &clockInfo) {
 
          case McgInfo::ClockMode_FEI: // From FBI or startup
 
-            // Note: C2, C4 and C7 set up in FBI
+            // Note: C2, C4, C6 and C7 set up in FBI or default from reset
 
             mcg->C1 =
-                  MCG_C1_CLKS(0)   | // CLKS     = 0     -> MCGOUTCLK = Output of FLL/PLL (depends on mcg_c6.PLLS)
-                  MCG_C1_IREFS(1)  | // IREFS    = 1     -> FLL source = Slow IRC
-                  clockInfo.c1;      // FRDIV, IRCLKEN, IREFSTEN
+                  MCG_C1_CLKS(0b00)   | // CLKS     = 0     -> MCGOUTCLK = Output of FLL/PLL (depends on mcg_c6.PLLS)
+                  MCG_C1_IREFS(1)     | // IREFS    = 1     -> FLL source = Slow IRC
+                  clockInfo.c1;         // FRDIV, IRCLKEN, IREFSTEN
 
             // Wait for S_IREFST to indicate FLL Reference has switched to IRC
             // Wait for S_CLKST to indicating that OUTCLK has switched to FLL
@@ -239,9 +238,9 @@ ErrorCode Mcg::clockTransition(const McgInfo::ClockInfo &clockInfo) {
             // Note: C2, C4, C6 and C7 set up in FBE
 
             mcg->C1 =
-                  MCG_C1_CLKS(0)   | // CLKS     = 0     -> MCGOUTCLK = Output of FLL/PLL (depends on mcg_c6.PLLS)
-                  MCG_C1_IREFS(0)  | // IREFS    = 0     -> FLL source = External reference clock
-                  clockInfo.c1;      // FRDIV, IRCLKEN, IREFSTEN
+                  MCG_C1_CLKS(0b00)   | // CLKS     = 0     -> MCGOUTCLK = Output of FLL/PLL (depends on mcg_c6.PLLS)
+                  MCG_C1_IREFS(0)     | // IREFS    = 0     -> FLL source = External reference clock
+                  clockInfo.c1;         // FRDIV, IRCLKEN, IREFSTEN
 
             // Wait for S_IREFST to indicate FLL Reference has switched to ERC
             // Wait for S_CLKST to indicating that MCGOUTCLK has switched to FLL
@@ -253,51 +252,64 @@ ErrorCode Mcg::clockTransition(const McgInfo::ClockInfo &clockInfo) {
          case McgInfo::ClockMode_FBI: // from BLPI, FEI, FEE, FBE
 
             mcg->C1 =
-                  MCG_C1_CLKS(1)   | // CLKS     = 1     -> MCGOUTCLK = Internal reference clock is selected
-                  MCG_C1_IREFS(1)  | // IREFS    = 1     -> FLL source = Slow IRC
-                  clockInfo.c1;      // FRDIV, IRCLKEN, IREFSTEN
+                  MCG_C1_CLKS(0b01)   | // CLKS     = 1     -> MCGOUTCLK = Internal reference clock is selected
+                  MCG_C1_IREFS(1)     | // IREFS    = 1     -> FLL source = Slow IRC
+                  clockInfo.c1;         // FRDIV, IRCLKEN, IREFSTEN
 
-            doMainRegs();
+#if USBDM_ERRATA_E7993
+            writeMainRegs(clockInfo, MCG_C4_DMX32_MASK);
+#else
+            writeMainRegs(clockInfo, 0);
+#endif
 
             // Wait for S_CLKST to indicating that MCGOUTCLK has switched to IRC
             // Wait for S_IREFST to indicate FLL Reference has switched to IRC
             do {
                __asm__("nop");
             } while ((mcg->S & (MCG_S_CLKST_MASK|MCG_S_IREFST_MASK)) != (MCG_S_CLKST(1)|MCG_S_IREFST(1)));
+
+#if USBDM_ERRATA_E7993
+            writeMainRegs(clockInfo, 0);
+#endif
+
             break;
 
          case McgInfo::ClockMode_FBE: // from FEI, FEE, FBI, BLPE, PBE
 
             mcg->C1 =
-                  MCG_C1_CLKS(2)   | // CLKS     = 2     -> MCGOUTCLK = External reference clock
-                  MCG_C1_IREFS(0)  | // IREFS    = 0     -> FLL source = External reference clock
-                  clockInfo.c1;      // FRDIV, IRCLKEN, IREFSTEN
+                  MCG_C1_CLKS(0b10)   | // CLKS     = 2     -> MCGOUTCLK = External reference clock
+                  MCG_C1_IREFS(0)     | // IREFS    = 0     -> FLL source = External reference clock
+                  clockInfo.c1;         // FRDIV, IRCLKEN, IREFSTEN
 
-            doMainRegs();
-
+#if USBDM_ERRATA_E7993
+            writeMainRegs(clockInfo, MCG_C4_DMX32_MASK);
+#else
+            writeMainRegs(clockInfo, 0);
+#endif
             // Wait for S_CLKST to indicating that MCGOUTCLK has switched to ERC
             // Wait for S_IREFST to indicate FLL Reference has switched to ERC
             do {
                __asm__("nop");
             } while ((mcg->S & (MCG_S_CLKST_MASK|MCG_S_IREFST_MASK)) != (MCG_S_CLKST(2)|MCG_S_IREFST(0)));
+
+#if USBDM_ERRATA_E7993
+            writeMainRegs(clockInfo, 0);
+#endif
             break;
 
          case McgInfo::ClockMode_PBE: // from FBE, BLPE, PEE
 
-            // Clear LP
-            mcg->C2 = clockInfo.c2|MCG_C2_LP(0);
-            mcg->C5 = clockInfo.c5;
-            // Select PLL as MCG clock source and set VDIV0
-            mcg->C6 = clockInfo.c6|MCG_C6_PLLS_MASK;
-
             mcg->C1 =
-                  MCG_C1_CLKS(2)   | // CLKS     = 2     -> MCGOUTCLK = External reference clock
-                  MCG_C1_IREFS(0)  | // IREFS    = 1     -> FLL source = External reference clock
-                  clockInfo.c1;      // FRDIV, IRCLKEN, IREFSTEN
+                  MCG_C1_CLKS(0b10)   | // CLKS     = 2     -> MCGOUTCLK = External reference clock
+                  MCG_C1_IREFS(0)     | // IREFS    = 0     -> FLL source = External reference clock
+                  clockInfo.c1;         // FRDIV, IRCLKEN, IREFSTEN
 
-            // Select OSCCLK Source (for exit to FEE or PEE (via FBE))
-            mcg->C7 = clockInfo.c7; // OSCSEL = 0,1,2 -> XTAL/XTAL32/IRC48M
+            writeMainRegs(clockInfo, 0);
 
+            // Enable PLL and select as available MCGOUTCLK choice
+            mcg->C6 = mcg->C6 | MCG_C6_PLLS_MASK;
+
+            // Wait for S_PLLST to indicate PLL is switched to External reference clock
             while ((mcg->S&MCG_S_PLLST_MASK) == 0) {
                __asm__("nop");
             }
@@ -305,18 +317,17 @@ ErrorCode Mcg::clockTransition(const McgInfo::ClockInfo &clockInfo) {
 
          case McgInfo::ClockMode_PEE: // from PBE
             mcg->C1 =
-                  MCG_C1_CLKS(0)   | // CLKS     = 0     -> MCGOUTCLK = Output of FLL/PLL (depends on mcg_c6.PLLS)
-                  MCG_C1_IREFS(0)  | // IREFS    = 0     -> FLL source = External reference clock
-                  clockInfo.c1;      // FRDIV, IRCLKEN, IREFSTEN
+                  MCG_C1_CLKS(0b00)   | // CLKS     = 0     -> MCGOUTCLK = Output of FLL/PLL (depends on mcg_c6.PLLS)
+                  MCG_C1_IREFS(0)     | // IREFS    = 0     -> FLL source = External reference clock
+                  clockInfo.c1;         // FRDIV, IRCLKEN, IREFSTEN
             break;
 
          case McgInfo::ClockMode_BLPE: // from FBE, PBE (registers differ depending on transition)
             // Fall through - no break
 
          case McgInfo::ClockMode_BLPI: // from FBI
-
-            // Set LP (not low-power), Select LOCRE0, RANGE0, HGO0, EREFS0, IRCS
-            mcg->C2 = clockInfo.c2|MCG_C2_LP(1);
+            // Set LP (low-power)
+            mcg->C2 = mcg->C2|MCG_C2_LP(1);
             break;
       }
       // Wait for oscillator stable (if used)
@@ -344,12 +355,23 @@ ErrorCode Mcg::clockTransition(const McgInfo::ClockInfo &clockInfo) {
    // Clock sources
    SIM->SOPT2 = (SIM->SOPT2&~SIM_SOPT2_PLLFLLSEL_MASK)|clockInfo.sopt2;
 
+#if defined(SIM_CLKDIV2_USBDIV)
+   // USB Clock divider
+   SIM->CLKDIV2 = clockInfo.clkdiv2_usb;
+#endif
+
    SystemCoreClockUpdate();
 
    // Enable clock monitors
-   mcg->C2 = clockInfo.c2;
+#if defined(MCG_C2_FCFTRIM)
+   mcg->C2 = (mcg->C2 & (MCG_C2_FCFTRIM_MASK|MCG_C2_LP_MASK))|clockInfo.c2; // Preserve FCFTRIM & LP
+#else
+   mcg->C2 = (mcg->C2 & (MCG_C2_LP_MASK))|clockInfo.c2; // Preserve LP
+#endif
    mcg->C6 = clockInfo.c6;
+#ifdef MCG_C8_CME1
    mcg->C8 = clockInfo.c8;
+#endif
 
    return E_NO_ERROR;
 }
@@ -360,35 +382,42 @@ ErrorCode Mcg::clockTransition(const McgInfo::ClockInfo &clockInfo) {
  * Updates the SystemCoreClock variable with current core Clock retrieved from CPU registers.
  */
 void Mcg::SystemCoreClockUpdate(void) {
+#if $(/SIM/rtcSharesPins)
+   const bool lowRange = ((mcg->C2&MCG_C2_RANGE0_MASK) == MCG_C2_RANGE0(0));
+#else
+   // Selection of RTC as MCG clock input also forces low-range dividers
+   const bool lowRange = ((mcg->C2&MCG_C2_RANGE0_MASK) == MCG_C2_RANGE0(0)) || ((mcg->C7&MCG_C7_OSCSEL_MASK) ==  MCG_C7_OSCSEL(1));
+#endif
 
+   // MCG external reference clock
    uint32_t mcg_erc_clock = McgInfo::getErcClock();
 
+   // Calculate SystemMcgffClock
    if ((mcg->C1&MCG_C1_IREFS_MASK) == 0) {
-      // External reference clock is selected
-      SystemMcgffClock = mcg_erc_clock/(1<<((mcg->C1&MCG_C1_FRDIV_MASK)>>MCG_C1_FRDIV_SHIFT));
-
-      if (((mcg->C2&MCG_C2_RANGE0_MASK) != 0) &&
-            ((mcg->C7&MCG_C7_OSCSEL_MASK) !=  1)) {
-         // High divisors - extra division
-         if ((mcg->C1&MCG_C1_FRDIV_MASK) == MCG_C1_FRDIV(6)) {
-            SystemMcgffClock = SystemMcgffClock / 20;
-         }
-         else if ((mcg->C1&MCG_C1_FRDIV_MASK) == MCG_C1_FRDIV(7)) {
-            SystemMcgffClock = SystemMcgffClock / 12;
-         }
-         else {
-            SystemMcgffClock = SystemMcgffClock / 32;
+      // External reference clock is selected with FRDIV divider
+      unsigned divisor = 1;
+      if (!lowRange) {
+         switch (mcg->C1&MCG_C1_FRDIV_MASK) {
+            default              : divisor = 32; break;
+            case MCG_C1_FRDIV(6) : divisor = 20; break;
+            case MCG_C1_FRDIV(7) : divisor = 12; break;
          }
       }
+      divisor *= (1<<((mcg->C1&MCG_C1_FRDIV_MASK)>>MCG_C1_FRDIV_SHIFT));
+      SystemMcgffClock = mcg_erc_clock / divisor;
    }
    else {
-      // External reference clock is selected
+      // Slow internal reference clock is selected
       SystemMcgffClock = McgInfo::system_slow_irc_clock;
    }
 
-   uint32_t systemFllClock = SystemMcgffClock * ((mcg->C4&MCG_C4_DMX32_MASK)?732:640) * (((mcg->C4&MCG_C4_DRST_DRS_MASK)>>MCG_C4_DRST_DRS_SHIFT)+1);
+   // Calculate FLL base clock
+   uint32_t systemFllClock = SystemMcgffClock *
+         /**/                ((mcg->C4&MCG_C4_DMX32_MASK)?732:640) *
+         /**/                (((mcg->C4&MCG_C4_DRST_DRS_MASK)>>MCG_C4_DRST_DRS_SHIFT)+1);
 
-   uint32_t systemPllClock = 0;
+   // Calculate PLL based clock
+   uint32_t systemPllClock;
    systemPllClock  = (mcg_erc_clock/10)*(((mcg->C6&MCG_C6_VDIV0_MASK)>>MCG_C6_VDIV0_SHIFT)+McgInfo::pll_vdiv_min);
    systemPllClock /= ((mcg->C5&MCG_C5_PRDIV0_MASK)>>MCG_C5_PRDIV0_SHIFT)+1;
    systemPllClock *= (10/McgInfo::pll_post_divider);
@@ -414,11 +443,7 @@ void Mcg::SystemCoreClockUpdate(void) {
    if (mcg->C5&MCG_C5_PLLCLKEN0_MASK) {
       SystemMcgPllClock = systemPllClock;
    }
-   ::SystemCoreClock    = SystemMcgOutClock/(((SIM->CLKDIV1&SIM_CLKDIV1_OUTDIV1_MASK)>>SIM_CLKDIV1_OUTDIV1_SHIFT)+1);
-   ::SystemBusClock     = SystemMcgOutClock/(((SIM->CLKDIV1&SIM_CLKDIV1_OUTDIV2_MASK)>>SIM_CLKDIV1_OUTDIV2_SHIFT)+1);
-#ifdef SIM_CLKDIV1_OUTDIV3_MASK
-   ::SystemFlexbusClock = SystemMcgOutClock/(((SIM->CLKDIV1&SIM_CLKDIV1_OUTDIV3_MASK)>>SIM_CLKDIV1_OUTDIV3_SHIFT)+1);
-#endif
+   SimInfo::updateSystemClocks(SystemMcgOutClock);
 }
 
 /**

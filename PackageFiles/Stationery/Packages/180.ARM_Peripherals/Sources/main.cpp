@@ -8,6 +8,7 @@
  ============================================================================
  */
 #include "hardware.h"
+#include "mcg.h"
 
 // Allow access to USBDM methods without USBDM:: prefix
 using namespace USBDM;
@@ -21,6 +22,7 @@ using Led   = $(/HARDWARE/Led1:GpioB<3,ActiveLow>);
 
 int main() {
    console.writeln("\nStarting");
+   console.writeln("Clock mode = ", Mcg::getClockModeName());
    console.writeln("SystemCoreClock = ", SystemCoreClock);
    console.writeln("SystemBusClock  = ", SystemBusClock);
 
