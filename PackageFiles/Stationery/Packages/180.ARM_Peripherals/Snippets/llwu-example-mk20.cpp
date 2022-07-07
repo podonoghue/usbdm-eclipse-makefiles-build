@@ -44,9 +44,9 @@ static ClockConfig VLPR_CLOCK_CONFIG   = ClockConfig_BLPE_4MHz;
 static constexpr int BAUD_RATE = 115200;
 
 // Using LEDs rather defeats VLLSx mode!
-using RedLED    = GpioC<3,ActiveLow>;
-using GreenLED  = GpioD<4,ActiveLow>;
-using BlueLED   = GpioA<2,ActiveLow>;
+using RedLED    = RedLed;
+using GreenLED  = GreenLed;
+using BlueLED   = BlueLed;
 
 // Timer to use for timed wake-up
 using WakeupTimer = Lptmr0;
@@ -59,6 +59,8 @@ using WakeupPin = Llwu::Pin<LlwuPin_Ptc1>;
 
 /** Possible tests - must be in this order */
 enum Test {
+   //    Non-LLWU (direct irq)          LLWU PE or PM inputs
+   //<--------------------------|------------------------------>
    NONE, STOP, VLPS, WAIT, VLPW, LLS, VLLS0, VLLS1, VLLS2, VLLS3,
 };
 
@@ -249,48 +251,51 @@ static void enablePin(const PreservedData preservedData) {
          PinPull_Up,
          PinAction_None,
          PinFilter_Passive);
-   WakeupPin::disablePortClock();
+//   WakeupPin::disablePortClock();
 
-   if (preservedData.enablePin && (preservedData.test>=LLS)) {
+   if (preservedData.enablePin) {
+      if (preservedData.test>=LLS2) {
 
-      // Use LLWU in most Low-leakage modes
-      Llwu::clearAllFlags();
+         // Use LLWU in most Low-leakage modes
+         Llwu::clearAllFlags();
 
-      if (preservedData.test!=VLLS0) {
-         // LLWU from filtered pin
-         // Not available in VLLS0 as LPO not running
-         console.writeln("Configuring filtered LLWU pin wake-up").flushOutput();
-         Llwu::configureFilteredPinSource(
-               FILTER_NUM,
-               WakeupPin::pin,
-               LlwuFilterPinMode_FallingEdge);
+         if (preservedData.test!=VLLS0) {
+            // LLWU from filtered pin
+            // Not available in VLLS0 as LPO not running
+            console.writeln("Configuring filtered LLWU pin wake-up").flushOutput();
+            Llwu::configureFilteredPinSource(
+                  FILTER_NUM,
+                  WakeupPin::pin,
+                  LlwuFilterPinMode_FallingEdge);
+         }
+         else {
+            // LLWU direct from pin
+            console.writeln("Configuring direct LLWU pin wake-up").flushOutput();
+            Llwu::configurePinSource(
+                  WakeupPin::pin,
+                  LlwuPinMode_FallingEdge);
+         }
+         Llwu::setCallback(llwuCallback);
+         Llwu::enableNvicInterrupts(NvicPriority_Normal);
       }
       else {
-         // LLWU direct from pin
-         console.writeln("Configuring direct LLWU pin wake-up").flushOutput();
-         Llwu::configurePinSource(
-               WakeupPin::pin,
-               LlwuPinMode_FallingEdge);
+
+         // Enable pin interrupt if not low-leakage mode
+         console.writeln("Configuring pin interrupt for wake-up").flushOutput();
+
+         // Configure wake-up via GPIO interrupt
+         WakeupPin::setInput(
+               PinPull_Up,
+               PinAction_IrqFalling,
+               PinFilter_Passive);
+
+         WakeupPin::clearPinInterruptFlag();
+         WakeupPin::setPinCallback(pinCallback);
+         WakeupPin::enableNvicInterrupts(NvicPriority_Normal);
       }
-      Llwu::setCallback(llwuCallback);
-      Llwu::enableNvicInterrupts(NvicPriority_Normal);
-   }
-   if (preservedData.enablePin && (preservedData.test<LLS)) {
-
-      // Enable pin interrupt if not low-leakage mode
-      console.writeln("Configuring pin interrupt for wake-up").flushOutput();
-
-      // Configure wake-up via GPIO interrupt
-      WakeupPin::setInput(
-            PinPull_Up,
-            PinAction_IrqFalling,
-            PinFilter_Passive);
-
-      WakeupPin::clearPinInterruptFlag();
-      WakeupPin::setPinCallback(pinCallback);
-      WakeupPin::enableNvicInterrupts(NvicPriority_Normal);
    }
    else {
+      // Disable pin
       WakeupPin::disableNvicInterrupts();
       WakeupPin::setPinCallback(pinCallback);
       WakeupPin::disablePin();
@@ -550,10 +555,10 @@ int main() {
                      "I   - Toggle LPWUI (Exit VLP to Run mode on interrupt)\n"
 #endif
                      "T   - Toggle LPTMR wake-up (not available in VLLS0)\n"
-                     "P   - Toggle PIN wake-up source\n"
-                     "C   - Toggle Continuous tests\n"
+                     "P   - Toggle PIN wake-up\n"
+                     "C   - Toggle Continuous tests (press key to stop)\n"
                      "+/- - Change timer delay\n"
-                     "H - Help\n"
+                     "H   - Help\n"
                );
                break;
             case SmcStatus_VLPR:
@@ -567,7 +572,7 @@ int main() {
                      "V   - Select VLLS0, VLLS1, VLLS2, VLLS3 test\n"
                      "T   - Toggle LPTMR wake-up (not available in VLLS0)\n"
                      "P   - Toggle PIN wake-up\n"
-                     "C   - Toggle Continuous tests\n"
+                     "C   - Toggle Continuous tests (press key to stop)\n"
                      "+/- - Change timer delay\n"
                      "H   - Help\n"
                );
@@ -575,7 +580,7 @@ int main() {
          }
          refresh = false;
       }
-      console.write("\rE - Run Test (", Smc::getSmcStatusName(), ":", Mcg::getClockModeName(), "@", ::SystemCoreClock);
+      console.write("\rE/X - Execute(", Smc::getSmcStatusName(), ":", Mcg::getClockModeName(), "@", ::SystemCoreClock);
 #ifdef SMC_PMCTRL_LPWUI_MASK
       console.write(lpwui?", LPWUI":"       ");
 #endif
@@ -612,7 +617,7 @@ int main() {
                preservedData.test = LLS;
             break;
          case 'V':
-            preservedData.test =
+               preservedData.test =
                  ((preservedData.test != VLLS0)&&
                   (preservedData.test != VLLS1)&&
                   (preservedData.test != VLLS2))?VLLS0:(Test)(preservedData.test+1);
@@ -666,6 +671,7 @@ int main() {
             }
             break;
          case 'E':
+         case 'X':
             if (preservedData.test != NONE) {
                console.writeln().flushOutput();
                preservedData.testCount = 0;
