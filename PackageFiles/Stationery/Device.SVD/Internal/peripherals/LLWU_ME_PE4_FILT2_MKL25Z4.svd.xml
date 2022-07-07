@@ -1,50 +1,12 @@
 <!--
 Devices using this peripheral: 
-      MK10D5
-      MK10D7
-      MK10D10
-      MK10F12
-      MK11D5
-      MK11DA5
-      MK11D5WS
-      MK12D5
-      MK20D7
-      MK20D10
-      MK20F12
-      MK21D5
-      MK21DA5
-      MK21D5WS
-      MK21F12
-      MK21FA12
-      MK22D5
-      MK22F12
-      MK22FA12
-      MK24F12
-      MK24F25612
-      MK30D7
-      MK30D10
-      MK40D7
-      MK40D10
-      MK50D7
-      MK50D10
-      MK51D7
-      MK51D10
-      MK52D10
-      MK53D10
-      MK60D10
-      MK60F12
-      MK60F15
-      MK61F15
-      MK61F15WS
-      MK63F12
-      MK70F15
-      MK70F15WS
-      MKW21D5
-      MKW22D5
-      MKW24D5
+      MKL25Z4
+      MKL27Z644
+      MKL43Z4
+      MKL46Z4
 -->
       <peripheral>
-         <?sourceFile "LLWU_PE4_FILT2_RST" ?>
+         <?sourceFile "LLWU_ME_PE4_FILT2_MKL25Z4" ?>
          <name>LLWU</name>
          <description>Low leakage wakeup unit</description>
          <groupName>LLWU</groupName>
@@ -57,7 +19,7 @@ Devices using this peripheral:
          <addressBlock>
             <?width "8" ?>
             <offset>0x0</offset>
-            <size>0xB</size>
+            <size>0xA</size>
             <usage>registers</usage>
          </addressBlock>
          <registers>
@@ -116,7 +78,7 @@ Enables and selects the edge detect type for the external wakeup input pins LLWU
                <fields>
                   <field>
                      <name>WUPE0</name>
-                     <description>Pin Enable 0</description>
+                     <description>Pin Enable 0 - PTE1</description>
                      <bitOffset>0</bitOffset>
                      <bitWidth>2</bitWidth>
                      <enumeratedValues>
@@ -142,9 +104,9 @@ Enables and selects the edge detect type for the external wakeup input pins LLWU
                         </enumeratedValue>
                      </enumeratedValues>
                   </field>
-                  <field derivedFrom="WUPE0" > <name>WUPE1</name> <description>Pin Enable 1</description> <bitOffset>2</bitOffset> </field>
-                  <field derivedFrom="WUPE0" > <name>WUPE2</name> <description>Pin Enable 2</description> <bitOffset>4</bitOffset> </field>
-                  <field derivedFrom="WUPE0" > <name>WUPE3</name> <description>Pin Enable 3</description> <bitOffset>6</bitOffset> </field>
+                  <field derivedFrom="WUPE0" > <name>WUPE1</name> <description>Pin Enable 1 - PTE2</description> <bitOffset>2</bitOffset> </field>
+                  <field derivedFrom="WUPE0" > <name>WUPE2</name> <description>Pin Enable 2 - PTE4</description> <bitOffset>4</bitOffset> </field>
+                  <field derivedFrom="WUPE0" > <name>WUPE3</name> <description>Pin Enable 3 - PTA4</description> <bitOffset>6</bitOffset> </field>
                </fields>
             </register>
             <register>
@@ -157,7 +119,7 @@ Enables and selects the edge detect type for the external wakeup input pins LLWU
                <fields>
                   <field>
                      <name>WUPE4</name>
-                     <description>Pin Enable 4</description>
+                     <description>Pin Enable 4 - PTA13</description>
                      <bitOffset>0</bitOffset>
                      <bitWidth>2</bitWidth>
                      <enumeratedValues>
@@ -183,9 +145,9 @@ Enables and selects the edge detect type for the external wakeup input pins LLWU
                         </enumeratedValue>
                      </enumeratedValues>
                   </field>
-                  <field derivedFrom="WUPE4" > <name>WUPE5</name> <description>Pin Enable 5</description> <bitOffset>2</bitOffset> </field>
-                  <field derivedFrom="WUPE4" > <name>WUPE6</name> <description>Pin Enable 6</description> <bitOffset>4</bitOffset> </field>
-                  <field derivedFrom="WUPE4" > <name>WUPE7</name> <description>Pin Enable 7</description> <bitOffset>6</bitOffset> </field>
+                  <field derivedFrom="WUPE4" > <name>WUPE5</name> <description>Pin Enable 5 - PTB0</description> <bitOffset>2</bitOffset> </field>
+                  <field derivedFrom="WUPE4" > <name>WUPE6</name> <description>Pin Enable 6 - PTC1</description> <bitOffset>4</bitOffset> </field>
+                  <field derivedFrom="WUPE4" > <name>WUPE7</name> <description>Pin Enable 7 - PTC3</description> <bitOffset>6</bitOffset> </field>
                </fields>
             </register>
             <register>
@@ -198,7 +160,7 @@ Enables and selects the edge detect type for the external wakeup input pins LLWU
                <fields>
                   <field>
                      <name>WUPE8</name>
-                     <description>Pin Enable 8</description>
+                     <description>Pin Enable 8 - PTC4</description>
                      <bitOffset>0</bitOffset>
                      <bitWidth>2</bitWidth>
                      <enumeratedValues>
@@ -224,9 +186,9 @@ Enables and selects the edge detect type for the external wakeup input pins LLWU
                         </enumeratedValue>
                      </enumeratedValues>
                   </field>
-                  <field derivedFrom="WUPE8" > <name>WUPE9</name> <description>Pin Enable 9</description> <bitOffset>2</bitOffset> </field>
-                  <field derivedFrom="WUPE8" > <name>WUPE10</name> <description>Pin Enable 10</description> <bitOffset>4</bitOffset> </field>
-                  <field derivedFrom="WUPE8" > <name>WUPE11</name> <description>Pin Enable 11</description> <bitOffset>6</bitOffset> </field>
+                  <field derivedFrom="WUPE8" > <name>WUPE9</name> <description>Pin Enable 9 - PTC5</description> <bitOffset>2</bitOffset> </field>
+                  <field derivedFrom="WUPE8" > <name>WUPE10</name> <description>Pin Enable 10 - PTC6</description> <bitOffset>4</bitOffset> </field>
+                  <field derivedFrom="WUPE8" > <name>WUPE11</name> <description>Pin Enable 11 - PTC11</description> <bitOffset>6</bitOffset> </field>
                </fields>
             </register>
             <register>
@@ -239,7 +201,7 @@ Enables and selects the edge detect type for the external wakeup input pins LLWU
                <fields>
                   <field>
                      <name>WUPE12</name>
-                     <description>Pin Enable 12</description>
+                     <description>Pin Enable 12 - PTD0</description>
                      <bitOffset>0</bitOffset>
                      <bitWidth>2</bitWidth>
                      <enumeratedValues>
@@ -265,9 +227,9 @@ Enables and selects the edge detect type for the external wakeup input pins LLWU
                         </enumeratedValue>
                      </enumeratedValues>
                   </field>
-                  <field derivedFrom="WUPE12" > <name>WUPE13</name> <description>Pin Enable 13</description> <bitOffset>2</bitOffset> </field>
-                  <field derivedFrom="WUPE12" > <name>WUPE14</name> <description>Pin Enable 14</description> <bitOffset>4</bitOffset> </field>
-                  <field derivedFrom="WUPE12" > <name>WUPE15</name> <description>Pin Enable 15</description> <bitOffset>6</bitOffset> </field>
+                  <field derivedFrom="WUPE12" > <name>WUPE13</name> <description>Pin Enable 13 - PTD2</description> <bitOffset>2</bitOffset> </field>
+                  <field derivedFrom="WUPE12" > <name>WUPE14</name> <description>Pin Enable 14 - PTD4</description> <bitOffset>4</bitOffset> </field>
+                  <field derivedFrom="WUPE12" > <name>WUPE15</name> <description>Pin Enable 15 - PTD6</description> <bitOffset>6</bitOffset> </field>
                </fields>
             </register>
             <register>
@@ -280,7 +242,7 @@ Enable and selects the internal module flag as a wakeup input source for inputs 
                <fields>
                   <field>
                      <name>WUME0</name>
-                     <description>Module Enable 0</description>
+                     <description>Module Enable 0 - LPTMR</description>
                      <bitOffset>0</bitOffset>
                      <bitWidth>1</bitWidth>
                      <enumeratedValues>
@@ -296,13 +258,13 @@ Enable and selects the internal module flag as a wakeup input source for inputs 
                         </enumeratedValue>
                      </enumeratedValues>
                   </field>
-                  <field derivedFrom="WUME0" > <name>WUME1</name> <description>Module Enable 1</description> <bitOffset>1</bitOffset> </field>
-                  <field derivedFrom="WUME0" > <name>WUME2</name> <description>Module Enable 2</description> <bitOffset>2</bitOffset> </field>
-                  <field derivedFrom="WUME0" > <name>WUME3</name> <description>Module Enable 3</description> <bitOffset>3</bitOffset> </field>
-                  <field derivedFrom="WUME0" > <name>WUME4</name> <description>Module Enable 4</description> <bitOffset>4</bitOffset> </field>
-                  <field derivedFrom="WUME0" > <name>WUME5</name> <description>Module Enable 5</description> <bitOffset>5</bitOffset> </field>
-                  <field derivedFrom="WUME0" > <name>WUME6</name> <description>Module Enable 6</description> <bitOffset>6</bitOffset> </field>
-                  <field derivedFrom="WUME0" > <name>WUME7</name> <description>Module Enable 7</description> <bitOffset>7</bitOffset> </field>
+                  <field derivedFrom="WUME0" > <name>WUME1</name> <description>Module Enable 1 - CMP0</description> <bitOffset>1</bitOffset> </field>
+                  <field derivedFrom="WUME0" > <name>WUME2</name> <description>Module Enable 2 - CMP1</description> <bitOffset>2</bitOffset> </field>
+                  <field derivedFrom="WUME0" > <name>WUME3</name> <description>Module Enable 3 - Reserved</description> <bitOffset>3</bitOffset> </field>
+                  <field derivedFrom="WUME0" > <name>WUME4</name> <description>Module Enable 4 - TSI</description> <bitOffset>4</bitOffset> </field>
+                  <field derivedFrom="WUME0" > <name>WUME5</name> <description>Module Enable 5 - RTC Alarm</description> <bitOffset>5</bitOffset> </field>
+                  <field derivedFrom="WUME0" > <name>WUME6</name> <description>Module Enable 6 - Reserved</description> <bitOffset>6</bitOffset> </field>
+                  <field derivedFrom="WUME0" > <name>WUME7</name> <description>Module Enable 7 - RTC Seconds</description> <bitOffset>7</bitOffset> </field>
                </fields>
             </register>
             <register>
@@ -382,7 +344,7 @@ Write 1 to clear the flag</description>
                </fields>
             </register>
             <register>
-               <name>PF2</name>
+               <name>F2</name>
                <description>Pin Flag 2 Register\n
 Contains the flags indicating if a wakeup source LLWU 15-8 caused the MCU to exit VLLS mode.\n
 Write 1 to clear the flag</description>
@@ -431,7 +393,7 @@ To clear this flag it is necessary to clear the flag in the peripheral</descript
                <fields>
                   <field>
                      <name>MWUF0</name>
-                     <description>Wakeup flag for module 0</description>
+                     <description>Wakeup flag For module 0</description>
                      <bitOffset>0</bitOffset>
                      <bitWidth>1</bitWidth>
                      <enumeratedValues>
@@ -535,53 +497,5 @@ To clear the flag write a one to FILTF</description>
             </register>
             <register derivedFrom="FILT%s"><dim>0</dim><dimIncrement>0</dimIncrement><dimIndex></dimIndex> <name>FILT1</name> <addressOffset>0x8</addressOffset> </register>
             <register derivedFrom="FILT%s"><dim>0</dim><dimIncrement>0</dimIncrement><dimIndex></dimIndex> <name>FILT2</name> <addressOffset>0x9</addressOffset> </register>
-            <register>
-               <name>RST</name>
-               <description>Reset Enable Register</description>
-               <addressOffset>0xA</addressOffset>
-               <size>8</size>
-               <resetValue>0x2</resetValue>
-               <resetMask>0xFF</resetMask>
-               <fields>
-                  <field>
-                     <name>RSTFILT</name>
-                     <description>Digital Filter on RESET Pin\
-Enables a filter on the RESET input</description>
-                     <bitOffset>0</bitOffset>
-                     <bitWidth>1</bitWidth>
-                     <enumeratedValues>
-                        <enumeratedValue>
-                           <name>0b0</name>
-                           <description>Filter not enabled</description>
-                           <value>0b0</value>
-                        </enumeratedValue>
-                        <enumeratedValue>
-                           <name>0b1</name>
-                           <description>Filter enabled</description>
-                           <value>0b1</value>
-                        </enumeratedValue>
-                     </enumeratedValues>
-                  </field>
-                  <field>
-                     <name>LLRSTE</name>
-                     <description>Low-Leakage Mode RESET Enable\n
-Controls whether the RESET pin is enabled as a low leakage mode exit source</description>
-                     <bitOffset>1</bitOffset>
-                     <bitWidth>1</bitWidth>
-                     <enumeratedValues>
-                        <enumeratedValue>
-                           <name>0b0</name>
-                           <description>Disabled as wakeup</description>
-                           <value>0b0</value>
-                        </enumeratedValue>
-                        <enumeratedValue>
-                           <name>0b1</name>
-                           <description>Enabled as wakeup</description>
-                           <value>0b1</value>
-                        </enumeratedValue>
-                     </enumeratedValues>
-                  </field>
-               </fields>
-            </register>
          </registers>
       </peripheral>

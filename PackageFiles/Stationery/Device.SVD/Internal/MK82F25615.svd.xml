@@ -54,7 +54,7 @@
       <peripheral derivedFrom="I2C0"><name>I2C2</name><baseAddress>0x400E6000</baseAddress></peripheral>
       <peripheral derivedFrom="I2C0"><name>I2C3</name><baseAddress>0x400E7000</baseAddress></peripheral>
       <xi:include href="peripherals/I2S0_2CH_MK82F25615.svd.xml"/>
-      <xi:include href="peripherals/LLWU_PE8_FILT4.svd.xml"/>
+      <xi:include href="peripherals/LLWU_ME_PE8_FILT4.svd.xml"/>
       <xi:include href="peripherals/LMEM_MK28F15.svd.xml"/>
       <xi:include href="peripherals/LPTMR0.svd.xml"/>
       <peripheral derivedFrom="LPTMR0"><name>LPTMR1</name><baseAddress>0x40044000</baseAddress></peripheral>

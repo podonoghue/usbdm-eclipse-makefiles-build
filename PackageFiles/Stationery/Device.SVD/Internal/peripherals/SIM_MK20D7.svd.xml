@@ -1045,6 +1045,8 @@ Allows extra drive-strength for PTD7</description>
                <name>SCGC1</name>
                <description>System Clock Gating Control Register 1</description>
                <addressOffset>0x1028</addressOffset>
+               <size>32</size>
+               <access>read-write</access>
             </register>
             <register>
                <name>SCGC2</name>

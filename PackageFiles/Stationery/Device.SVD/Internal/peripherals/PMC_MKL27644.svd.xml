@@ -1,6 +1,7 @@
 <!--
 Devices using this peripheral: 
       MKL27Z644
+      MKW41Z4
 -->
       <peripheral>
          <?sourceFile "PMC_MKL27644" ?>

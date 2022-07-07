@@ -108,7 +108,7 @@ resource caused by a violation of the command write sequence or issuing an illeg
                   </field>
                   <field>
                      <name>RDCOLERR</name>
-                     <description>FTFL Read Collision Error Flag \n
+                     <description>FTF Read Collision Error Flag \n
 Indicates that the MCU attempted a read from a flash memory resource that was being manipulated by a flash command</description>
                      <bitOffset>6</bitOffset>
                      <bitWidth>1</bitWidth>
@@ -155,7 +155,7 @@ Indicates that a flash command or EEPROM file system operation has completed</de
                <fields>
                   <field>
                      <name>EEERDY</name>
-                     <description>EEEPROM Ready \n
+                     <description>EEEPROM Ready  (If FlexNVM is available)\n
 Indicates if the EEPROM backup data has been copied to the FlexRAM and is available for read access\n
 Writes to FlexRAM clear EEERDY and initiate EEPROM programming</description>
                      <bitOffset>0</bitOffset>
@@ -198,7 +198,7 @@ If EEPROM is enabled the FlexRAM is used for EEPROM emulation, otherwise it may 
                   <field>
                      <name>PFLSH</name>
                      <description>Flash memory configuration \n
-This bit indicates if the FTFL module supports FlexMemory or only Data Flash\</description>
+This bit indicates if the FTF module supports FlexMemory or only Data Flash\</description>
                      <bitOffset>2</bitOffset>
                      <bitWidth>1</bitWidth>
                      <access>read-only</access>
@@ -226,12 +226,12 @@ The SWAP flag indicates which half of the program flash space is located at rela
                      <enumeratedValues>
                         <enumeratedValue>
                            <name>0b0</name>
-                           <description>PFlash 0 @ 0x0000</description>
+                           <description>PFlash 1st half @ 0x0000</description>
                            <value>0b0</value>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>0b1</name>
-                           <description>PFlash 1 @ 0x0000\t- If supported by device</description>
+                           <description>PFlash 2nd half @ 0x0000\t- If supported by device</description>
                            <value>0b1</value>
                         </enumeratedValue>
                      </enumeratedValues>
@@ -511,7 +511,7 @@ Each PROT bit protects 1/32 of the total program flash from program and erase op
             </register>
             <register>
                <name>FEPROT</name>
-               <description>EEPROM Protection Register\n
+               <description>EEPROM Protection Register (If EEPROM present)\n
 Each EPROT bit protects 1/8 of the configured EEPROM data from program and erase operations.\n
 (Only applicable to devices with EEPROM)</description>
                <addressOffset>0x16</addressOffset>
@@ -539,7 +539,7 @@ Each EPROT bit protects 1/8 of the configured EEPROM data from program and erase
             </register>
             <register>
                <name>FDPROT</name>
-               <description>Data Flash Protection Register \n
+               <description>Data Flash Protection Register  (If Data Flash present)\n
 Each FDPROT bit protects 1/8 of the configured Data Flash from program and erase operations</description>
                <addressOffset>0x17</addressOffset>
                <size>8</size>

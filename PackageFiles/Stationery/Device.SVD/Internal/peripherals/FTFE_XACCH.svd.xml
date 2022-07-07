@@ -195,7 +195,7 @@ If EEPROM is enabled the FlexRAM is used for EEPROM emulation, otherwise it may 
                   <field>
                      <name>PFLSH</name>
                      <description>Flash memory configuration \n
-This bit indicates if the FTFE module supports FlexMemory or only Data Flash\</description>
+This bit indicates if the FTF module supports FlexMemory or only Data Flash\</description>
                      <bitOffset>2</bitOffset>
                      <bitWidth>1</bitWidth>
                      <access>read-only</access>

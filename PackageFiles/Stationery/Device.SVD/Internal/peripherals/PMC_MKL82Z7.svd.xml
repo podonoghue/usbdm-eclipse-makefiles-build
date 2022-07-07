@@ -303,12 +303,12 @@ Allows the bandgap to be enabled in lower power modes of operation</description>
                      <enumeratedValues>
                         <enumeratedValue>
                            <name>0b0</name>
-                           <description>Bandgap disabled in LP</description>
+                           <description>Bandgap disabled in LP modes</description>
                            <value>0b0</value>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>0b1</name>
-                           <description>Bandgap enabled in LP</description>
+                           <description>Bandgap enabled in LP modes</description>
                            <value>0b1</value>
                         </enumeratedValue>
                      </enumeratedValues>

@@ -1,17 +1,27 @@
 <!--
 Devices using this peripheral: 
-      MK10DZ10
-      MK20DZ10
-      MK30DZ10
-      MK40DZ10
-      MK50DZ10
-      MK51DZ10
-      MK52DZ10
-      MK53DZ10
-      MK60DZ10
+      MK02F12810
+      MK22F25612
+      MKL14Z4
+      MKL15Z4
+      MKL16Z4
+      MKL17Z4
+      MKL24Z4
+      MKL26Z4
+      MKL27Z4
+      MKL33Z4
+      MKL34Z4
+      MKL36Z4
+      MKM14Z5
+      MKM33Z5
+      MKM34Z5
+      MKV10Z7
+      MKV11Z7
+      MKV30F12810
+      MKW01Z4
 -->
       <peripheral>
-         <?sourceFile "LLWU_PE4_MKDZ" ?>
+         <?sourceFile "LLWU_ME_PE4_FILT2" ?>
          <name>LLWU</name>
          <description>Low leakage wakeup unit</description>
          <groupName>LLWU</groupName>
@@ -24,7 +34,7 @@ Devices using this peripheral:
          <addressBlock>
             <?width "8" ?>
             <offset>0x0</offset>
-            <size>0x9</size>
+            <size>0xA</size>
             <usage>registers</usage>
          </addressBlock>
          <registers>
@@ -414,63 +424,93 @@ To clear this flag it is necessary to clear the flag in the peripheral</descript
                         </enumeratedValue>
                      </enumeratedValues>
                   </field>
-                  <field derivedFrom="MWUF0" > <name>MWUF1</name> <description>Wakeup flag For module 1</description> <bitOffset>1</bitOffset> </field>
-                  <field derivedFrom="MWUF0" > <name>MWUF2</name> <description>Wakeup flag For module 2</description> <bitOffset>2</bitOffset> </field>
-                  <field derivedFrom="MWUF0" > <name>MWUF3</name> <description>Wakeup flag For module 3</description> <bitOffset>3</bitOffset> </field>
-                  <field derivedFrom="MWUF0" > <name>MWUF4</name> <description>Wakeup flag For module 4</description> <bitOffset>4</bitOffset> </field>
-                  <field derivedFrom="MWUF0" > <name>MWUF5</name> <description>Wakeup flag For module 5</description> <bitOffset>5</bitOffset> </field>
-                  <field derivedFrom="MWUF0" > <name>MWUF6</name> <description>Wakeup flag For module 6</description> <bitOffset>6</bitOffset> </field>
-                  <field derivedFrom="MWUF0" > <name>MWUF7</name> <description>Wakeup flag For module 7</description> <bitOffset>7</bitOffset> </field>
+                  <field derivedFrom="MWUF0" > <name>MWUF1</name> <description>Wakeup flag for module 1</description> <bitOffset>1</bitOffset> </field>
+                  <field derivedFrom="MWUF0" > <name>MWUF2</name> <description>Wakeup flag for module 2</description> <bitOffset>2</bitOffset> </field>
+                  <field derivedFrom="MWUF0" > <name>MWUF3</name> <description>Wakeup flag for module 3</description> <bitOffset>3</bitOffset> </field>
+                  <field derivedFrom="MWUF0" > <name>MWUF4</name> <description>Wakeup flag for module 4</description> <bitOffset>4</bitOffset> </field>
+                  <field derivedFrom="MWUF0" > <name>MWUF5</name> <description>Wakeup flag for module 5</description> <bitOffset>5</bitOffset> </field>
+                  <field derivedFrom="MWUF0" > <name>MWUF6</name> <description>Wakeup flag for module 6</description> <bitOffset>6</bitOffset> </field>
+                  <field derivedFrom="MWUF0" > <name>MWUF7</name> <description>Wakeup flag for module 7</description> <bitOffset>7</bitOffset> </field>
                </fields>
             </register>
             <register>
-               <name>CS</name>
-               <description>Control and Status Register</description>
+               <dim>2</dim>
+               <dimIncrement>1</dimIncrement>
+               <dimIndex>0,1</dimIndex>
+               <name>FILT%s</name>
+               <?hide?>
+               <description>Pin Filter register\n
+Control and status register that is used to enable/disable the digital filter features for an external pin</description>
                <addressOffset>0x8</addressOffset>
                <size>8</size>
-               <resetValue>0x4</resetValue>
                <resetMask>0xFF</resetMask>
                <fields>
                   <field>
-                     <name>FLTR</name>
-                     <description>Digital Filter on RESET Pin\n
-Enables a filter on the RESET input</description>
+                     <name>FILTSEL</name>
+                     <description>Filter Pin Select\n
+Selects 1 of the wakeup pins to be muxed into the filter</description>
                      <bitOffset>0</bitOffset>
-                     <bitWidth>1</bitWidth>
+                     <bitWidth>4</bitWidth>
                      <enumeratedValues>
                         <enumeratedValue>
-                           <name>0b0</name>
-                           <description>Not enabled</description>
-                           <value>0b0</value>
-                        </enumeratedValue>
-                        <enumeratedValue>
-                           <name>0b1</name>
-                           <description>Enabled</description>
-                           <value>0b1</value>
+                           <name>0bXXXX</name>
+                           <description>Source pin number</description>
+                           <isDefault>true</isDefault>
                         </enumeratedValue>
                      </enumeratedValues>
                   </field>
-                  <field derivedFrom="FLTR" > <name>FLTEP</name> <description>Digital Filter on External Pin</description> <bitOffset>1</bitOffset> </field>
                   <field>
-                     <name>ACKISO</name>
-                     <description>Acknowledge Isolation\n
-Indicates if Peripherals and I/O pads are in normal run or isolated state</description>
+                     <name>FILTE</name>
+                     <description>Digital Filter on External Pin\n
+Controls the digital filter options for the external pin detect</description>
+                     <bitOffset>5</bitOffset>
+                     <bitWidth>2</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b00</name>
+                           <description>Filter disabled</description>
+                           <value>0b00</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b01</name>
+                           <description>Filter positive edge</description>
+                           <value>0b01</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b10</name>
+                           <description>Filter negative edge</description>
+                           <value>0b10</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b11</name>
+                           <description>Filter any edge</description>
+                           <value>0b11</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>FILTF</name>
+                     <description>Filter Detect Flag\n
+Indicates if the filtered external wakeup pin was the reason for exiting a low-leakage power mode.\n
+To clear the flag write a one to FILTF</description>
                      <bitOffset>7</bitOffset>
                      <bitWidth>1</bitWidth>
                      <enumeratedValues>
                         <enumeratedValue>
                            <name>0b0</name>
-                           <description>Normal run</description>
+                           <description>Not wakeup source</description>
                            <value>0b0</value>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>0b1</name>
-                           <description>Isolated &amp; latched</description>
+                           <description>Is wakeup source</description>
                            <value>0b1</value>
                         </enumeratedValue>
                      </enumeratedValues>
                   </field>
                </fields>
             </register>
+            <register derivedFrom="FILT%s"><dim>0</dim><dimIncrement>0</dimIncrement><dimIndex></dimIndex> <name>FILT1</name> <addressOffset>0x8</addressOffset> </register>
+            <register derivedFrom="FILT%s"><dim>0</dim><dimIncrement>0</dimIncrement><dimIndex></dimIndex> <name>FILT2</name> <addressOffset>0x9</addressOffset> </register>
          </registers>
       </peripheral>

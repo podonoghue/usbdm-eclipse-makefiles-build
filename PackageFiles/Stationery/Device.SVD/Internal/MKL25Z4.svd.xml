@@ -42,7 +42,7 @@
       <peripheral derivedFrom="FGPIOA"><name>GPIOE</name>      <groupName>GPIO</groupName><baseAddress>0x400FF100</baseAddress></peripheral>
       <xi:include href="peripherals/I2C0_MKL04Z4.svd.xml"/>
       <peripheral derivedFrom="I2C0"><name>I2C1</name><baseAddress>0x40067000</baseAddress></peripheral>
-      <xi:include href="peripherals/LLWU_PE4_FILT2_MKL25Z4.svd.xml"/>
+      <xi:include href="peripherals/LLWU_ME_PE4_FILT2_MKL25Z4.svd.xml"/>
       <xi:include href="peripherals/LPTMR0.svd.xml"/>
       <xi:include href="peripherals/MCG_MKL14Z4.svd.xml"/>
       <xi:include href="peripherals/MCM_MKL02Z4.svd.xml"/>

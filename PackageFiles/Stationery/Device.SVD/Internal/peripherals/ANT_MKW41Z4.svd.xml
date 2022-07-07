@@ -13,6 +13,9 @@ Devices using this peripheral:
          <access>read-write</access>
          <resetValue>0x0</resetValue>
          <resetMask>0xFFFFFFFF</resetMask>
+         <parameters>
+            <parameter> <value>64</value> <name>BUFFER_COUNT</name> <description>Size of packet buffer</description></parameter>
+         </parameters>
          <addressBlock>
             <offset>0x0</offset>
             <size>0x40</size>
@@ -997,9 +1000,8 @@ Devices using this peripheral:
                </fields>
             </register>
             <register>
-               <dim>64</dim>
+               <dim>$(BUFFER_COUNT)</dim>
                <dimIncrement>2</dimIncrement>
-               <dimIndex>0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36,37,38,39,40,41,42,43,44,45,46,47,48,49,50,51,52,53,54,55,56,57,58,59,60,61,62,63</dimIndex>
                <name>PACKET_BUFFER_%s</name>
                <description>PACKET BUFFER</description>
                <addressOffset>0x100</addressOffset>

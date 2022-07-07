@@ -1,9 +1,10 @@
 <!--
 Devices using this peripheral: 
-      MKW41Z4
+      MK22F12810
+      MK22F51212
 -->
       <peripheral>
-         <?sourceFile "LLWU_PE4_FILT2_MKW41Z4" ?>
+         <?sourceFile "LLWU_ME_PE4_FILT2_MK22F51212" ?>
          <name>LLWU</name>
          <description>Low leakage wakeup unit</description>
          <groupName>LLWU</groupName>
@@ -75,7 +76,7 @@ Enables and selects the edge detect type for the external wakeup input pins LLWU
                <fields>
                   <field>
                      <name>WUPE0</name>
-                     <description>Pin Enable 0 - PTC16</description>
+                     <description>Pin Enable 0 - PTE1</description>
                      <bitOffset>0</bitOffset>
                      <bitWidth>2</bitWidth>
                      <enumeratedValues>
@@ -101,9 +102,9 @@ Enables and selects the edge detect type for the external wakeup input pins LLWU
                         </enumeratedValue>
                      </enumeratedValues>
                   </field>
-                  <field derivedFrom="WUPE0" > <name>WUPE1</name> <description>Pin Enable 1 - PTC17</description> <bitOffset>2</bitOffset> </field>
-                  <field derivedFrom="WUPE0" > <name>WUPE2</name> <description>Pin Enable 2 - PTC18</description> <bitOffset>4</bitOffset> </field>
-                  <field derivedFrom="WUPE0" > <name>WUPE3</name> <description>Pin Enable 3 - PTC19</description> <bitOffset>6</bitOffset> </field>
+                  <field derivedFrom="WUPE0" > <name>WUPE1</name> <description>Pin Enable 1 - PTE2</description> <bitOffset>2</bitOffset> </field>
+                  <field derivedFrom="WUPE0" > <name>WUPE2</name> <description>Pin Enable 2 - PTE4</description> <bitOffset>4</bitOffset> </field>
+                  <field derivedFrom="WUPE0" > <name>WUPE3</name> <description>Pin Enable 3 - PTA4</description> <bitOffset>6</bitOffset> </field>
                </fields>
             </register>
             <register>
@@ -116,7 +117,7 @@ Enables and selects the edge detect type for the external wakeup input pins LLWU
                <fields>
                   <field>
                      <name>WUPE4</name>
-                     <description>Pin Enable 4 - PTA16</description>
+                     <description>Pin Enable 4 - PTA13</description>
                      <bitOffset>0</bitOffset>
                      <bitWidth>2</bitWidth>
                      <enumeratedValues>
@@ -142,9 +143,9 @@ Enables and selects the edge detect type for the external wakeup input pins LLWU
                         </enumeratedValue>
                      </enumeratedValues>
                   </field>
-                  <field derivedFrom="WUPE4" > <name>WUPE5</name> <description>Pin Enable 5 - PTA17</description> <bitOffset>2</bitOffset> </field>
-                  <field derivedFrom="WUPE4" > <name>WUPE6</name> <description>Pin Enable 6 - PTA18</description> <bitOffset>4</bitOffset> </field>
-                  <field derivedFrom="WUPE4" > <name>WUPE7</name> <description>Pin Enable 7 - PTA19</description> <bitOffset>6</bitOffset> </field>
+                  <field derivedFrom="WUPE4" > <name>WUPE5</name> <description>Pin Enable 5 - PTB0</description> <bitOffset>2</bitOffset> </field>
+                  <field derivedFrom="WUPE4" > <name>WUPE6</name> <description>Pin Enable 6 - PTC1</description> <bitOffset>4</bitOffset> </field>
+                  <field derivedFrom="WUPE4" > <name>WUPE7</name> <description>Pin Enable 7 - PTC3</description> <bitOffset>6</bitOffset> </field>
                </fields>
             </register>
             <register>
@@ -157,7 +158,7 @@ Enables and selects the edge detect type for the external wakeup input pins LLWU
                <fields>
                   <field>
                      <name>WUPE8</name>
-                     <description>Pin Enable 8 - PTB0</description>
+                     <description>Pin Enable 8 - PTC4</description>
                      <bitOffset>0</bitOffset>
                      <bitWidth>2</bitWidth>
                      <enumeratedValues>
@@ -183,9 +184,9 @@ Enables and selects the edge detect type for the external wakeup input pins LLWU
                         </enumeratedValue>
                      </enumeratedValues>
                   </field>
-                  <field derivedFrom="WUPE8" > <name>WUPE9</name> <description>Pin Enable 9 - PTC0</description> <bitOffset>2</bitOffset> </field>
-                  <field derivedFrom="WUPE8" > <name>WUPE10</name> <description>Pin Enable 10 - PTC2</description> <bitOffset>4</bitOffset> </field>
-                  <field derivedFrom="WUPE8" > <name>WUPE11</name> <description>Pin Enable 11 - PTC3</description> <bitOffset>6</bitOffset> </field>
+                  <field derivedFrom="WUPE8" > <name>WUPE9</name> <description>Pin Enable 9 - PTC5</description> <bitOffset>2</bitOffset> </field>
+                  <field derivedFrom="WUPE8" > <name>WUPE10</name> <description>Pin Enable 10 - PTC6</description> <bitOffset>4</bitOffset> </field>
+                  <field derivedFrom="WUPE8" > <name>WUPE11</name> <description>Pin Enable 11 - PTC11</description> <bitOffset>6</bitOffset> </field>
                </fields>
             </register>
             <register>
@@ -198,7 +199,7 @@ Enables and selects the edge detect type for the external wakeup input pins LLWU
                <fields>
                   <field>
                      <name>WUPE12</name>
-                     <description>Pin Enable 12 - PTC4</description>
+                     <description>Pin Enable 12 - PTD0</description>
                      <bitOffset>0</bitOffset>
                      <bitWidth>2</bitWidth>
                      <enumeratedValues>
@@ -224,9 +225,9 @@ Enables and selects the edge detect type for the external wakeup input pins LLWU
                         </enumeratedValue>
                      </enumeratedValues>
                   </field>
-                  <field derivedFrom="WUPE12" > <name>WUPE13</name> <description>Pin Enable 13 - PTC5</description> <bitOffset>2</bitOffset> </field>
-                  <field derivedFrom="WUPE12" > <name>WUPE14</name> <description>Pin Enable 14 - PTC6</description> <bitOffset>4</bitOffset> </field>
-                  <field derivedFrom="WUPE12" > <name>WUPE15</name> <description>Pin Enable 15 - PTC7</description> <bitOffset>6</bitOffset> </field>
+                  <field derivedFrom="WUPE12" > <name>WUPE13</name> <description>Pin Enable 13 - PTD2</description> <bitOffset>2</bitOffset> </field>
+                  <field derivedFrom="WUPE12" > <name>WUPE14</name> <description>Pin Enable 14 - PTD4</description> <bitOffset>4</bitOffset> </field>
+                  <field derivedFrom="WUPE12" > <name>WUPE15</name> <description>Pin Enable 15 - PTD6</description> <bitOffset>6</bitOffset> </field>
                </fields>
             </register>
             <register>
@@ -256,9 +257,9 @@ Enable and selects the internal module flag as a wakeup input source for inputs 
                      </enumeratedValues>
                   </field>
                   <field derivedFrom="WUME0" > <name>WUME1</name> <description>Module Enable 1 - CMP0</description> <bitOffset>1</bitOffset> </field>
-                  <field derivedFrom="WUME0" > <name>WUME2</name> <description>Module Enable 2 - Radio</description> <bitOffset>2</bitOffset> </field>
-                  <field derivedFrom="WUME0" > <name>WUME3</name> <description>Module Enable 3 - DCDC</description> <bitOffset>3</bitOffset> </field>
-                  <field derivedFrom="WUME0" > <name>WUME4</name> <description>Module Enable 4 - TSI</description> <bitOffset>4</bitOffset> </field>
+                  <field derivedFrom="WUME0" > <name>WUME2</name> <description>Module Enable 2 - CMP1</description> <bitOffset>2</bitOffset> </field>
+                  <field derivedFrom="WUME0" > <name>WUME3</name> <description>Module Enable 3 - CMP2</description> <bitOffset>3</bitOffset> </field>
+                  <field derivedFrom="WUME0" > <name>WUME4</name> <description>Module Enable 4 - Reserved</description> <bitOffset>4</bitOffset> </field>
                   <field derivedFrom="WUME0" > <name>WUME5</name> <description>Module Enable 5 - RTC Alarm</description> <bitOffset>5</bitOffset> </field>
                   <field derivedFrom="WUME0" > <name>WUME6</name> <description>Module Enable 6 - Reserved</description> <bitOffset>6</bitOffset> </field>
                   <field derivedFrom="WUME0" > <name>WUME7</name> <description>Module Enable 7 - RTC Seconds</description> <bitOffset>7</bitOffset> </field>
@@ -315,7 +316,7 @@ Write 1 to clear the flag</description>
                <fields>
                   <field>
                      <name>WUF0</name>
-                     <description>Wakeup flag for pin 0</description>
+                     <description>Wakeup flag for PTE1</description>
                      <bitOffset>0</bitOffset>
                      <bitWidth>1</bitWidth>
                      <enumeratedValues>
@@ -331,13 +332,13 @@ Write 1 to clear the flag</description>
                         </enumeratedValue>
                      </enumeratedValues>
                   </field>
-                  <field derivedFrom="WUF0" > <name>WUF1</name> <description>Wakeup flag for pin 1</description> <bitOffset>1</bitOffset> </field>
-                  <field derivedFrom="WUF0" > <name>WUF2</name> <description>Wakeup flag for pin 2</description> <bitOffset>2</bitOffset> </field>
-                  <field derivedFrom="WUF0" > <name>WUF3</name> <description>Wakeup flag for pin 3</description> <bitOffset>3</bitOffset> </field>
-                  <field derivedFrom="WUF0" > <name>WUF4</name> <description>Wakeup flag for pin 4</description> <bitOffset>4</bitOffset> </field>
-                  <field derivedFrom="WUF0" > <name>WUF5</name> <description>Wakeup flag for pin 5</description> <bitOffset>5</bitOffset> </field>
-                  <field derivedFrom="WUF0" > <name>WUF6</name> <description>Wakeup flag for pin 6</description> <bitOffset>6</bitOffset> </field>
-                  <field derivedFrom="WUF0" > <name>WUF7</name> <description>Wakeup flag for pin 7</description> <bitOffset>7</bitOffset> </field>
+                  <field derivedFrom="WUF0" > <name>WUF1</name> <description>Wakeup flag for PTE2</description> <bitOffset>1</bitOffset> </field>
+                  <field derivedFrom="WUF0" > <name>WUF2</name> <description>Wakeup flag for PTE4</description> <bitOffset>2</bitOffset> </field>
+                  <field derivedFrom="WUF0" > <name>WUF3</name> <description>Wakeup flag for PTA4</description> <bitOffset>3</bitOffset> </field>
+                  <field derivedFrom="WUF0" > <name>WUF4</name> <description>Wakeup flag for PTA13</description> <bitOffset>4</bitOffset> </field>
+                  <field derivedFrom="WUF0" > <name>WUF5</name> <description>Wakeup flag for PTB0</description> <bitOffset>5</bitOffset> </field>
+                  <field derivedFrom="WUF0" > <name>WUF6</name> <description>Wakeup flag for PTC1</description> <bitOffset>6</bitOffset> </field>
+                  <field derivedFrom="WUF0" > <name>WUF7</name> <description>Wakeup flag for PTC3</description> <bitOffset>7</bitOffset> </field>
                </fields>
             </register>
             <register>
@@ -351,7 +352,7 @@ Write 1 to clear the flag</description>
                <fields>
                   <field>
                      <name>WUF8</name>
-                     <description>Wakeup flag for pin 8</description>
+                     <description>Wakeup flag for PTC4</description>
                      <bitOffset>0</bitOffset>
                      <bitWidth>1</bitWidth>
                      <enumeratedValues>
@@ -367,13 +368,13 @@ Write 1 to clear the flag</description>
                         </enumeratedValue>
                      </enumeratedValues>
                   </field>
-                  <field derivedFrom="WUF8" > <name>WUF9</name> <description>Wakeup flag for pin 9</description> <bitOffset>1</bitOffset> </field>
-                  <field derivedFrom="WUF8" > <name>WUF10</name> <description>Wakeup flag for pin 10</description> <bitOffset>2</bitOffset> </field>
-                  <field derivedFrom="WUF8" > <name>WUF11</name> <description>Wakeup flag for pin 11</description> <bitOffset>3</bitOffset> </field>
-                  <field derivedFrom="WUF8" > <name>WUF12</name> <description>Wakeup flag for pin 12</description> <bitOffset>4</bitOffset> </field>
-                  <field derivedFrom="WUF8" > <name>WUF13</name> <description>Wakeup flag for pin 13</description> <bitOffset>5</bitOffset> </field>
-                  <field derivedFrom="WUF8" > <name>WUF14</name> <description>Wakeup flag for pin 14</description> <bitOffset>6</bitOffset> </field>
-                  <field derivedFrom="WUF8" > <name>WUF15</name> <description>Wakeup flag for pin 15</description> <bitOffset>7</bitOffset> </field>
+                  <field derivedFrom="WUF8" > <name>WUF9</name> <description>Wakeup flag for PTC5</description> <bitOffset>1</bitOffset> </field>
+                  <field derivedFrom="WUF8" > <name>WUF10</name> <description>Wakeup flag for PTC6</description> <bitOffset>2</bitOffset> </field>
+                  <field derivedFrom="WUF8" > <name>WUF11</name> <description>Wakeup flag for PTC11</description> <bitOffset>3</bitOffset> </field>
+                  <field derivedFrom="WUF8" > <name>WUF12</name> <description>Wakeup flag for PTD0</description> <bitOffset>4</bitOffset> </field>
+                  <field derivedFrom="WUF8" > <name>WUF13</name> <description>Wakeup flag for PTD2</description> <bitOffset>5</bitOffset> </field>
+                  <field derivedFrom="WUF8" > <name>WUF14</name> <description>Wakeup flag for PTD4</description> <bitOffset>6</bitOffset> </field>
+                  <field derivedFrom="WUF8" > <name>WUF15</name> <description>Wakeup flag for PTD6</description> <bitOffset>7</bitOffset> </field>
                </fields>
             </register>
             <register>
@@ -390,7 +391,7 @@ To clear this flag it is necessary to clear the flag in the peripheral</descript
                <fields>
                   <field>
                      <name>MWUF0</name>
-                     <description>Wakeup flag For module 0</description>
+                     <description>Wakeup flag for LPTMR</description>
                      <bitOffset>0</bitOffset>
                      <bitWidth>1</bitWidth>
                      <enumeratedValues>
@@ -406,13 +407,13 @@ To clear this flag it is necessary to clear the flag in the peripheral</descript
                         </enumeratedValue>
                      </enumeratedValues>
                   </field>
-                  <field derivedFrom="MWUF0" > <name>MWUF1</name> <description>Wakeup flag For module 1</description> <bitOffset>1</bitOffset> </field>
-                  <field derivedFrom="MWUF0" > <name>MWUF2</name> <description>Wakeup flag For module 2</description> <bitOffset>2</bitOffset> </field>
-                  <field derivedFrom="MWUF0" > <name>MWUF3</name> <description>Wakeup flag For module 3</description> <bitOffset>3</bitOffset> </field>
-                  <field derivedFrom="MWUF0" > <name>MWUF4</name> <description>Wakeup flag For module 4</description> <bitOffset>4</bitOffset> </field>
-                  <field derivedFrom="MWUF0" > <name>MWUF5</name> <description>Wakeup flag For module 5</description> <bitOffset>5</bitOffset> </field>
-                  <field derivedFrom="MWUF0" > <name>MWUF6</name> <description>Wakeup flag For module 6</description> <bitOffset>6</bitOffset> </field>
-                  <field derivedFrom="MWUF0" > <name>MWUF7</name> <description>Wakeup flag For module 7</description> <bitOffset>7</bitOffset> </field>
+                  <field derivedFrom="MWUF0" > <name>MWUF1</name> <description>Wakeup flag for CMP0</description> <bitOffset>1</bitOffset> </field>
+                  <field derivedFrom="MWUF0" > <name>MWUF2</name> <description>Wakeup flag for CMP1</description> <bitOffset>2</bitOffset> </field>
+                  <field derivedFrom="MWUF0" > <name>MWUF3</name> <description>Wakeup flag for CMP2</description> <bitOffset>3</bitOffset> </field>
+                  <field derivedFrom="MWUF0" > <name>MWUF4</name> <description>Wakeup flag for Reserved_4</description> <bitOffset>4</bitOffset> </field>
+                  <field derivedFrom="MWUF0" > <name>MWUF5</name> <description>Wakeup flag for RTC Alarm</description> <bitOffset>5</bitOffset> </field>
+                  <field derivedFrom="MWUF0" > <name>MWUF6</name> <description>Wakeup flag for Reserved_6</description> <bitOffset>6</bitOffset> </field>
+                  <field derivedFrom="MWUF0" > <name>MWUF7</name> <description>Wakeup flag for RTC Seconds</description> <bitOffset>7</bitOffset> </field>
                </fields>
             </register>
             <register>

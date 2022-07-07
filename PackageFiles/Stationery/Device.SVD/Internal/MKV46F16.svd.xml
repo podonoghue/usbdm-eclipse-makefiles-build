@@ -47,7 +47,7 @@
       <peripheral derivedFrom="GPIOA"><name>GPIOD</name><baseAddress>0x400FF0C0</baseAddress></peripheral>
       <peripheral derivedFrom="GPIOA"><name>GPIOE</name><baseAddress>0x400FF100</baseAddress></peripheral>
       <xi:include href="peripherals/I2C0_F12.svd.xml"/>
-      <xi:include href="peripherals/LLWU_PE8_FILT2.svd.xml"/>
+      <xi:include href="peripherals/LLWU_ME_PE8_FILT2.svd.xml"/>
       <xi:include href="peripherals/LPTMR0.svd.xml"/>
       <xi:include href="peripherals/MCG_MKV40F15.svd.xml"/>
       <xi:include href="peripherals/MCM_MKV40F15.svd.xml"/>

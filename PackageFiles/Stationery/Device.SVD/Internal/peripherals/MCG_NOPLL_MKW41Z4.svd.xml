@@ -75,12 +75,12 @@ Enables the internal reference clock for use as MCGIRCLK</description>
                      <enumeratedValues>
                         <enumeratedValue>
                            <name>0b0</name>
-                           <description>MCGIRCLK inactive</description>
+                           <description>MCGIRCLK disabled</description>
                            <value>0b0</value>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>0b1</name>
-                           <description>MCGIRCLK active</description>
+                           <description>MCGIRCLK enabled</description>
                            <value>0b1</value>
                         </enumeratedValue>
                      </enumeratedValues>
@@ -464,7 +464,6 @@ The LOCRE0 bit will determine if a interrupt or a reset request is generated fol
                <description>Status Register</description>
                <addressOffset>0x6</addressOffset>
                <size>8</size>
-               <access>read-only</access>
                <resetValue>0x10</resetValue>
                <resetMask>0xFF</resetMask>
                <fields>
@@ -474,6 +473,7 @@ The LOCRE0 bit will determine if a interrupt or a reset request is generated fol
 The IRCST bit indicates the current source for the internal reference clock select clock (IRCSCLK)</description>
                      <bitOffset>0</bitOffset>
                      <bitWidth>1</bitWidth>
+                     <access>read-only</access>
                      <enumeratedValues>
                         <enumeratedValue>
                            <name>0b0</name>
@@ -514,6 +514,7 @@ These bits indicate the current clock mode.\n
 The CLKST bits do not update immediately due to internal synchronisation between clock domains</description>
                      <bitOffset>2</bitOffset>
                      <bitWidth>2</bitWidth>
+                     <access>read-only</access>
                      <enumeratedValues>
                         <enumeratedValue>
                            <name>0b00</name>
@@ -543,6 +544,7 @@ The CLKST bits do not update immediately due to internal synchronisation between
 This bit indicates the current source for the FLL reference clock</description>
                      <bitOffset>4</bitOffset>
                      <bitWidth>1</bitWidth>
+                     <access>read-only</access>
                      <enumeratedValues>
                         <enumeratedValue>
                            <name>0b0</name>
