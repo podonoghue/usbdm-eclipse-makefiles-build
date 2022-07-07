@@ -143,7 +143,7 @@
    \t/**
    \t * Class representing $(_name)
    \t */
-   \ttypedef $(_base_class)Base_T<$(_class)Info> $(_class);\n
+   \ttypedef $(_base_class)Irq_T<$(_class)Info> $(_class);\n
    ]]></template>
 
    <projectActionList id="tsi_files">
