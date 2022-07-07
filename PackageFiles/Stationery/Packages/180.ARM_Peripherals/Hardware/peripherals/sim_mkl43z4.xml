@@ -8,17 +8,33 @@ Devices using this peripheral:
    
    <xi:include href="_default_instance.xml"/>
 
-   <!-- Indicates RTC/OSC0 share XTAL/EXTAL pins -->
-   <constant name="rtcSharesPins" value="true"  derived="true"/>
+   <!-- Indicates OSC0/RTC(OSC1) don't share XTAL/EXTAL pins -->
+   <constant name="rtcSharesPins" value="true"/>
+
+   <!-- Oscillator used for OSC0 to MCG = OSC0 -->
+   <constant name="osc0_peripheral" value="/OSC0" />
    
-   <!-- Oscillator used for OSC0 -->
-   <constant name="osc0_peripheral"   value="/OSC0"    derived="true"/>
-   
-   <!-- No OSC1, RTC uses external pin or OSC0 in low range (OSC32KCLK) -->
-   
-   <!-- RTC clock in (EXTAL32K) -->
-   <constant name="rtc_clkin"         value="/RTC/rtcclkin_clock" derived="true"/>
-   
+   <!-- Oscillator used for OSC1 to MCG = RTC -->
+   <constant name="osc1_peripheral" value="/RTC" />
+
+   <!-- Oscillator providing 32kHz clock = OSC0 in 32kHz mode-->
+   <constant name="osc32k_peripheral"   value="/OSC0" />
+
+   <intOption name="mgcpllClockDivider" 
+      description="MCGPLLCLK clock divider"
+      hidden="true"
+      toolTip="This factor divides the MCGPLLCLK when selected as peripheral clock"
+      value="2"/>
+
+   <intOption name="rtcclkin_clock" 
+      hidden="true"
+      units="Hz"
+      description="RTC_CLKIN pin"
+      toolTip="External clock for the RTC (usually 32.768 kHz)"
+      origin="RTC_CLKIN pin"
+      value="32768"
+      min="0" max="33000" />
+
    <category name="SOPT1" description="RTC signals">
       <choiceOption name="sim_sopt1_osc32ksel" 
          description="ERCLK32K source"
@@ -29,15 +45,14 @@ Devices using this peripheral:
          <choice value="2"  name="RTC_CLKIN pin" />
          <choice value="3"  name="LPO 1kHz clock" isDefault="true" />
       </choiceOption>
-      
+
       <intOption name="system_erclk32k_clock" 
-         units="Hz"
-	 derived="true"
-         description="Frequency of External 32k Reference Clock [ERCLK32K]"
-         toolTip="External reference clock available to some peripherals (usually ~32kHz)" 
-         origin="Derived from OSC32KCLK, RTCCLK or LPO" 
-         value="32768"
-         constant="true" />
+      units="Hz" 
+      derived="true" 
+      description="Frequency of External 32k Reference Clock [ERCLK32K]"
+      toolTip="External reference clock available to some peripherals (usually ~32kHz)" 
+      origin="Derived from OSC32KCLK, RTCCLK or LPO" 
+      value="32768" />
       
       <choiceOption name="sim_sopt1_osc32kout" 
          description="ERCLK32K Clock Output"
@@ -72,13 +87,13 @@ Devices using this peripheral:
          \t}\n\n
       ]]></template>
    </category>
-   
+
    <category name="SOPT2" description="Clock Gating">
       <binaryOption name="sim_sopt2_rtcclkoutsel" 
          description="RTC clock out select [RTC_CLKOUT pin]"
          toolTip="Clock output on the RTC_CLKOUT pin">
-         <choice value="0"  name="RTC 1 Hz clock" />
-         <choice value="1"  name="OSCERCLK clock" isDefault="true" />
+         <choice value="0"  name="RTC 1 Hz clock"  isDefault="true" />
+         <choice value="1"  name="OSCERCLK clock (usually with 32k crystal)" />
       </binaryOption>
       
       <intOption name="rtc_clkout"
@@ -166,7 +181,7 @@ Devices using this peripheral:
       
       <intOption name="system_lpuart1_clock" 
          constant="true"
-	 derived="true"
+         derived="true"
          units="Hz"
          description="LPUART1 Clock frequency"
          toolTip="Frequency of clock to LPUART"
@@ -231,7 +246,7 @@ Devices using this peripheral:
       
       <intOption name="system_usbfs_clock" 
          constant="true"
-	 derived="true"
+         derived="true"
          units="Hz"
          description="USB Full Speed Clock"
          toolTip="Frequency of clock to USB full speed controller"
@@ -660,6 +675,8 @@ Devices using this peripheral:
       </category>
    </indexedCategory>
    
+   <xi:include href="_sim_commonTemplates_mkl.xml" />
+
    <validate
       class="net.sourceforge.usbdm.deviceEditor.validators.SimValidateMKL_lite" dim="/SIM/numberOfClockSettings">
       <param type="long" value="48MHz" />    <!-- Core         -->

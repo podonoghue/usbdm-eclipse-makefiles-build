@@ -8,17 +8,33 @@ Devices using this peripheral:
    
    <xi:include href="_default_instance.xml"/>
 
-   <!-- Indicates RTC/OSC0 share XTAL/EXTAL pins -->
-   <constant name="rtcSharesPins" value="true"  derived="true"/>
+   <!-- Indicates OSC0/RTC(OSC1) don't share XTAL/EXTAL pins -->
+   <constant name="rtcSharesPins" value="true"/>
+
+   <!-- Oscillator used for OSC0 to MCG = OSC0 -->
+   <constant name="osc0_peripheral" value="/OSC0" />
    
-   <!-- Oscillator used for OSC0 -->
-   <constant name="osc0_peripheral"   value="/OSC0"    derived="true"/>
-   
-   <!-- No OSC1, RTC uses external pin or OSC0 in low range (OSC32KCLK) -->
-   
-   <!-- RTC clock in (EXTAL32K) -->
-   <constant name="rtc_clkin"         value="/RTC/rtcclkin_clock" derived="true"/>
-   
+   <!-- Oscillator used for OSC1 to MCG = RTC -->
+   <constant name="osc1_peripheral" value="/RTC" />
+
+   <!-- Oscillator providing 32kHz clock = OSC0 in 32kHz mode-->
+   <constant name="osc32k_peripheral"   value="/OSC0" />
+
+   <intOption name="mgcpllClockDivider" 
+      description="MCGPLLCLK clock divider"
+      hidden="true"
+      toolTip="This factor divides the MCGPLLCLK when selected as peripheral clock"
+      value="2"/>
+
+   <intOption name="rtcclkin_clock" 
+      hidden="true"
+      units="Hz"
+      description="RTC_CLKIN pin"
+      toolTip="External clock for the RTC (usually 32.768 kHz)"
+      origin="RTC_CLKIN pin"
+      value="32768"
+      min="0" max="33000" />
+
    <category name="SOPT1" description="RTC signals">
       <choiceOption name="sim_sopt1_osc32ksel" 
          description="ERCLK32K source"
@@ -29,15 +45,15 @@ Devices using this peripheral:
          <choice value="2"  name="RTC_CLKIN pin" />
          <choice value="3"  name="LPO 1kHz clock" isDefault="true" />
       </choiceOption>
-      
+
       <intOption name="system_erclk32k_clock" 
-         units="Hz"
-	 derived="true"
-         description="Frequency of External 32k Reference Clock [ERCLK32K]"
-         toolTip="External reference clock available to some peripherals (usually ~32kHz)" 
-         origin="Derived from OSC32KCLK, RTCCLK or LPO" 
-         value="32768"
-         constant="true" />
+      units="Hz" 
+      derived="true" 
+      description="Frequency of External 32k Reference Clock [ERCLK32K]"
+      toolTip="External reference clock available to some peripherals (usually ~32kHz)" 
+      origin="Derived from OSC32KCLK, RTCCLK or LPO" 
+      value="32768" />
+      
       
       <template><![CDATA[
          \t//! System Options Register 1
@@ -63,7 +79,7 @@ Devices using this peripheral:
          \t}\n\n
       ]]></template>
    </category>
-   
+
    <category name="SOPT2" description="Clock Gating">
       <binaryOption name="sim_sopt2_rtcclkoutsel" 
          description="RTC clock out select [RTC_CLKOUT pin]"
@@ -543,7 +559,7 @@ Devices using this peripheral:
          \t * otherwise Pre-trigger 0/1 is determined by this selection.
          \t */
          \tenum SimAdc0TriggerMode {
-         \t   SimAdc0TriggerMode_Tpm           = SIM_SOPT7_ADC0ALTTRGEN(0),                              //!< TPM trigger
+         \t   SimAdc0TriggerMode_Tpm               = SIM_SOPT7_ADC0ALTTRGEN(0),                              //!< TPM trigger
          \t   SimAdc0TriggerMode_Alt_PreTrigger_0  = SIM_SOPT7_ADC0ALTTRGEN(1)|SIM_SOPT7_ADC0PRETRGSEL(0),   //!< Pre-trigger 0 = A (SC1[0])
          \t   SimAdc0TriggerMode_Alt_PreTrigger_1  = SIM_SOPT7_ADC0ALTTRGEN(1)|SIM_SOPT7_ADC0PRETRGSEL(1),   //!< Pre-trigger 1 = B (SC1[1])
          \t};\n\n
@@ -631,6 +647,8 @@ Devices using this peripheral:
       </category>
    </indexedCategory>
    
+   <xi:include href="_sim_commonTemplates_mkl.xml" />
+
    <validate
       class="net.sourceforge.usbdm.deviceEditor.validators.SimValidateMKL" dim="/SIM/numberOfClockSettings">
       <param type="long" value="48MHz" />    <!-- Core         -->

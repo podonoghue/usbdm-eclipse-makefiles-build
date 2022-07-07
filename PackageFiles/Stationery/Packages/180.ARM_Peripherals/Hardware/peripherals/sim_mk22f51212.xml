@@ -3,41 +3,26 @@
 <!-- sim_mk22f51512.xml -->
 
 <peripheralPage xmlns:xi="http://www.w3.org/2001/XInclude" name="_instance" description="SIM">
-
-   <xi:include href="_default_instance.xml" />
-
-   <!-- Indicates RTC/OSC0 don't share XTAL/EXTAL pins -->
-   <constant name="rtcSharesPins" value="false" derived="true" />
-
-   <!-- Oscillator used for OSC0 -->
-   <constant name="osc0_peripheral" value="/OSC0" derived="true" />
    
-   <!-- Oscillator used for OSC1 = RTC -->
-   <constant name="osc32k_peripheral" value="/RTC" derived="true" />
-   
-   <!-- RTC clock in (EXTAL32K) -->
-   <constant name="rtc_clkin" value="/RTC/osc_input_freq" derived="true" />
-   
-   <category name="SOPT1" description="RTC and reference clock">
-      <choiceOption name="sim_sopt1_osc32ksel" 
-         description="ERCLK32K source" 
-         toolTip="Clock source of External 32k Reference Clock [ERCLK32K]\n
-            Used by LPTMR">
-         <choice value="0" name="System oscillator in low range (OSC32KCLK)" />
-         <choice value="1" name="Reserved" />
-         <choice value="2" name="RTC 32kHz clock" isDefault="true" />
-         <choice value="3" name="LPO 1kHz clock" />
-      </choiceOption>
+   <xi:include href="_default_instance.xml"/>
 
-      <intOption name="system_erclk32k_clock" 
-      units="Hz" 
-      derived="true" 
-      description="Frequency of External 32k Reference Clock [ERCLK32K]"
-         toolTip="External reference clock available to some peripherals (usually ~32kHz)" 
-      origin="Derived from OSC32KCLK, RTCCLK or LPO" 
-      value="32768" 
-      constant="true" />
+   <xi:include href="_sim_rtc_independent.xml"/>
+   <!-- Oscillator signal for OSC2 input to MCG = IRC48 -->
+   <constant name="osc2_clock"        value="/MCG/system_irc48m_clock" derived="true" />
+   <constant name="osc2_description"  value="OSC2 - 48 MHz Internal Oscillator (OSCCLK1 = IRC48MCLK)" derived="true" />
 
+      <intOption name="system_usb_clkin_clock"  
+         constant="true" 
+         hidden="true"
+         origin="USB Clock In pin"
+         units="Hz"
+         description="Frequency of External USB Clock"
+         toolTip="Externally provided clock for USB on USB_CLKIN" 
+         value="48000000" />
+   <category name="SOPT1" description="RTC clocks" >
+
+      <aliasOption name="sim_sopt1_osc32ksel" constant="false" optional="true" />
+      <aliasOption name="system_erclk32k_clock" optional="true" />
       <choiceOption name="sim_sopt1_osc32kout" 
          description="ERCLK32K Clock Output"
          toolTip="Outputs the ERCLK32K on the selected pin in all modes of operation">
@@ -47,25 +32,17 @@
          <choice value="3"  name="Reserved" />
       </choiceOption>
    </category>
-   
+
    <category name="SOPT2" description="Clock Gating">
-      <binaryOption name="sim_sopt2_rtcclkoutsel" 
-         description="RTC clock out select [RTC_CLKOUT pin]"
-         toolTip="Clock output on the RTC_CLKOUT pin">
-         <choice value="0"  name="RTC 1 Hz clock" />
-         <choice value="1"  name="RTC 32kHz clock" isDefault="true" />
-      </binaryOption>
-      
-      <intOption name="rtc_clkout"
-         constant="true"
-         derived="true"
-         units="Hz"
-         description="RTC clock out [RTC_CLKOUT pin]"
-         toolTip="Clock frequency on the RTC_CLKOUT pin"  />
+   
+      <aliasOption key="/SIM/sim_sopt2_rtcclkoutsel" optional="true" constant="false"/>
+      <aliasOption key="/SIM/rtc_clkout" optional="true" />
       
       <aliasOption key="/SIM/sim_sopt2_pllfllsel." constant="false" />
       
-      <aliasOption key="/SIM/system_peripheral_clock." />
+      <aliasOption key="/SIM/system_peripheral_clock." optional="true" />
+      <aliasOption key="/SIM/sim_sopt2_usbsrc." optional="true" constant="false" />
+      <aliasOption key="/SIM/system_usbfs_clock." optional="true" />
       
       <choiceOption name="sim_sopt2_lpuartsrc" 
          description="LPUART Clock select"
@@ -89,21 +66,6 @@
       <stringOption name="Uart1Clock" description="Uart 1 clock" value="SystemCoreClock" constant="true" derived="true" />
       <stringOption name="Uart2Clock" description="Uart 2 clock" value="SystemBusClock"  constant="true" derived="true" />
       
-      <choiceOption name="sim_sopt2_usbsrc" 
-         description="USB clock source select"
-         toolTip="Selects the source for the USB clock">
-         <choice value="0"  name="External bypass clock (USB_CLKIN)" />
-         <choice value="1"  name="Peripheral Clock divided by SIM_CLKDIV2" isDefault="true" />
-      </choiceOption>
-      
-      <intOption name="system_usbfs_clock" 
-         constant="true"
-         derived="true"
-         units="Hz"
-         description="USB Full Speed Clock"
-         toolTip="Frequency of clock to USB full speed controller"
-         value="0" />
-      
       <choiceOption name="sim_sopt2_fbsl" 
          description="FlexBus security level"
          toolTip="This field affects what CPU operations can access off-chip via the FlexBus interface" >
@@ -125,6 +87,30 @@
          <choice value="6"  name="OSCERCLK0" />
          <choice value="7"  name="IRC 48 MHz clock" />
       </choiceOption>
+      
+      <template namespace="usbdm"><![CDATA[    
+         \t#if defined(SIM_SOPT2_CLKOUTSEL)
+         \t/**
+         \t * Selects the clock to output on the CLKOUT pin.
+         \t */
+         \tenum SimClkoutSel {
+         \t   SimClkoutSel_FlexBus        = SIM_SOPT2_CLKOUTSEL(0),  //!< FlexBus
+         \t   SimClkoutSel_Reserved1      = SIM_SOPT2_CLKOUTSEL(1),  //!<
+         \t   SimClkoutSel_FlashClock     = SIM_SOPT2_CLKOUTSEL(2),  //!< Bus clock
+         \t   SimClkoutSel_Lpo            = SIM_SOPT2_CLKOUTSEL(3),  //!< LPO (1kHz)
+         \t#if defined(MCG_MC_LIRC_DIV2_MASK)
+         \t   SimClkoutSel_McgLirClk      = SIM_SOPT2_CLKOUTSEL(4), //!< LIRC_CLK 8/2 MHz
+         \t#else
+         \t   SimClkoutSel_McgirClk       = SIM_SOPT2_CLKOUTSEL(4),  //!< McgirClk
+         \t#endif
+         \t   SimClkoutSel_RTC            = SIM_SOPT2_CLKOUTSEL(5),  //!< RTC 32.768kHz
+         \t   SimClkoutSel_OscerClk0      = SIM_SOPT2_CLKOUTSEL(6),  //!< OscerClk0
+         \t#if defined(USB_CLK_RECOVER_IRC_EN_REG_EN_MASK)
+         \t   SimClkoutSel_Irc48MHz       = SIM_SOPT2_CLKOUTSEL(7),  //!< IRC 48MHz
+         \t#endif
+         \t};
+         \t#endif
+      ]]></template>
       
       <binaryOption name="sim_sopt2_traceclksel" 
          description="Debug trace clock select"
@@ -255,7 +241,7 @@
          <choice value="1"  name="CMP0 output" />
       </binaryOption>
    </category>
-   
+
    <category name="SOPT5" description="UART signals">
       <choiceOption name="sim_sopt5_uart0txsrc" 
          description="UART 0 transmit data source select"
@@ -302,7 +288,7 @@
          <choice value="3" name="Reserved" />
       </choiceOption>
    </category>
-   
+
    <category name="SOPT7" description="ADC signals">
       <binaryOption name="sim_sopt7_adc0alttrgen" 
          description="ADC0 alternate trigger enable"
@@ -474,39 +460,16 @@
    
    </category>
 
-   <choiceOption name="sim_clkdiv2_usb"
-      description="USB clock divider" 
-      toolTip="Sets the clock divider when the MCGFLLCLK, MCGPLLCLK, or IRC48M clock\n
-      is the USB clock source.">
-      <choice value="1" name="Multiply by 2 (div=0, frac=1)" />
-      <choice value="0" name="Multiply by 1 (div=0, frac=0)" />
-      <choice value="3" name="Multiply by 1 (div=1, frac=1)" />
-      <choice value="5" name="Divide by 1.5 (div=2, frac=1)" />
-      <choice value="2" name="Divide by 2 (div=1, frac=0)" />
-      <choice value="7" name="Divide by 2 (div=3, frac=1)" />
-      <choice value="9" name="Divide by 2.5 (div=4, frac=1)" />
-      <choice value="4" name="Divide by 3 (div=2, frac=0)" />
-      <choice value="11" name="Divide by 3 (div=5, frac=1)" />
-      <choice value="13" name="Divide by 3.5 (div=6, frac=1)" />
-      <choice value="6" name="Divide by 4 (div=3, frac=0)" />
-      <choice value="15" name="Divide by 4 (div=7, frac=1)" />
-      <choice value="8" name="Divide by 5 (div=4, frac=0)" />
-      <choice value="10" name="Divide by 6 (div=5, frac=0)" />
-      <choice value="12" name="Divide by 7 (div=6, frac=0)" />
-      <choice value="14" name="Divide by 8 (div=7, frac=0)" />
-   </choiceOption>
-   
    <xi:include href="_simCommon.xml"/>
 
-   <indexedCategory name="ClockConfig." dim="/SIM/numberOfClockSettings"
+   <indexedCategory name="ClockConfig." dim="/SIM/numberOfClockSettings" 
         derived="true"
         constant="true"
         value=""
         description="Clock configurations" 
         toolTip="Clock configurations for different run modes" >
       
-      <aliasOption key="/MCG/ClockConfig."
-        constant="true"/>
+      <aliasOption key="/MCG/ClockConfig." constant="true"/>
       
       <choiceOption name="sim_sopt2_pllfllsel."
          description="Peripheral Clock select"
@@ -523,19 +486,56 @@
          units="Hz"
          description="Peripheral Clock frequency"
          toolTip="Frequency of Peripheral Clock available to various peripherals"  />
+	 
+      <choiceOption name="sim_sopt2_usbsrc." 
+         description="USB clock source select"
+         toolTip="Selects the source for the USB clock">
+         <choice value="0"  name="External bypass clock (USB_CLKIN)" />
+         <choice value="1"  name="Peripheral Clock divided by SIM_CLKDIV2" isDefault="true" />
+      </choiceOption>
+      
+      <intOption name="system_usbfs_clock." 
+         constant="true"
+         derived="true"
+         units="Hz"
+         description="USB Full Speed Clock"
+         toolTip="Frequency of clock to USB full speed controller"
+         value="0" />
     
+      <choiceOption name="sim_clkdiv2_usb."
+         description="USB clock divider" 
+         toolTip="Sets the clock divider when the MCGFLLCLK, MCGPLLCLK, or IRC48M clock\n
+         is the USB clock source.">
+         <choice value="1" name="Multiply by 2 (div=0, frac=1)" />
+         <choice value="0" name="Multiply by 1 (div=0, frac=0)" />
+         <choice value="3" name="Multiply by 1 (div=1, frac=1)" />
+         <choice value="5" name="Divide by 1.5 (div=2, frac=1)" />
+         <choice value="2" name="Divide by 2 (div=1, frac=0)" />
+         <choice value="7" name="Divide by 2 (div=3, frac=1)" />
+         <choice value="9" name="Divide by 2.5 (div=4, frac=1)" />
+         <choice value="4" name="Divide by 3 (div=2, frac=0)" />
+         <choice value="11" name="Divide by 3 (div=5, frac=1)" />
+         <choice value="13" name="Divide by 3.5 (div=6, frac=1)" />
+         <choice value="6" name="Divide by 4 (div=3, frac=0)" />
+         <choice value="15" name="Divide by 4 (div=7, frac=1)" />
+         <choice value="8" name="Divide by 5 (div=4, frac=0)" />
+         <choice value="10" name="Divide by 6 (div=5, frac=0)" />
+         <choice value="12" name="Divide by 7 (div=6, frac=0)" />
+         <choice value="14" name="Divide by 8 (div=7, frac=0)" />
+      </choiceOption>
+   
       <intOption name="system_core_clock." 
          units="Hz"
          description="System Core Clock"
          toolTip="Clocks the ARM Cortex-M4 core and bus masters"
-         value="80000000" />
+         value="80 MHz" />
       
       <intOption name="system_bus_clock." 
          units="Hz"
          description="System Bus Clock"
          toolTip="Clocks the bus slaves and peripherals\n
                   Must be &lt;= Core Clock frequency and an integer divisor"
-         value="40000000" />
+         value="40 MHz" />
    
       <intOption name="system_flexbus_clock." 
          units="Hz"
@@ -590,6 +590,25 @@
       </category>
    </indexedCategory>
    
+   <template><![CDATA[
+   \t/**
+   \t * Update system clock values
+   \t *
+   \t * @param systemClock Frequency of clock provided to system clock dividers
+   \t */
+   \tstatic void updateSystemClocks(unsigned systemClock) {
+   \t
+   \t   SystemCoreClock    = systemClock/(((SIM->CLKDIV1&SIM_CLKDIV1_OUTDIV1_MASK)>>SIM_CLKDIV1_OUTDIV1_SHIFT)+1);
+   \t   SystemBusClock     = systemClock/(((SIM->CLKDIV1&SIM_CLKDIV1_OUTDIV2_MASK)>>SIM_CLKDIV1_OUTDIV2_SHIFT)+1);
+   \t#ifdef SIM_CLKDIV1_OUTDIV3_MASK
+   \t   SystemFlexbusClock = systemClock/(((SIM->CLKDIV1&SIM_CLKDIV1_OUTDIV3_MASK)>>SIM_CLKDIV1_OUTDIV3_SHIFT)+1);
+   \t#endif
+   \t#ifdef SIM_CLKDIV1_OUTDIV4_MASK
+   \t//   XXXX = systemClock/(((SIM->CLKDIV1&SIM_CLKDIV1_OUTDIV4_MASK)>>SIM_CLKDIV1_OUTDIV4_SHIFT)+1);
+   \t#endif
+   \t}\n\n
+   ]]></template>
+
    <xi:include href="_sim_commonTemplates.xml" />
 
    <validate
