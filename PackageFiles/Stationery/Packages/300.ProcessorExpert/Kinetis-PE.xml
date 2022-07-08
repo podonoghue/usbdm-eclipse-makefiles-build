@@ -44,19 +44,19 @@
 
          <!-- C Include paths -->
          <projectOption id="net.sourceforge.usbdm.gnu.c.compiler.option.include.paths">
-            <value>&quot;${ProjDirPath}/Generated_Code&quot;</value>
-            <value>&quot;${ProjDirPath}/Static_Code/IO_Map&quot;</value>
-            <value>&quot;${ProjDirPath}/Static_Code/PDD&quot;</value>
-            <value>&quot;${ProjDirPath}/Static_Code/System&quot;</value>
-            <value>&quot;${ProjDirPath}/Sources&quot;</value>
+            <value>&quot;../Generated_Code&quot;</value>
+            <value>&quot;../Static_Code/IO_Map&quot;</value>
+            <value>&quot;../Static_Code/PDD&quot;</value>
+            <value>&quot;../Static_Code/System&quot;</value>
+            <value>&quot;../Sources&quot;</value>
          </projectOption>
          <!-- C++ Include paths -->
          <projectOption id="net.sourceforge.usbdm.gnu.cpp.compiler.option.include.paths">
-            <value>&quot;${ProjDirPath}/Generated_Code&quot;</value>
-            <value>&quot;${ProjDirPath}/Static_Code/IO_Map&quot;</value>
-            <value>&quot;${ProjDirPath}/Static_Code/PDD&quot;</value>
-            <value>&quot;${ProjDirPath}/Static_Code/System&quot;</value>
-            <value>&quot;${ProjDirPath}/Sources&quot;</value>
+            <value>&quot;../Generated_Code&quot;</value>
+            <value>&quot;../Static_Code/IO_Map&quot;</value>
+            <value>&quot;../Static_Code/PDD&quot;</value>
+            <value>&quot;../Static_Code/System&quot;</value>
+            <value>&quot;../Sources&quot;</value>
          </projectOption>
          
          <projectOption id="net.sourceforge.usbdm.cdt.toolchain.c.linker.linkerFile" overwrite="true">

@@ -13,11 +13,11 @@
       <!-- Header file -->
       <!-- C Include paths -->
       <projectOption id="net.sourceforge.usbdm.gnu.c.compiler.option.include.paths">
-         <value>&quot;${ProjDirPath}/Project_Headers&quot;</value>
+         <value>&quot;../Project_Headers&quot;</value>
       </projectOption>
       <!-- C++ Include paths -->
       <projectOption id="net.sourceforge.usbdm.gnu.cpp.compiler.option.include.paths">
-         <value>&quot;${ProjDirPath}/Project_Headers&quot;</value>
+         <value>&quot;../Project_Headers&quot;</value>
       </projectOption>
    </projectActionList>
 </root>

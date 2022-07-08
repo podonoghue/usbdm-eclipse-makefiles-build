@@ -15,7 +15,7 @@
          <value>MemoryMap.ld</value>
       </projectOption>
       <projectOption id="gnu.c.link.option.paths">
-         <value>&quot;${ProjDirPath}/Project_Settings/Linker_Files&quot;</value>
+         <value>&quot;../Project_Settings/Linker_Files&quot;</value>
       </projectOption>
       
       <!-- Predefined symbols for debug build -->
@@ -51,12 +51,12 @@
 
       <!-- C Include paths -->
       <projectOption id="net.sourceforge.usbdm.gnu.c.compiler.option.include.paths">
-         <value>&quot;${ProjDirPath}/Sources&quot;</value>
+         <value>&quot;../Sources&quot;</value>
       </projectOption>
       
       <!-- C++ Include paths -->
       <projectOption id="net.sourceforge.usbdm.gnu.cpp.compiler.option.include.paths">
-         <value>&quot;${ProjDirPath}/Sources&quot;</value>
+         <value>&quot;../Sources&quot;</value>
       </projectOption>
       
       <!-- C++ Linker file and path -->
@@ -64,7 +64,7 @@
          <value>MemoryMap.ld</value>
       </projectOption>
       <projectOption id="gnu.cpp.link.option.paths">
-         <value>&quot;${ProjDirPath}/Project_Settings/Linker_Files&quot;</value>
+         <value>&quot;../Project_Settings/Linker_Files&quot;</value>
       </projectOption>
       
       <!-- Semi-hosting library option-->

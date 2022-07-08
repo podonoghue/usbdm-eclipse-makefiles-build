@@ -99,12 +99,12 @@
          <copy source="Sources/RTX_Conf_CM.cfg"  target="Sources/RTX_Conf_CM.cfg" />
          <copy source="Sources/RTX_Conf_CM.c"    target="Sources/RTX_Conf_CM.c" />
          <projectOption id="net.sourceforge.usbdm.gnu.c.compiler.option.include.paths">
-            <value>&quot;${ProjDirPath}/cmsis/INC&quot;</value>
-            <value>&quot;${ProjDirPath}/cmsis/SRC&quot;</value>
+            <value>&quot;../cmsis/INC&quot;</value>
+            <value>&quot;../cmsis/SRC&quot;</value>
          </projectOption>
          <projectOption id="net.sourceforge.usbdm.gnu.cpp.compiler.option.include.paths">
-            <value>&quot;${ProjDirPath}/cmsis/INC&quot;</value>
-            <value>&quot;${ProjDirPath}/cmsis/SRC&quot;</value>
+            <value>&quot;../cmsis/INC&quot;</value>
+            <value>&quot;../cmsis/SRC&quot;</value>
          </projectOption>
          <projectOption id="net.sourceforge.usbdm.gnu.c.compiler.option.preprocessor.def.symbols">
             <value>__CORTEX_M4F</value>

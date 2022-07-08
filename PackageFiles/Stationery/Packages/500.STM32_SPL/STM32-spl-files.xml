@@ -20,12 +20,12 @@
          <copy source="../spl/inc" target="spl/inc" />
          <copy source="../spl/src" target="spl/src" />
          <projectOption id="net.sourceforge.usbdm.gnu.c.compiler.option.include.paths">
-            <value>&quot;${ProjDirPath}/spl/inc&quot;</value>
-            <value>&quot;${ProjDirPath}/spl/src&quot;</value>
+            <value>&quot;../spl/inc&quot;</value>
+            <value>&quot;../spl/src&quot;</value>
          </projectOption>
          <projectOption id="net.sourceforge.usbdm.gnu.cpp.compiler.option.include.paths">
-            <value>&quot;${ProjDirPath}/spl/inc&quot;</value>
-            <value>&quot;${ProjDirPath}/spl/src&quot;</value>
+            <value>&quot;../spl/inc&quot;</value>
+            <value>&quot;../spl/src&quot;</value>
          </projectOption>
          <projectOption id="net.sourceforge.usbdm.gnu.cpp.compiler.option.preprocessor.def.symbols">
             <value>USE_STDPERIPH_DRIVER</value>

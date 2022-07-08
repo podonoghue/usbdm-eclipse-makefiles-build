@@ -41,14 +41,14 @@
          
          <excludeSourceFolder target="FreeRTOS/Source/portable" />
          <projectOption id="net.sourceforge.usbdm.gnu.c.compiler.option.include.paths">
-            <value>&quot;${ProjDirPath}/FreeRTOS/Source/include&quot;</value>
-            <value>&quot;${ProjDirPath}/FreeRTOS/Source&quot;</value>
-            <value>&quot;${ProjDirPath}/FreeRTOS&quot;</value>
+            <value>&quot;../FreeRTOS/Source/include&quot;</value>
+            <value>&quot;../FreeRTOS/Source&quot;</value>
+            <value>&quot;../FreeRTOS&quot;</value>
          </projectOption>
          <projectOption id="net.sourceforge.usbdm.gnu.cpp.compiler.option.include.paths">
-            <value>&quot;${ProjDirPath}/FreeRTOS/Source/include&quot;</value>
-            <value>&quot;${ProjDirPath}/FreeRTOS/Source&quot;</value>
-            <value>&quot;${ProjDirPath}/FreeRTOS&quot;</value>
+            <value>&quot;../FreeRTOS/Source/include&quot;</value>
+            <value>&quot;../FreeRTOS/Source&quot;</value>
+            <value>&quot;../FreeRTOS&quot;</value>
          </projectOption>
          <projectOption id="net.sourceforge.usbdm.gnu.c.compiler.option.preprocessor.def.symbols">
             <value>__CORTEX_M4F</value>
