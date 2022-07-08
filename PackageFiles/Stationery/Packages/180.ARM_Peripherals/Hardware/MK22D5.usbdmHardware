@@ -121,14 +121,13 @@
          <clock clockEnable="SIM->SCGC4 = SIM->SCGC4 | SIM_SCGC4_EWM_MASK;" clockDisable="SIM->SCGC4 = SIM->SCGC4 &amp; ~SIM_SCGC4_EWM_MASK;" />
          <irq num="WDOG_IRQn" />
       </peripheral>
-      <peripheral baseName="FTFL"     instance=""         version="ftfl">
+      <peripheral baseName="FTFL"     instance=""         version="ftfl_64k_flexrom">
          <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForFlash" />
          <clock clockEnable="SIM->SCGC6 = SIM->SCGC6 | SIM_SCGC6_FTFL_MASK;" clockDisable="SIM->SCGC6 = SIM->SCGC6 &amp; ~SIM_SCGC6_FTFL_MASK;" />
          <irq num="FTF_Command_IRQn" />
          <irq num="FTF_ReadCollision_IRQn" />
          <param name="Data flash phrase size" key="/FTFL/dflash_phrase_size" value="4" />
          <param name="Data flash sector size" key="/FTFL/dflash_sector_size" value="2048" />
-         <param name="Flash peripheral file" key="/FTFL/peripheral_file" value="ftfl_64k_flexrom" />
          <param name="Program flash phrase size" key="/FTFL/pflash_phrase_size" value="4" />
          <param name="Program flash sector size" key="/FTFL/pflash_sector_size" value="2048" />
       </peripheral>

@@ -170,16 +170,15 @@
          <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForFlexio" />
          <clock clockEnable="SIM->SCGC2 = SIM->SCGC2 | SIM_SCGC2_FLEXIO_MASK;" clockDisable="SIM->SCGC2 = SIM->SCGC2 &amp; ~SIM_SCGC2_FLEXIO_MASK;" />
          <irq num="FLEXIO_IRQn" />
-         <param name="trigger_list" key="/FLEXIO/trigger_list" value="External;CMP0;CMP1;;PIT0;PIT1;PIT2;PIT3;FTM0;FTM1;FTM2;FTM3;RTC_Alarm;RTC_Seconds;LPTMR0;" />
+         <param name="Trigger List" key="/FLEXIO/trigger_list" value="External;CMP0;CMP1;;PIT0;PIT1;PIT2;PIT3;FTM0;FTM1;FTM2;FTM3;RTC_Alarm;RTC_Seconds;LPTMR0;" />
       </peripheral>
-      <peripheral baseName="FTFE"     instance=""         version="ftfe_xacch">
+      <peripheral baseName="FTFE"     instance=""         version="ftfe_128k_flexrom_xacch">
          <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForFlash" />
          <clock clockEnable="SIM->SCGC6 = SIM->SCGC6 | SIM_SCGC6_FTF_MASK;" clockDisable="SIM->SCGC6 = SIM->SCGC6 &amp; ~SIM_SCGC6_FTF_MASK;" />
          <irq num="FTF_Command_IRQn" />
          <irq num="FTF_ReadCollision_IRQn" />
          <param name="Data flash phrase size" key="/FTFE/dflash_phrase_size" value="8" />
          <param name="Data flash sector size" key="/FTFE/dflash_sector_size" value="4096" />
-         <param name="Flash peripheral file" key="/FTFE/peripheral_file" value="ftfe_128k_flexrom" />
          <param name="Program flash phrase size" key="/FTFE/pflash_phrase_size" value="8" />
          <param name="Program flash sector size" key="/FTFE/pflash_sector_size" value="4096" />
       </peripheral>
@@ -266,7 +265,7 @@
       <peripheral baseName="LLWU"     instance=""         version="llwu_me_pe8_filt4">
          <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForLlwu" />
          <irq num="LLWU_IRQn" />
-         <param name="device_list"  key="/LLWU/device_list" value="LPTMR0/LPTMR1;CMP0;CMP1;;;RTC_Alarm;;RTC_Seconds" />
+         <param name="Wakeup sources" key="/LLWU/device_list" value="LPTMR0/LPTMR1;CMP0;CMP1;;;RTC_Alarm;;RTC_Seconds" />
       </peripheral>
       <peripheral baseName="LPTMR"    instance="0"        version="lptmr0">
          <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForLptmr" />

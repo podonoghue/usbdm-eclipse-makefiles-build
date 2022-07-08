@@ -166,6 +166,8 @@
          <irq num="FTFC_IRQn" />
          <irq num="FTFC_Read_Collision_IRQn" />
          <irq num="FTFC_Fault_IRQn" />
+         <param name="pflash_phrase_size" key="/FTFC/pflash_phrase_size" value="4" />
+         <param name="pflash_sector_size" key="/FTFC/pflash_sector_size" value="2048" />
       </peripheral>
       <peripheral baseName="FTM"      instance="">
          <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForFtmShared" />

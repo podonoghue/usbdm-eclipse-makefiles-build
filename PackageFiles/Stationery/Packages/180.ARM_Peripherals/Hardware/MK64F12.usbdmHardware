@@ -183,14 +183,13 @@
          <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForFlexBus" />
          <clock clockEnable="SIM->SCGC7 = SIM->SCGC7 | SIM_SCGC7_FLEXBUS_MASK;" clockDisable="SIM->SCGC7 = SIM->SCGC7 &amp; ~SIM_SCGC7_FLEXBUS_MASK;" />
       </peripheral>
-      <peripheral baseName="FTFE"     instance=""         version="ftfe_feprot_fdprot">
+      <peripheral baseName="FTFE"     instance=""         version="ftfe_128k_flexrom">
          <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForFlash" />
          <clock clockEnable="SIM->SCGC6 = SIM->SCGC6 | SIM_SCGC6_FTF_MASK;" clockDisable="SIM->SCGC6 = SIM->SCGC6 &amp; ~SIM_SCGC6_FTF_MASK;" />
          <irq num="FTF_Command_IRQn" />
          <irq num="FTF_ReadCollision_IRQn" />
          <param name="Data flash phrase size" key="/FTFE/dflash_phrase_size" value="8" />
          <param name="Data flash sector size" key="/FTFE/dflash_sector_size" value="4096" />
-         <param name="Flash peripheral file" key="/FTFE/peripheral_file" value="ftfe_128k_flexrom" />
          <param name="Program flash phrase size" key="/FTFE/pflash_phrase_size" value="8" />
          <param name="Program flash sector size" key="/FTFE/pflash_sector_size" value="4096" />
       </peripheral>

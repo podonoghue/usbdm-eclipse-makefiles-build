@@ -128,6 +128,8 @@
    <!ATTLIST stringOption description   CDATA        #IMPLIED>
    <!ATTLIST stringOption toolTip       CDATA        #IMPLIED>
    <!ATTLIST stringOption value         CDATA        #IMPLIED>
+   <!ATTLIST stringOption modify        CDATA        #IMPLIED>
+   <!ATTLIST stringOption replace       CDATA        #IMPLIED>
    <!ATTLIST stringOption disabledValue CDATA        #IMPLIED>
    <!ATTLIST stringOption indexedBy     CDATA        #IMPLIED>
    <!ATTLIST stringOption derived       (false|true) #IMPLIED>

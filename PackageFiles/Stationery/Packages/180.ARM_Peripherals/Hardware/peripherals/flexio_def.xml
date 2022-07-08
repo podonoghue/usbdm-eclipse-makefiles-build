@@ -9,6 +9,8 @@
 
    <xi:include href="_irqOption.xml"/>         
    
+   <stringOption name="Trigger List" key="/FLEXIO/trigger_list" derived="true" constant="true" modify="true" />
+
    <template name="/FLEXIO/declarations" namespace="all"  ><![CDATA[
    \t/**
    \t * Class representing $(_name)

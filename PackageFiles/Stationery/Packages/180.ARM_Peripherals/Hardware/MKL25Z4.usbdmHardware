@@ -98,7 +98,6 @@
          <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForFlash" />
          <clock clockEnable="SIM->SCGC6 = SIM->SCGC6 | SIM_SCGC6_FTF_MASK;" clockDisable="SIM->SCGC6 = SIM->SCGC6 &amp; ~SIM_SCGC6_FTF_MASK;" />
          <irq num="FTF_Command_IRQn" />
-         <param name="Flash peripheral file" key="/FTFA/peripheral_file" value="ftfa" />
          <param name="Program flash phrase size" key="/FTFA/pflash_phrase_size" value="4" />
          <param name="Program flash sector size" key="/FTFA/pflash_sector_size" value="1024" />
       </peripheral>
