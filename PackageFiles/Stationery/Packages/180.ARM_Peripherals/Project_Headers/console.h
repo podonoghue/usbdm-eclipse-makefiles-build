@@ -16,7 +16,13 @@
 #ifndef INCLUDE_USBDM_CONSOLE_H_
 #define INCLUDE_USBDM_CONSOLE_H_
 #include <derivative.h>
-$(/CONSOLE/Includes://)
+
+#if 0$(/LPUART/Present:\ // No Lpuarts)
+#include "lpuart.h"
+#endif
+#if 0$(/UART/Present:\ // No Uarts)
+#include "uart.h"
+#endif
 
 // The following macros allow the selective use of the console routines
 // In release versions of the code the macros are null.

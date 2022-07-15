@@ -2144,8 +2144,8 @@ public:
     *
     * @param channelMask Mask indicating which channel flags to clear
     *                    There is one bit for each channel
-	*
-	* @note Flags will not be cleared if the channel is configured for DMA
+    *
+    * @note Flags will not be cleared if the channel is configured for DMA
     */
    static void clearSelectedInterruptFlags(uint32_t channelMask) {
       (void)tmr->STATUS;
@@ -2159,7 +2159,7 @@ public:
     *         There is one bit for each channel
     *
     * @note Only flags captured in the return value are cleared
-	* @note Flags will not be cleared if the channel is configured for DMA
+    * @note Flags will not be cleared if the channel is configured for DMA
     */
    static unsigned getAndClearInterruptFlags() {
       // Note requires read and write zero to clear flags
@@ -2384,7 +2384,7 @@ public:
     *
     * @note The actual CnV register update may be delayed by the register synchronisation mechanism
     */
-   static ErrorCode setHighTimeInTicks(Ticks highTime, int channel) {
+   static ErrorCode setHighTime(Ticks highTime, int channel) {
       if (tmr->SC&FTM_SC_CPWMS_MASK) {
          // In CPWM the pulse width is doubled
          highTime = (highTime+1_ticks)/2U;
@@ -2406,10 +2406,10 @@ public:
     *
     * @return E_NO_ERROR on success
     *
-    * @note The actual CnV register update may be delayed by the TPM register synchronisation mechanism
+    * @note The actual CnV register update may be delayed by the FTM register synchronisation mechanism
     */
    static ErrorCode setHighTime(Seconds highTime, int channel) {
-      return setHighTimeInTicks(convertSecondsToTicks(highTime), channel);
+      return setHighTime(convertSecondsToTicks(highTime), channel);
    }
 
    /**
@@ -2647,7 +2647,7 @@ public:
        * @return Reference to the FTM channel registers
        */
       static __attribute__((always_inline)) volatile FtmChannelRegs &channelRegs() {
-         return *(FtmChannelRegs *)&Ftm::tmr->CONTROLS[CHANNEL];
+         return *reinterpret_cast<FtmChannelRegs *>(&Ftm::tmr->CONTROLS[CHANNEL]);
       }
 
       /** Timer channel number */
@@ -2697,7 +2697,7 @@ public:
        * @return Current mode of operation for the channel
        */
       static FtmChMode getMode() {
-         return (FtmChMode)(Ftm::tmr->CONTROLS[channel].CnSC &
+         return static_cast<FtmChMode>(Ftm::tmr->CONTROLS[channel].CnSC &
                (FTM_CnSC_MS_MASK|FTM_CnSC_ELS_MASK));
       }
 
@@ -2711,8 +2711,7 @@ public:
        */
       static void setMode(FtmChMode ftmChMode) {
          Ftm::tmr->CONTROLS[channel].CnSC =
-               (Ftm::tmr->CONTROLS[channel].CnSC & ~(FTM_CnSC_MS_MASK|FTM_CnSC_ELS_MASK))|
-               ftmChMode;
+               (Ftm::tmr->CONTROLS[channel].CnSC & ~(FTM_CnSC_MS_MASK|FTM_CnSC_ELS_MASK))|ftmChMode;
       }
 
       /**
@@ -2739,8 +2738,8 @@ public:
        *
        * @note The actual CnV register update will be delayed by the register synchronisation mechanism
        */
-      static ErrorCode setHighTimeInTicks(Ticks highTime) {
-         return Ftm::setHighTimeInTicks(highTime, channel);
+      static ErrorCode setHighTime(Ticks highTime) {
+         return Ftm::setHighTime(highTime, channel);
       }
 
       /**
@@ -3150,7 +3149,7 @@ public:
 
    /**
     * Set TOI Callback function\n
-    * Note that one callback is shared by all channels of the TPM
+    * Note that one callback is shared by all channels of the FTM
     *
     * @param[in] theCallback Callback function to execute when timer overflows. \n
     *                        nullptr to indicate none
@@ -3240,7 +3239,10 @@ public:
          disableAllPins();
       }
 
-      // Disable clock to peripheral
+      // Disable FTM (clock source disabled)
+      tmr->QDCTRL = 0;
+
+      // Disable clock to peripheral interface
       Info::disableClock();
    }
 

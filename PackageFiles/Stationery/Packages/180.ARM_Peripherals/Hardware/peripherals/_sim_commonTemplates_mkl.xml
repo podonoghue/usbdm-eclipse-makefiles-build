@@ -118,6 +118,18 @@
       \t};
       \t#endif
          
+      \t#if defined(SIM_SOPT2_LPUART1SRC)
+      \t/**
+      \t * LPUART1 Clock sources
+      \t */
+      \tenum SimLpuart1ClockSource {
+      \t   SimLpuart1ClockSource_Disabled   = SIM_SOPT2_LPUART1SRC(0), //!< Disabled
+      \t   SimLpuart1ClockSource_McgPClk    = SIM_SOPT2_LPUART1SRC(1), //!< MCGPCLK = IRC48M clock
+      \t   SimLpuart1ClockSource_OscerClk   = SIM_SOPT2_LPUART1SRC(2), //!< OSCERCLK clock
+      \t   SimLpuart1ClockSource_McgIrClk   = SIM_SOPT2_LPUART1SRC(3), //!< MCG Internal Reference clock
+      \t};
+      \t#endif
+
       \t#if defined(SIM_SOPT2_UART0SRC)
       \t/**
       \t * UART0 Clock sources
@@ -151,6 +163,7 @@
       \tenum SimUsbFullSpeedClockSource {
       \t   SimUsbFullSpeedClockSource_External   = SIM_SOPT2_USBSRC(0), //!< External bypass clock (USB_CLKIN)
       \t   SimUsbFullSpeedClockSource_Peripheral = SIM_SOPT2_USBSRC(1), //!< Peripheral clock (MCGPLLCLK/2 or MCGFLLCLK)
+      \t   SimUsbFullSpeedClockSource_Irc48M     = SIM_SOPT2_USBSRC(1), //!< IRC48M clock
       \t};
       \t#endif
          
@@ -206,6 +219,33 @@
       \t      case SIM_SOPT2_LPUART0SRC(1): return getPeripheralClock();
       \t      case SIM_SOPT2_LPUART0SRC(2): return Osc0Info::getOscerClock();
       \t      case SIM_SOPT2_LPUART0SRC(3): return McgInfo::getMcgIrClock();
+      \t   }
+      \t}
+      \t#endif
+      
+      \t#ifdef SIM_SOPT2_LPUART1SRC_MASK
+      \t/**
+      \t * Set LPUART1 input clock source
+      \t *
+      \t * @param simLpuart1ClockSource Clock source for LPUART
+      \t */
+      \tstatic void setLpuart1Clock(SimLpuart0ClockSource simLpuart1ClockSource) {
+      \t   sim->SOPT2 = (sim->SOPT2&~SIM_SOPT2_LPUART1SRC_MASK) | simLpuart1ClockSource;
+      \t}
+      
+      \t/**
+      \t * Get LPUART1 input clock frequency
+      \t *
+      \t * @return Frequency as a uint32_t in Hz
+      \t */
+      \tstatic uint32_t getLpuart1Clock() {
+      \t   
+      \t   switch(sim->SOPT2&SIM_SOPT2_LPUART1SRC_MASK) {
+      \t      default:
+      \t      case SIM_SOPT2_LPUART1SRC(0): return 0;
+      \t      case SIM_SOPT2_LPUART1SRC(1): return McgInfo::getMcgPClk();
+      \t      case SIM_SOPT2_LPUART1SRC(2): return Osc0Info::getOscerClock();
+      \t      case SIM_SOPT2_LPUART1SRC(3): return McgInfo::getMcgIrClock();
       \t   }
       \t}
       \t#endif
@@ -437,6 +477,15 @@
    <template><![CDATA[
       \t//! System Options Register 5
       \tstatic constexpr uint32_t sopt5 = 
+      \t#ifdef SIM_SOPT5_LPUART1ODE
+      \t   SIM_SOPT5_LPUART1ODE($(sim_sopt5_lpuart1ode)) |        // LPUART 1 Open Drain Enable
+      \t#endif
+      \t#ifdef SIM_SOPT5_LPUART1TXSRC
+      \t   SIM_SOPT5_LPUART1TXSRC($(sim_sopt5_lpuart1txsrc)) |      // LPUART 1 transmit data source select
+      \t#endif
+      \t#ifdef SIM_SOPT5_LPUART1RXSRC
+      \t   SIM_SOPT5_LPUART1RXSRC($(sim_sopt5_lpuart1rxsrc)) |      // LPUART 1 receive data source select
+      \t#endif
       \t#ifdef SIM_SOPT5_LPUART0ODE
       \t   SIM_SOPT5_LPUART0ODE($(sim_sopt5_lpuart0ode:0)) |        // LPUART 0 Open Drain Enable
       \t#endif

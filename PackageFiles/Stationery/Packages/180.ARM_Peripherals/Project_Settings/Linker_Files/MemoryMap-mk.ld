@@ -46,6 +46,12 @@ FORCE_BOOT_LOADER = DEFINED(bootloaderInformation) ? 1 : $(/LINKER/enableBootloa
     <i>  This value is used to automatically adjust the available flash area 
  */
 BOOT_LOADER_SIZE  = DEFINED(BOOT_LOADER_SIZE)  ? BOOT_LOADER_SIZE : $(/LINKER/bootloaderSize) * FORCE_BOOT_LOADER;
+/*
+    <o>  Bootloader information block size (usually 0x10 if used) <constant>
+    <i>  The bootloader information block is located at the top of the flash region
+    <i>  This value is used to automatically adjust the available flash area 
+ */
+BOOT_INFO_SIZE    = DEFINED(BOOT_INFO_SIZE)    ? BOOT_INFO_SIZE   : 0x10 * (BOOT_LOADER_SIZE > 0);
 /* </e> */
 
 $(/LINKER/information)
@@ -61,6 +67,7 @@ REGION_ALIAS("text_rom",         "$(/LINKER/text_rom)");
 /*  <s1>  Read-only data  <constant> data_rom      */
 REGION_ALIAS("rodata_rom",       "$(/LINKER/rodata_rom)");
 /* </h> */
+
 /*
   <h> Section placement in RAM
   <i> The RAM on Cortex-M4 Kinetis devices is divided into upper and lower memory regions.
@@ -88,5 +95,5 @@ REGION_ALIAS("bitband_ram",    "ram_high")
 /* </h> */
 
 
-INCLUDE "Linker-rom.ld"
+INCLUDE Linker-rom.ld
 

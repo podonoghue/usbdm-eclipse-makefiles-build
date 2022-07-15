@@ -1,7 +1,30 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE peripheralPage SYSTEM "_menu.dtd" >
-<!-- tpm1_6ch.xml -->
+<!-- tpm1_2ch.xml -->
 
-<fragment xmlns:xi="http://www.w3.org/2001/XInclude">
+<peripheralPage xmlns:xi="http://www.w3.org/2001/XInclude" name="_instance" description="Flex timer">
+
+   <constant name = "disable_peripheral"      derived = "true" value = "tpm->SC = TPM_SC_CMOD(0);"  />
+   <xi:include href="_mapPinsOption.xml"/>   
+
+   <intOption name="NumChannels" constant="true" derived="true"
+      description="Number of Channels" 
+      toolTip="The number of timer channels available" 
+      value="2" />
+
+   <intOption name="NumChannelVectors" constant="true" derived="true"
+      description="Number of Channel interrupt vectors" 
+      toolTip="Number of channel event interrupt vectors - \n
+               Multiple Channels may be mapped to the same vector" 
+      value="1" />
+
+   <template><![CDATA[
+      \t//! Number of channels implemented
+      \tstatic constexpr unsigned NumChannels = $(NumChannels);
+
+      \t//! Number of channel event vectors implemented
+      \tstatic constexpr unsigned NumChannelVectors = $(NumChannelVectors);\n\n
+   ]]></template>
+   
 <xi:include href="tpm_def.xml"/>
-</fragment>
+</peripheralPage>

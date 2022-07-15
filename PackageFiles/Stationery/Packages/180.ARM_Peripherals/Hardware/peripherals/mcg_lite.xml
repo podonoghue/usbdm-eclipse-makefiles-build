@@ -69,6 +69,8 @@
          <choice value="2" name="Very High range" />
             <choice value="0" name="Unused" />
       </choiceOption>
+      <aliasOption key="/OSC0/osc_clock" />
+      
    </category>
 
    <category name="RTC" description="RTC External Reference Clock/Oscillator [ERCLK32K]">
@@ -306,6 +308,7 @@
       \t * @return frequency in Hz as uint32_t
       \t */
       \tstatic uint32_t getMcgPClk() {
+      \t   // Directly enabled or required by current MCG clock mode
       \t   if ((mcg->MC&MCG_MC_HIRCEN_MASK) || ((mcg->S&MCG_S_CLKST_MASK) == MCG_S_CLKST(0))) {
       \t      return system_hirc_clock;
       \t   }
@@ -362,8 +365,8 @@
       \t      return getMcgPClk();
       \t   case MCG_S_CLKST(1): // LIRC (IRC2Mz/IRC8Mz)/DIV1
       \t      return getLircDiv1Clk();
-      \t   case MCG_S_CLKST(2): // EXT (IRC48MHz)
-      \t      return system_hirc_clock;
+      \t   case MCG_S_CLKST(2): // External clock (OSC0)
+      \t      return Osc0Info::getOscClock();
       \t   default:
       \t   case MCG_S_CLKST(3): // Reserved
       \t      return 0;

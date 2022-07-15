@@ -232,8 +232,9 @@ public:
     *
     * @note This function is loaded in RAM as stop may power down flash
     */
-   __attribute__((section(".ram_functions")))
-   __attribute__((long_call))
+__attribute__((section(".ram_functions")))
+__attribute__((long_call))
+__attribute__((noinline))
    static void enterStopMode() {
       // Set deep sleep
       SCB->SCR = SCB->SCR | SCB_SCR_SLEEPDEEP_Msk;

@@ -19,6 +19,7 @@
          description="Frequency of External USB Clock"
          toolTip="Externally provided clock for USB on USB_CLKIN" 
          value="48000000" />
+
    <category name="SOPT1" description="RTC clocks" >
 
       <aliasOption name="sim_sopt1_osc32ksel" constant="false" optional="true" />

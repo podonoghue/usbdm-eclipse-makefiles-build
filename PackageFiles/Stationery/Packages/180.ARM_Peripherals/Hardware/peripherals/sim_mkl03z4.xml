@@ -8,13 +8,12 @@
 
    <xi:include href="_sim_rtc_shared.xml"/>
    
-
    <category name="SOPT1" description="RTC clocks" >
 
-      <aliasOption name="rtcclkin_clock" constant="false" optional="true" />
+      <aliasOption name="rtc_clkin_clock" constant="false" />
 
-      <aliasOption name="sim_sopt1_osc32ksel" constant="false" optional="true" />
-      <aliasOption name="system_erclk32k_clock" optional="true" />
+      <aliasOption name="sim_sopt1_osc32ksel" constant="false" />
+      <aliasOption name="system_erclk32k_clock" />
       
       <choiceOption name="sim_sopt1_osc32kout" 
          description="ERCLK32K Clock Output"
@@ -26,10 +25,9 @@
 
    <category name="SOPT2" description="Clock Gating">
    
-      <aliasOption key="/SIM/sim_sopt2_rtcclkoutsel" optional="true" constant="false"/>
-      <aliasOption key="/SIM/rtc_clkout" optional="true" />
+      <aliasOption key="/SIM/sim_sopt2_rtcclkoutsel" constant="false"/>
+      <aliasOption key="/SIM/rtc_clkout" />
       
-      <aliasOption key="/SIM/system_peripheral_clock." optional="true" />
       <aliasOption key="/OSC0/oscer_clock" optional="true" />
       <aliasOption name="/MCG/system_mcgirclk_clock." optional="true" />
       <aliasOption key="/MCG/system_mcgpclk_clock." optional="true" />
@@ -87,8 +85,6 @@
          \t * Selects the clock to output on the CLKOUT pin.
          \t */
          \tenum SimClkoutSel {
-         \t   SimClkoutSel_Reserved0      = SIM_SOPT2_CLKOUTSEL(0),  //!<
-         \t   SimClkoutSel_Reserved1      = SIM_SOPT2_CLKOUTSEL(1),  //!<
          \t   SimClkoutSel_Bus            = SIM_SOPT2_CLKOUTSEL(2),  //!< Bus clock
          \t   SimClkoutSel_Lpo            = SIM_SOPT2_CLKOUTSEL(3),  //!< LPO (1kHz)
          \t#if defined(MCG_MC_LIRC_DIV2_MASK)
@@ -96,7 +92,6 @@
          \t#else
          \t   SimClkoutSel_McgirClk       = SIM_SOPT2_CLKOUTSEL(4),  //!< McgirClk
          \t#endif
-         \t   SimClkoutSel_Reserved5      = SIM_SOPT2_CLKOUTSEL(5),  //!<
          \t   SimClkoutSel_OscerClk0      = SIM_SOPT2_CLKOUTSEL(6),  //!< OscerClk0
          \t#if defined(USB_CLK_RECOVER_IRC_EN_REG_EN_MASK)
          \t   SimClkoutSel_Irc48MHz       = SIM_SOPT2_CLKOUTSEL(7),  //!< IRC 48MHz
@@ -133,7 +128,8 @@
    </category>
    
    <category name="SOPT5" description="UART signals">
-      <binaryOption name="sim_sopt5_lpuart0ode" description="LPUART0 Open Drain Enable"
+      <binaryOption name="sim_sopt5_lpuart0ode" 
+         description="LPUART0 Open Drain Enable"
          toolTip="Enables Open Drain output">
          <choice value="0" name="Push-pull" />
          <choice value="1" name="Open-drain" />
@@ -199,19 +195,11 @@
          \t   SimAdc0Trigger_External     = SIM_SOPT7_ADC0TRGSEL(0),   //!< External Trigger Source
          \t   SimAdc0Trigger_Cmp0         = SIM_SOPT7_ADC0TRGSEL(1),   //!< Comparator 0
          \t   SimAdc0Trigger_Cmp1         = SIM_SOPT7_ADC0TRGSEL(2),   //!< Comparator 1 (if present)
-         \t   SimAdc0Trigger_3            = SIM_SOPT7_ADC0TRGSEL(3),   //!< Reserved
-         \t   SimAdc0Trigger_4            = SIM_SOPT7_ADC0TRGSEL(4),   //!< Reserved
-         \t   SimAdc0Trigger_5            = SIM_SOPT7_ADC0TRGSEL(5),   //!< Reserved
-         \t   SimAdc0Trigger_6            = SIM_SOPT7_ADC0TRGSEL(6),   //!< Reserved
-         \t   SimAdc0Trigger_7            = SIM_SOPT7_ADC0TRGSEL(7),   //!< Reserved
          \t   SimAdc0Trigger_Tpm0         = SIM_SOPT7_ADC0TRGSEL(8),   //!< TPM0 Init and Ext Trigger Outputs
          \t   SimAdc0Trigger_Tpm1         = SIM_SOPT7_ADC0TRGSEL(9),   //!< TPM1 Init and Ext Trigger Outputs
-         \t   SimAdc0Trigger_10           = SIM_SOPT7_ADC0TRGSEL(10),  //!< Reserved
-         \t   SimAdc0Trigger_11           = SIM_SOPT7_ADC0TRGSEL(11),  //!< Reserved
          \t   SimAdc0Trigger_RtcAlarm     = SIM_SOPT7_ADC0TRGSEL(12),  //!< RTC Alarm
          \t   SimAdc0Trigger_RtcSeconds   = SIM_SOPT7_ADC0TRGSEL(13),  //!< RTC Seconds
          \t   SimAdc0Trigger_Lptrm        = SIM_SOPT7_ADC0TRGSEL(14),  //!< LPTMR
-         \t   SimAdc0Trigger_15           = SIM_SOPT7_ADC0TRGSEL(15),  //!< Reserved
          \t};
          
          \t/**
@@ -229,7 +217,7 @@
       ]]></template>
       
    </category>
-   
+    
    <xi:include href="_simCommon.xml"/>
 
    <indexedCategory name="ClockConfig." dim="/SIM/numberOfClockSettings" 
@@ -241,13 +229,6 @@
       
       <aliasOption key="/MCG/ClockConfig." constant="true"/>
       
-      <intOption name="system_peripheral_clock."
-         derived="true"
-         constant="true"
-         units="Hz"
-         description="Peripheral Clock frequency"
-         toolTip="Frequency of Peripheral Clock available to various peripherals"  />
-    
       <intOption name="system_core_clock." 
          units="Hz"
          description="System Core Clock"
@@ -297,7 +278,7 @@
    <xi:include href="_sim_commonTemplates_mkl.xml" />
 
    <validate
-      class="net.sourceforge.usbdm.deviceEditor.validators.SimValidateMKL_lite" dim="/SIM/numberOfClockSettings">
+      class="net.sourceforge.usbdm.deviceEditor.validators.SimValidateMKL" dim="/SIM/numberOfClockSettings">
       <param type="long" value="48MHz" />    <!-- Core         -->
       <param type="long" value="24MHz" />    <!-- Bus          -->
    </validate>

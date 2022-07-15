@@ -160,6 +160,14 @@
    \t */
    \tclass $(_class) : public $(_base_class)Base_T<$(_class)Info> {};\n
    ]]></template>
+
+   <template name="/MCG/Includes" namespace="all"  ><![CDATA[
+   #include "osc.h"\n
+   ]]></template>
+      
+   <template name="/MCG/Initialisation" namespace="all"  ><![CDATA[
+   \tUSBDM::$(_class)::initialise();\n
+   ]]></template>
       
    <signals />
 </peripheralPage>

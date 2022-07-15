@@ -22,23 +22,6 @@
       
    </indexedCategory>
    
-   <binaryOption name="mcg_c2_erefs0"
-      description="External Reference Select" 
-      toolTip="Determines whether a clock or crystal is used for the external reference clock"
-      hidden="true" >
-      <choice value="0" name="External clock" />
-      <choice value="1" name="Oscillator" isDefault="true" />
-   </binaryOption>
-   
-   <binaryOption name="mcg_c2_hgo0"
-      description="Oscillator Gain" 
-      toolTip="Controls the crystal oscillator mode of operation"
-      hidden="true" >
-      <choice value="0" name="Low power" isDefault="true"/>
-      <choice value="1" name="High gain" />
-   </binaryOption>
-   
-
    <validate
       class="net.sourceforge.usbdm.deviceEditor.validators.ClockValidator_MCG" dim="/SIM/numberOfClockSettings" >
       <param type="long" value="1" />              <!-- mcg_c4_drst_drs   -->
@@ -48,9 +31,9 @@
       <param type="long" value="120000000" />      <!-- pllOutMax    -->
       <param type="long" value="1" />              <!-- prDivMin     -->
       <param type="long" value="25" />             <!-- prDivMax     -->
-      <param type="long" value="24" />             <!-- vDivMin    - available as pll_vdiv_min -->
+      <param type="long" value="24" />             <!-- vDivMin      available as pll_vdiv_min -->
       <param type="long" value="55" />             <!-- vDivMax      -->
-      <param type="long" value="1" />              <!-- pllPostDiv - available as pll_post_divider -->
+      <param type="long" value="1" />              <!-- pllPostDiv   available as pll_post_divider -->
    </validate>
    
    <xi:include href="mcg_base.xml"/>

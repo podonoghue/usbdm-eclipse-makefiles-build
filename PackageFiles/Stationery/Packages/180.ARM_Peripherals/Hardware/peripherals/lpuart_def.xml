@@ -135,9 +135,7 @@ Devices using this peripheral:
       \t}\n\n
    ]]></template>
    
-   <template name="/CONSOLE/Includes" namespace="all"  ><![CDATA[
-   #include "lpuart.h"\n
-   ]]></template>
+   <template name="/LPUART/Present" namespace="all"  ><![CDATA[\ ||\ 1]]></template>
 
    <template name="/LPUART/declarations" namespace="all"  ><![CDATA[
       \t/**

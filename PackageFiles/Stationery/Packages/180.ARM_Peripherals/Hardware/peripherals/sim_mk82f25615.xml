@@ -6,65 +6,36 @@
    
    <xi:include href="_default_instance.xml"/>
 
-   <!-- Indicates whether OSC0/RTC(OSC1) share XTAL/EXTAL pins -->
-   <constant name="rtcSharesPins" value="false" />
-
-   <!-- Oscillator peripheral used for OSC0 input to MCG = OSC0 -->
-   <!-- This peripheral is tied closely to the MCG              -->
-   <constant name="osc0_peripheral"  value="/OSC0" />
-   <constant name="osc0_description" value="OSC0 - Main System Oscillator (OSCCLK0)" />
-
-   <!-- Oscillator signal for OSC1 input to MCG = RTC -->
-   <constant name="osc1_clock"       value="/RTC/osc_clock" />
-   <constant name="osc1_description" value="OSC1 - 32 kHz RTC Oscillator (RTC_32K)" />
-   
+   <xi:include href="_sim_rtc_independent.xml"/>
    <!-- Oscillator signal for OSC2 input to MCG = IRC48 -->
-   <constant name="osc2_clock"        value="/MCG/system_irc48m_clock" />
-   <constant name="osc2_description"  value="OSC2 - 48 MHz Internal Oscillator (OSCCLK1 = IRC48MCLK)" />
+   <constant name="osc2_clock"        value="/MCG/system_irc48m_clock" derived="true" />
+   <constant name="osc2_description"  value="OSC2 - 48 MHz Internal Oscillator (OSCCLK1 = IRC48MCLK)" derived="true" />
 
-   <category name="SOPT1" description="RTC and reference clock">
-      <choiceOption name="sim_sopt1_osc32ksel" 
-         description="ERCLK32K source" 
-         toolTip="Clock source of External 32k Reference Clock [ERCLK32K]\n
-            Used by LPTMR">
-         <choice value="0" name="System oscillator in low range (OSC32KCLK)" />
-         <choice value="1" name="Reserved" />
-         <choice value="2" name="RTC 32kHz clock" />
-         <choice value="3" name="LPO 1kHz clock"  isDefault="true"/>
-      </choiceOption>
+      <intOption name="system_usb_clkin_clock"  
+         constant="true" 
+         hidden="true"
+         origin="USB Clock In pin"
+         units="Hz"
+         description="Frequency of External USB Clock"
+         toolTip="Externally provided clock for USB on USB_CLKIN" 
+         value="48000000" />
 
-      <intOption name="system_erclk32k_clock" 
-         constant="true"
-         units="Hz" 
-         derived="true" 
-         description="Frequency of External 32k Reference Clock [ERCLK32K]"
-         toolTip="External reference clock available to some peripherals (usually ~32kHz)" 
-         origin="Derived from OSC32KCLK, RTCCLK or LPO" 
-         value="32768" />
-      
+   <category name="SOPT1" description="RTC clocks" >
+
+      <aliasOption name="sim_sopt1_osc32ksel" constant="false" optional="true" />
+      <aliasOption name="system_erclk32k_clock" optional="true" />
    </category>
 
    <category name="SOPT2" description="Clock Gating">
-      <binaryOption name="sim_sopt2_rtcclkoutsel" 
-         description="RTC clock out select [RTC_CLKOUT pin]"
-         toolTip="Clock output on the RTC_CLKOUT pin">
-         <choice value="0"  name="RTC 1 Hz clock" />
-         <choice value="1"  name="RTC 32kHz clock" isDefault="true" />
-      </binaryOption>
-      
-      <intOption name="rtc_clkout"
-         constant="true"
-         derived="true"
-         units="Hz"
-         description="RTC clock out [RTC_CLKOUT pin]"
-         toolTip="Clock frequency on the RTC_CLKOUT pin"  />
+   
+      <aliasOption key="/SIM/sim_sopt2_rtcclkoutsel" optional="true" constant="false"/>
+      <aliasOption key="/SIM/rtc_clkout" optional="true" />
       
       <aliasOption key="/SIM/sim_sopt2_pllfllsel." constant="false" />
       
-      <aliasOption key="/SIM/system_peripheral_clock." />
-      
-      <aliasOption key="/SIM/sim_sopt2_usbsrc." />
-      <aliasOption key="/SIM/system_usbfs_clock." />
+      <aliasOption key="/SIM/system_peripheral_clock." optional="true" />
+      <aliasOption key="/SIM/sim_sopt2_usbsrc." optional="true" constant="false" />
+      <aliasOption key="/SIM/system_usbfs_clock." optional="true" />
       
       <choiceOption name="sim_sopt2_lpuartsrc" 
          description="LPUART Clock select"
@@ -170,6 +141,7 @@
          \t};
          \t#endif
       ]]></template>
+      
       <binaryOption name="sim_sopt2_traceclksel" 
          description="Debug trace clock select"
          toolTip="Selects the core/system clock or MCG output clock (MCGOUTCLK)
@@ -299,7 +271,7 @@
          <choice value="1"  name="CMP0 output" />
       </binaryOption>
    </category>
-   
+
    <category name="SOPT5" description="UART signals">
       <choiceOption name="sim_sopt5_lpuart0txsrc" 
          description="LPUART 0 transmit data source select"
@@ -527,6 +499,7 @@
          toolTip="Selects the clock for various peripherals (LPUART, TPM etc.)">
          <choice value="0"  name="MCGFLLCLK clock" isDefault="true" />
          <choice value="1"  name="MCGPLLCLK clock" />
+         <choice value="2"  name="Reserved" />
          <choice value="3"  name="IRC48 MHz clock" />
       </choiceOption>
    

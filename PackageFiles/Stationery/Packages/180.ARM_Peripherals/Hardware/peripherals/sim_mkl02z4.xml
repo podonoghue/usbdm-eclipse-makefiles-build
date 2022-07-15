@@ -7,21 +7,14 @@
    <xi:include href="_default_instance.xml"/>
 
    <!-- Indicates whether OSC0/RTC(OSC1) share XTAL/EXTAL pins -->
-   <constant name="rtcSharesPins" value="false" />
+   <constant name="rtcSharesPins" value="false" derived="true" />
 
    <!-- Oscillator peripheral used for OSC0 input to MCG = OSC0 -->
    <!-- This peripheral is tied closely to the MCG              -->
    <constant name="osc0_peripheral"  value="/OSC0" derived="true" />
-   <constant name="osc0_description" value="OSC0 - Main System Oscillator (OSCCLK0)" />
+   <constant name="osc0_description" value="OSC0 - Main System Oscillator (OSCCLK0)" derived="true" />
    
    <constant name="erclk32k_source0"       value="/OSC0/osc32k_clock"            derived="true" />
-
-   <intOption name="mgcpllClockDivider" 
-      description="MCGPLLCLK clock divider"
-      hidden="true"
-      toolTip="This factor divides the MCGPLLCLK when selected as peripheral clock"
-      value="2"/>
-
 
    <category name="SOPT2" description="Clock Gating">
       <aliasOption key="/SIM/system_peripheral_clock." optional="true" />
@@ -158,19 +151,9 @@
          \t   SimAdc0Trigger_External     = SIM_SOPT7_ADC0TRGSEL(0),   //!< External Trigger Source
          \t   SimAdc0Trigger_Cmp0         = SIM_SOPT7_ADC0TRGSEL(1),   //!< Comparator 0
          \t   SimAdc0Trigger_Cmp1         = SIM_SOPT7_ADC0TRGSEL(2),   //!< Comparator 1 (if present)
-         \t   SimAdc0Trigger_3            = SIM_SOPT7_ADC0TRGSEL(3),   //!< Reserved
-         \t   SimAdc0Trigger_4            = SIM_SOPT7_ADC0TRGSEL(4),   //!< Reserved
-         \t   SimAdc0Trigger_5            = SIM_SOPT7_ADC0TRGSEL(5),   //!< Reserved
-         \t   SimAdc0Trigger_6            = SIM_SOPT7_ADC0TRGSEL(6),   //!< Reserved
-         \t   SimAdc0Trigger_7            = SIM_SOPT7_ADC0TRGSEL(7),   //!< Reserved
          \t   SimAdc0Trigger_Tpm0         = SIM_SOPT7_ADC0TRGSEL(8),   //!< TPM0 Init and Ext Trigger Outputs
          \t   SimAdc0Trigger_Tpm1         = SIM_SOPT7_ADC0TRGSEL(9),   //!< TPM1 Init and Ext Trigger Outputs
-         \t   SimAdc0Trigger_10           = SIM_SOPT7_ADC0TRGSEL(10),  //!< Reserved
-         \t   SimAdc0Trigger_11           = SIM_SOPT7_ADC0TRGSEL(11),  //!< Reserved
-         \t   SimAdc0Trigger_12           = SIM_SOPT7_ADC0TRGSEL(12),  //!< Reserved
-         \t   SimAdc0Trigger_13           = SIM_SOPT7_ADC0TRGSEL(13),  //!< Reserved
          \t   SimAdc0Trigger_Lptrm        = SIM_SOPT7_ADC0TRGSEL(14),  //!< LPTMR
-         \t   SimAdc0Trigger_15           = SIM_SOPT7_ADC0TRGSEL(15),  //!< Reserved
          \t};
          
          \t/**

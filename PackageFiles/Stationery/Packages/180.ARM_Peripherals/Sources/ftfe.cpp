@@ -36,76 +36,48 @@ static constexpr uint8_t  F_PGMPART     =  0x80;
 /** A23 == 1 => indicates DATA flash */
 static constexpr uint32_t DATA_ADDRESS_FLAG    = (1<<23);
 
+__attribute__((section(".ram_functions")))
+__attribute__((long_call))
+__attribute__((noinline))
 /**
  * Launch & wait for Flash command to complete
  *
- * @note This routine is copied to the stack (RAM) for execution
+ * @note This routine is executed from RAM
  */
-void Flash::executeFlashCommand_asm() {
-   __asm__ volatile (
-         "    .equ   FTFE_FSTAT,0x40020000        \n"
-         "    .equ   FTFE_FSTAT_ERROR_MASK,0x70   \n" // = FTFE_FSTAT_RDCOLERR_MASK|FTFE_FSTAT_ACCERR_MASK|FTFE_FSTAT_FPVIOL_MASK
-         "    .equ   FTFE_FSTAT_CCIF_MASK,0x80    \n"
-
-         "     ldr   r1,=FTFE_FSTAT               \n" // Point R1 @FTFE_FSTAT
-
-         "     movs  r2,#FTFE_FSTAT_ERROR_MASK    \n" // Clear previous errors
-         "     strb  r2,[r1,#0]                   \n" // FTFE_FSTAT = FTFE_FSTAT_ERROR_MASK
-
-         "     movs  r2,#FTFE_FSTAT_CCIF_MASK     \n" // Start command
-         "     strb  r2,[r1,#0]                   \n" // FTFE_FSTAT = FTFE_FSTAT_CCIF_MASK
-
-         "loop:                                   \n"
-         "     ldrb  r3,[r1,#0]                   \n" // Wait for completion
-#if (__CORTEX_M == 4)
-         "     ands  r3,r2                        \n" // while ((flashController->FSTAT & FTFE_FSTAT_CCIF_MASK) == 0) {
-#else
-         "     and   r3,r2                        \n" // while ((flashController->FSTAT & FTFE_FSTAT_CCIF_MASK) == 0) {
-#endif
-         "     beq   loop                         \n" // }
-
-         ::: "r1", "r2", "r3"
-   );
+void Flash::executeFlashCommand_ram() {
+   // Clear error flags
+   flashController->FSTAT = FTFE_FSTAT_RDCOLERR_MASK|FTFE_FSTAT_ACCERR_MASK|FTFE_FSTAT_FPVIOL_MASK;
+   // Start command
+   flashController->FSTAT = FTFE_FSTAT_CCIF_MASK;
+   do {
+   } while ((flashController->FSTAT & FTFE_FSTAT_CCIF_MASK) == 0);
 }
 
 /**
  * Launch & wait for Flash command to complete
- *
- * @note This routine must be placed in ROM immediately following executeFlashCommand_asm()
  */
 FlashDriverError_t Flash::executeFlashCommand() {
-   uint8_t space[50]; // Space for RAM copy of executeFlashCommand_asm()
-   FlashDriverError_t (*fp)() = (FlashDriverError_t (*)())((uint32_t)space|1);
-
-   volatile uint32_t source     = (uint32_t)executeFlashCommand_asm&~1;
-   volatile uint32_t source_end = (uint32_t)executeFlashCommand&~1;
-   volatile uint32_t size       = source_end-source;
-
-   usbdm_assert(size<sizeof(space), "Flash RAM buffer too small");
 
    if (!isFlashAvailable()) {
       return FLASH_ERR_NOT_AVAILABLE;
    }
 
-   // Copy routine to RAM (stack)
-   memcpy(space, (uint8_t*)(source), size);
-
-   // Call executeFlashCommand_asm() on the stack with interrupts disabled
    {
       CriticalSection cs;
-      (*fp)();
+      executeFlashCommand_ram();
    }
    // Handle any errors
-   if ((flashController->FSTAT & FTFE_FSTAT_FPVIOL_MASK ) != 0) {
+   uint8_t status = flashController->FSTAT;
+   if ((status & FTFE_FSTAT_FPVIOL_MASK ) != 0) {
       return FLASH_ERR_PROG_FPVIOL;
    }
-   if ((flashController->FSTAT & FTFE_FSTAT_ACCERR_MASK ) != 0) {
+   if ((status & FTFE_FSTAT_ACCERR_MASK ) != 0) {
       return FLASH_ERR_PROG_ACCERR;
    }
-   if ((flashController->FSTAT & FTFE_FSTAT_MGSTAT0_MASK ) != 0) {
+   if ((status & FTFE_FSTAT_MGSTAT0_MASK ) != 0) {
       return FLASH_ERR_PROG_MGSTAT0;
    }
-   if ((flashController->FSTAT & FTFE_FSTAT_RDCOLERR_MASK ) != 0) {
+   if ((status & FTFE_FSTAT_RDCOLERR_MASK ) != 0) {
       return FLASH_ERR_PROG_RDCOLERR;
    }
    return FLASH_ERR_OK;

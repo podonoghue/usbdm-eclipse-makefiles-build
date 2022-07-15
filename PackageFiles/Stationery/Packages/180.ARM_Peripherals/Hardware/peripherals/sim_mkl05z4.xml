@@ -6,50 +6,20 @@
    
    <xi:include href="_default_instance.xml"/>
 
-   <!-- Indicates whether OSC0/RTC(OSC1) share XTAL/EXTAL pins -->
-   <constant name="rtcSharesPins" value="true" />
-
-   <!-- Oscillator peripheral used for OSC0 input to MCG = OSC0 -->
-   <!-- This peripheral is tied closely to the MCG              -->
-   <constant name="osc0_peripheral"  value="/OSC0" />
-   <constant name="osc0_description" value="OSC0 - Main System Oscillator (OSCCLK0)" />
+   <xi:include href="_sim_rtc_shared.xml"/>
    
-   <intOption name="mgcpllClockDivider" 
-      description="MCGPLLCLK clock divider"
-      hidden="true"
-      toolTip="This factor divides the MCGPLLCLK when selected as peripheral clock"
-      value="2"/>
+   <category name="SOPT1" description="RTC clocks" >
 
-   <intOption name="rtcclkin_clock" 
-      hidden="true"
-      units="Hz"
-      description="RTC_CLKIN pin"
-      toolTip="External clock for the RTC (usually 32.768 kHz)"
-      origin="RTC_CLKIN pin"
-      value="32768"
-      min="0" max="33000" />
+      <aliasOption name="rtc_clkin_clock" constant="false" />
 
-   <category name="SOPT1" description="RTC signals">
-      <alias name="sim_sopt1_osc32ksel" constant="false" />
-
-      <alias name="system_erclk32k_clock" />
-      
+      <aliasOption name="sim_sopt1_osc32ksel" constant="false" />
+      <aliasOption name="system_erclk32k_clock" />
    </category>
 
    <category name="SOPT2" description="Clock Gating">
-      <binaryOption name="sim_sopt2_rtcclkoutsel" 
-         description="RTC clock out select [RTC_CLKOUT pin]"
-         toolTip="Clock output on the RTC_CLKOUT pin">
-         <choice value="0"  name="RTC 1 Hz clock"  isDefault="true" />
-         <choice value="1"  name="OSCERCLK clock (usually with 32k crystal)" />
-      </binaryOption>
-      
-      <intOption name="rtc_clkout"
-         constant="true"
-         derived="true"
-         units="Hz"
-         description="RTC clock out [RTC_CLKOUT pin]"
-         toolTip="Clock frequency on the RTC_CLKOUT pin"  />
+   
+      <aliasOption key="/SIM/sim_sopt2_rtcclkoutsel" optional="true" constant="false"/>
+      <aliasOption key="/SIM/rtc_clkout" optional="true" />
       
       <aliasOption key="/SIM/system_peripheral_clock." optional="true" />
       <aliasOption key="/OSC0/oscer_clock" optional="true" />
@@ -101,6 +71,27 @@
          <choice value="6"  name="OSCERCLK0" />
          <choice value="7"  name="Reserved" />
       </choiceOption>
+      
+      <template namespace="usbdm"><![CDATA[    
+         \t#if defined(SIM_SOPT2_CLKOUTSEL)
+         \t/**
+         \t * Selects the clock to output on the CLKOUT pin.
+         \t */
+         \tenum SimClkoutSel {
+         \t   SimClkoutSel_Bus            = SIM_SOPT2_CLKOUTSEL(2),  //!< Bus clock
+         \t   SimClkoutSel_Lpo            = SIM_SOPT2_CLKOUTSEL(3),  //!< LPO (1kHz)
+         \t#if defined(MCG_MC_LIRC_DIV2_MASK)
+         \t   SimClkoutSel_McgLirClk      = SIM_SOPT2_CLKOUTSEL(4), //!< LIRC_CLK 8/2 MHz
+         \t#else
+         \t   SimClkoutSel_McgirClk       = SIM_SOPT2_CLKOUTSEL(4),  //!< McgirClk
+         \t#endif
+         \t   SimClkoutSel_OscerClk0      = SIM_SOPT2_CLKOUTSEL(6),  //!< OscerClk0
+         \t#if defined(USB_CLK_RECOVER_IRC_EN_REG_EN_MASK)
+         \t   SimClkoutSel_Irc48MHz       = SIM_SOPT2_CLKOUTSEL(7),  //!< IRC 48MHz
+         \t#endif
+         \t};
+         \t#endif
+      ]]></template>
       
    </category>
    
@@ -192,7 +183,7 @@
       
       <template namespace="usbdm"><![CDATA[
          \t/**
-         \t * Select the ADC0 Trigger source in STOP and VLPS modes, or when ADC0 Alternative Trigger is active.
+         \t * Selects the ADC0 Trigger source in STOP and VLPS modes, or when ADC0 Alternative Trigger is active.
          \t */
          \tenum SimAdc0Trigger {
          \t   SimAdc0Trigger_External     = SIM_SOPT7_ADC0TRGSEL(0),   //!< External Trigger Source
@@ -201,8 +192,6 @@
          \t   SimAdc0Trigger_Cmp2         = SIM_SOPT7_ADC0TRGSEL(3),   //!< Comparator 2 (if present)
          \t   SimAdc0Trigger_PitCh0       = SIM_SOPT7_ADC0TRGSEL(4),   //!< PIT Channel 0
          \t   SimAdc0Trigger_PitCh1       = SIM_SOPT7_ADC0TRGSEL(5),   //!< PIT Channel 1
-         \t   SimAdc0Trigger_6            = SIM_SOPT7_ADC0TRGSEL(6),   //!< Reserved
-         \t   SimAdc0Trigger_7            = SIM_SOPT7_ADC0TRGSEL(7),   //!< Reserved
          \t   SimAdc0Trigger_Tpm0         = SIM_SOPT7_ADC0TRGSEL(8),   //!< TPM0 Init and Ext Trigger Outputs
          \t   SimAdc0Trigger_Tpm1         = SIM_SOPT7_ADC0TRGSEL(9),   //!< TPM1 Init and Ext Trigger Outputs
          \t   SimAdc0Trigger_Tpm2         = SIM_SOPT7_ADC0TRGSEL(10),  //!< TPM2 Init and Ext Trigger Outputs (if present)
@@ -210,7 +199,6 @@
          \t   SimAdc0Trigger_RtcAlarm     = SIM_SOPT7_ADC0TRGSEL(12),  //!< RTC Alarm
          \t   SimAdc0Trigger_RtcSeconds   = SIM_SOPT7_ADC0TRGSEL(13),  //!< RTC Seconds
          \t   SimAdc0Trigger_Lptrm        = SIM_SOPT7_ADC0TRGSEL(14),  //!< LPTMR
-         \t   SimAdc0Trigger_15           = SIM_SOPT7_ADC0TRGSEL(15),  //!< Reserved
          \t};
          
          \t/**

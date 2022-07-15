@@ -108,9 +108,7 @@ Devices using this peripheral:
    \t}\n\n
    ]]></template>
    
-   <template name="/CONSOLE/Includes" namespace="all"  ><![CDATA[
-   #include "uart.h"
-   ]]></template>
+   <template name="/UART/Present" namespace="all"  ><![CDATA[\ ||\ 1]]></template>
 
    <template name="/UART/declarations" namespace="all"  ><![CDATA[
       \t/**

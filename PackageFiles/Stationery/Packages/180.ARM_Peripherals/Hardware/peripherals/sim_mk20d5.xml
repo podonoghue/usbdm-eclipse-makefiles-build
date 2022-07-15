@@ -19,8 +19,8 @@
 
    <category name="SOPT1" description="RTC clocks" >
 
-      <aliasOption name="sim_sopt1_osc32ksel" constant="false" optional="true" />
-      <aliasOption name="system_erclk32k_clock" optional="true" />
+      <aliasOption name="sim_sopt1_osc32ksel" constant="false" />
+      <aliasOption name="system_erclk32k_clock" />
    </category>
 
    <category name="SOPT2" description="Clock Gating">

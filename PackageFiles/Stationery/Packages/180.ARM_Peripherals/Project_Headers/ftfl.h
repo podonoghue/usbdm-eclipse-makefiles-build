@@ -81,7 +81,7 @@ protected:
    /**
     * Launch & wait for Flash command to complete.
     */
-   static void executeFlashCommand_asm();
+   static void executeFlashCommand_ram();
 
    /**
     * Launch & wait for Flash command to complete.

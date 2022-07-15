@@ -1,16 +1,20 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE peripheralPage SYSTEM "_menu.dtd" >
+<!DOCTYPE fragment SYSTEM "_menu.dtd" >
 <!-- tpm_quad.xml -->
 
-<peripheralPage xmlns:xi="http://www.w3.org/2001/XInclude" name="_instance" description="Flex timer">
+<fragment xmlns:xi="http://www.w3.org/2001/XInclude" name="_instance" description="Flex timer">
 
    <xi:include href="_default_instance.xml"/>
 
-   <xi:include href="_mapPinsOption.xml"/>   
-
    <aliasOption key="/SIM/sim_sopt2_pllfllsel" constant="false" optional="true"/> 
-   <aliasOption key="/SIM/sim_sopt2_tpmsrc" constant="false" />
-   <aliasOption key="/SIM/system_tpm_clock" />
+   <aliasOption key="/SIM/sim_sopt2_tpmsrc" constant="false"  optional="true"/>
+   <aliasOption key="/SIM/system_tpm_clock"  optional="true"/>
+
+   <binaryOption name="check_minimums" description="Check minimum interval and minimum resolution"
+         toolTip="Enables boundary checks of minimum interval and minimum resolution when setting TPM values." >
+      <choice value="0" name="No checks done" />
+      <choice value="1" name="Do checks"  isDefault="true" />
+   </binaryOption>
 
    <intOption name="minimumInterval" description="Minimum usable interval in ticks"
       toolTip="This value is used as a minimum acceptable value for the timer interval in ticks\n
@@ -62,7 +66,7 @@
    <floatOption name="tpm_mod_period" 
       description="Period of timer"
       toolTip="Period of the timer"
-      origin="Clock period * ftm_mod"
+      origin="Clock period * tpm_mod"
       derived="true"
       min="0" units="s"/>
    <binaryOption name="tpm_sc_cpwms" 
@@ -78,7 +82,7 @@
       <choice value="1" name="Enabled" />
    </binaryOption>
    <template><![CDATA[
-      \t//! Timer external input frequency 
+      \t//! Timer external input frequency
       \tstatic constexpr uint32_t tpmExternalClock =  $(tpmExternalClock);
       
       \t//! Default Timer Modulo
@@ -171,10 +175,10 @@
          
    <template><![CDATA[
       \t/** Minimum resolution for PWM interval */
-      \tstatic constexpr uint32_t minimumResolution=$(minimumResolution);
+      \tstatic constexpr uint32_t minimumResolution=$(?check_minimums:$(minimumResolution):0);
       
       \t/** Minimum usable interval in ticks */      
-      \tstatic constexpr uint32_t minimumInterval=$(minimumInterval);
+      \tstatic constexpr uint32_t minimumInterval=$(?check_minimums:$(minimumInterval):0);
       
       \t/**
       \t * Get input clock frequency
@@ -208,4 +212,5 @@
    ]]></template>
 
    <signals/>
-</peripheralPage>
+
+</fragment>
