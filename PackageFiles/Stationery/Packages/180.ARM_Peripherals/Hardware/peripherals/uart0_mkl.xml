@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE peripheralPage SYSTEM "_menu.dtd" >
-<!-- uart_mkl04.xml -->
+<!-- uart0_mkl.xml -->
 <!--
 Devices using this peripheral: 
 -->
@@ -10,9 +10,10 @@ Devices using this peripheral:
 
    <xi:include href="_mapPinsOption_on.xml"/>
 
-   <aliasOption key="/SIM/sim_sopt2_uart$(_instance)src" optional="true" constant="false" />
-   <aliasOption key="/SIM/Uart$(_instance)Clock"         optional="true" />
-   
+   <aliasOption key="/SIM/sim_sopt2_uart$(_instance)src"            optional="true" constant="false" />
+   <aliasOption key="/SIM/system_uart$(_instance)_fixedclocksource" optional="true"/>
+   <aliasOption key="/SIM/system_uart$(_instance)_clock" optional="true" />
+
    <intOption name="oversampleRatio" description="Number of samples per bit" 
       toolTip="This value determines the number of times an Rx bit is sampled.\n
                This also affects the clock divider and hence the range of baud rates available."

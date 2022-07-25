@@ -4,24 +4,23 @@
 
 <peripheralPage xmlns:xi="http://www.w3.org/2001/XInclude" name="_instance" description="Multipurpose Clock Generator">
 
-   <indexedCategory name="DummyClockConfig."  dim="/SIM/numberOfClockSettings"
-         description="Clock configuration" 
-         hidden="true"
-         constant="true"
-         derived="true"         
-         toolTip="Clock configurations for different run modes"
-         value="ClockConfig_."  >
-
-      <binaryOption name="mcg_c8_lolre." 
-         description="PLL Loss of Lock Reset Enable"
-         toolTip="Determines if an interrupt or a reset request is made following a PLL loss of lock.\n
-                  Only has an affect when CME1 is set">
-         <choice value="0" name="Interrupt request" />
-         <choice value="1" name="Reset request" />
-      </binaryOption>
-      
-   </indexedCategory>
+   <for keys="n" dim="/SIM/numberOfClockSettings">
+      <category name=""
+            hidden="true"
+            constant="true"
+            derived="true" >
    
+         <binaryOption name="mcg_c8_lolre[%(n)]" 
+            description="PLL Loss of Lock Reset Enable"
+            toolTip="Determines if an interrupt or a reset request is made following a PLL loss of lock.\n
+                     Only has an affect when CME1 is set">
+            <choice value="0" name="Interrupt request" />
+            <choice value="1" name="Reset request" />
+         </binaryOption>
+      
+      </category>
+   </for>
+
    <validate
       class="net.sourceforge.usbdm.deviceEditor.validators.ClockValidator_MCG" dim="/SIM/numberOfClockSettings" >
       <param type="long" value="1" />              <!-- mcg_c4_drst_drs   -->

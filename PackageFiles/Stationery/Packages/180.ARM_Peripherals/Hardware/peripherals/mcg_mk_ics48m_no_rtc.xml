@@ -4,15 +4,6 @@
 
 <peripheralPage xmlns:xi="http://www.w3.org/2001/XInclude" name="_instance" description="Multipurpose Clock Generator">
    
-   <intOption name="system_irc48m_clock" 
-      constant="true"  
-      hidden="true"
-      units="Hz"
-      description="Frequency of Internal 48MHz Clock [IRC48MCLK]"
-      toolTip="48 MHz Internal Oscillator [May be trimmed against USB bus]"
-      origin="48MHz clock from IRC48MCLK"
-      value="48000000"/>
-   
    <validate
       class="net.sourceforge.usbdm.deviceEditor.validators.ClockValidator_MCG" dim="/SIM/numberOfClockSettings" >
       <param type="long" value="3" />              <!-- mcg_c4_drst_drs   -->

@@ -504,7 +504,7 @@ public:
       FlexbusInfo::configureSharedMultiplexing();
 
       // Requires CLKOUT = FLEXBUS Clock
-      SimInfo::setClkout(SimClkoutSel_FlexBus);
+      SimInfo::setClkout(SimClkoutSel_FlexBusClk);
    }
 
    /**

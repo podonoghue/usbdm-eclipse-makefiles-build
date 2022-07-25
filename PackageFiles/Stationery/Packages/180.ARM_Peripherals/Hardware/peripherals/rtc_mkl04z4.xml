@@ -2,6 +2,8 @@
 <!DOCTYPE peripheralPage SYSTEM "_menu.dtd" >
 <!-- rtc_mkl04z4.xml -->
 
-<fragment xmlns:xi="http://www.w3.org/2001/XInclude">
-<xi:include href="rtc.xml"/>
-</fragment>
+<peripheralPage xmlns:xi="http://www.w3.org/2001/XInclude" name="_instance" description="Real-time Clock">
+
+<xi:include href="rtc_base.xml"/>
+
+</peripheralPage>

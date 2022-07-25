@@ -979,7 +979,7 @@ public:
       }
       unsigned adiv;
       for(;;) {
-         unsigned clockFrequency = Info::getInputClockFrequency(adcClockSource);
+         unsigned clockFrequency = SimInfo::getAdcClock(adcClockSource);
          for (adiv=0; adiv<=3; adiv++) {
             if ((clockFrequency <= maxClock) && (clockFrequency >= MinClock)) {
                break;

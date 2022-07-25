@@ -352,12 +352,11 @@ ErrorCode Mcg::clockTransition(const McgInfo::ClockInfo &clockInfo) {
    // Clock sources
    SIM->SOPT2 = (SIM->SOPT2&~SIM_SOPT2_PLLFLLSEL_MASK)|clockInfo.sopt2;
 
-#if defined(SIM_CLKDIV2_USBDIV)
-   // USB Clock divider
-   SIM->CLKDIV2 = clockInfo.clkdiv2_usb;
-#endif
-
    SystemCoreClockUpdate();
+
+#if defined(SIM_CLKDIV2_USBDIV)
+   SimInfo::updateUsbClockDivider();
+#endif
 
    // Enable clock monitors
 #if defined(MCG_C2_FCFTRIM)

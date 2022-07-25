@@ -96,8 +96,8 @@ void SystemInitLowLevel(void) {
 #endif
 
 #if defined(SIM_COPC_COPT_MASK)
-   // Disable watch-dog
-   SIM->COPC = SIM_COPC_COPT(0);
+   // Configure watch-dog
+   SIM->COPC = USBDM::SimInfo::copc;
 #endif
 
 #ifdef WDOG_CS_UPDATE

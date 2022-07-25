@@ -8,21 +8,29 @@
    <item key="$$DeviceInfo_SubFamily"                      value="MKW41Z4" />
    <item key="$$Hardware_Source_Filename"                  value="MKW41Z4.usbdmHardware" />
    <item key="/Console/consoleDevice"                      value="USBDM::Lpuart0" />
-   <item key="/FTFA/peripheral_file"                       value="ftfa" />
    <item key="/MCG/ClockConfig[0]"                         value="ClockConfig_FEE_48MHz" />
    <item key="/MCG/ClockConfig[1]"                         value="ClockConfig_VLPR_BLPI_4MHz" />
-   <item key="/MCG/ClockConfig[2]"                         value="ClockConfig_FBE_32MHz" />
+   <item key="/MCG/ClockConfig[2]"                         value="ClockConfig_BLPE_32MHz" />
+   <item key="/MCG/ClockConfig[3]"                         value="ClockConfig_FEI_48M" />
    <item key="/MCG/clock_mode[0]"                          value="ClockMode_FEE" />
    <item key="/MCG/clock_mode[1]"                          value="ClockMode_BLPI" />
-   <item key="/MCG/clock_mode[2]"                          value="ClockMode_FBE" />
+   <item key="/MCG/clock_mode[2]"                          value="ClockMode_BLPE" />
+   <item key="/MCG/enableClockConfiguration[1]"            value="true" />
+   <item key="/MCG/enableClockConfiguration[2]"            value="true" />
+   <item key="/MCG/enableClockConfiguration[3]"            value="true" />
    <item key="/MCG/fllOutputFrequency[0]"                  value="47972352" />
+   <item key="/MCG/fllOutputFrequency[3]"                  value="47972352" />
    <item key="/MCG/mcg_c4_dmx32[0]"                        value="true" />
+   <item key="/MCG/mcg_c4_dmx32[3]"                        value="true" />
    <item key="/MCG/mcg_c7_oscsel[0]"                       value="1" />
-   <item key="/SIM/sim_sopt1_osc32ksel"                    value="0" />
+   <item key="/RTC/rtc_cr_osce"                            value="true" />
+   <item key="/SIM/sim_sopt1_osc32ksel"                    value="2" />
    <item key="/SIM/system_bus_clock[0]"                    value="23986176" />
-   <item key="/SIM/system_bus_clock[1]"                    value="800000" />
+   <item key="/SIM/system_bus_clock[1]"                    value="4000000" />
    <item key="/SIM/system_bus_clock[2]"                    value="16000000" />
+   <item key="/SIM/system_bus_clock[3]"                    value="23986176" />
    <item key="/SIM/system_core_clock[0]"                   value="47972352" />
    <item key="/SIM/system_core_clock[1]"                   value="4000000" />
    <item key="/SIM/system_core_clock[2]"                   value="32000000" />
+   <item key="/SIM/system_core_clock[3]"                   value="47972352" />
 </section>

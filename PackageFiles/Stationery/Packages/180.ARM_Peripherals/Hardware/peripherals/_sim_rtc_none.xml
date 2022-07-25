@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE peripheralPage SYSTEM "_menu.dtd" >
+<!-- _sim_rtc_shared.xml -->
+
+<fragment xmlns:xi="http://www.w3.org/2001/XInclude">
+   
+   <!-- Indicates whether OSC0/RTC(OSC1) share XTAL/EXTAL pins -->
+   <constant name="rtcSharesPins" value="false" derived="true" />
+   <stringOption name="rtc_none" derived="true" hidden ="true" />
+   
+
+   <!-- Oscillator peripheral used for OSC0 input to MCG = OSC0 -->
+   <!-- This peripheral is tied closely to the MCG              -->
+   <constant name="osc0_peripheral"  value="/OSC0" derived="true" />
+   <constant name="osc0_description" value="OSC0 - Main System Oscillator (OSCCLK0)" derived="true" />
+
+
+   <!-- ERCCLK32K Sources -->
+   <constant name="erclk32k_source0"       value="/OSC0/osc32k_clock"            derived="true" />
+
+   <intOption name="system_erclk32k_clock" 
+      hidden="true"
+      constant="true"
+      units="Hz" 
+      derived="true" 
+      description="Frequency of External 32k Reference Clock [ERCLK32K]"
+      toolTip="External reference clock available to some peripherals (usually ~32kHz)" 
+      origin="Derived from OSC32KCLK, RTCCLK or LPO" 
+      value="32768" />
+      
+</fragment>

@@ -38,8 +38,6 @@ extern volatile uint32_t SystemMcgFllClock;
 /** MCGPLLCLK - Output of PLL */
 extern volatile uint32_t SystemMcgPllClock;
 
-extern void setSysDividersStub(uint32_t simClkDiv1);
-
 /**
  * Clock configurations
  */
@@ -79,11 +77,11 @@ public:
    /**
     * Transition from current clock mode to mode given
     *
-    * @param[in]  to Clock mode to transition to
+    * @param[in]  clockInfo Clock mode to transition to
     *
     * @return E_NO_ERROR on success
     */
-   static ErrorCode clockTransition(const McgInfo::ClockInfo &to);
+   static ErrorCode clockTransition(const McgInfo::ClockInfo &clockInfo);
 
    /**
     * Update SystemCoreClock variable
@@ -92,14 +90,6 @@ public:
     */
    static void SystemCoreClockUpdate(void);
 
-   /**
-    *  Change SIM->CLKDIV1 value
-    *
-    * @param[in]  simClkDiv1 - Value to write to SIM->CLKDIV1 register
-    */
-   static void setSysDividers(uint32_t simClkDiv1) {
-      SIM->CLKDIV1 = simClkDiv1;
-   }
 
    /** Current clock mode (LIRC_8M out of reset) */
    static McgInfo::ClockMode currentClockMode;

@@ -5,40 +5,47 @@
 -->
 
 <section name="USBDM">
-   <item key="$$DeviceInfo_Device_Variant"                 value="FRDM_KL46Z4" />
+   <item key="$$DeviceInfo_Device_Variant"                 value="FRDM_KL46Z" />
    <item key="$$DeviceInfo_SubFamily"                      value="MKL46Z4" />
    <item key="$$Hardware_Source_Filename"                  value="MKL46Z4.usbdmHardware" />
-   <item key="$pin$PTA0_muxSetting_mux7(7)"                value="mux7" />
-   <item key="$pin$PTA18_muxSetting_mux0(0)"               value="mux0" />
-   <item key="$pin$PTA19_muxSetting_mux0(0)"               value="mux0" />
-   <item key="$pin$PTA1_muxSetting_mux2(2)"                value="mux2" />
-   <item key="$pin$PTA20_muxSetting_mux7(7)"               value="mux7" />
-   <item key="$pin$PTA2_muxSetting_mux2(2)"                value="mux2" />
-   <item key="$pin$PTA3_muxSetting_mux7(7)"                value="mux7" />
-   <item key="$pin$PTB10_muxSetting_mux0(0)"               value="mux0" />
-   <item key="$pin$PTB11_muxSetting_mux0(0)"               value="mux0" />
-   <item key="$pin$PTB21_muxSetting_mux0(0)"               value="mux0" />
-   <item key="$pin$PTB22_muxSetting_mux0(0)"               value="mux0" />
-   <item key="$pin$PTB23_muxSetting_mux0(0)"               value="mux0" />
-   <item key="$pin$PTB7_muxSetting_mux0(0)"                value="mux0" />
-   <item key="$pin$PTB8_muxSetting_mux0(0)"                value="mux0" />
-   <item key="$pin$PTC17_muxSetting_mux0(0)"               value="mux0" />
-   <item key="$pin$PTC18_muxSetting_mux0(0)"               value="mux0" />
-   <item key="$pin$PTD0_muxSetting_mux0(0)"                value="mux0" />
-   <item key="$pin$PTD1_muxSetting_mux0(0)"                value="mux0" />
-   <item key="$pin$PTD2_muxSetting_mux0(0)"                value="mux0" />
-   <item key="$pin$PTD3_muxSetting_mux0(0)"                value="mux0" />
-   <item key="$pin$PTD4_muxSetting_mux0(0)"                value="mux0" />
-   <item key="$pin$PTD5_muxSetting_mux1(1)"                value="mux1" />
-   <item key="$pin$PTD6_muxSetting_mux0(0)"                value="mux0" />
-   <item key="$pin$PTD7_muxSetting_mux0(0)"                value="mux0" />
-   <item key="$pin$PTE24_muxSetting_mux5(5)"               value="mux5" />
-   <item key="$pin$PTE25_muxSetting_mux5(5)"               value="mux5" />
-   <item key="$pin$PTE29_muxSetting_mux1(1)"               value="mux1" />
-   <item key="$pin$PTE4_muxSetting_mux0(0)"                value="mux0" />
-   <item key="$pin$PTE5_muxSetting_mux0(0)"                value="mux0" />
+   <item key="$pin$PTA12_pcrSetting_1"                     value="100" />
+   <item key="$pin$PTA13_pcrSetting_1"                     value="100" />
+   <item key="$pin$PTA18_pcrSetting_0"                     value="0" />
+   <item key="$pin$PTA19_pcrSetting_0"                     value="0" />
+   <item key="$pin$PTA1_pcrSetting_2"                      value="200" />
+   <item key="$pin$PTA2_pcrSetting_2"                      value="200" />
+   <item key="$pin$PTA4_pcrSetting_1"                      value="100" />
+   <item key="$pin$PTA5_pcrSetting_1"                      value="100" />
+   <item key="$pin$PTB0_pcrSetting_0"                      value="0" />
+   <item key="$pin$PTB16_pcrSetting_0"                     value="0" />
+   <item key="$pin$PTB17_pcrSetting_0"                     value="0" />
+   <item key="$pin$PTB1_pcrSetting_0"                      value="0" />
+   <item key="$pin$PTB2_pcrSetting_0"                      value="0" />
+   <item key="$pin$PTB3_pcrSetting_0"                      value="0" />
+   <item key="$pin$PTD1_pcrSetting_0"                      value="0" />
+   <item key="$pin$PTD2_pcrSetting_0"                      value="0" />
+   <item key="$pin$PTD3_pcrSetting_0"                      value="0" />
+   <item key="$pin$PTD4_pcrSetting_0"                      value="0" />
+   <item key="$pin$PTD5_pcrSetting_1"                      value="100" />
+   <item key="$pin$PTD6_pcrSetting_0"                      value="0" />
+   <item key="$pin$PTD7_pcrSetting_0"                      value="0" />
+   <item key="$pin$PTE22_pcrSetting_0"                     value="0" />
+   <item key="$pin$PTE24_pcrSetting_5"                     value="520" />
+   <item key="$pin$PTE25_pcrSetting_5"                     value="520" />
+   <item key="$pin$PTE29_pcrSetting_1"                     value="100" />
+   <item key="$signal$ADC0_SE12_codeIdentifier"            value="AnalogueA2" />
+   <item key="$signal$ADC0_SE13_codeIdentifier"            value="AnalogueA3" />
+   <item key="$signal$ADC0_SE3_codeIdentifier"             value="LightSensor" />
+   <item key="$signal$ADC0_SE8_codeIdentifier"             value="AnalogueA0" />
+   <item key="$signal$ADC0_SE9_codeIdentifier"             value="AnalogueA1" />
    <item key="$signal$EXTAL0_descriptionSetting"           value="Crystal" />
+   <item key="$signal$GPIOA_12_codeIdentifier"             value="GpioD3" />
+   <item key="$signal$GPIOA_13_codeIdentifier"             value="GpioD8" />
+   <item key="$signal$GPIOA_4_codeIdentifier"              value="GpioD4" />
+   <item key="$signal$GPIOA_5_codeIdentifier"              value="GpioD5" />
+   <item key="$signal$GPIOD_5_codeIdentifier"              value="GreenLed" />
    <item key="$signal$GPIOD_5_descriptionSetting"          value="Green LED" />
+   <item key="$signal$GPIOE_29_codeIdentifier"             value="RedLed" />
    <item key="$signal$I2C0_SCL_descriptionSetting"         value="onboard I2C" />
    <item key="$signal$I2C0_SDA_descriptionSetting"         value="onboard I2C" />
    <item key="$signal$LCD_P10_descriptionSetting"          value="LCD(4D/4E/4G/4F)" />
@@ -54,40 +61,40 @@
    <item key="$signal$LCD_P7_descriptionSetting"           value="LCD(2D/2E/2G/2F)" />
    <item key="$signal$LCD_P8_descriptionSetting"           value="LCD(DP2/2C/2B/2A)" />
    <item key="$signal$RESET_b_descriptionSetting"          value="Reset" />
-   <item key="$signal$RESET_b_polarity"                    value="true" />
    <item key="$signal$SWD_CLK_descriptionSetting"          value="SWD CLK" />
    <item key="$signal$SWD_DIO_descriptionSetting"          value="SWD DIO" />
+   <item key="$signal$TSI0_CH10_codeIdentifier"            value="Touch2" />
+   <item key="$signal$TSI0_CH9_codeIdentifier"             value="Touch1" />
    <item key="$signal$UART0_RX_descriptionSetting"         value="Console Rx" />
    <item key="$signal$UART0_TX_descriptionSetting"         value="Console Tx" />
    <item key="$signal$USB0_DM_descriptionSetting"          value="USB" />
    <item key="$signal$USB0_DP_descriptionSetting"          value="USB" />
    <item key="$signal$XTAL0_descriptionSetting"            value="Crystal" />
-   <item key="/FTFA/peripheral_file"                       value="ftfa" />
    <item key="/LCD/backplanes"                             value="40,52,19,18," />
-   <item key="/LCD/frontplanes"                            value="37,17,7,8,53,38,10,11," />
+   <item key="/LCD/frontplanes"                            value="37,17,7,8,53,38,10,11" />
    <item key="/LCD/lcdClock"                               value="4000000.0" />
    <item key="/LCD/lcd_gcr_clock"                          value="LCD_GCR_SOURCE(1)|LCD_GCR_ALTSOURCE(0)" />
    <item key="/LPTMR0/lptmr_cmr"                           value="0" />
    <item key="/MCG/ClockConfig[0]"                         value="ClockConfig_PEE_48MHz" />
    <item key="/MCG/ClockConfig[1]"                         value="ClockConfig_BLPE_4MHz" />
    <item key="/MCG/ClockConfig[2]"                         value="ClockConfig_FEE_40MHz" />
+   <item key="/MCG/ClockConfig[3]"                         value="ClockConfig_FEI_48MHz" />
    <item key="/MCG/clock_mode[0]"                          value="ClockMode_PEE" />
    <item key="/MCG/clock_mode[1]"                          value="ClockMode_BLPE" />
    <item key="/MCG/clock_mode[2]"                          value="ClockMode_FEE" />
+   <item key="/MCG/fllOutputFrequency[3]"                  value="47972352" />
+   <item key="/MCG/mcg_c4_dmx32[3]"                        value="true" />
    <item key="/MCG/pll0OutputFrequency[0]"                 value="96000000" />
-   <item key="/MCG/system_mcgfllclk_clock[2]"              value="40000000" />
    <item key="/OSC0/osc_cr_scp"                            value="4" />
    <item key="/PIT/pit_ldval"                              value="10000" />
-   <item key="/SIM/ClockConfig[0]"                         value="" />
-   <item key="/SIM/ClockConfig[1]"                         value="" />
-   <item key="/SIM/ClockConfig[2]"                         value="" />
-   <item key="/SIM/sim_sopt1_osc32ksel"                    value="2" />
    <item key="/SIM/sim_sopt2_pllfllsel[0]"                 value="1" />
    <item key="/SIM/sim_sopt2_rtcclkoutsel"                 value="false" />
    <item key="/SIM/system_bus_clock[1]"                    value="800000" />
    <item key="/SIM/system_bus_clock[2]"                    value="20000000" />
+   <item key="/SIM/system_bus_clock[3]"                    value="15990784" />
    <item key="/SIM/system_core_clock[1]"                   value="4000000" />
    <item key="/SIM/system_core_clock[2]"                   value="40000000" />
+   <item key="/SIM/system_core_clock[3]"                   value="47972352" />
    <item key="/SMC/smc_stopctrl_porpo"                     value="true" />
    <item key="/SMC/smc_stopctrl_pstopo"                    value="2" />
    <item key="/TSI0/tsi_gencs_extchrg"                     value="5" />

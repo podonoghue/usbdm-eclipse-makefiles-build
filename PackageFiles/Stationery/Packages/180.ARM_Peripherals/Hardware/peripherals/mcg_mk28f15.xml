@@ -4,118 +4,102 @@
 
 <peripheralPage xmlns:xi="http://www.w3.org/2001/XInclude" name="_instance" description="Multipurpose Clock Generator">
 
-   <indexedCategory name="DummyClockConfig."  dim="/SIM/numberOfClockSettings"
-         description="Clock configuration" 
-         hidden="true"
-         constant="true"
-         derived="true"         
-         toolTip="Clock configurations for different run modes"
-         value="ClockConfig_."  >
+   <for keys="n" dim="/SIM/numberOfClockSettings">
+      <category name=""
+            hidden="true"
+            constant="true"
+            derived="true" >
 
-      <choiceOption name="mcg_c7_oscsel." 
-         description="MCG External Reference Clock source [OSCSEL]"
-         toolTip="Selects the MCG FLL/PLL external reference clock source">
-         <choice value="0" name="Dummy" />
-      </choiceOption>
-
-      <binaryOption name="mcg_c8_cme1." 
-         description="OSC1 (RTC) Clock Monitor Enable"
-         toolTip="Determines if the clock monitor is enabled for the RTC external clock.\n
-                  CME1 bit must be set to a logic 0 before the MCG enters any Stop mode">
-         <choice value="0" name="Clock monitor disabled" />
-         <choice value="1" name="Clock monitor enabled" />
-      </binaryOption>
+         <binaryOption name="mcg_c8_cme1[%(n)]" 
+            description="OSC1 (RTC) Clock Monitor Enable"
+            toolTip="Determines if the clock monitor is enabled for the RTC external clock.\n
+                     CME1 bit must be set to a logic 0 before the MCG enters any Stop mode">
+            <choice value="0" name="Clock monitor disabled" />
+            <choice value="1" name="Clock monitor enabled" />
+         </binaryOption>
          
-      <binaryOption name="mcg_c8_locre1." 
-         description="OSC1 (RTC) Loss of Clock Reset Enable"
-         toolTip="Determines if a interrupt or a reset request is made following a loss of RTC external reference clock.\n 
-                  Only has an affect when CME1 is set." >
-         <choice value="0" name="Interrupt request" />
-         <choice value="1" name="Reset request" />
-      </binaryOption>
+         <binaryOption name="mcg_c8_locre1[%(n)]" 
+            description="OSC1 (RTC) Loss of Clock Reset Enable"
+            toolTip="Determines if a interrupt or a reset request is made following a loss of RTC external reference clock.\n 
+                     Only has an affect when CME1 is set[%(n)]" >
+            <choice value="0" name="Interrupt request" />
+            <choice value="1" name="Reset request" />
+         </binaryOption>
    
-      <binaryOption name="mcg_c8_lolre." 
-         description="PLL Loss of Lock Reset Enable"
-         toolTip="Determines if an interrupt or a reset request is made following a PLL loss of lock.\n
-                  Only has an affect when CME1 is set">
-         <choice value="0" name="Interrupt request" />
-         <choice value="1" name="Reset request" />
-      </binaryOption>
+         <binaryOption name="mcg_c8_lolre[%(n)]" 
+            description="PLL Loss of Lock Reset Enable"
+            toolTip="Determines if an interrupt or a reset request is made following a PLL loss of lock.\n
+                     Only has an affect when CME1 is set">
+            <choice value="0" name="Interrupt request" />
+            <choice value="1" name="Reset request" />
+         </binaryOption>
       
-      <binaryOption name="mcg_c9_pll_cme." 
-         description="MCG External PLL Clock Monitor Enable"
-         toolTip="Enables the loss of clock monitoring circuit for the MCG External PLL (EXT_PLL) reference clock">
-         <choice value="0" name="PLL clock monitor disabled" />
-         <choice value="1" name="PLL clock monitor enabled" />
-      </binaryOption>
+         <binaryOption name="mcg_c9_pll_cme[%(n)]" 
+            description="MCG External PLL Clock Monitor Enable"
+            toolTip="Enables the loss of clock monitoring circuit for the MCG External PLL (EXT_PLL) reference clock">
+            <choice value="0" name="PLL clock monitor disabled" />
+            <choice value="1" name="PLL clock monitor enabled" />
+         </binaryOption>
 
-      <binaryOption name="mcg_c9_pll_locre." 
-         description="MCG External PLL Loss of Clock Reset Enable"
-         toolTip="Determines wheather an interrupt or a reset request is made following a loss of the\n
-                  MCG External PLL clock when the MCG is running in PEE mode">
-         <choice value="0" name="Interrupt request" />
-         <choice value="1" name="Reset request" />
-      </binaryOption>
+         <binaryOption name="mcg_c9_pll_locre[%(n)]" 
+            description="MCG External PLL Loss of Clock Reset Enable"
+            toolTip="Determines wheather an interrupt or a reset request is made following a loss of the\n
+                     MCG External PLL clock when the MCG is running in PEE mode">
+            <choice value="0" name="Interrupt request" />
+            <choice value="1" name="Reset request" />
+         </binaryOption>
    
-      <binaryOption name="mcg_c11_pllcs." 
-         description="PLL Clock Select"
-         toolTip="Controls whether PLL0 or PLL1 (USB1 PFDCLK) is selected as the MCG\n
-                 source when CLKS are programmed in PLL Engaged External (PEE) mode.">
-         <choice value="0" name="PLL0 output clock is selected" />
-         <choice value="1" name="External PLL clock (USB1 PFDCLK) is selected" />
-      </binaryOption>
+         <binaryOption name="mcg_c11_pllcs[%(n)]" 
+            description="PLL Clock Select"
+            toolTip="Controls whether PLL0 or PLL1 (USB1 PFDCLK) is selected as the MCG\n
+                    source when CLKS are programmed in PLL Engaged External (PEE) mode[%(n)]">
+            <choice value="0" name="PLL0 output clock is selected" />
+            <choice value="1" name="External PLL clock (USB1 PFDCLK) is selected" />
+         </binaryOption>
       
-      <binaryOption name="usbphy_pll_enable." 
-         description="Enable clock output"
-         toolTip="Enables the clock output from the USB PLL.">
-         hidden="true"
-         <choice value="0" name="Disabled" />
-         <choice value="1" name="Enabled" />
-      </binaryOption>
+         <binaryOption name="usbphy_pll_enable[%(n)]" 
+            description="Enable clock output"
+            toolTip="Enables the clock output from the USB PLL[%(n)]">
+            hidden="true"
+            <choice value="0" name="Disabled" />
+            <choice value="1" name="Enabled" />
+         </binaryOption>
    
-      <binaryOption name="usbphy_power_enable." 
-         description="Enable clock output"
-         toolTip="Enables the clock output from the USB PLL.">
-         hidden="true"
-         <choice value="0" name="Disabled" />
-         <choice value="1" name="Enabled" />
-      </binaryOption>
+         <binaryOption name="usbphy_power_enable[%(n)]" 
+            description="Enable clock output"
+            toolTip="Enables the clock output from the USB PLL[%(n)]">
+            hidden="true"
+            <choice value="0" name="Disabled" />
+            <choice value="1" name="Enabled" />
+         </binaryOption>
    
-      <binaryOption name="usbphy_pll_en_usb_clks." 
-         description="Enable USB clock output"
-         toolTip="Enables the USB clock output from the USB PHY PLL.">
-         hidden="true"
-         <choice value="0" name="Disabled" />
-         <choice value="1" name="Enabled" />
-      </binaryOption>
+         <binaryOption name="usbphy_pll_en_usb_clks[%(n)]" 
+            description="Enable USB clock output"
+            toolTip="Enables the USB clock output from the USB PHY PLL[%(n)]">
+            hidden="true"
+            <choice value="0" name="Disabled" />
+            <choice value="1" name="Enabled" />
+         </binaryOption>
    
-      <choiceOption name="usbphy_pll_sic_div."
-         description="USB PLL feedback loop divider"
-         toolTip="Allows the PLL to be adjusted for input frequencies of 12, 16 or 24 MHz" >
-         hidden="true"
-            <choice value="0" name="24 MHz Crystal" />
-            <choice value="1" name="16 MHz Crystal" />
-            <choice value="2" name="12 MHz Crystal" />
-           <choice value="3" name="Reserved" />
-      </choiceOption>
+         <choiceOption name="usbphy_pll_sic_div[%(n)]"
+            description="USB PLL feedback loop divider"
+            toolTip="Allows the PLL to be adjusted for input frequencies of 12, 16 or 24 MHz" >
+            hidden="true"
+               <choice value="0" name="24 MHz Crystal" />
+               <choice value="1" name="16 MHz Crystal" />
+               <choice value="2" name="12 MHz Crystal" />
+              <choice value="3" name="Reserved" />
+         </choiceOption>
    
-      <intOption name="usb1pfdclk_Clock."
-         units="Hz"
-         description="USB1 PLL output frequency"
-         hidden="true"
-         toolTip="Used as input to high speed USB and available as general clock source"
-         value="180000000" max="180000000" />
-   </indexedCategory>
+         <intOption name="usb1pfdclk_Clock[%(n)]"
+            units="Hz"
+            description="USB1 PLL output frequency"
+            hidden="true"
+            toolTip="Used as input to high speed USB and available as general clock source"
+            value="180000000" max="180000000" />
+      </category>
+   </for>
 
-   <intOption name="system_irc48m_clock" 
-      constant="true"  
-      hidden="true"
-      units="Hz"
-      description="Frequency of Internal 48MHz Clock [IRC48MCLK]"
-      toolTip="48 MHz Internal Oscillator [May be trimmed against USB bus]"
-      origin="48MHz clock from IRC48MCLK"
-      value="48000000"/>
-   
    <validate
       class="net.sourceforge.usbdm.deviceEditor.validators.ClockValidator_MCG" dim="/SIM/numberOfClockSettings" >
       <param type="long" value="3" />              <!-- mcg_c4_drst_drs   -->
@@ -131,5 +115,22 @@
    </validate>
    
    <xi:include href="mcg_base.xml"/>
+
+   <category name="Hardware bugs" description="">
+      <binaryOption name="ERRATA_E2448" 
+         description="Flash prefetch could result in incorrect read data"
+         toolTip="Issue: Flash prefetch could result in incorrect read data when CLKDIV1 changed\n
+         Workaround: Use code in RAM that disables/restores prefetch around changing CLKDIV1" >
+         <choice value="0" name="No special handling" />
+         <choice value="1" name="Special handing" isdefault="true" />
+      </binaryOption>
+      <binaryOption name="ERRATA_E7993" 
+         description="FLL frequency may be incorrect"
+         toolTip="Issue: FLL frequency may be incorrect after changing the FLL reference clock\n
+         Workaround: Invert MCG_C4[DMX32] before clock source changes and restore afterwards">
+         <choice value="0" name="No special handling" />
+         <choice value="1" name="Special handing" isdefault="true" />
+      </binaryOption>
+   </category>
 
 </peripheralPage>

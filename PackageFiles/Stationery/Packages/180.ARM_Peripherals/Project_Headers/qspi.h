@@ -1339,7 +1339,7 @@ public:
          case QspiClockSource_MCGFLL     : return SystemMcgFllClock;
          case QspiClockSource_MCGPLL     : return SystemMcgPllClock;
          case QspiClockSource_MCGPLLx2   : return 2*SystemMcgPllClock;
-         case QspiClockSource_IRC48M     : return McgInfo::irc48m_clock;
+         case QspiClockSource_IRC48M     : return SimInfo::irc48mClock;
          case QspiClockSource_OSCERCLK   : return Osc0Info::getOscerClock();
          case QspiClockSource_MCGIRCLK   : return McgInfo::getMcgIrClock();
          case QspiClockSource_USB1PFDCLK : break;

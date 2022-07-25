@@ -36,9 +36,10 @@
    <!ATTLIST indexedCategory name         ID           #REQUIRED>
    <!ATTLIST indexedCategory description  CDATA        #REQUIRED>
    <!ATTLIST indexedCategory toolTip      CDATA        #IMPLIED>
-   <!ATTLIST indexedCategory dim          CDATA        #REQUIRED>
+   <!ATTLIST indexedCategory dim          CDATA        "1">
    <!ATTLIST indexedCategory value        CDATA        #IMPLIED>
    <!ATTLIST indexedCategory constant     (false|true) #IMPLIED>
+   <!ATTLIST indexedCategory derived      (false|true) #IMPLIED>
 
 <!ELEMENT category ((%gui_items;|template)*) >
    <!ATTLIST category  constant     (false|true) #IMPLIED>
@@ -52,7 +53,7 @@
 <!ELEMENT intOption (for?) >
    <!ATTLIST intOption constant     (false|true)  #IMPLIED>
    <!ATTLIST intOption hidden       (false|true)  #IMPLIED>
-   <!ATTLIST intOption name          ID           #REQUIRED>
+   <!ATTLIST intOption name          ID           #IMPLIED>
    <!ATTLIST intOption key           CDATA        #IMPLIED>
    <!ATTLIST intOption origin        CDATA        #IMPLIED>
    <!ATTLIST intOption description   CDATA        #IMPLIED>
@@ -122,7 +123,7 @@
 <!ELEMENT stringOption (for?) >
    <!ATTLIST stringOption constant      (false|true) #IMPLIED>
    <!ATTLIST stringOption hidden        (false|true) #IMPLIED>
-   <!ATTLIST stringOption name          ID           #REQUIRED>
+   <!ATTLIST stringOption name          ID           #IMPLIED>
    <!ATTLIST stringOption key           CDATA        #IMPLIED>
    <!ATTLIST stringOption origin        CDATA        #IMPLIED>
    <!ATTLIST stringOption description   CDATA        #IMPLIED>
@@ -185,6 +186,7 @@
    <!ATTLIST choice name                      CDATA        #REQUIRED>
    <!ATTLIST choice requiresPeripheral        CDATA        #IMPLIED>
    <!ATTLIST choice isDefault                 (false|true) #IMPLIED>
+   <!ATTLIST choice data                      CDATA        #IMPLIED>
 
 <!ELEMENT binaryOption (for?, choice, choice)? >
    <!ATTLIST binaryOption constant      (false|true) #IMPLIED>
@@ -216,12 +218,32 @@
 
 <!ELEMENT template (#PCDATA|for)* >
    <!ATTLIST template namespace (info|usbdm|class|all)  "info" >
-   <!ATTLIST template name 		CDATA  					"" >
-   <!ATTLIST template dim  		CDATA  					"0" >
+   <!ATTLIST template name       CDATA                "" >
+   <!ATTLIST template dim        CDATA                "0" >
+   <!ATTLIST template condition  CDATA        #IMPLIED>
 
-<!ELEMENT for (#PCDATA|for)* >
-   <!ATTLIST for var         CDATA #REQUIRED >
-   <!ATTLIST for enumeration CDATA #REQUIRED >
+<!ELEMENT enumTemplate (#PCDATA|for)* >
+   <!ATTLIST enumTemplate namespace (info|usbdm|class|all)   "info" >
+   <!ATTLIST enumTemplate name        CDATA                  "" >
+   <!ATTLIST enumTemplate dim         CDATA                  "0" >
+   <!ATTLIST enumTemplate condition   CDATA                  #IMPLIED>
+   <!ATTLIST enumTemplate template    CDATA                  #IMPLIED>
+   <!ATTLIST enumTemplate enumRoot    CDATA                  #IMPLIED>
+   <!ATTLIST enumTemplate valueFormat CDATA                  #IMPLIED>
+
+<!ELEMENT clockCodeTemplate (#PCDATA|for)* >
+   <!ATTLIST clockCodeTemplate namespace (info|usbdm|class|all) "info" >
+   <!ATTLIST clockCodeTemplate name         CDATA               "" >
+   <!ATTLIST clockCodeTemplate dim          CDATA               "0" >
+   <!ATTLIST clockCodeTemplate condition    CDATA               #REQUIRED>
+   <!ATTLIST clockCodeTemplate enumRoot     CDATA               #REQUIRED>
+   <!ATTLIST clockCodeTemplate returnFormat CDATA               #IMPLIED>
+   <!ATTLIST clockCodeTemplate mask         CDATA               #IMPLIED>
+
+<!ELEMENT for (%gui_items;|template)* >
+   <!ATTLIST for keys                 CDATA        #REQUIRED>
+   <!ATTLIST for values               CDATA        #IMPLIED>
+   <!ATTLIST for dim                  CDATA        #IMPLIED>
 
 <!ELEMENT validate (param*) >
    <!ATTLIST validate class CDATA #REQUIRED>

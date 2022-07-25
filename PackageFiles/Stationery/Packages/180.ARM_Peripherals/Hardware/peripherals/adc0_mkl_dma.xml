@@ -9,14 +9,9 @@
    <constant name = "disable_peripheral" derived = "true" value = "adc->SC1[0] = ADC_SC1_ADCH(-1);"  />
    <xi:include href="_mapPinsOption.xml"/>
    
-   <choiceOption name="adc_cfg1_adiclk" description="Clock Source"
-      toolTip="Selects the clock source for the module">
-      <choice value="0" name="Bus clock" />
-      <choice value="1" name="Alternate clock 2 (e.g. BUSCLK/2, IRC48MCLK)" />
-      <choice value="2" name="Alternate clock (OSCERCLK)" />
-      <choice value="3" name="Asynchronous clock (ADACK)" isDefault="true" />
-   </choiceOption>
-
+   <aliasOption key="/SIM/adc0_cfg1_adiclk" constant="false" />
+   <dependency key="/SIM/adc0_cfg1_adiclk"/>
+   
    <choiceOption name="adc_cfg1_adiv" description="Clock Divide Select"
       toolTip="Selects the divide ratio used by the ADC to generate the internal clock ADCK.">
       <choice value="0" name="Divide by 1" isDefault="true" />
@@ -25,7 +20,7 @@
       <choice value="3" name="Divide by 8" />
    </choiceOption>
 
-   <floatOption name="adcInternalClock" 
+   <intOption name="adcInternalClock" 
       derived="true"
       constant="true"
       description="Frequency of Internal ADC clock"
@@ -34,7 +29,7 @@
       origin="Internal ADC clock"
       units="Hz"/>
 
-   <floatOption name="clockFrequency" 
+   <intOption name="clockFrequency" 
       constant="true"
       description="Frequency of ADC clock"
       toolTip="Determined from clock source and prescaler"
@@ -159,26 +154,6 @@
 
    <xi:include href="_irqOption.xml"/>
       
-   <template namespace="usbdm"><![CDATA[
-   #ifndef USBDM_ADC_CLOCK_SOURCES_DEFINED
-   #define USBDM_ADC_CLOCK_SOURCES_DEFINED
-      \t/**
-      \t * ADC input clock source.
-      \t */
-      \tenum AdcClockSource {
-      \t   AdcClockSource_Bus      = ADC_CFG1_ADICLK(0), //!< Bus Clock
-      \t#if defined(USB_CLK_RECOVER_IRC_EN_REG_EN_MASK)
-      \t   AdcClockSource_Irc48m   = ADC_CFG1_ADICLK(1), //!< IRC 48MHz clock
-      \t#else
-      \t   AdcClockSource_Busdiv2  = ADC_CFG1_ADICLK(1), //!< Bus Clock / 2
-      \t#endif
-      \t   AdcClockSource_Alt      = ADC_CFG1_ADICLK(2), //!< Alternate clock (ALTCLK)
-      \t   AdcClockSource_Asynch   = ADC_CFG1_ADICLK(3), //!< Asynchronous clock (ADACK Internal ADC clock source)
-      \t   AdcClockSource_Default  = AdcClockSource_Asynch
-      \t};
-   #endif\n\n
-   ]]></template>
-   
    <template><![CDATA[
       \t/**
       \t *  Get input clock frequency for ADC
@@ -198,7 +173,7 @@
       \t      case AdcClockSource_Busdiv2:
       \t         return SystemBusClock/2;
       \t#endif
-      \t      case AdcClockSource_Alt:
+      \t      case AdcClockSource_OscerClk:
       \t         return  Osc0Info::getOscerClock();;
       \t      case AdcClockSource_Asynch:
       \t         return 2000000; // Actually varies with ADLPC/ADHSC
@@ -213,7 +188,7 @@
       \t *  @return Frequency in Hz
       \t */
       \tstatic unsigned getInputClockFrequency() {
-      \t   return getInputClockFrequency(static_cast<AdcClockSource>(adc->CFG1 & ADC_CFG1_ADICLK_MASK));
+      \t   return SimInfo::getAdcClock(static_cast<AdcClockSource>(adc->CFG1 & ADC_CFG1_ADICLK_MASK));
       \t}\n\n
    ]]></template>
    
@@ -223,7 +198,7 @@
 
      \t//! Default value for ADCx_CFG1 register
      \tstatic constexpr uint32_t cfg1  = 
-     \t    ADC_CFG1_ADICLK($(adc_cfg1_adiclk))|
+     \t    ADC_CFG1_ADICLK($(/SIM/adc$(_instance)_cfg1_adiclk))|
      \t    ADC_CFG1_MODE($(adc_cfg1_mode))|
      \t    ADC_CFG1_ADLSMP($(adc_cfg1_adlsmp))|
      \t    ADC_CFG1_ADIV($(adc_cfg1_adiv))|

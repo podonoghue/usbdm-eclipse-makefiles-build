@@ -275,10 +275,6 @@
       </peripheral>
       <peripheral baseName="SIM"      instance=""         version="sim_mk22f51212">
          <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForSim" />
-         <param name="busFreq"      key="/SIM/busFreq"  value="60MHz" />
-         <param name="coreFreq"     key="/SIM/coreFreq" value="120MHz" />
-         <param name="flashFreq"    key="/SIM/flashFreq" value="25MHz" />
-         <param name="flexFreq"     key="/SIM/flexFreq" value="50MHz" />
       </peripheral>
       <peripheral baseName="SMC"      instance=""         version="smc_mk22f51212">
          <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForSmc" />

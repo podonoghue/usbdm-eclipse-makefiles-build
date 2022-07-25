@@ -3,6 +3,7 @@
 <!-- mgc_lite.xml -->
 
 <peripheralPage xmlns:xi="http://www.w3.org/2001/XInclude" name="MCG" description="Multipurpose Clock Generator">
+   
    <xi:include href="_default_instance.xml"/>
 
    <category name="LIRC" description="Low Speed Internal Reference Clock Sources [LIRC]"

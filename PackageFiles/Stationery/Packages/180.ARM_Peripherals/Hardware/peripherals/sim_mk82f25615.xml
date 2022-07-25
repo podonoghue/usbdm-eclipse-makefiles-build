@@ -7,6 +7,7 @@
    <xi:include href="_default_instance.xml"/>
 
    <xi:include href="_sim_rtc_independent.xml"/>
+   
    <!-- Oscillator signal for OSC2 input to MCG = IRC48 -->
    <constant name="osc2_clock"        value="/MCG/system_irc48m_clock" derived="true" />
    <constant name="osc2_description"  value="OSC2 - 48 MHz Internal Oscillator (OSCCLK1 = IRC48MCLK)" derived="true" />
@@ -73,13 +74,14 @@
          <choice value="3"  name="MCGIRCLK clock" />
       </choiceOption>
    
-      <intOption name="system_tpm_clock" 
+      <intOption name="system_tpm_clock"
+         derived="true" 
          constant="true"
          units="Hz"
          description="TPM Clock frequency"
          toolTip="Frequency of clock to TPM"
          value="0" />
-         
+      
       <choiceOption name="sim_sopt2_fbsl" 
          description="FlexBus security level"
          toolTip="This field affects what CPU operations can access off-chip via the FlexBus interface" >
@@ -443,7 +445,6 @@
          <choice value="0" name="FTM0_CH0 pin is FTM0 ch 0 output" />
          <choice value="1" name="FTM0_CH0 pin is FTM0 ch 0 output, modulated by FTM1 ch 1" />
       </binaryOption>
-   
    </category>
    
    <category name="SOPT9" description="TPM signals">
@@ -480,7 +481,6 @@
          <choice value="2" name="CMP1 output" />
          <choice value="3" name="USB start of frame pulse" />
       </choiceOption>
-   
    </category>
 
    <xi:include href="_simCommon.xml"/>
@@ -530,7 +530,7 @@
          toolTip="Sets the clock divider when the MCGFLLCLK, MCGPLLCLK, or IRC48M clock\n
          is the USB clock source.">
          <choice value="1" name="Multiply by 2 (div=0, frac=1)" />
-         <choice value="0" name="Multiply by 1 (div=0, frac=0)" />
+         <choice value="0" name="Multiply by 1 (div=0, frac=0)" isdefault="true" />
          <choice value="3" name="Multiply by 1 (div=1, frac=1)" />
          <choice value="5" name="Divide by 1.5 (div=2, frac=1)" />
          <choice value="2" name="Divide by 2 (div=1, frac=0)" />
@@ -551,8 +551,8 @@
          description="Peripheral Clock post-divider" 
          toolTip="Selects the post PLL/FLL clock divider for various peripherals (LPUART, TPM, FlexIO)">
          <choice value="1" name="Multiply by 2 (div=0, frac=1)" />
-         <choice value="0" name="Multiply by 1 (div=0, frac=0)" />
-         <choice value="3" name="Multiply by 1 (div=1, frac=1)"  isDefault="true" />
+         <choice value="0" name="Multiply by 1 (div=0, frac=0)" isdefault="true" />
+         <choice value="3" name="Multiply by 1 (div=1, frac=1)" />
          <choice value="5" name="Divide by 1.5 (div=2, frac=1)" />
          <choice value="2" name="Divide by 2 (div=1, frac=0)" />
          <choice value="7" name="Divide by 2 (div=3, frac=1)" />
@@ -573,8 +573,9 @@
          constant="true"
          units="Hz"
          description="Peripheral Post-divider Clock frequency/"
-         toolTip="Frequency of Peripheral Clock available to various peripherals"  />
-	 
+         toolTip="Frequency of Peripheral Clock available to various peripherals"  
+         max="75 MHz" />
+    
       <intOption name="system_core_clock." 
          units="Hz"
          description="System Core Clock"

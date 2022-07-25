@@ -2,6 +2,9 @@
 <!DOCTYPE peripheralPage SYSTEM "_menu.dtd" >
 <!-- rtc_tamper_wpon.xml -->
 
-<fragment xmlns:xi="http://www.w3.org/2001/XInclude">
-<xi:include href="rtc_war_rar.xml"/>
-</fragment>
+<peripheralPage xmlns:xi="http://www.w3.org/2001/XInclude" name="_instance" description="Real-time Clock">
+
+<xi:include href="rtc_base_war_rar.xml"/>
+<xi:include href="rtc_base.xml"/>
+
+</peripheralPage>
