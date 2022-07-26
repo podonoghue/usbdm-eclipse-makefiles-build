@@ -23,7 +23,6 @@
 <!-- ========== ADC clock sources =============================== -->
 
    <enumTemplate namespace="usbdm" condition="adc0_cfg1_adiclk" 
-      enumRoot="AdcClockSource"
       valueFormat="ADC_CFG1_ADICLK(%s)"
    ><![CDATA[    
       \t/**
@@ -38,7 +37,6 @@
    ]]></enumTemplate>
 
    <clockCodeTemplate condition="adc0_cfg1_adiclk"
-      enumRoot="AdcClockSource"
       returnFormat="%s"
    ><![CDATA[
       \t/**
@@ -144,7 +142,6 @@
    ]]></template>
 
    <enumTemplate namespace="usbdm" condition="sim_sopt1_osc32kout" 
-      enumRoot="SimErc32kClkoutPinSelect"
    ><![CDATA[    
       \t/**
       \t * %description
@@ -157,7 +154,6 @@
    ]]></enumTemplate>
    
    <clockCodeTemplate condition="sim_sopt1_osc32kout"
-      enumRoot="SimErc32kClkoutPinSelect"
    ><![CDATA[
       \t/**
       \t * Set %description
@@ -170,7 +166,6 @@
    ]]></clockCodeTemplate>
 
    <enumTemplate namespace="usbdm" condition="sim_sopt1_usbpower" 
-      enumRoot="SimUsbPower"
       valueFormat="(%s)"
    ><![CDATA[    
       \t/**
@@ -184,7 +179,6 @@
    ]]></enumTemplate>
 
    <clockCodeTemplate condition="sim_sopt1_usbpower"
-      enumRoot="SimUsbPower"
       mask="(SIM_SOPT1_USBREGEN_MASK|SIM_SOPT1_USBSSTBY_MASK|SIM_SOPT1_USBVSTBY_MASK)"
    ><![CDATA[
       \t/**
@@ -240,7 +234,6 @@
          
    <for keys="n" values=";0;1;2;3;4">
       <enumTemplate namespace="usbdm" condition="sim_sopt2_lpuart%(n)src" 
-         enumRoot="SimLpuart%(n)ClockSource"
       ><![CDATA[    
          \t/**
          \t * %description
@@ -253,7 +246,6 @@
       ]]></enumTemplate>
          
       <clockCodeTemplate condition="sim_sopt2_lpuart%(n)src"
-         enumRoot="SimLpuart%(n)ClockSource"
          returnFormat="%s"
       ><![CDATA[
          \t/**
@@ -336,7 +328,6 @@
    </for>         
          
    <enumTemplate namespace="usbdm" condition="sim_sopt2_tpmsrc" 
-      enumRoot="SimTpmClockSource"
    ><![CDATA[    
       \t/**
       \t * %description
@@ -349,7 +340,6 @@
    ]]></enumTemplate>
          
    <clockCodeTemplate condition="sim_sopt2_tpmsrc"
-      enumRoot="SimTpmClockSource"
       returnFormat="%s"
    ><![CDATA[
       \t/**
@@ -376,7 +366,6 @@
    ]]></clockCodeTemplate>
          
    <enumTemplate namespace="usbdm" condition="sim_sopt2_traceclksel" 
-      enumRoot="SimTraceClockoutSel"
    ><![CDATA[    
       \t/**
       \t * %description
@@ -389,7 +378,6 @@
    ]]></enumTemplate>
          
    <clockCodeTemplate condition="sim_sopt2_traceclksel"
-      enumRoot="SimTraceClockoutSel"
    ><![CDATA[
       \t/**
       \t * Set %description
@@ -428,7 +416,6 @@
    ]]></clockCodeTemplate>
          
    <enumTemplate namespace="usbdm" condition="sim_sopt2_clkoutsel" 
-      enumRoot="SimClkoutSel"
    ><![CDATA[    
       \t/**
       \t * %description
@@ -441,7 +428,6 @@
    ]]></enumTemplate>
          
    <clockCodeTemplate condition="sim_sopt2_clkoutsel" 
-      enumRoot="SimClkoutSel"
    ><![CDATA[
       \t/**
       \t * Set %description
@@ -454,7 +440,6 @@
    ]]></clockCodeTemplate>
          
    <enumTemplate namespace="usbdm" condition="sim_sopt2_pllfllsel" 
-      enumRoot="SimPeripheralClockSource"
    ><![CDATA[    
       \t/**
       \t * %description
@@ -467,7 +452,6 @@
    ]]></enumTemplate>
          
    <clockCodeTemplate condition="sim_sopt2_pllfllsel"
-      enumRoot="SimPeripheralClockSource"
       returnFormat="%s"
    ><![CDATA[
       \t/**
@@ -497,7 +481,6 @@
    ]]></clockCodeTemplate>
          
    <enumTemplate namespace="usbdm" condition="sim_sopt2_emvsimsrc" 
-      enumRoot="SimEmvsimClockSource"
    ><![CDATA[    
       \t/**
       \t * %description
@@ -510,7 +493,6 @@
    ]]></enumTemplate>
    
    <clockCodeTemplate condition="sim_sopt2_emvsimsrc"
-      enumRoot="SimEmvsimClockSource"
       returnFormat="%s"
    ><![CDATA[
       \t/**
@@ -537,7 +519,6 @@
    ]]></clockCodeTemplate>
 
    <enumTemplate namespace="usbdm" condition="sim_sopt2_sdhcsrc" 
-      enumRoot="SimSdhcClockSource"
    ><![CDATA[    
       \t/**
       \t * %description
@@ -550,7 +531,6 @@
    ]]></enumTemplate>
    
    <clockCodeTemplate condition="sim_sopt2_sdhcsrc"
-      enumRoot="SimSdhcClockSource"
       returnFormat="%s"
    ><![CDATA[
       \t/**
@@ -577,7 +557,6 @@
    ]]></clockCodeTemplate>
    
    <enumTemplate namespace="usbdm" condition="sim_sopt2_fbsl" 
-      enumRoot="SimFlexbusSecurity"
    ><![CDATA[    
       \t/**
       \t * %description
@@ -590,7 +569,6 @@
    ]]></enumTemplate>
          
    <clockCodeTemplate condition="sim_sopt2_fbsl"
-      enumRoot="SimFlexbusSecurity"
    ><![CDATA[
       \t/**
       \t * Set %description
@@ -613,7 +591,6 @@
    ]]></clockCodeTemplate>
    
    <enumTemplate namespace="usbdm" condition="sim_sopt2_flexiosrc" 
-      enumRoot="SimFlexioClockSource"
    ><![CDATA[    
       \t/**
       \t * %description
@@ -626,7 +603,6 @@
    ]]></enumTemplate>
    
    <clockCodeTemplate condition="sim_sopt2_flexiosrc"
-      enumRoot="SimFlexioClockSource"
       returnFormat="%s"
    ><![CDATA[
       \t/**
@@ -680,7 +656,6 @@
    ]]></clockCodeTemplate>
    
    <enumTemplate namespace="usbdm" condition="sim_sopt2_usbregen" 
-      enumRoot="SimUsbPhyRegEnable"
    ><![CDATA[    
       \t/**
       \t * %description
@@ -693,7 +668,6 @@
    ]]></enumTemplate>
          
    <clockCodeTemplate condition="sim_sopt2_usbregen"
-      enumRoot="SimUsbPhyRegEnable"
    ><![CDATA[
       \t/**
       \t * Set %description
@@ -706,7 +680,6 @@
    ]]></clockCodeTemplate>
    
    <enumTemplate namespace="usbdm" condition="sim_sopt2_usbslsrc" 
-      enumRoot="SimUsbSlowClock"
    ><![CDATA[    
       \t/**
       \t * %description
@@ -719,7 +692,6 @@
    ]]></enumTemplate>
          
    <clockCodeTemplate condition="sim_sopt2_usbslsrc"
-      enumRoot="SimUsbSlowClock"
    ><![CDATA[
       \t/**
       \t * Set %description
@@ -758,7 +730,6 @@
    <for keys="ftm" values="0;1;2;3">
       <for keys="flt" values="0;1;2;3">
          <enumTemplate namespace="usbdm" condition="sim_sopt4_ftm%(ftm)flt%(flt)" 
-            enumRoot="SimFtm%(ftm)Flt%(flt)"
          ><![CDATA[    
             \t/**
             \t * %description
@@ -771,7 +742,6 @@
          ]]></enumTemplate>
          
          <clockCodeTemplate condition="sim_sopt4_ftm%(ftm)flt%(flt)"
-            enumRoot="SimFtm%(ftm)Flt%(flt)"
          ><![CDATA[
             \t/**
             \t * Set %description
@@ -788,7 +758,6 @@
    <for keys="ftm" values="0;1;2;3">
       <for keys="ch" values="0;1;2;3">
          <enumTemplate namespace="usbdm" condition="sim_sopt4_ftm%(ftm)ch%(ch)src" 
-            enumRoot="SimFtm%(ftm)Ch%(ch)Src"
          ><![CDATA[    
             \t/**
             \t * %description
@@ -801,7 +770,6 @@
          ]]></enumTemplate>
          
          <clockCodeTemplate condition="sim_sopt4_ftm%(ftm)ch%(ch)src"
-            enumRoot="SimFtm%(ftm)Ch%(ch)Src"
          ><![CDATA[
             \t/**
             \t * Set %description
@@ -817,7 +785,6 @@
 
    <for keys="ftm" values="0;1;2;3">
       <enumTemplate namespace="usbdm" condition="sim_sopt4_ftm%(ftm)clksel" 
-         enumRoot="SimFtm%(ftm)ClkSel"
       ><![CDATA[    
          \t/**
          \t * %description
@@ -830,7 +797,6 @@
       ]]></enumTemplate>
          
       <clockCodeTemplate condition="sim_sopt4_ftm%(ftm)clksel"
-         enumRoot="SimFtm%(ftm)ClkSel"
       ><![CDATA[
          \t/**
          \t * Set %description
@@ -846,7 +812,6 @@
    <for keys="ftm" values="0;1;2;3">
       <for keys="trg" values="0;1;2;3">
          <enumTemplate namespace="usbdm" condition="sim_sopt4_ftm%(ftm)trg%(trg)src" 
-            enumRoot="SimFtm%(ftm)Trg%(trg)Src"
          ><![CDATA[    
             \t/**
             \t * %description
@@ -859,7 +824,6 @@
          ]]></enumTemplate>
          
          <clockCodeTemplate condition="sim_sopt4_ftm%(ftm)trg%(trg)src"
-            enumRoot="SimFtm%(ftm)Trg%(trg)Src"
          ><![CDATA[
             \t/**
             \t * Set %description
@@ -875,7 +839,6 @@
    
    <for keys="tpm" values="0;1;2;3">
       <enumTemplate namespace="usbdm" condition="sim_sopt4_tpm%(tpm)clksel" 
-         enumRoot="SimTpm%(tpm)ExternalClockInput"
       ><![CDATA[    
          \t/**
          \t * %description
@@ -888,7 +851,6 @@
       ]]></enumTemplate>
          
       <clockCodeTemplate condition="sim_sopt4_tpm%(tpm)clksel"
-         enumRoot="SimTpm%(tpm)ExternalClockInput"
       ><![CDATA[
          \t/**
          \t * Set %description
@@ -907,7 +869,6 @@
     <for keys="tpm" values="0;1;2;3">
       <for keys="ch" values="0;1;2;3">
          <enumTemplate namespace="usbdm" condition="sim_sopt4_tpm%(tpm)ch%(ch)src" 
-            enumRoot="SimTpm%(tpm)Ch%(ch)InputCaptureSource"
          ><![CDATA[    
             \t/**
             \t * %description
@@ -920,7 +881,6 @@
          ]]></enumTemplate>
    
          <clockCodeTemplate condition="sim_sopt4_tpm%(tpm)ch%(ch)src"
-            enumRoot="SimTpm%(tpm)Ch%(ch)InputCaptureSource"
          ><![CDATA[
             \t/**
             \t * Set %description
@@ -983,7 +943,6 @@
       ]]></clockCodeTemplate>
       
       <enumTemplate namespace="usbdm" condition="sim_sopt5_lpuart%(n)rxsrc" 
-         enumRoot="SimLpuart%(n)RxSrc"
       ><![CDATA[    
          \t/**
          \t * %description
@@ -996,7 +955,6 @@
       ]]></enumTemplate>
       
       <clockCodeTemplate condition="sim_sopt5_lpuart%(n)rxsrc"
-         enumRoot="SimLpuart%(n)RxSrc"
       ><![CDATA[
          \t/**
          \t * Set %description
@@ -1009,7 +967,6 @@
       ]]></clockCodeTemplate>
    
       <enumTemplate namespace="usbdm" condition="sim_sopt5_lpuart%(n)txsrc" 
-         enumRoot="SimLpuart%(n)TxSrc"
       ><![CDATA[    
          \t/**
          \t * %description
@@ -1022,7 +979,6 @@
       ]]></enumTemplate>
       
       <clockCodeTemplate condition="sim_sopt5_lpuart%(n)txsrc"
-         enumRoot="SimLpuart%(n)TxSrc"
       ><![CDATA[
          \t/**
          \t * Set %description
@@ -1037,7 +993,6 @@
 
    <for keys="n" values="0;1;2;3;4;5">
       <enumTemplate namespace="usbdm" condition="sim_sopt5_uart%(n)ode" 
-         enumRoot="SimUart%(n)Drive"
       ><![CDATA[    
          \t/**
          \t * %description
@@ -1050,7 +1005,6 @@
       ]]></enumTemplate>
 
       <clockCodeTemplate condition="sim_sopt5_uart%(n)ode"
-         enumRoot="SimUart%(n)Drive"
       ><![CDATA[
          \t/**
          \t * Set %description
@@ -1063,7 +1017,6 @@
       ]]></clockCodeTemplate>
    
       <enumTemplate namespace="usbdm" condition="sim_sopt5_uart%(n)rxsrc" 
-         enumRoot="SimUart%(n)RxSrc"
       ><![CDATA[    
          \t/**
          \t * %description
@@ -1076,7 +1029,6 @@
       ]]></enumTemplate>
       
       <clockCodeTemplate condition="sim_sopt5_uart%(n)rxsrc"
-         enumRoot="SimUart%(n)RxSrc"
       ><![CDATA[
          \t/**
          \t * Set %description
@@ -1089,7 +1041,6 @@
       ]]></clockCodeTemplate>
    
       <enumTemplate namespace="usbdm" condition="sim_sopt5_uart%(n)txsrc" 
-         enumRoot="SimUart%(n)TxSrc"
       ><![CDATA[    
          \t/**
          \t * %description
@@ -1102,7 +1053,6 @@
       ]]></enumTemplate>
       
       <clockCodeTemplate condition="sim_sopt5_uart%(n)txsrc"
-         enumRoot="SimUart%(n)TxSrc"
       ><![CDATA[
          \t/**
          \t * Set %description
@@ -1132,7 +1082,6 @@
 <!-- ========== SOPT7 =============================== -->
    <for keys="p" values=";0;1">
       <enumTemplate namespace="usbdm" condition="sim_sopt7_adc%(p)trigger" 
-         enumRoot="SimAdc%(p)TriggerMode"
          valueFormat="(%s)"
       ><![CDATA[    
          \t/**
@@ -1146,7 +1095,6 @@
       ]]></enumTemplate>
       
       <enumTemplate namespace="usbdm" condition="sim_sopt7_adc%(p)trgsel" 
-         enumRoot="SimAdc%(p)Trigger"
       ><![CDATA[    
          \t/**
          \t * %description
@@ -1192,7 +1140,6 @@
    <for keys="p" values="0;1;2;3">
       <for keys="ch" values="0;1;2;3;4;5;6;7">
          <enumTemplate namespace="usbdm" condition="sim_sopt8_ftm%(p)och%(ch)src" 
-            enumRoot="SimFtm%(p)Ch%(ch)OutputSrc"
          ><![CDATA[    
             \t/**
             \t * %description
@@ -1205,7 +1152,6 @@
          ]]></enumTemplate>
       
          <clockCodeTemplate condition="sim_sopt8_ftm%(p)och%(ch)src"
-            enumRoot="SimFtm%(p)Ch%(ch)OutputSrc"
          ><![CDATA[
             \t/**
             \t * Set %description
@@ -1218,6 +1164,54 @@
          ]]></clockCodeTemplate>
       </for>
    </for>
+   
+   <enumTemplate namespace="usbdm" condition="sim_sopt8_ftm_syncbits" 
+      valueFormat="%s"
+   ><![CDATA[    
+      \t/**
+      \t * %description
+      \t *
+      \t * %tooltip
+      \t */
+      \tenum %enumClass {
+      %body
+      \t};\n\n
+   ]]></enumTemplate>
+      
+   <clockCodeTemplate condition="sim_sopt8_ftm_syncbits"
+   ><![CDATA[
+      \t/**
+      \t * Set %description
+      \t *
+      \t * %tooltip
+      \t *
+      \t * @param mask Mask of bits made up from %enumClass values
+      \t */
+      \tstatic void setFtmSyncBits(uint32_t %enumParam) {
+      \t   sim->SOPT8 = sim->SOPT8 | %enumParam;
+      \t}
+         
+      \t/**
+      \t * Clear %description
+      \t *
+      \t * %tooltip
+      \t *
+      \t * @param mask Mask of bits made up from %enumClass values
+      \t */
+      \tstatic void clearFtmSyncBits(uint32_t %enumParam) {
+      \t   sim->SOPT8 = sim->SOPT8 & ~%enumParam;
+      \t}
+         
+      \t/**
+      \t * Clear all %description
+      \t *
+      \t * %tooltip
+      \t */
+      \tstatic void clearAllFtmSyncBits() {
+      \t   sim->SOPT8 = sim->SOPT8 & 
+      \t      ~(SIM_SOPT8_FTM0SYNCBIT_MASK|SIM_SOPT8_FTM1SYNCBIT_MASK|SIM_SOPT8_FTM2SYNCBIT_MASK|SIM_SOPT8_FTM3SYNCBIT_MASK);
+      \t}\n\n
+   ]]></clockCodeTemplate>
    
    <template condition="sim_sopt8_ftm0och0src" ><![CDATA[
       \t//! System Options Register 8
@@ -1236,7 +1230,6 @@
    <for keys="p" values="1;2">
       <for keys="Fn,FN,fn" values="ClkSel,CLKSEL,clksel;Ch0Src,CH0SRC,ch0src">
          <enumTemplate namespace="usbdm" condition="sim_sopt9_tpm%(p)%(fn)" 
-            enumRoot="SimTpm%(p)%(Fn)"
          ><![CDATA[    
             \t/**
             \t * %description
@@ -1249,7 +1242,6 @@
          ]]></enumTemplate>
       
          <clockCodeTemplate condition="sim_sopt9_tpm%(p)%(fn)" 
-            enumRoot="SimTpm%(p)%(Fn)"
          ><![CDATA[
             \t/**
             \t * Set %description
@@ -1278,7 +1270,6 @@
 
 <!-- ========== CLKDIV2 =============================== -->
    <enumTemplate namespace="usbdm" condition="sim_sopt2_usbsrc" 
-      enumRoot="SimUsbFullSpeedClockSource"
    ><![CDATA[    
       \t/**
       \t * %description
@@ -1291,7 +1282,6 @@
    ]]></enumTemplate>
    
    <clockCodeTemplate condition="sim_sopt2_usbsrc"
-      enumRoot="SimUsbFullSpeedClockSource"
    ><![CDATA[
       \t/**
       \t * Set %description
@@ -1351,7 +1341,7 @@
       \t            (((sim->CLKDIV2&SIM_CLKDIV2_USBFRAC_MASK)>>SIM_CLKDIV2_USBFRAC_SHIFT)+1))/
       \t            (((sim->CLKDIV2&SIM_CLKDIV2_USBDIV_MASK)>>SIM_CLKDIV2_USBDIV_SHIFT)+1);\n
    ]]></template>
-   <template condition="!sim_clkdiv2_usb[]" ><![CDATA[
+   <template condition="!sim_clkdiv2_usb[]&amp;&amp;sim_sopt2_usbsrc" ><![CDATA[
       \t      case SimUsbFullSpeedClockSource_$(sim_sopt2_usbsrc[].enum[1]) : return getPeripheralClock();
    ]]></template>
    <template condition="sim_sopt2_usbsrc" ><![CDATA[
@@ -1361,7 +1351,6 @@
    
 
    <enumTemplate namespace="usbdm" condition="sim_clkdiv2_usb" 
-      enumRoot="SimUsbClockDivider"
       valueFormat="(%s)"
    ><![CDATA[    
       \t/**

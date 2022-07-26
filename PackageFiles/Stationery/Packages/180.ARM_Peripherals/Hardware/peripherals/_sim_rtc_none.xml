@@ -15,8 +15,33 @@
    <constant name="osc0_description" value="OSC0 - Main System Oscillator (OSCCLK0)" derived="true" />
 
 
+   <for keys="n" dim="/SIM/numberOfClockSettings">
+      <choiceOption name="mcg_c7_oscsel[%(n)]"
+         target="mcg_erc_clock[%(n)]"
+         hidden="true"
+         description="MCG External reference clock source" 
+         toolTip="Source for MCG External Reference Clock">
+         <choice value="0" ref="/OSC0/osc_clock"          name="OSC0 Clock"      />
+      </choiceOption>
+
+      <intOption name="mcg_erc_clock[%(n)]" 
+         constant="true"
+         hidden="true"
+         units="Hz" 
+         derived="true" 
+         description="Frequency of MCG External reference clock"
+         toolTip="External reference clock used by MCG" 
+         value="32768" />
+   </for>
+   
    <!-- ERCCLK32K Sources -->
-   <constant name="erclk32k_source0"       value="/OSC0/osc32k_clock"            derived="true" />
+   <choiceOption name="sim_sopt1_osc32ksel_Fixed"
+      target="system_erclk32k_clock"
+      hidden="true"
+      description="ERCLK32K clock source" 
+      toolTip="Clock source for External 32k Reference Clock [ERCLK32K]">
+      <choice value="0" name="OSC0 in low range (OSC32KCLK)"  ref="/OSC0/osc32k_clock"          enum="Osc32kClk" code="Osc0Info::getOsc32kClock()"  />
+   </choiceOption>
 
    <intOption name="system_erclk32k_clock" 
       hidden="true"
@@ -25,7 +50,7 @@
       derived="true" 
       description="Frequency of External 32k Reference Clock [ERCLK32K]"
       toolTip="External reference clock available to some peripherals (usually ~32kHz)" 
-      origin="Derived from OSC32KCLK, RTCCLK or LPO" 
+      origin="Derived from OSC32KCLK, RTC or LPO" 
       value="32768" />
       
 </fragment>

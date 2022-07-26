@@ -38,6 +38,7 @@
    <for keys="n" values="0;1">
       <choiceOption name="adc%(n)_cfg1_adiclk" description="ADC%(n) Clock Source"
          hidden="true"
+         enumStem="AdcClockSource"
          target="system_adc%(n)_clock"
          toolTip="Clock source for the ADC module" >
          <choice value="0" name="Bus clock"                   ref="system_bus_clock"       enum="Bus"       code="SystemBusClock"            />
@@ -48,20 +49,21 @@
    
       <intOption name="system_adc%(n)_clock"  
          hidden="true"
-         constant="true" 
+         constant="true"
+         derived="true" 
          origin="ADC%(n) clock"
          units="Hz"
-         description="Frequency of ADC Clock"
-         toolTip="XXX" 
-         value="0" />
+         description="Frequency of ADC Clock" />
    </for>
    
    <category name="SOPT1" description="RTC clocks" >
 
+      <stringOption name="sim_sopt1_ramsize" />
       <aliasOption key="sim_sopt1_osc32ksel" constant="false" />
       <aliasOption key="system_erclk32k_clock" />
       
       <choiceOption name="sim_sopt1_usbpower" 
+         enumStem="SimUsbPower"
          description="USB voltage regulator power control"
          toolTip="Controls when the USB voltage regulator is enabled in\n
         (RUN), (STOP, VLPS, LLS and VLLS) or (VLPR and VLPW) modes">
@@ -73,6 +75,7 @@
       </choiceOption>
 
       <choiceOption name="sim_sopt1_osc32kout" 
+         enumStem="SimErc32kClkoutPinSelect"
          description="ERCLK32K Clock Output"
          toolTip="Outputs the ERCLK32K on the selected pin in all modes of operation">
          <choice value="0"  name="ERCLK32K is not output"      enum="None"  isDefault="true" />
@@ -97,6 +100,7 @@
       <aliasOption key="/MCG/system_mcgirclk_clock[0]" optional="true" />
       
       <choiceOption name="sim_sopt2_lpuartsrc" 
+         enumStem="SimLpuartClockSource"
          target="system_lpuart_clock"
          description="LPUART Clock select"
          toolTip="Selects the clock source for the transmit and receive clock\n
@@ -126,9 +130,8 @@
             derived="true"
             description="UART%(n) Clock source"
             toolTip="Fixed clock source for UART" >
-            <choice value="0"  name="%(name)" enum="%(enum)" ref="%(ref)" code="%(code)" />
+            <choice value="0"  name="%(name)" ref="%(ref)" code="%(code)" />
          </choiceOption>
-      
          
          <intOption name="system_uart%(n)_clock" 
             constant="true"
@@ -140,14 +143,16 @@
       </for>
       
       <choiceOption name="sim_sopt2_fbsl" 
+         enumStem="SimFlexbusSecurity"
          description="FlexBus off-chip access security level"
          toolTip="Permitted CPU accesses off-chip via the FlexBus interface" >
          <choice value="0"  name="None - All accesses are disallowed"                enum="None"     />
          <choice value="2"  name="Data - Data only accesses allowed"                 enum="DataOnly" />
-         <choice value="3"  name="All - Data and instruction accesses are allowed"  enum="All"      />
+         <choice value="3"  name="All - Data and instruction accesses are allowed"   enum="All"      />
       </choiceOption>
       
       <choiceOption name="sim_sopt2_clkoutsel" 
+         enumStem="SimClkoutSel"
          description="CLKOUT pin clock"
          toolTip="Clock to output on the CLKOUT pin." >
          <choice value="0"  name="FlexBus CLKOUT"      enum="FlexBusClk"    />
@@ -160,6 +165,7 @@
       </choiceOption>
       
       <binaryOption name="sim_sopt2_traceclksel" 
+         enumStem="SimTraceClockoutSel"
          description="Debug trace clock select"
          toolTip="Selects the core/system clock or MCG output clock (MCGOUTCLK)\n
              as the trace clock source" >
@@ -171,6 +177,7 @@
    <category name="SOPT4" description="FTM signals">
       
       <binaryOption name="sim_sopt4_ftm0trg0src" 
+         enumStem="SimFtm0Trg0Src"
          description="FTM0 Hardware Trigger 0 Source"
          toolTip="Source of FTM hardware trigger 0" >
          <choice value="0"  name="CMP0 output"        enum="Cmp0" isDefault="true" />
@@ -178,6 +185,7 @@
       </binaryOption>
       
       <binaryOption name="sim_sopt4_ftm0trg1src" 
+         enumStem="SimFtm0Trg1Src"
          description="FTM0 Hardware Trigger 1 Source"
          toolTip="Source of FTM hardware trigger 1" >
          <choice value="0"  name="PDB output trigger 1" enum="PdbTrigger1" isDefault="true" />
@@ -185,6 +193,7 @@
       </binaryOption>
       
       <choiceOption name="sim_sopt4_ftm3trg0src" 
+         enumStem="SimFtm3Trg0Src"
          description="FTM3 Hardware Trigger 0 Source"
          toolTip="Source of FTM hardware trigger 0" 
          constant="true" >
@@ -192,6 +201,7 @@
       </choiceOption>
       
       <choiceOption name="sim_sopt4_ftm3trg1src" 
+         enumStem="SimFtm3Trg1Src"
          description="FTM3 Hardware Trigger 1 Source"
          toolTip="Source of FTM hardware trigger 1" 
          constant="true" >
@@ -200,6 +210,7 @@
       
       <for keys="p" values="0;1;2;3">
          <binaryOption name="sim_sopt4_ftm%(p)clksel" 
+            enumStem="SimFtm%(p)ClkSel"
             description="FTM%(p) External Clock Pin"
             toolTip="External pin used to drive the clock to the FTM module.">
             <choice value="0"  name="FTM_CLKIN0 pin" enum="0" isDefault="true" />
@@ -208,6 +219,7 @@
       </for>
    
       <choiceOption name="sim_sopt4_ftm1ch0src" 
+         enumStem="SimFtm1Ch0Src"
          description="FTM 1 channel 0 input capture source"
          toolTip="Source for FTM channel 0 input capture\n
             NOTE: When the FTM is not in input capture mode, clear this field">
@@ -218,6 +230,7 @@
       </choiceOption>
       
       <choiceOption name="sim_sopt4_ftm2ch0src" 
+         enumStem="SimFtm2Ch0Src"
          description="FTM2 channel 0 input capture source"
          toolTip="Source for FTM channel 0 input capture\n
             NOTE: When the FTM is not in input capture mode, clear this field">
@@ -227,6 +240,7 @@
       </choiceOption>
       
       <binaryOption name="sim_sopt4_ftm2ch1src" 
+         enumStem="SimFtm2Ch1Src"
          description="FTM2 channel 1 input capture source"
          toolTip="Source for FTM channel 1 input capture\n
             NOTE: When the FTM is not in input capture mode, clear this field">
@@ -236,18 +250,21 @@
    
       <for keys="ftmNum" values="0;1;2;3">
          <binaryOption key="sim_sopt4_ftm%(ftmNum)flt0" 
+            enumStem="SimFtm%(ftmNum)Flt0"
             description="FTM%(ftmNum) Fault 0 Select"
             toolTip="Source of FTM fault input 0" >
             <choice value="0"  name="FTM%(ftmNum)_FLT0 pin" enum="Ftm%(ftmNum)Fault0" isDefault="true" />
-            <choice value="1"  name="CMP0 output"   enum="Cmp0" />
+            <choice value="1"  name="CMP0 output"           enum="Cmp0" />
          </binaryOption>
       </for>
+      
       <for keys="ftmNum" values="0">
          <binaryOption key="sim_sopt4_ftm%(ftmNum)flt1" 
+            enumStem="SimFtm%(ftmNum)Flt1"
             description="FTM%(ftmNum) Fault 1 Select"
             toolTip="Source of FTM fault input 1" >
             <choice value="0"  name="FTM%(ftmNum)_FLT1 pin" enum="Ftm%(ftmNum)Fault1" isDefault="true" />
-            <choice value="1"  name="CMP1 output"   enum="Cmp1" />
+            <choice value="1"  name="CMP1 output"           enum="Cmp1" />
          </binaryOption>
       </for>
    </category>
@@ -255,6 +272,7 @@
    <category name="SOPT5" description="UART signals">
       
       <choiceOption name="sim_sopt5_lpuart0rxsrc" 
+         enumStem="SimLpuart0RxSrc"
          description="LPUART 0 receive data source"
          toolTip="Source for the LPUART receive data">
          <choice value="0" name="Rx pin"        enum="RxPin"  isDefault="true" />
@@ -264,6 +282,7 @@
       
       <for keys="n" values="0;1">
          <choiceOption key="sim_sopt5_uart%(n)rxsrc" 
+            enumStem="SimUart%(n)RxSrc"
             description="UART %(n) receive data source"
             toolTip="Source for the UART receive data">
             <choice value="0" name="Rx pin"        enum="RxPin"  isDefault="true" />
@@ -272,6 +291,7 @@
          </choiceOption>
       
          <choiceOption key="sim_sopt5_uart%(n)txsrc" 
+            enumStem="SimUart%(n)TxSrc"
             description="UART %(n) transmit data source"
             toolTip="Source for the UART transmit data">
             <choice value="0" name="Tx pin"     isDefault="true"         enum="Direct" />
@@ -284,6 +304,7 @@
    <category name="SOPT7" description="ADC signals">
       <for keys="adc" values="0;1">
          <choiceOption key="sim_sopt7_adc%(adc)trigger" 
+            enumStem="SimAdc%(adc)TriggerMode"
             description="ADC%(adc) trigger mode"
             toolTip="Alternative conversion triggers for ADC\n
                _Pdb              - ADC is triggered by PDB\n
@@ -295,6 +316,7 @@
          </choiceOption>
       
          <choiceOption key="sim_sopt7_adc%(adc)trgsel"
+            enumStem="SimAdc%(adc)Trigger"
             description="ADC%(adc) trigger"
             toolTip="ADC Trigger source in STOP and VLPS modes, or when ADC Alternative Trigger is active">
             <choice value="0"  name="External trigger pin input (PDB0_EXTRG)" enum="External" isDefault="true" />
@@ -318,6 +340,7 @@
    <category name="SOPT8" description="FTM signals">
       <for keys="ch" values="0;1;2;3;4;5;6;7">
          <binaryOption key="sim_sopt8_ftm0och%(ch)src" 
+            enumStem="SimFtm0Ch%(ch)OutputSrc"
             description="FTM0 channel %(ch) output source" 
             toolTip="Allows modulation of FTM output">
             <choice value="0" name="FTM0 ch %(ch) direct"                 enum="Direct"             isDefault="true" />
@@ -327,24 +350,39 @@
 
       <for keys="ch" values="0;1;2;3;4;5;6;7">
          <binaryOption key="sim_sopt8_ftm3och%(ch)src" 
+            enumStem="SimFtm3Ch%(ch)OutputSrc"
             description="FTM3 channel %(ch) output source"  
             toolTip="Allows modulation of FTM output">
             <choice value="0" name="FTM3 ch %(ch) direct"                 enum="Direct"             isDefault="true" />
             <choice value="1" name="FTM3 ch %(ch) modulated by FTM2 ch 1" enum="ModulatedByFtm2Ch1" />
          </binaryOption>
       </for>
+      
+      <choiceOption key="sim_sopt8_ftm_syncbits" 
+         enumStem="FtmSync"
+         hidden="true"
+         description="FTM Hardware Trigger 0 Software Asserts"
+         toolTip="This allows software to assert the hardware trigger (TRIG0) FTM inputs\n
+                  Use setFtmSyncBits() to assert TRIG0 input on multiple FTMs\n
+                  Use clearFtmSyncBits() or clearAllFtmSyncBits() to allow other trigger sources to assert">
+         <choice value="SIM_SOPT8_FTM0SYNCBIT_MASK" name="FTM0 trigger mask" enum="Ftm0" />
+         <choice value="SIM_SOPT8_FTM1SYNCBIT_MASK" name="FTM1 trigger mask" enum="Ftm1" />
+         <choice value="SIM_SOPT8_FTM2SYNCBIT_MASK" name="FTM2 trigger mask" enum="Ftm2" />
+         <choice value="SIM_SOPT8_FTM3SYNCBIT_MASK" name="FTM3 trigger mask" enum="Ftm3" />
+      </choiceOption>
    </category>
 
    <for keys="n" dim="/SIM/numberOfClockSettings" >
       <aliasCategoryOption key="/MCG/ClockConfig[%(n)]" derived="true" constant="true" >
       
-      
          <choiceOption name="sim_sopt2_pllfllsel[%(n)]"
+            enumStem="SimPeripheralClockSource"
+            target="system_peripheral_clock[%(n)]"
             description="Peripheral Clock"
             toolTip="Clock for various peripherals (LPUART, TPM etc.)">
-            <choice value="0"  name="MCGFLLCLK clock" enum="McgFllClk"  code="SystemMcgFllClock"     isDefault="true" />
-            <choice value="1"  name="MCGPLLCLK clock" enum="McgPllClk"  code="SystemMcgPllClock"     />
-            <choice value="3"  name="IRC48 MHz clock" enum="Irc48mClk"  code="irc48mClock" />
+            <choice value="0"  name="MCGFLLCLK clock" ref="/MCG/system_mcgfllclk_clock[%(n)]" enum="McgFllClk"  code="SystemMcgFllClock"     isDefault="true" />
+            <choice value="1"  name="MCGPLLCLK clock" ref="/MCG/system_mcgpllclk_clock[%(n)]" enum="McgPllClk"  code="SystemMcgPllClock"     />
+            <choice value="3"  name="IRC48 MHz clock" ref="/SIM/system_irc48m_clock"          enum="Irc48mClk"  code="irc48mClock"           />
          </choiceOption>
    
          <intOption name="system_peripheral_clock[%(n)]"
@@ -355,6 +393,7 @@
             toolTip="Frequency of Peripheral Clock available to various peripherals"  />
 	 
          <choiceOption name="sim_sopt2_usbsrc[%(n)]" 
+            enumStem="SimUsbFullSpeedClockSource"
             description="USB Clock"
             toolTip="Source for the USB clock">
             <choice value="0"  name="External bypass clock (USB_CLKIN)" enum="External" />
@@ -370,6 +409,7 @@
             value="0" />
     
          <choiceOption name="sim_clkdiv2_usb[%(n)]"
+            enumStem="SimUsbClockDivider"
             description="USB clock divider (SIM_CLKDIV2)" 
             toolTip="Sets the clock divider when MCGFLLCLK, MCGPLLCLK, or IRC48M clock\n
                      is the USB clock source[%(n)]">
@@ -395,21 +435,21 @@
             units="Hz"
             description="System Core Clock"
             toolTip="Clocks the ARM Cortex-M4 core and bus masters"
-            value="80 MHz" enum="SystemCoreClock" />
+            value="80 MHz" />
       
          <intOption name="system_bus_clock[%(n)]" 
             units="Hz"
             description="System Bus Clock"
             toolTip="Clocks the bus slaves and peripherals\n
                      Must be &lt;= Core Clock frequency and an integer divisor"
-            value="40 MHz" enum="SystemBusClock" />
+            value="40 MHz" />
    
          <intOption name="system_flexbus_clock[%(n)]" 
             units="Hz"
             description="System Flexbus Clock"
             toolTip="Clocks the flexbus interface\n
                      Must be &lt;= Bus Clock frequency"
-            value="26666666" enum="SystemFlexClock" />
+            value="26666666" />
       
          <intOption name="system_flash_clock[%(n)]" 
             units="Hz"
@@ -417,7 +457,7 @@
             toolTip="Clocks the flash memory\n
                      Must be an integer divisor of the Core Clock.\n
                      Must be &lt;= Bus Clock frequency[%(n)]"
-            value="26666666" enum="SystemFlashClock" />
+            value="26666666" />
       
          <category name="CLKDIV1" description="System Clock Dividers">
             <intOption name="sim_clkdiv1_outdiv1[%(n)]" 

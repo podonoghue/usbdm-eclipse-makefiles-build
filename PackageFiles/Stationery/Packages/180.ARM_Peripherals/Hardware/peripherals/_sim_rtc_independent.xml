@@ -14,10 +14,6 @@
    <constant name="osc0_peripheral"  value="/OSC0" derived="true" />
    <constant name="osc0_description" value="OSC0 - Main System Oscillator (OSCCLK0)" derived="true" />
 
-   <!-- Oscillator signal for OSC1 input to MCG = RTC -->
-   <constant name="osc1_clock"       value="/RTC/osc_clock" derived="true" />
-   <constant name="osc1_description" value="OSC1 - 32 kHz RTC Oscillator (RTC_32K)" derived="true" />
-
    <!-- Uses RTC EXTAL32/XTAL32 pins -->
    <intOption name="rtc_input_freq"
       hidden="true"
@@ -34,9 +30,8 @@
          hidden="true"
          description="MCG External reference clock source" 
          toolTip="Source for MCG External Reference Clock">
-         <choice value="0" ref="/OSC0/osc_clock" name="OSC0 Clock"      />
-         <choice value="2" ref="/RTC/osc_clock" name="RTC 32kHz clock" />
-         <choice value="3" ref="v" name="LPO 1kHz clock"  />
+         <choice value="0" ref="/OSC0/osc_clock"          name="OSC0 Clock"      />
+         <choice value="2" ref="/RTC/osc_clock"           name="RTC 32kHz clock" />
       </choiceOption>
 
       <intOption name="mcg_erc_clock[%(n)]" 
@@ -50,17 +45,14 @@
    </for>
    
    <!-- ERCCLK32K Sources -->
-   <constant name="erclk32k_source0"       value="/OSC0/osc32k_clock"            derived="true" />
-   <constant name="erclk32k_source2"       value="/RTC/osc_clock"                derived="true" />
-   <constant name="erclk32k_source3"       value="/PMC/system_low_power_clock"   derived="true" />
-
    <choiceOption name="sim_sopt1_osc32ksel"
+      target="system_erclk32k_clock"
       hidden="true"
       description="ERCLK32K clock source" 
       toolTip="Clock source for External 32k Reference Clock [ERCLK32K]">
-      <choice value="0" name="OSC0 in low range (OSC32KCLK)"  enum="Osc32kClk" code="Osc0Info::getOsc32kClock()"  />
-      <choice value="2" name="RTC 32kHz clock"                enum="Rtc32kClk" code="RtcInfo::getExternalClock()" />
-      <choice value="3" name="LPO 1kHz clock"                 enum="LpoClk"    code="1000"                           isDefault="true"/>
+      <choice value="0" name="OSC0 in low range (OSC32KCLK)"  ref="/OSC0/osc32k_clock"          enum="Osc32kClk" code="Osc0Info::getOsc32kClock()"  />
+      <choice value="2" name="RTC 32kHz clock"                ref="/RTC/osc_clock"              enum="Rtc32kClk" code="RtcInfo::getExternalClock()" />
+      <choice value="3" name="LPO 1kHz clock"                 ref="/PMC/system_low_power_clock" enum="LpoClk"    code="1000"                           isDefault="true"/>
    </choiceOption>
 
    <intOption name="system_erclk32k_clock" 
@@ -70,16 +62,17 @@
       derived="true" 
       description="Frequency of External 32k Reference Clock [ERCLK32K]"
       toolTip="External reference clock available to some peripherals (usually ~32kHz)" 
-      origin="Derived from OSC32KCLK, RTCCLK or LPO" 
+      origin="Derived from OSC32KCLK, RTC or LPO" 
       value="32768" />
       
-   <binaryOption name="sim_sopt2_rtcclkoutsel" 
+   <choiceOption name="sim_sopt2_rtcclkoutsel"
+      target="rtc_clkout" 
       hidden="true"
       description="RTC clock out [RTC_CLKOUT pin]"
       toolTip="Clock output on the RTC_CLKOUT pin">
-      <choice value="0"  name="RTC 1 Hz clock"                  enum="1Hz"   />
-      <choice value="1"  name="RTC 32kHz clock (from RTC_OSC)"  enum="32kHz" isDefault="true" />
-   </binaryOption>
+      <choice value="0"  name="RTC 1 Hz clock"                  ref="/RTC/rtc_1hz_clock"      enum="1Hz"   />
+      <choice value="1"  name="RTC 32kHz clock (from RTC_OSC)"  ref="/RTC/rtcclk_gated_clock" enum="32kHz" isDefault="true" />
+   </choiceOption>
       
    <intOption name="rtc_clkout"
       hidden="true"

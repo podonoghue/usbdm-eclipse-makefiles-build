@@ -50,11 +50,11 @@
    <aliasOption key="/SIM/numberOfClockSettings" />     
 
    <for keys="n" dim="/SIM/numberOfClockSettings">
-      <category key="ClockConfig[%(n)]"
+      <categoryOption key="ClockConfig[%(n)]"
          description="Clock configuration" 
          toolTip="Clock configurations for different run modes"
          value="ClockConfig_[%(n)]" 
-         disabledValue="Disabled"  >
+         disabledValue="Disabled" >
          
          <binaryOption key="enableClockConfiguration[%(n)]"
             description="Enable this clock settings"
@@ -372,9 +372,9 @@
                <aliasOption key="mcg_c8_cme1[%(n)]" optional="true" />
             </category>
       
-            </category>
        
-      </category>
+         </category>
+      </categoryOption>
    </for>
    
    <projectActionList id = "mcg_files" >
@@ -513,10 +513,10 @@
          \t   {  // $(ClockConfig[%(n)]) ($(clock_mode[%(n)]))
          \t      
          \t      //! SIM CLKDIV1 System Clock Divider Register 1
-         \t      SIM_CLKDIV1_OUTDIV4($(/SIM/sim_clkdiv1_outdiv4[%(n)]))|  // Flash clock
-         \t      SIM_CLKDIV1_OUTDIV3($(/SIM/sim_clkdiv1_outdiv3[%(n)]))|  // FlexBus clock
-         \t      SIM_CLKDIV1_OUTDIV2($(/SIM/sim_clkdiv1_outdiv2[%(n)]))|  // Bus clock
-         \t      SIM_CLKDIV1_OUTDIV1($(/SIM/sim_clkdiv1_outdiv1[%(n)])),  // Core/system clock
+         \t      SIM_CLKDIV1_OUTDIV4($(/SIM/sim_clkdiv1_outdiv4[%(n)]:0))|  // Flash clock
+         \t      SIM_CLKDIV1_OUTDIV3($(/SIM/sim_clkdiv1_outdiv3[%(n)]:0))|  // FlexBus clock
+         \t      SIM_CLKDIV1_OUTDIV2($(/SIM/sim_clkdiv1_outdiv2[%(n)]:0))|  // Bus clock
+         \t      SIM_CLKDIV1_OUTDIV1($(/SIM/sim_clkdiv1_outdiv1[%(n)]:0)),  // Core/system clock
               
          \t      //! Clock Mode
          \t      McgInfo::$(clock_mode[%(n)]),

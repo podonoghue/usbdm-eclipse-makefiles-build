@@ -4,19 +4,19 @@
 
 <peripheralPage xmlns:xi="http://www.w3.org/2001/XInclude" name="_instance" description="Multipurpose Clock Generator">
 
-   <indexedCategory name="DummyClockConfig."  dim="/SIM/numberOfClockSettings"
-         description="Clock configuration" 
-         hidden="true"
-         constant="true"
-         derived="true"         
-         toolTip="Clock configurations for different run modes"
-         value="ClockConfig_."  >
+   <for keys="n" dim="/SIM/numberOfClockSettings">
+      <category name=""
+            hidden="true"
+            constant="true"
+            derived="true" >
 
-   <!-- mcg_c7_oscsel. not used -->
-   <!-- mcg_c8_cme1. not used -->
-   <!-- mcg_c8_locre1. not used -->
-   </indexedCategory>
-   
+         <!-- mcg_c7_oscsel. not used -->
+         <!-- mcg_c8_cme1. not used -->
+         <!-- mcg_c8_locre1. not used -->
+         
+      </category>
+   </for>
+
    <binaryOption name="mcg_c2_erefs0"
       description="External Reference Select" 
       toolTip="Determines whether a clock or crystal is used for the external reference clock"
@@ -32,7 +32,7 @@
       <choice value="0" name="Low power" isDefault="true"/>
       <choice value="1" name="High gain" />
    </binaryOption>
-   
+
    <validate
       class="net.sourceforge.usbdm.deviceEditor.validators.ClockValidator_MCG_no_pll" dim="/SIM/numberOfClockSettings" >
       <param type="long" value="1" />              <!-- mcg_c4_drst_drs max -->
