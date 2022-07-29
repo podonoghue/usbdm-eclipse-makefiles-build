@@ -18,7 +18,7 @@
       <copy source="Snippets/cmt-sirc-example.cpp"  target="Snippets/cmt-sirc-example.cpp"  overwrite="true" derived="true" />
    </projectActionList>
    
-   <template name="/CMT/declarations" namespace="all"  ><![CDATA[
+   <template key="/CMT/declarations" namespace="all"  ><![CDATA[
    \t/**
    \t * Class representing $(_name)
    \t */

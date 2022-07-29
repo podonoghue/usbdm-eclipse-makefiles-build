@@ -15,7 +15,7 @@
    
    <choiceOption name="rcm_rpfc_rstfltsrw" 
       description="Reset pin filter select in run and wait modes"
-      toolTip="Selects how the reset pin filter is enabled in run and wait modes.">
+      toolTip="Selects how the reset pin filter is enabled in run and wait modes">
       <choice value="0" name="All filtering disabled" />
       <choice value="1" name="Bus clock filter enabled for normal operation" />
       <choice value="2" name="LPO clock filter enabled for normal operation" />
@@ -31,7 +31,7 @@
 
    <intOption name="rcm_rpfw_rstfltsel" 
       description="Reset pin filter bus clock select" 
-      toolTip="Selects the reset pin bus clock filter width."
+      toolTip="Selects the reset pin bus clock filter width"
       value="1" min="1" max="32" offset="-1" />
 
    <template><![CDATA[

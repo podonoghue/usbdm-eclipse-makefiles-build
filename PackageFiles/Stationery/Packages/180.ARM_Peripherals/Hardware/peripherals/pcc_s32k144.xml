@@ -64,63 +64,75 @@
    \t};\n\n
 ]]></template>
 
-<choiceOption key="pcc_$(instance::tolower)" 
-   description="Clock to $(instance::toUpper)"
-   toolTip="Default clock for $(instance::toUpper)">
-   <for 
-      var="instance" 
-      enumeration="
-         Ftm0, Ftm1, Ftm2, Ftm3, 
-         Enet"
-   />
-   <choice value="PccDiv1Clock_Disabled"                   name="Disabled" />
-   <choice value="PCC_PCCn_CGC_MASK|PccDiv1Clock_Sosc"     name="SOSCDIV1_CLK" />
-   <choice value="PCC_PCCn_CGC_MASK|PccDiv1Clock_Sirc"     name="SIRCDIV1_CLK" />
-   <choice value="PCC_PCCn_CGC_MASK|PccDiv1Clock_Firc"     name="FIRCDIV1_CLK" isDefault="true" />
-   <choice value="PCC_PCCn_CGC_MASK|PccDiv1Clock_Spll"     name="SPLLDIV1_CLK" />
-</choiceOption>
+<for keys = "instance,  INSTANCE"
+     values="ftm0,      FTM0;
+             ftm1,      FTM1;
+             ftm2,      FTM2;
+             ftm3,      FTM3;
+             enet,      ENET;>
+   <choiceOption key="pcc_%(instance)" 
+      description="Clock to %(INSTANCE)"
+      toolTip="Default clock for %(INSTANCE)">
+      <choice value="PccDiv1Clock_Disabled"                   name="Disabled" />
+      <choice value="PCC_PCCn_CGC_MASK|PccDiv1Clock_Sosc"     name="SOSCDIV1_CLK" />
+      <choice value="PCC_PCCn_CGC_MASK|PccDiv1Clock_Sirc"     name="SIRCDIV1_CLK" />
+      <choice value="PCC_PCCn_CGC_MASK|PccDiv1Clock_Firc"     name="FIRCDIV1_CLK" isDefault="true" />
+      <choice value="PCC_PCCn_CGC_MASK|PccDiv1Clock_Spll"     name="SPLLDIV1_CLK" />
+   </choiceOption>
+</for>
 
-<choiceOption key="pcc_$(instance::tolower)" 
-   description="Clock to $(instance::toUpper)"
-   toolTip="Default clock for $(instance::toUpper)">
-   <for 
-      var="instance" 
-      enumeration="
-         Adc0, Adc1, 
-         Flexio, 
-         Lpuart0, Lpuart1, Lpuart2, 
-         Lpspi0, Lpspi1, Lpspi2, 
-         Lpi2c0, Lpi2c1, Lpi2c2, 
-         Lpit0,
-         Lptmr0"
-   />
-   <choice value="PccDiv2Clock_Disabled"                   name="Disabled" />
-   <choice value="PCC_PCCn_CGC_MASK|PccDiv2Clock_Sosc"     name="SOSCDIV2_CLK" />
-   <choice value="PCC_PCCn_CGC_MASK|PccDiv2Clock_Sirc"     name="SIRCDIV2_CLK" />
-   <choice value="PCC_PCCn_CGC_MASK|PccDiv2Clock_Firc"     name="FIRCDIV2_CLK" isDefault="true" />
-   <choice value="PCC_PCCn_CGC_MASK|PccDiv2Clock_Spll"     name="SPLLDIV2_CLK" />
-</choiceOption>
+<for keys = "instance,  INSTANCE"
+     values="Adc0,      ADC0;
+             Adc1,      ADC1;
+             Flexio,    FLEXIO; 
+             Lpuart0,   LPUART0;
+             Lpuart1,   LPUART1;
+             Lpuart2,   LPUART2;
+             Lpspi0,    LPSPI0;
+             Lpspi1,    LPSPI1;
+             Lpspi2,    LPSPI2;
+             Lpi2c0,    LPI2C0; 
+             Lpi2c1,    LPI2C1; 
+             Lpi2c2,    LPI2C2; 
+             Lpit0,     LPIT0;  
+             Lptmr0,    LPTRM0 />
+   <choiceOption key="pcc_$(instance)" 
+      description="Clock to $(INSTANCE)"
+      toolTip="Default clock for $(INSTANCE)">
+      <choice value="PccDiv2Clock_Disabled"                   name="Disabled" />
+      <choice value="PCC_PCCn_CGC_MASK|PccDiv2Clock_Sosc"     name="SOSCDIV2_CLK" />
+      <choice value="PCC_PCCn_CGC_MASK|PccDiv2Clock_Sirc"     name="SIRCDIV2_CLK" />
+      <choice value="PCC_PCCn_CGC_MASK|PccDiv2Clock_Firc"     name="FIRCDIV2_CLK" isDefault="true" />
+      <choice value="PCC_PCCn_CGC_MASK|PccDiv2Clock_Spll"     name="SPLLDIV2_CLK" />
+   </choiceOption>
+</for>
 
-<binaryOption key="pcc_$(instance::tolower)" 
-   description="Clock to $(instance::toUpper)"
-   toolTip="Default clock for $(instance::toUpper)">
-   <for 
-      var="instance" 
-      enumeration="
-         Ftfc, 
-         Dmamux0, 
-         Can0, Can1, Can2, 
-         Cmp0,
-         Crc0,
-         Pdb0, Pdb1, 
-         Rtc, 
-         Porta, Portb, Portc, Portd, Porte, 
-         Sai0, Sai1, 
-         Ewm"
-   />
-   <choice value="PCC_PCCn_CGC(0)"  name="Disabled" />
-   <choice value="PCC_PCCn_CGC(1)"  name="Enabled" isDefault="true" />
-</binaryOption>
+<for keys = "instance,  INSTANCE"
+     values="Ftfc,      FTFC;
+             Dmamux0,   DMAMUX0;
+             Can0,      CAN0; 
+             Can1,      CAN1; 
+             Can2,      CAN2; 
+             Cmp0,      CMP0;
+             Crc0,      CRC0;
+             Pdb0,      PDB0;
+             Pdb1,      PDB1;
+             Rtc,       RTC;
+             Porta      PORTA;
+             Portb      PORTB;
+             Portc      PORTC;
+             Portd      PORTD;
+             Porte      PORTE;
+             Sai0,      SAI0;
+             Sai1,      SAI1;
+             Ewm,       EWM;  />
+   <binaryOption key="pcc_$(instance)" 
+      description="Clock to $(INSTANCE)"
+      toolTip="Default clock for $(INSTANCE)">
+      <choice value="PCC_PCCn_CGC(0)"  name="Disabled" />
+      <choice value="PCC_PCCn_CGC(1)"  name="Enabled" isDefault="true" />
+   </binaryOption>
+</for>
 
 <template><![CDATA[
    \t/**

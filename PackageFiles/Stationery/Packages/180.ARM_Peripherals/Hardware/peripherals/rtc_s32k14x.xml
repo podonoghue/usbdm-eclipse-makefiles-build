@@ -6,7 +6,7 @@
    
    <binaryOption name="configure_rtc"
       description="Configure RTC"
-      toolTip="Enables configuration of RTC\n If disabled no RTC registers are accessed.">
+      toolTip="Enables configuration of RTC\n If disabled no RTC registers are accessed">
       <choice value="0" name="Disabled" />
       <choice value="1" name="Enabled" isDefault="true" />
    </binaryOption>
@@ -33,7 +33,7 @@
    <binaryOption name="rtc_cr_cpe" 
       description="Clock Pin Enable"
       toolTip="Controls the RTC_CLKOUT function" >
-      <choice value="0" name="RTC_CLKOUT disabled." />
+      <choice value="0" name="RTC_CLKOUT disabled" />
       <choice value="1" name="RTC_CLKOUT enabled" />
    </binaryOption>
 
@@ -106,7 +106,7 @@
       toolTip="Configures the compensation interval in seconds from 1 to 256 to control how frequently the TCR should\n
 		adjust the number of 32.768 kHz cycles in each second. The value written should be one less than the\n
 		number of seconds (for example, write zero to configure for a compensation interval of one second). This\n
-		register is double buffered and writes do not take affect until the end of the current compensation interval."
+		register is double buffered and writes do not take affect until the end of the current compensation interval"
       value="0" />
 
    <intOption name="rtc_tcr_tcr" min="-128" max="127"
@@ -125,28 +125,28 @@
    <category name="Register Locks" description="Locks RTC Registers">
 	   <binaryOption name="rtc_lr_lrl" 
 	      description="Lock Register Lock"
-	      toolTip="Once cleared, this bit can only be set by VBAT POR or software reset." >
+	      toolTip="Once cleared, this bit can only be set by VBAT POR or software reset" >
 	      <choice value="0" name="Locked" />
 	      <choice value="1" name="Unlocked"  isDefault="true" />
 	   </binaryOption>
 	   
 	   <binaryOption name="rtc_lr_srl" 
 	      description="Status Register Lock"
-	      toolTip="Once cleared, this bit can only be set by VBAT POR or software reset." >
+	      toolTip="Once cleared, this bit can only be set by VBAT POR or software reset" >
 	      <choice value="0" name="Locked" />
 	      <choice value="1" name="Unlocked"  isDefault="true" />
 	   </binaryOption>
 	   
 	   <binaryOption name="rtc_lr_crl" 
 	      description="Control Register Lock"
-	      toolTip="Once cleared, this bit can only be set by VBAT POR or software reset." >
+	      toolTip="Once cleared, this bit can only be set by VBAT POR or software reset" >
 	      <choice value="0" name="Locked" />
 	      <choice value="1" name="Unlocked"  isDefault="true" />
 	   </binaryOption>
 	   
 	   <binaryOption name="rtc_lr_tcl" 
 	      description="Time Compensation Lock"
-	      toolTip="Once cleared, this bit can only be set by VBAT POR or software reset." >
+	      toolTip="Once cleared, this bit can only be set by VBAT POR or software reset" >
 	      <choice value="0" name="Locked" />
 	      <choice value="1" name="Unlocked"  isDefault="true" />
 	   </binaryOption>

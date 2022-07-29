@@ -26,7 +26,7 @@
       <binaryOption name="sim_copc_copw" 
          description="COP Windowed Mode"
          toolTip="Windowed mode is only supported when COP is using bus clock.\n
-                  The COP window is opened three quarters through the timeout period.">
+                  The COP window is opened three quarters through the timeout period">
          <choice value="0"  name="Normal Mode" isDefault="true" />
          <choice value="1"  name="Windowed Mode" />
       </binaryOption>
@@ -53,7 +53,6 @@
          units="Hz"
          description="Frequency of ADC Clock" />
    </for>
-   
 
    <category name="SOPT2" description="Clock Gating">
    
@@ -73,11 +72,12 @@
       ]]></template>
    
       
-      <aliasOption key="/SIM/system_peripheral_clock." optional="true" />
+      <aliasOption key="/SIM/system_peripheral_clock[]" optional="true" />
       <aliasOption key="/OSC0/oscer_clock" optional="true" />
       <aliasOption key="/MCG/system_mcgirclk_clock[0]" optional="true" />
       
       <choiceOption name="sim_sopt2_uart0src" 
+         enumStem="SimUart0ClockSource"
          target="system_uart0_clock"
          description="UART0 Clock"
          toolTip="Clock source for the transmit and receive clock" >
@@ -153,14 +153,14 @@
          enumStem="SimUart0RxSrc"
          description="UART 0 receive data source"
          toolTip="Source for the UART receive data">
-            <choice value="0" name="Rx pin"        enum="RxPin"  isDefault="true" />
-            <choice value="1" name="CMP0 output"   enum="Cmp0"   />
+         <choice value="0" name="Rx pin"        enum="RxPin"  isDefault="true" />
+         <choice value="1" name="CMP0 output"   enum="Cmp0"   />
       </choiceOption>
       
       <choiceOption key="sim_sopt5_uart0txsrc" 
          enumStem="SimUart0TxSrc"
          description="UART 0 transmit data source"
-         toolTip="Source for the UART transmit data.">
+         toolTip="Source for the UART transmit data">
          <choice value="0" name="Tx pin" isDefault="true"             enum="Direct" />
          <choice value="1" name="Tx pin modulated by TPM1 channel 0"  enum="ModulatedByTpm1Ch0" />
       </choiceOption>

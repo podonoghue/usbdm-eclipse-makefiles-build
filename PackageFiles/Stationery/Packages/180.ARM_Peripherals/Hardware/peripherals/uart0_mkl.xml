@@ -16,7 +16,7 @@ Devices using this peripheral:
 
    <intOption name="oversampleRatio" description="Number of samples per bit" 
       toolTip="This value determines the number of times an Rx bit is sampled.\n
-               This also affects the clock divider and hence the range of baud rates available."
+               This also affects the clock divider and hence the range of baud rates available"
        value="8" min="4" max="32"
       />
 

@@ -1,21 +1,21 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE peripheralPage SYSTEM "_menu.dtd" >
+<!DOCTYPE fragment SYSTEM "_menu.dtd" >
 <!-- _sim_rtc_shared.xml -->
 
 <fragment xmlns:xi="http://www.w3.org/2001/XInclude">
    
    <!-- Indicates whether OSC0/RTC(OSC1) share XTAL/EXTAL pins -->
-   <constant name="rtcSharesPins" value="true" derived="true" />
-   <stringOption name="rtc_shared" derived="true" hidden ="true" />
+   <constant key="rtcSharesPins" value="true" derived="true" />
+   <stringOption key="rtc_shared" derived="true" hidden ="true" />
    
 
    <!-- Oscillator peripheral used for OSC0 input to MCG = OSC0 -->
    <!-- This peripheral is tied closely to the MCG              -->
-   <constant name="osc0_peripheral"  value="/OSC0" derived="true" />
-   <constant name="osc0_description" value="OSC0 - Main System Oscillator (OSCCLK0)" derived="true" />
+   <constant key="osc0_peripheral"  value="/OSC0" derived="true" />
+   <constant key="osc0_description" value="OSC0 - Main System Oscillator (OSCCLK0)" derived="true" />
 
    <!-- Uses RTC_CLKIN pin -->
-   <intOption name="rtc_clkin_clock" 
+   <intOption key="rtc_clkin_clock" 
       hidden="true"
       units="Hz"
       description="RTC_CLKIN pin"
@@ -30,26 +30,26 @@
    ]]></template>
 
    <for keys="n" dim="/SIM/numberOfClockSettings">
-      <choiceOption name="mcg_c7_oscsel[%(n)]"
+      <choiceOption key="mcg_c7_oscsel[%(n)]"
          target="mcg_erc_clock[%(n)]"
          hidden="true"
-         description="MCG External reference clock source" 
+         description="MCG External reference clock" 
          toolTip="Source for MCG External Reference Clock">
          <choice value="0" ref="/OSC0/osc_clock"          name="OSC0 Clock"      />
       </choiceOption>
 
-      <intOption name="mcg_erc_clock[%(n)]" 
+      <intOption key="mcg_erc_clock[%(n)]" 
          constant="true"
          hidden="true"
          units="Hz" 
          derived="true" 
-         description="Frequency of MCG External reference clock"
+         description="Frequency of MCG External reference"
          toolTip="External reference clock used by MCG" 
          value="32768" />
    </for>
    
    <!-- ERCCLK32K Sources -->
-   <choiceOption name="sim_sopt1_osc32ksel"
+   <choiceOption key="sim_sopt1_osc32ksel"
       target="system_erclk32k_clock"
       hidden="true"
       description="ERCLK32K clock source" 
@@ -59,7 +59,7 @@
       <choice value="3" name="LPO 1kHz clock"                 ref="/PMC/system_low_power_clock" enum="LpoClk"    code="1000"                           isDefault="true"/>
    </choiceOption>
 
-   <intOption name="system_erclk32k_clock" 
+   <intOption key="system_erclk32k_clock" 
       hidden="true"
       constant="true"
       units="Hz" 
@@ -69,7 +69,7 @@
       origin="Derived from OSC32KCLK, RTC or LPO" 
       value="32768" />
       
-   <choiceOption name="sim_sopt2_rtcclkoutsel"
+   <choiceOption key="sim_sopt2_rtcclkoutsel"
       target="rtc_clkout" 
       hidden="true"
       description="RTC clock out [RTC_CLKOUT pin]"
@@ -78,7 +78,7 @@
       <choice value="1"  name="OSC32KCLK clock (from OSC0)"     ref="/OSC0/oscer_clock"       enum="32kHz" isDefault="true" />
    </choiceOption>
       
-   <intOption name="rtc_clkout"
+   <intOption key="rtc_clkout"
       hidden="true"
       constant="true"
       derived="true"

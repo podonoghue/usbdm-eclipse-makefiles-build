@@ -11,10 +11,10 @@
       \tstatic constexpr int outputPin  = 8;\n\n
    ]]></template>
    
-   <constant name = "disable_peripheral" derived = "true" value = "cmp->CR1 = CMP_CR1_EN(0);"  />
+   <constant key="disable_peripheral" derived = "true" value = "cmp->CR1 = CMP_CR1_EN(0);"  />
    <xi:include href="_mapPinsOption.xml"/>
    
-   <choiceOption name="cmp_cr0_filter_cnt" 
+   <choiceOption key="cmp_cr0_filter_cnt" 
       description="Filter Sample Count"
       toolTip="Represents the number of consecutive samples that must agree prior\n
       to the comparator ouput filter accepting a new output state">
@@ -28,7 +28,7 @@
       <choice value="7" name="7 sample must agree" />
    </choiceOption>
 
-   <choiceOption name="cmp_cr0_hystctr" 
+   <choiceOption key="cmp_cr0_hystctr" 
       description="Comparator hard block hysteresis control"
       toolTip="Defines the programmable hysteresis level.\n
       The hysteresis values associated with each level are device specific">
@@ -45,49 +45,49 @@
       \t   CMP_CR0_HYSTCTR($(cmp_cr0_hystctr));         // Comparator hard block hysteresis control\n\n
    ]]></template>
 
-   <binaryOption name="cmp_cr1_se" 
+   <binaryOption key="cmp_cr1_se" 
       description="Sample Enable"
       toolTip="Sampling mode enabled">
       <choice value="0" name="Sampling mode is disabled" />
       <choice value="1" name="Sampling mode is enabled" />
    </binaryOption>
 
-   <binaryOption name="cmp_cr1_we" 
+   <binaryOption key="cmp_cr1_we" 
       description="Windowing Enable"
       toolTip="Windowing mode enabled">
       <choice value="0" name="Windowing mode is disabled" />
       <choice value="1" name="Windowing mode is enabled" />
    </binaryOption>
 
-   <binaryOption name="cmp_cr1_trigm" 
+   <binaryOption key="cmp_cr1_trigm" 
       description="Trigger Mode Enable"
       toolTip="CMP and DAC are configured to CMP Trigger mode">
       <choice value="0" name="Trigger mode is disabled" />
       <choice value="1" name="Trigger mode is enabled" />
    </binaryOption>
 
-   <binaryOption name="cmp_cr1_pmode" 
+   <binaryOption key="cmp_cr1_pmode" 
       description="Power Mode Select"
       toolTip="Selects trade-off between speed and power consumption">
       <choice value="0" name="Low-Speed (LS) Comparison mode" />
       <choice value="1" name="High-Speed (HS) Comparison mode" />
    </binaryOption>
 
-   <binaryOption name="cmp_cr1_inv" 
+   <binaryOption key="cmp_cr1_inv" 
       description="Comparator Invert"
       toolTip="Allows selection of the polarity of the analog comparator function">
       <choice value="0" name="Not inverted" />
       <choice value="1" name="Inverted" />
    </binaryOption>
 
-   <binaryOption name="cmp_cr1_cos" 
+   <binaryOption key="cmp_cr1_cos" 
       description="Comparator Output Select"
       toolTip="">
       <choice value="0" name="Set the filtered comparator output (CMPO) to equal COUT" />
       <choice value="1" name="Set the unfiltered comparator output (CMPO) to equal COUTA" />
    </binaryOption>
 
-   <binaryOption name="cmp_cr1_ope" 
+   <binaryOption key="cmp_cr1_ope" 
       description="Comparator Output Pin Enable"
       toolTip="">
       <choice value="0" name="CMPO is not available on CMPO pin" />
@@ -108,7 +108,7 @@
       \t   CMP_CR1_OPE($(cmp_cr1_ope));    // Comparator Output Pin Enable\n\n
    ]]></template>
       
-   <intOption name="cmp_fpr_filt_per"
+   <intOption key="cmp_fpr_filt_per"
       description="Filter Sample Period"
       toolTip="Specifies the sampling period, in bus clock cycles, of the comparator output filter"
       value="0" min="0" max="255" />
@@ -119,7 +119,7 @@
       \t   CMP_FPR_FILT_PER($(cmp_fpr_filt_per)); // Filter Sample Period\n\n
    ]]></template>
 
-   <binaryOption name="cmp_scr_dmaen" 
+   <binaryOption key="cmp_scr_dmaen" 
       description="DMA Enable Control"
       toolTip="Enables the DMA transfer triggered from the CMP module\n(If DMA supported by device)\n
          When this field is set, a DMA request is asserted when CFR or CFF is set">
@@ -127,7 +127,7 @@
       <choice value="1" name="Enabled" />
    </binaryOption>
 
-   <binaryOption name="cmp_scr_ier" 
+   <binaryOption key="cmp_scr_ier" 
       description="Comparator Interrupt Enable Rising"
       toolTip="Enables the CFR interrupt from the CMP.\n
          When this field is set, an interrupt will be asserted when CFR is set">
@@ -135,7 +135,7 @@
       <choice value="1" name="Enabled" />
    </binaryOption>
 
-   <binaryOption name="cmp_scr_ief" 
+   <binaryOption key="cmp_scr_ief" 
       description="Comparator Interrupt Enable Falling"
       toolTip="Enables the CFF interrupt from the CMP\n
          When this field is set, an interrupt will be asserted when CFF is set">
@@ -153,7 +153,7 @@
       \t   CMP_SCR_IEF($(cmp_scr_ief));  // Comparator Interrupt Enable Falling\n\n
    ]]></template>
 
-   <binaryOption name="cmp_daccr_vrsel" 
+   <binaryOption key="cmp_daccr_vrsel" 
       description="DAC Reference Voltage Select"
       toolTip="Supply Voltage Reference Source Select">
       <choice value="0" name="Vin1 (Vref_OUT)" />
@@ -166,7 +166,7 @@
       \t   CMP_DACCR_VRSEL($(cmp_daccr_vrsel)); // Supply Voltage Reference Source Select\n\n
    ]]></template>
 
-   <template name="/CMP/declarations" namespace="all"  ><![CDATA[
+   <template key="/CMP/declarations" namespace="all"  ><![CDATA[
    \t/**
    \t * Class representing $(_name)
    \t */

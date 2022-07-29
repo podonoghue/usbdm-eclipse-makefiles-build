@@ -27,7 +27,7 @@
    <binaryOption name="pmc_lvdsc1_lvdre" 
       description="Low-Voltage Detect Reset Enable"
       toolTip="This write-once bit enables LVDF events to generate a hardware reset.\n 
-               Additional writes are ignored.">
+               Additional writes are ignored">
       <choice value="0" name="Disabled" isDefault="true" />
       <choice value="1" name="Enabled" />
    </binaryOption>
@@ -92,14 +92,14 @@
    <binaryOption name="pmc_regsc_bgen" 
       description="Bandgap Enable In VLPx Operation"
       toolTip="BGEN controls whether the bandgap is enabled in \n
-               lower power modes of operation (VLPx, LLS, and VLLSx).">
+               lower power modes of operation (VLPx, LLS, and VLLSx)">
       <choice value="0" name="Disabled" isDefault="true" />
       <choice value="1" name="Enabled" />
    </binaryOption>
 
    <binaryOption name="pmc_regsc_bgbe" 
       description="Bandgap Buffer Enable"
-      toolTip="Enables the bandgap buffer.">
+      toolTip="Enables the bandgap buffer">
       <choice value="0" name="Disabled" isDefault="true" />
       <choice value="1" name="Enabled" />
    </binaryOption>

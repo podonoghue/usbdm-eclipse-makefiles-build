@@ -12,13 +12,13 @@
      -  _IRQHandler is appended to the pattern (only)
    Multiple patterns and classsHandlers may be used separated by ';'
    -->
-   <irqOption name="irqHandlingMethod"  
+   <irqOption key="irqHandlingMethod"  
       description="Peripheral interrupt handler"
       toolTip="This selection allows the interrupt handler for this peripheral to be installed using several different methods"
       pattern="$(irq_pattern)" 
       classHandler="$(irq_classHandler)" />
       
-   <choiceOption name="irqLevel"
+   <choiceOption key="irqLevel"
       description="Default IRQ level for this peripheral"
       toolTip="Sets the default priority level used to configure the NVIC">
       <choice name="VeryHigh"      value="NvicPriority_VeryHigh" />
@@ -46,7 +46,7 @@
        \tstatic constexpr NvicPriority irqLevel =  $(?irqHandlingMethod:$(irqLevel):NvicPriority_NotInstalled);\n\n
    ]]></template>
       
-   <constant name = "enable_interrupts_code"  derived = "true" value = "enableNvicInterrupts();"  />
-   <constant name = "disable_interrupts_code" derived = "true" value = "disableNvicInterrupts();"  />
+   <constant key = "enable_interrupts_code"  derived = "true" value = "enableNvicInterrupts();"  />
+   <constant key = "disable_interrupts_code" derived = "true" value = "disableNvicInterrupts();"  />
 
 </fragment>

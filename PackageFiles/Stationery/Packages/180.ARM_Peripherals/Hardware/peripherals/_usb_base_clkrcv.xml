@@ -5,16 +5,7 @@
 <fragment xmlns:xi="http://www.w3.org/2001/XInclude">
 
    <category name="Clock Recovery" description="USB clock recovery options">
-      <choiceOption 
-         name="usb_clk_enable" 
-         description="IRC48M enable"
-         toolTip="This is used to control when the the on-chip IRC48M module is enabled\n
-                  It will also be enabled if selected as a peripheral clock or MCG clock source if powered\n
-                  It can be used as a clock source for FS USB device mode operation">
-         <choice value="USB_CLK_RECOVER_IRC_EN_IRC_EN(0)|USB_CLK_RECOVER_IRC_EN_REG_EN(0)"  enum="Disabled"         name="Power disabled - not available at all"                                        />
-         <choice value="USB_CLK_RECOVER_IRC_EN_IRC_EN(0)|USB_CLK_RECOVER_IRC_EN_REG_EN(1)"  enum="Peripheral"       name="Available as general clock source"  isDefault="true"  />
-         <choice value="USB_CLK_RECOVER_IRC_EN_IRC_EN(1)|USB_CLK_RECOVER_IRC_EN_REG_EN(1)"  enum="PeripheralAndUsb" name="Available as general and USB clock"  />
-      </choiceOption>
+      <aliasOption name="usb_clk_enable" required="false" constant="false" />
       
       <choiceOption 
          name="usb_clk_tracking_mode" 
@@ -57,7 +48,7 @@
    ]]></template>
 
    <enumTemplate namespace="usbdm" condition="usb_clk_enable" 
-      enumRoot="UsbIrc48mClockEnable"
+      enumStem="UsbIrc48mClockEnable"
       valueFormat="(%s)"
    ><![CDATA[    
       \t/**
@@ -71,7 +62,7 @@
    ]]></enumTemplate>
 
    <enumTemplate namespace="usbdm" condition="usb_clk_tracking_mode" 
-      enumRoot="UsbIrc48mClockTrackingMode"
+      enumStem="UsbIrc48mClockTrackingMode"
       valueFormat="(%s)"
    ><![CDATA[    
       \t/**
@@ -85,7 +76,7 @@
    ]]></enumTemplate>
 
    <enumTemplate namespace="usbdm" condition="usb_clk_recover_ctrl_restart_ifrtrim_en" 
-      enumRoot="UsbIrc48mClockResetTrim"
+      enumStem="UsbIrc48mClockResetTrim"
       valueFormat="(%s)"
    ><![CDATA[    
       \t/**

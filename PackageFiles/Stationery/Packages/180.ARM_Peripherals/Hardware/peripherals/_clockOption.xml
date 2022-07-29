@@ -36,7 +36,7 @@
       \t}\n\n
    ]]></template>
       
-   <constant name = "enable_clock"   derived = "true" value = "Info\:\:enableClock();"  />
-   <constant name = "disable_clock"  derived = "true" value = "Info\:\:disableClock();"  />
+   <constant key = "enable_clock"   derived = "true" value = "Info\:\:enableClock();"  />
+   <constant key = "disable_clock"  derived = "true" value = "Info\:\:disableClock();"  />
 
 </fragment>

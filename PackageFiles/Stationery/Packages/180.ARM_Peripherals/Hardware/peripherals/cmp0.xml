@@ -6,7 +6,7 @@
  
    <xi:include href="cmp_base.xml"/>
  
-   <choiceOption name="cmp_muxcr_psel" 
+   <choiceOption key="cmp_muxcr_psel" 
       description="Plus Input Mux Control"
       toolTip="Determines which input is selected for the plus input of the comparator" >
       <choice value="0" name="CMP_IN0" />
@@ -19,7 +19,7 @@
       <choice value="7" name="6-bit DAC" />
    </choiceOption>
 
-   <choiceOption name="cmp_muxcr_msel" 
+   <choiceOption key="cmp_muxcr_msel" 
       description="Minus Input Mux Control"
       toolTip="Determines which input is selected for the minus input of the comparator" >
       <choice value="0" name="CMP_IN0" />

@@ -73,7 +73,7 @@
    </intOption>
    <choiceOption name="chipctl_clkoutsel" 
       description="CLKOUT select"
-      toolTip="Selects the clock to output on the CLKOUT pin." >
+      toolTip="Selects the clock to output on the CLKOUT pin" >
       <choice value="0"   name="SCG CLKOUT" />
       <choice value="1"   name="Reserved" />
       <choice value="2"   name="SOSC DIV2 CLK" />

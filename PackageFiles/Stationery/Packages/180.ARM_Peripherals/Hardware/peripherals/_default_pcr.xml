@@ -5,15 +5,15 @@
 <fragment xmlns:xi="http://www.w3.org/2001/XInclude">
 
    <category name="Default Pin Configuration" description="Options for PCR" >
-   <binaryOption name="port_pcr_lk" 
+   <binaryOption key="port_pcr_lk" 
       description="Lock Register"
       toolTip="Locks Pin Control Register bits [15:0]\n
-         This will apply until reset.">
+         This will apply until reset">
       <choice value="0" name="Not locked" />
       <choice value="1" name="Locked" />
    </binaryOption>
 
-   <binaryOption name="port_pcr_dse" 
+   <binaryOption key="port_pcr_dse" 
       description="Drive Strength Enable"
       toolTip="Drive strength configuration when in digital pin muxing modes\n
          with the pin configured as an output">
@@ -21,7 +21,7 @@
       <choice value="1" name="High drive strength" />
    </binaryOption>
 
-   <binaryOption name="port_pcr_ode" 
+   <binaryOption key="port_pcr_ode" 
       description="Open Drain Enable"
       toolTip="Open drain configuration when in digital pin muxing modes\n
          with the pin configured as an output">
@@ -29,7 +29,7 @@
       <choice value="1" name="Open drain" />
    </binaryOption>
 
-   <binaryOption name="port_pcr_pfe" 
+   <binaryOption key="port_pcr_pfe" 
       description="Passive Filter Enable"
       toolTip="Filter configuration when in digital pin muxing modes\n
          with the pin configured as an input\n
@@ -38,16 +38,16 @@
       <choice value="1" name="Enabled" />
    </binaryOption>
 
-   <binaryOption name="port_pcr_sre" 
+   <binaryOption key="port_pcr_sre" 
       description="Slew Rate Enable"
       toolTip="Slew rate configuration when in digital pin muxing modes\n
          with the pin configured as an output.\n
-         Slow slew rate reduces EMI.">
+         Slow slew rate reduces EMI">
       <choice value="0" name="Fast slew" />
       <choice value="1" name="Slow slew" />
    </binaryOption>
 
-   <choiceOption name="port_pcr_pull_mode" 
+   <choiceOption key="port_pcr_pull_mode" 
       description="Pull Up/Down Enable"
       toolTip="Pull configuration when in digital pin muxing modes\n
          with the pin configured as an input">

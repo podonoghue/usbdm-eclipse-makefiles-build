@@ -9,7 +9,7 @@
       description="Low-Leakage Mode RESET Enable"
       toolTip="This bit must be set to allow the device to be reset while in a low-leakage power mode.\n
          On devices where Reset is not a dedicated pin, the RESET pin must also be enabled\n
-         in the explicit port mux control." >
+         in the explicit port mux control" >
       <choice name="RESET pin not enabled as a LLWU mode exit source"  value="0" />
       <choice name="RESET pin enabled as a LLWU mode exit source"      value="1" isDefault="true" />
    </binaryOption>      
@@ -17,7 +17,7 @@
    <binaryOption 
       name="llwu_rst_rstfilt" 
       description="Digital Filter On RESET Pin"
-      toolTip="Enables the digital filter for the RESET pin during LLS, VLLS3, VLLS2, or VLLS1 modes." >
+      toolTip="Enables the digital filter for the RESET pin during LLS, VLLS3, VLLS2, or VLLS1 modes" >
       <choice name="Filter not enabled"  value="0" isDefault="true" />
       <choice name="Filter enabled"      value="1" />
    </binaryOption>      

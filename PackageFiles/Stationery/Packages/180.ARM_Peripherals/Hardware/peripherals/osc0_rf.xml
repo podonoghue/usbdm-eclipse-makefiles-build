@@ -19,7 +19,7 @@
    <choiceOption name="rf_osc_en"
       description="RF Reference Oscillator Enable Select"
       toolTip="The oscillator can be enabled by a Radio link layer,\n
-        by an internal SoC clock mode, by an External Pin request, or by this field.">
+        by an internal SoC clock mode, by an External Pin request, or by this field">
          <choice value="0b0000"  name="RF Ref Osc will be controlled by the SoC, external pin, or a link layer" />
          <choice value="0b0001"  name="RF Ref Osc on in Run/Wait" isDefault="true"/>
          <choice value="0b0011"  name="RF Ref Osc on in Stop" />
@@ -48,7 +48,7 @@
       constant="true"
       description="Frequency Range Select"
       toolTip="This range value is determined from the Oscillator frequency.\n
-      It some cases it will be unused and a range value suited to the FLL is used instead.">
+      It some cases it will be unused and a range value suited to the FLL is used instead">
       <choice value="0" name="Low range" />
       <choice value="1" name="High range" />
       <choice value="2" name="Very High range" />

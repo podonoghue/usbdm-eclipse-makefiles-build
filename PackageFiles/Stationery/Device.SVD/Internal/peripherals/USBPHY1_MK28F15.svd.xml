@@ -1,11 +1,10 @@
 <!--
 Devices using this peripheral: 
-      MK65F18
-      MK66F18
+      MK28F15
 -->
       <peripheral>
-         <?sourceFile "USBPHY0" ?>
-         <name>USBPHY0</name>
+         <?sourceFile "USBPHY1_MK28F15" ?>
+         <name>USBPHY1</name>
          <description>USBPHY Register Reference Index</description>
          <groupName>USBPHY</groupName>
          <headerStructName>USBPHY</headerStructName>
@@ -37,6 +36,11 @@ Devices using this peripheral:
          <addressBlock>
             <offset>0xC0</offset>
             <size>0x14</size>
+            <usage>registers</usage>
+         </addressBlock>
+         <addressBlock>
+            <offset>0xF0</offset>
+            <size>0x4</size>
             <usage>registers</usage>
          </addressBlock>
          <addressBlock>
@@ -329,6 +333,30 @@ Devices using this peripheral:
                      <description>For host mode, enables high-speed disconnect detector</description>
                      <bitOffset>1</bitOffset>
                      <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>HOSTDISCONDETECT_IRQ</name>
+                     <description>Indicates that the device has disconnected in High-Speed mode</description>
+                     <bitOffset>3</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>ENDEVPLUGINDET</name>
+                     <description>Enables non-standard resistive plugged-in detection</description>
+                     <bitOffset>4</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>Disables 200kohm pullup resistors on USB_DP and USB_DM pins (Default)</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>Enables 200kohm pullup resistors on USB_DP and USB_DM pins</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
                   </field>
                   <field>
                      <name>DEVPLUGIN_IRQ</name>
@@ -769,118 +797,90 @@ Devices using this peripheral:
                      </enumeratedValues>
                   </field>
                   <field>
-                     <name>VBUSVALID_TO_SESSVALID</name>
-                     <description>Selects the comparator used for VBUS_VALID</description>
-                     <bitOffset>18</bitOffset>
+                     <name>VBUS_OVERRIDE_EN</name>
+                     <description>VBUS detect signal override enable</description>
+                     <bitOffset>3</bitOffset>
                      <bitWidth>1</bitWidth>
                      <enumeratedValues>
                         <enumeratedValue>
                            <name>0b0</name>
-                           <description>Use the VBUS_VALID comparator for VBUS_VALID results</description>
+                           <description>Use the results of the internal VBUS_VALID and Session Valid comparators for VBUS_VALID, AVALID, BVALID, and SESSEND (Default)</description>
                            <value>0b0</value>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>0b1</name>
-                           <description>Use the Session End comparator for VBUS_VALID results. The Session End threshold is &gt;0.8V and &lt;4.0V</description>
+                           <description>Use the override values for VBUS_VALID, AVALID, BVALID, and SESSEND</description>
                            <value>0b1</value>
                         </enumeratedValue>
                      </enumeratedValues>
                   </field>
                   <field>
-                     <name>PWRUP_CMPS</name>
-                     <description>Enables the VBUS_VALID comparator</description>
-                     <bitOffset>20</bitOffset>
+                     <name>SESSEND_OVERRIDE</name>
+                     <description>Override value for SESSEND</description>
+                     <bitOffset>4</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>BVALID_OVERRIDE</name>
+                     <description>Override value for B-Device Session Valid</description>
+                     <bitOffset>5</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>AVALID_OVERRIDE</name>
+                     <description>Override value for A-Device Session Valid</description>
+                     <bitOffset>6</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>VBUSVALID_OVERRIDE</name>
+                     <description>Override value for VBUS_VALID signal sent to USB controller</description>
+                     <bitOffset>7</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>VBUSVALID_SEL</name>
+                     <description>Selects the source of the VBUS_VALID signal reported to the USB controller</description>
+                     <bitOffset>8</bitOffset>
                      <bitWidth>1</bitWidth>
                      <enumeratedValues>
                         <enumeratedValue>
                            <name>0b0</name>
-                           <description>Powers down the VBUS_VALID comparator</description>
+                           <description>Use the VBUS_VALID comparator results for signal reported to the USB controller (Default)</description>
                            <value>0b0</value>
                         </enumeratedValue>
                         <enumeratedValue>
                            <name>0b1</name>
-                           <description>Enables the VBUS_VALID comparator (default)</description>
+                           <description>Use the VBUS_VALID_3V detector results for signal reported to the USB controller</description>
                            <value>0b1</value>
                         </enumeratedValue>
                      </enumeratedValues>
                   </field>
                   <field>
-                     <name>DISCHARGE_VBUS</name>
-                     <description>Controls VBUS discharge resistor</description>
-                     <bitOffset>26</bitOffset>
-                     <bitWidth>1</bitWidth>
+                     <name>VBUS_SOURCE_SEL</name>
+                     <description>Selects the source of the VBUS_VALID signal reported to the USB controller</description>
+                     <bitOffset>9</bitOffset>
+                     <bitWidth>2</bitWidth>
                      <enumeratedValues>
                         <enumeratedValue>
-                           <name>0b0</name>
-                           <description>VBUS discharge resistor is disabled (Default)</description>
-                           <value>0b0</value>
+                           <name>0b00</name>
+                           <description>Use the VBUS_VALID comparator results for signal reported to the USB controller (Default)</description>
+                           <value>0b00</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>0b1</name>
-                           <description>VBUS discharge resistor is enabled</description>
-                           <value>0b1</value>
-                        </enumeratedValue>
-                     </enumeratedValues>
-                  </field>
-                  <field>
-                     <name>CHARGE_VBUS</name>
-                     <description>no description available</description>
-                     <bitOffset>27</bitOffset>
-                     <bitWidth>1</bitWidth>
-                  </field>
-               </fields>
-            </register>
-            <register>
-               <name>USB1_VBUS_DETECT_SET</name>
-               <description>USB PHY VBUS Detect Control Register</description>
-               <addressOffset>0xC4</addressOffset>
-               <resetValue>0x700004</resetValue>
-               <fields>
-                  <field>
-                     <name>VBUSVALID_THRESH</name>
-                     <description>Sets the threshold for the VBUSVALID comparator</description>
-                     <bitOffset>0</bitOffset>
-                     <bitWidth>3</bitWidth>
-                     <enumeratedValues>
-                        <enumeratedValue>
-                           <name>0b000</name>
-                           <description>4.0 V</description>
-                           <value>0b000</value>
+                           <name>0b01</name>
+                           <description>Use the Session Valid comparator results for signal reported to the USB controller</description>
+                           <value>0b01</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>0b001</name>
-                           <description>4.1 V</description>
-                           <value>0b001</value>
+                           <name>0b10</name>
+                           <description>Use the Session Valid comparator results for signal reported to the USB controller</description>
+                           <value>0b10</value>
                         </enumeratedValue>
                         <enumeratedValue>
-                           <name>0b010</name>
-                           <description>4.2 V</description>
-                           <value>0b010</value>
-                        </enumeratedValue>
-                        <enumeratedValue>
-                           <name>0b011</name>
-                           <description>4.3 V</description>
-                           <value>0b011</value>
-                        </enumeratedValue>
-                        <enumeratedValue>
-                           <name>0b100</name>
-                           <description>4.4 V (Default)</description>
-                           <value>0b100</value>
-                        </enumeratedValue>
-                        <enumeratedValue>
-                           <name>0b101</name>
-                           <description>4.5 V</description>
-                           <value>0b101</value>
-                        </enumeratedValue>
-                        <enumeratedValue>
-                           <name>0b110</name>
-                           <description>4.6 V</description>
-                           <value>0b110</value>
-                        </enumeratedValue>
-                        <enumeratedValue>
-                           <name>0b111</name>
-                           <description>4.7 V</description>
-                           <value>0b111</value>
+                           <name>0b11</name>
+                           <description>Reserved, do not use</description>
+                           <value>0b11</value>
                         </enumeratedValue>
                      </enumeratedValues>
                   </field>
@@ -959,9 +959,9 @@ Devices using this peripheral:
                </fields>
             </register>
             <register>
-               <name>USB1_VBUS_DETECT_CLR</name>
+               <name>USB1_VBUS_DETECT_SET</name>
                <description>USB PHY VBUS Detect Control Register</description>
-               <addressOffset>0xC8</addressOffset>
+               <addressOffset>0xC4</addressOffset>
                <resetValue>0x700004</resetValue>
                <fields>
                   <field>
@@ -1009,6 +1009,94 @@ Devices using this peripheral:
                            <name>0b111</name>
                            <description>4.7 V</description>
                            <value>0b111</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>VBUS_OVERRIDE_EN</name>
+                     <description>VBUS detect signal override enable</description>
+                     <bitOffset>3</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>Use the results of the internal VBUS_VALID and Session Valid comparators for VBUS_VALID, AVALID, BVALID, and SESSEND (Default)</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>Use the override values for VBUS_VALID, AVALID, BVALID, and SESSEND</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>SESSEND_OVERRIDE</name>
+                     <description>Override value for SESSEND</description>
+                     <bitOffset>4</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>BVALID_OVERRIDE</name>
+                     <description>Override value for B-Device Session Valid</description>
+                     <bitOffset>5</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>AVALID_OVERRIDE</name>
+                     <description>Override value for A-Device Session Valid</description>
+                     <bitOffset>6</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>VBUSVALID_OVERRIDE</name>
+                     <description>Override value for VBUS_VALID signal sent to USB controller</description>
+                     <bitOffset>7</bitOffset>
+                     <bitWidth>1</bitWidth>
+                  </field>
+                  <field>
+                     <name>VBUSVALID_SEL</name>
+                     <description>Selects the source of the VBUS_VALID signal reported to the USB controller</description>
+                     <bitOffset>8</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>Use the VBUS_VALID comparator results for signal reported to the USB controller (Default)</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>Use the VBUS_VALID_3V detector results for signal reported to the USB controller</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>VBUS_SOURCE_SEL</name>
+                     <description>Selects the source of the VBUS_VALID signal reported to the USB controller</description>
+                     <bitOffset>9</bitOffset>
+                     <bitWidth>2</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b00</name>
+                           <description>Use the VBUS_VALID comparator results for signal reported to the USB controller (Default)</description>
+                           <value>0b00</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b01</name>
+                           <description>Use the Session Valid comparator results for signal reported to the USB controller</description>
+                           <value>0b01</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b10</name>
+                           <description>Use the Session Valid comparator results for signal reported to the USB controller</description>
+                           <value>0b10</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b11</name>
+                           <description>Reserved, do not use</description>
+                           <value>0b11</value>
                         </enumeratedValue>
                      </enumeratedValues>
                   </field>
@@ -1067,14 +1155,27 @@ Devices using this peripheral:
                      </enumeratedValues>
                   </field>
                   <field>
-                     <name>CHARGE_VBUS</name>
-                     <description>no description available</description>
-                     <bitOffset>27</bitOffset>
+                     <name>EN_CHARGER_RESISTOR</name>
+                     <description>Enables resistors used for an older method of resistive battery charger detection</description>
+                     <bitOffset>31</bitOffset>
                      <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>Disable resistive charger detection resistors on USB_DP and USB_DP</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>Enable resistive charger detection resistors on USB_DP and USB_DP</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
                   </field>
                </fields>
             </register>
-            <register derivedFrom="USB1_VBUS_DETECT_CLR"> <name>USB1_VBUS_DETECT_TOG</name> <addressOffset>0xCC</addressOffset> </register>
+            <register derivedFrom="USB1_VBUS_DETECT_SET"> <name>USB1_VBUS_DETECT_CLR</name> <addressOffset>0xC8</addressOffset> </register>
+            <register derivedFrom="USB1_VBUS_DETECT_SET"> <name>USB1_VBUS_DETECT_TOG</name> <addressOffset>0xCC</addressOffset> </register>
             <register>
                <name>USB1_VBUS_DET_STAT</name>
                <description>USB PHY VBUS Detector Status Register</description>
@@ -1150,6 +1251,104 @@ Devices using this peripheral:
                         <enumeratedValue>
                            <name>0b1</name>
                            <description>VBUS voltage is above VBUS_VALID_3V threshold</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+               </fields>
+            </register>
+            <register>
+               <name>USB1_CHRG_DET_STAT</name>
+               <description>USB PHY Charger Detect Status Register</description>
+               <addressOffset>0xF0</addressOffset>
+               <access>read-only</access>
+               <fields>
+                  <field>
+                     <name>PLUG_CONTACT</name>
+                     <description>Battery Charging Data Contact Detection phase output</description>
+                     <bitOffset>0</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>No USB cable attachment has been detected</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>A USB cable attachment between the device and host has been detected</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>CHRG_DETECTED</name>
+                     <description>Battery Charging Primary Detection phase output</description>
+                     <bitOffset>1</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>Standard Downstream Port (SDP) has been detected</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>Charging Port has been detected</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>DM_STATE</name>
+                     <description>Single ended receiver output for the USB_DM pin, from charger detection circuits</description>
+                     <bitOffset>2</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>USB_DM pin voltage is &lt; 0.8V</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>USB_DM pin voltage is &gt; 2.0V</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>DP_STATE</name>
+                     <description>Single ended receiver output for the USB_DP pin, from charger detection circuits</description>
+                     <bitOffset>3</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>USB_DP pin voltage is &lt; 0.8V</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>USB_DP pin voltage is &gt; 2.0V</description>
+                           <value>0b1</value>
+                        </enumeratedValue>
+                     </enumeratedValues>
+                  </field>
+                  <field>
+                     <name>SECDET_DCP</name>
+                     <description>Battery Charging Secondary Detection phase output</description>
+                     <bitOffset>4</bitOffset>
+                     <bitWidth>1</bitWidth>
+                     <enumeratedValues>
+                        <enumeratedValue>
+                           <name>0b0</name>
+                           <description>Charging Downstream Port (CDP) has been detected</description>
+                           <value>0b0</value>
+                        </enumeratedValue>
+                        <enumeratedValue>
+                           <name>0b1</name>
+                           <description>Downstream Charging Port (DCP) has been detected</description>
                            <value>0b1</value>
                         </enumeratedValue>
                      </enumeratedValues>

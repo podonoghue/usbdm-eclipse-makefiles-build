@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE peripheralPage SYSTEM "_menu.dtd" >
-<!-- _example_ref.xml -->
+<!DOCTYPE fragment SYSTEM "_menu.dtd" >
+<!-- usbphy1.xml -->
 
 <fragment xmlns:xi="http://www.w3.org/2001/XInclude">
-<xi:include href="xxxxx.xml"/>
+   <xi:include href="usbphy_def.xml"/>
 </fragment>

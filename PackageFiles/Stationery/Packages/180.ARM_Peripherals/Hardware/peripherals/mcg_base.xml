@@ -10,13 +10,13 @@
       <aliasOption key="/OSC0/osc_input_freq" constant="false" />
       <aliasOption key="/OSC0/osc_clock" optional="true" />
       <aliasOption key="/OSC0/oscer_clock" />
-      <binaryOption name="mcg_c2_erefs0"
+      <binaryOption key="mcg_c2_erefs0"
          description="External Reference Select" 
          toolTip="Determines whether a clock or crystal is used for the external reference clock" >
          <choice value="0" name="External clock" />
          <choice value="1" name="Oscillator" isDefault="true" />
       </binaryOption>
-      <binaryOption name="mcg_c2_hgo0"
+      <binaryOption key="mcg_c2_hgo0"
          description="Oscillator Gain" 
          toolTip="Controls the crystal oscillator mode of operation">
          <choice value="0" name="Low power" isDefault="true"/>
@@ -34,14 +34,14 @@
    
    <category name="Clocks" description="Clock Sources"
       toolTip="SLOW_IRC, FAST_IRC, USB_CLKIN, LPO" >
-      <intOption name="system_slow_irc_clock"
+      <intOption key="system_slow_irc_clock"
          origin="SLOW IRC"
          units="Hz"
          description="Frequency of Slow Internal Reference [SIRC] Clock"
          toolTip="Dependent on device and clock Trim. [Typically ~32kHz]"
          value="32768" />
 
-      <intOption name="system_fast_irc_clock"
+      <intOption key="system_fast_irc_clock"
          origin="FAST IRC"
          units="Hz"
          description="Frequency of Fast Internal Reference [FIRC] Clock"
@@ -63,7 +63,6 @@
       <categoryOption key="ClockConfig[%(n)]"
          description="Clock configuration" 
          toolTip="Clock configurations for different run modes"
-         value="ClockConfig_[%(n)]" 
          disabledValue="Disabled" >
          
          <binaryOption key="enableClockConfiguration[%(n)]"
@@ -122,17 +121,19 @@
             </choiceOption>
       
             <binaryOption key="mcg_c2_ircs[%(n)]"
-               description="Internal Reference [MCGIRCLK] Clock Source" 
+               enumStem="McgIrClkSrc"
+               description="Internal Reference Clock [MCGIRCLK] Source" 
                toolTip="Clock Source for MCGIRCLK" >
-               <choice value="0" name="Slow internal reference clock" />
-               <choice value="1" name="Fast internal reference clock" isDefault="true" />
+               <choice value="0" name="Slow internal reference clock" enum="Slow" />
+               <choice value="1" name="Fast internal reference clock" enum="Fast" isDefault="true" />
             </binaryOption>
       
             <binaryOption key="mcg_c1_irclken[%(n)]"
-               description="Internal Reference [MCGIRCLK] Clock Enable "
-               toolTip="Enables the internal reference clock for use by peripherals as MCGIRCLK">
-               <choice value="0" name="Disabled" />
-               <choice value="1" name="Enabled" isDefault="true"/>
+               enumStem="McgIrClkEn"
+               description="Internal Reference Clock [MCGIRCLK]"
+               toolTip="Enables the internal reference clock for use by peripherals" >
+               <choice value="0" name="Disabled" enum="Disabled" />
+               <choice value="1" name="Enabled"  enum="Enabled"  isDefault="true"/>
             </binaryOption>
       
             <binaryOption key="mcg_c1_irefsten[%(n)]"
@@ -151,6 +152,12 @@
                value="48000000" />
          </category>
       
+         <category name="OSC2 (USBPHY1 clock)" >
+            <aliasOption key="/USBPHY1/usbphy_anactrl_pfd_frac[%(n)]" constant="false" />
+            <aliasOption key="/USBPHY1/internal_pfd_clock_frequency[%(n)]" />
+            <aliasOption key="/USBPHY1/usbphy_anactrl_pfd_clk_sel[%(n)]" constant="false" />
+            <aliasOption key="/SIM/usb1pfdclk_Clock[%(n)]" />           
+         </category>
          <aliasOption key="/SIM/mcg_c7_oscsel[%(n)]" optional="true" constant="false" />
          <aliasOption key="/SIM/mcg_erc_clock[%(n)]" optional="true" />
       
@@ -292,12 +299,11 @@
                value="12000000" />
          </category>
          
-         <category name="USB PLL1 (Not implemented)" description="USB PLL1 Settings">
-            <aliasOption key="usbphy_pll_enable[%(n)]" optional="true" constant="false" />
-            <aliasOption key="usbphy_power_enable[%(n)]" optional="true" constant="false" />
-            <aliasOption key="usbphy_pll_en_usb_clks[%(n)]" optional="true" constant="false" />
-            <aliasOption key="usbphy_pll_sic_div[%(n)]" optional="true" constant="false" />
-            <aliasOption key="usb1pfdclk_Clock[%(n)]" optional="true" constant="false" />
+         <category name="USB PLL1" description="USB PLL1 Settings">
+            <aliasOption key="/USBPHY1/usbphy_anactrl_pfd_frac[%(n)]" constant="false" />
+            <aliasOption key="/USBPHY1/internal_pfd_clock_frequency[%(n)]" />
+            <aliasOption key="/USBPHY1/usbphy_anactrl_pfd_clk_sel[%(n)]" constant="false" />
+            <aliasOption key="/SIM/usb1pfdclk_Clock[%(n)]" />           
          </category>
       
          <category name="PLL0" description="PLL0 Settings">
@@ -615,7 +621,7 @@
       \t      case MCG_C7_OSCSEL(1) : return RtcInfo::getInternalClock();
       \t#endif
       \t#if defined(USB_CLK_RECOVER_IRC_EN_REG_EN_MASK)
-      \t      case MCG_C7_OSCSEL(2) : return $(/SIM/system_irc48m_clock);
+      \t      case MCG_C7_OSCSEL(2) : return $(/SIM/system_irc48m_clock:0);
       \t#endif
       \t   }
       \t#else
@@ -657,7 +663,7 @@
    ]]></template>
    
    <for keys="n" dim="/SIM/numberOfClockSettings">
-      <template name="ClockConfig" namespace="all" ><![CDATA[
+      <template key="ClockConfig" namespace="all" ><![CDATA[
          #if $(enableClockConfiguration[%(n)])
          \t$(ClockConfig[%(n)]://-- missing name for configuration --),
          #endif\n
@@ -665,7 +671,7 @@
    </for>
    
    <for keys="n" dim="/SIM/numberOfClockSettings">
-      <template name="McgClockInfoEntries" namespace="all" ><![CDATA[
+      <template key="McgClockInfoEntries" namespace="all" ><![CDATA[
          \t#if $(enableClockConfiguration[%(n)])
          \t   {  // $(ClockConfig[%(n)]) ($(clock_mode[%(n)]))
          \t      
@@ -749,4 +755,55 @@
          \t#endif\n
       ]]></template>
    </for>
+   
+   <enumTemplate namespace="usbdm" condition="mcg_c1_irclken" 
+   ><![CDATA[    
+      \t/**
+      \t * %description
+      \t *
+      \t * %tooltip
+      \t */
+      \tenum %enumClass {
+      %body
+      \t};\n\n
+   ]]></enumTemplate>
+         
+   <clockCodeTemplate condition="mcg_c1_irclken"
+   ><![CDATA[
+      \t/**
+      \t * %description
+      \t *
+      \t * %tooltip
+      \t *
+      \t * @param %enumParam
+      \t */
+      \tstatic void enableMcgIrClk(%enumClass %enumParam) {
+      \t   %defaultClockExpression
+      \t}\n\n
+   ]]></clockCodeTemplate>
+   
+   <enumTemplate namespace="usbdm" condition="mcg_c2_ircs" 
+   ><![CDATA[    
+      \t/**
+      \t * %description
+      \t *
+      \t * %tooltip
+      \t */
+      \tenum %enumClass {
+      %body
+      \t};\n\n
+   ]]></enumTemplate>
+         
+   <clockCodeTemplate condition="mcg_c2_ircs"
+   ><![CDATA[
+      \t/**
+      \t * %description
+      \t *
+      \t * @param %enumParam  %tooltip
+      \t */
+      \tstatic void setMcgIrClockSource(%enumClass %enumParam) {
+      \t   %defaultClockExpression
+      \t}\n\n
+   ]]></clockCodeTemplate>
+   
 </fragment>

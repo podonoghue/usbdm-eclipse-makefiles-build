@@ -7,12 +7,12 @@
 
    <xi:include href="_default_instance.xml"/>
 
-   <intOption name="NumChannels" constant="true" derived="true"
+   <intOption key="NumChannels" constant="true" derived="true"
       description="Number of DMA channels" 
       toolTip="The number of DMA channels available" 
       value="32" />
 
-   <intOption name="NumVectors" constant="true" derived="true"
+   <intOption key="NumVectors" constant="true" derived="true"
       description="Number of DMA interrupt vectors" 
       toolTip="Number of DMA interrupt vectors - \n
                Multiple channels may be mapped to the same vector" 
@@ -42,15 +42,15 @@
       \t}\n\n
    ]]></template>
       
-   <stringOption name="irq_pattern"        constant="true" value="^%b_?(\d+)(_DMA.*)?$;^%b_Error.*$" hidden="true" />
-   <stringOption name="irq_classHandler"   constant="true" value="%c%i::irqHandler&lt;$1&gt;;%c%i::errorIrqHandler" hidden="true" />
+   <stringOption key="irq_pattern"        constant="true" value="^%b_?(\d+)(_DMA.*)?$;^%b_Error.*$" hidden="true" />
+   <stringOption key="irq_classHandler"   constant="true" value="%c%i::irqHandler&lt;$1&gt;;%c%i::errorIrqHandler" hidden="true" />
    <xi:include href="_irqOptionSubstituted.xml"/>
  
    <validate
       class="net.sourceforge.usbdm.deviceEditor.validators.PeripheralValidator">
    </validate>
 
-   <template name="/DMA/declarations" namespace="all"  ><![CDATA[
+   <template key="/DMA/declarations" namespace="all"  ><![CDATA[
    \t/**
    \t * Class representing DMAMUX$(_instance)
    \t */

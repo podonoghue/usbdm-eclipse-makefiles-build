@@ -111,12 +111,12 @@ typedef enum {
   FTM3_IRQn                     =  71,   /**<  87 FlexTimer Module                                                                 */
   I2C2_IRQn                     =  74,   /**<  90 Inter-Integrated Circuit                                                         */
   SDHC0_IRQn                    =  81,   /**<  97 Secured Digital Host Controller                                                  */
-  TSI0_IRQn                     =  87,   /**< 103 Touch sense input                                                                */
+  TSI0_IRQn                     =  87,   /**< 103 Touch Sense Input                                                                */
   TPM1_IRQn                     =  88,   /**< 104 Timer/PWM Module                                                                 */
   TPM2_IRQn                     =  89,   /**< 105 Timer/PWM Module                                                                 */
-  USBHSDCD0_IRQn                =  90,   /**< 106 USB Device Charger Detection module                                              */
+  USBPHY_USBDCD1_IRQn           =  90,   /**< 106 USB Device Charger Detection                                                     */
   I2C3_IRQn                     =  91,   /**< 107 Inter-Integrated Circuit                                                         */
-  USBHS0_IRQn                   =  93,   /**< 109 USB HS/FS/LS OTG Controller                                                      */
+  USB1_IRQn                     =  93,   /**< 109 USB HS/FS/LS OTG Controller                                                      */
   QSPI0_IRQn                    = 100,   /**< 116 QuadSPI                                                                          */
 } IRQn_Type;
 
@@ -206,12 +206,12 @@ extern void FLEXIO_IRQHandler(void);                 /**< The FLEXIO Memory Map/
 extern void FTM3_IRQHandler(void);                   /**< FlexTimer Module                                                                 */
 extern void I2C2_IRQHandler(void);                   /**< Inter-Integrated Circuit                                                         */
 extern void SDHC0_IRQHandler(void);                  /**< Secured Digital Host Controller                                                  */
-extern void TSI0_IRQHandler(void);                   /**< Touch sense input                                                                */
+extern void TSI0_IRQHandler(void);                   /**< Touch Sense Input                                                                */
 extern void TPM1_IRQHandler(void);                   /**< Timer/PWM Module                                                                 */
 extern void TPM2_IRQHandler(void);                   /**< Timer/PWM Module                                                                 */
-extern void USBHSDCD0_IRQHandler(void);              /**< USB Device Charger Detection module                                              */
+extern void USBPHY_USBDCD1_IRQHandler(void);         /**< USB Device Charger Detection                                                     */
 extern void I2C3_IRQHandler(void);                   /**< Inter-Integrated Circuit                                                         */
-extern void USBHS0_IRQHandler(void);                 /**< USB HS/FS/LS OTG Controller                                                      */
+extern void USB1_IRQHandler(void);                   /**< USB HS/FS/LS OTG Controller                                                      */
 extern void QSPI0_IRQHandler(void);                  /**< QuadSPI                                                                          */
 
 /**
@@ -12749,13 +12749,36 @@ typedef struct USBDCD_Type {
  * @} */ /* End group USBDCD_Peripheral_access_layer_GROUP 
  */
 /**
+* @addtogroup USBDCD_Peripheral_access_layer_GROUP USBDCD Peripheral Access Layer
+* @brief C Struct for USBDCD
+* @{
+*/
+
+/* ================================================================================ */
+/* ================           USBDCD1 (derived from USBDCD0)       ================ */
+/* ================================================================================ */
+
+/**
+ * @brief USB Device Charger Detection module (USB DCD V1.2)
+ */
+
+/* USBDCD1 - Peripheral instance base addresses */
+#define USBDCD1_BasePtr                0x400A3000UL //!< Peripheral base address
+#define USBDCD1                        ((USBDCD_Type *) USBDCD1_BasePtr) //!< Freescale base pointer
+#define USBDCD1_BASE_PTR               (USBDCD1) //!< Freescale style base pointer
+#define USBDCD1_IRQS { USBPHY_USBDCD1_IRQn,  }
+
+/**
+ * @} */ /* End group USBDCD_Peripheral_access_layer_GROUP 
+ */
+/**
 * @addtogroup USBHS_Peripheral_access_layer_GROUP USBHS Peripheral Access Layer
 * @brief C Struct for USBHS
 * @{
 */
 
 /* ================================================================================ */
-/* ================           USBHS0 (file:USBHS0_8ENDPT)          ================ */
+/* ================           USBHS0 (file:USBHS1_8ENDPT)          ================ */
 /* ================================================================================ */
 
 /**
@@ -13522,33 +13545,10 @@ typedef struct USBHS_Type {
 #define USBHS0_BasePtr                 0x400A1000UL //!< Peripheral base address
 #define USBHS0                         ((USBHS_Type *) USBHS0_BasePtr) //!< Freescale base pointer
 #define USBHS0_BASE_PTR                (USBHS0) //!< Freescale style base pointer
-#define USBHS0_IRQS { USBHS0_IRQn,  }
+#define USBHS0_IRQS { USB1_IRQn,  }
 
 /**
  * @} */ /* End group USBHS_Peripheral_access_layer_GROUP 
- */
-/**
-* @addtogroup USBDCD_Peripheral_access_layer_GROUP USBDCD Peripheral Access Layer
-* @brief C Struct for USBDCD
-* @{
-*/
-
-/* ================================================================================ */
-/* ================           USBHSDCD0 (derived from USBDCD0)       ================ */
-/* ================================================================================ */
-
-/**
- * @brief USB Device Charger Detection module (USB DCD V1.2)
- */
-
-/* USBHSDCD0 - Peripheral instance base addresses */
-#define USBHSDCD0_BasePtr              0x400A3000UL //!< Peripheral base address
-#define USBHSDCD0                      ((USBDCD_Type *) USBHSDCD0_BasePtr) //!< Freescale base pointer
-#define USBHSDCD0_BASE_PTR             (USBHSDCD0) //!< Freescale style base pointer
-#define USBHSDCD0_IRQS { USBHSDCD0_IRQn,  }
-
-/**
- * @} */ /* End group USBDCD_Peripheral_access_layer_GROUP 
  */
 /**
 * @addtogroup USBPHY_Peripheral_access_layer_GROUP USBPHY Peripheral Access Layer
@@ -13557,7 +13557,7 @@ typedef struct USBHS_Type {
 */
 
 /* ================================================================================ */
-/* ================           USBPHY0 (file:USBPHY0_MK28F15)       ================ */
+/* ================           USBPHY1 (file:USBPHY1_MK28F15)       ================ */
 /* ================================================================================ */
 
 /**
@@ -13635,7 +13635,7 @@ typedef struct USBPHY_Type {
  */
 
 /* -------------------------------------------------------------------------------- */
-/* -----------     'USBPHY0' Position & Mask macros                     ----------- */
+/* -----------     'USBPHY1' Position & Mask macros                     ----------- */
 /* -------------------------------------------------------------------------------- */
 
 /**
@@ -13645,1282 +13645,1284 @@ typedef struct USBPHY_Type {
 */
 
 /*! @name PWD - USB PHY Power-Down Register */
-#define USBPHY0_PWD_TXPWDFS_MASK                 (0x400U)                                            /*!< USBPHY0_PWD.TXPWDFS Mask                */
-#define USBPHY0_PWD_TXPWDFS_SHIFT                (10U)                                               /*!< USBPHY0_PWD.TXPWDFS Position            */
-#define USBPHY0_PWD_TXPWDFS(x)                   (((uint32_t)(((uint32_t)(x))<<USBPHY0_PWD_TXPWDFS_SHIFT))&USBPHY0_PWD_TXPWDFS_MASK) /*!< USBPHY0_PWD.TXPWDFS Field               */
-#define USBPHY0_PWD_TXPWDIBIAS_MASK              (0x800U)                                            /*!< USBPHY0_PWD.TXPWDIBIAS Mask             */
-#define USBPHY0_PWD_TXPWDIBIAS_SHIFT             (11U)                                               /*!< USBPHY0_PWD.TXPWDIBIAS Position         */
-#define USBPHY0_PWD_TXPWDIBIAS(x)                (((uint32_t)(((uint32_t)(x))<<USBPHY0_PWD_TXPWDIBIAS_SHIFT))&USBPHY0_PWD_TXPWDIBIAS_MASK) /*!< USBPHY0_PWD.TXPWDIBIAS Field            */
-#define USBPHY0_PWD_TXPWDV2I_MASK                (0x1000U)                                           /*!< USBPHY0_PWD.TXPWDV2I Mask               */
-#define USBPHY0_PWD_TXPWDV2I_SHIFT               (12U)                                               /*!< USBPHY0_PWD.TXPWDV2I Position           */
-#define USBPHY0_PWD_TXPWDV2I(x)                  (((uint32_t)(((uint32_t)(x))<<USBPHY0_PWD_TXPWDV2I_SHIFT))&USBPHY0_PWD_TXPWDV2I_MASK) /*!< USBPHY0_PWD.TXPWDV2I Field              */
-#define USBPHY0_PWD_RXPWDENV_MASK                (0x20000U)                                          /*!< USBPHY0_PWD.RXPWDENV Mask               */
-#define USBPHY0_PWD_RXPWDENV_SHIFT               (17U)                                               /*!< USBPHY0_PWD.RXPWDENV Position           */
-#define USBPHY0_PWD_RXPWDENV(x)                  (((uint32_t)(((uint32_t)(x))<<USBPHY0_PWD_RXPWDENV_SHIFT))&USBPHY0_PWD_RXPWDENV_MASK) /*!< USBPHY0_PWD.RXPWDENV Field              */
-#define USBPHY0_PWD_RXPWD1PT1_MASK               (0x40000U)                                          /*!< USBPHY0_PWD.RXPWD1PT1 Mask              */
-#define USBPHY0_PWD_RXPWD1PT1_SHIFT              (18U)                                               /*!< USBPHY0_PWD.RXPWD1PT1 Position          */
-#define USBPHY0_PWD_RXPWD1PT1(x)                 (((uint32_t)(((uint32_t)(x))<<USBPHY0_PWD_RXPWD1PT1_SHIFT))&USBPHY0_PWD_RXPWD1PT1_MASK) /*!< USBPHY0_PWD.RXPWD1PT1 Field             */
-#define USBPHY0_PWD_RXPWDDIFF_MASK               (0x80000U)                                          /*!< USBPHY0_PWD.RXPWDDIFF Mask              */
-#define USBPHY0_PWD_RXPWDDIFF_SHIFT              (19U)                                               /*!< USBPHY0_PWD.RXPWDDIFF Position          */
-#define USBPHY0_PWD_RXPWDDIFF(x)                 (((uint32_t)(((uint32_t)(x))<<USBPHY0_PWD_RXPWDDIFF_SHIFT))&USBPHY0_PWD_RXPWDDIFF_MASK) /*!< USBPHY0_PWD.RXPWDDIFF Field             */
-#define USBPHY0_PWD_RXPWDRX_MASK                 (0x100000U)                                         /*!< USBPHY0_PWD.RXPWDRX Mask                */
-#define USBPHY0_PWD_RXPWDRX_SHIFT                (20U)                                               /*!< USBPHY0_PWD.RXPWDRX Position            */
-#define USBPHY0_PWD_RXPWDRX(x)                   (((uint32_t)(((uint32_t)(x))<<USBPHY0_PWD_RXPWDRX_SHIFT))&USBPHY0_PWD_RXPWDRX_MASK) /*!< USBPHY0_PWD.RXPWDRX Field               */
+#define USBPHY_PWD_TXPWDFS_MASK                  (0x400U)                                            /*!< USBPHY1_PWD.TXPWDFS Mask                */
+#define USBPHY_PWD_TXPWDFS_SHIFT                 (10U)                                               /*!< USBPHY1_PWD.TXPWDFS Position            */
+#define USBPHY_PWD_TXPWDFS(x)                    (((uint32_t)(((uint32_t)(x))<<USBPHY_PWD_TXPWDFS_SHIFT))&USBPHY_PWD_TXPWDFS_MASK) /*!< USBPHY1_PWD.TXPWDFS Field               */
+#define USBPHY_PWD_TXPWDIBIAS_MASK               (0x800U)                                            /*!< USBPHY1_PWD.TXPWDIBIAS Mask             */
+#define USBPHY_PWD_TXPWDIBIAS_SHIFT              (11U)                                               /*!< USBPHY1_PWD.TXPWDIBIAS Position         */
+#define USBPHY_PWD_TXPWDIBIAS(x)                 (((uint32_t)(((uint32_t)(x))<<USBPHY_PWD_TXPWDIBIAS_SHIFT))&USBPHY_PWD_TXPWDIBIAS_MASK) /*!< USBPHY1_PWD.TXPWDIBIAS Field            */
+#define USBPHY_PWD_TXPWDV2I_MASK                 (0x1000U)                                           /*!< USBPHY1_PWD.TXPWDV2I Mask               */
+#define USBPHY_PWD_TXPWDV2I_SHIFT                (12U)                                               /*!< USBPHY1_PWD.TXPWDV2I Position           */
+#define USBPHY_PWD_TXPWDV2I(x)                   (((uint32_t)(((uint32_t)(x))<<USBPHY_PWD_TXPWDV2I_SHIFT))&USBPHY_PWD_TXPWDV2I_MASK) /*!< USBPHY1_PWD.TXPWDV2I Field              */
+#define USBPHY_PWD_RXPWDENV_MASK                 (0x20000U)                                          /*!< USBPHY1_PWD.RXPWDENV Mask               */
+#define USBPHY_PWD_RXPWDENV_SHIFT                (17U)                                               /*!< USBPHY1_PWD.RXPWDENV Position           */
+#define USBPHY_PWD_RXPWDENV(x)                   (((uint32_t)(((uint32_t)(x))<<USBPHY_PWD_RXPWDENV_SHIFT))&USBPHY_PWD_RXPWDENV_MASK) /*!< USBPHY1_PWD.RXPWDENV Field              */
+#define USBPHY_PWD_RXPWD1PT1_MASK                (0x40000U)                                          /*!< USBPHY1_PWD.RXPWD1PT1 Mask              */
+#define USBPHY_PWD_RXPWD1PT1_SHIFT               (18U)                                               /*!< USBPHY1_PWD.RXPWD1PT1 Position          */
+#define USBPHY_PWD_RXPWD1PT1(x)                  (((uint32_t)(((uint32_t)(x))<<USBPHY_PWD_RXPWD1PT1_SHIFT))&USBPHY_PWD_RXPWD1PT1_MASK) /*!< USBPHY1_PWD.RXPWD1PT1 Field             */
+#define USBPHY_PWD_RXPWDDIFF_MASK                (0x80000U)                                          /*!< USBPHY1_PWD.RXPWDDIFF Mask              */
+#define USBPHY_PWD_RXPWDDIFF_SHIFT               (19U)                                               /*!< USBPHY1_PWD.RXPWDDIFF Position          */
+#define USBPHY_PWD_RXPWDDIFF(x)                  (((uint32_t)(((uint32_t)(x))<<USBPHY_PWD_RXPWDDIFF_SHIFT))&USBPHY_PWD_RXPWDDIFF_MASK) /*!< USBPHY1_PWD.RXPWDDIFF Field             */
+#define USBPHY_PWD_RXPWDRX_MASK                  (0x100000U)                                         /*!< USBPHY1_PWD.RXPWDRX Mask                */
+#define USBPHY_PWD_RXPWDRX_SHIFT                 (20U)                                               /*!< USBPHY1_PWD.RXPWDRX Position            */
+#define USBPHY_PWD_RXPWDRX(x)                    (((uint32_t)(((uint32_t)(x))<<USBPHY_PWD_RXPWDRX_SHIFT))&USBPHY_PWD_RXPWDRX_MASK) /*!< USBPHY1_PWD.RXPWDRX Field               */
 
 /*! @name PWD_SET - USB PHY Power-Down Register */
-#define USBPHY0_PWD_SET_TXPWDFS_MASK             (0x400U)                                            /*!< USBPHY0_PWD_SET.TXPWDFS Mask            */
-#define USBPHY0_PWD_SET_TXPWDFS_SHIFT            (10U)                                               /*!< USBPHY0_PWD_SET.TXPWDFS Position        */
-#define USBPHY0_PWD_SET_TXPWDFS(x)               (((uint32_t)(((uint32_t)(x))<<USBPHY0_PWD_SET_TXPWDFS_SHIFT))&USBPHY0_PWD_SET_TXPWDFS_MASK) /*!< USBPHY0_PWD_SET.TXPWDFS Field           */
-#define USBPHY0_PWD_SET_TXPWDIBIAS_MASK          (0x800U)                                            /*!< USBPHY0_PWD_SET.TXPWDIBIAS Mask         */
-#define USBPHY0_PWD_SET_TXPWDIBIAS_SHIFT         (11U)                                               /*!< USBPHY0_PWD_SET.TXPWDIBIAS Position     */
-#define USBPHY0_PWD_SET_TXPWDIBIAS(x)            (((uint32_t)(((uint32_t)(x))<<USBPHY0_PWD_SET_TXPWDIBIAS_SHIFT))&USBPHY0_PWD_SET_TXPWDIBIAS_MASK) /*!< USBPHY0_PWD_SET.TXPWDIBIAS Field        */
-#define USBPHY0_PWD_SET_TXPWDV2I_MASK            (0x1000U)                                           /*!< USBPHY0_PWD_SET.TXPWDV2I Mask           */
-#define USBPHY0_PWD_SET_TXPWDV2I_SHIFT           (12U)                                               /*!< USBPHY0_PWD_SET.TXPWDV2I Position       */
-#define USBPHY0_PWD_SET_TXPWDV2I(x)              (((uint32_t)(((uint32_t)(x))<<USBPHY0_PWD_SET_TXPWDV2I_SHIFT))&USBPHY0_PWD_SET_TXPWDV2I_MASK) /*!< USBPHY0_PWD_SET.TXPWDV2I Field          */
-#define USBPHY0_PWD_SET_RXPWDENV_MASK            (0x20000U)                                          /*!< USBPHY0_PWD_SET.RXPWDENV Mask           */
-#define USBPHY0_PWD_SET_RXPWDENV_SHIFT           (17U)                                               /*!< USBPHY0_PWD_SET.RXPWDENV Position       */
-#define USBPHY0_PWD_SET_RXPWDENV(x)              (((uint32_t)(((uint32_t)(x))<<USBPHY0_PWD_SET_RXPWDENV_SHIFT))&USBPHY0_PWD_SET_RXPWDENV_MASK) /*!< USBPHY0_PWD_SET.RXPWDENV Field          */
-#define USBPHY0_PWD_SET_RXPWD1PT1_MASK           (0x40000U)                                          /*!< USBPHY0_PWD_SET.RXPWD1PT1 Mask          */
-#define USBPHY0_PWD_SET_RXPWD1PT1_SHIFT          (18U)                                               /*!< USBPHY0_PWD_SET.RXPWD1PT1 Position      */
-#define USBPHY0_PWD_SET_RXPWD1PT1(x)             (((uint32_t)(((uint32_t)(x))<<USBPHY0_PWD_SET_RXPWD1PT1_SHIFT))&USBPHY0_PWD_SET_RXPWD1PT1_MASK) /*!< USBPHY0_PWD_SET.RXPWD1PT1 Field         */
-#define USBPHY0_PWD_SET_RXPWDDIFF_MASK           (0x80000U)                                          /*!< USBPHY0_PWD_SET.RXPWDDIFF Mask          */
-#define USBPHY0_PWD_SET_RXPWDDIFF_SHIFT          (19U)                                               /*!< USBPHY0_PWD_SET.RXPWDDIFF Position      */
-#define USBPHY0_PWD_SET_RXPWDDIFF(x)             (((uint32_t)(((uint32_t)(x))<<USBPHY0_PWD_SET_RXPWDDIFF_SHIFT))&USBPHY0_PWD_SET_RXPWDDIFF_MASK) /*!< USBPHY0_PWD_SET.RXPWDDIFF Field         */
-#define USBPHY0_PWD_SET_RXPWDRX_MASK             (0x100000U)                                         /*!< USBPHY0_PWD_SET.RXPWDRX Mask            */
-#define USBPHY0_PWD_SET_RXPWDRX_SHIFT            (20U)                                               /*!< USBPHY0_PWD_SET.RXPWDRX Position        */
-#define USBPHY0_PWD_SET_RXPWDRX(x)               (((uint32_t)(((uint32_t)(x))<<USBPHY0_PWD_SET_RXPWDRX_SHIFT))&USBPHY0_PWD_SET_RXPWDRX_MASK) /*!< USBPHY0_PWD_SET.RXPWDRX Field           */
+#define USBPHY_PWD_SET_TXPWDFS_MASK              (0x400U)                                            /*!< USBPHY1_PWD_SET.TXPWDFS Mask            */
+#define USBPHY_PWD_SET_TXPWDFS_SHIFT             (10U)                                               /*!< USBPHY1_PWD_SET.TXPWDFS Position        */
+#define USBPHY_PWD_SET_TXPWDFS(x)                (((uint32_t)(((uint32_t)(x))<<USBPHY_PWD_SET_TXPWDFS_SHIFT))&USBPHY_PWD_SET_TXPWDFS_MASK) /*!< USBPHY1_PWD_SET.TXPWDFS Field           */
+#define USBPHY_PWD_SET_TXPWDIBIAS_MASK           (0x800U)                                            /*!< USBPHY1_PWD_SET.TXPWDIBIAS Mask         */
+#define USBPHY_PWD_SET_TXPWDIBIAS_SHIFT          (11U)                                               /*!< USBPHY1_PWD_SET.TXPWDIBIAS Position     */
+#define USBPHY_PWD_SET_TXPWDIBIAS(x)             (((uint32_t)(((uint32_t)(x))<<USBPHY_PWD_SET_TXPWDIBIAS_SHIFT))&USBPHY_PWD_SET_TXPWDIBIAS_MASK) /*!< USBPHY1_PWD_SET.TXPWDIBIAS Field        */
+#define USBPHY_PWD_SET_TXPWDV2I_MASK             (0x1000U)                                           /*!< USBPHY1_PWD_SET.TXPWDV2I Mask           */
+#define USBPHY_PWD_SET_TXPWDV2I_SHIFT            (12U)                                               /*!< USBPHY1_PWD_SET.TXPWDV2I Position       */
+#define USBPHY_PWD_SET_TXPWDV2I(x)               (((uint32_t)(((uint32_t)(x))<<USBPHY_PWD_SET_TXPWDV2I_SHIFT))&USBPHY_PWD_SET_TXPWDV2I_MASK) /*!< USBPHY1_PWD_SET.TXPWDV2I Field          */
+#define USBPHY_PWD_SET_RXPWDENV_MASK             (0x20000U)                                          /*!< USBPHY1_PWD_SET.RXPWDENV Mask           */
+#define USBPHY_PWD_SET_RXPWDENV_SHIFT            (17U)                                               /*!< USBPHY1_PWD_SET.RXPWDENV Position       */
+#define USBPHY_PWD_SET_RXPWDENV(x)               (((uint32_t)(((uint32_t)(x))<<USBPHY_PWD_SET_RXPWDENV_SHIFT))&USBPHY_PWD_SET_RXPWDENV_MASK) /*!< USBPHY1_PWD_SET.RXPWDENV Field          */
+#define USBPHY_PWD_SET_RXPWD1PT1_MASK            (0x40000U)                                          /*!< USBPHY1_PWD_SET.RXPWD1PT1 Mask          */
+#define USBPHY_PWD_SET_RXPWD1PT1_SHIFT           (18U)                                               /*!< USBPHY1_PWD_SET.RXPWD1PT1 Position      */
+#define USBPHY_PWD_SET_RXPWD1PT1(x)              (((uint32_t)(((uint32_t)(x))<<USBPHY_PWD_SET_RXPWD1PT1_SHIFT))&USBPHY_PWD_SET_RXPWD1PT1_MASK) /*!< USBPHY1_PWD_SET.RXPWD1PT1 Field         */
+#define USBPHY_PWD_SET_RXPWDDIFF_MASK            (0x80000U)                                          /*!< USBPHY1_PWD_SET.RXPWDDIFF Mask          */
+#define USBPHY_PWD_SET_RXPWDDIFF_SHIFT           (19U)                                               /*!< USBPHY1_PWD_SET.RXPWDDIFF Position      */
+#define USBPHY_PWD_SET_RXPWDDIFF(x)              (((uint32_t)(((uint32_t)(x))<<USBPHY_PWD_SET_RXPWDDIFF_SHIFT))&USBPHY_PWD_SET_RXPWDDIFF_MASK) /*!< USBPHY1_PWD_SET.RXPWDDIFF Field         */
+#define USBPHY_PWD_SET_RXPWDRX_MASK              (0x100000U)                                         /*!< USBPHY1_PWD_SET.RXPWDRX Mask            */
+#define USBPHY_PWD_SET_RXPWDRX_SHIFT             (20U)                                               /*!< USBPHY1_PWD_SET.RXPWDRX Position        */
+#define USBPHY_PWD_SET_RXPWDRX(x)                (((uint32_t)(((uint32_t)(x))<<USBPHY_PWD_SET_RXPWDRX_SHIFT))&USBPHY_PWD_SET_RXPWDRX_MASK) /*!< USBPHY1_PWD_SET.RXPWDRX Field           */
 
 /*! @name PWD_CLR - USB PHY Power-Down Register */
-#define USBPHY0_PWD_CLR_TXPWDFS_MASK             (0x400U)                                            /*!< USBPHY0_PWD_CLR.TXPWDFS Mask            */
-#define USBPHY0_PWD_CLR_TXPWDFS_SHIFT            (10U)                                               /*!< USBPHY0_PWD_CLR.TXPWDFS Position        */
-#define USBPHY0_PWD_CLR_TXPWDFS(x)               (((uint32_t)(((uint32_t)(x))<<USBPHY0_PWD_CLR_TXPWDFS_SHIFT))&USBPHY0_PWD_CLR_TXPWDFS_MASK) /*!< USBPHY0_PWD_CLR.TXPWDFS Field           */
-#define USBPHY0_PWD_CLR_TXPWDIBIAS_MASK          (0x800U)                                            /*!< USBPHY0_PWD_CLR.TXPWDIBIAS Mask         */
-#define USBPHY0_PWD_CLR_TXPWDIBIAS_SHIFT         (11U)                                               /*!< USBPHY0_PWD_CLR.TXPWDIBIAS Position     */
-#define USBPHY0_PWD_CLR_TXPWDIBIAS(x)            (((uint32_t)(((uint32_t)(x))<<USBPHY0_PWD_CLR_TXPWDIBIAS_SHIFT))&USBPHY0_PWD_CLR_TXPWDIBIAS_MASK) /*!< USBPHY0_PWD_CLR.TXPWDIBIAS Field        */
-#define USBPHY0_PWD_CLR_TXPWDV2I_MASK            (0x1000U)                                           /*!< USBPHY0_PWD_CLR.TXPWDV2I Mask           */
-#define USBPHY0_PWD_CLR_TXPWDV2I_SHIFT           (12U)                                               /*!< USBPHY0_PWD_CLR.TXPWDV2I Position       */
-#define USBPHY0_PWD_CLR_TXPWDV2I(x)              (((uint32_t)(((uint32_t)(x))<<USBPHY0_PWD_CLR_TXPWDV2I_SHIFT))&USBPHY0_PWD_CLR_TXPWDV2I_MASK) /*!< USBPHY0_PWD_CLR.TXPWDV2I Field          */
-#define USBPHY0_PWD_CLR_RXPWDENV_MASK            (0x20000U)                                          /*!< USBPHY0_PWD_CLR.RXPWDENV Mask           */
-#define USBPHY0_PWD_CLR_RXPWDENV_SHIFT           (17U)                                               /*!< USBPHY0_PWD_CLR.RXPWDENV Position       */
-#define USBPHY0_PWD_CLR_RXPWDENV(x)              (((uint32_t)(((uint32_t)(x))<<USBPHY0_PWD_CLR_RXPWDENV_SHIFT))&USBPHY0_PWD_CLR_RXPWDENV_MASK) /*!< USBPHY0_PWD_CLR.RXPWDENV Field          */
-#define USBPHY0_PWD_CLR_RXPWD1PT1_MASK           (0x40000U)                                          /*!< USBPHY0_PWD_CLR.RXPWD1PT1 Mask          */
-#define USBPHY0_PWD_CLR_RXPWD1PT1_SHIFT          (18U)                                               /*!< USBPHY0_PWD_CLR.RXPWD1PT1 Position      */
-#define USBPHY0_PWD_CLR_RXPWD1PT1(x)             (((uint32_t)(((uint32_t)(x))<<USBPHY0_PWD_CLR_RXPWD1PT1_SHIFT))&USBPHY0_PWD_CLR_RXPWD1PT1_MASK) /*!< USBPHY0_PWD_CLR.RXPWD1PT1 Field         */
-#define USBPHY0_PWD_CLR_RXPWDDIFF_MASK           (0x80000U)                                          /*!< USBPHY0_PWD_CLR.RXPWDDIFF Mask          */
-#define USBPHY0_PWD_CLR_RXPWDDIFF_SHIFT          (19U)                                               /*!< USBPHY0_PWD_CLR.RXPWDDIFF Position      */
-#define USBPHY0_PWD_CLR_RXPWDDIFF(x)             (((uint32_t)(((uint32_t)(x))<<USBPHY0_PWD_CLR_RXPWDDIFF_SHIFT))&USBPHY0_PWD_CLR_RXPWDDIFF_MASK) /*!< USBPHY0_PWD_CLR.RXPWDDIFF Field         */
-#define USBPHY0_PWD_CLR_RXPWDRX_MASK             (0x100000U)                                         /*!< USBPHY0_PWD_CLR.RXPWDRX Mask            */
-#define USBPHY0_PWD_CLR_RXPWDRX_SHIFT            (20U)                                               /*!< USBPHY0_PWD_CLR.RXPWDRX Position        */
-#define USBPHY0_PWD_CLR_RXPWDRX(x)               (((uint32_t)(((uint32_t)(x))<<USBPHY0_PWD_CLR_RXPWDRX_SHIFT))&USBPHY0_PWD_CLR_RXPWDRX_MASK) /*!< USBPHY0_PWD_CLR.RXPWDRX Field           */
+#define USBPHY_PWD_CLR_TXPWDFS_MASK              (0x400U)                                            /*!< USBPHY1_PWD_CLR.TXPWDFS Mask            */
+#define USBPHY_PWD_CLR_TXPWDFS_SHIFT             (10U)                                               /*!< USBPHY1_PWD_CLR.TXPWDFS Position        */
+#define USBPHY_PWD_CLR_TXPWDFS(x)                (((uint32_t)(((uint32_t)(x))<<USBPHY_PWD_CLR_TXPWDFS_SHIFT))&USBPHY_PWD_CLR_TXPWDFS_MASK) /*!< USBPHY1_PWD_CLR.TXPWDFS Field           */
+#define USBPHY_PWD_CLR_TXPWDIBIAS_MASK           (0x800U)                                            /*!< USBPHY1_PWD_CLR.TXPWDIBIAS Mask         */
+#define USBPHY_PWD_CLR_TXPWDIBIAS_SHIFT          (11U)                                               /*!< USBPHY1_PWD_CLR.TXPWDIBIAS Position     */
+#define USBPHY_PWD_CLR_TXPWDIBIAS(x)             (((uint32_t)(((uint32_t)(x))<<USBPHY_PWD_CLR_TXPWDIBIAS_SHIFT))&USBPHY_PWD_CLR_TXPWDIBIAS_MASK) /*!< USBPHY1_PWD_CLR.TXPWDIBIAS Field        */
+#define USBPHY_PWD_CLR_TXPWDV2I_MASK             (0x1000U)                                           /*!< USBPHY1_PWD_CLR.TXPWDV2I Mask           */
+#define USBPHY_PWD_CLR_TXPWDV2I_SHIFT            (12U)                                               /*!< USBPHY1_PWD_CLR.TXPWDV2I Position       */
+#define USBPHY_PWD_CLR_TXPWDV2I(x)               (((uint32_t)(((uint32_t)(x))<<USBPHY_PWD_CLR_TXPWDV2I_SHIFT))&USBPHY_PWD_CLR_TXPWDV2I_MASK) /*!< USBPHY1_PWD_CLR.TXPWDV2I Field          */
+#define USBPHY_PWD_CLR_RXPWDENV_MASK             (0x20000U)                                          /*!< USBPHY1_PWD_CLR.RXPWDENV Mask           */
+#define USBPHY_PWD_CLR_RXPWDENV_SHIFT            (17U)                                               /*!< USBPHY1_PWD_CLR.RXPWDENV Position       */
+#define USBPHY_PWD_CLR_RXPWDENV(x)               (((uint32_t)(((uint32_t)(x))<<USBPHY_PWD_CLR_RXPWDENV_SHIFT))&USBPHY_PWD_CLR_RXPWDENV_MASK) /*!< USBPHY1_PWD_CLR.RXPWDENV Field          */
+#define USBPHY_PWD_CLR_RXPWD1PT1_MASK            (0x40000U)                                          /*!< USBPHY1_PWD_CLR.RXPWD1PT1 Mask          */
+#define USBPHY_PWD_CLR_RXPWD1PT1_SHIFT           (18U)                                               /*!< USBPHY1_PWD_CLR.RXPWD1PT1 Position      */
+#define USBPHY_PWD_CLR_RXPWD1PT1(x)              (((uint32_t)(((uint32_t)(x))<<USBPHY_PWD_CLR_RXPWD1PT1_SHIFT))&USBPHY_PWD_CLR_RXPWD1PT1_MASK) /*!< USBPHY1_PWD_CLR.RXPWD1PT1 Field         */
+#define USBPHY_PWD_CLR_RXPWDDIFF_MASK            (0x80000U)                                          /*!< USBPHY1_PWD_CLR.RXPWDDIFF Mask          */
+#define USBPHY_PWD_CLR_RXPWDDIFF_SHIFT           (19U)                                               /*!< USBPHY1_PWD_CLR.RXPWDDIFF Position      */
+#define USBPHY_PWD_CLR_RXPWDDIFF(x)              (((uint32_t)(((uint32_t)(x))<<USBPHY_PWD_CLR_RXPWDDIFF_SHIFT))&USBPHY_PWD_CLR_RXPWDDIFF_MASK) /*!< USBPHY1_PWD_CLR.RXPWDDIFF Field         */
+#define USBPHY_PWD_CLR_RXPWDRX_MASK              (0x100000U)                                         /*!< USBPHY1_PWD_CLR.RXPWDRX Mask            */
+#define USBPHY_PWD_CLR_RXPWDRX_SHIFT             (20U)                                               /*!< USBPHY1_PWD_CLR.RXPWDRX Position        */
+#define USBPHY_PWD_CLR_RXPWDRX(x)                (((uint32_t)(((uint32_t)(x))<<USBPHY_PWD_CLR_RXPWDRX_SHIFT))&USBPHY_PWD_CLR_RXPWDRX_MASK) /*!< USBPHY1_PWD_CLR.RXPWDRX Field           */
 
 /*! @name PWD_TOG - USB PHY Power-Down Register */
-#define USBPHY0_PWD_TOG_TXPWDFS_MASK             (0x400U)                                            /*!< USBPHY0_PWD_TOG.TXPWDFS Mask            */
-#define USBPHY0_PWD_TOG_TXPWDFS_SHIFT            (10U)                                               /*!< USBPHY0_PWD_TOG.TXPWDFS Position        */
-#define USBPHY0_PWD_TOG_TXPWDFS(x)               (((uint32_t)(((uint32_t)(x))<<USBPHY0_PWD_TOG_TXPWDFS_SHIFT))&USBPHY0_PWD_TOG_TXPWDFS_MASK) /*!< USBPHY0_PWD_TOG.TXPWDFS Field           */
-#define USBPHY0_PWD_TOG_TXPWDIBIAS_MASK          (0x800U)                                            /*!< USBPHY0_PWD_TOG.TXPWDIBIAS Mask         */
-#define USBPHY0_PWD_TOG_TXPWDIBIAS_SHIFT         (11U)                                               /*!< USBPHY0_PWD_TOG.TXPWDIBIAS Position     */
-#define USBPHY0_PWD_TOG_TXPWDIBIAS(x)            (((uint32_t)(((uint32_t)(x))<<USBPHY0_PWD_TOG_TXPWDIBIAS_SHIFT))&USBPHY0_PWD_TOG_TXPWDIBIAS_MASK) /*!< USBPHY0_PWD_TOG.TXPWDIBIAS Field        */
-#define USBPHY0_PWD_TOG_TXPWDV2I_MASK            (0x1000U)                                           /*!< USBPHY0_PWD_TOG.TXPWDV2I Mask           */
-#define USBPHY0_PWD_TOG_TXPWDV2I_SHIFT           (12U)                                               /*!< USBPHY0_PWD_TOG.TXPWDV2I Position       */
-#define USBPHY0_PWD_TOG_TXPWDV2I(x)              (((uint32_t)(((uint32_t)(x))<<USBPHY0_PWD_TOG_TXPWDV2I_SHIFT))&USBPHY0_PWD_TOG_TXPWDV2I_MASK) /*!< USBPHY0_PWD_TOG.TXPWDV2I Field          */
-#define USBPHY0_PWD_TOG_RXPWDENV_MASK            (0x20000U)                                          /*!< USBPHY0_PWD_TOG.RXPWDENV Mask           */
-#define USBPHY0_PWD_TOG_RXPWDENV_SHIFT           (17U)                                               /*!< USBPHY0_PWD_TOG.RXPWDENV Position       */
-#define USBPHY0_PWD_TOG_RXPWDENV(x)              (((uint32_t)(((uint32_t)(x))<<USBPHY0_PWD_TOG_RXPWDENV_SHIFT))&USBPHY0_PWD_TOG_RXPWDENV_MASK) /*!< USBPHY0_PWD_TOG.RXPWDENV Field          */
-#define USBPHY0_PWD_TOG_RXPWD1PT1_MASK           (0x40000U)                                          /*!< USBPHY0_PWD_TOG.RXPWD1PT1 Mask          */
-#define USBPHY0_PWD_TOG_RXPWD1PT1_SHIFT          (18U)                                               /*!< USBPHY0_PWD_TOG.RXPWD1PT1 Position      */
-#define USBPHY0_PWD_TOG_RXPWD1PT1(x)             (((uint32_t)(((uint32_t)(x))<<USBPHY0_PWD_TOG_RXPWD1PT1_SHIFT))&USBPHY0_PWD_TOG_RXPWD1PT1_MASK) /*!< USBPHY0_PWD_TOG.RXPWD1PT1 Field         */
-#define USBPHY0_PWD_TOG_RXPWDDIFF_MASK           (0x80000U)                                          /*!< USBPHY0_PWD_TOG.RXPWDDIFF Mask          */
-#define USBPHY0_PWD_TOG_RXPWDDIFF_SHIFT          (19U)                                               /*!< USBPHY0_PWD_TOG.RXPWDDIFF Position      */
-#define USBPHY0_PWD_TOG_RXPWDDIFF(x)             (((uint32_t)(((uint32_t)(x))<<USBPHY0_PWD_TOG_RXPWDDIFF_SHIFT))&USBPHY0_PWD_TOG_RXPWDDIFF_MASK) /*!< USBPHY0_PWD_TOG.RXPWDDIFF Field         */
-#define USBPHY0_PWD_TOG_RXPWDRX_MASK             (0x100000U)                                         /*!< USBPHY0_PWD_TOG.RXPWDRX Mask            */
-#define USBPHY0_PWD_TOG_RXPWDRX_SHIFT            (20U)                                               /*!< USBPHY0_PWD_TOG.RXPWDRX Position        */
-#define USBPHY0_PWD_TOG_RXPWDRX(x)               (((uint32_t)(((uint32_t)(x))<<USBPHY0_PWD_TOG_RXPWDRX_SHIFT))&USBPHY0_PWD_TOG_RXPWDRX_MASK) /*!< USBPHY0_PWD_TOG.RXPWDRX Field           */
+#define USBPHY_PWD_TOG_TXPWDFS_MASK              (0x400U)                                            /*!< USBPHY1_PWD_TOG.TXPWDFS Mask            */
+#define USBPHY_PWD_TOG_TXPWDFS_SHIFT             (10U)                                               /*!< USBPHY1_PWD_TOG.TXPWDFS Position        */
+#define USBPHY_PWD_TOG_TXPWDFS(x)                (((uint32_t)(((uint32_t)(x))<<USBPHY_PWD_TOG_TXPWDFS_SHIFT))&USBPHY_PWD_TOG_TXPWDFS_MASK) /*!< USBPHY1_PWD_TOG.TXPWDFS Field           */
+#define USBPHY_PWD_TOG_TXPWDIBIAS_MASK           (0x800U)                                            /*!< USBPHY1_PWD_TOG.TXPWDIBIAS Mask         */
+#define USBPHY_PWD_TOG_TXPWDIBIAS_SHIFT          (11U)                                               /*!< USBPHY1_PWD_TOG.TXPWDIBIAS Position     */
+#define USBPHY_PWD_TOG_TXPWDIBIAS(x)             (((uint32_t)(((uint32_t)(x))<<USBPHY_PWD_TOG_TXPWDIBIAS_SHIFT))&USBPHY_PWD_TOG_TXPWDIBIAS_MASK) /*!< USBPHY1_PWD_TOG.TXPWDIBIAS Field        */
+#define USBPHY_PWD_TOG_TXPWDV2I_MASK             (0x1000U)                                           /*!< USBPHY1_PWD_TOG.TXPWDV2I Mask           */
+#define USBPHY_PWD_TOG_TXPWDV2I_SHIFT            (12U)                                               /*!< USBPHY1_PWD_TOG.TXPWDV2I Position       */
+#define USBPHY_PWD_TOG_TXPWDV2I(x)               (((uint32_t)(((uint32_t)(x))<<USBPHY_PWD_TOG_TXPWDV2I_SHIFT))&USBPHY_PWD_TOG_TXPWDV2I_MASK) /*!< USBPHY1_PWD_TOG.TXPWDV2I Field          */
+#define USBPHY_PWD_TOG_RXPWDENV_MASK             (0x20000U)                                          /*!< USBPHY1_PWD_TOG.RXPWDENV Mask           */
+#define USBPHY_PWD_TOG_RXPWDENV_SHIFT            (17U)                                               /*!< USBPHY1_PWD_TOG.RXPWDENV Position       */
+#define USBPHY_PWD_TOG_RXPWDENV(x)               (((uint32_t)(((uint32_t)(x))<<USBPHY_PWD_TOG_RXPWDENV_SHIFT))&USBPHY_PWD_TOG_RXPWDENV_MASK) /*!< USBPHY1_PWD_TOG.RXPWDENV Field          */
+#define USBPHY_PWD_TOG_RXPWD1PT1_MASK            (0x40000U)                                          /*!< USBPHY1_PWD_TOG.RXPWD1PT1 Mask          */
+#define USBPHY_PWD_TOG_RXPWD1PT1_SHIFT           (18U)                                               /*!< USBPHY1_PWD_TOG.RXPWD1PT1 Position      */
+#define USBPHY_PWD_TOG_RXPWD1PT1(x)              (((uint32_t)(((uint32_t)(x))<<USBPHY_PWD_TOG_RXPWD1PT1_SHIFT))&USBPHY_PWD_TOG_RXPWD1PT1_MASK) /*!< USBPHY1_PWD_TOG.RXPWD1PT1 Field         */
+#define USBPHY_PWD_TOG_RXPWDDIFF_MASK            (0x80000U)                                          /*!< USBPHY1_PWD_TOG.RXPWDDIFF Mask          */
+#define USBPHY_PWD_TOG_RXPWDDIFF_SHIFT           (19U)                                               /*!< USBPHY1_PWD_TOG.RXPWDDIFF Position      */
+#define USBPHY_PWD_TOG_RXPWDDIFF(x)              (((uint32_t)(((uint32_t)(x))<<USBPHY_PWD_TOG_RXPWDDIFF_SHIFT))&USBPHY_PWD_TOG_RXPWDDIFF_MASK) /*!< USBPHY1_PWD_TOG.RXPWDDIFF Field         */
+#define USBPHY_PWD_TOG_RXPWDRX_MASK              (0x100000U)                                         /*!< USBPHY1_PWD_TOG.RXPWDRX Mask            */
+#define USBPHY_PWD_TOG_RXPWDRX_SHIFT             (20U)                                               /*!< USBPHY1_PWD_TOG.RXPWDRX Position        */
+#define USBPHY_PWD_TOG_RXPWDRX(x)                (((uint32_t)(((uint32_t)(x))<<USBPHY_PWD_TOG_RXPWDRX_SHIFT))&USBPHY_PWD_TOG_RXPWDRX_MASK) /*!< USBPHY1_PWD_TOG.RXPWDRX Field           */
 
 /*! @name TX - USB PHY Transmitter Control Register */
-#define USBPHY0_TX_D_CAL_MASK                    (0xFU)                                              /*!< USBPHY0_TX.D_CAL Mask                   */
-#define USBPHY0_TX_D_CAL_SHIFT                   (0U)                                                /*!< USBPHY0_TX.D_CAL Position               */
-#define USBPHY0_TX_D_CAL(x)                      (((uint32_t)(((uint32_t)(x))<<USBPHY0_TX_D_CAL_SHIFT))&USBPHY0_TX_D_CAL_MASK) /*!< USBPHY0_TX.D_CAL Field                  */
-#define USBPHY0_TX_TXCAL45DM_MASK                (0xF00U)                                            /*!< USBPHY0_TX.TXCAL45DM Mask               */
-#define USBPHY0_TX_TXCAL45DM_SHIFT               (8U)                                                /*!< USBPHY0_TX.TXCAL45DM Position           */
-#define USBPHY0_TX_TXCAL45DM(x)                  (((uint32_t)(((uint32_t)(x))<<USBPHY0_TX_TXCAL45DM_SHIFT))&USBPHY0_TX_TXCAL45DM_MASK) /*!< USBPHY0_TX.TXCAL45DM Field              */
-#define USBPHY0_TX_TXCAL45DP_MASK                (0xF0000U)                                          /*!< USBPHY0_TX.TXCAL45DP Mask               */
-#define USBPHY0_TX_TXCAL45DP_SHIFT               (16U)                                               /*!< USBPHY0_TX.TXCAL45DP Position           */
-#define USBPHY0_TX_TXCAL45DP(x)                  (((uint32_t)(((uint32_t)(x))<<USBPHY0_TX_TXCAL45DP_SHIFT))&USBPHY0_TX_TXCAL45DP_MASK) /*!< USBPHY0_TX.TXCAL45DP Field              */
-#define USBPHY0_TX_USBPHY_TX_EDGECTRL_MASK       (0x1C000000U)                                       /*!< USBPHY0_TX.USBPHY_TX_EDGECTRL Mask      */
-#define USBPHY0_TX_USBPHY_TX_EDGECTRL_SHIFT      (26U)                                               /*!< USBPHY0_TX.USBPHY_TX_EDGECTRL Position  */
-#define USBPHY0_TX_USBPHY_TX_EDGECTRL(x)         (((uint32_t)(((uint32_t)(x))<<USBPHY0_TX_USBPHY_TX_EDGECTRL_SHIFT))&USBPHY0_TX_USBPHY_TX_EDGECTRL_MASK) /*!< USBPHY0_TX.USBPHY_TX_EDGECTRL Field     */
+#define USBPHY_TX_D_CAL_MASK                     (0xFU)                                              /*!< USBPHY1_TX.D_CAL Mask                   */
+#define USBPHY_TX_D_CAL_SHIFT                    (0U)                                                /*!< USBPHY1_TX.D_CAL Position               */
+#define USBPHY_TX_D_CAL(x)                       (((uint32_t)(((uint32_t)(x))<<USBPHY_TX_D_CAL_SHIFT))&USBPHY_TX_D_CAL_MASK) /*!< USBPHY1_TX.D_CAL Field                  */
+#define USBPHY_TX_TXCAL45DM_MASK                 (0xF00U)                                            /*!< USBPHY1_TX.TXCAL45DM Mask               */
+#define USBPHY_TX_TXCAL45DM_SHIFT                (8U)                                                /*!< USBPHY1_TX.TXCAL45DM Position           */
+#define USBPHY_TX_TXCAL45DM(x)                   (((uint32_t)(((uint32_t)(x))<<USBPHY_TX_TXCAL45DM_SHIFT))&USBPHY_TX_TXCAL45DM_MASK) /*!< USBPHY1_TX.TXCAL45DM Field              */
+#define USBPHY_TX_TXCAL45DP_MASK                 (0xF0000U)                                          /*!< USBPHY1_TX.TXCAL45DP Mask               */
+#define USBPHY_TX_TXCAL45DP_SHIFT                (16U)                                               /*!< USBPHY1_TX.TXCAL45DP Position           */
+#define USBPHY_TX_TXCAL45DP(x)                   (((uint32_t)(((uint32_t)(x))<<USBPHY_TX_TXCAL45DP_SHIFT))&USBPHY_TX_TXCAL45DP_MASK) /*!< USBPHY1_TX.TXCAL45DP Field              */
+#define USBPHY_TX_USBPHY_TX_EDGECTRL_MASK        (0x1C000000U)                                       /*!< USBPHY1_TX.USBPHY_TX_EDGECTRL Mask      */
+#define USBPHY_TX_USBPHY_TX_EDGECTRL_SHIFT       (26U)                                               /*!< USBPHY1_TX.USBPHY_TX_EDGECTRL Position  */
+#define USBPHY_TX_USBPHY_TX_EDGECTRL(x)          (((uint32_t)(((uint32_t)(x))<<USBPHY_TX_USBPHY_TX_EDGECTRL_SHIFT))&USBPHY_TX_USBPHY_TX_EDGECTRL_MASK) /*!< USBPHY1_TX.USBPHY_TX_EDGECTRL Field     */
 
 /*! @name TX_SET - USB PHY Transmitter Control Register */
-#define USBPHY0_TX_SET_D_CAL_MASK                (0xFU)                                              /*!< USBPHY0_TX_SET.D_CAL Mask               */
-#define USBPHY0_TX_SET_D_CAL_SHIFT               (0U)                                                /*!< USBPHY0_TX_SET.D_CAL Position           */
-#define USBPHY0_TX_SET_D_CAL(x)                  (((uint32_t)(((uint32_t)(x))<<USBPHY0_TX_SET_D_CAL_SHIFT))&USBPHY0_TX_SET_D_CAL_MASK) /*!< USBPHY0_TX_SET.D_CAL Field              */
-#define USBPHY0_TX_SET_TXCAL45DM_MASK            (0xF00U)                                            /*!< USBPHY0_TX_SET.TXCAL45DM Mask           */
-#define USBPHY0_TX_SET_TXCAL45DM_SHIFT           (8U)                                                /*!< USBPHY0_TX_SET.TXCAL45DM Position       */
-#define USBPHY0_TX_SET_TXCAL45DM(x)              (((uint32_t)(((uint32_t)(x))<<USBPHY0_TX_SET_TXCAL45DM_SHIFT))&USBPHY0_TX_SET_TXCAL45DM_MASK) /*!< USBPHY0_TX_SET.TXCAL45DM Field          */
-#define USBPHY0_TX_SET_TXCAL45DP_MASK            (0xF0000U)                                          /*!< USBPHY0_TX_SET.TXCAL45DP Mask           */
-#define USBPHY0_TX_SET_TXCAL45DP_SHIFT           (16U)                                               /*!< USBPHY0_TX_SET.TXCAL45DP Position       */
-#define USBPHY0_TX_SET_TXCAL45DP(x)              (((uint32_t)(((uint32_t)(x))<<USBPHY0_TX_SET_TXCAL45DP_SHIFT))&USBPHY0_TX_SET_TXCAL45DP_MASK) /*!< USBPHY0_TX_SET.TXCAL45DP Field          */
-#define USBPHY0_TX_SET_USBPHY_TX_EDGECTRL_MASK   (0x1C000000U)                                       /*!< USBPHY0_TX_SET.USBPHY_TX_EDGECTRL Mask  */
-#define USBPHY0_TX_SET_USBPHY_TX_EDGECTRL_SHIFT  (26U)                                               /*!< USBPHY0_TX_SET.USBPHY_TX_EDGECTRL Position*/
-#define USBPHY0_TX_SET_USBPHY_TX_EDGECTRL(x)     (((uint32_t)(((uint32_t)(x))<<USBPHY0_TX_SET_USBPHY_TX_EDGECTRL_SHIFT))&USBPHY0_TX_SET_USBPHY_TX_EDGECTRL_MASK) /*!< USBPHY0_TX_SET.USBPHY_TX_EDGECTRL Field */
+#define USBPHY_TX_SET_D_CAL_MASK                 (0xFU)                                              /*!< USBPHY1_TX_SET.D_CAL Mask               */
+#define USBPHY_TX_SET_D_CAL_SHIFT                (0U)                                                /*!< USBPHY1_TX_SET.D_CAL Position           */
+#define USBPHY_TX_SET_D_CAL(x)                   (((uint32_t)(((uint32_t)(x))<<USBPHY_TX_SET_D_CAL_SHIFT))&USBPHY_TX_SET_D_CAL_MASK) /*!< USBPHY1_TX_SET.D_CAL Field              */
+#define USBPHY_TX_SET_TXCAL45DM_MASK             (0xF00U)                                            /*!< USBPHY1_TX_SET.TXCAL45DM Mask           */
+#define USBPHY_TX_SET_TXCAL45DM_SHIFT            (8U)                                                /*!< USBPHY1_TX_SET.TXCAL45DM Position       */
+#define USBPHY_TX_SET_TXCAL45DM(x)               (((uint32_t)(((uint32_t)(x))<<USBPHY_TX_SET_TXCAL45DM_SHIFT))&USBPHY_TX_SET_TXCAL45DM_MASK) /*!< USBPHY1_TX_SET.TXCAL45DM Field          */
+#define USBPHY_TX_SET_TXCAL45DP_MASK             (0xF0000U)                                          /*!< USBPHY1_TX_SET.TXCAL45DP Mask           */
+#define USBPHY_TX_SET_TXCAL45DP_SHIFT            (16U)                                               /*!< USBPHY1_TX_SET.TXCAL45DP Position       */
+#define USBPHY_TX_SET_TXCAL45DP(x)               (((uint32_t)(((uint32_t)(x))<<USBPHY_TX_SET_TXCAL45DP_SHIFT))&USBPHY_TX_SET_TXCAL45DP_MASK) /*!< USBPHY1_TX_SET.TXCAL45DP Field          */
+#define USBPHY_TX_SET_USBPHY_TX_EDGECTRL_MASK    (0x1C000000U)                                       /*!< USBPHY1_TX_SET.USBPHY_TX_EDGECTRL Mask  */
+#define USBPHY_TX_SET_USBPHY_TX_EDGECTRL_SHIFT   (26U)                                               /*!< USBPHY1_TX_SET.USBPHY_TX_EDGECTRL Position*/
+#define USBPHY_TX_SET_USBPHY_TX_EDGECTRL(x)      (((uint32_t)(((uint32_t)(x))<<USBPHY_TX_SET_USBPHY_TX_EDGECTRL_SHIFT))&USBPHY_TX_SET_USBPHY_TX_EDGECTRL_MASK) /*!< USBPHY1_TX_SET.USBPHY_TX_EDGECTRL Field */
 
 /*! @name TX_CLR - USB PHY Transmitter Control Register */
-#define USBPHY0_TX_CLR_D_CAL_MASK                (0xFU)                                              /*!< USBPHY0_TX_CLR.D_CAL Mask               */
-#define USBPHY0_TX_CLR_D_CAL_SHIFT               (0U)                                                /*!< USBPHY0_TX_CLR.D_CAL Position           */
-#define USBPHY0_TX_CLR_D_CAL(x)                  (((uint32_t)(((uint32_t)(x))<<USBPHY0_TX_CLR_D_CAL_SHIFT))&USBPHY0_TX_CLR_D_CAL_MASK) /*!< USBPHY0_TX_CLR.D_CAL Field              */
-#define USBPHY0_TX_CLR_TXCAL45DM_MASK            (0xF00U)                                            /*!< USBPHY0_TX_CLR.TXCAL45DM Mask           */
-#define USBPHY0_TX_CLR_TXCAL45DM_SHIFT           (8U)                                                /*!< USBPHY0_TX_CLR.TXCAL45DM Position       */
-#define USBPHY0_TX_CLR_TXCAL45DM(x)              (((uint32_t)(((uint32_t)(x))<<USBPHY0_TX_CLR_TXCAL45DM_SHIFT))&USBPHY0_TX_CLR_TXCAL45DM_MASK) /*!< USBPHY0_TX_CLR.TXCAL45DM Field          */
-#define USBPHY0_TX_CLR_TXCAL45DP_MASK            (0xF0000U)                                          /*!< USBPHY0_TX_CLR.TXCAL45DP Mask           */
-#define USBPHY0_TX_CLR_TXCAL45DP_SHIFT           (16U)                                               /*!< USBPHY0_TX_CLR.TXCAL45DP Position       */
-#define USBPHY0_TX_CLR_TXCAL45DP(x)              (((uint32_t)(((uint32_t)(x))<<USBPHY0_TX_CLR_TXCAL45DP_SHIFT))&USBPHY0_TX_CLR_TXCAL45DP_MASK) /*!< USBPHY0_TX_CLR.TXCAL45DP Field          */
-#define USBPHY0_TX_CLR_USBPHY_TX_EDGECTRL_MASK   (0x1C000000U)                                       /*!< USBPHY0_TX_CLR.USBPHY_TX_EDGECTRL Mask  */
-#define USBPHY0_TX_CLR_USBPHY_TX_EDGECTRL_SHIFT  (26U)                                               /*!< USBPHY0_TX_CLR.USBPHY_TX_EDGECTRL Position*/
-#define USBPHY0_TX_CLR_USBPHY_TX_EDGECTRL(x)     (((uint32_t)(((uint32_t)(x))<<USBPHY0_TX_CLR_USBPHY_TX_EDGECTRL_SHIFT))&USBPHY0_TX_CLR_USBPHY_TX_EDGECTRL_MASK) /*!< USBPHY0_TX_CLR.USBPHY_TX_EDGECTRL Field */
+#define USBPHY_TX_CLR_D_CAL_MASK                 (0xFU)                                              /*!< USBPHY1_TX_CLR.D_CAL Mask               */
+#define USBPHY_TX_CLR_D_CAL_SHIFT                (0U)                                                /*!< USBPHY1_TX_CLR.D_CAL Position           */
+#define USBPHY_TX_CLR_D_CAL(x)                   (((uint32_t)(((uint32_t)(x))<<USBPHY_TX_CLR_D_CAL_SHIFT))&USBPHY_TX_CLR_D_CAL_MASK) /*!< USBPHY1_TX_CLR.D_CAL Field              */
+#define USBPHY_TX_CLR_TXCAL45DM_MASK             (0xF00U)                                            /*!< USBPHY1_TX_CLR.TXCAL45DM Mask           */
+#define USBPHY_TX_CLR_TXCAL45DM_SHIFT            (8U)                                                /*!< USBPHY1_TX_CLR.TXCAL45DM Position       */
+#define USBPHY_TX_CLR_TXCAL45DM(x)               (((uint32_t)(((uint32_t)(x))<<USBPHY_TX_CLR_TXCAL45DM_SHIFT))&USBPHY_TX_CLR_TXCAL45DM_MASK) /*!< USBPHY1_TX_CLR.TXCAL45DM Field          */
+#define USBPHY_TX_CLR_TXCAL45DP_MASK             (0xF0000U)                                          /*!< USBPHY1_TX_CLR.TXCAL45DP Mask           */
+#define USBPHY_TX_CLR_TXCAL45DP_SHIFT            (16U)                                               /*!< USBPHY1_TX_CLR.TXCAL45DP Position       */
+#define USBPHY_TX_CLR_TXCAL45DP(x)               (((uint32_t)(((uint32_t)(x))<<USBPHY_TX_CLR_TXCAL45DP_SHIFT))&USBPHY_TX_CLR_TXCAL45DP_MASK) /*!< USBPHY1_TX_CLR.TXCAL45DP Field          */
+#define USBPHY_TX_CLR_USBPHY_TX_EDGECTRL_MASK    (0x1C000000U)                                       /*!< USBPHY1_TX_CLR.USBPHY_TX_EDGECTRL Mask  */
+#define USBPHY_TX_CLR_USBPHY_TX_EDGECTRL_SHIFT   (26U)                                               /*!< USBPHY1_TX_CLR.USBPHY_TX_EDGECTRL Position*/
+#define USBPHY_TX_CLR_USBPHY_TX_EDGECTRL(x)      (((uint32_t)(((uint32_t)(x))<<USBPHY_TX_CLR_USBPHY_TX_EDGECTRL_SHIFT))&USBPHY_TX_CLR_USBPHY_TX_EDGECTRL_MASK) /*!< USBPHY1_TX_CLR.USBPHY_TX_EDGECTRL Field */
 
 /*! @name TX_TOG - USB PHY Transmitter Control Register */
-#define USBPHY0_TX_TOG_D_CAL_MASK                (0xFU)                                              /*!< USBPHY0_TX_TOG.D_CAL Mask               */
-#define USBPHY0_TX_TOG_D_CAL_SHIFT               (0U)                                                /*!< USBPHY0_TX_TOG.D_CAL Position           */
-#define USBPHY0_TX_TOG_D_CAL(x)                  (((uint32_t)(((uint32_t)(x))<<USBPHY0_TX_TOG_D_CAL_SHIFT))&USBPHY0_TX_TOG_D_CAL_MASK) /*!< USBPHY0_TX_TOG.D_CAL Field              */
-#define USBPHY0_TX_TOG_TXCAL45DM_MASK            (0xF00U)                                            /*!< USBPHY0_TX_TOG.TXCAL45DM Mask           */
-#define USBPHY0_TX_TOG_TXCAL45DM_SHIFT           (8U)                                                /*!< USBPHY0_TX_TOG.TXCAL45DM Position       */
-#define USBPHY0_TX_TOG_TXCAL45DM(x)              (((uint32_t)(((uint32_t)(x))<<USBPHY0_TX_TOG_TXCAL45DM_SHIFT))&USBPHY0_TX_TOG_TXCAL45DM_MASK) /*!< USBPHY0_TX_TOG.TXCAL45DM Field          */
-#define USBPHY0_TX_TOG_TXCAL45DP_MASK            (0xF0000U)                                          /*!< USBPHY0_TX_TOG.TXCAL45DP Mask           */
-#define USBPHY0_TX_TOG_TXCAL45DP_SHIFT           (16U)                                               /*!< USBPHY0_TX_TOG.TXCAL45DP Position       */
-#define USBPHY0_TX_TOG_TXCAL45DP(x)              (((uint32_t)(((uint32_t)(x))<<USBPHY0_TX_TOG_TXCAL45DP_SHIFT))&USBPHY0_TX_TOG_TXCAL45DP_MASK) /*!< USBPHY0_TX_TOG.TXCAL45DP Field          */
-#define USBPHY0_TX_TOG_USBPHY_TX_EDGECTRL_MASK   (0x1C000000U)                                       /*!< USBPHY0_TX_TOG.USBPHY_TX_EDGECTRL Mask  */
-#define USBPHY0_TX_TOG_USBPHY_TX_EDGECTRL_SHIFT  (26U)                                               /*!< USBPHY0_TX_TOG.USBPHY_TX_EDGECTRL Position*/
-#define USBPHY0_TX_TOG_USBPHY_TX_EDGECTRL(x)     (((uint32_t)(((uint32_t)(x))<<USBPHY0_TX_TOG_USBPHY_TX_EDGECTRL_SHIFT))&USBPHY0_TX_TOG_USBPHY_TX_EDGECTRL_MASK) /*!< USBPHY0_TX_TOG.USBPHY_TX_EDGECTRL Field */
+#define USBPHY_TX_TOG_D_CAL_MASK                 (0xFU)                                              /*!< USBPHY1_TX_TOG.D_CAL Mask               */
+#define USBPHY_TX_TOG_D_CAL_SHIFT                (0U)                                                /*!< USBPHY1_TX_TOG.D_CAL Position           */
+#define USBPHY_TX_TOG_D_CAL(x)                   (((uint32_t)(((uint32_t)(x))<<USBPHY_TX_TOG_D_CAL_SHIFT))&USBPHY_TX_TOG_D_CAL_MASK) /*!< USBPHY1_TX_TOG.D_CAL Field              */
+#define USBPHY_TX_TOG_TXCAL45DM_MASK             (0xF00U)                                            /*!< USBPHY1_TX_TOG.TXCAL45DM Mask           */
+#define USBPHY_TX_TOG_TXCAL45DM_SHIFT            (8U)                                                /*!< USBPHY1_TX_TOG.TXCAL45DM Position       */
+#define USBPHY_TX_TOG_TXCAL45DM(x)               (((uint32_t)(((uint32_t)(x))<<USBPHY_TX_TOG_TXCAL45DM_SHIFT))&USBPHY_TX_TOG_TXCAL45DM_MASK) /*!< USBPHY1_TX_TOG.TXCAL45DM Field          */
+#define USBPHY_TX_TOG_TXCAL45DP_MASK             (0xF0000U)                                          /*!< USBPHY1_TX_TOG.TXCAL45DP Mask           */
+#define USBPHY_TX_TOG_TXCAL45DP_SHIFT            (16U)                                               /*!< USBPHY1_TX_TOG.TXCAL45DP Position       */
+#define USBPHY_TX_TOG_TXCAL45DP(x)               (((uint32_t)(((uint32_t)(x))<<USBPHY_TX_TOG_TXCAL45DP_SHIFT))&USBPHY_TX_TOG_TXCAL45DP_MASK) /*!< USBPHY1_TX_TOG.TXCAL45DP Field          */
+#define USBPHY_TX_TOG_USBPHY_TX_EDGECTRL_MASK    (0x1C000000U)                                       /*!< USBPHY1_TX_TOG.USBPHY_TX_EDGECTRL Mask  */
+#define USBPHY_TX_TOG_USBPHY_TX_EDGECTRL_SHIFT   (26U)                                               /*!< USBPHY1_TX_TOG.USBPHY_TX_EDGECTRL Position*/
+#define USBPHY_TX_TOG_USBPHY_TX_EDGECTRL(x)      (((uint32_t)(((uint32_t)(x))<<USBPHY_TX_TOG_USBPHY_TX_EDGECTRL_SHIFT))&USBPHY_TX_TOG_USBPHY_TX_EDGECTRL_MASK) /*!< USBPHY1_TX_TOG.USBPHY_TX_EDGECTRL Field */
 
 /*! @name RX - USB PHY Receiver Control Register */
-#define USBPHY0_RX_ENVADJ_MASK                   (0x7U)                                              /*!< USBPHY0_RX.ENVADJ Mask                  */
-#define USBPHY0_RX_ENVADJ_SHIFT                  (0U)                                                /*!< USBPHY0_RX.ENVADJ Position              */
-#define USBPHY0_RX_ENVADJ(x)                     (((uint32_t)(((uint32_t)(x))<<USBPHY0_RX_ENVADJ_SHIFT))&USBPHY0_RX_ENVADJ_MASK) /*!< USBPHY0_RX.ENVADJ Field                 */
-#define USBPHY0_RX_DISCONADJ_MASK                (0x70U)                                             /*!< USBPHY0_RX.DISCONADJ Mask               */
-#define USBPHY0_RX_DISCONADJ_SHIFT               (4U)                                                /*!< USBPHY0_RX.DISCONADJ Position           */
-#define USBPHY0_RX_DISCONADJ(x)                  (((uint32_t)(((uint32_t)(x))<<USBPHY0_RX_DISCONADJ_SHIFT))&USBPHY0_RX_DISCONADJ_MASK) /*!< USBPHY0_RX.DISCONADJ Field              */
-#define USBPHY0_RX_RXDBYPASS_MASK                (0x400000U)                                         /*!< USBPHY0_RX.RXDBYPASS Mask               */
-#define USBPHY0_RX_RXDBYPASS_SHIFT               (22U)                                               /*!< USBPHY0_RX.RXDBYPASS Position           */
-#define USBPHY0_RX_RXDBYPASS(x)                  (((uint32_t)(((uint32_t)(x))<<USBPHY0_RX_RXDBYPASS_SHIFT))&USBPHY0_RX_RXDBYPASS_MASK) /*!< USBPHY0_RX.RXDBYPASS Field              */
+#define USBPHY_RX_ENVADJ_MASK                    (0x7U)                                              /*!< USBPHY1_RX.ENVADJ Mask                  */
+#define USBPHY_RX_ENVADJ_SHIFT                   (0U)                                                /*!< USBPHY1_RX.ENVADJ Position              */
+#define USBPHY_RX_ENVADJ(x)                      (((uint32_t)(((uint32_t)(x))<<USBPHY_RX_ENVADJ_SHIFT))&USBPHY_RX_ENVADJ_MASK) /*!< USBPHY1_RX.ENVADJ Field                 */
+#define USBPHY_RX_DISCONADJ_MASK                 (0x70U)                                             /*!< USBPHY1_RX.DISCONADJ Mask               */
+#define USBPHY_RX_DISCONADJ_SHIFT                (4U)                                                /*!< USBPHY1_RX.DISCONADJ Position           */
+#define USBPHY_RX_DISCONADJ(x)                   (((uint32_t)(((uint32_t)(x))<<USBPHY_RX_DISCONADJ_SHIFT))&USBPHY_RX_DISCONADJ_MASK) /*!< USBPHY1_RX.DISCONADJ Field              */
+#define USBPHY_RX_RXDBYPASS_MASK                 (0x400000U)                                         /*!< USBPHY1_RX.RXDBYPASS Mask               */
+#define USBPHY_RX_RXDBYPASS_SHIFT                (22U)                                               /*!< USBPHY1_RX.RXDBYPASS Position           */
+#define USBPHY_RX_RXDBYPASS(x)                   (((uint32_t)(((uint32_t)(x))<<USBPHY_RX_RXDBYPASS_SHIFT))&USBPHY_RX_RXDBYPASS_MASK) /*!< USBPHY1_RX.RXDBYPASS Field              */
 
 /*! @name RX_SET - USB PHY Receiver Control Register */
-#define USBPHY0_RX_SET_ENVADJ_MASK               (0x7U)                                              /*!< USBPHY0_RX_SET.ENVADJ Mask              */
-#define USBPHY0_RX_SET_ENVADJ_SHIFT              (0U)                                                /*!< USBPHY0_RX_SET.ENVADJ Position          */
-#define USBPHY0_RX_SET_ENVADJ(x)                 (((uint32_t)(((uint32_t)(x))<<USBPHY0_RX_SET_ENVADJ_SHIFT))&USBPHY0_RX_SET_ENVADJ_MASK) /*!< USBPHY0_RX_SET.ENVADJ Field             */
-#define USBPHY0_RX_SET_DISCONADJ_MASK            (0x70U)                                             /*!< USBPHY0_RX_SET.DISCONADJ Mask           */
-#define USBPHY0_RX_SET_DISCONADJ_SHIFT           (4U)                                                /*!< USBPHY0_RX_SET.DISCONADJ Position       */
-#define USBPHY0_RX_SET_DISCONADJ(x)              (((uint32_t)(((uint32_t)(x))<<USBPHY0_RX_SET_DISCONADJ_SHIFT))&USBPHY0_RX_SET_DISCONADJ_MASK) /*!< USBPHY0_RX_SET.DISCONADJ Field          */
-#define USBPHY0_RX_SET_RXDBYPASS_MASK            (0x400000U)                                         /*!< USBPHY0_RX_SET.RXDBYPASS Mask           */
-#define USBPHY0_RX_SET_RXDBYPASS_SHIFT           (22U)                                               /*!< USBPHY0_RX_SET.RXDBYPASS Position       */
-#define USBPHY0_RX_SET_RXDBYPASS(x)              (((uint32_t)(((uint32_t)(x))<<USBPHY0_RX_SET_RXDBYPASS_SHIFT))&USBPHY0_RX_SET_RXDBYPASS_MASK) /*!< USBPHY0_RX_SET.RXDBYPASS Field          */
+#define USBPHY_RX_SET_ENVADJ_MASK                (0x7U)                                              /*!< USBPHY1_RX_SET.ENVADJ Mask              */
+#define USBPHY_RX_SET_ENVADJ_SHIFT               (0U)                                                /*!< USBPHY1_RX_SET.ENVADJ Position          */
+#define USBPHY_RX_SET_ENVADJ(x)                  (((uint32_t)(((uint32_t)(x))<<USBPHY_RX_SET_ENVADJ_SHIFT))&USBPHY_RX_SET_ENVADJ_MASK) /*!< USBPHY1_RX_SET.ENVADJ Field             */
+#define USBPHY_RX_SET_DISCONADJ_MASK             (0x70U)                                             /*!< USBPHY1_RX_SET.DISCONADJ Mask           */
+#define USBPHY_RX_SET_DISCONADJ_SHIFT            (4U)                                                /*!< USBPHY1_RX_SET.DISCONADJ Position       */
+#define USBPHY_RX_SET_DISCONADJ(x)               (((uint32_t)(((uint32_t)(x))<<USBPHY_RX_SET_DISCONADJ_SHIFT))&USBPHY_RX_SET_DISCONADJ_MASK) /*!< USBPHY1_RX_SET.DISCONADJ Field          */
+#define USBPHY_RX_SET_RXDBYPASS_MASK             (0x400000U)                                         /*!< USBPHY1_RX_SET.RXDBYPASS Mask           */
+#define USBPHY_RX_SET_RXDBYPASS_SHIFT            (22U)                                               /*!< USBPHY1_RX_SET.RXDBYPASS Position       */
+#define USBPHY_RX_SET_RXDBYPASS(x)               (((uint32_t)(((uint32_t)(x))<<USBPHY_RX_SET_RXDBYPASS_SHIFT))&USBPHY_RX_SET_RXDBYPASS_MASK) /*!< USBPHY1_RX_SET.RXDBYPASS Field          */
 
 /*! @name RX_CLR - USB PHY Receiver Control Register */
-#define USBPHY0_RX_CLR_ENVADJ_MASK               (0x7U)                                              /*!< USBPHY0_RX_CLR.ENVADJ Mask              */
-#define USBPHY0_RX_CLR_ENVADJ_SHIFT              (0U)                                                /*!< USBPHY0_RX_CLR.ENVADJ Position          */
-#define USBPHY0_RX_CLR_ENVADJ(x)                 (((uint32_t)(((uint32_t)(x))<<USBPHY0_RX_CLR_ENVADJ_SHIFT))&USBPHY0_RX_CLR_ENVADJ_MASK) /*!< USBPHY0_RX_CLR.ENVADJ Field             */
-#define USBPHY0_RX_CLR_DISCONADJ_MASK            (0x70U)                                             /*!< USBPHY0_RX_CLR.DISCONADJ Mask           */
-#define USBPHY0_RX_CLR_DISCONADJ_SHIFT           (4U)                                                /*!< USBPHY0_RX_CLR.DISCONADJ Position       */
-#define USBPHY0_RX_CLR_DISCONADJ(x)              (((uint32_t)(((uint32_t)(x))<<USBPHY0_RX_CLR_DISCONADJ_SHIFT))&USBPHY0_RX_CLR_DISCONADJ_MASK) /*!< USBPHY0_RX_CLR.DISCONADJ Field          */
-#define USBPHY0_RX_CLR_RXDBYPASS_MASK            (0x400000U)                                         /*!< USBPHY0_RX_CLR.RXDBYPASS Mask           */
-#define USBPHY0_RX_CLR_RXDBYPASS_SHIFT           (22U)                                               /*!< USBPHY0_RX_CLR.RXDBYPASS Position       */
-#define USBPHY0_RX_CLR_RXDBYPASS(x)              (((uint32_t)(((uint32_t)(x))<<USBPHY0_RX_CLR_RXDBYPASS_SHIFT))&USBPHY0_RX_CLR_RXDBYPASS_MASK) /*!< USBPHY0_RX_CLR.RXDBYPASS Field          */
+#define USBPHY_RX_CLR_ENVADJ_MASK                (0x7U)                                              /*!< USBPHY1_RX_CLR.ENVADJ Mask              */
+#define USBPHY_RX_CLR_ENVADJ_SHIFT               (0U)                                                /*!< USBPHY1_RX_CLR.ENVADJ Position          */
+#define USBPHY_RX_CLR_ENVADJ(x)                  (((uint32_t)(((uint32_t)(x))<<USBPHY_RX_CLR_ENVADJ_SHIFT))&USBPHY_RX_CLR_ENVADJ_MASK) /*!< USBPHY1_RX_CLR.ENVADJ Field             */
+#define USBPHY_RX_CLR_DISCONADJ_MASK             (0x70U)                                             /*!< USBPHY1_RX_CLR.DISCONADJ Mask           */
+#define USBPHY_RX_CLR_DISCONADJ_SHIFT            (4U)                                                /*!< USBPHY1_RX_CLR.DISCONADJ Position       */
+#define USBPHY_RX_CLR_DISCONADJ(x)               (((uint32_t)(((uint32_t)(x))<<USBPHY_RX_CLR_DISCONADJ_SHIFT))&USBPHY_RX_CLR_DISCONADJ_MASK) /*!< USBPHY1_RX_CLR.DISCONADJ Field          */
+#define USBPHY_RX_CLR_RXDBYPASS_MASK             (0x400000U)                                         /*!< USBPHY1_RX_CLR.RXDBYPASS Mask           */
+#define USBPHY_RX_CLR_RXDBYPASS_SHIFT            (22U)                                               /*!< USBPHY1_RX_CLR.RXDBYPASS Position       */
+#define USBPHY_RX_CLR_RXDBYPASS(x)               (((uint32_t)(((uint32_t)(x))<<USBPHY_RX_CLR_RXDBYPASS_SHIFT))&USBPHY_RX_CLR_RXDBYPASS_MASK) /*!< USBPHY1_RX_CLR.RXDBYPASS Field          */
 
 /*! @name RX_TOG - USB PHY Receiver Control Register */
-#define USBPHY0_RX_TOG_ENVADJ_MASK               (0x7U)                                              /*!< USBPHY0_RX_TOG.ENVADJ Mask              */
-#define USBPHY0_RX_TOG_ENVADJ_SHIFT              (0U)                                                /*!< USBPHY0_RX_TOG.ENVADJ Position          */
-#define USBPHY0_RX_TOG_ENVADJ(x)                 (((uint32_t)(((uint32_t)(x))<<USBPHY0_RX_TOG_ENVADJ_SHIFT))&USBPHY0_RX_TOG_ENVADJ_MASK) /*!< USBPHY0_RX_TOG.ENVADJ Field             */
-#define USBPHY0_RX_TOG_DISCONADJ_MASK            (0x70U)                                             /*!< USBPHY0_RX_TOG.DISCONADJ Mask           */
-#define USBPHY0_RX_TOG_DISCONADJ_SHIFT           (4U)                                                /*!< USBPHY0_RX_TOG.DISCONADJ Position       */
-#define USBPHY0_RX_TOG_DISCONADJ(x)              (((uint32_t)(((uint32_t)(x))<<USBPHY0_RX_TOG_DISCONADJ_SHIFT))&USBPHY0_RX_TOG_DISCONADJ_MASK) /*!< USBPHY0_RX_TOG.DISCONADJ Field          */
-#define USBPHY0_RX_TOG_RXDBYPASS_MASK            (0x400000U)                                         /*!< USBPHY0_RX_TOG.RXDBYPASS Mask           */
-#define USBPHY0_RX_TOG_RXDBYPASS_SHIFT           (22U)                                               /*!< USBPHY0_RX_TOG.RXDBYPASS Position       */
-#define USBPHY0_RX_TOG_RXDBYPASS(x)              (((uint32_t)(((uint32_t)(x))<<USBPHY0_RX_TOG_RXDBYPASS_SHIFT))&USBPHY0_RX_TOG_RXDBYPASS_MASK) /*!< USBPHY0_RX_TOG.RXDBYPASS Field          */
+#define USBPHY_RX_TOG_ENVADJ_MASK                (0x7U)                                              /*!< USBPHY1_RX_TOG.ENVADJ Mask              */
+#define USBPHY_RX_TOG_ENVADJ_SHIFT               (0U)                                                /*!< USBPHY1_RX_TOG.ENVADJ Position          */
+#define USBPHY_RX_TOG_ENVADJ(x)                  (((uint32_t)(((uint32_t)(x))<<USBPHY_RX_TOG_ENVADJ_SHIFT))&USBPHY_RX_TOG_ENVADJ_MASK) /*!< USBPHY1_RX_TOG.ENVADJ Field             */
+#define USBPHY_RX_TOG_DISCONADJ_MASK             (0x70U)                                             /*!< USBPHY1_RX_TOG.DISCONADJ Mask           */
+#define USBPHY_RX_TOG_DISCONADJ_SHIFT            (4U)                                                /*!< USBPHY1_RX_TOG.DISCONADJ Position       */
+#define USBPHY_RX_TOG_DISCONADJ(x)               (((uint32_t)(((uint32_t)(x))<<USBPHY_RX_TOG_DISCONADJ_SHIFT))&USBPHY_RX_TOG_DISCONADJ_MASK) /*!< USBPHY1_RX_TOG.DISCONADJ Field          */
+#define USBPHY_RX_TOG_RXDBYPASS_MASK             (0x400000U)                                         /*!< USBPHY1_RX_TOG.RXDBYPASS Mask           */
+#define USBPHY_RX_TOG_RXDBYPASS_SHIFT            (22U)                                               /*!< USBPHY1_RX_TOG.RXDBYPASS Position       */
+#define USBPHY_RX_TOG_RXDBYPASS(x)               (((uint32_t)(((uint32_t)(x))<<USBPHY_RX_TOG_RXDBYPASS_SHIFT))&USBPHY_RX_TOG_RXDBYPASS_MASK) /*!< USBPHY1_RX_TOG.RXDBYPASS Field          */
 
 /*! @name CTRL - USB PHY General Control Register */
-#define USBPHY0_CTRL_ENHOSTDISCONDETECT_MASK     (0x2U)                                              /*!< USBPHY0_CTRL.ENHOSTDISCONDETECT Mask    */
-#define USBPHY0_CTRL_ENHOSTDISCONDETECT_SHIFT    (1U)                                                /*!< USBPHY0_CTRL.ENHOSTDISCONDETECT Position*/
-#define USBPHY0_CTRL_ENHOSTDISCONDETECT(x)       (((uint32_t)(((uint32_t)(x))<<USBPHY0_CTRL_ENHOSTDISCONDETECT_SHIFT))&USBPHY0_CTRL_ENHOSTDISCONDETECT_MASK) /*!< USBPHY0_CTRL.ENHOSTDISCONDETECT Field   */
-#define USBPHY0_CTRL_HOSTDISCONDETECT_IRQ_MASK   (0x8U)                                              /*!< USBPHY0_CTRL.HOSTDISCONDETECT_IRQ Mask  */
-#define USBPHY0_CTRL_HOSTDISCONDETECT_IRQ_SHIFT  (3U)                                                /*!< USBPHY0_CTRL.HOSTDISCONDETECT_IRQ Position*/
-#define USBPHY0_CTRL_HOSTDISCONDETECT_IRQ(x)     (((uint32_t)(((uint32_t)(x))<<USBPHY0_CTRL_HOSTDISCONDETECT_IRQ_SHIFT))&USBPHY0_CTRL_HOSTDISCONDETECT_IRQ_MASK) /*!< USBPHY0_CTRL.HOSTDISCONDETECT_IRQ Field */
-#define USBPHY0_CTRL_ENDEVPLUGINDET_MASK         (0x10U)                                             /*!< USBPHY0_CTRL.ENDEVPLUGINDET Mask        */
-#define USBPHY0_CTRL_ENDEVPLUGINDET_SHIFT        (4U)                                                /*!< USBPHY0_CTRL.ENDEVPLUGINDET Position    */
-#define USBPHY0_CTRL_ENDEVPLUGINDET(x)           (((uint32_t)(((uint32_t)(x))<<USBPHY0_CTRL_ENDEVPLUGINDET_SHIFT))&USBPHY0_CTRL_ENDEVPLUGINDET_MASK) /*!< USBPHY0_CTRL.ENDEVPLUGINDET Field       */
-#define USBPHY0_CTRL_DEVPLUGIN_IRQ_MASK          (0x1000U)                                           /*!< USBPHY0_CTRL.DEVPLUGIN_IRQ Mask         */
-#define USBPHY0_CTRL_DEVPLUGIN_IRQ_SHIFT         (12U)                                               /*!< USBPHY0_CTRL.DEVPLUGIN_IRQ Position     */
-#define USBPHY0_CTRL_DEVPLUGIN_IRQ(x)            (((uint32_t)(((uint32_t)(x))<<USBPHY0_CTRL_DEVPLUGIN_IRQ_SHIFT))&USBPHY0_CTRL_DEVPLUGIN_IRQ_MASK) /*!< USBPHY0_CTRL.DEVPLUGIN_IRQ Field        */
-#define USBPHY0_CTRL_ENUTMILEVEL2_MASK           (0x4000U)                                           /*!< USBPHY0_CTRL.ENUTMILEVEL2 Mask          */
-#define USBPHY0_CTRL_ENUTMILEVEL2_SHIFT          (14U)                                               /*!< USBPHY0_CTRL.ENUTMILEVEL2 Position      */
-#define USBPHY0_CTRL_ENUTMILEVEL2(x)             (((uint32_t)(((uint32_t)(x))<<USBPHY0_CTRL_ENUTMILEVEL2_SHIFT))&USBPHY0_CTRL_ENUTMILEVEL2_MASK) /*!< USBPHY0_CTRL.ENUTMILEVEL2 Field         */
-#define USBPHY0_CTRL_ENUTMILEVEL3_MASK           (0x8000U)                                           /*!< USBPHY0_CTRL.ENUTMILEVEL3 Mask          */
-#define USBPHY0_CTRL_ENUTMILEVEL3_SHIFT          (15U)                                               /*!< USBPHY0_CTRL.ENUTMILEVEL3 Position      */
-#define USBPHY0_CTRL_ENUTMILEVEL3(x)             (((uint32_t)(((uint32_t)(x))<<USBPHY0_CTRL_ENUTMILEVEL3_SHIFT))&USBPHY0_CTRL_ENUTMILEVEL3_MASK) /*!< USBPHY0_CTRL.ENUTMILEVEL3 Field         */
-#define USBPHY0_CTRL_AUTORESUME_EN_MASK          (0x40000U)                                          /*!< USBPHY0_CTRL.AUTORESUME_EN Mask         */
-#define USBPHY0_CTRL_AUTORESUME_EN_SHIFT         (18U)                                               /*!< USBPHY0_CTRL.AUTORESUME_EN Position     */
-#define USBPHY0_CTRL_AUTORESUME_EN(x)            (((uint32_t)(((uint32_t)(x))<<USBPHY0_CTRL_AUTORESUME_EN_SHIFT))&USBPHY0_CTRL_AUTORESUME_EN_MASK) /*!< USBPHY0_CTRL.AUTORESUME_EN Field        */
-#define USBPHY0_CTRL_ENAUTOCLR_CLKGATE_MASK      (0x80000U)                                          /*!< USBPHY0_CTRL.ENAUTOCLR_CLKGATE Mask     */
-#define USBPHY0_CTRL_ENAUTOCLR_CLKGATE_SHIFT     (19U)                                               /*!< USBPHY0_CTRL.ENAUTOCLR_CLKGATE Position */
-#define USBPHY0_CTRL_ENAUTOCLR_CLKGATE(x)        (((uint32_t)(((uint32_t)(x))<<USBPHY0_CTRL_ENAUTOCLR_CLKGATE_SHIFT))&USBPHY0_CTRL_ENAUTOCLR_CLKGATE_MASK) /*!< USBPHY0_CTRL.ENAUTOCLR_CLKGATE Field    */
-#define USBPHY0_CTRL_ENAUTOCLR_PHY_PWD_MASK      (0x100000U)                                         /*!< USBPHY0_CTRL.ENAUTOCLR_PHY_PWD Mask     */
-#define USBPHY0_CTRL_ENAUTOCLR_PHY_PWD_SHIFT     (20U)                                               /*!< USBPHY0_CTRL.ENAUTOCLR_PHY_PWD Position */
-#define USBPHY0_CTRL_ENAUTOCLR_PHY_PWD(x)        (((uint32_t)(((uint32_t)(x))<<USBPHY0_CTRL_ENAUTOCLR_PHY_PWD_SHIFT))&USBPHY0_CTRL_ENAUTOCLR_PHY_PWD_MASK) /*!< USBPHY0_CTRL.ENAUTOCLR_PHY_PWD Field    */
-#define USBPHY0_CTRL_FSDLL_RST_EN_MASK           (0x1000000U)                                        /*!< USBPHY0_CTRL.FSDLL_RST_EN Mask          */
-#define USBPHY0_CTRL_FSDLL_RST_EN_SHIFT          (24U)                                               /*!< USBPHY0_CTRL.FSDLL_RST_EN Position      */
-#define USBPHY0_CTRL_FSDLL_RST_EN(x)             (((uint32_t)(((uint32_t)(x))<<USBPHY0_CTRL_FSDLL_RST_EN_SHIFT))&USBPHY0_CTRL_FSDLL_RST_EN_MASK) /*!< USBPHY0_CTRL.FSDLL_RST_EN Field         */
-#define USBPHY0_CTRL_OTG_ID_VALUE_MASK           (0x8000000U)                                        /*!< USBPHY0_CTRL.OTG_ID_VALUE Mask          */
-#define USBPHY0_CTRL_OTG_ID_VALUE_SHIFT          (27U)                                               /*!< USBPHY0_CTRL.OTG_ID_VALUE Position      */
-#define USBPHY0_CTRL_OTG_ID_VALUE(x)             (((uint32_t)(((uint32_t)(x))<<USBPHY0_CTRL_OTG_ID_VALUE_SHIFT))&USBPHY0_CTRL_OTG_ID_VALUE_MASK) /*!< USBPHY0_CTRL.OTG_ID_VALUE Field         */
-#define USBPHY0_CTRL_HOST_FORCE_LS_SE0_MASK      (0x10000000U)                                       /*!< USBPHY0_CTRL.HOST_FORCE_LS_SE0 Mask     */
-#define USBPHY0_CTRL_HOST_FORCE_LS_SE0_SHIFT     (28U)                                               /*!< USBPHY0_CTRL.HOST_FORCE_LS_SE0 Position */
-#define USBPHY0_CTRL_HOST_FORCE_LS_SE0(x)        (((uint32_t)(((uint32_t)(x))<<USBPHY0_CTRL_HOST_FORCE_LS_SE0_SHIFT))&USBPHY0_CTRL_HOST_FORCE_LS_SE0_MASK) /*!< USBPHY0_CTRL.HOST_FORCE_LS_SE0 Field    */
-#define USBPHY0_CTRL_UTMI_SUSPENDM_MASK          (0x20000000U)                                       /*!< USBPHY0_CTRL.UTMI_SUSPENDM Mask         */
-#define USBPHY0_CTRL_UTMI_SUSPENDM_SHIFT         (29U)                                               /*!< USBPHY0_CTRL.UTMI_SUSPENDM Position     */
-#define USBPHY0_CTRL_UTMI_SUSPENDM(x)            (((uint32_t)(((uint32_t)(x))<<USBPHY0_CTRL_UTMI_SUSPENDM_SHIFT))&USBPHY0_CTRL_UTMI_SUSPENDM_MASK) /*!< USBPHY0_CTRL.UTMI_SUSPENDM Field        */
-#define USBPHY0_CTRL_CLKGATE_MASK                (0x40000000U)                                       /*!< USBPHY0_CTRL.CLKGATE Mask               */
-#define USBPHY0_CTRL_CLKGATE_SHIFT               (30U)                                               /*!< USBPHY0_CTRL.CLKGATE Position           */
-#define USBPHY0_CTRL_CLKGATE(x)                  (((uint32_t)(((uint32_t)(x))<<USBPHY0_CTRL_CLKGATE_SHIFT))&USBPHY0_CTRL_CLKGATE_MASK) /*!< USBPHY0_CTRL.CLKGATE Field              */
-#define USBPHY0_CTRL_SFTRST_MASK                 (0x80000000U)                                       /*!< USBPHY0_CTRL.SFTRST Mask                */
-#define USBPHY0_CTRL_SFTRST_SHIFT                (31U)                                               /*!< USBPHY0_CTRL.SFTRST Position            */
-#define USBPHY0_CTRL_SFTRST(x)                   (((uint32_t)(((uint32_t)(x))<<USBPHY0_CTRL_SFTRST_SHIFT))&USBPHY0_CTRL_SFTRST_MASK) /*!< USBPHY0_CTRL.SFTRST Field               */
+#define USBPHY_CTRL_ENHOSTDISCONDETECT_MASK      (0x2U)                                              /*!< USBPHY1_CTRL.ENHOSTDISCONDETECT Mask    */
+#define USBPHY_CTRL_ENHOSTDISCONDETECT_SHIFT     (1U)                                                /*!< USBPHY1_CTRL.ENHOSTDISCONDETECT Position*/
+#define USBPHY_CTRL_ENHOSTDISCONDETECT(x)        (((uint32_t)(((uint32_t)(x))<<USBPHY_CTRL_ENHOSTDISCONDETECT_SHIFT))&USBPHY_CTRL_ENHOSTDISCONDETECT_MASK) /*!< USBPHY1_CTRL.ENHOSTDISCONDETECT Field   */
+#define USBPHY_CTRL_HOSTDISCONDETECT_IRQ_MASK    (0x8U)                                              /*!< USBPHY1_CTRL.HOSTDISCONDETECT_IRQ Mask  */
+#define USBPHY_CTRL_HOSTDISCONDETECT_IRQ_SHIFT   (3U)                                                /*!< USBPHY1_CTRL.HOSTDISCONDETECT_IRQ Position*/
+#define USBPHY_CTRL_HOSTDISCONDETECT_IRQ(x)      (((uint32_t)(((uint32_t)(x))<<USBPHY_CTRL_HOSTDISCONDETECT_IRQ_SHIFT))&USBPHY_CTRL_HOSTDISCONDETECT_IRQ_MASK) /*!< USBPHY1_CTRL.HOSTDISCONDETECT_IRQ Field */
+#define USBPHY_CTRL_ENDEVPLUGINDET_MASK          (0x10U)                                             /*!< USBPHY1_CTRL.ENDEVPLUGINDET Mask        */
+#define USBPHY_CTRL_ENDEVPLUGINDET_SHIFT         (4U)                                                /*!< USBPHY1_CTRL.ENDEVPLUGINDET Position    */
+#define USBPHY_CTRL_ENDEVPLUGINDET(x)            (((uint32_t)(((uint32_t)(x))<<USBPHY_CTRL_ENDEVPLUGINDET_SHIFT))&USBPHY_CTRL_ENDEVPLUGINDET_MASK) /*!< USBPHY1_CTRL.ENDEVPLUGINDET Field       */
+#define USBPHY_CTRL_DEVPLUGIN_IRQ_MASK           (0x1000U)                                           /*!< USBPHY1_CTRL.DEVPLUGIN_IRQ Mask         */
+#define USBPHY_CTRL_DEVPLUGIN_IRQ_SHIFT          (12U)                                               /*!< USBPHY1_CTRL.DEVPLUGIN_IRQ Position     */
+#define USBPHY_CTRL_DEVPLUGIN_IRQ(x)             (((uint32_t)(((uint32_t)(x))<<USBPHY_CTRL_DEVPLUGIN_IRQ_SHIFT))&USBPHY_CTRL_DEVPLUGIN_IRQ_MASK) /*!< USBPHY1_CTRL.DEVPLUGIN_IRQ Field        */
+#define USBPHY_CTRL_ENUTMILEVEL2_MASK            (0x4000U)                                           /*!< USBPHY1_CTRL.ENUTMILEVEL2 Mask          */
+#define USBPHY_CTRL_ENUTMILEVEL2_SHIFT           (14U)                                               /*!< USBPHY1_CTRL.ENUTMILEVEL2 Position      */
+#define USBPHY_CTRL_ENUTMILEVEL2(x)              (((uint32_t)(((uint32_t)(x))<<USBPHY_CTRL_ENUTMILEVEL2_SHIFT))&USBPHY_CTRL_ENUTMILEVEL2_MASK) /*!< USBPHY1_CTRL.ENUTMILEVEL2 Field         */
+#define USBPHY_CTRL_ENUTMILEVEL3_MASK            (0x8000U)                                           /*!< USBPHY1_CTRL.ENUTMILEVEL3 Mask          */
+#define USBPHY_CTRL_ENUTMILEVEL3_SHIFT           (15U)                                               /*!< USBPHY1_CTRL.ENUTMILEVEL3 Position      */
+#define USBPHY_CTRL_ENUTMILEVEL3(x)              (((uint32_t)(((uint32_t)(x))<<USBPHY_CTRL_ENUTMILEVEL3_SHIFT))&USBPHY_CTRL_ENUTMILEVEL3_MASK) /*!< USBPHY1_CTRL.ENUTMILEVEL3 Field         */
+#define USBPHY_CTRL_AUTORESUME_EN_MASK           (0x40000U)                                          /*!< USBPHY1_CTRL.AUTORESUME_EN Mask         */
+#define USBPHY_CTRL_AUTORESUME_EN_SHIFT          (18U)                                               /*!< USBPHY1_CTRL.AUTORESUME_EN Position     */
+#define USBPHY_CTRL_AUTORESUME_EN(x)             (((uint32_t)(((uint32_t)(x))<<USBPHY_CTRL_AUTORESUME_EN_SHIFT))&USBPHY_CTRL_AUTORESUME_EN_MASK) /*!< USBPHY1_CTRL.AUTORESUME_EN Field        */
+#define USBPHY_CTRL_ENAUTOCLR_CLKGATE_MASK       (0x80000U)                                          /*!< USBPHY1_CTRL.ENAUTOCLR_CLKGATE Mask     */
+#define USBPHY_CTRL_ENAUTOCLR_CLKGATE_SHIFT      (19U)                                               /*!< USBPHY1_CTRL.ENAUTOCLR_CLKGATE Position */
+#define USBPHY_CTRL_ENAUTOCLR_CLKGATE(x)         (((uint32_t)(((uint32_t)(x))<<USBPHY_CTRL_ENAUTOCLR_CLKGATE_SHIFT))&USBPHY_CTRL_ENAUTOCLR_CLKGATE_MASK) /*!< USBPHY1_CTRL.ENAUTOCLR_CLKGATE Field    */
+#define USBPHY_CTRL_ENAUTOCLR_PHY_PWD_MASK       (0x100000U)                                         /*!< USBPHY1_CTRL.ENAUTOCLR_PHY_PWD Mask     */
+#define USBPHY_CTRL_ENAUTOCLR_PHY_PWD_SHIFT      (20U)                                               /*!< USBPHY1_CTRL.ENAUTOCLR_PHY_PWD Position */
+#define USBPHY_CTRL_ENAUTOCLR_PHY_PWD(x)         (((uint32_t)(((uint32_t)(x))<<USBPHY_CTRL_ENAUTOCLR_PHY_PWD_SHIFT))&USBPHY_CTRL_ENAUTOCLR_PHY_PWD_MASK) /*!< USBPHY1_CTRL.ENAUTOCLR_PHY_PWD Field    */
+#define USBPHY_CTRL_FSDLL_RST_EN_MASK            (0x1000000U)                                        /*!< USBPHY1_CTRL.FSDLL_RST_EN Mask          */
+#define USBPHY_CTRL_FSDLL_RST_EN_SHIFT           (24U)                                               /*!< USBPHY1_CTRL.FSDLL_RST_EN Position      */
+#define USBPHY_CTRL_FSDLL_RST_EN(x)              (((uint32_t)(((uint32_t)(x))<<USBPHY_CTRL_FSDLL_RST_EN_SHIFT))&USBPHY_CTRL_FSDLL_RST_EN_MASK) /*!< USBPHY1_CTRL.FSDLL_RST_EN Field         */
+#define USBPHY_CTRL_OTG_ID_VALUE_MASK            (0x8000000U)                                        /*!< USBPHY1_CTRL.OTG_ID_VALUE Mask          */
+#define USBPHY_CTRL_OTG_ID_VALUE_SHIFT           (27U)                                               /*!< USBPHY1_CTRL.OTG_ID_VALUE Position      */
+#define USBPHY_CTRL_OTG_ID_VALUE(x)              (((uint32_t)(((uint32_t)(x))<<USBPHY_CTRL_OTG_ID_VALUE_SHIFT))&USBPHY_CTRL_OTG_ID_VALUE_MASK) /*!< USBPHY1_CTRL.OTG_ID_VALUE Field         */
+#define USBPHY_CTRL_HOST_FORCE_LS_SE0_MASK       (0x10000000U)                                       /*!< USBPHY1_CTRL.HOST_FORCE_LS_SE0 Mask     */
+#define USBPHY_CTRL_HOST_FORCE_LS_SE0_SHIFT      (28U)                                               /*!< USBPHY1_CTRL.HOST_FORCE_LS_SE0 Position */
+#define USBPHY_CTRL_HOST_FORCE_LS_SE0(x)         (((uint32_t)(((uint32_t)(x))<<USBPHY_CTRL_HOST_FORCE_LS_SE0_SHIFT))&USBPHY_CTRL_HOST_FORCE_LS_SE0_MASK) /*!< USBPHY1_CTRL.HOST_FORCE_LS_SE0 Field    */
+#define USBPHY_CTRL_UTMI_SUSPENDM_MASK           (0x20000000U)                                       /*!< USBPHY1_CTRL.UTMI_SUSPENDM Mask         */
+#define USBPHY_CTRL_UTMI_SUSPENDM_SHIFT          (29U)                                               /*!< USBPHY1_CTRL.UTMI_SUSPENDM Position     */
+#define USBPHY_CTRL_UTMI_SUSPENDM(x)             (((uint32_t)(((uint32_t)(x))<<USBPHY_CTRL_UTMI_SUSPENDM_SHIFT))&USBPHY_CTRL_UTMI_SUSPENDM_MASK) /*!< USBPHY1_CTRL.UTMI_SUSPENDM Field        */
+#define USBPHY_CTRL_CLKGATE_MASK                 (0x40000000U)                                       /*!< USBPHY1_CTRL.CLKGATE Mask               */
+#define USBPHY_CTRL_CLKGATE_SHIFT                (30U)                                               /*!< USBPHY1_CTRL.CLKGATE Position           */
+#define USBPHY_CTRL_CLKGATE(x)                   (((uint32_t)(((uint32_t)(x))<<USBPHY_CTRL_CLKGATE_SHIFT))&USBPHY_CTRL_CLKGATE_MASK) /*!< USBPHY1_CTRL.CLKGATE Field              */
+#define USBPHY_CTRL_SFTRST_MASK                  (0x80000000U)                                       /*!< USBPHY1_CTRL.SFTRST Mask                */
+#define USBPHY_CTRL_SFTRST_SHIFT                 (31U)                                               /*!< USBPHY1_CTRL.SFTRST Position            */
+#define USBPHY_CTRL_SFTRST(x)                    (((uint32_t)(((uint32_t)(x))<<USBPHY_CTRL_SFTRST_SHIFT))&USBPHY_CTRL_SFTRST_MASK) /*!< USBPHY1_CTRL.SFTRST Field               */
 
 /*! @name CTRL_SET - USB PHY General Control Register */
-#define USBPHY0_CTRL_SET_ENHOSTDISCONDETECT_MASK (0x2U)                                              /*!< USBPHY0_CTRL_SET.ENHOSTDISCONDETECT Mask*/
-#define USBPHY0_CTRL_SET_ENHOSTDISCONDETECT_SHIFT (1U)                                               /*!< USBPHY0_CTRL_SET.ENHOSTDISCONDETECT Position*/
-#define USBPHY0_CTRL_SET_ENHOSTDISCONDETECT(x)   (((uint32_t)(((uint32_t)(x))<<USBPHY0_CTRL_SET_ENHOSTDISCONDETECT_SHIFT))&USBPHY0_CTRL_SET_ENHOSTDISCONDETECT_MASK) /*!< USBPHY0_CTRL_SET.ENHOSTDISCONDETECT Field*/
-#define USBPHY0_CTRL_SET_HOSTDISCONDETECT_IRQ_MASK (0x8U)                                            /*!< USBPHY0_CTRL_SET.HOSTDISCONDETECT_IRQ Mask*/
-#define USBPHY0_CTRL_SET_HOSTDISCONDETECT_IRQ_SHIFT (3U)                                             /*!< USBPHY0_CTRL_SET.HOSTDISCONDETECT_IRQ Position*/
-#define USBPHY0_CTRL_SET_HOSTDISCONDETECT_IRQ(x) (((uint32_t)(((uint32_t)(x))<<USBPHY0_CTRL_SET_HOSTDISCONDETECT_IRQ_SHIFT))&USBPHY0_CTRL_SET_HOSTDISCONDETECT_IRQ_MASK) /*!< USBPHY0_CTRL_SET.HOSTDISCONDETECT_IRQ Field*/
-#define USBPHY0_CTRL_SET_ENDEVPLUGINDET_MASK     (0x10U)                                             /*!< USBPHY0_CTRL_SET.ENDEVPLUGINDET Mask    */
-#define USBPHY0_CTRL_SET_ENDEVPLUGINDET_SHIFT    (4U)                                                /*!< USBPHY0_CTRL_SET.ENDEVPLUGINDET Position*/
-#define USBPHY0_CTRL_SET_ENDEVPLUGINDET(x)       (((uint32_t)(((uint32_t)(x))<<USBPHY0_CTRL_SET_ENDEVPLUGINDET_SHIFT))&USBPHY0_CTRL_SET_ENDEVPLUGINDET_MASK) /*!< USBPHY0_CTRL_SET.ENDEVPLUGINDET Field   */
-#define USBPHY0_CTRL_SET_DEVPLUGIN_IRQ_MASK      (0x1000U)                                           /*!< USBPHY0_CTRL_SET.DEVPLUGIN_IRQ Mask     */
-#define USBPHY0_CTRL_SET_DEVPLUGIN_IRQ_SHIFT     (12U)                                               /*!< USBPHY0_CTRL_SET.DEVPLUGIN_IRQ Position */
-#define USBPHY0_CTRL_SET_DEVPLUGIN_IRQ(x)        (((uint32_t)(((uint32_t)(x))<<USBPHY0_CTRL_SET_DEVPLUGIN_IRQ_SHIFT))&USBPHY0_CTRL_SET_DEVPLUGIN_IRQ_MASK) /*!< USBPHY0_CTRL_SET.DEVPLUGIN_IRQ Field    */
-#define USBPHY0_CTRL_SET_ENUTMILEVEL2_MASK       (0x4000U)                                           /*!< USBPHY0_CTRL_SET.ENUTMILEVEL2 Mask      */
-#define USBPHY0_CTRL_SET_ENUTMILEVEL2_SHIFT      (14U)                                               /*!< USBPHY0_CTRL_SET.ENUTMILEVEL2 Position  */
-#define USBPHY0_CTRL_SET_ENUTMILEVEL2(x)         (((uint32_t)(((uint32_t)(x))<<USBPHY0_CTRL_SET_ENUTMILEVEL2_SHIFT))&USBPHY0_CTRL_SET_ENUTMILEVEL2_MASK) /*!< USBPHY0_CTRL_SET.ENUTMILEVEL2 Field     */
-#define USBPHY0_CTRL_SET_ENUTMILEVEL3_MASK       (0x8000U)                                           /*!< USBPHY0_CTRL_SET.ENUTMILEVEL3 Mask      */
-#define USBPHY0_CTRL_SET_ENUTMILEVEL3_SHIFT      (15U)                                               /*!< USBPHY0_CTRL_SET.ENUTMILEVEL3 Position  */
-#define USBPHY0_CTRL_SET_ENUTMILEVEL3(x)         (((uint32_t)(((uint32_t)(x))<<USBPHY0_CTRL_SET_ENUTMILEVEL3_SHIFT))&USBPHY0_CTRL_SET_ENUTMILEVEL3_MASK) /*!< USBPHY0_CTRL_SET.ENUTMILEVEL3 Field     */
-#define USBPHY0_CTRL_SET_AUTORESUME_EN_MASK      (0x40000U)                                          /*!< USBPHY0_CTRL_SET.AUTORESUME_EN Mask     */
-#define USBPHY0_CTRL_SET_AUTORESUME_EN_SHIFT     (18U)                                               /*!< USBPHY0_CTRL_SET.AUTORESUME_EN Position */
-#define USBPHY0_CTRL_SET_AUTORESUME_EN(x)        (((uint32_t)(((uint32_t)(x))<<USBPHY0_CTRL_SET_AUTORESUME_EN_SHIFT))&USBPHY0_CTRL_SET_AUTORESUME_EN_MASK) /*!< USBPHY0_CTRL_SET.AUTORESUME_EN Field    */
-#define USBPHY0_CTRL_SET_ENAUTOCLR_CLKGATE_MASK  (0x80000U)                                          /*!< USBPHY0_CTRL_SET.ENAUTOCLR_CLKGATE Mask */
-#define USBPHY0_CTRL_SET_ENAUTOCLR_CLKGATE_SHIFT (19U)                                               /*!< USBPHY0_CTRL_SET.ENAUTOCLR_CLKGATE Position*/
-#define USBPHY0_CTRL_SET_ENAUTOCLR_CLKGATE(x)    (((uint32_t)(((uint32_t)(x))<<USBPHY0_CTRL_SET_ENAUTOCLR_CLKGATE_SHIFT))&USBPHY0_CTRL_SET_ENAUTOCLR_CLKGATE_MASK) /*!< USBPHY0_CTRL_SET.ENAUTOCLR_CLKGATE Field*/
-#define USBPHY0_CTRL_SET_ENAUTOCLR_PHY_PWD_MASK  (0x100000U)                                         /*!< USBPHY0_CTRL_SET.ENAUTOCLR_PHY_PWD Mask */
-#define USBPHY0_CTRL_SET_ENAUTOCLR_PHY_PWD_SHIFT (20U)                                               /*!< USBPHY0_CTRL_SET.ENAUTOCLR_PHY_PWD Position*/
-#define USBPHY0_CTRL_SET_ENAUTOCLR_PHY_PWD(x)    (((uint32_t)(((uint32_t)(x))<<USBPHY0_CTRL_SET_ENAUTOCLR_PHY_PWD_SHIFT))&USBPHY0_CTRL_SET_ENAUTOCLR_PHY_PWD_MASK) /*!< USBPHY0_CTRL_SET.ENAUTOCLR_PHY_PWD Field*/
-#define USBPHY0_CTRL_SET_FSDLL_RST_EN_MASK       (0x1000000U)                                        /*!< USBPHY0_CTRL_SET.FSDLL_RST_EN Mask      */
-#define USBPHY0_CTRL_SET_FSDLL_RST_EN_SHIFT      (24U)                                               /*!< USBPHY0_CTRL_SET.FSDLL_RST_EN Position  */
-#define USBPHY0_CTRL_SET_FSDLL_RST_EN(x)         (((uint32_t)(((uint32_t)(x))<<USBPHY0_CTRL_SET_FSDLL_RST_EN_SHIFT))&USBPHY0_CTRL_SET_FSDLL_RST_EN_MASK) /*!< USBPHY0_CTRL_SET.FSDLL_RST_EN Field     */
-#define USBPHY0_CTRL_SET_OTG_ID_VALUE_MASK       (0x8000000U)                                        /*!< USBPHY0_CTRL_SET.OTG_ID_VALUE Mask      */
-#define USBPHY0_CTRL_SET_OTG_ID_VALUE_SHIFT      (27U)                                               /*!< USBPHY0_CTRL_SET.OTG_ID_VALUE Position  */
-#define USBPHY0_CTRL_SET_OTG_ID_VALUE(x)         (((uint32_t)(((uint32_t)(x))<<USBPHY0_CTRL_SET_OTG_ID_VALUE_SHIFT))&USBPHY0_CTRL_SET_OTG_ID_VALUE_MASK) /*!< USBPHY0_CTRL_SET.OTG_ID_VALUE Field     */
-#define USBPHY0_CTRL_SET_HOST_FORCE_LS_SE0_MASK  (0x10000000U)                                       /*!< USBPHY0_CTRL_SET.HOST_FORCE_LS_SE0 Mask */
-#define USBPHY0_CTRL_SET_HOST_FORCE_LS_SE0_SHIFT (28U)                                               /*!< USBPHY0_CTRL_SET.HOST_FORCE_LS_SE0 Position*/
-#define USBPHY0_CTRL_SET_HOST_FORCE_LS_SE0(x)    (((uint32_t)(((uint32_t)(x))<<USBPHY0_CTRL_SET_HOST_FORCE_LS_SE0_SHIFT))&USBPHY0_CTRL_SET_HOST_FORCE_LS_SE0_MASK) /*!< USBPHY0_CTRL_SET.HOST_FORCE_LS_SE0 Field*/
-#define USBPHY0_CTRL_SET_UTMI_SUSPENDM_MASK      (0x20000000U)                                       /*!< USBPHY0_CTRL_SET.UTMI_SUSPENDM Mask     */
-#define USBPHY0_CTRL_SET_UTMI_SUSPENDM_SHIFT     (29U)                                               /*!< USBPHY0_CTRL_SET.UTMI_SUSPENDM Position */
-#define USBPHY0_CTRL_SET_UTMI_SUSPENDM(x)        (((uint32_t)(((uint32_t)(x))<<USBPHY0_CTRL_SET_UTMI_SUSPENDM_SHIFT))&USBPHY0_CTRL_SET_UTMI_SUSPENDM_MASK) /*!< USBPHY0_CTRL_SET.UTMI_SUSPENDM Field    */
-#define USBPHY0_CTRL_SET_CLKGATE_MASK            (0x40000000U)                                       /*!< USBPHY0_CTRL_SET.CLKGATE Mask           */
-#define USBPHY0_CTRL_SET_CLKGATE_SHIFT           (30U)                                               /*!< USBPHY0_CTRL_SET.CLKGATE Position       */
-#define USBPHY0_CTRL_SET_CLKGATE(x)              (((uint32_t)(((uint32_t)(x))<<USBPHY0_CTRL_SET_CLKGATE_SHIFT))&USBPHY0_CTRL_SET_CLKGATE_MASK) /*!< USBPHY0_CTRL_SET.CLKGATE Field          */
-#define USBPHY0_CTRL_SET_SFTRST_MASK             (0x80000000U)                                       /*!< USBPHY0_CTRL_SET.SFTRST Mask            */
-#define USBPHY0_CTRL_SET_SFTRST_SHIFT            (31U)                                               /*!< USBPHY0_CTRL_SET.SFTRST Position        */
-#define USBPHY0_CTRL_SET_SFTRST(x)               (((uint32_t)(((uint32_t)(x))<<USBPHY0_CTRL_SET_SFTRST_SHIFT))&USBPHY0_CTRL_SET_SFTRST_MASK) /*!< USBPHY0_CTRL_SET.SFTRST Field           */
+#define USBPHY_CTRL_SET_ENHOSTDISCONDETECT_MASK  (0x2U)                                              /*!< USBPHY1_CTRL_SET.ENHOSTDISCONDETECT Mask*/
+#define USBPHY_CTRL_SET_ENHOSTDISCONDETECT_SHIFT (1U)                                                /*!< USBPHY1_CTRL_SET.ENHOSTDISCONDETECT Position*/
+#define USBPHY_CTRL_SET_ENHOSTDISCONDETECT(x)    (((uint32_t)(((uint32_t)(x))<<USBPHY_CTRL_SET_ENHOSTDISCONDETECT_SHIFT))&USBPHY_CTRL_SET_ENHOSTDISCONDETECT_MASK) /*!< USBPHY1_CTRL_SET.ENHOSTDISCONDETECT Field*/
+#define USBPHY_CTRL_SET_HOSTDISCONDETECT_IRQ_MASK (0x8U)                                             /*!< USBPHY1_CTRL_SET.HOSTDISCONDETECT_IRQ Mask*/
+#define USBPHY_CTRL_SET_HOSTDISCONDETECT_IRQ_SHIFT (3U)                                              /*!< USBPHY1_CTRL_SET.HOSTDISCONDETECT_IRQ Position*/
+#define USBPHY_CTRL_SET_HOSTDISCONDETECT_IRQ(x)  (((uint32_t)(((uint32_t)(x))<<USBPHY_CTRL_SET_HOSTDISCONDETECT_IRQ_SHIFT))&USBPHY_CTRL_SET_HOSTDISCONDETECT_IRQ_MASK) /*!< USBPHY1_CTRL_SET.HOSTDISCONDETECT_IRQ Field*/
+#define USBPHY_CTRL_SET_ENDEVPLUGINDET_MASK      (0x10U)                                             /*!< USBPHY1_CTRL_SET.ENDEVPLUGINDET Mask    */
+#define USBPHY_CTRL_SET_ENDEVPLUGINDET_SHIFT     (4U)                                                /*!< USBPHY1_CTRL_SET.ENDEVPLUGINDET Position*/
+#define USBPHY_CTRL_SET_ENDEVPLUGINDET(x)        (((uint32_t)(((uint32_t)(x))<<USBPHY_CTRL_SET_ENDEVPLUGINDET_SHIFT))&USBPHY_CTRL_SET_ENDEVPLUGINDET_MASK) /*!< USBPHY1_CTRL_SET.ENDEVPLUGINDET Field   */
+#define USBPHY_CTRL_SET_DEVPLUGIN_IRQ_MASK       (0x1000U)                                           /*!< USBPHY1_CTRL_SET.DEVPLUGIN_IRQ Mask     */
+#define USBPHY_CTRL_SET_DEVPLUGIN_IRQ_SHIFT      (12U)                                               /*!< USBPHY1_CTRL_SET.DEVPLUGIN_IRQ Position */
+#define USBPHY_CTRL_SET_DEVPLUGIN_IRQ(x)         (((uint32_t)(((uint32_t)(x))<<USBPHY_CTRL_SET_DEVPLUGIN_IRQ_SHIFT))&USBPHY_CTRL_SET_DEVPLUGIN_IRQ_MASK) /*!< USBPHY1_CTRL_SET.DEVPLUGIN_IRQ Field    */
+#define USBPHY_CTRL_SET_ENUTMILEVEL2_MASK        (0x4000U)                                           /*!< USBPHY1_CTRL_SET.ENUTMILEVEL2 Mask      */
+#define USBPHY_CTRL_SET_ENUTMILEVEL2_SHIFT       (14U)                                               /*!< USBPHY1_CTRL_SET.ENUTMILEVEL2 Position  */
+#define USBPHY_CTRL_SET_ENUTMILEVEL2(x)          (((uint32_t)(((uint32_t)(x))<<USBPHY_CTRL_SET_ENUTMILEVEL2_SHIFT))&USBPHY_CTRL_SET_ENUTMILEVEL2_MASK) /*!< USBPHY1_CTRL_SET.ENUTMILEVEL2 Field     */
+#define USBPHY_CTRL_SET_ENUTMILEVEL3_MASK        (0x8000U)                                           /*!< USBPHY1_CTRL_SET.ENUTMILEVEL3 Mask      */
+#define USBPHY_CTRL_SET_ENUTMILEVEL3_SHIFT       (15U)                                               /*!< USBPHY1_CTRL_SET.ENUTMILEVEL3 Position  */
+#define USBPHY_CTRL_SET_ENUTMILEVEL3(x)          (((uint32_t)(((uint32_t)(x))<<USBPHY_CTRL_SET_ENUTMILEVEL3_SHIFT))&USBPHY_CTRL_SET_ENUTMILEVEL3_MASK) /*!< USBPHY1_CTRL_SET.ENUTMILEVEL3 Field     */
+#define USBPHY_CTRL_SET_AUTORESUME_EN_MASK       (0x40000U)                                          /*!< USBPHY1_CTRL_SET.AUTORESUME_EN Mask     */
+#define USBPHY_CTRL_SET_AUTORESUME_EN_SHIFT      (18U)                                               /*!< USBPHY1_CTRL_SET.AUTORESUME_EN Position */
+#define USBPHY_CTRL_SET_AUTORESUME_EN(x)         (((uint32_t)(((uint32_t)(x))<<USBPHY_CTRL_SET_AUTORESUME_EN_SHIFT))&USBPHY_CTRL_SET_AUTORESUME_EN_MASK) /*!< USBPHY1_CTRL_SET.AUTORESUME_EN Field    */
+#define USBPHY_CTRL_SET_ENAUTOCLR_CLKGATE_MASK   (0x80000U)                                          /*!< USBPHY1_CTRL_SET.ENAUTOCLR_CLKGATE Mask */
+#define USBPHY_CTRL_SET_ENAUTOCLR_CLKGATE_SHIFT  (19U)                                               /*!< USBPHY1_CTRL_SET.ENAUTOCLR_CLKGATE Position*/
+#define USBPHY_CTRL_SET_ENAUTOCLR_CLKGATE(x)     (((uint32_t)(((uint32_t)(x))<<USBPHY_CTRL_SET_ENAUTOCLR_CLKGATE_SHIFT))&USBPHY_CTRL_SET_ENAUTOCLR_CLKGATE_MASK) /*!< USBPHY1_CTRL_SET.ENAUTOCLR_CLKGATE Field*/
+#define USBPHY_CTRL_SET_ENAUTOCLR_PHY_PWD_MASK   (0x100000U)                                         /*!< USBPHY1_CTRL_SET.ENAUTOCLR_PHY_PWD Mask */
+#define USBPHY_CTRL_SET_ENAUTOCLR_PHY_PWD_SHIFT  (20U)                                               /*!< USBPHY1_CTRL_SET.ENAUTOCLR_PHY_PWD Position*/
+#define USBPHY_CTRL_SET_ENAUTOCLR_PHY_PWD(x)     (((uint32_t)(((uint32_t)(x))<<USBPHY_CTRL_SET_ENAUTOCLR_PHY_PWD_SHIFT))&USBPHY_CTRL_SET_ENAUTOCLR_PHY_PWD_MASK) /*!< USBPHY1_CTRL_SET.ENAUTOCLR_PHY_PWD Field*/
+#define USBPHY_CTRL_SET_FSDLL_RST_EN_MASK        (0x1000000U)                                        /*!< USBPHY1_CTRL_SET.FSDLL_RST_EN Mask      */
+#define USBPHY_CTRL_SET_FSDLL_RST_EN_SHIFT       (24U)                                               /*!< USBPHY1_CTRL_SET.FSDLL_RST_EN Position  */
+#define USBPHY_CTRL_SET_FSDLL_RST_EN(x)          (((uint32_t)(((uint32_t)(x))<<USBPHY_CTRL_SET_FSDLL_RST_EN_SHIFT))&USBPHY_CTRL_SET_FSDLL_RST_EN_MASK) /*!< USBPHY1_CTRL_SET.FSDLL_RST_EN Field     */
+#define USBPHY_CTRL_SET_OTG_ID_VALUE_MASK        (0x8000000U)                                        /*!< USBPHY1_CTRL_SET.OTG_ID_VALUE Mask      */
+#define USBPHY_CTRL_SET_OTG_ID_VALUE_SHIFT       (27U)                                               /*!< USBPHY1_CTRL_SET.OTG_ID_VALUE Position  */
+#define USBPHY_CTRL_SET_OTG_ID_VALUE(x)          (((uint32_t)(((uint32_t)(x))<<USBPHY_CTRL_SET_OTG_ID_VALUE_SHIFT))&USBPHY_CTRL_SET_OTG_ID_VALUE_MASK) /*!< USBPHY1_CTRL_SET.OTG_ID_VALUE Field     */
+#define USBPHY_CTRL_SET_HOST_FORCE_LS_SE0_MASK   (0x10000000U)                                       /*!< USBPHY1_CTRL_SET.HOST_FORCE_LS_SE0 Mask */
+#define USBPHY_CTRL_SET_HOST_FORCE_LS_SE0_SHIFT  (28U)                                               /*!< USBPHY1_CTRL_SET.HOST_FORCE_LS_SE0 Position*/
+#define USBPHY_CTRL_SET_HOST_FORCE_LS_SE0(x)     (((uint32_t)(((uint32_t)(x))<<USBPHY_CTRL_SET_HOST_FORCE_LS_SE0_SHIFT))&USBPHY_CTRL_SET_HOST_FORCE_LS_SE0_MASK) /*!< USBPHY1_CTRL_SET.HOST_FORCE_LS_SE0 Field*/
+#define USBPHY_CTRL_SET_UTMI_SUSPENDM_MASK       (0x20000000U)                                       /*!< USBPHY1_CTRL_SET.UTMI_SUSPENDM Mask     */
+#define USBPHY_CTRL_SET_UTMI_SUSPENDM_SHIFT      (29U)                                               /*!< USBPHY1_CTRL_SET.UTMI_SUSPENDM Position */
+#define USBPHY_CTRL_SET_UTMI_SUSPENDM(x)         (((uint32_t)(((uint32_t)(x))<<USBPHY_CTRL_SET_UTMI_SUSPENDM_SHIFT))&USBPHY_CTRL_SET_UTMI_SUSPENDM_MASK) /*!< USBPHY1_CTRL_SET.UTMI_SUSPENDM Field    */
+#define USBPHY_CTRL_SET_CLKGATE_MASK             (0x40000000U)                                       /*!< USBPHY1_CTRL_SET.CLKGATE Mask           */
+#define USBPHY_CTRL_SET_CLKGATE_SHIFT            (30U)                                               /*!< USBPHY1_CTRL_SET.CLKGATE Position       */
+#define USBPHY_CTRL_SET_CLKGATE(x)               (((uint32_t)(((uint32_t)(x))<<USBPHY_CTRL_SET_CLKGATE_SHIFT))&USBPHY_CTRL_SET_CLKGATE_MASK) /*!< USBPHY1_CTRL_SET.CLKGATE Field          */
+#define USBPHY_CTRL_SET_SFTRST_MASK              (0x80000000U)                                       /*!< USBPHY1_CTRL_SET.SFTRST Mask            */
+#define USBPHY_CTRL_SET_SFTRST_SHIFT             (31U)                                               /*!< USBPHY1_CTRL_SET.SFTRST Position        */
+#define USBPHY_CTRL_SET_SFTRST(x)                (((uint32_t)(((uint32_t)(x))<<USBPHY_CTRL_SET_SFTRST_SHIFT))&USBPHY_CTRL_SET_SFTRST_MASK) /*!< USBPHY1_CTRL_SET.SFTRST Field           */
 
 /*! @name CTRL_CLR - USB PHY General Control Register */
-#define USBPHY0_CTRL_CLR_ENHOSTDISCONDETECT_MASK (0x2U)                                              /*!< USBPHY0_CTRL_CLR.ENHOSTDISCONDETECT Mask*/
-#define USBPHY0_CTRL_CLR_ENHOSTDISCONDETECT_SHIFT (1U)                                               /*!< USBPHY0_CTRL_CLR.ENHOSTDISCONDETECT Position*/
-#define USBPHY0_CTRL_CLR_ENHOSTDISCONDETECT(x)   (((uint32_t)(((uint32_t)(x))<<USBPHY0_CTRL_CLR_ENHOSTDISCONDETECT_SHIFT))&USBPHY0_CTRL_CLR_ENHOSTDISCONDETECT_MASK) /*!< USBPHY0_CTRL_CLR.ENHOSTDISCONDETECT Field*/
-#define USBPHY0_CTRL_CLR_HOSTDISCONDETECT_IRQ_MASK (0x8U)                                            /*!< USBPHY0_CTRL_CLR.HOSTDISCONDETECT_IRQ Mask*/
-#define USBPHY0_CTRL_CLR_HOSTDISCONDETECT_IRQ_SHIFT (3U)                                             /*!< USBPHY0_CTRL_CLR.HOSTDISCONDETECT_IRQ Position*/
-#define USBPHY0_CTRL_CLR_HOSTDISCONDETECT_IRQ(x) (((uint32_t)(((uint32_t)(x))<<USBPHY0_CTRL_CLR_HOSTDISCONDETECT_IRQ_SHIFT))&USBPHY0_CTRL_CLR_HOSTDISCONDETECT_IRQ_MASK) /*!< USBPHY0_CTRL_CLR.HOSTDISCONDETECT_IRQ Field*/
-#define USBPHY0_CTRL_CLR_ENDEVPLUGINDET_MASK     (0x10U)                                             /*!< USBPHY0_CTRL_CLR.ENDEVPLUGINDET Mask    */
-#define USBPHY0_CTRL_CLR_ENDEVPLUGINDET_SHIFT    (4U)                                                /*!< USBPHY0_CTRL_CLR.ENDEVPLUGINDET Position*/
-#define USBPHY0_CTRL_CLR_ENDEVPLUGINDET(x)       (((uint32_t)(((uint32_t)(x))<<USBPHY0_CTRL_CLR_ENDEVPLUGINDET_SHIFT))&USBPHY0_CTRL_CLR_ENDEVPLUGINDET_MASK) /*!< USBPHY0_CTRL_CLR.ENDEVPLUGINDET Field   */
-#define USBPHY0_CTRL_CLR_DEVPLUGIN_IRQ_MASK      (0x1000U)                                           /*!< USBPHY0_CTRL_CLR.DEVPLUGIN_IRQ Mask     */
-#define USBPHY0_CTRL_CLR_DEVPLUGIN_IRQ_SHIFT     (12U)                                               /*!< USBPHY0_CTRL_CLR.DEVPLUGIN_IRQ Position */
-#define USBPHY0_CTRL_CLR_DEVPLUGIN_IRQ(x)        (((uint32_t)(((uint32_t)(x))<<USBPHY0_CTRL_CLR_DEVPLUGIN_IRQ_SHIFT))&USBPHY0_CTRL_CLR_DEVPLUGIN_IRQ_MASK) /*!< USBPHY0_CTRL_CLR.DEVPLUGIN_IRQ Field    */
-#define USBPHY0_CTRL_CLR_ENUTMILEVEL2_MASK       (0x4000U)                                           /*!< USBPHY0_CTRL_CLR.ENUTMILEVEL2 Mask      */
-#define USBPHY0_CTRL_CLR_ENUTMILEVEL2_SHIFT      (14U)                                               /*!< USBPHY0_CTRL_CLR.ENUTMILEVEL2 Position  */
-#define USBPHY0_CTRL_CLR_ENUTMILEVEL2(x)         (((uint32_t)(((uint32_t)(x))<<USBPHY0_CTRL_CLR_ENUTMILEVEL2_SHIFT))&USBPHY0_CTRL_CLR_ENUTMILEVEL2_MASK) /*!< USBPHY0_CTRL_CLR.ENUTMILEVEL2 Field     */
-#define USBPHY0_CTRL_CLR_ENUTMILEVEL3_MASK       (0x8000U)                                           /*!< USBPHY0_CTRL_CLR.ENUTMILEVEL3 Mask      */
-#define USBPHY0_CTRL_CLR_ENUTMILEVEL3_SHIFT      (15U)                                               /*!< USBPHY0_CTRL_CLR.ENUTMILEVEL3 Position  */
-#define USBPHY0_CTRL_CLR_ENUTMILEVEL3(x)         (((uint32_t)(((uint32_t)(x))<<USBPHY0_CTRL_CLR_ENUTMILEVEL3_SHIFT))&USBPHY0_CTRL_CLR_ENUTMILEVEL3_MASK) /*!< USBPHY0_CTRL_CLR.ENUTMILEVEL3 Field     */
-#define USBPHY0_CTRL_CLR_AUTORESUME_EN_MASK      (0x40000U)                                          /*!< USBPHY0_CTRL_CLR.AUTORESUME_EN Mask     */
-#define USBPHY0_CTRL_CLR_AUTORESUME_EN_SHIFT     (18U)                                               /*!< USBPHY0_CTRL_CLR.AUTORESUME_EN Position */
-#define USBPHY0_CTRL_CLR_AUTORESUME_EN(x)        (((uint32_t)(((uint32_t)(x))<<USBPHY0_CTRL_CLR_AUTORESUME_EN_SHIFT))&USBPHY0_CTRL_CLR_AUTORESUME_EN_MASK) /*!< USBPHY0_CTRL_CLR.AUTORESUME_EN Field    */
-#define USBPHY0_CTRL_CLR_ENAUTOCLR_CLKGATE_MASK  (0x80000U)                                          /*!< USBPHY0_CTRL_CLR.ENAUTOCLR_CLKGATE Mask */
-#define USBPHY0_CTRL_CLR_ENAUTOCLR_CLKGATE_SHIFT (19U)                                               /*!< USBPHY0_CTRL_CLR.ENAUTOCLR_CLKGATE Position*/
-#define USBPHY0_CTRL_CLR_ENAUTOCLR_CLKGATE(x)    (((uint32_t)(((uint32_t)(x))<<USBPHY0_CTRL_CLR_ENAUTOCLR_CLKGATE_SHIFT))&USBPHY0_CTRL_CLR_ENAUTOCLR_CLKGATE_MASK) /*!< USBPHY0_CTRL_CLR.ENAUTOCLR_CLKGATE Field*/
-#define USBPHY0_CTRL_CLR_ENAUTOCLR_PHY_PWD_MASK  (0x100000U)                                         /*!< USBPHY0_CTRL_CLR.ENAUTOCLR_PHY_PWD Mask */
-#define USBPHY0_CTRL_CLR_ENAUTOCLR_PHY_PWD_SHIFT (20U)                                               /*!< USBPHY0_CTRL_CLR.ENAUTOCLR_PHY_PWD Position*/
-#define USBPHY0_CTRL_CLR_ENAUTOCLR_PHY_PWD(x)    (((uint32_t)(((uint32_t)(x))<<USBPHY0_CTRL_CLR_ENAUTOCLR_PHY_PWD_SHIFT))&USBPHY0_CTRL_CLR_ENAUTOCLR_PHY_PWD_MASK) /*!< USBPHY0_CTRL_CLR.ENAUTOCLR_PHY_PWD Field*/
-#define USBPHY0_CTRL_CLR_FSDLL_RST_EN_MASK       (0x1000000U)                                        /*!< USBPHY0_CTRL_CLR.FSDLL_RST_EN Mask      */
-#define USBPHY0_CTRL_CLR_FSDLL_RST_EN_SHIFT      (24U)                                               /*!< USBPHY0_CTRL_CLR.FSDLL_RST_EN Position  */
-#define USBPHY0_CTRL_CLR_FSDLL_RST_EN(x)         (((uint32_t)(((uint32_t)(x))<<USBPHY0_CTRL_CLR_FSDLL_RST_EN_SHIFT))&USBPHY0_CTRL_CLR_FSDLL_RST_EN_MASK) /*!< USBPHY0_CTRL_CLR.FSDLL_RST_EN Field     */
-#define USBPHY0_CTRL_CLR_OTG_ID_VALUE_MASK       (0x8000000U)                                        /*!< USBPHY0_CTRL_CLR.OTG_ID_VALUE Mask      */
-#define USBPHY0_CTRL_CLR_OTG_ID_VALUE_SHIFT      (27U)                                               /*!< USBPHY0_CTRL_CLR.OTG_ID_VALUE Position  */
-#define USBPHY0_CTRL_CLR_OTG_ID_VALUE(x)         (((uint32_t)(((uint32_t)(x))<<USBPHY0_CTRL_CLR_OTG_ID_VALUE_SHIFT))&USBPHY0_CTRL_CLR_OTG_ID_VALUE_MASK) /*!< USBPHY0_CTRL_CLR.OTG_ID_VALUE Field     */
-#define USBPHY0_CTRL_CLR_HOST_FORCE_LS_SE0_MASK  (0x10000000U)                                       /*!< USBPHY0_CTRL_CLR.HOST_FORCE_LS_SE0 Mask */
-#define USBPHY0_CTRL_CLR_HOST_FORCE_LS_SE0_SHIFT (28U)                                               /*!< USBPHY0_CTRL_CLR.HOST_FORCE_LS_SE0 Position*/
-#define USBPHY0_CTRL_CLR_HOST_FORCE_LS_SE0(x)    (((uint32_t)(((uint32_t)(x))<<USBPHY0_CTRL_CLR_HOST_FORCE_LS_SE0_SHIFT))&USBPHY0_CTRL_CLR_HOST_FORCE_LS_SE0_MASK) /*!< USBPHY0_CTRL_CLR.HOST_FORCE_LS_SE0 Field*/
-#define USBPHY0_CTRL_CLR_UTMI_SUSPENDM_MASK      (0x20000000U)                                       /*!< USBPHY0_CTRL_CLR.UTMI_SUSPENDM Mask     */
-#define USBPHY0_CTRL_CLR_UTMI_SUSPENDM_SHIFT     (29U)                                               /*!< USBPHY0_CTRL_CLR.UTMI_SUSPENDM Position */
-#define USBPHY0_CTRL_CLR_UTMI_SUSPENDM(x)        (((uint32_t)(((uint32_t)(x))<<USBPHY0_CTRL_CLR_UTMI_SUSPENDM_SHIFT))&USBPHY0_CTRL_CLR_UTMI_SUSPENDM_MASK) /*!< USBPHY0_CTRL_CLR.UTMI_SUSPENDM Field    */
-#define USBPHY0_CTRL_CLR_CLKGATE_MASK            (0x40000000U)                                       /*!< USBPHY0_CTRL_CLR.CLKGATE Mask           */
-#define USBPHY0_CTRL_CLR_CLKGATE_SHIFT           (30U)                                               /*!< USBPHY0_CTRL_CLR.CLKGATE Position       */
-#define USBPHY0_CTRL_CLR_CLKGATE(x)              (((uint32_t)(((uint32_t)(x))<<USBPHY0_CTRL_CLR_CLKGATE_SHIFT))&USBPHY0_CTRL_CLR_CLKGATE_MASK) /*!< USBPHY0_CTRL_CLR.CLKGATE Field          */
-#define USBPHY0_CTRL_CLR_SFTRST_MASK             (0x80000000U)                                       /*!< USBPHY0_CTRL_CLR.SFTRST Mask            */
-#define USBPHY0_CTRL_CLR_SFTRST_SHIFT            (31U)                                               /*!< USBPHY0_CTRL_CLR.SFTRST Position        */
-#define USBPHY0_CTRL_CLR_SFTRST(x)               (((uint32_t)(((uint32_t)(x))<<USBPHY0_CTRL_CLR_SFTRST_SHIFT))&USBPHY0_CTRL_CLR_SFTRST_MASK) /*!< USBPHY0_CTRL_CLR.SFTRST Field           */
+#define USBPHY_CTRL_CLR_ENHOSTDISCONDETECT_MASK  (0x2U)                                              /*!< USBPHY1_CTRL_CLR.ENHOSTDISCONDETECT Mask*/
+#define USBPHY_CTRL_CLR_ENHOSTDISCONDETECT_SHIFT (1U)                                                /*!< USBPHY1_CTRL_CLR.ENHOSTDISCONDETECT Position*/
+#define USBPHY_CTRL_CLR_ENHOSTDISCONDETECT(x)    (((uint32_t)(((uint32_t)(x))<<USBPHY_CTRL_CLR_ENHOSTDISCONDETECT_SHIFT))&USBPHY_CTRL_CLR_ENHOSTDISCONDETECT_MASK) /*!< USBPHY1_CTRL_CLR.ENHOSTDISCONDETECT Field*/
+#define USBPHY_CTRL_CLR_HOSTDISCONDETECT_IRQ_MASK (0x8U)                                             /*!< USBPHY1_CTRL_CLR.HOSTDISCONDETECT_IRQ Mask*/
+#define USBPHY_CTRL_CLR_HOSTDISCONDETECT_IRQ_SHIFT (3U)                                              /*!< USBPHY1_CTRL_CLR.HOSTDISCONDETECT_IRQ Position*/
+#define USBPHY_CTRL_CLR_HOSTDISCONDETECT_IRQ(x)  (((uint32_t)(((uint32_t)(x))<<USBPHY_CTRL_CLR_HOSTDISCONDETECT_IRQ_SHIFT))&USBPHY_CTRL_CLR_HOSTDISCONDETECT_IRQ_MASK) /*!< USBPHY1_CTRL_CLR.HOSTDISCONDETECT_IRQ Field*/
+#define USBPHY_CTRL_CLR_ENDEVPLUGINDET_MASK      (0x10U)                                             /*!< USBPHY1_CTRL_CLR.ENDEVPLUGINDET Mask    */
+#define USBPHY_CTRL_CLR_ENDEVPLUGINDET_SHIFT     (4U)                                                /*!< USBPHY1_CTRL_CLR.ENDEVPLUGINDET Position*/
+#define USBPHY_CTRL_CLR_ENDEVPLUGINDET(x)        (((uint32_t)(((uint32_t)(x))<<USBPHY_CTRL_CLR_ENDEVPLUGINDET_SHIFT))&USBPHY_CTRL_CLR_ENDEVPLUGINDET_MASK) /*!< USBPHY1_CTRL_CLR.ENDEVPLUGINDET Field   */
+#define USBPHY_CTRL_CLR_DEVPLUGIN_IRQ_MASK       (0x1000U)                                           /*!< USBPHY1_CTRL_CLR.DEVPLUGIN_IRQ Mask     */
+#define USBPHY_CTRL_CLR_DEVPLUGIN_IRQ_SHIFT      (12U)                                               /*!< USBPHY1_CTRL_CLR.DEVPLUGIN_IRQ Position */
+#define USBPHY_CTRL_CLR_DEVPLUGIN_IRQ(x)         (((uint32_t)(((uint32_t)(x))<<USBPHY_CTRL_CLR_DEVPLUGIN_IRQ_SHIFT))&USBPHY_CTRL_CLR_DEVPLUGIN_IRQ_MASK) /*!< USBPHY1_CTRL_CLR.DEVPLUGIN_IRQ Field    */
+#define USBPHY_CTRL_CLR_ENUTMILEVEL2_MASK        (0x4000U)                                           /*!< USBPHY1_CTRL_CLR.ENUTMILEVEL2 Mask      */
+#define USBPHY_CTRL_CLR_ENUTMILEVEL2_SHIFT       (14U)                                               /*!< USBPHY1_CTRL_CLR.ENUTMILEVEL2 Position  */
+#define USBPHY_CTRL_CLR_ENUTMILEVEL2(x)          (((uint32_t)(((uint32_t)(x))<<USBPHY_CTRL_CLR_ENUTMILEVEL2_SHIFT))&USBPHY_CTRL_CLR_ENUTMILEVEL2_MASK) /*!< USBPHY1_CTRL_CLR.ENUTMILEVEL2 Field     */
+#define USBPHY_CTRL_CLR_ENUTMILEVEL3_MASK        (0x8000U)                                           /*!< USBPHY1_CTRL_CLR.ENUTMILEVEL3 Mask      */
+#define USBPHY_CTRL_CLR_ENUTMILEVEL3_SHIFT       (15U)                                               /*!< USBPHY1_CTRL_CLR.ENUTMILEVEL3 Position  */
+#define USBPHY_CTRL_CLR_ENUTMILEVEL3(x)          (((uint32_t)(((uint32_t)(x))<<USBPHY_CTRL_CLR_ENUTMILEVEL3_SHIFT))&USBPHY_CTRL_CLR_ENUTMILEVEL3_MASK) /*!< USBPHY1_CTRL_CLR.ENUTMILEVEL3 Field     */
+#define USBPHY_CTRL_CLR_AUTORESUME_EN_MASK       (0x40000U)                                          /*!< USBPHY1_CTRL_CLR.AUTORESUME_EN Mask     */
+#define USBPHY_CTRL_CLR_AUTORESUME_EN_SHIFT      (18U)                                               /*!< USBPHY1_CTRL_CLR.AUTORESUME_EN Position */
+#define USBPHY_CTRL_CLR_AUTORESUME_EN(x)         (((uint32_t)(((uint32_t)(x))<<USBPHY_CTRL_CLR_AUTORESUME_EN_SHIFT))&USBPHY_CTRL_CLR_AUTORESUME_EN_MASK) /*!< USBPHY1_CTRL_CLR.AUTORESUME_EN Field    */
+#define USBPHY_CTRL_CLR_ENAUTOCLR_CLKGATE_MASK   (0x80000U)                                          /*!< USBPHY1_CTRL_CLR.ENAUTOCLR_CLKGATE Mask */
+#define USBPHY_CTRL_CLR_ENAUTOCLR_CLKGATE_SHIFT  (19U)                                               /*!< USBPHY1_CTRL_CLR.ENAUTOCLR_CLKGATE Position*/
+#define USBPHY_CTRL_CLR_ENAUTOCLR_CLKGATE(x)     (((uint32_t)(((uint32_t)(x))<<USBPHY_CTRL_CLR_ENAUTOCLR_CLKGATE_SHIFT))&USBPHY_CTRL_CLR_ENAUTOCLR_CLKGATE_MASK) /*!< USBPHY1_CTRL_CLR.ENAUTOCLR_CLKGATE Field*/
+#define USBPHY_CTRL_CLR_ENAUTOCLR_PHY_PWD_MASK   (0x100000U)                                         /*!< USBPHY1_CTRL_CLR.ENAUTOCLR_PHY_PWD Mask */
+#define USBPHY_CTRL_CLR_ENAUTOCLR_PHY_PWD_SHIFT  (20U)                                               /*!< USBPHY1_CTRL_CLR.ENAUTOCLR_PHY_PWD Position*/
+#define USBPHY_CTRL_CLR_ENAUTOCLR_PHY_PWD(x)     (((uint32_t)(((uint32_t)(x))<<USBPHY_CTRL_CLR_ENAUTOCLR_PHY_PWD_SHIFT))&USBPHY_CTRL_CLR_ENAUTOCLR_PHY_PWD_MASK) /*!< USBPHY1_CTRL_CLR.ENAUTOCLR_PHY_PWD Field*/
+#define USBPHY_CTRL_CLR_FSDLL_RST_EN_MASK        (0x1000000U)                                        /*!< USBPHY1_CTRL_CLR.FSDLL_RST_EN Mask      */
+#define USBPHY_CTRL_CLR_FSDLL_RST_EN_SHIFT       (24U)                                               /*!< USBPHY1_CTRL_CLR.FSDLL_RST_EN Position  */
+#define USBPHY_CTRL_CLR_FSDLL_RST_EN(x)          (((uint32_t)(((uint32_t)(x))<<USBPHY_CTRL_CLR_FSDLL_RST_EN_SHIFT))&USBPHY_CTRL_CLR_FSDLL_RST_EN_MASK) /*!< USBPHY1_CTRL_CLR.FSDLL_RST_EN Field     */
+#define USBPHY_CTRL_CLR_OTG_ID_VALUE_MASK        (0x8000000U)                                        /*!< USBPHY1_CTRL_CLR.OTG_ID_VALUE Mask      */
+#define USBPHY_CTRL_CLR_OTG_ID_VALUE_SHIFT       (27U)                                               /*!< USBPHY1_CTRL_CLR.OTG_ID_VALUE Position  */
+#define USBPHY_CTRL_CLR_OTG_ID_VALUE(x)          (((uint32_t)(((uint32_t)(x))<<USBPHY_CTRL_CLR_OTG_ID_VALUE_SHIFT))&USBPHY_CTRL_CLR_OTG_ID_VALUE_MASK) /*!< USBPHY1_CTRL_CLR.OTG_ID_VALUE Field     */
+#define USBPHY_CTRL_CLR_HOST_FORCE_LS_SE0_MASK   (0x10000000U)                                       /*!< USBPHY1_CTRL_CLR.HOST_FORCE_LS_SE0 Mask */
+#define USBPHY_CTRL_CLR_HOST_FORCE_LS_SE0_SHIFT  (28U)                                               /*!< USBPHY1_CTRL_CLR.HOST_FORCE_LS_SE0 Position*/
+#define USBPHY_CTRL_CLR_HOST_FORCE_LS_SE0(x)     (((uint32_t)(((uint32_t)(x))<<USBPHY_CTRL_CLR_HOST_FORCE_LS_SE0_SHIFT))&USBPHY_CTRL_CLR_HOST_FORCE_LS_SE0_MASK) /*!< USBPHY1_CTRL_CLR.HOST_FORCE_LS_SE0 Field*/
+#define USBPHY_CTRL_CLR_UTMI_SUSPENDM_MASK       (0x20000000U)                                       /*!< USBPHY1_CTRL_CLR.UTMI_SUSPENDM Mask     */
+#define USBPHY_CTRL_CLR_UTMI_SUSPENDM_SHIFT      (29U)                                               /*!< USBPHY1_CTRL_CLR.UTMI_SUSPENDM Position */
+#define USBPHY_CTRL_CLR_UTMI_SUSPENDM(x)         (((uint32_t)(((uint32_t)(x))<<USBPHY_CTRL_CLR_UTMI_SUSPENDM_SHIFT))&USBPHY_CTRL_CLR_UTMI_SUSPENDM_MASK) /*!< USBPHY1_CTRL_CLR.UTMI_SUSPENDM Field    */
+#define USBPHY_CTRL_CLR_CLKGATE_MASK             (0x40000000U)                                       /*!< USBPHY1_CTRL_CLR.CLKGATE Mask           */
+#define USBPHY_CTRL_CLR_CLKGATE_SHIFT            (30U)                                               /*!< USBPHY1_CTRL_CLR.CLKGATE Position       */
+#define USBPHY_CTRL_CLR_CLKGATE(x)               (((uint32_t)(((uint32_t)(x))<<USBPHY_CTRL_CLR_CLKGATE_SHIFT))&USBPHY_CTRL_CLR_CLKGATE_MASK) /*!< USBPHY1_CTRL_CLR.CLKGATE Field          */
+#define USBPHY_CTRL_CLR_SFTRST_MASK              (0x80000000U)                                       /*!< USBPHY1_CTRL_CLR.SFTRST Mask            */
+#define USBPHY_CTRL_CLR_SFTRST_SHIFT             (31U)                                               /*!< USBPHY1_CTRL_CLR.SFTRST Position        */
+#define USBPHY_CTRL_CLR_SFTRST(x)                (((uint32_t)(((uint32_t)(x))<<USBPHY_CTRL_CLR_SFTRST_SHIFT))&USBPHY_CTRL_CLR_SFTRST_MASK) /*!< USBPHY1_CTRL_CLR.SFTRST Field           */
 
 /*! @name CTRL_TOG - USB PHY General Control Register */
-#define USBPHY0_CTRL_TOG_ENHOSTDISCONDETECT_MASK (0x2U)                                              /*!< USBPHY0_CTRL_TOG.ENHOSTDISCONDETECT Mask*/
-#define USBPHY0_CTRL_TOG_ENHOSTDISCONDETECT_SHIFT (1U)                                               /*!< USBPHY0_CTRL_TOG.ENHOSTDISCONDETECT Position*/
-#define USBPHY0_CTRL_TOG_ENHOSTDISCONDETECT(x)   (((uint32_t)(((uint32_t)(x))<<USBPHY0_CTRL_TOG_ENHOSTDISCONDETECT_SHIFT))&USBPHY0_CTRL_TOG_ENHOSTDISCONDETECT_MASK) /*!< USBPHY0_CTRL_TOG.ENHOSTDISCONDETECT Field*/
-#define USBPHY0_CTRL_TOG_HOSTDISCONDETECT_IRQ_MASK (0x8U)                                            /*!< USBPHY0_CTRL_TOG.HOSTDISCONDETECT_IRQ Mask*/
-#define USBPHY0_CTRL_TOG_HOSTDISCONDETECT_IRQ_SHIFT (3U)                                             /*!< USBPHY0_CTRL_TOG.HOSTDISCONDETECT_IRQ Position*/
-#define USBPHY0_CTRL_TOG_HOSTDISCONDETECT_IRQ(x) (((uint32_t)(((uint32_t)(x))<<USBPHY0_CTRL_TOG_HOSTDISCONDETECT_IRQ_SHIFT))&USBPHY0_CTRL_TOG_HOSTDISCONDETECT_IRQ_MASK) /*!< USBPHY0_CTRL_TOG.HOSTDISCONDETECT_IRQ Field*/
-#define USBPHY0_CTRL_TOG_ENDEVPLUGINDET_MASK     (0x10U)                                             /*!< USBPHY0_CTRL_TOG.ENDEVPLUGINDET Mask    */
-#define USBPHY0_CTRL_TOG_ENDEVPLUGINDET_SHIFT    (4U)                                                /*!< USBPHY0_CTRL_TOG.ENDEVPLUGINDET Position*/
-#define USBPHY0_CTRL_TOG_ENDEVPLUGINDET(x)       (((uint32_t)(((uint32_t)(x))<<USBPHY0_CTRL_TOG_ENDEVPLUGINDET_SHIFT))&USBPHY0_CTRL_TOG_ENDEVPLUGINDET_MASK) /*!< USBPHY0_CTRL_TOG.ENDEVPLUGINDET Field   */
-#define USBPHY0_CTRL_TOG_DEVPLUGIN_IRQ_MASK      (0x1000U)                                           /*!< USBPHY0_CTRL_TOG.DEVPLUGIN_IRQ Mask     */
-#define USBPHY0_CTRL_TOG_DEVPLUGIN_IRQ_SHIFT     (12U)                                               /*!< USBPHY0_CTRL_TOG.DEVPLUGIN_IRQ Position */
-#define USBPHY0_CTRL_TOG_DEVPLUGIN_IRQ(x)        (((uint32_t)(((uint32_t)(x))<<USBPHY0_CTRL_TOG_DEVPLUGIN_IRQ_SHIFT))&USBPHY0_CTRL_TOG_DEVPLUGIN_IRQ_MASK) /*!< USBPHY0_CTRL_TOG.DEVPLUGIN_IRQ Field    */
-#define USBPHY0_CTRL_TOG_ENUTMILEVEL2_MASK       (0x4000U)                                           /*!< USBPHY0_CTRL_TOG.ENUTMILEVEL2 Mask      */
-#define USBPHY0_CTRL_TOG_ENUTMILEVEL2_SHIFT      (14U)                                               /*!< USBPHY0_CTRL_TOG.ENUTMILEVEL2 Position  */
-#define USBPHY0_CTRL_TOG_ENUTMILEVEL2(x)         (((uint32_t)(((uint32_t)(x))<<USBPHY0_CTRL_TOG_ENUTMILEVEL2_SHIFT))&USBPHY0_CTRL_TOG_ENUTMILEVEL2_MASK) /*!< USBPHY0_CTRL_TOG.ENUTMILEVEL2 Field     */
-#define USBPHY0_CTRL_TOG_ENUTMILEVEL3_MASK       (0x8000U)                                           /*!< USBPHY0_CTRL_TOG.ENUTMILEVEL3 Mask      */
-#define USBPHY0_CTRL_TOG_ENUTMILEVEL3_SHIFT      (15U)                                               /*!< USBPHY0_CTRL_TOG.ENUTMILEVEL3 Position  */
-#define USBPHY0_CTRL_TOG_ENUTMILEVEL3(x)         (((uint32_t)(((uint32_t)(x))<<USBPHY0_CTRL_TOG_ENUTMILEVEL3_SHIFT))&USBPHY0_CTRL_TOG_ENUTMILEVEL3_MASK) /*!< USBPHY0_CTRL_TOG.ENUTMILEVEL3 Field     */
-#define USBPHY0_CTRL_TOG_AUTORESUME_EN_MASK      (0x40000U)                                          /*!< USBPHY0_CTRL_TOG.AUTORESUME_EN Mask     */
-#define USBPHY0_CTRL_TOG_AUTORESUME_EN_SHIFT     (18U)                                               /*!< USBPHY0_CTRL_TOG.AUTORESUME_EN Position */
-#define USBPHY0_CTRL_TOG_AUTORESUME_EN(x)        (((uint32_t)(((uint32_t)(x))<<USBPHY0_CTRL_TOG_AUTORESUME_EN_SHIFT))&USBPHY0_CTRL_TOG_AUTORESUME_EN_MASK) /*!< USBPHY0_CTRL_TOG.AUTORESUME_EN Field    */
-#define USBPHY0_CTRL_TOG_ENAUTOCLR_CLKGATE_MASK  (0x80000U)                                          /*!< USBPHY0_CTRL_TOG.ENAUTOCLR_CLKGATE Mask */
-#define USBPHY0_CTRL_TOG_ENAUTOCLR_CLKGATE_SHIFT (19U)                                               /*!< USBPHY0_CTRL_TOG.ENAUTOCLR_CLKGATE Position*/
-#define USBPHY0_CTRL_TOG_ENAUTOCLR_CLKGATE(x)    (((uint32_t)(((uint32_t)(x))<<USBPHY0_CTRL_TOG_ENAUTOCLR_CLKGATE_SHIFT))&USBPHY0_CTRL_TOG_ENAUTOCLR_CLKGATE_MASK) /*!< USBPHY0_CTRL_TOG.ENAUTOCLR_CLKGATE Field*/
-#define USBPHY0_CTRL_TOG_ENAUTOCLR_PHY_PWD_MASK  (0x100000U)                                         /*!< USBPHY0_CTRL_TOG.ENAUTOCLR_PHY_PWD Mask */
-#define USBPHY0_CTRL_TOG_ENAUTOCLR_PHY_PWD_SHIFT (20U)                                               /*!< USBPHY0_CTRL_TOG.ENAUTOCLR_PHY_PWD Position*/
-#define USBPHY0_CTRL_TOG_ENAUTOCLR_PHY_PWD(x)    (((uint32_t)(((uint32_t)(x))<<USBPHY0_CTRL_TOG_ENAUTOCLR_PHY_PWD_SHIFT))&USBPHY0_CTRL_TOG_ENAUTOCLR_PHY_PWD_MASK) /*!< USBPHY0_CTRL_TOG.ENAUTOCLR_PHY_PWD Field*/
-#define USBPHY0_CTRL_TOG_FSDLL_RST_EN_MASK       (0x1000000U)                                        /*!< USBPHY0_CTRL_TOG.FSDLL_RST_EN Mask      */
-#define USBPHY0_CTRL_TOG_FSDLL_RST_EN_SHIFT      (24U)                                               /*!< USBPHY0_CTRL_TOG.FSDLL_RST_EN Position  */
-#define USBPHY0_CTRL_TOG_FSDLL_RST_EN(x)         (((uint32_t)(((uint32_t)(x))<<USBPHY0_CTRL_TOG_FSDLL_RST_EN_SHIFT))&USBPHY0_CTRL_TOG_FSDLL_RST_EN_MASK) /*!< USBPHY0_CTRL_TOG.FSDLL_RST_EN Field     */
-#define USBPHY0_CTRL_TOG_OTG_ID_VALUE_MASK       (0x8000000U)                                        /*!< USBPHY0_CTRL_TOG.OTG_ID_VALUE Mask      */
-#define USBPHY0_CTRL_TOG_OTG_ID_VALUE_SHIFT      (27U)                                               /*!< USBPHY0_CTRL_TOG.OTG_ID_VALUE Position  */
-#define USBPHY0_CTRL_TOG_OTG_ID_VALUE(x)         (((uint32_t)(((uint32_t)(x))<<USBPHY0_CTRL_TOG_OTG_ID_VALUE_SHIFT))&USBPHY0_CTRL_TOG_OTG_ID_VALUE_MASK) /*!< USBPHY0_CTRL_TOG.OTG_ID_VALUE Field     */
-#define USBPHY0_CTRL_TOG_HOST_FORCE_LS_SE0_MASK  (0x10000000U)                                       /*!< USBPHY0_CTRL_TOG.HOST_FORCE_LS_SE0 Mask */
-#define USBPHY0_CTRL_TOG_HOST_FORCE_LS_SE0_SHIFT (28U)                                               /*!< USBPHY0_CTRL_TOG.HOST_FORCE_LS_SE0 Position*/
-#define USBPHY0_CTRL_TOG_HOST_FORCE_LS_SE0(x)    (((uint32_t)(((uint32_t)(x))<<USBPHY0_CTRL_TOG_HOST_FORCE_LS_SE0_SHIFT))&USBPHY0_CTRL_TOG_HOST_FORCE_LS_SE0_MASK) /*!< USBPHY0_CTRL_TOG.HOST_FORCE_LS_SE0 Field*/
-#define USBPHY0_CTRL_TOG_UTMI_SUSPENDM_MASK      (0x20000000U)                                       /*!< USBPHY0_CTRL_TOG.UTMI_SUSPENDM Mask     */
-#define USBPHY0_CTRL_TOG_UTMI_SUSPENDM_SHIFT     (29U)                                               /*!< USBPHY0_CTRL_TOG.UTMI_SUSPENDM Position */
-#define USBPHY0_CTRL_TOG_UTMI_SUSPENDM(x)        (((uint32_t)(((uint32_t)(x))<<USBPHY0_CTRL_TOG_UTMI_SUSPENDM_SHIFT))&USBPHY0_CTRL_TOG_UTMI_SUSPENDM_MASK) /*!< USBPHY0_CTRL_TOG.UTMI_SUSPENDM Field    */
-#define USBPHY0_CTRL_TOG_CLKGATE_MASK            (0x40000000U)                                       /*!< USBPHY0_CTRL_TOG.CLKGATE Mask           */
-#define USBPHY0_CTRL_TOG_CLKGATE_SHIFT           (30U)                                               /*!< USBPHY0_CTRL_TOG.CLKGATE Position       */
-#define USBPHY0_CTRL_TOG_CLKGATE(x)              (((uint32_t)(((uint32_t)(x))<<USBPHY0_CTRL_TOG_CLKGATE_SHIFT))&USBPHY0_CTRL_TOG_CLKGATE_MASK) /*!< USBPHY0_CTRL_TOG.CLKGATE Field          */
-#define USBPHY0_CTRL_TOG_SFTRST_MASK             (0x80000000U)                                       /*!< USBPHY0_CTRL_TOG.SFTRST Mask            */
-#define USBPHY0_CTRL_TOG_SFTRST_SHIFT            (31U)                                               /*!< USBPHY0_CTRL_TOG.SFTRST Position        */
-#define USBPHY0_CTRL_TOG_SFTRST(x)               (((uint32_t)(((uint32_t)(x))<<USBPHY0_CTRL_TOG_SFTRST_SHIFT))&USBPHY0_CTRL_TOG_SFTRST_MASK) /*!< USBPHY0_CTRL_TOG.SFTRST Field           */
+#define USBPHY_CTRL_TOG_ENHOSTDISCONDETECT_MASK  (0x2U)                                              /*!< USBPHY1_CTRL_TOG.ENHOSTDISCONDETECT Mask*/
+#define USBPHY_CTRL_TOG_ENHOSTDISCONDETECT_SHIFT (1U)                                                /*!< USBPHY1_CTRL_TOG.ENHOSTDISCONDETECT Position*/
+#define USBPHY_CTRL_TOG_ENHOSTDISCONDETECT(x)    (((uint32_t)(((uint32_t)(x))<<USBPHY_CTRL_TOG_ENHOSTDISCONDETECT_SHIFT))&USBPHY_CTRL_TOG_ENHOSTDISCONDETECT_MASK) /*!< USBPHY1_CTRL_TOG.ENHOSTDISCONDETECT Field*/
+#define USBPHY_CTRL_TOG_HOSTDISCONDETECT_IRQ_MASK (0x8U)                                             /*!< USBPHY1_CTRL_TOG.HOSTDISCONDETECT_IRQ Mask*/
+#define USBPHY_CTRL_TOG_HOSTDISCONDETECT_IRQ_SHIFT (3U)                                              /*!< USBPHY1_CTRL_TOG.HOSTDISCONDETECT_IRQ Position*/
+#define USBPHY_CTRL_TOG_HOSTDISCONDETECT_IRQ(x)  (((uint32_t)(((uint32_t)(x))<<USBPHY_CTRL_TOG_HOSTDISCONDETECT_IRQ_SHIFT))&USBPHY_CTRL_TOG_HOSTDISCONDETECT_IRQ_MASK) /*!< USBPHY1_CTRL_TOG.HOSTDISCONDETECT_IRQ Field*/
+#define USBPHY_CTRL_TOG_ENDEVPLUGINDET_MASK      (0x10U)                                             /*!< USBPHY1_CTRL_TOG.ENDEVPLUGINDET Mask    */
+#define USBPHY_CTRL_TOG_ENDEVPLUGINDET_SHIFT     (4U)                                                /*!< USBPHY1_CTRL_TOG.ENDEVPLUGINDET Position*/
+#define USBPHY_CTRL_TOG_ENDEVPLUGINDET(x)        (((uint32_t)(((uint32_t)(x))<<USBPHY_CTRL_TOG_ENDEVPLUGINDET_SHIFT))&USBPHY_CTRL_TOG_ENDEVPLUGINDET_MASK) /*!< USBPHY1_CTRL_TOG.ENDEVPLUGINDET Field   */
+#define USBPHY_CTRL_TOG_DEVPLUGIN_IRQ_MASK       (0x1000U)                                           /*!< USBPHY1_CTRL_TOG.DEVPLUGIN_IRQ Mask     */
+#define USBPHY_CTRL_TOG_DEVPLUGIN_IRQ_SHIFT      (12U)                                               /*!< USBPHY1_CTRL_TOG.DEVPLUGIN_IRQ Position */
+#define USBPHY_CTRL_TOG_DEVPLUGIN_IRQ(x)         (((uint32_t)(((uint32_t)(x))<<USBPHY_CTRL_TOG_DEVPLUGIN_IRQ_SHIFT))&USBPHY_CTRL_TOG_DEVPLUGIN_IRQ_MASK) /*!< USBPHY1_CTRL_TOG.DEVPLUGIN_IRQ Field    */
+#define USBPHY_CTRL_TOG_ENUTMILEVEL2_MASK        (0x4000U)                                           /*!< USBPHY1_CTRL_TOG.ENUTMILEVEL2 Mask      */
+#define USBPHY_CTRL_TOG_ENUTMILEVEL2_SHIFT       (14U)                                               /*!< USBPHY1_CTRL_TOG.ENUTMILEVEL2 Position  */
+#define USBPHY_CTRL_TOG_ENUTMILEVEL2(x)          (((uint32_t)(((uint32_t)(x))<<USBPHY_CTRL_TOG_ENUTMILEVEL2_SHIFT))&USBPHY_CTRL_TOG_ENUTMILEVEL2_MASK) /*!< USBPHY1_CTRL_TOG.ENUTMILEVEL2 Field     */
+#define USBPHY_CTRL_TOG_ENUTMILEVEL3_MASK        (0x8000U)                                           /*!< USBPHY1_CTRL_TOG.ENUTMILEVEL3 Mask      */
+#define USBPHY_CTRL_TOG_ENUTMILEVEL3_SHIFT       (15U)                                               /*!< USBPHY1_CTRL_TOG.ENUTMILEVEL3 Position  */
+#define USBPHY_CTRL_TOG_ENUTMILEVEL3(x)          (((uint32_t)(((uint32_t)(x))<<USBPHY_CTRL_TOG_ENUTMILEVEL3_SHIFT))&USBPHY_CTRL_TOG_ENUTMILEVEL3_MASK) /*!< USBPHY1_CTRL_TOG.ENUTMILEVEL3 Field     */
+#define USBPHY_CTRL_TOG_AUTORESUME_EN_MASK       (0x40000U)                                          /*!< USBPHY1_CTRL_TOG.AUTORESUME_EN Mask     */
+#define USBPHY_CTRL_TOG_AUTORESUME_EN_SHIFT      (18U)                                               /*!< USBPHY1_CTRL_TOG.AUTORESUME_EN Position */
+#define USBPHY_CTRL_TOG_AUTORESUME_EN(x)         (((uint32_t)(((uint32_t)(x))<<USBPHY_CTRL_TOG_AUTORESUME_EN_SHIFT))&USBPHY_CTRL_TOG_AUTORESUME_EN_MASK) /*!< USBPHY1_CTRL_TOG.AUTORESUME_EN Field    */
+#define USBPHY_CTRL_TOG_ENAUTOCLR_CLKGATE_MASK   (0x80000U)                                          /*!< USBPHY1_CTRL_TOG.ENAUTOCLR_CLKGATE Mask */
+#define USBPHY_CTRL_TOG_ENAUTOCLR_CLKGATE_SHIFT  (19U)                                               /*!< USBPHY1_CTRL_TOG.ENAUTOCLR_CLKGATE Position*/
+#define USBPHY_CTRL_TOG_ENAUTOCLR_CLKGATE(x)     (((uint32_t)(((uint32_t)(x))<<USBPHY_CTRL_TOG_ENAUTOCLR_CLKGATE_SHIFT))&USBPHY_CTRL_TOG_ENAUTOCLR_CLKGATE_MASK) /*!< USBPHY1_CTRL_TOG.ENAUTOCLR_CLKGATE Field*/
+#define USBPHY_CTRL_TOG_ENAUTOCLR_PHY_PWD_MASK   (0x100000U)                                         /*!< USBPHY1_CTRL_TOG.ENAUTOCLR_PHY_PWD Mask */
+#define USBPHY_CTRL_TOG_ENAUTOCLR_PHY_PWD_SHIFT  (20U)                                               /*!< USBPHY1_CTRL_TOG.ENAUTOCLR_PHY_PWD Position*/
+#define USBPHY_CTRL_TOG_ENAUTOCLR_PHY_PWD(x)     (((uint32_t)(((uint32_t)(x))<<USBPHY_CTRL_TOG_ENAUTOCLR_PHY_PWD_SHIFT))&USBPHY_CTRL_TOG_ENAUTOCLR_PHY_PWD_MASK) /*!< USBPHY1_CTRL_TOG.ENAUTOCLR_PHY_PWD Field*/
+#define USBPHY_CTRL_TOG_FSDLL_RST_EN_MASK        (0x1000000U)                                        /*!< USBPHY1_CTRL_TOG.FSDLL_RST_EN Mask      */
+#define USBPHY_CTRL_TOG_FSDLL_RST_EN_SHIFT       (24U)                                               /*!< USBPHY1_CTRL_TOG.FSDLL_RST_EN Position  */
+#define USBPHY_CTRL_TOG_FSDLL_RST_EN(x)          (((uint32_t)(((uint32_t)(x))<<USBPHY_CTRL_TOG_FSDLL_RST_EN_SHIFT))&USBPHY_CTRL_TOG_FSDLL_RST_EN_MASK) /*!< USBPHY1_CTRL_TOG.FSDLL_RST_EN Field     */
+#define USBPHY_CTRL_TOG_OTG_ID_VALUE_MASK        (0x8000000U)                                        /*!< USBPHY1_CTRL_TOG.OTG_ID_VALUE Mask      */
+#define USBPHY_CTRL_TOG_OTG_ID_VALUE_SHIFT       (27U)                                               /*!< USBPHY1_CTRL_TOG.OTG_ID_VALUE Position  */
+#define USBPHY_CTRL_TOG_OTG_ID_VALUE(x)          (((uint32_t)(((uint32_t)(x))<<USBPHY_CTRL_TOG_OTG_ID_VALUE_SHIFT))&USBPHY_CTRL_TOG_OTG_ID_VALUE_MASK) /*!< USBPHY1_CTRL_TOG.OTG_ID_VALUE Field     */
+#define USBPHY_CTRL_TOG_HOST_FORCE_LS_SE0_MASK   (0x10000000U)                                       /*!< USBPHY1_CTRL_TOG.HOST_FORCE_LS_SE0 Mask */
+#define USBPHY_CTRL_TOG_HOST_FORCE_LS_SE0_SHIFT  (28U)                                               /*!< USBPHY1_CTRL_TOG.HOST_FORCE_LS_SE0 Position*/
+#define USBPHY_CTRL_TOG_HOST_FORCE_LS_SE0(x)     (((uint32_t)(((uint32_t)(x))<<USBPHY_CTRL_TOG_HOST_FORCE_LS_SE0_SHIFT))&USBPHY_CTRL_TOG_HOST_FORCE_LS_SE0_MASK) /*!< USBPHY1_CTRL_TOG.HOST_FORCE_LS_SE0 Field*/
+#define USBPHY_CTRL_TOG_UTMI_SUSPENDM_MASK       (0x20000000U)                                       /*!< USBPHY1_CTRL_TOG.UTMI_SUSPENDM Mask     */
+#define USBPHY_CTRL_TOG_UTMI_SUSPENDM_SHIFT      (29U)                                               /*!< USBPHY1_CTRL_TOG.UTMI_SUSPENDM Position */
+#define USBPHY_CTRL_TOG_UTMI_SUSPENDM(x)         (((uint32_t)(((uint32_t)(x))<<USBPHY_CTRL_TOG_UTMI_SUSPENDM_SHIFT))&USBPHY_CTRL_TOG_UTMI_SUSPENDM_MASK) /*!< USBPHY1_CTRL_TOG.UTMI_SUSPENDM Field    */
+#define USBPHY_CTRL_TOG_CLKGATE_MASK             (0x40000000U)                                       /*!< USBPHY1_CTRL_TOG.CLKGATE Mask           */
+#define USBPHY_CTRL_TOG_CLKGATE_SHIFT            (30U)                                               /*!< USBPHY1_CTRL_TOG.CLKGATE Position       */
+#define USBPHY_CTRL_TOG_CLKGATE(x)               (((uint32_t)(((uint32_t)(x))<<USBPHY_CTRL_TOG_CLKGATE_SHIFT))&USBPHY_CTRL_TOG_CLKGATE_MASK) /*!< USBPHY1_CTRL_TOG.CLKGATE Field          */
+#define USBPHY_CTRL_TOG_SFTRST_MASK              (0x80000000U)                                       /*!< USBPHY1_CTRL_TOG.SFTRST Mask            */
+#define USBPHY_CTRL_TOG_SFTRST_SHIFT             (31U)                                               /*!< USBPHY1_CTRL_TOG.SFTRST Position        */
+#define USBPHY_CTRL_TOG_SFTRST(x)                (((uint32_t)(((uint32_t)(x))<<USBPHY_CTRL_TOG_SFTRST_SHIFT))&USBPHY_CTRL_TOG_SFTRST_MASK) /*!< USBPHY1_CTRL_TOG.SFTRST Field           */
 
 /*! @name STATUS - USB PHY Status Register */
-#define USBPHY0_STATUS_HOSTDISCONDETECT_STATUS_MASK (0x8U)                                           /*!< USBPHY0_STATUS.HOSTDISCONDETECT_STATUS Mask*/
-#define USBPHY0_STATUS_HOSTDISCONDETECT_STATUS_SHIFT (3U)                                            /*!< USBPHY0_STATUS.HOSTDISCONDETECT_STATUS Position*/
-#define USBPHY0_STATUS_HOSTDISCONDETECT_STATUS(x) (((uint32_t)(((uint32_t)(x))<<USBPHY0_STATUS_HOSTDISCONDETECT_STATUS_SHIFT))&USBPHY0_STATUS_HOSTDISCONDETECT_STATUS_MASK) /*!< USBPHY0_STATUS.HOSTDISCONDETECT_STATUS Field*/
-#define USBPHY0_STATUS_DEVPLUGIN_STATUS_MASK     (0x40U)                                             /*!< USBPHY0_STATUS.DEVPLUGIN_STATUS Mask    */
-#define USBPHY0_STATUS_DEVPLUGIN_STATUS_SHIFT    (6U)                                                /*!< USBPHY0_STATUS.DEVPLUGIN_STATUS Position*/
-#define USBPHY0_STATUS_DEVPLUGIN_STATUS(x)       (((uint32_t)(((uint32_t)(x))<<USBPHY0_STATUS_DEVPLUGIN_STATUS_SHIFT))&USBPHY0_STATUS_DEVPLUGIN_STATUS_MASK) /*!< USBPHY0_STATUS.DEVPLUGIN_STATUS Field   */
-#define USBPHY0_STATUS_OTGID_STATUS_MASK         (0x100U)                                            /*!< USBPHY0_STATUS.OTGID_STATUS Mask        */
-#define USBPHY0_STATUS_OTGID_STATUS_SHIFT        (8U)                                                /*!< USBPHY0_STATUS.OTGID_STATUS Position    */
-#define USBPHY0_STATUS_OTGID_STATUS(x)           (((uint32_t)(((uint32_t)(x))<<USBPHY0_STATUS_OTGID_STATUS_SHIFT))&USBPHY0_STATUS_OTGID_STATUS_MASK) /*!< USBPHY0_STATUS.OTGID_STATUS Field       */
-#define USBPHY0_STATUS_RESUME_STATUS_MASK        (0x400U)                                            /*!< USBPHY0_STATUS.RESUME_STATUS Mask       */
-#define USBPHY0_STATUS_RESUME_STATUS_SHIFT       (10U)                                               /*!< USBPHY0_STATUS.RESUME_STATUS Position   */
-#define USBPHY0_STATUS_RESUME_STATUS(x)          (((uint32_t)(((uint32_t)(x))<<USBPHY0_STATUS_RESUME_STATUS_SHIFT))&USBPHY0_STATUS_RESUME_STATUS_MASK) /*!< USBPHY0_STATUS.RESUME_STATUS Field      */
+#define USBPHY_STATUS_HOSTDISCONDETECT_STATUS_MASK (0x8U)                                            /*!< USBPHY1_STATUS.HOSTDISCONDETECT_STATUS Mask*/
+#define USBPHY_STATUS_HOSTDISCONDETECT_STATUS_SHIFT (3U)                                             /*!< USBPHY1_STATUS.HOSTDISCONDETECT_STATUS Position*/
+#define USBPHY_STATUS_HOSTDISCONDETECT_STATUS(x) (((uint32_t)(((uint32_t)(x))<<USBPHY_STATUS_HOSTDISCONDETECT_STATUS_SHIFT))&USBPHY_STATUS_HOSTDISCONDETECT_STATUS_MASK) /*!< USBPHY1_STATUS.HOSTDISCONDETECT_STATUS Field*/
+#define USBPHY_STATUS_DEVPLUGIN_STATUS_MASK      (0x40U)                                             /*!< USBPHY1_STATUS.DEVPLUGIN_STATUS Mask    */
+#define USBPHY_STATUS_DEVPLUGIN_STATUS_SHIFT     (6U)                                                /*!< USBPHY1_STATUS.DEVPLUGIN_STATUS Position*/
+#define USBPHY_STATUS_DEVPLUGIN_STATUS(x)        (((uint32_t)(((uint32_t)(x))<<USBPHY_STATUS_DEVPLUGIN_STATUS_SHIFT))&USBPHY_STATUS_DEVPLUGIN_STATUS_MASK) /*!< USBPHY1_STATUS.DEVPLUGIN_STATUS Field   */
+#define USBPHY_STATUS_OTGID_STATUS_MASK          (0x100U)                                            /*!< USBPHY1_STATUS.OTGID_STATUS Mask        */
+#define USBPHY_STATUS_OTGID_STATUS_SHIFT         (8U)                                                /*!< USBPHY1_STATUS.OTGID_STATUS Position    */
+#define USBPHY_STATUS_OTGID_STATUS(x)            (((uint32_t)(((uint32_t)(x))<<USBPHY_STATUS_OTGID_STATUS_SHIFT))&USBPHY_STATUS_OTGID_STATUS_MASK) /*!< USBPHY1_STATUS.OTGID_STATUS Field       */
+#define USBPHY_STATUS_RESUME_STATUS_MASK         (0x400U)                                            /*!< USBPHY1_STATUS.RESUME_STATUS Mask       */
+#define USBPHY_STATUS_RESUME_STATUS_SHIFT        (10U)                                               /*!< USBPHY1_STATUS.RESUME_STATUS Position   */
+#define USBPHY_STATUS_RESUME_STATUS(x)           (((uint32_t)(((uint32_t)(x))<<USBPHY_STATUS_RESUME_STATUS_SHIFT))&USBPHY_STATUS_RESUME_STATUS_MASK) /*!< USBPHY1_STATUS.RESUME_STATUS Field      */
 
 /*! @name DEBUG - USB PHY Debug Register */
-#define USBPHY0_DEBUG_OTGIDPIOLOCK_MASK          (0x1U)                                              /*!< USBPHY0_DEBUG.OTGIDPIOLOCK Mask         */
-#define USBPHY0_DEBUG_OTGIDPIOLOCK_SHIFT         (0U)                                                /*!< USBPHY0_DEBUG.OTGIDPIOLOCK Position     */
-#define USBPHY0_DEBUG_OTGIDPIOLOCK(x)            (((uint32_t)(((uint32_t)(x))<<USBPHY0_DEBUG_OTGIDPIOLOCK_SHIFT))&USBPHY0_DEBUG_OTGIDPIOLOCK_MASK) /*!< USBPHY0_DEBUG.OTGIDPIOLOCK Field        */
-#define USBPHY0_DEBUG_DEBUG_INTERFACE_HOLD_MASK  (0x2U)                                              /*!< USBPHY0_DEBUG.DEBUG_INTERFACE_HOLD Mask */
-#define USBPHY0_DEBUG_DEBUG_INTERFACE_HOLD_SHIFT (1U)                                                /*!< USBPHY0_DEBUG.DEBUG_INTERFACE_HOLD Position*/
-#define USBPHY0_DEBUG_DEBUG_INTERFACE_HOLD(x)    (((uint32_t)(((uint32_t)(x))<<USBPHY0_DEBUG_DEBUG_INTERFACE_HOLD_SHIFT))&USBPHY0_DEBUG_DEBUG_INTERFACE_HOLD_MASK) /*!< USBPHY0_DEBUG.DEBUG_INTERFACE_HOLD Field*/
-#define USBPHY0_DEBUG_HSTPULLDOWN_MASK           (0xCU)                                              /*!< USBPHY0_DEBUG.HSTPULLDOWN Mask          */
-#define USBPHY0_DEBUG_HSTPULLDOWN_SHIFT          (2U)                                                /*!< USBPHY0_DEBUG.HSTPULLDOWN Position      */
-#define USBPHY0_DEBUG_HSTPULLDOWN(x)             (((uint32_t)(((uint32_t)(x))<<USBPHY0_DEBUG_HSTPULLDOWN_SHIFT))&USBPHY0_DEBUG_HSTPULLDOWN_MASK) /*!< USBPHY0_DEBUG.HSTPULLDOWN Field         */
-#define USBPHY0_DEBUG_ENHSTPULLDOWN_MASK         (0x30U)                                             /*!< USBPHY0_DEBUG.ENHSTPULLDOWN Mask        */
-#define USBPHY0_DEBUG_ENHSTPULLDOWN_SHIFT        (4U)                                                /*!< USBPHY0_DEBUG.ENHSTPULLDOWN Position    */
-#define USBPHY0_DEBUG_ENHSTPULLDOWN(x)           (((uint32_t)(((uint32_t)(x))<<USBPHY0_DEBUG_ENHSTPULLDOWN_SHIFT))&USBPHY0_DEBUG_ENHSTPULLDOWN_MASK) /*!< USBPHY0_DEBUG.ENHSTPULLDOWN Field       */
-#define USBPHY0_DEBUG_TX2RXCOUNT_MASK            (0xF00U)                                            /*!< USBPHY0_DEBUG.TX2RXCOUNT Mask           */
-#define USBPHY0_DEBUG_TX2RXCOUNT_SHIFT           (8U)                                                /*!< USBPHY0_DEBUG.TX2RXCOUNT Position       */
-#define USBPHY0_DEBUG_TX2RXCOUNT(x)              (((uint32_t)(((uint32_t)(x))<<USBPHY0_DEBUG_TX2RXCOUNT_SHIFT))&USBPHY0_DEBUG_TX2RXCOUNT_MASK) /*!< USBPHY0_DEBUG.TX2RXCOUNT Field          */
-#define USBPHY0_DEBUG_ENTX2RXCOUNT_MASK          (0x1000U)                                           /*!< USBPHY0_DEBUG.ENTX2RXCOUNT Mask         */
-#define USBPHY0_DEBUG_ENTX2RXCOUNT_SHIFT         (12U)                                               /*!< USBPHY0_DEBUG.ENTX2RXCOUNT Position     */
-#define USBPHY0_DEBUG_ENTX2RXCOUNT(x)            (((uint32_t)(((uint32_t)(x))<<USBPHY0_DEBUG_ENTX2RXCOUNT_SHIFT))&USBPHY0_DEBUG_ENTX2RXCOUNT_MASK) /*!< USBPHY0_DEBUG.ENTX2RXCOUNT Field        */
-#define USBPHY0_DEBUG_SQUELCHRESETCOUNT_MASK     (0x1F0000U)                                         /*!< USBPHY0_DEBUG.SQUELCHRESETCOUNT Mask    */
-#define USBPHY0_DEBUG_SQUELCHRESETCOUNT_SHIFT    (16U)                                               /*!< USBPHY0_DEBUG.SQUELCHRESETCOUNT Position*/
-#define USBPHY0_DEBUG_SQUELCHRESETCOUNT(x)       (((uint32_t)(((uint32_t)(x))<<USBPHY0_DEBUG_SQUELCHRESETCOUNT_SHIFT))&USBPHY0_DEBUG_SQUELCHRESETCOUNT_MASK) /*!< USBPHY0_DEBUG.SQUELCHRESETCOUNT Field   */
-#define USBPHY0_DEBUG_ENSQUELCHRESET_MASK        (0x1000000U)                                        /*!< USBPHY0_DEBUG.ENSQUELCHRESET Mask       */
-#define USBPHY0_DEBUG_ENSQUELCHRESET_SHIFT       (24U)                                               /*!< USBPHY0_DEBUG.ENSQUELCHRESET Position   */
-#define USBPHY0_DEBUG_ENSQUELCHRESET(x)          (((uint32_t)(((uint32_t)(x))<<USBPHY0_DEBUG_ENSQUELCHRESET_SHIFT))&USBPHY0_DEBUG_ENSQUELCHRESET_MASK) /*!< USBPHY0_DEBUG.ENSQUELCHRESET Field      */
-#define USBPHY0_DEBUG_SQUELCHRESETLENGTH_MASK    (0x1E000000U)                                       /*!< USBPHY0_DEBUG.SQUELCHRESETLENGTH Mask   */
-#define USBPHY0_DEBUG_SQUELCHRESETLENGTH_SHIFT   (25U)                                               /*!< USBPHY0_DEBUG.SQUELCHRESETLENGTH Position*/
-#define USBPHY0_DEBUG_SQUELCHRESETLENGTH(x)      (((uint32_t)(((uint32_t)(x))<<USBPHY0_DEBUG_SQUELCHRESETLENGTH_SHIFT))&USBPHY0_DEBUG_SQUELCHRESETLENGTH_MASK) /*!< USBPHY0_DEBUG.SQUELCHRESETLENGTH Field  */
-#define USBPHY0_DEBUG_HOST_RESUME_DEBUG_MASK     (0x20000000U)                                       /*!< USBPHY0_DEBUG.HOST_RESUME_DEBUG Mask    */
-#define USBPHY0_DEBUG_HOST_RESUME_DEBUG_SHIFT    (29U)                                               /*!< USBPHY0_DEBUG.HOST_RESUME_DEBUG Position*/
-#define USBPHY0_DEBUG_HOST_RESUME_DEBUG(x)       (((uint32_t)(((uint32_t)(x))<<USBPHY0_DEBUG_HOST_RESUME_DEBUG_SHIFT))&USBPHY0_DEBUG_HOST_RESUME_DEBUG_MASK) /*!< USBPHY0_DEBUG.HOST_RESUME_DEBUG Field   */
-#define USBPHY0_DEBUG_CLKGATE_MASK               (0x40000000U)                                       /*!< USBPHY0_DEBUG.CLKGATE Mask              */
-#define USBPHY0_DEBUG_CLKGATE_SHIFT              (30U)                                               /*!< USBPHY0_DEBUG.CLKGATE Position          */
-#define USBPHY0_DEBUG_CLKGATE(x)                 (((uint32_t)(((uint32_t)(x))<<USBPHY0_DEBUG_CLKGATE_SHIFT))&USBPHY0_DEBUG_CLKGATE_MASK) /*!< USBPHY0_DEBUG.CLKGATE Field             */
+#define USBPHY_DEBUG_OTGIDPIOLOCK_MASK           (0x1U)                                              /*!< USBPHY1_DEBUG.OTGIDPIOLOCK Mask         */
+#define USBPHY_DEBUG_OTGIDPIOLOCK_SHIFT          (0U)                                                /*!< USBPHY1_DEBUG.OTGIDPIOLOCK Position     */
+#define USBPHY_DEBUG_OTGIDPIOLOCK(x)             (((uint32_t)(((uint32_t)(x))<<USBPHY_DEBUG_OTGIDPIOLOCK_SHIFT))&USBPHY_DEBUG_OTGIDPIOLOCK_MASK) /*!< USBPHY1_DEBUG.OTGIDPIOLOCK Field        */
+#define USBPHY_DEBUG_DEBUG_INTERFACE_HOLD_MASK   (0x2U)                                              /*!< USBPHY1_DEBUG.DEBUG_INTERFACE_HOLD Mask */
+#define USBPHY_DEBUG_DEBUG_INTERFACE_HOLD_SHIFT  (1U)                                                /*!< USBPHY1_DEBUG.DEBUG_INTERFACE_HOLD Position*/
+#define USBPHY_DEBUG_DEBUG_INTERFACE_HOLD(x)     (((uint32_t)(((uint32_t)(x))<<USBPHY_DEBUG_DEBUG_INTERFACE_HOLD_SHIFT))&USBPHY_DEBUG_DEBUG_INTERFACE_HOLD_MASK) /*!< USBPHY1_DEBUG.DEBUG_INTERFACE_HOLD Field*/
+#define USBPHY_DEBUG_HSTPULLDOWN_MASK            (0xCU)                                              /*!< USBPHY1_DEBUG.HSTPULLDOWN Mask          */
+#define USBPHY_DEBUG_HSTPULLDOWN_SHIFT           (2U)                                                /*!< USBPHY1_DEBUG.HSTPULLDOWN Position      */
+#define USBPHY_DEBUG_HSTPULLDOWN(x)              (((uint32_t)(((uint32_t)(x))<<USBPHY_DEBUG_HSTPULLDOWN_SHIFT))&USBPHY_DEBUG_HSTPULLDOWN_MASK) /*!< USBPHY1_DEBUG.HSTPULLDOWN Field         */
+#define USBPHY_DEBUG_ENHSTPULLDOWN_MASK          (0x30U)                                             /*!< USBPHY1_DEBUG.ENHSTPULLDOWN Mask        */
+#define USBPHY_DEBUG_ENHSTPULLDOWN_SHIFT         (4U)                                                /*!< USBPHY1_DEBUG.ENHSTPULLDOWN Position    */
+#define USBPHY_DEBUG_ENHSTPULLDOWN(x)            (((uint32_t)(((uint32_t)(x))<<USBPHY_DEBUG_ENHSTPULLDOWN_SHIFT))&USBPHY_DEBUG_ENHSTPULLDOWN_MASK) /*!< USBPHY1_DEBUG.ENHSTPULLDOWN Field       */
+#define USBPHY_DEBUG_TX2RXCOUNT_MASK             (0xF00U)                                            /*!< USBPHY1_DEBUG.TX2RXCOUNT Mask           */
+#define USBPHY_DEBUG_TX2RXCOUNT_SHIFT            (8U)                                                /*!< USBPHY1_DEBUG.TX2RXCOUNT Position       */
+#define USBPHY_DEBUG_TX2RXCOUNT(x)               (((uint32_t)(((uint32_t)(x))<<USBPHY_DEBUG_TX2RXCOUNT_SHIFT))&USBPHY_DEBUG_TX2RXCOUNT_MASK) /*!< USBPHY1_DEBUG.TX2RXCOUNT Field          */
+#define USBPHY_DEBUG_ENTX2RXCOUNT_MASK           (0x1000U)                                           /*!< USBPHY1_DEBUG.ENTX2RXCOUNT Mask         */
+#define USBPHY_DEBUG_ENTX2RXCOUNT_SHIFT          (12U)                                               /*!< USBPHY1_DEBUG.ENTX2RXCOUNT Position     */
+#define USBPHY_DEBUG_ENTX2RXCOUNT(x)             (((uint32_t)(((uint32_t)(x))<<USBPHY_DEBUG_ENTX2RXCOUNT_SHIFT))&USBPHY_DEBUG_ENTX2RXCOUNT_MASK) /*!< USBPHY1_DEBUG.ENTX2RXCOUNT Field        */
+#define USBPHY_DEBUG_SQUELCHRESETCOUNT_MASK      (0x1F0000U)                                         /*!< USBPHY1_DEBUG.SQUELCHRESETCOUNT Mask    */
+#define USBPHY_DEBUG_SQUELCHRESETCOUNT_SHIFT     (16U)                                               /*!< USBPHY1_DEBUG.SQUELCHRESETCOUNT Position*/
+#define USBPHY_DEBUG_SQUELCHRESETCOUNT(x)        (((uint32_t)(((uint32_t)(x))<<USBPHY_DEBUG_SQUELCHRESETCOUNT_SHIFT))&USBPHY_DEBUG_SQUELCHRESETCOUNT_MASK) /*!< USBPHY1_DEBUG.SQUELCHRESETCOUNT Field   */
+#define USBPHY_DEBUG_ENSQUELCHRESET_MASK         (0x1000000U)                                        /*!< USBPHY1_DEBUG.ENSQUELCHRESET Mask       */
+#define USBPHY_DEBUG_ENSQUELCHRESET_SHIFT        (24U)                                               /*!< USBPHY1_DEBUG.ENSQUELCHRESET Position   */
+#define USBPHY_DEBUG_ENSQUELCHRESET(x)           (((uint32_t)(((uint32_t)(x))<<USBPHY_DEBUG_ENSQUELCHRESET_SHIFT))&USBPHY_DEBUG_ENSQUELCHRESET_MASK) /*!< USBPHY1_DEBUG.ENSQUELCHRESET Field      */
+#define USBPHY_DEBUG_SQUELCHRESETLENGTH_MASK     (0x1E000000U)                                       /*!< USBPHY1_DEBUG.SQUELCHRESETLENGTH Mask   */
+#define USBPHY_DEBUG_SQUELCHRESETLENGTH_SHIFT    (25U)                                               /*!< USBPHY1_DEBUG.SQUELCHRESETLENGTH Position*/
+#define USBPHY_DEBUG_SQUELCHRESETLENGTH(x)       (((uint32_t)(((uint32_t)(x))<<USBPHY_DEBUG_SQUELCHRESETLENGTH_SHIFT))&USBPHY_DEBUG_SQUELCHRESETLENGTH_MASK) /*!< USBPHY1_DEBUG.SQUELCHRESETLENGTH Field  */
+#define USBPHY_DEBUG_HOST_RESUME_DEBUG_MASK      (0x20000000U)                                       /*!< USBPHY1_DEBUG.HOST_RESUME_DEBUG Mask    */
+#define USBPHY_DEBUG_HOST_RESUME_DEBUG_SHIFT     (29U)                                               /*!< USBPHY1_DEBUG.HOST_RESUME_DEBUG Position*/
+#define USBPHY_DEBUG_HOST_RESUME_DEBUG(x)        (((uint32_t)(((uint32_t)(x))<<USBPHY_DEBUG_HOST_RESUME_DEBUG_SHIFT))&USBPHY_DEBUG_HOST_RESUME_DEBUG_MASK) /*!< USBPHY1_DEBUG.HOST_RESUME_DEBUG Field   */
+#define USBPHY_DEBUG_CLKGATE_MASK                (0x40000000U)                                       /*!< USBPHY1_DEBUG.CLKGATE Mask              */
+#define USBPHY_DEBUG_CLKGATE_SHIFT               (30U)                                               /*!< USBPHY1_DEBUG.CLKGATE Position          */
+#define USBPHY_DEBUG_CLKGATE(x)                  (((uint32_t)(((uint32_t)(x))<<USBPHY_DEBUG_CLKGATE_SHIFT))&USBPHY_DEBUG_CLKGATE_MASK) /*!< USBPHY1_DEBUG.CLKGATE Field             */
 
 /*! @name DEBUG_SET - USB PHY Debug Register */
-#define USBPHY0_DEBUG_SET_OTGIDPIOLOCK_MASK      (0x1U)                                              /*!< USBPHY0_DEBUG_SET.OTGIDPIOLOCK Mask     */
-#define USBPHY0_DEBUG_SET_OTGIDPIOLOCK_SHIFT     (0U)                                                /*!< USBPHY0_DEBUG_SET.OTGIDPIOLOCK Position */
-#define USBPHY0_DEBUG_SET_OTGIDPIOLOCK(x)        (((uint32_t)(((uint32_t)(x))<<USBPHY0_DEBUG_SET_OTGIDPIOLOCK_SHIFT))&USBPHY0_DEBUG_SET_OTGIDPIOLOCK_MASK) /*!< USBPHY0_DEBUG_SET.OTGIDPIOLOCK Field    */
-#define USBPHY0_DEBUG_SET_DEBUG_INTERFACE_HOLD_MASK (0x2U)                                           /*!< USBPHY0_DEBUG_SET.DEBUG_INTERFACE_HOLD Mask*/
-#define USBPHY0_DEBUG_SET_DEBUG_INTERFACE_HOLD_SHIFT (1U)                                            /*!< USBPHY0_DEBUG_SET.DEBUG_INTERFACE_HOLD Position*/
-#define USBPHY0_DEBUG_SET_DEBUG_INTERFACE_HOLD(x) (((uint32_t)(((uint32_t)(x))<<USBPHY0_DEBUG_SET_DEBUG_INTERFACE_HOLD_SHIFT))&USBPHY0_DEBUG_SET_DEBUG_INTERFACE_HOLD_MASK) /*!< USBPHY0_DEBUG_SET.DEBUG_INTERFACE_HOLD Field*/
-#define USBPHY0_DEBUG_SET_HSTPULLDOWN_MASK       (0xCU)                                              /*!< USBPHY0_DEBUG_SET.HSTPULLDOWN Mask      */
-#define USBPHY0_DEBUG_SET_HSTPULLDOWN_SHIFT      (2U)                                                /*!< USBPHY0_DEBUG_SET.HSTPULLDOWN Position  */
-#define USBPHY0_DEBUG_SET_HSTPULLDOWN(x)         (((uint32_t)(((uint32_t)(x))<<USBPHY0_DEBUG_SET_HSTPULLDOWN_SHIFT))&USBPHY0_DEBUG_SET_HSTPULLDOWN_MASK) /*!< USBPHY0_DEBUG_SET.HSTPULLDOWN Field     */
-#define USBPHY0_DEBUG_SET_ENHSTPULLDOWN_MASK     (0x30U)                                             /*!< USBPHY0_DEBUG_SET.ENHSTPULLDOWN Mask    */
-#define USBPHY0_DEBUG_SET_ENHSTPULLDOWN_SHIFT    (4U)                                                /*!< USBPHY0_DEBUG_SET.ENHSTPULLDOWN Position*/
-#define USBPHY0_DEBUG_SET_ENHSTPULLDOWN(x)       (((uint32_t)(((uint32_t)(x))<<USBPHY0_DEBUG_SET_ENHSTPULLDOWN_SHIFT))&USBPHY0_DEBUG_SET_ENHSTPULLDOWN_MASK) /*!< USBPHY0_DEBUG_SET.ENHSTPULLDOWN Field   */
-#define USBPHY0_DEBUG_SET_TX2RXCOUNT_MASK        (0xF00U)                                            /*!< USBPHY0_DEBUG_SET.TX2RXCOUNT Mask       */
-#define USBPHY0_DEBUG_SET_TX2RXCOUNT_SHIFT       (8U)                                                /*!< USBPHY0_DEBUG_SET.TX2RXCOUNT Position   */
-#define USBPHY0_DEBUG_SET_TX2RXCOUNT(x)          (((uint32_t)(((uint32_t)(x))<<USBPHY0_DEBUG_SET_TX2RXCOUNT_SHIFT))&USBPHY0_DEBUG_SET_TX2RXCOUNT_MASK) /*!< USBPHY0_DEBUG_SET.TX2RXCOUNT Field      */
-#define USBPHY0_DEBUG_SET_ENTX2RXCOUNT_MASK      (0x1000U)                                           /*!< USBPHY0_DEBUG_SET.ENTX2RXCOUNT Mask     */
-#define USBPHY0_DEBUG_SET_ENTX2RXCOUNT_SHIFT     (12U)                                               /*!< USBPHY0_DEBUG_SET.ENTX2RXCOUNT Position */
-#define USBPHY0_DEBUG_SET_ENTX2RXCOUNT(x)        (((uint32_t)(((uint32_t)(x))<<USBPHY0_DEBUG_SET_ENTX2RXCOUNT_SHIFT))&USBPHY0_DEBUG_SET_ENTX2RXCOUNT_MASK) /*!< USBPHY0_DEBUG_SET.ENTX2RXCOUNT Field    */
-#define USBPHY0_DEBUG_SET_SQUELCHRESETCOUNT_MASK (0x1F0000U)                                         /*!< USBPHY0_DEBUG_SET.SQUELCHRESETCOUNT Mask*/
-#define USBPHY0_DEBUG_SET_SQUELCHRESETCOUNT_SHIFT (16U)                                              /*!< USBPHY0_DEBUG_SET.SQUELCHRESETCOUNT Position*/
-#define USBPHY0_DEBUG_SET_SQUELCHRESETCOUNT(x)   (((uint32_t)(((uint32_t)(x))<<USBPHY0_DEBUG_SET_SQUELCHRESETCOUNT_SHIFT))&USBPHY0_DEBUG_SET_SQUELCHRESETCOUNT_MASK) /*!< USBPHY0_DEBUG_SET.SQUELCHRESETCOUNT Field*/
-#define USBPHY0_DEBUG_SET_ENSQUELCHRESET_MASK    (0x1000000U)                                        /*!< USBPHY0_DEBUG_SET.ENSQUELCHRESET Mask   */
-#define USBPHY0_DEBUG_SET_ENSQUELCHRESET_SHIFT   (24U)                                               /*!< USBPHY0_DEBUG_SET.ENSQUELCHRESET Position*/
-#define USBPHY0_DEBUG_SET_ENSQUELCHRESET(x)      (((uint32_t)(((uint32_t)(x))<<USBPHY0_DEBUG_SET_ENSQUELCHRESET_SHIFT))&USBPHY0_DEBUG_SET_ENSQUELCHRESET_MASK) /*!< USBPHY0_DEBUG_SET.ENSQUELCHRESET Field  */
-#define USBPHY0_DEBUG_SET_SQUELCHRESETLENGTH_MASK (0x1E000000U)                                      /*!< USBPHY0_DEBUG_SET.SQUELCHRESETLENGTH Mask*/
-#define USBPHY0_DEBUG_SET_SQUELCHRESETLENGTH_SHIFT (25U)                                             /*!< USBPHY0_DEBUG_SET.SQUELCHRESETLENGTH Position*/
-#define USBPHY0_DEBUG_SET_SQUELCHRESETLENGTH(x)  (((uint32_t)(((uint32_t)(x))<<USBPHY0_DEBUG_SET_SQUELCHRESETLENGTH_SHIFT))&USBPHY0_DEBUG_SET_SQUELCHRESETLENGTH_MASK) /*!< USBPHY0_DEBUG_SET.SQUELCHRESETLENGTH Field*/
-#define USBPHY0_DEBUG_SET_HOST_RESUME_DEBUG_MASK (0x20000000U)                                       /*!< USBPHY0_DEBUG_SET.HOST_RESUME_DEBUG Mask*/
-#define USBPHY0_DEBUG_SET_HOST_RESUME_DEBUG_SHIFT (29U)                                              /*!< USBPHY0_DEBUG_SET.HOST_RESUME_DEBUG Position*/
-#define USBPHY0_DEBUG_SET_HOST_RESUME_DEBUG(x)   (((uint32_t)(((uint32_t)(x))<<USBPHY0_DEBUG_SET_HOST_RESUME_DEBUG_SHIFT))&USBPHY0_DEBUG_SET_HOST_RESUME_DEBUG_MASK) /*!< USBPHY0_DEBUG_SET.HOST_RESUME_DEBUG Field*/
-#define USBPHY0_DEBUG_SET_CLKGATE_MASK           (0x40000000U)                                       /*!< USBPHY0_DEBUG_SET.CLKGATE Mask          */
-#define USBPHY0_DEBUG_SET_CLKGATE_SHIFT          (30U)                                               /*!< USBPHY0_DEBUG_SET.CLKGATE Position      */
-#define USBPHY0_DEBUG_SET_CLKGATE(x)             (((uint32_t)(((uint32_t)(x))<<USBPHY0_DEBUG_SET_CLKGATE_SHIFT))&USBPHY0_DEBUG_SET_CLKGATE_MASK) /*!< USBPHY0_DEBUG_SET.CLKGATE Field         */
+#define USBPHY_DEBUG_SET_OTGIDPIOLOCK_MASK       (0x1U)                                              /*!< USBPHY1_DEBUG_SET.OTGIDPIOLOCK Mask     */
+#define USBPHY_DEBUG_SET_OTGIDPIOLOCK_SHIFT      (0U)                                                /*!< USBPHY1_DEBUG_SET.OTGIDPIOLOCK Position */
+#define USBPHY_DEBUG_SET_OTGIDPIOLOCK(x)         (((uint32_t)(((uint32_t)(x))<<USBPHY_DEBUG_SET_OTGIDPIOLOCK_SHIFT))&USBPHY_DEBUG_SET_OTGIDPIOLOCK_MASK) /*!< USBPHY1_DEBUG_SET.OTGIDPIOLOCK Field    */
+#define USBPHY_DEBUG_SET_DEBUG_INTERFACE_HOLD_MASK (0x2U)                                            /*!< USBPHY1_DEBUG_SET.DEBUG_INTERFACE_HOLD Mask*/
+#define USBPHY_DEBUG_SET_DEBUG_INTERFACE_HOLD_SHIFT (1U)                                             /*!< USBPHY1_DEBUG_SET.DEBUG_INTERFACE_HOLD Position*/
+#define USBPHY_DEBUG_SET_DEBUG_INTERFACE_HOLD(x) (((uint32_t)(((uint32_t)(x))<<USBPHY_DEBUG_SET_DEBUG_INTERFACE_HOLD_SHIFT))&USBPHY_DEBUG_SET_DEBUG_INTERFACE_HOLD_MASK) /*!< USBPHY1_DEBUG_SET.DEBUG_INTERFACE_HOLD Field*/
+#define USBPHY_DEBUG_SET_HSTPULLDOWN_MASK        (0xCU)                                              /*!< USBPHY1_DEBUG_SET.HSTPULLDOWN Mask      */
+#define USBPHY_DEBUG_SET_HSTPULLDOWN_SHIFT       (2U)                                                /*!< USBPHY1_DEBUG_SET.HSTPULLDOWN Position  */
+#define USBPHY_DEBUG_SET_HSTPULLDOWN(x)          (((uint32_t)(((uint32_t)(x))<<USBPHY_DEBUG_SET_HSTPULLDOWN_SHIFT))&USBPHY_DEBUG_SET_HSTPULLDOWN_MASK) /*!< USBPHY1_DEBUG_SET.HSTPULLDOWN Field     */
+#define USBPHY_DEBUG_SET_ENHSTPULLDOWN_MASK      (0x30U)                                             /*!< USBPHY1_DEBUG_SET.ENHSTPULLDOWN Mask    */
+#define USBPHY_DEBUG_SET_ENHSTPULLDOWN_SHIFT     (4U)                                                /*!< USBPHY1_DEBUG_SET.ENHSTPULLDOWN Position*/
+#define USBPHY_DEBUG_SET_ENHSTPULLDOWN(x)        (((uint32_t)(((uint32_t)(x))<<USBPHY_DEBUG_SET_ENHSTPULLDOWN_SHIFT))&USBPHY_DEBUG_SET_ENHSTPULLDOWN_MASK) /*!< USBPHY1_DEBUG_SET.ENHSTPULLDOWN Field   */
+#define USBPHY_DEBUG_SET_TX2RXCOUNT_MASK         (0xF00U)                                            /*!< USBPHY1_DEBUG_SET.TX2RXCOUNT Mask       */
+#define USBPHY_DEBUG_SET_TX2RXCOUNT_SHIFT        (8U)                                                /*!< USBPHY1_DEBUG_SET.TX2RXCOUNT Position   */
+#define USBPHY_DEBUG_SET_TX2RXCOUNT(x)           (((uint32_t)(((uint32_t)(x))<<USBPHY_DEBUG_SET_TX2RXCOUNT_SHIFT))&USBPHY_DEBUG_SET_TX2RXCOUNT_MASK) /*!< USBPHY1_DEBUG_SET.TX2RXCOUNT Field      */
+#define USBPHY_DEBUG_SET_ENTX2RXCOUNT_MASK       (0x1000U)                                           /*!< USBPHY1_DEBUG_SET.ENTX2RXCOUNT Mask     */
+#define USBPHY_DEBUG_SET_ENTX2RXCOUNT_SHIFT      (12U)                                               /*!< USBPHY1_DEBUG_SET.ENTX2RXCOUNT Position */
+#define USBPHY_DEBUG_SET_ENTX2RXCOUNT(x)         (((uint32_t)(((uint32_t)(x))<<USBPHY_DEBUG_SET_ENTX2RXCOUNT_SHIFT))&USBPHY_DEBUG_SET_ENTX2RXCOUNT_MASK) /*!< USBPHY1_DEBUG_SET.ENTX2RXCOUNT Field    */
+#define USBPHY_DEBUG_SET_SQUELCHRESETCOUNT_MASK  (0x1F0000U)                                         /*!< USBPHY1_DEBUG_SET.SQUELCHRESETCOUNT Mask*/
+#define USBPHY_DEBUG_SET_SQUELCHRESETCOUNT_SHIFT (16U)                                               /*!< USBPHY1_DEBUG_SET.SQUELCHRESETCOUNT Position*/
+#define USBPHY_DEBUG_SET_SQUELCHRESETCOUNT(x)    (((uint32_t)(((uint32_t)(x))<<USBPHY_DEBUG_SET_SQUELCHRESETCOUNT_SHIFT))&USBPHY_DEBUG_SET_SQUELCHRESETCOUNT_MASK) /*!< USBPHY1_DEBUG_SET.SQUELCHRESETCOUNT Field*/
+#define USBPHY_DEBUG_SET_ENSQUELCHRESET_MASK     (0x1000000U)                                        /*!< USBPHY1_DEBUG_SET.ENSQUELCHRESET Mask   */
+#define USBPHY_DEBUG_SET_ENSQUELCHRESET_SHIFT    (24U)                                               /*!< USBPHY1_DEBUG_SET.ENSQUELCHRESET Position*/
+#define USBPHY_DEBUG_SET_ENSQUELCHRESET(x)       (((uint32_t)(((uint32_t)(x))<<USBPHY_DEBUG_SET_ENSQUELCHRESET_SHIFT))&USBPHY_DEBUG_SET_ENSQUELCHRESET_MASK) /*!< USBPHY1_DEBUG_SET.ENSQUELCHRESET Field  */
+#define USBPHY_DEBUG_SET_SQUELCHRESETLENGTH_MASK (0x1E000000U)                                       /*!< USBPHY1_DEBUG_SET.SQUELCHRESETLENGTH Mask*/
+#define USBPHY_DEBUG_SET_SQUELCHRESETLENGTH_SHIFT (25U)                                              /*!< USBPHY1_DEBUG_SET.SQUELCHRESETLENGTH Position*/
+#define USBPHY_DEBUG_SET_SQUELCHRESETLENGTH(x)   (((uint32_t)(((uint32_t)(x))<<USBPHY_DEBUG_SET_SQUELCHRESETLENGTH_SHIFT))&USBPHY_DEBUG_SET_SQUELCHRESETLENGTH_MASK) /*!< USBPHY1_DEBUG_SET.SQUELCHRESETLENGTH Field*/
+#define USBPHY_DEBUG_SET_HOST_RESUME_DEBUG_MASK  (0x20000000U)                                       /*!< USBPHY1_DEBUG_SET.HOST_RESUME_DEBUG Mask*/
+#define USBPHY_DEBUG_SET_HOST_RESUME_DEBUG_SHIFT (29U)                                               /*!< USBPHY1_DEBUG_SET.HOST_RESUME_DEBUG Position*/
+#define USBPHY_DEBUG_SET_HOST_RESUME_DEBUG(x)    (((uint32_t)(((uint32_t)(x))<<USBPHY_DEBUG_SET_HOST_RESUME_DEBUG_SHIFT))&USBPHY_DEBUG_SET_HOST_RESUME_DEBUG_MASK) /*!< USBPHY1_DEBUG_SET.HOST_RESUME_DEBUG Field*/
+#define USBPHY_DEBUG_SET_CLKGATE_MASK            (0x40000000U)                                       /*!< USBPHY1_DEBUG_SET.CLKGATE Mask          */
+#define USBPHY_DEBUG_SET_CLKGATE_SHIFT           (30U)                                               /*!< USBPHY1_DEBUG_SET.CLKGATE Position      */
+#define USBPHY_DEBUG_SET_CLKGATE(x)              (((uint32_t)(((uint32_t)(x))<<USBPHY_DEBUG_SET_CLKGATE_SHIFT))&USBPHY_DEBUG_SET_CLKGATE_MASK) /*!< USBPHY1_DEBUG_SET.CLKGATE Field         */
 
 /*! @name DEBUG_CLR - USB PHY Debug Register */
-#define USBPHY0_DEBUG_CLR_OTGIDPIOLOCK_MASK      (0x1U)                                              /*!< USBPHY0_DEBUG_CLR.OTGIDPIOLOCK Mask     */
-#define USBPHY0_DEBUG_CLR_OTGIDPIOLOCK_SHIFT     (0U)                                                /*!< USBPHY0_DEBUG_CLR.OTGIDPIOLOCK Position */
-#define USBPHY0_DEBUG_CLR_OTGIDPIOLOCK(x)        (((uint32_t)(((uint32_t)(x))<<USBPHY0_DEBUG_CLR_OTGIDPIOLOCK_SHIFT))&USBPHY0_DEBUG_CLR_OTGIDPIOLOCK_MASK) /*!< USBPHY0_DEBUG_CLR.OTGIDPIOLOCK Field    */
-#define USBPHY0_DEBUG_CLR_DEBUG_INTERFACE_HOLD_MASK (0x2U)                                           /*!< USBPHY0_DEBUG_CLR.DEBUG_INTERFACE_HOLD Mask*/
-#define USBPHY0_DEBUG_CLR_DEBUG_INTERFACE_HOLD_SHIFT (1U)                                            /*!< USBPHY0_DEBUG_CLR.DEBUG_INTERFACE_HOLD Position*/
-#define USBPHY0_DEBUG_CLR_DEBUG_INTERFACE_HOLD(x) (((uint32_t)(((uint32_t)(x))<<USBPHY0_DEBUG_CLR_DEBUG_INTERFACE_HOLD_SHIFT))&USBPHY0_DEBUG_CLR_DEBUG_INTERFACE_HOLD_MASK) /*!< USBPHY0_DEBUG_CLR.DEBUG_INTERFACE_HOLD Field*/
-#define USBPHY0_DEBUG_CLR_HSTPULLDOWN_MASK       (0xCU)                                              /*!< USBPHY0_DEBUG_CLR.HSTPULLDOWN Mask      */
-#define USBPHY0_DEBUG_CLR_HSTPULLDOWN_SHIFT      (2U)                                                /*!< USBPHY0_DEBUG_CLR.HSTPULLDOWN Position  */
-#define USBPHY0_DEBUG_CLR_HSTPULLDOWN(x)         (((uint32_t)(((uint32_t)(x))<<USBPHY0_DEBUG_CLR_HSTPULLDOWN_SHIFT))&USBPHY0_DEBUG_CLR_HSTPULLDOWN_MASK) /*!< USBPHY0_DEBUG_CLR.HSTPULLDOWN Field     */
-#define USBPHY0_DEBUG_CLR_ENHSTPULLDOWN_MASK     (0x30U)                                             /*!< USBPHY0_DEBUG_CLR.ENHSTPULLDOWN Mask    */
-#define USBPHY0_DEBUG_CLR_ENHSTPULLDOWN_SHIFT    (4U)                                                /*!< USBPHY0_DEBUG_CLR.ENHSTPULLDOWN Position*/
-#define USBPHY0_DEBUG_CLR_ENHSTPULLDOWN(x)       (((uint32_t)(((uint32_t)(x))<<USBPHY0_DEBUG_CLR_ENHSTPULLDOWN_SHIFT))&USBPHY0_DEBUG_CLR_ENHSTPULLDOWN_MASK) /*!< USBPHY0_DEBUG_CLR.ENHSTPULLDOWN Field   */
-#define USBPHY0_DEBUG_CLR_TX2RXCOUNT_MASK        (0xF00U)                                            /*!< USBPHY0_DEBUG_CLR.TX2RXCOUNT Mask       */
-#define USBPHY0_DEBUG_CLR_TX2RXCOUNT_SHIFT       (8U)                                                /*!< USBPHY0_DEBUG_CLR.TX2RXCOUNT Position   */
-#define USBPHY0_DEBUG_CLR_TX2RXCOUNT(x)          (((uint32_t)(((uint32_t)(x))<<USBPHY0_DEBUG_CLR_TX2RXCOUNT_SHIFT))&USBPHY0_DEBUG_CLR_TX2RXCOUNT_MASK) /*!< USBPHY0_DEBUG_CLR.TX2RXCOUNT Field      */
-#define USBPHY0_DEBUG_CLR_ENTX2RXCOUNT_MASK      (0x1000U)                                           /*!< USBPHY0_DEBUG_CLR.ENTX2RXCOUNT Mask     */
-#define USBPHY0_DEBUG_CLR_ENTX2RXCOUNT_SHIFT     (12U)                                               /*!< USBPHY0_DEBUG_CLR.ENTX2RXCOUNT Position */
-#define USBPHY0_DEBUG_CLR_ENTX2RXCOUNT(x)        (((uint32_t)(((uint32_t)(x))<<USBPHY0_DEBUG_CLR_ENTX2RXCOUNT_SHIFT))&USBPHY0_DEBUG_CLR_ENTX2RXCOUNT_MASK) /*!< USBPHY0_DEBUG_CLR.ENTX2RXCOUNT Field    */
-#define USBPHY0_DEBUG_CLR_SQUELCHRESETCOUNT_MASK (0x1F0000U)                                         /*!< USBPHY0_DEBUG_CLR.SQUELCHRESETCOUNT Mask*/
-#define USBPHY0_DEBUG_CLR_SQUELCHRESETCOUNT_SHIFT (16U)                                              /*!< USBPHY0_DEBUG_CLR.SQUELCHRESETCOUNT Position*/
-#define USBPHY0_DEBUG_CLR_SQUELCHRESETCOUNT(x)   (((uint32_t)(((uint32_t)(x))<<USBPHY0_DEBUG_CLR_SQUELCHRESETCOUNT_SHIFT))&USBPHY0_DEBUG_CLR_SQUELCHRESETCOUNT_MASK) /*!< USBPHY0_DEBUG_CLR.SQUELCHRESETCOUNT Field*/
-#define USBPHY0_DEBUG_CLR_ENSQUELCHRESET_MASK    (0x1000000U)                                        /*!< USBPHY0_DEBUG_CLR.ENSQUELCHRESET Mask   */
-#define USBPHY0_DEBUG_CLR_ENSQUELCHRESET_SHIFT   (24U)                                               /*!< USBPHY0_DEBUG_CLR.ENSQUELCHRESET Position*/
-#define USBPHY0_DEBUG_CLR_ENSQUELCHRESET(x)      (((uint32_t)(((uint32_t)(x))<<USBPHY0_DEBUG_CLR_ENSQUELCHRESET_SHIFT))&USBPHY0_DEBUG_CLR_ENSQUELCHRESET_MASK) /*!< USBPHY0_DEBUG_CLR.ENSQUELCHRESET Field  */
-#define USBPHY0_DEBUG_CLR_SQUELCHRESETLENGTH_MASK (0x1E000000U)                                      /*!< USBPHY0_DEBUG_CLR.SQUELCHRESETLENGTH Mask*/
-#define USBPHY0_DEBUG_CLR_SQUELCHRESETLENGTH_SHIFT (25U)                                             /*!< USBPHY0_DEBUG_CLR.SQUELCHRESETLENGTH Position*/
-#define USBPHY0_DEBUG_CLR_SQUELCHRESETLENGTH(x)  (((uint32_t)(((uint32_t)(x))<<USBPHY0_DEBUG_CLR_SQUELCHRESETLENGTH_SHIFT))&USBPHY0_DEBUG_CLR_SQUELCHRESETLENGTH_MASK) /*!< USBPHY0_DEBUG_CLR.SQUELCHRESETLENGTH Field*/
-#define USBPHY0_DEBUG_CLR_HOST_RESUME_DEBUG_MASK (0x20000000U)                                       /*!< USBPHY0_DEBUG_CLR.HOST_RESUME_DEBUG Mask*/
-#define USBPHY0_DEBUG_CLR_HOST_RESUME_DEBUG_SHIFT (29U)                                              /*!< USBPHY0_DEBUG_CLR.HOST_RESUME_DEBUG Position*/
-#define USBPHY0_DEBUG_CLR_HOST_RESUME_DEBUG(x)   (((uint32_t)(((uint32_t)(x))<<USBPHY0_DEBUG_CLR_HOST_RESUME_DEBUG_SHIFT))&USBPHY0_DEBUG_CLR_HOST_RESUME_DEBUG_MASK) /*!< USBPHY0_DEBUG_CLR.HOST_RESUME_DEBUG Field*/
-#define USBPHY0_DEBUG_CLR_CLKGATE_MASK           (0x40000000U)                                       /*!< USBPHY0_DEBUG_CLR.CLKGATE Mask          */
-#define USBPHY0_DEBUG_CLR_CLKGATE_SHIFT          (30U)                                               /*!< USBPHY0_DEBUG_CLR.CLKGATE Position      */
-#define USBPHY0_DEBUG_CLR_CLKGATE(x)             (((uint32_t)(((uint32_t)(x))<<USBPHY0_DEBUG_CLR_CLKGATE_SHIFT))&USBPHY0_DEBUG_CLR_CLKGATE_MASK) /*!< USBPHY0_DEBUG_CLR.CLKGATE Field         */
+#define USBPHY_DEBUG_CLR_OTGIDPIOLOCK_MASK       (0x1U)                                              /*!< USBPHY1_DEBUG_CLR.OTGIDPIOLOCK Mask     */
+#define USBPHY_DEBUG_CLR_OTGIDPIOLOCK_SHIFT      (0U)                                                /*!< USBPHY1_DEBUG_CLR.OTGIDPIOLOCK Position */
+#define USBPHY_DEBUG_CLR_OTGIDPIOLOCK(x)         (((uint32_t)(((uint32_t)(x))<<USBPHY_DEBUG_CLR_OTGIDPIOLOCK_SHIFT))&USBPHY_DEBUG_CLR_OTGIDPIOLOCK_MASK) /*!< USBPHY1_DEBUG_CLR.OTGIDPIOLOCK Field    */
+#define USBPHY_DEBUG_CLR_DEBUG_INTERFACE_HOLD_MASK (0x2U)                                            /*!< USBPHY1_DEBUG_CLR.DEBUG_INTERFACE_HOLD Mask*/
+#define USBPHY_DEBUG_CLR_DEBUG_INTERFACE_HOLD_SHIFT (1U)                                             /*!< USBPHY1_DEBUG_CLR.DEBUG_INTERFACE_HOLD Position*/
+#define USBPHY_DEBUG_CLR_DEBUG_INTERFACE_HOLD(x) (((uint32_t)(((uint32_t)(x))<<USBPHY_DEBUG_CLR_DEBUG_INTERFACE_HOLD_SHIFT))&USBPHY_DEBUG_CLR_DEBUG_INTERFACE_HOLD_MASK) /*!< USBPHY1_DEBUG_CLR.DEBUG_INTERFACE_HOLD Field*/
+#define USBPHY_DEBUG_CLR_HSTPULLDOWN_MASK        (0xCU)                                              /*!< USBPHY1_DEBUG_CLR.HSTPULLDOWN Mask      */
+#define USBPHY_DEBUG_CLR_HSTPULLDOWN_SHIFT       (2U)                                                /*!< USBPHY1_DEBUG_CLR.HSTPULLDOWN Position  */
+#define USBPHY_DEBUG_CLR_HSTPULLDOWN(x)          (((uint32_t)(((uint32_t)(x))<<USBPHY_DEBUG_CLR_HSTPULLDOWN_SHIFT))&USBPHY_DEBUG_CLR_HSTPULLDOWN_MASK) /*!< USBPHY1_DEBUG_CLR.HSTPULLDOWN Field     */
+#define USBPHY_DEBUG_CLR_ENHSTPULLDOWN_MASK      (0x30U)                                             /*!< USBPHY1_DEBUG_CLR.ENHSTPULLDOWN Mask    */
+#define USBPHY_DEBUG_CLR_ENHSTPULLDOWN_SHIFT     (4U)                                                /*!< USBPHY1_DEBUG_CLR.ENHSTPULLDOWN Position*/
+#define USBPHY_DEBUG_CLR_ENHSTPULLDOWN(x)        (((uint32_t)(((uint32_t)(x))<<USBPHY_DEBUG_CLR_ENHSTPULLDOWN_SHIFT))&USBPHY_DEBUG_CLR_ENHSTPULLDOWN_MASK) /*!< USBPHY1_DEBUG_CLR.ENHSTPULLDOWN Field   */
+#define USBPHY_DEBUG_CLR_TX2RXCOUNT_MASK         (0xF00U)                                            /*!< USBPHY1_DEBUG_CLR.TX2RXCOUNT Mask       */
+#define USBPHY_DEBUG_CLR_TX2RXCOUNT_SHIFT        (8U)                                                /*!< USBPHY1_DEBUG_CLR.TX2RXCOUNT Position   */
+#define USBPHY_DEBUG_CLR_TX2RXCOUNT(x)           (((uint32_t)(((uint32_t)(x))<<USBPHY_DEBUG_CLR_TX2RXCOUNT_SHIFT))&USBPHY_DEBUG_CLR_TX2RXCOUNT_MASK) /*!< USBPHY1_DEBUG_CLR.TX2RXCOUNT Field      */
+#define USBPHY_DEBUG_CLR_ENTX2RXCOUNT_MASK       (0x1000U)                                           /*!< USBPHY1_DEBUG_CLR.ENTX2RXCOUNT Mask     */
+#define USBPHY_DEBUG_CLR_ENTX2RXCOUNT_SHIFT      (12U)                                               /*!< USBPHY1_DEBUG_CLR.ENTX2RXCOUNT Position */
+#define USBPHY_DEBUG_CLR_ENTX2RXCOUNT(x)         (((uint32_t)(((uint32_t)(x))<<USBPHY_DEBUG_CLR_ENTX2RXCOUNT_SHIFT))&USBPHY_DEBUG_CLR_ENTX2RXCOUNT_MASK) /*!< USBPHY1_DEBUG_CLR.ENTX2RXCOUNT Field    */
+#define USBPHY_DEBUG_CLR_SQUELCHRESETCOUNT_MASK  (0x1F0000U)                                         /*!< USBPHY1_DEBUG_CLR.SQUELCHRESETCOUNT Mask*/
+#define USBPHY_DEBUG_CLR_SQUELCHRESETCOUNT_SHIFT (16U)                                               /*!< USBPHY1_DEBUG_CLR.SQUELCHRESETCOUNT Position*/
+#define USBPHY_DEBUG_CLR_SQUELCHRESETCOUNT(x)    (((uint32_t)(((uint32_t)(x))<<USBPHY_DEBUG_CLR_SQUELCHRESETCOUNT_SHIFT))&USBPHY_DEBUG_CLR_SQUELCHRESETCOUNT_MASK) /*!< USBPHY1_DEBUG_CLR.SQUELCHRESETCOUNT Field*/
+#define USBPHY_DEBUG_CLR_ENSQUELCHRESET_MASK     (0x1000000U)                                        /*!< USBPHY1_DEBUG_CLR.ENSQUELCHRESET Mask   */
+#define USBPHY_DEBUG_CLR_ENSQUELCHRESET_SHIFT    (24U)                                               /*!< USBPHY1_DEBUG_CLR.ENSQUELCHRESET Position*/
+#define USBPHY_DEBUG_CLR_ENSQUELCHRESET(x)       (((uint32_t)(((uint32_t)(x))<<USBPHY_DEBUG_CLR_ENSQUELCHRESET_SHIFT))&USBPHY_DEBUG_CLR_ENSQUELCHRESET_MASK) /*!< USBPHY1_DEBUG_CLR.ENSQUELCHRESET Field  */
+#define USBPHY_DEBUG_CLR_SQUELCHRESETLENGTH_MASK (0x1E000000U)                                       /*!< USBPHY1_DEBUG_CLR.SQUELCHRESETLENGTH Mask*/
+#define USBPHY_DEBUG_CLR_SQUELCHRESETLENGTH_SHIFT (25U)                                              /*!< USBPHY1_DEBUG_CLR.SQUELCHRESETLENGTH Position*/
+#define USBPHY_DEBUG_CLR_SQUELCHRESETLENGTH(x)   (((uint32_t)(((uint32_t)(x))<<USBPHY_DEBUG_CLR_SQUELCHRESETLENGTH_SHIFT))&USBPHY_DEBUG_CLR_SQUELCHRESETLENGTH_MASK) /*!< USBPHY1_DEBUG_CLR.SQUELCHRESETLENGTH Field*/
+#define USBPHY_DEBUG_CLR_HOST_RESUME_DEBUG_MASK  (0x20000000U)                                       /*!< USBPHY1_DEBUG_CLR.HOST_RESUME_DEBUG Mask*/
+#define USBPHY_DEBUG_CLR_HOST_RESUME_DEBUG_SHIFT (29U)                                               /*!< USBPHY1_DEBUG_CLR.HOST_RESUME_DEBUG Position*/
+#define USBPHY_DEBUG_CLR_HOST_RESUME_DEBUG(x)    (((uint32_t)(((uint32_t)(x))<<USBPHY_DEBUG_CLR_HOST_RESUME_DEBUG_SHIFT))&USBPHY_DEBUG_CLR_HOST_RESUME_DEBUG_MASK) /*!< USBPHY1_DEBUG_CLR.HOST_RESUME_DEBUG Field*/
+#define USBPHY_DEBUG_CLR_CLKGATE_MASK            (0x40000000U)                                       /*!< USBPHY1_DEBUG_CLR.CLKGATE Mask          */
+#define USBPHY_DEBUG_CLR_CLKGATE_SHIFT           (30U)                                               /*!< USBPHY1_DEBUG_CLR.CLKGATE Position      */
+#define USBPHY_DEBUG_CLR_CLKGATE(x)              (((uint32_t)(((uint32_t)(x))<<USBPHY_DEBUG_CLR_CLKGATE_SHIFT))&USBPHY_DEBUG_CLR_CLKGATE_MASK) /*!< USBPHY1_DEBUG_CLR.CLKGATE Field         */
 
 /*! @name DEBUG_TOG - USB PHY Debug Register */
-#define USBPHY0_DEBUG_TOG_OTGIDPIOLOCK_MASK      (0x1U)                                              /*!< USBPHY0_DEBUG_TOG.OTGIDPIOLOCK Mask     */
-#define USBPHY0_DEBUG_TOG_OTGIDPIOLOCK_SHIFT     (0U)                                                /*!< USBPHY0_DEBUG_TOG.OTGIDPIOLOCK Position */
-#define USBPHY0_DEBUG_TOG_OTGIDPIOLOCK(x)        (((uint32_t)(((uint32_t)(x))<<USBPHY0_DEBUG_TOG_OTGIDPIOLOCK_SHIFT))&USBPHY0_DEBUG_TOG_OTGIDPIOLOCK_MASK) /*!< USBPHY0_DEBUG_TOG.OTGIDPIOLOCK Field    */
-#define USBPHY0_DEBUG_TOG_DEBUG_INTERFACE_HOLD_MASK (0x2U)                                           /*!< USBPHY0_DEBUG_TOG.DEBUG_INTERFACE_HOLD Mask*/
-#define USBPHY0_DEBUG_TOG_DEBUG_INTERFACE_HOLD_SHIFT (1U)                                            /*!< USBPHY0_DEBUG_TOG.DEBUG_INTERFACE_HOLD Position*/
-#define USBPHY0_DEBUG_TOG_DEBUG_INTERFACE_HOLD(x) (((uint32_t)(((uint32_t)(x))<<USBPHY0_DEBUG_TOG_DEBUG_INTERFACE_HOLD_SHIFT))&USBPHY0_DEBUG_TOG_DEBUG_INTERFACE_HOLD_MASK) /*!< USBPHY0_DEBUG_TOG.DEBUG_INTERFACE_HOLD Field*/
-#define USBPHY0_DEBUG_TOG_HSTPULLDOWN_MASK       (0xCU)                                              /*!< USBPHY0_DEBUG_TOG.HSTPULLDOWN Mask      */
-#define USBPHY0_DEBUG_TOG_HSTPULLDOWN_SHIFT      (2U)                                                /*!< USBPHY0_DEBUG_TOG.HSTPULLDOWN Position  */
-#define USBPHY0_DEBUG_TOG_HSTPULLDOWN(x)         (((uint32_t)(((uint32_t)(x))<<USBPHY0_DEBUG_TOG_HSTPULLDOWN_SHIFT))&USBPHY0_DEBUG_TOG_HSTPULLDOWN_MASK) /*!< USBPHY0_DEBUG_TOG.HSTPULLDOWN Field     */
-#define USBPHY0_DEBUG_TOG_ENHSTPULLDOWN_MASK     (0x30U)                                             /*!< USBPHY0_DEBUG_TOG.ENHSTPULLDOWN Mask    */
-#define USBPHY0_DEBUG_TOG_ENHSTPULLDOWN_SHIFT    (4U)                                                /*!< USBPHY0_DEBUG_TOG.ENHSTPULLDOWN Position*/
-#define USBPHY0_DEBUG_TOG_ENHSTPULLDOWN(x)       (((uint32_t)(((uint32_t)(x))<<USBPHY0_DEBUG_TOG_ENHSTPULLDOWN_SHIFT))&USBPHY0_DEBUG_TOG_ENHSTPULLDOWN_MASK) /*!< USBPHY0_DEBUG_TOG.ENHSTPULLDOWN Field   */
-#define USBPHY0_DEBUG_TOG_TX2RXCOUNT_MASK        (0xF00U)                                            /*!< USBPHY0_DEBUG_TOG.TX2RXCOUNT Mask       */
-#define USBPHY0_DEBUG_TOG_TX2RXCOUNT_SHIFT       (8U)                                                /*!< USBPHY0_DEBUG_TOG.TX2RXCOUNT Position   */
-#define USBPHY0_DEBUG_TOG_TX2RXCOUNT(x)          (((uint32_t)(((uint32_t)(x))<<USBPHY0_DEBUG_TOG_TX2RXCOUNT_SHIFT))&USBPHY0_DEBUG_TOG_TX2RXCOUNT_MASK) /*!< USBPHY0_DEBUG_TOG.TX2RXCOUNT Field      */
-#define USBPHY0_DEBUG_TOG_ENTX2RXCOUNT_MASK      (0x1000U)                                           /*!< USBPHY0_DEBUG_TOG.ENTX2RXCOUNT Mask     */
-#define USBPHY0_DEBUG_TOG_ENTX2RXCOUNT_SHIFT     (12U)                                               /*!< USBPHY0_DEBUG_TOG.ENTX2RXCOUNT Position */
-#define USBPHY0_DEBUG_TOG_ENTX2RXCOUNT(x)        (((uint32_t)(((uint32_t)(x))<<USBPHY0_DEBUG_TOG_ENTX2RXCOUNT_SHIFT))&USBPHY0_DEBUG_TOG_ENTX2RXCOUNT_MASK) /*!< USBPHY0_DEBUG_TOG.ENTX2RXCOUNT Field    */
-#define USBPHY0_DEBUG_TOG_SQUELCHRESETCOUNT_MASK (0x1F0000U)                                         /*!< USBPHY0_DEBUG_TOG.SQUELCHRESETCOUNT Mask*/
-#define USBPHY0_DEBUG_TOG_SQUELCHRESETCOUNT_SHIFT (16U)                                              /*!< USBPHY0_DEBUG_TOG.SQUELCHRESETCOUNT Position*/
-#define USBPHY0_DEBUG_TOG_SQUELCHRESETCOUNT(x)   (((uint32_t)(((uint32_t)(x))<<USBPHY0_DEBUG_TOG_SQUELCHRESETCOUNT_SHIFT))&USBPHY0_DEBUG_TOG_SQUELCHRESETCOUNT_MASK) /*!< USBPHY0_DEBUG_TOG.SQUELCHRESETCOUNT Field*/
-#define USBPHY0_DEBUG_TOG_ENSQUELCHRESET_MASK    (0x1000000U)                                        /*!< USBPHY0_DEBUG_TOG.ENSQUELCHRESET Mask   */
-#define USBPHY0_DEBUG_TOG_ENSQUELCHRESET_SHIFT   (24U)                                               /*!< USBPHY0_DEBUG_TOG.ENSQUELCHRESET Position*/
-#define USBPHY0_DEBUG_TOG_ENSQUELCHRESET(x)      (((uint32_t)(((uint32_t)(x))<<USBPHY0_DEBUG_TOG_ENSQUELCHRESET_SHIFT))&USBPHY0_DEBUG_TOG_ENSQUELCHRESET_MASK) /*!< USBPHY0_DEBUG_TOG.ENSQUELCHRESET Field  */
-#define USBPHY0_DEBUG_TOG_SQUELCHRESETLENGTH_MASK (0x1E000000U)                                      /*!< USBPHY0_DEBUG_TOG.SQUELCHRESETLENGTH Mask*/
-#define USBPHY0_DEBUG_TOG_SQUELCHRESETLENGTH_SHIFT (25U)                                             /*!< USBPHY0_DEBUG_TOG.SQUELCHRESETLENGTH Position*/
-#define USBPHY0_DEBUG_TOG_SQUELCHRESETLENGTH(x)  (((uint32_t)(((uint32_t)(x))<<USBPHY0_DEBUG_TOG_SQUELCHRESETLENGTH_SHIFT))&USBPHY0_DEBUG_TOG_SQUELCHRESETLENGTH_MASK) /*!< USBPHY0_DEBUG_TOG.SQUELCHRESETLENGTH Field*/
-#define USBPHY0_DEBUG_TOG_HOST_RESUME_DEBUG_MASK (0x20000000U)                                       /*!< USBPHY0_DEBUG_TOG.HOST_RESUME_DEBUG Mask*/
-#define USBPHY0_DEBUG_TOG_HOST_RESUME_DEBUG_SHIFT (29U)                                              /*!< USBPHY0_DEBUG_TOG.HOST_RESUME_DEBUG Position*/
-#define USBPHY0_DEBUG_TOG_HOST_RESUME_DEBUG(x)   (((uint32_t)(((uint32_t)(x))<<USBPHY0_DEBUG_TOG_HOST_RESUME_DEBUG_SHIFT))&USBPHY0_DEBUG_TOG_HOST_RESUME_DEBUG_MASK) /*!< USBPHY0_DEBUG_TOG.HOST_RESUME_DEBUG Field*/
-#define USBPHY0_DEBUG_TOG_CLKGATE_MASK           (0x40000000U)                                       /*!< USBPHY0_DEBUG_TOG.CLKGATE Mask          */
-#define USBPHY0_DEBUG_TOG_CLKGATE_SHIFT          (30U)                                               /*!< USBPHY0_DEBUG_TOG.CLKGATE Position      */
-#define USBPHY0_DEBUG_TOG_CLKGATE(x)             (((uint32_t)(((uint32_t)(x))<<USBPHY0_DEBUG_TOG_CLKGATE_SHIFT))&USBPHY0_DEBUG_TOG_CLKGATE_MASK) /*!< USBPHY0_DEBUG_TOG.CLKGATE Field         */
+#define USBPHY_DEBUG_TOG_OTGIDPIOLOCK_MASK       (0x1U)                                              /*!< USBPHY1_DEBUG_TOG.OTGIDPIOLOCK Mask     */
+#define USBPHY_DEBUG_TOG_OTGIDPIOLOCK_SHIFT      (0U)                                                /*!< USBPHY1_DEBUG_TOG.OTGIDPIOLOCK Position */
+#define USBPHY_DEBUG_TOG_OTGIDPIOLOCK(x)         (((uint32_t)(((uint32_t)(x))<<USBPHY_DEBUG_TOG_OTGIDPIOLOCK_SHIFT))&USBPHY_DEBUG_TOG_OTGIDPIOLOCK_MASK) /*!< USBPHY1_DEBUG_TOG.OTGIDPIOLOCK Field    */
+#define USBPHY_DEBUG_TOG_DEBUG_INTERFACE_HOLD_MASK (0x2U)                                            /*!< USBPHY1_DEBUG_TOG.DEBUG_INTERFACE_HOLD Mask*/
+#define USBPHY_DEBUG_TOG_DEBUG_INTERFACE_HOLD_SHIFT (1U)                                             /*!< USBPHY1_DEBUG_TOG.DEBUG_INTERFACE_HOLD Position*/
+#define USBPHY_DEBUG_TOG_DEBUG_INTERFACE_HOLD(x) (((uint32_t)(((uint32_t)(x))<<USBPHY_DEBUG_TOG_DEBUG_INTERFACE_HOLD_SHIFT))&USBPHY_DEBUG_TOG_DEBUG_INTERFACE_HOLD_MASK) /*!< USBPHY1_DEBUG_TOG.DEBUG_INTERFACE_HOLD Field*/
+#define USBPHY_DEBUG_TOG_HSTPULLDOWN_MASK        (0xCU)                                              /*!< USBPHY1_DEBUG_TOG.HSTPULLDOWN Mask      */
+#define USBPHY_DEBUG_TOG_HSTPULLDOWN_SHIFT       (2U)                                                /*!< USBPHY1_DEBUG_TOG.HSTPULLDOWN Position  */
+#define USBPHY_DEBUG_TOG_HSTPULLDOWN(x)          (((uint32_t)(((uint32_t)(x))<<USBPHY_DEBUG_TOG_HSTPULLDOWN_SHIFT))&USBPHY_DEBUG_TOG_HSTPULLDOWN_MASK) /*!< USBPHY1_DEBUG_TOG.HSTPULLDOWN Field     */
+#define USBPHY_DEBUG_TOG_ENHSTPULLDOWN_MASK      (0x30U)                                             /*!< USBPHY1_DEBUG_TOG.ENHSTPULLDOWN Mask    */
+#define USBPHY_DEBUG_TOG_ENHSTPULLDOWN_SHIFT     (4U)                                                /*!< USBPHY1_DEBUG_TOG.ENHSTPULLDOWN Position*/
+#define USBPHY_DEBUG_TOG_ENHSTPULLDOWN(x)        (((uint32_t)(((uint32_t)(x))<<USBPHY_DEBUG_TOG_ENHSTPULLDOWN_SHIFT))&USBPHY_DEBUG_TOG_ENHSTPULLDOWN_MASK) /*!< USBPHY1_DEBUG_TOG.ENHSTPULLDOWN Field   */
+#define USBPHY_DEBUG_TOG_TX2RXCOUNT_MASK         (0xF00U)                                            /*!< USBPHY1_DEBUG_TOG.TX2RXCOUNT Mask       */
+#define USBPHY_DEBUG_TOG_TX2RXCOUNT_SHIFT        (8U)                                                /*!< USBPHY1_DEBUG_TOG.TX2RXCOUNT Position   */
+#define USBPHY_DEBUG_TOG_TX2RXCOUNT(x)           (((uint32_t)(((uint32_t)(x))<<USBPHY_DEBUG_TOG_TX2RXCOUNT_SHIFT))&USBPHY_DEBUG_TOG_TX2RXCOUNT_MASK) /*!< USBPHY1_DEBUG_TOG.TX2RXCOUNT Field      */
+#define USBPHY_DEBUG_TOG_ENTX2RXCOUNT_MASK       (0x1000U)                                           /*!< USBPHY1_DEBUG_TOG.ENTX2RXCOUNT Mask     */
+#define USBPHY_DEBUG_TOG_ENTX2RXCOUNT_SHIFT      (12U)                                               /*!< USBPHY1_DEBUG_TOG.ENTX2RXCOUNT Position */
+#define USBPHY_DEBUG_TOG_ENTX2RXCOUNT(x)         (((uint32_t)(((uint32_t)(x))<<USBPHY_DEBUG_TOG_ENTX2RXCOUNT_SHIFT))&USBPHY_DEBUG_TOG_ENTX2RXCOUNT_MASK) /*!< USBPHY1_DEBUG_TOG.ENTX2RXCOUNT Field    */
+#define USBPHY_DEBUG_TOG_SQUELCHRESETCOUNT_MASK  (0x1F0000U)                                         /*!< USBPHY1_DEBUG_TOG.SQUELCHRESETCOUNT Mask*/
+#define USBPHY_DEBUG_TOG_SQUELCHRESETCOUNT_SHIFT (16U)                                               /*!< USBPHY1_DEBUG_TOG.SQUELCHRESETCOUNT Position*/
+#define USBPHY_DEBUG_TOG_SQUELCHRESETCOUNT(x)    (((uint32_t)(((uint32_t)(x))<<USBPHY_DEBUG_TOG_SQUELCHRESETCOUNT_SHIFT))&USBPHY_DEBUG_TOG_SQUELCHRESETCOUNT_MASK) /*!< USBPHY1_DEBUG_TOG.SQUELCHRESETCOUNT Field*/
+#define USBPHY_DEBUG_TOG_ENSQUELCHRESET_MASK     (0x1000000U)                                        /*!< USBPHY1_DEBUG_TOG.ENSQUELCHRESET Mask   */
+#define USBPHY_DEBUG_TOG_ENSQUELCHRESET_SHIFT    (24U)                                               /*!< USBPHY1_DEBUG_TOG.ENSQUELCHRESET Position*/
+#define USBPHY_DEBUG_TOG_ENSQUELCHRESET(x)       (((uint32_t)(((uint32_t)(x))<<USBPHY_DEBUG_TOG_ENSQUELCHRESET_SHIFT))&USBPHY_DEBUG_TOG_ENSQUELCHRESET_MASK) /*!< USBPHY1_DEBUG_TOG.ENSQUELCHRESET Field  */
+#define USBPHY_DEBUG_TOG_SQUELCHRESETLENGTH_MASK (0x1E000000U)                                       /*!< USBPHY1_DEBUG_TOG.SQUELCHRESETLENGTH Mask*/
+#define USBPHY_DEBUG_TOG_SQUELCHRESETLENGTH_SHIFT (25U)                                              /*!< USBPHY1_DEBUG_TOG.SQUELCHRESETLENGTH Position*/
+#define USBPHY_DEBUG_TOG_SQUELCHRESETLENGTH(x)   (((uint32_t)(((uint32_t)(x))<<USBPHY_DEBUG_TOG_SQUELCHRESETLENGTH_SHIFT))&USBPHY_DEBUG_TOG_SQUELCHRESETLENGTH_MASK) /*!< USBPHY1_DEBUG_TOG.SQUELCHRESETLENGTH Field*/
+#define USBPHY_DEBUG_TOG_HOST_RESUME_DEBUG_MASK  (0x20000000U)                                       /*!< USBPHY1_DEBUG_TOG.HOST_RESUME_DEBUG Mask*/
+#define USBPHY_DEBUG_TOG_HOST_RESUME_DEBUG_SHIFT (29U)                                               /*!< USBPHY1_DEBUG_TOG.HOST_RESUME_DEBUG Position*/
+#define USBPHY_DEBUG_TOG_HOST_RESUME_DEBUG(x)    (((uint32_t)(((uint32_t)(x))<<USBPHY_DEBUG_TOG_HOST_RESUME_DEBUG_SHIFT))&USBPHY_DEBUG_TOG_HOST_RESUME_DEBUG_MASK) /*!< USBPHY1_DEBUG_TOG.HOST_RESUME_DEBUG Field*/
+#define USBPHY_DEBUG_TOG_CLKGATE_MASK            (0x40000000U)                                       /*!< USBPHY1_DEBUG_TOG.CLKGATE Mask          */
+#define USBPHY_DEBUG_TOG_CLKGATE_SHIFT           (30U)                                               /*!< USBPHY1_DEBUG_TOG.CLKGATE Position      */
+#define USBPHY_DEBUG_TOG_CLKGATE(x)              (((uint32_t)(((uint32_t)(x))<<USBPHY_DEBUG_TOG_CLKGATE_SHIFT))&USBPHY_DEBUG_TOG_CLKGATE_MASK) /*!< USBPHY1_DEBUG_TOG.CLKGATE Field         */
 
 /*! @name DEBUG0_STATUS - UTMI Debug Status Register 0 */
-#define USBPHY0_DEBUG0_STATUS_LOOP_BACK_FAIL_COUNT_MASK (0xFFFFU)                                    /*!< USBPHY0_DEBUG0_STATUS.LOOP_BACK_FAIL_COUNT Mask*/
-#define USBPHY0_DEBUG0_STATUS_LOOP_BACK_FAIL_COUNT_SHIFT (0U)                                        /*!< USBPHY0_DEBUG0_STATUS.LOOP_BACK_FAIL_COUNT Position*/
-#define USBPHY0_DEBUG0_STATUS_LOOP_BACK_FAIL_COUNT(x) (((uint32_t)(((uint32_t)(x))<<USBPHY0_DEBUG0_STATUS_LOOP_BACK_FAIL_COUNT_SHIFT))&USBPHY0_DEBUG0_STATUS_LOOP_BACK_FAIL_COUNT_MASK) /*!< USBPHY0_DEBUG0_STATUS.LOOP_BACK_FAIL_COUNT Field*/
-#define USBPHY0_DEBUG0_STATUS_UTMI_RXERROR_FAIL_COUNT_MASK (0x3FF0000U)                              /*!< USBPHY0_DEBUG0_STATUS.UTMI_RXERROR_FAIL_COUNT Mask*/
-#define USBPHY0_DEBUG0_STATUS_UTMI_RXERROR_FAIL_COUNT_SHIFT (16U)                                    /*!< USBPHY0_DEBUG0_STATUS.UTMI_RXERROR_FAIL_COUNT Position*/
-#define USBPHY0_DEBUG0_STATUS_UTMI_RXERROR_FAIL_COUNT(x) (((uint32_t)(((uint32_t)(x))<<USBPHY0_DEBUG0_STATUS_UTMI_RXERROR_FAIL_COUNT_SHIFT))&USBPHY0_DEBUG0_STATUS_UTMI_RXERROR_FAIL_COUNT_MASK) /*!< USBPHY0_DEBUG0_STATUS.UTMI_RXERROR_FAIL_COUNT Field*/
-#define USBPHY0_DEBUG0_STATUS_SQUELCH_COUNT_MASK (0xFC000000U)                                       /*!< USBPHY0_DEBUG0_STATUS.SQUELCH_COUNT Mask*/
-#define USBPHY0_DEBUG0_STATUS_SQUELCH_COUNT_SHIFT (26U)                                              /*!< USBPHY0_DEBUG0_STATUS.SQUELCH_COUNT Position*/
-#define USBPHY0_DEBUG0_STATUS_SQUELCH_COUNT(x)   (((uint32_t)(((uint32_t)(x))<<USBPHY0_DEBUG0_STATUS_SQUELCH_COUNT_SHIFT))&USBPHY0_DEBUG0_STATUS_SQUELCH_COUNT_MASK) /*!< USBPHY0_DEBUG0_STATUS.SQUELCH_COUNT Field*/
+#define USBPHY_DEBUG0_STATUS_LOOP_BACK_FAIL_COUNT_MASK (0xFFFFU)                                     /*!< USBPHY1_DEBUG0_STATUS.LOOP_BACK_FAIL_COUNT Mask*/
+#define USBPHY_DEBUG0_STATUS_LOOP_BACK_FAIL_COUNT_SHIFT (0U)                                         /*!< USBPHY1_DEBUG0_STATUS.LOOP_BACK_FAIL_COUNT Position*/
+#define USBPHY_DEBUG0_STATUS_LOOP_BACK_FAIL_COUNT(x) (((uint32_t)(((uint32_t)(x))<<USBPHY_DEBUG0_STATUS_LOOP_BACK_FAIL_COUNT_SHIFT))&USBPHY_DEBUG0_STATUS_LOOP_BACK_FAIL_COUNT_MASK) /*!< USBPHY1_DEBUG0_STATUS.LOOP_BACK_FAIL_COUNT Field*/
+#define USBPHY_DEBUG0_STATUS_UTMI_RXERROR_FAIL_COUNT_MASK (0x3FF0000U)                               /*!< USBPHY1_DEBUG0_STATUS.UTMI_RXERROR_FAIL_COUNT Mask*/
+#define USBPHY_DEBUG0_STATUS_UTMI_RXERROR_FAIL_COUNT_SHIFT (16U)                                     /*!< USBPHY1_DEBUG0_STATUS.UTMI_RXERROR_FAIL_COUNT Position*/
+#define USBPHY_DEBUG0_STATUS_UTMI_RXERROR_FAIL_COUNT(x) (((uint32_t)(((uint32_t)(x))<<USBPHY_DEBUG0_STATUS_UTMI_RXERROR_FAIL_COUNT_SHIFT))&USBPHY_DEBUG0_STATUS_UTMI_RXERROR_FAIL_COUNT_MASK) /*!< USBPHY1_DEBUG0_STATUS.UTMI_RXERROR_FAIL_COUNT Field*/
+#define USBPHY_DEBUG0_STATUS_SQUELCH_COUNT_MASK  (0xFC000000U)                                       /*!< USBPHY1_DEBUG0_STATUS.SQUELCH_COUNT Mask*/
+#define USBPHY_DEBUG0_STATUS_SQUELCH_COUNT_SHIFT (26U)                                               /*!< USBPHY1_DEBUG0_STATUS.SQUELCH_COUNT Position*/
+#define USBPHY_DEBUG0_STATUS_SQUELCH_COUNT(x)    (((uint32_t)(((uint32_t)(x))<<USBPHY_DEBUG0_STATUS_SQUELCH_COUNT_SHIFT))&USBPHY_DEBUG0_STATUS_SQUELCH_COUNT_MASK) /*!< USBPHY1_DEBUG0_STATUS.SQUELCH_COUNT Field*/
 
 /*! @name DEBUG1 - UTMI Debug Status Register 1 */
-#define USBPHY0_DEBUG1_ENTAILADJVD_MASK          (0x6000U)                                           /*!< USBPHY0_DEBUG1.ENTAILADJVD Mask         */
-#define USBPHY0_DEBUG1_ENTAILADJVD_SHIFT         (13U)                                               /*!< USBPHY0_DEBUG1.ENTAILADJVD Position     */
-#define USBPHY0_DEBUG1_ENTAILADJVD(x)            (((uint32_t)(((uint32_t)(x))<<USBPHY0_DEBUG1_ENTAILADJVD_SHIFT))&USBPHY0_DEBUG1_ENTAILADJVD_MASK) /*!< USBPHY0_DEBUG1.ENTAILADJVD Field        */
+#define USBPHY_DEBUG1_ENTAILADJVD_MASK           (0x6000U)                                           /*!< USBPHY1_DEBUG1.ENTAILADJVD Mask         */
+#define USBPHY_DEBUG1_ENTAILADJVD_SHIFT          (13U)                                               /*!< USBPHY1_DEBUG1.ENTAILADJVD Position     */
+#define USBPHY_DEBUG1_ENTAILADJVD(x)             (((uint32_t)(((uint32_t)(x))<<USBPHY_DEBUG1_ENTAILADJVD_SHIFT))&USBPHY_DEBUG1_ENTAILADJVD_MASK) /*!< USBPHY1_DEBUG1.ENTAILADJVD Field        */
 
 /*! @name DEBUG1_SET - UTMI Debug Status Register 1 */
-#define USBPHY0_DEBUG1_SET_ENTAILADJVD_MASK      (0x6000U)                                           /*!< USBPHY0_DEBUG1_SET.ENTAILADJVD Mask     */
-#define USBPHY0_DEBUG1_SET_ENTAILADJVD_SHIFT     (13U)                                               /*!< USBPHY0_DEBUG1_SET.ENTAILADJVD Position */
-#define USBPHY0_DEBUG1_SET_ENTAILADJVD(x)        (((uint32_t)(((uint32_t)(x))<<USBPHY0_DEBUG1_SET_ENTAILADJVD_SHIFT))&USBPHY0_DEBUG1_SET_ENTAILADJVD_MASK) /*!< USBPHY0_DEBUG1_SET.ENTAILADJVD Field    */
+#define USBPHY_DEBUG1_SET_ENTAILADJVD_MASK       (0x6000U)                                           /*!< USBPHY1_DEBUG1_SET.ENTAILADJVD Mask     */
+#define USBPHY_DEBUG1_SET_ENTAILADJVD_SHIFT      (13U)                                               /*!< USBPHY1_DEBUG1_SET.ENTAILADJVD Position */
+#define USBPHY_DEBUG1_SET_ENTAILADJVD(x)         (((uint32_t)(((uint32_t)(x))<<USBPHY_DEBUG1_SET_ENTAILADJVD_SHIFT))&USBPHY_DEBUG1_SET_ENTAILADJVD_MASK) /*!< USBPHY1_DEBUG1_SET.ENTAILADJVD Field    */
 
 /*! @name DEBUG1_CLR - UTMI Debug Status Register 1 */
-#define USBPHY0_DEBUG1_CLR_ENTAILADJVD_MASK      (0x6000U)                                           /*!< USBPHY0_DEBUG1_CLR.ENTAILADJVD Mask     */
-#define USBPHY0_DEBUG1_CLR_ENTAILADJVD_SHIFT     (13U)                                               /*!< USBPHY0_DEBUG1_CLR.ENTAILADJVD Position */
-#define USBPHY0_DEBUG1_CLR_ENTAILADJVD(x)        (((uint32_t)(((uint32_t)(x))<<USBPHY0_DEBUG1_CLR_ENTAILADJVD_SHIFT))&USBPHY0_DEBUG1_CLR_ENTAILADJVD_MASK) /*!< USBPHY0_DEBUG1_CLR.ENTAILADJVD Field    */
+#define USBPHY_DEBUG1_CLR_ENTAILADJVD_MASK       (0x6000U)                                           /*!< USBPHY1_DEBUG1_CLR.ENTAILADJVD Mask     */
+#define USBPHY_DEBUG1_CLR_ENTAILADJVD_SHIFT      (13U)                                               /*!< USBPHY1_DEBUG1_CLR.ENTAILADJVD Position */
+#define USBPHY_DEBUG1_CLR_ENTAILADJVD(x)         (((uint32_t)(((uint32_t)(x))<<USBPHY_DEBUG1_CLR_ENTAILADJVD_SHIFT))&USBPHY_DEBUG1_CLR_ENTAILADJVD_MASK) /*!< USBPHY1_DEBUG1_CLR.ENTAILADJVD Field    */
 
 /*! @name DEBUG1_TOG - UTMI Debug Status Register 1 */
-#define USBPHY0_DEBUG1_TOG_ENTAILADJVD_MASK      (0x6000U)                                           /*!< USBPHY0_DEBUG1_TOG.ENTAILADJVD Mask     */
-#define USBPHY0_DEBUG1_TOG_ENTAILADJVD_SHIFT     (13U)                                               /*!< USBPHY0_DEBUG1_TOG.ENTAILADJVD Position */
-#define USBPHY0_DEBUG1_TOG_ENTAILADJVD(x)        (((uint32_t)(((uint32_t)(x))<<USBPHY0_DEBUG1_TOG_ENTAILADJVD_SHIFT))&USBPHY0_DEBUG1_TOG_ENTAILADJVD_MASK) /*!< USBPHY0_DEBUG1_TOG.ENTAILADJVD Field    */
+#define USBPHY_DEBUG1_TOG_ENTAILADJVD_MASK       (0x6000U)                                           /*!< USBPHY1_DEBUG1_TOG.ENTAILADJVD Mask     */
+#define USBPHY_DEBUG1_TOG_ENTAILADJVD_SHIFT      (13U)                                               /*!< USBPHY1_DEBUG1_TOG.ENTAILADJVD Position */
+#define USBPHY_DEBUG1_TOG_ENTAILADJVD(x)         (((uint32_t)(((uint32_t)(x))<<USBPHY_DEBUG1_TOG_ENTAILADJVD_SHIFT))&USBPHY_DEBUG1_TOG_ENTAILADJVD_MASK) /*!< USBPHY1_DEBUG1_TOG.ENTAILADJVD Field    */
 
 /*! @name VERSION - UTMI RTL Version */
-#define USBPHY0_VERSION_STEP_MASK                (0xFFFFU)                                           /*!< USBPHY0_VERSION.STEP Mask               */
-#define USBPHY0_VERSION_STEP_SHIFT               (0U)                                                /*!< USBPHY0_VERSION.STEP Position           */
-#define USBPHY0_VERSION_STEP(x)                  (((uint32_t)(((uint32_t)(x))<<USBPHY0_VERSION_STEP_SHIFT))&USBPHY0_VERSION_STEP_MASK) /*!< USBPHY0_VERSION.STEP Field              */
-#define USBPHY0_VERSION_MINOR_MASK               (0xFF0000U)                                         /*!< USBPHY0_VERSION.MINOR Mask              */
-#define USBPHY0_VERSION_MINOR_SHIFT              (16U)                                               /*!< USBPHY0_VERSION.MINOR Position          */
-#define USBPHY0_VERSION_MINOR(x)                 (((uint32_t)(((uint32_t)(x))<<USBPHY0_VERSION_MINOR_SHIFT))&USBPHY0_VERSION_MINOR_MASK) /*!< USBPHY0_VERSION.MINOR Field             */
-#define USBPHY0_VERSION_MAJOR_MASK               (0xFF000000U)                                       /*!< USBPHY0_VERSION.MAJOR Mask              */
-#define USBPHY0_VERSION_MAJOR_SHIFT              (24U)                                               /*!< USBPHY0_VERSION.MAJOR Position          */
-#define USBPHY0_VERSION_MAJOR(x)                 (((uint32_t)(((uint32_t)(x))<<USBPHY0_VERSION_MAJOR_SHIFT))&USBPHY0_VERSION_MAJOR_MASK) /*!< USBPHY0_VERSION.MAJOR Field             */
+#define USBPHY_VERSION_STEP_MASK                 (0xFFFFU)                                           /*!< USBPHY1_VERSION.STEP Mask               */
+#define USBPHY_VERSION_STEP_SHIFT                (0U)                                                /*!< USBPHY1_VERSION.STEP Position           */
+#define USBPHY_VERSION_STEP(x)                   (((uint32_t)(((uint32_t)(x))<<USBPHY_VERSION_STEP_SHIFT))&USBPHY_VERSION_STEP_MASK) /*!< USBPHY1_VERSION.STEP Field              */
+#define USBPHY_VERSION_MINOR_MASK                (0xFF0000U)                                         /*!< USBPHY1_VERSION.MINOR Mask              */
+#define USBPHY_VERSION_MINOR_SHIFT               (16U)                                               /*!< USBPHY1_VERSION.MINOR Position          */
+#define USBPHY_VERSION_MINOR(x)                  (((uint32_t)(((uint32_t)(x))<<USBPHY_VERSION_MINOR_SHIFT))&USBPHY_VERSION_MINOR_MASK) /*!< USBPHY1_VERSION.MINOR Field             */
+#define USBPHY_VERSION_MAJOR_MASK                (0xFF000000U)                                       /*!< USBPHY1_VERSION.MAJOR Mask              */
+#define USBPHY_VERSION_MAJOR_SHIFT               (24U)                                               /*!< USBPHY1_VERSION.MAJOR Position          */
+#define USBPHY_VERSION_MAJOR(x)                  (((uint32_t)(((uint32_t)(x))<<USBPHY_VERSION_MAJOR_SHIFT))&USBPHY_VERSION_MAJOR_MASK) /*!< USBPHY1_VERSION.MAJOR Field             */
 
 /*! @name PLL_SIC - USB PHY PLL Control/Status Register */
-#define USBPHY0_PLL_SIC_PLL_DIV_SEL_MASK         (0x3U)                                              /*!< USBPHY0_PLL_SIC.PLL_DIV_SEL Mask        */
-#define USBPHY0_PLL_SIC_PLL_DIV_SEL_SHIFT        (0U)                                                /*!< USBPHY0_PLL_SIC.PLL_DIV_SEL Position    */
-#define USBPHY0_PLL_SIC_PLL_DIV_SEL(x)           (((uint32_t)(((uint32_t)(x))<<USBPHY0_PLL_SIC_PLL_DIV_SEL_SHIFT))&USBPHY0_PLL_SIC_PLL_DIV_SEL_MASK) /*!< USBPHY0_PLL_SIC.PLL_DIV_SEL Field       */
-#define USBPHY0_PLL_SIC_PLL_EN_USB_CLKS_MASK     (0x40U)                                             /*!< USBPHY0_PLL_SIC.PLL_EN_USB_CLKS Mask    */
-#define USBPHY0_PLL_SIC_PLL_EN_USB_CLKS_SHIFT    (6U)                                                /*!< USBPHY0_PLL_SIC.PLL_EN_USB_CLKS Position*/
-#define USBPHY0_PLL_SIC_PLL_EN_USB_CLKS(x)       (((uint32_t)(((uint32_t)(x))<<USBPHY0_PLL_SIC_PLL_EN_USB_CLKS_SHIFT))&USBPHY0_PLL_SIC_PLL_EN_USB_CLKS_MASK) /*!< USBPHY0_PLL_SIC.PLL_EN_USB_CLKS Field   */
-#define USBPHY0_PLL_SIC_PLL_HOLD_RING_OFF_MASK   (0x800U)                                            /*!< USBPHY0_PLL_SIC.PLL_HOLD_RING_OFF Mask  */
-#define USBPHY0_PLL_SIC_PLL_HOLD_RING_OFF_SHIFT  (11U)                                               /*!< USBPHY0_PLL_SIC.PLL_HOLD_RING_OFF Position*/
-#define USBPHY0_PLL_SIC_PLL_HOLD_RING_OFF(x)     (((uint32_t)(((uint32_t)(x))<<USBPHY0_PLL_SIC_PLL_HOLD_RING_OFF_SHIFT))&USBPHY0_PLL_SIC_PLL_HOLD_RING_OFF_MASK) /*!< USBPHY0_PLL_SIC.PLL_HOLD_RING_OFF Field */
-#define USBPHY0_PLL_SIC_PLL_POWER_MASK           (0x1000U)                                           /*!< USBPHY0_PLL_SIC.PLL_POWER Mask          */
-#define USBPHY0_PLL_SIC_PLL_POWER_SHIFT          (12U)                                               /*!< USBPHY0_PLL_SIC.PLL_POWER Position      */
-#define USBPHY0_PLL_SIC_PLL_POWER(x)             (((uint32_t)(((uint32_t)(x))<<USBPHY0_PLL_SIC_PLL_POWER_SHIFT))&USBPHY0_PLL_SIC_PLL_POWER_MASK) /*!< USBPHY0_PLL_SIC.PLL_POWER Field         */
-#define USBPHY0_PLL_SIC_PLL_ENABLE_MASK          (0x2000U)                                           /*!< USBPHY0_PLL_SIC.PLL_ENABLE Mask         */
-#define USBPHY0_PLL_SIC_PLL_ENABLE_SHIFT         (13U)                                               /*!< USBPHY0_PLL_SIC.PLL_ENABLE Position     */
-#define USBPHY0_PLL_SIC_PLL_ENABLE(x)            (((uint32_t)(((uint32_t)(x))<<USBPHY0_PLL_SIC_PLL_ENABLE_SHIFT))&USBPHY0_PLL_SIC_PLL_ENABLE_MASK) /*!< USBPHY0_PLL_SIC.PLL_ENABLE Field        */
-#define USBPHY0_PLL_SIC_PLL_BYPASS_MASK          (0x10000U)                                          /*!< USBPHY0_PLL_SIC.PLL_BYPASS Mask         */
-#define USBPHY0_PLL_SIC_PLL_BYPASS_SHIFT         (16U)                                               /*!< USBPHY0_PLL_SIC.PLL_BYPASS Position     */
-#define USBPHY0_PLL_SIC_PLL_BYPASS(x)            (((uint32_t)(((uint32_t)(x))<<USBPHY0_PLL_SIC_PLL_BYPASS_SHIFT))&USBPHY0_PLL_SIC_PLL_BYPASS_MASK) /*!< USBPHY0_PLL_SIC.PLL_BYPASS Field        */
-#define USBPHY0_PLL_SIC_PLL_LOCK_MASK            (0x80000000U)                                       /*!< USBPHY0_PLL_SIC.PLL_LOCK Mask           */
-#define USBPHY0_PLL_SIC_PLL_LOCK_SHIFT           (31U)                                               /*!< USBPHY0_PLL_SIC.PLL_LOCK Position       */
-#define USBPHY0_PLL_SIC_PLL_LOCK(x)              (((uint32_t)(((uint32_t)(x))<<USBPHY0_PLL_SIC_PLL_LOCK_SHIFT))&USBPHY0_PLL_SIC_PLL_LOCK_MASK) /*!< USBPHY0_PLL_SIC.PLL_LOCK Field          */
+#define USBPHY_PLL_SIC_PLL_DIV_SEL_MASK          (0x3U)                                              /*!< USBPHY1_PLL_SIC.PLL_DIV_SEL Mask        */
+#define USBPHY_PLL_SIC_PLL_DIV_SEL_SHIFT         (0U)                                                /*!< USBPHY1_PLL_SIC.PLL_DIV_SEL Position    */
+#define USBPHY_PLL_SIC_PLL_DIV_SEL(x)            (((uint32_t)(((uint32_t)(x))<<USBPHY_PLL_SIC_PLL_DIV_SEL_SHIFT))&USBPHY_PLL_SIC_PLL_DIV_SEL_MASK) /*!< USBPHY1_PLL_SIC.PLL_DIV_SEL Field       */
+#define USBPHY_PLL_SIC_PLL_EN_USB_CLKS_MASK      (0x40U)                                             /*!< USBPHY1_PLL_SIC.PLL_EN_USB_CLKS Mask    */
+#define USBPHY_PLL_SIC_PLL_EN_USB_CLKS_SHIFT     (6U)                                                /*!< USBPHY1_PLL_SIC.PLL_EN_USB_CLKS Position*/
+#define USBPHY_PLL_SIC_PLL_EN_USB_CLKS(x)        (((uint32_t)(((uint32_t)(x))<<USBPHY_PLL_SIC_PLL_EN_USB_CLKS_SHIFT))&USBPHY_PLL_SIC_PLL_EN_USB_CLKS_MASK) /*!< USBPHY1_PLL_SIC.PLL_EN_USB_CLKS Field   */
+#define USBPHY_PLL_SIC_PLL_HOLD_RING_OFF_MASK    (0x800U)                                            /*!< USBPHY1_PLL_SIC.PLL_HOLD_RING_OFF Mask  */
+#define USBPHY_PLL_SIC_PLL_HOLD_RING_OFF_SHIFT   (11U)                                               /*!< USBPHY1_PLL_SIC.PLL_HOLD_RING_OFF Position*/
+#define USBPHY_PLL_SIC_PLL_HOLD_RING_OFF(x)      (((uint32_t)(((uint32_t)(x))<<USBPHY_PLL_SIC_PLL_HOLD_RING_OFF_SHIFT))&USBPHY_PLL_SIC_PLL_HOLD_RING_OFF_MASK) /*!< USBPHY1_PLL_SIC.PLL_HOLD_RING_OFF Field */
+#define USBPHY_PLL_SIC_PLL_POWER_MASK            (0x1000U)                                           /*!< USBPHY1_PLL_SIC.PLL_POWER Mask          */
+#define USBPHY_PLL_SIC_PLL_POWER_SHIFT           (12U)                                               /*!< USBPHY1_PLL_SIC.PLL_POWER Position      */
+#define USBPHY_PLL_SIC_PLL_POWER(x)              (((uint32_t)(((uint32_t)(x))<<USBPHY_PLL_SIC_PLL_POWER_SHIFT))&USBPHY_PLL_SIC_PLL_POWER_MASK) /*!< USBPHY1_PLL_SIC.PLL_POWER Field         */
+#define USBPHY_PLL_SIC_PLL_ENABLE_MASK           (0x2000U)                                           /*!< USBPHY1_PLL_SIC.PLL_ENABLE Mask         */
+#define USBPHY_PLL_SIC_PLL_ENABLE_SHIFT          (13U)                                               /*!< USBPHY1_PLL_SIC.PLL_ENABLE Position     */
+#define USBPHY_PLL_SIC_PLL_ENABLE(x)             (((uint32_t)(((uint32_t)(x))<<USBPHY_PLL_SIC_PLL_ENABLE_SHIFT))&USBPHY_PLL_SIC_PLL_ENABLE_MASK) /*!< USBPHY1_PLL_SIC.PLL_ENABLE Field        */
+#define USBPHY_PLL_SIC_PLL_BYPASS_MASK           (0x10000U)                                          /*!< USBPHY1_PLL_SIC.PLL_BYPASS Mask         */
+#define USBPHY_PLL_SIC_PLL_BYPASS_SHIFT          (16U)                                               /*!< USBPHY1_PLL_SIC.PLL_BYPASS Position     */
+#define USBPHY_PLL_SIC_PLL_BYPASS(x)             (((uint32_t)(((uint32_t)(x))<<USBPHY_PLL_SIC_PLL_BYPASS_SHIFT))&USBPHY_PLL_SIC_PLL_BYPASS_MASK) /*!< USBPHY1_PLL_SIC.PLL_BYPASS Field        */
+#define USBPHY_PLL_SIC_PLL_LOCK_MASK             (0x80000000U)                                       /*!< USBPHY1_PLL_SIC.PLL_LOCK Mask           */
+#define USBPHY_PLL_SIC_PLL_LOCK_SHIFT            (31U)                                               /*!< USBPHY1_PLL_SIC.PLL_LOCK Position       */
+#define USBPHY_PLL_SIC_PLL_LOCK(x)               (((uint32_t)(((uint32_t)(x))<<USBPHY_PLL_SIC_PLL_LOCK_SHIFT))&USBPHY_PLL_SIC_PLL_LOCK_MASK) /*!< USBPHY1_PLL_SIC.PLL_LOCK Field          */
 
 /*! @name PLL_SIC_SET - USB PHY PLL Control/Status Register */
-#define USBPHY0_PLL_SIC_SET_PLL_DIV_SEL_MASK     (0x3U)                                              /*!< USBPHY0_PLL_SIC_SET.PLL_DIV_SEL Mask    */
-#define USBPHY0_PLL_SIC_SET_PLL_DIV_SEL_SHIFT    (0U)                                                /*!< USBPHY0_PLL_SIC_SET.PLL_DIV_SEL Position*/
-#define USBPHY0_PLL_SIC_SET_PLL_DIV_SEL(x)       (((uint32_t)(((uint32_t)(x))<<USBPHY0_PLL_SIC_SET_PLL_DIV_SEL_SHIFT))&USBPHY0_PLL_SIC_SET_PLL_DIV_SEL_MASK) /*!< USBPHY0_PLL_SIC_SET.PLL_DIV_SEL Field   */
-#define USBPHY0_PLL_SIC_SET_PLL_EN_USB_CLKS_MASK (0x40U)                                             /*!< USBPHY0_PLL_SIC_SET.PLL_EN_USB_CLKS Mask*/
-#define USBPHY0_PLL_SIC_SET_PLL_EN_USB_CLKS_SHIFT (6U)                                               /*!< USBPHY0_PLL_SIC_SET.PLL_EN_USB_CLKS Position*/
-#define USBPHY0_PLL_SIC_SET_PLL_EN_USB_CLKS(x)   (((uint32_t)(((uint32_t)(x))<<USBPHY0_PLL_SIC_SET_PLL_EN_USB_CLKS_SHIFT))&USBPHY0_PLL_SIC_SET_PLL_EN_USB_CLKS_MASK) /*!< USBPHY0_PLL_SIC_SET.PLL_EN_USB_CLKS Field*/
-#define USBPHY0_PLL_SIC_SET_PLL_HOLD_RING_OFF_MASK (0x800U)                                          /*!< USBPHY0_PLL_SIC_SET.PLL_HOLD_RING_OFF Mask*/
-#define USBPHY0_PLL_SIC_SET_PLL_HOLD_RING_OFF_SHIFT (11U)                                            /*!< USBPHY0_PLL_SIC_SET.PLL_HOLD_RING_OFF Position*/
-#define USBPHY0_PLL_SIC_SET_PLL_HOLD_RING_OFF(x) (((uint32_t)(((uint32_t)(x))<<USBPHY0_PLL_SIC_SET_PLL_HOLD_RING_OFF_SHIFT))&USBPHY0_PLL_SIC_SET_PLL_HOLD_RING_OFF_MASK) /*!< USBPHY0_PLL_SIC_SET.PLL_HOLD_RING_OFF Field*/
-#define USBPHY0_PLL_SIC_SET_PLL_POWER_MASK       (0x1000U)                                           /*!< USBPHY0_PLL_SIC_SET.PLL_POWER Mask      */
-#define USBPHY0_PLL_SIC_SET_PLL_POWER_SHIFT      (12U)                                               /*!< USBPHY0_PLL_SIC_SET.PLL_POWER Position  */
-#define USBPHY0_PLL_SIC_SET_PLL_POWER(x)         (((uint32_t)(((uint32_t)(x))<<USBPHY0_PLL_SIC_SET_PLL_POWER_SHIFT))&USBPHY0_PLL_SIC_SET_PLL_POWER_MASK) /*!< USBPHY0_PLL_SIC_SET.PLL_POWER Field     */
-#define USBPHY0_PLL_SIC_SET_PLL_ENABLE_MASK      (0x2000U)                                           /*!< USBPHY0_PLL_SIC_SET.PLL_ENABLE Mask     */
-#define USBPHY0_PLL_SIC_SET_PLL_ENABLE_SHIFT     (13U)                                               /*!< USBPHY0_PLL_SIC_SET.PLL_ENABLE Position */
-#define USBPHY0_PLL_SIC_SET_PLL_ENABLE(x)        (((uint32_t)(((uint32_t)(x))<<USBPHY0_PLL_SIC_SET_PLL_ENABLE_SHIFT))&USBPHY0_PLL_SIC_SET_PLL_ENABLE_MASK) /*!< USBPHY0_PLL_SIC_SET.PLL_ENABLE Field    */
-#define USBPHY0_PLL_SIC_SET_PLL_BYPASS_MASK      (0x10000U)                                          /*!< USBPHY0_PLL_SIC_SET.PLL_BYPASS Mask     */
-#define USBPHY0_PLL_SIC_SET_PLL_BYPASS_SHIFT     (16U)                                               /*!< USBPHY0_PLL_SIC_SET.PLL_BYPASS Position */
-#define USBPHY0_PLL_SIC_SET_PLL_BYPASS(x)        (((uint32_t)(((uint32_t)(x))<<USBPHY0_PLL_SIC_SET_PLL_BYPASS_SHIFT))&USBPHY0_PLL_SIC_SET_PLL_BYPASS_MASK) /*!< USBPHY0_PLL_SIC_SET.PLL_BYPASS Field    */
-#define USBPHY0_PLL_SIC_SET_PLL_LOCK_MASK        (0x80000000U)                                       /*!< USBPHY0_PLL_SIC_SET.PLL_LOCK Mask       */
-#define USBPHY0_PLL_SIC_SET_PLL_LOCK_SHIFT       (31U)                                               /*!< USBPHY0_PLL_SIC_SET.PLL_LOCK Position   */
-#define USBPHY0_PLL_SIC_SET_PLL_LOCK(x)          (((uint32_t)(((uint32_t)(x))<<USBPHY0_PLL_SIC_SET_PLL_LOCK_SHIFT))&USBPHY0_PLL_SIC_SET_PLL_LOCK_MASK) /*!< USBPHY0_PLL_SIC_SET.PLL_LOCK Field      */
+#define USBPHY_PLL_SIC_SET_PLL_DIV_SEL_MASK      (0x3U)                                              /*!< USBPHY1_PLL_SIC_SET.PLL_DIV_SEL Mask    */
+#define USBPHY_PLL_SIC_SET_PLL_DIV_SEL_SHIFT     (0U)                                                /*!< USBPHY1_PLL_SIC_SET.PLL_DIV_SEL Position*/
+#define USBPHY_PLL_SIC_SET_PLL_DIV_SEL(x)        (((uint32_t)(((uint32_t)(x))<<USBPHY_PLL_SIC_SET_PLL_DIV_SEL_SHIFT))&USBPHY_PLL_SIC_SET_PLL_DIV_SEL_MASK) /*!< USBPHY1_PLL_SIC_SET.PLL_DIV_SEL Field   */
+#define USBPHY_PLL_SIC_SET_PLL_EN_USB_CLKS_MASK  (0x40U)                                             /*!< USBPHY1_PLL_SIC_SET.PLL_EN_USB_CLKS Mask*/
+#define USBPHY_PLL_SIC_SET_PLL_EN_USB_CLKS_SHIFT (6U)                                                /*!< USBPHY1_PLL_SIC_SET.PLL_EN_USB_CLKS Position*/
+#define USBPHY_PLL_SIC_SET_PLL_EN_USB_CLKS(x)    (((uint32_t)(((uint32_t)(x))<<USBPHY_PLL_SIC_SET_PLL_EN_USB_CLKS_SHIFT))&USBPHY_PLL_SIC_SET_PLL_EN_USB_CLKS_MASK) /*!< USBPHY1_PLL_SIC_SET.PLL_EN_USB_CLKS Field*/
+#define USBPHY_PLL_SIC_SET_PLL_HOLD_RING_OFF_MASK (0x800U)                                           /*!< USBPHY1_PLL_SIC_SET.PLL_HOLD_RING_OFF Mask*/
+#define USBPHY_PLL_SIC_SET_PLL_HOLD_RING_OFF_SHIFT (11U)                                             /*!< USBPHY1_PLL_SIC_SET.PLL_HOLD_RING_OFF Position*/
+#define USBPHY_PLL_SIC_SET_PLL_HOLD_RING_OFF(x)  (((uint32_t)(((uint32_t)(x))<<USBPHY_PLL_SIC_SET_PLL_HOLD_RING_OFF_SHIFT))&USBPHY_PLL_SIC_SET_PLL_HOLD_RING_OFF_MASK) /*!< USBPHY1_PLL_SIC_SET.PLL_HOLD_RING_OFF Field*/
+#define USBPHY_PLL_SIC_SET_PLL_POWER_MASK        (0x1000U)                                           /*!< USBPHY1_PLL_SIC_SET.PLL_POWER Mask      */
+#define USBPHY_PLL_SIC_SET_PLL_POWER_SHIFT       (12U)                                               /*!< USBPHY1_PLL_SIC_SET.PLL_POWER Position  */
+#define USBPHY_PLL_SIC_SET_PLL_POWER(x)          (((uint32_t)(((uint32_t)(x))<<USBPHY_PLL_SIC_SET_PLL_POWER_SHIFT))&USBPHY_PLL_SIC_SET_PLL_POWER_MASK) /*!< USBPHY1_PLL_SIC_SET.PLL_POWER Field     */
+#define USBPHY_PLL_SIC_SET_PLL_ENABLE_MASK       (0x2000U)                                           /*!< USBPHY1_PLL_SIC_SET.PLL_ENABLE Mask     */
+#define USBPHY_PLL_SIC_SET_PLL_ENABLE_SHIFT      (13U)                                               /*!< USBPHY1_PLL_SIC_SET.PLL_ENABLE Position */
+#define USBPHY_PLL_SIC_SET_PLL_ENABLE(x)         (((uint32_t)(((uint32_t)(x))<<USBPHY_PLL_SIC_SET_PLL_ENABLE_SHIFT))&USBPHY_PLL_SIC_SET_PLL_ENABLE_MASK) /*!< USBPHY1_PLL_SIC_SET.PLL_ENABLE Field    */
+#define USBPHY_PLL_SIC_SET_PLL_BYPASS_MASK       (0x10000U)                                          /*!< USBPHY1_PLL_SIC_SET.PLL_BYPASS Mask     */
+#define USBPHY_PLL_SIC_SET_PLL_BYPASS_SHIFT      (16U)                                               /*!< USBPHY1_PLL_SIC_SET.PLL_BYPASS Position */
+#define USBPHY_PLL_SIC_SET_PLL_BYPASS(x)         (((uint32_t)(((uint32_t)(x))<<USBPHY_PLL_SIC_SET_PLL_BYPASS_SHIFT))&USBPHY_PLL_SIC_SET_PLL_BYPASS_MASK) /*!< USBPHY1_PLL_SIC_SET.PLL_BYPASS Field    */
+#define USBPHY_PLL_SIC_SET_PLL_LOCK_MASK         (0x80000000U)                                       /*!< USBPHY1_PLL_SIC_SET.PLL_LOCK Mask       */
+#define USBPHY_PLL_SIC_SET_PLL_LOCK_SHIFT        (31U)                                               /*!< USBPHY1_PLL_SIC_SET.PLL_LOCK Position   */
+#define USBPHY_PLL_SIC_SET_PLL_LOCK(x)           (((uint32_t)(((uint32_t)(x))<<USBPHY_PLL_SIC_SET_PLL_LOCK_SHIFT))&USBPHY_PLL_SIC_SET_PLL_LOCK_MASK) /*!< USBPHY1_PLL_SIC_SET.PLL_LOCK Field      */
 
 /*! @name PLL_SIC_CLR - USB PHY PLL Control/Status Register */
-#define USBPHY0_PLL_SIC_CLR_PLL_DIV_SEL_MASK     (0x3U)                                              /*!< USBPHY0_PLL_SIC_CLR.PLL_DIV_SEL Mask    */
-#define USBPHY0_PLL_SIC_CLR_PLL_DIV_SEL_SHIFT    (0U)                                                /*!< USBPHY0_PLL_SIC_CLR.PLL_DIV_SEL Position*/
-#define USBPHY0_PLL_SIC_CLR_PLL_DIV_SEL(x)       (((uint32_t)(((uint32_t)(x))<<USBPHY0_PLL_SIC_CLR_PLL_DIV_SEL_SHIFT))&USBPHY0_PLL_SIC_CLR_PLL_DIV_SEL_MASK) /*!< USBPHY0_PLL_SIC_CLR.PLL_DIV_SEL Field   */
-#define USBPHY0_PLL_SIC_CLR_PLL_EN_USB_CLKS_MASK (0x40U)                                             /*!< USBPHY0_PLL_SIC_CLR.PLL_EN_USB_CLKS Mask*/
-#define USBPHY0_PLL_SIC_CLR_PLL_EN_USB_CLKS_SHIFT (6U)                                               /*!< USBPHY0_PLL_SIC_CLR.PLL_EN_USB_CLKS Position*/
-#define USBPHY0_PLL_SIC_CLR_PLL_EN_USB_CLKS(x)   (((uint32_t)(((uint32_t)(x))<<USBPHY0_PLL_SIC_CLR_PLL_EN_USB_CLKS_SHIFT))&USBPHY0_PLL_SIC_CLR_PLL_EN_USB_CLKS_MASK) /*!< USBPHY0_PLL_SIC_CLR.PLL_EN_USB_CLKS Field*/
-#define USBPHY0_PLL_SIC_CLR_PLL_HOLD_RING_OFF_MASK (0x800U)                                          /*!< USBPHY0_PLL_SIC_CLR.PLL_HOLD_RING_OFF Mask*/
-#define USBPHY0_PLL_SIC_CLR_PLL_HOLD_RING_OFF_SHIFT (11U)                                            /*!< USBPHY0_PLL_SIC_CLR.PLL_HOLD_RING_OFF Position*/
-#define USBPHY0_PLL_SIC_CLR_PLL_HOLD_RING_OFF(x) (((uint32_t)(((uint32_t)(x))<<USBPHY0_PLL_SIC_CLR_PLL_HOLD_RING_OFF_SHIFT))&USBPHY0_PLL_SIC_CLR_PLL_HOLD_RING_OFF_MASK) /*!< USBPHY0_PLL_SIC_CLR.PLL_HOLD_RING_OFF Field*/
-#define USBPHY0_PLL_SIC_CLR_PLL_POWER_MASK       (0x1000U)                                           /*!< USBPHY0_PLL_SIC_CLR.PLL_POWER Mask      */
-#define USBPHY0_PLL_SIC_CLR_PLL_POWER_SHIFT      (12U)                                               /*!< USBPHY0_PLL_SIC_CLR.PLL_POWER Position  */
-#define USBPHY0_PLL_SIC_CLR_PLL_POWER(x)         (((uint32_t)(((uint32_t)(x))<<USBPHY0_PLL_SIC_CLR_PLL_POWER_SHIFT))&USBPHY0_PLL_SIC_CLR_PLL_POWER_MASK) /*!< USBPHY0_PLL_SIC_CLR.PLL_POWER Field     */
-#define USBPHY0_PLL_SIC_CLR_PLL_ENABLE_MASK      (0x2000U)                                           /*!< USBPHY0_PLL_SIC_CLR.PLL_ENABLE Mask     */
-#define USBPHY0_PLL_SIC_CLR_PLL_ENABLE_SHIFT     (13U)                                               /*!< USBPHY0_PLL_SIC_CLR.PLL_ENABLE Position */
-#define USBPHY0_PLL_SIC_CLR_PLL_ENABLE(x)        (((uint32_t)(((uint32_t)(x))<<USBPHY0_PLL_SIC_CLR_PLL_ENABLE_SHIFT))&USBPHY0_PLL_SIC_CLR_PLL_ENABLE_MASK) /*!< USBPHY0_PLL_SIC_CLR.PLL_ENABLE Field    */
-#define USBPHY0_PLL_SIC_CLR_PLL_BYPASS_MASK      (0x10000U)                                          /*!< USBPHY0_PLL_SIC_CLR.PLL_BYPASS Mask     */
-#define USBPHY0_PLL_SIC_CLR_PLL_BYPASS_SHIFT     (16U)                                               /*!< USBPHY0_PLL_SIC_CLR.PLL_BYPASS Position */
-#define USBPHY0_PLL_SIC_CLR_PLL_BYPASS(x)        (((uint32_t)(((uint32_t)(x))<<USBPHY0_PLL_SIC_CLR_PLL_BYPASS_SHIFT))&USBPHY0_PLL_SIC_CLR_PLL_BYPASS_MASK) /*!< USBPHY0_PLL_SIC_CLR.PLL_BYPASS Field    */
-#define USBPHY0_PLL_SIC_CLR_PLL_LOCK_MASK        (0x80000000U)                                       /*!< USBPHY0_PLL_SIC_CLR.PLL_LOCK Mask       */
-#define USBPHY0_PLL_SIC_CLR_PLL_LOCK_SHIFT       (31U)                                               /*!< USBPHY0_PLL_SIC_CLR.PLL_LOCK Position   */
-#define USBPHY0_PLL_SIC_CLR_PLL_LOCK(x)          (((uint32_t)(((uint32_t)(x))<<USBPHY0_PLL_SIC_CLR_PLL_LOCK_SHIFT))&USBPHY0_PLL_SIC_CLR_PLL_LOCK_MASK) /*!< USBPHY0_PLL_SIC_CLR.PLL_LOCK Field      */
+#define USBPHY_PLL_SIC_CLR_PLL_DIV_SEL_MASK      (0x3U)                                              /*!< USBPHY1_PLL_SIC_CLR.PLL_DIV_SEL Mask    */
+#define USBPHY_PLL_SIC_CLR_PLL_DIV_SEL_SHIFT     (0U)                                                /*!< USBPHY1_PLL_SIC_CLR.PLL_DIV_SEL Position*/
+#define USBPHY_PLL_SIC_CLR_PLL_DIV_SEL(x)        (((uint32_t)(((uint32_t)(x))<<USBPHY_PLL_SIC_CLR_PLL_DIV_SEL_SHIFT))&USBPHY_PLL_SIC_CLR_PLL_DIV_SEL_MASK) /*!< USBPHY1_PLL_SIC_CLR.PLL_DIV_SEL Field   */
+#define USBPHY_PLL_SIC_CLR_PLL_EN_USB_CLKS_MASK  (0x40U)                                             /*!< USBPHY1_PLL_SIC_CLR.PLL_EN_USB_CLKS Mask*/
+#define USBPHY_PLL_SIC_CLR_PLL_EN_USB_CLKS_SHIFT (6U)                                                /*!< USBPHY1_PLL_SIC_CLR.PLL_EN_USB_CLKS Position*/
+#define USBPHY_PLL_SIC_CLR_PLL_EN_USB_CLKS(x)    (((uint32_t)(((uint32_t)(x))<<USBPHY_PLL_SIC_CLR_PLL_EN_USB_CLKS_SHIFT))&USBPHY_PLL_SIC_CLR_PLL_EN_USB_CLKS_MASK) /*!< USBPHY1_PLL_SIC_CLR.PLL_EN_USB_CLKS Field*/
+#define USBPHY_PLL_SIC_CLR_PLL_HOLD_RING_OFF_MASK (0x800U)                                           /*!< USBPHY1_PLL_SIC_CLR.PLL_HOLD_RING_OFF Mask*/
+#define USBPHY_PLL_SIC_CLR_PLL_HOLD_RING_OFF_SHIFT (11U)                                             /*!< USBPHY1_PLL_SIC_CLR.PLL_HOLD_RING_OFF Position*/
+#define USBPHY_PLL_SIC_CLR_PLL_HOLD_RING_OFF(x)  (((uint32_t)(((uint32_t)(x))<<USBPHY_PLL_SIC_CLR_PLL_HOLD_RING_OFF_SHIFT))&USBPHY_PLL_SIC_CLR_PLL_HOLD_RING_OFF_MASK) /*!< USBPHY1_PLL_SIC_CLR.PLL_HOLD_RING_OFF Field*/
+#define USBPHY_PLL_SIC_CLR_PLL_POWER_MASK        (0x1000U)                                           /*!< USBPHY1_PLL_SIC_CLR.PLL_POWER Mask      */
+#define USBPHY_PLL_SIC_CLR_PLL_POWER_SHIFT       (12U)                                               /*!< USBPHY1_PLL_SIC_CLR.PLL_POWER Position  */
+#define USBPHY_PLL_SIC_CLR_PLL_POWER(x)          (((uint32_t)(((uint32_t)(x))<<USBPHY_PLL_SIC_CLR_PLL_POWER_SHIFT))&USBPHY_PLL_SIC_CLR_PLL_POWER_MASK) /*!< USBPHY1_PLL_SIC_CLR.PLL_POWER Field     */
+#define USBPHY_PLL_SIC_CLR_PLL_ENABLE_MASK       (0x2000U)                                           /*!< USBPHY1_PLL_SIC_CLR.PLL_ENABLE Mask     */
+#define USBPHY_PLL_SIC_CLR_PLL_ENABLE_SHIFT      (13U)                                               /*!< USBPHY1_PLL_SIC_CLR.PLL_ENABLE Position */
+#define USBPHY_PLL_SIC_CLR_PLL_ENABLE(x)         (((uint32_t)(((uint32_t)(x))<<USBPHY_PLL_SIC_CLR_PLL_ENABLE_SHIFT))&USBPHY_PLL_SIC_CLR_PLL_ENABLE_MASK) /*!< USBPHY1_PLL_SIC_CLR.PLL_ENABLE Field    */
+#define USBPHY_PLL_SIC_CLR_PLL_BYPASS_MASK       (0x10000U)                                          /*!< USBPHY1_PLL_SIC_CLR.PLL_BYPASS Mask     */
+#define USBPHY_PLL_SIC_CLR_PLL_BYPASS_SHIFT      (16U)                                               /*!< USBPHY1_PLL_SIC_CLR.PLL_BYPASS Position */
+#define USBPHY_PLL_SIC_CLR_PLL_BYPASS(x)         (((uint32_t)(((uint32_t)(x))<<USBPHY_PLL_SIC_CLR_PLL_BYPASS_SHIFT))&USBPHY_PLL_SIC_CLR_PLL_BYPASS_MASK) /*!< USBPHY1_PLL_SIC_CLR.PLL_BYPASS Field    */
+#define USBPHY_PLL_SIC_CLR_PLL_LOCK_MASK         (0x80000000U)                                       /*!< USBPHY1_PLL_SIC_CLR.PLL_LOCK Mask       */
+#define USBPHY_PLL_SIC_CLR_PLL_LOCK_SHIFT        (31U)                                               /*!< USBPHY1_PLL_SIC_CLR.PLL_LOCK Position   */
+#define USBPHY_PLL_SIC_CLR_PLL_LOCK(x)           (((uint32_t)(((uint32_t)(x))<<USBPHY_PLL_SIC_CLR_PLL_LOCK_SHIFT))&USBPHY_PLL_SIC_CLR_PLL_LOCK_MASK) /*!< USBPHY1_PLL_SIC_CLR.PLL_LOCK Field      */
 
 /*! @name PLL_SIC_TOG - USB PHY PLL Control/Status Register */
-#define USBPHY0_PLL_SIC_TOG_PLL_DIV_SEL_MASK     (0x3U)                                              /*!< USBPHY0_PLL_SIC_TOG.PLL_DIV_SEL Mask    */
-#define USBPHY0_PLL_SIC_TOG_PLL_DIV_SEL_SHIFT    (0U)                                                /*!< USBPHY0_PLL_SIC_TOG.PLL_DIV_SEL Position*/
-#define USBPHY0_PLL_SIC_TOG_PLL_DIV_SEL(x)       (((uint32_t)(((uint32_t)(x))<<USBPHY0_PLL_SIC_TOG_PLL_DIV_SEL_SHIFT))&USBPHY0_PLL_SIC_TOG_PLL_DIV_SEL_MASK) /*!< USBPHY0_PLL_SIC_TOG.PLL_DIV_SEL Field   */
-#define USBPHY0_PLL_SIC_TOG_PLL_EN_USB_CLKS_MASK (0x40U)                                             /*!< USBPHY0_PLL_SIC_TOG.PLL_EN_USB_CLKS Mask*/
-#define USBPHY0_PLL_SIC_TOG_PLL_EN_USB_CLKS_SHIFT (6U)                                               /*!< USBPHY0_PLL_SIC_TOG.PLL_EN_USB_CLKS Position*/
-#define USBPHY0_PLL_SIC_TOG_PLL_EN_USB_CLKS(x)   (((uint32_t)(((uint32_t)(x))<<USBPHY0_PLL_SIC_TOG_PLL_EN_USB_CLKS_SHIFT))&USBPHY0_PLL_SIC_TOG_PLL_EN_USB_CLKS_MASK) /*!< USBPHY0_PLL_SIC_TOG.PLL_EN_USB_CLKS Field*/
-#define USBPHY0_PLL_SIC_TOG_PLL_HOLD_RING_OFF_MASK (0x800U)                                          /*!< USBPHY0_PLL_SIC_TOG.PLL_HOLD_RING_OFF Mask*/
-#define USBPHY0_PLL_SIC_TOG_PLL_HOLD_RING_OFF_SHIFT (11U)                                            /*!< USBPHY0_PLL_SIC_TOG.PLL_HOLD_RING_OFF Position*/
-#define USBPHY0_PLL_SIC_TOG_PLL_HOLD_RING_OFF(x) (((uint32_t)(((uint32_t)(x))<<USBPHY0_PLL_SIC_TOG_PLL_HOLD_RING_OFF_SHIFT))&USBPHY0_PLL_SIC_TOG_PLL_HOLD_RING_OFF_MASK) /*!< USBPHY0_PLL_SIC_TOG.PLL_HOLD_RING_OFF Field*/
-#define USBPHY0_PLL_SIC_TOG_PLL_POWER_MASK       (0x1000U)                                           /*!< USBPHY0_PLL_SIC_TOG.PLL_POWER Mask      */
-#define USBPHY0_PLL_SIC_TOG_PLL_POWER_SHIFT      (12U)                                               /*!< USBPHY0_PLL_SIC_TOG.PLL_POWER Position  */
-#define USBPHY0_PLL_SIC_TOG_PLL_POWER(x)         (((uint32_t)(((uint32_t)(x))<<USBPHY0_PLL_SIC_TOG_PLL_POWER_SHIFT))&USBPHY0_PLL_SIC_TOG_PLL_POWER_MASK) /*!< USBPHY0_PLL_SIC_TOG.PLL_POWER Field     */
-#define USBPHY0_PLL_SIC_TOG_PLL_ENABLE_MASK      (0x2000U)                                           /*!< USBPHY0_PLL_SIC_TOG.PLL_ENABLE Mask     */
-#define USBPHY0_PLL_SIC_TOG_PLL_ENABLE_SHIFT     (13U)                                               /*!< USBPHY0_PLL_SIC_TOG.PLL_ENABLE Position */
-#define USBPHY0_PLL_SIC_TOG_PLL_ENABLE(x)        (((uint32_t)(((uint32_t)(x))<<USBPHY0_PLL_SIC_TOG_PLL_ENABLE_SHIFT))&USBPHY0_PLL_SIC_TOG_PLL_ENABLE_MASK) /*!< USBPHY0_PLL_SIC_TOG.PLL_ENABLE Field    */
-#define USBPHY0_PLL_SIC_TOG_PLL_BYPASS_MASK      (0x10000U)                                          /*!< USBPHY0_PLL_SIC_TOG.PLL_BYPASS Mask     */
-#define USBPHY0_PLL_SIC_TOG_PLL_BYPASS_SHIFT     (16U)                                               /*!< USBPHY0_PLL_SIC_TOG.PLL_BYPASS Position */
-#define USBPHY0_PLL_SIC_TOG_PLL_BYPASS(x)        (((uint32_t)(((uint32_t)(x))<<USBPHY0_PLL_SIC_TOG_PLL_BYPASS_SHIFT))&USBPHY0_PLL_SIC_TOG_PLL_BYPASS_MASK) /*!< USBPHY0_PLL_SIC_TOG.PLL_BYPASS Field    */
-#define USBPHY0_PLL_SIC_TOG_PLL_LOCK_MASK        (0x80000000U)                                       /*!< USBPHY0_PLL_SIC_TOG.PLL_LOCK Mask       */
-#define USBPHY0_PLL_SIC_TOG_PLL_LOCK_SHIFT       (31U)                                               /*!< USBPHY0_PLL_SIC_TOG.PLL_LOCK Position   */
-#define USBPHY0_PLL_SIC_TOG_PLL_LOCK(x)          (((uint32_t)(((uint32_t)(x))<<USBPHY0_PLL_SIC_TOG_PLL_LOCK_SHIFT))&USBPHY0_PLL_SIC_TOG_PLL_LOCK_MASK) /*!< USBPHY0_PLL_SIC_TOG.PLL_LOCK Field      */
+#define USBPHY_PLL_SIC_TOG_PLL_DIV_SEL_MASK      (0x3U)                                              /*!< USBPHY1_PLL_SIC_TOG.PLL_DIV_SEL Mask    */
+#define USBPHY_PLL_SIC_TOG_PLL_DIV_SEL_SHIFT     (0U)                                                /*!< USBPHY1_PLL_SIC_TOG.PLL_DIV_SEL Position*/
+#define USBPHY_PLL_SIC_TOG_PLL_DIV_SEL(x)        (((uint32_t)(((uint32_t)(x))<<USBPHY_PLL_SIC_TOG_PLL_DIV_SEL_SHIFT))&USBPHY_PLL_SIC_TOG_PLL_DIV_SEL_MASK) /*!< USBPHY1_PLL_SIC_TOG.PLL_DIV_SEL Field   */
+#define USBPHY_PLL_SIC_TOG_PLL_EN_USB_CLKS_MASK  (0x40U)                                             /*!< USBPHY1_PLL_SIC_TOG.PLL_EN_USB_CLKS Mask*/
+#define USBPHY_PLL_SIC_TOG_PLL_EN_USB_CLKS_SHIFT (6U)                                                /*!< USBPHY1_PLL_SIC_TOG.PLL_EN_USB_CLKS Position*/
+#define USBPHY_PLL_SIC_TOG_PLL_EN_USB_CLKS(x)    (((uint32_t)(((uint32_t)(x))<<USBPHY_PLL_SIC_TOG_PLL_EN_USB_CLKS_SHIFT))&USBPHY_PLL_SIC_TOG_PLL_EN_USB_CLKS_MASK) /*!< USBPHY1_PLL_SIC_TOG.PLL_EN_USB_CLKS Field*/
+#define USBPHY_PLL_SIC_TOG_PLL_HOLD_RING_OFF_MASK (0x800U)                                           /*!< USBPHY1_PLL_SIC_TOG.PLL_HOLD_RING_OFF Mask*/
+#define USBPHY_PLL_SIC_TOG_PLL_HOLD_RING_OFF_SHIFT (11U)                                             /*!< USBPHY1_PLL_SIC_TOG.PLL_HOLD_RING_OFF Position*/
+#define USBPHY_PLL_SIC_TOG_PLL_HOLD_RING_OFF(x)  (((uint32_t)(((uint32_t)(x))<<USBPHY_PLL_SIC_TOG_PLL_HOLD_RING_OFF_SHIFT))&USBPHY_PLL_SIC_TOG_PLL_HOLD_RING_OFF_MASK) /*!< USBPHY1_PLL_SIC_TOG.PLL_HOLD_RING_OFF Field*/
+#define USBPHY_PLL_SIC_TOG_PLL_POWER_MASK        (0x1000U)                                           /*!< USBPHY1_PLL_SIC_TOG.PLL_POWER Mask      */
+#define USBPHY_PLL_SIC_TOG_PLL_POWER_SHIFT       (12U)                                               /*!< USBPHY1_PLL_SIC_TOG.PLL_POWER Position  */
+#define USBPHY_PLL_SIC_TOG_PLL_POWER(x)          (((uint32_t)(((uint32_t)(x))<<USBPHY_PLL_SIC_TOG_PLL_POWER_SHIFT))&USBPHY_PLL_SIC_TOG_PLL_POWER_MASK) /*!< USBPHY1_PLL_SIC_TOG.PLL_POWER Field     */
+#define USBPHY_PLL_SIC_TOG_PLL_ENABLE_MASK       (0x2000U)                                           /*!< USBPHY1_PLL_SIC_TOG.PLL_ENABLE Mask     */
+#define USBPHY_PLL_SIC_TOG_PLL_ENABLE_SHIFT      (13U)                                               /*!< USBPHY1_PLL_SIC_TOG.PLL_ENABLE Position */
+#define USBPHY_PLL_SIC_TOG_PLL_ENABLE(x)         (((uint32_t)(((uint32_t)(x))<<USBPHY_PLL_SIC_TOG_PLL_ENABLE_SHIFT))&USBPHY_PLL_SIC_TOG_PLL_ENABLE_MASK) /*!< USBPHY1_PLL_SIC_TOG.PLL_ENABLE Field    */
+#define USBPHY_PLL_SIC_TOG_PLL_BYPASS_MASK       (0x10000U)                                          /*!< USBPHY1_PLL_SIC_TOG.PLL_BYPASS Mask     */
+#define USBPHY_PLL_SIC_TOG_PLL_BYPASS_SHIFT      (16U)                                               /*!< USBPHY1_PLL_SIC_TOG.PLL_BYPASS Position */
+#define USBPHY_PLL_SIC_TOG_PLL_BYPASS(x)         (((uint32_t)(((uint32_t)(x))<<USBPHY_PLL_SIC_TOG_PLL_BYPASS_SHIFT))&USBPHY_PLL_SIC_TOG_PLL_BYPASS_MASK) /*!< USBPHY1_PLL_SIC_TOG.PLL_BYPASS Field    */
+#define USBPHY_PLL_SIC_TOG_PLL_LOCK_MASK         (0x80000000U)                                       /*!< USBPHY1_PLL_SIC_TOG.PLL_LOCK Mask       */
+#define USBPHY_PLL_SIC_TOG_PLL_LOCK_SHIFT        (31U)                                               /*!< USBPHY1_PLL_SIC_TOG.PLL_LOCK Position   */
+#define USBPHY_PLL_SIC_TOG_PLL_LOCK(x)           (((uint32_t)(((uint32_t)(x))<<USBPHY_PLL_SIC_TOG_PLL_LOCK_SHIFT))&USBPHY_PLL_SIC_TOG_PLL_LOCK_MASK) /*!< USBPHY1_PLL_SIC_TOG.PLL_LOCK Field      */
 
 /*! @name USB1_VBUS_DETECT - USB PHY VBUS Detect Control Register */
-#define USBPHY0_USB1_VBUS_DETECT_VBUSVALID_THRESH_MASK (0x7U)                                        /*!< USBPHY0_USB1_VBUS_DETECT.VBUSVALID_THRESH Mask*/
-#define USBPHY0_USB1_VBUS_DETECT_VBUSVALID_THRESH_SHIFT (0U)                                         /*!< USBPHY0_USB1_VBUS_DETECT.VBUSVALID_THRESH Position*/
-#define USBPHY0_USB1_VBUS_DETECT_VBUSVALID_THRESH(x) (((uint32_t)(((uint32_t)(x))<<USBPHY0_USB1_VBUS_DETECT_VBUSVALID_THRESH_SHIFT))&USBPHY0_USB1_VBUS_DETECT_VBUSVALID_THRESH_MASK) /*!< USBPHY0_USB1_VBUS_DETECT.VBUSVALID_THRESH Field*/
-#define USBPHY0_USB1_VBUS_DETECT_VBUS_OVERRIDE_EN_MASK (0x8U)                                        /*!< USBPHY0_USB1_VBUS_DETECT.VBUS_OVERRIDE_EN Mask*/
-#define USBPHY0_USB1_VBUS_DETECT_VBUS_OVERRIDE_EN_SHIFT (3U)                                         /*!< USBPHY0_USB1_VBUS_DETECT.VBUS_OVERRIDE_EN Position*/
-#define USBPHY0_USB1_VBUS_DETECT_VBUS_OVERRIDE_EN(x) (((uint32_t)(((uint32_t)(x))<<USBPHY0_USB1_VBUS_DETECT_VBUS_OVERRIDE_EN_SHIFT))&USBPHY0_USB1_VBUS_DETECT_VBUS_OVERRIDE_EN_MASK) /*!< USBPHY0_USB1_VBUS_DETECT.VBUS_OVERRIDE_EN Field*/
-#define USBPHY0_USB1_VBUS_DETECT_SESSEND_OVERRIDE_MASK (0x10U)                                       /*!< USBPHY0_USB1_VBUS_DETECT.SESSEND_OVERRIDE Mask*/
-#define USBPHY0_USB1_VBUS_DETECT_SESSEND_OVERRIDE_SHIFT (4U)                                         /*!< USBPHY0_USB1_VBUS_DETECT.SESSEND_OVERRIDE Position*/
-#define USBPHY0_USB1_VBUS_DETECT_SESSEND_OVERRIDE(x) (((uint32_t)(((uint32_t)(x))<<USBPHY0_USB1_VBUS_DETECT_SESSEND_OVERRIDE_SHIFT))&USBPHY0_USB1_VBUS_DETECT_SESSEND_OVERRIDE_MASK) /*!< USBPHY0_USB1_VBUS_DETECT.SESSEND_OVERRIDE Field*/
-#define USBPHY0_USB1_VBUS_DETECT_BVALID_OVERRIDE_MASK (0x20U)                                        /*!< USBPHY0_USB1_VBUS_DETECT.BVALID_OVERRIDE Mask*/
-#define USBPHY0_USB1_VBUS_DETECT_BVALID_OVERRIDE_SHIFT (5U)                                          /*!< USBPHY0_USB1_VBUS_DETECT.BVALID_OVERRIDE Position*/
-#define USBPHY0_USB1_VBUS_DETECT_BVALID_OVERRIDE(x) (((uint32_t)(((uint32_t)(x))<<USBPHY0_USB1_VBUS_DETECT_BVALID_OVERRIDE_SHIFT))&USBPHY0_USB1_VBUS_DETECT_BVALID_OVERRIDE_MASK) /*!< USBPHY0_USB1_VBUS_DETECT.BVALID_OVERRIDE Field*/
-#define USBPHY0_USB1_VBUS_DETECT_AVALID_OVERRIDE_MASK (0x40U)                                        /*!< USBPHY0_USB1_VBUS_DETECT.AVALID_OVERRIDE Mask*/
-#define USBPHY0_USB1_VBUS_DETECT_AVALID_OVERRIDE_SHIFT (6U)                                          /*!< USBPHY0_USB1_VBUS_DETECT.AVALID_OVERRIDE Position*/
-#define USBPHY0_USB1_VBUS_DETECT_AVALID_OVERRIDE(x) (((uint32_t)(((uint32_t)(x))<<USBPHY0_USB1_VBUS_DETECT_AVALID_OVERRIDE_SHIFT))&USBPHY0_USB1_VBUS_DETECT_AVALID_OVERRIDE_MASK) /*!< USBPHY0_USB1_VBUS_DETECT.AVALID_OVERRIDE Field*/
-#define USBPHY0_USB1_VBUS_DETECT_VBUSVALID_OVERRIDE_MASK (0x80U)                                     /*!< USBPHY0_USB1_VBUS_DETECT.VBUSVALID_OVERRIDE Mask*/
-#define USBPHY0_USB1_VBUS_DETECT_VBUSVALID_OVERRIDE_SHIFT (7U)                                       /*!< USBPHY0_USB1_VBUS_DETECT.VBUSVALID_OVERRIDE Position*/
-#define USBPHY0_USB1_VBUS_DETECT_VBUSVALID_OVERRIDE(x) (((uint32_t)(((uint32_t)(x))<<USBPHY0_USB1_VBUS_DETECT_VBUSVALID_OVERRIDE_SHIFT))&USBPHY0_USB1_VBUS_DETECT_VBUSVALID_OVERRIDE_MASK) /*!< USBPHY0_USB1_VBUS_DETECT.VBUSVALID_OVERRIDE Field*/
-#define USBPHY0_USB1_VBUS_DETECT_VBUSVALID_SEL_MASK (0x100U)                                         /*!< USBPHY0_USB1_VBUS_DETECT.VBUSVALID_SEL Mask*/
-#define USBPHY0_USB1_VBUS_DETECT_VBUSVALID_SEL_SHIFT (8U)                                            /*!< USBPHY0_USB1_VBUS_DETECT.VBUSVALID_SEL Position*/
-#define USBPHY0_USB1_VBUS_DETECT_VBUSVALID_SEL(x) (((uint32_t)(((uint32_t)(x))<<USBPHY0_USB1_VBUS_DETECT_VBUSVALID_SEL_SHIFT))&USBPHY0_USB1_VBUS_DETECT_VBUSVALID_SEL_MASK) /*!< USBPHY0_USB1_VBUS_DETECT.VBUSVALID_SEL Field*/
-#define USBPHY0_USB1_VBUS_DETECT_VBUS_SOURCE_SEL_MASK (0x600U)                                       /*!< USBPHY0_USB1_VBUS_DETECT.VBUS_SOURCE_SEL Mask*/
-#define USBPHY0_USB1_VBUS_DETECT_VBUS_SOURCE_SEL_SHIFT (9U)                                          /*!< USBPHY0_USB1_VBUS_DETECT.VBUS_SOURCE_SEL Position*/
-#define USBPHY0_USB1_VBUS_DETECT_VBUS_SOURCE_SEL(x) (((uint32_t)(((uint32_t)(x))<<USBPHY0_USB1_VBUS_DETECT_VBUS_SOURCE_SEL_SHIFT))&USBPHY0_USB1_VBUS_DETECT_VBUS_SOURCE_SEL_MASK) /*!< USBPHY0_USB1_VBUS_DETECT.VBUS_SOURCE_SEL Field*/
-#define USBPHY0_USB1_VBUS_DETECT_VBUSVALID_TO_SESSVALID_MASK (0x40000U)                              /*!< USBPHY0_USB1_VBUS_DETECT.VBUSVALID_TO_SESSVALID Mask*/
-#define USBPHY0_USB1_VBUS_DETECT_VBUSVALID_TO_SESSVALID_SHIFT (18U)                                  /*!< USBPHY0_USB1_VBUS_DETECT.VBUSVALID_TO_SESSVALID Position*/
-#define USBPHY0_USB1_VBUS_DETECT_VBUSVALID_TO_SESSVALID(x) (((uint32_t)(((uint32_t)(x))<<USBPHY0_USB1_VBUS_DETECT_VBUSVALID_TO_SESSVALID_SHIFT))&USBPHY0_USB1_VBUS_DETECT_VBUSVALID_TO_SESSVALID_MASK) /*!< USBPHY0_USB1_VBUS_DETECT.VBUSVALID_TO_SESSVALID Field*/
-#define USBPHY0_USB1_VBUS_DETECT_PWRUP_CMPS_MASK (0x100000U)                                         /*!< USBPHY0_USB1_VBUS_DETECT.PWRUP_CMPS Mask*/
-#define USBPHY0_USB1_VBUS_DETECT_PWRUP_CMPS_SHIFT (20U)                                              /*!< USBPHY0_USB1_VBUS_DETECT.PWRUP_CMPS Position*/
-#define USBPHY0_USB1_VBUS_DETECT_PWRUP_CMPS(x)   (((uint32_t)(((uint32_t)(x))<<USBPHY0_USB1_VBUS_DETECT_PWRUP_CMPS_SHIFT))&USBPHY0_USB1_VBUS_DETECT_PWRUP_CMPS_MASK) /*!< USBPHY0_USB1_VBUS_DETECT.PWRUP_CMPS Field*/
-#define USBPHY0_USB1_VBUS_DETECT_DISCHARGE_VBUS_MASK (0x4000000U)                                    /*!< USBPHY0_USB1_VBUS_DETECT.DISCHARGE_VBUS Mask*/
-#define USBPHY0_USB1_VBUS_DETECT_DISCHARGE_VBUS_SHIFT (26U)                                          /*!< USBPHY0_USB1_VBUS_DETECT.DISCHARGE_VBUS Position*/
-#define USBPHY0_USB1_VBUS_DETECT_DISCHARGE_VBUS(x) (((uint32_t)(((uint32_t)(x))<<USBPHY0_USB1_VBUS_DETECT_DISCHARGE_VBUS_SHIFT))&USBPHY0_USB1_VBUS_DETECT_DISCHARGE_VBUS_MASK) /*!< USBPHY0_USB1_VBUS_DETECT.DISCHARGE_VBUS Field*/
-#define USBPHY0_USB1_VBUS_DETECT_EN_CHARGER_RESISTOR_MASK (0x80000000U)                              /*!< USBPHY0_USB1_VBUS_DETECT.EN_CHARGER_RESISTOR Mask*/
-#define USBPHY0_USB1_VBUS_DETECT_EN_CHARGER_RESISTOR_SHIFT (31U)                                     /*!< USBPHY0_USB1_VBUS_DETECT.EN_CHARGER_RESISTOR Position*/
-#define USBPHY0_USB1_VBUS_DETECT_EN_CHARGER_RESISTOR(x) (((uint32_t)(((uint32_t)(x))<<USBPHY0_USB1_VBUS_DETECT_EN_CHARGER_RESISTOR_SHIFT))&USBPHY0_USB1_VBUS_DETECT_EN_CHARGER_RESISTOR_MASK) /*!< USBPHY0_USB1_VBUS_DETECT.EN_CHARGER_RESISTOR Field*/
+#define USBPHY_USB1_VBUS_DETECT_VBUSVALID_THRESH_MASK (0x7U)                                         /*!< USBPHY1_USB1_VBUS_DETECT.VBUSVALID_THRESH Mask*/
+#define USBPHY_USB1_VBUS_DETECT_VBUSVALID_THRESH_SHIFT (0U)                                          /*!< USBPHY1_USB1_VBUS_DETECT.VBUSVALID_THRESH Position*/
+#define USBPHY_USB1_VBUS_DETECT_VBUSVALID_THRESH(x) (((uint32_t)(((uint32_t)(x))<<USBPHY_USB1_VBUS_DETECT_VBUSVALID_THRESH_SHIFT))&USBPHY_USB1_VBUS_DETECT_VBUSVALID_THRESH_MASK) /*!< USBPHY1_USB1_VBUS_DETECT.VBUSVALID_THRESH Field*/
+#define USBPHY_USB1_VBUS_DETECT_VBUS_OVERRIDE_EN_MASK (0x8U)                                         /*!< USBPHY1_USB1_VBUS_DETECT.VBUS_OVERRIDE_EN Mask*/
+#define USBPHY_USB1_VBUS_DETECT_VBUS_OVERRIDE_EN_SHIFT (3U)                                          /*!< USBPHY1_USB1_VBUS_DETECT.VBUS_OVERRIDE_EN Position*/
+#define USBPHY_USB1_VBUS_DETECT_VBUS_OVERRIDE_EN(x) (((uint32_t)(((uint32_t)(x))<<USBPHY_USB1_VBUS_DETECT_VBUS_OVERRIDE_EN_SHIFT))&USBPHY_USB1_VBUS_DETECT_VBUS_OVERRIDE_EN_MASK) /*!< USBPHY1_USB1_VBUS_DETECT.VBUS_OVERRIDE_EN Field*/
+#define USBPHY_USB1_VBUS_DETECT_SESSEND_OVERRIDE_MASK (0x10U)                                        /*!< USBPHY1_USB1_VBUS_DETECT.SESSEND_OVERRIDE Mask*/
+#define USBPHY_USB1_VBUS_DETECT_SESSEND_OVERRIDE_SHIFT (4U)                                          /*!< USBPHY1_USB1_VBUS_DETECT.SESSEND_OVERRIDE Position*/
+#define USBPHY_USB1_VBUS_DETECT_SESSEND_OVERRIDE(x) (((uint32_t)(((uint32_t)(x))<<USBPHY_USB1_VBUS_DETECT_SESSEND_OVERRIDE_SHIFT))&USBPHY_USB1_VBUS_DETECT_SESSEND_OVERRIDE_MASK) /*!< USBPHY1_USB1_VBUS_DETECT.SESSEND_OVERRIDE Field*/
+#define USBPHY_USB1_VBUS_DETECT_BVALID_OVERRIDE_MASK (0x20U)                                         /*!< USBPHY1_USB1_VBUS_DETECT.BVALID_OVERRIDE Mask*/
+#define USBPHY_USB1_VBUS_DETECT_BVALID_OVERRIDE_SHIFT (5U)                                           /*!< USBPHY1_USB1_VBUS_DETECT.BVALID_OVERRIDE Position*/
+#define USBPHY_USB1_VBUS_DETECT_BVALID_OVERRIDE(x) (((uint32_t)(((uint32_t)(x))<<USBPHY_USB1_VBUS_DETECT_BVALID_OVERRIDE_SHIFT))&USBPHY_USB1_VBUS_DETECT_BVALID_OVERRIDE_MASK) /*!< USBPHY1_USB1_VBUS_DETECT.BVALID_OVERRIDE Field*/
+#define USBPHY_USB1_VBUS_DETECT_AVALID_OVERRIDE_MASK (0x40U)                                         /*!< USBPHY1_USB1_VBUS_DETECT.AVALID_OVERRIDE Mask*/
+#define USBPHY_USB1_VBUS_DETECT_AVALID_OVERRIDE_SHIFT (6U)                                           /*!< USBPHY1_USB1_VBUS_DETECT.AVALID_OVERRIDE Position*/
+#define USBPHY_USB1_VBUS_DETECT_AVALID_OVERRIDE(x) (((uint32_t)(((uint32_t)(x))<<USBPHY_USB1_VBUS_DETECT_AVALID_OVERRIDE_SHIFT))&USBPHY_USB1_VBUS_DETECT_AVALID_OVERRIDE_MASK) /*!< USBPHY1_USB1_VBUS_DETECT.AVALID_OVERRIDE Field*/
+#define USBPHY_USB1_VBUS_DETECT_VBUSVALID_OVERRIDE_MASK (0x80U)                                      /*!< USBPHY1_USB1_VBUS_DETECT.VBUSVALID_OVERRIDE Mask*/
+#define USBPHY_USB1_VBUS_DETECT_VBUSVALID_OVERRIDE_SHIFT (7U)                                        /*!< USBPHY1_USB1_VBUS_DETECT.VBUSVALID_OVERRIDE Position*/
+#define USBPHY_USB1_VBUS_DETECT_VBUSVALID_OVERRIDE(x) (((uint32_t)(((uint32_t)(x))<<USBPHY_USB1_VBUS_DETECT_VBUSVALID_OVERRIDE_SHIFT))&USBPHY_USB1_VBUS_DETECT_VBUSVALID_OVERRIDE_MASK) /*!< USBPHY1_USB1_VBUS_DETECT.VBUSVALID_OVERRIDE Field*/
+#define USBPHY_USB1_VBUS_DETECT_VBUSVALID_SEL_MASK (0x100U)                                          /*!< USBPHY1_USB1_VBUS_DETECT.VBUSVALID_SEL Mask*/
+#define USBPHY_USB1_VBUS_DETECT_VBUSVALID_SEL_SHIFT (8U)                                             /*!< USBPHY1_USB1_VBUS_DETECT.VBUSVALID_SEL Position*/
+#define USBPHY_USB1_VBUS_DETECT_VBUSVALID_SEL(x) (((uint32_t)(((uint32_t)(x))<<USBPHY_USB1_VBUS_DETECT_VBUSVALID_SEL_SHIFT))&USBPHY_USB1_VBUS_DETECT_VBUSVALID_SEL_MASK) /*!< USBPHY1_USB1_VBUS_DETECT.VBUSVALID_SEL Field*/
+#define USBPHY_USB1_VBUS_DETECT_VBUS_SOURCE_SEL_MASK (0x600U)                                        /*!< USBPHY1_USB1_VBUS_DETECT.VBUS_SOURCE_SEL Mask*/
+#define USBPHY_USB1_VBUS_DETECT_VBUS_SOURCE_SEL_SHIFT (9U)                                           /*!< USBPHY1_USB1_VBUS_DETECT.VBUS_SOURCE_SEL Position*/
+#define USBPHY_USB1_VBUS_DETECT_VBUS_SOURCE_SEL(x) (((uint32_t)(((uint32_t)(x))<<USBPHY_USB1_VBUS_DETECT_VBUS_SOURCE_SEL_SHIFT))&USBPHY_USB1_VBUS_DETECT_VBUS_SOURCE_SEL_MASK) /*!< USBPHY1_USB1_VBUS_DETECT.VBUS_SOURCE_SEL Field*/
+#define USBPHY_USB1_VBUS_DETECT_VBUSVALID_TO_SESSVALID_MASK (0x40000U)                               /*!< USBPHY1_USB1_VBUS_DETECT.VBUSVALID_TO_SESSVALID Mask*/
+#define USBPHY_USB1_VBUS_DETECT_VBUSVALID_TO_SESSVALID_SHIFT (18U)                                   /*!< USBPHY1_USB1_VBUS_DETECT.VBUSVALID_TO_SESSVALID Position*/
+#define USBPHY_USB1_VBUS_DETECT_VBUSVALID_TO_SESSVALID(x) (((uint32_t)(((uint32_t)(x))<<USBPHY_USB1_VBUS_DETECT_VBUSVALID_TO_SESSVALID_SHIFT))&USBPHY_USB1_VBUS_DETECT_VBUSVALID_TO_SESSVALID_MASK) /*!< USBPHY1_USB1_VBUS_DETECT.VBUSVALID_TO_SESSVALID Field*/
+#define USBPHY_USB1_VBUS_DETECT_PWRUP_CMPS_MASK  (0x100000U)                                         /*!< USBPHY1_USB1_VBUS_DETECT.PWRUP_CMPS Mask*/
+#define USBPHY_USB1_VBUS_DETECT_PWRUP_CMPS_SHIFT (20U)                                               /*!< USBPHY1_USB1_VBUS_DETECT.PWRUP_CMPS Position*/
+#define USBPHY_USB1_VBUS_DETECT_PWRUP_CMPS(x)    (((uint32_t)(((uint32_t)(x))<<USBPHY_USB1_VBUS_DETECT_PWRUP_CMPS_SHIFT))&USBPHY_USB1_VBUS_DETECT_PWRUP_CMPS_MASK) /*!< USBPHY1_USB1_VBUS_DETECT.PWRUP_CMPS Field*/
+#define USBPHY_USB1_VBUS_DETECT_DISCHARGE_VBUS_MASK (0x4000000U)                                     /*!< USBPHY1_USB1_VBUS_DETECT.DISCHARGE_VBUS Mask*/
+#define USBPHY_USB1_VBUS_DETECT_DISCHARGE_VBUS_SHIFT (26U)                                           /*!< USBPHY1_USB1_VBUS_DETECT.DISCHARGE_VBUS Position*/
+#define USBPHY_USB1_VBUS_DETECT_DISCHARGE_VBUS(x) (((uint32_t)(((uint32_t)(x))<<USBPHY_USB1_VBUS_DETECT_DISCHARGE_VBUS_SHIFT))&USBPHY_USB1_VBUS_DETECT_DISCHARGE_VBUS_MASK) /*!< USBPHY1_USB1_VBUS_DETECT.DISCHARGE_VBUS Field*/
+#define USBPHY_USB1_VBUS_DETECT_EN_CHARGER_RESISTOR_MASK (0x80000000U)                               /*!< USBPHY1_USB1_VBUS_DETECT.EN_CHARGER_RESISTOR Mask*/
+#define USBPHY_USB1_VBUS_DETECT_EN_CHARGER_RESISTOR_SHIFT (31U)                                      /*!< USBPHY1_USB1_VBUS_DETECT.EN_CHARGER_RESISTOR Position*/
+#define USBPHY_USB1_VBUS_DETECT_EN_CHARGER_RESISTOR(x) (((uint32_t)(((uint32_t)(x))<<USBPHY_USB1_VBUS_DETECT_EN_CHARGER_RESISTOR_SHIFT))&USBPHY_USB1_VBUS_DETECT_EN_CHARGER_RESISTOR_MASK) /*!< USBPHY1_USB1_VBUS_DETECT.EN_CHARGER_RESISTOR Field*/
 
 /*! @name USB1_VBUS_DETECT_SET - USB PHY VBUS Detect Control Register */
-#define USBPHY0_USB1_VBUS_DETECT_SET_VBUSVALID_THRESH_MASK (0x7U)                                    /*!< USBPHY0_USB1_VBUS_DETECT_SET.VBUSVALID_THRESH Mask*/
-#define USBPHY0_USB1_VBUS_DETECT_SET_VBUSVALID_THRESH_SHIFT (0U)                                     /*!< USBPHY0_USB1_VBUS_DETECT_SET.VBUSVALID_THRESH Position*/
-#define USBPHY0_USB1_VBUS_DETECT_SET_VBUSVALID_THRESH(x) (((uint32_t)(((uint32_t)(x))<<USBPHY0_USB1_VBUS_DETECT_SET_VBUSVALID_THRESH_SHIFT))&USBPHY0_USB1_VBUS_DETECT_SET_VBUSVALID_THRESH_MASK) /*!< USBPHY0_USB1_VBUS_DETECT_SET.VBUSVALID_THRESH Field*/
-#define USBPHY0_USB1_VBUS_DETECT_SET_VBUS_OVERRIDE_EN_MASK (0x8U)                                    /*!< USBPHY0_USB1_VBUS_DETECT_SET.VBUS_OVERRIDE_EN Mask*/
-#define USBPHY0_USB1_VBUS_DETECT_SET_VBUS_OVERRIDE_EN_SHIFT (3U)                                     /*!< USBPHY0_USB1_VBUS_DETECT_SET.VBUS_OVERRIDE_EN Position*/
-#define USBPHY0_USB1_VBUS_DETECT_SET_VBUS_OVERRIDE_EN(x) (((uint32_t)(((uint32_t)(x))<<USBPHY0_USB1_VBUS_DETECT_SET_VBUS_OVERRIDE_EN_SHIFT))&USBPHY0_USB1_VBUS_DETECT_SET_VBUS_OVERRIDE_EN_MASK) /*!< USBPHY0_USB1_VBUS_DETECT_SET.VBUS_OVERRIDE_EN Field*/
-#define USBPHY0_USB1_VBUS_DETECT_SET_SESSEND_OVERRIDE_MASK (0x10U)                                   /*!< USBPHY0_USB1_VBUS_DETECT_SET.SESSEND_OVERRIDE Mask*/
-#define USBPHY0_USB1_VBUS_DETECT_SET_SESSEND_OVERRIDE_SHIFT (4U)                                     /*!< USBPHY0_USB1_VBUS_DETECT_SET.SESSEND_OVERRIDE Position*/
-#define USBPHY0_USB1_VBUS_DETECT_SET_SESSEND_OVERRIDE(x) (((uint32_t)(((uint32_t)(x))<<USBPHY0_USB1_VBUS_DETECT_SET_SESSEND_OVERRIDE_SHIFT))&USBPHY0_USB1_VBUS_DETECT_SET_SESSEND_OVERRIDE_MASK) /*!< USBPHY0_USB1_VBUS_DETECT_SET.SESSEND_OVERRIDE Field*/
-#define USBPHY0_USB1_VBUS_DETECT_SET_BVALID_OVERRIDE_MASK (0x20U)                                    /*!< USBPHY0_USB1_VBUS_DETECT_SET.BVALID_OVERRIDE Mask*/
-#define USBPHY0_USB1_VBUS_DETECT_SET_BVALID_OVERRIDE_SHIFT (5U)                                      /*!< USBPHY0_USB1_VBUS_DETECT_SET.BVALID_OVERRIDE Position*/
-#define USBPHY0_USB1_VBUS_DETECT_SET_BVALID_OVERRIDE(x) (((uint32_t)(((uint32_t)(x))<<USBPHY0_USB1_VBUS_DETECT_SET_BVALID_OVERRIDE_SHIFT))&USBPHY0_USB1_VBUS_DETECT_SET_BVALID_OVERRIDE_MASK) /*!< USBPHY0_USB1_VBUS_DETECT_SET.BVALID_OVERRIDE Field*/
-#define USBPHY0_USB1_VBUS_DETECT_SET_AVALID_OVERRIDE_MASK (0x40U)                                    /*!< USBPHY0_USB1_VBUS_DETECT_SET.AVALID_OVERRIDE Mask*/
-#define USBPHY0_USB1_VBUS_DETECT_SET_AVALID_OVERRIDE_SHIFT (6U)                                      /*!< USBPHY0_USB1_VBUS_DETECT_SET.AVALID_OVERRIDE Position*/
-#define USBPHY0_USB1_VBUS_DETECT_SET_AVALID_OVERRIDE(x) (((uint32_t)(((uint32_t)(x))<<USBPHY0_USB1_VBUS_DETECT_SET_AVALID_OVERRIDE_SHIFT))&USBPHY0_USB1_VBUS_DETECT_SET_AVALID_OVERRIDE_MASK) /*!< USBPHY0_USB1_VBUS_DETECT_SET.AVALID_OVERRIDE Field*/
-#define USBPHY0_USB1_VBUS_DETECT_SET_VBUSVALID_OVERRIDE_MASK (0x80U)                                 /*!< USBPHY0_USB1_VBUS_DETECT_SET.VBUSVALID_OVERRIDE Mask*/
-#define USBPHY0_USB1_VBUS_DETECT_SET_VBUSVALID_OVERRIDE_SHIFT (7U)                                   /*!< USBPHY0_USB1_VBUS_DETECT_SET.VBUSVALID_OVERRIDE Position*/
-#define USBPHY0_USB1_VBUS_DETECT_SET_VBUSVALID_OVERRIDE(x) (((uint32_t)(((uint32_t)(x))<<USBPHY0_USB1_VBUS_DETECT_SET_VBUSVALID_OVERRIDE_SHIFT))&USBPHY0_USB1_VBUS_DETECT_SET_VBUSVALID_OVERRIDE_MASK) /*!< USBPHY0_USB1_VBUS_DETECT_SET.VBUSVALID_OVERRIDE Field*/
-#define USBPHY0_USB1_VBUS_DETECT_SET_VBUSVALID_SEL_MASK (0x100U)                                     /*!< USBPHY0_USB1_VBUS_DETECT_SET.VBUSVALID_SEL Mask*/
-#define USBPHY0_USB1_VBUS_DETECT_SET_VBUSVALID_SEL_SHIFT (8U)                                        /*!< USBPHY0_USB1_VBUS_DETECT_SET.VBUSVALID_SEL Position*/
-#define USBPHY0_USB1_VBUS_DETECT_SET_VBUSVALID_SEL(x) (((uint32_t)(((uint32_t)(x))<<USBPHY0_USB1_VBUS_DETECT_SET_VBUSVALID_SEL_SHIFT))&USBPHY0_USB1_VBUS_DETECT_SET_VBUSVALID_SEL_MASK) /*!< USBPHY0_USB1_VBUS_DETECT_SET.VBUSVALID_SEL Field*/
-#define USBPHY0_USB1_VBUS_DETECT_SET_VBUS_SOURCE_SEL_MASK (0x600U)                                   /*!< USBPHY0_USB1_VBUS_DETECT_SET.VBUS_SOURCE_SEL Mask*/
-#define USBPHY0_USB1_VBUS_DETECT_SET_VBUS_SOURCE_SEL_SHIFT (9U)                                      /*!< USBPHY0_USB1_VBUS_DETECT_SET.VBUS_SOURCE_SEL Position*/
-#define USBPHY0_USB1_VBUS_DETECT_SET_VBUS_SOURCE_SEL(x) (((uint32_t)(((uint32_t)(x))<<USBPHY0_USB1_VBUS_DETECT_SET_VBUS_SOURCE_SEL_SHIFT))&USBPHY0_USB1_VBUS_DETECT_SET_VBUS_SOURCE_SEL_MASK) /*!< USBPHY0_USB1_VBUS_DETECT_SET.VBUS_SOURCE_SEL Field*/
-#define USBPHY0_USB1_VBUS_DETECT_SET_VBUSVALID_TO_SESSVALID_MASK (0x40000U)                          /*!< USBPHY0_USB1_VBUS_DETECT_SET.VBUSVALID_TO_SESSVALID Mask*/
-#define USBPHY0_USB1_VBUS_DETECT_SET_VBUSVALID_TO_SESSVALID_SHIFT (18U)                              /*!< USBPHY0_USB1_VBUS_DETECT_SET.VBUSVALID_TO_SESSVALID Position*/
-#define USBPHY0_USB1_VBUS_DETECT_SET_VBUSVALID_TO_SESSVALID(x) (((uint32_t)(((uint32_t)(x))<<USBPHY0_USB1_VBUS_DETECT_SET_VBUSVALID_TO_SESSVALID_SHIFT))&USBPHY0_USB1_VBUS_DETECT_SET_VBUSVALID_TO_SESSVALID_MASK) /*!< USBPHY0_USB1_VBUS_DETECT_SET.VBUSVALID_TO_SESSVALID Field*/
-#define USBPHY0_USB1_VBUS_DETECT_SET_PWRUP_CMPS_MASK (0x100000U)                                     /*!< USBPHY0_USB1_VBUS_DETECT_SET.PWRUP_CMPS Mask*/
-#define USBPHY0_USB1_VBUS_DETECT_SET_PWRUP_CMPS_SHIFT (20U)                                          /*!< USBPHY0_USB1_VBUS_DETECT_SET.PWRUP_CMPS Position*/
-#define USBPHY0_USB1_VBUS_DETECT_SET_PWRUP_CMPS(x) (((uint32_t)(((uint32_t)(x))<<USBPHY0_USB1_VBUS_DETECT_SET_PWRUP_CMPS_SHIFT))&USBPHY0_USB1_VBUS_DETECT_SET_PWRUP_CMPS_MASK) /*!< USBPHY0_USB1_VBUS_DETECT_SET.PWRUP_CMPS Field*/
-#define USBPHY0_USB1_VBUS_DETECT_SET_DISCHARGE_VBUS_MASK (0x4000000U)                                /*!< USBPHY0_USB1_VBUS_DETECT_SET.DISCHARGE_VBUS Mask*/
-#define USBPHY0_USB1_VBUS_DETECT_SET_DISCHARGE_VBUS_SHIFT (26U)                                      /*!< USBPHY0_USB1_VBUS_DETECT_SET.DISCHARGE_VBUS Position*/
-#define USBPHY0_USB1_VBUS_DETECT_SET_DISCHARGE_VBUS(x) (((uint32_t)(((uint32_t)(x))<<USBPHY0_USB1_VBUS_DETECT_SET_DISCHARGE_VBUS_SHIFT))&USBPHY0_USB1_VBUS_DETECT_SET_DISCHARGE_VBUS_MASK) /*!< USBPHY0_USB1_VBUS_DETECT_SET.DISCHARGE_VBUS Field*/
-#define USBPHY0_USB1_VBUS_DETECT_SET_EN_CHARGER_RESISTOR_MASK (0x80000000U)                          /*!< USBPHY0_USB1_VBUS_DETECT_SET.EN_CHARGER_RESISTOR Mask*/
-#define USBPHY0_USB1_VBUS_DETECT_SET_EN_CHARGER_RESISTOR_SHIFT (31U)                                 /*!< USBPHY0_USB1_VBUS_DETECT_SET.EN_CHARGER_RESISTOR Position*/
-#define USBPHY0_USB1_VBUS_DETECT_SET_EN_CHARGER_RESISTOR(x) (((uint32_t)(((uint32_t)(x))<<USBPHY0_USB1_VBUS_DETECT_SET_EN_CHARGER_RESISTOR_SHIFT))&USBPHY0_USB1_VBUS_DETECT_SET_EN_CHARGER_RESISTOR_MASK) /*!< USBPHY0_USB1_VBUS_DETECT_SET.EN_CHARGER_RESISTOR Field*/
+#define USBPHY_USB1_VBUS_DETECT_SET_VBUSVALID_THRESH_MASK (0x7U)                                     /*!< USBPHY1_USB1_VBUS_DETECT_SET.VBUSVALID_THRESH Mask*/
+#define USBPHY_USB1_VBUS_DETECT_SET_VBUSVALID_THRESH_SHIFT (0U)                                      /*!< USBPHY1_USB1_VBUS_DETECT_SET.VBUSVALID_THRESH Position*/
+#define USBPHY_USB1_VBUS_DETECT_SET_VBUSVALID_THRESH(x) (((uint32_t)(((uint32_t)(x))<<USBPHY_USB1_VBUS_DETECT_SET_VBUSVALID_THRESH_SHIFT))&USBPHY_USB1_VBUS_DETECT_SET_VBUSVALID_THRESH_MASK) /*!< USBPHY1_USB1_VBUS_DETECT_SET.VBUSVALID_THRESH Field*/
+#define USBPHY_USB1_VBUS_DETECT_SET_VBUS_OVERRIDE_EN_MASK (0x8U)                                     /*!< USBPHY1_USB1_VBUS_DETECT_SET.VBUS_OVERRIDE_EN Mask*/
+#define USBPHY_USB1_VBUS_DETECT_SET_VBUS_OVERRIDE_EN_SHIFT (3U)                                      /*!< USBPHY1_USB1_VBUS_DETECT_SET.VBUS_OVERRIDE_EN Position*/
+#define USBPHY_USB1_VBUS_DETECT_SET_VBUS_OVERRIDE_EN(x) (((uint32_t)(((uint32_t)(x))<<USBPHY_USB1_VBUS_DETECT_SET_VBUS_OVERRIDE_EN_SHIFT))&USBPHY_USB1_VBUS_DETECT_SET_VBUS_OVERRIDE_EN_MASK) /*!< USBPHY1_USB1_VBUS_DETECT_SET.VBUS_OVERRIDE_EN Field*/
+#define USBPHY_USB1_VBUS_DETECT_SET_SESSEND_OVERRIDE_MASK (0x10U)                                    /*!< USBPHY1_USB1_VBUS_DETECT_SET.SESSEND_OVERRIDE Mask*/
+#define USBPHY_USB1_VBUS_DETECT_SET_SESSEND_OVERRIDE_SHIFT (4U)                                      /*!< USBPHY1_USB1_VBUS_DETECT_SET.SESSEND_OVERRIDE Position*/
+#define USBPHY_USB1_VBUS_DETECT_SET_SESSEND_OVERRIDE(x) (((uint32_t)(((uint32_t)(x))<<USBPHY_USB1_VBUS_DETECT_SET_SESSEND_OVERRIDE_SHIFT))&USBPHY_USB1_VBUS_DETECT_SET_SESSEND_OVERRIDE_MASK) /*!< USBPHY1_USB1_VBUS_DETECT_SET.SESSEND_OVERRIDE Field*/
+#define USBPHY_USB1_VBUS_DETECT_SET_BVALID_OVERRIDE_MASK (0x20U)                                     /*!< USBPHY1_USB1_VBUS_DETECT_SET.BVALID_OVERRIDE Mask*/
+#define USBPHY_USB1_VBUS_DETECT_SET_BVALID_OVERRIDE_SHIFT (5U)                                       /*!< USBPHY1_USB1_VBUS_DETECT_SET.BVALID_OVERRIDE Position*/
+#define USBPHY_USB1_VBUS_DETECT_SET_BVALID_OVERRIDE(x) (((uint32_t)(((uint32_t)(x))<<USBPHY_USB1_VBUS_DETECT_SET_BVALID_OVERRIDE_SHIFT))&USBPHY_USB1_VBUS_DETECT_SET_BVALID_OVERRIDE_MASK) /*!< USBPHY1_USB1_VBUS_DETECT_SET.BVALID_OVERRIDE Field*/
+#define USBPHY_USB1_VBUS_DETECT_SET_AVALID_OVERRIDE_MASK (0x40U)                                     /*!< USBPHY1_USB1_VBUS_DETECT_SET.AVALID_OVERRIDE Mask*/
+#define USBPHY_USB1_VBUS_DETECT_SET_AVALID_OVERRIDE_SHIFT (6U)                                       /*!< USBPHY1_USB1_VBUS_DETECT_SET.AVALID_OVERRIDE Position*/
+#define USBPHY_USB1_VBUS_DETECT_SET_AVALID_OVERRIDE(x) (((uint32_t)(((uint32_t)(x))<<USBPHY_USB1_VBUS_DETECT_SET_AVALID_OVERRIDE_SHIFT))&USBPHY_USB1_VBUS_DETECT_SET_AVALID_OVERRIDE_MASK) /*!< USBPHY1_USB1_VBUS_DETECT_SET.AVALID_OVERRIDE Field*/
+#define USBPHY_USB1_VBUS_DETECT_SET_VBUSVALID_OVERRIDE_MASK (0x80U)                                  /*!< USBPHY1_USB1_VBUS_DETECT_SET.VBUSVALID_OVERRIDE Mask*/
+#define USBPHY_USB1_VBUS_DETECT_SET_VBUSVALID_OVERRIDE_SHIFT (7U)                                    /*!< USBPHY1_USB1_VBUS_DETECT_SET.VBUSVALID_OVERRIDE Position*/
+#define USBPHY_USB1_VBUS_DETECT_SET_VBUSVALID_OVERRIDE(x) (((uint32_t)(((uint32_t)(x))<<USBPHY_USB1_VBUS_DETECT_SET_VBUSVALID_OVERRIDE_SHIFT))&USBPHY_USB1_VBUS_DETECT_SET_VBUSVALID_OVERRIDE_MASK) /*!< USBPHY1_USB1_VBUS_DETECT_SET.VBUSVALID_OVERRIDE Field*/
+#define USBPHY_USB1_VBUS_DETECT_SET_VBUSVALID_SEL_MASK (0x100U)                                      /*!< USBPHY1_USB1_VBUS_DETECT_SET.VBUSVALID_SEL Mask*/
+#define USBPHY_USB1_VBUS_DETECT_SET_VBUSVALID_SEL_SHIFT (8U)                                         /*!< USBPHY1_USB1_VBUS_DETECT_SET.VBUSVALID_SEL Position*/
+#define USBPHY_USB1_VBUS_DETECT_SET_VBUSVALID_SEL(x) (((uint32_t)(((uint32_t)(x))<<USBPHY_USB1_VBUS_DETECT_SET_VBUSVALID_SEL_SHIFT))&USBPHY_USB1_VBUS_DETECT_SET_VBUSVALID_SEL_MASK) /*!< USBPHY1_USB1_VBUS_DETECT_SET.VBUSVALID_SEL Field*/
+#define USBPHY_USB1_VBUS_DETECT_SET_VBUS_SOURCE_SEL_MASK (0x600U)                                    /*!< USBPHY1_USB1_VBUS_DETECT_SET.VBUS_SOURCE_SEL Mask*/
+#define USBPHY_USB1_VBUS_DETECT_SET_VBUS_SOURCE_SEL_SHIFT (9U)                                       /*!< USBPHY1_USB1_VBUS_DETECT_SET.VBUS_SOURCE_SEL Position*/
+#define USBPHY_USB1_VBUS_DETECT_SET_VBUS_SOURCE_SEL(x) (((uint32_t)(((uint32_t)(x))<<USBPHY_USB1_VBUS_DETECT_SET_VBUS_SOURCE_SEL_SHIFT))&USBPHY_USB1_VBUS_DETECT_SET_VBUS_SOURCE_SEL_MASK) /*!< USBPHY1_USB1_VBUS_DETECT_SET.VBUS_SOURCE_SEL Field*/
+#define USBPHY_USB1_VBUS_DETECT_SET_VBUSVALID_TO_SESSVALID_MASK (0x40000U)                           /*!< USBPHY1_USB1_VBUS_DETECT_SET.VBUSVALID_TO_SESSVALID Mask*/
+#define USBPHY_USB1_VBUS_DETECT_SET_VBUSVALID_TO_SESSVALID_SHIFT (18U)                               /*!< USBPHY1_USB1_VBUS_DETECT_SET.VBUSVALID_TO_SESSVALID Position*/
+#define USBPHY_USB1_VBUS_DETECT_SET_VBUSVALID_TO_SESSVALID(x) (((uint32_t)(((uint32_t)(x))<<USBPHY_USB1_VBUS_DETECT_SET_VBUSVALID_TO_SESSVALID_SHIFT))&USBPHY_USB1_VBUS_DETECT_SET_VBUSVALID_TO_SESSVALID_MASK) /*!< USBPHY1_USB1_VBUS_DETECT_SET.VBUSVALID_TO_SESSVALID Field*/
+#define USBPHY_USB1_VBUS_DETECT_SET_PWRUP_CMPS_MASK (0x100000U)                                      /*!< USBPHY1_USB1_VBUS_DETECT_SET.PWRUP_CMPS Mask*/
+#define USBPHY_USB1_VBUS_DETECT_SET_PWRUP_CMPS_SHIFT (20U)                                           /*!< USBPHY1_USB1_VBUS_DETECT_SET.PWRUP_CMPS Position*/
+#define USBPHY_USB1_VBUS_DETECT_SET_PWRUP_CMPS(x) (((uint32_t)(((uint32_t)(x))<<USBPHY_USB1_VBUS_DETECT_SET_PWRUP_CMPS_SHIFT))&USBPHY_USB1_VBUS_DETECT_SET_PWRUP_CMPS_MASK) /*!< USBPHY1_USB1_VBUS_DETECT_SET.PWRUP_CMPS Field*/
+#define USBPHY_USB1_VBUS_DETECT_SET_DISCHARGE_VBUS_MASK (0x4000000U)                                 /*!< USBPHY1_USB1_VBUS_DETECT_SET.DISCHARGE_VBUS Mask*/
+#define USBPHY_USB1_VBUS_DETECT_SET_DISCHARGE_VBUS_SHIFT (26U)                                       /*!< USBPHY1_USB1_VBUS_DETECT_SET.DISCHARGE_VBUS Position*/
+#define USBPHY_USB1_VBUS_DETECT_SET_DISCHARGE_VBUS(x) (((uint32_t)(((uint32_t)(x))<<USBPHY_USB1_VBUS_DETECT_SET_DISCHARGE_VBUS_SHIFT))&USBPHY_USB1_VBUS_DETECT_SET_DISCHARGE_VBUS_MASK) /*!< USBPHY1_USB1_VBUS_DETECT_SET.DISCHARGE_VBUS Field*/
+#define USBPHY_USB1_VBUS_DETECT_SET_EN_CHARGER_RESISTOR_MASK (0x80000000U)                           /*!< USBPHY1_USB1_VBUS_DETECT_SET.EN_CHARGER_RESISTOR Mask*/
+#define USBPHY_USB1_VBUS_DETECT_SET_EN_CHARGER_RESISTOR_SHIFT (31U)                                  /*!< USBPHY1_USB1_VBUS_DETECT_SET.EN_CHARGER_RESISTOR Position*/
+#define USBPHY_USB1_VBUS_DETECT_SET_EN_CHARGER_RESISTOR(x) (((uint32_t)(((uint32_t)(x))<<USBPHY_USB1_VBUS_DETECT_SET_EN_CHARGER_RESISTOR_SHIFT))&USBPHY_USB1_VBUS_DETECT_SET_EN_CHARGER_RESISTOR_MASK) /*!< USBPHY1_USB1_VBUS_DETECT_SET.EN_CHARGER_RESISTOR Field*/
 
 /*! @name USB1_VBUS_DETECT_CLR - USB PHY VBUS Detect Control Register */
-#define USBPHY0_USB1_VBUS_DETECT_CLR_VBUSVALID_THRESH_MASK (0x7U)                                    /*!< USBPHY0_USB1_VBUS_DETECT_CLR.VBUSVALID_THRESH Mask*/
-#define USBPHY0_USB1_VBUS_DETECT_CLR_VBUSVALID_THRESH_SHIFT (0U)                                     /*!< USBPHY0_USB1_VBUS_DETECT_CLR.VBUSVALID_THRESH Position*/
-#define USBPHY0_USB1_VBUS_DETECT_CLR_VBUSVALID_THRESH(x) (((uint32_t)(((uint32_t)(x))<<USBPHY0_USB1_VBUS_DETECT_CLR_VBUSVALID_THRESH_SHIFT))&USBPHY0_USB1_VBUS_DETECT_CLR_VBUSVALID_THRESH_MASK) /*!< USBPHY0_USB1_VBUS_DETECT_CLR.VBUSVALID_THRESH Field*/
-#define USBPHY0_USB1_VBUS_DETECT_CLR_VBUS_OVERRIDE_EN_MASK (0x8U)                                    /*!< USBPHY0_USB1_VBUS_DETECT_CLR.VBUS_OVERRIDE_EN Mask*/
-#define USBPHY0_USB1_VBUS_DETECT_CLR_VBUS_OVERRIDE_EN_SHIFT (3U)                                     /*!< USBPHY0_USB1_VBUS_DETECT_CLR.VBUS_OVERRIDE_EN Position*/
-#define USBPHY0_USB1_VBUS_DETECT_CLR_VBUS_OVERRIDE_EN(x) (((uint32_t)(((uint32_t)(x))<<USBPHY0_USB1_VBUS_DETECT_CLR_VBUS_OVERRIDE_EN_SHIFT))&USBPHY0_USB1_VBUS_DETECT_CLR_VBUS_OVERRIDE_EN_MASK) /*!< USBPHY0_USB1_VBUS_DETECT_CLR.VBUS_OVERRIDE_EN Field*/
-#define USBPHY0_USB1_VBUS_DETECT_CLR_SESSEND_OVERRIDE_MASK (0x10U)                                   /*!< USBPHY0_USB1_VBUS_DETECT_CLR.SESSEND_OVERRIDE Mask*/
-#define USBPHY0_USB1_VBUS_DETECT_CLR_SESSEND_OVERRIDE_SHIFT (4U)                                     /*!< USBPHY0_USB1_VBUS_DETECT_CLR.SESSEND_OVERRIDE Position*/
-#define USBPHY0_USB1_VBUS_DETECT_CLR_SESSEND_OVERRIDE(x) (((uint32_t)(((uint32_t)(x))<<USBPHY0_USB1_VBUS_DETECT_CLR_SESSEND_OVERRIDE_SHIFT))&USBPHY0_USB1_VBUS_DETECT_CLR_SESSEND_OVERRIDE_MASK) /*!< USBPHY0_USB1_VBUS_DETECT_CLR.SESSEND_OVERRIDE Field*/
-#define USBPHY0_USB1_VBUS_DETECT_CLR_BVALID_OVERRIDE_MASK (0x20U)                                    /*!< USBPHY0_USB1_VBUS_DETECT_CLR.BVALID_OVERRIDE Mask*/
-#define USBPHY0_USB1_VBUS_DETECT_CLR_BVALID_OVERRIDE_SHIFT (5U)                                      /*!< USBPHY0_USB1_VBUS_DETECT_CLR.BVALID_OVERRIDE Position*/
-#define USBPHY0_USB1_VBUS_DETECT_CLR_BVALID_OVERRIDE(x) (((uint32_t)(((uint32_t)(x))<<USBPHY0_USB1_VBUS_DETECT_CLR_BVALID_OVERRIDE_SHIFT))&USBPHY0_USB1_VBUS_DETECT_CLR_BVALID_OVERRIDE_MASK) /*!< USBPHY0_USB1_VBUS_DETECT_CLR.BVALID_OVERRIDE Field*/
-#define USBPHY0_USB1_VBUS_DETECT_CLR_AVALID_OVERRIDE_MASK (0x40U)                                    /*!< USBPHY0_USB1_VBUS_DETECT_CLR.AVALID_OVERRIDE Mask*/
-#define USBPHY0_USB1_VBUS_DETECT_CLR_AVALID_OVERRIDE_SHIFT (6U)                                      /*!< USBPHY0_USB1_VBUS_DETECT_CLR.AVALID_OVERRIDE Position*/
-#define USBPHY0_USB1_VBUS_DETECT_CLR_AVALID_OVERRIDE(x) (((uint32_t)(((uint32_t)(x))<<USBPHY0_USB1_VBUS_DETECT_CLR_AVALID_OVERRIDE_SHIFT))&USBPHY0_USB1_VBUS_DETECT_CLR_AVALID_OVERRIDE_MASK) /*!< USBPHY0_USB1_VBUS_DETECT_CLR.AVALID_OVERRIDE Field*/
-#define USBPHY0_USB1_VBUS_DETECT_CLR_VBUSVALID_OVERRIDE_MASK (0x80U)                                 /*!< USBPHY0_USB1_VBUS_DETECT_CLR.VBUSVALID_OVERRIDE Mask*/
-#define USBPHY0_USB1_VBUS_DETECT_CLR_VBUSVALID_OVERRIDE_SHIFT (7U)                                   /*!< USBPHY0_USB1_VBUS_DETECT_CLR.VBUSVALID_OVERRIDE Position*/
-#define USBPHY0_USB1_VBUS_DETECT_CLR_VBUSVALID_OVERRIDE(x) (((uint32_t)(((uint32_t)(x))<<USBPHY0_USB1_VBUS_DETECT_CLR_VBUSVALID_OVERRIDE_SHIFT))&USBPHY0_USB1_VBUS_DETECT_CLR_VBUSVALID_OVERRIDE_MASK) /*!< USBPHY0_USB1_VBUS_DETECT_CLR.VBUSVALID_OVERRIDE Field*/
-#define USBPHY0_USB1_VBUS_DETECT_CLR_VBUSVALID_SEL_MASK (0x100U)                                     /*!< USBPHY0_USB1_VBUS_DETECT_CLR.VBUSVALID_SEL Mask*/
-#define USBPHY0_USB1_VBUS_DETECT_CLR_VBUSVALID_SEL_SHIFT (8U)                                        /*!< USBPHY0_USB1_VBUS_DETECT_CLR.VBUSVALID_SEL Position*/
-#define USBPHY0_USB1_VBUS_DETECT_CLR_VBUSVALID_SEL(x) (((uint32_t)(((uint32_t)(x))<<USBPHY0_USB1_VBUS_DETECT_CLR_VBUSVALID_SEL_SHIFT))&USBPHY0_USB1_VBUS_DETECT_CLR_VBUSVALID_SEL_MASK) /*!< USBPHY0_USB1_VBUS_DETECT_CLR.VBUSVALID_SEL Field*/
-#define USBPHY0_USB1_VBUS_DETECT_CLR_VBUS_SOURCE_SEL_MASK (0x600U)                                   /*!< USBPHY0_USB1_VBUS_DETECT_CLR.VBUS_SOURCE_SEL Mask*/
-#define USBPHY0_USB1_VBUS_DETECT_CLR_VBUS_SOURCE_SEL_SHIFT (9U)                                      /*!< USBPHY0_USB1_VBUS_DETECT_CLR.VBUS_SOURCE_SEL Position*/
-#define USBPHY0_USB1_VBUS_DETECT_CLR_VBUS_SOURCE_SEL(x) (((uint32_t)(((uint32_t)(x))<<USBPHY0_USB1_VBUS_DETECT_CLR_VBUS_SOURCE_SEL_SHIFT))&USBPHY0_USB1_VBUS_DETECT_CLR_VBUS_SOURCE_SEL_MASK) /*!< USBPHY0_USB1_VBUS_DETECT_CLR.VBUS_SOURCE_SEL Field*/
-#define USBPHY0_USB1_VBUS_DETECT_CLR_VBUSVALID_TO_SESSVALID_MASK (0x40000U)                          /*!< USBPHY0_USB1_VBUS_DETECT_CLR.VBUSVALID_TO_SESSVALID Mask*/
-#define USBPHY0_USB1_VBUS_DETECT_CLR_VBUSVALID_TO_SESSVALID_SHIFT (18U)                              /*!< USBPHY0_USB1_VBUS_DETECT_CLR.VBUSVALID_TO_SESSVALID Position*/
-#define USBPHY0_USB1_VBUS_DETECT_CLR_VBUSVALID_TO_SESSVALID(x) (((uint32_t)(((uint32_t)(x))<<USBPHY0_USB1_VBUS_DETECT_CLR_VBUSVALID_TO_SESSVALID_SHIFT))&USBPHY0_USB1_VBUS_DETECT_CLR_VBUSVALID_TO_SESSVALID_MASK) /*!< USBPHY0_USB1_VBUS_DETECT_CLR.VBUSVALID_TO_SESSVALID Field*/
-#define USBPHY0_USB1_VBUS_DETECT_CLR_PWRUP_CMPS_MASK (0x100000U)                                     /*!< USBPHY0_USB1_VBUS_DETECT_CLR.PWRUP_CMPS Mask*/
-#define USBPHY0_USB1_VBUS_DETECT_CLR_PWRUP_CMPS_SHIFT (20U)                                          /*!< USBPHY0_USB1_VBUS_DETECT_CLR.PWRUP_CMPS Position*/
-#define USBPHY0_USB1_VBUS_DETECT_CLR_PWRUP_CMPS(x) (((uint32_t)(((uint32_t)(x))<<USBPHY0_USB1_VBUS_DETECT_CLR_PWRUP_CMPS_SHIFT))&USBPHY0_USB1_VBUS_DETECT_CLR_PWRUP_CMPS_MASK) /*!< USBPHY0_USB1_VBUS_DETECT_CLR.PWRUP_CMPS Field*/
-#define USBPHY0_USB1_VBUS_DETECT_CLR_DISCHARGE_VBUS_MASK (0x4000000U)                                /*!< USBPHY0_USB1_VBUS_DETECT_CLR.DISCHARGE_VBUS Mask*/
-#define USBPHY0_USB1_VBUS_DETECT_CLR_DISCHARGE_VBUS_SHIFT (26U)                                      /*!< USBPHY0_USB1_VBUS_DETECT_CLR.DISCHARGE_VBUS Position*/
-#define USBPHY0_USB1_VBUS_DETECT_CLR_DISCHARGE_VBUS(x) (((uint32_t)(((uint32_t)(x))<<USBPHY0_USB1_VBUS_DETECT_CLR_DISCHARGE_VBUS_SHIFT))&USBPHY0_USB1_VBUS_DETECT_CLR_DISCHARGE_VBUS_MASK) /*!< USBPHY0_USB1_VBUS_DETECT_CLR.DISCHARGE_VBUS Field*/
-#define USBPHY0_USB1_VBUS_DETECT_CLR_EN_CHARGER_RESISTOR_MASK (0x80000000U)                          /*!< USBPHY0_USB1_VBUS_DETECT_CLR.EN_CHARGER_RESISTOR Mask*/
-#define USBPHY0_USB1_VBUS_DETECT_CLR_EN_CHARGER_RESISTOR_SHIFT (31U)                                 /*!< USBPHY0_USB1_VBUS_DETECT_CLR.EN_CHARGER_RESISTOR Position*/
-#define USBPHY0_USB1_VBUS_DETECT_CLR_EN_CHARGER_RESISTOR(x) (((uint32_t)(((uint32_t)(x))<<USBPHY0_USB1_VBUS_DETECT_CLR_EN_CHARGER_RESISTOR_SHIFT))&USBPHY0_USB1_VBUS_DETECT_CLR_EN_CHARGER_RESISTOR_MASK) /*!< USBPHY0_USB1_VBUS_DETECT_CLR.EN_CHARGER_RESISTOR Field*/
+#define USBPHY_USB1_VBUS_DETECT_CLR_VBUSVALID_THRESH_MASK (0x7U)                                     /*!< USBPHY1_USB1_VBUS_DETECT_CLR.VBUSVALID_THRESH Mask*/
+#define USBPHY_USB1_VBUS_DETECT_CLR_VBUSVALID_THRESH_SHIFT (0U)                                      /*!< USBPHY1_USB1_VBUS_DETECT_CLR.VBUSVALID_THRESH Position*/
+#define USBPHY_USB1_VBUS_DETECT_CLR_VBUSVALID_THRESH(x) (((uint32_t)(((uint32_t)(x))<<USBPHY_USB1_VBUS_DETECT_CLR_VBUSVALID_THRESH_SHIFT))&USBPHY_USB1_VBUS_DETECT_CLR_VBUSVALID_THRESH_MASK) /*!< USBPHY1_USB1_VBUS_DETECT_CLR.VBUSVALID_THRESH Field*/
+#define USBPHY_USB1_VBUS_DETECT_CLR_VBUS_OVERRIDE_EN_MASK (0x8U)                                     /*!< USBPHY1_USB1_VBUS_DETECT_CLR.VBUS_OVERRIDE_EN Mask*/
+#define USBPHY_USB1_VBUS_DETECT_CLR_VBUS_OVERRIDE_EN_SHIFT (3U)                                      /*!< USBPHY1_USB1_VBUS_DETECT_CLR.VBUS_OVERRIDE_EN Position*/
+#define USBPHY_USB1_VBUS_DETECT_CLR_VBUS_OVERRIDE_EN(x) (((uint32_t)(((uint32_t)(x))<<USBPHY_USB1_VBUS_DETECT_CLR_VBUS_OVERRIDE_EN_SHIFT))&USBPHY_USB1_VBUS_DETECT_CLR_VBUS_OVERRIDE_EN_MASK) /*!< USBPHY1_USB1_VBUS_DETECT_CLR.VBUS_OVERRIDE_EN Field*/
+#define USBPHY_USB1_VBUS_DETECT_CLR_SESSEND_OVERRIDE_MASK (0x10U)                                    /*!< USBPHY1_USB1_VBUS_DETECT_CLR.SESSEND_OVERRIDE Mask*/
+#define USBPHY_USB1_VBUS_DETECT_CLR_SESSEND_OVERRIDE_SHIFT (4U)                                      /*!< USBPHY1_USB1_VBUS_DETECT_CLR.SESSEND_OVERRIDE Position*/
+#define USBPHY_USB1_VBUS_DETECT_CLR_SESSEND_OVERRIDE(x) (((uint32_t)(((uint32_t)(x))<<USBPHY_USB1_VBUS_DETECT_CLR_SESSEND_OVERRIDE_SHIFT))&USBPHY_USB1_VBUS_DETECT_CLR_SESSEND_OVERRIDE_MASK) /*!< USBPHY1_USB1_VBUS_DETECT_CLR.SESSEND_OVERRIDE Field*/
+#define USBPHY_USB1_VBUS_DETECT_CLR_BVALID_OVERRIDE_MASK (0x20U)                                     /*!< USBPHY1_USB1_VBUS_DETECT_CLR.BVALID_OVERRIDE Mask*/
+#define USBPHY_USB1_VBUS_DETECT_CLR_BVALID_OVERRIDE_SHIFT (5U)                                       /*!< USBPHY1_USB1_VBUS_DETECT_CLR.BVALID_OVERRIDE Position*/
+#define USBPHY_USB1_VBUS_DETECT_CLR_BVALID_OVERRIDE(x) (((uint32_t)(((uint32_t)(x))<<USBPHY_USB1_VBUS_DETECT_CLR_BVALID_OVERRIDE_SHIFT))&USBPHY_USB1_VBUS_DETECT_CLR_BVALID_OVERRIDE_MASK) /*!< USBPHY1_USB1_VBUS_DETECT_CLR.BVALID_OVERRIDE Field*/
+#define USBPHY_USB1_VBUS_DETECT_CLR_AVALID_OVERRIDE_MASK (0x40U)                                     /*!< USBPHY1_USB1_VBUS_DETECT_CLR.AVALID_OVERRIDE Mask*/
+#define USBPHY_USB1_VBUS_DETECT_CLR_AVALID_OVERRIDE_SHIFT (6U)                                       /*!< USBPHY1_USB1_VBUS_DETECT_CLR.AVALID_OVERRIDE Position*/
+#define USBPHY_USB1_VBUS_DETECT_CLR_AVALID_OVERRIDE(x) (((uint32_t)(((uint32_t)(x))<<USBPHY_USB1_VBUS_DETECT_CLR_AVALID_OVERRIDE_SHIFT))&USBPHY_USB1_VBUS_DETECT_CLR_AVALID_OVERRIDE_MASK) /*!< USBPHY1_USB1_VBUS_DETECT_CLR.AVALID_OVERRIDE Field*/
+#define USBPHY_USB1_VBUS_DETECT_CLR_VBUSVALID_OVERRIDE_MASK (0x80U)                                  /*!< USBPHY1_USB1_VBUS_DETECT_CLR.VBUSVALID_OVERRIDE Mask*/
+#define USBPHY_USB1_VBUS_DETECT_CLR_VBUSVALID_OVERRIDE_SHIFT (7U)                                    /*!< USBPHY1_USB1_VBUS_DETECT_CLR.VBUSVALID_OVERRIDE Position*/
+#define USBPHY_USB1_VBUS_DETECT_CLR_VBUSVALID_OVERRIDE(x) (((uint32_t)(((uint32_t)(x))<<USBPHY_USB1_VBUS_DETECT_CLR_VBUSVALID_OVERRIDE_SHIFT))&USBPHY_USB1_VBUS_DETECT_CLR_VBUSVALID_OVERRIDE_MASK) /*!< USBPHY1_USB1_VBUS_DETECT_CLR.VBUSVALID_OVERRIDE Field*/
+#define USBPHY_USB1_VBUS_DETECT_CLR_VBUSVALID_SEL_MASK (0x100U)                                      /*!< USBPHY1_USB1_VBUS_DETECT_CLR.VBUSVALID_SEL Mask*/
+#define USBPHY_USB1_VBUS_DETECT_CLR_VBUSVALID_SEL_SHIFT (8U)                                         /*!< USBPHY1_USB1_VBUS_DETECT_CLR.VBUSVALID_SEL Position*/
+#define USBPHY_USB1_VBUS_DETECT_CLR_VBUSVALID_SEL(x) (((uint32_t)(((uint32_t)(x))<<USBPHY_USB1_VBUS_DETECT_CLR_VBUSVALID_SEL_SHIFT))&USBPHY_USB1_VBUS_DETECT_CLR_VBUSVALID_SEL_MASK) /*!< USBPHY1_USB1_VBUS_DETECT_CLR.VBUSVALID_SEL Field*/
+#define USBPHY_USB1_VBUS_DETECT_CLR_VBUS_SOURCE_SEL_MASK (0x600U)                                    /*!< USBPHY1_USB1_VBUS_DETECT_CLR.VBUS_SOURCE_SEL Mask*/
+#define USBPHY_USB1_VBUS_DETECT_CLR_VBUS_SOURCE_SEL_SHIFT (9U)                                       /*!< USBPHY1_USB1_VBUS_DETECT_CLR.VBUS_SOURCE_SEL Position*/
+#define USBPHY_USB1_VBUS_DETECT_CLR_VBUS_SOURCE_SEL(x) (((uint32_t)(((uint32_t)(x))<<USBPHY_USB1_VBUS_DETECT_CLR_VBUS_SOURCE_SEL_SHIFT))&USBPHY_USB1_VBUS_DETECT_CLR_VBUS_SOURCE_SEL_MASK) /*!< USBPHY1_USB1_VBUS_DETECT_CLR.VBUS_SOURCE_SEL Field*/
+#define USBPHY_USB1_VBUS_DETECT_CLR_VBUSVALID_TO_SESSVALID_MASK (0x40000U)                           /*!< USBPHY1_USB1_VBUS_DETECT_CLR.VBUSVALID_TO_SESSVALID Mask*/
+#define USBPHY_USB1_VBUS_DETECT_CLR_VBUSVALID_TO_SESSVALID_SHIFT (18U)                               /*!< USBPHY1_USB1_VBUS_DETECT_CLR.VBUSVALID_TO_SESSVALID Position*/
+#define USBPHY_USB1_VBUS_DETECT_CLR_VBUSVALID_TO_SESSVALID(x) (((uint32_t)(((uint32_t)(x))<<USBPHY_USB1_VBUS_DETECT_CLR_VBUSVALID_TO_SESSVALID_SHIFT))&USBPHY_USB1_VBUS_DETECT_CLR_VBUSVALID_TO_SESSVALID_MASK) /*!< USBPHY1_USB1_VBUS_DETECT_CLR.VBUSVALID_TO_SESSVALID Field*/
+#define USBPHY_USB1_VBUS_DETECT_CLR_PWRUP_CMPS_MASK (0x100000U)                                      /*!< USBPHY1_USB1_VBUS_DETECT_CLR.PWRUP_CMPS Mask*/
+#define USBPHY_USB1_VBUS_DETECT_CLR_PWRUP_CMPS_SHIFT (20U)                                           /*!< USBPHY1_USB1_VBUS_DETECT_CLR.PWRUP_CMPS Position*/
+#define USBPHY_USB1_VBUS_DETECT_CLR_PWRUP_CMPS(x) (((uint32_t)(((uint32_t)(x))<<USBPHY_USB1_VBUS_DETECT_CLR_PWRUP_CMPS_SHIFT))&USBPHY_USB1_VBUS_DETECT_CLR_PWRUP_CMPS_MASK) /*!< USBPHY1_USB1_VBUS_DETECT_CLR.PWRUP_CMPS Field*/
+#define USBPHY_USB1_VBUS_DETECT_CLR_DISCHARGE_VBUS_MASK (0x4000000U)                                 /*!< USBPHY1_USB1_VBUS_DETECT_CLR.DISCHARGE_VBUS Mask*/
+#define USBPHY_USB1_VBUS_DETECT_CLR_DISCHARGE_VBUS_SHIFT (26U)                                       /*!< USBPHY1_USB1_VBUS_DETECT_CLR.DISCHARGE_VBUS Position*/
+#define USBPHY_USB1_VBUS_DETECT_CLR_DISCHARGE_VBUS(x) (((uint32_t)(((uint32_t)(x))<<USBPHY_USB1_VBUS_DETECT_CLR_DISCHARGE_VBUS_SHIFT))&USBPHY_USB1_VBUS_DETECT_CLR_DISCHARGE_VBUS_MASK) /*!< USBPHY1_USB1_VBUS_DETECT_CLR.DISCHARGE_VBUS Field*/
+#define USBPHY_USB1_VBUS_DETECT_CLR_EN_CHARGER_RESISTOR_MASK (0x80000000U)                           /*!< USBPHY1_USB1_VBUS_DETECT_CLR.EN_CHARGER_RESISTOR Mask*/
+#define USBPHY_USB1_VBUS_DETECT_CLR_EN_CHARGER_RESISTOR_SHIFT (31U)                                  /*!< USBPHY1_USB1_VBUS_DETECT_CLR.EN_CHARGER_RESISTOR Position*/
+#define USBPHY_USB1_VBUS_DETECT_CLR_EN_CHARGER_RESISTOR(x) (((uint32_t)(((uint32_t)(x))<<USBPHY_USB1_VBUS_DETECT_CLR_EN_CHARGER_RESISTOR_SHIFT))&USBPHY_USB1_VBUS_DETECT_CLR_EN_CHARGER_RESISTOR_MASK) /*!< USBPHY1_USB1_VBUS_DETECT_CLR.EN_CHARGER_RESISTOR Field*/
 
 /*! @name USB1_VBUS_DETECT_TOG - USB PHY VBUS Detect Control Register */
-#define USBPHY0_USB1_VBUS_DETECT_TOG_VBUSVALID_THRESH_MASK (0x7U)                                    /*!< USBPHY0_USB1_VBUS_DETECT_TOG.VBUSVALID_THRESH Mask*/
-#define USBPHY0_USB1_VBUS_DETECT_TOG_VBUSVALID_THRESH_SHIFT (0U)                                     /*!< USBPHY0_USB1_VBUS_DETECT_TOG.VBUSVALID_THRESH Position*/
-#define USBPHY0_USB1_VBUS_DETECT_TOG_VBUSVALID_THRESH(x) (((uint32_t)(((uint32_t)(x))<<USBPHY0_USB1_VBUS_DETECT_TOG_VBUSVALID_THRESH_SHIFT))&USBPHY0_USB1_VBUS_DETECT_TOG_VBUSVALID_THRESH_MASK) /*!< USBPHY0_USB1_VBUS_DETECT_TOG.VBUSVALID_THRESH Field*/
-#define USBPHY0_USB1_VBUS_DETECT_TOG_VBUS_OVERRIDE_EN_MASK (0x8U)                                    /*!< USBPHY0_USB1_VBUS_DETECT_TOG.VBUS_OVERRIDE_EN Mask*/
-#define USBPHY0_USB1_VBUS_DETECT_TOG_VBUS_OVERRIDE_EN_SHIFT (3U)                                     /*!< USBPHY0_USB1_VBUS_DETECT_TOG.VBUS_OVERRIDE_EN Position*/
-#define USBPHY0_USB1_VBUS_DETECT_TOG_VBUS_OVERRIDE_EN(x) (((uint32_t)(((uint32_t)(x))<<USBPHY0_USB1_VBUS_DETECT_TOG_VBUS_OVERRIDE_EN_SHIFT))&USBPHY0_USB1_VBUS_DETECT_TOG_VBUS_OVERRIDE_EN_MASK) /*!< USBPHY0_USB1_VBUS_DETECT_TOG.VBUS_OVERRIDE_EN Field*/
-#define USBPHY0_USB1_VBUS_DETECT_TOG_SESSEND_OVERRIDE_MASK (0x10U)                                   /*!< USBPHY0_USB1_VBUS_DETECT_TOG.SESSEND_OVERRIDE Mask*/
-#define USBPHY0_USB1_VBUS_DETECT_TOG_SESSEND_OVERRIDE_SHIFT (4U)                                     /*!< USBPHY0_USB1_VBUS_DETECT_TOG.SESSEND_OVERRIDE Position*/
-#define USBPHY0_USB1_VBUS_DETECT_TOG_SESSEND_OVERRIDE(x) (((uint32_t)(((uint32_t)(x))<<USBPHY0_USB1_VBUS_DETECT_TOG_SESSEND_OVERRIDE_SHIFT))&USBPHY0_USB1_VBUS_DETECT_TOG_SESSEND_OVERRIDE_MASK) /*!< USBPHY0_USB1_VBUS_DETECT_TOG.SESSEND_OVERRIDE Field*/
-#define USBPHY0_USB1_VBUS_DETECT_TOG_BVALID_OVERRIDE_MASK (0x20U)                                    /*!< USBPHY0_USB1_VBUS_DETECT_TOG.BVALID_OVERRIDE Mask*/
-#define USBPHY0_USB1_VBUS_DETECT_TOG_BVALID_OVERRIDE_SHIFT (5U)                                      /*!< USBPHY0_USB1_VBUS_DETECT_TOG.BVALID_OVERRIDE Position*/
-#define USBPHY0_USB1_VBUS_DETECT_TOG_BVALID_OVERRIDE(x) (((uint32_t)(((uint32_t)(x))<<USBPHY0_USB1_VBUS_DETECT_TOG_BVALID_OVERRIDE_SHIFT))&USBPHY0_USB1_VBUS_DETECT_TOG_BVALID_OVERRIDE_MASK) /*!< USBPHY0_USB1_VBUS_DETECT_TOG.BVALID_OVERRIDE Field*/
-#define USBPHY0_USB1_VBUS_DETECT_TOG_AVALID_OVERRIDE_MASK (0x40U)                                    /*!< USBPHY0_USB1_VBUS_DETECT_TOG.AVALID_OVERRIDE Mask*/
-#define USBPHY0_USB1_VBUS_DETECT_TOG_AVALID_OVERRIDE_SHIFT (6U)                                      /*!< USBPHY0_USB1_VBUS_DETECT_TOG.AVALID_OVERRIDE Position*/
-#define USBPHY0_USB1_VBUS_DETECT_TOG_AVALID_OVERRIDE(x) (((uint32_t)(((uint32_t)(x))<<USBPHY0_USB1_VBUS_DETECT_TOG_AVALID_OVERRIDE_SHIFT))&USBPHY0_USB1_VBUS_DETECT_TOG_AVALID_OVERRIDE_MASK) /*!< USBPHY0_USB1_VBUS_DETECT_TOG.AVALID_OVERRIDE Field*/
-#define USBPHY0_USB1_VBUS_DETECT_TOG_VBUSVALID_OVERRIDE_MASK (0x80U)                                 /*!< USBPHY0_USB1_VBUS_DETECT_TOG.VBUSVALID_OVERRIDE Mask*/
-#define USBPHY0_USB1_VBUS_DETECT_TOG_VBUSVALID_OVERRIDE_SHIFT (7U)                                   /*!< USBPHY0_USB1_VBUS_DETECT_TOG.VBUSVALID_OVERRIDE Position*/
-#define USBPHY0_USB1_VBUS_DETECT_TOG_VBUSVALID_OVERRIDE(x) (((uint32_t)(((uint32_t)(x))<<USBPHY0_USB1_VBUS_DETECT_TOG_VBUSVALID_OVERRIDE_SHIFT))&USBPHY0_USB1_VBUS_DETECT_TOG_VBUSVALID_OVERRIDE_MASK) /*!< USBPHY0_USB1_VBUS_DETECT_TOG.VBUSVALID_OVERRIDE Field*/
-#define USBPHY0_USB1_VBUS_DETECT_TOG_VBUSVALID_SEL_MASK (0x100U)                                     /*!< USBPHY0_USB1_VBUS_DETECT_TOG.VBUSVALID_SEL Mask*/
-#define USBPHY0_USB1_VBUS_DETECT_TOG_VBUSVALID_SEL_SHIFT (8U)                                        /*!< USBPHY0_USB1_VBUS_DETECT_TOG.VBUSVALID_SEL Position*/
-#define USBPHY0_USB1_VBUS_DETECT_TOG_VBUSVALID_SEL(x) (((uint32_t)(((uint32_t)(x))<<USBPHY0_USB1_VBUS_DETECT_TOG_VBUSVALID_SEL_SHIFT))&USBPHY0_USB1_VBUS_DETECT_TOG_VBUSVALID_SEL_MASK) /*!< USBPHY0_USB1_VBUS_DETECT_TOG.VBUSVALID_SEL Field*/
-#define USBPHY0_USB1_VBUS_DETECT_TOG_VBUS_SOURCE_SEL_MASK (0x600U)                                   /*!< USBPHY0_USB1_VBUS_DETECT_TOG.VBUS_SOURCE_SEL Mask*/
-#define USBPHY0_USB1_VBUS_DETECT_TOG_VBUS_SOURCE_SEL_SHIFT (9U)                                      /*!< USBPHY0_USB1_VBUS_DETECT_TOG.VBUS_SOURCE_SEL Position*/
-#define USBPHY0_USB1_VBUS_DETECT_TOG_VBUS_SOURCE_SEL(x) (((uint32_t)(((uint32_t)(x))<<USBPHY0_USB1_VBUS_DETECT_TOG_VBUS_SOURCE_SEL_SHIFT))&USBPHY0_USB1_VBUS_DETECT_TOG_VBUS_SOURCE_SEL_MASK) /*!< USBPHY0_USB1_VBUS_DETECT_TOG.VBUS_SOURCE_SEL Field*/
-#define USBPHY0_USB1_VBUS_DETECT_TOG_VBUSVALID_TO_SESSVALID_MASK (0x40000U)                          /*!< USBPHY0_USB1_VBUS_DETECT_TOG.VBUSVALID_TO_SESSVALID Mask*/
-#define USBPHY0_USB1_VBUS_DETECT_TOG_VBUSVALID_TO_SESSVALID_SHIFT (18U)                              /*!< USBPHY0_USB1_VBUS_DETECT_TOG.VBUSVALID_TO_SESSVALID Position*/
-#define USBPHY0_USB1_VBUS_DETECT_TOG_VBUSVALID_TO_SESSVALID(x) (((uint32_t)(((uint32_t)(x))<<USBPHY0_USB1_VBUS_DETECT_TOG_VBUSVALID_TO_SESSVALID_SHIFT))&USBPHY0_USB1_VBUS_DETECT_TOG_VBUSVALID_TO_SESSVALID_MASK) /*!< USBPHY0_USB1_VBUS_DETECT_TOG.VBUSVALID_TO_SESSVALID Field*/
-#define USBPHY0_USB1_VBUS_DETECT_TOG_PWRUP_CMPS_MASK (0x100000U)                                     /*!< USBPHY0_USB1_VBUS_DETECT_TOG.PWRUP_CMPS Mask*/
-#define USBPHY0_USB1_VBUS_DETECT_TOG_PWRUP_CMPS_SHIFT (20U)                                          /*!< USBPHY0_USB1_VBUS_DETECT_TOG.PWRUP_CMPS Position*/
-#define USBPHY0_USB1_VBUS_DETECT_TOG_PWRUP_CMPS(x) (((uint32_t)(((uint32_t)(x))<<USBPHY0_USB1_VBUS_DETECT_TOG_PWRUP_CMPS_SHIFT))&USBPHY0_USB1_VBUS_DETECT_TOG_PWRUP_CMPS_MASK) /*!< USBPHY0_USB1_VBUS_DETECT_TOG.PWRUP_CMPS Field*/
-#define USBPHY0_USB1_VBUS_DETECT_TOG_DISCHARGE_VBUS_MASK (0x4000000U)                                /*!< USBPHY0_USB1_VBUS_DETECT_TOG.DISCHARGE_VBUS Mask*/
-#define USBPHY0_USB1_VBUS_DETECT_TOG_DISCHARGE_VBUS_SHIFT (26U)                                      /*!< USBPHY0_USB1_VBUS_DETECT_TOG.DISCHARGE_VBUS Position*/
-#define USBPHY0_USB1_VBUS_DETECT_TOG_DISCHARGE_VBUS(x) (((uint32_t)(((uint32_t)(x))<<USBPHY0_USB1_VBUS_DETECT_TOG_DISCHARGE_VBUS_SHIFT))&USBPHY0_USB1_VBUS_DETECT_TOG_DISCHARGE_VBUS_MASK) /*!< USBPHY0_USB1_VBUS_DETECT_TOG.DISCHARGE_VBUS Field*/
-#define USBPHY0_USB1_VBUS_DETECT_TOG_EN_CHARGER_RESISTOR_MASK (0x80000000U)                          /*!< USBPHY0_USB1_VBUS_DETECT_TOG.EN_CHARGER_RESISTOR Mask*/
-#define USBPHY0_USB1_VBUS_DETECT_TOG_EN_CHARGER_RESISTOR_SHIFT (31U)                                 /*!< USBPHY0_USB1_VBUS_DETECT_TOG.EN_CHARGER_RESISTOR Position*/
-#define USBPHY0_USB1_VBUS_DETECT_TOG_EN_CHARGER_RESISTOR(x) (((uint32_t)(((uint32_t)(x))<<USBPHY0_USB1_VBUS_DETECT_TOG_EN_CHARGER_RESISTOR_SHIFT))&USBPHY0_USB1_VBUS_DETECT_TOG_EN_CHARGER_RESISTOR_MASK) /*!< USBPHY0_USB1_VBUS_DETECT_TOG.EN_CHARGER_RESISTOR Field*/
+#define USBPHY_USB1_VBUS_DETECT_TOG_VBUSVALID_THRESH_MASK (0x7U)                                     /*!< USBPHY1_USB1_VBUS_DETECT_TOG.VBUSVALID_THRESH Mask*/
+#define USBPHY_USB1_VBUS_DETECT_TOG_VBUSVALID_THRESH_SHIFT (0U)                                      /*!< USBPHY1_USB1_VBUS_DETECT_TOG.VBUSVALID_THRESH Position*/
+#define USBPHY_USB1_VBUS_DETECT_TOG_VBUSVALID_THRESH(x) (((uint32_t)(((uint32_t)(x))<<USBPHY_USB1_VBUS_DETECT_TOG_VBUSVALID_THRESH_SHIFT))&USBPHY_USB1_VBUS_DETECT_TOG_VBUSVALID_THRESH_MASK) /*!< USBPHY1_USB1_VBUS_DETECT_TOG.VBUSVALID_THRESH Field*/
+#define USBPHY_USB1_VBUS_DETECT_TOG_VBUS_OVERRIDE_EN_MASK (0x8U)                                     /*!< USBPHY1_USB1_VBUS_DETECT_TOG.VBUS_OVERRIDE_EN Mask*/
+#define USBPHY_USB1_VBUS_DETECT_TOG_VBUS_OVERRIDE_EN_SHIFT (3U)                                      /*!< USBPHY1_USB1_VBUS_DETECT_TOG.VBUS_OVERRIDE_EN Position*/
+#define USBPHY_USB1_VBUS_DETECT_TOG_VBUS_OVERRIDE_EN(x) (((uint32_t)(((uint32_t)(x))<<USBPHY_USB1_VBUS_DETECT_TOG_VBUS_OVERRIDE_EN_SHIFT))&USBPHY_USB1_VBUS_DETECT_TOG_VBUS_OVERRIDE_EN_MASK) /*!< USBPHY1_USB1_VBUS_DETECT_TOG.VBUS_OVERRIDE_EN Field*/
+#define USBPHY_USB1_VBUS_DETECT_TOG_SESSEND_OVERRIDE_MASK (0x10U)                                    /*!< USBPHY1_USB1_VBUS_DETECT_TOG.SESSEND_OVERRIDE Mask*/
+#define USBPHY_USB1_VBUS_DETECT_TOG_SESSEND_OVERRIDE_SHIFT (4U)                                      /*!< USBPHY1_USB1_VBUS_DETECT_TOG.SESSEND_OVERRIDE Position*/
+#define USBPHY_USB1_VBUS_DETECT_TOG_SESSEND_OVERRIDE(x) (((uint32_t)(((uint32_t)(x))<<USBPHY_USB1_VBUS_DETECT_TOG_SESSEND_OVERRIDE_SHIFT))&USBPHY_USB1_VBUS_DETECT_TOG_SESSEND_OVERRIDE_MASK) /*!< USBPHY1_USB1_VBUS_DETECT_TOG.SESSEND_OVERRIDE Field*/
+#define USBPHY_USB1_VBUS_DETECT_TOG_BVALID_OVERRIDE_MASK (0x20U)                                     /*!< USBPHY1_USB1_VBUS_DETECT_TOG.BVALID_OVERRIDE Mask*/
+#define USBPHY_USB1_VBUS_DETECT_TOG_BVALID_OVERRIDE_SHIFT (5U)                                       /*!< USBPHY1_USB1_VBUS_DETECT_TOG.BVALID_OVERRIDE Position*/
+#define USBPHY_USB1_VBUS_DETECT_TOG_BVALID_OVERRIDE(x) (((uint32_t)(((uint32_t)(x))<<USBPHY_USB1_VBUS_DETECT_TOG_BVALID_OVERRIDE_SHIFT))&USBPHY_USB1_VBUS_DETECT_TOG_BVALID_OVERRIDE_MASK) /*!< USBPHY1_USB1_VBUS_DETECT_TOG.BVALID_OVERRIDE Field*/
+#define USBPHY_USB1_VBUS_DETECT_TOG_AVALID_OVERRIDE_MASK (0x40U)                                     /*!< USBPHY1_USB1_VBUS_DETECT_TOG.AVALID_OVERRIDE Mask*/
+#define USBPHY_USB1_VBUS_DETECT_TOG_AVALID_OVERRIDE_SHIFT (6U)                                       /*!< USBPHY1_USB1_VBUS_DETECT_TOG.AVALID_OVERRIDE Position*/
+#define USBPHY_USB1_VBUS_DETECT_TOG_AVALID_OVERRIDE(x) (((uint32_t)(((uint32_t)(x))<<USBPHY_USB1_VBUS_DETECT_TOG_AVALID_OVERRIDE_SHIFT))&USBPHY_USB1_VBUS_DETECT_TOG_AVALID_OVERRIDE_MASK) /*!< USBPHY1_USB1_VBUS_DETECT_TOG.AVALID_OVERRIDE Field*/
+#define USBPHY_USB1_VBUS_DETECT_TOG_VBUSVALID_OVERRIDE_MASK (0x80U)                                  /*!< USBPHY1_USB1_VBUS_DETECT_TOG.VBUSVALID_OVERRIDE Mask*/
+#define USBPHY_USB1_VBUS_DETECT_TOG_VBUSVALID_OVERRIDE_SHIFT (7U)                                    /*!< USBPHY1_USB1_VBUS_DETECT_TOG.VBUSVALID_OVERRIDE Position*/
+#define USBPHY_USB1_VBUS_DETECT_TOG_VBUSVALID_OVERRIDE(x) (((uint32_t)(((uint32_t)(x))<<USBPHY_USB1_VBUS_DETECT_TOG_VBUSVALID_OVERRIDE_SHIFT))&USBPHY_USB1_VBUS_DETECT_TOG_VBUSVALID_OVERRIDE_MASK) /*!< USBPHY1_USB1_VBUS_DETECT_TOG.VBUSVALID_OVERRIDE Field*/
+#define USBPHY_USB1_VBUS_DETECT_TOG_VBUSVALID_SEL_MASK (0x100U)                                      /*!< USBPHY1_USB1_VBUS_DETECT_TOG.VBUSVALID_SEL Mask*/
+#define USBPHY_USB1_VBUS_DETECT_TOG_VBUSVALID_SEL_SHIFT (8U)                                         /*!< USBPHY1_USB1_VBUS_DETECT_TOG.VBUSVALID_SEL Position*/
+#define USBPHY_USB1_VBUS_DETECT_TOG_VBUSVALID_SEL(x) (((uint32_t)(((uint32_t)(x))<<USBPHY_USB1_VBUS_DETECT_TOG_VBUSVALID_SEL_SHIFT))&USBPHY_USB1_VBUS_DETECT_TOG_VBUSVALID_SEL_MASK) /*!< USBPHY1_USB1_VBUS_DETECT_TOG.VBUSVALID_SEL Field*/
+#define USBPHY_USB1_VBUS_DETECT_TOG_VBUS_SOURCE_SEL_MASK (0x600U)                                    /*!< USBPHY1_USB1_VBUS_DETECT_TOG.VBUS_SOURCE_SEL Mask*/
+#define USBPHY_USB1_VBUS_DETECT_TOG_VBUS_SOURCE_SEL_SHIFT (9U)                                       /*!< USBPHY1_USB1_VBUS_DETECT_TOG.VBUS_SOURCE_SEL Position*/
+#define USBPHY_USB1_VBUS_DETECT_TOG_VBUS_SOURCE_SEL(x) (((uint32_t)(((uint32_t)(x))<<USBPHY_USB1_VBUS_DETECT_TOG_VBUS_SOURCE_SEL_SHIFT))&USBPHY_USB1_VBUS_DETECT_TOG_VBUS_SOURCE_SEL_MASK) /*!< USBPHY1_USB1_VBUS_DETECT_TOG.VBUS_SOURCE_SEL Field*/
+#define USBPHY_USB1_VBUS_DETECT_TOG_VBUSVALID_TO_SESSVALID_MASK (0x40000U)                           /*!< USBPHY1_USB1_VBUS_DETECT_TOG.VBUSVALID_TO_SESSVALID Mask*/
+#define USBPHY_USB1_VBUS_DETECT_TOG_VBUSVALID_TO_SESSVALID_SHIFT (18U)                               /*!< USBPHY1_USB1_VBUS_DETECT_TOG.VBUSVALID_TO_SESSVALID Position*/
+#define USBPHY_USB1_VBUS_DETECT_TOG_VBUSVALID_TO_SESSVALID(x) (((uint32_t)(((uint32_t)(x))<<USBPHY_USB1_VBUS_DETECT_TOG_VBUSVALID_TO_SESSVALID_SHIFT))&USBPHY_USB1_VBUS_DETECT_TOG_VBUSVALID_TO_SESSVALID_MASK) /*!< USBPHY1_USB1_VBUS_DETECT_TOG.VBUSVALID_TO_SESSVALID Field*/
+#define USBPHY_USB1_VBUS_DETECT_TOG_PWRUP_CMPS_MASK (0x100000U)                                      /*!< USBPHY1_USB1_VBUS_DETECT_TOG.PWRUP_CMPS Mask*/
+#define USBPHY_USB1_VBUS_DETECT_TOG_PWRUP_CMPS_SHIFT (20U)                                           /*!< USBPHY1_USB1_VBUS_DETECT_TOG.PWRUP_CMPS Position*/
+#define USBPHY_USB1_VBUS_DETECT_TOG_PWRUP_CMPS(x) (((uint32_t)(((uint32_t)(x))<<USBPHY_USB1_VBUS_DETECT_TOG_PWRUP_CMPS_SHIFT))&USBPHY_USB1_VBUS_DETECT_TOG_PWRUP_CMPS_MASK) /*!< USBPHY1_USB1_VBUS_DETECT_TOG.PWRUP_CMPS Field*/
+#define USBPHY_USB1_VBUS_DETECT_TOG_DISCHARGE_VBUS_MASK (0x4000000U)                                 /*!< USBPHY1_USB1_VBUS_DETECT_TOG.DISCHARGE_VBUS Mask*/
+#define USBPHY_USB1_VBUS_DETECT_TOG_DISCHARGE_VBUS_SHIFT (26U)                                       /*!< USBPHY1_USB1_VBUS_DETECT_TOG.DISCHARGE_VBUS Position*/
+#define USBPHY_USB1_VBUS_DETECT_TOG_DISCHARGE_VBUS(x) (((uint32_t)(((uint32_t)(x))<<USBPHY_USB1_VBUS_DETECT_TOG_DISCHARGE_VBUS_SHIFT))&USBPHY_USB1_VBUS_DETECT_TOG_DISCHARGE_VBUS_MASK) /*!< USBPHY1_USB1_VBUS_DETECT_TOG.DISCHARGE_VBUS Field*/
+#define USBPHY_USB1_VBUS_DETECT_TOG_EN_CHARGER_RESISTOR_MASK (0x80000000U)                           /*!< USBPHY1_USB1_VBUS_DETECT_TOG.EN_CHARGER_RESISTOR Mask*/
+#define USBPHY_USB1_VBUS_DETECT_TOG_EN_CHARGER_RESISTOR_SHIFT (31U)                                  /*!< USBPHY1_USB1_VBUS_DETECT_TOG.EN_CHARGER_RESISTOR Position*/
+#define USBPHY_USB1_VBUS_DETECT_TOG_EN_CHARGER_RESISTOR(x) (((uint32_t)(((uint32_t)(x))<<USBPHY_USB1_VBUS_DETECT_TOG_EN_CHARGER_RESISTOR_SHIFT))&USBPHY_USB1_VBUS_DETECT_TOG_EN_CHARGER_RESISTOR_MASK) /*!< USBPHY1_USB1_VBUS_DETECT_TOG.EN_CHARGER_RESISTOR Field*/
 
 /*! @name USB1_VBUS_DET_STAT - USB PHY VBUS Detector Status Register */
-#define USBPHY0_USB1_VBUS_DET_STAT_SESSEND_MASK  (0x1U)                                              /*!< USBPHY0_USB1_VBUS_DET_STAT.SESSEND Mask */
-#define USBPHY0_USB1_VBUS_DET_STAT_SESSEND_SHIFT (0U)                                                /*!< USBPHY0_USB1_VBUS_DET_STAT.SESSEND Position*/
-#define USBPHY0_USB1_VBUS_DET_STAT_SESSEND(x)    (((uint32_t)(((uint32_t)(x))<<USBPHY0_USB1_VBUS_DET_STAT_SESSEND_SHIFT))&USBPHY0_USB1_VBUS_DET_STAT_SESSEND_MASK) /*!< USBPHY0_USB1_VBUS_DET_STAT.SESSEND Field*/
-#define USBPHY0_USB1_VBUS_DET_STAT_BVALID_MASK   (0x2U)                                              /*!< USBPHY0_USB1_VBUS_DET_STAT.BVALID Mask  */
-#define USBPHY0_USB1_VBUS_DET_STAT_BVALID_SHIFT  (1U)                                                /*!< USBPHY0_USB1_VBUS_DET_STAT.BVALID Position*/
-#define USBPHY0_USB1_VBUS_DET_STAT_BVALID(x)     (((uint32_t)(((uint32_t)(x))<<USBPHY0_USB1_VBUS_DET_STAT_BVALID_SHIFT))&USBPHY0_USB1_VBUS_DET_STAT_BVALID_MASK) /*!< USBPHY0_USB1_VBUS_DET_STAT.BVALID Field */
-#define USBPHY0_USB1_VBUS_DET_STAT_AVALID_MASK   (0x4U)                                              /*!< USBPHY0_USB1_VBUS_DET_STAT.AVALID Mask  */
-#define USBPHY0_USB1_VBUS_DET_STAT_AVALID_SHIFT  (2U)                                                /*!< USBPHY0_USB1_VBUS_DET_STAT.AVALID Position*/
-#define USBPHY0_USB1_VBUS_DET_STAT_AVALID(x)     (((uint32_t)(((uint32_t)(x))<<USBPHY0_USB1_VBUS_DET_STAT_AVALID_SHIFT))&USBPHY0_USB1_VBUS_DET_STAT_AVALID_MASK) /*!< USBPHY0_USB1_VBUS_DET_STAT.AVALID Field */
-#define USBPHY0_USB1_VBUS_DET_STAT_VBUS_VALID_MASK (0x8U)                                            /*!< USBPHY0_USB1_VBUS_DET_STAT.VBUS_VALID Mask*/
-#define USBPHY0_USB1_VBUS_DET_STAT_VBUS_VALID_SHIFT (3U)                                             /*!< USBPHY0_USB1_VBUS_DET_STAT.VBUS_VALID Position*/
-#define USBPHY0_USB1_VBUS_DET_STAT_VBUS_VALID(x) (((uint32_t)(((uint32_t)(x))<<USBPHY0_USB1_VBUS_DET_STAT_VBUS_VALID_SHIFT))&USBPHY0_USB1_VBUS_DET_STAT_VBUS_VALID_MASK) /*!< USBPHY0_USB1_VBUS_DET_STAT.VBUS_VALID Field*/
-#define USBPHY0_USB1_VBUS_DET_STAT_VBUS_VALID_3V_MASK (0x10U)                                        /*!< USBPHY0_USB1_VBUS_DET_STAT.VBUS_VALID_3V Mask*/
-#define USBPHY0_USB1_VBUS_DET_STAT_VBUS_VALID_3V_SHIFT (4U)                                          /*!< USBPHY0_USB1_VBUS_DET_STAT.VBUS_VALID_3V Position*/
-#define USBPHY0_USB1_VBUS_DET_STAT_VBUS_VALID_3V(x) (((uint32_t)(((uint32_t)(x))<<USBPHY0_USB1_VBUS_DET_STAT_VBUS_VALID_3V_SHIFT))&USBPHY0_USB1_VBUS_DET_STAT_VBUS_VALID_3V_MASK) /*!< USBPHY0_USB1_VBUS_DET_STAT.VBUS_VALID_3V Field*/
+#define USBPHY_USB1_VBUS_DET_STAT_SESSEND_MASK   (0x1U)                                              /*!< USBPHY1_USB1_VBUS_DET_STAT.SESSEND Mask */
+#define USBPHY_USB1_VBUS_DET_STAT_SESSEND_SHIFT  (0U)                                                /*!< USBPHY1_USB1_VBUS_DET_STAT.SESSEND Position*/
+#define USBPHY_USB1_VBUS_DET_STAT_SESSEND(x)     (((uint32_t)(((uint32_t)(x))<<USBPHY_USB1_VBUS_DET_STAT_SESSEND_SHIFT))&USBPHY_USB1_VBUS_DET_STAT_SESSEND_MASK) /*!< USBPHY1_USB1_VBUS_DET_STAT.SESSEND Field*/
+#define USBPHY_USB1_VBUS_DET_STAT_BVALID_MASK    (0x2U)                                              /*!< USBPHY1_USB1_VBUS_DET_STAT.BVALID Mask  */
+#define USBPHY_USB1_VBUS_DET_STAT_BVALID_SHIFT   (1U)                                                /*!< USBPHY1_USB1_VBUS_DET_STAT.BVALID Position*/
+#define USBPHY_USB1_VBUS_DET_STAT_BVALID(x)      (((uint32_t)(((uint32_t)(x))<<USBPHY_USB1_VBUS_DET_STAT_BVALID_SHIFT))&USBPHY_USB1_VBUS_DET_STAT_BVALID_MASK) /*!< USBPHY1_USB1_VBUS_DET_STAT.BVALID Field */
+#define USBPHY_USB1_VBUS_DET_STAT_AVALID_MASK    (0x4U)                                              /*!< USBPHY1_USB1_VBUS_DET_STAT.AVALID Mask  */
+#define USBPHY_USB1_VBUS_DET_STAT_AVALID_SHIFT   (2U)                                                /*!< USBPHY1_USB1_VBUS_DET_STAT.AVALID Position*/
+#define USBPHY_USB1_VBUS_DET_STAT_AVALID(x)      (((uint32_t)(((uint32_t)(x))<<USBPHY_USB1_VBUS_DET_STAT_AVALID_SHIFT))&USBPHY_USB1_VBUS_DET_STAT_AVALID_MASK) /*!< USBPHY1_USB1_VBUS_DET_STAT.AVALID Field */
+#define USBPHY_USB1_VBUS_DET_STAT_VBUS_VALID_MASK (0x8U)                                             /*!< USBPHY1_USB1_VBUS_DET_STAT.VBUS_VALID Mask*/
+#define USBPHY_USB1_VBUS_DET_STAT_VBUS_VALID_SHIFT (3U)                                              /*!< USBPHY1_USB1_VBUS_DET_STAT.VBUS_VALID Position*/
+#define USBPHY_USB1_VBUS_DET_STAT_VBUS_VALID(x)  (((uint32_t)(((uint32_t)(x))<<USBPHY_USB1_VBUS_DET_STAT_VBUS_VALID_SHIFT))&USBPHY_USB1_VBUS_DET_STAT_VBUS_VALID_MASK) /*!< USBPHY1_USB1_VBUS_DET_STAT.VBUS_VALID Field*/
+#define USBPHY_USB1_VBUS_DET_STAT_VBUS_VALID_3V_MASK (0x10U)                                         /*!< USBPHY1_USB1_VBUS_DET_STAT.VBUS_VALID_3V Mask*/
+#define USBPHY_USB1_VBUS_DET_STAT_VBUS_VALID_3V_SHIFT (4U)                                           /*!< USBPHY1_USB1_VBUS_DET_STAT.VBUS_VALID_3V Position*/
+#define USBPHY_USB1_VBUS_DET_STAT_VBUS_VALID_3V(x) (((uint32_t)(((uint32_t)(x))<<USBPHY_USB1_VBUS_DET_STAT_VBUS_VALID_3V_SHIFT))&USBPHY_USB1_VBUS_DET_STAT_VBUS_VALID_3V_MASK) /*!< USBPHY1_USB1_VBUS_DET_STAT.VBUS_VALID_3V Field*/
 
 /*! @name USB1_CHRG_DET_STAT - USB PHY Charger Detect Status Register */
-#define USBPHY0_USB1_CHRG_DET_STAT_PLUG_CONTACT_MASK (0x1U)                                          /*!< USBPHY0_USB1_CHRG_DET_STAT.PLUG_CONTACT Mask*/
-#define USBPHY0_USB1_CHRG_DET_STAT_PLUG_CONTACT_SHIFT (0U)                                           /*!< USBPHY0_USB1_CHRG_DET_STAT.PLUG_CONTACT Position*/
-#define USBPHY0_USB1_CHRG_DET_STAT_PLUG_CONTACT(x) (((uint32_t)(((uint32_t)(x))<<USBPHY0_USB1_CHRG_DET_STAT_PLUG_CONTACT_SHIFT))&USBPHY0_USB1_CHRG_DET_STAT_PLUG_CONTACT_MASK) /*!< USBPHY0_USB1_CHRG_DET_STAT.PLUG_CONTACT Field*/
-#define USBPHY0_USB1_CHRG_DET_STAT_CHRG_DETECTED_MASK (0x2U)                                         /*!< USBPHY0_USB1_CHRG_DET_STAT.CHRG_DETECTED Mask*/
-#define USBPHY0_USB1_CHRG_DET_STAT_CHRG_DETECTED_SHIFT (1U)                                          /*!< USBPHY0_USB1_CHRG_DET_STAT.CHRG_DETECTED Position*/
-#define USBPHY0_USB1_CHRG_DET_STAT_CHRG_DETECTED(x) (((uint32_t)(((uint32_t)(x))<<USBPHY0_USB1_CHRG_DET_STAT_CHRG_DETECTED_SHIFT))&USBPHY0_USB1_CHRG_DET_STAT_CHRG_DETECTED_MASK) /*!< USBPHY0_USB1_CHRG_DET_STAT.CHRG_DETECTED Field*/
-#define USBPHY0_USB1_CHRG_DET_STAT_DM_STATE_MASK (0x4U)                                              /*!< USBPHY0_USB1_CHRG_DET_STAT.DM_STATE Mask*/
-#define USBPHY0_USB1_CHRG_DET_STAT_DM_STATE_SHIFT (2U)                                               /*!< USBPHY0_USB1_CHRG_DET_STAT.DM_STATE Position*/
-#define USBPHY0_USB1_CHRG_DET_STAT_DM_STATE(x)   (((uint32_t)(((uint32_t)(x))<<USBPHY0_USB1_CHRG_DET_STAT_DM_STATE_SHIFT))&USBPHY0_USB1_CHRG_DET_STAT_DM_STATE_MASK) /*!< USBPHY0_USB1_CHRG_DET_STAT.DM_STATE Field*/
-#define USBPHY0_USB1_CHRG_DET_STAT_DP_STATE_MASK (0x8U)                                              /*!< USBPHY0_USB1_CHRG_DET_STAT.DP_STATE Mask*/
-#define USBPHY0_USB1_CHRG_DET_STAT_DP_STATE_SHIFT (3U)                                               /*!< USBPHY0_USB1_CHRG_DET_STAT.DP_STATE Position*/
-#define USBPHY0_USB1_CHRG_DET_STAT_DP_STATE(x)   (((uint32_t)(((uint32_t)(x))<<USBPHY0_USB1_CHRG_DET_STAT_DP_STATE_SHIFT))&USBPHY0_USB1_CHRG_DET_STAT_DP_STATE_MASK) /*!< USBPHY0_USB1_CHRG_DET_STAT.DP_STATE Field*/
-#define USBPHY0_USB1_CHRG_DET_STAT_SECDET_DCP_MASK (0x10U)                                           /*!< USBPHY0_USB1_CHRG_DET_STAT.SECDET_DCP Mask*/
-#define USBPHY0_USB1_CHRG_DET_STAT_SECDET_DCP_SHIFT (4U)                                             /*!< USBPHY0_USB1_CHRG_DET_STAT.SECDET_DCP Position*/
-#define USBPHY0_USB1_CHRG_DET_STAT_SECDET_DCP(x) (((uint32_t)(((uint32_t)(x))<<USBPHY0_USB1_CHRG_DET_STAT_SECDET_DCP_SHIFT))&USBPHY0_USB1_CHRG_DET_STAT_SECDET_DCP_MASK) /*!< USBPHY0_USB1_CHRG_DET_STAT.SECDET_DCP Field*/
+#define USBPHY_USB1_CHRG_DET_STAT_PLUG_CONTACT_MASK (0x1U)                                           /*!< USBPHY1_USB1_CHRG_DET_STAT.PLUG_CONTACT Mask*/
+#define USBPHY_USB1_CHRG_DET_STAT_PLUG_CONTACT_SHIFT (0U)                                            /*!< USBPHY1_USB1_CHRG_DET_STAT.PLUG_CONTACT Position*/
+#define USBPHY_USB1_CHRG_DET_STAT_PLUG_CONTACT(x) (((uint32_t)(((uint32_t)(x))<<USBPHY_USB1_CHRG_DET_STAT_PLUG_CONTACT_SHIFT))&USBPHY_USB1_CHRG_DET_STAT_PLUG_CONTACT_MASK) /*!< USBPHY1_USB1_CHRG_DET_STAT.PLUG_CONTACT Field*/
+#define USBPHY_USB1_CHRG_DET_STAT_CHRG_DETECTED_MASK (0x2U)                                          /*!< USBPHY1_USB1_CHRG_DET_STAT.CHRG_DETECTED Mask*/
+#define USBPHY_USB1_CHRG_DET_STAT_CHRG_DETECTED_SHIFT (1U)                                           /*!< USBPHY1_USB1_CHRG_DET_STAT.CHRG_DETECTED Position*/
+#define USBPHY_USB1_CHRG_DET_STAT_CHRG_DETECTED(x) (((uint32_t)(((uint32_t)(x))<<USBPHY_USB1_CHRG_DET_STAT_CHRG_DETECTED_SHIFT))&USBPHY_USB1_CHRG_DET_STAT_CHRG_DETECTED_MASK) /*!< USBPHY1_USB1_CHRG_DET_STAT.CHRG_DETECTED Field*/
+#define USBPHY_USB1_CHRG_DET_STAT_DM_STATE_MASK  (0x4U)                                              /*!< USBPHY1_USB1_CHRG_DET_STAT.DM_STATE Mask*/
+#define USBPHY_USB1_CHRG_DET_STAT_DM_STATE_SHIFT (2U)                                                /*!< USBPHY1_USB1_CHRG_DET_STAT.DM_STATE Position*/
+#define USBPHY_USB1_CHRG_DET_STAT_DM_STATE(x)    (((uint32_t)(((uint32_t)(x))<<USBPHY_USB1_CHRG_DET_STAT_DM_STATE_SHIFT))&USBPHY_USB1_CHRG_DET_STAT_DM_STATE_MASK) /*!< USBPHY1_USB1_CHRG_DET_STAT.DM_STATE Field*/
+#define USBPHY_USB1_CHRG_DET_STAT_DP_STATE_MASK  (0x8U)                                              /*!< USBPHY1_USB1_CHRG_DET_STAT.DP_STATE Mask*/
+#define USBPHY_USB1_CHRG_DET_STAT_DP_STATE_SHIFT (3U)                                                /*!< USBPHY1_USB1_CHRG_DET_STAT.DP_STATE Position*/
+#define USBPHY_USB1_CHRG_DET_STAT_DP_STATE(x)    (((uint32_t)(((uint32_t)(x))<<USBPHY_USB1_CHRG_DET_STAT_DP_STATE_SHIFT))&USBPHY_USB1_CHRG_DET_STAT_DP_STATE_MASK) /*!< USBPHY1_USB1_CHRG_DET_STAT.DP_STATE Field*/
+#define USBPHY_USB1_CHRG_DET_STAT_SECDET_DCP_MASK (0x10U)                                            /*!< USBPHY1_USB1_CHRG_DET_STAT.SECDET_DCP Mask*/
+#define USBPHY_USB1_CHRG_DET_STAT_SECDET_DCP_SHIFT (4U)                                              /*!< USBPHY1_USB1_CHRG_DET_STAT.SECDET_DCP Position*/
+#define USBPHY_USB1_CHRG_DET_STAT_SECDET_DCP(x)  (((uint32_t)(((uint32_t)(x))<<USBPHY_USB1_CHRG_DET_STAT_SECDET_DCP_SHIFT))&USBPHY_USB1_CHRG_DET_STAT_SECDET_DCP_MASK) /*!< USBPHY1_USB1_CHRG_DET_STAT.SECDET_DCP Field*/
 
 /*! @name ANACTRL - USB PHY Analog Control Register */
-#define USBPHY0_ANACTRL_TESTCLK_SEL_MASK         (0x1U)                                              /*!< USBPHY0_ANACTRL.TESTCLK_SEL Mask        */
-#define USBPHY0_ANACTRL_TESTCLK_SEL_SHIFT        (0U)                                                /*!< USBPHY0_ANACTRL.TESTCLK_SEL Position    */
-#define USBPHY0_ANACTRL_TESTCLK_SEL(x)           (((uint32_t)(((uint32_t)(x))<<USBPHY0_ANACTRL_TESTCLK_SEL_SHIFT))&USBPHY0_ANACTRL_TESTCLK_SEL_MASK) /*!< USBPHY0_ANACTRL.TESTCLK_SEL Field       */
-#define USBPHY0_ANACTRL_PFD_CLKGATE_MASK         (0x2U)                                              /*!< USBPHY0_ANACTRL.PFD_CLKGATE Mask        */
-#define USBPHY0_ANACTRL_PFD_CLKGATE_SHIFT        (1U)                                                /*!< USBPHY0_ANACTRL.PFD_CLKGATE Position    */
-#define USBPHY0_ANACTRL_PFD_CLKGATE(x)           (((uint32_t)(((uint32_t)(x))<<USBPHY0_ANACTRL_PFD_CLKGATE_SHIFT))&USBPHY0_ANACTRL_PFD_CLKGATE_MASK) /*!< USBPHY0_ANACTRL.PFD_CLKGATE Field       */
-#define USBPHY0_ANACTRL_PFD_CLK_SEL_MASK         (0xCU)                                              /*!< USBPHY0_ANACTRL.PFD_CLK_SEL Mask        */
-#define USBPHY0_ANACTRL_PFD_CLK_SEL_SHIFT        (2U)                                                /*!< USBPHY0_ANACTRL.PFD_CLK_SEL Position    */
-#define USBPHY0_ANACTRL_PFD_CLK_SEL(x)           (((uint32_t)(((uint32_t)(x))<<USBPHY0_ANACTRL_PFD_CLK_SEL_SHIFT))&USBPHY0_ANACTRL_PFD_CLK_SEL_MASK) /*!< USBPHY0_ANACTRL.PFD_CLK_SEL Field       */
-#define USBPHY0_ANACTRL_PFD_FRAC_MASK            (0x3F0U)                                            /*!< USBPHY0_ANACTRL.PFD_FRAC Mask           */
-#define USBPHY0_ANACTRL_PFD_FRAC_SHIFT           (4U)                                                /*!< USBPHY0_ANACTRL.PFD_FRAC Position       */
-#define USBPHY0_ANACTRL_PFD_FRAC(x)              (((uint32_t)(((uint32_t)(x))<<USBPHY0_ANACTRL_PFD_FRAC_SHIFT))&USBPHY0_ANACTRL_PFD_FRAC_MASK) /*!< USBPHY0_ANACTRL.PFD_FRAC Field          */
-#define USBPHY0_ANACTRL_DEV_PULLDOWN_MASK        (0x400U)                                            /*!< USBPHY0_ANACTRL.DEV_PULLDOWN Mask       */
-#define USBPHY0_ANACTRL_DEV_PULLDOWN_SHIFT       (10U)                                               /*!< USBPHY0_ANACTRL.DEV_PULLDOWN Position   */
-#define USBPHY0_ANACTRL_DEV_PULLDOWN(x)          (((uint32_t)(((uint32_t)(x))<<USBPHY0_ANACTRL_DEV_PULLDOWN_SHIFT))&USBPHY0_ANACTRL_DEV_PULLDOWN_MASK) /*!< USBPHY0_ANACTRL.DEV_PULLDOWN Field      */
-#define USBPHY0_ANACTRL_EMPH_PULSE_CTRL_MASK     (0x1800U)                                           /*!< USBPHY0_ANACTRL.EMPH_PULSE_CTRL Mask    */
-#define USBPHY0_ANACTRL_EMPH_PULSE_CTRL_SHIFT    (11U)                                               /*!< USBPHY0_ANACTRL.EMPH_PULSE_CTRL Position*/
-#define USBPHY0_ANACTRL_EMPH_PULSE_CTRL(x)       (((uint32_t)(((uint32_t)(x))<<USBPHY0_ANACTRL_EMPH_PULSE_CTRL_SHIFT))&USBPHY0_ANACTRL_EMPH_PULSE_CTRL_MASK) /*!< USBPHY0_ANACTRL.EMPH_PULSE_CTRL Field   */
-#define USBPHY0_ANACTRL_EMPH_EN_MASK             (0x2000U)                                           /*!< USBPHY0_ANACTRL.EMPH_EN Mask            */
-#define USBPHY0_ANACTRL_EMPH_EN_SHIFT            (13U)                                               /*!< USBPHY0_ANACTRL.EMPH_EN Position        */
-#define USBPHY0_ANACTRL_EMPH_EN(x)               (((uint32_t)(((uint32_t)(x))<<USBPHY0_ANACTRL_EMPH_EN_SHIFT))&USBPHY0_ANACTRL_EMPH_EN_MASK) /*!< USBPHY0_ANACTRL.EMPH_EN Field           */
-#define USBPHY0_ANACTRL_EMPH_CUR_CTRL_MASK       (0xC000U)                                           /*!< USBPHY0_ANACTRL.EMPH_CUR_CTRL Mask      */
-#define USBPHY0_ANACTRL_EMPH_CUR_CTRL_SHIFT      (14U)                                               /*!< USBPHY0_ANACTRL.EMPH_CUR_CTRL Position  */
-#define USBPHY0_ANACTRL_EMPH_CUR_CTRL(x)         (((uint32_t)(((uint32_t)(x))<<USBPHY0_ANACTRL_EMPH_CUR_CTRL_SHIFT))&USBPHY0_ANACTRL_EMPH_CUR_CTRL_MASK) /*!< USBPHY0_ANACTRL.EMPH_CUR_CTRL Field     */
-#define USBPHY0_ANACTRL_PFD_STABLE_MASK          (0x80000000U)                                       /*!< USBPHY0_ANACTRL.PFD_STABLE Mask         */
-#define USBPHY0_ANACTRL_PFD_STABLE_SHIFT         (31U)                                               /*!< USBPHY0_ANACTRL.PFD_STABLE Position     */
-#define USBPHY0_ANACTRL_PFD_STABLE(x)            (((uint32_t)(((uint32_t)(x))<<USBPHY0_ANACTRL_PFD_STABLE_SHIFT))&USBPHY0_ANACTRL_PFD_STABLE_MASK) /*!< USBPHY0_ANACTRL.PFD_STABLE Field        */
+#define USBPHY_ANACTRL_TESTCLK_SEL_MASK          (0x1U)                                              /*!< USBPHY1_ANACTRL.TESTCLK_SEL Mask        */
+#define USBPHY_ANACTRL_TESTCLK_SEL_SHIFT         (0U)                                                /*!< USBPHY1_ANACTRL.TESTCLK_SEL Position    */
+#define USBPHY_ANACTRL_TESTCLK_SEL(x)            (((uint32_t)(((uint32_t)(x))<<USBPHY_ANACTRL_TESTCLK_SEL_SHIFT))&USBPHY_ANACTRL_TESTCLK_SEL_MASK) /*!< USBPHY1_ANACTRL.TESTCLK_SEL Field       */
+#define USBPHY_ANACTRL_PFD_CLKGATE_MASK          (0x2U)                                              /*!< USBPHY1_ANACTRL.PFD_CLKGATE Mask        */
+#define USBPHY_ANACTRL_PFD_CLKGATE_SHIFT         (1U)                                                /*!< USBPHY1_ANACTRL.PFD_CLKGATE Position    */
+#define USBPHY_ANACTRL_PFD_CLKGATE(x)            (((uint32_t)(((uint32_t)(x))<<USBPHY_ANACTRL_PFD_CLKGATE_SHIFT))&USBPHY_ANACTRL_PFD_CLKGATE_MASK) /*!< USBPHY1_ANACTRL.PFD_CLKGATE Field       */
+#define USBPHY_ANACTRL_PFD_CLK_SEL_MASK          (0xCU)                                              /*!< USBPHY1_ANACTRL.PFD_CLK_SEL Mask        */
+#define USBPHY_ANACTRL_PFD_CLK_SEL_SHIFT         (2U)                                                /*!< USBPHY1_ANACTRL.PFD_CLK_SEL Position    */
+#define USBPHY_ANACTRL_PFD_CLK_SEL(x)            (((uint32_t)(((uint32_t)(x))<<USBPHY_ANACTRL_PFD_CLK_SEL_SHIFT))&USBPHY_ANACTRL_PFD_CLK_SEL_MASK) /*!< USBPHY1_ANACTRL.PFD_CLK_SEL Field       */
+#define USBPHY_ANACTRL_PFD_FRAC_MASK             (0x3F0U)                                            /*!< USBPHY1_ANACTRL.PFD_FRAC Mask           */
+#define USBPHY_ANACTRL_PFD_FRAC_SHIFT            (4U)                                                /*!< USBPHY1_ANACTRL.PFD_FRAC Position       */
+#define USBPHY_ANACTRL_PFD_FRAC(x)               (((uint32_t)(((uint32_t)(x))<<USBPHY_ANACTRL_PFD_FRAC_SHIFT))&USBPHY_ANACTRL_PFD_FRAC_MASK) /*!< USBPHY1_ANACTRL.PFD_FRAC Field          */
+#define USBPHY_ANACTRL_DEV_PULLDOWN_MASK         (0x400U)                                            /*!< USBPHY1_ANACTRL.DEV_PULLDOWN Mask       */
+#define USBPHY_ANACTRL_DEV_PULLDOWN_SHIFT        (10U)                                               /*!< USBPHY1_ANACTRL.DEV_PULLDOWN Position   */
+#define USBPHY_ANACTRL_DEV_PULLDOWN(x)           (((uint32_t)(((uint32_t)(x))<<USBPHY_ANACTRL_DEV_PULLDOWN_SHIFT))&USBPHY_ANACTRL_DEV_PULLDOWN_MASK) /*!< USBPHY1_ANACTRL.DEV_PULLDOWN Field      */
+#define USBPHY_ANACTRL_EMPH_PULSE_CTRL_MASK      (0x1800U)                                           /*!< USBPHY1_ANACTRL.EMPH_PULSE_CTRL Mask    */
+#define USBPHY_ANACTRL_EMPH_PULSE_CTRL_SHIFT     (11U)                                               /*!< USBPHY1_ANACTRL.EMPH_PULSE_CTRL Position*/
+#define USBPHY_ANACTRL_EMPH_PULSE_CTRL(x)        (((uint32_t)(((uint32_t)(x))<<USBPHY_ANACTRL_EMPH_PULSE_CTRL_SHIFT))&USBPHY_ANACTRL_EMPH_PULSE_CTRL_MASK) /*!< USBPHY1_ANACTRL.EMPH_PULSE_CTRL Field   */
+#define USBPHY_ANACTRL_EMPH_EN_MASK              (0x2000U)                                           /*!< USBPHY1_ANACTRL.EMPH_EN Mask            */
+#define USBPHY_ANACTRL_EMPH_EN_SHIFT             (13U)                                               /*!< USBPHY1_ANACTRL.EMPH_EN Position        */
+#define USBPHY_ANACTRL_EMPH_EN(x)                (((uint32_t)(((uint32_t)(x))<<USBPHY_ANACTRL_EMPH_EN_SHIFT))&USBPHY_ANACTRL_EMPH_EN_MASK) /*!< USBPHY1_ANACTRL.EMPH_EN Field           */
+#define USBPHY_ANACTRL_EMPH_CUR_CTRL_MASK        (0xC000U)                                           /*!< USBPHY1_ANACTRL.EMPH_CUR_CTRL Mask      */
+#define USBPHY_ANACTRL_EMPH_CUR_CTRL_SHIFT       (14U)                                               /*!< USBPHY1_ANACTRL.EMPH_CUR_CTRL Position  */
+#define USBPHY_ANACTRL_EMPH_CUR_CTRL(x)          (((uint32_t)(((uint32_t)(x))<<USBPHY_ANACTRL_EMPH_CUR_CTRL_SHIFT))&USBPHY_ANACTRL_EMPH_CUR_CTRL_MASK) /*!< USBPHY1_ANACTRL.EMPH_CUR_CTRL Field     */
+#define USBPHY_ANACTRL_PFD_STABLE_MASK           (0x80000000U)                                       /*!< USBPHY1_ANACTRL.PFD_STABLE Mask         */
+#define USBPHY_ANACTRL_PFD_STABLE_SHIFT          (31U)                                               /*!< USBPHY1_ANACTRL.PFD_STABLE Position     */
+#define USBPHY_ANACTRL_PFD_STABLE(x)             (((uint32_t)(((uint32_t)(x))<<USBPHY_ANACTRL_PFD_STABLE_SHIFT))&USBPHY_ANACTRL_PFD_STABLE_MASK) /*!< USBPHY1_ANACTRL.PFD_STABLE Field        */
 
 /*! @name ANACTRL_SET - USB PHY Analog Control Register */
-#define USBPHY0_ANACTRL_SET_TESTCLK_SEL_MASK     (0x1U)                                              /*!< USBPHY0_ANACTRL_SET.TESTCLK_SEL Mask    */
-#define USBPHY0_ANACTRL_SET_TESTCLK_SEL_SHIFT    (0U)                                                /*!< USBPHY0_ANACTRL_SET.TESTCLK_SEL Position*/
-#define USBPHY0_ANACTRL_SET_TESTCLK_SEL(x)       (((uint32_t)(((uint32_t)(x))<<USBPHY0_ANACTRL_SET_TESTCLK_SEL_SHIFT))&USBPHY0_ANACTRL_SET_TESTCLK_SEL_MASK) /*!< USBPHY0_ANACTRL_SET.TESTCLK_SEL Field   */
-#define USBPHY0_ANACTRL_SET_PFD_CLKGATE_MASK     (0x2U)                                              /*!< USBPHY0_ANACTRL_SET.PFD_CLKGATE Mask    */
-#define USBPHY0_ANACTRL_SET_PFD_CLKGATE_SHIFT    (1U)                                                /*!< USBPHY0_ANACTRL_SET.PFD_CLKGATE Position*/
-#define USBPHY0_ANACTRL_SET_PFD_CLKGATE(x)       (((uint32_t)(((uint32_t)(x))<<USBPHY0_ANACTRL_SET_PFD_CLKGATE_SHIFT))&USBPHY0_ANACTRL_SET_PFD_CLKGATE_MASK) /*!< USBPHY0_ANACTRL_SET.PFD_CLKGATE Field   */
-#define USBPHY0_ANACTRL_SET_PFD_CLK_SEL_MASK     (0xCU)                                              /*!< USBPHY0_ANACTRL_SET.PFD_CLK_SEL Mask    */
-#define USBPHY0_ANACTRL_SET_PFD_CLK_SEL_SHIFT    (2U)                                                /*!< USBPHY0_ANACTRL_SET.PFD_CLK_SEL Position*/
-#define USBPHY0_ANACTRL_SET_PFD_CLK_SEL(x)       (((uint32_t)(((uint32_t)(x))<<USBPHY0_ANACTRL_SET_PFD_CLK_SEL_SHIFT))&USBPHY0_ANACTRL_SET_PFD_CLK_SEL_MASK) /*!< USBPHY0_ANACTRL_SET.PFD_CLK_SEL Field   */
-#define USBPHY0_ANACTRL_SET_PFD_FRAC_MASK        (0x3F0U)                                            /*!< USBPHY0_ANACTRL_SET.PFD_FRAC Mask       */
-#define USBPHY0_ANACTRL_SET_PFD_FRAC_SHIFT       (4U)                                                /*!< USBPHY0_ANACTRL_SET.PFD_FRAC Position   */
-#define USBPHY0_ANACTRL_SET_PFD_FRAC(x)          (((uint32_t)(((uint32_t)(x))<<USBPHY0_ANACTRL_SET_PFD_FRAC_SHIFT))&USBPHY0_ANACTRL_SET_PFD_FRAC_MASK) /*!< USBPHY0_ANACTRL_SET.PFD_FRAC Field      */
-#define USBPHY0_ANACTRL_SET_DEV_PULLDOWN_MASK    (0x400U)                                            /*!< USBPHY0_ANACTRL_SET.DEV_PULLDOWN Mask   */
-#define USBPHY0_ANACTRL_SET_DEV_PULLDOWN_SHIFT   (10U)                                               /*!< USBPHY0_ANACTRL_SET.DEV_PULLDOWN Position*/
-#define USBPHY0_ANACTRL_SET_DEV_PULLDOWN(x)      (((uint32_t)(((uint32_t)(x))<<USBPHY0_ANACTRL_SET_DEV_PULLDOWN_SHIFT))&USBPHY0_ANACTRL_SET_DEV_PULLDOWN_MASK) /*!< USBPHY0_ANACTRL_SET.DEV_PULLDOWN Field  */
-#define USBPHY0_ANACTRL_SET_EMPH_PULSE_CTRL_MASK (0x1800U)                                           /*!< USBPHY0_ANACTRL_SET.EMPH_PULSE_CTRL Mask*/
-#define USBPHY0_ANACTRL_SET_EMPH_PULSE_CTRL_SHIFT (11U)                                              /*!< USBPHY0_ANACTRL_SET.EMPH_PULSE_CTRL Position*/
-#define USBPHY0_ANACTRL_SET_EMPH_PULSE_CTRL(x)   (((uint32_t)(((uint32_t)(x))<<USBPHY0_ANACTRL_SET_EMPH_PULSE_CTRL_SHIFT))&USBPHY0_ANACTRL_SET_EMPH_PULSE_CTRL_MASK) /*!< USBPHY0_ANACTRL_SET.EMPH_PULSE_CTRL Field*/
-#define USBPHY0_ANACTRL_SET_EMPH_EN_MASK         (0x2000U)                                           /*!< USBPHY0_ANACTRL_SET.EMPH_EN Mask        */
-#define USBPHY0_ANACTRL_SET_EMPH_EN_SHIFT        (13U)                                               /*!< USBPHY0_ANACTRL_SET.EMPH_EN Position    */
-#define USBPHY0_ANACTRL_SET_EMPH_EN(x)           (((uint32_t)(((uint32_t)(x))<<USBPHY0_ANACTRL_SET_EMPH_EN_SHIFT))&USBPHY0_ANACTRL_SET_EMPH_EN_MASK) /*!< USBPHY0_ANACTRL_SET.EMPH_EN Field       */
-#define USBPHY0_ANACTRL_SET_EMPH_CUR_CTRL_MASK   (0xC000U)                                           /*!< USBPHY0_ANACTRL_SET.EMPH_CUR_CTRL Mask  */
-#define USBPHY0_ANACTRL_SET_EMPH_CUR_CTRL_SHIFT  (14U)                                               /*!< USBPHY0_ANACTRL_SET.EMPH_CUR_CTRL Position*/
-#define USBPHY0_ANACTRL_SET_EMPH_CUR_CTRL(x)     (((uint32_t)(((uint32_t)(x))<<USBPHY0_ANACTRL_SET_EMPH_CUR_CTRL_SHIFT))&USBPHY0_ANACTRL_SET_EMPH_CUR_CTRL_MASK) /*!< USBPHY0_ANACTRL_SET.EMPH_CUR_CTRL Field */
-#define USBPHY0_ANACTRL_SET_PFD_STABLE_MASK      (0x80000000U)                                       /*!< USBPHY0_ANACTRL_SET.PFD_STABLE Mask     */
-#define USBPHY0_ANACTRL_SET_PFD_STABLE_SHIFT     (31U)                                               /*!< USBPHY0_ANACTRL_SET.PFD_STABLE Position */
-#define USBPHY0_ANACTRL_SET_PFD_STABLE(x)        (((uint32_t)(((uint32_t)(x))<<USBPHY0_ANACTRL_SET_PFD_STABLE_SHIFT))&USBPHY0_ANACTRL_SET_PFD_STABLE_MASK) /*!< USBPHY0_ANACTRL_SET.PFD_STABLE Field    */
+#define USBPHY_ANACTRL_SET_TESTCLK_SEL_MASK      (0x1U)                                              /*!< USBPHY1_ANACTRL_SET.TESTCLK_SEL Mask    */
+#define USBPHY_ANACTRL_SET_TESTCLK_SEL_SHIFT     (0U)                                                /*!< USBPHY1_ANACTRL_SET.TESTCLK_SEL Position*/
+#define USBPHY_ANACTRL_SET_TESTCLK_SEL(x)        (((uint32_t)(((uint32_t)(x))<<USBPHY_ANACTRL_SET_TESTCLK_SEL_SHIFT))&USBPHY_ANACTRL_SET_TESTCLK_SEL_MASK) /*!< USBPHY1_ANACTRL_SET.TESTCLK_SEL Field   */
+#define USBPHY_ANACTRL_SET_PFD_CLKGATE_MASK      (0x2U)                                              /*!< USBPHY1_ANACTRL_SET.PFD_CLKGATE Mask    */
+#define USBPHY_ANACTRL_SET_PFD_CLKGATE_SHIFT     (1U)                                                /*!< USBPHY1_ANACTRL_SET.PFD_CLKGATE Position*/
+#define USBPHY_ANACTRL_SET_PFD_CLKGATE(x)        (((uint32_t)(((uint32_t)(x))<<USBPHY_ANACTRL_SET_PFD_CLKGATE_SHIFT))&USBPHY_ANACTRL_SET_PFD_CLKGATE_MASK) /*!< USBPHY1_ANACTRL_SET.PFD_CLKGATE Field   */
+#define USBPHY_ANACTRL_SET_PFD_CLK_SEL_MASK      (0xCU)                                              /*!< USBPHY1_ANACTRL_SET.PFD_CLK_SEL Mask    */
+#define USBPHY_ANACTRL_SET_PFD_CLK_SEL_SHIFT     (2U)                                                /*!< USBPHY1_ANACTRL_SET.PFD_CLK_SEL Position*/
+#define USBPHY_ANACTRL_SET_PFD_CLK_SEL(x)        (((uint32_t)(((uint32_t)(x))<<USBPHY_ANACTRL_SET_PFD_CLK_SEL_SHIFT))&USBPHY_ANACTRL_SET_PFD_CLK_SEL_MASK) /*!< USBPHY1_ANACTRL_SET.PFD_CLK_SEL Field   */
+#define USBPHY_ANACTRL_SET_PFD_FRAC_MASK         (0x3F0U)                                            /*!< USBPHY1_ANACTRL_SET.PFD_FRAC Mask       */
+#define USBPHY_ANACTRL_SET_PFD_FRAC_SHIFT        (4U)                                                /*!< USBPHY1_ANACTRL_SET.PFD_FRAC Position   */
+#define USBPHY_ANACTRL_SET_PFD_FRAC(x)           (((uint32_t)(((uint32_t)(x))<<USBPHY_ANACTRL_SET_PFD_FRAC_SHIFT))&USBPHY_ANACTRL_SET_PFD_FRAC_MASK) /*!< USBPHY1_ANACTRL_SET.PFD_FRAC Field      */
+#define USBPHY_ANACTRL_SET_DEV_PULLDOWN_MASK     (0x400U)                                            /*!< USBPHY1_ANACTRL_SET.DEV_PULLDOWN Mask   */
+#define USBPHY_ANACTRL_SET_DEV_PULLDOWN_SHIFT    (10U)                                               /*!< USBPHY1_ANACTRL_SET.DEV_PULLDOWN Position*/
+#define USBPHY_ANACTRL_SET_DEV_PULLDOWN(x)       (((uint32_t)(((uint32_t)(x))<<USBPHY_ANACTRL_SET_DEV_PULLDOWN_SHIFT))&USBPHY_ANACTRL_SET_DEV_PULLDOWN_MASK) /*!< USBPHY1_ANACTRL_SET.DEV_PULLDOWN Field  */
+#define USBPHY_ANACTRL_SET_EMPH_PULSE_CTRL_MASK  (0x1800U)                                           /*!< USBPHY1_ANACTRL_SET.EMPH_PULSE_CTRL Mask*/
+#define USBPHY_ANACTRL_SET_EMPH_PULSE_CTRL_SHIFT (11U)                                               /*!< USBPHY1_ANACTRL_SET.EMPH_PULSE_CTRL Position*/
+#define USBPHY_ANACTRL_SET_EMPH_PULSE_CTRL(x)    (((uint32_t)(((uint32_t)(x))<<USBPHY_ANACTRL_SET_EMPH_PULSE_CTRL_SHIFT))&USBPHY_ANACTRL_SET_EMPH_PULSE_CTRL_MASK) /*!< USBPHY1_ANACTRL_SET.EMPH_PULSE_CTRL Field*/
+#define USBPHY_ANACTRL_SET_EMPH_EN_MASK          (0x2000U)                                           /*!< USBPHY1_ANACTRL_SET.EMPH_EN Mask        */
+#define USBPHY_ANACTRL_SET_EMPH_EN_SHIFT         (13U)                                               /*!< USBPHY1_ANACTRL_SET.EMPH_EN Position    */
+#define USBPHY_ANACTRL_SET_EMPH_EN(x)            (((uint32_t)(((uint32_t)(x))<<USBPHY_ANACTRL_SET_EMPH_EN_SHIFT))&USBPHY_ANACTRL_SET_EMPH_EN_MASK) /*!< USBPHY1_ANACTRL_SET.EMPH_EN Field       */
+#define USBPHY_ANACTRL_SET_EMPH_CUR_CTRL_MASK    (0xC000U)                                           /*!< USBPHY1_ANACTRL_SET.EMPH_CUR_CTRL Mask  */
+#define USBPHY_ANACTRL_SET_EMPH_CUR_CTRL_SHIFT   (14U)                                               /*!< USBPHY1_ANACTRL_SET.EMPH_CUR_CTRL Position*/
+#define USBPHY_ANACTRL_SET_EMPH_CUR_CTRL(x)      (((uint32_t)(((uint32_t)(x))<<USBPHY_ANACTRL_SET_EMPH_CUR_CTRL_SHIFT))&USBPHY_ANACTRL_SET_EMPH_CUR_CTRL_MASK) /*!< USBPHY1_ANACTRL_SET.EMPH_CUR_CTRL Field */
+#define USBPHY_ANACTRL_SET_PFD_STABLE_MASK       (0x80000000U)                                       /*!< USBPHY1_ANACTRL_SET.PFD_STABLE Mask     */
+#define USBPHY_ANACTRL_SET_PFD_STABLE_SHIFT      (31U)                                               /*!< USBPHY1_ANACTRL_SET.PFD_STABLE Position */
+#define USBPHY_ANACTRL_SET_PFD_STABLE(x)         (((uint32_t)(((uint32_t)(x))<<USBPHY_ANACTRL_SET_PFD_STABLE_SHIFT))&USBPHY_ANACTRL_SET_PFD_STABLE_MASK) /*!< USBPHY1_ANACTRL_SET.PFD_STABLE Field    */
 
 /*! @name ANACTRL_CLR - USB PHY Analog Control Register */
-#define USBPHY0_ANACTRL_CLR_TESTCLK_SEL_MASK     (0x1U)                                              /*!< USBPHY0_ANACTRL_CLR.TESTCLK_SEL Mask    */
-#define USBPHY0_ANACTRL_CLR_TESTCLK_SEL_SHIFT    (0U)                                                /*!< USBPHY0_ANACTRL_CLR.TESTCLK_SEL Position*/
-#define USBPHY0_ANACTRL_CLR_TESTCLK_SEL(x)       (((uint32_t)(((uint32_t)(x))<<USBPHY0_ANACTRL_CLR_TESTCLK_SEL_SHIFT))&USBPHY0_ANACTRL_CLR_TESTCLK_SEL_MASK) /*!< USBPHY0_ANACTRL_CLR.TESTCLK_SEL Field   */
-#define USBPHY0_ANACTRL_CLR_PFD_CLKGATE_MASK     (0x2U)                                              /*!< USBPHY0_ANACTRL_CLR.PFD_CLKGATE Mask    */
-#define USBPHY0_ANACTRL_CLR_PFD_CLKGATE_SHIFT    (1U)                                                /*!< USBPHY0_ANACTRL_CLR.PFD_CLKGATE Position*/
-#define USBPHY0_ANACTRL_CLR_PFD_CLKGATE(x)       (((uint32_t)(((uint32_t)(x))<<USBPHY0_ANACTRL_CLR_PFD_CLKGATE_SHIFT))&USBPHY0_ANACTRL_CLR_PFD_CLKGATE_MASK) /*!< USBPHY0_ANACTRL_CLR.PFD_CLKGATE Field   */
-#define USBPHY0_ANACTRL_CLR_PFD_CLK_SEL_MASK     (0xCU)                                              /*!< USBPHY0_ANACTRL_CLR.PFD_CLK_SEL Mask    */
-#define USBPHY0_ANACTRL_CLR_PFD_CLK_SEL_SHIFT    (2U)                                                /*!< USBPHY0_ANACTRL_CLR.PFD_CLK_SEL Position*/
-#define USBPHY0_ANACTRL_CLR_PFD_CLK_SEL(x)       (((uint32_t)(((uint32_t)(x))<<USBPHY0_ANACTRL_CLR_PFD_CLK_SEL_SHIFT))&USBPHY0_ANACTRL_CLR_PFD_CLK_SEL_MASK) /*!< USBPHY0_ANACTRL_CLR.PFD_CLK_SEL Field   */
-#define USBPHY0_ANACTRL_CLR_PFD_FRAC_MASK        (0x3F0U)                                            /*!< USBPHY0_ANACTRL_CLR.PFD_FRAC Mask       */
-#define USBPHY0_ANACTRL_CLR_PFD_FRAC_SHIFT       (4U)                                                /*!< USBPHY0_ANACTRL_CLR.PFD_FRAC Position   */
-#define USBPHY0_ANACTRL_CLR_PFD_FRAC(x)          (((uint32_t)(((uint32_t)(x))<<USBPHY0_ANACTRL_CLR_PFD_FRAC_SHIFT))&USBPHY0_ANACTRL_CLR_PFD_FRAC_MASK) /*!< USBPHY0_ANACTRL_CLR.PFD_FRAC Field      */
-#define USBPHY0_ANACTRL_CLR_DEV_PULLDOWN_MASK    (0x400U)                                            /*!< USBPHY0_ANACTRL_CLR.DEV_PULLDOWN Mask   */
-#define USBPHY0_ANACTRL_CLR_DEV_PULLDOWN_SHIFT   (10U)                                               /*!< USBPHY0_ANACTRL_CLR.DEV_PULLDOWN Position*/
-#define USBPHY0_ANACTRL_CLR_DEV_PULLDOWN(x)      (((uint32_t)(((uint32_t)(x))<<USBPHY0_ANACTRL_CLR_DEV_PULLDOWN_SHIFT))&USBPHY0_ANACTRL_CLR_DEV_PULLDOWN_MASK) /*!< USBPHY0_ANACTRL_CLR.DEV_PULLDOWN Field  */
-#define USBPHY0_ANACTRL_CLR_EMPH_PULSE_CTRL_MASK (0x1800U)                                           /*!< USBPHY0_ANACTRL_CLR.EMPH_PULSE_CTRL Mask*/
-#define USBPHY0_ANACTRL_CLR_EMPH_PULSE_CTRL_SHIFT (11U)                                              /*!< USBPHY0_ANACTRL_CLR.EMPH_PULSE_CTRL Position*/
-#define USBPHY0_ANACTRL_CLR_EMPH_PULSE_CTRL(x)   (((uint32_t)(((uint32_t)(x))<<USBPHY0_ANACTRL_CLR_EMPH_PULSE_CTRL_SHIFT))&USBPHY0_ANACTRL_CLR_EMPH_PULSE_CTRL_MASK) /*!< USBPHY0_ANACTRL_CLR.EMPH_PULSE_CTRL Field*/
-#define USBPHY0_ANACTRL_CLR_EMPH_EN_MASK         (0x2000U)                                           /*!< USBPHY0_ANACTRL_CLR.EMPH_EN Mask        */
-#define USBPHY0_ANACTRL_CLR_EMPH_EN_SHIFT        (13U)                                               /*!< USBPHY0_ANACTRL_CLR.EMPH_EN Position    */
-#define USBPHY0_ANACTRL_CLR_EMPH_EN(x)           (((uint32_t)(((uint32_t)(x))<<USBPHY0_ANACTRL_CLR_EMPH_EN_SHIFT))&USBPHY0_ANACTRL_CLR_EMPH_EN_MASK) /*!< USBPHY0_ANACTRL_CLR.EMPH_EN Field       */
-#define USBPHY0_ANACTRL_CLR_EMPH_CUR_CTRL_MASK   (0xC000U)                                           /*!< USBPHY0_ANACTRL_CLR.EMPH_CUR_CTRL Mask  */
-#define USBPHY0_ANACTRL_CLR_EMPH_CUR_CTRL_SHIFT  (14U)                                               /*!< USBPHY0_ANACTRL_CLR.EMPH_CUR_CTRL Position*/
-#define USBPHY0_ANACTRL_CLR_EMPH_CUR_CTRL(x)     (((uint32_t)(((uint32_t)(x))<<USBPHY0_ANACTRL_CLR_EMPH_CUR_CTRL_SHIFT))&USBPHY0_ANACTRL_CLR_EMPH_CUR_CTRL_MASK) /*!< USBPHY0_ANACTRL_CLR.EMPH_CUR_CTRL Field */
-#define USBPHY0_ANACTRL_CLR_PFD_STABLE_MASK      (0x80000000U)                                       /*!< USBPHY0_ANACTRL_CLR.PFD_STABLE Mask     */
-#define USBPHY0_ANACTRL_CLR_PFD_STABLE_SHIFT     (31U)                                               /*!< USBPHY0_ANACTRL_CLR.PFD_STABLE Position */
-#define USBPHY0_ANACTRL_CLR_PFD_STABLE(x)        (((uint32_t)(((uint32_t)(x))<<USBPHY0_ANACTRL_CLR_PFD_STABLE_SHIFT))&USBPHY0_ANACTRL_CLR_PFD_STABLE_MASK) /*!< USBPHY0_ANACTRL_CLR.PFD_STABLE Field    */
+#define USBPHY_ANACTRL_CLR_TESTCLK_SEL_MASK      (0x1U)                                              /*!< USBPHY1_ANACTRL_CLR.TESTCLK_SEL Mask    */
+#define USBPHY_ANACTRL_CLR_TESTCLK_SEL_SHIFT     (0U)                                                /*!< USBPHY1_ANACTRL_CLR.TESTCLK_SEL Position*/
+#define USBPHY_ANACTRL_CLR_TESTCLK_SEL(x)        (((uint32_t)(((uint32_t)(x))<<USBPHY_ANACTRL_CLR_TESTCLK_SEL_SHIFT))&USBPHY_ANACTRL_CLR_TESTCLK_SEL_MASK) /*!< USBPHY1_ANACTRL_CLR.TESTCLK_SEL Field   */
+#define USBPHY_ANACTRL_CLR_PFD_CLKGATE_MASK      (0x2U)                                              /*!< USBPHY1_ANACTRL_CLR.PFD_CLKGATE Mask    */
+#define USBPHY_ANACTRL_CLR_PFD_CLKGATE_SHIFT     (1U)                                                /*!< USBPHY1_ANACTRL_CLR.PFD_CLKGATE Position*/
+#define USBPHY_ANACTRL_CLR_PFD_CLKGATE(x)        (((uint32_t)(((uint32_t)(x))<<USBPHY_ANACTRL_CLR_PFD_CLKGATE_SHIFT))&USBPHY_ANACTRL_CLR_PFD_CLKGATE_MASK) /*!< USBPHY1_ANACTRL_CLR.PFD_CLKGATE Field   */
+#define USBPHY_ANACTRL_CLR_PFD_CLK_SEL_MASK      (0xCU)                                              /*!< USBPHY1_ANACTRL_CLR.PFD_CLK_SEL Mask    */
+#define USBPHY_ANACTRL_CLR_PFD_CLK_SEL_SHIFT     (2U)                                                /*!< USBPHY1_ANACTRL_CLR.PFD_CLK_SEL Position*/
+#define USBPHY_ANACTRL_CLR_PFD_CLK_SEL(x)        (((uint32_t)(((uint32_t)(x))<<USBPHY_ANACTRL_CLR_PFD_CLK_SEL_SHIFT))&USBPHY_ANACTRL_CLR_PFD_CLK_SEL_MASK) /*!< USBPHY1_ANACTRL_CLR.PFD_CLK_SEL Field   */
+#define USBPHY_ANACTRL_CLR_PFD_FRAC_MASK         (0x3F0U)                                            /*!< USBPHY1_ANACTRL_CLR.PFD_FRAC Mask       */
+#define USBPHY_ANACTRL_CLR_PFD_FRAC_SHIFT        (4U)                                                /*!< USBPHY1_ANACTRL_CLR.PFD_FRAC Position   */
+#define USBPHY_ANACTRL_CLR_PFD_FRAC(x)           (((uint32_t)(((uint32_t)(x))<<USBPHY_ANACTRL_CLR_PFD_FRAC_SHIFT))&USBPHY_ANACTRL_CLR_PFD_FRAC_MASK) /*!< USBPHY1_ANACTRL_CLR.PFD_FRAC Field      */
+#define USBPHY_ANACTRL_CLR_DEV_PULLDOWN_MASK     (0x400U)                                            /*!< USBPHY1_ANACTRL_CLR.DEV_PULLDOWN Mask   */
+#define USBPHY_ANACTRL_CLR_DEV_PULLDOWN_SHIFT    (10U)                                               /*!< USBPHY1_ANACTRL_CLR.DEV_PULLDOWN Position*/
+#define USBPHY_ANACTRL_CLR_DEV_PULLDOWN(x)       (((uint32_t)(((uint32_t)(x))<<USBPHY_ANACTRL_CLR_DEV_PULLDOWN_SHIFT))&USBPHY_ANACTRL_CLR_DEV_PULLDOWN_MASK) /*!< USBPHY1_ANACTRL_CLR.DEV_PULLDOWN Field  */
+#define USBPHY_ANACTRL_CLR_EMPH_PULSE_CTRL_MASK  (0x1800U)                                           /*!< USBPHY1_ANACTRL_CLR.EMPH_PULSE_CTRL Mask*/
+#define USBPHY_ANACTRL_CLR_EMPH_PULSE_CTRL_SHIFT (11U)                                               /*!< USBPHY1_ANACTRL_CLR.EMPH_PULSE_CTRL Position*/
+#define USBPHY_ANACTRL_CLR_EMPH_PULSE_CTRL(x)    (((uint32_t)(((uint32_t)(x))<<USBPHY_ANACTRL_CLR_EMPH_PULSE_CTRL_SHIFT))&USBPHY_ANACTRL_CLR_EMPH_PULSE_CTRL_MASK) /*!< USBPHY1_ANACTRL_CLR.EMPH_PULSE_CTRL Field*/
+#define USBPHY_ANACTRL_CLR_EMPH_EN_MASK          (0x2000U)                                           /*!< USBPHY1_ANACTRL_CLR.EMPH_EN Mask        */
+#define USBPHY_ANACTRL_CLR_EMPH_EN_SHIFT         (13U)                                               /*!< USBPHY1_ANACTRL_CLR.EMPH_EN Position    */
+#define USBPHY_ANACTRL_CLR_EMPH_EN(x)            (((uint32_t)(((uint32_t)(x))<<USBPHY_ANACTRL_CLR_EMPH_EN_SHIFT))&USBPHY_ANACTRL_CLR_EMPH_EN_MASK) /*!< USBPHY1_ANACTRL_CLR.EMPH_EN Field       */
+#define USBPHY_ANACTRL_CLR_EMPH_CUR_CTRL_MASK    (0xC000U)                                           /*!< USBPHY1_ANACTRL_CLR.EMPH_CUR_CTRL Mask  */
+#define USBPHY_ANACTRL_CLR_EMPH_CUR_CTRL_SHIFT   (14U)                                               /*!< USBPHY1_ANACTRL_CLR.EMPH_CUR_CTRL Position*/
+#define USBPHY_ANACTRL_CLR_EMPH_CUR_CTRL(x)      (((uint32_t)(((uint32_t)(x))<<USBPHY_ANACTRL_CLR_EMPH_CUR_CTRL_SHIFT))&USBPHY_ANACTRL_CLR_EMPH_CUR_CTRL_MASK) /*!< USBPHY1_ANACTRL_CLR.EMPH_CUR_CTRL Field */
+#define USBPHY_ANACTRL_CLR_PFD_STABLE_MASK       (0x80000000U)                                       /*!< USBPHY1_ANACTRL_CLR.PFD_STABLE Mask     */
+#define USBPHY_ANACTRL_CLR_PFD_STABLE_SHIFT      (31U)                                               /*!< USBPHY1_ANACTRL_CLR.PFD_STABLE Position */
+#define USBPHY_ANACTRL_CLR_PFD_STABLE(x)         (((uint32_t)(((uint32_t)(x))<<USBPHY_ANACTRL_CLR_PFD_STABLE_SHIFT))&USBPHY_ANACTRL_CLR_PFD_STABLE_MASK) /*!< USBPHY1_ANACTRL_CLR.PFD_STABLE Field    */
 
 /*! @name ANACTRL_TOG - USB PHY Analog Control Register */
-#define USBPHY0_ANACTRL_TOG_TESTCLK_SEL_MASK     (0x1U)                                              /*!< USBPHY0_ANACTRL_TOG.TESTCLK_SEL Mask    */
-#define USBPHY0_ANACTRL_TOG_TESTCLK_SEL_SHIFT    (0U)                                                /*!< USBPHY0_ANACTRL_TOG.TESTCLK_SEL Position*/
-#define USBPHY0_ANACTRL_TOG_TESTCLK_SEL(x)       (((uint32_t)(((uint32_t)(x))<<USBPHY0_ANACTRL_TOG_TESTCLK_SEL_SHIFT))&USBPHY0_ANACTRL_TOG_TESTCLK_SEL_MASK) /*!< USBPHY0_ANACTRL_TOG.TESTCLK_SEL Field   */
-#define USBPHY0_ANACTRL_TOG_PFD_CLKGATE_MASK     (0x2U)                                              /*!< USBPHY0_ANACTRL_TOG.PFD_CLKGATE Mask    */
-#define USBPHY0_ANACTRL_TOG_PFD_CLKGATE_SHIFT    (1U)                                                /*!< USBPHY0_ANACTRL_TOG.PFD_CLKGATE Position*/
-#define USBPHY0_ANACTRL_TOG_PFD_CLKGATE(x)       (((uint32_t)(((uint32_t)(x))<<USBPHY0_ANACTRL_TOG_PFD_CLKGATE_SHIFT))&USBPHY0_ANACTRL_TOG_PFD_CLKGATE_MASK) /*!< USBPHY0_ANACTRL_TOG.PFD_CLKGATE Field   */
-#define USBPHY0_ANACTRL_TOG_PFD_CLK_SEL_MASK     (0xCU)                                              /*!< USBPHY0_ANACTRL_TOG.PFD_CLK_SEL Mask    */
-#define USBPHY0_ANACTRL_TOG_PFD_CLK_SEL_SHIFT    (2U)                                                /*!< USBPHY0_ANACTRL_TOG.PFD_CLK_SEL Position*/
-#define USBPHY0_ANACTRL_TOG_PFD_CLK_SEL(x)       (((uint32_t)(((uint32_t)(x))<<USBPHY0_ANACTRL_TOG_PFD_CLK_SEL_SHIFT))&USBPHY0_ANACTRL_TOG_PFD_CLK_SEL_MASK) /*!< USBPHY0_ANACTRL_TOG.PFD_CLK_SEL Field   */
-#define USBPHY0_ANACTRL_TOG_PFD_FRAC_MASK        (0x3F0U)                                            /*!< USBPHY0_ANACTRL_TOG.PFD_FRAC Mask       */
-#define USBPHY0_ANACTRL_TOG_PFD_FRAC_SHIFT       (4U)                                                /*!< USBPHY0_ANACTRL_TOG.PFD_FRAC Position   */
-#define USBPHY0_ANACTRL_TOG_PFD_FRAC(x)          (((uint32_t)(((uint32_t)(x))<<USBPHY0_ANACTRL_TOG_PFD_FRAC_SHIFT))&USBPHY0_ANACTRL_TOG_PFD_FRAC_MASK) /*!< USBPHY0_ANACTRL_TOG.PFD_FRAC Field      */
-#define USBPHY0_ANACTRL_TOG_DEV_PULLDOWN_MASK    (0x400U)                                            /*!< USBPHY0_ANACTRL_TOG.DEV_PULLDOWN Mask   */
-#define USBPHY0_ANACTRL_TOG_DEV_PULLDOWN_SHIFT   (10U)                                               /*!< USBPHY0_ANACTRL_TOG.DEV_PULLDOWN Position*/
-#define USBPHY0_ANACTRL_TOG_DEV_PULLDOWN(x)      (((uint32_t)(((uint32_t)(x))<<USBPHY0_ANACTRL_TOG_DEV_PULLDOWN_SHIFT))&USBPHY0_ANACTRL_TOG_DEV_PULLDOWN_MASK) /*!< USBPHY0_ANACTRL_TOG.DEV_PULLDOWN Field  */
-#define USBPHY0_ANACTRL_TOG_EMPH_PULSE_CTRL_MASK (0x1800U)                                           /*!< USBPHY0_ANACTRL_TOG.EMPH_PULSE_CTRL Mask*/
-#define USBPHY0_ANACTRL_TOG_EMPH_PULSE_CTRL_SHIFT (11U)                                              /*!< USBPHY0_ANACTRL_TOG.EMPH_PULSE_CTRL Position*/
-#define USBPHY0_ANACTRL_TOG_EMPH_PULSE_CTRL(x)   (((uint32_t)(((uint32_t)(x))<<USBPHY0_ANACTRL_TOG_EMPH_PULSE_CTRL_SHIFT))&USBPHY0_ANACTRL_TOG_EMPH_PULSE_CTRL_MASK) /*!< USBPHY0_ANACTRL_TOG.EMPH_PULSE_CTRL Field*/
-#define USBPHY0_ANACTRL_TOG_EMPH_EN_MASK         (0x2000U)                                           /*!< USBPHY0_ANACTRL_TOG.EMPH_EN Mask        */
-#define USBPHY0_ANACTRL_TOG_EMPH_EN_SHIFT        (13U)                                               /*!< USBPHY0_ANACTRL_TOG.EMPH_EN Position    */
-#define USBPHY0_ANACTRL_TOG_EMPH_EN(x)           (((uint32_t)(((uint32_t)(x))<<USBPHY0_ANACTRL_TOG_EMPH_EN_SHIFT))&USBPHY0_ANACTRL_TOG_EMPH_EN_MASK) /*!< USBPHY0_ANACTRL_TOG.EMPH_EN Field       */
-#define USBPHY0_ANACTRL_TOG_EMPH_CUR_CTRL_MASK   (0xC000U)                                           /*!< USBPHY0_ANACTRL_TOG.EMPH_CUR_CTRL Mask  */
-#define USBPHY0_ANACTRL_TOG_EMPH_CUR_CTRL_SHIFT  (14U)                                               /*!< USBPHY0_ANACTRL_TOG.EMPH_CUR_CTRL Position*/
-#define USBPHY0_ANACTRL_TOG_EMPH_CUR_CTRL(x)     (((uint32_t)(((uint32_t)(x))<<USBPHY0_ANACTRL_TOG_EMPH_CUR_CTRL_SHIFT))&USBPHY0_ANACTRL_TOG_EMPH_CUR_CTRL_MASK) /*!< USBPHY0_ANACTRL_TOG.EMPH_CUR_CTRL Field */
-#define USBPHY0_ANACTRL_TOG_PFD_STABLE_MASK      (0x80000000U)                                       /*!< USBPHY0_ANACTRL_TOG.PFD_STABLE Mask     */
-#define USBPHY0_ANACTRL_TOG_PFD_STABLE_SHIFT     (31U)                                               /*!< USBPHY0_ANACTRL_TOG.PFD_STABLE Position */
-#define USBPHY0_ANACTRL_TOG_PFD_STABLE(x)        (((uint32_t)(((uint32_t)(x))<<USBPHY0_ANACTRL_TOG_PFD_STABLE_SHIFT))&USBPHY0_ANACTRL_TOG_PFD_STABLE_MASK) /*!< USBPHY0_ANACTRL_TOG.PFD_STABLE Field    */
+#define USBPHY_ANACTRL_TOG_TESTCLK_SEL_MASK      (0x1U)                                              /*!< USBPHY1_ANACTRL_TOG.TESTCLK_SEL Mask    */
+#define USBPHY_ANACTRL_TOG_TESTCLK_SEL_SHIFT     (0U)                                                /*!< USBPHY1_ANACTRL_TOG.TESTCLK_SEL Position*/
+#define USBPHY_ANACTRL_TOG_TESTCLK_SEL(x)        (((uint32_t)(((uint32_t)(x))<<USBPHY_ANACTRL_TOG_TESTCLK_SEL_SHIFT))&USBPHY_ANACTRL_TOG_TESTCLK_SEL_MASK) /*!< USBPHY1_ANACTRL_TOG.TESTCLK_SEL Field   */
+#define USBPHY_ANACTRL_TOG_PFD_CLKGATE_MASK      (0x2U)                                              /*!< USBPHY1_ANACTRL_TOG.PFD_CLKGATE Mask    */
+#define USBPHY_ANACTRL_TOG_PFD_CLKGATE_SHIFT     (1U)                                                /*!< USBPHY1_ANACTRL_TOG.PFD_CLKGATE Position*/
+#define USBPHY_ANACTRL_TOG_PFD_CLKGATE(x)        (((uint32_t)(((uint32_t)(x))<<USBPHY_ANACTRL_TOG_PFD_CLKGATE_SHIFT))&USBPHY_ANACTRL_TOG_PFD_CLKGATE_MASK) /*!< USBPHY1_ANACTRL_TOG.PFD_CLKGATE Field   */
+#define USBPHY_ANACTRL_TOG_PFD_CLK_SEL_MASK      (0xCU)                                              /*!< USBPHY1_ANACTRL_TOG.PFD_CLK_SEL Mask    */
+#define USBPHY_ANACTRL_TOG_PFD_CLK_SEL_SHIFT     (2U)                                                /*!< USBPHY1_ANACTRL_TOG.PFD_CLK_SEL Position*/
+#define USBPHY_ANACTRL_TOG_PFD_CLK_SEL(x)        (((uint32_t)(((uint32_t)(x))<<USBPHY_ANACTRL_TOG_PFD_CLK_SEL_SHIFT))&USBPHY_ANACTRL_TOG_PFD_CLK_SEL_MASK) /*!< USBPHY1_ANACTRL_TOG.PFD_CLK_SEL Field   */
+#define USBPHY_ANACTRL_TOG_PFD_FRAC_MASK         (0x3F0U)                                            /*!< USBPHY1_ANACTRL_TOG.PFD_FRAC Mask       */
+#define USBPHY_ANACTRL_TOG_PFD_FRAC_SHIFT        (4U)                                                /*!< USBPHY1_ANACTRL_TOG.PFD_FRAC Position   */
+#define USBPHY_ANACTRL_TOG_PFD_FRAC(x)           (((uint32_t)(((uint32_t)(x))<<USBPHY_ANACTRL_TOG_PFD_FRAC_SHIFT))&USBPHY_ANACTRL_TOG_PFD_FRAC_MASK) /*!< USBPHY1_ANACTRL_TOG.PFD_FRAC Field      */
+#define USBPHY_ANACTRL_TOG_DEV_PULLDOWN_MASK     (0x400U)                                            /*!< USBPHY1_ANACTRL_TOG.DEV_PULLDOWN Mask   */
+#define USBPHY_ANACTRL_TOG_DEV_PULLDOWN_SHIFT    (10U)                                               /*!< USBPHY1_ANACTRL_TOG.DEV_PULLDOWN Position*/
+#define USBPHY_ANACTRL_TOG_DEV_PULLDOWN(x)       (((uint32_t)(((uint32_t)(x))<<USBPHY_ANACTRL_TOG_DEV_PULLDOWN_SHIFT))&USBPHY_ANACTRL_TOG_DEV_PULLDOWN_MASK) /*!< USBPHY1_ANACTRL_TOG.DEV_PULLDOWN Field  */
+#define USBPHY_ANACTRL_TOG_EMPH_PULSE_CTRL_MASK  (0x1800U)                                           /*!< USBPHY1_ANACTRL_TOG.EMPH_PULSE_CTRL Mask*/
+#define USBPHY_ANACTRL_TOG_EMPH_PULSE_CTRL_SHIFT (11U)                                               /*!< USBPHY1_ANACTRL_TOG.EMPH_PULSE_CTRL Position*/
+#define USBPHY_ANACTRL_TOG_EMPH_PULSE_CTRL(x)    (((uint32_t)(((uint32_t)(x))<<USBPHY_ANACTRL_TOG_EMPH_PULSE_CTRL_SHIFT))&USBPHY_ANACTRL_TOG_EMPH_PULSE_CTRL_MASK) /*!< USBPHY1_ANACTRL_TOG.EMPH_PULSE_CTRL Field*/
+#define USBPHY_ANACTRL_TOG_EMPH_EN_MASK          (0x2000U)                                           /*!< USBPHY1_ANACTRL_TOG.EMPH_EN Mask        */
+#define USBPHY_ANACTRL_TOG_EMPH_EN_SHIFT         (13U)                                               /*!< USBPHY1_ANACTRL_TOG.EMPH_EN Position    */
+#define USBPHY_ANACTRL_TOG_EMPH_EN(x)            (((uint32_t)(((uint32_t)(x))<<USBPHY_ANACTRL_TOG_EMPH_EN_SHIFT))&USBPHY_ANACTRL_TOG_EMPH_EN_MASK) /*!< USBPHY1_ANACTRL_TOG.EMPH_EN Field       */
+#define USBPHY_ANACTRL_TOG_EMPH_CUR_CTRL_MASK    (0xC000U)                                           /*!< USBPHY1_ANACTRL_TOG.EMPH_CUR_CTRL Mask  */
+#define USBPHY_ANACTRL_TOG_EMPH_CUR_CTRL_SHIFT   (14U)                                               /*!< USBPHY1_ANACTRL_TOG.EMPH_CUR_CTRL Position*/
+#define USBPHY_ANACTRL_TOG_EMPH_CUR_CTRL(x)      (((uint32_t)(((uint32_t)(x))<<USBPHY_ANACTRL_TOG_EMPH_CUR_CTRL_SHIFT))&USBPHY_ANACTRL_TOG_EMPH_CUR_CTRL_MASK) /*!< USBPHY1_ANACTRL_TOG.EMPH_CUR_CTRL Field */
+#define USBPHY_ANACTRL_TOG_PFD_STABLE_MASK       (0x80000000U)                                       /*!< USBPHY1_ANACTRL_TOG.PFD_STABLE Mask     */
+#define USBPHY_ANACTRL_TOG_PFD_STABLE_SHIFT      (31U)                                               /*!< USBPHY1_ANACTRL_TOG.PFD_STABLE Position */
+#define USBPHY_ANACTRL_TOG_PFD_STABLE(x)         (((uint32_t)(((uint32_t)(x))<<USBPHY_ANACTRL_TOG_PFD_STABLE_SHIFT))&USBPHY_ANACTRL_TOG_PFD_STABLE_MASK) /*!< USBPHY1_ANACTRL_TOG.PFD_STABLE Field    */
 
 /*! @name USB1_LOOPBACK - USB PHY Loopback Control/Status Register */
-#define USBPHY0_USB1_LOOPBACK_UTMI_TESTSTART_MASK (0x1U)                                             /*!< USBPHY0_USB1_LOOPBACK.UTMI_TESTSTART Mask*/
-#define USBPHY0_USB1_LOOPBACK_UTMI_TESTSTART_SHIFT (0U)                                              /*!< USBPHY0_USB1_LOOPBACK.UTMI_TESTSTART Position*/
-#define USBPHY0_USB1_LOOPBACK_UTMI_TESTSTART(x)  (((uint32_t)(((uint32_t)(x))<<USBPHY0_USB1_LOOPBACK_UTMI_TESTSTART_SHIFT))&USBPHY0_USB1_LOOPBACK_UTMI_TESTSTART_MASK) /*!< USBPHY0_USB1_LOOPBACK.UTMI_TESTSTART Field*/
-#define USBPHY0_USB1_LOOPBACK_UTMI_DIG_TST0_MASK (0x2U)                                              /*!< USBPHY0_USB1_LOOPBACK.UTMI_DIG_TST0 Mask*/
-#define USBPHY0_USB1_LOOPBACK_UTMI_DIG_TST0_SHIFT (1U)                                               /*!< USBPHY0_USB1_LOOPBACK.UTMI_DIG_TST0 Position*/
-#define USBPHY0_USB1_LOOPBACK_UTMI_DIG_TST0(x)   (((uint32_t)(((uint32_t)(x))<<USBPHY0_USB1_LOOPBACK_UTMI_DIG_TST0_SHIFT))&USBPHY0_USB1_LOOPBACK_UTMI_DIG_TST0_MASK) /*!< USBPHY0_USB1_LOOPBACK.UTMI_DIG_TST0 Field*/
-#define USBPHY0_USB1_LOOPBACK_UTMI_DIG_TST1_MASK (0x4U)                                              /*!< USBPHY0_USB1_LOOPBACK.UTMI_DIG_TST1 Mask*/
-#define USBPHY0_USB1_LOOPBACK_UTMI_DIG_TST1_SHIFT (2U)                                               /*!< USBPHY0_USB1_LOOPBACK.UTMI_DIG_TST1 Position*/
-#define USBPHY0_USB1_LOOPBACK_UTMI_DIG_TST1(x)   (((uint32_t)(((uint32_t)(x))<<USBPHY0_USB1_LOOPBACK_UTMI_DIG_TST1_SHIFT))&USBPHY0_USB1_LOOPBACK_UTMI_DIG_TST1_MASK) /*!< USBPHY0_USB1_LOOPBACK.UTMI_DIG_TST1 Field*/
-#define USBPHY0_USB1_LOOPBACK_TSTI_TX_HS_MODE_MASK (0x8U)                                            /*!< USBPHY0_USB1_LOOPBACK.TSTI_TX_HS_MODE Mask*/
-#define USBPHY0_USB1_LOOPBACK_TSTI_TX_HS_MODE_SHIFT (3U)                                             /*!< USBPHY0_USB1_LOOPBACK.TSTI_TX_HS_MODE Position*/
-#define USBPHY0_USB1_LOOPBACK_TSTI_TX_HS_MODE(x) (((uint32_t)(((uint32_t)(x))<<USBPHY0_USB1_LOOPBACK_TSTI_TX_HS_MODE_SHIFT))&USBPHY0_USB1_LOOPBACK_TSTI_TX_HS_MODE_MASK) /*!< USBPHY0_USB1_LOOPBACK.TSTI_TX_HS_MODE Field*/
-#define USBPHY0_USB1_LOOPBACK_TSTI_TX_LS_MODE_MASK (0x10U)                                           /*!< USBPHY0_USB1_LOOPBACK.TSTI_TX_LS_MODE Mask*/
-#define USBPHY0_USB1_LOOPBACK_TSTI_TX_LS_MODE_SHIFT (4U)                                             /*!< USBPHY0_USB1_LOOPBACK.TSTI_TX_LS_MODE Position*/
-#define USBPHY0_USB1_LOOPBACK_TSTI_TX_LS_MODE(x) (((uint32_t)(((uint32_t)(x))<<USBPHY0_USB1_LOOPBACK_TSTI_TX_LS_MODE_SHIFT))&USBPHY0_USB1_LOOPBACK_TSTI_TX_LS_MODE_MASK) /*!< USBPHY0_USB1_LOOPBACK.TSTI_TX_LS_MODE Field*/
-#define USBPHY0_USB1_LOOPBACK_TSTI_TX_EN_MASK    (0x20U)                                             /*!< USBPHY0_USB1_LOOPBACK.TSTI_TX_EN Mask   */
-#define USBPHY0_USB1_LOOPBACK_TSTI_TX_EN_SHIFT   (5U)                                                /*!< USBPHY0_USB1_LOOPBACK.TSTI_TX_EN Position*/
-#define USBPHY0_USB1_LOOPBACK_TSTI_TX_EN(x)      (((uint32_t)(((uint32_t)(x))<<USBPHY0_USB1_LOOPBACK_TSTI_TX_EN_SHIFT))&USBPHY0_USB1_LOOPBACK_TSTI_TX_EN_MASK) /*!< USBPHY0_USB1_LOOPBACK.TSTI_TX_EN Field  */
-#define USBPHY0_USB1_LOOPBACK_TSTI_TX_HIZ_MASK   (0x40U)                                             /*!< USBPHY0_USB1_LOOPBACK.TSTI_TX_HIZ Mask  */
-#define USBPHY0_USB1_LOOPBACK_TSTI_TX_HIZ_SHIFT  (6U)                                                /*!< USBPHY0_USB1_LOOPBACK.TSTI_TX_HIZ Position*/
-#define USBPHY0_USB1_LOOPBACK_TSTI_TX_HIZ(x)     (((uint32_t)(((uint32_t)(x))<<USBPHY0_USB1_LOOPBACK_TSTI_TX_HIZ_SHIFT))&USBPHY0_USB1_LOOPBACK_TSTI_TX_HIZ_MASK) /*!< USBPHY0_USB1_LOOPBACK.TSTI_TX_HIZ Field */
-#define USBPHY0_USB1_LOOPBACK_UTMO_DIG_TST0_MASK (0x80U)                                             /*!< USBPHY0_USB1_LOOPBACK.UTMO_DIG_TST0 Mask*/
-#define USBPHY0_USB1_LOOPBACK_UTMO_DIG_TST0_SHIFT (7U)                                               /*!< USBPHY0_USB1_LOOPBACK.UTMO_DIG_TST0 Position*/
-#define USBPHY0_USB1_LOOPBACK_UTMO_DIG_TST0(x)   (((uint32_t)(((uint32_t)(x))<<USBPHY0_USB1_LOOPBACK_UTMO_DIG_TST0_SHIFT))&USBPHY0_USB1_LOOPBACK_UTMO_DIG_TST0_MASK) /*!< USBPHY0_USB1_LOOPBACK.UTMO_DIG_TST0 Field*/
-#define USBPHY0_USB1_LOOPBACK_UTMO_DIG_TST1_MASK (0x100U)                                            /*!< USBPHY0_USB1_LOOPBACK.UTMO_DIG_TST1 Mask*/
-#define USBPHY0_USB1_LOOPBACK_UTMO_DIG_TST1_SHIFT (8U)                                               /*!< USBPHY0_USB1_LOOPBACK.UTMO_DIG_TST1 Position*/
-#define USBPHY0_USB1_LOOPBACK_UTMO_DIG_TST1(x)   (((uint32_t)(((uint32_t)(x))<<USBPHY0_USB1_LOOPBACK_UTMO_DIG_TST1_SHIFT))&USBPHY0_USB1_LOOPBACK_UTMO_DIG_TST1_MASK) /*!< USBPHY0_USB1_LOOPBACK.UTMO_DIG_TST1 Field*/
-#define USBPHY0_USB1_LOOPBACK_TSTI_HSFS_MODE_EN_MASK (0x8000U)                                       /*!< USBPHY0_USB1_LOOPBACK.TSTI_HSFS_MODE_EN Mask*/
-#define USBPHY0_USB1_LOOPBACK_TSTI_HSFS_MODE_EN_SHIFT (15U)                                          /*!< USBPHY0_USB1_LOOPBACK.TSTI_HSFS_MODE_EN Position*/
-#define USBPHY0_USB1_LOOPBACK_TSTI_HSFS_MODE_EN(x) (((uint32_t)(((uint32_t)(x))<<USBPHY0_USB1_LOOPBACK_TSTI_HSFS_MODE_EN_SHIFT))&USBPHY0_USB1_LOOPBACK_TSTI_HSFS_MODE_EN_MASK) /*!< USBPHY0_USB1_LOOPBACK.TSTI_HSFS_MODE_EN Field*/
-#define USBPHY0_USB1_LOOPBACK_TSTPKT_MASK        (0xFF0000U)                                         /*!< USBPHY0_USB1_LOOPBACK.TSTPKT Mask       */
-#define USBPHY0_USB1_LOOPBACK_TSTPKT_SHIFT       (16U)                                               /*!< USBPHY0_USB1_LOOPBACK.TSTPKT Position   */
-#define USBPHY0_USB1_LOOPBACK_TSTPKT(x)          (((uint32_t)(((uint32_t)(x))<<USBPHY0_USB1_LOOPBACK_TSTPKT_SHIFT))&USBPHY0_USB1_LOOPBACK_TSTPKT_MASK) /*!< USBPHY0_USB1_LOOPBACK.TSTPKT Field      */
+#define USBPHY_USB1_LOOPBACK_UTMI_TESTSTART_MASK (0x1U)                                              /*!< USBPHY1_USB1_LOOPBACK.UTMI_TESTSTART Mask*/
+#define USBPHY_USB1_LOOPBACK_UTMI_TESTSTART_SHIFT (0U)                                               /*!< USBPHY1_USB1_LOOPBACK.UTMI_TESTSTART Position*/
+#define USBPHY_USB1_LOOPBACK_UTMI_TESTSTART(x)   (((uint32_t)(((uint32_t)(x))<<USBPHY_USB1_LOOPBACK_UTMI_TESTSTART_SHIFT))&USBPHY_USB1_LOOPBACK_UTMI_TESTSTART_MASK) /*!< USBPHY1_USB1_LOOPBACK.UTMI_TESTSTART Field*/
+#define USBPHY_USB1_LOOPBACK_UTMI_DIG_TST0_MASK  (0x2U)                                              /*!< USBPHY1_USB1_LOOPBACK.UTMI_DIG_TST0 Mask*/
+#define USBPHY_USB1_LOOPBACK_UTMI_DIG_TST0_SHIFT (1U)                                                /*!< USBPHY1_USB1_LOOPBACK.UTMI_DIG_TST0 Position*/
+#define USBPHY_USB1_LOOPBACK_UTMI_DIG_TST0(x)    (((uint32_t)(((uint32_t)(x))<<USBPHY_USB1_LOOPBACK_UTMI_DIG_TST0_SHIFT))&USBPHY_USB1_LOOPBACK_UTMI_DIG_TST0_MASK) /*!< USBPHY1_USB1_LOOPBACK.UTMI_DIG_TST0 Field*/
+#define USBPHY_USB1_LOOPBACK_UTMI_DIG_TST1_MASK  (0x4U)                                              /*!< USBPHY1_USB1_LOOPBACK.UTMI_DIG_TST1 Mask*/
+#define USBPHY_USB1_LOOPBACK_UTMI_DIG_TST1_SHIFT (2U)                                                /*!< USBPHY1_USB1_LOOPBACK.UTMI_DIG_TST1 Position*/
+#define USBPHY_USB1_LOOPBACK_UTMI_DIG_TST1(x)    (((uint32_t)(((uint32_t)(x))<<USBPHY_USB1_LOOPBACK_UTMI_DIG_TST1_SHIFT))&USBPHY_USB1_LOOPBACK_UTMI_DIG_TST1_MASK) /*!< USBPHY1_USB1_LOOPBACK.UTMI_DIG_TST1 Field*/
+#define USBPHY_USB1_LOOPBACK_TSTI_TX_HS_MODE_MASK (0x8U)                                             /*!< USBPHY1_USB1_LOOPBACK.TSTI_TX_HS_MODE Mask*/
+#define USBPHY_USB1_LOOPBACK_TSTI_TX_HS_MODE_SHIFT (3U)                                              /*!< USBPHY1_USB1_LOOPBACK.TSTI_TX_HS_MODE Position*/
+#define USBPHY_USB1_LOOPBACK_TSTI_TX_HS_MODE(x)  (((uint32_t)(((uint32_t)(x))<<USBPHY_USB1_LOOPBACK_TSTI_TX_HS_MODE_SHIFT))&USBPHY_USB1_LOOPBACK_TSTI_TX_HS_MODE_MASK) /*!< USBPHY1_USB1_LOOPBACK.TSTI_TX_HS_MODE Field*/
+#define USBPHY_USB1_LOOPBACK_TSTI_TX_LS_MODE_MASK (0x10U)                                            /*!< USBPHY1_USB1_LOOPBACK.TSTI_TX_LS_MODE Mask*/
+#define USBPHY_USB1_LOOPBACK_TSTI_TX_LS_MODE_SHIFT (4U)                                              /*!< USBPHY1_USB1_LOOPBACK.TSTI_TX_LS_MODE Position*/
+#define USBPHY_USB1_LOOPBACK_TSTI_TX_LS_MODE(x)  (((uint32_t)(((uint32_t)(x))<<USBPHY_USB1_LOOPBACK_TSTI_TX_LS_MODE_SHIFT))&USBPHY_USB1_LOOPBACK_TSTI_TX_LS_MODE_MASK) /*!< USBPHY1_USB1_LOOPBACK.TSTI_TX_LS_MODE Field*/
+#define USBPHY_USB1_LOOPBACK_TSTI_TX_EN_MASK     (0x20U)                                             /*!< USBPHY1_USB1_LOOPBACK.TSTI_TX_EN Mask   */
+#define USBPHY_USB1_LOOPBACK_TSTI_TX_EN_SHIFT    (5U)                                                /*!< USBPHY1_USB1_LOOPBACK.TSTI_TX_EN Position*/
+#define USBPHY_USB1_LOOPBACK_TSTI_TX_EN(x)       (((uint32_t)(((uint32_t)(x))<<USBPHY_USB1_LOOPBACK_TSTI_TX_EN_SHIFT))&USBPHY_USB1_LOOPBACK_TSTI_TX_EN_MASK) /*!< USBPHY1_USB1_LOOPBACK.TSTI_TX_EN Field  */
+#define USBPHY_USB1_LOOPBACK_TSTI_TX_HIZ_MASK    (0x40U)                                             /*!< USBPHY1_USB1_LOOPBACK.TSTI_TX_HIZ Mask  */
+#define USBPHY_USB1_LOOPBACK_TSTI_TX_HIZ_SHIFT   (6U)                                                /*!< USBPHY1_USB1_LOOPBACK.TSTI_TX_HIZ Position*/
+#define USBPHY_USB1_LOOPBACK_TSTI_TX_HIZ(x)      (((uint32_t)(((uint32_t)(x))<<USBPHY_USB1_LOOPBACK_TSTI_TX_HIZ_SHIFT))&USBPHY_USB1_LOOPBACK_TSTI_TX_HIZ_MASK) /*!< USBPHY1_USB1_LOOPBACK.TSTI_TX_HIZ Field */
+#define USBPHY_USB1_LOOPBACK_UTMO_DIG_TST0_MASK  (0x80U)                                             /*!< USBPHY1_USB1_LOOPBACK.UTMO_DIG_TST0 Mask*/
+#define USBPHY_USB1_LOOPBACK_UTMO_DIG_TST0_SHIFT (7U)                                                /*!< USBPHY1_USB1_LOOPBACK.UTMO_DIG_TST0 Position*/
+#define USBPHY_USB1_LOOPBACK_UTMO_DIG_TST0(x)    (((uint32_t)(((uint32_t)(x))<<USBPHY_USB1_LOOPBACK_UTMO_DIG_TST0_SHIFT))&USBPHY_USB1_LOOPBACK_UTMO_DIG_TST0_MASK) /*!< USBPHY1_USB1_LOOPBACK.UTMO_DIG_TST0 Field*/
+#define USBPHY_USB1_LOOPBACK_UTMO_DIG_TST1_MASK  (0x100U)                                            /*!< USBPHY1_USB1_LOOPBACK.UTMO_DIG_TST1 Mask*/
+#define USBPHY_USB1_LOOPBACK_UTMO_DIG_TST1_SHIFT (8U)                                                /*!< USBPHY1_USB1_LOOPBACK.UTMO_DIG_TST1 Position*/
+#define USBPHY_USB1_LOOPBACK_UTMO_DIG_TST1(x)    (((uint32_t)(((uint32_t)(x))<<USBPHY_USB1_LOOPBACK_UTMO_DIG_TST1_SHIFT))&USBPHY_USB1_LOOPBACK_UTMO_DIG_TST1_MASK) /*!< USBPHY1_USB1_LOOPBACK.UTMO_DIG_TST1 Field*/
+#define USBPHY_USB1_LOOPBACK_TSTI_HSFS_MODE_EN_MASK (0x8000U)                                        /*!< USBPHY1_USB1_LOOPBACK.TSTI_HSFS_MODE_EN Mask*/
+#define USBPHY_USB1_LOOPBACK_TSTI_HSFS_MODE_EN_SHIFT (15U)                                           /*!< USBPHY1_USB1_LOOPBACK.TSTI_HSFS_MODE_EN Position*/
+#define USBPHY_USB1_LOOPBACK_TSTI_HSFS_MODE_EN(x) (((uint32_t)(((uint32_t)(x))<<USBPHY_USB1_LOOPBACK_TSTI_HSFS_MODE_EN_SHIFT))&USBPHY_USB1_LOOPBACK_TSTI_HSFS_MODE_EN_MASK) /*!< USBPHY1_USB1_LOOPBACK.TSTI_HSFS_MODE_EN Field*/
+#define USBPHY_USB1_LOOPBACK_TSTPKT_MASK         (0xFF0000U)                                         /*!< USBPHY1_USB1_LOOPBACK.TSTPKT Mask       */
+#define USBPHY_USB1_LOOPBACK_TSTPKT_SHIFT        (16U)                                               /*!< USBPHY1_USB1_LOOPBACK.TSTPKT Position   */
+#define USBPHY_USB1_LOOPBACK_TSTPKT(x)           (((uint32_t)(((uint32_t)(x))<<USBPHY_USB1_LOOPBACK_TSTPKT_SHIFT))&USBPHY_USB1_LOOPBACK_TSTPKT_MASK) /*!< USBPHY1_USB1_LOOPBACK.TSTPKT Field      */
 
 /*! @name USB1_LOOPBACK_SET - USB PHY Loopback Control/Status Register */
-#define USBPHY0_USB1_LOOPBACK_SET_UTMI_TESTSTART_MASK (0x1U)                                         /*!< USBPHY0_USB1_LOOPBACK_SET.UTMI_TESTSTART Mask*/
-#define USBPHY0_USB1_LOOPBACK_SET_UTMI_TESTSTART_SHIFT (0U)                                          /*!< USBPHY0_USB1_LOOPBACK_SET.UTMI_TESTSTART Position*/
-#define USBPHY0_USB1_LOOPBACK_SET_UTMI_TESTSTART(x) (((uint32_t)(((uint32_t)(x))<<USBPHY0_USB1_LOOPBACK_SET_UTMI_TESTSTART_SHIFT))&USBPHY0_USB1_LOOPBACK_SET_UTMI_TESTSTART_MASK) /*!< USBPHY0_USB1_LOOPBACK_SET.UTMI_TESTSTART Field*/
-#define USBPHY0_USB1_LOOPBACK_SET_UTMI_DIG_TST0_MASK (0x2U)                                          /*!< USBPHY0_USB1_LOOPBACK_SET.UTMI_DIG_TST0 Mask*/
-#define USBPHY0_USB1_LOOPBACK_SET_UTMI_DIG_TST0_SHIFT (1U)                                           /*!< USBPHY0_USB1_LOOPBACK_SET.UTMI_DIG_TST0 Position*/
-#define USBPHY0_USB1_LOOPBACK_SET_UTMI_DIG_TST0(x) (((uint32_t)(((uint32_t)(x))<<USBPHY0_USB1_LOOPBACK_SET_UTMI_DIG_TST0_SHIFT))&USBPHY0_USB1_LOOPBACK_SET_UTMI_DIG_TST0_MASK) /*!< USBPHY0_USB1_LOOPBACK_SET.UTMI_DIG_TST0 Field*/
-#define USBPHY0_USB1_LOOPBACK_SET_UTMI_DIG_TST1_MASK (0x4U)                                          /*!< USBPHY0_USB1_LOOPBACK_SET.UTMI_DIG_TST1 Mask*/
-#define USBPHY0_USB1_LOOPBACK_SET_UTMI_DIG_TST1_SHIFT (2U)                                           /*!< USBPHY0_USB1_LOOPBACK_SET.UTMI_DIG_TST1 Position*/
-#define USBPHY0_USB1_LOOPBACK_SET_UTMI_DIG_TST1(x) (((uint32_t)(((uint32_t)(x))<<USBPHY0_USB1_LOOPBACK_SET_UTMI_DIG_TST1_SHIFT))&USBPHY0_USB1_LOOPBACK_SET_UTMI_DIG_TST1_MASK) /*!< USBPHY0_USB1_LOOPBACK_SET.UTMI_DIG_TST1 Field*/
-#define USBPHY0_USB1_LOOPBACK_SET_TSTI_TX_HS_MODE_MASK (0x8U)                                        /*!< USBPHY0_USB1_LOOPBACK_SET.TSTI_TX_HS_MODE Mask*/
-#define USBPHY0_USB1_LOOPBACK_SET_TSTI_TX_HS_MODE_SHIFT (3U)                                         /*!< USBPHY0_USB1_LOOPBACK_SET.TSTI_TX_HS_MODE Position*/
-#define USBPHY0_USB1_LOOPBACK_SET_TSTI_TX_HS_MODE(x) (((uint32_t)(((uint32_t)(x))<<USBPHY0_USB1_LOOPBACK_SET_TSTI_TX_HS_MODE_SHIFT))&USBPHY0_USB1_LOOPBACK_SET_TSTI_TX_HS_MODE_MASK) /*!< USBPHY0_USB1_LOOPBACK_SET.TSTI_TX_HS_MODE Field*/
-#define USBPHY0_USB1_LOOPBACK_SET_TSTI_TX_LS_MODE_MASK (0x10U)                                       /*!< USBPHY0_USB1_LOOPBACK_SET.TSTI_TX_LS_MODE Mask*/
-#define USBPHY0_USB1_LOOPBACK_SET_TSTI_TX_LS_MODE_SHIFT (4U)                                         /*!< USBPHY0_USB1_LOOPBACK_SET.TSTI_TX_LS_MODE Position*/
-#define USBPHY0_USB1_LOOPBACK_SET_TSTI_TX_LS_MODE(x) (((uint32_t)(((uint32_t)(x))<<USBPHY0_USB1_LOOPBACK_SET_TSTI_TX_LS_MODE_SHIFT))&USBPHY0_USB1_LOOPBACK_SET_TSTI_TX_LS_MODE_MASK) /*!< USBPHY0_USB1_LOOPBACK_SET.TSTI_TX_LS_MODE Field*/
-#define USBPHY0_USB1_LOOPBACK_SET_TSTI_TX_EN_MASK (0x20U)                                            /*!< USBPHY0_USB1_LOOPBACK_SET.TSTI_TX_EN Mask*/
-#define USBPHY0_USB1_LOOPBACK_SET_TSTI_TX_EN_SHIFT (5U)                                              /*!< USBPHY0_USB1_LOOPBACK_SET.TSTI_TX_EN Position*/
-#define USBPHY0_USB1_LOOPBACK_SET_TSTI_TX_EN(x)  (((uint32_t)(((uint32_t)(x))<<USBPHY0_USB1_LOOPBACK_SET_TSTI_TX_EN_SHIFT))&USBPHY0_USB1_LOOPBACK_SET_TSTI_TX_EN_MASK) /*!< USBPHY0_USB1_LOOPBACK_SET.TSTI_TX_EN Field*/
-#define USBPHY0_USB1_LOOPBACK_SET_TSTI_TX_HIZ_MASK (0x40U)                                           /*!< USBPHY0_USB1_LOOPBACK_SET.TSTI_TX_HIZ Mask*/
-#define USBPHY0_USB1_LOOPBACK_SET_TSTI_TX_HIZ_SHIFT (6U)                                             /*!< USBPHY0_USB1_LOOPBACK_SET.TSTI_TX_HIZ Position*/
-#define USBPHY0_USB1_LOOPBACK_SET_TSTI_TX_HIZ(x) (((uint32_t)(((uint32_t)(x))<<USBPHY0_USB1_LOOPBACK_SET_TSTI_TX_HIZ_SHIFT))&USBPHY0_USB1_LOOPBACK_SET_TSTI_TX_HIZ_MASK) /*!< USBPHY0_USB1_LOOPBACK_SET.TSTI_TX_HIZ Field*/
-#define USBPHY0_USB1_LOOPBACK_SET_UTMO_DIG_TST0_MASK (0x80U)                                         /*!< USBPHY0_USB1_LOOPBACK_SET.UTMO_DIG_TST0 Mask*/
-#define USBPHY0_USB1_LOOPBACK_SET_UTMO_DIG_TST0_SHIFT (7U)                                           /*!< USBPHY0_USB1_LOOPBACK_SET.UTMO_DIG_TST0 Position*/
-#define USBPHY0_USB1_LOOPBACK_SET_UTMO_DIG_TST0(x) (((uint32_t)(((uint32_t)(x))<<USBPHY0_USB1_LOOPBACK_SET_UTMO_DIG_TST0_SHIFT))&USBPHY0_USB1_LOOPBACK_SET_UTMO_DIG_TST0_MASK) /*!< USBPHY0_USB1_LOOPBACK_SET.UTMO_DIG_TST0 Field*/
-#define USBPHY0_USB1_LOOPBACK_SET_UTMO_DIG_TST1_MASK (0x100U)                                        /*!< USBPHY0_USB1_LOOPBACK_SET.UTMO_DIG_TST1 Mask*/
-#define USBPHY0_USB1_LOOPBACK_SET_UTMO_DIG_TST1_SHIFT (8U)                                           /*!< USBPHY0_USB1_LOOPBACK_SET.UTMO_DIG_TST1 Position*/
-#define USBPHY0_USB1_LOOPBACK_SET_UTMO_DIG_TST1(x) (((uint32_t)(((uint32_t)(x))<<USBPHY0_USB1_LOOPBACK_SET_UTMO_DIG_TST1_SHIFT))&USBPHY0_USB1_LOOPBACK_SET_UTMO_DIG_TST1_MASK) /*!< USBPHY0_USB1_LOOPBACK_SET.UTMO_DIG_TST1 Field*/
-#define USBPHY0_USB1_LOOPBACK_SET_TSTI_HSFS_MODE_EN_MASK (0x8000U)                                   /*!< USBPHY0_USB1_LOOPBACK_SET.TSTI_HSFS_MODE_EN Mask*/
-#define USBPHY0_USB1_LOOPBACK_SET_TSTI_HSFS_MODE_EN_SHIFT (15U)                                      /*!< USBPHY0_USB1_LOOPBACK_SET.TSTI_HSFS_MODE_EN Position*/
-#define USBPHY0_USB1_LOOPBACK_SET_TSTI_HSFS_MODE_EN(x) (((uint32_t)(((uint32_t)(x))<<USBPHY0_USB1_LOOPBACK_SET_TSTI_HSFS_MODE_EN_SHIFT))&USBPHY0_USB1_LOOPBACK_SET_TSTI_HSFS_MODE_EN_MASK) /*!< USBPHY0_USB1_LOOPBACK_SET.TSTI_HSFS_MODE_EN Field*/
-#define USBPHY0_USB1_LOOPBACK_SET_TSTPKT_MASK    (0xFF0000U)                                         /*!< USBPHY0_USB1_LOOPBACK_SET.TSTPKT Mask   */
-#define USBPHY0_USB1_LOOPBACK_SET_TSTPKT_SHIFT   (16U)                                               /*!< USBPHY0_USB1_LOOPBACK_SET.TSTPKT Position*/
-#define USBPHY0_USB1_LOOPBACK_SET_TSTPKT(x)      (((uint32_t)(((uint32_t)(x))<<USBPHY0_USB1_LOOPBACK_SET_TSTPKT_SHIFT))&USBPHY0_USB1_LOOPBACK_SET_TSTPKT_MASK) /*!< USBPHY0_USB1_LOOPBACK_SET.TSTPKT Field  */
+#define USBPHY_USB1_LOOPBACK_SET_UTMI_TESTSTART_MASK (0x1U)                                          /*!< USBPHY1_USB1_LOOPBACK_SET.UTMI_TESTSTART Mask*/
+#define USBPHY_USB1_LOOPBACK_SET_UTMI_TESTSTART_SHIFT (0U)                                           /*!< USBPHY1_USB1_LOOPBACK_SET.UTMI_TESTSTART Position*/
+#define USBPHY_USB1_LOOPBACK_SET_UTMI_TESTSTART(x) (((uint32_t)(((uint32_t)(x))<<USBPHY_USB1_LOOPBACK_SET_UTMI_TESTSTART_SHIFT))&USBPHY_USB1_LOOPBACK_SET_UTMI_TESTSTART_MASK) /*!< USBPHY1_USB1_LOOPBACK_SET.UTMI_TESTSTART Field*/
+#define USBPHY_USB1_LOOPBACK_SET_UTMI_DIG_TST0_MASK (0x2U)                                           /*!< USBPHY1_USB1_LOOPBACK_SET.UTMI_DIG_TST0 Mask*/
+#define USBPHY_USB1_LOOPBACK_SET_UTMI_DIG_TST0_SHIFT (1U)                                            /*!< USBPHY1_USB1_LOOPBACK_SET.UTMI_DIG_TST0 Position*/
+#define USBPHY_USB1_LOOPBACK_SET_UTMI_DIG_TST0(x) (((uint32_t)(((uint32_t)(x))<<USBPHY_USB1_LOOPBACK_SET_UTMI_DIG_TST0_SHIFT))&USBPHY_USB1_LOOPBACK_SET_UTMI_DIG_TST0_MASK) /*!< USBPHY1_USB1_LOOPBACK_SET.UTMI_DIG_TST0 Field*/
+#define USBPHY_USB1_LOOPBACK_SET_UTMI_DIG_TST1_MASK (0x4U)                                           /*!< USBPHY1_USB1_LOOPBACK_SET.UTMI_DIG_TST1 Mask*/
+#define USBPHY_USB1_LOOPBACK_SET_UTMI_DIG_TST1_SHIFT (2U)                                            /*!< USBPHY1_USB1_LOOPBACK_SET.UTMI_DIG_TST1 Position*/
+#define USBPHY_USB1_LOOPBACK_SET_UTMI_DIG_TST1(x) (((uint32_t)(((uint32_t)(x))<<USBPHY_USB1_LOOPBACK_SET_UTMI_DIG_TST1_SHIFT))&USBPHY_USB1_LOOPBACK_SET_UTMI_DIG_TST1_MASK) /*!< USBPHY1_USB1_LOOPBACK_SET.UTMI_DIG_TST1 Field*/
+#define USBPHY_USB1_LOOPBACK_SET_TSTI_TX_HS_MODE_MASK (0x8U)                                         /*!< USBPHY1_USB1_LOOPBACK_SET.TSTI_TX_HS_MODE Mask*/
+#define USBPHY_USB1_LOOPBACK_SET_TSTI_TX_HS_MODE_SHIFT (3U)                                          /*!< USBPHY1_USB1_LOOPBACK_SET.TSTI_TX_HS_MODE Position*/
+#define USBPHY_USB1_LOOPBACK_SET_TSTI_TX_HS_MODE(x) (((uint32_t)(((uint32_t)(x))<<USBPHY_USB1_LOOPBACK_SET_TSTI_TX_HS_MODE_SHIFT))&USBPHY_USB1_LOOPBACK_SET_TSTI_TX_HS_MODE_MASK) /*!< USBPHY1_USB1_LOOPBACK_SET.TSTI_TX_HS_MODE Field*/
+#define USBPHY_USB1_LOOPBACK_SET_TSTI_TX_LS_MODE_MASK (0x10U)                                        /*!< USBPHY1_USB1_LOOPBACK_SET.TSTI_TX_LS_MODE Mask*/
+#define USBPHY_USB1_LOOPBACK_SET_TSTI_TX_LS_MODE_SHIFT (4U)                                          /*!< USBPHY1_USB1_LOOPBACK_SET.TSTI_TX_LS_MODE Position*/
+#define USBPHY_USB1_LOOPBACK_SET_TSTI_TX_LS_MODE(x) (((uint32_t)(((uint32_t)(x))<<USBPHY_USB1_LOOPBACK_SET_TSTI_TX_LS_MODE_SHIFT))&USBPHY_USB1_LOOPBACK_SET_TSTI_TX_LS_MODE_MASK) /*!< USBPHY1_USB1_LOOPBACK_SET.TSTI_TX_LS_MODE Field*/
+#define USBPHY_USB1_LOOPBACK_SET_TSTI_TX_EN_MASK (0x20U)                                             /*!< USBPHY1_USB1_LOOPBACK_SET.TSTI_TX_EN Mask*/
+#define USBPHY_USB1_LOOPBACK_SET_TSTI_TX_EN_SHIFT (5U)                                               /*!< USBPHY1_USB1_LOOPBACK_SET.TSTI_TX_EN Position*/
+#define USBPHY_USB1_LOOPBACK_SET_TSTI_TX_EN(x)   (((uint32_t)(((uint32_t)(x))<<USBPHY_USB1_LOOPBACK_SET_TSTI_TX_EN_SHIFT))&USBPHY_USB1_LOOPBACK_SET_TSTI_TX_EN_MASK) /*!< USBPHY1_USB1_LOOPBACK_SET.TSTI_TX_EN Field*/
+#define USBPHY_USB1_LOOPBACK_SET_TSTI_TX_HIZ_MASK (0x40U)                                            /*!< USBPHY1_USB1_LOOPBACK_SET.TSTI_TX_HIZ Mask*/
+#define USBPHY_USB1_LOOPBACK_SET_TSTI_TX_HIZ_SHIFT (6U)                                              /*!< USBPHY1_USB1_LOOPBACK_SET.TSTI_TX_HIZ Position*/
+#define USBPHY_USB1_LOOPBACK_SET_TSTI_TX_HIZ(x)  (((uint32_t)(((uint32_t)(x))<<USBPHY_USB1_LOOPBACK_SET_TSTI_TX_HIZ_SHIFT))&USBPHY_USB1_LOOPBACK_SET_TSTI_TX_HIZ_MASK) /*!< USBPHY1_USB1_LOOPBACK_SET.TSTI_TX_HIZ Field*/
+#define USBPHY_USB1_LOOPBACK_SET_UTMO_DIG_TST0_MASK (0x80U)                                          /*!< USBPHY1_USB1_LOOPBACK_SET.UTMO_DIG_TST0 Mask*/
+#define USBPHY_USB1_LOOPBACK_SET_UTMO_DIG_TST0_SHIFT (7U)                                            /*!< USBPHY1_USB1_LOOPBACK_SET.UTMO_DIG_TST0 Position*/
+#define USBPHY_USB1_LOOPBACK_SET_UTMO_DIG_TST0(x) (((uint32_t)(((uint32_t)(x))<<USBPHY_USB1_LOOPBACK_SET_UTMO_DIG_TST0_SHIFT))&USBPHY_USB1_LOOPBACK_SET_UTMO_DIG_TST0_MASK) /*!< USBPHY1_USB1_LOOPBACK_SET.UTMO_DIG_TST0 Field*/
+#define USBPHY_USB1_LOOPBACK_SET_UTMO_DIG_TST1_MASK (0x100U)                                         /*!< USBPHY1_USB1_LOOPBACK_SET.UTMO_DIG_TST1 Mask*/
+#define USBPHY_USB1_LOOPBACK_SET_UTMO_DIG_TST1_SHIFT (8U)                                            /*!< USBPHY1_USB1_LOOPBACK_SET.UTMO_DIG_TST1 Position*/
+#define USBPHY_USB1_LOOPBACK_SET_UTMO_DIG_TST1(x) (((uint32_t)(((uint32_t)(x))<<USBPHY_USB1_LOOPBACK_SET_UTMO_DIG_TST1_SHIFT))&USBPHY_USB1_LOOPBACK_SET_UTMO_DIG_TST1_MASK) /*!< USBPHY1_USB1_LOOPBACK_SET.UTMO_DIG_TST1 Field*/
+#define USBPHY_USB1_LOOPBACK_SET_TSTI_HSFS_MODE_EN_MASK (0x8000U)                                    /*!< USBPHY1_USB1_LOOPBACK_SET.TSTI_HSFS_MODE_EN Mask*/
+#define USBPHY_USB1_LOOPBACK_SET_TSTI_HSFS_MODE_EN_SHIFT (15U)                                       /*!< USBPHY1_USB1_LOOPBACK_SET.TSTI_HSFS_MODE_EN Position*/
+#define USBPHY_USB1_LOOPBACK_SET_TSTI_HSFS_MODE_EN(x) (((uint32_t)(((uint32_t)(x))<<USBPHY_USB1_LOOPBACK_SET_TSTI_HSFS_MODE_EN_SHIFT))&USBPHY_USB1_LOOPBACK_SET_TSTI_HSFS_MODE_EN_MASK) /*!< USBPHY1_USB1_LOOPBACK_SET.TSTI_HSFS_MODE_EN Field*/
+#define USBPHY_USB1_LOOPBACK_SET_TSTPKT_MASK     (0xFF0000U)                                         /*!< USBPHY1_USB1_LOOPBACK_SET.TSTPKT Mask   */
+#define USBPHY_USB1_LOOPBACK_SET_TSTPKT_SHIFT    (16U)                                               /*!< USBPHY1_USB1_LOOPBACK_SET.TSTPKT Position*/
+#define USBPHY_USB1_LOOPBACK_SET_TSTPKT(x)       (((uint32_t)(((uint32_t)(x))<<USBPHY_USB1_LOOPBACK_SET_TSTPKT_SHIFT))&USBPHY_USB1_LOOPBACK_SET_TSTPKT_MASK) /*!< USBPHY1_USB1_LOOPBACK_SET.TSTPKT Field  */
 
 /*! @name USB1_LOOPBACK_CLR - USB PHY Loopback Control/Status Register */
-#define USBPHY0_USB1_LOOPBACK_CLR_UTMI_TESTSTART_MASK (0x1U)                                         /*!< USBPHY0_USB1_LOOPBACK_CLR.UTMI_TESTSTART Mask*/
-#define USBPHY0_USB1_LOOPBACK_CLR_UTMI_TESTSTART_SHIFT (0U)                                          /*!< USBPHY0_USB1_LOOPBACK_CLR.UTMI_TESTSTART Position*/
-#define USBPHY0_USB1_LOOPBACK_CLR_UTMI_TESTSTART(x) (((uint32_t)(((uint32_t)(x))<<USBPHY0_USB1_LOOPBACK_CLR_UTMI_TESTSTART_SHIFT))&USBPHY0_USB1_LOOPBACK_CLR_UTMI_TESTSTART_MASK) /*!< USBPHY0_USB1_LOOPBACK_CLR.UTMI_TESTSTART Field*/
-#define USBPHY0_USB1_LOOPBACK_CLR_UTMI_DIG_TST0_MASK (0x2U)                                          /*!< USBPHY0_USB1_LOOPBACK_CLR.UTMI_DIG_TST0 Mask*/
-#define USBPHY0_USB1_LOOPBACK_CLR_UTMI_DIG_TST0_SHIFT (1U)                                           /*!< USBPHY0_USB1_LOOPBACK_CLR.UTMI_DIG_TST0 Position*/
-#define USBPHY0_USB1_LOOPBACK_CLR_UTMI_DIG_TST0(x) (((uint32_t)(((uint32_t)(x))<<USBPHY0_USB1_LOOPBACK_CLR_UTMI_DIG_TST0_SHIFT))&USBPHY0_USB1_LOOPBACK_CLR_UTMI_DIG_TST0_MASK) /*!< USBPHY0_USB1_LOOPBACK_CLR.UTMI_DIG_TST0 Field*/
-#define USBPHY0_USB1_LOOPBACK_CLR_UTMI_DIG_TST1_MASK (0x4U)                                          /*!< USBPHY0_USB1_LOOPBACK_CLR.UTMI_DIG_TST1 Mask*/
-#define USBPHY0_USB1_LOOPBACK_CLR_UTMI_DIG_TST1_SHIFT (2U)                                           /*!< USBPHY0_USB1_LOOPBACK_CLR.UTMI_DIG_TST1 Position*/
-#define USBPHY0_USB1_LOOPBACK_CLR_UTMI_DIG_TST1(x) (((uint32_t)(((uint32_t)(x))<<USBPHY0_USB1_LOOPBACK_CLR_UTMI_DIG_TST1_SHIFT))&USBPHY0_USB1_LOOPBACK_CLR_UTMI_DIG_TST1_MASK) /*!< USBPHY0_USB1_LOOPBACK_CLR.UTMI_DIG_TST1 Field*/
-#define USBPHY0_USB1_LOOPBACK_CLR_TSTI_TX_HS_MODE_MASK (0x8U)                                        /*!< USBPHY0_USB1_LOOPBACK_CLR.TSTI_TX_HS_MODE Mask*/
-#define USBPHY0_USB1_LOOPBACK_CLR_TSTI_TX_HS_MODE_SHIFT (3U)                                         /*!< USBPHY0_USB1_LOOPBACK_CLR.TSTI_TX_HS_MODE Position*/
-#define USBPHY0_USB1_LOOPBACK_CLR_TSTI_TX_HS_MODE(x) (((uint32_t)(((uint32_t)(x))<<USBPHY0_USB1_LOOPBACK_CLR_TSTI_TX_HS_MODE_SHIFT))&USBPHY0_USB1_LOOPBACK_CLR_TSTI_TX_HS_MODE_MASK) /*!< USBPHY0_USB1_LOOPBACK_CLR.TSTI_TX_HS_MODE Field*/
-#define USBPHY0_USB1_LOOPBACK_CLR_TSTI_TX_LS_MODE_MASK (0x10U)                                       /*!< USBPHY0_USB1_LOOPBACK_CLR.TSTI_TX_LS_MODE Mask*/
-#define USBPHY0_USB1_LOOPBACK_CLR_TSTI_TX_LS_MODE_SHIFT (4U)                                         /*!< USBPHY0_USB1_LOOPBACK_CLR.TSTI_TX_LS_MODE Position*/
-#define USBPHY0_USB1_LOOPBACK_CLR_TSTI_TX_LS_MODE(x) (((uint32_t)(((uint32_t)(x))<<USBPHY0_USB1_LOOPBACK_CLR_TSTI_TX_LS_MODE_SHIFT))&USBPHY0_USB1_LOOPBACK_CLR_TSTI_TX_LS_MODE_MASK) /*!< USBPHY0_USB1_LOOPBACK_CLR.TSTI_TX_LS_MODE Field*/
-#define USBPHY0_USB1_LOOPBACK_CLR_TSTI_TX_EN_MASK (0x20U)                                            /*!< USBPHY0_USB1_LOOPBACK_CLR.TSTI_TX_EN Mask*/
-#define USBPHY0_USB1_LOOPBACK_CLR_TSTI_TX_EN_SHIFT (5U)                                              /*!< USBPHY0_USB1_LOOPBACK_CLR.TSTI_TX_EN Position*/
-#define USBPHY0_USB1_LOOPBACK_CLR_TSTI_TX_EN(x)  (((uint32_t)(((uint32_t)(x))<<USBPHY0_USB1_LOOPBACK_CLR_TSTI_TX_EN_SHIFT))&USBPHY0_USB1_LOOPBACK_CLR_TSTI_TX_EN_MASK) /*!< USBPHY0_USB1_LOOPBACK_CLR.TSTI_TX_EN Field*/
-#define USBPHY0_USB1_LOOPBACK_CLR_TSTI_TX_HIZ_MASK (0x40U)                                           /*!< USBPHY0_USB1_LOOPBACK_CLR.TSTI_TX_HIZ Mask*/
-#define USBPHY0_USB1_LOOPBACK_CLR_TSTI_TX_HIZ_SHIFT (6U)                                             /*!< USBPHY0_USB1_LOOPBACK_CLR.TSTI_TX_HIZ Position*/
-#define USBPHY0_USB1_LOOPBACK_CLR_TSTI_TX_HIZ(x) (((uint32_t)(((uint32_t)(x))<<USBPHY0_USB1_LOOPBACK_CLR_TSTI_TX_HIZ_SHIFT))&USBPHY0_USB1_LOOPBACK_CLR_TSTI_TX_HIZ_MASK) /*!< USBPHY0_USB1_LOOPBACK_CLR.TSTI_TX_HIZ Field*/
-#define USBPHY0_USB1_LOOPBACK_CLR_UTMO_DIG_TST0_MASK (0x80U)                                         /*!< USBPHY0_USB1_LOOPBACK_CLR.UTMO_DIG_TST0 Mask*/
-#define USBPHY0_USB1_LOOPBACK_CLR_UTMO_DIG_TST0_SHIFT (7U)                                           /*!< USBPHY0_USB1_LOOPBACK_CLR.UTMO_DIG_TST0 Position*/
-#define USBPHY0_USB1_LOOPBACK_CLR_UTMO_DIG_TST0(x) (((uint32_t)(((uint32_t)(x))<<USBPHY0_USB1_LOOPBACK_CLR_UTMO_DIG_TST0_SHIFT))&USBPHY0_USB1_LOOPBACK_CLR_UTMO_DIG_TST0_MASK) /*!< USBPHY0_USB1_LOOPBACK_CLR.UTMO_DIG_TST0 Field*/
-#define USBPHY0_USB1_LOOPBACK_CLR_UTMO_DIG_TST1_MASK (0x100U)                                        /*!< USBPHY0_USB1_LOOPBACK_CLR.UTMO_DIG_TST1 Mask*/
-#define USBPHY0_USB1_LOOPBACK_CLR_UTMO_DIG_TST1_SHIFT (8U)                                           /*!< USBPHY0_USB1_LOOPBACK_CLR.UTMO_DIG_TST1 Position*/
-#define USBPHY0_USB1_LOOPBACK_CLR_UTMO_DIG_TST1(x) (((uint32_t)(((uint32_t)(x))<<USBPHY0_USB1_LOOPBACK_CLR_UTMO_DIG_TST1_SHIFT))&USBPHY0_USB1_LOOPBACK_CLR_UTMO_DIG_TST1_MASK) /*!< USBPHY0_USB1_LOOPBACK_CLR.UTMO_DIG_TST1 Field*/
-#define USBPHY0_USB1_LOOPBACK_CLR_TSTI_HSFS_MODE_EN_MASK (0x8000U)                                   /*!< USBPHY0_USB1_LOOPBACK_CLR.TSTI_HSFS_MODE_EN Mask*/
-#define USBPHY0_USB1_LOOPBACK_CLR_TSTI_HSFS_MODE_EN_SHIFT (15U)                                      /*!< USBPHY0_USB1_LOOPBACK_CLR.TSTI_HSFS_MODE_EN Position*/
-#define USBPHY0_USB1_LOOPBACK_CLR_TSTI_HSFS_MODE_EN(x) (((uint32_t)(((uint32_t)(x))<<USBPHY0_USB1_LOOPBACK_CLR_TSTI_HSFS_MODE_EN_SHIFT))&USBPHY0_USB1_LOOPBACK_CLR_TSTI_HSFS_MODE_EN_MASK) /*!< USBPHY0_USB1_LOOPBACK_CLR.TSTI_HSFS_MODE_EN Field*/
-#define USBPHY0_USB1_LOOPBACK_CLR_TSTPKT_MASK    (0xFF0000U)                                         /*!< USBPHY0_USB1_LOOPBACK_CLR.TSTPKT Mask   */
-#define USBPHY0_USB1_LOOPBACK_CLR_TSTPKT_SHIFT   (16U)                                               /*!< USBPHY0_USB1_LOOPBACK_CLR.TSTPKT Position*/
-#define USBPHY0_USB1_LOOPBACK_CLR_TSTPKT(x)      (((uint32_t)(((uint32_t)(x))<<USBPHY0_USB1_LOOPBACK_CLR_TSTPKT_SHIFT))&USBPHY0_USB1_LOOPBACK_CLR_TSTPKT_MASK) /*!< USBPHY0_USB1_LOOPBACK_CLR.TSTPKT Field  */
+#define USBPHY_USB1_LOOPBACK_CLR_UTMI_TESTSTART_MASK (0x1U)                                          /*!< USBPHY1_USB1_LOOPBACK_CLR.UTMI_TESTSTART Mask*/
+#define USBPHY_USB1_LOOPBACK_CLR_UTMI_TESTSTART_SHIFT (0U)                                           /*!< USBPHY1_USB1_LOOPBACK_CLR.UTMI_TESTSTART Position*/
+#define USBPHY_USB1_LOOPBACK_CLR_UTMI_TESTSTART(x) (((uint32_t)(((uint32_t)(x))<<USBPHY_USB1_LOOPBACK_CLR_UTMI_TESTSTART_SHIFT))&USBPHY_USB1_LOOPBACK_CLR_UTMI_TESTSTART_MASK) /*!< USBPHY1_USB1_LOOPBACK_CLR.UTMI_TESTSTART Field*/
+#define USBPHY_USB1_LOOPBACK_CLR_UTMI_DIG_TST0_MASK (0x2U)                                           /*!< USBPHY1_USB1_LOOPBACK_CLR.UTMI_DIG_TST0 Mask*/
+#define USBPHY_USB1_LOOPBACK_CLR_UTMI_DIG_TST0_SHIFT (1U)                                            /*!< USBPHY1_USB1_LOOPBACK_CLR.UTMI_DIG_TST0 Position*/
+#define USBPHY_USB1_LOOPBACK_CLR_UTMI_DIG_TST0(x) (((uint32_t)(((uint32_t)(x))<<USBPHY_USB1_LOOPBACK_CLR_UTMI_DIG_TST0_SHIFT))&USBPHY_USB1_LOOPBACK_CLR_UTMI_DIG_TST0_MASK) /*!< USBPHY1_USB1_LOOPBACK_CLR.UTMI_DIG_TST0 Field*/
+#define USBPHY_USB1_LOOPBACK_CLR_UTMI_DIG_TST1_MASK (0x4U)                                           /*!< USBPHY1_USB1_LOOPBACK_CLR.UTMI_DIG_TST1 Mask*/
+#define USBPHY_USB1_LOOPBACK_CLR_UTMI_DIG_TST1_SHIFT (2U)                                            /*!< USBPHY1_USB1_LOOPBACK_CLR.UTMI_DIG_TST1 Position*/
+#define USBPHY_USB1_LOOPBACK_CLR_UTMI_DIG_TST1(x) (((uint32_t)(((uint32_t)(x))<<USBPHY_USB1_LOOPBACK_CLR_UTMI_DIG_TST1_SHIFT))&USBPHY_USB1_LOOPBACK_CLR_UTMI_DIG_TST1_MASK) /*!< USBPHY1_USB1_LOOPBACK_CLR.UTMI_DIG_TST1 Field*/
+#define USBPHY_USB1_LOOPBACK_CLR_TSTI_TX_HS_MODE_MASK (0x8U)                                         /*!< USBPHY1_USB1_LOOPBACK_CLR.TSTI_TX_HS_MODE Mask*/
+#define USBPHY_USB1_LOOPBACK_CLR_TSTI_TX_HS_MODE_SHIFT (3U)                                          /*!< USBPHY1_USB1_LOOPBACK_CLR.TSTI_TX_HS_MODE Position*/
+#define USBPHY_USB1_LOOPBACK_CLR_TSTI_TX_HS_MODE(x) (((uint32_t)(((uint32_t)(x))<<USBPHY_USB1_LOOPBACK_CLR_TSTI_TX_HS_MODE_SHIFT))&USBPHY_USB1_LOOPBACK_CLR_TSTI_TX_HS_MODE_MASK) /*!< USBPHY1_USB1_LOOPBACK_CLR.TSTI_TX_HS_MODE Field*/
+#define USBPHY_USB1_LOOPBACK_CLR_TSTI_TX_LS_MODE_MASK (0x10U)                                        /*!< USBPHY1_USB1_LOOPBACK_CLR.TSTI_TX_LS_MODE Mask*/
+#define USBPHY_USB1_LOOPBACK_CLR_TSTI_TX_LS_MODE_SHIFT (4U)                                          /*!< USBPHY1_USB1_LOOPBACK_CLR.TSTI_TX_LS_MODE Position*/
+#define USBPHY_USB1_LOOPBACK_CLR_TSTI_TX_LS_MODE(x) (((uint32_t)(((uint32_t)(x))<<USBPHY_USB1_LOOPBACK_CLR_TSTI_TX_LS_MODE_SHIFT))&USBPHY_USB1_LOOPBACK_CLR_TSTI_TX_LS_MODE_MASK) /*!< USBPHY1_USB1_LOOPBACK_CLR.TSTI_TX_LS_MODE Field*/
+#define USBPHY_USB1_LOOPBACK_CLR_TSTI_TX_EN_MASK (0x20U)                                             /*!< USBPHY1_USB1_LOOPBACK_CLR.TSTI_TX_EN Mask*/
+#define USBPHY_USB1_LOOPBACK_CLR_TSTI_TX_EN_SHIFT (5U)                                               /*!< USBPHY1_USB1_LOOPBACK_CLR.TSTI_TX_EN Position*/
+#define USBPHY_USB1_LOOPBACK_CLR_TSTI_TX_EN(x)   (((uint32_t)(((uint32_t)(x))<<USBPHY_USB1_LOOPBACK_CLR_TSTI_TX_EN_SHIFT))&USBPHY_USB1_LOOPBACK_CLR_TSTI_TX_EN_MASK) /*!< USBPHY1_USB1_LOOPBACK_CLR.TSTI_TX_EN Field*/
+#define USBPHY_USB1_LOOPBACK_CLR_TSTI_TX_HIZ_MASK (0x40U)                                            /*!< USBPHY1_USB1_LOOPBACK_CLR.TSTI_TX_HIZ Mask*/
+#define USBPHY_USB1_LOOPBACK_CLR_TSTI_TX_HIZ_SHIFT (6U)                                              /*!< USBPHY1_USB1_LOOPBACK_CLR.TSTI_TX_HIZ Position*/
+#define USBPHY_USB1_LOOPBACK_CLR_TSTI_TX_HIZ(x)  (((uint32_t)(((uint32_t)(x))<<USBPHY_USB1_LOOPBACK_CLR_TSTI_TX_HIZ_SHIFT))&USBPHY_USB1_LOOPBACK_CLR_TSTI_TX_HIZ_MASK) /*!< USBPHY1_USB1_LOOPBACK_CLR.TSTI_TX_HIZ Field*/
+#define USBPHY_USB1_LOOPBACK_CLR_UTMO_DIG_TST0_MASK (0x80U)                                          /*!< USBPHY1_USB1_LOOPBACK_CLR.UTMO_DIG_TST0 Mask*/
+#define USBPHY_USB1_LOOPBACK_CLR_UTMO_DIG_TST0_SHIFT (7U)                                            /*!< USBPHY1_USB1_LOOPBACK_CLR.UTMO_DIG_TST0 Position*/
+#define USBPHY_USB1_LOOPBACK_CLR_UTMO_DIG_TST0(x) (((uint32_t)(((uint32_t)(x))<<USBPHY_USB1_LOOPBACK_CLR_UTMO_DIG_TST0_SHIFT))&USBPHY_USB1_LOOPBACK_CLR_UTMO_DIG_TST0_MASK) /*!< USBPHY1_USB1_LOOPBACK_CLR.UTMO_DIG_TST0 Field*/
+#define USBPHY_USB1_LOOPBACK_CLR_UTMO_DIG_TST1_MASK (0x100U)                                         /*!< USBPHY1_USB1_LOOPBACK_CLR.UTMO_DIG_TST1 Mask*/
+#define USBPHY_USB1_LOOPBACK_CLR_UTMO_DIG_TST1_SHIFT (8U)                                            /*!< USBPHY1_USB1_LOOPBACK_CLR.UTMO_DIG_TST1 Position*/
+#define USBPHY_USB1_LOOPBACK_CLR_UTMO_DIG_TST1(x) (((uint32_t)(((uint32_t)(x))<<USBPHY_USB1_LOOPBACK_CLR_UTMO_DIG_TST1_SHIFT))&USBPHY_USB1_LOOPBACK_CLR_UTMO_DIG_TST1_MASK) /*!< USBPHY1_USB1_LOOPBACK_CLR.UTMO_DIG_TST1 Field*/
+#define USBPHY_USB1_LOOPBACK_CLR_TSTI_HSFS_MODE_EN_MASK (0x8000U)                                    /*!< USBPHY1_USB1_LOOPBACK_CLR.TSTI_HSFS_MODE_EN Mask*/
+#define USBPHY_USB1_LOOPBACK_CLR_TSTI_HSFS_MODE_EN_SHIFT (15U)                                       /*!< USBPHY1_USB1_LOOPBACK_CLR.TSTI_HSFS_MODE_EN Position*/
+#define USBPHY_USB1_LOOPBACK_CLR_TSTI_HSFS_MODE_EN(x) (((uint32_t)(((uint32_t)(x))<<USBPHY_USB1_LOOPBACK_CLR_TSTI_HSFS_MODE_EN_SHIFT))&USBPHY_USB1_LOOPBACK_CLR_TSTI_HSFS_MODE_EN_MASK) /*!< USBPHY1_USB1_LOOPBACK_CLR.TSTI_HSFS_MODE_EN Field*/
+#define USBPHY_USB1_LOOPBACK_CLR_TSTPKT_MASK     (0xFF0000U)                                         /*!< USBPHY1_USB1_LOOPBACK_CLR.TSTPKT Mask   */
+#define USBPHY_USB1_LOOPBACK_CLR_TSTPKT_SHIFT    (16U)                                               /*!< USBPHY1_USB1_LOOPBACK_CLR.TSTPKT Position*/
+#define USBPHY_USB1_LOOPBACK_CLR_TSTPKT(x)       (((uint32_t)(((uint32_t)(x))<<USBPHY_USB1_LOOPBACK_CLR_TSTPKT_SHIFT))&USBPHY_USB1_LOOPBACK_CLR_TSTPKT_MASK) /*!< USBPHY1_USB1_LOOPBACK_CLR.TSTPKT Field  */
 
 /*! @name USB1_LOOPBACK_TOG - USB PHY Loopback Control/Status Register */
-#define USBPHY0_USB1_LOOPBACK_TOG_UTMI_TESTSTART_MASK (0x1U)                                         /*!< USBPHY0_USB1_LOOPBACK_TOG.UTMI_TESTSTART Mask*/
-#define USBPHY0_USB1_LOOPBACK_TOG_UTMI_TESTSTART_SHIFT (0U)                                          /*!< USBPHY0_USB1_LOOPBACK_TOG.UTMI_TESTSTART Position*/
-#define USBPHY0_USB1_LOOPBACK_TOG_UTMI_TESTSTART(x) (((uint32_t)(((uint32_t)(x))<<USBPHY0_USB1_LOOPBACK_TOG_UTMI_TESTSTART_SHIFT))&USBPHY0_USB1_LOOPBACK_TOG_UTMI_TESTSTART_MASK) /*!< USBPHY0_USB1_LOOPBACK_TOG.UTMI_TESTSTART Field*/
-#define USBPHY0_USB1_LOOPBACK_TOG_UTMI_DIG_TST0_MASK (0x2U)                                          /*!< USBPHY0_USB1_LOOPBACK_TOG.UTMI_DIG_TST0 Mask*/
-#define USBPHY0_USB1_LOOPBACK_TOG_UTMI_DIG_TST0_SHIFT (1U)                                           /*!< USBPHY0_USB1_LOOPBACK_TOG.UTMI_DIG_TST0 Position*/
-#define USBPHY0_USB1_LOOPBACK_TOG_UTMI_DIG_TST0(x) (((uint32_t)(((uint32_t)(x))<<USBPHY0_USB1_LOOPBACK_TOG_UTMI_DIG_TST0_SHIFT))&USBPHY0_USB1_LOOPBACK_TOG_UTMI_DIG_TST0_MASK) /*!< USBPHY0_USB1_LOOPBACK_TOG.UTMI_DIG_TST0 Field*/
-#define USBPHY0_USB1_LOOPBACK_TOG_UTMI_DIG_TST1_MASK (0x4U)                                          /*!< USBPHY0_USB1_LOOPBACK_TOG.UTMI_DIG_TST1 Mask*/
-#define USBPHY0_USB1_LOOPBACK_TOG_UTMI_DIG_TST1_SHIFT (2U)                                           /*!< USBPHY0_USB1_LOOPBACK_TOG.UTMI_DIG_TST1 Position*/
-#define USBPHY0_USB1_LOOPBACK_TOG_UTMI_DIG_TST1(x) (((uint32_t)(((uint32_t)(x))<<USBPHY0_USB1_LOOPBACK_TOG_UTMI_DIG_TST1_SHIFT))&USBPHY0_USB1_LOOPBACK_TOG_UTMI_DIG_TST1_MASK) /*!< USBPHY0_USB1_LOOPBACK_TOG.UTMI_DIG_TST1 Field*/
-#define USBPHY0_USB1_LOOPBACK_TOG_TSTI_TX_HS_MODE_MASK (0x8U)                                        /*!< USBPHY0_USB1_LOOPBACK_TOG.TSTI_TX_HS_MODE Mask*/
-#define USBPHY0_USB1_LOOPBACK_TOG_TSTI_TX_HS_MODE_SHIFT (3U)                                         /*!< USBPHY0_USB1_LOOPBACK_TOG.TSTI_TX_HS_MODE Position*/
-#define USBPHY0_USB1_LOOPBACK_TOG_TSTI_TX_HS_MODE(x) (((uint32_t)(((uint32_t)(x))<<USBPHY0_USB1_LOOPBACK_TOG_TSTI_TX_HS_MODE_SHIFT))&USBPHY0_USB1_LOOPBACK_TOG_TSTI_TX_HS_MODE_MASK) /*!< USBPHY0_USB1_LOOPBACK_TOG.TSTI_TX_HS_MODE Field*/
-#define USBPHY0_USB1_LOOPBACK_TOG_TSTI_TX_LS_MODE_MASK (0x10U)                                       /*!< USBPHY0_USB1_LOOPBACK_TOG.TSTI_TX_LS_MODE Mask*/
-#define USBPHY0_USB1_LOOPBACK_TOG_TSTI_TX_LS_MODE_SHIFT (4U)                                         /*!< USBPHY0_USB1_LOOPBACK_TOG.TSTI_TX_LS_MODE Position*/
-#define USBPHY0_USB1_LOOPBACK_TOG_TSTI_TX_LS_MODE(x) (((uint32_t)(((uint32_t)(x))<<USBPHY0_USB1_LOOPBACK_TOG_TSTI_TX_LS_MODE_SHIFT))&USBPHY0_USB1_LOOPBACK_TOG_TSTI_TX_LS_MODE_MASK) /*!< USBPHY0_USB1_LOOPBACK_TOG.TSTI_TX_LS_MODE Field*/
-#define USBPHY0_USB1_LOOPBACK_TOG_TSTI_TX_EN_MASK (0x20U)                                            /*!< USBPHY0_USB1_LOOPBACK_TOG.TSTI_TX_EN Mask*/
-#define USBPHY0_USB1_LOOPBACK_TOG_TSTI_TX_EN_SHIFT (5U)                                              /*!< USBPHY0_USB1_LOOPBACK_TOG.TSTI_TX_EN Position*/
-#define USBPHY0_USB1_LOOPBACK_TOG_TSTI_TX_EN(x)  (((uint32_t)(((uint32_t)(x))<<USBPHY0_USB1_LOOPBACK_TOG_TSTI_TX_EN_SHIFT))&USBPHY0_USB1_LOOPBACK_TOG_TSTI_TX_EN_MASK) /*!< USBPHY0_USB1_LOOPBACK_TOG.TSTI_TX_EN Field*/
-#define USBPHY0_USB1_LOOPBACK_TOG_TSTI_TX_HIZ_MASK (0x40U)                                           /*!< USBPHY0_USB1_LOOPBACK_TOG.TSTI_TX_HIZ Mask*/
-#define USBPHY0_USB1_LOOPBACK_TOG_TSTI_TX_HIZ_SHIFT (6U)                                             /*!< USBPHY0_USB1_LOOPBACK_TOG.TSTI_TX_HIZ Position*/
-#define USBPHY0_USB1_LOOPBACK_TOG_TSTI_TX_HIZ(x) (((uint32_t)(((uint32_t)(x))<<USBPHY0_USB1_LOOPBACK_TOG_TSTI_TX_HIZ_SHIFT))&USBPHY0_USB1_LOOPBACK_TOG_TSTI_TX_HIZ_MASK) /*!< USBPHY0_USB1_LOOPBACK_TOG.TSTI_TX_HIZ Field*/
-#define USBPHY0_USB1_LOOPBACK_TOG_UTMO_DIG_TST0_MASK (0x80U)                                         /*!< USBPHY0_USB1_LOOPBACK_TOG.UTMO_DIG_TST0 Mask*/
-#define USBPHY0_USB1_LOOPBACK_TOG_UTMO_DIG_TST0_SHIFT (7U)                                           /*!< USBPHY0_USB1_LOOPBACK_TOG.UTMO_DIG_TST0 Position*/
-#define USBPHY0_USB1_LOOPBACK_TOG_UTMO_DIG_TST0(x) (((uint32_t)(((uint32_t)(x))<<USBPHY0_USB1_LOOPBACK_TOG_UTMO_DIG_TST0_SHIFT))&USBPHY0_USB1_LOOPBACK_TOG_UTMO_DIG_TST0_MASK) /*!< USBPHY0_USB1_LOOPBACK_TOG.UTMO_DIG_TST0 Field*/
-#define USBPHY0_USB1_LOOPBACK_TOG_UTMO_DIG_TST1_MASK (0x100U)                                        /*!< USBPHY0_USB1_LOOPBACK_TOG.UTMO_DIG_TST1 Mask*/
-#define USBPHY0_USB1_LOOPBACK_TOG_UTMO_DIG_TST1_SHIFT (8U)                                           /*!< USBPHY0_USB1_LOOPBACK_TOG.UTMO_DIG_TST1 Position*/
-#define USBPHY0_USB1_LOOPBACK_TOG_UTMO_DIG_TST1(x) (((uint32_t)(((uint32_t)(x))<<USBPHY0_USB1_LOOPBACK_TOG_UTMO_DIG_TST1_SHIFT))&USBPHY0_USB1_LOOPBACK_TOG_UTMO_DIG_TST1_MASK) /*!< USBPHY0_USB1_LOOPBACK_TOG.UTMO_DIG_TST1 Field*/
-#define USBPHY0_USB1_LOOPBACK_TOG_TSTI_HSFS_MODE_EN_MASK (0x8000U)                                   /*!< USBPHY0_USB1_LOOPBACK_TOG.TSTI_HSFS_MODE_EN Mask*/
-#define USBPHY0_USB1_LOOPBACK_TOG_TSTI_HSFS_MODE_EN_SHIFT (15U)                                      /*!< USBPHY0_USB1_LOOPBACK_TOG.TSTI_HSFS_MODE_EN Position*/
-#define USBPHY0_USB1_LOOPBACK_TOG_TSTI_HSFS_MODE_EN(x) (((uint32_t)(((uint32_t)(x))<<USBPHY0_USB1_LOOPBACK_TOG_TSTI_HSFS_MODE_EN_SHIFT))&USBPHY0_USB1_LOOPBACK_TOG_TSTI_HSFS_MODE_EN_MASK) /*!< USBPHY0_USB1_LOOPBACK_TOG.TSTI_HSFS_MODE_EN Field*/
-#define USBPHY0_USB1_LOOPBACK_TOG_TSTPKT_MASK    (0xFF0000U)                                         /*!< USBPHY0_USB1_LOOPBACK_TOG.TSTPKT Mask   */
-#define USBPHY0_USB1_LOOPBACK_TOG_TSTPKT_SHIFT   (16U)                                               /*!< USBPHY0_USB1_LOOPBACK_TOG.TSTPKT Position*/
-#define USBPHY0_USB1_LOOPBACK_TOG_TSTPKT(x)      (((uint32_t)(((uint32_t)(x))<<USBPHY0_USB1_LOOPBACK_TOG_TSTPKT_SHIFT))&USBPHY0_USB1_LOOPBACK_TOG_TSTPKT_MASK) /*!< USBPHY0_USB1_LOOPBACK_TOG.TSTPKT Field  */
+#define USBPHY_USB1_LOOPBACK_TOG_UTMI_TESTSTART_MASK (0x1U)                                          /*!< USBPHY1_USB1_LOOPBACK_TOG.UTMI_TESTSTART Mask*/
+#define USBPHY_USB1_LOOPBACK_TOG_UTMI_TESTSTART_SHIFT (0U)                                           /*!< USBPHY1_USB1_LOOPBACK_TOG.UTMI_TESTSTART Position*/
+#define USBPHY_USB1_LOOPBACK_TOG_UTMI_TESTSTART(x) (((uint32_t)(((uint32_t)(x))<<USBPHY_USB1_LOOPBACK_TOG_UTMI_TESTSTART_SHIFT))&USBPHY_USB1_LOOPBACK_TOG_UTMI_TESTSTART_MASK) /*!< USBPHY1_USB1_LOOPBACK_TOG.UTMI_TESTSTART Field*/
+#define USBPHY_USB1_LOOPBACK_TOG_UTMI_DIG_TST0_MASK (0x2U)                                           /*!< USBPHY1_USB1_LOOPBACK_TOG.UTMI_DIG_TST0 Mask*/
+#define USBPHY_USB1_LOOPBACK_TOG_UTMI_DIG_TST0_SHIFT (1U)                                            /*!< USBPHY1_USB1_LOOPBACK_TOG.UTMI_DIG_TST0 Position*/
+#define USBPHY_USB1_LOOPBACK_TOG_UTMI_DIG_TST0(x) (((uint32_t)(((uint32_t)(x))<<USBPHY_USB1_LOOPBACK_TOG_UTMI_DIG_TST0_SHIFT))&USBPHY_USB1_LOOPBACK_TOG_UTMI_DIG_TST0_MASK) /*!< USBPHY1_USB1_LOOPBACK_TOG.UTMI_DIG_TST0 Field*/
+#define USBPHY_USB1_LOOPBACK_TOG_UTMI_DIG_TST1_MASK (0x4U)                                           /*!< USBPHY1_USB1_LOOPBACK_TOG.UTMI_DIG_TST1 Mask*/
+#define USBPHY_USB1_LOOPBACK_TOG_UTMI_DIG_TST1_SHIFT (2U)                                            /*!< USBPHY1_USB1_LOOPBACK_TOG.UTMI_DIG_TST1 Position*/
+#define USBPHY_USB1_LOOPBACK_TOG_UTMI_DIG_TST1(x) (((uint32_t)(((uint32_t)(x))<<USBPHY_USB1_LOOPBACK_TOG_UTMI_DIG_TST1_SHIFT))&USBPHY_USB1_LOOPBACK_TOG_UTMI_DIG_TST1_MASK) /*!< USBPHY1_USB1_LOOPBACK_TOG.UTMI_DIG_TST1 Field*/
+#define USBPHY_USB1_LOOPBACK_TOG_TSTI_TX_HS_MODE_MASK (0x8U)                                         /*!< USBPHY1_USB1_LOOPBACK_TOG.TSTI_TX_HS_MODE Mask*/
+#define USBPHY_USB1_LOOPBACK_TOG_TSTI_TX_HS_MODE_SHIFT (3U)                                          /*!< USBPHY1_USB1_LOOPBACK_TOG.TSTI_TX_HS_MODE Position*/
+#define USBPHY_USB1_LOOPBACK_TOG_TSTI_TX_HS_MODE(x) (((uint32_t)(((uint32_t)(x))<<USBPHY_USB1_LOOPBACK_TOG_TSTI_TX_HS_MODE_SHIFT))&USBPHY_USB1_LOOPBACK_TOG_TSTI_TX_HS_MODE_MASK) /*!< USBPHY1_USB1_LOOPBACK_TOG.TSTI_TX_HS_MODE Field*/
+#define USBPHY_USB1_LOOPBACK_TOG_TSTI_TX_LS_MODE_MASK (0x10U)                                        /*!< USBPHY1_USB1_LOOPBACK_TOG.TSTI_TX_LS_MODE Mask*/
+#define USBPHY_USB1_LOOPBACK_TOG_TSTI_TX_LS_MODE_SHIFT (4U)                                          /*!< USBPHY1_USB1_LOOPBACK_TOG.TSTI_TX_LS_MODE Position*/
+#define USBPHY_USB1_LOOPBACK_TOG_TSTI_TX_LS_MODE(x) (((uint32_t)(((uint32_t)(x))<<USBPHY_USB1_LOOPBACK_TOG_TSTI_TX_LS_MODE_SHIFT))&USBPHY_USB1_LOOPBACK_TOG_TSTI_TX_LS_MODE_MASK) /*!< USBPHY1_USB1_LOOPBACK_TOG.TSTI_TX_LS_MODE Field*/
+#define USBPHY_USB1_LOOPBACK_TOG_TSTI_TX_EN_MASK (0x20U)                                             /*!< USBPHY1_USB1_LOOPBACK_TOG.TSTI_TX_EN Mask*/
+#define USBPHY_USB1_LOOPBACK_TOG_TSTI_TX_EN_SHIFT (5U)                                               /*!< USBPHY1_USB1_LOOPBACK_TOG.TSTI_TX_EN Position*/
+#define USBPHY_USB1_LOOPBACK_TOG_TSTI_TX_EN(x)   (((uint32_t)(((uint32_t)(x))<<USBPHY_USB1_LOOPBACK_TOG_TSTI_TX_EN_SHIFT))&USBPHY_USB1_LOOPBACK_TOG_TSTI_TX_EN_MASK) /*!< USBPHY1_USB1_LOOPBACK_TOG.TSTI_TX_EN Field*/
+#define USBPHY_USB1_LOOPBACK_TOG_TSTI_TX_HIZ_MASK (0x40U)                                            /*!< USBPHY1_USB1_LOOPBACK_TOG.TSTI_TX_HIZ Mask*/
+#define USBPHY_USB1_LOOPBACK_TOG_TSTI_TX_HIZ_SHIFT (6U)                                              /*!< USBPHY1_USB1_LOOPBACK_TOG.TSTI_TX_HIZ Position*/
+#define USBPHY_USB1_LOOPBACK_TOG_TSTI_TX_HIZ(x)  (((uint32_t)(((uint32_t)(x))<<USBPHY_USB1_LOOPBACK_TOG_TSTI_TX_HIZ_SHIFT))&USBPHY_USB1_LOOPBACK_TOG_TSTI_TX_HIZ_MASK) /*!< USBPHY1_USB1_LOOPBACK_TOG.TSTI_TX_HIZ Field*/
+#define USBPHY_USB1_LOOPBACK_TOG_UTMO_DIG_TST0_MASK (0x80U)                                          /*!< USBPHY1_USB1_LOOPBACK_TOG.UTMO_DIG_TST0 Mask*/
+#define USBPHY_USB1_LOOPBACK_TOG_UTMO_DIG_TST0_SHIFT (7U)                                            /*!< USBPHY1_USB1_LOOPBACK_TOG.UTMO_DIG_TST0 Position*/
+#define USBPHY_USB1_LOOPBACK_TOG_UTMO_DIG_TST0(x) (((uint32_t)(((uint32_t)(x))<<USBPHY_USB1_LOOPBACK_TOG_UTMO_DIG_TST0_SHIFT))&USBPHY_USB1_LOOPBACK_TOG_UTMO_DIG_TST0_MASK) /*!< USBPHY1_USB1_LOOPBACK_TOG.UTMO_DIG_TST0 Field*/
+#define USBPHY_USB1_LOOPBACK_TOG_UTMO_DIG_TST1_MASK (0x100U)                                         /*!< USBPHY1_USB1_LOOPBACK_TOG.UTMO_DIG_TST1 Mask*/
+#define USBPHY_USB1_LOOPBACK_TOG_UTMO_DIG_TST1_SHIFT (8U)                                            /*!< USBPHY1_USB1_LOOPBACK_TOG.UTMO_DIG_TST1 Position*/
+#define USBPHY_USB1_LOOPBACK_TOG_UTMO_DIG_TST1(x) (((uint32_t)(((uint32_t)(x))<<USBPHY_USB1_LOOPBACK_TOG_UTMO_DIG_TST1_SHIFT))&USBPHY_USB1_LOOPBACK_TOG_UTMO_DIG_TST1_MASK) /*!< USBPHY1_USB1_LOOPBACK_TOG.UTMO_DIG_TST1 Field*/
+#define USBPHY_USB1_LOOPBACK_TOG_TSTI_HSFS_MODE_EN_MASK (0x8000U)                                    /*!< USBPHY1_USB1_LOOPBACK_TOG.TSTI_HSFS_MODE_EN Mask*/
+#define USBPHY_USB1_LOOPBACK_TOG_TSTI_HSFS_MODE_EN_SHIFT (15U)                                       /*!< USBPHY1_USB1_LOOPBACK_TOG.TSTI_HSFS_MODE_EN Position*/
+#define USBPHY_USB1_LOOPBACK_TOG_TSTI_HSFS_MODE_EN(x) (((uint32_t)(((uint32_t)(x))<<USBPHY_USB1_LOOPBACK_TOG_TSTI_HSFS_MODE_EN_SHIFT))&USBPHY_USB1_LOOPBACK_TOG_TSTI_HSFS_MODE_EN_MASK) /*!< USBPHY1_USB1_LOOPBACK_TOG.TSTI_HSFS_MODE_EN Field*/
+#define USBPHY_USB1_LOOPBACK_TOG_TSTPKT_MASK     (0xFF0000U)                                         /*!< USBPHY1_USB1_LOOPBACK_TOG.TSTPKT Mask   */
+#define USBPHY_USB1_LOOPBACK_TOG_TSTPKT_SHIFT    (16U)                                               /*!< USBPHY1_USB1_LOOPBACK_TOG.TSTPKT Position*/
+#define USBPHY_USB1_LOOPBACK_TOG_TSTPKT(x)       (((uint32_t)(((uint32_t)(x))<<USBPHY_USB1_LOOPBACK_TOG_TSTPKT_SHIFT))&USBPHY_USB1_LOOPBACK_TOG_TSTPKT_MASK) /*!< USBPHY1_USB1_LOOPBACK_TOG.TSTPKT Field  */
 
 /*! @name USB1_LOOPBACK_HSFSCNT - USB PHY Loopback Packet Number Select Register */
-#define USBPHY0_USB1_LOOPBACK_HSFSCNT_TSTI_HS_NUMBER_MASK (0xFFFFU)                                  /*!< USBPHY0_USB1_LOOPBACK_HSFSCNT.TSTI_HS_NUMBER Mask*/
-#define USBPHY0_USB1_LOOPBACK_HSFSCNT_TSTI_HS_NUMBER_SHIFT (0U)                                      /*!< USBPHY0_USB1_LOOPBACK_HSFSCNT.TSTI_HS_NUMBER Position*/
-#define USBPHY0_USB1_LOOPBACK_HSFSCNT_TSTI_HS_NUMBER(x) (((uint32_t)(((uint32_t)(x))<<USBPHY0_USB1_LOOPBACK_HSFSCNT_TSTI_HS_NUMBER_SHIFT))&USBPHY0_USB1_LOOPBACK_HSFSCNT_TSTI_HS_NUMBER_MASK) /*!< USBPHY0_USB1_LOOPBACK_HSFSCNT.TSTI_HS_NUMBER Field*/
-#define USBPHY0_USB1_LOOPBACK_HSFSCNT_TSTI_FS_NUMBER_MASK (0xFFFF0000U)                              /*!< USBPHY0_USB1_LOOPBACK_HSFSCNT.TSTI_FS_NUMBER Mask*/
-#define USBPHY0_USB1_LOOPBACK_HSFSCNT_TSTI_FS_NUMBER_SHIFT (16U)                                     /*!< USBPHY0_USB1_LOOPBACK_HSFSCNT.TSTI_FS_NUMBER Position*/
-#define USBPHY0_USB1_LOOPBACK_HSFSCNT_TSTI_FS_NUMBER(x) (((uint32_t)(((uint32_t)(x))<<USBPHY0_USB1_LOOPBACK_HSFSCNT_TSTI_FS_NUMBER_SHIFT))&USBPHY0_USB1_LOOPBACK_HSFSCNT_TSTI_FS_NUMBER_MASK) /*!< USBPHY0_USB1_LOOPBACK_HSFSCNT.TSTI_FS_NUMBER Field*/
+#define USBPHY_USB1_LOOPBACK_HSFSCNT_TSTI_HS_NUMBER_MASK (0xFFFFU)                                   /*!< USBPHY1_USB1_LOOPBACK_HSFSCNT.TSTI_HS_NUMBER Mask*/
+#define USBPHY_USB1_LOOPBACK_HSFSCNT_TSTI_HS_NUMBER_SHIFT (0U)                                       /*!< USBPHY1_USB1_LOOPBACK_HSFSCNT.TSTI_HS_NUMBER Position*/
+#define USBPHY_USB1_LOOPBACK_HSFSCNT_TSTI_HS_NUMBER(x) (((uint32_t)(((uint32_t)(x))<<USBPHY_USB1_LOOPBACK_HSFSCNT_TSTI_HS_NUMBER_SHIFT))&USBPHY_USB1_LOOPBACK_HSFSCNT_TSTI_HS_NUMBER_MASK) /*!< USBPHY1_USB1_LOOPBACK_HSFSCNT.TSTI_HS_NUMBER Field*/
+#define USBPHY_USB1_LOOPBACK_HSFSCNT_TSTI_FS_NUMBER_MASK (0xFFFF0000U)                               /*!< USBPHY1_USB1_LOOPBACK_HSFSCNT.TSTI_FS_NUMBER Mask*/
+#define USBPHY_USB1_LOOPBACK_HSFSCNT_TSTI_FS_NUMBER_SHIFT (16U)                                      /*!< USBPHY1_USB1_LOOPBACK_HSFSCNT.TSTI_FS_NUMBER Position*/
+#define USBPHY_USB1_LOOPBACK_HSFSCNT_TSTI_FS_NUMBER(x) (((uint32_t)(((uint32_t)(x))<<USBPHY_USB1_LOOPBACK_HSFSCNT_TSTI_FS_NUMBER_SHIFT))&USBPHY_USB1_LOOPBACK_HSFSCNT_TSTI_FS_NUMBER_MASK) /*!< USBPHY1_USB1_LOOPBACK_HSFSCNT.TSTI_FS_NUMBER Field*/
 
 /*! @name USB1_LOOPBACK_HSFSCNT_SET - USB PHY Loopback Packet Number Select Register */
-#define USBPHY0_USB1_LOOPBACK_HSFSCNT_SET_TSTI_HS_NUMBER_MASK (0xFFFFU)                              /*!< USBPHY0_USB1_LOOPBACK_HSFSCNT_SET.TSTI_HS_NUMBER Mask*/
-#define USBPHY0_USB1_LOOPBACK_HSFSCNT_SET_TSTI_HS_NUMBER_SHIFT (0U)                                  /*!< USBPHY0_USB1_LOOPBACK_HSFSCNT_SET.TSTI_HS_NUMBER Position*/
-#define USBPHY0_USB1_LOOPBACK_HSFSCNT_SET_TSTI_HS_NUMBER(x) (((uint32_t)(((uint32_t)(x))<<USBPHY0_USB1_LOOPBACK_HSFSCNT_SET_TSTI_HS_NUMBER_SHIFT))&USBPHY0_USB1_LOOPBACK_HSFSCNT_SET_TSTI_HS_NUMBER_MASK) /*!< USBPHY0_USB1_LOOPBACK_HSFSCNT_SET.TSTI_HS_NUMBER Field*/
-#define USBPHY0_USB1_LOOPBACK_HSFSCNT_SET_TSTI_FS_NUMBER_MASK (0xFFFF0000U)                          /*!< USBPHY0_USB1_LOOPBACK_HSFSCNT_SET.TSTI_FS_NUMBER Mask*/
-#define USBPHY0_USB1_LOOPBACK_HSFSCNT_SET_TSTI_FS_NUMBER_SHIFT (16U)                                 /*!< USBPHY0_USB1_LOOPBACK_HSFSCNT_SET.TSTI_FS_NUMBER Position*/
-#define USBPHY0_USB1_LOOPBACK_HSFSCNT_SET_TSTI_FS_NUMBER(x) (((uint32_t)(((uint32_t)(x))<<USBPHY0_USB1_LOOPBACK_HSFSCNT_SET_TSTI_FS_NUMBER_SHIFT))&USBPHY0_USB1_LOOPBACK_HSFSCNT_SET_TSTI_FS_NUMBER_MASK) /*!< USBPHY0_USB1_LOOPBACK_HSFSCNT_SET.TSTI_FS_NUMBER Field*/
+#define USBPHY_USB1_LOOPBACK_HSFSCNT_SET_TSTI_HS_NUMBER_MASK (0xFFFFU)                               /*!< USBPHY1_USB1_LOOPBACK_HSFSCNT_SET.TSTI_HS_NUMBER Mask*/
+#define USBPHY_USB1_LOOPBACK_HSFSCNT_SET_TSTI_HS_NUMBER_SHIFT (0U)                                   /*!< USBPHY1_USB1_LOOPBACK_HSFSCNT_SET.TSTI_HS_NUMBER Position*/
+#define USBPHY_USB1_LOOPBACK_HSFSCNT_SET_TSTI_HS_NUMBER(x) (((uint32_t)(((uint32_t)(x))<<USBPHY_USB1_LOOPBACK_HSFSCNT_SET_TSTI_HS_NUMBER_SHIFT))&USBPHY_USB1_LOOPBACK_HSFSCNT_SET_TSTI_HS_NUMBER_MASK) /*!< USBPHY1_USB1_LOOPBACK_HSFSCNT_SET.TSTI_HS_NUMBER Field*/
+#define USBPHY_USB1_LOOPBACK_HSFSCNT_SET_TSTI_FS_NUMBER_MASK (0xFFFF0000U)                           /*!< USBPHY1_USB1_LOOPBACK_HSFSCNT_SET.TSTI_FS_NUMBER Mask*/
+#define USBPHY_USB1_LOOPBACK_HSFSCNT_SET_TSTI_FS_NUMBER_SHIFT (16U)                                  /*!< USBPHY1_USB1_LOOPBACK_HSFSCNT_SET.TSTI_FS_NUMBER Position*/
+#define USBPHY_USB1_LOOPBACK_HSFSCNT_SET_TSTI_FS_NUMBER(x) (((uint32_t)(((uint32_t)(x))<<USBPHY_USB1_LOOPBACK_HSFSCNT_SET_TSTI_FS_NUMBER_SHIFT))&USBPHY_USB1_LOOPBACK_HSFSCNT_SET_TSTI_FS_NUMBER_MASK) /*!< USBPHY1_USB1_LOOPBACK_HSFSCNT_SET.TSTI_FS_NUMBER Field*/
 
 /*! @name USB1_LOOPBACK_HSFSCNT_CLR - USB PHY Loopback Packet Number Select Register */
-#define USBPHY0_USB1_LOOPBACK_HSFSCNT_CLR_TSTI_HS_NUMBER_MASK (0xFFFFU)                              /*!< USBPHY0_USB1_LOOPBACK_HSFSCNT_CLR.TSTI_HS_NUMBER Mask*/
-#define USBPHY0_USB1_LOOPBACK_HSFSCNT_CLR_TSTI_HS_NUMBER_SHIFT (0U)                                  /*!< USBPHY0_USB1_LOOPBACK_HSFSCNT_CLR.TSTI_HS_NUMBER Position*/
-#define USBPHY0_USB1_LOOPBACK_HSFSCNT_CLR_TSTI_HS_NUMBER(x) (((uint32_t)(((uint32_t)(x))<<USBPHY0_USB1_LOOPBACK_HSFSCNT_CLR_TSTI_HS_NUMBER_SHIFT))&USBPHY0_USB1_LOOPBACK_HSFSCNT_CLR_TSTI_HS_NUMBER_MASK) /*!< USBPHY0_USB1_LOOPBACK_HSFSCNT_CLR.TSTI_HS_NUMBER Field*/
-#define USBPHY0_USB1_LOOPBACK_HSFSCNT_CLR_TSTI_FS_NUMBER_MASK (0xFFFF0000U)                          /*!< USBPHY0_USB1_LOOPBACK_HSFSCNT_CLR.TSTI_FS_NUMBER Mask*/
-#define USBPHY0_USB1_LOOPBACK_HSFSCNT_CLR_TSTI_FS_NUMBER_SHIFT (16U)                                 /*!< USBPHY0_USB1_LOOPBACK_HSFSCNT_CLR.TSTI_FS_NUMBER Position*/
-#define USBPHY0_USB1_LOOPBACK_HSFSCNT_CLR_TSTI_FS_NUMBER(x) (((uint32_t)(((uint32_t)(x))<<USBPHY0_USB1_LOOPBACK_HSFSCNT_CLR_TSTI_FS_NUMBER_SHIFT))&USBPHY0_USB1_LOOPBACK_HSFSCNT_CLR_TSTI_FS_NUMBER_MASK) /*!< USBPHY0_USB1_LOOPBACK_HSFSCNT_CLR.TSTI_FS_NUMBER Field*/
+#define USBPHY_USB1_LOOPBACK_HSFSCNT_CLR_TSTI_HS_NUMBER_MASK (0xFFFFU)                               /*!< USBPHY1_USB1_LOOPBACK_HSFSCNT_CLR.TSTI_HS_NUMBER Mask*/
+#define USBPHY_USB1_LOOPBACK_HSFSCNT_CLR_TSTI_HS_NUMBER_SHIFT (0U)                                   /*!< USBPHY1_USB1_LOOPBACK_HSFSCNT_CLR.TSTI_HS_NUMBER Position*/
+#define USBPHY_USB1_LOOPBACK_HSFSCNT_CLR_TSTI_HS_NUMBER(x) (((uint32_t)(((uint32_t)(x))<<USBPHY_USB1_LOOPBACK_HSFSCNT_CLR_TSTI_HS_NUMBER_SHIFT))&USBPHY_USB1_LOOPBACK_HSFSCNT_CLR_TSTI_HS_NUMBER_MASK) /*!< USBPHY1_USB1_LOOPBACK_HSFSCNT_CLR.TSTI_HS_NUMBER Field*/
+#define USBPHY_USB1_LOOPBACK_HSFSCNT_CLR_TSTI_FS_NUMBER_MASK (0xFFFF0000U)                           /*!< USBPHY1_USB1_LOOPBACK_HSFSCNT_CLR.TSTI_FS_NUMBER Mask*/
+#define USBPHY_USB1_LOOPBACK_HSFSCNT_CLR_TSTI_FS_NUMBER_SHIFT (16U)                                  /*!< USBPHY1_USB1_LOOPBACK_HSFSCNT_CLR.TSTI_FS_NUMBER Position*/
+#define USBPHY_USB1_LOOPBACK_HSFSCNT_CLR_TSTI_FS_NUMBER(x) (((uint32_t)(((uint32_t)(x))<<USBPHY_USB1_LOOPBACK_HSFSCNT_CLR_TSTI_FS_NUMBER_SHIFT))&USBPHY_USB1_LOOPBACK_HSFSCNT_CLR_TSTI_FS_NUMBER_MASK) /*!< USBPHY1_USB1_LOOPBACK_HSFSCNT_CLR.TSTI_FS_NUMBER Field*/
 
 /*! @name USB1_LOOPBACK_HSFSCNT_TOG - USB PHY Loopback Packet Number Select Register */
-#define USBPHY0_USB1_LOOPBACK_HSFSCNT_TOG_TSTI_HS_NUMBER_MASK (0xFFFFU)                              /*!< USBPHY0_USB1_LOOPBACK_HSFSCNT_TOG.TSTI_HS_NUMBER Mask*/
-#define USBPHY0_USB1_LOOPBACK_HSFSCNT_TOG_TSTI_HS_NUMBER_SHIFT (0U)                                  /*!< USBPHY0_USB1_LOOPBACK_HSFSCNT_TOG.TSTI_HS_NUMBER Position*/
-#define USBPHY0_USB1_LOOPBACK_HSFSCNT_TOG_TSTI_HS_NUMBER(x) (((uint32_t)(((uint32_t)(x))<<USBPHY0_USB1_LOOPBACK_HSFSCNT_TOG_TSTI_HS_NUMBER_SHIFT))&USBPHY0_USB1_LOOPBACK_HSFSCNT_TOG_TSTI_HS_NUMBER_MASK) /*!< USBPHY0_USB1_LOOPBACK_HSFSCNT_TOG.TSTI_HS_NUMBER Field*/
-#define USBPHY0_USB1_LOOPBACK_HSFSCNT_TOG_TSTI_FS_NUMBER_MASK (0xFFFF0000U)                          /*!< USBPHY0_USB1_LOOPBACK_HSFSCNT_TOG.TSTI_FS_NUMBER Mask*/
-#define USBPHY0_USB1_LOOPBACK_HSFSCNT_TOG_TSTI_FS_NUMBER_SHIFT (16U)                                 /*!< USBPHY0_USB1_LOOPBACK_HSFSCNT_TOG.TSTI_FS_NUMBER Position*/
-#define USBPHY0_USB1_LOOPBACK_HSFSCNT_TOG_TSTI_FS_NUMBER(x) (((uint32_t)(((uint32_t)(x))<<USBPHY0_USB1_LOOPBACK_HSFSCNT_TOG_TSTI_FS_NUMBER_SHIFT))&USBPHY0_USB1_LOOPBACK_HSFSCNT_TOG_TSTI_FS_NUMBER_MASK) /*!< USBPHY0_USB1_LOOPBACK_HSFSCNT_TOG.TSTI_FS_NUMBER Field*/
+#define USBPHY_USB1_LOOPBACK_HSFSCNT_TOG_TSTI_HS_NUMBER_MASK (0xFFFFU)                               /*!< USBPHY1_USB1_LOOPBACK_HSFSCNT_TOG.TSTI_HS_NUMBER Mask*/
+#define USBPHY_USB1_LOOPBACK_HSFSCNT_TOG_TSTI_HS_NUMBER_SHIFT (0U)                                   /*!< USBPHY1_USB1_LOOPBACK_HSFSCNT_TOG.TSTI_HS_NUMBER Position*/
+#define USBPHY_USB1_LOOPBACK_HSFSCNT_TOG_TSTI_HS_NUMBER(x) (((uint32_t)(((uint32_t)(x))<<USBPHY_USB1_LOOPBACK_HSFSCNT_TOG_TSTI_HS_NUMBER_SHIFT))&USBPHY_USB1_LOOPBACK_HSFSCNT_TOG_TSTI_HS_NUMBER_MASK) /*!< USBPHY1_USB1_LOOPBACK_HSFSCNT_TOG.TSTI_HS_NUMBER Field*/
+#define USBPHY_USB1_LOOPBACK_HSFSCNT_TOG_TSTI_FS_NUMBER_MASK (0xFFFF0000U)                           /*!< USBPHY1_USB1_LOOPBACK_HSFSCNT_TOG.TSTI_FS_NUMBER Mask*/
+#define USBPHY_USB1_LOOPBACK_HSFSCNT_TOG_TSTI_FS_NUMBER_SHIFT (16U)                                  /*!< USBPHY1_USB1_LOOPBACK_HSFSCNT_TOG.TSTI_FS_NUMBER Position*/
+#define USBPHY_USB1_LOOPBACK_HSFSCNT_TOG_TSTI_FS_NUMBER(x) (((uint32_t)(((uint32_t)(x))<<USBPHY_USB1_LOOPBACK_HSFSCNT_TOG_TSTI_FS_NUMBER_SHIFT))&USBPHY_USB1_LOOPBACK_HSFSCNT_TOG_TSTI_FS_NUMBER_MASK) /*!< USBPHY1_USB1_LOOPBACK_HSFSCNT_TOG.TSTI_FS_NUMBER Field*/
 
 /*! @name TRIM_OVERRIDE_EN - USB PHY Trim Override Enable Register */
-#define USBPHY0_TRIM_OVERRIDE_EN_TRIM_DIV_SEL_OVERRIDE_MASK (0x1U)                                   /*!< USBPHY0_TRIM_OVERRIDE_EN.TRIM_DIV_SEL_OVERRIDE Mask*/
-#define USBPHY0_TRIM_OVERRIDE_EN_TRIM_DIV_SEL_OVERRIDE_SHIFT (0U)                                    /*!< USBPHY0_TRIM_OVERRIDE_EN.TRIM_DIV_SEL_OVERRIDE Position*/
-#define USBPHY0_TRIM_OVERRIDE_EN_TRIM_DIV_SEL_OVERRIDE(x) (((uint32_t)(((uint32_t)(x))<<USBPHY0_TRIM_OVERRIDE_EN_TRIM_DIV_SEL_OVERRIDE_SHIFT))&USBPHY0_TRIM_OVERRIDE_EN_TRIM_DIV_SEL_OVERRIDE_MASK) /*!< USBPHY0_TRIM_OVERRIDE_EN.TRIM_DIV_SEL_OVERRIDE Field*/
-#define USBPHY0_TRIM_OVERRIDE_EN_TRIM_ENV_TAIL_ADJ_VD_OVERRIDE_MASK (0x2U)                           /*!< USBPHY0_TRIM_OVERRIDE_EN.TRIM_ENV_TAIL_ADJ_VD_OVERRIDE Mask*/
-#define USBPHY0_TRIM_OVERRIDE_EN_TRIM_ENV_TAIL_ADJ_VD_OVERRIDE_SHIFT (1U)                            /*!< USBPHY0_TRIM_OVERRIDE_EN.TRIM_ENV_TAIL_ADJ_VD_OVERRIDE Position*/
-#define USBPHY0_TRIM_OVERRIDE_EN_TRIM_ENV_TAIL_ADJ_VD_OVERRIDE(x) (((uint32_t)(((uint32_t)(x))<<USBPHY0_TRIM_OVERRIDE_EN_TRIM_ENV_TAIL_ADJ_VD_OVERRIDE_SHIFT))&USBPHY0_TRIM_OVERRIDE_EN_TRIM_ENV_TAIL_ADJ_VD_OVERRIDE_MASK) /*!< USBPHY0_TRIM_OVERRIDE_EN.TRIM_ENV_TAIL_ADJ_VD_OVERRIDE Field*/
-#define USBPHY0_TRIM_OVERRIDE_EN_TRIM_TX_D_CAL_OVERRIDE_MASK (0x4U)                                  /*!< USBPHY0_TRIM_OVERRIDE_EN.TRIM_TX_D_CAL_OVERRIDE Mask*/
-#define USBPHY0_TRIM_OVERRIDE_EN_TRIM_TX_D_CAL_OVERRIDE_SHIFT (2U)                                   /*!< USBPHY0_TRIM_OVERRIDE_EN.TRIM_TX_D_CAL_OVERRIDE Position*/
-#define USBPHY0_TRIM_OVERRIDE_EN_TRIM_TX_D_CAL_OVERRIDE(x) (((uint32_t)(((uint32_t)(x))<<USBPHY0_TRIM_OVERRIDE_EN_TRIM_TX_D_CAL_OVERRIDE_SHIFT))&USBPHY0_TRIM_OVERRIDE_EN_TRIM_TX_D_CAL_OVERRIDE_MASK) /*!< USBPHY0_TRIM_OVERRIDE_EN.TRIM_TX_D_CAL_OVERRIDE Field*/
-#define USBPHY0_TRIM_OVERRIDE_EN_TRIM_TX_CAL45DP_OVERRIDE_MASK (0x8U)                                /*!< USBPHY0_TRIM_OVERRIDE_EN.TRIM_TX_CAL45DP_OVERRIDE Mask*/
-#define USBPHY0_TRIM_OVERRIDE_EN_TRIM_TX_CAL45DP_OVERRIDE_SHIFT (3U)                                 /*!< USBPHY0_TRIM_OVERRIDE_EN.TRIM_TX_CAL45DP_OVERRIDE Position*/
-#define USBPHY0_TRIM_OVERRIDE_EN_TRIM_TX_CAL45DP_OVERRIDE(x) (((uint32_t)(((uint32_t)(x))<<USBPHY0_TRIM_OVERRIDE_EN_TRIM_TX_CAL45DP_OVERRIDE_SHIFT))&USBPHY0_TRIM_OVERRIDE_EN_TRIM_TX_CAL45DP_OVERRIDE_MASK) /*!< USBPHY0_TRIM_OVERRIDE_EN.TRIM_TX_CAL45DP_OVERRIDE Field*/
-#define USBPHY0_TRIM_OVERRIDE_EN_TRIM_TX_CAL45DM_OVERRIDE_MASK (0x10U)                               /*!< USBPHY0_TRIM_OVERRIDE_EN.TRIM_TX_CAL45DM_OVERRIDE Mask*/
-#define USBPHY0_TRIM_OVERRIDE_EN_TRIM_TX_CAL45DM_OVERRIDE_SHIFT (4U)                                 /*!< USBPHY0_TRIM_OVERRIDE_EN.TRIM_TX_CAL45DM_OVERRIDE Position*/
-#define USBPHY0_TRIM_OVERRIDE_EN_TRIM_TX_CAL45DM_OVERRIDE(x) (((uint32_t)(((uint32_t)(x))<<USBPHY0_TRIM_OVERRIDE_EN_TRIM_TX_CAL45DM_OVERRIDE_SHIFT))&USBPHY0_TRIM_OVERRIDE_EN_TRIM_TX_CAL45DM_OVERRIDE_MASK) /*!< USBPHY0_TRIM_OVERRIDE_EN.TRIM_TX_CAL45DM_OVERRIDE Field*/
-#define USBPHY0_TRIM_OVERRIDE_EN_TRIM_PLL_CTRL0_DIV_SEL_MASK (0x30000U)                              /*!< USBPHY0_TRIM_OVERRIDE_EN.TRIM_PLL_CTRL0_DIV_SEL Mask*/
-#define USBPHY0_TRIM_OVERRIDE_EN_TRIM_PLL_CTRL0_DIV_SEL_SHIFT (16U)                                  /*!< USBPHY0_TRIM_OVERRIDE_EN.TRIM_PLL_CTRL0_DIV_SEL Position*/
-#define USBPHY0_TRIM_OVERRIDE_EN_TRIM_PLL_CTRL0_DIV_SEL(x) (((uint32_t)(((uint32_t)(x))<<USBPHY0_TRIM_OVERRIDE_EN_TRIM_PLL_CTRL0_DIV_SEL_SHIFT))&USBPHY0_TRIM_OVERRIDE_EN_TRIM_PLL_CTRL0_DIV_SEL_MASK) /*!< USBPHY0_TRIM_OVERRIDE_EN.TRIM_PLL_CTRL0_DIV_SEL Field*/
-#define USBPHY0_TRIM_OVERRIDE_EN_TRIM_USB_REG_ENV_TAIL_ADJ_VD_MASK (0xC0000U)                        /*!< USBPHY0_TRIM_OVERRIDE_EN.TRIM_USB_REG_ENV_TAIL_ADJ_VD Mask*/
-#define USBPHY0_TRIM_OVERRIDE_EN_TRIM_USB_REG_ENV_TAIL_ADJ_VD_SHIFT (18U)                            /*!< USBPHY0_TRIM_OVERRIDE_EN.TRIM_USB_REG_ENV_TAIL_ADJ_VD Position*/
-#define USBPHY0_TRIM_OVERRIDE_EN_TRIM_USB_REG_ENV_TAIL_ADJ_VD(x) (((uint32_t)(((uint32_t)(x))<<USBPHY0_TRIM_OVERRIDE_EN_TRIM_USB_REG_ENV_TAIL_ADJ_VD_SHIFT))&USBPHY0_TRIM_OVERRIDE_EN_TRIM_USB_REG_ENV_TAIL_ADJ_VD_MASK) /*!< USBPHY0_TRIM_OVERRIDE_EN.TRIM_USB_REG_ENV_TAIL_ADJ_VD Field*/
-#define USBPHY0_TRIM_OVERRIDE_EN_TRIM_USBPHY_TX_D_CAL_MASK (0xF00000U)                               /*!< USBPHY0_TRIM_OVERRIDE_EN.TRIM_USBPHY_TX_D_CAL Mask*/
-#define USBPHY0_TRIM_OVERRIDE_EN_TRIM_USBPHY_TX_D_CAL_SHIFT (20U)                                    /*!< USBPHY0_TRIM_OVERRIDE_EN.TRIM_USBPHY_TX_D_CAL Position*/
-#define USBPHY0_TRIM_OVERRIDE_EN_TRIM_USBPHY_TX_D_CAL(x) (((uint32_t)(((uint32_t)(x))<<USBPHY0_TRIM_OVERRIDE_EN_TRIM_USBPHY_TX_D_CAL_SHIFT))&USBPHY0_TRIM_OVERRIDE_EN_TRIM_USBPHY_TX_D_CAL_MASK) /*!< USBPHY0_TRIM_OVERRIDE_EN.TRIM_USBPHY_TX_D_CAL Field*/
-#define USBPHY0_TRIM_OVERRIDE_EN_TRIM_USBPHY_TX_CAL45DP_MASK (0xF000000U)                            /*!< USBPHY0_TRIM_OVERRIDE_EN.TRIM_USBPHY_TX_CAL45DP Mask*/
-#define USBPHY0_TRIM_OVERRIDE_EN_TRIM_USBPHY_TX_CAL45DP_SHIFT (24U)                                  /*!< USBPHY0_TRIM_OVERRIDE_EN.TRIM_USBPHY_TX_CAL45DP Position*/
-#define USBPHY0_TRIM_OVERRIDE_EN_TRIM_USBPHY_TX_CAL45DP(x) (((uint32_t)(((uint32_t)(x))<<USBPHY0_TRIM_OVERRIDE_EN_TRIM_USBPHY_TX_CAL45DP_SHIFT))&USBPHY0_TRIM_OVERRIDE_EN_TRIM_USBPHY_TX_CAL45DP_MASK) /*!< USBPHY0_TRIM_OVERRIDE_EN.TRIM_USBPHY_TX_CAL45DP Field*/
-#define USBPHY0_TRIM_OVERRIDE_EN_TRIM_USBPHY_TX_CAL45DM_MASK (0xF0000000U)                           /*!< USBPHY0_TRIM_OVERRIDE_EN.TRIM_USBPHY_TX_CAL45DM Mask*/
-#define USBPHY0_TRIM_OVERRIDE_EN_TRIM_USBPHY_TX_CAL45DM_SHIFT (28U)                                  /*!< USBPHY0_TRIM_OVERRIDE_EN.TRIM_USBPHY_TX_CAL45DM Position*/
-#define USBPHY0_TRIM_OVERRIDE_EN_TRIM_USBPHY_TX_CAL45DM(x) (((uint32_t)(((uint32_t)(x))<<USBPHY0_TRIM_OVERRIDE_EN_TRIM_USBPHY_TX_CAL45DM_SHIFT))&USBPHY0_TRIM_OVERRIDE_EN_TRIM_USBPHY_TX_CAL45DM_MASK) /*!< USBPHY0_TRIM_OVERRIDE_EN.TRIM_USBPHY_TX_CAL45DM Field*/
+#define USBPHY_TRIM_OVERRIDE_EN_TRIM_DIV_SEL_OVERRIDE_MASK (0x1U)                                    /*!< USBPHY1_TRIM_OVERRIDE_EN.TRIM_DIV_SEL_OVERRIDE Mask*/
+#define USBPHY_TRIM_OVERRIDE_EN_TRIM_DIV_SEL_OVERRIDE_SHIFT (0U)                                     /*!< USBPHY1_TRIM_OVERRIDE_EN.TRIM_DIV_SEL_OVERRIDE Position*/
+#define USBPHY_TRIM_OVERRIDE_EN_TRIM_DIV_SEL_OVERRIDE(x) (((uint32_t)(((uint32_t)(x))<<USBPHY_TRIM_OVERRIDE_EN_TRIM_DIV_SEL_OVERRIDE_SHIFT))&USBPHY_TRIM_OVERRIDE_EN_TRIM_DIV_SEL_OVERRIDE_MASK) /*!< USBPHY1_TRIM_OVERRIDE_EN.TRIM_DIV_SEL_OVERRIDE Field*/
+#define USBPHY_TRIM_OVERRIDE_EN_TRIM_ENV_TAIL_ADJ_VD_OVERRIDE_MASK (0x2U)                            /*!< USBPHY1_TRIM_OVERRIDE_EN.TRIM_ENV_TAIL_ADJ_VD_OVERRIDE Mask*/
+#define USBPHY_TRIM_OVERRIDE_EN_TRIM_ENV_TAIL_ADJ_VD_OVERRIDE_SHIFT (1U)                             /*!< USBPHY1_TRIM_OVERRIDE_EN.TRIM_ENV_TAIL_ADJ_VD_OVERRIDE Position*/
+#define USBPHY_TRIM_OVERRIDE_EN_TRIM_ENV_TAIL_ADJ_VD_OVERRIDE(x) (((uint32_t)(((uint32_t)(x))<<USBPHY_TRIM_OVERRIDE_EN_TRIM_ENV_TAIL_ADJ_VD_OVERRIDE_SHIFT))&USBPHY_TRIM_OVERRIDE_EN_TRIM_ENV_TAIL_ADJ_VD_OVERRIDE_MASK) /*!< USBPHY1_TRIM_OVERRIDE_EN.TRIM_ENV_TAIL_ADJ_VD_OVERRIDE Field*/
+#define USBPHY_TRIM_OVERRIDE_EN_TRIM_TX_D_CAL_OVERRIDE_MASK (0x4U)                                   /*!< USBPHY1_TRIM_OVERRIDE_EN.TRIM_TX_D_CAL_OVERRIDE Mask*/
+#define USBPHY_TRIM_OVERRIDE_EN_TRIM_TX_D_CAL_OVERRIDE_SHIFT (2U)                                    /*!< USBPHY1_TRIM_OVERRIDE_EN.TRIM_TX_D_CAL_OVERRIDE Position*/
+#define USBPHY_TRIM_OVERRIDE_EN_TRIM_TX_D_CAL_OVERRIDE(x) (((uint32_t)(((uint32_t)(x))<<USBPHY_TRIM_OVERRIDE_EN_TRIM_TX_D_CAL_OVERRIDE_SHIFT))&USBPHY_TRIM_OVERRIDE_EN_TRIM_TX_D_CAL_OVERRIDE_MASK) /*!< USBPHY1_TRIM_OVERRIDE_EN.TRIM_TX_D_CAL_OVERRIDE Field*/
+#define USBPHY_TRIM_OVERRIDE_EN_TRIM_TX_CAL45DP_OVERRIDE_MASK (0x8U)                                 /*!< USBPHY1_TRIM_OVERRIDE_EN.TRIM_TX_CAL45DP_OVERRIDE Mask*/
+#define USBPHY_TRIM_OVERRIDE_EN_TRIM_TX_CAL45DP_OVERRIDE_SHIFT (3U)                                  /*!< USBPHY1_TRIM_OVERRIDE_EN.TRIM_TX_CAL45DP_OVERRIDE Position*/
+#define USBPHY_TRIM_OVERRIDE_EN_TRIM_TX_CAL45DP_OVERRIDE(x) (((uint32_t)(((uint32_t)(x))<<USBPHY_TRIM_OVERRIDE_EN_TRIM_TX_CAL45DP_OVERRIDE_SHIFT))&USBPHY_TRIM_OVERRIDE_EN_TRIM_TX_CAL45DP_OVERRIDE_MASK) /*!< USBPHY1_TRIM_OVERRIDE_EN.TRIM_TX_CAL45DP_OVERRIDE Field*/
+#define USBPHY_TRIM_OVERRIDE_EN_TRIM_TX_CAL45DM_OVERRIDE_MASK (0x10U)                                /*!< USBPHY1_TRIM_OVERRIDE_EN.TRIM_TX_CAL45DM_OVERRIDE Mask*/
+#define USBPHY_TRIM_OVERRIDE_EN_TRIM_TX_CAL45DM_OVERRIDE_SHIFT (4U)                                  /*!< USBPHY1_TRIM_OVERRIDE_EN.TRIM_TX_CAL45DM_OVERRIDE Position*/
+#define USBPHY_TRIM_OVERRIDE_EN_TRIM_TX_CAL45DM_OVERRIDE(x) (((uint32_t)(((uint32_t)(x))<<USBPHY_TRIM_OVERRIDE_EN_TRIM_TX_CAL45DM_OVERRIDE_SHIFT))&USBPHY_TRIM_OVERRIDE_EN_TRIM_TX_CAL45DM_OVERRIDE_MASK) /*!< USBPHY1_TRIM_OVERRIDE_EN.TRIM_TX_CAL45DM_OVERRIDE Field*/
+#define USBPHY_TRIM_OVERRIDE_EN_TRIM_PLL_CTRL0_DIV_SEL_MASK (0x30000U)                               /*!< USBPHY1_TRIM_OVERRIDE_EN.TRIM_PLL_CTRL0_DIV_SEL Mask*/
+#define USBPHY_TRIM_OVERRIDE_EN_TRIM_PLL_CTRL0_DIV_SEL_SHIFT (16U)                                   /*!< USBPHY1_TRIM_OVERRIDE_EN.TRIM_PLL_CTRL0_DIV_SEL Position*/
+#define USBPHY_TRIM_OVERRIDE_EN_TRIM_PLL_CTRL0_DIV_SEL(x) (((uint32_t)(((uint32_t)(x))<<USBPHY_TRIM_OVERRIDE_EN_TRIM_PLL_CTRL0_DIV_SEL_SHIFT))&USBPHY_TRIM_OVERRIDE_EN_TRIM_PLL_CTRL0_DIV_SEL_MASK) /*!< USBPHY1_TRIM_OVERRIDE_EN.TRIM_PLL_CTRL0_DIV_SEL Field*/
+#define USBPHY_TRIM_OVERRIDE_EN_TRIM_USB_REG_ENV_TAIL_ADJ_VD_MASK (0xC0000U)                         /*!< USBPHY1_TRIM_OVERRIDE_EN.TRIM_USB_REG_ENV_TAIL_ADJ_VD Mask*/
+#define USBPHY_TRIM_OVERRIDE_EN_TRIM_USB_REG_ENV_TAIL_ADJ_VD_SHIFT (18U)                             /*!< USBPHY1_TRIM_OVERRIDE_EN.TRIM_USB_REG_ENV_TAIL_ADJ_VD Position*/
+#define USBPHY_TRIM_OVERRIDE_EN_TRIM_USB_REG_ENV_TAIL_ADJ_VD(x) (((uint32_t)(((uint32_t)(x))<<USBPHY_TRIM_OVERRIDE_EN_TRIM_USB_REG_ENV_TAIL_ADJ_VD_SHIFT))&USBPHY_TRIM_OVERRIDE_EN_TRIM_USB_REG_ENV_TAIL_ADJ_VD_MASK) /*!< USBPHY1_TRIM_OVERRIDE_EN.TRIM_USB_REG_ENV_TAIL_ADJ_VD Field*/
+#define USBPHY_TRIM_OVERRIDE_EN_TRIM_USBPHY_TX_D_CAL_MASK (0xF00000U)                                /*!< USBPHY1_TRIM_OVERRIDE_EN.TRIM_USBPHY_TX_D_CAL Mask*/
+#define USBPHY_TRIM_OVERRIDE_EN_TRIM_USBPHY_TX_D_CAL_SHIFT (20U)                                     /*!< USBPHY1_TRIM_OVERRIDE_EN.TRIM_USBPHY_TX_D_CAL Position*/
+#define USBPHY_TRIM_OVERRIDE_EN_TRIM_USBPHY_TX_D_CAL(x) (((uint32_t)(((uint32_t)(x))<<USBPHY_TRIM_OVERRIDE_EN_TRIM_USBPHY_TX_D_CAL_SHIFT))&USBPHY_TRIM_OVERRIDE_EN_TRIM_USBPHY_TX_D_CAL_MASK) /*!< USBPHY1_TRIM_OVERRIDE_EN.TRIM_USBPHY_TX_D_CAL Field*/
+#define USBPHY_TRIM_OVERRIDE_EN_TRIM_USBPHY_TX_CAL45DP_MASK (0xF000000U)                             /*!< USBPHY1_TRIM_OVERRIDE_EN.TRIM_USBPHY_TX_CAL45DP Mask*/
+#define USBPHY_TRIM_OVERRIDE_EN_TRIM_USBPHY_TX_CAL45DP_SHIFT (24U)                                   /*!< USBPHY1_TRIM_OVERRIDE_EN.TRIM_USBPHY_TX_CAL45DP Position*/
+#define USBPHY_TRIM_OVERRIDE_EN_TRIM_USBPHY_TX_CAL45DP(x) (((uint32_t)(((uint32_t)(x))<<USBPHY_TRIM_OVERRIDE_EN_TRIM_USBPHY_TX_CAL45DP_SHIFT))&USBPHY_TRIM_OVERRIDE_EN_TRIM_USBPHY_TX_CAL45DP_MASK) /*!< USBPHY1_TRIM_OVERRIDE_EN.TRIM_USBPHY_TX_CAL45DP Field*/
+#define USBPHY_TRIM_OVERRIDE_EN_TRIM_USBPHY_TX_CAL45DM_MASK (0xF0000000U)                            /*!< USBPHY1_TRIM_OVERRIDE_EN.TRIM_USBPHY_TX_CAL45DM Mask*/
+#define USBPHY_TRIM_OVERRIDE_EN_TRIM_USBPHY_TX_CAL45DM_SHIFT (28U)                                   /*!< USBPHY1_TRIM_OVERRIDE_EN.TRIM_USBPHY_TX_CAL45DM Position*/
+#define USBPHY_TRIM_OVERRIDE_EN_TRIM_USBPHY_TX_CAL45DM(x) (((uint32_t)(((uint32_t)(x))<<USBPHY_TRIM_OVERRIDE_EN_TRIM_USBPHY_TX_CAL45DM_SHIFT))&USBPHY_TRIM_OVERRIDE_EN_TRIM_USBPHY_TX_CAL45DM_MASK) /*!< USBPHY1_TRIM_OVERRIDE_EN.TRIM_USBPHY_TX_CAL45DM Field*/
 
 /*! @name TRIM_OVERRIDE_EN_SET - USB PHY Trim Override Enable Register */
-#define USBPHY0_TRIM_OVERRIDE_EN_SET_TRIM_DIV_SEL_OVERRIDE_MASK (0x1U)                               /*!< USBPHY0_TRIM_OVERRIDE_EN_SET.TRIM_DIV_SEL_OVERRIDE Mask*/
-#define USBPHY0_TRIM_OVERRIDE_EN_SET_TRIM_DIV_SEL_OVERRIDE_SHIFT (0U)                                /*!< USBPHY0_TRIM_OVERRIDE_EN_SET.TRIM_DIV_SEL_OVERRIDE Position*/
-#define USBPHY0_TRIM_OVERRIDE_EN_SET_TRIM_DIV_SEL_OVERRIDE(x) (((uint32_t)(((uint32_t)(x))<<USBPHY0_TRIM_OVERRIDE_EN_SET_TRIM_DIV_SEL_OVERRIDE_SHIFT))&USBPHY0_TRIM_OVERRIDE_EN_SET_TRIM_DIV_SEL_OVERRIDE_MASK) /*!< USBPHY0_TRIM_OVERRIDE_EN_SET.TRIM_DIV_SEL_OVERRIDE Field*/
-#define USBPHY0_TRIM_OVERRIDE_EN_SET_TRIM_ENV_TAIL_ADJ_VD_OVERRIDE_MASK (0x2U)                       /*!< USBPHY0_TRIM_OVERRIDE_EN_SET.TRIM_ENV_TAIL_ADJ_VD_OVERRIDE Mask*/
-#define USBPHY0_TRIM_OVERRIDE_EN_SET_TRIM_ENV_TAIL_ADJ_VD_OVERRIDE_SHIFT (1U)                        /*!< USBPHY0_TRIM_OVERRIDE_EN_SET.TRIM_ENV_TAIL_ADJ_VD_OVERRIDE Position*/
-#define USBPHY0_TRIM_OVERRIDE_EN_SET_TRIM_ENV_TAIL_ADJ_VD_OVERRIDE(x) (((uint32_t)(((uint32_t)(x))<<USBPHY0_TRIM_OVERRIDE_EN_SET_TRIM_ENV_TAIL_ADJ_VD_OVERRIDE_SHIFT))&USBPHY0_TRIM_OVERRIDE_EN_SET_TRIM_ENV_TAIL_ADJ_VD_OVERRIDE_MASK) /*!< USBPHY0_TRIM_OVERRIDE_EN_SET.TRIM_ENV_TAIL_ADJ_VD_OVERRIDE Field*/
-#define USBPHY0_TRIM_OVERRIDE_EN_SET_TRIM_TX_D_CAL_OVERRIDE_MASK (0x4U)                              /*!< USBPHY0_TRIM_OVERRIDE_EN_SET.TRIM_TX_D_CAL_OVERRIDE Mask*/
-#define USBPHY0_TRIM_OVERRIDE_EN_SET_TRIM_TX_D_CAL_OVERRIDE_SHIFT (2U)                               /*!< USBPHY0_TRIM_OVERRIDE_EN_SET.TRIM_TX_D_CAL_OVERRIDE Position*/
-#define USBPHY0_TRIM_OVERRIDE_EN_SET_TRIM_TX_D_CAL_OVERRIDE(x) (((uint32_t)(((uint32_t)(x))<<USBPHY0_TRIM_OVERRIDE_EN_SET_TRIM_TX_D_CAL_OVERRIDE_SHIFT))&USBPHY0_TRIM_OVERRIDE_EN_SET_TRIM_TX_D_CAL_OVERRIDE_MASK) /*!< USBPHY0_TRIM_OVERRIDE_EN_SET.TRIM_TX_D_CAL_OVERRIDE Field*/
-#define USBPHY0_TRIM_OVERRIDE_EN_SET_TRIM_TX_CAL45DP_OVERRIDE_MASK (0x8U)                            /*!< USBPHY0_TRIM_OVERRIDE_EN_SET.TRIM_TX_CAL45DP_OVERRIDE Mask*/
-#define USBPHY0_TRIM_OVERRIDE_EN_SET_TRIM_TX_CAL45DP_OVERRIDE_SHIFT (3U)                             /*!< USBPHY0_TRIM_OVERRIDE_EN_SET.TRIM_TX_CAL45DP_OVERRIDE Position*/
-#define USBPHY0_TRIM_OVERRIDE_EN_SET_TRIM_TX_CAL45DP_OVERRIDE(x) (((uint32_t)(((uint32_t)(x))<<USBPHY0_TRIM_OVERRIDE_EN_SET_TRIM_TX_CAL45DP_OVERRIDE_SHIFT))&USBPHY0_TRIM_OVERRIDE_EN_SET_TRIM_TX_CAL45DP_OVERRIDE_MASK) /*!< USBPHY0_TRIM_OVERRIDE_EN_SET.TRIM_TX_CAL45DP_OVERRIDE Field*/
-#define USBPHY0_TRIM_OVERRIDE_EN_SET_TRIM_TX_CAL45DM_OVERRIDE_MASK (0x10U)                           /*!< USBPHY0_TRIM_OVERRIDE_EN_SET.TRIM_TX_CAL45DM_OVERRIDE Mask*/
-#define USBPHY0_TRIM_OVERRIDE_EN_SET_TRIM_TX_CAL45DM_OVERRIDE_SHIFT (4U)                             /*!< USBPHY0_TRIM_OVERRIDE_EN_SET.TRIM_TX_CAL45DM_OVERRIDE Position*/
-#define USBPHY0_TRIM_OVERRIDE_EN_SET_TRIM_TX_CAL45DM_OVERRIDE(x) (((uint32_t)(((uint32_t)(x))<<USBPHY0_TRIM_OVERRIDE_EN_SET_TRIM_TX_CAL45DM_OVERRIDE_SHIFT))&USBPHY0_TRIM_OVERRIDE_EN_SET_TRIM_TX_CAL45DM_OVERRIDE_MASK) /*!< USBPHY0_TRIM_OVERRIDE_EN_SET.TRIM_TX_CAL45DM_OVERRIDE Field*/
-#define USBPHY0_TRIM_OVERRIDE_EN_SET_TRIM_PLL_CTRL0_DIV_SEL_MASK (0x30000U)                          /*!< USBPHY0_TRIM_OVERRIDE_EN_SET.TRIM_PLL_CTRL0_DIV_SEL Mask*/
-#define USBPHY0_TRIM_OVERRIDE_EN_SET_TRIM_PLL_CTRL0_DIV_SEL_SHIFT (16U)                              /*!< USBPHY0_TRIM_OVERRIDE_EN_SET.TRIM_PLL_CTRL0_DIV_SEL Position*/
-#define USBPHY0_TRIM_OVERRIDE_EN_SET_TRIM_PLL_CTRL0_DIV_SEL(x) (((uint32_t)(((uint32_t)(x))<<USBPHY0_TRIM_OVERRIDE_EN_SET_TRIM_PLL_CTRL0_DIV_SEL_SHIFT))&USBPHY0_TRIM_OVERRIDE_EN_SET_TRIM_PLL_CTRL0_DIV_SEL_MASK) /*!< USBPHY0_TRIM_OVERRIDE_EN_SET.TRIM_PLL_CTRL0_DIV_SEL Field*/
-#define USBPHY0_TRIM_OVERRIDE_EN_SET_TRIM_USB_REG_ENV_TAIL_ADJ_VD_MASK (0xC0000U)                    /*!< USBPHY0_TRIM_OVERRIDE_EN_SET.TRIM_USB_REG_ENV_TAIL_ADJ_VD Mask*/
-#define USBPHY0_TRIM_OVERRIDE_EN_SET_TRIM_USB_REG_ENV_TAIL_ADJ_VD_SHIFT (18U)                        /*!< USBPHY0_TRIM_OVERRIDE_EN_SET.TRIM_USB_REG_ENV_TAIL_ADJ_VD Position*/
-#define USBPHY0_TRIM_OVERRIDE_EN_SET_TRIM_USB_REG_ENV_TAIL_ADJ_VD(x) (((uint32_t)(((uint32_t)(x))<<USBPHY0_TRIM_OVERRIDE_EN_SET_TRIM_USB_REG_ENV_TAIL_ADJ_VD_SHIFT))&USBPHY0_TRIM_OVERRIDE_EN_SET_TRIM_USB_REG_ENV_TAIL_ADJ_VD_MASK) /*!< USBPHY0_TRIM_OVERRIDE_EN_SET.TRIM_USB_REG_ENV_TAIL_ADJ_VD Field*/
-#define USBPHY0_TRIM_OVERRIDE_EN_SET_TRIM_USBPHY_TX_D_CAL_MASK (0xF00000U)                           /*!< USBPHY0_TRIM_OVERRIDE_EN_SET.TRIM_USBPHY_TX_D_CAL Mask*/
-#define USBPHY0_TRIM_OVERRIDE_EN_SET_TRIM_USBPHY_TX_D_CAL_SHIFT (20U)                                /*!< USBPHY0_TRIM_OVERRIDE_EN_SET.TRIM_USBPHY_TX_D_CAL Position*/
-#define USBPHY0_TRIM_OVERRIDE_EN_SET_TRIM_USBPHY_TX_D_CAL(x) (((uint32_t)(((uint32_t)(x))<<USBPHY0_TRIM_OVERRIDE_EN_SET_TRIM_USBPHY_TX_D_CAL_SHIFT))&USBPHY0_TRIM_OVERRIDE_EN_SET_TRIM_USBPHY_TX_D_CAL_MASK) /*!< USBPHY0_TRIM_OVERRIDE_EN_SET.TRIM_USBPHY_TX_D_CAL Field*/
-#define USBPHY0_TRIM_OVERRIDE_EN_SET_TRIM_USBPHY_TX_CAL45DP_MASK (0xF000000U)                        /*!< USBPHY0_TRIM_OVERRIDE_EN_SET.TRIM_USBPHY_TX_CAL45DP Mask*/
-#define USBPHY0_TRIM_OVERRIDE_EN_SET_TRIM_USBPHY_TX_CAL45DP_SHIFT (24U)                              /*!< USBPHY0_TRIM_OVERRIDE_EN_SET.TRIM_USBPHY_TX_CAL45DP Position*/
-#define USBPHY0_TRIM_OVERRIDE_EN_SET_TRIM_USBPHY_TX_CAL45DP(x) (((uint32_t)(((uint32_t)(x))<<USBPHY0_TRIM_OVERRIDE_EN_SET_TRIM_USBPHY_TX_CAL45DP_SHIFT))&USBPHY0_TRIM_OVERRIDE_EN_SET_TRIM_USBPHY_TX_CAL45DP_MASK) /*!< USBPHY0_TRIM_OVERRIDE_EN_SET.TRIM_USBPHY_TX_CAL45DP Field*/
-#define USBPHY0_TRIM_OVERRIDE_EN_SET_TRIM_USBPHY_TX_CAL45DM_MASK (0xF0000000U)                       /*!< USBPHY0_TRIM_OVERRIDE_EN_SET.TRIM_USBPHY_TX_CAL45DM Mask*/
-#define USBPHY0_TRIM_OVERRIDE_EN_SET_TRIM_USBPHY_TX_CAL45DM_SHIFT (28U)                              /*!< USBPHY0_TRIM_OVERRIDE_EN_SET.TRIM_USBPHY_TX_CAL45DM Position*/
-#define USBPHY0_TRIM_OVERRIDE_EN_SET_TRIM_USBPHY_TX_CAL45DM(x) (((uint32_t)(((uint32_t)(x))<<USBPHY0_TRIM_OVERRIDE_EN_SET_TRIM_USBPHY_TX_CAL45DM_SHIFT))&USBPHY0_TRIM_OVERRIDE_EN_SET_TRIM_USBPHY_TX_CAL45DM_MASK) /*!< USBPHY0_TRIM_OVERRIDE_EN_SET.TRIM_USBPHY_TX_CAL45DM Field*/
+#define USBPHY_TRIM_OVERRIDE_EN_SET_TRIM_DIV_SEL_OVERRIDE_MASK (0x1U)                                /*!< USBPHY1_TRIM_OVERRIDE_EN_SET.TRIM_DIV_SEL_OVERRIDE Mask*/
+#define USBPHY_TRIM_OVERRIDE_EN_SET_TRIM_DIV_SEL_OVERRIDE_SHIFT (0U)                                 /*!< USBPHY1_TRIM_OVERRIDE_EN_SET.TRIM_DIV_SEL_OVERRIDE Position*/
+#define USBPHY_TRIM_OVERRIDE_EN_SET_TRIM_DIV_SEL_OVERRIDE(x) (((uint32_t)(((uint32_t)(x))<<USBPHY_TRIM_OVERRIDE_EN_SET_TRIM_DIV_SEL_OVERRIDE_SHIFT))&USBPHY_TRIM_OVERRIDE_EN_SET_TRIM_DIV_SEL_OVERRIDE_MASK) /*!< USBPHY1_TRIM_OVERRIDE_EN_SET.TRIM_DIV_SEL_OVERRIDE Field*/
+#define USBPHY_TRIM_OVERRIDE_EN_SET_TRIM_ENV_TAIL_ADJ_VD_OVERRIDE_MASK (0x2U)                        /*!< USBPHY1_TRIM_OVERRIDE_EN_SET.TRIM_ENV_TAIL_ADJ_VD_OVERRIDE Mask*/
+#define USBPHY_TRIM_OVERRIDE_EN_SET_TRIM_ENV_TAIL_ADJ_VD_OVERRIDE_SHIFT (1U)                         /*!< USBPHY1_TRIM_OVERRIDE_EN_SET.TRIM_ENV_TAIL_ADJ_VD_OVERRIDE Position*/
+#define USBPHY_TRIM_OVERRIDE_EN_SET_TRIM_ENV_TAIL_ADJ_VD_OVERRIDE(x) (((uint32_t)(((uint32_t)(x))<<USBPHY_TRIM_OVERRIDE_EN_SET_TRIM_ENV_TAIL_ADJ_VD_OVERRIDE_SHIFT))&USBPHY_TRIM_OVERRIDE_EN_SET_TRIM_ENV_TAIL_ADJ_VD_OVERRIDE_MASK) /*!< USBPHY1_TRIM_OVERRIDE_EN_SET.TRIM_ENV_TAIL_ADJ_VD_OVERRIDE Field*/
+#define USBPHY_TRIM_OVERRIDE_EN_SET_TRIM_TX_D_CAL_OVERRIDE_MASK (0x4U)                               /*!< USBPHY1_TRIM_OVERRIDE_EN_SET.TRIM_TX_D_CAL_OVERRIDE Mask*/
+#define USBPHY_TRIM_OVERRIDE_EN_SET_TRIM_TX_D_CAL_OVERRIDE_SHIFT (2U)                                /*!< USBPHY1_TRIM_OVERRIDE_EN_SET.TRIM_TX_D_CAL_OVERRIDE Position*/
+#define USBPHY_TRIM_OVERRIDE_EN_SET_TRIM_TX_D_CAL_OVERRIDE(x) (((uint32_t)(((uint32_t)(x))<<USBPHY_TRIM_OVERRIDE_EN_SET_TRIM_TX_D_CAL_OVERRIDE_SHIFT))&USBPHY_TRIM_OVERRIDE_EN_SET_TRIM_TX_D_CAL_OVERRIDE_MASK) /*!< USBPHY1_TRIM_OVERRIDE_EN_SET.TRIM_TX_D_CAL_OVERRIDE Field*/
+#define USBPHY_TRIM_OVERRIDE_EN_SET_TRIM_TX_CAL45DP_OVERRIDE_MASK (0x8U)                             /*!< USBPHY1_TRIM_OVERRIDE_EN_SET.TRIM_TX_CAL45DP_OVERRIDE Mask*/
+#define USBPHY_TRIM_OVERRIDE_EN_SET_TRIM_TX_CAL45DP_OVERRIDE_SHIFT (3U)                              /*!< USBPHY1_TRIM_OVERRIDE_EN_SET.TRIM_TX_CAL45DP_OVERRIDE Position*/
+#define USBPHY_TRIM_OVERRIDE_EN_SET_TRIM_TX_CAL45DP_OVERRIDE(x) (((uint32_t)(((uint32_t)(x))<<USBPHY_TRIM_OVERRIDE_EN_SET_TRIM_TX_CAL45DP_OVERRIDE_SHIFT))&USBPHY_TRIM_OVERRIDE_EN_SET_TRIM_TX_CAL45DP_OVERRIDE_MASK) /*!< USBPHY1_TRIM_OVERRIDE_EN_SET.TRIM_TX_CAL45DP_OVERRIDE Field*/
+#define USBPHY_TRIM_OVERRIDE_EN_SET_TRIM_TX_CAL45DM_OVERRIDE_MASK (0x10U)                            /*!< USBPHY1_TRIM_OVERRIDE_EN_SET.TRIM_TX_CAL45DM_OVERRIDE Mask*/
+#define USBPHY_TRIM_OVERRIDE_EN_SET_TRIM_TX_CAL45DM_OVERRIDE_SHIFT (4U)                              /*!< USBPHY1_TRIM_OVERRIDE_EN_SET.TRIM_TX_CAL45DM_OVERRIDE Position*/
+#define USBPHY_TRIM_OVERRIDE_EN_SET_TRIM_TX_CAL45DM_OVERRIDE(x) (((uint32_t)(((uint32_t)(x))<<USBPHY_TRIM_OVERRIDE_EN_SET_TRIM_TX_CAL45DM_OVERRIDE_SHIFT))&USBPHY_TRIM_OVERRIDE_EN_SET_TRIM_TX_CAL45DM_OVERRIDE_MASK) /*!< USBPHY1_TRIM_OVERRIDE_EN_SET.TRIM_TX_CAL45DM_OVERRIDE Field*/
+#define USBPHY_TRIM_OVERRIDE_EN_SET_TRIM_PLL_CTRL0_DIV_SEL_MASK (0x30000U)                           /*!< USBPHY1_TRIM_OVERRIDE_EN_SET.TRIM_PLL_CTRL0_DIV_SEL Mask*/
+#define USBPHY_TRIM_OVERRIDE_EN_SET_TRIM_PLL_CTRL0_DIV_SEL_SHIFT (16U)                               /*!< USBPHY1_TRIM_OVERRIDE_EN_SET.TRIM_PLL_CTRL0_DIV_SEL Position*/
+#define USBPHY_TRIM_OVERRIDE_EN_SET_TRIM_PLL_CTRL0_DIV_SEL(x) (((uint32_t)(((uint32_t)(x))<<USBPHY_TRIM_OVERRIDE_EN_SET_TRIM_PLL_CTRL0_DIV_SEL_SHIFT))&USBPHY_TRIM_OVERRIDE_EN_SET_TRIM_PLL_CTRL0_DIV_SEL_MASK) /*!< USBPHY1_TRIM_OVERRIDE_EN_SET.TRIM_PLL_CTRL0_DIV_SEL Field*/
+#define USBPHY_TRIM_OVERRIDE_EN_SET_TRIM_USB_REG_ENV_TAIL_ADJ_VD_MASK (0xC0000U)                     /*!< USBPHY1_TRIM_OVERRIDE_EN_SET.TRIM_USB_REG_ENV_TAIL_ADJ_VD Mask*/
+#define USBPHY_TRIM_OVERRIDE_EN_SET_TRIM_USB_REG_ENV_TAIL_ADJ_VD_SHIFT (18U)                         /*!< USBPHY1_TRIM_OVERRIDE_EN_SET.TRIM_USB_REG_ENV_TAIL_ADJ_VD Position*/
+#define USBPHY_TRIM_OVERRIDE_EN_SET_TRIM_USB_REG_ENV_TAIL_ADJ_VD(x) (((uint32_t)(((uint32_t)(x))<<USBPHY_TRIM_OVERRIDE_EN_SET_TRIM_USB_REG_ENV_TAIL_ADJ_VD_SHIFT))&USBPHY_TRIM_OVERRIDE_EN_SET_TRIM_USB_REG_ENV_TAIL_ADJ_VD_MASK) /*!< USBPHY1_TRIM_OVERRIDE_EN_SET.TRIM_USB_REG_ENV_TAIL_ADJ_VD Field*/
+#define USBPHY_TRIM_OVERRIDE_EN_SET_TRIM_USBPHY_TX_D_CAL_MASK (0xF00000U)                            /*!< USBPHY1_TRIM_OVERRIDE_EN_SET.TRIM_USBPHY_TX_D_CAL Mask*/
+#define USBPHY_TRIM_OVERRIDE_EN_SET_TRIM_USBPHY_TX_D_CAL_SHIFT (20U)                                 /*!< USBPHY1_TRIM_OVERRIDE_EN_SET.TRIM_USBPHY_TX_D_CAL Position*/
+#define USBPHY_TRIM_OVERRIDE_EN_SET_TRIM_USBPHY_TX_D_CAL(x) (((uint32_t)(((uint32_t)(x))<<USBPHY_TRIM_OVERRIDE_EN_SET_TRIM_USBPHY_TX_D_CAL_SHIFT))&USBPHY_TRIM_OVERRIDE_EN_SET_TRIM_USBPHY_TX_D_CAL_MASK) /*!< USBPHY1_TRIM_OVERRIDE_EN_SET.TRIM_USBPHY_TX_D_CAL Field*/
+#define USBPHY_TRIM_OVERRIDE_EN_SET_TRIM_USBPHY_TX_CAL45DP_MASK (0xF000000U)                         /*!< USBPHY1_TRIM_OVERRIDE_EN_SET.TRIM_USBPHY_TX_CAL45DP Mask*/
+#define USBPHY_TRIM_OVERRIDE_EN_SET_TRIM_USBPHY_TX_CAL45DP_SHIFT (24U)                               /*!< USBPHY1_TRIM_OVERRIDE_EN_SET.TRIM_USBPHY_TX_CAL45DP Position*/
+#define USBPHY_TRIM_OVERRIDE_EN_SET_TRIM_USBPHY_TX_CAL45DP(x) (((uint32_t)(((uint32_t)(x))<<USBPHY_TRIM_OVERRIDE_EN_SET_TRIM_USBPHY_TX_CAL45DP_SHIFT))&USBPHY_TRIM_OVERRIDE_EN_SET_TRIM_USBPHY_TX_CAL45DP_MASK) /*!< USBPHY1_TRIM_OVERRIDE_EN_SET.TRIM_USBPHY_TX_CAL45DP Field*/
+#define USBPHY_TRIM_OVERRIDE_EN_SET_TRIM_USBPHY_TX_CAL45DM_MASK (0xF0000000U)                        /*!< USBPHY1_TRIM_OVERRIDE_EN_SET.TRIM_USBPHY_TX_CAL45DM Mask*/
+#define USBPHY_TRIM_OVERRIDE_EN_SET_TRIM_USBPHY_TX_CAL45DM_SHIFT (28U)                               /*!< USBPHY1_TRIM_OVERRIDE_EN_SET.TRIM_USBPHY_TX_CAL45DM Position*/
+#define USBPHY_TRIM_OVERRIDE_EN_SET_TRIM_USBPHY_TX_CAL45DM(x) (((uint32_t)(((uint32_t)(x))<<USBPHY_TRIM_OVERRIDE_EN_SET_TRIM_USBPHY_TX_CAL45DM_SHIFT))&USBPHY_TRIM_OVERRIDE_EN_SET_TRIM_USBPHY_TX_CAL45DM_MASK) /*!< USBPHY1_TRIM_OVERRIDE_EN_SET.TRIM_USBPHY_TX_CAL45DM Field*/
 
 /*! @name TRIM_OVERRIDE_EN_CLR - USB PHY Trim Override Enable Register */
-#define USBPHY0_TRIM_OVERRIDE_EN_CLR_TRIM_DIV_SEL_OVERRIDE_MASK (0x1U)                               /*!< USBPHY0_TRIM_OVERRIDE_EN_CLR.TRIM_DIV_SEL_OVERRIDE Mask*/
-#define USBPHY0_TRIM_OVERRIDE_EN_CLR_TRIM_DIV_SEL_OVERRIDE_SHIFT (0U)                                /*!< USBPHY0_TRIM_OVERRIDE_EN_CLR.TRIM_DIV_SEL_OVERRIDE Position*/
-#define USBPHY0_TRIM_OVERRIDE_EN_CLR_TRIM_DIV_SEL_OVERRIDE(x) (((uint32_t)(((uint32_t)(x))<<USBPHY0_TRIM_OVERRIDE_EN_CLR_TRIM_DIV_SEL_OVERRIDE_SHIFT))&USBPHY0_TRIM_OVERRIDE_EN_CLR_TRIM_DIV_SEL_OVERRIDE_MASK) /*!< USBPHY0_TRIM_OVERRIDE_EN_CLR.TRIM_DIV_SEL_OVERRIDE Field*/
-#define USBPHY0_TRIM_OVERRIDE_EN_CLR_TRIM_ENV_TAIL_ADJ_VD_OVERRIDE_MASK (0x2U)                       /*!< USBPHY0_TRIM_OVERRIDE_EN_CLR.TRIM_ENV_TAIL_ADJ_VD_OVERRIDE Mask*/
-#define USBPHY0_TRIM_OVERRIDE_EN_CLR_TRIM_ENV_TAIL_ADJ_VD_OVERRIDE_SHIFT (1U)                        /*!< USBPHY0_TRIM_OVERRIDE_EN_CLR.TRIM_ENV_TAIL_ADJ_VD_OVERRIDE Position*/
-#define USBPHY0_TRIM_OVERRIDE_EN_CLR_TRIM_ENV_TAIL_ADJ_VD_OVERRIDE(x) (((uint32_t)(((uint32_t)(x))<<USBPHY0_TRIM_OVERRIDE_EN_CLR_TRIM_ENV_TAIL_ADJ_VD_OVERRIDE_SHIFT))&USBPHY0_TRIM_OVERRIDE_EN_CLR_TRIM_ENV_TAIL_ADJ_VD_OVERRIDE_MASK) /*!< USBPHY0_TRIM_OVERRIDE_EN_CLR.TRIM_ENV_TAIL_ADJ_VD_OVERRIDE Field*/
-#define USBPHY0_TRIM_OVERRIDE_EN_CLR_TRIM_TX_D_CAL_OVERRIDE_MASK (0x4U)                              /*!< USBPHY0_TRIM_OVERRIDE_EN_CLR.TRIM_TX_D_CAL_OVERRIDE Mask*/
-#define USBPHY0_TRIM_OVERRIDE_EN_CLR_TRIM_TX_D_CAL_OVERRIDE_SHIFT (2U)                               /*!< USBPHY0_TRIM_OVERRIDE_EN_CLR.TRIM_TX_D_CAL_OVERRIDE Position*/
-#define USBPHY0_TRIM_OVERRIDE_EN_CLR_TRIM_TX_D_CAL_OVERRIDE(x) (((uint32_t)(((uint32_t)(x))<<USBPHY0_TRIM_OVERRIDE_EN_CLR_TRIM_TX_D_CAL_OVERRIDE_SHIFT))&USBPHY0_TRIM_OVERRIDE_EN_CLR_TRIM_TX_D_CAL_OVERRIDE_MASK) /*!< USBPHY0_TRIM_OVERRIDE_EN_CLR.TRIM_TX_D_CAL_OVERRIDE Field*/
-#define USBPHY0_TRIM_OVERRIDE_EN_CLR_TRIM_TX_CAL45DP_OVERRIDE_MASK (0x8U)                            /*!< USBPHY0_TRIM_OVERRIDE_EN_CLR.TRIM_TX_CAL45DP_OVERRIDE Mask*/
-#define USBPHY0_TRIM_OVERRIDE_EN_CLR_TRIM_TX_CAL45DP_OVERRIDE_SHIFT (3U)                             /*!< USBPHY0_TRIM_OVERRIDE_EN_CLR.TRIM_TX_CAL45DP_OVERRIDE Position*/
-#define USBPHY0_TRIM_OVERRIDE_EN_CLR_TRIM_TX_CAL45DP_OVERRIDE(x) (((uint32_t)(((uint32_t)(x))<<USBPHY0_TRIM_OVERRIDE_EN_CLR_TRIM_TX_CAL45DP_OVERRIDE_SHIFT))&USBPHY0_TRIM_OVERRIDE_EN_CLR_TRIM_TX_CAL45DP_OVERRIDE_MASK) /*!< USBPHY0_TRIM_OVERRIDE_EN_CLR.TRIM_TX_CAL45DP_OVERRIDE Field*/
-#define USBPHY0_TRIM_OVERRIDE_EN_CLR_TRIM_TX_CAL45DM_OVERRIDE_MASK (0x10U)                           /*!< USBPHY0_TRIM_OVERRIDE_EN_CLR.TRIM_TX_CAL45DM_OVERRIDE Mask*/
-#define USBPHY0_TRIM_OVERRIDE_EN_CLR_TRIM_TX_CAL45DM_OVERRIDE_SHIFT (4U)                             /*!< USBPHY0_TRIM_OVERRIDE_EN_CLR.TRIM_TX_CAL45DM_OVERRIDE Position*/
-#define USBPHY0_TRIM_OVERRIDE_EN_CLR_TRIM_TX_CAL45DM_OVERRIDE(x) (((uint32_t)(((uint32_t)(x))<<USBPHY0_TRIM_OVERRIDE_EN_CLR_TRIM_TX_CAL45DM_OVERRIDE_SHIFT))&USBPHY0_TRIM_OVERRIDE_EN_CLR_TRIM_TX_CAL45DM_OVERRIDE_MASK) /*!< USBPHY0_TRIM_OVERRIDE_EN_CLR.TRIM_TX_CAL45DM_OVERRIDE Field*/
-#define USBPHY0_TRIM_OVERRIDE_EN_CLR_TRIM_PLL_CTRL0_DIV_SEL_MASK (0x30000U)                          /*!< USBPHY0_TRIM_OVERRIDE_EN_CLR.TRIM_PLL_CTRL0_DIV_SEL Mask*/
-#define USBPHY0_TRIM_OVERRIDE_EN_CLR_TRIM_PLL_CTRL0_DIV_SEL_SHIFT (16U)                              /*!< USBPHY0_TRIM_OVERRIDE_EN_CLR.TRIM_PLL_CTRL0_DIV_SEL Position*/
-#define USBPHY0_TRIM_OVERRIDE_EN_CLR_TRIM_PLL_CTRL0_DIV_SEL(x) (((uint32_t)(((uint32_t)(x))<<USBPHY0_TRIM_OVERRIDE_EN_CLR_TRIM_PLL_CTRL0_DIV_SEL_SHIFT))&USBPHY0_TRIM_OVERRIDE_EN_CLR_TRIM_PLL_CTRL0_DIV_SEL_MASK) /*!< USBPHY0_TRIM_OVERRIDE_EN_CLR.TRIM_PLL_CTRL0_DIV_SEL Field*/
-#define USBPHY0_TRIM_OVERRIDE_EN_CLR_TRIM_USB_REG_ENV_TAIL_ADJ_VD_MASK (0xC0000U)                    /*!< USBPHY0_TRIM_OVERRIDE_EN_CLR.TRIM_USB_REG_ENV_TAIL_ADJ_VD Mask*/
-#define USBPHY0_TRIM_OVERRIDE_EN_CLR_TRIM_USB_REG_ENV_TAIL_ADJ_VD_SHIFT (18U)                        /*!< USBPHY0_TRIM_OVERRIDE_EN_CLR.TRIM_USB_REG_ENV_TAIL_ADJ_VD Position*/
-#define USBPHY0_TRIM_OVERRIDE_EN_CLR_TRIM_USB_REG_ENV_TAIL_ADJ_VD(x) (((uint32_t)(((uint32_t)(x))<<USBPHY0_TRIM_OVERRIDE_EN_CLR_TRIM_USB_REG_ENV_TAIL_ADJ_VD_SHIFT))&USBPHY0_TRIM_OVERRIDE_EN_CLR_TRIM_USB_REG_ENV_TAIL_ADJ_VD_MASK) /*!< USBPHY0_TRIM_OVERRIDE_EN_CLR.TRIM_USB_REG_ENV_TAIL_ADJ_VD Field*/
-#define USBPHY0_TRIM_OVERRIDE_EN_CLR_TRIM_USBPHY_TX_D_CAL_MASK (0xF00000U)                           /*!< USBPHY0_TRIM_OVERRIDE_EN_CLR.TRIM_USBPHY_TX_D_CAL Mask*/
-#define USBPHY0_TRIM_OVERRIDE_EN_CLR_TRIM_USBPHY_TX_D_CAL_SHIFT (20U)                                /*!< USBPHY0_TRIM_OVERRIDE_EN_CLR.TRIM_USBPHY_TX_D_CAL Position*/
-#define USBPHY0_TRIM_OVERRIDE_EN_CLR_TRIM_USBPHY_TX_D_CAL(x) (((uint32_t)(((uint32_t)(x))<<USBPHY0_TRIM_OVERRIDE_EN_CLR_TRIM_USBPHY_TX_D_CAL_SHIFT))&USBPHY0_TRIM_OVERRIDE_EN_CLR_TRIM_USBPHY_TX_D_CAL_MASK) /*!< USBPHY0_TRIM_OVERRIDE_EN_CLR.TRIM_USBPHY_TX_D_CAL Field*/
-#define USBPHY0_TRIM_OVERRIDE_EN_CLR_TRIM_USBPHY_TX_CAL45DP_MASK (0xF000000U)                        /*!< USBPHY0_TRIM_OVERRIDE_EN_CLR.TRIM_USBPHY_TX_CAL45DP Mask*/
-#define USBPHY0_TRIM_OVERRIDE_EN_CLR_TRIM_USBPHY_TX_CAL45DP_SHIFT (24U)                              /*!< USBPHY0_TRIM_OVERRIDE_EN_CLR.TRIM_USBPHY_TX_CAL45DP Position*/
-#define USBPHY0_TRIM_OVERRIDE_EN_CLR_TRIM_USBPHY_TX_CAL45DP(x) (((uint32_t)(((uint32_t)(x))<<USBPHY0_TRIM_OVERRIDE_EN_CLR_TRIM_USBPHY_TX_CAL45DP_SHIFT))&USBPHY0_TRIM_OVERRIDE_EN_CLR_TRIM_USBPHY_TX_CAL45DP_MASK) /*!< USBPHY0_TRIM_OVERRIDE_EN_CLR.TRIM_USBPHY_TX_CAL45DP Field*/
-#define USBPHY0_TRIM_OVERRIDE_EN_CLR_TRIM_USBPHY_TX_CAL45DM_MASK (0xF0000000U)                       /*!< USBPHY0_TRIM_OVERRIDE_EN_CLR.TRIM_USBPHY_TX_CAL45DM Mask*/
-#define USBPHY0_TRIM_OVERRIDE_EN_CLR_TRIM_USBPHY_TX_CAL45DM_SHIFT (28U)                              /*!< USBPHY0_TRIM_OVERRIDE_EN_CLR.TRIM_USBPHY_TX_CAL45DM Position*/
-#define USBPHY0_TRIM_OVERRIDE_EN_CLR_TRIM_USBPHY_TX_CAL45DM(x) (((uint32_t)(((uint32_t)(x))<<USBPHY0_TRIM_OVERRIDE_EN_CLR_TRIM_USBPHY_TX_CAL45DM_SHIFT))&USBPHY0_TRIM_OVERRIDE_EN_CLR_TRIM_USBPHY_TX_CAL45DM_MASK) /*!< USBPHY0_TRIM_OVERRIDE_EN_CLR.TRIM_USBPHY_TX_CAL45DM Field*/
+#define USBPHY_TRIM_OVERRIDE_EN_CLR_TRIM_DIV_SEL_OVERRIDE_MASK (0x1U)                                /*!< USBPHY1_TRIM_OVERRIDE_EN_CLR.TRIM_DIV_SEL_OVERRIDE Mask*/
+#define USBPHY_TRIM_OVERRIDE_EN_CLR_TRIM_DIV_SEL_OVERRIDE_SHIFT (0U)                                 /*!< USBPHY1_TRIM_OVERRIDE_EN_CLR.TRIM_DIV_SEL_OVERRIDE Position*/
+#define USBPHY_TRIM_OVERRIDE_EN_CLR_TRIM_DIV_SEL_OVERRIDE(x) (((uint32_t)(((uint32_t)(x))<<USBPHY_TRIM_OVERRIDE_EN_CLR_TRIM_DIV_SEL_OVERRIDE_SHIFT))&USBPHY_TRIM_OVERRIDE_EN_CLR_TRIM_DIV_SEL_OVERRIDE_MASK) /*!< USBPHY1_TRIM_OVERRIDE_EN_CLR.TRIM_DIV_SEL_OVERRIDE Field*/
+#define USBPHY_TRIM_OVERRIDE_EN_CLR_TRIM_ENV_TAIL_ADJ_VD_OVERRIDE_MASK (0x2U)                        /*!< USBPHY1_TRIM_OVERRIDE_EN_CLR.TRIM_ENV_TAIL_ADJ_VD_OVERRIDE Mask*/
+#define USBPHY_TRIM_OVERRIDE_EN_CLR_TRIM_ENV_TAIL_ADJ_VD_OVERRIDE_SHIFT (1U)                         /*!< USBPHY1_TRIM_OVERRIDE_EN_CLR.TRIM_ENV_TAIL_ADJ_VD_OVERRIDE Position*/
+#define USBPHY_TRIM_OVERRIDE_EN_CLR_TRIM_ENV_TAIL_ADJ_VD_OVERRIDE(x) (((uint32_t)(((uint32_t)(x))<<USBPHY_TRIM_OVERRIDE_EN_CLR_TRIM_ENV_TAIL_ADJ_VD_OVERRIDE_SHIFT))&USBPHY_TRIM_OVERRIDE_EN_CLR_TRIM_ENV_TAIL_ADJ_VD_OVERRIDE_MASK) /*!< USBPHY1_TRIM_OVERRIDE_EN_CLR.TRIM_ENV_TAIL_ADJ_VD_OVERRIDE Field*/
+#define USBPHY_TRIM_OVERRIDE_EN_CLR_TRIM_TX_D_CAL_OVERRIDE_MASK (0x4U)                               /*!< USBPHY1_TRIM_OVERRIDE_EN_CLR.TRIM_TX_D_CAL_OVERRIDE Mask*/
+#define USBPHY_TRIM_OVERRIDE_EN_CLR_TRIM_TX_D_CAL_OVERRIDE_SHIFT (2U)                                /*!< USBPHY1_TRIM_OVERRIDE_EN_CLR.TRIM_TX_D_CAL_OVERRIDE Position*/
+#define USBPHY_TRIM_OVERRIDE_EN_CLR_TRIM_TX_D_CAL_OVERRIDE(x) (((uint32_t)(((uint32_t)(x))<<USBPHY_TRIM_OVERRIDE_EN_CLR_TRIM_TX_D_CAL_OVERRIDE_SHIFT))&USBPHY_TRIM_OVERRIDE_EN_CLR_TRIM_TX_D_CAL_OVERRIDE_MASK) /*!< USBPHY1_TRIM_OVERRIDE_EN_CLR.TRIM_TX_D_CAL_OVERRIDE Field*/
+#define USBPHY_TRIM_OVERRIDE_EN_CLR_TRIM_TX_CAL45DP_OVERRIDE_MASK (0x8U)                             /*!< USBPHY1_TRIM_OVERRIDE_EN_CLR.TRIM_TX_CAL45DP_OVERRIDE Mask*/
+#define USBPHY_TRIM_OVERRIDE_EN_CLR_TRIM_TX_CAL45DP_OVERRIDE_SHIFT (3U)                              /*!< USBPHY1_TRIM_OVERRIDE_EN_CLR.TRIM_TX_CAL45DP_OVERRIDE Position*/
+#define USBPHY_TRIM_OVERRIDE_EN_CLR_TRIM_TX_CAL45DP_OVERRIDE(x) (((uint32_t)(((uint32_t)(x))<<USBPHY_TRIM_OVERRIDE_EN_CLR_TRIM_TX_CAL45DP_OVERRIDE_SHIFT))&USBPHY_TRIM_OVERRIDE_EN_CLR_TRIM_TX_CAL45DP_OVERRIDE_MASK) /*!< USBPHY1_TRIM_OVERRIDE_EN_CLR.TRIM_TX_CAL45DP_OVERRIDE Field*/
+#define USBPHY_TRIM_OVERRIDE_EN_CLR_TRIM_TX_CAL45DM_OVERRIDE_MASK (0x10U)                            /*!< USBPHY1_TRIM_OVERRIDE_EN_CLR.TRIM_TX_CAL45DM_OVERRIDE Mask*/
+#define USBPHY_TRIM_OVERRIDE_EN_CLR_TRIM_TX_CAL45DM_OVERRIDE_SHIFT (4U)                              /*!< USBPHY1_TRIM_OVERRIDE_EN_CLR.TRIM_TX_CAL45DM_OVERRIDE Position*/
+#define USBPHY_TRIM_OVERRIDE_EN_CLR_TRIM_TX_CAL45DM_OVERRIDE(x) (((uint32_t)(((uint32_t)(x))<<USBPHY_TRIM_OVERRIDE_EN_CLR_TRIM_TX_CAL45DM_OVERRIDE_SHIFT))&USBPHY_TRIM_OVERRIDE_EN_CLR_TRIM_TX_CAL45DM_OVERRIDE_MASK) /*!< USBPHY1_TRIM_OVERRIDE_EN_CLR.TRIM_TX_CAL45DM_OVERRIDE Field*/
+#define USBPHY_TRIM_OVERRIDE_EN_CLR_TRIM_PLL_CTRL0_DIV_SEL_MASK (0x30000U)                           /*!< USBPHY1_TRIM_OVERRIDE_EN_CLR.TRIM_PLL_CTRL0_DIV_SEL Mask*/
+#define USBPHY_TRIM_OVERRIDE_EN_CLR_TRIM_PLL_CTRL0_DIV_SEL_SHIFT (16U)                               /*!< USBPHY1_TRIM_OVERRIDE_EN_CLR.TRIM_PLL_CTRL0_DIV_SEL Position*/
+#define USBPHY_TRIM_OVERRIDE_EN_CLR_TRIM_PLL_CTRL0_DIV_SEL(x) (((uint32_t)(((uint32_t)(x))<<USBPHY_TRIM_OVERRIDE_EN_CLR_TRIM_PLL_CTRL0_DIV_SEL_SHIFT))&USBPHY_TRIM_OVERRIDE_EN_CLR_TRIM_PLL_CTRL0_DIV_SEL_MASK) /*!< USBPHY1_TRIM_OVERRIDE_EN_CLR.TRIM_PLL_CTRL0_DIV_SEL Field*/
+#define USBPHY_TRIM_OVERRIDE_EN_CLR_TRIM_USB_REG_ENV_TAIL_ADJ_VD_MASK (0xC0000U)                     /*!< USBPHY1_TRIM_OVERRIDE_EN_CLR.TRIM_USB_REG_ENV_TAIL_ADJ_VD Mask*/
+#define USBPHY_TRIM_OVERRIDE_EN_CLR_TRIM_USB_REG_ENV_TAIL_ADJ_VD_SHIFT (18U)                         /*!< USBPHY1_TRIM_OVERRIDE_EN_CLR.TRIM_USB_REG_ENV_TAIL_ADJ_VD Position*/
+#define USBPHY_TRIM_OVERRIDE_EN_CLR_TRIM_USB_REG_ENV_TAIL_ADJ_VD(x) (((uint32_t)(((uint32_t)(x))<<USBPHY_TRIM_OVERRIDE_EN_CLR_TRIM_USB_REG_ENV_TAIL_ADJ_VD_SHIFT))&USBPHY_TRIM_OVERRIDE_EN_CLR_TRIM_USB_REG_ENV_TAIL_ADJ_VD_MASK) /*!< USBPHY1_TRIM_OVERRIDE_EN_CLR.TRIM_USB_REG_ENV_TAIL_ADJ_VD Field*/
+#define USBPHY_TRIM_OVERRIDE_EN_CLR_TRIM_USBPHY_TX_D_CAL_MASK (0xF00000U)                            /*!< USBPHY1_TRIM_OVERRIDE_EN_CLR.TRIM_USBPHY_TX_D_CAL Mask*/
+#define USBPHY_TRIM_OVERRIDE_EN_CLR_TRIM_USBPHY_TX_D_CAL_SHIFT (20U)                                 /*!< USBPHY1_TRIM_OVERRIDE_EN_CLR.TRIM_USBPHY_TX_D_CAL Position*/
+#define USBPHY_TRIM_OVERRIDE_EN_CLR_TRIM_USBPHY_TX_D_CAL(x) (((uint32_t)(((uint32_t)(x))<<USBPHY_TRIM_OVERRIDE_EN_CLR_TRIM_USBPHY_TX_D_CAL_SHIFT))&USBPHY_TRIM_OVERRIDE_EN_CLR_TRIM_USBPHY_TX_D_CAL_MASK) /*!< USBPHY1_TRIM_OVERRIDE_EN_CLR.TRIM_USBPHY_TX_D_CAL Field*/
+#define USBPHY_TRIM_OVERRIDE_EN_CLR_TRIM_USBPHY_TX_CAL45DP_MASK (0xF000000U)                         /*!< USBPHY1_TRIM_OVERRIDE_EN_CLR.TRIM_USBPHY_TX_CAL45DP Mask*/
+#define USBPHY_TRIM_OVERRIDE_EN_CLR_TRIM_USBPHY_TX_CAL45DP_SHIFT (24U)                               /*!< USBPHY1_TRIM_OVERRIDE_EN_CLR.TRIM_USBPHY_TX_CAL45DP Position*/
+#define USBPHY_TRIM_OVERRIDE_EN_CLR_TRIM_USBPHY_TX_CAL45DP(x) (((uint32_t)(((uint32_t)(x))<<USBPHY_TRIM_OVERRIDE_EN_CLR_TRIM_USBPHY_TX_CAL45DP_SHIFT))&USBPHY_TRIM_OVERRIDE_EN_CLR_TRIM_USBPHY_TX_CAL45DP_MASK) /*!< USBPHY1_TRIM_OVERRIDE_EN_CLR.TRIM_USBPHY_TX_CAL45DP Field*/
+#define USBPHY_TRIM_OVERRIDE_EN_CLR_TRIM_USBPHY_TX_CAL45DM_MASK (0xF0000000U)                        /*!< USBPHY1_TRIM_OVERRIDE_EN_CLR.TRIM_USBPHY_TX_CAL45DM Mask*/
+#define USBPHY_TRIM_OVERRIDE_EN_CLR_TRIM_USBPHY_TX_CAL45DM_SHIFT (28U)                               /*!< USBPHY1_TRIM_OVERRIDE_EN_CLR.TRIM_USBPHY_TX_CAL45DM Position*/
+#define USBPHY_TRIM_OVERRIDE_EN_CLR_TRIM_USBPHY_TX_CAL45DM(x) (((uint32_t)(((uint32_t)(x))<<USBPHY_TRIM_OVERRIDE_EN_CLR_TRIM_USBPHY_TX_CAL45DM_SHIFT))&USBPHY_TRIM_OVERRIDE_EN_CLR_TRIM_USBPHY_TX_CAL45DM_MASK) /*!< USBPHY1_TRIM_OVERRIDE_EN_CLR.TRIM_USBPHY_TX_CAL45DM Field*/
 
 /*! @name TRIM_OVERRIDE_EN_TOG - USB PHY Trim Override Enable Register */
-#define USBPHY0_TRIM_OVERRIDE_EN_TOG_TRIM_DIV_SEL_OVERRIDE_MASK (0x1U)                               /*!< USBPHY0_TRIM_OVERRIDE_EN_TOG.TRIM_DIV_SEL_OVERRIDE Mask*/
-#define USBPHY0_TRIM_OVERRIDE_EN_TOG_TRIM_DIV_SEL_OVERRIDE_SHIFT (0U)                                /*!< USBPHY0_TRIM_OVERRIDE_EN_TOG.TRIM_DIV_SEL_OVERRIDE Position*/
-#define USBPHY0_TRIM_OVERRIDE_EN_TOG_TRIM_DIV_SEL_OVERRIDE(x) (((uint32_t)(((uint32_t)(x))<<USBPHY0_TRIM_OVERRIDE_EN_TOG_TRIM_DIV_SEL_OVERRIDE_SHIFT))&USBPHY0_TRIM_OVERRIDE_EN_TOG_TRIM_DIV_SEL_OVERRIDE_MASK) /*!< USBPHY0_TRIM_OVERRIDE_EN_TOG.TRIM_DIV_SEL_OVERRIDE Field*/
-#define USBPHY0_TRIM_OVERRIDE_EN_TOG_TRIM_ENV_TAIL_ADJ_VD_OVERRIDE_MASK (0x2U)                       /*!< USBPHY0_TRIM_OVERRIDE_EN_TOG.TRIM_ENV_TAIL_ADJ_VD_OVERRIDE Mask*/
-#define USBPHY0_TRIM_OVERRIDE_EN_TOG_TRIM_ENV_TAIL_ADJ_VD_OVERRIDE_SHIFT (1U)                        /*!< USBPHY0_TRIM_OVERRIDE_EN_TOG.TRIM_ENV_TAIL_ADJ_VD_OVERRIDE Position*/
-#define USBPHY0_TRIM_OVERRIDE_EN_TOG_TRIM_ENV_TAIL_ADJ_VD_OVERRIDE(x) (((uint32_t)(((uint32_t)(x))<<USBPHY0_TRIM_OVERRIDE_EN_TOG_TRIM_ENV_TAIL_ADJ_VD_OVERRIDE_SHIFT))&USBPHY0_TRIM_OVERRIDE_EN_TOG_TRIM_ENV_TAIL_ADJ_VD_OVERRIDE_MASK) /*!< USBPHY0_TRIM_OVERRIDE_EN_TOG.TRIM_ENV_TAIL_ADJ_VD_OVERRIDE Field*/
-#define USBPHY0_TRIM_OVERRIDE_EN_TOG_TRIM_TX_D_CAL_OVERRIDE_MASK (0x4U)                              /*!< USBPHY0_TRIM_OVERRIDE_EN_TOG.TRIM_TX_D_CAL_OVERRIDE Mask*/
-#define USBPHY0_TRIM_OVERRIDE_EN_TOG_TRIM_TX_D_CAL_OVERRIDE_SHIFT (2U)                               /*!< USBPHY0_TRIM_OVERRIDE_EN_TOG.TRIM_TX_D_CAL_OVERRIDE Position*/
-#define USBPHY0_TRIM_OVERRIDE_EN_TOG_TRIM_TX_D_CAL_OVERRIDE(x) (((uint32_t)(((uint32_t)(x))<<USBPHY0_TRIM_OVERRIDE_EN_TOG_TRIM_TX_D_CAL_OVERRIDE_SHIFT))&USBPHY0_TRIM_OVERRIDE_EN_TOG_TRIM_TX_D_CAL_OVERRIDE_MASK) /*!< USBPHY0_TRIM_OVERRIDE_EN_TOG.TRIM_TX_D_CAL_OVERRIDE Field*/
-#define USBPHY0_TRIM_OVERRIDE_EN_TOG_TRIM_TX_CAL45DP_OVERRIDE_MASK (0x8U)                            /*!< USBPHY0_TRIM_OVERRIDE_EN_TOG.TRIM_TX_CAL45DP_OVERRIDE Mask*/
-#define USBPHY0_TRIM_OVERRIDE_EN_TOG_TRIM_TX_CAL45DP_OVERRIDE_SHIFT (3U)                             /*!< USBPHY0_TRIM_OVERRIDE_EN_TOG.TRIM_TX_CAL45DP_OVERRIDE Position*/
-#define USBPHY0_TRIM_OVERRIDE_EN_TOG_TRIM_TX_CAL45DP_OVERRIDE(x) (((uint32_t)(((uint32_t)(x))<<USBPHY0_TRIM_OVERRIDE_EN_TOG_TRIM_TX_CAL45DP_OVERRIDE_SHIFT))&USBPHY0_TRIM_OVERRIDE_EN_TOG_TRIM_TX_CAL45DP_OVERRIDE_MASK) /*!< USBPHY0_TRIM_OVERRIDE_EN_TOG.TRIM_TX_CAL45DP_OVERRIDE Field*/
-#define USBPHY0_TRIM_OVERRIDE_EN_TOG_TRIM_TX_CAL45DM_OVERRIDE_MASK (0x10U)                           /*!< USBPHY0_TRIM_OVERRIDE_EN_TOG.TRIM_TX_CAL45DM_OVERRIDE Mask*/
-#define USBPHY0_TRIM_OVERRIDE_EN_TOG_TRIM_TX_CAL45DM_OVERRIDE_SHIFT (4U)                             /*!< USBPHY0_TRIM_OVERRIDE_EN_TOG.TRIM_TX_CAL45DM_OVERRIDE Position*/
-#define USBPHY0_TRIM_OVERRIDE_EN_TOG_TRIM_TX_CAL45DM_OVERRIDE(x) (((uint32_t)(((uint32_t)(x))<<USBPHY0_TRIM_OVERRIDE_EN_TOG_TRIM_TX_CAL45DM_OVERRIDE_SHIFT))&USBPHY0_TRIM_OVERRIDE_EN_TOG_TRIM_TX_CAL45DM_OVERRIDE_MASK) /*!< USBPHY0_TRIM_OVERRIDE_EN_TOG.TRIM_TX_CAL45DM_OVERRIDE Field*/
-#define USBPHY0_TRIM_OVERRIDE_EN_TOG_TRIM_PLL_CTRL0_DIV_SEL_MASK (0x30000U)                          /*!< USBPHY0_TRIM_OVERRIDE_EN_TOG.TRIM_PLL_CTRL0_DIV_SEL Mask*/
-#define USBPHY0_TRIM_OVERRIDE_EN_TOG_TRIM_PLL_CTRL0_DIV_SEL_SHIFT (16U)                              /*!< USBPHY0_TRIM_OVERRIDE_EN_TOG.TRIM_PLL_CTRL0_DIV_SEL Position*/
-#define USBPHY0_TRIM_OVERRIDE_EN_TOG_TRIM_PLL_CTRL0_DIV_SEL(x) (((uint32_t)(((uint32_t)(x))<<USBPHY0_TRIM_OVERRIDE_EN_TOG_TRIM_PLL_CTRL0_DIV_SEL_SHIFT))&USBPHY0_TRIM_OVERRIDE_EN_TOG_TRIM_PLL_CTRL0_DIV_SEL_MASK) /*!< USBPHY0_TRIM_OVERRIDE_EN_TOG.TRIM_PLL_CTRL0_DIV_SEL Field*/
-#define USBPHY0_TRIM_OVERRIDE_EN_TOG_TRIM_USB_REG_ENV_TAIL_ADJ_VD_MASK (0xC0000U)                    /*!< USBPHY0_TRIM_OVERRIDE_EN_TOG.TRIM_USB_REG_ENV_TAIL_ADJ_VD Mask*/
-#define USBPHY0_TRIM_OVERRIDE_EN_TOG_TRIM_USB_REG_ENV_TAIL_ADJ_VD_SHIFT (18U)                        /*!< USBPHY0_TRIM_OVERRIDE_EN_TOG.TRIM_USB_REG_ENV_TAIL_ADJ_VD Position*/
-#define USBPHY0_TRIM_OVERRIDE_EN_TOG_TRIM_USB_REG_ENV_TAIL_ADJ_VD(x) (((uint32_t)(((uint32_t)(x))<<USBPHY0_TRIM_OVERRIDE_EN_TOG_TRIM_USB_REG_ENV_TAIL_ADJ_VD_SHIFT))&USBPHY0_TRIM_OVERRIDE_EN_TOG_TRIM_USB_REG_ENV_TAIL_ADJ_VD_MASK) /*!< USBPHY0_TRIM_OVERRIDE_EN_TOG.TRIM_USB_REG_ENV_TAIL_ADJ_VD Field*/
-#define USBPHY0_TRIM_OVERRIDE_EN_TOG_TRIM_USBPHY_TX_D_CAL_MASK (0xF00000U)                           /*!< USBPHY0_TRIM_OVERRIDE_EN_TOG.TRIM_USBPHY_TX_D_CAL Mask*/
-#define USBPHY0_TRIM_OVERRIDE_EN_TOG_TRIM_USBPHY_TX_D_CAL_SHIFT (20U)                                /*!< USBPHY0_TRIM_OVERRIDE_EN_TOG.TRIM_USBPHY_TX_D_CAL Position*/
-#define USBPHY0_TRIM_OVERRIDE_EN_TOG_TRIM_USBPHY_TX_D_CAL(x) (((uint32_t)(((uint32_t)(x))<<USBPHY0_TRIM_OVERRIDE_EN_TOG_TRIM_USBPHY_TX_D_CAL_SHIFT))&USBPHY0_TRIM_OVERRIDE_EN_TOG_TRIM_USBPHY_TX_D_CAL_MASK) /*!< USBPHY0_TRIM_OVERRIDE_EN_TOG.TRIM_USBPHY_TX_D_CAL Field*/
-#define USBPHY0_TRIM_OVERRIDE_EN_TOG_TRIM_USBPHY_TX_CAL45DP_MASK (0xF000000U)                        /*!< USBPHY0_TRIM_OVERRIDE_EN_TOG.TRIM_USBPHY_TX_CAL45DP Mask*/
-#define USBPHY0_TRIM_OVERRIDE_EN_TOG_TRIM_USBPHY_TX_CAL45DP_SHIFT (24U)                              /*!< USBPHY0_TRIM_OVERRIDE_EN_TOG.TRIM_USBPHY_TX_CAL45DP Position*/
-#define USBPHY0_TRIM_OVERRIDE_EN_TOG_TRIM_USBPHY_TX_CAL45DP(x) (((uint32_t)(((uint32_t)(x))<<USBPHY0_TRIM_OVERRIDE_EN_TOG_TRIM_USBPHY_TX_CAL45DP_SHIFT))&USBPHY0_TRIM_OVERRIDE_EN_TOG_TRIM_USBPHY_TX_CAL45DP_MASK) /*!< USBPHY0_TRIM_OVERRIDE_EN_TOG.TRIM_USBPHY_TX_CAL45DP Field*/
-#define USBPHY0_TRIM_OVERRIDE_EN_TOG_TRIM_USBPHY_TX_CAL45DM_MASK (0xF0000000U)                       /*!< USBPHY0_TRIM_OVERRIDE_EN_TOG.TRIM_USBPHY_TX_CAL45DM Mask*/
-#define USBPHY0_TRIM_OVERRIDE_EN_TOG_TRIM_USBPHY_TX_CAL45DM_SHIFT (28U)                              /*!< USBPHY0_TRIM_OVERRIDE_EN_TOG.TRIM_USBPHY_TX_CAL45DM Position*/
-#define USBPHY0_TRIM_OVERRIDE_EN_TOG_TRIM_USBPHY_TX_CAL45DM(x) (((uint32_t)(((uint32_t)(x))<<USBPHY0_TRIM_OVERRIDE_EN_TOG_TRIM_USBPHY_TX_CAL45DM_SHIFT))&USBPHY0_TRIM_OVERRIDE_EN_TOG_TRIM_USBPHY_TX_CAL45DM_MASK) /*!< USBPHY0_TRIM_OVERRIDE_EN_TOG.TRIM_USBPHY_TX_CAL45DM Field*/
+#define USBPHY_TRIM_OVERRIDE_EN_TOG_TRIM_DIV_SEL_OVERRIDE_MASK (0x1U)                                /*!< USBPHY1_TRIM_OVERRIDE_EN_TOG.TRIM_DIV_SEL_OVERRIDE Mask*/
+#define USBPHY_TRIM_OVERRIDE_EN_TOG_TRIM_DIV_SEL_OVERRIDE_SHIFT (0U)                                 /*!< USBPHY1_TRIM_OVERRIDE_EN_TOG.TRIM_DIV_SEL_OVERRIDE Position*/
+#define USBPHY_TRIM_OVERRIDE_EN_TOG_TRIM_DIV_SEL_OVERRIDE(x) (((uint32_t)(((uint32_t)(x))<<USBPHY_TRIM_OVERRIDE_EN_TOG_TRIM_DIV_SEL_OVERRIDE_SHIFT))&USBPHY_TRIM_OVERRIDE_EN_TOG_TRIM_DIV_SEL_OVERRIDE_MASK) /*!< USBPHY1_TRIM_OVERRIDE_EN_TOG.TRIM_DIV_SEL_OVERRIDE Field*/
+#define USBPHY_TRIM_OVERRIDE_EN_TOG_TRIM_ENV_TAIL_ADJ_VD_OVERRIDE_MASK (0x2U)                        /*!< USBPHY1_TRIM_OVERRIDE_EN_TOG.TRIM_ENV_TAIL_ADJ_VD_OVERRIDE Mask*/
+#define USBPHY_TRIM_OVERRIDE_EN_TOG_TRIM_ENV_TAIL_ADJ_VD_OVERRIDE_SHIFT (1U)                         /*!< USBPHY1_TRIM_OVERRIDE_EN_TOG.TRIM_ENV_TAIL_ADJ_VD_OVERRIDE Position*/
+#define USBPHY_TRIM_OVERRIDE_EN_TOG_TRIM_ENV_TAIL_ADJ_VD_OVERRIDE(x) (((uint32_t)(((uint32_t)(x))<<USBPHY_TRIM_OVERRIDE_EN_TOG_TRIM_ENV_TAIL_ADJ_VD_OVERRIDE_SHIFT))&USBPHY_TRIM_OVERRIDE_EN_TOG_TRIM_ENV_TAIL_ADJ_VD_OVERRIDE_MASK) /*!< USBPHY1_TRIM_OVERRIDE_EN_TOG.TRIM_ENV_TAIL_ADJ_VD_OVERRIDE Field*/
+#define USBPHY_TRIM_OVERRIDE_EN_TOG_TRIM_TX_D_CAL_OVERRIDE_MASK (0x4U)                               /*!< USBPHY1_TRIM_OVERRIDE_EN_TOG.TRIM_TX_D_CAL_OVERRIDE Mask*/
+#define USBPHY_TRIM_OVERRIDE_EN_TOG_TRIM_TX_D_CAL_OVERRIDE_SHIFT (2U)                                /*!< USBPHY1_TRIM_OVERRIDE_EN_TOG.TRIM_TX_D_CAL_OVERRIDE Position*/
+#define USBPHY_TRIM_OVERRIDE_EN_TOG_TRIM_TX_D_CAL_OVERRIDE(x) (((uint32_t)(((uint32_t)(x))<<USBPHY_TRIM_OVERRIDE_EN_TOG_TRIM_TX_D_CAL_OVERRIDE_SHIFT))&USBPHY_TRIM_OVERRIDE_EN_TOG_TRIM_TX_D_CAL_OVERRIDE_MASK) /*!< USBPHY1_TRIM_OVERRIDE_EN_TOG.TRIM_TX_D_CAL_OVERRIDE Field*/
+#define USBPHY_TRIM_OVERRIDE_EN_TOG_TRIM_TX_CAL45DP_OVERRIDE_MASK (0x8U)                             /*!< USBPHY1_TRIM_OVERRIDE_EN_TOG.TRIM_TX_CAL45DP_OVERRIDE Mask*/
+#define USBPHY_TRIM_OVERRIDE_EN_TOG_TRIM_TX_CAL45DP_OVERRIDE_SHIFT (3U)                              /*!< USBPHY1_TRIM_OVERRIDE_EN_TOG.TRIM_TX_CAL45DP_OVERRIDE Position*/
+#define USBPHY_TRIM_OVERRIDE_EN_TOG_TRIM_TX_CAL45DP_OVERRIDE(x) (((uint32_t)(((uint32_t)(x))<<USBPHY_TRIM_OVERRIDE_EN_TOG_TRIM_TX_CAL45DP_OVERRIDE_SHIFT))&USBPHY_TRIM_OVERRIDE_EN_TOG_TRIM_TX_CAL45DP_OVERRIDE_MASK) /*!< USBPHY1_TRIM_OVERRIDE_EN_TOG.TRIM_TX_CAL45DP_OVERRIDE Field*/
+#define USBPHY_TRIM_OVERRIDE_EN_TOG_TRIM_TX_CAL45DM_OVERRIDE_MASK (0x10U)                            /*!< USBPHY1_TRIM_OVERRIDE_EN_TOG.TRIM_TX_CAL45DM_OVERRIDE Mask*/
+#define USBPHY_TRIM_OVERRIDE_EN_TOG_TRIM_TX_CAL45DM_OVERRIDE_SHIFT (4U)                              /*!< USBPHY1_TRIM_OVERRIDE_EN_TOG.TRIM_TX_CAL45DM_OVERRIDE Position*/
+#define USBPHY_TRIM_OVERRIDE_EN_TOG_TRIM_TX_CAL45DM_OVERRIDE(x) (((uint32_t)(((uint32_t)(x))<<USBPHY_TRIM_OVERRIDE_EN_TOG_TRIM_TX_CAL45DM_OVERRIDE_SHIFT))&USBPHY_TRIM_OVERRIDE_EN_TOG_TRIM_TX_CAL45DM_OVERRIDE_MASK) /*!< USBPHY1_TRIM_OVERRIDE_EN_TOG.TRIM_TX_CAL45DM_OVERRIDE Field*/
+#define USBPHY_TRIM_OVERRIDE_EN_TOG_TRIM_PLL_CTRL0_DIV_SEL_MASK (0x30000U)                           /*!< USBPHY1_TRIM_OVERRIDE_EN_TOG.TRIM_PLL_CTRL0_DIV_SEL Mask*/
+#define USBPHY_TRIM_OVERRIDE_EN_TOG_TRIM_PLL_CTRL0_DIV_SEL_SHIFT (16U)                               /*!< USBPHY1_TRIM_OVERRIDE_EN_TOG.TRIM_PLL_CTRL0_DIV_SEL Position*/
+#define USBPHY_TRIM_OVERRIDE_EN_TOG_TRIM_PLL_CTRL0_DIV_SEL(x) (((uint32_t)(((uint32_t)(x))<<USBPHY_TRIM_OVERRIDE_EN_TOG_TRIM_PLL_CTRL0_DIV_SEL_SHIFT))&USBPHY_TRIM_OVERRIDE_EN_TOG_TRIM_PLL_CTRL0_DIV_SEL_MASK) /*!< USBPHY1_TRIM_OVERRIDE_EN_TOG.TRIM_PLL_CTRL0_DIV_SEL Field*/
+#define USBPHY_TRIM_OVERRIDE_EN_TOG_TRIM_USB_REG_ENV_TAIL_ADJ_VD_MASK (0xC0000U)                     /*!< USBPHY1_TRIM_OVERRIDE_EN_TOG.TRIM_USB_REG_ENV_TAIL_ADJ_VD Mask*/
+#define USBPHY_TRIM_OVERRIDE_EN_TOG_TRIM_USB_REG_ENV_TAIL_ADJ_VD_SHIFT (18U)                         /*!< USBPHY1_TRIM_OVERRIDE_EN_TOG.TRIM_USB_REG_ENV_TAIL_ADJ_VD Position*/
+#define USBPHY_TRIM_OVERRIDE_EN_TOG_TRIM_USB_REG_ENV_TAIL_ADJ_VD(x) (((uint32_t)(((uint32_t)(x))<<USBPHY_TRIM_OVERRIDE_EN_TOG_TRIM_USB_REG_ENV_TAIL_ADJ_VD_SHIFT))&USBPHY_TRIM_OVERRIDE_EN_TOG_TRIM_USB_REG_ENV_TAIL_ADJ_VD_MASK) /*!< USBPHY1_TRIM_OVERRIDE_EN_TOG.TRIM_USB_REG_ENV_TAIL_ADJ_VD Field*/
+#define USBPHY_TRIM_OVERRIDE_EN_TOG_TRIM_USBPHY_TX_D_CAL_MASK (0xF00000U)                            /*!< USBPHY1_TRIM_OVERRIDE_EN_TOG.TRIM_USBPHY_TX_D_CAL Mask*/
+#define USBPHY_TRIM_OVERRIDE_EN_TOG_TRIM_USBPHY_TX_D_CAL_SHIFT (20U)                                 /*!< USBPHY1_TRIM_OVERRIDE_EN_TOG.TRIM_USBPHY_TX_D_CAL Position*/
+#define USBPHY_TRIM_OVERRIDE_EN_TOG_TRIM_USBPHY_TX_D_CAL(x) (((uint32_t)(((uint32_t)(x))<<USBPHY_TRIM_OVERRIDE_EN_TOG_TRIM_USBPHY_TX_D_CAL_SHIFT))&USBPHY_TRIM_OVERRIDE_EN_TOG_TRIM_USBPHY_TX_D_CAL_MASK) /*!< USBPHY1_TRIM_OVERRIDE_EN_TOG.TRIM_USBPHY_TX_D_CAL Field*/
+#define USBPHY_TRIM_OVERRIDE_EN_TOG_TRIM_USBPHY_TX_CAL45DP_MASK (0xF000000U)                         /*!< USBPHY1_TRIM_OVERRIDE_EN_TOG.TRIM_USBPHY_TX_CAL45DP Mask*/
+#define USBPHY_TRIM_OVERRIDE_EN_TOG_TRIM_USBPHY_TX_CAL45DP_SHIFT (24U)                               /*!< USBPHY1_TRIM_OVERRIDE_EN_TOG.TRIM_USBPHY_TX_CAL45DP Position*/
+#define USBPHY_TRIM_OVERRIDE_EN_TOG_TRIM_USBPHY_TX_CAL45DP(x) (((uint32_t)(((uint32_t)(x))<<USBPHY_TRIM_OVERRIDE_EN_TOG_TRIM_USBPHY_TX_CAL45DP_SHIFT))&USBPHY_TRIM_OVERRIDE_EN_TOG_TRIM_USBPHY_TX_CAL45DP_MASK) /*!< USBPHY1_TRIM_OVERRIDE_EN_TOG.TRIM_USBPHY_TX_CAL45DP Field*/
+#define USBPHY_TRIM_OVERRIDE_EN_TOG_TRIM_USBPHY_TX_CAL45DM_MASK (0xF0000000U)                        /*!< USBPHY1_TRIM_OVERRIDE_EN_TOG.TRIM_USBPHY_TX_CAL45DM Mask*/
+#define USBPHY_TRIM_OVERRIDE_EN_TOG_TRIM_USBPHY_TX_CAL45DM_SHIFT (28U)                               /*!< USBPHY1_TRIM_OVERRIDE_EN_TOG.TRIM_USBPHY_TX_CAL45DM Position*/
+#define USBPHY_TRIM_OVERRIDE_EN_TOG_TRIM_USBPHY_TX_CAL45DM(x) (((uint32_t)(((uint32_t)(x))<<USBPHY_TRIM_OVERRIDE_EN_TOG_TRIM_USBPHY_TX_CAL45DM_SHIFT))&USBPHY_TRIM_OVERRIDE_EN_TOG_TRIM_USBPHY_TX_CAL45DM_MASK) /*!< USBPHY1_TRIM_OVERRIDE_EN_TOG.TRIM_USBPHY_TX_CAL45DM Field*/
 /**
  * @} */ /* End group USBPHY_Register_Masks_GROUP 
  */
 
-/* USBPHY0 - Peripheral instance base addresses */
-#define USBPHY0_BasePtr                0x400A2000UL //!< Peripheral base address
-#define USBPHY0                        ((USBPHY_Type *) USBPHY0_BasePtr) //!< Freescale base pointer
-#define USBPHY0_BASE_PTR               (USBPHY0) //!< Freescale style base pointer
+/* USBPHY1 - Peripheral instance base addresses */
+#define USBPHY1_BasePtr                0x400A2000UL //!< Peripheral base address
+#define USBPHY1                        ((USBPHY_Type *) USBPHY1_BasePtr) //!< Freescale base pointer
+#define USBPHY1_BASE_PTR               (USBPHY1) //!< Freescale style base pointer
+#define USBPHY1_IRQS { USBPHY_USBDCD1_IRQn,  }
+
 /**
  * @} */ /* End group USBPHY_Peripheral_access_layer_GROUP 
  */

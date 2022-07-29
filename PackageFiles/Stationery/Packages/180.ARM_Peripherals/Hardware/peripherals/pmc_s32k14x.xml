@@ -26,7 +26,7 @@
    <binaryOption name="pmc_lvdsc1_lvdre" 
       description="Low-Voltage Detect Reset Enable"
       toolTip="This write-once bit enables LVDF events to generate a hardware reset.\n 
-               Additional writes are ignored.">
+               Additional writes are ignored">
       <choice value="0" name="Disabled" isDefault="true" />
       <choice value="1" name="Enabled" />
    </binaryOption>
@@ -53,7 +53,7 @@
 
    <binaryOption name="pmc_regsc_lpodis" 
       description="Low Power Oscillator control"
-      toolTip="May be used to disable the LPO.">
+      toolTip="May be used to disable the LPO">
       <choice value="1" name="Disabled" />
       <choice value="0" name="Enabled" isDefault="true" />
    </binaryOption>
@@ -63,7 +63,7 @@
       toolTip="May be used to disable the bias currents and reference voltages for some \n
                clock modules to further reduce power consumption in VLPS mode. \n
                Note: It must be ensured that respective clock modules are disabled in VLPS\n
-               otherwise severe malfunction of clock modules will happen.">
+               otherwise severe malfunction of clock modules will happen">
       <choice value="1" name="Disabled - SIRC/FIRC/PLL clocks unavailable in VLPS " />
       <choice value="0" name="Enabled" isDefault="true" />
    </binaryOption>
@@ -73,7 +73,7 @@
       toolTip="Controls source and well biasing for the core logic in low power mode. \n
                In full performance mode this option has no effect. \n
 	       This is useful to further reduce MCU power consumption in low power mode. \n
-	       This bit must be set to 1 when using VLP* modes.">
+	       This bit must be set to 1 when using VLP* modes">
       <choice value="0" name="Disabled" isDefault="true" />
       <choice value="1" name="Enabled - Core has reduced performance" />
    </binaryOption>

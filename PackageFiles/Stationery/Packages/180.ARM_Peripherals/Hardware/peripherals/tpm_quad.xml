@@ -11,7 +11,7 @@
    <aliasOption key="/SIM/system_tpm_clock"  optional="true"/>
 
    <binaryOption name="check_minimums" description="Check minimum interval and minimum resolution"
-         toolTip="Enables boundary checks of minimum interval and minimum resolution when setting TPM values." >
+         toolTip="Enables boundary checks of minimum interval and minimum resolution when setting TPM values" >
       <choice value="0" name="No checks done" />
       <choice value="1" name="Do checks"  isDefault="true" />
    </binaryOption>
@@ -77,7 +77,7 @@
       <choice value="1" name="Centre-aligned (count up-down)" />
    </binaryOption>
    <binaryOption name="tpm_sc_toie" description="Timer Overflow Interrupt Enable"
-      toolTip="Enables TPM overflow interrupts.">
+      toolTip="Enables TPM overflow interrupts">
       <choice value="0" name="Disabled" />
       <choice value="1" name="Enabled" />
    </binaryOption>
@@ -100,7 +100,7 @@
    description="Combine Channel 0 and 1 Swap"
       toolTip="When set in combine mode,\n
          the even channel is used for the input capture and 1st compare,\n
-         the odd channel is used for the 2nd compare." >
+         the odd channel is used for the 2nd compare" >
       <choice value="0" name="Even channel is used for input capture and 1st compare" isDefault="true" />
       <choice value="1" name="Odd channel is used for input capture and 1st compare" />
    </binaryOption>

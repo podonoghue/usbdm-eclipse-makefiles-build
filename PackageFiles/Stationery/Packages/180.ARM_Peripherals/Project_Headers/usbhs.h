@@ -162,16 +162,7 @@ template<class Info> UsbhsCallbackFunction UsbhsBase_T<Info>::sCallback = Usbhs:
 /** Used by ISR to obtain handle of object */
 template<class Info> USBHS_Type *UsbhsBase_T<Info>::thisPtr = 0;
 
-#if defined(USBDM_USBHS0_IS_DEFINED)
-/**
- * @brief Class representing the USBHS0 interface
- *
- * <b>Example</b>\n
- * Refer @ref UsbhsBase_T
- */
-using Usbhs0 = UsbhsBase_T<Usbhs0Info>;
-#endif
-
+$(/USBHS/declarations: // No declarations found)
 /**
  * End USBHS_Group
  * @}

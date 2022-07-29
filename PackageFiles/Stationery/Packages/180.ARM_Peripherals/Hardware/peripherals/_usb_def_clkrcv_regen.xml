@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE peripheralPage SYSTEM "_menu.dtd" >
-<!-- _usb_def_clkrcv.xml -->
+<!-- _usb_def_clkrcv_regen.xml -->
 
 <peripheralPage xmlns:xi="http://www.w3.org/2001/XInclude" name="_instance" description="USB">
 
@@ -21,9 +21,12 @@
    <choiceOption 
       name="usb_clk_enable" 
       description="IRC48M enable"
-      toolTip="Enables the IRC48M clock as a clock source for FS USB">
-      <choice value="USB_CLK_RECOVER_IRC_EN_IRC_EN(0)"  enum="Peripheral"       name="Not available"  isDefault="true"  />
-      <choice value="USB_CLK_RECOVER_IRC_EN_IRC_EN(1)"  enum="PeripheralAndUsb" name="Available as USB clock"  />
+      toolTip="This is used to control when the the on-chip IRC48M module is enabled\n
+               It will also be enabled if selected as a peripheral clock or MCG clock source if powered\n
+               It can be used as a clock source for FS USB device mode operation">
+      <choice value="USB_CLK_RECOVER_IRC_EN_IRC_EN(0)|USB_CLK_RECOVER_IRC_EN_REG_EN(0)"  enum="Disabled"         name="Power disabled - not available at all"                                        />
+      <choice value="USB_CLK_RECOVER_IRC_EN_IRC_EN(0)|USB_CLK_RECOVER_IRC_EN_REG_EN(1)"  enum="Peripheral"       name="Available as general clock source"  isDefault="true"  />
+      <choice value="USB_CLK_RECOVER_IRC_EN_IRC_EN(1)|USB_CLK_RECOVER_IRC_EN_REG_EN(1)"  enum="PeripheralAndUsb" name="Available as general and USB clock"  />
    </choiceOption>
       
    <xi:include href="_usb_base_clkrcv.xml"/>

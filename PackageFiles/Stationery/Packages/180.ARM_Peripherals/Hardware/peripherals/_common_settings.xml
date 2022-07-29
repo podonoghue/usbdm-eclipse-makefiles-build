@@ -6,7 +6,7 @@
 <binaryOption name="Map all pins on startup" key="/HARDWARE/mapAllPins" 
    description="Execute mapAllPins() during startup"
    toolTip="Enables mapping of allocated pins during startup using mapAllPins()\n
-   Multiply mapped pins cannot be assigned by mapAllPins().">
+   Multiply mapped pins cannot be assigned by mapAllPins()">
    <choice value="false" name="Don't map - Use manual mapping or enable mapping for peripherals individually"  isDefault="true" />
    <choice value="true"  name="Map pins during startup using mapAllPins()" />
 </binaryOption>
@@ -22,7 +22,7 @@
    description="Lock out pins that are not bonded to physical pins on package"
    toolTip="In some smaller packages there are die pads that are not bonded to package pins\n
             For those pins the PCR can be set to 0 (analogue/disabled) to minimize power consumption\n
-            This is the reset state.">
+            This is the reset state">
    <choice value="false" name="Leave unbonded pins unchanged" />
    <choice value="true"  name="Force unbonded pins to analogue function" isDefault="true" />
 </binaryOption>
@@ -31,7 +31,7 @@
    description="Generate warnings about conflicting signal mappings"
    toolTip="It is allowable to have multiple signals mapped to a single pin on the understanding\n 
             that they will be dynamically mapped during execution to avoid conflict.\n
-            Multiply mapped pins cannot be assigned by mapAllPins().">
+            Multiply mapped pins cannot be assigned by mapAllPins()">
    <choice value="false" name="Don't produce warning during compilation" isDefault="true" />
    <choice value="true"  name="Produce warning during compilation" />
 </binaryOption>
@@ -39,7 +39,7 @@
 <binaryOption name="Use extended type system for timers" key="/HARDWARE/useTypeSystemForTimers" 
    description="Use a dimensioned type system for time and frequency"
    toolTip="Types 'Seconds', 'Hertz' and 'Ticks' are always defined but are simple aliases\n
-   rather than a enforced type system using classes.">
+   rather than a enforced type system using classes">
    <choice value="false" name="Don't use extended type system" isDefault="true" />
    <choice value="true"  name="Use extended type system" />
 </binaryOption>
@@ -68,10 +68,10 @@
                C Example:\n
                \t    // Variable allocated in bitband/bme accessible region (.bitband_ram)\n
                \t    // May be uint8_t, uint16_t or uint32_t\n
-               \t    __attribute__ ((section(&quote;.bitband_ram&quote;)))\n
+               \t    __attribute__ ((section('.bitband_ram')))\n
                \t    uint32_t variable;\n
                \t    // Each word of array maps to an individual bit in bit-band region (.bitband)\n
-               \t    __attribute__ ((section(&quote;.bitband&quote;)))\n
+               \t    __attribute__ ((section('.bitband')))\n
                \t    uint32_t variable_bits[8*sizeof(variable)];\n
                See bme.h and bitband.h for more information"
       value="0x0" />
@@ -93,7 +93,7 @@
    <intOption name="Flex NVM size"      key="/LINKER/flexNvmSize"     constant="true" description="Flex Flash available in target"   />
    
    <constant name="Linker Extra Regions" key="/LINKER/extraRegions" />
-   <constant name="Linker Information"  key="/LINKER/information" />
+   <constant name="Linker Information"   key="/LINKER/information"  />
    
    <stringOption name="Linker script"        key="/LINKER/scriptFilename"   constant="true" description="File used as linker script"       />
    <stringOption name="Linker memory map"    key="/LINKER/mapFilename"      constant="true" description="File used for target memory map"  />
@@ -104,7 +104,7 @@
       "Cortex-M4 Kinetis devices may have additional Flash that can be used as backing storage \n
        for non-volatile memory (FlexRAM -> FlexNVM.)\n
        If not used for this purpose, FlexNVM may be used to hold code or constant data.\n
-       These settings control which region (regular flash or FlexNVM) is used for various linker sections."
+       These settings control which region (regular flash or FlexNVM) is used for various linker sections"
    >
 
       <choiceOption name="Startup code" key="/LINKER/startup_rom" description="Segment allocation" 
@@ -121,7 +121,7 @@
      toolTip=
        "The RAM on Cortex-M4 Kinetis devices is divided into upper and lower memory regions.\n
         These settings control which region is used for various linker sections.\n
-        These sections cannot cross regions as unaligned half-word and long-word accesses are not supported."
+        These sections cannot cross regions as unaligned half-word and long-word accesses are not supported"
    >
       <choiceOption name="ramu_default" key="/LINKER/ramu_default" description="Segment allocation" hidden="true"
          toolTip="This selects placement for the segment" >

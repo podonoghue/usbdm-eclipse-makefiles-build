@@ -21,7 +21,7 @@
    <choiceOption 
       name="llwu_filt_filte_t"  hidden="true"
       description="Digital Filter On External Pin"  
-      toolTip="Controls the digital filter options for the external pin detect.">
+      toolTip="Controls the digital filter options for the external pin detect">
       <choice name="Filter disabled" value="LlwuFilterPinMode_Disabled" isDefault="true" />
       <choice name="Filter rising"   value="LlwuFilterPinMode_RisingEdge" />
       <choice name="Filter falling"  value="LlwuFilterPinMode_FallingEdge" />

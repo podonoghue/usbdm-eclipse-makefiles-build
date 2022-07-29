@@ -68,11 +68,11 @@
       <aliasOption key="/SIM/sim_sopt2_rtcclkoutsel" constant="false"/>
       <aliasOption key="/SIM/rtc_clkout" />
       
-      <aliasOption key="/SIM/sim_sopt2_pllfllsel." constant="false" />
-      <aliasOption key="/SIM/system_peripheral_clock." optional="true" />
+      <aliasOption key="/SIM/sim_sopt2_pllfllsel[]" constant="false" />
+      <aliasOption key="/SIM/system_peripheral_clock[]" optional="true" />
 
-      <aliasOption key="/SIM/sim_sopt2_usbsrc." constant="false" />
-      <aliasOption key="/SIM/system_usbfs_clock." />
+      <aliasOption key="/SIM/sim_sopt2_usbsrc[]" constant="false" />
+      <aliasOption key="/SIM/system_usbfs_clock[]" />
 
       <aliasOption key="/OSC0/oscer_clock" optional="true" />
       <aliasOption key="/MCG/system_mcgirclk_clock[0]" optional="true" />
@@ -120,7 +120,7 @@
       <choiceOption name="sim_sopt2_clkoutsel" 
          enumStem="SimClkoutSel"
          description="CLKOUT pin clock"
-         toolTip="Clock to output on the CLKOUT pin." >
+         toolTip="Clock to output on the CLKOUT pin" >
          <choice value="0"  name="FlexBus CLKOUT"      enum="FlexBusClk"    />
          <choice value="2"  name="Flash clock"         enum="FlashClk" isDefault="true" />
          <choice value="3"  name="LPO clock (1 kHz)"   enum="LpoClk"       />
@@ -176,7 +176,7 @@
          <binaryOption name="sim_sopt4_ftm%(p)clksel" 
             enumStem="SimFtm%(p)ClkSel"
             description="FTM%(p) External Clock Pin"
-            toolTip="External pin used to drive the clock to the FTM module.">
+            toolTip="External pin used to drive the clock to the FTM module">
             <choice value="0"  name="FTM_CLKIN0 pin" enum="0" isDefault="true" />
             <choice value="1"  name="FTM_CLKIN1 pin" enum="1" />
          </binaryOption>

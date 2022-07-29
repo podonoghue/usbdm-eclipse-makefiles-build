@@ -4,21 +4,19 @@
 
 <peripheralPage xmlns:xi="http://www.w3.org/2001/XInclude" name="_instance" description="Multipurpose Clock Generator">
 
-   <indexedCategory name="DummyClockConfig."  dim="/SIM/numberOfClockSettings"
-         description="Clock configuration" 
-         hidden="true"
-         constant="true"
-         derived="true"         
-         toolTip="Clock configurations for different run modes"
-         value="ClockConfig_."  >
+   <for keys="n" dim="/SIM/numberOfClockSettings">
+      <category name=""
+            hidden="true"
+            constant="true"
+            derived="true" >
 
-      <choiceOption name="mcg_c7_oscsel." 
+      <choiceOption name="mcg_c7_oscsel[%(n)]" 
          description="MCG External Reference Clock source [OSCSEL]"
          toolTip="Selects the MCG FLL/PLL external reference clock source">
          <choice value="0" name="dummy" />
       </choiceOption>
 
-      <binaryOption name="mcg_c8_cme1." 
+      <binaryOption name="mcg_c8_cme1[%(n)]" 
          description="OSC1 (RTC) Clock Monitor Enable"
          toolTip="Determines if the clock monitor is enabled for the RTC external clock.\n
                   CME1 bit must be set to a logic 0 before the MCG enters any Stop mode">
@@ -26,14 +24,16 @@
          <choice value="1" name="Clock monitor enabled" />
       </binaryOption>
       
-      <binaryOption name="mcg_c8_locre1." 
+      <binaryOption name="mcg_c8_locre1[%(n)]" 
          description="OSC1 (RTC) Loss of Clock Reset Enable"
          toolTip="Determines if a interrupt or a reset request is made following a loss of RTC external reference clock.\n 
-                  Only has an affect when CME1 is set." >
+                  Only has an affect when CME1 is set" >
          <choice value="0" name="Interrupt request" />
          <choice value="1" name="Reset request" />
       </binaryOption>
-   </indexedCategory>
+      </category>
+   </for>
+
    
    <!-- mcg_c2_erefs0 always 0 -->
 

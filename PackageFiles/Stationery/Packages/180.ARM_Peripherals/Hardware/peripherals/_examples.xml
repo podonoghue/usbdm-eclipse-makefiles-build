@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE peripheralPage SYSTEM "_menu.dtd" >
+<!DOCTYPE fragment SYSTEM "_menu.dtd" >
 <!-- examples.xml -->
 
 <!--
@@ -18,24 +18,64 @@ Symbols
    
    <aliasOption key="system_mcgir_clock" />
 
-   <choiceOption name="XXXX" 
+   <choiceOption key="KKKKK" 
+      target="TTTTT"
+      enumStem="SSSS" 
       description="YYYYY"
       toolTip="ZZZZZZZ">
-      <choice value="0" name="Reserved" />
-      <choice value="1" name="Reserved" />
-      <choice value="2" name="Reserved" />
-      <choice value="3" name="Reserved" />
+      <choice value="0" name="Reserved" enum="yyyy" code="cccc" ref = "zzzz" />
+      <choice value="1" name="Reserved" enum="yyyy" code="cccc" ref = "zzzz" />
+      <choice value="2" name="Reserved" enum="yyyy" code="cccc" ref = "zzzz" />
+      <choice value="3" name="Reserved" enum="yyyy" code="cccc" ref = "zzzz" />
    </choiceOption>
 
+      <enumTemplate namespace="usbdm" condition="KKKKK" 
+      ><![CDATA[    
+         \t/**
+         \t * %description
+         \t *
+         \t * %tooltip
+         \t */
+         \tenum %enumClass {
+         %body
+         \t};\n\n
+      ]]></enumTemplate>
+         
+      <clockCodeTemplate condition="KKKKK"
+         returnFormat="%s"
+      ><![CDATA[
+         \t/**
+         \t * Set %description
+         \t *
+         \t * @param %enumParam %tooltip
+         \t */
+         \tstatic void setLpuart%(n)Clock(%enumClass %enumParam) {
+         \t   %defaultClockExpression
+         \t}
+
+         \t/**
+         \t * Get %description
+         \t *
+         \t * @return Clock frequency in Hz
+         \t */
+         \tstatic uint32_t getLpuart%(n)Clock() {
+         \t   
+         \t   switch(%defaultMaskingExpression) {
+         \t      default: return 0;
+         %body
+         \t   }
+         \t}\n\n
+      ]]></clockCodeTemplate>
+
    <!-- Note: second entry gets the tick irrespective of true/false value -->
-   <binaryOption name="XXXXX" 
+   <binaryOption key="XXXXX" 
       description="YYYYY"
       toolTip="TTTTTTTTTTTT">
       <choice value="0" name="Reserved" />
       <choice value="1" name="Reserved" />
    </binaryOption>
 
-   <intOption name="xxxx" 
+   <intOption key="xxxx" 
       description="yyyyyy" 
       toolTip="yyyyyyy"
       value="4000000" 
@@ -43,7 +83,7 @@ Symbols
       
    </category>
    
-   <bitmaskOption name="XXX" 
+   <bitmaskOption key="XXX" 
       description="YYYYYY" 
       toolTip="ZZZZZZZZZZZZZZZZ"
       value="0"

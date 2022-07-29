@@ -51,10 +51,10 @@
            
  -->
  
-   <binaryOption name="mapPinsOnEnable" 
+   <binaryOption key="mapPinsOnEnable" 
       description="Map pins when peripheral is configured"
       toolTip="Map all allocated pins on a peripheral when the\n
-               peripheral is enabled by configure() method etc.">
+               peripheral is enabled by configure() method etc">
       <choice value="false" name="Don't map"  />
       <choice value="true"  name="Map when configured"  isDefault="true"/>
    </binaryOption>

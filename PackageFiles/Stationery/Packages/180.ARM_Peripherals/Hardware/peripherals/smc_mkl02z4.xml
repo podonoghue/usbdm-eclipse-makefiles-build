@@ -39,7 +39,7 @@
 
    <binaryOption name="smc_stopctrl_porpo" 
       description="POR Power Option" 
-      toolTip="This bit controls whether the POR detect circuit is enabled in VLLS0 mode." >
+      toolTip="This bit controls whether the POR detect circuit is enabled in VLLS0 mode" >
       <choice name="POR detect circuit is enabled in VLLS0"  value="0" isDefault="true" />
       <choice name="POR detect circuit is disabled in VLLS0" value="1" />
    </binaryOption>   

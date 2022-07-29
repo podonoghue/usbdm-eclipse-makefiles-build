@@ -220,7 +220,7 @@ In Host mode this field is set when the SOF threshold is reached, so that softwa
                   <field derivedFrom="USBRST" > <name>TOKDNE</name> <description>Token Done\n
 This bit is set when the current token being processed has completed.\n
 The processor should immediately read the STAT register to determine the EndPoint and BD used for this token.\n
-Clearing this bit (by writing a one) causes the STAT register to be cleared or the STAT holding register to be loaded into the STAT register</description> <bitOffset>3</bitOffset> </field>
+Clearing this bit (by writing a one) causes the STAT register to be cleared or the STAT holding register to be loaded into the STAT Register</description> <bitOffset>3</bitOffset> </field>
                   <field derivedFrom="USBRST" > <name>SLEEP</name> <description>Sleep timer\n
 This bit is set when the USB Module detects a constant idle on the USB bus for 3 ms.\n
 The sleep timer is reset by activity on the USB bus</description> <bitOffset>4</bitOffset> </field>

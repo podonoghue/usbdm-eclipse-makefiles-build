@@ -11,7 +11,7 @@ Devices using this peripheral:
    <xi:include href="_mapPinsOption.xml"/>  
 
    <aliasOption key="/SIM/system_bus_clock"     displayName="PDB input clock" constant="true" optional="true"/>
-   <aliasOption key="/SCG/run_mode_core_clock." displayName="PDB input clock" constant="true" optional="true"/>
+   <aliasOption key="/SCG/run_mode_core_clock[]" displayName="PDB input clock" constant="true" optional="true"/>
 
    <choiceOption name="pdb_sc_prescaler" 
       description="Clock Prescaler Divider Select"
@@ -74,7 +74,7 @@ Devices using this peripheral:
 
    <binaryOption name="pdb_sc_dmaen" 
       description="DMA Enable"
-      toolTip="When DMA is enabled, the PDBIF flag generates a DMA request instead of an interrupt.">
+      toolTip="When DMA is enabled, the PDBIF flag generates a DMA request instead of an interrupt">
       <choice value="0" name="DMA disabled" />
       <choice value="1" name="DMA enabled" />
    </binaryOption>
@@ -89,7 +89,7 @@ Devices using this peripheral:
    <binaryOption name="pdb_sc_pdbie" 
       description="Interrupt Enable"
       toolTip="This bit enables the interrupt.\n
-         When this bit is set and DMAEN is cleared, PDBIF generates a interrupt." >
+         When this bit is set and DMAEN is cleared, PDBIF generates a interrupt" >
       <choice value="0" name="Interrupt disabled" />
       <choice value="1" name="Interrupt enabled" />
    </binaryOption>
@@ -97,7 +97,7 @@ Devices using this peripheral:
    <binaryOption name="pdb_sc_pdbeie" 
       description="Sequence Error Interrupt Enable"
       toolTip="This bit enables the sequence error interrupt\n
-         When this bit is set, any of the channel sequence error flags generates a sequence error interrupt." >
+         When this bit is set, any of the channel sequence error flags generates a sequence error interrupt" >
       <choice value="0" name="Interrupt disabled" />
       <choice value="1" name="Interrupt enabled" />
    </binaryOption>
@@ -145,7 +145,7 @@ Devices using this peripheral:
    <intOption name="pdb_idly" 
       description="Interrupt Delay" 
       toolTip="Specifies the delay value to schedule the PDB interrupt.\n
-         It can be used to schedule an independent interrupt at some point in the PDB cycle."
+         It can be used to schedule an independent interrupt at some point in the PDB cycle"
       value="0" min="0" max="65535" />
 
    <floatOption name="pdb_idly_delay" 
@@ -178,7 +178,7 @@ Devices using this peripheral:
    
    <intOption name="pdb_ch0_dly0" 
       description="Channel 0 Delay 0 - ADC0.SC1[0]" 
-      toolTip="Specifies the delay value for the channel's corresponding pre-trigger."
+      toolTip="Specifies the delay value for the channel's corresponding pre-trigger"
       value="0" min="0" max="65535" />
 
    <floatOption name="pdb_ch0_dly0_delay" 
@@ -188,7 +188,7 @@ Devices using this peripheral:
 
    <intOption name="pdb_ch0_dly1" 
       description="Channel 0 Delay 1 - ADC1.SC1[1]" 
-      toolTip="Specifies the delay value for the channel's corresponding pre-trigger."
+      toolTip="Specifies the delay value for the channel's corresponding pre-trigger"
       value="0" min="0" max="65535" />
    
    <floatOption name="pdb_ch0_dly1_delay" 
@@ -202,7 +202,7 @@ Devices using this peripheral:
          Back-to-back operation enables the ADC conversions complete to trigger the next PDB channel\n
          pre-trigger and trigger output, so that the ADC conversions can be triggered on next set\n
          of configuration and results registers. Application code must only enable the back-to-back\n
-         operation of the pre-triggers at the leading of the back-to-back connection chain."
+         operation of the pre-triggers at the leading of the back-to-back connection chain"
       value="0"
       bitmask="0x3" 
       bitList="ADC1SC1B_COCO,ADC0SC1A_COCO" />
@@ -228,7 +228,7 @@ Devices using this peripheral:
    
    <intOption name="pdb_ch1_dly0" 
       description="Channel 1 Delay 0 - ADC1.SC1[0]" 
-      toolTip="Specifies the delay value for the channel's corresponding pre-trigger."
+      toolTip="Specifies the delay value for the channel's corresponding pre-trigger"
       value="0" min="0" max="65535" />
 
    <floatOption name="pdb_ch1_dly0_delay" 
@@ -238,7 +238,7 @@ Devices using this peripheral:
 
    <intOption name="pdb_ch1_dly1" 
       description="Channel 1 Delay 1 - ADC1.SC1[1]" 
-      toolTip="Specifies the delay value for the channel's corresponding pre-trigger."
+      toolTip="Specifies the delay value for the channel's corresponding pre-trigger"
       value="0" min="0" max="65535" />
    
    <floatOption name="pdb_ch1_dly1_delay" 
@@ -252,7 +252,7 @@ Devices using this peripheral:
          Back-to-back operation enables the ADC conversions complete to trigger the next PDB channel\n
          pre-trigger and trigger output, so that the ADC conversions can be triggered on next set\n
          of configuration and results registers. Application code must only enable the back-to-back\n
-         operation of the pre-triggers at the leading of the back-to-back connection chain."
+         operation of the pre-triggers at the leading of the back-to-back connection chain"
       value="0"
       bitmask="0x3" 
       bitList="ADC0SC1B_COCO,ADC1SC1A_COCO" />
@@ -290,14 +290,14 @@ Devices using this peripheral:
    <category name="Dac0 Interval Trigger" description="">
       <binaryOption name="pdb_int0c_toe" 
          description="DAC Interval Trigger Enable"
-         toolTip="This bit enables the DAC interval trigger.">
+         toolTip="This bit enables the DAC interval trigger">
          <choice value="0" name="Trigger disabled" />
          <choice value="1" name="Trigger enabled" />
       </binaryOption>
 
       <binaryOption name="pdb_int0c_ext" 
          description="DAC External Trigger Input Enable"
-         toolTip="Enables the external trigger for DAC interval counter.">
+         toolTip="Enables the external trigger for DAC interval counter">
          <choice value="0" name="Input disabled" />
          <choice value="1" name="Input enabled" />
       </binaryOption>
@@ -305,7 +305,7 @@ Devices using this peripheral:
       <intOption name="pdb_int0_int" 
          description="DAC Interval" 
          toolTip="Specifies the interval value for DAC interval trigger.\n
-                  DAC interval trigger triggers DAC update when the DAC interval counter is equal to the DACINT."
+                  DAC interval trigger triggers DAC update when the DAC interval counter is equal to the DACINT"
          value="0" min="0" max="65535" />
          
       <floatOption name="pdb_int0_int_delay" 
@@ -317,14 +317,14 @@ Devices using this peripheral:
    <category name="Dac1 Interval Trigger" description="">
       <binaryOption name="pdb_int1c_toe" 
          description="DAC Interval Trigger Enable"
-         toolTip="This bit enables the DAC interval trigger..">
+         toolTip="This bit enables the DAC interval trigger">
          <choice value="0" name="Trigger disabled" />
          <choice value="1" name="Trigger enabled" />
       </binaryOption>
 
       <binaryOption name="pdb_int1c_ext" 
          description="DAC External Trigger Input Enable"
-         toolTip="Enables the external trigger for DAC interval counter.">
+         toolTip="Enables the external trigger for DAC interval counter">
          <choice value="0" name="Input disabled" />
          <choice value="1" name="Input enabled" />
       </binaryOption>
@@ -332,7 +332,7 @@ Devices using this peripheral:
       <intOption name="pdb_int1_int" 
          description="DAC Interval" 
          toolTip="Specifies the interval value for DAC interval trigger.\n
-                  DAC interval trigger triggers DAC update when the DAC interval counter is equal to the DACINT."
+                  DAC interval trigger triggers DAC update when the DAC interval counter is equal to the DACINT"
          value="0" min="0" max="65535" />
          
       <floatOption name="pdb_int1_int_delay" 

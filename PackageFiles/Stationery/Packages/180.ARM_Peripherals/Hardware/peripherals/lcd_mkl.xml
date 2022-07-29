@@ -39,7 +39,7 @@
    
    <binaryOption name="lcd_gcr_rven" 
       description="Regulated Voltage Enable"
-      toolTip="Enables internal voltage regulator. It must have the charge pump enabled.">
+      toolTip="Enables internal voltage regulator. It must have the charge pump enabled">
       <choice value="0" name="Disabled" />
       <choice value="1" name="Enabled" />
    </binaryOption>
@@ -48,7 +48,7 @@
       description="Regulated Voltage Trim"
       toolTip="Trims the regulated input voltage.\n
          Each bit in the register has equal weight.\n
-         The regulated input is changed by 1.5% for each count.">
+         The regulated input is changed by 1.5% for each count">
       <choice value="0b0000"  name="0.91" />
       <choice value="0b1000"  name="0.92" />
       <choice value="0b0100"  name="0.93" />
@@ -94,7 +94,7 @@
 
    <binaryOption name="lcd_gcr_ffr" 
       description="Fast Frame Rate Select"
-      toolTip="Increases the Frame Clock Frequency." >
+      toolTip="Increases the Frame Clock Frequency" >
       <choice value="0" name="Standard Frame Rate LCD Frame Freq: 23.3 Hz(min) 73.1 Hz(max)" />
       <choice value="1" name="Fast Frame Rate (Rate x2) LCD Frame Freq: 46.6 Hz(min) 146.2 Hz(max)" />
    </binaryOption>

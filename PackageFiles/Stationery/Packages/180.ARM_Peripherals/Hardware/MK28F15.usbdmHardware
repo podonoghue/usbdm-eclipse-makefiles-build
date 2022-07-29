@@ -414,19 +414,20 @@
          <clock clockEnable="SIM->SCGC6 = SIM->SCGC6 | SIM_SCGC6_USBDCD_MASK;" clockDisable="SIM->SCGC6 = SIM->SCGC6 &amp; ~SIM_SCGC6_USBDCD_MASK;" />
          <irq num="USBDCD0_IRQn" />
       </peripheral>
-      <peripheral baseName="USBHS"    instance="0"        version="usbhs0_8endpt">
+      <peripheral baseName="USBDCD"   instance="1"        version="usbdcd0_v1_2_mk28f15">
+         <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForUsbdcd" />
+         <clock clockEnable="SIM->SCGC3 = SIM->SCGC3 | SIM_SCGC3_USBHSDCD_MASK;" clockDisable="SIM->SCGC3 = SIM->SCGC3 &amp; ~SIM_SCGC3_USBHSDCD_MASK;" />
+         <irq num="USBPHY_USBDCD1_IRQn" />
+      </peripheral>
+      <peripheral baseName="USBHS"    instance="1"        version="usbhs1_8endpt">
          <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForUsbhs" />
          <clock clockEnable="SIM->SCGC3 = SIM->SCGC3 | SIM_SCGC3_USBHS_MASK;" clockDisable="SIM->SCGC3 = SIM->SCGC3 &amp; ~SIM_SCGC3_USBHS_MASK;" />
-         <irq num="USBHS0_IRQn" />
+         <irq num="USB1_IRQn" />
       </peripheral>
-      <peripheral baseName="USBHSDCD" instance="0"        version="usbdcd0_v1_2_mk28f15">
-         <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForUsbhsdcd" />
-         <clock clockEnable="SIM->SCGC3 = SIM->SCGC3 | SIM_SCGC3_USBHSDCD_MASK;" clockDisable="SIM->SCGC3 = SIM->SCGC3 &amp; ~SIM_SCGC3_USBHSDCD_MASK;" />
-         <irq num="USBHSDCD0_IRQn" />
-      </peripheral>
-      <peripheral baseName="USBHSPHY" instance="0">
-         <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForToDo" />
+      <peripheral baseName="USBPHY"   instance="1"        version="usbphy1_mk28f15">
+         <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForUsbPhy" />
          <clock clockEnable="SIM->SCGC3 = SIM->SCGC3 | SIM_SCGC3_USBHSPHY_MASK;" clockDisable="SIM->SCGC3 = SIM->SCGC3 &amp; ~SIM_SCGC3_USBHSPHY_MASK;" />
+         <irq num="USBPHY_USBDCD1_IRQn" />
       </peripheral>
       <peripheral baseName="VREF"     instance=""         version="vref_c">
          <handler class="net.sourceforge.usbdm.deviceEditor.peripherals.WriterForVref" />
@@ -529,20 +530,20 @@
          <mux sel="fixed"         signal="USB0_DP" />
          <reset sel="fixed" />
       </pin>
-      <pin name="USB1_DM"      isFixed="true">
-         <mux sel="fixed"         signal="USB1_DM" />
+      <pin name="USBHS1_DM"    isFixed="true">
+         <mux sel="fixed"         signal="USBHS1_DM" />
          <reset sel="fixed" />
       </pin>
-      <pin name="USB1_DP"      isFixed="true">
-         <mux sel="fixed"         signal="USB1_DP" />
+      <pin name="USBHS1_DP"    isFixed="true">
+         <mux sel="fixed"         signal="USBHS1_DP" />
          <reset sel="fixed" />
       </pin>
-      <pin name="USB1_VBUS"    isFixed="true">
-         <mux sel="fixed"         signal="USB1_VBUS" />
+      <pin name="USBHS1_VBUS"  isFixed="true">
+         <mux sel="fixed"         signal="USBHS1_VBUS" />
          <reset sel="fixed" />
       </pin>
-      <pin name="USB1_VSS"     isFixed="true">
-         <mux sel="fixed"         signal="USB1_VSS" />
+      <pin name="USBHS1_VSS"   isFixed="true">
+         <mux sel="fixed"         signal="USBHS1_VSS" />
          <reset sel="fixed" />
       </pin>
       <pin name="VBAT"         isFixed="true">
@@ -948,7 +949,7 @@
          <mux sel="mux5"          signal="FXIO0_D17" />
          <mux sel="mux6"          signal="FTM2_QD_PHB" />
          <mux sel="mux6"          signal="TPM2_CH1" />
-         <mux sel="mux7"          signal="USB1_ID" />
+         <mux sel="mux7"          signal="USBHS1_ID" />
          <reset sel="unassigned" />
       </pin>
       <pin name="PTA12">
@@ -2124,10 +2125,10 @@
          <placement pin="TEMP_SENSOR"   location="Internal" />
          <placement pin="USB0_DM"       location="F1" />
          <placement pin="USB0_DP"       location="G1" />
-         <placement pin="USB1_DM"       location="H1" />
-         <placement pin="USB1_DP"       location="J1" />
-         <placement pin="USB1_VBUS"     location="J2" />
-         <placement pin="USB1_VSS"      location="K1" />
+         <placement pin="USBHS1_DM"     location="H1" />
+         <placement pin="USBHS1_DP"     location="J1" />
+         <placement pin="USBHS1_VBUS"   location="J2" />
+         <placement pin="USBHS1_VSS"    location="K1" />
          <placement pin="VBAT"          location="M6" />
          <placement pin="VDD10"         location="N12" />
          <placement pin="VDD2"          location="H6" />
@@ -2286,10 +2287,10 @@
          <placement pin="TEMP_SENSOR"   location="Internal" />
          <placement pin="USB0_DM"       location="USB0_DM" />
          <placement pin="USB0_DP"       location="USB0_DP" />
-         <placement pin="USB1_DM"       location="USB1_DM" />
-         <placement pin="USB1_DP"       location="USB1_DP" />
-         <placement pin="USB1_VBUS"     location="USB1_VBUS" />
-         <placement pin="USB1_VSS"      location="VSS" />
+         <placement pin="USBHS1_DM"     location="USBHS1_DM" />
+         <placement pin="USBHS1_DP"     location="USBHS1_DP" />
+         <placement pin="USBHS1_VBUS"   location="USBHS1_VBUS" />
+         <placement pin="USBHS1_VSS"    location="VSS" />
          <placement pin="VDD10"         location="VDD" />
          <placement pin="VDD2"          location="VDD" />
          <placement pin="VDD7"          location="VDD" />
@@ -2447,10 +2448,10 @@
          <placement pin="TEMP_SENSOR"   location="Internal" />
          <placement pin="USB0_DM"       location="K15" />
          <placement pin="USB0_DP"       location="J15" />
-         <placement pin="USB1_DM"       location="N15" />
-         <placement pin="USB1_DP"       location="M15" />
-         <placement pin="USB1_VBUS"     location="M14" />
-         <placement pin="USB1_VSS"      location="L15" />
+         <placement pin="USBHS1_DM"     location="N15" />
+         <placement pin="USBHS1_DP"     location="M15" />
+         <placement pin="USBHS1_VBUS"   location="M14" />
+         <placement pin="USBHS1_VSS"    location="L15" />
          <placement pin="VBAT"          location="N10" />
          <placement pin="VDD"           location="C9" />
          <placement pin="VDD1"          location="D9" />

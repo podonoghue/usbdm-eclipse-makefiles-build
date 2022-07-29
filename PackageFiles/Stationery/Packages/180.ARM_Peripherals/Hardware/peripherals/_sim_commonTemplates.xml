@@ -4,6 +4,12 @@
 
 <fragment xmlns:xi="http://www.w3.org/2001/XInclude">
 
+   <template><![CDATA[
+      \t/*
+      \t * Template:sim_commonTemplates.xml
+      \t */ \n
+   ]]></template>
+
 <!-- ========== External clock sources =============================== -->
    <template condition="system_usb_clkin_clock" ><![CDATA[
    \t//!  %description
@@ -76,8 +82,6 @@
    ]]></template>
 
    <template condition="sim_sopt1_ramsize"><![CDATA[
-      \t// Template:sim_common_templates.xml
-      \t
       \t/**
       \t * Get RAM size
       \t *
@@ -90,7 +94,7 @@
    ]]></template>
 
    <enumTemplate namespace="usbdm" condition="sim_sopt1_osc32ksel" 
-      enumRoot="SimOsc32kSel"
+      enumStem="SimOsc32kSel"
    ><![CDATA[    
       \t/**
       \t * %description
@@ -103,7 +107,7 @@
    ]]></enumTemplate>
          
    <clockCodeTemplate condition="sim_sopt1_osc32ksel"
-      enumRoot="SimOsc32kSel"
+      enumStem="SimOsc32kSel"
       returnFormat="%s"
    ><![CDATA[
       \t/**
@@ -207,7 +211,7 @@
 <!-- ========== SOPT2 =============================== -->
 
    <enumTemplate namespace="usbdm" condition="sim_sopt2_ptd7pad" 
-      enumRoot="simPortDPad"
+      enumStem="simPortDPad"
    ><![CDATA[    
       \t/**
       \t * %description
@@ -220,7 +224,7 @@
    ]]></enumTemplate>
          
    <clockCodeTemplate condition="sim_sopt2_ptd7pad"
-      enumRoot="simPortDPad"
+      enumStem="simPortDPad"
    ><![CDATA[
       \t/**
       \t * Set %description
@@ -274,7 +278,6 @@
 
    <for keys="n" values=";0;1;2;3">
       <enumTemplate namespace="usbdm" condition="sim_sopt2_uart%(n)src" 
-         enumRoot="SimUart%(n)ClockSource"
       ><![CDATA[    
          \t/**
          \t * %description
@@ -287,7 +290,7 @@
       ]]></enumTemplate>
          
       <clockCodeTemplate condition="sim_sopt2_uart%(n)src"
-         enumRoot="SimUart%(n)ClockSource"
+         enumStem="SimUart%(n)ClockSource"
          returnFormat="%s"
       ><![CDATA[
          \t/**
@@ -390,7 +393,7 @@
    ]]></clockCodeTemplate>
    
    <enumTemplate namespace="usbdm" condition="sim_sopt2_rtcclkoutsel" 
-      enumRoot="RtcClkoutSel"
+      enumStem="RtcClkoutSel"
    ><![CDATA[    
       \t/**
       \t * %description
@@ -403,7 +406,7 @@
    ]]></enumTemplate>
          
    <clockCodeTemplate condition="sim_sopt2_rtcclkoutsel"
-      enumRoot="RtcClkoutSel"
+      enumStem="RtcClkoutSel"
    ><![CDATA[
       \t/**
       \t * Set %description
@@ -629,7 +632,7 @@
    ]]></clockCodeTemplate>
    
    <clockCodeTemplate condition="sim_sopt2_timesrc"
-      enumRoot="SimTimestampClockSource"
+      enumStem="SimTimestampClockSource"
       returnFormat="%s"
    ><![CDATA[
       \t/**
@@ -674,7 +677,7 @@
       \t *
       \t * @param %enumParam %tooltip
       \t */
-      \tstatic void setUsbPhyRegulator(%enumClass %enumParam) {
+      \tstatic void enableUsbPhyRegulator(%enumClass %enumParam) {
       \t   %defaultClockExpression;
       \t}\n\n
    ]]></clockCodeTemplate>
@@ -917,7 +920,6 @@
 
    <for keys="n" values="0;1;2;3;4;5">
       <enumTemplate namespace="usbdm" condition="sim_sopt5_lpuart%(n)ode" 
-         enumRoot="SimLpuart%(n)Drive"
       ><![CDATA[    
          \t/**
          \t * %description
@@ -930,7 +932,6 @@
       ]]></enumTemplate>
 
       <clockCodeTemplate condition="sim_sopt5_lpuart%(n)ode"
-         enumRoot="SimLpuart%(n)Drive"
       ><![CDATA[
          \t/**
          \t * Set %description
@@ -1333,7 +1334,7 @@
       \tstatic uint32_t getUsbFullSpeedClock() {
       \t   switch ((sim->SOPT2&SIM_SOPT2_USBSRC_MASK)) {
       \t      default:
-      \t      case SimUsbFullSpeedClockSource_$(sim_sopt2_usbsrc[].enum[0])      : return usbExternalClock;\n
+      \t      case SimUsbFullSpeedClockSource_$(sim_sopt2_usbsrc[].enum[0]) : return usbExternalClock;\n
    ]]></template>
    <template condition="sim_clkdiv2_usb[]" ><![CDATA[
       \t      case SimUsbFullSpeedClockSource_$(sim_sopt2_usbsrc[].enum[1]) :
@@ -1342,7 +1343,7 @@
       \t            (((sim->CLKDIV2&SIM_CLKDIV2_USBDIV_MASK)>>SIM_CLKDIV2_USBDIV_SHIFT)+1);\n
    ]]></template>
    <template condition="!sim_clkdiv2_usb[]&amp;&amp;sim_sopt2_usbsrc" ><![CDATA[
-      \t      case SimUsbFullSpeedClockSource_$(sim_sopt2_usbsrc[].enum[1]) : return getPeripheralClock();
+      \t      case SimUsbFullSpeedClockSource_$(sim_sopt2_usbsrc[].enum[1]) : return getPeripheralClock();\n
    ]]></template>
    <template condition="sim_sopt2_usbsrc" ><![CDATA[
       \t   }
@@ -1375,7 +1376,7 @@
 
 <!-- ========== CLKDIV3 =============================== -->
    <enumTemplate namespace="usbdm" condition="sim_clkdiv3_pllfll" 
-      enumRoot="SimPeripheralClockDivider"
+      enumStem="SimPeripheralClockDivider"
       valueFormat="(%s)"
    ><![CDATA[    
       \t/**
@@ -1389,7 +1390,7 @@
    ]]></enumTemplate>
          
    <clockCodeTemplate condition="sim_clkdiv3_pllfll"
-      enumRoot="SimPeripheralClockDivider"
+      enumStem="SimPeripheralClockDivider"
    ><![CDATA[
       \t/**
       \t * Set %description

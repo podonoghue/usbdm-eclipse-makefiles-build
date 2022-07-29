@@ -4,7 +4,7 @@
 
 <peripheralPage xmlns:xi="http://www.w3.org/2001/XInclude" name="_instance" description="Comparitor">
  
-   <template name="/CMP0/InternalInputMapping" namespace="all"><![CDATA[
+   <template key="/CMP0/InternalInputMapping" namespace="all"><![CDATA[
    \t// cmp0_mk22f.xml
    \tCmp0Input_Dac1       = Cmp0Input_4, //!< 12-bit DAC1 Output
    \tCmp0Input_VRefOut    = Cmp0Input_5, //!< Vref Output
@@ -12,7 +12,7 @@
    \tCmp0Input_Cmp0Dac    = Cmp0Input_7, //!< CMP0 6-bit internal DAC reference
    ]]></template>
    
-   <template name="/CMP1/InternalInputMapping" namespace="all"><![CDATA[
+   <template key="/CMP1/InternalInputMapping" namespace="all"><![CDATA[
    \t// cmp0_mk22f.xml
    \tCmp1Input_Dac0       = Cmp1Input_3, //!< 12-bit DAC0 Output
    \tCmp1Input_VRefOut    = Cmp1Input_5, //!< Vref Output
@@ -22,7 +22,7 @@
  
    <xi:include href="cmp_base.xml"/>
  
-   <choiceOption name="cmp_muxcr_psel" 
+   <choiceOption key="cmp_muxcr_psel" 
       description="Plus Input Mux Control"
       toolTip="Determines which input is selected for the plus input of the comparator" >
       <choice value="0" name="CMP_IN0" />
@@ -35,7 +35,7 @@
       <choice value="7" name="6-bit DAC" />
    </choiceOption>
 
-   <choiceOption name="cmp_muxcr_msel" 
+   <choiceOption key="cmp_muxcr_msel" 
       description="Minus Input Mux Control"
       toolTip="Determines which input is selected for the minus input of the comparator" >
       <choice value="0" name="CMP_IN0" />

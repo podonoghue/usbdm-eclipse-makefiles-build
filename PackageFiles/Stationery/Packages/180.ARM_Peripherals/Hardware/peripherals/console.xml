@@ -4,7 +4,7 @@
 
 <peripheralPage xmlns:xi="http://www.w3.org/2001/XInclude" name="_instance" description="Console routines">
 
-   <binaryOption name="consoleEnable" 
+   <binaryOption key="consoleEnable" 
       description="Enable Console I/O"
       toolTip="Provides basic console I/O for the project\n
       This is also required for stdio support">
@@ -12,7 +12,7 @@
       <choice value="1" name="Enabled" isDefault="true" />
    </binaryOption>
 
-   <choiceOption name="consoleDevice" 
+   <choiceOption key="consoleDevice" 
       description="UART to use for console"
       toolTip="Not all UARTs listed may be available on a particular device" >
       <choice name="Uart 0"   value="USBDM::Uart0"    requiresPeripheral="Uart0" />
@@ -29,7 +29,7 @@
       <choice name="Lpuart 5" value="USBDM::Lpuart5"  requiresPeripheral="Lpuart5" />
    </choiceOption>
    
-   <choiceOption name="defaultBaudRate" 
+   <choiceOption key="defaultBaudRate" 
       description="UART default baud rate"
       toolTip="Used by default UART setup for stdio">
       <choice value="110"     name="110" />

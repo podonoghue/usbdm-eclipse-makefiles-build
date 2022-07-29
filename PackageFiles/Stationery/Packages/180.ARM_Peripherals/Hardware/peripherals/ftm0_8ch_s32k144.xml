@@ -82,12 +82,12 @@
    <binaryOption name="ftm_sc_cpwms" 
       description="Center-Aligned PWM Select"
       toolTip="Selects CPWM mode\n
-         This mode configures the FTM to operate in Up-Down Counting mode.">
+         This mode configures the FTM to operate in Up-Down Counting mode">
       <choice value="0" name="Left-aligned (count up)" />
       <choice value="1" name="Centre-aligned (count up-down)" />
    </binaryOption>
    <binaryOption name="ftm_sc_toie" description="Timer Overflow Interrupt Enable"
-      toolTip="Enables FTM overflow interrupts.">
+      toolTip="Enables FTM overflow interrupts">
       <choice value="0" name="Disabled" />
       <choice value="1" name="Enabled" />
    </binaryOption>
@@ -109,14 +109,14 @@
    <category name="External Triggers" description="External Triggers">
       <bitmaskOption name="ftm_exttrig_trig"   description="External Trigger Enable" 
          toolTip="Enables the generation of the trigger when the FTM counter \n
-          is equal to the channel CnV register."
+          is equal to the channel CnV register"
          value="0"
          bitmask="0x3F" 
          bitList="CH2TRIG,CH3TRIG,CH4TRIG,CH5TRIG,CH0TRIG,CH1TRIG," 
          />
       <binaryOption name="ftm_exttrig_inittrigen" description="Initialisation Trigger Enable"
          toolTip="Enables the generation of the trigger when the FTM counter \n
-          is equal to the CNTIN register.">
+          is equal to the CNTIN register">
          <choice value="0" name="Disabled" />
          <choice value="1" name="Enabled" />
       </binaryOption>

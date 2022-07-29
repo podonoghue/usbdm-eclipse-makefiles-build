@@ -81,20 +81,21 @@
 
    <aliasOption key="/SIM/numberOfClockSettings" />     
 
-   <indexedCategory name="ClockConfig."  dim="/SIM/numberOfClockSettings"
+   <for keys="n" dim="/SIM/numberOfClockSettings">
+      <categoryOption key="ClockConfig[%(n)]"
          description="Clock configuration" 
          toolTip="Clock configurations for different run modes"
-         value="ClockConfig_." 
-         disabledValue="Disabled"  >
+         value="ClockConfig_[%(n)]" 
+         disabledValue="Disabled" >
          
-         <binaryOption name="enableClockConfiguration."
+         <binaryOption name="enableClockConfiguration[%(n)]"
             description="Enable this clock settings"
             toolTip="If disabled this clock setting will be removed from the generated code" >
             <choice value="0" name="Disabled" />
             <choice value="1" name="Enabled"  isDefault="true" />
          </binaryOption>
 
-      <choiceOption name="clock_mode." 
+      <choiceOption name="clock_mode[%(n)]" 
          description="Clock Mode"
          toolTip="Clock Modes\n
             No setup     -  No setup done\n
@@ -108,35 +109,35 @@
          <choice name="External (EXT)"                   value="ClockMode_EXT" />
       </choiceOption>
   
-      <binaryOption name="mcg_mc_hircen." 
+      <binaryOption name="mcg_mc_hircen[%(n)]" 
          description="High-frequency IRC Clock Enable [MCGPCLK]"
-         toolTip="Enables the HIRC, even when MCG_Lite is not working at HIRC mode.">
+         toolTip="Enables the HIRC, even when MCG_Lite is not working at HIRC mode[%(n)]">
          <choice value="0" name="Enabled as required by MCG mode" />
          <choice value="1" name="Always enabled" />
       </binaryOption>
 
-      <binaryOption name="mcg_c2_ircs."
+      <binaryOption name="mcg_c2_ircs[%(n)]"
          description="Internal Reference [MCGIRCLK] Clock Source" 
          toolTip="Clock Source for MCGIRCLK" >
          <choice value="0" name="Slow internal reference clock" isDefault="true"/>
          <choice value="1" name="Fast internal reference clock" />
       </binaryOption>
 
-      <binaryOption name="mcg_c1_irclken."
+      <binaryOption name="mcg_c1_irclken[%(n)]"
          description="Internal Reference Clock Enable [MCGIRCLK]"
-         toolTip="Enables the LIRC, even when MCG_Lite is not working at LIRC modes.">
+         toolTip="Enables the LIRC, even when MCG_Lite is not working at LIRC modes[%(n)]">
          <choice value="0" name="Enabled as required by MCG mode" />
          <choice value="1" name="Always enabled" isDefault="true" />
       </binaryOption>
 
-      <binaryOption name="mcg_c1_irefsten."
+      <binaryOption name="mcg_c1_irefsten[%(n)]"
          description="Internal Reference Stop Enable [MCGIRCLK]" 
          toolTip="Determines if the LIRC is enabled in Stop mode">
          <choice value="0" name="IR disabled in STOP" />
          <choice value="1" name="IR enabled in STOP" />
       </binaryOption>
 
-      <choiceOption name="mcg_sc_fcrdiv."
+      <choiceOption name="mcg_sc_fcrdiv[%(n)]"
          description="Internal Clock Reference Divider[LIRC_DIV1]"
          toolTip="Selects the amount to divide down the selected internal reference clock\n
             The FIR clock is available for use as MCGOUTCLK and after further division as MCGIRCLK">
@@ -150,21 +151,21 @@
          <choice value="7" name="Divide by 128" />
       </choiceOption>
 
-      <intOption name="system_lirc_clock."  
+      <intOption name="system_lirc_clock[%(n)]"  
          constant="true" 
          units="Hz"
          description="Frequency of Low Speed Internal Reference [LIRC_CLK] "
          toolTip="Derived from system_slow_irc_clock or system_fast_irc_clock"
          value="2000000"/>
 
-      <intOption name="system_lirc_div1_clock." 
+      <intOption name="system_lirc_div1_clock[%(n)]" 
          constant="true" 
          units="Hz"
          description="Frequency of Low Speed Internal Reference [LIRC_DIV1_CLK] "
          toolTip="Derived from system_slow_irc_clock or system_fast_irc_clock/lirc_div1"
          value="2000000" />
 
-      <choiceOption name="mcg_mc_lirc_div2."
+      <choiceOption name="mcg_mc_lirc_div2[%(n)]"
          description="Second Low-frequency Internal Reference Clock Divider"
          toolTip="Selects the factor value to further divide the LIRC source">
          <choice value="0" name="Divide by 1" isDefault="true" />
@@ -177,7 +178,7 @@
          <choice value="7" name="Divide by 128" />
       </choiceOption>
 
-      <intOption name="system_mcgirclk_clock."  
+      <intOption name="system_mcgirclk_clock[%(n)]"  
          derived="true"
          constant="true"
          units="Hz"
@@ -185,7 +186,7 @@
          toolTip="Derived from Slow IRC or Fast IRC/lirc_div1/lirc_div2"
          value="2000000" />
 
-      <intOption name="system_mcgpclk_clock."
+      <intOption name="system_mcgpclk_clock[%(n)]"
          derived="true" 
          constant="true"
          units="Hz"
@@ -198,14 +199,14 @@
       <aliasOption key="/SIM/system_erclk32k_clock" constant="true" />
       <aliasOption key="/PMC/system_low_power_clock" constant="true" />
    
-      <stringOption name="system_mcgoutclk_clock_source."
+      <stringOption name="system_mcgoutclk_clock_source[%(n)]"
          derived="true" 
          constant="true"
          description="System MCG Output Clock source [MCGOUTCLK]" 
          toolTip="Source of MCG Output Clock\n
                   Determined by current clock mode" />
       
-      <intOption name="system_mcgoutclk_clock." 
+      <intOption name="system_mcgoutclk_clock[%(n)]" 
          derived="true" 
          constant="true"
          units="Hz"
@@ -213,12 +214,12 @@
          toolTip="MCG Main clock output\n
                   Derived from HIRC, LIRC-8M/2M, EXT" />
    
-      <aliasOption key="/SIM/system_core_clock."    constant="false" />
-      <aliasOption key="/SIM/system_bus_clock."     constant="false" />
+      <aliasOption key="/SIM/system_core_clock[%(n)]"    constant="false" />
+      <aliasOption key="/SIM/system_bus_clock[%(n)]"     constant="false" />
 
       <category name="Device Parameters" description="Register values">
          <category name="MCG_C1" description="MCG Control Register 1">
-            <choiceOption name="mcg_c1_clks."
+            <choiceOption name="mcg_c1_clks[%(n)]"
                derived="true"
                constant="true"
                description="MCGOUTCLK Clock Source Select"
@@ -229,27 +230,28 @@
                <choice value="2" name="External clock (OSCCLK)[EXT mode]" />
                <choice value="3" name="Reserved" />
             </choiceOption>
-            <aliasOption name="mcg_c1_irclken." />
-            <aliasOption name="mcg_c1_irefsten." />
+            <aliasOption name="mcg_c1_irclken[%(n)]" />
+            <aliasOption name="mcg_c1_irefsten[%(n)]" />
          </category>
          
          <category name="MCG_C2" description="MCG Control Register 2">
             <aliasOption key="mcg_c2_range" />
             <aliasOption key="mcg_c2_hgo0" />
             <aliasOption key="mcg_c2_erefs0" />
-            <aliasOption name="mcg_c2_ircs." />
+            <aliasOption name="mcg_c2_ircs[%(n)]" />
          </category>
          
          <category name="MCG_SC" description="MCG Status and Control Register" >
-            <aliasOption name="mcg_sc_fcrdiv." />
+            <aliasOption name="mcg_sc_fcrdiv[%(n)]" />
          </category>
 
          <category name="MCG_MC" description="MCG Miscellaneous Control Register" >
-            <aliasOption name="mcg_mc_hircen." />         
-            <aliasOption name="mcg_mc_lirc_div2." />         
+            <aliasOption name="mcg_mc_hircen[%(n)]" />         
+            <aliasOption name="mcg_mc_lirc_div2[%(n)]" />         
          </category>
       </category>
-   </indexedCategory>
+      </categoryOption>
+   </for>
    
    <validate
       class="net.sourceforge.usbdm.deviceEditor.validators.ClockValidator_MCG_Lite" dim="/SIM/numberOfClockSettings">

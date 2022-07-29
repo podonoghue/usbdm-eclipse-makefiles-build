@@ -9,7 +9,7 @@
 
    <binaryOption name="smc_pmprot_ahsrun" 
       description="Allow High Speed Run mode" 
-      toolTip="This write-once field allows the MCU to enter High Speed Run mode (HSRUN)." >
+      toolTip="This write-once field allows the MCU to enter High Speed Run mode (HSRUN)" >
       <choice name="HSRUN are not allowed" value="0" />
       <choice name="HSRUN are allowed"     value="1" isDefault="true" />
    </binaryOption>   

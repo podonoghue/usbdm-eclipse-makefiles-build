@@ -6,7 +6,7 @@
 
    <!-- Convenient location for common SIM Settings -->
 
-   <intOption name="numberOfClockSettings" 
+   <intOption key="numberOfClockSettings" 
       description="Number of clock settings"
       toolTip="This determines the number of clock settings provided"
       value="4"

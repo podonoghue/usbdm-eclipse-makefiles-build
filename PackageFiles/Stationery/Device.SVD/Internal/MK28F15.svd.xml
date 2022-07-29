@@ -97,9 +97,9 @@
       <xi:include href="peripherals/TSI0_DMA_MK28F15.svd.xml"/>
       <xi:include href="peripherals/USB0_MK28F15.svd.xml"/>
       <xi:include href="peripherals/USBDCD0_V1_2_MK28F15.svd.xml"/>
-      <xi:include href="peripherals/USBHS0_8ENDPT.svd.xml"/>
-      <peripheral derivedFrom="USBDCD0"><name>USBHSDCD0</name><baseAddress>0x400A3000</baseAddress></peripheral>
-      <xi:include href="peripherals/USBPHY0_MK28F15.svd.xml"/>
+      <peripheral derivedFrom="USBDCD0"><name>USBDCD1</name><baseAddress>0x400A3000</baseAddress></peripheral>
+      <xi:include href="peripherals/USBHS1_8ENDPT.svd.xml"/>
+      <xi:include href="peripherals/USBPHY1_MK28F15.svd.xml"/>
       <xi:include href="peripherals/VREF_C.svd.xml"/>
       <xi:include href="peripherals/WDOG_MK.svd.xml"/>
    </peripherals>

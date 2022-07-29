@@ -9,7 +9,7 @@
 
    <binaryOption name="configure_rtc"
       description="Configure RTC"
-      toolTip="Enables configuration of RTC during startup\n If disabled no RTC registers are accessed.">
+      toolTip="Enables configuration of RTC during startup\n If disabled no RTC registers are accessed">
       <choice value="0" name="Disabled" />
       <choice value="1" name="Enabled" isDefault="true" />
    </binaryOption>
@@ -24,7 +24,7 @@
    <intOption name="osc_input_freq"
       units="Hz"
       description="32kHz clock"
-      toolTip="RTC Clock - Only available if RTC oscillator is enabled"
+      toolTip="RTC Crystal frequency"
       origin="Crystal on XTAL32/EXTAL32"
       value="32768"
       disabledValue="0"
@@ -37,7 +37,7 @@
       <choice value="1" name="Enabled" />
    </binaryOption>
       
-   <choiceOption name="rtc_cr_scp"
+   <choiceOption key="rtc_cr_scp"
       description="Oscillator load capacitance"
       toolTip="Configures the oscillator load capacitance" >
       <choice value="0"  name="0 pF" />
@@ -58,7 +58,7 @@
       <choice value="15" name="30 pF" />
    </choiceOption>
    
-   <intOption name="osc_clock"
+   <intOption key="osc_clock"
       description="RTC oscillator clock"
       toolTip="Output of RTC oscillator and input to RTC counters"
       derived="true"
@@ -66,16 +66,16 @@
       units="Hz"
       disabledValue="0" />
 
-   <stringOption name="Note" constant="true" derived="true" />
+   <stringOption key="Note" constant="true" derived="true" />
 
-   <binaryOption name="rtc_cr_clko"
+   <binaryOption key="rtc_cr_clko"
       description="Enable RTC 32kHz Clock Output"
       toolTip="Determines if RTC 32kHz Clock is available to peripherals" >
       <choice value="1" name="Clock not output to peripherals" />
       <choice value="0" name="Clock is output to peripherals" isDefault="true" />
    </binaryOption>
       
-   <intOption name="rtcclk_gated_clock"
+   <intOption key="rtcclk_gated_clock"
       derived="true"
       constant="true"
       units="Hz"
@@ -83,7 +83,7 @@
       toolTip="RTC clock available to peripherals"
       value="0" />
 
-   <binaryOption name="rtc_cr_um" 
+   <binaryOption key="rtc_cr_um" 
       description="Update Mode"
       toolTip="Allows the SR[TCE] to be written even when the Status Register is locked.\n
          When set, the SR[TCE] can always be written if the SR[TIF] or SR[TOF] are set or if the SR[TCE] is clear" >
@@ -91,7 +91,7 @@
       <choice value="1" name="SR[TCE] can be written when locked under limited conditions" />
    </binaryOption>
 
-   <binaryOption name="rtc_cr_sup" 
+   <binaryOption key="rtc_cr_sup" 
       description="Supervisor access"
       toolTip="Determines if the RTC register access is available in non-supervisor mode\n
          Non supported write accesses generate a bus error" >
@@ -99,15 +99,15 @@
       <choice value="1" name="Non-supervisor write accesses supported" />
    </binaryOption>
 
-   <binaryOption name="rtc_cr_wpe" 
+   <binaryOption key="rtc_cr_wpe" 
       description="Wakeup Pin Enable"
       toolTip="Determines if the wakeup pin is asserted on RTC interrupt when powered down\n
-         The wakeup pin is optional and not available on all devices." >
+         The wakeup pin is optional and not available on all devices" >
       <choice value="0" name="Wakeup pin is disabled" />
       <choice value="1" name="Wakeup pin is enabled" />
    </binaryOption>
    
-   <intOption name="rtc_1hz_clock" 
+   <intOption key="rtc_1hz_clock" 
       constant="true"
       derived="true"
       description="1Hz output from RTC" 
@@ -136,15 +136,15 @@
       \t   RTC_CR_SCP($(rtc_cr_scp));   // RTC Oscillator load capacitance\n\n
    ]]></template>
 
-   <intOption name="rtc_tcr_cir"
+   <intOption key="rtc_tcr_cir"
       description="Compensation Interval Register"
       toolTip="Configures the compensation interval in seconds from 1 to 256 to control how frequently the TCR should\n
 		adjust the number of 32.768 kHz cycles in each second. The value written should be one less than the\n
 		number of seconds (for example, write zero to configure for a compensation interval of one second). This\n
-		register is double buffered and writes do not take affect until the end of the current compensation interval."
+		register is double buffered and writes do not take affect until the end of the current compensation interval"
       value="0" />
 
-   <intOption name="rtc_tcr_tcr" min="-128" max="127"
+   <intOption key="rtc_tcr_tcr" min="-128" max="127"
       description="Time Compensation Register"
       toolTip="Adjusts the number of 32.768 kHz clock cycles in each second.\n
          This value+32768 determines the number of clock cycles that makes up a second"
@@ -157,31 +157,31 @@
       \t   RTC_TCR_TCR($(rtc_tcr_tcr));  // Time Compensation Register\n\n
     ]]></template>     
    
-   <category name="Register Locks" description="Locks RTC Registers">
-	   <binaryOption name="rtc_lr_lrl" 
+   <category key="Register Locks" description="Locks RTC Registers">
+	   <binaryOption key="rtc_lr_lrl" 
 	      description="Lock Register Lock"
-	      toolTip="Once cleared, this bit can only be set by VBAT POR or software reset." >
+	      toolTip="Once cleared, this bit can only be set by VBAT POR or software reset" >
 	      <choice value="0" name="Locked" />
 	      <choice value="1" name="Unlocked"  isDefault="true" />
 	   </binaryOption>
 	   
-	   <binaryOption name="rtc_lr_srl" 
+	   <binaryOption key="rtc_lr_srl" 
 	      description="Status Register Lock"
-	      toolTip="Once cleared, this bit can only be set by VBAT POR or software reset." >
+	      toolTip="Once cleared, this bit can only be set by VBAT POR or software reset" >
 	      <choice value="0" name="Locked" />
 	      <choice value="1" name="Unlocked"  isDefault="true" />
 	   </binaryOption>
 	   
-	   <binaryOption name="rtc_lr_crl" 
+	   <binaryOption key="rtc_lr_crl" 
 	      description="Control Register Lock"
-	      toolTip="Once cleared, this bit can only be set by VBAT POR or software reset." >
+	      toolTip="Once cleared, this bit can only be set by VBAT POR or software reset" >
 	      <choice value="0" name="Locked" />
 	      <choice value="1" name="Unlocked"  isDefault="true" />
 	   </binaryOption>
 	   
-	   <binaryOption name="rtc_lr_tcl" 
+	   <binaryOption key="rtc_lr_tcl" 
 	      description="Time Compensation Lock"
-	      toolTip="Once cleared, this bit can only be set by VBAT POR or software reset." >
+	      toolTip="Once cleared, this bit can only be set by VBAT POR or software reset" >
 	      <choice value="0" name="Locked" />
 	      <choice value="1" name="Unlocked"  isDefault="true" />
 	   </binaryOption>
@@ -196,33 +196,33 @@
       \t   RTC_LR_TCL($(rtc_lr_tcl));  // Time Compensation Lock\n\n
     ]]></template>     
 
-   <category name="Write Access" description="Controls write access to RTC Registers">
-      <aliasOption name="rtc_war_ierw" constant="false" optional="true" />
-      <aliasOption name="rtc_war_lrw"  constant="false" optional="true" />
-      <aliasOption name="rtc_war_srw"  constant="false" optional="true" />
-      <aliasOption name="rtc_war_crw"  constant="false" optional="true" />
-      <aliasOption name="rtc_war_tcrw" constant="false" optional="true" />
-      <aliasOption name="rtc_war_tarw" constant="false" optional="true" />
-      <aliasOption name="rtc_war_tprw" constant="false" optional="true" />
-      <aliasOption name="rtc_war_tsrw" constant="false" optional="true" />
+   <category key="Write Access" description="Controls write access to RTC Registers">
+      <aliasOption key="rtc_war_ierw" constant="false" optional="true" />
+      <aliasOption key="rtc_war_lrw"  constant="false" optional="true" />
+      <aliasOption key="rtc_war_srw"  constant="false" optional="true" />
+      <aliasOption key="rtc_war_crw"  constant="false" optional="true" />
+      <aliasOption key="rtc_war_tcrw" constant="false" optional="true" />
+      <aliasOption key="rtc_war_tarw" constant="false" optional="true" />
+      <aliasOption key="rtc_war_tprw" constant="false" optional="true" />
+      <aliasOption key="rtc_war_tsrw" constant="false" optional="true" />
    </category>   
    
-   <category name="Read Access" description="Controls read access to RTC Registers">
-      <aliasOption name="rtc_rar_ierr" constant="false" optional="true" />
-      <aliasOption name="rtc_rar_lrr"  constant="false" optional="true" />
-      <aliasOption name="rtc_rar_srr"  constant="false" optional="true" />
-      <aliasOption name="rtc_rar_crr"  constant="false" optional="true" />
-      <aliasOption name="rtc_rar_tcrr" constant="false" optional="true" />
-      <aliasOption name="rtc_rar_tarr" constant="false" optional="true" />
-      <aliasOption name="rtc_rar_tprr" constant="false" optional="true" />
-      <aliasOption name="rtc_rar_tsrr" constant="false" optional="true" />
+   <category key="Read Access" description="Controls read access to RTC Registers">
+      <aliasOption key="rtc_rar_ierr" constant="false" optional="true" />
+      <aliasOption key="rtc_rar_lrr"  constant="false" optional="true" />
+      <aliasOption key="rtc_rar_srr"  constant="false" optional="true" />
+      <aliasOption key="rtc_rar_crr"  constant="false" optional="true" />
+      <aliasOption key="rtc_rar_tcrr" constant="false" optional="true" />
+      <aliasOption key="rtc_rar_tarr" constant="false" optional="true" />
+      <aliasOption key="rtc_rar_tprr" constant="false" optional="true" />
+      <aliasOption key="rtc_rar_tsrr" constant="false" optional="true" />
    </category>
 
-   <stringOption name="irq_pattern"        constant="true" value="^RTC_(Alarm|Seconds)$" hidden="true" />
-   <stringOption name="irq_classHandler"   constant="true" value="%c%i::irq$1Handler" hidden="true" />
+   <stringOption key="irq_pattern"        constant="true" value="^RTC_(Alarm|Seconds)$" hidden="true" />
+   <stringOption key="irq_classHandler"   constant="true" value="%c%i::irq$1Handler" hidden="true" />
    <xi:include href="_irqOptionSubstituted.xml"/>
 
-   <choiceOption name="rtc_year"
+   <choiceOption key="rtc_year"
       description="Initial Year" 
       toolTip="Used for coldstart" >
       <choice value="2017"  name="2017" />
@@ -250,7 +250,7 @@
       <choice value="2039"  name="2039" />
    </choiceOption>
 
-   <choiceOption name="rtc_month"
+   <choiceOption key="rtc_month"
       description="Initial Month" 
       toolTip="Used for coldstart" >
       <choice value="0"    name="Jan" />
@@ -267,15 +267,15 @@
       <choice value="335"  name="December" />
    </choiceOption>
 
-   <intOption name="rtc_day" min="1" max="31" value="1"
+   <intOption key="rtc_day" min="1" max="31" value="1"
       description="Initial Day of Month" 
       toolTip="Used for coldstart" />
    
-   <intOption name="rtc_hour" min="0" max="23" value="12"
+   <intOption key="rtc_hour" min="0" max="23" value="12"
       description="Initial Hour of Day" 
       toolTip="Used for coldstart" />
    
-   <intOption name="rtc_minute" min="0" max="59" value="0"
+   <intOption key="rtc_minute" min="0" max="59" value="0"
       description="Initial Minute of Hour" 
       toolTip="Used for coldstart" />
    
@@ -289,59 +289,59 @@
       \t          ($(rtc_minute)))*60;\n\n
     ]]></template>     
 
-   <category name="Device Registers (view only)" description="RTC Register values">
-      <category name="RTC CR" description="RTC Control Register">
-         <aliasOption name="rtc_cr_scp" />
-         <aliasOption name="rtc_cr_clko" />
-         <aliasOption name="rtc_cr_osce" />
-         <aliasOption name="rtc_cr_um" />
-         <aliasOption name="rtc_cr_sup" />
-         <aliasOption name="rtc_cr_wpe" />
+   <category key="Device Registers (view only)" description="RTC Register values">
+      <category key="RTC CR" description="RTC Control Register">
+         <aliasOption key="rtc_cr_scp" />
+         <aliasOption key="rtc_cr_clko" />
+         <aliasOption key="rtc_cr_osce" />
+         <aliasOption key="rtc_cr_um" />
+         <aliasOption key="rtc_cr_sup" />
+         <aliasOption key="rtc_cr_wpe" />
       </category>   
-      <category name="RTC LR" description="RTC Lock Register">
-         <aliasOption name="rtc_lr_lrl" />
-         <aliasOption name="rtc_lr_srl" />
-         <aliasOption name="rtc_lr_crl" />
-         <aliasOption name="rtc_lr_tcl" />
+      <category key="RTC LR" description="RTC Lock Register">
+         <aliasOption key="rtc_lr_lrl" />
+         <aliasOption key="rtc_lr_srl" />
+         <aliasOption key="rtc_lr_crl" />
+         <aliasOption key="rtc_lr_tcl" />
       </category>   
-      <category name="RTC TCR" description="RTC Time Compensation Register">
-         <aliasOption name="rtc_tcr_cir" />
-         <aliasOption name="rtc_tcr_tcr" />
+      <category key="RTC TCR" description="RTC Time Compensation Register">
+         <aliasOption key="rtc_tcr_cir" />
+         <aliasOption key="rtc_tcr_tcr" />
       </category>   
-      <category name="RTC WAR" description="RTC Write Access Register">
-         <aliasOption name="rtc_war_ierw" optional="true" />
-         <aliasOption name="rtc_war_lrw"  optional="true" />
-         <aliasOption name="rtc_war_srw"  optional="true" />
-         <aliasOption name="rtc_war_crw"  optional="true" />
-         <aliasOption name="rtc_war_tcrw" optional="true" />
-         <aliasOption name="rtc_war_tarw" optional="true" />
-         <aliasOption name="rtc_war_tprw" optional="true" />
-         <aliasOption name="rtc_war_tsrw" optional="true" />
+      <category key="RTC WAR" description="RTC Write Access Register">
+         <aliasOption key="rtc_war_ierw" optional="true" />
+         <aliasOption key="rtc_war_lrw"  optional="true" />
+         <aliasOption key="rtc_war_srw"  optional="true" />
+         <aliasOption key="rtc_war_crw"  optional="true" />
+         <aliasOption key="rtc_war_tcrw" optional="true" />
+         <aliasOption key="rtc_war_tarw" optional="true" />
+         <aliasOption key="rtc_war_tprw" optional="true" />
+         <aliasOption key="rtc_war_tsrw" optional="true" />
       </category>   
-      <category name="RTC RAR" description="RTC Read Access Register">
-         <aliasOption name="rtc_rar_ierr" optional="true" />
-         <aliasOption name="rtc_rar_lrr"  optional="true" />
-         <aliasOption name="rtc_rar_srr"  optional="true" />
-         <aliasOption name="rtc_rar_crr"  optional="true" />
-         <aliasOption name="rtc_rar_tcrr" optional="true" />
-         <aliasOption name="rtc_rar_tarr" optional="true" />
-         <aliasOption name="rtc_rar_tprr" optional="true" />
-         <aliasOption name="rtc_rar_tsrr" optional="true" />
+      <category key="RTC RAR" description="RTC Read Access Register">
+         <aliasOption key="rtc_rar_ierr" optional="true" />
+         <aliasOption key="rtc_rar_lrr"  optional="true" />
+         <aliasOption key="rtc_rar_srr"  optional="true" />
+         <aliasOption key="rtc_rar_crr"  optional="true" />
+         <aliasOption key="rtc_rar_tcrr" optional="true" />
+         <aliasOption key="rtc_rar_tarr" optional="true" />
+         <aliasOption key="rtc_rar_tprr" optional="true" />
+         <aliasOption key="rtc_rar_tsrr" optional="true" />
       </category>   
    </category>
    
-   <template name="/RTC/declarations" namespace="all"  ><![CDATA[
+   <template key="/RTC/declarations" namespace="all"  ><![CDATA[
    \t/**
    \t * Class representing $(_name)
    \t */
    \tclass $(_class) : public $(_base_class)Base_T<$(_class)Info> {};
    ]]></template>
 
-   <template name="/MCG/Includes" namespace="all"  ><![CDATA[
+   <template key="/MCG/Includes" namespace="all"  ><![CDATA[
    #include "rtc.h"\n
    ]]></template>
       
-   <template name="/MCG/Initialisation" namespace="all"  ><![CDATA[
+   <template key="/MCG/Initialisation" namespace="all"  ><![CDATA[
    \tUSBDM::$(_class)::initialise();\n
    ]]></template>
       

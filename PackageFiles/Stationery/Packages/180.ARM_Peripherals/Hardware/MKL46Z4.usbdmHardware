@@ -518,7 +518,7 @@
          <mux sel="mux0"          signal="TSI0_CH13" />
          <mux sel="mux1"          signal="GPIOC_0" />
          <mux sel="mux3"          signal="EXTRG_IN" />
-         <mux sel="mux4"          signal="audioUSB_SOF_OUT" />
+         <mux sel="mux4"          signal="USB_SOF_OUT" />
          <mux sel="mux5"          signal="CMP0_OUT" />
          <mux sel="mux6"          signal="I2S0_TXD0" />
          <mux sel="mux7"          signal="LCD_P20" />
@@ -599,7 +599,7 @@
          <mux sel="mux0"          signal="CMP0_IN1" />
          <mux sel="mux1"          signal="GPIOC_7" />
          <mux sel="mux2"          signal="SPI0_MISO" />
-         <mux sel="mux3"          signal="audioUSB_SOF_OUT" />
+         <mux sel="mux3"          signal="USB_SOF_OUT" />
          <mux sel="mux4"          signal="I2S0_RX_FS" />
          <mux sel="mux5"          signal="SPI0_MOSI" />
          <mux sel="mux7"          signal="LCD_P27" />
@@ -803,7 +803,7 @@
          <mux sel="mux0"          signal="LCD_P54" />
          <mux sel="mux1"          signal="GPIOE_6" />
          <mux sel="mux4"          signal="I2S0_MCLK" />
-         <mux sel="mux5"          signal="audioUSB_SOF_OUT" />
+         <mux sel="mux5"          signal="USB_SOF_OUT" />
          <mux sel="mux7"          signal="LCD_P54" />
          <reset sel="mux0" />
       </pin>

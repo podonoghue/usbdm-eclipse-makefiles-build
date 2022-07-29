@@ -6,7 +6,7 @@
  
    <xi:include href="cmp32_base.xml"/>
  
-   <choiceOption name="cmp_c1_psel" 
+   <choiceOption key="cmp_c1_psel" 
       description="Plus Input Mux Control"
       toolTip="Determines which input is selected for the plus input of the comparator" >
       <choice value="CMP_C1_PSEL(0)|CMP_C1_INPSEL(1)" name="CMP_IN0" />
@@ -20,7 +20,7 @@
       <choice value="CMP_C1_PSEL(0)|CMP_C1_INPSEL(1)" name="DAC" />
    </choiceOption>
 
-   <choiceOption name="cmp_c1_msel" 
+   <choiceOption key="cmp_c1_msel" 
       description="Minus Input Mux Control"
       toolTip="Determines which input is selected for the minus input of the comparator" >
       <choice value="CMP_C1_MSEL(0)|CMP_C1_INNSEL(1)" name="CMP_IN0" />

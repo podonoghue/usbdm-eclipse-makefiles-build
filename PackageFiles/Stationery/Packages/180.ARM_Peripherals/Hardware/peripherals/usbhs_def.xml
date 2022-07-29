@@ -2,11 +2,18 @@
 <!DOCTYPE peripheralPage SYSTEM "_menu.dtd" >
 <!-- usbhs_def.xml -->
 
-<peripheralPage xmlns:xi="http://www.w3.org/2001/XInclude" name="_instance" description="Inter-Integrated-Circuit">
+<peripheralPage xmlns:xi="http://www.w3.org/2001/XInclude" name="_instance" description="High Speed USB">
 
    <xi:include href="_default_instance.xml"/>
    <xi:include href="_mapPinsOption.xml"/>
 
+   <template name="/USBHS/declarations" namespace="all"  ><![CDATA[
+   \t/**
+   \t * Class representing $(_name)
+   \t */
+   \tclass $(_class) : public $(_base_class)Base_T<$(_class)Info> {};\n
+   ]]></template>
+      
    <xi:include href="_irqOption.xml"/>         
 
    <xi:include href="_clockOption.xml"/>

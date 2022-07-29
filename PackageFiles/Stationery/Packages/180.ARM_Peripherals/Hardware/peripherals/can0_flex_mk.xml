@@ -6,19 +6,19 @@
 
    <xi:include href="_default_instance.xml"/>
    
-   <constant name = "disable_peripheral" derived = "true" value = "can->MCR = CAN_MCR_MDIS(1);"  />
+   <constant key="disable_peripheral" derived = "true" value = "can->MCR = CAN_MCR_MDIS(1);"  />
    <xi:include href="_mapPinsOption.xml"/>
    
    <!-- Note: second entry gets the tick irrespective of true/false value -->
-   <binaryOption name="EnableFifo" 
+   <binaryOption key="EnableFifo" 
       description="Enable Receive FIFO"
       toolTip="This option enables use of the receive FIFO in addition to the individual mailboxes.\n
-               The maximum number of individual mailboxes is reduced.">
+               The maximum number of individual mailboxes is reduced">
       <choice value="0" name="Disabled" />
       <choice value="1" name="Enabled"  isDefault="true" />
    </binaryOption>
 
-   <intOption name="MaxNumberOfMessageBuffers" 
+   <intOption key="MaxNumberOfMessageBuffers" 
       description="Maximum number of message buffers available"
       toolTip="This is the maximum value determined by the hardware.\n
                The CAN memory is shared between the FIFO filters and message buffers so\n
@@ -26,20 +26,20 @@
       constant="true" 
       value="16" />
 
-   <intOption name="MaxNumberOfFifoMessageFilters" 
+   <intOption key="MaxNumberOfFifoMessageFilters" 
       description="Maximum number of FIFO message filters available"
       toolTip="This is the maximum value determined by the hardware.\n
                The CAN memory is shared between the FIFO filters and message buffers\n
-	       so a usable number will be less than this."  
+	       so a usable number will be less than this"  
       constant="true" 
       value="40" />
 
-   <intOption name="NumberOfFifoMessageFilters" 
+   <intOption key="NumberOfFifoMessageFilters" 
       description="Number of filters for FIFO"
       toolTip="Used to configure number of FIFO filters"
       value="16" step="8" min="0" max="40" />
 
-   <intOption name="NumberOfIndividualMailboxes" 
+   <intOption key="NumberOfIndividualMailboxes" 
       description="Number of individual Rx/Tx mailboxes"
       toolTip="Used to configure number individually allocated mailboxes"
       value="8" min="0" max="16" />
@@ -77,28 +77,28 @@
      -  _IRQHandler is appended to the pattern (only)
    Multiple patterns and classsHandlers may be used separated by ';'
    -->
-   <irqOption name="miscellaneousIrqHandlingMethod"  
+   <irqOption key="miscellaneousIrqHandlingMethod"  
       description="Miscellaneous Interrupt handlers"
       toolTip="This selection allow the interrupt handler for this peripheral to be installed using several different methods\n
                Handles: Bus Off, Transmit and Receive Warning"
       pattern="^%b%i_(BusOff|TxWarning|RxWarning)$" 
       classHandler="%c%i::irqHandler" />
 
-   <irqOption name="errorIrqHandlingMethod"  
+   <irqOption key="errorIrqHandlingMethod"  
       description="Error Interrupt handlers"
       toolTip="This selection allow the interrupt handler for this peripheral to be installed using several different methods\n
                Handles: Bus Error"
       pattern="^%b%i_Error$" 
       classHandler="%c%i::errorIrqHandler" />
 
-   <irqOption name="wakeupIrqHandlingMethod"  
+   <irqOption key="wakeupIrqHandlingMethod"  
       description="Wakeup Interrupt handlers"
       toolTip="This selection allow the interrupt handler for this peripheral to be installed using several different methods\n
                Handles: Wakeup"
       pattern="^%b%i_WakeUp$" 
       classHandler="%c%i::wakeupIrqHandler" />
 
-   <irqOption name="messagebufferIrqHandlingMethod"  
+   <irqOption key="messagebufferIrqHandlingMethod"  
       description="Message Buffer Interrupt handlers"
       toolTip="This selection allow the interrupt handler for this peripheral to be installed using several different methods\n
                Handles: Message buffer events (FIFO and Mailboxes)"
@@ -121,7 +121,7 @@
        \tstatic constexpr int Wakeup_IrqNumIndex              = 5;\n\n
    ]]></template>
        
-   <intOption name="irqLevel" 
+   <intOption key="irqLevel" 
       description="IRQ Level in NVIC [0-15]"
       toolTip="Sets the priority level used to configure the NVIC\n
                Lower numbers represent higher priorities"
@@ -186,7 +186,7 @@
        \tstatic constexpr uint32_t irqLevel =  $(irqLevel);\n\n
    ]]></template>
 
-   <template name="/CAN/NvicControl" namespace="all" ><![CDATA[
+   <template key="/CAN/NvicControl" namespace="all" ><![CDATA[
       \t/**
       \t * Enable Miscellaneous interrupts in NVIC
       \t */

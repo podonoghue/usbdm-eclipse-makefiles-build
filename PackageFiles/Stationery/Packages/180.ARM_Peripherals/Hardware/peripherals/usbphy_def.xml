@@ -1,0 +1,308 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE peripheralPage SYSTEM "_menu.dtd" >
+<!-- usbphy_def.xml -->
+
+<peripheralPage xmlns:xi="http://www.w3.org/2001/XInclude" name="_instance" description="High Speed USB PHY">
+
+   <xi:include href="_default_instance.xml"/>
+   <xi:include href="_mapPinsOption.xml"/>
+
+   <binaryOption key="usbphy_ctrl_sftrst" 
+      hidden="true"
+      enumStem="UsbphyReset" 
+      description="Soft-reset of PHY registers"
+      toolTip="Soft-reset the USBPHY_PWD, USBPHY_TX, USBPHY_RX, and USBPHY_CTRL registers">
+      <choice value="1" name="Hold in reset"       isDefault="true" />
+      <choice value="0" name="Release from reset"     />
+   </binaryOption>
+
+   <binaryOption key="usbphy_ctrl_clkgate" 
+      hidden="true"
+      enumStem="UsbphyUtmiClkEn" 
+      description="UTMI clock gate"
+      toolTip="Clock gate for UTMI\n
+               Configuration state is kept while gated\n
+               UTMI clocks can be automatically enabled on any wakeup event when USB\n
+               is suspended while ENAUTOCLR_CLKGATE bit of USBPHY_CTRL is enabled">
+      <choice value="1" name="Disabled" isDefault="true" />
+      <choice value="0" name="Enabled"    />
+   </binaryOption>
+
+   <binaryOption key="usbphy_pll_sic_pll_power"
+      hidden="true"
+      register="pll_sic" 
+      enumStem="UsbPllPwr" 
+      description="Power up the USB PLL"
+      toolTip="Power control for the USB PLL">
+      <choice value="1" name="Disabled" isDefault="true" />
+      <choice value="0" name="Enabled"  />
+   </binaryOption>
+
+   <choiceOption key="usbphy_pll_sic_pll_div_sel"
+      register="pll_sic" 
+      enumStem="UsbPllInputClkFrq" 
+      description="USB PLL feedback loop divider"
+      toolTip="The USB PLL produces a 480MHz clock from several possible clock frequencies\n
+               This field sets the PLL feedback divider appropriately">
+      <choice value="0b10" name="12MHz input clock" enum="12MHz"  />
+      <choice value="0b01" name="16MHz input clock" enum="16MHz"  />
+      <choice value="0b00" name="24MHz input clock" enum="24MHz" isDefault="true" />
+   </choiceOption>
+
+   <intOption key="pfd_pll_frequency" 
+      description="Fixed frequency output of the USBPLL" 
+      toolTip="This fixed frequency clock is produced by the USBPLL from the input clock (12/16/24MHz)"
+      value="400000000" 
+      units="Hz"
+      constant="true" />
+      
+   <for keys="n" dim="/SIM/numberOfClockSettings" >
+      <aliasCategoryOption key="/MCG/ClockConfig[%(n)]" derived="true" constant="true" >
+      
+      <choiceOption key="usbphy_anactrl_pfd_frac[%(n)]"
+         target="internal_pfd_clock_frequency[%(n)]"
+         enumStem="UsbPfdClkFreq" 
+         description="PFD clock [USBPFDCLK] divider"
+         toolTip="USBPFD (Phase Fractional Divider) input/output ratio">
+         <choice value="18"  name="Internal PFD Freq 400.00 MHz" enum="F400000000" ref="pfd_pll_frequency" />
+         <choice value="19"  name="Internal PFD Freq 378.95 MHz" enum="F378947368" ref="pfd_pll_frequency,*18,/19"/>
+         <choice value="20"  name="Internal PFD Freq 360.00 MHz" enum="F360000000" ref="pfd_pll_frequency,*18,/20"/>
+         <choice value="21"  name="Internal PFD Freq 342.86 MHz" enum="F342857143" ref="pfd_pll_frequency,*18,/21"/>
+         <choice value="22"  name="Internal PFD Freq 327.27 MHz" enum="F327272727" ref="pfd_pll_frequency,*18,/22"/>
+         <choice value="23"  name="Internal PFD Freq 313.04 MHz" enum="F313043478" ref="pfd_pll_frequency,*18,/23"/>
+         <choice value="24"  name="Internal PFD Freq 300.00 MHz" enum="F300000000" ref="pfd_pll_frequency,*18,/24"/>
+         <choice value="25"  name="Internal PFD Freq 288.00 MHz" enum="F288000000" ref="pfd_pll_frequency,*18,/25"/>
+         <choice value="26"  name="Internal PFD Freq 276.92 MHz" enum="F276923077" ref="pfd_pll_frequency,*18,/26"/>
+         <choice value="27"  name="Internal PFD Freq 266.67 MHz" enum="F266666667" ref="pfd_pll_frequency,*18,/27"/>
+         <choice value="28"  name="Internal PFD Freq 257.15 MHz" enum="F257142857" ref="pfd_pll_frequency,*18,/28"/>
+         <choice value="29"  name="Internal PFD Freq 248.28 MHz" enum="F248275862" ref="pfd_pll_frequency,*18,/29"/>
+         <choice value="30"  name="Internal PFD Freq 240.00 MHz" enum="F240000000" ref="pfd_pll_frequency,*18,/30"/>
+         <choice value="31"  name="Internal PFD Freq 232.25 MHz" enum="F232258065" ref="pfd_pll_frequency,*18,/31"/>
+         <choice value="32"  name="Internal PFD Freq 225.00 MHz" enum="F225000000" ref="pfd_pll_frequency,*18,/32"/>
+         <choice value="33"  name="Internal PFD Freq 218.18 MHz" enum="F218181818" ref="pfd_pll_frequency,*18,/33"/>
+         <choice value="34"  name="Internal PFD Freq 211.76 MHz" enum="F211764706" ref="pfd_pll_frequency,*18,/34"/>
+         <choice value="35"  name="Internal PFD Freq 205.71 MHz" enum="F205714286" ref="pfd_pll_frequency,*18,/35"/>
+      </choiceOption>
+
+      <intOption key="internal_pfd_clock_frequency[%(n)]" 
+         description="Internal PFD clock (after PLL)" 
+         toolTip="Clock available from the USBPFD"
+         derived="true" 
+         units="Hz"
+         constant="true" />
+      
+      <choiceOption key="usbphy_anactrl_pfd_clk_sel[%(n)]"
+         target="/SIM/usb1pfdclk_Clock[%(n)]"
+         enumStem="UsbPfdClkSrc" 
+         description="PFD clock [USBPFDCLK] output selection"
+         toolTip="Clock to output as PFD output clock [USBPFDCLK]">
+         <choice value="0b00" name="XTAL input clock" enum="Xtal"     ref="/OSC0/oscer_clock"   isDefault="true" />
+         <choice value="0b11" name="pfd_clk"          enum="Pfd"      ref="internal_pfd_clock_frequency" />
+         <choice value="0b10" name="pfd_clk/2"        enum="PfdDiv2"  ref="internal_pfd_clock_frequency,/2" />
+         <choice value="0b01" name="pfd_clk/4"        enum="PfdDiv4"  ref="internal_pfd_clock_frequency,/4" />
+      </choiceOption>
+
+      <aliasOption key="/SIM/usb1pfdclk_Clock[%(n)]" />
+      </aliasCategoryOption>
+   </for>
+   
+   <intOption key="system_pfdclk_frequency" 
+      description="PFD clock available to peripherals" 
+      toolTip="This clock is available to some peripherals"
+      value="4000000"
+      units="Hz" 
+      constant="true" 
+      max="180000000" />
+      
+
+   <clockCodeTemplate condition="usbphy_ctrl_sftrst"
+   ><![CDATA[
+      \t/**
+      \t * Apply %description
+      \t *
+      \t * %tooltip
+      \t
+      \t * @note The PHY is held in reset until releasePhyReset()
+      \t */
+      \tstatic void resetPhy() {
+      \t   %register_SET = %mask;
+      \t   (void)%register;
+      \t}
+      
+      \t/**
+      \t * Release %description
+      \t *
+      \t * %tooltip
+      \t */
+      \tstatic void releasePhyReset() {
+      \t   %register_CLR = %mask;
+      \t}\n\n
+   ]]></clockCodeTemplate>
+
+   <clockCodeTemplate condition="usbphy_ctrl_clkgate"
+   ><![CDATA[
+      \t/**
+      \t * Enable %description
+      \t *
+      \t * %tooltip
+      \t */
+      \tstatic void enableUtmiClocks() {
+      \t   %register_CLR = %mask;
+      \t}
+      
+      \t/**
+      \t * Disable %description
+      \t *
+      \t * %tooltip
+      \t */
+      \tstatic void disableUtmiClocks() {
+      \t   %register_SET = %mask;
+      \t}\n\n
+   ]]></clockCodeTemplate>
+
+   <clockCodeTemplate condition="usbphy_pll_sic_pll_power"
+   ><![CDATA[
+      \t/**
+      \t * Enable %description
+      \t *
+      \t * %tooltip
+      \t */
+      \tstatic void enablePllPower() {
+      \t   %register_CLR = %mask;
+      \t}
+      
+      \t/**
+      \t * Disable %description
+      \t *
+      \t * %tooltip
+      \t */
+      \tstatic void disablePllPower() {
+      \t   %register_SET = %mask;
+      \t}\n\n
+   ]]></clockCodeTemplate>
+
+   <enumTemplate namespace="usbdm" condition="usbphy_pll_sic_pll_div_sel" 
+   ><![CDATA[    
+      \t/**
+      \t * %description
+      \t *
+      \t * %tooltip
+      \t */
+      \tenum %enumClass {
+      %body
+      \t};\n\n
+   ]]></enumTemplate>
+         
+   <clockCodeTemplate condition="usbphy_pll_sic_pll_div_sel"
+   ><![CDATA[
+      \t/**
+      \t * Set %description
+      \t *
+      \t * %tooltip
+      \t *
+      \t * @param %enumParam 
+      \t */
+      \tstatic void setPllInputFrequency(%enumClass %enumParam) {
+      \t   %register_CLR = %mask;
+      \t   %register_SET = %enumParam;
+      \t}
+      
+      \t /// %description
+      \t static constexpr %enumClass %enumParam_default = %symbolicValueExpression; // %shortDescription \n\n 
+   ]]></clockCodeTemplate>
+
+   <enumTemplate namespace="usbdm" condition="usbphy_anactrl_pfd_frac" 
+   ><![CDATA[    
+      \t/**
+      \t * %description
+      \t *
+      \t * %tooltip
+      \t */
+      \tenum %enumClass {
+      %body
+      \t};\n\n
+   ]]></enumTemplate>
+         
+   <clockCodeTemplate condition="usbphy_anactrl_pfd_frac[]"
+   ><![CDATA[
+      \t/**
+      \t * Set %description
+      \t *
+      \t * @param %enumParam %tooltip
+      \t */
+      \tstatic void setPfdClkFrequency(%enumClass %enumParam) {
+      \t   %register_CLR = %mask;
+      \t   %register_SET = %enumParam;
+      \t}
+      
+      \t /// %description
+      \t static constexpr %enumClass %enumParam_default = %symbolicValueExpression; // %shortDescription\n\n 
+   ]]></clockCodeTemplate>
+
+   <enumTemplate namespace="usbdm" condition="usbphy_anactrl_pfd_clk_sel" 
+   ><![CDATA[    
+      \t/**
+      \t * %description
+      \t *
+      \t * %tooltip
+      \t */
+      \tenum %enumClass {
+      %body
+      \t};\n\n
+   ]]></enumTemplate>
+         
+   <clockCodeTemplate condition="usbphy_anactrl_pfd_clk_sel[]"
+   ><![CDATA[
+      \t/**
+      \t * Set %description
+      \t *
+      \t * @param %enumParam %tooltip
+      \t */
+      \tstatic void setPfdClockSrc(%enumClass %enumParam) {
+      \t   %register_CLR = %mask;
+      \t   %register_SET = %enumParam;
+      \t}
+      
+      \t /// %description
+      \t static constexpr %enumClass %enumParam_default = %symbolicValueExpression; // %shortDescription\n\n 
+   ]]></clockCodeTemplate>
+
+   <if condition="usbphy_anactrl_pfd_frac&amp;&amp;usbphy_anactrl_pfd_clk_sel">
+      <clockCodeTemplate condition="usbphy_anactrl_pfd_frac"
+      mask="(USBPHY_ANACTRL_PFD_CLK_SEL_MASK|USBPHY_ANACTRL_PFD_FRAC_MASK)"
+      ><![CDATA[
+         \t/**
+         \t * Set USBPFD clock
+         \t *
+         \t * @param usbPfdClkFreq  Clock to output as PFD output clock [USBPFDCLK]
+         \t * @param usbPfdClkSrc   USBPFD (Phase Fractional Divider) input/output ratio
+         \t */
+         \tstatic void setPfdClk(UsbPfdClkFreq usbPfdClkFreq, UsbPfdClkSrc usbPfdClkSrc) {
+         \t   %register_CLR = %mask;
+         \t   %register_SET = usbPfdClkFreq|usbPfdClkSrc;
+         \t}\n\n
+      ]]></clockCodeTemplate>
+   </if>
+
+   <template key="/USBPHY/declarations" namespace="all"  ><![CDATA[
+   \t/**
+   \t * Class representing $(_name)
+   \t */
+   \tclass $(_class) : public $(_base_class)Base_T<$(_class)Info> {};\n
+   ]]></template>
+      
+   <xi:include href="_irqOption.xml"/>         
+
+   <xi:include href="_clockOption.xml"/>
+   
+   <validate
+      class="net.sourceforge.usbdm.deviceEditor.validators.PeripheralValidator" >
+   </validate>
+
+   <projectActionList id = "usbphy_files">
+      <copy source="Project_Headers/usbphy.h"                   target="Project_Headers/usbphy.h"                     overwrite="true"  derived="true" />
+   </projectActionList>
+
+   <signals/>
+   
+</peripheralPage>
